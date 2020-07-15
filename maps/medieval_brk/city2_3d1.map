@@ -1,0 +1,39 @@
+
+
+
+
+
+
+{
+ "classname" "worldspawn"
+ "message" "Nine is a lucky number"
+ "wad" "gfx/QuArK.wad"
+
+
+ {
+  ( -8 4 -12 ) ( -8 4 116 ) ( -135.99998 4 -12 ) city2_3d -8 -12 0 -1 1 //TX1
+  ( -8 -4 4 ) ( -8 -4 132 ) ( 120 -4 4 ) city2_3d 8 4 0 1 1 //TX1
+  ( -8 -4 4 ) ( -8 -4 132 ) ( -8 -132 4 ) city2_3d -4 4 0 -1 1 //TX1
+  ( 0 -12 -4 ) ( 0 -140 -4 ) ( 128 -12 -4 ) city2_3d 0 12 0 1 -1 //TX1
+  ( 8 -20 4 ) ( 8 -20 132 ) ( 8 108 4 ) city2_3d 20 4 0 1 1 //TX1
+  ( 8 4 4 ) ( 8 132 4 ) ( 136 4 4 ) city2_3d -8 4 0 1 1 //TX1
+ }
+}
+
+
+{
+ "classname" "light"
+ "light" "200"
+ "angle" "360"
+ "origin" "-48 -48 64"
+ "delay" "5"
+}
+
+
+{
+ "classname" "light"
+ "light" "200"
+ "angle" "360"
+ "origin" "48 48 -32"
+ "delay" "5"
+}

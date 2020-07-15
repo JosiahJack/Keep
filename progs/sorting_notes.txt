@@ -1,0 +1,6 @@
+Model sorting into folders from each mod:
+AD - In progress, last one done in code flame2.mdl
+AD - Done all identical, need to address different between ad170 and ad171
+Drake - Models put into folder, not fixed in code - lots of errors to be expected!!
+
+Wizard, added green poison? skin from AD171...code it?

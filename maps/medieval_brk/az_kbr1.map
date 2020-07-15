@@ -1,0 +1,52 @@
+
+
+
+
+
+
+{
+ "classname" "worldspawn"
+ "wad" "gfx/QuArK.wad"
+
+
+ {
+  ( -8 4 4 ) ( -8 4 132 ) ( -136 4 4 ) wbrik8a -8 4 0 -1 1 //TX1
+  ( -8 -4 4 ) ( -8 -4 132 ) ( 120 -4 4 ) wbrik8a 8 4 0 1 1 //TX1
+  ( -8 -4 -4 ) ( -8 -4 124 ) ( -8 -132 -4 ) wbrik8a -4 -4 0 -1 1 //TX1
+  ( 8 -4 -4 ) ( 8 -132 -4 ) ( 136 -4 -4 ) wbrik8a -8 4 0 1 -1 //TX1
+  ( 8 -4 4 ) ( 8 -4 132 ) ( 8 124 4 ) wbrik8a 4 4 0 1 1 //TX1
+  ( 0 -4 4 ) ( 0 124 4 ) ( 128 -4 4 ) wbrik8a 0 -4 0 1 1 //TX1
+ }
+}
+
+
+{
+ "classname" "light"
+ "light" "120"
+ "origin" "-32 40 16"
+ "color" "255 250 210"
+}
+
+
+{
+ "classname" "light"
+ "light" "120"
+ "origin" "72 40 -44"
+ "color" "255 250 210"
+}
+
+
+{
+ "classname" "light"
+ "light" "120"
+ "origin" "-32 -84 -44"
+ "color" "255 250 210"
+}
+
+
+{
+ "classname" "light"
+ "light" "120"
+ "origin" "44 -84 52"
+ "color" "255 250 210"
+}

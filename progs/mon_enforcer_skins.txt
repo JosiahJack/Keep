@@ -1,0 +1,7 @@
+0,1,2 = Randomized normal enforcer. 0 = Visor, 1 = Visor, 2 = Open visor, nose covered
+3,4,5 = Randomized defender.  3 = Visor, 4 = Open visor, 5 = Open visor 
+6,7,8 = Randomized eliminator.  6 = Open visor, 7 = Open visor, 8 = Open visor
+9 = Defender old, Open visor, nose covered
+10 = Eliminator old, Blue trans visor
+11 = Mega enforcer, skull visor black, brown helmet
+12 = Ultra enforcer, skull visor black, bluish helmet

@@ -1,0 +1,3205 @@
+//======================================================================
+// SHOTGUN
+//
+// Stage 1 - wall decal
+// Stage 2 - sparks
+// Stage 2b - grey smoke
+//
+// Underwater
+// Stage 3 - grey impact particles
+// Stage 3b - grey/blue bubbles
+//
+//======================================================================
+//effect TE_GUNSHOT
+//countabsolute 1
+//type decal
+//tex 96 104						// variable bullet decals
+//size 1 2
+//alpha 32 96 0
+//originjitter 6 6 6
+
+effect TE_GUNSHOT
+count 16
+type alphastatic
+color 0x050505 0x202020			// dark/light grey						// O rings
+size 1.5 1.5
+rotate 0 0 0 0
+time 0.15 0.45
+alpha 256 256 0
+originjitter 8 8 8
+
+effect TE_GUNSHOT
+count 12
+type alphastatic
+color 0x404040 0x646464			// dark/light grey
+size 1.5 1.5
+rotate 0 0 0 0
+time 0.15 0.45
+originjitter 8 8 8
+alpha 256 256 0
+
+//----------------------------------------------------------------------
+//effect TE_GUNSHOT
+//count 2
+//type spark
+//color 0x801010 0xFFA020			// red/yellow
+//size 0.25 0.5					// Small
+//stretchfactor 2
+//alpha 0 128 64
+//gravity 0.25					// Fall down
+//bounce -1						// Remove on impact (costly)
+//velocityoffset 0 0 32
+//velocityjitter 32 32 32			// Large cube
+//notunderwater
+
+//effect TE_GUNSHOT
+//type smoke
+//count 8							// High count for SG/SSG
+//color 0x101010 0x79572a			// dark grey to dark orange
+//tex 8 16						// wispy smoke
+//size 4 12						// large puffs
+//sizeincrease 2
+//alpha 32 128 96
+//originjitter 4 4 4
+//velocityjitter 16 16 16
+//rotate 0 360 5 20				// Swirl and rotate
+//notunderwater
+
+//----------------------------------------------------------------------
+//effect TE_GUNSHOT
+//type bubble
+//count 4
+//color 0x101010 0x808080			// Dark/Light Grey
+//tex 32 46						// O ring bubbles
+//size 1 4
+//sizeincrease 2
+//alpha 96 256 64
+//liquidfriction 1				// Costly liquid test
+//originjitter 2 2 2
+//velocityjitter 8 8 8
+//underwater
+
+//======================================================================
+// NAILGUN
+//
+// Stage 1 - wall decal
+// Stage 2 - grey smoke
+// Stage 3 - grey impact particles
+//
+// Underwater
+// Stage 2b - grey smoke
+// Stage 3b - grey/blue impact particles 
+//
+//======================================================================
+effect TE_SPIKE
+count 12
+type alphastatic
+color 0x050505 0x202020			// dark/light grey						// O rings
+size 1.5 1.5
+rotate 0 0 0 0
+time 0.15 0.45
+alpha 256 256 0
+originjitter 8 8 8
+
+effect TE_SPIKE
+count 8
+type alphastatic
+color 0x404040 0x646464			// dark/light grey
+size 1.5 1.5
+rotate 0 0 0 0
+time 0.15 0.45
+originjitter 8 8 8
+alpha 256 256 0
+
+//======================================================================
+// SUPER NAILGUN
+//
+// Stage 1 - wall decal
+// Stage 2 - yellow/red smoke
+// Stage 3 - yellow/red impact particles
+//
+// Underwater
+// Stage 2b - grey smoke
+// Stage 3b - grey/blue impact particles 
+//
+//======================================================================
+effect TE_SUPERSPIKE
+count 14
+type alphastatic
+color 0x050505 0x202020			// dark/light grey						// O rings
+size 1.5 1.5
+rotate 0 0 0 0
+time 0.15 0.45
+alpha 256 256 0
+originjitter 8 8 8
+
+effect TE_SUPERSPIKE
+count 10
+type alphastatic
+color 0x404040 0x646464			// dark/light grey
+size 1.5 1.5
+rotate 0 0 0 0
+time 0.15 0.45
+originjitter 8 8 8
+alpha 256 256 0
+
+//======================================================================
+// ROCKET TRAIL
+//
+// Stage 1 - Yellow/red dots (like original)
+// Stage 2 - Puffs of grey smoke
+//
+//======================================================================
+effect TR_ROCKET
+trailspacing 2
+type alphastatic
+color 0xFF6600 0xFFFF55
+size 1.5 1.5
+rotate 0 0 0 0
+time 0.15 0.45
+alpha 256 256 0
+originjitter 2 2 2
+velocityjitter 16 16 16	
+//velocityoffset 50 50 50
+gravity -0.05
+
+effect TR_ROCKET
+trailspacing 2
+type alphastatic
+color 0x454545 0x303030
+size 1.5 1.5
+rotate 0 0 0 0
+time 0.15 0.45
+alpha 256 256 0
+originjitter 2 2 2
+velocityjitter 16 16 16
+//velocityoffset 50 50 50
+gravity -0.05
+
+//effect TR_ROCKET
+//trailspacing 1
+//type smoke
+//color 0x801010 0xFFA020			// Red/yellow
+//tex 62 64						// Solid Dots
+//size 1 2
+//sizeincrease 4
+//stretchfactor 2					// and stretch
+//velocityjitter 16 16 16			// Tight cube movement
+//lightradius 32
+//lightcolor 1 0.9 0.5
+
+// Grey smoke mixture
+//effect TR_ROCKET
+//trailspacing 4
+//type smoke
+//color 0x101010 0x606060			// Dark/Light Grey
+//tex 8 16						// Wispy smoke
+//size 1 7						// Wide variety of size
+//sizeincrease 4
+//stretchfactor 4					// and stretch
+//alpha 16 96 48					// Slow fade
+//velocityjitter 32 32 32			// Large spread cube
+//originjitter 4 4 4
+//gravity -0.05					// Force upwards
+//rotate 0 360 5 20				// Slow rotate
+//notunderwater
+
+//----------------------------------------------------------------------
+//effect TR_ROCKET
+//trailspacing 0.5
+//type bubble
+//color 0x101010 0xaacbd4			// Grey/white bubbles
+//tex 16 19						// 3 different types of bubbles
+//size 1 2
+//sizeincrease 2
+//alpha 96 192 64
+//liquidfriction 1
+//originjitter 2 2 2
+//velocityjitter 8 8 8
+//underwater
+
+//======================================================================
+// GRENADE TRAIL
+//
+// Stage 1 - Yellow/red dots (like original)
+// Stage 2 - Small puffs of grey smoke (vanish quick)
+//
+//======================================================================
+effect TR_GRENADE
+trailspacing 2
+type alphastatic
+color 0x202020 0x454545
+size 1.5 1.5
+rotate 0 0 0 0
+time 0.15 0.45
+alpha 256 256 0
+originjitter 2 2 2
+velocityjitter 16 16 16	
+//velocityoffset 50 50 50
+gravity -0.05
+
+effect TR_GRENADE
+trailspacing 3
+type alphastatic
+color 0x020202 0x040404
+size 1.5 1.5
+rotate 0 0 0 0
+time 0.8 1.5
+alpha 256 256 0
+originjitter 2 2 2
+velocityjitter 4 4 4
+//velocityoffset 50 50 50
+gravity -0.01
+
+//effect TR_GRENADE
+//trailspacing 1
+//type smoke
+//color 0x801010 0xFFA020			// Red/yellow
+//tex 62 64						// Old Style Quake Dots
+//size 1 2
+//sizeincrease 4
+//stretchfactor 2					// and stretch
+//velocityjitter 16 16 16			// Tight cube movement
+
+//effect TR_GRENADE
+//trailspacing 4
+//type alphastatic
+//color 0x101010 0x606060			// Dark/Light Grey
+//tex 8 16						// Wispy smoke
+//size 1 7						// Wide variety of size
+//sizeincrease 4
+//stretchfactor 4					// and stretch
+//alpha 16 96 48					// Slow fade
+//velocityjitter 32 32 32			// Large spread cube
+//originjitter 4 4 4
+//gravity -0.05					// Force upwards
+//rotate 0 360 5 20				// Slow rotate
+//notunderwater
+
+//----------------------------------------------------------------------
+//effect TR_GRENADE
+//trailspacing 0.25
+//type bubble
+//color 0x101010 0xaacbd4			// Dark/light grey
+//tex 16 19						// Full range of bubbles
+//size 1 2
+//sizeincrease 2
+//alpha 96 192 64
+//liquidfriction 1
+//originjitter 2 2 2
+//velocityjitter 8 8 8
+//underwater
+
+//======================================================================
+// ROCKET / GRENADE EXPLOSIONS
+//
+// Stage 1 : Black impact decal
+// Stage 2 : Ball of Light
+// Stage 3 : Large spray of sparks
+// Stage 4 : Red ball of smoke
+// Stage 5 : Slow grey smoke
+//
+//======================================================================
+effect TE_EXPLOSION
+count 600
+type alphastatic
+color 0x903010 0xFFD030
+size 1.5 1.5
+rotate 0 0 0 0
+time 1.0 1.2
+alpha 256 256 0
+originjitter 2 2 2
+velocityoffset 0 0 80			// fly up
+velocityjitter 900 900 900
+
+effect TE_EXPLOSION
+count 600
+type alphastatic
+color 0xFFCC00 0xFFFF33
+size 1.5 1.5
+rotate 0 0 0 0
+time 0.5 0.7
+alpha 256 256 0
+originjitter 2 2 2
+airfriction 2.0
+//velocityoffset 0 0 80			// fly up
+velocityjitter 600 600 600
+
+// Black smoke decal projected on to impact surface
+//effect TE_EXPLOSION
+//countabsolute 1
+//type decal
+//tex 112 119						// Large smokey impact
+//size 32 48						// Stretch up very large
+//alpha 64 128 0
+//originjitter 48 48 48
+
+// Ball of light
+effect TE_EXPLOSION
+lightradius 50					// Large light
+lightradiusfade 150				// Quick flash
+lightcolor 4 2 1				// Yellow/Orange
+originoffset 0 0 16
+notunderwater
+
+// Spray of Sparks with long lifetime
+//effect TE_EXPLOSION
+//count 32						// Medium amount
+//type spark
+//color 0x903010 0xFFD030			// red/yellow
+//size 1 1
+//sizeincrease 2					// Expand
+//stretchfactor 2					// and stretch
+//alpha 0 256 224					// Large range, quick fade
+//gravity 0.35					// quick fall
+//airfriction 0.35
+//velocityoffset 0 0 80			// fly up
+//velocityjitter 256 256 256		// Extra Wide start pattern
+//notunderwater
+
+//  large ball of yellow/red smoke which dissipates quickly
+//effect TE_EXPLOSION
+//count 16
+//type smoke
+//color 0x801010 0xFFA020			// red/yellow smoke
+//tex 0 8							// smoke puffs
+//size 16 24						// Very Large range
+//sizeincrease 4					// Expanding smoke
+//alpha 16 96 32					// Medium fade
+//airfriction 0.2					// Slowly fall down
+//originjitter 16 16 32			// Lift smoke off the ground
+//velocityjitter 32 32 16			// Wide spread pattern
+//rotate 0 360 15 30				// Keep rotating
+//notunderwater
+
+//  slowly dissipating grey smoke 
+//effect TE_EXPLOSION
+//count 24
+//type smoke
+//color 0x202020 0x635844			// Dark/Light grey (large range)
+//tex 8 16						// Wispy smoke
+//size 16 24						// Very Large range
+//sizeincrease 2					// Double size
+//alpha 16 128 32
+//airfriction 0.2
+//originjitter 8 8 16				// Lift smoke off the ground
+//velocityjitter 16 16 8			// Very little movement
+//rotate 0 360 -15 -30			// Reverse direction to red/yellow smoke
+//notunderwater
+
+//----------------------------------------------------------------------
+// Ball of light
+//effect TE_EXPLOSION
+//lightradius 50
+//lightradiusfade 100
+//lightcolor 2.8 2.3 1.2
+//underwater
+
+//  large ball of grey/blue bubbles which dissipates quickly
+//effect TE_EXPLOSION
+//count 32
+//type bubble
+//color 0x101010 0xbbb591
+//tex 16 19						// Full range of bubbles
+//size 4 8
+//sizeincrease 2
+//alpha 128 192 64
+//liquidfriction 1
+//velocityjitter 32 32 32
+//underwater
+
+//  slowly dissipating grey bubbles 
+//effect TE_EXPLOSION
+//count 32
+//type bubble
+//color 0x202020 0x606060
+//tex 32 46						// Full range of O rings
+//size 8 12						// Large size
+//sizeincrease 2
+//alpha 16 128 32
+//liquidfriction 1
+//velocityjitter 64 64 64
+//underwater
+
+//======================================================================
+// PLASMA TRAIL
+//
+// Stage 1 - Various blue dots (based on TR_ROCKET)
+// Stage 2 - Puffs of blue smoke
+//
+//======================================================================
+effect TR_PLASMA
+trailspacing 2
+type smoke
+color 0x8b8bc1 0xeae74d			// light blue/light yellow
+tex 62 64						// Solid Dots
+size 0.25 0.5
+sizeincrease 3
+stretchfactor 2					// and stretch
+velocityjitter 16 16 32			// move up
+lightradius 32
+lightcolor 1 0.9 0.5
+
+// Grey smoke mixture
+effect TR_PLASMA
+trailspacing 10
+type smoke
+color 0x2f2f3f 0x8b8bc1			// dark/light blue
+tex 8 16						// Wispy smoke
+size 0.5 2						// Wide variety of size
+sizeincrease 4
+stretchfactor 8					// and stretch
+alpha 16 96 48					// Slow fade
+velocityjitter 32 32 32			// Large spread cube
+originjitter 4 4 8
+gravity -0.05					// Force upwards
+rotate 0 360 5 20				// Slow rotate
+notunderwater
+
+//----------------------------------------------------------------------
+effect TR_PLASMA
+trailspacing 0.5
+type bubble
+color 0x8b8bc1 0xeae74d			// light blue/light yellow
+tex 16 19						// 3 different types of bubbles
+size 1 2
+sizeincrease 2
+alpha 96 192 64
+liquidfriction 1
+originjitter 2 2 2
+velocityjitter 8 8 8
+underwater
+
+//======================================================================
+// PLASMA IMPACT (EXPLOSION)
+//
+// Similiar to RL explosion, except more blue and spark like
+//
+//======================================================================
+// Black smoke decal projected on to impact surface
+effect TE_PLASMA
+countabsolute 1
+type decal
+tex 112 119						// Large smokey impact
+size 32 48						// Stretch up very large
+alpha 64 128 0
+originjitter 48 48 48
+
+// Ball of light
+effect TE_PLASMA
+lightradius 5					// Tiny light
+lightradiusfade 25				// Quick flash
+lightcolor 1 2 8				// Blue/Purple
+originoffset 0 0 16
+notunderwater
+
+// Spray of Sparks with long lifetime
+effect TE_PLASMA
+count 32						// Medium amount
+type spark
+color 0x545470 0x8b8bc1			// dark/light blue
+size 1 1
+sizeincrease 2					// Expand
+stretchfactor 2					// and stretch
+alpha 0 256 224					// Large range, quick fade
+gravity 0.35					// quick fall
+airfriction 0.35
+velocityoffset 0 0 80			// fly up
+velocityjitter 128 128 128		// medium pattern
+notunderwater
+
+effect TE_PLASMA
+count 8
+type static
+color 0x801010 0xFFA020			// red/yellow smoke
+tex 62 64						// Old style Quake Dots
+size 1 4
+alpha 64 128 24					// Slow Fade
+airfriction 0.25
+originjitter 8 8 8				// small cube of smoke
+velocityjitter 32 32 32			// Small focused pattern
+rotate 0 360 15 30				// Keep rotating
+notunderwater
+
+//  slowly dissipating grey smoke 
+effect TE_PLASMA
+count 8
+type smoke
+color 0x545470 0x8b8bc1			// dark/light blue
+tex 8 16						// Wispy smoke
+size 16 24						// Very Large range
+sizeincrease 2					// Double size
+alpha 16 128 48
+airfriction 0.2
+originjitter 8 8 16				// Lift smoke off the ground
+velocityjitter 16 16 8			// Very little movement
+rotate 0 360 -15 -30			// Reverse direction to red/yellow smoke
+notunderwater
+
+//----------------------------------------------------------------------
+// Ball of light
+effect TE_PLASMA
+lightradius 5
+lightradiusfade 25
+lightcolor 1.2 2.3 2.8
+underwater
+
+//  large ball of grey/blue bubbles which dissipates quickly
+effect TE_PLASMA
+count 24
+type bubble
+color 0x101010 0xbbb591
+tex 16 19						// Full range of bubbles
+size 4 8
+sizeincrease 2
+alpha 128 192 64
+liquidfriction 1
+velocityjitter 32 32 32
+underwater
+
+//  slowly dissipating grey bubbles 
+effect TE_PLASMA
+count 24
+type bubble
+color 0x202020 0x606060
+tex 32 46						// Full range of O rings
+size 8 12						// Large size
+sizeincrease 2
+alpha 16 128 32
+liquidfriction 1
+velocityjitter 64 64 64
+underwater
+
+//======================================================================
+// Lava Splash - Chthon rise and fall
+// Giant spray of sparks and smoke upward and out
+//----------------------------------------------------------------------
+effect TE_LAVASPLASH
+count 512
+type spark  
+color 0x903010 0xFFD030			// red/yellow
+size 1 2
+sizeincrease 2					// Expand
+stretchfactor 2					// and stretch
+alpha 256 256 80				// Bright slow fade
+gravity 0.2						// quick fall
+bounce -1						// Expensive bounce
+airfriction 0.35
+originoffset 8 8 4  			// Small flat cube
+originjitter 128 128 64			// Large initial volume
+velocityjitter 192 192 284		// Giant spread pattern
+
+effect TE_LAVASPLASH
+count 224
+type smoke 
+color 0x801010 0xFFA020			// red/yellow smoke
+tex 0 8							// smoke puffs
+size 16 32						// Very Large range
+sizeincrease 6					// Expanding smoke
+alpha 16 96 24					// Medium fade
+airfriction 0.2					// Slowly fall down
+gravity 0.2
+originoffset 8 8 8  			// Small cube start
+originjitter 128 128 64			// Large initial volume
+velocityoffset 0 0 64			// Push upwards
+velocityjitter 128 128 128		// Giant spread pattern
+rotate 0 360 15 60				// Keep rotating
+
+//----------------------------------------------------------------------
+// MONSTER - BOSS CHTHON
+// Smoke and sparks burst forth from the torso
+//----------------------------------------------------------------------
+//burning chton - sparkles
+effect TR_BOSSCHTHON
+countabsolute 4
+type spark						// Wispy goodness
+color 0x801010 0xFFA020			// red/yellow smoke
+tex 62 64						// Large dots
+size 1 4
+sizeincrease 2					// Expand
+stretchfactor 4					// and stretch
+alpha 128 192 64
+originjitter 64 64 32			// Large volume area
+originoffset 0 0 40 			// Start inside middle area
+velocityoffset 16 16 48 		// Float upward
+airfriction 1					// Fall down naturally
+velocityjitter 96 96 128		// Wide area movement
+
+effect TR_BOSSCHTHON
+countabsolute 2
+type smoke 
+color 0x801010 0xFFA020			// red/yellow smoke
+tex 0 8							// smoke puffs
+size 16 32						// Very Large range
+sizeincrease 6					// Expanding smoke
+alpha 16 96 24					// Medium fade
+airfriction 0.2					// Slowly fall down
+gravity 0.2
+originoffset 8 8 8  			// Small cube start
+originjitter 128 128 64			// Large initial volume
+velocityoffset 0 0 64			// Push upwards
+velocityjitter 128 128 64		// Giant spread pattern
+rotate 0 360 15 60				// Keep rotating
+
+effect TR_BOSSCHTHON
+count 2							// bunch of particles!
+type static						// Standard decal
+color 0x801010 0xFFA020			// red/yellow smoke
+tex 109 109						// Fluffy cloud ring
+size 96 144						// Fixed size around body
+sizeincrease 8					// Expanding ring
+alpha 96 320 80					// Slow Fade
+orientation oriented 			// Always draw on the floor
+originoffset 0 0 16				// Move forward
+originjitter 2 2 2
+velocityoffset 0 0 4
+rotate 0 360 30 45
+
+//----------------------------------------------------------------------
+// MONSTER - HELL KNIGHT
+// Magical fire trail matched with original projectile colours
+// interlaced with a quick fading wispy cloud
+//----------------------------------------------------------------------
+effect TR_KNIGHTSPIKE
+trailspacing 1.5
+type alphastatic
+color 0x7f1707 0xe7ab5f			// Red/Orange picked from projectile palette
+tex 62 64						// Old style Quake Dots
+size 2.0 2.0
+alpha 256 256 0
+rotate 0 0 0 0
+time 0.8 1.5
+//sizeincrease 4
+velocityjitter 8 8 8			// Gently dissipate 
+
+//effect TR_KNIGHTSPIKE
+//trailspacing 4
+//type smoke
+//color 0x101010 0x606060			// Dark/Light Grey
+//tex 8 16						// Wispy smoke
+//size 1 7
+//sizeincrease 3
+//alpha 16 128 96					// Quick fade
+//velocityjitter 16 16 16
+//originjitter 4 4 4
+//gravity -0.02					// Slow upward movement
+//rotate 0 360 5 20				// Slow rotate
+//notunderwater
+
+//----------------------------------------------------------------------
+// MONSTER - HELL KNIGHT
+// Black impack with light yellow smoke
+//----------------------------------------------------------------------
+//effect TE_KNIGHTSPIKE
+//countabsolute 1					// Only one per particle emitter
+//type decal
+//tex 96 104						// round impacts
+//size 3 9						// Large decal
+//alpha 32 96 0					// Variable alpha
+//originjitter 6 6 6
+
+//effect TE_KNIGHTSPIKE
+//countabsolute 1					// Only one per particle emitter
+//type decal
+//tex 96 104						// round impacts
+//size 1 6						// variable size
+//alpha 1024 1024 0
+//lightradius 20					// Small light
+//lightradiusfade 16				// gentle fade
+//lightshadow 0
+//lightcolor 1 0.75 0				// hot yellow glow
+
+//effect TE_KNIGHTSPIKE
+//type smoke
+//countabsolute 4
+//color 0x101010 0xc18c30			// Grey/Orange colour
+//tex 0 16						// solid + wispy cloud puffs
+//size 1 3
+//sizeincrease 2
+//alpha 96 192 128				// Large alpha selection, quick fade
+//originjitter 2 2 2
+//velocityjitter 8 8 8			// Slow movement
+//rotate 0 360 0 30
+
+effect TE_KNIGHTSPIKE
+type alphastatic
+countabsolute 8
+color 0x7f1707 0xe7ab5f			// Red/Orange picked from projectile palette
+tex 62 64						// Old Style Quake Dots
+size 1 3
+sizeincrease 2
+time 0.8 1.5
+alpha 256 256 0	
+rotate 0 0 0 0			
+originjitter 2 2 2
+velocityjitter 8 8 8
+
+//----------------------------------------------------------------------
+// MONSTER - WIZARD
+// Acid spit trail matched with original projectile colours
+// interlaced with a quick fading wispy cloud
+//----------------------------------------------------------------------
+effect TR_WIZSPIKE
+trailspacing 1
+type smoke
+color 0x433700 0xbba70f			// Original wiz projectile colours
+tex 62 64						// Lovely dot trail (original vibe)
+size 1 2
+time 0.8 1.5
+sizeincrease 4
+velocityjitter 16 16 16			// Gently dissipate 
+rotate 0 0 0 0
+
+//effect TR_WIZSPIKE
+//trailspacing 2
+//type alphastatic
+//color 0x101010 0x6b6b0f			// Sickly cloud colour
+//tex 8 16						// Wispy cloud puffs
+//size 1 3
+//sizeincrease 3
+//alpha 16 128 128				// Quick fade
+//velocityjitter 16 16 16
+//originjitter 4 4 4
+//gravity -0.05					// Gently lift upwards
+//rotate 0 360 0 30
+
+//----------------------------------------------------------------------
+// MONSTER - WIZARD
+// Blobs of acid drop like blood while two types of sickly clouds
+// swirl around the impact location
+//----------------------------------------------------------------------
+//effect TE_WIZSPIKE
+//count 16
+//type blood
+//color 0x730059 0x730059			// Special colour to match inverted textures
+//tex 72 80
+//size 4 10						// Large blobs
+//alpha 128 256 16				// Large variety of colour
+//gravity 0.4						// Fall Downward
+//bounce 1						// Turn into decal on impact
+//airfriction 1
+//originjitter 12 12 8
+///staincolor 0xFFFFFF 0xFFFFFF	// Full colour
+//stainsize 1 2					// Small size
+//staintex 64 71					// Remapped blood stain textures
+
+effect TE_WIZSPIKE
+type static
+count 48
+color 0x433700 0xbba70f			// Original wiz projectile colours
+tex 32 46						// Full range of O rings
+size 1.5 1.5
+sizeincrease 4
+time 0.15 0.45
+alpha 256 256 0					// gently dissipate
+originjitter 4 4 4				// evenly spread
+velocityjitter 4 4 4			// cube movement
+rotate 0 0 0 0
+
+//effect TE_WIZSPIKE
+//type smoke
+//count 24
+//color 0x101010 0x52520b			// Dark sickly colour
+//tex 8 16						// wispy smoke
+//size 4 12						// large range
+//sizeincrease 2
+//alpha 32 128 24					// Slowly dispate
+//originjitter 16 16 1			// Horizontal spread
+//velocityjitter 8 8 1			// Horizontal movement
+//rotate 0 360 20 40
+//notunderwater
+
+//----------------------------------------------------------------------
+// MONSTER - SHALRATH
+// Dense purple particle trail directly behind projectile
+//----------------------------------------------------------------------
+//effect TR_VORESPIKE
+//trailspacing 1
+//type smoke
+//color 0x6b4b57 0x937387			// Original shalrath projectile colours
+//tex 62 64						// Lovely dot trail (original vibe)
+//size 1 2
+//sizeincrease 4
+//velocityjitter 16 16 16			// Gently dissipate 
+//lightradius 16					// Small light source
+//lightcolor 1 0.8 0.9			// Purple light
+//rotate 0 360 0 30
+
+effect TR_VORESPIKE
+trailspacing 2
+type alphastatic
+color 0x3b1f23 0x7e424a			// Purple Haze cloud colour
+//tex 8 16						// Wispy cloud puffs
+size 1.5 1.5						// Wide variety of size
+//sizeincrease 4
+alpha 256 256 0
+time 0.4 0.8					// Bright + Slow fade
+originjitter 4 4 4
+velocityjitter 16 16 16			// Small cube
+gravity -0.05					// Gently lift upwards
+rotate 0 0 0 0
+//notunderwater
+
+//----------------------------------------------------------------------
+//effect TR_VORESPIKE
+//trailspacing 0.5
+//type bubble
+//color 0x6b4b57 0x937387			// Original shalrath projectile colours
+//tex 16 19						// Full range of bubbles
+//size 1 2
+//sizeincrease 4
+//alpha 96 192 64
+//liquidfriction 1
+//originjitter 2 2 2
+//velocityjitter 8 8 8
+//underwater
+
+//======================================================================
+// MONSTER - SHALRATH
+// Small purple explosion with sparks and lingering smoke
+//----------------------------------------------------------------------
+effect TE_VORESPIKE
+count 200
+type alphastatic
+color 0x4b2f37 0x9f7f97
+size 1.5 1.5
+rotate 0 0 0 0
+time 1.0 1.2
+alpha 256 256 0
+originjitter 2 2 2
+velocityoffset 0 0 80			// fly up
+velocityjitter 900 900 900
+
+effect TE_VORESPIKE
+count 200
+type alphastatic
+color 0x101010 0xbbb591
+size 1.5 1.5
+rotate 0 0 0 0
+time 0.5 0.7
+alpha 256 256 0
+originjitter 2 2 2
+airfriction 2.0
+//velocityoffset 0 0 80			// fly up
+velocityjitter 600 600 600
+
+// Black smoke decal projected on to impact surface
+//effect TE_VORESPIKE
+//countabsolute 1
+//type decal
+//tex 112 119						// Large impact
+//size 32 48						// Stretch up very large
+//alpha 64 128 0
+//originjitter 48 48 48
+
+// Ball of light
+effect TE_VORESPIKE
+lightradius 50					// Small light
+lightradiusfade 150				// Quick flash
+lightcolor 3.6 2 2.24			// Deep purple
+//notunderwater
+
+//effect TE_VORESPIKE
+//count 32
+//type spark						// central spray of sparks
+//color 0x4b2f37 0x9f7f97			// matched purple colour to projectile
+//size 0.5 1						// Small and stretched
+//stretchfactor 8
+//alpha 16 128 128				// Quick fade
+//airfriction 0.5
+//velocityjitter 64 64 64			// high speed
+//notunderwater
+
+//effect TE_VORESPIKE
+//count 16
+//type smoke
+//color 0x4b2f37 0x9f7f97			// matched purple colour to projectile
+//tex 0 8							// smoke puffs
+//size 16 24						// Very Large range
+//sizeincrease 4					// Expanding smoke
+//alpha 16 96 32					// Medium fade
+//airfriction 0.2					// Slowly fall down
+//originjitter 16 16 32			// Lift smoke off the ground
+//velocityjitter 32 32 16			// Wide spread pattern
+//rotate 0 360 15 30				// Keep rotating
+//notunderwater
+
+//effect TE_VORESPIKE
+//count 16
+//color 0x101010 0x6b4b57			// Dark colour
+//tex 32 46						// O rings
+//size 0.25 0.75					// start small
+//sizeincrease 1.5
+//alpha 16 1024 256				// Big variety of colour/density
+//originjitter 16 16 1			// Horizontal spread
+//velocityjitter 12 12 8			// Horzontal movement
+//notunderwater
+
+//effect TE_VORESPIKE
+//count 24
+//type smoke
+//color 0x4b2f37 0x9f7f97			// matched light/dark purple colour
+//tex 8 16						// Wispy smoke
+//size 16 24						// Very Large range
+//sizeincrease 2
+//alpha 16 64 48					// slow dissipation
+//airfriction 0.2
+//originjitter 8 8 16				// Lift smoke off the ground
+//velocityjitter 16 16 8			// Very little movement
+//rotate 0 360 -15 -30			// Reverse direction to red/yellow smoke
+//notunderwater
+
+//----------------------------------------------------------------------
+// Ball of light
+//effect TE_VORESPIKE
+//lightradius 50
+//lightradiusfade 200
+//lightcolor 2.8 2.3 1.2			// Strong yellow
+//underwater
+
+//effect TE_VORESPIKE
+//count 16
+//type smoke
+//color 0x4b2f37 0x9f7f97			// matched purple colour to projectile
+//tex 0 8							// smoke puffs
+//size 16 24						// Very Large range
+//sizeincrease 4					// Expanding smoke
+//alpha 16 96 32					// Medium fade
+//airfriction 0.2					// Slowly fall down
+//originjitter 16 16 32			// Lift smoke off the ground
+//velocityjitter 32 32 16			// Wide spread pattern
+//rotate 0 360 15 30				// Keep rotating
+//underwater
+
+//effect TE_VORESPIKE
+//count 64
+//type bubble
+//color 0x101010 0xbbb591			// grey/blue colour (subdued bec of water)
+//tex 16 19						// Full range of bubbles
+//size 4 8
+//sizeincrease 2
+//alpha 128 192 64				// Quick fade
+//liquidfriction 1
+//velocityjitter 32 32 32			// Slow movement
+//underwater
+
+//effect TE_VORESPIKE
+//count 64
+//type bubble
+//color 0x202020 0x606060			// Grey shades
+//tex 32 46						// O Rings
+//size 4 12						// Large size
+//sizeincrease 2
+//alpha 32 96 8					// Very slow dissipation
+//liquidfriction 1
+//velocityjitter 64 64 64			// Wide spread
+//underwater
+
+//======================================================================
+// MONSTER - WRAITH
+// Large explosion with dots and lingering smoke
+//----------------------------------------------------------------------
+// Ball of light
+effect DPP_ITSWRAITHEXPLODE
+lightradius 50					// small light
+lightradiusfade 150				// Quick flash
+lightcolor 3.6 2 2.24			// Deep purple
+
+effect DPP_ITSWRAITHEXPLODE
+count 96
+type static
+color 0x7f1707 0xe7ab5f			// Red/Orange picked from projectile palette
+tex 62 64						// Old style Quake Dots
+size 1 4
+alpha 64 128 16					// Slow Fade
+airfriction 0.25
+originjitter 8 8 8				// small cube of smoke
+velocityjitter 64 64 64			// Extra Wide start pattern
+rotate 0 360 15 30				// Keep rotating
+
+effect DPP_ITSWRAITHEXPLODE
+count 24
+type smoke
+color 0x4b2f37 0x9f7f97			// matched purple colour to projectile
+tex 0 8							// smoke puffs
+size 16 24						// Very Large range
+sizeincrease 8					// Expanding smoke
+alpha 16 160 32					// slow fade
+airfriction 0.2					// Slowly fall down
+originjitter 32 32 32			// wide cube of smoke
+velocityjitter 32 32 16			// medium dispersal
+rotate 0 360 15 30				// Keep rotating
+
+effect DPP_ITSWRAITHEXPLODE
+count 16
+type smoke
+color 0x801010 0xFFA020			// Red/yellow
+tex 8 16						// Wispy smoke
+size 16 24						// Very Large range
+sizeincrease 8					// Double size
+alpha 16 128 32					// Slow fade
+airfriction 0.2					// Slowly fall down
+originjitter 16 16 16			// medium cube of smoke
+velocityjitter 16 16 32			// medium dispersal
+rotate 0 360 -15 -30			// Reverse direction to red/yellow smoke
+
+//======================================================================
+// MONSTER - PYRO
+// Flame1 - Yellow/red out of water (detected in qc point content)
+// Flame2 - White/grey under water
+//----------------------------------------------------------------------
+effect DPP_ITSPYROFLAME1
+count 12
+type smoke
+color 0x801010 0xFFA020			// Red/yellow
+tex 0 16						// All smoke
+size 16 24						// Very Large range
+sizeincrease 8					// Double size
+alpha 32 128 48					// Slow fade
+airfriction 0.2					// Slowly fall down
+originjitter 16 16 16			// medium cube of smoke
+velocityoffset 0 0 16			// fly up
+velocityjitter 16 16 32			// medium dispersal
+velocitymultiplier 160			// Using parameter velocity
+rotate 0 360 -15 -30			// Reverse direction to red/yellow smoke
+
+effect DPP_ITSPYROFLAME1
+count 32
+type static
+color 0x7f1707 0xe7ab5f			// Red/Orange picked from projectile palette
+tex 62 64						// Old style Quake Dots
+size 1 4
+alpha 64 128 24					// Slow Fade
+airfriction 0.2
+originjitter 8 8 8				// small cube of smoke
+velocityoffset 0 0 16			// fly up
+velocityjitter 16 16 32			// medium dispersal
+velocitymultiplier 160			// Using parameter velocity
+rotate 0 360 15 30				// Keep rotating
+
+effect DPP_ITSPYROFLAME2
+count 16
+type smoke
+color 0x202020 0x606060			// Grey shades
+tex 8 16						// Wispy smoke
+size 16 24						// Very Large range
+sizeincrease 8					// Double size
+alpha 64 128 48					// Slow fade
+airfriction 0.2					// Slowly fall down
+originjitter 16 16 16			// medium cube of smoke
+velocityoffset 0 0 16			// fly up
+velocityjitter 16 16 32			// medium dispersal
+velocitymultiplier 160			// Using parameter velocity
+rotate 0 360 -15 -30			// Reverse direction to red/yellow smoke
+
+effect DPP_ITSPYROFLAME2
+count 28
+type static
+color 0x7f1707 0x606060			// Grey shades
+tex 62 64						// Old style Quake Dots
+size 1 4
+alpha 64 128 24					// Slow Fade
+airfriction 0.2
+originjitter 8 8 8				// small cube of smoke
+velocityoffset 0 0 16			// fly up
+velocityjitter 16 16 32			// medium dispersal
+velocitymultiplier 160			// Using parameter velocity
+rotate 0 360 15 30				// Keep rotating
+
+//======================================================================
+// STANDARD BLOOD IMPACT (from damage)
+//----------------------------------------------------------------------
+effect TE_BLOOD
+count 0.333						// DP default
+type blood						// produce decals on impact
+tex 72 80						// Remapped blood textures
+size 8 8
+alpha 256 256 64
+bounce -1						// Produce decals on impact
+airfriction 1
+liquidfriction 4				// Sink through water
+velocityjitter 64 64 64			// Large movement cube
+velocitymultiplier 1			// Using parameter velocity
+rotate 0 360 0 0				// Rotation variety
+staincolor 0xFFFFFF 0xFFFFFF	// Full colour
+stainsize 1 2					// Small size
+staintex 64 71					// Remapped blood stain textures
+
+//======================================================================
+// LIGHT BLOOD TRAIL (model flag) - Only used by Zombies
+//----------------------------------------------------------------------
+effect TR_SLIGHTBLOOD
+trailspacing 32					// DP default
+type blood						// bounce and change into blood decal
+color 0xFFFFFF 0xFFFFFF			// Texture colours
+tex 72 80						// motion blood splats
+size 4 8						// Medium blood splat
+alpha 384 384 192				// Full colour, quick fade time
+bounce -1						// Turn into blood decal
+airfriction 1
+liquidfriction 4				// Sink through water
+velocityjitter 64 64 64			// Large movement cube
+velocitymultiplier 0.5			// Using parameter velocity
+rotate 0 360 0 0				// Rotation variety
+staincolor 0xFFFFFF 0xFFFFFF	// Full colour
+stainsize 1 2					// Small size
+staintex 64 71					// Remapped blood stain textures
+
+//======================================================================
+// VANILLA QUAKE - LONG BLOOD TRAIL (model flag)
+//----------------------------------------------------------------------
+
+effect TR_BLOOD
+trailspacing 1.5
+type alphastatic
+color 0x550000 0x550000			// blood
+tex 62 64
+size 1.5 1.5
+rotate 0 0 0 0
+time 0.15 0.45
+alpha 256 256 0
+originjitter 2 2 2
+velocityjitter 8 8 8			// Gently dissipate
+gravity 0.05
+
+//effect TR_BLOOD
+//trailspacing 16					// DP default
+//type blood						// bounce and change into blood decal
+//color 0xFFFFFF 0xFFFFFF			// Texture colours
+//tex 72 80						// motion blood splats
+//size 4 8						// Medium blood splat
+//alpha 384 384 192				// Full colour, quick fade time
+//bounce -1						// Turn into blood decal
+//airfriction 1
+//liquidfriction 4				// Sink through water
+//velocityjitter 64 64 64			// Large movement cube
+//velocitymultiplier 0.5			// Using parameter velocity
+//rotate 0 360 0 0				// Rotation variety
+//staincolor 0xFFFFFF 0xFFFFFF	// Full colour
+//stainsize 1 2					// Small size
+//staintex 64 71					// Remapped blood stain textures
+
+//======================================================================
+// QUAKE - EXTRA LONG BLOOD TRAIL (model flag) (lots of particles)
+//----------------------------------------------------------------------
+effect TR_ITSBLOOD
+trailspacing 16					// DP default
+type blood						// bounce and change into blood decal
+color 0xFFFFFF 0xFFFFFF			// Texture colours
+tex 72 80						// motion blood splats
+size 4 8						// Medium blood splat
+alpha 256 384 16
+bounce -1						// Turn into blood decal
+airfriction 1
+liquidfriction 4
+velocityjitter 32 32 32			// Extra movement
+velocitymultiplier 0.5			// Using parameter velocity
+rotate 0 360 0 0				// Rotation variety
+staincolor 0xFFFFFF 0xFFFFFF	// Full colour
+stainsize 1 2					// Small size
+staintex 64 71					// Remapped blood stain textures
+
+effect TR_ITSBLOOD
+trailspacing 8 					// Very intense blood trail
+type alphastatic
+color 0x070000 0x3f0000			// Original Quake RED colours
+tex 62 64						// Large pixel goodness
+size 3 4						// Variable size
+alpha 128 256 16				// Good alpha range
+bounce 1						// Bounce off surface
+gravity 0.5
+originjitter 4 4 4				// random start bias
+notunderwater
+
+//======================================================================
+//----------------------------------------------------------------------
+effect TE_SPARK
+count 1
+type spark
+color 0x8f4333 0xfff31b			// Yellow/red colours
+size 0.4 0.4					// tiny
+alpha 0 256 768					// Ultra quick fade
+gravity 1						// Fall down fast
+bounce -1						// expensive on frames
+velocityoffset 0 0 80			// Start high
+velocityjitter 64 64 64			// large velocity adjustment
+velocitymultiplier 1			// Using parameter velocity
+
+//----------------------------------------------------------------------
+// Generic Teleport Effect
+// Start with imploding flash of light, followed by two sets of
+// streaking sparks and finally slow moving smoke/dots
+//----------------------------------------------------------------------
+// Ball of light
+effect TE_TELEPORT
+lightradius 64					// Small light
+lightradiusfade 300				// Implode
+lightcolor 2.6 2 2				// White/Red
+
+effect TE_TELEPORT
+count 32
+type spark						// central spray of sparks
+color 0x2f2f3f 0x63638b			// dark/light blue
+tex 32 35						// Solid O rings
+size 0.25 1						// Small and stretched
+stretchfactor 16
+alpha 320 128 48				// Quick fade
+airfriction 0.75
+originjitter 8 8 2				// Horz spread
+velocityjitter 32 32 32			// high speed
+
+effect TE_TELEPORT
+count 32
+type spark						// central spray of sparks
+color 0x2f2f3f 0x63638b			// dark/light blue
+tex 32 35						// Solid O rings
+size 0.25 1						// Small and stretched
+stretchfactor 12
+alpha 320 128 48				// Quick fade
+airfriction 0.6					// Go further than other sparks
+originjitter 8 8 4				// Horz spread
+velocityjitter 12 12 12			// slow speed
+
+effect TE_TELEPORT
+count 24
+type static
+color 0x101010 0x707070			// dark/light grey
+tex 32 47						// Full range of O rings
+size 0.25 1						// Start small
+sizeincrease 3
+alpha 320 256 96				// Quickly dispate
+originjitter 16 16 16			// Small cube
+velocityjitter 2 2 2			// Slight movement
+
+effect TE_TELEPORT
+count 32						// large amount
+type smoke
+color 0x101010 0x58606f			// dark/light blues
+tex 0 16						// wispy smoke puffs
+size 4 8						// Large size
+sizeincrease 4					// Expanding smoke
+alpha 16 96 12					// Slow Fade
+airfriction 0.2					// Slowly fall down
+originjitter 16 16 24			// Lift smoke off the ground
+velocityjitter 12 12 4			// Slow movement up
+rotate 0 360 5 15				// Swirl and rotate
+notunderwater
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//======================================================================
+//
+// specific particle effects (QC generated)
+// Check part_manage.qc for more details
+//
+//======================================================================
+//======================================================================
+// Light streaking and dot particles streaming from portal surface
+// Designed for 0,180 angle portal surfaces
+//----------------------------------------------------------------------
+effect DPP_ITSPORTALFRONT
+count 16
+type spark
+color 0x2f2f3f 0xa7a7ea			// dark/light blue
+tex 62 64						// Large Solid Dots
+size 0.25 1.0
+stretchfactor 16				// long stretched particles
+alpha 128 256 64				// slow dissipation
+originjitter 0 32 48
+velocityjitter 8 8 8
+velocitymultiplier 32			// Using parameter velocity
+
+effect DPP_ITSPORTALFRONT
+count 16
+type smoke
+color 0x808080 0xFFFFFF			// Dark Grey to White
+tex 62 64						// Large Solid Dots
+size 0.25 1.0
+sizeincrease 0.75
+alpha 192 256 64				// slow dissipation
+originjitter 0 32 48
+velocityjitter 4 4 4
+velocitymultiplier 32			// Using parameter velocity
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSPORTALFRONT
+count 24						// large amount
+type static
+color 0x101010 0x58606f			// dark/light blues
+tex 8 16						// wispy smoke puffs
+size 2 4						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 64 160 48					// Slow Fade
+airfriction 0.2					// Slowly fall down
+originjitter 8 32 8				// Horz movement
+originoffset 0 0 -36			// Bottom of portal
+velocityjitter 8 8 4			// Horz jig
+velocitymultiplier 28			// Using parameter velocity
+gravity 0.01
+rotate 0 360 5 15				// Swirl and rotate
+
+//----------------------------------------------------------------------
+// Designed for 90,270 angle portal surfaces
+//----------------------------------------------------------------------
+effect DPP_ITSPORTALSIDE
+count 16
+type spark
+color 0x2f2f3f 0xa7a7ea			// dark/light blue
+tex 62 64						// Large Solid Dots
+size 0.25 1.0
+stretchfactor 16				// long stretched particles
+alpha 128 256 32				// slow dissipation
+//alpha 128 256 64				// slow dissipation
+originjitter 32 0 48
+velocityjitter 8 8 8
+velocitymultiplier 32			// Using parameter velocity
+
+effect DPP_ITSPORTALSIDE
+count 16
+type smoke
+color 0x808080 0xFFFFFF			// Dark Grey to White
+tex 62 64						// Large Solid Dots
+size 0.25 1.0
+sizeincrease 0.75
+alpha 192 256 48				// slow dissipation
+//alpha 192 256 64				// slow dissipation
+originjitter 32 0 48
+velocityjitter 4 4 4
+velocitymultiplier 32			// Using parameter velocity
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSPORTALSIDE
+count 24						// large amount
+type static
+color 0x101010 0x58606f			// dark/light blues
+tex 8 16						// wispy smoke puffs
+size 2 4						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 64 160 32					// Slow Fade
+//alpha 64 160 48				// Slow Fade
+airfriction 0.2					// Slowly fall down
+originjitter 32 8 8				// Horz movement
+originoffset 0 0 -36			// Bottom of portal
+velocityjitter 8 8 4			// Horz jig
+velocitymultiplier 28			// Using parameter velocity
+gravity 0.01
+rotate 0 360 5 15				// Swirl and rotate
+
+//----------------------------------------------------------------------
+// The spawning volume for the particles is Z axis flat so it looks
+// correct on vertical portals or slipgate style pads
+//----------------------------------------------------------------------
+effect DPP_ITSPORTALDOWN
+count 4
+type spark
+color 0x101010 0x79572a			// dark grey to dark orange
+tex 62 64						// Large Solid Dots
+size 0.25 1.0
+stretchfactor 16
+alpha 128 256 64				// slow dissipation
+originjitter 32 32 0
+velocityjitter 8 8 8
+velocitymultiplier 32			// Using parameter velocity
+
+effect DPP_ITSPORTALDOWN
+count 24						// large amount
+type smoke
+color 0x101010 0x79572a			// dark grey to dark orange
+tex 8 16						// wispy smoke puffs
+size 2 4						// Large size
+sizeincrease 4					// Expanding smoke
+alpha 32 160 24					// Slow Fade
+originjitter 32 32 16			// Horz movement
+velocityjitter 8 8 0			// Horz jig
+velocitymultiplier 28			// Using parameter velocity
+airfriction 0.2					// Slowly fall down
+rotate 0 360 5 15				// Swirl and rotate
+
+effect DPP_ITSPORTALDOWN
+count 16
+type smoke
+color 0x79572a 0xFFFFFF			// dark orange to white
+tex 62 64						// Large Solid Dots
+size 0.25 1.0
+sizeincrease 0.75
+alpha 192 256 64				// slow dissipation
+originjitter 32 32 0
+velocityjitter 4 4 4
+velocitymultiplier 32			// Using parameter velocity
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSPORTALUP
+count 4
+type spark
+color 0x101010 0x79572a			// dark grey to dark orange
+tex 62 64						// Large Solid Dots
+size 0.25 1.0
+stretchfactor 16
+alpha 128 256 64				// slow dissipation
+originjitter 32 32 0
+velocityjitter 8 8 8
+velocitymultiplier 32			// Using parameter velocity
+
+effect DPP_ITSPORTALUP
+count 24						// large amount
+type smoke
+color 0x101010 0x79572a			// dark grey to dark orange
+tex 8 16						// wispy smoke puffs
+size 2 4						// Large size
+sizeincrease 4					// Expanding smoke
+alpha 32 160 24					// Slow Fade
+originjitter 32 32 16			// Horz movement
+velocityjitter 8 8 0			// Horz jig
+velocitymultiplier 28			// Using parameter velocity
+airfriction 0.2					// Slowly fall down
+rotate 0 360 5 15				// Swirl and rotate
+
+effect DPP_ITSPORTALUP
+count 16
+type smoke
+color 0x79572a 0xFFFFFF			// dark orange to white
+tex 62 64						// Large Solid Dots
+size 0.25 1.0
+sizeincrease 0.75
+alpha 192 256 64				// slow dissipation
+originjitter 32 32 0
+velocityjitter 4 4 4
+velocitymultiplier 32			// Using parameter velocity
+rotate 0 360 45 90				// swirl and rotate
+
+//======================================================================
+// Floor circles spawn particles around circle circumference
+//----------------------------------------------------------------------
+effect DPP_ITSFCIRCLE
+count 1
+type spark
+color 0x801010 0xe71b1b			// dark/light red
+tex 62 64						// Large Solid Dots
+size 1 1
+stretchfactor 64				// Stretched long
+alpha 128 256 48				// slow dissipation
+originoffset 0 0 -8				// Vertical movement
+velocityoffset 0 0 4
+velocityjitter 0 0 6			// Small velocity adjustment
+gravity -0.01					// Float up
+airfriction 0.5
+
+effect DPP_ITSFCIRCLE
+count 4
+type static
+color 0x801010 0xFFA020			// Red/yellow
+tex 62 64						// Large Solid Dots
+size 0.5 0.75
+sizeincrease 0.5
+alpha 128 256 64				// slow dissipation
+originoffset 0 0 -8				// Vertical movement
+velocityoffset 0 0 8
+velocityjitter 0 0 8			// Small velocity adjustment
+gravity -0.01					// Float up
+airfriction 0.4
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSFCIRCLE
+count 4							// A tiny puff
+type smoke
+color 0x101010 0x79572a			// dark grey to dark orange
+tex 8 16						// wispy smoke puffs
+size 0.25 0.5					// very small start size
+sizeincrease 4					// Expanding smoke
+alpha 32 160 32					// Slow Fade
+originoffset 0 0 -8				// Vertical movement
+velocityoffset 0 0 4
+velocityjitter 0 0 8			// Small velocity adjustment
+gravity -0.01					// Float up
+airfriction 1
+rotate 0 360 30 45				// Swirl and rotate
+
+//----------------------------------------------------------------------
+effect DPP_ITSFCIRCLE_RING
+countabsolute 1					// Only draw one at a time
+type static						// Standard decal
+color 0x101010 0x79572a			// dark grey to dark orange
+tex 110 110						// Solid ring texture
+size 80 96						// Plenty of size variety
+alpha 16 48 32					// Flickering
+orientation oriented 			// Always draw on the floor
+originoffset 0 0 1				// Raise one pixel off the floor
+velocityoffset 0 0 1			// Slight vertical movement
+rotate 0 0 0 0					// No rotation, looks odd
+
+//======================================================================
+// Jumppad streaming upward particles + smoke (copy of fcircle)
+//----------------------------------------------------------------------
+effect DPP_ITSJUMPPAD
+count 4
+type spark
+color 0x101010 0x79572a			// dark grey to dark orange
+tex 62 64						// Large Solid Dots
+size 1 1.25
+stretchfactor 32				// Stretched long
+alpha 128 256 56				// medium dissipation
+originoffset 0 0 -8				// Vertical movement
+originjitter 32 32 0
+velocityoffset 0 0 32
+velocityjitter 0 0 96			// large velocity adjustment
+
+effect DPP_ITSJUMPPAD
+count 8
+type static
+color 0x801010 0xFFA020			// Red/yellow
+tex 62 64						// Large Solid Dots
+size 0.5 1.0					// Start small
+sizeincrease 0.75
+alpha 128 256 64				// slow dissipation
+originoffset 0 0 -8				// Start below emitter origin
+originjitter 32 32 0			// Start inside pad circle
+velocityoffset 0 0 32
+velocityjitter 0 0 16			// Medium velocity adjustment
+airfriction 0.5					// Naturally slow down
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSJUMPPAD
+count 16
+type smoke
+color 0x101010 0x79572a			// dark grey to dark orange
+tex 8 16						// wispy smoke puffs
+size 0.25 0.5					// very small start size
+sizeincrease 8					// Expanding smoke
+alpha 32 160 32					// Slow Fade
+originoffset 0 0 -8				// Start below emitter origin
+originjitter 32 32 0			// Start inside pad circle
+velocityoffset 0 0 16
+velocityjitter 0 0 32
+rotate 0 360 30 45				// Swirl and rotate
+
+//======================================================================
+// Closed books have slow moving runes floating upwards
+//----------------------------------------------------------------------
+effect DPP_ITSBOOKBLUE
+count 1
+type alphastatic
+color 0x37374b 0x9c9cd9			// Dark Blue to Original Colour
+tex 48 56						// 8 celtic runes
+size 3 8						// Large
+alpha 512 640 64				// slow fade
+originoffset 0 0 12				// Move up to middle of book
+velocityoffset 0 0 12			// Start moving up
+velocityjitter 12 12 6			// Horz movement
+gravity -0.01					// Force upwards
+airfriction 1					// Slow down pace
+rotate 0 0 0 15					// Slight rotation
+
+effect DPP_ITSBOOKRED
+count 1
+type alphastatic
+color 0x7c0000 0xFFFFFF			// Dark Red to Original Colour
+tex 48 56						// 8 celtic runes
+size 3 8						// Large
+alpha 512 640 64				// slow fade
+originoffset 0 0 12				// Move up to middle of book
+velocityoffset 0 0 12			// Start moving up
+velocityjitter 12 12 6			// Horz movement
+gravity -0.01					// Force upwards
+airfriction 1					// Slow down pace
+rotate 0 0 0 15					// Slight rotation
+
+effect DPP_ITSBOOKGOLD
+count 1
+type alphastatic
+color 0x7c7800 0xFFFFFF			// Dark Yellow to Original Colour
+tex 48 56						// 8 celtic runes
+size 3 8						// Large
+alpha 512 640 64				// slow fade
+originoffset 0 0 12				// Move up to middle of book
+velocityoffset 0 0 12			// Start moving up
+velocityjitter 12 12 6			// Horz movement
+gravity -0.01					// Force upwards
+airfriction 1					// Slow down pace
+rotate 0 0 0 15					// Slight rotation
+
+//----------------------------------------------------------------------
+// Open books have plenty of dots and a few runes raising from the pages
+//----------------------------------------------------------------------
+effect DPP_ITSOPENBOOKBLUE
+count 0.4
+type alphastatic
+color 0x5c5c7e 0x9c9cd9			// Dark Blue to Original Colour
+tex 48 56						// 8 celtic runes
+size 3 8						// Large
+alpha 512 640 64				// slow fade
+velocityoffset 4 4 12			// Start moving up
+velocityjitter 12 12 6			// Horz movement
+gravity -0.01					// Force upwards
+airfriction 1					// Slow down pace
+rotate 0 0 0 15					// Slight rotation
+
+effect DPP_ITSOPENBOOKBLUE
+count 12
+type static
+color 0x37374b 0x5f5f85			// Dark Blue to Original Colour
+tex 62 64						// Large Solid Dots
+size 0.25 0.5
+sizeincrease 0.5
+alpha 256 512 64				// slow dissipation
+originjitter 12 12 4			// spread across open book
+velocityoffset 0 0 8			// Start moving up
+velocityjitter 4 4 8			// Vert movement
+gravity -0.005					// Force upwards
+airfriction 0.25				// Slow down pace
+rotate 0 360 45 90				// swirl and rotate
+
+//----------------------------------------------------------------------
+effect DPP_ITSOPENBOOKRED
+count 0.4
+type alphastatic
+color 0x7c0000 0xFFFFFF			// Dark Red to Original Colour
+tex 48 56						// 8 celtic runes
+size 3 8						// Large
+alpha 512 640 64				// slow fade
+velocityoffset 4 4 12			// Start moving up
+velocityjitter 12 12 6			// Horz movement
+gravity -0.01					// Force upwards
+airfriction 1					// Slow down pace
+rotate 0 0 0 15					// Slight rotation
+
+effect DPP_ITSOPENBOOKRED
+count 12
+type static
+color 0x3f0000 0x9b6969			// Dark Red to Original Colour
+tex 62 64						// Large Solid Dots
+size 0.25 0.5
+sizeincrease 0.5
+alpha 256 512 64				// slow dissipation
+originjitter 12 12 4			// spread across open book
+velocityoffset 0 0 8			// Start moving up
+velocityjitter 4 4 8			// Vert movement
+gravity -0.005					// Force upwards
+airfriction 0.25				// Slow down pace
+rotate 0 360 45 90				// swirl and rotate
+
+//----------------------------------------------------------------------
+effect DPP_ITSOPENBOOKGOLD
+count 0.4
+type alphastatic
+color 0x7c7800 0xFFFFFF			// Dark Yellow to Original Colour
+tex 48 56						// 8 celtic runes
+size 3 8						// Large
+alpha 512 640 64				// slow fade
+velocityoffset 4 4 12			// Start moving up
+velocityjitter 12 12 6			// Horz movement
+gravity -0.01					// Force upwards
+airfriction 1					// Slow down pace
+rotate 0 0 0 15					// Slight rotation
+
+effect DPP_ITSOPENBOOKGOLD
+count 16
+type static
+color 0x232300 0x6b531f			// Dark Yellow to Original Colour
+tex 62 64						// Large Solid Dots
+size 0.25 0.5
+sizeincrease 0.5
+alpha 256 512 64				// slow dissipation
+originjitter 12 12 4			// spread across open book
+velocityoffset 0 0 8			// Start moving up
+velocityjitter 4 4 8			// Vert movement
+gravity -0.005					// Force upwards
+airfriction 0.25				// Slow down pace
+rotate 0 360 45 90				// swirl and rotate
+
+//======================================================================
+// White/blue particle stream for electric beams (directional)
+//----------------------------------------------------------------------
+effect DPP_ITSELECTRIC
+count 16
+type spark
+color 0x2f2f3f 0xa7a7ea			// dark/light blue
+tex 62 64						// Large Solid Dots
+size 0.25 1.0
+stretchfactor 16				// long stretched particles
+alpha 128 192 128				// Fast Fade
+originjitter 12 12 12			// Cube volume
+velocityjitter 4 4 4			// Cube volume
+velocitymultiplier 128			// Using parameter velocity
+
+effect DPP_ITSELECTRIC
+count 16
+type static
+color 0x808080 0xFFFFFF			// Dark Grey to White
+tex 62 64						// Large Solid Dots
+size 0.25 1
+sizeincrease 2
+alpha 128 192 128				// Fast Fade
+originjitter 12 12 12			// Cube volume
+velocityjitter 4 4 4			// Cube volume
+velocitymultiplier 96			// Using parameter velocity
+rotate 0 360 5 30				// swirl and rotate
+
+effect DPP_ITSELECTRIC
+count 16
+type static
+color 0x736523 0x9e8f47			// dark/light yellow
+tex 62 64						// Large Solid Dots
+size 0.25 1
+sizeincrease 2
+alpha 128 192 96				// Fast Fade
+originjitter 12 12 12			// Cube volume
+velocityjitter 8 8 8			// Cube volume
+velocitymultiplier 88 			// Using parameter velocity
+rotate 0 360 5 30				// swirl and rotate
+
+effect DPP_ITSELECTRIC
+count 16						// large amount
+type static
+color 0x101010 0x58606f			// dark/light blues
+tex 8 16						// wispy smoke puffs
+size 4 20						// Large size
+sizeincrease 4					// Expanding smoke
+alpha 96 160 128				// Fast Fade
+originjitter 4 4 4				// Cube volume
+velocityjitter 16 16 16			// Cube volume
+velocitymultiplier 128			// Using parameter velocity
+rotate 0 360 45 90				// Fast Swirl and rotate
+
+//======================================================================
+// Small flame with single dot and two smoke particle effects
+//----------------------------------------------------------------------
+effect DPP_ITSSFLAME
+count 12
+type smoke
+color 0x801010 0xFFA020			// Red/yellow
+tex 62 64						// Large Solid Dots
+size 0.25 1.0
+sizeincrease 0.75
+alpha 256 256 96				// slow dissipation
+originjitter 2 2 4				// Slight wobble
+velocityoffset 0 0 12
+velocityjitter 4 4 12
+airfriction 0.2					// Slow down over time
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSSFLAME
+count 4
+type smoke
+color 0x404040 0xF0F0F0			// Light/Dark Grey
+tex 24 32						// Tiny white puffs
+size 2 4
+sizeincrease 8					// Grow very large
+alpha 48 72 32					// Slow fade
+velocityoffset 0 0 8
+velocityjitter 4 4 16			// Minimal spread
+gravity -0.01					// Slowly rise up
+airfriction 0.6					// Slow down over time
+rotate 0 360 15 45				// Swirl and rotate slowly
+notunderwater 
+
+effect DPP_ITSSFLAME
+count 4
+type smoke
+color 0x7a674d 0xFFA020			// Orange/yellow
+tex 8 16						// wispy smoke puffs
+size 3 6						// Large size
+sizeincrease 4					// Expanding smoke
+alpha 88 112 32					// Slow Fade
+originoffset 0 0 -4				// Move to base of flame model
+velocityjitter 4 4 16			// Fast movement
+airfriction 0.3					// Slow down
+gravity -0.01					// Slowly rise up
+rotate 0 360 30 45				// Swirl and rotate
+notunderwater
+
+// Small torch with single dot and two smoke particle effects
+//----------------------------------------------------------------------
+effect DPP_ITSTFLAME
+count 12
+type smoke
+color 0x801010 0xFFA020			// Red/yellow
+tex 62 64						// Large Solid Dots
+size 0.25 1.0
+sizeincrease 0.75
+alpha 256 256 96				// slow dissipation
+originoffset 0 0 12				// Top of the wood
+originjitter 2 2 4				// Slight wobble
+velocityoffset 0 0 12
+velocityjitter 4 4 12
+airfriction 0.2					// Slow down over time
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSTFLAME
+count 3
+type smoke
+color 0x404040 0xF0F0F0			// Light/Dark Grey
+tex 24 32						// Tiny white puffs
+size 2 4
+sizeincrease 8					// Grow very large
+alpha 48 64 32					// Slow fade
+originoffset 0 0 8				// Move to base of flame model
+velocityoffset 0 0 8
+velocityjitter 4 4 16			// Minimal spread
+gravity -0.01					// Slowly rise up
+airfriction 0.8					// Slow down over time
+rotate 0 360 15 45				// Swirl and rotate slowly
+notunderwater 
+
+effect DPP_ITSTFLAME
+count 3
+type smoke
+color 0x7a674d 0xFFA020			// Orange/yellow
+tex 8 16						// wispy smoke puffs
+size 2 4						// Large size
+sizeincrease 4					// Expanding smoke
+alpha 80 96 32					// Slow Fade
+originoffset 0 0 12				// Top of the wood
+velocityjitter 2 2 12			// Fast movement
+airfriction 0.3					// Slow down
+gravity -0.01					// Slowly rise up
+rotate 0 360 30 45				// Swirl and rotate
+notunderwater
+
+//----------------------------------------------------------------------
+// Large flame with two dots and smoke particle effects
+//----------------------------------------------------------------------
+effect DPP_ITSLFLAME
+count 12
+type smoke
+color 0x801010 0xFFA020			// Red/yellow
+tex 62 64						// Large Solid Dots
+size 0.5 1.0
+sizeincrease 0.75
+alpha 512 0 96					// slow dissipation
+velocityjitter 20 20 16			// Minimal spread
+velocityoffset 4 4 32
+gravity -0.01					// Slowly rise up
+airfriction 0.5					// Slow down over time
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSLFLAME
+count 4
+type smoke
+color 0x404040 0xF0F0F0			// Light/Dark Grey
+tex 24 32						// Tiny white puffs
+size 2 4
+sizeincrease 8					// Grow very large
+alpha 48 80 32					// Slow fade
+originoffset 0 0 -8				// Move to base of flame model
+velocityoffset 0 0 32
+velocityjitter 4 4 12			// Minimal spread
+gravity -0.01					// Slowly rise up
+airfriction 0.75				// Slow down over time
+rotate 0 360 15 45				// Swirl and rotate slowly
+notunderwater 
+
+effect DPP_ITSLFLAME
+count 4
+type smoke
+color 0x7a674d 0xFFA020			// Orange/yellow
+tex 8 16						// wispy smoke puffs
+size 4 8						// Large size
+sizeincrease 12					// Expanding smoke
+alpha 64 96 32					// Slow Fade
+originoffset 0 0 -4				// Move to base of flame model
+originjitter 0 0 12				// Vertical only
+velocityjitter 4 4 4			// Horizontal movement
+velocityoffset 0 0 24			// Fast movement
+airfriction 0.6					// Slow down
+gravity -0.01					// Slowly rise up
+rotate 0 360 30 45				// Swirl and rotate
+notunderwater
+
+//======================================================================
+// High frequency particle stream from the top of skill pillars
+//----------------------------------------------------------------------
+effect DPP_ITSSKILLPILLAR
+count 1
+type spark
+color 0x801010 0xe71b1b			// dark/light red
+tex 62 64						// Large Solid Dots
+size 0.25 1.0
+stretchfactor 16				// Stretched long
+alpha 128 256 64				// slow dissipation
+originjitter 4 4 4				// Small spawn cube
+velocityjitter 4 4 4			// Small velocity adjustment
+velocitymultiplier 8			// Using parameter velocity
+
+effect DPP_ITSSKILLPILLAR
+count 2
+type smoke
+color 0x801010 0xFFA020			// Red/yellow
+tex 62 64						// Large Solid Dots
+size 0.25 1.0
+sizeincrease 0.75
+alpha 128 256 64				// slow dissipation
+originjitter 4 4 4				// Small spawn cube
+velocityjitter 4 4 4			// Small velocity adjustment
+velocitymultiplier 12			// Using parameter velocity
+rotate 0 360 45 90				// swirl and rotate
+
+//======================================================================
+// DP ONLY - Velocity driven smoke
+//----------------------------------------------------------------------
+effect DPP_ITSVELSMOKEGREY1
+count 1
+type smoke
+color 0x808080 0xFFFFFF			// Dark Grey to White
+tex 8 16						// wispy smoke puffs
+size 1 4						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 16 80 32					// Slow Fade
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+velocitymultiplier 64			// Using parameter velocity
+airfriction 0.3					// Slow down
+rotate 0 360 5 15				// Swirl and rotate
+
+effect DPP_ITSVELSMOKEGREY1
+count 2
+type smoke
+color 0x404040 0xEEEEEE			// Dark Grey to White
+tex 8 16						// wispy smoke puffs
+size 4 8						// Large size
+sizeincrease 16					// Expanding smoke
+alpha 32 96 32					// Slow Fade
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+velocitymultiplier 48			// Using parameter velocity
+airfriction 0.1					// Slow down
+rotate 0 360 30 45				// Swirl and rotate
+
+//----------------------------------------------------------------------
+// Grey/white + yellow tint
+effect DPP_ITSVELSMOKEGREY2
+count 1
+type smoke
+color 0x808080 0xFFFFFF			// Dark Grey to White
+tex 8 16						// wispy smoke puffs
+size 1 8						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 64 112 32					// Slow Fade
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+velocitymultiplier 64			// Using parameter velocity
+airfriction 0.3					// Slow down
+rotate 0 360 5 15				// Swirl and rotate
+
+effect DPP_ITSVELSMOKEGREY2
+count 2
+type smoke
+color 0x747400 0xAAAAAA			// Dark Grey to White
+tex 8 16						// wispy smoke puffs
+size 4 8						// Large size
+sizeincrease 16					// Expanding smoke
+alpha 64 96 32					// Slow Fade
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+velocitymultiplier 48			// Using parameter velocity
+airfriction 0.1					// Slow down
+rotate 0 360 30 45				// Swirl and rotate
+
+//----------------------------------------------------------------------
+// Strong white (high alpha values)
+effect DPP_ITSVELSMOKEWHITE
+count 1
+type smoke
+color 0x808080 0xFFFFFF			// Dark Grey to White
+tex 8 16						// wispy smoke puffs
+size 1 8						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 96 128 32					// Slow Fade
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+velocitymultiplier 64			// Using parameter velocity
+airfriction 0.3					// Slow down
+rotate 0 360 5 15				// Swirl and rotate
+
+effect DPP_ITSVELSMOKEWHITE
+count 2
+type smoke
+color 0x808080 0xFFFFFF			// Dark Grey to White
+tex 8 16						// wispy smoke puffs
+size 4 8						// Large size
+sizeincrease 16					// Expanding smoke
+alpha 64 96 32					// Slow Fade
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+velocitymultiplier 48			// Using parameter velocity
+airfriction 0.1					// Slow down
+rotate 0 360 30 45				// Swirl and rotate
+
+//----------------------------------------------------------------------
+// Using wizard spit colours
+effect DPP_ITSVELSMOKETOXIC
+count 1
+type smoke
+color 0x433700 0xDDEED0			// Original wiz projectile colours
+tex 8 16						// wispy smoke puffs
+size 1 8						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 64 80 32					// Slow Fade
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+velocitymultiplier 64			// Using parameter velocity
+airfriction 0.3					// Slow down
+rotate 0 360 5 15				// Swirl and rotate
+
+effect DPP_ITSVELSMOKETOXIC
+count 2
+type smoke
+color 0x101010 0x6b6b0f			// Sickly cloud colour
+tex 8 16						// wispy smoke puffs
+size 4 8						// Large size
+sizeincrease 16					// Expanding smoke
+alpha 64 96 32					// Slow Fade
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+velocitymultiplier 48			// Using parameter velocity
+airfriction 0.1					// Slow down
+rotate 0 360 30 45				// Swirl and rotate
+
+//----------------------------------------------------------------------
+// Low saturation green
+effect DPP_ITSVELSMOKEGREEN
+count 1
+type smoke
+color 0x101010 0x909090			// White stuff
+tex 8 16						// wispy smoke puffs
+size 1 8						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 64 80 32					// Slow Fade
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+velocitymultiplier 64			// Using parameter velocity
+airfriction 0.3					// Slow down
+rotate 0 360 5 15				// Swirl and rotate
+
+effect DPP_ITSVELSMOKEGREEN
+count 2
+type smoke
+color 0x1A1A1A 0x50A050			// green cloud colour
+tex 8 16						// wispy smoke puffs
+size 4 8						// Large size
+sizeincrease 16					// Expanding smoke
+alpha 64 96 32					// Slow Fade
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+velocitymultiplier 48			// Using parameter velocity
+airfriction 0.1					// Slow down
+rotate 0 360 30 45				// Swirl and rotate
+
+//----------------------------------------------------------------------
+// Shalrath/sigil purple
+effect DPP_ITSVELSMOKEPURPLE
+count 1
+type smoke
+color 0x3b1f23 0x937387			// Full range of purple colour
+tex 8 16						// wispy smoke puffs
+size 1 8						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 64 80 32					// Slow Fade
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+velocitymultiplier 64			// Using parameter velocity
+airfriction 0.3					// Slow down
+rotate 0 360 5 15				// Swirl and rotate
+
+effect DPP_ITSVELSMOKEPURPLE
+count 2
+type smoke
+color 0x6b4b57 0x937387			// Original shalrath projectile colours
+tex 8 16						// wispy smoke puffs
+size 4 8						// Large size
+sizeincrease 16					// Expanding smoke
+alpha 64 96 32					// Slow Fade
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+velocitymultiplier 48			// Using parameter velocity
+airfriction 0.1					// Slow down
+rotate 0 360 30 45				// Swirl and rotate
+
+//----------------------------------------------------------------------
+// Hell Knight Reds
+effect DPP_ITSVELSMOKERED
+count 1
+type smoke
+color 0x801010 0xe71b1b			// dark/light red
+tex 8 16						// wispy smoke puffs
+size 1 8						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 64 80 32					// Slow Fade
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+velocitymultiplier 64			// Using parameter velocity
+airfriction 0.3					// Slow down
+rotate 0 360 5 15				// Swirl and rotate
+
+effect DPP_ITSVELSMOKERED
+count 2
+type smoke
+color 0x7f1707 0xe7ab5f			// Red/Orange picked from projectile palette
+tex 8 16						// wispy smoke puffs
+size 4 8						// Large size
+sizeincrease 16					// Expanding smoke
+alpha 64 96 32					// Slow Fade
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+velocitymultiplier 48			// Using parameter velocity
+airfriction 0.1					// Slow down
+rotate 0 360 30 45				// Swirl and rotate
+
+//----------------------------------------------------------------------
+// Large Torch Red/Yellow
+effect DPP_ITSVELSMOKEFIRE
+count 1
+type smoke
+color 0x747400 0xAAAAAA			// Dark Grey to White
+tex 8 16						// wispy smoke puffs
+size 1 8						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 80 96 32					// Slow Fade
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+velocitymultiplier 64			// Using parameter velocity
+airfriction 0.3					// Slow down
+rotate 0 360 5 15				// Swirl and rotate
+
+effect DPP_ITSVELSMOKEFIRE
+count 2
+type smoke
+color 0x7a674d 0xFFA020			// Orange/yellow
+tex 8 16						// wispy smoke puffs
+size 4 8						// Large size
+sizeincrease 16					// Expanding smoke
+alpha 64 80 32					// Slow Fade
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+velocitymultiplier 48			// Using parameter velocity
+airfriction 0.1					// Slow down
+rotate 0 360 30 45				// Swirl and rotate
+
+//======================================================================
+// High frequency particle stream from the top of skill pillars
+//----------------------------------------------------------------------
+effect DPP_ITSRESPAWN
+count 1
+type smoke
+color 0x801010 0xFFA020			// Red/yellow
+tex 62 64						// Large Solid Dots
+size 0.5 4
+alpha 128 256 40				// slow dissipation
+airfriction 0.2
+originjitter 12 12 8			// Base of item
+velocityjitter 4 4 12			// Mostly upward velocity
+rotate 0 360 45 90				// swirl and rotate
+
+
+effect DPP_ITSRESPAWN
+count 1
+type smoke
+color 0x202020 0x635844			// Dark/Light grey (large range)
+tex 8 16						// Wispy smoke
+size 8 24						// Very Large range
+sizeincrease 2					// Double size
+alpha 16 128 48
+airfriction 0.2
+originjitter 8 8 16				// Lift smoke off the ground
+velocityjitter 16 16 8			// Very little movement
+rotate 0 360 -15 -30			// Reverse direction to red/yellow smoke
+
+//======================================================================
+// Large Mega Health with red/yellow light traces and large smoke
+//----------------------------------------------------------------------
+effect DPP_ITSMEGAH
+countabsolute 12
+type spark						// central spray of sparks
+color 0x835713 0x6f0000			// yellow/red (model matched)
+tex 62 64						// Large Solid Dots
+size 0.5 1						// Small and stretched
+stretchfactor 16
+alpha 128 512 96				// Long fade
+airfriction 0.75				// Slowdown outside bottle
+originjitter 0 0 8				// Vertical movement
+velocityjitter 40 40 16			// fast speed
+
+effect DPP_ITSMEGAH
+countabsolute 16
+type smoke						// large puffs of smoke
+color 0x2f171b 0x572b17			// red/purple
+tex 8 16						// wispy smoke puffs
+size 2 4						// Large size
+sizeincrease 4					// Expanding smoke
+alpha 32 160 20					// Slow Fade
+originjitter 8 8 0				// Horz Spread
+velocityjitter 8 8 12			// Explosion
+rotate 0 360 15 45
+notunderwater 
+
+effect DPP_ITSMEGAH
+count 12
+type smoke
+color 0x835713 0xb4ab21			// dark orange to yellow
+tex 62 64						// Large Solid Dots
+size 0.25 1.0
+sizeincrease 0.5
+alpha 192 256 48				// slow dissipation
+originjitter 0 0 8				// Vertical movement
+velocityjitter 12 12 8			// small cube starting point
+rotate 0 360 45 90				// swirl and rotate
+
+//======================================================================
+// Green Armour - Colour matched smoke from center of model
+//----------------------------------------------------------------------
+effect DPP_ITSARMOR1
+countabsolute 4
+type smoke
+color 0x505050 0x719981			// dark/light green matching model
+tex 62 64						// Large Solid Dots
+size 0.5 1.0					// Start small
+sizeincrease 0.75
+alpha 192 512 96				// Quickly dissipate
+originoffset 0 0 16				// Top of the armour
+velocityoffset 2 2 32			// Starting velocity
+originjitter 8 8 0				// Small cube
+velocityjitter 2 2 16			// Slight movement
+gravity -0.01					// Move upwards
+airfriction 1					// Slowdown
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSARMOR1
+countabsolute 12
+type smoke						// large puffs of smoke
+color 0x172317 0x374b3f			// dark/light green matching model
+tex 0 8							// large solid puffs
+size 0.25 0.5					// start small
+stretchfactor 2
+sizeincrease 1.25
+alpha 16 128 16					// slow dissipation
+originoffset 0 0 16
+velocityjitter 4 4 -8			// Vertical drop
+rotate 0 360 5 20				// swirl and rotate
+notunderwater 
+
+//======================================================================
+// Yellow Armour - Colour matched smoke from center of model
+//----------------------------------------------------------------------
+effect DPP_ITSARMOR2
+countabsolute 4
+type smoke
+color 0x3b2b00 0xab970b			// dark/light yellow matching model
+tex 62 64						// Large Solid Dots
+size 0.5 1.0					// Start small
+sizeincrease 0.75
+alpha 192 512 96				// Quickly dispate
+originoffset 0 0 16				// Top of the armour
+velocityoffset 2 2 32			// Starting velocity
+originjitter 8 8 0				// Small cube
+velocityjitter 2 2 16			// Slight movement
+gravity -0.01					// Move upwards
+airfriction 1					// Slowdown
+rotate 0 360 45 90				// swirl and rotate
+
+//effect DPP_ITSARMOR2
+//countabsolute 12
+//type smoke						// large puffs of smoke
+//color 0x3b2b00 0xab970b			// dark/light yellow matching model
+//tex 0 8							// puffs
+//size 0.25 0.5					// start small
+//stretchfactor 2
+//sizeincrease 1.25
+//alpha 16 128 16					// slow dissipation
+//originoffset 0 0 16
+//velocityjitter 4 4 -8			// Vertical drop
+//rotate 0 360 5 20				// swirl and rotate
+//notunderwater 
+
+//======================================================================
+// Blue Armour - Colour matched smoke from center of model
+//----------------------------------------------------------------------
+effect DPP_ITSARMOR2BLUE
+countabsolute 4
+type smoke
+color 0x2f2f3f 0x8b8bc1			// dark/light blue
+tex 62 64						// Large Solid Dots
+size 0.5 1.0					// Start small
+sizeincrease 0.75
+alpha 192 512 96				// Quickly dispate
+originoffset 0 0 16				// Top of the armour
+velocityoffset 2 2 32			// Starting velocity
+originjitter 8 8 0				// Small cube
+velocityjitter 2 2 16			// Slight movement
+gravity -0.01					// Move upwards
+airfriction 1					// Slowdown
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSARMOR2BLUE
+countabsolute 12
+type smoke						// large puffs of smoke
+color 0x2f2f3f 0x8b8bc1			// dark/light blue
+tex 0 8							// puffs
+size 0.25 0.5					// start small
+stretchfactor 2
+sizeincrease 1.25
+alpha 16 128 16					// slow dissipation
+originoffset 0 0 16
+velocityjitter 4 4 -8			// Vertical drop
+rotate 0 360 5 20				// swirl and rotate
+notunderwater 
+
+//======================================================================
+// Red Armour - Colour matched smoke from center of model
+//----------------------------------------------------------------------
+effect DPP_ITSARMOR3
+countabsolute 4
+type smoke
+color 0x370000 0x7f0000			// dark/light red matching model
+tex 62 64						// Large Solid Dots
+size 0.5 1.0					// Start small
+sizeincrease 0.75
+alpha 192 512 96				// Quickly dispate
+originoffset 0 0 16				// Top of the armour
+velocityoffset 2 2 32			// Starting velocity
+originjitter 8 8 0				// Small cube
+velocityjitter 2 2 16			// Slight movement
+gravity -0.01					// Move upwards
+airfriction 1					// Slowdown
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSARMOR3
+countabsolute 12
+type smoke						// large puffs of smoke
+color 0x370000 0x7f0000			// dark/light red matching model
+tex 0 8							// puffs
+size 0.25 0.5					// start small
+stretchfactor 2
+sizeincrease 1.25
+alpha 16 128 16					// slow dissipation
+originoffset 0 0 16
+velocityjitter 4 4 -8			// Vertical drop
+rotate 0 360 5 20				// swirl and rotate
+notunderwater 
+
+//======================================================================
+// Silver Key - Pulsing Light traces from key top
+//----------------------------------------------------------------------
+effect DPP_ITSSILVERKEY
+countabsolute 8
+type spark						// central spray of sparks
+color 0x2f2f3f 0x8b8bc1			// dark/light blue
+tex 62 64						// Class Quake dots
+size 0.25 1						// Small size
+stretchfactor 24				// high stretch factor
+alpha 64 320 64					// Quick fade
+originoffset 0 0 20				// Center of key
+velocityjitter 16 16 6			// small cube size
+airfriction 0.5
+
+effect DPP_ITSSILVERKEY
+count 8
+type static						// central spray of sparks
+color 0x545470 0x8b8bc1			// dark/light blue
+tex 62 64						// Class Quake dots
+size 0.5 1						// Small size
+sizeincrease 0.5
+alpha 64 320 96					// Quick fade
+originoffset 0 0 20				// Center of key
+originjitter 8 8 4				// Horz Spread
+velocityjitter 16 16 16			// small cube size
+airfriction 0.75
+rotate 0 360 45 60				// Fast Swirl and rotate
+
+effect DPP_ITSSILVERKEY
+count 8							// small amount
+type smoke
+color 0x2f2f3f 0x8b8bc1			// dark/light blue
+tex 8 16						// wispy smoke puffs
+size 1 2						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 16 80 32					// Slow Fade
+originoffset 0 0 20				// Center of key
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+airfriction 0.2					// Slow down
+rotate 0 360 5 15				// Swirl and rotate
+
+//======================================================================
+// Gold Key - Pulsing Light traces from key top
+//----------------------------------------------------------------------
+effect DPP_ITSGOLDKEY
+countabsolute 8
+type spark						// central spray of sparks
+color 0x733723 0xcf8f2b			// dark/light yellow
+tex 62 64						// Class Quake dots
+size 0.25 1						// Small size
+stretchfactor 24				// high stretch factor
+alpha 64 320 64					// Quick fade
+originoffset 0 0 20				// Center of key
+velocityjitter 16 16 6			// small cube size
+airfriction 0.5
+
+effect DPP_ITSGOLDKEY
+count 8
+type static						// central spray of sparks
+color 0x736523 0x9e8f47			// dark/light yellow
+tex 62 64						// Class Quake dots
+size 0.5 1						// Small size
+sizeincrease 0.5
+alpha 64 320 96					// Quick fade
+originoffset 0 0 20				// Center of key
+originjitter 8 8 4				// Horz Spread
+velocityjitter 16 16 16			// small cube size
+airfriction 0.75
+rotate 0 360 45 60				// Fast Swirl and rotate
+
+effect DPP_ITSGOLDKEY
+count 8							// small amount
+type smoke
+color 0x733723 0xcf8f2b			// dark/light yellow
+tex 8 16						// wispy smoke puffs
+size 1 2						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 16 80 32					// Slow Fade
+originoffset 0 0 20				// Center of key
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+airfriction 0.2					// Slow down
+rotate 0 360 5 15				// Swirl and rotate
+
+//======================================================================
+// Sigils (runes 1 - 4)
+// 2 sets of sparks, dots and smoke cloud
+//----------------------------------------------------------------------
+effect DPP_ITSSIGIL
+countabsolute 8
+type spark						// central spray of sparks
+color 0x3b1f23 0x3b1f23			// Purple Haze cloud colour
+size 0.5 1						// Small and stretched
+stretchfactor 8
+alpha 32 192 64					// Quick fade
+originoffset 0 0 16				// Center of rune
+originjitter 8 8 16				// Vertical Spread
+velocityjitter 64 64 64			// high speed
+airfriction 0.5
+
+effect DPP_ITSSIGIL
+countabsolute 8
+type spark						// central spray of sparks
+color 0x3b1f23 0x937387			// Full range of purple colour
+size 0.5 1						// medium size
+stretchfactor 16
+airfriction 0.5
+originoffset 0 0 16				// Center of rune
+originjitter 8 8 16				// Vertical Spread
+velocityjitter 32 32 32			// slow speed
+alpha 32 192 48					// slow fade
+
+effect DPP_ITSSIGIL
+countabsolute 8
+type static
+color 0x6b4b57 0x937387			// Original shalrath projectile colours
+tex 62 64						// Dots
+size 0.25 0.5					// start small
+sizeincrease 0.5
+alpha 320 640 128				// Big variety of colour/density
+originoffset 0 0 16				// Center of rune
+originjitter 8 8 16				// Vertical Spread
+velocityjitter 16 16 16			// Explosion
+rotate 0 360 45 90				// Swirl and rotate
+
+effect DPP_ITSSIGIL
+count 12						// small amount
+type smoke
+color 0x3b1f23 0x3b1f23			// Purple Haze cloud colour
+tex 8 16						// wispy smoke puffs
+size 1 2						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 16 128 32					// Slow Fade
+originoffset 0 0 16				// Center of rune
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+airfriction 0.2					// Slowly fall down
+rotate 0 360 5 15				// Swirl and rotate
+
+//======================================================================
+// Random Ammo Backpack
+// Sparks + Smoke clouds
+//----------------------------------------------------------------------
+effect DPP_ITSBACKPACK
+countabsolute 4
+type spark						// central spray of sparks
+color 0x808080 0xFFFFFF			// Dark Grey to White
+size 0.5 1						// Small and stretched
+stretchfactor 2
+alpha 32 192 48					// Quick fade
+originoffset 0 0 12				// Center of Backpack
+originjitter 8 8 16				// Vertical Spread
+velocityjitter 32 32 32			// high speed
+airfriction 0.5
+
+effect DPP_ITSBACKPACK
+countabsolute 4
+type spark						// central spray of sparks
+color 0x808080 0xFFFFFF			// Dark Grey to White
+size 0.5 1						// medium size
+stretchfactor 8
+alpha 32 192 32					// slow fade
+originoffset 0 0 12				// Center of Backpack
+originjitter 8 8 16				// Vertical Spread
+velocityjitter 16 16 16			// slow speed
+airfriction 0.5
+
+effect DPP_ITSBACKPACK
+count 8						// small amount
+type smoke
+color 0x808080 0xFFFFFF			// Dark Grey to White
+tex 8 16						// wispy smoke puffs
+size 1 2						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 32 96 32					// Slow Fade
+originoffset 0 0 12				// Center of Backpack
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+airfriction 0.2					// Slowly fall down
+rotate 0 360 5 15				// Swirl and rotate
+
+//======================================================================
+// Tome of Power - Pulsing Light traces from skull
+//----------------------------------------------------------------------
+effect DPP_ITSTOMEOFP
+count 24
+type static
+color 0x736523 0x9e8f47			// dark/light yellow
+tex 62 64						// Dots
+size 0.25 0.75					// start small
+sizeincrease 0.5
+alpha 320 640 128				// Big variety of colour/density
+originoffset 0 0 16				// Center of Ring
+originjitter 4 4 2				// Start small
+velocityjitter 16 16 8			// Horz Explosion
+gravity 0.005					// Slowly fall down
+rotate 0 360 45 90				// Swirl and rotate
+
+effect DPP_ITSTOMEOFP
+count 16						// small amount
+type smoke
+color 0x733723 0xcf8f2b			// dark/light yellow
+tex 8 16						// wispy smoke puffs
+size 1 3						// Large size
+sizeincrease 16					// Expanding smoke
+alpha 16 80 32					// Slow Fade
+originoffset 0 0 16				// Center of key
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 16 16 4			// All directions
+airfriction 0.2					// Slow down
+rotate 0 360 5 15				// Swirl and rotate
+
+//======================================================================
+// Environmental Suit
+// Two Large smoke rings push up/down
+//----------------------------------------------------------------------
+effect DPP_ITSSUIT
+countabsolute 1					// Only draw one at a time
+type static						// Standard decal
+color 0x101010 0x6b6b0f			// Sickly cloud colour
+tex 109 109						// Fluffy cloud ring
+size 14 18						// Fixed size around suit
+alpha 128 320 64				// Slow Fade
+orientation oriented 			// Always draw on the floor
+originoffset 0 0 28				// Center of Suit
+velocityoffset 0 0 6
+velocityjitter 0 0 4
+gravity -0.001					// Fly upwards
+rotate 0 360 30 45
+
+effect DPP_ITSSUIT
+countabsolute 1					// Only draw one at a time
+type static						// Standard decal
+color 0x101010 0x6b6b0f			// Sickly cloud colour
+tex 109 109						// Fluffy cloud ring
+size 16 22						// Fixed size around suit
+alpha 128 320 64				// Slow Fade
+orientation oriented 			// Always draw on the floor
+originoffset 0 0 20 			// Center of Suit
+velocityoffset 0 0 -6
+velocityjitter 0 0 -4
+gravity 0.001					// Drift downwards
+rotate 0 360 -30 -45
+
+effect DPP_ITSSUIT
+count 8							// small amount
+type smoke
+color 0x101010 0x6b6b0f			// Sickly cloud colour
+tex 8 16						// wispy smoke puffs
+size 1 3						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 96 160 32					// Slow Fade
+originoffset 0 0 24				// Center of Quad
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 0 0 16			// Small movement
+airfriction 0.4					// Slowly fall down
+rotate 0 360 5 15				// Swirl and rotate
+
+//======================================================================
+// Pentagram of Protection
+// Central sparks + Large smoke ring
+//----------------------------------------------------------------------
+effect DPP_ITSPENT
+count 32
+type spark						// central spray of sparks
+color 0x801010 0xFFA020			// Red/yellow
+tex 62 64						// Small Quake dots
+size 0.5 1						// Small and stretched
+stretchfactor 12
+alpha 128 192 64				// Strong colour and quick fade
+originoffset 0 0 18				// Center of Pentagram
+velocityjitter 32 32 32			// large cube
+airfriction 0.65
+
+effect DPP_ITSPENT
+countabsolute 1					// Only draw one at a time
+type static						// Standard decal
+color 0x801010 0xFFA020			// Red/yellow
+tex 109 109						// Solid ring texture
+size 2 4						// Plenty of size variety
+sizeincrease 8
+alpha 128 192 32				// Strong colour and slow fade
+originoffset 0 0 18				// Center of Pentagram
+rotate 0 360 0 0
+
+//======================================================================
+// Quad damage
+// Sparks + Smoke clouds
+//----------------------------------------------------------------------
+effect DPP_ITSQUAD
+countabsolute 8
+type spark						// central spray of sparks
+color 0x2f2f3f 0x8b8bc1			// dark/light blue
+size 0.5 1						// Small and stretched
+stretchfactor 8
+alpha 32 192 64					// Quick fade
+originoffset 0 0 16				// Center of Powerup
+originjitter 8 8 16				// Vertical Spread
+velocityjitter 64 64 64			// high speed
+airfriction 0.5
+
+effect DPP_ITSQUAD
+countabsolute 8
+type spark						// central spray of sparks
+color 0x545470 0x8b8bc1			// dark/light blue
+size 0.5 1						// medium size
+stretchfactor 16
+airfriction 0.5
+originoffset 0 0 16				// Center of Powerup
+originjitter 8 8 16				// Vertical Spread
+velocityjitter 32 32 32			// slow speed
+alpha 32 192 48					// slow fade
+
+effect DPP_ITSQUAD
+count 12						// small amount
+type smoke
+color 0x2f2f3f 0x5c5c80			// dark/light blue
+tex 8 16						// wispy smoke puffs
+size 1 2						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 32 96 32					// Slow Fade
+originoffset 0 0 16				// Center of Powerup
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+airfriction 0.2					// Slowly fall down
+rotate 0 360 5 15				// Swirl and rotate
+
+//======================================================================
+// Sharp Shooter
+// Sparks + Smoke clouds
+//----------------------------------------------------------------------
+effect DPP_ITSSHARP
+countabsolute 8
+type spark						// central spray of sparks
+color 0x6b4b57 0x937387			// Sigil colours
+size 0.5 1						// Small and stretched
+stretchfactor 8
+alpha 32 192 64					// Quick fade
+originoffset 0 0 16				// Center of Powerup
+originjitter 8 8 16				// Vertical Spread
+velocityjitter 64 64 64			// high speed
+airfriction 0.5
+
+effect DPP_ITSSHARP
+countabsolute 8
+type spark						// central spray of sparks
+color 0x6b4b57 0x937387			// Sigil colours
+size 0.5 1						// medium size
+stretchfactor 16
+airfriction 0.5
+originoffset 0 0 16				// Center of Powerup
+originjitter 8 8 16				// Vertical Spread
+velocityjitter 32 32 32			// slow speed
+alpha 32 192 48					// slow fade
+
+effect DPP_ITSSHARP
+count 12						// small amount
+type smoke
+color 0x6b4b57 0x937387			// Sigil colours
+tex 8 16						// wispy smoke puffs
+size 1 2						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 32 96 32					// Slow Fade
+originoffset 0 0 16				// Center of Powerup
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+airfriction 0.2					// Slowly fall down
+rotate 0 360 5 15				// Swirl and rotate
+
+//======================================================================
+// Nail Piercer
+// Sparks + Smoke clouds
+//----------------------------------------------------------------------
+effect DPP_ITSPIERCE
+countabsolute 10
+type static
+color 0x6b4b57 0x937387			// Sigil colours
+tex 62 64						// Dots
+size 0.25 0.5					// start small
+sizeincrease 0.5
+alpha 320 640 128				// Big variety of colour/density
+originoffset 0 0 12				// Center of Powerup
+originjitter 2 2 2				// Start small
+velocityjitter 4 4 2			// Horz Explosion
+gravity -0.005					// Slowly fall down
+rotate 0 360 45 90				// Swirl and rotate
+
+effect DPP_ITSPIERCE
+count 8							// small amount
+type smoke
+color 0x6b4b57 0x937387			// Sigil colours
+tex 8 16						// wispy smoke puffs
+size 1 2						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 32 96 32					// Slow Fade
+originoffset 0 0 12				// Center of Powerup
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+airfriction 0.2					// Slowly fall down
+rotate 0 360 5 15				// Swirl and rotate
+
+//======================================================================
+// Ring of Shadows
+// 2 sets of sparks, dots and smoke clouds
+//----------------------------------------------------------------------
+effect DPP_ITSSRING
+countabsolute 10
+type static
+color 0x736523 0x9e8f47			// dark/light yellow
+tex 62 64						// Dots
+size 0.25 0.5					// start small
+sizeincrease 0.5
+alpha 320 640 128				// Big variety of colour/density
+originoffset 0 0 4				// Center of Powerup
+originjitter 2 2 2				// Start small
+velocityjitter 8 8 2			// Horz Explosion
+gravity 0.005					// Slowly fall down
+rotate 0 360 45 90				// Swirl and rotate
+
+effect DPP_ITSSRING
+count 6							// small amount
+type smoke
+color 0x733723 0xcf8f2b			// dark/light yellow
+tex 8 16						// wispy smoke puffs
+size 1 4						// Large size
+sizeincrease 8					// Expanding smoke
+alpha 32 96 32					// Slow Fade
+originoffset 0 0 4				// Center of Powerup
+originjitter 8 8 8				// Small cube spawn area
+velocityjitter 8 8 8			// Small movement
+gravity 0.005					// Slowly fall down
+rotate 0 360 5 15				// Swirl and rotate
+
+//======================================================================
+//
+// Special triggered events
+//
+//======================================================================
+effect DPP_ITSPART_RINGY
+count 2
+type static
+color 0x733723 0xcf8f2b			// dark/light yellow
+tex 62 64						// Large Solid Dots
+size 0.5 2
+sizeincrease 0.5
+alpha 128 256 40				// slow dissipation
+velocityoffset 0 0 10
+velocityjitter 4 4 12			// Small velocity adjustment
+gravity -0.01					// Float up
+airfriction 1
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSPART_RINGG
+count 2
+type static
+color 0x101010 0x6b6b0f			// Sickly cloud colour
+tex 62 64						// Large Solid Dots
+size 0.5 2
+sizeincrease 0.5
+alpha 128 256 40				// slow dissipation
+velocityoffset 0 0 10
+velocityjitter 4 4 12			// Small velocity adjustment
+gravity -0.01					// Float up
+airfriction 0.4
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSPART_RINGR
+count 2
+type static
+color 0x801010 0xe71b1b			// dark/light red
+tex 62 64						// Large Solid Dots
+size 0.5 2
+sizeincrease 0.5
+alpha 128 256 40				// slow dissipation
+velocityoffset 0 0 10
+velocityjitter 4 4 12			// Small velocity adjustment
+gravity -0.01					// Float up
+airfriction 0.4
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSPART_RINGB
+count 2
+type static
+color 0x545470 0x8b8bc1			// dark/light blue
+tex 62 64						// Large Solid Dots
+size 0.5 2
+sizeincrease 0.5
+alpha 128 256 40				// slow dissipation
+velocityoffset 0 0 10
+velocityjitter 4 4 12			// Small velocity adjustment
+gravity -0.01					// Float up
+airfriction 0.4
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSPART_RINGP
+count 2
+type static
+color 0x3b1f23 0x937387			// Full range of purple colour
+tex 62 64						// Large Solid Dots
+size 0.5 2
+sizeincrease 0.5
+alpha 128 256 40				// slow dissipation
+velocityoffset 0 0 10
+velocityjitter 4 4 12			// Small velocity adjustment
+gravity -0.01					// Float up
+airfriction 0.4
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSPART_RINGW
+count 2
+type static
+color 0x606060 0xC0C0C0			// dark/light white
+tex 62 64						// Large Solid Dots
+size 0.5 2
+sizeincrease 0.5
+alpha 128 256 40				// slow dissipation
+velocityoffset 0 0 10
+velocityjitter 4 4 12			// Small velocity adjustment
+gravity -0.01					// Float up
+airfriction 0.4
+rotate 0 360 45 90				// swirl and rotate
+
+//----------------------------------------------------------------------
+effect DPP_ITSPART_BURSTY
+count 1
+type static
+color 0x733723 0xcf8f2b			// dark/light yellow
+tex 62 64						// Small Quake dots
+size 0.5 2						// Small and stretched
+sizeincrease 0.5
+alpha 128 192 64				// Strong colour and quick fade
+velocityjitter 32 32 32			// large cube
+airfriction 0.65
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSPART_BURSTG
+count 1
+type static
+color 0x101010 0x6b6b0f			// Sickly cloud colour
+tex 62 64						// Small Quake dots
+size 0.5 2						// Small and stretched
+sizeincrease 0.5
+alpha 128 192 64				// Strong colour and quick fade
+velocityjitter 32 32 32			// large cube
+airfriction 0.65
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSPART_BURSTR
+count 1
+type static
+color 0x801010 0xe71b1b			// dark/light red
+tex 62 64						// Small Quake dots
+size 0.5 2						// Small and stretched
+sizeincrease 0.5
+alpha 128 192 64				// Strong colour and quick fade
+velocityjitter 32 32 32			// large cube
+airfriction 0.65
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSPART_BURSTB
+count 1
+type static
+color 0x545470 0x8b8bc1			// dark/light blue
+tex 62 64						// Small Quake dots
+size 0.5 2						// Small and stretched
+sizeincrease 0.5
+alpha 128 192 64				// Strong colour and quick fade
+velocityjitter 32 32 32			// large cube
+airfriction 0.65
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSPART_BURSTP
+count 1
+type static
+color 0x3b1f23 0x937387			// Full range of purple colour
+tex 62 64						// Small Quake dots
+size 0.5 2						// Small and stretched
+sizeincrease 0.5
+alpha 128 192 64				// Strong colour and quick fade
+velocityjitter 32 32 32			// large cube
+airfriction 0.65
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSPART_BURSTW
+count 1
+type static
+color 0x606060 0xC0C0C0			// dark/light white
+tex 62 64						// Small Quake dots
+size 0.5 2						// Small and stretched
+sizeincrease 0.5
+alpha 128 192 64				// Strong colour and quick fade
+velocityjitter 32 32 32			// large cube
+airfriction 0.65
+rotate 0 360 45 90				// swirl and rotate
+
+//----------------------------------------------------------------------
+effect DPP_ITSFLAME_BURST
+lightradius 96					// Medium light
+lightradiusfade 300				// Implode
+lightcolor 2.6 2 2				// White/Red
+
+effect DPP_ITSFLAME_BURST
+count 32
+type spark
+color 0x801010 0xFFA020			// White
+size 0.25 1
+stretchfactor 8
+sizeincrease 1.25
+alpha 128 256 128				// Quick fade
+bounce -1						// remove on impact
+velocityjitter 20 20 64			// explosion
+notunderwater
+
+effect DPP_ITSFLAME_BURST
+count 16
+type smoke
+color 0x302a19 0x453505			// yellow
+tex 0 8							// puffs
+size 0.25 1						// start small
+stretchfactor 4
+sizeincrease 1.25
+alpha 16 512 96					// slow dissipation
+originoffset 0 0 16
+originjitter 0 0 8				// Vertical Spread
+velocityjitter 12 12 16			// explosion
+gravity -0.01
+rotate 0 -90 0 -45
+notunderwater 
+
+effect DPP_ITSFLAME_BURST
+count 16
+type smoke
+color 0x727048 0xc7c47e			// yellow/white
+tex 0 8							// puffs
+size 0.5 2						// variable size
+sizeincrease 2
+blend alpha
+alpha 16 256 64					// slow dissipation
+originoffset 0 0 12
+originjitter 0 0 8
+velocityjitter 8 8 12			// explosion
+gravity -0.01
+rotate 0 90 0 45
+notunderwater
+
+//----------------------------------------------------------------------
+// Burst effect when sigil is picked up (mostly smoke and dots)
+//----------------------------------------------------------------------
+effect DPP_ITSSIGIL_PICKUP
+lightradius 64					// Small light
+lightradiusfade 300				// Implode
+lightcolor 3.6 2 2.24			// Deep purple
+
+effect DPP_ITSSIGIL_PICKUP
+count 64
+type static
+color 0x6b4b57 0x937387			// Original shalrath projectile colours
+tex 62 64
+size 0.25 0.5
+sizeincrease 0.5
+alpha 16 256 64					// Quick fade
+originjitter 4 4 0				// Horz Spread
+velocityjitter 24 24 24			// Cube explosion
+rotate 0 360 20 40				// Swirl and rotate
+
+effect DPP_ITSSIGIL_PICKUP
+count 32						// large amount
+type smoke
+color 0x6b4b57 0x937387			// Original shalrath projectile colours
+tex 0 16						// wispy + solid smoke puffs
+size 4 8						// Large size
+sizeincrease 4					// Expanding smoke
+alpha 16 96 12					// Slow Fade
+originjitter 16 16 24			// Lift smoke off the ground
+velocityjitter 12 12 4			// Slow movement up
+rotate 0 360 5 25				// Swirl and rotate
+airfriction 0.2					// Slowly fall down
+notunderwater
+
+//----------------------------------------------------------------------
+// Particle explosion for floor impact (copied grenade)
+// 1 - regular impact
+// 2 - shockwave impact
+//----------------------------------------------------------------------
+// Black smoke decal projected on to impact surface
+effect DPP_ITSBURSTSHOCKWAVE1
+countabsolute 1
+type decal
+tex 112 119						// Large smokey impact
+size 24 32						// Stretch up very large
+alpha 48 96 16
+originjitter 48 48 48
+
+// Spray of Sparks with long lifetime
+effect DPP_ITSBURSTSHOCKWAVE1
+count 32						// Medium amount
+type spark
+color 0x903010 0xFFD030			// red/yellow
+size 1 1
+sizeincrease 2					// Expand
+stretchfactor 2					// and stretch
+alpha 0 256 224					// Large range, quick fade
+gravity 0.35					// quick fall
+airfriction 0.35
+velocityoffset 64 64 128		// fly up
+velocityjitter 128 128 128		// Narrow pattern
+
+//  large ball of yellow/red smoke which dissipates quickly
+effect DPP_ITSBURSTSHOCKWAVE1
+count 4
+type smoke
+color 0x801010 0xFFA020			// red/yellow smoke
+tex 0 8							// smoke puffs
+size 16 24						// Very Large range
+sizeincrease 4					// Expanding smoke
+alpha 16 96 32					// Medium fade
+airfriction 0.2					// Slowly fall down
+originjitter 16 16 32			// Lift smoke off the ground
+velocityjitter 32 32 16			// Wide spread pattern
+rotate 0 360 15 30				// Keep rotating
+
+//  slowly dissipating grey smoke 
+effect DPP_ITSBURSTSHOCKWAVE1
+count 16
+type smoke
+color 0x202020 0x635844			// Dark/Light grey (large range)
+tex 8 16						// All smoke
+size 16 32						// Very Large range
+sizeincrease 3					// Double size
+alpha 16 96 32
+airfriction 0.2
+originjitter 8 8 16				// Lift smoke off the ground
+velocityjitter 64 64 16			// Lots of Horz movement
+rotate 0 360 -15 -30			// Reverse direction to red/yellow smoke
+
+//----------------------------------------------------------------------
+// Black smoke decal projected on to impact surface
+effect DPP_ITSBURSTSHOCKWAVE2
+countabsolute 1
+type decal
+tex 112 119						// Large smokey impact
+size 32 48						// Stretch up very large
+alpha 48 96 16
+originjitter 48 48 48
+
+effect DPP_ITSBURSTSHOCKWAVE2
+countabsolute 1					// Only draw one at a time
+type static						// Standard decal
+color 0x101010 0x79572a			// dark grey to dark orange
+tex 109 109						// fluffy ring texture
+size 18 21						// Slight variation
+sizeincrease 80					// Expand
+alpha 175 175 192				// Quick Fade
+orientation oriented 			// Always draw on the floor
+originoffset 0 0 1				// Raise one pixel off the floor
+velocityoffset 0 0 2			// Slight vertical movement
+
+// Spray of Sparks with long lifetime
+effect DPP_ITSBURSTSHOCKWAVE2
+count 48						// Medium amount
+type spark
+color 0x903010 0xFFD030			// red/yellow
+size 1 1
+sizeincrease 2					// Expand
+stretchfactor 2					// and stretch
+alpha 0 256 224					// Large range, quick fade
+gravity 0.35					// quick fall
+airfriction 0.35
+velocityoffset 64 64 128		// fly up
+velocityjitter 128 128 128		// Narrow pattern
+
+//  large ball of yellow/red smoke which dissipates quickly
+effect DPP_ITSBURSTSHOCKWAVE2
+count 8
+type smoke
+color 0x801010 0xFFA020			// red/yellow smoke
+tex 0 8							// smoke puffs
+size 16 24						// Very Large range
+sizeincrease 4					// Expanding smoke
+alpha 16 96 32					// Medium fade
+airfriction 0.2					// Slowly fall down
+originjitter 16 16 32			// Lift smoke off the ground
+velocityjitter 32 32 16			// Wide spread pattern
+rotate 0 360 15 30				// Keep rotating
+
+//  slowly dissipating grey smoke 
+effect DPP_ITSBURSTSHOCKWAVE2
+count 32
+type smoke
+color 0x202020 0x635844			// Dark/Light grey (large range)
+tex 8 16						// All smoke
+size 16 32						// Very Large range
+sizeincrease 3					// Double size
+alpha 16 96 32
+airfriction 0.2
+originjitter 8 8 16				// Lift smoke off the ground
+velocityjitter 64 64 16			// Lots of Horz movement
+rotate 0 360 -15 -30			// Reverse direction to red/yellow smoke
+
+//======================================================================
+// INTERACTIVE OBJECTS - BLOOD IMPACT (from damage)
+//----------------------------------------------------------------------
+effect DPP_ITSINTERACTIVE
+count 1							// Low count for high DPS weapons
+type alphastatic
+color 0x070000 0x3f0000			// Original Quake blood colours
+tex 62 64						// Large pixel goodness
+size 0.25 1						// Variable size
+alpha 64 256 32					// Good alpha range
+bounce -1						// Do not stick to any surface
+gravity 0.5						// Maintain gravity arc
+liquidfriction 2
+velocityoffset 0 0 32			// Start up high
+velocityjitter 64 64 96			// Large area
+velocitymultiplier 0.5			// Using parameter velocity

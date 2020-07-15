@@ -1,0 +1,93 @@
+version 0.60:
+	Added choices to fgd for misc_splash for the colors
+	Fixed missing link to zombie knight custom zombie sword gib model.
+	Fixed incorrect folder links to zombie master models.
+	Fixed incorrect folder links to drake dragons.
+	Fixed incorrectly capitalized baseclasses in the fgd.
+	Fixed numerous small folder links to several assets and rearranged certain models into correct source mod's folders.
+version 0.56:
+	Fixed bug with func_breakable set to custom templates not using sounds or setting blood to use.
+	Fixed bug where setting damage on trigger_explode to 0 caused it to reset to 40.
+	Fixed bug with misc_breakable_pot1 not getting rotated correctly using angle key in editor (.angles in qc)
+version 0.55:
+	Fixed a bug where monster_zombiep launched ogre grenades instead of poison flesh blobs.
+	Numerous fixes to the Keep.fgd
+	Added crossbow bolts, poison bolts, and dart arrows to trap_spikeshooter.
+	Added info_teleport_changedest to update a trigger_teleport's destination
+	Fixed centroid strafing bug when dodging nails causing it to get stuck jittering back and forth
+	Fixed bug with earthquake, point entity, ya poorly named...
+	Renamed earthquake (from rogue) to info_earthquake
+	Fixed bug where dead monsters would jump on trigger_monsterjump's
+	Fixed bug with monster_wraith that prevented setting minion_maxcount on scorpion spawning wraiths
+	Added spawnflag for monster_wraith to have it ONLY use the spike attack when not using minions
+	Fixed bug where func_togglewall sometimes failed to work at all due to wierd origin setting, changed to setmodel to "" and back.
+	Added ability to use lava nails on monster_scourge
+	Fixed bug where monster_ogre_flak that used lava nails dropped regular nails in backpack
+	Fixed bug where lava nailgun or supernailgun would not switch to unless you had nailgun as well
+	Fixed bug where sawblade model was pointing to wrong location causing precache crash.
+	Fixed bug where s_bubble_* sprites were pointing to wrong location causing precache crash (used in trigger_heal).
+version 0.50:
+	Added AD 1.71 features (mapvar system, some extra triggers for cd track and misc)
+	Consolidated parm variables for item and weapon storage so I could fit AD 1.71's mapvar system.
+	Added Drake wand weapon
+	Added deathstrings for all monsters so correct message plays if killed by a monster.
+	Reorganized all model files into their respective sub folder for each mod that has been subsumed.  Did this mostly due to some naming conflicts but also as a way to show where things come from and give credit indirectly.
+	Fixed wand bugs.
+	Fixed bug with Mjolnir frames skipping.
+	Increased Mjolnir range to match Axe.
+	Fixed weapon cycling forward and reverse skipping some weapons and going in incorrect order.
+	Added Drake Boots of Levitation (flying when you press jump).
+	Added Drake Twin Shot (halves nail usage, gives full nails (Keep bonus, also affects lava nails!))
+	Added Drake Shotgun Optimizer (increases rate of fire, gives full shells)
+	Added Drake Berserker Helm (1.25x melee damage, heals player on melee hit)
+	Added grapple weapon from Rogue for single player
+	Added Zerstorer chain lightning gun
+	Added Drake laser blaster which replaces the single barrel shotgun.  Modified to use enforcer's laser gun from AD for pickup model, sounds like enforcer fire, more or less tweaked to match single barrel shot gun but has more precision.  Uses shells but that is how it was.
+	Added worldspawn values for giving the player bolts, poison bolts, lava nails, multi-rockets, and plasma, in addition to the normal ammo already there from AD.
+version 0.40:
+	Fixed a bug where selecting the axe when player has no weapons would make the axe model appear.
+	Fixed a bug where picking up upgrade weapons wouldn't let you switch to it unless you already had the previous weapon.
+	Fixed a bug that crashed when cycling weapons when the player doesn't have any.
+	Fixed a bug where monster_polyp used movetype walk instead of fly.
+	Fixed a bug where monster_polyp was trying to set frame on its gibs to different values.
+	Fixed a bug where snakeman sight sound kept playing (changed CHAN to BODY)
+	Fixed a bug where virtus would keep raising up 24 units after resurfacing
+	Added worldspawn choice to use original axe or AD axe (default).
+	Added Willy the spider
+	Added Floyd
+	Added Sentinel
+	Added misc_gibft
+	Added misc_smokemaker
+	Added misc_glitter
+	Added misc_sparks
+	Added misc_boom
+	Added info_particles
+	Added mapobject_custom (just uses misc_model)
+	Added a few features of mapobject_custom to misc_model for both such as avelocity
+	Added env_sprite for custom effects and allows specifying frame anim ranges in .spr's
+	Added extras_r4 particle emitters
+	Added extras_r4 particle triggers (e.g. effectors)
+	Added Hell Hound from Drake
+	Added Anaconda boss from Anaconda mod.
+	Added Snakeman.
+	Added Virtus lava worm.
+version 0.30:
+	Fixed a bug where attack frames were incorrect on Mega Enforcers and Ultra Enforcers by changing progs.src order
+	Fixed a bug in startspawn2 system that always reset it to 0.
+	Fixed the antigravity belt not working at all.
+	Added Archer from Drake.
+	Added Nemesant from Drake.
+	Added logic_auto from Source Engine.
+	Added env_global from Source Engine.
+	Added global state system for triggering events based on events in other maps.
+	Fixed a bug in globalstate system where states overwrote each other.
+	Added Ryu Dragons from Drake/SOE: red fire, green acid, blue lightning, white ice, gold fire
+	Added Wyrm Dragon King boss from Drake/SOE: same skins as Ryu
+	Added Nightshade Dragon from Drake/SOE
+	Added Supergrunt/Sarge guy from Kinn Bastion
+	Added Baron from Drake
+version 0.21:
+	Fixed crash when gremlin spawns a new gremlin after gorging on a corpse.
+	Added ability for gremlins to steal any weapon excluding axe and mjolnir of course
+version 0.20:
+	Initial release
