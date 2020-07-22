@@ -366,7 +366,7 @@ void() Ice_Touch =
     self.angles_y = anglemod(self.angles_y + 180);
     setorigin (self, spot);
     self.alpha = 0;
-    BecomeAnyExplosion (RING2_ICE, 3, "progs/s_wave2.spr");
+    BecomeAnyExplosion (RING2_ICE, 3, "progs/drake/s_wave2.spr");
 };
 
 void() Ice_Think =

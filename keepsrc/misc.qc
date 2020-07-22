@@ -785,6 +785,14 @@ void() s_splash4 = [3, s_splash5] {self.nextthink = time+0.05;};
 void() s_splash5 = [4, s_splash6] {self.nextthink = time+0.05;};
 void() s_splash6 = [5, misc_drip_reset] {self.nextthink = time+0.05;};
 
+// splash animation (runs at 20fps)
+void() s_splashremoves1 = [0, s_splashremoves2] {self.nextthink = time+0.05;};
+void() s_splashremoves2 = [1, s_splashremoves3] {self.nextthink = time+0.05;};
+void() s_splashremoves3 = [2, s_splashremoves4] {self.nextthink = time+0.05;};
+void() s_splashremoves4 = [3, s_splashremoves5] {self.nextthink = time+0.05;};
+void() s_splashremoves5 = [4, s_splashremoves6] {self.nextthink = time+0.05;};
+void() s_splashremoves6 = [5, s_splashremoves1] {remove(self);};
+
 //----------------------------------------------------------------------
 void() misc_drip_touch =
 {
@@ -950,6 +958,198 @@ void() misc_drip =
 
 // Re-direct to correct entity name
 void() fx_drip = { misc_drip(); };
+
+void() misc_drip_removetouch = {
+	if (other == self.owner) return;			// Touching self, do nothing
+	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
+
+	self.touch = SUB_Null;
+	if (self.owner.bubble_count > 0) 
+		self.owner.bubble_count = self.owner.bubble_count - 1;
+
+	// play a random drip sound
+	if (!(self.owner.spawnflags & MISC_DRIPSILENT)) {
+		self.lip = random() * 3;
+		if (self.lip < 1) sound (self, CHAN_AUTO, self.owner.noise1, 1, ATTN_STATIC);
+		else if (self.lip < 2) sound (self, CHAN_AUTO, self.owner.noise2, 1, ATTN_STATIC);
+		else sound (self, CHAN_AUTO, self.owner.noise3, 1, ATTN_STATIC);
+	}	
+	
+	// small particle effect when hitting something
+	particle (self.origin+'0 0 1', '0 0 0.5', self.aflag+random()*4, 5+random()*5);
+	// Switch to splash sprite and animate for 5 frames
+	setmodel (self, self.headmdl);
+	self.origin_z += 7;
+	setorigin(self, self.origin);
+	s_splashremoves1();
+};
+
+void() misc_dripremovable_think = {
+	// Extremely simplified water surface check (pre-calculated)
+	//if (self.origin_z < self.pos1_z) misc_drip_removetouch();
+	self.nextthink = time + 0.1;
+}
+
+//----------------------------------------------------------------------
+void() trigger_spawn_drips = {
+	local entity drip;
+
+	if (self.bubble_count < self.count) {
+		self.bubble_count = self.bubble_count + 1;
+		drip = spawn();
+		drip.owner = self;
+		drip.classname = "misc_drip";
+		drip.classtype = CT_MISCDRIP;
+		drip.classgroup = CG_TEMPENT;
+		drip.movetype = MOVETYPE_FLY;
+		drip.solid = SOLID_TRIGGER;
+		drip.headmdl = self.headmdl;
+		setmodel(drip, self.path);
+		setsize (drip, VEC_ORIGIN, VEC_ORIGIN);
+		drip.origin_x = self.oldorigin_x + crandom()*self.t_width;
+		drip.origin_y = self.oldorigin_y + crandom()*self.t_length;
+		drip.origin_z = self.oldorigin_z;
+		setorigin(drip, drip.origin);
+		//drip.velocity = vecrand(0,5,TRUE);
+		drip.velocity_z = -map_gravity;
+
+		drip.nextthink = time + 0.5 + random()*0.5;
+		drip.think = misc_dripremovable_think;
+		drip.touch = misc_drip_removetouch;
+	}
+
+	// Keep spawning bubbles until told not too!
+	self.think = trigger_spawn_drips;
+	self.nextthink = time + self.yaw_speed + random()*self.yaw_speed;
+};
+
+void() func_drips = {
+	// Pick type of drip sprite based on spawnflags
+	if (self.spawnflags & MISC_DRIPBLOOD) {
+		self.path = SBLOOD_DRIP;
+		self.headmdl = SBLOOD_SPLASH;
+		self.aflag = 64;
+	}
+	else if (self.spawnflags & MISC_DRIPSLIME) {
+		self.path = SSLIME_DRIP;
+		self.headmdl = SSLIME_SPLASH;
+		self.aflag = 48;
+	}
+	else {
+		self.path = SWATER_DRIP;
+		self.headmdl = SWATER_SPLASH;
+		self.aflag = 0;
+	}
+
+	// Default cache - water
+	precache_model (self.path);
+	precache_model (self.headmdl);
+	
+	if (!self.noise1) self.noise1 = "misc/drip1.wav";
+	if (!self.noise2) self.noise2 = "misc/drip2.wav";
+	if (!self.noise3) self.noise3 = "misc/drip3.wav";
+	precache_sound (self.noise1);
+	precache_sound (self.noise2);
+	precache_sound (self.noise3);
+
+	if (check_bmodel_keys()) return;	// Check for bmodel errors
+
+	InitTrigger();
+
+	self.bubble_count = 0;		// Reset counters
+	if (!self.count) self.count = 5;			// max active drips
+	self.oldorigin = bmodel_origin(self);
+	self.oldorigin_z = self.maxs_z;
+	self.t_width = (self.size_x/2);
+	self.t_length = (self.size_y/2);
+	// Default spawn rate for drips
+	if (self.yaw_speed <= 0) self.yaw_speed = 0.5;
+
+	// default frequency to 0.2 seconds
+	if (self.wait <= 0) self.wait = 0.2;
+	self.nextthink = time + self.wait;
+	self.think = trigger_spawn_drips;
+};
+
+//----------------------------------------------------------------------
+void() func_bubbles_reset = {
+	if (self.noise1 != "") self.target = self.noise1;
+	if (self.noise2 != "") self.target2 = self.noise2;
+	self.estate_on();
+};
+
+//----------------------------------------------------------------------
+void() func_bubbles_on = {
+	self.estate = ESTATE_ON;
+	self.solid = SOLID_TRIGGER;
+	// Restore bounding box (dev testing visual thing)
+	setsize (self, self.bbmins, self.bbmaxs);
+	// Spawn bubbles inside volume brush
+	trigger_spawn_bubbles();
+};
+
+// brush based bubble source
+void() func_bubbles = {
+	if (check_bmodel_keys()) return;	// Check for bmodel errors
+
+	InitTrigger();
+	self.spawnflags = self.spawnflags | TRIG_SPAWNBUBBLES;
+	// Setup bubble model/counter/volume
+	trigger_setup_bubbles();
+
+	// Setup Entity State functionality
+	if (self.targetname != "") self.use = entity_state_use;
+	self.estate_on = func_bubbles_on;
+	self.estate_off = trigger_bmodel_off;
+	self.estate_disable = trigger_bmodel_disable;
+	self.estate_reset = func_bubbles_reset;
+	self.touch = SUB_Null; // do nothing, we are just here to blow bubbles
+
+	// Switch on OR off?
+	if (self.spawnflags & ENT_STARTOFF) self.estate_off();
+	else self.estate_on();
+};
+
+// brush based sprite source
+void() func_sprite_emitter = {
+	if (check_bmodel_keys()) return;	// Check for bmodel errors
+
+	InitTrigger();
+	self.spawnflags = self.spawnflags | TRIG_SPAWNBUBBLES;
+	// Setup bubble model/counter/volume
+	//trigger_setup_bubbles();
+
+	if (self.path) self.mdl = self.path;
+	else self.mdl = "progs/ad171/s_bubble_blue1.spr";
+	precache_model(self.mdl);
+	// Setup defaults for healing bubbles
+	self.waitmin = self.bubble_count = 0;		// Reset counters
+	if (!self.count) self.count = 5;			// max active bubbles
+	if (!self.height) self.height = self.size_z;
+	if (self.height < 64) self.height = 64;		// min top of volume
+	self.oldorigin = bmodel_origin(self);
+	self.oldorigin_z = self.mins_z;
+	self.t_width = (self.size_x/2);
+	self.t_length = (self.size_y/2);
+	// Default spawn rate for bubbles
+	if (self.yaw_speed <= 0) self.yaw_speed = 0.5;
+	// Default float speed for bubbles
+	if (self.old_velocity_x <= 0) self.old_velocity_x = 5;
+	if (self.old_velocity_y <= 0) self.old_velocity_y = 10;
+	if (self.old_velocity_z <= 0) self.old_velocity_z = 15;
+
+	// Setup Entity State functionality
+	if (self.targetname != "") self.use = entity_state_use;
+	self.estate_on = func_bubbles_on;
+	self.estate_off = trigger_bmodel_off;
+	self.estate_disable = trigger_bmodel_disable;
+	self.estate_reset = func_bubbles_reset;
+	self.touch = SUB_Null; // do nothing, we are just here to blow bubbles
+
+	// Switch on OR off?
+	if (self.spawnflags & ENT_STARTOFF) self.estate_off();
+	else self.estate_on();
+};
 
 //======================================================================
 /*QUAKED misc_smoke (.5 .5 .75) (-8 -8 -8) (8 8 192) x NODPMDL NODPFX x x x STARTOFF x

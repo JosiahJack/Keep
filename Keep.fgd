@@ -978,6 +978,10 @@
 	_dirt(integer) : "Dirt mapping (override)"
 	_minlight(integer) : "Min light for all surface"
 	_mincolor(string) : "Min light color R G B"
+	_mirrorinside(choices) : "Mirror all faces (e.g. foliage)" = [
+		0 : "Normal"
+		1 : "Draw back faces"
+	]
 	_shadow(choices) : "Shadows" = [
 		0 : "Do Nothing"
 		1 : "Cast shadows"
@@ -1638,6 +1642,7 @@
 		4 : "No Monsters" : 0
 	]
 	speed(integer) : "Speed of push (def=1000)"
+	noise(string) : "Custom Sound to play(def=ambience/windfly.wav)"
 ]
 
 @SolidClass base(TrigBasic) = trigger_jump : "Q3-style Jump Pad" [
@@ -1674,8 +1679,9 @@
 //----------------------------------------------------------------------
 @BaseClass base(TrigOFF,Targetname) flags(Angle) = TrigBubbles [
 	spawnflags(flags) = [ 2 : "Bubbles" : 0 ]
-	count(integer) : "Bubble active total"
+	count(integer) : "Bubble active total(def=5)"
 	height(integer) : "Max Travel distance"
+	yaw_speed(integer) : "Delay between emissions(def=0.5)"
 	style(choices) : "Bubble Type" = [
 		1 : "Grey"
 		2 : "Brown 1"
@@ -1693,6 +1699,7 @@
 		14: "Blue 2"
 		15: "Red 2"
 	]
+	old_velocity(string) : "Bubble speeds (shake base multi)(def=5 10 15)"
 ]
 @SolidClass base(TrigBubbles, Target) = trigger_hurt : "Trigger Hurt" [
 	spawnflags(flags) = [ 
@@ -1724,6 +1731,20 @@
 	]
 	message(string) : "Healing Message"
 	message2(string) : "Healing Expired"
+]
+@SolidClass base(TrigBubbles) = func_bubbles : "Bubble generator volume" []
+@SolidClass base(Misc) = func_drips : "Dripping water volume" [
+	spawnflags(Flags) = [ 
+		2 : "Silent" : 0
+		16 : "Blood" : 0
+		32 : "Slime" : 0
+	]
+	count(integer) : "Drip active total (def=5)"
+	wait(integer) : "Delay before start (def=0.2)"
+	yaw_speed(integer) : "Delay between emissions(def=0.5)"
+	noise1(string) : "Drip noise (def=misc/drip1.wav)"
+	noise2(string) : "Drip noise (def=misc/drip2.wav)"
+	noise3(string) : "Drip noise (def=misc/drip3.wav)"
 ]
 
 //----------------------------------------------------------------------
@@ -3382,6 +3403,15 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 		 0 : "No, spawns normally"
 		 1 : "Yes, only in coop"
 	]
+	passive_state(choices) : "Passive Mode" = [
+		 0 : "Default Nonpassive"
+		 1 : "Passive"
+	]
+	passive_resethp(choices) : "Reset Health When Returning" = [
+		 0 : "Don't Reset Health"
+		 1 : "Reset Health"
+	]
+	passive_resettimer(integer) : "Time to reset passive(def=0)"
 ]
 @baseclass base(Monster) size(-16 -16 -24, 16 16 16) = MonTiny []
 @baseclass base(Monster) size(-20 -20 -20, 20 20 20) = MonSquare []
@@ -3431,10 +3461,18 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 ]
 @PointClass base(MonDog) studio("progs/mon_dog.mdl") = monster_dog : "Nasty Doggie" []
 @PointClass base(MonFlat) studio("progs/hipnotic/grem.mdl") = monster_gremlin : "Gremlin" []
-@PointClass base(MonTiny) studio("progs/ad171/mon_eel.mdl") = monster_eel : "Eel" []
+@PointClass base(MonTiny) studio("progs/ad171/mon_eel.mdl") = monster_eel : "Eel" [
+	spawnflags(flags) = [ 4 : "Liquid Blocks Sight" : 0 ]
+]
+@PointClass base(MonTall) studio("progs/octa.mdl") = monster_octa : "Octopus" [
+	spawnflags(flags) = [ 4 : "Liquid Blocks Sight" : 0 ]
+]
 //----------------------------------------------------------------------
 @PointClass base(MonFish) studio("progs/ad171/mon_fish.mdl") = monster_fish : "Rotfish" [
-	spawnflags(flags) = [ 2 : "Small" : 0 ]
+	spawnflags(flags) = [
+		2 : "Small" : 0
+		4 : "Liquid Blocks Sight" : 0
+	]
 ]
 @PointClass base(MonGolem) studio("progs/ad171/mon_golem.mdl") = monster_golem : "Golem" [
 	spawnflags(flags) = [ 

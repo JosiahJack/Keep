@@ -83,6 +83,10 @@ void() trigger_setup_bubbles =
 	self.t_length = (self.size_y/2);
 	// Default spawn rate for bubbles
 	if (self.yaw_speed <= 0) self.yaw_speed = 0.5;
+	// Default float speed for bubbles
+	if (self.old_velocity_x <= 0) self.old_velocity_x = 5;
+	if (self.old_velocity_y <= 0) self.old_velocity_y = 10;
+	if (self.old_velocity_z <= 0) self.old_velocity_z = 15;
 };
 
 //----------------------------------------------------------------------
@@ -146,8 +150,8 @@ void() trigger_spawn_bubbles =
 		bubble.origin_y = self.oldorigin_y + crandom()*self.t_length;
 		bubble.origin_z = self.oldorigin_z;
 		setorigin(bubble, bubble.origin);
-		bubble.velocity = vecrand(0,5,TRUE);
-		bubble.velocity_z = 10 + random()*15;
+		bubble.velocity = vecrand(0,self.old_velocity_x,TRUE);
+		bubble.velocity_z = self.old_velocity_y + random()*self.old_velocity_z;
 		bubble.count = rint(random()*4);
 
 		bubble.nextthink = time + 0.5 + random()*0.5;

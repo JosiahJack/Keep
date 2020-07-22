@@ -549,7 +549,7 @@ void() Baron_Earth =
     local   vector  org, dir, err, base;
     local   float   loop, sped;
 
-    sound (self, CHAN_WEAPON, "misc/wallbrk.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "drake/misc/wallbrk.wav", 1, ATTN_NORM);
 
 // Note:  Rapture uses '6 6 0'.
     err = '6 6 0';
@@ -591,7 +591,7 @@ void() Geyser_Erupt =
     setorigin (self, org);
 
     T_RadiusDamage (self, self.owner, 60, world, DAMAGEALL);
-    sound (self, CHAN_WEAPON, "misc/wallbrk.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "drake/misc/wallbrk.wav", 1, ATTN_NORM);
     QuakeWave (self.origin);
 
 // Do rock spray from below.
@@ -644,7 +644,7 @@ void() Geyser_Think =
     spot_z = self.origin_z;
     traceline (spot + '0 0 1', spot - '0 0 1027', TRUE, self);
     if (trace_fraction < 1)
-        HalfWave (trace_endpos + '0 0 2', RING2_QUAKE, 3, "progs/s_wave2.spr");
+        HalfWave (trace_endpos + '0 0 2', RING2_QUAKE, 3, "progs/drake/s_wave2.spr");
 
     Geyser_NextThink ();
 };
@@ -1434,7 +1434,7 @@ void() monster_baron = {
     precache_sound ("imp/shard.wav");
     precache_sound ("misc/quake.wav");
     precache_sound ("misc/quakeend.wav");
-    precache_sound ("misc/wallbrk.wav");
+    precache_sound ("drake/misc/wallbrk.wav");
     precache_sound ("nemesant/bigboom.wav");
     precache_sound ("plasma/explode.wav");
     precache_sound ("plasma/fire.wav");
@@ -1456,7 +1456,7 @@ void() monster_baron = {
     precache_sound ("golem/step.wav");
     precache_sound ("hknight/grunt.wav");
     precache_sound ("hknight/slash1.wav");
-    precache_sound ("misc/wallbrk.wav");
+    precache_sound ("drake/misc/wallbrk.wav");
     precache_sound ("shambler/smack.wav");
     precache_sound ("weapons/mirv1.wav");   // In case MIRV is forbidden.
     precache_model ("progs/drake/s_wave.spr");

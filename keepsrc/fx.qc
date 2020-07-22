@@ -1209,7 +1209,7 @@ void(entity ent) Particle_Gust =
 };
 
 float SPRITE_PLAYONCE = 4;
-float SPRITE_STARTOFF = 8;
+float SPRITE_RANDOMWAIT = 8;
 float S_ACTIVE = 1;
 float S_DEACTIVE = 0;
 float S_ALPHANULL = 0.001;
@@ -1229,10 +1229,17 @@ void() env_sprite_loop = {
 			self.use();
 			return;
 		}
+		if (self.spawnflags & SPRITE_RANDOMWAIT && self.wait > 0) {
+			self.alpha = S_ALPHANULL;
+			self.think = env_sprite_loop;
+			self.nextthink = time + self.waitmin + random()*self.wait;
+			self.spritestarted = TRUE;
+			return;
+		}
 	}
 
 	self.think = env_sprite_loop;
-	self.nextthink = time + 0.05;
+	self.nextthink = time + self.impulse;
 };
 
 // Added by Qmaster
@@ -1253,27 +1260,29 @@ void() env_sprite_hide = {
 	self.nextthink = time + 0.1;
 };
 
-void () env_sprite_use = {
-	if (self.state == S_ACTIVE) {
-		self.alpha = S_ALPHANULL;
-		self.spritestarted = FALSE;
-		self.state = S_DEACTIVE;
-	} else {
-		self.state = S_ACTIVE;
-		self.alpha = self.pos1_y;
-	}
-};
-
 void () env_sprite_on = {
-	
+	self.state = S_ACTIVE;
+	self.alpha = self.pos1_y;
+	self.think = env_sprite_loop;
+	self.nextthink = time + self.impulse;
 };
 
 void () env_sprite_off = {
+		self.alpha = S_ALPHANULL;
+		self.spritestarted = FALSE;
+		self.state = S_DEACTIVE;
+};
 
+void () env_sprite_use = {
+	if (self.state == S_ACTIVE) {
+		env_sprite_off();
+	} else {
+		env_sprite_on();
+	}
 };
 
 void () env_sprite_disable = {
-
+	env_sprite_hide();
 };
 
 void () env_sprite_reset = {
@@ -1299,7 +1308,7 @@ void () env_sprite = {
 	self.estate_reset = env_sprite_reset;
 	self.estate = ESTATE_ON;
 
-	if (self.spawnflags & SPRITE_STARTOFF) {
+	if (self.spawnflags & 64) {
 		self.estate_off();
 	}
 
@@ -1308,7 +1317,9 @@ void () env_sprite = {
 	} else {
 		self.think = SUB_Null;
 	}
-	self.nextthink = time + 0.1;
+
+	if (self.impulse <= 0) self.impulse = 0.05;
+	self.nextthink = time + self.delay;
 };
 
 void () info_sprite_static = {

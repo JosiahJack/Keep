@@ -285,7 +285,7 @@ mon_virtusboss.qc
 // Keep stuff
 qrobot.qc
 mon_inquisitor.qc
-
+mon_octa.qc
 
 //CSQC extensions start here.
 //csqc_hud_vanilla.qc

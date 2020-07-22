@@ -206,8 +206,7 @@ void() fish_die =
 /*======================================================================
 QUAKED monster_fish (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 ======================================================================*/
-void() monster_fish =
-{
+void() monster_fish = {
 	if (deathmatch) { remove(self); return; }
 
 	self.mdl = "progs/ad171/mon_fish.mdl";	// Using new model
