@@ -2766,7 +2766,7 @@
 	wait(integer) : "time between firing (def=1s)"
 	delay(integer) : "random time between firing"
 ]
-@PointClass base(Trap) = trap_lightningshooter : "Rocket Shooter" [
+@PointClass base(Trap) = trap_lightningshooter : "Lightning Shooter" [
 	spawnflags(Flags) = [
  		1 : "Large (Chthon)" : 0 
 		
@@ -2775,6 +2775,9 @@
 	wait(integer) : "time between firing (def=1s)"
 	delay(integer) : "random time between firing"
 ]
+
+@PointClass base(Trap) = trap_tesla_coil : "Lightning Shooter" []
+@PointClass base(Trap) = trap_gods_wrath : "Lightning Shooter" []
 @PointClass base(Trap) = trap_gasshooter : "Particle Shooter" [
 	spawnflags(Flags) = [ 
 		1 : "Steam" : 1 
