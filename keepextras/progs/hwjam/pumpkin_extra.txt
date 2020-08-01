@@ -1,0 +1,15 @@
+Pumpkin extras by Preach (andrew.denner@btinternet.com)
+
+The original pumpkin.mdl was created by Joshua Skelton, and was provided by Newhouse for the 2018 Halloween Jam (http://celephais.net/board/view_thread.php?id=61642). I decided to have some unauthorised fun with it...
+
+The plain pumpkin skin and the original pose (skin 0 and frame 0) were part of the original model. I have added 6 variations on the original skin with jack-o-lantern 
+designs carved into the pumpkin. These are largely rendered in fullbright colours, so they're most effective when the pumpkin is mostly dark. The added skins are:
+
+1) Skull
+2) Jaws
+3) Quake logo
+4) Pentagrams
+5) Right arrow
+6) Left arrow
+
+In addition, I've added two extra frames to the model. These are variations in the size/shape/evenness of the original pumpkin, so that larger groups of pumpkins can look more natural. Some of the skins look a little bit better on frame 1, where a face has been flattened slighlty to accomodate the carving.
