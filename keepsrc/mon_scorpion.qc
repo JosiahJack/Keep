@@ -358,7 +358,7 @@ void() pinch_die =
 };
 
 /*======================================================================
-/*QUAKED monster_scorpion (1 0 0) (-16 -16 -24) (16 16 24) Ambush
+//QUAKED monster_scorpion (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 ======================================================================*/
 void() setup_scorpion;
 void() monster_scorpion =

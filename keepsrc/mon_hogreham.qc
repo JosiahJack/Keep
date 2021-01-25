@@ -368,7 +368,7 @@ void() hogreham_wakeup8a	=[	$smash13,		hogreham_wakeup9a ] {};
 void() hogreham_wakeup9a	=[	$smash14,		hogreham_run1	] {};
 
 /*======================================================================
-/*QUAKED monster_hogreham (0.5 0.75 0) (-32 -32 -24) (32 32 64) AMBUSH x METAL NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED monster_hogreham (0.5 0.75 0) (-32 -32 -24) (32 32 64) AMBUSH x METAL NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
 { model(":progs/ad171/mon_hogreham.mdl"); }
 Ogre, 300 health points.
 -------- KEYS --------

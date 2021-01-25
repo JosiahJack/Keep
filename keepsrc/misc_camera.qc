@@ -680,7 +680,7 @@ void() camera_controller_setup =
 };
 
 /*======================================================================
-/*QUAKED misc_camera (1 0.5 0.5) (-16 -16 -16) (16 16 16) PLAYER SKIPABLE FADEOUT FADEIN FIXEDANGLE ENDCAMERA x x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED misc_camera (1 0.5 0.5) (-16 -16 -16) (16 16 16) PLAYER SKIPABLE FADEOUT FADEIN FIXEDANGLE ENDCAMERA x x Not_Easy Not_Normal Not_Hard Not_DM
 In game cinematic camera (Does not work in coop/dm mode)
 -------- KEYS --------
 targetname  : Camera name for linking into target chains

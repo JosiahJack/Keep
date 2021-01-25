@@ -165,7 +165,7 @@ void() trigger_spawn_bubbles =
 };
 
 /*======================================================================
-/*QUAKED trigger_multiple (0.5 0 0.5) ? NOTOUCH x x x MODCHECK MONSTERS STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_multiple (0.5 0 0.5) ? NOTOUCH x x x MODCHECK MONSTERS STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Variable sized bmodel that uses multiple times
 ------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -204,7 +204,7 @@ void() trigger_multiple =
 };
 
 /*======================================================================
-/*QUAKED trigger_once (0.5 0 0.5) ? NOTOUCH x x INVIEW MODCHECK MONSTER STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_once (0.5 0 0.5) ? NOTOUCH x x INVIEW MODCHECK MONSTER STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Variable sized bmodel that uses once
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -252,7 +252,7 @@ void() trigger_once =
 };
 
 /*======================================================================
-/*QUAKED trigger_secret (.5 0 .5) ? NOTOUCH NOMSG x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_secret (.5 0 .5) ? NOTOUCH NOMSG x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Update map secret counter
 ------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -297,7 +297,7 @@ void() trigger_secret =
 };
 
 /*======================================================================
-/*QUAKED trigger_teleport (0.5 0 0.5) ? PLAYER_ONLY SILENT STARTON x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_teleport (0.5 0 0.5) ? PLAYER_ONLY SILENT STARTON x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Teleport player/monsters to target location
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -590,7 +590,7 @@ void() trigger_teleport =
 };
 
 /*======================================================================
-/*QUAKED trigger_changelevel (0.5 0 0.5) ? NO_INTERMIS RESETINV x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_changelevel (0.5 0 0.5) ? NO_INTERMIS RESETINV x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Finish current map, show intermission screen and loads next
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -711,7 +711,7 @@ void() trigger_changelevel =
 };
 
 /*======================================================================
-/*QUAKED trigger_setskill (0.5 0 0.5) ? NOTOUCH x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_setskill (0.5 0 0.5) ? NOTOUCH x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Sets player skill level (via console)
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -767,7 +767,7 @@ void() trigger_setskill =
 };
 
 /*======================================================================
-/*QUAKED trigger_rune (0.5 0 0.5) ? E1 E2 E3 E4 x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_rune (0.5 0 0.5) ? E1 E2 E3 E4 x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 A Trigger that fires once if the player has certain runes
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -864,7 +864,7 @@ void() trigger_rune =
 };
 
 /*======================================================================
-/*QUAKED trigger_push (0.5 0 0.5) ? PUSH_ONCE SILENT NOMONSTER x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_push (0.5 0 0.5) ? PUSH_ONCE SILENT NOMONSTER x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Push the Player and Grenades!
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -963,8 +963,8 @@ void() trigger_push =
  - Modified to have on/off/toggle state via triggers
  - Downsides to system, there is no abilty to go down a ladder
 
-/*======================================================================
-/*QUAKED trigger_ladder (.5 .5 .5) ? x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//======================================================================
+//QUAKED trigger_ladder (.5 .5 .5) ? x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Invisible brush based ladder (jump key to climb)
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -1054,7 +1054,7 @@ void() trigger_ladder =
 };
 
 /*======================================================================
-/*QUAKED trigger_gravity (.5 .5 .5) ? NOTOUCH SERVER PLAYER MONSTER RESET x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_gravity (.5 .5 .5) ? NOTOUCH SERVER PLAYER MONSTER RESET x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Change entity/entities/player or server (world) gravity
 ------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -1252,7 +1252,7 @@ void() trigger_gravity =
 };
 
 /*======================================================================
-/*QUAKED trigger_velocity (0.5 0 0.5) ? PLAYER MONSTER GRENADE ROCKET x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_velocity (0.5 0 0.5) ? PLAYER MONSTER GRENADE ROCKET x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Check for projectile / player velocity!
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -1438,7 +1438,7 @@ void() trigger_velocity =
 };
 
 /*======================================================================
-/*QUAKED trigger_giveitems (0.5 0 0.5) ? NOTOUCH x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_giveitems (0.5 0 0.5) ? NOTOUCH x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Variable sized bmodel used to give items to player
 The target items only work if delay spawned spawnflag is set
 The pickup sound can be turned off by adding sounds=4 to item
@@ -1537,7 +1537,7 @@ void() trigger_giveitems =
 };
 
 /*======================================================================
-/*QUAKED trigger_fog (.5 .5 .5) ? x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_fog (.5 .5 .5) ? x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Trigger change global fog to new value over time
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -1645,7 +1645,7 @@ void() trigger_fog =
 };
 
 /*======================================================================
-/*QUAKED trigger_skyfog (.5 .5 .5) ? x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_skyfog (.5 .5 .5) ? x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Trigger change global sky fog to new value over time
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -1756,7 +1756,7 @@ void() trigger_skyfog =
 };
 
 /*======================================================================
-/*QUAKED trigger_nomonjump (.5 .5 .5) ? x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_nomonjump (.5 .5 .5) ? x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Stop monsters from using jump attack
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -1829,7 +1829,7 @@ void() trigger_nomonjump =
 void() trigger_monsternojump = { trigger_nomonjump(); };
 
 /*======================================================================
-/*QUAKED trigger_monsterdrop (0 .5 .5) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_monsterdrop (0 .5 .5) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Drop monster(s) to floor
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -1889,7 +1889,7 @@ void() trigger_monsterdrop =
 };
 
 /*======================================================================
-/*QUAKED trigger_monsterjump (.5 .5 .5) ? x FLYING SWIMMING x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_monsterjump (.5 .5 .5) ? x FLYING SWIMMING x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Push monsters in a certain direction
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -1919,6 +1919,10 @@ void() trigger_monsterjump_fire =
 	if (self.bmodel_act.spawnstatue) return;
 	// Check monster is not jumping already
 	if (self.bmodel_act.jump_flag > time) return;
+
+    if (!other.enemy)
+        if (other.classname == "monster_bane")
+            return;   // SoE:  The Bane does not jump unless he has an enemy.
 	
 	// Block non-monsters and fly/swim if spawnflag not set
 	if (!(self.bmodel_act.flags & FL_MONSTER)) return;
@@ -1997,7 +2001,7 @@ void() trigger_drolejump =
 };
 
 /*======================================================================
-/*QUAKED trigger_monsterturret (0.5 0.3 0) ? x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_monsterturret (0.5 0.3 0) ? x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Temporarily turn a monster into a turret
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -2065,7 +2069,7 @@ void() trigger_monsterturret =
 };
 
 /*======================================================================
-/*QUAKED trigger_hurt (.5 .5 .5) ? x BUBBLES MONSTER_ONLY x MODCHECK FALLING STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_hurt (.5 .5 .5) ? x BUBBLES MONSTER_ONLY x MODCHECK FALLING STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Will hurt any touching entity
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -2111,6 +2115,7 @@ void() trigger_hurt_fire =
 	self.attack_finished = time + self.wait;
 	T_Damage (self.bmodel_act, self, self, self.dmg, DAMARMOR);
 };
+void() hurt_touch = { trigger_hurt_fire(); };
 
 //----------------------------------------------------------------------
 void() trigger_hurt_on =
@@ -2159,7 +2164,7 @@ void() trigger_hurt =
 };
 
 /*======================================================================
-/*QUAKED trigger_heal (.5 .5 .5) ? x BUBBLES x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_heal (.5 .5 .5) ? x BUBBLES x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Heals any player who touches this trigger
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -2296,7 +2301,7 @@ void() trigger_heal =
 };
 
 /*======================================================================
-/*QUAKED trigger_touchsound (.5 .5 .5) ? x x WORLDGEO DRAIN x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_touchsound (.5 .5 .5) ? x x WORLDGEO DRAIN x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Plays sounds when touched by the player
 ------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -2466,7 +2471,7 @@ void() trigger_touchsound =
 };
 
 /*======================================================================
-/*QUAKED trigger_void (.5 .5 .5) ? NO_CLIENT NO_MONSTER NO_AMMO NO_EGG NO_TEMP NO_ITEM STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_void (.5 .5 .5) ? NO_CLIENT NO_MONSTER NO_AMMO NO_EGG NO_TEMP NO_ITEM STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Garbage collector for bottom of skyboxes
 ------- KEYS --------
 targetname : trigger entity (works with entity state system)

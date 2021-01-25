@@ -261,6 +261,7 @@ void (float AttackNumber) WrathMissile = {
    self.effects = (self.effects | EF_MUZZLEFLASH);
    makevectors (self.angles);
    missile = spawn ();
+	missile.classgroup = CG_PROJALL;
    missile.owner = self;
    missile.solid = SOLID_BBOX;
    missile.movetype = MOVETYPE_FLYMISSILE;

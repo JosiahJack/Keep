@@ -1,7 +1,7 @@
 /*==============================================================================
 DOG
 ==============================================================================*/
-$cd id1/models/dog
+$cd keep/progs/mon_dog
 $origin 0 0 24
 $base base
 $skin skin
@@ -382,13 +382,12 @@ void() dog_missile = {
 };
 
 /*======================================================================
-/*QUAKED monster_dog (1 0 0) (-32 -32 -24) (32 32 40) Ambush
+//QUAKED monster_dog (1 0 0) (-32 -32 -24) (32 32 40) Ambush
 ======================================================================*/
 void() monster_dog = {
 	if (deathmatch) { remove(self); return; }
 
 	self.mdl = "progs/mon_dog.mdl";
-	if (self.classname == "monster_hell_hound") self.mdl = "progs/dog.mdl";
 	self.headmdl = "progs/h_dog.mdl";
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
@@ -450,7 +449,7 @@ void() monster_dog = {
 };
 
 void () monster_hell_hound = {
-	self.skin = 3;
+	if (self.skin == 0) self.skin = 3;
 	if (self.deathstring == "") self.deathstring = " was eaten by a Hell Hound\n";
 	monster_dog();
 };

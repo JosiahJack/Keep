@@ -25,7 +25,7 @@ float TRAP_TOGGLE = 32;			// Toggle function with triggered
 float TRAP_TRACKING = 128;		// Keep updating the target position
 
 /*======================================================================
-/*QUAKED trap_spikeshooter (0 0.5 0.8) (-8 -8 -8) (8 8 8) SNG LASER WIZARD HELLK x TOGGLE x TRACK
+//QUAKED trap_spikeshooter (0 0.5 0.8) (-8 -8 -8) (8 8 8) SNG LASER WIZARD HELLK x TOGGLE x TRACK
 When triggered, fires a SPIKE in the direction determined by angle
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -295,7 +295,7 @@ void() trap_spikeshooter =
 };
 
 /*======================================================================
-/*QUAKED trap_grenadeshooter (0 0.5 0.8) (-8 -8 -8) (8 8 8) LARGE x x x x TOGGLE x TRACK Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trap_grenadeshooter (0 0.5 0.8) (-8 -8 -8) (8 8 8) LARGE x x x x TOGGLE x TRACK Not_Easy Not_Normal Not_Hard Not_DM
 When triggered, fires a GRENADE in the direction determined by angle
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -352,7 +352,7 @@ void() trap_grenadeshooter =
 };
 
 /*======================================================================
-/*QUAKED trap_rocketshooter (0 0.5 0.8) (-8 -8 -8) (8 8 8) LAVA FIRE JIM x x TOGGLE x TRACK Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trap_rocketshooter (0 0.5 0.8) (-8 -8 -8) (8 8 8) LAVA FIRE JIM x x TOGGLE x TRACK Not_Easy Not_Normal Not_Hard Not_DM
 When triggered, fires a ROCKET in the direction determined by angle
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -435,7 +435,7 @@ void() trap_rocketshooter =
 };
 
 /*======================================================================
-/*QUAKED trap_lightningshooter (0 0.5 0.8) (-8 -8 -8) (8 8 8) LARGE x x DUST PART TOGGLE x TRACK
+//QUAKED trap_lightningshooter (0 0.5 0.8) (-8 -8 -8) (8 8 8) LARGE x x DUST PART TOGGLE x TRACK
 When triggered, fires a LIGHTNING at the target entity (can be blocked)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -574,6 +574,7 @@ void() trap_gasshooter_spawn =
 	
 	partemit = spawn();
 	partemit.classtype = CT_TEMPSTREAM;
+	partemit.classgroup = CG_PROJALL;
 	partemit.owner = self;
 	partemit.frame = partemit.cnt = 0;
 

@@ -225,6 +225,7 @@ void() Grapple_Think =
 void(entity attacker, vector start, vector dir) Grapple_Launch =
 {
     newmis = spawn();
+	newmis.classgroup = CG_PROJALL;
     newmis.movetype = MOVETYPE_FLYMISSILE;
     newmis.solid    = SOLID_BBOX;
     newmis.master   = newmis.owner  = attacker;

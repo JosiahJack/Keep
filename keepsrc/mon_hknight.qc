@@ -64,6 +64,23 @@ void() hknight_sword_sound;
 void() knight_statue;
 void() hknight_champion_magic;
 
+//- - - - - - - - -
+float   SKIN_HELL_KNIGHT    = 0;
+float   SKIN_HELL_KNIGHT2   = 1;
+float   SKIN_HELL_LORD      = 2;
+float   SKIN_HKBOSS         = 3;
+float   SKIN_BANE           = 4;
+float   SKIN_BANE_GRAY      = 5;
+float   SKIN_DARK_LORD      = 6;
+
+float   DARKLORD_NEAR       = 250;
+
+void(float side) bane_melee;
+void() hkboss_magic;
+void() lord_magic;
+void() hkboss_cache;
+void() hklord_cache;
+
 //===========================================================================
 void()	hknight_stand1	=[	$stand1,	hknight_stand2	] {monster_idle_sound(); ai_stand();};
 void()	hknight_stand2	=[	$stand2,	hknight_stand3	] {ai_stand();};
@@ -97,9 +114,10 @@ void()	hknight_walk18	=[	$walk18,	hknight_walk19	] {ai_walk(3);};
 void()	hknight_walk19	=[	$walk19,	hknight_walk20	] {ai_walk(3);};
 void()	hknight_walk20	=[	$walk20,	hknight_walk1	] {ai_walk(2);};
 
+void()	hknight_char_b1;
+
 //===========================================================================
-void() CheckForCharge =
-{
+void() CheckForCharge = {
 	// There are 4 conditions to keep charging
 	// Can see player, no attack timer, similar Z axis and outside melee range
 	// Nightmare skill level can lock HK in constant charging (no attack timer)
@@ -112,6 +130,13 @@ void() CheckForCharge =
 	if ( fabs(self.origin_z - self.enemy.origin_z) > MONAI_CHARGEZAXIS) return;
 	if (ai_checkmelee(MONAI_MELEEKNIGHT)) return;
 
+    if (self.classname == "monster_hkboss") {
+		// Emulate old behavior.
+        self.shots_left = 3;    // Replaced 'currentammo' with 'shots_*'.
+        hknight_char_b1 ();
+        return;
+    }
+
 	SUB_AttackFinished (2);
 	
 	// Used a pre-defined charge routine (th_charge) so that
@@ -120,16 +145,62 @@ void() CheckForCharge =
 	else self.th_run();
 };
 
+float(float d) ai_medic;
+
+// Checks if the Bane can use a nearby dead body.
+void() bane_magicd1;
+void() bane_magice1;
+void() bane_strafe;
+void() magica_sword_chop;
+void() M_Lightwall;
+
+void(float d) hk_run = {
+    if (self.classname == "monster_bane") {
+        d = d * 2;
+
+        if (!self.waitmax) {
+            if (ai_medic (d)) {
+                // Hack:  Set attack_finished higher than time so
+                //  that CheckForCharge fails, which would otherwise
+                //  bypass ritual anim.
+				//if ( self.frame == $run1 )
+                    self.attack_finished = time + 0.2;
+                bane_magicd1 ();
+                return;
+            }
+
+            if (self.search_time + 5 < time)
+            if (self.enemy)
+            if (!visible (self.enemy)) {
+				// Teleport to the enemy.
+				//if ( self.frame == $run1 )
+                    self.attack_finished = time + 0.2;
+                self.search_time = time;    //+ 5;
+                bane_magice1 ();
+                return;
+            }
+        }
+    }
+    ai_run (d);
+};
+
 //----------------------------------------------------------------------
-void()	hknight_run1	=[	$run1,		hknight_run2	] {monster_idle_sound(); 
-	ai_run (20); CheckForCharge(); };
-void()	hknight_run2	=[	$run2,		hknight_run3	] {monster_footstep(FALSE); ai_run(25);};
-void()	hknight_run3	=[	$run3,		hknight_run4	] {ai_run(18);};
-void()	hknight_run4	=[	$run4,		hknight_run5	] {ai_run(16);};
-void()	hknight_run5	=[	$run5,		hknight_run6	] {ai_run(14);};
-void()	hknight_run6	=[	$run6,		hknight_run7	] {monster_footstep(FALSE); ai_run(25);};
-void()	hknight_run7	=[	$run7,		hknight_run8	] {ai_run(21);};
-void()	hknight_run8	=[	$run8,		hknight_run1	] {ai_run(13);};
+void()	hknight_run1	=[	$run1,		hknight_run2	] {
+	if (self.classname == "monster_dark_lord") {
+		self.th_run();
+		return;
+	}
+	monster_idle_sound(); 
+
+    hk_run(20); CheckForCharge();
+};
+void()	hknight_run2	=[	$run2,		hknight_run3	] {monster_footstep(FALSE); hk_run(25);};
+void()	hknight_run3	=[	$run3,		hknight_run4	] {hk_run(18);};
+void()	hknight_run4	=[	$run4,		hknight_run5	] {hk_run(16);};
+void()	hknight_run5	=[	$run5,		hknight_run6	] {hk_run(14);};
+void()	hknight_run6	=[	$run6,		hknight_run7	] {monster_footstep(FALSE); hk_run(25);};
+void()	hknight_run7	=[	$run7,		hknight_run8	] {hk_run(21);};
+void()	hknight_run8	=[	$run8,		hknight_run1	] {hk_run(13);};
 
 //----------------------------------------------------------------------
 void()	hknight_char_a1	=[	$char_a1,	hknight_char_a2	] {ai_charge(20);};
@@ -186,7 +257,13 @@ void()	hknight_smash1	=[	$smash1,	hknight_smash2	] {ai_charge(1);};
 void()	hknight_smash2	=[	$smash2,	hknight_smash3	] {ai_charge(13);};
 void()	hknight_smash3	=[	$smash3,	hknight_smash4	] {hknight_sword_sound(); ai_charge(9);};
 void()	hknight_smash4	=[	$smash4,	hknight_smash5	] {monster_footstep(FALSE); ai_charge(11);};
-void()	hknight_smash5	=[	$smash5,	hknight_smash6	] {ai_charge(10); ai_melee();};
+void()	hknight_smash5	=[	$smash5,	hknight_smash6	] {ai_charge(10);
+	if ((self.classname == "monster_bane") || (self.classname == "monster_dark_lord")) {
+		bane_melee(0); 
+	} else {
+		ai_melee();
+	}
+};
 void()	hknight_smash6	=[	$smash6,	hknight_smash7	] {ai_charge(7); ai_melee();};
 void()	hknight_smash7	=[	$smash7,	hknight_smash8	] {ai_charge(12); ai_melee();};
 void()	hknight_smash8	=[	$smash8,	hknight_smash9	] {ai_charge(2); ai_melee();};
@@ -203,14 +280,23 @@ void()	hknight_watk5	=[	$w_attack5,	hknight_watk6	] {ai_melee();};
 void()	hknight_watk6	=[	$w_attack6,	hknight_watk7	] {ai_melee();};
 void()	hknight_watk7	=[	$w_attack7,	hknight_watk8	] {ai_charge(1);};
 void()	hknight_watk8	=[	$w_attack8,	hknight_watk9	] {ai_charge(4);};
-void()	hknight_watk9	=[	$w_attack9,	hknight_watk10	] {ai_charge(5);};
+void()	hknight_watk9	=[	$w_attack9,	hknight_watk10	] {
+	if ((self.classname == "monster_bane") || (self.classname == "monster_dark_lord")) {
+		bane_melee(0); 
+	}
+	ai_charge(5);
+};
 void()	hknight_watk10	=[	$w_attack10,	hknight_watk11	] {ai_charge(3); ai_melee();};
 void()	hknight_watk11	=[	$w_attack11,	hknight_watk12	] {monster_footstep(FALSE); ai_charge(2); ai_melee();};
 void()	hknight_watk12	=[	$w_attack12,	hknight_watk13	] {ai_charge(2); ai_melee();};
 void()	hknight_watk13	=[	$w_attack13,	hknight_watk14	] {ai_charge(0);};
 void()	hknight_watk14	=[	$w_attack14,	hknight_watk15	] {hknight_sword_sound(); ai_charge(0);};
 void()	hknight_watk15	=[	$w_attack15,	hknight_watk16	] {ai_charge(0);};
-void()	hknight_watk16	=[	$w_attack16,	hknight_watk17	] {ai_charge(1);};
+void()	hknight_watk16	=[	$w_attack16,	hknight_watk17	] {ai_charge(1);
+	if ((self.classname == "monster_bane") || (self.classname == "monster_dark_lord")) {
+		sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
+	}
+};
 void()	hknight_watk17	=[	$w_attack17,	hknight_watk18	] {ai_charge(1); ai_melee();};
 void()	hknight_watk18	=[	$w_attack18,	hknight_watk19	] {ai_charge(3); ai_melee();};
 void()	hknight_watk19	=[	$w_attack19,	hknight_watk20	] {ai_charge(4); ai_melee();};
@@ -257,24 +343,90 @@ void(float offset) hknight_shot =
 	dir = normalize (v_forward);
 	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
 	
-	launch_projectile (org, dir, CT_PROJ_HKN, self.attack_speed);
+    if (self.classname == "monster_bane") {
+        KnightBall_Launch (org, dir);
+        newmis.dmg = 60;
+        newmis.style = newmis.style | DF_SAFE;
+        newmis.velocity = dir*600;
+        if (( self.frame == $magicb6 ) || ( self.frame == $magicc6 )) sound (self, CHAN_WEAPON, "weapons/mirv1.wav", 1, ATTN_NORM);
+    } else if (self.classname == "monster_dark_lord") {
+        NecroBolt_Launch (org, dir);
+    } else {
+		launch_projectile (org, dir, CT_PROJ_HKN, self.attack_speed);
+	}
 };
+
+void() lord_magica7;
+
 //----------------------------------------------------------------------
 // Magic attack A (over head attack) - not used
-void()	hknight_magica1 =[	$magica1,	hknight_magica2	] {ai_face();};
-void()	hknight_magica2 =[	$magica2,	hknight_magica3	] {ai_face();};
-void()	hknight_magica3 =[	$magica3,	hknight_magica4	] {ai_face();};
-void()	hknight_magica4 =[	$magica4,	hknight_magica5	] {ai_face();};
-void()	hknight_magica5 =[	$magica5,	hknight_magica6	] {ai_face();};
-void()	hknight_magica6 =[	$magica6,	hknight_magica7	] {ai_face();};
-void()	hknight_magica7 =[	$magica7,	hknight_magica8	] {hknight_shot(-2);};
-void()	hknight_magica8 =[	$magica8,	hknight_magica9	] {hknight_shot(-1);};
-void()	hknight_magica9 =[	$magica9,	hknight_magica10] {hknight_shot(0);};
-void()	hknight_magica10 =[	$magica10,	hknight_magica11] {hknight_shot(1);};
-void()	hknight_magica11 =[	$magica11,	hknight_magica12] {hknight_shot(2);};
-void()	hknight_magica12 =[	$magica12,	hknight_magica13] {hknight_shot(3);};
-void()	hknight_magica13 =[	$magica13,	hknight_magica14] {ai_face();};
-void()	hknight_magica14 =[	$magica14,	hknight_run1	] {ai_face();};
+void()	hknight_magica1 =[	$magica1,	hknight_magica2	] {ai_face(); if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") {bane_strafe();} };
+void()	hknight_magica2 =[	$magica2,	hknight_magica3	] {ai_face(); if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") {bane_strafe();} };
+void()	hknight_magica3 =[	$magica3,	hknight_magica4	] {ai_face(); if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") {bane_strafe();} };
+void()	hknight_magica4 =[	$magica4,	hknight_magica5	] {ai_face(); if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") {bane_strafe();} };
+void()	hknight_magica5 =[	$magica5,	hknight_magica6	] {ai_face(); if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") {bane_strafe();} };
+void()	hknight_magica6 =[	$magica6,	hknight_magica7	] {
+	if (self.classname == "monster_hell_lord") self.think = lord_magica7;
+	if (!(self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane")) ai_face();
+};
+void()	hknight_magica7 =[	$magica7,	hknight_magica8	] {
+	 if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") {
+		ai_face();
+		bane_strafe();
+	} else {
+		hknight_shot(-2);
+	}
+};
+void()	hknight_magica8 =[	$magica8,	hknight_magica9	] {
+	 if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") {
+		ai_face();
+		bane_strafe();
+	} else {
+		hknight_shot(-1);
+	}
+};
+void()	hknight_magica9 =[	$magica9,	hknight_magica10] {
+	 if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") {
+		magica_sword_chop();
+		M_Lightwall ();
+	} else {
+		hknight_shot(0);
+	}
+};
+void()	hknight_magica10 =[	$magica10,	hknight_magica11] {
+	 if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") {
+		ai_face();
+		bane_strafe();
+	} else {
+		hknight_shot(1);
+	}
+};
+void()	hknight_magica11 =[	$magica11,	hknight_magica12] {
+	 if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") {
+		ai_face();
+		bane_strafe();
+	} else {
+		hknight_shot(2);
+	}
+};
+void()	hknight_magica12 =[	$magica12,	hknight_magica13] {
+	 if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") {
+		ai_face();
+		bane_strafe();
+	} else {
+		hknight_shot(3);
+	}
+};
+void()	hknight_magica13 =[	$magica13,	hknight_magica14] {
+	if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") bane_strafe();
+	ai_face();
+};
+void()	hknight_magica14 =[	$magica14,	hknight_run1	] {
+	if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") bane_strafe();
+	ai_face();
+};
+
+void() darklord_magicb6;
 
 //----------------------------------------------------------------------
 // Magic attack B (pointing sword) - not used
@@ -282,15 +434,31 @@ void()	hknight_magicb1 =[	$magicb1,	hknight_magicb2	] {ai_face();};
 void()	hknight_magicb2 =[	$magicb2,	hknight_magicb3	] {ai_face();};
 void()	hknight_magicb3 =[	$magicb3,	hknight_magicb4	] {ai_face();};
 void()	hknight_magicb4 =[	$magicb4,	hknight_magicb5	] {ai_face();};
-void()	hknight_magicb5 =[	$magicb5,	hknight_magicb6	] {ai_face();};
+void()	hknight_magicb5 =[	$magicb5,	hknight_magicb6	] {
+	if (self.classname == "monster_dark_lord")
+		{self.think = darklord_magicb6; return;}
+	ai_face();
+};
+
+void() ShalMissile;
+
 void()	hknight_magicb6 =[	$magicb6,	hknight_magicb7	] {ai_face();};
 void()	hknight_magicb7 =[	$magicb7,	hknight_magicb8	] {hknight_shot(-2);};
 void()	hknight_magicb8 =[	$magicb8,	hknight_magicb9	] {hknight_shot(-1);};
-void()	hknight_magicb9 =[	$magicb9,	hknight_magicb10] {hknight_shot(0);};
+void()	hknight_magicb9 =[	$magicb9,	hknight_magicb10] {
+	if (self.classname == "monster_hkboss") ShalMissile();
+	hknight_shot(0);
+};
 void()	hknight_magicb10 =[	$magicb10,	hknight_magicb11] {hknight_shot(1);};
 void()	hknight_magicb11 =[	$magicb11,	hknight_magicb12] {hknight_shot(2);};
 void()	hknight_magicb12 =[	$magicb12,	hknight_magicb13] {hknight_shot(3);};
-void()	hknight_magicb13 =[	$magicb13,	hknight_run1] {ai_face();};
+void()	hknight_magicb13 =[	$magicb13,	hknight_run1] {
+	ai_face();
+	if (self.classname == "monster_dark_lord")
+		SUB_CheckRefire (hknight_magicb1);
+};
+
+void() bane_strafe;
 
 //----------------------------------------------------------------------
 // Magic attack C (swing sword in arc)
@@ -299,12 +467,12 @@ void()	hknight_magicc2 =[	$magicc2,	hknight_magicc3	] {ai_face();};
 void()	hknight_magicc3 =[	$magicc3,	hknight_magicc4	] {ai_face();};
 void()	hknight_magicc4 =[	$magicc4,	hknight_magicc5	] {ai_face();};
 void()	hknight_magicc5 =[	$magicc5,	hknight_magicc6	] {ai_face();};
-void()	hknight_magicc6 =[	$magicc6,	hknight_magicc7	] {hknight_shot(-2);};
-void()	hknight_magicc7 =[	$magicc7,	hknight_magicc8	] {hknight_shot(-1);};
-void()	hknight_magicc8 =[	$magicc8,	hknight_magicc9	] {hknight_shot(0);};
-void()	hknight_magicc9 =[	$magicc9,	hknight_magicc10] {hknight_shot(1);};
-void()	hknight_magicc10 =[	$magicc10,	hknight_magicc11] {hknight_shot(2);};
-void()	hknight_magicc11 =[	$magicc11,	hknight_run1] {hknight_shot(3);};
+void()	hknight_magicc6 =[	$magicc6,	hknight_magicc7	] {hknight_shot(-2); if (self.classname == "monster_bane") {bane_strafe();}};
+void()	hknight_magicc7 =[	$magicc7,	hknight_magicc8	] {hknight_shot(-1);if (self.classname == "monster_bane") {bane_strafe();}};
+void()	hknight_magicc8 =[	$magicc8,	hknight_magicc9	] {hknight_shot(0);if (self.classname == "monster_bane") {bane_strafe();}};
+void()	hknight_magicc9 =[	$magicc9,	hknight_magicc10] {hknight_shot(1);if (self.classname == "monster_bane") {bane_strafe();}};
+void()	hknight_magicc10 =[	$magicc10,	hknight_magicc11] {hknight_shot(2);if (self.classname == "monster_bane") {bane_strafe();}};
+void()	hknight_magicc11 =[	$magicc11,	hknight_run1] {hknight_shot(3);if (self.classname == "monster_bane") {bane_strafe();}};
 
 //============================================================================
 // Special setup - Hell Knight firing electricity at target
@@ -447,9 +615,10 @@ void()	hknight_pain3	=[	$pain3,		hknight_pain4	] {};
 void()	hknight_pain4	=[	$pain4,		hknight_pain5	] {};
 void()	hknight_pain5	=[	$pain5,		hknight_run1	] {};
 
+void() hkfast_pain1;
+
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) hknight_pain =
-{
+void(entity inflictor, entity attacker, float damage) hknight_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -461,6 +630,14 @@ void(entity inflictor, entity attacker, float damage) hknight_pain =
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 0.5;
 			self.axhitme = 0;
+
+			// Update:  Quicker pain for lords.
+			if ((self.classname == "monster_hell_lord") || (self.classname == "monster_dark_lord")) {
+				if (random() < 0.5) {
+					hkfast_pain1 ();
+					return;
+				}
+			}
 			hknight_pain1 ();
 		}
 	}
@@ -500,7 +677,15 @@ void() hknight_die =
 	monster_death_precheck();
 	// Make sure attachments are removed
 	hknight_remove_attachment();
-	
+
+    if (self.classname == "monster_hell_lord") {
+        self.death_sound = "drake/archer/death2.wav";
+    } else if (self.classname == "monster_bane") {
+        if (self.skin == SKIN_BANE_GRAY) self.skin = SKIN_BANE;
+		self.modelindex = self.mindex2;
+        self.death_sound = "bane/death.wav";
+    }	
+
 	// regular death
 	if (!self.gibbed) {
 	sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
@@ -531,7 +716,15 @@ void() hknight_aistates =
 	if (self.classname == "monster_hell_knight_champion") {
 		self.th_missile = hknight_champion_magic;
 	} else {
-		self.th_missile = hknight_magicc1;	// Fire spikes
+		if (self.classname == "monster_hkboss") {
+			self.th_missile = hkboss_magic; // Either knight spikes or vore balls
+		} else {
+			if (self.classname == "monster_hell_lord") {
+				self.th_missile = lord_magic;
+			} else {
+				self.th_missile = hknight_magicc1;	// Fire spikes
+			}
+		}
 	}
 	self.th_charge = hknight_char_a1;	// Run + melee
 	self.th_pain = hknight_pain;		// Stumble and pain
@@ -629,7 +822,7 @@ void() monster_hell_knight =
 	self.gib1mdl = "progs/ad171/w_hknightsword.mdl";	// Unique sword
 	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
 	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot
-	
+
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
 	precache_model (MODEL_PROJ_HKN);
@@ -643,6 +836,8 @@ void() monster_hell_knight =
 
 	// Firing of magic spikes (first 0.1s must loop)
 	precache_sound ("hknight/attack1.wav");
+	precache_sound ("knight/sword2.wav");
+	precache_sound ("knight/sword2.wav");
 
 	// TE_KNIGHTSPIKE = Magic spike hitting the wall
 	// Has got to be in this location because the 
@@ -686,18 +881,42 @@ void() monster_hell_knight =
 	precache_sound ("weapons/sword1b.wav");
 	precache_sound ("weapons/sword2a.wav");
 	precache_sound ("weapons/sword2b.wav");
+
+	if (self.classname == "monster_hkboss") {
+		hkboss_cache();
+	}
+
+	if (self.classname == "monster_hell_lord") {
+		hklord_cache();
+	}
 	
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
-	if (self.classname == "monster_hell_knight_champion") {
-		if (self.health < 1) self.health = 350;
-		if (self.skin == 0) self.skin = 3;
-	} else {
-		if (self.health < 1) self.health = 250;
-	}
+
 	self.gibhealth = -40;
 	self.gibbed = FALSE;
+	if (self.classname == "monster_hell_knight_champion") {
+		if (self.health < 1) self.health = 350;
+		if (self.skin == 0) self.skin = 3; // Red trimmings and eyes, looking menacing
+		if (self.deathstring == "") self.deathstring = " was fell before a Champion\n";
+	} else {
+		if (self.classname == "monster_hkboss") {
+			if (self.health < 1) self.health = 900;
+			self.gibhealth = MON_NEVERGIB;
+			if (!self.skin) self.skin = 13; // Green trimmings, looking snazzy
+			if (self.deathstring == "") self.deathstring = " was slaughtered by a Warlord\n";
+		} else {
+			if (self.classname == "monster_hell_lord") {
+				if (self.health < 1) self.health = 400;
+				self.gibhealth = MON_NEVERGIB;
+				if (!self.skin) self.skin = 15; // Turquoise allover, looking sleek
+				if (self.deathstring == "") self.deathstring = " fell before a Hell Lord\n";
+			} else {
+				if (self.health < 1) self.health = 250;
+			}
+		}
+	}
 	self.pain_flinch = 40;					// Medium pain threshold
 	self.pain_timeout = 1.5;				// Higher than a knight
 	self.steptype = FS_TYPEHEAVY;			// Heavy player

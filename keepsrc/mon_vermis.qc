@@ -1204,6 +1204,7 @@ void(float xoff, float yoff, float zoff) vermis_shoot =
 	while (numspores > 0)
 	{
 		missile = spawn();
+		missile.classgroup = CG_PROJALL;
 		missile.owner = self;
 		missile.movetype = MOVETYPE_FLYMISSILE;
 		missile.solid = SOLID_BBOX;

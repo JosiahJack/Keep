@@ -13,6 +13,7 @@ void (string gibname, float dm) AccelerateGib = {
    local float offset1;
 
    new = spawn ();
+	new.classtype = CT_TEMPGIB;
    new.origin = self.origin;
    setmodel (new,gibname);
    setsize (new,'-8.000 -8.000 -8.000','8.000 8.000 8.000');
@@ -282,6 +283,7 @@ void (vector org, vector dir) launch_fireball = {
 
    self.effects = (self.effects | EF_MUZZLEFLASH);
    fireball = spawn ();
+	fireball.classgroup = CG_PROJALL;
    fireball.owner = self;
    fireball.movetype = MOVETYPE_FLYMISSILE;
    fireball.solid = SOLID_BBOX;

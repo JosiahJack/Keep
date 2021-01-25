@@ -1157,7 +1157,7 @@ void() monster_icegolem =
 };
 
 /*======================================================================
-/*QUAKED monster_icegolem_wavetrig (0.75 0.25 1) (-32 -32 -8) (32 32 8) x
+//QUAKED monster_icegolem_wavetrig (0.75 0.25 1) (-32 -32 -8) (32 32 8) x
 Target for boss column smash wave event
 -------- KEYS --------
 targetname : name of wave event (links to noise key on boss)

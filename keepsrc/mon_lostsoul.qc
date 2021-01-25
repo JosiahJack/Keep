@@ -629,7 +629,7 @@ void(vector minion_org, entity minion_targ) minion_lostsoul =
 	minion.minion_active = TRUE;			// Minion flag
 	minion.bodyfadeaway = TRUE;				// Get rid of body
 	
-	minion.mdl = "progs/mon_lostsoul.mdl";
+	minion.mdl = "progs/ad171/mon_lostsoul.mdl";
 
 	minion.pain_sound = "lostsoul/pain1.wav";
 	minion.idle_sound = "lostsoul/idle1.wav";

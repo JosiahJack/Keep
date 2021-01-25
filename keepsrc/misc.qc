@@ -19,7 +19,7 @@ float MISC_SHAKEVIEWONLY = 2;	// No velocity movement
 float MISC_EXPLBOX_MAX = 5;		// Maximum amount of skins available
 
 /*======================================================================
-/*QUAKED misc_explobox (0 0.5 0.8) (-16 -16 0) (16 16 64) x x x x x FLOAT STARTOFF
+//QUAKED misc_explobox (0 0.5 0.8) (-16 -16 0) (16 16 64) x x x x x FLOAT STARTOFF
 { model(":progs/ad171/explode_box1.mdl"); }
 Large exploding box
 -------- KEYS --------
@@ -34,7 +34,7 @@ STARTOFF : Starts off and waits for trigger
 -------- NOTES --------
 Large exploding box
 
-/*QUAKED misc_explobox2 (0 0.5 0.8) (-16 -16 0) (16 16 32) x x x x x FLOAT STARTOFF
+//QUAKED misc_explobox2 (0 0.5 0.8) (-16 -16 0) (16 16 32) x x x x x FLOAT STARTOFF
 { model(":progs/ad171/explode_box2.mdl"); }
 Small exploding box
 -------- KEYS --------
@@ -49,7 +49,7 @@ STARTOFF : Starts off and waits for trigger
 -------- NOTES --------
 Small exploding box
 
-/*QUAKED func_explobox (0 0.5 0.8) ? x x x x x x STARTOFF x
+//QUAKED func_explobox (0 0.5 0.8) ? x x x x x x STARTOFF x
 Exploding box (bmodel)
 -------- KEYS --------
 target      : trigger events when box explodes
@@ -290,6 +290,15 @@ void() misc_explobox2 =
 	precache_model (self.mdl);
 	self.bbmins = '-16 -16 0';
 	self.bbmaxs = '16 16 32';
+	misc_explobox_setup();
+};
+
+void() misc_barrel =
+{
+	self.mdl = "maps/b_barrel.bsp";	// maps/b_explob2.bsp
+	precache_model (self.mdl);
+	self.bbmins = '-32 -32 0';
+	self.bbmaxs = '32 32 64';
 	misc_explobox_setup();
 };
 
@@ -614,7 +623,7 @@ void() misc_gibfountain =
 };
 
 /*======================================================================
-/*QUAKED air_bubbles (0 .5 .8) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x
+//QUAKED air_bubbles (0 .5 .8) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x
 sprite based bubble that floats upward
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -748,7 +757,7 @@ void() air_bubbles =
  - Rewritten to not keep spawning endless entities
  - Modified to have on/off/toggle state
 
-/*QUAKED misc_drip (0 .5 .8) (-8 -8 -8) (8 8 8) x SILENT x x BLOOD SLIME STARTOFF x
+//QUAKED misc_drip (0 .5 .8) (-8 -8 -8) (8 8 8) x SILENT x x BLOOD SLIME STARTOFF x
 Falling water drip with splash and sound
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -1291,7 +1300,7 @@ void() misc_smoke =
  - Modified to have on/off/toggle state via triggers
  - extended parameters for angle/speed/custom sounds
 
-/*QUAKED misc_spark (.5 .75 .5) (-8 -8 -8) (8 8 8) x BLUE PALE RED x x STARTOFF x
+//QUAKED misc_spark (.5 .75 .5) (-8 -8 -8) (8 8 8) x BLUE PALE RED x x STARTOFF x
 Produces a burst of sparks at random intervals
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -1445,12 +1454,14 @@ void() misc_spark =
 	else entity_state_on();
 };
 
+void() fx_spark = { misc_spark(); };
+
 /*======================================================================
 Screen Shake (based on code from RRP by ijed/supa)
  - Modified to have on/off/toggle state
  - added extra sound options
 
-/*QUAKED misc_shake (.5 .5 .9) (-16 -16 -8) (16 16 8) x VIEWONLY x x x x x x
+//QUAKED misc_shake (.5 .5 .9) (-16 -16 -8) (16 16 8) x VIEWONLY x x x x x x
 Shake players view and/or velocity around center of entity
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -1610,7 +1621,7 @@ void() misc_deadbody_setup =
 };
 
 /*======================================================================
-/*QUAKED misc_player (1 .5 .25) (-16 -16 -24) (16 16 32) x x x x x x STARTOFF x
+//QUAKED misc_player (1 .5 .25) (-16 -16 -24) (16 16 32) x x x x x x STARTOFF x
 Dead Player MDL for poses
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -1623,7 +1634,7 @@ STARTOFF : Always Starts off and waits for trigger
 Dead Player MDL for poses
 */
 /*======================================================================
-/*QUAKED misc_demon (1 .5 .25) (-32 -32 -24) (32 32 64) x x x x x x STARTOFF x
+//QUAKED misc_demon (1 .5 .25) (-32 -32 -24) (32 32 64) x x x x x x STARTOFF x
 Dead demon/fiend for poses
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -1636,7 +1647,7 @@ STARTOFF : Always Starts off and waits for trigger
 Dead demon/fiend for poses
 */
 /*======================================================================
-/*QUAKED misc_dknight (0.75 0.25 0) (-16 -16 -24) (16 16 40) x x x x x x STARTOFF x
+//QUAKED misc_dknight (0.75 0.25 0) (-16 -16 -24) (16 16 40) x x x x x x STARTOFF x
 Dead Death Knight for poses
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -1748,7 +1759,7 @@ void() misc_dknight =
 };
 
 /*======================================================================
-/*QUAKED misc_builtineffect (0 .5 .8) (-8 -8 -8) (8 8 8) x
+//QUAKED misc_builtineffect (0 .5 .8) (-8 -8 -8) (8 8 8) x
 Spawns a builtin particle effect, will toggle if active
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)

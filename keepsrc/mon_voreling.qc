@@ -501,7 +501,7 @@ void() voreling_die =
 };
 
 /*======================================================================
-/*QUAKED monster_voreling (1 0 0) (-16 -16 -24) (16 16 24) Ambush
+//QUAKED monster_voreling (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 ======================================================================*/
 void() setup_voreling;
 void() monster_voreling =

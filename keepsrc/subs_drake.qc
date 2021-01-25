@@ -332,6 +332,19 @@ float() SUB_IgnorePain = {
     return FALSE;
 };
 
+// Checks if monster should use a faster attack.
+// Used to make rhythm tactics such as shambler dancing harder.
+float() SUB_QuickAttack =
+{
+    if (skill >= 2)
+        if (self.health <= (self.max_health * 0.25))
+            if (random() < 0.5)     //0.25
+                return TRUE;
+
+// Always fast in Cranked mode.  Otherwise, normal speed.
+    return cranked;
+};
+
 //- - - - - - - - -
 // Checks if enemy is within melee range.  def_range is defined melee range.
 // Assumes self has an enemy and can damage said enemy.
@@ -591,6 +604,54 @@ void() SUB_Flash = {
     e.think     = SUB_Remove;
     // Non-zero invisible model.
     setall (e, "progs/null.spr", '0 0 0', '0 0 0', self.origin); //was null_256  // formerly s_null.spr after that
+};
+
+// Like findradius, except the chain includes entities with solid_not.
+// Useful when you want explosions and the like to gib non-solid corpses.
+entity(vector org, float radius) QC_FindRadius = {
+    local   entity  e, head;
+    local   vector  spot;
+
+    head = world;
+    e = nextent (world);
+    while (e) {
+        spot = e.origin + (e.mins + e.maxs)*0.5;
+        if (vlen(org - spot) <= radius)
+        {
+            e.chain = head;
+            head = e;
+        }
+        e = nextent (e);
+    }
+    return head;
+};
+
+// visible2 -- same as visible except a 'src' entity takes place of self.
+float(entity targ, entity src) visible2 = {
+    local   entity  os;
+    local   float   found;
+
+    os = self;
+    self = src;
+    found = visible (targ);
+    self = os;
+
+    return found;
+};
+
+void(float hp) SUB_FullHealth =
+{
+    // Health can range from -32768 to 65535.
+    if (self.health)
+        hp = self.health;
+    hp = floor (hp);
+
+    if (hp > 50000)
+        hp = 50000;
+    else if (hp < 1)
+        hp = 1;
+
+    self.health = self.max_health = hp;
 };
 
 // Finds a random player in the game.
@@ -905,4 +966,104 @@ float(entity e) FeelsPain = {
                         return TRUE;
 
     return FALSE;
+};
+
+// Prints developer messages about self.
+void(string s1, string s2) print_self =
+    {dprint(s1);  dprint(s2);  dprint(vtos(self.origin));  dprint("\n");};
+
+//==========================================================================
+//  Reset Buttons
+
+// Removes all temporary powerups and their effects.
+// Does NOT remove permanent powers like extra health or equalizer.
+// The real purpose of this function is to turn off lights and colored
+// screens for entities when necessary.
+void() SUB_RemovePowerups =
+{
+// Standard Quake powerups.
+    //self.items      = self.items - (self.items & ITx_ALL_POWERUPS);
+    //self.items2     = self.items2 & IT2x_ALL_RUNES;     // Runes stay.
+	self.items = self.items2 = 0;
+    self.effects    = 0;    // PM:  Erase shield, lights, and the rest.
+
+    self.invincible_finished    = self.invisible_finished   = 0;
+    self.super_damage_finished  = self.radsuit_finished     = 0;
+
+    self.invincible_time    = self.invincible_sound = 0;
+    self.invisible_time     = self.invisible_sound  = 0;
+    self.super_time         = self.super_sound      = 0;
+    self.rad_time           = 0;
+
+// Extra powerups (Hipnotic, Quoth, Zerstorer, and my own additions)
+    self.thorns_finished  = self.thorns_time  = self.thorns_sound  = 0;
+    self.cross_finished   = self.cross_time   = self.cross_sound   = 0;
+    self.wing_finished    = self.wing_time    = self.wing_sound    = 0;
+    self.mirror_finished  = self.mirror_time  = self.mirror_sound  = 0;
+    self.mirror_ping      = 0;
+    // Arcanum:  Tome of Power and Necromancer curses.
+    self.tome_finished    = self.tome_time    = 0;
+    self.curse_finished   = self.curse_type   = 0;
+    self.gravity          = fabs(self.gravity);   // Boots of Leviation.
+// Jump pads
+    self.jump_time          = 0;
+
+// Reset Mjolnir (and other weapons).
+    //self.hammer_finished    = 0;
+    self.zapper_time        = 0;
+
+// DISABLED -- v_cshift causes unwanted problems for me.
+    // Screen color, done much like in Quoth.
+//    if (self.flags & FLx_CREATURE == FL_CLIENT)
+//        stuffcmd (self, "v_cshift 0 0 0 0");
+};
+
+void(float reload) M_Reload = {
+    reload = reload + time;
+    if (self.attack_finished < reload)
+        self.attack_finished = reload;
+};
+
+//=============
+// ai_run_side
+//
+// Move to the side of ideal_yaw.  Assumes ideal_yaw was set prior to a
+// call to this function.  Called by 'ai_run_strafe'.
+//=============
+void(float dist) ai_run_side =
+{
+    local   float   ofs;
+    
+    if (self.lefty)
+        ofs = 90;
+    else
+        ofs = -90;
+
+    if (safe_move (self.ideal_yaw + ofs, dist))
+        return;
+
+    self.lefty = !self.lefty;
+    safe_move (self.ideal_yaw - ofs, dist);
+};
+
+//=============
+// ai_run_strafe (formerly ai_run_slide)
+//
+// Strafe sideways, but stay at aproximately the same range
+// PM:  Renamed to 'ai_run_strafe', and added float argument 'dist'.
+//
+// The above description, which describes circle-strafing, is only true if
+// enemy_yaw updates each frame, which is true only if this is called from
+// ai_run.  If called directly, enemy_yaw probably will not be set, and the
+// monster will simply move to the side.
+//
+// For guaranteed circle-strafing, do the following:
+//  {ai_face(); ai_run_side(dist); ai_face();}
+//=============
+void(float dist) ai_run_strafe =
+{
+    self.ideal_yaw = enemy_yaw;
+    ChangeYaw ();
+
+    ai_run_side (dist);
 };

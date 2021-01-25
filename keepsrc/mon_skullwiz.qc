@@ -388,6 +388,7 @@ void() skullw_guardian =
 	while (poison_loop < 360) {
 		newmis = spawn();
 		newmis.classtype = CT_TEMPSTREAM;
+		newmis.classgroup = CG_PROJALL;
 		newmis.movetype = MOVETYPE_FLY;		// Fly, no gravity
 		newmis.solid = SOLID_TRIGGER;
 		setmodel(newmis, SBURST_POISON);
@@ -848,7 +849,7 @@ void() monster_skullwiz =
 };
 
 /*======================================================================
-/*QUAKED info_skullwiz_destination (0.6 0 0.8) (-16 -16 -24) (16 16 40) x
+//QUAKED info_skullwiz_destination (0.6 0 0.8) (-16 -16 -24) (16 16 40) x
 Teleport destination for skull wizard ONLY
 -------- KEYS --------
 targetname : part of a chain group (required)

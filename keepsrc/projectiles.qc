@@ -805,6 +805,7 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 		newmis.avelocity = vecrand(0,200,TRUE);
 	}
 
+
 	// Standard projectile setup (origin, size and velocity)
 	//----------------------------------------------------------------------
 	newmis.speed = proj_speed;
@@ -851,7 +852,6 @@ void() Touch_HomingMissile =
 				// Missile explosion base/rnd/splash
 				self.pos1 = '0 0 0';
 				if (self.classtype == CT_PROJ_SHUB1) self.pos1 = self.oldenemy.pos2;
-				// Shalrath/DSerg are using classic voreball damage
 				else self.pos1_z = DAMAGE_MONROCKET;
 			
 				// pre-calculate missile damage
@@ -879,7 +879,8 @@ void() Touch_HomingMissile =
 				// DP effect name set before homing missile launched
 				pointparticles(particleeffectnum(self.dpp_name), self.origin, '0 0 0', 1);
 				// Play standard explosion sound
-				sound(self, CHAN_WEAPON, SOUND_REXP3, 1, ATTN_NORM);
+				if (self.noise == "") self.noise = SOUND_REXP3;
+				sound(self, CHAN_WEAPON, self.noise, 1, ATTN_NORM);
 			}
 			else {
 				// Standard voreball explosion
@@ -889,7 +890,8 @@ void() Touch_HomingMissile =
 				WriteCoord (MSG_BROADCAST, self.origin_y);
 				WriteCoord (MSG_BROADCAST, self.origin_z);
 				// Sprite explosion for Fitz engines
-				SpawnExplosion(EXPLODE_SMALL, self.origin, SOUND_REXP3);
+				if (self.noise == "") self.noise = SOUND_REXP3;
+				SpawnExplosion(EXPLODE_SMALL, self.origin, self.noise);
 			}
 		}
 	}
@@ -1044,6 +1046,8 @@ void() Touch_Missile =
 			else if (self.classtype == CT_PROJ_ICEG1) self.pos1 = DAMAGE_RLICEG;
 			else if (self.classtype == CT_PROJ_EIDO1) self.pos1 = DAMAGE_RLEIDO;
 			else if (self.classtype == CT_PROJ_SMARTBALL) self.pos1 = DAMAGE_SMARTBALL;
+			else if (self.classtype == CT_PROJ_FABLADE) self.pos1 = '8 8 0';
+			else if (self.classtype == CT_PROJ_FASPELL) self.pos1 = '12 22 20';
 			else if (self.classtype == CT_PROJ_BLORD) {
 				self.pos1 = DAMAGE_RLBLORD;
 				// Don't spawn gib models at impact (could be solid)
@@ -1219,6 +1223,15 @@ void(vector org, vector dir, vector avel, float proj_type, float proj_speed) Lau
 //		newmis.frame = 7; // Large size
 //		newmis.noise = "boglord/slime_explode.wav";
 //	}
+	else if (proj_type == CT_PROJ_FABLADE) {
+		setmodel (newmis, "progs/hexen2/fablade.mdl");
+		newmis.noise = "hexen2/weapons/expsmall.wav";
+	}
+	else if (proj_type == CT_PROJ_FASPELL) {
+		setmodel (newmis, "progs/hexen2/faspell.mdl");
+		newmis.noise = "hexen2/weapons/explode.wav";
+		newmis.nextthink = time + 3;
+	}
 
 	// Standard projectile setup (origin, size and velocity)
 	//----------------------------------------------------------------------

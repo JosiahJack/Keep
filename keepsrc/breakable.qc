@@ -677,6 +677,8 @@ void() make_breakable_debris = {
 	if (self.break_template1 != "") {
 		while (i < self.brk_obj_count1) {
 			new = spawn();
+			new.classtype = CT_FUNCBREAKOBJ;
+			new.classgroup = CG_TEMPENT;
 			new.model = self.break_template1;
 			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
 			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
@@ -701,6 +703,8 @@ void() make_breakable_debris = {
 	if (self.break_template2 != "") {
 		while (i < self.brk_obj_count2) {
 			new = spawn();
+			new.classtype = CT_FUNCBREAKOBJ;
+			new.classgroup = CG_TEMPENT;
 			new.model = self.break_template2;
 			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
 			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
@@ -725,6 +729,8 @@ void() make_breakable_debris = {
 	if (self.break_template3 != "") {
 		while (i < self.brk_obj_count3) {
 			new = spawn();
+			new.classtype = CT_FUNCBREAKOBJ;
+			new.classgroup = CG_TEMPENT;
 			new.model = self.break_template3;
 			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
 			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
@@ -749,6 +755,8 @@ void() make_breakable_debris = {
 	if (self.break_template4 != "") {
 		while (i < self.brk_obj_count4) {
 			new = spawn();
+			new.classtype = CT_FUNCBREAKOBJ;
+			new.classgroup = CG_TEMPENT;
 			new.model = self.break_template4;
 			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
 			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
@@ -773,6 +781,8 @@ void() make_breakable_debris = {
 	if (self.break_template5 != "") {
 		while (i < self.brk_obj_count5) {
 			new = spawn();
+			new.classtype = CT_FUNCBREAKOBJ;
+			new.classgroup = CG_TEMPENT;
 			new.model = self.break_template5;
 			new.origin_x = (self.maxs_x - self.mins_x)*random() + self.mins_x;
 			new.origin_y = (self.maxs_y - self.mins_y)*random() + self.mins_y;
@@ -1512,7 +1522,7 @@ void() trigger_monsterbreak =
 };
 
 /*======================================================================
-/*QUAKED misc_breakable_pot1 (1 .5 .25) (-24 -24 -32) (24 24 32) STARTOFF NODAMAGE EXPLOSION SILENT DAMAGE NOMOSTER NOSOUND NOROTATE
+//QUAKED misc_breakable_pot1 (1 .5 .25) (-24 -24 -32) (24 24 32) STARTOFF NODAMAGE EXPLOSION SILENT DAMAGE NOMOSTER NOSOUND NOROTATE
 { model(":progs/ne_ruins/pot1.mdl"); }
 Breakable ceramic Pot 1 with handles
 -------- KEYS --------

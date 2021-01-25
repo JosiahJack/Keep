@@ -26,7 +26,7 @@ float TRIG_ENGRAIN = 16;		// Check for rain effects
 float TRIG_ENGSNOW = 32;		// Check for snow effects
 
 /*======================================================================
-/*QUAKED trigger_relay (0.5 0 0.5) (-8 -8 -8) (8 8 8) x RANDOM x x x x x x Not_Easy Not_Normal Not_Hard
+//QUAKED trigger_relay (0.5 0 0.5) (-8 -8 -8) (8 8 8) x RANDOM x x x x x x Not_Easy Not_Normal Not_Hard
 Triggers target(s) with custom sounds and messages
 -------- KEYS --------
 targetname : trigger entity
@@ -115,7 +115,7 @@ void() trigger_relay =
 };
 
 /*======================================================================
-/*QUAKED trigger_counter (0.5 0 0.1) (-8 -8 -8) (8 8 8) NOMESSAGE x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED trigger_counter (0.5 0 0.1) (-8 -8 -8) (8 8 8) NOMESSAGE x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 A counter which triggers target(s) when complete
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -220,7 +220,7 @@ void() trigger_counter =
 };
 
 /*======================================================================
-/*QUAKED trigger_engine (0 0 1) (-8 -8 -16) (8 8 16) FITZ DP FTE x RAIN SNOW x x
+//QUAKED trigger_engine (0 0 1) (-8 -8 -16) (8 8 16) FITZ DP FTE x RAIN SNOW x x
 Triggers target(s) when certain engine active
 -------- KEYS --------
 targetname : trigger entity
@@ -300,7 +300,7 @@ void() trigger_engine =
 };
 
 /*======================================================================
-/*QUAKED trigger_clientmsg (0.5 0.5 0) (-8 -8 -16) (8 8 16) x
+//QUAKED trigger_clientmsg (0.5 0.5 0) (-8 -8 -16) (8 8 16) x
 Centerprints a message to all clients
 -------- KEYS --------
 targetname : trigger entity
@@ -347,7 +347,7 @@ void() trigger_clientmsg =
 };
 
 /*======================================================================
-/*QUAKED trigger_cdtrack (0.8 0.5 0) (-8 -8 -16) (8 8 16) x
+//QUAKED trigger_cdtrack (0.8 0.5 0) (-8 -8 -16) (8 8 16) x
 Change CD track for all clients
 -------- KEYS --------
 targetname : trigger entity
@@ -397,7 +397,7 @@ void() trigger_cdtrack =
 };
 
 /*======================================================================
-/*QUAKED trigger_skybox (0.9 0.9 0.9) (-8 -8 -16) (8 8 16) x
+//QUAKED trigger_skybox (0.9 0.9 0.9) (-8 -8 -16) (8 8 16) x
 Load/Change Skybox for all clients
 -------- KEYS --------
 targetname : trigger entity
@@ -452,7 +452,7 @@ void() trigger_skybox =
 };
 
 /*======================================================================
-/*QUAKED trigger_itemrespawnupd (0.5 0 0.5) (-8 -8 -16) (8 8 16) x x x x RESPAWN x x x
+//QUAKED trigger_itemrespawnupd (0.5 0 0.5) (-8 -8 -16) (8 8 16) x x x x RESPAWN x x x
 Change the state of respawn flag on items
 -------- KEYS --------
 targetname : trigger entity
@@ -562,7 +562,7 @@ void() trigger_monstermovespeed =
 };
 
 /*======================================================================
-/*QUAKED trigger_monsterkill (0.5 0 0.5) (-8 -8 -16) (8 8 16) x x x x DEATH x x x
+//QUAKED trigger_monsterkill (0.5 0 0.5) (-8 -8 -16) (8 8 16) x x x x DEATH x x x
 Remove monster(s) from the map
 -------- KEYS --------
 targetname : Name of this trigger entity
@@ -640,7 +640,7 @@ void() trigger_monsterkill =
 };
 
 /*======================================================================
-/*QUAKED trigger_monsterattack (0.5 0 0.5) (-8 -8 -16) (8 8 16) x
+//QUAKED trigger_monsterattack (0.5 0 0.5) (-8 -8 -16) (8 8 16) x
 Force a monster to attack a certain target
 -------- KEYS --------
 targetname : Name of this trigger entity

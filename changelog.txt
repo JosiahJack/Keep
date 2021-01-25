@@ -1,5 +1,13 @@
+version 0.65:
+	Added extras_r5
+	Finished adding drake enemies
 version 0.60:
-	Added choices to fgd for misc_splash for the colors
+	Added func_drips for dripping water volume instead of using multiple misc_drip's
+	Added func_sprite_emitter
+	Created modified water noise for trigger_push to be used underwater
+	Created stormcloud sprite
+	Added func_bubbles
+	Fixed monster_eel's headmdl not getting precached.
 	Fixed missing link to zombie knight custom zombie sword gib model.
 	Fixed incorrect folder links to zombie master models.
 	Fixed incorrect folder links to drake dragons.

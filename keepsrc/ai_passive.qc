@@ -117,7 +117,7 @@ float() check_passivestate_system =
 };
 
 /*======================================================================
-/*QUAKED trigger_monsterpassivestate (0.5 0 0.5) (-8 -8 -16) (8 8 16) x
+//QUAKED trigger_monsterpassivestate (0.5 0 0.5) (-8 -8 -16) (8 8 16) x
 Change the monster passive state
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)

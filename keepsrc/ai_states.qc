@@ -69,13 +69,14 @@ void(float dist) ai_walk =
 		movetogoal (dist);
 	}
 };
-
+void() vanilla_water_check;
 //----------------------------------------------------------------------
 // ai_run
 //----------------------------------------------------------------------
 void(float dist) ai_run =
 {
 	if (self.health < 1) return;	// Health < 0, no more running
+	vanilla_water_check();	
 	monster_liquid_check();			// Check for liquid damage
 	monster_poisoned_check();			// Check and apply poison
 	movedist = dist;
@@ -125,6 +126,11 @@ void(float dist) ai_run =
 	// look for other coop players
 	if (coop && self.search_time < time && !self.charmed) {
 		if (FindTarget ()) return;
+
+        if (self.master)
+            if (self.enemy != self.master)
+                if (/*(self.alignment == GOOD) ||*/ (self.classname != "monster_bane"))
+                    {ai_run_done(); return;}  // Stop chase and return to master.
 	}
 
 	// Calculate if goal/enemy is infront, the range and direction

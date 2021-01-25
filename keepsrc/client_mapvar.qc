@@ -37,7 +37,7 @@ wait    : -1 = trigger once
 -------- NOTES --------
 Trigger target(s) based on mapvar
 //-----------------------------------------------------------------------------
-/*QUAKED trigger_mapvar_update (.5 .7 1) (-8 -8 -16) (8 8 16) x
+//QUAKED trigger_mapvar_update (.5 .7 1) (-8 -8 -16) (8 8 16) x
 Update the value of mapvar
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -51,7 +51,7 @@ wait    : -1 = trigger once
 -------- NOTES --------
 Update the value of mapvar
 //-----------------------------------------------------------------------------
-/*QUAKED trigger_mapvar_toggle (.5 .7 1) (-8 -8 -16) (8 8 16) x
+//QUAKED trigger_mapvar_toggle (.5 .7 1) (-8 -8 -16) (8 8 16) x
 Toggle the value of mapvar
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)

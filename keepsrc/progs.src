@@ -12,6 +12,7 @@ defsrubicon.qc
 defsquoth.qc
 defskinn.qc
 defsdrake.qc
+defshexen2.qc
 dpextensions.qc
 qrobotdefs.qc
 mathlib.qc
@@ -24,6 +25,7 @@ subs_keep.qc
 subs_drake.qc
 subs_rubicon.qc
 subs_extras.qc
+subs_hexen2.qc
 drake_box.qc
 //drake_armor.qc
 hiprot.qc
@@ -61,9 +63,15 @@ ai_combat.qc
 ai_combatkeep.qc
 ai_minions.qc
 ai_fly.qc // from Quoth
+ai_hexen2.qc
+
+// Drake stuff and subs used later
 fx_drake.qc
 drake_cool.qc
 drake_fire.qc
+drake_reflect.qc
+fablade.qc // from hexen2 used by Fallen Angel in fangel.qc
+faspell.qc // from hexen2 used by Fallen Angel in fangel.qc
 
 precache_keep.qc
 world.qc
@@ -201,6 +209,7 @@ mon_spikemine.qc
 mon_gremlin.qc
 hiprubbl.qc
 hip_part.qc
+hipspawn.qc
 hip_brk.qc
 hip_expl.qc
 hipclock.qc
@@ -218,7 +227,6 @@ mon_tarbabymitosis.qc
 earthq.qc
 
 // Kinn stuff
-
 mon_ogreflak.qc
 mon_supergrunt.qc
 
@@ -241,13 +249,15 @@ ai_ryu.qc
 ai_wyrm.qc
 mon_ryu.qc
 mon_shade.qc
-//mon_bandit.qc
-//mon_vomitus.qc
-//mon_necro.qc
+mon_bandit.qc
+mon_vomitus.qc
+revive.qc // used by necro and bane
+mon_necro.qc
 mon_cyber.qc
-//mon_bane.qc
-//mon_hlord.qc
+mon_hlord_dragon.qc // the Dark Lord transforms into a dragon beast
+mon_hlord.qc
 wand.qc
+
 
 // Zerstorer stuff
 mon_trog.qc
@@ -269,12 +279,14 @@ mon_tur.qc
 //mon_zmaster.qc
 
 // Pox's extras_r4 stuff
+extras_ai.qc
+extras_train.qc
+extras_buttons.qc
 extras_emitters.qc
-//extras_fx.qc
-//extras_misc.qc
-//extras_train.qc
-//extras_triggers.qc
-//extras_water.qc
+extras_water.qc
+extras_triggers.qc
+extras_misc.qc
+mon_hydra.qc
 
 // Random community stuff
 mon_snakeman.qc
@@ -290,3 +302,6 @@ mon_octa.qc
 //CSQC extensions start here.
 //csqc_hud_vanilla.qc
 //csqc_scoreboard.qc
+
+// Hexen 2 (most are in Drake but these weren't)
+mon_fangel.qc

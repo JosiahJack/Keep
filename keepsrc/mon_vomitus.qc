@@ -31,51 +31,45 @@ $frame death10 death11 death12 death13 death14 death15
 // non-attack animation scene.
 
 // Spews forth a tarbaby.
-void() Vomit_Spawn =
-{
-    local   entity  parent;
+void() Vomit_Spawn = {
+	local entity oself;
+	local entity newSpawn;
 
-    parent = self;
-
-    self = spawn();
-    self.flags      = 0;
-    // Owner set to vomitus so the tarbaby can pass through it if necessary.
-    self.owner      = self.master   = parent;
-    setorigin (self, parent.origin);
-    self.spawned    = TRUE;
-    self.spawnflags = parent.spawnflags & SPAWN_WHITE;
-    self.classname  = "monster_tarbaby";
-    // Monster is spew out of parent's yaw, so face away.
-    self.angles_x   = 0;
-    self.angles_y   = parent.angles_y;
-    self.angles_z   = 0;
-// The monster shall appear now.
-    monster_tarbaby ();
-
-// Yaw may change during tarbaby ai, change yaw back.
-    self.angles_y   = parent.angles_y;
-    self.fixangle   = TRUE;
-// Override normal ai with flying ai, since it is launched out of vomitus.
-    self.enemy      = parent.enemy;
-    tbaby_birth ();
-
-// Pet counter, used to enforce limits.
-    self.xfl = self.xfl | XFL_PET;
-    parent.pets = parent.pets + 1;
-
-// Successfully spawned a new creature.
-    self = parent;
+	self.minion_count = self.minion_count + 1;
+	newSpawn = spawn();
+	newSpawn.classname = self.classname;
+	newSpawn.movetype = MOVETYPE_STEP;
+	setsize (newSpawn, '-16 -16 -24', '16 16 40');
+	newSpawn.health = 80;
+	newSpawn.health = 100;
+	newSpawn.owner = self;
+	self.th_pain = SUB_Null_pain;
+	setmodel (newSpawn, self.owner.mdl);
+	newSpawn.solid = SOLID_SLIDEBOX;
+	newSpawn.skin = self.skin;
+	setorigin (newSpawn, self.origin);              
+	newSpawn.think = tbaby_checknew;
+	newSpawn.nextthink = time + 0.5;
+	sound (newSpawn, CHAN_VOICE, "blob/mytosis.wav", 1, ATTN_NORM);
+    newSpawn.angles_x   = 0;
+    newSpawn.angles_y   = self.angles_y;
+    newSpawn.angles_z   = 0;
+    newSpawn.fixangle   = TRUE;
+	// Override normal ai with flying ai, since it is launched out of vomitus.
+    newSpawn.enemy      = self.enemy;
+	oself = self;
+	self = newSpawn;
+    tbaby_jump5 ();
+	self = oself;
 };
 
 // Vomits chunks of meat at the enemy.
-void(float no) Vomit_Meat =
-{
+void(float no) Vomit_Meat = {
     local   vector  org, dir, err;
     local   float   side, up;
 
     err = '0 0 0';
-    if (no)
-    {
+    if (no) {
         if (random() < no)
             return;
         err_x = 10;
@@ -134,8 +128,8 @@ void() vom_melee =
 //- - - - - - - - -
     sound (self, CHAN_VOICE, "fish/bite.wav", 1, ATTN_NORM);
     // Update 6/17/2011:  Removed poison code.
-    if (random() < 0.1)     // Eat the player's weapon on a critical hit.
-        War_Steal (self, targ, "Vomitus ate your ");
+    // if (random() < 0.1)     // Eat the player's weapon on a critical hit.
+        // War_Steal (self, targ, "Vomitus ate your ");
     // Heal a little as it feeds on its victim.
     ldmg = SUB_MeleeDamage (10);
     T_Damage (targ, self, self, ldmg, DAMARMOR);
@@ -159,39 +153,33 @@ void() Vomit_Crush =
 
 // Note:  45 is approximately 32 * sqrt(2).
     head = QC_FindRadius (self.origin, 45);     // Picks up solid_not.
-    while (head)
-    {
+    while (head) {
         next = head.chain;  // We may remove head so get the next in line.
 
         if (head.flags & FLx_CREATURE)
         if (head.takedamage)    // Corpses can take damage in Drake.
-        if (head != self)
-        {
+        if (head != self) {
             // Crush the body into gibs it can eat.
-            if (head.deadflag == DEAD_DEAD)
-            {
-                if (head.th_gib)
-                {
-                    gh = head.gib_health - 1;
+            if (head.deadflag == DEAD_DEAD) {
+                if (head.gibhealth != MON_NEVERGIB) {
+                    gh = head.gibhealth - 1;
                     hp = head.health - gh;
                     // Modified T_Heal rejects numbers under 1, so no need to fix.
                     swap = self;
                     self = head;
                     self.health = gh;
-                    if (self.th_gib (0))    // Use 0 to minimize gib velocity.
-                    {
-                        self.th_gib = world.null_func;
+                    // if (self.th_gib (0))    // Use 0 to minimize gib velocity.
+                    // {
+                        // self.th_gib = world.null_func;
                         T_Heal (swap, hp, TRUE);    // Can exceed max hp.
-                    }
+                    // }
                     self = swap;
                 }
-            }
-            else
-            {
-                if (IsZombieDown (head))
-                {   // Devour fallen zombies.
+            } else {
+                if (IsZombieDown (head)) {
+					// Devour fallen zombies.
                     T_Heal (self, head.health, TRUE);
-                    T_Kill (head, self, self, 0, "melee");
+					T_Damage (head, self, self, self.health+1, NOARMOR);
                 }
             }
 //            if (self.enemy == head)
@@ -202,27 +190,21 @@ void() Vomit_Crush =
 };
 
 // TODO:  Have vomitus scan for corpses, go to them, and devour them.
-
-void() ai_vomit_stand = {Vomit_Crush(); ai_stand();};
-void(float dist) ai_vomit_walk = {Vomit_Crush(); ai_walk(dist);};
-void(float dist) ai_vomit_run  =
-{
+void() ai_vomit_stand = { Vomit_Crush(); ai_stand(); };
+void(float dist) ai_vomit_walk = { Vomit_Crush(); ai_walk(dist); };
+void(float dist) ai_vomit_run  = {
     local   float   close;
 
     close = QC_CloseEnough (dist);
 
     Vomit_Crush();
-    if (close)
-    {
-//        if (self.gorging)
-//        {
-//            if (IsDead (self.enemy) && (self.enemy.solid == SOLID_NOT))
-//                {walkmove (self.angles_y, dist);  return;}
-//            if (self.enemy.touch == Gib_Touch)
-//                {walkmove (self.angles_y, dist);  return;}
-//        }
-//        else
-        {
+    if (close) {
+	   if (self.gorging) {
+		   if ((self.enemy.health <= 0) && (self.enemy.solid == SOLID_NOT))
+			   {walkmove (self.angles_y, dist);  return;}
+		   if (self.enemy.touch == Gib_Touch)
+			   {walkmove (self.angles_y, dist);  return;}
+	   } else {
             // Move over the fallen zombie and crush it for an instakill.
             if (IsZombieDown (self.enemy))
                 {walkmove (self.angles_y, dist);  return;}
@@ -303,7 +285,7 @@ void() vom_end3 =[ $attack13, vom_run1     ] {ai_face();};
 
 void() vom_attack1  =[ $attack1,  vom_attack2  ] {
     self.pain_finished = time + 1.2;    // Ignore pain during attack.
-    sound (self, CHAN_WEAPON, "gibfnt/gf_sprt1.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "drake/gibfnt/gf_sprt1.wav", 1, ATTN_NORM);
     ai_face();
 };
 void() vom_attack2  =[ $attack2,  vom_attack3  ] {ai_face();};
@@ -316,9 +298,9 @@ void() vom_attack8  =[ $attack8,  vom_attack9  ] {ai_face();};
 void() vom_attack9  =[ $attack9,  vom_attack10 ] {ai_face();};
 void() vom_attack10 =[ $attack10, vom_attack11 ] {ai_face();
     if (random() < 0.5)
-        sound (self, CHAN_WEAPON, "vomitus/flesh1.wav", 1, ATTN_NORM);
+        sound (self, CHAN_WEAPON, "drake/vomitus/flesh1.wav", 1, ATTN_NORM);
     else
-        sound (self, CHAN_WEAPON, "vomitus/flesh2.wav", 1, ATTN_NORM);
+        sound (self, CHAN_WEAPON, "drake/vomitus/flesh2.wav", 1, ATTN_NORM);
     if (self.skin)
         Vomit_Meat(0);
     else
@@ -340,12 +322,12 @@ void() vom_attack =
             stop = TRUE;
     if (skill < 1)
     {   // Only one child in Easy.
-        if (self.pets)
+        if (self.minion_count)
             stop = TRUE;
     }
     else
     {   // Up to three.
-        if (self.pets >= 3)
+        if (self.minion_count >= self.minion_maxcount)
             stop = TRUE;
     }
 
@@ -369,7 +351,7 @@ void(entity inflictor, entity attacker, float damage) vom_pain = {
         return;
 
     self.pain_finished = time + 2;
-    sound (self, CHAN_VOICE, "vomitus/groan.wav", 1, ATTN_NORM);        
+    sound (self, CHAN_VOICE, "drake/vomitus/groan.wav", 1, ATTN_NORM);        
 
     if (SUB_IgnorePain ())
         return;         // No pain anims in Nightmare.
@@ -377,43 +359,31 @@ void(entity inflictor, entity attacker, float damage) vom_pain = {
     vom_pain1 ();
     attacker = attacker;  damage = damage;      // Appease FrikQcc.
 };
-/*
-// DEATH - - - - - - - - - - - - - - - -
-float(float dm) vom_gib =
-{
-// PM:  Don't even think about calling T_RadiusDamage here!
-// This is because gib functions may be called by T_Damage,
-// which may be called within in T_RadiusDamage loop.
-    if (self.health < self.gib_health)
-    {
-        local   float   loop;
 
+// DEATH - - - - - - - - - - - - - - - -
+float(float dm) vom_gib = {
+	// PM:  Don't even think about calling T_RadiusDamage here!
+	// This is because gib functions may be called by T_Damage,
+	// which may be called within in T_RadiusDamage loop.
+    if (self.health < self.gibhealth) {
         sound (self, CHAN_VOICE, "blob/death1.wav", 1, ATTN_NORM);
-        if (self.skin)
-        {   // Meatwad
+        if (self.skin) {
+			// Meatwad
             Tent_Explosion2 (self.origin, 64, 16);  // Last could be an 8.
-            ThrowGib ("progs/gib1.mdl", dm);
-            ThrowGib ("progs/gib2.mdl", dm);
-            ThrowGib ("progs/gib2.mdl", dm);
-            ThrowGib ("progs/gib3.mdl", dm);
-            ThrowGib ("progs/gib3.mdl", dm);
-            ThrowHead ("progs/drake/h_vomit.mdl", dm);
-        }
-        else
-        {   // Tar mother
+			ThrowGib (1,2);
+			ThrowGib (2,2);
+			ThrowGib (3,2);
+            ThrowGib(25,1);
+        } else {
+			// Tar mother
             Tent_Point (TE_TAREXPLOSION, self.origin);
-            while (loop < 5)
-            {
-                ThrowGib ("progs/drake/tar_gib.mdl", dm);
-                loop = loop + 1;
-            }
-            ThrowHead ("progs/drake/tar_gib.mdl", dm);
+            ThrowGib (11,6);
         }
         return TRUE;
     }
     return FALSE;
 };
-*/
+
 
 void() vom_die1  =[ $death1,  vom_die2    ] {};
 void() vom_die2  =[ $death2,  vom_die3    ] {};
@@ -431,7 +401,7 @@ void() vom_die13 =[ $death13, vom_die14   ] {};
 void() vom_die14 =[ $death14, vom_die15   ] {};
 void() vom_die15 =[ $death15, vom_die16   ] {};
 void() vom_die16 =[ $death15, vom_die16 ] {
-    self.health = self.gib_health - 1;
+    self.health = self.gibhealth - 1;
     vom_gib (self.health);      // Pop into gibs.
 };
 
@@ -445,7 +415,7 @@ void() vom_die =
     //if (vom_gib (self.health))
         //return;
 
-    sound (self, CHAN_VOICE, "vomitus/death.wav", 1, ATTN_NORM);
+    sound (self, CHAN_VOICE, "drake/vomitus/death.wav", 1, ATTN_NORM);
     vom_die1 ();
 };
 
@@ -465,37 +435,6 @@ void() vom_revive12 =[ $death3,   vom_revive13 ] {};
 void() vom_revive13 =[ $death2,   vom_revive14 ] {};
 void() vom_revive14 =[ $death1,   vom_run1     ] {};
 
-// OTHER - - - - - - - - - - - - - - - -
-void(float hello) vom_sight =
-{
-// No greeting sound.  Just croak if mad at something.
-    if (!hello)
-        sound (self, CHAN_VOICE, "gibfnt/gf_sbig.wav", 1, ATTN_NORM);
-};
-
-void() vom_cache =
-{
-    precache_gluttony ();   // Sound when it eats gibs.
-
-    precache_model ("progs/drake/h_vomit.mdl");
-    precache_model ("progs/h_zombie.mdl");
-    precache_model ("progs/drake/tar_gib.mdl");
-    precache_model ("progs/drake/vomitus.mdl");
-    precache_model ("progs/zom_gib.mdl");
-
-    precache_sound ("blob/death1.wav");
-    precache_sound ("fish/bite.wav");
-    precache_sound ("gibfnt/gf_plop.wav");
-    precache_sound ("gibfnt/gf_sbig.wav");
-    precache_sound ("gibfnt/gf_sprt1.wav");
-    precache_sound ("vomitus/groan.wav");
-    precache_sound ("vomitus/death.wav");
-    precache_sound ("vomitus/flesh1.wav");
-    precache_sound ("vomitus/flesh2.wav");
-    precache_sound ("zombie/z_miss.wav");
-    precache_sound ("zombie/z_hit.wav");
-};
-
 //============
 // --> QUAKED monster_vomit (1 0 0) (-32 -32 -24) (32 32 24) Ambush
 //
@@ -505,41 +444,74 @@ void() vom_cache =
 //
 // Note to self:  Quoth's gug is even fatter, yet it uses shambler bbox.
 //============
-void() monster_vomit =
-{
-    if (!self.spawned)
-    {
-        if (noenemies)
-            {remove (self); return;}
-        vom_cache ();
-        tbaby_cache ();     // It vomits tarbabies.
-    }
+void() monster_vomit = {
+	if (deathmatch) { remove(self); return; }
 
-    // Nehahra used 300 health, but Doom cacodemon has 400.
-    monster_form ("progs/drake/vomitus.mdl", '-32 -32 -24', '32 32 24', 400, -65);
+    precache_sound ("drake/cube/bc_attck.wav");
+    precache_sound ("drake/cube/bc_gulp.wav");
+    precache_model ("progs/drake/h_vomit.mdl");
+    precache_model ("progs/h_zombie.mdl");
+	self.gib1mdl = "progs/drake/tar_gib.mdl";
+    precache_model ("progs/drake/tar_gib.mdl");
+	self.mdl = "progs/drake/vomitus.mdl";
+    precache_model ("progs/drake/vomitus.mdl");
+    precache_model ("progs/zom_gib.mdl");
+	precache_model ("progs/mon_tarbaby.mdl");
+    precache_sound ("blob/death1.wav");
+    precache_sound ("fish/bite.wav");
+	self.idle_sound = "drake/gibfnt/gf_plop.wav";
+    precache_sound ("drake/gibfnt/gf_plop.wav");
+	self.sight_sound = "drake/gibfnt/gf_sbig.wav";
+    precache_sound ("drake/gibfnt/gf_sbig.wav");
+    precache_sound ("drake/gibfnt/gf_sprt1.wav");
+	self.pain_sound = "drake/vomitus/groan.wav";
+    precache_sound ("drake/vomitus/groan.wav");
+    precache_sound ("drake/vomitus/death.wav");
+    precache_sound ("drake/vomitus/flesh1.wav");
+    precache_sound ("drake/vomitus/flesh2.wav");
+    precache_sound ("zombie/z_miss.wav");
+    precache_sound ("zombie/z_hit.wav");
+    precache_sound ("blob/death1.wav");
+	precache_sound ("blob/hit1.wav");
+	precache_sound ("blob/land1.wav");
+	precache_sound ("blob/sight1.wav");
+	precache_sound ("blob/mytosis.wav");
+
+	self.solid = SOLID_NOT;				// No interaction with world
+	self.movetype = MOVETYPE_NONE;		// Static item, no movement
+	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDEFLAT;
+	if (self.health < 1) self.health = 400;  // Nehahra used 300 health, but Doom cacodemon has 400.   Note from Qmaster...OK, not sure how that's relevant lol
+	self.gibhealth = -65;
+	self.gibbed = FALSE;
+	self.pain_flinch = 20;
+
+	// Allow for extra functionality (death damage and poison)
+	if (self.death_dmg < 1) self.death_dmg = DAMAGE_TARBABY;
+
     self.mass   = MASS_HEAVY;
-
     self.th_stand   = vom_stand1;
     self.th_walk    = vom_walk1;
     self.th_run     = vom_run1;
     self.th_missile = vom_attack;
     self.th_pain    = vom_pain;
     self.th_die     = vom_die;
-
-    self.th_sight   = vom_sight;
-    self.th_gib     = vom_gib;
-    self.th_revive  = vom_revive1;
-    self.th_spawn   = monster_vomit;
 	if (self.deathstring == "") self.deathstring = " was vomited on by a Vomitus\n";
 
 	if (!self.yaw_speed) self.yaw_speed = 15;    // Slower than normal.
 
-	self.headmdl   = "progs/h_vomit.mdl";
-	if (!self.skin)
-	{
-		self.headmdl   = "progs/tar_gib.mdl";
+	self.headmdl   = "progs/drake/h_vomit.mdl";
+	if (!self.skin) {
+		self.headmdl   = "progs/drake/tar_gib.mdl";
 		self.bloodtype  = BLOOD_PURPLE;
+	} else {
+		if (self.deathstring == "") self.deathstring = " was meatpummeled by a Vomitus Meatwad\n";
 	}
+
+	if (self.minion_maxcount < 1) { self.minion_maxcount = 3; }
+
+	// Always reset Ammo Resistance to be consistent
+	self.resist_shells = self.resist_nails = 0;
+	self.resist_rockets = self.resist_cells = 0;
 
 	self.classtype = CT_MONVOMITUS;
 	self.classgroup = CG_SPAWN;

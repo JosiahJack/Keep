@@ -530,8 +530,9 @@ void() mino_magic =
 	if (self.spawnflags & MON_MINOTAUR_MINIONS && !self.minion_active) {
 		// Check for minion template first
 		miniondef = find(world,classname,"monster_minotaurminion");
-		if (miniondef.classtype == CT_CACHEGARGOYLE) setup_minionsupport();
-		else {
+		if (miniondef.classtype == CT_CACHEGARGOYLE) {
+			setup_minionsupport();
+		} else {
 			// If template no available, warn and remove feature
 			dprint("\b[MINOTAUR]\b Cannot find minion template!\n");
 			self.spawnflags = self.spawnflags - MON_MINOTAUR_MINIONS;

@@ -1,5 +1,26 @@
 void HuntTarget ();
 
+//===========
+// DontHurtMe
+//
+// PM:  Checks if 'self' should attack even though 'ent' is in the way.
+// Called by 'CheckAttack' and their monster-specific equivalents.
+//===========
+float(entity ent) DontHurtMe =
+{
+    if (ent.flags & FLx_CREATURE)   // Blocked by a possible target.
+        if (self.enemy.solid > SOLID_TRIGGER)   // Don't waste time if FALSE.
+		{
+			//if (!Align_Match (self, ent))
+				//return FALSE;   // Enemies.
+			if (ent.enemy == self)
+				return FALSE;   // Mad at attacker.
+			if (self.oldenemy == ent)
+				return FALSE;   // Attacker has a grudge against ent.
+		}
+    return TRUE;
+};
+
 //- - - - - - - - -
 // Like checkclient, but for monsters.
 // Checks if a given target is available for attacking.

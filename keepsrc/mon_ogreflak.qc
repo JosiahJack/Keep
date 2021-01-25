@@ -131,6 +131,7 @@ void() BDW_OgreFireFlak = {
 
 		flak = spawn();
 		flak.owner = self;
+		flak.classgroup = CG_PROJALL;
 		//flymissile is a bit too all-seeing for this gun...
 		flak.movetype = MOVETYPE_FLY;
 		//flak.movetype = MOVETYPE_FLYMISSILE;

@@ -215,6 +215,7 @@ void () W_FireProximityGrenade = {
    sound (self,CHAN_WEAPON,"hipweap/proxbomb.wav",TRUE,ATTN_NORM);
    self.punchangle_x = CONTENT_SOLID;
    missile = spawn ();
+	missile.classgroup = CG_PROJGRENADES;
    missile.owner = self;
    missile.lastvictim = self;
    missile.movetype = MOVETYPE_TOSS;
@@ -1139,6 +1140,7 @@ void () W_FireMultiGrenade = {
    sound (self,CHAN_WEAPON,"weapons/grenade.wav",TRUE,ATTN_NORM);
    self.punchangle_x = CONTENT_SOLID;
    missile = spawn ();
+	missile.classgroup = CG_PROJGRENADES;
    missile.owner = self;
    missile.movetype = MOVETYPE_BOUNCE;
    missile.solid = SOLID_BBOX;
@@ -1191,6 +1193,7 @@ void () W_FirePlasmaGun = {
    sound (self,CHAN_WEAPON,"plasma/fire.wav",0.500,ATTN_NORM);
    self.punchangle_x = CONTENT_SOLID;
    missile = spawn ();
+	missile.classgroup = CG_PROJCELLS;
    missile.owner = self;
    missile.movetype = MOVETYPE_FLYMISSILE;
    missile.solid = SOLID_BBOX;

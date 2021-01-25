@@ -567,10 +567,10 @@ float(entity ent) Ryu_NoShot = {
 // Watching attacks bounce off the reflector shield is fun, even if the
 // dragon knows better not to attack.  Therefore, dragon must be alert
 // to avoid attacking.  (Otherwise, what fun would that be to the player?)
-    //if (ent.ryuflags & RYU_ALERT)
-        //if (ent.enemy)
-            //if (HasReflection (ent.enemy, self.origin, 0))
-                //return TRUE;    // Attacks can bounce back.
+    if (ent.ryuflags & RYU_ALERT)
+        if (ent.enemy)
+            if (HasReflection (ent.enemy, self.origin, 0))
+                return TRUE;    // Attacks can bounce back.
 //- - - - - - - - -
     return FALSE;   // May attack.
 };

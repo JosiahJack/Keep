@@ -710,6 +710,7 @@ void() death_bubble_spawn =
 	if (self.owner.waterlevel != 3) return;
 	
 	bubble = spawn();
+	bubble.classtype = CT_BUBBLE;
 	bubble.classname = "bubble";
 	bubble.solid = SOLID_NOT;
 	bubble.movetype = MOVETYPE_NOCLIP;

@@ -130,6 +130,7 @@ local float go, dot;
 	lead = normalize(spot - org);
 
 	missile = spawn ();
+	missile.classgroup = CG_PROJALL;
 	missile.owner = self;
 	missile.enemy = self.enemy;
 	missile.movetype = MOVETYPE_FLY;
@@ -214,6 +215,7 @@ void() enforcer_firerocket =
 	}
 
 	missile = spawn ();
+	missile.classgroup = CG_PROJALL;
 	missile.owner = self;
 	missile.movetype = MOVETYPE_FLYMISSILE;
 	missile.solid = SOLID_BBOX;

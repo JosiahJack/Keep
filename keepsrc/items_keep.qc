@@ -537,9 +537,9 @@ void() item_multi_rockets = {
 };
 
 /*======================================================================
-/*QUAKED item_plasma (0 .5 .8) (0 0 0) (32 32 32) BIG
+//QUAKED item_plasma (0 .5 .8) (0 0 0) (32 32 32) BIG
 
-/*QUAKED item_plasma (0 .5 .8) (-16 -16 0) (16 16 32) BIG x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_plasma (0 .5 .8) (-16 -16 0) (16 16 32) BIG x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":maps/b_plas1.bsp"); }
 6 or 12 Cells
 -------- KEYS --------
@@ -649,6 +649,7 @@ void() artifact_touch = {
 	}
 	else if (self.classtype == CT_ARTINVS) {
 		other.invisible_time = TRUE;
+		other.notrace = 1;
 		other.invisible_finished = time + self.cnt;
 	}
 	else if (self.classtype == CT_ARTQUAD) {

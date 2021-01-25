@@ -723,6 +723,7 @@ void () GremlinFirePlasmaGun = {
 	sound (self,CHAN_WEAPON,"plasma/fire.wav",0.500,ATTN_NORM);
 	self.punchangle_x = CONTENT_SOLID;
 	missile = spawn ();
+	missile.classgroup = CG_PROJALL;
 	missile.owner = self;
 	missile.movetype = MOVETYPE_FLYMISSILE;
 	missile.solid = SOLID_BBOX;

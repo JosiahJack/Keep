@@ -38,15 +38,15 @@ float CG_DEMON = 615;			// (3) Demon, Drole, Minotaur, Boglord, Lichfiend, Hepha
 float CG_DOG = 620;				// (1) Dog
 float CG_FISH = 625;			// (2) Fish
 float CG_ROBOT = 630;			// (2) Jim, Laser/Rocket, Seeker, Floyd
-float CG_KNIGHT = 635;			// (3) Knight, Death Guard and Crossbow
+float CG_KNIGHT = 635;			// (3) Knight, Death Guard and Crossbow, Bandit, Goblin
 float CG_DKNIGHT = 637;			// (2) Hell and Death Knight
-float CG_DCAPTAIN = 640;		// (2) Fury, Sergeant Captains
+float CG_DCAPTAIN = 640;		// (2) Fury, Sergeant Captains, Bane
 float CG_STONE = 645;			// (4) Boss Eidolon, Statues and Golem
 float CG_OGRE = 650;			// (4) Vanilla and Hunter (Chainsaw, Mace, Hammer), Freddie
 float CG_SPIDER = 660;			// (4) Shalrath, Vorling, Wraith, Spider, Snakeman
 float CG_SHAM = 666;			// (1) Shambler
 float CG_SPAWN = 670;			// (2) Blue/Green, Boil
-float CG_WIZARD = 680;			// (6) Wizard, Gargoyle, Gaunt, Skull Wizard, Skull, Nour
+float CG_WIZARD = 680;			// (10) Wizard, Gargoyle, Gaunt, Skull Wizard, Skull, Nour, Necromancer, Acolyte, Warlock, Sorcerer
 float CG_ZOMBIE = 685;			// (3) Zombie, Knight, Mummy
 float CG_XMAS = 686;			// (4) Elf, Raindeer, Snowman, Santa
 float CG_BOSS = 690;			// (3) Cthon, Old one, Anaconda
@@ -82,6 +82,7 @@ float CT_PARTICLECONT = 42;		// Particle controller (setup particle banks)
 float CT_PARTICLETEMP = 45;		// Particle emitter template
 
 float CT_TEMPGIB = 50;			// Temporary entity (gib)
+float CT_TEMPPHYS = 51;			// Temporary entity affected by physics triggers
 float CT_TEMPSPARK = 52;		// Temporary entity (spark)
 float CT_TEMPSTREAM = 54;		// Temporary entity (stream)
 float CT_REFLECTLIGHT = 55;		// Reflection entity (Lightning)
@@ -113,9 +114,18 @@ float CT_MONWILLYSPIDER = 112;	// Willy the Spider
 float CT_MONSNAKEMAN = 113;		// Snakeman
 float CT_MONFLOYD = 114;		// Floyd robot
 float CT_MONDEMON = 115;		// 2 clawed fiend
+float CT_MONNECRO = 116;		// Necromancer from Drake
+float CT_MONACOLYTE = 117;		// Acolyte from Drake
+float CT_MONWARLOCK = 118;		// Warlock from Drake
+float CT_MONSORCERER = 119;		// Sorcerer from Drake
 float CT_MONDOG = 120;			// 4 legged friend
+float CT_MONBANDIT = 121;		// Drake bandit
+float CT_MONRAKEGOBLIN = 122;	// Drake goblin
+float CT_MONFANGEL = 123;		// Hexen2 Fallen Angel
+float CT_MONFANGELLORD = 124;	// Hexen2 Fallen Angel Lord
 float CT_MONFISH = 125;			// Fish fish fishy
 float CT_MONOCTOPUS = 126;		// Octopussy little cuty (-Madfox)
+float CT_MONHYDRA = 127;		// Hydra from Hexen 2 - added to extras_r5 by khreathor - using extras_r5 version
 float CT_MONHELLK = 130;		// Strong spikey Knights
 float CT_MONKNIGHT = 140;		// Small metal Knights
 float CT_MONOGRE = 150;			// Chainsaw wielding manics
@@ -171,26 +181,29 @@ float CT_MONTURRETB = 295;		// Large ball surface turret
 // Hexen 2 series (Raven Software)
 float CT_MONSPIDER = 300;		// Spiders (brown/green versions)
 float CT_CACHESPIDER = 302;		// Special entity for precache of assets
-float CT_MINIONSPIDER = 304;		// Minion Spawning version from wraith
+float CT_CACHENECRO = 303;		// Special entity for precache of assets
+float CT_MINIONSPIDER = 304;	// Minion Spawning version from wraith
+float CT_CACHEGOLEM = 305;		// Special entity for precache of assets
 float CT_MONSCORPION = 310;		// Deadly Scorpion (HL Black Crab!)
-float CT_CACHESCORPION = 312;		// Special entity for precache of assets
-float CT_MINIONSCORPION = 314;		// Minion Spawning version from wraith
+float CT_CACHESCORPION = 312;	// Special entity for precache of assets
+float CT_MINIONSCORPION = 314;	// Minion Spawning version from wraith
 float CT_MONLOSTSOUL = 315;		// The Original Doom flying lost soul
-float CT_CACHELOSTSOUL = 317;		// Special entity for precache of assets
-float CT_MINIONLOSTSOUL = 319;		// Minion Spawning version from skullwizard
+float CT_CACHELOSTSOUL = 317;	// Special entity for precache of assets
+float CT_MINIONLOSTSOUL = 319;	// Minion Spawning version from skullwizard
 float CT_MONSKULLW = 320;		// Creepy Skull Wizard (Teleport)
 float CT_MONGARGOYLE = 325;		// Flying Gargoyle (Flying fireball)
-float CT_MONGARGOYLE_MINI = 326;	// Flying Impling
-float CT_CACHEGARGOYLE = 327;		// Special entity for precache of assets
-float CT_MONGARGOYLE_MEGA = 328;	// Flying Imp Lord
-float CT_MINIONGARGOYLE = 329;		// Minion Spawning version from minotaur
+float CT_MONGARGOYLE_MINI = 326;// Flying Impling
+float CT_CACHEGARGOYLE = 327;	// Special entity for precache of assets
+float CT_MONGARGOYLE_MEGA = 328;// Flying Imp Lord
+float CT_MINIONGARGOYLE = 329;	// Minion Spawning version from minotaur
 float CT_MONGOLEM = 330;		// Giant stone Golem (ground slam)
+float CT_MINIONGOLEM = 331;		// Minion Spawning version for golem
 float CT_MONICEGOLEM = 335;		// Giant Ice Golem (shards+ground slam)
-float CT_MONICEGOLEMWAVE = 337;		// Wave targets for boss Ice Golem
+float CT_MONICEGOLEMWAVE = 337;	// Wave targets for boss Ice Golem
 float CT_MONMINOTAUR = 340;		// Large tank like bull (magic/charge)
 float CT_MONEIDOLON = 345;		// Large demon boss Eidolon
 
-float CT_MONEIDOLONWAVE = 347;		// Wave targets for boss Eidolon
+float CT_MONEIDOLONWAVE = 347;	// Wave targets for boss Eidolon
 
 
 float CT_MONWRAITH = 350;		// Undead wraith (Burning debuff)
@@ -228,7 +241,8 @@ float CT_MONENF_ULTRA = 391;			// Ultra Enforcer
 float CT_MONFUMIGATOR = 392;		// Poison version of the Pyro
 float CT_MONENF_MEGA = 393;			// Mega Enforcer
 float CT_MONCENTURION = 395;		// Enforcer hoverboard (Plasma)
-
+float CT_PROJ_FABLADE = 396;		// Fallen Angel ninja blade attack
+float CT_PROJ_FASPELL = 397;		// Fallen Angel green shard attack
 //----------------------------------------------------------------------
 // Class Types for all projectiles in game (there is a lot!)
 //----------------------------------------------------------------------

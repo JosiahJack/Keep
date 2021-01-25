@@ -7,6 +7,7 @@ float (entity targ) Zapper_Level;
 void(entity targ) ResetPowerInvRing =
 {
 	targ.items = targ.items - (self.items & IT_INVISIBILITY);
+	targ.notrace = 0;
 	targ.invisible_finished = targ.invisible_time = 0;
 	targ.modelindex = modelindex_player;
 	targ.frame = 0;

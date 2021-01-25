@@ -803,7 +803,7 @@ void(vector p1, vector p2, float sped, float damage, entity targ, float shots, f
     // Extra stuff for more multishot types.
     bomb = atype & RYU_BOMB;
     atype = atype & RYU_ELEMENTS;
-
+	newmis.classgroup = CG_PROJALL;
     // Begin old multishot stuff.
     err = '6 4.5 0';    // For ice dragon, 5x the spread as fire spray.
     p3 = Aim_Lead (p1, p2, sped, targ);
@@ -885,6 +885,7 @@ void() Ryu_Shot_Fire = {
     if (self.shots_left < 1)
         return;     // Out of ammo.
 
+	newmis.classgroup = CG_PROJALL;
     // Calculate lead coefficient.  The value begins at or close to zero at
     // the start of the salvo, then the value increases with each successive
     // shot until it reaches one at the final shot.
@@ -985,6 +986,7 @@ void(float pause) Ryu_Shot = {
     local entity echo;
     if (pause) {
         echo = spawn();
+		echo.classgroup = CG_PROJALL;
         echo.owner = self;
         echo.nextthink = time + pause;
         echo.think = Ryu_Shot_Think;

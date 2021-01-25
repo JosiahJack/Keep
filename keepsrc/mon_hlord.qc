@@ -11,43 +11,57 @@ $origin 0 0 24
 $base base
 $skin skin
 
+// 000-008
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
 
+// 009-028
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9
 $frame walk10 walk11 walk12 walk13 walk14 walk15 walk16 walk17
 $frame walk18 walk19 walk20
 
+// 029-036
 $frame run1 run2 run3 run4 run5 run6 run7 run8
 
+// 037-041
 $frame pain1 pain2 pain3 pain4 pain5
 
+// 042-053
 $frame death1 death2 death3 death4 death5 death6 death7 death8
 $frame death9 death10 death11 death12
 
+// 054-062
 $frame deathb1 deathb2 deathb3 deathb4 deathb5 deathb6 deathb7 deathb8
 $frame deathb9
 
+// 063-078
 $frame char_a1 char_a2 char_a3 char_a4 char_a5 char_a6 char_a7 char_a8
 $frame char_a9 char_a10 char_a11 char_a12 char_a13 char_a14 char_a15 char_a16
 
+// 079-092
 $frame magica1 magica2 magica3 magica4 magica5 magica6 magica7 magica8
 $frame magica9 magica10 magica11 magica12 magica13 magica14
 
+// 093-105
 $frame magicb1 magicb2 magicb3 magicb4 magicb5 magicb6 magicb7 magicb8
 $frame magicb9 magicb10 magicb11 magicb12 magicb13
 
+// 106-111
 $frame char_b1 char_b2 char_b3 char_b4 char_b5 char_b6
 
+// 112-121
 $frame slice1 slice2 slice3 slice4 slice5 slice6 slice7 slice8 slice9 slice10
 
+// 122-132
 $frame smash1 smash2 smash3 smash4 smash5 smash6 smash7 smash8 smash9 smash10
 $frame smash11
 
+// 133-154
 $frame w_attack1 w_attack2 w_attack3 w_attack4 w_attack5 w_attack6 w_attack7 
 $frame w_attack8 w_attack9 w_attack10 w_attack11 w_attack12 w_attack13 w_attack14
 $frame w_attack15 w_attack16 w_attack17 w_attack18 w_attack19 w_attack20 
 $frame w_attack21 w_attack22 
 
+// 155-165
 $frame magicc1 magicc2 magicc3 magicc4 magicc5 magicc6 magicc7 magicc8
 $frame magicc9 magicc10 magicc11
 
@@ -57,226 +71,10 @@ $frame decap9 decap10 decap11 decap12
 $frame decapb1 decapb2 decapb3 decapb4 decapb5 decapb6 decapb7 decapb8
 $frame decapb9
 
-
-//- - - - - - - - -
-float   SKIN_HELL_KNIGHT    = 0;
-float   SKIN_HELL_KNIGHT2   = 1;
-float   SKIN_HELL_LORD      = 2;
-float   SKIN_HKBOSS         = 3;
-float   SKIN_BANE           = 4;
-float   SKIN_BANE_GRAY      = 5;
-float   SKIN_DARK_LORD      = 6;
-
-float   DARKLORD_NEAR       = 250;
-//- - - - - - - - -
-void() hknight_char_a1;
-void() hknight_char_b1;     // PM:  Enabled unused charge anim.
-void() hknight_run1;
-void() hk_idle_sound;
-
-vector(float offset) hknight_shot_dir =
-{
-    local   vector  vec;
-//    local   vector  vx, vy, vz;
-
-// PM:  The shots tend to choke up if enemy is directly above or below the
-// attacking knight.  Could either be a bug or working as intended.
-    vec = vectoangles (self.enemy.origin - self.origin);
-    vec_y = vec_y + offset * 6;
-    
-    makevectors (vec);
-//    vx = v_forward;  vy = v_right;  vz = v_up;
-
-// set missile direction
-    vec = normalize (v_forward);
-    vec_z = 0 - vec_z + (random() - 0.5)*0.1;
-    vec = Maim_Scatter (vec, '0 0 0');      // Added for invisibility.
-
-//    v_forward = vx;  v_right = vy;  v_up = vz;
-    return vec;
-};
-
-void(float offset) hknight_shot =
-{
-    local   vector  org, vec;
-
-    vec = hknight_shot_dir (offset);    // Also calls 'makevectors'.
-
-    if (( self.frame >= $magicb1 ) && ( self.frame <= $magicb13 ))
-        org = self.origin + (v_forward * 16) + (v_up * 20);
-    else
-        org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
-
-    if (self.classname == "monster_bane")
-    {
-        KnightBall_Launch (org, vec);
-        newmis.dmg = 60;
-        newmis.style = newmis.style | DF_SAFE;
-        newmis.velocity = vec*600;
-        if (( self.frame == $magicb6 ) || ( self.frame == $magicc6 ))
-            sound (self, CHAN_WEAPON, "weapons/mirv1.wav", 1, ATTN_NORM);
-    }
-    else if (self.classname == "monster_dark_lord")
-    {
-        NecroBolt_Launch (org, vec);
-    }
-    else
-    {
-        local   float   sped;
-
-        if (cranked)
-            sped = 450;     // PM:  Faster missiles.
-        else
-            sped = 300;
-        Knightspike_Launch (org, vec, sped);
-        sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
-    }
-};
-
-void() CheckForCharge =
-{
-// check for mad charge
-    if (!enemy_vis)
-        return;
-    if (time < self.attack_finished)
-        return;    
-    if ( fabs(self.origin_z - self.enemy.origin_z) > 20)
-        return;        // too much height change
-    if ( vlen (self.origin - self.enemy.origin) < 80)
-        return;        // use regular attack
-//- - - - - - - - -
-    if (!self.fighting)
-        return;     // PM:  Don't charge if not fighting anyone.
-//    if (!self.enemy)
-//        return;     // PM:  In case world origin is near and in sight.
-//- - - - - - - - -
-
-// charge
-// PM:  Moved self.attack_finished to the 'knight_char_*1' functions.
-    if (self.classname == "monster_hkboss")
-    {   // Emulate old behavior.
-        self.shots_left = 3;    // Replaced 'currentammo' with 'shots_*'.
-        hknight_char_b1 ();
-        return;
-    }
-    if (random() < 0.25)
-    {   // char_b* scene has 6 frames.
-        self.shots_left = random() * 4;    // Swing from 1 to 4 times.
-        self.shots_left = ceil(self.shots_left);
-        hknight_char_b1 ();     // PM:  Unused, more damaging attack anim.
-    }
-    else
-        hknight_char_a1 ();
-};
-
-// PM:  Removed 'void() CheckContinueCharge'.
-
-//===========================================================================
-// STAND
-
-void()  hknight_stand1  =[ $stand1, hknight_stand2 ] {ai_stand();};
-void()  hknight_stand2  =[ $stand2, hknight_stand3 ] {ai_stand();};
-void()  hknight_stand3  =[ $stand3, hknight_stand4 ] {ai_stand();};
-void()  hknight_stand4  =[ $stand4, hknight_stand5 ] {ai_stand();};
-void()  hknight_stand5  =[ $stand5, hknight_stand6 ] {ai_stand();};
-void()  hknight_stand6  =[ $stand6, hknight_stand7 ] {ai_stand();};
-void()  hknight_stand7  =[ $stand7, hknight_stand8 ] {ai_stand();};
-void()  hknight_stand8  =[ $stand8, hknight_stand9 ] {ai_stand();};
-void()  hknight_stand9  =[ $stand9, hknight_stand1 ] {ai_stand();};
-
-//===========================================================================
-// WALK
-
-void() hk_idle_sound =
-{
-    if (random() < 0.2)
-    {
-        if (self.classname == "monster_bane")
-        {
-            sound (self, CHAN_VOICE, "bane/growl.wav", 1, ATTN_NORM);
-            return;
-        }
-        if (self.classname == "monster_dark_lord")  // FIXME:  Find sfx.
-            return;
-        sound (self, CHAN_VOICE, "hknight/idle.wav", 1, ATTN_NORM);
-    }
-};
-
-void() hknight_walk1  =[ $walk1,  hknight_walk2  ] {hk_idle_sound(); ai_walk(2);};
-void() hknight_walk2  =[ $walk2,  hknight_walk3  ] {M_Step(); ai_walk(5);};
-void() hknight_walk3  =[ $walk3,  hknight_walk4  ] {ai_walk(5);};
-void() hknight_walk4  =[ $walk4,  hknight_walk5  ] {ai_walk(4);};
-void() hknight_walk5  =[ $walk5,  hknight_walk6  ] {ai_walk(4);};
-void() hknight_walk6  =[ $walk6,  hknight_walk7  ] {ai_walk(2);};
-void() hknight_walk7  =[ $walk7,  hknight_walk8  ] {ai_walk(2);};
-void() hknight_walk8  =[ $walk8,  hknight_walk9  ] {ai_walk(3);};
-void() hknight_walk9  =[ $walk9,  hknight_walk10 ] {ai_walk(3);};
-void() hknight_walk10 =[ $walk10, hknight_walk11 ] {ai_walk(4);};
-void() hknight_walk11 =[ $walk11, hknight_walk12 ] {ai_walk(3);};
-void() hknight_walk12 =[ $walk12, hknight_walk13 ] {M_Step(); ai_walk(4);};
-void() hknight_walk13 =[ $walk13, hknight_walk14 ] {ai_walk(6);};
-void() hknight_walk14 =[ $walk14, hknight_walk15 ] {ai_walk(2);};
-void() hknight_walk15 =[ $walk15, hknight_walk16 ] {ai_walk(2);};
-void() hknight_walk16 =[ $walk16, hknight_walk17 ] {ai_walk(4);};
-void() hknight_walk17 =[ $walk17, hknight_walk18 ] {ai_walk(3);};
-void() hknight_walk18 =[ $walk18, hknight_walk19 ] {ai_walk(3);};
-void() hknight_walk19 =[ $walk19, hknight_walk20 ] {ai_walk(3);};
-void() hknight_walk20 =[ $walk20, hknight_walk1  ] {ai_walk(2);};
-
-//===========================================================================
-// RUN
-
-// Checks if the Bane can use a nearby dead body.
-void() bane_magicd1;
-void() bane_magice1;
-void(float d) hk_run =
-{
-    if (self.classname == "monster_bane")
-    {
-        d = d * 2;
-
-        if (!self.waitmax)
-        {
-            if (ai_medic (d))
-            {
-                // Hack:  Set attack_finished higher than time so
-                //  that CheckForCharge fails, which would otherwise
-                //  bypass ritual anim.
-//                if ( self.frame == $run1 )
-                    self.attack_finished = time + 0.2;
-                bane_magicd1 ();
-                return;
-            }
-
-            if (self.search_time + 5 < time)
-            if (self.enemy)
-            if (!visible (self.enemy))
-            {   // Teleport to the enemy.
-//                if ( self.frame == $run1 )
-                    self.attack_finished = time + 0.2;
-                self.search_time = time;    //+ 5;
-                bane_magice1 ();
-                return;
-            }
-        }
-    }
-    ai_run (d);
-};
-void() hknight_run1 =[ $run1, hknight_run2 ] {if (self.classname == "monster_dark_lord") {self.th_run(); return;}hk_idle_sound(); hk_run(20); CheckForCharge();};
-void() hknight_run2 =[ $run2, hknight_run3 ] {M_Step(); hk_run(25);};
-void() hknight_run3 =[ $run3, hknight_run4 ] {hk_run(18);};
-void() hknight_run4 =[ $run4, hknight_run5 ] {hk_run(16);};
-void() hknight_run5 =[ $run5, hknight_run6 ] {hk_run(14);};
-void() hknight_run6 =[ $run6, hknight_run7 ] {M_Step(); hk_run(25);};
-void() hknight_run7 =[ $run7, hknight_run8 ] {hk_run(21);};
-void() hknight_run8 =[ $run8, hknight_run1 ] {hk_run(13);};
-
-//============================================================================
-// PAIN
+float       hknight_type;
 
 // Makes the Bane gray and ghostly.  Called by 'painc' and 'magice' series.
-void() bane_gray =
-{
+void() bane_gray = {
     if (self.health <= self.waitmin)
     {   // Set up clone magic.
         self.health     = self.waitmin; // Yes, reset health.
@@ -315,141 +113,30 @@ void() bane_painc1=[ $pain1, bane_magice9 ]
     EntryPoint_Spawn (self, self.enemy, self.enemy.origin, EntryPoint_Random);
 };
 
-void() hknight_pain1 =[ $pain1, hknight_pain2 ] {}; // Sound already done in pain func.
-void() hknight_pain2 =[ $pain2, hknight_pain3 ] {};
-void() hknight_pain3 =[ $pain3, hknight_pain4 ] {};
-void() hknight_pain4 =[ $pain4, hknight_pain5 ] {};
-void() hknight_pain5 =[ $pain5, hknight_run1  ] {};
-
 void() hkfast_pain1    =[ $pain1, hknight_pain4 ] {};
-
-//============================================================================
-// DEATH
-
-// PM:  Beware -- With ai_forward on the first kill frame, T_Damage may be
-// called at least twice on touch kills!
-void() hknight_decap1  =[ $decap1,  hknight_decap2  ] {ai_forward(10); blood_spray('-2 0 28', 1);};
-void() hknight_decap2  =[ $decap2,  hknight_decap3  ] {ai_forward(8); blood_spray('-3 0 26', 2);};
-void() hknight_decap3  =[ $decap3,  hknight_decap4  ] {monster_drop(); ai_forward(7); blood_spray('-3 0 17', 1);};
-void() hknight_decap4  =[ $decap4,  hknight_decap5  ] {};
-void() hknight_decap5  =[ $decap5,  hknight_decap6  ] {};
-void() hknight_decap6  =[ $decap6,  hknight_decap7  ] {};
-void() hknight_decap7  =[ $decap7,  hknight_decap8  ] {blood_spray('8 -1 11', -1);};
-void() hknight_decap8  =[ $decap8,  hknight_decap9  ] {ai_forward(10);};
-void() hknight_decap9  =[ $decap9,  hknight_decap10 ] {ai_forward(11);};
-void() hknight_decap10 =[ $decap10, hknight_decap11 ] {};
-void() hknight_decap11 =[ $decap11, hknight_decap12 ] {};
-void() hknight_decap12 =[ $decap12, decap_end       ] {};
-
-void() hknight_decapb1 =[ $decapb1, hknight_decapb2 ] {blood_spray('-3 0 33', 1);};
-void() hknight_decapb2 =[ $decapb2, hknight_decapb3 ] {blood_spray('-12 0 32', 2);};
-void() hknight_decapb3 =[ $decapb3, hknight_decapb4 ] {blood_spray('-17 0 23', 1); monster_drop();};
-void() hknight_decapb4 =[ $decapb4, hknight_decapb5 ] {blood_spray('-19 0 12', 1);};
-void() hknight_decapb5 =[ $decapb5, hknight_decapb6 ] {};
-void() hknight_decapb6 =[ $decapb6, hknight_decapb7 ] {};
-void() hknight_decapb7 =[ $decapb7, hknight_decapb8 ] {};
-void() hknight_decapb8 =[ $decapb8, hknight_decapb9 ] {};
-void() hknight_decapb9 =[ $decapb9, decap_end       ] {};
-
-void() hknight_die1  =[ $death1,  hknight_die2  ] {ai_forward(10);};
-void() hknight_die2  =[ $death2,  hknight_die3  ] {ai_forward(8);};
-void() hknight_die3  =[ $death3,  hknight_die4  ] {monster_drop(); ai_forward(7);};
-void() hknight_die4  =[ $death4,  hknight_die5  ] {};
-void() hknight_die5  =[ $death5,  hknight_die6  ] {};
-void() hknight_die6  =[ $death6,  hknight_die7  ] {};
-void() hknight_die7  =[ $death7,  hknight_die8  ] {};
-void() hknight_die8  =[ $death8,  hknight_die9  ] {ai_forward(10);};
-void() hknight_die9  =[ $death9,  hknight_die10 ] {ai_forward(11);};
-void() hknight_die10 =[ $death10, hknight_die11 ] {};
-void() hknight_die11 =[ $death11, hknight_die12 ] {};
-void() hknight_die12 =[ $death12, monster_end   ] {};
-
-void() hknight_dieb1 =[ $deathb1, hknight_dieb2 ] {};
-void() hknight_dieb2 =[ $deathb2, hknight_dieb3 ] {};
-void() hknight_dieb3 =[ $deathb3, hknight_dieb4 ] {monster_drop();};
-void() hknight_dieb4 =[ $deathb4, hknight_dieb5 ] {};
-void() hknight_dieb5 =[ $deathb5, hknight_dieb6 ] {};
-void() hknight_dieb6 =[ $deathb6, hknight_dieb7 ] {};
-void() hknight_dieb7 =[ $deathb7, hknight_dieb8 ] {};
-void() hknight_dieb8 =[ $deathb8, hknight_dieb9 ] {};
-void() hknight_dieb9 =[ $deathb9, monster_end   ] {};
-
-float(float dm) hknight_gib =
-{
-// check for gib
-    if (self.health < self.gib_health)
-    {
-        sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
-        ThrowGib ("progs/gib1.mdl", dm);
-        ThrowGib ("progs/gib2.mdl", dm);
-        ThrowGib ("progs/gib3.mdl", dm);
-        ThrowHead ("progs/h_hellkn.mdl", dm);
-        return TRUE;
-    }
-    return FALSE;
-};
-
-void() hknight_die =
-{
-// check for gib
-    if (Shattered ())
-        return;
-    if (self.th_gib)
-    {
-        if (Decapitated ())
-        {
-            if (random() < 0.5)
-                monster_decap ('-2 0 28', hknight_decap1);
-            else
-                monster_decap ('-3 0 33', hknight_decapb1);
-            return;
-        }
-        if (hknight_gib (self.health))
-            return;
-    }
-
-// regular death
-    if (self.classname == "monster_hell_lord")
-        sound (self, CHAN_VOICE, "archer/death2.wav", 1, ATTN_NORM);
-    else if (self.classname == "monster_bane")
-    {
-        if (self.skin == SKIN_BANE_GRAY)
-            self.skin = SKIN_BANE;
-        sound (self, CHAN_VOICE, "bane/death.wav", 1, ATTN_NONE);
-    }
-    else
-        sound (self, CHAN_VOICE, "hknight/death1.wav", 1, ATTN_NORM);
-    if (random() > 0.5)
-        hknight_die1 ();
-    else
-        hknight_dieb1 ();
-};
 
 float   BANE_CHAT       = 1;
 float   BANE_RAGE       = 2;
 float   BANE_CLONE      = 4;
 
 // Broadcast message to players as if the Bane was a client.
-void(string text) Bane_Speaks =
-{
+void(string text) Bane_Speaks = {
     local   entity  pl;
 
     pl = find(world, classname, "player");
-    while (pl)
-    {
+    while (pl) {
         sound (pl, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
         pl = find(pl, classname, "player");
     }
     bprint (text);
 };
 
-void() bane_die =
-{
-// ... You win... for now. (Τθε ΒαξεΊ ®®® Ωου χιξ®®® ζος ξοχ®)
-// ... I'll be back! (Τθε ΒαξεΊ ®®® Ιΰμμ βε βαγλ‘)
-// ... I will return! (Τθε ΒαξεΊ ®®® Ι χιμμ ςετυςξ‘)
-// ... We will meet again! (Τθε ΒαξεΊ ®®® Χε χιμμ νεετ αηαιξ‘)
-// Update:  New taunts hinting of nsoe6.
+void() bane_die = {
+	// ... You win... for now. (Τθε ΒαξεΊ ®®® Ωου χιξ®®® ζος ξοχ®)
+	// ... I'll be back! (Τθε ΒαξεΊ ®®® Ιΰμμ βε βαγλ‘)
+	// ... I will return! (Τθε ΒαξεΊ ®®® Ι χιμμ ςετυςξ‘)
+	// ... We will meet again! (Τθε ΒαξεΊ ®®® Χε χιμμ νεετ αηαιξ‘)
+	// Update:  New taunts hinting of nsoe6.
     if (random() < 0.5)     // ... I still have the runes!
         Bane_Speaks ("Τθε ΒαξεΊ ®®® Ι στιμμ θαφε τθε ςυξεσ‘\n");
     else                    // ... You have not won yet!
@@ -540,7 +227,7 @@ void() Bane_JumpTouch =
         if ( vlen(self.velocity) > 400 )
         {
             ldmg = 40 + 10*random();
-            T_Damage (other, self, self, ldmg);    
+            T_Damage (other, self, self, ldmg, DAMARMOR);    
             if (self.health <= 0)
                 return;     // PM:  Killed by thorns (empathy shields).
             if (( self.frame == $char_a4 ) || ( self.frame == $char_a5 ))
@@ -568,8 +255,7 @@ void() Bane_JumpTouch =
     self.nextthink = time + 0.1;
 };
 
-float() CheckBaneJump =
-{
+float() CheckBaneJump = {
     local   vector  dist;
     local   float   d;
 
@@ -624,6 +310,8 @@ void() hknight_jump2   =[ $char_a5,  hknight_run6  ] {self.nextthink = time + 3;
 //============================================================================
 // BANE AI
 
+void(float dist) ai_run_strafe;
+
 void() bane_strafe =
 {
     if (self.classname == "monster_bane")
@@ -660,10 +348,10 @@ void() magica_sword_chop =
         return;
     if (!CanDamage (self.enemy, self))
         return;
-    if (self.classname != "monster_bane")
-        if (self.classname != "monster_dark_lord")
-            if (IsGhost (self.enemy))
-                return;     // Not allowed to hit wraith.
+    // if (self.classname != "monster_bane")
+        // if (self.classname != "monster_dark_lord")
+            // if (IsGhost (self.enemy))
+                // return;     // Not allowed to hit wraith.
 
     sound (self, CHAN_WEAPON, "weapons/axhit.wav", 1, ATTN_NORM);
     makevectors (self.angles);
@@ -671,8 +359,8 @@ void() magica_sword_chop =
     side = crandom() * 50;
     delta = (side * v_right) + (50 * v_up);
 
-    T_NewDamage (self.enemy, self, self, ldmg, 0, "melee");
-    SpawnMeatSpray (self.origin + v_forward*16, delta, self.enemy.bloodtype);
+    T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+    SpawnMeatSprayDrake (self.origin + v_forward*16, delta, self.enemy.bloodtype);
 };
 
 // Bane summons a thunderstorm.
@@ -718,33 +406,6 @@ void() lord_magica8  =[ $magica8,  lord_magica9     ] {hk_face(); if (skill >= 3
 void() lord_magica9  =[ $magica9,  lord_magica10    ] {hk_face(); magica_sword_chop();};
 void() lord_magica10 =[ $magica10, hknight_magica11 ] {hk_face();};
 
-// Cranked Hell Knights summon a bolt of lightning as a pillar.
-// Should launch a vacuum wave instead like in anime or J-style games,
-// but that may not look so great in Quake.  So, use lightning for now.
-void() hknight_magica1  =[ $magica1,  hknight_magica2  ] {hk_face();};
-void() hknight_magica2  =[ $magica2,  hknight_magica3  ] {hk_face();};
-void() hknight_magica3  =[ $magica3,  hknight_magica4  ] {hk_face();};
-void() hknight_magica4  =[ $magica4,  hknight_magica5  ] {hk_face();};
-void() hknight_magica5  =[ $magica5,  hknight_magica6  ] {hk_face();};
-void() hknight_magica6  =[ $magica6,  hknight_magica7  ] {hk_face();
-    if (self.classname == "monster_hell_lord")
-        self.think = lord_magica7;
-};
-//void() hknight_magica7  =[ $magica7,  hknight_magica8  ] {hknight_shot(-2);};
-//void() hknight_magica8  =[ $magica8,  hknight_magica9  ] {hknight_shot(-1);};
-//void() hknight_magica9  =[ $magica9,  hknight_magica10 ] {hknight_shot(0);};
-//void() hknight_magica10 =[ $magica10, hknight_magica11 ] {hknight_shot(1);};
-//void() hknight_magica11 =[ $magica11, hknight_magica12 ] {hknight_shot(2);};
-//void() hknight_magica12 =[ $magica12, hknight_magica13 ] {hknight_shot(3);};
-void() hknight_magica7  =[ $magica7,  hknight_magica8  ] {hk_face();};
-void() hknight_magica8  =[ $magica8,  hknight_magica9  ] {hk_face();};
-void() hknight_magica9  =[ $magica9,  hknight_magica10 ] {hk_face(); magica_sword_chop(); M_Lightwall ();};
-void() hknight_magica10 =[ $magica10, hknight_magica11 ] {hk_face();};
-void() hknight_magica11 =[ $magica11, hknight_magica12 ] {hk_face();};
-void() hknight_magica12 =[ $magica12, hknight_magica13 ] {hk_face();};
-void() hknight_magica13 =[ $magica13, hknight_magica14 ] {hk_face();};
-void() hknight_magica14 =[ $magica14, hknight_run1     ] {hk_face();};
-
 //============================================================================
 // ATTACK #2 (Modified for Fireball)
 
@@ -764,62 +425,12 @@ void() darklord_magicb8  =[ $magicb8,  darklord_magicb9  ] {hk_face(); hknight_s
     org = self.origin + (v_forward*16) + (v_right*2) + (v_up*24);
     MakeFancy (org, X32_STAR_RED, 2);
     self.effects = self.effects | EF_MUZZLEFLASH;
-    sound (self, CHAN_WEAPON, "plasma/fire.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "drake/plasma/fire.wav", 1, ATTN_NORM);
 //    SUB_AttackFinished (3);
     M_Reload (3);   // Three second delay before next salvo in non-NM.
 };
 void() darklord_magicb9  =[ $magicb9,  darklord_magicb10 ] {hk_face(); hknight_shot(-1);};
 void() darklord_magicb10 =[ $magicb10, hknight_magicb11  ] {hk_face(); hknight_shot(1);};
-
-// Hell Knights launch a single fireball to the ground, like in Quoth.
-void() hknight_magicb1  =[ $magicb1,  hknight_magicb2  ] {hk_face();};
-void() hknight_magicb2  =[ $magicb2,  hknight_magicb3  ] {hk_face();};
-void() hknight_magicb3  =[ $magicb3,  hknight_magicb4  ] {hk_face();};
-void() hknight_magicb4  =[ $magicb4,  hknight_magicb5  ] {hk_face();};
-void() hknight_magicb5  =[ $magicb5,  hknight_magicb6  ] {hk_face();
-if (self.classname == "monster_dark_lord")
-    {self.think = darklord_magicb6; return;}
-// Update 6/18/2011:  If hell knight uses this, use hell lord missiles.
-if (self.classname != "monster_hkboss")
-    self.think = lord_magicb6;
-};
-void() hknight_magicb6  =[ $magicb6,  hknight_magicb7  ] {hk_face();};
-//void() hknight_magicb7  =[ $magicb7,  hknight_magicb8  ] {hknight_shot(-2);};
-//void() hknight_magicb8  =[ $magicb8,  hknight_magicb9  ] {hknight_shot(-1);};
-//void() hknight_magicb9  =[ $magicb9,  hknight_magicb10 ] {hknight_shot(0);};
-//void() hknight_magicb10 =[ $magicb10, hknight_magicb11 ] {hknight_shot(1);};
-//void() hknight_magicb11 =[ $magicb11, hknight_magicb12 ] {hknight_shot(2);};
-//void() hknight_magicb12 =[ $magicb12, hknight_magicb13 ] {hknight_shot(3);};
-void() hknight_magicb7  =[ $magicb7,  hknight_magicb8  ] {hk_face();};
-void() hknight_magicb8  =[ $magicb8,  hknight_magicb9  ] {hk_face();};
-void() hknight_magicb9  =[ $magicb9,  hknight_magicb10 ] {hk_face();
-//    if (self.classname == "monster_hkboss")
-        M_Shal30 ('12 2 24');   // Vore bomb as in Rapture (and others).
-//    else
-//        M_FireKnight ('12 2 24', TRUE);
-};
-void() hknight_magicb10 =[ $magicb10, hknight_magicb11 ] {hk_face();};
-void() hknight_magicb11 =[ $magicb11, hknight_magicb12 ] {hk_face();};
-void() hknight_magicb12 =[ $magicb12, hknight_magicb13 ] {hk_face();};
-void() hknight_magicb13 =[ $magicb13, hknight_run1     ] {hk_face();
-if (self.classname == "monster_dark_lord")
-    SUB_CheckRefire (hknight_magicb1);
-};
-
-//============================================================================
-// ATTACK #3 (Standard)
-
-void() hknight_magicc1  =[ $magicc1,  hknight_magicc2  ] {hk_face();};
-void() hknight_magicc2  =[ $magicc2,  hknight_magicc3  ] {hk_face();};
-void() hknight_magicc3  =[ $magicc3,  hknight_magicc4  ] {hk_face();};
-void() hknight_magicc4  =[ $magicc4,  hknight_magicc5  ] {hk_face();};
-void() hknight_magicc5  =[ $magicc5,  hknight_magicc6  ] {hk_face();};
-void() hknight_magicc6  =[ $magicc6,  hknight_magicc7  ] {hknight_shot(-2); bane_strafe();};
-void() hknight_magicc7  =[ $magicc7,  hknight_magicc8  ] {hknight_shot(-1); bane_strafe();};
-void() hknight_magicc8  =[ $magicc8,  hknight_magicc9  ] {hknight_shot(0); bane_strafe();};
-void() hknight_magicc9  =[ $magicc9,  hknight_magicc10 ] {hknight_shot(1); bane_strafe();};
-void() hknight_magicc10 =[ $magicc10, hknight_magicc11 ] {hknight_shot(2); bane_strafe();};
-void() hknight_magicc11 =[ $magicc11, hknight_run1     ] {hknight_shot(3); bane_strafe();};
 
 //============================================================================
 // ATTACK #4 (Firewall -- Used by Hell Lords)
@@ -839,8 +450,8 @@ void() hknight_magicd12 =[ $magica1,  hknight_run1     ] {hk_face();};
 //============================================================================
 // ATTACK #5 (Wrath Summoning -- Used by Dark Lords)
 
-void() monster_wrath;
-void() wrath_grow1;
+// void() monster_wrath;
+// void() wrath_grow1;
 
 // FIXME:  Wrath summoning uses old code that needs updating.
 void() dk_shield;
@@ -850,7 +461,7 @@ void() darklord_magicd3  =[ $magica13, darklord_magicd4  ] {hk_face();};
 void() darklord_magicd4  =[ $magica12, darklord_magicd5  ] {hk_face();};
 void() darklord_magicd5  =[ $magica11, darklord_magicd6  ] {hk_face();};
 void() darklord_magicd6  =[ $magica10, darklord_magicd7  ] {hk_face();};
-void() darklord_magicd7  =[ $magica9,  hknight_magicd8   ] {hk_face(); SpawnMonster_Horde(ID_MP2_WRATH, 3); dk_shield();};
+void() darklord_magicd7  =[ $magica9,  hknight_magicd8   ] {hk_face(); /*SpawnMonster_Horde(ID_MP2_WRATH, 3);*/ dk_shield();};
 
 //============================================================================
 // ATTACK #6 (Monster Resurrection -- Bane exclusive)
@@ -899,8 +510,8 @@ void() bane_magice9  =[ $magicb8,  bane_magice10 ] {self.alpha = 0.2;
     {
         self.cnt = self.cnt - 1;    // Do before cloning.
         // Don't let the clones spawn more clones.
-        if (self.master.classname != self.classname)
-            clone_spawn();      // Only the master can clone himself.
+        //if (self.master.classname != self.classname)
+            //clone_spawn();      // Only the master can clone himself.
     }
 };
 void() bane_magice10 =[ $magicb8,  bane_magice11 ] {self.alpha = 0.4; hk_face();};
@@ -987,11 +598,11 @@ void() darklord_magic =
     local   float   dist;
 
 // FIXME:  Check for corpses to make wraths from.
-//    if (self.pets < skill)
+//    if (self.minion_count < skill)
 //        if (random() < 0.1)
-//    if (random() < (skill - self.pets) * 0.1)
+//    if (random() < (skill - self.minion_count) * 0.1)
     if (self.spawnflags & 2)
-        if (self.pets < 1)
+        if (self.minion_count < 1)
             if (self.waitmax < time)
                 {darklord_magicd1 ();  return;}
 
@@ -1057,11 +668,10 @@ void() bane_magic =
 
 //===========================================================================
 
-void(float side) bane_melee =
-{
+void(float side) bane_melee = {
     if (self.classname != "monster_bane")
-    if (self.classname != "monster_dark_lord")
-        return;
+		if (self.classname != "monster_dark_lord")
+			return;
 
     local   float   ldmg;
     local   vector  delta;
@@ -1078,7 +688,7 @@ void(float side) bane_melee =
     // Let the Bane hit ghosts.  He's just that badass.
     // Update:  Dark Lord is Bane-Lite, at least in human form...
 
-    sound (self, CHAN_WEAPON, "bane/hit.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "drake/bane/hit.wav", 1, ATTN_NORM);
     makevectors (self.angles);
     ldmg = 10 + 5*random();
     if (side)
@@ -1089,8 +699,8 @@ void(float side) bane_melee =
         delta = (side * v_right) + (50 * v_up);
     }
 
-    T_NewDamage (self.enemy, self, self, ldmg, DF_SCAR, "vorpal");
-    SpawnMeatSpray (self.origin + v_forward*16, delta, self.enemy.bloodtype);
+    T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+    SpawnMeatSprayDrake (self.origin + v_forward*16, delta, self.enemy.bloodtype);
 };
 
 void(float d) hk_charge =
@@ -1105,112 +715,23 @@ void(float d) hk_charge =
     }
     ai_charge (d);
 };
-// PM:  Added sounds like in my old Cranked mod.
-void() hknight_char_a1  =[ $char_a1,  hknight_char_a2  ]
-{
-// PM:  Don't use 'SUB_AttackFinished' because it won't be set on Nightmare,
-// which results in a charge lock for the knight.  In other words, don't let
-// him forget his magic.
-    self.attack_finished = time + 2;    //SUB_AttackFinished (2);
-    hk_charge(20);
-    sound (self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM);
-};
-void() hknight_char_a2  =[ $char_a2,  hknight_char_a3  ] {M_Step(); hk_charge(25);};
-void() hknight_char_a3  =[ $char_a3,  hknight_char_a4  ] {hk_charge(18);};
-void() hknight_char_a4  =[ $char_a4,  hknight_char_a5  ]
-{
-// The bane may jump instead.  Now is the best time to check.
-// Update 3/27/09:  Allow dark lord the priviledge too.
-    if ((self.classname == "monster_bane") || (self.classname == "monster_dark_lord"))
-        if (CheckBaneJump ())
-            if (random() < 0.5)
-            {
-                bane_jump4 ();
-                return;
-            }
-    hk_charge(16);
-};
-void() hknight_char_a5  =[ $char_a5,  hknight_char_a6  ] {hk_charge(14);};
-void() hknight_char_a6  =[ $char_a6,  hknight_char_a7  ] {M_Step(); hk_charge(20); bane_melee(0); ai_melee();};
-void() hknight_char_a7  =[ $char_a7,  hknight_char_a8  ] {hk_charge(21); ai_melee();};
-void() hknight_char_a8  =[ $char_a8,  hknight_char_a9  ] {hk_charge(13); ai_melee();};
-void() hknight_char_a9  =[ $char_a9,  hknight_char_a10 ] {hk_charge(20); ai_melee();};
-void() hknight_char_a10 =[ $char_a10, hknight_char_a11 ] {M_Step(); hk_charge(20); ai_melee();};
-void() hknight_char_a11 =[ $char_a11, hknight_char_a12 ] {hk_charge(18); ai_melee();};
-void() hknight_char_a12 =[ $char_a12, hknight_char_a13 ] {hk_charge(16);
-    sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
-    bane_melee(200);
-};
-void() hknight_char_a13 =[ $char_a13, hknight_char_a14 ] {hk_charge(14);};
-void() hknight_char_a14 =[ $char_a14, hknight_char_a15 ] {M_Step(); hk_charge(25);};
-void() hknight_char_a15 =[ $char_a15, hknight_char_a16 ] {hk_charge(21);};
-void() hknight_char_a16 =[ $char_a16, hknight_run1     ] {hk_charge(13);};
-
-//===========================================================================
-
-void() hknight_char_b1 =[ $char_b1, hknight_char_b2 ]
-{
-    self.attack_finished = time + 1;    // PM:  Don't use SUB_AttackFinished.
-    knight_sword_sound(); M_Step(); hk_charge(23); bane_melee(0); ai_melee();
-};
-void() hknight_char_b2 =[ $char_b2, hknight_char_b3 ] {hk_charge(17); ai_melee();};
-void() hknight_char_b3 =[ $char_b3, hknight_char_b4 ] {hk_charge(12); ai_melee();};
-void() hknight_char_b4 =[ $char_b4, hknight_char_b5 ] {M_Step(); hk_charge(22); ai_melee();};
-void() hknight_char_b5 =[ $char_b5, hknight_char_b6 ] {hk_charge(18); ai_melee();};
-void() hknight_char_b6 =[ $char_b6, hknight_run1    ] {hk_charge(8); ai_melee();
-    if (vlen (self.origin - self.enemy.origin) < 80)
-        self.shots_left = 0;   // Close enough for melee.
-    else
-    {
-        self.shots_left = self.shots_left - 1;
-        if (self.shots_left > 0)
-            self.think = hknight_char_b1;
-    }
-};
-
-//===========================================================================
 
 void() bane_slice1  =[ $slice1,  bane_slice2  ] {hk_charge(9);};
-void() bane_slice2  =[ $slice3,  bane_slice3  ] {M_Step(); hk_charge(19);};
+void() bane_slice2  =[ $slice3,  bane_slice3  ] {monster_footstep(FALSE); hk_charge(19);};
 void() bane_slice3  =[ $slice5,  bane_slice4  ] {hk_charge(11); bane_melee(-200); ai_melee();};
 void() bane_slice4  =[ $slice6,  bane_slice5  ] {hk_charge(15); ai_melee();};
-void() bane_slice5  =[ $slice7,  bane_slice6  ] {M_Step(); hk_charge(8); ai_melee();};
+void() bane_slice5  =[ $slice7,  bane_slice6  ] {monster_footstep(FALSE); hk_charge(8); ai_melee();};
 void() bane_slice6  =[ $slice9,  bane_slice7  ] {hk_charge(2); ai_melee();};
 void() bane_slice7  =[ $slice10, hknight_run1 ] {hk_charge(3);};
 
-void() hknight_slice1  =[ $slice1,  hknight_slice2  ] {hk_charge(9);};
-void() hknight_slice2  =[ $slice2,  hknight_slice3  ] {hk_charge(6);};
-void() hknight_slice3  =[ $slice3,  hknight_slice4  ] {M_Step(); hk_charge(13);};
-void() hknight_slice4  =[ $slice4,  hknight_slice5  ] {hk_charge(4);};
-void() hknight_slice5  =[ $slice5,  hknight_slice6  ] {hk_charge(7); bane_melee(-200); ai_melee();};
-void() hknight_slice6  =[ $slice6,  hknight_slice7  ] {hk_charge(15); ai_melee();};
-void() hknight_slice7  =[ $slice7,  hknight_slice8  ] {M_Step(); hk_charge(8); ai_melee();};
-void() hknight_slice8  =[ $slice8,  hknight_slice9  ] {hk_charge(2); ai_melee();};
-void() hknight_slice9  =[ $slice9,  hknight_slice10 ] {ai_melee();};
-void() hknight_slice10 =[ $slice10, hknight_run1    ] {hk_charge(3);};
-
-//===========================================================================
-
 void() bane_smash1  =[ $smash2,  bane_smash2  ] {hk_charge(14);};
-void() bane_smash2  =[ $smash4,  bane_smash3  ] {M_Step(); hk_charge(20);};
+void() bane_smash2  =[ $smash4,  bane_smash3  ] {monster_footstep(FALSE); hk_charge(20);};
 void() bane_smash3  =[ $smash5,  bane_smash4  ] {hk_charge(10); bane_melee(0); ai_melee();};
 void() bane_smash4  =[ $smash6,  bane_smash5  ] {hk_charge(7); ai_melee();};
 void() bane_smash5  =[ $smash7,  bane_smash6  ] {hk_charge(12); ai_melee();};
 void() bane_smash6  =[ $smash8,  bane_smash7  ] {hk_charge(2); ai_melee();};
-void() bane_smash7  =[ $smash9,  bane_smash8  ] {M_Step(); hk_charge(3); ai_melee();};
+void() bane_smash7  =[ $smash9,  bane_smash8  ] {monster_footstep(FALSE); hk_charge(3); ai_melee();};
 void() bane_smash8  =[ $smash11, hknight_run1 ] {hk_charge(0);};
-
-void() hknight_smash1  =[ $smash1,  hknight_smash2  ] {hk_charge(1);};
-void() hknight_smash2  =[ $smash2,  hknight_smash3  ] {hk_charge(13);};
-void() hknight_smash3  =[ $smash3,  hknight_smash4  ] {hk_charge(9);};
-void() hknight_smash4  =[ $smash4,  hknight_smash5  ] {M_Step(); hk_charge(11);};
-void() hknight_smash5  =[ $smash5,  hknight_smash6  ] {hk_charge(10); bane_melee(0); ai_melee();};
-void() hknight_smash6  =[ $smash6,  hknight_smash7  ] {hk_charge(7); ai_melee();};
-void() hknight_smash7  =[ $smash7,  hknight_smash8  ] {hk_charge(12); ai_melee();};
-void() hknight_smash8  =[ $smash8,  hknight_smash9  ] {hk_charge(2); ai_melee();};
-void() hknight_smash9  =[ $smash9,  hknight_smash10 ] {M_Step(); hk_charge(3); ai_melee();};
-void() hknight_smash10 =[ $smash10, hknight_smash11 ] {hk_charge(0);};  // Skipped in Neh.
-void() hknight_smash11 =[ $smash11, hknight_run1    ] {hk_charge(0);};
 
 //============================================================================
 
@@ -1220,7 +741,7 @@ void() bane_watk3  =[ $w_attack7,  bane_watk4  ] {hk_charge(1);};
 void() bane_watk4  =[ $w_attack8,  bane_watk5  ] {hk_charge(4);};
 void() bane_watk5  =[ $w_attack9,  bane_watk6  ] {hk_charge(5);};
 void() bane_watk6  =[ $w_attack10, bane_watk7  ] {hk_charge(3); ai_melee();};
-void() bane_watk7  =[ $w_attack11, bane_watk8  ] {M_Step(); hk_charge(2); ai_melee();};
+void() bane_watk7  =[ $w_attack11, bane_watk8  ] {monster_footstep(FALSE); hk_charge(2); ai_melee();};
 void() bane_watk8  =[ $w_attack13, bane_watk9  ] {hk_charge(2); ai_melee();};
 void() bane_watk9  =[ $w_attack14, bane_watk10 ] {hk_charge(0);};
 void() bane_watk10 =[ $w_attack16, bane_watk11 ] {hk_charge(1);
@@ -1231,77 +752,7 @@ void() bane_watk12 =[ $w_attack19, bane_watk13 ] {hk_charge(4); ai_melee();};
 void() bane_watk13 =[ $w_attack20, bane_watk14 ] {hk_charge(6);};
 void() bane_watk14 =[ $w_attack22, hknight_run1] {hk_charge(10);};
 
-// Nehahra skipped every even frame in the scene.
-void() hknight_watk1  =[ $w_attack1,  hknight_watk2  ] {hk_charge(2);};
-void() hknight_watk2  =[ $w_attack2,  hknight_watk3  ] {hk_charge(0);};
-void() hknight_watk3  =[ $w_attack3,  hknight_watk4  ] {hk_charge(0);};
-void() hknight_watk4  =[ $w_attack4,  hknight_watk5  ] {ai_melee();};
-void() hknight_watk5  =[ $w_attack5,  hknight_watk6  ] {ai_melee();};
-void() hknight_watk6  =[ $w_attack6,  hknight_watk7  ] {ai_melee();};
-void() hknight_watk7  =[ $w_attack7,  hknight_watk8  ] {hk_charge(1);};
-void() hknight_watk8  =[ $w_attack8,  hknight_watk9  ] {hk_charge(4);};
-void() hknight_watk9  =[ $w_attack9,  hknight_watk10 ] {hk_charge(5);};
-void() hknight_watk10 =[ $w_attack10, hknight_watk11 ] {hk_charge(3); bane_melee(0); ai_melee();};
-void() hknight_watk11 =[ $w_attack11, hknight_watk12 ] {M_Step(); hk_charge(2); ai_melee();};
-void() hknight_watk12 =[ $w_attack12, hknight_watk13 ] {hk_charge(2); ai_melee();};
-void() hknight_watk13 =[ $w_attack13, hknight_watk14 ] {hk_charge(0);};
-void() hknight_watk14 =[ $w_attack14, hknight_watk15 ] {hk_charge(0);};
-void() hknight_watk15 =[ $w_attack15, hknight_watk16 ] {hk_charge(0);
-    // PM:  Something from my old Cranked mod.
-    sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
-};
-void() hknight_watk16 =[ $w_attack16, hknight_watk17 ] {hk_charge(1);};
-void() hknight_watk17 =[ $w_attack17, hknight_watk18 ] {hk_charge(1); bane_melee(200); ai_melee();};
-void() hknight_watk18 =[ $w_attack18, hknight_watk19 ] {hk_charge(3); ai_melee();};
-void() hknight_watk19 =[ $w_attack19, hknight_watk20 ] {hk_charge(4); ai_melee();};
-void() hknight_watk20 =[ $w_attack20, hknight_watk21 ] {hk_charge(6);};
-void() hknight_watk21 =[ $w_attack21, hknight_watk22 ] {hk_charge(7);};
-void() hknight_watk22 =[ $w_attack22, hknight_run1   ] {hk_charge(3);};
-
-//============================================================================
-
-void(entity attacker, float damage) hknight_pain =
-{
-    if (self.pain_finished > time)
-        return;
-
-    if (self.classname == "monster_hell_lord")
-        sound (self, CHAN_VOICE, "archer/pain2.wav", 1, ATTN_NORM);
-    else if (self.classname == "monster_dark_lord")
-        sound (self, CHAN_VOICE, "darklord/pain.wav", 1, ATTN_NORM);
-    else
-        sound (self, CHAN_VOICE, "hknight/pain1.wav", 1, ATTN_NORM);
-    self.pain_finished = time + 1;
-
-    // Removed mandatory pain anim after five seconds.
-    
-    if (random()*30 > damage)
-        return;        // didn't flinch
-    if (SUB_IgnorePain ())
-        return;         // No pain anims in Nightmare.
-
-    if (self.classname == "monster_dark_lord")
-    {
-        if (self.lip > time)
-            return;     // Too soon to flinch.
-        self.lip = time + 3;    // Give him time to use magic.
-
-        self.waitmax = 0;       // Raise shield again ASAP!
-
-        if (!self.mirror_finished)
-            self.effects = self.effects - (self.effects & EF_BRIGHTFIELD);
-    }
-
-// Update:  Quicker pain for lords.
-    if ((self.classname == "monster_hell_lord") || (self.classname == "monster_dark_lord"))
-        if (random() < 0.5)
-            {hkfast_pain1 ();  return;}
-
-    hknight_pain1 ();
-    attacker = attacker;    // FrikQcc warning squelch!
-};
-
-void(entity attacker, float damage) bane_pain =
+void(entity inflictor, entity attacker, float damage) bane_pain =
 {
 // Shadow clone magic check.
     if (!self.waitmax)
@@ -1314,7 +765,7 @@ void(entity attacker, float damage) bane_pain =
         {   //"Bushin no Kage!\n"
             if (self.height)
                 self.height = self.height | BANE_CLONE;
-            sound (self, CHAN_VOICE, "bane/pain.wav", 1, ATTN_NORM);
+            sound (self, CHAN_VOICE, "drake/bane/pain.wav", 1, ATTN_NORM);
             // Cloning will take a while, so no need to add to pain_finished.
             bane_painc1();
             return;
@@ -1331,7 +782,7 @@ void(entity attacker, float damage) bane_pain =
             self.waitmax = 0;
             if (self.height)
                 self.height = self.height | BANE_RAGE;
-            sound (self, CHAN_VOICE, "bane/pain.wav", 1, ATTN_NORM);
+            sound (self, CHAN_VOICE, "drake/bane/pain.wav", 1, ATTN_NORM);
             bane_painc1();
             return;
         }
@@ -1342,7 +793,7 @@ void(entity attacker, float damage) bane_pain =
     if (self.pain_finished > time)
         return;
 
-    sound (self, CHAN_VOICE, "bane/pain.wav", 1, ATTN_NORM);
+    sound (self, CHAN_VOICE, "drake/bane/pain.wav", 1, ATTN_NORM);
     self.pain_finished = time + 1;
 
     if (self.touch == Bane_JumpTouch)
@@ -1375,7 +826,7 @@ void(entity attacker, float damage) bane_pain =
 
 // Update 1/7/10:  Moved hknight_type to globals.qc.
 
-void() hknight_melee =
+void() baneknight_melee =
 {
     local   float   fast;
 
@@ -1416,7 +867,7 @@ void() hknight_melee =
 void() bane_win =
 {
 // Update:  Changed from ATTN_NORM to ATTN_NONE for level-wide low laugh.
-    sound (self, CHAN_VOICE, "bane/laugh.wav", 1, ATTN_NONE);
+    sound (self, CHAN_VOICE, "drake/bane/laugh.wav", 1, ATTN_NONE);
 // DISABLED -- Player can't really listen if he's dead.
 //    if (self.height)
 //        if (!self.master)     // Death is only the beginning.
@@ -1425,16 +876,10 @@ void() bane_win =
     monster_sow ();
 };
 
-void() bane_void =
-{
-    monster_void ();
-    sound (self, CHAN_VOICE, "bane/death.wav", 1, ATTN_NONE);
-};
-
 void(float hello) bane_sight =
 {
     if (!hello)
-        sound (self, CHAN_VOICE, "bane/sight.wav", 1, 0.5);
+        sound (self, CHAN_VOICE, "drake/bane/sight.wav", 1, 0.5);
 };
 void(float hello) bane_hello =
 {
@@ -1461,7 +906,7 @@ void(float hello) lord_sight =
     if (hello)
         sound (self, CHAN_VOICE, "hknight/idle.wav", 1, ATTN_NORM);
     else
-        sound (self, CHAN_VOICE, "archer/sight2.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "drake/archer/sight2.wav", 1, ATTN_NORM);
 };
 
 void(float hello) hknight_sight =
@@ -1475,7 +920,7 @@ void(float hello) hknight_sight =
 // Files common to all of the hell knight variants.
 void() hk_cache =
 {
-    precache_model ("progs/hknight.mdl");
+    precache_model ("progs/ad171/mon_hknight.mdl");
     precache_model ("progs/k_spike.mdl");
     precache_model ("progs/h_hellkn.mdl");
 
@@ -1506,13 +951,13 @@ void() hklord_cache =
 {
     hk_cache ();
 
-    precache_model ("progs/lavaball.mdl");
+    precache_model ("progs/drake/lavarock.mdl");
 
     // Borrow sounds from archer lords.
     // Update:  Don't use growl2.wav or growl3.wav.
-    precache_sound ("archer/death2.wav");
-    precache_sound ("archer/pain2.wav");
-    precache_sound ("archer/sight2.wav");
+    precache_sound ("drake/archer/death2.wav");
+    precache_sound ("drake/archer/pain2.wav");
+    precache_sound ("drake/archer/sight2.wav");
     precache_sound ("boss1/throw.wav");
     precache_sound ("weapons/fwall.wav");
     precache_sound ("weapons/fwallhit.wav");
@@ -1523,11 +968,13 @@ void() hklord_cache =
 void() hkboss_cache =
 {
     hknight_cache ();
-
-    precache_model ("progs/v_spike.mdl");       // Used by hkboss.
-    precache_sound ("hkboss/iceball.wav");      // Used by hkboss.
+    precache_sound ("drake/hknight/death1.wav");
+    precache_sound ("drake/hknight/sboom.wav");
+    precache_sound ("drake/hknight/sboom2.wav");
+    precache_model ("progs/drake/v_spike.mdl");       // Used by hkboss.
+    precache_sound ("drake/hkboss/iceball.wav");      // Used by hkboss.
 };
-
+/*
 // Prototypes...
 void() monster_axeman;
 //============
@@ -1609,7 +1056,7 @@ void() monster_hell_knight =
         self.th_missile = lord_magic;
         self.th_sight   = lord_sight;
         // Originally 500 health, too much.
-        monster_form ("progs/hknight.mdl", '-16 -16 -24', '16 16 40', 400, -40);
+        monster_form ("progs/ad171/mon_hknight.mdl", '-16 -16 -24', '16 16 40', 400, -40);
     }
     else if (self.classname == "monster_hkboss")
     {
@@ -1628,7 +1075,7 @@ void() monster_hell_knight =
         }
         else
             self.skin       = self.skin & 1;    // First two only.
-        monster_form ("progs/hknight.mdl", '-16 -16 -24', '16 16 40', 250, -40);
+        monster_form ("progs/ad171/mon_hknight.mdl", '-16 -16 -24', '16 16 40', 250, -40);
     }
     self.mdl_head   = "progs/h_hellkn.mdl";
     self.mass       = MASS_MEDIUM;
@@ -1638,7 +1085,7 @@ void() monster_hell_knight =
     self.th_run     = hknight_run1;
     if (!self.th_missile)
         self.th_missile = hknight_magic;    // Was 'hknight_magicc1'
-    self.th_melee   = hknight_melee;
+    self.th_melee   = baneknight_melee;
     self.th_pain    = hknight_pain;
     self.th_die     = hknight_die;
     //- - - - - - - -
@@ -1654,7 +1101,7 @@ void() monster_hell_knight =
     self.hittype    = HIT_METAL;
 
     monster_start ();
-};
+};*/
 
 void() monster_hell_lord = {monster_hell_knight ();};
 void() monster_lord =
@@ -1666,126 +1113,134 @@ void() monster_hkboss = {monster_hell_knight ();};
 //==========================================================================
 //  The Bane  (SoE Big Bad Evil Guy, Hell Knight boss variant)
 //==========================================================================
-float() BaneCheckAttack =
-{
-// Here so Bane can destroy downed zombies and what not.
-    if (enemy_range == RANGE_MELEE)
-        if (infront (self.enemy))
-            if (CanDamage (self.enemy, self))
-                {self.th_melee ();  return TRUE;}
-
-// Use bog standard.
-    return CheckAttack();
-};
 
 // In case Bane gets aggravated during teleportation...
-void() bane_run =
-{
+void() bane_run = {
     if (self.skin == SKIN_BANE_GRAY)
         bane_painc1 ();     // Restart shadow walk.
     else
         hknight_run1 ();
 };
 
-void() bane_cache =
-{
-// Bane - - - - - -
-    precache_model ("progs/hknight.mdl");
+void() monster_bane = {
+	if (deathmatch) { remove(self); return; }
+
+	self.mdl = "progs/ad171/mon_hknight.mdl";			// Original ID Knight + extra skins
+	self.headmdl = "progs/h_hellkn.mdl";
+    precache_model ("progs/ad171/mon_hknight.mdl");
     precache_model ("progs/drake/k_ball.mdl");    // Bane fireball.
     precache_model ("progs/h_hellkn.mdl");
+	precache_model ("progs/drake/s_wave.spr");
 
     precache_sound ("ambience/thunder1.wav");
     precache_sound ("ambience/thunder2.wav");
-    precache_sound ("bane/death.wav");
-    precache_sound ("bane/growl.wav");
-    precache_sound ("bane/hit.wav");
-    precache_sound ("bane/laugh.wav");
-    precache_sound ("bane/pain.wav");
-    precache_sound ("bane/sight.wav");
-    precache_sound ("bane/thunder.wav");
+    precache_sound ("drake/bane/death.wav");
+    precache_sound ("drake/bane/growl.wav");
+    precache_sound ("drake/bane/hit.wav");
+    precache_sound ("drake/bane/laugh.wav");
+    precache_sound ("drake/bane/pain.wav");
+    precache_sound ("drake/bane/sight.wav");
+    precache_sound ("drake/bane/thunder.wav");
     precache_sound ("hknight/slash1.wav");
     precache_sound ("knight/sword1.wav");
     precache_sound ("knight/sword2.wav");
     precache_sound ("hipweap/mjolhit.wav");
-    precache_sound ("misc/dsslop.wav");
+    precache_sound ("drake/misc/dsslop.wav");
     precache_sound ("weapons/axhit.wav");
-//- - - - - - - - -
-};
 
-void() monster_bane =
-{
-    local   float   sklv;
+	self.gib1mdl = "progs/ad171/w_hknightsword.mdl";	// Unique sword
+	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
+	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot
+	
+	precache_model (self.mdl);
+	precache_model (self.headmdl);
+	precache_model (MODEL_PROJ_HKN);
+	precache_model (self.gib1mdl);
+	precache_model (self.gib2mdl);
+	precache_model (self.gib3mdl);
 
-    if (!self.spawned)
-    {
-        if (noenemies)
-            {remove (self); return;}
-        bane_cache ();
-    }
+	self.gib1sound = GIB_IMPACT_METALA;
+	if (random() < 0.5) self.gib2mdl = string_null;
+	if (random() < 0.5) self.gib3mdl = string_null;
 
-    // Update:  Make it very hard but possible to gib/behead the Bane.
-    self.skin       = SKIN_BANE;
-    monster_form ("progs/hknight.mdl", '-16 -16 -24', '16 16 40', 2000, -90);
-    self.mdl_head   = "progs/h_hellkn.mdl";
-    self.mass       = MASS_MEDIUM;
-    sklv = cvar("skill");
-    if (sklv < 1)
+	precache_sound ("hknight/attack1.wav");
+	precache_sound ("knight/sword2.wav");
+	precache_sound ("hknight/hit.wav");	
+			
+	self.idle_sound = "hknight/idle.wav";
+	precache_sound (self.idle_sound);
+
+	self.pain_sound = "bane/pain.wav";
+	self.death_sound = "bane/death.wav";
+	self.sight_sound = "bane/sight.wav";
+
+	precache_sound (self.pain_sound);
+	precache_sound (self.death_sound);
+	precache_sound (self.sight_sound);
+
+	// New sword sweep/slash sounds
+	precache_sound ("weapons/sword1a.wav");
+	precache_sound ("weapons/sword1b.wav");
+	precache_sound ("weapons/sword2a.wav");
+	precache_sound ("weapons/sword2b.wav");
+	
+    self.mass = MASS_MEDIUM;
+    self.skin = SKIN_BANE;
+	self.solid = SOLID_NOT;				// No interaction with world
+	self.movetype = MOVETYPE_NONE;		// Static item, no movement
+	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
+	if (self.health < 1) self.health = 2000;
+	self.gibhealth = -90;
+	self.gibbed = FALSE;
+	self.pain_flinch = 120;
+	self.pain_timeout = 5;
+	self.steptype = FS_TYPEHEAVY;
+	self.meleeattack = rint(random()*3);	// randomize last melee attack
+	self.th_die = hknight_die;				// Face meets floor
+
+    if (cvar("skill") < 1) {
         self.waitmin = self.waitmax = -1;   // No clones or rage on Easy.
-    else if (sklv < 2)
-    {
+    } else if (cvar("skill") < 2) {
         self.waitmin = floor(self.health / 4);   // Clones with 500 health.
         self.waitmax = floor(self.health / 2);   // Rage at half hp.
-    }
-    else
-    {
+    } else {
         self.waitmax = self.health / 3;
         self.waitmin = floor(self.waitmax);      // Clones with 666 health.
         self.waitmax = floor(self.waitmax * 2);  // Rage at 66% hp.
     }
 
-    self.th_stand   = hknight_stand1;
-    self.th_walk    = hknight_walk1;
-    self.th_run     = bane_run;     //hknight_run1;
-    self.th_missile = bane_magic;
-    self.th_melee   = hknight_melee;
-    self.th_pain    = bane_pain;
-    self.th_die     = hknight_die;
-    //- - - - - - - -
-//    self.th_jump    = hknight_jump1;
-    self.th_sight   = bane_sight;
-    self.th_check   = BaneCheckAttack;
-    self.th_gib     = hknight_gib;
-    self.th_win     = bane_win;
-    self.th_void    = bane_void;
-    self.th_spawn   = monster_bane;
-
-// SoE Hack:  Disable the Bane's new powers in soe1m5.
-    self.height = 0;
-    if (!self.spawned)
-    {
-        if (self.spawnflags & 2)
-        {
-            self.height  = BANE_CHAT;    // The Bane speaks!
-            self.waitmin = self.waitmax = -1;   // No clones or rage.
-            self.th_sight = bane_hello;
-        }
-        else if (world.model == "maps/nsoe5.bsp")
-        {
-            self.height = BANE_CHAT;    // The Bane speaks!
-            self.th_die = bane_die;
-            self.th_sight = bane_hello;
-        }
-    }
-
-    self.family     = FAM_BANE;
+	self.hittype = HIT_METAL;
     self.xfl        = XFL_ARMORED | XFL_BOSS;   // Don't dare hit the king!
     self.ryuflags   = RYU_ALERT | RYU_INSANE;
-    self.hittype    = HIT_METAL;
-    if (soul_evil)
-        monster_purse (20, 1, 0.5);
+	self.pain_longanim = FALSE;
 
-    monster_start ();
+	self.th_stand = hknight_stand1;		// Idling on feet
+	self.th_walk = hknight_walk1;		// Walking
+	self.th_run = bane_run;			// Running
+	self.th_melee = baneknight_melee;		// Sword attack
+	self.th_missile = bane_magic;	// Fire spikes
+	self.th_charge = hknight_char_a1;	// Run + melee
+	self.th_pain = bane_pain;		// Stumble and pain
+	self.th_die = hknight_die;			// Face meets floor
+    self.th_sight   = bane_sight;
+    self.th_win     = bane_win;
+    self.th_spawn   = monster_bane;
+	if (self.deathstring == "") self.deathstring = " provided sport for Bane\n";
+
+	// Always reset Ammo Resistance to be consistent
+	self.resist_shells = self.resist_nails = 0;
+	self.resist_rockets = self.resist_cells = 0;
+
+	self.classtype = CT_MONHELLK;
+	self.classgroup = CG_DCAPTAIN;	// Rule over seargent and fury knights but lesser knights are disloyal
+	self.classmove = MON_MOVEWALK;
+
+    // if (soul_evil)
+        // monster_purse (20, 1, 0.5);
+
+	monster_start();
 };
+
 
 
 //==========================================================================
@@ -1799,7 +1254,7 @@ void(float d) dk_slow;
 void(float d) dk_fast;
 
 void() darklord_run1  =[ $walk1,  darklord_run2  ] {dk_slow(2);};
-void() darklord_run2  =[ $walk2,  darklord_run3  ] {M_Step(); dk_slow(5);};
+void() darklord_run2  =[ $walk2,  darklord_run3  ] {monster_footstep(FALSE); dk_slow(5);};
 void() darklord_run3  =[ $walk3,  darklord_run4  ] {dk_slow(5);};
 void() darklord_run4  =[ $walk4,  darklord_run5  ] {dk_slow(4);};
 void() darklord_run5  =[ $walk5,  darklord_run6  ] {dk_slow(4);};
@@ -1809,7 +1264,7 @@ void() darklord_run8  =[ $walk8,  darklord_run9  ] {dk_slow(3);};
 void() darklord_run9  =[ $walk9,  darklord_run10 ] {dk_slow(3);};
 void() darklord_run10 =[ $walk10, darklord_run11 ] {dk_slow(4);};
 void() darklord_run11 =[ $walk11, darklord_run12 ] {dk_slow(3);};
-void() darklord_run12 =[ $walk12, darklord_run13 ] {M_Step(); dk_slow(4);};
+void() darklord_run12 =[ $walk12, darklord_run13 ] {monster_footstep(FALSE); dk_slow(4);};
 void() darklord_run13 =[ $walk13, darklord_run14 ] {dk_slow(6);};
 void() darklord_run14 =[ $walk14, darklord_run15 ] {dk_slow(2);};
 void() darklord_run15 =[ $walk15, darklord_run16 ] {dk_slow(2);};
@@ -1821,18 +1276,18 @@ void() darklord_run20 =[ $walk20, darklord_run1  ] {dk_slow(2);};
 //void() darklord_run20 =[ $walk20, darklord_run21 ] {dk_slow(2);};
 //void() darklord_run21 =[ $walk20, darklord_run2  ] {dk_slow(2);};
 
-void() darklord_fast1 =[ $run1, darklord_fast2 ] {hk_idle_sound(); dk_fast(20);};
-void() darklord_fast2 =[ $run2, darklord_fast3 ] {M_Step(); dk_fast(25);};
+void() darklord_fast1 =[ $run1, darklord_fast2 ] {monster_idle_sound(); dk_fast(20);};
+void() darklord_fast2 =[ $run2, darklord_fast3 ] {monster_footstep(FALSE); dk_fast(25);};
 void() darklord_fast3 =[ $run3, darklord_fast4 ] {dk_fast(18);};
 void() darklord_fast4 =[ $run4, darklord_fast5 ] {dk_fast(16);};
 void() darklord_fast5 =[ $run5, darklord_fast6 ] {dk_fast(14);};
-void() darklord_fast6 =[ $run6, darklord_fast7 ] {M_Step(); dk_fast(25);};
+void() darklord_fast6 =[ $run6, darklord_fast7 ] {monster_footstep(FALSE); dk_fast(25);};
 void() darklord_fast7 =[ $run7, darklord_fast8 ] {dk_fast(21);};
 void() darklord_fast8 =[ $run8, darklord_fast1 ] {dk_fast(13);};
 
 void() dk_shield =
 {
-    if (self.pets < 1)  // FIXME:  Check for wraths.
+    if (self.minion_count < 1)  // FIXME:  Check for wraths.
     {
         if (self.flags & FL_GODMODE)
         {
@@ -1884,28 +1339,28 @@ void(float d) dk_charge =
 void() dk_idle_sound =
 {
     if (random() < 0.2)
-        sound (self, CHAN_VOICE, "darklord/idle1.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "drake/darklord/idle1.wav", 1, ATTN_NORM);
 //    if (random() < 0.5)
-//        sound (self, CHAN_VOICE, "darklord/sword1.wav", 1, ATTN_NORM);
+//        sound (self, CHAN_VOICE, "drake/darklord/sword1.wav", 1, ATTN_NORM);
 //    else
-//        sound (self, CHAN_VOICE, "darklord/sword2.wav", 1, ATTN_NORM);
+//        sound (self, CHAN_VOICE, "drake/darklord/sword2.wav", 1, ATTN_NORM);
 };
 
 void() darklord_slice1  =[ $slice1,  darklord_slice2  ] {dk_idle_sound(); dk_charge(9);};
-void() darklord_slice2  =[ $slice3,  darklord_slice3  ] {M_Step(); dk_charge(19);};
+void() darklord_slice2  =[ $slice3,  darklord_slice3  ] {monster_footstep(FALSE); dk_charge(19);};
 void() darklord_slice3  =[ $slice5,  darklord_slice4  ] {dk_charge(11); bane_melee(-200); ai_melee();};
 void() darklord_slice4  =[ $slice6,  darklord_slice5  ] {dk_charge(15); ai_melee();};
-void() darklord_slice5  =[ $slice7,  darklord_slice6  ] {M_Step(); dk_charge(8); ai_melee();};
+void() darklord_slice5  =[ $slice7,  darklord_slice6  ] {monster_footstep(FALSE); dk_charge(8); ai_melee();};
 void() darklord_slice6  =[ $slice9,  darklord_slice7  ] {dk_charge(2); ai_melee();};
 void() darklord_slice7  =[ $slice10, hknight_run1 ] {dk_charge(3);};
 
 void() darklord_smash1  =[ $smash2,  darklord_smash2  ] {dk_idle_sound(); dk_charge(14);};
-void() darklord_smash2  =[ $smash4,  darklord_smash3  ] {M_Step(); dk_charge(20);};
+void() darklord_smash2  =[ $smash4,  darklord_smash3  ] {monster_footstep(FALSE); dk_charge(20);};
 void() darklord_smash3  =[ $smash5,  darklord_smash4  ] {dk_charge(10); bane_melee(0); ai_melee();};
 void() darklord_smash4  =[ $smash6,  darklord_smash5  ] {dk_charge(7); ai_melee();};
 void() darklord_smash5  =[ $smash7,  darklord_smash6  ] {dk_charge(12); ai_melee();};
 void() darklord_smash6  =[ $smash8,  darklord_smash7  ] {dk_charge(2); ai_melee();};
-void() darklord_smash7  =[ $smash9,  darklord_smash8  ] {M_Step(); dk_charge(3); ai_melee();};
+void() darklord_smash7  =[ $smash9,  darklord_smash8  ] {monster_footstep(FALSE); dk_charge(3); ai_melee();};
 void() darklord_smash8  =[ $smash11, hknight_run1 ] {dk_charge(0);};
 
 void() darklord_watk1  =[ $w_attack1,  darklord_watk2  ] {dk_idle_sound(); dk_charge(2);};
@@ -1914,7 +1369,7 @@ void() darklord_watk3  =[ $w_attack7,  darklord_watk4  ] {dk_charge(1);};
 void() darklord_watk4  =[ $w_attack8,  darklord_watk5  ] {dk_charge(4);};
 void() darklord_watk5  =[ $w_attack9,  darklord_watk6  ] {dk_charge(5);};
 void() darklord_watk6  =[ $w_attack10, darklord_watk7  ] {dk_charge(3); ai_melee();};
-void() darklord_watk7  =[ $w_attack11, darklord_watk8  ] {M_Step(); dk_charge(2); ai_melee();};
+void() darklord_watk7  =[ $w_attack11, darklord_watk8  ] {monster_footstep(FALSE); dk_charge(2); ai_melee();};
 void() darklord_watk8  =[ $w_attack13, darklord_watk9  ] {dk_charge(2); ai_melee();};
 void() darklord_watk9  =[ $w_attack14, darklord_watk10 ] {dk_charge(0);};
 void() darklord_watk10 =[ $w_attack16, darklord_watk11 ] {dk_charge(1);
@@ -1948,27 +1403,26 @@ void() darklord_melee =
 
 void() darklord_thebeast;   // Look in 'dragon.qc'.
 
-void() darklord_fall1  =[ $decap1,  darklord_fall2  ] {ai_forward(10);};
-void() darklord_fall2  =[ $decap2,  darklord_fall3  ] {ai_forward(8);};
-void() darklord_fall3  =[ $decap3,  darklord_fall4  ] {monster_drop(); ai_forward(7);};
-void() darklord_fall4  =[ $decap4,  darklord_fall5  ] {};
-void() darklord_fall5  =[ $decap5,  darklord_fall6  ] {};
-void() darklord_fall6  =[ $decap6,  darklord_fall7  ] {};
-void() darklord_fall7  =[ $decap7,  darklord_fall8  ] {};
-void() darklord_fall8  =[ $decap8,  darklord_fall9  ] {ai_forward(10);};
-void() darklord_fall9  =[ $decap9,  darklord_fall10 ] {ai_forward(11);};
-void() darklord_fall10 =[ $decap10, darklord_fall11 ] {};
-void() darklord_fall11 =[ $decap11, darklord_fall12 ] {};
-void() darklord_fall12 =[ $decap12, darklord_thebeast ]
+void() darklord_fall1  =[ $stand1,  darklord_fall2  ] {ai_forward(10);};
+void() darklord_fall2  =[ $stand2,  darklord_fall3  ] {ai_forward(8);};
+void() darklord_fall3  =[ $stand3,  darklord_fall4  ] {ai_forward(7);};
+void() darklord_fall4  =[ $stand4,  darklord_fall5  ] {};
+void() darklord_fall5  =[ $stand5,  darklord_fall6  ] {};
+void() darklord_fall6  =[ $stand6,  darklord_fall7  ] {};
+void() darklord_fall7  =[ $stand7,  darklord_fall8  ] {};
+void() darklord_fall8  =[ $stand8,  darklord_fall9  ] {ai_forward(10);};
+void() darklord_fall9  =[ $stand9,  darklord_fall10 ] {ai_forward(11);};
+void() darklord_fall10 =[ $stand1, darklord_fall11 ] {};
+void() darklord_fall11 =[ $stand2, darklord_fall12 ] {};
+void() darklord_fall12 =[ $stand3, darklord_thebeast ]
 {
     Quake_Level (0, self.origin, 5);
     self.nextthink = time + 3;
 };
 
-void(entity attacker, float damage) darklord_pain =
-{
-    if (self.max_health - self.health >= 1000)
-    {   // Took enough damage to die.  So feign death before transforming.
+void(entity inflictor, entity attacker, float damage) darklord_pain = {
+    if (self.max_health - self.health >= 1000) {
+		// Took enough damage to die.  So feign death before transforming.
         local   vector  st;
 
         // Become immune to damage and reset health.
@@ -1976,17 +1430,17 @@ void(entity attacker, float damage) darklord_pain =
         self.health = self.max_health - 1000;
 
         // Reset some things.
-        self.th_stand   =
-        self.th_walk    =
+        self.th_stand   = SUB_Null;
+        self.th_walk    = SUB_Null;
         self.th_run     = darklord_thebeast;
-        self.th_melee   =
-        self.th_missile =
-        self.th_pain    = SUB_Null;
+        self.th_melee   = SUB_Null;
+        self.th_missile = SUB_Null;
+        self.th_pain    = SUB_Null_pain;
 
         SUB_RemovePowerups ();
 
         // Fake death.
-        sound (self, CHAN_VOICE, "darklord/death.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "drake/darklord/death.wav", 1, ATTN_NORM);
     
         makevectors (self.angles);
         st = '-2 0 28';
@@ -1998,7 +1452,7 @@ void(entity attacker, float damage) darklord_pain =
     }
 
 // Proceed as usual.
-    hknight_pain (attacker, damage);
+    hknight_pain (inflictor, attacker, damage);
 };
 
 //============================================================================
@@ -2006,7 +1460,7 @@ void(entity attacker, float damage) darklord_pain =
 // Note:  The dark lord's helmet explodes when destroyed.
 void() darklord_die1  =[ $decap1,  darklord_die2  ] {ai_forward(10);};
 void() darklord_die2  =[ $decap2,  darklord_die3  ] {ai_forward(8);};
-void() darklord_die3  =[ $decap3,  darklord_die4  ] {monster_drop(); ai_forward(7);};
+void() darklord_die3  =[ $decap3,  darklord_die4  ] {ai_forward(7);};
 void() darklord_die4  =[ $decap4,  darklord_die5  ] {};
 void() darklord_die5  =[ $decap5,  darklord_die6  ] {};
 void() darklord_die6  =[ $decap6,  darklord_die7  ] {};
@@ -2015,20 +1469,19 @@ void() darklord_die8  =[ $decap8,  darklord_die9  ] {ai_forward(10);};
 void() darklord_die9  =[ $decap9,  darklord_die10 ] {ai_forward(11);};
 void() darklord_die10 =[ $decap10, darklord_die11 ] {};
 void() darklord_die11 =[ $decap11, darklord_die12 ] {};
-void() darklord_die12 =[ $decap12, monster_end   ] {};
+void() darklord_die12 =[ $decap12, darklord_die12 ] {};
 
 void() darklord_dieb1 =[ $decapb1, darklord_dieb2 ] {};
 void() darklord_dieb2 =[ $decapb2, darklord_dieb3 ] {};
-void() darklord_dieb3 =[ $decapb3, darklord_dieb4 ] {monster_drop();};
+void() darklord_dieb3 =[ $decapb3, darklord_dieb4 ] {};
 void() darklord_dieb4 =[ $decapb4, darklord_dieb5 ] {};
 void() darklord_dieb5 =[ $decapb5, darklord_dieb6 ] {};
 void() darklord_dieb6 =[ $decapb6, darklord_dieb7 ] {};
 void() darklord_dieb7 =[ $decapb7, darklord_dieb8 ] {};
 void() darklord_dieb8 =[ $decapb8, darklord_dieb9 ] {};
-void() darklord_dieb9 =[ $decapb9, monster_end   ] {};
+void() darklord_dieb9 =[ $decapb9, darklord_dieb9   ] {};
 
-void() darklord_die =
-{
+void() darklord_die = {
 // check for gib
 //    if (Shattered ())
 //        return;
@@ -2036,7 +1489,7 @@ void() darklord_die =
 // regular death
     local   vector  st;
 
-    sound (self, CHAN_VOICE, "darklord/death.wav", 1, ATTN_NORM);
+    sound (self, CHAN_VOICE, "drake/darklord/death.wav", 1, ATTN_NORM);
 
     if (random() > 0.5)
         {st = '-2 0 28'; darklord_die1 ();}
@@ -2050,37 +1503,11 @@ void() darklord_die =
 void(float hello) darklord_sight =
 {
     if (hello)
-        sound (self, CHAN_VOICE, "darklord/idle1.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "drake/darklord/idle1.wav", 1, ATTN_NORM);
     else
-        sound (self, CHAN_VOICE, "darklord/sight.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "drake/darklord/sight.wav", 1, ATTN_NORM);
 };
 
-void() dark_lord_cache =
-{
-// Bane - - - - - -
-    precache_model ("progs/hknight.mdl");
-    precache_model ("progs/drake/r_bolt.mdl");
-    // The dark lord's head explodes when killed, so no head gib needed.
-
-    precache_sound ("bane/hit.wav");
-    precache_sound ("darklord/death.wav");
-    precache_sound ("darklord/idle1.wav");
-    precache_sound ("darklord/pain.wav");
-    precache_sound ("darklord/sight.wav");
-    precache_sound ("darklord/death.wav");
-    precache_sound ("knight/sword1.wav");
-    precache_sound ("knight/sword2.wav");
-    precache_sound ("hipweap/mjolhit.wav");
-    precache_sound ("items/protect.wav");   // Powerup sound
-    precache_sound ("plasma/explode.wav");
-    precache_sound ("plasma/fire.wav");
-    precache_sound ("weapons/axhit.wav");
-    precache_sound ("skullwiz/gate.wav");   // For wrath summoning.
-//- - - - - - - - -
-};
-
-// FIXME:  Where do I put this aside from here?
-void() dragon_doe_cache;
 
 //============
 // --> QUAKED monster_dark_lord (1 0 0) (-16 -16 -24) (16 16 40) Ambush Guardian Beast
@@ -2088,21 +1515,10 @@ void() dragon_doe_cache;
 // Beast version has 4000+ hp and morphs into a dragon when damaged enough.
 // The boss flags can stack!
 //============
-void() monster_dark_lord =
-{
+void() monster_dark_lord = {
     local   float   hp;
 
-// FIXME:  Test -- good to go?  Remove?
-//self.spawnflags = self.spawnflags | 4;
-    if (!self.spawned)
-    {
-        if (noenemies)
-            {remove (self); return;}
-        dark_lord_cache ();
-        wrath_cache ();
-        if (self.spawnflags & 4)
-            dragon_doe_cache ();
-    }
+	if (deathmatch) { remove(self); return; }
 
     if (self.spawnflags & 4) {
         hp = 4000 + (500 * cvar("skill"));
@@ -2112,47 +1528,153 @@ void() monster_dark_lord =
         hp = 1000;
 	}
 
-    self.skin       = SKIN_DARK_LORD;
-    monster_form ("progs/hknight.mdl", '-16 -16 -24', '16 16 40', hp, 0);
-    self.mass       = MASS_MEDIUM;
+	self.mdl = "progs/ad171/mon_hknight.mdl";			// Original ID Knight + extra skins
+	self.headmdl = "progs/h_hellkn.mdl";
+    precache_model ("progs/ad171/mon_hknight.mdl");
+    precache_model ("progs/drake/k_ball.mdl");    // Bane fireball.
+    precache_model ("progs/h_hellkn.mdl");
+	precache_model ("progs/drake/s_wave.spr");
 
-    // Takes reduced damage from lightning and cold.
-    self.resist_cold = 0.5;
+    precache_sound ("ambience/thunder1.wav");
+    precache_sound ("ambience/thunder2.wav");
+    precache_sound ("drake/bane/death.wav");
+    precache_sound ("drake/bane/growl.wav");
+    precache_sound ("drake/bane/laugh.wav");
+    precache_sound ("drake/bane/pain.wav");
+    precache_sound ("drake/bane/sight.wav");
+    precache_sound ("drake/bane/thunder.wav");
+    precache_sound ("hknight/slash1.wav");
+    precache_sound ("knight/sword1.wav");
+    precache_sound ("knight/sword2.wav");
+    precache_sound ("drake/hipweap/mjolhit.wav");
+    precache_sound ("drake/misc/dsslop.wav");
+    precache_sound ("weapons/axhit.wav");
+	precache_sound ("drake/archer/sight2.wav");
 
-    self.th_stand   = hknight_stand1;
-    self.th_walk    = hknight_walk1;
-    self.th_run     = darklord_run1;    //hknight_run1;
-    self.th_missile = darklord_magic;   //lord_magic;
-    self.th_melee   = darklord_melee;   //hknight_melee;
-    if (self.spawnflags & 4)
-        self.th_pain    = darklord_pain;    // Checks for stage change.
-    else
-        self.th_pain    = hknight_pain;
-    self.th_die     = darklord_die;
-    //- - - - - - - -
-//    self.th_jump    = hknight_jump1;
-    self.th_sight   = darklord_sight;
-    self.th_spawn   = monster_dark_lord;
-    self.th_check   = BaneCheckAttack;
-    // As a wraith bound in armor, it cannot be gibbed.
+    precache_model ("progs/drake/r_bolt.mdl");
+    // The dark lord's head explodes when killed, so no head gib needed.
+    precache_sound ("drake/bane/hit.wav");
+    precache_sound ("drake/darklord/death.wav");
+    precache_sound ("drake/darklord/idle1.wav");
+    precache_sound ("drake/darklord/pain.wav");
+    precache_sound ("drake/darklord/sight.wav");
+    precache_sound ("drake/darklord/death.wav");
+    precache_sound ("items/protect.wav");   // Powerup sound
+    precache_sound ("drake/plasma/explode.wav");
+    precache_sound ("drake/plasma/fire.wav");
+    precache_sound ("drake/skullwiz/gate.wav");   // For wrath summoning.
 
-    self.bloodtype  = 0 - BLOOD_DARK;   // Less blood and no gibs.
+	self.gib1mdl = "progs/ad171/w_hknightsword.mdl";	// Unique sword
+	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
+	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot
+	
+	precache_model (self.mdl);
+	precache_model (self.headmdl);
+	precache_model (MODEL_PROJ_HKN);
+	precache_model (self.gib1mdl);
+	precache_model (self.gib2mdl);
+	precache_model (self.gib3mdl);
 
-    self.family     = FAM_BANE | FAM_UNDEAD;
+	self.gib1sound = GIB_IMPACT_METALA;
+	if (random() < 0.5) self.gib2mdl = string_null;
+	if (random() < 0.5) self.gib3mdl = string_null;
+
+	precache_sound ("hknight/attack1.wav");
+	precache_sound ("knight/sword2.wav");
+	precache_sound ("hknight/hit.wav");	
+			
+	self.idle_sound = "drake/darklord/idle1.wav";
+	precache_sound (self.idle_sound);
+
+	self.pain_sound = "drake/darklord/pain.wav";
+	self.death_sound = "drake/darklord/death.wav";
+	self.sight_sound = "drake/darklord/sight.wav";
+
+	precache_sound (self.pain_sound);
+	precache_sound (self.death_sound);
+	precache_sound (self.sight_sound);
+
+	// New sword sweep/slash sounds
+	precache_sound ("weapons/sword1a.wav");
+	precache_sound ("weapons/sword1b.wav");
+	precache_sound ("weapons/sword2a.wav");
+	precache_sound ("weapons/sword2b.wav");
+
+    precache_model ("progs/drake/dragon.mdl");
+    precache_model ("progs/drake/drggib01.mdl");
+    precache_model ("progs/drake/drggib02.mdl");
+    precache_model ("progs/drake/drggib03.mdl");
+    precache_model ("progs/drake/plasma.mdl");
+    
+    precache_sound ("drake/dragon/see.wav");
+    precache_sound ("drake/dragon/active.wav");
+    precache_sound ("drake/dragon/attack1.wav");
+    precache_sound ("drake/dragon/fly1.wav");
+    precache_sound ("drake/dragon/flywater.wav");
+    precache_sound ("drake/dragon/pain.wav");
+    precache_sound ("drake/dragon/death.wav");
+	precache_sound ("drake/dragon/fire.wav");
+    precache_sound ("shambler/smack.wav");
+	
+    self.mass = MASS_MEDIUM;
+    self.skin = SKIN_DARK_LORD;
+	self.solid = SOLID_NOT;				// No interaction with world
+	self.movetype = MOVETYPE_NONE;		// Static item, no movement
+	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
+	if (self.health < 1) self.health = hp; // 1000, unless beast then 4000 + (skill * 500)
+	self.gibhealth = MON_NEVERGIB;		// Cannot be gibbed by weapons
+	self.gibbed = FALSE;
+	self.pain_flinch = 120;
+	self.pain_timeout = 5;
+	self.steptype = FS_TYPEHEAVY;
+	self.meleeattack = rint(random()*3);	// randomize last melee attack
+	self.th_die = hknight_die;				// Face meets floor
+
+    if (cvar("skill") < 1) {
+        self.waitmin = self.waitmax = -1;   // No clones or rage on Easy.
+    } else if (cvar("skill") < 2) {
+        self.waitmin = floor(self.health / 4);   // Clones with 500 health.
+        self.waitmax = floor(self.health / 2);   // Rage at half hp.
+    } else {
+        self.waitmax = self.health / 3;
+        self.waitmin = floor(self.waitmax);      // Clones with 666 health.
+        self.waitmax = floor(self.waitmax * 2);  // Rage at 66% hp.
+    }
+
+	self.hittype = HIT_METAL;
     self.xfl        = XFL_ARMORED;
     if (self.spawnflags & 6) {
 		self.deathstring = " fell before a Guardian Dark Lord\n";
         self.xfl        = XFL_BOSS;
 	}
     self.ryuflags   = RYU_ALERT | RYU_INSANE;
-    self.hittype    = HIT_METAL;
-    if (soul_evil)
-        monster_purse (20, 1, 0.5);
+	self.pain_longanim = FALSE;
 
-	
+	self.th_stand = hknight_stand1;		// Idling on feet
+	self.th_walk = hknight_walk1;		// Walking
+	self.th_run = darklord_run1;			// Running
+	self.th_melee = darklord_melee;		// Sword attack
+	self.th_missile = darklord_magic;	// Fire spikes
+	self.th_charge = hknight_char_a1;	// Run + melee
+    if (self.spawnflags & 4)
+        self.th_pain    = darklord_pain;    // Checks for stage change.
+    else
+        self.th_pain    = hknight_pain;
+	self.th_die = darklord_die;			// Face meets floor
+    self.th_sight   = darklord_sight;
+    self.th_win     = bane_win;
+    self.th_spawn   = monster_bane;
 
-    monster_start ();
+	// Always reset Ammo Resistance to be consistent
+	self.resist_shells = self.resist_nails = 0;
+	self.resist_rockets = self.resist_cells = 0;
+
+	self.classtype = CT_MONHELLK;
+	self.classgroup = CG_DCAPTAIN;	// Rule over seargent and fury knights but lesser knights are disloyal
+	self.classmove = MON_MOVEWALK;
+
+    // if (soul_evil)
+        // monster_purse (20, 1, 0.5);
+
+	monster_start();
 };
-
-
-//===========================/  END OF FILE  /===========================//

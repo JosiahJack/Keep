@@ -42,6 +42,294 @@ $frame deathA1 deathA2 deathA3 deathA4 deathA5 deathA6 deathA7 deathA8
 // (101) Fall forward
 $frame deathB1 deathB2 deathB3 deathB4 deathB5 deathB6 deathB7 deathB8
 
+void() gaunt_run1;
+void() gaunt_side1;
+
+void(float dist) gaunt_hadj = {
+	local float hadj;
+	local vector hadjvec;
+	local float enemydistance;
+	local vector oldorg;
+	local vector reqvel;
+	local float d;
+	self.velocity = VEC_ORIGIN;
+	enemydistance = vlen(self.enemy.origin - self.origin);
+	// if (self.enemy.carrymode == LIGHTNING_RANDOM && enemydistance < 200)
+	// {
+		// dist = dist * CONTENT_EMPTY;
+	// }
+	// if (self.enemy != self.carry && self.carry != world)
+	// {
+		// gaunt_reset();
+	// }
+	// if (self.carry.health <= MSG_BROADCAST && self.carry != world)
+	// {
+		// gaunt_reset();
+	// }
+	self.origin2 = self.origin;
+	oldorg = self.origin;
+	self.movetype = MOVETYPE_STEP;
+	ai_run(dist);
+	d = vlen(self.origin - oldorg);
+	hadj = self.origin_z - self.origin2_z;
+	if (visible(self.enemy))
+	{
+		hadj = hadj * self.vsightmultiplier;
+	}
+	else
+	{
+		hadj = hadj * self.vmultiplier;
+	}
+	hadjvec_z = hadj;
+	setorigin(self, self.origin + hadjvec);
+	self.velocity = VEC_ORIGIN;
+	if (d <= dist + 5)
+	{
+		self.movetype = MOVETYPE_FLY;
+		reqvel = normalize(self.origin - oldorg) * dist * TE_WIZSPIKE;
+		setorigin(self, oldorg);
+		self.velocity = reqvel;
+	}
+};
+
+void() GauntCheckAttackQuoth = {
+	local vector spot1;
+	local vector spot2;
+	local entity targ;
+	local float chance;
+	if (time < self.attack_finished) return 0;
+	if (!enemy_vis) return 0;
+
+	if (enemy_range == RANGE_FAR) {
+		if (self.attack_state != AS_STRAIGHT) {
+			self.attack_state = AS_STRAIGHT;
+			gaunt_run1();
+		}
+		return;
+	}
+	targ = self.enemy;
+	spot1 = self.origin + self.view_ofs;
+	spot2 = targ.origin + targ.view_ofs;
+	traceline(spot1, spot2, 0, self);
+	if (trace_ent != targ) {
+		if (self.attack_state != AS_STRAIGHT) {
+			self.attack_state = AS_STRAIGHT;
+			gaunt_run1();
+		}
+		return;
+	}
+	if (enemy_range == RANGE_MELEE) {
+		chance = 0.9;
+	} else {
+		if (enemy_range == RANGE_NEAR) {
+			chance = 0.3;
+		} else {
+			if (enemy_range == RANGE_MID) {
+				chance = 0.05;
+			} else {
+				chance = MSG_BROADCAST;
+			}
+		}
+	}
+	if (random() < chance) {
+		self.attack_state = AS_MISSILE;
+		return;
+	}
+	if (enemy_range > RANGE_NEAR) {
+		if (self.attack_state != AS_STRAIGHT) {
+			self.attack_state = AS_STRAIGHT;
+			gaunt_run1();
+		}
+	} else {
+		if (self.attack_state != AS_SLIDING) {
+			self.attack_state = AS_SLIDING;
+			gaunt_side1();
+		}
+	}
+};
+
+void() GauntAttackFinished = 
+{
+	if (enemy_range >= RANGE_MID || !enemy_vis)
+	{
+		self.attack_state = AS_STRAIGHT;
+		self.think = gaunt_run1;
+	}
+	else
+	{
+		self.attack_state = AS_SLIDING;
+		self.think = gaunt_side1;
+	}
+};
+
+void() gaunt_strafe = {
+	local float ofs;
+	local float hadj;
+	local vector hadjvec;
+	local vector oldorg;
+	local vector reqvel;
+	self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
+	ChangeYaw();
+	if (self.lefty == 1) {
+		ofs = 90;
+	} else {
+		ofs = -90;
+	}
+	self.origin2 = self.origin;
+	oldorg = self.origin;
+	walkmove(self.ideal_yaw - ofs, 8 * self.multiplier);
+	hadj = self.origin_z - self.origin2_z;
+	if (visible(self.enemy)) {
+		hadj = hadj * self.vsightmultiplier;
+	} else {
+		hadj = hadj * self.vmultiplier;
+	}
+	hadjvec_z = hadj;
+	setorigin(self, self.origin + hadjvec);
+	if (self.lip == 0) {
+		self.movetype = MOVETYPE_FLY;
+		reqvel = normalize(self.origin - oldorg) * SECRET_NO_SHOOT * TE_WIZSPIKE;
+		setorigin(self, oldorg);
+		self.velocity = reqvel;
+	}
+	if (self.lip == 1) self.lip = 0;
+};
+
+void(vector p1, vector p2, entity from, float damage) GauntLightningDamage = 
+{
+	local entity e1;
+	local entity e2;
+	local vector f;
+	f = p2 - p1;
+	normalize(f);
+	f_x = MSG_BROADCAST - f_y;
+	f_y = f_x;
+	f_z = MSG_BROADCAST;
+	f = f * 16;
+	e2 = world;
+	e1 = world;
+	traceline(p1, p2, 0, self);
+	if (trace_ent.classname != "player")
+	{
+		damage = 25;
+	}
+	if (trace_ent.takedamage)
+	{
+		particle(trace_endpos, '0 0 100', 225, damage * SECRET_1ST_DOWN);
+		T_Damage(trace_ent, from, from, damage, DAMARMOR);
+		if (self.classname == "player")
+		{
+			if (other.classname == "player")
+			{
+				trace_ent.velocity_z = trace_ent.velocity_z + 400;
+			}
+		}
+	}
+	e1 = trace_ent;
+	traceline(p1 + f, p2 + f, 0, self);
+	if (trace_ent != e1 && trace_ent.takedamage)
+	{
+		particle(trace_endpos, '0 0 100', 225, damage * SECRET_1ST_DOWN);
+		T_Damage(trace_ent, from, from, damage, DAMARMOR);
+	}
+	e2 = trace_ent;
+	traceline(p1 - f, p2 - f, 0, self);
+	if (trace_ent != e1 && trace_ent != e2 && trace_ent.takedamage)
+	{
+		particle(trace_endpos, '0 0 100', 225, damage * SECRET_1ST_DOWN);
+		T_Damage(trace_ent, from, from, damage, DAMARMOR);
+	}
+};
+
+void(float offset) gaunt_lightning = {
+	local vector org;
+	local vector vec;
+	local vector dir;
+	local float damage;
+	local float hadj;
+	local vector hadjvec;
+	local float ofs;
+	local vector oldorg;
+	local vector reqvel;
+	self.effects = self.effects | EF_MUZZLEFLASH;
+	self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
+	ChangeYaw();
+	if (self.lefty == LIGHTNING_RANDOM)
+	{
+		ofs = 90;
+	}
+	else
+	{
+		ofs = -90;
+	}
+	self.origin2 = self.origin;
+	oldorg = self.origin;
+	walkmove(self.ideal_yaw - ofs, SECRET_NO_SHOOT * self.multiplier);
+	hadj = self.origin_z - self.origin2_z;
+	if (visible(self.enemy))
+	{
+		hadj = hadj * self.vsightmultiplier;
+	}
+	else
+	{
+		hadj = hadj * self.vmultiplier;
+	}
+	hadjvec_z = hadj;
+	setorigin(self, self.origin + hadjvec);
+	if (self.lip == MSG_BROADCAST)
+	{
+		self.movetype = MOVETYPE_FLY;
+		reqvel = normalize(self.origin - oldorg) * SECRET_NO_SHOOT * TE_WIZSPIKE;
+		setorigin(self, oldorg);
+		self.velocity = reqvel;
+	}
+	if (self.lip == LIGHTNING_RANDOM)
+	{
+		self.lip = MSG_BROADCAST;
+	}
+	if (self.enemy.classname == "player")
+	{
+		vec = self.enemy.origin - self.enemy.velocity * 0.085;
+	}
+	else
+	{
+		vec = self.enemy.origin - self.enemy.velocity * MSG_BROADCAST;
+	}
+	vec = normalize(vec - self.origin);
+	if (vlen(self.enemy.origin - self.origin) > 1200)
+	{
+		vec = self.origin + vec * 1100;
+	}
+	else
+	{
+		vec = self.origin + vec * (vlen(self.enemy.origin - self.origin) + 20);
+	}
+	org = self.origin;
+	traceline(org, vec, 1, self);
+	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte(MSG_BROADCAST, TE_LIGHTNING2);
+	WriteEntity(MSG_BROADCAST, self);
+	WriteCoord(MSG_BROADCAST, org_x);
+	WriteCoord(MSG_BROADCAST, org_y);
+	WriteCoord(MSG_BROADCAST, org_z);
+	WriteCoord(MSG_BROADCAST, trace_endpos_x);
+	WriteCoord(MSG_BROADCAST, trace_endpos_y);
+	WriteCoord(MSG_BROADCAST, trace_endpos_z);
+	damage = (50 / (vlen(self.enemy.origin - trace_endpos) * 0.25) + LIGHTNING_RANDOM) * 0.75;
+	if (self.enemy.carrymode == LIGHTNING_RANDOM)
+	{
+		damage = damage * 0.5;
+	}
+	GauntLightningDamage(self.origin, trace_endpos, self, damage);
+	if (self.enemy.health <= MSG_BROADCAST && vlen(self.enemy.origin - self.origin) <= 600)
+	{
+		self.enemy.velocity = self.enemy.velocity + '0 0 10';
+		dir = self.enemy.origin - (self.absmin + self.absmax) * 0.5;
+		dir = normalize(dir);
+		self.enemy.velocity = self.enemy.velocity + dir * 50;
+	}
+};
+
 void() gauntwings =
 { sound(self, CHAN_ITEM, "gaunt/wings1.wav", 1, ATTN_IDLE); };
 void() gaunt_elecfinish;
@@ -120,11 +408,75 @@ void() gaunt_run18 = [ $hover18, gaunt_run19 ] {ai_run(8);};
 void() gaunt_run19 = [ $hover19, gaunt_run20 ] {ai_run(8);};
 void() gaunt_run20 = [ $hover20, gaunt_run1 ] {ai_run(8);};
 
+void() gaunt_side1 = [24, gaunt_side2] { gaunt_hadj(2 * self.multiplier); monster_idle_sound();};
+void() gaunt_side2 = [25, gaunt_side3] {gaunt_hadj(2 * self.multiplier);};
+void() gaunt_side3 = [26, gaunt_side4] {gaunt_hadj(3 * self.multiplier);};
+void() gaunt_side4 = [27, gaunt_side5] {gaunt_hadj(3 * self.multiplier);};
+void() gaunt_side5 = [28, gaunt_side6] {gaunt_hadj(4 * self.multiplier);};
+void() gaunt_side6 = [29, gaunt_side7] {gaunt_hadj(5 * self.multiplier);};
+void() gaunt_side7 = [30, gaunt_side8] {gaunt_hadj(6 * self.multiplier);};
+void() gaunt_side8 = [31, gaunt_side9] {gaunt_hadj(8 * self.multiplier);};
+void() gaunt_side9 = [32, gaunt_side10] {gaunt_hadj(10 * self.multiplier);};
+void() gaunt_side10 = [33, gaunt_side11] {gaunt_hadj(12 * self.multiplier);};
+void() gaunt_side11 = [34, gaunt_side12] {gaunt_hadj(2 * self.multiplier);};
+void() gaunt_side12 = [35, gaunt_side13] {gaunt_hadj(2 * self.multiplier);};
+void() gaunt_side13 = [36, gaunt_side14] {gaunt_hadj(3 * self.multiplier);};
+void() gaunt_side14 = [37, gaunt_side15] {gaunt_hadj(3 * self.multiplier);};
+void() gaunt_side15 = [38, gaunt_side16] {gaunt_hadj(4 * self.multiplier);};
+void() gaunt_side16 = [39, gaunt_side17] {gaunt_hadj(5 * self.multiplier);};
+void() gaunt_side17 = [40, gaunt_side18] {gaunt_hadj(6 * self.multiplier);};
+void() gaunt_side18 = [41, gaunt_side19] {gaunt_hadj(8 * self.multiplier);};
+void() gaunt_side19 = [42, gaunt_side20] {gaunt_hadj(10 * self.multiplier);};
+void() gaunt_side20 = [43, gaunt_side1] {gaunt_hadj(12 * self.multiplier);};
+
+void(float fxframe) gaunt_lightning_fx = {
+	self.effects = self.effects | EF_MUZZLEFLASH;
+	self.owner.frame = fxframe;
+	setorigin(self.owner, self.origin - VEC_ORIGIN);
+	self.owner.angles = self.angles;
+};
+
+void() gaunt_fast1 = [44, gaunt_fast2] {
+	local entity o;
+	if (random() < 0.5) {
+		self.lefty = 1;
+	} else {
+		self.lefty = 0;
+	}
+	gaunt_strafe();
+	self.effects = self.effects | EF_MUZZLEFLASH;
+	self.owner = spawn();
+	o = self.owner;
+	setmodel(o, "progs/quoth2pt2full/g_fx.mdl");
+	setorigin(o, self.origin - VEC_ORIGIN);
+	o.angles = self.angles;
+	o.nextthink = time + 1;
+	o.think = SUB_Remove;
+};
+void() gaunt_fast2 = [45, gaunt_fast3] {gaunt_strafe(); gaunt_lightning_fx(1);};
+void() gaunt_fast3 = [46, gaunt_fast4] {gaunt_strafe(); gaunt_lightning_fx(2);};
+void() gaunt_fast4 = [47, gaunt_fast5] {gaunt_strafe(); gaunt_lightning_fx(3);};
+void() gaunt_fast5 = [48, gaunt_fast6] {gaunt_strafe(); gaunt_lightning_fx(4);};
+void() gaunt_fast6 = [49, gaunt_fast7] {gaunt_strafe(); gaunt_lightning_fx(5);};
+void() gaunt_fast7 = [50, gaunt_fast8] {gaunt_strafe(); gaunt_lightning_fx(6);};
+void() gaunt_fast8 = [51, gaunt_fast9] {gaunt_strafe(); gaunt_lightning_fx(7);};
+void() gaunt_fast9 = [52, gaunt_fast10] {gaunt_strafe(); gaunt_lightning_fx(8);};
+void() gaunt_fast10 = [53, gaunt_fast11] {gaunt_strafe(); gaunt_lightning_fx(9);};
+void() gaunt_fast11 = [54, gaunt_fast12] {sound(self, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM); gaunt_lightning(1); remove(self.owner);};
+void() gaunt_fast12 = [55, gaunt_fast13] {gaunt_lightning(0);};
+void() gaunt_fast13 = [56, gaunt_fast14] {gaunt_lightning(1);};
+void() gaunt_fast14 = [57, gaunt_fast15] {gaunt_lightning(0);};
+void() gaunt_fast15 = [58, gaunt_fast16] {gaunt_lightning(1);};
+void() gaunt_fast16 = [59, gaunt_fast17] {};
+void() gaunt_fast17 = [60, gaunt_fast18] {};
+void() gaunt_fast18 = [61, gaunt_fast19] {};
+void() gaunt_fast19 = [62, gaunt_fast20] {};
+void() gaunt_fast20 = [63, gaunt_run1] {ai_face(); self.attack_state = AS_STRAIGHT;};
+
 //============================================================================
 // RANGE - Plasma from arc infront
 //============================================================================
-void() gaunt_plasma =
-{
+void() gaunt_plasma = {
 	local vector org, dir;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
@@ -139,15 +491,13 @@ void() gaunt_plasma =
 };
 
 //----------------------------------------------------------------------
-void() gaunt_elecfinish =
-{
+void() gaunt_elecfinish = {
 	setmodel(self.attachment, "");
 	self.attachment.state = STATE_OFF;
 };
 
 //----------------------------------------------------------------------
-void(float elecframe) gaunt_elecupdate =
-{
+void(float elecframe) gaunt_elecupdate = {
 	if (self.health < 1) return;
 	if (!self.attachment) {
 		self.attachment = spawn();
@@ -359,6 +709,95 @@ void() gaunt_die =
 	}
 };
 
+float(entity targ, entity viewpoint) visiblegaunt = {
+	local vector spot1;
+	local vector spot2;
+	spot1 = viewpoint.origin + self.view_ofs;
+	spot2 = targ.origin + targ.view_ofs;
+	traceline(spot1, spot2, 1, self);
+	if (trace_inopen && trace_inwater) return 0;
+	if (trace_fraction == LIGHTNING_RANDOM) return 1;
+
+	return 0;
+};
+
+float() gaunt_checkswoop = {
+	local entity head;
+	local float m;
+	head = findradius(self.origin, 10000);
+	while (head) {
+		if (head.classname == "gaunt_corner" && head.targetname == self.pathtarget) {
+			m = vlen(self.enemy.origin - head.origin);
+			if (m > 500 && visible2(head, self.enemy))
+			{
+				return 1;
+			}
+			if (m <= 500 && !visiblegaunt(head, self.enemy))
+			{
+				return 1;
+			}
+		}
+		head = head.chain;
+	}
+	return 0;
+};
+
+void() gaunt_flyswoop = {
+	self.velocity = self.goalentity.origin - self.origin + '0 0 32';
+	self.velocity = normalize(self.velocity);
+	self.velocity = self.velocity * 600;
+	self.angles = vectoangles(self.velocity);
+};
+
+void() gaunt_charge1 = [72, gaunt_charge2] {};
+void() gaunt_charge2 = [73, gaunt_charge3] {gaunt_flyswoop();};
+void() gaunt_charge3 = [74, gaunt_charge4] {gaunt_flyswoop();};
+void() gaunt_charge4 = [75, gaunt_charge5] {gaunt_flyswoop();};
+void() gaunt_charge5 = [76, gaunt_charge2] {gaunt_flyswoop();};
+
+void(float thespeed) gaunt_flyup = {self.movetype = MOVETYPE_FLYMISSILE; self.velocity_z = thespeed; };
+
+void() gaunt_precharge1 = [64, gaunt_precharge2] {gaunt_flyup(SVC_INTERMISSION); self.pain_finished = time + SECRET_1ST_DOWN;};
+void() gaunt_precharge2 = [65, gaunt_precharge3] {gaunt_flyup(40);};
+void() gaunt_precharge3 = [66, gaunt_precharge4] {gaunt_flyup(50);};
+void() gaunt_precharge4 = [67, gaunt_precharge5] {gaunt_flyup(60);};
+void() gaunt_precharge5 = [68, gaunt_precharge6] {gaunt_flyup(80); };
+void() gaunt_precharge6 = [69, gaunt_precharge7] {gaunt_flyup(100);};
+void() gaunt_precharge7 = [70, gaunt_precharge8] {gaunt_flyup(120);};
+void() gaunt_precharge8 = [71, gaunt_charge1] {
+	gaunt_flyup(150);
+	self.movetype = MOVETYPE_FLYMISSILE;
+	makevectors(self.angles);
+	self.flags = self.flags - (self.flags & FL_ONGROUND);
+	self.origin_z = self.origin_z + 1;
+	self.velocity = normalize(self.goalentity.origin - self.origin + '0 0 32') * 600;
+	self.angles = vectoangles(self.velocity);
+};
+
+// Quoth lightning attack
+void() gaunt_Missile = {
+	self.attack_state = AS_STRAIGHT;
+	self.movetype = MOVETYPE_STEP;
+	// if (self.ltime < time && vlen(self.origin - self.enemy.origin) < 750 && self.enemy.carrymode == 0 && self.swoop != 0 && (self.enemy.flags & FL_CLIENT) && self.enemy.client_gaunt_swoop_time < time) {
+		// if (!gaunt_checkswoop) return;
+
+		// setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
+		// self.ltime = time + TE_LAVASPLASH;
+		// self.pain_finished = time + TE_WIZSPIKE;
+		// gaunt_precharge1();
+		// return;
+	// }
+	// if (self.swoop == 2) return;
+
+	//if (random() < 0.4 && self.swoop == 1 && self.enemy.carrymode == 0) {
+		//gaunt_fast1();
+	//} else {
+		//if (random() < 0.7 && self.swoop != 1 && self.enemy.carrymode == 0) gaunt_fast1();
+	//}
+	if (random() < 0.7) gaunt_fast1();
+	return;
+};
+
 /*======================================================================
 QUAKED monster_gaunt (1 0.2 0) (-16 -16 -24) (16 16 24)
 ======================================================================*/
@@ -373,6 +812,7 @@ void() monster_gaunt =
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
 	precache_model (self.weaponglow);		// Lightning effect
+	precache_model ("progs/quoth2pt2full/g_fx.mdl");		// Lightning effect
 	precache_model (MODEL_PROJ_GAPLASMA);	// Plasma spike/bolt
 
 	self.idle_sound = "gaunt/idle1.wav";
@@ -403,8 +843,11 @@ void() monster_gaunt =
 	self.blockudeath = TRUE;			// no humanoid death sound
 	self.height = MONAI_ABOVEDIST;		// Enemytarget distance above
 	self.attack_offset = '8 0 -4';		// Plasma start location
-
-	self.th_checkattack = GauntCheckAttack;
+	if (self.spawnflags & 2) {
+		self.th_checkattack = GauntCheckAttackQuoth;
+	} else {
+		self.th_checkattack = GauntCheckAttack;
+	}
 	self.th_pain = gaunt_pain; 
 	self.th_die = gaunt_die;
 	if ( (random () < 0.500) ) {
@@ -425,7 +868,12 @@ void() monster_gaunt =
 		self.th_stand = gaunt_idle1;
 		self.th_walk = gaunt_walk1;
 		self.th_run = gaunt_run1;
-		self.th_missile = gaunt_fire1;
+		// Check for and use Quoth lightning attack
+		if (self.spawnflags & 2) {
+			self.th_missile = gaunt_Missile;
+		} else {
+			self.th_missile = gaunt_fire1;
+		}
 	}
 
 	if(!self.classtype) self.classtype = CT_MONGAUNT;
@@ -434,7 +882,8 @@ void() monster_gaunt =
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
+	self.resist_rockets = 0;
+	self.resist_cells = 0.25;
 
 	monster_start();
 };

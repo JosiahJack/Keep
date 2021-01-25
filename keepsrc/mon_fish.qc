@@ -54,8 +54,8 @@ void() f_swim = {
 	if (self.walkframe > 17) self.walkframe = 0;
 	
 	if (self.state == FISH_STAND) ai_stand();
-	else if (self.state == FISH_WALK) ai_walk(self.move_state_y);
-	else ai_run(self.move_state_z);
+	else if (self.state == FISH_WALK) ai_fish_movement("ai_walk",self.move_state_y);
+	else ai_fish_movement("ai_run",self.move_state_z);
 };
 
 //----------------------------------------------------------------------
@@ -69,8 +69,8 @@ void() f_stand = {
 };
 	
 //----------------------------------------------------------------------
-void() f_walk1 = [ $swim1, f_swim ] { ai_walk(self.move_state_y);};
-void() f_walkS1 = [ $swimS1, f_swim ] { ai_walk(self.move_state_y);};
+void() f_walk1 = [ $swim1, f_swim ] { ai_fish_movement("ai_walk",self.move_state_y);};
+void() f_walkS1 = [ $swimS1, f_swim ] { ai_fish_movement("ai_walk",self.move_state_y);};
 
 void() f_walk = {
 	self.walkframe = 0; self.state = FISH_WALK; 
@@ -79,8 +79,8 @@ void() f_walk = {
 };
 
 //----------------------------------------------------------------------
-void() f_run1 = [ $swim1, f_swim ] { ai_run(self.move_state_z);};
-void() f_runS1 = [ $swimS1, f_swim ] { ai_run(self.move_state_z);};
+void() f_run1 = [ $swim1, f_swim ] { ai_fish_movement("ai_run",self.move_state_z);};
+void() f_runS1 = [ $swimS1, f_swim ] { ai_fish_movement("ai_run",self.move_state_z);};
 
 void() f_run = {
 	self.walkframe = 0; self.state = FISH_RUN; 
@@ -122,7 +122,7 @@ void() f_attack2 = {
 	if (self.walkframe > 17) self.think = self.th_run;
 	if (self.walkframe == 2 || self.walkframe == 8 || self.walkframe == 14) 
 		fish_melee();
-	else ai_charge(self.move_state_y);
+	else ai_fish_movement("ai_charge",self.move_state_y);
 };
 
 //----------------------------------------------------------------------
@@ -131,7 +131,7 @@ void() f_attackS1 = [ $attackS1, f_attack2 ] {};
 
 void() f_attack = {
 	self.walkframe = 0;
-	ai_charge(self.move_state_y);
+	ai_fish_movement("ai_charge",self.move_state_y);
 	if (self.spawnflags & MON_FISH_SMALL) f_attackS1();
 	else f_attack1();
 };
@@ -147,7 +147,7 @@ void() f_pain2 = {
 	else self.frame = $pain1 + self.walkframe;
 	
 	if (self.walkframe > 8) self.think = self.th_run;
-	if (self.walkframe > 1) ai_pain(self.move_state_y/2);	
+	if (self.walkframe > 1) ai_fish_movement("ai_pain",self.move_state_y/2);	
 };
 
 void() f_pain1 = [ $pain1, f_pain2 ] {};

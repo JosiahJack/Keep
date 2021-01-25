@@ -92,6 +92,7 @@ void (vector st) mummyFireGrenade = {
 
    sound (self,CHAN_WEAPON,"zombie/z_shot1.wav",TRUE,ATTN_NORM);
    missile = spawn ();
+	missile.classgroup = CG_PROJALL;
    missile.owner = self;
    missile.movetype = MOVETYPE_BOUNCE;
    missile.solid = SOLID_BBOX;

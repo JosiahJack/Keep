@@ -699,6 +699,11 @@ void() monster_ThrowGib =
 		ThrowGib(4, 2 + rint(random()*4));
 		ThrowGib(5, 2 + rint(random()*4));
 	}
+	else if (self.classtype == 	CT_MONHYDRA) {
+		ThrowGib(25,1); // headmdl
+		ThrowGib(11,5); // gib1mdl, lots of tentacles
+		ThrowGib(4, 1);
+	}
 	// Default humanoid explosion
 	else {
 		if (random()<0.5) ThrowGib(2, 2);
@@ -922,6 +927,8 @@ void(vector org, string gibname, vector vel, vector spin, float gibskin,
         new.touch       = Gib_Touch;
     }
     new.xf2         = XF2_QUAKE;
+	new.classtype = CT_TEMPGIB;
+	new.classgroup = CG_TEMPENT;
     new.volume      = 0;
     new.avelocity   = spin;
     new.think       = SUB_Remove;

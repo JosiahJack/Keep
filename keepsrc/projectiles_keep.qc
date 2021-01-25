@@ -121,6 +121,7 @@ void (vector org, vector vec, float light) HIP_LaunchLaser = {
 	}
    vec = normalize (vec);
    newmis = spawn ();
+	newmis.classgroup = CG_PROJALL;
    newmis.owner = self;
    newmis.classname = "hiplaser";
    newmis.lastvictim = self;
@@ -511,6 +512,7 @@ void () superlavaspike_touch = {
 
 void (vector org, vector dir) launch_lava_spike = {
    newmis = spawn ();
+	newmis.classgroup = CG_PROJNAILS;
    newmis.owner = self;
    newmis.movetype = MOVETYPE_FLYMISSILE;
    newmis.solid = SOLID_BBOX;
@@ -548,6 +550,7 @@ void (float offsetAngle) MiniGrenadeLaunch = {
    local float tempRand;
 
    missile = spawn ();
+	missile.classgroup = CG_PROJGRENADES;
    missile.owner = self.owner;
    missile.movetype = MOVETYPE_BOUNCE;
    missile.solid = SOLID_BBOX;
@@ -682,6 +685,7 @@ void (float offset, float frameNum) MultiRocketLaunch = {
 
    missile = spawn ();
    missile.owner = self;
+	missile.classgroup = CG_PROJROCKETS;
    missile.movetype = MOVETYPE_FLYMISSILE;
    missile.solid = SOLID_BBOX;
    missile.classname = "MultiRocket";
@@ -882,6 +886,7 @@ void () FireBallVerticalLaunch = {
    local float tempRand;
 
    missile = spawn ();
+	missile.classgroup = CG_PROJALL;
    missile.owner = self.owner;
    missile.movetype = MOVETYPE_BOUNCE;
    missile.solid = SOLID_BBOX;
@@ -912,6 +917,7 @@ void (float offsetAngle) FireBallSpurtLaunch = {
    local float tempRand;
 
    missile = spawn ();
+	missile.classgroup = CG_PROJALL;
    missile.owner = self.owner;
    missile.movetype = MOVETYPE_FLYMISSILE;
    missile.solid = SOLID_BBOX;
@@ -942,6 +948,7 @@ void (float offsetAngle) MiniFireBallLaunch = {
    local float tempRand;
 
    missile = spawn ();
+	missile.classgroup = CG_PROJALL;
    missile.owner = self.owner;
    missile.movetype = MOVETYPE_BOUNCE;
    missile.solid = SOLID_BBOX;
@@ -1019,6 +1026,7 @@ void () Fire_DragonFire = {
    sound (self,CHAN_WEAPON,"pyro/flame.wav",TRUE,ATTN_NORM);
    newmis = spawn();
    newmis.owner = self;
+	newmis.classgroup = CG_PROJALL;
    newmis.movetype = MOVETYPE_FLYMISSILE;
    newmis.classname = "Dragonfire";
    newmis.solid = SOLID_NOT;
@@ -1208,8 +1216,7 @@ void(float burstcharge) beam_water_burst=
 	} while(current);
 };
 
-void() beam_generate=
-{
+void() beam_generate = {
 	local entity beamseg;
 
 	beamseg = spawn ();
@@ -1218,8 +1225,7 @@ void() beam_generate=
 	setmodel (beamseg, "progs/custents/beam.mdl");
 	setsize (beamseg, '0 0 0', '0 0 0');
 	makevectors(self.owner.v_angle);
-	if(self.owner.flags & FL_CLIENT)
-	{
+	if(self.owner.flags & FL_CLIENT) {
 		self.owner.attack_finished = time + 0.5;
 		setorigin (beamseg, self.owner.origin + v_forward*12 + self.owner.dest2);
 		beamseg.velocity = aim(self.owner, 800) * 800;

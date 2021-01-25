@@ -363,6 +363,7 @@ void(vector p) newboss_missile =
 	}
 	vec = normalize(d - org);
 	newmis = spawn();
+	newmis.classgroup = CG_PROJALL;
 	newmis.owner = self;
 	newmis.movetype = MOVETYPE_FLYMISSILE;
 	newmis.solid = SOLID_BBOX;

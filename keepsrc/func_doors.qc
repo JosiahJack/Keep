@@ -9,7 +9,7 @@ float DOOR_SILVER_KEY = 16;		// Silver Key
 float DOOR_TOGGLE = 32;			// Need trigger to open AND close
 
 /*======================================================================
-/*QUAKED func_door (0 .5 .8) ? STARTOPEN SPAWNTRIG DONTLINK GOLD SILVER TOGGLE STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED func_door (0 .5 .8) ? STARTOPEN SPAWNTRIG DONTLINK GOLD SILVER TOGGLE STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Door (bmodel) with 2 states
 -------- KEYS --------
 targetname : = "" door automatically opens, != "" requires trigger to open
@@ -707,7 +707,7 @@ void() func_door =
 };
 
 /*======================================================================
-/*QUAKED trigger_doorstate (0.5 0 0.5) (-8 -8 -16) (8 8 16) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard
+//QUAKED trigger_doorstate (0.5 0 0.5) (-8 -8 -16) (8 8 16) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard
 Trigger func_door(s) to exact state (open/close)
 -------- KEYS --------
 targetname : trigger this entity

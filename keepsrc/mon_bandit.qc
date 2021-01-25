@@ -73,7 +73,7 @@ void() bandit_fire =
 //    else
 //        dir = Maim_Toss (org, dir, AKARROW_SPEED_TOSS, 200, world, '0 0 0');
 
-    sound (self, CHAN_WEAPON, "archer/arrowg.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "drake/archer/arrowg.wav", 1, ATTN_NORM);
     // PM:  Assumes skin is 0 or 1.  If 2+, rewrite!
     if (self.ryuflags & RYU_REBEL)
         artype = 0;     // Rebel arrows are stronger.
@@ -103,7 +103,7 @@ void() bandit_short = {
 
 // SoE:  Shoot scene modified from shooting a gun to drawing a bow.
 void() bandit_atk1  =[ $shoot1,   bandit_atk2    ] {ai_face();};
-void() bandit_atk2  =[ $shoot2,   bandit_atk3    ] {ai_face(); sound (self, CHAN_WEAPON, "archer/draw.wav", 1, ATTN_NORM);};
+void() bandit_atk2  =[ $shoot2,   bandit_atk3    ] {ai_face(); sound (self, CHAN_WEAPON, "drake/archer/draw.wav", 1, ATTN_NORM);};
 void() bandit_atk3  =[ $shoot3,   bandit_atk4    ] {ai_face();};
 void() bandit_atk4  =[ $shoot4,   bandit_atk5    ] {ai_face();};
 void() bandit_atk5  =[ $shoot5,   bandit_atk6    ] {ai_face();};
@@ -140,8 +140,7 @@ void() bandit_atk8  =[ $shoot7,   army_run1      ] {ai_face();
 //void() bandit_atk9  =[ $shoot9,   army_run1      ] {ai_face();};
 
 // PAIN - - - - - - - - - - - - - - - -
-void(entity attacker, float damage) bandit_pain =
-{
+void(entity inflictor, entity attacker, float damage) bandit_pain = {
     if (self.pain_finished > time)
         return;
 
@@ -150,7 +149,7 @@ void(entity attacker, float damage) bandit_pain =
         if (self.classname == "monster_bandit")
             sound (self, CHAN_VOICE, "soldier/pain1.wav", 1, ATTN_NORM);
         else
-            sound (self, CHAN_VOICE, "goblin/pain1.wav", 1, ATTN_NORM);
+            sound (self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
         return;         // No pain anims in Nightmare.
     }
 
@@ -170,7 +169,7 @@ void(entity attacker, float damage) bandit_pain =
         if (self.classname == "monster_bandit")
             sound (self, CHAN_VOICE, "soldier/pain1.wav", 1, ATTN_NORM);
         else
-            sound (self, CHAN_VOICE, "goblin/pain1.wav", 1, ATTN_NORM);
+            sound (self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
     }
     else if (r < p2)
     {
@@ -179,7 +178,7 @@ void(entity attacker, float damage) bandit_pain =
         if (self.classname == "monster_bandit")
             sound (self, CHAN_VOICE, "soldier/pain2.wav", 1, ATTN_NORM);
         else
-            sound (self, CHAN_VOICE, "goblin/pain1.wav", 1, ATTN_NORM);
+            sound (self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
     }
     else
     {
@@ -188,58 +187,45 @@ void(entity attacker, float damage) bandit_pain =
         if (self.classname == "monster_bandit")
             sound (self, CHAN_VOICE, "soldier/pain2.wav", 1, ATTN_NORM);
         else
-            sound (self, CHAN_VOICE, "goblin/pain2.wav", 1, ATTN_NORM);
+            sound (self, CHAN_VOICE, "drake/goblin/pain2.wav", 1, ATTN_NORM);
     }
     damage = damage;  attacker = attacker;  // FrikQcc warning squelch!
 };
 
-// DEATH - - - - - - - - - - - - - - - -
-float(float dm) bandit_gib =
-{
-    if (self.health < self.gib_health)
-    {
-        sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
-        ThrowGib ("progs/gib1.mdl", dm);
-        ThrowGib ("progs/gib2.mdl", dm);
-        ThrowGib ("progs/gib3.mdl", dm);
-        ThrowHead ("progs/drake/h_bandit.mdl", dm);
-        return TRUE;
-    }
-    return FALSE;
-};
-
 void() bandit_die = {
-    if (Shattered ())
-        return;
-    if (Decapitated ())
-    {
-        if (random() < 0.5)
-            monster_decap ('-8 0 24', army_decap1);
-        else
-            monster_decap ('-11 0 23', army_decapb1);
-        return;
-    }
-// check for gib
-    if (bandit_gib (self.health))
-        return;
+    // if (Shattered ())
+        // return;
+    // if (Decapitated ())
+    // {
+        // if (random() < 0.5)
+            // monster_decap ('-8 0 24', army_decap1);
+        // else
+            // monster_decap ('-11 0 23', army_decapb1);
+        // return;
+    // }
+
+	// Pre-check routine to tidy up extra entities
+	monster_death_precheck();
 
 	DropCoin(1);
 	DropCoin(1); // 2 coins because they are annoying
 
-// regular death
-    if (self.classname == "monster_bandit")
-        sound (self, CHAN_VOICE, "soldier/death1.wav", 1, ATTN_NORM);
-    else
-    {
-        if (random() < 0.5)
-            sound (self, CHAN_VOICE, "goblin/death1.wav", 1, ATTN_NORM);
-        else
-            sound (self, CHAN_VOICE, "goblin/death2.wav", 1, ATTN_NORM);
-    }
-    if (random() < 0.5)
-        army_die1 ();
-    else
-        army_cdie1 ();
+	// regular death
+	if (!self.gibbed) {
+		// regular death
+		if (self.classname == "monster_bandit") {
+			sound (self, CHAN_VOICE, "soldier/death1.wav", 1, ATTN_NORM);
+		} else {
+			if (random() < 0.5) {
+				sound (self, CHAN_VOICE, "drake/goblin/death1.wav", 1, ATTN_NORM);
+			} else {
+				sound (self, CHAN_VOICE, "drake/goblin/death2.wav", 1, ATTN_NORM);
+			}
+		}
+		if (random() < 0.5) army_die1 ();		// Forward
+		else army_cdie1 ();									// Backward/side
+	}
+
 };
 
 
@@ -255,9 +241,9 @@ void(float hello) bandit_sight =
         return;
     }
     if (hello)
-        sound (self, CHAN_VOICE, "goblin/idle1.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "drake/goblin/idle1.wav", 1, ATTN_NORM);
     else
-        sound (self, CHAN_VOICE, "goblin/sight1.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "drake/goblin/sight1.wav", 1, ATTN_NORM);
 };
 
 
@@ -272,34 +258,34 @@ void() monster_bandit = {
     precache_model ("progs/drake/arrow.mdl");
     precache_model (self.mdl);
     precache_model (self.headmdl);
-    precache_sound ("archer/arrow1.wav");
-    precache_sound ("archer/arrow2.wav");
-    precache_sound ("archer/arrow3.wav");
-    precache_sound ("archer/arrowbrk.wav");
-    precache_sound ("archer/arrowg.wav");
-    precache_sound ("archer/draw.wav");
+    precache_sound ("drake/archer/arrow1.wav");
+    precache_sound ("drake/archer/arrow2.wav");
+    precache_sound ("drake/archer/arrow3.wav");
+    precache_sound ("drake/archer/arrowbrk.wav");
+    precache_sound ("drake/archer/arrowg.wav");
+    precache_sound ("drake/archer/draw.wav");
     precache_sound ("soldier/death1.wav");
     precache_sound ("soldier/idle.wav");
     precache_sound ("soldier/pain1.wav");
     precache_sound ("soldier/pain2.wav");
     precache_sound ("soldier/sight1.wav");
-    precache_sound ("goblin/death1.wav");
-    precache_sound ("goblin/death2.wav");
-    precache_sound ("goblin/idle1.wav");
-    precache_sound ("goblin/idle2.wav");
-    precache_sound ("goblin/pain1.wav");
-    precache_sound ("goblin/pain2.wav");
-    precache_sound ("goblin/sight1.wav");
+    precache_sound ("drake/goblin/death1.wav");
+    precache_sound ("drake/goblin/death2.wav");
+    precache_sound ("drake/goblin/idle1.wav");
+    precache_sound ("drake/goblin/idle2.wav");
+    precache_sound ("drake/goblin/pain1.wav");
+    precache_sound ("drake/goblin/pain2.wav");
+    precache_sound ("drake/goblin/sight1.wav");
 
 	if (self.deathstring == "")  self.deathstring = " was shot by a Bandit\n";
 
 	if (self.classname == "monster_goblin") {
 		if (self.deathstring == "")  self.deathstring = " was shot by a Goblin\n";
-		self.sight_sound = "goblin/sight1.wav";
-		self.idle_sound = "goblin/idle1.wav";
-		self.idle_sound2 = "goblin/idle2.wav";
-		self.pain_sound = "goblin/pain1.wav";
-		self.pain_sound2 = "goblin/pain2.wav";
+		self.sight_sound = "drake/goblin/sight1.wav";
+		self.idle_sound = "drake/goblin/idle1.wav";
+		self.idle_sound2 = "drake/goblin/idle2.wav";
+		self.pain_sound = "drake/goblin/pain1.wav";
+		self.pain_sound2 = "drake/goblin/pain2.wav";
 	} else {
 		self.sight_sound = "soldier/sight1.wav";
 		self.idle_sound = "soldier/idle.wav";
@@ -332,8 +318,7 @@ void() monster_bandit = {
     //- - - - - - - -
     self.th_checkattack = SoldierCheckAttack;
     self.th_sight   = bandit_sight;
-    self.th_gib     = bandit_gib;
-    self.th_revive  = army_revive;
+    //self.th_revive  = army_revive;
     self.th_spawn   = monster_bandit;
 
     self.height     = 2;
@@ -343,17 +328,20 @@ void() monster_bandit = {
     //monster_purse (2, 0.2, 0);      // Bandits may drop some coins.
 	// SoE:  Modified stats for nsoe2 rebel fighters.
 
-    if (!self.skin && (self.spawnflags & SPAWN_WHITE) && !self.spawned)
-    {
-        if (self.health < 100)
-            {self.health = self.max_health = 100;}
-        self.ryuflags = RYU_ALERT | RYU_REBEL;
-		if (self.deathstring == "")  self.deathstring = " was shot by friendly fire\n";
-    }
+    // if (!self.skin && (self.spawnflags & SPAWN_WHITE) && !self.spawned)
+    // {
+        // if (self.health < 100)
+            // {self.health = self.max_health = 100;}
+        // self.ryuflags = RYU_ALERT | RYU_REBEL;
+		// if (self.deathstring == "")  self.deathstring = " was shot by friendly fire\n";
+    // }
 
+	self.classtype = CT_MONBANDIT;
+	if (self.classname == "monster_goblin") self.classtype = CT_MONRAKEGOBLIN;
+	self.classgroup = CG_KNIGHT;
+	self.classmove = MON_MOVEWALK;
 
     monster_start ();
 };
 
 void() monster_goblin = {self.skin = 1;  monster_bandit ();};
-//===========================/  END OF FILE  /===========================//

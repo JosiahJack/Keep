@@ -8,7 +8,7 @@ float SECRET_NO_SHOOT = 8;		// only opened by trigger
 float SECRET_ALWAYS_SHOOT = 16;	// shootable even if targeted
 
 /*======================================================================
-/*QUAKED func_door_secret (0 .5 .8) ? OPEN_ONCE 1ST_LEFT 1ST_DOWN NO_SHOOT ALWAYS_SHOOT x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED func_door_secret (0 .5 .8) ? OPEN_ONCE 1ST_LEFT 1ST_DOWN NO_SHOOT ALWAYS_SHOOT x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 A Door (bmodel) with 2 states and multiple stages
 -------- KEYS --------
 targetname : = "" door opens with damage, != "" requires trigger to open

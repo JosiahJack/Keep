@@ -10,8 +10,12 @@ void() ambient_sound_setup =
 	ambientsound (self.origin, self.noise, self.volume, ATTN_STATIC);
 };
 
+void() ambientsound_trigger_start = {
+	sound (self, CHAN_AUTO, self.noise, self.volume, self.distance);
+};
+
 /*============================================================================
-/*QUAKED ambient_custom_loop (0.3 0.1 0.6) (-16 -16 -8) (16 16 8) x
+//QUAKED ambient_custom_loop (0.3 0.1 0.6) (-16 -16 -8) (16 16 8) x
 Custom ambient (must be looped) sound, CANNOT toggle/switch state
 -------- KEYS --------
 volume : volume of sound (default 1, capped at 1)
@@ -32,8 +36,19 @@ void() ambient_custom_loop =
 	
 	precache_sound (self.noise);
 	if (self.volume <= 0) self.volume = 1;
-	ambient_sound_setup();
+
+	// start right away if not triggered
+	if(!self.targetname) {
+		// Need to start on the second frame since that's when entities not called in world_spawn are created
+		self.nextthink = time + 0.1;
+		self.think = ambient_sound_setup;
+	}
+	else// wait for trigger
+		self.use = ambientsound_trigger_start;
 };
+
+void() fx_ambientsound = { ambient_custom_loop(); };
+
 //----------------------------------------------------------------------
 void() ambient_comp_hum =
 {

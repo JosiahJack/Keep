@@ -38,5 +38,8 @@ float discharged;
 float NumProximityGrenades;
 float visible_distance;
 float modelindex_hammer;
+.string spawnmodel;
+.float spawnsolidtype;
+.void() spawnthink;
 
 

@@ -1089,7 +1089,7 @@ void() monster_eidolon =
 };
 
 /*======================================================================
-/*QUAKED monster_eidolon_wavetrig (0.75 0.25 1) (-32 -32 -4) (32 32 4) x
+//QUAKED monster_eidolon_wavetrig (0.75 0.25 1) (-32 -32 -4) (32 32 4) x
 Target for boss lightning wave event
 -------- KEYS --------
 targetname : name of wave event (links to noise key on boss)

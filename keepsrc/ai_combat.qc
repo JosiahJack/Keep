@@ -170,6 +170,20 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 			SpawnExplosion(EXPLODE_PLASMA_BIG, inflictor.origin+'0 0 8', SOUND_REXP3);
 		}
 	}
+
+	// FIXME:  Too messy, rewrite.
+    if (targ.xfl & XFL_BOSS) {
+        // SoE:  Bane clones.
+        if (targ.classname == attacker.classname)
+            if ((targ.classname == "monster_bane") || (targ.classname == "monster_morph"))
+                //if (Ally_Check (targ, attacker))
+                    return;     // Bane can't hurt himself and his clones.
+        // Minion immunity.
+        if (targ == attacker.master)
+            //if (Ally_Check (targ, attacker))
+                return;     // Immune to minions' attacks.
+    }
+// - - - - - - - - - - - - - - - - - - -
 	
 	//----------------------------------------------------------------------
 	// save damage based on the target's armor level

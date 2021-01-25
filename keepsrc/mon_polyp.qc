@@ -397,6 +397,7 @@ void() polyp_air = {
 	local vector vec;
 
 	missile = spawn();
+	missile.classgroup = CG_PROJALL;
 	missile.owner = self;
 	missile.movetype = MOVETYPE_FLYMISSILE;
 	missile.solid = SOLID_BBOX;
@@ -467,6 +468,7 @@ void(string gibname, float dm) throwpolypgib = {
 	local entity new;
 
 	new = spawn();
+	new.classgroup = CG_PROJALL;
 	new.origin = self.origin;
 	setmodel(new, gibname);
 	setsize(new, VEC_ORIGIN, VEC_ORIGIN);

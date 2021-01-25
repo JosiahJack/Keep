@@ -55,27 +55,27 @@ void () eel_walk1 = [ 0.000, eel_walk2 ] {
    if ( (random () < 0.200) )
       sound (self,CHAN_VOICE,"eel/eactive1.wav",TRUE,ATTN_IDLE);
 
-   ai_walk (MOVETYPE_TOSS);
+   ai_fish_movement("ai_walk",6);
    eel_pitch_change ();
 };
 void () eel_walk2 = [ 1.000, eel_walk3 ] {
-   ai_walk (MOVETYPE_TOSS);
+   ai_fish_movement("ai_walk",6);
    eel_pitch_change ();
 };
 void () eel_walk3 = [ 2.000, eel_walk4 ] {
-   ai_walk (MOVETYPE_TOSS);
+   ai_fish_movement("ai_walk",6);
    eel_pitch_change ();
 };
 void () eel_walk4 = [ 3.000, eel_walk5 ] {
-   ai_walk (MOVETYPE_TOSS);
+   ai_fish_movement("ai_walk",6);
    eel_pitch_change ();
 };
 void () eel_walk5 = [ 4.000, eel_walk6 ] {
-   ai_walk (MOVETYPE_TOSS);
+   ai_fish_movement("ai_walk",6);
    eel_pitch_change ();
 };
 void () eel_walk6 = [ 5.000, eel_walk1 ] {
-   ai_walk (MOVETYPE_TOSS);
+   ai_fish_movement("ai_walk",6);
    eel_pitch_change ();
 };
 
@@ -83,27 +83,27 @@ void () eel_run1 = [ 0.000, eel_run2 ] {
    if ( (random () < 0.400) )
       sound (self,CHAN_VOICE,"eel/eactive1.wav",TRUE,ATTN_IDLE);
 
-   ai_run (MOVETYPE_BOUNCE);
+   ai_fish_movement("ai_run",10);
    eel_pitch_change ();
 };
 void () eel_run2 = [ 1.000, eel_run3 ] {
-   ai_run (MOVETYPE_BOUNCE);
+   ai_fish_movement("ai_run",10);
    eel_pitch_change ();
 };
 void () eel_run3 = [ 2.000, eel_run4 ] {
-   ai_run (MOVETYPE_BOUNCE);
+   ai_fish_movement("ai_run",10);
    eel_pitch_change ();
 };
 void () eel_run4 = [ 3.000, eel_run5 ] {
-   ai_run (MOVETYPE_BOUNCE);
+   ai_fish_movement("ai_run",10);
    eel_pitch_change ();
 };
 void () eel_run5 = [ 4.000, eel_run6 ] {
-   ai_run (MOVETYPE_BOUNCE);
+   ai_fish_movement("ai_run",10);
    eel_pitch_change ();
 };
 void () eel_run6 = [ 5.000, eel_run1 ] {
-   ai_run (MOVETYPE_BOUNCE);
+   ai_fish_movement("ai_run",10);
    eel_pitch_change ();
 };
 
@@ -147,54 +147,54 @@ void () eel_melee = {
 };
 
 void () eel_attack1 = [ 0.000, eel_attack2 ] {
-   ai_charge (FL_CLIENT);
+   ai_fish_movement("ai_charge",8);
    eel_pitch_change ();
 };
 void () eel_attack2 = [ 1.000, eel_attack3 ] {
-   ai_charge (FL_CLIENT);
+   ai_fish_movement("ai_charge",8);
    eel_pitch_change ();
 };
 void () eel_attack3 = [ 2.000, eel_attack4 ] {
-   ai_charge (FL_CLIENT);
+   ai_fish_movement("ai_charge",8);
    eel_pitch_change ();
 };
 void () eel_attack4 = [ 3.000, eel_attack5 ] {
-   ai_charge (FL_CLIENT);
+   ai_fish_movement("ai_charge",8);
    eel_pitch_change ();
 };
 void () eel_attack5 = [ 4.000, eel_attack6 ] {
-   ai_charge (FL_CLIENT);
+   ai_fish_movement("ai_charge",8);
    eel_pitch_change ();
 };
 void () eel_attack6 = [ 5.000, eel_attack7 ] {
-   ai_charge (FL_CLIENT);
+   ai_fish_movement("ai_charge",8);
    eel_pitch_change ();
 };
 void () eel_attack7 = [ 0.000, eel_attack8 ] {
-   ai_charge (FL_CLIENT);
+   ai_fish_movement("ai_charge",8);
    eel_pitch_change ();
 };
 void () eel_attack8 = [ 1.000, eel_attack9 ] {
    self.effects = EF_DIMLIGHT;
-   self.skin = TRUE;
-   ai_charge (FL_CLIENT);
+   self.skin = 1;
+   ai_fish_movement("ai_charge",8);
    eel_pitch_change ();
    sound (self,CHAN_WEAPON,"eel/eatt1.wav",TRUE,ATTN_NORM);
 };
 void () eel_attack9 = [ 2.000, eel_attack10 ] {
    self.skin = FL_SWIM;
-   ai_charge (FL_CLIENT);
+   ai_fish_movement("ai_charge",8);
    eel_pitch_change ();
 };
 void () eel_attack10 = [ 3.000, eel_attack11 ] {
    self.skin = MOVETYPE_WALK;
-   ai_charge (FL_CLIENT);
+   ai_fish_movement("ai_charge",8);
    eel_pitch_change ();
 };
 void () eel_attack11 = [ 4.000, eel_attack12 ] {
    self.effects = EF_BRIGHTLIGHT;
    self.skin = MOVETYPE_STEP;
-   ai_charge (FL_CLIENT);
+   ai_fish_movement("ai_charge",8);
    eel_pitch_change ();
 };
 void () eel_attack12 = [ 5.000, eel_run1 ] {
@@ -238,10 +238,10 @@ void () eel_death11 = [ 10.000, eel_death12 ] { self.flags = (self.flags - FL_SW
 void () eel_death12 = [ 11.000, eel_death13 ] {};
 void () eel_death13 = [ 12.000, eel_death14 ] {};
 void () eel_death14 = [ 13.000, eel_death15 ] {};
-void () eel_death15 = [ 14.000, eel_death16 ] { droptofloor (); };
+void () eel_death15 = [ 14.000, eel_death16 ] {monster_death_postcheck();/*droptofloor ();*/ };
 void () eel_death16 = [ 15.000, eel_death16 ] {
    self.solid = SOLID_NOT;
-   monster_death_postcheck();
+	monster_deadbody_check();
 };
 
 void () eel_death = {
@@ -271,6 +271,7 @@ void () monster_eel = {
    self.mdl = "progs/ad171/mon_eel.mdl";
    self.headmdl = "progs/ad171/h_eel.mdl";
    precache_model (self.mdl);
+   precache_model (self.headmdl);
    precache_model ("progs/ad171/eelgib.mdl");
    precache_model ("progs/ad171/gib1.mdl");
    precache_model ("progs/ad171/proj_plasma.mdl");

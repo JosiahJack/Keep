@@ -62,6 +62,7 @@ void (float ofs, float turn) armagon_launch_missile = {
    self.punchangle_x = CONTENT_SOLID;
    missile = spawn ();
    missile.owner = self;
+	missile.classgroup = CG_PROJALL;
    missile.movetype = MOVETYPE_FLYMISSILE;
    missile.solid = SOLID_BBOX;
    missile.classname = "missile";

@@ -244,6 +244,7 @@ void(vector start_org) wraith_debuff_explode =
 	
 	while (fire_loop < 360) {
 		newmis = spawn();
+		newmis.classgroup = CG_PROJALL;
 		newmis.classtype = CT_TEMPSTREAM;
 		newmis.movetype = MOVETYPE_FLY;		// Fly, no gravity
 		newmis.solid = SOLID_TRIGGER;
@@ -347,7 +348,7 @@ void() wraith_debuff_trail =
 	self.finaldest = tvec+(dir *16);
 
 	//----------------------------------------------------------------------
-	// Spawn a ball of plasma at the final destionation
+	// Spawn a ball of plasma at the final destination
 	// Shrinking downwards in size over 0.1s frames
 	tent = spawn();
 	tent.owner = self;
@@ -811,7 +812,7 @@ void() wraith_die =
 };
 
 /*======================================================================
-/*QUAKED monster_wraith (1 0 0) (-16 -16 -24) (16 16 32) Ambush
+//QUAKED monster_wraith (1 0 0) (-16 -16 -24) (16 16 32) Ambush
 ======================================================================*/
 void() monster_wraith =
 {

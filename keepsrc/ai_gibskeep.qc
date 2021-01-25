@@ -11,6 +11,7 @@ entity (string gibname) StartGib = {
    setmodel (new,gibname);
    setsize (new,VEC_ORIGIN,VEC_ORIGIN);
    new.movetype = MOVETYPE_BOUNCE;
+	new.classtype = CT_TEMPGIB;
    new.solid = SOLID_NOT;
    new.think = SUB_Remove;
    new.ltime = time;

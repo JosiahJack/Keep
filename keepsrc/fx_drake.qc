@@ -1,4 +1,5 @@
 void() T_MissileTouch;
+void(entity ent, float chan) StopSound;
 
 // This creates an explosion sprite entity from scratch.
 void(vector spot) MakeExplosion =
@@ -385,6 +386,7 @@ void(vector start, vector dir, float sped) Ice_Launch =
     newmis = spawn ();
     newmis.master       = newmis.owner      = self;
     newmis.movetype     = MOVETYPE_FLYMISSILE;
+	newmis.classgroup = CG_PROJALL;
     newmis.solid        = SOLID_BBOX;
     newmis.classname    = "ice";
 // set missile speed
@@ -590,6 +592,7 @@ void(vector start) IceMine_Spawn =
     ice.master       = self;
     ice.movetype     = MOVETYPE_TOSS;
     ice.solid        = SOLID_BBOX;
+	ice.classgroup = CG_PROJALL;
     ice.classname    = "ice";
 // set missile speed
     ice.velocity     = '0 0 0';
@@ -735,7 +738,7 @@ void() tornado1 =[ 0, tornado1 ]
     if (self.delay <= time)
     {
         super_active = FALSE;
-//        StopSound (self, 6);
+        StopSound (self, 6);
         remove (self);
         return;
     }
@@ -744,7 +747,7 @@ void() tornado1 =[ 0, tornado1 ]
     if (self.t_width < time)
     {
         self.t_width = time + 1;
-        sound (self, CHAN_AUTO, "baron/tornado.wav", 1, ATTN_NORM);
+        sound (self, CHAN_AUTO, "drake/baron/tornado.wav", 1, ATTN_NORM);
     }
 
     Tornado_Attack ();
@@ -1001,3 +1004,9 @@ void() Glitter_Spawner =
     setorigin (test, spot);
     SUB_Think (test, misc_glitter);
 };
+
+void(entity ent, float chan) StopSound =
+    {sound (ent, chan, "misc/null.wav", 1, ATTN_NONE);};
+
+// Was "weapons/discharg.wav".
+void() Sfx_Discharge = {sound (self, CHAN_AUTO, "plasma/explode.wav", 1, ATTN_NORM);};

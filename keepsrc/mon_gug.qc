@@ -523,6 +523,7 @@ void() BileBombTouch = {
 		bcnt = bcnt + 1;
 		missile = spawn();
 		missile.owner = self;
+		missile.classgroup = CG_PROJALL;
 		missile.movetype = MOVETYPE_BOUNCE;
 		missile.solid = SOLID_BBOX;
 		makevectors(self.angles);
@@ -563,6 +564,7 @@ void() BileBombThink = {
 	while (t < 2) {
 		missile = spawn();
 		missile.owner = self.owner;
+		missile.classgroup = CG_PROJALL;
 		missile.movetype = MOVETYPE_TOSS;
 		missile.solid = SOLID_BBOX;
 		spd = vlen(self.velocity);
@@ -599,6 +601,7 @@ void() gug_bilebomb = {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	missile = spawn();
 	missile.owner = self;
+	missile.classgroup = CG_PROJALL;
 	missile.movetype = MOVETYPE_TOSS;
 	missile.solid = SOLID_BBOX;
 	spd = 1000 / (850 / dist);

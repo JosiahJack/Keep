@@ -672,10 +672,9 @@ float() FindTarget = {
 	if (client == self.enemy) return FALSE;
 
 	//----------------------------------------------------------------------
-	// Check for debug mode, invis artifact, menu system active
+	// Check for debug mode, menu system active
 	//----------------------------------------------------------------------
 	if (playtarg.flags & FL_NOTARGET && !self.charmed) return FALSE;
-	if (playtarg.items & IT_INVISIBILITY) return FALSE;
 
 	//----------------------------------------------------------------------
 	// Is the client/player >1000 = FAR do nothing, too far away
@@ -703,6 +702,17 @@ float() FindTarget = {
 		//----------------------------------------------------------------------
 		else if (enemy_range == RANGE_MID) {
 				if (!infront (client)) return FALSE;
+		}
+	}
+
+	// the only two things that alert monsters when invisible besides damage:
+	// - firing a weapon
+	// - bumping into a dog
+	if (playtarg.items & IT_INVISIBILITY) {
+		if (self.classname == "monster_dog" && client.classname == "player") {
+			if (r != RANGE_MELEE) return FALSE;
+		} else if (client.show_hostile < time) {
+			return FALSE;
 		}
 	}
 

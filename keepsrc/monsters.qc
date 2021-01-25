@@ -28,6 +28,7 @@ float BBOX_XTALL = 6;		// -16 -16 -24, 16 16 64
 float BBOX_WIDE = 7;		// -24 -24 -24, 24 24 40
 float BBOX_GIANT = 8;		// -24 -24 -24, 24 24 64
 float BBOX_FLAT = 9;		// -24 -24 -24, 24 24 22
+float BBOX_WIDEFLAT = 9;	// -32 -32 -24, 32 32 24
 float BBOX_MASSIVE = 10;	// -32 -32 -24, 32 32 64
 float BBOX_GOLEM = 15;		// -24 -24 -24, 24 24 72
 float BBOX_DOG = 20;		// -20 -20 -24, 20 20 16
@@ -103,7 +104,8 @@ void() monster_liquid_check =
 {
 	local float monster_dmg;
 	local vector monster_feet;
-	
+
+
 	// This function is for monsters only (high damage)
 	if (self.no_liquiddmg) return;
 	if (query_configflag(SVR_LIQDAM)) return;
@@ -204,6 +206,7 @@ void() monster_sightsound =
 	// No monsters, dead and timer not reset?
 	if ( !(self.flags & FL_MONSTER) ) return;
 	if (self.health < 1) return;
+	self.monster_awake = TRUE;
 	if (!self.sight_sound) return;
 	if (self.spawnflags & MON_SPAWN_NOSIGHT) return;
 	if (intermission_running > 0) return;
@@ -636,6 +639,7 @@ void() monster_spawn =
 	self.solid = SOLID_SLIDEBOX;				// Standard monster movement
 	self.movetype = MOVETYPE_STEP;				// Standard monster movement
 	setmodel(self, self.mdl);					// Setup model
+	self.mindex2 = self.modelindex;
 	self.skin = self.skin_override;				// Restore any skins
 	self.frame = self.frame_override;			// Restore any frames
 	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
@@ -1025,11 +1029,14 @@ void() monster_start = {
 	
 	//----------------------------------------------------------------------
 	// Detect monster armour map hack
-	//if (self.armorvalue || self.armortype) {
-	// This hack really should be stopped, no point upsetting mappers at this point
-	//	self.armorvalue = self.armortype = 0;
-	//	dprint("\b[MAPHACKS]\b Using armor on monsters, use health key instead!\n");
-	//}
+	// if (self.armorvalue || self.armortype) {
+		// This hack really should be stopped, no point upsetting mappers at this point
+		// self.armorvalue = self.armortype = 0;
+		// dprint("\b[MAPHACKS]\b Using armor on monsters, use health key instead!\n");
+	// }
+	// Qmaster is evil again
+
+    self.mindex2 = self.modelindex;      // Remember original modelindex.
 
 	if (self.spawnflags & MON_SPAWN_DELAY) {
 		self.mindex2 = self.modelindex;
@@ -1057,12 +1064,13 @@ void() monster_start = {
 // Map hacks are not supported in this MOD
 // There is no use in pretending otherwise!
 //======================================================================
-void() walkmonster_start_go = { remove(self); return; };
-void() flymonster_start_go = { remove(self); return; };
-void() swimmonster_start_go = { remove(self); return; };
+// void() walkmonster_start_go = { remove(self); return; };
+// void() flymonster_start_go = { remove(self); return; };
+// void() swimmonster_start_go = { remove(self); return; };
+// MUAHAHA QMASTER IS EVIL AND COMMENTED THESE OUT
 
 /*======================================================================
-/*QUAKED monster_x (1 0 0) (x y z) (x y z) AMBUSH x x NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED monster_x (1 0 0) (x y z) (x y z) AMBUSH x x NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
 XXX, x health points.
 -------- KEYS --------
 targetname : monster/trigger name

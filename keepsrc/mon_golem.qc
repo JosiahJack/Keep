@@ -597,8 +597,8 @@ void() golem_statue =
 /*======================================================================
 QUAKED monster_golem (1 0.2 0) (-16 -16 -24) (16 16 24)
 ======================================================================*/
-void() monster_golem =
-{
+void() setup_golem;
+void() monster_golem = {
 	if (deathmatch) { remove(self); return; }
 
 	self.mdl = "progs/ad171/mon_golem.mdl";
@@ -648,6 +648,16 @@ void() monster_golem =
 	self.sight_sound = "golem/sight.wav";
 	precache_sound (self.sight_sound);
 
+	if (self.classtype != CT_CACHEGOLEM) setup_golem();
+};
+
+//----------------------------------------------------------------------------
+void() monster_necrominiongolem = { 
+	self.classtype = CT_CACHEGOLEM; 
+	monster_golem();
+};
+
+void() setup_golem = {
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_GOLEM;
@@ -720,4 +730,50 @@ void() monster_golem =
 	self.classmove = MON_MOVEWALK;
 
 	monster_start();
+};
+
+//----------------------------------------------------------------------------
+// A code way to spawn golems (requires monster_necrominiongolem entity)
+//----------------------------------------------------------------------------
+void(vector minion_org, entity minion_targ) minion_golem = {
+	local entity minion;
+
+	// Check if there is space to spawn entity
+	if (entity_pcontent(minion_org)) return;
+	
+	// Self = minotaur, there is no egg 
+	update_minioncount(self, 1);			// Update spawn counters
+	
+	minion = spawn();
+	minion.classname = "monster_golem";	// For function searching
+	setorigin(minion, minion_org);			// Move to new location
+	minion.owner = self;					// Spawner Parent Link
+	
+	minion.effects = minion.flags = 0;		// make sure are blank
+	minion.gibondeath = 1;					// Always gib on death
+	minion.classtype = CT_MINIONGOLEM;	// Special minion class
+	minion.enemy = minion_targ;				// Target to attack
+	minion.spawnflags = 0;
+	minion.classgroup = CG_WIZARD;			// Don't turn on master (Necromancer)
+	minion.minion_active = TRUE;			// Minion flag
+	minion.bodyfadeaway = TRUE;				// Get rid of body
+	
+	// Adopt parameters from host spawner
+	minion.infightextra = self.infightextra;
+	
+	minion.mdl = "progs/ad171/mon_golem.mdl";
+	minion.gib1mdl = MODEL_PROJ_GROCK1;	// Left wing
+	minion.gib2mdl = MODEL_PROJ_GROCK2;	// Right wing
+	minion.gibtype = GIBTYPE_STONE;		// Stoney gibs!
+	minion.gib1frame = minion.gib2frame = 9;
+	minion.pain_sound = "golem/pain1.wav";
+	minion.pain_sound2 = "golem/pain2.wav";
+	minion.idle_sound = "golem/idle1a.wav";
+	minion.idle_sound2 = "golem/idle1b.wav";
+	minion.idle_soundcom = "golem/idle2a.wav";
+	minion.idle_soundcom2 = "golem/idle2b.wav";
+	minion.sight_sound = "golem/sight.wav";
+
+	minion.nextthink = time + 0.01;
+	minion.think = setup_golem;
 };

@@ -383,8 +383,7 @@ PERCH : Start in a sitting down, place 44 units out from perching edge, 4 units 
 
 ======================================================================*/
 void() setup_gargoyle;
-void() monster_gargoyle =
-{
+void() monster_gargoyle = {
 	if (deathmatch) { remove(self); return; }
 
 	self.mdl = "progs/ad171/mon_gargoyle.mdl";

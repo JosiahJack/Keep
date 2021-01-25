@@ -494,7 +494,7 @@ void() info_book_setup =
 };
 
 /*======================================================================
-/*QUAKED misc_textbook (0 0.5 0.5) (-16 -16 -8) (16 16 8) NOMODEL PLINTH1 PLINTH2 STORY COLLISION ANGLEONLY STARTOFF NOEFFECTS
+//QUAKED misc_textbook (0 0.5 0.5) (-16 -16 -8) (16 16 8) NOMODEL PLINTH1 PLINTH2 STORY COLLISION ANGLEONLY STARTOFF NOEFFECTS
 Display custom text messages
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -562,7 +562,7 @@ void() misc_textbook =
 };
 
 /*======================================================================
-/*QUAKED misc_textstory (0 0.5 1.0) (-16 -16 -8) (16 16 8) x
+//QUAKED misc_textstory (0 0.5 1.0) (-16 -16 -8) (16 16 8) x
 Text Book Story Chapters
 -------- KEYS --------
 targetname : name of current chapter
@@ -575,7 +575,7 @@ message4   : Body Text 3 (displayed after message3)
 -------- NOTES --------
 Text Book Story Chapters
 
-/*QUAKED misc_textstoryctrl (0 0.1 1.0) (-16 -16 -8) (16 16 8) x
+//QUAKED misc_textstoryctrl (0 0.1 1.0) (-16 -16 -8) (16 16 8) x
 Text Book Story Controller
 -------- KEYS --------
 targetname : name of controller for story

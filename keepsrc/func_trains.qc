@@ -8,7 +8,7 @@ float TRAIN_TOUCH = 8;
 float TRAIN_REVERSE = 32;
 
 /*======================================================================
-/*QUAKED func_train (0 .5 .8) ? STARTON NONSOLID MODEL TOUCH x REVERSE STARTOFF x
+//QUAKED func_train (0 .5 .8) ? STARTON NONSOLID MODEL TOUCH x REVERSE STARTOFF x
 Bmodel platform moving around entity chain
 -------- KEYS --------
 targetname : = "" start moving straight away != "" wait for trigger

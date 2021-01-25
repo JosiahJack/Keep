@@ -232,7 +232,7 @@ void() baron_win =
         if (r >= 0.3)
         {
             if (r < 0.6)
-            {   sound (self, CHAN_VOICE, "baron/idle.wav", 1, ATTN_NORM);
+            {   sound (self, CHAN_VOICE, "drake/baron/idle.wav", 1, ATTN_NORM);
                 self.walkframe = 5;
                 baron_look6 ();
             }
@@ -398,7 +398,7 @@ void() baron_fist =
     }
 
     // Inflict the damage.
-    sound (self, CHAN_WEAPON, "baron/smash.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "drake/baron/smash.wav", 1, ATTN_NORM);
     T_Damage (self.enemy, self, self, damage,DAMARMOR);
 
     // Throw a piece of meat.
@@ -449,7 +449,7 @@ void() baron_melee =
         self.think = baron_blam1;
     self.state = !self.state;
 
-    sound (self, CHAN_WEAPON, "baron/woosh.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "drake/baron/woosh.wav", 1, ATTN_NORM);
     self.think ();
 };
 
@@ -507,7 +507,7 @@ void() Earth_Touch =
         T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
     } else {
         spawn_touchblood (other, self, self.dmg);     // Rock chunks.
-        sound (self, CHAN_AUTO, "baron/e_hit.wav", 1, ATTN_NORM);
+        sound (self, CHAN_AUTO, "drake/baron/e_hit.wav", 1, ATTN_NORM);
     }
     remove (self);
 };
@@ -516,6 +516,7 @@ void(vector start, vector dir, float sped) Earth_Launch =
 {
     newmis = spawn ();
     newmis.master       = newmis.owner      = self;
+	newmis.classgroup = CG_PROJALL;
     newmis.movetype     = MOVETYPE_FLYMISSILE;
     newmis.solid        = SOLID_BBOX;
     newmis.classname    = "earth";
@@ -729,8 +730,8 @@ void() Baron_Air =
                     {
                         Particle_Gust (head);   // Show some dust.
                         T_Damage (head, self, self, damage,DAMARMOR);
-                        // Was "baron/woosh.wav".
-                        sound (head, 7, "skullwiz/push.wav", 1, ATTN_NORM);
+                        // Was "drake/baron/woosh.wav".
+                        sound (head, 7, "drake/skullwiz/push.wav", 1, ATTN_NORM);
                     }
                 }
             }
@@ -797,7 +798,7 @@ void() baron_slam =
         }
     }
 };
-void() baron_slam1  =[ $smack1,  baron_slam2  ] {sound (self, CHAN_WEAPON, "baron/woosh.wav", 1, ATTN_NORM); ai_charge(2); self.dest = self.enemy.origin;};
+void() baron_slam1  =[ $smack1,  baron_slam2  ] {sound (self, CHAN_WEAPON, "drake/baron/woosh.wav", 1, ATTN_NORM); ai_charge(2); self.dest = self.enemy.origin;};
 void() baron_slam2  =[ $smack2,  baron_slam3  ] {ai_charge(2);};
 void() baron_slam3  =[ $smack3,  baron_slam4  ] {ai_charge(2);};
 void() baron_slam4  =[ $smack4,  baron_slam5  ] {ai_charge(2);};
@@ -811,7 +812,7 @@ void() baron_slam11 =[ $smack11, baron_slam12 ] {ai_charge(2);};
 void() baron_slam12 =[ $smack12, baron_run    ] {ai_charge(2);};
 
 //- - - - - - - - -
-void() baron_cast1  =[ $magica7,  baron_cast2  ] {sound (self, CHAN_WEAPON, "baron/woosh.wav", 1, ATTN_NORM); ai_face(); self.dest = self.enemy.origin;};
+void() baron_cast1  =[ $magica7,  baron_cast2  ] {sound (self, CHAN_WEAPON, "drake/baron/woosh.wav", 1, ATTN_NORM); ai_face(); self.dest = self.enemy.origin;};
 void() baron_cast2  =[ $magica6,  baron_cast3  ] {ai_face();if (self.level == BARON_FIRE) self.nextthink = time + 0.2;};
 void() baron_cast3  =[ $magica5,  baron_cast4  ] {ai_face();if (self.level == BARON_FIRE) self.nextthink = time + 0.2;};
 void() baron_cast4  =[ $magica4,  baron_cast5  ] {ai_face();if (self.level == BARON_FIRE) self.nextthink = time + 0.2;};
@@ -917,7 +918,7 @@ void(float offset) baron_shot =
     else if (self.level == BARON_WATER)
     {
         Baron_Ice_Launch (org, vec, 600);
-        sound (self, CHAN_WEAPON, "baron/icefire.wav", 1, ATTN_NORM);
+        sound (self, CHAN_WEAPON, "drake/baron/icefire.wav", 1, ATTN_NORM);
     }
     else
     {   // Use offset as speed.
@@ -1174,7 +1175,7 @@ void() baron_jumptouch =
         if (CanDamage (self.enemy, self))
         if (InMeleeRange (100))
         {
-            sound (self, CHAN_WEAPON, "baron/woosh.wav", 1, ATTN_NORM);
+            sound (self, CHAN_WEAPON, "drake/baron/woosh.wav", 1, ATTN_NORM);
             self.state = TRUE;
             self.think = baron_blam6;
         }
@@ -1239,7 +1240,7 @@ void(entity inflictor, entity attacker, float damage) baron_pain = {
         return;
 
     self.pain_finished = time + 1;
-    sound (self, CHAN_VOICE, "baron/bpain1.wav", 1, ATTN_NORM);
+    sound (self, CHAN_VOICE, "drake/baron/bpain1.wav", 1, ATTN_NORM);
     if (self.touch == baron_jumptouch)
         return;     // can't flinch while jumping
     if ((random() * 30) > damage)   // Me: 40, Neh: 30.  I'll go 30.
@@ -1294,7 +1295,7 @@ void() baron_die = {
 
     // regular death
     if (!self.gibbed) {
-        sound (self, CHAN_VOICE, "baron/death.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "drake/baron/death.wav", 1, ATTN_NORM);
         if (random() < 0.5)     // Nehahra uses 0.3.
             baron_diea1 ();
         else
@@ -1399,13 +1400,13 @@ void() monster_baron = {
     precache_model ("progs/drake/k_ball.mdl");
     precache_model ("progs/k_spike.mdl");
 
-    precache_sound ("baron/bpain1.wav");
-    precache_sound ("baron/death.wav");
-    precache_sound ("baron/fireball.wav");
-    precache_sound ("baron/idle.wav");      // Win only.
-    precache_sound ("baron/sight.wav");
-    precache_sound ("baron/smash.wav");
-    precache_sound ("baron/woosh.wav");
+    precache_sound ("drake/baron/bpain1.wav");
+    precache_sound ("drake/baron/death.wav");
+    precache_sound ("drake/baron/fireball.wav");
+    precache_sound ("drake/baron/idle.wav");      // Win only.
+    precache_sound ("drake/baron/sight.wav");
+    precache_sound ("drake/baron/smash.wav");
+    precache_sound ("drake/baron/woosh.wav");
     precache_sound ("hknight/attack1.wav");
     precache_sound ("hknight/idle.wav");
     precache_sound ("hknight/hit.wav");    // used by C code, so don't sound2
@@ -1425,10 +1426,10 @@ void() monster_baron = {
 
 //    precache_sound ("ambience/wind2.wav");  // Tornado
 //    precache_sound ("ambience/suck1.wav");  // Tornado
-    precache_sound ("bane/thunder.wav");    // Lightning Storm
-    precache_sound ("baron/e_hit.wav");
-    precache_sound ("baron/icefire.wav");
-    precache_sound ("baron/tornado.wav");   // Tornado
+    precache_sound ("drake/bane/thunder.wav");    // Lightning Storm
+    precache_sound ("drake/baron/e_hit.wav");
+    precache_sound ("drake/baron/icefire.wav");
+    precache_sound ("drake/baron/tornado.wav");   // Tornado
     precache_sound ("dragon/icehit.wav");
     precache_sound ("hipweap/mjolhit.wav");
     precache_sound ("imp/shard.wav");
@@ -1438,7 +1439,7 @@ void() monster_baron = {
     precache_sound ("nemesant/bigboom.wav");
     precache_sound ("plasma/explode.wav");
     precache_sound ("plasma/fire.wav");
-    precache_sound ("skullwiz/push.wav");
+    precache_sound ("drake/skullwiz/push.wav");
     precache_sound ("weapons/fwall.wav");
     precache_sound ("weapons/fwallhit.wav");
     precache_sound ("weapons/fwalltap.wav");

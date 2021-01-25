@@ -136,6 +136,7 @@ void(vector org, vector dir) pyroflame_spawn =
 	
 	newmis = spawn();
 	newmis.classtype = CT_TEMPSTREAM;
+	newmis.classgroup = CG_PROJALL;
 	newmis.classname = "PBurst";
 	newmis.owner = self;
 	newmis.frame = newmis.cnt = 0;

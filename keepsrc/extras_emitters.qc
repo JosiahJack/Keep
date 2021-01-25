@@ -93,7 +93,6 @@ float NOT_X = 2;
 float NOT_Y = 4;
 float NOT_Z = 8;
 
-float EXTRAS_START_ON = 1;
 float EMITSOLID = 2;
 float REMOVEONTOUCH = 4;
 float DIEAFTERANIM = 8;
@@ -103,9 +102,26 @@ float KILLINFWATER = 64;
 float USEEFFECTORS = 128;
 float STARTSTOPPED = 256;
 
-.float extras_v1, extras_v2, extras_h1, extras_h2;
+.float v1, v2, h1, h2;
 .float frate, frate2, nfrms, nfrms2;
 .float lspan, lspan2, ppe, stagcnt;
+
+float(entity o) AffectedByPhysics = {
+	if (o.classtype == CT_FUNCBREAKOBJ) return TRUE;
+	if (o.classtype == CT_TEMPGIB) return TRUE;
+	if (o.classgroup == CG_PROJALL) return TRUE;
+	if (o.classgroup == CG_PROJNAILS) return TRUE; 
+	if (o.classgroup == CG_PROJSHELLS) return TRUE;
+	if (o.classgroup == CG_PROJROCKETS) return TRUE;
+	if (o.classgroup == CG_PROJCELLS) return TRUE;
+	if (o.classgroup == CG_PROJGRENADES) return TRUE;
+	if (o.classtype == CT_TEMPPHYS) return TRUE;
+	if (o.classtype == CT_BUBBLE) return TRUE;
+	if (o.classtype == CT_MISCDRIP) return TRUE;
+	if (o.classtype == CT_TEMPSPARK) return TRUE;
+
+	return FALSE;
+};
 
 void() effector_use =
 {
@@ -118,49 +134,65 @@ void() effector_use =
 void() effector_destroy =
 {
 	if (!self.state) return;// Disabled
-	if (other.classname != "particle") return;
-	if (!(other.owner.spawnflags & USEEFFECTORS)) return;
-	if (other.trigger_field == self) return;// Already affected by this trigger
-	
-	if (random() < self.count) {
-		self = other;
-		self.think1();// kill it		
-	} else
-		other.trigger_field = self;// Can no longer affect this particle
+	//if (other.classname != "particle") return;
+	if (AffectedByPhysics(other)) {
+		//if (!(other.owner.spawnflags & USEEFFECTORS)) return;
+		if (other.trigger_field == self) return;// Already affected by this trigger
+		
+		if (random() < self.count) {
+			self = other;
+			//self.think1();// kill it
+			if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
+			if (self.touchedvoid) return;				// Marked for removal
+			if (other == self.owner) return;			// no touching self
+			//if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
+
+			// No more touch/world interaction
+			self.touch = SUB_Null;
+			self.movetype = MOVETYPE_NONE;
+			self.solid = SOLID_NOT;
+		} else
+			other.trigger_field = self;// Can no longer affect this particle
+	}
 };
 
 void() effector_push =
 {
 	if (!self.state) return;// Disabled
-	if (other.classname != "particle") return;
-	if (!(other.owner.spawnflags & USEEFFECTORS)) return;
-	if (other.trigger_field == self) return;// Already affected by this trigger
-	
-	if (random() < self.count) {// push it
-		other.velocity = (other.velocity - (other.velocity*self.cnt)) + self.mangle;
-		if (self.spawnflags & TANGENTIAL)
-			other.angles = vectoangles(other.velocity);	
+	//if (other.classname != "particle") return;
+	if (AffectedByPhysics(other)) {
+		//if (!(other.owner.spawnflags & USEEFFECTORS)) return;
+		if (other.trigger_field == self) return;// Already affected by this trigger
+		
+		if (random() < self.count) {// push it
+			other.velocity = (other.velocity - (other.velocity*self.cnt)) + self.mangle;
+			if (other.classname == "hiplaser") other.old_velocity = other.velocity;
+			if (self.spawnflags & TANGENTIAL)
+				other.angles = vectoangles(other.velocity);	
+		}
+		
+		other.trigger_field = self;// Can no longer affect this particle
 	}
-	
-	other.trigger_field = self;// Can no longer affect this particle
 };
 
 void() effector_gravity =
 {
 	if (!self.state) return;// Disabled
-	if (other.classname != "particle") return;
-	if (!(other.owner.spawnflags & USEEFFECTORS)) return;
-	if (other.trigger_field == self) return;// Already affected by this trigger
-	
-	if (random() < self.count) {// modify gravity
+	//if (other.classname != "particle") return;
+	if (AffectedByPhysics(other)) {
+		//if (!(other.owner.spawnflags & USEEFFECTORS)) return;
+		if (other.trigger_field == self) return;// Already affected by this trigger
 		
-		if (self.spawnflags & ABSOLUTE)
-			other.gravity = self.gravity;
-		else
-			other.gravity = other.gravity + self.gravity;
+		if (random() < self.count) {// modify gravity
+			
+			if (self.spawnflags & ABSOLUTE)
+				other.gravity = self.gravity;
+			else
+				other.gravity = other.gravity + self.gravity;
+		}
+		
+		other.trigger_field = self;// Can no longer affect this particle
 	}
-	
-	other.trigger_field = self;// Can no longer affect this particle
 };
 
 void() effector_turbulence =
@@ -168,26 +200,30 @@ void() effector_turbulence =
 	local float r;
 	
 	if (!self.state) return;// Disabled
-	if (other.classname != "particle") return;
-	if (!(other.owner.spawnflags & USEEFFECTORS)) return;
-	if (other.trigger_field == self) return;// Already affected by this trigger
-	
-	if (random() < self.count) {// add turbulence
+	//if (other.classname != "particle") return;
+	if (AffectedByPhysics(other)) {
+		//if (!(other.owner.spawnflags & USEEFFECTORS)) return;
+		if (other.trigger_field == self) return;// Already affected by this trigger
 		
-		if (random() > 0.5) r = -1; else r = 1;
-		
-		if (!(self.spawnflags & NOT_X))
-			other.velocity_x = (other.velocity_x - (other.velocity_x*self.cnt)) + r*(random()*self.speed);
-		if (!(self.spawnflags & NOT_Y))
-			other.velocity_y = (other.velocity_y - (other.velocity_y*self.cnt)) + r*(random()*self.speed);
-		if (!(self.spawnflags & NOT_Z))
-			other.velocity_z = (other.velocity_z - (other.velocity_z*self.cnt)) + r*(random()*self.speed);
+		if (random() < self.count) {// add turbulence
 			
-		if (self.spawnflags & TANGENTIAL)
-			other.angles = vectoangles(other.velocity);	
+			if (random() > 0.5) r = -1; else r = 1;
+			
+			if (!(self.spawnflags & NOT_X))
+				other.velocity_x = (other.velocity_x - (other.velocity_x*self.cnt)) + r*(random()*self.speed);
+			if (!(self.spawnflags & NOT_Y))
+				other.velocity_y = (other.velocity_y - (other.velocity_y*self.cnt)) + r*(random()*self.speed);
+			if (!(self.spawnflags & NOT_Z))
+				other.velocity_z = (other.velocity_z - (other.velocity_z*self.cnt)) + r*(random()*self.speed);
+
+			if (other.classname == "hiplaser") other.old_velocity = other.velocity;
+				
+			if (self.spawnflags & TANGENTIAL)
+				other.angles = vectoangles(other.velocity);	
+		}
+		
+		other.trigger_field = self;// Can no longer affect this particle
 	}
-	
-	other.trigger_field = self;// Can no longer affect this particle
 };
 
 // attrators keep influencing particles that are caught
@@ -196,46 +232,50 @@ void() effector_attract =
 	local vector	dir;
 	
 	if (!self.state) return;// Disabled
-	if (other.classname != "particle") return;
-	if (!(other.owner.spawnflags & USEEFFECTORS)) return;
-	if (other.frags) return;// Already failed to catch this one	
-	if (other.teleport_time > time) return;// Timed out
-	
-	if (random() < self.count || other.trigger_field == self) {
-		dir = normalize(self.dest - other.origin);
-		other.velocity = (other.velocity - (other.velocity*self.cnt)) + (dir*self.speed);
-		if (self.spawnflags & TANGENTIAL)
-			other.angles = vectoangles(other.velocity);		
+	//if (other.classname != "particle") return;
+	if (AffectedByPhysics(other)) {
+		//if (!(other.owner.spawnflags & USEEFFECTORS)) return;
+		if (other.frags) return;// Already failed to catch this one	
+		if (other.teleport_time > time) return;// Timed out
+		
+		if (random() < self.count || other.trigger_field == self) {
+			dir = normalize(self.dest - other.origin);
+			other.velocity = (other.velocity - (other.velocity*self.cnt)) + (dir*self.speed);
+			if (other.classname == "hiplaser") other.old_velocity = other.velocity;
+			if (self.spawnflags & TANGENTIAL)
+				other.angles = vectoangles(other.velocity);		
+		} else
+			other.frags = TRUE;// can't touch this one
+		
+		other.teleport_time = time + 0.1;// Time out
+		other.trigger_field = self;// clear other triggers, and guarentee re-influence
 	}
-	else
-		other.frags = TRUE;// can't touch this one
-	
-	other.teleport_time = time + 0.1;// Time out
-	other.trigger_field = self;// clear other triggers, and guarentee re-influence
-	
 };
 
 // friction triggers keep influencing particles that are caught
 void() effector_friction =
 {
 	if (!self.state) return;// Disabled
-	if (other.classname != "particle") return;
-	if (!(other.owner.spawnflags & USEEFFECTORS)) return;
-	if (other.frags) return;// Already failed to catch this one	
-	if (other.teleport_time > time) return;// Timed out
-	
-	if (random() < self.count || other.trigger_field == self)
-		other.velocity = other.velocity - (other.velocity*self.speed);	
-	else
-		other.frags = TRUE;// can't touch this one
-	
-	other.teleport_time = time + 0.1;// Time out
-	other.trigger_field = self;// clear other triggers, and guarentee re-influence
-	
+	//if (other.classname != "particle") return;
+	if (AffectedByPhysics(other)) {
+		//if (!(other.owner.spawnflags & USEEFFECTORS)) return;
+		if (other.frags) return;// Already failed to catch this one	
+		if (other.teleport_time > time) return;// Timed out
+		
+		if (random() < self.count || other.trigger_field == self) {
+			other.velocity = other.velocity - (other.velocity*self.speed);
+			if (other.classname == "hiplaser") other.old_velocity = other.velocity;
+		} else {
+			other.frags = TRUE;// can't touch this one
+		}
+		
+		other.teleport_time = time + 0.1;// Time out
+		other.trigger_field = self;// clear other triggers, and guarentee re-influence
+	}
 };
 
 
-/*QUAKED t_effector_friction (0 .5 .8) ? EXTRAS_START_ON
+/*QUAKED t_effector_friction (0 .5 .8) ? START_ON
 Applies friction to particles, slowing them down (negative values speed particles up)
 
 "speed"			Amount of Friction (max 100 = dead stop, negative values can go further though -200 etc.)
@@ -243,7 +283,7 @@ Applies friction to particles, slowing them down (negative values speed particle
 "targetname"	Can be enabled/disabled
 
 Spawnflags
-"EXTRAS_START_ON"		Start in enabled state even if targeted
+"START_ON"		Start in enabled state even if targeted
 
 */
 void() t_effector_friction =
@@ -258,7 +298,7 @@ void() t_effector_friction =
 	self.speed = self.speed/100.0;
 	if (self.speed > 1.0) self.speed = 1.0;
 	
-	if (self.targetname != string_null && !(self.spawnflags & EXTRAS_START_ON))
+	if (self.targetname != string_null && !(self.spawnflags & START_ON))
 		self.state = FALSE;// off
 	else
 		self.state = TRUE;// on
@@ -267,7 +307,7 @@ void() t_effector_friction =
 	self.touch = effector_friction;
 };
 
-/*QUAKED t_effector_attract (0 .5 .8) ? EXTRAS_START_ON
+/*QUAKED t_effector_attract (0 .5 .8) ? START_ON
 Particles touching this trigger are attracted to it's centre. Can also repel particles with
 negative strength. This works best with particles that have a low gravity setting.
 
@@ -277,7 +317,7 @@ negative strength. This works best with particles that have a low gravity settin
 "targetname"	Can be enabled/disabled
 
 Spawnflags
-"EXTRAS_START_ON"		Start in enabled state even if targeted
+"START_ON"		Start in enabled state even if targeted
 "TANGENENTAL"	Particles turn to face new direction
 
 */
@@ -303,7 +343,7 @@ void() t_effector_attract =
 	self.dest_y = (self.mins_y + self.maxs_y)*0.5;
 	self.dest_z = (self.mins_z + self.maxs_z)*0.5;
 	
-	if (self.targetname != string_null && !(self.spawnflags & EXTRAS_START_ON))
+	if (self.targetname != string_null && !(self.spawnflags & START_ON))
 		self.state = FALSE;// off
 	else
 		self.state = TRUE;// on
@@ -313,7 +353,7 @@ void() t_effector_attract =
 };
 
 
-/*QUAKED t_effector_trubulence (0 .5 .8) ? EXTRAS_START_ON
+/*QUAKED t_effector_trubulence (0 .5 .8) ? START_ON
 Pushes particles at random speeds in all directions (can exlude certain axii)
 
 "speed"			Max amount of turbulence
@@ -322,7 +362,7 @@ Pushes particles at random speeds in all directions (can exlude certain axii)
 "targetname"	Can be enabled/disabled
 
 Spawnflags
-"EXTRAS_START_ON"		Start in enabled state even if targeted
+"START_ON"		Start in enabled state even if targeted
 "NOT_X"			Don't affect X direction
 "NOT_Y"			Don't affect Y direction
 "NOT_Z"			Don't affect Z direction
@@ -348,7 +388,7 @@ void() t_effector_trubulence =
 	
 	self.speed = fabs(self.speed);
 	
-	if (self.targetname != string_null && !(self.spawnflags & EXTRAS_START_ON))
+	if (self.targetname != string_null && !(self.spawnflags & START_ON))
 		self.state = FALSE;// off
 	else
 		self.state = TRUE;// on
@@ -358,7 +398,7 @@ void() t_effector_trubulence =
 };
 
 
-/*QUAKED t_effector_gravity (0 .5 .8) ? EXTRAS_START_ON ABSOLUTE
+/*QUAKED t_effector_gravity (0 .5 .8) ? START_ON ABSOLUTE
 Modifies particle gravity
 
 "gravity"		Add this to current gravity value, or change to this value if  "ABSOLUTE" is set
@@ -366,7 +406,7 @@ Modifies particle gravity
 "targetname"	Can be enabled/disabled
 
 Spawnflags
-"EXTRAS_START_ON"		Start in enabled state even if targeted
+"START_ON"		Start in enabled state even if targeted
 "ABSOLUTE"		Particles use new gravity outright
 
 */
@@ -379,7 +419,7 @@ void() t_effector_gravity =
 	
 	self.count = self.count*0.01;
 	
-	if (self.targetname != string_null && !(self.spawnflags & EXTRAS_START_ON))
+	if (self.targetname != string_null && !(self.spawnflags & START_ON))
 		self.state = FALSE;// off
 	else
 		self.state = TRUE;// on
@@ -388,7 +428,7 @@ void() t_effector_gravity =
 	self.touch = effector_gravity;
 };
 
-/*QUAKED t_effector_push (0 .5 .8) ? EXTRAS_START_ON ABSOLUTE
+/*QUAKED t_effector_push (0 .5 .8) ? START_ON ABSOLUTE
 Pushes particles in a new direction
 
 "mangle"		X Y Z speed
@@ -397,7 +437,7 @@ Pushes particles in a new direction
 "targetname"	Can be enabled/disabled
 
 Spawnflags
-"EXTRAS_START_ON"		Start in enabled state even if targeted
+"START_ON"		Start in enabled state even if targeted
 "TANGENENTAL"	Particles turn to face new direction
 
 */
@@ -417,7 +457,7 @@ void() t_effector_push =
 	
 	// NOTE: mangle of '0 0 0' is ok (let gravity take over)
 	
-	if (self.targetname != string_null && !(self.spawnflags & EXTRAS_START_ON))
+	if (self.targetname != string_null && !(self.spawnflags & START_ON))
 		self.state = FALSE;// off
 	else
 		self.state = TRUE;// on
@@ -426,14 +466,14 @@ void() t_effector_push =
 	self.touch = effector_push;
 };
 
-/*QUAKED t_effector_destroy (0 .5 .8) ? EXTRAS_START_ON
+/*QUAKED t_effector_destroy (0 .5 .8) ? START_ON
 Kills particles that touch it
 
 "count"			Override the default 100% obliteration (valid: 1-99 i.e 50 affects roughly 50% of the particles)
 "targetname"	Can be enabled/disabled
 
 Spawnflags
-"EXTRAS_START_ON"		Start in enabled state even if targeted
+"START_ON"		Start in enabled state even if targeted
 
 */
 void() t_effector_destroy =
@@ -445,7 +485,7 @@ void() t_effector_destroy =
 	
 	self.count = self.count*0.01;
 	
-	if (self.targetname != string_null && !(self.spawnflags & EXTRAS_START_ON))
+	if (self.targetname != string_null && !(self.spawnflags & START_ON))
 		self.state = FALSE;// off
 	else
 		self.state = TRUE;// on
@@ -538,7 +578,7 @@ void() particle_think =
 void() particle_touch =
 {
 	// Don't die on other particles
-	if (other.classname == "particle")
+	if (AffectedByPhysics(other))
 		return;
 		
 	if (self.cnt == 3)
@@ -558,7 +598,7 @@ void() particle_touch =
 			if (self.attack_finished < time)
 			{			
 				if (self.owner.dmg > 0 && self.owner.weapon >= TE_SPIKE)// Negative damage heals
-					spawn_touchblood (self, other, self.owner.dmg);
+					spawn_touchblood(self,other,self.owner.dmg);
 				
 				T_Damage (other, self, self, self.owner.dmg,DAMARMOR);
 				self.attack_finished = time + 1;// Don't go nuts if particle doesn't die on touch
@@ -626,7 +666,8 @@ void() emitter_start =
 	self.nextthink = time + 0.01;
 };
 
-void() emitter_pause = {
+void() emitter_pause =
+{
 	if (emitter_checkrelay(other.classname)) return;// spin trigger
 	
 	// Wait around for next use
@@ -634,7 +675,8 @@ void() emitter_pause = {
 	self.use = emitter_start;
 };
 
-void() emitter_emit = {
+void() emitter_emit =
+{
 	local entity p;
 	local vector dir;
 	
@@ -655,11 +697,12 @@ void() emitter_emit = {
 	p.effects = self.drag;
 	p.touch = particle_touch;
 	p.classname = "particle";
+	p.classgroup = CG_PROJALL;
 	p.think1 = particle_die;// So other triggers can kill'em
 	
 	// Get the direction for this particle	
-	dir_x = SUB_RandomRange(self.extras_v1, self.extras_v2);	
-	dir_y = SUB_RandomRange(self.extras_h1, self.extras_h2);
+	dir_x = SUB_RandomRange(self.v1, self.v2);	
+	dir_y = SUB_RandomRange(self.h1, self.h2);
 	dir_z = 0;
 
 //	if (dir_x >= 180) dir_x = dir_x - 360;
@@ -748,11 +791,11 @@ void() emitter_emit = {
 void() emitter_find =
 {
 	// Check for a paret train
-	//if (self.target) train_ext_linkchild();
+	if (self.target) train_ext_linkchild();
 	
 	// Start it up
 	self.think = emitter_emit;
-	if (self.targetname != string_null && !(self.spawnflags & EXTRAS_START_ON))
+	if (self.targetname != string_null && !(self.spawnflags & START_ON))
 		emitter_pause();
 	else
 		emitter_start();
@@ -792,37 +835,37 @@ void() emitter_init =
 	}
 	
 	// cap the horizontal angle
-	if (self.extras_h1 > 360) self.extras_h1 = 360;
-	if (self.extras_h1 < 0) self.extras_h1 = 0;
-	if (self.extras_h2 < 0) self.extras_h2 = 0;// ignored
-	if (self.extras_h2 > 360) self.extras_h2 = 360;
+	if (self.h1 > 360) self.h1 = 360;
+	if (self.h1 < 0) self.h1 = 0;
+	if (self.h2 < 0) self.h2 = 0;// ignored
+	if (self.h2 > 360) self.h2 = 360;
 	
 	// invert H so everything's clockwise
-	if (self.extras_h1 != 0 && self.extras_h1 != 360) self.extras_h1 = 360 - self.extras_h1;
-	if (self.extras_h2 != 0 && self.extras_h2 != 360) self.extras_h2 = 360 - self.extras_h2;
-	if (self.extras_h2) {
-		t = self.extras_h1;
-		self.extras_h1 = self.extras_h2;
-		self.extras_h2 = t;
+	if (self.h1 != 0 && self.h1 != 360) self.h1 = 360 - self.h1;
+	if (self.h2 != 0 && self.h2 != 360) self.h2 = 360 - self.h2;
+	if (self.h2) {
+		t = self.h1;
+		self.h1 = self.h2;
+		self.h2 = t;
 	}
 
 	// h2 has to be greater than h1 if defined
-	if (self.extras_h2 && (self.extras_h2 < self.extras_h1)) {
-		self.extras_h1 = self.extras_h1 - 360;// So it spans the right way
+	if (self.h2 && (self.h2 < self.h1)) {
+		self.h1 = self.h1 - 360;// So it spans the right way
 	}
 	
 	// cap the vertical angle
-	if (self.extras_v1 > 360) self.extras_v1 = 360;
-	if (self.extras_v1 < 0) self.extras_v1 = 0;
-	if (self.extras_v2 < 0) self.extras_v2 = 0;// ignored
-	if (self.extras_v2 > 360) self.extras_v2 = 360;
-	// extras_v2 has to be greater than v1 if defined
-	if (self.extras_v2 && (self.extras_v2 < self.extras_v1)) {
-		self.extras_v1 = self.extras_v1 - 360;// So it spans the right way
+	if (self.v1 > 360) self.v1 = 360;
+	if (self.v1 < 0) self.v1 = 0;
+	if (self.v2 < 0) self.v2 = 0;// ignored
+	if (self.v2 > 360) self.v2 = 360;
+	// v2 has to be greater than v1 if defined
+	if (self.v2 && (self.v2 < self.v1)) {
+		self.v1 = self.v1 - 360;// So it spans the right way
 	}
 	
-//	if (self.extras_h1 == 0) self.extras_h1 = 360;
-//	if (self.extras_v1 == 0) self.extras_v1 = 360;
+//	if (self.h1 == 0) self.h1 = 360;
+//	if (self.v1 == 0) self.v1 = 360;
 	
 	if (self.noise) precache_sound(self.noise);
 	if (self.noise1) precache_sound(self.noise1);
@@ -885,7 +928,7 @@ void() emitter_init =
 	self.think = emitter_find;
 };
 
-/*QUAKED func_emitter_volume (0 .5 .8) ? EXTRAS_START_ON EMITSOLID REMOVEONTOUCH DIEAFTERANIM STAGGERFRAMES KILLINFWATER USEEFFECTORS STARTSTOPPED
+/*QUAKED func_emitter_volume (0 .5 .8) ? START_ON EMITSOLID REMOVEONTOUCH DIEAFTERANIM STAGGERFRAMES KILLINFWATER USEEFFECTORS STARTSTOPPED
 Emit particles from a random spot within a brush volume.
 
 */
@@ -904,7 +947,7 @@ void() func_emitter_volume =
 	emitter_init();
 };
 
-/*QUAKED func_emitter (0 .5 .8) (-8 -8 -8) (8 8 8) ? EXTRAS_START_ON EMITSOLID REMOVEONTOUCH DIEAFTERANIM STAGGERFRAMES KILLINFWATER USEEFFECTORS STARTSTOPPED
+/*QUAKED func_emitter (0 .5 .8) (-8 -8 -8) (8 8 8) ? START_ON EMITSOLID REMOVEONTOUCH DIEAFTERANIM STAGGERFRAMES KILLINFWATER USEEFFECTORS STARTSTOPPED
 Emit particles from a fixed point.
 
 */
@@ -961,7 +1004,7 @@ void() func_emitter =
 "frate2"		Override the default 10fps (0.1) animation rate for the "death" model
 
 -SPAWNFLAGS-
-"EXTRAS_START_ON"		Emitters with targetnames will wait for a trigger event unless this is set
+"START_ON"		Emitters with targetnames will wait for a trigger event unless this is set
 "EMITSOLID"		Particles are solid, block players, and collide with each other
 "REMOVEONTOUCH" Remove particles (or do death animation) on touch
 "DIEAFTERANIM"	Remove particles (or do death animation) after reaching the last animation frame (loop animation otherwise)

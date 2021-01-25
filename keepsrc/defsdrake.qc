@@ -307,6 +307,26 @@ float   RYU_REBEL       = 4194304;  // SoE:  For rebel archers in nsoe2.
 float   RYU_REAPER      = 8388608;  // Soul collector.
 //float   RYU_NO_SIGHT    = ???       // No Line of sight needed for attacks.
 
+//===========================================================================
+//  TRONYN
+//  (FIXME:  For Tronyn only -- remove for Drake.)
+
+//.float      tronyn;     // Flags that do special things in his maps.
+
+float   DJG_STRIP       = 1;    // Strips all items.
+float   DJG_BSP_SHIFT   = 2;    // Move ammo/health boxes by '-16 -16 z'.
+//
+float   DJG_SNOW        = 4;    // unf2: Use snow skins on select monsters.
+float   DJG_MEDIEVAL    = 8;    // Replace base soldiers with medieval.
+float   DJG_SOUL_EVIL   = 16;   // Soul of Evil, extra cash and variant obits.
+float   DJG_OUM         = 32;   // OUM mode.  For Tronyn's toum map.
+//float   DJG_NSOE4       = 4;    // Wind and flame hacks for nsoe4.
+float   DJG_GROUND64    = 64;   // Force delayed spawn walkmonsters onground.
+float   DJG_NO_DROWN    = 128;  // Monsters cannot drown in this level.
+float   DJG_VOID        = 256;  // Convert trigger_hurt to trigger_void.
+float   DJG_WIND        = 512;  // Adds wind hack to nsoe4.
+float   DJG_ARENA       = 1024; // automatic dmsp in single-player.
+
 // Speed for various missiles.
 float   SPEED_HOOK      = 500;      // Was 500 in Roman, 1000 in original.
 float   SPEED_BURIZA    = 2000;     // Was 1000.
@@ -622,3 +642,15 @@ float PUSH_CURRENT = 2;     // Zerstorer -- "Silent" PUSH for water currents.
 float PUSH_JUMP_ONLY = 4;   // Drake -- Push only when jump is pressed.
 
 .float jump_time;		// Used by custom trigger_jump Q3 style jump pad
+
+.entity fallen; // used for ressurection by Necromancer, Bane, HLord
+
+float   COS30   = 0.866;
+float   COS45   = 0.7071;
+float   COS60   = 0.5;
+float   SQRT2   = 1.4142;   // The square root of 2.
+
+.string spawnclassname;
+.string summontarget;
+.vector spawnmins;
+.void() spawnfunction;

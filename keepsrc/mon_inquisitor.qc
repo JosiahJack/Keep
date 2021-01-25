@@ -3,12 +3,12 @@ INQUISITOR - For Twilight of the Idols map by Tronyn, for Stair of Grief Episode
 ==============================================================================*/
 
 // Idle 70-72
-void()	inquisitor_idle1	=[70,	inquisitor_idle2	] {ai_stand();};
+void()	inquisitor_idle1	=[70,	inquisitor_idle2	] {ai_stand();  self.gravity = 1;};
 void()	inquisitor_idle2	=[71,	inquisitor_idle3	] {ai_stand();};
 void()	inquisitor_idle3	=[72,	inquisitor_idle1	] {ai_stand();};
 
 // Walk 206-217
-void()	inquisitor_walk1	=[206,	inquisitor_walk2	] {ai_walk(5);};
+void()	inquisitor_walk1	=[206,	inquisitor_walk2	] {ai_walk(5); self.gravity = 1;};
 void()	inquisitor_walk2	=[207,	inquisitor_walk3	] {ai_walk(4);};
 void()	inquisitor_walk3	=[208,	inquisitor_walk4	] {ai_walk(3);};
 void()	inquisitor_walk4	=[209,	inquisitor_walk5	] {ai_walk(5);};
@@ -21,13 +21,21 @@ void()	inquisitor_walk10	=[215,	inquisitor_walk11	] {ai_walk(3);};
 void()	inquisitor_walk11	=[216,	inquisitor_walk12	] {ai_walk(3);};
 void()	inquisitor_walk12	=[217,	inquisitor_walk1	] {ai_walk(6);};
 
+void() inquisitor_flightland1;
+
 void() InquisitorCheckSetDown = {
 	// Should we stop flying?
-
+	if (self.turrettimer < time) {
+		self.think = inquisitor_flightland1;
+		self.gravity = 1;
+		self.nextthink = 0.1;
+	} else {
+		self.gravity = 0;
+	}
 };
 
 // Fly 105-119
-void()	inquisitor_run1	=[105,		inquisitor_run2	] {ai_run(13); InquisitorCheckSetDown ();};
+void()	inquisitor_run1	=[105,		inquisitor_run2	] {ai_run(13); InquisitorCheckSetDown (); self.gravity = 0;};
 void()	inquisitor_run2	=[106,		inquisitor_run3	] {ai_run(13);};
 void()	inquisitor_run3	=[107,		inquisitor_run4	] {ai_run(13);InquisitorCheckSetDown ();};
 void()	inquisitor_run4	=[108,		inquisitor_run5	] {ai_run(13);};
@@ -45,11 +53,27 @@ void()	inquisitor_run15=[119,		inquisitor_run1 ] {ai_run(13);InquisitorCheckSetD
 
 // FlyAscend 89-104
 // TouchDownFromFly 152-167
+void()	inquisitor_flightland1=[152,inquisitor_flightland2] {ai_run(0); self.gravity = 1; };
+void()	inquisitor_flightland2=[153,inquisitor_flightland3] {ai_run(0);};
+void()	inquisitor_flightland3=[154,inquisitor_flightland4] {ai_run(0);};
+void()	inquisitor_flightland4=[155,inquisitor_flightland5] {ai_run(0);};
+void()	inquisitor_flightland5=[156,inquisitor_flightland6] {ai_run(0);};
+void()	inquisitor_flightland6=[157,inquisitor_flightland7] {ai_run(0);};
+void()	inquisitor_flightland7=[158,inquisitor_flightland8] {ai_run(0);};
+void()	inquisitor_flightland8=[159,inquisitor_flightland9] {ai_run(0);};
+void()	inquisitor_flightland9=[160,inquisitor_flightland10] {ai_run(0);};
+void()	inquisitor_flightland10=[161,inquisitor_flightland11] {ai_run(0);};
+void()	inquisitor_flightland11=[162,inquisitor_flightland12] {ai_run(0);};
+void()	inquisitor_flightland12=[163,inquisitor_flightland13] {ai_run(0);};
+void()	inquisitor_flightland13=[164,inquisitor_flightland14] {ai_run(0);};
+void()	inquisitor_flightland14=[165,inquisitor_flightland15] {ai_run(0);};
+void()	inquisitor_flightland15=[166,inquisitor_flightland16] {ai_run(0);};
+void()	inquisitor_flightland16=[167,inquisitor_standrun1] {ai_run(0);};
 
 void() InquisitorCheckAttack;
 
 // StandRun 70-72
-void()	inquisitor_standrun1=[70,		inquisitor_standrun2 ] {ai_run(0); InquisitorCheckAttack();};
+void()	inquisitor_standrun1=[70,		inquisitor_standrun2 ] {ai_run(0); InquisitorCheckAttack();  self.gravity = 1;};
 void()	inquisitor_standrun2=[71,		inquisitor_standrun3 ] {ai_run(0);};
 void()	inquisitor_standrun3=[72,		inquisitor_standrun1 ] {ai_run(0);};
 
@@ -113,7 +137,7 @@ void()	inquisitor_magicc20=[48,inquisitor_magicc21] {ai_face();};
 void()	inquisitor_magicc21=[49,inquisitor_magicc22] {ai_face();};
 void()	inquisitor_magicc22=[50,inquisitor_standrun1]  {ai_face();};
 
-void() inquisitor_bbomb_die1 = [0,inquisitor_bbomb_die2] {};
+void() inquisitor_bbomb_die1 = [0,inquisitor_bbomb_die2] {setmodel(self,"progs/ad171/s_burst_poison.spr"); T_RadiusDamage(self, self.owner,9,self.owner,DAMAGEALL);};
 void() inquisitor_bbomb_die2 = [1,inquisitor_bbomb_die2] {};
 void() inquisitor_bbomb_die3 = [2,inquisitor_bbomb_die2] {};
 void() inquisitor_bbomb_die4 = [3,inquisitor_bbomb_die2] {};
@@ -125,15 +149,13 @@ void() inquisitor_bbomb_burstcheck = {
 	if (self.attack_finished < time) {
 		self.think = inquisitor_bbomb_die1;
 		self.nextthink = 0.1;
-		setmodel(self,"progs/ad171/s_burst_poison.spr");
-		T_RadiusDamage(self, self.owner,9,self.owner,DAMAGEALL);
 	}
 };
 
 void() inquisitor_bbomb_charge1 = [8,inquisitor_bbomb_charge2] {inquisitor_bbomb_burstcheck();};
 void() inquisitor_bbomb_charge2 = [7,inquisitor_bbomb_charge3] {inquisitor_bbomb_burstcheck();};
 void() inquisitor_bbomb_charge3 = [6,inquisitor_bbomb_charge4] {inquisitor_bbomb_burstcheck();};
-void() inquisitor_bbomb_charge4 = [5,inquisitor_bbomb_charge1] {inquisitor_bbomb_burstcheck();};
+void() inquisitor_bbomb_charge4 = [5,inquisitor_bbomb_die1] {inquisitor_bbomb_burstcheck();};
 
 void() inquisitor_bilebomb_at_enemys_feet = {
 	local entity missile;
@@ -227,7 +249,7 @@ void()	inquisitor_pain28=[126,inquisitor_pain29] {};
 void()	inquisitor_pain29=[127,inquisitor_pain30] {};
 void()	inquisitor_pain30=[128,inquisitor_pain31] {};
 void()	inquisitor_pain31=[129,inquisitor_pain32] {};
-void()	inquisitor_pain32=[130,inquisitor_pain33] { inquisitor_shieldoff(); };
+void()	inquisitor_pain32=[130,inquisitor_pain33] { inquisitor_shieldoff(); self.turrettimer = time + (random() * 15) + 8;};
 void()	inquisitor_pain33=[131,inquisitor_pain34] {};
 void()	inquisitor_pain34=[132,inquisitor_pain35] {};
 void()	inquisitor_pain35=[133,inquisitor_pain36] {};

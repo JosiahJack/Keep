@@ -178,6 +178,7 @@ void(vector org, vector dir) sgrunt_spawn_plasma =
 	plasma = spawn();
 	plasma.classname = "plasma";
 	plasma.owner = self;
+	plasma.classgroup = CG_PROJALL;
 	plasma.movetype = MOVETYPE_FLYMISSILE;
 	plasma.solid = SOLID_BBOX;
 	plasma.touch = sgrunt_plasma_touch;

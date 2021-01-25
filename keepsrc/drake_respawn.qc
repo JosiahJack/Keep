@@ -6,8 +6,8 @@ float() M_CheckPosition =
     local   entity  head;
     local   vector  vmin, vmax;
 
-    vmin = self.oldorigin + self.dest1;
-    vmax = self.oldorigin + self.dest2;
+    vmin = self.oldorigin + self.bbmins;
+    vmax = self.oldorigin + self.bbmaxs;
 // Is the spawn point blocked by terrain now?
 // Don't use BoxInWall because monsters' feet may be in the ground on purpose.
     if (pointcontents (self.oldorigin) == CONTENT_SOLID)
@@ -75,7 +75,7 @@ void() monster_respawn = {
 // Move creature back to its original spawn point and cover current point
 // and spawn point with teleporter effects.
     // 1. Spawn effects at original spawn point.
-    if (self.dest2_x > 96)
+    if (self.bbmaxs_x > 96)
     {   // Hack for oldone/wyrm.
         Tent_Point (TE_LAVASPLASH, self.oldorigin - '0 0 24');
         sound (self, CHAN_VOICE, "boss1/out1.wav", 1, ATTN_NORM);

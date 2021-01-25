@@ -139,8 +139,12 @@ void () counter_think = {
    self.nextthink = (time + self.wait);
    if ( (self.spawnflags & COUNTER_STEP) ) counter_on_use ();
    if ( (self.cnt >= self.count) ) {
-      self.cnt = FALSE;
-      if ( (self.aflag || !(self.spawnflags & COUNTER_LOOP)) && self.spawnflags & COUNTER_TOGGLE ) { counter_on_use (); } else { remove (self); }
+		self.cnt = FALSE;
+		if ( (self.aflag || !(self.spawnflags & COUNTER_LOOP)) && self.spawnflags & COUNTER_TOGGLE ) {
+			counter_on_use ();
+		} else {
+			remove (self);
+		}
    }
 };
 

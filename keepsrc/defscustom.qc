@@ -462,25 +462,7 @@ float SVR_AIPATH = 2097152;		// Turn OFF AI path corner extra info
 float SVR_LIQDAM = 4194304;		// Turn OFF Liquid damage checks for monsters
 float SVR_SPRPARTON = 8388608;		// Always use sprite particles (default OFF)
 
-//----------------------------------------------------------------------
-float IT_UPGRADE_AXE	= 2048;	// Shadow Axe, +75% dmg, +gib bodies
-float IT_UPGRADE_SSG	= 2;	// The Widowmaker, +50 dmg, +3 shells
-float IT_UPGRADE_LG		= 64;	// Plasma Gun, direct + splashdamage
-float IT_ALLARMOR		= 57344;// Test for player grn/yel/red armour
 
-float IT_CKEY1		= 8192;		// Custom Key 1
-float IT_CKEY2		= 16384;	// Custom Key 2
-float IT_CKEY3		= 32768;	// Custom Key 3
-float IT_CKEY4		= 65536;	// Custom Key 4
-float IT_CKEYALL	= 122880;	// All Custom keys
-
-float IT_ARTLAVASHIELD = 131072;// No health or armor damage in lava
-float IT_ARTWETSUIT	= 262144;	// No running out of oxygen under water
-float IT_ARTBLASTBELT= 524288;	// Immunity to all splashdamage
-float IT_ARTJUMPBOOTS= 1048576;	// JCR Jump Boots (1-4 power levels)
-float IT_ARTSHARP	= 2097152;	// Reduce SG/SSG/RG spread pattern
-float IT_ARTPIERCE	= 4194304;	// NG/SNG Nails travel through enemy bodies
-float IT_ARTTOME	= 8388608;	// Tome of Power (event trigger)
 
 // Jump boots idea by JCR from mod jam pack 1
 .float jumpboots_finished, jumpboots_time, jumpboots_sound;
@@ -704,7 +686,7 @@ float SPEED_PLAYSPIKE = 1000;		// Player speed for Spikes
 float SPEED_TRAPSPIKE = 500;		// Trap shooters
 float SPEED_HKSPIKE = 200;			// Hell Knight (def=300)
 float SPEED_HKSKILL = 50;			// 200=easy, 250=normal, 300=hard, 350=nm
-float SPEED_WIZSPIKE = 500;			// Wizards (def=600)
+float SPEED_WIZSPIKE = 500;			// Wizards (def=500)
 float SPEED_WIZSKILL = 50;			// 500=easy, 550=normal, 600=hard, 650=nm
 float SPEED_SPIDER = 600;			// Large Spiders (acid spit)
 float SPEED_VORELING = 600;			// Large Voreling (purple spit)

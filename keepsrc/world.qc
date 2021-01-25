@@ -166,7 +166,7 @@ void() main =
 };
 
 /*======================================================================
-/*QUAKED worldspawn (0 0 0) ? x
+//QUAKED worldspawn (0 0 0) ? x
 Only used for the world.
 -------- KEYS --------
 worldtype : World type 0 = medieval, 1 = metal, 2 = base
@@ -237,6 +237,7 @@ void() worldspawn =
 	InitBodyQue ();
 	InitTempGoal ();
 	InitMoveBox ();
+    InitLightning ();
 	developer = cvar("developer");
 	self.classtype = CT_WORLD;
 
@@ -395,6 +396,7 @@ void() worldspawn =
 	precache_model (MODEL_VWEAP_RL);
 	precache_model (MODEL_VWEAP_LG);
 	precache_model (MODEL_VWEAP_UPLG);		// Upgrade - Plasma Gun
+	precache_model ("progs/drake/memissil.mdl"); // Sidewinder missle
 	
 	// precache_model (MODEL_VWEAP_ZSSG);	// Zerstorer Riot gun
 
@@ -587,7 +589,7 @@ void() worldspawn =
 	// Check for any override on player projectiles
 	playerprojsize = world.no_bigprojectiles;
 
-	if (self.useold_axe) {
+	if (!self.useold_axe) {
 		g_axemodel = "progs/g_axe.mdl";
 		v_axemodel = "progs/v_axe.mdl";
 	} else {
@@ -770,7 +772,7 @@ void() testplayerstart = { remove(self); };
 void() viewthing = { remove(self); };
 
 /*======================================================================
-/*QUAKED trigger_onlyregistered (.5 .5 .5) ?
+//QUAKED trigger_onlyregistered (.5 .5 .5) ?
 Checks for registered version of game, no one uses this anymore
 ======================================================================*/
 void() trigger_onlyregistered_touch =

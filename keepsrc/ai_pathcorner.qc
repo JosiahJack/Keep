@@ -20,7 +20,7 @@ float STATE_EXACT = 4;		// Switch to exact route selection
 float STATE_RANDOM = 5;		// Switch to random route selection
 
 /*======================================================================
-/*QUAKED path_corner (0.5 0.3 0) (-8 -8 -24) (8 8 48) EXACT INSTANT REVERSE NOPAUSE
+//QUAKED path_corner (0.5 0.3 0) (-8 -8 -24) (8 8 48) EXACT INSTANT REVERSE NOPAUSE
 Node based path routing system
 -------- KEYS --------
 targetname   : Name of current path corner

@@ -263,6 +263,7 @@ void (float AttackNumber) lavaman_missile = {
 
    vec = normalize ((d - org));
    fireball = spawn ();
+	fireball.classgroup = CG_PROJALL;
    fireball.owner = self;
    fireball.movetype = MOVETYPE_BOUNCE;
    fireball.solid = SOLID_BBOX;

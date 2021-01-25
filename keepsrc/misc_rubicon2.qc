@@ -126,6 +126,7 @@ void() make_sparks =
 			local entity spark;
 			spark = spawn();
 			spark.owner = self;
+			spark.classtype = CT_TEMPSPARK;
 			setmodel (spark, "progs/spark.mdl");
 			setorigin (spark, self.origin);
 			spark.movetype = MOVETYPE_BOUNCE;

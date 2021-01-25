@@ -64,12 +64,27 @@ void() info_effect_pulse = {
 };
 
 void() shaker_think = {
+	local float d;
+
+	// Scale effect by distance
+	d = vlen(self.origin - self.spawnmaster.origin);
+	d = (self.count - d)/self.count;
+
 	self.nextthink = time + self.lip;
 	self.think = shaker_think;
 	if (self.ltime > time) {
 		self.spawnmaster.punchangle_x = (time - self.ltime) * random() * self.multiplier;
 		self.spawnmaster.punchangle_y = (time - self.ltime) * random() * self.multiplier;
 		self.spawnmaster.punchangle_z = (time - self.ltime) * random() * self.multiplier;
+	}
+	if (d > 0) {
+		// push the player around
+		if (self.spawnmaster.flags & FL_ONGROUND && self.spawnflags & 2) {
+			d = self.dmg*d;
+			self.spawnmaster.velocity_x = self.spawnmaster.velocity_x + (random()*d*2 - d);
+			self.spawnmaster.velocity_y = self.spawnmaster.velocity_y + (random()*d*2 - d);
+			self.spawnmaster.velocity_z = self.spawnmaster.velocity_z + (random()*d);// always push up
+		}	
 	}
 	if (self.ltime < time) SUB_Remove();
 };
@@ -95,6 +110,7 @@ void() info_screenshake = {
 	if (!(self.ltime)) self.ltime = 1;
 	if (!(self.lip)) self.lip = 0.010000;
 	if (!(self.multiplier)) self.multiplier = 0.000500;
+	if (!self.dmg) self.dmg = 120;
 	self.use = shake_use;
 };
 

@@ -252,7 +252,7 @@ void(entity targ, entity inflictor, entity attacker, float damage,
                 if (Ally_Check (targ, attacker))
                     return;     // Bane can't hurt himself and his clones.
         // Minion immunity.
-        if (targ == attacker.master)
+        if (targ == attacker.charmer)
             if (Ally_Check (targ, attacker))
                 return;     // Immune to minions' attacks.
     }

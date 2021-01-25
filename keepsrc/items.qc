@@ -297,7 +297,7 @@ void() item_touch =
 	
 	if ( !(other.flags & FL_CLIENT) ) return;
 	if ( other.health < 1 ) return;
-	if ( other.flags & FL_NOTARGET) return;
+	//if ( other.flags & FL_NOTARGET) return;
 	if (self.attack_finished > time) return;
 
 	// Check for and allow for purchases in versus survivor mode
@@ -639,7 +639,7 @@ void() health_touch =
 };	
 
 /*======================================================================
-/*QUAKED item_health (0.3 0.3 1) (-16 -16 0) (16 16 32) ROTTEN MEGA x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_health (0.3 0.3 1) (-16 -16 0) (16 16 32) ROTTEN MEGA x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/health_25.mdl"); }
 15, 25 or 100 Health
 -------- KEYS --------
@@ -788,7 +788,7 @@ void() item_armor_setup =
 };
 
 /*======================================================================
-/*QUAKED item_armor1 (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_armor1 (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/armour.mdl"); }
 Green Armour with 100 points of protection
 -------- KEYS --------
@@ -825,7 +825,7 @@ void() item_armor1 =
 };
 
 /*======================================================================
-/*QUAKED item_armor2 (0 0.5 0.8) (-16 -16 0) (16 16 56) x BLUESKIN x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_armor2 (0 0.5 0.8) (-16 -16 0) (16 16 56) x BLUESKIN x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/armour.mdl"); }
 Yellow Armour with 150 points of protection
 -------- KEYS --------
@@ -872,7 +872,7 @@ void() item_armor2 =
 };
 
 /*======================================================================
-/*QUAKED item_armorInv (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_armorInv (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/armour.mdl"); }
 Red Armour with 200 points of protection
 -------- KEYS --------
@@ -1161,7 +1161,7 @@ void() weapon_start =
 };
 
 /*======================================================================
-/*QUAKED weapon_upgrade_axe (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED weapon_upgrade_axe (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/g_shadaxe.mdl"); }
 Shadow Axe, extra dmg and gib zombies
 -------- KEYS --------
@@ -1192,7 +1192,7 @@ void() weapon_upgrade_axe =
 };
 
 /*======================================================================
-/*QUAKED weapon_upgrade_ssg (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED weapon_upgrade_ssg (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/g_shot3.mdl"); }
 The Widowmaker Shotgun, extra dmg, triple shot
 -------- KEYS --------
@@ -1223,7 +1223,7 @@ void() weapon_upgrade_ssg =
 };
 
 /*======================================================================
-/*QUAKED weapon_upgrade_lg (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED weapon_upgrade_lg (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/g_plasma.mdl"); }
 The Plasma Gun, direct & splashdamage
 -------- KEYS --------
@@ -1254,7 +1254,7 @@ void() weapon_upgrade_lg =
 };
 
 /*======================================================================
-/*QUAKED weapon_shotgun (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED weapon_shotgun (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/g_shot1.mdl"); }
 Single barrel Shotgun
 -------- KEYS --------
@@ -1287,7 +1287,7 @@ void() weapon_shotgun =
 };
 
 /*======================================================================
-/*QUAKED weapon_supershotgun (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED weapon_supershotgun (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/g_shot2.mdl"); }
 Super Shotgun
 -------- KEYS --------
@@ -1325,7 +1325,7 @@ void() weapon_supershotgun =
 };
 
 /*======================================================================
-/*QUAKED weapon_nailgun (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED weapon_nailgun (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/g_nail.mdl"); }
 Perforator (Nailgun)
 -------- KEYS --------
@@ -1358,7 +1358,7 @@ void() weapon_nailgun =
 };
 
 /*======================================================================
-/*QUAKED weapon_supernailgun (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED weapon_supernailgun (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/g_nail2.mdl"); }
 Super Perforator (Super Nailgun)
 -------- KEYS --------
@@ -1391,7 +1391,7 @@ void() weapon_supernailgun =
 };
 
 /*======================================================================
-/*QUAKED weapon_grenadelauncher (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED weapon_grenadelauncher (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/g_rock.mdl"); }
 Grenade Launcher
 -------- KEYS --------
@@ -1424,7 +1424,7 @@ void() weapon_grenadelauncher =
 };
 
 /*======================================================================
-/*QUAKED weapon_rocketlauncher (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED weapon_rocketlauncher (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/g_rock2.mdl"); }
 Rocket Launcher
 -------- KEYS --------
@@ -1457,7 +1457,7 @@ void() weapon_rocketlauncher =
 };
 
 /*======================================================================
-/*QUAKED weapon_lightning (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED weapon_lightning (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/g_light.mdl"); }
 Thunderbolt Cannon
 -------- KEYS --------
@@ -1597,9 +1597,9 @@ void() item_ammo_setup =
 };
 
 /*======================================================================
-/*QUAKED item_shells (0 .5 .8) (0 0 0) (32 32 32) BIG
+//QUAKED item_shells (0 .5 .8) (0 0 0) (32 32 32) BIG
 
-/*QUAKED item_shells (0 .5 .8) (-16 -16 0) (16 16 32) BIG LID x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_shells (0 .5 .8) (-16 -16 0) (16 16 32) BIG LID x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/ammo_shells0.mdl"); }
 20 or 40 Shells
 -------- KEYS --------
@@ -1651,9 +1651,9 @@ void() item_shells =
 };
 
 /*======================================================================
-/*QUAKED item_spikes (0 .5 .8) (0 0 0) (32 32 32) BIG
+//QUAKED item_spikes (0 .5 .8) (0 0 0) (32 32 32) BIG
 
-/*QUAKED item_spikes (0 .5 .8) (-16 -16 0) (16 16 32) BIG LID x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_spikes (0 .5 .8) (-16 -16 0) (16 16 32) BIG LID x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/ammo_nails0.mdl"); }
 25 or 50 Spikes
 -------- KEYS --------
@@ -1704,9 +1704,9 @@ void() item_spikes =
 };
 
 /*======================================================================
-/*QUAKED item_rockets (0 .5 .8) (0 0 0) (32 32 32) BIG
+//QUAKED item_rockets (0 .5 .8) (0 0 0) (32 32 32) BIG
 
-/*QUAKED item_rockets (0 .5 .8) (-16 -16 0) (16 16 32) BIG x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_rockets (0 .5 .8) (-16 -16 0) (16 16 32) BIG x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/ammo_rockets0.mdl"); }
 5 or 10 Rockets
 -------- KEYS --------
@@ -1755,9 +1755,9 @@ void() item_rockets =
 };
 
 /*======================================================================
-/*QUAKED item_cells (0 .5 .8) (0 0 0) (32 32 32) BIG
+//QUAKED item_cells (0 .5 .8) (0 0 0) (32 32 32) BIG
 
-/*QUAKED item_cells (0 .5 .8) (-16 -16 0) (16 16 32) BIG x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_cells (0 .5 .8) (-16 -16 0) (16 16 32) BIG x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/ammo_battery0.mdl"); }
 6 or 12 Medieval Battery
 -------- KEYS --------
@@ -1889,7 +1889,7 @@ void() key_setup =
 };
 
 /*======================================================================
-/*QUAKED item_key1 (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_key1 (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/key_silver.mdl"); }
 SILVER key, changes based on worldtype on worldspawn
 -------- KEYS --------
@@ -1939,7 +1939,7 @@ void() item_key1 =
 };
 
 /*======================================================================
-/*QUAKED item_key2 (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_key2 (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/key_gold.mdl"); }
 GOLD key, changes based on worldtype on worldspawn
 -------- KEYS --------
@@ -1989,7 +1989,7 @@ void() item_key2 =
 };
 
 /*======================================================================
-/*QUAKED item_keyx (0 .5 .8) (-16 -16 -24) (16 16 32) CKEY1 CKEY2 CKEY3 CKEY4 RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_keyx (0 .5 .8) (-16 -16 -24) (16 16 32) CKEY1 CKEY2 CKEY3 CKEY4 RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/key_medieval.mdl"); }
 Custom key
 -------- KEYS --------
@@ -2059,7 +2059,7 @@ void() item_keyx =
 };
 
 /*======================================================================
-/*QUAKED item_custom (0 .5 .8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_custom (0 .5 .8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/key_base.mdl"); }
 Custom Pickup Item
 -------- KEYS --------
@@ -2161,7 +2161,7 @@ void() item_custom =
 };
 
 /*======================================================================
-/*QUAKED item_sigil (0 0.5 0.8) (-16 -16 -24) (16 16 32) Ep1 Ep2 Ep3 Ep4 RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_sigil (0 0.5 0.8) (-16 -16 -24) (16 16 32) Ep1 Ep2 Ep3 Ep4 RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/key_rune1.mdl"); }
 End of episode sigil / rune
 -------- KEYS --------
@@ -2268,7 +2268,7 @@ void() item_sigil =
 };
 
 /*======================================================================
-/*QUAKED item_artifact_tomeofpower (0 .5 .8) (-16 -16 -24) (16 16 32) x x x x x FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_artifact_tomeofpower (0 .5 .8) (-16 -16 -24) (16 16 32) x x x x x FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/artifact_tome.mdl"); }
 Custom event trigger
 -------- KEYS --------
@@ -2351,7 +2351,7 @@ void() artifact_setup =
 };
 
 /*======================================================================
-/*QUAKED item_artifact_envirosuit (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_artifact_envirosuit (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/artifact_envsuit.mdl"); }
 Player takes no damage from water or slime for 30 seconds
 -------- KEYS --------
@@ -2394,7 +2394,7 @@ void() item_artifact_envirosuit =
 };
 
 /*======================================================================
-/*QUAKED item_artifact_wetsuit (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_artifact_wetsuit (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/artifact_wetsuit.mdl"); }
 Player takes no damage from water for 5 mins (300s)
 -------- KEYS --------
@@ -2444,7 +2444,7 @@ void() item_artifact_wetsuit =
 };
 
 /*======================================================================
-/*QUAKED item_artifact_invulnerability (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_artifact_invulnerability (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/artifact_pent.mdl"); }
 Player is invulnerable for 30 seconds
 -------- KEYS --------
@@ -2488,7 +2488,7 @@ void() item_artifact_invulnerability =
 };
 
 /*======================================================================
-/*QUAKED item_artifact_invisibility (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_artifact_invisibility (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/artifact_invis.mdl"); }
 Player is invisible for 30 seconds
 -------- KEYS --------
@@ -2531,7 +2531,7 @@ void() item_artifact_invisibility =
 };
 
 /*======================================================================
-/*QUAKED item_artifact_super_damage (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_artifact_super_damage (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/artifact_quad.mdl"); }
 The next attack from the player will do 4x damage
 -------- KEYS --------
@@ -2574,7 +2574,7 @@ void() item_artifact_super_damage =
 };
 
 /*======================================================================
-/*QUAKED item_artifact_sharp_shooter (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_artifact_sharp_shooter (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/artifact_sharp.mdl"); }
 Reduces the bullet spread of all Shotguns
 -------- KEYS --------
@@ -2617,7 +2617,7 @@ void() item_artifact_sharp_shooter =
 };
 
 /*======================================================================
-/*QUAKED item_artifact_nail_piercer (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_artifact_nail_piercer (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/artifact_piercer.mdl"); }
 All nail attacks will travel through monsters
 -------- KEYS --------
@@ -2660,7 +2660,7 @@ void() item_artifact_nail_piercer =
 };
 
 /*======================================================================
-/*QUAKED item_artifact_lavashield (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_artifact_lavashield (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/artifact_lavashield.mdl"); }
 Player takes no HP/armour damage from lava for 30s
 -------- KEYS --------
@@ -2707,7 +2707,7 @@ void() item_artifact_lavashield =
 };
 
 /*======================================================================
-/*QUAKED item_artifact_blastbelt (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_artifact_blastbelt (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/artifact_blastbelt.mdl"); }
 Player is immune to Splash Damage for 30 seconds
 -------- KEYS --------
@@ -2751,7 +2751,7 @@ void() item_artifact_blastbelt =
 };
 
 /*======================================================================
-/*QUAKED item_artifact_jumpboots (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_artifact_jumpboots (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/artifact_jumpboots.mdl"); }
 Player can do extra (1-4) jumps in mid air
 -------- KEYS --------
@@ -3068,12 +3068,12 @@ void() BackpackTouch =
 		// For coop backpacks can be dropped from players
 		// These can contain huge amounts of armour and needed
 		// to be treated as upgrade/replace, not the shard system
-		if (coop > 0 && self.items & IT_ALLARMOR) {
+		if (coop > 0 && self.items2 & IT2_ALLARMOR) {
 			if (other.armortype*other.armorvalue < self.armortype*self.armorvalue) {
 				other.armortype = self.armortype;
 				other.armorvalue = self.armorvalue;
-				other.items = other.items - (other.items & IT_ALLARMOR);
-				other.items = other.items + (self.items & IT_ALLARMOR);
+				other.items2 = other.items2 - (other.items2 & IT2_ALLARMOR);
+				other.items2 = other.items2 + (self.items2 & IT2_ALLARMOR);
 				acount = BackpackText(other, "armor upgraded", "", acount);
 			}
 		}
@@ -3348,7 +3348,7 @@ void() DropBackpack =
 };
 
 /*======================================================================
-/*QUAKED item_backpack (0 .5 .8) (-16 -16 0) (16 16 56) SHELLS NAILS ROCKETS CELLS RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+//QUAKED item_backpack (0 .5 .8) (-16 -16 0) (16 16 56) SHELLS NAILS ROCKETS CELLS RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/ad171/w_backpack.mdl"); }
 Backpack with random/exact amount of ammo
 -------- KEYS --------

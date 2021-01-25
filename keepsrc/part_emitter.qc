@@ -1327,7 +1327,7 @@ void() misc_weather =
 };
 
 /*======================================================================
-/*QUAKED misc_particle (0 0.5 0.75) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x
+//QUAKED misc_particle (0 0.5 0.75) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x
 A particle emitter which can be turned on/off (use function)
 -------- KEYS --------
 targetname   : toggle state (use trigger ent for exact state)
@@ -1343,7 +1343,7 @@ STARTOFF : Always Starts off and waits for trigger
 A particle emitter which can be turned on/off (use function)
 
 //-----------------------------------------------------------------------------
-/*QUAKED misc_particletemplate (0 0.5 0.75) (-8 -8 -8) (8 8 8) x
+//QUAKED misc_particletemplate (0 0.5 0.75) (-8 -8 -8) (8 8 8) x
 A particle emitter template
 -------- KEYS --------
 targetname   : target name reference for misc_particle entities
@@ -1374,7 +1374,7 @@ dpp_vel      : Direction of DP particles to move towards (XYZ)
 A particle emitter template
 
 //-----------------------------------------------------------------------------
-/*QUAKED misc_particle_burst (0 0.5 0.75) (-8 -8 -8) (8 8 8) x
+//QUAKED misc_particle_burst (0 0.5 0.75) (-8 -8 -8) (8 8 8) x
 A particle emitter that fires a burst
 -------- KEYS --------
 targetname    : Trigger Particle Emitter
@@ -1388,7 +1388,7 @@ part_movetype : 2=center, 3=up, 4=shockwave, 5=skull, 6=lost, 7=minotaur
 A particle emitter that fires a burst
 
 //-----------------------------------------------------------------------------
-/*QUAKED misc_weather (0 0.5 0.75) ? x x SILENT SNOW BLOOD SLIME STARTOFF x
+//QUAKED misc_weather (0 0.5 0.75) ? x x SILENT SNOW BLOOD SLIME STARTOFF x
 A particle emitter which produces weather effects
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)

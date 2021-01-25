@@ -6,7 +6,7 @@ void() info_notnull = {};
 void() info_target = {};
 
 /*======================================================================
-/*QUAKED info_player_start (1 0 0) (-16 -16 -24) (16 16 24) x x x x x x x x Not_Easy Not_Normal Not_Hard Not_DM Dyn_Easy Dyn_Normal Dyn_Hard Dyn_Night
+//QUAKED info_player_start (1 0 0) (-16 -16 -24) (16 16 24) x x x x x x x x Not_Easy Not_Normal Not_Hard Not_DM Dyn_Easy Dyn_Normal Dyn_Hard Dyn_Night
 { model(":progs/player.mdl"); }
 DEFAULT starting point for a player
 -------- KEYS --------
@@ -23,7 +23,7 @@ void() info_player_start = {
 };
 
 /*======================================================================
-/*QUAKED info_player_start2 (0.9 0 0) (-16 -16 -24) (16 16 24) x x x x x x x x Not_Easy Not_Normal Not_Hard Not_DM Dyn_Easy Dyn_Normal Dyn_Hard Dyn_Night
+//QUAKED info_player_start2 (0.9 0 0) (-16 -16 -24) (16 16 24) x x x x x x x x Not_Easy Not_Normal Not_Hard Not_DM Dyn_Easy Dyn_Normal Dyn_Hard Dyn_Night
 { model(":progs/player.mdl"); }
 Starting point for players with runes or startspawn2 system
 -------- KEYS --------
@@ -42,7 +42,7 @@ void() info_player_start2 = {
 };
 
 /*======================================================================
-/*QUAKED info_player_coop (1 0 1) (-16 -16 -24) (16 16 24) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED info_player_coop (1 0 1) (-16 -16 -24) (16 16 24) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 { model(":progs/player.mdl"); }
 Starting position for coop games
 -------- KEYS --------
@@ -63,7 +63,7 @@ void() info_player_coop = {
 };
 
 /*======================================================================
-/*QUAKED info_player_deathmatch (0 1 1) (-16 -16 -24) (16 16 24) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED info_player_deathmatch (0 1 1) (-16 -16 -24) (16 16 24) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 { model(":progs/player.mdl"); }
 Starting position for deathmatch games
 -------- KEYS --------
@@ -84,7 +84,7 @@ void() info_player_deathmatch = {
 };
 
 /*======================================================================
-/*QUAKED info_teleport_destination (1 0.5 0.5) (-8 -8 -8) (8 8 32) x
+//QUAKED info_teleport_destination (1 0.5 0.5) (-8 -8 -8) (8 8 32) x
 Destination marker for a teleporter
 -------- KEYS --------
 targetname : link to trigger_teleport
@@ -105,7 +105,7 @@ void() info_teleport_destination =
 };
 
 /*======================================================================
-/*QUAKED info_camera_destination (1 0.5 0.5) (-16 -16 -24) (16 16 32) x
+//QUAKED info_camera_destination (1 0.5 0.5) (-16 -16 -24) (16 16 32) x
 Marker for a Cinematic Camera System
 -------- KEYS --------
 targetname : link to misc_camera entity
@@ -122,7 +122,7 @@ void() info_camera_destination =
 };
 
 /*======================================================================
-/*QUAKED info_teleportinstant_dest (.5 .5 .5) ? x
+//QUAKED info_teleportinstant_dest (.5 .5 .5) ? x
 Destination for an instant teleporter
 -------- KEYS --------
 targetname : link to trigger_teleport
@@ -146,7 +146,7 @@ void() info_teleportinstant_dest =
 };
 
 /*======================================================================
-/*QUAKED info_intermission (1 0.5 0.5) (-16 -16 -16) (16 16 16) NO_INTERMIS SOLID x x x x x x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED info_intermission (1 0.5 0.5) (-16 -16 -16) (16 16 16) NO_INTERMIS SOLID x x x x x x Not_Easy Not_Normal Not_Hard Not_DM
 This is the camera point for the intermission
 -------- KEYS --------
 target : triggered target(s) when used as a viewing camera

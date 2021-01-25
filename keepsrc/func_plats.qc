@@ -8,7 +8,7 @@ float PLAT_START_OPEN = 16;
 float PLAT_STARTDIS = 32;		// Platform starts in disabled state
 
 /*======================================================================
-/*QUAKED func_plat (0 .5 .8) ? LOW_TRIGGER x MIN_TRIGGER START_LOWER START_OPEN x STARTOFF x
+//QUAKED func_plat (0 .5 .8) ? LOW_TRIGGER x MIN_TRIGGER START_LOWER START_OPEN x STARTOFF x
 A Platform (bmodel) with 2 states
 -------- KEYS --------
 targetname : = "" plat start low, != "" plat starts high and reqs trigger to work

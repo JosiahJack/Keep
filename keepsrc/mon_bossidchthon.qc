@@ -407,7 +407,7 @@ void() monster_boss =
 };
 
 /*======================================================================
-/*QUAKED event_lightning (0 1 1) (-16 -16 -16) (16 16 16) x
+//QUAKED event_lightning (0 1 1) (-16 -16 -16) (16 16 16) x
 Just for boss level. Used for killing Cthon.
 -------- KEYS --------
 -------- SPAWNFLAGS --------
@@ -420,7 +420,7 @@ void() event_lightning =
 };
 
 /*======================================================================
-/*QUAKED misc_teleporttrain (0 0.5 0.8) (-8 -8 -8) (8 8 8) x
+//QUAKED misc_teleporttrain (0 0.5 0.8) (-8 -8 -8) (8 8 8) x
 This is used for the final boss ONLY
 Flying ball needed to teleport kill Shub-Niggurath
 -------- KEYS --------

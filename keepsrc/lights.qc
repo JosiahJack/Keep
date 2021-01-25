@@ -98,7 +98,7 @@ void() light_off =
 };
 
 /*======================================================================
-/*QUAKED light (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF x x x x x x x
+//QUAKED light (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF x x x x x x x
 Non-displayed light
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -157,7 +157,7 @@ void() light =
 };
 
 /*======================================================================
-/*QUAKED light_fluoro (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF NO_SOUND x x x x x x
+//QUAKED light_fluoro (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF NO_SOUND x x x x x x
 Non-displayed light. Makes steady fluorescent humming sound
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -187,7 +187,7 @@ void() light_fluoro =
 };
 
 /*======================================================================
-/*QUAKED light_fluorospark (0 1 0) (-8 -8 -8) (8 8 8) x NO_SOUND x x x x x x
+//QUAKED light_fluorospark (0 1 0) (-8 -8 -8) (8 8 8) x NO_SOUND x x x x x x
 Non-displayed light. Makes sparking, broken fluorescent sound
 -------- KEYS --------
 light : sets brightness, 300 is default
@@ -207,7 +207,7 @@ void() light_fluorospark =
 };
 
 /*======================================================================
-/*QUAKED light_globe (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF x NO_STATIC x x x X x
+//QUAKED light_globe (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF x NO_STATIC x x x X x
 Sphere globe light (sprite)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -238,7 +238,7 @@ void() light_globe =
 };
 
 /*======================================================================
-/*QUAKED light_torch_small_walltorch (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF NO_SOUND NO_STATIC x x x x x
+//QUAKED light_torch_small_walltorch (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF NO_SOUND NO_STATIC x x x x x
 Short wall torch
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -299,7 +299,7 @@ void() light_torch_small_walltorch =
 };
 
 /*======================================================================
-/*QUAKED light_flame_large_yellow (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF NO_SOUND NO_STATIC x x x x x
+//QUAKED light_flame_large_yellow (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF NO_SOUND NO_STATIC x x x x x
 Large yellow flame
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -346,7 +346,7 @@ void() light_flame_large_yellow =
 };
 
 /*======================================================================
-/*QUAKED light_flame_small_yellow (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF NO_SOUND NO_STATIC x x x X x
+//QUAKED light_flame_small_yellow (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF NO_SOUND NO_STATIC x x x X x
 Small yellow flames
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -395,7 +395,7 @@ void() light_flame_small_yellow =
 void() light_flame_small_white = { light_flame_small_yellow(); };
 
 /*======================================================================
-/*QUAKED light_postlight (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF x x x x x x x
+//QUAKED light_postlight (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF x x x x x x x
 light post (from Quoth)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -422,7 +422,7 @@ void() light_postlight =
 };
 
 /*======================================================================
-/*QUAKED light_tubelight (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF x x x x x x x
+//QUAKED light_tubelight (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF x x x x x x x
 light Tube (from Quoth)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -449,7 +449,7 @@ void() light_tubelight =
 };
 
 /*======================================================================
-/*QUAKED light_fixture1 (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF x x x x x x x
+//QUAKED light_fixture1 (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF x x x x x x x
 light Fixture (from Rubicon)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -478,7 +478,7 @@ void() light_fixture1 =
 };
 
 /*======================================================================
-/*QUAKED light_candle (0 1 0) (-4 -4 -16) (4 4 16) LIGHTOFF FLAMEOFF x SHADOW x x x x
+//QUAKED light_candle (0 1 0) (-4 -4 -16) (4 4 16) LIGHTOFF FLAMEOFF x SHADOW x x x x
 Wide variety of Candles (from Rogue Software)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -753,7 +753,7 @@ void() light_beacon = {
 };
 
 /*======================================================================
-/*QUAKED misc_marshlight (.5 .5 .75) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x
+//QUAKED misc_marshlight (.5 .5 .75) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x
 Marsh lights (Quoth item)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)

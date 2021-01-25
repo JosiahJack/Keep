@@ -393,7 +393,7 @@ void() hogre_wakeup1 = {
 };
 
 /*======================================================================
-/*QUAKED monster_hogre (0.5 0.75 0) (-32 -32 -24) (32 32 64) AMBUSH x METAL NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED monster_hogre (0.5 0.75 0) (-32 -32 -24) (32 32 64) AMBUSH x METAL NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
 { model(":progs/ad171/mon_hogre.mdl"); }
 Ogre, 200 health points.
 -------- KEYS --------

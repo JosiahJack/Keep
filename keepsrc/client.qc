@@ -226,20 +226,8 @@ void() SetChangeParms =
 	if (self.health > HEAL_PLAYMAX) self.health = HEAL_PLAYMAX;
 	if (self.health < 50) self.health = 50; //heal me on level change up to 50 from potentially 1
 	parm2 = encode(self.health, self.armortype, self.armorvalue);
-	//parm2 = self.health;
-	//parm9 = self.armortype * 100;
-	//parm3 = self.armorvalue;
-
 	parm3 = encode(self.ammo_shells,self.ammo_nails,self.ammo_rockets);
-	// Always make sure the player has 25 shells
-	// Uh no, no we won't
-	//if (self.ammo_shells < DEF_SHELLS) parm4 = DEF_SHELLS;
-	//else parm4 = self.ammo_shells;
-	//parm4 = self.ammo_shells;
-	//parm5 = self.ammo_nails;
-	//parm6 = self.ammo_rockets;
 	parm4 = encode(self.ammo_cells,self.ammo_bolts,self.ammo_poison);
-	//parm7 = self.ammo_cells;
 	parm5 = encode(self.ammo_lava_nails,self.ammo_multi_rockets,self.ammo_plasma);
 	//parm6;
 	//parm7;
@@ -934,6 +922,7 @@ void() PutClientInServer =
 	self.super_damage_finished = self.super_time = 0;
 	self.radsuit_finished = self.rad_time = 0;
 	self.invisible_finished = self.invisible_time = 0;
+	self.notrace = 0;	// fix for dying with the ring
 	self.invincible_finished = self.invincible_time = 0;
 	
 	self.sharpshoot_finished = self.sharpshoot_time = 0;
@@ -1199,6 +1188,18 @@ void() PlayerPreThink =
 		// Original jump conditions
 		if (self.button2) PlayerJump ();
 		else self.flags = self.flags | FL_JUMPRELEASED;
+	}
+
+	// Monster Hydra slowdown effect
+	if (self.slowdowntime > time) {
+		self.velocity_x = self.velocity_x * 0.5;
+		self.velocity_y = self.velocity_y * 0.5;
+		//if (self.flags & FL_INWATER)
+		if (self.waterlevel == 3) {
+			self.velocity_z = self.velocity_z * 0.5;
+		} else {
+			if (self.velocity_z > 0) self.velocity_z = self.velocity_x * 0.5;
+		}
 	}
 		
 	// When the player/client starts in the map they don't want any velocity	

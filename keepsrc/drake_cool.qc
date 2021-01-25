@@ -532,7 +532,7 @@ float(float shots, float dur) Divine_Wrath =
         if (!shots)
             shots = 255;
         if (!lightzero_finished)
-            sound (world, CHAN_AUTO, "bane/thunder.wav", 1, ATTN_NONE);
+            sound (world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE);
         LightZero_Set (-1, dur, -2);
         self.divine_hits = shots;   // Number of bolts in slam, so match that.
     }
@@ -567,7 +567,7 @@ void() divine_use =
     }
     else
     {   // No lightning strikes, so just flash and thunder ominously.
-        sound (world, CHAN_AUTO, "bane/thunder.wav", 1, ATTN_NONE);
+        sound (world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE);
         LightZero_Set (LIGHTZERO_MAX, 0, -4);
         remove (self);
     }
@@ -582,7 +582,7 @@ void() divine_use =
 
 void() trigger_smite =
 {
-    precache_sound ("bane/thunder.wav");
+    precache_sound ("drake/bane/thunder.wav");
     precache_sound ("hipweap/mjolhit.wav");
 
     self.attack_finished = 0;
@@ -770,7 +770,7 @@ void(float frmin, float frmax) bane_storm =
     magic.waitmin = frmin;
     magic.waitmax = frmax;
     magic.volume  = 0.5;    // 50% chance of no bolt after the first.
-    sound (magic, CHAN_AUTO, "bane/thunder.wav", 1, ATTN_NONE);
+    sound (magic, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE);
     magic.pain_finished = time + 3;
     magic.attack_finished = 0;
 

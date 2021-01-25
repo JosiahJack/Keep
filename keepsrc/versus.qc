@@ -25,7 +25,7 @@ void(entity targ) print_bones;
 */
 
 void () usecommand = {
-	self.usingfinished = time + 0.8; // show that we pressed using for a bit, 0.2 to give time for touches to register
+	self.usingfinished = time + 0.8; // show that we pressed using for a bit, to give time for touches to register
 };
 
 void () versus_setup = {
@@ -72,6 +72,7 @@ void () print_bones = {
 
 void () item_coin_touch = {
    if (coop == 3 && other.versustype != VT_SURVIVOR)  return;
+   if ( !(other.flags & FL_CLIENT) ) return;
 
    sprint (other, "You got ");
    sprint (other, ftos(self.count));
@@ -170,6 +171,7 @@ void(float c) DropCoin = {
 */
 
 void () trigger_coinpurchase_touch = {
+	if ( !(other.flags & FL_CLIENT) ) return;
 	if (coop < 3 || (coop == 3 && other.flags & FL_CLIENT && other.versustype == VT_SURVIVOR)) {
 		// Check for and allow for purchases in versus survivor mode
 		if (self.cost > 0) {
@@ -177,6 +179,7 @@ void () trigger_coinpurchase_touch = {
 				if (coins >= self.cost) {
 					// continue on
 					coins = coins - self.cost;
+					self.cost = 0;
 					other.usingfinished = 0;
 				} else {
 					centerprint(other,"You do not have enough for this");
@@ -186,9 +189,9 @@ void () trigger_coinpurchase_touch = {
 				centerprint_msg3(other,"Press \b'e'\b to purchase for ",ftos(self.cost)," coins.");
 				return;
 			}
+			//activator = other;
+			SUB_UseTargets();
 		}
-		//activator = other;
-		SUB_UseTargets();
 	}
 };
 

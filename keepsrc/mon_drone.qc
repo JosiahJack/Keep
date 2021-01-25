@@ -26,6 +26,7 @@ void(vector org, vector vec) LaunchDLaser =
 	}
 	vec = normalize(vec);
 	newmis = spawn();
+	newmis.classgroup = CG_PROJALL;
 	newmis.owner = self;
 	newmis.movetype = MOVETYPE_FLY;
 	newmis.solid = SOLID_BBOX;

@@ -1010,9 +1010,7 @@ void() Fireball_Think =
 //------------------------------------------------------------------------//
 //  Create and launch a small fireball.
 //------------------------------------------------------------------------//
-void(entity attacker, vector start, vector dir, float sped, float damage)
-    Fireball_Launch =
-{
+void(entity attacker, vector start, vector dir, float sped, float damage) Fireball_Launch = {
     local   entity  fire;
     local   vector  ofs;
     local   string  text;
@@ -1025,6 +1023,7 @@ void(entity attacker, vector start, vector dir, float sped, float damage)
 	text = "progs/drake/flame2.mdl";
     fire = spawn();
     fire.movetype   = MOVETYPE_FLYMISSILE;
+	fire.classgroup = CG_PROJALL;
     fire.solid      = SOLID_BBOX;
     fire.frame      = $flame;
     fire.angles     = vectoangles(dir) + ofs;
@@ -1175,6 +1174,7 @@ void(entity attacker, vector start, vector dir, float sped, float damage)
 	ofs = '90 0 0';
 	text = "progs/drake/flame2.mdl";
     fire = spawn();
+	fire.classgroup = CG_PROJALL;
     fire.movetype   = MOVETYPE_FLYMISSILE;
     fire.solid      = SOLID_BBOX;
     fire.frame      = $flameb;      // Use a *big* flame.
@@ -1270,6 +1270,7 @@ void(vector spot, float hot) Firelink_Spawn =
     local   entity  fire;
 
     fire = spawn();
+	fire.classgroup = CG_PROJALL;
     fire.owner      = self.owner;
     fire.master     = self.master;
     fire.angles     = self.angles;

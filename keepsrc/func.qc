@@ -14,7 +14,7 @@ float BOB_COLLISION = 2;		// Collision for misc_bob
 float BOB_NONSOLID = 4;			// Non solid for func_bob
 
 /*======================================================================
-/*QUAKED func_wall (0 .5 .8) ? x AFRAME x x MODCHECK x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED func_wall (0 .5 .8) ? x AFRAME x x MODCHECK x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 A SOLID bmodel with toggled animated texture
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -105,7 +105,7 @@ void() func_wall =
 };
 
 /*======================================================================
-/*QUAKED func_illusionary (0 .5 .8) ? x AFRAME x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED func_illusionary (0 .5 .8) ? x AFRAME x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 A NON SOLID bmodel with texture toggle
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -171,7 +171,7 @@ void() func_illusionary =
 };
 
 /*======================================================================
-/*QUAKED func_episodegate (0 .5 .8) ? E1 E2 E3 E4 x x x x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED func_episodegate (0 .5 .8) ? E1 E2 E3 E4 x x x x Not_Easy Not_Normal Not_Hard Not_DM
 SOLID bmodel when player has SELECTED rune(s)
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -228,7 +228,7 @@ void() func_episodegate =
 };
 
 /*======================================================================
-/*QUAKED func_bossgate (0 .5 .8) ? x x x x x x x x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED func_bossgate (0 .5 .8) ? x x x x x x x x Not_Easy Not_Normal Not_Hard Not_DM
 A NON SOLID bmodel when player has ALL runes
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -284,8 +284,8 @@ void() func_bossgate =
  - Added on/off message once function
  - Added collision and nodmg spawnflags
 
-/*======================================================================
-/*QUAKED func_laser (0 .5 .8) ? x SOLID NODMG x x x STARTOFF x
+//======================================================================
+//QUAKED func_laser (0 .5 .8) ? x SOLID NODMG x x x STARTOFF x
 A togglable laser, hurts to touch, can be used to block players
 -------- KEYS --------
 targetname  : trigger entity (works with entity state system)
@@ -472,7 +472,7 @@ void() func_laser =
 };
 
 /*======================================================================
-/*QUAKED func_skill (0 .5 .8) ? STARTOPEN x x x x START_OFF x
+//QUAKED func_skill (0 .5 .8) ? STARTOPEN x x x x START_OFF x
 This is a special bmodel that changes texture based on current skill level
 Will keep checking skill level until triggered (based on door QC code)
 -------- KEYS --------
@@ -720,7 +720,7 @@ void() func_skill = {
 };
 
 /*======================================================================
-/*QUAKED func_bob (0 .5 .8) ? x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED func_bob (0 .5 .8) ? x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 A SOLID bmodel that gently moves back and forth
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)

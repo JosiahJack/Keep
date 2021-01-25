@@ -1,4 +1,5 @@
 void Touch_Missile();
+float HasReflection(entity ent, vector spot, float damage);
 
 /*======================================================================
  PROJECTILE Explosion and Blood functions
@@ -209,6 +210,7 @@ void() BecomeExplosion =
 void(vector org, float velrnd, float upbase, float uprnd) SpawnProjectileSmoke =
 {
 	newmis = spawn();
+	newmis.classtype = CT_TEMPPHYS;
 	newmis.classgroup = CG_TEMPENT;
 	newmis.movetype = MOVETYPE_TOSS;
 	newmis.solid = SOLID_NOT;
@@ -226,6 +228,7 @@ void(vector org, float velrnd, float upbase, float uprnd) SpawnProjectileSmoke =
 void(vector org, vector veldir, float velbase, float velrnd) SpawnVelocitySmoke =
 {
 	newmis = spawn();
+	newmis.classtype = CT_TEMPPHYS;
 	newmis.classgroup = CG_TEMPENT;
 	newmis.movetype = MOVETYPE_TOSS;
 	newmis.solid = SOLID_NOT;
@@ -397,6 +400,7 @@ void(vector org, vector vel, float btype) SpawnMeatSprayDrake =
     gib.owner       = self;
     gib.movetype    = MOVETYPE_BOUNCE;
     gib.solid       = SOLID_NOT;
+	gib.classtype = CT_TEMPGIB;
 
     gib.velocity    = vel;
     gib.velocity_z  = gib.velocity_z + 250 + 50*random();
@@ -452,8 +456,7 @@ void(float fx, entity src, vector p1, vector p2) Tent_Beam =
     WriteCoord (MSG_BROADCAST, p2_z);
 };
 
-void(vector spot) Tent_Explosion =
-{
+void(vector spot) Tent_Explosion = {
     WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
     WriteByte (MSG_BROADCAST, TE_EXPLOSION);
     WriteCoord (MSG_BROADCAST, spot_x);
@@ -461,8 +464,7 @@ void(vector spot) Tent_Explosion =
     WriteCoord (MSG_BROADCAST, spot_z);
 };
 
-void(vector spot, float rgb, float add) Tent_Explosion2 =
-{
+void(vector spot, float rgb, float add) Tent_Explosion2 = {
     WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
     WriteByte (MSG_BROADCAST, 12);      // TE_EXPLOSION2
     WriteCoord (MSG_BROADCAST, spot_x);
@@ -507,8 +509,7 @@ void(vector spot) R_Exp3 =
     remove (e);
 };
 
-void(vector spot) Rocket_Explosion1 =
-{
+void(vector spot) Rocket_Explosion1 = {
     R_Exp3 (spot);
 
     Tent_Explosion (spot);
@@ -533,6 +534,7 @@ void(vector spot) Rocket_TarExplosion =
 };
 //- - - - - - - - -
 
+void() Old_Explosion1 = {Rocket_Explosion1 (self.origin);  BecomeExplosion ();};
 
 //==========================================================================
 //  Common Explosions
@@ -828,6 +830,25 @@ local   vector  circlepos, vel;
 };
 
 //==========================================================================
+//  LIGHTNING (Custom addition)
+//
+//  This is an edict set aside for the sole purpose of referencing
+//  reflected lightning bolts.
+//==========================================================================
+entity  lightning;
+
+// Used by lightning code to draw reflected lightning bolts.
+void() InitLightning =
+{ 
+    lightning = spawn();
+    setsize (move_box, VEC_ORIGIN, VEC_ORIGIN);
+    move_box.solid      = SOLID_NOT;
+    move_box.movetype   = MOVETYPE_NONE;
+    move_box.classname  = "lightning";
+	dprint("\b[SETUP]\b Drake lightning is now setup");
+};
+
+//==========================================================================
 //  Normal Lightning Bolt
 
 // Creates a discharge effect.
@@ -940,32 +961,27 @@ void(vector p1, vector p2, entity attacker, float damage, entity inflictor,
             else
                 ignore = world;
 
-            if (targ != inflictor)      // Dirty hack to prevent suicide.
-            {
-                //if (HasReflection (targ, p1, damage))
-                //{
-                    //if (yes)
-                    //{
-                    //    yes = FALSE;
-                    //    ruler = targ;
-                    //    delta = delta - vlen(p1 - start);   // Get remaining dist.
-                   //     dir = normalize(p1 - targ.origin);
-                        p2 = p1 + dir*delta;
-                    //}
-                    //else    // ...we give up.
-                    //{   // Use dummy entity to draw reflected bolt.
-                        // If there are many, only one is drawn.
-                    //    inflictor = lightning;
-                    //}
-                    //ignore = world;     // Stop bolt.
-                    //ReflectSound (targ);
-                //}
-                //else
-                //{
+			// Dirty hack to prevent suicide.
+            if (targ != inflictor) {
+                if (HasReflection (targ, p1, damage)) {
+                    if (yes) {
+                       yes = FALSE;
+                       ruler = targ;
+                       delta = delta - vlen(p1 - start);   // Get remaining dist.
+                       dir = normalize(p1 - targ.origin);
+                        // p2 = p1 + dir*delta;
+                    } else {
+						// ...we give up.
+						// Use dummy entity to draw reflected bolt.  If there are many, only one is drawn.
+						inflictor = lightning;
+                    }
+                    ignore = world;     // Stop bolt.
+                    ReflectSound (targ);
+                } else {
                     if (first)
                     if (targ.takedamage)
                         BoltDamage (targ, inflictor, attacker, p1, damage, dtype);
-                //}
+                }
             }
 
         // If current trace hits inflictor/attacker, next trace will miss all.
@@ -1060,6 +1076,7 @@ void(vector start, vector dir, vector add) SmartBall_Launch = {
     newmis.master       = newmis.owner      = self;
     newmis.movetype     = MOVETYPE_TOSS;
     newmis.solid        = SOLID_BBOX;
+	newmis.classgroup = CG_PROJALL;
     newmis.classname    = "fireball";
 // set missile speed
     newmis.speed        = 600;

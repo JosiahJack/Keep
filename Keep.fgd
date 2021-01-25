@@ -739,6 +739,46 @@
 	count(integer) : "Number of Bones"
 ]
 
+//----------------------------------------------------------------------
+@PointClass base(Items,KeySize) studio("progs/drake/t_gem.mdl") = item_treasure : "Tiny Health or Armor Pickup, +10" [
+	spawnflags(Flags) = [
+		1 : "Small +5" : 0
+		2 : "Big +20" : 0
+	]
+	healtype(choices) : "Treasure Type" = [
+		0 : "Armor - Gold coin (default)"
+		1 : "Health - Gem"
+	]
+	skin(choices) : "Skin (gems only, fullbright)" = [
+		0 : "Red"
+		1 : "Orange"
+		2 : "Yellow"
+		3 : "Blue-white"
+	]
+]
+
+//----------------------------------------------------------------------
+@PointClass base(Items,KeySize) studio( "progs/drake/t_coin.mdl") = item_treasure_coin : "Tiny Armor Pickup, +10" [
+	spawnflags(Flags) = [
+		1 : "Small +5" : 0
+		2 : "Big +20" : 0
+	]
+]
+
+@PointClass base(Items,KeySize) studio( "progs/drake/t_coin.mdl") = item_treasure_gem : "Tiny Health Pickup, +10" [
+	spawnflags(Flags) = [
+		1 : "Small +5" : 0
+		2 : "Big +20" : 0
+	]
+	skin(choices) : "Skin (gems only, fullbright)" = [
+		0 : "Red"
+		1 : "Orange"
+		2 : "Yellow"
+		3 : "Blue-white"
+	]
+]
+
+
 @PointClass base(Items,KeySize) studio("progs/fromitz.mdl") = item_circuitboard : "17mm Fromitz Board!" []
 
 @PointClass base(Items,KeySize) = item_custom : "Custom Pickup Item" [
@@ -1053,6 +1093,7 @@
 	spawnflags(flags) = [
         32: "Start Disabled" : 0
 	]
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 
 //----------------------------------------------------------------------
@@ -1099,6 +1140,7 @@
 		4 : "Custom Key 4"
 	]
 	message2(string) : "Custom key message"
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 
 //----------------------------------------------------------------------
@@ -1134,6 +1176,7 @@
 	noise1(string) : "Custom sound - Open"
 	noise2(string) : "Custom sound - Opening"
 	noise3(string) : "Custom sound - Closed"
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 
 //----------------------------------------------------------------------
@@ -1154,6 +1197,7 @@
 	]
 	noise(string) : "Custom sound - Moving"
 	noise1(string) : "Custom sound - Stopped"
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]	
 
 @SolidClass base(FuncItems, FuncLighting) = func_new_plat : "Rogue Plat" [
@@ -1173,6 +1217,7 @@
 		1: "Base fast"
 		2: "Chain slow"
 	]
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 @SolidClass base(FuncItems, FuncLighting) = func_multi_exploder : "Multiple Explosions"
 [
@@ -1213,6 +1258,7 @@
 	]
 	noise(string) : "Custom sound - Stopped"
 	noise1(string) : "Custom sound - Moving"
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 
 @SolidClass base(FuncItems) = func_particlefield : "Particle Field" [
@@ -1222,8 +1268,7 @@
 	]
 	cnt(integer) : "Activate on count #" : 1
 	count(integer) : "Paticle Density" : 2
-	color(choices) : "Particle color" : 192 =
-	[
+	col(choices) : "Particle color (type value 0-255)" : 192 =[
 		  1 : "Gray"
 		 15 : "White"
 		 63 : "Greenish"
@@ -1309,17 +1354,30 @@
 		2 : "A Frame" : 0
 		16: "Mod Check" : 0
 	]
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 
-@SolidClass base(FuncItems, FuncLighting) = func_pushable : "Pushable Wall" []
+@SolidClass base(FuncItems) = func_nodraw : "Invisible Wall" [
+	spawnflags(Flags) = [
+		1 : "Show brush geometry" : 0
+	]
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
+]
+
+@SolidClass base(FuncItems) = func_bspframe : "Alternate Frame for explobox brush" [
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
+]
+
+@SolidClass base(FuncItems, FuncLighting) = func_pushable : "Pushable Wall" [alpha(integer) : "Alpha Transparency(def=1,opaque)"]
 @SolidClass base(FuncItems, FuncLighting) = func_togglewall : "Toggleable Blocker" []
-@SolidClass base(FuncItems, FuncLighting) = func_breakawaywall : "SUB_Remove-able Wall" []
-@SolidClass base(FuncItems, FuncLighting) = func_slidebox : "Slicky Surface" []
+@SolidClass base(FuncItems, FuncLighting) = func_breakawaywall : "SUB_Remove-able Wall" [alpha(integer) : "Alpha Transparency(def=1,opaque)"]
+@SolidClass base(FuncItems, FuncLighting) = func_slidebox : "Slicky Surface" [alpha(integer) : "Alpha Transparency(def=1,opaque)"]
 
 @SolidClass base(FuncItems, FuncLighting) = func_illusionary : "Wall Illusionary" [
 	spawnflags(Flags) = [
 		2 : "A Frame" : 0
 	]
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 @SolidClass base(FuncItems, FuncLighting) = func_episodegate : "Episode Gate" [
 	spawnflags(Flags) = [
@@ -1328,8 +1386,9 @@
 		4 : "Episode 3" : 0
 		8 : "Episode 4" : 0
 	]
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
-@SolidClass base(FuncItems, FuncLighting) = func_bossgate : "Boss gate" []
+@SolidClass base(FuncItems, FuncLighting) = func_bossgate : "Boss gate" [alpha(integer) : "Alpha Transparency(def=1,opaque)"]
 //----------------------------------------------------------------------
 @SolidClass base(FuncItems, FuncLighting) = func_laser : "Lasers" [
 	spawnflags(Flags) = [
@@ -1340,7 +1399,7 @@
 	message2(string) : "Switched on Message"
 	wait(integer) : "-1 = display switched message once"
 	dmg(integer) : "Touch damage (1 per 0.1s)"
-	alpha(integer) : "Alpha variance (def 0.5)"
+	alpha(integer) : "Alpha Transparency(def=0.5)"
 	sounds(choices) : "Sounds" = [
 		0 : "Silent"
 		1 : "Laser"
@@ -1369,6 +1428,7 @@
 	noise1(string) : "Custom sound : Stopped"
 	noise2(string) : "Custom sound : Start/Loop"
 	noise3(string) : "Custom sound : Touch"
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 //----------------------------------------------------------------------
 @SolidClass base(FuncItems, FuncLighting) = func_bob : "Bobbing Bmodel" [	
@@ -1377,12 +1437,14 @@
 	waitmin(integer) : "Speed up scale (def=1)"
 	waitmin2(integer) : "Slow down scale (def=0.75)"
 	delay(integer) : "Delay start (-1=random)"
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]	
 //----------------------------------------------------------------------
 @SolidClass base(FuncItems, FuncLighting) = func_explobox : "Exploding Brushwork" [
 	noise(string) : "Custom Sound - Explosion"
 	health(integer) : "Health (def=15)"
 	dmg(integer) : "Radius Damage (def=160)"
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 
 //NOTE- These two directly below still need sorted out
@@ -1406,7 +1468,7 @@
 ]
 
 //_____PRESSURE SWITCH_____
-@SolidClass base(FuncItems,PSwitchSettings,FuncLighting) = func_pressureswitch : "Pressure Switch - NOTE - To be used in conjunction with 'func_insidevolume' and 'trigger_doorstate'." []
+@SolidClass base(FuncItems,PSwitchSettings,FuncLighting) = func_pressureswitch : "Pressure Switch - NOTE - To be used in conjunction with 'func_insidevolume' and 'trigger_doorstate'." [alpha(integer) : "Alpha Transparency(def=1,opaque)"]
 //_____INSIDE VOLUME_____
 @SolidClass base(Appearflags) = func_insidevolume : "Function to test if an entity bounding box is inside of this volume." [
 	spawnflags(flags) = [
@@ -2138,6 +2200,10 @@
 	]
 ]
 
+@PointClass base(Appearflags,Targetname) size(-64 -64 -80, 64 64 88) color(0 128 192) flags(Angle) studio("progs/drake/bellring.mdl") = misc_bell : "Bell, Shootable" []
+@PointClass base(Appearflags,Targetname) size(-32 -32 -24, 32 32 80) color(0 128 192) flags(Angle) studio("progs/drake/anglstat.mdl") = misc_statue : "Angel Statue, Breakable" []
+@PointClass base(Appearflags,Targetname) size(-16 -16 0, 16 16 128) color(0 128 192) flags(Angle) studio("progs/drake/tree.mdl") = misc_tree : "Tree Model" []
+
 @PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2) studio("progs/ne_ruins/pot1.mdl") = misc_breakable_pot1 [
     spawnflags(flags) = [
 		1 : "Start OFF (hidden)" : 0 : "Start hidden"
@@ -2630,14 +2696,6 @@
 //NOTE - need to ADD editor view pose/skin chnages
 //studio({"path": "progs/key_medieval.mdl", "skin": 2})
 @PointClass base(TrigOFF, Appearflags, Targetname) size(-16 -16 -24, 16 16 32) color(255 128 64) studio("progs/ad171/misc_player.mdl") = misc_player : "Misc Player - Dead Player MDL for poses." [
-	spawnflags(Flags) = [ 
-	    1 : "On Back" : 0 
-	    2 : "Face Down1" : 0
-	    4 : "Slumped Over" : 0
-	    8 : "Face Down2" : 0
-	   16 : "Face Down3" : 0
-	   32 : "On Side" : 0
-	]
 	angle(integer) : "facing angle"
 	ideal_yaw(choices) : "Y axis rotation" = [
 		0 : "No rotation"
@@ -2645,13 +2703,12 @@
 	]
 	//We have spawnflags for these?
 	frame(choices) : "Pose Selection" = [
-		0 : "Default"
-		49 : "On Back"
-		60 : "Face Down 1"
-		69 : "Slumped Over"
-		84 : "Face Down 2"
-		93 : "Face Down 3"
-		102 : "On Side"
+		0 : "Default On Back"
+		1 : "Face Down 1"
+		2 : "Slumped Over"
+		3 : "Face Down 2"
+		4 : "Face Down 3"
+		5 : "On Side"
 	]
 	exactskin(choices) : "Skin Selection" = [
 	   -1 : "Random"
@@ -2720,6 +2777,7 @@
 ]
 @PointClass base(EBox) size(-16 -16 0, 16 16 64) studio("progs/ad171/explode_box1.mdl") = misc_explobox : "Large box" []
 @PointClass base(EBox) size(-16 -16 0, 16 16 32) studio("progs/ad171/explode_box2.mdl") = misc_explobox2 : "Small box" []
+@PointClass base(EBox) size(-32 -32 0, 32 32 64) studio("maps/b_barrel.bsp") = misc_barrel : "Small box" []
 
 @PointClass base(EBox) size(-16 -16 0, 16 16 64) studio("progs/b_bio_l.bsp") = misc_biobox_l : "Large box" []
 @PointClass base(EBox) size(-16 -16 0, 16 16 32) studio("progs/b_bio_s.bsp") = misc_biobox_s : "Small box" []
@@ -2856,8 +2914,16 @@
 		16: "Rockets" : 0
 		32: "Phasebeam PPC" : 0
 	]
+	sounds(choices) : "Sounds" = [
+		0 : "Silent (def)"
+		1 : "Door1"
+		2 : "Hydro"
+		3 : "Door2"
+		4 : "Door3"
+	]
 	angles(string) : "Angles"
 	movedir(string) : "Move amount for retraction"
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 
 //======================================================================
@@ -3090,6 +3156,9 @@
 	multiplier(integer) : "Strength multiplier" : 1
 	noise(string) : "Looping sound"
 	noise1(string) : "Ending sound"
+	spawnflags(flags) = [
+		2 : "Also Move Physically" : 0
+	]
 ]
 
 //======================================================================
@@ -3147,6 +3216,7 @@
 	sounds(integer) : "Sounds (1=metal)"
 	noise(string) : "Custom sound - stop"
 	noise1(string) : "Custom sound - moving"
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 @SolidClass base(HipItems) = func_movewall : "Rotating Collision" [
 	spawnflags(flags) = [
@@ -3155,8 +3225,9 @@
 		4 : "No Solid" : 0 : "makes the brush non-solid"
 	]
 	dmg(integer) : "Touch/Block Damage"
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
-@SolidClass base(HipItems) = rotate_object : "Rotating Object" []
+@SolidClass base(HipItems) = rotate_object : "Rotating Object" [alpha(integer) : "Alpha Transparency(def=1,opaque)"]
 @PointClass base(Appearflags,Targetname,Target) size(-8 -8 -8, 8 8 8) =
 	func_rotate_door : "Rotating Door" [
 	spawnflags(flags) = [
@@ -3169,6 +3240,7 @@
 		2 : "Metal"
 		3 : "Base"
 	]
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 
 
@@ -3281,6 +3353,7 @@
 	brk_obj_count3(integer) : "Template 3 spawn count"
 	brk_obj_count4(integer) : "Template 4 spawn count"
 	brk_obj_count5(integer) : "Template 5 spawn count"
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 @PointClass base(Break) = func_breakable_spawner : "Breakable Spawner" [
     spawnflags(flags) = [
@@ -3303,6 +3376,7 @@
 		-1: "Once Only"
 	]
 	waitmin(integer) : "Fadeout timer"
+	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 @PointClass base(Appearflags,Targetname) size(-8 -8 -8, 8 8 8) = trigger_monsterbreak : "Trigger monster + breakable" [
 	spawnflags(flags) = [
@@ -3344,6 +3418,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 		32 : "NoGFX" : 0 : "No teleport spawn effect or sound"
 		64 : "Delay" : 0 : "Will wait for trigger before spawning"
 		128 : "Angry" : 0 : "Will spawn angry at the player"
+		32768 : "Can Drown" : 0 : "Monster will drown underwater (if not swimmer)"
 	]
 	angrytarget(target_destination) : "Angry target"
 	deathtarget(target_destination) : "Death target"
@@ -3427,6 +3502,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @baseclass base(Monster) size(-16 -16 -24, 16 16 64) = MonXTall []
 @baseclass base(Monster) size(-32 -32 -24, 32 32 64) = MonWide []
 @baseclass base(Monster) size(-24 -24 -24, 24 24 22) = MonFlat []
+@baseclass base(Monster) size(-32 -32 -24, 32 32 24) = MonWideFlat []
 @baseclass base(Monster) size(-24 -24 -24, 24 24 64) = MonGiant []
 @baseclass base(Monster) size(-32 -32 -24, 32 32 64) = MonMassive []
 @baseclass base(Monster) size(-48 -48 -24, 48 48 84) = MonArmagon []
@@ -3468,6 +3544,10 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	spawnflags(flags) = [ 4 : "Liquid Blocks Sight" : 0 ]
 ]
 @PointClass base(MonTall) studio("progs/octa.mdl") = monster_octa : "Octopus" [
+	spawnflags(flags) = [ 4 : "Liquid Blocks Sight" : 0 ]
+]
+
+@PointClass base(MonFish) studio("progs/extras_r5/hydra.mdl") = monster_hydra : "Hydra" [
 	spawnflags(flags) = [ 4 : "Liquid Blocks Sight" : 0 ]
 ]
 //----------------------------------------------------------------------
@@ -3683,6 +3763,9 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @PointClass base(MonTall) studio("progs/mon_tarbaby.mdl") skin(1) = monster_tarbaby_mitosis : "Self-Replicating Tarbaby"
 [ spawnflags(flags) = [ 4 : "Jump Less" : 0 ] ]
 
+@PointClass base(MonWideFlat) studio("progs/drake/vomitus.mdl") = monster_vomitus : "Vomitus" []
+@PointClass base(MonWideFlat) studio("progs/drake/vomitus.mdl") skin(1) = monster_meatwad : "Vomitus Meatwad" []
+
 //----------------------------------------------------------------------
 @PointClass base(MonTall) studio("progs/wizard.mdl") = monster_wizard : "Wizard"
 [ spawnflags(flags) = [ 4 : "Always Above" : 0 ] ]
@@ -3716,8 +3799,12 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	skin(integer) : "Skin"
 ]
 
-@PointClass base(MonTall) studio("progs/ad171/mon_gaunt.mdl") = monster_gaunt : "Gaunt"
-[ spawnflags(flags) = [ 4 : "Perch" : 0 ] ]
+@PointClass base(MonTall) studio("progs/ad171/mon_gaunt.mdl") = monster_gaunt : "Gaunt" [
+	spawnflags(flags) = [ 
+		2 : "Quoth Lightning" : 0
+		4 : "Perch" : 0
+	]
+]
 
 //----------------------------------------------------------------------
 @PointClass base(MonShort) studio("progs/ad171/mon_zombie.mdl") skin(6) = monster_zombiep : "Poison Zombie"
@@ -3750,6 +3837,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 
 //----------------------------------------------------------------------
 @PointClass base(MonTiny) studio("progs/ad171/mon_gargoyle.mdl") = monster_minotaurminion : "Gargoyle Minion" []
+@PointClass base(MonGolem) studio("progs/ad171/mon_golem.mdl") = monster_necrominiongolem : "Golem Minion" []
 @PointClass base(MonTiny) studio("progs/ad171/mon_voreling.mdl") = monster_shalrathminion : "Voreling Minion" []
 @PointClass base(MonTiny) studio("progs/ad171/mon_lostsoul.mdl") = monster_skullwizminion : "Lost Soul Minion" []
 @PointClass base(MonTiny) studio("progs/ad171/mon_spiderb.mdl") = monster_wraithminion : "Spider Minion" []
@@ -3938,9 +4026,16 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/bandit.mdl") = monster_bandit : "Bandit" []
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/archer.mdl") = monster_archer : "Archer" []
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/archer.mdl") skin(1) = monster_archer_lord : "Archer Lord" []
-@PointClass base(Monster) size(-32 -32 -24, 32 32 40) studio("progs/dog.mdl") skin(2) = monster_hell_hound : "Hell hound" []
+@PointClass base(MonDog) studio("progs/mon_dog.mdl") skin(3) = monster_hell_hound : "Hell hound" []
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hknight.mdl") skin(2) = monster_hell_lord : "Hell Lord" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hknight.mdl") skin(3) = monster_hkboss : "Boss Knight" []
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hknight.mdl") skin(4) = monster_bane : "Bane" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hknight.mdl") skin(6) = monster_dark_lord : "The Dark Lord" [
+	spawnflags(Flags) = 
+	[
+		4 : "Beast" : 1
+	]
+]
 @PointClass base(MonGiant) studio("progs/anaconda/anaconda.mdl") = monster_anac : "Anaconda" [
 	spawnflags(Flags) = 
 	[
@@ -3964,7 +4059,9 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/necro.mdl") = monster_sorceror : "Sorceror" []
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/necro.mdl") = monster_acolyte : "Acolyte" []
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/necro.mdl") = monster_warlock : "Warlock" []
-@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_fallen_angel : "Fallen Angel" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/necro.mdl") = monster_necromancer : "Necromancer" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hexen2/fangel.mdl") = monster_fallen_angel : "Fallen Angel" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hexen2/fangel.mdl") skin(1) = monster_fallen_angel_lord : "Fallen Angel" []
 @PointClass base(Monster) size(-32 -32 -24, 32 32 64) studio("progs/drake/cyber.mdl") = monster_cyberdemon : "Cyberdemon" []
 //@PointClass base(MonSquare) size(-20 -20 -20, 20 20 20) studio("progs/ad172/mon_turretbal.mdl") = monster_turretbal : "Bal Turret" []
 

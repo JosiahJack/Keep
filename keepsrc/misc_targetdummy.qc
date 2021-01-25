@@ -1,5 +1,5 @@
 /*======================================================================
-/*QUAKED misc_targetdummy (0 .5 .5) (-32 -32 -24) (32 32 64) KNIGHT WIZARD OGRE HELL_KNIGHT ZOMBIE DEMON SHALRATH SHAMBLER
+//QUAKED misc_targetdummy (0 .5 .5) (-32 -32 -24) (32 32 64) KNIGHT WIZARD OGRE HELL_KNIGHT ZOMBIE DEMON SHALRATH SHAMBLER
 Target practice dummy
 ------- KEYS --------
 noise1 : Targetnumber tracking weapon used
@@ -272,7 +272,7 @@ void() misc_targetdummy =
 };
 
 /*======================================================================
-/*QUAKED misc_targetnumber (.5 .5 0) (-4 -4 -8) (4 4 8) x
+//QUAKED misc_targetnumber (.5 .5 0) (-4 -4 -8) (4 4 8) x
 target number to display ingame
 ------- KEYS --------
 targetname : required for numbers to updated

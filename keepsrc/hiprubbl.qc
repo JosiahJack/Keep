@@ -11,6 +11,7 @@ void (string rubblename) hipThrowRubble = {
    local entity new;
 
    new = spawn ();
+	new.classtype = CT_TEMPPHYS;
    new.origin = self.origin;
    setmodel (new,rubblename);
    setsize (new,VEC_ORIGIN,VEC_ORIGIN);

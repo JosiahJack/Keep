@@ -218,8 +218,7 @@ void() tbaby_die =
 //=============================================================================
 //QUAKED monster_tarbaby (1 0 0) (-16 -16 -24) (16 16 24) Ambush x Lessjump
 //=============================================================================
-void() monster_tarbaby =
-{
+void() monster_tarbaby = {
 	if (deathmatch) { remove(self); return; }
 
 	self.mdl = "progs/mon_tarbaby.mdl";
@@ -232,7 +231,6 @@ void() monster_tarbaby =
 	self.pain_sound = self.idle_sound;
 
 	precache_sound ("blob/death1.wav");
-	
 	precache_sound ("blob/hit1.wav");
 	precache_sound ("blob/land1.wav");
 	

@@ -1,5 +1,5 @@
 /*======================================================================
-/*QUAKED func_insidevolume (0 .5 .8) ? PLAYER MONSTER ITEM PUSHABLE x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED func_insidevolume (0 .5 .8) ? PLAYER MONSTER ITEM PUSHABLE x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Function to test if an entity bounding box is inside of this volume
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)

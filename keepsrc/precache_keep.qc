@@ -20,6 +20,7 @@ void() PrecacheAll = {
 	precache_sound ("hipweap/proxwarn.wav");
 	precache_sound ("hipweap/proxbomb.wav");
 	precache_sound ("weapons/crossbow_rdy.wav");
+	precache_sound2("enforcer/enfstop.wav");
 	precache_sound ("spider/hiss2.wav");
 	precache_sound ("lavagun/snail.wav");
 	precache_sound ("boss1/sight1.wav");
@@ -76,6 +77,7 @@ void() PrecacheAll = {
 	precache_sound ("ambience/thunder3.wav");
 	precache_sound ("weapons/crossbow_fire.wav");
 	precache_sound ("weapons/Lncharow.wav");
+	precache_sound ("weapons/mirv1.wav");
 
 	precache_sound ("weapons/axe_flesh.wav");
 	precache_sound ("items/blastbelt2.wav");
@@ -84,6 +86,7 @@ void() PrecacheAll = {
 	precache_sound ("items/jumpboots3a.wav");
 	precache_sound ("items/jumpboots3b.wav");
 	precache_sound ("items/jumpboots3c.wav");
+	precache_sound ("misc/dsslop.wav");
 
 	precache_model ("progs/null.mdl");
 	precache_model ("progs/beamhit.spr");

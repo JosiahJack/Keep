@@ -750,7 +750,7 @@ void() monster_zombiek =
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
 
-	self.gib1mdl = "progs/w_zombiesword.mdl";	// Unique sword
+	self.gib1mdl = "progs/ad171/w_zombiesword.mdl";	// Unique sword
 	self.gib1sound = GIB_IMPACT_METALA;
 	precache_model (self.gib1mdl);
 

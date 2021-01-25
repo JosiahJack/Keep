@@ -400,7 +400,7 @@ void() hogremac_wakeup8a	=[	$smash13,		hogremac_wakeup9a ] {};
 void() hogremac_wakeup9a	=[	$smash14,		hogremac_run1	] {};
 
 /*======================================================================
-/*QUAKED monster_hogremac (0.5 0.75 0) (-32 -32 -24) (32 32 64) AMBUSH x METAL NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
+//QUAKED monster_hogremac (0.5 0.75 0) (-32 -32 -24) (32 32 64) AMBUSH x METAL NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
 { model(":progs/ad171/mon_hogremac.mdl"); }
 Ogre, 200 health points.
 -------- KEYS --------

@@ -5,6 +5,8 @@
 .void() th_novis;
 vector VEC_HULL_MIN = '-16 -16 -24';
 vector VEC_HULL_MAX = '16 16 32';
+float LIGHTNING_RANDOM = 1;
+float LIGHTNING_BOOM = 2;
 .vector oldenemyorigin;
 .vector spawnmaxs;
 .entity eye;
@@ -34,3 +36,9 @@ vector VEC_HULL_MAX = '16 16 32';
 .float trinity_start;
 .float trinity_time;
 .float vermis_grabbed;
+.float carrymode;
+.entity carry;
+.vector origin2;
+.float vsightmultiplier;
+.float vmultiplier;
+.string pathtarget;
