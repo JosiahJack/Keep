@@ -1053,6 +1053,8 @@ void() trigger_ladder =
 	trigger_bmodel_setup();
 };
 
+void() func_ladder = { trigger_ladder(); };
+
 /*======================================================================
 //QUAKED trigger_gravity (.5 .5 .5) ? NOTOUCH SERVER PLAYER MONSTER RESET x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Change entity/entities/player or server (world) gravity

@@ -229,17 +229,21 @@ void() SetChangeParms =
 	parm3 = encode(self.ammo_shells,self.ammo_nails,self.ammo_rockets);
 	parm4 = encode(self.ammo_cells,self.ammo_bolts,self.ammo_poison);
 	parm5 = encode(self.ammo_lava_nails,self.ammo_multi_rockets,self.ammo_plasma);
-	//parm6;
-	//parm7;
+	parm6 = mapvar[0];
+	parm7 = mapvar[1];
 	parm8 = self.weapon;
-	//parm9;
+	parm9 = mapvar[2];
 	//parm10 is self.moditems above
 	//parm11 is self.items2 above
 	parm12 = globalstate;
 	parm13 = self.perms;
-	//parm14;
-	//parm15;
-	//parm16;
+	parm14 = mapvar[3];
+	parm15 = mapvar[4];
+	parm16 = mapvar[5];
+
+	// Ok, locking us in as of NOW!  QSS or FTE ENGINES ONLY FROM THIS POINT FORWARD!!!
+	parm17 = encode(self.ammo_bloodcrystals,self.ammo_voidshards,self.ammo_elemental);
+	parm18 = self.selfweaponismoditems; // remember hack for secondary set of 24 weapons!  For AoA and any further weapon additions!
 };
 
 /*======================================================================
@@ -613,6 +617,9 @@ void() DecodeLevelParms =
 	self.ammo_lava_nails = decode(parm5,LOW8);
 	self.ammo_multi_rockets = decode(parm5,MID8);
 	self.ammo_plasma = decode(parm5,HI8);
+	self.ammo_bloodcrystals = decode(parm17,LOW8);
+	self.ammo_voidshards = decode(parm17,MID8);
+	self.ammo_elemental = decode(parm17,HI8);
 	// parm6;
 	// parm7;
 	self.weapon = parm8;
@@ -645,6 +652,8 @@ void() DecodeLevelParms =
 	// Check for any worldspawn map variable settings
 	if (CheckZeroVector(world.mapvar_update) == FALSE)
 		mapvar_range(world.mapvar_update);
+
+	self.selfweaponismoditems = parm18;
 };
 
 //----------------------------------------------------------------------
@@ -912,7 +921,6 @@ void() PutClientInServer =
 	self.steplast = 1;
 	//self.jumplandfinished = time;
 	self.jump_flag = 0;
-	self.oldgravity = 0;				// Reset gravity effects
 
 	// Drake variables
     self.mist = world;
@@ -1011,7 +1019,12 @@ void() PutClientInServer =
 		}
 		// Teleport effect + sound
 		spawn_tdeath (self.origin, self);
-	}	
+	}
+
+	// pOx - START - func_water support
+	self.fwatershift = TRUE;// catch runaway cshifts (changlevel/respawn while in func_water)
+	self.oldgravity = 0;// use unmodified sv_gravity
+	// pOx - END - func_water support	
 
 	RunCommandSpawn();
 };
@@ -1073,6 +1086,23 @@ void() PlayerPreThink =
 	}
 
 	makevectors (self.v_angle);	
+
+	// pOx - START - func_water & func_ladder support
+	// Set cshift back to normal if eyes are out of func_water
+	if (self.fwatershifttime < time) {
+		stuffcmd(self, "v_cshift 130 80 50 0\n");
+		if (self.fwatershift) {
+			self.fwatershift = FALSE;
+		}
+	}
+	// Both func_water and func_ladder require zero G to work properly.
+	// Lucky for us, the Mission Pack build of Quake has a gravity modifier we can exploit.
+	if (self.zerogtime < time)
+		self.gravity = self.oldgravity;// reset normal gravity
+	else
+		self.gravity = 0.0001;// zero G (0 OR 1 is normal)
+	// pOx - END  - func_water & func_ladder support
+
 	CheckRules ();
 	WaterMove ();
 
@@ -1129,7 +1159,11 @@ void() PlayerPreThink =
 		}
 	}
 		
-		if (self.deadflag == DEAD_DYING) return;	// dying, so do nothing
+	//if (self.deadflag == DEAD_DYING) return;	// dying, so do nothing
+	if (self.deadflag == DEAD_DYING) {
+		CheckFuncWaterDeath();// pOx - check cshift for dead players in func_water
+		return;	// dying, so do nothing
+	}
 
 	// The jump boots can be setup to work a limited amount of uses before
 	// having to be reset by landing on the ground.
@@ -1265,6 +1299,10 @@ void() PlayerPostThink =
 		sprint (self,"No global states are set.\n");
 		}
 	}
+
+	// pOx - Advance frame based entities (noclip)
+	SUB_PushFrameMovers();
+
 	if (intermission_running > 0) return;	// intermission or finale
 	if (cinematic_running > 0) {
 		// The focalpoint system is about tracking an entity while the camera
@@ -1666,6 +1704,9 @@ void() ClientRespawn =
 void() ClientDeath =
 {
 	local float forward;
+
+	// pOx - func_water support
+	CheckFuncWaterDeath();//check cshift for dead players in func_water
 
 	if ((self.flags & FL_ONGROUND)) {
 		forward = vlen (self.velocity);

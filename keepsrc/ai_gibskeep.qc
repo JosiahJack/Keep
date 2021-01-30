@@ -7,12 +7,13 @@ entity (string gibname) StartGib = {
    local entity new;
 
    new = spawn ();
-   new.origin = self.origin;
+   //new.origin = self.origin;
    setmodel (new,gibname);
    setsize (new,VEC_ORIGIN,VEC_ORIGIN);
    new.movetype = MOVETYPE_BOUNCE;
 	new.classtype = CT_TEMPGIB;
    new.solid = SOLID_NOT;
+	setorigin(new, self.origin);
    new.think = SUB_Remove;
    new.ltime = time;
    new.nextthink = ((time + 10) + (random () * 10));

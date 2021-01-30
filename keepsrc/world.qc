@@ -331,7 +331,7 @@ void() worldspawn =
 
 	//----------------------------------------------------------------------
 	// more weapon sounds
-	//	precache_sound ("weapons/ax1.wav");			// ax swoosh
+	//	precache_sound ("kurok/weapons/ax1.wav");			// ax swoosh
 	//	precache_sound ("player/axhit1.wav");		// ax hit meat
 	//	precache_sound ("player/axhit2.wav");		// ax hit world
 	precache_sound(SOUND_AXE_SWIPE1);			// Axe swipe 1
@@ -843,6 +843,12 @@ void() amsumthink = {
 	dprint(", Poison: ");
 	dprint(ftos(self.ammo_poison));
 	dprint("\n");
+	dprint(", Blood Crystals: ");
+	dprint(ftos(self.ammo_bloodcrystals));
+	dprint(", Void Shards: ");
+	dprint(ftos(self.ammo_voidshards));
+	dprint(", Elemental Mana: ");
+	dprint(ftos(self.ammo_elemental));
 
 	vector plasmad = DAMAGE_PGPLAYER;
 	dmg = dmg + (self.ammo_shells * DAMAGE_SHELL);
@@ -854,6 +860,9 @@ void() amsumthink = {
 	dmg = dmg + (self.ammo_plasma * plasmad.x);
 	dmg = dmg + (self.ammo_bolts * DAMAGE_BOLTPLAYER);
 	dmg = dmg + (self.ammo_poison * DAMAGE_BOLTPLAYERP);
+	dmg = dmg + (self.ammo_bloodcrystals * DAMAGE_BOLTPLAYERP);
+	dmg = dmg + (self.ammo_voidshards * DAMAGE_BOLTPLAYERP);
+	dmg = dmg + (self.ammo_elemental * DAMAGE_BOLTPLAYERP);
 	dprint("Estimated Player Damage Points:: ");
 	dprint(ftos(dmg));
 	dprint("\n");

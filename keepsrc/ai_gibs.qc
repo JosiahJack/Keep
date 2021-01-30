@@ -911,10 +911,6 @@ void(vector org, string gibname, vector vel, vector spin, float gibskin,
     local   entity  new;
 
     new = spawn();
-    setorigin (new, org);
-    setmodel (new, gibname);
-    setsize (new, '0 0 0', '0 0 0');
-
     new.velocity    = vel;
     new.movetype    = MOVETYPE_BOUNCE;
     new.solid       = SOLID_NOT;
@@ -926,6 +922,9 @@ void(vector org, string gibname, vector vel, vector spin, float gibskin,
         new.flags       = FL_ITEM;          // Make it easier to pick up.
         new.touch       = Gib_Touch;
     }
+    setmodel (new, gibname);
+    setsize (new, '0 0 0', '0 0 0');
+    setorigin (new, org);
     new.xf2         = XF2_QUAKE;
 	new.classtype = CT_TEMPGIB;
 	new.classgroup = CG_TEMPENT;
@@ -1078,9 +1077,15 @@ void(string gibname, vector vel, vector spin, float gibskin, float gibframe,
 // against bsps.  Namely Quake uses only three bbox sizes to clip entities.
 // Note:  Assumes self has a size at least as big as VEC_HULL_xxx.
     setsize (self, '-16 -16 0', '16 16 56');
+
     self.velocity   = vel;
-    if (Gib_NearCeiling ())     // Don't move head unless necessary.
+    if (Gib_NearCeiling ()) {
+		// Don't move head unless necessary.
         self.origin_z   = self.origin_z + lo;
+		setorigin(self,self.origin);
+	} else {
+		setorigin(self,self.origin);
+	}
     self.flags      = self.flags - (self.flags & FL_ONGROUND);
     self.avelocity  = spin;
     self.volume     = 0;    // So head won't plop on contact.

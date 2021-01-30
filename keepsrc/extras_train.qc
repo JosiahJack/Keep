@@ -45,7 +45,7 @@ float RIGHTWAY = 1;// At an endpoint, and direction leads away (can move)
 float WRONGWAY = 2;// At an endpoint, but direction leads into endpoint (can't move)
 
 .entity next, previous, child;
-/*
+
 //============================================================================
 
 // QUAKED trigger_changedir (.5 .5 .5) (-8 -8 -8) (8 8 8) ?
@@ -109,7 +109,7 @@ void() trigger_go =
 	self.classname = "t_go";
 	self.use = SUB_UseTargets;
 };
-*/
+
 //============================================================================
 
 // QUAKED train_ext_waypoint (0 .5 .8) (-8 -8 -8) (8 8 8) ?
@@ -796,7 +796,7 @@ void() train_ext_precachenoise =
 	precache_sound(self.noise);
 	precache_sound(self.noise1);
 };
-/*
+
 // QUAKED func_train_ext (0 .5 .8) ? START_ON ALLOWPAUSE ALLOWCHANGEDIR AUTOREVERSE BLOCKREVERSE STARTREVERSE
 
 // "speed"			Speed of the train (can be overridden by waypoints)
@@ -865,4 +865,3 @@ void() func_train_ext =
 };
 
 //============================================================================
-*/

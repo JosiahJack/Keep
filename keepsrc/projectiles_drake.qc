@@ -1011,20 +1011,20 @@ void(entity targ, vector dir) Attack_Saw =
     targ = trace_ent;
     if (targ.takedamage) {
         local   vector  vec;
-        local   float   damage, dflags, pain;
+        local   float   damage, pain;
         local   string  dtype;
 
         dtype = "chainsaw";     // Normal kill.
-        dflags = DF_SCAR | DF_MELEE;
+        // dflags = DF_SCAR | DF_MELEE;
         damage = 40;
-        if (trace_fraction <= 0.5) {
+        // if (trace_fraction <= 0.5) {
 			// Deep hit.
-            dtype = "saw_decap";    // Chop off the head.
-            if (targ.xsf & XSF_BODY_DOUBLE)     // Chop up flimsy bodies.
-                if (targ.max_health < 50)
-                    if (targ.health > damage)
-                        damage = targ.health;
-        }
+            // dtype = "saw_decap";    // Chop off the head.
+            // if (targ.xsf & XSF_BODY_DOUBLE)     // Chop up flimsy bodies.
+                // if (targ.max_health < 50)
+                    // if (targ.health > damage)
+                        // damage = targ.health;
+        // }
 
 		// Suck life like Heretic's necro gauntlets.
         //if (self.tome_finished) {
@@ -1032,33 +1032,51 @@ void(entity targ, vector dir) Attack_Saw =
         //        damage = 40;
         //    dflags = dflags | DF_LEECH;
         //}
-
-    // Blood!
+		// Blood!
         vec = ((random()*300) - 150) * v_right + (100 * v_forward);
         SpawnBlood (targ, trace_endpos, '0 0 5', damage);
         if (self.weaponframe & 1)
             SpawnMeatSprayDrake (self.origin + dir*16, vec, targ.bloodtype);
-    // Damage!
+		// Damage!
         pain = FeelsPain (targ);
         T_Damage (targ, self, self, damage, DAMARMOR);
-        if (targ.solid != SOLID_BSP)
+
+        if (trace_ent.flags & FL_MONSTER){
             targ.velocity = targ.velocity * 0.5;
-    // Sounds.
-        sound (self, CHAN_WEAPON, "weapons/sawguts.wav", 1, ATTN_NORM);
-        if (targ.hittype == HIT_METAL || targ.spawnflags & MON_OGRE_GREEN || targ.spawnflags & MON_HOGRE_METAL)
-            if (pain && (targ.pain_finished > time))
-                sound (self, CHAN_AUTO, "weapons/clang.wav", 1, ATTN_NORM);
+		// Sounds.
+			sound (self, CHAN_WEAPON, "weapons/sawguts.wav", 1, ATTN_NORM);
+			if (targ.hittype == HIT_METAL || targ.spawnflags & MON_OGRE_GREEN || targ.spawnflags & MON_HOGRE_METAL)
+				if (pain && (targ.pain_finished > time))
+					sound (self, CHAN_AUTO, "weapons/clang.wav", 1, ATTN_NORM);
 
-		if (targ.hittype == HIT_STONE)
-			if (pain && (targ.pain_finished > time))
-				sound (self, CHAN_AUTO, "weapons/axhitwal.wav", 1, ATTN_NORM);
+			if (targ.hittype == HIT_STONE)
+				if (pain && (targ.pain_finished > time))
+					sound (self, CHAN_AUTO, "weapons/axhitwal.wav", 1, ATTN_NORM);
 
-        self.punchangle_x = -8;
+			self.punchangle_x = -8;
+		}
+		// Breakable impact sounds (def=stone/brick)
+		else if (trace_ent.classtype == CT_FUNCBREAK) {
+			if (trace_ent.style == BTYPE_WOOD) 
+				sound (self, CHAN_WEAPON, SOUND_AXE_WOOD, 1, ATTN_NORM);
+			else if (trace_ent.style == BTYPE_GLASS) 
+				sound (self, CHAN_WEAPON, SOUND_AXE_GLASS, 1, ATTN_NORM);
+			else if (trace_ent.style == BTYPE_METAL) 
+				sound (self, CHAN_WEAPON, SOUND_AXE_METAL, 1, ATTN_NORM);
+			else if (trace_ent.style == BTYPE_FLESH) 
+				sound (self, CHAN_WEAPON, SOUND_AXE_FLESH, 1, ATTN_NORM);
+			else
+				sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
+		}
     }
     else
     {   // Hit wall.
-        sound (self, CHAN_WEAPON, "player/axhit2.wav", 1, ATTN_NORM);
-        Tent_Point (TE_GUNSHOT, spot);
+		sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
+		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+		WriteByte (MSG_BROADCAST, TE_GUNSHOT);
+		WriteCoord (MSG_BROADCAST, org_x);
+		WriteCoord (MSG_BROADCAST, org_y);
+		WriteCoord (MSG_BROADCAST, org_z);
     }
 };
 

@@ -1,0 +1,131 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="General WarT'">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.01 [en] (Win95; I) [Netscape]">
+   <TITLE>Custents Entity Defs - Hipnotic Effects</TITLE>
+</HEAD>
+<BODY TEXT="#CC33CC" BGCOLOR="#000000" LINK="#00CC00" VLINK="#009900" ALINK="#00CC00">
+
+<CENTER><IMG SRC="custtitle.jpg" HEIGHT=60 WIDTH=330><FONT COLOR="#009900"><FONT SIZE=+3>6.0</FONT></FONT></CENTER>
+
+<CENTER><FONT SIZE=+2>Entities Definitions - Hipnotic Effects</FONT>&nbsp;
+<HR WIDTH="100%"></CENTER>
+Last Updated : 2/5/98
+<BR>&copy;1998 Carl Glave
+<BR><A HREF="index.htm">Back to Main Index</A>
+<BR>
+<HR WIDTH="100%">
+
+<P>Hipnotic Effects Entities Index
+<UL>
+<LI>
+<A HREF="#play_sound_triggered">play_sound_triggered</A></LI>
+
+<LI>
+<A HREF="#play_sound">play_sound</A></LI>
+
+<LI>
+<A HREF="#random_thunder">random_thunder</A></LI>
+
+<LI>
+<A HREF="#random_thunder_triggered">random_thunder_triggered</A></LI>
+
+<LI>
+<A HREF="#func_particlefield">func_particlefield</A></LI>
+</UL>
+<A NAME="play_sound_triggered"></A>
+<HR WIDTH="100%">
+<BR><B>play_sound_triggered (0.3 0.1 0.6) (-8 -8 -8) (8 8 8) TOGGLE</B>
+<UL>play a sound when it is used
+
+<P><B>TOGGLE</B> determines whether sound should be stopped when triggered
+again.
+
+<P><B>"volume"</B> how loud (1 default full volume)
+
+<P><B>"noise"</B> sound to play
+
+<P><B>"impulse"</B> channel on which to play sound (0-7) (0 automatic is
+default)
+
+<P><B>"speed"</B> attenuation factor
+<UL>-1 - no attenuation
+<BR>1 - normal
+<BR>2 - idle
+<BR>3 - static</UL>
+</UL>
+<A NAME="play_sound"></A>
+<HR WIDTH="100%">
+<BR><B>play_sound (0.3 0.1 0.6) (-8 -8 -8) (8 8 8)</B>
+<UL>play a sound on a periodic basis
+
+<P><B>"volume"</B> how loud (1 default full volume)
+
+<P><B>"noise"</B> sound to play
+
+<P><B>"wait"</B> random time between sounds (default 20)
+
+<P><B>"delay"</B> minimum delay between sounds (default 2)
+
+<P><B>"impulse"</B> channel on which to play sound (0-7) (0 automatic is
+default)
+
+<P><B>"speed"</B> attenuation factor
+<UL>-1 - no attenuation
+<BR>1 - normal
+<BR>2 - idle
+<BR>3 - static</UL>
+</UL>
+<A NAME="random_thunder"></A>
+<HR WIDTH="100%">
+<BR><B>random_thunder (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)</B>
+<UL><B>"wait" </B>random time between strikes (default 20)
+
+<P><B>"delay" </B>minimum delay between strikes (default 2)
+
+<P><B>"volume"</B> how loud (1 default full volume)
+
+<P><B>"speed" </B>attenuation factor
+<UL>-1 - no attenuation
+<BR>1 - normal
+<BR>2 - idle
+<BR>3 - static</UL>
+</UL>
+<A NAME="random_thunder_triggered"></A>
+<HR WIDTH="100%">
+<BR><B>random_thunder_triggered (0.3 0.1 0.6) (-10 -10 -8) (10 10 8) TOGGLE</B>
+<UL><B>TOGGLE</B> determines whether sound should be stopped when triggered
+again.
+
+<P><B>"volume" </B>how loud (1 default full volume)
+
+<P><B>"speed" </B>attenuation factor
+<UL>-1 - no attenuation
+<BR>1 - normal
+<BR>2 - idle
+<BR>3 - static</UL>
+</UL>
+<A NAME="func_particlefield"></A>
+<HR WIDTH="100%">
+<BR><B>func_particlefield (0 .5 .8) ? USE_COUNT</B>
+<UL>Creates a brief particle flash roughly the size of the defining brush
+each time it is triggered.
+
+<P><B>USE_COUNT </B>when the activator is a func_counter, the field will
+only activate when count is equal to "cnt". Same as using a func_oncount
+to trigger.
+
+<P><B>"cnt" </B>is the count to activate on when USE_COUNT is set.
+
+<P><B>"color" </B>is the color of the particles. Default is 192 (yellow).
+
+<P><B>"count" </B>is the density of the particles. Default is 2.
+
+<P><B>"noise" </B>is the sound to play when triggered. Do not use a looping
+sound here.
+
+<P><B>"dmg" </B>is the amount of damage to cause when touched.</UL>
+&nbsp;
+</BODY>
+</HTML>

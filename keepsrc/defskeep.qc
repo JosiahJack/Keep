@@ -40,15 +40,15 @@ float IT2_PLASMA_AMMO   	= 16.000;		//Correct for DOE HUD					I
 float IT2_MULTI_ROCKETS    	= 32.000;		//Correct for DOE HUD					I
 float IT2_SHIELD    		= 64.000;		//Correct for DOE HUD					I
 float IT2_CHAINLIGHTNING	= 128.000;		//Zerstorer chain lightning				W	(I Antigrav for DOE HUD)
-float IT2_SUPERHEALTH    	= 256.000;		//Correct for DOE HUD					I(available for a new weapon)
-float IT2_EARTHQUAKE    	= 512.000;		//Correct for DOE HUD					I(available for a new weapon)
-float IT2_V_SPHERE    		= 1024.000;		//Correct for DOE HUD					I(available for a new weapon)
+float IT2_SUPERHEALTH    	= 256.000;		//Correct for DOE HUD					I
+float IT2_EARTHQUAKE    	= 512.000;		//Correct for DOE HUD					I
+float IT2_V_SPHERE    		= 1024.000;		//Correct for DOE HUD					I
 float IT2_BOLTS		    	= 2048.000;		//Keep specific						I
 float IT2_POISON    		= 4096.000;		//Keep specific						I
 float HIP_IT2_WETSUIT    	= 8192.000;		//Keep specific (modified from HIP)			I
 float HIP_IT2_EMPATHY_SHIELDS= 16384.000;		//Keep specific (modified from HIP)			I
 float HIP_IT2_HORN_OF_CONJURING= 32768.000;		//Keep specific (modified from HIP)			I
-//float UNUSED				= 65536.000;		EMPTY SLOT (skipped...same as IT_PLASMA_GUN)		I
+//float UNUSED				= 65536.000;		//Unused item slot
 float IT2_PROXIMITY_GUN    	= 131072.000;		//Keep specific.Unique number for self.weapon calls 	W
 float IT2_MJOLNIR 			= 262144.000;		//Keep specific	""					W
 float IT2_LASER_CANNON    	= 524288.000;		//Keep specific	""					W
@@ -58,20 +58,21 @@ float IT2_CROSS				= 4194304.000;		//Quoth							I && W2 (used by Wand)
 float IT2_WAND				= 8388608.000; 		//Drake magic wand					W2 (special check to prevent IT_EXTRA_WEAPON conflict
 float IT2_ALLARMOR			= 7.000;// Test for player grn/yel/red armour. Helper combo bit of 1 + 2 + 4
 //=======================================SELF.MODITEMS======================================================
-float IT_NOWEAPON			= 0;	// No extra mod weapon (blank)
-//float UNUSED 				= 1.000;
-float IT_UPGRADE_SSG		= 2.000;
-//float UNUSED    			= 4.000;
-//float UNUSED   			 = 8.000;
-//float UNUSED			   	= 16.000;
-//float UNUSED   			= 32.000;
+float IT_NOWEAPON			= 0;		// No extra mod weapon (blank)
+//float UNUSED   			= 1.000;	// I
+float IT_UPGRADE_SSG		= 2.000;	//AoA		W
+.float selfweaponismoditems; 	// HACK FOR HACKBANK! Used to carry more than 24 weapons which is all we can fit in the float's bits
+	float IT_ICE    			= 4.000;	//AoA		W2  HACKBANK!
+	float IT_MACE   			= 8.000;	//AoA		W2  HACKBANK!
+	float IT_VOID_STAFF			= 16.000;	//AoA		W2  HACKBANK!
+	float IT_FLAK   			= 32.000;	//AoA		W2  HACKBANK!
 float IT_UPGRADE_LG			= 64.000;	// Plasma Gun, direct + splashdamage
-//float UNUSED   			= 128.000;
-//float UNUSED			   	= 256.000;
-//float UNUSED   			= 512.000;
-//float UNUSED   			= 1024.000;
-//float UNUSED				= 2048.000;
-float IT_UPGRADE_AXE   		= 4096.000;	// Shadow Axe, +75% dmg, +gib bodies
+	float IT_GUNGNIR   			= 128.000;	//AoA		W  HACKBANK!
+float IT_SANGUINATORS		= 256.000;	//AoA		W
+float IT_SCIMITAR			= 512.000;	//AoA		W
+float IT_RAPIER 			= 1024.000;	//AoA		W
+float IT_UPGRADE_AXE   		= 2048.000;	// Shadow Axe, +75% dmg, +gib bodies
+//float UNUSED				= 4096.000;
 float IT_CKEY1				= 8192;		// Custom Key 1
 float IT_CKEY2				= 16384;	// Custom Key 2
 float IT_CKEY3				= 32768;	// Custom Key 3
@@ -95,6 +96,7 @@ float   POW_POWER_ARMOR = 4096;     // Power shield toggle.
 //float   POW_RESIST      = 8192;     // Half damage.
 //float   POW_REGEN       = 16384;    // Regeneration.
 //- - - - - - - - -
+//=======================================SELF.PERMS======================================================
 float   POW_DOUBLE      = 65536;    // Twin shot -- nailgun buff.
 float   POW_SHOTTYMAN   = 131072;   // Shotgun buff.
 float   POW_VAMPIRE     = 262144;   // Melee buff.
@@ -107,7 +109,19 @@ float   POW_HINT_FALL   = 8388608;  // nsoe4:  slow falling message.
 float   POWx_HEALTH     = 255;      // Extra max health.  First 8 bits.
 float   POWx_ARMOR      = 3840;     // Mutually exclustive exotic armor.
 
-
+// WEAPON CYCLE ORDER=====================================================================================
+/*
+1 - Axe + Shadow Axe + Chainsaw, Grapple, Mace (3)
+2 - Shotgun + Laser Blaster, Elemental Tome (2)
+3 - Doublebarrel Shotgun + Widowmaker + Shotcycler + Quad Shotgun, Scimitar (2)
+4 - Nailgun, Lava Nailgun, Rapier (3)
+5 - Perforator, Lava Super Nailgun, Void Staff (3)
+6 - Grenade Launcher, Proximity Grenade Launcher, Multi-Grenade Launcher (3)
+7 - Rocket Launcher, Multi-Rocket Launcher, Sanguinators(3)
+8 - Thunderbolt + Plasmagun(AD), Plasmagun(rogue), Flak Cannon (3)
+9 - Crossbow, Laser Cannon, Chain Lightning Gun (2)
+0 - Wand, Mjolnir, Gungnir (3)
+*/
 //========================================================================================================
 float BBOX_ARMAGON = 23;	// -48 -48 -24, 48 48 84
 float BBOX_VERMIS = 24;		// -64 -64 -512, 64 64 256
@@ -117,10 +131,19 @@ float AMMO_MAXMULTIROCKETS = 100;
 float AMMO_MAXPLASMA = 100;
 float AMMO_MAXPOISON = 50;
 float AMMO_MAXBOLTS = 100;
+float AMMO_MAXBLOOD = 100;
+float AMMO_MAXVOID = 100;
+float AMMO_MAXMANA = 100;
 float AMMO_POISON_LGR = 10;
 float AMMO_POISON_SML = 5;
 float AMMO_BOLTS_LGR = 16;
 float AMMO_BOLTS_SML = 8;
+float AMMO_BLOOD_SML = 25;
+float AMMO_BLOOD_LGR = 50;
+float AMMO_VOID_SML = 10;
+float AMMO_VOID_LGR = 20;
+float AMMO_MANA_SML = 20;
+float AMMO_MANA_LGR = 40;
 float GREMLIN_AMMO_TAKE = 30;
 float OGRE_MULTI = 2;
 string MODEL_GWEAP_LNG = "progs/g_lava.mdl";

@@ -1,0 +1,1102 @@
+//-----------------------------------------------------------------------------
+/*QUAKED trigger_monsterpassivestate (0.5 0 0.5) (-8 -8 -16) (8 8 16) x
+Change the monster passive state
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target  : this points to the monster(s) to affect
+state   : 0 = ON, 1 = OFF, -1 = TOGGLE
+wait    : -1 = trigger once only
+-------- SPAWNFLAGS --------
+-------- NOTES --------
+Change the monster passive state
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED misc_camera (1 0.5 0.5) (-16 -16 -16) (16 16 16) PLAYER SKIPABLE FADEOUT FADEIN FIXEDANGLE ENDCAMERA x x Not_Easy Not_Normal Not_Hard Not_DM
+In game cinematic camera (Does not work in coop/dm mode)
+-------- KEYS --------
+targetname  : Camera name for linking into target chains
+target      : Points to the next camera in a chain/sequence
+angletarget : Direction the camera will face (use info_target)
+angles      : Direction the camera will face (Pitch Yaw Roll setup)
+focalpoint  : Always focus the camera on angletarget (=1 enabled)
+target2     : Additional target(s) to trigger when camera VIEWED
+deathtarget : Additional target(s) to trigger when cinematic FINISHED
+modeltarget : Location of fake player mdl (use info_camera_destination)
+returntarget: Location of returning player (use info_camera_destination)
+pos1        : Camera starting BACKGROUND colour (R/G/B)
+pos2        : Camara finishing BACKGROUND colour (R/G/B)
+waitmin     : Fade OUT previous camera, time (def=1s, minimum=0.1s)
+waitmin2    : Fade IN this camera, time (def=1s, minimum=0.1s)
+waitmin3    : Speed at which camera moves towards sighttarget
+sighttarget : Position the camera will travel towards (use info_target)
+wait        : Time to wait while showing camera (-1 = wait for key)
+message     : message to centerprint when camera is viewed
+message2    : message to centerprint to client if coop is active
+sounds      : 1=Secret,2=talk(def),3=switch,4=silent,5=custom,6=secret2
+noise       : custom sound to play when messaged is centerprinted
+-------- SPAWNFLAGS --------
+PLAYER      : Show the player model when starting cinematics
+SKIPABLE    : Allow the cinematic to be skipped (exit after fade)
+FADEOUT     : Fade OUT previous camera (time = waitmin)
+FADEIN      : Fade IN this camera (time = waitmin2)
+FIXEDANGLE  : All cameras in a chain will use the first camera angle
+ENDCAMERA	: Only the fade in/out work, the origin/angle are ignored
+-------- NOTES --------
+In game cinematic camera will fade/move based on times in seconds.
+The first fade (out) is from previous camera to background colour.
+The second fade (in) is to current camera view. The linear movement
+will start at the same time as the fade in process.
+Start -> Fade Out(waitmin1) -> Fade In(waitmin2) / Movement (waitmin3)
+Once 'Fade in' has finshed then the pause timer (wait) starts.
+Waitmin3 = Waitmin2 + Wait (Sync everything to finish together)
+To sync the final camera to a player start, finish 22 map units above
+angles = up/down, angle, tilt left/right 'pitch roll yaw'
+up/left = negative value, down/right = positive value
+deathtarget, modeltarget & returntarget have to be defined on first camera
+Be aware that coop is not supported, so be careful of trigger events
+and decide on a coop "not working" message2.
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED info_camera_destination (1 0.5 0.5) (-16 -16 -24) (16 16 32) x
+Marker for a Cinematic Camera System
+-------- KEYS --------
+targetname : link to misc_camera entity
+angles : Pitch Yaw Roll (facing angle)
+-------- SPAWNFLAGS --------
+-------- NOTES --------
+Marker for a Cinematic Camera System
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED item_artifact_lavashield (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+{ model(":progs/artifact_lavashield.mdl"); }
+Player takes no HP/armour damage from lava for 30s
+-------- KEYS --------
+targetname   : toggle state (use trigger ent for exact state)
+upgrade_ssg  : = 1 will only spawn if shotgun upgrade active on server
+upgrade_axe  : = 1 will only spawn if axe upgrade active on server
+upgrade_lg   : = 1 will only spawn if lightning gun upgrade active on server
+message      : centerprint message when item is picked up
+respawn_time : time to wait before respawning (1-x seconds, default varies)
+respawn_count: Total amount of times to respawn (counts down to zero)
+respawn_trig : = 1 Wait for trigger before respawning
+noise        : Custom pickup sound for powerup
+volume       : Maximum range for volume (def=1, no sound=-1)
+cnt          : override duration of artifact (default = 30s)
+-------- SPAWNFLAGS --------
+RESPAWN  : Can respawn after being picked up
+FLOAT    : No drop to floor test
+STARTOFF : Starts off and waits for trigger
+NOEFFECTS: No particle or effects active
+-------- NOTES --------
+Player takes no HP/armour damage from lava for 30s
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED item_artifact_wetsuit (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x SILENT RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+{ model(":progs/artifact_wetsuit.mdl"); }
+Player takes no damage from water for 5 mins (300s)
+-------- KEYS --------
+targetname   : toggle state (use trigger ent for exact state)
+exactskin    : 0=Original, 1=Green, 2=Brown, 3=Aqua, 4=Blue
+upgrade_ssg  : = 1 will only spawn if shotgun upgrade active on server
+upgrade_axe  : = 1 will only spawn if axe upgrade active on server
+upgrade_lg   : = 1 will only spawn if lightning gun upgrade active on server
+message      : centerprint message when item is picked up
+respawn_time : time to wait before respawning (1-x seconds, default varies)
+respawn_count: Total amount of times to respawn (counts down to zero)
+respawn_trig : = 1 Wait for trigger before respawning
+noise        : Custom pickup sound for powerup
+cnt          : override duration of artifact (default = 300s)
+volume       : Maximum range for volume (def=1, no sound=-1)
+distance     : = 1 Breathing sound is only played when in the water
+-------- SPAWNFLAGS --------
+SILENT   : No breathing sound when wetsuit active
+RESPAWN  : Can respawn after being picked up
+FLOAT    : No drop to floor test
+STARTOFF : Starts off and waits for trigger
+NOEFFECTS: No particle or effects active
+-------- NOTES --------
+Player takes no damage from water for 5 mins (300s)
+Immume to Fire Attack, but take small damage instead
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED item_artifact_blastbelt (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+{ model(":progs/artifact_blastbelt.mdl"); }
+Player is immune to Splash Damage for 30 seconds
+-------- KEYS --------
+targetname   : toggle state (use trigger ent for exact state)
+upgrade_ssg  : = 1 will only spawn if shotgun upgrade active on server
+upgrade_axe  : = 1 will only spawn if axe upgrade active on server
+upgrade_lg   : = 1 will only spawn if lightning gun upgrade active on server
+message      : centerprint message when item is picked up
+respawn_time : time to wait before respawning (1-x seconds, default varies)
+respawn_count: Total amount of times to respawn (counts down to zero)
+respawn_trig : = 1 Wait for trigger before respawning
+noise        : Custom pickup sound for powerup
+cnt          : Duration override of artifact (default = 30s)
+-------- SPAWNFLAGS --------
+RESPAWN  : Can respawn after being picked up
+FLOAT    : No drop to floor test
+STARTOFF : Starts off and waits for trigger
+NOEFFECTS : No particle or effects active
+-------- NOTES --------
+Player is immune to Splash Damage for 30 seconds
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED item_artifact_jumpboots (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+{ model(":progs/artifact_jumpboots.mdl"); }
+Player can do extra (1-4) jumps in mid air
+-------- KEYS --------
+targetname   : toggle state (use trigger ent for exact state)
+upgrade_ssg  : = 1 will only spawn if shotgun upgrade active on server
+upgrade_axe  : = 1 will only spawn if axe upgrade active on server
+upgrade_lg   : = 1 will only spawn if lightning gun upgrade active on server
+message      : centerprint message when item is picked up
+respawn_time : time to wait before respawning (1-x seconds, default varies)
+respawn_count: Total amount of times to respawn (counts down to zero)
+respawn_trig : = 1 Wait for trigger before respawning
+noise        : Custom pickup sound for powerup
+cnt          : Duration override of artifact (default = 999999s)
+count        : Power level override (0=def, 1-4=exact level, -1=endless)
+-------- SPAWNFLAGS --------
+RESPAWN  : Can respawn after being picked up
+FLOAT    : No drop to floor test
+STARTOFF : Starts off and waits for trigger
+NOEFFECTS : No particle or effects active
+-------- NOTES --------
+Player can do extra (1-4) jumps in mid air
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED trigger_gravity (.5 .5 .5) ? NOTOUCH SERVER PLAYER MONSTER RESET x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Change entity/entities/player or server (world) gravity
+------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target   : Group of entities to affect with gravity update
+target2  : fire event(s) everytime gravity is changed
+waitmin2 : Minimum time between re-triggering fire events
+noise2   : Sound to play everytime gravity is changed
+waitmin  : Minimum time between re-triggering sound
+count    : Gravity value (server=0-1000 (def=800) entity=0-1, can be negative)
+wait     : (def) -1 = will only fire targets once
+-------- SPAWNFLAGS --------
+NOTOUCH  : can only be triggered via other entities
+SERVER   : Changes server gravity instead of entity gravity
+PLAYER   : Player(s) only can touch this trigger
+MONSTER  : Monster(s) only can touch this trigger
+RESET    : Reset any entity to default gravity (does not affect server)
+STARTOFF : Requires trigger to activate
+------- NOTES --------
+Change entity/entities/player or server (world) gravity
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED trigger_velocity (0.5 0 0.5) ? PLAYER MONSTER GRENADE ROCKET x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Check for projectile / player velocity!
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target    : fire event(s) everytime trigger conditions successful
+target2   : fire event(s) everytime trigger exceptions fail
+angle     : Facing Direction for trigger to work, use "360" for angle 0
+ideal_yaw : Facing angle sensitivity (def=0.3, range = 0 - 1)
+speed     : Minimum velocity speed to trigger (def=500)
+waitmin   : (def=1s) Time between target/message working again
+waitmin2  : (def=1s) Time between target2/message2 working again
+wait      : -1 = Only fire the trigger functionality once
+delay     : -1 = No spawn delay, 0 (def=1s), +0 = spawn delay
+message   : display message everytime trigger conditions successful
+message2  : display message everytime trigger exceptions fail
+dmg_take  : Grenades will explode on impact of this trigger
+-------- SPAWNFLAGS --------
+PLAYER    : Player only trigger
+MONSTER   : Monster only trigger
+GRENADE   : Grenade projectile only trigger
+ROCKET    : Rocket projectile only trigger
+STARTOFF  : Starts off and waits for trigger
+-------- NOTES --------
+Check for projectile / player velocity!
+This entity cannot be damaged and is always touchable
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED trigger_teleport (0.5 0 0.5) ? PLAYER_ONLY SILENT STARTON INSTANT x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Teleport player/monsters to target location
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : Points to info_teleport_destination entity
+wait   : -1 = trigger once condition (def=0)
+speed  : forward momentum speed after teleporting (def=300)
+volume : teleporter hum sound volume (def=0.5)
+noise  : custom sound to play when active (must be looped, def=hum1.wav)
+waitmin : the length of the custom sound (def=3.622 for hum1.wav)
+-------- SPAWNFLAGS --------
+PLAYER_ONLY : Can only be used by players (nothing else)
+SILENT      : No teleporter hum sound regardless of state
+STARTON     : Will start active regardless of targetname setting
+INSTANT     : Instantly teleport (no effects or sounds)
+STARTOFF    : Starts off and waits for trigger
+-------- NOTES --------
+Teleport player/monsters to target location
+if targetname is setup, the teleporter requires a trigger to activate
+This entity cannot be damaged and is always touchable once activated
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED info_teleportinstant_dest (.5 .5 .5) ? x
+Destination for an instant teleporter
+-------- KEYS --------
+targetname : link to trigger_teleport
+-------- SPAWNFLAGS --------
+-------- NOTES --------
+Destination for an instant teleporter
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED ambient_custom_sound (0.5 0.1 0.8) (-16 -16 -8) (16 16 8) x PLAYONCE TRIGGER x x x STARTOFF x
+Play a sound on a periodic basis
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target  : targets to trigger each time sound is played
+volume  : volume of sound (default 1, capped at 1)
+noise   : primary sound (ambience/windgust1a.wav)
+noise1  : stop sound (anbience/switch_6off.wav)
+noise2  : random sound (ambience/windgust1b.wav)
+wait    : random time between sounds (default 20, =-1 no random element)
+delay   : minimum time between sounds (default 2)
+waitmin : Starting time (waitmin + random() x waitmin, =-1 no delay)
+waitmin2: 1 = Will not silence any playing sound if switching off
+impulse : channel on which to play sound (0-7) (0 automatic is default)
+speed   : attenuation -1=no attenuation, 1=normal (default), 2=idle, 3=static, 4=quiet
+-------- SPAWNFLAGS --------
+PLAYONCE : When triggered plays once
+TRIGGER  : Constantly waits for trigger events (retrigger)
+STARTOFF : Starts off and waits for trigger
+-------- NOTES --------
+Play a sound on a periodic basis
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED trigger_giveitems (0.5 0 0.5) ? NOTOUCH x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Variable sized bmodel used to give items to player
+The target items only work if delay spawned spawnflag is set
+The pickup sound can be turned off by adding sounds=4 to item
+The target items will not respawn or work more than once
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target  : Trigger items (only) to give to the player
+target2 : Trigger other type of entities (relays, estate etc)
+wait    : (def) -1 = will only fire targets once
+angle   : Facing Direction for trigger to work, use "360" for angle 0.
+sounds  : 1=Secret,2=talk(def),3=switch,4=silent,5=custom,6=secret2
+noise   : custom sound to play when triggered
+message : message to display when triggered
+-------- SPAWNFLAGS --------
+NOTOUCH  : can only be triggered via other entities
+STARTOFF : Requires trigger to activate
+-------- NOTES --------
+Variable sized bmodel used to give items to activator
+The target items only work if delay spawned spawnflag is set
+The pickup sound can be turned off by adding sounds=4 to item
+The target items will not respawn or work more than once
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED trigger_monsterkill (0.5 0 0.5) (-8 -8 -16) (8 8 16) x x x x DEATH GIB x x
+Remove monster(s) from the map
+-------- KEYS --------
+targetname : Name of this trigger entity
+target  : Name of monster(s) to remove/stop
+-------- SPAWNFLAGS --------
+DEATH : kill monsters via death function
+GIB   : Gib monsters via death function
+-------- NOTES --------
+Remove monster(s) from the map
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED misc_marshlight (.5 .5 .75) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x
+Marsh lights (Quoth item)
+-------- KEYS --------
+targetname : toggle state (use trigger ent for exact state)
+count      : Maximum amount of marsh light entities (def=5)
+color      : 0=White, 1=Cyan, 2=Blue, 3=Green, 4=Orange, 5=Red, 6=Purple
+mdl        : Name of Small sprite (def='progs/s_marsh_small.spr')
+headmdl    : Name of Medium sprite (def='progs/s_marsh_med.spr')
+count      : Maximum active marsh lights (def=5)
+waitmin    : Reset movement timer (def=6s)
+waitmin2   : Reset Velocity movement (def=4.5s)
+distance   : Starting distance from center (def=20)
+pos1       : used for selection of frame(s) has several setups
+             X=0, Y=0, Z=exact frame number
+             X->Y, Z=0 Randomly pick a frame from the X,Y range
+pos2       : used for the selection of skin(s) has several setups
+             X=0, Y=0, Z=exact skin number
+             X->Y, Z=0 Randomly pick a skin from the X,Y range
+pos3       : Base rotation avelocity (def=0 0 0)
+finalangle : Random rotation avelocity (def=0 0 0)
+-------- SPAWNFLAGS --------
+STARTOFF : Starts off and waits for trigger
+-------- NOTES --------
+Marsh lights
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED light_flame_pyre (0 .5 0) (-8 -8 -8) (8 8 8) LIGHTOFF x x x x x x NOPARTICLES
+{ model(":progs/misc_flame_big.mdl"); }
+Flame Pyre (from Quoth)
+-------- KEYS --------
+targetname : toggle state (use trigger ent for exact state)
+light : sets brightness, 300 is default
+
+_color : Light color - R/G/B (def='1 1 1')
+wait : Fade distance multiplier (def=1)
+delay : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+
+mangle : Spotlight direction
+angle : Spotlight cone angle (def=40)
+
+_dirt : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance : Deviance
+_samples : No. of Deviance lights (def=16)
+_surface : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale : Light angle scale (def=0.5)
+-------- SPAWNFLAGS --------
+LIGHTOFF : Starts off and waits for trigger
+NOPARTICLES : No particle or effects active
+-------- NOTES --------
+Flame Pyre (from Quoth)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED light_flame_brazier_short (0 .5 0) (-8 -8 -16) (8 8 8) LIGHTOFF x x x x x x NOPARTICLES
+{ model(":progs/misc_brazshrt.mdl"); }
+Short brazier (from Quoth)
+-------- KEYS --------
+targetname : toggle state (use trigger ent for exact state)
+light : sets brightness, 300 is default
+skin : 0=knave(def), 1=rust, 2=redbrick, 3=copper, 4=altar, 5=wizmet
+
+_color : Light color - R/G/B (def='1 1 1')
+wait : Fade distance multiplier (def=1)
+delay : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+
+mangle : Spotlight direction
+angle : Spotlight cone angle (def=40)
+
+_dirt : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance : Deviance
+_samples : No. of Deviance lights (def=16)
+_surface : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale : Light angle scale (def=0.5)
+-------- SPAWNFLAGS --------
+LIGHTOFF : Starts off and waits for trigger
+NOPARTICLES : No particle or effects active
+-------- NOTES --------
+Short brazier (from Quoth)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED light_flame_brazier_tall (0 .5 0) (-8 -8 -64) (8 8 8) LIGHTOFF x x x x x x NOPARTICLES
+{ model(":progs/misc_braztall.mdl"); }
+Long brazier (from Quoth)
+-------- KEYS --------
+targetname : toggle state (use trigger ent for exact state)
+light : sets brightness, 300 is default
+skin : 0=knave(def), 1=rust, 2=redbrick, 3=copper, 4=altar, 5=wizmet
+
+_color : Light color - R/G/B (def='1 1 1')
+wait : Fade distance multiplier (def=1)
+delay : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+
+mangle : Spotlight direction
+angle : Spotlight cone angle (def=40)
+
+_dirt : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance : Deviance
+_samples : No. of Deviance lights (def=16)
+_surface : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale : Light angle scale (def=0.5)
+-------- SPAWNFLAGS --------
+LIGHTOFF : Starts off and waits for trigger
+NOPARTICLES : No particle or effects active
+-------- NOTES --------
+Long brazier (from Quoth)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED misc_gibfountain (0 .5 .8) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x
+Spew Gibs in target direction (Originally from Zerstorer MOD)
+-------- KEYS --------
+targetname : toggle state (use trigger ent for exact state)
+gibtype    : 0=Blood (def) 1=Stone 10=Poison
+style      : 0=Random (def) 1=Arm/Leg 2=Torso 3=Slice 4=Small 5=Large
+count      : Quantity of gibs to throw at once (def=1)
+cnt        : Extra random quanity of gibs to throw (def=0)
+gib1mdl    : Custom Gib 1 model
+gib2mdl    : Custom Gib 2 model
+gib3mdl    : Custom Gib 3 model
+gib1skin   : Custom Gib 1 skin number (def=0)
+gib2skin   : Custom Gib 2 skin number (def=0)
+gib3skin   : Custom Gib 3 skin number (def=0)
+gib1frame  : Custom Gib 1 range to randomly pick from
+gib2frame  : Custom Gib 2 range to randomly pick from
+gib3frame  : Custom Gib 3 range to randomly pick from
+gib1sound  : Custom Gib 1 Impact sound (0=Light flesh, 1=Heavy flesh, 5=Acid,
+gib2sound  : Custom Gib 2 Impact sound 10-12=Pebbles, 20=Wood, 40=Metal1, 
+gib3sound  : Custom Gib 3 Impact sound 41=Metal2, 42=Chain, 50=Custom)
+gib1soundx : Custom Gib 1 Impact WAV file (must set gib1sound=50)
+gib1soundx : Custom Gib 2 Impact WAV file (must set gib2sound=50)
+gib1soundx : Custom Gib 3 Impact WAV file (must set gib3sound=50)
+sounds     : 1=Zerstorer(def) 4=Silent 5=Custom
+noise      : Custom sound 1 for launching gibs
+noise1     : Custom sound 2 for launching gibs (random selection)
+target     : targeting entity used for custom direction
+angle      : determines the firing direction (def=-1 UP)
+gibmins    : Bounding box override for gib model (def='0 0 0')
+gibmaxs    : Bounding box override for gib model (def='0 0 0')
+speed      : forward speed (def=600)
+gibvel     : Random Velocity X=Forward, Y=L/R, Z=U/D (def=200 100 0)
+gib1dmg    : Amount of damage (>1) to inflict on player when touching gibs
+gib1exp    : Sprite Explosion (1=small 2=medium 3=large 10+=plasma 20+=poison 30+=electric 40+=smoke)
+gibpartstyle  : Particle Colour (1=Yellow 2=Green 4=Red 8=Blue 16=Purple 32=Fire 64=White)
+gibpartoffset : Offset to particle origin (center of effect)
+gibpartbase   : Particle quantity, Base (minimum) value
+gibpartrnd    : Particle quantity, Random amount to add
+gibpartlife   : Time (seconds) which particles are active
+gibpartchance : % chance of particle effect being active while on floor
+gibAnimfinal  : Final animation frame (>0) to enable sequence
+gibAnimstart  : Starting animation frame for sequence
+gibAnimTimer  : Time (seconds) spent in final impact animation
+delay      : base time between spawning gibs (default 3)
+wait       : random time default 5 (= time + self.delay + (random() x self.wait) ) 
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Spew Gibs in target direction (Originally from Zerstorer MOD)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED misc_fireball (0 .5 .8) (-8 -8 -8) (8 8 8) x x x x x SLIME STARTOFF x
+Lava Balls, with damage on impact
+-------- KEYS --------
+targetname : toggle state (use trigger ent for exact state)
+target     : targeting entity used for custom direction
+speed : vertical speed (default 1000)
+dmg   : impact damage (default 5)
+delay : base time between spawning fireballs (default 3)
+wait  : random time default 5 (= time + self.delay + (random() x self.wait) ) 
+-------- SPAWNFLAGS --------
+SLIME  : Green slime version (smoke trail)
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Lava Balls, with damage on impact
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED item_artifact_trinity (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+{ model(":progs/artifact_piercer.mdl"); }
+Quoth MOD replacement - Nail Piercer
+-------- KEYS --------
+targetname   : toggle state (use trigger ent for exact state)
+message      : centerprint message when item is picked up
+respawn_time : time to wait before respawning (1-x seconds, default varies)
+respawn_count: Total amount of times to respawn (counts down to zero)
+respawn_trig : = 1 Wait for trigger before respawning
+cnt          : override duration of artifact (default = 30s)
+-------- SPAWNFLAGS --------
+RESPAWN  : Can respawn after being picked up
+FLOAT    : No drop to floor test
+STARTOFF : Starts off and waits for trigger
+NOEFFECTS : No particle or effects active
+-------- NOTES --------
+Quoth MOD replacement - Nail Piercer
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED item_artifact_cross (0 0.5 0.8) (-16 -16 -24) (16 16 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+{ model(":progs/artifact_blastbelt.mdl"); }
+Quoth MOD replacement - Splashdamage immunity
+-------- KEYS --------
+targetname   : toggle state (use trigger ent for exact state)
+message      : centerprint message when item is picked up
+respawn_time : time to wait before respawning (1-x seconds, default varies)
+respawn_count: Total amount of times to respawn (counts down to zero)
+respawn_trig : = 1 Wait for trigger before respawning
+cnt          : override duration of artifact (default = 30s)
+-------- SPAWNFLAGS --------
+RESPAWN  : Can respawn after being picked up
+FLOAT    : No drop to floor test
+STARTOFF : Starts off and waits for trigger
+NOEFFECTS : No particle or effects active
+-------- NOTES --------
+Quoth MOD replacement - Splashdamage immunity
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED weapon_hammer (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+{ model(":progs/g_shadaxe.mdl"); }
+Quoth MOD replacement - Shadow Axe
+-------- KEYS --------
+targetname   : toggle state (use trigger ent for exact state)
+message       : centerprint message when item is picked up
+respawn_time  : time to wait before respawning (1-x seconds, default varies)
+respawn_count : Total amount of times to respawn (counts down to zero)
+respawn_trig : = 1 Wait for trigger before respawning
+-------- SPAWNFLAGS --------
+RESPAWN  : Can respawn after being picked up
+FLOAT    : No drop to floor test
+STARTOFF : Starts off and waits for trigger
+NOEFFECTS: No particle or effects active
+-------- NOTES --------
+Quoth MOD replacement - Shadow Axe
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED weapon_plasmagun (0 0.5 0.8) (-16 -16 0) (16 16 56) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+{ model(":progs/g_plasma.mdl"); }
+Quoth MOD replacement - LG Upgrade
+-------- KEYS --------
+targetname   : toggle state (use trigger ent for exact state)
+message       : centerprint message when item is picked up
+respawn_time  : time to wait before respawning (1-x seconds, default varies)
+respawn_count : Total amount of times to respawn (counts down to zero)
+respawn_trig : = 1 Wait for trigger before respawning
+-------- SPAWNFLAGS --------
+RESPAWN  : Can respawn after being picked up
+FLOAT    : No drop to floor test
+STARTOFF : Starts off and waits for trigger
+NOEFFECTS: No particle or effects active
+-------- NOTES --------
+Quoth MOD replacement - LG Upgrade
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED monster_gug (1 0 0) (-32 -32 -24) (32 32 64) AMBUSH STRONG x NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
+{ model(":progs/mon_bossboglord.mdl"); }
+Quoth MOD replacement - Boglord, 1200HP
+-------- KEYS --------
+targetname : monster/trigger name
+target : trigger to fire on death
+target2 : tether point to keep close too
+angrytarget : something (monster/player) to get angry at once spawned
+deathtarget : entity to trigger upon death (useful if target field already in use)
+health : Override default health settings
+exactskin : Override default skin selection of 0 (no error checking)
+upgrade_ssg : 1 = will only spawn if shotgun upgrade active on server
+upgrade_axe : 1 = will only spawn if axe upgrade active on server
+upgrade_lg : 1 = will only spawn if lightning gun upgrade active on server
+nomonstercount : will not be included in any monster count functionality
+-------- SPAWNFLAGS --------
+AMBUSH : the monster will only wake up on seeing the player
+STRONG : More Health and Skin 2
+NOSIGHT : No sight sound
+NOIDLE : No idle sound
+NOGFX : No spawn effect or sound when triggered
+STARTOFF : Trigger Spawn
+ANGRY : Trigger Spawn angry at the player
+-------- NOTES --------
+Quoth MOD replacement - Boglord, 1200HP
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED monster_juggernaut (1 0 0) (-32 -32 -24) (32 32 64) AMBUSH x SHIELD NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
+{ model(":progs/mon_seeker.mdl"); }
+Travail MOD replacement - Seeker, 500HP.
+-------- KEYS --------
+targetname : monster/trigger name
+target : Starting position or path_corner to walk towards (always define)
+target2 : Fired when the shield is turned off (trigger_once)
+angrytarget : something (monster/player) to get angry at once spawned
+deathtarget : entity to trigger upon death (useful if target field already in use)
+health : Override default health settings
+exactskin : Override default skin selection of 0 (no error checking)
+upgrade_ssg : 1 = will only spawn if shotgun upgrade active on server
+upgrade_axe : 1 = will only spawn if axe upgrade active on server
+upgrade_lg : 1 = will only spawn if lightning gun upgrade active on server
+nomonstercount : will not be included in any monster count functionality
+infightextra : Damage multiplier for infighting damage
+pain_ignore : 1 = Ignore pain when hit by other monsters
+noinfighting : Will not react to any infighting (it can look stupid)
+no_liquiddmg : Blocks all liquid (slime/lava) damage checks
+no_zaware : All Z Aware projectiles will be disabled
+bboxtype : Change bbox 1=Tiny,4=Short,5=Tall,7=Wide,8=Giant,10=Massive
+gibondeath : 1 = always explode in a shower of gibs on death
+bodyfadeaway : Time (secs) before body/head will fade away (default=0)
+movespeed : -1 = no movement(turret), =0/1 free movement (default)
+turrethealth : = 0.0->1.0; % of HP when monster turret is released 
+turrettarget : Target(s) to fire when turret % HP is released
+state : start with one arm removed 1=Left, 2=Right
+-------- SPAWNFLAGS --------
+AMBUSH : the monster will only wake up on seeing the player, not by another monster
+SHIELD : Start with shield ON and waits for trigger
+NOSIGHT : No sight sound
+NOIDLE : No idle sound
+NOGFX : No spawn effect or sound when triggered
+STARTOFF : Trigger Spawn
+ANGRY : Trigger Spawn angry at the player
+-------- NOTES --------
+Travail MOD replacement - Seeker, 500HP.
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED monster_floyd (0 1 .5) (-16 -16 -24) (16 16 40) AMBUSH ROLL ASLEEP NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
+{ model(":progs/mon_floyd.mdl"); }
+Floyd, 150 health points.
+-------- KEYS --------
+targetname : monster/trigger name
+target : Starting position or path_corner to walk towards (always define)
+target2 : Additional trigger function (need target to be defined as well)
+angrytarget : something (monster/player) to get angry at once spawned
+deathtarget : entity to trigger upon death (useful if target field already in use)
+health : Override default health settings
+exactskin : Override default skin selection of 0 (no error checking)
+upgrade_ssg : 1 = will only spawn if shotgun upgrade active on server
+upgrade_axe : 1 = will only spawn if axe upgrade active on server
+upgrade_lg : 1 = will only spawn if lightning gun upgrade active on server
+nomonstercount : will not be included in any monster count functionality
+infightextra : Damage multiplier for infighting damage
+pain_ignore : 1 = Ignore pain when hit by other monsters
+noinfighting : Will not react to any infighting (it can look stupid)
+no_liquiddmg : Blocks all liquid (slime/lava) damage checks
+no_zaware : All Z Aware projectiles will be disabled
+bboxtype : Change bbox 1=Tiny,4=Short,5=Tall,7=Wide,8=Giant,10=Massive
+gibondeath : 1 = always explode in a shower of gibs on death
+bodyfadeaway : Time (secs) before body/head will fade away (default=0)
+movespeed : -1 = no movement(turret), =0/1 free movement (default)
+turrethealth : = 0.0->1.0; % of HP when monster turret is released 
+turrettarget : Target(s) to fire when turret % HP is released
+-------- SPAWNFLAGS --------
+AMBUSH  : the monster will only wake up on seeing the player, not by another monster
+ROLL    : Start on floor and eventually explode
+ASLEEP  : Start off unless shot or triggered
+NOSIGHT : No sight sound
+NOIDLE  : No idle sound
+NOGFX   : No spawn effect or sound when triggered
+STARTOFF: Trigger Spawn
+ANGRY   : Trigger Spawn angry at the player
+-------- NOTES --------
+Floyd, 150 health points.
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED monster_megaforce (0 1 .5) (-16 -16 -24) (16 16 40) AMBUSH x x NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
+{ model(":progs/mon_megaforce.mdl"); }
+Mega Enforcer, 400 health points.
+-------- KEYS --------
+targetname : monster/trigger name
+target : Starting position or path_corner to walk towards (always define)
+target2 : Additional trigger function (need target to be defined as well)
+angrytarget : something (monster/player) to get angry at once spawned
+deathtarget : entity to trigger upon death (useful if target field already in use)
+health : Override default health settings
+exactskin : Override default skin selection of 0 (no error checking)
+upgrade_ssg : 1 = will only spawn if shotgun upgrade active on server
+upgrade_axe : 1 = will only spawn if axe upgrade active on server
+upgrade_lg : 1 = will only spawn if lightning gun upgrade active on server
+nomonstercount : will not be included in any monster count functionality
+infightextra : Damage multiplier for infighting damage
+pain_ignore : 1 = Ignore pain when hit by other monsters
+noinfighting : Will not react to any infighting (it can look stupid)
+no_liquiddmg : Blocks all liquid (slime/lava) damage checks
+no_zaware : All Z Aware projectiles will be disabled
+bboxtype : Change bbox 1=Tiny,4=Short,5=Tall,7=Wide,8=Giant,10=Massive
+gibondeath : 1 = always explode in a shower of gibs on death
+bodyfadeaway : Time (secs) before body/head will fade away (default=0)
+movespeed : -1 = no movement(turret), =0/1 free movement (default)
+turrethealth : = 0.0->1.0; % of HP when monster turret is released 
+turrettarget : Target(s) to fire when turret % HP is released
+-------- SPAWNFLAGS --------
+AMBUSH : the monster will only wake up on seeing the player, not by another monster
+NOSIGHT : No sight sound
+NOIDLE : No idle sound
+NOGFX : No spawn effect or sound when triggered
+STARTOFF : Trigger Spawn
+ANGRY : Trigger Spawn angry at the player
+-------- NOTES --------
+Mega Enforcer, 400 health points.
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED monster_turretbal (.75 0 .75) (-20 -20 -20) (20 20 20) AMBUSH TRIPLE PLASMA NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
+{ model(":progs/mon_turretbal.mdl"); }
+Large surface mount turret, 200 health points.
+-------- KEYS --------
+targetname : monster/trigger name
+target : Starting position or path_corner to walk towards (always define)
+target2 : Additional trigger function (need target to be defined as well)
+angrytarget : something (monster/player) to get angry at once spawned
+deathtarget : entity to trigger upon death (useful if target field already in use)
+health : Override default health settings
+exactskin : Override default skin selection of 0 (no error checking)
+upgrade_ssg : 1 = will only spawn if shotgun upgrade active on server
+upgrade_axe : 1 = will only spawn if axe upgrade active on server
+upgrade_lg : 1 = will only spawn if lightning gun upgrade active on server
+nomonstercount : will not be included in any monster count functionality
+infightextra : Damage multiplier for infighting damage
+pain_ignore : 1 = Ignore pain when hit by other monsters
+noinfighting : Will not react to any infighting (it can look stupid)
+bboxtype : Change bbox 1=Tiny,4=Short,5=Tall,7=Wide,8=Giant,10=Massive
+gibondeath : 1 = always explode in a shower of gibs on death
+bodyfadeaway : Time (secs) before body/head will fade away (default=0)
+movespeed : -1 = no movement(turret), =0/1 free movement (default)
+turrethealth : = 0.0->1.0; % of HP when monster turret is released 
+turrettarget : Target(s) to fire when turret % HP is released
+t_length : Axis restriction for ceiling/floor version
+t_width  : 2nd axis restriction for wall version
+attack_count : =-1 to disable increased fire rate
+-------- SPAWNFLAGS --------
+AMBUSH   : the monster will only wake up on seeing the player, not by another monster
+TRIPLE   : Fire triple shot instead of single (powerful blast attack)
+PLASMA   : Fire plasma bolts instead of laser (high damage)
+NOSIGHT  : No sight sound
+NOIDLE   : No idle sound
+NOGFX    : No spawn effect or sound when triggered
+STARTOFF : Trigger Spawn
+ANGRY    : Trigger Spawn angry at the player
+-------- NOTES --------
+Large surface mount turret, 200 health points.
+*/
+
+//=============================================================================
+/*QUAKED corpse_crucified1 (1 .5 .25) (-16 -16 -24) (16 16 40) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (crucified)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (crucified)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_crucified2 (1 .5 .25) (-16 -16 -24) (16 16 40) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (crucified + headless)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (crucified + headless)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_impaled_back1 (1 .5 .25) (-16 -16 -32) (16 16 0) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (impaled in back + clothed)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (impaled in back + clothed)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_impaled_back2 (1 .5 .25) (-16 -16 -32) (16 16 0) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (impaled in back)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (impaled in back)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_impaled_back3 (1 .5 .25) (-16 -16 -24) (16 16 0) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (impaled in back + eaten)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (impaled in back + eaten)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_impaled_front1 (1 .5 .25) (-16 -16 -16) (16 16 16) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (impaled in front + clothed)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (impaled in front + clothed)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_impaled_front2 (1 .5 .25) (-16 -16 -16) (16 16 16) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (impaled in front)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (impaled in front)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_impaled_front3 (1 .5 .25) (-16 -16 -8) (16 16 16) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (impaled in front + eaten)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (impaled in front + eaten)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_impaled_horizontal1 (1 .5 .25) (-16 -16 -40) (16 16 24) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (impaled horizontal + clothed)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (impaled horizontal + clothed)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_impaled_horizontal2 (1 .5 .25) (-16 -16 -40) (16 16 24) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (impaled horizontal)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (impaled horizontal)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_impaled_horizontal3 (1 .5 .25) (-16 -16 -40) (16 16 24) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (impaled horizontal + nibbled)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (impaled horizontal + nibbled)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_impaled_horizontal4 (1 .5 .25) (-16 -16 -32) (16 16 16) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (impaled horizontal + eaten)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (impaled horizontal + eaten)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_impaled_vertical1 (1 .5 .25) (-16 -16 -32) (16 16 24) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (impaled vertical + clothed)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (impaled vertical + clothed)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_impaled_vertical2 (1 .5 .25) (-16 -16 -32) (16 16 24) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (impaled vertical)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (impaled vertical)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_impaled_vertical3 (1 .5 .25) (-16 -16 -32) (16 16 24) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (impaled vertical + eaten)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (impaled vertical + eaten)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_lynched1 (1 .5 .25) (-16 -16 -96) (16 16 0) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (lynched + clothed)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (lynched + clothed)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_lynched2 (1 .5 .25) (-16 -16 -96) (16 16 0) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (lynched)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (lynched)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_lynched3 (1 .5 .25) (-16 -16 -96) (16 16 0) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (lynched + eaten)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (lynched + eaten)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_flayed1 (1 .5 .25) (-16 -16 -96) (16 16 0) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (flayed + clothed)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (flayed + clothed)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_flayed2 (1 .5 .25) (-16 -16 -96) (16 16 0) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (flayed)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (flayed)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_flayed3 (1 .5 .25) (-16 -16 -96) (16 16 0) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (flayed + eaten)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (flayed + eaten)
+*/
+
+//-----------------------------------------------------------------------------
+/*QUAKED corpse_flayed4 (1 .5 .25) (-16 -16 -96) (16 16 0) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Corpse model (flayed + broken leg)
+-------- KEYS --------
+targetname : trigger entity (works with entity state system)
+target : trigger all these targets
+angle  : facing angle (-1 = random position)
+angles : 'pitch yaw roll' up/down, angle, tilt left/right 
+ideal_yaw : = 1 Setup model with random Y axis rotation
+-------- SPAWNFLAGS --------
+STARTOFF : Always Starts off and waits for trigger
+-------- NOTES --------
+Corpse model (flayed + broken leg)
+*/

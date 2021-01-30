@@ -615,3 +615,53 @@ void() gib_misc_3 = {
 // END Scenic Dead Monster Patch stuff here from DeadStuff mod -- dumptruck_ds
 
 */
+
+// Touch trigger that prevents things from falling too fast.
+void() trigger_dive_touch =
+{
+// PM:  Use wind flag on projectiles to catch them.
+// Replaced grenade classname check with wind flag check.
+    if (!(other.flags & FL_ONGROUND))
+    if ((other.health > 0) || (other.xfl & XFL_WIND))
+    if (other.velocity_z < self.speed)
+    {
+        other.velocity_z = self.speed;
+        if (other.classname == "player")
+        {
+            if (other.fly_sound < time)
+            {
+                other.fly_sound = time + 1.5;
+                if (!(self.spawnflags & PUSH_CURRENT))
+                    sound (other, CHAN_AUTO, "ambience/windfly.wav", 1, ATTN_NORM);
+            }
+        }
+    }
+};
+
+void() push_use2 =   // This function is Zerstorer stuff.
+{
+    if (self.solid == SOLID_NOT)
+        self.solid = SOLID_TRIGGER;
+    else
+        self.solid = SOLID_NOT;
+};
+
+//============
+// --> QUAKED trigger_dive (.5 .5 .5) ? x PUSH_CURRENT
+// Slows downward velocity to prevent falling damage.
+//============
+void() trigger_dive_spawn =
+{
+//    InitTrigger ();
+    precache_sound ("ambience/windfly.wav");
+    self.touch = trigger_dive_touch;
+    if (!self.speed)
+        self.speed = -500;
+//- - - - - - - - -
+// Zerstorer stuff
+    if (self.targetname)
+        {self.solid = SOLID_NOT; self.use = push_use2;}
+//- - - - - - - - -
+};
+void() trigger_dive = {InitTrigger ();  trigger_dive_spawn();};
+void() trigger_dive_point = {InitPointTrigger ();  trigger_dive_spawn();};

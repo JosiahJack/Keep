@@ -7,7 +7,7 @@ void() usecommand;
 
 void() ImpulseCommands =
 {
-	if ((self.impulse >= 1 && self.impulse <= 9) || (self.impulse >= 60 && self.impulse <= 64) || (self.impulse >= 175 && self.impulse <= 181)) W_ChangeWeapon (self);
+	if ((self.impulse >= 1 && self.impulse <= 9) || (self.impulse >= 60 && self.impulse <= 64) || (self.impulse >= 175 && self.impulse <= 189)) W_ChangeWeapon (self);
 	else if (self.impulse == 10) CycleWeaponCommand();
 	else if (self.impulse == 12) CycleWeaponReverseCommand();
 

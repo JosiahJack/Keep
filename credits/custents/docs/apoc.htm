@@ -1,0 +1,403 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="General WarT'">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.01 [en] (Win95; I) [Netscape]">
+   <TITLE>Custents Entity Defs - General Enhancements</TITLE>
+</HEAD>
+<BODY TEXT="#CC33CC" BGCOLOR="#000000" LINK="#00CC00" VLINK="#009900" ALINK="#00CC00">
+
+<CENTER><IMG SRC="custtitle.jpg" HEIGHT=60 WIDTH=330><FONT COLOR="#009900"><FONT SIZE=+3>6.0</FONT></FONT></CENTER>
+
+<CENTER><FONT SIZE=+2>Entities Definitions - Misc. Apocalypse Stuff</FONT>&nbsp;
+<HR WIDTH="100%"></CENTER>
+Last Updated : 3/7/98
+<BR>&copy;1998 Carl Glave
+<BR><A HREF="index.htm">Back to Main Index</A>
+<BR>
+<HR WIDTH="100%">
+
+<P>Misc. Apocalypse Stuff Index
+<UL>
+<LI>
+<A HREF="#func_particlespray">func_particlespray</A></LI>
+
+<LI>
+<A HREF="#func_remote_cam">func_remote_cam</A></LI>
+
+<LI>
+<A HREF="#func_glass">func_glass</A></LI>
+
+<LI>
+<A HREF="#func_model">func_model</A></LI>
+
+<LI>
+<A HREF="#trigger_servomech">trigger_servomech</A></LI>
+
+<LI>
+<A HREF="#func_servomech">func_servomech</A></LI>
+
+<LI>
+<A HREF="#monster_servomech">monster_servomech</A></LI>
+
+<LI>
+<A HREF="#monster_army_grenade">monster_army_grenade</A></LI>
+
+<LI>
+<A HREF="#monster_army_nail">monster_army_nail</A></LI>
+
+<LI>
+<A HREF="#monster_army_rocket">monster_army_rocket</A></LI>
+
+<LI>
+<A HREF="#monster_axzombie">monster_axzombie</A></LI>
+
+<LI>
+<A HREF="#monster_babysham">monster_babysham</A></LI>
+
+<LI>
+<A HREF="#monster_turret">monster_turret</A></LI>
+
+<LI>
+<A HREF="#monster_zombie">monster_zombie</A></LI>
+
+<LI>
+<A HREF="#monster_zombie_master">monster_zombie_master</A></LI>
+
+<LI>
+<A HREF="#monster_shock_trooper">monster_shock_trooper</A></LI>
+
+<LI>
+<A HREF="#weapon_ppc">weapon_ppc</A></LI>
+</UL>
+<A NAME="func_particlespray"></A>
+<HR WIDTH="100%">
+<BR><B>func_particlespray (0 .5 .8) (-8 -8 -8) (8 8 8)</B>
+<UL>Shoots particles either when triggered, or contiuously when not triggered
+by anything.
+
+<P><B>"color"</B> is the palette color of the particles
+
+<P><B>"count"</B> is the number of particles to make each time
+
+<P><B>"delay"</B> is the delay between each triggering
+
+<P><B>"noise"</B> is the name of the wav file to play when triggered
+
+<P><B>"movedir"</B> is the vector distance that the particles will travel
+before disappearing.
+
+<P><B>"duration"</B> is the amount of time that the it will continue to
+release particles so that it can release a long stream of particles with
+only one triggering.</UL>
+&nbsp;<A NAME="func_remote_cam"></A>&nbsp;
+<HR WIDTH="100%">
+<BR><B>func_remote_cam (0 0.5 0.8) (-8 -8 -8) (8 8 8) RCAM_FREEZE RCAM_ALL
+RCAM_TRACKING RCAM_SMOOTH RCAM_ALOWIMP RCAM_MOVING RCAM_EXITABLE RCAM_NODMG</B>
+<UL>This is a camera usefull for mid level cutscenes and working security
+cameras. It changes the player's view to the camera's when it is triggered.
+The player must be the activator of the triggering for it to work properly.
+The player's view angle's can be set to those of the camera with an optional
+spawnflag. The view angle is always restored to its original value when
+the camera is deactivated. The player's movement is always frozen while
+in the camera view. For looped cameras, the player's pressing the fire
+button will also make him trigger his current remote camera. This is what
+allows the player to loop through all the different cameras.
+
+<P><B>RCAM_FREEZE</B> forces the player to face in the direction of the
+camera's angles at all times and does not allow then to look around. The
+player's view direction is by default free to look around, but not if this
+is set.
+
+<P><B>RCAM_ALL</B> makes all player in the level use the camera when it
+is triggered instead of just the player that activates the triggering.
+Can be used in simgle player to activate a camera when the player was not
+the activator of the triggering, allowing for several different triggering
+possibilities.
+
+<P><B>RCAM_TRACKING</B> makes the camera view track its "target" entity.
+Allows panning scenes and turning security cameras. A good entity to use
+for the target entity for panning shots is the func_moving_light.
+
+<P><B>RCAM_SMOOTH</B> makes the camera tracking smoother, but at the cost
+of doubling the number of calculation per second that it must do. Don't
+bother using if doing still or slow panning scenes.
+
+<P><B>RCAM_ALOWIMP</B> allows the player to use impulses to activate trigger_impulse
+entities. Should allow for things like interactive cut scenes in mid-level.
+Does not enable any other impulse actions like weapons fire or weapon selection.
+
+<P><B>RCAM_MOVING</B> makes the camera move along with the entity named
+in its "path" variable. It follows the target entities origin offset by
+"pos1".
+
+<P><B>RCAM_EXITABLE </B>allows players to exit the remote camera view by
+pressing the fire button. This has no effect for a camera that's in a loop
+since the player must press the button to switch between the different
+cameras.
+
+<P><B>"model" </B>is the model that the camera will be set to use. The
+camera defaults to using no model.
+
+<P><B>"target"</B> is the entity that the camera will point at. If not
+used, then the camera's angles value is used.
+
+<P><B>"angles" </B>sets the view angle of the camera if there is no "target"
+specified.
+
+<P><B>"spawnmodel"</B> allows you to specify a weaponmodel to use. Doing
+this will allow for adding in things like monitor frames to make it appear
+that the player is looking at a computer monitor. If a "spawnmodel" is
+not specified, then no weaponmodel is displayed at all.
+
+<P><B>"path"</B> is the name of the entity to move along with. RCAM_MOVING
+must also be set for this to work.
+
+<P><B>"pos1"</B> is used while moving with another entity. It is the offset
+that the camera will be at relative to the other entity's origin. If set
+to '-1 -1 -1', it will be automatically calculated from the camera's starting
+position relative to the "path" entity's starting position. This allows
+for visual placement of the camera.
+
+<P><B>"target2"</B> is not to be confused with "target". "target2" is used
+to specify that the camera is in a loop, and also the name of the next
+camera in that loop. This should be set to the "targetname" of the next
+camera in the loop for it to work properly. To designate the last camera
+in the loop, set this to "end". This will make the player exit the camera
+loop after pressing the fire button while using this last camera.
+
+<P><B>"message"</B> is the message to display to the player when he uses
+the camera.</UL>
+<A NAME="func_glass"></A>
+<HR WIDTH="100%">
+<BR><B>func_glass (0 .5 .8) ? GLASS_SMOOTH</B> <B>GLASS_BLOCKABLE</B> <B>GLASS_STARTOFF
+GLASS_ONEHIT</B>
+<UL>This entity can move in one of two ways. First, if its "target" key
+is set, then it will move like a train. Second, if no "target"is specified,
+it will move like a func_togglewall and toggle between being there and
+not being there when triggered. All keys not described here are those of
+it's movement which will be just like either a train or togglewall.
+
+<P><B>GLASS_SMOOTH</B> is used when it moves like a train. This makes it
+move like a smooth train instead of a regular train.
+
+<P><B>GLASS_BLOCKABLE</B> is used when it moves like a train. This makes
+it blockable when it's a smooth train.
+
+<P><B>GLASS_STARTOFF</B> is used for when it is moving like a func_togglewall.
+This makes it start in the off position so that it is not there when the
+level begins.
+
+<P><B>GLASS_ONEHIT</B> is for when the glass is destroyable. It makes it
+like a trigger_damage threshold in that it requires a single hit of "health"
+damage to destroy it. Damage taken is not acumulated.
+
+<P><B>"health"</B> when set, the glass is destroyable and requires this
+amount of damage to destroy. The "event" will be triggered when the func_glass
+is destroyed.
+
+<P><B>"color"</B> is the number of shards of glass to throw out when it
+is destroyed. The default number is set according to the size of the entity's
+brush model. Set this to -1 to make no pieces come out at all when it is
+destroyed. I would have used "count" for this like the rubble throwers
+do, but it's used for making clones when the glass entity is moving like
+a train. Yes, glass supports cloning too. :)
+
+<P><B>"event"</B> is the targetname to trigger when the func_glass is destroyed.
+
+<P><B>"noise2"</B> is the sound to play when it is destryoed. This defaults
+to a glass shattering sound.</UL>
+<A NAME="func_model"></A>
+<HR WIDTH="100%">
+<BR><B>func_model (0 .5 .8) ? ANIMATED STILLSTART</B>
+<UL>This entity is to be used for placing static models that don't really
+do anything but look nice. It has support for toggelable animation. Triggering
+an animating one will make it toggle its animation on and off. A more effeciant
+way to animate a model, though, is to not use this entities animation feature,
+but instead use a model that has a scene grouped together starting at frame
+0 so that Quake will animate it automatically in the Client's side. This
+second method only allows for a 0.1 wait between frames and it has to start
+at frame 0, but it's also much faster. Good examples of this method are
+the flame.mdl and flame2.mdl included with Quake.
+
+<P><B>ANIMATED</B> makes it animate through a few specified frames.
+
+<P><B>STILLSTART</B> will make an animating one start with its animation
+off.
+
+<P><B>"model"</B> is the file name of the model to use. This can be either
+an actual model, or a sprite.
+
+<P><B>"angles"</B> specified the pitch, yaw, and roll to place the model
+with.
+
+<P><B>"wait"</B> is the delay between the different frames when being animated.
+Default value is 0.1.
+
+<P><B>"walkframe"</B> is the number of the first frame to start animating
+at. Default is 0.
+
+<P><B>"count"</B> is the number of frames to animate through. Default is
+2.
+
+<P><B>"weaponframe"</B> is the frame number to use when not animating.
+If this is not set, it will just stay with the frame that it was using
+when it was triggered to stop. To use frame 0 as the still frame, set this
+to - 1.</UL>
+<A NAME="trigger_servomech"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_servomech (0 .5 .8) (-8 -8 -8) (8 8 8) SITTING NODMG</B>
+<UL>This is the point entity to use to target the func_servomech controllable
+mechs. It can be used to target as many as you want. They will be used
+in the order that they are added to the map. This entity must be triggered
+by another entity, as this just relays the command for control to the appropriate
+servomech. Several of these can target the same group of servomechs, they
+will just assign the first available servomech to the player when activated.
+They are usually best triggered by a trigger_impulse.
+
+<P><B>SITTING</B> makes the player appear to be sitting while using the
+servomech. (currently makes the player stand with a gun instead of an axe)
+
+<P><B>NODMG</B> makes the player impervious to damage while using this
+trigger_servomech.
+
+<P><B>"target"</B> is the "target" value assigned to all the servomechs
+that are accessable through this trigger_servomech.</UL>
+<A NAME="func_servomech"></A>
+<HR WIDTH="100%">
+<BR><B>func_servomech (0 .5 .8) (-32 -32 -48) (32 32 28)</B>
+<UL>This makes a servomech that is player controllable. It must targeted
+by a trigger_servomech to do this. It can also be placed simply as a stationary
+servomech that can be shot up by just giving it no targetname.
+
+<P><B>"targetname"</B> is what must be used to specify the name for it
+to be targeted by. You can not use any of the other targetname variables.
+
+<P><B>"skin"</B> sets the skin to use for the servomech.</UL>
+<A NAME="monster_servomech"></A>
+<HR WIDTH="100%">
+<BR><B>monster_servomech (1 0 0) (-32 -32 -48) (32 32 28) Ambush</B>
+<UL><B>"skin"</B> sets the skin for the servomech. valid values are from
+0 to 3. default is 0.</UL>
+<A NAME="monster_army_grenade"></A>
+<HR WIDTH="100%">
+<BR><B>monster_army_grenade (1 0 0) (-16 -16 -24) (16 16 40) Ambush</B>
+<UL>Regular monster_army monster, but toting a grenade launcher. They're
+quite good with them compared to Ogres too.</UL>
+<A NAME="monster_army_nail"></A>
+<HR WIDTH="100%">
+<BR><B>monster_army_nail (1 0 0) (-16 -16 -24) (16 16 40) Ambush</B>
+<UL>Regular monster_army, but toting a nail gun.</UL>
+<A NAME="monster_army_rocket"></A>
+<HR WIDTH="100%">
+<BR><B>monster_army_rocket (1 0 0) (-16 -16 -24) (16 16 40) Ambush</B>
+<UL>Regular monster_army, but toting a rocket launcher.</UL>
+<A NAME="monster_axzombie"></A>
+<HR WIDTH="100%">
+<BR><B>monster_axzombie (1 0 0) (-16 -16 -24) (16 16 32) SPAWN_CRUCIFIED
+SPAWN_SLEEPING SPAWN_DEAD</B>
+<UL>A dead body state has been added to the zombie to do two things. First
+to increase the paranoia factor from the zombies, cause it's really hard
+to tell when they're really dead. Second, to make it easier for Zombie
+Masters to get their hands on the zombies. >) These are the type of zombies
+that the Zombie Masters make. They can only be killed by either a direct
+rocket blast or a hit from an ax.
+
+<P><B>SPAWN_SLEEPING </B>makes the zombie start out lying down and asleep.
+It will get up and attack if the player gets near it.
+
+<P><B>SPAWN_DEAD </B>makes the zombie start lying down and escentially
+dead. It will be changed to a sleeping state when triggered so that it
+can come to life.</UL>
+<A NAME="monster_babysham"></A>
+<HR WIDTH="100%">
+<BR><B>monster_babysham (1 0 0) ('-10 -10 -7') ('10 10 19') Ambush</B>
+<UL>This is a baby Shambler. It's 1/3 the size of an adult shambler, isn't
+as good with the lightning yet, and it's claws aren't as big, but it's
+still a tough little monster.</UL>
+<A NAME="monster_turret"></A>
+<HR WIDTH="100%">
+<BR><B>monster_turret (1 0 0) (-12 -12 -6) (12 12 12) TUR_STARTOFF TUR_RETRACT
+TUR_OFFRET TUR_LASERS TUR_ROCKETS TUR_PPC</B>
+<UL>This is the ceiling mounted, automated gun turret. It can be placed
+any distance under the surface that it will attach to. At the start of
+the level, the turrets will adjust their vertical positioning so that they
+are properly positioned up against the ceiling surface. When targeted,
+turrets toggle between active and inactive. While inactive, a turret will
+not react to anything. While active, the turret operates normally. The
+defauly ammunition that the turrets fire is plasma bullets.
+
+<P><B>TUR_STARTOFF </B>makes the turret start out as inactive.
+
+<P><B>TUR_RETRACT </B>makes the turret retract up into the ceiling when
+it is inactive and when it currently has no target.
+
+<P><B>TUR_OFFRET </B>makes the turret retract into the ceiling only when
+it is inactive. It remain as normal when it has no enemy.
+
+<P><B>TUR_LASERS </B>makes the turret fire lasers.
+
+<P><B>TUR_ROCKETS </B>makes the turret fire rockets.
+
+<P><B>TUR_PPC </B>makes the turret fire a phased plasma cannon.
+
+<P><B>"health" </B>is the amount of health that the turret will have. Default
+is 100.
+
+<P><B>"rotate_type" </B>is the starting tile angle of the gun. Default
+is 0, which is in a horizontal position. Valid values are from 0 to 90.
+
+<P><B>"skin" </B>specifies the skin color that you want for the turret.
+Here's a list.
+<UL>0 - gray (default)
+<BR>1 - black
+<BR>2 - aqua
+<BR>3 - blue
+<BR>4 - brown
+<BR>5 - tan
+<BR>6 - red</UL>
+</UL>
+<A NAME="monster_zombie"></A>
+<HR WIDTH="100%">
+<BR><B>monster_zombie (1 0 0) (-16 -16 -24) (16 16 32) SPAWN_CRUCIFIED
+SPAWN_SLEEPING SPAWN_DEAD</B>
+<UL>A dead body state has been added to the zombie to do two things. First
+to increase the paranoia factor from the zombies, cause it's really hard
+to tell when they're really dead. Second, to make it easier for Zombie
+Masters to get their hands on the zombies. >)
+
+<P><B>SPAWN_SLEEPING</B> makes the zombie start out lying down and asleep.
+it will get up and attack if the player gets near it.
+
+<P><B>SPAWN_DEAD </B>makes the zombie start lying down and escentially
+dead. It will be changed to a sleeping state when triggered so that it
+can come to life.</UL>
+<A NAME="monster_zombie_master"></A>
+<HR WIDTH="100%">
+<BR><B>monster_zombie_master (1 0 0) (-16 -16 -24) (16 16 40) Ambush</B>
+<UL>Goes around controlling zombies and raising dead bodies into zombies.</UL>
+<A NAME="monster_shock_trooper"></A>
+<HR WIDTH="100%">
+<BR><B>monster_shock_trooper (1 0 0) (-16 -16 -24) (16 16 40) Ambush</B>
+<UL>A modified version of the regular Enforcer. Looks really cool and fires
+a double laser in a semi-random speed tracking way that makes it extreamly
+hard to predict just where he's firing, and so it's much more difficult
+to dodge these guys' weapons fire.</UL>
+<A NAME="weapon_ppc"></A>
+<HR WIDTH="100%">
+<BR><B>weapon_ppc (0 0 1) (-16 -16 0, 16 16 32)</B>
+<UL>This the pickupable Phased Plasma Cannon. It's been modified from it's
+original form so that it doesn't require as much added stuff (like 5 extra
+skins for everything) and so that is't a bit more of an interesting weapon.
+Both its power and ammo usage depend apon the total amount of ammo (cells)
+that you have. The more ammo you've got, the bigger, longer, and more destructive
+the bursts that you fire out. To simplify the coding for it even more,
+I've removed the added death required for it. Personally, I think it actualyl
+looked even cooler now, cause there's bloody chunks flying everywhere now.
+:) It's been added in a way that if you don't want it in your game, just
+don't use it. Even if the player does an Impulse 9, he can't use it unless
+he knows what impulse you set it on (199). Anyway, try it out to see how
+you like it. ;)</UL>
+
+</BODY>
+</HTML>

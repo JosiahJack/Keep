@@ -1,0 +1,242 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="General WarT'">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.01 [en] (Win95; I) [Netscape]">
+   <TITLE>Custents Entity Defs - Hipnotic Traps</TITLE>
+</HEAD>
+<BODY TEXT="#CC33CC" BGCOLOR="#000000" LINK="#00CC00" VLINK="#009900" ALINK="#00CC00">
+
+<CENTER><IMG SRC="custtitle.jpg" HEIGHT=60 WIDTH=330><FONT COLOR="#009900"><FONT SIZE=+3>6.0</FONT></FONT></CENTER>
+
+<CENTER><FONT SIZE=+2>Entities Definitions - Hipnotic Traps</FONT>&nbsp;
+<HR WIDTH="100%"></CENTER>
+Last Updated : 3/7/98
+<BR>&copy;1998 Carl Glave
+<BR><A HREF="index.htm">Back to Main Index</A>
+<BR>
+<HR WIDTH="100%">
+
+<P>Hipnotic Traps Entities Index
+<UL>
+<LI>
+<A HREF="#trap_lightning_triggered">trap_lightning_triggered</A></LI>
+
+<LI>
+<A HREF="#trap_lightning">trap_lightning</A></LI>
+
+<LI>
+<A HREF="#trap_lightning_switched">trap_lightning_switched</A></LI>
+
+<LI>
+<A HREF="#trap_tesla_coil">trap_tesla_coil</A></LI>
+
+<LI>
+<A HREF="#trap_gods_wrath">trap_gods_wrath</A></LI>
+
+<LI>
+<A HREF="#trap_gravity_well">trap_gravity_well</A></LI>
+
+<LI>
+<A HREF="#trap_spikeshooter">trap_spikeshooter</A></LI>
+
+<LI>
+<A HREF="#trap_shooter">trap_shooter</A></LI>
+
+<LI>
+<A HREF="#trap_switched_shooter">trap_switched_shooter</A></LI>
+</UL>
+<A NAME="trap_lightning_triggered"></A>
+<HR WIDTH="100%">
+<BR><B>trap_lightning_triggered (0 .5 .8) (-8 -8 -8) (8 8 8) RANDOM BOOM</B>
+<UL>When triggered, fires lightning in the direction set in QuakeEd.
+
+<P><B>RANDOM</B> randomizes the firing the the lightning.
+
+<P><B>BOOM</B> makes a booming lightning sound when it fires.
+
+<P><B>"wait"</B> how long to wait between blasts (1.0 default) if in random
+mode wait is multiplied by random.
+
+<P><B>"nextthink"</B> delay before firing first lightning, so multiple
+traps can be stagered.
+
+<P><B>"dmg"</B> how much damage lightning should inflict (30 default)
+
+<P><B>"duration"</B> how long each lightning attack should last (0.1 default)</UL>
+<A NAME="trap_lightning"></A>
+<HR WIDTH="100%">
+<BR><B>trap_lightning (0 .5 .8) (-8 -8 -8) (8 8 8) RANDOM BOOM</B>
+<UL>Continuously fire lightning.
+
+<P><B>RANDOM</B> randomizes the firing the the lightning.
+
+<P><B>BOOM</B> makes a booming lightning sound when it fires.
+
+<P><B>"wait"</B> how long to wait between blasts (1.0 default) if in random
+mode wait is multiplied by random
+
+<P><B>"nextthink"</B> delay before firing first lightning, so multiple
+traps can be stagered.
+
+<P><B>"dmg"</B> how much damage lightning should inflict (30 default)
+
+<P><B>"duration"</B> how long each lightning attack should last (0.1 default)</UL>
+<A NAME="trap_lightning_switched"></A>
+<HR WIDTH="100%">
+<BR><B>trap_lightning_switched (0 .5 .8) (-8 -8 -8) (8 8 8) RANDOM BOOM</B>
+<UL>Continuously fires lightning.
+
+<P><B>RANDOM</B> randomizes the firing the the lightning.
+
+<P><B>BOOM</B> makes a booming lightning sound when it fires.
+
+<P><B>"wait"</B> how long to wait between blasts (1.0 default) if in random
+mode wait is multiplied by random
+
+<P><B>"nextthink"</B> delay before firing first lightning, so multiple
+traps can be stagered.
+
+<P><B>"dmg"</B> how much damage lightning should inflict (30 default)
+
+<P><B>"duration"</B> how long each lightning attack should last (0.1 default)
+
+<P><B>"state"</B> 0 (default) initially off, 1 initially on.</UL>
+<A NAME="trap_tesla_coil"></A>
+<HR WIDTH="100%">
+<BR><B>trap_tesla_coil (0 .5 .8) (-8 -8 -8) (8 8 8) TARGETENEMIES</B>
+<UL>Targets enemies in vicinity and fires at them.
+
+<P><B>"wait"</B> how long build up should be (0.5 * (4-skill) default)
+
+<P><B>"dmg"</B> how much damage lightning should inflict (5 default)
+
+<P><B>"duration"</B> how long each lightning attack should last (continuous
+default)
+
+<P><B>"distance"</B> how far the tesla coil should reach (600 default)
+
+<P><B>"state"</B> on/off for the coil (0 default is off)
+
+<P><B>"count"</B> number of people to target (2 default)</UL>
+<A NAME="trap_gods_wrath"></A>
+<HR WIDTH="100%">
+<BR><B>trap_gods_wrath (0 .5 .8) (-8 -8 -8) (8 8 8) TARGETENEMIES</B>
+<UL>Targets enemies in vicinity and fires at them.
+
+<P><B>"dmg"</B> how much damage lightning should inflict (5 default)
+
+<P><B>"duration"</B> how long each lightning attack should last (continuous
+default)
+
+<P><B>"distance"</B> how far god's wrath should reach (600 default)
+
+<P><B>"delay"</B> how long to wait until god calms down this is only needed
+if no one is targetted (5 seconds default)
+
+<P><B>"count"</B> number of people to target (2 default)</UL>
+<A NAME="trap_gravity_well"></A>
+<HR WIDTH="100%">
+<BR><B>trap_gravity_well (.8 .5 0) (-8 -8 -8) (8 8 8) TARGETENEMIES UNDERWATER</B>
+<UL>Targets enemies in vicinity and draws them near, gibbing them on contact.
+
+<P><B>UNDERWATER</B> cuts the pull in half for players wearing the wetsuit
+
+<P><B>"distance"</B> how far the gravity well should reach (600 default)
+
+<P><B>"count"</B> number of people to target (2 default)
+
+<P><B>"speed"</B> is how strong the pull is. (210 default)
+
+<P><B>"dmg"</B> is how much damage to do each touch. (10000 default)</UL>
+<A NAME="trap_spikeshooter"></A>
+<HR WIDTH="100%">
+<BR><B>trap_spikeshooter (0 .5 .8) (-8 -8 -8) (8 8 8) SUPERSPIKE LASER
+LAVABALL ROCKET GRENADE ARROW SILENT</B>
+<UL>shoots spikes, lasers, lavaballs, rockets, grenades, or arrows. silent
+flag determines if firing is silent or not. Fires the projectile in the
+direction set in QUAKED.
+
+<P><B>SUPERSPIKE</B> fires superspikes
+
+<P><B>LASER</B> fires lasers
+
+<P><B>+ LAVABALLS</B> fires lavaballs
+
+<P><B>+ ROCKET </B>fires rockets
+
+<P><B>+ GRENADE</B> fires grenades
+
+<P><B>+ ARROW</B> fires arrows
+
+<P><B>SILENT </B>doesn't make a sound when it fires.
+
+<P><B>"speed"</B> Initial projectile speed. If not set, it uses the standard
+speed for the selected projectile.</UL>
+<A NAME="trap_shooter"></A>
+<HR WIDTH="100%">
+<BR><B>trap_shooter (0 .5 .8) (-8 -8 -8) (8 8 8) SUPERSPIKE LASER LAVABALL
+ROCKET GRENADE ARROW SILENT</B>
+<UL>Shoots spikes, lasers, lavaballs, rockets, grenades, or arrows. silent
+flag determines if firing is silent or not. Fires the projectile in the
+direction set in QUAKED. Continuous fire.
+
+<P><B>SUPERSPIKE</B> fires superspikes
+
+<P><B>LASER</B> fires lasers
+
+<P><B>+ LAVABALLS</B> fires lavaballs
+
+<P><B>+ ROCKET </B>fires rockets
+
+<P><B>+ GRENADE</B> fires grenades
+
+<P><B>+ ARROW</B> fires arrows
+
+<P><B>SILENT </B>doesn't make a sound when it fires.
+
+<P><B>+PPC</B> fires a phased plasma cannon
+
+<P><B>"speed"</B> Initial projectile speed. If not set, it uses the standard
+speed for the selected projectile.
+
+<P><B>"wait"</B> time between spike (1.0 default)
+
+<P><B>"nextthink"</B> delay before firing first spike, so multiple shooters
+can be stagered.</UL>
+<A NAME="trap_switched_shooter"></A>
+<HR WIDTH="100%">
+<BR><B>trap_switched_shooter (0 .5 .8) (-8 -8 -8) (8 8 8) SUPERSPIKE LASER
+LAVABALL ROCKET GRENADE ARROW SILENT</B>
+<UL>Shoots spikes, lasers, lavaballs, rockets, grenades, or arrows. silent
+flag determines if firing is silent or not. Fires the projectile in the
+direction set in QUAKED. Continuous fire.
+
+<P><B>SUPERSPIKE</B> fires superspikes
+
+<P><B>LASER</B> fires lasers
+
+<P><B>+ LAVABALLS</B> fires lavaballs
+
+<P><B>+ ROCKET </B>fires rockets
+
+<P><B>+ GRENADE</B> fires grenades
+
+<P><B>+ ARROW</B> fires arrows
+
+<P><B>SILENT </B>doesn't make a sound when it fires.
+
+<P><B>+ PPC </B>fired a phased plasma cannon
+
+<P><B>"speed"</B> Initial projectile speed. If not set, it uses the standard
+speed for the selected projectile.
+
+<P><B>"wait"</B> time between spike (1.0 default)
+
+<P><B>"nextthink"</B> delay before firing first spike, so multiple shooters
+can be stagered.
+
+<P><B>"state"</B> 0 initially off, 1 initially on. (0 default)</UL>
+&nbsp;
+</BODY>
+</HTML>

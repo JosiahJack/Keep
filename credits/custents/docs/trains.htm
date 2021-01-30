@@ -1,0 +1,139 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="General WarT'">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.01 [en] (Win95; I) [Netscape]">
+   <TITLE>Custents Entity Defs - Train Stuff</TITLE>
+</HEAD>
+<BODY TEXT="#CC33CC" BGCOLOR="#000000" LINK="#00CC00" VLINK="#009900" ALINK="#00CC00">
+
+<CENTER><IMG SRC="custtitle.jpg" HEIGHT=60 WIDTH=330><FONT COLOR="#009900"><FONT SIZE=+3>6.0</FONT></FONT></CENTER>
+
+<CENTER><FONT SIZE=+2>Entities Definitions - Trains</FONT>&nbsp;
+<HR WIDTH="100%"></CENTER>
+Last Updated : 2/5/98
+<BR>&copy;1998 Carl Glave
+<BR><A HREF="index.htm">Back to Main Index</A>
+<BR>
+<HR WIDTH="100%">
+
+<P>Trains Entities Index
+<UL>
+<LI>
+<A HREF="#func_train">func_train</A></LI>
+
+<LI>
+<A HREF="#path_corner">path_corner</A></LI>
+
+<LI>
+<A HREF="#func_train_syncer">func_train_syncer</A></LI>
+
+<LI>
+<A HREF="#trigger_change_path">trigger_change_path</A></LI>
+</UL>
+<A NAME="func_train"></A>
+<HR WIDTH="100%">
+<BR><B>func_train (0 .5 .8) ? TRAIN_SMOOTH TRAIN_BLOCKABLE</B>
+<UL>The train has been modified so that you have the option of making it
+move smoothly. It also has several other added features to it. Here are
+the new and changed values by func_trains.
+
+<P><B>+ TRAIN_SMOOTH</B> Makes the train move smoothly through path_corners
+that have no wait time on them.
+
+<P><B>+ TRAIN_BLOCKABLE</B> Allows the smooth trains to be blocked in the
+regular fasion of stopping and applying damage instead of pushing the blocking
+entity out of the way like it would do otherwise.
+
+<P><B>+ "duration"</B> specifies the amout of time for the train to take
+in going from corner to corner. Set to 0 if you want to use "speed".
+
+<P><B>+ "noise"</B> allows you the specify a wav file for the stop sound.
+
+<P><B>+ "noise1"</B> allows you the specify a wav file for the moveing
+sound.
+
+<P><B>+ "count"</B> is the number of clones you want the train to make
+of it self. The clones are placed sequentially along the path corners.It
+is recomented to have a train make fewer than 10 clones of itself to ensure
+that proper timing and spacing is maintained.
+
+<P>All other standard train setup stuff still applies to the trains.</UL>
+<A NAME="path_corner"></A>
+<HR WIDTH="100%">
+<BR><B>path_corner (0 .5 .8) (-8 -8 -8) (8 8 8)</B>
+<UL><B>+ "speed"</B> makes the train move on to the next corner at this
+rate.
+
+<P><B>+ "duration"</B> makes the train move on to the next corner and get
+there in this number of seconds. If this is not 0, this will be used over
+the speed variable.
+
+<P><B>+ "event"</B> is the target name of the entity to trigger when the
+train gets to it.
+
+<P><B>+ "message"</B> is the message to display when the event is triggered.</UL>
+<A NAME="func_train_syncer"></A>
+<HR WIDTH="100%">
+<BR><B>func_train_syncer (0 .5 .8) (-8 -8 -8) (8 8 8) SYNCER_START_ON SYNCER_START_TOGETHER
+SYNCER_RETRACTABLE SYNCER_BLOCKABLE SYNCER_SYNC_BLOCK</B>
+<UL>This is an entity that is to be targeted at a set of trains and it
+will keep these trains syncronized no matter how badly they get blocked
+up. All settings for the trains are set in this entity and it passes them
+down so that all the trains are all the same. Things like being invisible
+or glowing are still set in the trains themselves, but can not be changed
+during play. Really the only things that need to be set in the trains are
+the target and target name. This entity will automatically make all controlled
+trains into smooth trains, and duration must be used, not speed.
+
+<P><B>SYNCER_START_ON</B> Makes the set of trains start out moving. This
+is only needed if the syncer is targeted, otherwise it will automatically
+start anyway.
+
+<P><B>SYNCER_START_TOGETHER</B> All of the trains start at the same location.
+This location is the first path_corner that the syncer goes to.
+
+<P><B>SYNCER_RETRACTABLE</B> Makes the trains all go back together to the
+same location when triggered off. This location is specified by the first
+path_corner that the syncer goes to.
+
+<P><B>SYNCER_BLOCKABLE</B> Allows the trains to actually be blocked by
+things rather than trying to push the blocking object out of the way like
+it does by default. This also allows blocking entities to be damaged by
+the trains.
+
+<P><B>SYNCER_SYNC_BLOCK</B> Forces all of the train that the syncer controls
+to stop at the same time when any of them are blocked. If this is not set,
+only the blocked train will stop. This does nothing if SYNCER_BLOCKABLE
+is not set.
+
+<P><B>"target"</B> is the name that all of the trains that will be controlled
+by the syncer.
+
+<P><B>"path"</B> is the name of the first path_corner that the syncer will
+go to itself. This is also where the train set will go to if it starts
+or retracts together.
+
+<P><B>"duration"</B> is the amount of time that the trains will take to
+travel from corner to corner.
+
+<P><B>"dmg"</B> is the damage that will be given if SYNCER_BLOCKABLE is
+set.</UL>
+<A NAME="trigger_change_path"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_change_path (0 .5 .8) (-8 -8 -8) (8 8 8)</B>
+<UL>The point entity trigger is used to alter a path. It changes the "target"
+of the targeted path corner to acomplish this. It also alters the entity
+link of the path which is used to speed up trains during the game compared
+to repeted find functions.
+
+<P><B>"targetname"</B> is its triggering name.
+
+<P><B>"target"</B> is the name of the path corner to change the target
+of.
+
+<P><B>"path"</B> is the new destination path corner for the targeted path
+corner.</UL>
+&nbsp;
+</BODY>
+</HTML>

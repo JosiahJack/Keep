@@ -78,6 +78,7 @@ void() PrecacheAll = {
 	precache_sound ("weapons/crossbow_fire.wav");
 	precache_sound ("weapons/Lncharow.wav");
 	precache_sound ("weapons/mirv1.wav");
+    precache_sound ("knight/sword1.wav");
 
 	precache_sound ("weapons/axe_flesh.wav");
 	precache_sound ("items/blastbelt2.wav");
@@ -148,5 +149,16 @@ void() PrecacheAll = {
 	precache_model ("progs/ad171/proj_swampling.mdl");
 	precache_model ("progs/s_light4.spr");
 	precache_model ("progs/drake/arrow.mdl");
+
+	precache_model ("progs/aoa/v_flak.mdl");
+	precache_model ("progs/aoa/v_gungnir.mdl");
+	precache_model ("progs/aoa/v_ice.mdl");
+	precache_model ("progs/aoa/v_mace.mdl");
+	precache_model ("progs/aoa/v_rapier.mdl");
+	precache_model ("progs/aoa/v_sanguinators.mdl");
+	precache_model ("progs/aoa/v_scimitar.mdl");
+	precache_model ("progs/aoa/v_voidstaff.mdl");
+
+	precache_aoa();
 	precache_poisongibs();
 };

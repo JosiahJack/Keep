@@ -2298,13 +2298,13 @@ void() tomeofpower_touch =
 	// This is a trigger once condition (regardless of coop)
 	item_finished();
 
+	other.tome_finished = time + self.cnt;
 	activator = other;
 	SUB_UseTargets();
 };
 
 //----------------------------------------------------------------------
-void() item_artifact_tomeofpower =
-{
+void() item_artifact_tomeofpower = {
 	self.mdl = "progs/ad171/artifact_tome.mdl";
 	precache_model (self.mdl);	
 	if (self.noise == "") self.noise = "misc/medkey.wav";
@@ -2314,6 +2314,7 @@ void() item_artifact_tomeofpower =
 	self.classgroup = CG_ARTIFACT;
 	self.moditems = IT_ARTTOME;
 	self.netname = "Tome of Power";
+	if (!self.cnt) self.cnt = 45;
 
 	self.touch2 = tomeofpower_touch;
 	self.bbmins = VEC_POWR_MIN;

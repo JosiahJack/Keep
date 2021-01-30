@@ -342,29 +342,37 @@ float CT_PROJ_RAINDEER = 498;	// Raindeer rocket
 
 //----------------------------------------------------------------------
 float CT_UPGRADE_AXE = 500;		// Shadow Axe
-float CT_AXE = 501;			// Axe
+float CT_AXE = 501;				// Axe
+float CT_RAPIER = 502;			// Ghost Rapier
+float CT_MACE = 503;			// Vampiric Mace
+float CT_ICE = 504;				// Elemental Tome
 float CT_SHOTGUN = 505;			// Shotgun
-float CT_SUPER_SHOTGUN = 510;		// Super Shotgun
+float CT_SCIMITAR = 506;		// Fire Scimitar
+float CT_VOID_STAFF = 507;		// Void Staff
+float CT_GUNGNIR = 508;			// Gungnir
+float CT_SANGUINATORS = 509;	// Sanguinators
+float CT_SUPER_SHOTGUN = 510;	// Super Shotgun
+float CT_FLAK = 511;			// Flak Cannon
 float CT_UPGRADE_SSG = 515;		// The Widowmaker Shotgun
 float CT_NAILGUN = 520;			// Nailgun
 float CT_LAVANG = 521;			// Lava nailgun
-float CT_SUPER_NAILGUN = 525;		// Super Nailgun
+float CT_SUPER_NAILGUN = 525;	// Super Nailgun
 float CT_LAVASNG = 526;			// Lava nailgun
 float CT_WAND = 527;			// Magic Wand (Drake)
 float CT_GRAPPLE = 528;			// Grapple (Rogue with Drake upgrades)
 float CT_CHAINLIGHTGUN = 529;	// Chain Lightning Gun
-float CT_GRENADE_LAUNCHER = 530;	// Grenade Launcher
-float CT_PROXIMITY_GUN = 531;		// Grenade Launcher
-float CT_MULTI_GRENADE = 532;		// Multi Grenade Launcher
-float CT_MULTI_ROCKET = 533;		// Multi Rocket Launcher
-float CT_BLASTERWEP = 534;			// Drake Laser Blaster
-float CT_ROCKET_LAUNCHER = 535;		// Rocket Launcher
+float CT_GRENADE_LAUNCHER = 530;// Grenade Launcher
+float CT_PROXIMITY_GUN = 531;	// Grenade Launcher
+float CT_MULTI_GRENADE = 532;	// Multi Grenade Launcher
+float CT_MULTI_ROCKET = 533;	// Multi Rocket Launcher
+float CT_BLASTERWEP = 534;		// Drake Laser Blaster
+float CT_ROCKET_LAUNCHER = 535;	// Rocket Launcher
 float CT_LIGHTNING = 540;		// Lightning Gun
 float CT_UPGRADE_LG = 545;		// Plasma Gun
 float CT_PLASMAGUN = 546;		// Rogue Plasma Gun
 float CT_MJOLNIR = 547;			// Mjolnir's Hammer
-float CT_EXTRA_WEAPON = 548;		// Extra Weapon (Crossbow)
-float CT_LASER_CANNON = 549;		// Laser Cannon
+float CT_EXTRA_WEAPON = 548;	// Extra Weapon (Crossbow)
+float CT_LASER_CANNON = 549;	// Laser Cannon
 float CT_ARTSUIT = 550;			// Environment suit
 float CT_CIRCUIT = 551;			// Circuit Board collectible (17mm Fromitz board from Rubicon2)
 float CT_CHAINSAW = 552;		// Chainsaw (Zerstorer with Drake upgrades)
@@ -438,9 +446,9 @@ float CT_AMMOBOLTS = 742;
 float CT_AMMOLAVANAILS = 743;
 float CT_AMMOMULTIROCKETS = 744;
 float CT_AMMOPLASMA = 745;
-
-
-
+float CT_AMMOBLOODCRYSTALS = 746;
+float CT_AMMOVOIDSHARDS = 747;
+float CT_AMMOELEMENTAL = 748;
 
 float CT_HEALROT = 750;			// Different Health packs
 

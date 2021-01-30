@@ -1,0 +1,163 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="General WarT'">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.01 [en] (Win95; I) [Netscape]">
+   <TITLE>Custents Entity Defs - General Enhancements</TITLE>
+</HEAD>
+<BODY TEXT="#CC33CC" BGCOLOR="#000000" LINK="#00CC00" VLINK="#009900" ALINK="#00CC00">
+
+<CENTER><IMG SRC="custtitle.jpg" HEIGHT=60 WIDTH=330><FONT COLOR="#009900"><FONT SIZE=+3>6.0</FONT></FONT></CENTER>
+
+<CENTER><FONT SIZE=+2>Entities Definitions - Triggers</FONT>&nbsp;
+<HR WIDTH="100%"></CENTER>
+Last Updated : 2/28/98
+<BR>&copy;1998 Carl Glave
+<BR><A HREF="index.htm">Back to Main Index</A>
+<BR>
+<HR WIDTH="100%">
+
+<P>Apocalypse Stuff Index
+<UL>
+<LI>
+<A HREF="#trigger_impulse">trigger_impulse</A></LI>
+
+<LI>
+<A HREF="#trigger_touch_impulse">trigger_touch_impulse</A></LI>
+
+<LI>
+<A HREF="#trigger_interupt">trigger_interupt</A></LI>
+
+<LI>
+<A HREF="#trigger_combo">trigger_combo</A></LI>
+
+<LI>
+<A HREF="#trigger_sequence">trigger_sequence</A></LI>
+</UL>
+<A NAME="trigger_impulse"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_impulse (0 0.5 0.8) (-8 -8 -8) (8 8 8)</B>
+<UL>This trigger uses its targets when the choosen impulse is pressed.
+Any impulse from 1 to 255 can be used. It can be activated by a player
+anywhere in the level.
+
+<P><B>"impulse"</B> is the impulse value that will activate the trigger.
+
+<P><B>"wait"</B> delay time till it can be used again after being activated.
+
+<P><B>"message"</B> the message to print when a player touches the trigger.
+This Should generally be used to tell the player which key to press to
+activate the trigger.</UL>
+<A NAME="trigger_touch_impulse"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_touch_impulse (0 0.5 0.8) ?</B>
+<UL>This trigger uses its targets when the choosen impulse is press, but
+only when the player is touching the trigger. Any impulse from 1-255 can
+be used.
+
+<P><B>"impulse"</B> is the impulse value that will activate the trigger.
+
+<P><B>"message"</B> the message to print when a player touches the trigger.
+This Should generally be used to tell the player which key to press to
+activate the trigger.
+
+<P><B>"wait"</B> delay time till it can be used again after being activated.</UL>
+<A NAME="trigger_interupt"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_interupt (0 0.5 0.8) ? INT_ENTIN INT_PLAYERONLY INT_MONSTONLY
+INT_SETACTIVATOR</B>
+<UL>This can be used to make sure that there is either noone or someone
+in the trigger's area when the triggering is relayed. This can only be
+used to control the relaying of a triggering, not to start one.
+
+<P><B>INT_ENTIN</B> a player and/or monster must be IN it for it to relay
+the triggering. Default is to relay when there are NO players and/or monsters
+in it.
+
+<P><B>INT_PLAYERONLY</B> makes it only check to see if a player is in it
+and ignore monsters.
+
+<P><B>INT_MONSTONLY</B> makes it only check to see if a monster is in it
+and ignore players.
+
+<P><B>INT_SETACTIVATOR</B> sets the last touched player within it to be
+the activator of the triggering.
+
+<P><B>"path"</B> is the name to trigger if the regular triggering chain
+is interrupted.
+
+<P><B>"sounds"</B> is the number of the sounds to use for when the triggering
+chain is interupted.
+<UL>
+<LI>
+1 = Base sound</LI>
+
+<LI>
+2 = Medieval sound</LI>
+
+<LI>
+3 = Runic sound</LI>
+</UL>
+<B>"noise"</B> is the actual sound file to play when the triggering chain
+is interupted. Allows for using sounds other than those setable by "sounds".</UL>
+<A NAME="trigger_combo"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_combo (0 0.5 0.8) (-8 -8 -8) (8 8 8) BIT1 BIT2 BIT3 BIT4</B>
+<UL>This trigger requires a certain combination of targetname triggerings
+to make it use its targets. The required combination is set using the spawnflags.
+
+<P><B>BIT1 - BIT4</B> these spawnflags are used to set the combination
+required to make it use its targets. Each of the spawnflag bits corrosponds
+to the similarly numbered targetname. As an example, setting BIT1 and BIT3
+require that its targetname and targetname3 be triggered for the correct
+combination. Up to four different names can be used in the combo triggering.
+
+<P><B>"noise"</B> is the sound to play when the correct combination is
+entered.
+
+<P><B>"noise1"</B> name to trigger when activated by its targetname.
+
+<P><B>"noise2"</B> name to trigger when activated by its targetname2.
+
+<P><B>"noise3"</B> name to trigger when activated by its targetname3.
+
+<P><B>"noise4"</B> name to trigger when activated by its targetname4.</UL>
+<A NAME="trigger_sequence"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_sequence (0 0.5 0.8) (-8 -8 -8) (8 8 8) SEQ_FAILRESET SEQ_MULTIPLE</B>
+<UL>This trigger requires an ordered sequence of triggering in order to
+make it use its targets. This sequential order is determined by the targetnames,
+which must be used in order (targetname, targetname2, etc.) and any number
+of them can be used, so you can have sequences from one to four triggerings.
+
+<P><B>SEQ_FAILRESET</B> makes the sequence reset back to the begining if
+the proper sequence of triggerings is broken.
+
+<P><B>SEQ_MULTIPLE</B> allows the sequence trigger to be used multiple
+times. If not set, the trigger will remove itself after the first time
+the sequence is properly entered.
+
+<P><B>"targetname"</B> is the name of the first name that must be triggered
+in the sequence.
+
+<P><B>"targetname2"</B> is the name of the second name that must be triggered
+in the sequence.
+
+<P><B>"targetname3"</B> is the name of the third name that must be triggered
+in the sequence.
+
+<P><B>"targetname4"</B> is the name of the fourth name that must be triggered
+in the sequence.
+
+<P><B>"noise"</B> is the sound to play when the sequence is completed.
+
+<P><B>"noise1"</B> is the sound to play when a correct triggering is made
+in the sequence.
+
+<P><B>"noise2"</B> is the sound to play when the sequence if broken.
+
+<P><B>"event"</B> is the name to trigger if the sequence if broken by triggering
+the targetnames out of teh correct order.</UL>
+&nbsp;
+</BODY>
+</HTML>

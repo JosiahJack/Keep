@@ -181,8 +181,8 @@
 	take_weapons(integer) : "Take weapons/items away at start" :  : "SG=1, SSG=2, NG=4, SNG=8, GL=16, RL=32, LG=64, AX=2048, SK=131072, GK=262144, XBW=8388608"
 	take_perms(integer) : "Take permanent powerups away at start" : : "Default=0.  Must be greater than 0 to reset"
 	useold_axe(choices) : "Axe Model to Use" = [
-		 0 : "Use AD Axe"
-		 1 : "Use original id1 Axe (w/ dwereweps upgrade)"
+		 0 : "Use original id1 Axe (w/ dwereweps upgrade)"
+		 1 : "Use AD Axe"
 	]
 	max_health(integer) : "Minimum Health at start" :  : "Update player health if below this value"
 	reset_health(integer) : "Reset Health at start" :  : "Reset player health to this value"
@@ -623,7 +623,7 @@
 // ITEM entities
 //
 //======================================================================
-@baseclass size(-16 -16 0, 16 16 32) = ItemSize []
+@baseclass size(0 -0 0, 32 32 56) = ItemSize []
 @baseclass size(-16 -16 -24, 16 16 32) offset(0 0 24) = PowerupSize []
 @baseclass size(-16 -16 -24, 16 16 32) = ArmourSize []
 @baseclass size(-16 -16 -24, 16 16 32) offset(0 0 24) = KeySize []
@@ -703,6 +703,11 @@
 @PointClass base(AmmoBase) studio("maps/b_mrock0.bsp") = item_multi_rockets : "Multi-Rockets" []
 @PointClass base(AmmoBase) studio("progs/ammo_bolts0.mdl") = item_bolts : "Bolts" []
 @PointClass base(AmmoBase) studio("progs/ammo_poison0.mdl") = item_poison : "Poison" []
+
+@PointClass base(AmmoBase) studio("progs/aoa/ammo_bloodcrystals.mdl") = item_bloodcrystals : "Blood Crystals" []
+@PointClass base(AmmoBase) studio("progs/aoa/ammo_voidshards.mdl") = item_voidshards : "Void Shards" []
+@PointClass base(AmmoBase) studio("progs/aoa/ammo_elemental.mdl") = item_elemental: "Elemental Mana" []
+
 //----------------------------------------------------------------------
 @PointClass base(Items,ArmourSize) studio("progs/ad171/armour.mdl") = item_armor1 : "100% armor (Green)" []
 @PointClass base(Items,ArmourSize) studio("progs/ad171/armour.mdl") = item_armor2 : "150% armor (Yellow)" []
@@ -999,12 +1004,21 @@
 @PointClass base(Weapon) studio("progs/hipnotic/g_hammer.mdl") = weapon_mjolnir : "Mjolnir's Hammer" []
 @PointClass base(Weapon) studio("progs/drake/g_saw.mdl") = weapon_chainsaw : "Chainsaw" []
 @PointClass base(Weapon) studio("progs/drake/g_grpple.mdl") = weapon_grapple : "Grappling Hook" []
-@PointClass base(Weapon) studio("progs/drake/g_xbow.mdl") = weapon_dcrossbow : "Ice Crossbow" []
+// @PointClass base(Weapon) studio("progs/drake/g_xbow.mdl") = weapon_dcrossbow : "Ice Crossbow" []
 @PointClass base(Weapon) studio("progs/drake/g_wand.mdl") = weapon_wand : "Wand" []
 @PointClass base(Weapon) studio("progs/g_axe.mdl") = weapon_sword : "Sword" []
 @PointClass base(Weapon) studio("progs/drake/g_light2.mdl") = weapon_chain_lightning : "Chain Lightning Gun" []
 @PointClass base(Weapon) studio("progs/w_blaster.mdl") = weapon_blaster : "Laser Blaster" []
 
+// Arms of Asgard weapons from Ryan "ryanscissorhands" Holaday
+@PointClass base(Weapon) studio("progs/aoa/g_rapier.mdl") = weapon_rapier : "Ghost Rapier" []
+@PointClass base(Weapon) studio("progs/aoa/g_mace.mdl") = weapon_mace : "Vampiric Mace" []
+@PointClass base(Weapon) studio("progs/aoa/g_ice.mdl") = weapon_ice: "Elemental Tome" []
+@PointClass base(Weapon) studio("progs/aoa/g_scimitar.mdl") = weapon_scimitar : "Fire Scimitar" []
+@PointClass base(Weapon) studio("progs/aoa/g_voidstaff.mdl") = weapon_voidstaff : "Void Staff" []
+@PointClass base(Weapon) studio("progs/aoa/g_gungnir.mdl") = weapon_gungnir : "Gungnir" []
+@PointClass base(Weapon) studio("progs/aoa/g_sanguinators.mdl") = weapon_sanguinators : "Sanguinators" []
+@PointClass base(Weapon) studio("progs/aoa/g_flak.mdl") = weapon_flak : "Flak Cannon" []
 
 //======================================================================
 //
@@ -3243,6 +3257,15 @@
 	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 
+@PointClass base(MonShort) = func_spawn_small : "Monster Spawn (Legacy Support)" [
+	spawnclassname(string) : "Monster To Spawn"
+	cnt(integer) : "Number to spawn" : 1
+]
+
+@PointClass base(MonWide) = func_spawn : "Monster Spawn (Legacy Support)" [
+	spawnclassname(string) : "Monster To Spawn"
+	cnt(integer) : "Number to spawn" : 1
+]
 
 //======================================================================
 //

@@ -92,6 +92,7 @@ void		end_sys_globals;		// flag for structure dumping
 //
 // system fields (*** = do not set in prog code, maintained by C code)
 //
+float parm17, parm18;
 .float		modelindex;		// *** model index in the precached list
 .vector		absmin, absmax;	// *** origin + mins / maxs
 

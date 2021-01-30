@@ -772,8 +772,8 @@ Falling water drip with splash and sound
 
 =============================================================================*/
 void() misc_drip_spawn;
-void() misc_drip_reset =
-{
+void() misc_drip_touch;
+void() misc_drip_reset ={
 	self.touch = SUB_Null;
 	self.frame = self.flags = 0;
 	setmodel (self, "");
@@ -1453,8 +1453,6 @@ void() misc_spark =
 	if (self.spawnflags & (MISC_STARTOFF | ENT_STARTOFF)) entity_state_off();
 	else entity_state_on();
 };
-
-void() fx_spark = { misc_spark(); };
 
 /*======================================================================
 Screen Shake (based on code from RRP by ijed/supa)

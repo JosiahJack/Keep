@@ -351,3 +351,5 @@ void() item_treasure_gem =
 // Large gold coins
 //============
 void() item_treasure_coin = { precache_sound("drake/items/treasure.wav"); self.healtype = 0;  item_treasure();};
+
+void() item_health_potion = {};

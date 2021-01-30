@@ -1,0 +1,404 @@
+Title     : Custom Entities
+Filename  : ce6.zip
+Version   : 6.0
+Date      : 3/9/98
+Author    : General WarT' (aka Carl Glave)
+Email     : gnrlwart@telefragged.com
+Home      : http://wartrench.telefragged.com
+Build time: oy, way too long.
+Kudos to  : *Dan Bickell, for making all the Apocalypse related skins and
+             textures that are contained in here.
+            *Ethan Leon, for making all the Apocalypse related models that
+             that are contained in here. Also for being so cool about letting
+             me animate the servomech. Thanks man, that was fun. ;)
+            *The rest of the Original Apocalypse team (you know who you are)
+             for simply being, well, a bunch'a cool dudes. :)
+            *Steve Fukuda, for being so supportive and a cool friend, even
+             though he lives in another contry and had never even met me
+             before. Thanks Man. *sniff* :)
+
+
+Descriptions of Modifications from previous versions
+----------------------------------------------------
+**Version 5.2 stuff
+Sorry I took so long getting around to this, but I've been really busy on
+Quake: The Apocalypse. I've found a hole (actually I made one ;) in my
+Apocalyptic schedule and got to finally do this. :P Anyway, on to what's new.
+
+I've fixed the trap shooting traps. Someone had notified me that the rocket
+shooters that Hip had made didn't work, and well, he was right. Worry not
+though, I've taken care of the rockets and also the lava balls. I then added
+more trap shooter projectiles. There are now also grenades and arrows. You
+can also specify the firing velocity of the projectiles, mostly usefull for
+the lava balls, grenade, and arrows which are effected by gravity.
+
+The probably even bigger news is that I've added all the addable map stuff
+from Rogue's Mission Pack #2: Dissolution of Eternity. Here's the ones that
+I've added:
+- Rogue earthquake (Hipnotic's earthquake is still here to)
+- Lantern light
+- candle light
+- elevator and elevator buttons
+- new plat entity
+- relay lightning
+- buzzsaw trap
+- pendulum trap
+
+There was actually more addable stuff, but there was already the same sort of
+stuff in here, and I didn't want to confuse anyone with things like two
+different rubble things... especially myself. :P
+
+Last, and certainly not least, I've done some work on the train paths
+themselves. They are now linked together much differently than before. Now,
+they allow any sort of path you could possibly want for a smooth train.
+Before they would only work on looped paths, but no more. :) I've also added
+a trigger_change_path entity that allows you to change a train path. It
+automatically repairs the broken path link when changing the path, so the
+smooth trains will work perfectly with a changed path. A demo of this and
+also the cloning are in the traintst map.
+
+**Version 5.1 stuff
+   I've just taken those misc. train flags out. Only two of them were actually
+usefull, and the others just wouldn't work. Those two (solid/not solid) should
+be back later. There are also two new entities for you to play with.
+   The first is to make up for losing the light flags from the trains, and it
+more than makes it up. They are called func_move_light. Their movement is
+exactly the same as the trains, even the same code. They can glow with a dim
+light, bright light, or flash every "delay" seconds. They can have a field of
+glowing dots around them at any time. They also can use a model(usually a
+sprite) when specified with the "model" variable. All of these things, including
+the model, can be set each time the func_move_light reaches a path_light, which
+are used as it's path corners.
+   The other new entity is a healing entity called trigger_heal. The original
+was sent to me by Jan Martin Mathiassen (TGR). I've modified it a bit though so that
+it can heal multiple things at once and it can be turned on and off. I'm sure
+you won't mind though. :) Oh yea, and I also added spawnflags to it so that you
+can make it only affect players or only monsters. It will not affect anything
+other than players or monsters, code has been added to prevent this, otherwise
+some odd side effects with some entities could result. I did want to chance
+something weird like that heppening, so I didn't. I've also added a flag that makes
+pay atention to each entity's max health limit.
+
+**Version 5.0 stuff
+	Things were getting too crowded in this text file, so I've broken it up
+into several different ones to get it better organized and easier to sift
+through. All descriptions of past versions of Custents is now in the
+history.txt file, and all descriptions of the entities are in the
+entsdefs.txt file. Now, on with the show.
+	Can you say incompatabilities? Well, I hope so, because before you start
+using all the new and really cool new entities in this version, you are going
+to have to go through all of the stuff that you have made with past versions
+of Custents. It started off as one slight tweak that caused a slight
+compatability problem, but I didn't want several different releases doing
+such a thing, so I went through all the code and enhanced it up the wahoo.
+The result is that the code is cleaner, and all the previously existing
+Custents exclusives are a combination of easier to use, smoother working, or
+even more feature packed than before. I will go over all of the
+incompatability type changes here, and all others you will have to go to the
+entsdefs.txt file to see.
+	To start with, let's talk about the rotating brushes. Please note that
+all rotating brushes madewith prevoius version of Custents relied on
+different origin alignment techniques and code alterations to make them work
+without the new QBSP and LIGHT utilities that Hipnotic released. Now that
+these utilities are available, they have been reverted to their much better
+original state. To make rotating brushes that you made before this release
+work with this new and all future versions, simply move the rotate_object to
+the exact location that you want it to actually be and then recompile it
+using the new QBSP and LIGHT utilities.
+	Next up is the trains. Big changes here. Now, to make a train a smooth
+train, you use the first flag instead of setting weaponmodel. A another big 
+change is that to have a train move with a specified time between corners
+instead of speed, you set duration, and not weapon like before. There are
+several added new features to the trains also, here they are.The second flag
+can now be used to make smooth trains blockable. By this I mean that they'll
+pause for half a second before continuing on, like the regular trains do. The
+third flag can be set to make the train not solid. The fourth flag makes the
+train invisible. Due to several requests for it, I've added moving lights,
+but not the ordinary way, I did it by adding the feature to the trains, so
+there are two more flags for the trains. The fifth flag makes the train glow,
+and the sixth makes it glow brighter. It will not glow brightly unless the
+regular glow flag is also set.
+	Even more features were added to the trains by adding stuff to the
+path_corner entities like Hipnotic did with their rotating train. You can now
+make the trains switch detween using speed and duration, trigger an event
+when the train gets to that corner, and, using the path_corner's flags, can
+make the train flash when it gets there and set the train's solid state,
+visible state, and glowing state.
+	In the ambient_general entity, you can now specify the sound's volume
+and attonation.
+	In the ambient_bgm, several things have changed that make it an
+incredably more usefull entity. To hear it in action, go to the Esclator demo
+map. There is a button that triggers one to play back ground music. They are
+also used for something that will be explained later. Right now, the changes
+to ambient_bgm. The value used to set the number of times to loop has been
+changed to waitmax, and the value used to hold the length of the extro when
+needed is now button0. The added features to it are the ability to specify
+the volume and attonation. The ability the specify the attonation was sorely
+needed to make this an extreamly usefull entity, and now it's got it. The
+first spawn flag is still used to make it start as on.
+	Keep with the topic of trains, I've made a new entity that makes having
+looping chains of trains extreamely easy, as all you have to set for each
+train is their names (which will all be the same) and their targets. This new
+entity is called func_train_syncer. It is given all the values that you want
+the trains to have and passes them to all of the trains that it controls. It
+finally aconplishes something that I've been trying to do since version 1.0,
+thats to have a cet of trains that are impossible to screw up, as in
+missalign. This entity controls each of the trains movements, and will fix
+any introduced problemes as soon as the trains path is clear. One other thing
+that this entity allows the trains to do is to all start or move to the same
+place, making things like retractable, moving walkways(one is in the Esclator
+map) possible. There are now two eclators in the Esclator map. One is made of
+regular, non controlled smooth trains, and other is made of trains that are
+controlled a func_train_syncer. The controlled esclator also has a button to
+start and stop it to show how controlled sets of trains can be stopped at any
+time, even when they are inbetween path corners.
+	The rest of the new entities were originally made by hipnotic, but I
+have added some features to several of them. These Custents additions are
+denoted in the entsdefs.txt file by a line like this...
+// ### Custents features
+	A general new feature is that now you can set the deathtype string for
+any solid brush entity that can harm you to specify a special death message
+for that entity.
+	One last feature that I managed to get in was changing gravity for
+everything. This makes firing granades in a low gravity place kinda fun.
+For instruction on how to make this work in your patch see the gravity.txt
+file. This provides the pieces of code that you need to paste into your
+code files and describes where they go.
+	Well, that's about it... for now. Have fun with your new toys. :)
+
+**Version 4.2 stuff
+   I didn't like how no what the exploding wall looked like, it gave off only
+one color of rubble. I've taken care of that, and now there are 14 different
+colors for the rubble. They are listed in the how to use section. The buttons
+on teh sides of the exploding wall in the Esclator map are setup to give off
+a color of rubble similar to their texture, just shoot them.
+   I've had several requests for it, so I've added in the gravity changing
+trigger. It's actually alot simpler that I though is would be. Must be
+supported by the exe. That means that you really should have version 1.07 of
+Quake. I've also added in a few other triggers that Hip made simply because
+they were in the same file as the gravity thing.
+Last but not least, I've added the EaRtHqUaKeS. The button that triggers one of
+these is just on the opposite side of the bridge when you start the Esclator
+map. Please note that both the gravity changing and earthquakes requires
+additional modifications to the client'qc files, so if you're using this with
+another patch, make sure you get those changes in there.
+
+**Version 4.1 stuff
+   First off, I'd like people to know that the screwyness of the rotating
+brushes right now is only a temporary thing. It's apparently a problem with
+the QBSP and VIS utilities. Hipnotic is going to be releasing updated versions
+of these to make the rotating brushes work correctly for us. Till then, just
+be satisfied that you can learn how to make them right now. When these
+utilities are updated, I will make them available at my page, so you don't
+have to go looking for them. I will also them revert the rotating code back to
+its original form. It is currently modified so that it will work with what
+we've got on hand. Just hold in there with me.
+   I've added a few more of the Hipnotic entities. This time they're the ones
+that make really cool exploding walls possible. In total there are eight new
+entities, they are func_exploder, func_multi_exploder, func_rubble,
+func_rubble1, func_rubble2, func_rubble3, trigger_damagethreshold, and
+func_breakawaywall. I've modified some of the entities so that making exploding
+walls will be eisier that with what the Hip guys had to work with. Anyway,
+enjoy the new explodable walls that you can do now. One last thing though.
+One of the things that I've added is a feature to the func_exploder and
+func_multi_exploder entities so that you can now have each explosion give off
+a certain number of chunks of rubble. As it was before you had to make all of
+the rubble tossing stuff seperate entities and get them timed together. Now
+you just set a single value in the explosions entities. Oh yea, and now you can
+also make the func_breakawaywall explode. Before they could just simply
+dissapear. The demo exploding wall in the demo map Esclator uses these
+features. If you don't want to use them, then you can figure out the timing
+yourself, but why would you want to. I also included a shootable button that
+triggers a rubble entity just incase it's usefull in some obscure way.
+
+**Version 4.01 stuff
+   Just updated the progs.src file. Forgot to do that in 4.0, doh!
+
+**Version 4.0 stuff
+   It's what you've been waiting for since the day QuakeEd came out, or at
+I have. It what the guys at Hipnotic figured out... it's Rotating Brushes!
+You can thank their spiffy brainyness for this, as I am. It was done in a
+bit of a complicated way, but once you get the hang of it you'll be able to
+whip out those rotating things. One important warning though. They seem to
+be extreamly sensitive to their surroundings. Quake seems to easily mess up
+drawing them and they get drawn over by arcitecture behind them. Sometimes
+they completely dissapear if you do something that they don't like. If you
+find out what it is causes these problems or how to avoid them, please email
+me so that I can put the information about it in here. These problems forced
+me to put the example rotating door in a seperate level called Rottest, but
+it came out OK. The example uses the func_rotate_door entity and is a replica
+of the first door in the start map.
+   I didn't stop at the rotating brushes though. I've also added in a few
+other really cool things whipped up by Hipnotic.
+   The first of these, and one of my favorites, are particle fields. I've put
+two different particle field examples in the Esclator map. One is a togglable
+Bridge, and the other is a particle field that is as simple as I could make
+it.
+   Along with the particle fields are the togglewalls. These are invisible
+walls that can be triggered on and off. These are used to make the particle
+fields solid. They also make great glass and invisible barriers.
+   Yet another entity that supports the particle fields are the func_counters.
+These trigger several different entities one after another with a certain wait
+time between each trigger. These are what make the particle fields repetedly
+give off particles. These seem to be very versitile entities, and can be used
+for many other uses.
+   The last fully implimented new entity is the bobbing water entity. A water
+brush used for one of these entities isn't actually used as a water brush. It
+only continues to look like one. It is actually empty. I found that slopped
+sides acentuate the bobbing so that you can maximum effect with minimal room.
+I also noticed that It doesn't really look right when used in a place where
+the player might go under the water because the real water under it has a
+surface that doesn't move and messem up the effect. This only bobbs up and
+down, moving a distance equale to half its height up and then down. Look at
+example in the Esclator map for more info.
+   There are a few other entities that I've included but haven't yet been able
+to get one going in a map. These are func_rotate_entity, path_rotate, and
+func_rotate_train. I will continue work with this stuff to figure these out,
+but if any of you get one working well, please send me the test map and tell
+me how you did it so that I don't have to spend too much time on them.
+   Some of these new entities are quite complicated, and a few use several
+different spawn flags that are easy to overlook. Make sure you examin the demo
+maps to help you see how they work. I will be setting up a demo maps page for
+demos that either I made or are sent in to demonstrate how to do different
+things with these new entities. The descriptions provided here are still a bit
+vague because I'm not completely sure of how they work yet, but as more
+information about their operation becomes available I will release updated
+text files.
+
+**Version 3.11 stuff
+   Just a little fix to the smtrains, no biggie. Before they just keept going
+with their moving sound. Now the trains play the stopping sound when stopped
+with a -1 wait time like they're supposed to.
+
+**Version 3.1 stuff
+   I had a wonderfull time doing this little touchup. I somehow deleted the
+text file off of my hard drive completely. It wasn't even in the recycle bin.
+Well, it fealt silly, but all is now good because I just downloaded my own
+patch to get it back. What a night eh? Anyway, on to the task at hand.
+   This release fixes some problems with the ambient_bgm entity and the text
+file (not the prob. above). Non-triggered BGM entities will now properly play
+their intro wav files when the level starts. I also added the ability for them
+to trigger other entities when they stop playing. This will allow for complex
+BGM setups with multiple loops in it. To get them to trigger AFTER the extro
+is done playing, set the "impulse" variable to the length of the extro in
+seconds. The text thing that is fixed is that I forgot to mention how to make
+the ambient_bgm entities loop forever or untill triggered. The way you do it
+is to just set the "button0" variable to 0.
+
+**Version 3.0 stuff
+   You know, I talk to that Ged guy too much. He got me going on another
+fruit loop idea and I coded it. I love it. The latest addition to the
+Custents family is simply a slight modification of the info_player_start
+and trigger_changelevel functions. These modifications are clearly marked
+with the usual "// ###" before and after them. What this stuff allows you
+to do is have several different entry points on the same level. You could
+have a forest level surrounding a town with entrances on all sides, and
+when the player enters the town, he'll come in on the corresponding side.
+Lots of stuff is possible with this, and it can make some of your levels
+more reusable. Two important thing to note. First is that this is
+supported only in single player games. This could too easily confuse the
+server in multiplayer games. Second, it uses the global called parm13, so
+if you want to use this feature with another patch that uses that variable,
+you should change one or the other. If you're not going to be using this
+feature and there is a conflict, don't worry about it. The testing grounds
+for this feature are through the two passageways in the esclator map.
+   I also edited the World Craft files so that WC will support this feature
+just like the others.
+
+**Version 2.0a stuff
+   Right after uploading version 2.0, I went to Blue's News and noticed
+something very interesting. Team Fortress had made custom stuff to make
+World Craft support their new entities. Inspired by this because I
+didn't think it was something you could do with World Craft, I made my
+own custom stuff to make World Craft support the custom entites and
+added entity functionality. For more detailed instruction on how to
+make your copy of World Craft support Custents, open up the wc_ents.txt
+file. Although, if you have never edited your World Craft quake.fgd
+file, then just copy the included quake.fgd file into your WC folder to
+replace the original. You should find this eliminates the need for
+remembering all of the different variable names used for each. Each one
+defaults to values used in the demo map, you can edit it so that it
+doesn't. I just made it do this so that you could see examples for
+the different variables.
+
+**Version 2.0 stuff
+   I've added some features to the trains and made some totally new sound
+entities. The first of the train features is added support for wait
+times. To make a train to wait any length of time at a path corner,
+just set the path corner's wait value to the wait time, just like
+with regular trains. The other is that now if you set a path corner's
+wait to -1, it will not only stop, but will be retriggerable. This
+will allow you to do things like elevators that stop at multiple levels
+and trains that, after traveling their path, will stop back at the
+begining to be used again. Use your imagination, you'll think of
+something cool. :)
+   As for the sound entities, these entities will ensure that you will
+never need another one. The first is a universal ambient sound entity
+called ambient_general. What I mean by universal is that you set its
+"noise" value to the wav file name to the new ambient sound. It will
+load the passed sound file and play it as an ambient sound. The mosh
+anbient sound at the base of the esclator is one of these.
+  The other sound entity is called ambient_bgm. What this does is that
+it allows you to play back ground music in your levels, and have it
+triggerable so that different areas would have music while others will,
+or to have different areas have different music. it allows for an intro
+wav, and a extro wav. You can also have the music loop play a set
+number of times then stop automatically. A button that triggeres one of
+these entities is on the platform at the top of the esclator. It is
+set to stop autimatically after playing the loop wav five times. It can
+be stopped or started at anytime at all. See below to see how to use it.
+
+**Version 1.1 stuff
+   I have modified the shooth trains so that you can now setup the path
+with variable distances between the path corners. To demonstrate how
+this can actually work, I opened up the back of the esclator in the
+demo map. You will notice that while there are several tightly packed
+steps moving along slowly to form the esclator, the previously needed
+double row of these steps has been eliminated because now there is only
+the need for just one path corner in the back. Look at the map to
+better understand what I'm saying. You should also notice that the
+steps flatten out and slow down a bit at the top and bottom just like
+a real esclator. Anyway, the way you make your trains able to move
+along a path with variable distances is to add a line like
+'"weapon" "0.5"' to the train entities in the map file. The number
+"0.5" is just the time in seconds that you want the train to take in
+moving between each path corner. For instance, '"weapon" "2"' would
+make the train take two seconds going from corner to corner. Support
+for this feature is also supported by regular, non-smooth trains.
+Please note that any level that uses this feature really should be
+played with this patch loaded, otherwise the varying distances will
+wreak havok in the regular Quake code. It won't crash, just go all
+funky.
+
+**Version 1.0 stuff
+   Once apon a time I need to fix something,so I searched through
+Quake Lab for something that many people complained about. It didn't
+take long to find all the icky things said about trains not really
+having a 0 wait time, so I decided to fix it. At first it was only a
+changed number in the func_train_next function, but it still lagged,
+and even more when there were more just than a few trains on the
+screen. So what I did was to make a recursive function that set an
+unused .entity (goalentity) to the actual entity that was being
+targeted instead of using the targetnames. This removed the find
+function from the thinking process and sped it up quite a bit. If
+your not a programmer, just read the How To Use section to get going
+with your new wonderfully smooth conveyors and stuff. Otherwise,
+check out the code, it's in the plats.qc file, set off in the regular
+train code with "// ###" at the begining and end of every section of
+new code. The new functions are at the end. It's especially cool
+because it worked one the first try! 8)
+   The map to check out the new smooth trains in action is ESCLATOR.
+This is a modified version of a demo map available for download at
+Quake Lab. It was modified a bit so that it's actually the steps
+themselves that cause you to go up. This also allows for going back
+down the esclator as well. First check out the cool original, then
+check out the new one with this mod and you'll be able to tell the
+diff.
+   Another map that I tries this out on is the SUBWAY map that's
+available on Quake Lab. To get this patch to work in the map, just
+add '"weaponmodel" "smtrain"' to all the func_train entities in the
+map file. Another thing you could do is email me for the modified
+version, sinch I've already done the work. It looks reallY cool. :)
+   One other thing, I added an ambient sound. It's the mosh sound
+from Quake Command's Christmas Present to us for 96. It was just to
+cool not to add.

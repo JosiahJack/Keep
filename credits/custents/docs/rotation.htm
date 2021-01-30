@@ -1,0 +1,177 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="General WarT'">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.01 [en] (Win95; I) [Netscape]">
+   <TITLE>Custents Entity Defs - Rotation</TITLE>
+</HEAD>
+<BODY TEXT="#CC33CC" BGCOLOR="#000000" LINK="#00CC00" VLINK="#009900" ALINK="#00CC00">
+
+<CENTER><IMG SRC="custtitle.jpg" HEIGHT=60 WIDTH=330><FONT COLOR="#009900"><FONT SIZE=+3>6.0</FONT></FONT></CENTER>
+
+<CENTER><FONT SIZE=+2>Entities Definitions - Rotation</FONT>&nbsp;
+<HR WIDTH="100%"></CENTER>
+Last Updated : 2/5/98
+<BR>&copy;1998 Carl Glave
+<BR><A HREF="index.htm">Back to Main Index</A>
+<BR>
+<HR WIDTH="100%">
+
+<P>Rotation Entities Index
+<UL>
+<LI>
+<A HREF="#info_rotate">info_rotate</A></LI>
+
+<LI>
+<A HREF="#func_rotate_entity">func_rotate_entity</A></LI>
+
+<LI>
+<A HREF="#path_rotate">path_rotate</A></LI>
+
+<LI>
+<A HREF="#func_rotate_train">func_rotate_train</A></LI>
+
+<LI>
+<A HREF="#rotate_object">rotate_object</A></LI>
+
+<LI>
+<A HREF="#func_rotate_door">func_rotate_door</A></LI>
+
+<LI>
+<A HREF="#func_clock">func_clock</A></LI>
+</UL>
+<A NAME="info_rotate"></A>
+<HR WIDTH="100%">
+<BR><B>info_rotate (0 0.5 0) (-4 -4 -4) (4 4 4)</B>
+<UL>Used as the point of rotation for rotatable objects.</UL>
+<A NAME="func_rotate_entity"></A>
+<HR WIDTH="100%">
+<BR><B>func_rotate_entity (0 .5 .8) (-8 -8 -8) (8 8 8) TOGGLE START_ON</B>
+<UL>Creates an entity that continually rotates. Can be toggled on nd off
+if targeted.
+
+<P><B>TOGGLE</B> allows the rotation to be toggled on/off.
+
+<P><B>START_ON</B> wether the entity is spinning when spawned. If TOGGLE
+is 0, entity can be turned on, but not off. If "deathtype" is set with
+a string, this is the message that will appear when a player is killed
+by the train.
+
+<P><B>"rotate"</B> is the rate to rotate.
+
+<P><B>"target"</B> is the rotating entity.
+
+<P><B>"speed"</B> is how long the entity takes to go from standing still
+to full speed and vice-versa.</UL>
+<A NAME="path_rotate"></A>
+<HR WIDTH="100%">
+<BR><B>path_rotate (0.5 0.3 0) (-8 -8 -8) (8 8 8) ROTATION ANGLES STOP
+NO_ROTATE DAMAGE MOVETIME SET_DAMAGE</B>
+<UL>Path for rotate_train.
+
+<P><B>ROTATION</B> tells train to rotate at rate specified by "rotate".
+Use '0 0 0' to stop rotation.
+
+<P><B>ANGLES</B> tells train to rotate to the angles specified by "angles"
+while traveling to this path_rotate. Use values &lt; 0 or > 360 to guarantee
+that it turns in a certain direction. Having this flag set automatically
+clears any rotation.
+
+<P><B>STOP</B> tells the train to stop and wait to be retriggered.
+
+<P><B>NO_ROTATE</B> tells the train to stop rotating when waiting to be
+triggered.
+
+<P><B>DAMAGE</B> tells the train to cause damage based on "dmg".
+
+<P><B>MOVETIME</B> tells the train to interpret "speed" as the length of
+time to take moving from one corner to another.
+
+<P><B>SET_DAMAGE</B> tells the train to set all targets damage to "dmg"
+
+<P><B>"noise"</B> contains the name of the sound to play when train stops.
+
+<P><B>"noise1"</B> contains the name of the sound to play when train moves.
+
+<P><B>"event"</B> is a target to trigger when train arrives at path_rotate.</UL>
+<A NAME="func_rotate_train"></A>
+<HR WIDTH="100%">
+<BR><B>func_rotate_train (0 .5 .8) (-8 -8 -8) (8 8 8)</B>
+<UL>In path_rotate, set speed to be the new speed of the train after it
+reaches the path change. If speed is -1, the train will warp directly to
+the next path change after the specified wait time. If MOVETIME is set
+on the path_rotate, the train to interprets "speed" as the length of time
+to take moving from one corner to another.
+
+<P><B>"path"</B> specifies the first path_rotate and is the starting position.
+If the train is the target of a button or trigger, it will not begin moving
+until activated. The func_rotate_train entity is the center of rotation
+of all objects targeted by it.
+
+<P><B>"deathtype"</B> this is the message that will appear when a player
+is killed by the train.
+
+<P><B>"speed"</B> the rate at wich the train moves. default 100
+
+<P><B>"dmg"</B> if the damage done to somethine that blocks the train's
+movement. default 0
+
+<P><B>"sounds"</B> the kind of sounds that will be played for the train.
+<UL>
+<LI>
+1 - ratchet metal</LI>
+</UL>
+<B>"noise"</B> contains the name of the sound to play when train stops.
+
+<P><B>"noise1"</B> contains the name of the sound to play when train moves.
+
+<P>Both "noise" and "noise1" defaults depend upon "sounds" variable and
+can be overridden by the "noise" and "noise1" variable in path_rotate.
+Also in path_rotate, if STOP is set, the train will wait until it is retriggered
+before moving on to the next goal.</UL>
+<A NAME="rotate_object"></A>
+<HR WIDTH="100%">
+<BR><B>rotate_object (0 .5 .8) ?</B>
+<UL>This defines an object to be rotated. Used as the target of func_rotate_door.</UL>
+<A NAME="func_rotate_door"></A>
+<HR WIDTH="100%">
+<BR><B>func_rotate_door (0 .5 .8) (-8 -8 -8) (8 8 8) STAYOPEN</B>
+<UL>Creates a door that rotates between two positions around a point of
+rotation each time it's triggered.
+
+<P><B>STAYOPEN</B> tells the door to reopen after closing. This prevents
+a trigger-once door from closing again when it's blocked.
+
+<P><B>"dmg"</B> specifies the damage to cause when blocked. Defaults to
+2. Negative numbers indicate no damage.
+
+<P><B>"speed"</B> specifies how the time it takes to rotate
+
+<P><B>"sounds"</B>
+<UL>
+<LI>
+1 - medieval (default)</LI>
+
+<LI>
+2 - metal</LI>
+
+<LI>
+3 - base</LI>
+</UL>
+</UL>
+<A NAME="func_clock"></A>
+<HR WIDTH="100%">
+<BR><B>func_clock (0 0 0.5) (0 0 0) (32 32 32)</B>
+<UL>Creates one hand of a "clock". Set the angle to be the direction the
+clock is facing.
+
+<P><B>"event"</B> is the targetname of the entities to trigger when hand
+strikes 12.
+
+<P><B>"cnt"</B> is the time to start at.
+
+<P><B>"count"</B> is the # of seconds it takes to make a full revolution
+(seconds is 60, minutes 3600, hours 43200).&nbsp; default is 60.</UL>
+
+</BODY>
+</HTML>

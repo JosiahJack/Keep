@@ -1061,6 +1061,9 @@ float AMMO_BOLTS_WPN = 8;
 float AMMO_LAVA_NAILS_WPN = 30;		// Both Nailgun and Super
 float AMMO_MULTI_ROCKETS_WPN = 10;		// Both Rocket and Grenade launcher
 float AMMO_PLASMA_WPN = 10;
+float AMMO_BLOOD_WPN = 30;
+float AMMO_VOID_WPN = 30;
+float AMMO_ELEMENTAL_WPN = 30;
 
 //----------------------------------------------------------------------
 float ARMOR_GRN_TYPE = 0.3;		// Armour damage reduction and quantity

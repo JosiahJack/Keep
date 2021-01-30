@@ -1,0 +1,80 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="General WarT'">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.01 [en] (Win95; I) [Netscape]">
+   <TITLE>Custents Entity Defs - General Enhancements</TITLE>
+</HEAD>
+<BODY TEXT="#CC33CC" BGCOLOR="#000000" LINK="#00CC00" VLINK="#009900" ALINK="#00CC00">
+
+<CENTER><IMG SRC="custtitle.jpg" HEIGHT=60 WIDTH=330><FONT COLOR="#009900"><FONT SIZE=+3>6.0</FONT></FONT></CENTER>
+
+<CENTER><FONT SIZE=+2>Entities Definitions - General Enhancements</FONT>&nbsp;
+<HR WIDTH="100%"></CENTER>
+Last Updated : 2/5/98
+<BR>&copy;1998 Carl Glave
+<BR><A HREF="index.htm">Back to Main Index</A>
+<BR>
+<HR WIDTH="100%">
+
+<P>General Enhamcements Index
+<UL>
+<LI>
+<A HREF="#deathtype">death messages</A></LI>
+
+<LI>
+<A HREF="#gravity">gravity</A></LI>
+
+<LI>
+<A HREF="#killtarget">multiple killtargets</A></LI>
+
+<LI>
+<A HREF="#killtarget">multiple targets</A></LI>
+
+<LI>
+<A HREF="#targetname">multiple targetnames</A></LI>
+</UL>
+<A NAME="deathtype"></A>
+<HR WIDTH="100%">
+
+<P>"deathtype" can now be set for any solid BSP entity that can damage
+things. When a player is killed by the entity, the displayed obituary will
+be the string entered for that entities deathtype.
+
+<P><A NAME="gravity"></A>
+<HR WIDTH="100%">
+
+<P>"gravity" can now be set for monsters to set the initial amount of gravity
+for them. This will allow for them to be started in an area of low gravity.
+Please note that the gravity changing in Custents affects all things that
+are affected by gravity, so if you have monsters in a large area that you
+want to low gravity, you only need to set the monster's intiial gravity
+and then have the triggers to change the gravity at all entrance locations
+to that area.
+
+<P><A NAME="killtarget"></A>
+<HR WIDTH="100%">
+
+<P>Every entity that targets something can kill two targets using "killtarget"
+and "killtarget2". They can be used in any order.
+
+<P><A NAME="target"></A>
+<HR WIDTH="100%">
+
+<P>Every entity that targets something can now target up to four different
+targetnames using "target", "target2", "target3", and "target4". They can
+be used in any order. Please note that this only works for triggering another
+entity. For purposes like finding an entity to follow or some other purpose
+like that, the first target name, "target" must still be used.
+
+<P><A NAME="targetname"></A>
+<HR WIDTH="100%">
+
+<P>Every entity that is targeted by something can have up to three different
+targetnames using "targetname", "targetname2", "targetname3", and "targetname4".
+They can be used in any order. Please note that some entities may require
+using certain targetnames due to the fact that they do different things
+when triggered by different names.
+<BR>&nbsp;
+</BODY>
+</HTML>

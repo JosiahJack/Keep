@@ -190,6 +190,19 @@ void() InitTrigger =
 	self.model = "";			// hide bmodel surface
 };
 
+// PM:  The point trigger version of InitTrigger.
+void() InitPointTrigger =
+{
+    local   vector  v1, v2;
+
+    v1 = self.origin;
+    v2 = v1 + self.mangle;
+    self.model = "";
+    setorigin (self, '0 0 0');
+    InitTrigger ();     // Calls 'setmodel', so do first.
+    setsize (self, v1, v2);     // Calling 'setmodel' resets entity size.
+};
+
 /*======================================================================
 SUB_CalcMove
 

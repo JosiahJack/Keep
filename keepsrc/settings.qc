@@ -909,11 +909,14 @@ void() CheatCommand =
 	self.ammo_plasma = 100;
 	self.ammo_bolts = 100;
 	self.ammo_poison = 100;	
+	self.ammo_bloodcrystals = 100;	
+	self.ammo_voidshards = 100;	
+	self.ammo_elemental = 100;	
 
-	self.moditems = self.moditems | IT_UPGRADE_AXE | IT_UPGRADE_SSG | IT_UPGRADE_LG;
+	self.moditems = self.moditems | IT_UPGRADE_AXE | IT_UPGRADE_SSG | IT_UPGRADE_LG | IT_ICE | IT_MACE | IT_VOID_STAFF | IT_FLAK | IT_SANGUINATORS | IT_SCIMITAR | IT_RAPIER;
 	self.items = self.items | IT_AXE | IT_SHOTGUN | IT_SUPER_SHOTGUN | IT_NAILGUN |
 				IT_SUPER_NAILGUN | IT_GRENADE_LAUNCHER | IT_ROCKET_LAUNCHER | IT_LIGHTNING | IT_LAVA_NAILGUN | IT_LAVA_SUPER_NAILGUN | IT_MULTI_GRENADE | IT_MULTI_ROCKET | IT_PLASMA_GUN | IT_EXTRA_WEAPON;
-	self.items2 = self.items2 | IT2_ARMOR3 | IT2_PROXIMITY_GUN | IT2_MJOLNIR | IT2_LASER_CANNON;
+	self.items2 = self.items2 | IT2_ARMOR3 | IT2_PROXIMITY_GUN | IT2_MJOLNIR | IT2_LASER_CANNON | IT2_GRAPPLE | IT2_CROSS;// | IT2_WAND;
 	self.weapon = IT2_LASER_CANNON;
 	self.armorvalue = 150;
 	W_SetCurrentAmmo (self);

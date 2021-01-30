@@ -19,7 +19,6 @@ void(vector org, vector vel) SpawnChunk - Not used anywhere, removed
  SuperDamageSound   - Plays quad damage sound
 
 ======================================================================*/
-void() player_run;				// Start of run cycle
 void(entity targ) remoteplayer_run;
 void() player_axe1;				// Different Axe animations
 void() player_axeb1;
@@ -1235,140 +1234,187 @@ void(entity targ) W_SetCurrentAmmo = {
 	remoteplayer_run (targ);			// get out of any weapon firing states
 
 	// Reset all Ammo types for gfx on sbar (engine code hack - sbar.c)
-	targ.items = targ.items - ( targ.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS) );
-  	targ.items2 = (targ.items2 - (targ.items2 & ((IT2_LAVA_NAILS | IT2_PLASMA_AMMO) | IT2_MULTI_ROCKETS)));
-		
-	if (targ.weapon == IT_AXE) {
-		targ.currentammo = 0;
-		if (targ.moditems & IT_UPGRADE_AXE) {
-			targ.weaponmodel = MODEL_VWEAP_UPAXE;
-		} else {
-			targ.weaponmodel = v_axemodel;
-		}
-
-		if (targ.perms & IT_CHAINSAW) {
-			targ.weaponmodel = "progs/drake/v_saw.mdl"; // override axes
-		}
-	}
-	else if (targ.weapon == IT_SHOTGUN) {
-		targ.currentammo = targ.ammo_shells;
-		if (targ.perms & IT_BLASTER) {
-			targ.weaponmodel = "progs/drake/v_laserb.mdl";
-		} else {
-			if (targ.items & IT_SHOTGUN) {
-				targ.weaponmodel = MODEL_VWEAP_SG;
+	//targ.items = targ.items - ( targ.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS) );
+  	//targ.items2 = (targ.items2 - (targ.items2 & ((IT2_LAVA_NAILS | IT2_PLASMA_AMMO) | IT2_MULTI_ROCKETS)));
+	dprint("\b[self.weapon\b = ");
+	dprint(ftos(self.weapon));
+	dprint("\n");
+	if (!targ.selfweaponismoditems) {
+		if (targ.weapon == IT_AXE) {
+			targ.currentammo = 0;
+			if (targ.moditems & IT_UPGRADE_AXE) {
+				targ.weaponmodel = MODEL_VWEAP_UPAXE;
 			} else {
-				targ.weaponmodel = "";
-				targ.currentammo = 0;
+				targ.weaponmodel = v_axemodel;
+			}
+
+			if (targ.perms & IT_CHAINSAW) {
+				targ.weaponmodel = "progs/drake/v_saw.mdl"; // override axes
 			}
 		}
-		targ.items = targ.items | IT_SHELLS;
-	}
-	else if (targ.weapon == IT_SUPER_SHOTGUN) {
-		targ.currentammo = targ.ammo_shells;
-		if (targ.moditems & IT_UPGRADE_SSG) targ.weaponmodel = MODEL_VWEAP_UPSSG;
-		else targ.weaponmodel = MODEL_VWEAP_SSG;
-		targ.items = targ.items | IT_SHELLS;
-	}
-	else if (targ.weapon == IT_LAVA_NAILGUN) {
-		targ.currentammo = targ.ammo_lava_nails;
-		targ.weaponmodel = MODEL_VWEAP_LAVANG;
-		targ.items2 = targ.items2 | IT2_LAVA_NAILS;
-	}
-	else if (targ.weapon == IT_NAILGUN) {
-		targ.currentammo = targ.ammo_nails;
-		targ.weaponmodel = MODEL_VWEAP_NG;
-		targ.items = targ.items | IT_NAILS;
-	}
-	else if (targ.weapon == IT_LAVA_SUPER_NAILGUN) {
-		targ.currentammo = targ.ammo_lava_nails;
-		targ.weaponmodel = MODEL_VWEAP_LAVASNG;
-		targ.items2 = targ.items2 | IT2_LAVA_NAILS;
-	}
-	else if (targ.weapon == IT_SUPER_NAILGUN) {
-		targ.currentammo = targ.ammo_nails;
-		targ.weaponmodel = MODEL_VWEAP_SNG;
-		targ.items = targ.items | IT_NAILS;
-	}
-	else if (targ.weapon == IT_MULTI_GRENADE) {
-		targ.currentammo = targ.ammo_multi_rockets;
-		targ.weaponmodel = MODEL_VWEAP_MULTG;
-		targ.items2 = targ.items2 | IT2_MULTI_ROCKETS;
-	}
-	else if (targ.weapon == IT_GRENADE_LAUNCHER) {
-		targ.currentammo = targ.ammo_rockets;
-		targ.weaponmodel = MODEL_VWEAP_GL;
-		targ.items = targ.items | IT_ROCKETS;
-	}
-	else if (targ.weapon == IT2_PROXIMITY_GUN) {
-		targ.currentammo = targ.ammo_rockets;
-		targ.weaponmodel = MODEL_VWEAP_PROX;
-		targ.items = targ.items | IT_ROCKETS;
-	}
-	else if (targ.weapon == IT_MULTI_ROCKET) {
-		targ.currentammo = targ.ammo_multi_rockets;
-		targ.weaponmodel = MODEL_VWEAP_MULTR;
-		targ.items2 = targ.items2 | IT2_MULTI_ROCKETS;
-	}
-	else if (targ.weapon == IT_ROCKET_LAUNCHER) {
-		targ.currentammo = targ.ammo_rockets;
-		targ.weaponmodel = MODEL_VWEAP_RL;
-		targ.items = targ.items | IT_ROCKETS;
-	}
-	else if (targ.weapon == IT_LIGHTNING) {
-		targ.currentammo = targ.ammo_cells;
-		if (targ.moditems & IT_UPGRADE_LG) targ.weaponmodel = MODEL_VWEAP_UPLG;
-		else targ.weaponmodel = MODEL_VWEAP_LG;
-		targ.items = targ.items | IT_CELLS;
-	}
-	else if (targ.weapon == IT2_CHAINLIGHTNING) {
-		targ.currentammo = targ.ammo_cells;
-		targ.weaponmodel = "progs/drake/v_light2.mdl";
-		targ.items = targ.items | IT_CELLS;
-	}
-	else if (targ.weapon == IT_PLASMA_GUN) {
-		targ.currentammo = targ.ammo_plasma;
-		targ.weaponmodel = MODEL_VWEAP_PLASM;
-		targ.items2 = targ.items2 | IT2_MULTI_ROCKETS;
-	}
-	else if (targ.weapon == IT2_LASER_CANNON) {
-		targ.currentammo = targ.ammo_cells;
-		//targ.weaponmodel = MODEL_VWEAP_LCAN;
-		targ.weaponmodel = "progs/drake/v_laserg.mdl";
-		targ.items = targ.items | IT_CELLS;
-	}
-	else if (targ.weapon == IT_EXTRA_WEAPON) {
-		if (targ.ammo_poison > 0) {
-			targ.currentammo = targ.ammo_poison;
-			targ.weaponmodel = "progs/v_crossbow2.mdl";
-			targ.items2 = targ.items2 | IT2_POISON;
-		} else {
-			targ.currentammo = targ.ammo_bolts;
-			targ.weaponmodel = "progs/v_crossbow1.mdl";
-			targ.items2 = targ.items2 | IT2_BOLTS;
+		else if (targ.weapon == IT_SHOTGUN) {
+			targ.currentammo = targ.ammo_shells;
+			if (targ.perms & IT_BLASTER) {
+				targ.weaponmodel = "progs/drake/v_laserb.mdl";
+			} else {
+				if (targ.items & IT_SHOTGUN) {
+					targ.weaponmodel = MODEL_VWEAP_SG;
+				} else {
+					targ.weaponmodel = "";
+					targ.currentammo = 0;
+				}
+			}
+			targ.items = targ.items | IT_SHELLS;
 		}
-	}
-	else if (targ.weapon == IT2_MJOLNIR) {
-		targ.currentammo = targ.ammo_cells;
-		targ.weaponmodel = MODEL_VWEAP_MJOL;
-		targ.items = targ.items | IT_CELLS;
-	}
-	else if (targ.weapon == IT2_CROSS) {
-		targ.weaponmodel =  "progs/drake/v_wand.mdl";
-	}
-	else if (targ.weapon == IT2_GRAPPLE) {
-		targ.currentammo = 0;
-		targ.weaponmodel = "progs/drake/v_grpple.mdl";
-        if (self.hook) {
-            if (self.hook.count) {
-                self.weaponframe = 1;   // Hook is still out.
+		else if (targ.weapon == IT_SUPER_SHOTGUN) {
+			targ.currentammo = targ.ammo_shells;
+			if (targ.moditems & IT_UPGRADE_SSG) targ.weaponmodel = MODEL_VWEAP_UPSSG;
+			else targ.weaponmodel = MODEL_VWEAP_SSG;
+			targ.items = targ.items | IT_SHELLS;
+		}
+		else if (targ.weapon == IT_LAVA_NAILGUN) {
+			targ.currentammo = targ.ammo_lava_nails;
+			targ.weaponmodel = MODEL_VWEAP_LAVANG;
+			targ.items2 = targ.items2 | IT2_LAVA_NAILS;
+		}
+		else if (targ.weapon == IT_NAILGUN) {
+			targ.currentammo = targ.ammo_nails;
+			targ.weaponmodel = MODEL_VWEAP_NG;
+			targ.items = targ.items | IT_NAILS;
+		}
+		else if (targ.weapon == IT_LAVA_SUPER_NAILGUN) {
+			targ.currentammo = targ.ammo_lava_nails;
+			targ.weaponmodel = MODEL_VWEAP_LAVASNG;
+			targ.items2 = targ.items2 | IT2_LAVA_NAILS;
+		}
+		else if (targ.weapon == IT_SUPER_NAILGUN) {
+			targ.currentammo = targ.ammo_nails;
+			targ.weaponmodel = MODEL_VWEAP_SNG;
+			targ.items = targ.items | IT_NAILS;
+		}
+		else if (targ.weapon == IT_MULTI_GRENADE) {
+			targ.currentammo = targ.ammo_multi_rockets;
+			targ.weaponmodel = MODEL_VWEAP_MULTG;
+			targ.items2 = targ.items2 | IT2_MULTI_ROCKETS;
+		}
+		else if (targ.weapon == IT_GRENADE_LAUNCHER) {
+			targ.currentammo = targ.ammo_rockets;
+			targ.weaponmodel = MODEL_VWEAP_GL;
+			targ.items = targ.items | IT_ROCKETS;
+		}
+		else if (targ.weapon == IT2_PROXIMITY_GUN) {
+			targ.currentammo = targ.ammo_rockets;
+			targ.weaponmodel = MODEL_VWEAP_PROX;
+			targ.items = targ.items | IT_ROCKETS;
+		}
+		else if (targ.weapon == IT_MULTI_ROCKET) {
+			targ.currentammo = targ.ammo_multi_rockets;
+			targ.weaponmodel = MODEL_VWEAP_MULTR;
+			targ.items2 = targ.items2 | IT2_MULTI_ROCKETS;
+		}
+		else if (targ.weapon == IT_ROCKET_LAUNCHER) {
+			targ.currentammo = targ.ammo_rockets;
+			targ.weaponmodel = MODEL_VWEAP_RL;
+			targ.items = targ.items | IT_ROCKETS;
+		}
+		else if (targ.weapon == IT_LIGHTNING) {
+			targ.currentammo = targ.ammo_cells;
+			if (targ.moditems & IT_UPGRADE_LG) targ.weaponmodel = MODEL_VWEAP_UPLG;
+			else targ.weaponmodel = MODEL_VWEAP_LG;
+			targ.items = targ.items | IT_CELLS;
+		}
+		else if (targ.weapon == IT2_CHAINLIGHTNING) {
+			targ.currentammo = targ.ammo_cells;
+			targ.weaponmodel = "progs/drake/v_light2.mdl";
+			targ.items = targ.items | IT_CELLS;
+		}
+		else if (targ.weapon == IT_PLASMA_GUN) {
+			targ.currentammo = targ.ammo_plasma;
+			targ.weaponmodel = MODEL_VWEAP_PLASM;
+			targ.items2 = targ.items2 | IT2_MULTI_ROCKETS;
+		}
+		else if (targ.weapon == IT2_LASER_CANNON) {
+			targ.currentammo = targ.ammo_cells;
+			//targ.weaponmodel = MODEL_VWEAP_LCAN;
+			targ.weaponmodel = "progs/drake/v_laserg.mdl";
+			targ.items = targ.items | IT_CELLS;
+		}
+		else if (targ.weapon == IT_EXTRA_WEAPON) {
+			if (targ.ammo_poison > 0) {
+				targ.currentammo = targ.ammo_poison;
+				targ.weaponmodel = "progs/v_crossbow2.mdl";
+				targ.items2 = targ.items2 | IT2_POISON;
+			} else {
+				targ.currentammo = targ.ammo_bolts;
+				targ.weaponmodel = "progs/v_crossbow1.mdl";
+				targ.items2 = targ.items2 | IT2_BOLTS;
 			}
 		}
-	}
-	else {
-		// Cinematic mode, no viewmodel
-		targ.currentammo = 0;
-		targ.weaponmodel = "";
+		else if (targ.weapon == IT2_MJOLNIR) {
+			targ.currentammo = targ.ammo_cells;
+			targ.weaponmodel = MODEL_VWEAP_MJOL;
+			targ.items = targ.items | IT_CELLS;
+		}
+		else if (targ.weapon == IT2_CROSS) {
+			targ.weaponmodel =  "progs/drake/v_wand.mdl";
+		}
+		else if (targ.weapon == IT2_GRAPPLE) {
+			targ.currentammo = 0;
+			targ.weaponmodel = "progs/drake/v_grpple.mdl";
+			if (self.hook) {
+				if (self.hook.count) {
+					self.weaponframe = 1;   // Hook is still out.
+				}
+			}
+		}
+		else if (targ.weapon == IT_SANGUINATORS) {
+			targ.currentammo = targ.ammo_bloodcrystals;
+			targ.weaponmodel = "progs/aoa/v_sanguinators.mdl";
+			//targ.items = targ.items | IT_BLOOD;
+		}
+		else if (targ.weapon == IT_SCIMITAR) {
+			targ.currentammo = targ.ammo_elemental;
+			targ.weaponmodel = "progs/aoa/v_scimitar.mdl";
+			//targ.items = targ.items | IT_ELEMENTAL;
+		}
+		else if (targ.weapon == IT_RAPIER) {
+			targ.currentammo = 0;
+			targ.weaponmodel = "progs/aoa/v_rapier.mdl";
+		}
+		else {
+			// Cinematic mode, no viewmodel
+			targ.currentammo = 0;
+			targ.weaponmodel = "";
+		}
+	} else {
+		if (targ.weapon == IT_ICE) {
+			targ.currentammo = targ.ammo_elemental;
+			targ.weaponmodel = "progs/aoa/v_ice.mdl";
+			//targ.items = targ.items | IT_ELEMENTAL;
+		}
+		else if (targ.weapon == IT_MACE) {
+			targ.currentammo = targ.ammo_bloodcrystals;
+			targ.weaponmodel = "progs/aoa/v_mace.mdl";
+			//targ.items = targ.items | IT_BLOOD;
+		}
+		else if (targ.weapon == IT_VOID_STAFF) {
+			targ.currentammo = targ.ammo_voidshards;
+			targ.weaponmodel = "progs/aoa/v_voidstaff.mdl";
+			//targ.items = targ.items | IT_VOID;
+		}
+		else if (targ.weapon == IT_FLAK) {
+			targ.currentammo = targ.ammo_nails;
+			targ.weaponmodel = "progs/aoa/v_flak.mdl";
+		}
+		else if (targ.weapon == IT_GUNGNIR) {
+			targ.currentammo = targ.ammo_voidshards;
+			targ.weaponmodel = "progs/aoa/v_gungnir.mdl";
+		}
+		else {
+			// Cinematic mode, no viewmodel
+			targ.currentammo = 0;
+			targ.weaponmodel = "";
+		}
 	}
 	targ.weaponframe = 0;		// reset weapon frame
 };
@@ -1387,14 +1433,20 @@ float(entity targ) W_BestWeapon =
 			return IT_LIGHTNING;
 	if (targ.waterlevel < 1 && targ.ammo_cells > 0 && (targ.items & IT2_MJOLNIR) )
 			return IT2_MJOLNIR;
+	if (targ.ammo_bloodcrystals > 0 && (targ.items & IT_SANGUINATORS) )
+			return IT_SANGUINATORS;
 	if(targ.ammo_lava_nails > 1 && (targ.items & IT_LAVA_SUPER_NAILGUN) )
 		return IT_LAVA_SUPER_NAILGUN;
 	if(targ.ammo_nails > 1 && (targ.items & IT_SUPER_NAILGUN) )
 		return IT_SUPER_NAILGUN;
 	if(targ.ammo_lava_nails > 1 && (targ.items & IT_LAVA_NAILGUN) )
 		return IT_LAVA_NAILGUN;
+	if (targ.ammo_elemental > 0 && (targ.items & IT_SCIMITAR) )
+			return IT_SCIMITAR;
 	if(targ.ammo_bolts > 1 && (targ.items & IT_EXTRA_WEAPON) )
 		return IT_EXTRA_WEAPON;
+	if (targ.ammo_bloodcrystals > 0 && (targ.items & IT_SANGUINATORS) )
+			return IT_SANGUINATORS;
 	if(targ.ammo_shells > 2 && (targ.items & IT_SUPER_SHOTGUN) )
 		return IT_SUPER_SHOTGUN; // greater than 2 in case of upgrade triple shotgun Widowmaker
 	if(targ.ammo_nails > 0 && (targ.items & IT_NAILGUN) )
@@ -1415,8 +1467,8 @@ float(entity targ) W_BestWeapon =
 float(entity targ) W_CheckNoAmmo =
 {
 	if (targ.currentammo > 0) return TRUE;
-	if (targ.weapon == IT_AXE || targ.weapon == IT2_MJOLNIR || targ.weapon == IT2_CROSS || targ.weapon == IT2_GRAPPLE) return TRUE;
-	
+	if (targ.weapon == IT_AXE || targ.weapon == IT2_MJOLNIR || targ.weapon == IT2_CROSS || targ.weapon == IT2_GRAPPLE || targ.weapon == IT_RAPIER) return TRUE;
+
 	targ.weapon = W_BestWeapon (targ);
 	W_SetCurrentAmmo (targ);
 	
@@ -1440,124 +1492,141 @@ void() W_Attack = {
 	if (self.weapon != IT_EXTRA_WEAPON)
 		self.show_hostile = time + 1;	// wake monsters up
 
+	dprint("\b[self.weapon\b = ");
+	dprint(ftos(self.weapon));
+	dprint("\n");
 	//----------------------------------------------------------------------
 	// Axe - Mighty chopper
 	//----------------------------------------------------------------------
-	if (self.weapon == IT_AXE) {
-		if (self.perms & IT_CHAINSAW) {
-			// Chainsaw (overrides axes once acquired)
-            player_saw1 ();
-            self.attack_finished = time + 0.55;
-            sound (self, CHAN_AUTO, "weapons/sawatck.wav", 1, ATTN_NORM);
-		} else {
-			// Axe and Shadowaxe
-			if (random() < 0.5) sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE1, 1, ATTN_NORM);
-			else sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
-			// Work out which axe swing to play (never play swing twice in a row)
-			self.lip = self.meleeattack;
-			while (self.meleeattack == self.lip) {
-				self.lip = rint(random()*4.4);
-			}
-			self.meleeattack = self.lip;
-			if (v_axemodel == "progs/ad171/v_shadaxe0.mdl") {
-				if (self.meleeattack == 0) player_axe1();
-				else if (self.meleeattack == 1) player_axeb1();
-				else if (self.meleeattack == 2) player_axec1();
-				else if (self.meleeattack == 3) player_axed1();
-				else player_axee1();
+	if (!self.selfweaponismoditems) {
+		if (self.weapon == IT_AXE) {
+			if (self.perms & IT_CHAINSAW) {
+				// Chainsaw (overrides axes once acquired)
+				player_saw1 ();
+				self.attack_finished = time + 0.55;
+				sound (self, CHAN_AUTO, "weapons/sawatck.wav", 1, ATTN_NORM);
 			} else {
-				if (self.meleeattack == 0) player_axeold1();
-				else if (self.meleeattack == 1) player_axeoldb1();
-				else if (self.meleeattack == 2) player_axeoldc1();
-				else player_axeoldd1();
-			}	
-			self.attack_finished = time + 0.5;
+				// Axe and Shadowaxe
+				if (random() < 0.5) sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE1, 1, ATTN_NORM);
+				else sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
+				// Work out which axe swing to play (never play swing twice in a row)
+				self.lip = self.meleeattack;
+				while (self.meleeattack == self.lip) {
+					self.lip = rint(random()*4.4);
+				}
+				self.meleeattack = self.lip;
+				if (v_axemodel == "progs/ad171/v_shadaxe0.mdl") {
+					if (self.meleeattack == 0) player_axe1();
+					else if (self.meleeattack == 1) player_axeb1();
+					else if (self.meleeattack == 2) player_axec1();
+					else if (self.meleeattack == 3) player_axed1();
+					else player_axee1();
+				} else {
+					if (self.meleeattack == 0) player_axeold1();
+					else if (self.meleeattack == 1) player_axeoldb1();
+					else if (self.meleeattack == 2) player_axeoldc1();
+					else player_axeoldd1();
+				}	
+				self.attack_finished = time + 0.5;
+			}
 		}
-	}
-	//----------------------------------------------------------------------
-	else if (self.weapon == IT_SHOTGUN) {
-		if (self.perms & IT_BLASTER) {
-			player_blast1(); // use laser blaster only once we have it, still uses shells
-		} else {
-			player_sg1(); // use standard single barrel shotgun
+		//----------------------------------------------------------------------
+		else if (self.weapon == IT_SHOTGUN) {
+			if (self.perms & IT_BLASTER) {
+				player_blast1(); // use laser blaster only once we have it, still uses shells
+			} else {
+				player_sg1(); // use standard single barrel shotgun
+			}
 		}
-	}
-	else if (self.weapon == IT_SUPER_SHOTGUN) player_supersg1();
-	else if (self.weapon == IT_NAILGUN) player_nail1();
-	else if (self.weapon == IT_LAVA_NAILGUN) { player_lava_nail1(); self.lavaGunFired = TRUE; }
-	else if (self.weapon == IT_SUPER_NAILGUN) player_snail1();
-	else if (self.weapon == IT_LAVA_SUPER_NAILGUN) {player_lava_snail1();  self.lavaGunFired = TRUE; }
-	else if (self.weapon == IT_MULTI_GRENADE) player_multi_grenade1();
-	else if (self.weapon == IT_GRENADE_LAUNCHER) player_grenade1();
-	else if (self.weapon == IT_MULTI_ROCKET) player_multi_rocket1();
-	else if (self.weapon == IT_ROCKET_LAUNCHER) player_rocket1();
-	else if (self.weapon == IT_PLASMA_GUN) player_plasmalight1();
-	else if (self.weapon == IT_LIGHTNING) {
-		if (self.moditems & IT_UPGRADE_LG) player_plasma1();
-		else {
-			player_light1(); 
-			sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM); 
+		else if (self.weapon == IT_SUPER_SHOTGUN) { player_supersg1(); }
+		else if (self.weapon == IT_NAILGUN) { player_nail1(); }
+		else if (self.weapon == IT_LAVA_NAILGUN) { player_lava_nail1(); self.lavaGunFired = TRUE; }
+		else if (self.weapon == IT_SUPER_NAILGUN) { player_snail1(); }
+		else if (self.weapon == IT_LAVA_SUPER_NAILGUN) { player_lava_snail1();  self.lavaGunFired = TRUE; }
+		else if (self.weapon == IT_MULTI_GRENADE) { player_multi_grenade1(); }
+		else if (self.weapon == IT_GRENADE_LAUNCHER) { player_grenade1(); }
+		else if (self.weapon == IT_MULTI_ROCKET) { player_multi_rocket1(); }
+		else if (self.weapon == IT_ROCKET_LAUNCHER) { player_rocket1(); }
+		else if (self.weapon == IT_PLASMA_GUN) { player_plasmalight1(); }
+		else if (self.weapon == IT_LIGHTNING) {
+			if (self.moditems & IT_UPGRADE_LG) player_plasma1();
+			else {
+				player_light1(); 
+				sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM); 
+			}
 		}
-	}
-	else if (self.weapon == IT_EXTRA_WEAPON) player_crossbow1();
-	else if (self.weapon == IT2_LASER_CANNON) player_laser1();
-	else if (self.weapon == IT2_MJOLNIR) {
-		if (self.ammo_cells < 30) {
-			self.attack_finished = time + 0.4;
-			player_hammer1();
-		} else {
-			self.attack_finished = time + 0.4;
-			player_mjolnir1();
+		else if (self.weapon == IT_EXTRA_WEAPON) player_crossbow1();
+		else if (self.weapon == IT2_LASER_CANNON) player_laser1();
+		else if (self.weapon == IT2_MJOLNIR) {
+			if (self.ammo_cells < 30) {
+				self.attack_finished = time + 0.4;
+				player_hammer1();
+			} else {
+				self.attack_finished = time + 0.4;
+				player_mjolnir1();
+			}
 		}
-	}
-	else if (self.weapon == IT2_GRAPPLE) {
-            if (self.hook) {
-				// Assume hook was improperly removed, so reset links.
-                if (!self.hook.modelindex) {   
-                    self.hook = world;  // So W_FireGrapple fires a hook.
-                    player_grapple1 ();
-                    return;
-                }
-                if (self.hook.count)
-                    return;
-                player_grapple3 ();
-            }
-            else
-                player_grapple1 ();
-            // Modified animation takes three frames to complete.
-            self.attack_finished = time + 0.3;
-	}
-	else if (self.weapon == IT2_PROXIMITY_GUN) {
-		player_prox_grenade1();
-		/*           player_rocket1();
-            if (self.tome_finished)
-            {   W_FireHydra();
-                W_Reload (1.5);
-            }
-            else
-            {   W_FireSidewinder();
-                W_Reload (1);
-            }
-		*/
-	}
-	else if (self.weapon == IT2_CHAINLIGHTNING) {
-		// Quake cannot draw very many bolts, so rapid-fire like
-		// normal Thunderbolt is a bad idea.
-		// Update 11/20/09:  Use DoE plasma code with fewer bolts.
-		//  We may be able to stay under limits (24 bolts).
-		//if (self.tome_finished) { TODO: Uncomment this if statement once I figure out if tome_finished is a viable powerup from Drake?
-		//	player_snake1 ();
-		//	W_FireDeathRay ();
-		//	W_Reload (0.4);
-		//} else {
-			player_chainlight1();
-			self.attack_finished = time + 0.1;
-			sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
-		//}
-	}
-	else if (self.weapon == IT2_CROSS) {
-		player_wand1();
-		W_FireSparks();
+		else if (self.weapon == IT2_GRAPPLE) {
+				if (self.hook) {
+					// Assume hook was improperly removed, so reset links.
+					if (!self.hook.modelindex) {   
+						self.hook = world;  // So W_FireGrapple fires a hook.
+						player_grapple1 ();
+						return;
+					}
+					if (self.hook.count)
+						return;
+					player_grapple3 ();
+				}
+				else
+					player_grapple1 ();
+				// Modified animation takes three frames to complete.
+				self.attack_finished = time + 0.3;
+		}
+		else if (self.weapon == IT2_PROXIMITY_GUN) {
+			player_prox_grenade1();
+			/*           player_rocket1();
+				if (self.tome_finished)
+				{   W_FireHydra();
+					W_Reload (1.5);
+				}
+				else
+				{   W_FireSidewinder();
+					W_Reload (1);
+				}
+			*/
+		}
+		else if (self.weapon == IT2_CHAINLIGHTNING) {
+			// Quake cannot draw very many bolts, so rapid-fire like
+			// normal Thunderbolt is a bad idea.
+			// Update 11/20/09:  Use DoE plasma code with fewer bolts.
+			//  We may be able to stay under limits (24 bolts).
+			//if (self.tome_finished) { TODO: Uncomment this if statement once I figure out if tome_finished is a viable powerup from Drake?
+			//	player_snake1 ();
+			//	W_FireDeathRay ();
+			//	W_Reload (0.4);
+			//} else {
+				player_chainlight1();
+				self.attack_finished = time + 0.1;
+				sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
+			//}
+		} else if (self.weapon == IT2_CROSS) {
+			player_wand1();
+			W_FireSparks();
+		} else if (self.weapon == IT_SANGUINATORS) {
+			W_FireSanguinators();
+		}
+		else if (self.weapon == IT_SCIMITAR) {
+			W_FireScimitar(); 
+		} else if (self.weapon == IT_RAPIER) {
+			W_FireRapier();
+		}
+	} else {
+		if (self.weapon == IT_ICE) { W_FireIce(); }
+		else if (self.weapon == IT_MACE) { W_FireMace(); }
+		else if (self.weapon == IT_VOID_STAFF) { W_FireVoidStaff(); }
+		else if (self.weapon == IT_FLAK) { W_FireFlak(); }
+		else if (self.weapon == IT_GUNGNIR) { W_FireGungnir(); }
 	}
 };
 
@@ -1582,64 +1651,346 @@ float (entity targ, float testValue) InModItems = {
    return ( FALSE );
 };
 
+float (entity targ, float testValue) InPerms = {
+   if ( (targ.perms & testValue) )
+      return ( TRUE );
+
+   return ( FALSE );
+};
+
+float IN_ITEMS1 = 1;
+float IN_ITEMS2 = 2;
+float IN_MODITEMS = 4;
+float IN_PERMS = 8;
+float IN_ITEMS1_HACKBANK = 16;
+float IN_ITEMS2_HACKBANK = 32;
+float IN_MODITEMS_HACKBANK = 64;
+float IN_PERMS_HACKBANK = 128;
+
+float (float mask, entity targ, float testValue) InAnyItems = {
+	if (mask == IN_ITEMS1) return InItems(targ,testValue);
+	if (mask == IN_ITEMS2) return InItems2(targ,testValue);
+	if (mask == IN_MODITEMS) return InModItems(targ,testValue);
+	if (mask == IN_PERMS) return InPerms(targ,testValue);
+	if (mask == IN_ITEMS1_HACKBANK) return InItems(targ,testValue);
+	if (mask == IN_ITEMS2_HACKBANK) return InItems2(targ,testValue);
+	if (mask == IN_MODITEMS_HACKBANK) return InModItems(targ,testValue);
+	if (mask == IN_PERMS_HACKBANK) return InPerms(targ,testValue);
+	return FALSE;
+}
+
+// Function to cycle within the same slot by multiple keypresses, e.g. keep pressing 6 to cycle through grenade launcher,
+// proximity grenade launcher, and multi-grenade launcher.
+// Returns a vector: x = fl (the new self.weapon, y = gotgun (whether we have it), z = (am, whether we have ammo)
+// targ = player
+// wep1 = 1st weapon in this keybind's slot
+// wep2 = 2nd weapon in this keybind's slot
+// wep3 = 3rd weapon in this keybind's slot
+// wep1initems = bitmask to specify whether to use self.items, self.items2, self.moditems, or self.perms
+vector (entity targ, float wep1, float wep2, float wep3, float wep1initems, float wep2initems, float wep3initems) WeaponSlotPickOneOfThree = {
+	local vector retvec;
+	local float fl, gotgun, gotgun1, gotgun2, gotgun3, am;
+	local float inhackbank;
+	// Make sure it's all zeroed out
+	inhackbank = fl = gotgun1 = gotgun2 = gotgun3 = am = FALSE;
+	if (wep1) gotgun1 = InAnyItems(wep1initems, targ, wep1);
+	if (wep2) gotgun2 = InAnyItems(wep2initems, targ, wep2);
+	if (wep3) gotgun3 = InAnyItems(wep3initems, targ, wep3);
+	retvec = VEC_ORIGIN;
+
+	if (targ.weapon == wep1) {
+		if (gotgun3) {
+			fl = wep3;
+			gotgun = TRUE;
+		} else {
+			fl = wep2;
+			//gotgun = InItems2(targ, fl);
+			gotgun = gotgun2;
+		}
+	} else {
+		if (targ.weapon == wep3) {
+			if (gotgun2) {
+				fl = wep2;
+				gotgun = TRUE;
+			} else {
+				fl = wep1;
+				//gotgun = InItems(targ, fl);
+				gotgun = gotgun1;
+			}
+		}  else {
+			if (targ.weapon == wep2) {
+				if (gotgun1) {
+					fl = wep1;
+					gotgun = TRUE;
+				} else {
+					fl = wep3;
+					//gotgun = InItems(targ, fl);
+					gotgun = gotgun3;
+				}
+			} else {
+				if (gotgun1) {
+					fl = wep1;
+					gotgun = TRUE;
+				} else {
+					if (gotgun3) {
+						fl = wep3;
+						gotgun = TRUE;
+					} else {
+						if (gotgun2) {
+							fl = wep2;
+							gotgun = TRUE;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if (fl == wep1) {
+		if (wep1initems == IN_ITEMS1_HACKBANK || wep1initems == IN_ITEMS2_HACKBANK || wep1initems == IN_MODITEMS_HACKBANK || wep1initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
+	}
+	if (fl == wep2) {
+		if (wep2initems == IN_ITEMS1_HACKBANK || wep2initems == IN_ITEMS2_HACKBANK || wep2initems == IN_MODITEMS_HACKBANK || wep2initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
+	}
+	if (fl == wep3) {
+		if (wep3initems == IN_ITEMS1_HACKBANK || wep3initems == IN_ITEMS2_HACKBANK || wep3initems == IN_MODITEMS_HACKBANK || wep3initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
+	}
+
+	retvec.x = fl;
+	retvec.y = gotgun;
+	retvec.z = inhackbank;
+	return retvec;
+};
+
+// FOUR WEAPONS ON THE SAME KEYBOARD KEY!!!
+vector (entity targ, float wep1, float wep2, float wep3, float wep4, float wep1initems, float wep2initems, float wep3initems, float wep4initems) WeaponSlotPickOneOfFour = {
+	local vector retvec;
+	local float fl, gotgun, gotgun1, gotgun2, gotgun3, gotgun4, am;
+	local float inhackbank;
+	// Make sure it's all zeroed out
+	inhackbank = fl = gotgun1 = gotgun2 = gotgun3 = gotgun4 = am = FALSE;
+	if (wep1) gotgun1 = InAnyItems(wep1initems, targ, wep1);
+	if (wep2) gotgun2 = InAnyItems(wep2initems, targ, wep2);
+	if (wep3) gotgun3 = InAnyItems(wep3initems, targ, wep3);
+	if (wep4) gotgun4 = InAnyItems(wep4initems, targ, wep3);
+	retvec = VEC_ORIGIN;
+
+	if (targ.weapon == wep1) {
+		if (gotgun4) {
+			fl = wep4;
+			gotgun = TRUE;
+		} else {
+			fl = wep3;
+			//gotgun = InItems2(targ, fl);
+			gotgun = gotgun3;
+		}
+	} else {
+		if (targ.weapon == wep4) {
+			if (gotgun3) {
+				fl = wep3;
+				gotgun = TRUE;
+			} else {
+				fl = wep2;
+				gotgun = gotgun2;
+			}
+		} else {
+			if (targ.weapon == wep3) {
+				if (gotgun2) {
+					fl = wep2;
+					gotgun = TRUE;
+				} else {
+					fl = wep1;
+					//gotgun = InItems(targ, fl);
+					gotgun = gotgun1;
+				}
+			}  else {
+				if (targ.weapon == wep2) {
+					if (gotgun1) {
+						fl = wep1;
+						gotgun = TRUE;
+					} else {
+						fl = wep3;
+						//gotgun = InItems(targ, fl);
+						gotgun = gotgun3;
+					}
+				} else {
+					if (gotgun1) {
+						fl = wep1;
+						gotgun = TRUE;
+					} else {
+						if (gotgun4) {
+							fl = wep4;
+							gotgun = TRUE;
+						} else {
+							if (gotgun3) {
+								fl = wep3;
+								gotgun = TRUE;
+							} else {
+								if (gotgun2) {
+									fl = wep2;
+									gotgun = TRUE;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if (fl == wep1) {
+		if (wep1initems == IN_ITEMS1_HACKBANK || wep1initems == IN_ITEMS2_HACKBANK || wep1initems == IN_MODITEMS_HACKBANK || wep1initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
+	}
+	if (fl == wep2) {
+		if (wep2initems == IN_ITEMS1_HACKBANK || wep2initems == IN_ITEMS2_HACKBANK || wep2initems == IN_MODITEMS_HACKBANK || wep2initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
+	}
+	if (fl == wep3) {
+		if (wep3initems == IN_ITEMS1_HACKBANK || wep3initems == IN_ITEMS2_HACKBANK || wep3initems == IN_MODITEMS_HACKBANK || wep3initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
+	}
+	if (fl == wep4) {
+		if (wep4initems == IN_ITEMS1_HACKBANK || wep4initems == IN_ITEMS2_HACKBANK || wep4initems == IN_MODITEMS_HACKBANK || wep4initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
+	}
+
+	retvec.x = fl;
+	retvec.y = gotgun;
+	retvec.z = inhackbank;
+	return retvec;
+};
+
 /*======================================================================
  W_ChangeWeapon
  Check if got weapon and ammo and switch to relevant weapon
 ======================================================================*/
 void(entity targ) W_ChangeWeapon = {
-	local float it, it2, am, fl;
+	// local float it, it2, am, fl;
+	local float am, fl;
 	local float gotgun;
-	local float gotprox;
-	local float gotgren;
-	local float gotmultgren;
+	// local float gotprox;
+	// local float gotgren;
+	// local float gotmultgren;
+	local float inhackbank;
+	local vector checkvec;
 	
 	if (intermission_running > 0) return;	// intermission or finale
 	if (cinematic_running > 0) return;		// Remote camera active
-	it = targ.items;
-	it2 = targ.items2;
+	// it = targ.items;
+	// it2 = targ.items2;
 	am = FALSE;
-	
-	gotprox = InItems2(targ, IT2_PROXIMITY_GUN);
-	gotgren = InItems(targ, IT_GRENADE_LAUNCHER);
-	gotmultgren = InItems(targ, IT_MULTI_GRENADE);
+	checkvec = VEC_ORIGIN;
+	inhackbank = FALSE; // Assume we aren't looking into the hack bank of 2nd set of 24 weapons
+	// gotprox = InItems2(targ, IT2_PROXIMITY_GUN);
+	// gotgren = InItems(targ, IT_GRENADE_LAUNCHER);
+	// gotmultgren = InItems(targ, IT_MULTI_GRENADE);
 	gotgun = FALSE;
 	if (targ.impulse == 1) {
-		if ((targ.items2 & IT2_GRAPPLE) && (targ.weapon == IT_AXE)) {
-			fl = IT2_GRAPPLE;
-			gotgun = InItems2(targ, fl);
-		} else {
-			fl = IT_AXE;
-			gotgun = InItems(targ, IT_AXE);
+		checkvec = WeaponSlotPickOneOfThree(targ, IT_AXE, IT2_GRAPPLE, IT_MACE, IN_ITEMS1, IN_ITEMS2, IN_MODITEMS_HACKBANK);
+		fl = checkvec_x;
+		gotgun = checkvec_y;
+		inhackbank = checkvec_z;
+		if (fl == IT_AXE) {
 			if (InModItems(targ, IT_UPGRADE_AXE)) gotgun = TRUE;
 			if (self.perms & IT_CHAINSAW) gotgun = TRUE;
 		}
-
-		if ( !(targ.items & IT_AXE)) {
-			fl = IT2_GRAPPLE;
-			gotgun = InItems2(targ, fl);
+		if (fl == IT_MACE) {
+			if (targ.ammo_bloodcrystals < 1) am = TRUE; // no ammo
 		}
+
+		// if (fl == IT_NOWEAPON) {
+			// if (0 < 1) am = TRUE; // no ammo
+		// }
+
+		// if ((targ.items2 & IT2_GRAPPLE) && (targ.weapon == IT_AXE)) {
+			// fl = IT2_GRAPPLE;
+			// gotgun = InItems2(targ, fl);
+		// } else {
+			// fl = IT_AXE;
+			// gotgun = InItems(targ, IT_AXE);
+			// if (InModItems(targ, IT_UPGRADE_AXE)) gotgun = TRUE;
+			// if (self.perms & IT_CHAINSAW) gotgun = TRUE;
+		// }
+
+		// if ( !(targ.items & IT_AXE)) {
+			// fl = IT2_GRAPPLE;
+			// gotgun = InItems2(targ, fl);
+		// }
 	}
 	else if (targ.impulse == 2) {
-		fl = IT_SHOTGUN;
-		if (targ.ammo_shells < 1) am = TRUE;
-		gotgun = InItems(targ, IT_SHOTGUN);
+		checkvec = WeaponSlotPickOneOfThree(targ, IT_SHOTGUN, IT_ICE, 0, IN_ITEMS1, IN_MODITEMS_HACKBANK, 0);
+		fl = checkvec_x;
+		gotgun = checkvec_y;
+		inhackbank = checkvec_z;
+		if (fl == IT_SHOTGUN) {
+			if (targ.ammo_shells < 1) am = TRUE; // no ammo
+		}
+		if (fl == IT_ICE) {
+			if (targ.ammo_elemental < 1) am = TRUE; // no ammo
+		}
+		// if (fl == IT_NOWEAPON) {
+			// if (0 < 1) am = TRUE; // no ammo
+		// }
+
+
+		// if (targ.weapon == IT_SHOTGUN || (InItems(targ,IT_ICE) && targ.weapon != IT_ICE)) {
+			// fl = IT_ICE;
+			// if (targ.ammo_elemental < 1) am = TRUE;
+			// gotgun = InItems(targ, fl);
+		// } else {
+			// fl = IT_SHOTGUN;
+			// if (targ.ammo_shells < 1) am = TRUE;
+			// gotgun = InItems(targ, fl);
+		// }
+
+		// fl = IT_SHOTGUN;
+		// if (targ.ammo_shells < 1) am = TRUE;
+		// gotgun = InItems(targ, IT_SHOTGUN);
 	}
 	else if (targ.impulse == 3) {
-		fl = IT_SUPER_SHOTGUN;
-		if (targ.ammo_shells < 2) am = TRUE;
-		gotgun = InItems(targ, IT_SUPER_SHOTGUN);
-		if (InModItems(targ, IT_UPGRADE_SSG)) gotgun = TRUE;
+		checkvec = WeaponSlotPickOneOfThree(targ, IT_SUPER_SHOTGUN, IT_SCIMITAR, 0, IN_ITEMS1, IN_MODITEMS, 0);
+		fl = checkvec_x;
+		gotgun = checkvec_y;
+		inhackbank = checkvec_z;
+		if (fl == IT_SUPER_SHOTGUN) {
+			if (targ.ammo_shells < 1) am = TRUE; // no ammo
+		}
+		if (fl == IT_SCIMITAR) {
+			if (targ.ammo_elemental < 1) am = TRUE; // no ammo
+		}
+
+		// if (fl == IT_NOWEAPON) {
+			// if (0 < 1) am = TRUE; // no ammo
+		// }
+
+		// fl = IT_SUPER_SHOTGUN;
+		// if (targ.ammo_shells < 2) am = TRUE;
+		// gotgun = InItems(targ, IT_SUPER_SHOTGUN);
+		// if (InModItems(targ, IT_UPGRADE_SSG)) gotgun = TRUE;
 	}		
 	else if (targ.impulse == 4) {
-		if (targ.weapon == IT_NAILGUN || (InItems(targ,IT_LAVA_NAILGUN) && targ.weapon != IT_LAVA_NAILGUN)) {
-			fl = IT_LAVA_NAILGUN;
-			if (targ.ammo_lava_nails < 1) am = TRUE;
-			gotgun = InItems(targ, fl);
-		} else {
-			fl = IT_NAILGUN;
-			if (targ.ammo_nails < 1) am = TRUE;
-			gotgun = InItems(targ, fl);
+		checkvec = WeaponSlotPickOneOfThree(targ, IT_NAILGUN, IT_LAVA_NAILGUN, IT_RAPIER, IN_ITEMS1, IN_ITEMS1, IN_MODITEMS);
+		fl = checkvec_x;
+		gotgun = checkvec_y;
+		inhackbank = checkvec_z;
+		if (fl == IT_NAILGUN) {
+			if (targ.ammo_nails < 1) am = TRUE; // no ammo
 		}
+		if (fl == IT_LAVA_NAILGUN) {
+			if (targ.ammo_lava_nails < 1) am = TRUE; // no ammo
+		}
+		if (fl == IT_RAPIER) {
+			am = FALSE; // not using ammo right now
+			// if (targ.ammo_ SOMETHING? < 1) am = TRUE; // no ammo
+		}
+
+
+		// if (targ.weapon == IT_NAILGUN || (InItems(targ,IT_LAVA_NAILGUN) && targ.weapon != IT_LAVA_NAILGUN)) {
+			// fl = IT_LAVA_NAILGUN;
+			// if (targ.ammo_lava_nails < 1) am = TRUE;
+			// gotgun = InItems(targ, fl);
+		// } else {
+			// fl = IT_NAILGUN;
+			// if (targ.ammo_nails < 1) am = TRUE;
+			// gotgun = InItems(targ, fl);
+		// }
 		
 		/*
 		if ((targ.items & IT_LAVA_NAILGUN) &&(targ.weapon == IT_NAILGUN) || (targ.ammo_nails < 1)) {
@@ -1653,15 +2004,29 @@ void(entity targ) W_ChangeWeapon = {
 		}*/
 	}
 	else if (targ.impulse == 5) {
-		if (targ.weapon == IT_SUPER_NAILGUN || (InItems(targ,IT_LAVA_SUPER_NAILGUN) && targ.weapon != IT_LAVA_SUPER_NAILGUN)) {
-			fl = IT_LAVA_SUPER_NAILGUN;
-			if (targ.ammo_lava_nails < 2) am = TRUE;
-			gotgun = InItems(targ, fl);
-		} else {
-			fl = IT_SUPER_NAILGUN;
-			if (targ.ammo_nails < 2) am = TRUE;
-			gotgun = InItems(targ, fl);
+		checkvec = WeaponSlotPickOneOfThree(targ, IT_SUPER_NAILGUN, IT_LAVA_SUPER_NAILGUN, IT_VOID_STAFF, IN_ITEMS1, IN_ITEMS1, IN_MODITEMS_HACKBANK);
+		fl = checkvec_x;
+		gotgun = checkvec_y;
+		inhackbank = checkvec_z;
+		if (fl == IT_SUPER_NAILGUN) {
+			if (targ.ammo_nails < 1) am = TRUE; // no ammo
 		}
+		if (fl == IT_LAVA_SUPER_NAILGUN) {
+			if (targ.ammo_lava_nails < 1) am = TRUE; // no ammo
+		}
+		if (fl == IT_VOID_STAFF) {
+			if (targ.ammo_voidshards < 1) am = TRUE; // no ammo
+		}
+
+		// if (targ.weapon == IT_SUPER_NAILGUN || (InItems(targ,IT_LAVA_SUPER_NAILGUN) && targ.weapon != IT_LAVA_SUPER_NAILGUN)) {
+			// fl = IT_LAVA_SUPER_NAILGUN;
+			// if (targ.ammo_lava_nails < 2) am = TRUE;
+			// gotgun = InItems(targ, fl);
+		// } else {
+			// fl = IT_SUPER_NAILGUN;
+			// if (targ.ammo_nails < 2) am = TRUE;
+			// gotgun = InItems(targ, fl);
+		// }
 
 		/*
 		if ((targ.items & IT_LAVA_SUPER_NAILGUN) && (targ.weapon == IT_SUPER_NAILGUN) || (targ.ammo_nails < 2)) {
@@ -1676,89 +2041,169 @@ void(entity targ) W_ChangeWeapon = {
 		*/
 	}
 	else if (targ.impulse == 6) {
-		if (targ.weapon == IT_GRENADE_LAUNCHER) {
-			if (gotmultgren) {
-				fl = IT_MULTI_GRENADE;
-				gotgun = TRUE;
-			} else {
-				fl = IT2_PROXIMITY_GUN;
-				gotgun = InItems2(targ, fl);
+		// if (targ.selfweaponismoditems && targ.weapon == IT_GUNGNIR) {
+			checkvec = WeaponSlotPickOneOfThree(targ, IT_GRENADE_LAUNCHER, IT2_PROXIMITY_GUN, IT_MULTI_GRENADE, IN_ITEMS1, IN_ITEMS2, IN_ITEMS1);
+			fl = checkvec_x;
+			gotgun = checkvec_y;
+			inhackbank = checkvec_z;
+			if (fl == IT_GRENADE_LAUNCHER) {
+				if (targ.ammo_rockets < 1) am = TRUE; // no ammo
 			}
-		} else {
-			if (targ.weapon == IT_MULTI_GRENADE) {
-				if (gotprox) {
-					fl = IT2_PROXIMITY_GUN;
+			if (fl == IT2_PROXIMITY_GUN) {
+				if (targ.ammo_rockets < 1) am = TRUE; // no ammo
+			}
+			if (fl == IT_MULTI_GRENADE) {
+				if (targ.ammo_multi_rockets < 1) am = TRUE; // no ammo
+			}
+			if (fl == IT_GUNGNIR) {
+				if (targ.ammo_voidshards < 1) am = TRUE; // no ammo
+			}
+
+			// checkvec = WeaponSlotPickOneOfThree(targ, IT_GRENADE_LAUNCHER, IT2_PROXIMITY_GUN, IT_MULTI_GRENADE, IN_ITEMS1, IN_ITEMS2, IN_ITEMS1);
+			// fl = checkvec_x;
+			// gotgun = checkvec_y;
+			// inhackbank = checkvec_z;
+			// if (fl == IT_GRENADE_LAUNCHER) {
+				// if (targ.ammo_rockets < 1) am = TRUE; // no ammo
+			// }
+			// if (fl == IT2_PROXIMITY_GUN) {
+				// if (targ.ammo_rockets < 1) am = TRUE; // no ammo
+			// }
+			// if (fl == IT_MULTI_GRENADE) {
+				// if (targ.ammo_multi_rockets < 1) am = TRUE; // no ammo
+			// }
+
+			/*
+			if (targ.weapon == IT_GRENADE_LAUNCHER) {
+				if (gotmultgren) {
+					fl = IT_MULTI_GRENADE;
 					gotgun = TRUE;
 				} else {
-					fl = IT_GRENADE_LAUNCHER;
-					gotgun = InItems(targ, fl);
+					fl = IT2_PROXIMITY_GUN;
+					gotgun = InItems2(targ, fl);
 				}
-			}  else {
-				if (targ.weapon == IT2_PROXIMITY_GUN) {
-					if (gotgren) {
-						fl = IT_GRENADE_LAUNCHER;
+			} else {
+				if (targ.weapon == IT_MULTI_GRENADE) {
+					if (gotprox) {
+						fl = IT2_PROXIMITY_GUN;
 						gotgun = TRUE;
 					} else {
-						fl = IT_MULTI_GRENADE;
+						fl = IT_GRENADE_LAUNCHER;
 						gotgun = InItems(targ, fl);
 					}
-				} else {
-					if (gotgren) {
-						fl = IT_GRENADE_LAUNCHER;
-						gotgun = TRUE;
-					} else {
-						if (gotmultgren) {
-							fl = IT_MULTI_GRENADE;
+				}  else {
+					if (targ.weapon == IT2_PROXIMITY_GUN) {
+						if (gotgren) {
+							fl = IT_GRENADE_LAUNCHER;
 							gotgun = TRUE;
 						} else {
-							if (gotprox) {
-								fl = IT2_PROXIMITY_GUN;
+							fl = IT_MULTI_GRENADE;
+							gotgun = InItems(targ, fl);
+						}
+					} else {
+						if (gotgren) {
+							fl = IT_GRENADE_LAUNCHER;
+							gotgun = TRUE;
+						} else {
+							if (gotmultgren) {
+								fl = IT_MULTI_GRENADE;
 								gotgun = TRUE;
+							} else {
+								if (gotprox) {
+									fl = IT2_PROXIMITY_GUN;
+									gotgun = TRUE;
+								}
 							}
 						}
 					}
 				}
 			}
-		}
-		if (fl == IT_MULTI_GRENADE) {
-			if (targ.ammo_multi_rockets < 1) am = TRUE;
-		} else {
-			if (targ.ammo_rockets < 1) am = TRUE;
-		}
+			if (fl == IT_MULTI_GRENADE) {
+				if (targ.ammo_multi_rockets < 1) am = TRUE;
+			} else {
+				if (targ.ammo_rockets < 1) am = TRUE;
+			}*/
+		// } else {
+			// fl = IT_GUNGNIR;
+			// inhackbank = TRUE;
+			// gotgun = InAnyItems(IN_MODITEMS_HACKBANK,targ,fl);
+		// }
 	}
 	else if (targ.impulse == 7) {
-		if ((targ.items & IT_MULTI_ROCKET) && (targ.weapon == IT_ROCKET_LAUNCHER) || (targ.ammo_rockets < 1)) {
-			fl = IT_MULTI_ROCKET;
-			if (targ.ammo_multi_rockets < 1) am = TRUE;
-			gotgun = InItems(targ, fl);
-		} else {
-			fl = IT_ROCKET_LAUNCHER;
-			if (targ.ammo_rockets < 1) am = TRUE;
-			gotgun = InItems(targ, fl);
+		checkvec = WeaponSlotPickOneOfThree(targ, IT_ROCKET_LAUNCHER, IT_MULTI_ROCKET, IT_SANGUINATORS, IN_ITEMS1, IN_ITEMS1, IN_MODITEMS);
+		fl = checkvec_x;
+		gotgun = checkvec_y;
+		inhackbank = checkvec_z;
+		if (fl == IT_ROCKET_LAUNCHER) {
+			if (targ.ammo_rockets < 1) am = TRUE; // no ammo
 		}
+		if (fl == IT_MULTI_ROCKET) {
+			if (targ.ammo_multi_rockets < 1) am = TRUE; // no ammo
+		}
+		if (fl == IT_SANGUINATORS) {
+			if (targ.ammo_bloodcrystals < 1) am = TRUE; // no ammo
+		}
+
+		// if ((targ.items & IT_MULTI_ROCKET) && (targ.weapon == IT_ROCKET_LAUNCHER) || (targ.ammo_rockets < 1)) {
+			// fl = IT_MULTI_ROCKET;
+			// if (targ.ammo_multi_rockets < 1) am = TRUE;
+			// gotgun = InItems(targ, fl);
+		// } else {
+			// fl = IT_ROCKET_LAUNCHER;
+			// if (targ.ammo_rockets < 1) am = TRUE;
+			// gotgun = InItems(targ, fl);
+		// }
 	}
 	else if (targ.impulse == 8) {
-		if ((targ.items & IT_PLASMA_GUN) && (targ.weapon == IT_LIGHTNING) || (targ.ammo_cells < 1)) {
-			fl = IT_PLASMA_GUN;
-			if (targ.ammo_plasma < 1) am = TRUE;
-			gotgun = InItems(targ, fl);
-		} else {
-			fl = IT_LIGHTNING;
-			if (targ.ammo_cells < 1) am = TRUE;
-			gotgun = InItems(targ, fl);
-			if (InModItems(targ, IT_UPGRADE_LG)) gotgun = TRUE;
+		checkvec = WeaponSlotPickOneOfThree(targ, IT_LIGHTNING, IT_PLASMA_GUN, IT_FLAK, IN_ITEMS1, IN_ITEMS1, IN_MODITEMS_HACKBANK);
+		fl = checkvec_x;
+		gotgun = checkvec_y;
+		inhackbank = checkvec_z;
+		if (fl == IT_LIGHTNING) {
+			if (targ.ammo_cells < 1) am = TRUE; // no ammo
 		}
+		if (fl == IT_PLASMA_GUN) {
+			if (targ.ammo_plasma < 1) am = TRUE; // no ammo
+		}
+		if (fl == IT_FLAK) {
+			if (targ.ammo_nails < 1) am = TRUE; // no ammo
+		}
+
+		// if ((targ.items & IT_PLASMA_GUN) && (targ.weapon == IT_LIGHTNING) || (targ.ammo_cells < 1)) {
+			// fl = IT_PLASMA_GUN;
+			// if (targ.ammo_plasma < 1) am = TRUE;
+			// gotgun = InItems(targ, fl);
+		// } else {
+			// fl = IT_LIGHTNING;
+			// if (targ.ammo_cells < 1) am = TRUE;
+			// gotgun = InItems(targ, fl);
+			// if (InModItems(targ, IT_UPGRADE_LG)) gotgun = TRUE;
+		// }
 	}
 	else if (targ.impulse == 9) {
-		if ((targ.items & IT_EXTRA_WEAPON) && (targ.weapon == IT2_LASER_CANNON) || (targ.ammo_cells < 1)) {
-			fl = IT_EXTRA_WEAPON;
-			if (targ.ammo_bolts < 1) am = TRUE;
-			gotgun = InItems(targ, fl);
-		} else {
-			fl = IT2_LASER_CANNON;
-			if (targ.ammo_cells < 1) am = TRUE;
-			gotgun = InItems2(targ, fl);
+		checkvec = WeaponSlotPickOneOfThree(targ, IT_EXTRA_WEAPON, IT2_LASER_CANNON, IT2_CHAINLIGHTNING, IN_ITEMS1, IN_ITEMS2, IN_ITEMS2);
+		fl = checkvec_x;
+		gotgun = checkvec_y;
+		inhackbank = checkvec_z;
+		if (fl == IT_EXTRA_WEAPON) {
+			if (targ.ammo_bolts < 1) am = TRUE; // no ammo
 		}
+		if (fl == IT2_LASER_CANNON) {
+			if (targ.ammo_cells < 1) am = TRUE; // no ammo
+		}
+		if (fl == IT2_CHAINLIGHTNING) {
+			if (targ.ammo_cells < 1) am = TRUE; // no ammo
+		}
+
+		// if ((targ.items & IT_EXTRA_WEAPON) && (targ.weapon == IT2_LASER_CANNON) || (targ.ammo_cells < 1)) {
+			// fl = IT_EXTRA_WEAPON;
+			// if (targ.ammo_bolts < 1) am = TRUE;
+			// gotgun = InItems(targ, fl);
+		// } else {
+			// fl = IT2_LASER_CANNON;
+			// if (targ.ammo_cells < 1) am = TRUE;
+			// gotgun = InItems2(targ, fl);
+		// }
 	}
 	else if (targ.impulse == 60) {
 		fl = IT_LAVA_NAILGUN;
@@ -1795,23 +2240,29 @@ void(entity targ) W_ChangeWeapon = {
 		gotgun = InItems2(targ, fl);
 	}
 	else if (targ.impulse == 177) {
-		if ((targ.items & IT_EXTRA_WEAPON) && (targ.weapon == IT2_LASER_CANNON) || (targ.ammo_cells < 1)) {
-			fl = IT_EXTRA_WEAPON;
-			if (targ.ammo_bolts < 1) am = TRUE;
-			gotgun = InItems(targ, fl);
-		} else {
-			fl = IT2_LASER_CANNON;
-			if (targ.ammo_cells < 1) am = TRUE;
-			gotgun = InItems2(targ, fl);
+		checkvec = WeaponSlotPickOneOfThree(targ, IT2_MJOLNIR, IT2_CROSS, IT_GUNGNIR, IN_ITEMS2, IN_ITEMS2, IN_MODITEMS_HACKBANK);
+		fl = checkvec_x;
+		gotgun = checkvec_y;
+		inhackbank = checkvec_z;
+		if (fl == IT_GUNGNIR) {
+			if (targ.ammo_voidshards < 1) am = TRUE; // no ammo
 		}
 
-		if ((targ.items2 & IT2_CROSS) && ((targ.weapon == IT2_MJOLNIR) || !InItems(targ,IT2_MJOLNIR))) {
-			fl = IT2_CROSS;
-			gotgun = InItems2(targ, fl);
-		} else {
-			fl = IT2_MJOLNIR;
-			gotgun = InItems2(targ, fl);
-		}
+		// if ((targ.items & IT2_CROSS) && (targ.weapon == IT2_MJOLNIR)) {
+			// fl = IT2_CROSS;
+			// gotgun = InItems2(targ, fl);
+		// } else {
+			// fl = IT2_MJOLNIR;
+			// gotgun = InItems2(targ, fl);
+		// }
+
+		// if ((targ.items2 & IT2_CROSS) && ((targ.weapon == IT2_MJOLNIR) || !InItems(targ,IT2_MJOLNIR))) {
+			// fl = IT2_CROSS;
+			// gotgun = InItems2(targ, fl);
+		// } else {
+			// fl = IT2_MJOLNIR;
+			// gotgun = InItems2(targ, fl);
+		// }
 	}
 	else if (targ.impulse == 178) {
 		fl = IT_EXTRA_WEAPON;
@@ -1828,6 +2279,43 @@ void(entity targ) W_ChangeWeapon = {
 	else if (targ.impulse == 181) {
 		fl = IT2_CHAINLIGHTNING;
 		gotgun = InItems2(targ, fl);
+	}
+	else if (targ.impulse == 182) {
+		fl = IT_ICE;
+		inhackbank = TRUE; // Ok we are hacking now, switch to 2nd set of 24 weapons in bank 2
+		gotgun = InModItems(targ, fl);
+	}
+	else if (targ.impulse == 183) {
+		fl = IT_MACE;
+		inhackbank = TRUE; // Ok we are hacking now, switch to 2nd set of 24 weapons in bank 2
+		gotgun = InModItems(targ, fl);
+	}
+	else if (targ.impulse == 184) {
+		fl = IT_VOID_STAFF;
+		inhackbank = TRUE; // Ok we are hacking now, switch to 2nd set of 24 weapons in bank 2
+		gotgun = InModItems(targ, fl);
+	}
+	else if (targ.impulse == 185) {
+		fl = IT_FLAK;
+		inhackbank = TRUE; // Ok we are hacking now, switch to 2nd set of 24 weapons in bank 2
+		gotgun = InModItems(targ, fl);
+	}
+	else if (targ.impulse == 186) {
+		fl = IT_GUNGNIR;
+		inhackbank = TRUE; // Ok we are hacking now, switch to 2nd set of 24 weapons in bank 2
+		gotgun = InModItems(targ, fl);
+	}
+	else if (targ.impulse == 187) {
+		fl = IT_SANGUINATORS;
+		gotgun = InModItems(targ, fl);
+	}
+	else if (targ.impulse == 188) {
+		fl = IT_SCIMITAR;
+		gotgun = InModItems(targ, fl);
+	}
+	else if (targ.impulse == 189) {
+		fl = IT_RAPIER;
+		gotgun = InModItems(targ, fl);
 	}
 	targ.impulse = 0;		// Clear impulse
 	
@@ -1847,69 +2335,103 @@ void(entity targ) W_ChangeWeapon = {
 		return ;
 	}
 
-   if ( (targ.weapon != fl) ) {
-      if ( ((targ.weapon == IT_LAVA_NAILGUN) || (targ.weapon == IT_LAVA_SUPER_NAILGUN)) ) {
-         if ( ((fl == IT_NAILGUN) || (fl == IT_SUPER_NAILGUN)) ) {
-            sprint (targ,"Normal Nails\n");
-         }
-      } else {
-         if ( (targ.weapon == IT_MULTI_GRENADE) ) {
-            if ( (fl == IT_GRENADE_LAUNCHER) ) {
-               sprint (targ,"Normal Grenades\n");
-            }
-         } else {
-            if ( (targ.weapon == IT_MULTI_ROCKET) ) {
-               if ( (fl == IT_ROCKET_LAUNCHER) ) {
-                  sprint (targ,"Normal Rockets\n");
-               }
-            } else {
-               if ( (targ.weapon == IT_PLASMA_GUN) ) {
-                  if ( (fl == IT_LIGHTNING) ) {
-                     if (targ.moditems & IT_UPGRADE_LG) {
-                        sprint (targ,"Plasma Gun\n");
-                     } else {
-                        sprint (targ,"Lightning Gun\n");
-                     }
-                  }
-               } else {
-                  if ( ((fl == IT_LAVA_NAILGUN) || (fl == IT_LAVA_SUPER_NAILGUN)) ) {
-                     sprint (targ,"Lava Nails!\n");
-                  } else {
-                     if ( (fl == IT_MULTI_GRENADE) ) {
-                        sprint (targ,"Multi-Grenades!\n");
-                     } else {
-                        if ( (fl == IT_MULTI_ROCKET) ) {
-                           sprint (targ,"Multi-Rockets!\n");
-                        } else {
-                           if ( (fl == IT_PLASMA_GUN) ) {
-                              sprint (targ,"Plasma Gun!\n");
-                           } else {
-                              if ( (fl == IT2_PROXIMITY_GUN) ) {
-                                 sprint (targ,"Proximity Grenades!\n");
-                              } else {
-                                 if ( (fl == IT2_LASER_CANNON) ) {
-                                    sprint (targ,"Laser Cannon!\n");
-                                 }  else {
-                                 	if ( (fl == IT2_CROSS) ) {
-                                   		sprint (targ,"Magic Wand!\n");
-                                 	}  else {
-                                    		if ( (fl == IT2_MJOLNIR) ) {
-                                       			sprint (targ,"Mjolnir's Hammer!\n");
-                                    		}
-									}
-                                 }
-                              }
-                           }
-                        }
-                     }
-                  }
-               }
-            }
-         }
-      }
-   }
-   targ.weapon = fl;
-   W_SetCurrentAmmo (targ);
+	if (inhackbank) {
+		targ.selfweaponismoditems = TRUE;
+		//if ( (targ.weapon != fl) ) {
+			if (fl == IT_ICE) {
+				sprint (targ,"Elemental Tome!\n");
+			} else {
+				if (fl== IT_MACE) {
+					sprint (targ,"Vampiric Mace!\n");
+				} else {
+					if (fl== IT_VOID_STAFF) {
+						sprint (targ,"Void Staff!\n");
+					} else {
+						if (fl == IT_FLAK) {
+							sprint (targ,"Flak Cannon!\n");
+						} else {
+							if (fl == IT_GUNGNIR) sprint (targ,"Gungnir!\n");
+						}
+					}
+				}
+			}
+		//}
+	} else {
+		targ.selfweaponismoditems = FALSE;
+		if ( (targ.weapon != fl) ) {
+		  if ( ((targ.weapon == IT_LAVA_NAILGUN) || (targ.weapon == IT_LAVA_SUPER_NAILGUN)) ) {
+			 if ( ((fl == IT_NAILGUN) || (fl == IT_SUPER_NAILGUN)) ) {
+				sprint (targ,"Normal Nails\n");
+			 }
+		  } else {
+			 if ( (targ.weapon == IT_MULTI_GRENADE) ) {
+				if ( (fl == IT_GRENADE_LAUNCHER) ) {
+				   sprint (targ,"Normal Grenades\n");
+				}
+			 } else {
+				if ( (targ.weapon == IT_MULTI_ROCKET) ) {
+				   if ( (fl == IT_ROCKET_LAUNCHER) ) {
+					  sprint (targ,"Normal Rockets\n");
+				   }
+				} else {
+				   if ( (targ.weapon == IT_PLASMA_GUN) ) {
+					  if ( (fl == IT_LIGHTNING) ) {
+						 if (targ.moditems & IT_UPGRADE_LG) {
+							sprint (targ,"Plasma Gun\n");
+						 } else {
+							sprint (targ,"Lightning Gun\n");
+						 }
+					  }
+				   } else {
+					  if ( ((fl == IT_LAVA_NAILGUN) || (fl == IT_LAVA_SUPER_NAILGUN)) ) {
+						 sprint (targ,"Lava Nails!\n");
+					  } else {
+						 if ( (fl == IT_MULTI_GRENADE) ) {
+							sprint (targ,"Multi-Grenades!\n");
+						 } else {
+							if ( (fl == IT_MULTI_ROCKET) ) {
+							   sprint (targ,"Multi-Rockets!\n");
+							} else {
+							   if ( (fl == IT_PLASMA_GUN) ) {
+								  sprint (targ,"Plasma Gun!\n");
+							   } else {
+								  if ( (fl == IT2_PROXIMITY_GUN) ) {
+									 sprint (targ,"Proximity Grenades!\n");
+								  } else {
+									 if ( (fl == IT2_LASER_CANNON) ) {
+										sprint (targ,"Laser Cannon!\n");
+									 }  else {
+										if ( (fl == IT2_CROSS) ) {
+											sprint (targ,"Magic Wand!\n");
+										}  else {
+											if ( (fl == IT2_MJOLNIR) ) {
+												sprint (targ,"Mjolnir's Hammer!\n");
+											} else {
+												if ( (fl == IT_SANGUINATORS) ) {
+													sprint (targ,"Sanguinators!\n");
+												} else {
+													if ( (fl == IT_SCIMITAR) ) {
+														sprint (targ,"Fire Scimitar!\n");
+													} else {
+														if ( (fl == IT_RAPIER) ) sprint (targ,"Ghost Rapier!\n");
+													}
+												}
+											}
+										}
+									 }
+								  }
+							   }
+							}
+						 }
+					  }
+				   }
+				}
+			 }
+		  }
+	   }
+	}
+	targ.weapon = fl;
+	W_SetCurrentAmmo (targ);
 };
 
 /*======================================================================
@@ -1917,8 +2439,9 @@ CycleWeaponCommand
 ======================================================================*/
 void() CycleWeaponCommand =
 {
-	local	float	am;
+	local	float	am, inhackbank;
 	
+	if (self.selfweaponismoditems) inhackbank = TRUE;
 	if (intermission_running > 0) return;		// intermission or finale
 	if (cinematic_running > 0) return;		// Remote camera active
 	self.impulse = 0;			// reset impulse

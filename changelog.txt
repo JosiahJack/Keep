@@ -1,3 +1,5 @@
+version 0.75:
+	Added Arms of Asgard weapons
 version 0.65:
 	Added extras_r5
 	Finished adding drake enemies

@@ -1,0 +1,84 @@
+Title     : Custom Entities
+Filename  : ce50.zip
+Version   : 5.0
+Date      : 3/17/97
+Author    : General WarT' (aka Carl Glave)
+Email     : general-wart@geocities.com
+Build time: oy, way too long.
+Kudos to  : The Hipnotic Guys for not only making a kickin' fun
+            add-on, "Scourge of Armagon", but also for making it such
+            a feature and surprise rich one too.
+
+OK, here it is. Gravity changing for everything that's affected by gravity.
+I'll try to keep it brief and clear cut. The info is divided into sections
+relating to making the different things be affected properly by gravity
+changing. Here we go.
+
+
+*********************
+Player Weapons:
+*********************
+	This was the main reason that I did this enhancement. I didn't like
+flying around a low grav room while my grenades just went blaa down to the
+ground. You will have to add a bit of code to the granade launcher and any
+other gravity affected weapons that you have in your patch. Here is the code
+segment that you will have to put in for the grenade launcher. It goes in
+the W_FireGrenade function and replaces the line
+missile.nextthink = time + 2.5;
+One other thing to note is that I have the duration of the grenade change
+according the its gravity level. This way the granades act like usual in
+normal gravity, but can bounce all over the place in low gravity.
+
+// ### Added for Custents all affecting gravity
+//	missile.nextthink = time + 2.5; // This is the line to replace
+	missile.gravity = self.gravity;
+	missile.nextthink = time + 2 + (1/missile.gravity);
+	if(missile.nextthink < (time+1))
+		missile.nextthink = time + 1;
+	if(missile.nextthink > (time+15))
+		missile.nextthink = time + 15;
+// ###
+
+*********************
+Monsters:
+*********************
+	The other thing that changing gravity can now affect is monsters.
+This is a single piece of code that goes at the very end of the monster's
+spawn function. Just make sure that you paste this into the function for
+all the monsters, otherwise setting their initial gravity in the map won't
+work correctly. This allows them to start at a certain initial gravity so
+that you place them into low gravity areas and have them fall at the
+correct speeds.
+
+// ### Added for Custents all affecting gravity
+	if(!self.gravity)
+		self.gravity = 1;
+	else
+	      self.gravity = ((self.gravity - 1) / 100);
+// ###
+
+One other thing that you have to take care of for the monsters is to add
+supporting code to the missiles that are affected by gravity of all
+monster that have them. The only monster like this in original Quake was
+the Ogre, so here's a sample of what you would add to their missile
+launching function, which is the OgreFireGrenade function for the Ogre.
+
+// ### Added for Custents all affecting gravity
+//	missile.nextthink = time + 2.5;
+	missile.gravity = self.gravity;
+	missile.nextthink = time + 2 + (1/missile.gravity);
+	if(missile.nextthink < (time+1))
+		missile.nextthink = time + 1;
+	if(missile.nextthink > (time+15))
+		missile.nextthink = time + 15;
+// ###
+
+
+
+Simply adjust these bits of simple code to fit each of the different
+gravity affected weapons and other items that are in your patch. All of
+these changes have been inplimented into the code used to compile the
+released Custents progs.dat file, so to see how it works, try out a
+gravity changing place with that dat file. Don't try out one of Hipnotic's
+levels though, because they have some items and monsters that are not a
+part of Custents.

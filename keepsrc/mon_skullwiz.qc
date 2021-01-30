@@ -848,6 +848,9 @@ void() monster_skullwiz =
 	monster_start();
 };
 
+// Guardian variant redirect for drake
+void() monster_skull_wizard_lord = { self.classname = "monster_skullwiz"; self.spawnflags = self.spawnflags | MON_SKULLWIZ_GUARDIAN; monster_skullwiz(); };
+
 /*======================================================================
 //QUAKED info_skullwiz_destination (0.6 0 0.8) (-16 -16 -24) (16 16 40) x
 Teleport destination for skull wizard ONLY

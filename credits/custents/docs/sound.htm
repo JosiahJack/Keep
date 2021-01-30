@@ -1,0 +1,91 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="General WarT'">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.01 [en] (Win95; I) [Netscape]">
+   <TITLE>Custents Entity Defs - Sound</TITLE>
+</HEAD>
+<BODY TEXT="#CC33CC" BGCOLOR="#000000" LINK="#00CC00" VLINK="#009900" ALINK="#00CC00">
+
+<CENTER><IMG SRC="custtitle.jpg" HEIGHT=60 WIDTH=330><FONT COLOR="#009900"><FONT SIZE=+3>6.0</FONT></FONT></CENTER>
+
+<CENTER><FONT SIZE=+2>Entities Definitions - Sound Entities</FONT>&nbsp;
+<HR WIDTH="100%"></CENTER>
+Last Updated : 2/5/98
+<BR>&copy;1998 Carl Glave
+<BR><A HREF="index.htm">Back to Main Index</A>
+<BR>
+<HR WIDTH="100%">
+
+<P>Sound Entities Index
+<UL>
+<LI>
+<A HREF="#ambient_general">ambient_general</A></LI>
+
+<LI>
+<A HREF="#ambient_bgm">ambient_bgm</A></LI>
+</UL>
+<A NAME="ambient_general"></A>
+<HR WIDTH="100%">
+<BR><B>ambient_general (0 .5 .8) (-8 -8 -8) (8 8 8)</B>
+<UL><B>"speed"</B> specifies the annotation of the ambient sound. -1 is
+for none, 1 is for normal, 2 is for idle, and 3 is for static. This defaults
+to 1.
+
+<P><B>"volume"</B> is the volume at which to play the ambient sound. Default
+is 1.
+
+<P><B>"noise"</B> is the file name of the wav file to play as an ambient
+sound</UL>
+<A NAME="ambient_bgm"></A>
+<HR WIDTH="100%">
+<BR><B>ambient_bgm (0 .5 .8) (-8 -8 -8) (8 8 8) BGM_START_ON</B>
+<UL>This was first only intended for background music, but the addition
+of being able the specify the volume and annotation make it much more versitile
+and usefull.
+
+<P><B>BGM_START_ON</B> it starts the level playing and does not wait to
+be triggered. This is not needed if it does not have a target name, because
+it will start anyway.
+
+<P><B>"noise1"</B> is the file name for the intro. This is not required.
+
+<P><B>"button1"</B> is the length of the intro wav file. It should be exact
+to the hundredths place for a more seemless transition from the intro the
+the main loop. This is not needed unless there is an intro wav to play.
+
+<P><B>"noise2"</B> is the file name for the main loop wav file. This is
+a required thing for this to work.
+
+<P><B>"button2"</B> if the length of the main loop wav file. It should
+be exact to the hundreths place for a more seemless transition from loop
+to loop, or loop to entro. This is not required if the loop is going to
+be played only once and there is no extro wav to play.
+
+<P><B>"waitmax"</B> is the number of times that the main loop wav will
+be played before automatically stopping. It will loop infinitly if this
+is set to 0.
+
+<P><B>"noise3"</B> is the file name for the extro wav file. This is not
+required.
+
+<P><B>"button0"</B> is the length of the extro wav file. It is only needed
+if something will be traggered when playing stops. It is to be set to the
+amount of time that you want to delay the triggering after the start of
+the extro wav file. In other words, it can be longer of shorter than the
+actual wav to suit your needs.
+
+<P><B>"target"</B> is the entity to trigger when play has stopped. It will
+be be delayed button0 seconds after the extro wav is started. An extro
+wav file is not required to trigger an entity after play has stopped, and
+button0 can still be used to delay the triggering.
+
+<P><B>"speed"</B> specifies the annotation of the ambient sound. -1 is
+for none, 1 is for normal, 2 is for idle, and 3 is for static. This defaults
+to 1.
+
+<P><B>"volume"</B> is the volume at which to play the ambient sound. Default
+is 1.</UL>
+&nbsp;
+</BODY>
+</HTML>

@@ -1,0 +1,122 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="General WarT'">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.01 [en] (Win95; I) [Netscape]">
+   <TITLE>Custents Entity Defs - Misc</TITLE>
+</HEAD>
+<BODY TEXT="#CC33CC" BGCOLOR="#000000" LINK="#00CC00" VLINK="#009900" ALINK="#00CC00">
+
+<CENTER><IMG SRC="custtitle.jpg" HEIGHT=60 WIDTH=330><FONT COLOR="#009900"><FONT SIZE=+3>6.0</FONT></FONT></CENTER>
+
+<CENTER><FONT SIZE=+2>Entities Definitions - Misc.</FONT>&nbsp;
+<HR WIDTH="100%"></CENTER>
+Last Updated : 2/5/98
+<BR>&copy;1998 Carl Glave
+<BR><A HREF="index.htm">Back to Main Index</A>
+<BR>
+<HR WIDTH="100%">
+
+<P>Misc Entities Index
+<UL>
+<LI>
+<A HREF="#path_light">path_light</A></LI>
+
+<LI>
+<A HREF="#func_move_light">func_move_light</A></LI>
+
+<LI>
+<A HREF="#trigger_heal">trigger_heal</A></LI>
+</UL>
+<A NAME="path_light"></A>
+<HR WIDTH="100%">
+<BR><B>path_light (0 .5 .8) (-8 -8 -8) (8 8 8) LP_OFF LP_DIM LP_BRIGHT
+LP_FLASH LP_FIELD LP_SET_MODEL</B>
+<UL>These are used as the path entities for the func_move_light entity.
+They can also be used for moving or stationary models, as they do not need
+to be lighted.
+
+<P><B>LP_OFF</B> Turn off any lighting effects including the dot field.
+
+<P><B>LP_DIM</B> Set the ligh type to a dim light.
+
+<P><B>LP_BRIGHT</B> Set the light type to a bright light.
+
+<P><B>LP_FLASH</B> Set the light type to a flashing strobe light type of
+light that flashes every "delay" seconds.
+
+<P><B>LP_FIELD</B> Turn on the dot field. Can be used in conjunction with
+any of the lighting types.
+
+<P><B>LP_SET_MODEL</B> Sets the model to "model" when the entity gets here.
+
+<P><B>"model"</B> is the model that will be used when using the LP_SET_MODEL
+spawnflag. Default is "progs/s_null.spr".
+
+<P><B>"speed"</B> makes the train move on to the next corner at this rate.
+
+<P><B>"duration"</B> makes the train move on to the next corner and get
+there in this number of seconds. If this is not 0, this will be used over
+the speed variable.
+
+<P><B>"event"</B> is the target name of the entity to trigger when the
+train gets to it.
+
+<P><B>"message"</B> is the message to display when the event is triggered.</UL>
+<A NAME="func_move_light"></A>
+<HR WIDTH="100%">
+<BR><B>func_move_light (0 .5 .8) (-8 -8 -8) (8 8 8) LIGHT_START_OFF LIGHT_BRIGHT
+LIGHT_FLASH LIGHT_FIELD</B>
+<UL>This entity is a moving entity that can use any model and any lighting
+effect. It's movement is exactly like that of a func_train, so refer to
+that entity to see how to control it's movement. It uses the dim light
+effect by default, and the model "s_null.spr" by default, which is an enpty
+sprite so that that it has no appearance.
+
+<P><B>LIGHT_START_OFF</B> Make it start with no lighting effects.
+
+<P><B>LIGHT_BRIGHT</B> Make it start using a bright light effect.
+
+<P><B>LIGHT_FLASH</B> Make it start using a flashing light effect. It will
+flash every "delay" seconds.
+
+<P><B>LIGHT_FIELD</B> Makes it start with a dot field effect. This can
+be used in conjunction with any of the lighting effects.
+
+<P><B>"delay"</B> is the time in seconds between each flash when using
+the flashing light efect. Default is 0.2.
+
+<P><B>"model"</B> is the model that will be used by the entity. Default
+value is "progs/s_null.spr".
+
+<P><B>"noise"</B> allows you the specify a wav file for the stop sound.
+
+<P><B>"noise1"</B> allows you the specify a wav file for the moveing sound.
+
+<P><B>"count"</B> specifies the number of clones to make of itself along
+it's path. Works just the cloning on the trains.</UL>
+<A NAME="trigger_heal"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_heal (0 .5 .8) ? HEAL_START_ON HEAL_OBEY_MAX HEAL_PLAYER_ONLY
+HEAL_MONSTER_ONLY</B>
+<UL>This entity heals monster and/or players when they touch it. It can
+affect multiple entities at a time, and can be switched on and off when
+triggered.
+
+<P><B>HEAL_START_ON</B> Makes it start in the on state when it is going
+to be triggered. This is not needed if it is not going to be triggered.
+
+<P><B>HEAL_OBEY_MAX</B> It will not heal beyond the entity's max health.
+
+<P><B>HEAL_PLAYER_ONLY</B> Makes it only affect players, and not monsters.
+
+<P><B>HEAL_MONSTER_ONLY</B> Makes it only affect monsters, and not players.
+
+<P><B>"wait"</B> is the seconds between each healing. Default is 1.
+
+<P><B>"dmg"</B> is the amount that will be healed each time it is activated.
+
+<P><B>"health"</B> is the max health that it will heal to.</UL>
+&nbsp;
+</BODY>
+</HTML>

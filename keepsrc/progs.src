@@ -13,6 +13,7 @@ defsquoth.qc
 defskinn.qc
 defsdrake.qc
 defshexen2.qc
+defsaoa.qc
 dpextensions.qc
 qrobotdefs.qc
 mathlib.qc
@@ -26,6 +27,7 @@ subs_drake.qc
 subs_rubicon.qc
 subs_extras.qc
 subs_hexen2.qc
+subs_aoa.qc
 drake_box.qc
 //drake_armor.qc
 hiprot.qc
@@ -73,6 +75,12 @@ drake_reflect.qc
 fablade.qc // from hexen2 used by Fallen Angel in fangel.qc
 faspell.qc // from hexen2 used by Fallen Angel in fangel.qc
 
+// Gyro2 Physics
+//gyro_forces.qc
+//gyro_main.qc
+//gyro_physics.qc
+//gyro_user.qc
+
 precache_keep.qc
 world.qc
 client_mapvar.qc
@@ -89,9 +97,11 @@ drake_respawn.qc
 items.qc
 items_keep.qc
 items_drake.qc
+items_aoa.qc
 projectiles.qc
 projectiles_keep.qc
 projectiles_drake.qc
+weapons_aoa.qc
 weapons.qc
 w_mjolniradaya.qc
 drake_hook.qc
@@ -209,7 +219,6 @@ mon_spikemine.qc
 mon_gremlin.qc
 hiprubbl.qc
 hip_part.qc
-hipspawn.qc
 hip_brk.qc
 hip_expl.qc
 hipclock.qc
@@ -285,6 +294,7 @@ extras_buttons.qc
 extras_emitters.qc
 extras_water.qc
 extras_triggers.qc
+extras_fx.qc
 extras_misc.qc
 mon_hydra.qc
 
@@ -305,3 +315,6 @@ mon_octa.qc
 
 // Hexen 2 (most are in Drake but these weren't)
 mon_fangel.qc
+
+// Hipnotic spawn - must be LAST
+hipspawn.qc

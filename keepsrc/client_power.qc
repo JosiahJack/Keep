@@ -446,7 +446,11 @@ void() ClientPowerups =
 		}
 		// Update inventory and timers
 		if (self.wing_finished < time) ResetPowerLevitation(self);
-	}		
+	}	
+
+	if (self.tome_finished < time) {
+		self.tome_finished = 0;
+	}
 
 	//------------------------------------------------------------------
 	// Only remove the quad effect (status bar update)

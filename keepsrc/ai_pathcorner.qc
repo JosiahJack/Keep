@@ -471,5 +471,4 @@ void() path_corner =
 	// Got to start linking before func_train (2nd frame)
 	self.think = path_corner_setuptargets;
 	self.nextthink = time + 0.1;
-	
 };

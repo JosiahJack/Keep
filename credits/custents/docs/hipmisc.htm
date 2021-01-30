@@ -1,0 +1,447 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="General WarT'">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.01 [en] (Win95; I) [Netscape]">
+   <TITLE>Custents Entity Defs - Hipnotic Misc</TITLE>
+</HEAD>
+<BODY TEXT="#CC33CC" BGCOLOR="#000000" LINK="#00CC00" VLINK="#009900" ALINK="#00CC00">
+
+<CENTER><IMG SRC="custtitle.jpg" HEIGHT=60 WIDTH=330><FONT COLOR="#009900"><FONT SIZE=+3>6.0</FONT></FONT></CENTER>
+
+<CENTER><FONT SIZE=+2>Entities Definitions - Hipnotic Misc.</FONT>&nbsp;
+<HR WIDTH="100%"></CENTER>
+Last Updated : 2/5/98
+<BR>&copy;1998 Carl Glave
+<BR><A HREF="index.htm">Back to Main Index</A>
+<BR>
+<HR WIDTH="100%">
+
+<P>Hipnotic Misc. Entities Index
+<UL>
+<LI>
+<A HREF="#func_pushable">func_pushable</A></LI>
+
+<LI>
+<A HREF="#func_movewall">func_movewall</A></LI>
+
+<LI>
+<A HREF="#path_follow">path_follow</A></LI>
+
+<LI>
+<A HREF="#path_follow2">path_follow2</A></LI>
+
+<LI>
+<A HREF="#func_togglewall">func_togglewall</A></LI>
+
+<LI>
+<A HREF="#func_earthquake">func_earthquake</A></LI>
+
+<LI>
+<A HREF="#func_rubble">func_rubble</A></LI>
+
+<LI>
+<A HREF="#func_rubble1">func_rubble1</A></LI>
+
+<LI>
+<A HREF="#func_rubble2">func_rubble2</A></LI>
+
+<LI>
+<A HREF="#func_rubble3">func_rubble3</A></LI>
+
+<LI>
+<A HREF="#func_breakawaywall">func_breakawaywall</A></LI>
+
+<LI>
+<A HREF="#func_exploder">func_exploder</A></LI>
+
+<LI>
+<A HREF="#func_multi_exploder">func_multi_exploder</A></LI>
+
+<LI>
+<A HREF="#wallsprite">wallsprite</A></LI>
+
+<LI>
+<A HREF="#effect_teleport">effect_teleport</A></LI>
+
+<LI>
+<A HREF="#func_spawn">func_spawn</A></LI>
+
+<LI>
+<A HREF="#func_counter">func_counter</A></LI>
+
+<LI>
+<A HREF="#func_oncount">func_oncount</A></LI>
+
+<LI>
+<A HREF="#trigger_damagethreshold">trigger_damagethreshold</A></LI>
+
+<LI>
+<A HREF="#trigger_usekey">trigger_usekey</A></LI>
+
+<LI>
+<A HREF="#trigger_remove">trigger_remove</A></LI>
+
+<LI>
+<A HREF="#trigger_setgravity">trigger_setgravity</A></LI>
+
+<LI>
+<A HREF="#trigger_command">trigger_command</A></LI>
+
+<LI>
+<A HREF="#info_command">info_command</A></LI>
+
+<LI>
+<A HREF="#trigger_waterfall">trigger_waterfall</A></LI>
+
+<LI>
+<A HREF="#func_bobbingwater">func_bobbingwater</A></LI>
+</UL>
+<A NAME="func_pushable"></A>
+<BR>
+<HR WIDTH="100%">
+<BR><B>func_pushable (0 .5 .8) ?</B>
+<UL>This entity uses a brush model, and can be push horizontally by the
+player. They are not perfect, but work nicely in open, flat areas.</UL>
+<A NAME="func_movewall"></A>
+<HR WIDTH="100%">
+<BR><B>func_movewall (0 .5 .8) ? VISIBLE TOUCH</B>
+<UL>Used to emulate collision on rotating objects.
+
+<P><B>VISIBLE </B>causes brush to be displayed.
+
+<P><B>TOUCH </B>specifies whether to cause damage when touched by player.
+
+<P><B>NONBLOCKING </B>makes the brush non-solid. This is useless if VISIBLE
+is not set.
+
+<P><B>"dmg" </B>specifies the damage to cause when touched or blocked.</UL>
+<A NAME="path_follow"></A>
+<HR WIDTH="100%">
+<BR><B>path_follow (0.5 0.3 0) ?</B>
+<UL>Monsters will stop what they are doing and follow to the target. This
+forces monsters to change direction, unless there enemy is in sight. Variable
+Sized</UL>
+<A NAME="path_follow2"></A>
+<HR WIDTH="100%">
+<BR><B>path_follow2 (0.5 0.3 0) (-8 -8 -8) (8 8 8)</B>
+<UL>Monsters will stop what they are doing and follow to the target. This
+forces monsters to change direction, unless there enemy is in sight. Fixed
+Size</UL>
+<A NAME="func_togglewall"></A>
+<HR WIDTH="100%">
+<BR><B>func_togglewall (0 .5 .8) ? START_OFF</B>
+<UL>Creates a invisible wall that can be toggled on and off.
+
+<P><B>START_OFF </B>wall doesn't block until triggered.
+
+<P><B>"noise" </B>is the sound to play when wall is turned off.
+
+<P><B>"noise1" </B>is the sound to play when wall is blocking.
+
+<P><B>"dmg" </B>is the amount of damage to cause when touched.</UL>
+<A NAME="func_earthquake"></A>
+<HR WIDTH="100%">
+<BR><B>func_earthquake (0 0 0.5) (0 0 0) (32 32 32)</B>
+<UL>Causes an earthquake. Triggers targets.
+
+<P><B>"dmg" </B>is the duration of the earthquake. Default is 0.8 seconds.</UL>
+<A NAME="func_rubble"></A>
+<HR WIDTH="100%">
+<BR><B>func_rubble (0.4 0.4 0.2) (0 0 0) (32 32 32)</B>
+<UL>Spawns random sized rubble when triggered.
+
+<P><B>"count"</B> is the number of pieces of rubble to spawn. Default is
+1.
+
+<P><B>+ "skin"</B> is the color of rubble to throw. Here's a list of the
+colors.
+<UL>0 = Rusty Metal
+<BR>1 = Muky Metal
+<BR>2 = Brown
+<BR>3 = Light Brown
+<BR>4 = Red
+<BR>5 = Blue
+<BR>6 = Cyan
+<BR>7 = Aqua
+<BR>8 = Green
+<BR>9 = Yellow
+<BR>10 = Purple
+<BR>11 = White
+<BR>12 = Gray
+<BR>13 = Black
+<BR>-1 = Random</UL>
+</UL>
+<A NAME="func_rubble1"></A>
+<HR WIDTH="100%">
+<BR><B>func_rubble1 (0.4 0.4 0.2) (0 0 0) (8 8 8)</B>
+<UL>Spawns small rubble when triggered.
+
+<P><B>"count"</B> is the number of pieces of rubble to spawn. Default is
+1.
+
+<P><B>+ "skin"</B> is the color of rubble to throw. See <A HREF="#func_rubble">func_rubble</A>
+for a list of valid values.</UL>
+<A NAME="func_rubble2"></A>
+<HR WIDTH="100%">
+<BR><B>func_rubble2 (0.4 0.4 0.2) (0 0 0) (16 16 16)</B>
+<UL>Spawns medium rubble when triggered.
+
+<P><B>"count" </B>is the number of pieces of rubble to spawn. Default is
+1.
+
+<P><B>+ "skin" </B>is the color of rubble to throw. See <A HREF="#func_rubble">func_rubble</A>
+for a list of valid values.</UL>
+<A NAME="func_rubble3"></A>
+<HR WIDTH="100%">
+<BR><B>func_rubble3 (0.4 0.4 0.2) (0 0 0) (32 32 32)</B>
+<UL>Spawns large rubble when triggered.
+
+<P><B>"count" </B>is the number of pieces of rubble to spawn. Default is
+1.
+
+<P><B>+ "skin" </B>is the color of rubble to throw. See <A HREF="#func_rubble">func_rubble</A>
+for a list of valid values.</UL>
+<A NAME="func_breakawaywall"></A>
+<HR WIDTH="100%">
+<BR><B>func_breakawaywall (0 .5 .8) ? EXPLODE PARTICLES</B>
+<UL>Special walltype that removes itself when triggered.
+
+<P><B>+ EXPLODE</B> makes the wall become an explosion when triggered and
+not just dissapear.
+
+<P><B>+ PARTICLES</B> makes it use particles when it blows up. No effect
+if EXPLODE is not also set.
+
+<P><B>+ "cnt" </B>is the count value that a func_counter must be at to
+trigger it. This was added so that you can have a func_counter directly
+trigger a series of these without needing an extra entity for each one.
+
+<P><B>+ "count"</B> is the number of pieces of rubble to toss when triggered.
+
+<P><B>+ "skin" </B>is the skin number of the rubble to use if "count" is
+set. See <A HREF="#func_rubble">func_rubble</A> for a list of valid values.</UL>
+<A NAME="func_exploder"></A>
+<HR WIDTH="100%">
+<BR><B>func_exploder (0.4 0 0) (0 0 0) (8 8 8) PARTICLES</B>
+<UL>Spawns an explosion when triggered. Triggers any targets.
+
+<P><B>PARTICLES</B> whether to spawn a particle explosion or not.
+
+<P><B>"dmg" </B>specifies how much damage to cause. Negative values indicate
+no damage. Default or 0 indicates 120.
+
+<P><B>"volume" </B>volume at which to play explosions (default 1.0)
+
+<P><B>"speed" </B>attenuation for explosions (default normal)
+
+<P><B>+ "count" </B>is the number of pieces of rubble to spawn. Default
+is 0.
+
+<P><B>+ "skin" </B>is the color of rubble to throw. See <A HREF="#func_rubble">func_rubble</A>
+for a list of valid values.</UL>
+<A NAME="func_multi_exploder"></A>
+<HR WIDTH="100%">
+<BR><B>func_multi_exploder (0.4 0 0) ?</B>
+<UL>Spawns an explosion when triggered. Triggers any targets. size of brush
+determines where explosions will occur.
+
+<P><B>"dmg" </B>specifies how much damage to cause from each explosion
+Negative values indicate no damage. Default or 0 indicates 120.
+
+<P><B>"delay" </B>delay before exploding (Default 0 seconds)
+
+<P><B>"duration" </B>how long to explode for (Default 1 second)
+
+<P><B>"wait" </B>time between each explosion (default 0.25 seconds)
+
+<P><B>"volume" </B>volume to play explosion sound at (default 0.5)
+
+<P><B>"speed" </B>attenuation for explosions (default normal)
+
+<P><B>+ "count" </B>is the number of pieces of rubble to spawn. Default
+is 0.
+
+<P><B>+ "skin" </B>is the color of rubble to throw. See <A HREF="#func_rubble">func_rubble</A>
+for a list of valid values.</UL>
+<A NAME="wallsprite"></A>
+<HR WIDTH="100%">
+<BR><B>wallsprite (0 1 0) (-8 -8 -8) (8 8 8)</B>
+<UL>Places a sprite on a wall. Angles should be opposite of face.
+
+<P><B>"model" </B>sprite to place on wall. Default is "progs/s_blood1.spr".</UL>
+<A NAME="effect_teleport"></A>
+<HR WIDTH="100%">
+<BR><B>effect_teleport (0.3 0.1 0.6) (-8 -8 -8) (8 8 8)</B>
+<UL>Create a teleport effect when triggered The effect is only eye-candy
+it does nothing</UL>
+<A NAME="func_spawn"></A>
+<HR WIDTH="100%">
+<BR><B>func_spawn (0 .5 .8) (-32 -32 -24) (32 32 40) big/ambush megahealth</B>
+<UL>This will spawn a thing upon being used. The thing that is spawned
+depends upon the value of "spawnfunction". The angles, target and all flags
+are passed on Think of it like setting up a normal entity.
+
+<P><B>"spawnclassname"</B> should contain the same value as "spawnfunction".
+
+<P>If <B>"spawnfunction"</B> is unspecified a random monster is chosen
+as follows:
+<UL>50% - dog
+<BR>30% - ogre
+<BR>12% - fiend
+<BR>5% - zombie
+<BR>3% - shambler</UL>
+<B>"spawnsilent"</B> set this to none 0 if you want a silent spawn.
+
+<P><B>"spawnmulti"</B> set this to 1 if you want this spawn to be reoccuring.</UL>
+<A NAME="func_counter"></A>
+<HR WIDTH="100%">
+<BR><B>func_counter (0 0 0.5) (0 0 0) (32 32 32) TOGGLE LOOP STEP RESET
+RANDOM FINISHCOUNT START_ON</B>
+<UL>This is used to trigger things in a series. Examples of uses are for
+triggering the parts og particle fields, and exploding walls in a series
+instead of having them be triggered all at the same time.
+
+<P><B>TOGGLE</B> causes the counter to switch between an on and off state
+each time the counter is triggered.
+
+<P><B>LOOP</B> causes the counter to repeat infinitly. The count resets
+to zero after reaching the value in "count".
+
+<P><B>STEP</B> causes the counter to only increment when triggered. Effectively,
+this turns the counter into a relay with counting abilities.
+
+<P><B>RESET</B> causes the counter to reset to 0 when restarted.
+
+<P><B>RANDOM</B> causes the counter to generate random values in the range
+1 to "count" at the specified interval.
+
+<P><B>FINISHCOUNT</B> causes the counter to continue counting until it
+reaches "count" before shutting down even after being set to an off state.
+
+<P><B>START_ON</B> causes the counter to be on when the level starts.
+
+<P><B>"count"</B> specifies how many times to repeat the event. If LOOP
+is set, it specifies how high to count before reseting to zero. Default
+is 10.
+
+<P><B>"wait"</B> the length of time between each trigger event. Default
+is 1 second.
+
+<P><B>"delay"</B> how much time to wait before firing after being switched
+on.</UL>
+<A NAME="func_oncount"></A>
+<HR WIDTH="100%">
+<BR><B>func_oncount (0 0 0.5) (0 0 0) (16 16 16)</B>
+<UL>For use as the target of a func_counter. When the counter reaches the
+value set by count, func_oncount triggers its targets. This is not needed
+if the intended target has counter support built into it.
+
+<P><B>"count"</B> specifies the value to trigger on. Default is 1.
+
+<P><B>"delay"</B> how much time to wait before firing after being triggered.</UL>
+<A NAME="trigger_damagethreshold"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_damagethreshold (0 .5 .8) ? MULTI_USE INVISIBLE</B>
+<UL>Triggers only when a threshold of damage is exceeded. When used in
+conjunction with func_breakawaywall, allows walls that may be destroyed
+with a rocket blast.
+
+<P><B>MULTI_USE </B>tells the trigger to not to remove itself after being
+fired. Allows the trigger to be used multiple times.
+
+<P><B>INVISIBLE </B>tells the trigger to not be visible.
+
+<P><B>"health" </B>specifies how much damage must occur before trigger
+fires. Default is 60.</UL>
+
+<UL>&nbsp;</UL>
+<A NAME="trigger_usekey"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_usekey (0 .5 0) ? USE_GOLD_KEY</B>
+<UL>Variable sized single use trigger that requires a key to trigger targets.
+Must be targeted at one or more entities.
+
+<P><B>USE_GOLD_KEY</B> if set use gold key, otherwise use the silver key.
+
+<P><B>"message" </B>is printed when the trigger is touched without having
+the right key.</UL>
+<A NAME="trigger_remove"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_remove (.5 .5 .5) ? IGNOREMONSTERS IGNOREPLAYERS</B>
+<UL>Variable sized trigger that removes the thing that touches it. Does
+not affect monsters or players.
+
+<P><B>IGNOREMONSTERS</B> ignores monsters if set
+
+<P><B>IGNOREPLAYERS</B> ignores players if set</UL>
+<A NAME="trigger_setgravity"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_setgravity (.5 .5 .5) ?</B>
+<UL>Set the gravity of a player, monster, or a weapon projectile.
+
+<P>+ This now sets the gravity for all things. This makes weapons fire
+and monster jumping in low gravity areas much more realistic.
+
+<P><B>"gravity"</B> what to set the players gravity to.
+<UL>
+<LI>
+0 (default) normal gravity</LI>
+
+<LI>
+1 no gravity</LI>
+
+<LI>
+2 almost no gravity</LI>
+
+<LI>
+...</LI>
+
+<LI>
+101 normal gravity</LI>
+
+<LI>
+102 slightly higher than normal gravity</LI>
+
+<LI>
+...</LI>
+
+<LI>
+1000 very high gravity</LI>
+</UL>
+</UL>
+<A NAME="trigger_command"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_command (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)</B>
+<UL>When triggered, stuffs a command into the console to allow map designers
+to set server variables.
+
+<P><B>"message"</B> is the command to send to the console.</UL>
+<A NAME="info_command"></A>
+<HR WIDTH="100%">
+<BR><B>info_command (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)</B>
+<UL>Stuffs a command into the console to allow map designers to set server
+variables.
+
+<P><B>"message"</B> is the command to send to the console.</UL>
+<A NAME="trigger_waterfall"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_waterfall (.2 .5 .2) ?</B>
+<UL>Pushes the player in the direction specified by angles.
+
+<P><B>"speed"</B> is the strength of the push (default 50).
+
+<P><B>"count"</B> amount of random xy movement to add to velocity (default
+100).</UL>
+<A NAME="func_bobbingwater"></A>
+<HR WIDTH="100%">
+<BR><B>func_bobbingwater (0 .5 .8) ?</B>
+<UL>Used to emulate water. To use, create a thin water brush and center
+it on the water line of the body of water to bob. The amount of the bob
+is the depth of the brush.
+
+<P><B>"speed"</B> is how long in seconds it takes the brush to do one full
+bob.</UL>
+&nbsp;
+</BODY>
+</HTML>

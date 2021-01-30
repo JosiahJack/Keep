@@ -533,7 +533,7 @@ void() monster_zombie =
 	if (deathmatch) { remove(self); return; }
 
 	self.mdl = "progs/ad171/mon_zombie.mdl";
-	self.headmdl = "progs/h_zombie.mdl";
+	self.headmdl = "progs/ad171/h_zombie.mdl";
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
 	//precache_model (MODEL_PROJ_FLESH); (world.qc)
@@ -620,7 +620,7 @@ void() monster_zombiep =
 	if (deathmatch) { remove(self); return; }
 
 	self.mdl = "progs/ad171/mon_zombie.mdl";
-	self.headmdl = "progs/h_zombie.mdl";
+	self.headmdl = "progs/ad171/h_zombie.mdl";
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
 	precache_model (MODEL_PROJ_FLESHP);
@@ -683,4 +683,3 @@ void() monster_zombiep =
 	
 	monster_start();
 };
-

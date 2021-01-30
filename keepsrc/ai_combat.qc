@@ -133,7 +133,13 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	// check for quad damage powerup on the attacker
 	if (attacker.super_damage_finished > 0) damage = damage * 4;
 
-	if ((attacker.perms & POW_VAMPIRE) && (attacker.weapon == IT_AXE || attacker.weapon == IT2_MJOLNIR)) damage = damage * 1.25; //Apply Berserker Helm melee damage boost, Drake permanent powerup
+	if ((attacker.perms & POW_VAMPIRE)) {
+		if (attacker.selfweaponismoditems) {
+			if (attacker.weapon == IT_MACE) damage = damage * 1.25; //Apply Berserker Helm melee damage boost, Drake permanent powerup
+		} else {
+			if (attacker.weapon == IT_AXE || attacker.weapon == IT2_MJOLNIR || attacker.weapon == IT_SCIMITAR || attacker.weapon == IT_RAPIER) damage = damage * 1.25; //Apply Berserker Helm melee damage boost, Drake permanent powerup
+		}
+	}
 
 	if (targ.classname == "monster_death_lord" && targ.shield == 1)
 		damage = damage * 0.5;
@@ -250,11 +256,22 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	targ.health = targ.health - take;
 
 	// Apply berserker helm life leech to heal the attacker if the target still has health
-	if (attacker.perms & POW_VAMPIRE && targ.health > 0 && (attacker.weapon == IT_AXE || attacker.weapon == IT2_MJOLNIR)) {
-		misc = ceil(take * 0.1); //10% of the damage done gets leeched.  Damage was already done so doesn't affect damage amount
-		if (misc < 1) misc = 1; // minimum of 1 leech
-		attacker.health = attacker.health + misc;
-		if (attacker.health > HEAL_MEGAMAX) attacker.health = HEAL_MEGAMAX;
+	if (attacker.perms & POW_VAMPIRE && targ.health > 0) {
+		if (attacker.selfweaponismoditems) {
+			if (attacker.weapon == IT_MACE) {
+				misc = ceil(take * 0.1); //10% of the damage done gets leeched.  Damage was already done so doesn't affect damage amount
+				if (misc < 1) misc = 1; // minimum of 1 leech
+				attacker.health = attacker.health + misc;
+				if (attacker.health > HEAL_MEGAMAX) attacker.health = HEAL_MEGAMAX;
+			}
+		} else {
+			if (attacker.weapon == IT_AXE || attacker.weapon == IT2_MJOLNIR || attacker.weapon == IT_SCIMITAR || attacker.weapon == IT_RAPIER) {
+				misc = ceil(take * 0.1); //10% of the damage done gets leeched.  Damage was already done so doesn't affect damage amount
+				if (misc < 1) misc = 1; // minimum of 1 leech
+				attacker.health = attacker.health + misc;
+				if (attacker.health > HEAL_MEGAMAX) attacker.health = HEAL_MEGAMAX;
+			}
+		}
 	}
 	
 	//----------------------------------------------------------------------

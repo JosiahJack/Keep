@@ -1,0 +1,243 @@
+Title		: Custents - Custom Entities
+Filename	: ce6.zip
+Version	: 6.0
+Date		: 3/11/98
+Author	: General WarT' (aka Carl Glave)
+Email		: gnrlwart@telefragged.com
+Home		: http://wartrench.telefragged.com
+Build time	: oy, way too long.
+Kudos to	*Dan Bickell, for making all the Apocalypse related skins and
+		 textures that are contained in here.
+		*Ethan Leon, for making all the Apocalypse related models that
+		 that are contained in here. Also for being so cool about letting
+		 me animate the servomech. Thanks man, that was fun. ;)
+		*The rest of the Original Apocalypse team (you know who you are)
+		 for simply being, well, a bunch'a cool dudes. :)
+		*Steve Fukuda, for being so supportive and a cool friend, even
+		 though he lives in another contry and has never even met me
+		 in person. Thanks Man. *sniff* :)
+
+Type of Mod
+-----------
+Quake C	: yup
+Sound		: you betcha
+MDL		: uh hu
+Brush type	: yea sure
+
+Format of QuakeC (if a Quake C Mod)
+-----------------------------------
+unified diff	: nope
+context diff	: nope
+.qc files		: yup
+progs.dat		: uh huh
+
+New qc files
+------------
+actors.qc		* contains all the code for the actor entities
+apocmisc.qc		* contains all sorts of misc. stuff from Apocalypse
+buzzsaw.qc		* Rogue buzzsaw trap
+custdefs.qc		* the globals for the Custents code
+custents.qc		* where the cool Custents features are held
+elevatr.qc		* Rogue elevator
+hipsubs.qc		* Hipnotic subroutines
+hipcount.qc		* Hipnotic counter
+hiptraps.qc		* Hipnotic hazards
+hiprubbl.qc		* Hipnotic rubble stuff
+hip_brk.qc		* Hipnotic breakable walls
+hip_expl.qc		* Hipnotic explosions
+hip_part.qc		* Hipnotic particle field
+hip_push.qc		* Hipnotic pushable walls
+hiprot.qc		* Hipnotic rotating code
+hipclock.qc		* Hipnotic clock
+hipmisc.qc		* Hipnotic sound stuff
+hipspawn.qc		* Hipnotic dynamic spawning
+hiptrig.qc		* Hipnotic triggers
+hipquake.qc		* Hipnotic Earthquakes
+hipwater.qc		* Hipnotic bobbing water
+lightnin.qc		* Rogue relay lightning
+missiles.qc		* contains custom code for handling projectiles
+pendulum.qc		* Rogue pendulum
+rogmisc.qc		* Rogue misc stuff
+rogplats.qc		* Rogue new platforms
+rogquake.qc		* Rogue earth quake
+srvomech.qc		* controllable and monster servomechs
+zmaster.qc		* Zombie Master: not Apoc related, but mine, and cool
+
+Modified qc files
+-----------------
+progs.src	* Added lines to compile the new source files
+ai.qc		* train path setup, monster sight sounds,
+		  controllable servomech targeting
+client.qc	* multiple starting points, changing gravity,
+		  parm value packing, external camera,
+		  remote cameras, controllable servomechs,
+		  speed optimizations, earthquakes, special
+		  death messages, added obituaries
+combat.qc	* speed optimizations, zombie master, added
+		  damage dealing functions
+doors.qc	* added door spawnflag
+enforcer.qc	* spawnblood fix
+items.qc	* PPC weapon
+misc.qc	* trap shooters
+plats.qc	* trains
+player.qc	* PPC weapon, zombie master
+shambler.qc	* baby shambler
+soldier.qc	* new soldier monsters
+subs.qc	* multiple targets and targetnames
+triggers.qc	* added trigger functionality
+weapons.qc	* spawnblood fix, new rocket explosion, axzombies,
+		  grenade duration for changing gravity, PPC weapon,
+		  external camera, trigger_impulse, trigger_touch_impulse
+world.qc	* speed optimizations, added precaches for Custents entities,
+		  PPC weapon precaches
+zombie.qc	* added zombie features, axzombie, zombie master
+
+
+Text files
+----------
+Custents.txt	* hellOOo. That's this file. :P
+History.txt		* Modification descriptions from previous versions.
+Gravity.txt		* Description of how to make all effecting gravity work
+			   in your own patches.
+docs directory	* This collection of html files has replaced the
+			  entsdefs.txt file from previous versions. It's
+			  HTMLized, and much easier to find stuff in, as well
+			  as easier to maintain. *grin* :) Trust me, you'll
+			  like this MUCH better than that oversized text file.
+
+
+The Latest Haps with Custents
+-----------------------------
+   Lots of added stuff for this final version of Custents, but it's all
+original this time around. :) Besides the usual bug fixed and minor
+additions to existing entities, many of the entities from Quake:Apocalypse
+have been added. These entities were all coded by yours truly, modeled by
+Ethan Leon, and skined/textured by Dan Bickell... an all-star cast of you
+ask me, hehe. ;) Let's get started on the list of things that have been
+added...
+   First comes the new triggering system. I've augmented Quake's triggering
+code so that it now supports four different names, and four different
+targets, as well as two killtarget names for each seperate entity. The best
+examples of it's use would be the actor entities (described later) and the
+map that I made to demonstrate them, ACTTEST. Full support for this has been
+added to the quake.fgd file for Worldcraft that comes with Custents. This is
+the editor that I use, that's why it's the only editor that I've written
+entity support for. However, if you or someone you know writes up Custents
+entity support for another editor, please let me know so that I can let
+everyone else know about it, and also make available from my site.
+   Getting on with the show, ther are several new triggers available to let
+you do all sorts of cool new stuff. Some of them have been done before, but
+these are all natural (or is that original?) entities that were designed to
+make full use of the rest of the Apocalypse code features, especially the
+triggering system. Here's a quick list of these new tirggers(look in the
+docs for details descriptions of their use): trigger_interupt,
+trigger_impulse, trigger_touch_impulse, trigger_combo, & trigger_sequence.
+The F8 key has been binded to "Impulse 100" in the default.cfg file for
+convenient use with the trigger_touch_impulse.
+   Next up are the remote cameras. Developed mostly for Apocalypse, they
+were refined greatly with the help of my 2015 buds. They were originally
+designed to allow for in-level cut scenes (which they still do quite well),
+but they also allow you to set up camera "security circuits" where they
+player can cycle through several different cameras which have been grouped
+together (as described in the entity docs) for something like the cameras
+that were in Duke Nukem.
+   Working off the same base client view handling code as the remote cameras
+is the controllable servomechs. These are demonstrated in the MECHTEST map,
+and are one of my absolute favorites of all the things I've made. If a player
+comes after you with one of these, you'd better run like hell, then find the
+bastard and shoot him in the back while he's still using the mech. The
+controls require a bit of getting used to (it's kinda like playing
+Mechwarrior) but once you do, you'll love it. For controls setup, a special
+purpose cfg file is used called "mech.cfg". if you want to change the
+controls used while controlling a servomech, you have to edit the mech.cfg
+file. This is what's execed each time a player starts using one. When a
+player stops using one, the config.cfg , then the autoexec.cfg files are
+execed to restore your usual playing controls. Please note that if you exit
+the game while still controlling a servomech that your controls will not be
+reset back to normal. To prevent problems with this happening, you should
+make sure that if there are any keys that are changed from your usual
+controls by your mech.cfg, that you include those key bindings in the
+autoexec.cfg so that they will get properly restored every time, even if you
+quite the game while still using a servomech.
+  A few other various entites that were added to Custents 6.0 are as
+follows: func_particlespray, func_model, and func_glass. Please note that all
+of these (including the func_glass are original entities from Apocalypse as
+well. Check out the GLASTEST map and you'll see that this is definatly very
+cool glass that you can do lots of stuff with. :) Please look them up in the
+entity docs for more info on what they can do, and how.
+   Adding a new realm to Custents is the addition of Monsters, OOooo. Hehe,
+all the monster that I'd completed for Apocalypse, plus a few other I've
+made, are included. All of these monsters are listed in the Misc. Apoc Stuff
+section of the entity docs. You can check out my fav. (the Zombie Master) in
+the demo map ZOMB.
+   Speaking of spreading Custents to different realms of Quake, There are a
+few other things that I've added in. Some for fun, others because of the way
+such things need to interact with some of the other code (like a chase cam
+view with the controllable servomech or a remote camera). In the fun catagory
+is my favorite weapon from Apocalypse, the PPC, or Phased Plasma Cannon. I've
+altered it quite a bit from the original to reduce the amount of skins and
+code needed for it. The result is a very different weapon that I think just
+might actually be a bit more balanced, as well as more fun. I've added it in
+a way that makes it completely imvisible if you don't want it in the game.
+   As I mentioned briefly before, I've also added an external view (the Apoc
+cam) that has all needed code to properly interact with the remote cameras
+and the controllable servomechs. This cam has only two real features to how
+it works, but they're the two that I haven't see on any other cam, and that
+I've always wanted: It makes sure that what's in front of your character is
+always in view, and it doesn't do that annoying bobbing thinggy that gives
+me a headache. Remember, you can always touch it up if you want to, but I
+like it. :) Oh yea, and don't forget that the Apoc cam's impulse (which I
+set to 40) is binded to the F7 key in the default.cfg file for easy use.
+   Last, but certainly not least, are the actor entities. These are without
+doubt, the most complicated Quake entities (to setup and use that is) on the
+face of the planet. This may seem like a bad thing at first, seing as how it
+extends to the point that I even seperated them off into their own docs file
+because there's so much to them. I did this all for good reason though...
+total and absolute control over the best darn computer controlled actors I
+could make. Just take a look at them in action in the PARTTEST and ACTTEST
+maps, and you'll see that I'm not just flappin my jaw here (at least I hope
+not). I'm not completely without simpathy towards mappers however, cause I've
+included a feature that allows for complete value setups of an actor by
+setting only an "impulse" value for it. I've made a few of these auto setups
+myself, including a few monsters and several variants of player actors. To
+add your own, just see how they're setup in the actors.qc file, and then add
+your own impulse values. Like all the other entities, the whole load of
+sordid details about all of the actor settings and entities are available
+in the entity docs.
+   Also included with this version of Custents is LightDLX, the lighting
+utility made for Apocalypse by Neal White. It's got lots of new lighting
+effects in it, as well as support for colored lighting. To use the colored
+lighting, ligt your level using LightDLX with the -colors. Then, rename the
+colormap.lm_ file in the gfx folder to colomap.lmp. This is the file that
+maps the lighting to two colors.
+   Welp, that's about it, I guess I'll stop blabbering on so that you can go
+and try it out. Enjoy, and god speed. ;)
+
+
+How to Install the Modification
+-------------------------------
+
+   There's two different things you can do to install Custents. First,
+you can create a Custents directory under Quake's directory and unzip
+everything into there. Second, you could include some or all of the
+Custents code into your own Quake mod. The latter may require code
+reworking to get everything to coincide properly, but that should mostly
+just be reassigning different variables to things to avoid conflicts in
+their use. All code in the modified qc files are set off with "// ###" at
+the begining and end to simplify finding it for inclusion with other patches.
+
+
+Author Information
+------------------
+
+   To be honest, I don't really play Quake that much, I'm always too
+busy making stuff for it. I can't help it, it's just so fun. But, the
+addiction has paid off, cause I've got a job. WOOP! Hehe, that's why this
+is going to be the last version of Custents. Aww darn hu? ;D Hehe, yea right. 
+All of my work can be attained at my web site, The Trench of Mantal Warfare
+http://wartrench.telefragged.com
+
+Oh yea, and new home can found at
+http://www.2015.com
+We haven't gotten it all spiffied up yet, but it'll be lookin hip once we get 
+goin', oh yes it will. :)

@@ -1,0 +1,54 @@
+Copyright and Distribution Permissions (legal yakity shmakity)
+--------------------------------------
+
+The included source code in this release (not counting the Hipnotic and
+Rogue stuff) is Copyright 1997, Carl Glave.
+The models from Apocalypse are copyright 1997 Ethan Leon.
+The skins and textures from Apocalypse are copyright 1997 Dan Bickell.
+The original QuakeC source is Copyright 1996, id software.
+The mosh ambient sound is from the gool 'ol guys at Quake Command.
+The original esclator map was by Garry Cook.
+Hipnotic's stuff in here is, of course, Copyright 1997 Hipnotic Interactive.
+Rogue's stuff in here is, also of course, Copyright 1997 Rogue Entertainment.
+
+Actura Software may have total and free access to this modification...
+after an upfront $1,000,000 fee is payed in full(plus tax).
+
+Authors MAY use these modifications as a basis for other NON COMERCIAL
+works provided that the original author, Carl Glave is given express credit.
+
+Authors MAY NOT use these modifications as a basis for other COMERCIALLY
+available work without express written permission from the original author, 
+Carl Glave. Permission may be granted on terms.
+
+You may distribute this Quake modification in any electronic format as
+long as all the files in this archive remain intact and unmodified and
+are distributed together.
+
+
+Mushy stuff AKA.Special Thanks
+------------------------------
+   Steve Funky-dude-hu(he claims it's actually Fukuda) Maintainer of Quake
+Lab, for mental support that he's beem giving me. I'v been doing some stuff
+for Apocalypse with him as you read above. Sorry to tell you this, but since
+all super special stuff that will be in it are deemed classified and
+confidential, I won't be added the stuff I creat for it to Custents till
+after Apocalypse is released. After then however...
+   A nice hardy thanks to Halotron for pointing out the big problem with the
+trap shooters from before. Got me to add the grenades and arrows too, that
+cool or what? :)
+   Thanks to Jan Martin Mathiassen (TGR) for giving me the basic idea for the
+healing entity. He finally came up with a good idea. ;) JK.
+   I'd just like to take a small time out to thank Ged (Scott Manganello)
+for the inspiration for some of these new features and entities.If he
+wouldn't have had the patience to yammer back and fourth with me, I
+probably woundn't have though of some of the new entities. He get's
+lonly some times, so go check out his page. It's quite cool in a very
+RPGesque way. Nice new word for ya there. :)
+http://dragonfire.net/~BlackWind
+   I'd like to give a quick thanks to Jimmy McKinney for pointing out the
+little glitches that made me release v3.1 to fix. Gee, thanks alot ;P
+   What can I say but THANK YOU HIPNOTIC! I've spent so much wasted time
+trying to get those brushes to rotate, now I don't have to anymore :D BTW,
+if you don't have Scourge of Armagon, get it. Get it now. You'll thank me for
+proding you to get it. :)

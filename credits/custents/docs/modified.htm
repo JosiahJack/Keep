@@ -1,0 +1,127 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="Author" CONTENT="General WarT'">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.01 [en] (Win95; I) [Netscape]">
+   <TITLE>Custents Entity Defs - Modified Entities</TITLE>
+</HEAD>
+<BODY TEXT="#CC33CC" BGCOLOR="#000000" LINK="#00CC00" VLINK="#009900" ALINK="#00CC00">
+
+<CENTER><IMG SRC="custtitle.jpg" HEIGHT=60 WIDTH=330><FONT COLOR="#009900"><FONT SIZE=+3>6.0</FONT></FONT></CENTER>
+
+<CENTER><FONT SIZE=+2>Entities Definitions - Modified</FONT>&nbsp;
+<HR WIDTH="100%"></CENTER>
+Last Updated : 3/7/98
+<BR>&copy;1998 Carl Glave
+<BR><A HREF="index.htm">Back to Main Index</A>
+<BR>
+<HR WIDTH="100%">
+
+<P>Modified Entities Index
+<UL>
+<LI>
+<A HREF="#info_player_start">info_player_start</A></LI>
+
+<LI>
+<A HREF="#trigger_changelevel">trigger_change_level</A></LI>
+
+<LI>
+<A HREF="#trigger_multiple">trigger_multiple</A></LI>
+
+<LI>
+<A HREF="#trigger_hurt">trigger_hurt</A></LI>
+
+<LI>
+<A HREF="#trigger_monsterjump">trigger_monsterjump</A></LI>
+
+<LI>
+<A HREF="#func_door">func_door</A></LI>
+
+<LI>
+<A HREF="#monster_ogre_marksman">monster_ogre_marksman</A></LI>
+</UL>
+<A NAME="info_player_start"></A>
+<HR WIDTH="100%">
+<BR><B>&nbsp;info_player_start (0 .5 .8) (-8 -8 -8) (8 8 8)</B>
+<UL>&nbsp;Has been modified slightly to allow for the use of multiple start
+points within a level. This feature is only allowed in single player
+
+<P><B>+ "weapon"</B> is its ID number for use with multiple starting points</UL>
+<A NAME="trigger_changelevel"></A>
+<HR WIDTH="100%">
+<BR><B>&nbsp;trigger_changelevel (0 .5 .8) (-8 -8 -8) (8 8 8) INFO_RESET</B>
+<UL>This trigger has been changed slightly to allow or multiple starting
+points within the same level. This feature is only supported in single
+player.
+
+<P><B>+ INFO_RESET</B> resets all the between-level information for serverflags
+(runes) and id#s for stored events. This should only be set if player is
+moving off into another, unconnected level group. This will allow all serverflags
+and id #s to be use again for the next level group.
+
+<P><B>+ "weapon"</B> specifies the ID number of the info_player_start to
+start the player at when going to the next level.</UL>
+<A NAME="trigger_multiple"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_multiple (.5 .5 .5) ? NOTOUCH</B>
+<UL>Variable sized repeatable trigger. Must be targeted at one or more
+entities. If "health" is set, the trigger must be killed to activate each
+time. If "delay" is set, the trigger waits some time after activating before
+firing.
+
+<P><B>NOTOUCH</B> doesn't trigger when it's touched, but has been obsoleted
+by trigger_relay, so use a trigger_relay instead if you want this. (the
+trigger_relay is a point entity too)
+
+<P><B>"wait"</B> Seconds between triggerings. (.2 default)
+
+<P><B>"cnt"</B> how many times it can be triggered (infinite default) If
+notouch is set, the trigger is only fired by other entities, not by touching.
+
+<P><B>"sounds"</B>
+<UL>1 - secret
+<BR>2 - beep beep
+<BR>3 - large switch
+<BR>4 - set "message" to text string</UL>
+</UL>
+<A NAME="trigger_hurt"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_hurt (.5 .5 .5) ?</B>
+<UL>Any object touching this will be hurt.
+
+<P><B>"dmg"</B> damage amount, defalt is 5.
+
+<P><B>"cnt"</B> how many times to trigger. Default 0 (infinite)</UL>
+<A NAME="trigger_monsterjump"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_monsterjump (.5 .5 .5) ?</B>
+<UL>Walking monsters that touch this will jump in the direction of the
+trigger's angle
+
+<P><B>"speed"</B> default to 200, the speed thrown forward
+
+<P><B>"height" </B>default to 200, the speed thrown upwards
+
+<P><B>"cnt"</B> how many times to trigger. Default 0 (infinite)</UL>
+&nbsp;<A NAME="func_door"></A>&nbsp;
+<HR WIDTH="100%">
+<BR><B>func_door (0 .5 .8) ? START_OPEN UNUSED DONT_LINK GOLD_KEY SILVER_KEY
+TOGGLE SMALL_TRIG</B>
+<UL>I just added a small option to the doors that allow you to put them
+in narrow hallways and small places without them opening while the player
+is too far away or on the other side of a thin wall.
+
+<P><B>+ SMALL_TRIG</B> makes the door spawn its touch trigger only 30 units
+away, instead of 60. This is very usefull for when you have doors in small
+places or near thin walls.</UL>
+&nbsp;<A NAME="monster_ogre_marksman"></A>&nbsp;
+<HR WIDTH="100%">
+<BR><B>monster_ogre_marksman (1 0 0) (-16 -16 -24) (16 16 32) Ambush</B>
+<UL>I thought it weird to have a "marksman" be just as bad a shot as a
+regular ogre, so I souped them up with better aim and the ability to fire
+while on the run. They can close on you surprisingly fast, since they don't
+have to stop to fire off a grenade at you. Definatly much more dangerous.
+;)</UL>
+
+</BODY>
+</HTML>

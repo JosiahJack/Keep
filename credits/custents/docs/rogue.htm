@@ -1,0 +1,248 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.01 [en] (Win95; I) [Netscape]">
+   <TITLE>2015 Entity Docs - Rogue Stuff</TITLE>
+<!--Ant Demo document-->
+</HEAD>
+<BODY TEXT="#CC33CC" BGCOLOR="#000000" LINK="#00CC00" VLINK="#009900" ALINK="#00CC00">
+
+<CENTER><IMG SRC="custtitle.jpg" HEIGHT=60 WIDTH=330><FONT COLOR="#009900"><FONT SIZE=+3>6.0</FONT></FONT></CENTER>
+
+<CENTER><FONT SIZE=+2>Entities Definitions - Rogue Entities</FONT>&nbsp;
+<HR WIDTH="100%"></CENTER>
+Last Updated : 2/5/98
+<BR>&copy;1998 Carl Glave
+<BR><A HREF="index.htm">Back to Main Index</A>
+<BR>
+<HR WIDTH="100%">
+
+<P>Rogue Entities Index
+<UL>
+<LI>
+<A HREF="#buzzsaw">buzzsaw</A></LI>
+
+<LI>
+<A HREF="#ltrail_start">ltrail_start</A></LI>
+
+<LI>
+<A HREF="#ltrail_relay">ltrail_relay</A></LI>
+
+<LI>
+<A HREF="#ltrail_end">ltrail_end</A></LI>
+
+<LI>
+<A HREF="#pendulum">pendulum</A></LI>
+
+<LI>
+<A HREF="#earthquake">earthquake</A></LI>
+
+<LI>
+<A HREF="#trigger_earthquake">trigger_earthquake</A></LI>
+
+<LI>
+<A HREF="#trigger_earthquake_kill">trigger_earthquake_kill</A></LI>
+
+<LI>
+<A HREF="#func_elvtr_button">func_elvtr_button</A></LI>
+
+<LI>
+<A HREF="#func_new_plat">func_new_plat</A></LI>
+
+<LI>
+<A HREF="#light_candle">light_candle</A></LI>
+
+<LI>
+<A HREF="#light_lantern">light_lantern</A></LI>
+</UL>
+<A NAME="buzzsaw"></A>
+<HR WIDTH="100%">
+<BR><B>buzzsaw (0 .5 .8) (-18 -18 -18) (18 18 18) Vertical</B>
+<UL>The buzzsaw trap. Use the angle buttons to point the buzzsaw in the
+direction it should face. Place on a monster path if you want it to move.
+If it is targeted, it will wait until triggered to activate. It will not
+damage players until activated.
+
+<P><B>"currentammo"</B> amount of damage for each contact. (default 10)
+
+<P><B>"speed"</B> speed that it will follow it's path. (default 10)</UL>
+<A NAME="ltrail_start"></A>
+<HR WIDTH="100%">
+<BR><B>ltrail_start (0 1 0) (-8 -8 -8) (8 8 8) LT_TOGGLE</B>
+<UL>Starting point of a lightning trail.
+
+<P><B>LT_TOGGLE</B> lightning shooter continuously fires until triggered
+again.
+
+<P><B>"currentammo" </B>amount of damage you want the lightning to do.
+Default is 25.
+
+<P><B>"frags" </B>amount of time before next item is triggered. Default
+is 0.3 seconds.
+
+<P><B>"weapon" </B>amount of time to be firing the lightning. Default is
+0.3 seconds.</UL>
+<A NAME="ltrail_relay"></A>
+<HR WIDTH="100%">
+<BR><B>ltrail_relay (0 1 0) (-8 -8 -8) (8 8 8)</B>
+<UL>Relay point of a lightning trail.
+
+<P><B>"currentammo" </B>amount of damage you want the lightning to do.
+Default is 25.
+
+<P><B>"frags" </B>to amount of time before next item is triggered. Default
+is 0.3 seconds.
+
+<P><B>"weapon" </B>to amount of time to be firing the lightning. Default
+is 0.3 seconds.</UL>
+<A NAME="ltrail_end"></A>
+<HR WIDTH="100%">
+<BR><B>ltrail_end (0 1 0) (-8 -8 -8) (8 8 8)</B>
+<UL>Ending point of a lightning trail. Does not fire any lightning.
+
+<P><B>"frags" </B>to amount of time before next item is triggered. Default
+is 0.3 seconds.</UL>
+<A NAME="pendulum"></A>
+<HR WIDTH="100%">
+<BR><B>pendulum (0 .5 .8) (-8 -24 -100) (8 24 100) PEND_X PEND_Y PEND_TRG</B>
+<UL>Directional Flags: Pendulum swings perpendicular to it's angle. (eg.
+A pendulum facing east will swing north/south). Default: PEND_Y The pendulum
+angle is set automatically depending on the PEND_ choice.
+
+<P><B>PEND_X </B>= a pendulum hanging from the ceiling swinging parallel
+to the X axis.
+
+<P><B>PEND_Y = </B>a pendulum hanging from the ceiling swinging parallel
+to the Y axis.
+
+<P><B>PEND_TRG </B>= the pendulum must be triggered to start swinging.
+The delay value still affects the pendulum.
+
+<P><B>"delay" </B>amount of time (in seconds) before starting swinging.
+default 1.
+
+<P><B>"currentammo" </B>amount of damage for each contact. default 5.</UL>
+<A NAME="earthquake"></A>
+<HR WIDTH="100%">
+<BR><B>earthquake (0 1 0) (-8 -8 -8) (8 8 8) RANDOM</B>
+<UL>The Rogue Earthquake generator. Thos creates a level wide earthquake
+effect.
+
+<P><B>RANDOM </B>affects the times only. It will change them randomly between
+0-n where n is the duration or time between.
+
+<P><B>"delay" </B>duration of the tremor (default 20)
+
+<P><B>"wait" </B>time between tremors (default 60)
+
+<P><B>"weapon" </B>richter scale of movement (default 40) With a given
+a "weapon" value of 40, the X and Y displacement can vary between -20 and
++20, a range of 40.</UL>
+<A NAME="trigger_earthquake"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_earthquake (.5 .5 .5) ?</B>
+<UL>The Rogue Earthquake generator. Used for local area earthquakes. Anytime
+a person is in an active field, they shake. If the trigger is a target,
+it will be OFF until triggered. It will then toggle between ON and OFF.
+
+<P><B>"weapon" </B>richter scale of movement (default 40) With a given
+a "weapon" value of 40, the X and Y displacement can vary between -20 and
++20, a range of 40.</UL>
+<A NAME="trigger_earthquake_kill"></A>
+<HR WIDTH="100%">
+<BR><B>trigger_earthquake_kill (.5 .5 .5) ?</B>
+<UL>Trigger to kill the level-wide earthquake.</UL>
+<A NAME="func_elvtr_button"></A>
+<HR WIDTH="100%">
+<BR><B>func_elvtr_button (0 .5 .8) ? ELVTR_DOWN</B>
+<UL>ELEVATOR BUTTON ONLY! When a button is touched, it moves some distance
+in the direction of it's angle, triggers all of it's targets, waits some
+time, then returns to it's original position where it can be triggered
+again.
+
+<P><B>ELVTR_DOWN </B>= causes this to be a DOWN button. Default is UP.
+
+<P><B>"angle" </B>determines the opening direction
+
+<P><B>"target" </B>all entities with a matching targetname will be used
+
+<P><B>"speed" </B>override the default 40 speed
+
+<P><B>"wait" </B>override the default 1 second wait (-1 = never return)
+
+<P><B>"lip" </B>override the default 4 pixel lip remaining at end of move
+
+<P><B>"health" </B>if set, the button must be killed instead of touched
+
+<P><B>"sounds"</B>
+<UL>0 - steam metal
+<BR>1 - wooden clunk
+<BR>2 - metallic click
+<BR>3 - in-out</UL>
+</UL>
+<A NAME="func_new_plat"></A>
+<HR WIDTH="100%">
+<BR><B>func_new_plat (0 .5 .8) ? DN_N_WAIT PLT_TOGGLE ELEVATOR START_AT_TOP
+PLAT2 P2_BOTTOM</B>
+<UL>Plats are always drawn in the extended position, so they will light
+correctly. If the plat is the target of another trigger or button, it will
+start out disabled in the extended position until it is trigger, when it
+will lower and become a normal plat.
+
+<P><B>DN_N_WAIT </B>= starts at the top and when triggered, goes down,
+waits, then comes back up.
+
+<P><B>PLT_TOGGLE&nbsp; </B>= will change between the top and bottom each
+time it is triggered.
+
+<P><B>ELEVATOR </B>= elevator plat. You can have as many levels as you
+want but they must be all the same distance away. Use elevator button entity
+as the trigger.
+
+<P><B>START_AT_TOP </B>= optional flag for elevators. It just tells the
+elevator that it's position is the top floor. (Default is the bottom floor)
+USE THIS ONLY WITH ELEVATORS!
+
+<P><B>PLAT2 </B>= a fixed version of the original plat. If you want the
+plat to start at the bottom and move to the top on demand, use a negative
+height. That will tell Quake to lower the plat at spawn time. Always place
+this plat type in the top position when making the map. This will ensure
+correct lighting, hopefully. If a plat2 is the target of a trigger, it
+will be disabled until it has been triggered. Delay is the wait before
+the plat returns to original position. If you don't want to bother figuring
+out the height, don't put a value in the height.
+
+<P><B>P2_BOTTOM </B>= an optional switch to have an auto-sized plat2 start
+at the bottom.
+
+<P><B>"health" </B>number of seconds to wait (default 5) for a DN_N_WAIT
+plat.
+
+<P><B>"cnt" </B>the number of floors for an elevator plat.
+
+<P><B>"height" </B>the distance between floors for an elevator plat. If
+"height" is set, that will determine the amount the plat moves, instead
+of being implicitly determined by the model's height.
+
+<P><B>"delay" </B>for PLAT2 plat. default 3
+
+<P><B>"speed" </B>travel speed for PLAT2 plat. default 150
+
+<P><B>"cnt" </B>for PLAT2 plat. default 2
+
+<P><B>"sounds" </B>selects the sounds to use while moving.
+<UL>1 - base fast
+<BR>2 - chain slow</UL>
+</UL>
+<A NAME="light_candle"></A>
+<HR WIDTH="100%">
+<BR><B>light_candle (0 .5 0) (-4 -4 -10) (4 4 10)</B>
+<UL>A lighting Candle. Default light value is 200, Default style is 0.</UL>
+<A NAME="light_lantern"></A>
+<HR WIDTH="100%">
+<BR><B>light_lantern (0 .5 0) (-10 -10 -20) (10 10 20)</B>
+<UL>Light-emitting lantern. Default light value is 200, Default style is
+0.</UL>
+&nbsp;
+</BODY>
+</HTML>

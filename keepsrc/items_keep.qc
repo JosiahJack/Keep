@@ -1,6 +1,6 @@
 void() weapon_touch = {
 	local float best, new;
-	local float leave, moditem, use2, useperms;
+	local float leave, moditem, use2, useperms, usehackbank;
 
 	// if the player was using his best weapon
 	// change up to the new one if better		
@@ -8,6 +8,7 @@ void() weapon_touch = {
 
 	use2 = FALSE; //bit to set if checking against self.items2
 	useperms = FALSE; // diddo for checking against self.perms
+	usehackbank = FALSE; // diddo for checking against self.moditems
 	// Deathmatch/coop switch
 	if (deathmatch == 2 || coop) leave = TRUE;
 	else leave = FALSE;
@@ -168,6 +169,67 @@ void() weapon_touch = {
 		new = IT2_CROSS;
 		use2 = TRUE;
 	}
+	// Arms of Asgard weapons by Ryan "ryanscissorhands" Holaday
+	else if (self.classtype == CT_RAPIER) {
+		if (leave && (other.moditems & IT_RAPIER) ) return;
+		update_configflag(SVR_UPDLG, TRUE);
+		moditem = TRUE;
+		new = IT_RAPIER;
+	}
+	else if (self.classtype == CT_MACE) {
+		if (leave && (other.moditems & IT_MACE) ) return;
+		update_configflag(SVR_UPDLG, TRUE);
+		moditem = TRUE;
+		usehackbank = TRUE;
+		new = IT_MACE;
+		other.ammo_bloodcrystals = other.ammo_bloodcrystals + AMMO_BLOOD_WPN;
+	}
+	else if (self.classtype == CT_ICE) {
+		if (leave && (other.moditems & IT_ICE) ) return;
+		update_configflag(SVR_UPDLG, TRUE);
+		moditem = TRUE;
+		usehackbank = TRUE;
+		new = IT_ICE;
+		other.ammo_elemental = other.ammo_elemental + AMMO_ELEMENTAL_WPN;
+	}
+	else if (self.classtype == CT_SCIMITAR) {
+		if (leave && (other.moditems & IT_SCIMITAR) ) return;
+		update_configflag(SVR_UPDLG, TRUE);
+		moditem = TRUE;
+		new = IT_SCIMITAR;
+		other.ammo_elemental = other.ammo_elemental + AMMO_ELEMENTAL_WPN;
+	}
+	else if (self.classtype == CT_VOID_STAFF) {
+		if (leave && (other.moditems & IT_VOID_STAFF) ) return;
+		update_configflag(SVR_UPDLG, TRUE);
+		moditem = TRUE;
+		usehackbank = TRUE;
+		new = IT_VOID_STAFF;
+		other.ammo_voidshards = other.ammo_voidshards + AMMO_VOID_WPN;
+	}
+	else if (self.classtype == CT_GUNGNIR) {
+		if (leave && (other.moditems & IT_GUNGNIR) ) return;
+		update_configflag(SVR_UPDLG, TRUE);
+		moditem = TRUE;
+		usehackbank = TRUE;
+		new = IT_GUNGNIR;
+		other.ammo_voidshards = other.ammo_voidshards + AMMO_VOID_WPN;
+	}
+	else if (self.classtype == CT_SANGUINATORS) {
+		if (leave && (other.moditems & IT_SANGUINATORS) ) return;
+		update_configflag(SVR_UPDLG, TRUE);
+		moditem = TRUE;
+		new = IT_SANGUINATORS;
+		other.ammo_bloodcrystals = other.ammo_bloodcrystals + AMMO_BLOOD_WPN;
+	}
+	else if (self.classtype == CT_FLAK) {
+		if (leave && (other.moditems & IT_FLAK) ) return;
+		update_configflag(SVR_UPDLG, TRUE);
+		moditem = TRUE;
+		usehackbank = TRUE;
+		new = IT_FLAK;
+		other.ammo_nails = other.ammo_nails + AMMO_NAILS_WPN;
+	}
 	//----------------------------------------------------------------------
 	else return;
 
@@ -221,6 +283,7 @@ void() weapon_touch = {
 			}
 		}
 		if (moditem) {
+			if (moditem == IT_ICE || moditem == IT_MACE || moditem == IT_VOID_STAFF || moditem == IT_FLAK || moditem == IT_GUNGNIR) other.selfweaponismoditems = TRUE;
 			other.moditems = other.moditems | new;
 			if (moditem == IT_UPGRADE_LG) other.items = other.items | IT_LIGHTNING;  // give lightning just in case
 			if (moditem == IT_UPGRADE_AXE || self.perms & IT_CHAINSAW) other.items = other.items | IT_AXE; // give axe just in case
@@ -251,6 +314,8 @@ void() weapon_touch = {
 		}
 		//W_SetCurrentAmmo(other);
 	}
+	if (usehackbank) other.selfweaponismoditems = TRUE;
+	else other.selfweaponismoditems = FALSE;
 	W_SetCurrentAmmo(other);
 
 	// If co-op active, exit
@@ -465,6 +530,18 @@ void() ammo_touch = {
 	else if (self.classtype == CT_AMMOBOLTS) {
 		if (other.ammo_bolts >= AMMO_MAXBOLTS) return;
 		other.ammo_bolts = other.ammo_bolts + self.aflag;
+	}
+	else if (self.classtype == CT_AMMOBLOODCRYSTALS) {
+		if (other.ammo_bloodcrystals >= AMMO_MAXBLOOD) return;
+		other.ammo_bloodcrystals = other.ammo_bloodcrystals + self.aflag;
+	}
+	else if (self.classtype == CT_AMMOVOIDSHARDS) {
+		if (other.ammo_voidshards >= AMMO_MAXVOID) return;
+		other.ammo_voidshards = other.ammo_voidshards + self.aflag;
+	}
+	else if (self.classtype == CT_AMMOELEMENTAL) {
+		if (other.ammo_elemental >= AMMO_MAXMANA) return;
+		other.ammo_elemental = other.ammo_elemental + self.aflag;
 	}
 
 	// Check/cap ammo limits
@@ -938,6 +1015,8 @@ void () item_artifact_horn = {
 	setsize (self,VEC_HULL_MIN,VEC_HULL_MAX);
 	item_start ();
 };
+
+void() item_hornofconjuring = { self.classname = "item_artifact_horn"; item_artifact_horn(); };
 
 // Can't touch dis!
 void () item_taunt = {
