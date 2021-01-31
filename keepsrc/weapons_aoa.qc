@@ -75,7 +75,7 @@ void() sword1Attack2 = [33, sword1Attack3] {self.weaponframe = 2;};
 void() sword1Attack3 = [34, sword1Attack4]
 {
 	self.weaponframe = 3;SwordSwing(1);
-	if (TomeToggleForTesting) //#techdebt. #tomeflag
+	if (self.tome_finished) //Tome of Power:every attack launches a fire projectile. #tomeflag
 	{
 		SwordMagic(1);
 		sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
@@ -100,7 +100,7 @@ void() sword2Attack3 = [39, sword2Attack4]
 {
 	self.weaponframe = 9;
 	SwordSwing(2);
-	if (TomeToggleForTesting) //#techdebt. #tomeflag
+	if (self.tome_finished) //Tome of Power:every attack launches a fire projectile. #tomeflag #tomeflag
 	{
 		SwordMagic(1);
 		sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
@@ -236,7 +236,7 @@ void() W_FireScimitar = //the first attack in the scimitar's combo
 	{
 		self.velocity =  lungeDirection*650 + '0 0 75';
 		
-		if (TomeToggleForTesting) // #techdebt #tomeflag
+		if (self.tome_finished) // #techdebt #tomeflag
 			self.velocity = self.velocity * 1.5;
 		self.flags = self.flags - FL_ONGROUND;
 	}
@@ -368,7 +368,7 @@ void() GhostRapierAnimation6 = [6, GhostRapierAnimation7] {MeleeSound();FindEnem
 void() GhostRapierAnimation7 = [7, GhostRapierAnimation8] {GhostRapierAttack(30);};
 void() GhostRapierAnimation8 = [8, GhostRapierAnimation9]
 {
-	if (TomeToggleForTesting == FALSE) //if tome of power is off, remove self, else, carry on. #techdebt #tomeflag. Change this to check for player's 'Tome of Power' flag, rather than hacky variable
+	if (!self.tome_finished) //if tome of power is off, remove self, else, carry on. #techdebt #tomeflag. Change this to check for player's 'Tome of Power' flag, rather than hacky variable
 		remove(self);
 	
 };
@@ -391,14 +391,14 @@ void() RapierAnimation8 = [0, RapierAnimation9] {self.weaponframe = 8;};
 void() RapierAnimation9 = [1, RapierAnimation10]
 {
 	self.weaponframe = 9;
-	if (TomeToggleForTesting == FALSE)//if tome of power isn't up, end sequence, else, carry on, self.attack_finished + time + 0.8
+	if (!self.tome_finished) //if tome of power isn't up, end sequence, else, carry on, self.attack_finished + time + 0.8
 	{
 		player_run();
 		self.attack_finished = time + 0.2;
 	}
 	else
 	{
-		self.attack_finished = time + 0.7;
+		self.attack_finished = time + 0.8;
 	}
 };
 void() RapierAnimation10 = [2, RapierAnimation11] {self.weaponframe = 10;};
@@ -636,7 +636,7 @@ void() IceAttack10 =	[116, IceAttack11] {self.weaponframe = 8;};
 void() IceAttack11 =	[117, IceAttack12]
 {
 	self.weaponframe = 7;
-	if (TomeToggleForTesting != TRUE) //if player isn't holding mouse, don't do second (lightning) attack. will need ammo check here later
+	if (!self.button0 || !self.tome_finished)  //If still attacking and Tome of Power: Launch Boulder for third attack in combo
 	{
 		player_run();
 		return;
@@ -1022,7 +1022,7 @@ void () VoidExplosion =
 	GreenEmbers3.nextthink = time + 0.05;
 	GreenEmbers3.think = embers1;
 
-	if (TomeToggleForTesting) //#techdebt #tomeflag
+	if (self.tome_finished) //#techdebt #tomeflag
 	{
 		T_RadiusDamageAOA(self, self.owner, 150, 150, world, DAMAGEALL);
 	}
@@ -1157,7 +1157,7 @@ void () VoidStaffProjectile =
 	VoidShard.dmg = 45;
 	VoidShard.touch = VoidShardTouch;
 	VoidShard.classname = "VoidShard";
-	if (TomeToggleForTesting == TRUE)
+	if (self.tome_finished)
 	{
 		VoidShard.velocity = v_forward*450 +'0 0 -50';
 		VoidShard.attack_offset = v_right*rnd(-30, 30);
@@ -1202,7 +1202,7 @@ void() ShrapnelShot1 = [0, ShrapnelShot2] {self.weaponframe = 1;};
 void() ShrapnelShot2 = [0, ShrapnelShot3]
 {
 	self.weaponframe = 2;
-	if (TomeToggleForTesting == TRUE) //#techdebt #tomeflag
+	if (self.tome_finished) // Tome of Power: Instan explosion #tomeflag
 		DetonateFlakShell();
 	else
 		LaunchFlakShell();
@@ -1548,7 +1548,7 @@ void(vector org, entity victim) MaceSwingHits =
 		TriggerHeal(self, 5, 100);// entity target, float hlth, float maxHealth
 	}
 
-	if (TomeToggleForTesting)
+	if (self.tome_finished)
 	{
 		
 		if (victim.classname == "monster_zombie")
@@ -1720,7 +1720,7 @@ void() GungnirDive4 = [143, player_run]
 {
 
 	self.weaponframe = 0;
-	if (TomeToggleForTesting == 1 && self.button0)
+	if (self.tome_finished == 1 && self.button0)
 	{
 		self.nextthink = time + 0.1;
 		self.think = GungnirVortex1;
@@ -1799,7 +1799,7 @@ void() ImpaleTouch =
 	impact.nextthink = time + 0.1;
 	impact.think = impactFrames;
 
-	if (TomeToggleForTesting == 1 && self.button0)
+	if (self.tome_finished && self.button0) //Tome of Power: Adds Eye of Odin to attack
 	{
 		self.nextthink = time + 0.1;
 		self.think = GungnirVortex1;
@@ -2046,7 +2046,7 @@ void()	RGaunt1 =[		115,		RGaunt2	]
 {
 	self.weaponframe=1;
 	GauntletBeam(15); //right beam
-	if (TomeToggleForTesting)
+	if (self.tome_finished)
 		AttackWithGreyOrbs();
 	self.attack_finished = time + 0.4;
 };
@@ -2066,7 +2066,7 @@ void()	LGaunt1 =[		115,		LGaunt2	]
 {
 	self.weaponframe=3;
 	GauntletBeam(-15); //left beam
-	if (TomeToggleForTesting)
+	if (self.tome_finished)
 		AttackWithGreyOrbs();
 	self.attack_finished = time + 0.4;
 };
@@ -2428,7 +2428,7 @@ void() GauntletBloodOrbit = //make the blood orbs orbit the player, and provide 
 	local vector toOwner;
 	
 	
-	if (TomeToggleForTesting) //#techdebt #tomeflag
+	if (self.tome_finished) //#techdebt #tomeflag
 	{
 		self.nextthink = time;
 		self.think = BloodTornadoSeek;
@@ -2554,7 +2554,7 @@ void() CheckBloodOrbs = //checks in a radius around the player for any blood orb
 		checkForOrbs = checkForOrbs.chain;
 	}
 	
-	if (orbCount >= 8 && TomeToggleForTesting != TRUE) //when there are 8 or more orbs available
+	if (orbCount >= 8 && !self.tome_finished) //when there are 8 or more orbs available
 	{
 		
 		//consume all orbs in range for Blood attack
@@ -2609,7 +2609,7 @@ void (float RightOffset) GauntletBeam = //triggers attack and visual effect, alt
 	makevectors(self.v_angle);
 	org = self.origin + v_up*6 + v_forward*16 + v_right*RightOffset;
 	
-	if (TomeToggleForTesting)
+	if (self.tome_finished)
 		dir = org + v_forward*700 + v_right*(-1)*RightOffset;
 	else
 		dir = org + v_forward*400 + v_right*(-1)*RightOffset;

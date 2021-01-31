@@ -101,18 +101,6 @@ void(string a, string b, string c, string d) aoaprint =
 	dprint("\n");
 };
 
-void() ToggleTomeForTesting =
-{
-
-	if (TomeToggleForTesting == TRUE)
-		TomeToggleForTesting = FALSE;
-	else
-		TomeToggleForTesting = TRUE;
-	bprint("Tome is ");
-	bprint(ftos(TomeToggleForTesting));
-	bprint("\n");
-	
-};
 
 void(string playerModel) setPlayerModel = //sets the player model to the string value, and sets appropriate mins/maxs
 {

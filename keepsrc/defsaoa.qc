@@ -9,7 +9,6 @@ void() W_FireGungnir; //
 void() W_FireSanguinators; //
 void() StaffShot1;
 void() VoidStaffProjectile;
-void() ToggleTomeForTesting;
 void() precache_aoa;
 void() LaunchBoulder;
 void() GungnirVortex1;
@@ -18,4 +17,3 @@ void() GungnirVortex1;
 .float ammo_elemental;
 
 float(entity target) CountFlakAmmo;
-float TomeToggleForTesting;
