@@ -54,6 +54,7 @@ void() ImpulseCommands =
 	else if (self.impulse == 245) givekey(IT_KEY1 + IT_KEY2);	// Both
 
 	// Legacy cheat commands, should be developer 1 only ...
+	else if (self.impulse == 248) TomeOfPowerCheat();
 	else if (self.impulse == 249) CheatCommand();
 	else if (self.impulse == 250) SharpshooterCheat();
 	else if (self.impulse == 251) NailPiercerCheat();

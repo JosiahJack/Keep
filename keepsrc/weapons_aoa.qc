@@ -2205,7 +2205,7 @@ void() AttackWithGreyOrbs = // self == Player
 
 
 
-void() BloodTornadoSeek = //converts vlood orbs into grey blood orbs, in preparation for attacks with Tome of Power
+void() BloodTornadoSeek = //converts blood orbs into grey blood orbs, in preparation for attacks with Tome of Power
 {
 	local vector cog, toOwner; //cog = center of gravity location, toOwner is the diff from cog to self.origin
 	local float distance;
@@ -2428,8 +2428,9 @@ void() GauntletBloodOrbit = //make the blood orbs orbit the player, and provide 
 	local vector toOwner;
 	
 	
-	if (self.tome_finished) //#techdebt #tomeflag
+	if (self.owner.tome_finished) //#techdebt #tomeflag
 	{
+		bprint ("This stuff is working!!!\n");
 		self.nextthink = time;
 		self.think = BloodTornadoSeek;
 		return;

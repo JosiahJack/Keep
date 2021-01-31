@@ -34,6 +34,7 @@ void() EnvSuitCheat;
 void() PentagramCheat;
 void() InvisibleCheat;
 void() QuadDamageCheat;
+void() TomeOfPowerCheat;
 void() StartIntermissionCamera;
 
 /*======================================================================
@@ -921,6 +922,24 @@ void() CheatCommand =
 	self.armorvalue = 150;
 	W_SetCurrentAmmo (self);
 };
+
+
+/*======================================================================
+ IMPULSE 248
+======================================================================*/
+void() TomeOfPowerCheat =
+{
+	if (intermission_running) return;		// intermission or finale
+	if (cinematic_running > 0) return;		// Remote camera active
+	if (deathmatch || coop) return;
+
+	dprint("\b[Impulse 248]\b Tome Of Power Cheat\n");
+	self.impulse = 0;
+	self.tome_time = 1;
+	self.tome_finished = time + POWERUP_TIMER;
+	self.items = self.items | IT_ARTTOME;
+};
+
 
 /*======================================================================
  IMPULSE 250
