@@ -368,9 +368,11 @@ void() GhostRapierAnimation6 = [6, GhostRapierAnimation7] {MeleeSound();FindEnem
 void() GhostRapierAnimation7 = [7, GhostRapierAnimation8] {GhostRapierAttack(30);};
 void() GhostRapierAnimation8 = [8, GhostRapierAnimation9]
 {
-	if (!self.tome_finished) //if tome of power is off, remove self, else, carry on. #techdebt #tomeflag. Change this to check for player's 'Tome of Power' flag, rather than hacky variable
+	if (!self.owner.tome_finished) //if tome of power is off, remove self, else, carry on. #techdebt #tomeflag. Change this to check for player's 'Tome of Power' flag, rather than hacky variable
+	{	
+		bprint("I think tome is off...\n");
 		remove(self);
-	
+	}
 };
 void() GhostRapierAnimation9 = [9, GhostRapierAnimation10] {};
 void() GhostRapierAnimation10 = [10, GhostRapierAnimation11] {};
@@ -1202,7 +1204,7 @@ void() ShrapnelShot1 = [0, ShrapnelShot2] {self.weaponframe = 1;};
 void() ShrapnelShot2 = [0, ShrapnelShot3]
 {
 	self.weaponframe = 2;
-	if (self.tome_finished) // Tome of Power: Instan explosion #tomeflag
+	if (self.tome_finished) // Tome of Power: Instant explosion #tomeflag
 		DetonateFlakShell();
 	else
 		LaunchFlakShell();
@@ -1363,7 +1365,7 @@ Lifetaker Mace		#mace	#ryanscissorhands
 */
 
 void() MaceSwing;
-void() MaceSpin;
+
 void() CastDrainHealth;
 
 void() MaceSwing1 =	[	119,	MaceSwing2	] {self.weaponframe=1;sound (self, CHAN_WEAPON, "kurok/weapons/ax1.wav", 1, ATTN_NORM);self.attack_finished = time + 0.6; }; //th
@@ -1395,59 +1397,20 @@ void() MaceBackhand6 =	[	0,	DrainHealth1	]
 	}
 };
 
-void() DrainHealth1 =	[112, DrainHealth2]	{self.weaponframe = 9;MaceSpin();self.attack_finished = time + 0.8;};  
+void() DrainHealth1 =	[112, DrainHealth2]	{self.weaponframe = 9;self.attack_finished = time + 0.8;};  
 void() DrainHealth2 =	[115, DrainHealth3]	{self.weaponframe = 10;CastDrainHealth();}; 
 void() DrainHealth3 =	[118, DrainHealth4]	{self.weaponframe = 11;}; 
 void() DrainHealth4 =	[118, player_run]	{self.weaponframe = 11;}; 
 
 
-void() drain1 = [1, drain2]{self.frame = 6;};
-void() drain2 = [1, drain3]{self.frame = 5;};
-void() drain3 = [1, drain4]{self.frame = 4;};
-void() drain4 = [1, drain5]{self.frame = 3;};
-void() drain5 = [1, drain6]{self.frame = 2;};
-void() drain6 = [1, drain7]{self.frame = 1;};
-void() drain7 = [1, drain17]{self.frame = 0;};
-
-void() drain8 = [1, drain9]{self.frame = 9;};
-void() drain9 = [1, drain10]{self.frame = 8;};
-void() drain10 = [1, drain11]{self.frame = 7;};
-void() drain11 = [1, drain12]{self.frame = 6;};
-void() drain12 = [1, drain13]{self.frame = 5;};
-void() drain13 = [1, drain14]{self.frame = 4;};
-void() drain14 = [1, drain15]{self.frame = 3;};
-void() drain15 = [1, drain16]{self.frame = 2;};
-void() drain16 = [1, drain17]{self.frame = 1;};
-void() drain17 = [1, drain2]{self.frame = 0;self.nextthink = time + 0.1; self.think = SUB_Remove;};
-
-
-void() Spin =
+void() drainFrames =
 {
-	self.count = self.count + 5;
-	
-	if (self.count > 330) //make player view spin, currently linear
-	{
-		self.owner.punchangle = '0 0 0';
-		bprint("complete.    ");
+	self.frame = self.frame + 1;
+	if (self.frame >9)
 		remove(self);
-		return;
-	}
-	self.owner.punchangle_y = self.count; //makes the player face an increasingly higher X punchangle
-	self.nextthink = time + 0.005;
-	self.think = Spin;
+	self.nextthink = time + 0.1;
+	self.think = drainFrames;
 };
-
-void() MaceSpin =
-{
-	local entity spinner;
-
-	spinner = spawn();
-	spinner.owner = self;
-	spinner.nextthink = time + 0.002;
-	spinner.count = 10;
-	spinner.think = Spin;
-};
-
 
 void(vector location) DrainHealthEffect =
 {
@@ -1458,12 +1421,12 @@ void(vector location) DrainHealthEffect =
 	FX.movetype = MOVETYPE_NONE;
 	FX.solid = SOLID_NOT;
 	
-	setmodel (FX, "progs/aoa/bloodembers.mdl");
+	setmodel (FX, "progs/aoa/bloodsphere.mdl");
 	setsize (FX, '0 0 0', '0 0 0');
-	setorigin (FX, location);
+	setorigin (FX, location + '0 0 -24');
 
 	FX.nextthink = time + 0.1;
-	FX.think = drain1;
+	FX.think = drainFrames;
 };
 
 void(entity victim, entity attacker) DrainHealth 
@@ -1496,8 +1459,8 @@ void() CastDrainHealth =
 		}
 		NearbyEnemies = NearbyEnemies.chain;
 	}
-	if (hit == TRUE)
-	DrainHealthEffect(self.origin + '0 0 20');
+	//if (hit == TRUE)
+		DrainHealthEffect(self.origin + '0 0 20');
 };
 
 
@@ -2524,7 +2487,7 @@ void(entity victim) GauntletDrainSpell = //spawns orbs of blood at enemy hit by 
 	FlyingBlood.dmg = 3;
 	FlyingBlood.attack_finished = time + 45;
 
-	FlyingBlood.velocity = normalize(self.origin - self.owner.origin) * 175 + '0 0 30' + spread('30 30 40'); //fly sort of towards owner
+	FlyingBlood.velocity = normalize(self.origin - self.owner.origin) * 175 + '0 0 30' + spread('100 100 60'); //fly sort of towards owner
 	FlyingBlood.angles = vectoangles(spread('100 100 100'));
 	self.avelocity = spread('360 360 360');
 	FlyingBlood.attack_offset = spread('5 5 4');
