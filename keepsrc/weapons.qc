@@ -2056,7 +2056,7 @@ void(entity targ) W_ChangeWeapon = {
 				if (targ.ammo_multi_rockets < 1) am = TRUE; // no ammo
 			}
 			if (fl == IT_GUNGNIR) {
-				if (targ.ammo_voidshards < 1) am = TRUE; // no ammo
+				am = FALSE; // never needs ammo
 			}
 
 			// checkvec = WeaponSlotPickOneOfThree(targ, IT_GRENADE_LAUNCHER, IT2_PROXIMITY_GUN, IT_MULTI_GRENADE, IN_ITEMS1, IN_ITEMS2, IN_ITEMS1);
@@ -2245,7 +2245,7 @@ void(entity targ) W_ChangeWeapon = {
 		gotgun = checkvec_y;
 		inhackbank = checkvec_z;
 		if (fl == IT_GUNGNIR) {
-			if (targ.ammo_voidshards < 1) am = TRUE; // no ammo
+			am = FALSE; // doesn't require ammo
 		}
 
 		// if ((targ.items & IT2_CROSS) && (targ.weapon == IT2_MJOLNIR)) {

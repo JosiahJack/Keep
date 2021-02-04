@@ -228,7 +228,8 @@ void() weapon_touch = {
 		moditem = TRUE;
 		usehackbank = TRUE;
 		new = IT_FLAK;
-		other.ammo_nails = other.ammo_nails + AMMO_NAILS_WPN;
+		other.ammo_nails = other.ammo_nails + AMMO_NAILS_WPN*2;
+		other.ammo_rockets = other.ammo_rockets + AMMO_ROCKETS_WPN*2;
 	}
 	//----------------------------------------------------------------------
 	else return;

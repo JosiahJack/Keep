@@ -592,7 +592,7 @@ void() W_FireRapier =
 
 /*
 ==================================================================
-Ice Storm by ryanscissorhands		#chain #ryanscissorhands
+Ice Storm by ryanscissorhands		#ice #chain #ryanscissorhands
 ==================================================================
 */
 
@@ -657,13 +657,12 @@ void() T_BoulderTouch =
 	local float speed;
 		
 	speed = vlen(self.velocity);
-	
-	self.velocity = self.velocity * 0.5;
-		
+			
 	if (other.takedamage)
 	{
 		T_Damage(other, self, self.owner,self.dmg, DAMARMOR);
-		other.velocity = ignoreVertical(self.velocity)*speed + '0 0 250';		
+		// #techdebt spawn blood
+		other.velocity = ignoreVertical(self.velocity)*speed + '0 0 300';		
 		aoaprint("Self.dmg = ", ftos(self.dmg), "\n", "");
 		if (self.dmg > 10) //reduce damage until it's low enough to ignore
 			self.dmg = self.dmg *0.4;
@@ -672,9 +671,21 @@ void() T_BoulderTouch =
 	}
 	else
 	{
-		T_RadiusDamage(self, self.owner, self.dmg*speed/1500, self.owner, DAMAGEALL);
-		aoaprint("Radius damage is ", ftos(self.dmg*speed/1500), "\n", "");
+		T_RadiusDamage(self, self.owner, self.dmg*speed/1000, self.owner, DAMAGEALL);
+		aoaprint("Radius damage is ", ftos(self.dmg*speed/1000), "\n", "");
 	}
+
+	if (speed > 200)
+		sound (self, CHAN_WEAPON, "aoa/fastboulder.wav", 1, ATTN_NORM);//fast impact sound
+	else
+		sound (self, CHAN_WEAPON, "aoa/slowboulder.wav", 1, ATTN_NORM);//slow impact sound
+
+	self.velocity = self.velocity * 0.5;
+
+	particle(self.origin, spread('70 70 70'), 2, 4);
+	particle(self.origin, spread('70 70 70'), 2, 4);
+	particle(self.origin, spread('70 70 70'), 2, 4);
+	 
 
 };
 
@@ -685,6 +696,7 @@ void() LaunchBoulder =
 	
 	boulder = spawn();
 	boulder.owner = self;
+	boulder.classgroup = CG_PROJALL;
 	boulder.movetype = MOVETYPE_BOUNCE;
 	boulder.solid = SOLID_BBOX;
 	
@@ -695,10 +707,12 @@ void() LaunchBoulder =
 	
 	boulder.velocity = v_forward*1200 + v_up*120;
 	boulder.touch = T_BoulderTouch;
-	boulder.dmg = 100;
+	boulder.dmg = 120;
 	
 	boulder.nextthink = time + 3;
 	boulder.think = SUB_Remove;
+	sound(self, CHAN_WEAPON, "aoa/rockattack.wav", 1, ATTN_NORM);
+
 };
 
 void() ChainedLightning =
@@ -793,6 +807,7 @@ void() W_FireChainLightning = //direct hitscan damage, then lightning chains fro
 	stormOrigin = terminus + '0 0 20';
 	storm = spawn();
 	storm.owner = self;
+	storm.classgroup = CG_PROJALL;
 	setmodel (storm, "progs/aoa/tessla.mdl");
 	setsize (storm, '0 0 0', '0 0 0');
 	setorigin (storm, stormOrigin);
@@ -808,7 +823,7 @@ void() IceSpikeTouch =
 {
 	if (other != self.owner && other.takedamage)
 	{
-		T_Damage(other, self, self.owner, 3, DAMARMOR);//3 dmg per ice spike
+		T_Damage(other, self, self.owner, 2, DAMARMOR);//3 dmg per ice spike
 		SpawnBlood(self, self.origin, self.velocity, 4);
 	}	
 	else
@@ -827,10 +842,11 @@ void(float vertical, float horizontal) IceSpikeProjectile =
 
 	IceSpike = spawn();
 	IceSpike.owner = self;
+	IceSpike.classgroup = CG_PROJALL;
 	IceSpike.movetype = MOVETYPE_FLYMISSILE;
 	IceSpike.solid = SOLID_BBOX;
 	IceSpike.touch = IceSpikeTouch;
-	IceSpike.velocity = v_forward*900 - v_up*vertical*7 - v_right*horizontal*7 + spread('10 10 10');
+	IceSpike.velocity = v_forward*900 - v_up*vertical*8 - v_right*horizontal*8;// + spread('12 12 12');
 	IceSpike.angles = vectoangles(IceSpike.velocity);
 	IceSpike.avelocity_z = crandom()*1000;
 	setmodel (IceSpike, "progs/aoa/icespike.mdl"); //remember to precache
@@ -838,6 +854,18 @@ void(float vertical, float horizontal) IceSpikeProjectile =
 	setorigin (IceSpike, self.origin + v_up* (16 + vertical) + v_forward*8 + v_right*horizontal);
 	IceSpike.nextthink = time + 1.2;
 	IceSpike.think = SUB_Remove;
+};
+void(float offset) IceSpread =
+{
+	IceSpikeProjectile (offset, offset);
+	IceSpikeProjectile (offset, -offset);
+	IceSpikeProjectile (-offset, offset);
+	IceSpikeProjectile (-offset, -offset);
+	IceSpikeProjectile (0, offset);
+	IceSpikeProjectile (0, -offset);
+	IceSpikeProjectile (offset, 0);
+	IceSpikeProjectile (-offset, 0);
+	
 };
 
 void () W_FireIce = //#ice1
@@ -853,23 +881,14 @@ void() IceProjectiles =
 	self.attack_finished = time + 0.9;
 	
 	sound (self, CHAN_WEAPON, "aoa/iceattack.wav", 1, ATTN_NORM);
-	IceSpikeProjectile (crandom()*35, crandom()*10);
-	IceSpikeProjectile (crandom()*35, crandom()*20);
-	IceSpikeProjectile (crandom()*30, crandom()*20);
-	IceSpikeProjectile (crandom()*25, crandom()*25);
-	IceSpikeProjectile (crandom()*25, crandom()*25);
+	//15 projectiles IceSpikeProjectile ();
 	
-	IceSpikeProjectile (crandom()*15, crandom()*20);
-	IceSpikeProjectile (crandom()*15, crandom()*20);
-	IceSpikeProjectile (crandom()*15, crandom()*30);
-	IceSpikeProjectile (crandom()*8, crandom()*10);
-	IceSpikeProjectile (crandom()*8, crandom()*10);
+	IceSpread(24);
+	IceSpread(16);
+	IceSpread(8);
 
-	IceSpikeProjectile (crandom()*15, crandom()*25);
-	IceSpikeProjectile (crandom()*15, crandom()*25);
-	IceSpikeProjectile (crandom()*15, crandom()*30);
-	IceSpikeProjectile (crandom()*8, crandom()*8);
-	IceSpikeProjectile (crandom()*8, crandom()*8);
+	
+
 };
 
 //==========================================END OF ICE STORM===================================================
@@ -1368,7 +1387,7 @@ void() MaceSwing;
 
 void() CastDrainHealth;
 
-void() MaceSwing1 =	[	119,	MaceSwing2	] {self.weaponframe=1;sound (self, CHAN_WEAPON, "kurok/weapons/ax1.wav", 1, ATTN_NORM);self.attack_finished = time + 0.6; }; //th
+void() MaceSwing1 =	[	119,	MaceSwing2	] {self.weaponframe=1;sound (self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);self.attack_finished = time + 0.6; }; //th
 void() MaceSwing2 =	[	120,	MaceSwing3	] {self.weaponframe=2;};
 void() MaceSwing3 =	[	121,	MaceSwing4	] {self.weaponframe=3; MaceSwing(); };
 void() MaceSwing4 =	[	122,	MaceSwing5	] {self.weaponframe=4;};
@@ -1382,7 +1401,7 @@ void() MaceSwing5 =	[	123,	MaceBackhand1	]
 	}
 };
 
-void() MaceBackhand1 =	[	125,	MaceBackhand2	] {self.weaponframe=6;sound (self, CHAN_WEAPON, "kurok/weapons/ax1.wav", 1, ATTN_NORM);self.attack_finished = time + 0.7;};
+void() MaceBackhand1 =	[	125,	MaceBackhand2	] {self.weaponframe=6;sound (self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);self.attack_finished = time + 0.7;};
 void() MaceBackhand2 =	[	126,	MaceBackhand3	] {self.weaponframe=7;MaceSwing();};
 void() MaceBackhand3 =	[	127,	MaceBackhand4	] {self.weaponframe=8;};
 void() MaceBackhand4 =	[	128,	MaceBackhand5	] {self.weaponframe=0;};
@@ -1390,7 +1409,7 @@ void() MaceBackhand5 =	[	129,	MaceBackhand6	] {self.weaponframe=0;};
 void() MaceBackhand6 =	[	0,	DrainHealth1	]
 {
 	self.weaponframe=0;
-	if (!self.button0) //if player isn't holding mouse, don't do second attack. will need ammo check here later
+	if (!self.button0 || !self.tome_finished) //if player isn't holding mouse or doesn't have Tome of Power, end combo
 	{
 		player_run();
 		return;

@@ -43,6 +43,11 @@ void() precache_aoa = //precache all models and sounds for aoa weapons
 	precache_sound ("kurok/weapons/ax1.wav");
 	precache_sound ("hknight/hit.wav");
 	precache_sound ("shambler/sboom.wav");
+	precache_sound ("weapons/ax1.wav");
+	precache_sound ("aoa/rockattack.wav");
+	precache_sound ("aoa/fastboulder.wav");
+	precache_sound ("aoa/slowboulder.wav");
+	
 	
 	//#aoa precache models
 	precache_model ("progs/aoa/ghostrapier.mdl");
@@ -89,6 +94,10 @@ void() precache_aoa = //precache all models and sounds for aoa weapons
 	precache_model ("progs/aoa/g_sanguinators.mdl");
 	precache_model ("progs/aoa/glow.mdl");
 	precache_model ("progs/aoa/tessla.mdl");
+	precache_model ("progs/aoa/bloodsphere.mdl");
+
+
+
 	//precache_model ("progs/aoa/tessla.mdl");
 };
 
