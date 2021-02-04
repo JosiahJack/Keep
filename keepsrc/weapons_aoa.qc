@@ -125,22 +125,24 @@ void() sword3Attack1 = [43, sword3Attack3]
 	
 
 };
-//void() sword3Attack2 = [44, sword3Attack3] {self.weaponframe = 14;};
 void() sword3Attack3 = [45, sword3Attack5] {self.weaponframe = 15;};
-//void() sword3Attack4 = [46, sword3Attack5] {self.weaponframe = 16;}; #techdebt need to re look at frames here
 void() sword3Attack5 = [47, sword3Attack6]
 {
 	self.weaponframe = 17;
 	SwordSwing(3);
 	sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
 };
-
 void() sword3Attack6 = [0, sword3Attack7] {self.weaponframe = 18;};
-
 void() sword3Attack7 = [1, sword3Attack8]
 {
 	self.weaponframe = 19;
-	SwordMagic(3);
+	if (self.ammo_elemental > 2) //if they have ammo, consume it to fire projectile
+	{
+		SwordMagic(3);//launch projectile
+		self.currentammo = self.ammo_elemental = self.ammo_elemental - 3;
+		if (self.currentammo <0)
+			self.currentammo = self.ammo_elemental = 0;
+	}
 	sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
 };
 
@@ -309,13 +311,13 @@ void(float attackNumber) SwordSwing =
 
 void() GlowTouch =
 {
-	if (other.classname == "monster_zombie")
+	if (other.classgroup == CG_ZOMBIE)
 	{
 		T_Damage(other, self, self.owner, 150, NOARMOR);
 	}
 	T_RadiusDamageAOA (self, self.owner, 150, 200, self.owner, DAMAGEALL);
 
-	SpawnExplosion(EXPLODE_MED, self.origin, SOUND_REXP3);
+	SpawnExplosion(EXPLODE_SMALL, self.origin, "yakman/expsmall.wav");
 	remove(self);
 };
 
@@ -327,6 +329,7 @@ void(float projectileNumber) SwordMagic =
 	makevectors(self.v_angle);
 	glow = spawn();
 	glow.owner = self;
+	glow.classgroup = CG_PROJALL;
 	glow.solid = SOLID_BBOX;
 	glow.movetype = MOVETYPE_BOUNCE;
 	
@@ -857,15 +860,14 @@ void(float vertical, float horizontal) IceSpikeProjectile =
 };
 void(float offset) IceSpread =
 {
-	IceSpikeProjectile (offset, offset);
-	IceSpikeProjectile (offset, -offset);
-	IceSpikeProjectile (-offset, offset);
-	IceSpikeProjectile (-offset, -offset);
-	IceSpikeProjectile (0, offset);
-	IceSpikeProjectile (0, -offset);
-	IceSpikeProjectile (offset, 0);
-	IceSpikeProjectile (-offset, 0);
-	
+	IceSpikeProjectile (offset*0.9, offset*0.9);
+	IceSpikeProjectile (offset*0.9, -offset*0.9);
+	IceSpikeProjectile (-offset*0.9, offset*0.9);
+	IceSpikeProjectile (-offset*0.9, -offset*0.9);
+	IceSpikeProjectile (0, offset*1.2);
+	IceSpikeProjectile (0, -offset*1.2);
+	IceSpikeProjectile (offset*1.2, 0);
+	IceSpikeProjectile (-offset*1.2, 0);	
 };
 
 void () W_FireIce = //#ice1
@@ -1212,14 +1214,14 @@ void() W_FireVoidStaff =
 
 /*
 ========================================================================================
-Flak Cannon		#flak	#ryanscissorhands
+Flak Cannon		#flak	#ryanscissorhands 
 ========================================================================================
 */
 
 void() LaunchFlakShell;
 void() DetonateFlakShell;
 
-void() ShrapnelShot1 = [0, ShrapnelShot2] {self.weaponframe = 1;};
+void() ShrapnelShot1 = [0, ShrapnelShot2] {self.weaponframe = 1;sound(self, CHAN_WEAPON, "aoa/flakshot.wav", 1.0, ATTN_NORM);};
 void() ShrapnelShot2 = [0, ShrapnelShot3]
 {
 	self.weaponframe = 2;
@@ -1237,6 +1239,8 @@ void() ShrapnelShot7 = [0, player_run] {self.weaponframe = 0;};
 
 void() ShrapnelTouch =
 {
+	local float soundVariance;
+	local string soundFile;
 	if (pointcontents(self.origin) <-2)// all liquids and sky
 	{
 		remove(self);
@@ -1249,8 +1253,21 @@ void() ShrapnelTouch =
 		self.velocity = spread('1 1 1')*1500;
 	}
 	
+	soundVariance = random();
+	
+	if (soundVariance > 0.8) // mix up riccochet sounds, and don't make the sound every time; it's a bit noisy
+		soundFile = "weapons/ric1.wav";
+	else if (soundVariance > 0.6)
+		soundFile = "weapons/ric2.wav";
+	else if (soundVariance > 0.4)
+		soundFile = "weapons/ric3.wav";
+	
+	if (soundVariance > 0.4)
+		sound (self, CHAN_WEAPON, soundFile, 0.5, ATTN_NORM);
+	
 	if (self.count <= 0) //after a number (self.count) bounces, delete shrapnel
 		remove(self);
+	
 };
 
 void(vector direction) FlakShrapnel =
@@ -1259,6 +1276,7 @@ void(vector direction) FlakShrapnel =
 	
 	shrapnel = spawn();
 	shrapnel.owner = self.owner;
+	shrapnel.classgroup = CG_PROJALL;
 	shrapnel.solid = SOLID_BBOX;
 	shrapnel.movetype = MOVETYPE_BOUNCE;
 	shrapnel.count = 3; //number of touches before deletion
@@ -1280,7 +1298,7 @@ void() FlakExplode =
 {
 	T_RadiusDamage(self, self.owner, 125, world, DAMAGEALL);
 	//trigger sound #techdebt
-	FlakShrapnel('1 0 0.1'); //18projectiles
+	FlakShrapnel('1 0 0.1'); //
 	FlakShrapnel('-1 0 0.1');
 	FlakShrapnel('0 1 0.1');
 	FlakShrapnel('0 -1 0.1');
@@ -1302,6 +1320,7 @@ void() FlakExplode =
 	FlakShrapnel(spread('1 1 1'));
 	FlakShrapnel(spread('1 1 1')); //20 projectiles
 	
+	sound (self, CHAN_VOICE, "drake/weapons/r_exp3a.wav", 1.0, ATTN_NORM);
 	BecomeExplosion();
 };
 
@@ -1322,9 +1341,7 @@ void() DetonateFlakShell =
 	explosion.origin = trace_endpos - v_forward*4;
 	explosion.nextthink = time;
 	explosion.think = FlakExplode;
-	
-	
-	
+		
 };
 
 void() W_FireFlak =
@@ -1354,6 +1371,7 @@ void() LaunchFlakShell =
 	
 	flak = spawn();
 	flak.owner = self;
+	flak.classgroup = CG_PROJALL;
 	flak.solid = SOLID_BBOX;
 	flak.movetype = MOVETYPE_BOUNCE;
 	

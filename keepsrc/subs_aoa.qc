@@ -47,6 +47,8 @@ void() precache_aoa = //precache all models and sounds for aoa weapons
 	precache_sound ("aoa/rockattack.wav");
 	precache_sound ("aoa/fastboulder.wav");
 	precache_sound ("aoa/slowboulder.wav");
+	precache_sound ("drake/weapons/r_exp3a.wav");
+	precache_sound ("aoa/flakshot.wav");
 	
 	
 	//#aoa precache models
