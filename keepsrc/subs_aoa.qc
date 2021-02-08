@@ -50,7 +50,7 @@ void() precache_aoa = //precache all models and sounds for aoa weapons
 	precache_sound ("drake/weapons/r_exp3a.wav");
 	precache_sound ("aoa/flakshot.wav");
 	precache_sound ("aoa/hhs.wav"); //mace third attack (Tome of Power)
-	
+	precache_sound ("aoa/mildarmor.wav");
 	
 	//#aoa precache models
 	precache_model ("progs/aoa/ghostrapier.mdl");
@@ -106,11 +106,11 @@ void() precache_aoa = //precache all models and sounds for aoa weapons
 
 void(string a, string b, string c, string d) aoaprint =
 {
-	dprint(a);
-	dprint(b);
-	dprint(c);
-	dprint(d);
-	dprint("\n");
+	bprint(a);
+	bprint(b);
+	bprint(c);
+	bprint(d);
+	bprint("\n");
 };
 
 
