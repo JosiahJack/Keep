@@ -1378,7 +1378,7 @@ void(entity targ) W_SetCurrentAmmo = {
 			//targ.items = targ.items | IT_ELEMENTAL;
 		}
 		else if (targ.weapon == IT_RAPIER) {
-			targ.currentammo = 0;
+			targ.currentammo = targ.ammo_bloodcrystals;
 			targ.weaponmodel = "progs/aoa/v_rapier.mdl";
 		}
 		else {
@@ -1416,7 +1416,8 @@ void(entity targ) W_SetCurrentAmmo = {
 			targ.weaponmodel = "";
 		}
 	}
-	targ.weaponframe = 0;		// reset weapon frame
+	if (targ.weapon != IT_MACE && targ.weapon != IT_ICE && targ.weapon != IT_SCIMITAR && targ.weapon != IT_GUNGNIR && targ.weapon != IT_RAPIER && targ.weapon != IT_SANGUINATORS && targ.weapon != IT_VOID_STAFF)
+		targ.weaponframe = 0;		// reset weapon frame, but not for Arms of Asgard weapons
 };
 
 /*======================================================================
