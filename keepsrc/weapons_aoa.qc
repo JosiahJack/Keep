@@ -2,7 +2,7 @@ void() player_run;
 void(vector p1, vector p2, entity from, float damage) LightningDamage;
 void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage;
 
-//   SPHERE
+//   SPHERE #techdebt to remove it when no longer necessary
 
 void() SphereFrames = 
 {
@@ -23,6 +23,7 @@ void() MakeSphere =
 	
 	sphere = spawn();
 	sphere.owner = self;
+	sphere.classgroup = CG_PROJALL;
 	sphere.solid = SOLID_NOT;
 	sphere.movetype = MOVETYPE_NONE;
 	
@@ -125,22 +126,24 @@ void() sword3Attack1 = [43, sword3Attack3]
 	
 
 };
-//void() sword3Attack2 = [44, sword3Attack3] {self.weaponframe = 14;};
 void() sword3Attack3 = [45, sword3Attack5] {self.weaponframe = 15;};
-//void() sword3Attack4 = [46, sword3Attack5] {self.weaponframe = 16;}; #techdebt need to re look at frames here
 void() sword3Attack5 = [47, sword3Attack6]
 {
 	self.weaponframe = 17;
 	SwordSwing(3);
 	sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
 };
-
 void() sword3Attack6 = [0, sword3Attack7] {self.weaponframe = 18;};
-
 void() sword3Attack7 = [1, sword3Attack8]
 {
 	self.weaponframe = 19;
-	SwordMagic(3);
+	if (self.ammo_elemental > 2) //if they have ammo, consume it to fire projectile
+	{
+		SwordMagic(3);//launch projectile
+		self.currentammo = self.ammo_elemental = self.ammo_elemental - 3;
+		if (self.currentammo <0)
+			self.currentammo = self.ammo_elemental = 0;
+	}
 	sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
 };
 
@@ -309,13 +312,13 @@ void(float attackNumber) SwordSwing =
 
 void() GlowTouch =
 {
-	if (other.classname == "monster_zombie")
+	if (other.classgroup == CG_ZOMBIE)
 	{
-		T_Damage(other, self, self.owner, 150, NOARMOR);
+		T_Damage(other, self, self.owner, 150, NOARMOR);//bonus damage on direct zombie hit
 	}
 	T_RadiusDamageAOA (self, self.owner, 150, 200, self.owner, DAMAGEALL);
 
-	SpawnExplosion(EXPLODE_MED, self.origin, SOUND_REXP3);
+	SpawnExplosion(EXPLODE_SMALL, self.origin, "yakman/expsmall.wav");
 	remove(self);
 };
 
@@ -327,6 +330,7 @@ void(float projectileNumber) SwordMagic =
 	makevectors(self.v_angle);
 	glow = spawn();
 	glow.owner = self;
+	glow.classgroup = CG_PROJALL;
 	glow.solid = SOLID_BBOX;
 	glow.movetype = MOVETYPE_BOUNCE;
 	
@@ -426,7 +430,7 @@ void() RapierAttack = //this is the player's melee attack, called three times as
 	org = self.origin + '0 0 16'; //attack origin is player's hands height.
 
 	dir = org + v_forward*75;
-	damage = 30+ random()*10;
+	damage = 35;
 	traceline(org, dir, FALSE, self);
 	
 	org = trace_endpos + v_forward*-2;
@@ -438,7 +442,7 @@ void() RapierAttack = //this is the player's melee attack, called three times as
 		trace_ent.axhitme = 1;
 		SpawnBlood(trace_ent, dir, dir-org, 20);
 		if (trace_ent.classname == "monster_shambler")
-			damage = damage * 2;
+			damage = damage * 1.5;
 		T_Damage (trace_ent, self, self, damage, DAMARMOR);
 		local float randy;
 		if (randy > 0.7)
@@ -559,17 +563,16 @@ void() W_FireRapier =
 	self.attack_finished = time + 1;
 	RapierAnimation1();
 	
-	// if (self.ammo_shells <11)
-		// return;
-	// else if (self.ammo_shells <13)
-		// self.currentammo = self.ammo_shells = 10;
-	// else
-		// self.currentammo = self.ammo_shells = self.ammo_shells - 3;
-	//this will eventually consume plasma #techdebt
+	if (self.ammo_bloodcrystals <1 && !self.tome_finished) //don't spawn Ghost rapier if you have no ammo and no Tome of Power
+		return;
+	
+	if (self.ammo_bloodcrystals > 0)
+		self.currentammo = self.ammo_bloodcrystals = self.ammo_bloodcrystals - 1;
 		
 	local entity ghostRapier;
 	ghostRapier = spawn();
 	ghostRapier.owner = self;
+	ghostRapier.classgroup = CG_PROJALL;
 	ghostRapier.movetype = MOVETYPE_FLYMISSILE;
 	ghostRapier. solid = SOLID_BBOX;
 	ghostRapier.enemy = world;
@@ -592,10 +595,10 @@ void() W_FireRapier =
 
 /*
 ==================================================================
-Ice Storm by ryanscissorhands		#ice #chain #ryanscissorhands
+Ice Storm by ryanscissorhands		#ice #chain #ryanscissorhands //#ice1
 ==================================================================
 */
-
+void() W_FireChainLightning;
 void() IceProjectiles;
 
 void() ChainLightningAnimation1 = [0, ChainLightningAnimation2] {self.frame = 1;};
@@ -612,7 +615,6 @@ void() ChainLightningAnimation11 = [0, ChainLightningAnimation12] {self.frame = 
 void() ChainLightningAnimation12 = [0, ChainLightningAnimation13] {self.frame = 12;};
 void() ChainLightningAnimation13 = [0, player_run] {self.frame = 13;};
 
-
 void() IceAttack1 =	[107, IceAttack2] {if (time < self.attack_finished) return;self.weaponframe = 1;IceProjectiles();self.attack_finished = time + 0.8;};
 void() IceAttack2 =	[108, IceAttack3] {self.weaponframe = 2;};
 void() IceAttack3 =	[109, IceAttack4] {self.weaponframe = 3;};
@@ -626,10 +628,8 @@ void() IceAttack6 =	[112, IceAttack7]
 		player_run();
 		return;
 	}
-	self.attack_finished = time + 0.6;	
+	self.attack_finished = time + 0.8;	
 };
-
-void() W_FireChainLightning;
 
 void() IceAttack7 =	[113, IceAttack8] {self.weaponframe = 7;};
 void() IceAttack8 =	[114, IceAttack9] {self.weaponframe = 8;W_FireChainLightning();};
@@ -721,8 +721,6 @@ void() ChainedLightning =
 	
 	sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
 	traceline(self.origin, self.enemy.origin, FALSE, self);
-	
-	//MakeBeam(self.origin, trace_endpos, "progs/aoa/bolt4.mdl", 0.3);
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_LIGHTNING1);
@@ -734,11 +732,10 @@ void() ChainedLightning =
 	WriteCoord (MSG_BROADCAST, trace_endpos_y);
 	WriteCoord (MSG_BROADCAST, trace_endpos_z);
 	
-	if (trace_ent.classname == "player")
-		damage = 15;
-	else
-		damage = 30;
-
+	damage = 30;
+	if (self.enemy.classname == "player")//half damage to players
+		damage = damage * 0.5;
+		
 	LightningDamage(self.origin, trace_endpos, self.owner, damage);
 	remove(self);
 };
@@ -760,7 +757,10 @@ void() StormFindTargets =
 	local entity nearbyTargets;
 	local float targets;
 
-	targets = 10;
+	if (self.tome_finished)//tome hgas max 10 targets, otherwise max 5
+		targets = 10;
+	else
+		targets = 5;
 	
 	nearbyTargets = findradius(self.origin, 512);
 	while (nearbyTargets && targets >0)
@@ -802,7 +802,7 @@ void() W_FireChainLightning = //direct hitscan damage, then lightning chains fro
 	WriteCoord (MSG_BROADCAST, terminus_x);
 	WriteCoord (MSG_BROADCAST, terminus_y);
 	WriteCoord (MSG_BROADCAST, terminus_z);
-	PlayerLightningDamage (org, terminus, self, 40);	
+	PlayerLightningDamage (org, terminus, self, 40);
 		
 	stormOrigin = terminus + '0 0 20';
 	storm = spawn();
@@ -821,15 +821,14 @@ void() W_FireChainLightning = //direct hitscan damage, then lightning chains fro
 	
 void() IceSpikeTouch =
 {
+	if (!self.owner.attack_finished)
+		self.dmg = self.dmg *1.5;
 	if (other != self.owner && other.takedamage)
 	{
-		T_Damage(other, self, self.owner, 2, DAMARMOR);//3 dmg per ice spike
+		T_Damage(other, self, self.owner, self.dmg, DAMARMOR);//2 dmg per ice spike, 3 with Tome of Power
 		SpawnBlood(self, self.origin, self.velocity, 4);
 	}	
-	else
-	{
-		self.movetype = MOVETYPE_BOUNCE;
-	}
+
 	sound (self, CHAN_AUTO, "hknight/hit.wav", 0.5, ATTN_NORM);
 	remove(self);
 };
@@ -846,7 +845,8 @@ void(float vertical, float horizontal) IceSpikeProjectile =
 	IceSpike.movetype = MOVETYPE_FLYMISSILE;
 	IceSpike.solid = SOLID_BBOX;
 	IceSpike.touch = IceSpikeTouch;
-	IceSpike.velocity = v_forward*900 - v_up*vertical*8 - v_right*horizontal*8;// + spread('12 12 12');
+	IceSpike.dmg = 2;
+	IceSpike.velocity = v_forward*900 - v_up*vertical*8 - v_right*horizontal*8 + spread('5 5 5');
 	IceSpike.angles = vectoangles(IceSpike.velocity);
 	IceSpike.avelocity_z = crandom()*1000;
 	setmodel (IceSpike, "progs/aoa/icespike.mdl"); //remember to precache
@@ -857,22 +857,20 @@ void(float vertical, float horizontal) IceSpikeProjectile =
 };
 void(float offset) IceSpread =
 {
-	IceSpikeProjectile (offset, offset);
-	IceSpikeProjectile (offset, -offset);
-	IceSpikeProjectile (-offset, offset);
-	IceSpikeProjectile (-offset, -offset);
-	IceSpikeProjectile (0, offset);
-	IceSpikeProjectile (0, -offset);
-	IceSpikeProjectile (offset, 0);
-	IceSpikeProjectile (-offset, 0);
-	
+	IceSpikeProjectile (offset*0.9, offset*0.9);
+	IceSpikeProjectile (offset*0.9, -offset*0.9);
+	IceSpikeProjectile (-offset*0.9, offset*0.9);
+	IceSpikeProjectile (-offset*0.9, -offset*0.9);
+	IceSpikeProjectile (0, offset*1.2);
+	IceSpikeProjectile (0, -offset*1.2);
+	IceSpikeProjectile (offset*1.2, 0);
+	IceSpikeProjectile (-offset*1.2, 0);	
 };
 
-void () W_FireIce = //#ice1
+void () W_FireIce = 
 {
 	IceAttack1(); //trigger animation
-	//consume ammo
-	self.currentammo = self.ammo_elemental - 1;
+	self.currentammo = self.ammo_elemental = self.ammo_elemental - 1; 	//consume ammo
 	//trigger sound sound (self, CHAN_WEAPON, "aoa/iceattack.wav", 0.7, ATTN_NORM);
 };
 
@@ -881,8 +879,8 @@ void() IceProjectiles =
 	self.attack_finished = time + 0.9;
 	
 	sound (self, CHAN_WEAPON, "aoa/iceattack.wav", 1, ATTN_NORM);
-	//15 projectiles IceSpikeProjectile ();
-	
+
+	//24 projectiles IceSpikeProjectile ();
 	IceSpread(24);
 	IceSpread(16);
 	IceSpread(8);
@@ -1020,6 +1018,7 @@ void () VoidExplosion =
 	makevectors(self.velocity);
 	
 	GreenEmbers = spawn();
+	GreenEmbers.classgroup = CG_PROJALL;
 	GreenEmbers.angles = vectoangles(v_right* 10);
 	setmodel (GreenEmbers, "progs/aoa/greenembers.mdl");
 	setsize (GreenEmbers, '0 0 0', '0 0 0');
@@ -1028,6 +1027,7 @@ void () VoidExplosion =
 	GreenEmbers.think = embers1;
 	
 	GreenEmbers2 = spawn();
+	GreenEmbers2.classgroup = CG_PROJALL;
 	GreenEmbers2.angles = vectoangles(v_right*-10);
 	setmodel (GreenEmbers2, "progs/aoa/greenembers.mdl");
 	setsize (GreenEmbers2, '0 0 0', '0 0 0');
@@ -1036,6 +1036,7 @@ void () VoidExplosion =
 	GreenEmbers2.think = embers1;
 	
 	GreenEmbers3 = spawn();
+	GreenEmbers3.classgroup = CG_PROJALL;
 	GreenEmbers3.angles = vectoangles(v_forward*10);
 	setmodel (GreenEmbers3, "progs/aoa/greenembers.mdl");
 	setsize (GreenEmbers3, '0 0 0', '0 0 0');
@@ -1043,7 +1044,7 @@ void () VoidExplosion =
 	GreenEmbers3.nextthink = time + 0.05;
 	GreenEmbers3.think = embers1;
 
-	if (self.tome_finished) //#techdebt #tomeflag
+	if (self.tome_finished) //extra damage with TOme of Power
 	{
 		T_RadiusDamageAOA(self, self.owner, 150, 150, world, DAMAGEALL);
 	}
@@ -1115,6 +1116,8 @@ void() VoidShardTouch =
 	// sound (self, CHAN_AUTO, "aoa/staffhit.wav", 1, ATTN_NORM); #techdebt
 	GreenExplosion();
 	BlueExplosion();
+	if (self.owner.tome_finished)
+		self.dmg = 75;
 	if (other != self.owner && other.takedamage)
 	{
 		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
@@ -1173,19 +1176,20 @@ void () VoidStaffProjectile =
 
 	VoidShard = spawn();
 	VoidShard.owner = self;
+	VoidShard.classgroup = CG_PROJALL;
 	VoidShard.movetype = MOVETYPE_FLYMISSILE;
 	VoidShard.solid = SOLID_BBOX;
 	VoidShard.dmg = 45;
 	VoidShard.touch = VoidShardTouch;
 	VoidShard.classname = "VoidShard";
-	if (self.tome_finished)
+	if (self.tome_finished)//erratic projectiles with Tome
 	{
 		VoidShard.velocity = v_forward*450 +'0 0 -50';
-		VoidShard.attack_offset = v_right*rnd(-30, 30);
+		VoidShard.attack_offset = v_right*rnd(-35, 35);
 	}
 	else
 	{	
-		VoidShard.velocity = v_forward*600 +'0 0 50';
+		VoidShard.velocity = v_forward*600 +'0 0 -50';
 	}
 	VoidShard.angles = spread('180 180 180');
 	VoidShard.avelocity = spread('180 180 180');
@@ -1212,14 +1216,14 @@ void() W_FireVoidStaff =
 
 /*
 ========================================================================================
-Flak Cannon		#flak	#ryanscissorhands
+Flak Cannon		#flak	#ryanscissorhands 
 ========================================================================================
 */
 
 void() LaunchFlakShell;
 void() DetonateFlakShell;
 
-void() ShrapnelShot1 = [0, ShrapnelShot2] {self.weaponframe = 1;};
+void() ShrapnelShot1 = [0, ShrapnelShot2] {self.weaponframe = 1;sound(self, CHAN_WEAPON, "aoa/flakshot.wav", 1.0, ATTN_NORM);};
 void() ShrapnelShot2 = [0, ShrapnelShot3]
 {
 	self.weaponframe = 2;
@@ -1237,6 +1241,8 @@ void() ShrapnelShot7 = [0, player_run] {self.weaponframe = 0;};
 
 void() ShrapnelTouch =
 {
+	local float soundVariance;
+	local string soundFile;
 	if (pointcontents(self.origin) <-2)// all liquids and sky
 	{
 		remove(self);
@@ -1249,8 +1255,21 @@ void() ShrapnelTouch =
 		self.velocity = spread('1 1 1')*1500;
 	}
 	
+	soundVariance = random();
+	
+	if (soundVariance > 0.8) // mix up riccochet sounds, and don't make the sound every time; it's a bit noisy
+		soundFile = "weapons/ric1.wav";
+	else if (soundVariance > 0.6)
+		soundFile = "weapons/ric2.wav";
+	else if (soundVariance > 0.4)
+		soundFile = "weapons/ric3.wav";
+	
+	if (soundVariance > 0.4)
+		sound (self, CHAN_WEAPON, soundFile, 0.5, ATTN_NORM);
+	
 	if (self.count <= 0) //after a number (self.count) bounces, delete shrapnel
 		remove(self);
+	
 };
 
 void(vector direction) FlakShrapnel =
@@ -1259,6 +1278,7 @@ void(vector direction) FlakShrapnel =
 	
 	shrapnel = spawn();
 	shrapnel.owner = self.owner;
+	shrapnel.classgroup = CG_PROJALL;
 	shrapnel.solid = SOLID_BBOX;
 	shrapnel.movetype = MOVETYPE_BOUNCE;
 	shrapnel.count = 3; //number of touches before deletion
@@ -1280,7 +1300,7 @@ void() FlakExplode =
 {
 	T_RadiusDamage(self, self.owner, 125, world, DAMAGEALL);
 	//trigger sound #techdebt
-	FlakShrapnel('1 0 0.1'); //18projectiles
+	FlakShrapnel('1 0 0.1'); //
 	FlakShrapnel('-1 0 0.1');
 	FlakShrapnel('0 1 0.1');
 	FlakShrapnel('0 -1 0.1');
@@ -1302,6 +1322,7 @@ void() FlakExplode =
 	FlakShrapnel(spread('1 1 1'));
 	FlakShrapnel(spread('1 1 1')); //20 projectiles
 	
+	sound (self, CHAN_VOICE, "drake/weapons/r_exp3a.wav", 1.0, ATTN_NORM);
 	BecomeExplosion();
 };
 
@@ -1311,20 +1332,18 @@ void() DetonateFlakShell =
 	local entity explosion;
 	
 	makevectors(self.v_angle);
-	makevectors(self.v_angle);
 	
 	org = self.origin + '0 0 16' + v_up*8 + v_forward*8;
 	traceline (org, org+v_forward*700, FALSE, self);
 	
 	explosion = spawn();
 	explosion.owner = self;
+	explosion.classgroup = CG_PROJALL;
 	
 	explosion.origin = trace_endpos - v_forward*4;
 	explosion.nextthink = time;
 	explosion.think = FlakExplode;
-	
-	
-	
+		
 };
 
 void() W_FireFlak =
@@ -1354,6 +1373,7 @@ void() LaunchFlakShell =
 	
 	flak = spawn();
 	flak.owner = self;
+	flak.classgroup = CG_PROJALL;
 	flak.solid = SOLID_BBOX;
 	flak.movetype = MOVETYPE_BOUNCE;
 	
@@ -1379,7 +1399,7 @@ void() LaunchFlakShell =
 
 /*
 ========================================================================================
-Lifetaker Mace		#mace	#ryanscissorhands
+Vampiric Mace		#mace	#ryanscissorhands
 ========================================================================================
 */
 
@@ -1404,7 +1424,7 @@ void() MaceSwing5 =	[	123,	MaceBackhand1	]
 void() MaceBackhand1 =	[	125,	MaceBackhand2	] {self.weaponframe=6;sound (self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);self.attack_finished = time + 0.7;};
 void() MaceBackhand2 =	[	126,	MaceBackhand3	] {self.weaponframe=7;MaceSwing();};
 void() MaceBackhand3 =	[	127,	MaceBackhand4	] {self.weaponframe=8;};
-void() MaceBackhand4 =	[	128,	MaceBackhand5	] {self.weaponframe=0;};
+void() MaceBackhand4 =	[	128,	MaceBackhand5	] {self.weaponframe=9;};
 void() MaceBackhand5 =	[	129,	MaceBackhand6	] {self.weaponframe=0;};
 void() MaceBackhand6 =	[	0,	DrainHealth1	]
 {
@@ -1416,70 +1436,93 @@ void() MaceBackhand6 =	[	0,	DrainHealth1	]
 	}
 };
 
-void() DrainHealth1 =	[112, DrainHealth2]	{self.weaponframe = 9;self.attack_finished = time + 0.8;};  
-void() DrainHealth2 =	[115, DrainHealth3]	{self.weaponframe = 10;CastDrainHealth();}; 
-void() DrainHealth3 =	[118, DrainHealth4]	{self.weaponframe = 11;}; 
-void() DrainHealth4 =	[118, player_run]	{self.weaponframe = 11;}; 
+void() DrainHealth1 =	[112, DrainHealth2]	{self.weaponframe = 10;self.attack_finished = time + 1.2;};  
+void() DrainHealth2 =	[115, DrainHealth3]	{self.weaponframe = 11;}; 
+void() DrainHealth3 =	[118, DrainHealth4]	{self.weaponframe = 12;}; 
+void() DrainHealth4 =	[118, player_run]	{self.weaponframe = 13;CastDrainHealth();}; 
+
+void() drain1Frames =
+{
+	self.frame = self.frame + 1;
+	if (self.frame >17)
+		remove(self);
+	self.nextthink = time + 0.05;
+	self.think = drain1Frames;
+};
 
 
-void() drainFrames =
+void() drain2Frames =
 {
 	self.frame = self.frame + 1;
 	if (self.frame >9)
 		remove(self);
-	self.nextthink = time + 0.1;
-	self.think = drainFrames;
+	self.nextthink = time + 0.025;
+	self.think = drain2Frames;
 };
 
 void(vector location) DrainHealthEffect =
 {
-	local entity FX;
+	local entity FX, FX2;
 	
 	FX = spawn();
+	FX.classgroup = CG_PROJALL;
 	
 	FX.movetype = MOVETYPE_NONE;
 	FX.solid = SOLID_NOT;
 	
-	setmodel (FX, "progs/aoa/bloodsphere.mdl");
-	setsize (FX, '0 0 0', '0 0 0');
-	setorigin (FX, location + '0 0 -24');
+	setmodel (FX, "progs/aoa/bloodembers.mdl");
+	setsize (FX, '0 0 0', '1000 1000 1000');
+	setorigin (FX, location);
+	FX.frame = 0;
 
-	FX.nextthink = time + 0.1;
-	FX.think = drainFrames;
+	FX.nextthink = time + 0.05;
+	FX.think = drain1Frames;
+	
+	FX2 = spawn();
+	FX2.classgroup = CG_PROJALL;
+	
+	FX2.movetype = MOVETYPE_NONE;
+	FX2.solid = SOLID_NOT;
+
+	
+	setmodel (FX2, "progs/aoa/bloodsphere.mdl");
+	setsize (FX2, '0 0 0', '0 0 0');
+	setorigin (FX2, location);
+	FX2.frame = 0;
+
+	FX2.nextthink = time + 0.025;
+	FX2.think = drain2Frames;
+
+	
 };
 
 void(entity victim, entity attacker) DrainHealth 
 {
 	T_Damage(victim, attacker, attacker, 35, DAMARMOR);
-	TriggerHeal(self, 5, 110);
-	SpawnBlood(victim, victim.origin, spread('100 100 100'), 20);
+	TriggerHeal(self, 10, 110);
+	SpawnBlood(victim, victim.origin + '0 0 45', '0 0 100' + spread('100 100 100'), 20);
 };
 
 void() CastDrainHealth =
 {
 	local entity NearbyEnemies;
-	local float hit; //tracks whethere there was a valid target
-	
-	hit = FALSE;
-	
-	NearbyEnemies = findradius(self.origin, 100);
-	
-	//#techdebt needs sound FX. sound (self, CHAN_WEAPON, "aoa/somesortofsound.wav");
-	
+
+	makevectors(self.v_angle);
+	NearbyEnemies = findradius(self.origin + ignoreVertical(v_forward)*30, 120);
+
 	while (NearbyEnemies)
 	{
 		if (NearbyEnemies.takedamage > 0 && NearbyEnemies.health > 0 && NearbyEnemies != self)
 		{
 			//aoaprint("Draining from a ", NearbyEnemies.classname, ".\n");
-			hit = TRUE;
 			DrainHealth(NearbyEnemies, self);
 			sound(NearbyEnemies, CHAN_WEAPON, "aoa/drainhealth.wav", 1, ATTN_NORM);
-			T_Damage(other, self, self, 20, DAMARMOR);
 		}
 		NearbyEnemies = NearbyEnemies.chain;
 	}
-	//if (hit == TRUE)
-		DrainHealthEffect(self.origin + '0 0 20');
+	makevectors(self.v_angle);
+	DrainHealthEffect(self.origin + ignoreVertical(v_forward)*30);
+	sound (self, CHAN_WEAPON, "aoa/hhs.wav", 1, ATTN_NORM);
 };
 
 
@@ -1488,7 +1531,8 @@ void() MaceLungeTouch =
 	if (other.takedamage && !(self.flags & FL_ONGROUND))
 	{
 		T_Damage(other, self, self, 25, DAMARMOR);
-		//#techdebt trigger lunge attack sound
+		sound(self, CHAN_VOICE, "weapons/axe_wood.wav", 1.0, ATTN_NORM);
+		SpawnBlood(other, (self.origin - other.origin)/2 + '0 0 20', self.velocity, 20);
 	}
 	self.touch = SUB_Null;
 };
@@ -1502,6 +1546,8 @@ void() W_FireMace =
 	{
 		return;		
 	}
+	sound (self, CHAN_VOICE, "player/jump.wav", 1, ATTN_NORM);
+
 	self.flags = self.flags - FL_ONGROUND;
 	makevectors(self.v_angle);
 	lunge = '0 0 300';
@@ -1521,27 +1567,27 @@ void() W_FireMace =
 
 void(vector org, entity victim) MaceSwingHits =
 {
+	local float damage;
+	
 	sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
-	traceline(org, victim.origin +'0 0 5', TRUE, self);
+	traceline(org, victim.origin +'0 0 10', TRUE, self);
 	particle(trace_endpos, '0 0 2', 73, 10);
 	SpawnBlood(victim, org, '0 0 1', 10);
-	if (victim.classname != "monster_zombie") //don't drain health from zombies. #techdebt: need to add other zombie variants to this condition check
+	sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
+	if (victim.classgroup == CG_ZOMBIE)
 	{
-		TriggerHeal(self, 5, 100);// entity target, float hlth, float maxHealth
-	}
-
-	if (self.tome_finished)
-	{
-		
-		if (victim.classname == "monster_zombie")
-			T_Damage(victim, self, self, 500, DAMARMOR); //major crit 
-		T_Damage(victim, self, self, 75, DAMARMOR); //tome of power damage
+		damage = 100; //bonus damage to zombies, but cannot drain health from zombies
 	}
 	else
-		T_Damage(victim, self, self, 45, DAMARMOR); //normal damage
+	{
+		TriggerHeal(self, 5, 100);// entity target, float hlth, float maxHealth. Heals self 5, capped at 100
+	}
 	
+	damage = 45;//regular attack
+	if (self.tome_finished)
+		damage = 90; //double damage during Tome of Power
+	T_Damage(victim, self, self, damage, DAMARMOR);
 
-	sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
 };
 
 void() MaceSwing = //executes the attack part. Melee changed from traceline to findradius for sweeping attack area
@@ -1595,7 +1641,7 @@ void() GungnirPrimary;
 void() GungnirDive;
 void() LaunchVortex;
 
-/* Gungnir combo: GungnirAttack, GungnirVortex, GundnirJump, GungnirDive */
+// Gungnir combo: GungnirAttack, GundnirJump, GungnirDive, GungnirVortex
 
 
 void()	GungnirAttack1 = 	[144, GungnirAttack2		]
@@ -1630,26 +1676,9 @@ void()	GungnirVortex4 = 	[146, GungnirVortex5		]	{self.weaponframe = 6;};
 void()	GungnirVortex5 = 	[146, GungnirVortex6		]	{self.weaponframe = 7;};
 void()	GungnirVortex6 = 	[148, player_run]	{self.weaponframe = 8;LaunchVortex();};
 
-
-//jump in preparation for dive attack
-void()	GungnirJump1 = 	[143, GungnirJump2		]
-{
-	self.weaponframe = 4;
-	self.attack_finished = time + 0.8;
-	if (self.flags & FL_ONGROUND)
-	{
-		self.velocity = '0 0 550';
-	}
-	sound (self, CHAN_AUTO, "aoa/swing2.wav", 1, ATTN_NORM);
-};
-
-
-
-void() DiveTargetFollow =
+void() DiveTargetFollow = //this loop ensures that the reticle is where the player is aiming, and is ultimately going to dive
 {
 	local vector org, dest;
-	
-	
 	
 	if (time > self.attack_finished)
 	{
@@ -1669,12 +1698,13 @@ void() DiveTargetFollow =
 	
 };
 
-void() SpawnDiveTarget =
+void() SpawnDiveTarget = //spawns the reticle which shows the player where they will dive to
 {
 	local entity target;
 	
 	target = spawn();
 	target.owner = self;
+	target.classgroup = 0;
 	target.solid = SOLID_NOT;
 	target.movetype = MOVETYPE_NONE;
 	
@@ -1688,7 +1718,17 @@ void() SpawnDiveTarget =
 	target.think = DiveTargetFollow;	
 };
 
-
+//jump in preparation for dive attack
+void()	GungnirJump1 = 	[143, GungnirJump2		]
+{
+	self.weaponframe = 4;
+	self.attack_finished = time + 0.8;
+	if (self.flags & FL_ONGROUND && self.ammo_voidshards > 1)
+	{
+		self.velocity = '0 0 550';
+	}
+	sound (self, CHAN_AUTO, "aoa/swing2.wav", 1, ATTN_NORM);
+};
 void() GungnirJump2 = [143, GungnirJump3] {self.weaponframe = 4;GungnirPrimary();SpawnDiveTarget();};
 void() GungnirJump3 = [143, GungnirJump4] {self.weaponframe = 4;};
 void() GungnirJump4 = [143, GungnirJump5] {self.weaponframe = 4;};
@@ -1696,22 +1736,17 @@ void() GungnirJump5 = [143, GungnirDive1] {self.weaponframe = 4;};
 
 //dive attack
 void() GungnirDive1 = [143, GungnirDive2] {self.weaponframe = 6;GungnirDive();};
-void() GungnirDive2 = [143, GungnirDive3] {self.weaponframe = 7;};
-void() GungnirDive3 = [143, GungnirDive4] {self.weaponframe = 8;};
+void() GungnirDive2 = [143, GungnirDive3] {self.weaponframe = 6;};
+void() GungnirDive3 = [143, GungnirDive4] {self.weaponframe = 6;};
 void() GungnirDive4 = [143, player_run]
 {
-
 	self.weaponframe = 0;
-	if (self.tome_finished == 1 && self.button0)
+	if (self.tome_finished && self.button0)//if player is attacking with Tome of Power, add Eye of Odin (Vortex)
 	{
 		self.nextthink = time + 0.1;
-		self.think = GungnirVortex1;
+		self.think = GungnirVortex1;	
 	}
-
 };
-
-
-
 
 void() impactFrames =
 {
@@ -1740,12 +1775,15 @@ void() ImpaleTouch =
 			armorResist = other.armorvalue/2;
 		T_Damage (other, self, self.owner, 120 - armorResist, DAMARMOR);
 	}
-	T_RadiusDamageAOA(self, self, 100, 350, self, DAMAGEALL); //med dmg, high radius
+	if (!self.tome_finished)
+		T_RadiusDamageAOA(self, self, 100, 350, self, DAMAGEALL); //norm damage 50-100
+	else
+		T_RadiusDamageAOA(self, self, 150, 350, self, DAMAGEALL); //Tome dmg 75-150
 
 	
 	makevectors(self.v_angle);
 	explosionCenter = self.origin + ignoreVertical(v_forward)*20;
-	sound (self, CHAN_AUTO, "shambler/sboom.wav", 1, ATTN_NORM); //needs a new sound
+	sound (self, CHAN_AUTO, "shambler/sboom.wav", 1, ATTN_NORM); //needs a new sound #techdebt
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_TAREXPLOSION);
 	WriteCoord (MSG_BROADCAST, explosionCenter_x);
@@ -1756,7 +1794,7 @@ void() ImpaleTouch =
 	
 	enemies = findradius(explosionCenter, 300);
 	
-	while (enemies)
+	while (enemies)//area knockback 
 	{
 		if ( (HasLOS(enemies, self)) && ((enemies.movetype == MOVETYPE_STEP) || (enemies.movetype == MOVETYPE_WALK)) ) //if 'enemies' entity is in line of sight, and is not NONE, NOCLIP, or PUSH, then:
 		{
@@ -1774,6 +1812,7 @@ void() ImpaleTouch =
 	}
 	impact = spawn(); //the visual ring effect for the explosion
 	impact.owner = self;
+	impact.classgroup = CG_PROJALL;
 	setmodel(impact, "progs/aoa/ad_gungnir_impact.mdl");
 	setsize(impact, '0 0 0', '0 0 0');
 	setorigin(impact, self.origin+ v_forward*20);
@@ -1796,6 +1835,17 @@ void() GungnirDive =
 {
 	local vector org, dest;	
 	
+	if (self.ammo_voidshards < 3)
+	{
+		centerprint(self, "Not enough ammo");
+		return;
+	}
+	else
+	{
+		self.currentammo = self.ammo_voidshards = self.ammo_voidshards - 3;//consume 3 voidshards for a dive
+		if (self.ammo_voidshards < 0)
+			self.currentammo = self.ammo_voidshards = 0;
+	}
 	makevectors(self.v_angle);
 	org = self.origin + '0 0 32' + v_forward*8;
 	dest = org + ignoreVertical(v_forward)*150 + v_forward*150 + '0 0 -200';
@@ -1849,7 +1899,6 @@ void() VortexThink =
 	local entity victims;
 	local vector gravity;
 	
-	if (random() < 0.7)
 		sound (self, CHAN_AUTO, "aoa/vortex.wav", 1, ATTN_NORM);	
 	
 	if (vlen(self.velocity) > 50)
@@ -1864,7 +1913,7 @@ void() VortexThink =
 		{
 			ZapEnemy(victims);
 		}
-		if (victims != self.owner && victims.movetype != MOVETYPE_NONE && victims.classname != "vortex")
+		if (victims != self.owner && victims.movetype != MOVETYPE_NONE && victims.movetype != MOVETYPE_PUSH && victims.movetype != MOVETYPE_NOCLIP && victims != self)
 		{
 			gravity = self.origin - victims.origin;
 			makevectors(vectoangles(gravity));
@@ -1876,28 +1925,32 @@ void() VortexThink =
 	}
 	if (time > self.attack_finished) //delete if past expiry
 		remove(self);
+
+	if (self.frame == 1)
+		sound (self, CHAN_AUTO, "aoa/vortex.wav", 1, ATTN_NORM);
 	if (self.frame == 23)
 		self.frame = 0;
 	else
 		self.frame = self.frame + 1;
+		
+
 	self.nextthink = time + 0.05;
 	self.think = VortexThink;
 };
 
-void() LaunchVortex =
+void() LaunchVortex = //#EyeOfOdin
 {
-	local entity nearby;
+	local entity nearby, vortex;
+	local vector org;
 	
 	nearby = find(world,classname,"vortex"); //check if there is an existing Eye of Odin
 	if (nearby != world)
-		return; //Odin only has one eye, globally
-
-	local entity vortex;
-	local vector org;
+		return; //Odin only has one eye. Globally.
 	
 	vortex = spawn();
 	
 	vortex.owner = self;
+	vortex.classgroup = CG_PROJALL;
 	vortex.movetype = MOVETYPE_FLY;
 	vortex.solid = SOLID_BBOX;
 	vortex.classname = "vortex";
@@ -1905,7 +1958,7 @@ void() LaunchVortex =
 
 	makevectors(self.v_angle);
 	org = self.origin + '0 0 16' + v_forward*8 + v_up*8;
-	vortex.velocity = ignoreVertical(v_forward) * 500;
+	vortex.velocity = ignoreVertical(v_forward) * 600;
 	vortex.touch = VortexTouch;
 	vortex.nextthink = time + 0.2;
 	vortex.think = VortexThink;
@@ -1932,14 +1985,7 @@ void() SparkTouch =
 	if (other.takedamage)
 	{
 		SpawnBlood (other, self.origin, spread('100 100 100'), 25);
-		
-		if (other.armorvalue <15)
-			other.armorvalue = 0;
-		else if (other.armorvalue >= 15)
-		{
-			other.armorvalue = other.armorvalue - 15;
-		}
-		T_Damage (other, self, self.owner, 35, DAMARMOR);
+		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
 		sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
 	}
 	else
@@ -1955,11 +2001,17 @@ void() SparkTouch =
 void() GungnirPrimary = 
 {
 	local	vector	source, org, swim;
-	
+	local float usedAmmo;
 	local entity spark;
 	
 	makevectors (self.v_angle);
 	
+	
+	if (self.ammo_voidshards > 0)
+	{
+		usedAmmo = TRUE;
+		self.currentammo = self.ammo_voidshards = self.ammo_voidshards - 1;
+	}
 	swim = v_forward; //this is used to make the player go faster underwater
 	source = self.origin + v_up*16 + v_right*6 + v_forward*8;
 	traceline (source, source + v_forward*150, FALSE, self);
@@ -1967,14 +2019,15 @@ void() GungnirPrimary =
 	{
 		if (swim_z > 0)
 			swim_z = 0;
-		self.velocity = swim*1500;
+		self.velocity = swim*1500;//underwater boost
 	}
-	if (trace_fraction == 1.0) //if nothing is hit, spawns a "spark" projectile.
+	if (usedAmmo == TRUE)
 	{
 		spark = spawn();
 		spark.owner = self;
+		spark.classgroup = CG_PROJALL;
 		spark.touch = SparkTouch;
-		spark.nextthink = time + 0.4;
+		spark.nextthink = time + 2;
 		spark.think = SUB_Remove;
 		
 		spark.movetype = MOVETYPE_FLYMISSILE;
@@ -1984,17 +2037,18 @@ void() GungnirPrimary =
 		setmodel (spark, "progs/aoa/spark.mdl");
 		setorigin (spark, self.origin + v_up*12 + v_right*8 + v_forward*25);
 		setsize (spark, '0 0 0', '0 0 0');
+		spark.dmg = 40;
 	}
-	else
+	else if (trace_fraction < 1)
 	{
 		org = trace_endpos + v_forward*(-2);
 
 		if (trace_ent.takedamage) //do damage and make blood if it lands
 		{
 			SpawnBlood (trace_ent, org, '0 0 0', 40);
-			if (trace_ent.classname == "monster_zombie")
+			if (trace_ent.classgroup == CG_ZOMBIE)
 				T_Damage(trace_ent, self, self, 400, DAMARMOR);
-			T_Damage (trace_ent, self, self, 55, DAMARMOR);
+			T_Damage (trace_ent, self, self, 50, DAMARMOR);
 			sound (self, CHAN_WEAPON, "blob/hit1.wav", 1, ATTN_NORM);
 			sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
 		}
@@ -2017,10 +2071,7 @@ Sanguinators		#gauntlets #bloodgauntlets #sanguinators #ryanscissorhands
 */
 void (float RightOffset) GauntletBeam;
 void() GauntletBloodReturn;
-void() SpawnBloodFountain;
-void() BloodFountainSeekTarget;
-void() BloodFountainThink;
-void() CheckBloodOrbs;
+
 void() BloodTornadoSeek;
 void() AttackWithGreyOrbs;
 
@@ -2028,8 +2079,7 @@ void()	RGaunt1 =[		115,		RGaunt2	]
 {
 	self.weaponframe=1;
 	GauntletBeam(15); //right beam
-	if (self.tome_finished)
-		AttackWithGreyOrbs();
+	AttackWithGreyOrbs(); //any orbs generated with tome are now projectiles.
 	self.attack_finished = time + 0.4;
 };
 void()	RGaunt2 =[		117,		RGaunt3	] { self.weaponframe=2;};
@@ -2048,12 +2098,11 @@ void()	LGaunt1 =[		115,		LGaunt2	]
 {
 	self.weaponframe=3;
 	GauntletBeam(-15); //left beam
-	if (self.tome_finished)
-		AttackWithGreyOrbs();
+	AttackWithGreyOrbs();
 	self.attack_finished = time + 0.4;
 };
 
-void() LGaunt2 = [117, LGaunt3]{self.weaponframe=4;CheckBloodOrbs();};
+void() LGaunt2 = [117, LGaunt3]{self.weaponframe=4;};
 
 void()	LGaunt3 =[		118,		RGaunt1	]
 {
@@ -2064,15 +2113,6 @@ void()	LGaunt3 =[		118,		RGaunt1	]
 		return;
 	}
 };
-
-//W_FireGauntlets2 = id1's pain player animation
-void()	SGaunt1 =[		35,		SGaunt2	]		{self.weaponframe=48;self.attack_finished = time + 0.7;SpawnBloodFountain();};
-void()	SGaunt2 =[		36,		SGaunt3	]		{self.weaponframe=49;};
-void()	SGaunt3 =[		37,		SGaunt4	]		{self.weaponframe=50;};
-void()	SGaunt4 =[		38,		SGaunt5	]		{self.weaponframe=51;};
-void()	SGaunt5 =[		39,		SGaunt6	]		{self.weaponframe=52;};
-void()	SGaunt6 =[		40,		player_run	]		{self.weaponframe=53;};
-
 
 void() GauntletOrbTouch =
 {
@@ -2090,12 +2130,12 @@ void() GauntletOrbTouch =
 };
 
 
-void() GreyOrbTouch =
+void() GreyOrbTouch = //Tome of Power blood orb projectiles
 {
-	// add sound effects and visuals later
+
 	if (other != self.owner)
 	{
-		T_RadiusDamageAOA(self, self.owner, 150, 80, self.owner, DAMAGEALL);
+		T_RadiusDamageAOA(self, self.owner, 100, 80, self.owner, DAMAGEALL);
 		sound (self, CHAN_VOICE, "weapons/r_exp3.wav", 1, ATTN_NORM);
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 		WriteByte (MSG_BROADCAST, TE_EXPLOSION);
@@ -2119,10 +2159,10 @@ void() CountGreyOrbs =
 		orbCount = orbCount + 1;
 		orbs = find(orbs, classname, "GreyBloodOrb");
 	}
-	aoaprint("There are ", ftos(orbCount), "orbs on the server.", "");
+	//aoaprint("There are ", ftos(orbCount), "orbs on the server.", "");
 };
 
-entity (entity first, entity second, entity reference) ClosestEntity = //returns
+entity (entity first, entity second, entity reference) ClosestEntity = //returns the closest of first or second, filtering out world
 {
 	if (first == world && second != world)
 		return second;
@@ -2137,7 +2177,6 @@ entity (entity first, entity second, entity reference) ClosestEntity = //returns
 		return first;
 	else
 		return second;
-	
 };
 
 void() AttackWithGreyOrbs = // self == Player
@@ -2184,8 +2223,6 @@ void() AttackWithGreyOrbs = // self == Player
 
 	}
 };
-
-
 
 void() BloodTornadoSeek = //converts blood orbs into grey blood orbs, in preparation for attacks with Tome of Power
 {
@@ -2240,168 +2277,14 @@ void() BloodTornadoSeek = //converts blood orbs into grey blood orbs, in prepara
 	}
 };
 
-void() BloodFountainThink = //handles deletion and seeking player's left hand
+void() TurnIntoArmor =
 {
-	if (time > self.attack_finished || self.dmg <20 || self.owner.health < 0)
-	{
-		remove(self);
-		return;
-	}
-	
-	local float distance;
-	local vector toOwner;
-	
-	if (self.flags & FL_ONGROUND) //make sure bits don't get stuck on the ground as they orbit
-	{
-		self.flags = self.flags - FL_ONGROUND;
-		setorigin (self, self.origin + '0 0 1');
-	}
-	
-	//seek its spot by the left hand of the caster
-	makevectors(self.owner.v_angle);
-	toOwner = (self.owner.origin + '0 0 25' + v_forward*50 + v_right*(-40) + self.attack_offset); //this is where the blood orbs congregate, the player's "blood clot"
-	distance = vlen(toOwner - self.origin);
-
-	makevectors (vectoangles (toOwner - self.origin)); //make orb face the player's "blood clot" location, where the blood orbs congregate
-	
-	if (distance < 60)
-	{
-		self.velocity = normalize(toOwner - self.origin)*distance*4;
-	}
-	else
-	{
-		self.velocity = normalize(toOwner - self.origin)*distance*8;
-
-	}
-	self.avelocity = self.avelocity + spread('25 25 25');
-};
-
-void() BloodFountainAttack = //attacks when it has an enemy.
-{	
-	if (self.frame == 9)
-		self.frame = 0;
-	else
-		self.frame = self.frame + 1;
-	self.walkframe = self.walkframe + 1;
-	if (self.walkframe == 7)
-	{
-		self.walkframe = 0;
-	}
-	
-	if (self.enemy.health > 0 && InLOS(self.enemy.origin, self.origin) && self.enemy.owner != self.owner) //check if the current enemy is alive and in LOS
-	{
-		if (self.walkframe == 1)
-		{
-
-			local entity orb;
-			local vector toEnemy;
-			toEnemy = normalize(self.enemy.origin + '0 0 20' - self.origin);
-			
-			orb = spawn();
-			orb.owner = self.owner;
-			orb.movetype = MOVETYPE_FLYMISSILE;
-			orb.solid = SOLID_BBOX;
-
-			makevectors (toEnemy);
-			orb.velocity = normalize (self.enemy.origin - self.origin + '0 0 15')*800 + spread('5 5 5');
-			orb.angles = vectoangles(orb.velocity);
-			orb.touch = GauntletOrbTouch;
-			if (self.enemy.health > 300)
-			{
-				orb.dmg = 50; // 25dmg * 15 projectiles = 375 total dmg
-			}
-			else if (self.enemy.health > 150)
-			{
-				orb.dmg = 35; // 15 dmg * 15 projectiles = 225 total dmg
-			}
-			else
-			{
-				orb.dmg = 25; // 10 dmg * 15 projectiles = 150 total dmg
-			}
-			orb.nextthink = time + 3;
-			orb.think = SUB_Remove;
-
-			setmodel (orb, "progs/aoa/boneshard.mdl");
-			setsize (orb, '0 0 0', '0 0 0');
-			setorigin (orb, self.origin);
-			
-			sound(self, CHAN_AUTO, "aoa/gibacid.wav", 1, ATTN_NORM);
-			self.dmg = self.dmg - 25;
-		}
-		self.nextthink = time + 0.1;
-		self.think = BloodFountainAttack;
-
-	}
-	else
-	{
-		self.enemy = world;
-		self.nextthink = time+ 0.1;
-		self.think = BloodFountainSeekTarget;
-	}
-	BloodFountainThink();
-};
-
-void() BloodFountainSeekTarget = //fountain looks for a nearby enemy.
-{
-	local entity FoundResults;
-	FoundResults = findradius (self.origin, 800);
-	
-	if (self.enemy.health < 0)
-		self.enemy = world;
-	
-	while (FoundResults && self.enemy == world)
-	{
-		if (FoundResults.takedamage && CanDamage(FoundResults, self) && FoundResults != self.owner && FoundResults.owner != self.owner && FoundResults != world && FoundResults.movetype != MOVETYPE_PUSH && FoundResults.classname != "monster_zombie") //don't target doors, triggers, self, self's constructs, or zombies
-		{
-			self.enemy = FoundResults;			
-		}
-		FoundResults = FoundResults.chain;
-	}
-	
-	if (self.enemy == world)
-	{
-		self.nextthink = time + 0.1;
-		self.think = BloodFountainSeekTarget;
-	}
-	else
-	{
-		self.nextthink = time;
-		self.think = BloodFountainAttack;
-	}
-		
-	BloodFountainThink();
-};
-
-void() SpawnBloodFountain = //called  when there are sufficient orbs to consume
-{	
-	local entity BloodFountain;
-	local vector org;
-		
-	BloodFountain = spawn();
-	BloodFountain.owner = self;
-	BloodFountain.enemy = world;
-	BloodFountain.solid = SOLID_BBOX;
-	BloodFountain.movetype = MOVETYPE_FLY;
-	
-	makevectors (self.v_angle);
-	org = (self.origin + '0 0 20' + v_forward*60 + v_right*16);
-	
-	BloodFountain.angles = spread('100 100 100');
-	
-	BloodFountain.velocity ='0 0 0';
-	setmodel(BloodFountain, "progs/aoa/bloodorb1.mdl");
-	setsize (BloodFountain, '0 0 0', '0 0 0');
-	setorigin (BloodFountain, org);
-	
-	BloodFountain.attack_finished = time + 10;
-	BloodFountain.nextthink = time + 0.1;
-	BloodFountain.attack_offset = spread('10 10 30');
-	BloodFountain.frame = 0;
-	BloodFountain.think = BloodFountainSeekTarget;
-	BloodFountain.touch = SUB_Null;
-	BloodFountain.dmg = 200;
-	BloodFountain.walkframe = 0;
-	sound (self, CHAN_WEAPON, "aoa/corruption.wav", 1, ATTN_NORM);
+	if (self.owner.armorvalue < 199)
+		self.owner.armorvalue = self.owner.armorvalue + 2;
+	if (self.owner.armortype < 0.5)
+		self.owner.armortype = 0.5;
+	sound(self, CHAN_VOICE, "aoa/mildarmor.wav", 0.5, ATTN_NORM);
+	remove(self);	
 };
 
 void() GauntletBloodOrbit = //make the blood orbs orbit the player, and provide health if possible.
@@ -2410,9 +2293,8 @@ void() GauntletBloodOrbit = //make the blood orbs orbit the player, and provide 
 	local vector toOwner;
 	
 	
-	if (self.owner.tome_finished) //#techdebt #tomeflag
+	if (self.owner.tome_finished) //
 	{
-		bprint ("This stuff is working!!!\n");
 		self.nextthink = time;
 		self.think = BloodTornadoSeek;
 		return;
@@ -2422,9 +2304,15 @@ void() GauntletBloodOrbit = //make the blood orbs orbit the player, and provide 
 		self.frame = 0;
 	else
 		self.frame = self.frame + 1;
-	if (time > self.attack_finished || self.owner.health < 0) //this is set by GauntletDrainSpell as attack_finished (time+20seconds), and determines the lifspan of the Gauntlet Blood bits
+		
+	if (self.owner.health < 0) //this is set by GauntletDrainSpell as attack_finished (time+20seconds), and determines the lifspan of the Gauntlet Blood bits
 	{
 		remove(self);
+		return;
+	}
+	if (time > self.attack_finished) //at expiry, turn into armor
+	{
+		TurnIntoArmor();
 		return;
 	}
 
@@ -2476,9 +2364,9 @@ void() GauntletBloodReturn = //used to move the blood orbs from the victim back 
 	}
 	else
 	{
-			self.nextthink = time;
-			self.think = GauntletBloodOrbit;
-			return;
+		self.nextthink = time;
+		self.think = GauntletBloodOrbit;
+		return;
 	}
 	
 	if (self.frame == 9)
@@ -2498,13 +2386,14 @@ void(entity victim) GauntletDrainSpell = //spawns orbs of blood at enemy hit by 
 	local entity FlyingBlood;
 
 	FlyingBlood = spawn();
+	FlyingBlood.classgroup = CG_PROJALL;
 	FlyingBlood.enemy = victim;
 	FlyingBlood.owner = self;
 	FlyingBlood.classname = "FlyingBlood";
 	FlyingBlood.movetype = MOVETYPE_FLY;
 	FlyingBlood.solid = SOLID_TRIGGER;
-	FlyingBlood.dmg = 3;
-	FlyingBlood.attack_finished = time + 45;
+	FlyingBlood.dmg = 4;
+	FlyingBlood.attack_finished = time + 15;
 
 	FlyingBlood.velocity = normalize(self.origin - self.owner.origin) * 175 + '0 0 30' + spread('100 100 60'); //fly sort of towards owner
 	FlyingBlood.angles = vectoangles(spread('100 100 100'));
@@ -2520,47 +2409,9 @@ void(entity victim) GauntletDrainSpell = //spawns orbs of blood at enemy hit by 
 	FlyingBlood.think = GauntletBloodReturn;
 };
 
-void() CheckBloodOrbs = //checks in a radius around the player for any blood orbs, and counts them; Then, if there are 8+ orbs, deletes them and 
-{
-	local entity checkForOrbs, ConsumeOrbs;
-	local float orbCount;
-	
-	orbCount = 0;
-	
-	checkForOrbs = findradius(self.origin,250); //counts how blood orbs are available
-	while (checkForOrbs)
-	{
-		if (checkForOrbs.classname == "FlyingBlood")
-		{
-			orbCount = orbCount + 1; //this counts them
-		}
-		checkForOrbs = checkForOrbs.chain;
-	}
-	
-	if (orbCount >= 8 && !self.tome_finished) //when there are 8 or more orbs available
-	{
-		
-		//consume all orbs in range for Blood attack
-		ConsumeOrbs = findradius(self.origin, 250);
-		while (ConsumeOrbs)
-		{
-			if (ConsumeOrbs.classname == "FlyingBlood")
-			{
-				//ConsumeOrbs.velocity = normalize(ConsumeOrbs.owner.origin + '0 0 28' - ConsumeOrbs.origin)*800;
-				ConsumeOrbs.nextthink = time + 0.15;
-				ConsumeOrbs.think = SUB_Remove;
-				//orbCount = orbCount - 1;
-			}
-			//orbCount = orbCount - 1;
-			ConsumeOrbs = ConsumeOrbs.chain;
-		} 
-		SGaunt1(); //trigger blood fountain animation, which handles the attack and sounds
-	}	
-};
 
 void (float RightOffset) GauntletBeam = //triggers attack and visual effect, alternating left and right by passing a different 'RightOffset" value.
 {
-	CheckBloodOrbs();
 	if (self.ammo_bloodcrystals < 1)
 	{
 		self.weapon = W_BestWeapon (self);
@@ -2592,10 +2443,10 @@ void (float RightOffset) GauntletBeam = //triggers attack and visual effect, alt
 	makevectors(self.v_angle);
 	org = self.origin + v_up*6 + v_forward*16 + v_right*RightOffset;
 	
-	if (self.tome_finished)
-		dir = org + v_forward*700 + v_right*(-1)*RightOffset;
+	if (self.tome_finished) //langer range with Tome
+		dir = org + v_forward*1000 + v_right*(-1)*RightOffset;
 	else
-		dir = org + v_forward*400 + v_right*(-1)*RightOffset;
+		dir = org + v_forward*600 + v_right*(-1)*RightOffset;
 	
 	traceline(org, dir, FALSE, self);
 	if (trace_ent.takedamage)
@@ -2608,7 +2459,8 @@ void (float RightOffset) GauntletBeam = //triggers attack and visual effect, alt
 	{
 		MakeBeam(org, dir, "progs/aoa/drainmiss.mdl", 0.15);
 	}
-	LightningDamage (org, dir, self, 12);
+	LightningDamage (org, dir, self, 15);
+	
 };
 
 void() W_FireSanguinators = //triggers animations, which alternate left/right like the nailgun

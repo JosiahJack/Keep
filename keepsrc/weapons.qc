@@ -1378,7 +1378,7 @@ void(entity targ) W_SetCurrentAmmo = {
 			//targ.items = targ.items | IT_ELEMENTAL;
 		}
 		else if (targ.weapon == IT_RAPIER) {
-			targ.currentammo = 0;
+			targ.currentammo = targ.ammo_bloodcrystals;
 			targ.weaponmodel = "progs/aoa/v_rapier.mdl";
 		}
 		else {
@@ -1403,7 +1403,7 @@ void(entity targ) W_SetCurrentAmmo = {
 			//targ.items = targ.items | IT_VOID;
 		}
 		else if (targ.weapon == IT_FLAK) {
-			targ.currentammo = targ.ammo_nails;
+			targ.currentammo = CountFlakAmmo(targ);
 			targ.weaponmodel = "progs/aoa/v_flak.mdl";
 		}
 		else if (targ.weapon == IT_GUNGNIR) {
@@ -1416,7 +1416,8 @@ void(entity targ) W_SetCurrentAmmo = {
 			targ.weaponmodel = "";
 		}
 	}
-	targ.weaponframe = 0;		// reset weapon frame
+	if (targ.weapon != IT_MACE && targ.weapon != IT_ICE && targ.weapon != IT_SCIMITAR && targ.weapon != IT_GUNGNIR && targ.weapon != IT_RAPIER && targ.weapon != IT_SANGUINATORS && targ.weapon != IT_VOID_STAFF)
+		targ.weaponframe = 0;		// reset weapon frame, but not for Arms of Asgard weapons
 };
 
 /*======================================================================
@@ -1466,9 +1467,11 @@ float(entity targ) W_BestWeapon =
 //----------------------------------------------------------------------
 float(entity targ) W_CheckNoAmmo =
 {
-	if (targ.currentammo > 0) return TRUE;
-	if (targ.weapon == IT_AXE || targ.weapon == IT2_MJOLNIR || targ.weapon == IT2_CROSS || targ.weapon == IT2_GRAPPLE || targ.weapon == IT_RAPIER) return TRUE;
-
+	if (targ.weapon == IT_FLAK)
+		targ.currentammo = CountFlakAmmo(targ);
+	if (targ.currentammo >= 1) return TRUE;
+	if (targ.weapon == IT_AXE || targ.weapon == IT2_MJOLNIR || targ.weapon == IT2_CROSS || targ.weapon == IT2_GRAPPLE || targ.weapon == IT_RAPIER || targ.weapon == IT_GUNGNIR || targ.weapon == IT_MACE || targ.weapon == IT_SCIMITAR) return TRUE;
+	
 	targ.weapon = W_BestWeapon (targ);
 	W_SetCurrentAmmo (targ);
 	
