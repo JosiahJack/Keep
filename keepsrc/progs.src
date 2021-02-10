@@ -15,9 +15,14 @@ defsdrake.qc
 defshexen2.qc
 defsaoa.qc
 dpextensions.qc
+//fteextensions.qc
 qrobotdefs.qc
 mathlib.qc
 math.qc
+
+csqc_defs.qc
+csqc_hudkeep.qc
+
 
 subs.qc
 subs_soc.qc
@@ -28,15 +33,17 @@ subs_rubicon.qc
 subs_extras.qc
 subs_hexen2.qc
 subs_aoa.qc
+estate.qc
+hiprot.qc
 drake_box.qc
 //drake_armor.qc
-hiprot.qc
-estate.qc
 globalfog.qc
+chaosmode.qc
 settings.qc
 impulse.qc
 breakable.qc
 pushable.qc
+switchshad.qc
 
 part_manage.qc
 part_generate.qc
@@ -50,13 +57,12 @@ ai_blood.qc
 ai_gibs.qc
 ai_gibskeep.qc
 ai_enemytarget.qc
-ai_pathcorner.qc
 ai_passive.qc
 ai_tether.qc
-ai_checkattack.qc
+ai_pathcorner.qc
 fx.qc
-fx_nehahra.qc
 ai_ammoresist.qc
+fx_nehahra.qc
 hiphorn.qc
 ai_subs.qc
 ai_subskeep.qc
@@ -66,6 +72,8 @@ ai_combatkeep.qc
 ai_minions.qc
 ai_fly.qc // from Quoth
 ai_hexen2.qc
+ai_hazards.qc
+ai_checkattack.qc
 
 // Drake stuff and subs used later
 fx_drake.qc
@@ -75,6 +83,10 @@ drake_reflect.qc
 fablade.qc // from hexen2 used by Fallen Angel in fangel.qc
 faspell.qc // from hexen2 used by Fallen Angel in fangel.qc
 
+projectiles.qc
+projectiles_keep.qc
+projectiles_drake.qc
+
 // Gyro2 Physics
 //gyro_forces.qc
 //gyro_main.qc
@@ -83,13 +95,16 @@ faspell.qc // from hexen2 used by Fallen Angel in fangel.qc
 
 precache_keep.qc
 world.qc
+client_cshift.qc
 client_mapvar.qc
 client_debuff.qc
 client_power.qc
+client_evilmode.qc
 client.qc
 client_obituary.qc
 client_camera.qc
 client_info.qc
+client_advinfo.qc
 misc_globalstate.qc
 monsters.qc
 monsters_drake.qc
@@ -98,14 +113,14 @@ items.qc
 items_keep.qc
 items_drake.qc
 items_aoa.qc
-projectiles.qc
-projectiles_keep.qc
-projectiles_drake.qc
+items_progspn.qc
+
 weapons_aoa.qc
 weapons.qc
 w_mjolniradaya.qc
 drake_hook.qc
 player.qc
+lights.qc
 triggers_states.qc
 triggers.qc
 triggers_keep.qc
@@ -121,19 +136,18 @@ func_plats.qc
 func_keep.qc
 func_trains.qc
 misc.qc
+misc_model.qc
 misc_camera.qc
 misc_keep.qc
 misc_quoth.qc
 misc_drake.qc
 misc_textbook.qc
 misc_targetdummy.qc
-misc_props.qc
 traps.qc
 traps_hipnotic.qc
 traps_pendulum.qc
 traps_sawblade.qc
 traps_turret.qc
-lights.qc
 sounds.qc
 soundskeep.qc
 misc_rubicon2.qc
@@ -180,7 +194,6 @@ mon_hogremac.qc
 mon_jim.qc
 mon_lostsoul.qc
 //mon_manglioch.qc
-mon_turretbal.qc
 mon_megaforce.qc
 mon_minotaur.qc
 mon_pyro.qc
@@ -211,6 +224,17 @@ mon_bossfiretop.qc
 mon_bossicegolem.qc
 mon_bosslichfiend.qc
 mon_bossnour.qc
+
+// AD 1.81 additions
+mon_deflector.qc
+mon_dprince.qc
+mon_steelclaw.qc
+mon_sweeper.qc // Hypnogogia Monsters
+mon_turretbal.qc // Hypnogogia Monsters
+mon_bossmammoth.qc // Hypnogogia Monsters
+//mon_bossphobetor.qc // Hypnogogia Monsters
+//mon_bosspsyder.qc // Hypnogogia Monsters
+mon_bossjudicator.qc // Justice
 
 // Hipnotic stuff
 mon_armagon.qc
@@ -270,7 +294,7 @@ wand.qc
 
 // Zerstorer stuff
 mon_trog.qc
-//mon_zerst.qc
+//mon_zerst.qc // Heavily modified to make use of madfox's added poses
 
 // Soul of Evil stuff
 mon_axeman.qc
@@ -305,9 +329,16 @@ mon_anaconda.qc
 mon_virtusboss.qc
 
 // Keep stuff
-qrobot.qc
-mon_inquisitor.qc
-mon_octa.qc
+qrobot.qc // Qmaster's super syncronized trains, boring right, until the whole world is made of them
+mon_inquisitor.qc // Inquisitor by Qmaster, model from Hexen II
+mon_octa.qc // Octopus by madfox
+//mon_lampoon.qc // Lampoon fish by madfox
+//mon_balrog.qc // Balrog by madfox
+//mon_xogre.qc // Elden Ogre by madfox derived from QTest
+//mon_fragy.qc // Frog by madfox
+//mon_orgulus.qc // Dr. Mhorbo Orgulus by madfox
+//mon_samuri.qc // Samuri Knight by madfox
+//mon_mcorn.qc // Manticore by madfox
 
 //CSQC extensions start here.
 //csqc_hud_vanilla.qc
@@ -315,6 +346,9 @@ mon_octa.qc
 
 // Hexen 2 (most are in Drake but these weren't)
 mon_fangel.qc
+
+// Travail
+//mon_ubs.qc // Uber Scrag
 
 // Hipnotic spawn - must be LAST
 hipspawn.qc

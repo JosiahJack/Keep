@@ -342,6 +342,12 @@ void(entity targ, entity attacker) ClientObituary =
 			else if (targ.poisoned) bprint (" was poisoned\n");
 			else if (targ.bleeding) bprint (" bled to death\n");
 
+			// Special blocking of evil skill savegames
+			else if(targ.deathtype == "loadingevil") {
+				targ.deathtype = string_null;
+				bprint (" is too EVIL to live again!\n");
+			}
+
 			// fell to their death?
 			else if (targ.deathtype == "falling") {
 				targ.deathtype = string_null;

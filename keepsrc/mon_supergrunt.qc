@@ -494,7 +494,10 @@ void() sgrunt_die =  {
 };
 
 void() monster_super_grunt = {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 	
 	self.mdl = "progs/kinn/sgrunt.mdl";
 	self.headmdl = "progs/kinn/head2.mdl";
@@ -548,6 +551,10 @@ void() monster_super_grunt = {
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
 	if (self.deathstring == "")  self.deathstring = " was slaughtered by a Sergeant\n";
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.classtype = CT_MONSUPERGRUNT;
 	self.classgroup = CG_ARMY;

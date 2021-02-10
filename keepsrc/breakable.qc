@@ -1521,6 +1521,247 @@ void() trigger_monsterbreak =
 	self.estate = ESTATE_ON;
 };
 
+//======================================================================
+/*QUAKED func_breakable_vase (1 .5 .25) (-16 -16 -16) (16 16 24) STARTOFF NODAMAGE EXPLOSION SILENT DAMAGE NOMOSTER NOSOUND NOROTATE
+{ model(":progs/brk_vase1.mdl"); }
+Breakable ceramic vase (model)
+-------- KEYS --------
+mdl        : Name of model to display (def = 'progs/brk_vase1.mdl')
+brkobj1    : Breakable rubble 1 (def = 'progs/brk_vase1part1.mdl')
+brkobj2    : Breakable rubble 2 (def = 'progs/brk_vase1part2.mdl')
+brkobj3    : Breakable rubble 3 (def = 'progs/brk_vase1part3.mdl')
+brkobj4    : Breakable rubble 4 (def = 'progs/brk_vase1part4.mdl')
+exactskin  : Skin override of model (def 0, cannot be negative)
+target     : Additional triggers to fire when model breaks
+angle      : Yaw rotation of model (-1/0 = random rotation)
+health     : amount of damage to take before breaking (def 1)
+count      : minimum quantity to spawn (def 4)
+cnt        : random quantity to spawn (def 4) final qty = count + random(cnt)
+dmg        : explosive radius damage (emits from center of func object)
+pos1       : x=start particle colour, y=random range, z=quantity (def '168 8 1')
+bbmins     : Model bounding box MINIMUM size (def '-8 -8 -16')
+bbmaxs     : Model bounding box MAXIMUM size (def '8 8 16')
+brkvol     : Volume size for spawning pieces inside of (def '16 16 32')
+brkmdltype : Predefined sizes (0/1 = '16 16 32' and 2/3 = '24 24 40')
+brkpuff    : Spawn explosive puff of smoke and extra particles (-1 = disable)
+brkvelbase : Base amount for velocity of broken parts (def '50 50 100')
+brkveladd  : Random additions for velocity of broken parts (def '100 100 150')
+brkavel    : Amount of breaking object angle velocity (def 200)
+brkfade    : Fade time before rubble fades away (def 4+random()x4)
+brkgravity : will change the gravity for rubble, useful for underwater
+-------- SPAWNFLAGS --------
+STARTOFF   : Will wait for trigger to spawn
+NODAMAGE   : Cannot be damaged or shot, trigger only
+EXPLOSION  : trigger sprite/particle explosion
+SILENT     : No initial breakage sound
+DAMAGE     : Spawning rubble can damage (def = 2, use dmg key for touch damage)
+NOMONSTER  : monsters cannot damage this breakable and/or spawning rubble will not damage monsters
+NOSOUND    : Spawning rubble has no impact sounds
+NOROTATE   : Spawning rubble has No Y rotation
+-------- NOTES --------
+Breakable ceramic vase (model)
+
+======================================================================*/
+void() func_breakable_ceramic_model =
+{
+	// Setup object defaults
+	self.classtype = CT_FUNCBREAKMDL;
+	self.classgroup = CG_BREAKABLE;
+	self.style = BTYPE_CERAMIC;
+	self.brkobjects = BMODTYPE_CUSTOM;
+
+	// Setup particle dust colour
+	if (CheckZeroVector(self.pos1)) self.pos1 = '168 8 1'; // Whiteish
+	
+	// Check for exactskin range errors, will be copied to rubble
+	if (self.exactskin <= 0) self.exactskin = 0;
+	self.skin = self.exactskin;
+
+	// Setting the angle key in the editor to UP/DOWN = random rotation	
+	if (self.angles_y <= 0) self.angles_y = rint(random()*359);
+	self.pos2 = self.angles;	// Save for later
+	self.wait = -1;				// Only break once
+	// Setup default puff of smoke on break
+	if (self.brkpuff < 1) self.brkpuff = 0;
+	else self.brkpuff = 1;
+	
+	// precache all sound/model stuff
+	breakable_cache();
+	breakable_defaults();
+
+	if (self.spawnflags & BREAK_STARTOFF) self.use = breakable_on;
+	else breakable_on();
+};
+
+//----------------------------------------------------------------------
+void() misc_breakable_vase1 =
+{
+	// Default model/skin
+	if (self.mdl == "") self.mdl = "progs/brk_vase1.mdl";
+	precache_model(self.mdl);
+
+	if (self.brkobj1 == "") self.brkobj1 = "progs/brk_vase1part1.mdl";
+	if (self.brkobj2 == "") self.brkobj2 = "progs/brk_vase1part2.mdl";
+	if (self.brkobj3 == "") self.brkobj3 = "progs/brk_vase1part3.mdl";
+	if (self.brkobj4 == "") self.brkobj4 = "progs/brk_vase1part4.mdl";
+
+	// Make sure no out of range errors
+	if (self.brkmdltype <= 0) self.brkmdltype = 0;
+	// pre-defined large version (2/3)
+	if (self.brkmdltype == 2 || self.brkmdltype == 3) {
+		// 2 = large, 3 = large (animated)
+		self.bbmins = '-16 -16 -16';
+		self.bbmaxs = '16 16 24';
+		self.brkvol = '32 32 40';
+	}
+	else {
+		// Default bounding box and volume
+		if (CheckZeroVector(self.bbmins)) self.bbmins = '-8 -8 -16';
+		if (CheckZeroVector(self.bbmaxs)) self.bbmaxs = '8 8 16';
+		if (CheckZeroVector(self.brkvol)) self.brkvol = '16 16 32';
+	}
+	// Default setup
+	func_breakable_ceramic_model();
+};
+
+// Re-direct (old entity format)
+void() func_breakable_vase = { misc_breakable_vase1(); };
+
+//----------------------------------------------------------------------
+void() misc_breakable_pot_setup =
+{
+	// Check for random model setup
+	if (self.brkmdltype == -1) self.brkmdltype = rint(11+(random()*3.5));
+	if (self.brkmdltype < -1) self.brkmdltype = rint(21+(random()*3.5));
+	// Check for errors
+	if (self.brkmdltype < 11) self.brkmdltype = 11;
+	else if (self.brkmdltype > 25) self.brkmdltype = 25;
+	else if (self.brkmdltype > 15 && self.brkmdltype < 21) self.brkmdltype = 15;
+
+	// Pick model
+	if (self.brkmdltype == 11) self.mdl = "progs/brk_pot1a.mdl";
+	else if (self.brkmdltype == 12) self.mdl = "progs/brk_pot1b.mdl";
+	else if (self.brkmdltype == 13) self.mdl = "progs/brk_pot1c.mdl";
+	else if (self.brkmdltype == 14) self.mdl = "progs/brk_pot1d.mdl";
+	else if (self.brkmdltype == 15) self.mdl = "progs/brk_pot1aflr.mdl";
+	else if (self.brkmdltype == 21) self.mdl = "progs/brk_pot2a.mdl";
+	else if (self.brkmdltype == 22) self.mdl = "progs/brk_pot2b.mdl";
+	else if (self.brkmdltype == 23) self.mdl = "progs/brk_pot2c.mdl";
+	else if (self.brkmdltype == 24) self.mdl = "progs/brk_pot2d.mdl";
+	else if (self.brkmdltype == 25) self.mdl = "progs/brk_pot2aflr.mdl";
+	precache_model(self.mdl);
+	
+	// Pot 1a and 2a
+	if (self.brkmdltype == 11 || self.brkmdltype == 21) {
+		if (CheckZeroVector(self.bbmins)) self.bbmins = '-16 -16 -16';
+		if (CheckZeroVector(self.bbmaxs)) self.bbmaxs = '16 16 32';
+		if (CheckZeroVector(self.brkvol)) self.brkvol = '32 32 48';
+	}
+	// Pot 1b and 2b
+	else if (self.brkmdltype == 12 || self.brkmdltype == 22) {
+		if (CheckZeroVector(self.bbmins)) self.bbmins = '-10 -10 -16';
+		if (CheckZeroVector(self.bbmaxs)) self.bbmaxs = '10 10 16';
+		if (CheckZeroVector(self.brkvol)) self.brkvol = '20 20 32';
+	}
+	// Pot 1c and 2c
+	else if (self.brkmdltype == 13 || self.brkmdltype == 23) {
+		if (CheckZeroVector(self.bbmins)) self.bbmins = '-16 -16 -16';
+		if (CheckZeroVector(self.bbmaxs)) self.bbmaxs = '16 16 32';
+		if (CheckZeroVector(self.brkvol)) self.brkvol = '32 32 48';
+	}
+	// Pot 1d and 2d
+	else if (self.brkmdltype == 14 || self.brkmdltype == 24) {
+		if (CheckZeroVector(self.bbmins)) self.bbmins = '-12 -12 -16';
+		if (CheckZeroVector(self.bbmaxs)) self.bbmaxs = '12 12 32';
+		if (CheckZeroVector(self.brkvol)) self.brkvol = '24 24 48';
+	}
+	else if (self.brkmdltype == 15 || self.brkmdltype == 25) {
+		// Find out any random rotation of the pot early for this setup
+		if (self.angles_y <= 0) self.angles_y = rint(random()*359);
+		// Calculate the true rotation of XY bounding box
+		self.bbmins = mathlib_vectorotateZ('-20 -12 -16', self.angles_y);
+		// The vector should have a minimum size, otherwise odd sizes
+		if (self.bbmins_x > -16) self.bbmins_x = -16;
+		if (self.bbmins_y > -16) self.bbmins_y = -16;
+		// Calculate the true rotation of XY bounding box
+		self.bbmaxs = mathlib_vectorotateZ('20 12 12', self.angles_y);
+		// The vector should have a minimum size, otherwise odd sizes
+		if (self.bbmaxs_x < 16) self.bbmaxs_x = 16;
+		if (self.bbmaxs_y < 16) self.bbmaxs_y = 16;
+		// Pot2a floor version is flatter on top (lower Z)
+		if (self.brkmdltype == 25) self.bbmaxs_z = 8;
+		// Volume is the same for breakable parts
+		self.brkvol = '32 32 32';
+	}
+	
+	
+	// Setup breakable parts for each model type
+	if (self.brkmdltype >= 11 && self.brkmdltype <= 15) {
+		self.brkobj1 = "progs/brk_pot1part1.mdl";
+		self.brkobj2 = "progs/brk_pot1part2.mdl";
+		self.brkobj3 = "progs/brk_pot1part3.mdl";
+		self.brkobj4 = "progs/brk_pot1part4.mdl";
+	}
+	else if (self.brkmdltype >= 21 && self.brkmdltype <= 25) {
+		self.brkobj1 = "progs/brk_pot2part1.mdl";
+		self.brkobj2 = "progs/brk_pot2part2.mdl";
+		self.brkobj3 = "progs/brk_pot2part3.mdl";
+		self.brkobj4 = "progs/brk_pot2part4.mdl";
+	}
+	func_breakable_ceramic_model();
+};
+
+//----------------------------------------------------------------------
+void() misc_breakable_pot1a = {
+	if (self.brkmdltype < 0) self.brkmdltype = -1;
+	else self.brkmdltype = 11;
+	misc_breakable_pot_setup();
+};
+void() misc_breakable_pot1b = {
+	if (self.brkmdltype < 0) self.brkmdltype = -1;
+	else self.brkmdltype = 12;
+	misc_breakable_pot_setup();
+};
+void() misc_breakable_pot1c = {
+	if (self.brkmdltype < 0) self.brkmdltype = -1;
+	else self.brkmdltype = 13;
+	misc_breakable_pot_setup();
+};
+void() misc_breakable_pot1d = {
+	if (self.brkmdltype < 0) self.brkmdltype = -1;
+	else self.brkmdltype = 14;
+	misc_breakable_pot_setup();
+};
+void() misc_breakable_pot1aflr = {
+	self.brkmdltype = 15;
+	misc_breakable_pot_setup();
+};
+//----------------------------------------------------------------------
+void() misc_breakable_pot2a = {
+	if (self.brkmdltype < 0) self.brkmdltype = -2;
+	else self.brkmdltype = 21;
+	misc_breakable_pot_setup();
+};
+void() misc_breakable_pot2b = {
+	if (self.brkmdltype < 0) self.brkmdltype = -2;
+	else self.brkmdltype = 22;
+	misc_breakable_pot_setup();
+};
+void() misc_breakable_pot2c = {
+	if (self.brkmdltype < 0) self.brkmdltype = -2;
+	else self.brkmdltype = 23;
+	misc_breakable_pot_setup();
+};
+void() misc_breakable_pot2d = {
+	if (self.brkmdltype < 0) self.brkmdltype = -2;
+	else self.brkmdltype = 24;
+	misc_breakable_pot_setup();
+};
+void() misc_breakable_pot2aflr = {
+	self.brkmdltype = 25;
+	misc_breakable_pot_setup();
+};
+
 /*======================================================================
 //QUAKED misc_breakable_pot1 (1 .5 .25) (-24 -24 -32) (24 24 32) STARTOFF NODAMAGE EXPLOSION SILENT DAMAGE NOMOSTER NOSOUND NOROTATE
 { model(":progs/ne_ruins/pot1.mdl"); }

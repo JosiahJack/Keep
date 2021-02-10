@@ -71,7 +71,7 @@ void () print_bones = {
 };
 
 void () item_coin_touch = {
-   if (coop == 3 && other.versustype != VT_SURVIVOR)  return;
+   if (coop > 2 && other.versustype != VT_SURVIVOR)  return;
    if ( !(other.flags & FL_CLIENT) ) return;
 
    sprint (other, "You got ");
@@ -153,7 +153,7 @@ void(float c) DropCoin = {
 
 /* Purchasing code
 	// Check for and allow for purchases in versus survivor mode
-	if (coop == 3 && other.versustype == VT_SURVIVOR && self.cost > 0) {
+	if (coop > 2 && other.versustype == VT_SURVIVOR && self.cost > 0) {
 		if (other.usingfinished > time) {
 			if (coins >= self.cost) {
 				// continue on
@@ -172,7 +172,7 @@ void(float c) DropCoin = {
 
 void () trigger_coinpurchase_touch = {
 	if ( !(other.flags & FL_CLIENT) ) return;
-	if (coop < 3 || (coop == 3 && other.flags & FL_CLIENT && other.versustype == VT_SURVIVOR)) {
+	if (coop < 3 || (coop > 2 && other.flags & FL_CLIENT && other.versustype == VT_SURVIVOR)) {
 		// Check for and allow for purchases in versus survivor mode
 		if (self.cost > 0) {
 			if (other.usingfinished > time) {
@@ -204,7 +204,7 @@ void () trigger_coinpurchase = {
 void () trigger_gibpurchase_touch = {
 	if (other.flags & FL_CLIENT && other.versustype == VT_GAMEMASTER) {
 		// Check for and allow for purchases in versus survivor mode
-		if (coop == 3 && self.cost > 0) {
+		if (coop > 2 && self.cost > 0) {
 			if (other.usingfinished > time) {
 				if (bones >= self.cost) {
 					// continue on

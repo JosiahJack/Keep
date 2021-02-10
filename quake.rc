@@ -47,22 +47,52 @@ r_noshadow_list "progs/flame2.mdl,progs/flame.mdl,progs/bolt1.mdl,progs/bolt2.md
 //-----------------------------------------------------------
 // New commands for this MOD
 //-----------------------------------------------------------
-// Impulse 100 - Toggle auto aim
+// Impulse 100 - Toggle auto aim (0.93 <> 1.00)
+// Impulse 105 - Toggle player projectile size
 // Impulse 110 - Toggle Z aware monsters
 // Impulse 115 - Toggle texture mode (linear/nearest)
 // Impulse 120 - Toggle footstep sound
 // Impulse 125 - Toggle Monster Liquid Damage
 // Impulse 130 - Toggle Shotgun Projectiles
+// Impulse 135 - Toggle Shotgun Casing
+// Impulse 137 - Toggle tracking missiles on death
 // Impulse 140 - Display MOD information
+// Impulse 142 - Display Player information
+// Impulse 145 - Cycle through Intermission Camera(s)
 
-// DEVELOPER ONLY (need to set developer to "1")
-// Impulse 200 - Upgrade Axe
-// Impulse 205 - Upgrade SSG
-// Impulse 210 - Upgrade LG
+// Impulse 150 - Toggle COOP players can drop artifacts
+// Impulse 152 - Toggle COOP weapons to respawn
+// Impulse 154 - Toggle COOP health packs to respawn
+// Impulse 156 - Toggle COOP ammo boxes to respawn
+// Impulse 158 - Toggle COOP powerups to respawn
+
+// Impulse 160 - Toggle Weather systems
+// Impulse 170 - Toggle monster body fade/removal
+// Impulse 175 - Display Arcane Key Inventory
+
+// Impulse 180 - Display a list of secret locations
+// Impulse 182 - Display secret locations
+// Impulse 184 - Display a list of monsters left alive
+// Impulse 185 - Display a table of monster type/qty
+// Impulse 186 - Display a list of Ammo Stats
+
+// Impulse 190 - Display current random seed
+// Impulse 192 - Display current settings
+// Impulse 194 - Display weapon upgrades
+// Impulse 196 - Reset seed for Chaos system
+
+// DEVELOPER ONLY (developer "1" required)
+// Impulse 200 - Give/Take Upgrade Axe
+// Impulse 202 - Give/Take Grapple Hook
+// Impulse 205 - Give/Take Upgrade SSG
+// Impulse 210 - Give/Take Upgrade LG
 // Impulse 220 - Display Configflag
-// Impulse 225 - Display Player information
-// Impulse 230 - Toggle AI path extra info
+// Impulse 222 - Display Tempflag
+// Impulse 225 - Display Map Variables
+// Impulse 230 - Toggle Dev Helpers (mark/arrow)
 // Impulse 235 - Cycle Particle debug commands
+// Impulse 162 - Toggle Health Max 25/50/75/100
+// Impulse 164 - Toggle Health Max 50/100
 
 // Impulse 240 - Give ALL rune sigils
 // Impulse 241 - Give rune sigil 1
@@ -71,6 +101,10 @@ r_noshadow_list "progs/flame2.mdl,progs/flame.mdl,progs/bolt1.mdl,progs/bolt2.md
 // Impulse 244 - Give rune sigil 4
 // Impulse 245 - Give SILVER+GOLD key
 
+// Impulse 246 - Lava Shield
+// Impulse 247 - Wet Suit
+// Impulse 248 - Blast Belt
+// Impulse 249 - Jump Boots
 // Impulse 250 - Sharp Shooter
 // Impulse 251 - Nail Piercer
 // Impulse 252 - Environment Suit
@@ -85,6 +119,20 @@ alias feet "impulse 120"
 alias liqdmg "impulse 125"
 alias upgproj "impulse 130"
 alias ver "impulse 140"
+alias rseed "impulse 190"
+
+alias invent "impulse 175"
+alias huds "impulse 178"
+
+alias seclist "impulse 180"
+alias findsec "impulse 182"
+alias monlist "impulse 184"
+alias monstat "impulse 185"
+alias mapstat "impulse 186"
+
+alias showchaos "impulse 190"
+alias resetchaos "impulse 196"
+
 alias upgaxe "impulse 200"
 alias upgssg "impulse 205"
 alias upglg "impulse 210"
@@ -94,23 +142,28 @@ alias upglg "impulse 210"
 // Add the values below together and update temp1
 //
 // 256     Turn OFF item offset (designed for new maps)
-// 512     Turn OFF randomly rotate ammo/health items
+// 512     Turn ON sprite particles for any engine (default OFF)
 // 1024    Turn ON particle system (default OFF)
-// 2048    Turn OFF all fog related commands (default ON)
+// 2048    Turn OFF Dev Helpers (mark/arrows)
 //
-// 8192    Upgrade existing Axe, +75% dmg, gib zombies
-// 16384   Upgrade SSG weapon pickups, +50% dmg, uses 3 shells
-// 32768   Upgrade LG weapon pickups, Direct + Splashdamage
+// 4096    Upgrade existing Axe, +75% dmg, gib zombies
+// 8192    Upgrade SSG weapon pickups, +50% dmg, uses 3 shells
+// 16384   Upgrade LG weapon pickups, Direct + Splashdamage
 //
-// 65536   Turn ON Player Auto Aim
-// 131072  Turn OFF projectiles/casings for Shotguns
-// 262144  Turn OFF Z aware monsters
-// 524288  Turn OFF Enemy/player footsteps
-// 1048576 Turn OFF AI path extra info
-// 2097152 Turn OFF Monster liquid damage
+//
+// 65536
+// 131072  Turn OFF Shotgun projectiles
+// 262144  Turn OFF Shotgun casings
+// 524288  Turn OFF Z aware monsters
+// 1048576 Turn OFF Enemy/player footsteps
+// 2097152 Turn OFF AI path corner extra info
+// 4194304 Turn OFF Monster liquid damage
 // 
-// For example
-// 3072 = Turn on particles and turn off fog (1024 + 2048)
+// Examples:
+//    3072 = particles ON & Dev Helpers OFF (1024 + 2048)
+//  132096 = particles ON & Projectile Shotgun OFF (1024 + 131072)
+//  263168 = particles ON & Shotgun casings OFF (1024 + 262144)
+// 1049600 = particles ON & Enemy/player footsteps OFF (1024 + 1048576)
 //-----------------------------------------------------------
 temp1 1024
 

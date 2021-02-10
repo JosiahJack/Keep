@@ -142,7 +142,7 @@ void() SantaMelee =
 		
 	ai_charge(10);	// + ai_face()
 	ai_damagebreakable(50);
-	if (!ai_checkmelee(MONAI_MELEESANTA)) return;
+	if (!ai_checkmelee(MONAI_MELEESANTA,FALSE)) return;
 
 	// Can the target bleed?
 	if (!self.enemy.takedamage) return;
@@ -176,7 +176,7 @@ void() santa_sack8 = [ $sack8, santa_sack9 ] {SantaMelee();};
 void() santa_sack9 = [ $sack9, santa_sack10 ] {};
 void() santa_sack10 = [ $sack10, santa_run1 ] {
 	// Check if snowman is within range to attack again
-	if (ai_checkmelee(MONAI_MELEESANTA) && self.enemy.health > 0) {
+	if (ai_checkmelee(MONAI_MELEESANTA,FALSE) && self.enemy.health > 0) {
 		if (self.health > 0) self.think = santa_sack3;
 	}
 };
@@ -333,7 +333,8 @@ QUAKED monster_santa (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 ======================================================================*/
 void() monster_xmas_santa =
 {
-	if (deathmatch) { remove(self); return; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 	
 	self.mdl = "progs/xmas/mon_santa.mdl";		// Big Sack Man!
 	self.headmdl = "progs/xmas/h_santa.mdl";	// Pointy Face
@@ -392,6 +393,7 @@ void() monster_xmas_santa =
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
+	self.flags = FL_MONSTER;		// Reset flag (no user settings)
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)		
 
 	if (self.health < 1) self.health = 1200;
@@ -407,7 +409,7 @@ void() monster_xmas_santa =
 	self.poisonous = FALSE;			// Not Supported
 	self.attack_offset = '28 22 26';// End of gun
 	self.attack_rage = TRUE;		// Not in combat yet
-	self.deathstring = " was wrapped up by Santa\n";
+	if (self.deathstring == "") self.deathstring = " was wrapped up by Santa\n";
 	
 	// Setup Ammo Resistance
 	self.resist_shells = self.resist_nails = 0;
@@ -418,6 +420,10 @@ void() monster_xmas_santa =
 	// Pain/Death functions
 	self.th_pain = santa_pain;
 	self.th_die = santa_die;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	// Check for GOOD Santa setup?
 	if (self.spawnflags & MON_SANTA_GOOD) {
@@ -431,7 +437,7 @@ void() monster_xmas_santa =
 		self.noise = SOUND_EMPTY;
 		if (self.message == "")
 			 self.message = "You have rescued Santa!\nfrom the claws of hell!\n";
-		 // Nobody should be trying to kill good santa, WTF!?!
+		 // Nobody should be trying to kill good santa, WUT!?!
 		self.resist_shells = self.resist_nails = 1.0;
 		self.resist_rockets = self.resist_cells = 1.0;
 		self.nomonstercount = TRUE;

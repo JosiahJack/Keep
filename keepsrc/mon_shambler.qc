@@ -89,7 +89,7 @@ void(float melee_attack, float side) sham_meleeattack =
 	
 	if (!self.enemy) return;					// Something to fight?
 	ai_damagebreakable(40);						// Damage any breakables
-	if (!ai_checkmelee(MONAI_MELEESHAM)) return;// Too far away
+	if (!ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL)) return;// Too far away
 	dmg_multiplier = 1;
 
 	// Get closer to enemy
@@ -151,7 +151,7 @@ void() sham_swingl6 =[      $swingl6,      sham_swingl7   ] {ai_charge(9);};
 void() sham_swingl7 =[      $swingl7,      sham_swingl8   ] {ai_charge(5); sham_meleeattack(SHAM_MCLAW,250);};
 void() sham_swingl8 =[      $swingl8,      sham_swingl9   ] {ai_charge(4);};
 void() sham_swingl9 =[      $swingl9,      sham_run1  ] { ai_charge(8);
-if (ai_checkmelee(MONAI_MELEESHAM) && self.enemy.health > 0) self.think = sham_swingr1;};
+if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL) && self.enemy.health > 0) self.think = sham_swingr1;};
 
 //----------------------------------------------------------------------
 void() sham_swingr1	=[      $swingr1,      sham_swingr2   ] {
@@ -164,7 +164,7 @@ void() sham_swingr6 =[      $swingr6,      sham_swingr7   ] {ai_charge(6);};
 void() sham_swingr7 =[      $swingr7,      sham_swingr8   ] {ai_charge(6); sham_meleeattack(SHAM_MCLAW,-250);};
 void() sham_swingr8 =[      $swingr8,      sham_swingr9   ] {ai_charge(3);};
 void() sham_swingr9 =[      $swingr9,      sham_run1  ] { ai_charge(10);
-if (ai_checkmelee(MONAI_MELEESHAM) && self.enemy.health > 0) self.think = sham_swingl1;};
+if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL) && self.enemy.health > 0) self.think = sham_swingl1;};
 
 //----------------------------------------------------------------------
 void() sham_melee =
@@ -383,7 +383,10 @@ QUAKED monster_shambler (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 ======================================================================*/
 void() monster_shambler =
 {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	if (self.poisonous) {
 		self.mdl = "progs/ad171/mon_shambler.mdl";
@@ -461,6 +464,10 @@ void() monster_shambler =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = 0.5; self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.th_checkattack = ShamCheckAttack;
 	self.th_stand = sham_stand1;

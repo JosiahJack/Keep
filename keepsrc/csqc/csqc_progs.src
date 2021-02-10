@@ -1,0 +1,8 @@
+./csprogs.dat
+
+//fteextensions.qc
+csqc_defsclient.qc
+csqc_defs.qc
+// Pick AD or ID1 vers
+csqc_hudkeep.qc
+//csqc_hudvanilla.qc

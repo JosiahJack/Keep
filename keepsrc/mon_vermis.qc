@@ -58,6 +58,7 @@ float() VermisFindTarget =
 {
 	local entity client;
 	local float r;
+	if (self.passive_state) return FALSE;
 	if (sight_entity_time >= time - 0.1 && !(self.spawnflags & AS_MELEE))
 	{
 		client = sight_entity;
@@ -1815,7 +1816,8 @@ void() vermis_die = {
 };
 
 void() monster_vermis = {
-	if (deathmatch) { remove(self); return; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/quoth2pt2full/vermis.mdl";
 	precache_model("progs/quoth2pt2full/vermis.mdl");
@@ -1831,7 +1833,7 @@ void() monster_vermis = {
 	precache_sound("vermis/splash3.wav");
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_NOCLIP;
-	setmodel(self, "progs/quoth2pt2full/vermis.mdl");
+	setmodel(self,self.mdl);
 	self.health = 3000;
 	if (self.coiled != 0) {
 		precache_sound("vermis/sight.wav");
@@ -1848,6 +1850,9 @@ void() monster_vermis = {
 	self.th_melee = vermis_melee;
 	self.th_pain = vermis_pain;
 	self.th_die = vermis_die;
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;

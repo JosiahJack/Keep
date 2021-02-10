@@ -666,7 +666,10 @@ void(float hello) archer_sight = {
 // --> QUAKED monster_archer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 //============
 void() monster_archer = {
-    if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
     self.mdl = "progs/drake/archer.mdl";
     self.headmdl   = "progs/drake/h_archer.mdl";
@@ -705,7 +708,7 @@ void() monster_archer = {
 
 		if (self.health < 1) self.health = 325;
         self.gibhealth = -40;
-		if (self.deathstring == "")  self.deathstring = " was assassinated by an Assassin\n";
+		if (self.deathstring == "")  self.deathstring = " was stealthily skewered by an Assassin\n";
     } else {
         // Grunt class.
         self.skin = 0;
@@ -753,6 +756,10 @@ void() monster_archer = {
     // Always reset Ammo Resistance to be consistent
     self.resist_shells = self.resist_nails = 0;
     self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
     self.classtype = CT_MONARCHER;
     self.classgroup = CG_KNIGHT;

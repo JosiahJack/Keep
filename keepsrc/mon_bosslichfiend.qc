@@ -495,9 +495,9 @@ void() lfiend_awake =
 /*======================================================================
  QUAKED monster_lichfiend (1 0 0) (-32 -32 -24) (32 32 128)
 ======================================================================*/
-void() monster_lichfiend =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_lichfiend = {
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 	
 	self.mdl = "progs/ad171/mon_bossfiend.mdl";
 	precache_model (self.mdl);
@@ -553,6 +553,9 @@ void() monster_lichfiend =
 		spawn_marker(self.origin, SPNMARK_YELLOW);
 		return;
 	}
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
 
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 

@@ -2,90 +2,94 @@
 // MOD    : Keep.
 // You keep what you kill (and kill with).
 //======================================================================
-string MOD_VERSION		= "\b[INFO]\b Keep Mod, version 0.65\n";
+string MOD_VERSION		= "\b[INFO]\b Keep Mod, version 0.85\n";
 
 .float mapversion;
 .string target3, target4;
+
+float IT_NOWEAPON			= 0;		// No extra mod weapon (blank)
+
 //=======================================SELF.ITEMS1======================================================
-float IT_SHOTGUN    		= 1.000;		//Correct for standard HUD & HIP & DOE			W
-float IT_SUPER_SHOTGUN   	= 2.000;		//Correct for standard HUD & HIP & DOE			W
-float IT_NAILGUN    		= 4.000;		//Correct for standard HUD & HIP & DOE			W
-float IT_SUPER_NAILGUN    	= 8.000;		//Correct for standard HUD & HIP & DOE			W
-float IT_GRENADE_LAUNCHER   = 16.000;		//Correct for standard HUD & HIP & DOE			W
-float IT_ROCKET_LAUNCHER    = 32.000;		//Correct for standard HUD & HIP & DOE			W
-float IT_LIGHTNING    		= 64.000;		//Correct for standard HUD & HIP & DOE			W
-float IT_SHELLS    			= 128.000;		//Correct for DOE HUD					I
-float IT_NAILS    			= 256.000;		//Correct for DOE HUD					I
-float IT_ROCKETS    		= 512.000;		//Correct for DOE HUD					I
-float IT_CELLS    			= 1024.000;		//Correct for DOE HUD					I
-float IT_AXE    			= 2048.000;		//Correct for DOE HUD					W
-float IT_LAVA_NAILGUN    	= 4096.000;		//Correct for DOE HUD (okay for standard and HIP)	W
-float IT_LAVA_SUPER_NAILGUN = 8192.000;		//Correct for DOE HUD (okay for standard and HIP)	W
-float IT_MULTI_GRENADE    	= 16384.000;		//Correct for DOE HUD (okay for standard and HIP)	W
-float IT_MULTI_ROCKET    	= 32768.000;		//Correct for DOE HUD (okay for standard and HIP)	W
-float IT_PLASMA_GUN   	 	= 65536.000;		//Correct for DOE HUD					W
-float IT_KEY1    			= 131072.000;		//Correct for standard HUD & HIP & DOE			I
-float IT_KEY2    			= 262144.000;		//Correct for standard HUD & HIP & DOE			I
-float IT_INVISIBILITY    	= 524288.000;		//Correct for standard HUD & HIP & DOE			I
-float IT_INVULNERABILITY    = 1048576.000;		//Correct for standard HUD & HIP & DOE			I
-float IT_SUIT    			= 2097152.000;		//Correct for standard HUD & HIP & DOE			I
-float IT_QUAD    			= 4194304.000;		//Correct for standard HUD & HIP & DOE			I
-float IT_EXTRA_WEAPON  		= 8388608.000;		//Correct for DOE HUD					W
+float IT_SHOTGUN    		= 1.000;		//0  Correct for standard HUD & HIP & DOE			W
+float IT_SUPER_SHOTGUN   	= 2.000;		//1  Correct for standard HUD & HIP & DOE			W
+float IT_NAILGUN    		= 4.000;		//2  Correct for standard HUD & HIP & DOE			W
+float IT_SUPER_NAILGUN    	= 8.000;		//3  Correct for standard HUD & HIP & DOE			W
+float IT_GRENADE_LAUNCHER   = 16.000;		//4  Correct for standard HUD & HIP & DOE			W
+float IT_ROCKET_LAUNCHER    = 32.000;		//5  Correct for standard HUD & HIP & DOE			W
+float IT_LIGHTNING    		= 64.000;		//6  Correct for standard HUD & HIP & DOE			W
+float IT_SHELLS    			= 128.000;		//7  Correct for DOE HUD					I
+float IT_NAILS    			= 256.000;		//8  Correct for DOE HUD					I
+float IT_ROCKETS    		= 512.000;		//9 Correct for DOE HUD					I
+float IT_CELLS    			= 1024.000;		//10 Correct for DOE HUD					I
+float IT_AXE    			= 2048.000;		//11 Correct for DOE HUD					W
+float IT_LAVA_NAILGUN    	= 4096.000;		//12 Correct for DOE HUD (okay for standard and HIP)	W
+float IT_LAVA_SUPER_NAILGUN = 8192.000;		//13 Correct for DOE HUD (okay for standard and HIP)	W
+float IT_MULTI_GRENADE    	= 16384.000;	//14 Correct for DOE HUD (okay for standard and HIP)	W
+float IT_MULTI_ROCKET    	= 32768.000;	//15 Correct for DOE HUD (okay for standard and HIP)	W
+float IT_PLASMA_GUN   	 	= 65536.000;	//16 Correct for DOE HUD					W
+float IT_KEY1    			= 131072.000;	//17 Correct for standard HUD & HIP & DOE			I
+float IT_KEY2    			= 262144.000;	//18 Correct for standard HUD & HIP & DOE			I
+float IT_INVISIBILITY    	= 524288.000;	//19 Correct for standard HUD & HIP & DOE			I
+float IT_INVULNERABILITY    = 1048576.000;	//20 Correct for standard HUD & HIP & DOE			I
+float IT_SUIT    			= 2097152.000;	//21 Correct for standard HUD & HIP & DOE			I
+float IT_QUAD    			= 4194304.000;	//22 Correct for standard HUD & HIP & DOE			I
+float IT_EXTRA_WEAPON  		= 8388608.000;	//23 Correct for DOE HUD					W
 //=======================================SELF.ITEMS2======================================================
-float IT2_ARMOR1    		= 1.000;		//Correct for DOE HUD					I
-float IT2_ARMOR2    		= 2.000;		//Correct for DOE HUD					I
-float IT2_ARMOR3    		= 4.000;		//Correct for DOE HUD					I
-float IT2_LAVA_NAILS    	= 8.000;		//Correct for DOE HUD					I
-float IT2_PLASMA_AMMO   	= 16.000;		//Correct for DOE HUD					I
-float IT2_MULTI_ROCKETS    	= 32.000;		//Correct for DOE HUD					I
-float IT2_SHIELD    		= 64.000;		//Correct for DOE HUD					I
-float IT2_CHAINLIGHTNING	= 128.000;		//Zerstorer chain lightning				W	(I Antigrav for DOE HUD)
-float IT2_SUPERHEALTH    	= 256.000;		//Correct for DOE HUD					I
-float IT2_EARTHQUAKE    	= 512.000;		//Correct for DOE HUD					I
-float IT2_V_SPHERE    		= 1024.000;		//Correct for DOE HUD					I
-float IT2_BOLTS		    	= 2048.000;		//Keep specific						I
-float IT2_POISON    		= 4096.000;		//Keep specific						I
-float HIP_IT2_WETSUIT    	= 8192.000;		//Keep specific (modified from HIP)			I
-float HIP_IT2_EMPATHY_SHIELDS= 16384.000;		//Keep specific (modified from HIP)			I
-float HIP_IT2_HORN_OF_CONJURING= 32768.000;		//Keep specific (modified from HIP)			I
-//float UNUSED				= 65536.000;		//Unused item slot
-float IT2_PROXIMITY_GUN    	= 131072.000;		//Keep specific.Unique number for self.weapon calls 	W
-float IT2_MJOLNIR 			= 262144.000;		//Keep specific	""					W
-float IT2_LASER_CANNON    	= 524288.000;		//Keep specific	""					W
-float IT2_GRAPPLE			= 1048576.000;		//Keep specific "" W Rogue grapple
-float IT2_TRINITY			= 2097152.000;		//Quoth
-float IT2_CROSS				= 4194304.000;		//Quoth							I && W2 (used by Wand)
-float IT2_WAND				= 8388608.000; 		//Drake magic wand					W2 (special check to prevent IT_EXTRA_WEAPON conflict
+float IT2_ARMOR1    		= 1.000;		//0  Correct for DOE HUD					I
+float IT2_ARMOR2    		= 2.000;		//1  Correct for DOE HUD					I
+float IT2_ARMOR3    		= 4.000;		//2  Correct for DOE HUD					I
+float IT2_LAVA_NAILS    	= 8.000;		//3  Correct for DOE HUD					I
+float IT2_PLASMA_AMMO   	= 16.000;		//4  Correct for DOE HUD					I
+float IT2_MULTI_ROCKETS    	= 32.000;		//5  Correct for DOE HUD					I
+float IT2_SHIELD    		= 64.000;		//6  Correct for DOE HUD					I
+float IT2_CHAINLIGHTNING	= 128.000;		//7  Zerstorer chain lightning				W	(I Antigrav for DOE HUD)
+float IT2_SUPERHEALTH    	= 256.000;		//8  Correct for DOE HUD					I
+float IT2_EARTHQUAKE    	= 512.000;		//9  Correct for DOE HUD					I
+float IT2_V_SPHERE    		= 1024.000;		//10 Correct for DOE HUD					I
+float IT2_BOLTS		    	= 2048.000;		//11 Keep specific						I
+float IT2_POISON    		= 4096.000;		//12 Keep specific						I
+float HIP_IT2_WETSUIT    	= 8192.000;		//13 Keep specific (modified from HIP)			I
+float HIP_IT2_EMPATHY_SHIELDS= 16384.000;	//14 Keep specific (modified from HIP)			I
+float HIP_IT2_HORN_OF_CONJURING= 32768.000;	//15 Keep specific (modified from HIP)			I
+//float UNUSED				= 65536.000;	//16 Unused item slot
+float IT2_PROXIMITY_GUN    	= 131072.000;	//17 Keep specific.Unique number for self.weapon calls 	W
+float IT2_MJOLNIR 			= 262144.000;	//18 Keep specific	""					W
+float IT2_LASER_CANNON    	= 524288.000;	//19 Keep specific	""					W
+float IT2_GRAPPLE			= 1048576.000;	//20 Keep specific "" W Rogue grapple
+float IT2_TRINITY			= 2097152.000;	//20 Quoth
+float IT2_CROSS				= 4194304.000;	//21 Quoth							I && W2 (used by Wand)
+float IT2_WAND				= 8388608.000; 	//22 Drake magic wand					W2 (special check to prevent IT_EXTRA_WEAPON conflict
+
 float IT2_ALLARMOR			= 7.000;// Test for player grn/yel/red armour. Helper combo bit of 1 + 2 + 4
 //=======================================SELF.MODITEMS======================================================
-float IT_NOWEAPON			= 0;		// No extra mod weapon (blank)
-//float UNUSED   			= 1.000;	// I
-float IT_UPGRADE_SSG		= 2.000;	//AoA		W
-.float selfweaponismoditems; 	// HACK FOR HACKBANK! Used to carry more than 24 weapons which is all we can fit in the float's bits
-	float IT_ICE    			= 4.000;	//AoA		W2  HACKBANK!
-	float IT_MACE   			= 8.000;	//AoA		W2  HACKBANK!
-	float IT_VOID_STAFF			= 16.000;	//AoA		W2  HACKBANK!
-	float IT_FLAK   			= 32.000;	//AoA		W2  HACKBANK!
-float IT_UPGRADE_LG			= 64.000;	// Plasma Gun, direct + splashdamage
-	float IT_GUNGNIR   			= 128.000;	//AoA		W  HACKBANK!
-float IT_SANGUINATORS		= 256.000;	//AoA		W
-float IT_SCIMITAR			= 512.000;	//AoA		W
-float IT_RAPIER 			= 1024.000;	//AoA		W
-float IT_UPGRADE_AXE   		= 2048.000;	// Shadow Axe, +75% dmg, +gib bodies
-//float UNUSED				= 4096.000;
-float IT_CKEY1				= 8192;		// Custom Key 1
-float IT_CKEY2				= 16384;	// Custom Key 2
-float IT_CKEY3				= 32768;	// Custom Key 3
-float IT_CKEY4				= 65536;	// Custom Key 4
-float IT_CKEYALL			= 122880;	// All Custom keys
-float IT_ARTLAVASHIELD 		= 131072;// No health or armor damage in lava
-float IT_ARTWETSUIT			= 262144;	// No running out of oxygen under water
-float IT_ARTBLASTBELT		= 524288;	// Immunity to all splashdamage
-float IT_ARTJUMPBOOTS		= 1048576;	// JCR Jump Boots (1-4 power levels)
-float IT_ARTSHARP			= 2097152;	// Reduce SG/SSG/RG spread pattern
-float IT_ARTPIERCE			= 4194304;	// NG/SNG Nails travel through enemy bodies
-float IT_ARTTOME			= 8388608;	// Tome of Power (event trigger)
+//float UNUSED   			= 1;			//0  I
+float IT_UPGRADE_SSG		= 2;			//1  AoA		W\
+	float IT_ICE    		= 4;			//2  AoA		W2  HACKBANK!
+	float IT_MACE   		= 8;			//3  AoA		W2  HACKBANK!
+	float IT_VOID_STAFF		= 16;			//4  AoA		W2  HACKBANK!
+	float IT_FLAK   		= 32;			//5  AoA		W2  HACKBANK!
+float IT_UPGRADE_LG			= 64;			//6  Plasma Gun, direct + splashdamage
+	float IT_GUNGNIR   		= 128;			//7  AoA		W2  HACKBANK!
+float IT_SANGUINATORS		= 256;			//8  AoA		W
+float IT_SCIMITAR			= 512;			//9  AoA		W
+float IT_RAPIER 			= 1024;			//10 AoA		W
+float IT_UPGRADE_AXE   		= 2048;			//11 Shadow Axe, +75% dmg, +gib bodies
+//float UNUSED				= 4096;			//12
+float IT_CKEY1				= 8192;			//13 Custom Key 1
+float IT_CKEY2				= 16384;		//14 Custom Key 2
+float IT_CKEY3				= 32768;		//15 Custom Key 3
+float IT_CKEY4				= 65536;		//16 Custom Key 4
+float IT_ARTLAVASHIELD 		= 131072;		//17 No health or armor damage in lava
+float IT_ARTWETSUIT			= 262144;		//18 No running out of oxygen under water
+float IT_ARTBLASTBELT		= 524288;		//19 Immunity to all splashdamage
+float IT_ARTJUMPBOOTS		= 1048576;		//20 JCR Jump Boots (1-4 power levels)
+float IT_ARTSHARP			= 2097152;		//21 Reduce SG/SSG/RG spread pattern
+float IT_ARTPIERCE			= 4194304;		//22 NG/SNG Nails travel through enemy bodies
+float IT_ARTTOME			= 8388608;		//23 Tome of Power (event trigger)
 
+.float selfweaponismoditems; 	// HACK FOR HACKBANK! Used to carry more than 24 weapons which is all we can fit in the float's bits
+float IT_CKEYALL			= 122880;	//17 All Custom keys
+//==========================================================================================================
 // More powerups -----------------------------------------------------------
 // Bits 00-07 (values 1-128) are reserved for health.
 // Bits 08-11 (values 256-2048) are reserved for armor.
@@ -126,6 +130,10 @@ float   POWx_ARMOR      = 3840;     // Mutually exclustive exotic armor.
 float BBOX_ARMAGON = 23;	// -48 -48 -24, 48 48 84
 float BBOX_VERMIS = 24;		// -64 -64 -512, 64 64 256
 float ARMOR_BLUE = 2;			// Display a blue armour
+float AMMO_MAXSHELLS = 200;		// Maximum ammo the player can carry
+float AMMO_MAXNAILS = 200;		// Shells use to be 100
+float AMMO_MAXROCKETS = 100;
+float AMMO_MAXCELLS = 100;
 float AMMO_MAXLAVANAILS = 200;
 float AMMO_MAXMULTIROCKETS = 100;
 float AMMO_MAXPLASMA = 100;

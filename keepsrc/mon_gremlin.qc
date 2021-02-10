@@ -412,40 +412,40 @@ void () gremlin_walk1 = [ 17.000, gremlin_walk2 ] {
    if ( (random () < 0.100) )
       sound (self,CHAN_VOICE,"grem/idle.wav",TRUE,ATTN_IDLE);
 
-   gremlin_walk (FL_CLIENT);
+   gremlin_walk (8);
 };
-void () gremlin_walk2 = [ 18.000, gremlin_walk3 ] { gremlin_walk (FL_CLIENT); };
-void () gremlin_walk3 = [ 19.000, gremlin_walk4 ] { gremlin_walk (FL_CLIENT); };
-void () gremlin_walk4 = [ 20.000, gremlin_walk5 ] { gremlin_walk (FL_CLIENT); };
-void () gremlin_walk5 = [ 21.000, gremlin_walk6 ] { gremlin_walk (FL_CLIENT); };
-void () gremlin_walk6 = [ 22.000, gremlin_walk7 ] { gremlin_walk (FL_CLIENT); };
-void () gremlin_walk7 = [ 23.000, gremlin_walk8 ] { gremlin_walk (FL_CLIENT); };
-void () gremlin_walk8 = [ 24.000, gremlin_walk9 ] { gremlin_walk (FL_CLIENT); };
-void () gremlin_walk9 = [ 25.000, gremlin_walk10 ] { gremlin_walk (FL_CLIENT); };
-void () gremlin_walk10 = [ 26.000, gremlin_walk11 ] { gremlin_walk (FL_CLIENT); };
-void () gremlin_walk11 = [ 27.000, gremlin_walk12 ] { gremlin_walk (FL_CLIENT); };
-void () gremlin_walk12 = [ 28.000, gremlin_walk1 ] { gremlin_walk (FL_CLIENT); };
+void () gremlin_walk2 = [ 18.000, gremlin_walk3 ] { gremlin_walk (8); };
+void () gremlin_walk3 = [ 19.000, gremlin_walk4 ] { gremlin_walk (8); };
+void () gremlin_walk4 = [ 20.000, gremlin_walk5 ] { gremlin_walk (8); };
+void () gremlin_walk5 = [ 21.000, gremlin_walk6 ] { gremlin_walk (8); };
+void () gremlin_walk6 = [ 22.000, gremlin_walk7 ] { gremlin_walk (8); };
+void () gremlin_walk7 = [ 23.000, gremlin_walk8 ] { gremlin_walk (8); };
+void () gremlin_walk8 = [ 24.000, gremlin_walk9 ] { gremlin_walk (8); };
+void () gremlin_walk9 = [ 25.000, gremlin_walk10 ] { gremlin_walk (8); };
+void () gremlin_walk10 = [ 26.000, gremlin_walk11 ] { gremlin_walk (8); };
+void () gremlin_walk11 = [ 27.000, gremlin_walk12 ] { gremlin_walk (8); };
+void () gremlin_walk12 = [ 28.000, gremlin_walk1 ] { gremlin_walk (8); };
 
 void () gremlin_run1 = [ 29.000, gremlin_run2 ] {
    if ( (random () < 0.100) )
       sound (self,CHAN_VOICE,"grem/idle.wav",TRUE,ATTN_IDLE);
 
-   gremlin_run (FALSE);
+   gremlin_run (2); // Was 0, -Qmaster
 };
-void () gremlin_run2 = [ 30.000, gremlin_run3 ] { gremlin_run (FL_CLIENT);};
-void () gremlin_run3 = [ 31.000, gremlin_run4 ] { gremlin_run (STAT_TOTALMONSTERS); };
-void () gremlin_run4 = [ 32.000, gremlin_run5 ] { gremlin_run (FL_INWATER); };
-void () gremlin_run5 = [ 33.000, gremlin_run6 ] { gremlin_run (FL_INWATER); };
-void () gremlin_run6 = [ 34.000, gremlin_run7 ] { gremlin_run (STAT_TOTALMONSTERS); };
-void () gremlin_run7 = [ 35.000, gremlin_run8 ] { gremlin_run (FL_CLIENT); };
-void () gremlin_run8 = [ 36.000, gremlin_run9 ] { gremlin_run (FALSE); };
-void () gremlin_run9 = [ 37.000, gremlin_run10 ] { gremlin_run (FL_CLIENT); };
-void () gremlin_run10 = [ 38.000, gremlin_run11 ] { gremlin_run (STAT_TOTALMONSTERS); };
-void () gremlin_run11 = [ 39.000, gremlin_run12 ] { gremlin_run (FL_INWATER); };
-void () gremlin_run12 = [ 40.000, gremlin_run13 ] { gremlin_run (FL_INWATER); };
-void () gremlin_run13 = [ 41.000, gremlin_run14 ] { gremlin_run (STAT_TOTALMONSTERS); };
-void () gremlin_run14 = [ 42.000, gremlin_run15 ] { gremlin_run (FL_CLIENT); };
-void () gremlin_run15 = [ 43.000, gremlin_run1 ] { gremlin_run (FALSE); };
+void () gremlin_run2 = [ 30.000, gremlin_run3 ] { gremlin_run (8);};
+void () gremlin_run3 = [ 31.000, gremlin_run4 ] { gremlin_run (16); }; // Was 12, -Qmaster
+void () gremlin_run4 = [ 32.000, gremlin_run5 ] { gremlin_run (24); }; // Was 16, -Qmaster
+void () gremlin_run5 = [ 33.000, gremlin_run6 ] { gremlin_run (24); }; // Was 16, -Qmaster
+void () gremlin_run6 = [ 34.000, gremlin_run7 ] { gremlin_run (16); }; // Was 12, -Qmaster
+void () gremlin_run7 = [ 35.000, gremlin_run8 ] { gremlin_run (8); };
+void () gremlin_run8 = [ 36.000, gremlin_run9 ] { gremlin_run (0); };
+void () gremlin_run9 = [ 37.000, gremlin_run10 ] { gremlin_run (8); };
+void () gremlin_run10 = [ 38.000, gremlin_run11 ] { gremlin_run (16); }; // Was 12, -Qmaster
+void () gremlin_run11 = [ 39.000, gremlin_run12 ] { gremlin_run (24); }; // Was 16, -Qmaster
+void () gremlin_run12 = [ 40.000, gremlin_run13 ] { gremlin_run (24); }; // Was 16, -Qmaster
+void () gremlin_run13 = [ 41.000, gremlin_run14 ] { gremlin_run (16); }; // Was 12, -Qmaster
+void () gremlin_run14 = [ 42.000, gremlin_run15 ] { gremlin_run (8); };
+void () gremlin_run15 = [ 43.000, gremlin_run1 ] { gremlin_run (2); }; // Was 0, -Qmaster
 
 void () gremlin_jump1 = [ 44.000, gremlin_jump2 ] { ai_face (); };
 void () gremlin_jump2 = [ 45.000, gremlin_jump3 ] { ai_face (); };
@@ -779,8 +779,8 @@ void () gremlin_lunge3 = [ 126.000, gremlin_lunge4 ] { ai_charge (FALSE); };
 void () gremlin_lunge4 = [ 127.000, gremlin_lunge5 ] { ai_charge (FALSE); };
 void () gremlin_lunge5 = [ 128.000, gremlin_lunge6 ] { ai_charge (FALSE); };
 void () gremlin_lunge6 = [ 129.000, gremlin_lunge7 ] { ai_charge (FALSE); };
-void () gremlin_lunge7 = [ 130.000, gremlin_lunge8 ] { ai_charge (15.000); };
-void () gremlin_lunge8 = [ 131.000, gremlin_lunge9 ] { ai_charge (FALSE); Gremlin_Melee (FALSE); };
+void () gremlin_lunge7 = [ 130.000, gremlin_lunge8 ] { ai_charge (18.000); }; // Was 15, -Qmaster
+void () gremlin_lunge8 = [ 131.000, gremlin_lunge9 ] { ai_charge (1); Gremlin_Melee (FALSE); }; // Was 0, -Qmaster
 void () gremlin_lunge9 = [ 132.000, gremlin_lunge10 ] { ai_charge (FALSE); };
 void () gremlin_lunge10 = [ 133.000, gremlin_lunge11 ] { ai_charge (FALSE); };
 void () gremlin_lunge11 = [ 134.000, gremlin_run1 ] { ai_charge (FALSE); };
@@ -1183,6 +1183,15 @@ void () gremlin_setup = {
    self.resist_shells = self.resist_nails = 0;
    self.resist_rockets = self.resist_cells = 0;
 
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
+
+	// Default jump forward/up distance
+	// if (CheckZeroVector(self.jumpdist)) self.jumpdist = '150 0 200';
+	// if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPZKNEAR;
+	// if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPZKFAR;
+
    if(!self.classtype) self.classtype = CT_MONGREMLIN;
    if (!self.classgroup) self.classgroup = CG_MONSTERS;  // Same team as fiends, droles, minotaurs, boglords, lichfiend, hephaestus
    self.classmove = MON_MOVEWALK;
@@ -1192,7 +1201,10 @@ void () gremlin_setup = {
 };
 
 void () monster_gremlin = {
-   if ( deathmatch ) { remove (self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
    self.mdl = "progs/hipnotic/grem.mdl";
    self.headmdl = "progs/hipnotic/h_grem.mdl";

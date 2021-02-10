@@ -175,7 +175,7 @@ void (entity inflictor, entity attacker, float damage, float radius, entity igno
 			else {
 				// Check for breakable/pushable monster immunity
 				// Do nothing, radius damage has no miss effect
-				if (ai_immunedamage(attacker, head)) {
+				if (ai_immunebreakable(attacker, head)) {
 				}
 				// Check for any breakables which are prone to explosive damage
 				else if (ai_foundbreakable(attacker, head,TRUE) && head.brktrigmissile !=0) {

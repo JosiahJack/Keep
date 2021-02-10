@@ -18,10 +18,6 @@ float MAPV_MONSTERS = 32;		// Monsters can use bmodel trigger
 
 float bitflags[24];				// Bitflag values
 float mapvar[6];				// Map variables stored in savefile
-void() trigger_bmodel_sounds;
-void() trigger_bmodel_setup;
-void() trigger_cdtrack_change;
-void(entity e) trigger_skybox_change;
 
 //======================================================================
 /*QUAKED trigger_mapvar_query (.5 .7 1) (-8 -8 -16) (8 8 16) x
@@ -36,8 +32,9 @@ wait    : -1 = trigger once
 -------- SPAWNFLAGS --------
 -------- NOTES --------
 Trigger target(s) based on mapvar
+*/
 //-----------------------------------------------------------------------------
-//QUAKED trigger_mapvar_update (.5 .7 1) (-8 -8 -16) (8 8 16) x
+/*QUAKED trigger_mapvar_update (.5 .7 1) (-8 -8 -16) (8 8 16) x
 Update the value of mapvar
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -50,8 +47,9 @@ wait    : -1 = trigger once
 -------- SPAWNFLAGS --------
 -------- NOTES --------
 Update the value of mapvar
+*/
 //-----------------------------------------------------------------------------
-//QUAKED trigger_mapvar_toggle (.5 .7 1) (-8 -8 -16) (8 8 16) x
+/*QUAKED trigger_mapvar_toggle (.5 .7 1) (-8 -8 -16) (8 8 16) x
 Toggle the value of mapvar
 -------- KEYS --------
 targetname : trigger entity (works with entity state system)
@@ -63,7 +61,7 @@ wait    : -1 = trigger once
 -------- SPAWNFLAGS --------
 -------- NOTES --------
 Toggle the value of mapvar
-======================================================================*/
+*/
 
 // Setup the bitflag array (used in world.qc)
 void() mapvar_setuparray =

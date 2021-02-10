@@ -1,6 +1,6 @@
-/*======================================================================
-Cinematic Camera System
-======================================================================*/
+//======================================================================
+// Cinematic Camera System
+//======================================================================
 // Camera spawnflags
 float CINECAM_FUNC_PLAYER = 1;	// Setup fake player model
 float CINECAM_FUNC_SKIPABLE = 2;// Allow cinematic to be skipable
@@ -107,6 +107,93 @@ void(entity targ) camera_check_skip =
 	}
 };
 
+//----------------------------------------------------------------------
+float(float cam_angle1, float cam_angle2) camera_check_anglezero =
+{
+	// Smallest / Largest camera angle
+	local float cam_anglesmall, cam_anglelarge;
+	// Camera small/large angle distance and wrap distance
+	local float cam_angledist, cam_anglewrap;
+	
+	// Guard against interpolating across the 360<->0 discontinuity
+	cam_anglelarge = mathlib_max(cam_angle1, cam_angle2);
+	cam_anglesmall = mathlib_min(cam_angle1, cam_angle2);
+
+	// This is the distance between the yaws if we don't cross 360.
+	cam_angledist = cam_anglelarge - cam_anglesmall;
+	// This is the distance if we do cross 360. i.e. "359" and "1" would
+	// have an angle_wrap of "2" and direct_dist of "358".
+	cam_anglewrap = (360 - cam_anglelarge) + cam_anglesmall;
+
+	// Is it shorter to cross the 360<->0 boundary?
+	if (cam_anglewrap < cam_angledist) return TRUE;
+	else return FALSE;
+};
+
+//----------------------------------------------------------------------
+float(float baxis_start, float baxis_control, float baxis_end, float baxis_time) bezier_axis =
+{
+	local float baxis_1, baxis_2, baxis_3, baxis_return;
+	
+	// Work out bezier curve position 
+	baxis_1 = ((1 - baxis_time) * (1 - baxis_time)) * baxis_start;
+	baxis_2 = ((2 * baxis_time) * (1 - baxis_time)) * baxis_control;
+	baxis_3 = (baxis_time * baxis_time) * baxis_end;
+	// Add up parts and return result
+	baxis_return = baxis_1 + baxis_2 + baxis_3;
+	return baxis_return;
+};
+
+//----------------------------------------------------------------------
+vector(vector bez_start, vector bez_control, vector bez_end, float bez_timemax, float bez_timeleft) bezier_curve =
+{
+	local vector bez_result;
+	local float bez_time;
+	
+	// Normalize (0-1) the time value 
+	bez_time = bez_timeleft / bez_timemax;
+	// Make sure time is within normalized range (0-1)
+	if (bez_time <= 0) bez_time = 0;
+	if (bez_time >= 1) bez_time = 1;
+
+	// Work out each vector (XYZ) axis
+	bez_result_x = bezier_axis(bez_start_x, bez_control_x, bez_end_x, bez_time);
+	bez_result_y = bezier_axis(bez_start_y, bez_control_y, bez_end_y, bez_time);
+	bez_result_z = bezier_axis(bez_start_z, bez_control_z, bez_end_z, bez_time);
+	
+	return bez_result;
+};
+
+//----------------------------------------------------------------------
+// Bezier curve debug system (developer = 1 only)
+// Display the curve with yellow diamonds
+//----------------------------------------------------------------------
+void() misc_camera_bezier_debug =
+{
+	// Block debug info regardless (help reduce ents)
+	if (self.nodebuginfo == TRUE) return;
+	
+	// Find the bezier curve CONTROL point
+	self.attachment2 = find(world, targetname, self.controltarget);
+	// Find the bezier curve END point
+	self.attachment3 = find(world, targetname, self.target);
+
+	// Display debug markers for start/control/end locations
+	spawn_marker(self.origin, SPNMARK_RED);
+	spawn_marker(self.attachment2.origin, SPNMARK_GREEN);
+	spawn_marker(self.attachment3.origin, SPNMARK_RED);
+	
+	// Loop through 10 points on each bezier curve
+	self.cnt = 0.1;
+	while (self.cnt < 1) {
+		// Work out bezier curve vector position
+		self.finalangle = bezier_curve(self.origin, self.attachment2.origin, self.attachment3.origin, 1, self.cnt);
+		// Spawn debug marker (yellow is wrong colour!)
+		spawn_marker(self.finalangle, SPNMARK_YELLOW);
+		self.cnt = self.cnt + 0.1;
+	}
+};
+
 //======================================================================
 // Main loop for cinematic controller (all states)
 //======================================================================
@@ -135,6 +222,7 @@ void() camera_controller_think =
 		cam_movement = FALSE;	// No movement tracking
 		cam_fakeplay = FALSE;	// The invisible man
 		cam_angle = '0 0 0';	// Reset angles
+		cam_lastanglevalid = FALSE;	// Reset angle smoothing
 		
 		// Reset player location markers
 		self.attachment = self.attachment2 = world;
@@ -148,8 +236,9 @@ void() camera_controller_think =
 				self.attachment = find(world, targetname, cam_focus.modeltarget);
 				// Found the target entity?
 				if (self.attachment) {
-					// Spawn a dev marker
-					if (developer > 0) spawn_marker(self.attachment.origin, SPNMARK_RED);
+					// Spawn a dev marker (can be blocked)
+					if (developer > 0 && !self.nodebuginfo) 
+						spawn_marker(self.attachment.origin, SPNMARK_RED);
 					// Info_teleport_destination are fined tuned for trig_teleport
 					if (self.attachment.classtype == CT_MISCTELEPORT) {
 						self.attachment.origin = self.attachment.origin - '0 0 27';
@@ -164,8 +253,9 @@ void() camera_controller_think =
 			self.attachment2 = find(world, targetname, cam_focus.returntarget);
 			// Found the target entity?
 			if (self.attachment2) {
-				// Spawn a dev marker
-				if (developer > 0) spawn_marker(self.attachment2.origin, SPNMARK_RED);
+				// Spawn a dev marker (can be blocked)
+				if (developer > 0 && !self.nodebuginfo) 
+					spawn_marker(self.attachment2.origin, SPNMARK_RED);
 				// Info_teleport_destination are fined tuned for trig_teleport
 				if (self.attachment2.classtype == CT_MISCTELEPORT) {
 					self.attachment2.origin = self.attachment2.origin - '0 0 27';
@@ -378,52 +468,73 @@ void() camera_controller_think =
 			// Otherwise it will feel like the controls are broken
 			cam_locked = FALSE;
 			cam_movement = FALSE;
+			cam_bezier = FALSE;
 		}
 		else {
 			// Switch to Next cinematic camera
 			setorigin(cam_client, cam_focus.origin);
 			cam_client.view_ofs = cam_focus.view_ofs;
 
-			// Is the camera angletarget / angles being updated
-			if (cam_fixangle != CINECAM_FIXANGLE_DONE) {
-				// Only update angles once per camera chain
-				if (cam_fixangle == CINECAM_FIXANGLE_ACTIVE) 
-					cam_fixangle = CINECAM_FIXANGLE_DONE;
-				
-				// Check for any special angle target setup?
-				if (cam_focus.angletarget != "") {
-					// Find angle target of camera and return results
-					// movetarget = angletarget entity
-					// dest1 = angletarget.origin
-					// movedir = vector movement direction
-					TargetMovedir(cam_focus, TRUE);
-					// Angle target found?
-					if (self.movetarget) {
-						// Convert direction vector to angles
-						cam_focus.angles = vectoangles(self.movedir);
-						// Spawn a debug arrow if devmode (only once)
-						if (developer > 0 && !self.movetarget.cam_debugarrow) {
-							spawn_arrow(self.dest1, cam_focus.angles, 3);
-							self.movetarget.cam_debugarrow = TRUE;
-						}
-						// Got to reverse the pitch angle because 
-						// v_angle is upside down (special carmack code)
-						cam_focus.angles_x = -cam_focus.angles_x;
-					}
-					// Cannot have a focalpoint if no angletarget
-					else cam_focus.focalpoint = 0;
-
-				}
-				
-				// Update camera from existing angles key
-				cam_angle = cam_focus.angles;
-			}
+			// Setup Camera angle blend fraction
+			if (cam_focus.angleblend <= 0 || cam_focus.angleblend >= 1) 
+				cam_focus.angleblend = CINECAM_ANGLEBLEND;
 			
 			// Lock player viewing angle (done via PlayerPreThink)
+			// Stops the player moving the cursor/head around
 			cam_locked = TRUE;
+			
+			// Movement of Camera (Bezier)
+			if (cam_focus.controltarget != "") {
+				// search for Control Point entity (info_target)
+				self.enemy = find(world, targetname, cam_focus.controltarget);
+				// Need to know next camera location for bezier maths
+				self.oldenemy = find(world, targetname, cam_focus.target);
+				
+				// Found a control AND next camera entity?
+				// Must find both of these because of the math formula
+				if (self.enemy && self.oldenemy) {
+					// Show movement tracking entity
+					if (developer > 0) {
+						// Use the yellow diamond model
+						setmodel(cam_track, MODEL_BROKEN);
+						setsize(cam_track, VEC_ORIGIN, VEC_ORIGIN);
+					}
 
+					// Reset movement origin to starting position
+					cam_track.origin = cam_focus.origin;
+					
+					// Is the time or movement is too small?
+					if (cam_focus.waitmin3 <= 0.1 || self.enemy.origin == cam_focus.origin) {
+						// Move directly to movement location
+						setorigin(cam_client, cam_focus.origin);
+						cam_movement = FALSE;
+					}
+					else {
+						// Setup camera tracking entity to start at client
+						setorigin(cam_track, cam_focus.origin);
+						cam_track.angles = cam_focus.angles;
+						// Keep track of bezier curve start/control/end
+						cam_track.pos4 = cam_focus.origin;
+						cam_track.pos5 = self.enemy.origin;
+						cam_track.pos6 = self.oldenemy.origin;
+						cam_track.wait = cam_focus.waitmin3;
+						cam_track.velocity = '0 0 0';
+						
+						// The exact position of where the camera should be on
+						// the bezier curve can be calculated. Just need to move
+						// the origin instead of relying on velocity movement
+						cam_track.attack_finished = time + cam_track.wait;
+						cam_track.think = camera_tracking_finish;
+						cam_track.nextthink = time + cam_track.wait;
+						
+						// Allow for updates (done via PlayerPreThink)
+						cam_movement = TRUE;
+						cam_bezier = TRUE;
+					}
+				}
+			}
 			// Movement of Camera (Linear)
-			if (cam_focus.sighttarget != "") {
+			else if (cam_focus.sighttarget != "") {
 				// search for target entity (info_target)
 				self.enemy = find(world, targetname, cam_focus.sighttarget);
 				
@@ -464,8 +575,44 @@ void() camera_controller_think =
 						
 						// Allow for updates (done via PlayerPreThink)
 						cam_movement = TRUE;
+						cam_bezier = FALSE;
 					}
 				}
+			}
+			
+			// Has the camera angletarget been setup?
+			if (cam_fixangle != CINECAM_FIXANGLE_DONE) {
+				// Only update angles once per camera chain
+				if (cam_fixangle == CINECAM_FIXANGLE_ACTIVE)
+					cam_fixangle = CINECAM_FIXANGLE_DONE;
+				
+				// Check for any special angle target setup?
+				if (cam_focus.angletarget != "") {
+					// Find angle target of camera and return results
+					// movetarget = angletarget entity
+					// dest1 = angletarget.origin
+					// movedir = vector movement direction
+					TargetMovedir(cam_focus, TRUE);
+					// Angle target found?
+					if (self.movetarget) {
+						// Convert direction vector to angles
+						cam_focus.angles = vectoangles(self.movedir);
+						// Spawn a debug arrow if devmode (only once)
+						if (!cam_focus.cam_debugarrow && !self.nodebuginfo) {
+							spawn_arrow(cam_focus.origin, cam_focus.angles, 3);
+							cam_focus.cam_debugarrow = TRUE;
+						}
+						// Got to reverse the pitch angle because 
+						// v_angle is upside down (special carmack code)
+						cam_focus.angles_x = -cam_focus.angles_x;
+					}
+					// Cannot have a focalpoint if no angletarget
+					else cam_focus.focalpoint = 0;
+
+				}
+				
+				// Update camera from existing angles key
+				cam_angle = cam_focus.angles;
 			}
 			
 			// First camera? Hide player and HUD
@@ -615,6 +762,9 @@ void() camera_controller_think =
 };
 
 //======================================================================
+// When the fake player is displayed via the camera system
+// This function keeps the model animated like the real player
+//----------------------------------------------------------------------
 void() camera_player_animate =
 {
 	// Stop animating if disabled
@@ -626,6 +776,8 @@ void() camera_player_animate =
 	self.nextthink = time + 0.1;
 };
 
+//----------------------------------------------------------------------
+// Check if the camera controller entity is setup and running
 //----------------------------------------------------------------------
 void() camera_controller_setup = 
 {
@@ -679,37 +831,40 @@ void() camera_controller_setup =
 	}
 };
 
-/*======================================================================
-//QUAKED misc_camera (1 0.5 0.5) (-16 -16 -16) (16 16 16) PLAYER SKIPABLE FADEOUT FADEIN FIXEDANGLE ENDCAMERA x x Not_Easy Not_Normal Not_Hard Not_DM
+//======================================================================
+/*QUAKED misc_camera (1 0.5 0.5) (-16 -16 -16) (16 16 16) PLAYER SKIPABLE FADEOUT FADEIN FIXEDANGLE ENDCAMERA x x Not_Easy Not_Normal Not_Hard Not_DM
 In game cinematic camera (Does not work in coop/dm mode)
 -------- KEYS --------
-targetname  : Camera name for linking into target chains
-target      : Points to the next camera in a chain/sequence
-angletarget : Direction the camera will face (use info_target)
-angles      : Direction the camera will face (Pitch Yaw Roll setup)
-focalpoint  : Always focus the camera on angletarget (=1 enabled)
-target2     : Additional target(s) to trigger when camera VIEWED
-deathtarget : Additional target(s) to trigger when cinematic FINISHED
-modeltarget : Location of fake player mdl (use info_camera_destination)
-returntarget: Location of returning player (use info_camera_destination)
-pos1        : Camera starting BACKGROUND colour (R/G/B)
-pos2        : Camara finishing BACKGROUND colour (R/G/B)
-waitmin     : Fade OUT previous camera, time (def=1s, minimum=0.1s)
-waitmin2    : Fade IN this camera, time (def=1s, minimum=0.1s)
-waitmin3    : Speed at which camera moves towards sighttarget
-sighttarget : Position the camera will travel towards (use info_target)
-wait        : Time to wait while showing camera (-1 = wait for key)
-message     : message to centerprint when camera is viewed
-message2    : message to centerprint to client if coop is active
-sounds      : 1=Secret,2=talk(def),3=switch,4=silent,5=custom,6=secret2
-noise       : custom sound to play when messaged is centerprinted
+targetname   : Camera name for linking into target chains
+target       : Points to the next camera in a chain/sequence
+angletarget  : Direction the camera will face (use info_target)
+angles       : Direction the camera will face (Pitch Yaw Roll setup)
+focalpoint   : Always focus the camera on angletarget (=1 enabled)
+angleblend   : Blend between current/last camera angles (def=0.03 range=0-1)
+target2      : Additional target(s) to trigger when camera VIEWED
+deathtarget  : Additional target(s) to trigger when cinematic FINISHED
+modeltarget  : Location of fake player mdl (use info_camera_destination)
+returntarget : Location of returning player (use info_camera_destination)
+pos1         : Camera starting BACKGROUND colour (R/G/B)
+pos2         : Camara finishing BACKGROUND colour (R/G/B)
+waitmin      : Fade OUT previous camera, time (def=1s, minimum=0.1s)
+waitmin2     : Fade IN this camera, time (def=1s, minimum=0.1s)
+waitmin3     : Speed at which camera moves towards sighttarget
+sighttarget  : Position the camera will travel towards (use info_target)
+controltarget: Bezier Curve control point (has angletarget defaults)
+wait         : Time to wait while showing camera (-1 = wait for key)
+message      : message to centerprint when camera is viewed
+message2     : message to centerprint to client if coop is active
+sounds       : 1=Secret,2=talk(def),3=switch,4=silent,5=custom,6=secret2
+noise        : custom sound to play when messaged is centerprinted
+nodebuginfo  : All debug info displayed via developer=1 is blocked
 -------- SPAWNFLAGS --------
-PLAYER      : Show the player model when starting cinematics
-SKIPABLE    : Allow the cinematic to be skipped (exit after fade)
-FADEOUT     : Fade OUT previous camera (time = waitmin)
-FADEIN      : Fade IN this camera (time = waitmin2)
-FIXEDANGLE  : All cameras in a chain will use the first camera angle
-ENDCAMERA	: Only the fade in/out work, the origin/angle are ignored
+PLAYER       : Show the player model when starting cinematics
+SKIPABLE     : Allow the cinematic to be skipped (exit after fade)
+FADEOUT      : Fade OUT previous camera (time = waitmin)
+FADEIN       : Fade IN this camera (time = waitmin2)
+FIXEDANGLE   : All cameras in a chain will use the first camera angle
+ENDCAMERA	 : Only the fade in/out work, the origin/angle are ignored
 -------- NOTES --------
 In game cinematic camera will fade/move based on times in seconds.
 The first fade (out) is from previous camera to background colour.
@@ -795,14 +950,11 @@ void() misc_camera =
 	if (self.sounds < 1) self.sounds = 2;	// DEF=talktalk
 	trigger_bmodel_sounds();
 	
-	// Create camera controller
-	camera_controller_setup();
-	
 	// Cannot have a fade IN/OUT timer less than 0.1s
 	// The fade IN/OUT function is done via spawnflags
 	if (self.waitmin < 0.1) self.waitmin = 1;
 	if (self.waitmin2 < 0.1) self.waitmin2 = 1;
-	// Check colour fade parameters
+	// Check colour fade parameters are in range
 	misc_camera_colcheck(self.pos1);
 	misc_camera_colcheck(self.pos2);
 	// Time to move (linear) towards sighttarget, no angle change
@@ -810,6 +962,16 @@ void() misc_camera =
 	// Default warning for cinematics and COOP mode
 	if (self.message2 == "") self.message2 = "Cinematics don't work in COOP!\n";
 
+	// Found bezier curve setup
+	if (self.controltarget != "") {
+		// If no angle target setup, use next camera
+		if (self.angletarget == "") {
+			self.angletarget = self.target;
+			// Focus on next camera instead
+			self.focalpoint = TRUE;
+		}
+	}
+	
 	// Cannot have a focalpoint if no angletarget is defined
 	if (self.angletarget == "" && self.focalpoint) {
 		dprint("\b[MISC_CAM]\b No focalpoint entity defined!\n");
@@ -819,4 +981,142 @@ void() misc_camera =
 	// Setup Entity State functionality
 	if (self.targetname != "") self.use = entity_state_use;
 	self.use = misc_camera_use;
+	
+	// Create camera controller
+	camera_controller_setup();
+	
+	// Check for bezier debug mode (display curves)
+	// Can block debug info (start/control/end/arrows)
+	if (self.controltarget != "" && !self.nodebuginfo) {
+		self.think = misc_camera_bezier_debug;
+		self.nextthink = time + 0.2;
+	}
 };
+
+/*======================================================================
+ Write a config/text file
+ 
+ * generates file in the DATA subdirectory under MOD folder
+ * Uses currently loaded map file with _cam extension added
+ * requires the FRIK file system extensions (advanced engine only)
+ * requires advanced FTE string commands (included in QSS/DP as well)
+ 
+ // Example use of sprintf
+ string = sprintf("\"%s\" \"%s\"\n", entityfieldname(entno), getentityfieldstring(entno, self));
+
+======================================================================*/
+void(float filehandle, string entkey, string entval) misc_camera_str =
+{
+	local string expstr;
+	if (entval == "") return;
+	expstr = strcat("\"", entkey, "\" \"", entval, "\"\n");
+	fputs(filehandle, expstr);
+};
+
+//----------------------------------------------------------------------
+void(float filehandle, string entkey, float entval) misc_camera_float =
+{
+	if (entval == 0) return;
+	misc_camera_str(filehandle, entkey, ftos(entval));
+};
+
+//----------------------------------------------------------------------
+void(float filehandle, string entkey, vector entval) misc_camera_vec =
+{
+	local string expstr;
+	if (CheckZeroVector(entval) == TRUE) return;
+	expstr = strcat(ftos(entval_x), " ", ftos(entval_y), " ", ftos(entval_z));
+	misc_camera_str(filehandle, entkey, expstr);
+};
+
+//----------------------------------------------------------------------
+void() misc_camera_filewrite =
+{
+	local string camfile;
+	local entity cament;
+	local float camfilelen, charpos, camfh;
+
+	// Check for advanced engine support
+	if (!ext_active) return;		// Check for advanced engines
+	if (!ext_frikfile) return;		// Check for Frik file system
+	if (!ext_ftestrings) return;	// Check for advanced string functions
+	//if (!ext_sprintf) return;		// Check for C code sprintf exposure
+	if (world.model == "") return;	// Check for map name
+	
+	// Find out current map name
+	camfile = world.model;
+	camfilelen = strlen(camfile);
+	// Search at beginning for directory prefix
+	charpos = strstrofs(camfile, "/", 0);
+	// Any prefix detected? (Cut directory)
+	if (charpos > 0) camfile = substring(camfile, charpos+1, camfilelen);
+
+	// Search for .bsp extension
+	camfilelen = strlen(camfile);
+	charpos = strstrofs(camfile, ".", 0);
+	// Any model (.bsp) extensions? (Cut it!)
+	if (charpos > 0) camfile = substring(camfile, 0, charpos);
+
+	// Add new file extension and file type
+	camfile = strcat(camfile, "_cam.txt");
+	// Open new (overwrite) file ready for export
+	camfh = fopen(camfile, FILE_WRITE);
+
+	// Search for any misc_camera entities
+	cament = find(world, classname, "misc_camera");
+	while(cament) {
+		// Open entity definition
+		fputs(camfh, "{\n");
+		// Write all relevant fields to file
+		misc_camera_str(camfh, "classname", cament.classname);
+		misc_camera_vec(camfh, "origin", cament.origin);
+		misc_camera_float(camfh, "spawnflags", cament.spawnflags);
+		misc_camera_str(camfh, "targetname", cament.targetname);
+		misc_camera_str(camfh, "target", cament.target);
+		misc_camera_str(camfh, "angletarget", cament.angletarget);
+		misc_camera_vec(camfh, "angles", cament.angles);
+		misc_camera_float(camfh, "focalpoint", cament.focalpoint);
+		misc_camera_float(camfh, "angleblend", cament.angleblend);
+		misc_camera_str(camfh, "target2", cament.target2);
+		misc_camera_str(camfh, "deathtarget", cament.deathtarget);
+		misc_camera_str(camfh, "modeltarget", cament.modeltarget);
+		misc_camera_str(camfh, "returntarget", cament.returntarget);
+		misc_camera_vec(camfh, "pos1", cament.pos1);
+		misc_camera_vec(camfh, "pos2", cament.pos2);
+		misc_camera_float(camfh, "waitmin", cament.waitmin);
+		misc_camera_float(camfh, "waitmin2", cament.waitmin2);
+		misc_camera_float(camfh, "waitmin3", cament.waitmin3);
+		misc_camera_str(camfh, "sighttarget", cament.sighttarget);
+		misc_camera_str(camfh, "controltarget", cament.controltarget);
+		misc_camera_float(camfh, "wait", cament.wait);
+		misc_camera_str(camfh, "message", cament.message);
+		misc_camera_str(camfh, "message2", cament.message2);
+		misc_camera_float(camfh, "sounds", cament.sounds);
+		misc_camera_str(camfh, "noise", cament.noise);
+		misc_camera_float(camfh, "nodebuginfo", cament.nodebuginfo);
+		
+		// Extra fields that could be generated
+		misc_camera_float(camfh, "classtype", cament.classtype);
+		misc_camera_float(camfh, "estate", cament.estate);
+		misc_camera_str(camfh, "model", cament.model);
+		misc_camera_vec(camfh, "absmin", cament.absmin);
+		misc_camera_vec(camfh, "absmax", cament.absmax);
+		misc_camera_vec(camfh, "mins", cament.mins);
+		misc_camera_vec(camfh, "maxs", cament.maxs);
+		misc_camera_vec(camfh, "size", cament.size);
+		misc_camera_str(camfh, "noise", cament.noise);
+		misc_camera_float(camfh, "volume", cament.volume);
+		// This is a void() not a string
+		//misc_camera_str(camfh, "use", cament.use);
+		
+		// Close entity definition
+		fputs(camfh, "}\n");
+		// Next camera entity
+		cament = find(cament, classname, "misc_camera");
+	}
+	
+	// Close file
+	fclose(camfh);
+};
+
+

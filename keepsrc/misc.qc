@@ -1,3 +1,5 @@
+void() misc_model;
+
 /*======================================================================
  MISC ENTITIES
 ======================================================================*/
@@ -213,7 +215,7 @@ void() misc_explobox_setup =
 	if (self.health < 1) self.health = 15;		// ID def = 20
 	if (!self.dmg) self.dmg = 160;
 	// Check and setup default box skin
-	// 0=Original, 1=rubicon2, 3=plasma, 4=toxic
+	// 0=Original, 1=rubicon2, 2=plasma, 3=toxic, 4=Light wood, 5=dark wood
 	if (self.skin_override < 1 || self.skin_override > MISC_EXPLBOX_MAX)
 		self.skin_override = 0;
 	
@@ -310,9 +312,23 @@ void () func_explobox =
 	self.mdl = self.model;					// Brushwork version
 	self.bsporigin = TRUE;					// bmodel object
 	self.angles = '0 0 0';					// Make sure no angle twist
+	self.skin_override = 0;				// Only bsp skins
 	// Cannot be setup floating (always remove flag)
 	self.spawnflags = self.spawnflags - (self.spawnflags & ITEM_FLOATING);
 	misc_explobox_setup();
+};
+
+//----------------------------------------------------------------------
+// Vanilla ID map hack (not used directly anymore)
+//----------------------------------------------------------------------
+void() barrel_explode =
+{
+	self.enemy = spawn();
+	setorigin(self.enemy, self.origin+'0 0 32');
+	self.enemy.noise = SOUND_REXP3;
+	self.enemy.dmg = 160;
+	self.enemy.think = misc_explod_delay;
+	self.enemy.nextthink = 0.01 + random()*0.1;
 };
 
 //======================================================================
@@ -336,6 +352,7 @@ void() misc_lavaball_reset =
 {
 	self.touch = SUB_Null;
 	self.flags = 0;
+	self.modelindex = 0;			// Make sure no model
 	self.model = "";
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
@@ -349,7 +366,22 @@ void() misc_lavaball_reset =
 void() misc_lavaball_touch =
 {
 	self.touch = SUB_Null;
-	if (other.takedamage) T_Damage (other, self, self, self.dmg, DAMARMOR);
+	if (other.takedamage) {
+		// Check for lava shield?
+		if (self.spawnflags & MISC_FBALLSLIME) {
+			if (other.flags & FL_CLIENT && other.items & IT_SUIT)
+				// Play envirosuit protection sound
+				sound (other, CHAN_ITEM, SOUND_ARTSUIT3, 0.5, ATTN_NORM);
+			// Default = pain!
+			else T_Damage (other, self, self, self.dmg, DAMARMOR);
+		} else {
+			if (other.flags & FL_CLIENT && other.moditems & IT_ARTLAVASHIELD)
+				// Play lava shield protection sound
+				sound (other, CHAN_ITEM, SOUND_ARTLSHIELD3, 0.5, ATTN_NORM);
+			// Default = pain!
+			else T_Damage (other, self, self, self.dmg, DAMARMOR);
+		}
+	}
 	misc_lavaball_reset();
 };
 
@@ -494,10 +526,18 @@ void() misc_gibfountain_fly =
 
 	// Loop through gibs, better chance of different types
 	self.lefty = rint(self.count + random()*self.cnt);
-	while (self.lefty > 0) {
+	while (self.lefty > 0) {		
 		// Check for custom gib models
-		if (self.pos1_z && random() < 0.5) self.aflag = 13;
-		else if (self.pos1_y && random() < 0.5) self.aflag = 12;
+		if (self.pos1_z) {
+			self.lip = random();
+			if (self.lip < 0.3) self.aflag = 13;
+			else if (self.lip < 0.6) self.aflag = 12;
+			else self.aflag = 11;
+		}
+		else if (self.pos1_y) {
+			if (random() < 0.5) self.aflag = 12;
+			else self.aflag = 11;
+		}
 		else if (self.pos1_x) self.aflag = 11;
 		else {
 			if (self.style == 0) self.aflag = rint(1 + random()*4);
@@ -521,15 +561,17 @@ void() misc_gibfountain_fly =
 void() misc_gibfountain_on =
 {
 	self.estate = ESTATE_ON;
-	// If triggered for the first time, start with no delay
-	if (self.spawnflags & ENT_STARTOFF) {
-		self.spawnflags = self.spawnflags - (self.spawnflags & ENT_STARTOFF);
-		misc_gibfountain_fly();
+	// Spawn delay is no longer required, remove it
+	self.spawnflags = self.spawnflags - (self.spawnflags & ENT_STARTOFF);
+
+	// Display spawn direction with angle model
+	if (self.lip) {
+		self.lip = FALSE;	// Once only
+		if (self.target != "") TargetMovedir(self, FALSE);
+		spawn_arrow(self.origin, vectoangles(self.movedir), 0);
 	}
-	else {
-		self.nextthink = time + self.delay + (random() * self.wait);
-		self.think = misc_gibfountain_fly;
-	}
+	// Start spewing (no delay so it can be triggered properly)
+	misc_gibfountain_fly();
 };
 
 //----------------------------------------------------------------------
@@ -597,29 +639,47 @@ void() misc_gibfountain =
 	// Entity defaults
 	self.classtype = CT_MISCGIBF;
 	self.classgroup = CG_MISCENT;
+	// Special target system gibs
 	self.max_health = MON_GIBTARGET;
 	
 	if (self.wait <= 0) self.wait = 5;
 	if (self.delay <= 0) self.delay = 3;
+	if (self.waitmin <= 0) self.waitmin = 0.5;
 	if (self.style < 1 || self.style > 9) self.style = 0;
 	if (self.count < 1) self.count = 1;
 	if (self.cnt < 1) self.cnt = 0;
+	// Default velocity (like misc_fireball)
 	if (self.speed <= 0) self.speed = 600;
+	// Extra randomness to speed/velocity of gib (forward/right/up)
 	if (CheckZeroVector(self.gibvel)) self.gibvel = '200 100 0';
-	
-	// Check for simple angle setup or target system
-	if (self.target == "") {
-		// Default angle is UP
-		if (self.angles_y == 0) self.angles = '0 -1 0';
-		SetMovedir();
+
+	// Direction system priority = ANGLES > TARGET > ANGLETARGET
+	//------------------------------------------------------------------
+	// Check for empty angles setup?
+	if (CheckZeroVector(self.angles)) {
+		// No angles defined, create default direction
+		// Target/Angletarget are checked when gib is thrown/spawned
+		self.angles = '0 -1 0';
+		// priority = TARGET > ANGLETARGET
+		// Target has to be defined for gib to be thrown properly
+		if (self.target == "") self.target = self.angletarget;
+		else self.angletarget = self.target;
 	}
-	else self.angletarget = self.target;
+	// Find movedir vector
+	SetMovedir();
+	// lefty = random quantity, lip = display debug arrow
+	self.lefty = self.lip = TRUE;
 	
 	// Setup Entity State functionality
+	//------------------------------------------------------------------
 	if (self.targetname != "") self.use = entity_state_use;
 	self.estate_on = misc_gibfountain_on;
 	if (self.spawnflags & ENT_STARTOFF) entity_state_off();
-	else entity_state_on();
+	else { 
+		// Random start timer (def=0.5 + random()*0.5)
+		self.nextthink = time + self.waitmin + (self.waitmin * random());
+		self.think = self.estate_on; 
+	}
 };
 
 /*======================================================================
@@ -881,17 +941,32 @@ void() misc_drip =
 {	
 	// Pick type of drip sprite based on spawnflags
 	if (self.spawnflags & MISC_DRIPBLOOD) {
-		self.mdl = SBLOOD_DRIP;
+		if (self.spawnflags & 8) {
+			self.path = "progs/s_dripred_lg.spr";
+		} else {
+			self.mdl = SBLOOD_DRIP;
+		}
+
 		self.headmdl = SBLOOD_SPLASH;
 		self.aflag = 64;
 	}
 	else if (self.spawnflags & MISC_DRIPSLIME) {
-		self.mdl = SSLIME_DRIP;
+		if (self.spawnflags & 8) {
+			self.path = "progs/s_dripgreen_lg.spr";
+		} else {
+			self.mdl = SSLIME_DRIP;
+		}
+
 		self.headmdl = SSLIME_SPLASH;
 		self.aflag = 48;
 	}
 	else {
-		self.mdl = SWATER_DRIP;
+		if (self.spawnflags & 8) {
+			self.path = "progs/s_dripblue_lg.spr";
+		} else {
+			self.mdl = SWATER_DRIP;
+		}
+
 		self.headmdl = SWATER_SPLASH;
 		self.aflag = 0;
 	}
@@ -982,8 +1057,16 @@ void() misc_drip_removetouch = {
 		if (self.lip < 1) sound (self, CHAN_AUTO, self.owner.noise1, 1, ATTN_STATIC);
 		else if (self.lip < 2) sound (self, CHAN_AUTO, self.owner.noise2, 1, ATTN_STATIC);
 		else sound (self, CHAN_AUTO, self.owner.noise3, 1, ATTN_STATIC);
-	}	
-	
+	}
+
+	// Damage if our owner has dmg set
+	if (self.owner.dmg) {
+		if (other.flags & FL_MONSTER || other.flags & FL_CLIENT && other.takedamage) {
+			spawn_touchblood (self,other,self.owner.dmg);
+			T_Damage (other, self, self.owner, self.owner.dmg, DAMARMOR);
+		}
+	}
+
 	// small particle effect when hitting something
 	particle (self.origin+'0 0 1', '0 0 0.5', self.aflag+random()*4, 5+random()*5);
 	// Switch to splash sprite and animate for 5 frames
@@ -1035,17 +1118,31 @@ void() trigger_spawn_drips = {
 void() func_drips = {
 	// Pick type of drip sprite based on spawnflags
 	if (self.spawnflags & MISC_DRIPBLOOD) {
-		self.path = SBLOOD_DRIP;
+		if (self.spawnflags & 8) {
+			self.path = "progs/s_dripred_lg.spr";
+		} else {
+			self.path = SBLOOD_DRIP;
+		}
+
 		self.headmdl = SBLOOD_SPLASH;
 		self.aflag = 64;
 	}
 	else if (self.spawnflags & MISC_DRIPSLIME) {
-		self.path = SSLIME_DRIP;
+		if (self.spawnflags & 8) {
+			self.path = "progs/s_dripgreen_lg.spr";
+		} else {
+			self.path = SSLIME_DRIP;
+		}
+
 		self.headmdl = SSLIME_SPLASH;
 		self.aflag = 48;
-	}
-	else {
-		self.path = SWATER_DRIP;
+	} else {
+		if (self.spawnflags & 8) {
+			self.path = "progs/s_dripblue_lg.spr";
+		} else {
+			self.path = SWATER_DRIP;
+		}
+
 		self.headmdl = SWATER_SPLASH;
 		self.aflag = 0;
 	}
@@ -1129,7 +1226,7 @@ void() func_sprite_emitter = {
 	//trigger_setup_bubbles();
 
 	if (self.path) self.mdl = self.path;
-	else self.mdl = "progs/ad171/s_bubble_blue1.spr";
+	else self.mdl = PART_BUBBLE_BLUE;
 	precache_model(self.mdl);
 	// Setup defaults for healing bubbles
 	self.waitmin = self.bubble_count = 0;		// Reset counters
@@ -1560,11 +1657,6 @@ void() misc_shake =
 	self.estate_on = misc_shake_on;
 	self.estate = ESTATE_OFF;
 };
-
-void misc_model();
-//----------------------------------------------------------------------
-// Allows GTK editors to work with Q1 assets easier
-void() misc_gtkmodel = { misc_model(); };
 
 //======================================================================
 // All dead bodies use the same on/off states

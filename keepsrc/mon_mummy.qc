@@ -346,7 +346,10 @@ void (entity inflictor, entity attacker, float damage) mummy_wake_pain = { mummy
 float MUMMY_STRONG = 4.000;
 
 void () monster_mummy = {
-   if ( deathmatch ) { remove (self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
    self.mdl = "progs/rogue/mon_mummy.mdl";
    precache_model (self.mdl);
@@ -387,6 +390,10 @@ void () monster_mummy = {
    // Always reset Ammo Resistance to be consistent
    self.resist_shells = self.resist_nails = 0;
    self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
    self.th_stand = mummy_stand1;
    self.th_walk = mummy_walk1;

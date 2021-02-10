@@ -1335,7 +1335,7 @@ void () env_sprite = {
 		self.think = SUB_Null;
 	}
 
-	if (self.impulse <= 0) self.impulse = 0.05;
+	if (self.impulse <= 0) self.impulse = 0.05; // default delay between frames
 	self.nextthink = time + self.delay;
 };
 
@@ -1344,3 +1344,190 @@ void () info_sprite_static = {
 	self.mdl = self.model;
 	env_sprite();
 };
+
+// Rain cloud effect
+// Spawns a storm cloud
+// Normally it moves about randomly at the same height
+void() misc_dripremovable_think;
+void() misc_drip_removetouch;
+
+void() raincloud_raindrip = {
+	local entity drip;
+
+	//dprint("Spawning a raindrop from a cloud");
+	drip = spawn();
+	drip.owner = self;
+	drip.classname = "misc_drip";
+	drip.classtype = CT_MISCDRIP;
+	drip.classgroup = CG_TEMPENT;
+	drip.movetype = MOVETYPE_FLY;
+	drip.solid = SOLID_TRIGGER;
+	drip.headmdl = self.headmdl;
+	setmodel(drip, self.path);
+	setsize (drip, VEC_ORIGIN, VEC_ORIGIN);
+	drip.origin_x = self.origin_x + crandom()*self.t_width;
+	drip.origin_y = self.origin_y + crandom()*self.t_length;
+	drip.origin_z = self.origin_z;
+	setorigin(drip, drip.origin);
+	//drip.velocity = vecrand(0,5,TRUE);
+	drip.velocity_z = -map_gravity;
+
+	drip.nextthink = time + 0.5 + random()*0.5;
+	drip.think = misc_dripremovable_think;
+	drip.touch = misc_drip_removetouch;
+};
+
+void () raincloud_think = {
+	//dprint("Raincloud thinking");
+	if (!(self.spawnflags & 4)) {
+		// Moves about randomly at the same height
+		if (self.attack_finished < time) {
+			self.attack_finished = time + self.search_time;
+			self.velocity_x = 8 + (crandom() * 100);
+			self.velocity_y = 8 + (crandom() * 100);
+			self.velocity_z = 0;
+		}
+	} else {
+		// Static
+		self.velocity = 0;
+		self.movetype = MOVETYPE_NONE;
+	}
+
+	if (self.spritestarted == FALSE) {
+		self.frame = 0;
+		self.spritestarted = TRUE;
+	} else {
+		self.frame = self.frame + 1;
+
+		if (self.bubble_count < self.count) {
+			self.bubble_count = self.bubble_count + 1;
+			raincloud_raindrip();
+		}
+
+		if (self.spritestarted == 2) {
+			if (self.frame >= 201) {
+				self.frame = 0;
+				self.alpha = 0.001;
+				remove(self);
+				return;
+			}
+		}
+
+		if (self.frame > 177 && self.spritestarted != 2) self.frame = 77;
+	}
+
+	// Time to die out
+	if (self.pain_finished < time && !(self.cnt == -1)) {
+		self.spritestarted = 2; // dying state
+	}
+
+	self.think = raincloud_think;
+	self.nextthink = time + self.impulse;
+};
+
+void () raincloud_use = {
+	self.think = raincloud_think;
+	self.nextthink = time + self.delay;
+};
+
+void () spawn_raincloud = {
+	//dprint("Raincloud spawning");
+	self.mdl = "progs/astorm.spr";
+	if (self.alpha <= 0) self.alpha = 1;
+	setmodel(self, self.mdl);
+    setsize (self, '0 0 0', '0 0 0');
+	self.movetype = MOVETYPE_FLYMISSILE;
+	self.solid = SOLID_BBOX;
+	setorigin(self, self.origin);
+	self.attack_finished = 0;
+	self.classname = "misc_raincloud";
+	if (!self.count) self.count = 10;
+	if (!self.cnt) self.cnt = 20; // give a default lifetime
+	if (self.impulse <= 0) self.impulse = 0.05; // default delay between frames
+	if (!self.search_time) self.search_time = 2 + (random() * 3); // Time to drift before changing direction
+	self.bubble_count = 0;
+	self.pain_finished = time + self.cnt;
+	if (self.targetname != "") {
+		self.use = raincloud_use;
+		return;
+	}
+	self.t_width = 40;
+	self.t_length = 40;
+
+	self.think = raincloud_think;
+	self.nextthink = time + self.delay;
+};
+
+void () misc_raincloud = {
+	// Pick type of drip sprite based on spawnflags
+	if (self.spawnflags & 16) {
+		if (self.spawnflags & 8) {
+			self.path = "progs/s_dripred_lg.spr";
+		} else {
+			self.path = SBLOOD_DRIP;
+		}
+
+		self.headmdl = SBLOOD_SPLASH;
+		self.aflag = 64;
+	}
+	else if (self.spawnflags & 32) {
+		if (self.spawnflags & 8) {
+			self.path = "progs/s_dripgreen_lg.spr";
+		} else {
+			self.path = SSLIME_DRIP;
+		}
+
+		self.headmdl = SSLIME_SPLASH;
+		self.aflag = 48;
+	} else {
+		if (self.spawnflags & 8) {
+			self.path = "progs/s_dripblue_lg.spr";
+		} else {
+			self.path = SWATER_DRIP;
+		}
+
+		self.headmdl = SWATER_SPLASH;
+		self.aflag = 0;
+	}
+
+	// Default cache - water
+	precache_model (self.path);
+	precache_model (self.headmdl);
+	
+	if (!self.noise1) self.noise1 = "misc/drip1.wav";
+	if (!self.noise2) self.noise2 = "misc/drip2.wav";
+	if (!self.noise3) self.noise3 = "misc/drip3.wav";
+	precache_sound (self.noise1);
+	precache_sound (self.noise2);
+	precache_sound (self.noise3);
+
+	precache_model("progs/astorm.spr");
+	if (!self.delay && (self.targetname == "")) self.delay = (random() * 5); // random spawn time to not all storm the same
+	spawn_raincloud();
+};
+
+void() skyl_stand1	=[  0,	skyl_stand2  ]{self.effects = EF_BRIGHTLIGHT;};
+void() skyl_stand2	=[  1,	skyl_stand3  ]{};
+void() skyl_stand3	=[  2,	skyl_stand4  ]{self.effects = 0;};
+void() skyl_stand4	=[  3,	skyl_stand5  ]{self.effects = EF_BRIGHTLIGHT;};
+void() skyl_stand5	=[  4,	skyl_stand6  ]{};
+void() skyl_stand6	=[  5,	skyl_stand7  ]{};
+void() skyl_stand7	=[  6,	skyl_stand8  ]{if (!(self.spawnflags & 2)) { sound (world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE); } };
+void() skyl_stand8	=[  7,	skyl_stand1  ]{self.effects = 0; self.nextthink = time + self.wait + (random() * self.waitmax);}; //time  lightning appears time + your time
+
+void() model_skylight = {
+	precache_model ("progs/madfox/skylight.spr");
+	self.solid = SOLID_BBOX;                               
+	self.movetype = MOVETYPE_NONE;
+	self.classname = "env_lightning";
+	setmodel (self, "progs/madfox/skylight.spr");
+	precache_sound ("drake/bane/thunder.wav");
+	setsize (self, '16 16 16', '24 24 24');
+	if (!self.wait) self.wait = 10;
+	self.think = skyl_stand1;
+	self.nextthink = time + 0.01;
+};
+
+void() env_lightning = {
+	model_skylight();
+}

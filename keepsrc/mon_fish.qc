@@ -95,7 +95,7 @@ void() fish_melee =
 
 	if (!self.enemy) return;				// removed before stroke
 	ai_damagebreakable(5);					// Damage any breakables
-	if (!ai_checkmelee(MONAI_MELEEFISH)) return;	// Too far away
+	if (!ai_checkmelee(MONAI_MELEEFISH,FALSE)) return;	// Too far away
 		
 	// Fish bites man!
 	ldmg = (random() + random()) * 3;
@@ -207,7 +207,10 @@ void() fish_die =
 QUAKED monster_fish (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 ======================================================================*/
 void() monster_fish = {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_fish.mdl";	// Using new model
 	precache_model (self.mdl);
@@ -240,6 +243,10 @@ void() monster_fish = {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	// Tiny fish are easier to kill
 	if (self.spawnflags & MON_FISH_SMALL) {

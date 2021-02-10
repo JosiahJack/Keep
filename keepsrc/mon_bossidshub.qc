@@ -230,7 +230,8 @@ void (entity inflictor, entity attacker, float damage) idshub_nopain =
 ============================================================================*/
 void() monster_oldone =
 {
-	if (deathmatch) { remove(self); return; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/oldone.mdl";
 	precache_model (self.mdl);
@@ -261,6 +262,9 @@ void() monster_oldone =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 1;
 	self.resist_rockets = self.resist_cells = 1;
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
 
 	if (self.deathstring == "")  self.deathstring = " became one with Shub-Niggurath\n";
 

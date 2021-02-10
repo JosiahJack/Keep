@@ -599,7 +599,8 @@ QUAKED monster_golem (1 0.2 0) (-16 -16 -24) (16 16 24)
 ======================================================================*/
 void() setup_golem;
 void() monster_golem = {
-	if (deathmatch) { remove(self); return; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_golem.mdl";
 	precache_model (self.mdl);
@@ -681,6 +682,11 @@ void() setup_golem = {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = 0; self.resist_nails = 0.5;
 	self.resist_rockets = self.resist_cells = 0;
+	self.reflectnails = TRUE;		// Reflect nail projectiles
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	//----------------------------------------------------------------------
 	// Detect statues and setup different parameters
@@ -721,7 +727,7 @@ void() setup_golem = {
 	if ( (random () < 0.500) ) {
 		if (self.deathstring == "")  self.deathstring = " was crushed by a Golem\n";
 	} else {
-		if (self.deathstring == "")  self.deathstring = " was terminated by a Golem\n";
+		if (self.deathstring == "")  self.deathstring = " was crumbled by a Golem\n";
 	}
 		
 	self.hittype = HIT_STONE;

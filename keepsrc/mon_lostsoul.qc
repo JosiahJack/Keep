@@ -340,7 +340,7 @@ void() lost_bite =
 		
 	ai_charge(10);							// Get closer for extra bite
 	ai_damagebreakable(10);					// Damage any breakables
-	if (!ai_checkmelee(MONAI_MELEELOSTSOUL)) return;	// Too far away
+	if (!ai_checkmelee(MONAI_MELEELOSTSOUL,FALSE)) return;	// Too far away
 
 	// Can the target bleed?
 	if (enemy_targ.takedamage < 1) return;
@@ -371,7 +371,7 @@ void() lost_melee2 =
 		self.think = self.th_run;
 		
 		// Check if enemy is still within range for another chop!
-//		if (ai_checkmelee(MONAI_MELEELOSTSOUL) && SUB_healthEnemyTarget() > 0)
+//		if (ai_checkmelee(MONAI_MELEELOSTSOUL,FALSE) && SUB_healthEnemyTarget() > 0)
 //			self.think = self.th_melee;
 //		else self.think = self.th_run;
 	}
@@ -518,7 +518,10 @@ QUAKED monster_lostsoul (1 0.2 0) (-16 -16 -24) (16 16 24)
 void() setup_lostsoul;
 void() monster_lostsoul =
 {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_lostsoul.mdl";
 	precache_model (self.mdl);
@@ -572,6 +575,10 @@ void() setup_lostsoul =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.th_checkattack = LostCheckAttack;
 	self.th_pain = lost_pain;

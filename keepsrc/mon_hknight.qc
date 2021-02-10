@@ -128,7 +128,7 @@ void() CheckForCharge = {
 	if (self.tetherlock) return;
 	// Only charge at player if ground height < 20
 	if ( fabs(self.origin_z - self.enemy.origin_z) > MONAI_CHARGEZAXIS) return;
-	if (ai_checkmelee(MONAI_MELEEKNIGHT)) return;
+	if (ai_checkmelee(MONAI_MELEEKNIGHT,FALSE)) return;
 
     if (self.classname == "monster_hkboss") {
 		// Emulate old behavior.
@@ -813,9 +813,11 @@ void() hknight_pointuse =
 /*======================================================================
  QUAKED monster_hell_knight (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 ======================================================================*/
-void() monster_hell_knight =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_hell_knight = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_hknight.mdl";			// Original ID Knight + extra skins
 	self.headmdl = "progs/h_hellkn.mdl";
@@ -926,6 +928,10 @@ void() monster_hell_knight =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.hittype = HIT_METAL;
 

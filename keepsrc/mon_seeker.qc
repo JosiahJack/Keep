@@ -294,7 +294,7 @@ void() seek_punch =
 	if (self.health < 1) return;
 	ai_face ();						// Turn towards enemy target
 	ai_damagebreakable(50);			// Damage any breakables
-	if (!ai_checkmelee(MONAI_MELEESEEKER)) return;// Too far away
+	if (!ai_checkmelee(MONAI_MELEESEEKER,MONAI_MELEEZTALL)) return;// Too far away
 
 	// Melee hit sound
 	sound (self, CHAN_WEAPON, "seeker/punch1.wav", 1, ATTN_NORM);
@@ -442,7 +442,7 @@ void() seek_fire = { self.walkframe = 0; seek_fireframe(); };
 //============================================================================
 void() seek_arm_explode =
 {
-	particle_dust(self.pos2, 10+random()*10, PARTICLE_BURST_YELLOW);
+	particle_dust(self.pos2, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
 	SpawnExplosion(EXPLODE_BIG, self.pos2, "seeker/explode_major.wav");
 	SpawnProjectileSmoke(self.pos2, 150, 50, 150);
 	SpawnProjectileSmoke(self.pos2, 150, 50, 150);
@@ -499,7 +499,7 @@ void(entity inflictor, entity attacker, float damage) seek_pain =
 			}
 			else {
 				// Spawn dust and sprite explosion
-				particle_dust(inflictor.origin, 10+random()*10, PARTICLE_BURST_YELLOW);
+				particle_dust(inflictor.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
 				SpawnProjectileSmoke(inflictor.origin, 150, 50, 150);
 				SpawnProjectileSmoke(inflictor.origin, 150, 50, 150);
 				SpawnProjectileSmoke(inflictor.origin, 150, 50, 150);
@@ -507,7 +507,7 @@ void(entity inflictor, entity attacker, float damage) seek_pain =
 		}
 		else {
 			// Once down to one arm, just sparks and dust
-			particle_dust(inflictor.origin, 10+random()*10, PARTICLE_BURST_YELLOW);
+			particle_dust(inflictor.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
 			SpawnProjectileSmoke(inflictor.origin, 150, 50, 150);
 			SpawnProjectileSmoke(inflictor.origin, 150, 50, 150);
 			SpawnProjectileSmoke(inflictor.origin, 150, 50, 150);
@@ -601,7 +601,7 @@ void() seek_die =
 	// Spawn dust and sprite explosion from chest area
 	makevectors(self.angles);
 	self.pos1 = self.origin + attack_vector('8 0 24');
-	particle_dust(self.pos1, 10+random()*10, PARTICLE_BURST_YELLOW);
+	particle_dust(self.pos1, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
 	SpawnExplosion(EXPLODE_BIG, self.pos1, "seeker/explode_major.wav");
 	SpawnProjectileSmoke(self.pos1, 200, 250, 100);
 	
@@ -672,7 +672,10 @@ QUAKED monster_seeker (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 ======================================================================*/
 void() monster_seeker =
 {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_seeker.mdl";
 	self.headmdl = "progs/ad171/h_seeker.mdl";
@@ -792,6 +795,10 @@ void() monster_seeker =
 		self.th_missile = seek_fire;	// Rockets incoming!
 		self.th_pain = seek_pain;
 		self.th_die = seek_die;
+
+		// Check for random rotation setup and angle limits
+		if (self.angles_y < 0) self.angles_y = rint(random()*359);
+		if (self.angles_y > 360) self.angles_y = 360;
 	}
 
 	self.th_checkattack = SeekerCheckAttack;

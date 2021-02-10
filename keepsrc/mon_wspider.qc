@@ -117,7 +117,7 @@ void() spid_jump = {
 	ai_face();
 	makevectors(self.angles);
 	self.origin_z = self.origin_z + 1;
-	self.velocity = v_forward * MIN_CHARMER_DISTANCE + '0 0 600';
+	self.velocity = (v_forward * self.jumpdist_x) + ('0 0 1' * self.jumpdist_z);
 	if (self.flags & FL_ONGROUND) self.flags = self.flags - FL_ONGROUND;
 };
 
@@ -147,7 +147,10 @@ void() SpidMissile = {
 };
 
 void() monster_wspider = {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/spider.mdl";
 	self.headmdl = "progs/gib2.mdl";
@@ -183,6 +186,15 @@ void() monster_wspider = {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Default jump forward/up distance
+	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '150 0 600';
+	if (self.jumprange_x <= 0) self.jumprange_x = 100;
+	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = 200;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	if (self.deathstring == "") self.deathstring = " was entangled by Willie the Spider\n";
 

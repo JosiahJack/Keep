@@ -1,6 +1,6 @@
-/*======================================================================
- STANDARD DOOR FUNCTIONS
-======================================================================*/
+//======================================================================
+// STANDARD DOOR FUNCTIONS
+//======================================================================
 float DOOR_START_OPEN = 1;		// Work the opposite way around
 float DOOR_SPAWN_TRIGGER = 2;	// Spawn open trigger regardless of targetname
 float DOOR_DONT_LINK = 4;		// never link this door with anything
@@ -8,30 +8,37 @@ float DOOR_GOLD_KEY = 8;		// Gold Key
 float DOOR_SILVER_KEY = 16;		// Silver Key
 float DOOR_TOGGLE = 32;			// Need trigger to open AND close
 
-/*======================================================================
-//QUAKED func_door (0 .5 .8) ? STARTOPEN SPAWNTRIG DONTLINK GOLD SILVER TOGGLE STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
-Door (bmodel) with 2 states
+//======================================================================
+/*QUAKED func_door (0 .5 .8) ? STARTOPEN SPAWNTRIG DONTLINK GOLD SILVER TOGGLE STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+Door (bmodel) with two states
 -------- KEYS --------
 targetname : = "" door automatically opens, != "" requires trigger to open
 if using entity state system set SPAWN_TRIG spawnflags to fix this problem
 target   : name of target(s) to trigger at the start opening sequence
 angle    : determines the opening direction, use "360" for angle 0
+angletarget : Entity (path_corner) to move towards (custom direction)
 speed    : movement speed (def=100)
-yaw_speed: return movement speed (def=self.speed)
+yaw_speed: return movement speed (def=speed)
 wait     : wait before returning (def=3, -1 = never return)
 lip      : lip remaining at end of move. (def=8)
+height   : Exact distance to move (works like func_plat and uses angles)
+midstart : Start in 2nd position and wait for trigger, then work as spawned
 health   : Can be damaged instead of touched
 dmg      : damage to inflict when blocked. (def=2)
 message  : centerprint message when touched (removed when opened)
-sounds   : 0 = silent 1 = stone 2 = base 3 = stone chain 4 = screechy metal 5 = custom
-locksounds : 0 = talktalk 1 = short rattle, 2 = medium rattle, 3 = long rattle
+sounds   : 0=silent 1=stone 2=base 3=chain 4=metal 5=custom 11=base plat 12=med plat
+locksounds : 0=talk 1=med1 2=med2 3=med3 13=trigger 14=silent 16=secret 21=base1 22=base2 23=base3 24=base4
 noise    : custom sound - door locked sound (targetname+message)
 noise1   : custom sound - Moving/Open door (looping)
 noise2   : custom sound - Stop/Close door 
 noise3   : custom sound - Silver/Gold key try lock
 noise4   : custom sound - Silver/Gold key OPEN
+volume   : Volume for all custom sounds played (def=1, range=0-1)
+persistentkey : Key required for this door is never removed from player
 customkey: custom key required to open door (1-4 supported values)
 message2 : custom key message (You need the custom key)
+bbmins   : custom size for generated trigger (def='-60 -60 -8')
+bbmaxs   : custom size for generated trigger (def='60 60 8')
 _dirt       : -1 = will be excluded from dirtmapping
 _minlight   : Minimum light level for any surface of the brush model
 _mincolor   : Minimum light color for any surface (def='1 1 1' RGB)
@@ -43,10 +50,10 @@ SPAWNTRIG : Will spawn trigger around door even if targetname SETUP
 DONTLINK  : Touching doors will not link into a single entity
 GOLD      : Requires gold key to open
 SILVER    : Requires silver key to open
-TOGGLE    : Door waits in start and end states for a trigger
+TOGGLE    : Door waits for trigger between states (if wait=-1 cannot be blocked)
 STARTOFF  : Starts off and waits for trigger
 -------- NOTES --------
-Door (bmodel) with 2 states
+Door (bmodel) with two states
 
 ======================================================================*/
 
@@ -71,7 +78,6 @@ void() func_door_trigger_touch =
 	if (other.classtype == CT_FUNCBREAK) return;
 	if (other.flags & FL_ITEM) return;
 	if (time < self.attack_finished) return;
-
 	self.attack_finished = time + 1;
 
 	// Switch to parent (self) of trigger
@@ -99,9 +105,55 @@ entity(vector fmins, vector fmaxs) func_door_spawn_field =
 	t1 = fmins;
 	t2 = fmaxs;
 	// Extend the X/Y size of the trigger +/- 60 units
+	// Allow for custom sizes defined with bbmins/bbmaxs
 	// Return the trigger entity to the previous function
-	setsize (trigger, t1 - '60 60 8', t2 + '60 60 8');
+	setsize (trigger, t1 + self.bbmins, t2 + self.bbmaxs);
 	return (trigger);
+};
+
+//----------------------------------------------------------------------
+void() func_door_angletarget =
+{
+	// Use sub function and return movetarget/dest1 values
+	TargetMovedir(self, TRUE);
+	// Need to use original spawn location because block functionality
+	// will have the func_door in between state positions (origin)
+	self.dest2 = self.oldorigin;
+	
+	// Check for height plat movement system instead
+	if (self.height) {
+		// Convert self dest2 to func_train corner bottom left offset)
+		self.dest2 = self.dest2 - (self.size*0.5);
+		// re-calculate the movedir (bec of self origin is different)
+		// dest1 should be setup in TargetMovedir function
+		self.movedir = normalize(self.dest1 - self.dest2);
+		// Simple movement along vector length (no lip changes)
+		// Not easy to predict in the editor because its the long side
+		// of a trangle (other corners are func_door/angletarget)
+		self.pos2 = self.pos1 + (self.movedir * self.height);
+	}
+	else {
+		// Work out destination (using func_train bottom left offset)
+		self.pos2 = self.pos1 + (self.dest1 - self.dest2) + (self.size*0.5);
+	}		
+};
+
+//----------------------------------------------------------------------
+void() func_door_final_setup =
+{
+	// Any angletarget entity key defined?
+	if (self.angletarget != "") {
+		// Upate second position based on angletarget
+		func_door_angletarget();
+		
+		// Mid start requires second position
+		if (self.midstart > 0) {
+			setorigin (self, self.pos2);
+			self.state = STATE_TOP;
+		}
+	}
+	// Switch off the entity once setup has finished
+	if (self.spawnflags & ENT_STARTOFF) self.estate_off();
 };
 
 //----------------------------------------------------------------------
@@ -113,11 +165,8 @@ void() func_door_link =
 	local vector cmins, cmaxs;
 	local float loopcondition;
 
-	// Switch off the entity once the door linking has been done
-	if (self.spawnflags & ENT_STARTOFF) {
-		self.think = self.estate_off;
-		self.nextthink = self.ltime + 0.1;
-	}
+	self.think = func_door_final_setup;
+	self.nextthink = self.ltime + 0.1;
 
 	// Door linking exceptions (self.enemy = already linked)
 	if (self.enemy) return;
@@ -213,8 +262,10 @@ void() func_door_link =
 //----------------------------------------------------------------------
 void() func_door_hit_bottom =
 {
+	// Always reset midstart flag (its not longer needed)
+	if (self.midstart) self.midstart = FALSE;
 	if (self.estate == ESTATE_OFF) return;
-	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
 	self.state = STATE_BOTTOM;
 	self.frame = 1 - self.frame;	//switch textures
 };
@@ -225,13 +276,13 @@ void() func_door_hit_bottom =
 void() func_door_go_down =
 {
 	if (self.estate == ESTATE_OFF) return;
-	sound (self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+
 	if (self.max_health) {
 		self.takedamage = DAMAGE_YES;
 		self.health = self.max_health;
 	}
-	
 	self.state = STATE_DOWN;
+	sound (self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM);
 	// Add - return speed can now be different, 
 	// yaw_speed = speed if nothing defined
 	SUB_CalcMove (self.pos1, self.yaw_speed, func_door_hit_bottom);
@@ -243,7 +294,7 @@ void() func_door_go_down =
 void() func_door_hit_top =
 {
 	if (self.estate == ESTATE_OFF) return;
-	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
 	self.state = STATE_TOP;
 	// don't come down automatically
 	if (self.spawnflags & DOOR_TOGGLE) return;
@@ -264,20 +315,11 @@ void() func_door_go_up =
 		return;
 	}
 
-	// Check for custom movement angle
-	// Always re-calculate to allow for updated movement
-	if (self.angletarget != "") {
-		// Find the angle target entity
-		self.movetarget = find(world, targetname, self.angletarget);
-		// Find origins of source/target entities
-		self.dest1 = bmodel_origin(self);
-		if (self.movetarget.bsporigin) self.dest2 = bmodel_origin(self.movetarget);
-		else self.dest2 = self.movetarget.origin;
-		// Work out destination (using func_train bottom left offset)
-		self.pos2 = self.pos1 + (self.dest2 - self.dest1) + (self.size*0.5);
-	}
+	//------------------------------------------------------------------
+	// Check for custom movement using angletarget (entity target)
+	if (self.angletarget != "") func_door_angletarget();
 	
-	sound (self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM);
 	self.state = STATE_UP;
 	SUB_CalcMove (self.pos2, self.speed, func_door_hit_top);
 
@@ -293,30 +335,63 @@ void() func_door_fire =
 	if (self.estate == ESTATE_BLOCK) return;
 	if (self.owner != self) dprint ("\b[door_fire]\b self.owner != self\n");
 
+	// Save for later (linked doors)
+	oself = starte = self;
+
+	// Check for mid start setup (waiting at pos2)
+	if (self.midstart > 0) {
+		// trigger all paired doors
+		do {
+			// Don't keep re-triggering midstart doors
+			// Let the door reset back to pos1 (start position)
+			if (self.state != STATE_DOWN) func_door_go_down ();
+			self = self.enemy;
+			// Prevent endless world loops
+			if (self == world) self = starte;
+		} while ( self != starte );
+		self = oself;
+		return;
+	}
+	
+	// Check for exact state requests
+	if (other.classtype == CT_TRIGDOORSTATE) {
+		if (other.state == 0) {
+			// Is the door closing (DOWN) or closed (BOTTOM)?
+			if (self.state == STATE_DOWN || self.state == STATE_BOTTOM) return;
+		}
+		else {
+			// Is the door opening (UP) or open (TOP)?
+			if (self.state == STATE_UP || self.state == STATE_TOP) return;
+		}
+	}
+
 	// play use key sound
-	if (self.items) sound (self, CHAN_VOICE, self.noise4, 1, ATTN_NORM);
+	if (self.items) sound (self, CHAN_VOICE, self.noise4, self.volume, ATTN_NORM);
 
 	self.message = string_null;		// no more message
-	oself = self;
-	
+
 	if (self.spawnflags & DOOR_TOGGLE) {
 		if (self.state == STATE_UP || self.state == STATE_TOP) {
-			starte = self;
+			starte = self; // Reset
 			do {
 				func_door_go_down ();
 				self = self.enemy;
-			} while ( (self != starte) && (self != world) );
+				// Prevent endless world loops
+				if (self == world) self = starte;
+			} while ( self != starte );
 			self = oself;
 			return;
 		}
 	}
 	
+	starte = self; // Reset
 	// trigger all paired doors
-	starte = self;
 	do {
 		func_door_go_up ();
 		self = self.enemy;
-	} while ( (self != starte) && (self != world) );
+		// Prevent endless world loops
+		if (self == world) self = starte;
+	} while ( self != starte );
 	self = oself;
 };
 
@@ -374,7 +449,7 @@ void() func_door_touch =
 		if (self.owner.message != "") {
 			centerprint (other, self.owner.message);
 			// Use custom lock sound (default = talktalk)
-			sound (other, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+			sound (other, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
 		}
 	}
 	// Check door for keys (silver/gold/custom)
@@ -385,48 +460,64 @@ void() func_door_touch =
 				// Tell the player that a custom key is required
 				// Use the message2 string instead of message1
 				centerprint (other, self.message2);
-				// Play door locked sound (based on worldspawn)
-				sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
+				// Check for locksounds override
+				if (self.locksounds > 0)
+					sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+				// Default lock sound (based on worldspawn)
+				else sound (self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM);
 				return;
 			}
 			else {
-				// Remove custom key from player/client
-				other.moditems = other.moditems - self.moditems;
-				// Tell the player that the custom key has been removed
-				// Use the key item netname to reference the custom key
-				// These netnames are updated when picking up the key
-				sprint(other, "You used the ");
-				if (self.moditems & IT_CKEY1 && other.ckeyname1 != "") sprint(other, other.ckeyname1);
-				else if (self.moditems & IT_CKEY2 && other.ckeyname2 != "") sprint(other, other.ckeyname2);
-				else if (self.moditems & IT_CKEY3 && other.ckeyname3 != "") sprint(other, other.ckeyname3);
-				else if (self.moditems & IT_CKEY4 && other.ckeyname4 != "") sprint(other, other.ckeyname4);
-				sprint(other, "\n");
+				if (self.persistentkey == TRUE) 
+					sprint(other, "You keep the key after use!\n");
+				else {
+					// Remove custom key from player/client
+					other.moditems = other.moditems - self.moditems;
+					// Tell the player that the custom key has been removed
+					// Use the key item netname to reference the custom key
+					// These netnames are updated when picking up the key
+					sprint(other, "You used the ");
+					if (self.moditems & IT_CKEY1 && other.ckeyname1 != "") sprint(other, other.ckeyname1);
+					else if (self.moditems & IT_CKEY2 && other.ckeyname2 != "") sprint(other, other.ckeyname2);
+					else if (self.moditems & IT_CKEY3 && other.ckeyname3 != "") sprint(other, other.ckeyname3);
+					else if (self.moditems & IT_CKEY4 && other.ckeyname4 != "") sprint(other, other.ckeyname4);
+					sprint(other, "\n");
+				}
 			}
 		}
 		else {
 			// Does the player have the correct key? (silver/gold)
 			if ( (self.items & other.items) != self.items ) {
 				if (self.owner.items == IT_KEY1) {
-					if (self.worldtype == 1) centerprint (other, "You need the silver runekey");
+					if (self.message2 != "") centerprint (other, self.message2);
+					else if (self.worldtype == 1) centerprint (other, "You need the silver runekey");
 					else if (self.worldtype == 2) centerprint (other, "You need the silver keycard");
 					else centerprint (other, "You need the silver key");
-					sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 				}
 				else {
-					if (self.worldtype == 1) centerprint (other, "You need the gold runekey");
+					if (self.message2 != "") centerprint (other, self.message2);
+					else if (self.worldtype == 1) centerprint (other, "You need the gold runekey");
 					else if (self.worldtype == 2) centerprint (other, "You need the gold keycard");
 					else centerprint (other, "You need the gold key");
-					sound (self, CHAN_VOICE, self.noise3, 1, ATTN_NORM);
 				}
+				// Check for locksounds override
+				if (self.locksounds > 0)
+					sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+				// Default lock sound for silver/gold keys
+				else sound (self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM);
 				return;
 			}
 			else {
-				// Tell the player that the key has been removed
-				sprint(other, "You used the ");
-				if (other.items & IT_KEY1) sprint(other, "Silver key\n");
-				else sprint(other, "Gold key\n");
-				// Take key from player inventory
-				other.items = other.items - self.items;
+				if (self.persistentkey == TRUE) 
+					sprint(other, "You keep the key after use!\n");
+				else {
+					// Tell the player that the key has been removed
+					sprint(other, "You used the ");
+					if (other.items & IT_KEY1) sprint(other, "Silver key\n");
+					else sprint(other, "Gold key\n");
+					// Take key from player inventory
+					other.items = other.items - self.items;
+				}
 			}
 		}
 
@@ -482,7 +573,7 @@ void() func_door_off =
 	self.think = SUB_Null;
 
 	// Stop all movement sounds
-	sound (self, CHAN_VOICE, SOUND_EMPTY, 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, SOUND_EMPTY, self.volume, ATTN_NORM);
 	
 	// Reset Door position if NOT key or working once
 	if (self.items == 0 && self.wait != -1) {
@@ -517,6 +608,8 @@ void() func_door_reset =
 	self.state = STATE_BOTTOM;
 	self.attack_finished = 0;
 	self.frame = self.frame_override;	// Reset Alt textures
+	// Always reset midstart flag (position is wrong)
+	if (self.midstart) self.midstart = FALSE;
 	
 	// Restore door to ON state
 	self.estate = ESTATE_OFF;
@@ -527,8 +620,10 @@ void() func_door_reset =
 //----------------------------------------------------------------------
 void() func_door_blocked =
 {
+	// Always reset midstart flag (its no longer needed)
+	if (self.midstart) self.midstart = FALSE;
+	// Do the block damage
 	T_Damage (other, self, self, self.dmg, DAMARMOR);
-	
 	// if a door has a negative wait, it would never come back if blocked,
 	// so let it just squash the object to death real fast
 	if (self.wait != -1) {
@@ -546,21 +641,33 @@ void() func_door =
 	if (self.noise1 == "") self.noise1 = SOUND_EMPTY;
 	if (self.noise2 == "") self.noise2 = SOUND_EMPTY;
 
+	// noise1 : Moving/Open door (looping)
+	// noise2 : Stop/Close door 
 	if (self.sounds == 1) {
 		self.noise1 = "doors/drclos4.wav";
 		self.noise2 = "doors/doormv1.wav";
 	}
 	else if (self.sounds == 2) {
-		self.noise2 = "doors/hydro1.wav";
 		self.noise1 = "doors/hydro2.wav";
+		self.noise2 = "doors/hydro1.wav";
 	}
 	else if (self.sounds == 3) {
-		self.noise2 = "doors/stndr1.wav";
 		self.noise1 = "doors/stndr2.wav";
+		self.noise2 = "doors/stndr1.wav";
 	}
 	else if (self.sounds == 4) {
 		self.noise1 = "doors/ddoor2.wav";
 		self.noise2 = "doors/ddoor1.wav";
+	}
+	// Sounds from func_plat (base sounds)
+	else if (self.sounds == 11) {
+		self.noise1 = "plats/plat2.wav";
+		self.noise2 = "plats/plat1.wav";
+	}
+	// Sounds from func_plat (base sounds)
+	else if (self.sounds == 12) {
+		self.noise1 = "plats/medplat2.wav";
+		self.noise2 = "plats/medplat1.wav";
 	}
 
 	// Check for any self worldtype override
@@ -584,6 +691,13 @@ void() func_door =
 	if (self.locksounds == 1) self.noise = "doors/rattle1.wav";
 	else if (self.locksounds == 2) self.noise = "doors/rattle2.wav";
 	else if (self.locksounds == 3) self.noise = "doors/rattle6.wav";
+	else if (self.locksounds == 13) self.noise = "misc/trigger1.wav";
+	else if (self.locksounds == 14) self.noise = SOUND_EMPTY; 
+	else if (self.locksounds == 16) self.noise = "misc/secret3.wav";
+	else if (self.locksounds == 21) self.noise = "doors/rattle_tech1.wav";
+	else if (self.locksounds == 22) self.noise = "doors/rattle_tech2.wav";
+	else if (self.locksounds == 23) self.noise = "doors/rattle_tech3.wav";
+	else if (self.locksounds == 24) self.noise = "doors/rattle_tech4.wav";
 
 	//Pre-cache all sounds
 	precache_sound (self.noise);
@@ -591,19 +705,21 @@ void() func_door =
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
 	precache_sound (self.noise4);
+	trigger_bmodel_volume(1);
 
 	// Setup classtype and flag as BSP origin
 	self.classtype = CT_FUNCDOOR;
 	self.classgroup = CG_FUNCMOVER;
 	self.bsporigin = TRUE;
 	self.mdl = self.model;
-	SetMovedir ();			// Work out movedir based on angles
+	// Set angle/movedir and reset angles
+	SetMovedir ();
 
-	if (!self.speed) self.speed = 100;
+	if (self.speed <=0) self.speed = 100;
 	// Second movement speed can be different, yaw_speed
-	if (!self.yaw_speed) self.yaw_speed = self.speed;
+	if (self.yaw_speed <=0) self.yaw_speed = self.speed;
 	if (!self.wait) self.wait = 3;
-	//if (!self.lip) self.lip = 8;
+	if (!self.lip) self.lip = 8;
 	if (!self.dmg) self.dmg = 2;
 	self.state = STATE_BOTTOM;
 	self.attack_finished = 0;
@@ -618,8 +734,8 @@ void() func_door =
 	self.items = self.moditems = 0;
 	if (self.spawnflags & DOOR_SILVER_KEY) self.items = IT_KEY1;
 	else if (self.spawnflags & DOOR_GOLD_KEY) self.items = IT_KEY2;
-	// Check for custom key requirement (only supports 1-4 types
-	if (self.customkey > 0) {
+	// Check for custom key requirement (only supports 1-4 types)
+	else if (self.customkey > 0) {
 		self.items = IT_KEY1 | IT_KEY2;
 		if (self.message2 == "") self.message2 = "You need the custom key";
 		if (self.customkey == 1) self.moditems = IT_CKEY1;
@@ -646,17 +762,40 @@ void() func_door =
 	setorigin (self, self.origin);	
 	setsize (self, self.mins , self.maxs);
 	self.pos1 = self.origin;
-	self.pos2 = self.pos1 + self.movedir*(fabs(self.movedir*self.size) - self.lip);
-
+	self.oldorigin = bmodel_origin(self);
+	
 	// Check for spawning conditions (nightmare, coop)
 	// Needs to exist after entity has been added to work for BSPorigin
-	if (check_nightmare() == TRUE) return;
-	if (check_coop() == TRUE) return;
+	if (check_nightmare() == TRUE) { entity_hide(self); return; }
+	if (check_coop() == TRUE) { entity_hide(self); return; }
 
-	// Only need door functionality if require keys or centerprint messages
+	// Only need to touch doors if require keys or centerprint messages
 	if (self.items > 0 || self.message != "") self.touch = func_door_touch;
 	self.blocked = func_door_blocked;
+
+	// Check for QC created trigger bounding box override
+	if (CheckZeroVector(self.bbmins)) self.bbmins = '-60 -60 -8';
+	if (CheckZeroVector(self.bbmaxs)) self.bbmaxs = '60 60 8';
 	
+	//----------------------------------------------------------------------
+	// Start open reverses pos1+2 which will screw up angletarget location
+	// Disable this feature, reverse lifts can be setup easily if needed
+	if (self.angletarget != "" && self.spawnflags & DOOR_START_OPEN) {
+		dprint("\b[FUNC_DOOR]\b angletarget + start open not supported!\n");
+		spawn_marker(self.oldorigin, SPNMARK_YELLOW);
+		remove(self);
+		return;
+	}
+	
+	//----------------------------------------------------------------------
+	// Check if height is defined? (used by func_plat)
+	// Much easier system to setup, instead of voodoo lip magic!
+	if (self.height > 0) self.pos2 = self.pos1 + (self.movedir*self.height);
+	else {
+		// Default movement system = move direction * (size - lip)
+		self.pos2 = self.pos1 + self.movedir*(fabs(self.movedir*self.size) - self.lip);
+	}
+
 	//----------------------------------------------------------------------
 	// DOOR_START_OPEN is design for an entity to be lit in the closed position
 	// but spawn in the open position, also reversed door functions
@@ -673,14 +812,29 @@ void() func_door =
 		self.th_die = func_door_killed;
 	}
 
-	if (world.devdata & DEV_AMMO_N_HEALTH && self.health > 0) {
-		if (self.wait || self.spawnflags & DOOR_TOGGLE) {
-			world.deventity.enemyhealth = world.deventity.enemyhealth + (self.health * 2); // assume that we will likely shoot the button twice if it can reset
-		} else {
-			world.deventity.enemyhealth = world.deventity.enemyhealth + self.health; // we only need to shoot it once, and only can shoot it once
+	//----------------------------------------------------------------------
+	// MIDSTART is designed for doors pretending to be func_plats
+	// The door is moved to the 2nd position and paused until trigger
+	// Once triggered the func_door will resume movement and go back
+	// to the first position and work as a regular elevator/door!
+	if (self.midstart > 0) {
+		// If cannot be triggered without a targetname
+		if (self.targetname == "") {
+			dprint("\b[FUNC_DOOR]\b targetname required for midstart!\n");
+			spawn_marker(self.oldorigin, SPNMARK_YELLOW);
+			remove(self);
+			return;
+		}
+
+		// Have to wait for angletarget ent to spawn
+		if (self.angletarget == "") {
+			// Move func_door into second position
+			setorigin (self, self.pos2);
+			self.state = STATE_TOP;
 		}
 	}
-
+	
+	//----------------------------------------------------------------------
 	// Setup Entity State functionality
 	// The 'USE' wrapper has to be setup, because after
 	// the doors are linked they will all have targetnames!
@@ -690,15 +844,41 @@ void() func_door =
 	self.estate_use = func_door_use;
 	self.estate_disable = func_door_disable;
 	self.estate_reset = func_door_reset;
-	self.estate = ESTATE_ON;
 	
+	// Check for any (mapper) entity state setups (OFF/DISABLE)
+	// Need targetname defined (can't active bmodel otherwise)
+	// Not an ideal way to do this because estate values could change
+	if (self.targetname != "" && self.estate > 0) {
+		if (self.estate == ESTATE_OFF) 
+			self.spawnflags = self.spawnflags | ENT_STARTOFF;
+		// Unfortunately there is no start disabled functionality
+		//if (self.estate == ESTATE_DISABLE)
+	}
+	// Default state
+	else self.estate = ESTATE_ON;
+	
+	//----------------------------------------------------------------------
+	// Light/Shadow switchable system, setup defaults
+	if (self.switchshadstyle > 0) {
+		dprint("\n[DOOR] Light style (");
+		dprint(ftos(self.switchshadstyle));
+		dprint(")\n\n");
+		lightstyle(self.switchshadstyle, "a");
+	}
 	//----------------------------------------------------------------------
 	// Doors cannot be linked until all bmodels have spawned and
 	// bounding box sizes established, check for exceptions first
 	if (self.spawnflags & DOOR_DONT_LINK) { 
 		self.owner = self.enemy = self;
-		// Its safe to switch this entity off, no linking required
-		if (self.spawnflags & ENT_STARTOFF) self.estate_off();
+		
+		// Need spawn delay if using angletarget (target not ready)
+		if (self.angletarget != "") {
+			// Check for any final setup conditions
+			self.think = func_door_final_setup;
+			self.nextthink = self.ltime + 0.1;
+		}
+		// Original setup, no delay on spawn
+		else func_door_final_setup();
 	}
 	else {
 		self.think = func_door_link;
@@ -706,8 +886,8 @@ void() func_door =
 	} 
 };
 
-/*======================================================================
-//QUAKED trigger_doorstate (0.5 0 0.5) (-8 -8 -16) (8 8 16) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard
+//======================================================================
+/*QUAKED trigger_doorstate (0.5 0 0.5) (-8 -8 -16) (8 8 16) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard
 Trigger func_door(s) to exact state (open/close)
 -------- KEYS --------
 targetname : trigger this entity
@@ -779,7 +959,7 @@ void() trigger_doorstate_setup =
 	
 	// Found any errors with setup?
 	if (self.lefty == FALSE) {
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		spawn_marker(self.oldorigin, SPNMARK_YELLOW);
 		remove(self);
 		return;
 	}

@@ -222,9 +222,11 @@ void () lavaman_touch = {
       return ;
    }
    damg = 40;
-   if ( other.health ) {
+   if (other.health && !(other.moditems & IT_ARTLAVASHIELD) && !(other.therm_finished > 0)) {
       if ( (other.classname == "monster_shambler") )
          damg = (damg * 0.500);
+
+		if  (other.classname == "monster_boss" || other.classname == "monster_chthon") damg = 0;
 
       T_Damage (other,self,self.owner,damg, DAMARMOR);
    }
@@ -309,7 +311,10 @@ void () lavaman_awake = {
 };
 
 void () monster_lava_man = {
-   if ( deathmatch ) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
    self.mdl = "progs/rogue/mon_lavaman.mdl";
    precache_model (self.mdl);
@@ -334,6 +339,10 @@ void () monster_lava_man = {
    // Always reset Ammo Resistance to be consistent
    self.resist_shells = self.resist_nails = 0;
    self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
    self.th_stand = lavaman_awake;
    self.th_walk = lavaman_awake;

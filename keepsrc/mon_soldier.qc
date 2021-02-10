@@ -364,7 +364,10 @@ void() army_die = {
 ======================================================================*/
 void() monster_army =
 {	
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_soldier.mdl";
 	self.headmdl = "progs/ad171/h_soldier.mdl";
@@ -413,6 +416,10 @@ void() monster_army =
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
 
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
+
 	self.th_checkattack = SoldierCheckAttack;
 	self.th_stand = army_stand1;
 	self.th_walk = army_walk1;
@@ -437,7 +444,10 @@ void() monster_army =
 //----------------------------------------------------------------------
 void() monster_army_rocket =
 {	
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 	
 	self.classtype = CT_MONARMYROCKET;
 	if (self.health < 1) self.health = 45;
@@ -464,7 +474,10 @@ void() monster_army_rocket =
 //----------------------------------------------------------------------
 void() monster_army_grenade =
 {	
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 	
 	self.classtype = CT_MONARMYGRENADE;
 	precache_model (MODEL_PROJ_GRENADE);
@@ -487,7 +500,10 @@ void() monster_army_grenade =
 //----------------------------------------------------------------------
 void() monster_army_plasma =
 {	
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 	
 	self.classtype = CT_MONARMYPLASMA;
 	precache_model (MODEL_PROJ_PLASMA);

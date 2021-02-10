@@ -335,9 +335,11 @@ void() pyro_die =
 /*======================================================================
  QUAKED monster_pyro (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 ======================================================================*/
-void() monster_pyro =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_pyro = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 	
 	self.mdl = "progs/ad171/mon_pyro.mdl";
 	self.headmdl = "progs/ad171/h_pyro.mdl";
@@ -389,6 +391,10 @@ void() monster_pyro =
 	self.resist_shells = 0; self.resist_nails = 0.5;
 	self.resist_rockets = self.resist_cells = 0;
 
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
+
 	self.th_checkattack = PyroCheckAttack;
 	self.th_stand = pyro_stand1;
 	self.th_walk = pyro_walk1;
@@ -408,9 +414,11 @@ void() monster_pyro =
 /*======================================================================
  QUAKED monster_fumigator (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 ======================================================================*/
-void() monster_fumigator =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_fumigator = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 	
 	self.mdl = "progs/ad171/mon_fumigator.mdl";
 	self.headmdl = "progs/ad171/h_pyro.mdl";
@@ -474,6 +482,10 @@ void() monster_fumigator =
 	self.th_die = pyro_die;
 	self.th_melee = pyro_atk1;
 	self.th_missile = pyro_atk1;		// For monster_turret function
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.classtype = CT_MONFUMIGATOR;
 	self.classgroup = CG_ENFORCER;

@@ -117,8 +117,7 @@ void() newboss_sink6 = [3, newboss_sink7]
 };
 
 void() newboss_sink7 = [2, newboss_sink8]
-{
-};
+{};
 
 void() newboss_sink8 = [1, newboss_newplace]
 {
@@ -203,21 +202,10 @@ void() newboss_missile9 = [8, newboss_idle1]
 	newboss_face();
 };
 
-void() newboss_hurt1 = [29, newboss_hurt2]
-{
-};
-
-void() newboss_hurt2 = [30, newboss_hurt3]
-{
-};
-
-void() newboss_hurt3 = [31, newboss_hurt4]
-{
-};
-
-void() newboss_hurt4 = [32, newboss_idle1]
-{
-};
+void() newboss_hurt1 = [17, newboss_hurt2] {self.passive_state = FALSE;};
+void() newboss_hurt2 = [18, newboss_hurt3] {};
+void() newboss_hurt3 = [19, newboss_hurt4] {};
+void() newboss_hurt4 = [20, newboss_idle1] {};
 
 void(entity inflictor, entity attacker, float damage) newboss_damage = {
 	if (self.health <= 0) { self.th_die(); remove(self); return; }
@@ -238,7 +226,8 @@ void(entity inflictor, entity attacker, float damage) newboss_damage = {
 void() newboss_finale2 = {
 	if (!(self.spawnflags & 2)) {
 		WriteByte(MSG_ALL, SVC_FINALE);
-		WriteString(MSG_ALL, "Designers & Artists:\nIntroduction - Eric Sage\nMunitions Warehouse - Eric Sage\nResearch Lab - John Zwicker\nMax Security Prison - Chris Haire\nUnderground Testing Station - \nKristian Hawkinson\nStation Omega - Eric Sage\nSubway Station - Bryan Baldwin\nThe BackAlleys - Eric Sage\nOffice Park - Sean Conlon\nFinal Confrontation - \nKristian Hawkinson, Eric Sage\nNew Textures - Brenda Lo, Eric Sage\n3D Content - Matt Peckham\nThe Wyrm - Eric Sage, John Zwicker");
+		//if (!self.message) self.message = "Designers & Artists:\nIntroduction - Eric Sage\nMunitions Warehouse - Eric Sage\nResearch Lab - John Zwicker\nMax Security Prison - Chris Haire\nUnderground Testing Station - \nKristian Hawkinson\nStation Omega - Eric Sage\nSubway Station - Bryan Baldwin\nThe BackAlleys - Eric Sage\nOffice Park - Sean Conlon\nFinal Confrontation - \nKristian Hawkinson, Eric Sage\nNew Textures - Brenda Lo, Eric Sage\n3D Content - Matt Peckham\nThe Wyrm - Eric Sage, John Zwicker";
+		WriteString(MSG_ALL, self.message2);
 	}
 	remove(self);
 };
@@ -262,7 +251,8 @@ void() newboss_finale = {
 		}
 	
 		WriteByte(MSG_ALL, SVC_FINALE);
-		WriteString(MSG_ALL, "Congratulations! You have completed the\ndemo episodes created for you\nby Virtus!\nNow your mission is to create\nyour own nightmare!\n");
+		//WriteString(MSG_ALL, "Congratulations! You have completed the\ndemo episodes created for you\nby Virtus!\nNow your mission is to create\nyour own nightmare!\n");
+		WriteString(MSG_ALL, self.message);
 		pl = find(world, classname, "player");
 		while (pl != world) {
 			pl.view_ofs = VEC_ORIGIN;
@@ -345,6 +335,7 @@ void() newboss_death12 = [28, newboss_death12]
 
 void(vector p) newboss_missile = 
 {
+	if (self.passive_state) return;
 	local vector offang;
 	local vector org;
 	local vector vec;
@@ -406,7 +397,9 @@ void() newboss_awake = {
 };
 
 void() monster_newboss = {
-	if (deathmatch) { remove(self); return; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+
 	precache_model("progs/virtus/newboss.mdl");
 	precache_model("progs/lavaball.mdl");
 	precache_sound("weapons/rocket1i.wav");
@@ -416,17 +409,30 @@ void() monster_newboss = {
 	precache_sound("boss1/throw.wav");
 	precache_sound("boss1/pain.wav");
 	precache_sound("boss1/death.wav");
-	total_monsters = total_monsters + 1;
-	self.use = newboss_awake;
+
 	self.mdl = "progs/virtus/newboss.mdl";
 	if (self.health < 1) self.health = 1800;
 	self.th_run = SUB_Null;
 	self.max_health = self.health;
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
+
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 	if (self.deathstring == "") self.deathstring = " was destroyed by a Virtus Worm\n";
 	self.th_die = newboss_death1;
 	self.th_pain = newboss_damage;
 	self.classtype = CT_MONVIRTUS;
+
+	// No targetname = no trigger!
+	if (self.targetname == "") {
+		dprint("\b[ICEGOLEM]\b Missing targetname name!\n");
+		spawn_marker(self.origin, SPNMARK_YELLOW);
+		return;
+	}
+
+	total_monsters = total_monsters + 1;
+	self.use = newboss_awake;
 };
 
 void() monster_virtus = { self.classname = "monster_newboss"; monster_newboss(); };

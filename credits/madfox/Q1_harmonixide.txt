@@ -1,0 +1,47 @@
+==============================================================
+Title                  : harmonixide
+Filename               : Q1_harmonium.zip
+Author                 : Madfox
+Email Adress           : catweazel@kpn.home.nl
+Description            : New Quake1 harmonium
+
+Additional Credits to  : ID Software
+
+==============================================================
+
+* Play Inormation *
+
+Level Name              : /
+Single Player           : /
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Model               : yes
+New Sounds              : /
+New Weapon              : /
+qC                      : static.mdl
+
+==============================================================
+
+* Construction *
+
+Base              : Let there be an harmonium in Quake1 ..,
+                  : and explode!
+                  
+Build Time        : other toppic
+Editor(s) Used    : Quark Qmle Wally Quark6.3 AM2005
+Known Bugs        : skinfile gets crossed.
+                  
+                  
+Thanks            : Sweet Inspiration.
+                  
+                    ID software's Quake1 sounds and game.
+Install           : compile the qc and play in a test map with 
+                  : harmonium.mdl in a progs file. 
+
+You may distribute and modify this file, as long as you give
+me credit, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 30 9 2020 

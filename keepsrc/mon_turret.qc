@@ -498,6 +498,10 @@ void() turret_setup=
 };
 
 void() monster_turret= {
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+
+	self.mdl = "progs/custents/turret.mdl";
 	precache_model ("progs/custents/turret.mdl");
 	precache_model ("progs/custents/h_turret.mdl");
 	precache_model ("progs/custents/dedturet.mdl");
@@ -523,7 +527,7 @@ void() monster_turret= {
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 
-	setmodel (self, "progs/custents/turret.mdl");
+	setmodel (self, self.mdl);
 	if (self.deathstring == "") self.deathstring = " was blasted by a Turret\n";
 
 	setsize (self, '-12 -12 -6', '12 12 12');

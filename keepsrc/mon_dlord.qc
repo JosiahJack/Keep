@@ -429,7 +429,10 @@ void() magic_choice = {
 };
 
 void() monster_death_lord = {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_hknight.mdl";
 	precache_model2("progs/ad171/mon_hknight.mdl");
@@ -470,6 +473,10 @@ void() monster_death_lord = {
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
 	if (self.deathstring == "") self.deathstring = " was executed by a Death Lord\n";
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.classtype = CT_MONHELLK;
 	self.classgroup = CG_DCAPTAIN;

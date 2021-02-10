@@ -263,7 +263,7 @@ void() megaf_fire_plasma =
 	else targ_org = self.enemy.origin - self.enemy.view_ofs;
 	dir = normalize(targ_org - self.origin);
 
-	launch_plasma(org, dir, CT_MONMEGAFORCE, self.attack_speed);
+	launch_plasma(org, dir, CT_MONDEFLECTOR, self.attack_speed);
 };
 
 //----------------------------------------------------------------------
@@ -320,7 +320,7 @@ void(vector orgofs) megaf_fire_rocket =
 	dir = normalize(self.enemy.origin - org);
 
 	self.attack_speed = SPEED_MEGAFROCKET + (skill * SPEED_MEGAFRSKILL);
-	Launch_Missile (org, dir, '0 0 0', CT_PROG_RLMEGAF, self.attack_speed);
+	Launch_Missile (org, dir, '0 0 0', CT_PROJ_DEFLECT1, self.attack_speed);
 };
 
 //----------------------------------------------------------------------
@@ -497,9 +497,11 @@ void() megaf_die =
 /*======================================================================
  QUAKED monster_megaforce (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 ======================================================================*/
-void() monster_megaforce =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_megaforce = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 	
 	self.mdl = "progs/ad172/mon_megaforce.mdl";
 	self.headmdl = "progs/ad172/h_megaforce.mdl";
@@ -582,6 +584,10 @@ void() monster_megaforce =
 	self.th_missile = megaf_rock1;
 	self.th_pain = megaf_pain;
 	self.th_die = megaf_die;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.classtype = CT_MONMEGAFORCE;
 	self.classgroup = CG_DCAPTAIN;	// Make sure to infight

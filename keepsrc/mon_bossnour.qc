@@ -758,7 +758,7 @@ void() nour_die9 = [ $death9, nour_die9 ] {
 	// Spawn particle smoke and explosive smoke
 	else {
 		SpawnProjectileSmoke(self.origin, 150, 100, 300);
-		particle_dust(self.origin, 10+random()*10, PARTICLE_BURST_BLUE);
+		particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_BLUE);
 	}
 	
 	// Check for any random lightning strikes outward
@@ -1017,9 +1017,9 @@ void() nour_awake =
 /*======================================================================
  QUAKED monster_nouronihar (1 0 0) (-16 -16 -24) (16 16 40)
 ======================================================================*/
-void() monster_nour =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_nour = {
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 	
 	self.mdl = "progs/ad171/mon_bossnour.mdl";
 	self.headmdl = "progs/h_wizard.mdl";
@@ -1106,7 +1106,10 @@ void() monster_nour =
 		return;
 	}
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-	
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);	
+
 	total_monsters = total_monsters + 1;
 	self.use = nour_awake;
 };

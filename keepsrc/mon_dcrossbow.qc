@@ -366,7 +366,7 @@ void() dcrossbow_checkattack =
 			// Is the enemy blocked by another enemy?
 			if (!visblocked_wide(self.enemy, self.attack_offset, '0 0 0')) {
 				// Is the enemy within melee range?
-				if (ai_checkmelee(MONAI_MELEEKNIGHT)) self.th_melee();
+				if (ai_checkmelee(MONAI_MELEEKNIGHT,FALSE)) self.th_melee();
 				else {
 					// Skill level adjustment for bolt speed
 					boltspeed = SPEED_DCROSS + (skill*SPEED_BOLTSKILL);
@@ -518,7 +518,7 @@ void() dcrossbow_checkmelee =
 	else {
 		// Is the enemy within melee range?
 		// If not then do a quick hipshot at the player
-		if (!ai_checkmelee(MONAI_MELEEKNIGHT)) {
+		if (!ai_checkmelee(MONAI_MELEEKNIGHT,FALSE)) {
 			self.attack_chance = -1;	// Start with higher percentage
 			dcrossbow_ready1();			// Raise up crossbow ready
 		}
@@ -633,9 +633,11 @@ void() dcrossbow_crossbow_sound =
 /*======================================================================
 QUAKED monster_dcrossbow (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 ======================================================================*/
-void() monster_dcrossbow =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_dcrossbow = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_dcrossbow.mdl";			// crossbow guy
 	self.headmdl = "progs/ad171/h_dcrossbow.mdl";
@@ -710,6 +712,10 @@ void() monster_dcrossbow =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 	
 	self.th_checkattack = DCrossCheckAttack;
 	self.th_stand = dcrossbow_stand1;

@@ -161,7 +161,7 @@ void() W_Bomb = {
 	local entity t;
 	local float dist;
 	local entity ring;
-	if (coop == 1 && self.gotbomb != -1) self.gotbomb = 1;
+	if (coop > 0 && self.gotbomb != -1) self.gotbomb = 1;
 	bomb = spawn();
 	bomb.solid = SOLID_NOT;
 	setsize(bomb, VEC_ORIGIN, VEC_ORIGIN);

@@ -92,7 +92,8 @@ void () spike_mine_first_think = {
 };
 
 void () monster_spikemine = {
-   if ( deathmatch ) { remove (self); return ; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
    precache_model ("progs/hipnotic/mon_spikmine.mdl");
    precache_sound ("weapons/r_exp3.wav");

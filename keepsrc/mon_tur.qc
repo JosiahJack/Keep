@@ -239,8 +239,13 @@ void() start_monster_tur = {
 	self.th_stand();
 };
 
+// montur is a monster...lame puns are great! haha!
 void() monster_tur = {
 	local vector v1;
+
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+
 	precache_model("progs/oum/aagba.mdl");
 	precache_model("progs/oum/aagtb.mdl");
 	precache_model2("progs/laser.mdl");

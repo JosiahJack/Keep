@@ -27,6 +27,7 @@
 .vector		gibvel;				// X=Forward RND, Y=Left/Right RND, Z=0
 .vector		gibmins;			// Minimum bounding box for model
 .vector		gibmaxs;			// Maximum bounding box for model
+.float		gibdir;				// Override for gib velocity direction
 .float		gibtype;			// What type of gibs (blood, stone, etc)
 .float		blockudeath;		// ID udeath.wav sounds human, block it for non-humanoids
 .float		gib1dmg;			// Special damage from touching
@@ -149,6 +150,17 @@ void() precache_poisongibs =
 };
 
 //----------------------------------------------------------------------
+void() precache_bloodgibs =
+{
+	gibblood = TRUE;
+	precache_model (GIB1_BLOOD);			// New gib - arm/leg
+	precache_model (GIB2_BLOOD);			// New gib - body
+	precache_model (GIB3_BLOOD);			// New gib - slice
+	precache_model (GIB4_BLOOD);			// New gib - small chunk/ball
+	precache_model (GIB5_BLOOD);			// New gib - large chunk/ball
+};
+
+//----------------------------------------------------------------------
 float(float gibsound) check_gibsound =
 {
 	if (gibsound == GIB_IMPACT_HEAVY) return TRUE;
@@ -161,6 +173,38 @@ float(float gibsound) check_gibsound =
 	else return FALSE;
 };
 
+//----------------------------------------------------------------------
+void(entity gibent) DPP_blood_trail =
+{
+	// Cannot add particle trails to the player!
+	if (gibent.flags & FL_CLIENT) {
+		dprint("\b[GIB]\b Cannot add particle trail to player!\n");
+		return;
+	}
+	
+	// Stone = dark black dust on the floor
+	if (gibent.gibtype == GIBTYPE_STONE) {
+		gibent.traileffectnum = particleeffectnum(DPP_TRSBLOOD);
+	}
+	// Nothing for wood at this moment
+	else if (gibent.gibtype == GIBTYPE_WOOD) {}
+	// Nothing for wood at this moment
+	else if (gibent.gibtype == GIBTYPE_GLASS) {}
+	// Nothing for wood at this moment
+	else if (gibent.gibtype == GIBTYPE_METAL) {}
+	// Glowing green blobs splashed about
+	else if (gibent.gibtype == GIBTYPE_POISON) {
+		gibent.traileffectnum = particleeffectnum(DPP_TRPBLOOD);
+	}
+	else {
+		// DISABLED - Excessive blood trails can be bad for large maps
+		// Typical blood stains (20% chance of more blood)
+		//if (random() < 0.2) gibent.traileffectnum = particleeffectnum(DPP_ITSBLOOD);
+		//else gibent.traileffectnum = particleeffectnum(DPP_TRBLOOD);
+		gibent.traileffectnum = particleeffectnum(DPP_TRBLOOD);
+	}
+};
+
 /*======================================================================
  DirectionForDamage
   Takes the angle between self and enemy and projects backwards
@@ -168,22 +212,29 @@ float(float gibsound) check_gibsound =
 vector(float gibforce) DirectionForDamage =
 {
 	local vector gvel;
-
+	local float gftype;
+	
+	// Horrible hack!!! Need a way to override max_health
+	// Sometimes gibs are thrown when monsters are not dead
+	// This will create the correct velocity while alive
+	if (self.gibdir < 0) gftype = self.gibdir;
+	else gftype = self.max_health;
+	
 	// Gentle fountain, not much upward motion
-	if (self.max_health == MON_GIBFOUNTAIN) {
+	if (gftype == MON_GIBFOUNTAIN) {
 		gvel_x = crandom()*100;
 		gvel_y = crandom()*100;
 		gvel_z = 100 + (100 * random());
 		return gvel;
 	}
 	// Party popper version (large explosion)
-	else if (self.max_health == MON_GIBEXPLOSION) {
+	else if (gftype == MON_GIBEXPLOSION) {
 		gvel_x = crandom()*250;
 		gvel_y = crandom()*250;
 		gvel_z = 400 + (100 * random());
 		return gvel;
 	}
-	else if (self.max_health == MON_XYGIBVELOCITY) {
+	else if (gftype == MON_XYGIBVELOCITY) {
 		// Back to front vector so gib will travel away from enemy
 		gvel = vectoangles(self.origin - self.enemy.origin);
 		makevectors(gvel);
@@ -191,7 +242,7 @@ vector(float gibforce) DirectionForDamage =
 		gvel = gvel + (v_right * (200 * crandom()));
 		gvel_z = 100 + (100 * random());
 	}
-	else if (self.max_health == MON_NOGIBVELOCITY) {
+	else if (gftype == MON_NOGIBVELOCITY) {
 		// Back to front vector so gib will travel away from enemy
 		gvel = vectoangles(self.origin - self.enemy.origin);
 		makevectors(gvel);
@@ -200,7 +251,7 @@ vector(float gibforce) DirectionForDamage =
 		gvel_z = 30;
 	}
 	// Designed for non monster entities (overwrites self entity keys)
-	else if (self.max_health == MON_GIBTARGET) {
+	else if (gftype == MON_GIBTARGET) {
 		// Check for any target entity tracking setup
 		if (self.target != "") TargetMovedir(self, FALSE);
 		// default movedir movement
@@ -237,7 +288,7 @@ void() RemoveGib =
 void() CheckFloorGib =
 {
 	// Is it time for the gib to fade away?
-	if (coop == 3 && numgamemasters > 0) return;
+	if (coop > 2 && numgamemasters > 0) return;
 	if (self.pain_finished > time) {
 		// Check for particles from gib
 		if (self.gibpartstyle > 0) {
@@ -354,30 +405,6 @@ void() TouchGib =
 	if (self.noise != "") sound(self, CHAN_VOICE, self.noise, 1, self.volume);
 };
 
-//----------------------------------------------------------------------
-void(entity gibent) DPP_blood_trail =
-{
-	// Cannot add particle trails to the player!
-	if (gibent.flags & FL_CLIENT) {
-		dprint("\b[GIB]\b Cannot add particle trail to player!\n");
-		return;
-	}
-	
-	// Stone = dark black dust on the floor
-	if (gibent.gibtype == GIBTYPE_STONE) {
-		gibent.traileffectnum = particleeffectnum(DPP_TRSBLOOD);
-	}
-	// Glowing green blobs splashed about
-	else if (gibent.gibtype == GIBTYPE_POISON) {
-		gibent.traileffectnum = particleeffectnum(DPP_TRPBLOOD);
-	}
-	else {
-		// Typical blood stains (20% chance of more blood)
-		if (random() < 0.2) gibent.traileffectnum = particleeffectnum(DPP_ITSBLOOD);
-		else gibent.traileffectnum = particleeffectnum(DPP_TRBLOOD);
-	}
-};
-
 //======================================================================
 // ThrowGib was originally in player.qc (moved here instead)
 // Spawns a gib model and throws it up into the air to bounce around
@@ -440,21 +467,7 @@ void(float gib_no, float gib_qty) ThrowGib =
 			gibitem.weapon = self.gib1sound;
 			if (self.gib1skin > 0) gibitem.skin = self.gib1skin;
 			if (self.gib1frame) gibitem.frame = rint(random()*self.gib1frame);
-			if (self.gib1origin) gibitem.oldorigin = self.gib1origin;
-
-			// Check for any particles setup on gib
-			if (self.gibpartstyle > 0) {
-				if (self.gibpartbase > 0) gibitem.gibpartbase = self.gibpartbase;
-				else gibitem.gibpartbase = 1;
-				if (self.gibpartrnd > 0) gibitem.gibpartrnd = self.gibpartrnd;
-				else gibitem.gibpartrnd = 1;
-				if (self.gibpartlife > 0) gibitem.gibpartlife = self.gibpartlife;
-				else gibitem.gibpartlife = 0.5;
-				if (self.gibpartchance > 0) gibitem.gibpartchance = self.gibpartchance;
-				else gibitem.gibpartchance = 0.5;
-				gibitem.gibpartoffset = self.gibpartoffset;
-				gibitem.gibpartstyle = self.gibpartstyle;
-			}
+			if (!(CheckZeroVector(self.gib1origin))) gibitem.oldorigin = self.gib1origin;
 		}
 		// Custom Gib (defined by monster)
 		else if (gib_no == 12) {
@@ -463,7 +476,7 @@ void(float gib_no, float gib_qty) ThrowGib =
 			gibitem.weapon = self.gib2sound;
 			if (self.gib2skin > 0) gibitem.skin = self.gib2skin;
 			if (self.gib2frame) gibitem.frame = rint(random()*self.gib2frame);
-			if (self.gib2origin) gibitem.oldorigin = self.gib2origin;
+			if (!(CheckZeroVector(self.gib2origin))) gibitem.oldorigin = self.gib2origin;
 		}
 		// Custom Gib (defined by monster)
 		else if (gib_no == 13) {
@@ -472,7 +485,7 @@ void(float gib_no, float gib_qty) ThrowGib =
 			gibitem.weapon = self.gib3sound;
 			if (self.gib3skin > 0) gibitem.skin = self.gib3skin;
 			if (self.gib3frame) gibitem.frame = rint(random()*self.gib3frame);
-			if (self.gib3origin) gibitem.oldorigin = self.gib3origin;
+			if (!(CheckZeroVector(self.gib3origin))) gibitem.oldorigin = self.gib3origin;
 		}
 		// Extra Custom Gib (just models, no paramters)
 		else if (gib_no == 14) gibitem.mdl = self.gib4mdl;
@@ -534,6 +547,10 @@ void(float gib_no, float gib_qty) ThrowGib =
 		}
 		else {
 			//----------------------------------------------------------------------
+			// Make sure gibs fountain items have correct origins
+			if (self.classtype == CT_MISCGIBF) gibitem.oldorigin = self.origin;
+
+			//----------------------------------------------------------------------
 			// Spawn gib inside of owner model volume instead of from a single point
 			// Not used anymore, does not cope very well with larger bound boxes
 			//gibitem.oldorigin_x = self.absmin_x + random()*(self.maxs_x - self.mins_x);
@@ -541,9 +558,27 @@ void(float gib_no, float gib_qty) ThrowGib =
 			//gibitem.oldorigin_z = 16 + (random()*12) + self.origin_z;
 			
 			//----------------------------------------------------------------------
-			// This version copes with taller enemies by using all of the bounding box
-			if (CheckZeroVector(gibitem.oldorigin))
-				gibitem.oldorigin = self.origin + self.gib_ofs + crandom()*self.maxs;
+			if (CheckZeroVector(gibitem.oldorigin)) {
+				gibitem.oldorigin_x = crandom()*(self.bbmaxs_x*0.75);
+				gibitem.oldorigin_y = crandom()*(self.bbmaxs_y*0.75);
+				// This function was originally designed for monster bbox only
+				// Function has been expanded to use misc model (source) as well
+				// Not every model is using the -24 unit monster floor setup
+				// Check for odd model setups first (zero and < 0 unit)
+				if (self.bbmaxs_z == 0 && self.bbmins_z == 0) gibitem.oldorigin_z = 0;
+				// If max is too small or negative, calc bbox and move downward
+				// This is option really relies on the gib_ofs option to compensate
+				if (self.bbmaxs_z < 8)
+					gibitem.oldorigin_z = 0 - (((self.bbmaxs_z-self.bbmins_z)*0.5)*random());
+				// This is designed for monster models only
+				else gibitem.oldorigin_z = (random()*self.bbmaxs_z)-12;
+				
+				//gibitem.oldorigin_z = ((self.bbmaxs_z-self.bbmins_z)*0.5)*(random()*0.5);
+				
+				gibitem.oldorigin = gibitem.oldorigin + self.origin + self.gib_ofs;
+				// Debug marker to show gib spread within bbox
+				//spawn_marker(gibitem.oldorigin,SPNMARK_WHITE);
+			}
 			setorigin(gibitem, gibitem.oldorigin);
 		
 			//----------------------------------------------------------------------
@@ -738,8 +773,14 @@ void() monster_check_gib =
 
 	// Can only gib a monster once!
 	if (self.gibbed) return;
-	if ( self.health < (self.gibhealth + 1) || self.gibondeath)
+	
+	// Make sure gibondeath has gib velocity (health value)
+	if (self.gibondeath) self.health = self.gibhealth;
+	// Is it time to throw a gib party?
+	if ( self.health < (self.gibhealth + 1) || self.gibondeath) {
 		monster_ThrowGib();
+		monster_gibrandomizer();
+	}
 };
 
 float() Gib_NearCeiling =

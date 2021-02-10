@@ -37,7 +37,7 @@ Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	Effectors change the behaviour of particles that touch them (the emitter must have
 	the "USEEFFECTORS" spawnflag set).
 	
-	Emitters can be attached to a func_train_ext, for some really neat shit :)
+	Emitters can be attached to a func_train_ext, for some really neat crap :)
 	
 	----------------------------------------------------------------------------------------
 	NOTES:

@@ -332,7 +332,7 @@ void(float offset) gaunt_lightning = {
 
 void() gauntwings =
 { sound(self, CHAN_ITEM, "gaunt/wings1.wav", 1, ATTN_IDLE); };
-void() gaunt_elecfinish;
+void() 	gaunt_finish_attachment;
 
 //============================================================================
 void() gaunt_idle1 = [ $hover1, gaunt_idle2 ] {monster_idle_sound();ai_stand();};
@@ -380,7 +380,7 @@ void() gaunt_walk20 = [ $hover20, gaunt_walk1 ] {ai_walk(8);};
 
 //============================================================================
 void() gaunt_run1 = [ $hover1, gaunt_run2 ] {monster_idle_sound();
-	if (self.attachment && self.attachment.state == STATE_ON) gaunt_elecfinish();
+	gaunt_finish_attachment();
 	// Switch direction of strafing (random duration)
 	if (self.meleeattack < time) {
 		self.meleeattack = time + 4 + (random() + random() + random() * 4);
@@ -490,21 +490,43 @@ void() gaunt_plasma = {
 	launch_plasma(org, dir, CT_PROJ_PLASMA, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
-void() gaunt_elecfinish = {
-	setmodel(self.attachment, "");
-	self.attachment.state = STATE_OFF;
-};
-
-//----------------------------------------------------------------------
-void(float elecframe) gaunt_elecupdate = {
-	if (self.health < 1) return;
+//============================================================================
+// Attachment management (create, finish and delete)
+//============================================================================
+void() gaunt_create_attachment =
+{
+	// Are the attachments setup yet?
 	if (!self.attachment) {
 		self.attachment = spawn();
 		self.attachment.owner = self;
 		self.attachment.classtype = CT_ATTACHMENT;
 		self.attachment.mdl = self.weaponglow;
+		if (self.poisonous) self.attachment.skin = 1;
 	}
+};
+
+//----------------------------------------------------------------------
+void() gaunt_finish_attachment =
+{
+	if (self.attachment) {
+		setmodel(self.attachment, "");
+		self.attachment.state = STATE_OFF;
+	}
+};
+
+//----------------------------------------------------------------------
+void() gaunt_remove_attachment =
+{
+	if (self.attachment) {
+		self.attachment.think = SUB_Remove;
+		self.attachment.nextthink = time + 0.1;
+	}
+};
+
+//----------------------------------------------------------------------
+void(float elecframe) gaunt_elecupdate = {
+	if (self.health < 1) return;
+	if (!self.attachment) gaunt_create_attachment();
 	
 	if (elecframe == 0) {
 		self.attachment.state = STATE_ON;
@@ -536,7 +558,7 @@ void() gaunt_fire8 = [ $attack8, gaunt_fire9 ] {gaunt_elecupdate(7);gaunt_plasma
 void() gaunt_fire9 = [ $attack9, gaunt_fire10 ] {gaunt_elecupdate(8);};
 void() gaunt_fire10 = [ $attack10, gaunt_fire11 ] {ai_face();
 	if (skill > SKILL_NORMAL) gaunt_plasma();
-	gaunt_elecfinish();};
+	gaunt_finish_attachment();};
 void() gaunt_fire11 = [ $attack11, gaunt_fire12 ] {};
 void() gaunt_fire12 = [ $attack12, gaunt_fire13 ] {};
 void() gaunt_fire13 = [ $attack13, gaunt_fire14 ] {};
@@ -635,7 +657,7 @@ void(entity inflictor, entity attacker, float damage) gaunt_pain =
 	monster_pain_check(attacker, damage);
 
 	// make sure any electricity is hidden
-	if (self.attachment) gaunt_elecfinish();
+	if (self.attachment) gaunt_finish_attachment();
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
@@ -691,7 +713,7 @@ void() gaunt_die =
 			SpawnExplosion(EXPLODE_PLASMA_BIG, self.oldorigin, SOUND_REXP3);
 		}
 		// make sure any electricity is hidden
-		gaunt_elecfinish();
+		gaunt_finish_attachment();
 	}
 	
 	// Pre-check routine to tidy up extra entities
@@ -798,12 +820,37 @@ void() gaunt_Missile = {
 	return;
 };
 
+//============================================================================
+// Minion Wakeup
+//============================================================================
+void()	gaunt_minwake =[ $hover1, gaunt_run1 ] {
+	// Is the gaunt stuck? cannot move?
+	if (pointcontents(self.origin) == CONTENT_SOLID) {
+		// Time to die!
+		self.health = self.gibhealth;
+		Killed(self, self);
+	}
+	else {
+		monster_sightsound();
+		// Setup goals and warn other monsters
+		FoundHuntTarget(TRUE);
+		// Restore all think state functions
+		self.th_stand = gaunt_idle1;
+		self.th_walk = gaunt_walk1;
+		self.th_run = gaunt_run1;
+		self.th_missile = gaunt_fire1;
+	}
+};
+
 /*======================================================================
 QUAKED monster_gaunt (1 0.2 0) (-16 -16 -24) (16 16 24)
 ======================================================================*/
 void() monster_gaunt =
 {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_gaunt.mdl";
 	self.headmdl = "progs/ad171/h_gaunt.mdl";
@@ -833,6 +880,16 @@ void() monster_gaunt =
 	self.sight_sound = "gaunt/sight.wav";
 	precache_sound (self.sight_sound);
 
+	// Check for poisonous entity flag
+	if (self.poisonous) {
+		precache_poisongibs();			// precache gibs
+		self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
+		precache_model (MODEL_PROJ_GAPLASMAGRN);
+	}
+
+	// Cache gaunt is a special class used for precache only
+	if (self.classtype == CT_CACHEGAUNT) return;
+
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -841,7 +898,7 @@ void() monster_gaunt =
 	self.gibbed = FALSE;				// no falling apart
 	self.pain_flinch = 70;				// High pain threshold
 	self.blockudeath = TRUE;			// no humanoid death sound
-	self.height = MONAI_ABOVEDIST;		// Enemytarget distance above
+	if (self.height < 1) self.height = MONAI_ABOVEDIST;		// Enemytarget distance above
 	self.attack_offset = '8 0 -4';		// Plasma start location
 	if (self.spawnflags & 2) {
 		self.th_checkattack = GauntCheckAttackQuoth;
@@ -885,5 +942,118 @@ void() monster_gaunt =
 	self.resist_rockets = 0;
 	self.resist_cells = 0.25;
 
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
+
 	monster_start();
+};
+
+//----------------------------------------------------------------------------
+void() monster_judgeminion = { 
+	self.classtype = CT_CACHEGAUNT; 
+	self.poisonous = TRUE;	// Cache poison stuff (just in case)
+	monster_gaunt();
+};
+
+//----------------------------------------------------------------------------
+void() setup_gaunt =
+{
+	self.solid = SOLID_NOT;				// No interaction with world
+	self.movetype = MOVETYPE_NONE;		// Static item, no movement
+	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
+	if (self.health < 1) self.health = 120;
+	self.gibhealth = -70;				// Need a powerful weapon to GIB
+	self.gibbed = FALSE;				// no falling apart
+	self.pain_flinch = 70;				// High pain threshold
+	self.blockudeath = TRUE;			// no humanoid death sound
+	if (self.height < 1) self.height = MONAI_ABOVEDIST; // Custom height
+	self.attack_offset = '8 0 -4';		// Plasma start location
+	if ( (random () < 0.500) ) {
+		if (self.deathstring == "")  self.deathstring = " was blasted by a Gaunt\n";
+	} else {
+		if (self.deathstring == "")  self.deathstring = " was charred by a Gaunt\n";
+	}
+
+	// Always reset Ammo Resistance to be consistent
+	self.resist_shells = self.resist_nails = 0;
+	self.resist_rockets = 0;
+	self.resist_cells = 0.25;
+
+	self.th_checkattack = GauntCheckAttack;
+	self.th_pain = gaunt_pain; 
+	self.th_die = gaunt_die;
+	
+	//----------------------------------------------------------------------
+	// Perched Gaunt have special idle animation + idle sounds
+	if (self.spawnflags & MON_GAUNT_PERCH) {
+		self.th_stand = self.th_walk = gaunt_perch1;
+		self.th_run = self.th_missile = gaunt_wakeup;
+	}
+	//----------------------------------------------------------------------
+	else if (self.classtype == CT_MINIONGAUNT) {
+		self.th_stand = self.th_walk = gaunt_minwake;
+		self.th_run = self.th_missile = gaunt_minwake;
+	}
+	//----------------------------------------------------------------------
+	else {
+		// Default gaunt setup
+		self.th_stand = gaunt_idle1;
+		self.th_walk = gaunt_walk1;
+		self.th_run = gaunt_run1;
+		self.th_missile = gaunt_fire1;
+	}
+
+	if(!self.classtype) self.classtype = CT_MONGAUNT;
+	if (!self.classgroup) self.classgroup = CG_WIZARD;
+	self.classmove = MON_MOVEFLY;
+
+	monster_start();
+};
+
+//----------------------------------------------------------------------------
+// A code way to spawn gaunts (requires monster_judgeminion entity)
+//----------------------------------------------------------------------------
+void(vector minion_org, entity minion_targ, float minion_sflag) minion_gaunt =
+{
+	local entity minion;
+
+	// Check if there is space to spawn entity
+	if (entity_pcontent(minion_org)) return;
+	
+	update_minioncount(self, 1);			// Update spawn counters
+	
+	minion = spawn();
+	minion.classname = "monster_gaunt";		// For function searching
+	setorigin(minion, minion_org);			// Move to new location
+	minion.owner = self;					// Spawner Parent Link
+	
+	minion.effects = minion.flags = 0;		// make sure are blank
+	minion.gibondeath = 1;					// Always gib on death
+	minion.classtype = CT_MINIONGAUNT;		// Special minion class
+	minion.enemy = minion_targ;				// Target to attack
+	minion.spawnflags = minion_sflag;		// Spawnflags
+	minion.classgroup = CG_DCAPTAIN;		// Don't turn on master
+	minion.minion_active = TRUE;			// Minion flag
+	minion.bodyfadeaway = TRUE;				// Get rid of body
+	
+	// Check for poison gibs being cached first
+	if (gibpoison && self.poisonous == TRUE) {
+		minion.poisonous = self.poisonous;	// carry over from host spawner 
+		minion.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
+	}
+
+	minion.mdl = "progs/ad171/mon_gaunt.mdl";
+	minion.headmdl = "progs/ad171/h_gaunt.mdl";
+	minion.weaponglow = "progs/ad171/mon_gaunt_elec.mdl";
+
+	minion.idle_sound = "gaunt/idle1.wav";
+	minion.idle_sound2 = "gaunt/idle2.wav";
+	minion.idle_soundcom = "gaunt/idle2.wav";
+	minion.sight_sound = "gaunt/sight.wav";
+	minion.pain_sound = "gaunt/pain.wav";
+	minion.death_sound = "gaunt/death.wav";
+	
+	minion.nextthink = time + 0.01;
+	minion.think = setup_gaunt;
 };

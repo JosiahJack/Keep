@@ -262,9 +262,9 @@ float	DEAD_EXPLODE		= 5;
 float	DEAD_FINISHED		= 6;
 
 // takedamage values
-float	DAMAGE_NO			= 0;
-float	DAMAGE_YES			= 1;
-float	DAMAGE_AIM			= 2;
+float	DAMAGE_NO			= 0;	// No damage
+float	DAMAGE_YES			= 1;	// No grenades
+float	DAMAGE_AIM			= 2;	// Everything hits
 
 // OVERRIDDEN
 /*  See defskeep.qc for IT_'s
@@ -288,7 +288,7 @@ float	DAMAGE_AIM			= 2;
 //float	IT_ARMOR1			= 8192;
 //float	IT_ARMOR2			= 16384;
 //float	IT_ARMOR3			= 32768;
-//float	IT_SUPERHEALTH		= 65536;
+//float	IT2_SUPERHEALTH		= 65536;
 
 //float	IT_KEY1				= 131072;
 //float	IT_KEY2				= 262144;
@@ -470,7 +470,7 @@ entity	activator;			// the entity that activated a trigger or brush
 entity	damage_attacker;	// set by T_Damage
 float	framecount;
 
-float		skill;
+float		skill, oskill;
 float 	developer;
 
 //======================================================================
@@ -549,17 +549,17 @@ float AS_BACKWARD  = 8; // Turn 180 degrees and move backwards
 
 //======================================================================
 // object stuff
-.string		mdl;
+.string		mdl, mdl2;		// Extra mdl2 string
 .vector		mangle;			// angle at start
 .float		t_length, t_width;
 
 //======================================================================
 // doors, etc
 .vector		dest0, dest1, dest2, dest3;
-.float		wait;			// time from firing to restarting
-.float		delay;			// time from activation to firing
+.float		wait;	// time from firing to restarting
+.float		delay, delay2;	// time from activation to firing
 .entity		trigger_field;	// door's trigger entity
-.string		noise4;
+.string		noise4, noise6;
 .float		dmg;			// damage done by door when hit
 
 //======================================================================
@@ -571,6 +571,7 @@ float AS_BACKWARD  = 8; // Turn 180 degrees and move backwards
 //======================================================================
 // items
 .float		aflag;			// Ammo quantity stored on items
+.float		aused;			// Ammo quantity used (respawn aware)
 	
 //======================================================================
 // misc
@@ -584,6 +585,7 @@ float AS_BACKWARD  = 8; // Turn 180 degrees and move backwards
 //======================================================================
 // triggers
 .float		count;			// for counting triggers
+.float		endstate;		// final state for trigger_relay
 
 //======================================================================
 // plats / doors / buttons
@@ -728,6 +730,19 @@ void(string var, string s, string s) cvar_setlong = #72; // sets cvar.value
 void(entity client, string s) centerprint_builtin = #73;
 void(entity client, string s, string s) centerprint_msg = #73;
 void(entity client, string s, string s, string s) centerprint_msg3 = #73;
+void(entity client, string s1, string s2, string s3) centerprint3 = {
+	// Is the centerprint message being used by something else?
+	if (!client.suppressCenterPrint)
+		centerprint_msg3(client, s1, s2, s3);
+	else {
+		// Send message to client console instead
+		sprint(client, "(centerprint) ");
+		sprint(client, s1);
+		sprint(client, s2);
+		sprint(client, s3);
+		sprint(client, "\n");
+	}
+}
 void(entity client, string s, string s, string s, string s) centerprint_msg4 = #73;
 void(entity client, string s) centerprint = {
 	// Is the centerprint message being used by something else?
@@ -772,10 +787,15 @@ void(entity e) setspawnparms		= #78;	// set parm1... to the values at level star
 entity sight_entity;		// Highlight an angry monster
 float sight_entity_time;	// Time got angry
 
+.string sighttarget;			// Attack this target if sighted
+.string sightgroup;				// Group name for attacking as one
+entity sightgroup_entity;		// Attack group all together
+float sightgroup_entity_time;	// Time to activate
+
 float(entity targ) infront;
 float (entity targ) visible;
 float(entity targ, float flat2d) range_distance;
-float(float attackdist) ai_checkmelee;
+float(float attackdist, float attackzaxis) ai_checkmelee;
 float(entity targ) visblocked;
 float(entity targ, vector s_offset, vector t_offset, float nomonsters) visxray;
 float (entity targ, vector s_ofset, vector t_ofset) visblocked_wide;
@@ -789,13 +809,18 @@ float intermission_exittime;
 string nextmap;				// Used by GotoNextMap()
 .float dmgtime;				// Used by WaterMove()
 .float poisonous;			// A monster with poisonous attack
+void(entity targ) Client_LadderSounds;
 void(entity targ) BleedDeBuff;
 void(entity targ) BurnDeBuff;
 void(entity targ) PoisonDeBuff;
+void(entity targ) PlayLavaShieldSound;
+void(entity targ) PlayBlastBeltSound;
+void(entity targ) PlayPentagramSound;
 
 //	combat.qc
-float DAMARMOR = 1;
-float NOARMOR = 2;
+float DAMARMOR = 1;		// Typical damage to health + armour
+float NOARMOR = 2;		// Ingnores armour for damage reduction
+float DAMSPLASH = 4;	// Splash damage only
 float DAMAGEALL = 4;
 float IGNORECLASS = 8;
 void(entity targ, entity inflictor, entity attacker, float damage, float checkarmor) T_Damage;
@@ -809,6 +834,9 @@ float enemy_yaw;
 // items.qc
 .float	healamount, healtype;
 float (entity e, float healamount, float ignore) T_Heal;
+// items_progspn.qc
+void(entity targ) item_proglist_setup;
+void() SUB_regen;
 
 // monsters.qc
 void() monster_sightsound;
@@ -821,6 +849,16 @@ void() monster_ThrowGib;
 void() SUB_Null;
 void() SUB_UseTargets;
 void() SUB_Remove;
+
+// settings.qc
+float(float regbitflag) query_configflag;
+float(float regbitflag) query_temp1flag;
+
+// triggers_state.qc
+void(float defvol) trigger_bmodel_volume;
+void() trigger_bmodel_sounds;
+void() trigger_bmodel_setup;
+float() check_bmodel_keys;
 
 // traps_pendulum.qc
 void() pendulum_setuparray;
@@ -838,6 +876,33 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion;
 void(vector org, float velrnd, float upbase, float uprnd) SpawnProjectileSmoke;
 void(entity source, entity targ, float side) SpawnMeatSpray;
 void(entity targ, vector org, vector vel, float part_qty) SpawnBlood;
+
+//======================================================================
+// A list of variables (not used) defined in most quake engines! :P
+// CVAR_ARCHIVE = written to config.cfg file in mod directory
+
+// Used in quake.rc to define extra AD option/features
+//cvar_t    temp1 = CVARF("temp1", "0", CVAR_ARCHIVE);
+
+// Used for Deathmatch (in QC)
+//cvar_t    noexit = CVAR("noexit", "0");
+
+// Used to disable all monster spawning
+//cvar_t    nomonsters = CVAR("nomonsters", "0");
+
+// Probably used for something
+//cvar_t    gamecfg = CVAR("gamecfg", "0");
+//cvar_t    savedgamecfg = CVARF("savedgamecfg", "0", CVAR_ARCHIVE);
+
+// Empty variables, probably added by expansions packs
+//cvar_t    scratch1 = CVAR("scratch1", "0");
+//cvar_t    scratch2 = CVAR("scratch2", "0");
+//cvar_t    scratch3 = CVAR("scratch3", "0");
+//cvar_t    scratch4 = CVAR("scratch4", "0");
+//cvar_t    saved1 = CVARF("saved1", "0", CVAR_ARCHIVE);
+//cvar_t    saved2 = CVARF("saved2", "0", CVAR_ARCHIVE);
+//cvar_t    saved3 = CVARF("saved3", "0", CVAR_ARCHIVE);
+//cvar_t    saved4 = CVARF("saved4", "0", CVAR_ARCHIVE);
 
 //======================================================================
 void() DummyFunction = //gets rid of the last compiler warnings ; - )

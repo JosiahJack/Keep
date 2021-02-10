@@ -384,7 +384,10 @@ PERCH : Start in a sitting down, place 44 units out from perching edge, 4 units 
 ======================================================================*/
 void() setup_gargoyle;
 void() monster_gargoyle = {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_gargoyle.mdl";
 	if (self.classtype == CT_MONGARGOYLE_MINI)
@@ -471,6 +474,10 @@ void() setup_gargoyle =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	if (self.deathstring == "")  self.deathstring = " was burned by a Gargoyle\n";
 

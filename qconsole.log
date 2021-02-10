@@ -1,0 +1,91 @@
+Command line: [ -game keep ]
+Log file: C:/Users/Josiah/Dropbox/QUAKE/keep/qconsole.log
+Sat Jun 29 23:58:28 2019
+DirectX 9 Mark V Windows (Build: 1099)
+Exe: mark_v.exe (1563 kb)
+Exe: 02:15:18 May 11 2018
+Caches: C:/Users/Josiah/AppData/Roaming/Mark V/caches
+UDP4 Initialized: INADDR_ANY, 127.0.0.1
+IPv6 Initialized: [0:0:0:0:0:0:0:1]
+Exe: 02:14:47 May 11 2018
+256.0 megabyte heap
+GL_VENDOR: NVIDIA GeForce GTS 450   
+GL_RENDERER: nvd3dum.dll
+GL_VERSION: 1.1
+GL_EXTENSIONS: 
+   GL_EXT_swap_control
+   GL_ARB_texture_storage
+   GL_ARB_texture_non_power_of_two
+   GL_ARB_multitexture
+   GL_EXT_texture_filter_anisotropic
+   GL_ARB_texture_env_add
+   GL_ARB_texture_env_combine
+Max texture size: 16384
+Multitexture:     1
+Non-Power of 2:   1
+Combine:			 1
+Stencil Bits:	 8
+Hardware gamma available
+Input initialized
+Avi capturing module initialized
+ACM module initialized
+
+Sound Initialization
+Set primary sound buffer format: yes
+Using secondary sound buffer
+   2 channel(s)
+   16 bits/sample
+   11025 bytes/sec
+DirectSound initialized
+Audio: 16 bit, stereo, 11025 Hz
+Sound sampling rate: 11025
+CDAudio_Init: MCI_OPEN failed (266)
+
+========= Quake Initialized =========
+
+execing quake.rc
+execing default.cfg
+couldn't exec config.cfg
+Unknown command "max_edicts"
+Unknown command "r_useportalculling"
+Unknown command "cl_beams_polygons"
+couldn't exec autoexec.cfg
+]maps
+   a1
+   a2
+   alchemy
+   arcanists_mill
+   asset_library
+   asset_library_maxedoutgltextures
+   b_barrel
+   b_lnail0
+   b_lnail1
+   b_mrock0
+   b_mrock1
+   b_plas0
+   b_plas1
+   b_wbh10
+   b_wbh25
+   classic01
+   cryptoknaut
+   egyptoagula
+   fortyfiver01
+   fortyfiver02
+   hwjam_qmaster
+   kpbonus
+   kpcrypt1
+   kpdung
+   kpkeep
+   kplibry
+   qcastle
+   qma_level1
+   qma_level13
+   qma_level3
+   qma_level7
+   qma_level9
+   quake_castle_portentry
+   quake_castle_ship
+   rogtests
+   singmontest
+   start
+37 map(s)

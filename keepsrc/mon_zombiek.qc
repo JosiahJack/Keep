@@ -314,7 +314,7 @@ void()	zombiek_jump3	=[	$atta3,		zombiek_jump4 ] {
 	self.jump_flag = time + MONAI_JUMPZOMBTIME;
 	self.touch = zombiek_JumpTouch;
 	makevectors (self.angles);
-	self.velocity = v_forward * (150 + random() * 50) + '0 0 200';
+	self.velocity = (v_forward*(self.jumpdist_x + random()*50)) + ('0 0 1'*self.jumpdist_z);
 	self.origin_z = self.origin_z + 4;
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.oldorigin = self.origin;
@@ -741,9 +741,11 @@ void() zombiek_die =
 /*======================================================================
  QUAKED monster_zombiek (1 0 0) (-16 -16 -24) (16 16 32) Ambush x FLOOR
 ======================================================================*/
-void() monster_zombiek =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_zombiek = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_zombiek.mdl";		// Zombie Knight
 	self.headmdl = "progs/ad171/h_zombiek.mdl";
@@ -775,6 +777,14 @@ void() monster_zombiek =
 	self.sight_sound = "zombie/zk_sight.wav";
 	precache_sound (self.sight_sound);
 
+	// Check for poisonous entity flag
+	if (self.poisonous) {
+		precache_poisongibs();			// precache gibs
+		self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
+		self.skin = self.exactskin = self.gib1skin = 1;
+		if (self.deathstring == "") self.deathstring = " was cornered by a Poisonous Zombie Knight\n";
+	}
+
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
@@ -788,11 +798,16 @@ void() monster_zombiek =
 	self.inpain = 0;					// Zombie starts with no pain lock
 	self.count = 0;						// Reset get up timer
 
+	if (self.deathstring == "") self.deathstring = " was cornered by a Zombie Knight\n";
+
+	// Default jump forward/up distance
+	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '150 0 200';
+	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPZKNEAR;
+	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPZKFAR;
+
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
-
-	if (self.deathstring == "") self.deathstring = " was cornered by a Zombie Knight\n";
 
     self.hittype    = HIT_METAL;
 	self.th_checkattack = ZombiekCheckAttack;

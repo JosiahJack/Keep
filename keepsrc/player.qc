@@ -970,7 +970,7 @@ void() player_death =
 	if (deathmatch || coop) DropBackpack();
 	
 	// Remove all powerup/debuff effects
-	ResetPowerSystem(self);
+	ResetPowerSystem(self,0,TRUE);
 	ResetDebuffSystem(self);
 
 	self.weaponmodel="";

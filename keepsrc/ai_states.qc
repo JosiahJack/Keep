@@ -8,7 +8,7 @@ void monster_poisoned_check();
 //----------------------------------------------------------------------
 void() ai_stand =
 {
-	self.lastorigin = self.origin;		// Save for cinematic interpolation																
+	self.lastorigin = self.origin;		// Save for cinematic interpolation
 	if (self.health < 1) return;		// Health < 0, no more standing
 	monster_liquid_check();				// Check for liquid damage
 	check_tethertimer();				// Check for tethering system
@@ -22,7 +22,7 @@ void() ai_stand =
 		self.th_walk ();
 	}
 	else {
-		// Only test ground walking monsters (no fly/swim)
+		// Only test ground walking monsters (no fly/swim/static)
 		// Check global map variable first (default = off)
 		if (map_bodyflrcheck == TRUE && self.classmove == MON_MOVEWALK) 
 			ent_floorcheck(self, FLOOR_TRACE_MONSTER);
@@ -62,45 +62,44 @@ void(float dist) ai_walk =
 	}
 	
 	// Move to goal (code function)
-	if (self.huntingcharmer) {
-		movetogoal (dist);
-		self.nextthink = (time + ((self.nextthink - time) / FL_SWIM));
-	} else {
-		movetogoal (dist);
-	}
+	movetogoal (dist);
 };
-void() vanilla_water_check;
+
 //----------------------------------------------------------------------
 // ai_run
 //----------------------------------------------------------------------
 void(float dist) ai_run =
 {
 	if (self.health < 1) return;	// Health < 0, no more running
-	vanilla_water_check();	
-	monster_liquid_check();			// Check for liquid damage
+	vanilla_water_check();			// Check for liquid damage
+
+	// Moved within vanilla water check above to work with water trains
+	//monster_liquid_check();			// Check for liquid damage
 	monster_poisoned_check();			// Check and apply poison
 	movedist = dist;
 
 	// Is the enemy dead or no longer taking damage?
-	if (SUB_healthEnemyTarget() < 1 || SUB_takedEnemyTarget() == DAMAGE_NO || (self.charmed && (self.charmer == self.enemy))) {
-		// Switch around any enemytarget for enemy
+	if (SUB_healthEnemyTarget() < 1 || SUB_takedEnemyTarget() == DAMAGE_NO || self.enemyexit) {
+		// Reset any exit conditions
+		self.enemyexit = FALSE;
+		// Remove any enemy target entity tracking
 		SUB_switchEnemyTarget();
-		self.enemy = self.goalentity = world;
-		if (self.charmed) {
-			HuntCharmer();
-			return;
-		}
+		// Reset enemy and target system
+		self.enemy = self.goalentity = self.movetarget = world;
+			
 		// Is the old enemy still alive and can it be damaged?
 		if (self.oldenemy.health > 0 && self.oldenemy.takedamage > 0) {
 			self.enemy = self.oldenemy;
 			HuntTarget ();
-		} else {
-			// Check for any passive monsters
-			if (self.passive_mode) {
+		}
+		else {
+			// Was this a passive monster before combat?
+			if (self.passive_mode == TRUE) {
 				// Return to passive monster state (reset)
 				self.passive_state = MON_PASSIVESTATE_RESET;
-				check_passivestate_system();
-			} else {
+				check_passivestate_system(self);
+			}
+			else {
 				// Monster busy with something else?
 				if (self.target != "") 
 					self.movetarget = find(world, targetname, self.target);
@@ -115,22 +114,23 @@ void(float dist) ai_run =
 			return;
 		}
 	}
-
-	// Wake up any monsters in visual range										
-	self.show_hostile = time + 1;		// wake up other monsters
+	
+	// Wake up any monsters in visual range
+	self.show_hostile = time + 1;
 
 	// check visibility of enemy
 	enemy_vis = visible(SUB_entEnemyTarget());
-	if (enemy_vis) self.search_time = time + 5;
+	if (enemy_vis) {
+		// Used to wake up other enemies
+		self.search_time = time + 5;
+		// The last time the enemy was in sight
+		self.enemylastseen = time;
+	}
 
+	//----------------------------------------------------------------------
 	// look for other coop players
-	if (coop && self.search_time < time && !self.charmed) {
+	if (coop && self.search_time < time) {
 		if (FindTarget ()) return;
-
-        if (self.master)
-            if (self.enemy != self.master)
-                if (/*(self.alignment == GOOD) ||*/ (self.classname != "monster_bane"))
-                    {ai_run_done(); return;}  // Stop chase and return to master.
 	}
 
 	// Calculate if goal/enemy is infront, the range and direction
@@ -162,10 +162,11 @@ void(float dist) ai_run =
 		if (self.th_tether) self.think = self.th_tether;
 		return;
 	}
+
 	//----------------------------------------------------------------------
 	// Check for the passive state system (reset/timer etc)
 	//----------------------------------------------------------------------
-	if (check_passivestate_system()) return;																		 
+	if (check_passivestate_system(self)) return;
 	
 	//----------------------------------------------------------------------
 	// Check if blocked by breakables

@@ -179,7 +179,7 @@ void () HIP_FireMjolnir = {
    org = (trace_endpos - (v_forward * 4));
    if ( trace_ent.takedamage ) {
       damage = 50.000;
-      if ( (trace_ent.classgroup == CG_ZOMBIE) )
+      if ((trace_ent.classgroup == CG_ZOMBIE) && !(trace_ent.classname == "monster_mummy"))
          damage = 70.000;
 
       trace_ent.axhitme = TRUE;
@@ -281,7 +281,7 @@ void() W_FireAxe = {
 					onflr.bodyonflr = string_null;	// no more body gibbing
 					tself = self; tother = other;	// save self/other
 					self = onflr; other = tself;	// switch around
-					if (onflr.classgroup == CG_ZOMBIE) {
+					if (onflr.classgroup == CG_ZOMBIE && !(onflr.classname == "monster_mummy")) {
 						self.health = 0;
 						Killed(onflr, tself);
 					}
@@ -306,16 +306,23 @@ void() W_FireAxe = {
 	
 	org = trace_endpos - v_forward*4;	// Back 4 units to spawn blood
 
-	if (trace_ent.takedamage) {
-		trace_ent.axhitme = 1;			// special DM/Coop axe hit sound
-		if (self.moditems & IT_UPGRADE_AXE) axedmg = DAMAGE_PLAYAXE2;
-		else axedmg = DAMAGE_PLAYAXE1;
+	//----------------------------------------------------------------------
+	// REFLECTION stuff like blue shields
+	if (trace_ent.reflectaxe) Resist_Axe(self, org);
+	//----------------------------------------------------------------------
+	// BLEEDING/DAMAGE stuff with unique impact sounds
+	else if (trace_ent.takedamage) {
+		// Mark the monster with type of axe used and change damage
+		if (self.moditems & IT_UPGRADE_AXE) {
+			axedmg = DAMAGE_PLAYAXE2; trace_ent.axhitme = 2; }
+		else {
+			axedmg = DAMAGE_PLAYAXE1; trace_ent.axhitme = 1; }
 		
 		// Spamn blood always up so player can see it
 		SpawnBlood (trace_ent, org, '0 0 1', axedmg);
 		T_Damage (trace_ent, self, self, axedmg, DAMARMOR);
 		
-		// Check with impact sound to play
+		// Monster impact sounds (fleshy stuff)
 		if (trace_ent.flags & FL_MONSTER) {
 			if (random() < 0.5) sound (self, CHAN_WEAPON, GIB_SOUND_HEAVY, 1, ATTN_NORM);
 			else sound (self, CHAN_WEAPON, GIB_SOUND_HEAVY2, 1, ATTN_NORM);
@@ -333,7 +340,17 @@ void() W_FireAxe = {
 			else
 				sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
 		}
-
+		// Pushable impact sounds (def=stone/brick)
+		else if (trace_ent.classtype == CT_FUNCPUSHABLE) {
+			if (trace_ent.style == PTYPE_WOOD) 
+				sound (self, CHAN_WEAPON, SOUND_AXE_WOOD, 1, ATTN_NORM);
+			else if (trace_ent.style == PTYPE_GLASS) 
+				sound (self, CHAN_WEAPON, SOUND_AXE_GLASS, 1, ATTN_NORM);
+			else if (trace_ent.style == PTYPE_METAL) 
+				sound (self, CHAN_WEAPON, SOUND_AXE_METAL, 1, ATTN_NORM);
+			else
+				sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
+		}
 	}
 	//----------------------------------------------------------------------
 	// WORLD OBJECT : Target does not bleed, play stone hitting sound
@@ -786,6 +803,7 @@ PLASMA
 ======================================================================*/
 void() W_FirePlasma = {
 	local vector org, dir;
+	local float cells;
 	
 	// If run out of ammo, switch weapons to next best
 	if (self.attack_finished > time) return;
@@ -793,8 +811,24 @@ void() W_FirePlasma = {
 
 	// Do nothing if weapon is under water
 	if (self.waterlevel > 1) {
-		self.attack_finished = time + 0.2;
-		sound (self, CHAN_WEAPON, "weapons/nofire.wav", 1, ATTN_NORM);
+		// Air tank vania item wil explode weapon instead
+		if (self.moditems & IT_ARTWETSUIT) {
+			// Use all cells
+			cells = self.ammo_cells;
+			// Update inventory
+			self.ammo_cells = 0;
+			W_SetCurrentAmmo (self);
+			// Impact avoidance sound
+			PlayBlastBeltSound(self);
+			// Death to everything around, except players!
+			T_RadiusDamage (self, self, 35*cells, self, IGNORECLASS);
+			// Reduce player HP down to 50%, no armour saves!
+			T_Damage(self, world, world, self.health*0.5, NOARMOR);
+		}
+		else {
+			self.attack_finished = time + 0.2;
+			sound (self, CHAN_WEAPON, SOUND_MISFIRE, 1, ATTN_NORM);
+		}
 		return;
 	}
 	
@@ -863,7 +897,7 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage = {
 	if (lighthit) {
 		//----------------------------------------------------------------------
 		// Check for breakable/pushable monster immunity
-		if (ai_immunedamage(self, trace_ent)) {
+		if (ai_immunebreakable(self, trace_ent)) {
 			// This is resist lightning function without pain sound
 			// Don't spawn smoke constantly (let the sprite finish)
 			if (self.lightning_timer < time) {
@@ -1036,10 +1070,22 @@ void() W_FireLightning = {
 
 	// explode if under water
 	if (self.waterlevel > 1) {
+		// Use all cells
 		cells = self.ammo_cells;
+		// Update inventory
 		self.ammo_cells = 0;
 		W_SetCurrentAmmo (self);
-		T_RadiusDamage (self, self, 35*cells, world, DAMAGEALL);
+		// Air tank vania item saves player from death
+		if (self.moditems & IT_ARTWETSUIT) {
+			// Impact avoidance sound
+			PlayBlastBeltSound(self);
+			// Death to everything around, except players!
+			T_RadiusDamage (self, self, 35*cells, self, IGNORECLASS);
+			// Reduce player HP down to 50%, no armour saves!
+			T_Damage(self, world, world, self.health*0.5, NOARMOR);
+		}
+		// Default behaviour, death to everything!
+		else T_RadiusDamage (self, self, 35*cells, world, DAMAGEALL);
 		return;
 	}
 
@@ -1079,12 +1125,26 @@ void(float cl) W_FireThunderbolt = {
 	// Ran out of ammo, switch to next best weapon
 	if (self.ammo_cells < 1) { forceweaponswitch(0.2); return; }
 
-	// explode if under water
+	// Do nothing if weapon is under water
 	if (self.waterlevel > 1) {
-		cells = self.ammo_cells;
-		self.ammo_cells = 0;
-		W_SetCurrentAmmo (self);
-		T_RadiusDamage (self, self, 35*cells, world, DAMAGEALL);
+		// Air tank vania item wil explode weapon instead
+		if (self.moditems & IT_ARTWETSUIT) {
+			// Use all cells
+			cells = self.ammo_cells;
+			// Update inventory
+			self.ammo_cells = 0;
+			W_SetCurrentAmmo (self);
+			// Impact avoidance sound
+			PlayBlastBeltSound(self);
+			// Death to everything around, except players!
+			T_RadiusDamage (self, self, 35*cells, self, IGNORECLASS);
+			// Reduce player HP down to 50%, no armour saves!
+			T_Damage(self, world, world, self.health*0.5, NOARMOR);
+		}
+		else {
+			self.attack_finished = time + 0.2;
+			sound (self, CHAN_WEAPON, SOUND_MISFIRE, 1, ATTN_NORM);
+		}
 		return;
 	}
 
@@ -1114,19 +1174,6 @@ void(float cl) W_FireThunderbolt = {
     else
         LightningBolt (self.origin, org + v_forward*600, self, damage, self, TE_LIGHTNING2, "thunderbolt");
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void () W_FireMultiGrenade = {
    local entity missile;
@@ -1177,16 +1224,32 @@ void () W_FireMultiRocket = {
 
 void () W_FirePlasmaGun = {
    local entity missile;
+	local float cells;
 
 	if (self.attack_finished > time) return;
-   if ( (self.waterlevel > TRUE) ) {
-      W_SetCurrentAmmo (self);
-      discharged = TRUE;
-      T_RadiusDamage (self,self,(35.000 * self.ammo_plasma),world,DAMAGEALL);
-      discharged = FALSE;
-      self.ammo_plasma = FALSE;
-      return ;
-   }
+	// Do nothing if weapon is under water
+	if (self.waterlevel > 1) {
+		// Air tank vania item wil explode weapon instead
+		if (self.moditems & IT_ARTWETSUIT) {
+			// Use all cells
+			cells = self.ammo_cells;
+			// Update inventory
+			self.ammo_cells = 0;
+			W_SetCurrentAmmo (self);
+			// Impact avoidance sound
+			PlayBlastBeltSound(self);
+			// Death to everything around, except players!
+			T_RadiusDamage (self, self, 35*cells, self, IGNORECLASS);
+			// Reduce player HP down to 50%, no armour saves!
+			T_Damage(self, world, world, self.health*0.5, NOARMOR);
+		}
+		else {
+			self.attack_finished = time + 0.2;
+			sound (self, CHAN_WEAPON, SOUND_MISFIRE, 1, ATTN_NORM);
+		}
+		return;
+	}
+
    self.ammo_plasma = (self.ammo_plasma - TRUE);
    self.currentammo = (self.currentammo - TRUE);
    sound (self,CHAN_WEAPON,"plasma/fire.wav",0.500,ATTN_NORM);
@@ -1236,9 +1299,9 @@ void(entity targ) W_SetCurrentAmmo = {
 	// Reset all Ammo types for gfx on sbar (engine code hack - sbar.c)
 	//targ.items = targ.items - ( targ.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS) );
   	//targ.items2 = (targ.items2 - (targ.items2 & ((IT2_LAVA_NAILS | IT2_PLASMA_AMMO) | IT2_MULTI_ROCKETS)));
-	dprint("\b[self.weapon\b = ");
-	dprint(ftos(self.weapon));
-	dprint("\n");
+	// dprint("\b[self.weapon\b = ");
+	// dprint(ftos(self.weapon));
+	// dprint("\n");
 	if (!targ.selfweaponismoditems) {
 		if (targ.weapon == IT_AXE) {
 			targ.currentammo = 0;
@@ -1411,6 +1474,7 @@ void(entity targ) W_SetCurrentAmmo = {
 			targ.weaponmodel = "progs/aoa/v_gungnir.mdl";
 		}
 		else {
+			// This is also called no axe startup option
 			// Cinematic mode, no viewmodel
 			targ.currentammo = 0;
 			targ.weaponmodel = "";
@@ -1467,11 +1531,10 @@ float(entity targ) W_BestWeapon =
 //----------------------------------------------------------------------
 float(entity targ) W_CheckNoAmmo =
 {
-	if (targ.weapon == IT_FLAK)
-		targ.currentammo = CountFlakAmmo(targ);
-	if (targ.currentammo >= 1) return TRUE;
+	if (targ.weapon == IT_FLAK) targ.currentammo = CountFlakAmmo(targ);
 	if (targ.weapon == IT_AXE || targ.weapon == IT2_MJOLNIR || targ.weapon == IT2_CROSS || targ.weapon == IT2_GRAPPLE || targ.weapon == IT_RAPIER || targ.weapon == IT_GUNGNIR || targ.weapon == IT_MACE || targ.weapon == IT_SCIMITAR) return TRUE;
-	
+	if (targ.currentammo > 0) return TRUE;
+
 	targ.weapon = W_BestWeapon (targ);
 	W_SetCurrentAmmo (targ);
 	
@@ -1495,9 +1558,9 @@ void() W_Attack = {
 	if (self.weapon != IT_EXTRA_WEAPON)
 		self.show_hostile = time + 1;	// wake monsters up
 
-	dprint("\b[self.weapon\b = ");
-	dprint(ftos(self.weapon));
-	dprint("\n");
+	// dprint("\b[self.weapon\b = ");
+	// dprint(ftos(self.weapon));
+	// dprint("\n");
 	//----------------------------------------------------------------------
 	// Axe - Mighty chopper
 	//----------------------------------------------------------------------
@@ -2058,9 +2121,6 @@ void(entity targ) W_ChangeWeapon = {
 			if (fl == IT_MULTI_GRENADE) {
 				if (targ.ammo_multi_rockets < 1) am = TRUE; // no ammo
 			}
-			if (fl == IT_GUNGNIR) {
-				am = FALSE; // never needs ammo
-			}
 
 			// checkvec = WeaponSlotPickOneOfThree(targ, IT_GRENADE_LAUNCHER, IT2_PROXIMITY_GUN, IT_MULTI_GRENADE, IN_ITEMS1, IN_ITEMS2, IN_ITEMS1);
 			// fl = checkvec_x;
@@ -2233,22 +2293,22 @@ void(entity targ) W_ChangeWeapon = {
 		if (targ.ammo_plasma < 1) am = TRUE;
 		gotgun = InItems(targ, fl);
 	}
-	else if (targ.impulse == 175) {
+	else if (targ.impulse == 75) {
 		fl = IT2_LASER_CANNON;
 		if (targ.ammo_cells < 1) am = TRUE;
 		gotgun = InItems2(targ, fl);
 	}
-	else if (targ.impulse == 176) {
+	else if (targ.impulse == 76) {
 		fl = IT2_PROXIMITY_GUN;
 		gotgun = InItems2(targ, fl);
 	}
-	else if (targ.impulse == 177) {
+	else if (targ.impulse == 77) {
 		checkvec = WeaponSlotPickOneOfThree(targ, IT2_MJOLNIR, IT2_CROSS, IT_GUNGNIR, IN_ITEMS2, IN_ITEMS2, IN_MODITEMS_HACKBANK);
 		fl = checkvec_x;
 		gotgun = checkvec_y;
 		inhackbank = checkvec_z;
 		if (fl == IT_GUNGNIR) {
-			am = FALSE; // doesn't require ammo
+			if (targ.ammo_voidshards < 1) am = TRUE; // no ammo
 		}
 
 		// if ((targ.items & IT2_CROSS) && (targ.weapon == IT2_MJOLNIR)) {
@@ -2267,38 +2327,38 @@ void(entity targ) W_ChangeWeapon = {
 			// gotgun = InItems2(targ, fl);
 		// }
 	}
-	else if (targ.impulse == 178) {
+	else if (targ.impulse == 78) {
 		fl = IT_EXTRA_WEAPON;
 		gotgun = InItems(targ, fl);
 	}
-	else if (targ.impulse == 179) {
+	else if (targ.impulse == 79) {
 		fl = IT2_CROSS;
 		gotgun = InItems2(targ, fl);
 	}
-	else if (targ.impulse == 180) {
+	else if (targ.impulse == 80) {
 		fl = IT2_GRAPPLE;
 		gotgun = InItems2(targ, fl);
 	}
-	else if (targ.impulse == 181) {
+	else if (targ.impulse == 81) {
 		fl = IT2_CHAINLIGHTNING;
 		gotgun = InItems2(targ, fl);
 	}
-	else if (targ.impulse == 182) {
+	else if (targ.impulse == 82) {
 		fl = IT_ICE;
 		inhackbank = TRUE; // Ok we are hacking now, switch to 2nd set of 24 weapons in bank 2
 		gotgun = InModItems(targ, fl);
 	}
-	else if (targ.impulse == 183) {
+	else if (targ.impulse == 83) {
 		fl = IT_MACE;
 		inhackbank = TRUE; // Ok we are hacking now, switch to 2nd set of 24 weapons in bank 2
 		gotgun = InModItems(targ, fl);
 	}
-	else if (targ.impulse == 184) {
+	else if (targ.impulse == 84) {
 		fl = IT_VOID_STAFF;
 		inhackbank = TRUE; // Ok we are hacking now, switch to 2nd set of 24 weapons in bank 2
 		gotgun = InModItems(targ, fl);
 	}
-	else if (targ.impulse == 185) {
+	else if (targ.impulse == 85) {
 		fl = IT_FLAK;
 		inhackbank = TRUE; // Ok we are hacking now, switch to 2nd set of 24 weapons in bank 2
 		gotgun = InModItems(targ, fl);
@@ -2308,15 +2368,15 @@ void(entity targ) W_ChangeWeapon = {
 		inhackbank = TRUE; // Ok we are hacking now, switch to 2nd set of 24 weapons in bank 2
 		gotgun = InModItems(targ, fl);
 	}
-	else if (targ.impulse == 187) {
+	else if (targ.impulse == 87) {
 		fl = IT_SANGUINATORS;
 		gotgun = InModItems(targ, fl);
 	}
-	else if (targ.impulse == 188) {
+	else if (targ.impulse == 88) {
 		fl = IT_SCIMITAR;
 		gotgun = InModItems(targ, fl);
 	}
-	else if (targ.impulse == 189) {
+	else if (targ.impulse == 89) {
 		fl = IT_RAPIER;
 		gotgun = InModItems(targ, fl);
 	}

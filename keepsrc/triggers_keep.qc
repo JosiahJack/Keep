@@ -81,7 +81,13 @@ void () info_command_use_server = { command_use_server(); };
 void () info_command_use = { command_use(); };
 
 void () info_command = {
-	if (self.message == "") { remove(self); return; }
+	if (self.message == "") {
+		dprint("\b[INFO_CMD]\b Message cmd missing!\n");
+		spawn_marker(self.origin, SPNMARK_YELLOW);
+		entity_hide(self);
+		return;
+	}
+	self.classtype = CT_CONTROL;
 	self.use = info_command_use;
 	self.think = SUB_Null;
 };

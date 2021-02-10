@@ -168,7 +168,7 @@ void() dog_bite =
 	if (self.health < 1) return;
 	ai_charge(10);								// Get closer for extra bite
 	ai_damagebreakable(10);						// Damage any breakables
-	if (!ai_checkmelee(MONAI_MELEEDOG)) return;	// Too far away
+	if (!ai_checkmelee(MONAI_MELEEDOG,FALSE)) return;	// Too far away
 
 	// Can the target bleed?
 	if (!self.enemy.takedamage) return;
@@ -385,7 +385,10 @@ void() dog_missile = {
 //QUAKED monster_dog (1 0 0) (-32 -32 -24) (32 32 40) Ambush
 ======================================================================*/
 void() monster_dog = {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/mon_dog.mdl";
 	self.headmdl = "progs/h_dog.mdl";
@@ -416,6 +419,7 @@ void() monster_dog = {
 		self.th_missile = dog_missile;
 		self.health = self.health + 125; //def = 150
 		self.pain_flinch = 50;				// Med response to pain
+		if (self.deathstring == "") self.deathstring = " was scorched by a Hell Hound\n";
 	} else {
 		self.pain_flinch = 10;				// Easy response to pain
 		self.classtype = CT_MONDOG;
@@ -431,6 +435,15 @@ void() monster_dog = {
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
 	if (self.deathstring == "") self.deathstring = " was mauled by a Rottweiler\n";
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
+
+	// Default jump forward/up distance
+	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '300 0 200';
+	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPDOGNEAR;
+	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPDOGFAR;
 
 	self.th_checkattack = DogCheckAttack;
 	self.th_stand = dog_stand1;

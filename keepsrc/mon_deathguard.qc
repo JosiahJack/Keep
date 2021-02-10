@@ -249,7 +249,10 @@ void(entity inflictor, entity attacker, float damage) deathguard_pain = {
 void() deathguard_melee = { deathguard_slash1(); };
 
 void() monster_deathguard = {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/quoth2pt2full/dguard.mdl";
 	precache_model(self.mdl);
@@ -290,6 +293,10 @@ void() monster_deathguard = {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.th_stand = deathguard_stand1;
 	self.th_walk = deathguard_walk1;

@@ -170,7 +170,10 @@ void() ogre_nail6	=[	$shoot5,		ogre_nail7	] {ai_face();};
 void() ogre_nail7	=[	$shoot6,		ogre_run1	] {ai_face();};
 
 void() monster_ogre_spikeshooter = {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 		
 	self.mdl = "progs/ad171/mon_ogre.mdl";		// Rogue Ogre
 	self.headmdl = "progs/h_ogre.mdl";
@@ -247,6 +250,9 @@ void() monster_ogre_spikeshooter = {
 	self.th_wakeup = ogre_wakeup1;
 	if (self.deathstring == "")  self.deathstring = " was skotched by a Flak Ogre\n";
 	
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.classtype = CT_MONOGRE;		// Old style ogres
 	self.classgroup = CG_OGRE;		// One big happy ogre family!

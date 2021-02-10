@@ -657,7 +657,7 @@ void() necro_activate_special = {
 		/*
         if (self.enemy.flags & FL_MONSTER) {
 			// Special cases for some monsters.
-            if (self.enemy.classgroup == CG_ZOMBIE) {
+            if (self.enemy.classgroup == CG_ZOMBIE && !(targ.classname == "monster_mummy")) {
 				// Supress zombie immortality so any damage can kill zombies.
                 T_Curse (self.enemy, self, CURSE_ARMOR, 10);
                 return;
@@ -1194,6 +1194,11 @@ void() setup_necro;
 void() monster_necromancer = {
     local float nec;
 
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+
     if (self.classname == "monster_acolyte") {
 		nec = NECRO_ACOLYTE;
 		if (self.health < 1) self.health = 150;
@@ -1290,6 +1295,10 @@ void() setup_necro = {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	if(!self.classtype) self.classtype = CT_MONACOLYTE;
 	if (!self.classgroup) self.classgroup = CG_WIZARD;

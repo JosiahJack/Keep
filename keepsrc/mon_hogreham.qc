@@ -377,9 +377,11 @@ METAL : Full plate metal armour and +100HP
 -------- NOTES --------
 
 ======================================================================*/
-void() monster_hogreham =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_hogreham = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_hogreham.mdl";		// New Ogre Model
 	self.headmdl = "progs/ad171/h_hogreham.mdl";		// Large head
@@ -450,6 +452,10 @@ void() monster_hogreham =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.th_checkattack = OgreHamCheckAttack;
 	self.th_stand = hogreham_stand1;

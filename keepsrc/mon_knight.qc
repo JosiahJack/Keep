@@ -220,7 +220,7 @@ void()	knight_atk10=[	$attackb10,		knight_run1	] {ai_charge(5);};
 //=============================================================================
 void() knight_melee =
 {
-	if (ai_checkmelee(MONAI_MELEEKNIGHT)) knight_atk1 ();
+	if (ai_checkmelee(MONAI_MELEEKNIGHT,FALSE)) knight_atk1 ();
 	else knight_runatk1 ();
 };
 
@@ -369,9 +369,11 @@ void() knight_statue =
 /*======================================================================
  QUAKED monster_knight (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 ======================================================================*/
-void() monster_knight =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_knight = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_knight.mdl";
 	self.headmdl = "progs/h_knight.mdl";		// Large head
@@ -466,6 +468,11 @@ void() monster_knight =
 		// Allow knights to start with a stone skin, but not be frozen!
 		if (self.spawnflags & MON_NOTFROZEN) {
 			self.spawnflags = self.spawnflags - MON_STATUE;
+
+			// Check for random rotation setup and angle limits
+			if (self.angles_y < 0) self.angles_y = rint(random()*359);
+			if (self.angles_y > 360) self.angles_y = 360;
+
 			knight_aistates();			// setup AI state functions
 		}
 		else {
@@ -499,6 +506,11 @@ void() monster_knight =
 
 		self.pain_longanim = TRUE;		// can be chopped with shadow axe
 		self.classgroup = CG_KNIGHT;	// Classic tincan!
+
+		// Check for random rotation setup and angle limits
+		if (self.angles_y < 0) self.angles_y = rint(random()*359);
+		if (self.angles_y > 360) self.angles_y = 360;
+
 		knight_aistates();				// setup AI state functions
 	}
 

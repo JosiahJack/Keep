@@ -791,7 +791,13 @@ void(float hello) nemes_sight =
 // --> QUAKED monster_nemesant (1 0 0) (-16 -16 -24) (16 16 40) Ambush Boss
 //============
 void() monster_nemesant = {
-    if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (self.classname != "monster_trogboss") {
+		if (monster_checkrandomizer() == TRUE) return;
+	}
+
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
     
     self.mdl = "progs/drake/nemesant.mdl";
     self.headmdl = "progs/drake/h_nemes.mdl";
@@ -863,11 +869,17 @@ void() monster_nemesant = {
         //    monster_purse (10, 1, 0.5);  // 10 items, 50% gem.
     //}
 
+	if (self.classname == "monster_trogboss") setup_passivestate_boss(self);  // Check passive system for exceptions
+	
     self.waitmin    = time + 5;     // Wait for idle sounds
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 	
 	self.classtype = CT_MONNEMESANT;
 	self.classgroup = CG_WIZARD;

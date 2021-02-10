@@ -443,9 +443,11 @@ vector (entity floyd) get_floyd_maxs =
 /*======================================================================
 QUAKED monster_floyd (1 0 0) (-24 -24 -24) (24 24 64) Ambush
 ======================================================================*/
-void() monster_floyd =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_floyd = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	// Let the mapper override the mdl keys so that they can
 	// create different skin versions, a rusty floyd anyone?
@@ -504,6 +506,10 @@ void() monster_floyd =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 	
 	self.th_checkattack = FloydCheckAttack;
 	self.th_die = floyd_die;

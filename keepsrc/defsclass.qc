@@ -8,16 +8,19 @@
 // Previous system used classname (slow string search)
 //======================================================================
 float CG_PLAYERS = 50;			// All player/clients
+float CG_LIGHTS = 70;			// All light type entities
 float CG_HEALTH = 100;			// All health pack types (15/25/+100)
 float CG_AMMOITEM = 200;		// All ammo items/packs
 float CG_PROJALL = 205;			// All monster projectiles
 float CG_PROJSHELLS = 210;		// To help with combining shell damage
 float CG_PROJNAILS = 220;		// Testing ammo resistance in t_damage
-float CG_PROJROCKETS = 230;
-float CG_PROJGRENADES = 235;
-float CG_PROJCELLS = 240;
+float CG_PROJROCKETS = 230;		// Includes homing missiles
+float CG_PROJGRENADES = 235;	// Separated for extra testing
+float CG_PROJCELLS = 240;		// Mainly used for plasma
+float CG_PROJHAZARD = 241;		// Hazard projectiles (flame/plasma)
 float CG_MINIONEGG = 245;		// Special minion eggs
 float CG_WEAPON = 250;			// All weapon items
+float CG_PROGRESSION = 260;		// All progression items
 float CG_ARMOR = 275;			// All armor types
 float CG_KEY = 300;				// All keys (gold/silver/custom)
 float CG_RUNE = 310;			// All runes 1-4
@@ -26,7 +29,10 @@ float CG_TRAPS = 400;			// Endless supply of traps!
 float CG_MISCENT = 410;			// All misc entity types
 float CG_TEMPENT = 420;			// All temporary types (gibs, smoke, sparks)
 float CG_BREAKABLE = 430;		// All breakable types
+float CG_TRIGGERS = 440;		// All trigger types (bmodels)
+float CG_TARGETS = 445;			// All target types
 float CG_FUNCMOVER = 450;		// All FUNC movers
+float CG_HIPROTATE = 460;		// All Hipnotic rotation stuff
 float CG_MONSTERS = 500;		// Default
 
 //----------------------------------------------------------------------
@@ -50,7 +56,8 @@ float CG_WIZARD = 680;			// (10) Wizard, Gargoyle, Gaunt, Skull Wizard, Skull, N
 float CG_ZOMBIE = 685;			// (3) Zombie, Knight, Mummy
 float CG_XMAS = 686;			// (4) Elf, Raindeer, Snowman, Santa
 float CG_BOSS = 690;			// (3) Cthon, Old one, Anaconda
-float CG_DRAGON = 695;			// (9) Rogue Dragon, Drake Dragons, Drake Dragon King
+float CG_DRAGON = 695;			// (9) Rogue Dragon, Drake Dragons (7 variants), Drake Dragon King
+float CG_HARMLESS = 777;		// (1) Frog
 
 //======================================================================
 // Unique Class Types for quicker entity searches
@@ -67,12 +74,14 @@ float CT_CAMERA = 16;			// Camera entity (info_intermission)
 float CT_MISCCAM = 18;			// Misc Camera entity
 
 float CT_LIGHT = 20;			// Light entity
+float CT_LIGHTSTATIC = 21;		// Static light entity
 float CT_SOUNDEMITTER = 22;		// Sound emitter
 float CT_DEVMARKER = 24;		// Developer model marker
 float CT_PATHCORNER = 26;		// Standard path nodes
 
 float CT_ENEMYTARGET = 30;		// Target enemy for flying enemies
 float CT_ATTACHMENT = 32;		// Attachment for entities
+float CT_TETHERENT = 33;		// Code generated tether point
 float CT_ESTATE = 34;			// Entity state modifier
 float CT_MAPVAR = 35;			// Map Variable logic
 
@@ -84,13 +93,14 @@ float CT_PARTICLETEMP = 45;		// Particle emitter template
 float CT_TEMPGIB = 50;			// Temporary entity (gib)
 float CT_TEMPPHYS = 51;			// Temporary entity affected by physics triggers
 float CT_TEMPSPARK = 52;		// Temporary entity (spark)
-float CT_TEMPSTREAM = 54;		// Temporary entity (stream)
-float CT_REFLECTLIGHT = 55;		// Reflection entity (Lightning)
-float CT_REFLECTPLASMA = 56;	// Reflection entity (Plasma)
-
-float CT_STORYCONTROL = 60;		// Controller for story system
-float CT_STORYBOOK = 62;		// Story book for the player
-float CT_STORYCHAPTER = 64;		// Story chapter for story system
+float CT_TEMPSTREAM = 53;		// Temporary entity (stream)
+float CT_REFLECTLIGHT = 54;		// Reflection entity (Lightning)
+float CT_REFLECTPLASMA = 55;	// Reflection entity (Plasma)
+float CT_TEMPTRIG = 56;			// Temporary trigger (touch)
+float CT_SUMMONLIGHT = 57;		// Summon entity (Lightning)
+float CT_STORYBOOK = 58;		// Story book for the player
+float CT_STORYCONTROL = 59;	// Controller for story system
+float CT_STORYCHAPTER = 60;		// Story chapter for story system
 
 float CT_TARGETDUMMY = 90;		// Misc target dummy
 float CT_TARGETNUMBER = 95;		// Misc number drawn ingame
@@ -126,6 +136,8 @@ float CT_MONFANGELLORD = 124;	// Hexen2 Fallen Angel Lord
 float CT_MONFISH = 125;			// Fish fish fishy
 float CT_MONOCTOPUS = 126;		// Octopussy little cuty (-Madfox)
 float CT_MONHYDRA = 127;		// Hydra from Hexen 2 - added to extras_r5 by khreathor - using extras_r5 version
+float CT_MONDYONG = 128;		// Mini Shub with extra tentacles Four Feathers MOD (Madfox)
+float CT_MONFROG = 129;			// Fragy froggy frog (-Madfox)
 float CT_MONHELLK = 130;		// Strong spikey Knights
 float CT_MONKNIGHT = 140;		// Small metal Knights
 float CT_MONOGRE = 150;			// Chainsaw wielding manics
@@ -133,7 +145,7 @@ float CT_MONOGREFISH = 155;		// Madfox fishing ogre
 float CT_MONSHAL = 160;			// Shalrath / Vore
 float CT_MONSHAM = 165;			// Shambler
 float CT_MONBOGLORD = 166;		// Lord of the Bog! (Big shammy)
-float CT_MONSPAWN = 170;		// Bouncing annoying shit!
+float CT_MONSPAWN = 170;		// Bouncing annoying crudblossom!
 float CT_MONWIZARD = 180;		// Wizard / Scrags
 float CT_CACHEWIZARD = 181;		// Special entity for precache of assets
 float CT_MINIONWIZARD = 182;	// Minion Spawning version for Nour Boss
@@ -156,6 +168,7 @@ float CT_MONDCROSS = 205;		// HD Knight (Crossbow)
 float CT_MONDFURY = 210;		// HD Knight (Fury)
 float CT_MONDBLOOD = 215;		// HD Hell Knight (Blood)
 float CT_MONDKNIGHT = 220;		// HD Hell Knight (Death)
+float CT_MONDPRINCE = 221;		// HD Hell Knight (Prince)
 float CT_MONDSERG = 225;		// HD Hell Knight (Sergeant)
 float CT_MONCOMM = 230;			// HD Hell Knight (Commander)
 
@@ -165,21 +178,27 @@ float CT_MONHOGREMAC = 255;		// HD Ogre (Mace)
 float CT_MONHOGREHAM = 260;		// HD Ogre (Hammer)
 
 // New base monster series (Inspired by lunaran/Quoth)
-float CT_MONARMYROCKET = 270;		// Army Soldier (Rocket)
-float CT_MONARMYGRENADE = 272;		// Army Soldier (Grenade)
-float CT_MONARMYPLASMA = 275;		// Army Soldier (Plasma)
+float CT_MONARMYROCKET = 270;	// Army Soldier (Rocket)
+float CT_MONARMYGRENADE = 272;	// Army Soldier (Grenade)
+float CT_MONARMYPLASMA = 275;	// Army Soldier (Plasma)
 float CT_MONDEFENDER = 280;		// Enforcer SSG/GL (Defender)
 float CT_MONELIMATOR = 285;		// Enforcer Plasma (Eliminator)
 float CT_MONMEGAFORCE = 286;	// Mega Enforcer (Plasma+Rocket)
+float CT_MONDEFLECTOR = 287;	// The Deflector (Plasma+Rocket)
+float CT_MONPHOBETOR = 288;		// Final giant cloaked boss
+float CT_MONPSYDER = 289;		// Large floating spawner mini boss
+float CT_MONMANGLIOCH = 290;	// Strange floating alien creature Nehara MOD (Mindcrime)
+float CT_MONJUSTICE = 291;		// Large knight with flat sword
 
-// Nehara MOD (Mindcrime)
-float CT_MONMANGLIOCH = 290;	// Strange floating alien creature
 
-// Bal MOD (Bal)
-float CT_MONTURRETB = 295;		// Large ball surface turret
 
-// Hexen 2 series (Raven Software)
-float CT_MONSPIDER = 300;		// Spiders (brown/green versions)
+float CT_MONTURRETB = 295;		// Large ball surface turret // Bal MOD (Bal)
+float CT_MONSWEEPER = 296;		// Knight size floating mine layer
+float CT_MONMAMMOTH = 297;		// Large two stage mini "the fridge" boss
+float CT_MONTHUMPER = 298;		// Regular version of mammoth boss
+float CT_MONJUDGE = 299;		// Large BOSS with glowing sword
+float CT_MONSPIDER = 300;		// Spiders (brown/green versions) Hexen 2 series (Raven Software)
+float CT_MONSTEELCLAW = 301;	// Steel Claw (bleed attack spider)
 float CT_CACHESPIDER = 302;		// Special entity for precache of assets
 float CT_CACHENECRO = 303;		// Special entity for precache of assets
 float CT_MINIONSPIDER = 304;	// Minion Spawning version from wraith
@@ -230,6 +249,8 @@ float CT_MONSWAMPLING = 375;		// Tiny swamplings! ahh so cute!
 float CT_MONDROLE = 380;		// Fast moving tentacle tank with rockets
 float CT_MONFREDDIE = 381;		// Slow moving mechanical ogre mutant
 float CT_MONGAUNT = 382;		// Flying harpy thing with plasma bolts!
+float CT_CACHEGAUNT = 383;		// Cache for minion gaunts
+float CT_MINIONGAUNT = 384;		// Minion gaunts
 float CT_MONJIM = 385;			// Jim the flying robot of doom!
 float CT_MONJIMROCKET = 386;		// Jim has a rocket launcher!
 float CT_MONGUG = 387;				// Gug!
@@ -271,9 +292,9 @@ float CT_PROJ_SANTA = 424;		// Santa Snowball shotgun!
 float CT_PROJ_WIZ = 425;		// Wizard Spit
 float CT_PROJ_NOUR1 = 426;		// Nour Spit 
 float CT_PROJ_MPOISON = 427;	// Minotaur Poison Bolt (nail)
-float CT_PROJ_WPOISON = 428;	// Wraith Poison Bolt (nail)
-float CT_PROJ_FURY2 = 429;		// Fury Spit with grenade trail
-
+float CT_PROJ_MBLOOD = 428;		// Alternative Minotaur Bolt (nail)
+float CT_PROJ_WPOISON = 429;	// Wraith Poison Bolt (nail)
+float CT_PROJ_FURY2 = 430;		// Fury Spit with grenade trail
 
 
 
@@ -285,28 +306,26 @@ float CT_PROJ_ENFHKN = 438;		// Ultra Enforcer knight spike
 float CT_PROJ_LAVANG = 439;		// Lava nailgun
 float CT_PROJ_LASER = 440;		// Enforcer/Traps/Bob Laser
 float CT_PROJ_PLASMA = 441;		// Generic Plasma (blue laser version)
-float CT_PROJ_LAVASNG = 442;		// Lava super nailgun
-float CT_PROJ_GAUNT = 443;		// Gaunt Plasma bolt
-float CT_PROJ_MINO = 444;		// Minotaur Plasma bolt
-float CT_PROJ_WBOLT = 445;		// Wraith Hitscan Bolt 
-float CT_PROJ_BLBOLT = 446;		// Boglord fast bolt
-float CT_PROJ_LAVASPIK = 447;		// Lava nail
-
+float CT_PROJ_FLAME = 442;		// Burning (sprite based) flame
+float CT_PROJ_LAVASNG = 443;	// Lava super nailgun
+float CT_PROJ_GAUNT = 444;		// Gaunt Plasma bolt
+float CT_PROJ_MINO = 445;		// Minotaur Plasma bolt
+float CT_PROJ_WBOLT = 446;		// Wraith Hitscan Bolt 
+float CT_PROJ_BLBOLT = 447;		// Boglord fast bolt
+float CT_PROJ_LAVASPIK = 448;	// Lava nail
 float CT_PROJ_BLBOLT2 = 449;	// Boglord fast bolt (red)
-
-
 float CT_PROJ_GL = 450;			// Grenade projectile
-
+float CT_PROJ_RICLASER = 451;	// Ricochet ( attack_ricochet = bounce qty )
 float CT_PROJ_GLMON = 452;		// Monster grenades
-float CT_PROJ_GLMONMULTI = 453;		// Monster multi-grenades
-float CT_PROJ_GLMONPROX = 454;		// Monster grenades
+float CT_PROJ_GLMONMULTI = 453;	// Monster multi-grenades
+float CT_PROJ_GLMONPROX = 454;	// Monster grenades
 float CT_PROJ_MEGG = 455;		// Minion Egg (grenade arc+bounce)
-
-
-
-
+float CT_PROJ_SWEEPER2 = 456;	// Sweeper (blue/red+grenade arc)		Hazard / Grenade projectiles
+float CT_PROJ_DPRINCE2 = 457;	// Dark prince (blue/red+grenade arc)
+float CT_PROJ_DEFLECT1 = 458;	// The Deflector (rocket)
+float CT_PROJ_SWEEP1 = 459;		// Sweeper mine/rocket
 float CT_PROJ_FLESH = 460;		// Zombie Flesh (grenade arc)
-
+float CT_PROJ_DPRINCE1 = 461;	// Dark Prince (spike ball)
 float CT_PROJ_FLESHP = 462;		// Zombie Poison Flesh (grenade arc)
 float CT_PROJ_SWAMP = 463;		// Swampling Spit (grenade arc)
 float CT_PROJ_ELF = 464;		// Elf snowball (grenade arc)
@@ -323,17 +342,22 @@ float CT_PROJ_GARG = 475;		// Gargoyle fireball
 float CT_PROG_RLMEGAF = 476;	// Mega Enforcer (rocket)
 float CT_PROJ_SKULLW = 477;		// Skull Wizard Skull (rocket)
 float CT_PROJ_SKULLWP = 478;	// Skull Wizard Skull (poison rocket)
+float CT_PROJ_BARON = 479;		// The Baron spike ball
 float CT_PROJ_FURY1 = 480;		// Fury Knight spike ball +rocket trail
+float CT_PROJ_JUDGER = 481;		// RED judicator arrows
 float CT_PROJ_ARMY = 482;		// Army rocket
 float CT_PROJ_JIM2 = 483;		// Jim robot rocket
 float CT_PROJ_SEEKER = 484;		// Seeker robot rocket
 float CT_PROJ_DROLE = 485;		// Drole fireball
+float CT_PROJ_JUDGEB = 486;		// BLUE judicator arrows
 float CT_PROJ_BLORD = 487;		// Bog Lord Slime bomb
 float CT_PROJ_BLORD2 = 488;		// Bog Lord Red Slime bomb
+float CT_PROJ_JUSTICER = 489;	// RED justice arrows
 float CT_PROJ_EIDO1 = 490;		// Eidolon boulder
+float CT_PROJ_MAMMOTH = 491;	// Mammoth rocket
 float CT_PROJ_ICEG1 = 492;		// Ice Golem ice shard
 float CT_WANDSPARK = 493;		// Magic wand normal spark
-float CT_WANDBIGSPARK = 494;		// Magic wand large burst
+float CT_WANDBIGSPARK = 494;	// Magic wand large burst
 float CT_PROJ_SHAL = 495;		// Shalrath spike ball +purple trail
 float CT_PROJ_SERG = 496;		// Death Sergeant spike ball +hknight trail
 float CT_PROJ_SHUB1 = 497;		// Custom Shub homing spike attack
@@ -387,7 +411,7 @@ float CT_ARTLAVASHIELD = 576;	// Lava Shield
 float CT_ARTBLASTBELT = 577;	// Blast Belt
 float CT_ARTJUMPBOOTS = 578;	// Jump Boots
 
-
+float CT_PROGSPAWN = 589;		// Progression spawn
 float CT_ARTTOME = 590;			// Tome of Power
 float CT_ARTPSHIELD = 591;		// Power Shield
 float CT_ARTGRAVBELT = 592;		// Anti-Gravity Belt
@@ -436,7 +460,9 @@ float CT_MISCGIBF = 694;		// Misc Gib fountain
 
 //----------------------------------------------------------------------
 float CT_AMMOPACK = 700;		// Ammo Backpacks
+float CT_AMMODROPPACK = 701;	// Dropped Ammo Backpacks from monsters
 float CT_AMMORANDOM = 702;		// Random Ammo Backpack
+float CT_AMMOITEMPACK = 703;	// Ammo Backpack for players
 float CT_AMMOSHELLS = 710;		// Different ammo types
 float CT_AMMONAILS = 720;
 float CT_AMMOROCKETS = 730;
@@ -449,23 +475,18 @@ float CT_AMMOPLASMA = 745;
 float CT_AMMOBLOODCRYSTALS = 746;
 float CT_AMMOVOIDSHARDS = 747;
 float CT_AMMOELEMENTAL = 748;
-
+float CT_HEALVIAL = 749;		//  5 health pack
 float CT_HEALROT = 750;			// Different Health packs
-
-
-
-
-float CT_HEALNORM = 755;
-
-
-
-
-float CT_HEALMEGA = 760;
+float CT_HEALNORM = 751;		// 25 health pack
+float CT_HEALMEGA = 752;		// 100 Mega health
 
 float CT_ARMOR1 = 770;			// Green armour
 float CT_ARMOR2 = 775;			// Yellow armour
 float CT_ARMORINV = 790;		// Red armour
-
+float CT_ARMORITEMPACK = 791;	// Armour shard system
+float BACKARMGRN = 15;			// Green shards
+float BACKARMYEL = 30;			// Yellow shards
+float BACKARMRED = 45;			// Red shards 
 
 //----------------------------------------------------------------------
 float CT_FUNCDOOR = 800;		// Func door
@@ -477,11 +498,17 @@ float CT_FUNCPSWITCH = 812;		// Func Pressure Switch
 float CT_FUNCINSVOLUME = 813;	// Func to detect inside volume
 
 float CT_FUNCBOB = 815;			// Func bobbing bmodels
+float CT_FUNCSHADOW = 816;		// Func shadows
+
 float CT_FUNCTRAIN = 820;		// Func train
+
 float CT_FUNCWALL = 830;		// Func wall
+float CT_FUNCTOGWALL = 831;		// Func wall (toggle)
 float CT_FUNCILLUSIONARY = 832;	// Func illusionary
 float CT_FUNCLASER = 834;		// Func laser
 float CT_FUNCSKILL = 836;		// Func_skill pillars
+float CT_FUNCCHAOS = 837;		// Func_chaos pillar
+float CT_FUNCHOOK = 838;		// Func Grapple Hook point
 
 float CT_FUNCBREAK = 840;		// Func breakable (parent)
 float CT_FUNCBREAKWALL = 841;	// Bmodel to activate after breakage
@@ -489,6 +516,13 @@ float CT_FUNCBREAKMDL = 845;	// Func breakable (model)
 float CT_FUNCBREAKSPN = 846;	// Func breakable (spawner)
 float CT_FUNCBREAKOBJ = 847;	// Func breakable (rubble))
 float CT_FUNCPUSHABLE = 850;	// Func pushable
+float CT_ROTATEORG = 851;		// Origin point for rotation
+float CT_ROTATEPATH = 852;		// Rotating entity path_corner
+float CT_ROTATEOBJ = 853;		// Rotating bmodel
+float CT_ROTATEENT = 854;		// Rotating entity (continous)
+float CT_ROTATEMOVE = 855;		// Rotating clip brushes!
+float CT_ROTATETRAIN = 856;	// Rotating func_train (path corners)
+float CT_ROTATEDOOR = 857;		// Rotating func_door (dual-state)
 
 float CT_FUNCEPISODEGATE = 875;	// Episode gates (not used anymore)
 float CT_FUNCBOSSGATE = 880;	// Final boss gate (not used anymore)
@@ -504,33 +538,38 @@ float CT_TRIGRELAY = 910;		// Relay, point entity no touch
 
 float CT_TRIGDOORSTATE = 914;	// Set func_door to specific state
 float CT_TRIGRELAYDELAY = 915;	// Relay, point entity no touch
+float CT_TRIGTIMER = 916;		// Timer, point entity no touch
 
 float CT_TRIGCOUNT = 920;		// Count, point entity no touch
 
 float CR_TRIGENG = 922;			// Engine, point entity no touch
+float CT_TRIGPLAYPART = 923;	// Player particles, point entity no touch
 
 float CT_TRIGRUNES = 925;		// Rune, volume
 float CT_TRIGSKILLS = 927;		// Skill, volume
 float CT_TRIGTELEPORT = 930;	// Trigger teleport
+
 float CT_MISCTELEPORT = 932;	// info_teleport_destination
 float CT_MISCTELCAMERA = 934;	// info_camera_destination
 float CT_MISCTELINSTANT = 936;	// info_teleportinstant_dest (volume)
 float CT_SKULLTELEPORT = 938;	// info_skullwiz_destination
 float CT_TRIGEXPLODE = 945;		// Trigger sprite explosion
+
 float CT_TRIGSECRET = 950;		// Secret, volume
+float CT_TRIGLIGHTSTYLE = 954;	// Lightstyle, volume
 float CT_TRIGLADDER = 955;		// Ladder, volume
 float CT_TRIGFOG = 956;			// Fog, volume
 float CT_TRIGSKYFOG = 957;		// Sky Fog, volume
 float CT_TRIGGRAVITY = 958;		// Gravity, volume
-
-float CT_TRIGHURT = 960;		// Hurt, volume
-
-float CT_TRIGGIVEITEM = 964;	// Give items, volume
-float CT_TRIGHEAL = 965;		// Heal, volume
-
+float CR_TRIGFALLSPEED = 959;	// Player fall speed, volume
+float CR_TRIGMAXHP = 960;		// Player max HP, volume
+float CT_TRIGHURT = 961;		// Hurt, volume
+float CT_TRIGHEAL = 962;		// Heal, volume
+float CT_TRIGGIVEITEM = 963;	// Give items, volume
+float CT_TRIGTAKEART = 964;	// Take artifacts, volume
 float CT_TRIGTSOUND = 968;		// Touch sounds, volume
-
 float CT_TRIGPUSH = 970;		// Push, volume
+
 float CT_TRIGVELOCITY = 972;	// Velocity, volume
 float CT_TRIGCONVEYOR = 974;	// Conveyor, volume
 float CT_TRIGLEVEL = 975;		// Change level
@@ -541,15 +580,12 @@ float CT_TRIGCDTRACK = 979;		// Change CD track
 float CT_TRIGMONJUMP = 980;		// Triger monster to jump forward
 float CT_TRIGNOJUMP = 981;		// Trigger monster to NOT jump!
 float CT_TRIGMONDROP = 982;		// Trigger monster to fall naturally
-
-float CT_TRIGMONTURRET = 985;	// Trigger monster to turn into turret
-
-float CT_TRIGMONMOVE = 987;		// Trigger monster movement state
-float CT_TRIGMONBREAK = 990;	// Trigger monster/breakable together
-
-float CT_TRIGMONKILL = 992;		// Trigger monster to be killed
-
-float CT_TRIGMONATTACK = 996;		// Trigger monster to attack something
+float CT_TRIGMONTURRET = 983;	// Trigger monster to turn into turret
+float CT_TRIGMONMOVE = 984;		// Trigger monster movement state
+float CT_TRIGMONBREAK = 985;	// Trigger monster/breakable together
+float CT_TRIGMONKILL = 986;		// Trigger monster to be killed
+float CT_TRIGMONATT = 987;		// Trigger monster to attack something
+float CT_TRIGMONATTACK = 988;	// Trigger monster to attack something
 
 float CT_TRIGVOID = 999;		// Skybox garbage collector!
 //----------------------------------------------------------------------

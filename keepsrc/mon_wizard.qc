@@ -229,9 +229,11 @@ void() wiz_die =
 QUAKED monster_wizard (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 ======================================================================*/
 void() setup_wizard;
-void() monster_wizard =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_wizard = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_wizard.mdl";
 	self.headmdl = "progs/h_wizard.mdl";
@@ -279,9 +281,11 @@ void() setup_wizard =
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
 	if (self.health < 1) self.health = 80;
 	self.gibhealth = -30;
+	self.gibbed = FALSE;				// Not fallen apart as of yet
 	self.pain_flinch = 70;				// high pain threshold
 	self.pain_longanim = TRUE;			// Has long pain animation for Shadow Axe
 	self.blockudeath = TRUE;			// no humanoid death sound
+	self.steptype = FS_FLYING;			// Wandering around!
 	if (self.height == 0) self.height = MONAI_ABOVEDIST; // Custom height
 	self.attack_offset = '0 0 30';		// Acid spit start location
 
@@ -300,6 +304,10 @@ void() setup_wizard =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	if(!self.classtype) self.classtype = CT_MONWIZARD;
 	if (!self.classgroup) self.classgroup = CG_WIZARD;

@@ -553,7 +553,10 @@ void(entity inflictor, entity attacker, float damage) polyp_pain = {
 };
 
 void() monster_polyp = {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/quoth2pt2full/polyp.mdl";
 	precache_model("progs/quoth2pt2full/polyp.mdl");
@@ -598,6 +601,10 @@ void() monster_polyp = {
 		self.th_stand = polyp_float1;
 		self.th_walk = polyp_walkfly1;
 	}
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.classtype = CT_MONPOLYP;
 	self.classgroup = CG_SPAWN;

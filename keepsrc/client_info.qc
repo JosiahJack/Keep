@@ -2,8 +2,14 @@
  INFO ENTITIES
 ======================================================================*/
 void() info_null = { remove(self); };
+
+// Sometimes this entity is used as point or bmmodel entity
+// It depends on the mapper and what they are trying to do
 void() info_notnull = {};
+
 void() info_target = {};
+// New skyroom feature for QSS clients
+void() info_skyroom = { remove(self); };
 
 /*======================================================================
 //QUAKED info_player_start (1 0 0) (-16 -16 -24) (16 16 24) x x x x x x x x Not_Easy Not_Normal Not_Hard Not_DM Dyn_Easy Dyn_Normal Dyn_Hard Dyn_Night
@@ -18,6 +24,23 @@ DEFAULT starting point for a player
 
 ======================================================================*/
 void() info_player_start = { 
+	self.classtype = CT_SPAWNSP;
+	self.estate = ESTATE_ON;
+};
+
+//======================================================================
+/*QUAKED info_player_startdev (1 1 0.5) (-16 -16 -24) (16 16 24) x x x x x x x x Not_Easy Not_Normal Not_Hard Not_DM Dyn_Easy Dyn_Normal Dyn_Hard Dyn_Night
+{ model(":progs/player.mdl"); }
+DEFAULT starting point for a DEVELOPER only
+-------- KEYS --------
+target : triggered target(s) when used as a client destination
+angle  : Starting view angle
+-------- SPAWNFLAGS --------
+-------- NOTES --------
+DEFAULT starting point for a DEVELOPER only
+
+======================================================================*/
+void() info_player_startdev = { 
 	self.classtype = CT_SPAWNSP;
 	self.estate = ESTATE_ON;
 };
@@ -95,13 +118,78 @@ angles : Pitch Yaw Roll (viewing angle after teleporting)
 Destination marker for a teleporter
 
 ======================================================================*/
+void() info_teleport_angle = 
+{
+	// Find angletarget entity in world
+	self.movetarget = find(world, targetname, self.angletarget);
+	if (self.movetarget) {
+		// Check for bmodel origin on self/angletarget entities
+		if (self.bsporigin) self.dest1 = bmodel_origin(self);
+		else self.dest1 = self.origin;
+		// Find the destination origin
+		if (self.movetarget.bsporigin) self.dest2 = bmodel_origin(self.movetarget);
+		else self.dest2 = self.movetarget.origin;
+		// Update Z axis for any editor offset information
+		self.dest1 = self.dest1 - self.view_ofs;
+		// Create directional vector from source to target
+		self.movedir = normalize(self.dest2 - self.dest1);
+		// Convert vector direction to angles
+		self.mangle = vectoangles(self.movedir);
+		// Spawn a dev marker for visual reasons
+		spawn_arrow(self.dest1, self.mangle, SPNMARK_YELLOW);
+	}
+	else {
+		// Display console error and diamond in game
+		dprint("\b[INFO_TELE]\b angletarget is missing!\n");
+		if (self.bsporigin) spawn_marker(self.oldorigin, SPNMARK_YELLOW);
+		else spawn_marker(self.origin, SPNMARK_YELLOW);
+		// Reset angletarget field, its broken and not needed
+		self.angletarget = "";
+	}
+};
+
+//----------------------------------------------------------------------
+void() info_teleport_convert_updown =
+{
+	// Setup special mangle/movedir
+	// editor -1 = UP and -2 = DOWN
+	if (self.mangle == '0 -1 0') {
+		self.mangle = '270 0 0'; self.movedir = '0 0 1';
+	}
+	else if (self.mangle == '0 -2 0') {
+		self.mangle = '90 0 0'; self.movedir = '0 0 -1';
+	}
+};
+
+//----------------------------------------------------------------------
 void() info_teleport_destination =
 {
 	self.classtype = CT_MISCTELEPORT;
 	self.estate = ESTATE_ON;
-	self.mangle = self.angles;
-	self.angles = '0 0 0';
-	self.origin = self.origin + '0 0 27';
+	self.mangle = self.angles;	// Save for later
+	self.angles = '0 0 0';		// Don't need to be zero, previous code
+	self.view_ofs = '0 0 27';	// Z axis modifier for editor placement
+	self.origin = self.origin + self.view_ofs;
+	info_teleport_convert_updown();
+
+	// Cannot use info entity if targetname missing
+	if (self.targetname == "") {
+		dprint("\b[INFO_TELE]\b targetname is missing!\n");
+		spawn_marker(self.origin, SPNMARK_YELLOW);
+		entity_hide(self);
+	}
+	// Check for destination number errors
+	else if (self.teledest < 0) {
+		dprint("\b[INFO_TELE]\b Dest value cannot be negative\n");
+		spawn_marker(self.origin, SPNMARK_YELLOW);
+		self.teledest = 0;
+	}
+
+	// Check for angle target setup
+	if (self.angletarget != "") {
+		self.nextthink = time + 0.1 + random();
+		self.think = info_teleport_angle;
+	}
 };
 
 /*======================================================================
@@ -121,11 +209,15 @@ void() info_camera_destination =
 	self.estate = ESTATE_ON;
 };
 
-/*======================================================================
-//QUAKED info_teleportinstant_dest (.5 .5 .5) ? x
+//======================================================================
+/*QUAKED info_teleportinstant_dest (.5 .5 .5) ? x
 Destination for an instant teleporter
 -------- KEYS --------
 targetname : link to trigger_teleport
+target     : fires when used as a destination (works only once)
+angletarget: targeting entity used for custom direction
+angles     : Pitch Yaw Roll (destination angle after teleporting)
+teledest   : Unique number for multiple teleporter destinations
 -------- SPAWNFLAGS --------
 -------- NOTES --------
 Destination for an instant teleporter
@@ -136,14 +228,48 @@ void() info_teleportinstant_dest =
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	self.classtype = CT_MISCTELINSTANT;
-	InitTrigger ();
+	self.estate = ESTATE_ON;
+	self.mangle = self.angles;	// Save for later
+	self.angles = '0 0 0';		// Zero'd to prevent bmodel twisting
+	self.view_ofs = '0 0 0';	// Z axis modifier for editor placement
+	info_teleport_convert_updown();
 	
+	// Stuff from InitTrigger
+	self.solid = SOLID_NOT;
+	self.movetype = MOVETYPE_NONE;
+	self.mdl = self.model;		// Save model for later
+	setmodel (self, self.mdl);	// set size and link into world
+	self.bbmins = self.mins;	// Save bmodel bounds for later
+	self.bbmaxs = self.maxs;
+
 	// Work out true volume origin
+	self.bsporigin = TRUE;
 	self.oldorigin = bmodel_origin(self);
+	
 	// Don't need volume brush anymore
 	setmodel(self, "");
 	setsize(self, VEC_ORIGIN, VEC_ORIGIN);
+
+	// Cannot use info entity if targetname missing
+	if (self.targetname == "") {
+		dprint("\b[INFO_TELE]\b targetname is missing!\n");
+		spawn_marker(self.oldorigin, SPNMARK_YELLOW);
+		entity_hide(self);
+	}
+	// Check for destination number errors
+	else if (self.teledest < 0) {
+		dprint("\b[INFO_TELE]\b Dest value cannot be negative\n");
+		spawn_marker(self.oldorigin, SPNMARK_YELLOW);
+		self.teledest = 0;
+	}
+
+	// Check for angle target setup
+	if (self.angletarget != "") {
+		self.nextthink = time + 0.1 + random();
+		self.think = info_teleport_angle;
+	}
 };
+
 
 /*======================================================================
 //QUAKED info_intermission (1 0.5 0.5) (-16 -16 -16) (16 16 16) NO_INTERMIS SOLID x x x x x x Not_Easy Not_Normal Not_Hard Not_DM

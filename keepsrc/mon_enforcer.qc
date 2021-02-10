@@ -391,6 +391,10 @@ void() monster_base_enforcer =
 	if (self.classtype == CT_MONELIMATOR) self.resist_cells = 0.5;
 	if (self.classtype == CT_MONDEFENDER) self.resist_rockets = 0.5;
 	if (self.classtype == CT_MONENF_MEGA) self.resist_cells = 0.75;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 	
 	self.th_stand = enf_stand1;
 	self.th_walk = enf_walk1;
@@ -406,69 +410,43 @@ void() monster_base_enforcer =
 void enforcer_spawnshieldfx();
 
 //----------------------------------------------------------------------
-void() monster_enforcer =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_enforcer = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 	
 	self.classtype = CT_MONENFORCER;
 	precache_model (MODEL_PROJ_LASER);	// Originally - progs/laser.mdl
 	precache_model2 ("progs/enforcer.mdl");
-
 	precache_model2 ("progs/h_mega.mdl");
-
 	precache_model2 ("progs/laser.mdl");
-
 	precache_model2 ("progs/laser2.mdl");
-
 	precache_model2 ("progs/k_spike.mdl");
 	precache_model2 ("progs/missile.mdl");
 	precache_sound2 ("enforcer/death1.wav");
-
 	precache_sound2 ("enforcer/enfire.wav");
-
 	precache_sound2 ("enforcer/enfstop.wav");
-
 	precache_sound2 ("enforcer/idle1.wav");
-
 	precache_sound2 ("enforcer/pain1.wav");
-
 	precache_sound2 ("enforcer/pain2.wav");
-
 	precache_sound2 ("enforcer/sight1.wav");
-
 	precache_sound2 ("enforcer/sight2.wav");
-
 	precache_sound2 ("enforcer/sight3.wav");
-
 	precache_sound2 ("enforcer/sight4.wav");
-
 	precache_sound2 ("enforcer/me_fire1.wav");
-
 	precache_sound2 ("enforcer/ue_fire1.wav");
-
 	precache_sound2 ("items/protect3.wav");
-
-
 	precache_sound2 ("enforcer/ue_die1.wav");
-
 	precache_sound2 ("enforcer/ue_die2.wav");
-
 	precache_sound2 ("enforcer/ue_die3.wav");
-
 	precache_sound2 ("enforcer/ue_site1.wav");
-
 	precache_sound2 ("enforcer/ue_site2.wav");
-
 	precache_sound2 ("enforcer/ue_site3.wav");
-
 	precache_sound2 ("enforcer/ue_site4.wav");
-
 	precache_sound2 ("enforcer/ue_site5.wav");
-
 	precache_sound2 ("enforcer/ue_pain1.wav");
-
 	precache_sound2 ("enforcer/ue_pain2.wav");
-
 	precache_sound2 ("enforcer/ue_pain3.wav");
 
 	if (self.spawnflags & ULTRA_ENF) {
@@ -511,9 +489,11 @@ void() monster_enforcer =
 };
 	
 //----------------------------------------------------------------------
-void() monster_defender =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_defender = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 	
 	self.classtype = CT_MONDEFENDER;
 	precache_model (MODEL_PROJ_GRENADE);
@@ -545,9 +525,11 @@ void() monster_defender =
 };
 
 //----------------------------------------------------------------------
-void() monster_eliminator =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_eliminator = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 	
 	self.classtype = CT_MONELIMATOR;
 	precache_model (MODEL_PROJ_PLASMA);

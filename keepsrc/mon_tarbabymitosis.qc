@@ -59,7 +59,8 @@ void(entity inflictor, entity attacker, float damage) tbaby_mitosis = {
 };
 
 void() monster_tarbaby_mitosis = {
-	if (deathmatch) { remove(self); return; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/mon_tarbaby.mdl";
 	self.headmdl = string_null;
@@ -88,6 +89,10 @@ void() monster_tarbaby_mitosis = {
 	self.resist_rockets = self.resist_cells = 0;
 
 	if (self.deathstring == "") self.deathstring = " was slimed by a Mitosis Spawn\n";
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.th_checkattack = SpawnCheckAttack;
 	self.th_stand = tbaby_stand1;

@@ -402,9 +402,11 @@ METAL : Chain mail metal armour and +100HP
 -------- NOTES --------
 
 ======================================================================*/
-void() monster_hogre =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_hogre = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_hogre.mdl";			// New Ogre Model
 	self.headmdl = "progs/ad171/h_hogre.mdl";
@@ -466,6 +468,10 @@ void() monster_hogre =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.th_checkattack = OgreCheckAttack;
 	self.th_stand = hogre_stand1;

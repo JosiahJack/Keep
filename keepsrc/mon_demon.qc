@@ -79,7 +79,7 @@ void(float side) Demon_Claw =
 	// Moved the check for melee distance to here with takedamage
 	// If the demon is outside of melee range then need miss swipe sound
 	// same goes for enemies that cannot be damaged (world geo mostly)
-	if (!ai_checkmelee(MONAI_MELEEDEMON) || !self.enemy.takedamage) {
+	if (!ai_checkmelee(MONAI_MELEEDEMON,FALSE) || !self.enemy.takedamage) {
 		// Melee claw miss sound
 		if (random() < 0.5) sound (self, CHAN_WEAPON, "weapons/sword1a.wav", 1, ATTN_NORM);
 		else sound (self, CHAN_WEAPON, "weapons/sword1b.wav", 1, ATTN_NORM);
@@ -255,7 +255,10 @@ QUAKED monster_demon1 (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 ======================================================================*/
 void() monster_demon1 =
 {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/mon_demon.mdl";
 	self.headmdl = "progs/h_demon.mdl";
@@ -321,6 +324,11 @@ void() monster_demon1 =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 	
 	self.th_checkattack = DemonCheckAttack;
 	self.th_stand = demon1_stand1;
@@ -338,3 +346,5 @@ void() monster_demon1 =
 	
 	monster_start();
 };
+
+void() monster_demon = { self.classname = "monster_demon1"; monster_demon1(); }; //Redirect for typos

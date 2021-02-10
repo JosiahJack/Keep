@@ -49,15 +49,16 @@ void() zer_awake =
 */
 void() monster_zer =
 {
-	if (deathmatch)
-	{
-		remove(self);
-		return;
-	}
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+
 	precache_model ("progs/drake/bbg.mdl");
 	precache_sound ("boss1/out1.wav");
 
-	if (self.deathstring == "") self.deathstring = " was destroyed by the Zerstorer\n";
+	if (self.deathstring == "") self.deathstring = " was destroyed by the Zerstörer\n";
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
 
 	self.use = zer_awake;
 };

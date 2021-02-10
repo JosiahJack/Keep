@@ -263,7 +263,7 @@ void()	dfury_rswing5	=[	$rswing5,	dfury_rswing6	] {ai_charge(7);ai_melee();};
 void()	dfury_rswing6	=[	$rswing6,	dfury_rswing7	] {ai_charge(5);ai_melee(); dfury_sword_sound();};
 void()	dfury_rswing7	=[	$rswing7,	dfury_rswing8	] {ai_charge(2);monster_footstep(FALSE);};
 void()	dfury_rswing8	=[	$rswing8,	dfury_run1	] {ai_charge(1);
-	if (ai_checkmelee(MONAI_MELEEFRONT) && self.enemy.health > 0) self.think = dfury_lswing3;
+	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE) && self.enemy.health > 0) self.think = dfury_lswing3;
 };
 
 //----------------------------------------------------------------------
@@ -275,7 +275,7 @@ void()	dfury_lswing5	=[	$lswing5,	dfury_lswing6	] {ai_charge(7);ai_melee();};
 void()	dfury_lswing6	=[	$lswing6,	dfury_lswing7	] {ai_charge(5);ai_melee(); dfury_sword_sound();};
 void()	dfury_lswing7	=[	$lswing7,	dfury_lswing8	] {ai_charge(2);monster_footstep(FALSE);};
 void()	dfury_lswing8	=[	$lswing8,	dfury_run1	] {ai_charge(1);
-	if (ai_checkmelee(MONAI_MELEEFRONT) && self.enemy.health > 0) self.think = dfury_rswing3;
+	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE) && self.enemy.health > 0) self.think = dfury_rswing3;
 };
 
 //----------------------------------------------------------------------
@@ -350,7 +350,7 @@ void()	dfury_lunge13	=[	$lunge13,	dfury_lunge14	] {ai_charge(1);ai_melee();monst
 void()	dfury_lunge14	=[	$lunge14,	dfury_lunge15	] {ai_charge(1);};
 void()	dfury_lunge15	=[	$lunge15,	dfury_run1	] {ai_resetangles();
 	// If close enough starting swinging left+right ELSE return to run cycle
-	if (ai_checkmelee(MONAI_MELEEFRONT) && self.enemy.health > 0) self.think = dfury_rswing3;
+	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE) && self.enemy.health > 0) self.think = dfury_rswing3;
 };
 
 //----------------------------------------------------------------------
@@ -382,8 +382,8 @@ void()	dfury_watk22=[	$w_attack22,dfury_run1	] {ai_charge(21);
 	// this is a long animations set for chasing the player
 	// Quick check if within melee range, close melee range or random magic attack!
 	if (self.enemy.health > 0) {
-		if (ai_checkmelee(MONAI_MELEEFRONT)) self.think = dfury_rswing3;
-		else if (ai_checkmelee(MONAI_JUMPFURYNEAR)) self.think = dfury_slice1;
+		if (ai_checkmelee(MONAI_MELEEFRONT,FALSE)) self.think = dfury_rswing3;
+		else if (ai_checkmelee(MONAI_JUMPFURYNEAR,FALSE)) self.think = dfury_slice1;
 		else if (random() < 0.3) self.think = dfury_magic;
 	}
 };
@@ -711,9 +711,11 @@ void(float soundtype) dfury_grunt_sound =
 /*======================================================================
 QUAKED monster_dfury (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 ======================================================================*/
-void() monster_dfury =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_dfury = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_dfury.mdl";
 	self.headmdl = "progs/ad171/h_dfury.mdl";
@@ -795,6 +797,10 @@ void() monster_dfury =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 	
 	self.th_checkattack = DFuryCheckAttack;
 	self.th_stand = dfury_standL1;

@@ -467,7 +467,10 @@ QUAKED monster_dguard (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 ======================================================================*/
 void() monster_dguard =
 {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_dguard.mdl";
 	self.headmdl = "progs/ad171/h_dguard.mdl";				// Large head
@@ -519,6 +522,10 @@ void() monster_dguard =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 	
 	self.th_stand = dguard_stand1;
 	self.th_walk = dguard_walk1;

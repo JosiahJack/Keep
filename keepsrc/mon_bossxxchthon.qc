@@ -42,6 +42,7 @@ float() xxchthon_FindTarget =
 	if (self.health < 1) return FALSE;
 	if (intermission_running) return FALSE;
 	if (cinematic_running > 0) return FALSE;
+	if (self.passive_state) return FALSE;
 
 	// Find a client in current PVS
 	client = checkclient ();
@@ -468,9 +469,9 @@ void() xxchthon_awake =
 /*======================================================================
  QUAKED monster_chthon (1 0 0) (-128 -128 -24) (128 128 256)
 ======================================================================*/
-void() monster_chthon =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_chthon = {
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_bosschthon.mdl";
 	precache_model (self.mdl);
@@ -553,6 +554,9 @@ void() monster_chthon =
 	self.classtype = CT_MONXXCHTHON;
 	self.classgroup = CG_BOSS;
 	self.style = 0;
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
 	
 	// No targetname = no trigger!
 	if (self.targetname == "") {

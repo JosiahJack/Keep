@@ -7,7 +7,10 @@ float SOUND_PLAYONCE = 2;		// When triggered plays once
 void() ambient_sound_setup =
 {
 	if (self.volume > 1) self.volume = 1;
-	ambientsound (self.origin, self.noise, self.volume, ATTN_STATIC);
+	else if (self.volume < 0) self.volume = 0;
+	if (self.speed < 0) self.speed = ATTN_NONE;
+	else if (self.speed == 0) self.speed = ATTN_NORM;
+	ambientsound (self.origin, self.noise, self.volume, self.speed);
 };
 
 void() ambientsound_trigger_start = {
@@ -122,6 +125,48 @@ void() ambient_thunder =
 	ambient_sound_setup();
 };
 
+//----------------------------------------------------------------------
+// Quoth MOD - Extra ambient sounds
+//----------------------------------------------------------------------
+void() ambient_generalpurpose =
+{
+	// Check for sound file
+	if (self.noise == "") {
+		dprint("\b[AMBIENT_SOUND]\b Missing sound file at ");
+		dprint(vtos(self.origin)); dprint("\n");
+		spawn_marker(self.origin, SPNMARK_YELLOW);
+		remove(self);
+		return;
+	}
+	precache_sound (self.noise);
+	ambient_sound_setup();
+};
+
+//----------------------------------------------------------------------
+// Travil MOD - Extra ambient sounds
+//----------------------------------------------------------------------
+void() ambient_lavagurg =
+{
+	self.noise = "ambience/lavagurg.wav";
+	precache_sound (self.noise);
+	self.volume = 0.5;
+	ambient_sound_setup();
+};
+void() ambient_hevifals =
+{
+	self.noise = "ambience/hevifals.wav";
+	precache_sound (self.noise);
+	self.volume = 0.5;
+	ambient_sound_setup();
+};
+void() ambient_bublfals =
+{
+	self.noise = "ambience/bublfals.wav";
+	precache_sound (self.noise);
+	self.volume = 0.5;
+	ambient_sound_setup();
+};
+
 //======================================================================
 /*QUAKED ambient_custom_sound (0.5 0.1 0.8) (-16 -16 -8) (16 16 8) x PLAYONCE x x x x STARTOFF x
 Play a sound on a periodic basis
@@ -186,7 +231,7 @@ void() ambient_custom_play =
 	// Check for weather system?
 	if (self.check_weather == TRUE) {
 		// Check if weather system still active?
-		if (!query_configflag(SVR_WEATHER)) {
+		if (query_weathersystem() == TRUE) {
 			// never has multiple sounds
 			sound (self, self.impulse, self.noise, self.volume, self.speed);
 		}
@@ -304,6 +349,13 @@ void() ambient_custom_sound =
 		}
 		else self.estate_on();
 	}
+};
+
+//----------------------------------------------------------------------
+// Quoth version (not 100% compatible)
+void() play_sound_triggered = { 
+	self.spawnflags = self.spawnflags | ENT_STARTOFF;
+	ambient_custom_sound(); 
 };
 
 //----------------------------------------------------------------------

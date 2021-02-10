@@ -323,9 +323,9 @@ void() ftop_wakeup =
 /*======================================================================
  QUAKED monster_firetopboss (1 0.25 0.25) (-128 -128 -24) (128 128 256)
 ======================================================================*/
-void() monster_firetopboss =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_firetopboss = {
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_bosschthon.mdl";
 	precache_model (self.mdl);
@@ -349,8 +349,8 @@ void() monster_firetopboss =
 	self.bbmins = '-128 -128 -24';		// has own entity setup
 	self.bbmaxs = '128 128 256';
 	self.bboxtype = BBOX_CUSTOM;
+	self.flags = FL_MONSTER;		// Reset flag (no user settings)
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
-
 	self.health = self.max_health = MEGADEATH;
 	self.takedamage = DAMAGE_NO;
 	self.classtype = CT_MONFIRETOP;
@@ -358,8 +358,13 @@ void() monster_firetopboss =
 	self.infightextra = 8;
 	self.pain_ignore = 1;
 	self.yaw_speed = 20;
+	self.deadflag = DEAD_NO;
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
 
 	if (self.deathstring == "")  self.deathstring = " was destroyed by the Firetop Guardian\n";
+	self.lastorigin = self.origin;	// Origin for camera interpolation
 
 	// Always reset Ammo Resistance to be consistent
 	// The shamblers infront of the boss are suppose to be killed

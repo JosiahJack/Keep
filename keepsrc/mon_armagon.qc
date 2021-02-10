@@ -626,10 +626,9 @@ float () ArmagonCheckAttack = {
 void () monster_armagon = {
    local entity body;
 
-   if ( deathmatch ) {
-      remove (self);
-      return ;
-   }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+
    self.lefty = FALSE;
    precache_model ("progs/hipnotic/armabody.mdl");
    precache_model ("progs/hipnotic/armalegs.mdl");
@@ -673,6 +672,9 @@ void () monster_armagon = {
    // Always reset Ammo Resistance to be consistent
    self.resist_shells = self.resist_nails = 0;
    self.resist_rockets = 0; self.resist_cells = 0.5;
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
 
    self.gibhealth = -1000000;
    self.gibbed = FALSE;

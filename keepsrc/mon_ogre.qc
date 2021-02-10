@@ -137,7 +137,7 @@ void(float side, float dmgmultipler) chainsaw =
 	if (self.health < 1) return;
 
 	ai_damagebreakable(20);							// Damage any breakables
-	if (!ai_checkmelee(self.meleerange)) return;	// Too far away
+	if (!ai_checkmelee(self.meleerange,FALSE)) return;	// Too far away
 
 	// Can the target bleed? - generate blood
 	if (!CanDamage (self.enemy, self)) return;
@@ -634,7 +634,10 @@ void() monster_ogre_precache =
 //----------------------------------------------------------------------
 void() monster_ogre =
 {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	// Precache basic ogre models and sounds
 	monster_ogre_precache();
@@ -679,6 +682,10 @@ void() monster_ogre =
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
 
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
+
 	self.th_checkattack = OgreCheckAttack;
 	self.th_stand = ogre_stand1;
 	self.th_walk = ogre_walk1;
@@ -705,7 +712,8 @@ void() monster_ogre_marksman = {
 //----------------------------------------------------------------------
 void() monster_ogre_fishing =
 {
-	if (deathmatch) { remove(self); return; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 		
 	// Precache basic ogre models and sounds
 	monster_ogre_precache();

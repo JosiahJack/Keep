@@ -5,6 +5,14 @@ entity	lastspawn;					// client.qc (SelectSpawnPoint)
 void() versus_setup;
 entity () ammohealthsum;
 void() InitBodyQue;
+void() light_style_boundary;
+void() light_style_setuparray;
+void() pendulum_setuparray;
+void() mapvar_setuparray;
+void() player_fallspeed_reset;
+void() player_fallspeed_setup;
+void() Client_SyncEvilmode;
+
 //----------------------------------------------------------------------
 void() main =
 {
@@ -165,22 +173,26 @@ void() main =
 	precache_file2 ("maps/dm6.bsp");
 };
 
-/*======================================================================
-//QUAKED worldspawn (0 0 0) ? x
-Only used for the world.
+//======================================================================
+/*QUAKED worldspawn (0 0 0) ? x
+Unique entity in every map (read only in QC)
 -------- KEYS --------
-worldtype : World type 0 = medieval, 1 = metal, 2 = base
-wad       : list of Wad Files used by compiler (; for seperation)
-message   : Title of map
-sounds    : CD Music track to play (4-11)
+worldtype   : World type 0 = medieval, 1 = metal, 2 = base
+wad         : list of Wad Files used by compiler (; for separation)
+sounds      : CD Music track to play (4-11, 12+ custom tracks)
+message     : Title of map
 
-light     : Ambient light level (eg 5) 
-sky       : 6 sided cube for sky brushes (night_)
-_range    : Scales brightness range of all lights (useful for dirt)
+light       : Ambient light level (eg 5) 
+sky         : 6 sided cube for sky brushes (night_)
+_range      : Scales brightness range of all lights (useful for dirt)
+_dist       : Scales the fade distance of all lights by a factor of n
+_anglescale : Scaling factor for how much influence the angle of incidence
+_gamma      : Adjust brightness of final lightmap
 
 _sunlight          : Brightness of SUN (eg 100)
 _sunlight_color    : Red/Green/Blue (0.78 0.86 1.00)
 _sunlight_mangle   : Angle of sunlight (eg 0 -90 0)
+_sun_mangle        : Duplicate version of sunlight_mangle
 _sunlight_penumbra : Penumbra width, in degrees, of sunlight
 _sunlight_dirt     : 1 = enables dirt mapping on sun
 
@@ -188,40 +200,62 @@ _sunlight_dirt     : 1 = enables dirt mapping on sun
 _sunlight2       : Second SUN (eg 100)
 _sunlight2_color : Red/Green/Blue (0.78 0.86 1.00)
 _sunlight2_dirt  : 1 = enables dirt mapping on sun 2
+_sunlight3       : Third SUN! (ask MFX)
 
-_dirt       : 1 = enables dirtmapping (ambient occlusion) on all lights
-_dirtmode   : Choose between ordered (def=0) and randomized (1)
-_dirtscale  : Scale factor used in dirt calculations, def=1
-_dirtgain   : Exponent used in dirt calculation, def=1
-_dirtdepth  : Maximum depth of occlusion checking, def=128
+_dirt          : 1 = enables dirtmapping (ambient occlusion) on all lights
+_dirtmode      : Choose between ordered (def=0) and randomized (1)
+_dirtscale     : Scale factor used in dirt calculations, def=1
+_dirtgain      : Exponent used in dirt calculation, def=1
+_dirtdepth     : Maximum depth of occlusion checking, def=128
+_minlight_dirt : 1 enables dirtmapping (ambient occlusion) on minlight
+compilerstyle_start : starting point for target lights (set by compiler)
 
-gravity     : gravity of map (default = 800)
-fog         : console command (Den/R/G/B - '0.05 0.3 0.3 0.3')
-fog_density : Global fog density (works with trigger_fog)
-fog_colour  : Global fog colour (XYZ = RGB)
-fog_dpextra : extra DP fog parameters, default - '1 0 8192 1024 32'
-water_alpha : Water Alpha, default - 1.00
-particlemax : Amount of ACTIVE particles per map
+gravity        : gravity of map (default = 800)
+fog            : console command (Den/R/G/B - '0.05 0.3 0.3 0.3')
+fog_density    : Trigger fog starting density (default = 0.1)
+fog_colour     : Trigger fog starting colour (default = 0.1 0.1 0.1)
+fog_dpextra    : extra DP fog parameters, default - '1 0 8192 1024 32'
+skyfog_density : Trigger skyfog starting density (default = 0.5)
+water_alpha    : Water Alpha, default - 1.00
+particlemax    : Amount of ACTIVE particles per map
+playerweather  : Name of weather effect active above player
 
-no_item_offset  : All ammo/heal items use central point rotation
-no_item_rotate  : No random rotated for all items
-no_zaware       : Switch OFF zaware monster attacks
-no_sgprojectile : Switches OFF ALL shotgun projectiles
-no_sgcasing     : Switches OFF ALL shotgun casings
-no_liquiddmg    : Switch OFF liquid (slime/lava) monster damage
-no_surfacecheck : Switch OFF Darkplaces style particles, useful for large maps
-knight_defskin  : Default skin (0-3) type for new knight model
-bodyflrcheck    : All monster dead body check floor for gravity
-bodyfadeaway    : All monster dead bodies fade away
-sprite_particles: Switch all custom particles to sprites (builtin excluded)
+passive_state     : All monsters are setup in a passive state 1=ON
+no_item_offset    : All ammo/heal items use central point rotation
+no_item_rotate    : Not used anymore (keep for legacy reasons)
+no_zaware         : Switch OFF zaware monster attacks
+no_sgprojectile   : Switches OFF ALL shotgun projectiles
+no_sgcasing       : Switches OFF ALL shotgun casings
+no_liquiddmg      : Switch OFF liquid (slime/lava) monster damage
+no_trackondeath   : Homing missiles stop tracking when monster dead (1=active)
+hazard_dmg        : Hazard damage override for map (water=2/slime=4/lava=10)
+knight_defskin    : Default skin (0-3) type for new knight model
+bodyflrcheck      : All monster dead body check floor for gravity
+bodyfadeaway      : All monster dead bodies fade away
+sprite_particles  : Switch all custom particles to sprites (builtin excluded)
+no_bigprojectiles : Switches OFF large player projectiles size
+no_surfacecheck   : Stops surface checks for sky brushes (Very large maps only)
+mapvar_update     : Update map variables (Range X->Y=Z)
+ckeyhint          : Arcane key Inventory message 1=SUPPRESS (no msg to player)
 
-upgrade_axe     : Upgrade Axe -1=disable, 1=enable
-upgrade_ssg     : Upgrade Super Shotgun -1=disable, 1=enable
-upgrade_lg      : Upgrade Lightning Gun -1=disable, 1=enable
+jump_height     : Player jump height (def=270) initial boast from standing still
+fall_speedlow   : Fall speed for any checks (def=-300) must be negative no.
+fall_speedhigh  : Fall speed for damage checks (def=-650) must be negative no.
+fall_speeddebug : Display players fall velocity to console (1=ON, -1=OFF)
+fall_dmg        : Fall damage for player (def=5, -1=no dmg/sound)
+fall_dmgwater   : Fall damage into water (>0 for dmg/sound, -1=no dmg/sound)
+
+upgrade_axe     : Upgrade Axe -1=remove on spawn, 1=enable
+upgrade_ghook   : Upgrade Grapple Hook -1=remove on spawn, 1=enable
+upgrade_ssg     : Upgrade Super Shotgun -1=remove on spawn, 1=enable
+upgrade_lg      : Upgrade Lightning Gun -1=remove on spawn, 1=enable
 
 give_weapons    : Bit flag for which weapons to give to the player
 take_weapons    : 1=SG, 2=SSG, 4=NG, 8=SNG, 16=GL, 32=RL, 64=LG (excludes Axe)
 max_health      : Update player health if below this value
+reset_health    : Reset player health to this value (1-100)
+player_health   : Max/Mega/Skill (1=Easy,2=Normal,4=Hard,8=NM,15=All)
+bleeding_dmg    : Percentage reduction / HoT Qty / Initial pause
 currentammo     : =1 reset inventory, =0 minimum values
 ammo_shells     : Setup starting shell quanity (reset/minimum)
 ammo_nails      : Setup starting nails quanity (reset/minimum)
@@ -229,10 +263,27 @@ ammo_rockets    : Setup starting rockets quanity (reset/minimum)
 ammo_cells      : Setup starting cells quanity (reset/minimum)
 armortype       : Armour type to start with 1=Green, 2=Yellow, 3=Red
 armorvalue      : Quantity of armour to reset player (100/150/200)
+plasmagun_dmg   : Plasma gun damage override (def=45 0 20)
+
+gh_hookstyle    : Swing=0 / linear=1 movement of hook/client
+gh_debugmove    : Show debug entities for grapple movement (-1=def qty)
+gh_funchookonly : Only works with func grapple hook points
+gh_hookearly    : Chain pulling start before hook attached
+gh_maxdist      : Maximum distance grapple hook can travel
+gh_hookspeed    : Forward momentum of hook (rocket spd+)
+gh_pullspeed    : Forward momentum on chain (pulling forward)
+gh_mindist      : Minimum distance to slowdown velocity
+gh_minbeam      : Minimum distance to stop drawing beam
+gh_dmg          : Damage to Player/Monsters/World (def=4 8 8)
+gh_linechain    : Linear movement while on the chain
+gh_jumpchain    : Jump movement to jumping off the chain
+gh_boostchain   : Boost movement during swing/pull chain
+gh_movemonster  : Monster movement when impacted by chain
 
 ======================================================================*/
 void() worldspawn =
 {
+	dprint ("\b[WORLDSPAWN]\b function started ...\n");
 	lastspawn = world;
 	InitBodyQue ();
 	InitTempGoal ();
@@ -240,6 +291,12 @@ void() worldspawn =
     InitLightning ();
 	developer = cvar("developer");
 	self.classtype = CT_WORLD;
+
+	// ID map E3M3 has worldspawn angles set, WUT!?!
+	if (self.angles_y != 0) self.angles = '0 0 0';
+
+	// Engine resets skill 0-3, change it back
+	Client_SyncEvilmode();
 
 	//----------------------------------------------------------------------
 	// these sounds MUST be the first precache_sounds
@@ -263,7 +320,7 @@ void() worldspawn =
 	precache_sound ("weapons/ssg2.wav");		// Projectile shells or Shotgun upgrade
 	precache_sound (SOUND_PLASMA_FIRE);			// Player PG (eliminator)
 	precache_sound (SOUND_PLASMA_HIT);			// New fire/impact sounds
-	precache_sound ("weapons/nofire.wav");		// Weapon jams/noammo/broken
+	precache_sound (SOUND_MISFIRE);		// Weapon jams/noammo/broken
 
 	//----------------------------------------------------------------------
 	precache_sound (SOUND_REXP3);				// Original explosion
@@ -303,6 +360,9 @@ void() worldspawn =
 	precache_sound (SOUND_ARTQUAD3);			// Quad firing
 	precache_sound (SOUND_ARTNAILP3);			// Nail Piercer firing
 	precache_sound (SOUND_ARTPENT3);			// God mode on, taking damage
+	precache_sound (SOUND_ARTBLASTBELT3);		// Blast belt active
+	precache_sound (SOUND_ARTLSHIELD3);			// Lava shield active
+	precache_sound (SOUND_ARTSUIT3);		// Blast belt active
 
 	precache_sound ("misc/power.wav");			//lightning for boss
 
@@ -421,11 +481,7 @@ void() worldspawn =
 	precache_model (MODEL_EMPTY);			// Used for info_intermission cameras
 	precache_model (MODEL_CORNER1);			// Dev spawn angle marker
 	
-	precache_model (GIB1_BLOOD);			// New gib - arm/leg
-	precache_model (GIB2_BLOOD);			// New gib - body
-	precache_model (GIB3_BLOOD);			// New gib - slice
-	precache_model (GIB4_BLOOD);			// New gib - small chunk/ball
-	precache_model (GIB5_BLOOD);			// New gib - large chunk/ball
+	precache_bloodgibs();
 
 	precache_sound (GIB1_SOUND);			// Monster Gib 1
 	precache_sound (GIB3_SOUND);			// Monster Gib 3
@@ -497,9 +553,10 @@ void() worldspawn =
 	PrecacheAll();
 	
 
-	//----------------------------------------------------------------------
+	/* OLD!!  Using custom lightstyles setup now
+	// ----------------------------------------------------------------------
 	// Setup light animation tables. 'a' is total darkness, 'z' is maxbright.
-	//----------------------------------------------------------------------
+	// ----------------------------------------------------------------------
 	// 0 normal
 	lightstyle(0, "m");
 	// 1 FLICKER (first variety)
@@ -527,6 +584,7 @@ void() worldspawn =
 	// styles 32-62 are assigned by the light program for switchable lights
 	// 63 testing
 	lightstyle(63, "a");
+	*/
 
 	//----------------------------------------------------------------------
 	// Check for engine type and extensions (different features)
@@ -537,38 +595,58 @@ void() worldspawn =
 		// This could be DP, QSS, DQ, RMQ, Qbism etc
 		engine = ENG_DPEXT;
 
-		// Check for DP point particle extensions
+		// Check for DP/FTE point particle extensions
 		ext_dppart = checkextension("DP_SV_POINTPARTICLES");
+		ext_ftepart = checkextension("FTE_SV_POINTPARTICLES");
 		// DP extra fog params
 		ext_dpfog = checkextension("DP_GFX_FOG");
 		// surface content
 		ext_dpsurf = checkextension("DP_QC_GETSURFACE");
 		// particle rain/snow system
+		// QSS supports weather extensions in v7+
 		ext_dprain = checkextension("DP_TE_PARTICLERAIN");
 		ext_dpsnow = checkextension("DP_TE_PARTICLESNOW");
-		// Engine support for proper rotating/colliding bmodels
-		//ext_dprot = checkextension("DP_SV_ROTATINGBMODEL");
+		// If weather extensions active, assume default = ON
+		if (ext_dprain || ext_dpsnow) weathersys = TRUE;
 
-		// Check for FTE/QS-S point particle extensions
-		// Sadly it seems the QS-Spike engine is not going to declare
-		// the particle functions to the MOD, so it looks like there
-		// is no way to detect if rain/snow effects are active
-		if (checkextension("FTE_SV_POINTPARTICLES")) {
-			ext_dppart = TRUE;
-			if (checkextension("FTE_PART_NAMESPACE_EFFECTINFO")) {
-				// The default should be root of MOD directory
-				// QS-Spike/FTE has other plans ...
-				particleeffectnum("effectinfo.txt");
-				// Rain/Snow checkextension don't exist atm
-				// Maybe one day the QSS engine will support it!
-				particleeffectnum("fte_weather.cfg");
-			}
-		}
+		// Engine support for proper rotating/colliding bmodels
+		ext_dprot = checkextension("DP_SV_ROTATINGBMODEL");
+		// Check for FTE skin/ladder system
+		ext_fteskin = checkextension("FTE_ENT_SKIN_CONTENTS");
+		// Frik file system, advanced strings and C code sprintf
+		ext_frikfile = checkextension("FRIK_FILE");
+		ext_ftestrings = checkextension("FTE_STRINGS");
+		ext_sprintf = checkextension("DP_QC_SPRINTF");
+		
+		// There is no way to detect CSQC, no checkextension exists!
+		// If DP detect the CSQC functions it will just use them.
+		// QSS/FTE has a console variable to toggle CSQC on/off,
+		// but requires the map to be reload for changes to take affect.
+		// Setup a temp variable if none is found (def=0 CSQC is on)
+		autocvar(cl_nocsqc, "0");
+		// Read scratch1 in quake.rc (-1=off, 0=on, 1+=diff layouts)
+		if (cvar("scratch1") < 0) cvar_set("cl_nocsqc", "1");
+		
+		// Setup variables for CSQC HUD (cannot directly query variables)
+		// FTE/QSS use clientstat, DP use addstat (same function)
+		// The addstat is defined in dpextensions.qc
+		// void(float index, float type, ...) addstat = #232;
+		addstat(CLIENT_MODITEMS, EV_FLOAT, moditems); 
+		addstat(CLIENT_ITEMS2, EV_FLOAT, items2); 
+		addstat(CLIENT_PERMS, EV_FLOAT, perms); 
+		addstat(CLIENT_CKEYNAME1, EV_STRING, ckeyname1); 
+		addstat(CLIENT_CKEYNAME2, EV_STRING, ckeyname2); 
+		addstat(CLIENT_CKEYNAME3, EV_STRING, ckeyname3); 
+		addstat(CLIENT_CKEYNAME4, EV_STRING, ckeyname4); 
+		addstat(CLIENT_CKEYSKIN1, EV_FLOAT, ckeyskin1); 
+		addstat(CLIENT_CKEYSKIN2, EV_FLOAT, ckeyskin2); 
+		addstat(CLIENT_CKEYSKIN3, EV_FLOAT, ckeyskin3); 
+		addstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4); 	
 	}
-	
+
 	dprint("\n\b[ENGINE]\b ");
 	if (engine == ENG_FITZ) dprint("Fitz Compatible\n");
-	else if (engine == ENG_DPEXT) dprint("DP Compatible\n");
+	else if (engine == ENG_DPEXT) dprint("Advanced Engine\n"); // FTE, no longer lame old broken Darkplaces aka DP
 	else dprint("Unknown\n");
 
 	// Large maps cannot use this function, check for disable
@@ -598,6 +676,20 @@ void() worldspawn =
 	}
 
 	//----------------------------------------------------------------------
+	// Check for changes to monster homing missiles on death behaviour
+	if (self.no_trackondeath == TRUE) map_notrackondeath = TRUE;
+	else map_notrackondeath = FALSE;
+	
+	//----------------------------------------------------------------------
+	// Check for hazard damage override (water=2/sline=4/lava=10)
+	if (self.hazard_dmg_x <= 0) map_hazarddmg_x = WATER_DAMAGE;
+	else map_hazarddmg_x = self.hazard_dmg_x;
+	if (self.hazard_dmg_y <= 0) map_hazarddmg_y = SLIME_DAMAGE;
+	else map_hazarddmg_y = self.hazard_dmg_y;
+	if (self.hazard_dmg_z <= 0) map_hazarddmg_z = LAVA_DAMAGE;
+	else map_hazarddmg_z = self.hazard_dmg_z;
+
+	//----------------------------------------------------------------------
 	// Check for any custom gravity settings or ziggy secret map
 	if (!self.gravity) map_gravity = DEF_GRAVITY;
 	else map_gravity = self.gravity;
@@ -607,8 +699,27 @@ void() worldspawn =
 
 	//----------------------------------------------------------------------
 	// Check for any custom player jump height settings
-	if (!self.jump_height) map_jumpheight = DEF_JUMPHEIGHT;
-	else map_jumpheight = self.jump_height;
+	// All value checks done in separate function (triggers.qc)
+	player_fallspeed_reset();
+	player_fallspeed_setup();
+
+	//----------------------------------------------------------------------
+	// Check for Plasma gun damage override (Direct, Random, Splash)
+	if (!CheckZeroVector(world.plasmagun_dmg)) map_plasmagundmg = world.plasmagun_dmg;
+	else map_plasmagundmg = DAMAGE_PGPLAYER;
+
+	//----------------------------------------------------------------------
+	// Check for Bleeding damage override (Percentage, HoT, Pause)
+	if (!CheckZeroVector(world.bleeding_dmg)) map_bleedingdmg = world.bleeding_dmg;
+	else map_bleedingdmg = DAMAGE_BLEEDING;
+	// Make sure all parameters are within certain ranges
+	// Perc = 0.05-0.75, HoT = 1-10, Pause = 0.1-10
+	if (map_bleedingdmg_x <= 0.05) map_bleedingdmg_x = 0.05;
+	else if (map_bleedingdmg_x >= 0.75) map_bleedingdmg_x = 0.75;
+	if (map_bleedingdmg_y <= 1) map_bleedingdmg_y = 1;
+	else if (map_bleedingdmg_y >= 10) map_bleedingdmg_y = 10;
+	if (map_bleedingdmg_z <= 0.1) map_bleedingdmg_z = 0.1;
+	else if (map_bleedingdmg_z >= 10) map_bleedingdmg_z = 10;
 
 	//----------------------------------------------------------------------
 	// Check for global body floor check and fading timer
@@ -616,6 +727,11 @@ void() worldspawn =
 	else map_bodyflrcheck = FALSE;
 	if (self.bodyfadeaway > 0) map_bodyfadeaway = self.bodyfadeaway;
 	else map_bodyfadeaway = FALSE;
+
+	// Check for all monsters being setup in a passive state
+	// Useful for explore jam events where minimal combat required
+	if (self.passive_state == 1) map_passivestate = TRUE;
+	else map_passivestate = FALSE;
 
 	//----------------------------------------------------------------------
 	// The values of configflag is never saved, its always generated!
@@ -631,26 +747,66 @@ void() worldspawn =
 	// Setup Particle System
 	//----------------------------------------------------------------------
 	if (query_configflag(SVR_PARTICLES) == SVR_PARTICLES) {
-		if (self.particlemax > 0) part_max = self.particlemax;
+		if (self.particlemax > PARTICLE_MAXENTS) part_max = self.particlemax;
 		else part_max = PARTICLE_MAXENTS;
-		// DP setup uses engine particles
+		// DP/FTE setup requires less entities for sprite particles
 		if (engine == ENG_DPEXT && query_configflag(SVR_SPRPARTON) == FALSE
 			&& self.sprite_particles == FALSE)
-			part_max = part_max * 0.5;	
+			part_multiplier = 0.5;
+		else part_multiplier = 1;
+		
+		part_max = part_max * part_multiplier;
 		dprint("\b[WORLD]\b Max particles (");
 		dprint(ftos(part_max)); dprint(")\n");
 		setup_particlechain();		// Setup intial particle chain
 	}
+
+	//----------------------------------------------------------------------
+	// Check if FTE/QSS (FTE_SV_POINTPARTICLES) particles are active
+	// This has got to happen after 'sycn_worldspawn' function
+	// Allow for 'saved1' variable in quake.rc to be read
+	//----------------------------------------------------------------------
+	if (ext_ftepart == TRUE) {
+		// Switch to vanilla particle effects (no smoke, sparks etc)
+		// Don't bother with sprite settings for DP, the default is worse!
+		if (query_configflag(SVR_SPRPARTON) == SVR_SPRPARTON) {
+			// Load particle effects (mostly empty defs)
+			particleeffectnum("effectvanilla.txt");
+			// Make sure all extra particle effects are off
+			ext_dppart = ext_ftepart = FALSE;
+			weathersys = FALSE;
+		}
+		else {
+			// Set both active, used through out code
+			ext_dppart = ext_ftepart = TRUE;
+			// Check for FTE/QS-S point particle extensions
+			// Engine wants config files in different locations
+			if (checkextension("FTE_PART_NAMESPACE_EFFECTINFO")) {
+				// Load particle effects file (DP default=mod root)
+				particleeffectnum("effectinfo.txt");
+				// Load up default weather effects
+				particleeffectnum("fte_weather.cfg");
+			}
+		}
+	}
 	
 	//----------------------------------------------------------------------
+	// Setup target light starting point
+	// Got to do this early before any light entities
+	dprint("\b[WORLD]\b Setup Light style array\n");
+	light_style_setuparray();
 	dprint("\b[WORLD]\b Setup Pendulum vector array\n");
 	pendulum_setuparray();
+	dprint("\b[WORLD]\b Setup Map Var bitflag array\n");	
+	mapvar_setuparray();
+	dprint("\b[WORLD]\b Setup Shadow lightstyle array\n");	
+	switch_shadow_setuparray();
 
 	if (self.devdata & DEV_AMMO_N_HEALTH) {
 		self.deventity = ammohealthsum();
 	}
 
-	if (coop == 3) versus_setup();
+	if (coop > 2) versus_setup();
 
 	//----------------------------------------------------------------------
 	// Original id levels
@@ -769,7 +925,7 @@ void() test_spawn = { remove(self); };
 void() test_teleport = { remove(self); };
 
 void() testplayerstart = { remove(self); };
-void() viewthing = { remove(self); };
+void() viewthing = { if (developer < 1) remove(self); };
 
 /*======================================================================
 //QUAKED trigger_onlyregistered (.5 .5 .5) ?
@@ -849,6 +1005,7 @@ void() amsumthink = {
 	dprint(ftos(self.ammo_voidshards));
 	dprint(", Elemental Mana: ");
 	dprint(ftos(self.ammo_elemental));
+	dprint("\n");
 
 	vector plasmad = DAMAGE_PGPLAYER;
 	dmg = dmg + (self.ammo_shells * DAMAGE_SHELL);

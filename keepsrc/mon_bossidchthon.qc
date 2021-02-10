@@ -351,7 +351,8 @@ void() idchthon_death10 = [$death9, idchthon_death10] {
 ======================================================================*/
 void() monster_boss =
 {
-	if (deathmatch) { remove(self); return; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_bosschthon.mdl";
 	precache_model (self.mdl);
@@ -389,6 +390,9 @@ void() monster_boss =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 1;
 	self.resist_rockets = self.resist_cells = 1;
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
 
 	self.th_stand = idchthon_idle1;
 	self.th_walk = idchthon_idle1;

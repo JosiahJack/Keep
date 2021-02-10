@@ -734,9 +734,11 @@ void() skullw_die =
 /*======================================================================
 QUAKED monster_skullwiz (0.5 0 1) (-16 -16 -24) (16 16 40)
 ======================================================================*/
-void() monster_skullwiz =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_skullwiz = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_skullwiz.mdl";
 	precache_model (self.mdl);

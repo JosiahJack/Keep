@@ -978,7 +978,7 @@ void(entity targ, vector dir) Attack_Saw =
 				onflr.bodyonflr = string_null;	// no more body gibbing
 				tself = self; tother = other;	// save self/other
 				self = onflr; other = tself;	// switch around
-				if (onflr.classgroup == CG_ZOMBIE) {
+				if (onflr.classgroup == CG_ZOMBIE && !(targ.classname == "monster_mummy")) {
 					self.health = 0;
 					Killed(onflr, tself);
 				}

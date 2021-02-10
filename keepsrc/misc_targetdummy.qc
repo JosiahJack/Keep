@@ -1,5 +1,5 @@
-/*======================================================================
-//QUAKED misc_targetdummy (0 .5 .5) (-32 -32 -24) (32 32 64) KNIGHT WIZARD OGRE HELL_KNIGHT ZOMBIE DEMON SHALRATH SHAMBLER
+//======================================================================
+/*QUAKED misc_targetdummy (0 .5 .5) (-32 -32 -24) (32 32 64) KNIGHT WIZARD OGRE HELL_KNIGHT ZOMBIE DEMON SHALRATH SHAMBLER
 Target practice dummy
 ------- KEYS --------
 noise1 : Targetnumber tracking weapon used
@@ -56,13 +56,7 @@ void() misc_targetdummy_stand =
 	// Check for any accumulating damage totals
 	if (self.attack_finished < time) {
 		dprint("Wpn (");
-		if (self.weapon & IT_SHOTGUN) {
-			if (self.perms & IT_BLASTER) {
-				dprint("Laser Blaster");
-			} else {
-				dprint("Shotgun");
-			}
-		}
+		if (self.weapon & IT_SHOTGUN) dprint("Shotgun");
 		else if (self.weapon & IT_SUPER_SHOTGUN && self.moditems & IT_UPGRADE_SSG)
 				dprint("Shotgun Upgrade");
 		else if (self.weapon & IT_SUPER_SHOTGUN) dprint("Super Shotgun");
@@ -74,7 +68,8 @@ void() misc_targetdummy_stand =
 			dprint("Lightning Upgrade");
 		else if (self.weapon & IT_LIGHTNING) dprint("Lightning Gun");
 		else dprint("Unknown");
-		dprint(") Dist ("); dprint(ftos(self.enemydist));
+		dprint(") Dist ("); lftos(self, self.enemydist, 3, 2, BUFFER_DPRINT);
+		//dprint(ftos(self.enemydist));
 		dprint(") Dmg ("); dprint(ftos(self.dmg)); 
 		dprint(") % (");
 		if (self.weapon & IT_SHOTGUN || self.weapon & IT_SUPER_SHOTGUN) {
@@ -84,7 +79,8 @@ void() misc_targetdummy_stand =
 			self.cnt = self.cnt * 100;
 		}
 		else self.cnt = 100;
-		dprint(ftos(self.cnt));
+		lftos(self, self.cnt, 3, 2, BUFFER_DPRINT);
+		//dprint(ftos(self.cnt));
 		dprint(")\n");
 		
 		misc_targetdummy_trigger(self.weapon, self.noise1);
@@ -150,16 +146,16 @@ void() misc_targetdummy =
 	self.resist_rockets = self.resist_cells = 0;
 	
 	if (self.spawnflags & MISC_TARGKNIGHT) {
-		self.mdl = "progs/ad171/mon_knight.mdl";
-		self.headmdl = "progs/ad171/targd_short.mdl";
+		self.mdl = "progs/mon_knight.mdl";
+		self.headmdl = "progs/targd_short.mdl";
 		self.pain_sound = "knight/khurt.wav";
 		self.t_width = FALSE;
 		self.bboxtype = BBOX_SHORT;
 		self.pos1 = '0 9 0';	// stand1-9
 	}
 	else if (self.spawnflags & MISC_TARGWIZARD) {
-		self.mdl = "progs/wizard.mdl";
-		self.headmdl = "progs/ad171/targd_tall.mdl";
+		self.mdl = "progs/mon_wizard.mdl";
+		self.headmdl = "progs/targd_tall.mdl";
 		self.pain_sound = "wizard/wpain.wav";
 		self.t_width = FALSE;
 		self.bboxtype = BBOX_TALL;
@@ -167,47 +163,47 @@ void() misc_targetdummy =
 	}
 	else if (self.spawnflags & MISC_TARGOGRE) {
 		self.mdl = "progs/ogre.mdl";
-		self.headmdl = "progs/ad171/targd_wide.mdl";
+		self.headmdl = "progs/targd_wide.mdl";
 		self.pain_sound = "ogre/ogpain1.wav";
 		self.t_width = TRUE;
 		self.bboxtype = BBOX_WIDE;
 		self.pos1 = '0 9 0';	// stand1-9
 	}
 	else if (self.spawnflags & MISC_TARGHELLKNIGHT) {
-		self.mdl = "progs/ad171/mon_hknight.mdl";
-		self.headmdl = "progs/ad171/targd_tall.mdl";
+		self.mdl = "progs/mon_hknight.mdl";
+		self.headmdl = "progs/targd_tall.mdl";
 		self.pain_sound = "hknight/pain1.wav";
 		self.t_width = FALSE;
 		self.bboxtype = BBOX_TALL;
 		self.pos1 = '0 9 0';	// stand1-9
 	}
 	else if (self.spawnflags & MISC_TARGZOMBIE) {
-		self.mdl = "progs/ad171/mon_zombie.mdl";
-		self.headmdl = "progs/ad171/targd_short.mdl";
+		self.mdl = "progs/mon_zombie.mdl";
+		self.headmdl = "progs/targd_short.mdl";
 		self.pain_sound = "zombie/z_pain.wav";
 		self.t_width = FALSE;
 		self.bboxtype = BBOX_SHORT;
 		self.pos1 = '0 15 0';	// stand 1-15
 	}
 	else if (self.spawnflags & MISC_TARGDEMON) {
-		self.mdl = "progs/mon_demon.mdl";
-		self.headmdl = "progs/ad171/targd_wide.mdl";
+		self.mdl = "progs/demon.mdl";
+		self.headmdl = "progs/targd_wide.mdl";
 		self.pain_sound = "demon/dpain1.wav";
 		self.t_width = TRUE;
 		self.bboxtype = BBOX_WIDE;
 		self.pos1 = '0 13 0';	// stand 1-13
 	}
 	else if (self.spawnflags & MISC_TARGSHALRATH) {
-		self.mdl = "progs/ad171/mon_shalrath.mdl";
-		self.headmdl = "progs/ad171/targd_wide.mdl";
+		self.mdl = "progs/mon_shalrath.mdl";
+		self.headmdl = "progs/targd_wide.mdl";
 		self.pain_sound = "shalrath/pain.wav";
 		self.t_width = TRUE;
 		self.bboxtype = BBOX_WIDE;
 		self.pos1 = '0 1 0';	// stand 1
 	}
 	else if (self.spawnflags & MISC_TARGSHAMBLER) {
-		self.mdl = "progs/ad171/mon_shambler.mdl";
-		self.headmdl = "progs/ad171/targd_massive.mdl";
+		self.mdl = "progs/shambler.mdl";
+		self.headmdl = "progs/targd_massive.mdl";
 		self.pain_sound = "shambler/shurt2.wav";
 		self.t_width = FALSE;
 		self.bboxtype = BBOX_MASSIVE;
@@ -271,11 +267,14 @@ void() misc_targetdummy =
 	self.nextthink = time + 0.5 + random();
 };
 
-/*======================================================================
-//QUAKED misc_targetnumber (.5 .5 0) (-4 -4 -8) (4 4 8) x
+//======================================================================
+/*QUAKED misc_targetnumber (.5 .5 0) (-4 -4 -8) (4 4 8) x
 target number to display ingame
 ------- KEYS --------
 targetname : required for numbers to updated
+mdl        : Numbers 0-9,dot,blank (def=progs/misc_digit.mdl)
+waitmin    : Spacing of the model numbers (def=8)
+cnt        : Initial display value on spawn (must be >0)
 pos1       : X= top digit quantity, Y=Lower digit quantity
 -------- SPAWNFLAGS --------
 ------- NOTES --------
@@ -287,19 +286,26 @@ void() misc_targetnumber_dispno =
 	local float str_counter, str_pow, str_result, str_low;
 	
 	str_counter = self.pos1_x;		// Upper number length
-	str_pow = pow10(self.pos1_x);	// Setup initial base 10 power for checking
+	str_pow = mathlib_powbit(self.pos1_x,10);// Setup initial base 10 power for checking
+
+	// Get rid of negative state
+	self.count = fabs(self.count);
 
 	// If number larger than fixed length? - truncate number
 	if (self.count > str_pow)
-		self.count = self.count - (floor(self.count / str_pow) * str_pow);
-
+		self.count = mathlib_truncate(self.count, self.pos1_x, self.pos1_y);
+	
 	// Loop through lower part of number
 	while(str_counter > 0) {
 		// Move down one pow digit
 		str_pow = str_pow / 10;
 
 		// Divide number by pow to get divider
-		str_result = floor(self.count / str_pow);
+		str_result = mathlib_divisible(self.count, str_pow);
+		
+		// Result must be 0-9 digits
+		if (str_result > 9) str_result = 9;
+		if (str_result < 1) str_result = 0;
 		
 		if (str_counter == 4) self.tno8.skin = str_result;
 		else if (str_counter == 3) self.tno7.skin = str_result;
@@ -313,7 +319,7 @@ void() misc_targetnumber_dispno =
 	
 	// Shift the lower part of the number upwards
 	str_low = str_counter = self.pos1_y;
-	str_pow = pow10(self.pos1_y);
+	str_pow = mathlib_powbit(self.pos1_y,10);
 	while (str_low > 0) {
 		self.count = self.count * 10;
 		str_low = str_low - 1;
@@ -325,7 +331,11 @@ void() misc_targetnumber_dispno =
 		str_pow = str_pow / 10;
 
 		// Divide number by pow to get divider
-		str_result = floor(self.count / str_pow);
+		str_result = mathlib_divisible(self.count, str_pow);
+
+		// Result must be 0-9 digits
+		if (str_result > 9) str_result = 9;
+		if (str_result < 1) str_result = 0;
 		
 		if (str_counter == 3) self.tno3.skin = str_result;
 		else if (str_counter == 2) self.tno2.skin = str_result;
@@ -340,6 +350,7 @@ void() misc_targetnumber_dispno =
 //----------------------------------------------------------------------
 void() misc_targetnumber_use =
 {
+	// No negative numbers
 	self.count = fabs(other.targetnumber);
 	misc_targetnumber_dispno();
 };
@@ -354,7 +365,7 @@ entity(float offset, float startno) misc_targetnumber_spawn =
 	tnoent.movetype = MOVETYPE_NONE;
 	makevectors(self.angles);
 	setmodel(tnoent, self.mdl);
-	setorigin(tnoent, self.origin + v_right*(8*offset));
+	setorigin(tnoent, self.origin + (v_right * (self.waitmin * offset)) );
 	setsize(tnoent, VEC_ORIGIN, VEC_ORIGIN);
 	tnoent.skin = startno;
 	tnoent.angles = self.angles;
@@ -364,12 +375,21 @@ entity(float offset, float startno) misc_targetnumber_spawn =
 //----------------------------------------------------------------------
 void() misc_targetnumber =
 {
-	self.mdl = "progs/misc_digit.mdl";
+	if (self.mdl == "") self.mdl = "progs/misc_digit.mdl";
 	precache_model (self.mdl);
 	
 	self.classtype = CT_TARGETNUMBER;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
+	
+	if (self.waitmin <= 0) self.waitmin = 8;
+	if (self.cnt > 0) self.count = self.cnt;
+	
+	// Double check digit quantities are within range
+	if (self.pos1_x > 4 || self.pos1_y > 3) {
+		dprint("\b[MISCNUM]\b pos1 limited to '4 3 0'\n");
+		spawn_marker(self.origin, SPNMARK_YELLOW);
+	}
 	
 	// Setup lower part of number (1-3 decimal places, 4=dot always)
 	if (self.pos1_y > 0) {
@@ -414,4 +434,6 @@ void() misc_targetnumber =
 
 	// Setup trigger function for number update
 	if (self.targetname != "") self.use = misc_targetnumber_use;
+	// Update initial value (no external source)
+	if (self.cnt > 0) misc_targetnumber_dispno();
 };

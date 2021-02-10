@@ -55,7 +55,7 @@ void() SnowmMelee =
 	if (self.health < 1) return;
 		
 	ai_damagebreakable(10);							// Damage any breakables
-	if (!ai_checkmelee(MONAI_MELEESNOWMAN)) return; // Too far away
+	if (!ai_checkmelee(MONAI_MELEESNOWMAN,FALSE)) return; // Too far away
 
 	// Can the target bleed?
 	if (!self.enemy.takedamage) return;
@@ -78,7 +78,7 @@ void() snowm_claw3 = [ $claw3, snowm_claw4 ] {ai_face();SnowmMelee();};
 void() snowm_claw4 = [ $claw4, snowm_claw5 ] {};
 void() snowm_claw5 = [ $claw5, snowm_run1 ] {
 	// Check if snowman is within range to attack again
-	if (ai_checkmelee(MONAI_MELEESNOWMAN) && self.enemy.health > 0) {
+	if (ai_checkmelee(MONAI_MELEESNOWMAN,FALSE) && self.enemy.health > 0) {
 		if (self.health > 0) self.think = snowm_claw1;
 	}
 };
@@ -210,9 +210,11 @@ void() snowm_die =
 /*======================================================================
 QUAKED monster_snowman (1 0 0) (-16 -16 -24) (16 16 32) Ambush
 ======================================================================*/
-void() monster_xmas_snowman =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_xmas_snowman = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/xmas/mon_snowman.mdl";		// Top Hat Snow
 	self.headmdl = "progs/xmas/h_snowman.mdl";		// Top Hat
@@ -271,7 +273,7 @@ void() monster_xmas_snowman =
 	self.meleeoffset = '24 0 20';		// Claw attack offset
 	self.attack_offset = '24 0 20';		// Run + Gun vector
 	self.bleedcolour = MON_BCOLOR_SILVER;// Red is odd for snow
-	self.deathstring = " was smashed on a Snowman\n";
+	if (self.deathstring == "") self.deathstring = " was smashed on a Snowman\n";
 
 	// Default amount of nails to burst fire (5x9=45dmg)
 	if (self.attack_count < 1) self.attack_count = 5;
@@ -279,6 +281,10 @@ void() monster_xmas_snowman =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 	
 	self.th_checkattack = SnowmanCheckAttack;
 	self.th_stand = snowm_stand1;

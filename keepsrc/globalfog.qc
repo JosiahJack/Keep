@@ -12,23 +12,6 @@
 ======================================================================*/
 
 //----------------------------------------------------------------------
-// Returns power of 10 for string format function below
-//----------------------------------------------------------------------
-float(float pow_loop) pow10 =
-{
-	local float pow_num, pow_counter;
-	pow_num = 10;
-	pow_counter = 1;
-	if (pow_loop < 1) pow_loop = 1;
-			
-	while (pow_counter < pow_loop) {
-		pow_num = pow_num * 10;
-		pow_counter = pow_counter + 1;
-	}
-	return pow_num;
-}; 
-
-//----------------------------------------------------------------------
 // (Long Float TO String) Format and print a number to the console
 // - str_player : needs to be a client for various buffer commands
 // - buffer : BUFFER_STUFFCMD, BUFFER_SPRINT, BUFFER_DPRINT
@@ -37,7 +20,7 @@ void(entity str_player, float str_num, float topbit, float botbit, float buffer)
 	local float str_counter, str_pow, str_result, str_remain, str_first;
 	
 	str_counter = topbit;		// Upper number length
-	str_pow = pow10(topbit);	// Setup initial base 10 power for checking
+	str_pow = mathlib_powbit(topbit,10);// Setup initial base 10 power for checking
 	str_remain = FALSE;			// Decimal point been done yet
 	str_first = FALSE;			// First non-zero digit printed
 
@@ -50,9 +33,11 @@ void(entity str_player, float str_num, float topbit, float botbit, float buffer)
 	// Get rid of negative state
 	str_num = fabs(str_num);
 	
-	// If number larger than fixed length? - truncate number
+	// If number larger than fixed length?
 	if (str_num > str_pow)
 		str_num = str_num - (floor(str_num / str_pow) * str_pow);
+		// New system, not used for this function
+		// str_num = mathlib_truncate(str_num, topbit, botbit);
 
 	// Loop through upper part of number
 	while(str_counter > 0) {
@@ -62,11 +47,22 @@ void(entity str_player, float str_num, float topbit, float botbit, float buffer)
 		// Divide number by pow to get divider
 		// Floor can produce rounding errors (fix it with 0.01)
 		str_result = floor((str_num / str_pow)+0.01);
+		// New system, not used for this function
+		// str_result = mathlib_divisible(str_num, str_pow);
+		
 		// Result must be 0-9 digits
-		if (str_result > 9) str_result = 0;
+		if (str_result > 9) str_result = 9;
 		if (str_result < 1) str_result = 0;
 		
-		if (str_result > 0 || str_first) {
+		// Fill front of number with spaces
+		if (str_counter > 1 && str_result == 0 && str_first == FALSE) {
+			// Print space to buffer type
+			if (buffer & BUFFER_STUFFCMD) stuffcmd(str_player, " ");
+			else if (buffer & BUFFER_SPRINT) sprint(str_player, " ");
+			else if (buffer & BUFFER_DPRINT) dprint(" ");
+		}
+		// Display a number
+		else if (str_result > 0 || str_first) {
 			str_first = TRUE;
 			// Print digit to buffer type
 			if (buffer & BUFFER_STUFFCMD) stuffcmd(str_player, ftos(str_result));
@@ -77,6 +73,17 @@ void(entity str_player, float str_num, float topbit, float botbit, float buffer)
 		// remove top part of number, decrease str length counter
 		str_num = str_num - (str_result * str_pow);
 		str_counter = str_counter - 1;
+	}
+	
+	// Any decimal place?
+	if (botbit <= 0) {
+		// Check for zero value
+		if (!str_first) {
+			if (buffer & BUFFER_STUFFCMD) stuffcmd(str_player, "0");
+			else if (buffer & BUFFER_SPRINT) sprint(str_player, "0");
+			else if (buffer & BUFFER_DPRINT) dprint("0");
+		}
+		return;
 	}
 	
 	// Is there any remainder?
@@ -99,7 +106,7 @@ void(entity str_player, float str_num, float topbit, float botbit, float buffer)
 			str_num = str_num * 10; 
 			botbit = botbit -1;
 		}
-		str_pow = pow10(str_counter);
+		str_pow = mathlib_powbit(str_counter,10);
 	}
 
 	// Loop through lower part of number
@@ -110,8 +117,11 @@ void(entity str_player, float str_num, float topbit, float botbit, float buffer)
 		// Divide number by pow to get divider
 		// Floor can produce rounding errors (fix it with 0.01)
 		str_result = floor((str_num / str_pow)+0.01);
+		// New system, not used for this function
+		// str_result = mathlib_divisible(str_num, str_pow);
+
 		// Result must be 0-9 digits
-		if (str_result > 9) str_result = 0;
+		if (str_result > 9) str_result = 9;
 		if (str_result < 1) str_result = 0;
 
 		if (str_result > 0 || str_first) {

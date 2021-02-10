@@ -1391,7 +1391,10 @@ float() BaronBossCheckAttack =
 // --> QUAKED monster_baron (1 0 0) (-16 -16 -24) (16 16 40) Ambush x Nojump
 //============
 void() monster_baron = {
-    if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
     self.mdl = "progs/drake/baron.mdl";
     // Baron files are derived from the Rapture pack.
@@ -1536,6 +1539,10 @@ void() monster_baron = {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.classtype = CT_MONBARON;
 	self.classgroup = CG_DCAPTAIN;

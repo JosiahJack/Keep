@@ -114,7 +114,7 @@ void() boil_checktarget =
 	
 	// Get the obvious exception(s) done first
 	if (self.health < 1) return;
-	if (intermission_running) return;
+	if (intermission_running > 0) return;
 	if (cinematic_running > 0) return;
 
 	// Find a client in current PVS
@@ -296,7 +296,6 @@ void() boil_explode = {
 	}
 	*/
 	
-	// Show classic grenade explosion effect
 	// Switch explosions effect based on poison flag
 	if (self.poisonous) {
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
@@ -315,11 +314,8 @@ void() boil_explode = {
 		WriteCoord (MSG_BROADCAST, self.origin_y);
 		WriteCoord (MSG_BROADCAST, self.origin_z);
 	}
-
-	//Drop nice coins for coop versus mode
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
+	// Can drop health packs! - randomizer
+	if (self.healamount > 0) DropHealthpack();
 };
 
 //----------------------------------------------------------------------
@@ -343,9 +339,10 @@ void() boil_die =
 ======================================================================*/
 void() monster_boil =
 {
-	if (deathmatch) { remove(self); return; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
-	self.mdl = "progs/ad171/mon_boil.mdl";
+	self.mdl = "progs/mon_boil.mdl";
 	precache_model (self.mdl);
 
 	self.idle_sound = "zombie/boil_idle1.wav";
@@ -360,8 +357,14 @@ void() monster_boil =
 	precache_sound ("zombie/boil_windup.wav");
 	precache_sound ("zombie/boil_explode.wav");
 
-	precache_poisongibs();				// precache gibs
-	if (self.poisonous) self.gibtype = GIBTYPE_POISON;
+	// Check for poisonous entity flag
+	if (self.poisonous) {
+		precache_poisongibs();			// precache gibs
+		self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
+	}
+	
+	// The randomizer drops health packs on death
+	if (self.healamount > 0) CacheHealthpacks();
 	
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
@@ -375,8 +378,8 @@ void() monster_boil =
 	self.blockudeath = TRUE;			// No humanoid death sound
 	if (self.death_dmg < 1) self.death_dmg = DAMAGE_BOIL;
 	if (self.infightextra < 1) self.infightextra = 16;
-
 	self.attack_instant = 1;			// Start moving right away
+	self.deathstring = " was blown away by a Boil\n";
 	
 	// Setup timer for flesh gib squirting from body
 	if (self.wait < 1) self.wait = 4;
@@ -457,8 +460,12 @@ void() monster_boil =
 		self.th_run = boil_run1;
 		self.th_melee = boil_expl1;
 	}
-
-	if (self.deathstring == "")  self.deathstring = " was blown away by a Boil\n";
 	
-	monster_start();
+	// Delay spawn randomized boils a couple of frame
+	// To avoid telefrags issues of bad placement of HP packs
+	if (self.randomized > 0) {
+		self.nextthink = time + 0.1 + (random()*0.2);
+		self.think = monster_start;
+	}
+	else monster_start();
 };

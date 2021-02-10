@@ -52,6 +52,23 @@ void()	inquisitor_run14=[118,		inquisitor_run15] {ai_run(13);};
 void()	inquisitor_run15=[119,		inquisitor_run1 ] {ai_run(13);InquisitorCheckSetDown ();};
 
 // FlyAscend 89-104
+void() inquisitor_ascend1=[89, inquisitor_ascend2] {};
+void() inquisitor_ascend2=[90, inquisitor_ascend3] {};
+void() inquisitor_ascend3=[91, inquisitor_ascend4] {};
+void() inquisitor_ascend4=[92, inquisitor_ascend5] {};
+void() inquisitor_ascend5=[93, inquisitor_ascend6] {};
+void() inquisitor_ascend6=[94, inquisitor_ascend7] {};
+void() inquisitor_ascend7=[95, inquisitor_ascend8] {};
+void() inquisitor_ascend8=[96, inquisitor_ascend9] {};
+void() inquisitor_ascend9=[97, inquisitor_ascend10] {};
+void() inquisitor_ascend10=[98, inquisitor_ascend11] {};
+void() inquisitor_ascend11=[99, inquisitor_ascend12] {};
+void() inquisitor_ascend12=[100, inquisitor_ascend13] {};
+void() inquisitor_ascend13=[101, inquisitor_ascend14] {};
+void() inquisitor_ascend14=[102, inquisitor_ascend15] {};
+void() inquisitor_ascend15=[103, inquisitor_ascend16] {};
+void() inquisitor_ascend16=[104, inquisitor_run1] {};
+
 // TouchDownFromFly 152-167
 void()	inquisitor_flightland1=[152,inquisitor_flightland2] {ai_run(0); self.gravity = 1; };
 void()	inquisitor_flightland2=[153,inquisitor_flightland3] {ai_run(0);};
@@ -80,6 +97,28 @@ void()	inquisitor_standrun3=[72,		inquisitor_standrun1 ] {ai_run(0);};
 // AttackStopPalmOut 51-72
 
 
+void() inquisitor_stormcloud = {
+	local entity cloud;
+	local vector offs;
+
+	offs_x = crandom() * 32;
+	offs_y = crandom() * 32;
+	offs_z = 128;
+
+	cloud = spawn();
+	setorigin(cloud,self.origin + offs);
+	cloud.spawnflags = cloud.spawnflags | MISC_DRIPSLIME | MISC_DRIPSILENT | 8;
+	// cloud.noise1 = "misc/drip1.wav";
+	// cloud.noise2 = "misc/drip2.wav";
+	// cloud.noise3 = "misc/drip3.wav"; Too many sounds for this!
+	cloud.path = "progs/s_dripgreen_lg.spr";
+	cloud.headmdl = SSLIME_SPLASH;
+	cloud.aflag = 48;
+	cloud.dmg = 2;
+	cloud.think = spawn_raincloud;
+	cloud.nextthink = time + 0.05;
+};
+
 // AttackStaffPlantHuge 0-12
 // Shockwave knock players and monsters back, Cast multiple poison clouds that move around slowly
 void()	inquisitor_magica1 =[0,	inquisitor_magica2	] {ai_face();};
@@ -92,9 +131,9 @@ void()	inquisitor_magica7 =[6,	inquisitor_magica8	] {ai_face();};
 void()	inquisitor_magica8 =[7,	inquisitor_magica9	] {ai_face();};
 void()	inquisitor_magica9 =[8,	inquisitor_magica10	] {ai_face();};
 void()	inquisitor_magica10=[9,	inquisitor_magica11	] {ai_face();};
-void()	inquisitor_magica11=[10,inquisitor_magica12	] {ai_face();};
-void()	inquisitor_magica12=[11,inquisitor_magica13	] {ai_face();};
-void()	inquisitor_magica13=[12,inquisitor_standrun1] {ai_face();};
+void()	inquisitor_magica11=[10,inquisitor_magica12	] {ai_face();inquisitor_stormcloud();	sound (world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE);};
+void()	inquisitor_magica12=[11,inquisitor_magica13	] {ai_face();inquisitor_stormcloud();};
+void()	inquisitor_magica13=[12,inquisitor_standrun1] {ai_face();inquisitor_stormcloud();};
 
 // AttackHoldStaffOut 13-27
 void()	inquisitor_magicb1=[13,inquisitor_magicb2	] {ai_face();};
@@ -137,13 +176,13 @@ void()	inquisitor_magicc20=[48,inquisitor_magicc21] {ai_face();};
 void()	inquisitor_magicc21=[49,inquisitor_magicc22] {ai_face();};
 void()	inquisitor_magicc22=[50,inquisitor_standrun1]  {ai_face();};
 
-void() inquisitor_bbomb_die1 = [0,inquisitor_bbomb_die2] {setmodel(self,"progs/ad171/s_burst_poison.spr"); T_RadiusDamage(self, self.owner,9,self.owner,DAMAGEALL);};
-void() inquisitor_bbomb_die2 = [1,inquisitor_bbomb_die2] {};
-void() inquisitor_bbomb_die3 = [2,inquisitor_bbomb_die2] {};
-void() inquisitor_bbomb_die4 = [3,inquisitor_bbomb_die2] {};
-void() inquisitor_bbomb_die5 = [4,inquisitor_bbomb_die2] {};
-void() inquisitor_bbomb_die6 = [5,inquisitor_bbomb_die2] {};
-void() inquisitor_bbomb_die7 = [6,inquisitor_bbomb_die1] { self.think = SUB_Remove; self.nextthink = time + 0.05;};
+void() inquisitor_bbomb_die1 = [0,inquisitor_bbomb_die2] {setmodel(self,"progs/ad171/s_burst_poison.spr"); T_RadiusDamage(self, self.owner,9,self.owner,DAMAGEALL); };
+void() inquisitor_bbomb_die2 = [1,inquisitor_bbomb_die3] {particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 16);	sound (world, CHAN_AUTO, "quoth2pt2full/gug/bile.wav", 1, ATTN_NONE); };
+void() inquisitor_bbomb_die3 = [2,inquisitor_bbomb_die4] {particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 14); };
+void() inquisitor_bbomb_die4 = [3,inquisitor_bbomb_die5] {particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 12);};
+void() inquisitor_bbomb_die5 = [4,inquisitor_bbomb_die6] {particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 10);};
+void() inquisitor_bbomb_die6 = [5,inquisitor_bbomb_die7] {particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 8);};
+void() inquisitor_bbomb_die7 = [6,inquisitor_bbomb_die7] {particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 6); entity_remove(self, 0.1); return;};
 
 void() inquisitor_bbomb_burstcheck = {
 	if (self.attack_finished < time) {
@@ -270,7 +309,7 @@ void()	inquisitor_pain49=[147,inquisitor_pain50] {};
 void()	inquisitor_pain50=[148,inquisitor_pain51] {};
 void()	inquisitor_pain51=[149,inquisitor_pain52] {};
 void()	inquisitor_pain52=[150,inquisitor_pain53] {};
-void()	inquisitor_pain53=[151,inquisitor_run1] {}; // go to fly
+void()	inquisitor_pain53=[151,inquisitor_ascend1] {}; // go to fly
 
 void(entity inflictor, entity attacker, float damage) inquisitor_pain = {
 	if (self.health > 4500 && self.count == 0) return; // stage 1
@@ -300,9 +339,9 @@ void() InquisitorCheckAttack = {
 /*======================================================================
  QUAKED monster_inquisitor (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 ======================================================================*/
-void() monster_inquisitor =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_inquisitor = {
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/inquisitor.mdl";
 	precache_model (self.mdl);
@@ -344,12 +383,20 @@ void() monster_inquisitor =
 	precache_sound (self.idle_sound);
 	self.pain_sound = "ad171/skullwiz/pain2.wav";
 	precache_sound (self.pain_sound);
-	self.sight_sound = "ad171/skullwis/idle2.wav";
+	self.sight_sound = "ad171/skullwiz/idle2.wav";
 	precache_sound (self.sight_sound);
-	self.death_sound = "ad171/skullwis/fadeaway.wav";
+	self.death_sound = "ad171/skullwiz/fadeaway.wav";
 	precache_sound (self.death_sound);
 
-	precache_sound ("ad171/skullwis/poison_hit.wav");
+	precache_sound ("misc/drip1.wav");
+	precache_sound ("misc/drip2.wav");
+	precache_sound ("misc/drip3.wav");
+	precache_model ("progs/astorm.spr");
+	precache_sound ("drake/bane/thunder.wav");
+	precache_sound ("quoth2pt2full/gug/bile.wav");
+	precache_model ("progs/s_dripgreen_lg.spr");
+
+	precache_sound ("ad171/skullwiz/poison_hit.wav");
 	
 	self.solid = SOLID_NOT;				// No interaction with world until spawned
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement until spawned
@@ -363,6 +410,13 @@ void() monster_inquisitor =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.pain_longanim = FALSE;		// can't be chopped with shadow axe
 	self.classgroup = CG_WIZARD;	// Creepy dudes

@@ -242,7 +242,10 @@ void(float offset) SnakeMissile = {
 };
 
 void() monster_snakeman = {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/snakeman.mdl";
 	self.headmdl = "progs/uzi.mdl";
@@ -275,6 +278,10 @@ void() monster_snakeman = {
 	self.th_missile = snake_attack1;
 	self.blockudeath = TRUE;			// No humanoid death sound
 	self.wait2 = TRUE; // have not played sight sound yet
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;

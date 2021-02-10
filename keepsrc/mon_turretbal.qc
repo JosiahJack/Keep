@@ -1,6 +1,6 @@
 /*==============================================================================
  Large rotating surface mount turret (model/animation by Benoit Stordeur)
- * QC was created for Bal's personal JamX project
+ * QC was created for Bal's Hypnagogia project
 
   Interesting QC traits
   * Can be mounted on walls, ceilings or floors
@@ -670,7 +670,7 @@ void(entity inflictor, entity attacker, float damage) turretb_pain =
 	SpawnVelocitySmoke(self.origin, self.dest1+(crandom()*v_up), 200, 200);
 	SpawnVelocitySmoke(self.origin, self.dest1+(crandom()*v_up), 200, 200);
 	SpawnVelocitySmoke(self.origin, self.dest1+(crandom()*v_up), 200, 200);
-	particle_dust(self.origin, 10+random()*10, PARTICLE_BURST_YELLOW);
+	particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
@@ -691,7 +691,7 @@ void() turretb_die =
 	SpawnVelocitySmoke(self.origin, self.dest1+(crandom()*v_up), 200, 200);
 	SpawnVelocitySmoke(self.origin, self.dest1+(crandom()*v_up), 200, 200);
 	SpawnVelocitySmoke(self.origin, self.dest1+(crandom()*v_up), 200, 200);
-	particle_dust(self.origin, 10+random()*10, PARTICLE_BURST_YELLOW);
+	particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
 	// Sprite explosion
 	SpawnExplosion(EXPLODE_BIG, self.origin, self.death_sound);
 
@@ -715,7 +715,8 @@ QUAKED monster_turretbal (1 0 0) (-20 -20 -20) (20 20 20) Ambush
 ======================================================================*/
 void() monster_turretbal =
 {
-	if (deathmatch) { remove(self); return; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/mon_turretbal.mdl";		// Turret
 //	self.headmdl = "progs/h_turretbal.mdl";		// Not used
@@ -897,7 +898,8 @@ void() monster_turretbal =
 	//----------------------------------------------------------------------
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
+	self.resist_cells = 0;
+	self.resist_rockets = -1;	// Double damage from grenades/rockets
 	
 	self.th_checkattack = TurretbCheckAttack;
 	self.th_stand = turretb_stand;

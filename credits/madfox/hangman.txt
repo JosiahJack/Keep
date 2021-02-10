@@ -1,0 +1,43 @@
+=================================================================================
+Title                  : hangman.zip
+Filename               : hangman
+Author                 : Madfox
+Email Adress           : catweazel@kpnmail.nl
+Description            : New Quake 1 static
+
+Additional Credits to  : ID Software
+
+=================================================================================
+
+* Play Inormation *
+
+Level Name              : /
+Single Player           : /
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Models              : yes
+New Sounds              : /
+qC                      : /
+
+=================================================================================
+
+* Construction *
+
+Base              : New static for a hanging grunt, good luck Ijazz!
+Build Time        : 6 houres
+Editor(s) Used    : Quark6.3/4.07 Wally PSP AM2005 QMLE   
+Known Bugs        : skin texture is a mess, you can look through.
+Specific          : Poor Grunt.
+Thanks            : Id Software for Quake!
+GameOption        : Place in a map after making a static.qc.
+                
+
+Live long and propsper!
+
+================================================================================= 
+
+Madfox 6 aug 2019
+
+=================================================================================
+

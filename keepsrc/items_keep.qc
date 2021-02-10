@@ -30,13 +30,13 @@ void() weapon_touch = {
 		if (self.perms & IT_BLASTER) other.ammo_shells = other.ammo_shells + AMMO_SHELLS_WPN;
 		if (leave && (other.items & IT_SHOTGUN) ) return;
 		new = IT_SHOTGUN;
-		if (!(self.perms & IT_BLASTER)) other.ammo_shells = other.ammo_shells + AMMO_SHELLS_WPN;
+		if (!(self.perms & IT_BLASTER)) other.ammo_shells = other.ammo_shells + self.aflag;
 	}
 	//----------------------------------------------------------------------
 	else if (self.classtype == CT_BLASTERWEP) {
 		if (leave && (other.items & IT_SHOTGUN) ) return;
 		new = IT_SHOTGUN;
-		other.ammo_shells = other.ammo_shells + AMMO_SHELLS_WPN;
+		other.ammo_shells = other.ammo_shells + self.aflag;
 		other.perms = other.perms | IT_BLASTER;
 	}
 	//----------------------------------------------------------------------
@@ -50,55 +50,55 @@ void() weapon_touch = {
 		update_configflag(SVR_UPDSSG, TRUE);
 		moditem = TRUE;
 		new = IT_UPGRADE_SSG;
-		other.ammo_shells = other.ammo_shells + AMMO_SHELLS_WPN;
+		other.ammo_shells = other.ammo_shells + self.aflag;
 	}
 	//----------------------------------------------------------------------
 	else if (self.classtype == CT_SUPER_SHOTGUN) {
 		if (leave && (other.items & IT_SUPER_SHOTGUN) ) return;
 		new = IT_SUPER_SHOTGUN;
-		other.ammo_shells = other.ammo_shells + AMMO_SHELLS_WPN;
+		other.ammo_shells = other.ammo_shells + self.aflag;
 	}
 	//----------------------------------------------------------------------
 	else if (self.classtype == CT_NAILGUN) {
 		if (leave && (other.items & IT_NAILGUN) ) return;
 		new = IT_NAILGUN;
-		other.ammo_nails = other.ammo_nails + AMMO_NAILS_WPN;
+		other.ammo_nails = other.ammo_nails + self.aflag;
 	}
 	//----------------------------------------------------------------------
 	else if (self.classtype == CT_SUPER_NAILGUN) {
 		if (leave && (other.items & IT_SUPER_NAILGUN) ) return;
 		new = IT_SUPER_NAILGUN;
-		other.ammo_nails = other.ammo_nails + AMMO_NAILS_WPN;
+		other.ammo_nails = other.ammo_nails + self.aflag;
 	}
 	//----------------------------------------------------------------------
 	else if (self.classtype == CT_GRENADE_LAUNCHER) {
 		if (leave && (other.items & IT_GRENADE_LAUNCHER) ) return;
 		new = IT_GRENADE_LAUNCHER;
-		other.ammo_rockets = other.ammo_rockets + AMMO_ROCKETS_WPN;
+		other.ammo_rockets = other.ammo_rockets + self.aflag;
 	}
 	//----------------------------------------------------------------------
 	else if (self.classtype == CT_ROCKET_LAUNCHER) {
 		if (leave && (other.items & IT_ROCKET_LAUNCHER) ) return;
 		new = IT_ROCKET_LAUNCHER;
-		other.ammo_rockets = other.ammo_rockets + AMMO_ROCKETS_WPN;
+		other.ammo_rockets = other.ammo_rockets + self.aflag;
 	}
 	//----------------------------------------------------------------------
 	else if (self.classtype == CT_MULTI_GRENADE) {
 		if (leave && (other.items & IT_MULTI_GRENADE) ) return;
 		new = IT_MULTI_GRENADE;
-		other.ammo_multi_rockets = other.ammo_multi_rockets + AMMO_MULTI_ROCKETS_WPN;
+		other.ammo_multi_rockets = other.ammo_multi_rockets + self.aflag;
 	}
 	//----------------------------------------------------------------------
 	else if (self.classtype == CT_MULTI_ROCKET) {
 		if (leave && (other.items & IT_MULTI_ROCKET) ) return;
 		new = IT_MULTI_ROCKET;
-		other.ammo_multi_rockets = other.ammo_multi_rockets + AMMO_MULTI_ROCKETS_WPN;
+		other.ammo_multi_rockets = other.ammo_multi_rockets + self.aflag;
 	}
 	//----------------------------------------------------------------------
 	else if (self.classtype == CT_CHAINLIGHTGUN) {
 		if (leave && (other.items2 & IT2_CHAINLIGHTNING) ) return;
 		new = IT2_CHAINLIGHTNING;
-		other.ammo_cells = other.ammo_cells + AMMO_CELLS_WPN;
+		other.ammo_cells = other.ammo_cells + self.aflag;
 		use2 = TRUE;
 	}
 	//----------------------------------------------------------------------
@@ -113,50 +113,50 @@ void() weapon_touch = {
 		update_configflag(SVR_UPDLG, TRUE);
 		moditem = TRUE;
 		new = IT_UPGRADE_LG;
-		other.ammo_cells = other.ammo_cells + AMMO_CELLS_WPN;
+		other.ammo_cells = other.ammo_cells + self.aflag;
 	}
 	//----------------------------------------------------------------------
 	else if (self.classtype == CT_LIGHTNING) {
 		if (leave && (other.items & IT_LIGHTNING) ) return;
 		new = IT_LIGHTNING;
-		other.ammo_cells = other.ammo_cells + AMMO_CELLS_WPN;
+		other.ammo_cells = other.ammo_cells + self.aflag;
 	}
 	else if (self.classtype == CT_EXTRA_WEAPON) {
 		if (leave && (other.items & IT_EXTRA_WEAPON) ) return;
-		other.ammo_bolts = other.ammo_bolts + AMMO_BOLTS_WPN;
+		other.ammo_bolts = other.ammo_bolts + self.aflag;
 		new = IT_EXTRA_WEAPON;
 	}
 	else if (self.classtype == CT_LAVANG) {
 		if (leave && (other.items & IT_LAVA_NAILGUN) ) return;
 		new = IT_LAVA_NAILGUN;
-		other.ammo_lava_nails = other.ammo_lava_nails + AMMO_LAVA_NAILS_WPN;
+		other.ammo_lava_nails = other.ammo_lava_nails + self.aflag;
 	}
 	else if (self.classtype == CT_LAVASNG) {
 		if (leave && (other.items & IT_LAVA_SUPER_NAILGUN) ) return;
 		new = IT_LAVA_SUPER_NAILGUN;
-		other.ammo_lava_nails = other.ammo_lava_nails + AMMO_LAVA_NAILS_WPN;
+		other.ammo_lava_nails = other.ammo_lava_nails + self.aflag;
 	}
 	else if (self.classtype == CT_PLASMAGUN) {
 		if (leave && (other.items & IT_PLASMA_GUN) ) return;
 		new = IT_PLASMA_GUN;
-		other.ammo_plasma = other.ammo_plasma + AMMO_PLASMA_WPN;
+		other.ammo_plasma = other.ammo_plasma + self.aflag;
 	}
 	else if (self.classtype == CT_PROXIMITY_GUN) {
 		if (leave && (other.items2 & IT2_PROXIMITY_GUN) ) return;
 		new = IT2_PROXIMITY_GUN;
-		other.ammo_rockets = other.ammo_rockets + AMMO_ROCKETS_WPN;
+		other.ammo_rockets = other.ammo_rockets + self.aflag;
 		use2 = TRUE;
 	}
 	else if (self.classtype == CT_LASER_CANNON) {
 		if (leave && (other.items2 & IT2_LASER_CANNON) ) return;
 		new = IT2_LASER_CANNON;
-		other.ammo_cells = other.ammo_cells + AMMO_CELLS_WPN;
+		other.ammo_cells = other.ammo_cells + self.aflag;
 		use2 = TRUE;
 	}
 	else if (self.classtype == CT_MJOLNIR) {
 		if (leave && (other.items2 & IT2_MJOLNIR) ) return;
 		new = IT2_MJOLNIR;
-		other.ammo_cells = other.ammo_cells + AMMO_CELLS_WPN;
+		other.ammo_cells = other.ammo_cells + self.aflag;
 		use2 = TRUE;
 	}
 	else if (self.classtype == CT_GRAPPLE) {
@@ -182,7 +182,7 @@ void() weapon_touch = {
 		moditem = TRUE;
 		usehackbank = TRUE;
 		new = IT_MACE;
-		other.ammo_bloodcrystals = other.ammo_bloodcrystals + AMMO_BLOOD_WPN;
+		other.ammo_bloodcrystals = other.ammo_bloodcrystals + self.aflag;
 	}
 	else if (self.classtype == CT_ICE) {
 		if (leave && (other.moditems & IT_ICE) ) return;
@@ -190,14 +190,14 @@ void() weapon_touch = {
 		moditem = TRUE;
 		usehackbank = TRUE;
 		new = IT_ICE;
-		other.ammo_elemental = other.ammo_elemental + AMMO_ELEMENTAL_WPN;
+		other.ammo_elemental = other.ammo_elemental + self.aflag;
 	}
 	else if (self.classtype == CT_SCIMITAR) {
 		if (leave && (other.moditems & IT_SCIMITAR) ) return;
 		update_configflag(SVR_UPDLG, TRUE);
 		moditem = TRUE;
 		new = IT_SCIMITAR;
-		other.ammo_elemental = other.ammo_elemental + AMMO_ELEMENTAL_WPN;
+		other.ammo_elemental = other.ammo_elemental + self.aflag;
 	}
 	else if (self.classtype == CT_VOID_STAFF) {
 		if (leave && (other.moditems & IT_VOID_STAFF) ) return;
@@ -205,7 +205,7 @@ void() weapon_touch = {
 		moditem = TRUE;
 		usehackbank = TRUE;
 		new = IT_VOID_STAFF;
-		other.ammo_voidshards = other.ammo_voidshards + AMMO_VOID_WPN;
+		other.ammo_voidshards = other.ammo_voidshards + self.aflag;
 	}
 	else if (self.classtype == CT_GUNGNIR) {
 		if (leave && (other.moditems & IT_GUNGNIR) ) return;
@@ -213,14 +213,14 @@ void() weapon_touch = {
 		moditem = TRUE;
 		usehackbank = TRUE;
 		new = IT_GUNGNIR;
-		other.ammo_voidshards = other.ammo_voidshards + AMMO_VOID_WPN;
+		other.ammo_voidshards = other.ammo_voidshards + self.aflag;
 	}
 	else if (self.classtype == CT_SANGUINATORS) {
 		if (leave && (other.moditems & IT_SANGUINATORS) ) return;
 		update_configflag(SVR_UPDLG, TRUE);
 		moditem = TRUE;
 		new = IT_SANGUINATORS;
-		other.ammo_bloodcrystals = other.ammo_bloodcrystals + AMMO_BLOOD_WPN;
+		other.ammo_bloodcrystals = other.ammo_bloodcrystals + self.aflag;
 	}
 	else if (self.classtype == CT_FLAK) {
 		if (leave && (other.moditems & IT_FLAK) ) return;
@@ -228,8 +228,8 @@ void() weapon_touch = {
 		moditem = TRUE;
 		usehackbank = TRUE;
 		new = IT_FLAK;
-		other.ammo_nails = other.ammo_nails + AMMO_NAILS_WPN*2;
-		other.ammo_rockets = other.ammo_rockets + AMMO_ROCKETS_WPN*2;
+		other.ammo_nails = other.ammo_nails + self.aflag;
+		other.ammo_rockets = other.ammo_rockets + (self.aflag/3);
 	}
 	//----------------------------------------------------------------------
 	else return;
@@ -342,142 +342,189 @@ void() weapon_touch = {
 };
 
 void() weapon_grapple = {
-	self.mdl = "progs/drake/g_grpple.mdl";
+	// Check for custom model setup?
+	item_debugcustomdl();
+	if (self.mdl == "") self.mdl = "progs/drake/g_grpple.mdl";
 	precache_model (self.mdl);
 	self.weapon = IT2_GRAPPLE;
 	self.classtype = CT_GRAPPLE;
-	self.netname = "Grapple";
+	if (self.netname == "") self.netname = "Grapple";
 	weapon_start();
 };
 
 void() weapon_chainsaw = {
-	self.mdl = "progs/drake/g_saw.mdl";
+	// Check for custom model setup?
+	item_debugcustomdl();
+	if (self.mdl == "") self.mdl = "progs/drake/g_saw.mdl";
 	precache_model (self.mdl);
 	self.classtype = CT_CHAINSAW;
-	self.netname = "Chainsaw";
+	if (self.netname == "") self.netname = "Chainsaw";
 	weapon_start();
 };
 
 void() weapon_axe = {
-	self.mdl = g_axemodel; // set by world.qc, mapper can pick to use AD or original axe
+	// Check for custom model setup?
+	item_debugcustomdl();
+	if (self.mdl == "") self.mdl = g_axemodel; // set by world.qc, mapper can pick to use AD or original axe
 	precache_model (self.mdl);
 	self.weapon = IT_AXE;
 	self.classtype = CT_AXE;
-	self.netname = "Axe";
+	if (self.netname == "") self.netname = "Axe";
 	weapon_start();
 };
 
 void() weapon_mjolnir = {
-	self.mdl = MODEL_GWEAP_MJOL;
+	// Check for custom model setup?
+	item_debugcustomdl();
+	if (self.mdl == "") self.mdl = MODEL_GWEAP_MJOL;
 	precache_model (self.mdl);
 	self.weapon = IT2_MJOLNIR;
 	self.classtype = CT_MJOLNIR;
-	self.netname = "Mjolnir's Hammer";
-	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_cells = world.deventity.ammo_cells + AMMO_CELLS_WPN;
+	if (self.netname == "") self.netname = "Mjolnir's Hammer";
+	// Allow for mapper override on weapon ammo start
+	if (self.aflag == 0) self.aflag = AMMO_CELLS_WPN;
+	else if (self.aflag < 0) self.aflag = 0;
+	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_cells = world.deventity.ammo_cells + self.aflag;
 	weapon_start();
 };
 
 void() weapon_wand = {
-	self.mdl = MODEL_GWEAP_WAND;
+	// Check for custom model setup?
+	item_debugcustomdl();
+	if (self.mdl == "") self.mdl = MODEL_GWEAP_WAND;
 	precache_model (self.mdl);
 	self.weapon = IT2_CROSS;
 	self.classtype = CT_WAND;
-	self.netname = "Magic Wand";
+	if (self.netname == "") self.netname = "Magic Wand";
 	weapon_start();
 };
 
 void () weapon_crossbow = {
-	self.mdl = "progs/g_crossbow.mdl";
+	// Check for custom model setup?
+	item_debugcustomdl();
+	if (self.mdl == "") self.mdl = "progs/g_crossbow.mdl";
 	precache_model(self.mdl);
 	self.weapon = IT_EXTRA_WEAPON;
 	self.classtype = CT_EXTRA_WEAPON; 
-	self.netname = "Crossbow";
-	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_bolts = world.deventity.ammo_bolts + AMMO_BOLTS_WPN;
+	if (self.netname == "") self.netname = "Crossbow";
+	if (self.aflag == 0) self.aflag = AMMO_BOLTS_WPN;
+	else if (self.aflag < 0) self.aflag = 0;
+	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_bolts = world.deventity.ammo_bolts + self.aflag;
 	weapon_start();
 };
 
 void() weapon_lava_nailgun = {
-	self.mdl = MODEL_GWEAP_LNG;
+	// Check for custom model setup?
+	item_debugcustomdl();
+	if (self.mdl == "") self.mdl = MODEL_GWEAP_LNG;
 	precache_model (self.mdl);
 	self.weapon = IT_LAVA_NAILGUN;
 	self.classtype = CT_LAVANG;
-	self.netname = "Lava Nailgun";
-	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_lava_nails = world.deventity.ammo_lava_nails + AMMO_LAVA_NAILS_WPN;
+	if (self.netname == "") self.netname = "Lava Nailgun";
+	if (self.aflag == 0) self.aflag = AMMO_LAVA_NAILS_WPN;
+	else if (self.aflag < 0) self.aflag = 0;
+	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_lava_nails = world.deventity.ammo_lava_nails + self.aflag;
 	weapon_start();
 };
 
 void() weapon_lava_super_nailgun = {
-	self.mdl = MODEL_GWEAP_LSNG;
+	// Check for custom model setup?
+	item_debugcustomdl();
+	if (self.mdl == "") self.mdl = MODEL_GWEAP_LSNG;
 	precache_model (self.mdl);
 	self.weapon = IT_LAVA_SUPER_NAILGUN;
 	self.classtype = CT_LAVASNG;
-	self.netname = "Lava Super Nailgun";
-	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_lava_nails = world.deventity.ammo_lava_nails + AMMO_LAVA_NAILS_WPN;
+	if (self.netname == "") self.netname = "Lava Super Nailgun";
+	if (self.aflag == 0) self.aflag = AMMO_LAVA_NAILS_WPN;
+	else if (self.aflag < 0) self.aflag = 0;
+	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_lava_nails = world.deventity.ammo_lava_nails + self.aflag;
 	weapon_start();
 };
 
 void() weapon_proximity_gun = {
-	self.mdl = MODEL_GWEAP_PROX;
+	// Check for custom model setup?
+	item_debugcustomdl();
+	if (self.mdl == "") self.mdl = MODEL_GWEAP_PROX;
 	precache_model (self.mdl);
 	self.weapon = IT2_PROXIMITY_GUN;
 	self.classtype = CT_PROXIMITY_GUN;
-	self.netname = "Proximity Grenade Launcher";
-	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_rockets = world.deventity.ammo_rockets + AMMO_ROCKETS_WPN;
+	if (self.netname == "") self.netname = "Proximity Grenade Launcher";
+	if (self.aflag == 0) self.aflag = AMMO_ROCKETS_WPN;
+	else if (self.aflag < 0) self.aflag = 0;
+	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_rockets = world.deventity.ammo_rockets + self.aflag;
 	weapon_start();
 };
 
 void () weapon_laser_gun = {
-	self.mdl = MODEL_GWEAP_LASER;
+	// Check for custom model setup?
+	item_debugcustomdl();
+	if (self.mdl == "") self.mdl = MODEL_GWEAP_LASER;
 	precache_model (self.mdl);
 	self.weapon = IT2_LASER_CANNON;
 	self.classtype = CT_LASER_CANNON;
-	self.netname = "Laser Cannon";
-	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_cells = world.deventity.ammo_cells + AMMO_CELLS_WPN;
+	if (self.netname == "") self.netname = "Laser Cannon";
+	if (self.aflag == 0) self.aflag = AMMO_CELLS_WPN;
+	else if (self.aflag < 0) self.aflag = 0;
+	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_cells = world.deventity.ammo_cells + self.aflag;
 	weapon_start();
 };
 
 void () weapon_multi_grenade = {
-	self.mdl = "progs/g_rock.mdl";
+	// Check for custom model setup?
+	item_debugcustomdl();
+	if (self.mdl == "") { self.mdl = "progs/g_rock.mdl"; self.skin = 2; }
 	precache_model (self.mdl);
-	self.skin = 2;
 	self.weapon = IT_MULTI_GRENADE;
 	self.classtype = CT_MULTI_GRENADE;
-	self.netname = "Multi-Grenade Launcher";
-	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_multi_rockets = world.deventity.ammo_multi_rockets + AMMO_MULTI_ROCKETS_WPN;
+	if (self.netname == "") self.netname = "Multi-Grenade Launcher";
+	if (self.aflag == 0) self.aflag = AMMO_MULTI_ROCKETS_WPN;
+	else if (self.aflag < 0) self.aflag = 0;
+	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_multi_rockets = world.deventity.ammo_multi_rockets + self.aflag;
 	weapon_start();
 };
 
 void () weapon_multi_rocket = {
-	self.mdl = "progs/g_rock2.mdl";
-	self.skin = 1;
+	// Check for custom model setup?
+	item_debugcustomdl();
+	if (self.mdl == "") { self.mdl = "progs/g_rock2.mdl"; self.skin = 1;}
 	precache_model (self.mdl);
 	self.weapon = IT_MULTI_ROCKET;
 	self.classtype = CT_MULTI_ROCKET;
-	self.netname = "Multi-Rocket Launcher";
-	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_multi_rockets = world.deventity.ammo_multi_rockets + AMMO_MULTI_ROCKETS_WPN;
+	if (self.netname == "") self.netname = "Multi-Rocket Launcher";
+	if (self.aflag == 0) self.aflag = AMMO_MULTI_ROCKETS_WPN;
+	else if (self.aflag < 0) self.aflag = 0;
+	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_multi_rockets = world.deventity.ammo_multi_rockets + self.aflag;
 	weapon_start();
 };
 
 void () weapon_plasmalightning = {
-	self.mdl = "progs/g_light.mdl";
-	self.skin = 1;
+	// Check for custom model setup?
+	item_debugcustomdl();
+	if (self.mdl == "") { self.mdl = "progs/g_light.mdl"; self.skin = 1; }
 	precache_model (self.mdl);
 	self.weapon = IT_PLASMA_GUN;
 	self.classtype = CT_PLASMAGUN;
-	self.netname = "Plasma Thunderbolt";
-	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_plasma = world.deventity.ammo_plasma + AMMO_PLASMA_WPN;
+	if (self.netname == "") self.netname = "Plasma Thunderbolt";
+	if (self.aflag == 0) self.aflag = AMMO_PLASMA_WPN;
+	else if (self.aflag < 0) self.aflag = 0;
+	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_plasma = world.deventity.ammo_plasma + self.aflag;
 	weapon_start();
 };
 
 void () weapon_chain_lightning = {
-	self.mdl = "progs/drake/g_light2.mdl";
+	// Check for custom model setup?
+	item_debugcustomdl();
+	if (self.mdl == "") self.mdl = "progs/drake/g_light2.mdl";
 	precache_model (self.mdl);
 	self.weapon = IT2_CHAINLIGHTNING;
 	self.classtype = CT_CHAINLIGHTGUN;
-	self.netname = "Chain Lightning Gun";
-	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_cells = world.deventity.ammo_cells + AMMO_CELLS_WPN;
+	if (self.netname == "") self.netname = "Chain Lightning Gun";
+	if (self.aflag == 0) self.aflag = AMMO_CELLS_WPN;
+	else if (self.aflag < 0) self.aflag = 0;
+	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_cells = world.deventity.ammo_cells + self.aflag;
 	weapon_start();
 };
+
 
 /*======================================================================
  AMMO
@@ -573,19 +620,24 @@ void() ammo_touch = {
 };
 
 void() item_lava_spikes ={
+	// Check for any random monster setups
+	if (ammo_checkrandomizer() == TRUE) return;
+
+	// Check for custom model setup?
+	item_debugcustomdl();
+
 	if (self.spawnflags & A_LARGE) {
-		self.mdl = "maps/b_lnail1.bsp";
+		if (self.mdl == "") self.mdl = "maps/b_lnail1.bsp";
 		if (self.aflag < 1) self.aflag = AMMO_NAILS_LGR;
 	}
 	else {
-		self.mdl = "maps/b_lnail0.bsp";
+		if (self.mdl == "") self.mdl = "maps/b_lnail0.bsp";
 		if (self.aflag < 1) self.aflag = AMMO_NAILS_SML;
 	}
-	self.ammo_lava_nails = self.aflag;
 	
 	precache_model (self.mdl);
 	self.classtype = CT_AMMOLAVANAILS;
-	self.netname = "box of lava nails";
+	if (self.netname == "") self.netname = "box of lava nails";
 	self.respawn_style = PARTICLE_BURST_WHITE + PARTICLE_BURST_RING;
 	self.respawn_ofs = '0 0 24';
 	self.respawn_effect = TRUE;
@@ -593,19 +645,24 @@ void() item_lava_spikes ={
 };
 
 void() item_multi_rockets = {
+	// Check for any random monster setups
+	if (ammo_checkrandomizer() == TRUE) return;
+
+	// Check for custom model setup?
+	item_debugcustomdl();
+
 	if (self.spawnflags & A_LARGE) {
-		self.mdl = "maps/b_mrock1.bsp";
+		if (self.mdl == "") self.mdl = "maps/b_mrock1.bsp";
 		if (self.aflag < 1) self.aflag = AMMO_ROCKETS_LGR;
 	}
 	else {
-		self.mdl = "maps/b_mrock0.bsp";
+		if (self.mdl == "") self.mdl = "maps/b_mrock0.bsp";
 		if (self.aflag < 1) self.aflag = AMMO_ROCKETS_SML;
 	}
-	self.ammo_multi_rockets = self.aflag;
 	
 	precache_model (self.mdl);
 	self.classtype = CT_AMMOMULTIROCKETS;
-	self.netname = "box of multi rockets";
+	if (self.netname == "") self.netname = "box of multi rockets";
 	if (self.spawnflags & A_LID) self.spawnflags = self.spawnflags - A_LID;
 	self.frame_override = TRUE;
 	self.respawn_style = PARTICLE_BURST_WHITE + PARTICLE_BURST_RING;
@@ -643,19 +700,24 @@ NOEFFECTS : No particle or effects active
 
 ======================================================================*/
 void() item_plasma = {
+	// Check for any random monster setups
+	if (ammo_checkrandomizer() == TRUE) return;
+
+	// Check for custom model setup?
+	item_debugcustomdl();
+
 	if (self.spawnflags & A_LARGE) {
-		self.mdl = "maps/b_plas1.bsp";
+		if (self.mdl == "") self.mdl = "maps/b_plas1.bsp";
 		if (self.aflag < 1) self.aflag = AMMO_CELLS_LGR;
 	}
 	else {
-		self.mdl = "maps/b_plas0.bsp";
+		if (self.mdl == "") self.mdl = "maps/b_plas0.bsp";
 		if (self.aflag < 1) self.aflag = AMMO_CELLS_SML;
 	}
-	self.ammo_plasma = self.aflag;
 
 	precache_model (self.mdl);
 	self.classtype = CT_AMMOPLASMA;
-	self.netname = "box of cells";
+	if (self.netname == "") self.netname = "box of plasma";
 	if (self.spawnflags & A_LID) self.spawnflags = self.spawnflags - A_LID;
 	self.frame_override = TRUE;
 	self.respawn_style = PARTICLE_BURST_BLUE + PARTICLE_BURST_RING;
@@ -665,18 +727,23 @@ void() item_plasma = {
 };
 
 void() item_bolts = {
+	// Check for any random monster setups
+	if (ammo_checkrandomizer() == TRUE) return;
+
+	// Check for custom model setup?
+	item_debugcustomdl();
+
 	if (self.spawnflags & A_LARGE) {
-		self.mdl = "progs/ammo_bolts1.mdl";
+		if (self.mdl == "") self.mdl = "progs/ammo_bolts1.mdl";
 		if (self.aflag < 1) self.aflag = AMMO_BOLTS_LGR;
 	} else {
-		self.mdl = "progs/ammo_bolts0.mdl";
+		if (self.mdl == "") self.mdl = "progs/ammo_bolts0.mdl";
 		if (self.aflag < 1) self.aflag = AMMO_BOLTS_SML;
 	}
-	self.ammo_bolts = self.aflag;
 
 	precache_model (self.mdl);
 	self.classtype = CT_AMMOBOLTS;
-	self.netname = "box of crossbow bolts";
+	if (self.netname == "") self.netname = "box of crossbow bolts";
 	self.skin = 0;
 	self.skin_override = 0;
 	self.respawn_style = PARTICLE_BURST_WHITE + PARTICLE_BURST_RING;
@@ -686,18 +753,23 @@ void() item_bolts = {
 };
 
 void() item_poison = {
+	// Check for any random monster setups
+	if (ammo_checkrandomizer() == TRUE) return;
+
+	// Check for custom model setup?
+	item_debugcustomdl();
+
 	if (self.spawnflags & A_LARGE) {
-		self.mdl = "progs/ammo_poison1.mdl";
+		if (self.mdl == "") self.mdl = "progs/ammo_poison1.mdl";
 		if (self.aflag < 1) self.aflag = AMMO_POISON_LGR;
 	} else {
-		self.mdl = "progs/ammo_poison0.mdl";
+		if (self.mdl == "") self.mdl = "progs/ammo_poison0.mdl";
 		if (self.aflag < 1) self.aflag = AMMO_POISON_SML;
 	}
-	self.ammo_poison = self.aflag;
 
 	precache_model (self.mdl);
 	self.classtype = CT_AMMOPOISON;
-	self.netname = "box of poison";
+	if (self.netname == "") self.netname = "jar of poison";
 	self.skin = 0;
 	self.skin_override = 0;
 	self.respawn_style = PARTICLE_BURST_WHITE + PARTICLE_BURST_RING;
@@ -716,39 +788,47 @@ void() artifact_touch = {
 	//----------------------------------------------------------------------
 	if (self.classtype == CT_ARTSUIT) {
 		other.rad_time = TRUE;
-		other.radsuit_finished = time + self.cnt;
+		if (self.cnt < 0) other.radsuit_finished = POWERUP_VANIA;
+		else other.radsuit_finished = time + self.cnt;
 		ResetDebuffBurning(other);
 		ResetDebuffPoisoned(other);
 	}
 	else if (self.classtype == CT_ARTPENT) {
 		other.invincible_time = TRUE;
-		other.invincible_finished = time + self.cnt;
+		if (self.cnt < 0) other.radsuit_finished = POWERUP_VANIA;
+		else other.radsuit_finished = time + self.cnt;
 		ResetDebuffSystem(other);
 	}
 	else if (self.classtype == CT_ARTINVS) {
 		other.invisible_time = TRUE;
 		other.notrace = 1;
-		other.invisible_finished = time + self.cnt;
+		if (self.cnt < 0) other.invisible_finished = POWERUP_VANIA;
+		else other.invisible_finished = time + self.cnt;
 	}
 	else if (self.classtype == CT_ARTQUAD) {
 		other.super_time = TRUE;
-		other.super_damage_finished = time + self.cnt;
+		if (self.cnt < 0) other.super_damage_finished = POWERUP_VANIA;
+		else other.super_damage_finished = time + self.cnt;
 	}
 	else if (self.classtype == CT_ARTSHARP) {
 		other.sharpshoot_time = TRUE;
-		other.sharpshoot_finished = time + self.cnt;
+		if (self.cnt < 0) other.sharpshoot_finished = POWERUP_VANIA;
+		else other.sharpshoot_finished = time + self.cnt;
 	}
 	else if (self.classtype == CT_ARTPIERCE) {
 		other.nailpiercer_time = TRUE;
-		other.nailpiercer_finished = time + self.cnt;
+		if (self.cnt < 0) other.nailpiercer_finished = POWERUP_VANIA;
+		else other.nailpiercer_finished = time + self.cnt;
 	}
 	else if (self.classtype == CT_ARTPSHIELD) {
 		other.shield_time = TRUE;
-		other.shield_finished = time + self.cnt;
+		if (self.cnt < 0) other.shield_finished = POWERUP_VANIA;
+		else other.shield_finished = time + self.cnt;
 	}
 	else if (self.classtype == CT_ARTGRAVBELT) {
 		other.antigrav_time = TRUE;
-		other.antigrav_finished = time + self.cnt;
+		if (self.cnt < 0) other.antigrav_finished = POWERUP_VANIA;
+		else other.antigrav_finished = time + self.cnt;
 		other.gravity = 0.25; // This is where the magic happens! See client_power.qc for how it goes back to 1.
 	}
 	//----------------------------------------------------------------------
@@ -756,19 +836,25 @@ void() artifact_touch = {
 		other.lavashield_time = TRUE;
 		// Volume range modifier (0-1)
 		other.lavashield_volume = self.volume;
-		other.lavashield_finished = time + self.cnt;
+		if (self.cnt < 0) other.lavashield_finished = POWERUP_VANIA;
+		else other.lavashield_finished = time + self.cnt;
+		ResetDebuffBurning(other);
 	}
 	else if (self.classtype == CT_ARTWETSUIT) {
 		other.wetsuit_time = TRUE;
-		other.wetsuit_finished = time + self.cnt;
+		if (self.cnt < 0) other.wetsuit_finished = POWERUP_VANIA;
+		else other.wetsuit_finished = time + self.cnt;
 	}
 	else if (self.classtype == CT_ARTBLASTBELT) {
 		other.blastbelt_time = TRUE;
-		other.blastbelt_finished = time + self.cnt;
+		if (self.cnt < 0) other.blastbelt_finished = POWERUP_VANIA;
+		else other.blastbelt_finished = time + self.cnt;
 	}
 	else if (self.classtype == CT_ARTJUMPBOOTS) {
-		other.jumpboots_time = TRUE;
-		other.jumpboots_finished = time + self.cnt;
+		other.jumpboots_time = 1;
+		if (self.cnt < 0) other.jumpboots_finished = POWERUP_VANIA;
+		else other.jumpboots_finished = time + self.cnt;
+		
 		other.jumpboots_airlvl = 0;
 		// Check if jump max is endless, additive or exact
 		if (self.count < 0) other.jumpboots_airmax = -1;
@@ -784,22 +870,27 @@ void() artifact_touch = {
 	}
 	else if (self.classtype == CT_ARTEMPATHY) {
 		other.empathy_time = TRUE;
-		other.empathy_finished = time + self.cnt;
+		if (self.cnt < 0) other.empathy_finished = POWERUP_VANIA;
+		else other.empathy_finished = time + self.cnt;
 	}
 	else if (self.classtype == CT_ARTTHERMSUIT) {
 		other.therm_time = TRUE;
-		other.therm_finished = time + self.cnt;
+		if (self.cnt < 0) other.therm_finished = POWERUP_VANIA;
+		else other.therm_finished = time + self.cnt;
 		ResetDebuffBurning(other);
 	}
 	else if (self.classtype == CT_ARTTRINITY) {
 		other.trinity_time = 1;
 		other.trinity_start = 1;
-		other.trinity_finished = time + self.cnt;
+		if (self.cnt < 0) other.trinity_finished = POWERUP_VANIA;
+		else other.trinity_finished = time + self.cnt;
 	}
 	else if (self.classtype == CT_ARTCROSS) {
 		other.cross_time = 1;
 		other.cross_start = 1;
-		other.cross_finished = time + self.cnt;
+		if (self.cnt < 0) other.cross_finished = POWERUP_VANIA;
+		else other.cross_finished = time + self.cnt;
+		ResetDebuffSystem(other);
 	}
 	else if (self.classtype == CT_ARTBERSERK) {
 		other.perms = other.perms | POW_VAMPIRE;
@@ -815,7 +906,8 @@ void() artifact_touch = {
 	}
 	else if (self.classtype == CT_ARTLEVITATION) {
 		other.wing_time = 1;
-		other.wing_finished = time + 45;
+		if (self.cnt < 0) other.wing_finished = POWERUP_VANIA;
+		else other.wing_finished = time + 45;
 	}
 	else if (self.classtype == CT_ARTOPTIMIZER) {
 		other.perms = other.perms | POW_SHOTTYMAN;
@@ -837,7 +929,7 @@ void() artifact_touch = {
 	sprint (other, "You got the ");
 	sprint (other, self.netname);
 	sprint (other,"\n");
-	sound (other, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 	stuffcmd (other, "bf\n");
 
 	// Update player item flags (regular + mod)
@@ -854,16 +946,22 @@ void() artifact_touch = {
 };
 
 void () item_powerup_shield = {
-	self.mdl = "progs/rogue/shield.mdl";
+	// Check for any random setups
+	if (artifact_checkrandomizer() == TRUE) return;
+
+	// Check for custom model setup?
+	item_debugcustomdl();
+
+	if (self.mdl == "") self.mdl = "progs/rogue/shield.mdl";
 	precache_model (self.mdl);
-	self.noise = "shield/pickup.wav";
+	if (self.noise == "") self.noise = "shield/pickup.wav";
 	self.noise1 = "shield/hit.wav";
 	self.noise2 = "shield/fadeout.wav";
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 	precache_model ("progs/rogue/shield.mdl");
-	self.netname = "Power Shield";
+	if (self.netname == "") self.netname = "Power Shield";
 	self.items = IT_QUAD;
 	self.items2 = IT2_SHIELD;
 	self.classtype = CT_ARTPSHIELD;
@@ -874,15 +972,21 @@ void () item_powerup_shield = {
 };
 
 void () item_powerup_belt = {
-	self.mdl = "progs/rogue/beltup.mdl";
+	// Check for any random setups
+	if (artifact_checkrandomizer() == TRUE) return;
+
+	// Check for custom model setup?
+	item_debugcustomdl();
+
+	if (self.mdl == "") self.mdl = "progs/rogue/beltup.mdl";
 	precache_model (self.mdl);
-	self.noise = "belt/pickup.wav";
+	if (self.noise == "") self.noise = "belt/pickup.wav";
 	self.noise1 = "belt/use.wav";
 	self.noise2 = "belt/fadeout.wav";
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
-	self.netname = "Anti-Grav Belt";
+	if (self.netname == "") self.netname = "Anti-Grav Belt";
 	self.items = IT_QUAD;
 	self.classtype = CT_ARTGRAVBELT;
 	self.part_active = PARTICLE_STYLE_QUAD;
@@ -893,15 +997,21 @@ void () item_powerup_belt = {
 };
 
 void () item_artifact_empathy_shields = {
-	self.mdl = "progs/hipnotic/empathy.mdl";
+	// Check for any random setups
+	if (artifact_checkrandomizer() == TRUE) return;
+
+	// Check for custom model setup?
+	item_debugcustomdl();
+
+	if (self.mdl == "") self.mdl = "progs/hipnotic/empathy.mdl";
 	precache_model (self.mdl);
-	self.noise = "hipitems/empathy.wav";
+	if (self.noise == "") self.noise = "hipitems/empathy.wav";
 	self.noise1 = "hipitems/empathy2.wav";
 	self.noise2 = "items/suit2.wav";
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
-	self.netname = "Empathy Shield";
+	if (self.netname == "") self.netname = "Empathy Shield";
 	self.items2 = HIP_IT2_EMPATHY_SHIELDS;
 	self.classtype = CT_ARTEMPATHY;
 	self.part_active = PARTICLE_STYLE_SRING;
@@ -911,13 +1021,19 @@ void () item_artifact_empathy_shields = {
 };
 
 void () item_artifact_lavasuit = {
-	self.mdl = "progs/suit2.mdl";
+	// Check for any random setups
+	if (artifact_checkrandomizer() == TRUE) return;
+
+	// Check for custom model setup?
+	item_debugcustomdl();
+
+	if (self.mdl == "") self.mdl = "progs/suit2.mdl";
 	precache_model (self.mdl);
-	self.noise = "items/suit.wav";
+	if (self.noise == "") self.noise = "items/suit.wav";
 	self.noise1 = "items/suit2.wav";
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
-	self.netname = "Thermal Protection Suit";
+	if (self.netname == "") self.netname = "Thermal Protection Suit";
 	self.skin = 1;
 	self.classtype = CT_ARTTHERMSUIT;
 	self.part_active = PARTICLE_STYLE_PENT;
@@ -927,15 +1043,21 @@ void () item_artifact_lavasuit = {
 };
 
 void() item_artifact_trinity = {
-	self.mdl = "progs/quoth2pt2full/trinity.mdl";
+	// Check for any random setups
+	if (artifact_checkrandomizer() == TRUE) return;
+
+	// Check for custom model setup?
+	item_debugcustomdl();
+
+	if (self.mdl == "") self.mdl = "progs/quoth2pt2full/trinity.mdl";
 	precache_model (self.mdl);
-	self.noise = "items2/trintake.wav";
+	if (self.noise == "") self.noise = "items2/trintake.wav";
 	self.noise1 = "items2/trinuse.wav";
 	self.noise2 = "items2/trinend.wav";
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
-	self.netname = "Trinity";
+	if (self.netname == "") self.netname = "Trinity";
 	self.items = IT_QUAD;
 	self.items2 = IT2_TRINITY;
 	self.classtype = CT_ARTTRINITY;
@@ -946,13 +1068,19 @@ void() item_artifact_trinity = {
 };
 
 void() item_artifact_cross = {
-	self.mdl = "progs/quoth2pt2full/cross.mdl";
+	// Check for any random setups
+	if (artifact_checkrandomizer() == TRUE) return;
+
+	// Check for custom model setup?
+	item_debugcustomdl();
+
+	if (self.mdl == "") self.mdl = "progs/quoth2pt2full/cross.mdl";
 	precache_model (self.mdl);
-	self.noise = "items2/crostake.wav";
+	if (self.noise == "") self.noise = "items2/crostake.wav";
 	self.noise2 = "items2/crosend.wav";
 	precache_sound (self.noise);
 	precache_sound (self.noise2);
-	self.netname = "Cross of Deflection";
+	if (self.netname == "") self.netname = "Cross of Deflection";
 	self.items = IT_QUAD;
 	self.classtype = CT_ARTCROSS;
 	self.part_active = PARTICLE_STYLE_QUAD;
@@ -994,7 +1122,9 @@ void () horn_touch = {
 
 	self.solid = SOLID_NOT;
 	self.model = string_null;
-	sprint (other,"You got the Horn of Conjuring\n");
+	sprint (other,"You got the ");
+	sprint (other,self.netname);
+	sprint (other,"\n");
 	sound (other,CHAN_VOICE,self.noise,TRUE,ATTN_NONE);
 	stuffcmd (other,"bf\n");
 	activator = other;
@@ -1006,12 +1136,16 @@ void () horn_touch = {
 void () item_artifact_horn = {
 	if (deathmatch) { remove(self); return; }
 
+	// Check for custom model setup?
+	item_debugcustomdl();
+
 	self.touch2 = horn_touch;
-	self.mdl = "progs/hipnotic/horn.mdl";
+	if (self.mdl == "") self.mdl = "progs/hipnotic/horn.mdl";
 	precache_model ("progs/hipnotic/horn.mdl");
 	precache_sound ("hipitems/horn.wav");
 	setmodel (self,self.mdl);
-	self.noise = "hipitems/horn.wav";
+	if (self.netname == "") self.netname = "Horn of Conjuring";
+	if (self.noise == "") self.noise = "hipitems/horn.wav";
 	self.classtype = CT_ARTHORN;
 	setsize (self,VEC_HULL_MIN,VEC_HULL_MAX);
 	item_start ();
@@ -1057,7 +1191,7 @@ void () circuitboard_touch = {
 		return;
 
 	stuffcmd (other, "bf\n");
-	centerprint (other, "You got the 17-centimeter Fromitz board!");
+	centerprint (other, "You got a 17-centimeter Fromitz board!");
 	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 	activator = other;
 	SUB_UseTargets ();
@@ -1069,11 +1203,14 @@ collectible circuit board thing
 */
 
 void () item_circuitboard = {
-	self.mdl = "progs/fromitz.mdl";
-	precache_model ("progs/fromitz.mdl");
-	setmodel (self, "progs/fromitz.mdl");
-	precache_sound ("items/protect.wav");
-	self.noise = "items/protect.wav";
+	// Check for custom model setup?
+	item_debugcustomdl();
+
+	if (self.mdl == "") self.mdl = "progs/fromitz.mdl";
+	precache_model (self.mdl);
+	setmodel (self, self.mdl);
+	if (self.noise == "") self.noise = "items/protect.wav";
+	precache_sound (self.noise);
 	self.touch2 = circuitboard_touch;
 	setsize (self, '-16 -16 -24', VEC_HULL_MAX);
 	self.classtype = CT_CIRCUIT;

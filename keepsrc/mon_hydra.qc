@@ -289,7 +289,10 @@ void() hydra_death= {
 /*QUAKED monster_hydra (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 */
 void() monster_hydra = {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	precache_model ("progs/extras_r5/hydra.mdl");
 	precache_model ("progs/extras_r5/hydragib.mdl");
@@ -324,13 +327,17 @@ void() monster_hydra = {
 
 	if (self.bboxtype < 1) self.bboxtype = BBOX_FISH;
 	if (self.health < 1) self.health = 160;//75;	// I gave hydra more life (khreathor)
-	if (self.deathstring == "") self.deathstring = " was fed to the Rotfish\n";
+	if (self.deathstring == "") self.deathstring = " was choked by a Hydra\n";
 	// Check for water sightline wakeup
 	if (self.spawnflags & MON_LIQUIDBLOCK) self.liquidblock = TRUE;
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.th_stand = hydra_stand1;
 	self.th_walk = hydra_walk1;

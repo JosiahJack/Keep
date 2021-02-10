@@ -1,0 +1,45 @@
+==============================================================
+Title                  : knight2
+Filename               : test03.mdl
+Author                 : Madfox
+Email Adress           : gimli@home.ml
+Description            : crossbow knight
+
+Additional Credits to  : ID Software
+
+==============================================================
+
+* Play Inormation *
+
+Level Name              : /
+Single Player           : yes
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Monsters            : yes
+New Sounds              : /
+New Weapon              : yes
+qC                      : /
+
+==============================================================
+
+* Construction *
+
+Base              : Make a crosbow knight that corresponds with
+                  : the knight in Quake1.
+Build Time        : other toppic
+Editor(s) Used    : Quark Qmle Wally Quark6.3 AM2005
+Known Bugs        : Original triverts and triangles of Q1knight
+                  : are 201 - 617.This one is 263 - 1039.
+                  : All frames identical to the Q1 knight except
+                  : switch (22frames) shoot (9frames) rload (17)
+                  : blast (15)
+Thanks            : The RemakeQuake Team! 
+Install           : Not qc related yet, so no.
+
+You may distribute and modify this file, as long as you give
+me credit, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 20 september 2009  

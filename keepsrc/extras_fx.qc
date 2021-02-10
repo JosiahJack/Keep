@@ -282,6 +282,6 @@ void() fx_sound =
 	else {// Start immediately
 		self.use = sound_pause;// next use stops it
 		self.think = sound_play;
-		self.nextthink = time + 1.0;// FIXME! - WTF?
+		self.nextthink = time + 1.0;// FIXME! - WUT?
 	}
 };

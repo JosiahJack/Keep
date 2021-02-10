@@ -1,3 +1,5 @@
+void() vanilla_water_check;
+
 /*======================================================================
  AI (monster) FUNCTIONALITY
  
@@ -492,20 +494,45 @@ void() FoundTarget = {
 	if (self.liquidblock == TRUE && self.th_missile)
 		self.liquidblock = FALSE;
 
-	if ( (self.enemy.flags & FL_CLIENT) ) {
-		if ( self.charmed ) {
-			if ( ((self.charmer == self.enemy) || (self.charmer == self.enemy.charmer)) ) {
-				self.enemy = world;
-				return ;
+
+	//----------------------------------------------------------------------
+	// If current enemy is alive and can take damage then wakeup
+	// the rest of the groupsight group using global entity
+	//----------------------------------------------------------------------
+	if (self.sightgroup != "") {
+		if (self.enemy.health > 0 && self.enemy.takedamage > DAMAGE_NO) {
+			if ( self.charmed ) {
+				if ( ((self.charmer == self.enemy) || (self.charmer == self.enemy.charmer)) ) {
+					self.enemy = world;
+					return ;
+				}
 			}
+			sightgroup_entity = self;		// Highlight target for others
+			sightgroup_entity_time = time;	// reset wakeup timer
+			if (self.enemy.flags & FL_CLIENT) monster_sightsound();
+			HuntTarget ();					// Keep running after enemy
+			return;
 		}
-		sight_entity = self;			// Highlight an angry monster for others
-		sight_entity_time = time;		// reset wakeup timer
-	} else {
-		if ( self.charmed ) {
-			if ( (self.charmer == self.enemy.charmer) ) {
-				self.enemy = world;
-				return ;
+	}
+	//----------------------------------------------------------------------
+	// DEFAULT wakeup method for all monsters
+	//----------------------------------------------------------------------
+	else {
+		if ( (self.enemy.flags & FL_CLIENT) ) {
+			if ( self.charmed ) {
+				if ( ((self.charmer == self.enemy) || (self.charmer == self.enemy.charmer)) ) {
+					self.enemy = world;
+					return ;
+				}
+			}
+			sight_entity = self;			// Highlight an angry monster for others
+			sight_entity_time = time;		// reset wakeup timer
+		} else {
+			if ( self.charmed ) {
+				if ( (self.charmer == self.enemy.charmer) ) {
+					self.enemy = world;
+					return ;
+				}
 			}
 		}
 	}
@@ -519,9 +546,15 @@ void() FoundTarget = {
 	if (self.sighttarget != "") {
 		if (self.enemy.targetname == self.sighttarget) {
 			// Make sure the sight target is alive before chasing it
-			sight_entity = self.enemy;		// Highlight target for others
-			sight_entity_time = time;		// reset wakeup timer
-			monster_sightsound();			// Always make wakeup noise!
+			self.oldenemy = find(world, targetname, self.sighttarget);
+			if (self.oldenemy.health > 0) {
+				if (self.oldenemy.takedamage > DAMAGE_NO) {
+					sight_entity = self.enemy;		// Highlight target for others
+					sight_entity_time = time;		// reset wakeup timer
+					monster_sightsound();			// Always make wakeup noise!
+				}
+			}
+			self.oldenemy = world;
 		}
 	}
 	
@@ -542,6 +575,9 @@ void(float wakeupothers) FoundHuntTarget =
 {
 	if (self.health < 1) return;	// Dead monsters don't hunt!
 	if (!self.enemy) return;
+
+	// Passive mode active and about to switch state?
+	if (check_passivestate_switch(self)) return;
 
 	// Check for Liquid surface block entity key
 	// if the monster has range attack, can NOW see through liquid surface
@@ -575,6 +611,9 @@ float() FindTarget = {
 	if (intermission_running > 0) return FALSE;
 	if (cinematic_running > 0) return FALSE;
 
+	// Reset any combat exit conditions
+	self.enemyexit = FALSE;
+
 	if ( self.charmed ) {
 		self.effects = (self.effects | EF_DIMLIGHT);
 		if ( (self.huntingcharmer > FALSE) ) {
@@ -600,10 +639,8 @@ float() FindTarget = {
 		}
 	}
 
-	// Passive mode active and about to switch state?
-	if (check_passivestate_switch()) return FALSE;
-
 	//----------------------------------------------------------------------
+	// SIGHT TARGET CHECK
 	// Does the global sight entity match the enemy sight group?
 	// Always check for an empty sighttarget first because the
 	// the global sight entity could have an empty targetname
@@ -613,14 +650,42 @@ float() FindTarget = {
 			// Make sure the sight target is alive before chasing it
 			if (sight_entity.health < 0) self.sighttarget = "";
 			else {
-				// If using enemytarget system, switch off tracking entity first
+				// If using enerytarget system, switch off tracking entity first
 				if (self.enemy.classtype == CT_ENEMYTARGET) SUB_switchEnemyTarget();
 				self.enemy = sight_entity;	// Switch to new enemy
+				self.passive_state = MON_PASSIVESTATE_OFF;
 				FoundTarget ();				// Run+turn towards new enemy
 				return TRUE;
 			}
 		}
 	}
+	//----------------------------------------------------------------------
+	// SIGHT GROUP CHECK
+	// This is designed to co-ordination wakeup and attack as a group
+	// Check the gobal entity has the same sightgroup string (trigger)
+	// sightgroup + NO Ambush = ALL wake up when sight of combat/fire/player
+	// sightgroup + Ambush = All wake up when sight of player
+	// sightgroup + passive + No Ambush = All wake up sight of combat/fire
+	// sightgroup + passive + Ambush = All wake up with direct damage ONLY
+	//----------------------------------------------------------------------
+	if (self.sightgroup != "") {
+		// Let ambush still override wakeup (ambush=req direct damage)
+		if (sightgroup_entity_time >= time - 0.1) {
+			if (self.sightgroup == sightgroup_entity.sightgroup) {
+				self.enemy = sightgroup_entity.enemy;	// Monster who wokeup
+				self.passive_state = MON_PASSIVESTATE_OFF;
+				FoundTarget ();							// Run+turn at new enemy
+				return TRUE;
+			}
+		}
+	}
+	//----------------------------------------------------------------------
+	// PASSIVE SYSTEM CHECK
+	// passive_state + NO ambush = wake up when sight of combat/fire
+	// passive_state + Ambush = wake up from direct damage ONLY
+	//----------------------------------------------------------------------
+	if (check_passivestate_switch(self)) return FALSE;
+
 	//----------------------------------------------------------------------
 	// if the first spawnflag bit is set, the monster will only wake up on
 	// really seeing the player, not another monster getting angry
@@ -747,6 +812,7 @@ float() FindTarget = {
 //----------------------------------------------------------------------
 void() ai_face =
 {
+	vanilla_water_check();
 	if (self.health < 1) return;// Unusual check, caught elsewhere
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
 	ChangeYaw (); 				// Done in code
@@ -757,6 +823,7 @@ void() ai_face =
 //----------------------------------------------------------------------
 void(float dist) ai_forward =
 {
+	vanilla_water_check();
 	walkmove (self.angles_y, dist);
 };
 
@@ -772,7 +839,10 @@ void(float dist) ai_faceforward =
 //----------------------------------------------------------------------
 // ai_back + backface
 //----------------------------------------------------------------------
-void(float dist) ai_back = {walkmove ( (self.angles_y+180), dist);};
+void(float dist) ai_back = {
+	vanilla_water_check();
+	walkmove ( (self.angles_y+180), dist);
+};
 
 void(float dist) ai_backface = {
 	ai_face();
@@ -788,6 +858,7 @@ void(float dist) ai_pain ={ai_back (dist);};
 // ai_painforward
 //----------------------------------------------------------------------
 void(float dist) ai_painforward = {
+	vanilla_water_check();
 	walkmove (self.angles_y, dist);
 	// Not sure why Id used ideal_yaw when other functions use angles_y
 //	walkmove (self.ideal_yaw, dist);
@@ -797,6 +868,7 @@ void(float dist) ai_painforward = {
 // ai_turn (Very costly function, re-using FindTarget again)
 //----------------------------------------------------------------------
 void() ai_turn = {
+	vanilla_water_check();
 	if (FindTarget ()) return;
 	ChangeYaw ();			// Code function
 };
@@ -819,6 +891,7 @@ float() FacingIdeal =
 //----------------------------------------------------------------------
 void() ai_trackenemy =
 {
+	vanilla_water_check();
 	if (visible(self.enemy)) {
 		self.attack_track = self.enemy.origin;
 		ai_face();
@@ -863,6 +936,8 @@ void() ai_charge_side =
 	local	vector	dtemp;
 	local	float	heading;
 	
+	vanilla_water_check();
+
 	// aim to the left of the enemy for a flyby
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
 	ChangeYaw ();
@@ -893,10 +968,12 @@ void() ai_charge_front =
  ai_run_melee
  - Turn and close until within an angle to launch a melee attack
 ======================================================================*/
-void() ai_run_melee =
-{
+void() ai_run_melee = {
+	vanilla_water_check();
+
 	self.ideal_yaw = enemy_yaw;		// This is defined in ai_run
 	ChangeYaw ();					// Code function
+
 
 	//----------------------------------------------------------------------
 	// Facing towards the ENEMY target? (ideal_yaw)
@@ -911,8 +988,9 @@ void() ai_run_melee =
  ai_run_missile
  - Turn in place until within an angle to launch a missile attack
 ======================================================================*/
-void() ai_run_missile =
-{
+void() ai_run_missile = {
+	vanilla_water_check();
+
 	self.ideal_yaw = enemy_yaw;		// This is defined in ai_run
 	ChangeYaw ();					// Code function
 	
@@ -929,8 +1007,9 @@ void() ai_run_missile =
  ai_run_jump
  - Turn in place until within an angle to jump attack
 ======================================================================*/
-void() ai_run_jump =
-{
+void() ai_run_jump = {
+	vanilla_water_check();
+
 	self.ideal_yaw = enemy_yaw;		// This is defined in ai_run
 	ChangeYaw ();					// Code function
 	
@@ -950,6 +1029,8 @@ void() ai_run_jump =
 void(float dist) ai_run_slide =
 {
 	local float	ofs;
+
+	vanilla_water_check();
 
 	// It is better to re-calcuate this than wait for ai_run to update
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);	
@@ -977,6 +1058,8 @@ void(float dist) ai_run_sidestep =
 {
 	local float	ofs;
 
+	vanilla_water_check();
+
 	if (self.attack_sidestep < time) {
 		self.attack_sidestep = time + 4 + random()*4;
 		self.lefty = rint(1 - self.lefty);
@@ -1001,6 +1084,8 @@ void(float dist) ai_run_sidestep =
 ======================================================================*/
 void(float dist) ai_run_backward =
 {
+	vanilla_water_check();
+
 	// Work out angle to face for enemy and then turn +/- 90 degrees
 	// so that the monster is moving sideways to the enemy
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin) + 180;	
@@ -1019,12 +1104,13 @@ void(float dist) ai_run_backward =
 float(entity source, entity targ, float ignorenoshoot) ai_foundbreakable =
 {
 	// Found a breakable in the way?
-	if (targ.classtype == CT_FUNCBREAK) {
+	if (targ.classtype == CT_FUNCBREAK || targ.classtype == CT_FUNCBREAKMDL) {
 		// Check if a monster and nomonster damage/trigger allowed?
-		if (source.flags & FL_MONSTER && targ.spawnflags & BREAK_NOMONSTER)
-			return FALSE;
+		if (source.flags & FL_MONSTER && targ.spawnflags & BREAK_NOMONSTER) return FALSE;
 		// Ignoring noshoot spawnflag? (designed for jump/missile events)
 		else if (ignorenoshoot == TRUE) return TRUE;
+		// is breakable explosive damage only and attacker can use explosives?
+		else if (targ.brktrigmissile && source.attack_explosive) return TRUE;
 		// Can the breakable be damaged?
 		else if (targ.spawnflags & BREAK_NOSHOOT) return FALSE;
 		// Its a breakable that breaks!
@@ -1034,13 +1120,52 @@ float(entity source, entity targ, float ignorenoshoot) ai_foundbreakable =
 };
 
 /*======================================================================
- ai_immunedamage
+ ai_tracebreakable
+  Check if the monster (self) can see any breakables infront (target)
+  Triple trace infront (self.angles) origin, +upward and +downward
+======================================================================*/
+float BRKTRACE_DIST = 128;
+float BRKTRACE_ANG = 0.35;
+
+float(float tracedist, float traceang) ai_tracebreakable =
+{
+	local vector spot1, spot2;
+	local float mon_height;
+	
+	// Take current facing angle of monster
+	makevectors(self.angles);
+	spot1 = self.origin;
+
+	// Work out look up/down height for additional tracelines
+	mon_height = (self.maxs_z - self.mins_z) * traceang;
+	
+	// Trace directly infront of entity using angles
+	spot2 = spot1 + (v_forward * tracedist);
+	traceline (spot1, spot2, FALSE, self);
+	if (ai_foundbreakable(self, trace_ent, FALSE)) return TRUE;
+
+	// Trace from origin and look UP!
+	spot2 = spot1 + (v_forward * tracedist) + (v_up * mon_height);
+	traceline (spot1, spot2, FALSE, self);
+	if (ai_foundbreakable(self, trace_ent, FALSE)) return TRUE;
+
+	// Trace from origin and look DOWN!
+	spot2 = spot1 + (v_forward * tracedist) - (v_up * mon_height);
+	traceline (spot1, spot2, FALSE, self);
+	if (ai_foundbreakable(self, trace_ent, FALSE)) return TRUE;
+
+	// No breakable found
+	return FALSE;
+};
+
+/*======================================================================
+ ai_immunebreakable
   Check if a breakable/pushable is immune to damage from monsters
 ======================================================================*/
-float(entity source, entity targ) ai_immunedamage =
+float(entity source, entity targ) ai_immunebreakable =
 {
-	// Found a breakable?
-	if (targ.classtype == CT_FUNCBREAK) {
+	// Found a breakable? (BSP or model)
+	if (targ.classtype == CT_FUNCBREAK || targ.classtype == CT_FUNCBREAKMDL) {
 		// Check no damage spawnflag?
 		if (source.flags & FL_MONSTER && targ.spawnflags & BREAK_NOMONSTER)
 			return TRUE;
@@ -1056,57 +1181,34 @@ float(entity source, entity targ) ai_immunedamage =
 
 /*======================================================================
  ai_damagebreakable
-  Check if the monster (self) can hit any breakables infront (target)
-  Triple trace infront (self.angles) up,middle,down
   If any breakables found, damage them to see if they will break
+  Use the triple trace forward, upward and dowward to find breakables
 ======================================================================*/
 void(float brkdmg) ai_damagebreakable =
 {
-	local vector	spot1, spot2;
 	local float ldmg;
 	
-	// Setup damage, forward facing vector and initial trace origin
+	// Setup damage modifier
 	ldmg = (random() + random() + random()) * brkdmg;
-	makevectors(self.angles);
-	spot1 = self.origin;
-	
-	// Trace directly infront of entity using angles
-	spot2 = spot1 + v_forward * 100;
-	traceline (spot1, spot2, TRUE, self);
-	if (ai_foundbreakable(self, trace_ent, FALSE)) {
+
+	// Triple trace directly infront of monster using angles
+	if (ai_tracebreakable(BRKTRACE_DIST, BRKTRACE_ANG)) {
 		// Check for any monster damage modifier on breakable
-		if (trace_ent.brkmondmg>0) ldmg = ldmg * trace_ent.brkmondmg;
+		if (self.flags & FL_MONSTER && trace_ent.brkmondmg > 0)
+			ldmg = ldmg * trace_ent.brkmondmg;
+		// Apply damage to breakable
 		T_Damage (trace_ent, self, self, ldmg, DAMARMOR);
-	}
-	else {
-		// Trace upwards
-		spot2 = spot1 + v_forward * 100 + v_up * 64;
-		traceline (spot1, spot2, TRUE, self);
-		if (ai_foundbreakable(self, trace_ent, FALSE)) {
-			// Check for any monster damage modifier on breakable
-			if (trace_ent.brkmondmg>0) ldmg = ldmg * trace_ent.brkmondmg;
-			T_Damage (trace_ent, self, self, ldmg, DAMARMOR);
-		}
-		else {
-			// Trace downwards
-			spot2 = spot1 + v_forward * 100 - v_up * 64;
-			traceline (spot1, spot2, TRUE, self);
-			if (ai_foundbreakable(self, trace_ent, FALSE)) {
-				// Check for any monster damage modifier on breakable
-				if (trace_ent.brkmondmg>0) ldmg = ldmg * trace_ent.brkmondmg;
-				T_Damage (trace_ent, self, self, ldmg, DAMARMOR);
-			}
-		}
 	}
 };
 
 /*======================================================================
  ai_jumpbreakable
   Check if the monster can trigger a breakable from jump attack
+  Expecting SELF = monster and OTHER = breakable
 ======================================================================*/
 void(float brkdmg) ai_jumpbreakable =
 {
-	if (ai_foundbreakable(self, other,TRUE) && other.brktrigjump != 0) {
+	if (ai_foundbreakable(self, other, TRUE) && other.brktrigjump != 0) {
 		// Found a breakable which is prone to jump damage
 		trigger_ent(other, self);
 	}
@@ -1114,15 +1216,57 @@ void(float brkdmg) ai_jumpbreakable =
 };
 
 /*======================================================================
+ CheckBlockedBreakable
+  See if any breakables are in the way (running forward)
+======================================================================*/
+void() CheckBlockedBreakable =
+{
+	local float brklen;
+
+	// Still busy attacking? do nothing	
+	if (time < self.attack_finished) return;
+
+	// Double check a DEFAULT melee range exist, use knights
+	if (self.th_melee && !self.meleerange)
+		self.meleerange = MONAI_MELEEKNIGHT;
+
+	// Triple trace directly infront of monster using angles
+	if (ai_tracebreakable(BRKTRACE_DIST, BRKTRACE_ANG)) {
+		if (ai_foundbreakable(self, trace_ent, FALSE)) {
+			// Find out exactly how far away breakable bounding box is
+			brklen = fabs(vlen(self.origin - trace_endpos));
+			
+			// Check breakable within melee/missile range?
+			// Added extra check for explosive damage on breakbles (1.8)
+			if (self.attack_explosive && trace_ent.brktrigmissile) {
+				SUB_AttackFinished (1+random());
+				self.attack_state = AS_MISSILE;
+			}
+			else if (brklen < self.meleerange && self.th_melee) {
+				SUB_AttackFinished (1+random());
+				self.attack_state = AS_MELEE;
+			}
+			else if (self.th_missile) {
+				SUB_AttackFinished (1+random());
+				self.attack_state = AS_MISSILE;
+			}
+		}
+	}
+};
+
+/*======================================================================
  ai_checkmelee
   Check if the monster (self) can attack enemy (target)
   and returns TRUE if the monster is within XYZ range
 ======================================================================*/
-float(float attackdist) ai_checkmelee =
+float(float attackdist, float attackzaxis) ai_checkmelee =
 {
 	local vector	spot1, spot2;
 	local float 	delta, zdiff;
 
+	// Setup default
+	if (attackzaxis <= 0) attackzaxis = MONAI_MELEEZAXIS;
+	
 	// Calculate distance and z axis difference seperate
 	spot1 = SUB_orgEnemyTarget();
 	spot2 = self.origin;
@@ -1131,7 +1275,7 @@ float(float attackdist) ai_checkmelee =
 	delta = vlen(spot1 - spot2);		// Calculate vector distance
 
 	// Is the enemy too far away and the zaxis is wrong (too low/high)
-	if (delta < attackdist && zdiff < MONAI_MELEEZAXIS) return TRUE;
+	if (delta <= attackdist && zdiff <= MONAI_MELEEZAXIS) return TRUE;
 	else return FALSE;
 };
 
@@ -1144,9 +1288,11 @@ void() ai_melee =
 {
 	local float ldmg;
 
+	vanilla_water_check();
+
 	if (!self.enemy) return;			// removed before stroke
 	ai_damagebreakable(10);				// Damage any breakables
-	if (!ai_checkmelee(MONAI_MELEEFRONT)) return;	// Too far away
+	if (!ai_checkmelee(MONAI_MELEEFRONT,FALSE)) return;	// Too far away
 
 	// Can the target bleed? - no blood/damage, quick exit
 	// This candamage test not in origina id code (sync'd to melee_side)
@@ -1182,9 +1328,12 @@ void(float dmg_multiplier) ai_meleesmash =
 {
 	local float ldmg;
 
+	vanilla_water_check();
+
 	if (!self.enemy) return;						// removed before stroke
 	ai_damagebreakable(3*dmg_multiplier);			// Damage any breakables
-	if (!ai_checkmelee(self.meleerange)) return;	// Too far away
+	// Is the enemy too far away, ++ extra Z height
+	if (!ai_checkmelee(self.meleerange,MONAI_MELEEZTALL)) return;	// Too far away
 
 	// Can the target bleed? - no blood/damage, quick exit
 	// This candamage test not in origina id code (sync'd to melee_side)
@@ -1194,9 +1343,13 @@ void(float dmg_multiplier) ai_meleesmash =
 	// If this is infighting do more damage as it will look more impressive
 	// Also if this damage is enough to kill in a single blow, gib for effect
 	if (self.enemy.flags & FL_MONSTER) dmg_multiplier = dmg_multiplier * 2;
+
+	// 1-9 damage
 	ldmg = (random() + random() + random()) * dmg_multiplier;
+	if (ldmg < 1) ldmg = 1;
 	if (self.enemy.health < ldmg) ldmg = ldmg*3;
 	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+
 	// Lots of blood and gore
 	SpawnMeatSpray (self, self.enemy, crandom() * 100);
 	SpawnMeatSpray (self, self.enemy, crandom() * 100);
@@ -1222,10 +1375,12 @@ void() ai_melee_side =
 {
 	local float ldmg;
 
+	vanilla_water_check();
+
 	if (!self.enemy) return;	// removed before stroke
 	ai_damagebreakable(10);		// Damage any breakables
 	ai_charge_side();					// move (20 units) to the side of enemy
-	if (!ai_checkmelee(MONAI_MELEESIDE)) return;	// Too far away
+	if (!ai_checkmelee(MONAI_MELEESIDE,FALSE)) return;	// Too far away
 
 	// Can the target bleed? - no blood/damage, quick exit
 	if (!CanDamage (self.enemy, self)) return;
@@ -1249,7 +1404,7 @@ void() ai_melee_side =
 /*======================================================================
  ai_shockwave
  - produce a large ground slam/shockwave effect
- - Used by hammer ogres and golems
+ - Used by hammer ogres, golems and barons
 ======================================================================*/
 void() ai_shockwave_think =
 {
@@ -1271,19 +1426,16 @@ void(vector imp_vec, float imp_damage, float imp_radius, float imp_forward, floa
 {
 	local entity swave, sjump;
 	local vector impact, fvel;
-	local float vdist, vpercent, vpart;
-	local float impzdiff;
+	local float vdist, vpercent, vdamage, vpart, impzdiff;
 	
+	// Big impact, flash effect
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	// Check if the player is close enough for damage?
-	self.meleecontact = TRUE;
-	ai_meleesmash(imp_damage);
-	self.meleecontact = FALSE;
-	
+
 	// Play impact sound and work out where the impact is going to happen
 	sound (self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_IDLE);
 	makevectors (self.angles);
-//	impact = self.origin + v_forward*imp_vec_x + v_right*imp_vec_y + v_up*imp_vec_z;
+	// Replaced this crazy mess with function attack_vector
+	//impact = self.origin + v_forward*imp_vec_x + v_right*imp_vec_y + v_up*imp_vec_z;
 	impact = self.origin + attack_vector(imp_vec);
 
 	// Push all entities within a certain radius outwards
@@ -1293,22 +1445,56 @@ void(vector imp_vec, float imp_damage, float imp_radius, float imp_forward, floa
 	while(sjump) {
 		// Ignore monster (self)
 		if (sjump != self) {
-			// Only affect players and other monsters
-			if (sjump.flags & FL_CLIENT || sjump.flags & FL_MONSTER) {
+			// Check for player + blast belt? - play active sound
+			if (sjump.flags & FL_CLIENT && sjump.moditems & IT_ARTBLASTBELT)
+				PlayBlastBeltSound(sjump);
+			// Only affect players and other monsters AND breakables (BSP+model)
+			else if (sjump.flags & FL_CLIENT || sjump.flags & FL_MONSTER || sjump.classgroup == CG_BREAKABLE) {
+				// Exclude breakable/pushable immune to monster damage
+				// This does not catch breakables excluded from player damage
+				if (ai_immunebreakable(self, sjump)) {
+					dprint("[SHOCKWAVE] Breakable (");
+					dprint(ftos(sjump.classtype));
+					dprint(") spnflg ("); dprint(ftos(sjump.spawnflags));
+					dprint(") Immune\n");
+				}
 				// Exclude statues, stone/heavy monsters and bosses!
-				if (sjump.classgroup != CG_STONE && sjump.bossflag == FALSE) {
-					// Is the entity on the ground?
-					if (sjump.flags & FL_ONGROUND) {
+				else if (sjump.classgroup != CG_STONE && sjump.bossflag == FALSE) {
+					// Is the entity on the ground or a breakable?
+					// The test for breakables exceptions is done earlier
+					// Breakable bmodel/model don't have onground flag set
+					// The onground test is really to catch player/monsters
+					if (sjump.flags & FL_ONGROUND || sjump.classgroup == CG_BREAKABLE) {
 						// Is the entity too far above or below the impact?
 						impzdiff = fabs(sjump.origin_z - impact_z);
 						if (impzdiff < MONAI_IMPACTZAXIS) {
-							// Distance between impact and enemy
+							// Distance between impact and enemy/entity
 							vdist = vlen(sjump.origin - impact);
 							// Percentage of impact force
 							vpercent = 1 - (vdist / imp_radius);
+							vdamage = rint(imp_damage * vpercent);
+							// Impact damage radius is half for breakables
+							// Otherwise whole rooms would be destroyed!
+							if (sjump.classgroup == CG_BREAKABLE) {
+								if (vdist > (imp_radius * 0.5)) vdamage = 0;
+							}
+							// Only apply impact damage to players (not monsters)
+							// The damage was previously a meleerange with +/- 48 zaxis
+							// Been changed to a radius damage as its radius impact!
+							// Percentage (distance) of the impact damaged specified
+							// This will STILL not apply if blast belt or jumping :P
+							// Breakable's need source (self) for impact direction
+							// to spawn breakable pieces away from impact location
+							if (vdamage > 0) {
+								if (sjump.classgroup == CG_BREAKABLE)
+									T_Damage (sjump, self, self, imp_damage*vpercent, DAMARMOR);
+								else
+									T_Damage (sjump, world, world, imp_damage*vpercent, DAMARMOR);
+							}
+							
 							// Monsters have less impact
 							if (sjump.flags & FL_MONSTER) vpercent = vpercent * 0.75;
-							// Ogre facing angle (easier to understand)
+							// Attacker facing angle
 							makevectors(self.angles);									
 							// Combine forward/up force with existing velocity
 							fvel = (v_forward * (imp_forward * vpercent)) + (v_up * (imp_up * vpercent));

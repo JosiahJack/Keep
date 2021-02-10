@@ -445,7 +445,8 @@ void() vom_revive14 =[ $death1,   vom_run1     ] {};
 // Note to self:  Quoth's gug is even fatter, yet it uses shambler bbox.
 //============
 void() monster_vomit = {
-	if (deathmatch) { remove(self); return; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
     precache_sound ("drake/cube/bc_attck.wav");
     precache_sound ("drake/cube/bc_gulp.wav");
@@ -512,6 +513,10 @@ void() monster_vomit = {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.classtype = CT_MONVOMITUS;
 	self.classgroup = CG_SPAWN;

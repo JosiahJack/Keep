@@ -1056,9 +1056,9 @@ void() iceg_setup =
 /*======================================================================
 QUAKED monster_icegolem (1 0.2 0) (-32 -32 -24) (32 32 128)
 ======================================================================*/
-void() monster_icegolem =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_icegolem = {
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_bossicegolem.mdl";
 	precache_model (self.mdl);
@@ -1151,6 +1151,9 @@ void() monster_icegolem =
 	}
 
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
 
 	total_monsters = total_monsters + 1;
 	self.use = iceg_setup;

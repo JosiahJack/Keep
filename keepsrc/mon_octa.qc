@@ -39,6 +39,35 @@ $frame dieb11 dieb12 dieb13 dieb14 dieb15 dieb16
 
 //=============================================================================
 
+void()   ink_stand1      =[ 0,     ink_stand2  ] {};
+void()   ink_stand2      =[ 1,     ink_stand3  ] {};  
+void()   ink_stand3      =[ 2,     ink_stand4  ] {};  
+void()   ink_stand4      =[ 3,     ink_stand5  ] {};  
+void()   ink_stand5      =[ 4,     ink_stand6  ] {};  
+void()   ink_stand6      =[ 5,     ink_stand7  ] {};  
+void()   ink_stand7      =[ 6,     ink_stand8  ] {};  
+void()   ink_stand8      =[ 7,     ink_stand9  ] {};  
+void()   ink_stand9      =[ 8,     ink_stand10 ] {};
+void()   ink_stand10     =[ 9,     ink_stand11 ] {};
+void()   ink_stand11     =[ 10,    ink_stand12 ] {};
+void()   ink_stand12     =[ 11,    ink_stand13 ] {};  
+void()   ink_stand13     =[ 12,    ink_stand14 ] {};  
+void()   ink_stand14     =[ 13,    ink_stand15 ] {};  
+void()   ink_stand15     =[ 14,    ink_stand16 ] {};  
+void()   ink_stand16     =[ 15,    ink_stand17 ] {}; 
+void()   ink_stand17     =[ 16,    ink_stand1  ] {};  
+
+void() info_inkt = {
+     self.solid = SOLID_BBOX;                               
+     self.movetype = MOVETYPE_NONE;
+
+     setmodel (self, "progs/madfox/wink.spr");
+
+     setsize (self, '16 16 16', '24 24 24');
+     self.nextthink = time + 1.7;
+     self.think = SUB_Remove;
+};
+
 void()	octa_stand1	=[	$stand1,	octa_stand2	] {ai_stand();};
 void()	octa_stand2	=[	$stand2,	octa_stand3	] {ai_stand();};
 void()	octa_stand3	=[	$stand3,	octa_stand4	] {ai_stand();};
@@ -203,9 +232,14 @@ void() octa_die = {
 */
 
 void() monster_octa = {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 	
-	self.mdl = "progs/octa.mdl";
+    precache_model ("progs/madfox/wink.spr");
+    precache_model ("progs/madfox/beamhit.spr");
+	self.mdl = "progs/madfox/mon_octa.mdl";
 	precache_model (self.mdl);
 	//self.headmdl = "progs/h_octa.mdl";
 	//precache_model (self.headmdl);
@@ -249,6 +283,10 @@ void() monster_octa = {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
 

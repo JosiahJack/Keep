@@ -71,7 +71,7 @@ float() eidolon_FindTarget =
 	
 	// Get the obvious exception(s) done first
 	if (self.health < 1) return FALSE;
-	if (intermission_running) return FALSE;
+	if (intermission_running > 0) return FALSE;
 	if (cinematic_running > 0) return FALSE;
 
 	// Find a client in current PVS
@@ -156,7 +156,7 @@ float() eidolon_WaveCheck =
 					trigger_strs(self.attachment2.target, self);
 				
 				// Turn around and fire at crystal
-				self.th_jump();
+				self.th_summon();
 			}
 		}
 
@@ -173,16 +173,18 @@ float() eidolon_WaveCheck =
 //----------------------------------------------------------------------
 void() EidolonCheckAttack = 
 {
+	local float currentdist;
+	
 	// Check for boss wave trigger events
 	if (eidolon_WaveCheck() == TRUE) return;
 
 	//----------------------------------------------------------------------
 	// Check the tether system
 	//----------------------------------------------------------------------
-	self.t_length = vlen(self.origin - self.movelast.origin);
-	self.t_width = vlen(self.enemy.origin - self.movelast.origin);
+	currentdist = vlen(self.origin - self.movelast.origin);
+	//self.t_width = vlen(self.enemy.origin - self.movelast.origin);
 	// Is the boss at maximum range?
-	if (self.t_length > MONAI_MAXEIDO) {
+	if (currentdist > self.tetherrange) {
 		// Can the boss see the player?
 		if (enemy_vis) self.attack_state = AS_MELEE;
 		else {
@@ -339,6 +341,26 @@ void() eidolon_create_attachment =
 };
 
 //----------------------------------------------------------------------
+void() eidolon_setup_attachment = 
+{
+	// Is monster dead or dying?
+	if (self.health < 1) return;
+
+	// Check if attachment has been setup yet
+	if (!self.attachment) eidolon_create_attachment();
+
+	// Move attachment into place ready for use
+	self.attachment.movetype = MOVETYPE_NONE;
+	self.attachment.solid = SOLID_NOT;
+	setmodel(self.attachment, MODEL_EMPTY);
+	setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
+	setorigin(self.attachment, self.origin);
+	// Using empty model, so reset angle, frame and skin.
+	self.attachment.angles = self.angles;
+	self.attachment.frame = self.attachment.skin = 0;
+};
+
+//----------------------------------------------------------------------
 void() eidolon_finish_attachment =
 {
 	if (self.attachment) {
@@ -411,12 +433,11 @@ void(vector rockofs, float rockframe) Setup_attackA =
 	// Frame 0 is start of the sequence (move everything into place)
 	if (rockframe == 0) {
 		self.attachment.state = STATE_ON;
-		setorigin(self.attachment, self.origin);
-		setmodel(self.attachment, self.attachment.mdl);
-		setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
 		self.attachment.movetype = MOVETYPE_NONE;
 		self.attachment.solid = SOLID_NOT;
-		self.attachment.skin = 0;
+
+		setmodel(self.attachment, self.attachment.mdl);
+		setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
 
 		// Start throwing rock sound
 		sound (self, CHAN_WEAPON, "eidolon/attacka.wav", 1, ATTN_NORM);
@@ -450,7 +471,8 @@ void() eidolon_attackA2 = {
 	if (self.frame < $spell14) ai_face();
 	
 	// Check the state of the projectile (grow/fire)
-	if (self.frame == $spell4) Setup_attackA('60 18 64',0);
+	if (self.frame == $spell3) eidolon_setup_attachment();
+	else if (self.frame == $spell4) Setup_attackA('60 18 64',0);
 	else if (self.frame == $spell5) Setup_attackA('62 18 68',1);
 	else if (self.frame == $spell6) Setup_attackA('64 18 72',2);
 	else if (self.frame == $spell7) Setup_attackA('68 18 78',3);
@@ -551,11 +573,11 @@ void(vector rockofs, float rockframe) Setup_attackE =
 	// Frame 0 is start of the sequence (move everything into place)
 	if (rockframe == 0) {
 		self.attachment.state = STATE_ON;
+		self.attachment.movetype = MOVETYPE_NONE;
+		self.attachment.solid = SOLID_NOT;
 		setorigin(self.attachment, self.origin);
 		setmodel(self.attachment, self.attachment.mdl);
 		setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
-		self.attachment.movetype = MOVETYPE_NONE;
-		self.attachment.solid = SOLID_NOT;
 		self.attachment.skin = 1;
 
 		// Start long growl
@@ -759,27 +781,6 @@ void() eidolon_explode =
 	ThrowGib(12, 10 + rint(random()*10));	// Large Golem rock
 	ThrowGib(4, 5 + rint(random()*3));		// Some flesh bits
 	ThrowGib(5, 5 + rint(random()*3));
-
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
-	DropCoin(1);
 };
 
 //----------------------------------------------------------------------
@@ -803,7 +804,7 @@ void() eidolon_die2 =
 		// Spawn particle smoke and explosive smoke
 		else {
 			SpawnProjectileSmoke(self.origin, 150, 100, 300);
-			particle_dust(self.origin, 10+random()*10, PARTICLE_BURST_WHITE);
+			particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_WHITE);
 		}
 	
 		// Check for any random lightning strikes outward
@@ -863,7 +864,7 @@ void() eidolon_die =
 void() eidolon_free2 =
 {
 	// Do nothing if dead
-	if (self.health < 0) return;
+	if (self.health < 1) return;
 
 	self.nextthink = time + 0.1;
 	
@@ -898,7 +899,7 @@ void() eidolon_wakeup =
 	self.th_run = eidolon_run1;
 	self.th_melee = eidolon_attackC1;
 	self.th_missile = eidolon_attackA1;
-	self.th_jump = eidolon_attackE1;
+	self.th_summon = eidolon_attackE1;
 	self.th_pain = eidolon_pain;
 	self.th_die = eidolon_die;
 	
@@ -937,7 +938,9 @@ void() eidolon_start =
 	// Setup Ammo Resistance
 	self.resist_shells = self.resist_cells = 0;
 	self.resist_nails = self.resist_rockets = 0.75;
-	
+	self.reflectnails = TRUE;		// Reflect nail projectiles
+	self.reflectaxe = TRUE;			// Prevent axe damage
+		
 	//Resist_CheckRange(self);		// Double check values
 	Resist_Save(self);				// Save for Later
 	Resist_ChangeType(self,TRUE);	// resist everything
@@ -971,11 +974,13 @@ void() eidolon_start =
 	// Tether point, save for later
 	self.movelast = spawn();
 	self.movelast.owner = self;
-	self.movelast.classtype = CT_MONEIDOLON;
+	self.movelast.classtype = CT_TETHERENT;
 	self.movelast.movetype = MOVETYPE_NONE;
 	self.movelast.solid = SOLID_NOT;
 	self.movelast.origin = self.origin;
 	setsize (self.movelast, VEC_ORIGIN, VEC_ORIGIN);
+	spawn_marker(self.movelast.origin+'0 0 8', SPNMARK_RED);
+	if (self.tetherrange < 32) self.tetherrange = MONAI_MAXEIDO;
 
 	// Make sure all death triggers are setup ready
 	self.message2 = self.target;
@@ -991,12 +996,13 @@ void() eidolon_start =
 	self.use = eidolon_wakeup;
 };
 
-/*======================================================================
- QUAKED monster_eidolon (1 0 0) (-32 -32 -24) (32 32 128)
+//======================================================================
+/*QUAKED monster_eidolon (1 0 0) (-32 -32 -24) (32 32 128)
 ======================================================================*/
 void() monster_eidolon =
 {
-	if (deathmatch) { remove(self); return; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 	
 	self.mdl = "progs/ad171/mon_bosseidolon.mdl";
 	precache_model (self.mdl);
@@ -1045,7 +1051,16 @@ void() monster_eidolon =
 	self.bbmins = '-32 -32 -24';	// Special Size
 	self.bbmaxs = '32 32 128';
 	self.bboxtype = BBOX_CUSTOM;
+	self.flags = FL_MONSTER;		// Reset flag (no user settings)
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
+	self.poisonous = FALSE;			// Cannot be poisonous
+	self.deathstring = " was pulverized by the Sculptor\n";
+	self.lastorigin = self.origin;	// Origin for camera interpolation
+	self.ticktimer = 0.05;			// Model animations at 20fps
+	
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
+	
 	self.health = self.max_health = MEGADEATH;
 	self.pain_finished = time + LARGE_TIMER;
 	self.takedamage = DAMAGE_NO;	// Immune to damage
@@ -1072,9 +1087,6 @@ void() monster_eidolon =
 	self.classgroup = CG_STONE;
 	self.classmove = MON_MOVEWALK;
 	self.style = 0;
-	if (self.deathstring == "")  self.deathstring = " was pulverized by the Sculptor\n";
-	self.lastorigin = self.origin;	// Origin for camera interpolation
-	self.ticktimer = 0.05;			// Model animations at 20fps
 	
 	// No targetname = no trigger!
 	if (self.targetname == "") {
@@ -1083,13 +1095,12 @@ void() monster_eidolon =
 		return;
 	}
 
-	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 	total_monsters = total_monsters + 1;
 	self.use = eidolon_start;
 };
 
-/*======================================================================
-//QUAKED monster_eidolon_wavetrig (0.75 0.25 1) (-32 -32 -4) (32 32 4) x
+//======================================================================
+/*QUAKED monster_eidolon_wavetrig (0.75 0.25 1) (-32 -32 -4) (32 32 4) x
 Target for boss lightning wave event
 -------- KEYS --------
 targetname : name of wave event (links to noise key on boss)

@@ -598,16 +598,15 @@ void(entity attacker, float damage)	zmaster_pain =
 
 /*QUAKED monster_zombie_master (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 */
-void() monster_zombie_master =
-{
-	if (deathmatch)
-	{
-		remove(self);
-		return;
-	}
-	precache_model2 ("progs/zmaster.mdl");
-	precache_model2 ("progs/k_spike.mdl");
-	precache_model2 ("progs/h_zmastr.mdl");
+void() monster_zombie_master = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+
+	precache_model2 ("progs/custents/zmaster.mdl");
+	precache_model2 ("progs/custents/k_spike.mdl");
+	precache_model2 ("progs/custents/h_zmastr.mdl");
 
 	
 	precache_sound2 ("hknight/attack1.wav");
@@ -631,9 +630,9 @@ void() monster_zombie_master =
 	precache_sound ("zmaster/echo.wav");
 
 // precaches for the controlled zombies
-	precache_model ("progs/axzombie.mdl");
-	precache_model ("progs/h_axzomb.mdl");
-	precache_model ("progs/zom_gib.mdl");
+	precache_model ("progs/custents/axzombie.mdl");
+	precache_model ("progs/custents/h_axzomb.mdl");
+	precache_model ("progs/custents/zom_gib.mdl");
 
 	precache_sound ("zombie/z_idle.wav");
 	precache_sound ("zombie/z_idle1.wav");
@@ -654,7 +653,7 @@ void() monster_zombie_master =
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 
-	setmodel (self, "progs/zmaster.mdl");
+	setmodel (self, "progs/custents/zmaster.mdl");
 
 	setsize (self, '-16 -16 -24', '16 16 40');
 	self.health = 1250;
@@ -675,7 +674,11 @@ void() monster_zombie_master =
 	      self.gravity = ((self.gravity - 1) / 100);
 // ###
 
-	walkmonster_start ();
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
+
+	monster_start ();
 };
 
 void(float dist) zmaster_run =

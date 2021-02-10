@@ -366,7 +366,7 @@ void() bogl_pain5 =[ $pain5, bogl_pain6 ] {};
 void() bogl_pain6 =[ $pain6, bogl_run1  ] {};
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage)	bogl_pain =
+void(entity inflictor, entity attacker, float damage) bogl_pain =
 {
 	// Finish with all attachments
 	bogl_finish_attachment();
@@ -445,7 +445,8 @@ QUAKED monster_boglord (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 ======================================================================*/
 void() monster_boglord =
 {
-	if (deathmatch) { remove(self); return; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	// One model, two different skins
 	self.mdl = "progs/ad171/mon_bossboglord.mdl";
@@ -461,9 +462,9 @@ void() monster_boglord =
 		self.part_style = PARTICLE_BURST_RED;
 		self.part_life = EXPLODE_MED;
 		if (self.health < 1) self.health = 2000;
+		self.exactskin = 1;			// Dark red/purple
 		self.poisonous = FALSE;		// Cannot be poisonous
-		self.exactskin = 1;	// Dark red/purple
-		if (self.deathstring == "") self.deathstring = " was toasted by a Fire Shambler\n";
+		self.deathstring = " was toasted by a Fire Shambler\n";
 	}
 	else {
 		// Unique models for wizard trail on model flags
@@ -472,13 +473,15 @@ void() monster_boglord =
 		self.gib2mdl = "progs/ad171/gib_blclaw2.mdl";		// Right claw
 		self.gib3mdl = "progs/ad171/gib_blfoot1.mdl";		// foot
 		self.gib4mdl = "progs/ad171/gib_blfoot2.mdl";		// foot
-		self.poisonous = TRUE;				// Green vulcan blood!
-		self.gibtype = GIBTYPE_POISON;		// Liquid Poison
 		self.part_style = PARTICLE_BURST_YELLOW;
 		self.part_life = EXPLODE_POISON_MED;
 		if (self.health < 1) self.health = 1200;
-		self.exactskin = 0;	// Swampy green
-		if (self.deathstring == "") self.deathstring = " was obliterated by The Bog Lord\n";
+		self.exactskin = 0;				// Swampy green
+		
+		precache_poisongibs();			// precache gibs
+		self.poisonous = TRUE;			// Green vulcan blood!
+		self.gibtype = GIBTYPE_POISON;	// Liquid Poison
+		self.deathstring = " was obliterated by The Bog Lord\n";
 	}
 
 	// Precache model + unique particle trail
@@ -518,8 +521,6 @@ void() monster_boglord =
 	precache_sound ("boglord/attack2.wav");
 	precache_sound ("boglord/slime_explode.wav");
 	precache_sound ("boglord/slime_miss.wav");
-
-	precache_poisongibs();			// precache gibs
 	
 	// Melee attacks no longer used anymore
 	//self.meleehitsound = "boglord/smack.wav";
@@ -531,29 +532,49 @@ void() monster_boglord =
 	precache_sound ("boglord/bangdoor1.wav");
 	precache_sound ("boglord/bangdoor2.wav");
 
-	precache_poisongibs();				// precache gibs
-
-	self.solid = SOLID_NOT;				// No interaction with world
-	self.movetype = MOVETYPE_NONE;		// Static item, no movement
-	self.bbmins = '-32 -32 -24';		// Special Size
+	self.solid = SOLID_NOT;			// No interaction with world
+	self.movetype = MOVETYPE_NONE;	// Static item, no movement
+	self.bbmins = '-32 -32 -24';	// Special Size
 	self.bbmaxs = '32 32 80';
-	self.bboxtype = BBOX_CUSTOM;		// Custom size
-	self.bossflag = TRUE;				// Boss flag (like FL_MONSTER)
-	self.gibhealth = -60;
-	self.gibbed = FALSE;				// Starts complete
-	self.pain_flinch = 400;				// Really low chance of pain
-	self.pain_timeout = 2;				// long pause on pain
-	self.infightextra = 8;				// Does not like infighting
-	self.steptype = FS_TYPELARGE;		// Large stomping feet
-	self.blockudeath = TRUE;			// No player gib sound
-	self.tetherturn = TRUE;				// Always turn towards enemy
-	self.tetherpause = 0.9;				// Rarely pauses to attacks
-	self.dmg = 40;						// Radius dmg for gibondeath
+	self.bboxtype = BBOX_CUSTOM;	// Custom size
+	// Boglord and Fire Shamblers are really just monsters with HP++
+	// They don't need bossflag protection, their combat is standard stuff
+	//self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
+
+	self.gibhealth = -60;			// Shambler gibness!
+	self.gibbed = FALSE;			// Starts complete
+	self.pain_flinch = 400;			// Really low chance of pain
+	self.pain_timeout = 2;			// long pause on pain
+	if (self.infightextra <= 0) self.infightextra = 8;
+	self.steptype = FS_TYPELARGE;	// Large stomping feet
+	self.blockudeath = TRUE;		// No player gib sound
+	self.pain_longanim = FALSE;		// cannot be chopped with shadow axe
+	self.no_liquiddmg = TRUE;		// no slime/lava damage
+	self.tetherturn = TRUE;			// Always turn towards enemy
+	self.tetherpause = 0.9;			// Rarely pauses to attacks
+	self.dmg = 40;					// Radius dmg for gibondeath
+	
+	// Special Rage attack mode ( >0 = enabled )
+	// Closer to 0 = Lightning attack, Closer to 1 = Ball attack
+	// Make sure percentage chance within range of 0-1
+	if (self.attack_rage <= 0) self.attack_rage = 0;
+	if (self.attack_rage >= 1) self.attack_rage = 1;
+	
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
 	
 	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0.75;
-
+	if (self.classname == "monster_gug") {
+		self.resist_shells = self.resist_nails = 0;
+		self.resist_rockets = 0.5; self.resist_cells = 0;
+	}
+	else {
+		self.resist_shells = self.resist_nails = 0;
+		self.resist_rockets = self.resist_cells = 0.75;
+		self.reflectlightning = TRUE;	// Reflect lightning strikes
+		self.reflectplasma = TRUE;		// Reflect plasma projectiles
+	}
+	
 	self.th_checkattack = BogLordCheckAttack;
 	self.th_stand = bogl_stand1;
 	self.th_walk = bogl_walk1;

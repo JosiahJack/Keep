@@ -2,22 +2,44 @@
 	CheckPowerups
 	- Check for turning off powerups
 ======================================================================*/
+float PWR_FADING = 3;
 float (entity targ) Zapper_Level;
 
-void(entity targ) ResetPowerInvRing =
+//----------------------------------------------------------------------
+void(entity targ, float powtimer) ResetPowerInvRing =
 {
-	targ.items = targ.items - (self.items & IT_INVISIBILITY);
-	targ.notrace = 0;
-	targ.invisible_finished = targ.invisible_time = 0;
-	targ.modelindex = modelindex_player;
-	targ.frame = 0;
+	if (powtimer == 0) {
+		targ.items = targ.items - (targ.items & IT_INVISIBILITY);
+		targ.invisible_finished = targ.invisible_time = 0;
+		// Reset player model
+		targ.modelindex = modelindex_player;
+		targ.frame = 0;
+	}
+	else if (targ.items & IT_INVISIBILITY) {
+		// Stop powerup constantly being reset once below timer
+		if (targ.invisible_finished > (time + powtimer) ) {
+			targ.invisible_finished = time + powtimer;
+			// Enable fading message
+			targ.invisible_time = 1;
+		}
+	}
 };
 
 //----------------------------------------------------------------------
-void(entity targ) ResetPowerEnvSuit =
+void(entity targ, float powtimer) ResetPowerEnvSuit =
 {
-	targ.items = targ.items - (targ.items & IT_SUIT);
-	targ.radsuit_finished = targ.rad_time = 0;
+	if (powtimer == 0) {
+		targ.items = targ.items - (targ.items & IT_SUIT);
+		targ.radsuit_finished = targ.rad_time = 0;
+	}
+	else if (targ.items & IT_SUIT) {
+		// Stop powerup constantly being reset once below timer
+		if (targ.radsuit_finished > (time + powtimer) ) {
+			targ.radsuit_finished = time + powtimer;
+			// Enable fading message
+			targ.rad_time = 1;
+		}
+	}
 };
 
 //----------------------------------------------------------------------
@@ -28,30 +50,74 @@ void(entity targ) ResetPowerThermSuit =
 };
 
 //----------------------------------------------------------------------
-void(entity targ) ResetPowerPent =
+void(entity targ, float powtimer) ResetPowerPent =
 {
-	targ.items = targ.items - (targ.items & IT_INVULNERABILITY);
-	targ.invincible_finished = targ.invincible_time = 0;
+	if (powtimer == 0) {
+		targ.items = targ.items - (targ.items & IT_INVULNERABILITY);
+		targ.invincible_finished = targ.invincible_time = 0;
+	}
+	else if (targ.items & IT_INVULNERABILITY) {
+		// Stop powerup constantly being reset once below timer
+		if (targ.invincible_finished > (time + powtimer) ) {
+			targ.invincible_finished = time + powtimer;
+			// Enable fading message
+			targ.invincible_time = 1;
+		}
+	}
 };
 
 //----------------------------------------------------------------------
-void(entity targ) ResetPowerQuad = {
-	targ.super_damage_finished = targ.super_time = 0;};
+void(entity targ, float powtimer) ResetPowerQuad =
+{
+	if (powtimer == 0) {
+		targ.super_damage_finished = targ.super_time = 0;
+	}
+	else if (targ.items & IT_QUAD) {
+		// Stop powerup constantly being reset once below timer
+		if (targ.super_damage_finished > (time + powtimer) ) {
+			targ.super_damage_finished = time + powtimer;
+			// Enable fading message
+			targ.super_time = 1;
+		}
+	}
+};
+// Quad screen effect is shared by several items
 void(entity targ) ResetPowerQuadItem = {
-	targ.items = targ.items - (targ.items & IT_QUAD);};
-
-//----------------------------------------------------------------------
-void(entity targ) ResetPowerSharp =
-{
-	targ.moditems = targ.moditems - (targ.moditems & IT_ARTSHARP);
-	targ.sharpshoot_finished = targ.sharpshoot_time = 0;
+	targ.items = targ.items - (targ.items & IT_QUAD);
 };
 
 //----------------------------------------------------------------------
-void(entity targ) ResetPowerPiercer =
+void(entity targ, float powtimer) ResetPowerSharp =
 {
-	targ.moditems = targ.moditems - (targ.moditems & IT_ARTPIERCE);
-	targ.nailpiercer_finished = targ.nailpiercer_time = 0;
+	if (powtimer == 0) {
+		targ.moditems = targ.moditems - (targ.moditems & IT_ARTSHARP);
+		targ.sharpshoot_finished = targ.sharpshoot_time = 0;
+	}
+	else if (targ.moditems & IT_ARTSHARP) {
+		// Stop powerup constantly being reset once below timer
+		if (targ.sharpshoot_finished > (time + powtimer) ) {
+			targ.sharpshoot_finished = time + powtimer;
+			// Enable fading message
+			targ.sharpshoot_time = 1;
+		}
+	}
+};
+
+//----------------------------------------------------------------------
+void(entity targ, float powtimer) ResetPowerPiercer =
+{
+	if (powtimer == 0) {
+		targ.moditems = targ.moditems - (targ.moditems & IT_ARTPIERCE);
+		targ.nailpiercer_finished = targ.nailpiercer_time = 0;
+	}
+	else if (targ.moditems & IT_ARTPIERCE) {
+		// Stop powerup constantly being reset once below timer
+		if (targ.nailpiercer_finished > (time + powtimer) ) {
+			targ.nailpiercer_finished = time + powtimer;
+			// Enable fading message
+			targ.nailpiercer_time = 1;
+		}
+	}
 };
 
 void(entity targ) ResetPowerLevitation = {
@@ -61,10 +127,71 @@ void(entity targ) ResetPowerLevitation = {
 };
 
 //----------------------------------------------------------------------
-void(entity targ) ResetPowerLavaShield =
+void(entity targ, float powtimer) ResetPowerLavaShield =
 {
-	targ.moditems = targ.moditems - (targ.moditems & IT_ARTLAVASHIELD);
-	targ.lavashield_finished = targ.lavashield_time = 0;
+	if (powtimer == 0) {
+		targ.moditems = targ.moditems - (targ.moditems & IT_ARTLAVASHIELD);
+		targ.lavashield_finished = targ.lavashield_time = 0;
+	}
+	else if (targ.moditems & IT_ARTLAVASHIELD) {
+		// Stop powerup constantly being reset once below timer
+		if (targ.lavashield_finished > (time + powtimer) ) {
+			targ.lavashield_finished = time + powtimer;
+			// Enable fading message
+			targ.lavashield_time = 1;
+		}
+	}
+};
+
+//----------------------------------------------------------------------
+void(entity targ, float powtimer) ResetPowerAirTank =
+{
+	if (powtimer == 0) {
+		targ.moditems = targ.moditems - (targ.moditems & IT_ARTWETSUIT);
+		targ.wetsuit_finished = targ.wetsuit_time = 0;
+	}
+	else if (targ.moditems & IT_ARTWETSUIT) {
+		// Stop powerup constantly being reset once below timer
+		if (targ.wetsuit_finished > (time + powtimer) ) {
+			targ.wetsuit_finished = time + powtimer;
+			// Enable fading message
+			targ.wetsuit_time = 1;
+		}
+	}
+};
+
+//----------------------------------------------------------------------
+void(entity targ, float powtimer) ResetPowerBlastbelt =
+{
+	if (powtimer == 0) {
+		targ.moditems = targ.moditems - (targ.moditems & IT_ARTBLASTBELT);
+		targ.blastbelt_finished = targ.blastbelt_time = 0;
+	}
+	else if (targ.moditems & IT_ARTBLASTBELT) {
+		// Stop powerup constantly being reset once below timer
+		if (targ.blastbelt_finished > (time + powtimer) ) {
+			targ.blastbelt_finished = time + powtimer;
+			// Enable fading message
+			targ.blastbelt_time = 1;
+		}
+	}
+};
+
+//----------------------------------------------------------------------
+void(entity targ, float powtimer) ResetPowerJumpBoots =
+{
+	if (powtimer == 0) {
+		targ.moditems = targ.moditems - (targ.moditems & IT_ARTJUMPBOOTS);
+		targ.jumpboots_finished = targ.jumpboots_time = 0;
+	}
+	else if (targ.moditems & IT_ARTJUMPBOOTS) {
+		// Stop powerup constantly being reset once below timer
+		if (targ.jumpboots_finished > (time + powtimer) ) {
+			targ.jumpboots_finished = time + powtimer;
+			// Enable fading message
+			targ.jumpboots_time = 1;
+		}
+	}
 };
 
 //----------------------------------------------------------------------
@@ -75,35 +202,79 @@ void(entity targ) ResetPowerWetSuit =
 };
 
 //----------------------------------------------------------------------
-void(entity targ) ResetPowerBlastbelt =
+void(entity targ, float powtimer, float novania) ResetPowerSystem =
 {
-	targ.moditems = targ.moditems - (targ.moditems & IT_ARTBLASTBELT);
-	targ.blastbelt_finished = targ.blastbelt_time = 0;
-};
+	// This only works for player clients
+	if (!(targ.flags & FL_CLIENT)) return;
 
-//----------------------------------------------------------------------
-void(entity targ) ResetPowerJumpBoots =
-{
-	targ.moditems = targ.moditems - (targ.moditems & IT_ARTJUMPBOOTS);
-	targ.jumpboots_finished = targ.jumpboots_time = 0;
-};
-
-//----------------------------------------------------------------------
-void(entity targ) ResetPowerSystem =
-{
-	ResetPowerInvRing(targ);
-	ResetPowerEnvSuit(targ);
+	targ.effects = 0;
+	ResetPowerInvRing(targ, powtimer);
+	ResetPowerEnvSuit(targ, powtimer);
 	ResetPowerThermSuit(targ);
-	ResetPowerPent(targ);
-	ResetPowerQuad(targ);
-	ResetPowerQuadItem(targ);
-	ResetPowerSharp(targ);
-	ResetPowerPiercer(targ);
+	ResetPowerPent(targ, powtimer);
+	ResetPowerQuad(targ, powtimer);
+	ResetPowerSharp(targ, powtimer);
+	ResetPowerPiercer(targ, powtimer);
 	ResetPowerLevitation(targ);
-	ResetPowerLavaShield(targ);
 	ResetPowerWetSuit(targ);
-	ResetPowerBlastbelt(targ);
-	ResetPowerJumpBoots(targ);
+	// Don't reset Vania items
+	if (novania) {
+		ResetPowerLavaShield(targ, powtimer);
+		ResetPowerAirTank(targ, powtimer);
+		ResetPowerBlastbelt(targ, powtimer);
+		ResetPowerJumpBoots(targ, powtimer);
+	}
+};
+
+//----------------------------------------------------------------------
+void(entity targ) PlayLavaShieldSound =
+{
+	// Only works for the player
+	if (!(targ.flags & FL_CLIENT)) return;
+	
+	// Can still drown from liquid damage!?!
+	targ.air_finished = time + WATER_AIR;
+	// Time for another sound reminder?
+	if (targ.lavashield_sound < time) {
+		if (targ.lavashield_volume > 0) {
+			targ.volume = (0.5 + random() * 0.5) * targ.lavashield_volume;
+			// Make sure volume is within range (will get errors)
+			if (targ.volume > 1) targ.volume = 1;
+			sound (targ, CHAN_ITEM, SOUND_ARTLSHIELD3, targ.volume, ATTN_NORM);
+		}
+		targ.lavashield_sound = time + 2;
+	}
+};
+
+//----------------------------------------------------------------------
+void(entity targ) PlayBlastBeltSound =
+{
+	// Only works for the player
+	if (!(targ.flags & FL_CLIENT)) return;
+	
+	// Time for another sound reminder?
+	if (targ.blastbelt_sound < time) {
+		if (targ.blastbelt_volume > 0) {
+			targ.volume = (0.5 + random() * 0.5) * targ.blastbelt_volume;
+			// Make sure volume is within range (will get errors)
+			if (targ.volume > 1) targ.volume = 1;
+			sound (targ, CHAN_ITEM, SOUND_ARTBLASTBELT3, targ.volume, ATTN_NORM);
+		}
+		targ.blastbelt_sound = time + 2;
+	}
+};
+
+//----------------------------------------------------------------------
+void(entity targ) PlayPentagramSound =
+{
+	// Only works for the player
+	if (!(targ.flags & FL_CLIENT)) return;
+	
+	// Time for another sound reminder?
+	if (targ.invincible_sound < time) {
+		sound (targ, CHAN_ITEM, SOUND_ARTPENT3, 1, ATTN_NORM);
+		targ.invincible_sound = time + 2;
+	}
 };
 
 //============================================================================
@@ -125,7 +296,7 @@ void() ClientPowerups =
 			self.invisible_sound = time + ((random() * 3) + 1);
 		}
 
-		if (self.invisible_finished < time + 3) {
+		if (self.invisible_finished < time + PWR_FADING) {
 			if (self.invisible_time == 1) {
 				sprint (self, "Ring of Shadows magic is fading\n");
 				stuffcmd (self, "bf\n");
@@ -140,7 +311,7 @@ void() ClientPowerups =
 		}
 		// Update inventory and timers
 		if (self.invisible_finished < time) {
-			ResetPowerInvRing(self);
+			ResetPowerInvRing(self,0);
 		} else {
 			// keep using the eyes
 			self.modelindex = modelindex_eyes;
@@ -182,7 +353,7 @@ void() ClientPowerups =
 			}
 		}
 		// Update inventory and timers
-		if (self.radsuit_finished < time) ResetPowerEnvSuit(self);
+		if (self.radsuit_finished < time) ResetPowerEnvSuit(self,0);
 	}
 	//----------------------------------------------------------------------
 	// Thermal Protection Suit	
@@ -228,7 +399,7 @@ void() ClientPowerups =
 			}
 		}	
 		// Update inventory and timers
-		if (self.lavashield_finished < time) ResetPowerLavaShield(self);
+		if (self.lavashield_finished < time) ResetPowerLavaShield(self,0);
 	}
 
 	//----------------------------------------------------------------------
@@ -313,7 +484,7 @@ void() ClientPowerups =
 			}
 		}	
 		// Update inventory and timers
-		if (self.invincible_finished < time) ResetPowerPent(self);
+		if (self.invincible_finished < time) ResetPowerPent(self,0);
 	}
 
 	//----------------------------------------------------------------------
@@ -335,7 +506,7 @@ void() ClientPowerups =
 			}
 		}
 		// Update inventory and timers
-		if (self.super_damage_finished < time) ResetPowerQuad(self);
+		if (self.super_damage_finished < time) ResetPowerQuad(self,0);
 	}	
 
 	
@@ -358,7 +529,7 @@ void() ClientPowerups =
 			}
 		}	
 		// Update inventory and timers
-		if (self.blastbelt_finished < time) ResetPowerBlastbelt(self);
+		if (self.blastbelt_finished < time) ResetPowerBlastbelt(self,0);
 	}
 
 	//----------------------------------------------------------------------
@@ -379,7 +550,7 @@ void() ClientPowerups =
 			}
 		}
 		// Update inventory and timers
-		if (self.jumpboots_finished < time) ResetPowerJumpBoots(self);
+		if (self.jumpboots_finished < time) ResetPowerJumpBoots(self,0);
 	}
 
 	//----------------------------------------------------------------------
@@ -401,7 +572,7 @@ void() ClientPowerups =
 			}
 		}	
 		// Update inventory and timers
-		if (self.sharpshoot_finished < time) ResetPowerSharp(self);
+		if (self.sharpshoot_finished < time) ResetPowerSharp(self,0);
 	}
 
 	//----------------------------------------------------------------------
@@ -423,7 +594,7 @@ void() ClientPowerups =
 			}
 		}
 		// Update inventory and timers
-		if (self.nailpiercer_finished < time) ResetPowerPiercer(self);
+		if (self.nailpiercer_finished < time) ResetPowerPiercer(self,0);
 	}
 
 	//----------------------------------------------------------------------

@@ -256,27 +256,29 @@ void() vanilla_water_check =
 	test_vec_x = test_vec_y = 0;
 	test_vec = self.origin + test_vec;
 	
-	if(pointcontents(test_vec) < -2)
-	{
-		if(!self.inBSPwater)
-		{
+	monster_liquid_check();
+	// if(pointcontents(test_vec) < -2)
+	// {
+		// if(!self.inBSPwater)
+		// {
 			//dprint("under water \n");
-			self.inBSPwater = TRUE;
-		}
+			// self.inBSPwater = TRUE;
+		// }
 		
-		if(self.spawnflags & CAN_DROWN)
-		{
-			self.drawntime = time + 12;
-			self.drown_dmg = 0;
-			self.drown_cnt = 1;
-			liquid_drown(self);
-		}
-	}
-	else if(self.inBSPwater)
-	{
+		// if(self.spawnflags & CAN_DROWN || self.no_liquiddmg == 0)
+		// {
+			// self.drawntime = time + 12;
+			// self.drown_dmg = 0;
+			// self.drown_cnt = 1;
+			// liquid_drown(self);
+		// }
+	// }
+	// else if(self.inBSPwater)
+	// {
 		//dprint("above water \n");
-		self.inBSPwater = FALSE;
-	}
+		// self.inBSPwater = FALSE;
+	// }
+
 };
 
 void() liquid_touch =

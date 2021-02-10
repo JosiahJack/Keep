@@ -814,9 +814,9 @@ void() wraith_die =
 /*======================================================================
 //QUAKED monster_wraith (1 0 0) (-16 -16 -24) (16 16 32) Ambush
 ======================================================================*/
-void() monster_wraith =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_wraith = {
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_wraith.mdl";
 	self.weaponglow = "progs/ad171/mon_wraith_glow.mdl";
@@ -867,9 +867,10 @@ void() monster_wraith =
 	self.alpha = WRAITH_ALPHA;			// Semi transparent
 	self.yaw_speed = 35;				// Can turn really fast
 	self.gibhealth = MON_NEVERGIB;		// Cannot be gibbed by weapons
-	self.gibbed = FALSE;				// not falling apart
+	self.gibbed = FALSE;				// Not falling apart (yet!)
 	self.pain_flinch = 70;				// High pain threshold
 	self.blockudeath = TRUE;			// no humanoid death sound
+	self.steptype = FS_FLYING;			// Floating around!
 	if (self.height == 0) self.height = MONAI_ABOVEDIST; // Custom height
 	self.frame = 1;						// First frame is never used!
 	

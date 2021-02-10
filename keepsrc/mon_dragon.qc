@@ -578,7 +578,8 @@ void () dragon_activate = {
 };
 
 void () monster_dragon = {
-   if ( deathmatch ) { remove (self); return ; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
    self.mdl = "progs/drake/dragon.mdl";
    precache_model ("progs/drake/dragon.mdl");
@@ -606,11 +607,15 @@ void () monster_dragon = {
    setmodel (self,"progs/drake/dragon.mdl");
    setsize (self,VEC_HULL2_MIN,VEC_HULL2_MAX);
    if (self.health < 1) self.health = 4000;
-   if (self.target == "") self.target = "dragondoor"; 
+   //if (self.target == "") self.target = "dragondoor"; //Quell unnecessary warnings
    self.th_run = dragon_walk1;
    self.th_pain = dragon_pain;
    self.th_die = dragon_death1;
    self.dragonPainSequence = TRUE;
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
+
    total_monsters = (total_monsters + TRUE);
    self.nextthink = (self.nextthink + 0.100);
 	if (self.deathstring == "")  self.deathstring = " was annihilated by the Dragon\n";

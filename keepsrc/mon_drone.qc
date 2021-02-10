@@ -337,7 +337,7 @@ void() drn_die1 = [32, drn_die2] {
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 
 	// Spawn dust and sprite explosion
-	particle_dust(self.origin, 10+random()*10, PARTICLE_BURST_YELLOW);
+	particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
 	SpawnExplosion(EXPLODE_BIG, self.origin, "jim/explode_minor.wav");
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 };
@@ -350,7 +350,7 @@ void() drn_die7 = [0, drn_die7] {
 	self.touch = SUB_Null;
 	
 	// Final fireworks!
-	particle_dust(self.origin, 10+random()*10, PARTICLE_BURST_YELLOW);
+	particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 	SpawnExplosion(EXPLODE_BIG, self.origin, "jim/explode_major.wav");
@@ -363,7 +363,10 @@ void() drn_die7 = [0, drn_die7] {
 void() DroneTouch = { if (other.takedamage) drn_die7(); };
 
 void() monster_drone =  {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/drake/drone1.mdl";
 	precache_model("progs/drake/drone1.mdl");
@@ -423,6 +426,10 @@ void() monster_drone =  {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = 0; self.resist_cells = 0.5;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.hittype = HIT_METAL;
 	self.touch = DroneTouch;

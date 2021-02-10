@@ -1,3 +1,5 @@
+version 0.85:
+	Added in remaining AD 1.81 features, phew!
 version 0.75:
 	Added Arms of Asgard weapons
 version 0.65:

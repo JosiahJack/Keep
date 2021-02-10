@@ -606,7 +606,8 @@ void() morph_phased = {
 // monster_morph (1 0 0) (-16 -16 -24) (16 16 32) Ambush Aztec Egyptian Greek  The morphing monster.
 // Select the look of the monster (Aztec,Greek,Egyptian).
 void() monster_morph = {
-	if (deathmatch) { remove(self); return; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	precache_model ("progs/rogue/mon_morph_gr.mdl");
 	precache_model ("progs/rogue/mon_morph_az.mdl");

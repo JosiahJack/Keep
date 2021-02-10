@@ -1,0 +1,50 @@
++==========================================================================================+
+Title                   : Shield_Ogre_Flies
+Filename                : Shield_Ogre_Flies.zip
+Author                  : Madfox
+Email Address           : http://kpn.mail.nl
+Description             : Quake1 Monster of shielded ogre.
+  
+Additional Credits to   : ID Software
+			 
++==========================================================================================+
+
+* Play Information *
+
+Level Name              : murky
+Single Player           : yes
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficulty Settings     : /
+Support                 : /
+New model         :/ yes
+QC                      : partley
+* Construction *
+
+Base            : New Q1monster inspired on a Ogre with a shield axe, and flies.
+Build Time      : some time. 
+
+Editor(s) used  : Quark4.07 - QUARK6.1 - AM2000 - QMLE - WALLY 
+
+Known Bugs      : Good code 
+                             
+
+Thanks          : sure
+           
+Intention       : Make a Ogre with an axe and shield in stead of a chainsaw.
+                     : Now how to make the code shield the ogre off while be attacked.
+                     : xogre.qc is my file without the shield code used.
+                     : oldogre.qc is the QuakeRemakeFile that can only 
+                     : be used with the rest of the code 
+                     
+SetUp           : Compile compatible shield code.
+                  
+Any support I will apreciately rejoyce, just email.      
+You may distribute and modify this level, as long as you give
+me credit, but more of all ID Sofware & Gandalf Technology.
+
++==========================================================================================+
+
+				- Madfox 6 januari 2021.
+
++==========================================================================================+

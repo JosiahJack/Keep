@@ -1,0 +1,48 @@
+==============================================================
+Title                  : BowOgre
+Filename               : Q1_bowogre.zip
+Author                 : Madfox
+Email Adress           : catweazel@kpn.home.nl
+Description            : New Quake1 monster
+
+Additional Credits to  : ID Software
+
+==============================================================
+
+* Play Inormation *
+
+Level Name              : /
+Single Player           : /
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Monsters            : yes
+New Sounds              : /
+New Weapon              : /
+qC                      : yes
+
+==============================================================
+
+* Construction *
+
+Base              : Let therebe a Crossbow Ogre in Quake1.
+                  
+Build Time        : other toppic
+Editor(s) Used    : Quark Qmle Wally Quark6.3 AM2005
+Known Bugs        : skinfile gets crossed.
+                  
+                  
+Thanks            : Animation Master's model.
+                  
+                    ID software's Quake1 sounds and game.
+Install           : compile the qc and play in a test map with 
+                  : balrog.mdl in a progs file. 
+
+You may distribute and modify this file, as long as you give
+me credit, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 11 januari 2021
+
+============================================================== 

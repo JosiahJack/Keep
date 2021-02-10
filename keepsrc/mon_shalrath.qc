@@ -303,9 +303,11 @@ void() shal_die =
 /*======================================================================
  QUAKED monster_shalrath (1 0 0) (-32 -32 -24) (32 32 48) Ambush
 ======================================================================*/
-void() monster_shalrath =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_shalrath = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_shalrath.mdl";	// Extra skin
 	self.headmdl = "progs/ad171/h_shalrath.mdl";	// Matching new skin
@@ -352,6 +354,10 @@ void() monster_shalrath =
 	self.resist_rockets = self.resist_cells = 0;
 
 	if (self.deathstring == "") self.deathstring = " was exploded by a Vore\n";
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.th_checkattack = ShalCheckAttack;
 	self.th_stand = shal_stand;

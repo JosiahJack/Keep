@@ -880,7 +880,10 @@ void(entity inflictor, entity attacker, float damage) gug_pain = {
 };
 
 void() monster_gug = {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/quoth2pt2full/gug.mdl";
 	precache_model("progs/quoth2pt2full/gug.mdl");
@@ -915,6 +918,10 @@ void() monster_gug = {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = 0; self.resist_nails = 0;
 	self.resist_rockets = 0; self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.th_stand = gug_stand1;
 	self.th_walk = gug_walk1;

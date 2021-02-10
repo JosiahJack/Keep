@@ -145,7 +145,10 @@ void() sentinel_die = {
 };
 
 void() monster_sentinel = {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 		
 	self.mdl = "progs/quoth2pt2full/sentinel.mdl";
 	precache_model("progs/quoth2pt2full/sentinel.mdl");
@@ -195,6 +198,10 @@ void() monster_sentinel = {
 	self.height = -16;
 
     self.hittype    = HIT_METAL;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;

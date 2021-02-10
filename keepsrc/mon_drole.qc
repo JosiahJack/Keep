@@ -218,7 +218,7 @@ void(float side) drole_claw =
 	ai_face ();						// Turn towards enemy target
 	ai_damagebreakable(50);			// Damage any breakables
 
-	if (!ai_checkmelee(MONAI_MELEEDROLE1) || !self.enemy.takedamage) {
+	if (!ai_checkmelee(MONAI_MELEEDROLE1,MONAI_MELEEZTALL) || !self.enemy.takedamage) {
 		// Melee claw miss sound
 		sound (self, CHAN_WEAPON, "drole/swipe.wav", 1, ATTN_NORM);
 	}
@@ -262,7 +262,7 @@ void() drole_clawR14 = [ $clawR14, drole_clawR15 ] {drole_charge(26);
 sound (self, CHAN_WEAPON, "drole/swipe.wav", 1, ATTN_NORM);};
 void() drole_clawR15 = [ $clawR15, drole_clawR16 ] {monster_footstep(FALSE);drole_charge(30);};
 void() drole_clawR16 = [ $clawR16, drole_run ] {drole_charge(28);
-	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEDROLE2) && 
+	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEDROLE2,MONAI_MELEEZTALL) && 
 		self.enemy.health > 0 && visible(self.enemy)) drole_clawL1();
 };
 
@@ -287,7 +287,7 @@ void() drole_clawL14 = [ $clawL14, drole_clawL15 ] {drole_charge(26);
 sound (self, CHAN_WEAPON, "drole/swipe.wav", 1, ATTN_NORM);};
 void() drole_clawL15 = [ $clawL15, drole_clawL16 ] {monster_footstep(FALSE);drole_charge(30);};
 void() drole_clawL16 = [ $clawL16, drole_run ] {drole_charge(28);
-	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEDROLE2) && 
+	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEDROLE2,MONAI_MELEEZTALL) && 
 		self.enemy.health > 0 && visible(self.enemy)) drole_clawR1();
 };
 
@@ -419,9 +419,11 @@ void() drole_die =
 /*======================================================================
 QUAKED monster_drole (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 ======================================================================*/
-void() monster_drole =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_drole = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_drole.mdl";
 	self.headmdl = "progs/ad171/h_drole.mdl";
@@ -477,6 +479,10 @@ void() monster_drole =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 	
 	self.th_checkattack = DroleCheckAttack;
 	self.th_stand = drole_standC1;

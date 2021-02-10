@@ -1624,7 +1624,11 @@ float   RYUSKIN_GOLD       = 4;        // Kept only for Soul of Evil.
 //============
 void() monster_ryu = {
     local float powlevel, element, evade;
-    if (deathmatch) { remove(self); return; }
+
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
     precache_model ("progs/drake/dr1_head.mdl");  // Gib (head)
     precache_model ("progs/drake/dr1_lw.mdl");    // Gib (left wing)
@@ -1729,18 +1733,18 @@ void() monster_ryu = {
 
     if (self.spawnflags & SPAWN_WYRM) {
         self.headmdl   = "progs/drake/dr2_head.mdl";
-	self.mdl = "progs/drake/dragon2.mdl";
+		self.mdl = "progs/drake/dragon2.mdl";
         self.th_stand = self.th_walk = self.th_run = wyrm_start;
         self.ryuflags = self.ryuflags | RYU_PATH;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_WYRM;
 	if (self.health < 1) self.health = 3000;
-	self.gibhealth = MON_NEVERGIB;
+		self.gibhealth = MON_NEVERGIB;
         self.th_die     = wyrm_die;
-	self.bossflag = TRUE;
-	self.classtype = CT_MONWYRM;
+		self.bossflag = TRUE;
+		self.classtype = CT_MONWYRM;
     } else {
         self.headmdl   = "progs/drake/dr1_head.mdl";
-	self.mdl = "progs/drake/dragon1.mdl";
+		self.mdl = "progs/drake/dragon1.mdl";
         self.th_stand   = ryu_stand1;
         self.th_walk    = ryu_walk1;
         self.th_run     = ryu_run1;
@@ -1749,7 +1753,7 @@ void() monster_ryu = {
         self.th_revive  = dragon_revive;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_RYU;
 	if (self.health < 1) self.health = 750;
-	self.gibhealth = -90;
+		self.gibhealth = -90;
         if (!self.yaw_speed) self.yaw_speed = 20;    // Same as walkmonster.
     }
 

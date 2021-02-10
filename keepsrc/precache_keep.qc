@@ -149,6 +149,8 @@ void() PrecacheAll = {
 	precache_model ("progs/ad171/proj_swampling.mdl");
 	precache_model ("progs/s_light4.spr");
 	precache_model ("progs/drake/arrow.mdl");
+	precache_model ("progs/ad181/proj_minoblood.mdl");
+	precache_model ("progs/ad171/proj_lazgrn.mdl");
 
 	precache_model ("progs/aoa/v_flak.mdl");
 	precache_model ("progs/aoa/v_gungnir.mdl");

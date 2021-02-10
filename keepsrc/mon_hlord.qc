@@ -1500,8 +1500,7 @@ void() darklord_die = {
     Rocket_Explosion2 (st, 32, 5);
 };
 
-void(float hello) darklord_sight =
-{
+void(float hello) darklord_sight = {
     if (hello)
         sound (self, CHAN_VOICE, "drake/darklord/idle1.wav", 1, ATTN_NORM);
     else
@@ -1518,7 +1517,8 @@ void(float hello) darklord_sight =
 void() monster_dark_lord = {
     local   float   hp;
 
-	if (deathmatch) { remove(self); return; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
     if (self.spawnflags & 4) {
         hp = 4000 + (500 * cvar("skill"));
@@ -1668,6 +1668,9 @@ void() monster_dark_lord = {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
 
 	self.classtype = CT_MONHELLK;
 	self.classgroup = CG_DCAPTAIN;	// Rule over seargent and fury knights but lesser knights are disloyal

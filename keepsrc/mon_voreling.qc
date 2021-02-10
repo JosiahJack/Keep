@@ -179,7 +179,7 @@ void() voreling_melee =
 		
 	ai_charge(10);										// Get closer for extra bite
 	ai_damagebreakable(10);								// Damage any breakables
-	if (!ai_checkmelee(MONAI_MELEEVORELING)) return;	// Too far away
+	if (!ai_checkmelee(MONAI_MELEEVORELING,FALSE)) return;	// Too far away
 
 	// Can the target bleed?
 	if (!self.enemy.takedamage) return;
@@ -203,7 +203,7 @@ void()	voreling_bite3	=[	$bite3, voreling_bite4 ] {ai_face();};
 void()	voreling_bite4 = [	$bite4, voreling_bite5 ] {voreling_melee();};
 void()	voreling_bite5 = [	$bite5, voreling_bite6 ] {};
 void()	voreling_bite6 =[	$bite6, voreling_bite7 ] {
-	if (ai_checkmelee(MONAI_MELEEVORELING) && self.enemy.health > 0) self.think = voreling_bite2;};
+	if (ai_checkmelee(MONAI_MELEEVORELING,FALSE) && self.enemy.health > 0) self.think = voreling_bite2;};
 // Exit bite attack loop
 void()	voreling_bite7	=[	$bite7, voreling_run1	] {};
 
@@ -256,7 +256,7 @@ void() voreling_leap3	=[	$jump3, voreling_leap4	] {
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	self.touch = Voreling_JumpTouch;
 	makevectors (self.angles);
-	self.velocity = v_forward * MONAI_JUMPVORELINGDIST + '0 0 200';
+	self.velocity = (v_forward*self.jumpdist_x) + ('0 0 1'*self.jumpdist_z);
 	self.origin_z = self.origin_z + 4;
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.oldorigin = self.origin;
@@ -504,9 +504,9 @@ void() voreling_die =
 //QUAKED monster_voreling (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 ======================================================================*/
 void() setup_voreling;
-void() monster_voreling =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_voreling = {
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	if (self.spawnflags & MON_VORELING_LARGE) {
 		self.mdl = "progs/ad171/mon_vorelingp.mdl";
@@ -573,6 +573,10 @@ void() setup_voreling =
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
 
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
+
 	if (self.deathstring == "") self.deathstring = " was nibbled by a Voreling\n";
 
 	self.th_checkattack = VorelingCheckAttack;
@@ -594,6 +598,10 @@ void() setup_voreling =
 		self.gibhealth = -20;
 		self.th_jump = voreling_leap1;
 		self.th_jumpexit = voreling_leap7;
+		// Default jump forward/up distance
+		if (CheckZeroVector(self.jumpdist)) self.jumpdist = '500 0 200';
+		if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPVORELINGNEAR;
+		if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPVORELINGFAR;
 	}
 
 	//----------------------------------------------------------------------

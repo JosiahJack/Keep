@@ -25,6 +25,8 @@ void() Puke_Touch = {
 void(vector p) anac_missile = {
 	local vector offang,org,vec,d;
 
+	if (self.passive_state) return;
+
 	offang = vectoangles(self.enemy.origin - self.origin);
 	makevectors(offang);
 	org = self.origin + p_x * v_forward + p_y * v_right + p_z * '0 0 1';
@@ -816,7 +818,9 @@ void() check_anac = {
 };
 
 void() monster_anac = {
-	if (deathmatch) { remove(self); return; }
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+
 	precache_sound2("blob/death1.wav");
 	precache_sound2("boss1/out1.wav");
 	precache_sound2("boss1/sight1.wav");
@@ -856,6 +860,9 @@ void() monster_anac = {
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
 	if (self.deathstring == "")  self.deathstring = " was killed by a giant anaconda\n";
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
 
 	if(!self.classtype) self.classtype = CT_MONANACONDA;
 	if (!self.classgroup) self.classgroup = CG_BOSS;

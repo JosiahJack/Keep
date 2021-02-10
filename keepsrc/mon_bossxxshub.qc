@@ -17,6 +17,8 @@ float SHUB_PHASE2 = 2;  // Fighting
 float SHUB_PHASE3 = 3;  // Frenzy mode
 float SHUB_PHASE4 = 4;	// Death
 
+float SHUB_NEEDS_2ND_TRIG = 8;
+
 //======================================================================
 // Global functions
 //======================================================================
@@ -77,6 +79,8 @@ void() xxshub_WaveSetupHP =
 	dprint(") Trig ("); dprint(ftos(self.bosswavetrig));
 	dprint(")\n");
 };
+
+void() xxshub_wakeup;
 
 //----------------------------------------------------------------------
 // Check if HP has reached next boss wave trigger event
@@ -154,6 +158,8 @@ void() xxshub_idle ={ self.walkframe = 0; xxshub_idleframe(); };
 //============================================================================
 void() xxshub_attack1 =
 {
+	//if (self.spawnflags & SHUB_NEEDS_2ND_TRIG && self.use == xxshub_wakeup) return FALSE; // don't start attacking until 2nd trigger
+
 	// Check sightline to player
 	if (visblocked(self.enemy)) return;
 	if (time < self.attack_finished) return;
@@ -197,6 +203,7 @@ void() xxshub_shakeattack =
 //----------------------------------------------------------------------
 void() xxshub_shakeframe =
 {
+
 	// Randomnly fire grenades outward
 	if (random() < 0.5) xxshub_shakeattack();
 	
@@ -232,6 +239,7 @@ void() xxshub_shakeframe =
 //----------------------------------------------------------------------
 void() xxshub_attack2 =
 { 
+	//if (self.spawnflags & SHUB_NEEDS_2ND_TRIG && self.use == xxshub_wakeup) return FALSE; // don't start attacking until 2nd trigger
 	Resist_ChangeType(self, TRUE);
 	self.walkframe = self.count = 0; 
 	xxshub_shakeframe();
@@ -361,8 +369,7 @@ void() xxshub_wakeup =
 //----------------------------------------------------------------------
 // Setup Shub after trigger event
 //----------------------------------------------------------------------
-void() xxshub_start =
-{
+void() xxshub_start = {
 	self.use = SUB_Null;			// Suppress trigger events
 	self.style = SHUB_PHASE1;		// Waiting for combat trigger
 	self.flags = FL_MONSTER;		// Reset flag (no user settings)
@@ -422,9 +429,8 @@ void() xxshub_start =
 /*============================================================================
  QUAKED monster_shub (1 0 0) (-128 -128 -24) (128 128 512)
 ============================================================================*/
-void() monster_shub =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_shub = {
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/oldone.mdl";
 	precache_model (self.mdl);
@@ -502,6 +508,9 @@ void() monster_shub =
 		spawn_marker(self.origin, SPNMARK_YELLOW);
 		return;
 	}
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
 	
 	// Does not go through monster spawn functions
 	total_monsters = total_monsters + 1;

@@ -4,8 +4,9 @@
 //======================================================================
 nosave float configflag;		// Temp cvar used to hold serverflags until live
 nosave float temp1flag;			// Temp cvar used to hold temp1 console flag
-nosave float prethink; 			// always runs everytime the map is start/load/quickload
-nosave float postthink;			// Used once after map load
+nosave float prethink; 			// runs everytime the map is start/load/quickload
+nosave float postthink;			// runs after the prethink conditions in postplayer
+nosave float chaoscount;		//
 nosave float coop_cvar;			// Has the coop cvar been read from console
 nosave float skill_cvar;		// Has the skill cvar been read from console
 nosave float autoaim_cvar;		// What is the current state of autoaim
@@ -26,34 +27,56 @@ float		engine;				// Type of engine active 0=Fitz, 1=DP, 2=FTE
 float		ext_active;			// PR extenstions active (DP/FTE)
 float		ext_dpfog;			// Extra DP fog parameters
 float		ext_dppart;			// Extra DP particle system
+float		ext_ftepart;		// Extra FTE particle system
 float		ext_dpsurf;			// Extra DP query surface information
 float		ext_dprain;			// Extra DP particle rain system
 float		ext_dpsnow;			// Extra DP particle snow system
-//float		ext_dprot;			// Extra DP rotating bmodel system
+float		ext_dprot;			// Extra DP rotating bmodel system
+float		ext_fteskin;		// Extra FTE skin/ladder system
+float		ext_frikfile;		// Extra FRIK File extension system
+float		ext_ftestrings;		// Extra FTE/QSS file extensions
+float		ext_sprintf;		// Sprintf C code function (exposed to QC)
 float		pixelmode;			// Change texture pixel mode (linear/nearest)
+float		weathersys;			// Change weather particles (enable/disable)
 float		playerprojsize;		// Player projectiles 0=Large or 1=Small
 entity		gibitem;			// Latest gib to be generated
 float		gibstone;			// Has stone gibs been precached
 float		gibpoison;			// Has poison gibs been precached
+float		gibblood;			// Has blood gibs been precached
+float		healthcache;		// Have the Health packs been precached
 float		liquid_alpha;		// Stores water alpha, used for monster sight checks
 float		map_gravity;		// Current map gravity setting
+float		map_notargetblock;	// Override for notarget blocking items
+float		mapstyle_start;		// Starting point for compiler light styles
 float		map_jumpheight;		// Current player jump height (def=270)
 float		map_bodyflrcheck;	// Check floor for monster dead bodies
 float		map_bodyfadeaway;	// Fade all dead monster bodies (time in secs)
-//float		map_fallspeedlow;	// Fall Speed for any checks (def=-300)
-//float		map_fallspeedhigh;	// Fall Speed for damage check (def=-650)
-//float		map_falldmg;		// Fall damage for player (def=5, <-1 no dmg/sound)
-//float		map_falldmgwater;	// Fall damage into water (>0 for dmg/sound)
+float		map_fallspeedlow;	// Fall Speed for any checks (def=-300)
+float		map_fallspeedhigh;	// Fall Speed for damage check (def=-650)
+float		map_fallspeeddebug; // Displays players fall velocity to console
+float		map_falldmg;		// Fall damage for player (def=5, <-1 no dmg/sound)
+float		map_falldmgwater;	// Fall damage into water (>0 for dmg/sound)
+float		map_passivestate;	// All monsters are setup in a passive state
+float		map_notrackondeath;	// Homing missiles stop tracking when monster dead
+vector		map_hazarddmg;		// Hazard damage override (water=2/slime=4/lava=10)
+vector		map_plasmagundmg;	// Plasma gun damage (direct, random, splash)
+vector		map_bleedingdmg;	// Percentage reduction / HoT Qty / Initial pause
 entity		debugent1, debugent2, debugent3; // Used on wide visibility tests
+float		mod_version;		// Version number of mod
+float		mod_patch;			// Patch number of mod
+float		mod_beta;			// Beta version of mod
 
 // Worldspawn features
 .float		alpha;				// Alpha value (requires modern engine)
 .float		gravity;			// per-entity gravity (support added in engines after hipnotic xpac)
 .float		oldgravity;			// Previous gravity setting for player
 .float		water_alpha;		// Map specific alpha value for water surfaces
-//.float		proj_shotgun;		// Enable/Disable projectile shotgun
+.float		compilerstyle_start;// Starting point for compiler lightstyles
+.float		proj_shotgun;		// Enable/Disable projectile shotgun
+.float		no_trackondeath;	// Homing missiles stop tracking when monster dead
 .float		upgrade_axe;		// Upgrade the axe with new weapon
 .float		upgrade_ssg;		// Upgrade Super Shotgun with new weapon
+//.float		upgrade_ghook;		// Upgrade the axe with grapple hook KEEP USES ROGUE GRAPPLE INSTEAD
 .float		upgrade_lg;			// Upgrade Lightning Gun with new weapon
 .float		no_item_offset; 	// All ammo + heal items to use central rotation
 .float		no_item_rotate;		// No random rotated for all items (ammo/heal/misc)
@@ -62,51 +85,32 @@ entity		debugent1, debugent2, debugent3; // Used on wide visibility tests
 .float		no_sgcasing;		// Switches OFF ALL shotgun casings
 .float		no_bigprojectiles;	// Switches OFF large player projectiles size
 .float		no_liquiddmg;		// Blocks liquid damage checks for monsters
+.float		no_moncountdevmsg;	// No monster count developer messages
 .float		no_surfacecheck;	// Stops surface checks for large maps
+.float		proj_noskycheck;	// Stop checking for sky brushes (individual tests)
 .float		sprite_particles;	// Forces all particles to be dots/sprites
 .float		knight_defskin;		// Default skin (0-3) type for new knight model
 .float		give_weapons;		// Which weapons the player always starts with
 .float		take_weapons;		// Which weapons the player never starts with
+.float		no_axestart;		// Removes axe and all weapons on start of map!
 .float		reset_health;		// Reset health to this value upon spawning
 .float		jump_height;		// The default player jump height (def=270)
 .float		fall_speedlow;		// Fall Speed for any checks (def=-300)
 .float		fall_speedhigh;		// Fall Speed for damage check (def=-650)
+.float		fall_speeddebug;	// Displays players fall velocity to console
 .float		fall_dmg;			// Fall damage for player (def=5, <-1 no dmg/sound)
 .float		fall_dmgwater;		// Fall damage into water (>0 for dmg/sound)
 .float		bodyflrcheck;		// Check floor for monster dead bodies
 .float		bodyfadeaway;		// Time in seconds before body/head fades away
+.float		corpse_time;		// Quoth version of body fade timer
+.vector		hazard_dmg;			// Hazard damage override (water=2/slime=4/lava=10)
+.vector		plasmagun_dmg;		// Plasma gun damage (direct, random, splash)
+.vector		bleeding_dmg;		// Percentage reduction / HoT Qty / Initial pause
+.vector		player_health;		// Maximum / Mega Maximum / Skill restrictions
 .vector		mapvar_update;		// Update map variables (Range X->Y=Z)
-
-// Cinematic Camera System
-float CINECAM_SETUP = 1;		// Check camera/client is correct
-float		cinematic_running;	// QC wide flag to stop entities
-float		cam_startup;		// Special startup for spawning players
-.string		cameratarget;		// Camera target for spawning players
-float		cam_hudsize;		// State of the hud layout
-float		cam_crosshair;		// State of crosshair before cinematic
-entity		cam_control;		// Misc camera controller
-float		cam_active;			// Camera controller status
-float		cam_exit;			// Exit cinematic condition
-float		cam_fakeplay;		// Display fake player at start
-entity		cam_player;			// Fake player at start position
-entity		cam_focus;			// Active camera entity
-entity		cam_track;			// Tracking entity for camera movement
-entity		cam_client;			// Active player using system
-vector		cam_colour;			// V_Cshift background colour
-float		cam_locked;			// Fixed angle/direction for camera
-vector		cam_angle;			// Direction to keep looking
-float		cam_fixangle;		// Fixed direction for camera chain
-.float		focalpoint;			// Always focus the camera on angletarget
-float		cam_interpolate;	// Percentage between old and new origin
-float		cam_ticktimer;		// Current angletarget entity tick timer
-float		cam_sequence;		// First or Last camera active
-float		cam_movement;		// Camera movement flag (on/off)
-.string		modeltarget;		// Location for fake player model
-.string		returntarget;		// Location for returning player
-.float		cam_debugarrow;		// Shown debug arrow for target angle
-
-// Quoth extra entity keys to reduce console spam
-.float		quothflags;			// Not used for anything in this MOD
+.vector		modver_check;		// Mod version/patch/beta check
+.vector		_skyroom;			// Origin for skyroom location
+.string		skybox;				// Used by intermission camera's to change skybox
 
 // Global fog system
 float		fog_active;			// Global fog values are active
@@ -133,13 +137,56 @@ entity		skyfog_control;		// Global sky fog controller (unique)
 .float		skyfog_difftime;	// Amount of time to fade sky fog (seconds)
 .float		skyfog_steptime;	// Amount of steps to fade (20 per second)
 
+// Cinematic Camera System
+float CINECAM_SETUP = 1;		// Check camera/client is correct
+float		cinematic_running;	// QC wide flag to stop entities
+float		cam_startup;		// Special startup for spawning players
+.string		cameratarget;		// Camera target for spawning players
+float		cam_hudsize;		// State of the hud layout
+float		cam_crosshair;		// State of crosshair before cinematic
+entity		cam_control;		// Misc camera controller
+float		cam_active;			// Camera controller status
+float		cam_exit;			// Exit cinematic condition
+float		cam_fakeplay;		// Display fake player at start
+entity		cam_player;			// Fake player at start position
+entity		cam_focus;			// Active camera entity
+entity		cam_track;			// Tracking entity for camera movement
+entity		cam_client;			// Active player using system
+vector		cam_colour;			// V_Cshift background colour
+float		cam_locked;			// Fixed angle/direction for camera
+float		cam_bezier;			// Camera is using bezier curves
+vector		cam_angle;			// Direction to keep looking
+float		cam_fixangle;		// Fixed direction for camera chain
+float		cam_sequence;		// First or Last camera active
+float		cam_movement;		// Camera movement flag (on/off)
+.float		cam_debugarrow;		// Shown debug arrow for target angle
+.string		modeltarget;		// Location for fake player model
+.string		returntarget;		// Location for returning player
+.string		controltarget;		// Location for bezier control point
+.float		focalpoint;			// Always focus the camera on angletarget
+.entity		cam_chain;			// Chain/list of debug diamonds
+
+// Cinematic Camera Angle Smoothing System V2
+vector		cam_newangle;		// The new angle direction to look
+vector		cam_lastangle;		// Last value of cam_angle
+float		cam_lastanglevalid;	// Is lastangle is valid?
+.float		angleblend;			// Blend between current/last camera angles
+float CINECAM_ANGLEBLEND = 0.03;// Camera angle blend fraction
+float		secloc_running;		// QC flag for secret location camera
+entity		secloc_cam;			// Camera entity keeping track of stuff
+
 // General features
 .float		moditems;			// New items flag for new stuff in the mod
+//.float		permitems;			// Permanant castlevania style items (powerups) KEEP uses .perms instead
 .float		customkey;			// Bit flag for custom keys (func_door)
 .float		bsporigin;			// All bmodel origins are 0,0,0 check this first
 .float		savedeffects;		// Saved effects to apply after spawn
 .float		nightmare;			// Only spawn entity if nightmare skill active
 .float		cooponly;			// Only spawn entity if coop gameplay active
+.float		mega_health;		// Mega Health Maximum (checked in items.qc)
+.float		tog_health;			// Toggle percentage for health max/mega
+.entity		mega_rotdown;		// Entity defined on player for mega countdown
+.float		rotting_qty;		// Total ammount to rot down (DoT)
 .float		startspawn2;		// player_start2 unique spawn location number
 .entity		activate;			// When something is triggered, this is the culprit!
 .entity		bmodel_act;			// Trigger bmodel generic touch/kill/use functions
@@ -154,39 +201,61 @@ entity		skyfog_control;		// Global sky fog controller (unique)
 .string		message3;			// Used by misc_books for addtional text
 .string		message4;			// Used by misc_books for addtional text
 .string		target2;			// Secondary target field (additional fires)
+// .string		target3;			// Third target field (additional fires)  Keep already had in defskeep.qc
+// .string		target4;			// Fourth target field (additional fires)  Keep already had in defskeep.qc
+.string		timertarget;		// Timer target updated every frame tic
+.string		counttarget;		// Count target updated for trigger_count
 .void()		touch2;				// Used by items for final touch function
 .float		projeffect;			// Special effects and states active
 .float		gibhealth;			// The negative health value for gibbing
 .float		gibbed;				// true/false flag on body state
+.vector		dmgskill;			// Damage done depending on skill level
+.float		teledest;			// Unique number for teleporter destination
+.float		telefxtimer;		// Time between playing of sound/fx effects
+.float		telefixangle;		// Exit angle is fixed based on destination
 .float		touchedvoid;		// true/false flag if touched void bmodel
 .float		touchedliquid;		// true/false flag if touched fake liquid
 .string		touchedsound;		// Sound string for fake liquid exit 
 .string		headmdl;			// Head model for gib routine
 .float		bleedcolour;		// Alternative colour for 'bleeding' objects
 .float		locksounds;			// Locked sound for doors etc
+.float		persistentkey;		// Silver/Gold/Custom key not removed on doors
 .float		skin_override;		// Override skin selection based on world theme
 .float		frame_override;		// Override frame number (ammo_boxes)
 .float		frame_box;			// Set frame number for model animation (-1=random)
 .float		item_flrcheck;		// Check the floor surface under items
+.float		item_tossvel;		// Toss velocity upward (XYZ axis) for item
 .float		item_expired;		// Removal timer for item in item_thinkloop
 .float		item_skinanim;		// Does the skin require animating?
 .float		item_skincycle;		// Skin animations are usually 0.3s (health packs)
 .float		item_skinanim_no;	// Skin no for animation groups
 .float		noradiusdmg;		// Block all T_RadiusDamage, stops grenade spam
 .float		nodebuginfo;		// Blocks certain debug info for entities
-.float		onladder;			// Update state from ladder entity to client
-.entity		entladder;			// Ladder entity for reference (time, sounds etc)
-.float		timeladder;			// Amount of time before playing climb sound
 .entity		attachment;			// 1st Entity attachment (additional model)
 .entity		attachment2;		// 2nd entity attachment (additional model)
 .entity		attachment3;		// 3rd entity attachment (additional model)
+.float		entactive;			// Player particle emitter status
+.entity		entattachment;		// Player particle emitter attachment entity
 .entity		sound_emitter;		// Used by various entities for add sound
 .float		check_weather;		// Checks for weather system on sound emitters
 .float		entno_unique;		// Unique number for linking entities
 //.string		str_unique;			// Unique string name for testing
 .string		ckeyname1, ckeyname2, ckeyname3, ckeyname4;	// Custom key netnames
+.float		ckeyskin1, ckeyskin2, ckeyskin3, ckeyskin4;	// Custom key skins
+.float		ckeyhudskin;		// Override of Custom key HUD skin
 .float		ckeyhint;			// Hint to the player about inventory key
 .vector		anglockx, anglocky;	// Angles axis (XY) lock restrictions
+.float		midstart;			// Start func_door at 2 pos function logic
+.float		progspawnlist;		// Item progress spawner list entity
+.entity		progspawncont;		// Item progress controller (code generated)
+
+// Ladder system variables for clients
+.float		onladder;			// Update state from ladder entity to client
+.float		blockladder;		// Block ladder touch function working
+.entity		entladder;			// Ladder entity for reference (time, sounds etc)
+.float		timeladder;			// Amount of time before playing climb sound
+.vector		orgladder;			// Origin of player last time checked ladder
+.float		distladder;			// Distance travelled on ladder
 
 // Pressure switch/ volume trigger parameters
 .float		presstype;			// 0/1 if touching entity type is valid
@@ -208,12 +277,23 @@ entity		skyfog_control;		// Global sky fog controller (unique)
 .float		corner_route;		// Change path_corner route (1-3 routes, 4=exact, 5=random)
 .float		corner_switch;		// Change spawnflags REVERSE (-1=NO, 1=YES, 2=Toggle)
 .float		corner_pause;		// Change spawnflags NOPAUSE (-1=NO, 1=YES, 2=Toggle)
+.float		corner_pstate;		// Change monster passive state (-1=OFF, 1=ON, 2=TOGGLE)
 .float		corner_speed;		// Change path_corner speed (def=100)
 .string		corner_event;		// Special target event on path_corners
 .string		targetback;			// Override backwards pathing route on path_corners
 .entity 	movetarget2;		// Additional move target for AI pathing
 .entity 	movetarget3;		// Additional move target for AI pathing
 .entity		movelast;			// The last AI pathing corner been at
+.entity		movestart;			// Starting AI path corner (spawning position)
+
+// SubMoveFacingAngle parameters
+.float		faceangle;			// Setup facing angle while moving around
+.entity		facetarget;			// +1 path corner target for correct angle
+.vector		facevector;			// Facing angle vector direction
+.float		faceangle_div;		// Time division for distance (def=0.05)
+.float		faceangle_time;		// Time when move/angle should finish
+.vector		faceangle_inc;		// Incremental change to angle over time
+.float		normalangle;		// Normal plane facing angle setup
 
 // Ingame number displays
 .float		targetnumber;		// Float number to pass to misc_targetnumber
@@ -239,6 +319,7 @@ entity		skyfog_control;		// Global sky fog controller (unique)
 .string		brkobj2;			// Breakable object 2 (bsp/mdl)
 .string		brkobj3;			// Breakable object 3 (bsp/mdl)
 .string		brkobj4;			// Breakable object 4 (bsp/mdl)
+.float		brkmdltype;			// Breakable model setup types
 .float		brkobjqty;			// Total breakable sub objects setup
 .vector		brkvelbase;			// Base amount for velocity of broken parts
 .vector		brkveladd;			// Random additions for velocity of broken parts
@@ -246,6 +327,7 @@ entity		skyfog_control;		// Global sky fog controller (unique)
 .float		brkfade;			// Fade time before rumble fades away
 .vector		brkvol;				// Spawning volume for breakable point entity
 .float		brkgravity;			// Change the gravity for rumble, useful for underwater
+.float		brkpuff;			// Puff of smoke for model breakables
 .float		brkmondmg;			// Damage multipler for monster attacks
 .float		brktrigmissile;		// Trigger breakable if hit by - rocket/grenade/shalball
 .float		brktrigjump;		// Trigger breakable if hit by jumping monster attack
@@ -255,10 +337,14 @@ entity		skyfog_control;		// Global sky fog controller (unique)
 .float		bossflag;			// Flag set on all bosses
 .float		ticktimer;			// nextthink tick timer value (def=0.1)
 .entity		enemytarget;		// flying monsters enemy target
+.float		enemytargetlock;	// Lockout timer for enemy target
+.float		enemylastseen;		// Last time enemy has been seen
+.float		enemyexit;			// Not seen enemy for a while, exit combat
 .float		debuglvl;			// Used to debug monsters behaviour
+.float		debugalpha;			// Shows entities with alpha when testing
 .float		randomskin;			// 0=nothing, x=random number of skins
 .float		exactskin;			// 1-x exact skin number to choose
-
+.float		startingpose;		// On spawn special starting animation set
 .void()		th_checkattack;		// Which check attack function to use
 .void()		th_slide;			// Mainly used by wizard monster
 .void()		th_charge;			// Mainly used by Hell/Death Knight monsters
@@ -268,6 +354,7 @@ entity		skyfog_control;		// Global sky fog controller (unique)
 .void()		th_jumpexit;		// Exit animation to stop flying (stuck)
 .void()		th_updmissile;		// Update monster missiles while flying
 .void()		th_gibdie;			// Special function for gib death
+.void()		th_summon;			// Special boss ONLY summon mode
 
 .float		liquidbase;			// Liquid content at base of model (feet)
 .float		liquidcheck;		// Timer to prevent over checking of liqdmg
@@ -278,25 +365,43 @@ entity		skyfog_control;		// Global sky fog controller (unique)
 .float		attack_elev;		// Iternative attack angle for zaware monsters
 .float		move_elev;			// Z movement adjustment for flying units
 .vector		move_state;			// AI state movement; Stand, Walk & Run
+.float		move_altwalk;		// Alternative walk animation (special setup)
 .float		bouncegrenade;		// All grenades bounce off monster body
 .float		reflectlightning;	// All Lightning strikes are reflected
 .float		reflectplasma;		// All plasma projectiles are reflected
 .float		reflectnails;		// All NG/SNG projectiles are reflected
+.float		reflectaxe;			// All axe/shadow damage is reflected
 .entity		reflectent;			// Entity to generate lightning from
 
 .vector		attack_track;		// Iternative tracking for range attacks
+.vector		attack_origin;		// Enemy Origin for tracking range attacks
+.float		attack_active;		// Attack state has been actived
+.float		attack_disabled;	// Enemy origin tracking disabled
+.float		attack_summon;		// Total amount of minions to summon
 .float		attack_chance;		// The percentage chance the monster will attack
 .float		attack_speed;		// Skill based adjusted projectile speed
+.float		attack_maxspeed;	// Maximum speed of (steering) projectile
 .float		attack_timer;		// Blocking of certain attack types (charging)
+.float		attack_switch;		// Prevent switching of attack types
+.float		attack_lifetime;	// Lifetime of certain projectile attacks
 .float		attack_count;		// Total amount of consecutive attacks
 .vector		attack_offset;		// Vector where AI fires projectiles from
+.vector		attack_offset2;		// Second attack vector for projectiles
+.vector		attack_offset3;		// Third attack vector for projectiles
+.vector		attack_offset4;		// Fourth attack vector for projectiles
 .float		attack_rage;		// Is the monster in a rage mode
 .float		attack_frame;		// Animation attack frame limit
+.float		attack_angle;		// Up/down rotation angle for attack vector
 .float		attack_sidestep;	// Timer to switch sides for movement
 .float		attack_sidedeny;	// Timer to block side movement
 .float		attack_instant;		// No pause when waking up to attack
 .float		attack_sniper;		// Will wake up at any range (def=1000)
 .float		attack_explosive;	// Can attack with explosives (brk check)
+.float		attack_expflame;	// Limit the explosive flame attacks
+.float		attack_ricochet;	// Projectile will bounce off geo surfaces
+.string		attack_proj1;		// Attack 1 projectile for R/B monsters
+.string		attack_proj2;		// Attack 2 projectile for R/B monsters
+.float		attack_steering;	// Percentage to steer by over time
 
 .float		meleeattack;		// Which type of melee attack is happening
 .float		meleerange;			// Distance used for checking melee contact
@@ -309,15 +414,26 @@ entity		skyfog_control;		// Global sky fog controller (unique)
 .float		weaponstate;		// State of the weapon (up/down etc)
 .float		weaponswitch;		// Switch timer for different weapons
 .string		weaponglow;			// Special glowing model for magic attacks
+.string		weaponglow2;		// Special glowing model for magic attacks
+.float		blendstart;			// Starting point for a blend animation (set)
+.float		blenddir;			// Direction of blend animation
+.float		blendsfx;			// Sound FX type (unique table lookup)
+.float		velocityfriction;	// Slowdown friction for flying velocity
 .float		bodyphased;			// Used for teleporter monsters
 .float		bodystatic;			// Used to prevent teleporting monsters
 .float		spawnstatue;		// Start/spawn as a statue (cannot be move)
+.float		spawndelay;			// Spawn delay once monster triggered
+.float		spawnnosight;		// Spawn when not in sight of player
+.float		spawnnosighttime;	// Time to wait for sight condition
+.float		spawnnotelefrag;	// Spawn when nothing is blocking location
 .float		nospawndamage;		// Will not do any telefrag damage on spawn
 .float		wakeuptrigger;		// Trigger flag to use special wakeup animation
 .entity		turretactive;		// Set when a monster touches a triggerturret
 .float		turrettimer;		// Timer used to prevent constant spamming
-.float		turrethealth;		// % HP at which a turret monster is released
-.string		turrettarget;		// Target to fire when turret % HP is released
+.float		turrethealth;		// % HP for a trigger event to happen (+releases turret monsters)
+.string		turrettarget;		// Targets to fire when % HP is turrethealth reached
+.float		turrethealth2;		// % HP for a trigger event to happen (must be < turrethealth)
+.string		turrettarget2;		// Targets to fire when % HP is turrethealth2 reached
 .string		turretopening;		// Targets to fire when turret is opening
 .string		turretclosing;		// Targets to fire when turret is closing
 .float		turretlocked;		// Turret locked, will not hide in wall
@@ -335,10 +451,12 @@ entity		skyfog_control;		// Global sky fog controller (unique)
 .string		death_sound2;		// Alternative death sound wav file
 .float		death_dmg;			// Used by tarbaby for explosive damage on death
 .string		deathstring;		// Used by client for player death messages
+.string		customsound;		// Custom sound for Judicator/Justice sounds
 
 .float		idlebusy;			// Busy with an alternative idle animation
 .float		idlereverse;		// Reverse direction for idle animation
 .float		idletimer;			// Idle sound timer (next time to check)
+.float		idleframe;			// Used for multi functional monster setups
 .float		idlemoreoften;		// Chance of more idle sound (def=random)
 .string		idle_sound;			// Idle sound wav file
 .string		idle_sound2;		// Alternative Idle sound wav file
@@ -360,14 +478,37 @@ entity		skyfog_control;		// Global sky fog controller (unique)
 
 .string		angrytarget;		// Alternative target to attack upon spawn
 .string		deathtarget;		// Alternative target to fire when dying
-.string		sighttarget;		// Will always attack this target if sighted
 .string		angletarget;		// Will create custom bmodel move direction
 .entity		switchattacker;		// Last entity to attack and cause damage
 .float		switchtimer;		// Cooldown before switching targets (infighting)
+.float		switchoverride;		// Cooldown override timer to stop rapid switch
 .float		infightextra;		// Damage multiplier for infighting damage
 .float		noinfighting;		// Will ignore/start any infighting
 .float		nomonstercount;		// excluded from map monster count
+.float		delaymonstercount;	// Monster added to count when spawned
 .entity		jumptouch;			// Last entity a jumping monster touched
+.float		jumptimer;			// Slowdown jump touch functionality (player)
+.float		ignore_monjump;		// Cannot use ANY monster jump triggers
+.float		jumpsquash;			// Player jumped on this, squash contents!
+.vector		jumpdist;			// Monster jump forward + up distance
+.vector		jumprange;			// Monster jump minimum/maximum range checks
+.float		dangle;				// Spawn on ceiling flag for certain entities
+
+// Misc model animation (frame, skin and rotation loops)
+.float		framestart;			// FRAME Starting number for misc_model animations
+.float		frameloop;			// FRAME Loop 0=Constant, 1+=Range, -1=Toggle, -2=Trigger
+.float		skinstart;			// SKIN Starting number for misc_model animations
+.float		skinloop;			// SKIN Loop 0=Constant, 1+=Range, -1=Toggle, -2=Trigger
+.float		rotateloop;			// ROTATE Loop 0=Constant, 1+=Range, -1=Toggle, -2=Trigger
+.vector		rotateangles;		// ROTATE axis (XYZ) changing (+/-) angles
+.float		alphastart;			// ALPHA fade IN time for misc_model
+.float		alphadiff;			// ALPHA fade range left for diff start positions
+
+.float		eventswitch;		// Toggles the event on/off conditions
+.float		eventontrigger;		// Number used to start an event sequence
+.string		eventontarget;		// Target to fire when event is switched on
+.float		eventofftrigger;	// Number used to stop an event sequence
+.string		eventofftarget;		// Target to fire when event is switched off
 
 .float		steptype;			// Primary footstep type
 .float		altsteptype;		// Secondary footstep type
@@ -384,6 +525,12 @@ entity		skyfog_control;		// Global sky fog controller (unique)
 .float		bosswavetotal;		// Total amount of boss waves
 .float		bosswaveqty;		// Total HP for each boss wave
 .float		bosswavetrig;		// Current HP trigger for wave
+.float		bosswaveuse;		// Let waves advance via use/triggers
+.entity		bossminchain;		// Chain of entity locations for minions
+.float		bossminbase;		// Minimum summon distance for minions
+.float		bossminrnd;			// Extra random summon distance
+float MONAI_BOSS_SUMDIST = 128;	// Default base value for distance
+float MONAI_BOSS_SUMRND = 128;	// Default random value
 
 // Minions (rest of the parameters in ai_minions.qc)
 .float		minion_active;		// is the minion system active
@@ -391,6 +538,10 @@ entity		skyfog_control;		// Global sky fog controller (unique)
 // Projectile resistance (% protection) for monsters
 .float		resist_shells, resist_nails, resist_rockets, resist_cells;
 .float		lightning_timer;	// Cool down for LG resist effect
+
+// Quoth extra entity keys to reduce console spam
+.float		quothflags;			// Not used for anything in this MOD
+.float		notelefrag;			// Prevents monster spawn telefrag
 
 //----------------------------------------------------------------------
 float ENG_UNKNOWN = 0;			// Default engine type
@@ -416,6 +567,7 @@ float FADEFOG_TIME = 0.05;		// 20 updates per second
 float PARTICLE_DEBUGMAX = 2;	// Maximum debug level
 float part_debug;				// Particle debug level (visual details)
 float POWERUP_TIMER = 30;		// Default timer for powerups
+float POWERUP_VANIA = -1;		// Vania timeout for powerups
 float DEF_SHELLS = 25;			// Default ammo given to new players
 float FLOOR_TRACE_DIST = 256;	// Default distance for floor trace checks
 float FLOOR_TRACE_MONSTER = 40;	// Distance for monster/body checks
@@ -444,25 +596,23 @@ float SVR_HIGHFLAG = 8323072;	// Bits 17-23 - these options carry over
 // MOD Options that can only be changed via temp1 console variable
 // These affect the spawning functions of monster / items
 float SVR_ITEMOFFSET = 256;		// Toggle item offset (corner/center)
-float SVR_ITEMROTATE = 512;		// Always randomly rotate ammo items
+float SVR_SPRPARTON = 512;		// Always use sprite particles (default OFF)
 float SVR_PARTICLES = 1024;		// Turn ON particle system (default OFF)
-float SVR_NOFOGCMDS = 2048;		// Disables all fog commands (winquake)
-float SVR_DEVHELPER = 4096;		// Turn OFF Dev helpers (marks+arrows)
-float SVR_UPDAXE = 8192;		// Upgrade Axe, +75% dmg, gib zombies
-float SVR_UPDSSG = 16384;		// Upgrade Super Shotgun, +50% dmg, uses 3 shells
-float SVR_UPDLG = 32768;		// Upgrade Lightning Gun, Direct+Splashdamage
+float SVR_DEVHELPER = 2048;		// Turn OFF Dev helpers (marks+arrows)
+float SVR_UPDAXE = 4096;		// Upgrade Axe, +75% dmg, gib zombies
+float SVR_UPDSSG = 8192;		// Upgrade Super Shotgun, +50% dmg, uses 3 shells
+float SVR_UPDLG = 16384;		// Upgrade Lightning Gun, Direct+Splashdamage
+float SVR_ITEMROTATE = 32768;		// Always randomly rotate ammo items
+// float SVR_UPDGHOOK = 32768;		// Upgrade Grapple Hook, +dmg, +flying, -axes // Not used like this by Keep, grapple treated as normal weapon
 // MOD Options that can be changed via impulse commands (need a map loaded)
 // These options will override the temp1 console variable
-float SVR_WEATHER = 65536;		// Turn OFF All weather systems
+// float SVR_WEATHER = 65536;		// Turn OFF All weather systems
 float SVR_SHOTGPROJ = 131072;	// Turn OFF Shotgun projectiles
 float SVR_SHOTGCASE = 262144;	// Turn OFF Shotgun casings
 float SVR_ZAWARE = 524288;		// Turn OFF Z aware monsters
 float SVR_FOOTSTEP = 1048576;	// Turn OFF Enemy/player footsteps
 float SVR_AIPATH = 2097152;		// Turn OFF AI path corner extra info
 float SVR_LIQDAM = 4194304;		// Turn OFF Liquid damage checks for monsters
-float SVR_SPRPARTON = 8388608;		// Always use sprite particles (default OFF)
-
-
 
 // Jump boots idea by JCR from mod jam pack 1
 .float jumpboots_finished, jumpboots_time, jumpboots_sound;
@@ -475,17 +625,27 @@ float ART_JUMPFORWARD = 320;	// Jump speed forward
 .float lavashield_finished, lavashield_time, lavashield_sound, lavashield_volume;
 .float powerup_sound;
 .float sharpshoot_finished, sharpshoot_time, sharpshooter_sound;
+.float blastbelt_finished, blastbelt_time, blastbelt_sound, blastbelt_volume;
 .float nailpiercer_finished, nailpiercer_time, nailpiercer_sound;
 .float wetsuit_finished, wetsuit_time, wetsuit_sound;
 .float wetsuit_level, wetsuit_bubbles;
 .float blastbelt_finished, blastbelt_time, blastbelt_sound;
-
+float ART_BLASTBELT_DD = 0.5;	// Direct damage
+float ART_JUMPBOOTS_AIRMAX = 4;	// Max amount of jumps available
+float ART_JUMPHEIGHT = 360;		// Second jump height
+float ART_JUMPFORWARD = 320;	// Jump speed forward
 
 //----------------------------------------------------------------------
 float SKILL_EASY = 0;		// Skill level constants
 float SKILL_NORMAL = 1;
 float SKILL_HARD = 2;
 float SKILL_NIGHTMARE = 3;
+float SKILL_EVIL = 4;		// Evil nightmare (max 50hp)
+
+float HP_EASY = 1;			// HP skill level constants
+float HP_NORMAL = 2;
+float HP_HARD = 4;
+float HP_NIGHTMARE = 8;
 
 float HUD_SECRETS = 2;		// Update secrets screen counter
 float HUD_MONSTERS = 4;		// Update monster screen counter
@@ -514,12 +674,17 @@ float TARGET_LEFT = 1;		// Side - 45-135
 float TARGET_FRONT = 2;		// Front - 135-225
 float TARGET_RIGHT = 3;		// Right - 225-315
 
-float SPNMARK_YELLOW = 0;	// Error something is broken
+float SPNMARK_YELLOW = 0;	// Error something is broken!
 float SPNMARK_BLUE = 1;		// Delay spawn monster/item
 float SPNMARK_GREEN = 2;	// Delay spawn mosnter with no counter
 float SPNMARK_RED = 3;		// Nightmare only spawn
 float SPNMARK_PURPLE = 4;	// Coop only spawn
-float SPNMARK_WHITE = 5;	// Not used atm
+float SPNMARK_WHITE = 5;	// Monsters with no Z Aware functionality
+
+//----------------------------------------------------------------------
+float LADDER_NONE = 0;		// No player contact with ladder
+float LADDER_JUMP = 1;		// Jump movement system (rubicon2)
+float LADDER_VEL = 2;		// Push velocity system (extra4)
 
 //----------------------------------------------------------------------
 // Environmental damage
@@ -527,9 +692,9 @@ float LIQUID_TIMER = 1;		// Amount of time to check for liquid damage
 float MON_MULTIPLIER = 10;	// Multiplier for liquid damage against monsters
 float WATER_DAMAGE = 2;		// water drowning
 float WATER_AIR = 12;		// time before damage
-float LIQUID_DMG = 1;		// Base damage from liquid damage
+float LIQUID_DMG = 1;		// Base damage from normal water drowning
 float SLIME_DAMAGE = 4;		// Acid burning
-float LAVA_DAMAGE = 10;		// Getting crispy
+float LAVA_DAMAGE = 10;		// Getting crispy.  Oh yeah we like it hot!
 
 //----------------------------------------------------------------------
 // Footstep types (slow, drag, light, medium, heavy, large, giant)
@@ -612,6 +777,9 @@ float MON_FISH_SMALL = 2;		// Smaller and faster fish!
 float MON_BOIL_HANGING = 2;		// Hanging on wall upside down by spikes
 float MON_BOIL_HOBBLED = 4;		// Hobbled on the floor, random A/B position
 float MON_SEEK_SHIELD = 4;		// Shield mode until triggered
+float MON_SENTINEL_NAIL = 4;		// Red nail firing sentinels (quoth)
+float MON_SWEEPER_LASER = 2;		// Fires lasers instead of mines
+float MON_SWEEPER_SHIELD = 4;		// Shield mode until triggered
 float MON_CHTHON_RED = 2;		// New red skin + fire balls
 float MON_CHTHON_GREEN = 4;		// Green skin + Slime balls
 float MON_SHUB_DMGTRIG = 2;		// Can be triggered with damage
@@ -635,6 +803,9 @@ float MON_RAINDEER_DEAD = 2;		// Dead body sacrifice
 float MON_SANTA_GOOD = 2;			// Good Santa with touch trigger
 float MON_TURRETB_TRIPLE = 2;		// Fire triple shot instead of single
 float MON_TURRETB_PLASMA = 4;		// Fire plasma bolts instead of laser
+float MON_DPRINCE_FIRE = 2;			// Fire bolt/burning and skin 1
+float MON_DEFLECTOR_PLASMA = 2;		// Plasma/Rockets attacks and skin 1
+float MON_JUDGE_BLUE = 4;			// Blue flame setup/explosions
 
 float MON_JIM_ROCKET = 4;		// Rocket version of Jim the Robot
 float MON_SCORPION_STINGER = 4;		// Black stinger scorpion (debuff)
@@ -691,10 +862,13 @@ float SPEED_WIZSKILL = 50;			// 500=easy, 550=normal, 600=hard, 650=nm
 float SPEED_SPIDER = 600;			// Large Spiders (acid spit)
 float SPEED_VORELING = 600;			// Large Voreling (purple spit)
 float SPEED_SWAMPLING = 600;		// Large Swamping (poison spit)
+float SPEED_SWEEPER = 600;			// Sweeper (Lava Spike)
+float SPEED_DPRINCE = 600;			// Dark Prince (Plasma spit)
 float SPEED_BLORD = 600;			// Boglord (acid spit)
 float SPEED_ELF = 600;				// Dark Elf (snowballs)
+float SPEED_FLAME = 600;			// Flying flames (sprite)
 float SPEED_LAVABALL = 250;			// Boss Lava balls
-float SPEED_LAVASKILL = 50;			// Lava ball skill upgrade
+float SPEED_LAVASKILL = 50;			// Lavaball speed addition based on skill 250=easy, 300=normal, 350=hard, 400=nm
 
 float SPEED_RLPLAYER = 1000;		// Player rocket speed
 float SPEED_PLAYGRENADE = 600;		// Player speed for Grenades
@@ -707,12 +881,34 @@ float SPEED_PLAYPLASMA = 900;		// Player speed for Plasma
 float SPEED_REFLECTION = 600;		// Reflection speed for Plasma/Lightning
 float SPEED_LASER = 600;			// Enforcer laser speed
 float SPEED_PLASMA = 600;			// Eliminator plasma speed
+
+float SPEED_ROCSTEERDIS = 160;		// How close to target before stop steering
+float SPEED_ROCSTEERDISSKILL = 20;	// 160=Easy, 140=Normal, 120=Hard, 100=NM
+float SPEED_ROCSTEERINC = 70;		// Steering missile speed increase (0.1 tick)
+float SPEED_ROCSTEERINCSKILL = 10;	// 70=Easy, 80=Normal, 90=Hard, 100=NM
+float SPEED_ROCSTEERBASE = 0.7;		// Base percentage of steering accuracy
+float SPEED_ROCSTEERINCACC = 0.1;	// Increase accuracy of steering
+
 float SPEED_JIMPROJ = 575;			// Crazy flying jim robot laz0r/rockets!?
 float SPEED_JIMPROJSKILL = 75;		// 575=easy, 650=normal, 725=hard, nm=800
 float SPEED_SENTPROJ = 575;			// Crazy flying jim robot laz0r/rockets!?
 float SPEED_SENTPROJSKILL = 75;		// 575=easy, 650=normal, 725=hard, nm=800
+
 float SPEED_TURRETBPROJ = 575;		// Wall mounted turret speed
-float SPEED_TURRETBPROJSKILL = 75;	// 575=easy, 650=normal, 725=hard, nm=800
+float SPEED_TURRETBPROJSKILL = 75;	// 575=easy, 650=normal, 725=hard, 800=nm
+float SPEED_SWEEPERPROJ = 575;		// Slow flying robot laz0r/spikes!?
+float SPEED_SWEEPERPROJSKILL = 75;	// 575=easy, 650=normal, 725=hard, 800=nm
+
+float SPEED_MAMMOTHLAZ = 600;		// The "fridge" Mammoth
+float SPEED_MAMMOTHLAZSKILL = 200;	// 600=easy, 800=normal, 1000=hard, 1200=nm
+float SPEED_MAMMOTHROCK = 700;		// The "fridge" Mammoth
+float SPEED_MAMMOTHROCKSKILL = 100;	// 700=easy, 800=normal, 900=hard, 1000=nm
+
+float SPEED_ARMYROCKPROJ = 575;		// Army rocketeer (red skin version)
+float SPEED_ARMYROCKPROJSKILL = 75;	// 575=easy, 650=normal, 725=hard, 800=nm
+
+float SPEED_DGQFB = 700;			// Chainmail Hell Knight from Quoth
+float SPEED_DGQFBSKILL = 100;		// 700=easy, 800=normal, 900=hard, 1000=nm
 
 float SPEED_SEEKROCK = 575;			// Large UV ugly robot from rrp
 float SPEED_SEEKROCKSKILL = 75;		// 575=easy, 650=normal, 725=hard, nm=800
@@ -724,6 +920,14 @@ float SPEED_RAINDROCKSKILL = 75;	// 575=easy, 650=normal, 725=hard, nm=800
 
 float SPEED_DFURYSPIKE = 400;		// Base speed of Fury attack A/B
 float SPEED_DFURYSKILL = 225;		// 400=easy, 625=normal, 850=hard, 1075=nm
+
+float SPEED_BARONMISSILE = 650;		// Spike ball attack
+float SPEED_BARONSKILL = 100;		// 550=easy, 650=normal, 750=hard, 850=nm
+
+float SPEED_JUDGEMISSILE = 650;		// Blood/Fire arrow attack
+float SPEED_JUDGESKILL = 150;		// 650=easy, 800=normal, 950=hard, 1100=nm
+float SPEED_JUSTICEMISSILE = 400;	// Blood/Fire arrow attack
+float SPEED_JUSTICESKILL = 225;		// 400=easy, 625=normal, 850=hard, 1075=nm
 
 float SPEED_NOURSPIKE = 600;		// Base speed of Nour attack A/B
 float SPEED_NOURSKILL = 200;		// 600=easy, 800=normal, 1000=hard, 1200=nm
@@ -743,8 +947,18 @@ float SPEED_MEGAFBSKILL = 150;		// 450=easy, 600=normal, 750=hard, 900=nm
 float MONAI_MEGAFMAX = 30;			// Maximum amount of plasma to fire
 float MONAI_RANGEMEGAF = 350;		// Switch between rockets and plasma
 
+float SPEED_DEFLECTROCKET = 525;	// Mega Enforcer ROCKET attack
+float SPEED_DEFLECTRSKILL = 75;		// 525=easy, 600=normal, 675=hard, 750=nm
+float SPEED_DEFLECTBOLT = 450;		// Mega Enforcer plasma bolt speed
+float SPEED_DEFLECTBSKILL = 150;	// 450=easy, 600=normal, 750=hard, 900=nm
+float MONAI_DEFLECTMAX = 30;		// Maximum amount of plasma to fire
+float MONAI_RANGEDEFLECT = 350;		// Switch between rockets and plasma
+
 float SPEED_MINOBOLT = 500;			// Minotaur plasma bolt speed
 float SPEED_MINOSKILL = 150;		// 500=easy, 650=normal, 800=hard, 950=nm
+
+float SPEED_DPRINCEBOLT = 500;		// Dark Prince plasma bolt speed
+float SPEED_DPRINCESKILL = 150;		// 500=easy, 650=normal, 800=hard, 950=nm
 
 float SPEED_GAUNTBOLT = 500;		// Gaunt plasma bolt speed
 float SPEED_GAUNTSKILL = 150;		// 500=easy, 650=normal, 800=hard, 950=nm
@@ -768,10 +982,10 @@ float SPEED_NAILOGRESKILL = 150;	// 500=easy, 650=normal, 800=hard, 950=nm
 float SPEED_NAILSNOWMPROJ = 500;		// Snowman Nail spike speed
 float SPEED_NAILSNOWMSKILL = 150;	// 500=easy, 650=normal, 800=hard, 950=nm
 
-float SPEED_SHALMISSILE = 200;		// Shalrath intial speed of homing missile
-float SPEED_SHALSKILL = 50;			// 200=easy, 250=normal, 300=hard, 350=nm
-float SPEED_SERGMISSILE = 200;		// Death Sergeant homing missile initial speed
-float SPEED_SERGSKILL = 20;			// 200=easy, 220=normal, 240=hard, 260=nm
+float SPEED_SHALMISSILE = 225;		// Shalrath intial speed of homing missile
+float SPEED_SHALSKILL = 25;			// 225=easy, 250=normal, 275=hard, 300=nm
+float SPEED_SERGMISSILE = 220;		// Death Sergeant homing missile initial speed
+float SPEED_SERGSKILL = 20;			// 220=easy, 240=normal, 260=hard, 280=nm
 
 float SPEED_SCORPTAIL = 400;		// Scorpion Tail Swipe (large arc infront)
 float SPEED_SCORPSKILL = 100;		// 400=easy, 500=normal, 600=hard, 700=nm
@@ -801,6 +1015,7 @@ float LIFE_FLESH = 2.5;				// Life of zombie flesh
 float DAMAGE_NGREFSPIKE = 4;		// Reflected Spike for NG
 float DAMAGE_NGSPIKE = 9;			// Single Spike for NG
 float DAMAGE_SNGSPIKE = 18;			// Single Spike for SNG
+float DAMAGE_RTSPIKE = 2;			// Re-touch spike damage (lying on floor)
 float DAMAGE_LAVANGSPIKE = 15;			// Single Spike for NG
 float DAMAGE_LAVASNGSPIKE = 30;			// Single Spike for SNG
 float DAMAGE_PLAYGRENADE = 120;		// Direct damage from player grenade
@@ -814,30 +1029,47 @@ vector ELEV_SPID_OFS = '0 0 -16';	// Hit low
 
 vector DAMAGE_RLPLAYER = '100 20 120';	// Base + Random, Splash
 vector DAMAGE_RLFURY = '20 0 20';		// Fury rockets - Equal Direct/Radius
+vector DAMAGE_RLDPRINCE = '20 0 20';	// Prince rockets - Equal Direct/Radius
 vector DAMAGE_RLGARG = '20 10 30';		// Gargoyle rocket, very weak dmg
 vector DAMAGE_RLSKULLW = '30 10 20';	// Skull wizard, high direct, low splash
+vector DAMAGE_RLDEFLECT = '30 10 20';	// Deflector, high direct, low splash
 vector DAMAGE_RLWRAITH = '100 20 0';	// Wraith hitscan bolt against monsters
 vector DAMAGE_RLDROLE = '40 10 80';		// High splash damage, low direct
-vector DAMAGE_RLARMY = '25 5 45';		// Weak direct, high splash
+vector DAMAGE_RLARMY = '25 5 25';		// Weak direct, high splash
+vector DAMAGE_RLSWEEPER = '15 0 30';	// Weak direct, med splash
+vector DAMAGE_RLMAMMOTH = '15 0 30';	// Weak direct, med splash
 vector DAMAGE_RLJIM2 = '25 15 25';		// Weak direct, med splash
 vector DAMAGE_RLSEEKER = '25 15 25';	// Weak direct, med splash
+vector DAMAGE_RLBARON = '15 0 30';		// Weak direct, high splash
+vector DAMAGE_RLJUDGE = '15 0 30';		// Weak direct, high splash
+vector DAMAGE_RLRAINDEER = '20 0 20';	// Weak direct, low splash
 vector DAMAGE_RLFIRETOP = '70 0 20';	// High direct, low splash
 vector DAMAGE_RLEIDO = '25 15 25';		// Eidolon Rock - med damage
 vector DAMAGE_RLICEG = '20 0 20';		// Ice Golem shard - fury damage
 vector DAMAGE_RLBLORD = '30 0 10';		// Bog Lord Slime - Low Direct/Splash
 vector DAMAGE_SMARTBALL = '30 10 40';		// Nemesant smart fire ball chasing projectile
 vector DAMAGE_RLCYBER = '40 0 40';		// Cyber Demon
+float DAMAGE_RLKILLZOM = 60;			// Direct Damage to kill zombie
+
+vector DAMAGE_HMSHAL = '0 0 40';		// Homing Missile splashdamage
+vector DAMAGE_HMSERG = '0 0 40';
+vector DAMAGE_HMSHUB = '0 0 40';
 
 vector DAMAGE_PLASMA = '15 5 20';		// Default plasma (very high)
 vector DAMAGE_PGPLAYER = '45 0 20';		// Player plasma (very high)
 vector DAMAGE_PGREFLECT = '15 0 0';		// Plasma reflection (very low)
+vector DAMAGE_PGSUMMON = '10 0 0';		// Plasma summons (very low)
 vector DAMAGE_PGMINOTAUR = '10 5 10';	// Lower damage for minotaur
 vector DAMAGE_PGGAUNT = '10 5 10';		// Lower damage for gaunt
+vector DAMAGE_PGDPRINCE = '10 5 10';	// Lower damage for dark prince
 vector DAMAGE_PGTURRETB = '10 5 10';	// Lower damage for turret
 vector DAMAGE_PGNOUR = '10 0 0';		// Direct damage only
 vector DAMAGE_PGFLOYD = '15 0 0';		// Direct damage only
+vector DAMAGE_PGDEFLECT = '15 0 0';		// Direct damage only
 vector DAMAGE_PGMEGAF = '15 0 0';		// Direct damage only
 vector DAMAGE_PGGREMLIN = '15 5 20';	// Gremlin gets same as player, stole player's plasma gun
+
+vector DAMAGE_BLEEDING = '0.25 5 2';	// Percentage, HoT, Pause
 
 float DAMAGE_LGPLAYER = 30;			// Player Lightning gun (per 0.1s)
 float DAMAGE_LASER = 15;			// Lasers! (traps AND enforcers)
@@ -869,6 +1101,8 @@ float DAMAGE_BOLTPLAYERP = 110;			// Powerful player poison bolt
 
 float DAMAGE_TARBABY = 120;			// Explosive damage from tarbies
 float DAMAGE_BOIL = 60;				// Explosive damage from boil
+float DAMAGE_NOUR = 50;				// Explosive damage from Nouronihar
+float DAMAGE_PSYDER = 50;			// Explosive damage from Psyder
 float DAMAGE_SEEKER = 50;			// Explosive damage from seeker
 float DAMAGE_FREDDIE = 40;			// Explosive damage from Freddie
 float DAMAGE_FLOYD = 50;			// Explosive damage from Floyd (1/2 original)
@@ -886,6 +1120,7 @@ float DAMAGE_LOSTCHARGE = 10;		// Charging damage for lost soul
 float MONAI_MELEEFRONT = 70;		// Front attacks reach further (original = 60)
 float MONAI_MELEESIDE = 60;			// Side attacks less distance
 float MONAI_MELEEZAXIS = 48;		// Z axis range for melee attack
+float MONAI_MELEEZTALL = 64;		// Tall monster Z axis melee attack
 float MONAI_CHARGEZAXIS = 20;		// Maximum height for knight charge attack
 float MONAI_RANGESUMMON = 128;		// High close to block summoning minion
 
@@ -925,6 +1160,9 @@ float MONAI_MELEESWAMPLING = 60;	// Distance for swampling bite
 float MONAI_JUMPSWAMPLINGNEAR = 80;	// SWAMPLING Jump attack ranges
 float MONAI_JUMPSWAMPLINGFAR = 200;
 float MONAI_JUMPSWAMPLINGDIST = 500;// Forward distance modifier
+float MONAI_RANGESWEEPER = 250;		// Range for switching mine/spike
+float MONAI_RANGEMINESWEEPER = 64;	// Minimum floor space to fire mines
+float MONAI_RANGEDPRINCE = 300;		// Mid Range switch (floor damage)
 
 float MONAI_JUMPTIMEOUT = 2;		// Time between jumps
 float MONAI_RUNPAUSE = 128;			// If enemy this close, stop pause and run!
@@ -939,19 +1177,31 @@ float MONAI_MELEESPIDER = 60;		// Distance for spider bite
 float MONAI_JUMPSPIDERNEAR = 80;	// SPIDER Jump attack ranges
 float MONAI_JUMPSPIDERFAR = 200;
 float MONAI_JUMPSPIDERDIST = 400;	// Forward distance modifier
+
 float MONAI_MELEEVORELING = 60;		// Distance for voreling bite
 float MONAI_JUMPVORELINGNEAR = 80;	// VORELING Jump attack ranges
 float MONAI_JUMPVORELINGFAR = 200;
 float MONAI_JUMPVORELINGDIST = 500;	// Forward distance modifier
-float MONAI_MELEELOSTSOUL = 80;		// Distance for Lost Soul bite
-float MONAI_RANGELOSTNEAR = 200;	// Too close for charge attack
-float MONAI_RANGELOSTFAR = 400;		// Too far for charge attack
+
+float MONAI_MELEESWAMPLING = 60;	// Distance for bite attack
+float MONAI_JUMPSWAMPLINGNEAR = 80;	// Jump attack ranges
+float MONAI_JUMPSWAMPLINGFAR = 200;
+float MONAI_JUMPSWAMPLINGDIST = 500;// Forward distance modifier
 
 // Scorpions
 float MONAI_JUMPSCORPTIME = 1;		// Special timer for scorpion
 float MONAI_MELEESCORPION = 80;		// Distance for scorpion claws
 float MONAI_JUMPSCORPNEAR = 80;		// SCORPION Jump attack ranges
 float MONAI_JUMPSCORPFAR = 300;		// long jump distance!
+
+float MONAI_JUMPSTEELTIME = 1;		// Jump timer
+float MONAI_MELEESTEELCLAW = 60;	// Distance for melee bite
+float MONAI_JUMPSTEELNEAR = 100;	// Jump attack ranges
+float MONAI_JUMPSTEELFAR = 250;		// long jump distance!
+
+float MONAI_MELEELOSTSOUL = 80;		// Distance for Lost Soul bite
+float MONAI_RANGELOSTNEAR = 200;	// Too close for charge attack
+float MONAI_RANGELOSTFAR = 400;		// Too far for charge attack
 
 // Demon1
 float MONAI_MELEEDEMON = 80;		// Distance for demon claws
@@ -974,6 +1224,30 @@ float MONAI_CHARGEFLAIL = 350;		// Flail Knight charging distance
 float MONAI_JUMPFURYTIME = 2;		// Time before next jump attack
 float MONAI_JUMPFURYNEAR = 150;		// FURY jump attack distance
 float MONAI_JUMPFURYFAR = 350;
+
+// The Baron (from Nehara MOD)
+float MONAI_BARONSMASHRANGE = 120;	// Floor smash very large range
+float MONAI_MELEEBARON = 200;		// Floor Smash with knockback
+float MONAI_CLOSEBARON = 100;		// Really close melee
+float MONAI_JUMPBARONTIME = 2;		// Time before next jump attack
+float MONAI_JUMPBARONNEAR = 200;
+float MONAI_JUMPBARONFAR = 300;
+
+// The Judicator (Judge)
+float MONAI_JUDGESMASHRANGE = 120;	// Floor smash very large range
+float MONAI_MELEEJUDGE = 200;		// Floor Smash with knockback
+float MONAI_CLOSEJUDGE = 100;		// Really close melee
+float MONAI_FLAMELINEJUDGE = 400;	// Flame line has limited range
+float MONAI_JUMPJUDGETIME = 2;		// Time before next jump attack
+float MONAI_JUMPJUDGENEAR = 200;	// Jump attack distance
+float MONAI_JUMPJUDGEFAR = 300;
+
+float MONAI_MELEEJUSTICE = 200;		// Run + slash charge attack
+float MONAI_CLOSEJUSTICE = 100;		// Really close melee
+float MONAI_JUMPJUSTICETIME = 2;	// Time before next jump attack
+float MONAI_JUMPJUSTICENEAR = 200;	// Jump attack distance
+float MONAI_JUMPJUSTICEFAR = 350;
+float MONAI_RANGEJUSTICE = 250;		// Minimum attack range
 
 // Minotaur
 float MONAI_JUMPMINOTIME = 2;		// Time before next jump attack
@@ -1004,19 +1278,44 @@ float MONAI_MELEESNOWMAN = 80;		// Standing still attack
 float MONAI_MELEESANTA = 100;		// Large Sack attack
 
 // Shockwave floor attacks
+// GOLEM
 vector MONAI_STOMPIMPACT = '12 8 -22';
 float MONAI_STOMPDAMAGE = 30;		// Impact damage
 float MONAI_STOMPRADIUS = 512;		// Radius of foot stomp attack
 float MONAI_STOMPFORWARD = 300;		// Forward momentum
 float MONAI_STOMPUP = 600;			// Vertical momentum
 
+// OGRE
 vector MONAI_HAMMERIMPACT = '56 0 -22';
-float MONAI_HAMMERDAMAGE = 30;		// Impaxct damage
+float MONAI_HAMMERDAMAGE = 30;		// Impact damage
 float MONAI_HAMMERRADIUS = 512;		// Radius of hammer slam attack
 float MONAI_HAMMERFORWARD = 300;	// Forward momentum
 float MONAI_HAMMERUP = 500;			// Vertical momentum
 
+// BARON KNIGHT
+vector MONAI_BARONIMPACT = '24 8 -22';
+float MONAI_BARONDAMAGE = 30;		// Impact damage
+float MONAI_BARONRADIUS = 512;		// Radius of foot stomp attack
+float MONAI_BARONFORWARD = 250;		// Forward momentum
+float MONAI_BARONUP = 400;			// Vertical momentum
+
+// JUDICATOR
+vector MONAI_JUDGEIMPACT = '24 8 -22';
+float MONAI_JUDGESMASHDMG = 30;		// Smash Impact damage
+float MONAI_JUDGESWINGDMG = 15;		// Swing impact damage
+float MONAI_JUDGERADIUS = 512;		// Radius of foot stomp attack
+float MONAI_JUDGEFORWARD = 250;		// Forward momentum
+float MONAI_JUDGEUP = 500;			// Vertical momentum
+float MONAI_MAXJUDGE = 500;			// Maximum tether range
+
 float MONAI_IMPACTZAXIS = 128;		// Above/below limit on affect
+
+// Boss Mammoth
+float MONAI_MAXMAMMOTH = 128;		// Maximum tether range
+float MONAI_MELEEMAMMOTH = 256;		// Close distance for melee/dump
+float MONAI_RANGEMAMMOTH = 600;		// Max distance for missiles
+float MONAI_COREMAMMOTH = 350;		// Always fire core laser
+float MONAI_GRENMAMMOTH = 500;		// Always fire grenades
 
 // Boss Nour
 float MONAI_MELEENOUR = 192;		// Always attack player
@@ -1040,10 +1339,25 @@ float MONAI_MELEELFIEND = 128;		// Always attack with melee
 float MONAI_CLOSELFIEND = 384;		// Close distance fireballs
 float MONAI_MAXLFIEND = 350;		// Maximum tether range
 
-float AMMO_MAXSHELLS = 200;		// Maximum ammo the player can carry
-float AMMO_MAXNAILS = 200;		// Shells use to be 100
-float AMMO_MAXROCKETS = 100;
-float AMMO_MAXCELLS = 100;
+//----------------------------------------------------------------------
+// Originally defined in items.qc
+float ITEM_RESPAWN = 16;	// Item will respawn
+float ITEM_FLOATING = 32;	// Spawn floating
+float ITEM_NOEFFECTS = 128;	// Disable particles and effects
+
+float H_ROTTEN = 1;		// Rotten
+float H_MEGA = 2;		// Mega Health
+float H_PHIAL = 1;		// Red phial
+float A_LARGE = 1;		// Used by ammo boxes
+float A_LID = 2;		// Display Lid
+
+float BACKPACK_SHELLS = 1;
+float BACKPACK_NAILS = 2;
+float BACKPACK_ROCKETS = 4;
+float BACKPACK_CELLS = 8;
+float BACKPACK_GRNTYPE = 1;
+float BACKPACK_YELTYPE = 2;
+float BACKPACK_REDTYPE = 4;
 
 float AMMO_SHELLS_SML = 20;		// Ammo quantities for small / large boxes 
 float AMMO_SHELLS_LGR = 40;		// and from weapon pickups
@@ -1074,9 +1388,11 @@ float ARMOR_RED_TYPE = 0.8;
 float ARMOR_RED_VALUE = 200;
 
 //----------------------------------------------------------------------
+float HEAL_GEM = 5;				// Small
 float HEAL_ROT = 15;			// Health packs
 float HEAL_NORM = 25;
 float HEAL_MEGA = 100;			// How much extra health to add
+float HEAL_EVILMAX = 50;		// Maximum for Evil NM+ skill level
 float HEAL_PLAYMAX = 100;		// Maximum player health (default)
 float HEAL_MEGAMAX = 250;		// Maximum health (several megahealths)
 
@@ -1098,21 +1414,37 @@ string MODEL_BACKPACK = "progs/ad171/w_backpack.mdl";	// HD backpack
 string MODEL_PLAYER = "progs/player.mdl";
 string MODEL_PLAYER_HEAD = "progs/h_player.mdl";
 string MODEL_PLAYER_EYES = "progs/eyes.mdl";
+string MODEL_PLAYER_DANCE = "progs/ad181/dance_player.mdl";
+string SOUND_PLAYER_JUMP = "player/plyrjmp8.wav";
 
+string SOUND_MISFIRE = "weapons/nofire.wav";	// Misfire of weapon
+string SOUND_HEAL05 = "items/health0.wav";		// small health pack
 string SOUND_HEAL15 = "items/r_item1.wav";		// pickup sound for rotten health
 string SOUND_HEAL25 = "items/health1.wav";		// large health
 string SOUND_HEAL100 = "items/r_item2.wav";		// mega health
 string SOUND_RESPAWN = "items/itembk2.wav";		// item respawn sound
 string SOUND_TALK = "misc/talk.wav";			// Activate/message sound
 
+string SOUND_MISFIRE = "weapons/nofire.wav";	// Misfire of weapon
 string SOUND_REXP3 = "weapons/r_exp3.wav";		// Original explode sound
+string SOUND_PLASMA_LOAD = "weapons/plasma_load.wav";	// Plasma Load
 string SOUND_PLASMA_FIRE = "weapons/plasma_fire.wav";	// Plasma Fire
 string SOUND_PLASMA_HIT = "weapons/plasma_hit.wav";		// Plasma Impact
 string SOUND_LASER_FIRE = "weapons/laser_fire.wav";		// Enforcer Fire
 string SOUND_LASER_HIT = "weapons/laser_hit.wav";		// Enforcer Impact
+string SOUND_LASER_RIC = "weapons/laser_richotet.wav";	// From Hipnotic MOD
 
 // Resist ammo damage
 string SOUND_RESIST_ROCKET = "weapons/resist_rocket.wav";
+
+//----------------------------------------------------------------------
+string MODEL_HEAL5 = "progs/ad181/health_5.mdl";
+string MODEL_HEAL15 = "progs/ad181/health_15.mdl";
+string MODEL_HEAL15B = "progs/ad181/health_15b.mdl";
+string MODEL_HEAL25 = "progs/ad181/health_25.mdl";
+string MODEL_HEAL25B = "progs/ad181/health_25b.mdl";
+string MODEL_HEAL100 = "progs/ad181/health_100.mdl";
+string MODEL_HEAL100B = "progs/ad181/health_100b.mdl";
 
 //----------------------------------------------------------------------
 // Projectile models
@@ -1136,6 +1468,13 @@ string MODEL_PROJ_HKNGRN = "progs/ad171/proj_dkgrn.mdl";
 string MODEL_PROJ_SERG = "progs/ad171/proj_serg.mdl";
 string MODEL_PROJ_FURY1 = "progs/ad171/proj_fury1.mdl";
 string MODEL_PROJ_FURY2 = "progs/ad171/proj_fury2.mdl";
+string MODEL_PROJ_BARON1 = "progs/ad181/proj_baron1.mdl";
+string MODEL_PROJ_JUDGER = "progs/ad181/proj_judger.mdl";
+string MODEL_PROJ_DLORD1 = "progs/ad181/proj_dlord1.mdl";
+string MODEL_PROJ_DPRINCE1B = "progs/ad181/proj_dprince1b.mdl";
+string MODEL_PROJ_DPRINCE1R = "progs/ad181/proj_dprince1r.mdl";
+string MODEL_PROJ_DPRINCE2B = "progs/ad181/proj_dprince2b.mdl";
+string MODEL_PROJ_DPRINCE2R = "progs/ad181/proj_dprince2r.mdl";
 string MODEL_PROJ_NOUR1 = "progs/ad171/proj_nour1.mdl";
 string MODEL_PROJ_NOUR2B = "progs/ad171/proj_nour2b.mdl";
 string MODEL_PROJ_NOUR2P = "progs/ad171/proj_nour2p.mdl";
@@ -1152,6 +1491,9 @@ string MODEL_PROJ_BLORD2S = "progs/ad171/proj_blord2s.mdl";
 string MODEL_PROJ_BLORDBOLT2 = "progs/ad171/proj_blordbolt2.mdl";
 string MODEL_PROJ_BLORDBEAM2 = "progs/ad171/proj_blordbeam2.mdl";
 string MODEL_PROJ_SHAMLIT = "progs/ad171/proj_shamlit.mdl";
+string MODEL_PROJ_SWEEPER1 = "progs/ad181/proj_sweeper1.mdl";
+string MODEL_PROJ_SWEEPER2B = "progs/ad181/proj_sweeper2b.mdl";
+string MODEL_PROJ_SWEEPER2R = "progs/ad181/proj_sweeper2r.mdl";
 string MODEL_PROJ_WIZ = "progs/ad171/proj_wiz.mdl";
 string MODEL_PROJ_SPID = "progs/ad171/proj_spider.mdl";
 string MODEL_PROJ_VORE = "progs/ad171/proj_voreling.mdl";
@@ -1168,7 +1510,7 @@ string MODEL_PROJ_DROLE = "progs/ad171/proj_drole.mdl";
 string MODEL_PROJ_DROLEGRN = "progs/ad171/proj_drolegrn.mdl";
 string MODEL_PROJ_LASER = "progs/ad171/proj_laz.mdl";
 string MODEL_PROJ_LASERGRN = "progs/ad171/proj_lazgrn.mdl";
-string MODEL_PROJ_LASERBLUE = "progs/ad172/proj_lazblue.mdl";
+string MODEL_PROJ_LASERBLUE = "progs/ad181/proj_lazblue.mdl";
 string MODEL_PROJ_LIGHTNING2 = "progs/ad171/proj_lightning2.mdl";
 string MODEL_PROJ_PLASMA = "progs/ad171/proj_plasma.mdl";
 string MODEL_PROJ_PLASMAGRN = "progs/AD171/proj_plasmagrn.mdl";
@@ -1193,6 +1535,7 @@ string MODEL_PROJ_SCORP = "progs/ad171/proj_scorpion.mdl";
 string MODEL_PROJ_MBALL = "progs/ad171/proj_minoball.mdl";
 string MODEL_PROJ_MPLASMA = "progs/ad171/proj_minoplasma.mdl";
 string MODEL_PROJ_MPOISON = "progs/ad171/proj_minopoison.mdl";
+string MODEL_PROJ_MBLOOD = "progs/ad181/proj_minoblood.mdl";
 string MODEL_PROJ_GROCK1 = "progs/ad171/proj_golemrock1.mdl";
 string MODEL_PROJ_GROCK2 = "progs/ad171/proj_golemrock2.mdl";
 string MODEL_PROJ_EIDO1 = "progs/ad171/proj_eidolonrock1.mdl";
@@ -1252,6 +1595,7 @@ float EXPLODE_BURST_POISON = 43;
 
 //----------------------------------------------------------------------
 // WORLD weapon models (player)
+string MODEL_GWEAP_AXE = "progs/ad171/g_axe.mdl";			// Shadow without glow
 string MODEL_GWEAP_UPAXE = "progs/ad171/g_shadaxe.mdl";	// Has all 6 skins
 string MODEL_GWEAP_SG = "progs/ad171/g_shot1.mdl";		// From Rubicon
 string MODEL_GWEAP_SSG = "progs/ad171/g_shot2.mdl";		// New Model update
@@ -1279,6 +1623,7 @@ string MODEL_VWEAP_UPLG = "progs/ad171/v_plasma.mdl";		// LG Upgrade
 // Standard ID artifact sounds
 string SOUND_ARTSUIT1 = "items/suit.wav";			// Pick up
 string SOUND_ARTSUIT2 = "items/suit2.wav";			// Fading
+string SOUND_ARTSUIT3 = "items/suit3.wav";			// Active - Added and created by Qmaster
 string SOUND_ARTWETS1 = "items/wetsuit.wav";		// Pick up
 string SOUND_ARTWETS2 = "items/wetsuit2.wav";		// Fading
 string SOUND_ARTWETS3 = "items/wetsuit3.wav";		// In Water
@@ -1302,6 +1647,10 @@ string SOUND_ARTNAILP3 = "items/nailp3.wav";		// Active
 string SOUND_ARTLSHIELD1 = "items/lavashield1.wav";	// Pick up
 string SOUND_ARTLSHIELD2 = "items/lavashield2.wav";	// Fading
 string SOUND_ARTLSHIELD3 = "items/lavashield3.wav";	// Active
+string SOUND_ARTAIRTANK1 = "items/airtank.wav";		// Pick up
+string SOUND_ARTAIRTANK2 = "items/airtank2.wav";		// Fading
+string SOUND_ARTAIRTANK3 = "items/airtank3.wav";		// In Water
+string SOUND_ARTAIRTANK3B = "items/airtank3out.wav";	// Out Water
 string SOUND_ARTBLASTBELT1 = "items/blastbelt1.wav";	// Pick up
 string SOUND_ARTBLASTBELT2 = "items/blastbelt2.wav";	// Active
 string SOUND_ARTBLASTBELT3 = "items/blastbelt3.wav";	// Fading

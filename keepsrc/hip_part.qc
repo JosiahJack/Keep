@@ -113,6 +113,7 @@ void () func_particlefield = {
    self.ltime = time;
 };
 
+/*
 void () blocker_touch = {
    if ( !self.dmg ) return ;
    if ( (time < self.attack_finished) ) return ;
@@ -165,3 +166,4 @@ void () func_togglewall = {
 		sound (self,CHAN_VOICE,self.noise1,TRUE,ATTN_NORM);
 	}
 };
+*/

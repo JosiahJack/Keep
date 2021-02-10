@@ -3,16 +3,104 @@
 ======================================================================*/
 float LIGHT_STARTOFF = 1;
 float LIGHT_NOSOUND = 2;
+float LIGHT_QUOTHNOSTAT = 2;
 float LIGHT_NOSTATIC = 4;
 float LIGHT_FLAMEOFF = 2;
 float LIGHT_CANDLESHADOW = 8;
 float LIGHT_SWITCHFADE = 16;
 float LIGHT_NOEFFECTS = 128;
 
+.string	lighttarget;
 // To help reduce signon buffer size, allow for light entities
 // to be delay spawned (especially light models like candles)
 // Cannot use target key because compiler uses it for light styles
-.string	lighttarget;
+.string customstyle_string;
+// Only 32 switchable lights are allowed per map. The compiler
+// re-uses the style key to keep track of the switchable lights
+// which means they cannot have light style strings by default
+.float customstyle_remap;
+// Rather than defined a new light style string, this entity key
+// allows for a light style to be a mirror/copy of another style
+.float customstyle_update;
+// Determines how the customstyle is updated with trigger function
+// =0 always update, =1 no update, =2 only update if estate/light on
+
+// Protected default light styles
+float LIGHT_IDSTYLE = 12;
+float LIGHT_COMPILERSTYLE = 32;
+float LIGHT_MAXLIGHTSTYLE = 64;
+// Possible extended BSP2 standard ... who knows!
+float LIGHT_BSP2LIGHTSTYLE = 256;
+// The array is setup from world.qc before anything loads
+string light_style_str[LIGHT_MAXLIGHTSTYLE];
+
+//----------------------------------------------------------------------
+// Allow the compile to change the starting point for target lights
+//----------------------------------------------------------------------
+void() light_style_boundary =
+{
+	// Check worldspawn key for starting point of target lights
+	if (world.compilerstyle_start == 0) mapstyle_start = LIGHT_COMPILERSTYLE;
+	else mapstyle_start = world.compilerstyle_start;
+	// Make sure it does not overwrite default (0-11) ID styles
+	if (mapstyle_start < LIGHT_IDSTYLE) mapstyle_start = LIGHT_IDSTYLE;
+};
+
+//----------------------------------------------------------------------
+// Setup all vanilla light styles into a small array (16 strings)
+// These light styles can be referenced later for switchable lights
+// Originally was setup in world.qc file (not saved strings)
+//----------------------------------------------------------------------
+void() light_style_setuparray =
+{
+	local float loopint;
+	
+	// 0 normal
+	light_style_str[0] = "m";
+	// 1 FLICKER (first variety)
+	light_style_str[1] = "mmnmmommommnonmmonqnmmo";
+	// 2 SLOW STRONG PULSE
+	light_style_str[2] = "abcdefghijklmnopqrstuvwxyzyxwvutsrqponmlkjihgfedcba";
+	// 3 CANDLE (first variety)
+	light_style_str[3] = "mmmmmaaaaammmmmaaaaaabcdefgabcdefg";
+	// 4 FAST STROBE
+	light_style_str[4] = "mamamamamama";
+	// 5 GENTLE PULSE 1
+	light_style_str[5] = "jklmnopqrstuvwxyzyxwvutsrqponmlkj";
+	// 6 FLICKER (second variety)
+	light_style_str[6] = "nmonqnmomnmomomno";
+	// 7 CANDLE (second variety)
+	light_style_str[7] = "mmmaaaabcdefgmmmmaaaammmaamm";
+	// 8 CANDLE (third variety)
+	light_style_str[8] = "mmmaaammmaaammmabcdefaaaammmmabcdefmmmaaaa";
+	// 9 SLOW STROBE (fourth variety)
+	light_style_str[9] = "aaaaaaaazzzzzzzz";
+	// 10 FLUORESCENT FLICKER
+	light_style_str[10] = "mmamammmmammamamaaamammma";
+	// 11 SLOW PULSE NOT FADE TO BLACK
+	light_style_str[11] = "abcdefghijklmnopqrrqponmlkjihgfedcba";
+	
+	//----------------------------------------------------------------------
+	// Setup default ("m") for all the custom map styles (12-63)
+	loopint = LIGHT_IDSTYLE;
+	while (loopint < LIGHT_MAXLIGHTSTYLE) {
+		light_style_str[loopint] = "m";
+		loopint = loopint + 1;
+	}
+
+	//----------------------------------------------------------------------
+	// Setup vanilla + custom light style table (def=0-31)
+	loopint = 0;
+	while (loopint < mapstyle_start) {
+		lightstyle(loopint, light_style_str[loopint]);
+		loopint = loopint + 1;
+	}
+	
+	//----------------------------------------------------------------------
+	// styles 32-62 are assigned by the light program for switchable lights
+	// 63 testing? No idea why this is done like this, maybe for savefile?
+	//lightstyle(63, "a");
+};
 
 //----------------------------------------------------------------------
 void() play_light_sound = 
@@ -46,9 +134,33 @@ void() setup_light_sound =
 //----------------------------------------------------------------------
 void() setup_light_static =
 {
+	// Default = static, check for exception spawnflag
+	if (self.spawnflags & LIGHT_NOSTATIC) return;
+	// Setup any models that are defined
+	if (self.mdl) setmodel (self, self.mdl);
 	// Cannot have static entities and particle emitters!
-	if (query_configflag(SVR_PARTICLES) == SVR_PARTICLES) return;
-	if ( !(self.spawnflags & LIGHT_NOSTATIC) ) makestatic (self);
+	if (self.part_emitter && self.part_static == FALSE) return;
+	// Goodbye entity, no longer interactive with QC
+	makestatic (self);
+};
+
+//----------------------------------------------------------------------
+void() setup_vanilla_nostatic =
+{
+	// Setup particle static flag
+	if (self.spawnflags & LIGHT_NOSTATIC) self.part_static = FALSE;
+	else if (self.targetname != "") self.part_static = FALSE;
+	else self.part_static = TRUE;	
+};
+
+//----------------------------------------------------------------------
+void() setup_quoth_nostatic =
+{
+	// Need to change around spawnflags; 2 -> 4 bitflags
+	if (self.spawnflags & LIGHT_QUOTHNOSTAT) {
+		self.spawnflags = self.spawnflags - (self.spawnflags & LIGHT_QUOTHNOSTAT);
+		self.spawnflags = self.spawnflags | LIGHT_NOSTATIC;
+	}
 };
 
 //----------------------------------------------------------------------
@@ -82,8 +194,15 @@ void() light_part_emitter_on =
 void() light_on =
 {
 	self.estate = ESTATE_ON;
+	// Setup any models, like torches etc
 	if (self.mdl) setmodel (self, self.mdl);
-	lightstyle(self.style, "m");
+	
+	// Light style defined?
+	if (self.style > 0)
+		// Update light style (use array to get the latest)
+		lightstyle(self.style, light_style_str[self.style]);
+
+	// Switch on particle emitters
 	light_part_emitter_on();
 };
 
@@ -91,46 +210,176 @@ void() light_on =
 void() light_off =
 {
 	self.estate = ESTATE_OFF;
-	if (self.mdl) self.model = "";
+	if (self.mdl) {
+		self.modelindex = 0;
+		self.model = "";
+	}
+	// Switch off light style
 	lightstyle(self.style, "a");
+	// Stop any sounds
 	if (self.attachment) 
 		sound (self.attachment, CHAN_VOICE, SOUND_EMPTY, 1, ATTN_STATIC);
 };
 
-/*======================================================================
-//QUAKED light (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF x x x x x x x
+//----------------------------------------------------------------------
+void() light_customstyle_finish =
+{
+	// Check for style errors above compiler light boundary
+	// Only for lights with style range issues + customstyles remap/string
+	if (self.style >= mapstyle_start && self.targetname == "") {
+		// The light entity is using a style number in the compiler
+		// generated (they always have targetname) target light zone.
+		// If this issue is left, weird things will start happening
+		// to lightstyles, highlight error to mapper.
+		spawn_marker(self.origin, SPNMARK_YELLOW);
+		dprint("\b[LIGHT]\b style ("); dprint(ftos(self.style));
+		dprint(") cannot be used, error!\n");
+		remove(self);
+		return;
+	}
+	// Style has to be different to re-map
+	if (self.customstyle_remap > 0 && self.customstyle_remap == self.style) {
+		spawn_marker(self.origin, SPNMARK_YELLOW);
+		dprint("\b[LIGHT]\b remap and style are the same!\n");
+		remove(self);
+		return;
+	}
+
+	// Any re-map custom style lights defined?
+	if (self.customstyle_remap > 0 && self.style > 0) {
+		// Copy string from array
+		self.customstyle_string = light_style_str[self.customstyle_remap];
+		// Show debug info for custom lightstyle remaps
+		dprint("\b[LIGHT]\b ("); dprint(self.classname);
+		dprint(") style ("); dprint(ftos(self.style));
+		dprint(") remap ("); dprint(ftos(self.customstyle_remap));
+		dprint(")\n");
+	}
+
+	// Any custom style light string defined?
+	// No style check, so that 0 (default, whole map) can be changed
+	if (self.customstyle_string != "") {
+		// Save the light style to the array
+		light_style_str[self.style] = self.customstyle_string;
+		// Define new light style to the engine
+		lightstyle(self.style, self.customstyle_string);
+		// Only show debug info for new custom lightstyles not remaps
+		if (self.customstyle_remap == 0) {
+			dprint("\b[LIGHT]\b ("); dprint(self.classname);
+			dprint(") style ("); dprint(ftos(self.style));
+			dprint(") string ("); dprint(self.customstyle_string);
+			dprint(")\n");
+		}
+	}
+	
+	// Is this a switchable light?
+	if (self.targetname != "") {
+		// For reference later by other functions
+		// self.classgroup = CG_LIGHTS;
+		// Setup Entity State functionality
+		self.use = entity_state_use;
+		if (!self.estate_on) self.estate_on = light_on;
+		if (!self.estate_off) self.estate_off = light_off;
+		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
+		else self.estate_on();
+	}
+	else {
+		// No more world interaction required (no targetname)
+		// Either remove light or make it static (model exists)
+		if (self.classtype == CT_LIGHT) remove(self);
+		else if (self.classtype == CT_LIGHTSTATIC) setup_light_static();
+	}
+};
+
+//----------------------------------------------------------------------
+void() light_customstyle_start =
+{
+	// Need to check style and remap values are within range FIRST
+	// Will be serious crash because its an index for fixed size array
+	if (self.style < 0 || self.style >= LIGHT_MAXLIGHTSTYLE) {
+		spawn_marker(self.origin, SPNMARK_YELLOW);
+		dprint("\b[LIGHT]\b light style ("); dprint(ftos(self.style));
+		dprint(") out of range!\n");
+		remove(self);
+		return;
+	}
+	else if (self.customstyle_remap < 0 || self.customstyle_remap >= LIGHT_MAXLIGHTSTYLE) {
+		spawn_marker(self.origin, SPNMARK_YELLOW);
+		dprint("\b[LIGHT]\b remap style ("); dprint(ftos(self.customstyle_remap));
+		dprint(") out of range!\n");
+		remove(self);
+		return;
+	}
+
+	// All custom lightstyle strings must happen FIRST, so that
+	// the array is setup with all the correct strings for remaps
+	// Needs slight delay to make sure array has defaults setup
+	// No style key check so that style 0 (whole map) can be changed
+	if (self.customstyle_string != "") {
+		// string has priority over remap
+		self.customstyle_remap = 0;
+		self.think = light_customstyle_finish;
+		self.nextthink = time + 0.1;
+	}
+	// Re-map lightstyles MUST happen after custom lightstyle strings
+	// These lights will have problems being static because of timing
+	// Static lights need to be converted early to work properly
+	else if (self.customstyle_remap > 0 && self.style > 0) {
+		// Will be redefined later
+		self.customstyle_string = "";
+		self.think = light_customstyle_finish;
+		self.nextthink = time + 0.3;
+	}
+	// Finally switchable lights with styles defined by the compiler
+	// These are not removeable or static because of interaction
+	// Will need entity state setup and 'use' functionality
+	else if (self.targetname != "") light_customstyle_finish();
+	else {
+		// DEFAULT = No world interaction because no targetname
+		// Either remove light or make it static (model exists)
+		// This should be happening at spawntime + 0.0
+		if (self.classtype == CT_LIGHT) remove(self);
+		else if (self.classtype == CT_LIGHTSTATIC) setup_light_static();
+	}
+};
+
+//======================================================================
+/*QUAKED light (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF x x x x x x x
 Non-displayed light
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
 light : sets brightness, 300 is default
 style : 0 = normal
-1 = flicker (first variety)
-2 = slow strong pulse
-3 = candle (first variety)
-4 = fast strobe
-5 = gentle pulse
-6 = flicker (second variety)
-7 = candle (second variety)
-8 = candle (third variety)
-9 = slow strobe
-10 = flourescent flicker
-11 = slow pulse, not fading to black
-styles 32-62 are assigned by the light program for switchable lights
+        1 = flicker (first variety)
+        2 = slow strong pulse
+        3 = candle (first variety)
+        4 = fast strobe
+        5 = gentle pulse
+        6 = flicker (second variety)
+        7 = candle (second variety)
+        8 = candle (third variety)
+        9 = slow strobe
+       10 = flourescent flicker
+       11 = slow pulse, not fading to black
+styles 01-63 can be custom in map (use customstyle_string)
+styles 32-63 are assigned by the light program for switchable lights
+
+customstyle_remap  : Re-use another light style (0-63)
+customstyle_string : light value string made up of "a-z" letters
 
 _color : Light color - R/G/B (def='1 1 1')
-wait : Fade distance multiplier (def=1)
-delay : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
-
+wait   : Fade distance multiplier (def=1)
+delay  : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
 mangle : Spotlight direction
-angle : Spotlight cone angle (def=40)
+angle  : Spotlight cone angle (def=40)
 
-_dirt : Dirt map (override)
-_dirtscale : Dirt scale (override)
-_deviance : Deviance
-_samples : No. of Deviance lights (def=16)
-_surface : Surface light texture name
+_dirt       : Dirt map (override)
+_dirtscale  : Dirt scale (override)
+_deviance   : Deviance
+_samples    : No. of Deviance lights (def=16)
+_surface    : Surface light texture name
 _surface_offset : Surface light offset (def=2)
-_softangle : Spotlight soft angle (def=0)
+_softangle  : Spotlight soft angle (def=0)
 _anglescale : Light angle scale (def=0.5)
 -------- SPAWNFLAGS --------
 LIGHTOFF : Starts off and waits for trigger
@@ -140,81 +389,123 @@ Non-displayed light. If targeted, it will toggle between on or off
 ======================================================================*/
 void() light =
 {
-	// If no targetname then inert light, safe to remove
-	if (self.targetname == "") {
-		remove(self);
-		return;
-	}
-	
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
-		self.estate_on = light_on;
-		self.estate_off = light_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	}
+	// If any model defined, cache it
+	if (self.mdl != "") precache_model (self.mdl);
+	self.classtype = CT_LIGHT;
+	// Check for any custom light styles
+	light_customstyle_start();
 };
 
-/*======================================================================
-//QUAKED light_fluoro (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF NO_SOUND x x x x x x
+//======================================================================
+/*QUAKED light_fluoro (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF NO_SOUND x x x x x x
 Non-displayed light. Makes steady fluorescent humming sound
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
-light : sets brightness, 300 is default
+light      : sets brightness, 300 is default
+_color     : Light color - R/G/B (def='1 1 1')
+wait       : Fade distance multiplier (def=1)
+delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+mangle     : Spotlight direction
+angle      : Spotlight cone angle (def=40)
+
+_dirt      : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance  : Deviance
+_samples   : No. of Deviance lights (def=16)
+_surface   : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale: Light angle scale (def=0.5)
 -------- SPAWNFLAGS --------
-LIGHTOFF : Starts off and waits for trigger
-NO_SOUND : No ambient sound
+LIGHTOFF   : Starts off and waits for trigger
+NO_SOUND   : No ambient sound
 -------- NOTES --------
 Non-displayed light. Makes steady fluorescent humming sound
 
 ======================================================================*/
 void() light_fluoro =
 {
-	self.noise = "ambience/fl_hum1.wav";
+	// Allow for custom sound
+	if (self.noise == "") self.noise = "ambience/fl_hum1.wav";
 	precache_sound (self.noise);
 
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
-		self.estate_on = light_on;
-		self.estate_off = light_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	}
-	
+	// Default = static entity, check done in static function
+	self.classtype = CT_LIGHTSTATIC;
+	// Check for any custom light styles
+	light_customstyle_start();
+	setup_vanilla_nostatic();
+	// Setup ambient sound/noise
 	setup_light_sound();
 };
 
-/*======================================================================
-//QUAKED light_fluorospark (0 1 0) (-8 -8 -8) (8 8 8) x NO_SOUND x x x x x x
+//======================================================================
+/*QUAKED light_fluorospark (0 1 0) (-8 -8 -8) (8 8 8) x NO_SOUND x x x x x x
 Non-displayed light. Makes sparking, broken fluorescent sound
 -------- KEYS --------
-light : sets brightness, 300 is default
+targetname : toggle state (use trigger ent for exact state)
+light      : sets brightness, 300 is default
+_color     : Light color - R/G/B (def='1 1 1')
+wait       : Fade distance multiplier (def=1)
+delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+mangle     : Spotlight direction
+angle      : Spotlight cone angle (def=40)
+
+_dirt      : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance  : Deviance
+_samples   : No. of Deviance lights (def=16)
+_surface   : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale: Light angle scale (def=0.5)
 -------- SPAWNFLAGS --------
-NO_SOUND  : No ambient sound
+NO_SOUND   : No ambient sound
 -------- NOTES --------
 Non-displayed light. Makes sparking, broken fluorescent sound
 
 ======================================================================*/
 void() light_fluorospark =
 {
-	self.noise = "ambience/buzz1.wav";
+	// Allow for custom sound
+	if (self.noise == "") self.noise = "ambience/buzz1.wav";
 	precache_sound (self.noise);
 
+	// Wait for worldspawn to be read correctly
 	if (!self.style) self.style = 10;
+	// Default = static entity, check done in static function
+	self.classtype = CT_LIGHTSTATIC;
+	setup_vanilla_nostatic();
+	// Check for any custom light styles
+	light_customstyle_start();
+
+	// Setup ambient sound/noise
 	setup_light_sound();
 };
 
-/*======================================================================
-//QUAKED light_globe (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF x NO_STATIC x x x X x
+//======================================================================
+/*QUAKED light_globe (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF x NO_STATIC x x x X x
+{ model(":progs/s_light.spr"); }
 Sphere globe light (sprite)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
-light : sets brightness, 300 is default
+light      : sets brightness, 300 is default
+_color     : Light color - R/G/B (def='1 1 1')
+wait       : Fade distance multiplier (def=1)
+delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+mangle     : Spotlight direction
+angle      : Spotlight cone angle (def=40)
+
+_dirt      : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance  : Deviance
+_samples   : No. of Deviance lights (def=16)
+_surface   : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale: Light angle scale (def=0.5)
 -------- SPAWNFLAGS --------
-LIGHTOFF : Starts off and waits for trigger
-NO_STATIC : Will not turn into static entity
+LIGHTOFF   : Starts off and waits for trigger
+NO_STATIC  : Will not turn into static entity
 -------- NOTES --------
 Sphere globe light (sprite)
 
@@ -226,27 +517,39 @@ void() light_globe =
 	setmodel (self, self.mdl);
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
-		self.estate_on = light_on;
-		self.estate_off = light_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	}
-	else setup_light_static();
+	// Default = static entity, check done in static function
+	self.classtype = CT_LIGHTSTATIC;
+	setup_vanilla_nostatic();
+	// Check for any custom light styles
+	light_customstyle_start();
 };
 
-/*======================================================================
-//QUAKED light_torch_small_walltorch (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF NO_SOUND NO_STATIC x x x x x
+//======================================================================
+/*QUAKED light_torch_small_walltorch (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF NO_SOUND NO_STATIC x x x x NOPARTICLES
+{ model(":progs/flame.mdl"); }
 Short wall torch
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
-light : sets brightness, 300 is default
+light      : sets brightness, 300 is default
+_color     : Light color - R/G/B (def='1 1 1')
+wait       : Fade distance multiplier (def=1)
+delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+mangle     : Spotlight direction
+angle      : Spotlight cone angle (def=40)
+
+_dirt      : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance  : Deviance
+_samples   : No. of Deviance lights (def=16)
+_surface   : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale: Light angle scale (def=0.5)
 -------- SPAWNFLAGS --------
-LIGHTOFF : Starts off and waits for trigger
-NO_SOUND  : No ambient sound
-NO_STATIC : Will not turn into static entity
+LIGHTOFF   : Starts off and waits for trigger
+NO_SOUND   : No ambient sound
+NO_STATIC  : Will not turn into static entity
+NOPARTICLES: No particle or effects active
 -------- NOTES --------
 Short wall torch
 
@@ -255,7 +558,9 @@ void() light_torch_on =
 {
 	self.frame = 0;
 	self.estate = ESTATE_ON;
-	lightstyle(self.style, "m");
+	// Light style defined? (use array to get the latest)
+	if (self.style > 0) lightstyle(self.style, light_style_str[self.style]);
+
 	light_part_emitter_on();
 };
 
@@ -272,55 +577,77 @@ void() light_torch_off =
 //----------------------------------------------------------------------
 void() light_torch_small_walltorch =
 {
-	self.mdl = "progs/flame.mdl";
+	// Allow for custom models
+	if (self.mdl == "") self.mdl = "progs/flame.mdl";
 	precache_model (self.mdl);
+	// Allow for custom sounds
 	if (self.noise == "") self.noise = "ambience/fire1.wav";
 	precache_sound (self.noise);
+	// Default for fire1 sound
 	if (!self.waitmin) self.waitmin = 2.165;
 
 	setmodel (self, self.mdl);
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	// Setting the angle key in the editor to UP/DOWN = random rotation	
-	if (self.angles_y < 0 || (self.angles_y == 0 && !query_configflag(SVR_ITEMROTATE)) ) 
-		self.angles_y = rint(random()*359);
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 
+	// Default = static entity, check done in static function
+	self.classtype = CT_LIGHTSTATIC;
+
+	setup_vanilla_nostatic();
 	setup_light_sound();
 	setup_light_particle(PARTICLE_STYLE_FLAMET);
 
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
-		self.estate_on = light_torch_on;
-		self.estate_off = light_torch_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	}
-	else setup_light_static();
+	// Custom estate on/off functions
+	self.estate_on = light_torch_on;
+	self.estate_off = light_torch_off;
+
+	// Check for any custom light styles
+	light_customstyle_start();
 };
 
-/*======================================================================
-//QUAKED light_flame_large_yellow (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF NO_SOUND NO_STATIC x x x x x
+//======================================================================
+/*QUAKED light_flame_large_yellow (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF NO_SOUND NO_STATIC x x x x NOPARTICLES
+{ model(":progs/flame2.mdl"); }
 Large yellow flame
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
-light : sets brightness, 300 is default
+light      : sets brightness, 300 is default
+_color     : Light color - R/G/B (def='1 1 1')
+wait       : Fade distance multiplier (def=1)
+delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+mangle     : Spotlight direction
+angle      : Spotlight cone angle (def=40)
+
+_dirt      : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance  : Deviance
+_samples   : No. of Deviance lights (def=16)
+_surface   : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale: Light angle scale (def=0.5)
 -------- SPAWNFLAGS --------
-LIGHTOFF : Starts off and waits for trigger
-NO_SOUND  : No ambient sound
-NO_STATIC : Will not turn into static entity
+LIGHTOFF   : Starts off and waits for trigger
+NO_SOUND   : No ambient sound
+NO_STATIC  : Will not turn into static entity
+NOPARTICLES: No particle or effects active
 -------- NOTES --------
 Large yellow flame
 
 ======================================================================*/
 void() light_flame_large_yellow =
 {
-	self.mdl = "progs/flame2.mdl";
+	// Allow for custom models
+	if (self.mdl == "") self.mdl = "progs/flame2.mdl";
 	precache_model (self.mdl);
+	// Allow for custom sounds
 	if (self.noise == "") self.noise = "ambience/fire1.wav";
 	precache_sound (self.noise);
+	// The default length of the ambient fire1 sound
 	if (!self.waitmin) self.waitmin = 2.165;
 	
-	// If DP engine active remove candle model shadow
+	// If DP engine active remove model shadow
 	if (engine == ENG_DPEXT) self.effects = self.effects + EF_NOSHADOW;
 
 	setmodel (self, self.mdl);
@@ -328,44 +655,58 @@ void() light_flame_large_yellow =
 	self.frame = 1;			// Switch to frame group 2 (larger flame)
 	if (!self.alpha) self.alpha = 0.8;
 	// Setting the angle key in the editor to UP/DOWN = random rotation	
-	if (self.angles_y < 0 || (self.angles_y == 0 && !query_configflag(SVR_ITEMROTATE)) ) 
-		self.angles_y = rint(random()*359);
+	if (self.angles_y <= 0) self.angles_y = rint(random()*359);
 
+	// Default = static entity, check done in static function
+	self.classtype = CT_LIGHTSTATIC;
+	
+ 	setup_vanilla_nostatic();
 	setup_light_sound();
 	setup_light_particle(PARTICLE_STYLE_FLAMEL);
 	
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
-		self.estate_on = light_on;
-		self.estate_off = light_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	}
-	else setup_light_static();
+	// Check for any custom light styles
+	light_customstyle_start();
 };
 
-/*======================================================================
-//QUAKED light_flame_small_yellow (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF NO_SOUND NO_STATIC x x x X x
+//======================================================================
+/*QUAKED light_flame_small_yellow (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF NO_SOUND NO_STATIC x x x x NOPARTICLES
+{ model(":progs/flame2.mdl"); }
 Small yellow flames
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
-light : sets brightness, 300 is default
+light      : sets brightness, 300 is default
+_color     : Light color - R/G/B (def='1 1 1')
+wait       : Fade distance multiplier (def=1)
+delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+mangle     : Spotlight direction
+angle      : Spotlight cone angle (def=40)
+
+_dirt      : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance  : Deviance
+_samples   : No. of Deviance lights (def=16)
+_surface   : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale: Light angle scale (def=0.5)
 -------- SPAWNFLAGS --------
-LIGHTOFF : Starts off and waits for trigger
-NO_SOUND  : No ambient sound
-NO_STATIC : Will not turn into static entity
+LIGHTOFF   : Starts off and waits for trigger
+NO_SOUND   : No ambient sound
+NO_STATIC  : Will not turn into static entity
+NOPARTICLES: No particle or effects active
 -------- NOTES --------
 Small yellow flames.
 
 ======================================================================*/
 void() light_flame_small_yellow =
 {
-	self.mdl = "progs/flame2.mdl";
+	// Allow for custom models
+	if (self.mdl == "") self.mdl = "progs/flame2.mdl";
 	precache_model (self.mdl);
+	// Allow for custom sounds
 	if (self.noise == "") self.noise = "ambience/fire1.wav";
 	precache_sound (self.noise);
-	self.part_active = PARTICLE_STYLE_FLAMES;
+	// The default length of the ambient fire1 sound
 	if (!self.waitmin) self.waitmin = 2.165;
 
 	// If DP engine active remove candle model shadow
@@ -375,60 +716,87 @@ void() light_flame_small_yellow =
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	if (!self.alpha) self.alpha = 0.8;
 	// Setting the angle key in the editor to UP/DOWN = random rotation	
-	if (self.angles_y < 0 || (self.angles_y == 0 && !query_configflag(SVR_ITEMROTATE)) ) 
-		self.angles_y = rint(random()*359);
+	if (self.angles_y <= 0) self.angles_y = rint(random()*359);
 
+	// Default = static entity, check done in static function
+	self.classtype = CT_LIGHTSTATIC;
+
+	setup_vanilla_nostatic();
 	setup_light_sound();
+	self.part_active = PARTICLE_STYLE_FLAMES;
 	setup_light_particle(PARTICLE_STYLE_FLAMES);
 
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
-		self.estate_on = light_on;
-		self.estate_off = light_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	}
-	else setup_light_static();
+	// Check for any custom light styles
+	light_customstyle_start();
 };
 //Duplicate (small yellow flame)
 void() light_flame_small_white = { light_flame_small_yellow(); };
 
-/*======================================================================
-//QUAKED light_postlight (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF x x x x x x x
+//======================================================================
+/*QUAKED light_postlight (0 .5 0) (-8 -8 -32) (8 8 16) LIGHTOFF NOTSTATIC x x x x x x
+{ model(":progs/ad171/misc_lightpost.mdl"); }
 light post (from Quoth)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
-light : sets brightness, 300 is default
+light      : sets brightness, 300 is default
+_color     : Light color - R/G/B (def='1 1 1')
+wait       : Fade distance multiplier (def=1)
+delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+mangle     : Spotlight direction
+angle      : Spotlight cone angle (def=40)
+
+_dirt      : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance  : Deviance
+_samples   : No. of Deviance lights (def=16)
+_surface   : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale: Light angle scale (def=0.5)
 -------- SPAWNFLAGS --------
-LIGHTOFF : Starts off and waits for trigger
+LIGHTOFF   : Starts off and waits for trigger
+NOTSTATIC  : Not static entity (useful for switchable lights)
 -------- NOTES --------
 light post (from Quoth)
+
 ======================================================================*/
 void() light_postlight =
 {
 	self.mdl = "progs/ad171/misc_lightpost.mdl";
 	precache_model (self.mdl);
 
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
-		self.estate_on = light_on;
-		self.estate_off = light_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	}
-	else setmodel (self, self.mdl);
+	// Default = static entity, check done in static function
+	self.classtype = CT_LIGHTSTATIC;
+	setup_quoth_nostatic();
+	setup_vanilla_nostatic();
+	// Check for any custom light styles
+	light_customstyle_start();
 };
 
-/*======================================================================
-//QUAKED light_tubelight (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF x x x x x x x
+//======================================================================
+/*QUAKED light_tubelight (0 .5 0) (-8 -8 -32) (8 8 16) LIGHTOFF NOTSTATIC x x x x x x
+{ model(":progs/ad171/misc_lighttube.mdl"); }
 light Tube (from Quoth)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
-light : sets brightness, 300 is default
+light      : sets brightness, 300 is default
+_color     : Light color - R/G/B (def='1 1 1')
+wait       : Fade distance multiplier (def=1)
+delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+mangle     : Spotlight direction
+angle      : Spotlight cone angle (def=40)
+
+_dirt      : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance  : Deviance
+_samples   : No. of Deviance lights (def=16)
+_surface   : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale: Light angle scale (def=0.5)
 -------- SPAWNFLAGS --------
-LIGHTOFF : Starts off and waits for trigger
+LIGHTOFF   : Starts off and waits for trigger
+NOTSTATIC  : Not static entity (useful for switchable lights)
 -------- NOTES --------
 light Tube (from Quoth)
 ======================================================================*/
@@ -437,48 +805,243 @@ void() light_tubelight =
 	self.mdl = "progs/ad171/misc_lighttube.mdl";
 	precache_model (self.mdl);
 
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
-		self.estate_on = light_on;
-		self.estate_off = light_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	}
-	else setmodel (self, self.mdl);
+	// Default = static entity, check done in static function
+	self.classtype = CT_LIGHTSTATIC;
+	setup_quoth_nostatic();
+	setup_vanilla_nostatic();
+	// Check for any custom light styles
+	light_customstyle_start();
 };
 
-/*======================================================================
-//QUAKED light_fixture1 (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF x x x x x x x
+//======================================================================
+/*QUAKED light_flame_pyre (0 .5 0) (-32 -32 -8) (32 32 56) LIGHTOFF NOSTATIC x x x x x NOPARTICLES
+{ model(":progs/ad181/misc_flame_big.mdl"); }
+Flame Pyre (from Quoth)
+-------- KEYS --------
+targetname : toggle state (use trigger ent for exact state)
+light      : sets brightness, 300 is default
+_color     : Light color - R/G/B (def='1 1 1')
+wait       : Fade distance multiplier (def=1)
+delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+mangle     : Spotlight direction
+angle      : Spotlight cone angle (def=40)
+
+_dirt      : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance  : Deviance
+_samples   : No. of Deviance lights (def=16)
+_surface   : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale: Light angle scale (def=0.5)
+-------- SPAWNFLAGS --------
+LIGHTOFF   : Starts off and waits for trigger
+NOTSTATIC  : Not static entity (useful for switchable lights)
+NOPARTICLES: No particle or effects active
+-------- NOTES --------
+Flame Pyre (from Quoth)
+
+======================================================================*/
+void() light_flame_pyre =
+{
+	self.mdl = "progs/ad181/misc_flame_big.mdl";
+	precache_model (self.mdl);
+
+	// Default = static entity, check done in static function
+	self.classtype = CT_LIGHTSTATIC;
+	setup_quoth_nostatic();
+	setup_vanilla_nostatic();
+	setup_light_sound();
+	setup_light_particle(PARTICLE_STYLE_FLAMEL);
+
+	// Check for any custom light styles
+	light_customstyle_start();
+};
+
+//======================================================================
+/*QUAKED light_flame_brazier_short (0 .5 0) (-8 -8 -16) (8 8 8) LIGHTOFF NOTSTATIC x x x x x NOPARTICLES
+{ model(":progs/misc_brazshrt.mdl"); }
+Short brazier (from Quoth)
+-------- KEYS --------
+targetname : toggle state (use trigger ent for exact state)
+light      : sets brightness, 300 is default
+skin       : 0=knave(def), 1=rust, 2=redbrick, 3=copper, 4=altar, 5=wizmet
+_color     : Light color - R/G/B (def='1 1 1')
+wait       : Fade distance multiplier (def=1)
+delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+mangle     : Spotlight direction
+angle      : Spotlight cone angle (def=40)
+
+_dirt      : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance  : Deviance
+_samples   : No. of Deviance lights (def=16)
+_surface   : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale: Light angle scale (def=0.5)
+-------- SPAWNFLAGS --------
+LIGHTOFF   : Starts off and waits for trigger
+NOTSTATIC  : Not static entity (useful for switchable lights)
+NOPARTICLES: No particle or effects active
+-------- NOTES --------
+Short brazier (from Quoth)
+
+======================================================================*/
+void() light_flame_brazier_short =
+{
+	self.mdl = "progs/misc_brazshrt.mdl";
+	precache_model (self.mdl);
+
+	// Default = static entity, check done in static function
+	self.classtype = CT_LIGHTSTATIC;
+	setup_quoth_nostatic();
+	setup_vanilla_nostatic();
+	setup_light_sound();
+	setup_light_particle(PARTICLE_STYLE_FLAMES);
+
+	// Check for any custom light styles
+	light_customstyle_start();
+};
+
+//======================================================================
+/*QUAKED light_flame_brazier_tall (0 .5 0) (-8 -8 -64) (8 8 8) LIGHTOFF NOTSTATIC x x x x x NOPARTICLES
+{ model(":progs/misc_braztall.mdl"); }
+Long brazier (from Quoth)
+-------- KEYS --------
+targetname : toggle state (use trigger ent for exact state)
+light      : sets brightness, 300 is default
+skin       : 0=knave(def), 1=rust, 2=redbrick, 3=copper, 4=altar, 5=wizmet
+_color     : Light color - R/G/B (def='1 1 1')
+wait       : Fade distance multiplier (def=1)
+delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+mangle     : Spotlight direction
+angle      : Spotlight cone angle (def=40)
+
+_dirt      : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance  : Deviance
+_samples   : No. of Deviance lights (def=16)
+_surface   : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale: Light angle scale (def=0.5)
+-------- SPAWNFLAGS --------
+LIGHTOFF   : Starts off and waits for trigger
+NOTSTATIC  : Not static entity (useful for switchable lights)
+NOPARTICLES: No particle or effects active
+-------- NOTES --------
+Long brazier (from Quoth)
+
+======================================================================*/
+void() light_flame_brazier_tall =
+{
+	self.mdl = "progs/misc_braztall.mdl";
+	precache_model (self.mdl);
+
+	// Default = static entity, check done in static function
+	self.classtype = CT_LIGHTSTATIC;
+	setup_quoth_nostatic();
+	setup_vanilla_nostatic();
+	setup_light_sound();
+	setup_light_particle(PARTICLE_STYLE_FLAMES);
+
+	// Check for any custom light styles
+	light_customstyle_start();
+};
+
+//======================================================================
+/*QUAKED light_torch_long_walltorch (0 .5 0) (-8 -8 -48) (8 8 80) LIGHTOFF NOTSTATIC x x x x x NOPARTICLES
+{ model(":progs/misc_longtrch.mdl"); }
+Long wall torch (from Quoth)
+-------- KEYS --------
+targetname : toggle state (use trigger ent for exact state)
+light      : sets brightness, 300 is default
+skin       : 0=knave(def), 1=rust, 2=redbrick, 3=copper, 4=altar, 5=wizmet
+_color     : Light color - R/G/B (def='1 1 1')
+wait       : Fade distance multiplier (def=1)
+delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+mangle     : Spotlight direction
+angle      : Spotlight cone angle (def=40)
+
+_dirt      : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance  : Deviance
+_samples   : No. of Deviance lights (def=16)
+_surface   : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale: Light angle scale (def=0.5)
+-------- SPAWNFLAGS --------
+LIGHTOFF   : Starts off and waits for trigger
+NOTSTATIC  : Not static entity (useful for switchable lights)
+NOPARTICLES: No particle or effects active
+-------- NOTES --------
+Long wall torch (from Quoth)
+
+======================================================================*/
+void() light_torch_long_walltorch =
+{
+	self.mdl = "progs/misc_longtrch.mdl";
+	precache_model (self.mdl);
+
+	// Default = static entity, check done in static function
+	self.classtype = CT_LIGHTSTATIC;
+	setup_quoth_nostatic();
+	setup_vanilla_nostatic();
+	setup_light_sound();
+	setup_light_particle(PARTICLE_STYLE_FLAMES);
+
+	// Check for any custom light styles
+	light_customstyle_start();
+};
+
+//======================================================================
+/*QUAKED light_fixture1 (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF NOTSTATIC x x x x x x
+{ model(":progs/misc_fixture1.mdl"); }
 light Fixture (from Rubicon)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
-light : sets brightness, 300 is default
-fixangle : angle the model should be facing; set it to face away from the wall
+light      : sets brightness, 300 is default
+fixangle   : angle the model should be facing; set it to face away from the wall
+_color     : Light color - R/G/B (def='1 1 1')
+wait       : Fade distance multiplier (def=1)
+delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+mangle     : Spotlight direction
+angle      : Spotlight cone angle (def=40)
+
+_dirt      : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance  : Deviance
+_samples   : No. of Deviance lights (def=16)
+_surface   : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale: Light angle scale (def=0.5)
 -------- SPAWNFLAGS --------
-LIGHTOFF : Starts off and waits for trigger
+LIGHTOFF   : Starts off and waits for trigger
+NOTSTATIC  : Not static entity (useful for switchable lights)
 -------- NOTES --------
 light Fixture (from Rubicon)
+
 ======================================================================*/
 void() light_fixture1 =
 {
-	self.mdl = "progs/ad171/misc_fixture1.mdl";
+	self.mdl = "progs/misc_fixture1.mdl";
 	precache_model (self.mdl);
 	self.angles_y = self.fixangle;
 
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
-		self.estate_on = light_on;
-		self.estate_off = light_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	}
-	else setmodel (self, self.mdl);
+	// Default = static entity, check done in static function
+	self.classtype = CT_LIGHTSTATIC;
+	setup_quoth_nostatic();
+	setup_vanilla_nostatic();
+	// Check for any custom light styles
+	light_customstyle_start();
 };
 
-/*======================================================================
-//QUAKED light_candle (0 1 0) (-4 -4 -16) (4 4 16) LIGHTOFF FLAMEOFF x SHADOW x x x x
+//======================================================================
+/*QUAKED light_candle (0 1 0) (-4 -4 -16) (4 4 16) LIGHTOFF FLAMEOFF x SHADOWS x STATIC x x
+{ model(":progs/misc_candle1.mdl"); }
 Wide variety of Candles (from Rogue Software)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -487,10 +1050,25 @@ height     : size of candle 1=short, 2=medium, 3=regular, -1=random
 t_width    : width of candle 1=regular, 2=fat, 3=thin, -1=random
 lip        : Moves model down to ground plane (default = 16)
 light      : sets brightness, 300 is default
+_color     : Light color - R/G/B (def='1 1 1')
+wait       : Fade distance multiplier (def=1)
+delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+mangle     : Spotlight direction
+angle      : Spotlight cone angle (def=40)
+
+_dirt      : Dirt map (override)
+_dirtscale : Dirt scale (override)
+_deviance  : Deviance
+_samples   : No. of Deviance lights (def=16)
+_surface   : Surface light texture name
+_surface_offset : Surface light offset (def=2)
+_softangle : Spotlight soft angle (def=0)
+_anglescale: Light angle scale (def=0.5)
 -------- SPAWNFLAGS --------
-LIGHTOFF : Starts off and waits for trigger
-FLAMEOFF : The candle is displayed off (no light/flame)
-SHADOW   : Turn on shadows in DP engine
+LIGHTOFF   : Starts off and waits for trigger
+FLAMEOFF   : The candle is displayed off (no flame)
+SHADOWS    : Turn on shadows in DP engine
+STATIC     : Turn entity into static upon spawn (frame 0)
 -------- NOTES --------
 Wide variety of Candles (from Rogue Software)
 
@@ -499,7 +1077,8 @@ void() light_candle_on =
 {
 	self.estate = ESTATE_ON;
 	self.frame = 1 + (self.t_width-1)*2;
-	lightstyle(self.style, "m");
+	// Light style defined? (use array to get the latest)
+	if (self.style > 0) lightstyle(self.style, light_style_str[self.style]);
 };
 
 //----------------------------------------------------------------------
@@ -509,6 +1088,7 @@ void() light_candle_off =
 	self.frame = (self.t_width-1)*2;
 	lightstyle(self.style, "a");
 };
+
 //----------------------------------------------------------------------
 void() light_candle_setup =
 {
@@ -528,18 +1108,16 @@ void() light_candle_setup =
 		self.estate = ESTATE_OFF;
 		self.frame = (self.t_width-1)*2;
 	}
-	
-	// Is switchable light style defined?
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
+
+	// Check for static option (default is now static if no target)
+	if (self.spawnflags & ENT_SPNSTATIC) makestatic(self);
+	else {
+		// Custom estate on/off functions
 		self.estate_on = light_candle_on;
 		self.estate_off = light_candle_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
+		// Check for any custom light styles
+		light_customstyle_start();
 	}
-	// Check for static option, after switchable lights
-	else if (self.spawnflags & ENT_SPNSTATIC) makestatic(self);
 };
 
 //----------------------------------------------------------------------
@@ -548,15 +1126,15 @@ void() light_candle =
 	// Cannot have randomly selected models for prechache
 	// Quickload will re-run all spawn functions and try to select
 	// a different candle model which is not precached
-	precache_model ("progs/ad171/misc_candle1.mdl");
-	precache_model ("progs/ad171/misc_candle2.mdl");
-	precache_model ("progs/ad171/misc_candle3.mdl");
+	precache_model ("progs/misc_candle1.mdl");
+	precache_model ("progs/misc_candle2.mdl");
+	precache_model ("progs/misc_candle3.mdl");
 
 	// Check for size 1=small, 2=medium, 3=regular (def), -1=random
 	if (self.height < 0) self.height = 1 + rint(random()*2);
-	if (self.height == 1) self.mdl = "progs/ad171/misc_candle1.mdl";
-	else if (self.height == 2) self.mdl = "progs/ad171/misc_candle2.mdl";
-	else self.mdl = "progs/ad171/misc_candle3.mdl";
+	if (self.height == 1) self.mdl = "progs/misc_candle1.mdl";
+	else if (self.height == 2) self.mdl = "progs/misc_candle2.mdl";
+	else self.mdl = "progs/misc_candle3.mdl";
 	
 	// Check for width 1=regular (def), 2=fat, 3=thin, -1=random
 	// The models are split up into three groups of off/on
@@ -591,454 +1169,3 @@ void() light_candle =
 		else light_candle_setup();
 	}
 };
-
-
-//----------------------------------------------------------------------
-void() light_flame_brazier_short = 
-{
-	self.mdl = "progs/brazshrt.mdl";
-	precache_model (self.mdl);
-	if (self.noise == "") self.noise = "ambience/fire1.wav";
-	precache_sound (self.noise);
-	if (!self.waitmin) self.waitmin = 2.165;
-
-	setmodel (self, self.mdl);
-	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
-	// Setting the angle key in the editor to UP/DOWN = random rotation	
-	if (self.angles_y < 0 || (self.angles_y == 0 && !query_configflag(SVR_ITEMROTATE)) ) 
-		self.angles_y = rint(random()*359);
-
-	setup_light_sound();
-	setup_light_particle(PARTICLE_STYLE_FLAMET);
-
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
-		self.estate_on = light_torch_on;
-		self.estate_off = light_torch_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	}
-	else setup_light_static();
-};
-
-//----------------------------------------------------------------------
-void() light_flame_brazier_tall = 
-{
-	self.mdl = "progs/braztall.mdl";
-	precache_model (self.mdl);
-	if (self.noise == "") self.noise = "ambience/fire1.wav";
-	precache_sound (self.noise);
-	if (!self.waitmin) self.waitmin = 2.165;
-
-	setmodel (self, self.mdl);
-	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
-	// Setting the angle key in the editor to UP/DOWN = random rotation	
-	if (self.angles_y < 0 || (self.angles_y == 0 && !query_configflag(SVR_ITEMROTATE)) ) 
-		self.angles_y = rint(random()*359);
-
-	setup_light_sound();
-	setup_light_particle(PARTICLE_STYLE_FLAMET);
-
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
-		self.estate_on = light_torch_on;
-		self.estate_off = light_torch_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	}
-	else setup_light_static();
-};
-
-//----------------------------------------------------------------------
-void() light_torch_long_walltorch = 
-{
-	self.mdl = "progs/longtrch.mdl";
-	precache_model (self.mdl);
-	if (self.noise == "") self.noise = "ambience/fire1.wav";
-	precache_sound (self.noise);
-	if (!self.waitmin) self.waitmin = 2.165;
-
-	setmodel (self, self.mdl);
-	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
-	// Setting the angle key in the editor to UP/DOWN = random rotation	
-	if (self.angles_y < 0 || (self.angles_y == 0 && !query_configflag(SVR_ITEMROTATE)) ) 
-		self.angles_y = rint(random()*359);
-
-	setup_light_sound();
-	setup_light_particle(PARTICLE_STYLE_FLAMET);
-
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
-		self.estate_on = light_torch_on;
-		self.estate_off = light_torch_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	}
-	else setup_light_static();
-};
-
-void () light_lantern = {
-	self.mdl = "progs/rogue/lantern.mdl";
-	precache_model (self.mdl);
-	self.angles_y = self.fixangle;
-
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
-		self.estate_on = light_on;
-		self.estate_off = light_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	}
-	else setmodel (self, self.mdl);
-};
-
-void () light_lantern2 = {
-	self.mdl = "progs/ad171/misc_lantern.mdl";
-	precache_model(self.mdl);
-	if (self.noise == "") self.noise = "ambience/fire1.wav";
-	precache_sound (self.noise);
-	if (!self.waitmin) self.waitmin = 2.165;
-
-	setmodel (self, self.mdl);
-	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
-	// Setting the angle key in the editor to UP/DOWN = random rotation	
-	if (self.angles_y < 0 || (self.angles_y == 0 && !query_configflag(SVR_ITEMROTATE)) ) 
-		self.angles_y = rint(random()*359);
-
-	setup_light_sound();
-	setup_light_particle(PARTICLE_STYLE_FLAMET);
-
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
-		self.estate_on = light_torch_on;
-		self.estate_off = light_torch_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	}
-	else setup_light_static();
-};
-
-
-//===============================================================================
-//light_beacon
-//===============================================================================
-/*QUAKED light_beacon (0 1 0) (-8 -8 -36) (8 8 8) BLINKING
-floor-mounted flashing red beacon
-Default light value is 300
-Default style is 0
-Flags:
-1 : "Blinking" if you want the beacon to blink (Set style to "16" to match the skin animation.) */
-
-void() light_beacon = {
-	if (self.spawnflags & 1) self.skin = 1;
-
-	self.mdl = "progs/rubicon2/beacon.mdl";
-	precache_model (self.mdl);
-	self.angles_y = self.fixangle;
-
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
-		self.estate_on = light_on;
-		self.estate_off = light_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	}
-	else setmodel (self, self.mdl);
-};
-
-/*======================================================================
-//QUAKED misc_marshlight (.5 .5 .75) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x
-Marsh lights (Quoth item)
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-count      : Maximum amount of marsh light entities (def=5)
-color      : 0=White, 1=Cyan, 2=Blue, 3=Green, 4=Orange, 5=Red, 6=Purple
-mdl        : Name of Small sprite (def='progs/ad172/s_marsh_small.spr')
-headmdl    : Name of Medium sprite (def='progs/ad172/s_marsh_med.spr')
-count      : Maximum active marsh lights (def=5)
-waitmin    : Reset movement timer (def=6s)
-waitmin2   : Reset Velocity movement (def=4.5s)
-distance   : Starting distance from center (def=20)
-pos1       : used for selection of frame(s) has several setups
-             X=0, Y=0, Z=exact frame number
-             X->Y, Z=0 Randomly pick a frame from the X,Y range
-pos2       : used for the selection of skin(s) has several setups
-             X=0, Y=0, Z=exact skin number
-             X->Y, Z=0 Randomly pick a skin from the X,Y range
-pos3       : Base rotation avelocity (def=0 0 0)
-finalangle : Random rotation avelocity (def=0 0 0)
--------- SPAWNFLAGS --------
-STARTOFF : Starts off and waits for trigger
--------- NOTES --------
-Marsh lights
-======================================================================*/
-void() misc_marshlight_move =
-{
-	// Check if ready to be removed?
-	if (self.attack_finished < time) { remove(self); return; }
-	// Setup gradual turn off of marsh lights
-	if (self.owner.estate & ESTATE_BLOCK) {
-		if (self.attack_finished == LARGE_TIMER) {
-			self.attack_finished = time + random() + random()*2;
-		}
-	}
-	
-	// Keep moving the marsh light around
-	self.think = misc_marshlight_move;
-	self.nextthink = time + 0.1;
-	
-	// Slow down movement over time (0.1s)
-	if (self.lefty > 1) self.lefty = self.lefty - 0.15;
-	if (self.lefty < 1) self.lefty = 1;
-
-	// Adjust velocity based on starting origin
-	self.pos1 = (self.owner.origin - self.origin) * 0.2;
-	self.pos2 = self.velocity * 0.8;
-	self.velocity = self.pos2 + self.pos1;
-	
-	// Check for velocity/time reset
-	if ( (random() < 0.03) && (self.ltime < time) ) {
-		self.ltime = time + self.owner.waitmin;	// Reset timer
-		self.lefty = self.owner.waitmin2;		// Reset velocity
-	}
-	
-	// Adjust velocity based on movement modifier
-	self.velocity = normalize(self.velocity);
-	self.velocity = self.velocity * (20 + (random()*8) * self.lefty);
-};
-
-//----------------------------------------------------------------------
-void() misc_marshlight_spawn =
-{
-	// Block functionality if state wrong
-	if (self.estate & ESTATE_BLOCK) return;
-	
-	// Spawn marsh light
-	self.movetarget = spawn();
-	self.movetarget.classname = self.classname;
-	self.movetarget.classtype = CT_BUBBLE;
-	self.movetarget.classgroup = CG_TEMPENT;
-	self.movetarget.owner = self;
-	self.movetarget.attack_finished = LARGE_TIMER;
-
-	// First marsh light is large, after that small
-	if (self.bubble_count > 1) setmodel(self.movetarget, self.mdl);
-	else setmodel(self.movetarget, self.headmdl);
-	self.movetarget.movetype = MOVETYPE_NOCLIP;
-	self.movetarget.solid = SOLID_NOT;
-
-	// Randonly define skin/frame for each light/model
-	// Has a frame range been defined?
-	if (self.pos1_x != self.pos1_y) {
-		self.pos1_z = rint( random() * fabs(self.pos1_y - self.pos1_x) );
-	}
-	else {
-		// If no exact frame bas specified, reset frame to default = 0
-		if (self.pos1_z < 1) self.pos1 = '0 0 0';
-	}
-	// Has a skin range been defined?
-	if (self.pos2_x != self.pos2_y) {
-		self.pos2_z = rint( random() * fabs(self.pos2_y - self.pos2_x) );
-	}
-	else {
-		// If no exact frame bas specified, reset skin to default = 0
-		if (self.pos2_z < 1) self.pos2 = '0 0 0';
-	}
-
-	// Select frame/skin (pos1/2 or color_x key)
-	if (self.pos1_z == 0) self.movetarget.frame = self.color_x;
-	else self.movetarget.frame = self.pos1_z;
-	if (self.pos2_z > 0) self.movetarget.skin = self.pos2_z;
-	
-	// Setup radom rotation velocity (base + modifier)
-	self.dest2_x = random() * self.finalangle_x;
-	self.dest2_y = random() * self.finalangle_y;
-	self.dest2_z = random() * self.finalangle_z;
-	self.movetarget.avelocity = self.pos3 + self.dest2;
-	
-	// Starting origin +/- (def=20)
-	setsize (self.movetarget, VEC_ORIGIN, VEC_ORIGIN);
-	self.movetarget.origin = self.origin + vecrand(0, self.distance, TRUE);
-	setorigin(self.movetarget, self.movetarget.origin);
-	// Setup starting velocity +/- (def=20)
-	self.movetarget.velocity = vecrand(0, self.distance, TRUE);
-	
-	// Keep moving around (randomly)
-	self.movetarget.nextthink = time + 0.1;
-	self.movetarget.think = misc_marshlight_move;
-
-	// Limited amount of marsh lights
-	self.bubble_count =  self.bubble_count + 1;
-	if (self.bubble_count < self.count) {
-		self.think = misc_marshlight_spawn;
-		self.nextthink = time + 0.1;
-	}
-};
-
-//----------------------------------------------------------------------
-void() misc_marshlight_on =
-{
-	// Block functionality if state wrong
-	if (self.estate == ESTATE_ON) return;
-
-	self.estate = ESTATE_ON;
-	self.bubble_count = 0;
-	self.nextthink = time + 0.5 + random();
-	self.think = misc_marshlight_spawn;
-};
-
-//----------------------------------------------------------------------
-void() misc_marshlight_off =
-{
-	self.estate = ESTATE_OFF;
-	self.bubble_count = 0;
-};
-
-//----------------------------------------------------------------------
-void() misc_marshlight =
-{
-	// Allow for custom sprites
-	if (self.mdl == "") self.mdl = SMARSH_SMALL;
-	if (self.headmdl == "") self.headmdl = SMARSH_MED;
-
-	// Default cache - Quoth sprites
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	
-	// This is a stupid entity key to use, screws with coloured lighting
-	self.color_x = rint(self.color_x);
-	if (self.color_x < 0 || self.color_x > 6) self.color_x = 0;
-
-	// Setup defaults
-	self.bubble_count = 0;						// Active Marsh lights
-	if (self.count <= 0) self.count = 5; 		// Maximum Marsh lights
-	if (self.waitmin < 1) self.waitmin = 6;		// Reset timer
-	if (self.waitmin2 < 1) self.waitmin2 = 4.5;	// Velocity Movement
-	if (self.distance < 1) self.distance = 20;	// Starting distance
-	
-	self.classtype = CT_MISCMARSH;
-	self.classgroup = CG_MISCENT;
-	self.solid = SOLID_NOT;
-	self.movetype = MOVETYPE_NONE;
-	setsize(self, VEC_ORIGIN, VEC_ORIGIN);
-
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
-	self.estate_on = misc_marshlight_on;
-	self.estate_off = misc_marshlight_off;
-	if (self.spawnflags & ENT_STARTOFF) self.estate_off();
-	else self.estate_on();
-};
-
-//----------------------------------------------------------------------
-// Re-direct all Quoth light_marsh requests to misc_marshlight!
-void() light_marsh =
-{
-	misc_marshlight();
-};
-
-/*
-void() bug_bob = {
-	self.nextthink = time + 0.1;
-	self.think = bug_bob;
-	if (self.multiplier > 1) self.multiplier = self.multiplier - 0.15;
-	if (self.multiplier < 1) self.multiplier = 1;
-	self.velocity = self.velocity * 0.8 + (self.oldorigin - self.origin) * 0.2;
-	if (random() < 0.030000 && self.ltime < time) {
-		self.ltime = time + 6;
-		self.multiplier = 4.5;
-	}
-	self.velocity = normalize(self.velocity);
-	self.velocity = self.velocity * ((20 + random() * 8) * self.multiplier);
-};
-
-void() make_bugs = {
-	local entity bug;
-	local vector svec;
-	bug = spawn();
-	bug.oldorigin = self.origin;
-	bug.movetype = MOVETYPE_NOCLIP;
-	bug.solid = SOLID_NOT;
-	bug.velocity_x = 20 + random() * -40;
-	bug.velocity_y = 20 + random() * -40;
-	bug.velocity_z = 20 + random() * -40;
-	bug.nextthink = time + 0.1;
-	bug.think = bug_bob;
-	bug.classname = "lightchunk";
-	bug.frame = 0;
-	bug.cnt = 0;
-	if (self.count > 1)
-		setmodel(bug, "progs/marshsm.spr");
-	else
-		setmodel(bug, "progs/marsh.spr");
-
-	bug.frame = self.col;
-	svec_x = 20 + random() * -40;
-	svec_y = 20 + random() * -40;
-	svec_z = 20 + random() * -40;
-	svec = self.origin + svec;
-	setorigin(bug, svec);
-	setsize(bug, VEC_ORIGIN, VEC_ORIGIN);
-	if (self.count < 5) {
-		self.nextthink = time + 0.1;
-		self.think = make_bugs;
-	} else {
-		if (self.targetname != "") {
-			if (self.count == 0) {
-				self.syncent1 = bug;
-			} else if (self.count == 1) {
-				self.syncent2 = bug;
-			} else if (self.count == 2) {
-				self.syncent3 = bug;
-			} else if (self.count == 3) {
-				self.syncent4 = bug;
-			} else if (self.count == 4) {
-				self.syncent5 = bug;
-			}
-		} else {
-			remove(self);
-		}
-	}
-	self.count = self.count + 1;
-};
-
-void() kill_bugs = {
-	if (self.syncent1) remove(self.syncent1);
-	if (self.syncent2) remove(self.syncent2);
-	if (self.syncent3) remove(self.syncent3);
-	if (self.syncent4) remove(self.syncent4);
-	if (self.syncent5) remove(self.syncent5);
-};
-
-void() marshlight_on = {
-	make_bugs();
-	light_on();
-};
-
-void() marshlight_off = {
-	kill_bugs();
-	light_off();
-};
-
-
-void() light_marsh = {
-	precache_model("progs/marsh.spr");
-	precache_model("progs/marshsm.spr");
-
-	if (self.style >= 32) {
-		// Setup Entity State functionality
-		if (self.targetname != "") self.use = entity_state_use;
-		self.estate_on = marshlight_on;
-		self.estate_off = marshlight_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	} else {
-		make_bugs();
-	}
-};*/

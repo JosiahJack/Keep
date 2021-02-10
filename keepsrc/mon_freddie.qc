@@ -255,7 +255,7 @@ void(float side) fred_blade =
 	if (self.health < 1) return;
 
 	ai_damagebreakable(20);							// Damage any breakables
-	if (!ai_checkmelee(self.meleerange)) return;	// Too far away
+	if (!ai_checkmelee(self.meleerange,MONAI_MELEEZTALL)) return;	// Too far away
 
 	// Can the target bleed? - generate blood
 	if (!CanDamage (self.enemy, self)) return;
@@ -308,7 +308,7 @@ void() fred_fswing11 = [ $fswing11, fred_fswinge1 ] {
 	// Always check for enemy and health before changing think
 	if (self.enemy && self.enemy.health > 1 && self.health > 0) {
 		// Check if within range to do a second (back) swing attack
-		if (ai_checkmelee(self.meleerange)) self.think = fred_bswing1;
+		if (ai_checkmelee(self.meleerange,MONAI_MELEEZTALL)) self.think = fred_bswing1;
 	}
 };
 
@@ -457,7 +457,10 @@ QUAKED monster_freddie (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 ======================================================================*/
 void() monster_freddie =
 {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_freddie.mdl";			// was edie.mdl
 	self.headmdl = "progs/h_ogre.mdl";			// ID ogre
@@ -521,7 +524,24 @@ void() monster_freddie =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
-	if (self.deathstring == "") self.deathstring = " was exterminated by Freddie\n";
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
+	
+	if ( (random () < 0.500) ) {
+		if ( (random () < 0.500) ) {
+			if (self.deathstring == "")  self.deathstring = " was exterminated by Fred\n"; // Silly Qmaster
+		} else {
+			if (self.deathstring == "")  self.deathstring = " was exterminated by Freddie\n"; // AD
+		}
+	} else {
+		if ( (random () < 0.500) ) {
+			if (self.deathstring == "")  self.deathstring = " was terminated by Ed\n"; // Silly Qmaster
+		} else {
+			if (self.deathstring == "")  self.deathstring = " was terminated by Eddie\n"; // Quoth
+		}
+	}
 	
 	// Custom feet sounds (specific order)
 	self.stepc1 = "freddie/step.wav";

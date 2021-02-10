@@ -312,7 +312,7 @@ void() jim_inpain =
 	// Start of pain cycle
 	if (self.inpain ==  0) {
 		// Spawn a pile of sparks and dust falling down
-		particle_dust(self.origin, 10+random()*10, PARTICLE_BURST_YELLOW);
+		particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
 		self.pos1 = '0 0 0';
 		self.pos1_x = random() * self.lefty;	// Pitch away from dmg
 		self.pos1_z = crandom() * -10;			// Roll left / right
@@ -427,7 +427,7 @@ void() jim_is_dead =
 	self.think = self.touch = SUB_Null;
 	
 	// Final fireworks!
-	particle_dust(self.origin, 10+random()*10, PARTICLE_BURST_YELLOW);
+	particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 	SpawnExplosion(EXPLODE_BIG, self.origin, "jim/explode_major.wav");
@@ -471,7 +471,7 @@ void() jim_die =
 	else self.lefty = 0;
 
 	// Spawn dust and sprite explosion
-	particle_dust(self.origin, 10+random()*10, PARTICLE_BURST_YELLOW);
+	particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
 	SpawnExplosion(EXPLODE_BIG, self.origin, "jim/explode_minor.wav");
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 
@@ -481,9 +481,11 @@ void() jim_die =
 /*======================================================================
 //QUAKED monster_jim (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 ======================================================================*/
-void() monster_jim =
-{
-	if (deathmatch) { remove(self); return; }
+void() monster_jim = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	if (self.spawnflags & MON_JIM_ROCKET) self.mdl = "progs/ad171/mon_jimrock.mdl";
 	else self.mdl = "progs/ad171/mon_jim.mdl";
@@ -532,6 +534,10 @@ void() monster_jim =
 
 	self.classgroup = CG_ROBOT;
 	self.classmove = MON_MOVEFLY;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
     self.hittype    = HIT_METAL;
 	

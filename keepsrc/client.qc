@@ -2,7 +2,7 @@
  CLIENT FUNCTIONS
 ======================================================================*/
 // Vanilla Quake Inventory reset combined flag
-// IT_SUPERHEALTH, IT_KEY1, IT_KEY2 
+// IT2_SUPERHEALTH, IT_KEY1, IT_KEY2 
 // IT_INVISIBILITY, IT_INVULNERABILITY, IT_SUIT, IT_QUAD
 float IT_ITEMRESET = 7864320;		// 65536++
 float IT_MODRESET = 8380416;		// 8192++
@@ -16,7 +16,12 @@ void() CycleIntermissionCamera;
 // client_debuff.qc AND client_power.qc
 void() ClientDeBuff;
 void() ClientPowerups;
+void(entity targ, float powtimer, float novania) ResetPowerSystem;
+void(entity targ) ResetDebuffSystem;
 void() GrappleService;
+
+// client_advinfo.qc
+void() CheckSecretCamera;
 
 // player.qc
 void(entity inflictor, entity attacker, float damage) player_pain;
@@ -25,8 +30,17 @@ void() player_stand1;
 
 // triggers.qc
 void() trigger_changelevel_finish;
+void() trigger_changelevel_finish;
+void() trigger_cdtrack_change;
+void(entity targ) trigger_skybox_change;
 
 void(entity targ) set_teamsurvivor;
+
+// misc_camera.qc
+float(float cam_angle1, float cam_angle2) camera_check_anglezero;
+float(float baxis_start, float baxis_control, float baxis_end, float baxis_time) bezier_axis;
+vector(vector bez_start, vector bez_control, vector bez_end, float bez_timemax, float bez_timeleft) bezier_curve;
+void() misc_camera_filewrite;
 
 
 //========================================================================
@@ -156,9 +170,12 @@ return f;
  USED : Load (map command) NEW MAP or NEW GAME
  This is a function called via the engine for new games
  Resets all parm data back to default values, followed by Decode
+ * Cannot use any self keys in this functions, its called by engine
+   BEFORE any client setup or insertion into the map!
 ======================================================================*/
 void() SetNewParms =
 {
+	local float sethealth;
 	dprint("\b[CLIENT]\b SetNewParms\n");
 
 	// Brand new game/map, reset start position settings
@@ -166,10 +183,15 @@ void() SetNewParms =
 	update_configflag(SVR_SPAWN_BIT2, FALSE);
 	update_configflag(SVR_SPAWN_BIT3, FALSE);
 	fog_active = FALSE;
+	skyfog_active = FALSE;
 	
 	parm1 = IT_SHOTGUN | IT_AXE;	// Default self.items, give shotgun and axe to start
-	parm2 = encode(100, 0, 0);		// Default Health, Armortype, Armorvalue in that order
-	//parm2 = 100; 					// Starting Health
+
+	sethealth = 100;
+	// Check for Evil NM+ skill level (Lower HP max)
+	if (Client_QueryEvilmode()) sethealth = HEAL_EVILMAX;
+	parm2 = encode(sethealth, 0, 0);		// Default Health, Armortype, Armorvalue in that order
+	//parm2 = 100; 					// Starting Health, 50 in Evil Mode
 	//parm3 = 0;					// Armourtype
 	//parm9 = 0;					// Armourvalue
 
@@ -193,6 +215,20 @@ void() SetNewParms =
 	if (query_configflag(SVR_UPDAXE)) parm10 = parm10 | IT_UPGRADE_AXE;
 	if (query_configflag(SVR_UPDSSG)) parm10 = parm10 | IT_UPGRADE_SSG;
 	if (query_configflag(SVR_UPDLG)) parm10 = parm10 | IT_UPGRADE_LG;
+
+	// Skill 4 always starts with Shadow Axe!
+	if (Client_QueryEvilmode()) { 
+		parm1 = parm1 | IT_AXE;
+		parm10 = parm10 | IT_UPGRADE_AXE;
+
+		parm8 = IT_AXE; // Start with shadow axe in Evil Mode
+	}
+	// If a map wants NO axe start, then its likely been designed for it!
+	// World entity is readable at this point. The No Axe start is also a
+	// NO WEAPONS at all !?! (including any from previous map)
+	else if (world.no_axestart == TRUE) { 
+		parm1 = parm8 = 0;
+	}
 
 	// Are map variables live?
 	if (mapvar_cvar) dprint("\b[CLIENT]\b LIVE Map Variables Detected\n");
@@ -222,9 +258,8 @@ void() SetChangeParms =
 	self.items2 = self.items2 - (self.items2 & IT2_ITEMRESET);
 	parm11 = self.items2; // save the good stuff!  multi-weapons and such
 	
-	// cap super health
-	if (self.health > HEAL_PLAYMAX) self.health = HEAL_PLAYMAX;
-	if (self.health < 50) self.health = 50; //heal me on level change up to 50 from potentially 1
+	// Make sure player HP is within Max range and not less 50%
+	Client_CheckMaxHP(self, TRUE);
 	parm2 = encode(self.health, self.armortype, self.armorvalue);
 	parm3 = encode(self.ammo_shells,self.ammo_nails,self.ammo_rockets);
 	parm4 = encode(self.ammo_cells,self.ammo_bolts,self.ammo_poison);
@@ -269,7 +304,7 @@ void() DecodeWorldParms =
 		if (world.give_weapons & IT_LIGHTNING) dprint("LG ");
 		dprint(")\n");
 	}
-	if (world.take_weapons && (world.take_weapons < 99999999)) {
+	if (world.take_weapons && (world.take_weapons < 9999999)) {
 		dprint("\b[CLIENT]\b Weapon Take ( ");
 		if (world.take_weapons & IT_SHOTGUN) dprint("SG ");
 		if (world.take_weapons & IT_SUPER_SHOTGUN) dprint("SSG ");
@@ -287,15 +322,24 @@ void() DecodeWorldParms =
 		parm_items = parm_items | (world.give_weapons & ALL_WEAPONS);		
 	}
 	//----------------------------------------------------------------------
-	if (world.take_weapons > 0) {
-		if (world.take_weapons > 999) {
+	if (world.take_weapons > 0 || world.no_axestart) {
+		if (world.take_weapons >= 9999999) {
 			parm_items = 0;   //take all
 			parm13 = parm13 - (parm13 & IT_BLASTER);
 			parm8 = 0;
 			parm4 = 0;
-			dprint("\b[CLIENT]\b Weapon Take ( ");
-			dprint("ALL WEAPONS! ");
-			dprint(")\n");
+			if (Client_QueryEvilmode() == FALSE) {
+				dprint("\b[CLIENT]\b Weapon Take ( ");
+				dprint("ALL WEAPONS! ");
+				dprint(")\n");
+			} else {
+				dprint("\b[CLIENT]\b Weapon Take ( ");
+				dprint("Evil Mode detected: ALL WEAPONS EXCEPT AXE! ");
+				dprint(")\n");
+				parm1 = parm1 | IT_AXE;
+				parm10 = parm10 | IT_UPGRADE_AXE;
+				parm8 = IT_AXE;
+			}
 		} else {
 			if (world.take_weapons & IT_SHOTGUN && parm_items & IT_SHOTGUN) {
 				parm_items = parm_items - IT_SHOTGUN;
@@ -396,7 +440,7 @@ void() DecodeWorldParms =
 		dprint(ftos(tlow8)); dprint(")\n");	
 		parm4 = encode(tlow8,tmid8,thi8); //store cells back in parm4
 	}
-	if (world.ammo_bolts || (world.currentammo && tmid8 > 0)) {
+	if (world.ammo_bolts) {
 		dprint("\b[CLIENT]\b Ammo Bolts ("); dprint(ftos(tmid8)); dprint(") To (");
 		if (world.currentammo) tmid8 = world.ammo_bolts;
 		else if (tmid8 < world.ammo_bolts) tmid8 = world.ammo_bolts;
@@ -405,7 +449,7 @@ void() DecodeWorldParms =
 		dprint(ftos(tmid8)); dprint(")\n");
 		parm4 = encode(tlow8,tmid8,thi8); //store bolts back in parm4
 	}
-	if (world.ammo_poison || (world.currentammo && thi8 > 0)) {
+	if (world.ammo_poison) {
 		dprint("\b[CLIENT]\b Ammo Poison ("); dprint(ftos(thi8)); dprint(") To (");
 		if (world.currentammo) thi8 = world.ammo_poison;
 		else if (thi8 < world.ammo_poison) thi8 = world.ammo_poison;
@@ -447,6 +491,36 @@ void() DecodeWorldParms =
 		parm5 = encode(tlow8,tmid8,thi8); //store plasma back in parm5
 	}
 
+	tlow8 = decode(parm17,LOW8);
+	tmid8 = decode(parm17,MID8);
+	thi8 = decode(parm17,HI8);
+	if (world.ammo_bloodcrystals || (world.currentammo && tlow8 > 0)) {
+		dprint("\b[CLIENT]\b Ammo Blood Crystals ("); dprint(ftos(tlow8)); dprint(") To (");
+		if (world.currentammo) tlow8 = world.ammo_bloodcrystals;
+		else if (tlow8 < world.ammo_bloodcrystals) tlow8 = world.ammo_bloodcrystals;
+		if (tlow8 > AMMO_MAXBLOOD) tlow8 = AMMO_MAXBLOOD;
+		else if (tlow8 < 0) tlow8 = 0;
+		dprint(ftos(tlow8)); dprint(")\n");	
+		parm17 = encode(tlow8,tmid8,thi8); //store bloodcrystals back in parm17
+	}
+	if (world.ammo_voidshards || (world.currentammo && tmid8 > 0)) {
+		dprint("\b[CLIENT]\b Ammo Void Shards ("); dprint(ftos(tmid8)); dprint(") To (");
+		if (world.currentammo) tmid8 = world.ammo_voidshards;
+		else if (tmid8 < world.ammo_voidshards) tmid8 = world.ammo_voidshards;
+		if (tmid8 > AMMO_MAXVOID) tmid8 = AMMO_MAXVOID;
+		else if (tmid8 < 0) tmid8 = 0;
+		dprint(ftos(tmid8)); dprint(")\n");
+		parm17 = encode(tlow8,tmid8,thi8); //store voidshards back in parm17
+	}
+	if (world.ammo_elemental || (world.currentammo && thi8 > 0)) {
+		dprint("\b[CLIENT]\b Ammo Plasma ("); dprint(ftos(thi8)); dprint(") To (");
+		if (world.currentammo) thi8 = world.ammo_elemental;
+		else if (thi8 < world.ammo_elemental) thi8 = world.ammo_elemental;
+		if (thi8 > AMMO_MAXMANA) thi8 = AMMO_MAXMANA;
+		else if (thi8 < 0) thi8 = 0;
+		dprint(ftos(thi8)); dprint(")\n");
+		parm17 = encode(tlow8,tmid8,thi8); //store elemental_mana back in parm17
+	}
 
 	//----------------------------------------------------------------------
 	// Update player armour type and quantity
@@ -598,6 +672,10 @@ void() DecodeLevelParms =
 		// take away all stuff on starting new episode
 		if (world.model == "maps/start.bsp") SetNewParms ();
 	}
+
+	// Most Quake Engines resets the skill level to 0-3 only
+	// Make sure skill level/console variable are updated on load
+	Client_SyncPrevEvilmode();
 	
 	DecodeWorldParms();		// Decode worldspawn client inv updates
 	sync_serverflags();		// update/sync serverflags to worldspawn
@@ -606,6 +684,10 @@ void() DecodeLevelParms =
 	// Read all current params into client variables
 	self.items = parm1;
 	self.health = decode(parm2,LOW8);
+	// Always make sure the HP read from parm2 is within range!
+	// Parm2 is re-used when map restart command is issued
+	Client_CheckMaxHP(self, FALSE);
+
 	self.armortype = decode(parm2,MID8);
 	self.armorvalue = decode(parm2,HI8);
 	self.ammo_shells = decode(parm3,LOW8);
@@ -631,6 +713,10 @@ void() DecodeLevelParms =
 	// parm14;
 	// parm15;
 	// parm16;
+
+	// The AD inventory is reset with parm10 (could lose Shadow axe)
+	// Check for evil skill and add shadow axe + make current weapon!
+	Client_CheckEvilInv(self);
 
 	dprint("\b[CLIENT]\b self.weapon == ");
 	dprint(ftos(self.weapon));
@@ -743,7 +829,7 @@ void() SetupSpawnCoopLocations =
 {
 	local entity cooploc, prevloc;
 	
-	if (coop == 3) {
+	if (coop > 2) {
 		set_teamsurvivor(self);
 	}
 	// The first spawn for coop is always the SP start location
@@ -776,7 +862,7 @@ void() SetupSpawnCoopLocations =
 		// No coop spawns, use start location
 		dprint("\b[COOP]\b Spawn locations Missing!\n");
 		coop_ent = find (world, classname, "info_player_start");
-		// no start location, WTF!?!
+		// no start location, WUT!?!
 		if (!coop_ent) coop_ent = client_ent;
 		coop_ent.owner = coop_ent;
 	}
@@ -792,6 +878,15 @@ entity() SelectSpawnPoint =
 	
 	// Always use a player start as default position
 	if (!lastspawn) lastspawn = find (world, classname, "info_player_start");
+
+	// Test this first because its such a restrictive set of condition
+	if (developer > 0 && coop == 0 && deathmatch == 0) {
+		spot = find( world, classname, "info_player_startdev");
+		if (spot) {
+			dprint ("\b[CLIENT_SPAWN]\b Developer only start!\n");
+			return spot;
+		}
+	}
 
 	// Cycle through list of info_player_coop location
 	if (coop > 0) {
@@ -865,7 +960,7 @@ entity() SelectSpawnPoint =
 	
 	// Last chance to find a spawn location before giving up!
 	spot = find (world, classname, "info_player_start");
-	if (!spot) dprint ("\b[CLIENT_SPAWN]\b missing info_player_start!");
+	if (!spot) dprint ("\b[CLIENT_SPAWN]\b missing info_player_start!\n");
 	
 	return spot;
 };
@@ -885,13 +980,23 @@ void() PutClientInServer =
 {
 	local	entity spot;
 
+	dprint("\b[CLIENT]\b PutClientInServer\n");
 	client_ent = self;
 	self.classname = "player";
 	self.classtype = CT_PLAYER;
 	self.classgroup = CG_PLAYERS;
+	self.flags = FL_CLIENT;
 	// This entity can never be switched off
 	self.estate = ESTATE_ON;
 	self.estate_off = SUB_Null;
+
+	// Reset intermission/cinematic stuff
+	intermission_running = cinematic_running = 0;
+	
+	// Check for Evil NM+ skill level (Lower HP max)
+	if (Client_QueryEvilmode()) Client_SetupEvilmode();
+	// Update health/mega max and leave weapons alone
+	else Client_ResetEvilmode(-1);
 
 	// Setup entity chains for coop, dm and intermission
 	SetupSpawnCoopLocations();
@@ -906,7 +1011,6 @@ void() PutClientInServer =
 	if (spot.cameratarget) self.cameratarget = spot.cameratarget;
 
 	self.headmdl = MODEL_PLAYER_HEAD;
-	self.health = self.max_health = HEAL_PLAYMAX;
 	self.takedamage = DAMAGE_AIM;
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_WALK;
@@ -914,13 +1018,13 @@ void() PutClientInServer =
 	self.show_hostile = 0;
 	self.gibhealth = -40;
 	self.gibbed = FALSE;
-	self.flags = FL_CLIENT;
 	self.air_finished = time + WATER_AIR;
 	self.dmg = WATER_DAMAGE;
 	self.effects = 0;
 	self.steplast = 1;
 	//self.jumplandfinished = time;
 	self.jump_flag = 0;
+	self.oldgravity = 0;				// Reset gravity effects
 
 	// Drake variables
     self.mist = world;
@@ -946,9 +1050,13 @@ void() PutClientInServer =
 
 	self.wing_finished = self.wing_time = 0;
 
+	// Check if Arcane Key Inventory message is blocked/suppressed
+	if (world.ckeyhint == TRUE) self.ckeyhint = TRUE;
+
 	self.steptype = FS_TYPEMEDIUM;		// Standard boots
 	self.suppressCenterPrint = FALSE;	// No centerprint active
 
+	ResetPowerSystem(self,0,FALSE);		// Remove powerup effects (not vania)
 	ResetDebuffSystem(self);			// Reset/initialize debuff system
 	
 	self.enemy = world;
@@ -957,7 +1065,10 @@ void() PutClientInServer =
 		sprint (self,"Global states are set!\n");
 	else
 		sprint (self,"No global states are set.\n");
-	self.weapon = W_BestWeapon (self);	// Pick best weapon from inventory
+
+	// Evil Mode should always start with the Axe!
+	if (Client_QueryEvilmode()) self.weapon = IT_AXE;
+	else self.weapon = W_BestWeapon (self);	// Pick best weapon from inventory
 	W_SetCurrentAmmo (self);			// Update hud icons and v_model
 
 	self.attack_finished = time;
@@ -969,6 +1080,9 @@ void() PutClientInServer =
 
 	update_hud_totals(HUD_MONSTERS);	// Make screen total is correct
 	update_hud_totals(HUD_SECRETS);		// Update monsters and secrets
+
+	// Reset randomizer counters
+	self.randomshells = self.randomcells = 0;
 	
 	//	spot = SelectSpawnPoint ();
 	self.origin = spot.origin + '0 0 1';
@@ -996,11 +1110,13 @@ void() PutClientInServer =
 	self.bbmins = VEC_HULLSHORT_MIN;	// -16 -16 -24, 16 16 32
 	self.bbmaxs = VEC_HULLSHORT_MAX;
 	setsize (self, self.bbmins, self.bbmaxs);
+	// Where the feet are! 22 units below!
 	self.view_ofs = '0 0 22';
 	player_stand1 ();
 
 	// Check for cinematic system startup (NO COOP!!!)
-	if (self.cameratarget != "" && coop == 0) {
+	//if (self.cameratarget != "" && coop == 0) {
+	if (self.cameratarget != "") {
 		// Find first camera
 		self.enemy = find(world, targetname, self.cameratarget);
 		if (self.enemy.classtype == CT_MISCCAM) {
@@ -1036,10 +1152,76 @@ void() CheckWaterJump;
 void() ClientDeath;
 
 //----------------------------------------------------------------------
+void(entity targ) Client_LadderSounds =
+{
+	local float rndsound;
+	if (query_configflag(SVR_FOOTSTEP) == TRUE) return;
+	if (targ.entladder.sounds == 4) return;
+	
+	rndsound = random();
+	if (rndsound < 0.25 && targ.entladder.noise1) 
+		sound (targ, CHAN_BODY, targ.entladder.noise1, 1, ATTN_NORM);
+	else if (rndsound < 0.5 && targ.entladder.noise2) 
+		sound (targ, CHAN_BODY, targ.entladder.noise2, 1, ATTN_NORM);
+	else if (rndsound < 0.75 && targ.entladder.noise3) 
+		sound (targ, CHAN_BODY, targ.entladder.noise3, 1, ATTN_NORM);
+	else if (targ.entladder.noise4) 
+		sound (targ, CHAN_BODY, targ.entladder.noise4, 1, ATTN_NORM);
+};
+
+//----------------------------------------------------------------------
 // PlayerPreThink - Called every frame before physics are run
 //----------------------------------------------------------------------
 void() PlayerPreThink =
 {
+	//----------------------------------------------------------------------
+	// This is just a ****ed up messy situation ...
+	// The savegame data is not live until after frame 0 has finished
+	// The only variable read from a savegame early is skill level!
+	// So instead of detecting Chaos mode changes at frame 0 and fixing them
+	// have to wait for savegame data to be live and client/server stable
+	// This function also detects savegames (framecount>0)
+	if (chaoscount <= 2) {
+		// Increase counter early because of return later
+		chaoscount = chaoscount + 1;
+		// Save games don't usually start at framecount 0
+		if (framecount > RND_FRAMECOUNT) {
+			// Catch quickload (read 'oskill') and reset skill level
+			Client_SyncPrevEvilmode();
+
+			// Detect skill 4 + Chaos savegame!
+			// Cannot kill player here, client is not properly setup
+			if (rnd_CheckNoQuickLoad()) {
+				dprint("\b[RND_SYNC]\b FC ("); dprint(ftos(framecount));
+				dprint(") Skill 4 death detected!\n");
+				// Stop this function and wait for postclient
+				chaoscount = 10;
+				// Make sure death happens in PostClient check
+				framecount = framecount + RND_FRAMECOUNT;
+			}
+			else {
+				// Save game found, highlight on dev console
+				dprint("\b[RND_SYNC]\b FC ("); dprint(ftos(framecount));
+				dprint(") Save Game Found!\n");
+			}
+		}
+		// Wait for frame1 to validate current/savegame chaos setup
+		// The Restart command cannot be done on frame 0
+		// It will break the client/server setup sequence
+		if (chaoscount == 2) {
+			// Returns true if restart required
+			if (rnd_CheckSaveGameReboot()) {
+				// Works better if restart here instead of above function
+				// Cannot use map or changelevel command because of savegame
+				localcmd ("restart\n");
+				// Block any pre/post functions
+				prethink = postthink = TRUE;
+				// Finish PlayerPreThink function
+				return;
+			}
+		}
+	}
+
 	// Once the map has loaded (prethink) set loadflag (never saved)
 	if (!prethink) {
 		prethink = TRUE;			// prethink flag complete
@@ -1066,10 +1248,33 @@ void() PlayerPreThink =
 		if (trig_skybox != "") trigger_skybox_change(self);
 	}
 			
+	//----------------------------------------------------------------------
 	// If Intermission system active check for button0-2 keys
-	if (intermission_running > 0) { CycleIntermissionCamera(); return; }
+	if (intermission_running > 0) { impulse_notvalid(); CycleIntermissionCamera(); return; }
+	// If secret location camera active check for button0-2 keys
+	if (secloc_running > 0) { impulse_notvalid(); CheckSecretCamera(); return; }
+	// Update particle emitter origin attached to the player
+	// Cinematic camera uses player and this should be before it
+	if (self.entactive && self.entattachment) 
+		setorigin(self.entattachment, self.origin);
 	// If cinematic camera system active
-	if (cinematic_running > 0) return;
+	if (cinematic_running > 0) { impulse_notvalid(); return; }
+
+	//----------------------------------------------------------------------
+	// Skill 4 - Detect ANY skill changes (player console)
+	//----------------------------------------------------------------------
+	if (skill != oskill) {
+		// Check if Evil skill enabled? (check skill NOT cvar)
+		if (Client_QueryEvilskill()) {
+			// Reset HP + Max/Mega and give Shadow Axe
+			Client_SetupEvilmode();
+			Client_DispEvilmsg();
+		}
+		// Reset HP/Max (check worldspawn for override)
+		else Client_ResetEvilmode(oskill);
+		// Sync old and new skill variables
+		oskill = skill;
+	}
 
 	if (earthquake_active) {
 		if ( self.flags & FL_ONGROUND ) {
@@ -1090,7 +1295,12 @@ void() PlayerPreThink =
 	// pOx - START - func_water & func_ladder support
 	// Set cshift back to normal if eyes are out of func_water
 	if (self.fwatershifttime < time) {
-		stuffcmd(self, "v_cshift 130 80 50 0\n");
+		self.cshift_col = '130 80 50';
+		self.cshift_den = 5;
+		self.cshift_step = 10;
+		self.cshift_upd = TRUE;		// Update screen colour
+		self.cshift_time = -1;		// Update striaght away
+		//stuffcmd(self, "v_cshift 130 80 50 0\n");
 		if (self.fwatershift) {
 			self.fwatershift = FALSE;
 		}
@@ -1179,13 +1389,27 @@ void() PlayerPreThink =
 	if (self.moditems & IT_ARTJUMPBOOTS && self.flags & FL_ONGROUND) 
 		self.jumpboots_onground = TRUE;
 	
+	// Check Grapple Hook (release/beam/jump)
+	//GrappleHook_Client();  Keep mod handles this the old Rogue way and let's you hang around if you switch to other weapons
+
 	//----------------------------------------------------------------------
 	// Rubicon Ladder Code - johnfitz
 	// Modified by me to support diff climb sounds and on/off/toggle states
 	//----------------------------------------------------------------------
-	if (self.onladder) {
-		self.onladder = 0;		// Reset ladder touch function
-		if (self.button2) {		// Is jump key being pressed?
+	if (self.onladder == LADDER_JUMP) {
+		// Reset ladder touch function
+		self.onladder = LADDER_NONE;
+		if (ext_fteskin && self.entladder.skin == -16) {
+			// Only do the ladder sound if the player is moving (X/Y)
+			if (self.timeladder < time && self.velocity_x != 0 && self.velocity_y != 0) {
+				// Reset timer for next sound to play
+				self.timeladder = time + self.entladder.waitmin;
+				// Check for any sounds and query if footsteps are active
+				Client_LadderSounds(self);
+			}
+		}
+		// Is jump key being pressed?
+		else if (self.button2) {
 			// Reset velocity upwards and all sideways movement
 			// so that the player stays on the ladder and climbs
 			// straight up with very little sidways movement
@@ -1197,28 +1421,32 @@ void() PlayerPreThink =
 				// Reset timer for next sound to play
 				self.timeladder = time + self.entladder.waitmin;
 				// Check for any sounds and query if footsteps are active
-				if (self.entladder.sounds != 4 && query_configflag(SVR_FOOTSTEP) == FALSE) {
-					self.lip = random();
-					if (self.lip < 0.25 && self.entladder.noise1) 
-						sound (self, CHAN_BODY, self.entladder.noise1, 1, ATTN_NORM);
-					else if (self.lip < 0.5 && self.entladder.noise2) 
-						sound (self, CHAN_BODY, self.entladder.noise2, 1, ATTN_NORM);
-					else if (self.lip < 0.75 && self.entladder.noise3) 
-						sound (self, CHAN_BODY, self.entladder.noise3, 1, ATTN_NORM);
-					else if (self.entladder.noise4) 
-						sound (self, CHAN_BODY, self.entladder.noise4, 1, ATTN_NORM);
-				}
+				Client_LadderSounds(self);
 			}
-		} else {
+		}
+		else {
 			// Jump key released, stay floating on the ladder
 			self.flags = self.flags | FL_JUMPRELEASED;
 			self.velocity = 0.9 * self.velocity;
 			self.velocity_z = 0;
 		}
-	} else {
+	}
+	else if (self.onladder == LADDER_VEL) {
+		// Is jump key being pressed?
+		if (self.button2) {
+			self.blockladder = time + 0.1;
+			self.flags = self.flags - FL_ONGROUND;
+			PlayerJump ();
+		}
+		else self.flags = self.flags | FL_JUMPRELEASED;
+		// Reset ladder touch function
+		self.onladder = LADDER_NONE;
+	}
+	else {
 		// Reset any ladder gravity settings
 		if (self.oldgravity > 0) self.gravity = self.oldgravity;
 		else self.gravity = 1;
+
 		// Original jump conditions
 		if (self.button2) PlayerJump ();
 		else self.flags = self.flags | FL_JUMPRELEASED;
@@ -1253,12 +1481,24 @@ void() PlayerFly_PostThink = {
 //----------------------------------------------------------------------
 void() PlayerPostThink =
 {
-	if (prethink && !postthink) {
+	if (prethink == TRUE && postthink == FALSE) {
 		// Check for the player? 
 		// - first couple of frames the player is not setup correctly
 		if (self.flags & FL_CLIENT) {
 			postthink = TRUE;			// postthink flag complete
 			mapvar_cvar = TRUE;			// Map Variable are live
+
+			// Cannot load skill 4 + Chaos save games!
+			// Only kill the player once the client/server is setup
+			// This also catches the savegame resetting Chaos mode
+			if (rnd_CheckNoQuickLoad() && framecount > RND_FRAMECOUNT) {
+				// Classic death message
+				self.deathtype = "loadingevil";
+				centerprint(self,"Cannot resurrect EVIL mode!?!\n");
+				T_Damage(self, world, world, MEGADEATH, NOARMOR);
+				return;
+			}
+
 			// Reset any screen cshift parameters, eng often leaves them
 			if (!self.cshift_upd) self.cshift_time = -1;
 			
@@ -1280,30 +1520,34 @@ void() PlayerPostThink =
 			// Always reset with newgame and quickload
 			autoaim_cvar = cvar("sv_aim");
 
-			// Setup/change global fog if enabled (default)
-			if (!(query_configflag(SVR_NOFOGCMDS))) {
-				// Create fog controller and/or update engine fog
-				if (fog_active) change_fog(self);
-				else setup_fog_controller();
-				// Sky fog is a different system (only density)
-				if (skyfog_active) change_skyfog(self);
-				else setup_skyfog_controller();
-			}
+			// AD 1.8 removed SVR_NOFOGCMDS (winquake idea)
+			// Create fog controller and/or update engine fog
+			if (fog_active) change_fog(self);
+			else setup_fog_controller();
+			// Sky fog is a different system (only density)
+			if (skyfog_active) change_skyfog(self);
+			else setup_skyfog_controller();
 
 			// Update console with MOD settings
 			display_configflag();
 			display_version();
-				if (globalstate > 0)
-		sprint (self,"Global states are set!\n");
-	else
-		sprint (self,"No global states are set.\n");
+
+			if (globalstate > 0)
+				dprint ("Global states are set!\n");
+			else
+				dprint ("No global states are set.\n");
+
+			// Warn about chaos mode
+			warning_chaosmode();
 		}
 	}
 
 	// pOx - Advance frame based entities (noclip)
 	SUB_PushFrameMovers();
 
+	// Special systems that pause the QC/Game
 	if (intermission_running > 0) return;	// intermission or finale
+	if (secloc_running > 0) return;
 	if (cinematic_running > 0) {
 		// The focalpoint system is about tracking an entity while the camera
 		// is stationary or moving and updating the player viewing angle.
@@ -1323,67 +1567,87 @@ void() PlayerPostThink =
 			if (cam_movement) {
 				// Finished moving the tracking entity?
 				if (cam_track.attack_finished < time) {
-					setorigin(self, cam_track.enemy.origin);
+					// Don't reset origin if at 0,0,0 (usually error)
+					if (!CheckZeroVector(cam_track.enemy.origin))
+						setorigin(self, cam_track.enemy.origin);
 					cam_movement = FALSE;
 				}
 				// Update camera (player) origin
-				else setorigin(self, cam_track.origin);
+				else {
+					// Bezier Curve movement
+					if (cam_bezier) {
+						cam_track.delay = cam_track.wait - (cam_track.attack_finished - time);
+						cam_track.origin = bezier_curve(cam_track.pos4, cam_track.pos5, cam_track.pos6, cam_track.wait, cam_track.delay);
+						// Don't reset origin if at 0,0,0 (usually error)
+						if (!CheckZeroVector(cam_track.origin))
+							setorigin(self, cam_track.origin);
+					}
+					// Linear movement
+					else {
+						// Don't reset origin if at 0,0,0 (usually error)
+						if (!CheckZeroVector(cam_track.origin))
+							setorigin(self, cam_track.origin);
+					}
+				}
 			}
 
 			// Does the camera have to focus on angletarget?
 			// validation of angletarget done in misc_cam function
-			if (cam_focus.focalpoint) {
+			if (cam_focus.focalpoint > 0) {
 				// Move camera angletarget to player(camera) entity
 				// Targetmovedir function uses (self) for comparision
 				self.angletarget = cam_focus.angletarget;
 				// Update movedir, movetarget and dest1
 				TargetMovedir(self, TRUE);
-				// check if angletarget is a bmodel or point entity?
-				// bmodels usually move via velocity and models by discrete steps
-				// Only need to interpolate models because of tick timer issues
-				if (!self.movetarget.bsporigin) {
-					// Find current/last origin points
-					self.pos1 = self.movetarget.origin;
-					self.pos2 = self.movetarget.lastorigin;
+				
+				// Convert direction vector to angles
+				// This function returns integers! (engine code bug)
+				cam_newangle = vectoangles(self.movedir);
 
-					// has the target origin changed?
-					if (self.pos1_x == self.pos2_x && self.pos1_y == self.pos2_y &&
-						self.pos1_z == self.pos2_z) 
-						// No origin change (probably stationary)
-						cam_interpolate = 1;
-					else {
-						if (self.movetarget.flags & FL_MONSTER || self.movetarget.bossflag) {
-							// Big thank you to spike for the angle interpolation idea/fix
-							// Most monsters move at 10fps (there can be exceptions)
-							// The client is updating at frame speed (def = 72fps)
-							// Will need to interpolate the movement/angle difference manually
-							// Check entity think tick timer first and multiple up to whole number
-							cam_ticktimer = self.movetarget.ticktimer;
-							// Make sure there is a default (can't assume its always defined)
-							// The range check of 0-1 is a bit extreme, but it needs something
-							if (cam_ticktimer < 0 || cam_ticktimer > 1) cam_ticktimer = 0.1;
-							cam_ticktimer = cam_ticktimer * 100;
-							// Use nextthink timer to calculate how much time left before next movement
-							cam_interpolate = (self.movetarget.nextthink - time) * cam_ticktimer;
-							// Make sure the interpolation is in the correct range (0-1)
-							if (cam_interpolate < 0) cam_interpolate = 0;
-							if (cam_interpolate > 1) cam_interpolate = 1;
-							// Is there any interpolation happening? (1=stationary)
-							if (cam_interpolate < 1) {
-								// Work out vector difference and multiple by inverse interpolation
-								self.pos3 = (self.pos1 - self.pos2) * (1-cam_interpolate);
-								// Re-create new (interpolated) origin from difference
-								// The camera will be tracking behind the monster movement
-								self.movedir = (self.pos2 + self.pos3) - self.origin;
-							}
-						}
-					}
+				//---------------------------------------------------------------------
+				// Camera Angle Smoothing V2 by Eric Wasylishen
+				//---------------------------------------------------------------------
+				// Initialize last angle (snap to the initial angle)
+				if (!cam_lastanglevalid) {
+					cam_lastanglevalid = TRUE;
+					cam_lastangle = cam_newangle;
 				}
 
-				// Convert direction vector to angles
-				cam_angle = vectoangles(self.movedir);
-				// Got to reverse the pitch angle because 
-				// v_angle is upside down (special carmack code)
+				// Clamp angles to 0-360
+				cam_newangle = vectormod(cam_newangle);
+				cam_lastangle = vectormod(cam_lastangle);
+
+				// Need to check every axis (XYZ) for 0 boundary issues
+				// function stored in misc_camera.qc (only used for camera's)
+				if (camera_check_anglezero(cam_newangle_x, cam_lastangle_x)) {
+					// To avoid breaking the interpolation,
+					// shift the larger number so it's negative
+					if (cam_newangle_x > cam_lastangle_x) cam_newangle_x -= 360;
+					else cam_lastangle_x -= 360;
+				}
+				if (camera_check_anglezero(cam_newangle_y, cam_lastangle_y)) {
+					if (cam_newangle_y > cam_lastangle_y) cam_newangle_y -= 360;
+					else cam_lastangle_y -= 360;
+				}
+				if (camera_check_anglezero(cam_newangle_z, cam_lastangle_z)) {
+					if (cam_newangle_z > cam_lastangle_z) cam_newangle_z -= 360;
+					else cam_lastangle_z -= 360;
+				}
+				// Blend the last frame's angle with the target.
+				// This controls how much of the target is mixed in, closer to 0 is slower.
+				cam_focus.angleblend = CINECAM_ANGLEBLEND;
+				cam_angle = (cam_newangle * cam_focus.angleblend) + (cam_lastangle * (1 - cam_focus.angleblend));
+				// Clamp angles to 0-360
+				cam_angle = vectormod(cam_angle);
+
+				// Store history of cam_angle for next frame's smoothing
+				cam_lastangle = cam_angle;
+				//---------------------------------------------------------------------
+				// End of Camera Angle smoothing
+				//---------------------------------------------------------------------
+				
+				// Got to reverse the pitch angle because the player angles
+				// and v_angle are upside down (special carmack code)
 				cam_angle_x = -cam_angle_x;
 				self.angles = self.v_angle = cam_angle;
 			}
@@ -1398,6 +1662,7 @@ void() PlayerPostThink =
 		}
 		return;
 	}
+
 	if (self.deadflag) return;				// Dead
 
 	// Any spawn targets to update?
@@ -1409,21 +1674,80 @@ void() PlayerPostThink =
 
 	W_WeaponFrame ();						// Impulse commands and Quad updates
 
-	// check to see if player landed and play landing sound	
-	if ((self.jump_flag < -300) && (self.flags & FL_ONGROUND) && (self.health > 0)) {
-		if (self.watertype == CONTENT_WATER)
-			sound (self, CHAN_BODY, "player/h2ojump.wav", 1, ATTN_NORM);
-		else if (self.jump_flag < -650) {
-			T_Damage (self, world, world, 5, DAMARMOR); 
-			sound (self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM);
-			self.deathtype = "falling";
-		}
-		else {
-			if (self.jumplandfinished < time) {
-				self.jumplandfinished = time + 0.5; // wait a bit before playing the sound again
-				sound (self, CHAN_VOICE, "player/jumpland.wav", 1, ATTN_NORM);
+	// Show the player fall speed/velocity to the console
+	// Useful for showing what map unit heights affect damage values
+	if (map_fallspeeddebug == TRUE && developer == 1 && self.jump_flag != 0) {
+		dprint(ftos(self.jump_flag)); dprint(" ");
+	}
+	
+	// Is the player sliding on top of an entity? (not on ground)
+	// Need postthink check bec player starts at 0,0,0 floating :P
+	if (self.velocity_z == 0 && !(self.flags & FL_ONGROUND) && postthink) {
+		// Block players who jump and then noclip around!?!
+		if (self.jumptimer < time && self.movetype != MOVETYPE_NOCLIP ) {
+			// Slow down function, its running pre/post timing
+			self.jumptimer = time + 0.1;
+			// Create a really small radius list, this is expensive!
+			self.jumptouch = findradius(self.origin, 96);
+			while (self.jumptouch) {
+				// Found a breakable model?
+				if (self.jumptouch.classtype == CT_FUNCBREAKMDL) {
+					// Check for nodamage spawnflag exception!
+					if (self.jumptouch.spawnflags & BREAK_NOSHOOT) {
+						// Slow down console message
+						self.jumptimer = time + 2;
+						dprint("[SLIDING] Unbreakable obj at ");
+						dprint(vtos(self.jumptouch.origin));
+						dprint("\n");
+					}
+					else {
+						// From the player origin down to the feet is 22 (def) units
+						// The breakable bbox edge (maxs) should be below feet
+						if ( (self.jumptouch.origin_z + self.jumptouch.bbmaxs_z) < self.origin_z-self.view_ofs_z &&
+							vlen(self.jumptouch.origin - self.origin) <= 64) {
+							// Spawn a debug marker to show affected breakables
+							//spawn_marker(self.jumptouch.origin + self.jumptouch.bbmaxs, 0);
+							// Squash the contents (monsters) of this breakable
+							self.jumptouch.jumpsquash = TRUE;
+							// Force trigger break object! (no debug info)
+							self.jumptouch.nodebuginfo = TRUE;
+							trigger_ent(self.jumptouch, self);
+						}
+					}
+				}
+				// Keep cycling through radius list
+				self.jumptouch = self.jumptouch.chain;
 			}
 		}
+	}
+	
+	// check to see if player landed and play landing sound	
+	// land.wav  = light huh sound (floor impact and no damage)
+	// land2.wav = heavy huh sound and nasty bone crunching sound
+	if ((self.jump_flag < map_fallspeedlow) && (self.flags & FL_ONGROUND) && (self.health > 0)) {
+		// Landed deep (waist high) in water
+		if (self.watertype == CONTENT_WATER) {
+			// Player hits water surface
+			sound (self, CHAN_BODY, "player/h2ojump.wav", 1, ATTN_NORM);
+			// Check if damage can be applied after hitting water surface
+			// Cannot check jump flag velocity because player hit water
+			if (map_falldmgwater > 0) {
+				T_Damage (self, world, world, map_falldmgwater, DAMARMOR);
+				// Play on different channel so it does not conflict
+				sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
+				self.deathtype = "falling";
+			}
+		}
+		else if (self.jump_flag < map_fallspeedhigh) {
+			if (map_falldmg > 0) {
+				T_Damage (self, world, world, map_falldmg, DAMARMOR);
+				sound (self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM);
+				self.deathtype = "falling";
+			}
+			else sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
+		}
+		else
+			sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
 
 		self.jump_flag = 0;
 	}
@@ -1479,10 +1803,12 @@ void() PlayerJump =
     }
 	//- - - - - - - - - - - - - - - - - - -
 
+	//----------------------------------------------------------------------
 	// The jump boots idea by Jose Carlos Rodriguez (JCR) from modjam1
 	// This code was originally by JCR and modified by me to fit AD layout
 	// Switched over all the variables to constants and entity options
 	// Does the player have the jump boot powerup?
+	//----------------------------------------------------------------------
 	if (self.moditems & IT_ARTJUMPBOOTS) {
 		// On the ground and starting to jump upward
 		// Reset jump counter and start sequence
@@ -1563,7 +1889,25 @@ void() PlayerJump =
 			}
 		}
 	}
-	// Original jump logic
+	//----------------------------------------------------------------------
+	// Velocity ladder jump logic
+	// Can't block onground or jumprelease flag conditions
+	// Jump direction should be v_angle and not just up!
+	//----------------------------------------------------------------------
+	else if (self.onladder == LADDER_VEL) {
+		// Very precise order for this, Jumprelease and then onground
+		self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
+		self.flags = self.flags - FL_ONGROUND;	// don't stairwalk
+		self.button2 = 0;
+		
+		// player jumping sound
+		sound (self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM);
+		makevectors(self.v_angle);
+		self.velocity = v_forward * (map_jumpheight*1);
+	}
+	//----------------------------------------------------------------------
+	// Original ID1 jump logic
+	//----------------------------------------------------------------------
 	else {
 		if (!(self.flags & FL_ONGROUND)) return;
 		if (!(self.flags & FL_JUMPRELEASED)) return;	// don't pogo stick
@@ -1574,7 +1918,7 @@ void() PlayerJump =
 		self.button2 = 0;
 		
 		// player jumping sound
-		sound (self, CHAN_BODY, "player/plyrjmp8.wav", 1, ATTN_NORM);
+		sound (self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM);
 		self.velocity_z = self.velocity_z + map_jumpheight;
 	}
 };
@@ -1598,11 +1942,12 @@ void() WaterMove =
 		else if (self.air_finished < time + 9)
 			sound (self, CHAN_VOICE, "player/gasp1.wav", 1, ATTN_NORM);
 		self.air_finished = time + 12;
-		self.dmg = 2;
+		self.dmg = map_hazarddmg_x;
 	}
 	else if (self.air_finished < time) {	// drown!
 		if (self.pain_finished < time) {
-			self.dmg = self.dmg + 2;
+			// Keep increasing drowning damage
+			self.dmg = self.dmg + map_hazarddmg_x;
 			if (self.dmg > 15) self.dmg = 10;
 			T_Damage (self, world, world, self.dmg, DAMARMOR);
 			self.pain_finished = time + 1;
@@ -1619,16 +1964,21 @@ void() WaterMove =
 	}
 
 	if (self.watertype == CONTENT_LAVA) {	// do damage
-		if (self.dmgtime < time && self.therm_finished < time) {
-			if (self.radsuit_finished > time) self.dmgtime = time + 1;
-			else self.dmgtime = time + 0.2;
-			T_Damage (self, world, world, 10*self.waterlevel, DAMARMOR);
+		// Check for lava shield and play reminder it exists
+		if (self.moditems & IT_ARTLAVASHIELD) PlayLavaShieldSound(self);
+		else {
+			if (self.dmgtime < time && self.therm_finished < time) {
+				if (self.radsuit_finished > time) self.dmgtime = time + 1;
+				else self.dmgtime = time + 0.2;
+				// Lava damage is crazy high the deeper you go
+				T_Damage (self, world, world, map_hazarddmg_z*self.waterlevel, DAMARMOR);
+			}
 		}
 	}
 	else if (self.watertype == CONTENT_SLIME) {	// do damage
 		if (self.dmgtime < time && self.radsuit_finished < time && self.therm_finished < time) {
 			self.dmgtime = time + 1;
-			T_Damage (self, world, world, 4*self.waterlevel, DAMARMOR);
+			T_Damage (self, world, world, map_hazarddmg_y*self.waterlevel, DAMARMOR);
 		}
 	}
 	
@@ -1686,6 +2036,9 @@ void() set_suicide_frame;		// In player.qc
 //----------------------------------------------------------------------
 void() ClientRespawn =
 {
+	// CLIENT DIED = Reset randomizer seed
+	rnd_ResetRandomSeed(RND_NORESETDEATH);
+
 	if (coop) {
 		CopyToBodyQue (self);	// make a copy of the dead body for appearances sake
 		setspawnparms (self);	// get the spawn parms as they were at level start

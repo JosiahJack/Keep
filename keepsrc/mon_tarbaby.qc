@@ -219,7 +219,10 @@ void() tbaby_die =
 //QUAKED monster_tarbaby (1 0 0) (-16 -16 -24) (16 16 24) Ambush x Lessjump
 //=============================================================================
 void() monster_tarbaby = {
-	if (deathmatch) { remove(self); return; }
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/mon_tarbaby.mdl";
 	self.headmdl = string_null;
@@ -233,6 +236,9 @@ void() monster_tarbaby = {
 	precache_sound ("blob/death1.wav");
 	precache_sound ("blob/hit1.wav");
 	precache_sound ("blob/land1.wav");
+
+	// The randomizer drops health packs on death
+	if (self.healamount > 0) CacheHealthpacks();
 	
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
@@ -253,6 +259,15 @@ void() monster_tarbaby = {
 
 	if (self.deathstring == "") self.deathstring = " was slimed by a Spawn\n";
 
+	// Allow for extra functionality (death damage and poison)
+	if (self.death_dmg < 1) self.death_dmg = DAMAGE_TARBABY;
+	if (self.poisonous < 1) self.poisonous = FALSE;
+	else { self.poisonous = TRUE; self.exactskin = 2; }
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
+
 	self.th_checkattack = SpawnCheckAttack;
 	self.th_stand = tbaby_stand1;
 	self.th_walk = tbaby_walk1;
@@ -266,5 +281,11 @@ void() monster_tarbaby = {
 	self.classgroup = CG_SPAWN;
 	self.classmove = MON_MOVEWALK;
 	
-	monster_start();
+	// Delay spawn randomized tarbabies a couple of frame
+	// To avoid telefrags issues of bad placement of HP packs
+	if (self.randomized > 0) {
+		self.nextthink = time + 0.1 + (random()*0.2);
+		self.think = monster_start;
+	}
+	else monster_start();
 };

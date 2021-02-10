@@ -848,6 +848,11 @@ void() shadow_die = {
 // --> QUAKED monster_nightshade (1 0 0) (-32 -32 -24) (32 32 32) Ambush x Souls
 //============
 void() monster_nightshade = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+
     precache_model ("progs/drake/shade.mdl");
     precache_model ("progs/drake/soul.mdl");
     precache_model ("progs/drake/dr1_head.mdl");  // Gib (head)
@@ -892,6 +897,10 @@ void() monster_nightshade = {
     self.th_checkattack   = Shade_CheckAttack;
     self.gibondeath = TRUE;
 	if (self.deathstring == "") self.deathstring = " was etherialized by a Nightshade\n";
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
     shadow_speed ();
     //shadow_phase(TRUE);
