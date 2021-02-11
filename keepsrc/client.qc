@@ -1294,17 +1294,23 @@ void() PlayerPreThink =
 
 	// pOx - START - func_water & func_ladder support
 	// Set cshift back to normal if eyes are out of func_water
-	if (self.fwatershifttime < time) {
-		self.cshift_col = '130 80 50';
-		self.cshift_den = 5;
-		self.cshift_step = 10;
-		self.cshift_upd = TRUE;		// Update screen colour
-		self.cshift_time = -1;		// Update striaght away
-		//stuffcmd(self, "v_cshift 130 80 50 0\n");
-		if (self.fwatershift) {
-			self.fwatershift = FALSE;
-		}
+	//if (self.fwatershifttime < time) {
+		// self.cshift_col = '130 80 50';
+		// self.cshift_den = 5;
+		// self.cshift_step = 10;
+		// self.cshift_upd = TRUE;		// Update screen colour
+		// self.cshift_time = -1;		// Update striaght away
+		// stuffcmd(self, "v_cshift 130 80 50 0\n");
+		// if (self.fwatershift) {
+			// self.fwatershift = FALSE;
+		// }
+	// }
+
+	if (self.fwatershift) {
+		ResetDebuffScreen(self);
+		self.fwatershift = FALSE;
 	}
+
 	// Both func_water and func_ladder require zero G to work properly.
 	// Lucky for us, the Mission Pack build of Quake has a gravity modifier we can exploit.
 	if (self.zerogtime < time)
@@ -1500,7 +1506,7 @@ void() PlayerPostThink =
 			}
 
 			// Reset any screen cshift parameters, eng often leaves them
-			if (!self.cshift_upd) self.cshift_time = -1;
+			//if (!self.cshift_upd) self.cshift_time = -1;
 			
 			// Check worldspawn water alpha parameters?
 			// liquid alpha is used by the monster visible system

@@ -22,10 +22,6 @@
 .float		poisoned_time;		// Timer (1s tick) for screen/sound update
 .float		poisoned_qty;		// Total amount of damage stored (DoT)
 
-// IT_INVISIBILITY + IT_INVULNERABILITY + IT_SUIT + IT_QUAD
-// 524288 + 1048576 + 2097152 + 4194304
-float ALL_ITARTIFACTS = 7864320;
-
 // Wraith Health drain
 vector DEBUFF_BLEED_COL = '50 35 0';		// Dark Orange
 float DEBUFF_BLEED_DEN = 80;
@@ -144,6 +140,23 @@ void() ClientDeBuff =
 			ResetDebuffBurning(self);
 		}
 	}
+
+	// Are we in a movable water brush?
+	// if (!self.fwatershift && self.waterlevel >= 3) {
+		// if (self.fwatershifttime < time) {
+			// self.cshift_upd = TRUE;		// Update screen colour
+			// self.cshift_time = -1;		// Update striaght away
+			// self.cshift_col = '130 80 50';
+			// self.cshift_den = DEBUFF_BLEED_DEN;
+			// self.cshift_step = FALSE;
+		// } else {
+			// self.fwatershift = TRUE;
+			// self.cshift_den = FALSE;
+		// }
+	// } else {
+		// self.fwatershift = TRUE;
+		// if (!self.burning && !self.poisoned && !self.bleeding) self.cshift_den = FALSE;
+	// }
 	
 	// Check for poisoned debuff (DoT)
 	if (self.poisoned) {
@@ -271,7 +284,7 @@ void() ClientDeBuff =
 
 				// Don't update the screen if an artifact is active
 				// The engine will be updating at the same time
-				if (self.items & ALL_ITARTIFACTS == 0) {
+				if ((self.items & ALL_ITEMSARTIFACTS == 0) && (self.items2 & ALL_ITEMS2ARTIFACTS == 0) && (self.moditems & ALL_MODITEMSARTIFACTS == 0)) {
 					stuffcmd(self, "v_cshift ");
 					stuffcmd(self, ftos(rint(self.cshift_col_x)));
 					stuffcmd(self, " ");

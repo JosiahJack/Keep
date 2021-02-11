@@ -36,6 +36,12 @@ vector(vector attack_dir) attack_vector =
 	return retvec;
 };
 
+float(vector checkpos, vector abmax, vector abmin) SUB_CheckPointInBounds = {
+	if ((checkpos_x < abmax_x) && (checkpos_y < abmax_y) && (checkpos_z < abmax_z) && (checkpos_x > abmin_x) && (checkpos_y > abmin_y) && (checkpos_z > abmin_z))
+		return TRUE;
+	return FALSE;
+};
+
 //======================================================================
 // Bmodels have a 0,0,0 origin key, need to calculate from mins/maxs
 // This function will return the true origin using mins/max vectors

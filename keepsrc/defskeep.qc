@@ -34,6 +34,10 @@ float IT_INVULNERABILITY    = 1048576.000;	//20 Correct for standard HUD & HIP &
 float IT_SUIT    			= 2097152.000;	//21 Correct for standard HUD & HIP & DOE			I
 float IT_QUAD    			= 4194304.000;	//22 Correct for standard HUD & HIP & DOE			I
 float IT_EXTRA_WEAPON  		= 8388608.000;	//23 Correct for DOE HUD					W
+
+// IT_INVISIBILITY + IT_INVULNERABILITY + IT_SUIT + IT_QUAD
+// 524288 + 1048576 + 2097152 + 4194304
+float ALL_ITEMSARTIFACTS = 7864320; // All items that affect screen overlay cshift
 //=======================================SELF.ITEMS2======================================================
 float IT2_ARMOR1    		= 1.000;		//0  Correct for DOE HUD					I
 float IT2_ARMOR2    		= 2.000;		//1  Correct for DOE HUD					I
@@ -61,6 +65,7 @@ float IT2_CROSS				= 4194304.000;	//21 Quoth							I && W2 (used by Wand)
 float IT2_WAND				= 8388608.000; 	//22 Drake magic wand					W2 (special check to prevent IT_EXTRA_WEAPON conflict
 
 float IT2_ALLARMOR			= 7.000;// Test for player grn/yel/red armour. Helper combo bit of 1 + 2 + 4
+float ALL_ITEMS2ARTIFACTS = 6291456; // All items that affect screen overlay cshift
 //=======================================SELF.MODITEMS======================================================
 //float UNUSED   			= 1;			//0  I
 float IT_UPGRADE_SSG		= 2;			//1  AoA		W\
@@ -86,6 +91,8 @@ float IT_ARTJUMPBOOTS		= 1048576;		//20 JCR Jump Boots (1-4 power levels)
 float IT_ARTSHARP			= 2097152;		//21 Reduce SG/SSG/RG spread pattern
 float IT_ARTPIERCE			= 4194304;		//22 NG/SNG Nails travel through enemy bodies
 float IT_ARTTOME			= 8388608;		//23 Tome of Power (event trigger)
+
+float ALL_MODITEMSARTIFACTS = 16646144; // All items that affect screen overlay cshift
 
 .float selfweaponismoditems; 	// HACK FOR HACKBANK! Used to carry more than 24 weapons which is all we can fit in the float's bits
 float IT_CKEYALL			= 122880;	//17 All Custom keys

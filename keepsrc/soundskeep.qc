@@ -16,14 +16,14 @@ void() SuperDamageSound = {
 void() ambient_drain = {
 	self.noise = "ambience/drain.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN)self.volume = 0.5;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
 void() ambient_eerie = {
 	self.noise = "ambience/rych1.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
@@ -37,35 +37,35 @@ void() ambient_factory = {
 void() ambient_fan_blowing = {
 	self.noise = "ambience/fanblow.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
 void() ambient_flies = {
 	self.noise = "ambience/bugs.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
 void() ambient_flys = {
 	self.noise = "misc/flys.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
 void() ambient_grinder = {
 	self.noise = "ambience/grinder.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
 void() ambient_highwind = {
 	self.noise = "ambience/highwind.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	self.count = 99;
 	ambient_sound_setup();
 };
@@ -73,10 +73,10 @@ void() ambient_highwind = {
 void() ambient_humming = {
 	if (self.spawnflags & SOUND_ALTVERSION) {
 		self.noise = "ambience/maydn.wav"; // Support for Nehahra ambient_humming
-		if (self.volume <= 0) self.volume = 0.5;
+		if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	} else { 
 		self.noise = "ambience/humming.wav";
-		if (self.volume <= 0) self.volume = 0.5;
+		if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	}
 	precache_sound (self.noise);
 	ambient_sound_setup();
@@ -84,21 +84,21 @@ void() ambient_humming = {
 //----------------------------------------------------------------------
 void() ambient_hum1 = {
 	self.noise = "ambience/hum1.wav";
-	if (self.volume <= 0) self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	precache_sound (self.noise);
 	ambient_sound_setup();
 };
 void() ambient_lapping = {
 	self.noise = "ambience/wat_amb.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	self.count = 99;
 	ambient_sound_setup();
 };
 void() ambient_lapping2 = {
 	self.noise = "ambience/wat_cave.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	self.count = 99;
 	ambient_sound_setup();
 };
@@ -106,14 +106,14 @@ void() ambient_lapping2 = {
 void() ambient_machines = {
 	self.noise = "ambience/begths.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
 void() ambient_nehum = {
 	self.noise = "ambience/filt.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
@@ -131,48 +131,48 @@ void() ambient_rain = {
 		self.noise = "ambience/rain3.wav";
 
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
 void() ambient_riftpower = {
 	self.noise = "ambience/riftpowr.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
 void() ambient_running_lava = {
 	self.noise = "ambience/runlava.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
 void() ambient_running_water = {
 	self.noise = "ambience/runwater.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
 void() ambient_rushing = {
 	self.noise = "ambience/rushing.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
 void() ambient_sizzle = {
 	self.noise = "ambience/amsizl.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 void() ambient_stargate_hum = {
 	self.noise = "ambience/sgatehum.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	self.count = 99;
 	ambient_sound_setup();
 };
@@ -180,28 +180,28 @@ void() ambient_stargate_hum = {
 void() ambient_swamp3 = {
 	self.noise = "ambience/swamp3.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
 void() ambient_teeth = {
 	self.noise = "ambience/teeth.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
 void() ambient_teleport = {
 	self.noise = "ambience/hum1.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
 void() ambient_thrum = {
 	self.noise = "ambience/thrum.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
@@ -231,13 +231,13 @@ void() thunder_go_boom = {
 void() ambient_waterfall = {
 	self.noise = "ambience/waterfal.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 void() ambient_water_fall = {
 	self.noise = "ambience/wat_fall.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	self.count = 99;
 	ambient_sound_setup();
 };
@@ -245,13 +245,13 @@ void() ambient_water_fall = {
 void() ambient_whnoise = {
 	self.noise = "ambience/whn.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
 void() ambient_zzxzz = {
 	self.noise = "ambience/flash.wav";
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };

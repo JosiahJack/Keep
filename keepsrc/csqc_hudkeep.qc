@@ -1131,6 +1131,14 @@ void (vector pos, vector br) Hud_DrawIBar6 =
 	Hud_DrawNoFont8(pos + [506,0], getstatf(CLIENT_NAILS), 3, FALSE, HUDFONT_YELLOW);
 	Hud_DrawNoFont8(pos + [554,0], getstatf(CLIENT_ROCKETS), 3, FALSE, HUDFONT_YELLOW);
 	Hud_DrawNoFont8(pos + [602,0], getstatf(CLIENT_CELLS), 3, FALSE, HUDFONT_YELLOW);
+	// Hud_DrawNoFont8(pos + [602,0], getstatf(CLIENT_BOLTS), 3, FALSE, HUDFONT_YELLOW);
+	// Hud_DrawNoFont8(pos + [602,0], getstatf(CLIENT_POISON), 3, FALSE, HUDFONT_YELLOW);
+	// Hud_DrawNoFont8(pos + [602,0], getstatf(CLIENT_LAVANAILS), 3, FALSE, HUDFONT_YELLOW);
+	// Hud_DrawNoFont8(pos + [602,0], getstatf(CLIENT_MULTIROCKETS), 3, FALSE, HUDFONT_YELLOW);
+	// Hud_DrawNoFont8(pos + [602,0], getstatf(CLIENT_PLASMA), 3, FALSE, HUDFONT_YELLOW);
+	// Hud_DrawNoFont8(pos + [602,0], getstatf(CLIENT_BLOODCRYSTALS), 3, FALSE, HUDFONT_YELLOW);
+	// Hud_DrawNoFont8(pos + [602,0], getstatf(CLIENT_VOIDSHARDS), 3, FALSE, HUDFONT_YELLOW);
+	//Hud_DrawNoFont8(pos + [602,0], getstatf(CLIENT_ELEMENTALMANA), 3, FALSE, HUDFONT_YELLOW);
 
 	// Draw weapons and highlight current one
 	if (sitems & CSQC_SHOTGUN) Hud_DrawWeapon(0, HUDWPN_24, pos+[448,8]);

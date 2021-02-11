@@ -121,6 +121,7 @@ w_mjolniradaya.qc
 drake_hook.qc
 player.qc
 lights.qc
+lights_keep.qc
 triggers_states.qc
 triggers.qc
 triggers_keep.qc

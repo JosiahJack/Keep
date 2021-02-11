@@ -197,7 +197,7 @@ void() info_book_fade =
 	
 	// Only update the screen if the debuff system is NOT active
 	// and the client does NOT have any powerups active
-	if (!self.enemy.cshift_upd && self.enemy.items & ALL_ITARTIFACTS == 0) {	
+	if (!self.enemy.cshift_upd && (self.enemy.items & ALL_ITEMSARTIFACTS == 0)&& (self.enemy.items2 & ALL_ITEMS2ARTIFACTS == 0) && (self.enemy.moditems & ALL_MODITEMSARTIFACTS == 0)) {	
 		// Change screen background density (makes text easier to read)
 		stuffcmd(self.enemy, "v_cshift 0 0 0 ");
 		stuffcmd(self.enemy, ftos(self.lip));
@@ -278,7 +278,7 @@ void() info_book_touch =
 	local float book_yaw, book_angle1, book_angle2, play_yaw, play_angle;
 
 	if (self.estate & ESTATE_BLOCK) return;
-	if (intermission_running) return;		// intermission or finale
+	if (intermission_running > 0) return;		// intermission or finale
 	if (cinematic_running > 0) return;
 	if ( !(other.flags & FL_CLIENT) ) return;
 	if (other.health < 1) return;
@@ -390,7 +390,7 @@ void() info_book_off =
 	if (self.attachment) {
 		if (self.attachment.lip != 0) {
 			self.attachment.lip = 0;
-			if (!self.enemy.cshift_upd && self.enemy.items & ALL_ITARTIFACTS == 0) {	
+			if (!self.enemy.cshift_upd && (self.enemy.items & ALL_ITEMSARTIFACTS == 0) && (self.enemy.items2 & ALL_ITEMS2ARTIFACTS == 0) && (self.enemy.moditems & ALL_MODITEMSARTIFACTS == 0)) {	
 				stuffcmd(self.enemy, "v_cshift 0 0 0 0\n");
 			}
 		}

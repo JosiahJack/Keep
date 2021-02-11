@@ -289,23 +289,18 @@ void() liquid_touch =
 	
 	if (!(other.flags & FL_CLIENT)) {
 		// Handle some special cases (always set think1 as death function!)
-		if (other.classname == "drip") {
+		if (other.classtype == CT_MISCDRIP) {
 			setorigin(other, other.origin + '0 0 6');
 			self = other;
-			self.think1();
+			self.touch();
 			return;
 		}
-		else if (other.classname == "spark") {
+		else if (other.classtype == CT_TEMPSPARK) {
 			self = other;
-			self.think1();
+			misc_sparks_fade3();
 			return;
 		}
-		// else if (other.classname == "particle" && other.owner.spawnflags & KILLINFWATER) {	
-			// self = other;
-			// self.think1();
-			// return;
-		// }
-		
+
 	// Trick the C code into playing the splash sound... (even though I find it annoying as hell)
 		
 		// These movetypes don't splash
@@ -380,24 +375,30 @@ void() liquid_touch =
 	}
 	
 	// Test Feet (if feet are below maxs and above mins, we're in)
-	test = other.origin_z + other.mins_z + 1;
+	//test = other.origin_z + other.mins_z + 1;
+	test = other.origin_z + 1;
 	if (test <= self.absmax_z && test >= self.absmin_z) {
 		
 		other.watertype = self.watertype;
 		other.waterlevel = 1;
 		
+
+		if (SUB_CheckPointInBounds(other.origin, self.absmax, self.absmin)) {
 		// Test Torso
-		test = other.origin_z + (other.mins_z + other.maxs_z) * 0.5;
-		if (test <= self.absmax_z) {
+		//test = other.origin_z + (other.mins_z + other.maxs_z) * 0.5;
+		//test = other.origin_z;
+		//if (test <= self.absmax_z) {
 			other.waterlevel = 2;
 			other.zerogtime = time+0.05;// remove gravity in PreThink
 		}
 		
 		// Test Eyes
-		test = other.origin_z + other.view_ofs_z;
-		if (test <= self.absmax_z) {
+		if (SUB_CheckPointInBounds(other.origin + other.view_ofs, self.absmax, self.absmin)) {
+		//test = other.origin_z + other.view_ofs_z; // WORKS FOR BOTTOM OF BRUSH, BUT IS EVEN WITH TOP
+		//if (test <= self.absmax_z || test >= self.absmin_z) {
 			other.waterlevel = 3;
-			
+
+			other.cshift_upd = TRUE;
 			// Do the color shift
 			stuffcmd(other, "v_cshift ");
 			stuffcmd(other, self.cshift);
@@ -406,10 +407,12 @@ void() liquid_touch =
 			// Tell PreThink to clear the cshift when the player is out
 			other.fwatershifttime = time+frametime;
 			other.fwatershift = TRUE;
+		} else {
+			if (!self.burning && !self.poisoned && !self.bleeding) other.cshift_upd = FALSE;
 		}
 		
 		// Don't let water sweep ayway someone on a ladder (not if totally underwater though)
-		if (other.laddertime > time) return;
+		if (other.onladder) return;
 		
 		// Add drag and/or current
 		if (self.spawnflags & EASEUNDERCURRENT) c = 4-other.waterlevel; else c = other.waterlevel;	

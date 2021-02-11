@@ -2,12 +2,13 @@
  SOUND functions
 ======================================================================*/
 float SOUND_PLAYONCE = 2;		// When triggered plays once
+float SOUND_VOLUME_MIN = 0.05; // Minimum volume cutoff before it defaults to normal
 
 //----------------------------------------------------------------------
 void() ambient_sound_setup =
 {
 	if (self.volume > 1) self.volume = 1;
-	else if (self.volume < 0) self.volume = 0;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	if (self.speed < 0) self.speed = ATTN_NONE;
 	else if (self.speed == 0) self.speed = ATTN_NORM;
 	ambientsound (self.origin, self.noise, self.volume, self.speed);
@@ -38,7 +39,7 @@ void() ambient_custom_loop =
 	}
 	
 	precache_sound (self.noise);
-	if (self.volume <= 0) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 
 	// start right away if not triggered
 	if(!self.targetname) {
@@ -57,7 +58,7 @@ void() ambient_comp_hum =
 {
 	self.noise = "ambience/comp1.wav";
 	precache_sound (self.noise);
-	self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
@@ -65,7 +66,7 @@ void() ambient_drip =
 {
 	self.noise = "ambience/drip1.wav";
 	precache_sound (self.noise);
-	self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
@@ -73,7 +74,7 @@ void() ambient_drone =
 {
 	self.noise = "ambience/drone6.wav";
 	precache_sound (self.noise);
-	self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
@@ -81,7 +82,7 @@ void() ambient_flouro_buzz =
 {
 	self.noise = "ambience/buzz1.wav";
 	precache_sound (self.noise);
-	self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
@@ -89,7 +90,7 @@ void() ambient_light_buzz =
 {
 	self.noise = "ambience/fl_hum1.wav";
 	precache_sound (self.noise);
-	self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
@@ -97,7 +98,7 @@ void() ambient_suck_wind =
 {
 	self.noise = "ambience/suck1.wav";
 	precache_sound (self.noise);
-	self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
@@ -105,7 +106,7 @@ void() ambient_swamp1 =
 {
 	self.noise = "ambience/swamp1.wav";
 	precache_sound (self.noise);
-	self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
@@ -113,7 +114,7 @@ void() ambient_swamp2 =
 {
 	self.noise = "ambience/swamp2.wav";
 	precache_sound (self.noise);
-	self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 //----------------------------------------------------------------------
@@ -121,7 +122,7 @@ void() ambient_thunder =
 {
 	self.noise = "ambience/thunder1.wav";
 	precache_sound (self.noise);
-	self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
@@ -138,6 +139,7 @@ void() ambient_generalpurpose =
 		remove(self);
 		return;
 	}
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1.0;
 	precache_sound (self.noise);
 	ambient_sound_setup();
 };
@@ -149,7 +151,7 @@ void() ambient_lavagurg =
 {
 	self.noise = "ambience/lavagurg.wav";
 	precache_sound (self.noise);
-	self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 void() ambient_hevifals =
@@ -163,7 +165,7 @@ void() ambient_bublfals =
 {
 	self.noise = "ambience/bublfals.wav";
 	precache_sound (self.noise);
-	self.volume = 0.5;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
@@ -318,7 +320,7 @@ void() ambient_custom_sound =
 	if (self.noise2 != "") precache_sound (self.noise2);
 	
 	self.classtype = CT_SOUNDEMITTER;
-	if (self.volume <= 0 || self.volume > 1) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	
 	// Setup defaults for sound waits (-1=no random element)
 	if (self.wait == 0) self.wait = 20;
@@ -362,7 +364,7 @@ void() play_sound_triggered = {
 void() ambient_custom_water =
 {
 	if (self.noise == "") self.noise = "ad171/ambience/water1.wav";
-	if (!self.volume) self.volume = 0.75;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.75;
 	ambient_custom_loop();
 };
 
@@ -373,7 +375,7 @@ void() ambient_custom_rain =
 		// Long dripping water sound
 		self.noise = "ad171/ambience/rain1_nl.wav";
 		if (!self.speed) self.speed = 2;
-		if (!self.volume) self.volume = 0.4;
+		if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.4;
 		// Sound is 7s long, 0.1s for overlap
 		self.delay = 6.9;
 	}
@@ -381,7 +383,7 @@ void() ambient_custom_rain =
 		// Very short intense rain sound
 		self.noise = "ad171/ambience/rain2_nl.wav";
 		if (!self.speed) self.speed = 1;
-		if (!self.volume) self.volume = 0.5;
+		if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 		// Sound is 3s long, 0.1s for overlap
 		self.delay = 2.9;
 	}
@@ -435,7 +437,7 @@ void() ambient_custom_rumble =
 	}
 	
 	// Default values for rumble
-	if (!self.volume) { self.t_width = 0.5; self.t_length = 0.5; }
+	if (self.volume < SOUND_VOLUME_MIN) { self.t_width = 0.5; self.t_length = 0.5; }
 	if (!self.speed) self.speed = 1;
 	if (!self.delay) self.delay = 20;
 	if (!self.wait) self.wait = 20;
@@ -507,7 +509,7 @@ void() ambient_custom_wind =
 	}
 	
 	// Default values for wind
-	if (!self.volume) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN)  self.volume = 1;
 	if (!self.speed) self.speed = 1;
 	if (!self.delay) self.delay = 10;
 	if (!self.wait) self.wait = 10;
@@ -562,7 +564,7 @@ void() ambient_custom_wood =
 	}
 	
 	// Default values for wood
-	if (!self.volume) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	if (!self.speed) self.speed = 2;
 	if (!self.delay) self.delay = 15;
 	if (!self.wait) self.wait = 30;
@@ -577,7 +579,7 @@ void() ambient_custom_chime =
 {
 	if (self.noise == "") self.noise = "ad171/ambience/chimes.wav";
 	if (!self.speed) self.speed = 2;
-	if (!self.volume) self.volume = 1;
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	if (!self.wait) self.wait = 10;
 	if (!self.delay) self.delay = 10;
 	if (!self.waitmin) self.waitmin = 10 + random()*10;
