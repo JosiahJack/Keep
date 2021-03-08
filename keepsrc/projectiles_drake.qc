@@ -95,7 +95,8 @@ void() AkArrow_Think =
     self.angles  = vectoangles(self.movedir);
     if (self.cnt)
         Meteor_Trail (self.cnt, 1, FALSE);
-
+	else
+		particle (self.origin, '0 0 0', 6, 1);	//ijed: subtle basic arrow trail
     self.nextthink = time + 0.05;
 
 // PM:  Energy arrows can blast ghosts.
@@ -174,10 +175,10 @@ void(vector start, vector dir, float type) AkArrow_Launch =
     {
         newmis.touch        = AkArrow_Wood_Touch;
 //        if (ARROW_FLY)
-        {
+        /*{		//ijed regular arrows now have a continual think to produce a subtle particle trail, not one of the more magical built in mdl variants
             newmis.nextthink    = newmis.delay;
             newmis.think        = SUB_Remove;
-        }
+        }*/
     }
 
     if (self.classname == "monster_rebel")  // FIXME:  Crossbow bandit hack.

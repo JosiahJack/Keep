@@ -106,25 +106,7 @@ float STARTSTOPPED = 256;
 .float frate, frate2, nfrms, nfrms2;
 .float lspan, lspan2, ppe, stagcnt;
 
-float(entity o) AffectedByPhysics = {
-	if (o.classtype == CT_FUNCBREAKOBJ) return TRUE;
-	if (o.classtype == CT_TEMPGIB) return TRUE;
-	if (o.classgroup == CG_PROJALL) return TRUE;
-	if (o.classgroup == CG_PROJNAILS) return TRUE; 
-	if (o.classgroup == CG_PROJSHELLS) return TRUE;
-	if (o.classgroup == CG_PROJROCKETS) return TRUE;
-	if (o.classgroup == CG_PROJCELLS) return TRUE;
-	if (o.classgroup == CG_PROJGRENADES) return TRUE;
-	if (o.classtype == CT_TEMPPHYS) return TRUE;
-	if (o.classtype == CT_BUBBLE) return TRUE;
-	if (o.classtype == CT_MISCDRIP) return TRUE;
-	if (o.classtype == CT_TEMPSPARK) return TRUE;
-
-	return FALSE;
-};
-
-void() effector_use =
-{
+void() effector_use = {
 	if (self.state)
 		self.state = FALSE;// off
 	else

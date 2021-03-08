@@ -1067,3 +1067,27 @@ void(float dist) ai_run_strafe =
 
     ai_run_side (dist);
 };
+
+//============
+// UseCourage
+//
+// Checks if 'ent' can reflect an attack from the point 'spot'.
+//============
+float(entity ent, vector spot) UseCourage =
+{
+    if (ent.perms & POW_ARMORCOURAGE) {
+        local   vector  vx, vy, vz, v1, v2;
+
+        vx = v_forward;
+		vy = v_right;
+		vz = v_up;
+        makevectors (ent.angles);   // Yes, use model angles, not viewangles.
+        v1 = normalize (spot - ent.origin);
+        v2 = v_forward;
+        v_forward = vx;
+		v_right = vy;
+		v_up = vz;
+        if ((v1 * v2) > 0.3) return TRUE; // Must be infront of 'ent'.
+    }
+    return FALSE;
+};

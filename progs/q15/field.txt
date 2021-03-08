@@ -1,0 +1,17 @@
+field.mdl by Preach
+
+A model of a force-field for quake
+
+Triangles: 56
+Skins: 4
+Animations: 4
+
+This is a 128x128 unit force field model, designed to be an alternative to brush-built lasers and network intensive particle spawning in quake maps. The model is inspired by the 'fizzler' design from Portal. Place the model exactly in the middle of the 128x128 square to be occupied by the forcefield, rotated to face along the normal of the desired surface. Larger forcefields can be created from multiple models, although it is recommended to join them top-to-bottom, and rotate the model if you want a wider field.
+
+The first animation sequence loops automatically, and is the easiest to use. Just draw the forcefield model when the field is on, and hide it when the field is off. This will make the particles wink off instantly.
+
+If you prefer, you can use the other three animations in combination so the particles appear and disappear properly. When the field is to start, play the activate animation, and immediately afterwards start the active loop. You cannot use the automatically looping animation, you must use the second one. When you want to shut off the field, wait until the current loop has reached the last frame of the animation. Then play the deactivate animation.
+
+There are four skins on offer: blue, yellow, red and orange. I limited myself to the fullbright colours for this release but if you need another colour it is very easy to create custom ones.
+
+Questions, comments, feedback etc to andrew.denner@btinternet.com.

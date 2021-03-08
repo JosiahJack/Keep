@@ -1010,3 +1010,22 @@ void(entity ent, float chan) StopSound =
 
 // Was "weapons/discharg.wav".
 void() Sfx_Discharge = {sound (self, CHAN_AUTO, "plasma/explode.wav", 1, ATTN_NORM);};
+
+// Spawns particles within an ent.  Bounds are the entity's hull boundaries.
+void(entity ent, float color1, float color2) Particle_Cube =
+{
+    local   vector  spot;
+    local   float   loop, r;
+
+    loop = 11;
+    while (loop > 0)
+    {
+        loop = loop - 1;
+        spot_x = random();  spot_y = random();  spot_z = loop / 10;
+        spot = Anypoint (ent, spot);
+        r = color1;
+        if (random() < 0.25)
+            r = color2;
+        particle (spot, '0 0 0', r, 5);
+    }
+};

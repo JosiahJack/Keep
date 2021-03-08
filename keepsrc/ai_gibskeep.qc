@@ -4,22 +4,23 @@ void() monster_death_postcheck;
 // StartGib function for Rogue Overlord Wrath
 //======================================================================
 entity (string gibname) StartGib = {
-   local entity new;
+	local entity new;
 
-   new = spawn ();
-   //new.origin = self.origin;
-   setmodel (new,gibname);
-   setsize (new,VEC_ORIGIN,VEC_ORIGIN);
-   new.movetype = MOVETYPE_BOUNCE;
+	new = spawn ();
+	//new.origin = self.origin;
+	setmodel (new,gibname);
+	setsize (new,VEC_ORIGIN,VEC_ORIGIN);
+	new.movetype = MOVETYPE_BOUNCE;
 	new.classtype = CT_TEMPGIB;
-   new.solid = SOLID_NOT;
+	new.classgroup = CG_MISCENT;
+	new.solid = SOLID_NOT;
 	setorigin(new, self.origin);
-   new.think = SUB_Remove;
-   new.ltime = time;
-   new.nextthink = ((time + 10) + (random () * 10));
-   new.frame = FALSE;
-   new.flags = FALSE;
-   return (new);
+	new.think = SUB_Remove;
+	new.ltime = time;
+	new.nextthink = ((time + 10) + (random () * 10));
+	new.frame = FALSE;
+	new.flags = FALSE;
+	return (new);
 };
 
 //----------------------------------------------------------------------
@@ -31,6 +32,7 @@ void() ThrowHead = {
 	self.takedamage = DAMAGE_NO;
 	self.solid = SOLID_NOT;
 	// Hide the entity if it hits void, don't remove it
+	self.classtype = CT_TEMPGIB;
 	self.classgroup = CG_MISCENT;
 	self.view_ofs = '0 0 8';
 	setsize (self, '-16 -16 0', '16 16 32');
@@ -52,4 +54,27 @@ void() ThrowHead = {
 
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	monster_death_postcheck();
+};
+
+void(string gibname, float dm) ThrowBody = {
+	local	entity new;
+	local vector org, dir;
+
+	new = spawn();
+	org = self.origin;
+	new.origin = org;
+	new.origin_z = new.origin_z - 8;
+	setmodel (new, gibname);
+	new.colormap = self.colormap;
+	setsize (new, '0 0 0', '0 0 0');
+	new.velocity = VelocityForDamage (dm/2);
+	new.solid = SOLID_NOT;
+	new.movetype = MOVETYPE_BOUNCE;
+	// new.cansplash = TRUE;			   // create a splash when fall into liquid
+	new.owner = new;
+	dir = vectoangles (new.velocity);
+	new.angles_y = -dir_y;
+	new.avelocity = crandom() * '0 100 0';	 // only spin around yaw to keep weapon aligned
+	new.classtype = CT_TEMPGIB;
+	new.classgroup = CG_MISCENT;
 };

@@ -1,0 +1,536 @@
+
+
+IMPORTANT!!!
+
+If you have The Seal of Nehahra movie, you should put the game in the
+same directory BUT........
+
+DO NOT EXTRACT THE PAK0.PAK file from the PAK0.ZIP as this is a dummy pak file.
+
+****************
+I. THE STORY
+****************
+	Following the demise of ShubNiggurath the gates to a new dimension were flung open to 
+	the realm of mankind.  Seizing this opportunity the human civilization on earth
+	spent the next five years building a colony in the new dimension.  The humans call
+	this new bastion of human civilization Forge City..........
+
+A. Background
+      
+II. INSTALLING NEHAHRA
+A. Installation
+   You must install the full registered version of Quake before you can play it.
+   Please follow the instructions on your Quake manual for installation instructions
+   Nehahra will not run with Shareware version of Quake.  Create a folder in your
+   Quake directory and name it nehahra.  Unzip the contents of this zip into the nehahra
+   folder, make sure to maintain any directory structure which exists within the zip.  
+   
+B. Running Nehahra
+   Just run the Nehahra.exe executable, that's all she wrote.  No -game
+   parameter is necessary.
+
+   Check the Quake documentation for more command line and console commands.
+ 
+III. THE BASICS OF PLAY
+A. Goal of the Game
+        Quake has two basic goals. First, stay alive. Second, get out of the
+        place you're in.  That hasn't changed in Nehahra.  First and foremost,
+        Nehahra is meant to be survived, not necessarily conquered, though
+        there are places where you have no choice.  In some cases you may
+        find it a near to impossible task to get %100 kills, unless you have
+        the skill. In these scenarios escaping the level itself may be your
+        only option.  
+
+B. Skill
+	The Nehahra start map allows for skill selection.  Take the path that is
+        best for you and keep in mind that Nehahra Easy is a bit like Quake
+	Hard :)
+
+        Easy ------The Skilled Player 
+        Normal ----The Veteran Player
+        Hard ------The Elite
+        Nightmare--The Certifiably Insane
+
+
+C. Episode/Story
+        After the starting map, you will be shown the introductory demos
+        to the game and storyline.  This is a continuation of the
+        Quake movie released called THE SEAL OF NEHAHRA.  It is not
+        necessary that you obtain THE SEAL OF NEHAHRA, but it is
+        highly recommended as you'll be otherwise missing out.
+
+        ((See http://www.planetquake.com/nehahra/download.html for links
+        to the movie))
+
+        After the first game three demos, the interaction begins.  Through
+        the course of the game, you will experience in-between level
+        demo scenes and the occasional in-level cutscene.
+
+        To shut off .dem cutscenes, you may type at the console:
+
+                CUTSCENE 0
+
+D. The Environment
+
+        Nehahra maintains the standard Quake environment with secret
+        doors, lifts, trains, and the like.  In addition to this,
+        you may encounter an object or section of architecture that
+        is pushable, breakable, or interactive in other ways.
+        Experimentation and exploration in different situations is always 
+        beneficial.
+
+
+IV:  YOUR NEW ENVIRONMENT
+
+
+A. Firepower
+
+   Sword
+
+      Hey, something new to look at.
+
+   Shotgun  
+      The basic gun, to which all other guns compare favorably.
+
+   Double-barrelled Shotgun
+      A worthy weapon with three minor drawbacks: first, it uses up 2 shells 
+      per blast; second, it's slow; third, its shot pattern is very loose at 
+      long range. But in general, once you find this puppy, the other shotgun 
+      starts rusting from disuse. 
+
+   Nailgun
+      A two-barrel dingus that prickles bad guys with armor-piercing darts, 
+      technically termed "nails". 
+
+   Supernailgun 
+      The great equalizer. Four cyclic barrels that hose out spikes like 
+      crazy. Pro: foes drop like flies. Con: eats ammo like popcorn. 
+
+   Grenade Launcher
+      Thumps neat exploding bombs into the air. You can even bounce a grenade
+      off the wall or floor.. When a grenade hits someone, it explodes. 
+      If it misses, the bomb sits on the floor for a moment, then explodes. 
+
+   Rocket Launcher
+      For when a grenade positively, absolutely, has to be there on time. 
+
+   Thunderbolt  
+      Try it. You'll like it. Use the same technique as watering your 
+      rosebush.
+
+   Autoshotgun(Tsemochian Autoshotgun)
+      High speed shotgun from Hell.  You haven't lived until you've
+      hosed down some baddies with this.  Just don't get carried away,
+      it eats ammo like its going out of style.
+
+   Sprocket Launcher(Tsemochian Sprocket)
+      Crossbreed a spear, a rocket, and a grenade and you might end
+      up with a Tsemochian sprocket.  This weapon takes some getting
+      used to, but after a while, you'll feel nekkid without it. :)
+
+B. Weapon Controls
+
+1-------------SWORD----------------------IMPULSE 1
+2-------------SHOTGUN--------------------IMPULSE 2
+3-------------DOUBLE BARREL--------------IMPULSE 3
+4-------------NAILGUN--------------------IMPULSE 4
+5-------------SUPER NAILGUN--------------IMPULSE 5
+6-------------GRENADE LAUNCHER-----------IMPULSE 6
+7-------------ROCKET LAUNCHER------------IMPULSE 7
+8-------------THUNDERBOLT----------------IMPULSE 8
+9-------------SPROCKET-------------------IMPULSE 9
+0-------------AUTOSHOTGUN----------------IMPULSE 100
+
+C. Power-ups
+
+   In addition to the traditional power-ups, Nehahra offers:
+
+   Regeneration Artifact
+      This powerup never runs out, unless you die.  You can accumulate
+      these.  The more regeneration artifacts you have, the more you
+      can regenerate and the faster you regenerate.  Five of these
+      puppies is the maximum that will have affect.
+
+   Flight Artifact
+      This powerup runs out, but lasts longer than the others.  This
+      enables you to fly, even take enormous leaps, or hang out on
+      the ceiling.  It takes some getting used to, but it's good
+      for getting to high places in a hurry :)
+
+   Resurrection Artifact
+      The most powerful of all power-ups.  Like the Regeneration
+      Artifact, you can accumulate these.  For every Resurrection
+      Artifact you have, you can rise from the dead right where
+      you fell.  It gives you 3 seconds of Invulnerability when
+      you return, use this time wisely to get away from the
+      monsters who were likely standing right over you.
+
+      Remember, use your lives sparingly, these artifacts don't
+      grow on trees.
+
+      You will notice that when you die, an icon appears on the
+      screen.  It could be one of three.  Don't rush to hit
+      'quickload' just yet....
+
+      SKULL WITH BLACK EYES:
+
+      This means you are dead, no resurrection artifacts available.
+      That's all she wrote.
+
+      SKULL WITH RED EYES:
+
+      This means that you have one or more lives left.  You can
+      rejoin the living by simply hitting the attack key or jump.
+
+      SKULL WITH RED EYES WITH AN 'X' OVER IT
+
+      This is unfortunate.  Even this artifact has its limitations.
+      If you fall into a void, your accumulated lives will not
+      help you.  If you die in lava or you have been gibbed, the
+      body has suffered too much damage to be restored.
+
+
+D. The Cast
+
+   Rottweiler
+      Bad, bad doggie! Play dead! -- blam! -- yipe! Good  dog!
+
+   Grunt 
+      Between the probes wired up to their pleasure centers that give
+      them paroxysms of ecstasy from killing and the stimulants
+      flowing through their veins, grunts range from slow to paranoid,
+      jumpy, and surprisingly dangerous.  Take care, they could be
+      armed with anything!
+
+   Enforcer 
+      Grunt, Mark Two.  Outfitted in combat armor, toting built-in blasters, 
+      and light on their feet, they range from a nuisance to clever.
+
+   Knight 
+      Canned meat. Open 'er up and see if it's still fresh. 
+
+   Death Knight  
+      This particular canned meat tends to open you up instead.  Keep
+      your distance though, they've learned some new tricks over the
+      years.
+
+   Rotfish 
+      Disgusting little critters who dish it out, but can't take it.
+
+   Zombie
+      Thou canst not kill that which doth not live. But you can blast it 
+      into chunky kibbles. 
+
+   Scrag 
+      Floats like a butterfly, stings like a bee. Ugly as hell.  Keep
+      your aim steady because these bastards can really move when
+      they want to!
+
+   Ogre 
+      Since the death of Shub-Niggurath, ogres have come to exercise
+      more free will than ever before.  Although sometimes cautious
+      and other times wanting to save their ass, they can still dish
+      out the pain!
+
+   Spawn  
+      A merrily bouncing blob as dangerous to kill as to ignore. Blech.
+
+   Fiend 
+      In essence, organic buzzsaws, rife with pummeling power!  Fiends
+      are creatures of varied dispositions, some may be indifferent.
+      Beware the alpha fiends that walk among them, these guys are
+      especially territorial and cranky.
+
+   Vore  
+      A spideresque hybrid horror. Keep your eye on the energy pod he hurls. 
+
+   Shambler 
+      Even other monsters fear him, so expect a clobbering. He shrugs off 
+      explosions. Good luck. 
+
+   Marines
+      These guys are on your side...in theory.  You might find a few
+      survivors of the latest fiasco in the lands of Quake.  Some of
+      them might even help you out.  Be wary of them at times, they
+      are stressed, scared shitless, and not sure who to trust.
+      Don't set one of them off or you might become a military
+      statistic.
+
+   Field Enforcer
+      More human than he is ogre.  One of the many half breeds from
+      archgaunt experiments over the course of years and nuclear
+      contamination from the ravaged Dimension of the Doomed.  These
+      guys are sent out with concealed body armor and an armor shard
+      trench coat.  With automatic shotguns as a weapon and the
+      stamina and strength of an ogre, they can prove to be a
+      tactical nightmare.
+
+   Ogre Mutant
+      More ogre than he is human.  He's missing an appendage but
+      Tsemochian technology has generously provided him with an
+      alternative, a nice big gun with some convenient features.
+      He's a bit slow in the head, but once he's drawn a bead on you,
+      run for cover; having a weapon for an arm has allowed him to
+      become very efficient with it.
+
+   Tsemoch
+      Caffeine incarnate.  With modern weaponry and unearthly
+      metabolisms, they are the strange products of evolution in an
+      alternate dimension.  A little more insect than man.  Some 
+      of them tote Tsemochian sprockets, if you hear a *thoomp*,
+      head for the hills!  It just takes one sprocket to ruin your
+      afternoon.
+
+   Jaggers
+      Once flourishing in the Tsemochian dimension, these
+      animals have seeped into every dimension touching it.
+      It takes a lot to drop one so if you can deal with them
+      peacefully, save some ammo.  Give them some respect
+      and space and you might not get "jagged".
+
+   Gaunt
+      The monks of the medieval society.  They like to gossip and
+      they're not afraid to tell you what's on their mind...not
+      that you'll understand a word of it.  Not too hard to drop,
+      but don't get them excited...their bag of tricks is deeper
+      than you might suspect.
+
+   Archgaunts
+      Hierarchs in the making.  These pompous, elder gaunts are
+      skilled in the Gaunt magics and masters of aggravation.
+      Fighting these guys is about as fun as a root canal.  Good
+      luck with them!
+
+   Barons
+      A few hundred years ago, a large group of death knights
+      deserted the ranks of Shub-Niggurath, tired of tolerating
+      Archgaunt councils and the restrictions of the former
+      Archgaunt Hierarch, Zagheida.  Since the death of Shub-
+      Niggurath and Hierarch Zagheida, they've come out of hiding
+      from remote medieval highlands and returned to their roots.
+
+    Vomitus
+      An organic gib fountain.  Slow, stupid, and not too dangerous.
+      Slip by them and fry the bigger fish, a few years later, they
+      might catch up with you.
+
+    Wraith
+      Ghosts to the world, scavengers of souls.  Existing in two
+      planes simultaneously, they vulture on the dead and go about
+      their strange agendas.  Try not to anger them unless you
+      have a handle on how to hurt them :)
+
+V.  TECHNICAL NOTES
+
+1.  Coop mode is available.  Keep in mind that Coop mode shuts off
+    all in-level cutscenes as well as in-between level demo cutscenes.
+
+2.  If you have already seen the demo cutscenes and don't wish to
+    watch them when you play again, hit the `tilde to bring down the
+    console and set CUTSCENE 0.  Set it back to 1 to re-enable demo
+    cutscenes.
+
+    ((NOTE:  There is a bug whereby weapons will not be returned to you.
+    It does not appear to happen often, but this bug is extremely elusive
+    and because of this, unfixable at this time))
+
+3.  If you want to tone down the AI (especially on the Tech monsters: grunts,
+enforcers, etc) to bring it a little closer to normal Quake gameplay) go to the console
+and set the NOMONSTERS cvar to 1, setting it to 0 returns it to normal.  0 is the default.
+
+4.  If you want normal Quake explosions, set NO_SPR32 to 1
+
+VI. LEVELS & DESIGNERS
+
+******************************************
+The Beginning
+nehstart -- Welcome to Nehahra -- by Tim Elek
+******************************************
+Episode 1: The Fall of Forge
+******************************************
+neh1m1: Forge City1 : Slipgates -- by Tim Elek
+neh1m2: Forge City2 : Boiler -- by Tim Elek
+neh1m3: Forge City3 : Escape -- by Tim Elek
+neh1m4: Grind Core -- by John McCann
+neh1m5: Industrial Silence -- by Christian Grawert
+neh1m6: Locked-Up Anger -- by Christian Grawert
+neh1m7: Wanderer of the Wastes -- by Jussi Jaiskelainen
+neh1m8: Artemis System Net -- by Jussi Jaiskelainen
+neh1m9: To the Death -- by Dmitry Svetlichny
+*******************************************
+Episode 2:  The Outlands
+*******************************************
+neh2m1: The Gates of Ghoro -- by Tim Elek
+neh2m2: Sacred Trinity -- by Christian Grawert
+neh2m3: Realm of the Ancients -- by Tim Elek
+neh2m4: Temple of the Ancients  -- by Tim Elek
+neh2m5: Dreams Made Flesh -- by Benoit Stordeur
+neh2m6: Your Last Cup of Sorrow -- by Benoit Stordeur
+*******************************************
+Episode 3: Dimension of the Lost
+The End
+*******************************************
+nehahra: Nehahra's Den -- by Tim Elek
+nehend: Quintessence -- By Dmitry Svetlichny
+*******************************************
+
+XI. The Team!
+	Mindcrime: Coding, modelling, skinning, sounds, and all around kick ass team leader
+	and inspiritor.  This man made Nehahra what it is.  Without his leadership skills
+	the mod would have tanked ages ago.
+
+	Ender: Engine coder
+	
+	Lord Havoc: engine coder, level testing, helpful commentator
+	
+	DaMaul: Mapper, bear inventor
+
+	CZG: Mapper, creator of immersive environments.
+	
+	Bal: Mapper, french bearded librarian
+
+	ELEK: Mapper, bossy_arse, assorted graphics, and asker of too many questions
+
+	Vigilante: Mapper, alien lifeform
+
+	Vondur: Mapper, most responsible, first one to complete all his maps! 
+	
+	Darc Jedi: Skybox artist, now a professional game artist
+
+	
+
+XII. Passive Contributors Credits and Thanks!
+
+    There are many individuals who have assisted in the development of Nehahra in many ways.  
+    The following list includes individuals who may have created textures, models, skies and
+    other content which was used throughout the game.  Special thanks to all of these people
+    their roles may have been passive, but surely very important.
+
+Textures:
+	Stecki: Decon wad
+	Ogro: Ogro wad
+	Ikka "fingers" Keranen: ikbase wad
+	John Fitzgibbons: Rubicon wad
+	Raven Software: misc. cool textures
+	Epic Mega Games: misc. cool textures
+        Xatrix: misc. cool textures
+	id software: misc Q3 textures
+	Hipnotic: misc cool textures
+
+Models/animations
+	Brian 'EvilBastard' Collins
+	David 'Hotfat' Biggs
+	King Chou
+	Tan Sian Yue, a.k.a. 'Bubbah'
+	Garry Ant
+	Daniel Garcia Romero, a.k.a. 'Headcrusher'
+	Cayenne Mandua
+	V.S.KiRill
+	Deft'Conrad
+	Seth 'SerpentLord' Galbraith
+
+Code base
+        Darien McNeil: Cutscene code base
+
+Skyboxes
+	Stecki
+	Jason Abbot
+	Crinity
+	Woebane
+		
+
+Compilers
+	Ken Alverson for WQbsp.
+	Tyrann for Tyrlite.
+	LordHavoc for Hvis.
+	id software for vis
+	Tim 'argh' Wright for arghlite
+	Neil White III for LightDLX
+	Tyrann for rvis+
+
+Editors
+	Ty and Neal for Wally
+	Mickey for TexMex
+	Ben Morris for WorldCraft
+	Adobe for Photoshop
+	JGsoft for EditPad
+	PaintShopPro 6.0
+
+SOUND EFFECTS
+
+	Eric 'RedChurch' VonRothKirch
+	Chancellor Films
+	Parusa
+
+SPECIAL THANKS AND APOLOGIES TO ANYONE WHOSE WORK APPEARED IN
+NEHAHRA THAT WE FORGOT OR COULD NOT IDENTIFY.
+
+
+***********************************
+XIII. Special Thanks from the team:
+***********************************
+	Bal would like to thank the following:
+		Wadfather site for great skyboxes
+		nehahra crew for feedback and kickin ass
+                LordImric and Lordhavoc for having shared their cpu speed for some compiling
+		Stecki for the cool skybox
+
+	ELEK would like to thank the following:
+		My wife Marisa for sticking by me and giving me countless hours of time to get 
+		this thing completed.  She spent too many hours sitting alone while I poured time
+		into Nehahra.
+		Mindcrime for sticking through the development of this project, Nehahra has
+		sent him to Hell and back again
+		Darc Jedi for all the great skies
+		Jack 'Scrag Bait' Meacher for all the help he has given me along the way
+		The rest of the Nehahra team for sticking it out and getting it done right
+		All of my friends for listening to my constant Nehahra/Quake banter
+
+	
+	Vondur would like to thank the following:
+		MindCrime, for organizing such awesome project and collecting under
+		its roof such cool people. It was the true pleasure to work with you, boss.
+		Nehahra team, you are the best people. Remember that!
+		Black winter days for inspiration
+		My cat for running around
+		Dark music
+
+
+
+	CZG would like to thank the following:
+		My sisters.
+		Emma.
+		Donkey.
+		The rest of the Nehahra team.
+
+		Anticredits:
+		My father...
+		The Norwegian army.
+		Magne Hæstvik Lie. DU FORTJENER SMERTE!!!
+
+
+
+******* Disclaimers *******
+
+* Large portions of this product are property and are copyrighted by the Nehahra Team.
+* If this product appears on any medium/media without consent, full
+  legal action will be taken.
+* A small number of snippets were 'borrowed' from Zerstorer: Testament
+   of the Destroyer.  If you have not played this conversion, get it.
+   It's inspirational.
+* A small measure of the massive code that makes up the progs.dat were
+  originally adapted from early patches performing various tasks.
+  Because code has migrated from patch to patch over time, the
+  original sources become very vague and questionable.
+  While the code may not be recognizable to the original, Mindcrime
+  would like to thank the creators of these patches whom he has no
+  means of identifying. :]
+* This zip file may be distributed by any electronic means as long as this txt file is 
+  included in the zip.
+* All other copyrights apply to their respective claimers
+
+
+
+	
+	
+        

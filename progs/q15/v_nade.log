@@ -1,0 +1,22 @@
+######################BEGIN######################
+Converted quads in UV map of Cube.000_Cube.002 to tris.
+Exporting UV texture coordinates for Cube.000_Cube.002
+Exporting Cube.000_Cube.002
+Header Information
+Ident: IDP3
+Version: 15
+Name: 
+Flags: 0
+Number of Frames: 6
+Number of Tags: 0
+Number of Surfaces: 1
+Number of Skins: 0
+Offset Frames: 108
+Offset Tags: 444
+Offset Surfaces: 444
+Offset end: 41748
+Total Shaders: 1
+Total Triangles: 842
+Total Vertices: 554
+MD3 saved to E:\Quake\jmod\progs\v_nade.md3
+Elapsed 0.12965 seconds

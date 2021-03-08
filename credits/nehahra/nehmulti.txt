@@ -1,0 +1,100 @@
+-----------------------
+NEHAHRA DEATHMATCH/COOP
+-----------------------
+
+Nehahra Multiplayer works the same way good old Quake does.  Not much
+has changed except some optimizations.  However, there are a few
+included features which I took the liberty of adding before this
+release and in waiting for the multiplayer capable exe to be ready.
+
+PLAYER MODEL/SKIN
+
+In single player, you are the Jack Torres model, not that you see yourself
+in single player unless you have CHASE_ACTIVE 1 which doesn't really work
+as nicely as we would have liked.
+
+In Coop and Deathmatch:
+
+You are not restricted to using the standard QuakeGuy.
+There is a console command called PMODEL which sets your model/skin.
+There is not a great variety but enough to make DM interesting.  Note
+that all thrown heads are the standard head, this was a last minute
+addition I decided to put in.
+
+Pmodel will be saved in your config.cfg as well.
+
+PMODEL
+
+0 = standard Qguy
+1 = Grunt
+2 = Ogre Mutant
+3 = Labguy
+4 = Major Bent
+5 = Jack Torres
+
+To switch models, you'd simply type PMODEL # ((# being the model number)).
+This is indeed stored in your config.cfg file and will always be set when
+you connect, to whatever value you last set the pmodel to.
+
+When you switch pmodels, it will respawn you frag loss free.  This opens up
+room for abuse but it's especially important for certain deathmatch modes
+like Deathmatch 3 which will be later described.  The name of the game is
+fun anyway =]
+
+
+DEATHMATCH 3
+
+Teamplay Deathmatch in conjunction with use of skins. ((i.e.
+qguys versus Grunts, Bents versus Labguys :>)).  Like skin/models
+cannot injure like skin/models.
+
+TYPE (or Bind to a key) 'IMPULSE 221' to check on overall team scores.
+Keep in mind that this keeps track of the scores even if someone leaves,
+it doesn't recount the scores each time, it records it at the gain or loss
+of every frag.
+
+
+DEATHMATCH 4
+
+This is deathmatch in the air :)  Potentially anyway.  Everyone has
+constant flight as if they had the Flight Artifact.
+
+This probably wouldn't work well on all levels, but if you come to find
+a favorite.  You could probably run a 1 map server for a while and suck
+all the fun out of it you can.  Flight can enable you to get to a lot
+of places you otherwise could not and will spoil the "illusion" of many
+levels depending on how they are built.
+
+DEATHMATCH 5
+
+DeathMatch Mode 5 is a little something I put in for myself but I think
+others may appreciate it as well.  Among other things, Mode 5 allows
+you to run DM games on maps that are not otherwise DMable (due to
+lack of weapons placed in the level, info_player_deathmatch entities, etc).
+But this is not to say that I would condone using it to play on
+Nehahra SP levels and other non-Id SP levels because many levels
+simply weren't built for this.
+
+Sometimes the exits of certain maps (Nehahra SP maps in particular) are
+not easily accessible from multiplayer(sometimes the death of a monster may
+open a door for example) so the usage of FRAGLIMIT and/or
+TIMELIMIT is highly recommended.
+
+However, this works very nicely in normal DM maps.
+
+When looking for a location to spawn, Mode 5 will use both
+info_player_deathmatch and info_player_coop.  Each player spawns with
+all weapons and some ammo for each weapon.  50 shells, 50 nails, 50 cells,
+and 10 rockets.  It also gives you one regeneration artifact.
+
+OTHER NOTES:
+
+1.  Demo cutscenes will be skipped in COOP/DM just as if CUTSCENE = 0
+2.  In-level cutscenes will be skipped in COOP/DM.
+3.  Fog can be toggled from the client side so any mapper wishing to do
+         a DM level is advised not to count on it being there and
+         unchangable.
+4.  You can use the Nehahra.exe to connect to normal netquake servers,
+    but you must be running the nehahra.exe to connect to a nehahra.exe
+    server.
+

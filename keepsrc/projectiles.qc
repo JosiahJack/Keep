@@ -792,6 +792,7 @@ void() Touch_Projectile =
 			else if (self.classtype == CT_PROJ_BLBOLT) WriteByte (MSG_BROADCAST, TE_WIZSPIKE);
 			else if (self.classtype == CT_PROJ_BLBOLT2) WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
 			else if (self.classtype == CT_PROJ_HKN) WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
+			else if (self.classtype == CT_PROJ_HKN2) WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
 			else WriteByte (MSG_BROADCAST, TE_SPIKE);
 			
 			WriteCoord (MSG_BROADCAST, self.origin_x);
@@ -863,6 +864,7 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 	else if (proj_type == CT_PROJ_DARTARROW) setmodel (newmis, "progs/drake/arrow.mdl");
 //	else if (proj_type == CT_PROJ_BLBOLT) setmodel (newmis, MODEL_PROJ_BLORDBOLT);
 	else if (proj_type == CT_PROJ_HKN) setmodel (newmis, MODEL_PROJ_HKN);
+	else if (proj_type == CT_PROJ_HKN2) setmodel (newmis, "progs/q15/k_spike2.mdl"); // Warlord spike (Quake 1.5)
 	// Death Lord - like Death Knight magic attack (spike ball instead)
 	// else if (proj_type == CT_PROJ_DLORD) {
 		// setmodel (newmis, MODEL_PROJ_DLORD1);
@@ -884,7 +886,7 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 		else setmodel (newmis, MODEL_PROJ_WBONE);
 	}
 	else if (proj_type == CT_PROJ_WPOISON) setmodel (newmis, MODEL_PROJ_WPOISON);
-	// Monster Nails (MONNG) = Red Coloured Nails
+	// Monster Nails (MONNG) = Lava Nails
 	else if (proj_type == CT_PROJ_MONNG) setmodel (newmis, MODEL_PROJ_NGRED);
 	else if (proj_type == CT_PROJ_SCORP) setmodel (newmis, MODEL_PROJ_SCORP);
 	else if (proj_type == CT_PROJ_FURY2) setmodel (newmis, MODEL_PROJ_FURY2);
@@ -1904,7 +1906,7 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade =
 			setmodel( newmis, MODEL_PROJ_WEGG);
 			newmis.noise = "wraith/bounce.wav";
 		}
-		else if (self.classtype == CT_MONSHAL) {
+		else if (self.classtype == CT_MONSHAL || self.classtype == CT_MONSHALBOSS) {
 			setmodel( newmis, MODEL_PROJ_SEGG);
 			newmis.noise = "shalrath/bounce.wav";
 		}

@@ -1,3 +1,21 @@
+float(entity o) AffectedByPhysics = {
+	if (o.classtype == CT_FUNCBREAKOBJ) return TRUE;
+	if (o.classtype == CT_TEMPGIB) return TRUE;
+	if (o.classgroup == CG_PROJALL) return TRUE;
+	if (o.classgroup == CG_PROJNAILS) return TRUE; 
+	if (o.classgroup == CG_PROJSHELLS) return TRUE;
+	if (o.classgroup == CG_PROJROCKETS) return TRUE;
+	if (o.classgroup == CG_PROJCELLS) return TRUE;
+	if (o.classgroup == CG_PROJGRENADES) return TRUE;
+	if (o.classtype == CT_TEMPPHYS) return TRUE;
+	if (o.classtype == CT_BUBBLE) return TRUE;
+	if (o.classtype == CT_MISCDRIP) return TRUE;
+	if (o.classtype == CT_TEMPSPARK) return TRUE;
+	if (o.classtype == CT_PROJ_MEGG) return TRUE;
+
+	return FALSE;
+};
+
 void (entity srcent, entity destent) SUB_CopyEntity = {
    destent.modelindex = srcent.modelindex;
    destent.absmin = srcent.absmin;

@@ -1,0 +1,3 @@
+mushroom.mdl by Preach(andrew.denner@btinternet.com)
+
+A speedmodel made in 1 hour, a patch of mushrooms to decorate your levels. There are a few different poses which vary the size and arrangement of the mushrooms a bit. Place 8 units above the ground.

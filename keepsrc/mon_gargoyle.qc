@@ -437,16 +437,26 @@ void() monster_minotaurminion = {
 	monster_gargoyle();
 };
 
+// From Kinn
 void() monster_imp = {
 if (self.deathstring == "")  self.deathstring = " was incinerated by an Imp\n";
 monster_gargoyle();
 };
 
+// From Kinn
 void() monster_impling = {
 	self.classtype = CT_MONGARGOYLE_MINI;
 	if (self.deathstring == "")  self.deathstring = " was incinerated by an Impling\n";
 	monster_gargoyle();
 };
+
+// From Quake 1.5
+void() monster_afrit = {
+if (self.deathstring == "")  self.deathstring = " was burned down by the Afrits\n";
+self.classname = "monster_imp";
+monster_gargoyle();
+}
+
 
 //----------------------------------------------------------------------------
 void() setup_gargoyle =

@@ -140,8 +140,9 @@ float() nour_WaveCheck =
 //----------------------------------------------------------------------
 // Check the tether system
 //----------------------------------------------------------------------
-float() nour_CheckTether =
-{
+float() nour_CheckTether = {
+	if (!self.movelast) return FALSE;
+
 	self.t_length = vlen(self.origin - self.movelast.origin);
 	// Check the most obvious first, inside tether range?
 	if (self.t_length < MONAI_MAXNOUR) return FALSE;
@@ -814,8 +815,30 @@ void() nour_die =
 //======================================================================
 // REVEAL PHASE (coming out of the ground)
 //======================================================================
-void() nour_revealframe = 
-{
+void() nour_revealframe = {
+	if (self.movetarget2 == self || self.movetarget2.origin == self.origin) {
+		sound (self, CHAN_BODY, "nour/reveal.wav", 1, ATTN_NORM);
+		if (self.enemy) ai_face();
+		self.walkframe = 0;				// Reset just in case
+		self.height = MONAI_ABOVEDIST;	// Enemytarget distance above
+		self.movetype = MOVETYPE_STEP;	// back to regular movement
+		self.takedamage = DAMAGE_AIM;	// Can take damage
+		self.style = NOUR_PHASE2;		// Time to fight!
+		Resist_ChangeType(self,FALSE);	// restore resistance
+		self.velocity = '0 0 0';
+		self.nextthink = time + 0.1;
+		if (self.enemy) {
+			self.think = nour_run1;			// Straight to running
+			self.frame = $fly1;
+			FoundHuntTarget(FALSE);			// make sure tracking player
+		} else {
+			self.pain_finished = time + 1.2;
+			self.th_stand();
+			return;
+		}
+		return;
+	}
+
 	// Beginning of animation block
 	if (self.walkframe == 3) 
 		sound (self, CHAN_BODY, "nour/reveal.wav", 1, ATTN_NORM);
@@ -850,11 +873,16 @@ void() nour_revealframe =
 		self.takedamage = DAMAGE_AIM;	// Can take damage
 		self.style = NOUR_PHASE2;		// Time to fight!
 		Resist_ChangeType(self,FALSE);	// restore resistance
-		self.think = nour_run1;			// Straight to running
-		self.frame = $fly1;
-		FoundHuntTarget(FALSE);			// make sure tracking player
-	}
-	else {
+		if (self.enemy) {
+			self.think = nour_run1; // Straight to running
+			self.frame = $fly1;
+			if (self.enemy) FoundHuntTarget(FALSE);			// make sure tracking player
+		} else {
+			self.pain_finished = time + 1.2;
+			self.th_stand();
+			return;
+		}
+	} else {
 		self.think = nour_revealframe;
 		// Setup current animation frame
 		self.frame = $reveal1 + self.walkframe;
@@ -873,10 +901,9 @@ void() nour_reveal1	= {
 // Entities are created so that the spawning space can be tested
 // before spawning the minions for possible collisions
 //======================================================================
-float() nour_minionsetup =
-{
+float() nour_minionsetup = {
 	local entity min_prev, min_first;
-	
+
 	self.lip = self.count;
 	min_prev = min_first = world;
 	
@@ -903,15 +930,13 @@ float() nour_minionsetup =
 		newmis.entchain = min_first;
 		self.attachment3 = min_first;
 		return FALSE;
-	}
-	else return TRUE;
+	} else return TRUE;
 };
 
 //======================================================================
 // Setup Nour after trigger event
 //======================================================================
-void() nour_awake =
-{
+void() nour_awake = {
 	self.use = SUB_Null;			// No more triggers
 	self.style = NOUR_PHASE1;		// Bursting intro sequence
 	self.flags = FL_MONSTER | FL_FLY;	// Reset flag
@@ -933,9 +958,9 @@ void() nour_awake =
 	// Setup minion chain entity system
 	if (nour_minionsetup()) {
 		dprint("\b[NOUR]\b Cannot create minion chain!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		entity_hide(self);
-		return;
+		// spawn_marker(self.origin, SPNMARK_YELLOW);
+		// entity_hide(self);
+		// return;
 	}
 		
 	// Setup Ammo Resistance
@@ -972,6 +997,7 @@ void() nour_awake =
 	
 	// Setup player focus
 	if (activator.flags & FL_CLIENT) {
+		dprint("\b[NOUR]\b Successfully assigned activator to enemy.\n");
 		self.goalentity = self.enemy = activator;
 	}
 	else self.enemy = world;
@@ -983,10 +1009,11 @@ void() nour_awake =
 	// Find spawning (move) destination
 	self.movetarget2 = find(world,targetname,self.message2);
 	if (!self.movetarget2) {
-		dprint("\b[NOUR]\b Missing spawn destination!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		entity_hide(self);
-		return;
+		self.movetarget2 = self; // Ok fine, don't rise then!
+		// dprint("\b[NOUR]\b Missing spawn destination!\n");
+		// spawn_marker(self.origin, SPNMARK_YELLOW);
+		// entity_hide(self);
+		// return;
 	}
 	
 	// Make sure all death triggers are setup ready
@@ -994,19 +1021,22 @@ void() nour_awake =
 	self.target = self.target2 = self.deathtarget = "";
 
 	// Check for tether system (special target field)
-	if (self.tethertarget == "") {
-		dprint("\b[NOUR]\b Missing tether marker!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		entity_hide(self);
-		return;
-	}
+	// if (self.tethertarget == "") {
+		// dprint("\b[NOUR]\b Missing tether marker!\n");
+		// spawn_marker(self.origin, SPNMARK_YELLOW);
+		// entity_hide(self);
+		// return;
+	// }
 	// Find the tether marker (must be path_corner)
 	self.movelast = find(world,targetname,self.tethertarget);
-	if (self.movelast.classtype != CT_PATHCORNER) {
-		dprint("\b[NOUR]\b Tether marker not path_corner!\n");
-		spawn_marker(self.movelast.origin, SPNMARK_YELLOW);
-		self.movelast = world;
-	}
+
+	// if (self.movelast.classtype != CT_PATHCORNER) {
+		// dprint("\b[NOUR]\b Tether marker not path_corner!\n");
+		// spawn_marker(self.movelast.origin, SPNMARK_YELLOW);
+		// self.movelast = world;
+	// }
+	// Qmaster - don't see the need to require this be a path_corner, all we need from it is the location vector
+
 	// Make sure tethertarget is blank
 	self.tethertarget = "";
 	
@@ -1018,6 +1048,8 @@ void() nour_awake =
  QUAKED monster_nouronihar (1 0 0) (-16 -16 -24) (16 16 40)
 ======================================================================*/
 void() monster_nour = {
+	local entity stemp;
+
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 	
@@ -1061,6 +1093,20 @@ void() monster_nour = {
 	precache_sound ("nour/attack2.wav");
 	precache_sound ("nour/explode2.wav");
 	precache_sound ("nour/bounce.wav");
+
+	// Precache minion stuff since we use it regardless of the presence of a monster_nourminion
+	precache_model ("progs/ad171/mon_wizard.mdl");
+	precache_model ("progs/h_wizard.mdl");
+	precache_model ("progs/ad171/gib_wzarm1.mdl");
+	precache_model ("progs/ad171/gib_wzarm2.mdl");
+	precache_model ("progs/ad171/gib_wztail.mdl");
+	precache_sound ("wizard/widle1.wav");
+	precache_sound ("wizard/widle2.wav");
+	precache_sound ("wizard/wdeath.wav");
+	precache_sound ("wizard/wpain.wav");
+	precache_sound ("wizard/hit.wav");
+	precache_sound ("wizard/wattack.wav");
+	precache_sound ("wizard/wsight.wav");
 	
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
@@ -1087,29 +1133,37 @@ void() monster_nour = {
 	self.style = 0;
 	if (self.deathstring == "")  self.deathstring = " was picked apart by the Scragmother\n";
 
-	// No targetname = no trigger!
-	if (self.targetname == "") {
-		dprint("\b[NOUR]\b Missing targetname name!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		return;
-	}
 	// Missing spawn trigger
-	if (self.message == "") {
-		dprint("\b[NOUR]\b Missing spawn (message) trigger!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		return;
-	}
+	// if (self.message == "") {
+		// dprint("\b[NOUR]\b Missing spawn (message) trigger!\n");
+		// spawn_marker(self.origin, SPNMARK_YELLOW);
+		// return;
+	// }
+	// Qmaster commented out because he sees no reason to require targets when spawning
+
 	// Missing rise path corner
-	if (self.message2 == "") {
-		dprint("\b[NOUR]\b Missing spawn (message2) path corner!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		return;
-	}
+	// if (self.message2 == "") {
+		// dprint("\b[NOUR]\b Missing spawn point (message2)!\n");
+		// spawn_marker(self.origin, SPNMARK_YELLOW);
+		// return;
+	// }
+	// Qmaster commented out because this lets us now use nour's like normal enemies. (also added escape from the nour rise)
+	// What?  Scragmothers aren't that powerful all things considered.
+
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 
 	// Check passive system for exceptions
 	setup_passivestate_boss(self);	
 
 	total_monsters = total_monsters + 1;
+
+	// No targetname = no trigger!
+	if (self.targetname == "") {
+		stemp = activator;
+		activator = self; // clear activator to prevent giving enemy at start
+		nour_awake();
+		activator = stemp; // just in case return to what it was
+		return;
+	}
 	self.use = nour_awake;
 };

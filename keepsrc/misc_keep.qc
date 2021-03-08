@@ -265,6 +265,7 @@ Produces a continuous particle splash for waterfalls
 */
 void() misc_splash = {
 	if (!self.wait) self.wait = 0.1;
+	if (self.mangle != '0 0 0' && !self.movedir) self.movedir = self.mangle;
 	if (!self.movedir) self.movedir = '0 0 4';
 	if (!self.volume) self.volume = 10;
 	self.col = self.col * 16;
@@ -323,4 +324,89 @@ void () light_globecolor = {
 
    }
 
+};
+
+// Madfox destroyable fast fan model
+// 0-14 run
+// 15 broke
+void() misc_fan_break = {
+	self.frame = 15;
+	self.think = SUB_Null;
+	self.nextthink = time;
+	self.use = SUB_Null;
+	SUB_UseTargets();
+};
+
+void() misc_fan_run = {
+	self.walkframe = self.walkframe + 1;
+	if (self.walkframe > 14) self.walkframe = 0;
+	self.frame = self.walkframe;
+	self.think = misc_fan_run;
+	self.nextthink = time + self.speed;
+};
+
+void() misc_fan_enable = {
+	self.estate = ESTATE_ON;				// Switch running/spinning
+	self.think = misc_fan_run;
+	self.nextthink = time + self.speed;
+};
+
+void() misc_fan_idle = {
+	self.frame = 0;
+	self.think = misc_fan_idle;
+	self.nextthink = time + 0.1;
+};
+
+void() misc_fan_disable = {
+	self.estate = ESTATE_DISABLE; // Switch to stationary
+	self.think = misc_fan_idle;
+	self.nextthink = time + 0.1;
+};
+
+void() misc_fan_reset = {
+	setmodel (self,self.mdl);
+	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
+	self.velocity = '0 0 0';
+	setorigin(self, self.oldorigin);
+	misc_fan_enable();
+};
+
+void() misc_fan_off = {
+	self.estate = ESTATE_OFF; // Completely invisible
+	self.model = string_null;				// hide bmodel surface
+	self.think = misc_fan_idle;
+	self.nextthink = 0;
+};
+
+void() misc_fan = {
+	self.mdl = "progs/madfox/fanhouse.mdl";
+	precache_model (self.mdl);
+	setmodel (self,self.mdl);
+	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
+	setorigin(self, self.origin);
+	self.solid = SOLID_NOT;
+	self.movetype = MOVETYPE_NONE;
+	self.use = misc_fan_break;
+	self.oldorigin = self.origin;
+
+	// Override angles with mangle
+	if (!self.mangle) {	
+		self.mangle = self.angles;			// Save for later
+	}
+	self.angles = self.mangle;
+
+	if (self.speed <=0 ) self.speed = 0.1;
+	if (self.spawnflags & 1) {
+		misc_fan_disable();
+		return;
+	} else if (self.spawnflags & 2) {
+		misc_fan_break();
+		return;
+	}
+	self.estate_disable = misc_fan_disable;
+	self.estate_reset = misc_fan_reset;
+	self.estate_on = misc_fan_enable;
+	self.estate_off = misc_fan_off;
+	self.walkframe = 0;
+	misc_fan_run();
 };

@@ -47,6 +47,7 @@ void() weapon_touch = {
 	//----------------------------------------------------------------------
 	else if (self.classtype == CT_UPGRADE_SSG) {
 		if (leave && (other.moditems & IT_UPGRADE_SSG) ) return;
+		other.items = other.items | IT_SUPER_SHOTGUN; // make sure we give super shotgun
 		update_configflag(SVR_UPDSSG, TRUE);
 		moditem = TRUE;
 		new = IT_UPGRADE_SSG;
@@ -795,8 +796,8 @@ void() artifact_touch = {
 	}
 	else if (self.classtype == CT_ARTPENT) {
 		other.invincible_time = TRUE;
-		if (self.cnt < 0) other.radsuit_finished = POWERUP_VANIA;
-		else other.radsuit_finished = time + self.cnt;
+		if (self.cnt < 0) other.invincible_finished = POWERUP_VANIA;
+		else other.invincible_finished = time + self.cnt;
 		ResetDebuffSystem(other);
 	}
 	else if (self.classtype == CT_ARTINVS) {
@@ -910,16 +911,22 @@ void() artifact_touch = {
 		else other.wing_finished = time + 45;
 	}
 	else if (self.classtype == CT_ARTOPTIMIZER) {
-		other.perms = other.perms | POW_SHOTTYMAN;
 		other.ammo_shells = AMMO_MAXSHELLS; // max out nails ammo
 	}
 	else if (self.classtype == CT_SIGILBANE) {
 		// Give all players 250 health
 		pl = find (world, classname, "player");
 		while (pl) {
-			pl.health = HEAL_MEGAMAX;
+			pl.health = pl.max_health;
 			pl = find (pl, classname, "player");
 		}
+	}
+	else if (self.classtype == CT_ARTREGEN) {
+		other.health = other.max_health;
+	}
+	else if (self.classtype == CT_ARTVITALITY) {
+		other.max_health = other.max_health + self.max_health;
+		other.health = other.max_health; 
 	}
 	else return;
 
@@ -936,6 +943,7 @@ void() artifact_touch = {
 	other.items = other.items | self.items;
 	other.items2 = other.items2 | self.items2;
 	other.moditems = other.moditems | self.moditems;
+	other.perms = other.perms | self.perms;
 
 	// hide item and check for respawn
 	item_finished();
@@ -1152,6 +1160,21 @@ void () item_artifact_horn = {
 };
 
 void() item_hornofconjuring = { self.classname = "item_artifact_horn"; item_artifact_horn(); };
+void() item_artifact_shambler = {
+	if (self.mdl == "") self.mdl = "progs/drake/doll03.mdl";
+    if (self.netname == "") self.netname = "Monster Doll";
+    if (self.noise == "") self.noise = "drake/items/shambler.wav";
+	self.classname = "item_artifact_horn";
+	item_artifact_horn();
+};
+
+void() item_artifact_monster = {
+    if (self.mdl == "") self.mdl = "progs/drake/doll03.mdl";
+    if (self.netname == "") self.netname = "Shambler Doll";
+    if (self.noise == "") self.noise = "drake/items/shambler.wav";
+	self.classname = "item_artifact_horn";
+	item_artifact_horn();
+};
 
 // Can't touch dis!
 void () item_taunt = {
@@ -1215,4 +1238,55 @@ void () item_circuitboard = {
 	setsize (self, '-16 -16 -24', VEC_HULL_MAX);
 	self.classtype = CT_CIRCUIT;
 	item_start();
+};
+
+void(entity ent) PowerArmor_Awaken;
+void(entity ent) BerserkerArmor_Awaken;
+void(entity ent) SpiritArmor_Awaken;
+void(entity ent) DragonArmor_Awaken;
+void(entity ent) OnyxArmor_Awaken;
+
+void() armor_touch = {
+	if (other.health <= 0) return;
+    if (!(other.flags & FL_CLIENT)) return;
+
+	// If not exotic, handle exclusivity for normal Armor 1, 2, or Inv(3)
+	if (!self.perms)  {
+		// Cannot pickup armour if wearing something better!
+		if (armor_pickupcondition(other, self)) return;
+
+		// Check for randomizer pickup conditions
+		armour_touchrandomizer();
+
+		other.items2 = other.items2 - (other.items2 & (IT2_ARMOR1 | IT2_ARMOR2 | IT2_ARMOR3)) + self.items2;
+
+		// Only normal armor affects actual armortype and armorvalue
+		other.armortype = self.armortype;
+		other.armorvalue = self.armorvalue;
+	} else {
+		if (other.perms & self.perms) return; // Already have this, don't give more than one of each
+		if (self.classtype == CT_ARMORONYXPOWER && !(other.perms & POW_ARMORONYXPOWER)) PowerArmor_Awaken(other);
+		if (self.classtype == CT_ARMORBERSERKER && !(other.perms & POW_ARMORBERSERKER)) BerserkerArmor_Awaken(other);
+		if (self.classtype == CT_ARMORSPIRIT && !(other.perms & POW_ARMORSPIRIT)) SpiritArmor_Awaken(other);
+		if (self.classtype == CT_ARMORDRAGON && !(other.perms & POW_ARMORDRAGON)) DragonArmor_Awaken(other);
+		if (self.classtype == CT_ARMORONYX && !(other.perms & POW_ARMORONYX)) OnyxArmor_Awaken(other);
+		other.perms = other.perms | self.perms; // perms are nonexclusive, we can have multiple types of armor on weehee! -Qmaster
+		if (self.aflag > 0) other.ammo_cells = other.ammo_cells + self.aflag; // Add cells for power shield
+	}
+	
+	sprint (other, "You got the ");
+	sprint (other, self.netname);
+	sprint (other, "\n");
+	if (self.noise != SOUND_EMPTY) 
+		sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+	stuffcmd (other, "bf\n");
+	
+	activator = other;
+	SUB_UseTargets();
+
+	// Quick exit, no need for following stuff
+	if (self.progspawnlist) return;
+	
+	item_finished();
+	check_item_respawn();
 };

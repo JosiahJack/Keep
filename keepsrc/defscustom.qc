@@ -710,6 +710,7 @@ float FS_FLYING = 10;		// Exclusion, no happy feet!
 
 //----------------------------------------------------------------------
 // Monster constant values
+float MON_MOVENONE = 0;
 float MON_MOVEWALK = 1;				// Walking Monster
 float MON_MOVEFLY = 2;				// Flying Monster
 float MON_MOVESWIM = 4;				// Swiming Monster
@@ -1386,6 +1387,33 @@ float ARMOR_YEL_TYPE = 0.6;
 float ARMOR_YEL_VALUE = 150;
 float ARMOR_RED_TYPE = 0.8;
 float ARMOR_RED_VALUE = 200;
+float ARMOR_COURAGE_TYPE = 0.95;	// Courage Armor
+float ARMOR_COURAGE_VALUE = 150;
+float ARMOR_DRAGON_TYPE = 0.8;		// Dragonscale Armor
+float ARMOR_DRAGON_VALUE = 200;
+float ARMOR_ONYX_TYPE = 0.5; 		// Onyx Armor
+float ARMOR_ONYX_VALUE = 0;
+float ARMOR_ONYXPOWER_TYPE = 0.5; 	// Power Armor
+float ARMOR_ONYXPOWER_VALUE = 0;
+float ARMOR_BERSERKER_TYPE = 0; 	// Demonhide Armor
+float ARMOR_BERSERKER_VALUE = 100;
+float ARMOR_SPIRIT_TYPE = 1; 		// Spirit Shroud
+float ARMOR_SPIRIT_VALUE = 25;
+float ARMOR_CHAOS_TYPE = 0; 		// Chaos Armor
+float ARMOR_CHAOS_VALUE = 200;
+float ARMOR_NINJA_TYPE = 0.3; 		// Jump Armor
+float ARMOR_NINJA_VALUE = 100;
+// vector  ARMOR_STATS_GREEN   = '0.3 100 1';
+// vector  ARMOR_STATS_YELLOW  = '0.6 150 2';
+// vector  ARMOR_STATS_RED     = '0.8 200 4';
+// Note:  Dragonscale uses the same stats as red armor.
+// vector  ARMOR_STATS_COURAGE = '0.95 150 4';
+// vector  ARMOR_STATS_ONYX    = '0.5 0 8388608';
+// Note:  Onyx Power uses the same stats as onyx armor.
+// vector  ARMOR_STATS_DEMON   = '0 100 4';
+// vector  ARMOR_STATS_SPIRIT  = '1 25 0';
+// vector  ARMOR_STATS_CHAOS   = '0 200 65536';
+// Note:  Ninja uses the same stats as green armor.
 
 //----------------------------------------------------------------------
 float HEAL_GEM = 5;				// Small

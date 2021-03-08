@@ -518,7 +518,7 @@ void() mino_summon7 =[ $howl13, mino_summon8 ] {mino_sumeffect();
 	self.pos1 = self.origin + self.view_ofs + v_forward*64 + v_up*32;
 	self.aflag = find_minionspace(self.pos1);
 	
-	// If the spawn locaiton all clear, spawn something!
+	// If the spawn location all clear, spawn something!
 	if (self.aflag == TRUE) {
 		minion_gargoyle(self.pos1, self.enemy);
 		self.pos2 = self.pos1 - '0 0 16';	// Origin of gargoyle
@@ -554,9 +554,10 @@ void() mino_magic =
 		if (miniondef.classtype == CT_CACHEGARGOYLE) {
 			setup_minionsupport();
 		} else {
+			setup_minionsupport(); // Set them up anyways, Qmaster added precaches to main monster_minotaur function
 			// If template no available, warn and remove feature
-			dprint("\b[MINOTAUR]\b Cannot find minion template!\n");
-			self.spawnflags = self.spawnflags - MON_MINOTAUR_MINIONS;
+			// dprint("\b[MINOTAUR]\b Cannot find minion template!\n");
+			// self.spawnflags = self.spawnflags - MON_MINOTAUR_MINIONS;
 		}
 	}
 	
@@ -830,5 +831,12 @@ void() monster_minotaur = {
 
 void() monster_shuffler = {
 	if (self.deathstring == "")  self.deathstring = " was gored by a Gauroch\n"; // from Kinn
+	self.classname = "monster_minotaur";
+	monster_minotaur();
+};
+
+void() monster_yakman = {
+	if (self.deathstring == "")  self.deathstring = " was crushed by a Yakman\n"; // from Quake 1.5
+	self.classname = "monster_minotaur";
 	monster_minotaur();
 };

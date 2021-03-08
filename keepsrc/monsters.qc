@@ -46,6 +46,7 @@ float BBOX_JUSTICE = 23;	// -16 -16 -24, 16 16 56	Vol 32 x 32 x 80
 float BBOX_PSYDER = 24;		// -32 -32 -24, 32 32 160	Vol 64 x 64 x 184
 float BBOX_XMASSIVE = 25;	// -32 -32 -24, 32 32 80	Vol 64 x 64 x 104
 float BBOX_BRKTINY = 26;	// -12 -12 -24, 12 12 16	Vol 24 x 24 x 40
+float BBOX_SHALBOSS = 27;	// -46 -40 -24, 46 40 100   Vol 92 x 80 x 124
 
 float BBOX_CUSTOM = 99;		// Custom size set already
 
@@ -586,12 +587,20 @@ void(entity targ, float deathfunc, float gibdeath) monster_remove_kill =
 			// If a monster marked with no monster count dies
 			// update HUD totals to reflect death properly
 			if (targ.nomonstercount) {
-				total_monsters = total_monsters + 1;
-				update_hud_totals(HUD_MONSTERS);
+				if (targ.classgroup == CG_HARMLESS) {
+					total_denizens = total_denizens + 1;
+				} else {
+					total_monsters = total_monsters + 1;
+					update_hud_totals(HUD_MONSTERS);
+				}
 			}	
 			// Update global monster death totals
-			killed_monsters = killed_monsters + 1;
-			WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+			if (targ.classgroup == CG_HARMLESS) {
+				killed_denizens = killed_denizens + 1;
+			} else {
+				killed_monsters = killed_monsters + 1;
+				WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+			}
 
 			// Stop all animation think functions
 			targ.think = SUB_Null;
@@ -829,8 +838,12 @@ void() monster_spawn =
 	if (self.delaymonstercount) {
 		// Reset both monster count conditions
 		self.nomonstercount = self.delaymonstercount = 0;
-		total_monsters = total_monsters + 1;
-		update_hud_totals(HUD_MONSTERS);
+		if (self.classgroup == CG_HARMLESS) {
+			total_denizens = total_denizens + 1;
+		} else {
+			total_monsters = total_monsters + 1;
+			update_hud_totals(HUD_MONSTERS);
+		}
 	}
 	
 	// Restore any effect flags settings (various dlight glows)
@@ -1185,6 +1198,8 @@ void() monster_bbox =
 		{ self.bbmins = '-20 -20 -36'; self.bbmaxs = '20 20 74'; }
 	else if (self.bboxtype == BBOX_ANACONDA)
 		{ self.bbmins = '-32 -32 -16'; self.bbmaxs = '32 32 174'; }
+	else if (self.bboxtype == BBOX_SHALBOSS)
+		{ self.bbmins = '-46 -40 -24'; self.bbmaxs = '46 40 100'; }
 	
 	// default bounding box = TALL
 	else { self.bbmins = '-16 -16 -24'; self.bbmaxs = '16 16 40'; }
@@ -1220,6 +1235,9 @@ float() monster_checkspawn =
 	}
 
 	// No more execeptions
+
+	// Let's do some global checks, whaddya say?
+	if (self.brain & 32) self.spawnflags = self.spawnflags | MON_SPAWN_DELAY; // Nehahra support
 	return FALSE;
 };
 
@@ -1288,10 +1306,15 @@ void() monster_start = {
 			dprint("\b[MONSTER]\b ("); dprint(self.targetname);
 			dprint(") - no monster count\n");
 		}
+	} else {
+		// Default state - update monster total
+		// HUD update done with client setup
+		if (self.classgroup == CG_HARMLESS) {
+			total_denizens = total_denizens + 1;
+		} else {
+			total_monsters = total_monsters + 1;
+		}
 	}
-	// Default state - update monster total
-	// HUD update done with client setup
-	else total_monsters = total_monsters + 1;
 	
 	//----------------------------------------------------------------------
 	// Detect monster armour map hack

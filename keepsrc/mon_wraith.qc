@@ -641,9 +641,10 @@ void() wraith_magic =
 		miniondef = find(world,classname,"monster_wraithminion");
 		if (miniondef.classtype == CT_CACHESPIDER) setup_minionsupport();
 		else {
+			setup_minionsupport(); // Set them up anyways, Qmaster added precaches to main monster_wraith function
 			// If template no available, warn and remove feature
-			dprint("\b[WRAITH]\b Cannot find spider template!\n");
-			self.spawnflags = self.spawnflags - MON_WRAITH_SPIDERS;
+			// dprint("\b[WRAITH]\b Cannot find spider template!\n");
+			// self.spawnflags = self.spawnflags - MON_WRAITH_SPIDERS;
 		}
 	}
 	if (self.spawnflags & MON_WRAITH_SCORPIONS && !self.minion_active) {
@@ -651,9 +652,10 @@ void() wraith_magic =
 		miniondef = find(world,classname,"monster_wraithminion2");
 		if (miniondef.classtype == CT_CACHESCORPION) setup_minionsupport();
 		else {
+			setup_minionsupport(); // Set them up anyways, Qmaster added precaches to main monster_wraith function
 			// If template no available, warn and remove feature
-			dprint("\b[WRAITH]\b Cannot find scorpion template!\n");
-			self.spawnflags = self.spawnflags - MON_WRAITH_SCORPIONS;
+			// dprint("\b[WRAITH]\b Cannot find scorpion template!\n");
+			// self.spawnflags = self.spawnflags - MON_WRAITH_SCORPIONS;
 		}
 	}
 	
@@ -901,12 +903,61 @@ void() monster_wraith = {
 		self.exactskin = WRAITH_SKINPURPLE;			// Purple/Blood skin
 		self.poisonous = FALSE;						// Must be off for scorpion wraith
 		self.part_style = PARTICLE_BURST_PURPLE;	// Purple cloud
+
+		// Precache scorpion stuff for monster_wraithminion2
+		precache_model ("progs/mon_scorpion.mdl");
+		precache_model ("progs/h_scorpion.mdl");
+		precache_model ("progs/gib_scorpleg.mdl");
+		precache_model ("progs/gib_scorptail.mdl");		
+		precache_model ("progs/gib_scorpclaw.mdl");
+		precache_sound("scorpion/jumpattack1.wav");
+		precache_sound("scorpion/jumpattack2.wav");
+		precache_sound("scorpion/jumphit.wav");
+		precache_sound("scorpion/tailfire1.wav");
+		precache_sound("scorpion/tailfire2.wav");
+		precache_sound("scorpion/tailattack1.wav");
+		precache_sound("scorpion/tailattack2.wav");
+		precache_model (MODEL_PROJ_SCORP);		// Large green spike
+		precache_sound ("scorpion/idle1.wav");
+		precache_sound ("scorpion/idle2.wav");
+		precache_sound ("scorpion/sight1.wav");
+		precache_sound ("scorpion/warning1.wav");
+		precache_sound ("scorpion/warning2.wav");
+		precache_sound ("scorpion/hiss.wav");
+		precache_sound("scorpion/pain1.wav");
+		precache_sound("scorpion/pain2.wav");
+		precache_sound("scorpion/death1.wav");
+		precache_sound("scorpion/clawattack1.wav");
+		precache_sound("scorpion/clawattack2.wav");
 	}
 	else if (self.spawnflags & MON_WRAITH_SPIDERS) {
 		self.exactskin = WRAITH_SKINGREEN;				// Poison/Green skin
 		if (self.poisonous < 0) self.poisonous = FALSE;	// Poison debuff
 		else self.poisonous = TRUE;
 		self.part_style = PARTICLE_BURST_GREEN;			// Poison cloud
+
+		// Precache spider stuff for monster_wraithminion
+		precache_model ("progs/ad171/mon_spiderg.mdl");
+		precache_model ("progs/ad171/h_spiderg.mdl");
+		precache_model ("progs/ad171/gib_spidlegg.mdl");
+		precache_model ("progs/ad171/gib_spidbodyg.mdl");		
+		precache_model (MODEL_PROJ_SPID);			// Spit Projectile
+		precache_model ("progs/ad171/mon_spiderb.mdl");
+		precache_model ("progs/ad171/h_spiderb.mdl");
+		precache_model ("progs/ad171/gib_spidlegb.mdl");
+		precache_model ("progs/ad171/gib_spidbodyb.mdl");
+		precache_sound ("spider/idle1.wav");
+		precache_sound ("spider/hiss2.wav");
+		precache_sound ("spider/idle1.wav");
+		precache_sound ("spider/hiss3.wav");
+		precache_sound("spider/death1.wav");
+		precache_sound("spider/pain1.wav");
+		precache_sound("spider/pain2.wav");
+		precache_sound("spider/miss.wav");
+		precache_sound("spider/attackmunch.wav");
+		precache_sound("spider/attacktear.wav");
+		precache_sound("spider/jumpland.wav");
+		precache_sound ("spider/hiss1.wav");
 	}
 	else {
 		self.exactskin = WRAITH_SKINBLUE;	// Blue/Red skin

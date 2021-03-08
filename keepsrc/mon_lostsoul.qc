@@ -70,7 +70,7 @@ void(float fstate) lost_update =
 	// Update glowing eyes! (skin types = 0,1,2,3,2,1)
 	if (self.t_length < time) {
 		// fire particle quantity linked to AI state
-		particle_explode(self.origin+'0 0 12', self.state, 1, PARTICLE_BURST_YELLOW, PARTICLE_BURST_LOSTUP);
+		particle_explode(self.origin+'0 0 12', self.state, 1, PARTICLE_BURST_FIRE, PARTICLE_BURST_LOSTUP);  // Was Yellow, changed to Fire color for ijed. //ijed: Incredibly subtle change to differentiate them from rockets / Skullwiz ranged attack slightly																																																	  
 		self.t_length = time + 0.2;
 		self.exactskin = self.exactskin + 1;
 		if (self.exactskin > 5) self.exactskin = 0;

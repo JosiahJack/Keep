@@ -553,9 +553,10 @@ void() skullw_magic =
 		miniondef = find(world,classname,"monster_skullwizminion");
 		if (miniondef.classtype == CT_CACHELOSTSOUL) setup_minionsupport();
 		else {
+			setup_minionsupport(); // Set them up anyways, Qmaster added precaches to main monster_skullwiz function
 			// If template no available, warn and remove feature
-			dprint("\b[SKULLWIZ]\b Cannot find minion template!\n");
-			self.spawnflags = self.spawnflags - MON_SKULLWIZ_MINIONS;
+			// dprint("\b[SKULLWIZ]\b Cannot find minion template!\n");
+			// self.spawnflags = self.spawnflags - MON_SKULLWIZ_MINIONS;
 		}
 	}
 	
@@ -639,6 +640,12 @@ void()	skullw_painB11	=[	$painA11,	skullw_run1	] 	{};
 //----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) skullw_pain =
 {
+	if (random() < skill * 0.1)	//ijed: make them blink sometimes, 10% chance per skill above easy
+	{		
+		//bprint("SkullWiz Telepain\n");
+		skullw_tele1();
+		return;
+	}
 	// Cannot feel pain when phased out
 	if (self.bodyphased == MONAI_SKULLWINVIS) return;
 	
@@ -662,7 +669,7 @@ void() skullw_fadeaway =
 {
 	//	sound (self, CHAN_BODY, "skullwiz/fadeaway.wav", 1, ATTN_NORM);
 	// Particle burst upwards as robes fade away
-	particle_explode(self.origin, 100, 3, self.part_style, PARTICLE_BURST_SKULLUP);
+	//particle_explode(self.origin, 100, 3, self.part_style, PARTICLE_BURST_SKULLUP);	//ijed: why call attention to a post-post death sequence?
 	self.think = model_fade;
 	self.nextthink = time + 0.1;
 	self.ltime = self.nextthink;
@@ -672,7 +679,8 @@ void() skullw_fadeaway =
 void() skullw_explode =
 {
 	self.health = MON_NOGIBVELOCITY;	// Low gib directional modifier
-	particle_explode(self.origin, 100, 3, PARTICLE_BURST_WHITE, PARTICLE_BURST_SKULLUP);
+	//particle_explode(self.origin, 100, 3, PARTICLE_BURST_WHITE, PARTICLE_BURST_SKULLUP);
+	particle_explode(self.origin, 100, 3, PARTICLE_BURST_RED, PARTICLE_BURST_SKULLUP);	//ijed: made them all die red which just seemed to fit better than white tbh																																							
 	self.gib2skin = self.exactskin;		// Update book skin
 	ThrowGib(11,1); ThrowGib(12,1);		// Throw head and book
 };
@@ -726,7 +734,7 @@ void() skullw_die =
 	// Regular death, collapse and fade away
 	else {
 		// Large particle explosion upwards
-		particle_explode(self.origin, 100, 3, self.part_style, PARTICLE_BURST_SKULLUP);
+		particle_explode(self.origin, 100, 3, self.part_style, PARTICLE_BURST_SKULLUP);  //ijed: These were confusing, making it look like it had teleported when dead.  Kept and tweaked colors below -Qmaster
 		skullw_death1();
 	}
 };
@@ -776,6 +784,15 @@ void() monster_skullwiz = {
 
 	self.sight_sound = "skullwiz/sight.wav";
 	precache_sound (self.sight_sound);
+
+	// Precache minion stuff anyway from monster_skullwizminion
+	precache_model ("progs/ad171/mon_lostsoul.mdl");
+	precache_sound ("lostsoul/idle1.wav");
+	precache_sound ("lostsoul/idle2.wav");
+	precache_sound ("lostsoul/charge.wav");		// charge hiss/scream
+	precache_sound ("lostsoul/bite.wav");		// chomp with teeth
+	precache_sound ("lostsoul/pain1.wav");
+	precache_sound ("lostsoul/death.wav");
 
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
@@ -842,9 +859,9 @@ void() monster_skullwiz = {
 	
 	// Make sure the particles match the skin
 	if (self.exactskin == 1) self.part_style = PARTICLE_BURST_GREEN;
-	else if (self.exactskin == 2) self.part_style = PARTICLE_BURST_PURPLE;
+	else if (self.exactskin == 2) self.part_style = PARTICLE_BURST_RED; // Was purple, changed for ijed to make more readable and not confuse with teleport
 	else if (self.exactskin == 3) self.part_style = PARTICLE_BURST_GREEN;
-	else if (self.exactskin == 4) self.part_style = PARTICLE_BURST_WHITE;
+	else if (self.exactskin == 4) self.part_style = PARTICLE_BURST_RED; // Was white, changed for ijed to make more readable and not confuse with teleport
 	else self.part_style = PARTICLE_BURST_RED;
 			
 	monster_start();
@@ -872,6 +889,10 @@ void() info_skullwiz_link =
 	
 	// Teleport destination already been linked
 	if (self.enemy) return;
+	if (self.target == self.targetname) {
+		self.enemy = self;
+		return;
+	}
 	
 	// The master entity is the start of the chain
 	// the currlink is a link in the chain

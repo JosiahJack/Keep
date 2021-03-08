@@ -1,0 +1,16 @@
+Music for "The NEHAHRA Project" [format .xm]
+
+SongList:
+
+NEH1.XM Solarfall- By Purusa
+NEH2.XM Patala- By Purusa
+NEH3.XM Thou Art Forged- By Purusa
+NEH4.XM Techno-Magic- By Purusa
+NEH5.XM Target Locked- By Purusa
+NEH6.XM Mountains of Might- By Purusa
+NEH7.XM Waste & Desolation- By Purusa
+NEH8.XM Delicious Carnage- By Purusa
+NEHEND.s3m - By Purusa
+ATMOS2.XM - By Damaul
+
+(c) 2000 by Purusa

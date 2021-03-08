@@ -11,6 +11,9 @@
 
 .float		rotting;			// Rotting debuff status (DoT)
 .float		rotting_time;		// Timer (1s tick) for health update
+
+.float		regen_time; 
+
 // Has to be defined early in defscustom.qc because of the randomizer.qc
 //.float		rotting_qty;		// Total ammount to rot down (DoT)
 
@@ -236,6 +239,31 @@ void() ClientDeBuff =
 		}
 		// Reset (if over max) HP and remove inventory item
 		if (self.health <= self.max_health) ResetDebuffRotting(self);
+	}
+
+	// Check for regeneration powerups (HoT).  Berserker and amulet of regeneration do not stack, only 1 healing amount
+	if (self.perms & POW_REGEN || self.perms & POW_ARMORBERSERKER || self.perms & POW_REGENLESSER) {
+		// Is it time for a debuff update
+		if (self.regen_time < time) {
+			if (self.health < self.max_health) {
+				// Reset rotting tick timer
+				if (self.perms & POW_REGENLESSER && !(self.perms & POW_REGEN) || (self.perms & POW_ARMORBERSERKER))
+					self.regen_time = time + 3;
+				else
+					self.regen_time = time + 1;
+				// Directly subject health from player
+				if (self.rotting_qty < 1) self.rotting_qty = 1; // Guarantee at least 1 health increase
+				self.health = self.health + self.rotting_qty;
+				if (self.health > self.max_health) self.health = self.max_health;
+			}
+		}
+	}
+
+	if (self.perms & POW_ARMORSPIRIT && (self.items2 & IT2_ARMOR1 || self.items2 & IT2_ARMOR2 || self.items2 & IT2_ARMOR3)) {
+		if (self.repairtime < time) {
+			self.repairtime = time + 1;
+			if (self.armorvalue < 100) self.armorvalue = self.armorvalue + 1; // recharge armor
+		}
 	}
 	
 	// Don't need sound or visual updates for cinematic stuff

@@ -1,0 +1,18 @@
+MOD MUSIC FIX
+For Nehahra Episodes 1, 2, 3
+-----------------------------------
+By Mindcrime
+Feb. 4, 2001
+-----------------------------------
+Some may have noticed the music files don't play on neh1m9, neh2m6, and nehend.
+This fixes this, if you unzip the files and pay attention to the filepaths.
+
+atmos2.xm
+nehend.s3m
+
+These go in your quake/nehahra/mods dir, not Paked, the engine apparently does
+not recognize sound files paked up.
+
+Gracias and Enjoy.
+
+--Mindcrime

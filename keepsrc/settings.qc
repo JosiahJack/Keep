@@ -1503,13 +1503,76 @@ void() CheatCommand =
 	self.ammo_voidshards = 100;	
 	self.ammo_elemental = 100;	
 
-	self.moditems = self.moditems | IT_UPGRADE_AXE | IT_UPGRADE_SSG | IT_UPGRADE_LG | IT_ICE | IT_MACE | IT_VOID_STAFF | IT_FLAK | IT_SANGUINATORS | IT_SCIMITAR | IT_RAPIER;
+	self.moditems = self.moditems | IT_UPGRADE_AXE | IT_UPGRADE_SSG | IT_ICE | 
+									IT_MACE | IT_VOID_STAFF | IT_FLAK | IT_SANGUINATORS | 
+									IT_SCIMITAR | IT_RAPIER; // Left out IT_UPGRADE_LG since I like the LG better -Qmaster
 	self.items = self.items | IT_AXE | IT_SHOTGUN | IT_SUPER_SHOTGUN | IT_NAILGUN |
-				IT_SUPER_NAILGUN | IT_GRENADE_LAUNCHER | IT_ROCKET_LAUNCHER | IT_LIGHTNING | IT_LAVA_NAILGUN | IT_LAVA_SUPER_NAILGUN | IT_MULTI_GRENADE | IT_MULTI_ROCKET | IT_PLASMA_GUN | IT_EXTRA_WEAPON;
-	self.items2 = self.items2 | IT2_ARMOR3 | IT2_PROXIMITY_GUN | IT2_MJOLNIR | IT2_LASER_CANNON | IT2_GRAPPLE | IT2_CROSS;// | IT2_WAND;
+				IT_SUPER_NAILGUN | IT_GRENADE_LAUNCHER | IT_ROCKET_LAUNCHER | IT_LIGHTNING | 
+				IT_LAVA_NAILGUN | IT_LAVA_SUPER_NAILGUN | IT_MULTI_GRENADE | IT_MULTI_ROCKET | 
+				IT_PLASMA_GUN | IT_EXTRA_WEAPON;
+	self.items2 = self.items2 | IT2_ARMOR3 | IT2_PROXIMITY_GUN | IT2_MJOLNIR | IT2_LASER_CANNON | 
+								IT2_GRAPPLE | IT2_CROSS | IT2_CHAINLIGHTNING;// | IT2_WAND;
+	// self.perms = self.perms | IT_CHAINSAW | IT_BLASTER; // Left these out since they aren't always applicable to every map -Qmaster
 	self.weapon = IT2_LASER_CANNON;
 	self.armorvalue = 150;
 	W_SetCurrentAmmo (self);
+};
+
+void() TogglePowerShield = {
+	if (!(self.perms & POW_ARMORONYXPOWER)) { sprint(self, "Player has no Power Shield to activate.\n"); return; } // no power shield on player
+	if (self.ammo_cells < 1) { sprint(self, "Not enough cells to activate Power Shield.\n"); return; } // no power shield on player
+	if (self.powershield_active) {
+		self.powershield_active = FALSE;
+		sound (self, CHAN_AUTO, "me/me_soff.wav", 1, ATTN_NORM);
+		sprint(self, "Power Shield deactivated.\n");
+	} else {
+		self.powershield_active = TRUE;
+		sound (self, CHAN_AUTO, "me/me_son.wav", 1, ATTN_NORM);
+		sprint(self, "Power Shield activated.\n");
+	}
+	stuffcmd (self, "bf\n");
+};
+
+void() ToggleSpiritShroud = {
+	if (!(self.perms & POW_ARMORSPIRIT)) { sprint(self, "Player has no Spirit Shroud to activate.\n"); return; } // no power shield on player
+	if (self.invisible_finished == POWERUP_VANIA || self.invisible_finished > time) { centerprint(self,"Invisibility already active!\n saving Spirit Shroud for later."); return; }
+	spawn_tfog (self.origin);
+	self.invisible_finished = time + POWERUP_TIMER;
+	self.invisible_time = TRUE;
+	self.items = self.items & IT_INVISIBILITY;
+	self.notrace = 1;
+	sound (self, CHAN_AUTO, SOUND_ARTINV1, 1, ATTN_NORM);
+	self.perms = self.perms - (self.perms & POW_ARMORSPIRIT); // use it up
+	centerprint(self,"Spirit Shroud raised.\nYou vanish in a puff of smoke!");
+	stuffcmd (self, "bf\n");
+};
+
+void() ToggleBerserkerArmor = {
+	if (!(self.perms & POW_ARMORBERSERKER)) { sprint(self, "Player has no Berserker Armor to activate.\n"); return; } // no power shield on player
+	if (self.super_damage_finished == POWERUP_VANIA || self.super_damage_finished > time) { centerprint(self,"Quad already active!\n saving Berserker for later."); return; }
+	sound (self, CHAN_AUTO, SOUND_ARTQUAD1, 1, ATTN_NORM);
+	self.super_damage_finished = time + POWERUP_TIMER;		
+	self.super_sound = time + 1;
+	self.items = self.items & IT_QUAD;
+	self.super_time = TRUE;
+	self.perms = self.perms - (self.perms & POW_ARMORBERSERKER); // use it up
+	centerprint(self,"Berserker Armor used!\nYou feel like a killing machine!");
+	stuffcmd (self, "bf\n");
+};
+
+void(entity targ) ResetDebuffSystem;
+
+void() ToggleDragonArmor = {
+	if (!(self.perms & POW_ARMORDRAGON)) { sprint(self, "Player has no Dragonscale Armor to activate.\n"); return; } // no power shield on player
+	if (self.invincible_finished == POWERUP_VANIA || self.invincible_finished > time) { centerprint(self,"Invincibility already active!\n saving Dragonscale for later."); return; }
+	sound (self, CHAN_AUTO, SOUND_ARTPENT1, 1, ATTN_NORM);
+	self.invincible_finished = time + POWERUP_TIMER;
+	self.items = self.items & IT_INVULNERABILITY;
+	self.invincible_time = TRUE;
+	ResetDebuffSystem(other);
+	self.perms = self.perms - (self.perms & POW_ARMORDRAGON); // use it up
+	centerprint(self,"Dragonscale Armor used!\nYou are invincible for a time!");
+	stuffcmd (self, "bf\n");
 };
 
 /*======================================================================

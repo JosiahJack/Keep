@@ -823,6 +823,13 @@ void() item_health =
 	item_start ();
 };
 
+// Redirect for Nehahra medieval healthkit
+void() item2_health = {
+	self.skin_override = 2;
+	self.classname = "item_health";
+	item_health();
+};
+
 //----------------------------------------------------------------------
 /*QUAKED item_healthvial (0.3 0.3 1) (-8 -8 0) (8 8 32) x x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/health_5.mdl"); }
@@ -872,6 +879,7 @@ void() item_healthvial =
 
 // Used to be called a gem, renamed to vial
 void() item_healthgem = { item_healthvial(); }
+void() item_health_potion = { item_healthvial(); } // From drake, redirect
 
 //======================================================================
 // armor_touch
@@ -886,7 +894,9 @@ float(entity armplayer, entity armitem) armor_pickupcondition =
 	if (arm1 >= arm2) return TRUE;
 	else return FALSE;
 };
+void() armor_touch;
 
+/*
 //----------------------------------------------------------------------
 void() armor_touch =
 {
@@ -898,7 +908,7 @@ void() armor_touch =
 	
 	other.armortype = self.armortype;
 	other.armorvalue = self.armorvalue;
-	other.items2 = other.items2 - (other.items2 & (IT2_ARMOR1 | IT2_ARMOR2 | IT2_ARMOR3)) + self.items2;
+	if (self.items2) other.items2 = other.items2 - (other.items2 & (IT2_ARMOR1 | IT2_ARMOR2 | IT2_ARMOR3)) + self.items2;
 
 	sprint (other, "You got the ");
 	sprint (other, self.netname);
@@ -916,12 +926,12 @@ void() armor_touch =
 	item_finished();
 	check_item_respawn();
 };
-
+*/
 //----------------------------------------------------------------------
 void() item_armor_setup =
 {
 	self.classgroup = CG_ARMOR;
-	self.part_active = PARTICLE_STYLE_ARMOR;
+	if (!self.part_active) self.part_active = PARTICLE_STYLE_ARMOR;
 	self.touch2 = armor_touch;
 	self.bbmins = '-16 -16 0';
 	self.bbmaxs = '16 16 56';
@@ -967,7 +977,7 @@ void() item_armor1 =
 
 	self.classtype = CT_ARMOR1;
 	self.items2 = IT2_ARMOR1;
-	if (self.netname == "") self.netname = "Green Armour";
+	if (self.netname == "") self.netname = "Green Armor";
 	if (self.armortype <= 0) self.armortype = ARMOR_GRN_TYPE;
 	if (self.armorvalue <= 0) self.armorvalue = ARMOR_GRN_VALUE;
 	self.respawn_effect = TRUE;
@@ -1018,12 +1028,12 @@ void() item_armor2 =
 
 	// Setup alternative colour
 	if (self.spawnflags & ARMOR_BLUE) {
-		if (self.netname == "") self.netname = "Blue Armour";
+		if (self.netname == "") self.netname = "Blue Armor";
 		self.respawn_style = PARTICLE_BURST_BLUE + PARTICLE_BURST_RING;
 		self.skin = 3;
 	}
 	else {
-		if (self.netname == "") self.netname = "Yellow Armour";
+		if (self.netname == "") self.netname = "Yellow Armor";
 		self.respawn_style = PARTICLE_BURST_YELLOW + PARTICLE_BURST_RING;
 		self.skin = 1;
 	}
@@ -1065,7 +1075,7 @@ void() item_armorInv =
 
 	self.classtype = CT_ARMORINV;
 	self.items2 = IT2_ARMOR3;
-	if (self.netname == "") self.netname = "Red Armour";
+	if (self.netname == "") self.netname = "Red Armor";
 	if (self.armortype <= 0) self.armortype = ARMOR_RED_TYPE;
 	if (self.armorvalue <= 0) self.armorvalue = ARMOR_RED_VALUE;
 	self.respawn_effect = TRUE;
@@ -2516,6 +2526,7 @@ void() sigil_touch =
 	
 	// Add rune to server! not player
 	update_configflag(self.customkey, TRUE);
+	if (other.flags & FL_CLIENT) other.serverflagstemp = other.serverflagstemp | self.customkey;
 
 	// DP has special effect for sigil being picked up
 	if (ext_dppart) pointparticles(particleeffectnum(DPP_SIGILPICKUP), self.origin, '0 0 0', 1);
@@ -3608,16 +3619,8 @@ void() BackpackTouch =
 };
 
 //----------------------------------------------------------------------
-void() DropBackpack =
-{
+void() DropBackpack = {
 	local entity item;
-
-	//----------------------------------------------------------------------
-	// Check for player because of other items
-	if (self.classtype != CT_PLAYER && self.classtype != CT_MONGREMLIN) {
-		if (!(self.ammo_shells + self.ammo_nails + self.ammo_rockets + self.ammo_cells + self.ammo_lava_nails + self.ammo_plasma + self.ammo_multi_rockets + self.ammo_bolts + self.ammo_poison + self.ammo_bloodcrystals + self.ammo_voidshards + self.ammo_elemental))
-			return;	// nothing in it
-	}
 
 	item = spawn();
 	item.classtype = CT_AMMOPACK;
@@ -3904,6 +3907,8 @@ void() item_backpack =
 	self.think = item_backpack_setup;
 	self.nextthink = time + 0.1 + random();
 };
+
+void() item_artifact_super_pack = { self.classname = "item_backpack"; item_backpack(); };
 
 //----------------------------------------------------------------------
 void() item_backpack_armour =

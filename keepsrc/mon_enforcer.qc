@@ -356,7 +356,7 @@ void() monster_base_enforcer =
 	
 	self.mdl = "progs/mon_enforcer.mdl";
 	self.headmdl = "progs/h_enforcer.mdl";
-	self.gib1mdl = "progs/ad171/w_enforcergun.mdl";	// Unique weapon
+	if (!self.gib1mdl) self.gib1mdl = "progs/ad171/w_enforcergun.mdl";	// Unique weapon
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
 	precache_model (self.gib1mdl);

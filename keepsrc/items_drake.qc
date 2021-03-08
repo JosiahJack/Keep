@@ -106,7 +106,7 @@ void() item_artifact_optimizer = {
 	self.noise = "items/optimize.wav";
 	precache_sound (self.noise);
     self.netname = "Shotgun Optimizer";
-	self.items = 0;
+	self.perms = POW_SHOTTYMAN;
 	self.classtype = CT_ARTOPTIMIZER;
 	self.part_active = PARTICLE_STYLE_ARMOR;
 	self.respawn_style = PARTICLE_BURST_YELLOW + PARTICLE_BURST_CENTER;
@@ -352,4 +352,209 @@ void() item_treasure_gem =
 //============
 void() item_treasure_coin = { precache_sound("drake/items/treasure.wav"); self.healtype = 0;  item_treasure();};
 
-void() item_health_potion = {};
+//============
+// --> QUAKED item_armor_exotic (0 .5 .8) (-16 -16 0) (16 16 32)
+// Custom Exotic Armor.
+//
+// spawnflags
+// 1 = Courage armor (reflects missiles, frontal protection only.  Zerstorer)
+// 2 = Dragonscale (red armor that morphs player into dragon.  Soul of Evil)
+// 3 = Onyx armor (indestructible, 50% protection.  Inspired by DoomRL.)
+// 4 = Power armor (as Onyx, plus power shield like in Quake2)
+// 5 = Demonhide (cursed, increases damage taken, but regenerates hp)
+// 6 = Spirit shroud (stealth, absorbs up to 25 damage, self-repairs)
+// 7 = Chaos armor (variable protection, can teleport as Chaos device from Heretic)
+// 8 = Jump armor (green armor with high jump and half health regeneration)
+//============
+void() item_armor_exotic = {
+	// Check for custom model setup?
+	item_debugcustomdl();
+
+	if (self.count > 7) self.count = 7;
+
+	// Courage
+	if (self.count == 0) {
+		// Setup default model
+		if (self.mdl == "") { self.mdl = "progs/drake/courage.mdl"; self.skin = 0; }
+		self.classtype = CT_ARMORCOURAGE;
+		self.perms = POW_ARMORCOURAGE;
+		if (self.netname == "") self.netname = "Courage Armor";
+		if (self.armortype <= 0) self.armortype = ARMOR_COURAGE_TYPE;
+		if (self.armorvalue <= 0) self.armorvalue = ARMOR_COURAGE_VALUE;
+		self.respawn_style = PARTICLE_BURST_WHITE + PARTICLE_BURST_RING;
+		if (!self.part_active) self.part_active = PARTICLE_STYLE_KEYWHITE;
+		if (self.noise == "") self.noise = "items/armor1.wav";
+		precache_sound (self.noise);
+	}
+	if (self.noise == "") self.noise = "items/armor1.wav";
+	precache_sound (self.noise);
+	// Dragonscale
+	if (self.count == 1) {
+		// Setup default model
+		if (self.mdl == "") { self.mdl = "progs/drake/armor.mdl"; self.skin = 6; }
+		self.classtype = CT_ARMORDRAGON;
+		self.perms = POW_ARMORDRAGON;
+		if (self.netname == "") self.netname = "Dragonscale Armor";
+		if (self.armortype <= 0) self.armortype = ARMOR_DRAGON_TYPE;
+		if (self.armorvalue <= 0) self.armorvalue = ARMOR_DRAGON_VALUE;
+		self.respawn_style = PARTICLE_BURST_RED + PARTICLE_BURST_RING;
+		if (!self.part_active) self.part_active = PARTICLE_STYLE_ALTAR;
+		precache_sound (SOUND_ARTPENT1);
+	}
+	// Onyx
+	if (self.count == 2) {
+		// Setup default model
+		if (self.mdl == "") { self.mdl = "progs/drake/armor.mdl"; self.skin = 4; }
+		self.classtype = CT_ARMORONYX;
+		self.perms = POW_ARMORONYX;
+		if (self.netname == "") self.netname = "Onyx Armor";
+		if (self.armortype <= 0) self.armortype = ARMOR_ONYX_TYPE;
+		if (self.armorvalue <= 0) self.armorvalue = ARMOR_ONYX_VALUE;
+		self.respawn_style = PARTICLE_BURST_WHITE + PARTICLE_BURST_RING;
+		if (!self.part_active) self.part_active = PARTICLE_STYLE_BACKPACK;
+	}
+	// Power
+	if (self.count == 3) {
+		// Setup default model
+		if (self.mdl == "") { self.mdl = "progs/drake/armor.mdl"; self.skin = 5; }
+		self.classtype = CT_ARMORONYXPOWER;
+		self.perms = POW_ARMORONYXPOWER;
+		if (self.netname == "") self.netname = "Power Armor";
+		if (self.armortype <= 0) self.armortype = ARMOR_ONYXPOWER_TYPE;
+		if (self.armorvalue <= 0) self.armorvalue = ARMOR_ONYXPOWER_VALUE;
+		self.respawn_style = PARTICLE_BURST_YELLOW + PARTICLE_BURST_RING;
+		if (!self.part_active) self.part_active = PARTICLE_STYLE_KEYGOLD;
+		precache_sound("me/me_soff.wav"); // shield off
+		precache_sound("me/me_son.wav"); // shields up!
+		precache_sound("me/me_fire1.wav"); // shield hit
+		if (self.aflag < 1) self.aflag = AMMO_CELLS_WPN;
+	}
+	// Demon
+	if (self.count == 4) {
+		// Setup default model
+		if (self.mdl == "") { self.mdl = "progs/drake/armor.mdl"; self.skin = 3; }
+		self.classtype = CT_ARMORBERSERKER;
+		self.perms = POW_ARMORBERSERKER;
+		if (self.netname == "") self.netname = "Berserker Armor"; // formerly demonhide
+		if (self.armortype <= 0) self.armortype = ARMOR_BERSERKER_TYPE;
+		if (self.armorvalue <= 0) self.armorvalue = ARMOR_BERSERKER_VALUE;
+		self.respawn_style = PARTICLE_BURST_RED + PARTICLE_BURST_RING;
+		if (!self.part_active) self.part_active = PARTICLE_STYLE_PENT;
+		precache_sound (SOUND_ARTQUAD1);
+	}
+	// Spirit Shroud
+	if (self.count == 5) {
+		// Setup default model
+		if (self.mdl == "") { self.mdl = "progs/drake/armor.mdl"; self.skin = 7; }
+		self.classtype = CT_ARMORSPIRIT;
+		self.perms = POW_ARMORSPIRIT;
+		if (self.netname == "") self.netname = "Spirit Shroud";
+		if (self.armortype <= 0) self.armortype = ARMOR_SPIRIT_TYPE;
+		if (self.armorvalue <= 0) self.armorvalue = ARMOR_SPIRIT_VALUE;
+		self.respawn_style = PARTICLE_BURST_PURPLE + PARTICLE_BURST_RING;
+		if (!self.part_active) self.part_active = PARTICLE_STYLE_SHARP;
+		precache_sound (SOUND_ARTINV1);
+	}
+	// Chaos
+	if (self.count == 6) {
+		// Setup default model
+		if (self.mdl == "") { self.mdl = "progs/drake/armor.mdl"; self.skin = 8; }
+		self.classtype = CT_ARMORCHAOS;
+		self.perms = POW_ARMORCHAOS;
+		if (self.netname == "") self.netname = "Chaos Armor";
+		if (self.armortype <= 0) self.armortype = ARMOR_CHAOS_TYPE;
+		if (self.armorvalue <= 0) self.armorvalue = ARMOR_CHAOS_VALUE;
+		self.respawn_style = PARTICLE_BURST_PURPLE + PARTICLE_BURST_RING;
+		if (!self.part_active) self.part_active = PARTICLE_STYLE_PIERCE;
+	}
+	// Ninja
+	if (self.count == 7) {
+		// Setup default model
+		if (self.mdl == "") { self.mdl = "progs/drake/armor.mdl"; self.skin = 9; }
+		self.classtype = CT_ARMORNINJA;
+		self.perms = POW_ARMORNINJA;
+		if (self.netname == "") self.netname = "Ninja Fall Armor";
+		if (self.armortype <= 0) self.armortype = ARMOR_NINJA_TYPE;
+		if (self.armorvalue <= 0) self.armorvalue = ARMOR_NINJA_VALUE;
+		self.respawn_style = PARTICLE_BURST_GREEN + PARTICLE_BURST_RING;
+		if (!self.part_active) self.part_active = PARTICLE_STYLE_KEYGREEN;
+	}
+	
+	// Setup default model
+	if (self.mdl == "") { self.mdl = "progs/drake/armor.mdl"; } // Just in case
+	precache_model (self.mdl);
+	self.respawn_effect = TRUE;
+	self.respawn_ofs = '0 0 24';
+	item_armor_setup();
+};
+
+// Zerstorer's Courage Armor.
+void() item_armor4 = { self.count = 0; self.classname = "item_armor_exotic"; item_armor_exotic(); };
+
+//============
+// --> QUAKED item_artifact_regeneration (0 .5 .8) (-16 -16 -24) (16 16 32)
+// Raises health to maximum, then activates regeneration.
+// Player can regenerate health at a rate of 50 per minute.
+// Lasts until death or end of level.
+//============
+void() item_artifact_regeneration = {
+	// Check for any random setups
+	if (artifact_checkrandomizer() == TRUE) return;
+
+	// Check for custom model setup?
+	item_debugcustomdl();
+
+	if (self.spawnflags & 1) {
+		if (self.mdl == "") self.mdl = "progs/drake/regen2.mdl";
+		self.perms = POW_REGENLESSER;
+		if (self.netname == "") self.netname = "Lesser Rejuvenator";
+	} else {
+		if (self.mdl == "") self.mdl = "progs/drake/regen.mdl";
+		self.perms = POW_REGEN;
+		if (self.netname == "") self.netname = "Rejuvenator";
+	}
+
+	precache_model (self.mdl);
+	if (self.noise == "") self.noise = "drake/items/regen.wav";
+	precache_sound (self.noise);
+
+	self.classtype = CT_ARTREGEN;
+	if (self.skin == 1) {
+		self.exactskin = self.skin;
+		self.part_active = PARTICLE_STYLE_PENT;
+		self.respawn_style = PARTICLE_BURST_RED + PARTICLE_BURST_CENTER;
+		self.respawn_time = 30;
+	} else {
+		self.part_active = PARTICLE_STYLE_SUIT;
+		self.respawn_style = PARTICLE_BURST_GREEN + PARTICLE_BURST_CENTER;
+	}
+	self.respawn_ofs = '0 0 16';
+    artifact_setup();
+};
+
+//============
+// --> QUAKED item_artifact_vitality (0 .5 .8) (-16 -16 -24) (16 16 32)
+// Increases maximum health and health by 25.
+// Maximum health boost lasts until end of level.
+// FIXME:  Make heart like Zelda's Heart Containers (i.e., permanent).
+//============
+void() item_artifact_vitality = {
+	// Check for any random setups
+	if (artifact_checkrandomizer() == TRUE) return;
+
+	// Check for custom model setup?
+	item_debugcustomdl();
+
+	if (self.mdl == "") self.mdl = "progs/drake/life_up.mdl";
+	self.perms = POW_VITALITY;
+	if (self.netname == "") self.netname = "Heart of Darkness";
+	precache_model (self.mdl);
+	if (self.noise == "") self.noise = "drake/items/life_up.wav";
+	precache_sound (self.noise);
+    self.max_health = 25;
+	self.classtype = CT_ARTVITALITY;
+	self.part_active = PARTICLE_STYLE_PENT;
+	self.respawn_style = PARTICLE_BURST_RED + PARTICLE_BURST_CENTER;
+	self.respawn_ofs = '0 0 16';
+    artifact_setup();
+};

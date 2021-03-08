@@ -14,15 +14,14 @@ defskinn.qc
 defsdrake.qc
 defshexen2.qc
 defsaoa.qc
+defsq15.qc
 dpextensions.qc
-//fteextensions.qc
 qrobotdefs.qc
 mathlib.qc
 math.qc
 
 csqc_defs.qc
 csqc_hudkeep.qc
-
 
 subs.qc
 subs_soc.qc
@@ -33,10 +32,10 @@ subs_rubicon.qc
 subs_extras.qc
 subs_hexen2.qc
 subs_aoa.qc
+subs_q15.qc
 estate.qc
 hiprot.qc
 drake_box.qc
-//drake_armor.qc
 globalfog.qc
 chaosmode.qc
 settings.qc
@@ -63,6 +62,7 @@ ai_pathcorner.qc
 fx.qc
 ai_ammoresist.qc
 fx_nehahra.qc
+fx_q15.qc
 hiphorn.qc
 ai_subs.qc
 ai_subskeep.qc
@@ -74,6 +74,7 @@ ai_fly.qc // from Quoth
 ai_hexen2.qc
 ai_hazards.qc
 ai_checkattack.qc
+ai_q15.qc
 
 // Drake stuff and subs used later
 fx_drake.qc
@@ -111,6 +112,7 @@ monsters_drake.qc
 drake_respawn.qc
 items.qc
 items_keep.qc
+drake_armor.qc
 items_drake.qc
 items_aoa.qc
 items_progspn.qc
@@ -144,6 +146,8 @@ misc_quoth.qc
 misc_drake.qc
 misc_textbook.qc
 misc_targetdummy.qc
+scripting_extra.qc // Quake 1.5 actor code
+misc_q15.qc
 traps.qc
 traps_hipnotic.qc
 traps_pendulum.qc
@@ -290,6 +294,7 @@ mon_necro.qc
 mon_cyber.qc
 mon_hlord_dragon.qc // the Dark Lord transforms into a dragon beast
 mon_hlord.qc
+mon_rebel.qc // Crossbow bandit (enforcer derived)
 wand.qc
 
 
@@ -336,10 +341,11 @@ mon_octa.qc // Octopus by madfox
 //mon_lampoon.qc // Lampoon fish by madfox
 //mon_balrog.qc // Balrog by madfox
 //mon_xogre.qc // Elden Ogre by madfox derived from QTest
-//mon_fragy.qc // Frog by madfox
+mon_fragy.qc // Frog by madfox
 //mon_orgulus.qc // Dr. Mhorbo Orgulus by madfox
 //mon_samuri.qc // Samuri Knight by madfox
 //mon_mcorn.qc // Manticore by madfox
+//mon_swarm.qc // Bees by madfox
 
 //CSQC extensions start here.
 //csqc_hud_vanilla.qc
@@ -350,6 +356,14 @@ mon_fangel.qc
 
 // Travail
 //mon_ubs.qc // Uber Scrag
+
+// Quake 1.5
+mon_warlord.qc
+mon_carnivean.qc
+mon_dfury_boss.qc
+mon_shalrath_boss.qc
+mon_reiver.qc
+mon_oldone_tentacle.qc
 
 // Hipnotic spawn - must be LAST
 hipspawn.qc

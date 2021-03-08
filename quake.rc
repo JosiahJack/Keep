@@ -165,7 +165,7 @@ alias upglg "impulse 210"
 //  263168 = particles ON & Shotgun casings OFF (1024 + 262144)
 // 1049600 = particles ON & Enemy/player footsteps OFF (1024 + 1048576)
 //-----------------------------------------------------------
-temp1 1024
+temp1 132096
 
 //-----------------------------------------------------------
 // run a user script file if present (user settings)

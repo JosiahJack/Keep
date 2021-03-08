@@ -1,0 +1,44 @@
+=================================================================================
+Title                  : fans.zip
+Filename               : fanhouse
+Author                 : Madfox
+Email Adress           : catweazel@kpnmail.nl
+Description            : New Quake 1 static
+
+Additional Credits to  : ID Software
+
+=================================================================================
+
+* Play Inormation *
+
+Level Name              : fanhouse
+Single Player           : /
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Models              : yes
+New Sounds              : yes
+qC                      : yes
+
+=================================================================================
+
+* Construction *
+
+Base              : New static for a fan, after animated texture hadn't enough velocity.
+Build Time        : 6 houres
+Editor(s) Used    : Quark6.3/4.07 Wally PSP AM2005 QMLE   
+Known Bugs        : skin texture is a mess, you can look through.sound not looped.
+Specific          : Added a fan4.mdl with a broken frame for toggle, no qc.
+Thanks            : Gypsy for inspiration and support, Qmaster for hints.
+>                 : The Chasm the Rift, original idea and texture.
+GameOption        : Place in a subdirectory Quake -game fanhouse +map fanhouse 
+                
+
+Live long and propsper! Make the Quake1 Universe get bigger and bigger!
+
+================================================================================= 
+
+Madfox 28 juni 2017
+
+=================================================================================
+

@@ -1,0 +1,32 @@
+
+
+DEVELOPMENT NOTES ON DEMOS
+--------------------------
+
+How to play a demo after a map is explained in the devkit1.txt.
+IF you decide you want to try to create a .dem of your own to place
+inbetween maps or whatnot.  There are a few things you should do in
+the demo file itself for it work correctly in Nehahra.
+
+
+AT THE END OF THE DEMO...
+you will want a stuffcmd directly to the console of the following:
+
+NEHX15 1
+
+if you wish it to load a map from there then stuffcmd a
+
+MAP BLAH
+
+message, BLAH being the name of the map.  If it links to another
+demo, then you will want:
+
+PLAYDEMO DEMONAME
+
+------------------
+
+How you accomplish the demo is up to you.  QuakeC knowledge is almost
+a must unless you set it up by other means.
+
+--Mindcrime
+

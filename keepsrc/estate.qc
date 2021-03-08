@@ -90,6 +90,8 @@ Switch the target(s) entity state X
 -------- KEYS --------
 target  : target entities to switch x
 target2 : more target(s) to affect
+target3 : more target(s) to affect
+target4 : more target(s) to affect
 wait    : -1 = will only fire targets once
 delay   : delay before firing (after being triggered)
 cnt     : random amount of time to add to delay
@@ -133,6 +135,8 @@ void() trigger_entitystate_fire =
 	// Check for multiple target commands
 	if (self.target != "") trigger_entitystate_target(self.target);
 	if (self.target2 != "") trigger_entitystate_target(self.target2);
+	if (self.target3 != "") trigger_entitystate_target(self.target3);
+	if (self.target4 != "") trigger_entitystate_target(self.target4);
 
 	// TRIGGER_ONCE functionality
 	if (self.wait < 0) self.attack_finished = time + LARGE_TIMER;

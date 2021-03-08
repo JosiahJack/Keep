@@ -1,0 +1,22 @@
+######################BEGIN######################
+Converted quads in UV map of Cylinder to tris.
+Exporting UV texture coordinates for Cylinder
+Exporting Cylinder
+Header Information
+Ident: IDP3
+Version: 15
+Name: 
+Flags: 0
+Number of Frames: 259
+Number of Tags: 0
+Number of Surfaces: 1
+Number of Skins: 0
+Offset Frames: 108
+Offset Tags: 14612
+Offset Surfaces: 14612
+Offset end: 1116068
+Total Shaders: 1
+Total Triangles: 600
+Total Vertices: 526
+MD3 saved to C:\Quake\jmod\progs\p_shot2.md3
+Elapsed 37.5351 seconds

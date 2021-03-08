@@ -106,6 +106,19 @@ void() info_player_deathmatch = {
 	if (self.targetname != "") self.use = entity_state_use;
 };
 
+//CTF Spawns
+// Red Team - Soviets
+void() info_player_team1 = { 
+	self.classtype = CT_SPAWNDM;
+	self.estate = ESTATE_ON;
+};
+
+// Blue Team - Allies
+void() info_player_team2 = { 
+	self.classtype = CT_SPAWNDM;
+	self.estate = ESTATE_ON;
+};
+
 /*======================================================================
 //QUAKED info_teleport_destination (1 0.5 0.5) (-8 -8 -8) (8 8 32) x
 Destination marker for a teleporter

@@ -138,6 +138,7 @@ void() trigger_bmodel_fire =
 	if (self.classtype == CT_TRIGSECRET) {
 		// If trigger_secret has NOTOUCH then check activator
 		if (!(self.bmodel_act.flags & FL_CLIENT)) return;
+		if (self.bmodel_act.movetype == MOVETYPE_NOCLIP) return;
 		// The trigger can be reset, so double check
 		if (self.count > 0) {
 			found_secrets = found_secrets + self.count;

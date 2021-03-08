@@ -117,6 +117,7 @@ void() main =
 	precache_sound ("misc/menu3.wav");
 
 	precache_sound ("ambience/water1.wav");
+	precache_sound ("ad171/ambience/water1.wav");
 	precache_sound ("ambience/wind2.wav");
 
 	//----------------------------------------------------------------------
@@ -641,7 +642,12 @@ void() worldspawn =
 		addstat(CLIENT_CKEYSKIN1, EV_FLOAT, ckeyskin1); 
 		addstat(CLIENT_CKEYSKIN2, EV_FLOAT, ckeyskin2); 
 		addstat(CLIENT_CKEYSKIN3, EV_FLOAT, ckeyskin3); 
-		addstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4); 	
+		addstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4);
+		addstat(CLIENT_AMMOPOISON, EV_FLOAT, ammo_poison);
+		addstat(CLIENT_USINGHACKBANK, EV_FLOAT, selfweaponismoditems);
+		addstat(CLIENT_RUNEFLAG, EV_FLOAT, serverflagstemp);
+		addstat(CLIENT_DENIZENS, EV_FLOAT, total_denizens);
+		addstat(CLIENT_DENIZENSKILLED, EV_FLOAT, killed_denizens);
 	}
 
 	dprint("\n\b[ENGINE]\b ");

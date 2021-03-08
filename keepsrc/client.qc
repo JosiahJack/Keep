@@ -17,7 +17,6 @@ void() CycleIntermissionCamera;
 void() ClientDeBuff;
 void() ClientPowerups;
 void(entity targ, float powtimer, float novania) ResetPowerSystem;
-void(entity targ) ResetDebuffSystem;
 void() GrappleService;
 
 // client_advinfo.qc
@@ -244,8 +243,20 @@ void() SetNewParms =
 // USED : trigger CHANGE LEVEL
 // Stores a copy of the parm data ready for death/level reset
 ======================================================================*/
-void() SetChangeParms =
-{
+void() SetChangeParms = {
+	local float had_regen;
+
+	// ----------Drake Special exotic armor stuff----------------------------------------------
+    if ((self.perms & POW_ARMORBERSERKER) || (self.perms & POW_REGEN))
+        had_regen = TRUE;
+    else
+        had_regen = FALSE;
+
+	// Reset spirit armor.
+    if (self.perms & POW_ARMORSPIRIT && (self.items2 & IT2_ARMOR1 || self.items2 & IT2_ARMOR2 || self.items2 & IT2_ARMOR3))
+        self.armorvalue = 100;
+	// ----------End Drake exotic armor stuff--------------------------------------------------
+
 	dprint("\n\b[CLIENT]\b SetChangeParms\n");
 	if (self.health < 1) { SetNewParms (); return;	}
 
@@ -259,7 +270,7 @@ void() SetChangeParms =
 	parm11 = self.items2; // save the good stuff!  multi-weapons and such
 	
 	// Make sure player HP is within Max range and not less 50%
-	Client_CheckMaxHP(self, TRUE);
+	Client_CheckMaxHP(self, TRUE, had_regen);
 	parm2 = encode(self.health, self.armortype, self.armorvalue);
 	parm3 = encode(self.ammo_shells,self.ammo_nails,self.ammo_rockets);
 	parm4 = encode(self.ammo_cells,self.ammo_bolts,self.ammo_poison);
@@ -271,7 +282,7 @@ void() SetChangeParms =
 	//parm10 is self.moditems above
 	//parm11 is self.items2 above
 	parm12 = globalstate;
-	parm13 = self.perms;
+	parm13 = self.perms; // Store permanent powerups and Drake stuff
 	parm14 = mapvar[3];
 	parm15 = mapvar[4];
 	parm16 = mapvar[5];
@@ -279,6 +290,7 @@ void() SetChangeParms =
 	// Ok, locking us in as of NOW!  QSS or FTE ENGINES ONLY FROM THIS POINT FORWARD!!!
 	parm17 = encode(self.ammo_bloodcrystals,self.ammo_voidshards,self.ammo_elemental);
 	parm18 = self.selfweaponismoditems; // remember hack for secondary set of 24 weapons!  For AoA and any further weapon additions!
+	parm19 = self.serverflagstemp; // remember runes.  no, what runes?
 };
 
 /*======================================================================
@@ -662,8 +674,9 @@ void() SyncModInventory =
  USED : Load NEW MAP or trigger CHANGE LEVEL
  Not used when loading a saved file or quickload
 ======================================================================*/
-void() DecodeLevelParms =
-{
+void() DecodeLevelParms = {
+	local float had_regen;
+
 	dprint("\b[CLIENT]\b Decode (Level) Parms\n");
 	// Map Variables are active (do not reset)
 	mapvar_cvar = TRUE;
@@ -684,9 +697,6 @@ void() DecodeLevelParms =
 	// Read all current params into client variables
 	self.items = parm1;
 	self.health = decode(parm2,LOW8);
-	// Always make sure the HP read from parm2 is within range!
-	// Parm2 is re-used when map restart command is issued
-	Client_CheckMaxHP(self, FALSE);
 
 	self.armortype = decode(parm2,MID8);
 	self.armorvalue = decode(parm2,HI8);
@@ -710,6 +720,17 @@ void() DecodeLevelParms =
 	self.items2 = parm11;
 	globalstate = parm12;
 	self.perms = parm13;
+
+	// ----------Drake Special exotic armor stuff----------------------------------------------
+    if ((self.perms & POW_ARMORBERSERKER) || (self.perms & POW_REGEN))
+        had_regen = TRUE;
+    else
+        had_regen = FALSE;
+
+	// Always make sure the HP read from parm2 is within range!
+	// Parm2 is re-used when map restart command is issued
+	Client_CheckMaxHP(self, FALSE, had_regen);
+
 	// parm14;
 	// parm15;
 	// parm16;
@@ -740,6 +761,7 @@ void() DecodeLevelParms =
 		mapvar_range(world.mapvar_update);
 
 	self.selfweaponismoditems = parm18;
+	self.serverflagstemp = parm19;
 };
 
 //----------------------------------------------------------------------
@@ -1018,6 +1040,7 @@ void() PutClientInServer =
 	self.show_hostile = 0;
 	self.gibhealth = -40;
 	self.gibbed = FALSE;
+	self.regen_time = FALSE;
 	self.air_finished = time + WATER_AIR;
 	self.dmg = WATER_DAMAGE;
 	self.effects = 0;
@@ -1737,7 +1760,7 @@ void() PlayerPostThink =
 			sound (self, CHAN_BODY, "player/h2ojump.wav", 1, ATTN_NORM);
 			// Check if damage can be applied after hitting water surface
 			// Cannot check jump flag velocity because player hit water
-			if (map_falldmgwater > 0) {
+			if (map_falldmgwater > 0 && !(self.perms & POW_ARMORNINJA)) {
 				T_Damage (self, world, world, map_falldmgwater, DAMARMOR);
 				// Play on different channel so it does not conflict
 				sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
@@ -1745,15 +1768,17 @@ void() PlayerPostThink =
 			}
 		}
 		else if (self.jump_flag < map_fallspeedhigh) {
-			if (map_falldmg > 0) {
-				T_Damage (self, world, world, map_falldmg, DAMARMOR);
-				sound (self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM);
-				self.deathtype = "falling";
+			if (!(self.perms & POW_ARMORNINJA)) {
+				if (map_falldmg > 0) {
+					T_Damage (self, world, world, map_falldmg, DAMARMOR);
+					sound (self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM);
+					self.deathtype = "falling";
+				}
+				else sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
 			}
-			else sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
 		}
 		else
-			sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
+			if (!(self.perms & POW_ARMORNINJA)) sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
 
 		self.jump_flag = 0;
 	}
@@ -1977,20 +2002,23 @@ void() WaterMove =
 				if (self.radsuit_finished > time) self.dmgtime = time + 1;
 				else self.dmgtime = time + 0.2;
 				// Lava damage is crazy high the deeper you go
-				T_Damage (self, world, world, map_hazarddmg_z*self.waterlevel, DAMARMOR);
+				if (self.funcwaterdmg_finished < time) T_Damage (self, world, world, map_hazarddmg_z*self.waterlevel, DAMARMOR);
 			}
 		}
 	}
 	else if (self.watertype == CONTENT_SLIME) {	// do damage
 		if (self.dmgtime < time && self.radsuit_finished < time && self.therm_finished < time) {
 			self.dmgtime = time + 1;
-			T_Damage (self, world, world, map_hazarddmg_y*self.waterlevel, DAMARMOR);
+			if (self.funcwaterdmg_finished < time) T_Damage (self, world, world, map_hazarddmg_y*self.waterlevel, DAMARMOR);
 		}
 	}
 	
 	if ( !(self.flags & FL_INWATER) ) {	 // player enter water sound
-		if (self.watertype == CONTENT_LAVA)
+		if (self.infuncwater) self.funcwaterdmg_finished = time + 1;
+		if (self.watertype == CONTENT_LAVA) {
 			sound (self, CHAN_BODY, "player/inlava.wav", 1, ATTN_NORM);
+			if (self.infuncwater) self.funcwaterdmg_finished = time + 0.2;
+		}
 		if (self.watertype == CONTENT_WATER)
 			sound (self, CHAN_BODY, "player/inh2o.wav", 1, ATTN_NORM);
 		if (self.watertype == CONTENT_SLIME)

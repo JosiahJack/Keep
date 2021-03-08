@@ -34,6 +34,11 @@ void() PrecacheAll = {
 	precache_sound ("items/inv2.wav");
 	precache_sound ("items/suit2.wav");
 	//precache_sound ("items/suit3.wav");
+	precache_sound (SOUND_ARTINV1);
+	precache_sound (SOUND_ARTQUAD1);
+	precache_sound (SOUND_ARTPENT1);
+	precache_sound ("me/me_soff.wav");
+	precache_sound ("me/me_son.wav");
 	precache_sound ("items/wetsuit3.wav");
 	precache_sound ("items/wetsuit3out.wav");
 	precache_sound ("items/wetsuit2.wav");
@@ -115,6 +120,7 @@ void() PrecacheAll = {
 	precache_model ("progs/ad171/proj_bolt1.mdl");
 	precache_model ("progs/ad171/proj_bolt2.mdl");
 	precache_model ("progs/lspike.mdl");
+	precache_model ("progs/madfox/s_bfg.spr");
 	precache_model ("progs/rogue/mervup.mdl");
 	precache_model ("progs/rockup_d.mdl");
 	precache_model ("progs/rockup.mdl");

@@ -1,0 +1,12 @@
+
+This is an updated version of the Nehahra.exe with the old style
+HUD if you were one of those who didn't approve of the Nehahra HUD.
+
+This EXE hasn't been extensively tested.  I do know that the 
+PAUSEDEMO feature freezes up my computer, so you might want to 
+stay clear of that puppy.
+
+Send bug reports to: ender@telefragged.com
+
+--Mindcrime
+May 22, 2001

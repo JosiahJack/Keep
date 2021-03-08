@@ -1238,6 +1238,8 @@ Push the Player, player/ogre grenades and minion eggs!
 This entity cannot be damaged and is always touchable once activated
 
 ======================================================================*/
+float(entity o) AffectedByPhysics;
+
 void() trigger_push_fire =
 {
 	// This is after bmodel _use, _killed and _touch, so any reference
@@ -1257,9 +1259,7 @@ void() trigger_push_fire =
 	
 	// Cool feature is that it will push grenades!
 	// Added player, ogre and minion eggs to the catch
-	if (self.bmodel_act.classtype == CT_PROJ_GL || 
-		self.bmodel_act.classtype == CT_PROJ_GLMON ||
-		self.bmodel_act.classtype == CT_PROJ_MEGG)
+	if (self.bmodel_act.classtype == CT_PROJ_GL || self.bmodel_act.classtype == CT_PROJ_GLMON ||self.bmodel_act.classtype == CT_PROJ_MEGG || self.bmodel_act.classtype == CT_TEMPGIB || self.bmodel_act.classtype == CT_FUNCBREAKOBJ || (self.spawnflags & 8 && AffectedByPhysics(self.bmodel_act)))
 		self.bmodel_act.velocity = self.speed * self.movedir * 10;
 	// Standard push for all bmodel_act living entities
 	else if (self.bmodel_act.health > 0) {

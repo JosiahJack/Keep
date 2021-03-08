@@ -747,10 +747,10 @@ void() monster_archer = {
     //    self.xfl        = XFL_ARMORED;  //| XFL_METALHEAD;
     //}
 
-// As SoE enforcer replacements, give them ammo to drop.
+	// As SoE enforcer replacements, give them ammo to drop.
     if (soul_evil)
 	self.ammo_bolts = 2;
-        //monster_guns (0, 0, 20, 0, 0);
+    //monster_guns (0, 0, 20, 0, 0);
     //self.family = self.family | FAM_ARCHER;
 
     // Always reset Ammo Resistance to be consistent

@@ -535,12 +535,20 @@ void() SUB_UseTargets =
 				// If a monster marked with no monster count dies
 				// update HUD totals to reflect death properly
 				if (t.nomonstercount) {
-					total_monsters = total_monsters + 1;
-					update_hud_totals(HUD_MONSTERS);
+					if (t.classgroup == CG_HARMLESS) {
+						total_denizens = total_denizens + 1;
+					} else {
+						total_monsters = total_monsters + 1;
+						update_hud_totals(HUD_MONSTERS);
+					}
 				}	
 				// Update global monster death totals
-				killed_monsters = killed_monsters + 1;
-				WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+				if (t.classgroup == CG_HARMLESS) {
+					killed_denizens = killed_denizens + 1;
+				} else {
+					killed_monsters = killed_monsters + 1;
+					WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+				}
 			}
 			// Added extra check to prevent player client removal!?!
 			if (!(t.flags & FL_CLIENT)) {
@@ -1200,6 +1208,8 @@ void(vector org) spawn_tfog =
 	WriteCoord (MSG_BROADCAST, org_z);
 };
 
+void(entity targ, float hpminimum, float had_regen) Client_CheckMaxHP;
+
 //----------------------------------------------------------------------
 void() tdeath_touch =
 {
@@ -1212,14 +1222,14 @@ void() tdeath_touch =
 	// Telefrag entity trying to telefrag boss instead!?!
 	if (other.bossflag == TRUE) {
 		if (other.classtype != CT_MONIDSHUB) {
-			T_Damage (self.owner, other, other, MEGADEATH, NOARMOR);
+			T_Damage (self.owner, other, other, MEGADEATH, NOARMOR); // Chaos cannot protect you from bosses!
 			return;
 		}
 	}
 
 	// frag anyone who teleports in on top of an invincible player
 	if (other.flags & FL_CLIENT) {
-		if (other.invincible_finished > time) self.classname = "teledeath2";
+		if (other.invincible_finished > time || other.perms & POW_ARMORCHAOS) self.classname = "teledeath2";
 		// other monsters explode themselves
 		if ( !(self.owner.flags & FL_CLIENT) ) {
 			T_Damage (self.owner, self, self, MEGADEATH, NOARMOR);
@@ -1228,7 +1238,16 @@ void() tdeath_touch =
 	}
 
 	// Sudden death incoming ...
-	if (other.health) T_Damage (other, self, self, MEGADEATH, NOARMOR);
+	if (other.health){
+		if (other.perms & POW_ARMORCHAOS) {
+			other.perms = other.perms - (other.perms & POW_ARMORCHAOS); // use it up
+			other.health = 1;
+			Client_CheckMaxHP(other,TRUE,FALSE); // Set to half health, the 2nd parameter does this normally for level transitions but we reuse it here
+			T_Damage (self.owner, self, self, MEGADEATH, NOARMOR);
+			return;
+		}
+		T_Damage (other, self, self, MEGADEATH, NOARMOR);
+	}
 };
 
 //----------------------------------------------------------------------

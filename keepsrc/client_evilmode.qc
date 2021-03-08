@@ -57,12 +57,14 @@ float() Client_QueryEvilskill =
 //----------------------------------------------------------------------
 // Check HP for max limit and minimum (50%) balance for new games
 //----------------------------------------------------------------------
-void(entity targ, float hpminimum) Client_CheckMaxHP =
+void(entity targ, float hpminimum, float had_regen) Client_CheckMaxHP =
 {
 	// Make sure current HP is not over limit
 	if (targ.health > targ.max_health) targ.health = targ.max_health;
 	if (hpminimum && targ.health < (targ.max_health/2)) 
 		targ.health = targ.max_health/2;
+
+	if (had_regen) targ.health = targ.max_health; // We've regenerated health during the intermission ;)
 };
 
 //----------------------------------------------------------------------
@@ -94,10 +96,12 @@ void() Client_SetupEvilmode =
 	dprint("\b[SKILL4]\b EvilMode Enabled!\n");
 	// Set Evil skill flag
 	Client_SetEvilFlag();
-	self.max_health = HEAL_EVILMAX;
+	if (self.perms & POW_VITALITY) self.max_health = HEAL_EVILMAX + 25;
+	else self.max_health = HEAL_EVILMAX;
+
 	self.mega_health = HEAL_PLAYMAX;
 	// Current HP over limit?
-	Client_CheckMaxHP(self, FALSE);
+	Client_CheckMaxHP(self, FALSE, FALSE);
 	Client_CheckEvilInv(self);
 };
 
@@ -130,7 +134,7 @@ void(float prevskill) Client_ResetEvilmode =
 		}
 	}
 	// Current HP over limit?
-	Client_CheckMaxHP(self, FALSE);
+	Client_CheckMaxHP(self, FALSE, FALSE);
 	// Switching skill levels has consequences
 	if (prevskill >= SKILL_EVIL) { 
 		// Shadow axe is removed and quake axe restored

@@ -34,6 +34,8 @@ $frame walk_17 walk_18 walk_19 walk_20 walk_21 walk_22 walk_23 walk_24
 
 void() army_fire;
 
+float ARMY_LAVANG = 8192;
+
 //======================================================================
 void()	army_stand1	=[	$stand1,	army_stand2	] {monster_idle_sound(); ai_stand();};
 void()	army_stand2	=[	$stand2,	army_stand3	] {ai_stand();};
@@ -239,6 +241,78 @@ void()	army_plasma_atk7 =[	$shoot7, army_plasma_atk8	] {ai_face();SUB_CheckRefir
 void()	army_plasma_atk8 =[	$shoot8, army_plasma_atk9	] {};
 void()	army_plasma_atk9 =[	$shoot9, army_run1	] {ai_face();};
 
+void() army_nailfire = {
+	local	vector	dir, org;
+	local	entity	en;
+	
+	if (!self.enemy) return;
+	if (self.health < 1) return;
+
+	ai_face();
+	en = self.enemy; // fire somewhat behind the player, so a dodging player is harder to hit
+	makevectors(self.angles);
+	
+	self.attack_speed = SPEED_FREDDIEPROJ + (skill * SPEED_FREDDIESKILL);
+	// if (autocvar_skill_adjusted_soldier_aiming) {
+		if (skill == 0) dir = en.origin - en.velocity*0.2; 
+		else if (skill == 1) dir = en.origin - en.velocity*0.15; 
+		else if (skill == 2) dir = en.origin - en.velocity*0.1; 
+		else dir = en.origin - en.velocity*0.05; 
+	//} else { dir = en.origin - en.velocity*0.2; }
+	org = self.origin + v_up*12 - v_right*-12 + v_forward*19;
+	dir = normalize (dir - org);
+
+	self.effects = self.effects | EF_MUZZLEFLASH;
+	if (self.classtype == CT_MONARMYCYBORG) sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
+	else sound (self, CHAN_WEAPON, "weapons/rocket1i_q15.wav", 1, ATTN_NORM);
+	if (self.spawnflags & ARMY_LAVANG)
+		launch_projectile(org, dir, CT_PROJ_MONNG, self.attack_speed);
+	else 
+		launch_projectile(org, dir, CT_PROJ_NG, self.attack_speed);
+};
+
+//----------------------------------------------------------------------
+void()	army_nail1 =[	$shoot1, army_nail2	] { self.pain_finished = time + 1.3; sound (self, CHAN_WEAPON, "soldier/reload.wav", 1, ATTN_NORM);};
+void()	army_nail2 =[	$shoot2, army_nail3	] {ai_face();};
+void()	army_nail3 =[	$shoot3, army_nail4	] {ai_face();};
+void()	army_nail4 =[	$shoot4, army_nail5	] {ai_face();};
+void()	army_nail5 =[	$shoot5, army_nail6	] {ai_face();army_nailfire();};
+void()	army_nail6 =[	$shoot6, army_nail7	] {army_nailfire();};
+void()	army_nail7 =[	$shoot7, army_nail8	] {ai_face();army_nailfire();};
+void()	army_nail8 =[	$shoot8, army_nail9	] {SUB_CheckRefire (army_nail1);};
+void()	army_nail9 =[	$shoot9, army_run1	] {ai_face();};
+
+void() army_supernailload1 =[	$load1, army_supernailload2	] {
+	ai_face();
+	self.pain_finished = time + 1.3;
+	sound (self, CHAN_WEAPON, "soldier/reload.wav", 1, ATTN_NORM);
+};
+void() army_supernailload2 =[$load2, army_supernailload3	] {ai_face();ai_back(2);};
+void() army_supernailload3 =[$load3, army_supernailload4	] {ai_face();ai_back(2);};
+void() army_supernailload4 =[$load4, army_supernailload5	] {ai_face();};
+void() army_supernailload5 =[$load5, army_supernailload6	] {ai_face();};
+void() army_supernailload6 =[$load6, army_supernailload7	] {ai_face();ai_forward(3);};
+void() army_supernailload7 =[$load7, army_supernailload8	] {ai_face();ai_forward(1);};
+void() army_supernailload8 =[$load8, army_supernailload9	] {ai_face();};
+void() army_supernailload9 =[$load9, army_supernailload10	] {ai_face();};
+void() army_supernailload10 =[$load10, army_supernailload11	] {ai_face();};
+void() army_supernailload11 =[$load11, army_supernail1	] {ai_face();};
+
+void()	army_supernail1 =[	$shoot1, army_supernail2	] {ai_face();if (self.classtype == CT_MONARMYCYBORG) ai_run_strafe(16);};
+void()	army_supernail2 =[	$shoot2, army_supernail3	] {ai_face();if (self.classtype == CT_MONARMYCYBORG) ai_run_strafe(16);};
+void()	army_supernail3 =[	$shoot3, army_supernail4	] {ai_face();if (self.classtype == CT_MONARMYCYBORG) ai_run_strafe(16);};
+void()	army_supernail4 =[	$shoot4, army_supernail5	] {ai_face();if (self.classtype == CT_MONARMYCYBORG) ai_run_strafe(16);army_nailfire();};
+void()	army_supernail5 =[	$shoot5, army_supernail6	] {ai_face();if (self.classtype == CT_MONARMYCYBORG) ai_run_strafe(16);army_nailfire();};
+void()	army_supernail6 =[	$shoot6, army_supernail7	] {ai_face();if (self.classtype == CT_MONARMYCYBORG) ai_run_strafe(16);army_nailfire();};
+void()	army_supernail7 =[	$shoot7, army_run1	] {
+	ai_face();
+	if (self.classtype == CT_MONARMYCYBORG) {
+		ai_run_strafe(16);
+		if (random() < 0.25) {army_supernailload1();  return;}
+	}
+	SUB_CheckRefire (army_supernail2);
+};
+
 //======================================================================
 void()	army_pain1	=[	$pain1,		army_pain2	] {};
 void()	army_pain2	=[	$pain2,		army_pain3	] {};
@@ -369,8 +443,9 @@ void() monster_army =
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	self.mdl = "progs/ad171/mon_soldier.mdl";
-	self.headmdl = "progs/ad171/h_soldier.mdl";
+	if (!self.mdl) self.mdl = "progs/ad171/mon_soldier.mdl";
+	//if (self.classname == "monster_army_spike") self.mdl = "progs/q15/soldier1.mdl";
+	if (!self.headmdl) self.headmdl = "progs/ad171/h_soldier.mdl";
 	self.gib1mdl = "progs/ad171/w_soldiergun.mdl";	// Unique weapon
 	self.gib2mdl = "progs/ad171/gib_soldfoot1.mdl";	// Upright foot
 	self.gib3mdl = "progs/ad171/gib_soldfoot2.mdl";	// Fallen down foot
@@ -420,7 +495,8 @@ void() monster_army =
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
 
-	self.th_checkattack = SoldierCheckAttack;
+    if (self.classtype != CT_MONARMYCYBORG)
+		self.th_checkattack = SoldierCheckAttack;
 	self.th_stand = army_stand1;
 	self.th_walk = army_walk1;
 	self.th_run = army_run1;
@@ -521,6 +597,55 @@ void() monster_army_plasma =
 	
 	self.th_missile = army_plasma_atk1;
 	if (self.deathstring == "") self.deathstring = " was fried by an Electrocutioner\n";
+	
+	monster_army();
+};
+
+//----------------------------------------------------------------------
+void() monster_army_spike = {	
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+	
+	self.classtype = CT_MONARMYSPIKE;
+	if (self.health < 1) self.health = 50;
+	// Gray pads
+	self.exactskin = 10;
+	if (random() < 0.35 && self.ammo_nails < 1) self.ammo_nails = 5;
+
+	// Extra load/fire sounds (from Quoth MOD)
+	precache_sound ("soldier/reload.wav");
+	precache_sound ("weapons/rocket1i_q15.wav");
+	
+	self.th_missile = army_nail1;
+	if (self.deathstring == "") self.deathstring = " was spiked by a Nail Grunt\n";
+	
+	monster_army();
+};
+
+//----------------------------------------------------------------------
+void() monster_army_cyborg = {	
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+
+	self.mdl = "progs/drake/soldier.mdl";
+
+	self.classtype = CT_MONARMYCYBORG;
+	if (self.health < 1) self.health = 200;
+	// Gray pads
+	self.exactskin = 4;
+	if (random() < 0.35 && self.ammo_nails < 1) self.ammo_nails = 10;
+
+	// Extra load/fire sounds (from Quoth MOD)
+	precache_sound ("soldier/reload.wav");
+	precache_sound ("weapons/spike2.wav");
+	
+	self.th_missile = army_supernail1;
+
+	if (self.deathstring == "") self.deathstring = " was spiked by a Cyborg Grunt\n";
 	
 	monster_army();
 };

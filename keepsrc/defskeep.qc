@@ -1,14 +1,25 @@
 //======================================================================
 // MOD    : Keep.
+// Compiled by Qmaster (aka Josiah Jack)
+// With numerous contributions from...well...everywhere.  See keep/credits/ folder or refer to the Readme Tome
+//
 // You keep what you kill (and kill with).
+//
+// One mod to rule them all
+// One mod to find them
+// One mod to Keep them all
+// and in Quake bind them
+// -ijed
 //======================================================================
-string MOD_VERSION		= "\b[INFO]\b Keep Mod, version 0.85\n";
+string MOD_VERSION		= "\b[INFO]\b Keep Mod, version 0.90\n";
 
 .float mapversion;
 .string target3, target4;
 
-float IT_NOWEAPON			= 0;		// No extra mod weapon (blank)
+float total_denizens; // Used to track total harmless denizens
+float killed_denizens; // Used to track harmless creature kills
 
+// float IT_NOWEAPON			= 0;		// No extra mod weapon (blank)
 //=======================================SELF.ITEMS1======================================================
 float IT_SHOTGUN    		= 1.000;		//0  Correct for standard HUD & HIP & DOE			W
 float IT_SUPER_SHOTGUN   	= 2.000;		//1  Correct for standard HUD & HIP & DOE			W
@@ -93,35 +104,47 @@ float IT_ARTPIERCE			= 4194304;		//22 NG/SNG Nails travel through enemy bodies
 float IT_ARTTOME			= 8388608;		//23 Tome of Power (event trigger)
 
 float ALL_MODITEMSARTIFACTS = 16646144; // All items that affect screen overlay cshift
-
+.float serverflagstemp;
 .float selfweaponismoditems; 	// HACK FOR HACKBANK! Used to carry more than 24 weapons which is all we can fit in the float's bits
 float IT_CKEYALL			= 122880;	//17 All Custom keys
 //==========================================================================================================
 // More powerups -----------------------------------------------------------
 // Bits 00-07 (values 1-128) are reserved for health.
 // Bits 08-11 (values 256-2048) are reserved for armor.
-float   POW_ARMOR1      = 256;      // Divide this into perms for suit value.
-float   POW_POWER_ARMOR = 4096;     // Power shield toggle.
-// Note:  Do NOT use the next three for exotic armor!
-//  That is because item flags use those values for basic armor,
-//float   POW_RESIST      = 8192;     // Half damage.
-//float   POW_REGEN       = 16384;    // Regeneration.
-//- - - - - - - - -
+// float   POW_ARMOR1      	= 256;      	// Divide this into perms for suit value.
+// float   POW_POWER_ARMOR 	= 4096;     	// Power shield toggle.
 //=======================================SELF.PERMS======================================================
-float   POW_DOUBLE      = 65536;    // Twin shot -- nailgun buff.
-float   POW_SHOTTYMAN   = 131072;   // Shotgun buff.
-float   POW_VAMPIRE     = 262144;   // Melee buff.
-float   POW_PACK        = 524288;   // Extra ammo capacity.
-float IT_BLASTER = 1048576; // Drake laser blaster 					W  stored in self.perms.  was POW_20 in Drake, unused
-float IT_CHAINSAW = 2097152; // Drake chainsaw						W stored in self.pems.  was POW_21 in Drake, unused.  Chainsaw is modified version of Zerstorer
-float   POW_HINT_ARMOR  = 4194304;  // Armor instructions.
-float   POW_HINT_FALL   = 8388608;  // nsoe4:  slow falling message.
+float 	POW_ARMORCOURAGE	= 1;			//0
+float 	POW_ARMORDRAGON		= 2;			//1
+float	POW_ARMORONYX		= 4;			//2
+float	POW_ARMORONYXPOWER	= 8;			//3
+float 	POW_ARMORBERSERKER	= 16;			//4
+float 	POW_ARMORSPIRIT		= 32;			//5
+float 	POW_ARMORCHAOS		= 64;			//6
+float 	POW_ARMORNINJA		= 128;			//7
+float 	POW_REGEN			= 256;			//8
+float	POW_REGENLESSER		= 512;			//9
+//float UNUSED				= 1024;			//10
+//float UNUSED				= 2048;			//11
+//float UNUSED				= 4096;			//12
+float   POW_RESIST      	= 8192;     	//13 Half damage.
+float   POW_VITALITY       	= 16384;    	//14 Regeneration.
+//float UNUSED				= 32768;		//15
+float   POW_DOUBLE      	= 65536;    	//16 Twin shot -- nailgun buff.
+float   POW_SHOTTYMAN		= 131072;   	//17 Shotgun buff.
+float   POW_VAMPIRE     	= 262144;   	//18 Melee buff.
+float   POW_PACK        	= 524288;   	//19 Extra ammo capacity.
+float	IT_BLASTER 			= 1048576; 		//20 Drake laser blaster 					W  stored in self.perms.  was POW_20 in Drake, unused
+float	IT_CHAINSAW 		= 2097152;		//21 Drake chainsaw						W stored in self.pems.  was POW_21 in Drake, unused.  Chainsaw is modified version of Zerstorer
+float   POW_HINT_ARMOR  	= 4194304;		//22 Armor instructions.
+float   POW_HINT_FALL   	= 8388608;		//23 nsoe4:  slow falling message.
 
-float   POWx_HEALTH     = 255;      // Extra max health.  First 8 bits.
-float   POWx_ARMOR      = 3840;     // Mutually exclustive exotic armor.
+// float   POWx_HEALTH     = 255;      // Extra max health.  First 8 bits.
+// float   POWx_ARMOR      = 3840;     // Mutually exclustive exotic armor.
 
-// WEAPON CYCLE ORDER=====================================================================================
+// ===WEAPON ORDERING==================================================================================
 /*
+WEAPON KEYBOARD ORDER
 1 - Axe + Shadow Axe + Chainsaw, Grapple, Mace (3)
 2 - Shotgun + Laser Blaster, Elemental Tome (2)
 3 - Doublebarrel Shotgun + Widowmaker + Shotcycler + Quad Shotgun, Scimitar (2)
@@ -130,9 +153,69 @@ float   POWx_ARMOR      = 3840;     // Mutually exclustive exotic armor.
 6 - Grenade Launcher, Proximity Grenade Launcher, Multi-Grenade Launcher (3)
 7 - Rocket Launcher, Multi-Rocket Launcher, Sanguinators(3)
 8 - Thunderbolt + Plasmagun(AD), Plasmagun(rogue), Flak Cannon (3)
-9 - Crossbow, Laser Cannon, Chain Lightning Gun (2)
+9 - Crossbow, Laser Cannon, Chain Lightning Gun (3)
 0 - Wand, Mjolnir, Gungnir (3)
+
+WEAPON CYCLING ORDER										NORMAL e.g.
+UniqueID Wepname												HACKBANK e.g.
+1  Grapple													IT2_GRAPPLE
+2  Axe/Shadowaxe/Chainsaw									IT_AXE
+3  Mace															IT_MACE
+4  Shotgun/Blaster											IT_SHOTGUN
+5  Ice Tome														IT_ICE
+6  Doublebarrel Shotgun/Widowmaker/Shotcycler/QuadShotgun	IT_SUPER_SHOTGUN
+7  Scimitar													IT_SCIMITAR
+8  Nailgun													IT_NAILGUN
+9  Lava Nailgun												IT_LAVA_NAILGUN
+10 Rapier													IT_RAPIER
+11 Perforator												IT_SUPER_NAILGUN
+12 Lava Super Nailgun										IT_LAVA_SUPER_NAILGUN
+13 Void Staff													IT_VOID_STAFF
+14 Grenade Launcher											IT_GRENADE_LAUNCHER
+15 Proximity Grenade Launcher								IT2_PROXIMITY_GUN
+16 Multi-Grenade Launcher									IT_MULTI_GRENADE
+17 Rocket Launcher											IT_ROCKET_LAUNCHER
+18 Multi-Rocket Launcher									IT_MULTI_ROCKET
+19 Sanguinators												IT_SANGUINATORS
+20 Thunderbolt/Plasmagun									IT_LIGHTNING
+21 Plasma Gun(rogue)										IT_PLASMA_GUN
+22 Flak Cannon													IT_FLAK
+23 Crossbow													IT_EXTRA_WEAPON
+24 Laser Cannon												IT2_LASER_CANNON
+25 Chain Lightning Gun										IT2_CHAINLIGHTNING
+26 Wand														IT2_CROSS
+27 Mjolnir													IT2_MJOLNIR
+28 Gungir														IT_GUNGNIR
 */
+// Unique ID's for weapon cycling list.
+float ID_GRAPPLE = 1;
+float ID_AXE_SHADAXE_CHAINSAW = 2;
+float ID_MACE = 3;
+float ID_SHOTGUN_BLASTER = 4;
+float ID_ICE = 5;
+float ID_SUPER_SHOTGUN_WIDOWMAKER_SHOTCYCLER_QUADSHOTTY = 6;
+float ID_SCIMITAR = 7;
+float ID_NAILGUN = 8;
+float ID_LAVANAILGUN = 9;
+float ID_RAPIER = 10;
+float ID_PERFORATOR = 11;
+float ID_LAVASUPERNAILGUN = 12;
+float ID_VOIDSTAFF = 13;
+float ID_GRENADE_LAUNCHER = 14;
+float ID_PROXIMITY_GRENADE = 15;
+float ID_MULTI_GRENADE = 16;
+float ID_ROCKETLAUNCHER = 17;
+float ID_MULTIROCKETLAUNCHER = 18;
+float ID_SANGUINATORS = 19;
+float ID_THUNDERBOLT_AD_PLASMAGUN = 20;
+float ID_PLASMAGUN_ROGUE = 21;
+float ID_FLAK = 22;
+float ID_CROSSBOW = 23;
+float ID_LASER_CANNON = 24;
+float ID_CHAINLIGHTNING = 25;
+float ID_WANDCROSS2 = 26;
+float ID_MJOLNIR = 27;
+float ID_GUNGNIR = 28;
 //========================================================================================================
 float BBOX_ARMAGON = 23;	// -48 -48 -24, 48 48 84
 float BBOX_VERMIS = 24;		// -64 -64 -512, 64 64 256
@@ -182,6 +265,8 @@ string SOUND_ARTPSHIELD3 = "shield/fadeout.wav";		// Fading
 string SOUND_ARTCROSS2 = "items2/crosuse.wav";			// Active
 string SOUND_ARTEMPATH2 = "hipitems/empathy2.wav";		// Active
 
+.float slimealpha;
+.float lavaalpha;
 //.float oldgravity;
 .float versustype;
 .float therm_finished;
@@ -193,6 +278,7 @@ string SOUND_ARTEMPATH2 = "hipitems/empathy2.wav";		// Active
 .float enemyhealth;
 float wavenumber;
 float DEV_AMMO_N_HEALTH = 1;
+.float funcwaterdmg_finished;
 
 // Versus gamemode
 float COOP_VERSUS = 3;

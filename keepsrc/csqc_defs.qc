@@ -53,6 +53,11 @@ const float CLIENT_CKEYSKIN1 = 55;		// self.ckeyskin1
 const float CLIENT_CKEYSKIN2 = 56;		// self.ckeyskin2
 const float CLIENT_CKEYSKIN3 = 57;		// self.ckeyskin3
 const float CLIENT_CKEYSKIN4 = 58;		// self.ckeyskin4
+const float CLIENT_AMMOPOISON = 59;		// self.ammo_poison for bolts or poison display on crossbow
+const float CLIENT_USINGHACKBANK = 60;  // self.selfweaponismoditems
+const float CLIENT_RUNEFLAG = 61;		// self.serverflagstemp
+const float CLIENT_DENIZENS = 62;		// world denizens total
+const float CLIENT_DENIZENSKILLED = 63;	// world denizens killed
 
 //----------------------------------------------------------------------
 // Duplicate of IT_ references in defs.qc

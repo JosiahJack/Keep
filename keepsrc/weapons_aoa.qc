@@ -1353,8 +1353,8 @@ void() W_FireFlak =
 		return;
 	if (self.currentammo < 1)
 		return;
-	self.ammo_nails = self.ammo_nails - 8;
-	self.ammo_rockets = self.ammo_rockets - 2;
+	self.ammo_nails = self.ammo_nails - FLAK_NAILUSAGE;
+	self.ammo_rockets = self.ammo_rockets - FLAK_ROCKETUSAGE;
 	if (self.ammo_nails < 0)
 		self.ammo_nails = 0;
 	if (self.ammo_rockets < 0)
@@ -1842,9 +1842,8 @@ void() GungnirDive =
 	}
 	else
 	{
-		self.currentammo = self.ammo_voidshards = self.ammo_voidshards - 3;//consume 3 voidshards for a dive
-		if (self.ammo_voidshards < 0)
-			self.currentammo = self.ammo_voidshards = 0;
+		self.currentammo = self.ammo_voidshards = self.ammo_voidshards - GUNGNIR_DIVE_VOIDUSAGE;//consume 3 voidshards for a dive
+		if (self.ammo_voidshards < 0) self.currentammo = self.ammo_voidshards = 0;
 	}
 	makevectors(self.v_angle);
 	org = self.origin + '0 0 32' + v_forward*8;

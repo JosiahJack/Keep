@@ -58,8 +58,14 @@ void(entity targ, entity attacker) Killed =
 			// bump the monster counter
 			if (self.flags & FL_MONSTER) {
 				if (!self.nomonstercount) {
-					killed_monsters = killed_monsters + 1;
-					WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+					if (self.classgroup == CG_HARMLESS) {
+						killed_denizens = killed_denizens + 1;
+					} else {
+						killed_monsters = killed_monsters + 1;
+						WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+					}
+
+					if (targ.classgroup == CG_HARMLESS) killed_denizens = killed_denizens + 1;
 				}
 			}
 		
@@ -76,12 +82,16 @@ void(entity targ, entity attacker) Killed =
 			self.deadflag = DEAD_DEAD;
 			killed_monsters = killed_monsters + 1;
 			WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+
+			if (targ.classgroup == CG_HARMLESS) killed_denizens = killed_denizens + 1;
 			self.th_die ();
 		}
 	}		
 	// Restore self
 	self = oself;
 };
+
+float(entity targ, float damage, float drain) PowerArmor_Absorb;
 
 /*======================================================================
  T_Damage
@@ -101,7 +111,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 {
 	local vector dir;
 	local entity oldself;
-	local float save, take, flinch, misc, noarmordmg;
+	local float save, saveperms, take, flinch, misc, noarmordmg, adamant, oldarmorvalue;
 
 	// Cannot hurt the world or enemy targets (fake flying markers)
 	if (targ.classtype == CT_WORLD) return;
@@ -136,11 +146,15 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	// check for quad damage powerup on the attacker
 	if (attacker.super_damage_finished > 0) damage = ceil(damage * 4);
 
+	if (attacker.curse_type == CURSE_WEAKEN)
+		damage = damage * 0.5;
+
+	// Berserker Helm melee damage boost, Drake permanent powerup
 	if ((attacker.perms & POW_VAMPIRE)) {
 		if (attacker.selfweaponismoditems) {
-			if (attacker.weapon == IT_MACE) damage = damage * 1.25; //Apply Berserker Helm melee damage boost, Drake permanent powerup
+			if (attacker.weapon == IT_MACE) damage = damage * 1.25;
 		} else {
-			if (attacker.weapon == IT_AXE || attacker.weapon == IT2_MJOLNIR || attacker.weapon == IT_SCIMITAR || attacker.weapon == IT_RAPIER) damage = damage * 1.25; //Apply Berserker Helm melee damage boost, Drake permanent powerup
+			if (attacker.weapon == IT_AXE || attacker.weapon == IT2_MJOLNIR || attacker.weapon == IT_SCIMITAR || attacker.weapon == IT_RAPIER) damage = damage * 1.25;
 		}
 	}
 
@@ -225,7 +239,13 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	// save damage based on the target's armor level
 	//----------------------------------------------------------------------
 	save = 0;
+	saveperms = 0;
+	adamant = 0;
+	oldarmorvalue = targ.armorvalue;
+	adamant = (targ.perms & POW_ARMORONYX) || (targ.perms & POW_ARMORONYXPOWER) || (targ.perms & POW_ARMORBERSERKER);
+
 	if (checkarmor == DAMARMOR || checkarmor == DAMSPLASH) {
+		// Normal armor handling, armor 1, 2, and inv(3) --------------
 		save = ceil(targ.armortype*damage);
 		// Run out of amour?
 		if (save >= targ.armorvalue) {
@@ -239,12 +259,48 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		}
 		// Reduce armour based on save forumla above
 		if (noarmordmg == FALSE) targ.armorvalue = targ.armorvalue - save;
+
 		// CEIL function will round up any fractional damage
 		// TBH it is better to round up than round down
 		take = ceil(damage-save);
+		// End normal armor handling ----------------------------------
+
+		// Power Armor
+		if (targ.perms & POW_ARMORONYX) {
+			take = ceil(take * 0.5);
+		}
+
+		// Power Armor
+		if (targ.perms & POW_ARMORONYXPOWER) {
+			if (targ.powershield_active) {
+				if (targ.ammo_cells > 1) {
+					saveperms = PowerArmor_Absorb(targ,take,TRUE); // only does something if damage is greater than 2
+				} else {
+					targ.powershield_active = FALSE;
+					sound (targ, CHAN_AUTO, "me/me_soff.wav", 1, ATTN_NORM);
+				}
+			}
+		}
+		take = ceil(take-saveperms);
+
+		// Courage Armor
+		if (targ.perms & POW_ARMORCOURAGE) {
+			if (UseCourage(targ,inflictor.origin)) {
+				saveperms = ceil(ARMOR_COURAGE_TYPE*take); // Apply another armor reduction
+			}
+		}
+		take = ceil(take-saveperms);
+
+		// Chaos Armor (does more when armor is high and health is low, really helps when almost dead)
+		if (targ.perms & POW_ARMORCHAOS) {
+			if ((targ.health/targ.max_health) < 0.5) saveperms = 0.25;
+			else saveperms = 0.10;
+			saveperms = ceil (saveperms * take);
+		}
+		take = ceil(take-saveperms);
 	}
-	else take = damage;
-	
+	else take = damage; // Damage bypasses all armor
+
 	//----------------------------------------------------------------------
 	// add to the damage total for clients, which will be sent as a single
 	// message at the end of the frame
@@ -289,6 +345,19 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		PlayPentagramSound(targ);
 		return;
 	}
+
+	// Warlord special dodging.  From Quake 1.5, simplified a little.   -Qmaster
+	if (targ.classtype == CT_MONWARLORD) {
+		if ((targ.enemy != world) && (inflictor.classgroup != CG_PROJROCKETS)) { 	// when shot from unseen inflictor !  ( => Did not see inflicter/player)   Warlord can not dodge rockets, only grenades !
+			if (targ.dodge_finished < time)	{ // chance to dodge
+				if (random () > 0.15) {				// checks if Warlord resists this attack and dodge
+					take = 0;
+					targ.dodge_finished = time + 1.2;		// finetune invulnerable/dodging time !
+					targ.dodging = 1;
+				}
+			}
+		}	
+	}	
 
 	//----------------------------------------------------------------------
 	// do the damage
@@ -636,17 +705,12 @@ void(entity attacker, float damage) T_BeamDamage =
 
 //============
 // T_Repair
-//
 // Add armor to an entity, within limits.  Similar to T_Heal, but for armor.
 //============
-float(entity e, float heal, float ignore) T_Repair =
-{
+float(entity e, float heal, float ignore) T_Repair = {
     local   float   full;
 
-    if (e.health <= 0)
-        return 0;   // Dead.
-    //if (Armor_NoPatch (e))
-        //return 0;
+    if (e.health <= 0) return 0;   // Dead.
 
     if (ignore)
         full = 250;     // armorvalue on hud is restricted to max of 255.
@@ -657,23 +721,19 @@ float(entity e, float heal, float ignore) T_Repair =
     else
         full = ARMOR_GRN_VALUE;
 
-    if (e.armorvalue >= full)
-        return 0;   // Armor already fully restored.
+    if (e.armorvalue >= full) return 0;   // Armor already fully restored.
+    if (heal < 1) return 0;   // Don't damage the armor.
 
     if (e.armorvalue + heal >= full)
-        heal = full - e.armorvalue;
-    if (heal < 1)
-        return 0;   // Don't damage the armor.
+        e.armorvalue = full;
+	else
+		e.armorvalue = e.armorvalue + heal;
 
-    e.armorvalue = e.armorvalue + heal;
-    if (!e.armortype)
-    //if (!Armor_Exotic (e)) {
-    	// Some of the custom armors are cursed!
-        // Add green armor.
-        e.armortype = ARMOR_GRN_TYPE;
-        if (e.flags & FL_CLIENT)
-            if (!(e.items2 & IT2_ARMOR1) || !(e.items2 & IT2_ARMOR2) || !(e.items2 & IT2_ARMOR3))
-                e.items2 = e.items2 | IT2_ARMOR1;
+    // if (!e.armortype)
+        // e.armortype = ARMOR_GRN_TYPE;
+        // if (e.flags & FL_CLIENT)
+            // if (!(e.items2 & IT2_ARMOR1) || !(e.items2 & IT2_ARMOR2) || !(e.items2 & IT2_ARMOR3))
+                // e.items2 = e.items2 | IT2_ARMOR1;
     //}
     return heal;        // Return amount healed instead of TRUE.
 };

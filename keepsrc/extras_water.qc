@@ -377,11 +377,9 @@ void() liquid_touch =
 	// Test Feet (if feet are below maxs and above mins, we're in)
 	//test = other.origin_z + other.mins_z + 1;
 	test = other.origin_z + 1;
-	if (test <= self.absmax_z && test >= self.absmin_z) {
-		
+	if (test <= self.absmax_z && ((test + other.view_ofs_z) >= self.absmin_z)) {
 		other.watertype = self.watertype;
 		other.waterlevel = 1;
-		
 
 		if (SUB_CheckPointInBounds(other.origin, self.absmax, self.absmin)) {
 		// Test Torso
@@ -397,7 +395,8 @@ void() liquid_touch =
 		//test = other.origin_z + other.view_ofs_z; // WORKS FOR BOTTOM OF BRUSH, BUT IS EVEN WITH TOP
 		//if (test <= self.absmax_z || test >= self.absmin_z) {
 			other.waterlevel = 3;
-
+			other.infuncwater = TRUE;
+			//other.funcwaterdmg_finished = time;
 			other.cshift_upd = TRUE;
 			// Do the color shift
 			stuffcmd(other, "v_cshift ");
@@ -418,6 +417,8 @@ void() liquid_touch =
 		if (self.spawnflags & EASEUNDERCURRENT) c = 4-other.waterlevel; else c = other.waterlevel;	
 		if (self.drag) other.velocity = other.velocity + self.velocity*(self.drag*frametime)*c;
 		if (self.mangle != '0 0 0') other.velocity = other.velocity + self.mangle*frametime*(c/3);
+	} else {
+		other.infuncwater = FALSE;
 	}
 };
 
@@ -499,12 +500,16 @@ void() func_water =
 		self.watertype = CONTENT_WATER;
 
 	if (self.cshift == string_null) {
-		if (self.watertype == CONTENT_WATER)
+		if (self.watertype == CONTENT_WATER) {
 			self.cshift = "130 80 50 128";
-		else if (self.watertype == CONTENT_SLIME)
+			self.alpha = world.water_alpha;
+		} else if (self.watertype == CONTENT_SLIME) {
 			self.cshift = "0 25 5 150";
-		else if (self.watertype == CONTENT_LAVA)
+			self.alpha = world.slimealpha;
+		} else if (self.watertype == CONTENT_LAVA) {
 			self.cshift = "255 80 0 150";
+			self.alpha = world.lavaalpha;
+		}
 	}
 	
 	// Cap drag force
@@ -609,12 +614,16 @@ void() func_watertrain =
 		self.watertype = CONTENT_WATER;
 		
 	if (self.cshift == string_null) {
-		if (self.watertype == CONTENT_WATER)
+		if (self.watertype == CONTENT_WATER) {
 			self.cshift = "130 80 50 128";
-		else if (self.watertype == CONTENT_SLIME)
+			self.alpha = world.water_alpha;
+		} else if (self.watertype == CONTENT_SLIME) {
 			self.cshift = "0 25 5 150";
-		else if (self.watertype == CONTENT_LAVA)
+			self.alpha = world.slimealpha;
+		} else if (self.watertype == CONTENT_LAVA) {
 			self.cshift = "255 80 0 150";
+			self.alpha = world.lavaalpha;
+		}
 	}
 	
 	// Cap drag force

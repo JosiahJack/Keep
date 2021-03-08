@@ -241,7 +241,14 @@ void() Hatch_Egg =
 		if (self.owner.spawnflags & MON_WRAITH_SCORPIONS) minion_scorpion(self.oldorigin, self.enemy);
 		else minion_spider(self.oldorigin, self.enemy);
 	}
-	else if (self.owner.classtype == CT_MONSHAL) minion_voreling(self.oldorigin, self.enemy);
+	else if (self.owner.classtype == CT_MONSHAL || self.owner.classtype == CT_MONSHALBOSS) {
+		if (self.owner.classtype == CT_MONSHALBOSS) {
+			sound (self, CHAN_WEAPON, "misc/summon.wav", 1, ATTN_NORM);
+			minion_voreling(self.oldorigin+'0 0 4', self.enemy);
+		} else {
+			minion_voreling(self.oldorigin, self.enemy);
+		}
+	}
 
 	// Skip a couple of frames
 	self.think = Explode_Egg;

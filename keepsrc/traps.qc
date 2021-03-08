@@ -205,15 +205,13 @@ void() trap_shooter_use =
 };
 
 //----------------------------------------------------------------------
-void() trap_shooter_reset =
-{
+void() trap_shooter_reset = {
 	self.estate = ESTATE_ON;
 	self.state = STATE_OFF;
 };
 
 //----------------------------------------------------------------------
-void() trap_spikeshooter =
-{
+void() trap_spikeshooter = {
 	if (self.spawnflags & TRAP_SNGSPIKE) {
 		self.mdl = MODEL_PROJ_SNG;
 		self.noise = "weapons/spike2.wav";

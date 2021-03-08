@@ -121,6 +121,12 @@ void(string mname) BeMonsterFromString = {
 	if (mname == "monster_zombie") { monster_zombie(); return; }
 	if (mname == "monster_zombiek") { monster_zombiek(); return; }
 	if (mname == "monster_zombiep") { monster_zombiep(); return; }
+	if (mname == "monster_reiver") { monster_reiver(); return; }
+	if (mname == "monster_carnivean") { monster_carnivean(); return; }
+	if (mname == "monster_shalrath_boss") { monster_shalrath_boss(); return; }
+	if (mname == "monster_dfury_boss") { monster_dfury_boss(); return; }
+	if (mname == "monster_oldone_tentacle") { monster_oldone_tentacle(); return; }
+	if (mname == "monster_hell_knight2") { monster_hell_knight2(); return; } // Warlord
 };
 
 void () func_spawn = {

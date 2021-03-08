@@ -817,30 +817,30 @@ float() Gib_NearCeiling =
 float() Gib_Eaten =
 {
     if (other.health <= 0)
-        return 0;   // Dead.
+        return FALSE;   // Dead.
     if (!(other.xfl & XFL_GHOUL))
-        return 0;   // Can't eat gibs.
+        return FALSE;   // Can't eat gibs.
     if (self.healamount < 1)
-        return 0;   // Gib has no food value.
+        return FALSE;   // Gib has no food value.
 
     local   float   leave;
 
     leave = 1;
-    if (other.form_active)
-    {   // Note:  Morphed clients use armorvalue as health.
-        if (T_Repair (other, self.healamount, FALSE))   // armor
-            leave = 0;
-    }
-    else
-    {
+
+	// Not including morphing into a dragon in Keep.  -Qmaster
+    // if (other.form_active)
+    // {   // Note:  Morphed clients use armorvalue as health.
+        // if (T_Repair (other, self.healamount, FALSE))   // armor
+            // leave = 0;
+    // }
+    // else
+    // {
         if (T_Heal (other, self.healamount, FALSE))     // health
             leave = 0;
-    }
+    // }
 
-    if (other.xfl & XFL_HUNGRY == 0)
-    {
-        if (leave)
-            return 0;
+    if (other.xfl & XFL_HUNGRY == 0) {
+        if (leave) return FALSE;
     }
     // ELSE... It's hungry, eat it anyway!
 //- - - - - - - - -

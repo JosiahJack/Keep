@@ -44,9 +44,9 @@ float CG_DEMON = 615;			// (3) Demon, Drole, Minotaur, Boglord, Lichfiend, Hepha
 float CG_DOG = 620;				// (1) Dog
 float CG_FISH = 625;			// (2) Fish
 float CG_ROBOT = 630;			// (2) Jim, Laser/Rocket, Seeker, Floyd
-float CG_KNIGHT = 635;			// (3) Knight, Death Guard and Crossbow, Bandit, Goblin
+float CG_KNIGHT = 635;			// (7) Knight, Death Guard and Crossbow, Bandit, Goblin, Rebel, Archer
 float CG_DKNIGHT = 637;			// (2) Hell and Death Knight
-float CG_DCAPTAIN = 640;		// (2) Fury, Sergeant Captains, Bane
+float CG_DCAPTAIN = 640;		// (4) Fury, Sergeant Captains, Bane, Brigade Commander
 float CG_STONE = 645;			// (4) Boss Eidolon, Statues and Golem
 float CG_OGRE = 650;			// (4) Vanilla and Hunter (Chainsaw, Mace, Hammer), Freddie
 float CG_SPIDER = 660;			// (4) Shalrath, Vorling, Wraith, Spider, Snakeman
@@ -139,10 +139,14 @@ float CT_MONHYDRA = 127;		// Hydra from Hexen 2 - added to extras_r5 by khreatho
 float CT_MONDYONG = 128;		// Mini Shub with extra tentacles Four Feathers MOD (Madfox)
 float CT_MONFROG = 129;			// Fragy froggy frog (-Madfox)
 float CT_MONHELLK = 130;		// Strong spikey Knights
+float CT_MONREBEL = 131;		// Rebel (crossbow bandit from Drake)
 float CT_MONKNIGHT = 140;		// Small metal Knights
+float CT_MONCARNIVEAN = 141;	// Carnivean Serpentine Knight
+float CT_MONREIVER = 142;		// Reiver from Quake 1.5 mod
 float CT_MONOGRE = 150;			// Chainsaw wielding manics
 float CT_MONOGREFISH = 155;		// Madfox fishing ogre
 float CT_MONSHAL = 160;			// Shalrath / Vore
+float CT_MONSHALBOSS = 161;		// Shalrath Mother
 float CT_MONSHAM = 165;			// Shambler
 float CT_MONBOGLORD = 166;		// Lord of the Bog! (Big shammy)
 float CT_MONSPAWN = 170;		// Bouncing annoying crudblossom!
@@ -166,11 +170,19 @@ float CT_MONINQUISITOR = 199;	// Inquisitor boss for Twilight of the Idols
 float CT_MONDGUARD = 200;		// HD Knight (Guard)
 float CT_MONDCROSS = 205;		// HD Knight (Crossbow)
 float CT_MONDFURY = 210;		// HD Knight (Fury)
+float CT_MONDFURYBOSS = 211;	// Brigade Commander (Quake 1.5)
 float CT_MONDBLOOD = 215;		// HD Hell Knight (Blood)
 float CT_MONDKNIGHT = 220;		// HD Hell Knight (Death)
 float CT_MONDPRINCE = 221;		// HD Hell Knight (Prince)
+float CT_MONWARLORD = 222;		// Quake 1.5 Warlord
+
+
 float CT_MONDSERG = 225;		// HD Hell Knight (Sergeant)
 float CT_MONCOMM = 230;			// HD Hell Knight (Commander)
+
+
+
+
 
 // New (hunter) Ogre series (sock/necros)
 float CT_MONHOGRE = 250;		// HD Ogre (Chainsaw)
@@ -181,6 +193,10 @@ float CT_MONHOGREHAM = 260;		// HD Ogre (Hammer)
 float CT_MONARMYROCKET = 270;	// Army Soldier (Rocket)
 float CT_MONARMYGRENADE = 272;	// Army Soldier (Grenade)
 float CT_MONARMYPLASMA = 275;	// Army Soldier (Plasma)
+float CT_MONARMYSPIKE = 276;	// Army Soldier (Nail)
+float CT_MONARMYCYBORG = 277;	// Army Soldier (Perforator)
+
+
 float CT_MONDEFENDER = 280;		// Enforcer SSG/GL (Defender)
 float CT_MONELIMATOR = 285;		// Enforcer Plasma (Eliminator)
 float CT_MONMEGAFORCE = 286;	// Mega Enforcer (Plasma+Rocket)
@@ -287,7 +303,7 @@ float CT_PROJ_HKN = 419;		// Hell Knight Spike
 float CT_PROJ_WBONE = 420;		// Wraith Bone Bolt (nail)
 float CT_PROJ_GROCK = 421;		// Golem rock debris (pebble)
 float CT_PROJ_SCORP = 422;		// Scorpion Tail (nail)
-
+float CT_PROJ_HKN2 = 423;		// Warlord Spike
 float CT_PROJ_SANTA = 424;		// Santa Snowball shotgun!
 float CT_PROJ_WIZ = 425;		// Wizard Spit
 float CT_PROJ_NOUR1 = 426;		// Nour Spit 
@@ -410,6 +426,8 @@ float CT_ARTPIERCE = 575;		// Nail Piercer
 float CT_ARTLAVASHIELD = 576;	// Lava Shield
 float CT_ARTBLASTBELT = 577;	// Blast Belt
 float CT_ARTJUMPBOOTS = 578;	// Jump Boots
+float CT_ARTREGEN = 579;		// Regeneration Powerup
+float CT_ARTVITALITY = 580;		// Vitality +25 Max Health
 
 float CT_PROGSPAWN = 589;		// Progression spawn
 float CT_ARTTOME = 590;			// Tome of Power
@@ -480,15 +498,22 @@ float CT_HEALROT = 750;			// Different Health packs
 float CT_HEALNORM = 751;		// 25 health pack
 float CT_HEALMEGA = 752;		// 100 Mega health
 
-float CT_ARMOR1 = 770;			// Green armour
-float CT_ARMOR2 = 775;			// Yellow armour
-float CT_ARMORINV = 790;		// Red armour
-float CT_ARMORITEMPACK = 791;	// Armour shard system
 float BACKARMGRN = 15;			// Green shards
 float BACKARMYEL = 30;			// Yellow shards
 float BACKARMRED = 45;			// Red shards 
 
-//----------------------------------------------------------------------
+float CT_ARMOR1 = 770;			// Green armour
+float CT_ARMOR2 = 775;			// Yellow armour
+float CT_ARMORINV = 790;		// Red armour
+float CT_ARMORITEMPACK = 791;	// Armour shard system
+float CT_ARMORCOURAGE = 792;	// Courage
+float CT_ARMORDRAGON = 793;		// Dragonscale
+float CT_ARMORONYX = 794;		// Onyx
+float CT_ARMORONYXPOWER = 795;	// Power
+float CT_ARMORBERSERKER = 796;  // Demon
+float CT_ARMORSPIRIT = 797;		// Spirit
+float CT_ARMORCHAOS = 798;		// Chaos
+float CT_ARMORNINJA = 799;		// Ninja
 float CT_FUNCDOOR = 800;		// Func door
 float CT_FUNCDOORTRIG = 801;	// Generated touch trigger around door
 float CT_FUNCSECDOOR = 805;		// Func SECRET door

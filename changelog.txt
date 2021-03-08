@@ -1,5 +1,10 @@
 version 0.85:
 	Added in remaining AD 1.81 features, phew!
+	Changed skullwiz skull1.wav and skull2.wav to sound more like projectiles and not lost souls
+	Removed particles from skull wizard clothing fade
+	Added Quake 1.5 bosses and new enemies.
+	Made minions no longer require monster_xxxminion templates, precached them anyways and set them up like normal to help those poor ignorant mappers.
+	Fixed weapon cycling for all weapons
 version 0.75:
 	Added Arms of Asgard weapons
 version 0.65:

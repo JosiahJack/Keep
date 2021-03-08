@@ -1,0 +1,53 @@
+DarkPlaces engine, Nehahra edition, version 1.05
+
+Pretty much just click it and play, automatically loads -game nehahra and
+special settings for Nehahra.
+
+3DFX notes:
+May or may not work with WickedGL, untested.
+
+Known to not work with 3DFX glquake opengl32.dll (despite my best efforts),
+rename/delete it to fix patchy lighting.
+
+If you rename/delete quake\opengl32.dll, and get slideshow speeds,
+get newer 3DFX drivers, preferably ones labeled as 'Quake3 compatible'.
+If it still gets slideshow speeds or you have a V1/V2 not compatible with
+the reference drivers, please don't complain to me as I can't help.
+
+Brightness control console variables:
+
+brightness 1-5 (default: 1)
+Up to 5x brightness (quite bright).
+(note: brightness works in the options menu)
+
+contrast 0.2-1.0 (default: 1)
+reduce this in very small (.05 usually) steps to bring up the black,
+washs out the image but lets you see in dark corners better.
+
+If anything doesn't work right, try out these console variables:
+
+gl_lightmode 0/1 (default: 1)
+New lighting mode, 0 is old GLQuake look, 1 is software quake style
+(full brightness range), compare and salt to taste...  Some degradation
+in image quality results, however the dynamic lighting especially benefits.
+
+gl_multitexture 0/1 (default: 1 if you have a multitexturing 3D card)
+If experiencing negative lighting or completely bizarre textures (Matrox),
+you might want to set this to 0...
+
+gl_nosubimagefragments 0/1 (default 0 unless 3DFX minigl is detected)
+if you see a strange fragmented lighting glitch everywhere, turn this on but
+it slows down dynamic lighting and uses a lot more memory like original
+glquake did, note you must restart the level to see the change.
+
+gl_nosubimage 0/1 (default 0)
+if nosubimagefragments doesn't fix it, this should...
+
+gl_lightmaprgba 0/1 (default 1)
+setting this to 0 improves lighting quality (less banding) in 16bit modes,
+however it has been known to disagree with certain drivers,
+so it defaults to 1 for compatibility.
+
+
+Engine and this readme written by LordHavoc ( havoc@gamevisions.com ),
+based on source code by id Software ( http://www.idsoftware.com )

@@ -17,3 +17,7 @@ void() GungnirVortex1;
 .float ammo_elemental;
 
 float(entity target) CountFlakAmmo;
+
+float FLAK_NAILUSAGE = 8;
+float FLAK_ROCKETUSAGE = 2;
+float GUNGNIR_DIVE_VOIDUSAGE = 3;

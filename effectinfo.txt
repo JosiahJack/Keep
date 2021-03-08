@@ -3212,3 +3212,2277 @@ liquidfriction 2
 velocityoffset 0 0 32			// Start up high
 velocityjitter 64 64 96			// Large area
 velocitymultiplier 0.5			// Using parameter velocity
+
+//------------------------------//
+//-----------MONSTERS-----------//
+//------------------------------//
+
+/////Afrit's burning particles disabled for to prevent horrible co-op lag/sound bug
+
+//Quake particles
+effect TR_AFRITSPIKE_RED
+count 45
+tex 63 63
+type smoke
+color 0xFFAB57 0xFF0A0A
+stretchfactor 0 
+size .6 1.6 
+alpha 100 256 90
+//gravity 0.3
+bounce -1
+airfriction 1
+gravity -0.06
+liquidfriction 5
+originjitter 5 5 0
+originoffset 0 0 0
+velocityjitter 5 5 -10
+
+//afrit fire trail - software quake-esque partiles
+effect TR_AFRITSPIKE_RED
+count 60
+tex 40 40
+type spark
+color 0xFFAB57 0xFF0A0A
+stretchfactor 0 
+size 4 4 
+alpha 0 256 200
+gravity 0.3
+bounce 1
+airfriction 0.5
+gravity 0.07
+liquidfriction 5
+originjitter 0 0 0
+velocityjitter 50 50 50
+   
+effect TR_AFRITSPIKE_RED		// for Afrit monster projectile (fireball)
+trailspacing 5
+type smoke 			
+tex 0 7 
+color 0xff0000 0xe3974f
+size 2 5 
+sizeincrease 10
+alpha 50 100 470
+originjitter 5 5 3
+velocityjitter 10 10 20 
+bounce 0 
+lightradius 100 
+lightcolor 0.7 0.2 0
+lighttime 0         
+
+
+
+effect TE_AFRITSPIKE_RED		//Afrit projectile - impact fire
+count 30
+type smoke
+color 0x801010 0xFFA020
+size 2 5 
+alpha 0 100 65
+lightcolor 1 0.627 0.1254
+airfriction 2
+liquidfriction 2
+originjitter 0 0 0 
+velocityjitter 15 15 15
+tex 0 7
+
+effect TE_AFRITSPIKE_RED		//Afrit projectile - impact fire elevating up
+count 25
+type smoke
+color 0x801010 0xB80C00
+size 3 7 
+alpha 10 70 40
+gravity -0.03
+airfriction 3
+liquidfriction 2
+originjitter 3 3 5    
+velocityjitter 2 2 6   
+velocityoffset 0 0 10
+tex 0 7
+
+effect TE_AFRITSPIKE_RED		// Afrit projectile - impact smoke elevating up
+notunderwater
+type alphastatic
+count 4   
+tex 0 7
+size 3 5
+alpha 150 200 100
+color 0x000000 0x333333
+gravity -0.03
+originjitter 2 2 2
+velocityjitter 2 2 8
+originoffset 0 0 4
+
+effect TE_AFRITSPIKE_RED		// Afrit projectile - impact decal
+countabsolute 1
+type decal
+tex 8 16
+size 5.5 5.5
+alpha 256 256 0
+originjitter 6 6 6
+lightradius 40               
+lightradiusfade 7            
+lightshadow 0                
+lightcolor 1 0.15 0 
+
+////////////////
+//  Reiver   ///
+////////////////
+
+effect reiver_outbreak		// used for reiver outbreak (debris)
+countabsolute 15
+type alphastatic
+tex 43 45
+size 0.7 2
+color 0x404040 0x969696
+alpha 2048 2048 777
+gravity 0.4
+bounce -1
+originjitter 27 27 7
+originoffset 0 0 -30
+velocityoffset 0 0 40
+velocityjitter 40 40 35
+rotate -50 50 20 120
+
+effect reiver_outbreak		// used for reiver outbreak (black smoke)
+notunderwater
+type alphastatic
+countabsolute 30
+tex 0 7
+size 3 5
+alpha 150 200 120
+color 0x000000 0x333333
+sizeincrease 2
+gravity -0.017
+originjitter 23 23 4
+originoffset 0 0 -30
+velocityoffset 0 0 5
+velocityjitter 10 10 15
+
+effect reiver_outbreak		// used for reiver outbreak (flames)   	
+notunderwater 
+countabsolute 7	
+type static
+tex 37 39 
+size 3 6
+sizeincrease 10
+alpha 50 110 220
+color 0xFFAB57 0xFFAB57
+gravity -0.18
+originoffset 0 0 -30
+originjitter 22 22 4
+velocityjitter 4 4 7
+rotate 160 200 10 40
+
+effect reiver_outbreak		// used for reiver outbreak (fire like smoke)   
+notunderwater 
+countabsolute 15	
+type smoke 			
+tex 0 7 
+size 3 7 
+sizeincrease 3
+color 0xFFAB57 0xFF0A0A
+alpha 20 90 90 
+gravity -0.2 
+originoffset 0 0 -30 
+originjitter 26 26 3
+velocityoffset 0 0 5 
+airfriction 4 
+bounce 0 
+
+effect reiver_outbreak		// used for reiver outbreak (bright smoke )	
+notunderwater
+countabsolute 4		
+type smoke
+tex 0 7
+size 6 10
+sizeincrease 5
+color 0x303030 0x303030
+alpha 10 130 80
+gravity -0.25
+originoffset 0 0 -20
+originjitter 22 22 5
+airfriction 5
+bounce -1
+
+effect reiver_outbreak		// used for reiver outbreak (sparks)  		
+notunderwater 
+countabsolute 15		
+type snow
+tex 40 40
+//color 0xFFBF80 0xFFFF80
+color 0x9f5343 0xFF5C5C
+size 0.3 0.6
+stretchfactor 1
+sizeincrease -0.2
+alpha 150 150 80
+gravity -0.2
+originoffset 0 0 -20
+originjitter 14 14 12
+airfriction 8
+velocityjitter 120 120 100
+bounce -1
+
+
+
+
+   
+effect reiver_outbreak_decal	// used for reiver outbreak (decal)
+countabsolute 1
+type decal
+orientation oriented	
+tex 8 15
+size 35 40
+alpha 256 256 0
+originjitter 1 1 1
+
+
+
+
+
+effect reiver_vampire_drain2 	// for reivers vampire attack ( "health" drain out of players body)  blood/cloud
+countabsolute 30  		// effect type 2
+type spark
+tex 0 7 
+color 0x448800 0x559900		// yellow/green ish
+size 0.7 1.1
+alpha 80 150 110
+originjitter 12 12 12
+originoffset 0 0 1
+stretchfactor 2
+velocitymultiplier 10
+
+
+effect reiver_vampire_drain1 	// for reivers vampire attack ( "health" drain out of players body)  dots/stars	
+countabsolute 30  	 	// effect type 1  (alternative effect !! )
+type spark
+tex 40 40
+//color 0xff0000 0xdc7171	// red
+color 0x44aa00 0x55aa00		// yellow/green ish
+size 0.7 1.1
+alpha 100 200 177
+originjitter 14 14 14
+originoffset 0 0 1
+stretchfactor 1
+velocitymultiplier 10
+
+//////////////////
+//  Carnivean  ///
+//////////////////
+
+effect canivean_rock_explode		//  for exploding rocks effect of Carnivieans
+count 50	
+type alphastatic
+tex 44 46
+size 0.7 3  
+sizeincrease 0.1
+color 0x433000 0xdd3000 
+alpha 200 256 20
+originjitter 11 11 15  
+velocityjitter 40 40 50
+velocityoffset 0 0 10
+gravity 0.3
+bounce 1.5
+
+
+
+//////////////////
+//  Torment  /////
+//////////////////
+
+effect torment_hellrod_projectile	// used for hell-rod projectile lying on the floor 	
+notunderwater
+countabsolute 1	
+type smoke
+color 0x801010 0xFFA020
+tex 0 7
+size 2 3
+sizeincrease 4	
+alpha 25 45 55  
+gravity -0.02
+originoffset 0 0 3
+originjitter 4 4 5
+velocityoffset 0 0 10
+ 
+effect torment_hellrod_projectile    	// used for hell-rod projectile flying
+notunderwater
+trailspacing 4                   
+type static
+color 0x801010 0xFFA020           
+tex 0 7                       
+size 5 1                         
+alpha 16 16 12                   
+velocityjitter 10 10 10  
+airfriction 1      
+
+effect torment_hellrod_projectile    	// used for hell-rod projectile flying underwater
+underwater
+trailspacing 8
+type bubble
+tex 62 62
+size 0.5 2
+alpha 64 128 100
+gravity -0.25
+bounce 1.5
+liquidfriction 0.25
+velocityjitter 16 16 16
+
+
+
+//explosion - bouble
+effect torment_hellrod_explosion 
+underwater
+count 66
+type bubble
+tex 62 63
+size 0.2 0.8                       
+alpha 128 256 64
+gravity -0.125
+bounce 1.5
+liquidfriction 1
+originjitter 10 10 10
+velocityjitter 50 50 70        
+
+//explosions - sparks - faster and higher flying ones
+effect torment_hellrod_explosion 
+notunderwater
+count 2
+type spark
+tex 40 40
+color 0xFF9E3D 0xBD0000
+stretchfactor 3
+size 1 3 
+alpha 65 130 200
+sizeincrease -1
+gravity 0.1
+bounce -1
+airfriction 3
+liquidfriction 5
+originjitter 10 10 10
+velocityjitter 300 300 400
+
+//explosions - sparks quickly dissapearing 
+effect torment_hellrod_explosion  
+underwater
+count 15
+type spark
+tex 40 41
+color 0xF07800 0xBD0000
+stretchfactor 7 
+size 0.5 1 
+alpha 0 256 350
+gravity 0
+bounce -1
+liquidfriction 5
+originjitter 10 10 10
+velocityjitter 150 150 150
+
+//explosion -  red smoke
+effect torment_hellrod_explosion         
+notunderwater
+count 70
+type smoke
+color 0x901000 0xFF3010
+size 10 10
+alpha 32 16 64
+bounce -1
+tex 0 8
+airfriction 0.2               
+liquidfriction 1
+velocityjitter 256 256 256    
+
+//explosion -  bright smoke
+effect torment_hellrod_explosion 
+notunderwater
+type smoke
+count 17
+tex 0 7
+size 10 13
+alpha 70 90 50
+sizeincrease 1
+color 0x202020 0x404040
+bounce -1
+airfriction 0.5
+liquidfriction 1
+originjitter 3 3 3
+velocityjitter 95 95 85 
+
+//explosion - decal      
+effect torment_hellrod_explosion 
+countabsolute 1
+type decal
+orientation oriented
+tex 8 15
+size 48 48
+alpha 256 256 0
+originjitter 30 30 30
+
+//explosion - light 
+effect torment_hellrod_explosion  
+lightradius 400
+lightradiusfade 600
+lightcolor 3 1 0.5
+lightshadow 0
+
+//explosion - firelike effect inside the explosion
+effect torment_hellrod_explosion  
+notunderwater
+count 4
+type smoke
+color 0x801010 0xFFA020
+size 5 10 
+tex 1 8
+alpha 50 150 100
+airfriction 2
+sizeincrease 2
+liquidfriction 2
+originoffset 0 0 5
+originjitter 20 20 20
+velocityjitter 20 20 20
+rotate 0 10 0 10
+
+//fire effect underwater 1
+effect torment_hellrod_explosion  
+underwater
+count 15
+type smoke
+color 0x801010 0xFFA020
+size 5 10 
+tex 1 8
+alpha 50 150 100
+sizeincrease 2
+liquidfriction 1
+originoffset 0 0 5
+originjitter 15 15 15 
+velocityjitter 20 20 20
+rotate 0 10 0 10
+
+effect torment_hellrod_explosion  
+underwater
+count 30
+type spark
+tex 40 41
+color 0xF07800 0xBD0000
+stretchfactor  4
+size 0.5 2 
+alpha 128 256 350
+sizeincrease -1
+gravity 0
+bounce -1
+airfriction 4
+liquidfriction 0
+originjitter 10 10 10
+velocityjitter 300 300 300
+
+
+
+effect torment_rod_scratching_start		// sparks  
+notunderwater
+type spark
+tex 40 40
+count 40
+color 0xff0000 0xFFA020 
+size 0.75 1.25
+alpha 30 100 250
+stretchfactor 3
+airfriction 1
+gravity 0.1
+velocityjitter 70 70 70
+
+effect torment_rod_scratching_start		// ember
+notunderwater
+type snow
+tex 40 40
+count 25
+color 0xB80000 0xFF5C5C 
+size 0.5 1
+alpha 0 100 120
+stretchfactor 1
+airfriction 5
+originjitter 5 5 8
+velocityjitter 20 20 20
+
+effect torment_rod_scratching_start 		//  fire
+notunderwater
+type alphastatic
+tex 0 7
+count 5
+size 3 5
+alpha 40 80 80
+color 0xff0000 0xFFA020 
+gravity -0.03
+originjitter 3 3 3
+velocityjitter 5 5 7
+
+
+
+effect torment_rod_scratching		// ember
+notunderwater
+type snow
+tex 40 40
+count 10 //25
+color 0xB80000 0xFF5C5C 
+size 0.5 1
+alpha 0 80 120
+stretchfactor 1
+airfriction 5
+originjitter 5 5 8
+velocityjitter 20 20 20
+
+effect torment_rod_scratching 		//  fire
+notunderwater
+type alphastatic
+tex 0 7
+count 2.5 //5
+size 3 5
+alpha 40 80 80
+color 0xff0000 0xFFA020 
+gravity -0.02
+originjitter 3 3 3
+velocityjitter 5 5 7
+
+
+
+
+//////////////////
+//  Warlord  /////
+//////////////////
+
+effect TR_WARLORDHOMING        
+trailspacing 3                
+type static
+color 0x801010 0xFFA020       
+size 5 1  
+tex 35 36                   
+alpha 10 20 15               
+velocityjitter 25 25 25             
+lightradius 80
+lightshadow 0
+airfriction 3
+liquidfriction 3                              
+lightcolor 1 0.3 0            
+
+effect TR_WARLORDHOMING
+trailspacing 1
+tex 0 7
+type static
+color 0x801010 0xFFA020
+alpha 128 256 666
+size 2 4
+airfriction 6
+liquidfriction 6
+velocityjitter 125 125 125
+
+//Warlord fire trail - software quake-esque partiles
+effect TR_WARLORDSPIKE
+count 20
+tex 40 40
+type spark
+color 0xFFAB57 0xFF0A0A
+stretchfactor 0 
+size 4 4 
+alpha 0 256 200
+gravity 0.3
+bounce 1
+airfriction 0.5
+gravity 0.07
+liquidfriction 5
+originjitter 0 0 0
+velocityjitter 50 50 50
+
+effect TR_WARLORDSPIKE      
+trailspacing 8               
+type static
+color 0x801010 0xFFA020       
+size 5 1  
+tex 35 36                   
+alpha 10 20 15               
+velocityjitter 25 25 25             
+airfriction 3
+liquidfriction 3                              
+           
+
+effect TR_WARLORDSPIKE 	// for burning gibs - center glow		 
+notunderwater
+type smoke
+count 100
+tex 37 37
+size 8 15
+alpha 150 255 1855
+//color 0xfff8ed 0xfff8ed
+bounce -1
+gravity 0
+sizeincrease 136.5
+time 0.02 0.01
+airfriction 1
+liquidfriction 1
+originoffset 0 0 0
+velocityjitter 8 8 20
+velocitymultiplier .5 
+
+// Vore Mother Shalrath Boss
+//explosion -  blue center
+effect vore_shockwave       
+notunderwater
+count 60
+type smoke
+color 0xD5BAE3 0xab84ff
+size 20 20
+alpha 32 126 124
+//bounce -1
+tex 0 7
+airfriction 0.2               
+liquidfriction 1
+gravity -0.03
+lighttime 0
+velocityjitter 656 656 16
+velocityoffset 100 100 0
+
+
+//vore trail light
+effect voreball_explosion
+
+
+//voreball explosion  
+effect voreball_explosion
+count 11
+type spark
+color 0x283880 0xA163BF
+size 1 2
+alpha 32 186 300 
+bounce -1
+tex 41 41
+airfriction 1              
+liquidfriction 1
+stretchfactor 7
+originjitter 40 40 40
+velocityjitter -150 -150 -150e
+
+//voreball explosion 
+effect voreball_explosion
+count 20
+type spark
+tex 41 41
+color 0x990066 0xCC0033
+stretchfactor -4 
+time 0.8 1.3
+size 0.6 0.6 
+alpha 128 256 500
+sizeincrease 0
+gravity 0
+bounce -1
+airfriction 7
+liquidfriction 7
+originjitter 2 2 2
+velocityjitter 150 150 150
+
+//voreball explosion 
+effect voreball_explosion
+type alphastatic
+count 12
+tex 0 7
+size 8 12
+alpha 16 64 30
+color 0xD5BAE3 0x283880
+sizeincrease -1
+airfriction 2
+liquidfriction 2
+originjitter 10 10 10
+velocityjitter 4 4 4
+rotate -50 05 10 30
+
+//explosion -  blue center
+effect voreball_explosion       
+notunderwater
+count 10
+type smoke
+color 0xD5BAE3 0xab84ff
+size 30 30
+alpha 32 126 124
+bounce -1
+tex 0 7
+airfriction 0.2               
+liquidfriction 1
+gravity 0.01
+lighttime 0
+velocityjitter 56 56 166  
+
+//explosion -  colored smoke
+effect voreball_explosion       
+notunderwater
+count 10
+type smoke
+color 0x990066 0xab84ff
+size 35 35
+alpha 32 66 44
+bounce 1
+tex 2 7
+airfriction 1               
+liquidfriction 1
+gravity .1
+lighttime 0
+velocityjitter 376 376 256
+velocityoffset 0 0 100 
+originoffset 0 0 0 
+
+//Quake particles
+effect voreball_explosion 
+count 75
+tex 63 63
+type smoke
+color 0xD5BAE3 0x283880
+stretchfactor 0 
+size .6 1.6 
+alpha 100 256 90
+gravity 0.1
+bounce -1
+airfriction 3
+gravity 0.06
+liquidfriction 5
+originjitter 5 5 0
+originoffset 0 0 0
+velocityjitter 476 476 356
+
+/////////////////////
+//grenade explosion//
+/////////////////////
+
+//  on enemies
+
+//explosion -  red center
+effect grenade_explosion_nodebris       
+notunderwater
+count 50
+type smoke
+color 0xff0000 0xff471a
+size 30 30
+alpha 32 126 124
+bounce -1
+tex 0 7
+airfriction 0.2               
+liquidfriction 1
+gravity 0.01
+lighttime 0
+velocityjitter 56 56 166  
+
+//explosion -  colored smoke
+effect grenade_explosion_nodebris        
+notunderwater
+count 40
+type smoke
+color 0x331a00 0xe62e00
+size 35 35
+alpha 32 66 44
+bounce 1
+tex 2 7
+airfriction 1               
+liquidfriction 1
+gravity .1
+lighttime 0
+velocityjitter 176 176 256
+velocityoffset 0 0 200 
+originoffset 0 0 0 
+
+//explosion - bouble
+effect grenade_explosion_nodebris  
+underwater
+count 100
+type bubble
+tex 62 63
+size 0.2 0.8                       
+alpha 128 256 64
+gravity -0.125
+bounce 1.5
+liquidfriction 1
+originjitter 10 10 10
+velocityjitter 50 50 70      
+
+//explosions - sparks 2
+effect grenade_explosion_nodebris 
+count 240
+tex 40 40
+type spark
+color 0xFFAB57 0xFF0A0A
+stretchfactor 0 
+size 4 4 
+alpha 0 256 200
+gravity 0.3
+bounce 1
+airfriction 0.5
+gravity 0.7
+liquidfriction 5
+originjitter 10 10 10
+velocityjitter 250 250 550
+
+//explosions - sparks quickly dissapearing 
+effect grenade_explosion_nodebris  
+underwater
+count 25
+type spark
+tex 40 41
+color 0xF07800 0xBD0000
+stretchfactor 7 
+size 0.5 1 
+alpha 0 256 350
+gravity 0
+bounce -1
+liquidfriction 5
+originjitter 10 10 10
+velocityjitter 150 150 150
+
+//explosion -  red smoke
+effect grenade_explosion_nodebris         
+notunderwater
+count 150
+type smoke
+color 0x901000 0xFF3010
+size 10 10
+alpha 32 16 64
+bounce -1
+tex 0 8
+airfriction 0.2               
+liquidfriction 1
+velocityjitter 256 256 256    
+
+//explosion - horizontal "shock wave"
+effect grenade_explosion_nodebris           
+notunderwater
+count 192
+type smoke
+color 0x901000 0xFF3010
+size 10 10
+alpha 32 16 70
+bounce -1
+tex 0 7
+airfriction 0.2               
+liquidfriction 1
+originoffset 0 0 2
+velocityjitter 512 512 5
+
+//explosion -  bright smoke
+effect grenade_explosion_nodebris 
+notunderwater
+type smoke
+count 25
+tex 0 7
+size 10 13
+alpha 70 90 50
+sizeincrease 2
+color 0x202020 0x404040
+bounce -1
+airfriction 0.5
+liquidfriction 1
+originjitter 3 3 3
+velocityjitter 95 95 85 
+
+//explosion -  dark smoke inside the epicentre
+effect grenade_explosion_nodebris 
+notunderwater
+type alphastatic
+count 4
+tex 46 47
+size 1 1.2
+sizeincrease 6
+alpha 100 128 50
+color 0x303030 0x000000
+bounce -1
+airfriction 1     
+liquidfriction 1
+originjitter 0 0 5
+originoffset 0 0 5
+velocityjitter 20 20 20
+velocitymultiplier 0.38
+rotate 0 10 0 10
+
+//explosion - decal      
+effect grenade_explosion_nodebris 
+countabsolute 1
+type decal
+orientation oriented
+tex 8 15
+size 48 48
+alpha 256 256 0
+originjitter 30 30 30
+
+//explosion - light (casting shadow)
+effect grenade_explosion_nodebris  
+lightradius 400
+lightradiusfade 600
+lightcolor 9 6 0.5
+lightshadow 1
+
+//explosion - firelike effect inside the explosion above water
+effect grenade_explosion_nodebris  
+notunderwater
+count 10
+type smoke
+color 0x801010 0xFFA020
+size 5 10 
+tex 1 8
+alpha 50 150 100
+airfriction 2
+sizeincrease 2
+liquidfriction 2
+originoffset 0 0 5
+originjitter 20 20 20
+velocityjitter 20 20 20
+rotate 0 10 0 10
+
+effect grenade_explosion_nodebris	// shockwave nade
+notunderwater 
+count 6
+type static  //smoke
+//color 0x801010 0xFFA020
+color 0xff7f60 0xffc091
+size 23 25
+alpha 1 156 490
+tex 32 32
+//airfriction -0.1               
+originoffset 0 0 3
+originjitter 5 5 3
+velocityjitter 0 0 1	// must be set to this !!
+sizeincrease 480
+orientation oriented	// must be set to this !!
+rotate 0 10 -20 20
+
+
+//fire effect underwater 1
+effect grenade_explosion_nodebris  
+underwater
+count 30
+type smoke
+color 0x801010 0xFFA020
+size 5 10 
+tex 1 8
+alpha 50 150 100
+sizeincrease 2
+liquidfriction 1
+originoffset 0 0 5
+originjitter 15 15 15 
+velocityjitter 20 20 20
+rotate 0 10 0 10
+
+effect grenade_explosion_nodebris  
+underwater
+count 60
+type spark
+tex 40 41
+color 0xF07800 0xBD0000
+stretchfactor  4
+size 0.5 2 
+alpha 128 256 350
+sizeincrease -1
+gravity 0
+bounce -1
+airfriction 4
+liquidfriction 0
+originjitter 10 10 10
+velocityjitter 300 300 300
+
+effect grenade_explosion_nodebris	// used for giant watersplash
+underwater
+count 140
+type smoke
+tex 63 63
+color 0x707070 0x707070
+size 1 2
+stretchfactor 0
+alpha 40 228 48
+gravity .4
+originoffset 0 0 7
+originjitter 0 0 1
+liquidfriction 1
+bounce 1
+velocityoffset 0 0 400
+velocityjitter 370 370 170
+
+effect grenade_explosion_nodebris	// water mist
+underwater 
+countabsolute 5
+type smoke
+blend alpha
+//tex 16 31
+tex 0 7
+color 0x707070 0x707070
+size 20 30
+sizeincrease 17
+alpha 70 170 40
+originoffset 0 0 25
+originjitter 10 10 10
+airfriction 5
+velocityjitter 125 125 0
+velocityoffset 0 0 0
+gravity 0.14
+bounce 1
+
+effect grenade_explosion_nodebris	// water mist above water
+underwater 
+countabsolute 9
+type smoke
+blend alpha
+//tex 16 31
+tex 0 7
+color 0x707070 0x707070
+size 20 30
+sizeincrease 17
+alpha 20 120 40
+originoffset 0 0 55
+originjitter 10 10 60
+airfriction 2
+velocityjitter 125 125 0
+velocityoffset 0 0 400
+gravity 0.34
+bounce 1
+
+effect grenade_explosion_nodebris	// underwater shockwave
+underwater 
+count 1
+type static  //smoke
+color 0x353535 0x000000
+size 23 25
+alpha 175 270 190
+tex 32 32
+//airfriction -0.1               
+originoffset 0 0 23
+originjitter 5 5 0
+velocityjitter 0 0 1	// must be set to this !!
+sizeincrease 110
+orientation oriented	// must be set to this !!
+rotate 0 10 -20 20
+
+
+////////////////////
+
+////////////////////Grenade Wall
+
+//  on walls (= not enemies)
+
+
+//explosion -  dust cloud
+effect grenade_explosion          
+notunderwater
+count 90
+type alphastatic
+color 0x333333 0x331100
+size 30 30
+alpha 32 126 44
+bounce 1
+tex 2 7
+airfriction 1               
+liquidfriction 1
+gravity .5
+lighttime 0
+velocityjitter 106 106 266
+velocityoffset 0 0 350 
+originoffset 0 0 30 
+
+//explosion -  red center
+effect grenade_explosion       
+notunderwater
+count 60
+type smoke
+color 0xffc34d 0xe65c00
+size 30 30
+alpha 32 126 124
+bounce -1
+tex 0 7
+airfriction 0.2               
+liquidfriction 1
+gravity 0.01
+lighttime 0
+velocityjitter 56 56 186  
+
+//explosion -  colored smoke
+effect grenade_explosion    
+notunderwater
+count 30
+type smoke
+color 0x331a00 0xe62e00
+size 35 35
+alpha 32 66 44
+bounce 1
+tex 2 7
+airfriction 1               
+liquidfriction 1
+gravity .1
+lighttime 0
+velocityjitter 176 176 236
+velocityoffset 0 0 200 
+originoffset 0 0 0      
+
+//explosions - sparks 2
+effect grenade_explosion 
+count 230
+tex 40 40
+type spark
+color 0xFFAB57 0xFF0A0A
+stretchfactor 0 
+size 4 4 
+alpha 0 256 100
+gravity 0.3
+bounce 1
+airfriction 0.5
+gravity 0.7
+liquidfriction 5
+originjitter 10 10 10
+velocityjitter 250 250 650
+
+//explosion - bouble
+effect grenade_explosion 
+underwater
+count 80
+type bubble
+tex 62 63
+size 0.5 1.7                       
+alpha 128 256 64
+gravity -0.125
+bounce 1.5
+liquidfriction 1
+originjitter 10 10 10
+velocityjitter 50 50 70        
+
+//GL DEBRIS
+effect grenade_explosion  
+notunderwater
+tex 43 45
+count 120
+type alphastatic
+alpha 2048 2048 800
+color 0x262626 0x1a1a1a
+size 4 5.5
+gravity 0.9
+bounce 1
+originjitter 5 5 5
+velocityjitter 170 170 570
+
+//explosions - debris underwater
+effect grenade_explosion  
+underwater
+tex 43 45
+count 30
+type alphastatic
+alpha 2048 2048 512
+color 0x404040 0x4A4A4A
+size 1 3
+gravity 0.05
+bounce -1
+liquidfriction 1
+originjitter 2 2 0
+velocityjitter 150 150 120
+rotate -50 50 20 120
+
+//explosions - sparks - faster and higher flying ones
+effect grenade_explosion 
+notunderwater
+count 3
+type spark
+tex 40 40
+color 0xFF9E3D 0xBD0000
+stretchfactor 3
+size 1 3 
+alpha 65 130 200
+sizeincrease -1
+gravity 0.1
+bounce -1
+airfriction 3
+liquidfriction 5
+originjitter 10 10 10
+velocityjitter 300 300 400
+
+//explosions - sparks quickly dissapearing 
+effect grenade_explosion  
+underwater
+count 25
+type spark
+tex 40 41
+color 0xF07800 0xBD0000
+stretchfactor 7 
+size 0.5 1 
+alpha 0 256 350
+gravity 0
+bounce -1
+liquidfriction 5
+originjitter 10 10 10
+velocityjitter 150 150 150
+
+//explosion -  red smoke
+effect grenade_explosion         
+notunderwater
+count 150
+type smoke
+color 0x901000 0xFF3010
+size 10 10
+alpha 32 16 64
+bounce -1
+tex 0 8
+airfriction 0.2               
+liquidfriction 1
+velocityjitter 256 256 256    
+
+//explosion - horizontal "shock wave"
+effect grenade_explosion           
+notunderwater
+count 192
+type smoke
+color 0x901000 0xFF3010
+size 10 10
+alpha 32 16 70
+bounce -1
+tex 0 7
+airfriction 0.2               
+liquidfriction 1
+originoffset 0 0 2
+velocityjitter 512 512 5
+
+//explosion -  bright smoke
+effect grenade_explosion 
+notunderwater
+type smoke
+count 30
+tex 0 7
+size 10 13
+alpha 80 100 45
+sizeincrease 4
+color 0x202020 0x404040
+bounce -1
+airfriction 0.5
+liquidfriction 1
+originjitter 3 3 3
+velocityjitter 110 110 95 
+
+//explosion -  dark smoke inside the epicentre
+effect grenade_explosion 
+notunderwater
+type alphastatic
+count 4
+tex 46 47
+size 1 1.2
+sizeincrease 6
+alpha 100 128 50
+color 0x303030 0x000000
+bounce -1
+airfriction 1     
+liquidfriction 1
+originjitter 0 0 5
+originoffset 0 0 5
+velocityjitter 20 20 20
+velocitymultiplier 0.38
+rotate 0 10 0 10
+
+//explosion - decal      
+effect grenade_explosion 
+countabsolute 1
+type decal
+orientation oriented
+tex 8 15
+size 48 48
+alpha 256 256 0
+originjitter 30 30 30
+
+//explosion - light (casting shadow)
+effect grenade_explosion  
+lightradius 400
+lightradiusfade 600
+lightcolor 9 5 0.5
+lightshadow 1
+
+//explosion - firelike effect inside the explosion above water
+effect grenade_explosion  
+notunderwater
+count 10
+type smoke
+color 0x801010 0xFFA020
+size 5 10 
+tex 1 8
+alpha 50 150 100
+airfriction 2
+sizeincrease 2
+liquidfriction 2
+originoffset 0 0 5
+originjitter 20 20 20
+velocityjitter 20 20 20
+rotate 0 10 0 10
+
+effect grenade_explosion	// shockwave  
+notunderwater 
+count 6
+type static  //smoke
+//color 0x801010 0xFFA020
+color 0xff7f60 0xffc091
+size 23 25
+alpha 1 156 490
+tex 32 32
+//airfriction -0.1               
+originoffset 0 0 23
+originjitter 5 5 3
+velocityjitter 0 0 1	// must be set to this !!
+sizeincrease 480
+orientation oriented	// must be set to this !!
+rotate 0 10 -20 20
+
+
+/////UNDERWATER GRENADE
+
+
+//fire effect underwater 1
+effect grenade_explosion  
+underwater
+count 30
+type smoke
+color 0x801010 0xFFA020
+size 5 10 
+tex 1 8
+alpha 50 150 100
+sizeincrease 2
+liquidfriction 1
+originoffset 0 0 5
+originjitter 15 15 15 
+velocityjitter 20 20 20
+rotate 0 10 0 10
+
+//explosion -  red center
+effect grenade_explosion       
+underwater
+count 30
+type smoke
+color 0xffc34d 0xe65c00
+size 30 30
+alpha 32 126 124
+bounce -1
+tex 0 7
+airfriction 0.2               
+liquidfriction 1
+gravity 0.01
+lighttime 0
+velocityjitter 56 56 186 
+velocityjitter 126 126 176 
+
+effect grenade_explosion  
+underwater
+count 60
+type spark
+tex 40 41
+color 0xF07800 0xBD0000
+stretchfactor  4
+size 0.5 2 
+alpha 128 256 350
+sizeincrease -1
+gravity 0
+bounce -1
+airfriction 4
+liquidfriction 0
+originjitter 10 10 10
+velocityjitter 300 300 300
+
+effect grenade_explosion	// used for giant watersplash
+underwater
+count 150
+type smoke
+tex 63 63
+color 0x707070 0x707070
+size 1 2
+stretchfactor 0
+alpha 40 228 48
+gravity .4
+originoffset 0 0 7
+originjitter 0 0 1
+liquidfriction 1
+bounce 1
+velocityoffset 0 0 400
+velocityjitter 370 370 170
+
+
+effect grenade_explosion	// water mist
+underwater 
+countabsolute 5
+type smoke
+blend alpha
+//tex 16 31
+tex 0 7
+color 0x707070 0x707070
+size 20 30
+sizeincrease 17
+alpha 70 170 40
+originoffset 0 0 25
+originjitter 10 10 10
+airfriction 5
+velocityjitter 125 125 0
+velocityoffset 0 0 0
+gravity 0.14
+bounce 1
+
+effect grenade_explosion	// water mist above water
+underwater 
+countabsolute 9
+type smoke
+blend alpha
+//tex 16 31
+tex 0 7
+color 0x707070 0x707070
+size 20 30
+sizeincrease 17
+alpha 30 140 40
+originoffset 0 0 55
+originjitter 10 10 60
+airfriction 2
+velocityjitter 125 125 0
+velocityoffset 0 0 400
+gravity 0.34
+bounce 1
+
+effect grenade_explosion	// underwater shockwave
+underwater 
+count 1
+type static  //smoke
+//color 0x353535 0x000000
+color 0xff7f60 0xffc091
+size 23 25
+alpha 175 270 190
+tex 32 32
+//airfriction -0.1               
+originoffset 0 0 23
+originjitter 5 5 0
+velocityjitter 0 0 1	// must be set to this !!
+sizeincrease 110
+orientation oriented	// must be set to this !!
+rotate 0 10 -20 20
+color 0xf47a42 0xf28452    
+
+
+///////////////////////
+/////MONSTER GIBS////
+
+effect blood_monster_gib	// blood mist
+notunderwater 
+countabsolute 35
+type smoke
+blend alpha
+//tex 16 31
+tex 0 7
+color 0x330300 0x210200
+size 20 30
+sizeincrease 17
+alpha 10 70 40
+originoffset 0 0 25
+originjitter 10 10 10
+airfriction 5
+velocityjitter 125 125 0
+velocityoffset 0 0 0
+gravity 0.14
+
+effect blood_monster_gib	// used when cvar bloodextension == 1  (when gibbing a living monster, a lot of blood splashes are spawned and a high z-velocity)
+notunderwater
+count 60
+type spark
+blend invmod
+tex 16 32
+size 2 3
+alpha 233 250 40
+bounce -1
+stretchfactor 1.4
+airfriction 3
+liquidfriction 4
+velocityjitter 615 615 877
+originoffset 0 0 20
+originjitter 10 10 0
+gravity 1.2
+staincolor 0xA8FFFF 0xA8FFFF
+staintex 16 32
+stainalpha 156 256
+stainsize 3 6
+
+effect blood_monster_gib	// used when cvar bloodextension == 1  (when gibbing a living monster, a lot of blood splashes are spawned and a high z-velocity)
+notunderwater
+count 30
+type spark
+blend invmod
+tex 16 32
+size 2 3
+alpha 233 250 40
+bounce -1
+stretchfactor 2.4
+airfriction 3
+liquidfriction 4
+velocityjitter 615 615 877
+originoffset 0 0 20
+originjitter 10 10 0
+gravity 1.2
+staincolor 0xA8FFFF 0xA8FFFF
+staintex 16 32
+stainalpha 156 256
+stainsize 4 5
+
+// blood mist
+effect blood_monster_gib	
+notunderwater 
+count 4
+type smoke
+blend alpha
+//tex 16 31
+tex 0 7
+color 0x330300 0x210200
+size 13 20
+sizeincrease 30
+alpha 320 470 560
+originoffset 0 0 7
+originjitter 10 10 20
+airfriction 5
+velocityjitter 25 25 120
+velocityoffset 0 0 0
+gravity -0.1
+
+effect blood_monster_gib		// underwater blood
+underwater
+countabsolute 20
+type smoke
+blend invmod
+tex 16 32
+size 5 7
+alpha 133 200 10
+stretchfactor 3
+sizeincrease .5
+bounce -1
+airfriction 15
+liquidfriction 5.5
+velocityjitter 275 275 450
+originoffset 0 0 10
+originjitter 10 10 0
+staincolor 0xA8FFFF 0xA8FFFF
+staintex 16 32
+stainalpha 156 256
+stainsize 8 7
+gravity 0.02
+
+effect blood_monster_gib	// decal under gibbed body
+count 1
+type blood
+tex 17 32
+size 25 30
+alpha 53 100 40
+bounce -1
+airfriction 1
+liquidfriction 1.9
+velocityjitter 25 25 17
+originoffset 0 0 0
+originjitter 10 10 0
+gravity 0.8
+
+
+
+
+////GIB SMALLER
+
+effect blood_monster_gibsm	// used when cvar bloodextension == 1  (when gibbing a living monster, a lot of blood splashes are spawned and a high z-velocity)
+notunderwater
+count 30
+type spark
+blend invmod
+tex 16 32
+size 2 3
+alpha 233 250 40
+bounce -1
+stretchfactor 1.4
+airfriction 3
+liquidfriction 4
+velocityjitter 415 415 677
+originoffset 0 0 20
+originjitter 10 10 0
+gravity 1.2
+staincolor 0xA8FFFF 0xA8FFFF
+staintex 16 32
+stainalpha 156 256
+stainsize 3 6
+
+effect blood_monster_gibsm	// used when cvar bloodextension == 1  (when gibbing a living monster, a lot of blood splashes are spawned and a high z-velocity)
+notunderwater
+count 20
+type spark
+blend invmod
+tex 16 32
+size 2 3
+alpha 233 250 40
+bounce -1
+stretchfactor 2.4
+airfriction 3
+liquidfriction 4
+velocityjitter 315 315 477
+originoffset 0 0 20
+originjitter 10 10 0
+gravity 1.2
+staincolor 0xA8FFFF 0xA8FFFF
+staintex 16 32
+stainalpha 156 256
+stainsize 4 5
+
+effect blood_monster_gibsm		// underwater blood
+underwater
+countabsolute 40
+type smoke
+blend invmod
+tex 16 32
+size 3 4
+alpha 133 200 10
+stretchfactor 3
+sizeincrease 2.5
+bounce -1
+airfriction 15
+liquidfriction 5.5
+velocityjitter 275 275 450
+originoffset 0 0 10
+originjitter 10 10 0
+staincolor 0xA8FFFF 0xA8FFFF
+staintex 16 32
+stainalpha 156 256
+stainsize 8 7
+gravity 0.02
+
+effect blood_corpse_gib		// used when cvar bloodextension == 1  (when gibbing a corpse, a lot of blood splashes are spawned out of the corpse)
+notunderwater
+countabsolute 120
+type spark
+blend invmod
+tex 16 32
+size 3 4
+alpha 133 200 40
+stretchfactor 3
+bounce -1
+airfriction 5
+liquidfriction 36.5
+velocityjitter 875 875 850
+originoffset 0 0 10
+originjitter 10 10 0
+gravity 1.5
+staincolor 0xA8FFFF 0xA8FFFF
+staintex 16 32
+stainalpha 156 256
+stainsize 1 6
+
+effect blood_corpse_gib		// underwater blood
+underwater
+countabsolute 60
+type smoke
+blend invmod
+tex 16 32
+size 3 4
+alpha 133 200 10
+stretchfactor 3
+sizeincrease 2.5
+bounce -1
+airfriction 15
+liquidfriction 5.5
+velocityjitter 275 275 450
+originoffset 0 0 10
+originjitter 10 10 0
+gravity 0.02
+
+
+effect blood_corpse_gib		// used when cvar bloodextension == 1  (when gibbing a corpse, a lot of blood mist is spawned over the corpse)
+count 77
+type alphastatic
+color 0xA8FFFF 0xA8FFFF
+blend invmod
+tex 16 31
+size 7 14
+alpha 70 95 300
+originoffset 0 0 18
+originjitter 18 18 0
+velocityjitter 70 70 70
+bounce -1
+
+// blood mist
+effect blood_corpse_gib	
+notunderwater 
+count 4
+type smoke
+blend alpha
+//tex 16 31
+tex 0 7
+color 0x330300 0x210200
+size 13 20
+sizeincrease 30
+alpha 320 470 860
+originoffset 0 0 7
+originjitter 10 10 20
+airfriction 5
+velocityjitter 25 25 120
+velocityoffset 0 0 0
+gravity -0.1
+
+
+//gib blood trail in the acid 
+effect gibacid
+trailspacing 5
+type blood
+tex 16 23
+size 3 7
+alpha 100 200 192
+bounce -1
+airfriction 1
+liquidfriction 4
+velocityjitter 64 64 64
+velocitymultiplier 0.2
+
+
+//center glow
+effect double_shotgun_muzzleflash
+notunderwater
+type smoke
+count 3
+tex 48 55
+size 9 12
+alpha 50 75 225
+color 0xffd972 0xFF811A
+bounce -1
+gravity 0
+sizeincrease 100.5
+time 0.03 0.03
+airfriction 1
+liquidfriction 1
+originoffset 0 0 5
+originjitter 0 0 0
+velocityjitter 0 0 16
+
+//center flash streak
+effect double_shotgun_muzzleflash
+notunderwater
+type smoke
+count 3
+tex 40 40
+size .2 .5
+alpha 50 75 1225
+color 0xffd972 0xffeb8c
+bounce -1
+gravity 0
+sizeincrease 400.5
+stretchfactor 2
+time 0.03 0.03
+airfriction 1
+liquidfriction 1
+originoffset 0 0 5
+originjitter 0 0 0
+velocityjitter 0 0 16
+
+//doublegunshot - muzzleflash
+effect double_shotgun_muzzleflash
+notunderwater
+countabsolute 25 //15
+type alphastatic
+color 0x202020 0x666666
+tex 0 7
+size 2 3
+alpha 100 200 700
+sizeincrease 7
+originoffset 0 0 7
+originjitter 1.5 1.5 1.5
+velocityjitter 6 6 6
+velocitymultiplier 0.01
+lightradius 200
+lightradiusfade 2000
+lightcolor 2 1.5 0.2
+
+//doublegunshot - muzzleflash underwater bubble
+effect double_shotgun_muzzleflash
+underwater
+countabsolute 15
+type bubble
+tex 62 62
+size 0.1 0.2
+alpha 128 256 180
+gravity -0.125
+bounce -1
+liquidfriction 4
+velocityjitter 18 18 18
+
+
+////////////////
+//  Reiver   ///
+////////////////
+
+effect reiver_outbreak		// used for reiver outbreak (debris)
+countabsolute 15
+type alphastatic
+tex 43 45
+size 0.7 2
+color 0x404040 0x969696
+alpha 2048 2048 777
+gravity 0.4
+bounce -1
+originjitter 27 27 7
+originoffset 0 0 -30
+velocityoffset 0 0 40
+velocityjitter 40 40 35
+rotate -50 50 20 120
+
+effect reiver_outbreak		// used for reiver outbreak (black smoke)
+notunderwater
+type alphastatic
+countabsolute 30
+tex 0 7
+size 3 5
+alpha 150 200 120
+color 0x000000 0x333333
+sizeincrease 2
+gravity -0.017
+originjitter 23 23 4
+originoffset 0 0 -30
+velocityoffset 0 0 5
+velocityjitter 10 10 15
+
+effect reiver_outbreak		// used for reiver outbreak (flames)   	
+notunderwater 
+countabsolute 7	
+type static
+tex 37 39 
+size 3 6
+sizeincrease 10
+alpha 50 110 220
+color 0xFFAB57 0xFFAB57
+gravity -0.18
+originoffset 0 0 -30
+originjitter 22 22 4
+velocityjitter 4 4 7
+rotate 160 200 10 40
+
+effect reiver_outbreak		// used for reiver outbreak (fire like smoke)   
+notunderwater 
+countabsolute 15	
+type smoke 			
+tex 0 7 
+size 3 7 
+sizeincrease 3
+color 0xFFAB57 0xFF0A0A
+alpha 20 90 90 
+gravity -0.2 
+originoffset 0 0 -30 
+originjitter 26 26 3
+velocityoffset 0 0 5 
+airfriction 4 
+bounce 0 
+
+effect reiver_outbreak		// used for reiver outbreak (bright smoke )	
+notunderwater
+countabsolute 4		
+type smoke
+tex 0 7
+size 6 10
+sizeincrease 5
+color 0x303030 0x303030
+alpha 10 130 80
+gravity -0.25
+originoffset 0 0 -20
+originjitter 22 22 5
+airfriction 5
+bounce -1
+
+effect reiver_outbreak		// used for reiver outbreak (sparks)  		
+notunderwater 
+countabsolute 15		
+type snow
+tex 40 40
+//color 0xFFBF80 0xFFFF80
+color 0x9f5343 0xFF5C5C
+size 0.3 0.6
+stretchfactor 1
+sizeincrease -0.2
+alpha 150 150 80
+gravity -0.2
+originoffset 0 0 -20
+originjitter 14 14 12
+airfriction 8
+velocityjitter 120 120 100
+bounce -1
+
+
+
+
+   
+effect reiver_outbreak_decal	// used for reiver outbreak (decal)
+countabsolute 1
+type decal
+orientation oriented	
+tex 8 15
+size 35 40
+alpha 256 256 0
+originjitter 1 1 1
+
+effect reiver_vampire_drain2 	// for reivers vampire attack ( "health" drain out of players body)  blood/cloud
+countabsolute 30  		// effect type 2
+type spark
+tex 0 7 
+color 0x448800 0x559900		// yellow/green ish
+size 0.7 1.1
+alpha 80 150 110
+originjitter 12 12 12
+originoffset 0 0 1
+stretchfactor 2
+velocitymultiplier 10
+
+
+effect reiver_vampire_drain1 	// for reivers vampire attack ( "health" drain out of players body)  dots/stars	
+countabsolute 30  	 	// effect type 1  (alternative effect !! )
+type spark
+tex 40 40
+//color 0xff0000 0xdc7171	// red
+color 0x44aa00 0x55aa00		// yellow/green ish
+size 0.7 1.1
+alpha 100 200 177
+originjitter 14 14 14
+originoffset 0 0 1
+stretchfactor 1
+velocitymultiplier 10
+
+////////////////////
+
+//  on walls (= not enemies)
+
+//explosion - bouble
+effect rocket_explosion  
+underwater
+count 100
+type bubble
+tex 62 63
+size 0.2 0.8                       
+alpha 128 256 64
+gravity -0.125
+bounce 1.5
+liquidfriction 1
+originjitter 10 10 10
+velocityjitter 50 50 70      
+
+//explosions - sparks 2
+effect rocket_explosion  
+count 180
+tex 40 40
+type spark
+color 0xFFAB57 0xFF0A0A
+stretchfactor 0 
+size 4 4 
+alpha 0 256 100
+gravity 0.3
+bounce 1
+airfriction 0.5
+gravity 0.7
+liquidfriction 5
+originjitter 10 10 10
+velocityjitter 450 450 450
+
+effect rocket_explosion  
+underwater
+count 50
+tex 40 40
+type spark
+color 0xFFAB57 0xFF0A0A
+stretchfactor 3 
+size 0.5 1 
+alpha 0 256 300
+gravity 0
+bounce -1
+liquidfriction 2
+originjitter 10 10 10
+velocityjitter 128 128 128
+
+//explosion -  red smoke
+effect rocket_explosion          
+notunderwater
+count 300
+type smoke
+color 0x901000 0xFF3010
+size 10 10
+alpha 32 16 64
+bounce -1
+tex 0 7
+airfriction 0.2               
+liquidfriction 1
+lighttime 0
+velocityjitter 256 256 256    
+
+//explosion -  bright smoke
+effect rocket_explosion  
+notunderwater
+type smoke
+count 30
+tex 0 7
+size 12 15
+alpha 80 100 35
+sizeincrease 5
+color 0x202020 0x404040
+bounce -1
+airfriction 0.5
+liquidfriction 1
+originjitter 5 5 5
+velocityjitter 110 110 95 
+
+//explosion -  dark smoke inside the epicentre
+effect rocket_explosion  
+notunderwater
+type alphastatic
+count 5
+tex 0 7
+size 2 3
+sizeincrease 6
+alpha 100 256 70
+color 0x303030 0x000000
+bounce -1
+airfriction 1     
+liquidfriction 1
+originjitter 0 0 5
+velocityjitter 20 20 20
+velocitymultiplier 0.38
+rotate 0 10 -20 20
+
+//explosion -  red center
+effect rocket_explosion          
+notunderwater
+count 60
+type smoke
+color 0xffc34d 0x2d2d2d
+size 40 40
+alpha 32 126 124
+bounce -1
+tex 0 7
+airfriction 0.2               
+liquidfriction 1
+gravity 0.01
+lighttime 0
+velocityjitter 66 66 196  
+
+//explosion -  dust cloud
+effect rocket_explosion          
+notunderwater
+count 110
+type alphastatic
+color 0x333333 0x331100
+size 35 35
+alpha 32 126 44
+bounce 1
+tex 2 7
+airfriction 1            
+liquidfriction 1
+gravity .5
+lighttime 0
+velocityjitter 106 106 456
+velocityoffset 0 0 400 
+originoffset 0 0 30 
+
+//explosion -  colored smoke
+effect rocket_explosion          
+notunderwater
+count 40
+type smoke
+color 0x331a00 0x2d2d2d
+size 45 45
+alpha 32 66 44
+bounce 1
+tex 2 7
+airfriction 1               
+liquidfriction 1
+gravity .1
+lighttime 0
+velocityjitter 176 176 256
+velocityoffset 0 0 200 
+originoffset 0 0 0 
+
+//explosion - decal      
+effect rocket_explosion  
+countabsolute 1
+type decal
+orientation oriented
+tex 8 15
+size 48 48
+alpha 256 156 10
+originjitter 30 30 30
+
+//explosion - light (casting shadow)
+effect rocket_explosion  
+lightradius 300
+lightradiusfade 250
+//lightcolor 4 2 0.5
+lightcolor 17 10 3
+lightshadow 1
+
+//explosion -  red center
+effect rocket_explosion    
+underwater
+count 30
+type smoke
+color 0xffc34d 0x2d2d2d
+size 40 40
+alpha 32 126 124
+bounce -1
+tex 0 7
+airfriction 0.2               
+liquidfriction 1
+gravity 0.09
+lighttime 0
+velocityjitter 126 126 176 
+
+
+//explosion - firelike effect inside the explosion underwater
+effect rocket_explosion  
+underwater
+count 20
+type smoke
+color 0x801010 0xFFA020
+size 5 10
+tex 0 7 
+alpha 20 150 120
+airfriction 2
+sizeincrease 2
+liquidfriction 2
+originjitter 15 15 15 
+velocityjitter 30 30 30
+rotate 50 -50 -40 40
+
+//explosions - debris
+effect rocket_explosion  
+notunderwater
+tex 43 45
+count 60
+type alphastatic
+alpha 2048 2048 800
+color 0x262626 0x1a1a1a
+size 5 5.9
+gravity 0.9
+bounce 1
+originjitter 5 5 5
+originoffset 0 0 10
+velocityjitter 170 170 870
+
+//explosions - debris
+effect rocket_explosion  
+notunderwater
+tex 43 45
+count 160
+type alphastatic
+alpha 2048 2048 800
+color 0x262626 0x1a1a1a
+size 3 3.9
+gravity 0.9
+bounce -1
+originjitter 5 5 5
+originoffset 0 0 10
+velocityjitter 170 170 870
+
+effect rocket_explosion	// shockwave  
+notunderwater 
+count 6
+type static  //smoke
+color 0x801010 0xFFA020
+size 23 25
+alpha 1 156 490
+tex 32 32
+//airfriction -0.1               
+originoffset 0 0 23
+originjitter 5 5 3
+velocityjitter 0 0 1	// must be set to this !!
+sizeincrease 480
+orientation oriented	// must be set to this !!
+rotate 0 10 -20 20
+
+//explosion -  dark smoke ring
+effect rocket_explosion  
+notunderwater
+type alphastatic
+count 40
+tex 0 7
+size 16 18
+alpha 100 150 45
+sizeincrease 10
+color 0x212121 0x0f0f0f
+bounce -1
+airfriction 3
+liquidfriction 1
+originjitter 5 5 5
+velocityjitter 270 270 5 
+velocityoffset 0 0 5
+rotate 50 -50 -40 40
+
+
+//explosion -  dark smoke
+effect rocket_explosion  
+notunderwater
+type alphastatic
+count 30
+tex 0 7
+size 1 2
+alpha 100 50 -5
+alpha 100 150 35
+sizeincrease 35
+color 0x212121 0x0f0f0f
+bounce -1
+airfriction 2
+liquidfriction 1
+originjitter 5 5 5
+velocityjitter 20 20 175 
+velocityoffset 0 0 125
+rotate 50 -50 -40 40
+
+//////UNDERWATER ROCKET//////////////
+
+effect rocket_explosion	// used for giant watersplash
+underwater
+count 140
+type smoke
+tex 63 63
+color 0x707070 0x707070
+size 1 2
+stretchfactor 0
+alpha 40 228 48
+gravity .4
+originoffset 0 0 7
+originjitter 0 0 1
+liquidfriction 1
+bounce 1
+velocityoffset 0 0 400
+velocityjitter 370 370 170
+
+effect rocket_explosion	// water mist
+underwater 
+countabsolute 5
+type smoke
+blend alpha
+//tex 16 31
+tex 0 7
+color 0x707070 0x707070
+size 20 30
+sizeincrease 17
+alpha 70 170 40
+originoffset 0 0 25
+originjitter 10 10 10
+airfriction 5
+velocityjitter 125 125 0
+velocityoffset 0 0 0
+gravity 0.14
+
+effect rocket_explosion	// water mist above water
+underwater 
+countabsolute 9
+type smoke
+blend alpha
+//tex 16 31
+tex 0 7
+color 0x707070 0x707070
+size 20 30
+sizeincrease 17
+alpha 20 120 40
+originoffset 0 0 55
+originjitter 10 10 60
+airfriction 2
+velocityjitter 125 125 0
+velocityoffset 0 0 400
+liquidfriction 5
+gravity 0.34
+
+effect rocket_explosion	// underwater shockwave
+underwater 
+count 1
+type static  //smoke
+color 0x353535 0x000000
+size 23 25
+alpha 175 270 190
+tex 32 32
+//airfriction -0.1               
+originoffset 0 0 23
+originjitter 5 5 0
+velocityjitter 0 0 1	// must be set to this !!
+sizeincrease 110
+orientation oriented	// must be set to this !!
+rotate 0 10 -20 20

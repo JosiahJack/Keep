@@ -495,7 +495,7 @@ void() W_FireShotgun = {
 	if (query_configflag(SVR_SHOTGPROJ))
 		FireBullets (QUANTITY_SG, spread_pat);
 	else {
-		Launch_Shells(QUANTITY_SGP, spread_pat, CT_PROJ_SG);
+		Launch_Shells(QUANTITY_SG, spread_pat, CT_PROJ_SG);
 		Launch_ShellCasing(1);	// Shell casings
 	}
 };
@@ -542,8 +542,7 @@ void() W_FireSuperShotgun = {
 		if (self.ammo_shells < 3) {
 			self.ammo_shells = 0;
 			ssg_qty = QUANTITY_SSG * 1;
-		}
-		else {
+		} else {
 			// 150% damage
 			shell_qty = 3;
 			self.ammo_shells = self.ammo_shells - 3;
@@ -1296,9 +1295,6 @@ void(entity targ) W_SetCurrentAmmo = {
 	if (cinematic_running > 0) return;		// Remote camera active
 	remoteplayer_run (targ);			// get out of any weapon firing states
 
-	// Reset all Ammo types for gfx on sbar (engine code hack - sbar.c)
-	//targ.items = targ.items - ( targ.items & (IT_SHELLS | IT_NAILS | IT_ROCKETS | IT_CELLS) );
-  	//targ.items2 = (targ.items2 - (targ.items2 & ((IT2_LAVA_NAILS | IT2_PLASMA_AMMO) | IT2_MULTI_ROCKETS)));
 	// dprint("\b[self.weapon\b = ");
 	// dprint(ftos(self.weapon));
 	// dprint("\n");
@@ -1310,12 +1306,8 @@ void(entity targ) W_SetCurrentAmmo = {
 			} else {
 				targ.weaponmodel = v_axemodel;
 			}
-
-			if (targ.perms & IT_CHAINSAW) {
-				targ.weaponmodel = "progs/drake/v_saw.mdl"; // override axes
-			}
-		}
-		else if (targ.weapon == IT_SHOTGUN) {
+			if (targ.perms & IT_CHAINSAW) targ.weaponmodel = "progs/drake/v_saw.mdl"; // override axes
+		} else if (targ.weapon == IT_SHOTGUN) {
 			targ.currentammo = targ.ammo_shells;
 			if (targ.perms & IT_BLASTER) {
 				targ.weaponmodel = "progs/drake/v_laserb.mdl";
@@ -1323,105 +1315,70 @@ void(entity targ) W_SetCurrentAmmo = {
 				if (targ.items & IT_SHOTGUN) {
 					targ.weaponmodel = MODEL_VWEAP_SG;
 				} else {
+					// This is also called no axe startup option
+					// Cinematic mode, no viewmodel
 					targ.weaponmodel = "";
 					targ.currentammo = 0;
 				}
 			}
-			targ.items = targ.items | IT_SHELLS;
-		}
-		else if (targ.weapon == IT_SUPER_SHOTGUN) {
+		} else if (targ.weapon == IT_SUPER_SHOTGUN) {
 			targ.currentammo = targ.ammo_shells;
 			if (targ.moditems & IT_UPGRADE_SSG) targ.weaponmodel = MODEL_VWEAP_UPSSG;
 			else targ.weaponmodel = MODEL_VWEAP_SSG;
-			targ.items = targ.items | IT_SHELLS;
-		}
-		else if (targ.weapon == IT_LAVA_NAILGUN) {
+		} else if (targ.weapon == IT_LAVA_NAILGUN) {
 			targ.currentammo = targ.ammo_lava_nails;
 			targ.weaponmodel = MODEL_VWEAP_LAVANG;
-			targ.items2 = targ.items2 | IT2_LAVA_NAILS;
-		}
-		else if (targ.weapon == IT_NAILGUN) {
+		} else if (targ.weapon == IT_NAILGUN) {
 			targ.currentammo = targ.ammo_nails;
 			targ.weaponmodel = MODEL_VWEAP_NG;
-			targ.items = targ.items | IT_NAILS;
-		}
-		else if (targ.weapon == IT_LAVA_SUPER_NAILGUN) {
+		} else if (targ.weapon == IT_LAVA_SUPER_NAILGUN) {
 			targ.currentammo = targ.ammo_lava_nails;
 			targ.weaponmodel = MODEL_VWEAP_LAVASNG;
-			targ.items2 = targ.items2 | IT2_LAVA_NAILS;
-		}
-		else if (targ.weapon == IT_SUPER_NAILGUN) {
+		} else if (targ.weapon == IT_SUPER_NAILGUN) {
 			targ.currentammo = targ.ammo_nails;
 			targ.weaponmodel = MODEL_VWEAP_SNG;
-			targ.items = targ.items | IT_NAILS;
-		}
-		else if (targ.weapon == IT_MULTI_GRENADE) {
+		} else if (targ.weapon == IT_MULTI_GRENADE) {
 			targ.currentammo = targ.ammo_multi_rockets;
 			targ.weaponmodel = MODEL_VWEAP_MULTG;
-			targ.items2 = targ.items2 | IT2_MULTI_ROCKETS;
-		}
-		else if (targ.weapon == IT_GRENADE_LAUNCHER) {
+		} else if (targ.weapon == IT_GRENADE_LAUNCHER) {
 			targ.currentammo = targ.ammo_rockets;
 			targ.weaponmodel = MODEL_VWEAP_GL;
-			targ.items = targ.items | IT_ROCKETS;
-		}
-		else if (targ.weapon == IT2_PROXIMITY_GUN) {
+		} else if (targ.weapon == IT2_PROXIMITY_GUN) {
 			targ.currentammo = targ.ammo_rockets;
 			targ.weaponmodel = MODEL_VWEAP_PROX;
-			targ.items = targ.items | IT_ROCKETS;
-		}
-		else if (targ.weapon == IT_MULTI_ROCKET) {
+		} else if (targ.weapon == IT_MULTI_ROCKET) {
 			targ.currentammo = targ.ammo_multi_rockets;
 			targ.weaponmodel = MODEL_VWEAP_MULTR;
-			targ.items2 = targ.items2 | IT2_MULTI_ROCKETS;
-		}
-		else if (targ.weapon == IT_ROCKET_LAUNCHER) {
+		} else if (targ.weapon == IT_ROCKET_LAUNCHER) {
 			targ.currentammo = targ.ammo_rockets;
 			targ.weaponmodel = MODEL_VWEAP_RL;
-			targ.items = targ.items | IT_ROCKETS;
-		}
-		else if (targ.weapon == IT_LIGHTNING) {
+		} else if (targ.weapon == IT_LIGHTNING) {
 			targ.currentammo = targ.ammo_cells;
 			if (targ.moditems & IT_UPGRADE_LG) targ.weaponmodel = MODEL_VWEAP_UPLG;
 			else targ.weaponmodel = MODEL_VWEAP_LG;
-			targ.items = targ.items | IT_CELLS;
-		}
-		else if (targ.weapon == IT2_CHAINLIGHTNING) {
+		} else if (targ.weapon == IT2_CHAINLIGHTNING) {
 			targ.currentammo = targ.ammo_cells;
 			targ.weaponmodel = "progs/drake/v_light2.mdl";
-			targ.items = targ.items | IT_CELLS;
-		}
-		else if (targ.weapon == IT_PLASMA_GUN) {
+		} else if (targ.weapon == IT_PLASMA_GUN) {
 			targ.currentammo = targ.ammo_plasma;
 			targ.weaponmodel = MODEL_VWEAP_PLASM;
-			targ.items2 = targ.items2 | IT2_MULTI_ROCKETS;
-		}
-		else if (targ.weapon == IT2_LASER_CANNON) {
+		} else if (targ.weapon == IT2_LASER_CANNON) {
 			targ.currentammo = targ.ammo_cells;
-			//targ.weaponmodel = MODEL_VWEAP_LCAN;
 			targ.weaponmodel = "progs/drake/v_laserg.mdl";
-			targ.items = targ.items | IT_CELLS;
-		}
-		else if (targ.weapon == IT_EXTRA_WEAPON) {
+		} else if (targ.weapon == IT_EXTRA_WEAPON) {
 			if (targ.ammo_poison > 0) {
 				targ.currentammo = targ.ammo_poison;
 				targ.weaponmodel = "progs/v_crossbow2.mdl";
-				targ.items2 = targ.items2 | IT2_POISON;
 			} else {
 				targ.currentammo = targ.ammo_bolts;
 				targ.weaponmodel = "progs/v_crossbow1.mdl";
-				targ.items2 = targ.items2 | IT2_BOLTS;
 			}
-		}
-		else if (targ.weapon == IT2_MJOLNIR) {
+		} else if (targ.weapon == IT2_MJOLNIR) {
 			targ.currentammo = targ.ammo_cells;
 			targ.weaponmodel = MODEL_VWEAP_MJOL;
-			targ.items = targ.items | IT_CELLS;
-		}
-		else if (targ.weapon == IT2_CROSS) {
+		} else if (targ.weapon == IT2_CROSS) {
 			targ.weaponmodel =  "progs/drake/v_wand.mdl";
-		}
-		else if (targ.weapon == IT2_GRAPPLE) {
+		} else if (targ.weapon == IT2_GRAPPLE) {
 			targ.currentammo = 0;
 			targ.weaponmodel = "progs/drake/v_grpple.mdl";
 			if (self.hook) {
@@ -1429,22 +1386,17 @@ void(entity targ) W_SetCurrentAmmo = {
 					self.weaponframe = 1;   // Hook is still out.
 				}
 			}
-		}
-		else if (targ.weapon == IT_SANGUINATORS) {
+		} else if (targ.weapon == IT_SANGUINATORS) {
 			targ.currentammo = targ.ammo_bloodcrystals;
 			targ.weaponmodel = "progs/aoa/v_sanguinators.mdl";
-			//targ.items = targ.items | IT_BLOOD;
-		}
-		else if (targ.weapon == IT_SCIMITAR) {
+		} else if (targ.weapon == IT_SCIMITAR) {
 			targ.currentammo = targ.ammo_elemental;
 			targ.weaponmodel = "progs/aoa/v_scimitar.mdl";
-			//targ.items = targ.items | IT_ELEMENTAL;
-		}
-		else if (targ.weapon == IT_RAPIER) {
+		} else if (targ.weapon == IT_RAPIER) {
 			targ.currentammo = targ.ammo_bloodcrystals;
 			targ.weaponmodel = "progs/aoa/v_rapier.mdl";
-		}
-		else {
+		} else {
+			// This is also called no axe startup option
 			// Cinematic mode, no viewmodel
 			targ.currentammo = 0;
 			targ.weaponmodel = "";
@@ -1453,27 +1405,19 @@ void(entity targ) W_SetCurrentAmmo = {
 		if (targ.weapon == IT_ICE) {
 			targ.currentammo = targ.ammo_elemental;
 			targ.weaponmodel = "progs/aoa/v_ice.mdl";
-			//targ.items = targ.items | IT_ELEMENTAL;
-		}
-		else if (targ.weapon == IT_MACE) {
+		} else if (targ.weapon == IT_MACE) {
 			targ.currentammo = targ.ammo_bloodcrystals;
 			targ.weaponmodel = "progs/aoa/v_mace.mdl";
-			//targ.items = targ.items | IT_BLOOD;
-		}
-		else if (targ.weapon == IT_VOID_STAFF) {
+		} else if (targ.weapon == IT_VOID_STAFF) {
 			targ.currentammo = targ.ammo_voidshards;
 			targ.weaponmodel = "progs/aoa/v_voidstaff.mdl";
-			//targ.items = targ.items | IT_VOID;
-		}
-		else if (targ.weapon == IT_FLAK) {
+		} else if (targ.weapon == IT_FLAK) {
 			targ.currentammo = CountFlakAmmo(targ);
 			targ.weaponmodel = "progs/aoa/v_flak.mdl";
-		}
-		else if (targ.weapon == IT_GUNGNIR) {
+		} else if (targ.weapon == IT_GUNGNIR) {
 			targ.currentammo = targ.ammo_voidshards;
 			targ.weaponmodel = "progs/aoa/v_gungnir.mdl";
-		}
-		else {
+		} else {
 			// This is also called no axe startup option
 			// Cinematic mode, no viewmodel
 			targ.currentammo = 0;
@@ -2497,121 +2441,229 @@ void(entity targ) W_ChangeWeapon = {
 	W_SetCurrentAmmo (targ);
 };
 
+// Returns unique ID in list of weapon cycling order.  Refer to defskeep.qc for the list and ID's
+float GetWepIDIndex (float wep, float inhackbank) = {
+	float retval;
+	retval = 0;
+	if (inhackbank) {
+		if (wep == IT_MACE) 		retval = ID_MACE;
+		if (wep == IT_ICE)			retval = ID_ICE;
+		if (wep == IT_VOID_STAFF)	retval = ID_VOIDSTAFF;
+		if (wep == IT_FLAK) 		retval = ID_FLAK;
+		if (wep == IT_GUNGNIR) 		retval = ID_GUNGNIR;
+	} else {
+		if (wep == IT2_GRAPPLE) 			retval = ID_GRAPPLE;
+		if (wep == IT_AXE)					retval = ID_AXE_SHADAXE_CHAINSAW;
+		if (wep == IT_SHOTGUN)				retval = ID_SHOTGUN_BLASTER;
+		if (wep == IT_SUPER_SHOTGUN)		retval = ID_SUPER_SHOTGUN_WIDOWMAKER_SHOTCYCLER_QUADSHOTTY;
+		if (wep == IT_SCIMITAR)				retval = ID_SCIMITAR;
+		if (wep == IT_NAILGUN)				retval = ID_NAILGUN;
+		if (wep == IT_LAVA_NAILGUN)			retval = ID_LAVANAILGUN;
+		if (wep == IT_RAPIER)				retval = ID_RAPIER;
+		if (wep == IT_SUPER_NAILGUN)		retval = ID_PERFORATOR;
+		if (wep == IT_LAVA_SUPER_NAILGUN)	retval = ID_LAVASUPERNAILGUN;
+		if (wep == IT_GRENADE_LAUNCHER)		retval = ID_GRENADE_LAUNCHER;
+		if (wep == IT2_PROXIMITY_GUN)		retval = ID_PROXIMITY_GRENADE;
+		if (wep == IT_MULTI_GRENADE)		retval = ID_MULTI_GRENADE;
+		if (wep == IT_ROCKET_LAUNCHER)		retval = ID_ROCKETLAUNCHER;
+		if (wep == IT_MULTI_ROCKET)			retval = ID_MULTIROCKETLAUNCHER;
+		if (wep == IT_SANGUINATORS)			retval = ID_SANGUINATORS;
+		if (wep == IT_LIGHTNING)			retval = ID_THUNDERBOLT_AD_PLASMAGUN;
+		if (wep == IT_PLASMA_GUN)			retval = ID_PLASMAGUN_ROGUE;
+		if (wep == IT_EXTRA_WEAPON)			retval = ID_CROSSBOW;
+		if (wep == IT2_LASER_CANNON)		retval = ID_LASER_CANNON;
+		if (wep == IT2_CHAINLIGHTNING)		retval = ID_CHAINLIGHTNING;
+		if (wep == IT2_CROSS)				retval = ID_WANDCROSS2;
+		if (wep == IT2_MJOLNIR)				retval = ID_MJOLNIR;
+	}
+	return retval;
+};
+
+vector GetWepIT_FromID(float id) = {
+	vector retval;
+	retval = VEC_ORIGIN;
+	if (id == ID_MACE ) 		{ retval_x = IT_MACE;			retval_y = TRUE; } // in hack bank
+	if (id == ID_ICE )			{ retval_x = IT_ICE;			retval_y = TRUE; }
+	if (id == ID_VOIDSTAFF )	{ retval_x = IT_VOID_STAFF;	retval_y = TRUE; }
+	if (id == ID_FLAK ) 		{ retval_x = IT_FLAK;			retval_y = TRUE; }
+	if (id == ID_GUNGNIR ) 		{ retval_x = IT_GUNGNIR;		retval_y = TRUE; }
+
+	if (id == ID_GRAPPLE ) 				{ retval_x = IT2_GRAPPLE; retval_y = FALSE; }
+	if (id == ID_AXE_SHADAXE_CHAINSAW )	{ retval_x = IT_AXE; retval_y = FALSE; }
+	if (id == ID_SHOTGUN_BLASTER )		{ retval_x = IT_SHOTGUN; retval_y = FALSE; }
+	if (id == ID_SUPER_SHOTGUN_WIDOWMAKER_SHOTCYCLER_QUADSHOTTY ) { retval_x = IT_SUPER_SHOTGUN; retval_y = FALSE; }
+	if (id == ID_SCIMITAR )				{ retval_x = IT_SCIMITAR; retval_y = FALSE; }
+	if (id == ID_NAILGUN )				{ retval_x = IT_NAILGUN; retval_y = FALSE; }
+	if (id == ID_LAVANAILGUN )			{ retval_x = IT_LAVA_NAILGUN; retval_y = FALSE; }
+	if (id == ID_RAPIER )				{ retval_x = IT_RAPIER; retval_y = FALSE; }
+	if (id == ID_PERFORATOR )			{ retval_x = IT_SUPER_NAILGUN; retval_y = FALSE; }
+	if (id == ID_LAVASUPERNAILGUN )		{ retval_x = IT_LAVA_SUPER_NAILGUN; retval_y = FALSE; }
+	if (id == ID_GRENADE_LAUNCHER )		{ retval_x = IT_GRENADE_LAUNCHER; retval_y = FALSE; }
+	if (id == ID_PROXIMITY_GRENADE )	{ retval_x = IT2_PROXIMITY_GUN; retval_y = FALSE; }
+	if (id == ID_MULTI_GRENADE )		{ retval_x = IT_MULTI_GRENADE; retval_y = FALSE; }
+	if (id == ID_ROCKETLAUNCHER )		{ retval_x = IT_ROCKET_LAUNCHER; retval_y = FALSE; }
+	if (id == ID_MULTIROCKETLAUNCHER )	{ retval_x = IT_MULTI_ROCKET; retval_y = FALSE; }
+	if (id == ID_SANGUINATORS )			{ retval_x = IT_SANGUINATORS; retval_y = FALSE; }
+	if (id == ID_THUNDERBOLT_AD_PLASMAGUN) { retval_x = IT_LIGHTNING; retval_y = FALSE; }
+	if (id == ID_PLASMAGUN_ROGUE )		{ retval_x = IT_PLASMA_GUN; retval_y = FALSE; }
+	if (id == ID_CROSSBOW )				{ retval_x = IT_EXTRA_WEAPON; retval_y = FALSE; }
+	if (id == ID_LASER_CANNON )			{ retval_x = IT2_LASER_CANNON; retval_y = FALSE; }
+	if (id == ID_CHAINLIGHTNING )		{ retval_x = IT2_CHAINLIGHTNING; retval_y = FALSE; }
+	if (id == ID_WANDCROSS2 )			{ retval_x = IT2_CROSS; retval_y = FALSE; }
+	if (id == ID_MJOLNIR )				{ retval_x = IT2_MJOLNIR; retval_y = FALSE; }
+	return retval;
+};
+
 /*======================================================================
 CycleWeaponCommand
 ======================================================================*/
-void() CycleWeaponCommand =
-{
-	local	float	am, inhackbank;
+void() CycleWeaponCommand = {
+	local float	am, inhackbank, wepID, cyclecheck;
+	local vector idconversion;
 	
+	inhackbank = FALSE;
 	if (self.selfweaponismoditems) inhackbank = TRUE;
 	if (intermission_running > 0) return;		// intermission or finale
 	if (cinematic_running > 0) return;		// Remote camera active
 	self.impulse = 0;			// reset impulse
-
-	if (self.weapon == 0 && self.items == 0) return;
+	cyclecheck = 0; // counter to see how many times we go through the loop
+	if (self.weapon == 0 && self.items == 0 && self.items2 == 0 && self.moditems == 0 && self.perms == 0) return;
+	wepID = GetWepIDIndex(self.weapon, inhackbank);
+	// dprint("wepID at start of CycleWeaponCommand: ");
+	// dprint(ftos(wepID));
+	// dprint("\n");
 
 	// Keep cycling around weapon list until found a weapon with ammo
 	while (1) {
 		am = 0;
-		if (self.weapon == IT2_MJOLNIR) {
-			self.weapon = IT2_CHAINLIGHTNING;
-			if (self.ammo_cells < 1) am = 1;
-		}
-		else if (self.weapon == IT2_CHAINLIGHTNING) {
-			self.weapon = IT_AXE;
-		}
-		else if (self.weapon == IT_AXE) {
-			self.weapon = IT_SHOTGUN;
+		cyclecheck = cyclecheck + 1;
+		// if (cyclecheck > 100) return; // exit gracefully, no runaway loop error
+		if (wepID == ID_GRAPPLE) {
+			wepID = ID_AXE_SHADAXE_CHAINSAW;
+		} else if (wepID == ID_AXE_SHADAXE_CHAINSAW) {
+			wepID = ID_MACE;
+		} else if (wepID == ID_MACE) {
+			wepID = ID_SHOTGUN_BLASTER;
 			if (self.ammo_shells < 1) am = 1;
-		}
-		else if (self.weapon == IT_SHOTGUN) {
-			self.weapon = IT_SUPER_SHOTGUN;
-			if (self.ammo_shells < 2) am = 1;
-		}		
-		else if (self.weapon == IT_SUPER_SHOTGUN) {
-			self.weapon = IT_NAILGUN;
+		} else if (wepID == ID_SHOTGUN_BLASTER) {
+			wepID = ID_ICE;
+			if (self.ammo_elemental < 1) am = 1;
+		} else if (wepID == ID_ICE) {
+			wepID = ID_SUPER_SHOTGUN_WIDOWMAKER_SHOTCYCLER_QUADSHOTTY;
+			if (self.ammo_shells < 1) am = 1; // only checking for 1 shell since autoshotgun/shotcycler might only use 1
+		} else if (wepID == ID_SUPER_SHOTGUN_WIDOWMAKER_SHOTCYCLER_QUADSHOTTY) {
+			wepID = ID_SCIMITAR;
+			// if (self.ammo_elemental < 2) am = 1; // Doesn't always need ammo to swing, it is a sword after all
+		} else if (wepID == ID_SCIMITAR) {
+			wepID = ID_NAILGUN;
 			if (self.ammo_nails < 1) am = 1;
-		}
-		else if (self.weapon == IT_NAILGUN) {
-			self.weapon = IT_LAVA_NAILGUN;
+		} else if (wepID == ID_NAILGUN) {
+			wepID = ID_LAVANAILGUN;
 			if (self.ammo_lava_nails < 2) am = 1;
-		}
-		else if (self.weapon == IT_LAVA_NAILGUN) {
-			self.weapon = IT_SUPER_NAILGUN;
+		} else if (wepID == ID_LAVANAILGUN) {
+			wepID = ID_RAPIER;
+			if (self.ammo_bloodcrystals < 1) am = 1;
+		} else if (wepID == ID_RAPIER) {
+			wepID = ID_PERFORATOR;
 			if (self.ammo_nails < 2) am = 1;
-		}
-		else if (self.weapon == IT_SUPER_NAILGUN) {
-			self.weapon = IT_LAVA_SUPER_NAILGUN;
+		} else if (wepID == ID_PERFORATOR) {
+			wepID = ID_LAVASUPERNAILGUN;
 			if (self.ammo_lava_nails < 2) am = 1;
-		}
-		else if (self.weapon == IT_LAVA_SUPER_NAILGUN) {
-			self.weapon = IT_GRENADE_LAUNCHER;
+		} else if (wepID == ID_LAVASUPERNAILGUN) {
+			wepID = ID_VOIDSTAFF;
+			if (self.ammo_voidshards < 1) am = 1;
+		} else if (wepID == ID_VOIDSTAFF) {
+			wepID = ID_GRENADE_LAUNCHER;
 			if (self.ammo_rockets < 1) am = 1;
-		}
-		else if (self.weapon == IT_GRENADE_LAUNCHER) {
-			self.weapon = IT2_PROXIMITY_GUN;
+		} else if (wepID == ID_GRENADE_LAUNCHER) {
+			wepID = ID_PROXIMITY_GRENADE;
 			if (self.ammo_rockets < 1) am = 1;
-		}
-		else if (self.weapon == IT2_PROXIMITY_GUN) {
-			self.weapon = IT_MULTI_GRENADE;
+		} else if (wepID == ID_PROXIMITY_GRENADE) {
+			wepID = ID_MULTI_GRENADE;
 			if (self.ammo_multi_rockets < 1) am = 1;
-		}
-		else if (self.weapon == IT_MULTI_GRENADE) {
-			self.weapon = IT_ROCKET_LAUNCHER;
+		} else if (wepID == ID_MULTI_GRENADE) {
+			wepID = ID_ROCKETLAUNCHER;
 			if (self.ammo_rockets < 1) am = 1;
-		}
-		else if (self.weapon == IT_ROCKET_LAUNCHER) {
-			self.weapon = IT_MULTI_ROCKET;
+		} else if (wepID == ID_ROCKETLAUNCHER) {
+			wepID = ID_MULTIROCKETLAUNCHER;
 			if (self.ammo_multi_rockets < 1) am = 1;
-		}
-		else if (self.weapon == IT_MULTI_ROCKET) {
-			self.weapon = IT_LIGHTNING;
+		} else if (wepID == ID_MULTIROCKETLAUNCHER) {
+			wepID = ID_SANGUINATORS;
+			if (self.ammo_bloodcrystals < 1) am = 1;
+		} else if (wepID == ID_SANGUINATORS) {
+			wepID = ID_THUNDERBOLT_AD_PLASMAGUN;
 			if (self.ammo_cells < 1) am = 1;
-		}
-		else if (self.weapon == IT_LIGHTNING) {
-			self.weapon = IT_PLASMA_GUN;
+		} else if (wepID == ID_THUNDERBOLT_AD_PLASMAGUN) {
+			wepID = ID_PLASMAGUN_ROGUE;
 			if (self.ammo_plasma < 1) am = 1;
-		}
-		else if (self.weapon == IT_PLASMA_GUN) {
-			self.weapon = IT2_LASER_CANNON;
+		} else if (wepID == ID_PLASMAGUN_ROGUE) {
+			wepID = ID_FLAK;
+			if (self.ammo_rockets < FLAK_ROCKETUSAGE || self.ammo_nails < FLAK_NAILUSAGE) am = 1; // Flak uses multiple nails & rockets per shot
+		} else if (wepID == ID_FLAK) {
+			wepID = ID_CROSSBOW;
+			if (self.ammo_bolts < 1 && self.ammo_poison < 1) am = 1;
+		} else if (wepID == ID_CROSSBOW) {
+			wepID = ID_LASER_CANNON;
 			if (self.ammo_cells < 1) am = 1;
-		}
-		else if (self.weapon == IT2_LASER_CANNON) {
-			self.weapon = IT_EXTRA_WEAPON;
-			if (self.ammo_bolts < 1) am = 1;
-		}
-		else if (self.weapon == IT_EXTRA_WEAPON) {
-			self.weapon = IT2_CROSS;
-		}
-		else if (self.weapon == IT2_CROSS) {
-			self.weapon = IT2_MJOLNIR;
-		}
-		else if (self.weapon == IT2_MJOLNIR) {
-			self.weapon = IT2_CHAINLIGHTNING;
+		} else if (wepID == ID_LASER_CANNON) {
+			wepID = ID_CHAINLIGHTNING;
 			if (self.ammo_cells < 1) am = 1;
+		} else if (wepID == ID_CHAINLIGHTNING) {
+			wepID = ID_WANDCROSS2;
+		} else if (wepID == ID_WANDCROSS2) {
+			wepID = ID_MJOLNIR;
+		} else if (wepID == ID_MJOLNIR) {
+			wepID = ID_GUNGNIR;
+			if (self.ammo_voidshards < 1) am = 1;
+		} else if (wepID == ID_GUNGNIR) {
+			wepID = ID_GRAPPLE;
 		}
-		else if (self.weapon == FALSE || self.items == 0) {
+
+		if (wepID == FALSE) {
 			return; // prevent crash in "cinematic mode"
-		}	
+		}
+
+		// ok we found the weapon from the full list, turn it back into a normal IT_ number
+		idconversion = GetWepIT_FromID(wepID);
+		self.weapon =  idconversion_x;
+		self.selfweaponismoditems = idconversion_y;
+		if (self.selfweaponismoditems) inhackbank = TRUE; // just in case I need to add a check below
+		else inhackbank = FALSE;
 
 		// Has the player got the weapons and ammo to switch?
-		if (self.weapon == IT2_MJOLNIR || self.weapon == IT2_LASER_CANNON || self.weapon == IT2_PROXIMITY_GUN || self.weapon == IT2_CROSS || self.weapon == IT2_CHAINLIGHTNING) {
-			if (self.weapon == IT2_CROSS) {
-				if ( (self.items2 & IT2_CROSS) && !am) {
+		if (inhackbank) {
+			if (wepID == ID_MACE || wepID == ID_ICE || wepID == ID_VOIDSTAFF || wepID == ID_FLAK || wepID == ID_GUNGNIR) {
+				if ((self.moditems & self.weapon) && !am) {
 					W_SetCurrentAmmo (self);
+					dprint("idconversion: ");
+					dprint(ftos(idconversion_x));
+					dprint(" ");
+					dprint(ftos(idconversion_y));
+					dprint("\n");
+					return;
+				}
+			}
+		} else {
+			if (wepID == ID_LASER_CANNON || wepID == ID_MJOLNIR || wepID == ID_PROXIMITY_GRENADE || wepID == ID_WANDCROSS2 || wepID == ID_GRAPPLE || wepID == ID_CHAINLIGHTNING) {
+				if ((self.items2 & self.weapon) && !am) {
+					W_SetCurrentAmmo (self);
+					dprint("idconversion: ");
+					dprint(ftos(idconversion_x));
+					dprint(" ");
+					dprint(ftos(idconversion_y));
+					dprint("\n");
 					return;
 				}
 			} else {
-				if ( (self.items2 & self.weapon) && !am) {
+				if ((self.items & self.weapon) && !am) {
 					W_SetCurrentAmmo (self);
+					dprint("idconversion: ");
+					dprint(ftos(idconversion_x));
+					dprint(" ");
+					dprint(ftos(idconversion_y));
+					dprint("\n");
 					return;
 				}
-			}	
-		} else {
-			if ( (self.items & self.weapon) && !am) {
-				W_SetCurrentAmmo (self);
-				return;
 			}
 		}
 	}
@@ -2620,112 +2672,153 @@ void() CycleWeaponCommand =
 /*======================================================================
 CycleWeaponReverseCommand
 ======================================================================*/
-void() CycleWeaponReverseCommand =
-{
-	local	float	am;
+void() CycleWeaponReverseCommand = {
+	local float	am, inhackbank, wepID, cyclecheck;
+	local vector idconversion;
 	
+	inhackbank = FALSE;
+	if (self.selfweaponismoditems) inhackbank = TRUE;
 	if (intermission_running > 0) return;		// intermission or finale
 	if (cinematic_running > 0) return;		// Remote camera active
 	self.impulse = 0;			// reset impulse
-
-	if (self.weapon == 0 && self.items == 0) return;
+	cyclecheck = 0; // counter to see how many times we go through the loop
+	if (self.weapon == 0 && self.items == 0 && self.items2 == 0 && self.moditems == 0 && self.perms == 0) return;
+	wepID = GetWepIDIndex(self.weapon, inhackbank);
+	dprint("wepID at start of CycleWeaponReverseCommand: ");
+	dprint(ftos(wepID));
+	dprint("\n");
 
 	// Keep cycling around weapon list until found a weapon with ammo
 	while (1) {
 		am = 0;
-		if (self.weapon == IT2_MJOLNIR) {
-			self.weapon = IT2_CROSS;
-		}
-		else if (self.weapon == IT2_CROSS) {
-			self.weapon = IT_EXTRA_WEAPON;
-			if (self.ammo_bolts < 1) am = 1;
-		}
-		else if (self.weapon == IT_EXTRA_WEAPON) {
-			self.weapon = IT2_LASER_CANNON;
+		cyclecheck = cyclecheck + 1;
+		// if (cyclecheck > 100) return; // exit gracefully, no runaway loop error
+		if (wepID == ID_GUNGNIR) {
+			wepID = ID_MJOLNIR;
+		} else if (wepID == ID_MJOLNIR) {
+			wepID = ID_WANDCROSS2;
+		} else if (wepID == ID_WANDCROSS2) {
+			wepID = ID_CHAINLIGHTNING;
 			if (self.ammo_cells < 1) am = 1;
-		}
-		else if (self.weapon == IT2_LASER_CANNON) {
-			self.weapon = IT_PLASMA_GUN;
+		} else if (wepID == ID_CHAINLIGHTNING) {
+			wepID = ID_LASER_CANNON;
+			if (self.ammo_cells < 2) am = 1;
+		} else if (wepID == ID_LASER_CANNON) {
+			wepID = ID_CROSSBOW;
+			if (self.ammo_bolts < 1 && self.ammo_poison < 1) am = 1;
+		} else if (wepID == ID_CROSSBOW) {
+			wepID = ID_FLAK;
+			if (self.ammo_rockets < FLAK_ROCKETUSAGE || self.ammo_nails < FLAK_NAILUSAGE) am = 1; // Flak uses multiple nails & rockets per shot
+		} else if (wepID == ID_FLAK) {
+			wepID = ID_PLASMAGUN_ROGUE;
 			if (self.ammo_plasma < 1) am = 1;
-		}
-		else if (self.weapon == IT_PLASMA_GUN) {
-			self.weapon = IT_LIGHTNING;
+		} else if (wepID == ID_PLASMAGUN_ROGUE) {
+			wepID = ID_THUNDERBOLT_AD_PLASMAGUN;
 			if (self.ammo_cells < 1) am = 1;
-		}
-		else if (self.weapon == IT_LIGHTNING) {
-			self.weapon = IT_MULTI_ROCKET;
+		} else if (wepID == ID_THUNDERBOLT_AD_PLASMAGUN) {
+			wepID = ID_SANGUINATORS;
+			if (self.ammo_bloodcrystals < 1) am = 1;
+		} else if (wepID == ID_SANGUINATORS) {
+			wepID = ID_MULTIROCKETLAUNCHER;
 			if (self.ammo_multi_rockets < 1) am = 1;
-		}
-		else if (self.weapon == IT_MULTI_ROCKET) {
-			self.weapon = IT_ROCKET_LAUNCHER;
+		} else if (wepID == ID_MULTIROCKETLAUNCHER) {
+			wepID = ID_ROCKETLAUNCHER;
 			if (self.ammo_rockets < 1) am = 1;
-		}
-		else if (self.weapon == IT_ROCKET_LAUNCHER) {
-			self.weapon = IT_MULTI_GRENADE;
+		} else if (wepID == ID_ROCKETLAUNCHER) {
+			wepID = ID_MULTI_GRENADE;
 			if (self.ammo_multi_rockets < 1) am = 1;
-		}
-		else if (self.weapon == IT_MULTI_GRENADE) {
-			self.weapon = IT2_PROXIMITY_GUN;
+		} else if (wepID == ID_MULTI_GRENADE) {
+			wepID = ID_PROXIMITY_GRENADE;
 			if (self.ammo_rockets < 1) am = 1;
-		}
-		else if (self.weapon == IT2_PROXIMITY_GUN) {
-			self.weapon = IT_GRENADE_LAUNCHER;
+		} else if (wepID == ID_PROXIMITY_GRENADE) {
+			wepID = ID_GRENADE_LAUNCHER;
 			if (self.ammo_rockets < 1) am = 1;
-		}
-		else if (self.weapon == IT_GRENADE_LAUNCHER) {
-			self.weapon = IT_LAVA_SUPER_NAILGUN;
+		} else if (wepID == ID_GRENADE_LAUNCHER) {
+			wepID = ID_VOIDSTAFF;
+			if (self.ammo_voidshards < 1) am = 1;
+		} else if (wepID == ID_VOIDSTAFF) {
+			wepID = ID_LAVASUPERNAILGUN;
 			if (self.ammo_lava_nails < 2) am = 1;
-		}
-		else if (self.weapon == IT_LAVA_SUPER_NAILGUN) {
-			self.weapon = IT_SUPER_NAILGUN;
+		} else if (wepID == ID_LAVASUPERNAILGUN) {
+			wepID = ID_PERFORATOR;
 			if (self.ammo_nails < 2) am = 1;
-		}
-		else if (self.weapon == IT_SUPER_NAILGUN) {
-			self.weapon = IT_LAVA_NAILGUN;
+		} else if (wepID == ID_PERFORATOR) {
+			wepID = ID_RAPIER;
+			if (self.ammo_bloodcrystals < 1) am = 1;
+		} else if (wepID == ID_RAPIER) {
+			wepID = ID_LAVANAILGUN;
 			if (self.ammo_lava_nails < 1) am = 1;
-		}
-		else if (self.weapon == IT_LAVA_NAILGUN) {
-			self.weapon = IT_NAILGUN;
+		} else if (wepID == ID_LAVANAILGUN) {
+			wepID = ID_NAILGUN;
 			if (self.ammo_nails < 1) am = 1;
-		}
-		else if (self.weapon == IT_NAILGUN) {
-			self.weapon = IT_SUPER_SHOTGUN;
-			if (self.ammo_shells < 2) am = 1;
-		}		
-		else if (self.weapon == IT_SUPER_SHOTGUN) {
-			self.weapon = IT_SHOTGUN;
+		} else if (wepID == ID_NAILGUN) {
+			wepID = ID_SCIMITAR;
+			// if (self.ammo_elemental < 2) am = 1; // Doesn't always need ammo to swing, it is a sword after all
+		} else if (wepID == ID_SCIMITAR) {
+			wepID = ID_SUPER_SHOTGUN_WIDOWMAKER_SHOTCYCLER_QUADSHOTTY;
+			if (self.ammo_shells < 1) am = 1; // only checking for 1 shell since autoshotgun/shotcycler might only use 1
+		} else if (wepID == ID_SUPER_SHOTGUN_WIDOWMAKER_SHOTCYCLER_QUADSHOTTY) {
+			wepID = ID_ICE;
+			if (self.ammo_elemental < 1) am = 1;
+		} else if (wepID == ID_ICE) {
+			wepID = ID_SHOTGUN_BLASTER;
 			if (self.ammo_shells < 1) am = 1;
+		} else if (wepID == ID_SHOTGUN_BLASTER) {
+			wepID = ID_MACE;
+		} else if (wepID == ID_MACE) {
+			wepID = ID_AXE_SHADAXE_CHAINSAW;
+		} else if (wepID == ID_AXE_SHADAXE_CHAINSAW) {
+			wepID = ID_GRAPPLE;
+		} else if (wepID == ID_GRAPPLE) {
+			wepID = ID_GUNGNIR;
+			if (self.ammo_voidshards < 1) am = 1;
 		}
-		else if (self.weapon == IT_SHOTGUN) {
-			self.weapon = IT_AXE;
-		}
-		else if (self.weapon == IT_AXE) {
-			self.weapon = IT2_CHAINLIGHTNING;
-			if (self.ammo_cells < 1) am = 1;
-		}
-		else if (self.weapon == IT2_CHAINLIGHTNING) {
-			self.weapon = IT2_MJOLNIR;
-		} else if (self.weapon == FALSE || self.items == 0) {
+
+		if (wepID == FALSE) {
 			return; // prevent crash in "cinematic mode"
-		}	
-	
+		}
+
+		// ok we found the weapon from the full list, turn it back into a normal IT_ number
+		idconversion = GetWepIT_FromID(wepID);
+		self.weapon =  idconversion_x;
+		self.selfweaponismoditems = idconversion_y;
+		if (self.selfweaponismoditems) inhackbank = TRUE; // just in case I need to add a check below
+		else inhackbank = FALSE;
+
 		// Has the player got the weapons and ammo to switch?
-		if (self.weapon == IT2_MJOLNIR || self.weapon == IT2_LASER_CANNON || self.weapon == IT2_PROXIMITY_GUN || self.weapon == IT2_CROSS || self.weapon == IT2_CHAINLIGHTNING) {
-			if (self.weapon == IT2_CROSS) {
-				if ( (self.items2 & IT2_CROSS) && !am) {
+		if (inhackbank) {
+			if (wepID == ID_MACE || wepID == ID_ICE || wepID == ID_VOIDSTAFF || wepID == ID_FLAK || wepID == ID_GUNGNIR) {
+				if ((self.moditems & self.weapon) && !am) {
 					W_SetCurrentAmmo (self);
+					dprint("idconversion: ");
+					dprint(ftos(idconversion_x));
+					dprint(" ");
+					dprint(ftos(idconversion_y));
+					dprint("\n");
+					return;
+				}
+			}
+		} else {
+			if (wepID == ID_LASER_CANNON || wepID == ID_MJOLNIR || wepID == ID_PROXIMITY_GRENADE || wepID == ID_WANDCROSS2 || wepID == ID_GRAPPLE || wepID == ID_CHAINLIGHTNING) {
+				if ((self.items2 & self.weapon) && !am) {
+					W_SetCurrentAmmo (self);
+					dprint("idconversion: ");
+					dprint(ftos(idconversion_x));
+					dprint(" ");
+					dprint(ftos(idconversion_y));
+					dprint("\n");
 					return;
 				}
 			} else {
-				if ( (self.items2 & self.weapon) && !am) {
+				if ((self.items & self.weapon) && !am) {
 					W_SetCurrentAmmo (self);
+					dprint("idconversion: ");
+					dprint(ftos(idconversion_x));
+					dprint(" ");
+					dprint(ftos(idconversion_y));
+					dprint("\n");
 					return;
 				}
-			}	
-		} else {
-			if ( (self.items & self.weapon) && !am) {
-				W_SetCurrentAmmo (self);
-				return;
 			}
 		}
 	}

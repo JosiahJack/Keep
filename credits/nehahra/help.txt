@@ -1,0 +1,10 @@
+
+
+Read Nehahra.txt and other TXT files included in this archive.
+
+The .EXE files should sit in your quake/ directory.  The PAK files in your
+quake/nehahra, directory.  It is not necessary to use the -game parameter
+when running Nehahra.
+
+If you have a dir structure like quake/nehahra/quake/nehahra or
+quake/quake/nehahra, then you have improperly installed the game.

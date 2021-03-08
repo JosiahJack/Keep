@@ -213,9 +213,10 @@ void() shal_magic =
 		miniondef = find(world,classname,"monster_shalrathminion");
 		if (miniondef.classtype == CT_CACHEVORELING) setup_minionsupport();
 		else {
+			setup_minionsupport(); // Set them up anyways, Qmaster added precaches to main monster_shalrath function
 			// If template no available, warn and remove feature
-			dprint("\b[SHALRATH]\b Cannot find minion template!\n");
-			self.spawnflags = self.spawnflags - MON_SHALRATH_MINIONS;
+			// dprint("\b[SHALRATH]\b Cannot find minion template!\n");
+			// self.spawnflags = self.spawnflags - MON_SHALRATH_MINIONS;
 		}
 	}
 	
@@ -334,6 +335,22 @@ void() monster_shalrath = {
 	
 	self.sight_sound = "shalrath/sight.wav";
 	precache_sound (self.sight_sound);
+
+	// Precache minion stuff anwyays from monster_shalrathminion
+	precache_model ("progs/ad171/mon_vorelingp.mdl");
+	precache_model ("progs/ad171/gib_vorelegp.mdl");
+	precache_model (MODEL_PROJ_VORE);			// Spit Projectile
+	precache_model ("progs/ad171/mon_voreling.mdl");
+	precache_model ("progs/ad171/gib_voreleg.mdl");
+	precache_sound ("voreling/idle.wav");
+	precache_sound("voreling/death.wav");
+	precache_sound("voreling/pain.wav");
+	precache_sound("voreling/miss.wav");	// Spit misses
+	precache_sound("voreling/hiss2.wav");	// Spit attack
+	precache_sound("voreling/attackmunch.wav");
+	precache_sound("voreling/attacktear.wav");
+	precache_sound("voreling/jumpland.wav");
+	precache_sound ("voreling/sight.wav");
 
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement

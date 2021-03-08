@@ -11,6 +11,10 @@ void() ImpulseCommands =
 	else if (self.impulse == 10) CycleWeaponCommand();
 	else if (self.impulse == 12) CycleWeaponReverseCommand();
 
+	else if (self.impulse == 56) ToggleDragonArmor();
+	else if (self.impulse == 57) ToggleSpiritShroud();
+	else if (self.impulse == 58) ToggleBerserkerArmor(); // Quad time using armor for seconds!
+	else if (self.impulse == 59) TogglePowerShield(); // Uses cells to absorb damage when hit
 	// Only these MOD options can be changed via the console
 	else if (self.impulse == 100) toggleautoaim();		// Toggle auto aim
 	else if (self.impulse == 105) toggleprojsize();		// Toggle player proj size
@@ -40,7 +44,6 @@ void() ImpulseCommands =
 	// else if (self.impulse == 168) togglenomwheelskip(); // Toggle no mouse wheel skip
 	else if (self.impulse == 170) togglebodyremoval();	// Toggle monster body fade/removal
 	else if (self.impulse == 175) display_customkeys();	// Display Custom Key inventory
-	// 177 is keyboard key number 0 for Mjolnir etc.
 	else if (self.impulse == 178) CycleThroughHuds();	// Cycle through different custom HUDS
 
 	else if (self.impulse == 180) display_secrets();	// Display a list of secret locations

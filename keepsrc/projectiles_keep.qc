@@ -1326,3 +1326,111 @@ sound (self, CHAN_WEAPON, "enforcer/enfstop.wav", 1, ATTN_STATIC);
 	remove(self);
 
 };
+
+void() BFGBoomThink = {
+        self.frame = self.frame + 1;
+        self.think = BFGBoomThink;
+        self.nextthink = time + self.pain_timeout;
+
+        if(self.frame >= self.frame_override) {
+			self.frame = self.frame_override;
+			self.think = SUB_Remove;
+			self.nextthink = time + self.pain_timeout;
+        }
+};
+
+// SpawnBFGBoom - Spawns an explosion sprite atorg.
+
+void(vector org, vector dir, string emdl, float beginf, float endfrm,float
+anitm, float skn, vector vel) SpawnBFGBoom = {
+        newmis = spawn();
+        newmis.solid = SOLID_NOT;
+        newmis.movetype = MOVETYPE_FLY; // DRS: todo - change so it can move
+        newmis.owner = world;
+        newmis.angles = vectoangles(dir);
+        newmis.velocity = vel;
+        setmodel(newmis, emdl);
+        setsize(newmis, '0 0 0', '0 0 0');
+        setorigin(newmis, org);
+        newmis.skin = skn;
+        newmis.frame = beginf;
+        newmis.pain_timeout = anitm;
+        newmis.frame_override = endfrm;
+        newmis.think = BFGBoomThink;
+        newmis.nextthink = time + anitm;
+};
+
+void() BFGTracerThink = {
+        local vector org;
+        local float dis;
+
+        dis = vlen(self.view_ofs-self.oldorigin)/5;
+        org = self.origin + self.pos1*dis;
+        setorigin(self, org);
+
+        SpawnBFGBoom(self.origin, self.pos1, "progs/madfox/s_bfg.spr", 8, 14, 0.06, 0, '0 0 0'); // Fixes improperly aligned sprite beamrings.
+        newmis.angles_x = newmis.angles_x - newmis.angles_x*2;
+        SpawnBFGBoom(self.origin, (self.pos1-self.pos1*2), "progs/madfox/s_bfg.spr", 8, 14, 0.06, 0, '0 0 0'); // Fixes improperly aligned sprite beamrings.
+        newmis.angles_x = newmis.angles_x - newmis.angles_x*2;
+
+        if(self.cnt == 5) {
+			self.think = SUB_Remove;
+			self.nextthink = time + 0.1;
+        } else {
+			self.think = BFGTracerThink;
+			self.nextthink = time + 0.1;
+			self.cnt = self.cnt + 1;
+        }
+};
+
+// Madfox's BFG implementation
+//void(float damage) W_FireRail = {
+void(float damage) W_FireBFG = {
+        local entity tempen;
+        local vector orgen, orgo, dir, tdir, dorg;
+        local float donerail;
+
+        makevectors(self.v_angle);
+        sound (self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
+        self.ammo_cells = self.ammo_cells - 5;
+        self.currentammo = floor(self.ammo_cells / 5);
+        orgo = self.origin + self.view_ofs + v_forward*8;
+        dir = v_forward;
+        traceline (orgo, orgo + v_forward*2048, FALSE, self);
+
+        while(!donerail) {
+			if(trace_ent.takedamage) {
+				orgen = trace_endpos + dir*4;
+				dorg = trace_endpos - dir*4;
+				SpawnBlood (trace_ent, dorg, '0 0 0', damage);
+				T_Damage (trace_ent, self, self, damage,DAMARMOR);
+				if (trace_ent.movetype != MOVETYPE_PUSH && trace_ent.classname != "monster_oldone" && trace_ent.classname != "monster_boss") {
+					tdir = trace_endpos - orgo;
+					tdir = normalize(tdir);
+					trace_ent.flags = trace_ent.flags - (trace_ent.flags & FL_ONGROUND);
+					trace_ent.velocity = trace_ent.velocity + tdir*(170+damage);
+
+					if(trace_ent.velocity_z < 270)
+					trace_ent.velocity_z = trace_ent.velocity_z + 270;
+				}
+			} else {
+				dorg = trace_endpos - dir*4;
+				donerail = TRUE;
+			}
+			tempen = self;
+			self = trace_ent;
+			traceline(orgen, orgen + dir*2048, FALSE, self);
+			self = tempen;
+        }
+        newmis = spawn();
+        newmis.solid = SOLID_NOT;
+        setsize(newmis, '-1 -1 -1', '1 1 1');
+        setorigin(newmis, orgo);
+        newmis.classname = "railtrail";
+        newmis.nextthink = time + 0.1;
+        newmis.think = BFGTracerThink;
+        newmis.oldorigin = dorg;
+        newmis.view_ofs = orgo;
+        newmis.pos1 = dir; // store old velocity
+        newmis.owner = self;
+};

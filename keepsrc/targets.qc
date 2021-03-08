@@ -1373,12 +1373,20 @@ void() trigger_monsterkill_use =
 				// If a monster marked with no monster count dies
 				// update HUD totals to reflect death properly
 				if (self.enemy.nomonstercount) {
-					total_monsters = total_monsters + 1;
-					update_hud_totals(HUD_MONSTERS);
+					if (self.enemy.classgroup == CG_HARMLESS) {
+						total_denizens = total_denizens + 1;
+					} else {
+						total_monsters = total_monsters + 1;
+						update_hud_totals(HUD_MONSTERS);
+					}
 				}	
 				// Update global monster death totals
-				killed_monsters = killed_monsters + 1;
-				WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+				if (self.enemy.classgroup == CG_HARMLESS) {
+					killed_denizens = killed_denizens + 1;
+				} else {
+					killed_monsters = killed_monsters + 1;
+					WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+				}
 
 				// Stop all animation think functions
 				self.enemy.think = SUB_Null;

@@ -2,18 +2,6 @@ float   ALPHA_GHOST     = 0.7;  // Used by wraiths.
 float   ALPHA_ICE       = 0.7;  // Used by ice shards.
 float   ALPHA_ICEBALL   = 0.9;  // Used by iceballs.
 
-//vector  ARMOR_STATS_GREEN   = '0.3 100 1';
-//vector  ARMOR_STATS_YELLOW  = '0.6 150 2';
-//vector  ARMOR_STATS_RED     = '0.8 200 4';
-// Note:  Dragonscale uses the same stats as red armor.
-vector  ARMOR_STATS_COURAGE = '0.95 150 4';
-vector  ARMOR_STATS_ONYX    = '0.5 0 8388608';
-//vector  ARMOR_STATS_POWER   = '0.5 0 65536';    // Onyx with power shield.
-vector  ARMOR_STATS_DEMON   = '0 100 4';
-vector  ARMOR_STATS_SPIRIT  = '1 25 0';
-vector  ARMOR_STATS_CHAOS   = '0 200 65536';
-vector  ARMOR_STATS_ULTRA   = '1 30 65536';       // Ultra enforcer armor.
-
 // Custom attack states.
 //See defshipnotic.qc  float   AS_DODGING  = 5;    // One of Hipnotic's inventions for the scourge.  
 float   AS_CHASING  = 9;    // Use shortest, direct path to chase target.
@@ -124,17 +112,17 @@ float   HIT_STONE   = 2;    // Statues, golems.
 
 
 // List of exotic armor.  Player can wear only one at a time.  Duh!
-float   SUIT_COURAGE    = 1;    // Reflective half-armor.  From Zerstorer.
-float   SUIT_DRAGON     = 2;    // Dragonscale and morph.
-float   SUIT_ONYX       = 3;    // Indestructible.
-float   SUIT_ONYX_POWER = 4;    // As Onyx, plus built-in power shield.
-float   SUIT_BERSERKER  = 5;    // Demonhide - regeneration and life-saving.
-float   SUIT_SPIRIT     = 6;    // Spirit shroud, like hyper enforcer shield.
-float   SUIT_CHAOS      = 7;    // Variable protection, teleportation.
-float   SUIT_NINJA      = 8;    // Jumpsuit with special powers.
-float   SUIT_ULTRA      = 9;    // Ultra enforcer particle shield.  NPC only.
+// float   SUIT_COURAGE    = 1;    // Reflective half-armor.  From Zerstorer.
+// float   SUIT_DRAGON     = 2;    // Dragonscale and morph.
+// float   SUIT_ONYX       = 3;    // Indestructible.
+// float   SUIT_ONYX_POWER = 4;    // As Onyx, plus built-in power shield.
+// float   SUIT_BERSERKER  = 5;    // Demonhide - regeneration and life-saving.
+// float   SUIT_SPIRIT     = 6;    // Spirit shroud, like hyper enforcer shield.
+// float   SUIT_CHAOS      = 7;    // Variable protection, teleportation.
+// float   SUIT_NINJA      = 8;    // Jumpsuit with special powers.
+// float   SUIT_ULTRA      = 9;    // Ultra enforcer particle shield.  NPC only.
 
-float   SUITx_ALL       = 15;   // Value must be a power of 2 minus 1.
+// float   SUITx_ALL       = 15;   // Value must be a power of 2 minus 1.
                                 // This means 3, 7, or 15.  No higher.
 
 float   COURAGE_DAMAGE  = 10;   // Damage to armor if it reflects a rocket.
@@ -515,6 +503,8 @@ float respawning; // Toggle used when respawning monsters.
 float soul_evil;  // TRUE = Soul of Evil mode.  Merger code.
 float super_active;
 
+.float powershield_active;
+
 // hit type -----------------------------------------------------------------
 .float      hittype;
 vector      damage_velocity;    // Set by 'T_Damage' for gib velocity.
@@ -654,3 +644,4 @@ float   SQRT2   = 1.4142;   // The square root of 2.
 .string summontarget;
 .vector spawnmins;
 .void() spawnfunction;
+.float repairtime;
