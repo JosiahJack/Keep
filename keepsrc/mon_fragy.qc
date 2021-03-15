@@ -269,6 +269,8 @@ void() monster_fragy = {
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
 
+	self.passive_state = 1;
+
 	self.classtype = CT_MONFROG;
 	self.classgroup = CG_HARMLESS;
 	self.classmove = MON_MOVEWALK;

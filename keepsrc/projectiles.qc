@@ -1521,7 +1521,7 @@ void(vector org, vector dir, vector avel, float proj_type, float proj_speed) Lau
 			newmis.th_updmissile = SUB_Null;
 		}
 	}
-	else if (proj_type == CT_PROJ_SKULLWP) setmodel(newmis, MODEL_PROJ_SWSKULLP);
+	// else if (proj_type == CT_PROJ_SKULLWP) setmodel(newmis, MODEL_PROJ_SWSKULLP);
 	else if (proj_type == CT_PROJ_FURY1) {
 		if (newmis.poisonous) setmodel(newmis, MODEL_PROJ_SHALGRN);
 		else setmodel(newmis, MODEL_PROJ_FURY1);

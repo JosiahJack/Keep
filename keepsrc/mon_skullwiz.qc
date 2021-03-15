@@ -321,8 +321,9 @@ void(vector orgofs) skullw_fire =
 	dir = normalize(self.enemy.origin - org);
 
 	self.attack_speed = SPEED_SWIZMISSILE + (skill * SPEED_SWIZSKILL);
-	if (self.spawnflags & MON_SKULLWIZ_GUARDIAN) proj_type = CT_PROJ_SKULLWP;
-	else proj_type = CT_PROJ_SKULLW;
+	// if (self.spawnflags & MON_SKULLWIZ_GUARDIAN) proj_type = CT_PROJ_SKULLWP;
+	// else proj_type = CT_PROJ_SKULLW;
+	proj_type = CT_PROJ_SKULLW; // handles newmis.owner.poisonous check in projectile function, poisonous set if Guardian spawnflag is set
 	Launch_Missile (org, dir, '0 0 0', proj_type, self.attack_speed);
 };
 
@@ -853,6 +854,7 @@ void() monster_skullwiz = {
 	else if (self.spawnflags & MON_SKULLWIZ_GUARDIAN) {
 		self.health = self.health * 2;		// 200% HP
 		if (!self.exactskin) self.exactskin = 3;	// Green rboes
+		self.poisonous = TRUE;						// Explosive Poison
 	}
 
 	if (self.deathstring == "") self.deathstring = " was blown apart by a Skull Wizard\n";

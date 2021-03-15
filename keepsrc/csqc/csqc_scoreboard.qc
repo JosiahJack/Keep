@@ -17,12 +17,9 @@ void(vector virtmin, vector virtsize) Hud_DeathmatchScoreboard = {
 		Hud_CentrePic("gfx/ranking.lmp", virtsize_x, pos, 24);	pos_y += 24;
 		pos_y += 10;
 	}
-
-	if (autocvar(cg_woot, 0))	//I added this mostly just to demonstrate that you're actually using the csqc version...
-		pos_x = (virtsize_x-320)/2 * (1+sin(time));
-	else
-		pos_x += (virtsize_x-320)/2;
-
+	//I added this mostly just to demonstrate that you're actually using the csqc version...
+	if (autocvar(cg_woot, 0)) 	pos_x = (virtsize_x-320)/2 * (1+sin(time));
+	else 						pos_x += (virtsize_x-320)/2;
 	pos_x += 80;
 
 	//negative numbers are players sorted by frags.
@@ -35,19 +32,6 @@ void(vector virtmin, vector virtsize) Hud_DeathmatchScoreboard = {
 		vector top = stov(getplayerkeyvalue(i, "topcolor_rgb"));
 		vector bot = stov(getplayerkeyvalue(i, "bottomcolor_rgb"));
 		name = strconv(0,2,2, name);
-		//FIXME: string team = getplayerkeyvalue(i, "team");	//QW team names do NOT match player colours.
-		/*Other interesting fields
-			pl 			- for packetloss
-			activetime	- how long the player has been on the server.
-			chat 		- to check if someone is at the console/tabbed out
-			userid		- for easy banning etc, assuming you're the server.
-			ignored		- text from this player will be dropped clientside.
-			vignored	- voicechat from this player will be dropped (clientside and hopefully serverside too).
-			voipspeaking- whether they're speaking or not
-			voiploudness- the player's average voip volume.
-			also any other networked userinfo
-		*/
-
 		drawstring(pos-[8*5	,0], strpad(-4, ping), [8,8], [1,1,1],1,0);
 		if (isspec) {
 			drawstring(pos+[4,0], "spec", [8,8], [1,1,1],1,0);

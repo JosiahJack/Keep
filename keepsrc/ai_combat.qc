@@ -64,8 +64,6 @@ void(entity targ, entity attacker) Killed =
 						killed_monsters = killed_monsters + 1;
 						WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
 					}
-
-					if (targ.classgroup == CG_HARMLESS) killed_denizens = killed_denizens + 1;
 				}
 			}
 		

@@ -646,8 +646,8 @@ void() worldspawn =
 		addstat(CLIENT_AMMOPOISON, EV_FLOAT, ammo_poison);
 		addstat(CLIENT_USINGHACKBANK, EV_FLOAT, selfweaponismoditems);
 		addstat(CLIENT_RUNEFLAG, EV_FLOAT, serverflagstemp);
-		addstat(CLIENT_DENIZENS, EV_FLOAT, total_denizens);
-		addstat(CLIENT_DENIZENSKILLED, EV_FLOAT, killed_denizens);
+		globalstat(CLIENT_DENIZENS, EV_FLOAT, "total_denizens");
+		globalstat(CLIENT_DENIZENSKILLED, EV_FLOAT, "killed_denizens");
 	}
 
 	dprint("\n\b[ENGINE]\b ");

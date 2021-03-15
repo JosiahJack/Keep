@@ -3713,11 +3713,32 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	bboxtype(choices) : "Bounding Box Override" = [
 		 0 : "Default"
 		 1 : "Tiny"
+		 2 : "Square"
+		 3 : "Flat"
 		 4 : "Short"
 		 5 : "Tall"
-		 7 : "Wide"
-		 8 : "Giant"
+		 6 : "XTall"
+		 7 : "Wide"		
+		 8: "Giant"
+		 9 : "WideFlat"
 		 10 : "Massive"
+		 11 : "Golem"
+		 12 : "Dog"
+		 13 : "Shade"
+		 14 : "Fish"
+		 15 : "FishSmall"
+		 16 : "Eel"
+		 17 : "Wyrm"
+		 18 : "Ryu"
+		 19 : "Hydra"
+		 20 : "Willy"
+		 21 : "Cyber"
+		 22 : "Anaconda"
+		 23 : "Justice"
+		 24 : "Psyder"
+		 25 : "XMassive"
+		 26 : "BrkTiny"
+		 27 : "Shalboss"
 	]
 	gibondeath(choices) : "Gib/Explode on Death" = [
 		 0 : "Default"
@@ -3825,7 +3846,13 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 		4 : "Liquid Blocks Sight" : 0
 	]
 ]
+
 @PointClass base(MonFish) studio("progs/madfox/mon_fragy.mdl") = monster_frog : "Frog" []
+@PointClass base(MonDog) studio("progs/hexen2/sheep2.mdl") = monster_sheep : "Sheep" []
+@PointClass base(MonFish) studio("progs/heretic2/mon_ogle.mdl") = monster_ogle : "Ogle" [
+	spawnflags(flags) = [ 4 : "Flesh Mining Sounds" : 0 ]
+]
+
 @PointClass base(MonGolem) studio("progs/ad171/mon_golem.mdl") = monster_golem : "Golem" [
 	spawnflags(flags) = [ 
 		2 : "Start as Statue" : 0
