@@ -2190,22 +2190,19 @@ void() monster_judicator = {
 	setup_passivestate_boss(self);
 
 	// No targetname = no trigger!
-	if (self.targetname == "") {
-		dprint("\b[JUDGE]\b Missing targetname name!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		return;
-	}
-	// No tether target defined!
-	if (self.tethertarget == "") {
-		dprint("\b[JUDGE]\b Missing tether target!\n");
-	}
+	// if (self.targetname == "") {
+		// dprint("\b[JUDGE]\b Missing targetname name!\n");
+		// spawn_marker(self.origin, SPNMARK_YELLOW);
+		// return;
+	// }
+
 	// Monster count exceptions
 	if (self.nomonstercount > 0 || self.delaymonstercount > 0) {
 		// Some maps have way too many no monster counts
-		if (world.no_moncountdevmsg <= 0) {
-			dprint("\b[JUDGE]\b ("); dprint(self.targetname);
-			dprint(") - no monster count\n");
-		}
+		// if (world.no_moncountdevmsg <= 0) {
+			// dprint("\b[JUDGE]\b ("); dprint(self.targetname);
+			// dprint(") - no monster count\n");
+		// }
 	}
 	// Update count before client spawn
 	else total_monsters = total_monsters + 1;
@@ -2213,9 +2210,112 @@ void() monster_judicator = {
 	// Devmarker function changes skins, save for later
 	self.frame = 0; self.exactskin = self.skin;
 	// Display debug diamonds
-	monster_devmarker(self);
+	// monster_devmarker(self);
 	// Wait for trigger event
-	self.use = judge_awake;
+
+	if (self.targetname != "") {
+		self.use = judge_awake;
+	} else {
+		self.flags = FL_MONSTER;		// Reset flag (no user settings)
+		self.frame = $stand1; self.skin = self.exactskin;
+		self.takedamage = DAMAGE_NO;	// Still immune to damage
+		self.yaw_speed = 20;			// Average Speed
+		self.attack_summon = skill + 1;	// Total amount of minions
+		if (self.tetherrange < 32) self.tetherrange = MONAI_MAXJUDGE;
+		if (self.bossminbase <= 64) self.bossminbase = MONAI_BOSS_SUMDIST;
+		if (self.bossminrnd <= 64) self.bossminrnd = MONAI_BOSS_SUMRND;
+
+			// skill modifier : Easy = 1, Normal = 2, Hard/NM = 3
+		if (self.attack_summon > 3) self.attack_summon = 3;
+		// Setup minion chain entity system
+		if (judge_minionsetup()) {
+			dprint("\b[JUDGE]\b Cannot create minion chain!\n");
+			// spawn_marker(self.origin+'0 0 32', SPNMARK_YELLOW);
+			// entity_hide(self);
+			// return;
+		}
+			
+		// Check for tether system (special target field)
+		if (self.tethertarget == "") {
+			judge_spawntether();
+		}
+		// Find the defined tether marker
+		else self.movelast = find(world,targetname,self.tethertarget);
+		
+		// Does the tether entity exist?
+		if (!self.movelast) {
+			dprint("\b[JUDGE]\b Tether target not found!\n");
+			spawn_marker(self.origin, SPNMARK_YELLOW);
+			entity_hide(self);
+			return;
+		}
+
+		// Show BOSS tetherpoint
+		// spawn_marker(self.movelast.origin+'0 0 8', SPNMARK_RED);
+		
+		// Zap (50K damage) anything in its place!
+		// if (self.nospawndamage == 0) 
+			// spawn_tdeath(self.origin, self);
+		// Don't show spawning effect if nogfx
+		// if (!(self.spawnflags & MON_SPAWN_NOGFX)) 
+			// spawn_tfog(self.origin);
+
+		// Start spawning BOSS
+		// self.solid = SOLID_SLIDEBOX;
+		// self.movetype = MOVETYPE_STEP;
+		// setmodel(self, self.mdl);					// Setup model
+		// setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
+
+		// Check for delay spawn monster count
+		// if (self.delaymonstercount) {
+			// Reset both monster count conditions
+			// self.nomonstercount = self.delaymonstercount = 0;
+			// total_monsters = total_monsters + 1;
+			// update_hud_totals(HUD_MONSTERS);
+		// }
+
+		//Resist_CheckRange(self);		// Double check values
+		// Resist_Save(self);				// Save for Later
+		// Resist_ChangeType(self,TRUE);	// resist everything
+
+		// Reset all combat flags and counters
+		// self.deadflag = DEAD_NO;
+		// self.liquidbase = self.liquidcheck = 0;
+		// self.dmgcombined = self.dmgtimeframe = 0;
+
+		// Setup boss waves and overall health
+		if (self.bosswave < 1) self.bosswavetotal = 4;
+		else self.bosswavetotal = self.bosswave;
+		
+		// Setup boss waves and overall health
+		self.bosswave = 1;
+		if (self.bosswaveqty < 1) self.bosswaveqty = 500;
+		self.max_health = self.bosswavetotal * self.bosswaveqty;
+		// Setup boss wave HP + trigger event
+		judge_WaveSetupHP();
+
+		// self.pain_finished = time + 3;		// Make pain go away
+		// self.attack_finished = time + 2;	// Reset attack system
+		
+		// Reset all combat entities
+		self.enemy = self.goalentity = self.movetarget = world;
+
+		// Trigger all spawning events (optional)
+		if (self.message != "") {
+			trigger_strs(self.message, self);
+			self.message = "";
+		}
+		
+		// Make sure all death triggers are setup ready
+		self.message2 = self.target;
+		self.target = self.target2 = self.deathtarget = "";
+
+		monster_start();
+		self.max_health = self.bosswavetotal * self.bosswaveqty;
+
+		// Time for an intro?
+		// judge_readyframe();
+	}
 };
 
 //======================================================================

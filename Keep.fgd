@@ -60,7 +60,7 @@
 	//-------- SUN options -------- 
 	_sunlight(integer) : "Sunlight" :  : "Set the brightness of the sunlight coming from an unseen sun in the sky. Sky brushes, or more accurately bsp leafs with sky contents, will emit sunlight at an angle specified by the '_sunlight_mangle' key. Default 0."
 	_sunlight_color(color255) : "Sunlight Color" :  : "Specify the red(r), green(g) and blue(b) components for the colour of the sunlight. Default is white(255 255 255)." 
-	_sunlight_mangle(string) : "Sunlight Direction" :  : "Specifies the direction of sunlight using yaw(x), pitch(y) and roll(z) in degrees. Yaw specifies the angle around the Z-axis from 0 to 359 degrees, in a counter clockwise rotation. Looking top down(top=X/Y) in the editor, a yaw value of 1/359 is effectively placing the Sun's starting position at 9:00 A.M. Pitch specifies the angle from 90 'straight up' to -90 'straight down'. Roll has no effect(use 0). Default is straight down (0 -90 0)."
+	_sunlight_mangle(string) : "Sunlight Direction" :  : "Specifies the direction of sunlight using yaw(x), pitch(y), and roll(z) in degrees (YES THIS IS DIFFERENT THAN mangle OR angles!). Yaw specifies the angle around the Z-axis from 0 to 359 degrees, in a counter clockwise rotation. Looking top down(top=X/Y) in the editor, a yaw value of 1/359 is effectively placing the Sun's starting position at 9:00 A.M. Pitch specifies the angle from 90 'straight up' to -90 'straight down'. Roll has no effect(use 0). Default is straight down (0 -90 0)."
 	_sun_mangle(string) : "Duplicate version of sunlight_mangle"
 	_anglescale(integer) : "Sunlight Angle Scale" :  : "Sets a scaling factor for how much influence, the angle of incidence, sunlight has on the brightness of a surface. Values must be between '0.0' and '1.0'. Smaller values mean less attenuation, with zero meaning that angle of incidence has no effect at all on the brightness. Default 0.5"
 	_sunlight_dirt(choices) : "Sunlight Dirt" :  : "1 enables dirtmapping (ambient occlusion) on sunlight, -1 to disable (making it illuminate the dirtmapping shadows). Default is to use the value of '_dirt'." = [
@@ -594,7 +594,7 @@
 		2 : "Solid Interaction" : 0 : "Solid world interaction"
 	]
 	target(string) : "target(s) fire when used as a viewing camera"
-	mangle(string) : "Mangle (Pitch Yaw Roll)"
+	mangle(string) : "Mangle (Pitch Roll Yaw)"
 	fog_density(integer) : "Fog density (Must be >0 to activate feature)"
 	fog_colour(string) : "Fog colours (def=0.1 0.1 0.1)"
 	speed(integer) : "Fog time to change (def=2s)"
@@ -717,6 +717,7 @@
 		2 : "Megahealth" : 0
 	]
 ]
+@PointClass base(Items,ItemSize,ItemWorldType) studio("progs/ad181/health_5.mdl") = item_healthvial : "Health Vial" []
 //----------------------------------------------------------------------
 //@PointClass base(AmmoBase,AmmoLid) studio({{
 //	spawnflags & 1 ->	":progs/ad171/ammo_shells1.mdl",
@@ -786,7 +787,7 @@
 	count(integer) : "Number of Coins"
 ]
 
-@PointClass base(Items,KeySize) studio("progs/ad171/proj_wraithbone.mdl") = item_bone : "Bone Currency for Versus" [
+@PointClass base(Items,KeySize) studio("progs/boneitem.mdl") = item_bone : "Bone Currency for Versus" [
 	count(integer) : "Number of Bones"
 ]
 
@@ -2372,7 +2373,7 @@
 	brkavel(integer) : "Velocity Rotation (def=200)"
 	brkfade(integer) : "Rubble fade timer (def=4)"
 	angles(string) : "Direction to throw rubble"
-	mangle(string) : "Override pot pitch roll yaw" : : "up/down, angle, tilt left/right "
+	mangle(string) : "Override pot Pitch Roll Yaw" : : "up/down, angle, tilt left/right "
 	brkgravity(integer) : "Rubble gravity (def=1)"
 ]
 
@@ -2516,7 +2517,7 @@
 		64 : "Start Off" : 0
 	]
 	target(string) : "Custom direction for smoke"
-	angles(string) : "Pitch Roll Yaw"
+	angles(string) : "Pitch Yaw Roll"
 	exactskin(choices) : "Type of Smoke" = [
 		0 : "Gunsmoke (Default)"
 		1 : "Soot (darker)"
@@ -2535,7 +2536,7 @@
 
 @PointClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 192)
 	color(128 128 192) = misc_smokemaker : "Smoke Particle Fountain" [
-	angles(string) : "Pitch Roll Yaw"
+	angles(string) : "Pitch Yaw Roll"
 	wait(integer) : "Life of Projectiles"
 	cnt(integer) : "Time Between Bursts(def=0.2, -1=rand 0to1)"
 ]
@@ -2623,8 +2624,8 @@
 		64 : "Start Off" : 0
 	]
 	mdl(string) : "Model to load (progs/model.mdl)"
-	angles(string) : "pitch roll yaw" : : "up/down, angle, tilt left/right "
-	mangle(string) : "Override pitch roll yaw" : : "up/down, angle, tilt left/right "
+	angles(string) : "Pitch Yaw Roll" : : "up/down, angle, tilt left/right "
+	mangle(string) : "Override Pitch Roll Yaw" : : "up/down, angle, tilt left/right "
 	ideal_yaw(choices) : "Y axis rotation" = [
 		0 : "No rotation"
 		1 : "Random"
@@ -2639,7 +2640,7 @@
 		 1 : "Start Idle" : 0
 		 2 : "Start Broken" : 0
 	]
-	mangle(string) : "Model Rotation"
+	mangle(string) : "Model Rotation as Pitch Roll Yaw"
 	speed(integer) : "Time between frames (def=0.1)"
 ]
 
@@ -2651,7 +2652,7 @@
 	]
 	mdl(string) : "Model to load (progs/model.mdl)"
 	angle(integer) : "facing angle"
-	angles(string) : "pitch roll yaw" : : "up/down, angle, tilt left/right "
+	angles(string) : "Pitch Yaw Roll" : : "up/down, angle, tilt left/right "
 	ideal_yaw(choices) : "Y axis rotation" = [
 		0 : "No rotation"
 		1 : "Random"
@@ -2666,8 +2667,8 @@
 		64 : "Start Off" : 0
 	]
 	mdl(string) : "Model to load (progs/model.mdl)"
-	angles(string) : "pitch roll yaw" : : "up/down, angle, tilt left/right "
-	mangle(string) : "Override pitch roll yaw" : : "up/down, angle, tilt left/right "
+	angles(string) : "Pitch Yaw Roll" : : "up/down, angle, tilt left/right "
+	mangle(string) : "Override Pitch Roll Yaw" : : "up/down, angle, tilt left/right "
 	ideal_yaw(choices) : "Y axis rotation" = [
 		0 : "No rotation"
 		1 : "Random"
@@ -3150,7 +3151,7 @@
 		4 : "Local minlight"
 		5 : "Inverse distance 2"
 	]
-	mangle(string) : "Spotlight direction" :  : "Turns the light into a spotlight and specifies the direction of light using yaw(x), pitch(y) and roll(z) in degrees. Yaw specifies the angle around the Z-axis from 0 to 359 degrees and pitch specifies the angle from 90 (straight up) to -90 (straight down). Roll has no effect, so use any value (e.g. 0). Often easier than the 'target' method"
+	mangle(string) : "Spotlight direction" :  : "Turns the light into a spotlight and specifies the direction of light using Pitch(x) Roll(y) Yaw(z) in degrees. Yaw specifies the angle around the Z-axis from 0 to 359 degrees and pitch specifies the angle from 90 (straight up) to -90 (straight down). Roll has no effect, so use any value (e.g. 0). Often easier than the 'target' method"
 	angle(integer) : "Spotlight cone angle" :  : "Specifies the angle in degrees for a spotlight cone. Default 40"
 	_softangle(integer) : "Spotlight soft angle" :  : "Specifies the angle in degrees for an inner spotlight cone (must be less than the 'angle' cone. Creates a softer transition between the full brightness of the inner cone to the edge of the outer cone. Default 0 (disabled)"
 	_anglescale(integer) : "Light angle scale" :  : "Sets a scaling factor for how much influence the angle of incidence of light on a surface has on the brightness of the surface. n must be between 0.0 and 1.0. Smaller values mean less attenuation, with zero meaning that angle of incidence has no effect at all on the brightness. Default 0.5"
@@ -3178,7 +3179,7 @@
 	_surface_offset(integer) : "Surface light offset" :  : "Controls the offset lights are placed above surfaces for '_surface'. Default 2"
    _surface_spotlight(integer) : "Surface Spotlight" :  : "For a surface light template (i.e. a light with '_surface' set), setting this to 1 makes each instance into a spotlight, with the direction of light pointing along the surface normal. In other words, it automatically sets 'mangle' on each of the generated lights."
     _project_texture(string) : "Project Texture(name)" :  : "Specifies that a light should project the named texture. The texture must be used in the map somewhere."
-    _project_mangle(string) : "Projection Mangle" :  : "Specifies the yaw/pitch/roll angles for a texture projection (overriding mangle)."
+    _project_mangle(string) : "Projection Mangle" :  : "Specifies the yaw/pitch/roll (yes different than angles or mangles!) angles for a texture projection (overriding mangle)."
     _project_fov(integer) : "Projection FOV" :  : "Specifies the 'Field of View'(FOV) angle for a texture projection. Default 90."
 
 //------------------- Alternate SUN Method --------------------------
@@ -3765,7 +3766,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 		 1 : "Reset Health"
 	]
 	passive_resettimer(integer) : "Time to reset passive(def=0)"
-	angles(angle) : "Pitch Roll Yaw (set Y to -1 for random)"
+	angles(angle) : "Pitch Yaw Roll (set Y to -1 for random)"
 ]
 @baseclass base(Monster) size(-16 -16 -24, 16 16 16) = MonTiny []
 @baseclass base(Monster) size(-20 -20 -20, 20 20 20) = MonSquare []
@@ -3848,7 +3849,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 ]
 
 @PointClass base(MonFish) studio("progs/madfox/mon_fragy.mdl") = monster_frog : "Frog" []
-@PointClass base(MonDog) studio("progs/hexen2/sheep2.mdl") = monster_sheep : "Sheep" []
+@PointClass base(MonDog) studio("progs/hexen2/mon_sheep.mdl") = monster_sheep : "Sheep" []
 @PointClass base(MonFish) studio("progs/heretic2/mon_ogle.mdl") = monster_ogle : "Ogle" [
 	spawnflags(flags) = [ 4 : "Flesh Mining Sounds" : 0 ]
 ]
@@ -3905,11 +3906,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	frame(integer) : "Statue Pose def=73" :  : "Override statue pose"
 	pos1(string) : "Statue Idle range" :  : "X->Y, Z=0 ; Idle animation range to pick from"
 ]
-@PointClass base(MonTall) studio("progs/q15/warlord.mdl") = monster_hell_knight2 : "Warlord" [
-	spawnflags(Flags) = [
-		2 : "Multi-Grenade" : 0
-	]
-]
+@PointClass base(MonTall) studio("progs/q15/warlord.mdl") = monster_hell_knight2 : "Warlord" []
 
 @PointClass base(MonTall) studio("progs/ad171/mon_hknight.mdl") = monster_hell_pointknight : "Hell knight" [
 	spawnflags(flags) = [ 
@@ -3952,7 +3949,11 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	]
 ]
 
-@PointClass base(MonTiny) studio("progs/quoth2pt2full/sentinel.mdl") = monster_sentinel : "Sentinel" []
+@PointClass base(MonTiny) studio("progs/quoth2pt2full/sentinel.mdl") = monster_sentinel : "Sentinel" [
+	spawnflags(flags) = [
+		4 : "Nails" : 0
+	]
+]
 //----------------------------------------------------------------------
 @PointClass base(MonWide) studio("progs/ogre.mdl") = monster_ogre : "Ogre" [
 	spawnflags(flags) = [
@@ -4374,7 +4375,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hknight.mdl") skin(6) = monster_dark_lord : "The Dark Lord" [
 	spawnflags(Flags) = 
 	[
-		4 : "Beast" : 1
+		4 : "Beast" : 0
 	]
 ]
 @PointClass base(MonGiant) studio("progs/anaconda/anaconda.mdl") = monster_anac : "Anaconda" [
@@ -4487,12 +4488,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) =
 	event_lightning : "Chthon's lightning" []
 @PointClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 8) studio("progs/teleport.mdl") =
-	misc_teleporttrain : "Shub-Niggurath Flying ball" [
-	speed(integer) : "Speed (units per second)" : 64
-	target(target_source) : "First stop target"
-]
-
-@PointClass base(Appearflags, Targetname) = func_teleporttrain : "Moving teleport destination"  [
+	misc_teleporttrain : "Moving teleport destination" [
 	speed(integer) : "Speed (units per second)" : 64
 	target(target_source) : "First stop target"
 ]
@@ -4688,7 +4684,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	noise(string) : "Noise" : : "Path to the WAV played when the water moves from pos1 to pos2 (should be looped)."
 	noise1(string) : "Noise1" : : "Path to the WAV played when the water moves back to pos1 from pos2 (should be looped)."
 	noise2(string) : "Noise2" : : "Path to the WAV played when the water stops moving."
-	mangle(angle) : "Direction" : : "Direction & speed of current"
+	mangle(angle) : "Direction" : : "Direction & speed of current as a speed in one of X Y or Z, specify like '0 0 0' without quotes"
 	drag(integer) : "Drag" : 0 : "Drag on player when water is moving (0 is no drag, 100 if full drag)"
 	cshift(color1) : "Color shift" : : "Custom RGB+I colour shift. Automatically set by watertype if ommited."
 	targetname(target_source) : "Name" : : "Can be triggered (just keeps bobbing between pos1 & pos2 otherwise)."
@@ -4724,7 +4720,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	noise2(string) : "Noise4" : : "Noise to make when changing directions (DON'T USE A LOOPED WAV!!)"
 	noise5(string) : "Noise5" : : "Noise to make when trying to go wrong way at end of path (uses 'noise1' if not set)"
 	cshift(color1) : "Color shift" : : "Custom RGB+I colour shift. Automatically set by watertype if ommited."
-	mangle(angle) : "Direction" : : "Direction & speed of current (if any)"
+	mangle(angle) : "Direction" : : "Direction & speed of current (if any) as a speed in one of X Y or Z, specify like '0 0 0' without quotes"
 	drag(integer) : "Drag" : 0 : "Drag on player when water is moving (0 is no drag, 100 if full drag)"
 	target(target_destination) : "Target" : : "Activate this entity after moving (top and bottom)"
 	event(target_destination) : "Event" : : "Start at this waypoint (since you MUST use the first waypoint as the 'target' on a non-looped path)"
@@ -4873,7 +4869,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 ]
 
 @SolidClass base(Targetname) = t_effector_push : "Extras_R4 particle pushtrig" [
-	mangle(string) : "X Y Z Push speed"
+	mangle(string) : "Push speed in one of X Y or Z, specify like '0 0 0' without quotes"
 	cnt(integer) : "% of Velocity to Diminish" : 10
 	count(integer) : "% of Particles to Affect(1-100)" : 100
 	spawnflags(Flags) = [
@@ -5079,7 +5075,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
         "func_detail_illusionary" : "func_detail_illusionary"    
     ]
     _external_map_angle(integer) : "Rotation (y-axis only)"
-    _external_map_angles(integer) : "Rotation(x y z)" :  : "Final Entity Angle Orientation, pitch yaw and roll(X Y Z) axis."
+    _external_map_angles(integer) : "Rotation(x y z)" :  : "Final Entity Angle Orientation, Pitch Yaw Roll(X Y Z) axis."
     _external_map_scale(string) : "Scale" :  : "Final Entity Scale (default='1 1 1' XYZ axis)" 
 ]
 

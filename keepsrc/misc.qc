@@ -860,7 +860,7 @@ void() s_splashremoves2 = [1, s_splashremoves3] {self.nextthink = time+0.05;};
 void() s_splashremoves3 = [2, s_splashremoves4] {self.nextthink = time+0.05;};
 void() s_splashremoves4 = [3, s_splashremoves5] {self.nextthink = time+0.05;};
 void() s_splashremoves5 = [4, s_splashremoves6] {self.nextthink = time+0.05;};
-void() s_splashremoves6 = [5, s_splashremoves1] {remove(self);};
+void() s_splashremoves6 = [5, SUB_Remove] {self.nextthink = time+0.05;};
 
 //----------------------------------------------------------------------
 void() misc_drip_touch =
@@ -883,6 +883,7 @@ void() misc_drip_touch =
 	// small particle effect when hitting something
 	particle (self.origin+'0 0 1', '0 0 0.5', self.aflag+random()*4, 5+random()*5);
 	// Switch to splash sprite and animate for 5 frames
+	if (!self.headmdl || (self.headmdl != SBLOOD_SPLASH) && (self.headmdl != SSLIME_SPLASH) && (self.headmdl != SWATER_SPLASH)) self.headmdl = SWATER_SPLASH;
 	setmodel (self, self.headmdl);
 	s_splash1();
 };
@@ -1070,6 +1071,7 @@ void() misc_drip_removetouch = {
 	// small particle effect when hitting something
 	particle (self.origin+'0 0 1', '0 0 0.5', self.aflag+random()*4, 5+random()*5);
 	// Switch to splash sprite and animate for 5 frames
+	if (!self.headmdl || (self.headmdl != SBLOOD_SPLASH) && (self.headmdl != SSLIME_SPLASH) && (self.headmdl != SWATER_SPLASH)) self.headmdl = SWATER_SPLASH;
 	setmodel (self, self.headmdl);
 	self.origin_z += 7;
 	setorigin(self, self.origin);

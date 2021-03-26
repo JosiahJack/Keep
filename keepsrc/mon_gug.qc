@@ -824,6 +824,10 @@ void() gug_die = {
 	if (!self.gibbed) {
 		sound(self, CHAN_VOICE, "gug/death.wav", 1, 0.5);
 		gug_death1();
+	} else {
+		ThrowGib (1,2);
+		ThrowGib (2,2);
+		ThrowGib (3,2);
 	}
 };
 

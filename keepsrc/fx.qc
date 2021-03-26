@@ -845,7 +845,7 @@ void() InitLightning =
     move_box.solid      = SOLID_NOT;
     move_box.movetype   = MOVETYPE_NONE;
     move_box.classname  = "lightning";
-	dprint("\b[SETUP]\b Drake lightning is now setup");
+	dprint("\b[SETUP]\b Drake lightning is now setup\n");
 };
 
 //==========================================================================
@@ -1363,6 +1363,7 @@ void() raincloud_raindrip = {
 	drip.movetype = MOVETYPE_FLY;
 	drip.solid = SOLID_TRIGGER;
 	drip.headmdl = self.headmdl;
+	drip.frame = 0;
 	setmodel(drip, self.path);
 	setsize (drip, VEC_ORIGIN, VEC_ORIGIN);
 	drip.origin_x = self.origin_x + crandom()*self.t_width;

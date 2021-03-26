@@ -361,27 +361,23 @@ void(entity inflictor, entity attacker, float damage) vom_pain = {
 };
 
 // DEATH - - - - - - - - - - - - - - - -
-float(float dm) vom_gib = {
+void(float dm) vom_gib = {
 	// PM:  Don't even think about calling T_RadiusDamage here!
 	// This is because gib functions may be called by T_Damage,
 	// which may be called within in T_RadiusDamage loop.
-    if (self.health < self.gibhealth) {
-        sound (self, CHAN_VOICE, "blob/death1.wav", 1, ATTN_NORM);
-        if (self.skin) {
-			// Meatwad
-            Tent_Explosion2 (self.origin, 64, 16);  // Last could be an 8.
-			ThrowGib (1,2);
-			ThrowGib (2,2);
-			ThrowGib (3,2);
-            ThrowGib(25,1);
-        } else {
-			// Tar mother
-            Tent_Point (TE_TAREXPLOSION, self.origin);
-            ThrowGib (11,6);
-        }
-        return TRUE;
-    }
-    return FALSE;
+	sound (self, CHAN_VOICE, "blob/death1.wav", 1, ATTN_NORM);
+	if (self.skin) {
+		// Meatwad
+		Tent_Explosion2 (self.origin, 64, 16);  // Last could be an 8.
+		ThrowGib (1,2);
+		ThrowGib (2,2);
+		ThrowGib (3,2);
+		ThrowGib(25,1);
+	} else {
+		// Tar mother
+		Tent_Point (TE_TAREXPLOSION, self.origin);
+		ThrowGib (11,6);
+	}
 };
 
 
@@ -403,17 +399,12 @@ void() vom_die15 =[ $death15, vom_die16   ] {};
 void() vom_die16 =[ $death15, vom_die16 ] {
     self.health = self.gibhealth - 1;
     vom_gib (self.health);      // Pop into gibs.
+	self.think = SUB_Remove;
+	self.nextthink = time + 0.1;
 };
 
-void() vom_die =
-{
+void() vom_die = {
 	monster_death_precheck();
-    //if (Shattered ())
-        //return;
-
-// check for gib
-    //if (vom_gib (self.health))
-        //return;
 
     sound (self, CHAN_VOICE, "drake/vomitus/death.wav", 1, ATTN_NORM);
     vom_die1 ();

@@ -860,7 +860,7 @@ void() light_flame_pyre =
 
 //======================================================================
 /*QUAKED light_flame_brazier_short (0 .5 0) (-8 -8 -16) (8 8 8) LIGHTOFF NOTSTATIC x x x x x NOPARTICLES
-{ model(":progs/misc_brazshrt.mdl"); }
+{ model(":progs/brazshrt.mdl"); }
 Short brazier (from Quoth)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -890,7 +890,7 @@ Short brazier (from Quoth)
 ======================================================================*/
 void() light_flame_brazier_short =
 {
-	self.mdl = "progs/misc_brazshrt.mdl";
+	self.mdl = "progs/brazshrt.mdl";
 	precache_model (self.mdl);
 
 	// Default = static entity, check done in static function
@@ -906,7 +906,7 @@ void() light_flame_brazier_short =
 
 //======================================================================
 /*QUAKED light_flame_brazier_tall (0 .5 0) (-8 -8 -64) (8 8 8) LIGHTOFF NOTSTATIC x x x x x NOPARTICLES
-{ model(":progs/misc_braztall.mdl"); }
+{ model(":progs/braztall.mdl"); }
 Long brazier (from Quoth)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -936,7 +936,7 @@ Long brazier (from Quoth)
 ======================================================================*/
 void() light_flame_brazier_tall =
 {
-	self.mdl = "progs/misc_braztall.mdl";
+	self.mdl = "progs/braztall.mdl";
 	precache_model (self.mdl);
 
 	// Default = static entity, check done in static function
@@ -952,7 +952,7 @@ void() light_flame_brazier_tall =
 
 //======================================================================
 /*QUAKED light_torch_long_walltorch (0 .5 0) (-8 -8 -48) (8 8 80) LIGHTOFF NOTSTATIC x x x x x NOPARTICLES
-{ model(":progs/misc_longtrch.mdl"); }
+{ model(":progs/longtrch.mdl"); }
 Long wall torch (from Quoth)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -982,7 +982,7 @@ Long wall torch (from Quoth)
 ======================================================================*/
 void() light_torch_long_walltorch =
 {
-	self.mdl = "progs/misc_longtrch.mdl";
+	self.mdl = "progs/longtrch.mdl";
 	precache_model (self.mdl);
 
 	// Default = static entity, check done in static function
@@ -998,7 +998,7 @@ void() light_torch_long_walltorch =
 
 //======================================================================
 /*QUAKED light_fixture1 (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF NOTSTATIC x x x x x x
-{ model(":progs/misc_fixture1.mdl"); }
+{ model(":progs/ad171/misc_fixture1.mdl"); }
 light Fixture (from Rubicon)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -1027,7 +1027,7 @@ light Fixture (from Rubicon)
 ======================================================================*/
 void() light_fixture1 =
 {
-	self.mdl = "progs/misc_fixture1.mdl";
+	self.mdl = "progs/ad171/misc_fixture1.mdl";
 	precache_model (self.mdl);
 	self.angles_y = self.fixangle;
 
@@ -1041,7 +1041,7 @@ void() light_fixture1 =
 
 //======================================================================
 /*QUAKED light_candle (0 1 0) (-4 -4 -16) (4 4 16) LIGHTOFF FLAMEOFF x SHADOWS x STATIC x x
-{ model(":progs/misc_candle1.mdl"); }
+{ model(":progs/ad171/misc_candle1.mdl"); }
 Wide variety of Candles (from Rogue Software)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -1126,15 +1126,15 @@ void() light_candle =
 	// Cannot have randomly selected models for prechache
 	// Quickload will re-run all spawn functions and try to select
 	// a different candle model which is not precached
-	precache_model ("progs/misc_candle1.mdl");
-	precache_model ("progs/misc_candle2.mdl");
-	precache_model ("progs/misc_candle3.mdl");
+	precache_model ("progs/ad171/misc_candle1.mdl");
+	precache_model ("progs/ad171/misc_candle2.mdl");
+	precache_model ("progs/ad171/misc_candle3.mdl");
 
 	// Check for size 1=small, 2=medium, 3=regular (def), -1=random
 	if (self.height < 0) self.height = 1 + rint(random()*2);
-	if (self.height == 1) self.mdl = "progs/misc_candle1.mdl";
-	else if (self.height == 2) self.mdl = "progs/misc_candle2.mdl";
-	else self.mdl = "progs/misc_candle3.mdl";
+	if (self.height == 1) self.mdl = "progs/ad171/misc_candle1.mdl";
+	else if (self.height == 2) self.mdl = "progs/ad171/misc_candle2.mdl";
+	else self.mdl = "progs/ad171/misc_candle3.mdl";
 	
 	// Check for width 1=regular (def), 2=fat, 3=thin, -1=random
 	// The models are split up into three groups of off/on

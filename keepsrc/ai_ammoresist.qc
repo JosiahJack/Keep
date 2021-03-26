@@ -65,12 +65,12 @@ void(entity targ, float artype) Resist_ChangeType =
 		targ.resist_cells = targ.ammo_cells;
 		targ.pain_finished = time + 1;
 	}
-	dprint("\b[AMMO RESIST]\b");
-	dprint(" S="); dprint(ftos(targ.resist_shells));
-	dprint(" N="); dprint(ftos(targ.resist_nails));
-	dprint(" R="); dprint(ftos(targ.resist_rockets));
-	dprint(" C="); dprint(ftos(targ.resist_cells));
-	dprint("\n");
+	// dprint("\b[AMMO RESIST]\b");
+	// dprint(" S="); dprint(ftos(targ.resist_shells));
+	// dprint(" N="); dprint(ftos(targ.resist_nails));
+	// dprint(" R="); dprint(ftos(targ.resist_rockets));
+	// dprint(" C="); dprint(ftos(targ.resist_cells));
+	// dprint("\n");
 };
 
 //----------------------------------------------------------------------

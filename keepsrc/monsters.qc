@@ -136,16 +136,15 @@ void() monster_liquid_check =
 	// Some monsters start in lava/slime (ID1 maps)
 	// If placed in laval/slime give immunity (old ID1 behaviour)
 	if (framecount < 50 && !(self.spawnflags & CAN_DROWN)) {
-		if (self.liquidbase == CONTENT_SLIME || self.liquidbase == CONTENT_LAVA)
-		{ 
+		if (self.liquidbase == CONTENT_SLIME || self.liquidbase == CONTENT_LAVA) { 
 			self.no_liquiddmg = TRUE;
-			spawn_marker(self.origin, 0);
-			dprint("\b[Monster]\b ("); dprint(self.classname);
-			dprint(") at ("); dprint(vtos(self.origin));
-			dprint(") in ("); dprint(ftos(self.liquidbase));
-			dprint(") FC ("); dprint(ftos(framecount));
-			dprint(")\n");
-			return;
+			// spawn_marker(self.origin, 0);
+			// dprint("\b[Monster]\b ("); dprint(self.classname);
+			// dprint(") at ("); dprint(vtos(self.origin));
+			// dprint(") in ("); dprint(ftos(self.liquidbase));
+			// dprint(") FC ("); dprint(ftos(framecount));
+			// dprint(")\n");
+			// return;
 		}
 	}
 
@@ -1261,7 +1260,7 @@ void() monster_start = {
 
 	// Warning if effects flag is active before spawning
 	if (self.effects) {
-		dprint("\b[MONSTER]\b Effects flag active\n");
+		// dprint("\b[MONSTER]\b Effects flag active\n");
 		self.savedeffects = self.effects;
 	}
 	// Reset effects flag because some engines will show effects

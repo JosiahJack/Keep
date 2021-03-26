@@ -576,11 +576,11 @@ void() monster_dprince =
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	self.mdl = "progs/mon_dprince.mdl";			// New Hell Knight
-	self.headmdl = "progs/h_dprince.mdl";
-	self.gib1mdl = "progs/w_dprincesword.mdl";	// Unique sword
-	self.gib2mdl = "progs/gib_knfoot_l.mdl";	// left foot
-	self.gib3mdl = "progs/gib_knfoot_r.mdl";	// right foot
+	self.mdl = "progs/ad181/mon_dprince.mdl";			// New Hell Knight
+	self.headmdl = "progs/ad181/h_dprince.mdl";
+	self.gib1mdl = "progs/ad181/w_dprincesword.mdl";	// Unique sword
+	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
+	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot
 
 	precache_model (self.mdl);
 	precache_model (self.headmdl);

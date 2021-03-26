@@ -191,13 +191,13 @@ void() PlaceDecor =
     self.solid      = SOLID_BBOX;
     self.movetype   = MOVETYPE_TOSS;    
     self.velocity   = '0 0 0';
-    self.origin_z   = self.origin_z + 1;    // Other items used +6.
-    if (!droptofloor ())
-    {
-        print_self (self.classname, " fell out of level at ");
-        remove (self);
-        return;
-    }
+    // self.origin_z   = self.origin_z + 1;    // Other items used +6.
+    // if (!droptofloor ())
+    // {
+        // print_self (self.classname, " fell out of level at ");
+        // remove (self);
+        // return;
+    // }
 };
 
 //============

@@ -2142,7 +2142,7 @@ void(float rndperc) rnd_addpoison =
 //----------------------------------------------------------------------
 float() rnd_CheckNoQuickLoad =
 {
-	dprint("\b[RND_LOAD]\b Checking load exceptions!\n");
+	// dprint("\b[RND_LOAD]\b Checking load exceptions!\n");
 	// Is randomizer active in savegame data!?!
 	if (check_customflags(savegamechaos) == FALSE) return FALSE;
 	// Skill 4 only restricted

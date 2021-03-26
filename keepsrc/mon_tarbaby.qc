@@ -66,16 +66,16 @@ void()	tbaby_walk24=[	$walk24,	tbaby_walk25] {ai_walk(2);};
 void()	tbaby_walk25=[	$walk25,	tbaby_walk1	] {ai_walk(2);};
 
 //============================================================================
-void()	tbaby_run1	=[	$run1,		tbaby_run2	] {ai_face();};
-void()	tbaby_run2	=[	$run2,		tbaby_run3	] {ai_face();};
-void()	tbaby_run3	=[	$run3,		tbaby_run4	] {ai_face();};
-void()	tbaby_run4	=[	$run4,		tbaby_run5	] {ai_face();};
-void()	tbaby_run5	=[	$run5,		tbaby_run6	] {ai_face();};
-void()	tbaby_run6	=[	$run6,		tbaby_run7	] {ai_face();};
-void()	tbaby_run7	=[	$run7,		tbaby_run8	] {ai_face();};
-void()	tbaby_run8	=[	$run8,		tbaby_run9	] {ai_face();};
-void()	tbaby_run9	=[	$run9,		tbaby_run10	] {ai_face();};
-void()	tbaby_run10	=[	$run10,		tbaby_run11	] {ai_face();};
+void()	tbaby_run1	=[	$run1,		tbaby_run2	] {ai_face();ai_run(0);};
+void()	tbaby_run2	=[	$run2,		tbaby_run3	] {ai_face();ai_run(0);};
+void()	tbaby_run3	=[	$run3,		tbaby_run4	] {ai_face();ai_run(0);};
+void()	tbaby_run4	=[	$run4,		tbaby_run5	] {ai_face();ai_run(0);};
+void()	tbaby_run5	=[	$run5,		tbaby_run6	] {ai_face();ai_run(0);};
+void()	tbaby_run6	=[	$run6,		tbaby_run7	] {ai_face();ai_run(0);};
+void()	tbaby_run7	=[	$run7,		tbaby_run8	] {ai_face();ai_run(0);};
+void()	tbaby_run8	=[	$run8,		tbaby_run9	] {ai_face();ai_run(0);};
+void()	tbaby_run9	=[	$run9,		tbaby_run10	] {ai_face();ai_run(0);};
+void()	tbaby_run10	=[	$run10,		tbaby_run11	] {ai_face();ai_run(0);};
 void()	tbaby_run11	=[	$run11,		tbaby_run12	] {ai_run(2);};
 void()	tbaby_run12	=[	$run12,		tbaby_run13	] {ai_run(2);};
 void()	tbaby_run13	=[	$run13,		tbaby_run14	] {ai_run(2);};

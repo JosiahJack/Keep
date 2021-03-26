@@ -1290,3 +1290,19 @@ void() armor_touch = {
 	item_finished();
 	check_item_respawn();
 };
+
+void() item_flag_team1 = {
+
+};
+
+void() item_flag_team2 = {
+
+};
+
+void() item_flagblue = {
+
+};
+
+void() item_flagred = {
+
+};

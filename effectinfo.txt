@@ -1130,7 +1130,7 @@ liquidfriction 4				// Sink through water
 velocityjitter 64 64 64			// Large movement cube
 velocitymultiplier 1			// Using parameter velocity
 rotate 0 360 0 0				// Rotation variety
-staincolor 0xFFFFFF 0xFFFFFF	// Full colour
+//staincolor 0xFFFFFF 0xFFFFFF	// Full colour
 stainsize 1 2					// Small size
 staintex 64 71					// Remapped blood stain textures
 
@@ -1150,7 +1150,7 @@ liquidfriction 4				// Sink through water
 velocityjitter 64 64 64			// Large movement cube
 velocitymultiplier 0.5			// Using parameter velocity
 rotate 0 360 0 0				// Rotation variety
-staincolor 0xFFFFFF 0xFFFFFF	// Full colour
+//staincolor 0xFFFFFF 0xFFFFFF	// Full colour
 stainsize 1 2					// Small size
 staintex 64 71					// Remapped blood stain textures
 
@@ -1204,7 +1204,7 @@ liquidfriction 4
 velocityjitter 32 32 32			// Extra movement
 velocitymultiplier 0.5			// Using parameter velocity
 rotate 0 360 0 0				// Rotation variety
-staincolor 0xFFFFFF 0xFFFFFF	// Full colour
+//staincolor 0xFFFFFF 0xFFFFFF	// Full colour
 stainsize 1 2					// Small size
 staintex 64 71					// Remapped blood stain textures
 
@@ -4684,7 +4684,7 @@ velocityjitter 615 615 877
 originoffset 0 0 20
 originjitter 10 10 0
 gravity 1.2
-staincolor 0xA8FFFF 0xA8FFFF
+//staincolor 0xA8FFFF 0xA8FFFF
 staintex 16 32
 stainalpha 156 256
 stainsize 3 6
@@ -4705,7 +4705,7 @@ velocityjitter 615 615 877
 originoffset 0 0 20
 originjitter 10 10 0
 gravity 1.2
-staincolor 0xA8FFFF 0xA8FFFF
+//staincolor 0xA8FFFF 0xA8FFFF
 staintex 16 32
 stainalpha 156 256
 stainsize 4 5
@@ -4744,8 +4744,8 @@ airfriction 15
 liquidfriction 5.5
 velocityjitter 275 275 450
 originoffset 0 0 10
-originjitter 10 10 0
-staincolor 0xA8FFFF 0xA8FFFF
+originjitter
+//staincolor 0xA8FFFF 0xA8FFFF
 staintex 16 32
 stainalpha 156 256
 stainsize 8 7
@@ -4786,7 +4786,7 @@ velocityjitter 415 415 677
 originoffset 0 0 20
 originjitter 10 10 0
 gravity 1.2
-staincolor 0xA8FFFF 0xA8FFFF
+//staincolor 0xA8FFFF 0xA8FFFF
 staintex 16 32
 stainalpha 156 256
 stainsize 3 6
@@ -4807,7 +4807,7 @@ velocityjitter 315 315 477
 originoffset 0 0 20
 originjitter 10 10 0
 gravity 1.2
-staincolor 0xA8FFFF 0xA8FFFF
+//staincolor 0xA8FFFF 0xA8FFFF
 staintex 16 32
 stainalpha 156 256
 stainsize 4 5
@@ -4828,7 +4828,7 @@ liquidfriction 5.5
 velocityjitter 275 275 450
 originoffset 0 0 10
 originjitter 10 10 0
-staincolor 0xA8FFFF 0xA8FFFF
+//staincolor 0xA8FFFF 0xA8FFFF
 staintex 16 32
 stainalpha 156 256
 stainsize 8 7
@@ -4850,7 +4850,7 @@ velocityjitter 875 875 850
 originoffset 0 0 10
 originjitter 10 10 0
 gravity 1.5
-staincolor 0xA8FFFF 0xA8FFFF
+//staincolor 0xA8FFFF 0xA8FFFF
 staintex 16 32
 stainalpha 156 256
 stainsize 1 6

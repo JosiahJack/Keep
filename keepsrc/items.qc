@@ -569,7 +569,7 @@ void() item_start =
 
 	// Warning if effects flag is active before spawning
 	if (self.effects) {
-		dprint("\b[ITEM]\b Effects flag active\n");
+		// dprint("\b[ITEM]\b Effects flag active\n");
 		self.savedeffects = self.effects;
 	}
 	// Reset effects flag because some engines will show effects
@@ -2318,10 +2318,11 @@ void() item_keyx =
 	
 	// Can't have a custom key without a custom model!?!
 	if (self.mdl == "") {
-		dprint("\b[CUSTOM KEY]\b Missing model\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		remove(self);
-		return;
+		self.mdl = "progs/ad171/key_medieval.mdl";
+		// dprint("\b[CUSTOM KEY]\b Missing model\n");
+		// spawn_marker(self.origin, SPNMARK_YELLOW);
+		// remove(self);
+		// return;
 	}
 	precache_model (self.mdl);	
 
@@ -2349,10 +2350,13 @@ void() item_keyx =
 		if (self.netname == "") self.netname = "Arcane Key 4";
 	}
 	else {
-		dprint("\b[CUSTOM KEY]\b Missing spawnflag key number!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		remove(self);
-		return;
+		self.moditems = IT_CKEY1;
+		if (self.netname == "") self.netname = "Arcane Key 1";
+		self.ckeyskin1 = self.ckeyhudskin;
+		// dprint("\b[CUSTOM KEY]\b Missing spawnflag key number!\n");
+		// spawn_marker(self.origin, SPNMARK_YELLOW);
+		// remove(self);
+		// return;
 	}
 		
 	self.classtype = CT_CUSTOMKEY;
@@ -2550,9 +2554,10 @@ void() sigil_touch =
 void() item_sigil =
 {
 	if (!self.spawnflags) {
-		dprint("\b[SIGIL]\b No Rune type selected!?!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		return;		
+		self.spawnflags |= SVR_RUNE_KEY1;
+		// dprint("\b[SIGIL]\b No Rune type selected!?!\n");
+		// spawn_marker(self.origin, SPNMARK_YELLOW);
+		// return;		
 	}
 
 	// Check for custom model setup?

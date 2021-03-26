@@ -300,6 +300,7 @@ void() polyp_visible1 = [0, polyp_visible2] {
 	self.statevis = 0;
 	org = self.origin;
 	sound(self, CHAN_AUTO, "polyp/decloak.wav", 1, ATTN_NORM);
+	self.frame = 0;
 	setmodel(self, "progs/quoth2pt2full/polyp_t3.mdl");
 	setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
 	self.count = time + 2 + 2 * random();
@@ -307,8 +308,8 @@ void() polyp_visible1 = [0, polyp_visible2] {
 	self.th_die = polyp_die1;
 	self.th_run = polyp_hover1;
 };
-void() polyp_visible2 = [0, polyp_visible3] {setmodel(self, "progs/quoth2pt2full/polyp_t2.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
-void() polyp_visible3 = [0, polyp_hover0a]{setmodel(self, "progs/quoth2pt2full/polyp_t1.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
+void() polyp_visible2 = [0, polyp_visible3] {	self.frame = 0; setmodel(self, "progs/quoth2pt2full/polyp_t2.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
+void() polyp_visible3 = [0, polyp_hover0a]{	self.frame = 0; setmodel(self, "progs/quoth2pt2full/polyp_t1.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
 
 void() polyp_invisible = [0, polyp_invisible2] {
 	local vector org;
@@ -316,6 +317,7 @@ void() polyp_invisible = [0, polyp_invisible2] {
 	self.statevis = 1;
 	org = self.origin;
 	sound(self, CHAN_AUTO, "polyp/cloak.wav", 1, ATTN_NORM);
+	self.frame = 0;
 	setmodel(self, "progs/quoth2pt2full/polyp_t1.mdl");
 	setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
 	self.th_missile = SUB_Null;
@@ -323,8 +325,8 @@ void() polyp_invisible = [0, polyp_invisible2] {
 	self.th_die = polyp_idie1;
 	self.count = time + 2 + 2 * random();
 };
-void() polyp_invisible2 = [0, polyp_invisible3]{setmodel(self, "progs/quoth2pt2full/polyp_t2.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
-void() polyp_invisible3 = [0, polyp_ihover0]{setmodel(self, "progs/quoth2pt2full/polyp_t3.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
+void() polyp_invisible2 = [0, polyp_invisible3]{	self.frame = 0; setmodel(self, "progs/quoth2pt2full/polyp_t2.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
+void() polyp_invisible3 = [0, polyp_ihover0]{	self.frame = 0; setmodel(self, "progs/quoth2pt2full/polyp_t3.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
 
 void() polyp_hover0 = [156, polyp_hover1] {
 	local vector dist;

@@ -2069,28 +2069,28 @@ void() monster_mammoth = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 	
-	self.mdl = "progs/mon_mammoth.mdl";			// Mammoth Phase 1+2
-	self.mdl2 = "progs/mon_mammothb.mdl";		// Mammoth Phase 3
-	self.weaponglow = "progs/mon_mammoth_glow.mdl";	// Blue shield
-	self.headmdl = "progs/mon_mammothd.mdl";		// Final dead chunk
+	self.mdl = "progs/ad181/mon_mammoth.mdl";			// Mammoth Phase 1+2
+	self.mdl2 = "progs/ad181/mon_mammothb.mdl";		// Mammoth Phase 3
+	self.weaponglow = "progs/ad181/mon_mammoth_glow.mdl";	// Blue shield
+	self.headmdl = "progs/ad181/mon_mammothd.mdl";		// Final dead chunk
 	precache_model (self.mdl);
 	precache_model (self.mdl2);
 	precache_model (self.weaponglow);
 	precache_model (self.headmdl);
 
 	// Phase 2 gib models
-	precache_model ("progs/gib_mammoth1.mdl");	// Front light panel
-	precache_model ("progs/gib_mammoth2.mdl");	// Corner chunk 1
-	precache_model ("progs/gib_mammoth3.mdl");	// Arm piece
-	precache_model ("progs/gib_mammoth4.mdl");	// Front light panel
-	precache_model ("progs/gib_mammoth5.mdl");	// Arm piece
+	precache_model ("progs/ad181/gib_mammoth1.mdl");	// Front light panel
+	precache_model ("progs/ad181/gib_mammoth2.mdl");	// Corner chunk 1
+	precache_model ("progs/ad181/gib_mammoth3.mdl");	// Arm piece
+	precache_model ("progs/ad181/gib_mammoth4.mdl");	// Front light panel
+	precache_model ("progs/ad181/gib_mammoth5.mdl");	// Arm piece
 	// Phase 3 gib models
-	precache_model ("progs/gib_mammoth6.mdl");	// Back panel
-	precache_model ("progs/gib_mammoth7.mdl");	// Feet jet
-	precache_model ("progs/gib_mammoth8.mdl");	// Grenade panel
-	precache_model ("progs/gib_mammoth9.mdl");	// Corner chunk 2
-	precache_model ("progs/gib_mammoth10.mdl");	// Back Fan
-	precache_model ("progs/gib_metal1.mdl");	// Generic metal chunk
+	precache_model ("progs/ad181/gib_mammoth6.mdl");	// Back panel
+	precache_model ("progs/ad181/gib_mammoth7.mdl");	// Feet jet
+	precache_model ("progs/ad181/gib_mammoth8.mdl");	// Grenade panel
+	precache_model ("progs/ad181/gib_mammoth9.mdl");	// Corner chunk 2
+	precache_model ("progs/ad181/gib_mammoth10.mdl");	// Back Fan
+	precache_model ("progs/ad181/gib_metal1.mdl");	// Generic metal chunk
 	self.gibtype = GIBTYPE_METAL;				// All metal
 	self.gibdir = MON_GIBFOUNTAIN;				// Velocity override
 

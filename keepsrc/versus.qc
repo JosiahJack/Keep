@@ -81,7 +81,7 @@ void () item_coin_touch = {
    stuffcmd (other, "bf\n");
    coins = coins + self.count;
    //centerprint_msg(other,"Coin total: ",ftos(coins));
-   sound (other, CHAN_ITEM, "items/money.wav", 1, ATTN_NORM);
+   sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
    item_finished();
    check_item_respawn();
    activator = other;
@@ -89,8 +89,7 @@ void () item_coin_touch = {
 };
 
 void () item_coin_setup = {
-   if (self.noise == "")
-      self.noise = "items/money.wav";
+   if (self.noise == "") self.noise = "items/money.wav";
 
    precache_sound (self.noise);
    self.touch = item_touch;
@@ -116,6 +115,41 @@ void () item_coin = {
    precache_model (self.mdl);
 	item_coin_setskin();
    item_coin_setup();
+};
+
+void () item_bone_touch = {
+   if (coop > 2 && other.versustype != VT_GAMEMASTER)  return;
+   if ( !(other.flags & FL_CLIENT) ) return;
+
+   sprint (other, "You got ");
+   sprint (other, ftos(self.count));
+   if (self.count == 1) sprint (other, " bone!\n");
+   else sprint (other, " bones!\n");
+   stuffcmd (other, "bf\n");
+   bones = bones + self.count;
+   //centerprint_msg(other,"Bone total: ",ftos(bones));
+   sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+   item_finished();
+   check_item_respawn();
+   activator = other;
+   SUB_UseTargets();
+};
+
+void () item_bone = {
+   if (self.mdl == "")
+      self.mdl = "progs/boneitem.mdl";
+
+   precache_model (self.mdl);
+   if (self.noise == "") self.noise = "polyp/gibsplt1.wav";
+
+	if (!self.count) self.count = 1;
+
+   precache_sound (self.noise);
+   self.touch = item_touch;
+   self.touch2 = item_bone_touch;
+   self.bbmins = VEC_KEYS_MIN;
+   self.bbmaxs = VEC_KEYS_MAX;
+   item_start();
 };
 
 //----------------------------------------------------------------------

@@ -146,16 +146,16 @@ void() misc_targetdummy =
 	self.resist_rockets = self.resist_cells = 0;
 	
 	if (self.spawnflags & MISC_TARGKNIGHT) {
-		self.mdl = "progs/mon_knight.mdl";
-		self.headmdl = "progs/targd_short.mdl";
+		self.mdl = "progs/ad171/mon_knight.mdl";
+		self.headmdl = "progs/ad171/targd_short.mdl";
 		self.pain_sound = "knight/khurt.wav";
 		self.t_width = FALSE;
 		self.bboxtype = BBOX_SHORT;
 		self.pos1 = '0 9 0';	// stand1-9
 	}
 	else if (self.spawnflags & MISC_TARGWIZARD) {
-		self.mdl = "progs/mon_wizard.mdl";
-		self.headmdl = "progs/targd_tall.mdl";
+		self.mdl = "progs/ad171/mon_wizard.mdl";
+		self.headmdl = "progs/ad171/targd_tall.mdl";
 		self.pain_sound = "wizard/wpain.wav";
 		self.t_width = FALSE;
 		self.bboxtype = BBOX_TALL;
@@ -163,23 +163,23 @@ void() misc_targetdummy =
 	}
 	else if (self.spawnflags & MISC_TARGOGRE) {
 		self.mdl = "progs/ogre.mdl";
-		self.headmdl = "progs/targd_wide.mdl";
+		self.headmdl = "progs/ad171/targd_wide.mdl";
 		self.pain_sound = "ogre/ogpain1.wav";
 		self.t_width = TRUE;
 		self.bboxtype = BBOX_WIDE;
 		self.pos1 = '0 9 0';	// stand1-9
 	}
 	else if (self.spawnflags & MISC_TARGHELLKNIGHT) {
-		self.mdl = "progs/mon_hknight.mdl";
-		self.headmdl = "progs/targd_tall.mdl";
+		self.mdl = "progs/ad171/mon_hknight.mdl";
+		self.headmdl = "progs/ad171/targd_tall.mdl";
 		self.pain_sound = "hknight/pain1.wav";
 		self.t_width = FALSE;
 		self.bboxtype = BBOX_TALL;
 		self.pos1 = '0 9 0';	// stand1-9
 	}
 	else if (self.spawnflags & MISC_TARGZOMBIE) {
-		self.mdl = "progs/mon_zombie.mdl";
-		self.headmdl = "progs/targd_short.mdl";
+		self.mdl = "progs/ad171/mon_zombie.mdl";
+		self.headmdl = "progs/ad171/targd_short.mdl";
 		self.pain_sound = "zombie/z_pain.wav";
 		self.t_width = FALSE;
 		self.bboxtype = BBOX_SHORT;
@@ -187,15 +187,15 @@ void() misc_targetdummy =
 	}
 	else if (self.spawnflags & MISC_TARGDEMON) {
 		self.mdl = "progs/demon.mdl";
-		self.headmdl = "progs/targd_wide.mdl";
+		self.headmdl = "progs/ad171/targd_wide.mdl";
 		self.pain_sound = "demon/dpain1.wav";
 		self.t_width = TRUE;
 		self.bboxtype = BBOX_WIDE;
 		self.pos1 = '0 13 0';	// stand 1-13
 	}
 	else if (self.spawnflags & MISC_TARGSHALRATH) {
-		self.mdl = "progs/mon_shalrath.mdl";
-		self.headmdl = "progs/targd_wide.mdl";
+		self.mdl = "progs/ad171/mon_shalrath.mdl";
+		self.headmdl = "progs/ad171/targd_wide.mdl";
 		self.pain_sound = "shalrath/pain.wav";
 		self.t_width = TRUE;
 		self.bboxtype = BBOX_WIDE;
@@ -203,7 +203,7 @@ void() misc_targetdummy =
 	}
 	else if (self.spawnflags & MISC_TARGSHAMBLER) {
 		self.mdl = "progs/shambler.mdl";
-		self.headmdl = "progs/targd_massive.mdl";
+		self.headmdl = "progs/ad171/targd_massive.mdl";
 		self.pain_sound = "shambler/shurt2.wav";
 		self.t_width = FALSE;
 		self.bboxtype = BBOX_MASSIVE;
@@ -245,7 +245,7 @@ void() misc_targetdummy =
 
 	// Spawn Hull2 bounding box visual marker
 	if (self.t_width) {
-		self.noise = "progs/targd_hull2.mdl";
+		self.noise = "progs/ad171/targd_hull2.mdl";
 		precache_model(self.noise);
 		self.attachment2 = spawn();
 		self.attachment2.solid = SOLID_NOT;
@@ -272,7 +272,7 @@ void() misc_targetdummy =
 target number to display ingame
 ------- KEYS --------
 targetname : required for numbers to updated
-mdl        : Numbers 0-9,dot,blank (def=progs/misc_digit.mdl)
+mdl        : Numbers 0-9,dot,blank (def=progs/ad171/misc_digit.mdl)
 waitmin    : Spacing of the model numbers (def=8)
 cnt        : Initial display value on spawn (must be >0)
 pos1       : X= top digit quantity, Y=Lower digit quantity
@@ -375,7 +375,7 @@ entity(float offset, float startno) misc_targetnumber_spawn =
 //----------------------------------------------------------------------
 void() misc_targetnumber =
 {
-	if (self.mdl == "") self.mdl = "progs/misc_digit.mdl";
+	if (self.mdl == "") self.mdl = "progs/ad171/misc_digit.mdl";
 	precache_model (self.mdl);
 	
 	self.classtype = CT_TARGETNUMBER;

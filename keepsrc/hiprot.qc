@@ -401,6 +401,8 @@ Basic rotating object
 //======================================================================
 void() func_rotate_entity =
 {
+	if (!self.target) { dprint("\b[ROT TRAIN]\b missing target!\n"); return;}
+
 	self.solid    = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 
@@ -547,14 +549,14 @@ void() rotate_train_next =
 	current = self.goalentity;
 	targ = find (world, targetname, self.path );
 	if ( targ.classname != "path_rotate" )
-		dprint("\b[ROT TRAIN]\b Next target is not path_rotate\n");
+		dprint("\b[ROT TRAIN]\b func_rotate_train next target is not path_rotate\n");
 
 	if ( self.goalentity.noise1 ) self.noise1 = self.goalentity.noise1;
 	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 
 	self.goalentity = targ;
 	self.path = targ.target;
-	if (!self.path ) dprint("\b[ROT TRAIN]\b No next target\n");
+	if (!self.path ) dprint("\b[ROT TRAIN]\b func_rotate_train no next target\n");
 
 	if ( targ.spawnflags & TRAIN_STOP ) self.think1 = rotate_train_stop;
 	else if (targ.wait) self.think1 = rotate_train_wait;
@@ -888,7 +890,7 @@ void() rotate_object_move =
 void() rotate_object =
 {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
-	
+	if (!self.target) { dprint("\b[ROT OBJECT]\b missing target!\n"); return;}
 	self.classname = "rotate_object";
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
@@ -1050,7 +1052,7 @@ Rotating door moving around a point of rotation
 //======================================================================
 void() func_rotate_door =
 {
-	if (!self.target) dprint("\b[ROT DOOR]\b missing target!\n");
+	if (!self.target) { dprint("\b[ROT DOOR]\b missing target!\n"); return;}
 
 	self.dest1 = '0 0 0';
 	self.dest2 = self.angles;

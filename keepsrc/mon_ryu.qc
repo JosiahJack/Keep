@@ -881,10 +881,10 @@ void() Ryu_Shot_Fire = {
     local   float   sped;   // Missile speed or lightning bolt range.
     local   float   frac;   // Lead coefficient.  0 = no lead, 1 = perfect.
 
-// As with players, pay ammo cost first then attack.
-    if (self.shots_left < 1)
-        return;     // Out of ammo.
+	// As with players, pay ammo cost first then attack.
+    if (self.shots_left < 1) return;     // Out of ammo.
 
+	newmis = spawn();
 	newmis.classgroup = CG_PROJALL;
     // Calculate lead coefficient.  The value begins at or close to zero at
     // the start of the salvo, then the value increases with each successive

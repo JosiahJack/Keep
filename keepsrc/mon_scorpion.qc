@@ -368,11 +368,11 @@ void() monster_scorpion =
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	self.mdl = "progs/mon_scorpion.mdl";
-	self.headmdl = "progs/h_scorpion.mdl";		// Front Jaws
-	self.gib1mdl = "progs/gib_scorpleg.mdl";	// Single Leg
-	self.gib2mdl = "progs/gib_scorptail.mdl";	// Tail + Sting
-	self.gib3mdl = "progs/gib_scorpclaw.mdl";	// Claw
+	self.mdl = "progs/ad171/mon_scorpion.mdl";
+	self.headmdl = "progs/ad171/h_scorpion.mdl";		// Front Jaws
+	self.gib1mdl = "progs/ad171/gib_scorpleg.mdl";	// Single Leg
+	self.gib2mdl = "progs/ad171/gib_scorptail.mdl";	// Tail + Sting
+	self.gib3mdl = "progs/ad171/gib_scorpclaw.mdl";	// Claw
 
 	precache_model (self.mdl);
 	precache_model (self.headmdl);

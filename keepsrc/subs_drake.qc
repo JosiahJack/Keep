@@ -1002,7 +1002,7 @@ void() SUB_RemovePowerups =
     self.mirror_finished  = self.mirror_time  = self.mirror_sound  = 0;
     self.mirror_ping      = 0;
     // Arcanum:  Tome of Power and Necromancer curses.
-    self.tome_finished    = self.tome_time    = 0;
+    self.tome_finished  = 0;
     self.curse_finished   = self.curse_type   = 0;
     self.gravity          = fabs(self.gravity);   // Boots of Leviation.
 // Jump pads

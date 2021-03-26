@@ -580,18 +580,13 @@ void() hknight_pointfire =
 };
 
 //----------------------------------------------------------------------
-void() hknight_pointsetup = 
-{
-	// Find Lightning bolt target
-	self.movetarget = find(world, targetname, self.target);
-	if (!self.movetarget) {
-		dprint("\b[HKNIGHT]\b Pointing knight invalid target!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		remove(self);
-		return;
-	}
-	// Start pointing lightning sword!
-	else {
+void() hknight_pointsetup = {
+	local entity newpoint;
+	// Start pointing lightning sword?
+	if (self.target == "") {
+		newpoint = spawn();
+		setorigin(newpoint,self.origin + '0 0 64');
+		self.movetarget = newpoint;
 		// Save pain threshold and timeout for later
 		self.finaldest_x = self.pain_flinch;
 		self.finaldest_y = self.pain_timeout;
@@ -605,6 +600,31 @@ void() hknight_pointsetup =
 		// Create glowing sword and start pointing
 		hknight_create_attachment();
 		self.th_run();
+	} else {
+		// Find Lightning bolt target
+		self.movetarget = find(world, targetname, self.target);
+		if (!self.movetarget) {
+			dprint("\b[HKNIGHT]\b Pointing knight invalid target!\n");
+			spawn_marker(self.origin, SPNMARK_YELLOW);
+			remove(self);
+			return;
+		}
+		// Start pointing lightning sword!
+		else {
+			// Save pain threshold and timeout for later
+			self.finaldest_x = self.pain_flinch;
+			self.finaldest_y = self.pain_timeout;
+			// Reset all pain parameters so it always happens
+			self.pain_flinch = self.pain_timeout = 0;
+			self.pain_finished = self.pain_ignore = 0;
+			self.infightextra = self.noinfighting = 0;
+			// Stop other monsters attacking pointy knights
+			self.flags = self.flags - (self.flags & FL_MONSTER);
+			self.enemy = world;
+			// Create glowing sword and start pointing
+			hknight_create_attachment();
+			self.th_run();
+		}
 	}
 };
 
@@ -1057,8 +1077,8 @@ STARTOFF : Trigger Spawn
 -------- NOTES --------
 Special Electricity Pointing Hell Knight*/
 //======================================================================
-void() monster_hell_pointknight =
-{
+void() monster_hell_pointknight = {
+	local entity newpoint;
 	// Setup with new special spawnflag (not mapper controlled)
 	self.spawnflags = self.spawnflags | MON_POINT_KNIGHT;
 	// remove notfrozen and angry, always start/spawn firing lightning
@@ -1068,11 +1088,15 @@ void() monster_hell_pointknight =
 	if (self.deathstring == "") self.deathstring = " was cleaved by an Electrical Death Knight\n";
 	// If not target setup then stop!
 	if (self.target == "") {
-		dprint("\b[HKNIGHT]\b Pointing knight needs target!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		remove(self);
-		return;
+		// Create one!
+		newpoint = spawn();
+		setorigin(newpoint,self.origin + '0 0 64');
+		self.movetarget = newpoint;
+		// dprint("\b[HKNIGHT]\b Pointing knight needs target!\n");
+		// spawn_marker(self.origin, SPNMARK_YELLOW);
+		// remove(self);
+		// return;
 	}
 	// Loop back through existing hell knight function
-	else monster_hell_knight();
+	monster_hell_knight();
 };

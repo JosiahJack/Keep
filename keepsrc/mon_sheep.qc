@@ -465,7 +465,7 @@ void() sheep_bite =  {
 	traceline ( (self.origin + self.view_ofs), ((self.origin + self.view_ofs) + (v_forward * 36.00000)), FALSE, self);
 	if (trace_ent.takedamage) {
 		vel = (v_forward * (random() * 100 + 100));     //+ (v_up * 50);
-		sound ( self, CHAN_VOICE, "spider/bite.wav", 1.00000, ATTN_NORM);
+		sound ( self, CHAN_VOICE, "sheep/bite.wav", 1.00000, ATTN_NORM);
 		SpawnBloodSpray(trace_ent.origin, vel);
 		T_Damage(trace_ent, self, self, 5, DAMARMOR);
 		self.attack_finished = (time + 0.2 + (random() * 0.8));
@@ -497,8 +497,69 @@ void()	sheep_run8		=[231,	sheep_run9	] {sheep_run_think();};
 void()	sheep_run9		=[232,	sheep_run10] {sheep_run_think();};
 void()	sheep_run10		=[233,	sheep_run1]{sheep_run_think();};
 
-void() sheep_die = {
+void()	sheep_diea1		=[250,	sheep_diea2	] {};
+void()	sheep_diea2		=[251,	sheep_diea3	] {monster_check_gib();};
+void()	sheep_diea3		=[252,	sheep_diea4	] {monster_check_gib();};
+void()	sheep_diea4		=[253,	sheep_diea5	] {};
+void()	sheep_diea5		=[254,	sheep_diea6	] {};
+void()	sheep_diea6		=[255,	sheep_diea7	] {};
+void()	sheep_diea7		=[256,	sheep_diea8	] {};
+void()	sheep_diea8		=[257,	sheep_diea9	] {};
+void()	sheep_diea9		=[258,	sheep_diea10	] {};
+void()	sheep_diea10	=[259,	sheep_diea11	] {};
+void()	sheep_diea11	=[260,	sheep_diea12	] {};
+void()	sheep_diea12	=[261,	sheep_diea13	] {};
+void()	sheep_diea13	=[262,	sheep_diea14	] {};
+void()	sheep_diea14	=[263,	sheep_diea15	] {};
+void()	sheep_diea15	=[264,	sheep_diea16	] {};
+void()	sheep_diea16	=[265,	sheep_diea17	] {};
+void()	sheep_diea17	=[266,	sheep_diea18	] {};
+void()	sheep_diea18	=[267,	sheep_diea19	] {};
+void()	sheep_diea19	=[268,	sheep_diea20	] {};
+void()	sheep_diea20	=[269,	sheep_diea21	] {};
+void()	sheep_diea21	=[270,	sheep_diea22	] {};
+void()	sheep_diea22	=[271,	sheep_diea23	] {};
+void()	sheep_diea23	=[272,	sheep_diea24	] {monster_death_postcheck();};
+void()	sheep_diea24	=[273,	sheep_diea24	] {monster_deadbody_check();};
 
+void()	sheep_dieb1		=[274,	sheep_dieb2	] {};
+void()	sheep_dieb2		=[275,	sheep_dieb3	] {monster_check_gib();};
+void()	sheep_dieb3		=[276,	sheep_dieb4	] {monster_check_gib();};
+void()	sheep_dieb4		=[277,	sheep_dieb5	] {};
+void()	sheep_dieb5		=[278,	sheep_dieb6	] {};
+void()	sheep_dieb6		=[279,	sheep_dieb7	] {};
+void()	sheep_dieb7		=[280,	sheep_dieb8	] {};
+void()	sheep_dieb8		=[281,	sheep_dieb9	] {};
+void()	sheep_dieb9		=[282,	sheep_dieb10	] {};
+void()	sheep_dieb10	=[283,	sheep_dieb11	] {};
+void()	sheep_dieb11	=[284,	sheep_dieb12	] {};
+void()	sheep_dieb12	=[285,	sheep_dieb13	] {};
+void()	sheep_dieb13	=[286,	sheep_dieb14	] {};
+void()	sheep_dieb14	=[287,	sheep_dieb15	] {};
+void()	sheep_dieb15	=[288,	sheep_dieb16	] {};
+void()	sheep_dieb16	=[289,	sheep_dieb17	] {};
+void()	sheep_dieb17	=[290,	sheep_dieb18	] {};
+void()	sheep_dieb18	=[291,	sheep_dieb19	] {};
+void()	sheep_dieb19	=[292,	sheep_dieb20	] {};
+void()	sheep_dieb20	=[293,	sheep_dieb21	] {};
+void()	sheep_dieb21	=[294,	sheep_dieb22	] {};
+void()	sheep_dieb22	=[295,	sheep_dieb23	] {};
+void()	sheep_dieb23	=[296,	sheep_dieb24	] {};
+void()	sheep_dieb24	=[297,	sheep_dieb25	] {};
+void()	sheep_dieb25	=[298,	sheep_dieb26	] {monster_death_postcheck();};
+void()	sheep_dieb26	=[299,	sheep_dieb26	] {monster_deadbody_check();};
+
+void() sheep_die = {
+	// Pre-check routine to tidy up extra entities
+	monster_death_precheck();
+
+	// regular death
+	if (!self.gibbed) {
+		sound (self, CHAN_VOICE, "sheep/sheepfly.wav", 1, ATTN_NORM);
+
+		if (random() > 0.5) sheep_diea1 ();
+		else sheep_dieb1 ();
+	}
 };
 
 void() monster_sheep =  {

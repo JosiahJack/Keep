@@ -65,6 +65,8 @@ void(float dist) ai_walk =
 	movetogoal (dist);
 };
 
+void() CheckAttack;
+
 //----------------------------------------------------------------------
 // ai_run
 //----------------------------------------------------------------------
@@ -191,7 +193,11 @@ void(float dist) ai_run =
 	// Some monsters don't have distance checks, like wizards
 	// All monsters have checkattack defined, no need for ifs and buts!
 	if (self.enemymaxdist || self.enemydist < MON_MAX_RANGE) 
-		self.th_checkattack ();
+		if (!self.th_checkattack) {
+			self.th_checkattack = CheckAttack;
+		} else {
+			self.th_checkattack ();
+		}
 
 	//----------------------------------------------------------------------
 	if (self.attack_state == AS_SLIDING) {

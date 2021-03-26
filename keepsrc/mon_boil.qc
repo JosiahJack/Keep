@@ -342,7 +342,7 @@ void() monster_boil =
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	self.mdl = "progs/mon_boil.mdl";
+	self.mdl = "progs/ad171/mon_boil.mdl";
 	precache_model (self.mdl);
 
 	self.idle_sound = "zombie/boil_idle1.wav";

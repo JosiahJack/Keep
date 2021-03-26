@@ -641,9 +641,9 @@ void() hlorddragon_nuke = {
 };
 
 void() hlorddragon_parts = {
-    ThrowIt ("progs/drggib01.mdl", -100, GIBx_GIB|GIB_SKIN_MATCH);
-    ThrowIt ("progs/drggib02.mdl", -100, GIBx_GIB|GIB_SKIN_MATCH);
-    ThrowIt ("progs/drggib03.mdl", -100, GIBx_GIB|GIB_SKIN_MATCH);
+    ThrowIt ("progs/drake/drggib01.mdl", -100, GIBx_GIB|GIB_SKIN_MATCH);
+    ThrowIt ("progs/drake/drggib02.mdl", -100, GIBx_GIB|GIB_SKIN_MATCH);
+    ThrowIt ("progs/drake/drggib03.mdl", -100, GIBx_GIB|GIB_SKIN_MATCH);
     // Was "player/tornoff2.wav".
     sound (self, CHAN_BODY, "player/teledth1.wav", 1, ATTN_NONE);
 };

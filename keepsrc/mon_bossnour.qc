@@ -41,9 +41,10 @@ $frame reveal17 reveal18 reveal19 reveal20 reveal21 reveal22 reveal23 reveal24
 $frame reveal25 reveal26 reveal27 reveal28 reveal29 reveal30 reveal31 reveal32
 $frame reveal33 reveal34 reveal35 reveal36
 
-float NOUR_PHASE1 = 1;	// Burst through floor
+float NOUR_PHASE0 = -1;	// No boss wave/setup
+float NOUR_PHASE1 = 1;	// Intro = Burst through floor
 float NOUR_PHASE2 = 2;	// Fighting
-float NOUR_PHASE3 = 3;	// Frenzy mode
+float NOUR_PHASE3 = 3;	// Summon mode
 float NOUR_PHASE4 = 4;	// Death
 
 //======================================================================
@@ -57,7 +58,7 @@ float() nour_FindTarget =
 	
 	// Get the obvious exception(s) done first
 	if (self.health < 1) return FALSE;
-	if (intermission_running) return FALSE;
+	if (intermission_running > 0) return FALSE;
 	if (cinematic_running > 0) return FALSE;
 
 	// Find a client in current PVS
@@ -72,7 +73,7 @@ float() nour_FindTarget =
 	// Check range and visibility of player
 	enemy_vis = visible(client);
 	if (!enemy_vis) return FALSE;
-	if (!infront(client)) return FALSE;
+	//if (!infront(client)) return FALSE;
 
 	// Finally found something
 	self.enemy = client;
@@ -131,7 +132,7 @@ float() nour_WaveCheck =
 		// Update Boss wave parameters (next wave!)
 		self.bosswave = self.bosswave + 1;
 		nour_WaveSetupHP();
-		self.style = NOUR_PHASE3;	// Frenzy mode
+		self.style = NOUR_PHASE3;	// Summon mode
 		return TRUE;
 	}
 	return FALSE;
@@ -140,12 +141,16 @@ float() nour_WaveCheck =
 //----------------------------------------------------------------------
 // Check the tether system
 //----------------------------------------------------------------------
-float() nour_CheckTether = {
-	if (!self.movelast) return FALSE;
+float() nour_CheckTether =
+{
+	local float currentdist;
+	
+	// Check for boss mode
+	if (!(self.spawnflags & MON_NOUR_BOSS)) return FALSE;
 
-	self.t_length = vlen(self.origin - self.movelast.origin);
+	currentdist = vlen(self.origin - self.movelast.origin);
 	// Check the most obvious first, inside tether range?
-	if (self.t_length < MONAI_MAXNOUR) return FALSE;
+	if (currentdist < self.tetherrange) return FALSE;
 	else {
 		// If player or tether close to each other?
 		if (infront(self.movelast) && infront(SUB_entEnemyTarget()) )
@@ -164,8 +169,9 @@ void() NourCheckAttack =
 	// setup enemytarget if one is not active
 	//----------------------------------------------------------------------
 	if (self.enemy.classtype != CT_ENEMYTARGET) {
-		SUB_setupEnemyTarget(self.enemy, self.height, MONAI_ABOVETIMER);
-		if (self.enemytarget) self.enemy = self.enemytarget;
+		if (SUB_setupEnemyTarget(self.enemy, self.height, MONAI_ABOVETIMER)) {
+			self.enemy = self.enemytarget;
+		}
 	}
 
 	//----------------------------------------------------------------------
@@ -178,11 +184,12 @@ void() NourCheckAttack =
 	
 	//----------------------------------------------------------------------
 	// Range attacks (Spit and Bomb)
+	// Attack_chance override (percentage 0-1 chance)
 	//----------------------------------------------------------------------
 	// Only range attack if cooldown has finished
 	if (time > self.attack_finished) {
 		// Fast/intense nail/spit attack
-		if (self.enemydist < MONAI_CLOSENOUR) {
+		if (self.enemydist < MONAI_CLOSENOUR || self.attack_chance > random()) {
 			// Skill 0=3s, 1=2.25s, 2=1.5s, 3=0.75s
 			self.attack_speed = (4 - skill) * 0.75;
 			self.attack_finished = time + self.attack_speed + random();
@@ -239,12 +246,16 @@ void() nour_walk11	=[	$idle11, nour_walk1] {ai_walk(8);};
 //======================================================================
 void() nour_slideframe =
 {
-	if (self.style != NOUR_PHASE2) return;
-	if (self.health < 1) return;
+	// Check for boss mode (phase and wave check)
+	if (self.spawnflags & MON_NOUR_BOSS) {
+		if (self.style != NOUR_PHASE2) return;
 
-	// Check for boss wave trigger events
-	if (nour_WaveCheck() == TRUE) {self.th_jump(); return;}
+		// Check for boss wave trigger events
+		if (nour_WaveCheck() == TRUE) {self.th_summon(); return;}
+	}
 	
+	// Dead monster?
+	if (self.health < 1) return;
 	if (self.walkframe == 0) monster_idle_sound();
 
 	// Move frame forward, check for conditions
@@ -257,7 +268,7 @@ void() nour_slideframe =
 	self.frame = $idle1 + self.walkframe;
 	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
 	
-	// Check the tether system
+	// Check the BOSS tether system
 	if (nour_CheckTether()) ai_run(0);
 	else ai_run(8);
 };
@@ -270,12 +281,15 @@ void() nour_slide1 = {self.walkframe = 0; nour_slideframe();};
 //======================================================================
 void() nour_runframe =
 {
-	if (self.style != NOUR_PHASE2) return;
-	if (self.health < 1) return;
+	// Check for boss mode (phase and wave check)
+	if (self.spawnflags & MON_NOUR_BOSS) {
+		if (self.style != NOUR_PHASE2) return;
 
-	// Check for boss wave trigger events
-	if (nour_WaveCheck() == TRUE) {self.th_jump(); return;}
+		// Check for boss wave trigger events
+		if (nour_WaveCheck() == TRUE) {self.th_summon(); return;}
+	}
 	
+	if (self.health < 1) return;
 	if (self.walkframe == 0) monster_idle_sound();
 	
 	// Move frame forward, check for conditions
@@ -288,7 +302,7 @@ void() nour_runframe =
 	self.frame = $fly1 + self.walkframe;
 	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
 	
-	// Check the tether system
+	// Check the BOSS tether system
 	if (nour_CheckTether()) ai_run(0);
 	else ai_run(16);
 };
@@ -503,8 +517,7 @@ void(vector minofs) Fire_NourPlasma =
 	org = self.origin + attack_vector(minofs);
 	self.pos2 = vecrand(0,50,TRUE);
 	self.pos3 = normalize(self.pos2);
-	self.attack_speed = SPEED_NOURSPIKE + (random() * SPEED_NOURSKILL);
-	launch_plasma(org, self.pos3, CT_PROJ_PLASMA, self.attack_speed);
+	launch_plasma(org, self.pos3, CT_SUMMONLIGHT, SPEED_REFLECTION);
 };
 
 //----------------------------------------------------------------------
@@ -514,17 +527,14 @@ void(vector minofs) Spawn_NourMin =
 	nour_finish_attachment();
 	Fire_NourPlasma(minofs);
 	
-	if (!self.enemy) return;
-	if (self.health < 1) return;
-
 	// Cycle through spawn targets and spawn Tfog + Wizard
-	self.lip = self.count;
+	self.lip = self.attack_summon;
 	while(self.lip > 0) {
-		self.attachment3.think = Spawn_NourFog;
-		self.attachment3.nextthink = time + 0.01 + random()*0.3;
+		self.bossminchain.think = Spawn_NourFog;
+		self.bossminchain.nextthink = time + 0.01 + random()*0.3;
 
 		// If the spawn locaiton all clear, spawn something!
-		self.pos1 = self.attachment3.origin;
+		self.pos1 = self.bossminchain.origin;
 		self.aflag = find_minionspace(self.pos1);			
 		if (self.aflag == TRUE) {
 			// Check for any spawnflags on spawn point
@@ -534,7 +544,7 @@ void(vector minofs) Spawn_NourMin =
 		}
 		
 		// Next spawn point
-		self.attachment3 = self.attachment3.entchain;
+		self.bossminchain = self.bossminchain.entchain;
 		self.lip = self.lip - 1;
 	}
 };
@@ -543,9 +553,8 @@ void(vector minofs) Spawn_NourMin =
 void(vector minofs, float minframe) Setup_NourMin =
 {
 	local vector org;
-	if (self.health < 1) return;
 	
-	// Check if attachment has been setup yet
+	// Re-use the energy ball attachment for spawning lightning from
 	if (!self.attachment) nour_create_attachment();
 	
 	// Frame 0 is start of the sequence (move everything into place)
@@ -562,7 +571,7 @@ void(vector minofs, float minframe) Setup_NourMin =
 		sound (self, CHAN_WEAPON, "nour/attack2.wav", 1, ATTN_NORM);
 	}
 
-	// The offset is based on the nour facing forward
+	// Move the energy ball into position infront of the nour
 	makevectors(self.angles);
 	org = self.origin + attack_vector(minofs);
 	setorigin(self.attachment, org);
@@ -573,10 +582,10 @@ void(vector minofs, float minframe) Setup_NourMin =
 	particle_implode(org, 20+random()*20, 75, 75, PARTICLE_BURST_BLUE);
 
 	// Cycle through spawn targets and fire Lightning per frame
-	self.lip = self.count;
+	self.lip = self.attack_summon;
 	while(self.lip > 0) {
 		// Traceline from spawn point to random direction
-		self.pos1 = self.attachment3.origin - org;
+		self.pos1 = self.bossminchain.origin - org;
 		self.pos2 = vecrand(0,50,TRUE);
 		self.pos3 = normalize(self.pos1 + self.pos2);
 		traceline(org, org + self.pos3 * 600, FALSE, self);
@@ -584,7 +593,7 @@ void(vector minofs, float minframe) Setup_NourMin =
 		// Create lightning bolt from source to target
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 		WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
-		WriteEntity (MSG_BROADCAST, self.attachment3);
+		WriteEntity (MSG_BROADCAST, self.bossminchain);
 		WriteCoord (MSG_BROADCAST, org_x);
 		WriteCoord (MSG_BROADCAST, org_y);
 		WriteCoord (MSG_BROADCAST, org_z);
@@ -594,12 +603,12 @@ void(vector minofs, float minframe) Setup_NourMin =
 		
 		// Play some arching lightning sounds
 		if (random() < 0.5) {
-			if (random() < 0.5) sound (self.attachment3, CHAN_BODY, "nour/elec_arch1.wav", 1, ATTN_NORM);
-			else sound (self.attachment3, CHAN_BODY, "nour/elec_arch2.wav", 1, ATTN_NORM);
+			if (random() < 0.5) sound (self.bossminchain, CHAN_BODY, "nour/elec_arch1.wav", 1, ATTN_NORM);
+			else sound (self.bossminchain, CHAN_BODY, "nour/elec_arch2.wav", 1, ATTN_NORM);
 		}
 
 		// Next spawn point
-		self.attachment3 = self.attachment3.entchain;
+		self.bossminchain = self.bossminchain.entchain;
 		self.lip = self.lip - 1;
 	}
 	
@@ -609,18 +618,22 @@ void(vector minofs, float minframe) Setup_NourMin =
 
 //----------------------------------------------------------------------
 void() nour_attc1	=[ $shotc1, nour_attc2] {ai_face();
+	// Make sure boss mode active for this attack
+	if (!(self.spawnflags & MON_NOUR_BOSS)) { self.think = self.th_run; return; }
+
 	// Block all damage while summoning stuff
 	Resist_ChangeType(self, TRUE);
 	
 	// Reset attack state so it does not keep spawning
 	self.attack_state = AS_STRAIGHT;
-	self.lip = self.count;
+	self.lip = self.attack_summon;
 	while (self.lip > 0) {
 		self.cnt = 4;	// Try 4 times, no infinite loops
 		while (self.cnt > 0) {
 			// Work out 2 empty spaces around Nour for minions
-			self.pos2 = vecrand(0,200,TRUE);
-			self.pos2_z = 16;	// Spawn higher than boss
+			self.pos2 = vecrand(self.bossminbase, self.bossminrnd, TRUE);
+			// Always spawn higher than boss
+			if (self.pos2_z < self.maxs_z) self.pos2_z = self.maxs_z;
 			self.pos1 = self.origin + self.pos2;
 			// Check for available space for mininon
 			self.aflag = find_minionspace(self.pos1);
@@ -629,11 +642,11 @@ void() nour_attc1	=[ $shotc1, nour_attc2] {ai_face();
 			if (self.aflag == TRUE) self.cnt = -10;
 		}
 		// Found space, store origin for later
-		if (self.cnt == -10) self.attachment3.origin = self.pos1;
-		else self.attachment3.origin = self.origin;
+		if (self.cnt == -10) self.bossminchain.origin = self.pos1;
+		else self.bossminchain.origin = self.origin;
 		
 		// Next spawn point
-		self.attachment3 = self.attachment3.entchain;
+		self.bossminchain = self.bossminchain.entchain;
 		self.lip = self.lip - 1;
 	}
 };
@@ -691,8 +704,10 @@ void(entity inflictor, entity attacker, float damage) nour_pain =
 	// Finish with all attachments
 	nour_finish_attachment();
 
-	// Check for boss wave trigger events
-	if (nour_WaveCheck() == TRUE) {self.th_jump(); return;}
+	if (self.spawnflags & MON_NOUR_BOSS) {
+		// Check for boss wave trigger events
+		if (nour_WaveCheck() == TRUE) {self.th_summon(); return;}
+	}
 
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
@@ -730,6 +745,9 @@ void() nour_explode =
 	WriteCoord (MSG_BROADCAST, self.origin_z);
 	WriteByte (MSG_BROADCAST, 35);
 	WriteByte (MSG_BROADCAST, 8);
+	// Check for any death radius damage
+	if (self.death_dmg > 0) 
+		T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
 	
 	// Classic sprite/DP explosion
 	SpawnExplosion(EXPLODE_PLASMA_BIG, self.origin, "nour/explode_death.wav");
@@ -799,6 +817,9 @@ void() nour_die9 = [ $death9, nour_die9 ] {
 //----------------------------------------------------------------------
 void() nour_die =
 {
+	dprint("[NOUR] Dying State ("); dprint(ftos(self.style));
+	dprint(") HP ("); dprint(ftos(self.health));
+	dprint(")\n");
 	self.deadflag = DEAD_DEAD;	// Nour bites the dust
 	self.effects = 0;			// Remove effects on death
 	nour_finish_attachment();	// Remove any attachments
@@ -813,98 +834,15 @@ void() nour_die =
 };
 
 //======================================================================
-// REVEAL PHASE (coming out of the ground)
-//======================================================================
-void() nour_revealframe = {
-	if (self.movetarget2 == self || self.movetarget2.origin == self.origin) {
-		sound (self, CHAN_BODY, "nour/reveal.wav", 1, ATTN_NORM);
-		if (self.enemy) ai_face();
-		self.walkframe = 0;				// Reset just in case
-		self.height = MONAI_ABOVEDIST;	// Enemytarget distance above
-		self.movetype = MOVETYPE_STEP;	// back to regular movement
-		self.takedamage = DAMAGE_AIM;	// Can take damage
-		self.style = NOUR_PHASE2;		// Time to fight!
-		Resist_ChangeType(self,FALSE);	// restore resistance
-		self.velocity = '0 0 0';
-		self.nextthink = time + 0.1;
-		if (self.enemy) {
-			self.think = nour_run1;			// Straight to running
-			self.frame = $fly1;
-			FoundHuntTarget(FALSE);			// make sure tracking player
-		} else {
-			self.pain_finished = time + 1.2;
-			self.th_stand();
-			return;
-		}
-		return;
-	}
-
-	// Beginning of animation block
-	if (self.walkframe == 3) 
-		sound (self, CHAN_BODY, "nour/reveal.wav", 1, ATTN_NORM);
-	else if (self.walkframe == 23)
-		sound (self, CHAN_VOICE, "nour/idle1.wav", 1, ATTN_NORM);
-	
-	// Work out remaining distance to go
-	self.movedir = self.movetarget2.origin - self.origin;
-	self.t_length = vlen(self.movedir);
-	// Calc initial velocity boast (burst action)
-	self.lip = (self.pausetime - time) / 3.6;
-	self.t_width = 1 + (self.lip/2);
-
-	// If time or distance too small, stop moving
-	if (self.lip < 0.1 || self.t_length < 2) {
-		self.velocity = '0 0 0';
-	}
-	// Update velocity every frame
-	else self.velocity = self.movedir * self.t_width;
-	
-	// Turn towards player
-	if (self.enemy) ai_face();
-
-	// Move frame forward, check for conditions
-	self.walkframe = self.walkframe + 1;
-	self.nextthink = time + 0.1;
-	// Time to exit reveal?
-	if (self.walkframe > 35) {
-		self.walkframe = 0;				// Reset just in case
-		self.height = MONAI_ABOVEDIST;	// Enemytarget distance above
-		self.movetype = MOVETYPE_STEP;	// back to regular movement
-		self.takedamage = DAMAGE_AIM;	// Can take damage
-		self.style = NOUR_PHASE2;		// Time to fight!
-		Resist_ChangeType(self,FALSE);	// restore resistance
-		if (self.enemy) {
-			self.think = nour_run1; // Straight to running
-			self.frame = $fly1;
-			if (self.enemy) FoundHuntTarget(FALSE);			// make sure tracking player
-		} else {
-			self.pain_finished = time + 1.2;
-			self.th_stand();
-			return;
-		}
-	} else {
-		self.think = nour_revealframe;
-		// Setup current animation frame
-		self.frame = $reveal1 + self.walkframe;
-	}
-};
-
-//----------------------------------------------------------------------
-void() nour_reveal1	= {
-	self.pausetime = time + 3.6;
-	self.walkframe = 0;
-	nour_revealframe();
-};
-
-//======================================================================
 // Create wizard minion entity chain
 // Entities are created so that the spawning space can be tested
 // before spawning the minions for possible collisions
 //======================================================================
-float() nour_minionsetup = {
+float() nour_minionsetup =
+{
 	local entity min_prev, min_first;
-
-	self.lip = self.count;
+	
+	self.lip = self.attack_summon;
 	min_prev = min_first = world;
 	
 	// Cycle through minion list
@@ -928,128 +866,222 @@ float() nour_minionsetup = {
 	// Close loop
 	if (min_first) {
 		newmis.entchain = min_first;
-		self.attachment3 = min_first;
+		self.bossminchain = min_first;
 		return FALSE;
-	} else return TRUE;
+	}
+	else return TRUE;
+};
+
+//----------------------------------------------------------------------
+void() nour_spawntether =
+{
+	// temporary tether point
+	self.movelast = spawn();
+	self.movelast.owner = self;
+	self.movelast.classtype = CT_TETHERENT;
+	self.movelast.movetype = MOVETYPE_NONE;
+	self.movelast.solid = SOLID_NOT;
+	self.movelast.origin = self.origin;
+	setsize (self.movelast, VEC_ORIGIN, VEC_ORIGIN);
 };
 
 //======================================================================
-// Setup Nour after trigger event
+// REVEAL PHASE (coming out of the ground)
+//======================================================================
+void() nour_readyframe =
+{
+	self.walkframe = 0;				// Reset just in case
+	self.height = MONAI_ABOVEDIST;	// Enemytarget distance above
+	self.movetype = MOVETYPE_STEP;	// back to regular movement
+	self.takedamage = DAMAGE_AIM;	// Can take damage
+	self.style = NOUR_PHASE2;		// Time to fight!
+	Resist_ChangeType(self,FALSE);	// restore resistance
+	if (self.enemy) self.th_run();	// Hunt the player
+	else self.th_stand();			// Wait for the player
+};
+
+//----------------------------------------------------------------------
+void() nour_revealframe = 
+{
+	// Beginning of animation block
+	if (self.walkframe == 3) 
+		sound (self, CHAN_BODY, "nour/reveal.wav", 1, ATTN_NORM);
+	else if (self.walkframe == 23)
+		sound (self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
+	
+	if (self.movetarget2 != world) { 
+		// Work out remaining distance to go
+		self.movedir = self.movetarget2.origin - self.origin;
+		self.t_length = vlen(self.movedir);
+		// Calc initial velocity boast (burst action)
+		self.lip = (self.pausetime - time) / 3.6;
+		self.t_width = 1 + (self.lip/2);
+
+		// If time or distance too small, stop moving
+		if (self.lip < 0.1 || self.t_length < 2) {
+			self.velocity = '0 0 0';
+		}
+		// Update velocity every frame
+		else self.velocity = self.movedir * self.t_width;
+	}
+	
+	// Turn towards player
+	if (self.enemy) ai_face();
+
+	// Move frame forward, check for conditions
+	self.walkframe = self.walkframe + 1;
+	self.nextthink = time + 0.1;
+	// Time to exit reveal?
+	if (self.walkframe > 35) nour_readyframe();
+	else {
+		self.think = nour_revealframe;
+		// Setup current animation frame
+		self.frame = $reveal1 + self.walkframe;
+	}
+};
+
+//======================================================================
+// Setup BOSS Nour after trigger event
 //======================================================================
 void() nour_awake = {
+	// make sure boss mode selected
+	if (!(self.spawnflags & MON_NOUR_BOSS)) return;
+
 	self.use = SUB_Null;			// No more triggers
 	self.style = NOUR_PHASE1;		// Bursting intro sequence
-	self.flags = FL_MONSTER | FL_FLY;	// Reset flag
+	self.flags = FL_MONSTER | FL_FLY;	// Reset flag (no user settings)
+	self.frame = $idle1; self.skin = self.exactskin;
 	monster_bbox();					// Setup bounding box
 
-	self.solid = SOLID_SLIDEBOX;
-	self.movetype = MOVETYPE_FLY;
-	setmodel(self, self.mdl);					// Setup model
-	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
-	
+	self.noinfighting = TRUE;		// No infighting
 	self.takedamage = DAMAGE_NO;	// Still immune to damage
 	self.yaw_speed = 20;			// Average Speed
 	self.velocity = '0 0 0';		// Make sure stationary
-	self.pain_longanim = FALSE;		// No axe advantage
-	self.noinfighting = TRUE;		// No infighting
-	self.count = skill+1;			// Total amount of minions
+	self.walkframe = 0;				// reset for animation
+	self.attack_summon = skill + 1;	// Total amount of minions
+
+	if (self.tetherrange < 32) self.tetherrange = MONAI_MAXNOUR;
+	if (self.bossminbase <= 64) self.bossminbase = MONAI_BOSS_SUMDIST;
+	if (self.bossminrnd <= 64) self.bossminrnd = MONAI_BOSS_SUMRND;
+
 	// skill modifier : Easy = 1, Normal = 2, Hard/NM = 3
-	if (self.count > 3) self.count = 3;
+	if (self.attack_summon > 3) self.attack_summon = 3;
 	// Setup minion chain entity system
 	if (nour_minionsetup()) {
 		dprint("\b[NOUR]\b Cannot create minion chain!\n");
-		// spawn_marker(self.origin, SPNMARK_YELLOW);
-		// entity_hide(self);
-		// return;
+		spawn_marker(self.origin+'0 0 32', SPNMARK_YELLOW);
+		entity_hide(self);
+		return;
 	}
 		
-	// Setup Ammo Resistance
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = 0; self.resist_cells = 1;
+	// Check for tether system (special target field)
+	if (self.tethertarget == "") {
+		dprint("\b[NOUR]\b Generated tetherpoint!\n");
+		nour_spawntether();
+	}
+	// Find the defined tether marker
+	else self.movelast = find(world,targetname,self.tethertarget);
 	
+	// Does the tether entity exist?
+	if (!self.movelast) {
+		dprint("\b[NOUR]\b Tether target not found!\n");
+		spawn_marker(self.origin, SPNMARK_YELLOW);
+		entity_hide(self);
+		return;
+	}
+
+	// Show BOSS tetherpoint
+	spawn_marker(self.movelast.origin+'0 0 8', SPNMARK_RED);
+	
+	// If message2 is not defined?
+	if (self.message2 == "") {
+		// No movement towards a reveal location
+		self.movetarget2 = world;
+		// Skip reveal sequence
+		self.walkframe = 35;
+		// Reset all combat entities
+		self.enemy = self.goalentity = self.movetarget = world;
+		// Zap (50K damage) anything in its place!
+		if (self.nospawndamage == 0) 
+			spawn_tdeath(self.origin, self);
+		// Don't show spawning effect if nogfx
+		if (!(self.spawnflags & MON_SPAWN_NOGFX)) 
+			spawn_tfog(self.origin);
+	}
+	else {
+		// Find spawning (move) destination
+		self.movetarget2 = find(world,targetname,self.message2);
+		if (!self.movetarget2) {
+			dprint("\b[NOUR]\b Missing spawn destination!\n");
+			spawn_marker(self.origin, SPNMARK_YELLOW);
+			entity_hide(self);
+			return;
+		}
+		else {
+			// After reveal, start attacking player
+			if (activator.flags & FL_CLIENT) {
+				self.goalentity = self.enemy = activator; }
+			else self.enemy = world;
+		}
+	}
+	
+	// Start spawning BOSS
+	self.solid = SOLID_SLIDEBOX;
+	self.movetype = MOVETYPE_FLY;				// Alway fly
+	setmodel(self, self.mdl);					// Setup model
+	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
+	
+	// Check for delay spawn monster count
+	if (self.delaymonstercount) {
+		// Reset both monster count conditions
+		self.nomonstercount = self.delaymonstercount = 0;
+		total_monsters = total_monsters + 1;
+		update_hud_totals(HUD_MONSTERS);
+	}
+
 	//Resist_CheckRange(self);		// Double check values
 	Resist_Save(self);				// Save for Later
 	Resist_ChangeType(self,TRUE);	// resist everything
 
+	// Reset all combat flags and counters
+	self.deadflag = DEAD_NO;
+	self.liquidbase = self.liquidcheck = 0;
+	self.dmgcombined = self.dmgtimeframe = 0;
+
+	// Setup boss waves and overall health
+	if (self.bosswave < 1) self.bosswavetotal = 4;
+	else self.bosswavetotal = self.bosswave;
+	
 	// Setup boss waves and overall health
 	self.bosswave = 1;
-	self.bosswavetotal = 4;
-	self.bosswaveqty = 500;
+	if (self.bosswaveqty < 1) self.bosswaveqty = 500;
 	self.max_health = self.bosswavetotal * self.bosswaveqty;
 	// Setup boss wave HP + trigger event
 	nour_WaveSetupHP();
 
-	// Restore all think functions
-	self.th_checkattack = NourCheckAttack;
-	self.th_stand = nour_stand1;
-	self.th_walk = nour_walk1;
-	self.th_run = nour_run1;
-	self.th_slide = nour_slide1;
-	self.th_melee = nour_atta1;
-	self.th_missile = nour_attb1;
-	self.th_jump = nour_attc1;
-	self.th_pain = nour_pain;
-	self.th_die = nour_die;
-	
 	self.pain_finished = time + 3;		// Make pain go away
 	self.attack_finished = time + 2;	// Reset attack system
-	self.gibhealth = -1000;				// Special death sequence
 	
-	// Setup player focus
-	if (activator.flags & FL_CLIENT) {
-		dprint("\b[NOUR]\b Successfully assigned activator to enemy.\n");
-		self.goalentity = self.enemy = activator;
-	}
-	else self.enemy = world;
-
-	// Trigger all spawning events
-	trigger_strs(self.message, self);
-	self.message = "";
-	
-	// Find spawning (move) destination
-	self.movetarget2 = find(world,targetname,self.message2);
-	if (!self.movetarget2) {
-		self.movetarget2 = self; // Ok fine, don't rise then!
-		// dprint("\b[NOUR]\b Missing spawn destination!\n");
-		// spawn_marker(self.origin, SPNMARK_YELLOW);
-		// entity_hide(self);
-		// return;
+	// Trigger all spawning events (optional)
+	if (self.message != "") {
+		trigger_strs(self.message, self);
+		self.message = "";
 	}
 	
 	// Make sure all death triggers are setup ready
 	self.message2 = self.target;
 	self.target = self.target2 = self.deathtarget = "";
 
-	// Check for tether system (special target field)
-	// if (self.tethertarget == "") {
-		// dprint("\b[NOUR]\b Missing tether marker!\n");
-		// spawn_marker(self.origin, SPNMARK_YELLOW);
-		// entity_hide(self);
-		// return;
-	// }
-	// Find the tether marker (must be path_corner)
-	self.movelast = find(world,targetname,self.tethertarget);
-
-	// if (self.movelast.classtype != CT_PATHCORNER) {
-		// dprint("\b[NOUR]\b Tether marker not path_corner!\n");
-		// spawn_marker(self.movelast.origin, SPNMARK_YELLOW);
-		// self.movelast = world;
-	// }
-	// Qmaster - don't see the need to require this be a path_corner, all we need from it is the location vector
-
-	// Make sure tethertarget is blank
-	self.tethertarget = "";
-	
-	// Time to rise from the ground
-	nour_reveal1();
+	// Time to keep pushing velocity upward
+	self.pausetime = time + 3.6;
+	// Time to rise from the ground or spawn regular
+	nour_revealframe();
 };
 
 /*======================================================================
  QUAKED monster_nouronihar (1 0 0) (-16 -16 -24) (16 16 40)
 ======================================================================*/
 void() monster_nour = {
-	local entity stemp;
-
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 	
@@ -1068,7 +1100,7 @@ void() monster_nour = {
 	precache_model (MODEL_PROJ_NOUR2B);	// Growing ball
 	precache_model (MODEL_PROJ_NOUR2P);	// Warping projectile
 	precache_model (MODEL_PROJ_NOUR2S);	// Explosive pieces
-	precache_model (MODEL_PROJ_NOUR3);	// Lightning bolt
+	precache_model ("progs/ad171/proj_nour3.mdl");
 	precache_model (SBURST_POISON);		// Poison Burst
 
 	// sight/pain/death sounds
@@ -1093,77 +1125,101 @@ void() monster_nour = {
 	precache_sound ("nour/attack2.wav");
 	precache_sound ("nour/explode2.wav");
 	precache_sound ("nour/bounce.wav");
-
-	// Precache minion stuff since we use it regardless of the presence of a monster_nourminion
-	precache_model ("progs/ad171/mon_wizard.mdl");
-	precache_model ("progs/h_wizard.mdl");
-	precache_model ("progs/ad171/gib_wzarm1.mdl");
-	precache_model ("progs/ad171/gib_wzarm2.mdl");
-	precache_model ("progs/ad171/gib_wztail.mdl");
-	precache_sound ("wizard/widle1.wav");
-	precache_sound ("wizard/widle2.wav");
-	precache_sound ("wizard/wdeath.wav");
-	precache_sound ("wizard/wpain.wav");
-	precache_sound ("wizard/hit.wav");
-	precache_sound ("wizard/wattack.wav");
-	precache_sound ("wizard/wsight.wav");
 	
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	self.bboxtype = BBOX_WIDE;		// Wraith Body
-	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
-	
-	self.health = self.max_health = MEGADEATH;
-	self.pain_finished = LARGE_TIMER;
-	self.no_liquiddmg = TRUE;		// no slime/lava damage
-	self.gibbed = FALSE;			// Still in one piece
-	
+	// Regular monster with large HP
+	if (self.health < 1) self.health = 1200;
+
+	self.gibhealth = MON_NEVERGIB;	// Cannot be gibbed by weapons
+	self.gibbed = FALSE;			// Starts complete
 	self.pain_flinch = 200;			// Strong Wizard level
 	self.pain_timeout = 2;			// Stop constant pain
+	if (self.infightextra <= 0) self.infightextra = 8;
 	self.steptype = FS_FLYING;		// No foot sound
-
-	self.deadflag = DEAD_NO;					// used to stop death re-triggering
-	self.liquidbase = self.liquidcheck = 0;		// Used for liquid content damage
-	self.dmgcombined = self.dmgtimeframe = 0;	// combined damage over 0.1s
-	self.takedamage = DAMAGE_NO;	// Immune to damage
+	self.blockudeath = TRUE;		// No player gib sound
+	self.pain_longanim = FALSE;		// No axe advantage
+	self.no_liquiddmg = TRUE;		// no slime/lava damage
+	if (self.height < 1) self.height = MONAI_ABOVEDIST; // Custom height
+	if (self.death_dmg < 1) self.death_dmg = DAMAGE_NOUR;
+	self.poisonous = FALSE;			// Cannot be poisonous
+	self.style = NOUR_PHASE0;		// No waves setup
+	self.deathstring = " was picked apart by the Scragmother\n";
 	
+	// Change balance of range (spit/bomb) attacks
+	if (self.attack_chance <= 0) self.attack_chance = 0;
+	if (self.attack_chance >= 1) self.attack_chance = 1;
+	
+	// Setup Ammo Resistance
+	if (self.spawnflags & MON_NOUR_BOSS) self.resist_cells = 1;
+	// Regular Nour is not 100% resistant
+	else self.resist_cells = 0.75;
+	self.resist_shells = self.resist_nails = 0;
+	self.resist_rockets = 0; 
+	self.reflectlightning = TRUE;	// Reflect lightning strikes
+	self.reflectplasma = TRUE;		// Reflect plasma projectiles
+	
+	// Restore all think functions
+	self.th_checkattack = NourCheckAttack;
+	self.th_stand = nour_stand1;
+	self.th_walk = nour_walk1;
+	self.th_run = nour_run1;
+	self.th_slide = nour_slide1;
+	self.th_melee = nour_atta1;
+	self.th_missile = nour_attb1;
+	self.th_summon = nour_attc1;
+	self.th_pain = nour_pain;
+	self.th_die = nour_die;
+		
 	self.classtype = CT_MONNOUR;
 	self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
-	self.style = 0;
-	if (self.deathstring == "")  self.deathstring = " was picked apart by the Scragmother\n";
-
-	// Missing spawn trigger
-	// if (self.message == "") {
-		// dprint("\b[NOUR]\b Missing spawn (message) trigger!\n");
-		// spawn_marker(self.origin, SPNMARK_YELLOW);
-		// return;
-	// }
-	// Qmaster commented out because he sees no reason to require targets when spawning
-
-	// Missing rise path corner
-	// if (self.message2 == "") {
-		// dprint("\b[NOUR]\b Missing spawn point (message2)!\n");
-		// spawn_marker(self.origin, SPNMARK_YELLOW);
-		// return;
-	// }
-	// Qmaster commented out because this lets us now use nour's like normal enemies. (also added escape from the nour rise)
-	// What?  Scragmothers aren't that powerful all things considered.
-
-	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-
-	// Check passive system for exceptions
-	setup_passivestate_boss(self);	
-
-	total_monsters = total_monsters + 1;
-
-	// No targetname = no trigger!
-	if (self.targetname == "") {
-		stemp = activator;
-		activator = self; // clear activator to prevent giving enemy at start
-		nour_awake();
-		activator = stemp; // just in case return to what it was
-		return;
+	
+	// Check for boss version of Nouronihar?
+	if (self.spawnflags & MON_NOUR_BOSS) {
+		// Reset spawnflag, other values not required
+		self.health = self.max_health = MEGADEATH;
+		self.pain_finished = LARGE_TIMER;		
+		self.takedamage = DAMAGE_NO;	// Immune to damage
+		self.flags = FL_MONSTER;		// Reset flag (no user settings)
+		self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)		
+		self.reflectaxe = TRUE;			// Prevent axe damage
+	
+		// Check passive system for exceptions
+		setup_passivestate_boss(self);
+	
+		// No targetname = no trigger!
+		if (self.targetname == "") {
+			// dprint("\b[NOUR]\b Missing targetname name!\n");
+			// spawn_marker(self.origin, SPNMARK_YELLOW);
+			// return;
+		}
+		// No tether target defined!
+		// if (self.tethertarget == "") {
+			// dprint("\b[NOUR]\b Missing tether target!\n");
+		// }
+		// Monster count exceptions
+		if (self.nomonstercount > 0 || self.delaymonstercount > 0) {
+			// Some maps have way too many no monster counts
+			if (world.no_moncountdevmsg <= 0) {
+				dprint("\b[NOUR]\b ("); dprint(self.targetname);
+				dprint(") - no monster count\n");
+			}
+		}
+		// Update count before client spawn
+		else total_monsters = total_monsters + 1;
+		
+		// Devmarker function changes skins, save for later
+		self.frame = 0; self.exactskin = self.skin;
+		// Display debug diamonds
+		// monster_devmarker(self);
+		// Wait for trigger event
+		if (self.targetname != "")
+			self.use = nour_awake;
+		else
+			nour_awake(); // or not, mapper didn't set us up right!
 	}
-	self.use = nour_awake;
+	// Regular start of monster
+	else monster_start();
 };

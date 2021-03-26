@@ -324,6 +324,7 @@ float() prandom = {return (random() * 256) & 255;};
 //  Damage
 
 // Damage when hit by a rocket directly.  Emulates 100-120 when d = 120.
+// Does 83.333% to 100% damage
 float(float d) SUB_RandomDamage = {return d / 6 * (5 + random());};
 
 // Damage when hit by melee attack.  Typical amount is the sum of three

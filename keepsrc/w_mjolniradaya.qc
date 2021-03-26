@@ -82,10 +82,10 @@ void (entity current, float life) SpawnLightningTrace = {
 	WriteCoord (MSG_BROADCAST,self.origin_y);
 	WriteCoord (MSG_BROADCAST,self.origin_z);
 	sound (self,CHAN_VOICE,"weapons/lhit.wav",TRUE,ATTN_NORM);
-	if (current.classname == "monster_zombie") {
+	if (current.classgroup == CG_ZOMBIE) {
 		dmg = 70; // poor zombies die in so many ways
 	} else {
-		dmg = 25;
+		dmg = 30;
 	}
 	OrbLightningDamage (self.origin,current.origin,self,dmg);
 };

@@ -11,7 +11,7 @@
 // and in Quake bind them
 // -ijed
 //======================================================================
-string MOD_VERSION		= "\b[INFO]\b Keep Mod, version 0.90\n";
+string MOD_VERSION		= "\b[INFO]\b Keep Mod, version 0.91\n";
 
 .float mapversion;
 .string target3, target4;

@@ -1,6 +1,6 @@
 void(string mname) BeMonsterFromString = {
 	self.classname = mname;
-	self.spawnflags = self.spawnflags | 64; // we need to be targeted
+	if (self.targetname) self.spawnflags = self.spawnflags | 64; // we need to be targeted
 	if (mname == "monster_acolyte") { monster_acolyte(); return; }
 	if (mname == "monster_anac") { monster_anac(); return; }
 	if (mname == "monster_archer") { monster_archer(); return; }
@@ -130,7 +130,7 @@ void(string mname) BeMonsterFromString = {
 };
 
 void () func_spawn = {
-	if (!self.targetname) { dprint("ERROR: No targetname on func_spawn!!"); return; }
+	//if (!self.targetname) { dprint("ERROR: No targetname on func_spawn!!"); return; }
 	if (!self.spawnclassname) self.spawnclassname = "monster_dog";
 	BeMonsterFromString(self.spawnclassname);
 };

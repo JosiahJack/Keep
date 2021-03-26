@@ -1467,7 +1467,7 @@ void() monster_baron = {
     precache_model ("progs/drake/s_expbig.spr");
     precache_model ("progs/drake/s_fancy.spr");
 
-    self.sight_sound = "baron/sight.wav";
+    self.sight_sound = "drake/baron/sight.wav";
 
     if (self.level) {
         //self.purse_x    = (self.level & 3) + 5;

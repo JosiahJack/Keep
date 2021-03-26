@@ -579,7 +579,7 @@ vector      damage_velocity;    // Set by 'T_Damage' for gib velocity.
 .float      wing_finished, wing_time, wing_sound;       // Dark-Angel Wings *
 .float      mirror_finished, mirror_time, mirror_sound, mirror_ping;  // Reflection
 .float      slow_finished, slow_time, slow_ping;    // For those hit by ice arrow.
-.float      tome_finished, tome_time;       // Tome of Power.
+.float      tome_finished;       // Tome of Power.
 
 .float      fighting;   // Checks if monster is really fighting while
                         //  running.  Monsters can run to follow friends.

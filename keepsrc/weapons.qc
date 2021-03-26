@@ -200,8 +200,13 @@ void () HIP_FireMjolnir = {
    self.attack_finished = (time + 0.400);
 };
 
-//void () W_FireMjolnir = { HIP_FireMjolnir2(); }; //adaya bfg lightning ball spawn!
-void () W_FireMjolnir = { HIP_FireMjolnir(); };
+void () W_FireMjolnir = {
+	if (self.tome_finished > 0) {
+		HIP_FireMjolnir2(); //adaya bfg lightning ball spawn!
+	} else { 
+		HIP_FireMjolnir();
+	}
+};
 
 void () W_FireProximityGrenade = {
    local entity missile;
@@ -1473,10 +1478,14 @@ float(entity targ) W_BestWeapon =
 };
 
 //----------------------------------------------------------------------
-float(entity targ) W_CheckNoAmmo =
-{
-	if (targ.weapon == IT_FLAK) targ.currentammo = CountFlakAmmo(targ);
-	if (targ.weapon == IT_AXE || targ.weapon == IT2_MJOLNIR || targ.weapon == IT2_CROSS || targ.weapon == IT2_GRAPPLE || targ.weapon == IT_RAPIER || targ.weapon == IT_GUNGNIR || targ.weapon == IT_MACE || targ.weapon == IT_SCIMITAR) return TRUE;
+float(entity targ) W_CheckNoAmmo = {
+	if (targ.selfweaponismoditems) {
+		if (targ.weapon == IT_FLAK) targ.currentammo = CountFlakAmmo(targ);
+		if (targ.weapon == IT_GUNGNIR || targ.weapon == IT_MACE) return TRUE;
+	} else {
+		if (targ.weapon == IT_AXE || targ.weapon == IT2_MJOLNIR || targ.weapon == IT2_CROSS || targ.weapon == IT2_GRAPPLE || targ.weapon == IT_RAPIER || targ.weapon == IT_SCIMITAR) return TRUE;
+	}
+
 	if (targ.currentammo > 0) return TRUE;
 
 	targ.weapon = W_BestWeapon (targ);
@@ -1493,21 +1502,25 @@ void() player_lava_snail1;
 W_Attack
 ======================================================================*/
 void() W_Attack = {
+	// dprint("\bself.weapon\b = ");
+	// dprint(ftos(self.weapon));
+	// dprint(", \bself.currentammo\b =");
+	// dprint(ftos(self.currentammo));
+	// dprint(", \bself.selfweaponismoditems\b =");
+	// dprint(ftos(self.selfweaponismoditems));
+	// dprint("\n");
+
 	if (intermission_running > 0) return;	// intermission or finale
 	if (cinematic_running > 0) return;		// Remote camera active
 	if ( !W_CheckNoAmmo(self) ) return;		// Out of ammo?
 
 	makevectors	(self.v_angle);		// calculate forward angle for velocity
 
+	// dprint("We have ammo\n");
+
 	if (self.weapon != IT_EXTRA_WEAPON)
 		self.show_hostile = time + 1;	// wake monsters up
 
-	// dprint("\b[self.weapon\b = ");
-	// dprint(ftos(self.weapon));
-	// dprint("\n");
-	//----------------------------------------------------------------------
-	// Axe - Mighty chopper
-	//----------------------------------------------------------------------
 	if (!self.selfweaponismoditems) {
 		if (self.weapon == IT_AXE) {
 			if (self.perms & IT_CHAINSAW) {
@@ -1556,7 +1569,7 @@ void() W_Attack = {
 		else if (self.weapon == IT_MULTI_GRENADE) { player_multi_grenade1(); }
 		else if (self.weapon == IT_GRENADE_LAUNCHER) { player_grenade1(); }
 		else if (self.weapon == IT_MULTI_ROCKET) { player_multi_rocket1(); }
-		else if (self.weapon == IT_ROCKET_LAUNCHER) { player_rocket1(); }
+		else if (self.weapon == IT_ROCKET_LAUNCHER) { player_rocket1();}
 		else if (self.weapon == IT_PLASMA_GUN) { player_plasmalight1(); }
 		else if (self.weapon == IT_LIGHTNING) {
 			if (self.moditems & IT_UPGRADE_LG) player_plasma1();

@@ -43,32 +43,40 @@ float OGLE_CELEBRATORY = 5;
 
 // Spawnflag option
 float OGLE_FLESHMINING = 4;
+/*
+void() ogle_hammerb1;
+void() ogle_hammerlowa1;
+void() ogle_hammerlowb1;
+void() ogle_leaning1;
+void() ogle_leaning_pain1;
+void() ogle_paina1;
+void() ogle_painb1;
 
 void() ogle_mining_sound = {
 	local float r;
 	r = random();
 	if (OGLE_FLESHMINING) {
 		if (r < 0.5) {
-			sound (self, CHAN_IDLE, "ogle/pickflesh.wav", 1, ATTN_NORM);
+			sound (self, CHAN_VOICE, "ogle/pickflesh.wav", 1, ATTN_NORM);
 			return;
 		} else {
-			sound (self, CHAN_IDLE, "ogle/hammerflesh.wav", 1, ATTN_NORM);
+			sound (self, CHAN_VOICE, "ogle/hammerflesh.wav", 1, ATTN_NORM);
 			return;
 		}
 	}
 
 	if (r < 0.17) {
-		sound (self, CHAN_IDLE, "ogle/hammer1.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "ogle/hammer1.wav", 1, ATTN_NORM);
 	} else if (r < 0.33) {
-		sound (self, CHAN_IDLE, "ogle/hammer2.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "ogle/hammer2.wav", 1, ATTN_NORM);
 	} else if (r < 0.5) {
-		sound (self, CHAN_IDLE, "ogle/pick1.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "ogle/pick1.wav", 1, ATTN_NORM);
 	} else if (r < 0.67) {
-		sound (self, CHAN_IDLE, "ogle/pick2.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "ogle/pick2.wav", 1, ATTN_NORM);
 	} else if (r < 0.83) {
-		sound (self, CHAN_IDLE, "ogle/spike1.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "ogle/spike1.wav", 1, ATTN_NORM);
 	} else {
-		sound (self, CHAN_IDLE, "ogle/spike2.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "ogle/spike2.wav", 1, ATTN_NORM);
 	}
 };
 
@@ -183,15 +191,17 @@ void(entity inflictor, entity attacker, float damage) ogle_pain = {
 			ogle_whippedtowork1();
 		} else {
 			if (random() < 0.5) {
-				ogle_paina();
+				ogle_paina1();
 			} else {
-				ogle_painb();
+				ogle_painb1();
 			}
 		}
 	}
 };
-
+*/
 void() monster_ogle =  {
+	return;
+	/*
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
 	// Check all spawn exceptions (monsters.qc)
@@ -253,4 +263,5 @@ void() monster_ogle =  {
 	self.classgroup = CG_HARMLESS;
 	self.classmove = MON_MOVEWALK;
 	monster_start();
+	*/
 };

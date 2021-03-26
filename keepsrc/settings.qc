@@ -78,21 +78,21 @@ void() reset_randomizer;	// Reset seed for randomizer
 ======================================================================*/
 void() display_version =
 {
-	if (impulse_playeronly()) return;		// Player only
+	// if (impulse_playeronly()) return;		// Player only
 	
-	self.impulse = 0;
-	sprint(self,"\b[INFO]\b Arcane Dimensions V");
-	lftos(self, mod_version, 1, 2, BUFFER_SPRINT);
-	if (mod_patch > 0) {
-		sprint(self, " Patch ");
-		sprint(self, ftos(rint(mod_patch)));
-	}
-	if (mod_beta > 0) {
-		sprint(self, " (Beta");
-		sprint(self, ftos(rint(mod_beta)));
-		sprint(self, ")");
-	}
-	sprint(self, " \n");
+	// self.impulse = 0;
+	// sprint(self,"\b[INFO]\b Arcane Dimensions V");
+	// lftos(self, mod_version, 1, 2, BUFFER_SPRINT);
+	// if (mod_patch > 0) {
+		// sprint(self, " Patch ");
+		// sprint(self, ftos(rint(mod_patch)));
+	// }
+	// if (mod_beta > 0) {
+		// sprint(self, " (Beta");
+		// sprint(self, ftos(rint(mod_beta)));
+		// sprint(self, ")");
+	// }
+	// sprint(self, " \n");
 };
 
 /*======================================================================
@@ -1749,8 +1749,7 @@ void() TomeOfPowerCheat =
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
 	self.impulse = 0;
-	dprint("\b[Impulse 250]\b Sharp Shooter Cheat\n");
-	self.tome_time = 1;
+	dprint("\b[Impulse 248]\b Tome of Power Cheat!\n");
 	self.tome_finished = time + POWERUP_TIMER;
 	self.moditems = self.moditems | IT_ARTTOME;
 };

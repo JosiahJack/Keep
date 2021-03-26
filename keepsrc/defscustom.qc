@@ -785,7 +785,7 @@ float MON_CHTHON_RED = 2;		// New red skin + fire balls
 float MON_CHTHON_GREEN = 4;		// Green skin + Slime balls
 float MON_SHUB_DMGTRIG = 2;		// Can be triggered with damage
 float MON_SHUB_UPSIDE = 4;		// Setup upside (ceiling pose)
-
+float MON_NOUR_BOSS = 2;			// Boss version (with waves+minions)
 // Minion spawner options
 float MON_MINOTAUR_MINIONS = 4;		// Allow the Minotaur to spawn gargoyles
 float MON_SHALRATH_MINIONS = 4;		// Allow the Shalrath to spawn vorlings

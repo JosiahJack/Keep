@@ -65,12 +65,6 @@ $frame w_attack21 w_attack22
 $frame magicc1 magicc2 magicc3 magicc4 magicc5 magicc6 magicc7 magicc8
 $frame magicc9 magicc10 magicc11
 
-$frame decap1 decap2 decap3 decap4 decap5 decap6 decap7 decap8
-$frame decap9 decap10 decap11 decap12
-
-$frame decapb1 decapb2 decapb3 decapb4 decapb5 decapb6 decapb7 decapb8
-$frame decapb9
-
 float       hknight_type;
 
 // Makes the Bane gray and ghostly.  Called by 'painc' and 'magice' series.
@@ -1458,28 +1452,28 @@ void(entity inflictor, entity attacker, float damage) darklord_pain = {
 //============================================================================
 
 // Note:  The dark lord's helmet explodes when destroyed.
-void() darklord_die1  =[ $decap1,  darklord_die2  ] {ai_forward(10);};
-void() darklord_die2  =[ $decap2,  darklord_die3  ] {ai_forward(8);};
-void() darklord_die3  =[ $decap3,  darklord_die4  ] {ai_forward(7);};
-void() darklord_die4  =[ $decap4,  darklord_die5  ] {};
-void() darklord_die5  =[ $decap5,  darklord_die6  ] {};
-void() darklord_die6  =[ $decap6,  darklord_die7  ] {};
-void() darklord_die7  =[ $decap7,  darklord_die8  ] {};
-void() darklord_die8  =[ $decap8,  darklord_die9  ] {ai_forward(10);};
-void() darklord_die9  =[ $decap9,  darklord_die10 ] {ai_forward(11);};
-void() darklord_die10 =[ $decap10, darklord_die11 ] {};
-void() darklord_die11 =[ $decap11, darklord_die12 ] {};
-void() darklord_die12 =[ $decap12, darklord_die12 ] {};
+void() darklord_die1  =[ $death1,  darklord_die2  ] {ai_forward(10);};
+void() darklord_die2  =[ $death2,  darklord_die3  ] {ai_forward(8);};
+void() darklord_die3  =[ $death3,  darklord_die4  ] {ai_forward(7);};
+void() darklord_die4  =[ $death4,  darklord_die5  ] {};
+void() darklord_die5  =[ $death5,  darklord_die6  ] {};
+void() darklord_die6  =[ $death6,  darklord_die7  ] {};
+void() darklord_die7  =[ $death7,  darklord_die8  ] {};
+void() darklord_die8  =[ $death8,  darklord_die9  ] {ai_forward(10);};
+void() darklord_die9  =[ $death9,  darklord_die10 ] {ai_forward(11);};
+void() darklord_die10 =[ $death10, darklord_die11 ] {};
+void() darklord_die11 =[ $death11, darklord_die12 ] {};
+void() darklord_die12 =[ $death12, darklord_die12 ] {};
 
-void() darklord_dieb1 =[ $decapb1, darklord_dieb2 ] {};
-void() darklord_dieb2 =[ $decapb2, darklord_dieb3 ] {};
-void() darklord_dieb3 =[ $decapb3, darklord_dieb4 ] {};
-void() darklord_dieb4 =[ $decapb4, darklord_dieb5 ] {};
-void() darklord_dieb5 =[ $decapb5, darklord_dieb6 ] {};
-void() darklord_dieb6 =[ $decapb6, darklord_dieb7 ] {};
-void() darklord_dieb7 =[ $decapb7, darklord_dieb8 ] {};
-void() darklord_dieb8 =[ $decapb8, darklord_dieb9 ] {};
-void() darklord_dieb9 =[ $decapb9, darklord_dieb9   ] {};
+void() darklord_dieb1 =[ $deathb1, darklord_dieb2 ] {};
+void() darklord_dieb2 =[ $deathb2, darklord_dieb3 ] {};
+void() darklord_dieb3 =[ $deathb3, darklord_dieb4 ] {};
+void() darklord_dieb4 =[ $deathb4, darklord_dieb5 ] {};
+void() darklord_dieb5 =[ $deathb5, darklord_dieb6 ] {};
+void() darklord_dieb6 =[ $deathb6, darklord_dieb7 ] {};
+void() darklord_dieb7 =[ $deathb7, darklord_dieb8 ] {};
+void() darklord_dieb8 =[ $deathb8, darklord_dieb9 ] {};
+void() darklord_dieb9 =[ $deathb9, darklord_dieb9   ] {};
 
 void() darklord_die = {
 // check for gib

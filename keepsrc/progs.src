@@ -348,7 +348,7 @@ mon_fragy.qc // Frog by madfox
 //mon_mcorn.qc // Manticore by madfox
 //mon_swarm.qc // Bees by madfox
 mon_sheep.qc // Hexen2 sheep, modified
-//mon_ogle.qc // Heretic2 ogle, slightly modified
+mon_ogle.qc // Heretic2 ogle, slightly modified
 
 //CSQC extensions start here.
 //csqc_hud_vanilla.qc

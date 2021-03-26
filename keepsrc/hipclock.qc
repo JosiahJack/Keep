@@ -37,6 +37,8 @@ void () clock_firstthink = {
 void () func_clock = {
    local vector temp;
 
+	if (!self.target) return;
+
    self.classname = "clock";
    self.think = clock_firstthink;
    self.nextthink = (time + 0.100);

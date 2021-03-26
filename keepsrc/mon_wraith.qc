@@ -905,11 +905,11 @@ void() monster_wraith = {
 		self.part_style = PARTICLE_BURST_PURPLE;	// Purple cloud
 
 		// Precache scorpion stuff for monster_wraithminion2
-		precache_model ("progs/mon_scorpion.mdl");
-		precache_model ("progs/h_scorpion.mdl");
-		precache_model ("progs/gib_scorpleg.mdl");
-		precache_model ("progs/gib_scorptail.mdl");		
-		precache_model ("progs/gib_scorpclaw.mdl");
+		precache_model ("progs/ad171/mon_scorpion.mdl");
+		precache_model ("progs/ad171/h_scorpion.mdl");
+		precache_model ("progs/ad171/gib_scorpleg.mdl");
+		precache_model ("progs/ad171/gib_scorptail.mdl");		
+		precache_model ("progs/ad171/gib_scorpclaw.mdl");
 		precache_sound("scorpion/jumpattack1.wav");
 		precache_sound("scorpion/jumpattack2.wav");
 		precache_sound("scorpion/jumphit.wav");

@@ -718,13 +718,13 @@ void() monster_turretbal =
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	self.mdl = "progs/mon_turretbal.mdl";		// Turret
+	self.mdl = "progs/ad181/mon_turretbal.mdl";		// Turret
 //	self.headmdl = "progs/h_turretbal.mdl";		// Not used
-	self.gib1mdl = "progs/gib_turretbal1.mdl";	// base of gun barrel
-	self.gib2mdl = "progs/gib_turretbal2.mdl";	// end of metal barrel
-	self.gib3mdl = "progs/gib_turretbal3.mdl";	// barrel section
-	self.gib4mdl = "progs/gib_turretbal4.mdl";	// main body section
-	self.gib5mdl = "progs/gib_metal1.mdl";		// generic metal chunk
+	self.gib1mdl = "progs/ad181/gib_turretbal1.mdl";	// base of gun barrel
+	self.gib2mdl = "progs/ad181/gib_turretbal2.mdl";	// end of metal barrel
+	self.gib3mdl = "progs/ad181/gib_turretbal3.mdl";	// barrel section
+	self.gib4mdl = "progs/ad181/gib_turretbal4.mdl";	// main body section
+	self.gib5mdl = "progs/ad171/gib_metal1.mdl";		// generic metal chunk
 
 	precache_model (self.mdl);			// Turret
 //	precache_model (self.headmdl);		// Not used
