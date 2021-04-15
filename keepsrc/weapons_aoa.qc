@@ -199,7 +199,7 @@ void (entity inflictor, entity attacker, float damage, float radius, entity igno
 							if (CanDamage (head, inflictor)) {
 								// #ryanscissorhands: This splash damage is NOT part of rocket resistance, hence commenting out the subsequent two lines
 								//if (head.resist_rockets > 0)
-								//	points = Resist_Damage(head, IT_ROCKETS, points);
+								//	points = Resist_Damage(head, AM_ROCKETS, points);
 								
 								// Zombies should really be blown from explosives
 								// especially from ogre grenades right under their feet
@@ -208,9 +208,9 @@ void (entity inflictor, entity attacker, float damage, float radius, entity igno
 									points = DAMAGE_ZOMBIECLASS;
 								// Any damage left? Check for poison as well
 								if (points > 0) T_Damage (head, inflictor, attacker, points, DAMARMOR); //T_Damage(
-								bprint("Radius is doing ");
-								bprint(ftos(points));
-								bprint(" damage.\n");
+								// bprint("Radius is doing ");
+								// bprint(ftos(points));
+								// bprint(" damage.\n");
 								
 								if (attacker.poisonous) PoisonDeBuff(head);
 							}
@@ -715,8 +715,7 @@ void() LaunchBoulder =
 
 };
 
-void() ChainedLightning =
-{
+void() ChainedLightning = {
 	local float damage;
 	
 	sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);

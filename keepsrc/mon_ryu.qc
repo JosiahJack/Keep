@@ -24,55 +24,44 @@ $frame decapb1 decapb2 decapb3 decapb4 decapb5 decapb6
 //  water-fearing dragon will try to escape from any body of
 //  water if it is placed in one.
 //------------------------------------------------------------------------//
-void(float dist) ryu_idle =
-{
-    if (Ryu_HatesWater ())
-    {
-        if (self.h2olevel)
-        {
-            if (Ryu_LeaveWater (self.speed))
-                return;
-        // Dragon could not rise toward air.  If in walk mode, increase
-        // speed in the hope of finding another way toward air faster.
-            if (dist)       // In walk mode.
-                dist = self.speed;
+void(float dist) ryu_idle = {
+    if (Ryu_HatesWater ()) {
+        if (self.h2olevel) {
+            if (Ryu_LeaveWater (self.speed)) return;
+			// Dragon could not rise toward air.  If in walk mode, increase
+			// speed in the hope of finding another way toward air faster.
+            if (dist) dist = self.speed; // In walk mode.
         }
     }
 
     ryu_untilt ();  // Undo any angle changes due to evasion.
-
-    // Don't move if guarding.
-    if (Ryu_InGuardMode ()) return;
+ 
+    if (Ryu_InGuardMode ()) return; // Don't move if guarding.
 
     if (dist) safe_goal (dist);
 };
 
 void() ryu_stand = {
-    if (FindTarget ())
-        return;
+    if (FindTarget()) return;
 
     ryu_idle (0);   // This will eject the dragon from water.
     //ai_pet_stay ();
 };
 
 void() ryu_walk = {
-    if (self.master)    // Warning: 'self.master == self' causes weirdness.
-    {
-        if (self.ryuflags & RYU_PATROL)
-        {
-            if (!FindTarget ())     // check for noticing a player
-            {
+    if (self.master) { // Warning: 'self.master == self' causes weirdness.
+        if (self.ryuflags & RYU_PATROL) {
+            if (!FindTarget ()) { // check for noticing a player
                 ryu_idle (0);   // If underwater, get out!
                 //ai_pet_patrol (SPEED_RYU_MIN);
             }
-        }
-        else
+        } else {
             self.th_run ();     // Override walk and run after master.
+		}
         return;
     }
 
-    if (FindTarget ())
-        return;
+    if (FindTarget()) return;
 
     ryu_idle (SPEED_RYU_MIN);
 };
@@ -82,28 +71,20 @@ void() ryu_walk = {
 //  when one is in air while the other is in liquid.
 //------------------------------------------------------------------------//
 float() Ryu_BlockCrossfire = {
-    if (self.th_missile)
-    {
-        local   float   elements;
+    local float elements;
 
+    if (self.th_missile) {
         elements = self.ryuflags & RYU_ELEMENTS;
-        if (elements == RYU_USE_LITE)
-            return FALSE;   // Shoot lightning into water to fry targets.
-        else if (elements == RYU_USE_ICE)
-        {   // Don't shoot ice if either endpoint is in lava.
+        if (elements == RYU_USE_LITE) return FALSE;   // Shoot lightning into water to fry targets.
+        else if (elements == RYU_USE_ICE) {   // Don't shoot ice if either endpoint is in lava.
             if (self.h2otype == CONTENT_LAVA)
-                if (self.h2olevel > 1)
-                    return TRUE;    // Mouth in lava.
-            if (self.enemy.h2otype == CONTENT_LAVA)
-                //if (self.enemy.h2olevel == 3)
-                    return TRUE;    // Target covered under lava.
+                if (self.h2olevel > 1) return TRUE;    // Mouth in lava.
+            if (self.enemy.h2otype == CONTENT_LAVA) return TRUE;    // Target covered under lava.
         }
         // Check alert AFTER element check.
-        if (self.ryuflags & RYU_ALERT)
-            return FALSE;   // Smart enough to aim through water.
+        if (self.ryuflags & RYU_ALERT) return FALSE;   // Smart enough to aim through water.
     }
-    // Cannot attack at all.
-    return TRUE;
+    return TRUE; // Cannot attack at all.
 };
 
 //------------------------------------------------------------------------//
@@ -111,9 +92,8 @@ float() Ryu_BlockCrossfire = {
 //  from the original visible() function in that some dragons can see
 //  a swimming target through the water.
 //------------------------------------------------------------------------//
-float(entity targ) ryu_visible =
-{
-    local   vector  spot1, spot2;
+float(entity targ) ryu_visible = {
+    local vector spot1, spot2;
     
     spot1 = self.origin + self.view_ofs;
     spot2 = targ.origin + targ.view_ofs;
@@ -890,8 +870,8 @@ void() Ryu_Shot_Fire = {
     // the start of the salvo, then the value increases with each successive
     // shot until it reaches one at the final shot.
     frac = Frac_ShotDown();     // Lowers 'shots_left', pays ammo cost.
-    if (self.spawnflags & SPAWN_SLOW)
-        frac = frac * 0.5;      // Can't fully track if slow.
+	
+    if (self.spawnflags & SPAWN_SLOW) frac = frac * 0.5;      // Can't fully track if slow.
 
     targ = self.enemy;
     // Shot speed varies by dragon size -- bigger is faster.
@@ -900,10 +880,8 @@ void() Ryu_Shot_Fire = {
     // Update 4/23/2009:  1000 for dragons, 1200 for wyrms.
     // Speed may be increased by another 66%, so limit
     // speed to 1200 so that it cannot exceed 2000.
-    if (self.spawnflags & SPAWN_WYRM)
-        sped = 1200;
-    else
-        sped = 1000;
+    if (self.spawnflags & SPAWN_WYRM) sped = 1200;
+    else sped = 1000;
 
     makevectors (self.angles);
 
@@ -918,15 +896,12 @@ void() Ryu_Shot_Fire = {
         sped = sped * 1.25;     // Fire spray shots are 25% faster.
         dir = Maim_LineEx (start, end, sped, targ, '1.2 0.9 0', frac);
         Ryu_Fire (start, dir, sped, 200, 0);
-        if (self.height > 9)
-            newmis.dmg = self.height;   // Extra damage.
-            if ( !self.shots_left || (self.shots_left == (self.shots_max - 1)) )
-                newmis.effects = newmis.effects | EF_DIMLIGHT;
+        if (self.height > 9) newmis.dmg = self.height;   // Extra damage.
+        if (!self.shots_left || (self.shots_left == (self.shots_max - 1))) newmis.effects = newmis.effects | EF_DIMLIGHT;
     } else if (self.worldtype == RYU_USE_ACID) {
         dir = Maim_TossEx (start, end, sped, 200, targ, '0 0 0', frac);
         Acid_Toss (start, dir, sped);
-        if (self.height > 9)
-            newmis.dmg = self.height;   // Extra damage.
+        if (self.height > 9) newmis.dmg = self.height;   // Extra damage.
     } else if (self.worldtype == RYU_USE_LITE) {
         // Check for discharge, just like Thunderbolt-wielding player.
         self.effects = self.effects | EF_MUZZLEFLASH;
@@ -944,9 +919,9 @@ void() Ryu_Shot_Fire = {
         // unavoidable attack.  An exception is made if the target is in
         // the water, in which case, the aim becomes perfect (or rather
         // the error calcuation is skipped) to simulate water conductivity.
-        if (self.enemy)
-            if (self.enemy.h2olevel < 2)
-                end = end - (self.enemy.velocity * ((1 - frac) * 0.2));
+        if (self.enemy) {
+            if (self.enemy.h2olevel < 2) end = end - (self.enemy.velocity * ((1 - frac) * 0.2));
+		}
 
         dir = Maim_Line (start, end, 0, world, '0 0 0');    // Insta-hit.
         end = start + (dir * sped);

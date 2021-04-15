@@ -471,6 +471,9 @@ void() monster_carnivean = {
 	precache_sound("carnivean/scream.wav");
 	precache_sound("carnivean/step1.wav");
 	precache_sound("carnivean/step2.wav");
+	precache_sound("player/inflame.wav");
+	precache_sound("zombie/corpse_fire.wav");
+	precache_sound("weapons/r_exp3.wav");
 	precache_sound("ambience/coaled_monster_explode.wav");
 
 	self.sight_sound = "carnivean/scream.wav";

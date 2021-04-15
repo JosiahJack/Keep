@@ -3,37 +3,55 @@
 ======================================================================*/
 void monster_poisoned_check();
 
-//----------------------------------------------------------------------
-// ai_stand
-//----------------------------------------------------------------------
-void() ai_stand =
-{
+float() ai_objekt = {
+	local vector megadeth;
+
+	if (self.charmer.health < 1 && self.classname != "monster_hunter" && self.charmer.classtype != CT_PATHCORNER) {
+		self.charmer = world;
+		self.goalentity = world;
+		self.th_stand();
+		return FALSE;
+	}
+
+	megadeth = self.charmer.origin - self.origin;
+	if (vlen(megadeth) < 100) {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+};
+
+void() ai_stand = {
 	self.lastorigin = self.origin;		// Save for cinematic interpolation
 	if (self.health < 1) return;		// Health < 0, no more standing
 	monster_liquid_check();				// Check for liquid damage
 	check_tethertimer();				// Check for tethering system
 	monster_poisoned_check();			// Check and apply poison
 	if (FindTarget ()) return;			// Found a player?
+
+	if (!self.charmed) {
+		if (self.charmer) {
+			if (ai_objekt()) {
+				self.goalentity = self.charmer;
+				self.th_walk(); // continue following, they've moved further away than 100 units
+			}
+		}
+	}
+
 	// Double check there is a goalentity, no pause and no turret
 	if (self.goalentity && time > self.pausetime && self.movespeed >= 0) {
 		// Make sure AI is turning towards new path corner direction
 		self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
 		ChangeYaw ();
 		self.th_walk ();
-	}
-	else {
+	} else {
 		// Only test ground walking monsters (no fly/swim/static)
 		// Check global map variable first (default = off)
-		if (map_bodyflrcheck == TRUE && self.classmove == MON_MOVEWALK) 
-			ent_floorcheck(self, FLOOR_TRACE_MONSTER);
+		if (map_bodyflrcheck == TRUE && self.classmove == MON_MOVEWALK) ent_floorcheck(self, FLOOR_TRACE_MONSTER);
 	}
 };
 
-//----------------------------------------------------------------------
-// ai_walk
-//----------------------------------------------------------------------
-void(float dist) ai_walk =
-{
+void(float dist) ai_walk = {
 	local vector vertdiff;
 	
 	if (self.health < 1) return;		// Health < 0, no more walking
@@ -60,18 +78,28 @@ void(float dist) ai_walk =
 			if (vertdiff_x < MON_ZTOL && vertdiff_y < MON_ZTOL) dist = 0;
 		}
 	}
-	
-	// Move to goal (code function)
-	movetogoal (dist);
+
+	// Horn of conjouring monsters just follow player
+	if (!self.charmed) { 
+		if (self.charmer) { // have a follow target
+			if (ai_objekt()) {
+				self.goalentity = world; // stop for a bit, our follow target is closer than 100 units
+				self.th_stand();
+			} else {
+				self.goalentity = self.charmer; // continue following
+				// Move to goal (code function)
+				movetogoal (dist);
+			}
+		}
+	} else {
+		// Move to goal (code function)
+		movetogoal (dist);
+	}
 };
 
 void() CheckAttack;
 
-//----------------------------------------------------------------------
-// ai_run
-//----------------------------------------------------------------------
-void(float dist) ai_run =
-{
+void(float dist) ai_run = {
 	if (self.health < 1) return;	// Health < 0, no more running
 	vanilla_water_check();			// Check for liquid damage
 
@@ -79,6 +107,8 @@ void(float dist) ai_run =
 	//monster_liquid_check();			// Check for liquid damage
 	monster_poisoned_check();			// Check and apply poison
 	movedist = dist;
+
+	if (self.hasobject == "true") take_monster_object(self); // drop our stuff
 
 	// Is the enemy dead or no longer taking damage?
 	if (SUB_healthEnemyTarget() < 1 || SUB_takedEnemyTarget() == DAMAGE_NO || self.enemyexit) {
@@ -93,15 +123,13 @@ void(float dist) ai_run =
 		if (self.oldenemy.health > 0 && self.oldenemy.takedamage > 0) {
 			self.enemy = self.oldenemy;
 			HuntTarget ();
-		}
-		else {
+		} else {
 			// Was this a passive monster before combat?
 			if (self.passive_mode == TRUE) {
 				// Return to passive monster state (reset)
 				self.passive_state = MON_PASSIVESTATE_RESET;
 				check_passivestate_system(self);
-			}
-			else {
+			} else {
 				// Monster busy with something else?
 				if (self.target != "") 
 					self.movetarget = find(world, targetname, self.target);
@@ -112,13 +140,12 @@ void(float dist) ai_run =
 				}
 				else self.think = self.th_stand;
 			}
-			// Exit run function
-			return;
+
+			return; // Exit run function
 		}
 	}
 	
-	// Wake up any monsters in visual range
-	self.show_hostile = time + 1;
+	self.show_hostile = time + 1; // Wake up any monsters in visual range
 
 	// check visibility of enemy
 	enemy_vis = visible(SUB_entEnemyTarget());
@@ -174,22 +201,19 @@ void(float dist) ai_run =
 	// Check if blocked by breakables
 	CheckBlockedBreakable();
 	
-	//----------------------------------------------------------------------
 	if (self.attack_state == AS_MISSILE) {
 		ai_run_missile (); return;
-	}
-	else if (self.attack_state == AS_JUMP) {
+	} else if (self.attack_state == AS_JUMP) {
 		ai_run_jump (); return;
-	}
-	else if (self.attack_state == AS_MELEE) {
+	} else if (self.attack_state == AS_MELEE) {
 		ai_run_melee (); return;
 	}
-	//----------------------------------------------------------------------
+
 	// This has to go after range/melee attack state checks
 	// otherwise the AI will not do anything
 	// These checks are for the next frame, not this one
 	// Exception : wizards need to strafe quickly
-	//----------------------------------------------------------------------
+
 	// Some monsters don't have distance checks, like wizards
 	// All monsters have checkattack defined, no need for ifs and buts!
 	if (self.enemymaxdist || self.enemydist < MON_MAX_RANGE) 
@@ -202,11 +226,9 @@ void(float dist) ai_run =
 	//----------------------------------------------------------------------
 	if (self.attack_state == AS_SLIDING) {
 		ai_run_slide (dist); return;
-	}
-	else if (self.attack_state == AS_SIDESTEP) {
+	} else if (self.attack_state == AS_SIDESTEP) {
 		ai_run_sidestep (dist); return;
-	}
-	else if (self.attack_state == AS_BACKWARD) {
+	} else if (self.attack_state == AS_BACKWARD) {
 		ai_run_backward (dist); return;
 	}
 

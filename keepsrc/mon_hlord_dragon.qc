@@ -731,13 +731,8 @@ void() hlorddragon_death21 =[ $drgdth21, SUB_Null       ] {
     remove(self);
 };
 
-void(float hello) hlorddragon_sight = {
-    if (!hello) sound (self, CHAN_VOICE, "drake/dragon/see.wav", 1, ATTN_NORM);
-};
-
 // Morphs the dark lord into the beast.  See 'hknight.qc' for dark lord.
-void() darklord_thebeast =
-{
+void() darklord_thebeast = {
     hlorddragon_nuke ();     // Spawn a big explosion.
 
     self.flags = (self.flags | FL_FLY) - (self.flags & FL_GODMODE);
@@ -785,8 +780,8 @@ void() darklord_thebeast =
     self.th_missile = SUB_Null;     // Constantly changes while walking.
     self.th_pain    = hlorddragon_pain;
     self.th_die     = hlorddragon_death1;
-
-    self.th_sight   = hlorddragon_sight;
+    self.sight_sound = "drake/dragon/see.wav";
+	self.hello_sound = string_null; // no hello
     self.th_move    = Wyrm_WalkMove;
     self.th_goal    = QC_MoveToGoal;
 
@@ -799,21 +794,3 @@ void() darklord_thebeast =
 
     hlorddragon_walk1 ();
 };
-
-
-// =================================================
-// dragon corners
-// =================================================
-
-//============
-// QUAKED dragon_corner (0.5 0.3 0) (-16 -16 -16) (16 16 16)
-//
-// Only for use with monster_dragon. Use only as transitions 
-// between rooms.
-//
-// PM:  Now it converts into a standard path_corner.
-//============
-//void() dragon_corner = {self.classname = "path_corner"; movetarget_f();};
-
-
-//===========================/  END OF FILE  /===========================//

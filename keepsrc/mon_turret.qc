@@ -225,63 +225,31 @@ void() turret_active =	[ $tilt0, turret_active]
 
 //=============================================================================
 
-void() turret_bullet1 = [ $tilt0, turret_bullet2]
-{
-	local vector dir;
-
+void() turret_bullet1 = [ $tilt0, turret_bullet2] {
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
-
 	sound (self, CHAN_WEAPON, "turret/plasbult.wav", 1, ATTN_NORM);
-
-      self.effects = self.effects | EF_MUZZLEFLASH;
-
+	self.effects = self.effects | EF_MUZZLEFLASH;
 	dir = self.enemy.origin - self.enemy.velocity*0.3*random();
 	dir = normalize (dir - self.origin);
-	
-	FireBullets (2, dir, '0 0 0');
-//	FireLaser(self.origin + v_forward*8 + v_right*4, dir, 3, self.color);
-//	FireLaser(self.origin + v_forward*8 - v_right*4, dir, 3, self.color);
+	FireBullets (2, '0 0 0');
 };
 void() turret_bullet2 = [ $tilt0, turret_bullet3]
 {turret_face();self.nextthink = time + 0.05;};
-void() turret_bullet3 = [ $tilt0, turret_bullet4]
-{
-	local vector dir;
-
+void() turret_bullet3 = [ $tilt0, turret_bullet4] {
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
-
 	sound (self, CHAN_WEAPON, "turret/plasbult.wav", 1, ATTN_NORM);
-
-      self.effects = self.effects | EF_MUZZLEFLASH;
-
-	dir = self.enemy.origin - self.enemy.velocity*0.3*random();
-	dir = normalize (dir - self.origin);
-	
-	FireBullets (2, dir, '0 0 0');
-//	FireLaser(self.origin + v_forward*8 + v_right*4, dir, 3, self.color);
-//	FireLaser(self.origin + v_forward*8 - v_right*4, dir, 3, self.color);
+	self.effects = self.effects | EF_MUZZLEFLASH;
+	FireBullets (2, '0 0 0');
 };
-void() turret_bullet4 = [ $tilt0, turret_bullet5]
-{turret_face();self.nextthink = time + 0.05;};
-void() turret_bullet5 = [ $tilt0, turret_active]
-{
-	local vector dir;
-
+void() turret_bullet4 = [ $tilt0, turret_bullet5] {turret_face();self.nextthink = time + 0.05;};
+void() turret_bullet5 = [ $tilt0, turret_active] {
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
-
 	sound (self, CHAN_WEAPON, "turret/plasbult.wav", 1, ATTN_NORM);
-
-      self.effects = self.effects | EF_MUZZLEFLASH;
-
-	dir = self.enemy.origin - self.enemy.velocity*0.3*random();
-	dir = normalize (dir - self.origin);
-	
-	FireBullets (2, dir, '0 0 0');
-//	FireLaser(self.origin + v_forward*8 + v_right*4, dir, 3, self.color);
-//	FireLaser(self.origin + v_forward*8 - v_right*4, dir, 3, self.color);
+	self.effects = self.effects | EF_MUZZLEFLASH;
+	FireBullets (2, '0 0 0');
 };
 
 void() turret_laser1 =[ $tilt0, turret_laser2]
@@ -399,30 +367,22 @@ void() turret_fire4 =	[ $tilt0, turret_fire4]
 		turret_bullet1();
 };
 
-//=============================================================================
-
-void(entity attacker, float damage)	turret_pain =
-{
-	if (self.pain_finished > time)
-		return;
+void(entity inflictor, entity attacker, float take)	turret_pain = {
+	if (self.pain_finished > time) return;
 	self.pain_finished = time + 1;
-
 	sound (self, CHAN_VOICE, "turret/beamchrg.wav", 1, ATTN_NORM);
-	ThrowGib ("progs/custents/turetgib.mdl", 0 - damage);
+	ThrowIt ("progs/custents/turetgib.mdl", 0 - damage,GIBx_GIB);
 };
 
-void() turret_die=
-{
+void() turret_die = {
 	local entity dedtur;
 
 	self.use = SUB_Null;
-
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
 	WriteCoord (MSG_BROADCAST, self.origin_x);
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, self.origin_z);
-
 	dedtur = spawn();
 	dedtur.solid = SOLID_NOT;
 	dedtur.movetype = MOVETYPE_NONE;
@@ -431,26 +391,21 @@ void() turret_die=
 	setmodel (dedtur, "progs/custents/dedturet.mdl");
 	setsize (self, '-10 -10 -3', '10 10 12');
 	dedtur.skin = self.skin;
-
-	ThrowHead ("progs/custents/h_turret.mdl", self.health);
-	ThrowGib ("progs/custents/turetgib.mdl", self.health);
-	ThrowGib ("progs/custents/turetgib.mdl", self.health);
-	ThrowGib ("progs/custents/turetgib.mdl", self.health);
-	ThrowGib ("progs/custents/turetgib.mdl", self.health);
+	ThrowIt ("progs/custents/h_turret.mdl", self.health,GIBx_GIB);
+	ThrowIt ("progs/custents/turetgib.mdl", self.health,GIBx_GIB);
+	ThrowIt ("progs/custents/turetgib.mdl", self.health,GIBx_GIB);
+	ThrowIt ("progs/custents/turetgib.mdl", self.health,GIBx_GIB);
+	ThrowIt ("progs/custents/turetgib.mdl", self.health,GIBx_GIB);
 };
 
-void() turret_use=
-{
-	if(self.currentammo)
-	{
+void() turret_use= {
+	if(self.currentammo) {
 		self.currentammo = FALSE;
 		if((self.spawnflags & TUR_RETRACT) || (self.spawnflags & TUR_OFFRET))
 			turret_ret1();
 		else
 			self.think = SUB_Null;
-	}
-	else
-	{
+	} else {
 		self.currentammo = TRUE;
 		if((self.spawnflags & TUR_RETRACT) || (self.spawnflags & TUR_OFFRET))
 			turret_unret1();
@@ -459,8 +414,7 @@ void() turret_use=
 	}
 };
 
-void() turret_setup=
-{
+void() turret_setup = {
 	local vector endorg;
 
 	traceline(self.origin, self.origin + '0 0 2000', TRUE, self);

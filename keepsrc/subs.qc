@@ -192,8 +192,7 @@ void() InitTrigger =
 };
 
 // PM:  The point trigger version of InitTrigger.
-void() InitPointTrigger =
-{
+void() InitPointTrigger = {
     local   vector  v1, v2;
 
     v1 = self.origin;

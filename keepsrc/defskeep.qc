@@ -359,3 +359,68 @@ string v_axemodel;
 // From Copper by Lunaran
 .float notrace; // Used to help with Invisibility confusion
 .float jumplandfinished; // used to prevent spamming jump land noise when running down the side of a pyramid
+
+// Ammo resistance system
+float AM_NONE = -1;
+float AM_SHELLS = 0;
+float AM_NAILS = 1;
+float AM_ROCKETS = 2;
+float AM_CELLS = 3;
+float AM_LAVANAILS = 4;
+float AM_MULTI_ROCKETS = 5;
+float AM_PLASMA = 6;
+float AM_BOLTS = 7;
+float AM_POISON = 8;
+float AM_BLOODCRYSTALS = 9;
+float AM_VOIDSHARDS = 10;
+float AM_ELEMENTAL = 11;
+.float resist_lava_nails;
+.float resist_multi_rockets;
+.float resist_plasma;
+.float resist_bolts;
+.float resist_poison;
+.float resist_bloodcrystals;
+.float resist_voidshards;
+.float resist_elemental;
+.float save_shells;
+.float save_nails;
+.float save_rockets;
+.float save_cells;
+.float save_lava_nails;
+.float save_multi_rockets;
+.float save_plasma;
+.float save_bolts;
+.float save_poison;
+.float save_bloodcrystals;
+.float save_voidshards;
+.float save_elemental;
+
+// Monster attachments (like carts for ogles, or pushables, and other misc_model's)
+.vector attachment_offset;
+.string hasobject;
+
+// Mass values for gyro physics
+float MASS_GRENADE = 1;
+float BOUY_GRENADE = 1.2;
+float RESIST_GRENADE = 0.4;
+float TURB_GRENADE = 0.24;
+float AERO_GRENADE = 0.8;
+
+float MASS_MINIGRENADE = 0.2;
+float BOUY_MINIGRENADE = 0.3;
+float RESIST_MINIGRENADE = 3;
+
+float MASS_GIB = 1.5;
+float BOUY_GIB = 2.2;
+float RESIST_GIB = 1.8;
+.float ubs_deflapped;
+
+// Enhance the gyro physics for  setting multiple physics effects at once, if desired
+.float physicsflags;
+float PHYS_GYRO_BOUYANT		 = 1;
+float PHYS_GYRO_MOTIONRESIST = 2;
+float PHYS_GYRO_TURBULENCE	 = 4;
+float PHYS_GYRO_HOVER		 = 8;
+float PHYS_GYRO_THRUST		 = 16;
+float PHYS_GYRO_AERODYNAMIC	 = 32;
+float PHYS_GYRO_ANGTURBULENCE= 64;

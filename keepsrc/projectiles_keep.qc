@@ -573,6 +573,10 @@ void (float offsetAngle) MiniGrenadeLaunch = {
    setorigin (missile,self.origin);
    missile.nextthink = ((time + TRUE) + (crandom () * 0.500));
    missile.think = MiniGrenadeExplode;
+
+	Gyro_Object_Activate(missile,MASS_MINIGRENADE);
+	Gyro_Object_SetBouyancy(missile,BOUY_MINIGRENADE);
+	Gyro_Object_SetResistance(missile,RESIST_MINIGRENADE); // Sluggish in liquids
 };
 
 void () MultiGrenadeExplode = {
@@ -585,8 +589,7 @@ void () MultiGrenadeExplode = {
 };
 
 void () MultiGrenadeTouch = {
-   if ( (other == self.owner) )
-      return ;
+   if (other == self.owner) return;
 
    if ( (other.takedamage == DAMAGE_AIM) ) {
       if ( (self.classname == "MiniGrenade") ) {
@@ -601,8 +604,7 @@ void () MultiGrenadeTouch = {
       return ;
    }
    sound (self,CHAN_WEAPON,"weapons/bounce.wav",TRUE,ATTN_NORM);
-   if ( (self.velocity == VEC_ORIGIN) )
-      self.avelocity = VEC_ORIGIN;
+   if (self.velocity == VEC_ORIGIN) self.avelocity = VEC_ORIGIN;
 };
 
 void () MultiRocketExplode = {

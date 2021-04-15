@@ -525,7 +525,6 @@ void() monster_megaforce = {
 	
 	self.idle_sound = "megaforce/idle1.wav";
 	precache_sound (self.idle_sound);
-	self.sight_count = 3;
 	self.sight_sound = "megaforce/sight1.wav";
 	self.sight_sound2 = "megaforce/sight2.wav";
 	self.sight_sound3 = "megaforce/sight3.wav";

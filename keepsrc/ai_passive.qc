@@ -17,40 +17,26 @@ float MON_PASSIVESTATE_ON = 1;		// Passive mode active
 float MON_PASSIVESTATE_TOGGLE = 2;	// Toggle states (0>1 1>0)
 float MON_PASSIVESTATE_RESET = 5;	// Going back to Passive mode
 
-//----------------------------------------------------------------------
-float(entity targ) check_passivestate_exception =
-{
-	// Check exceptions and return true if found one
+// Check exceptions and return true if found one
+float(entity targ) check_passivestate_exception = {
 	if (!(targ.flags & FL_MONSTER)) return TRUE;
 	if (targ.health < 1) return TRUE;
 	if (targ.spawnflags & MON_SPAWN_ANGRY) return TRUE;
 	if (targ.passive_state == MON_PASSIVESTATE_NEVER) return TRUE;
+	if (targ.temperament == 4) return TRUE; // PSYCHOTIC!
+	if (targ.ryuflags & RYU_INSANE) return TRUE; // PSYCHOTIC!
+	if (targ.ryuflags & RYU_FORCED) return TRUE; // Player made me shoot
 	return FALSE;
 };
 
-//----------------------------------------------------------------------
-// Check for passive system exceptions
-void(entity targ) setup_passivestate_boss =
-{
-	// Boss monsters cannot use the passive system
-	// if (!targ.bossflag) return;
-	// targ.passive_state = MON_PASSIVESTATE_NEVER;
-	// targ.passive_mode = MON_PASSIVESTATE_NEVER;
-
-	// Nah!  Commented out
-	// How else can I have calm bosses in my Asset Library.  -Qmaster
-};
-
-//----------------------------------------------------------------------
 // Make sure the passive mode flag is active and setup some defaults
-void(entity targ) setup_passivestate =
-{
+void(entity targ) setup_passivestate = {
 	// Check for system exceptions
 	if (check_passivestate_exception(targ)) return;
 	
 	// Check map worldspawn and monster for passive states
 	// Setup all default parameters for passive monsters
-	if (map_passivestate || targ.passive_state == MON_PASSIVESTATE_ON) {
+	if (map_passivestate || targ.passive_state == MON_PASSIVESTATE_ON || targ.ryuflags & RYU_CALM) {
 		targ.passive_mode = TRUE;
 		targ.passive_state = MON_PASSIVESTATE_ON;
 		if (targ.passive_resettimer < 1) targ.passive_resettimer = LARGE_TIMER;
@@ -58,10 +44,12 @@ void(entity targ) setup_passivestate =
 	}
 };
 
+// Check for passive state on bosses
+void(entity targ) setup_passivestate_boss = { setup_passivestate(targ); };
+
 //----------------------------------------------------------------------
 // Fire event trigger strings (empty check done in trigger_strs function)
-void(entity targ) trigger_passivestate_event =
-{
+void(entity targ) trigger_passivestate_event = {
 	if (targ.passive_eventon != "" && targ.passive_state == MON_PASSIVESTATE_ON)
 		trigger_strs(targ.passive_eventon, world);
 	else if (targ.passive_eventoff != "" && targ.passive_state == MON_PASSIVESTATE_OFF)
@@ -70,29 +58,23 @@ void(entity targ) trigger_passivestate_event =
 
 //----------------------------------------------------------------------
 // Decide if the passive monster can switch to aggressive state
-// Return TRUE if need to exit, FALSE to carry on with function
-float(entity targ) check_passivestate_switch =
-{
+// Return TRUE if need to stay passive, FALSE to carry on with changing to angry
+float(entity targ) check_passivestate_switch = {
 	// Is the monster in passive mode?
 	if (targ.passive_state == MON_PASSIVESTATE_ON) {
-		// Check for ambush flag exception
-		if (sight_entity_time >= time - 0.1 && !(targ.spawnflags & MON_AMBUSH) )
-			targ.passive_state = MON_PASSIVESTATE_OFF;
-		else {
-			// Only join in combat if attacked directly (enemy active)
-			if (!targ.enemy) return TRUE;
-			// If passive mode active, turn it off. No longer needed
-			else targ.passive_state = MON_PASSIVESTATE_OFF;
+		// Check for ambush flag exception, and that we aren't cowardly or passive temperament
+		if (sight_entity_time >= time - 0.1 && !(targ.spawnflags & MON_AMBUSH) && self.temperament != 2 && self.temperament != 1) {
+			targ.passive_state = MON_PASSIVESTATE_OFF; // Get angry!
+		} else {
+			if (!targ.enemy) return TRUE; // Only join in combat if attacked directly (enemy active)
+			else targ.passive_state = MON_PASSIVESTATE_OFF; // If passive mode active, turn it off. No longer needed
 		}
 	}
 	return FALSE;
 }
 
-//----------------------------------------------------------------------
 // Check if the monster is going back to passive mode
-float(entity targ) check_passivestate_system =
-{
-	// Check for system exceptions
+float(entity targ) check_passivestate_system = {
 	if (check_passivestate_exception(targ)) return FALSE;
 
 	// Check for enemy sight timer
@@ -138,8 +120,7 @@ float(entity targ) check_passivestate_system =
 };
 
 //----------------------------------------------------------------------
-void(entity targ, float targstate) change_passivestate =
-{
+void(entity targ, float targstate) change_passivestate = {
 	// Check for system exceptions
 	if (check_passivestate_exception(targ)) return;
 	
@@ -199,8 +180,7 @@ void() trigger_monsterpassivestate_use =
 };
 
 //----------------------------------------------------------------------
-void() trigger_monsterpassivestate =
-{
+void() trigger_monsterpassivestate = {
 	self.classtype = CT_TRIGMONATTACK;
 	if (self.target == "") {
 		dprint("\b[MON_PASSIVESTATE]\b No target set, removing\n");
@@ -219,4 +199,3 @@ void() trigger_monsterpassivestate =
 	self.estate_use = trigger_monsterpassivestate_use;
 	self.estate = ESTATE_ON;
 };
-

@@ -3,7 +3,6 @@
 ======================================================================*/
 .float		gibondeath;			// true/false always gib on death
 .vector		gib_ofs;			// Vertical gib origin offset (override)
-
 .string		gib1mdl;			// Gib 1 unique weapon/body part
 .string		gib2mdl;			// Gib 2 unique weapon/body part
 .string		gib3mdl;			// Gib 3 unique weapon/body part
@@ -35,7 +34,6 @@
 .float		gibAnimTimer;		// Starting time for animation
 .float		gibAnimstart;		// Starting frame no for animation
 .float		gibAnimfinal;		// Final frame no for animation
-
 .float		gibpartbase;		// Base quantity of particle from gibs
 .float		gibpartrnd;			// Random quantity of particles from gibs
 .float		gibpartlife;		// Lifetime of particles from gibs
@@ -128,8 +126,7 @@ void(float secs) M_RespawnNextthink;
   The gib system tests for the global variables defined below
   If the extra gibs are not active then default blood vers are used
 ======================================================================*/
-void() precache_stonegibs =
-{
+void() precache_stonegibs = {
 	gibstone = TRUE;
 	precache_model (GIB1_STONE);			// New gib - arm/leg
 	precache_model (GIB2_STONE);			// New gib - body
@@ -138,9 +135,7 @@ void() precache_stonegibs =
 	precache_model (GIB5_STONE);			// New gib - large chunk/ball
 };
 
-//----------------------------------------------------------------------
-void() precache_poisongibs =
-{
+void() precache_poisongibs = {
 	gibpoison = TRUE;
 	precache_model (GIB1_POISON);			// New gib - arm/leg
 	precache_model (GIB2_POISON);			// New gib - body
@@ -149,9 +144,7 @@ void() precache_poisongibs =
 	precache_model (GIB5_POISON);			// New gib - large chunk/ball
 };
 
-//----------------------------------------------------------------------
-void() precache_bloodgibs =
-{
+void() precache_bloodgibs = {
 	gibblood = TRUE;
 	precache_model (GIB1_BLOOD);			// New gib - arm/leg
 	precache_model (GIB2_BLOOD);			// New gib - body
@@ -160,9 +153,7 @@ void() precache_bloodgibs =
 	precache_model (GIB5_BLOOD);			// New gib - large chunk/ball
 };
 
-//----------------------------------------------------------------------
-float(float gibsound) check_gibsound =
-{
+float(float gibsound) check_gibsound = {
 	if (gibsound == GIB_IMPACT_HEAVY) return TRUE;
 	else if (gibsound == GIB_IMPACT_METALA) return TRUE;
 	else if (gibsound == GIB_IMPACT_METALB) return TRUE;
@@ -174,8 +165,7 @@ float(float gibsound) check_gibsound =
 };
 
 //----------------------------------------------------------------------
-void(entity gibent) DPP_blood_trail =
-{
+void(entity gibent) DPP_blood_trail = {
 	// Cannot add particle trails to the player!
 	if (gibent.flags & FL_CLIENT) {
 		dprint("\b[GIB]\b Cannot add particle trail to player!\n");
@@ -195,12 +185,7 @@ void(entity gibent) DPP_blood_trail =
 	// Glowing green blobs splashed about
 	else if (gibent.gibtype == GIBTYPE_POISON) {
 		gibent.traileffectnum = particleeffectnum(DPP_TRPBLOOD);
-	}
-	else {
-		// DISABLED - Excessive blood trails can be bad for large maps
-		// Typical blood stains (20% chance of more blood)
-		//if (random() < 0.2) gibent.traileffectnum = particleeffectnum(DPP_ITSBLOOD);
-		//else gibent.traileffectnum = particleeffectnum(DPP_TRBLOOD);
+	} else {
 		gibent.traileffectnum = particleeffectnum(DPP_TRBLOOD);
 	}
 };
@@ -209,8 +194,7 @@ void(entity gibent) DPP_blood_trail =
  DirectionForDamage
   Takes the angle between self and enemy and projects backwards
 ======================================================================*/
-vector(float gibforce) DirectionForDamage =
-{
+vector(float gibforce) DirectionForDamage = {
 	local vector gvel;
 	local float gftype;
 	
@@ -226,32 +210,28 @@ vector(float gibforce) DirectionForDamage =
 		gvel_y = crandom()*100;
 		gvel_z = 100 + (100 * random());
 		return gvel;
-	}
-	// Party popper version (large explosion)
-	else if (gftype == MON_GIBEXPLOSION) {
+	} else if (gftype == MON_GIBEXPLOSION) {
+		// Party popper version (large explosion)
 		gvel_x = crandom()*250;
 		gvel_y = crandom()*250;
 		gvel_z = 400 + (100 * random());
 		return gvel;
-	}
-	else if (gftype == MON_XYGIBVELOCITY) {
+	} else if (gftype == MON_XYGIBVELOCITY) {
 		// Back to front vector so gib will travel away from enemy
 		gvel = vectoangles(self.origin - self.enemy.origin);
 		makevectors(gvel);
 		gvel = v_forward * (50 + (100 * random()));
 		gvel = gvel + (v_right * (200 * crandom()));
 		gvel_z = 100 + (100 * random());
-	}
-	else if (gftype == MON_NOGIBVELOCITY) {
+	} else if (gftype == MON_NOGIBVELOCITY) {
 		// Back to front vector so gib will travel away from enemy
 		gvel = vectoangles(self.origin - self.enemy.origin);
 		makevectors(gvel);
 		gvel = v_forward * (50 + (100 * random()));
 		gvel = gvel + (v_right * (100 * crandom()));
 		gvel_z = 30;
-	}
-	// Designed for non monster entities (overwrites self entity keys)
-	else if (gftype == MON_GIBTARGET) {
+	} else if (gftype == MON_GIBTARGET) {
+		// Designed for non monster entities (overwrites self entity keys)
 		// Check for any target entity tracking setup
 		if (self.target != "") TargetMovedir(self, FALSE);
 		// default movedir movement
@@ -261,8 +241,7 @@ vector(float gibforce) DirectionForDamage =
 		// Add Up/Down random velocity
 		gvel = gvel + (v_up * (self.gibvel_z * crandom()));
 		return gvel;
-	}
-	else {
+	} else {
 		// Back to front vector so gib will travel away from enemy
 		gvel = vectoangles(self.origin - self.enemy.origin);
 		makevectors(gvel);
@@ -276,8 +255,7 @@ vector(float gibforce) DirectionForDamage =
 };
 
 //======================================================================
-void() RemoveGib =
-{
+void() RemoveGib = {
 	// Fade away model
 	self.think = model_fade;
 	self.nextthink = time + 0.1;
@@ -285,8 +263,7 @@ void() RemoveGib =
 };
 
 //----------------------------------------------------------------------
-void() CheckFloorGib =
-{
+void() CheckFloorGib = {
 	// Is it time for the gib to fade away?
 	if (coop > 2 && numgamemasters > 0) return;
 	if (self.pain_finished > time) {
@@ -306,8 +283,7 @@ void() CheckFloorGib =
 				self.gibAnimfinal = 0;
 				RemoveGib();
 				return;
-			}
-			else {
+			} else {
 				self.frame = self.gibAnimstart + self.walkframe;
 				self.walkframe = self.walkframe + 1;
 			}
@@ -320,12 +296,15 @@ void() CheckFloorGib =
 	else RemoveGib();
 };
 
+float() Gib_Eaten;
+
 //----------------------------------------------------------------------
-void() TouchGib =
-{
+void() TouchGib = {
 	// Always check for sky and void functions first
 	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
 	if (self.touchedvoid) return;				// Marked for removal
+
+    if (Gib_Eaten ()) return; // This may remove self if TRUE.
 
 	// Check if the gib can damage (only players) on touch
 	if (self.gib1dmg > 0 && other.flags & FL_CLIENT) {
@@ -419,7 +398,11 @@ void(float gib_no, float gib_qty) ThrowGib =
 		gibitem.classtype = CT_TEMPGIB;
 		gibitem.classgroup = CG_TEMPENT;
 		gibitem.frame = gibitem.skin = 0;
-		
+		gibitem.physicsflags = gibitem.physicsflags | PHYS_GYRO_BOUYANT | PHYS_GYRO_MOTIONRESIST;
+
+		// Make sure stone, metal, and glass don't float
+		if (self.gibtype == GIBTYPE_STONE || self.gibtype == GIBTYPE_METAL || self.gibtype == GIBTYPE_GLASS) gibitem.physicsflags = 0;
+
 		// Check for any touch/contact damage / explosions
 		if (self.gib1dmg > 0) gibitem.gib1dmg = self.gib1dmg;
 		if (self.gib1exp > 0) gibitem.gib1exp = self.gib1exp;
@@ -544,8 +527,7 @@ void(float gib_no, float gib_qty) ThrowGib =
 			gibitem.avelocity = '0 0 0';
 			gibitem.avelocity_y = 200 + random() * 200;
 			gibitem.angles_y = gibitem.ideal_yaw = random() * 360;
-		}
-		else {
+		} else {
 			//----------------------------------------------------------------------
 			// Make sure gibs fountain items have correct origins
 			if (self.classtype == CT_MISCGIBF) gibitem.oldorigin = self.origin;
@@ -601,6 +583,11 @@ void(float gib_no, float gib_qty) ThrowGib =
 		gibitem.pain_finished = gibitem.nextthink;
 		gibitem.think = RemoveGib;
 
+		if (gibitem.physicsflags) {
+			Gyro_Object_Activate(gibitem,MASS_GIB);
+			if (gibitem.physicsflags & PHYS_GYRO_BOUYANT) Gyro_Object_SetBouyancy(gibitem,BOUY_GIB);
+			if (gibitem.physicsflags & PHYS_GYRO_MOTIONRESIST) Gyro_Object_SetResistance(gibitem,RESIST_GIB);
+		}
 		gib_qty = gib_qty - 1;
 	}
 };
@@ -814,8 +801,7 @@ float() Gib_NearCeiling =
 };
 
 // Checks if gib should be eaten.  TRUE = yes.
-float() Gib_Eaten =
-{
+float() Gib_Eaten = {
     if (other.health <= 0)
         return FALSE;   // Dead.
     if (!(other.xfl & XFL_GHOUL))
@@ -1062,41 +1048,34 @@ void() Head_Think =
 //
 // Arguments here are used in the same manner as in Gib_Spawn.
 //- - - - - - - - -
-void(string gibname, vector vel, vector spin, float gibskin, float gibframe,
-    float heal)  Gib_Head =
-{
+void(string gibname, vector vel, vector spin, float gibskin, float gibframe, float heal) Gib_Head = {
     local   float   lo;
 
     lo = self.mins_z;   // Usually -24.  Higher for spiders.
-
     setmodel (self, gibname);
     self.frame      = gibframe;
     self.skin       = gibskin;
-    if (self.classname == "player")
-    {   // Never remove a client's head!
+    if (self.flags & FL_CLIENT) {
+		// Never remove a client's head!
         heal = 0;   // Don't let cannibals eat the head either!
         self.nextthink  = -1;
         self.think      = SUB_Null;
-    }
-    else
-    {
-        if (self.deadflag < DEAD_DEAD)
-            self.deadflag = DEAD_DEAD;
-        if (self.flags & FL_MONSTER)
-        {   // We can't release pets now because that may cause T_Damage loop.
+    } else {
+        if (self.deadflag < DEAD_DEAD) self.deadflag = DEAD_DEAD;
+        if (self.flags & FL_MONSTER) {
+			// We can't release pets now because that may cause T_Damage loop.
             // We must delay pet release for another frame so we don't crash.
             self.nextthink = 0.01;
             self.think     = Head_Think;
             //monster_item_drop ();   // Update 9/4/09:  Check for special drop.
-        }
-        else
+        } else {
             Head_SetThink ();
+		}
     }
     self.movetype   = MOVETYPE_BOUNCE;
     self.takedamage = DAMAGE_NO;
     self.solid      = SOLID_NOT;
-    if (heal)
-    {
+    if (heal) {
         // FIXME:  Is changing the head's solid to trigger safe?
         // Make the head a trigger solid so others can find and eat it.
         self.volume     = 0;
@@ -1113,10 +1092,10 @@ void(string gibname, vector vel, vector spin, float gibskin, float gibframe,
         // NOTE:  No need to set FL_ITEM to heads.
     }
     self.view_ofs   = '0 0 8';
-// I am not fond of the head moved at self's feet, but I see it done
-// that way because of Quake's infernal way of moving and clip entities
-// against bsps.  Namely Quake uses only three bbox sizes to clip entities.
-// Note:  Assumes self has a size at least as big as VEC_HULL_xxx.
+	// I am not fond of the head moved at self's feet, but I see it done
+	// that way because of Quake's infernal way of moving and clip entities
+	// against bsps.  Namely Quake uses only three bbox sizes to clip entities.
+	// Note:  Assumes self has a size at least as big as VEC_HULL_xxx.
     setsize (self, '-16 -16 0', '16 16 56');
 
     self.velocity   = vel;
@@ -1131,9 +1110,9 @@ void(string gibname, vector vel, vector spin, float gibskin, float gibframe,
     self.avelocity  = spin;
     self.volume     = 0;    // So head won't plop on contact.
 
-// Now gibbed, so change to a null function to stop the possibility
-// of multiple gibbings.  Update:  And stop resurrection.
-// (Note:  Should've been done in combat.qc but just in case it hasn't...)
+	// Now gibbed, so change to a null function to stop the possibility
+	// of multiple gibbings.  Update:  And stop resurrection.
+	// (Note:  Should've been done in combat.qc but just in case it hasn't...)
     self.gibbed = TRUE;
     self.gorging    = TRUE;     // Don't let gremlin eat the head.
 
@@ -1142,31 +1121,27 @@ void(string gibname, vector vel, vector spin, float gibskin, float gibframe,
 };
 
 // All-purpose support function for throwing gibs, rubble, etc.
-void(string gibname, float dm, float gibflags) ThrowIt =
-{
+void(string gibname, float dm, float gibflags) ThrowIt = {
     local   float   gibskin, gibframe, heal, fast;
     local   vector  org, vel, spin;
 
     heal = gibflags & GIB_EAT;
     gibskin = gibframe = 0;
-    if (gibflags & GIB_SKIN_MATCH)
-        gibskin = self.skin;
+    if (gibflags & GIB_SKIN_MATCH) gibskin = self.skin;
 
-// Calculate gib velocity.
-    if (gibflags & GIB_DMV)
-    {   // Add some of the damage velocity to the gib.
+	// Calculate gib velocity.
+    if (gibflags & GIB_DMV) {
+		// Add some of the damage velocity to the gib.
         // Full speed is too fast, so use 25-50%.
         vel = damage_velocity * 0.25;   // FIXME:  Make sure dmv is defined.
-        if (vel_z < 0)
-            vel_z = 0;   // Gibs always go up.
+        if (vel_z < 0) vel_z = 0;   // Gibs always go up.
         vel = vel + VelocityForDamage (dm);
     }
     else
         vel = VelocityForDamage (dm);
 
-// Check if it is a head or normal gib.
-    if (gibflags & GIB_HEAD)
-    {
+	// Check if it is a head or normal gib.
+    if (gibflags & GIB_HEAD) {
         if (self.maxs_x > 96)
             heal = FALSE;       // Too big to eat.
         gibskin = self.skin;
@@ -1175,9 +1150,8 @@ void(string gibname, float dm, float gibflags) ThrowIt =
         return;     // We are done here.
     }
 
-// Find the spawn point for the gib.
-    if (gibflags & (GIB_BODY_HALF | GIB_BODY_FULL))
-    {
+	// Find the spawn point for the gib.
+    if (gibflags & (GIB_BODY_HALF | GIB_BODY_FULL)) {
         spin = self.size * 0.5;
         org = Midpoint (self);
         org_x = org_x + crandom() * spin_x;
@@ -1186,16 +1160,16 @@ void(string gibname, float dm, float gibflags) ThrowIt =
             org_z = org_z + crandom() * spin_z;
         else
             org_z = org_z - random() * spin_z;  // Use only the lower half.
-    }
-    else
+    } else {
         org = self.origin;
+	}
 
-// Calculate gib spin (angle velocity).
+	// Calculate gib spin (angle velocity).
     spin_x = random()*600;
     spin_y = random()*600;
     spin_z = random()*600;
 
-// Got all the info, so call the gib spawning function.
+	// Got all the info, so call the gib spawning function.
     if (gibflags & GIB_BURN)
         fast = -2;
     else
@@ -1203,32 +1177,45 @@ void(string gibname, float dm, float gibflags) ThrowIt =
     Gib_Spawn (org, gibname, vel, spin, gibskin, gibframe, heal, fast);
 };
 
-void(string gibname, float dm) ThrowJunk =  // This throws an inedible gib.
-    { ThrowIt (gibname, dm, 0); };
-
 //==========================================================================
 //  Ice
 // If TRUE, self explodes into ice chunks, one of which is a head gib.
-float() Shattered = {
-    if (self.deathtype != "frozen")
-        return FALSE;
+// float() Shattered = {
+    // if (self.deathtype != "frozen") return FALSE;
 
     // Since this is called during T_Damage, don't invoke more damage calls here.
     // In other words, don't call T_RadiusDamage for colateral damage.
-    sound (self, CHAN_VOICE, "weapons/shatter.wav", 1, ATTN_NORM);
-    Rocket_Explosion2 (self.origin, 32, 16);
+    // sound (self, CHAN_VOICE, "weapons/shatter.wav", 1, ATTN_NORM);
+    // Rocket_Explosion2 (self.origin, 32, 16);
     // Icy shockwave here would be over-the-top, so don't make one.
-    MakeIcyExp (self.origin);
+    // MakeIcyExp (self.origin);
 
-    ThrowGib(GIBTYPE_ICE,3);
-    self.skin = 0;
-    return TRUE;
+    // ThrowGib(GIBTYPE_ICE,3);
+    // self.skin = 0;
+    // return TRUE;
+// };
+
+void(entity targ, entity attacker) Killed;
+
+//======================================================================
+// Gib a body on the floor (special setup)
+//======================================================================
+void(entity onflr, float impactdmg) monster_flrbody_gib = {
+	local entity tself, tother;
+	
+	onflr.bodyonflr = string_null;	// no more body gibbing
+	tself = self; tother = other;	// save self/other
+	self = onflr; other = tself;	// switch around
+	if (onflr.classgroup == CG_ZOMBIE && !(onflr.classname == "monster_mummy")) {
+		self.health = 0;
+		Killed(onflr, tself);
+	} else {
+		self.max_health = MON_NOGIBVELOCITY; // use minimal velocity
+		monster_ThrowGib();			// throw parts
+	}
+	
+	self = tself; other = tother;	// switch back
+	SpawnBlood (onflr, onflr.origin, '0 0 50', impactdmg*4);
+	if (onflr.bodyonflrtrig) trigger_strs(onflr.bodyonflrtrig,self);
+	entity_hide(onflr); // Hide/Remove original body/shadow
 };
-
-// Okay, this has nothing to do with ice.
-// This should return TRUE if the monster died from holy damage.
-// Nothing causes holy damage at the moment (though Mjolnir should).
-//float() Dispelled =
-//{
-//    return FALSE;
-//};

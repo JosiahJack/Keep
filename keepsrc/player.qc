@@ -47,7 +47,7 @@ $frame axattb1 axattb2 axattb3 axattb4 axattb5 axattb6
 $frame axattc1 axattc2 axattc3 axattc4 axattc5 axattc6
 $frame axattd1 axattd2 axattd3 axattd4 axattd5 axattd6
 
-void() player_run;
+// void() player_run;
 
 //----------------------------------------------------------------------
 // Updated player idle/fire weapon frame logic to be consistent
@@ -56,9 +56,6 @@ void() player_run;
 float IDLE_WEAPON_FRAME = 0;	// Default idle state
 float FIRE_WEAPON_FRAME = 1;	// Start of firing frames
 
-//----------------------------------------------------------------------
-// 
-//----------------------------------------------------------------------
 float() frame_pause =
 {
 	if (intermission_running > 0 || cinematic_running > 0) return TRUE;
@@ -396,18 +393,19 @@ void()	player_supersg6 =	[$shotatt6, player_supersg1	] { if (!frame_pause())  se
 void(float oframe, float ox) nail_upd = {
 	if (frame_pause()) return;
 	if (!self.button0) { player_run(); return; }
-	self.weaponframe = oframe;
+	self.weaponframe = self.weaponframe + 1;
+	if (self.weaponframe > 8) self.weaponframe = 0;
 	W_FireSpikes (0,ox);
 };
 
-void() player_nail1 = [$nailatt1, player_nail2 ] {nail_upd(1,2);};
-void() player_nail2 = [$nailatt2, player_nail3 ] {nail_upd(2,-2);};
-void() player_nail3 = [$nailatt1, player_nail4 ] {nail_upd(3,2);};
-void() player_nail4 = [$nailatt2, player_nail5 ] {nail_upd(4,-2);};
-void() player_nail5 = [$nailatt1, player_nail6 ] {nail_upd(5,2);};
-void() player_nail6 = [$nailatt2, player_nail7 ] {nail_upd(6,-2);};
-void() player_nail7 = [$nailatt1, player_nail8 ] {nail_upd(7,2);};
-void() player_nail8 = [$nailatt2, player_nail1 ] {nail_upd(8,-2);};
+void() player_nail1 = [self.weaponframe, player_nail2 ] {nail_upd(1,2);};
+void() player_nail2 = [self.weaponframe, player_nail3 ] {nail_upd(2,-2);};
+void() player_nail3 = [self.weaponframe, player_nail4 ] {nail_upd(3,2);};
+void() player_nail4 = [self.weaponframe, player_nail5 ] {nail_upd(4,-2);};
+void() player_nail5 = [self.weaponframe, player_nail6 ] {nail_upd(5,2);};
+void() player_nail6 = [self.weaponframe, player_nail7 ] {nail_upd(6,-2);};
+void() player_nail7 = [self.weaponframe, player_nail8 ] {nail_upd(7,2);};
+void() player_nail8 = [self.weaponframe, player_nail1 ] {nail_upd(8,-2);};
 
 //============================================================================
 // The Lava Nailgun
@@ -416,19 +414,20 @@ void(float cnt, float ox) W_FireLavaSpikes;
 
 void(float oframe, float ox) lava_nail_upd = {
 	if (frame_pause()) return;
-	self.weaponframe=IDLE_WEAPON_FRAME;
+	self.weaponframe = self.weaponframe + 1;
+	if (self.weaponframe > 8) self.weaponframe = 0;
 	if (!self.button0) { player_run(); return; }
 	W_FireLavaSpikes (0,ox);
 };
 
-void() player_lava_nail1 = [$nailatt1, player_lava_nail2 ] {lava_nail_upd(1,2);};
-void() player_lava_nail2 = [$nailatt2, player_lava_nail3 ] {lava_nail_upd(2,-2);};
-void() player_lava_nail3 = [$nailatt1, player_lava_nail4 ] {lava_nail_upd(3,2);};
-void() player_lava_nail4 = [$nailatt2, player_lava_nail5 ] {lava_nail_upd(4,-2);};
-void() player_lava_nail5 = [$nailatt1, player_lava_nail6 ] {lava_nail_upd(5,2);};
-void() player_lava_nail6 = [$nailatt2, player_lava_nail7 ] {lava_nail_upd(6,-2);};
-void() player_lava_nail7 = [$nailatt1, player_lava_nail8 ] {lava_nail_upd(7,2);};
-void() player_lava_nail8 = [$nailatt2, player_lava_nail1 ] {lava_nail_upd(8,-2);};
+void() player_lava_nail1 = [self.weaponframe, player_lava_nail2 ] {lava_nail_upd(1,2);};
+void() player_lava_nail2 = [self.weaponframe, player_lava_nail3 ] {lava_nail_upd(2,-2);};
+void() player_lava_nail3 = [self.weaponframe, player_lava_nail4 ] {lava_nail_upd(3,2);};
+void() player_lava_nail4 = [self.weaponframe, player_lava_nail5 ] {lava_nail_upd(4,-2);};
+void() player_lava_nail5 = [self.weaponframe, player_lava_nail6 ] {lava_nail_upd(5,2);};
+void() player_lava_nail6 = [self.weaponframe, player_lava_nail7 ] {lava_nail_upd(6,-2);};
+void() player_lava_nail7 = [self.weaponframe, player_lava_nail8 ] {lava_nail_upd(7,2);};
+void() player_lava_nail8 = [self.weaponframe, player_lava_nail1 ] {lava_nail_upd(8,-2);};
 
 //============================================================================
 // The Super Nailgun
@@ -440,38 +439,40 @@ void() player_lava_nail8 = [$nailatt2, player_lava_nail1 ] {lava_nail_upd(8,-2);
 //============================================================================
 void(float oframe, float oz, float ox) snail_upd = {
 	if (frame_pause()) return;
-	self.weaponframe=IDLE_WEAPON_FRAME;
+	self.weaponframe = self.weaponframe + 1;
+	if (self.weaponframe > 8) self.weaponframe = 0;
 	if (!self.button0) { player_run(); return; }
 	W_FireSpikes (oz,ox);
 };
 
-void() player_snail1 = [$nailatt1, player_snail2 ] {snail_upd(1,8,2.5);};
-void() player_snail2 = [$nailatt2, player_snail3 ] {snail_upd(2,5.5,-3.5);};
-void() player_snail3 = [$nailatt1, player_snail4 ] {snail_upd(3,3,2.5);};
-void() player_snail4 = [$nailatt2, player_snail5 ] {snail_upd(4,9,0);};
-void() player_snail5 = [$nailatt1, player_snail6 ] {snail_upd(5,3,-2.5);};
-void() player_snail6 = [$nailatt2, player_snail7 ] {snail_upd(6,5.5,3.5);};
-void() player_snail7 = [$nailatt1, player_snail8 ] {snail_upd(7,8,-2.5);};
-void() player_snail8 = [$nailatt2, player_snail1 ] {snail_upd(8,2,0);};
+void() player_snail1 = [self.weaponframe, player_snail2 ] {snail_upd(1,8,2.5);};
+void() player_snail2 = [self.weaponframe, player_snail3 ] {snail_upd(2,5.5,-3.5);};
+void() player_snail3 = [self.weaponframe, player_snail4 ] {snail_upd(3,3,2.5);};
+void() player_snail4 = [self.weaponframe, player_snail5 ] {snail_upd(4,9,0);};
+void() player_snail5 = [self.weaponframe, player_snail6 ] {snail_upd(5,3,-2.5);};
+void() player_snail6 = [self.weaponframe, player_snail7 ] {snail_upd(6,5.5,3.5);};
+void() player_snail7 = [self.weaponframe, player_snail8 ] {snail_upd(7,8,-2.5);};
+void() player_snail8 = [self.weaponframe, player_snail1 ] {snail_upd(8,2,0);};
 
 //============================================================================
 // The Lava Super Nailgun
 //============================================================================
 void(float oframe, float oz, float ox) lava_snail_upd = {
 	if (frame_pause()) return;
-	self.weaponframe=IDLE_WEAPON_FRAME;
+	self.weaponframe = self.weaponframe + 1;
+	if (self.weaponframe > 8) self.weaponframe = 0;
 	if (!self.button0) { player_run(); return; }
 	W_FireLavaSpikes (oz,ox);
 };
 
-void() player_lava_snail1 = [$nailatt1, player_lava_snail2 ] {lava_snail_upd(1,8,2.5);};
-void() player_lava_snail2 = [$nailatt2, player_lava_snail3 ] {lava_snail_upd(2,5.5,-3.5);};
-void() player_lava_snail3 = [$nailatt1, player_lava_snail4 ] {lava_snail_upd(3,3,2.5);};
-void() player_lava_snail4 = [$nailatt2, player_lava_snail5 ] {lava_snail_upd(4,9,0);};
-void() player_lava_snail5 = [$nailatt1, player_lava_snail6 ] {lava_snail_upd(5,3,-2.5);};
-void() player_lava_snail6 = [$nailatt2, player_lava_snail7 ] {lava_snail_upd(6,5.5,3.5);};
-void() player_lava_snail7 = [$nailatt1, player_lava_snail8 ] {lava_snail_upd(7,8,-2.5);};
-void() player_lava_snail8 = [$nailatt2, player_lava_snail1 ] {lava_snail_upd(8,2,0);};
+void() player_lava_snail1 = [self.weaponframe, player_lava_snail2 ] {lava_snail_upd(1,8,2.5);};
+void() player_lava_snail2 = [self.weaponframe, player_lava_snail3 ] {lava_snail_upd(2,5.5,-3.5);};
+void() player_lava_snail3 = [self.weaponframe, player_lava_snail4 ] {lava_snail_upd(3,3,2.5);};
+void() player_lava_snail4 = [self.weaponframe, player_lava_snail5 ] {lava_snail_upd(4,9,0);};
+void() player_lava_snail5 = [self.weaponframe, player_lava_snail6 ] {lava_snail_upd(5,3,-2.5);};
+void() player_lava_snail6 = [self.weaponframe, player_lava_snail7 ] {lava_snail_upd(6,5.5,3.5);};
+void() player_lava_snail7 = [self.weaponframe, player_lava_snail8 ] {lava_snail_upd(7,8,-2.5);};
+void() player_lava_snail8 = [self.weaponframe, player_lava_snail1 ] {lava_snail_upd(8,2,0);};
 
 //============================================================================
 void() player_plasma1   =[$light1, player_plasma2  ] {
@@ -916,6 +917,8 @@ void() player_death_sound =
 		sound (self, CHAN_VOICE, self.noise, 1, ATTN_NONE);
 	}
 };
+
+void() DeathSound = { player_death_sound(); }; //legacy drake redirect
 
 //============================================================================
 void() player_gib =

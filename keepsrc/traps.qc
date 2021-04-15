@@ -498,8 +498,6 @@ void() trap_lightningshooter =
 	self.think = TargetMovedirReturn;
 };
 
-void() trap_lightning_triggered = { self.classname = "trap_lightningshooter"; trap_lightningshooter(); };
-
 //======================================================================
 /*QUAKED trap_gasshooter (0 .5 .8) (-8 -8 -8) (8 8 8) STEAM FIRE POISON x SILENT TOGGLE x TRACK
 When triggered, fires a gas particle in the direction determined by angle

@@ -240,7 +240,6 @@ void() monster_xmas_snowman = {
 	self.sight_sound2 = "xmas/snowman/sight2.wav";	// Growling
 	precache_sound (self.sight_sound);
 	precache_sound (self.sight_sound2);
-	self.sight_count = 2;
 
 	// Melee/Range Attacks
 	// Original version used ice, switched to red nails

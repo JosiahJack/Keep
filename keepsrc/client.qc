@@ -1283,6 +1283,11 @@ void() PlayerPreThink =
 	// If cinematic camera system active
 	if (cinematic_running > 0) { impulse_notvalid(); return; }
 
+    if (self.view_ofs == '0 0 0') {
+        Cutscene_Think ();      // Check for Drake cutscene stuff.
+        return;        // intermission or finale
+    }
+
 	//----------------------------------------------------------------------
 	// Skill 4 - Detect ANY skill changes (player console)
 	//----------------------------------------------------------------------
@@ -1495,6 +1500,13 @@ void() PlayerPreThink =
 		
 	// When the player/client starts in the map they don't want any velocity	
 	if (time < self.pausetime) self.velocity = '0 0 0';
+
+	if (!( deathmatch || coop )) { // adds player´s legs to 1st person view  (meant for Single player only !)
+		if (self.visible_legs_helper == 0) {
+			self.visible_legs_helper = 1;
+			player_legs (self);
+		}
+	}
 };
 
 void() PlayerFly_PostThink = {

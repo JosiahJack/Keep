@@ -996,7 +996,7 @@ void() SUB_RemovePowerups =
     self.rad_time           = 0;
 
 // Extra powerups (Hipnotic, Quoth, Zerstorer, and my own additions)
-    self.thorns_finished  = self.thorns_time  = self.thorns_sound  = 0;
+    self.empathy_finished  = self.empathy_time  = self.empathy_sound  = 0;
     self.cross_finished   = self.cross_time   = self.cross_sound   = 0;
     self.wing_finished    = self.wing_time    = self.wing_sound    = 0;
     self.mirror_finished  = self.mirror_time  = self.mirror_sound  = 0;

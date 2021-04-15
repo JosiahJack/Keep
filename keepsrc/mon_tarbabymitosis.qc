@@ -7,9 +7,20 @@ void() tbaby_checknew = {
 	self.th_stand = tbaby_stand1;
 	self.th_walk = tbaby_walk1;
 	self.th_run = tbaby_run1;
+	self.th_jump = tbaby_jump1;
+	self.th_jumpexit = tbaby_jump5;
 	self.th_missile = tbaby_jump1;
 	self.th_melee = tbaby_jump1;
-	self.th_die = tbaby_die1;       
+	self.th_die = tbaby_die1;      
+	self.th_pain = tbaby_pain;
+	self.classtype = CT_MONSPAWN;
+	self.classgroup = CG_SPAWN;
+	self.classmove = MON_MOVEWALK;
+	self.takedamage = DAMAGE_AIM;
+	self.death_sound = "blob/death1.wav";
+	self.idle_sound = "blob/sight1.wav";
+	self.sight_sound = self.idle_sound;
+	self.pain_sound = self.idle_sound;
 	self.origin_z = self.origin_z + 1;      // raise off floor a bit
 	droptofloor();
 
@@ -23,7 +34,7 @@ void() tbaby_checknew = {
 	self.flags = self.flags | FL_MONSTER;
 	if (self.deathstring == "") self.deathstring = " was slimed by a Fresh Spawn\n";
 	self.pausetime = 99999999;
-	self.th_stand ();
+	self.think = self.th_stand;
 	self.nextthink = self.nextthink + random()*0.5;
 	total_monsters = total_monsters + 1;  
 	

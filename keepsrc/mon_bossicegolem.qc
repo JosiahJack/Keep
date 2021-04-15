@@ -999,6 +999,7 @@ void() iceg_setup =
 	// Setup Ammo Resistance
 	self.resist_shells = self.resist_cells = 0;
 	self.resist_nails = self.resist_rockets = 0.75;
+	self.reflectnails = TRUE;		// Reflect nail projectiles
 	
 	//Resist_CheckRange(self);		// Double check values
 	Resist_Save(self);				// Save for Later

@@ -228,25 +228,6 @@ void() bandit_die = {
 
 };
 
-
-// OTHER - - - - - - - - - - - - - - - -
-void(float hello) bandit_sight =
-{
-    if (self.classname == "monster_bandit")
-    {
-        if (!hello)
-            sound (self, CHAN_VOICE, "soldier/sight1.wav", 1, ATTN_NORM);
-        else if (!(self.ryuflags & RYU_REBEL))
-            sound (self, CHAN_VOICE, "soldier/idle.wav", 1, ATTN_NORM);
-        return;
-    }
-    if (hello)
-        sound (self, CHAN_VOICE, "drake/goblin/idle1.wav", 1, ATTN_NORM);
-    else
-        sound (self, CHAN_VOICE, "drake/goblin/sight1.wav", 1, ATTN_NORM);
-};
-
-
 //============
 // QUAKED monster_bandit (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 //============
@@ -279,6 +260,14 @@ void() monster_bandit = {
     precache_sound ("drake/goblin/pain1.wav");
     precache_sound ("drake/goblin/pain2.wav");
     precache_sound ("drake/goblin/sight1.wav");
+
+    if (self.classname == "monster_bandit") {
+		self.hello_sound = "soldier/idle.wav";
+		self.sight_sound = "soldier/sight1.wav";
+    } else {
+		self.hello_sound = "drake/goblin/idle1.wav";
+		self.sight_sound = "drake/goblin/sight1.wav";
+    }
 
 	if (self.deathstring == "")  self.deathstring = " was shot by a Bandit\n";
 
@@ -322,9 +311,7 @@ void() monster_bandit = {
     self.th_missile = bandit_atk1;
     self.th_pain    = bandit_pain;
     self.th_die     = bandit_die;
-    //- - - - - - - -
     self.th_checkattack = SoldierCheckAttack;
-    self.th_sight   = bandit_sight;
     //self.th_revive  = army_revive;
     self.th_spawn   = monster_bandit;
 

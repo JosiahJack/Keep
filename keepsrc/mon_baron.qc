@@ -51,11 +51,7 @@ $frame decap1 decap2 decap3 decap4 decap5 decap6
 
 $frame decapb1 decapb2 decapb3 decapb4 decapb5 decapb6
 
-
-//==========================================================================
-
-//- - - - - - - - -
-//  This file has been adapted to Drake/SoE.
+//  This file has been adapted to Keep mod.
 //
 //  Frames:
 //     0 -  10  Wave (with sword on back -- idle taunt?)
@@ -73,9 +69,6 @@ $frame decapb1 decapb2 decapb3 decapb4 decapb5 decapb6
 //   109 - 115  Magic Missile attack
 //   116 - 124  Taunt
 //   125 - 130  Jump
-//- - - - - - - - -
-
-//.float  nojump;     // Don't jump if TRUE;
 
 // Spawnflags
 float   BSF_NO_JUMP = 4;    // Disables jumping.
@@ -90,33 +83,20 @@ float   BARON_EARTH = 2;
 float   BARON_AIR   = 3;
 float   BARON_WATER = 4;
 
-
 //==========================================================================
 //  Stand
 
 // FALSE = sword in scabbard, TRUE = sword in hand.
-float() baron_sword_drawn =
-{
-//    if ( self.frame == $draw1 )
-//        return FALSE;
-    if ( self.frame <= $wave11 )
-        return FALSE;
+float() baron_sword_drawn = {
+    if ( self.frame <= $wave11 ) return FALSE;
     if ( self.frame >= $idle1 )
-        if ( self.frame <= $idle20 )
-            return FALSE;
+        if ( self.frame <= $idle20 ) return FALSE;
 
     return TRUE;
 };
 
 // PM:  Unsheath sound is loud, so keep the volume down.
-void() baron_draw_sound =
-    {sound (self, CHAN_WEAPON, "weapons/unsheath.wav", 0.5, ATTN_IDLE);};
-
-void() baron_idle_sound =
-{
-    if (!(self.spawnflags & 1))     // Only if not in ambush mode.
-        sound (self, CHAN_VOICE, "hknight/idle.wav", 1, ATTN_NORM);
-};
+void() baron_draw_sound = {sound (self, CHAN_WEAPON, "weapons/unsheath.wav", 0.5, ATTN_IDLE);};
 
 void() baron_idle1  =[ $draw5,  baron_idle2  ] {ai_stand();};
 void() baron_idle2  =[ $draw4,  baron_idle3  ] {ai_stand();};
@@ -133,7 +113,7 @@ void() baron_idle12 =[ $idle7,  baron_idle13 ] {ai_stand();};
 void() baron_idle13 =[ $idle8,  baron_idle14 ] {ai_stand();};
 void() baron_idle14 =[ $idle9,  baron_idle15 ] {ai_stand();};
 void() baron_idle15 =[ $idle10, baron_idle16 ] {ai_stand();};
-void() baron_idle16 =[ $idle11, baron_idle17 ] {baron_idle_sound(); ai_stand();};
+void() baron_idle16 =[ $idle11, baron_idle17 ] {monster_idle_sound(); ai_stand();};
 void() baron_idle17 =[ $idle12, baron_idle18 ] {ai_stand();};
 void() baron_idle18 =[ $idle13, baron_idle19 ] {ai_stand();};
 void() baron_idle19 =[ $idle14, baron_idle20 ] {ai_stand();};
@@ -151,7 +131,7 @@ void() baron_idle30 =[ $idle15, baron_idle31 ] {ai_stand();};
 void() baron_idle31 =[ $idle14, baron_idle32 ] {ai_stand();};
 void() baron_idle32 =[ $idle13, baron_idle33 ] {ai_stand();};
 void() baron_idle33 =[ $idle12, baron_idle34 ] {ai_stand();};
-void() baron_idle34 =[ $idle11, baron_idle35 ] {baron_idle_sound(); ai_stand();};
+void() baron_idle34 =[ $idle11, baron_idle35 ] {monster_idle_sound(); ai_stand();};
 void() baron_idle35 =[ $idle10, baron_idle36 ] {ai_stand();};
 void() baron_idle36 =[ $idle9,  baron_idle37 ] {ai_stand();};
 void() baron_idle37 =[ $idle8,  baron_idle38 ] {ai_stand();};
@@ -1200,15 +1180,12 @@ float(vector ang, float sped, vector add) baron_tracejump = {
             if (trace_ent != self.enemy)
                 if (trace_ent.classname != self.classname)
                     return FALSE;   // Hit something, but not the target.
-    if (self.enemy.origin_z - end_z > 150)
-        return FALSE;   // Too low.
-    traceline (end, end - '0 0 400', FALSE, self);
-    if (trace_fraction == 1)
-        return FALSE;   // Can't find ground.
-    pc = pointcontents (trace_endpos);
-    if (pc <= CONTENT_WATER)
-        return FALSE;   // Jumped into water or worse.
 
+    if (self.enemy.origin_z - end_z > 150) return FALSE;   // Too low.
+    traceline (end, end - '0 0 400', FALSE, self);
+    if (trace_fraction == 1) return FALSE;   // Can't find ground.
+    pc = pointcontents (trace_endpos);
+    if (pc <= CONTENT_WATER) return FALSE;   // Jumped into water or worse.
     return TRUE;    // Go!
 };
 
@@ -1319,8 +1296,7 @@ void() baron_reviveb3  =[ $dieb3,  baron_reviveb4  ] {};
 void() baron_reviveb4  =[ $dieb2,  baron_reviveb5  ] {};
 void() baron_reviveb5  =[ $dieb1,  baron_run6      ] {};
 
-void() baron_revive =
-{
+void() baron_revive = {
     if ( self.frame == $dieb6 )
         baron_reviveb1 ();
     else
@@ -1328,29 +1304,21 @@ void() baron_revive =
 };
 
 
-//==========================================================================
-//  Other
-
-float() BaronBossCheckAttack =
-{
-// If target is not in LOS, use an attack that doesn't care about line-of-fire.
-// This will harass a player that tries to hide and spam grenades from a
-// safe spot.
+float() BaronBossCheckAttack = {
+	// If target is not in LOS, use an attack that doesn't care about line-of-fire.
+	// This will harass a player that tries to hide and spam grenades from a
+	// safe spot.
     if (enemy_range <= RANGE_MID)
     if (time >= self.attack_finished)
     if (self.waitmax < time)    // Use only after a delay.
-    if (random() < 0.01)        // Use infrequently.
-    {
-//dprint("harass!\n");
+    if (random() < 0.01) {
+
         local   float   r;
 
         r = random();
-        if (self.level == BARON_FIRE)
-        {
+        if (self.level == BARON_FIRE) {
             baron_cast1 ();
-        }
-        else if (self.level == BARON_EARTH)
-        {
+        } else if (self.level == BARON_EARTH) {
             if ((r < 0.5) && !super_active && Grounded (self.enemy))
                 baron_slam1();
             else if (BaronGolem_Check ())
@@ -1358,22 +1326,17 @@ float() BaronBossCheckAttack =
             else
                 return FALSE;
         }
-        else if (self.level == BARON_AIR)
-        {
-            if (UpIsSky (self.enemy.origin))
-            {
+        else if (self.level == BARON_AIR) {
+            if (UpIsSky (self.enemy.origin)) {
                 if ((r < 0.5) && !super_active)
                     baron_slam1();
                 else
                     baron_cast1();
-            }
-            else if (!super_active)
+            } else if (!super_active)
                 baron_slam1();
             else
                 return FALSE;
-        }
-        else if (self.level == BARON_WATER)
-        {
+        } else if (self.level == BARON_WATER) {
             if ((r < 0.5) && !super_active)
                 baron_cast1();
             else
@@ -1468,6 +1431,7 @@ void() monster_baron = {
     precache_model ("progs/drake/s_fancy.spr");
 
     self.sight_sound = "drake/baron/sight.wav";
+	self.idle_sound = "hknight/idle.wav";
 
     if (self.level) {
         //self.purse_x    = (self.level & 3) + 5;

@@ -312,13 +312,13 @@ void() mammoth_shieldon =
 {
 	self.takedamage = DAMAGE_YES;	// Grenades bounce off
 	self.bouncegrenade = TRUE;		// Warning to other monsters
-	self.reflectnails = TRUE;		// Reflect nail projectiles
 	self.reflectlightning = TRUE;	// Reflect lightning strikes
 	self.reflectplasma = TRUE;		// Reflect plasma projectiles
-	self.reflectaxe = TRUE;			// Reflect axe damage
 	// Visually show resistance and reduce damage taken
 	self.resist_shells = self.resist_nails = 1;
 	self.resist_rockets = self.resist_cells = 1;
+	self.reflectnails = TRUE;		// Reflect nail projectiles
+	self.reflectaxe = TRUE;			// Prevent axe damage
 	sound (self, CHAN_FEET, "mammoth/shield_on.wav", 1, ATTN_NORM);
 };
 
@@ -330,7 +330,7 @@ void() mammoth_shieldoff =
 	self.reflectnails = FALSE;		// Allow nail projectiles
 	self.reflectlightning = TRUE;	// Reflect lightning strikes
 	self.reflectplasma = TRUE;		// Reflect plasma projectiles
-	self.reflectaxe = TRUE;			// Reflect axe damage
+	self.reflectaxe = FALSE;		// Take axe damage
 	self.resist_shells = self.resist_nails = 0;
 	// Phase 3 has lower resistance, outer shell broken
 	if (self.style == MM_PHASE3)

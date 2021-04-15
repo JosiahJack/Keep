@@ -718,7 +718,6 @@ void() monster_deflector =
 	
 	self.idle_sound = "deflector/idle1.wav";
 	precache_sound (self.idle_sound);
-	self.sight_count = 3;
 	self.sight_sound = "deflector/sight1.wav";
 	self.sight_sound2 = "deflector/sight2.wav";
 	self.sight_sound3 = "deflector/sight3.wav";

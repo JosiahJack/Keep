@@ -340,7 +340,7 @@ void() polyp_hover0 = [156, polyp_hover1] {
 		self.count = 0;
 };
 
-void() polyp_hover0a = [153, polyp_hover2] {
+void() polyp_hover0a = [0, polyp_hover2] {
 	setmodel(self, "progs/quoth2pt2full/polyp.mdl");
 	setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
 	polypcheckdist();

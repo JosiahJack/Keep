@@ -2,24 +2,22 @@ void emit_particles();
 void trigger_particles();
 void particles_reset();
 
+// FGD_ENTITY = TRUE;
 void info_particles() = {
-  if (self.speed <= 0) {
-    self.speed = 1;
-    }
-  if (self.delay <= 0) {
-    self.delay = 0.1;
-    }
-  if (self.targetname) {
-    if (self.spawnflags & 64) {
-      self.use = particles_reset;
-      self.think = emit_particles;
-      self.nextthink = time + self.wait;
-      return;
-      }
-    self.use = trigger_particles;
-    return;
-    }
-  trigger_particles();
+	if (self.speed <= 0) self.speed = 1;
+	if (self.delay <= 0) self.delay = 0.1;
+
+	if (self.targetname) {
+		if (self.spawnflags & 64) {
+			self.use = particles_reset;
+			self.think = emit_particles;
+			self.nextthink = time + self.wait;
+			return;
+		}
+		self.use = trigger_particles;
+		return;
+	}
+	trigger_particles();
 };
 
 void trigger_particles() = {
@@ -157,3 +155,76 @@ void misc_boom() = {
   self.use = big_bang;
   self.wait = 1;
 };
+
+void() nehahra_deathbeams = {
+	local entity mark;
+	local vector vec;
+
+	sound(self, CHAN_AUTO, "sets/set2_4.wav", 1, ATTN_NONE);
+	mark = spawn();
+	mark.solid = SOLID_NOT;
+	mark.fullbright = 1;
+	mark.alpha = 0.1;
+	mark.movetype = MOVETYPE_NONE;
+	mark.event = "nehahra_jetdeath";
+	vec = self.origin;
+	if (random() < 0.4) {
+		vec_x = vec_x + random() * 20;
+	} else {
+		vec_x = vec_x - random() * 20;
+	}
+	if (random() < 0.4) {
+		vec_y = vec_y - random() * 20;
+	} else {
+		vec_y = vec_y + random() * 20;
+	}
+	if (random() < 0.4) {
+		vec_z = vec_z + 100 - random() * 20;
+	} else {
+		vec_z = vec_z + 100 + random() * 20;
+	}
+	setorigin(mark, vec);
+	setsize(mark, VEC_ORIGIN, VEC_ORIGIN);
+	setmodel(mark, "progs/nehahra/nehjet.mdl");
+	mark.angles_x = 360 * random();
+	mark.angles_y = 360 * random();
+	mark.angles_z = 360 * random();
+	mark.effects = mark.effects | EF_DIMLIGHT;
+	mark.think = SUB_Remove;
+	mark.nextthink = time + 0.1;
+};
+
+void() nehjet = {
+	nehahra_deathbeams();
+	nehahra_deathbeams();
+	nehahra_deathbeams();
+};
+
+void() throwgibs = {
+	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
+
+	sound(self, CHAN_AUTO, "player/udeath.wav", 1, ATTN_NONE);
+	ThrowGib(1, 1);
+	ThrowGib(2, 2);
+	ThrowGib(3, 1);
+};
+
+void(string gibname, float dm) ThrowGibstorm = {
+	local entity new;
+	new = spawn();
+	new.origin = self.origin;
+	setmodel(new, gibname);
+	setsize(self, VEC_HULL_MIN, '16 16 40');
+	new.velocity = VelocityForDamage(dm);
+	new.movetype = MOVETYPE_BOUNCE;
+	new.solid = SOLID_NOT;
+	new.health = -120;
+	new.avelocity_x = random() * 600;
+	new.avelocity_y = random() * 600;
+	new.avelocity_z = random() * 600;
+	new.touch = throwgibs;
+	new.think = throwgibs;
+	new.nextthink = time + 1 + random() + random();
+};
+
+void(vector org) lavasplash = { Tent_Point (TE_LAVASPLASH, org); };

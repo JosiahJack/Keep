@@ -23,36 +23,55 @@ void()	inquisitor_walk12	=[217,	inquisitor_walk1	] {ai_walk(6);};
 
 void() inquisitor_flightland1;
 
+void() inquisitor_flight_attack = {
+	throwpolypgib("progs/quoth2pt2full/bilefrag.mdl", -40);
+	throwpolypgib("progs/quoth2pt2full/bilefrag.mdl", -50);
+	throwpolypgib("progs/quoth2pt2full/bilefrag.mdl", -60);
+	throwpolypgib("progs/quoth2pt2full/bilefrag.mdl", -75);
+};
+
 void() InquisitorCheckSetDown = {
 	// Should we stop flying?
 	if (self.turrettimer < time) {
 		self.think = inquisitor_flightland1;
-		self.gravity = 1;
 		self.nextthink = 0.1;
 	} else {
+		if (self.attack_finished < time) {
+			self.attack_finished = time + 1;
+			inquisitor_flight_attack();
+		}
 		self.gravity = 0;
+		self.movetype = MOVETYPE_FLY;
 	}
 };
 
+
+
 // Fly 105-119
 void()	inquisitor_run1	=[105,		inquisitor_run2	] {ai_run(13); InquisitorCheckSetDown (); self.gravity = 0;};
-void()	inquisitor_run2	=[106,		inquisitor_run3	] {ai_run(13);};
+void()	inquisitor_run2	=[106,		inquisitor_run3	] {ai_run(13);InquisitorCheckSetDown ();};
 void()	inquisitor_run3	=[107,		inquisitor_run4	] {ai_run(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run4	=[108,		inquisitor_run5	] {ai_run(13);};
+void()	inquisitor_run4	=[108,		inquisitor_run5	] {ai_run(13);InquisitorCheckSetDown ();};
 void()	inquisitor_run5	=[109,		inquisitor_run6	] {ai_run(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run6	=[110,		inquisitor_run7	] {ai_run(13);};
+void()	inquisitor_run6	=[110,		inquisitor_run7	] {ai_run(13);InquisitorCheckSetDown ();};
 void()	inquisitor_run7	=[111,		inquisitor_run8	] {ai_run(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run8	=[112,		inquisitor_run9	] {ai_run(13);};
+void()	inquisitor_run8	=[112,		inquisitor_run9	] {ai_run(13);InquisitorCheckSetDown ();};
 void()	inquisitor_run9	=[113,		inquisitor_run10] {ai_run(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run10=[114,		inquisitor_run11] {ai_run(13);};
+void()	inquisitor_run10=[114,		inquisitor_run11] {ai_run(13);InquisitorCheckSetDown ();};
 void()	inquisitor_run11=[115,		inquisitor_run12] {ai_run(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run12=[116,		inquisitor_run13] {ai_run(13);};
+void()	inquisitor_run12=[116,		inquisitor_run13] {ai_run(13);InquisitorCheckSetDown ();};
 void()	inquisitor_run13=[117,		inquisitor_run14] {ai_run(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run14=[118,		inquisitor_run15] {ai_run(13);};
+void()	inquisitor_run14=[118,		inquisitor_run15] {ai_run(13);InquisitorCheckSetDown ();};
 void()	inquisitor_run15=[119,		inquisitor_run1 ] {ai_run(13);InquisitorCheckSetDown ();};
 
 // FlyAscend 89-104
-void() inquisitor_ascend1=[89, inquisitor_ascend2] {};
+void() inquisitor_ascend1=[89, inquisitor_ascend2] {
+	local vector up;
+
+	up = self.velocity;
+	up_z = up_z + 250 + (random() * 50); // Bit more oomph than a huh! player jump
+	self.velocity = up; // huh!
+};
 void() inquisitor_ascend2=[90, inquisitor_ascend3] {};
 void() inquisitor_ascend3=[91, inquisitor_ascend4] {};
 void() inquisitor_ascend4=[92, inquisitor_ascend5] {};
@@ -67,7 +86,23 @@ void() inquisitor_ascend12=[100, inquisitor_ascend13] {};
 void() inquisitor_ascend13=[101, inquisitor_ascend14] {};
 void() inquisitor_ascend14=[102, inquisitor_ascend15] {};
 void() inquisitor_ascend15=[103, inquisitor_ascend16] {};
-void() inquisitor_ascend16=[104, inquisitor_run1] {};
+void() inquisitor_ascend16=[104, inquisitor_run1] {
+	self.turrettimer = time + 5 + (random() * 10); // 5-15sec flight time
+};
+
+void() inquisitor_wavetargets = {
+	// Check for boss wave boundary event
+	if (self.health > 0) {
+		// Check for wave boundary triggers
+		self.noise = "";
+		if (self.bosswave == 1) self.noise = self.noise1;
+		else if(self.bosswave == 2) self.noise = self.noise2;
+		else if(self.bosswave == 3) self.noise = self.noise3;
+		
+		// Is there any trigger for the wave boundary?
+		if (self.noise != "") trigger_strs(self.noise, self);
+	}
+};
 
 // TouchDownFromFly 152-167
 void()	inquisitor_flightland1=[152,inquisitor_flightland2] {ai_run(0); self.gravity = 1; };
@@ -84,7 +119,7 @@ void()	inquisitor_flightland11=[162,inquisitor_flightland12] {ai_run(0);};
 void()	inquisitor_flightland12=[163,inquisitor_flightland13] {ai_run(0);};
 void()	inquisitor_flightland13=[164,inquisitor_flightland14] {ai_run(0);};
 void()	inquisitor_flightland14=[165,inquisitor_flightland15] {ai_run(0);};
-void()	inquisitor_flightland15=[166,inquisitor_flightland16] {ai_run(0);};
+void()	inquisitor_flightland15=[166,inquisitor_flightland16] {ai_run(0);self.movetype = MOVETYPE_STEP;};
 void()	inquisitor_flightland16=[167,inquisitor_standrun1] {ai_run(0);};
 
 void() InquisitorCheckAttack;
@@ -105,6 +140,16 @@ void() inquisitor_stormcloud = {
 	offs_y = crandom() * 32;
 	offs_z = 128;
 
+	if (self.minion_count > self.minion_maxcount) {
+		if (random() < 0.5) return; // still chance to spawn some
+	}
+
+	if (skill < 2) {
+		if (random() < 0.25) return; // less clouds on lower skills
+	} else if (skill == 0) {
+		if (random() < 0.5) return; // half as many clouds on Easy
+	}
+	
 	cloud = spawn();
 	setorigin(cloud,self.origin + offs);
 	cloud.spawnflags = cloud.spawnflags | MISC_DRIPSLIME | MISC_DRIPSILENT | 8;
@@ -117,6 +162,8 @@ void() inquisitor_stormcloud = {
 	cloud.dmg = 2;
 	cloud.think = spawn_raincloud;
 	cloud.nextthink = time + 0.05;
+	cloud.owner = self; // Tell the cloud we need to adjust the count...
+	self.minion_count = self.minion_count + 1; // Limit total clouds.  Cloud death reduces this count by 1
 };
 
 // AttackStaffPlantHuge 0-12
@@ -135,6 +182,30 @@ void()	inquisitor_magica11=[10,inquisitor_magica12	] {ai_face();inquisitor_storm
 void()	inquisitor_magica12=[11,inquisitor_magica13	] {ai_face();inquisitor_stormcloud();};
 void()	inquisitor_magica13=[12,inquisitor_standrun1] {ai_face();inquisitor_stormcloud();};
 
+void(vector boneofs) inquisitor_firebones = {
+	local vector org, dir;
+
+	if (self.health < 1) return;
+
+	self.attack_speed = SPEED_WRAITHBONE + (skill * SPEED_WBONESKILL);
+	makevectors(self.angles);
+
+	// Generate spike/bone at final animation position
+	org = self.origin + attack_vector(boneofs);
+	dir = SUB_orgEnemyTarget() + v_right*(8*3);
+	dir = normalize(dir - org);
+	launch_projectile (org, dir, CT_PROJ_WPOISON, self.attack_speed+random()*25);
+	dir = SUB_orgEnemyTarget() - v_right*(8*3);
+	dir = normalize(dir - org);
+	launch_projectile (org, dir, CT_PROJ_WPOISON, self.attack_speed+random()*25);
+	dir = SUB_orgEnemyTarget() + v_up*8;
+	dir = normalize(dir - org);
+	launch_projectile (org, dir, CT_PROJ_WPOISON, self.attack_speed+random()*25);
+	dir = SUB_orgEnemyTarget() - v_up*8;
+	dir = normalize(dir - org);
+	launch_projectile (org, dir, CT_PROJ_WPOISON, self.attack_speed+random()*25);
+};
+
 // AttackHoldStaffOut 13-27
 void()	inquisitor_magicb1=[13,inquisitor_magicb2	] {ai_face();};
 void()	inquisitor_magicb2=[14,inquisitor_magicb3	] {ai_face();};
@@ -144,13 +215,51 @@ void()	inquisitor_magicb5=[17,inquisitor_magicb6	] {ai_face();};
 void()	inquisitor_magicb6=[18,inquisitor_magicb7	] {ai_face();};
 void()	inquisitor_magicb7=[19,inquisitor_magicb8	] {ai_face();};
 void()	inquisitor_magicb8=[20,inquisitor_magicb9	] {ai_face();};
-void()	inquisitor_magicb9=[21,inquisitor_magicb10	] {ai_face();};
+void()	inquisitor_magicb9=[21,inquisitor_magicb10	] {ai_face();inquisitor_firebones('60 4 14');};
 void()	inquisitor_magicb10=[22,inquisitor_magicb11	] {ai_face();};
 void()	inquisitor_magicb11=[23,inquisitor_magicb12	] {ai_face();};
 void()	inquisitor_magicb12=[24,inquisitor_magicb13	] {ai_face();};
 void()	inquisitor_magicb13=[25,inquisitor_magicb14	] {ai_face();};
 void()	inquisitor_magicb14=[26,inquisitor_magicb15	] {ai_face();};
 void()	inquisitor_magicb15=[27,inquisitor_standrun1] {ai_face();};
+
+void() inquisitor_fireflamewall = {
+	local vector org, eorg, torg, dir, ang;
+	local float targetang, fire_life;
+
+	if (!self.enemy) return; // cannot find target!
+	if (self.health < 1) return; // we're dead Jim!
+
+	makevectors (self.angles);	
+	org = self.origin + attack_vector(self.attack_offset);
+	eorg = org + attack_vector('16 0 16'); // Setup explosion origin (infront)
+	
+	// Quiet sfx + dust/smoke
+	sound (self, CHAN_WEAPON, "justice/flame_fire.wav", 1, ATTN_NORM);	
+	if (random() > 0.5) SpawnProjectileSmoke(eorg, 200, 50, 250);
+
+	// Start with facing angle
+	makevectors (self.angles);	
+	// Work out offset (24 unit) from left to right (- to +)
+	if (self.lefty == 0) self.lefty = 1;
+	torg = self.enemy.origin + (v_right * (self.attack_count*24*self.lefty));
+	targetang = SUB_Elevation(ELEV_DEFAULT, self.origin, torg, SPEED_FLAME);
+	// Work out angle
+	ang = vectoangles(torg - org);
+	ang_x = -targetang;	// Negative = upwards angle 
+	makevectors (ang);
+	// fire flames forward with slight Z wobble
+	dir = (v_forward + (v_up * (random()*0.2)) ) * SPEED_FLAME;
+
+	// Fire that flame!
+	fire_life = (LIFE_FLAME/2) + random() + random();
+	if (random() < 0.5) self.part_exitpuff = FALSE;
+	else self.part_exitpuff = TRUE;
+	// target, origin, v_forward, colour, size, lifetime, speed
+	Launch_Flame (self, org, dir, FLAME_GREEN, -1, fire_life, SPEED_FLAME);
+};
+
+void() inquisitor_magicc24;
 
 // AttackRaiseHandsPalmOutAfter 29-50
 void()	inquisitor_magicc1=	[29,inquisitor_magicc2]  {ai_face();};
@@ -167,14 +276,52 @@ void()	inquisitor_magicc11=[39,inquisitor_magicc12] {ai_face();};
 void()	inquisitor_magicc12=[40,inquisitor_magicc13] {ai_face();};
 void()	inquisitor_magicc13=[41,inquisitor_magicc14] {ai_face();};
 void()	inquisitor_magicc14=[42,inquisitor_magicc15] {ai_face();};
-void()	inquisitor_magicc15=[43,inquisitor_magicc16] {ai_face();};
+void()	inquisitor_magicc15=[43,inquisitor_magicc16] {
+	ai_face();
+	local float total;
+
+	self.attack_count = SpriteCount_Flame(self.proj_attqty);
+	total = self.attack_count;
+	while (self.attack_count) {
+		if ((self.attack_count / total) < 0.5)
+			self.lefty = 1;
+		else
+			self.lefty = -1;
+		inquisitor_fireflamewall();
+		self.attack_count = self.attack_count - 1;
+	}
+	if (skill == 0) inquisitor_magicc24();
+};
 void()	inquisitor_magicc16=[44,inquisitor_magicc17] {ai_face();};
-void()	inquisitor_magicc17=[45,inquisitor_magicc18] {ai_face();};
-void()	inquisitor_magicc18=[46,inquisitor_magicc19] {ai_face();};
-void()	inquisitor_magicc19=[47,inquisitor_magicc20] {ai_face();};
-void()	inquisitor_magicc20=[48,inquisitor_magicc21] {ai_face();};
-void()	inquisitor_magicc21=[49,inquisitor_magicc22] {ai_face();};
-void()	inquisitor_magicc22=[50,inquisitor_standrun1]  {ai_face();};
+void()	inquisitor_magicc17=[43,inquisitor_magicc18] {ai_face();};
+void()	inquisitor_magicc18=[42,inquisitor_magicc19] {ai_face();};
+void()	inquisitor_magicc19=[43,inquisitor_magicc20] {
+	ai_face();
+	self.attack_count = SpriteCount_Flame(self.proj_attqty);
+	while (self.attack_count) {
+		inquisitor_fireflamewall();
+		self.attack_count = self.attack_count - 1;
+	}
+	if (skill < 2) inquisitor_magicc24();
+};
+void()	inquisitor_magicc20=[44,inquisitor_magicc21] {ai_face();};
+void()	inquisitor_magicc21=[43,inquisitor_magicc22] {ai_face();};
+void()	inquisitor_magicc22=[42,inquisitor_magicc23] {ai_face();};
+void()	inquisitor_magicc23=[43,inquisitor_magicc24] {
+	ai_face();
+	self.attack_count = SpriteCount_Flame(self.proj_attqty);
+	while (self.attack_count) {
+		inquisitor_fireflamewall();
+		self.attack_count = self.attack_count - 1;
+	}
+};
+void()	inquisitor_magicc24=[44,inquisitor_magicc25] {ai_face();};
+void()	inquisitor_magicc25=[45,inquisitor_magicc26] {ai_face();};
+void()	inquisitor_magicc26=[46,inquisitor_magicc27] {ai_face();};
+void()	inquisitor_magicc27=[47,inquisitor_magicc28] {ai_face();};
+void()	inquisitor_magicc28=[48,inquisitor_magicc29] {ai_face();};
+void()	inquisitor_magicc29=[49,inquisitor_magicc30] {ai_face();};
+void()	inquisitor_magicc30=[50,inquisitor_standrun1]  {ai_face();};
 
 void() inquisitor_bbomb_die1 = [0,inquisitor_bbomb_die2] {setmodel(self,"progs/ad171/s_burst_poison.spr"); T_RadiusDamage(self, self.owner,9,self.owner,DAMAGEALL); };
 void() inquisitor_bbomb_die2 = [1,inquisitor_bbomb_die3] {particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 16);	sound (world, CHAN_AUTO, "quoth2pt2full/gug/bile.wav", 1, ATTN_NONE); };
@@ -199,6 +346,14 @@ void() inquisitor_bbomb_charge4 = [5,inquisitor_bbomb_die1] {inquisitor_bbomb_bu
 void() inquisitor_bilebomb_at_enemys_feet = {
 	local entity missile;
 	local vector org;
+	local float dist;
+
+	// Do shot straight at player always
+	// ?();
+
+	// Only do bilebomb at enemy's feet if they are close enough, don't cheese player from across the map
+	dist = vlen(self.origin - self.enemy.origin);
+	if (dist > 2048) return; // Too far away
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	missile = spawn();
@@ -234,9 +389,10 @@ void()	inquisitor_magicd16=[86,inquisitor_magicd17] {ai_face();};
 void()	inquisitor_magicd17=[87,inquisitor_magicd18] {ai_face();};
 void()	inquisitor_magicd18=[88,inquisitor_standrun1] {ai_face();};
 
+void() inquisitor_pain1;
+
 void() inquisitor_die = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	inquisitor_pain1(); // hunch it, prep for burst!
 };
 
 void() inquisitor_shieldon = {
@@ -250,6 +406,8 @@ void() inquisitor_shieldoff = {
 	self.effects = 0;
 	self.takedamage = DAMAGE_AIM;
 };
+
+void() inquisitor_hunch_idle1;
 
 // PainDownToHunch 185-205
 void()	inquisitor_pain1=[185,inquisitor_pain2] { inquisitor_shieldon(); };
@@ -272,11 +430,100 @@ void()	inquisitor_pain17=[201,inquisitor_pain18] {};
 void()	inquisitor_pain18=[202,inquisitor_pain19] {};
 void()	inquisitor_pain19=[203,inquisitor_pain20] {};
 void()	inquisitor_pain20=[204,inquisitor_pain21] {};
-void()	inquisitor_pain21=[205,inquisitor_pain22] {};
+void()	inquisitor_pain21=[205,inquisitor_pain22] {if (self.health < 1) inquisitor_hunch_idle1();};
+
+// Die at this point if health is gone
+void() inquisitor_explode = {
+	// Check for any final trigger events
+	if (self.message2 != "") trigger_strs(self.message2,self);
+	
+	// No more Nour!
+	entity_hide(self);
+	
+	// Blue ID particle explosion
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, TE_EXPLOSION2);
+	WriteCoord (MSG_BROADCAST, self.origin_x);
+	WriteCoord (MSG_BROADCAST, self.origin_y);
+	WriteCoord (MSG_BROADCAST, self.origin_z);
+	WriteByte (MSG_BROADCAST, 35);
+	WriteByte (MSG_BROADCAST, 8);
+	// Check for any death radius damage
+	if (self.death_dmg > 0) 
+		T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
+	
+	// Classic sprite/DP explosion
+	SpawnExplosion(EXPLODE_PLASMA_BIG, self.origin, "nour/explode_death.wav");
+
+	// Gib explosive fountain!?!
+	self.max_health = MON_GIBEXPLOSION;
+	ThrowGib(11, 2);	// Left Arm
+	ThrowGib(12, 2);	// Right Arm
+	ThrowGib(13, 1);	// Tail
+	ThrowGib(4, 10 + rint(random()*3));
+	ThrowGib(5, 10 + rint(random()*3));
+};
 
 // HunchIdle 168-184
-// Not used currently
+void()	inquisitor_hunch_idle1=[168,inquisitor_hunch_idle2] {};
+void()	inquisitor_hunch_idle2=[169,inquisitor_hunch_idle3] {};
+void()	inquisitor_hunch_idle3=[170,inquisitor_hunch_idle4] {};
+void()	inquisitor_hunch_idle4=[171,inquisitor_hunch_idle5] {};
+void()	inquisitor_hunch_idle5=[172,inquisitor_hunch_idle6] {};
+void()	inquisitor_hunch_idle6=[173,inquisitor_hunch_idle7] {};
+void()	inquisitor_hunch_idle7=[174,inquisitor_hunch_idle8] {};
+void()	inquisitor_hunch_idle8=[175,inquisitor_hunch_idle9] {};
+void()	inquisitor_hunch_idle9=[176,inquisitor_hunch_idle10] {};
+void()	inquisitor_hunch_idle10=[177,inquisitor_hunch_idle11] {};
+void()	inquisitor_hunch_idle11=[178,inquisitor_hunch_idle12] {};
+void()	inquisitor_hunch_idle12=[179,inquisitor_hunch_idle13] {};
+void()	inquisitor_hunch_idle13=[180,inquisitor_hunch_idle14] {};
+void()	inquisitor_hunch_idle14=[181,inquisitor_hunch_idle15] {};
+void()	inquisitor_hunch_idle15=[182,inquisitor_hunch_idle16] {};
+void()	inquisitor_hunch_idle16=[183,inquisitor_hunch_idle17] {};
+void()	inquisitor_hunch_idle17=[184,inquisitor_hunch_idle17] {
+	// Spawn implosion effect
+	if (random() < 0.5)
+		particle_implode(self.origin, 20+random()*20, 100, 100, PARTICLE_BURST_GREEN);
+	// Spawn particle smoke and explosive smoke
+	else {
+		SpawnProjectileSmoke(self.origin, 150, 100, 300);
+		particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_GREEN);
+	}
+	
+	// Check for any random lightning strikes outward
+	if (random() < 0.5) {
+		self.pos1 = self.origin - '0 0 16';
+		self.pos2 = vecrand(0,50,TRUE);
+		self.pos2_z = 25 + random()*25;	// Always up!
+		self.pos3 = normalize(self.pos2);
+		traceline(self.pos1, self.pos1 + self.pos3 * 600, FALSE, self);
+		
+		// Create lightning bolt
+		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+		WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
+		WriteEntity (MSG_BROADCAST, self);
+		WriteCoord (MSG_BROADCAST, self.origin_x);
+		WriteCoord (MSG_BROADCAST, self.origin_y);
+		WriteCoord (MSG_BROADCAST, self.origin_z);
+		WriteCoord (MSG_BROADCAST, trace_endpos_x);
+		WriteCoord (MSG_BROADCAST, trace_endpos_y);
+		WriteCoord (MSG_BROADCAST, trace_endpos_z);
 
+		// Play some arching lightning sounds
+		if (random() < 0.5) {
+			if (random() < 0.5) sound (self, CHAN_BODY, "nour/elec_arch1.wav", 1, ATTN_NORM);
+			else sound (self, CHAN_BODY, "nour/elec_arch2.wav", 1, ATTN_NORM);
+		}
+	}
+	
+	// Cycle through end phase
+	self.lip = self.lip + 1;
+	if (self.lip == 26) sound (self, CHAN_AUTO, "nour/implode_death.wav", 1, ATTN_NONE);
+	if (self.lip == 40) inquisitor_explode();
+};
+
+// We yet live?  Ok, let's fly up and scare the pants off the player
 // RiseFromHunchToFly 120-151
 void()	inquisitor_pain22=[120,inquisitor_pain23] {};
 void()	inquisitor_pain23=[121,inquisitor_pain24] {};
@@ -312,12 +559,13 @@ void()	inquisitor_pain52=[150,inquisitor_pain53] {};
 void()	inquisitor_pain53=[151,inquisitor_ascend1] {}; // go to fly
 
 void(entity inflictor, entity attacker, float damage) inquisitor_pain = {
-	if (self.health > 4500 && self.count == 0) return; // stage 1
-	if (self.health > 3000 && self.count == 1) return; // stage 2
-	if (self.health > 1500 && self.count == 2) return; // stage 3
+	// Health increments of 1500 for performing a pain hunch, then flight afterwards
+	if (self.health > 4500 && self.bosswave == 0) return; // stage 1
+	if (self.health > 3000 && self.bosswave == 1) return; // stage 2
+	if (self.health > 1500 && self.bosswave == 2) return; // stage 3
 
-	if (self.count >= 3) return;  // stage 4
-	self.count = self.count + 1;
+	if (self.bosswave >= 3) return;  // stage 4
+	self.bosswave = self.bosswave + 1;
 	inquisitor_pain1();
 }
 
@@ -332,8 +580,13 @@ void() InquisitorCheckAttack = {
 		inquisitor_magicb1();
 	else if (rnd < 75)
 		inquisitor_magicc1();
-	else
-		inquisitor_magicd1();
+	else {
+		// Can see the enemy?
+		if ((!enemy_vis || visblocked(self.enemy)) || random() < 0.2)
+			inquisitor_magicd1(); // Bile bomb at enemy's feet when we can't see them
+		else
+			inquisitor_magicb1(); // Bone attack
+	}
 };
 
 /*======================================================================
@@ -345,6 +598,9 @@ void() monster_inquisitor = {
 
 	self.mdl = "progs/inquisitor.mdl";
 	precache_model (self.mdl);
+
+	PreCache_GreenFlame();
+	precache_model (MODEL_PROJ_WPOISON);	// Poison nails (spider)
 
 	// small bile drop
 	precache_model ("progs/quoth2pt2full/bilefrag.mdl"); // frames 0-5
@@ -387,6 +643,7 @@ void() monster_inquisitor = {
 	precache_sound (self.sight_sound);
 	self.death_sound = "ad171/skullwiz/fadeaway.wav";
 	precache_sound (self.death_sound);
+	precache_sound ("justice/flame_fire.wav");
 
 	precache_sound ("misc/drip1.wav");
 	precache_sound ("misc/drip2.wav");
@@ -405,8 +662,13 @@ void() monster_inquisitor = {
 	self.pain_flinch = 100;					// Medium pain threshold
 	self.pain_timeout = 5;				// High
 	self.no_liquiddmg = TRUE;
-	self.count = 0; //reset pain states
-	
+	self.bosswave = 0; //reset pain states
+	self.steptype = FS_FLYING; // we change from walking to flying sometimes
+	//self.death_dmg = 0; // make sure we don't punish players too hard when rewarding them
+	self.poisonous = TRUE; // Oh yeah, definitely!
+	self.minion_maxcount = 8 + skill; // More clouds on hard! (Spawn faster too, 3 at once per staf slame)
+	if (CheckZeroVector(self.proj_attqty)) self.proj_attqty = '7 3 16';
+
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;

@@ -281,25 +281,18 @@ Remainder
 Similar to C's % operator, but deals with
 negative numbers differently.
 ----------------------------------------------------------------------*/
-float(float a, float b) mod =
-{
-	return a - (floor(a / b) * b);
-};
+float(float a, float b) mod = { return a - (floor(a / b) * b); };
 
 /*======================================================================
 mathlib_anglemod 
 
 faster version of id's anglemod
 ======================================================================*/
-float(float v) anglemod =
-{
-	return v - floor(v/360) * 360;
-};
+float(float v) anglemod = { return v - floor(v/360) * 360; };
 
 //----------------------------------------------------------------------
 // Vector version of anglemod
-vector(vector targang) vectormod =
-{
+vector(vector targang) vectormod = {
 	local vector finang;
 	finang_x = anglemod(targang_x);
 	finang_y = anglemod(targang_y);

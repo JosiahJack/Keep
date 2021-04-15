@@ -76,95 +76,61 @@ void () ubs_dodge;
 void () ubs_side;
 
 
-void () ubs_countscraglets =
-{
+void () ubs_countscraglets = {
 	local entity head;
 
-	self.ident = MSG_BROADCAST;
+	self.ident = 0;
 	head = findradius (self.origin, 2000);
-	while (head)
-	{
-		if ((head.classname == "monster_wizard"))
-		{
-			self.ident = (self.ident + SPAWN_CRUCIFIED);
-		}
+	while (head) {
+		if ((head.classname == "monster_wizard")) self.ident = self.ident + 1;
 		head = head.chain;
 	}
 };
 
-float inside;
 
-void () ubscheckdist =
-{
-	local vector dist;
-	local vector dist2;
-	local float d;
-	local float d2, cond;
-	local vector org;
+void () ubscheckdist = {
+	local vector dist, dist2, org;
+	local float d, d2, cond;
 	local entity head;
 
-	if (inside)
-	{
-//		print_self ("ubscheckdist:", "recursive");
-		return;
-	}
+	if (self.cnt) return;
 
-	inside = TRUE;
+	self.cnt = TRUE;
 
 	dist = (self.enemy.origin - self.origin);
-	dist_z = MSG_BROADCAST;
+	dist_z = 0;
 	d = vlen (dist);
-	if (d < 450)
-	{
-		if (visible (self.enemy))
-			ai_run ((((SPAWN_CRUCIFIED / d) * 5000) * CONTENT_EMPTY));
+	if (d < 450) {
+		if (visible (self.enemy)) ai_run ((((1 / d) * 5000) * -1));
 	}
 	cond = FALSE;
-	if (d < 450 && d > MSG_BROADCAST)
-	{
-		if (!visible (self.enemy))
-			cond = TRUE;
-    	}
-	if (cond)
-	{
-		ai_run (SECRET_YES_SHOOT);
+	if (d < 450 && d > 0) {
+		if (!visible (self.enemy)) cond = TRUE;
 	}
-	else
-	{
-		if (((d > 450) && (d <= 600)))
-		{
+
+	if (cond) {
+		ai_run (SECRET_YES_SHOOT);
+	} else {
+		if (((d > 450) && (d <= 600))) {
 			ai_run (SECRET_1ST_DOWN);
-		}
-		else
-		{
-			if ((d >= 600))
-			{
-				ai_run ((20 * (d / 500)));
-			}
+		} else {
+			if ((d >= 600)) ai_run ((20 * (d / 500)));
 		}
 	}
 	head = findradius (self.origin, 500);
-	while (head)
-	{
-		if ((head.classname == "missile"))
-		{
-			ubs_dodge ();
-		}
+	while (head) {
+		if ((head.classname == "missile")) ubs_dodge ();
 		head = head.chain;
 	}
 	ubs_countscraglets ();
-
-	inside = FALSE;
+	self.cnt = FALSE;
 };
 
 void () ubshome;
 void () ubshome2;
 
-void () ubs_shot2 =
-{
-	local vector offang;
-	local vector org;
-	local vector vec;
+void () ubs_shot2 = {
+	local vector offang, org, vec;
 
 	offang = vectoangles ((self.enemy.origin - self.origin));
 	makevectors (offang);
@@ -183,16 +149,12 @@ void () ubs_shot2 =
 	newmis.nextthink = (time + 0.2);
 };
 
-void (float setting) ubs_spread =
-{
-	local vector offang;
-	local vector org;
-	local vector vec;
+void (float setting) ubs_spread = {
+	local vector offang, org, vec;
 	local float offset;
 
 	offang = vectoangles ((self.enemy.origin - self.origin));
-	if ((setting != SPAWN_CRUCIFIED))
-	{
+	if ((setting != 1)) {
 		offang_x = (offang_x + ((random () * -50) + 25));
 		offang_y = (offang_y + ((random () * -50) + 25));
 		offang_z = (offang_z + ((random () * -50) + 25));
@@ -200,7 +162,7 @@ void (float setting) ubs_spread =
 	makevectors (offang);
 	org = (((self.origin + self.mins) + (self.size * 0.5)) + (v_forward * 20));
 	vec = normalize (v_forward);
-	vec_z = ((MSG_BROADCAST - vec_z) + ((random () - 0.5) * 0.1));
+	vec_z = ((0 - vec_z) + ((random () - 0.5) * 0.1));
 	launch_spike (org, vec);
 	newmis.classname = "wizspike";
 	setmodel (newmis, "progs/w_spike.mdl");
@@ -212,25 +174,17 @@ void (float setting) ubs_spread =
 	newmis.enemy = self.enemy;
 };
 
-void (float dist, float damage) ubs_zap =
-{
-	local vector org, dir;
+void (float dist, float damage) ubs_zap = {
+	local vector org, dir, horg;
 	local float cells;
-	local entity head;
-	local vector horg;
-	local entity plasmapoint;
+	local entity head, plasmapoint;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-
 	ai_face ();
-
 	org = self.origin + '0 0 40';
-
 	dir = self.enemy.origin + '0 0 16' - org;
 	dir = normalize (dir);
-
 	traceline (org, self.origin + dir*dist, FALSE, self);
-
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_LIGHTNING1);
 	WriteEntity (MSG_BROADCAST, self);
@@ -240,22 +194,14 @@ void (float dist, float damage) ubs_zap =
 	WriteCoord (MSG_BROADCAST, trace_endpos_x);
 	WriteCoord (MSG_BROADCAST, trace_endpos_y);
 	WriteCoord (MSG_BROADCAST, trace_endpos_z);
-
-	if ((trace_ent.classname == "monster_zombie"))
-		damage = 70;
-	if ((trace_ent.health <= damage))
-		damage = 60;
-	if (trace_ent.takedamage)
-		T_Damage (trace_ent, self, self, damage);
+	if ((trace_ent.classgroup == CG_ZOMBIE)) damage = 70;
+	if ((trace_ent.health <= damage)) damage = 60;
+	if (trace_ent.takedamage) T_Damage (trace_ent, self, self, damage);
 };
 
-void () ubs_shot1_touch =
-{
+void () ubs_shot1_touch = {
 	self.think = SUB_Null;
-	if ((other == self.owner))
-	{
-		ubshome ();
-	}
+	if ((other == self.owner)) ubshome ();
 	T_Damage (other, self, self.owner, 15);
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
@@ -265,134 +211,89 @@ void () ubs_shot1_touch =
 	BecomeExplosion ();
 };
 
-void () ubs_shot1_touch2 =
-{
+void () ubs_shot1_touch2 = {
 	self.think = SUB_Null;
-	if ((other == self.owner))
-	{
-		self.think = ubshome2;
-	}
-	self.owner.ident = (self.owner.ident + SPAWN_CRUCIFIED);
+	if ((other == self.owner)) self.think = ubshome2;
+	self.owner.ident = (self.owner.ident + 1);
 	self.nextthink = (time + 0.1);
 	spawnwiz ();
 	BecomeExplosion ();
 };
 
-void () ubshome =
-{
-	local vector dir;
-	local vector vtemp;
-	local vector dist;
+void () ubshome = {
+	local vector dir, vtemp, dist;
 	local float d;
 
 	self.angles = vectoangles(self.velocity); //point in direction of movement
 
 	dist = (self.enemy.origin - self.origin);
-	dist_z = MSG_BROADCAST;
+	dist_z = 0;
 	d = vlen (dist);
 	traceline (self.origin, self.enemy.origin, TRUE, self);
-	if ((trace_fraction == SPAWN_CRUCIFIED))
-	{
-		if (!IsAlive(self.enemy))
-		{
-			self.think = SUB_Null;
-		}
+	if ((trace_fraction == 1)) {
+		if (self.enemy.health < 1) self.think = SUB_Null;
 		vtemp = (self.enemy.origin + '0 0 10');
 		dir = normalize ((vtemp - self.origin));
-		if ((skill == AS_MELEE))
-		{
-			self.velocity = (dir * 430);
-		}
-		if ((self.classname == "wizspike"))
-		{
+		if ((skill == 3)) self.velocity = (dir * 430);
+
+		if ((self.classname == "wizspike")) {
 			self.velocity = (dir * 400);
-		}
-		else
-		{
+		} else {
 			self.velocity = (dir * 300);
 		}
 		self.nextthink = (time + 0.1);
 		self.think = ubshome;
 		self.enemy = self.owner.enemy;
-		if (((self.temp6 == 15) && (self.classname != "wizspike")))
-		{
+		if (((self.temp6 == 15) && (self.classname != "wizspike"))) {
 			self.think = SUB_Null;
 			self.nextthink = (time + 0.1);
 		}
-		if ((self.classname != "wizspike"))
-		{
-			self.temp6 = (self.temp6 + SPAWN_CRUCIFIED);
-		}
+		if ((self.classname != "wizspike")) self.temp6 = (self.temp6 + 1);
 	}
-	if ((self.classname == "wizspike"))
-	{
+	if ((self.classname == "wizspike")) {
 		self.angles = vectoangles (self.velocity);
-		if ((self.temp6 == 12))
-		{
-			self.think = SUB_Null;
-		}
-		self.temp6 = (self.temp6 + SPAWN_CRUCIFIED);
+		if ((self.temp6 == 12)) self.think = SUB_Null;
+		self.temp6 = (self.temp6 + 1);
 	}
 };
 
-void () ubshome2 =
-{
-	local vector dir;
-	local vector vtemp;
-	local vector dist;
+void () ubshome2 = {
+	local vector dir, vtemp, dist;
 	local float d;
 
 	dist = (self.enemy.origin - self.origin);
-//	dist_z = 0;
+
 	d = vlen (dist);
 	traceline (self.origin, self.enemy.origin, TRUE, self);
-	if ((trace_fraction == SPAWN_CRUCIFIED))
-	{
-		if (!IsAlive(self.enemy))
-		{
-			self.think = SUB_Null;
-		}
+	if ((trace_fraction == 1)) {
+		if (!IsAlive(self.enemy)) self.think = SUB_Null;
 		vtemp = (self.enemy.origin + '0 0 20');
 		dir = normalize ((vtemp - self.origin));
 		self.velocity = (dir * 300);
 		self.enemy = self.owner.enemy;
 	}
-	if ((d >= 256))
-	{
-		self.think = ubshome2;
-	}
-	if ((d < 256))
-	{
-		self.think = spawnwiz;
-	}
+	if ((d >= 256)) self.think = ubshome2;
+	if ((d < 256)) self.think = spawnwiz;
 	self.nextthink = (time + 0.1);
-	if ((self.skin == MSG_BROADCAST))
-	{
-		self.skin = SPAWN_CRUCIFIED;
-	}
-	else
-	{
-		if ((self.skin == SPAWN_CRUCIFIED))
-		{
-			self.skin = MSG_BROADCAST;
+
+	if ((self.skin == 0)) {
+		self.skin = 1;
+	} else {
+		if ((self.skin == 1)) {
+			self.skin = 0;
 		}
 	}
 };
 
-void (float offset) ubs_shot1 =
-{
+void (float offset) ubs_shot1 = {
 	local entity missile;
 	local vector dir;
-	local float dist;
-	local float flytime;
+	local float dist, flytime;
 
 	dir = normalize (((self.enemy.origin + '0 0 10') - self.origin));
 	dist = vlen ((self.enemy.origin - self.origin));
 	flytime = (dist * 0.002);
-	if ((flytime < 0.1))
-	{
-		flytime = 0.1;
-	}
+	if ((flytime < 0.1)) flytime = 0.1;
 	self.effects = (self.effects | EF_MUZZLEFLASH);
 	sound (self, CHAN_WEAPON, "shalrath/attack2.wav", 1, ATTN_NORM);
 	missile = spawn ();
@@ -411,10 +312,8 @@ void (float offset) ubs_shot1 =
 	missile.movetype = MOVETYPE_FLYMISSILE;
 };
 
-void (entity missile, float mspeed, float accuracy) UbsMissile =
-{
-	local vector vec;
-	local vector move;
+void (entity missile, float mspeed, float accuracy) UbsMissile = {
+	local vector vec, move;
 	local float fly;
 
 	makevectors (self.angles);
@@ -431,22 +330,18 @@ void (entity missile, float mspeed, float accuracy) UbsMissile =
 	missile.nextthink = (time + TE_LIGHTNING1);
 	missile.think = SUB_Remove;
 };
+
 void () ubs_run;
 
-float () ubsCheckAttack =
-{
-	local vector spot1;
-	local vector spot2;
+float () ubsCheckAttack = {
+	local vector spot1, spot2;
 	local entity targ;
 	local float chance;
 
-	if ((time < self.attack_finished))
-		return (FALSE);
+	if ((time < self.attack_finished)) return (FALSE);
 
-	if ((enemy_range == RANGE_FAR))
-	{
-		if ((self.attack_state != AS_STRAIGHT))
-		{
+	if ((enemy_range == RANGE_FAR)) {
+		if ((self.attack_state != AS_STRAIGHT)) {
 			self.attack_state = AS_STRAIGHT;
 			ubs_run ();
 		}
@@ -455,16 +350,12 @@ float () ubsCheckAttack =
 
 	targ = self.enemy;
 
-// see if any entities are in the way of the shot
+	// see if any entities are in the way of the shot
 	spot1 = (self.origin + self.view_ofs);
 	spot2 = (targ.origin + targ.view_ofs);
-
 	traceline (spot1, spot2, FALSE, self);
-
-	if ((trace_ent != targ))
-	{
-		if ((self.attack_state != AS_STRAIGHT))
-		{
+	if ((trace_ent != targ)) {
+		if ((self.attack_state != AS_STRAIGHT)) {
 			self.attack_state = AS_STRAIGHT;
 			ubs_run ();
 		}
@@ -478,50 +369,38 @@ float () ubsCheckAttack =
 	else if ((enemy_range == RANGE_MID))
 		chance = 0.2;
 	else
-		chance = MSG_BROADCAST;
+		chance = 0;
 
-	if ((random () < chance))
-	{
+	if ((random () < chance)) {
 		self.attack_state = AS_MISSILE;
 		return (TRUE);
 	}
 
-	if ((enemy_range == RANGE_MID))
-	{
-		if ((self.attack_state != AS_STRAIGHT))
-		{
+	if ((enemy_range == RANGE_MID)) {
+		if ((self.attack_state != AS_STRAIGHT)) {
 			self.attack_state = AS_STRAIGHT;
 			ubs_run ();
 		}
-	}
-	else
-	{
-		if ((self.attack_state != AS_SLIDING) && (random() < 0.5))
-		{
+	} else {
+		if ((self.attack_state != AS_SLIDING) && (random() < 0.5)) {
 			self.attack_state = AS_SLIDING;
 			ubs_side ();
 		}
 	}
-
 	return FALSE;
 };
 
-void () ubsAttackFinished =
-{
-	if (((enemy_range >= RANGE_MID) || !enemy_vis))
-	{
+void () ubsAttackFinished = {
+	if (((enemy_range >= RANGE_MID) || !enemy_vis)) {
 		self.attack_state = AS_STRAIGHT;
 		self.think = ubs_run;
 	}
 };
 
-void () ubs_FastFire =
-{
-	local vector vec;
-	local vector dst;
+void () ubs_FastFire = {
+	local vector vec, dst;
 
-	if (IsAlive(self.owner))
-	{
+	if (IsAlive(self.owner)) {
 		self.owner.effects = (self.owner.effects | EF_MUZZLEFLASH);
 		makevectors (self.enemy.angles);
 		dst = (self.enemy.origin - (13 * self.movedir));
@@ -537,8 +416,7 @@ void () ubs_FastFire =
 	remove (self);
 };
 
-void () ubs_StartFast =
-{
+void () ubs_StartFast = {
 	local entity missile;
 
 	sound (self, CHAN_WEAPON, "ubs/wattack.wav", 1, ATTN_NORM);
@@ -555,7 +433,7 @@ void () ubs_StartFast =
 	missile.movedir = v_right;
 	missile = spawn ();
 	missile.owner = self;
-	missile.nextthink = (time + SPAWN_CRUCIFIED);
+	missile.nextthink = (time + 1);
 	setsize (missile, VEC_ORIGIN, VEC_ORIGIN);
 	setorigin (missile, (((self.origin + '0 0 30') + (v_forward * 14)) + (v_right * -14)));
 	missile.enemy = self.enemy;
@@ -571,7 +449,7 @@ void () ubs_idlesound =
 	wr = (random () * TE_LIGHTNING1);
 	if ((self.waitmin < time))
 	{
-		self.waitmin = (time + SPAWNFLAG_LASER);
+		self.waitmin = (time + 2);
 		if ((wr > 4.5))
 		{
 			sound (self, CHAN_VOICE, "ubs/widle1.wav", 1, ATTN_NONE);
@@ -689,37 +567,37 @@ void () ubs_walk =
 
 
 
-void () ubs_sidea1 = [ $flya1, ubs_sidea2 ] {ai_run (20); self.attack_state = AS_SLIDING; ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sidea2 = [ $flya2, ubs_sidea3 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sidea3 = [ $flya3, ubs_sidea4 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sidea4 = [ $flya4, ubs_sidea5 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sidea5 = [ $flya5, ubs_sidea6 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sidea6 = [ $flya6, ubs_sidea7 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sidea7 = [ $flya7, ubs_sidea8 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sidea8 = [ $flya8, ubs_run ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
+void () ubs_sidea1 = [ $flya1, ubs_sidea2 ] {ai_run (20); self.attack_state = AS_SLIDING; ubs_zap (500, (1 + skill));};
+void () ubs_sidea2 = [ $flya2, ubs_sidea3 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sidea3 = [ $flya3, ubs_sidea4 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sidea4 = [ $flya4, ubs_sidea5 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sidea5 = [ $flya5, ubs_sidea6 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sidea6 = [ $flya6, ubs_sidea7 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sidea7 = [ $flya7, ubs_sidea8 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sidea8 = [ $flya8, ubs_run ] {ai_run (24); ubs_zap (500, (1 + skill));};
 
-void () ubs_sideb1 = [ $flyb1, ubs_sideb2 ] {ai_run (20); self.attack_state = AS_SLIDING; ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sideb2 = [ $flyb2, ubs_sideb3 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sideb3 = [ $flyb3, ubs_sideb4 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sideb4 = [ $flyb4, ubs_sideb5 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sideb5 = [ $flyb5, ubs_sideb6 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sideb6 = [ $flyb6, ubs_sideb7 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sideb7 = [ $flyb7, ubs_sideb8 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sideb8 = [ $flyb8, ubs_run ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
+void () ubs_sideb1 = [ $flyb1, ubs_sideb2 ] {ai_run (20); self.attack_state = AS_SLIDING; ubs_zap (500, (1 + skill));};
+void () ubs_sideb2 = [ $flyb2, ubs_sideb3 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sideb3 = [ $flyb3, ubs_sideb4 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sideb4 = [ $flyb4, ubs_sideb5 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sideb5 = [ $flyb5, ubs_sideb6 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sideb6 = [ $flyb6, ubs_sideb7 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sideb7 = [ $flyb7, ubs_sideb8 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sideb8 = [ $flyb8, ubs_run ] {ai_run (24); ubs_zap (500, (1 + skill));};
 
-void () ubs_sidec1 = [ $flyc1, ubs_sidec2 ] {ai_run (20); self.attack_state = AS_SLIDING; ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sidec2 = [ $flyc2, ubs_sidec3 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sidec3 = [ $flyc3, ubs_sidec4 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sidec4 = [ $flyc4, ubs_sidec5 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sidec5 = [ $flyc5, ubs_sidec6 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sidec6 = [ $flyc6, ubs_sidec7 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sidec7 = [ $flyc7, ubs_sidec8 ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
-void () ubs_sidec8 = [ $flyc8, ubs_run ] {ai_run (24); ubs_zap (500, (SPAWN_CRUCIFIED + skill));};
+void () ubs_sidec1 = [ $flyc1, ubs_sidec2 ] {ai_run (20); self.attack_state = AS_SLIDING; ubs_zap (500, (1 + skill));};
+void () ubs_sidec2 = [ $flyc2, ubs_sidec3 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sidec3 = [ $flyc3, ubs_sidec4 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sidec4 = [ $flyc4, ubs_sidec5 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sidec5 = [ $flyc5, ubs_sidec6 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sidec6 = [ $flyc6, ubs_sidec7 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sidec7 = [ $flyc7, ubs_sidec8 ] {ai_run (24); ubs_zap (500, (1 + skill));};
+void () ubs_sidec8 = [ $flyc8, ubs_run ] {ai_run (24); ubs_zap (500, (1 + skill));};
 
 void () ubs_side =
 {
-	sound (self, CHAN_VOICE, "ubs/elec.wav", SPAWN_CRUCIFIED, ATTN_NORM);
-	self.attack_finished = (time + SPAWN_CRUCIFIED);
+	sound (self, CHAN_VOICE, "ubs/elec.wav", 1, ATTN_NORM);
+	self.attack_finished = (time + 1);
 
 	if (self.health <= 500)
 		ubs_sidec1 ();
@@ -731,35 +609,34 @@ void () ubs_side =
 
 
 
-void () ubs_dodgea1 = [ $flya1, ubs_dodgea2 ] {ai_run (SVC_INTERMISSION); self.attack_state = AS_SLIDING;};
-void () ubs_dodgea2 = [ $flya2, ubs_dodgea3 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgea3 = [ $flya3, ubs_dodgea4 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgea4 = [ $flya4, ubs_dodgea5 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgea5 = [ $flya5, ubs_dodgea6 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgea6 = [ $flya6, ubs_dodgea7 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgea7 = [ $flya7, ubs_dodgea8 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgea8 = [ $flya8, ubs_run ] {ai_run (SVC_INTERMISSION); self.attack_state = AS_STRAIGHT;};
+void () ubs_dodgea1 = [ $flya1, ubs_dodgea2 ] {ai_run (30); self.attack_state = AS_SLIDING;};
+void () ubs_dodgea2 = [ $flya2, ubs_dodgea3 ] {ai_run (30);};
+void () ubs_dodgea3 = [ $flya3, ubs_dodgea4 ] {ai_run (30);};
+void () ubs_dodgea4 = [ $flya4, ubs_dodgea5 ] {ai_run (30);};
+void () ubs_dodgea5 = [ $flya5, ubs_dodgea6 ] {ai_run (30);};
+void () ubs_dodgea6 = [ $flya6, ubs_dodgea7 ] {ai_run (30);};
+void () ubs_dodgea7 = [ $flya7, ubs_dodgea8 ] {ai_run (30);};
+void () ubs_dodgea8 = [ $flya8, ubs_run ] {ai_run (30); self.attack_state = AS_STRAIGHT;};
 
-void () ubs_dodgeb1 = [ $flyb1, ubs_dodgeb2 ] {ai_run (SVC_INTERMISSION); self.attack_state = AS_SLIDING;};
-void () ubs_dodgeb2 = [ $flyb2, ubs_dodgeb3 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgeb3 = [ $flyb3, ubs_dodgeb4 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgeb4 = [ $flyb4, ubs_dodgeb5 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgeb5 = [ $flyb5, ubs_dodgeb6 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgeb6 = [ $flyb6, ubs_dodgeb7 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgeb7 = [ $flyb7, ubs_dodgeb8 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgeb8 = [ $flyb8, ubs_run ] {ai_run (SVC_INTERMISSION); self.attack_state = AS_STRAIGHT;};
+void () ubs_dodgeb1 = [ $flyb1, ubs_dodgeb2 ] {ai_run (30); self.attack_state = AS_SLIDING;};
+void () ubs_dodgeb2 = [ $flyb2, ubs_dodgeb3 ] {ai_run (30);};
+void () ubs_dodgeb3 = [ $flyb3, ubs_dodgeb4 ] {ai_run (30);};
+void () ubs_dodgeb4 = [ $flyb4, ubs_dodgeb5 ] {ai_run (30);};
+void () ubs_dodgeb5 = [ $flyb5, ubs_dodgeb6 ] {ai_run (30);};
+void () ubs_dodgeb6 = [ $flyb6, ubs_dodgeb7 ] {ai_run (30);};
+void () ubs_dodgeb7 = [ $flyb7, ubs_dodgeb8 ] {ai_run (30);};
+void () ubs_dodgeb8 = [ $flyb8, ubs_run ] {ai_run (30); self.attack_state = AS_STRAIGHT;};
 
-void () ubs_dodgec1 = [ $flyc1, ubs_dodgec2 ] {ai_run (SVC_INTERMISSION); self.attack_state = AS_SLIDING;};
-void () ubs_dodgec2 = [ $flyc2, ubs_dodgec3 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgec3 = [ $flyc3, ubs_dodgec4 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgec4 = [ $flyc4, ubs_dodgec5 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgec5 = [ $flyc5, ubs_dodgec6 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgec6 = [ $flyc6, ubs_dodgec7 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgec7 = [ $flyc7, ubs_dodgec8 ] {ai_run (SVC_INTERMISSION);};
-void () ubs_dodgec8 = [ $flyc8, ubs_run ] {ai_run (SVC_INTERMISSION); self.attack_state = AS_STRAIGHT;};
+void () ubs_dodgec1 = [ $flyc1, ubs_dodgec2 ] {ai_run (30); self.attack_state = AS_SLIDING;};
+void () ubs_dodgec2 = [ $flyc2, ubs_dodgec3 ] {ai_run (30);};
+void () ubs_dodgec3 = [ $flyc3, ubs_dodgec4 ] {ai_run (30);};
+void () ubs_dodgec4 = [ $flyc4, ubs_dodgec5 ] {ai_run (30);};
+void () ubs_dodgec5 = [ $flyc5, ubs_dodgec6 ] {ai_run (30);};
+void () ubs_dodgec6 = [ $flyc6, ubs_dodgec7 ] {ai_run (30);};
+void () ubs_dodgec7 = [ $flyc7, ubs_dodgec8 ] {ai_run (30);};
+void () ubs_dodgec8 = [ $flyc8, ubs_run ] {ai_run (30); self.attack_state = AS_STRAIGHT;};
 
-void () ubs_dodge =
-{
+void () ubs_dodge = {
 	if (self.health <= 500)
 		ubs_dodgec1 ();
 	else if (self.health <= 1000)
@@ -767,8 +644,6 @@ void () ubs_dodge =
 	else
 		ubs_dodgea1 ();
 };
-
-
 
 void () ubs_runa1 = [ $flya1, ubs_runa2 ] {ubs_idlesound (); ubscheckdist (); self.attack_state = AS_STRAIGHT; ai_face();};
 void () ubs_runa2 = [ $flya2, ubs_runa3 ] {ubscheckdist (); ai_face();};
@@ -795,10 +670,9 @@ void () ubs_runc4 = [ $flyc4, ubs_runc5 ] {ubscheckdist ();};
 void () ubs_runc5 = [ $flyc5, ubs_runc6 ] {ubscheckdist ();};
 void () ubs_runc6 = [ $flyc6, ubs_runc7 ] {ubscheckdist ();};
 void () ubs_runc7 = [ $flyc7, ubs_runc8 ] {ubscheckdist ();};
-void () ubs_runc8 = [ $flyc8, ubs_run ] {ubscheckdist ();};
+void () ubs_runc8 = [ $flyc8, ubs_run ]   {ubscheckdist ();};
 
-void () ubs_run =
-{
+void () ubs_run = {
 	if (self.health <= 500)
 		ubs_runc1 ();
 	else if (self.health <= 1000)
@@ -806,8 +680,6 @@ void () ubs_run =
 	else
 		ubs_runa1 ();
 };
-
-
 
 void () ubs_fasta1 = [ $flinga1, ubs_fasta2 ] {ai_face ();};
 void () ubs_fasta2 = [ $flinga2, ubs_fasta3 ] {ai_face ();};
@@ -822,7 +694,7 @@ void () ubs_fasta10 = [ $flinga10, ubs_fasta11 ] {ubscheckdist ();};
 void () ubs_fasta11 = [ $flinga11, ubs_fasta12 ] {ubscheckdist ();};
 void () ubs_fasta12 = [ $flinga12, ubs_fasta13 ] {ubscheckdist ();};
 void () ubs_fasta13 = [ $flinga13, ubs_fasta14 ] {ubscheckdist ();};
-void () ubs_fasta14 = [ $flinga14, ubs_run ] {SUB_AttackFinished (SPAWN_CRUCIFIED);};
+void () ubs_fasta14 = [ $flinga14, ubs_run ] {SUB_AttackFinished (1);};
 
 void () ubs_fastb1 = [ $flingb1, ubs_fastb2 ] {ai_face ();};
 void () ubs_fastb2 = [ $flingb2, ubs_fastb3 ] {ai_face ();};
@@ -837,7 +709,7 @@ void () ubs_fastb10 = [ $flingb10, ubs_fastb11 ] {ubscheckdist ();};
 void () ubs_fastb11 = [ $flingb11, ubs_fastb12 ] {ubscheckdist ();};
 void () ubs_fastb12 = [ $flingb12, ubs_fastb13 ] {ubscheckdist ();};
 void () ubs_fastb13 = [ $flingb13, ubs_fastb14 ] {ubscheckdist ();};
-void () ubs_fastb14 = [ $flingb14, ubs_run ] {SUB_AttackFinished (SPAWN_CRUCIFIED);};
+void () ubs_fastb14 = [ $flingb14, ubs_run ] {SUB_AttackFinished (1);};
 
 void () ubs_fastc1 = [ $flingc1, ubs_fastc2 ] {ai_face ();};
 void () ubs_fastc2 = [ $flingc2, ubs_fastc3 ] {ai_face ();};
@@ -852,10 +724,9 @@ void () ubs_fastc10 = [ $flingc10, ubs_fastc11 ] {ubscheckdist ();};
 void () ubs_fastc11 = [ $flingc11, ubs_fastc12 ] {ubscheckdist ();};
 void () ubs_fastc12 = [ $flingc12, ubs_fastc13 ] {ubscheckdist ();};
 void () ubs_fastc13 = [ $flingc13, ubs_fastc14 ] {ubscheckdist ();};
-void () ubs_fastc14 = [ $flingc14, ubs_run ] {SUB_AttackFinished (SPAWN_CRUCIFIED);};
+void () ubs_fastc14 = [ $flingc14, ubs_run ] {SUB_AttackFinished (1);};
 
-void () ubs_fast =
-{
+void () ubs_fast = {
 	if (self.health <= 500)
 		ubs_fastc1 ();
 	else if (self.health <= 1000)
@@ -864,16 +735,13 @@ void () ubs_fast =
 		ubs_fasta1 ();
 };
 
-
-
-void () ubs_makewiza1 = [ $flinga1, ubs_makewiza2 ]
-{
+void () ubs_makewiza1 = [ $flinga1, ubs_makewiza2 ] {
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
 	WriteCoord (MSG_BROADCAST, self.origin_x);
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, (self.origin_z - DOOR_TOGGLE));
-	sound (self, CHAN_AUTO, "ubs/spawnst.wav", SPAWN_CRUCIFIED, ATTN_NONE);
+	sound (self, CHAN_AUTO, "ubs/spawnst.wav", 1, ATTN_NONE);
 };
 void () ubs_makewiza2 = [ $flinga2, ubs_makewiza3 ] {};
 void () ubs_makewiza3 = [ $flinga3, ubs_makewiza4 ] {};
@@ -887,7 +755,7 @@ void () ubs_makewiza10 = [ $flinga10, ubs_makewiza11 ] {};
 void () ubs_makewiza11 = [ $flinga11, ubs_makewiza12 ] {};
 void () ubs_makewiza12 = [ $flinga12, ubs_makewiza13 ] {};
 void () ubs_makewiza13 = [ $flinga13, ubs_makewiza14 ] {};
-void () ubs_makewiza14 = [ $flinga14, ubs_run ] {ubscheckdist (); SUB_AttackFinished (SPAWNFLAG_LASER); ubsAttackFinished ();};
+void () ubs_makewiza14 = [ $flinga14, ubs_run ] {ubscheckdist (); SUB_AttackFinished (2); ubsAttackFinished ();};
 
 void () ubs_makewizb1 = [ $flingb1, ubs_makewizb2 ]
 {
@@ -896,7 +764,7 @@ void () ubs_makewizb1 = [ $flingb1, ubs_makewizb2 ]
 	WriteCoord (MSG_BROADCAST, self.origin_x);
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, (self.origin_z - DOOR_TOGGLE));
-	sound (self, CHAN_AUTO, "ubs/spawnst.wav", SPAWN_CRUCIFIED, ATTN_NONE);
+	sound (self, CHAN_AUTO, "ubs/spawnst.wav", 1, ATTN_NONE);
 };
 void () ubs_makewizb2 = [ $flingb2, ubs_makewizb3 ] {};
 void () ubs_makewizb3 = [ $flingb3, ubs_makewizb4 ] {};
@@ -919,7 +787,7 @@ void () ubs_makewizc1 = [ $flingc1, ubs_makewizc2 ]
 	WriteCoord (MSG_BROADCAST, self.origin_x);
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, (self.origin_z - DOOR_TOGGLE));
-	sound (self, CHAN_AUTO, "ubs/spawnst.wav", SPAWN_CRUCIFIED, ATTN_NONE);
+	sound (self, CHAN_AUTO, "ubs/spawnst.wav", 1, ATTN_NONE);
 };
 void () ubs_makewizc2 = [ $flingc2, ubs_makewizc3 ] {};
 void () ubs_makewizc3 = [ $flingc3, ubs_makewizc4 ] {};
@@ -933,7 +801,7 @@ void () ubs_makewizc10 = [ $flingc10, ubs_makewizc11 ] {};
 void () ubs_makewizc11 = [ $flingc11, ubs_makewizc12 ] {};
 void () ubs_makewizc12 = [ $flingc12, ubs_makewizc13 ] {};
 void () ubs_makewizc13 = [ $flingc13, ubs_makewizc14 ] {};
-void () ubs_makewizc14 = [ $flingc14, ubs_run ] {ubscheckdist (); SUB_AttackFinished (SPAWNFLAG_LASER); ubsAttackFinished ();};
+void () ubs_makewizc14 = [ $flingc14, ubs_run ] {ubscheckdist (); SUB_AttackFinished (2); ubsAttackFinished ();};
 
 void () ubs_makewiz =
 {
@@ -952,17 +820,17 @@ void () ubs_spreada2 = [ $figeighta2, ubs_spreada3 ] {ai_face ();};
 void () ubs_spreada3 = [ $figeighta3, ubs_spreada4 ] {ai_face ();};
 void () ubs_spreada4 = [ $figeighta4, ubs_spreada5 ] {ai_face ();};
 void () ubs_spreada5 = [ $figeighta5, ubs_spreada6 ] {ai_face ();};
-void () ubs_spreada6 = [ $figeighta6, ubs_spreada7 ] {ai_face (); ubs_spread (SPAWN_CRUCIFIED);};
-void () ubs_spreada7 = [ $figeighta7, ubs_spreada8 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreada8 = [ $figeighta8, ubs_spreada9 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreada9 = [ $figeighta9, ubs_spreada10 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreada10 = [ $figeighta10, ubs_spreada11 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
+void () ubs_spreada6 = [ $figeighta6, ubs_spreada7 ] {ai_face (); ubs_spread (1);};
+void () ubs_spreada7 = [ $figeighta7, ubs_spreada8 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreada8 = [ $figeighta8, ubs_spreada9 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreada9 = [ $figeighta9, ubs_spreada10 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreada10 = [ $figeighta10, ubs_spreada11 ] {ai_face (); ubs_spread (0);};
 void () ubs_spreada11 = [ $figeighta11, ubs_spreada12 ] {ai_face ();};
-void () ubs_spreada12 = [ $figeighta12, ubs_spreada13 ] {ai_face (); ubs_spread (SPAWN_CRUCIFIED);};
-void () ubs_spreada13 = [ $figeighta13, ubs_spreada14 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreada14 = [ $figeighta14, ubs_spreada15 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreada15 = [ $figeighta15, ubs_spreada16 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreada16 = [ $figeighta16, ubs_spreada17 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
+void () ubs_spreada12 = [ $figeighta12, ubs_spreada13 ] {ai_face (); ubs_spread (1);};
+void () ubs_spreada13 = [ $figeighta13, ubs_spreada14 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreada14 = [ $figeighta14, ubs_spreada15 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreada15 = [ $figeighta15, ubs_spreada16 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreada16 = [ $figeighta16, ubs_spreada17 ] {ai_face (); ubs_spread (0);};
 void () ubs_spreada17 = [ $figeighta17, ubs_spreada18 ] {ai_face ();};
 void () ubs_spreada18 = [ $figeighta18, ubs_spreada19 ] {ai_face ();};
 void () ubs_spreada19 = [ $figeighta19, ubs_spreada20 ] {ai_face ();};
@@ -970,24 +838,24 @@ void () ubs_spreada20 = [ $figeighta20, ubs_spreada21 ] {ai_face ();};
 void () ubs_spreada21 = [ $figeighta21, ubs_spreada22 ] {ai_face ();};
 void () ubs_spreada22 = [ $figeighta22, ubs_spreada23 ] {ai_face ();};
 void () ubs_spreada23 = [ $figeighta23, ubs_spreada24 ] {ai_face ();};
-void () ubs_spreada24 = [ $figeighta24, ubs_run ] {ubscheckdist (); SUB_AttackFinished (SPAWNFLAG_LASER); ubsAttackFinished ();};
+void () ubs_spreada24 = [ $figeighta24, ubs_run ] {ubscheckdist (); SUB_AttackFinished (2); ubsAttackFinished ();};
 
 void () ubs_spreadb1 = [ $figeightb1, ubs_spreadb2 ] {ai_face ();};
 void () ubs_spreadb2 = [ $figeightb2, ubs_spreadb3 ] {ai_face ();};
 void () ubs_spreadb3 = [ $figeightb3, ubs_spreadb4 ] {ai_face ();};
 void () ubs_spreadb4 = [ $figeightb4, ubs_spreadb5 ] {ai_face ();};
 void () ubs_spreadb5 = [ $figeightb5, ubs_spreadb6 ] {ai_face ();};
-void () ubs_spreadb6 = [ $figeightb6, ubs_spreadb7 ] {ai_face (); ubs_spread (SPAWN_CRUCIFIED);};
-void () ubs_spreadb7 = [ $figeightb7, ubs_spreadb8 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreadb8 = [ $figeightb8, ubs_spreadb9 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreadb9 = [ $figeightb9, ubs_spreadb10 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreadb10 = [ $figeightb10, ubs_spreadb11 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
+void () ubs_spreadb6 = [ $figeightb6, ubs_spreadb7 ] {ai_face (); ubs_spread (1);};
+void () ubs_spreadb7 = [ $figeightb7, ubs_spreadb8 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreadb8 = [ $figeightb8, ubs_spreadb9 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreadb9 = [ $figeightb9, ubs_spreadb10 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreadb10 = [ $figeightb10, ubs_spreadb11 ] {ai_face (); ubs_spread (0);};
 void () ubs_spreadb11 = [ $figeightb11, ubs_spreadb12 ] {ai_face ();};
-void () ubs_spreadb12 = [ $figeightb12, ubs_spreadb13 ] {ai_face (); ubs_spread (SPAWN_CRUCIFIED);};
-void () ubs_spreadb13 = [ $figeightb13, ubs_spreadb14 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreadb14 = [ $figeightb14, ubs_spreadb15 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreadb15 = [ $figeightb15, ubs_spreadb16 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreadb16 = [ $figeightb16, ubs_spreadb17 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
+void () ubs_spreadb12 = [ $figeightb12, ubs_spreadb13 ] {ai_face (); ubs_spread (1);};
+void () ubs_spreadb13 = [ $figeightb13, ubs_spreadb14 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreadb14 = [ $figeightb14, ubs_spreadb15 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreadb15 = [ $figeightb15, ubs_spreadb16 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreadb16 = [ $figeightb16, ubs_spreadb17 ] {ai_face (); ubs_spread (0);};
 void () ubs_spreadb17 = [ $figeightb17, ubs_spreadb18 ] {ai_face ();};
 void () ubs_spreadb18 = [ $figeightb18, ubs_spreadb19 ] {ai_face ();};
 void () ubs_spreadb19 = [ $figeightb19, ubs_spreadb20 ] {ai_face ();};
@@ -995,24 +863,24 @@ void () ubs_spreadb20 = [ $figeightb20, ubs_spreadb21 ] {ai_face ();};
 void () ubs_spreadb21 = [ $figeightb21, ubs_spreadb22 ] {ai_face ();};
 void () ubs_spreadb22 = [ $figeightb22, ubs_spreadb23 ] {ai_face ();};
 void () ubs_spreadb23 = [ $figeightb23, ubs_spreadb24 ] {ai_face ();};
-void () ubs_spreadb24 = [ $figeightb24, ubs_run ] {ubscheckdist (); SUB_AttackFinished (SPAWNFLAG_LASER); ubsAttackFinished ();};
+void () ubs_spreadb24 = [ $figeightb24, ubs_run ] {ubscheckdist (); SUB_AttackFinished (2); ubsAttackFinished ();};
 
 void () ubs_spreadc1 = [ $figeightc1, ubs_spreadc2 ] {ai_face ();};
 void () ubs_spreadc2 = [ $figeightc2, ubs_spreadc3 ] {ai_face ();};
 void () ubs_spreadc3 = [ $figeightc3, ubs_spreadc4 ] {ai_face ();};
 void () ubs_spreadc4 = [ $figeightc4, ubs_spreadc5 ] {ai_face ();};
 void () ubs_spreadc5 = [ $figeightc5, ubs_spreadc6 ] {ai_face ();};
-void () ubs_spreadc6 = [ $figeightc6, ubs_spreadc7 ] {ai_face (); ubs_spread (SPAWN_CRUCIFIED);};
-void () ubs_spreadc7 = [ $figeightc7, ubs_spreadc8 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreadc8 = [ $figeightc8, ubs_spreadc9 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreadc9 = [ $figeightc9, ubs_spreadc10 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreadc10 = [ $figeightc10, ubs_spreadc11 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
+void () ubs_spreadc6 = [ $figeightc6, ubs_spreadc7 ] {ai_face (); ubs_spread (1);};
+void () ubs_spreadc7 = [ $figeightc7, ubs_spreadc8 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreadc8 = [ $figeightc8, ubs_spreadc9 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreadc9 = [ $figeightc9, ubs_spreadc10 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreadc10 = [ $figeightc10, ubs_spreadc11 ] {ai_face (); ubs_spread (0);};
 void () ubs_spreadc11 = [ $figeightc11, ubs_spreadc12 ] {ai_face ();};
-void () ubs_spreadc12 = [ $figeightc12, ubs_spreadc13 ] {ai_face (); ubs_spread (SPAWN_CRUCIFIED);};
-void () ubs_spreadc13 = [ $figeightc13, ubs_spreadc14 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreadc14 = [ $figeightc14, ubs_spreadc15 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreadc15 = [ $figeightc15, ubs_spreadc16 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
-void () ubs_spreadc16 = [ $figeightc16, ubs_spreadc17 ] {ai_face (); ubs_spread (MSG_BROADCAST);};
+void () ubs_spreadc12 = [ $figeightc12, ubs_spreadc13 ] {ai_face (); ubs_spread (1);};
+void () ubs_spreadc13 = [ $figeightc13, ubs_spreadc14 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreadc14 = [ $figeightc14, ubs_spreadc15 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreadc15 = [ $figeightc15, ubs_spreadc16 ] {ai_face (); ubs_spread (0);};
+void () ubs_spreadc16 = [ $figeightc16, ubs_spreadc17 ] {ai_face (); ubs_spread (0);};
 void () ubs_spreadc17 = [ $figeightc17, ubs_spreadc18 ] {ai_face ();};
 void () ubs_spreadc18 = [ $figeightc18, ubs_spreadc19 ] {ai_face ();};
 void () ubs_spreadc19 = [ $figeightc19, ubs_spreadc20 ] {ai_face ();};
@@ -1020,7 +888,7 @@ void () ubs_spreadc20 = [ $figeightc20, ubs_spreadc21 ] {ai_face ();};
 void () ubs_spreadc21 = [ $figeightc21, ubs_spreadc22 ] {ai_face ();};
 void () ubs_spreadc22 = [ $figeightc22, ubs_spreadc23 ] {ai_face ();};
 void () ubs_spreadc23 = [ $figeightc23, ubs_spreadc24 ] {ai_face ();};
-void () ubs_spreadc24 = [ $figeightc24, ubs_run ] {ubscheckdist (); SUB_AttackFinished (SPAWNFLAG_LASER); ubsAttackFinished ();};
+void () ubs_spreadc24 = [ $figeightc24, ubs_run ] {ubscheckdist (); SUB_AttackFinished (2); ubsAttackFinished ();};
 
 void () ubs_spreadx =
 {
@@ -1183,12 +1051,10 @@ void () ubs_death21 = [ $dieloop21, ubs_death22 ] {};
 void () ubs_death22 = [ $dieloop22, ubs_death23 ] {};
 void () ubs_death23 = [ $dieloop23, ubs_death1 ] {ubs_killdie();};
 
-void () ubs_die =
-{
+void () ubs_die = {
 	self.movetype = MOVETYPE_FLY;
 	self.velocity = '0 0 0';
 	setsize (self, '-16 -16 -16', '16 16 16');
-
 	ubs_death1();
 };
 
@@ -1201,10 +1067,8 @@ void () flap_land4 = [ 21, flap_land5 ] {};
 void () flap_land5 = [ 22, flap_land6 ] {};
 void () flap_land6 = [ 23, flap_land6 ] {self.nextthink = time + 10 + random()*10; self.think = SUB_Remove;};
 
-void () Flap_Think =
-{
-	if (self.velocity == '0 0 0')
-		flap_land1();
+void () Flap_Think = {
+	if (self.velocity == '0 0 0') flap_land1();
 };
 
 void () flap_drop1 = [ 0, flap_drop2 ] {Flap_Think();};
@@ -1227,12 +1091,10 @@ void () flap_float6 = [ 15, flap_float7 ] {Flap_Think();};
 void () flap_float7 = [ 16, flap_float8 ] {Flap_Think();};
 void () flap_float8 = [ 17, flap_float1 ] {Flap_Think();};
 
-void() Toss_Flap =
-{
-	local	entity new;
+void() Toss_Flap = {
+	local entity new;
 
 	self.ubs_deflapped = 1;
-
 	new = spawn();
 	new.origin = self.origin + v_forward*32;
 	setmodel (new, "progs/uberskinflap.mdl");
@@ -1248,12 +1110,9 @@ void() Toss_Flap =
 	new.flags = 0;
 };
 
-void (entity attacker, float damage) ubs_Pain =
-{
-	if (self.health <= 500)
-	{
-		if (self.ubs_deflapped != 1)
-		{
+void (entity inflictor, entity attacker, float damage) ubs_Pain = {
+	if (self.health <= 500) {
+		if (self.ubs_deflapped != 1) {
 			Toss_Flap();
 			sound (self, CHAN_VOICE, "ubs/wpain.wav", 1, ATTN_NONE);
 			ubs_painc1 ();
@@ -1268,8 +1127,7 @@ void (entity attacker, float damage) ubs_Pain =
 
 	sound (self, CHAN_VOICE, "ubs/wpain.wav", 1, ATTN_NONE);
 
-	if (((random () * 70) > damage))
-		return;
+	if (((random () * 70) > damage)) return;
 	if (self.health <= 500)
 		ubs_painc1 ();
 	else if (self.health <= 1000)
@@ -1278,21 +1136,16 @@ void (entity attacker, float damage) ubs_Pain =
 		ubs_paina1 ();
 };
 
-void () ubs_Missile =
-{
-	local vector dir;
-	local vector vtemp;
-	local vector dist;
-	local float d;
-	local float rnd1;
+void () ubs_Missile = {
+	local vector dir, vtemp, dist;
+	local float d, rndl;
 	local entity head;
 
 	dist = (self.enemy.origin - self.origin);
         dist_z = 0; // Damage? Huh?
 	rnd1 = random ();
 	d = vlen (dist);
-	if (((((d >= 200) && (d < 500)) && (rnd1 < 0.4)) && (self.attack_finished < time)))
-	{
+	if (((((d >= 200) && (d < 500)) && (rnd1 < 0.4)) && (self.attack_finished < time))) {
 		self.attack_finished = (time + 0.4);
 		if (self.health <= 500)
 			ubs_spreadc1 ();
@@ -1300,10 +1153,8 @@ void () ubs_Missile =
 			ubs_spreadb1 ();
 		else
 			ubs_spreada1 ();
-	}
-	else if ((((d > 400) && (self.attack_finished < time)) && (rnd1 < 0.4)))
-	{
-		self.attack_finished = (time + SPAWN_CRUCIFIED);
+	} else if ((((d > 400) && (self.attack_finished < time)) && (rnd1 < 0.4))) {
+		self.attack_finished = (time + 1);
 		if (self.health <= 500)
 			ubs_fastc1 ();
 		else if (self.health <= 1000)
@@ -1313,36 +1164,30 @@ void () ubs_Missile =
 	}
 	else if (((((d > 400) && (self.attack_finished < time)) && (rnd1 >= 0.4)) && (self.ident >= SECRET_1ST_DOWN)))
 	{
-		self.attack_finished = (time + SPAWN_CRUCIFIED);
+		self.attack_finished = (time + 1);
 		if (self.health <= 500)
 			ubs_fastc1 ();
 		else if (self.health <= 1000)
 			ubs_fastb1 ();
 		else
 			ubs_fasta1 ();
-	}
-	else if ((((d > 400) && (rnd1 >= 0.4)) && (self.ident < SECRET_1ST_DOWN)))
-	{
-		self.attack_finished = (time + SPAWN_CRUCIFIED);
+	} else if ((((d > 400) && (rnd1 >= 0.4)) && (self.ident < SECRET_1ST_DOWN))) {
+		self.attack_finished = (time + 1);
 		if (self.health <= 500)
 			ubs_makewizc1 ();
 		else if (self.health <= 1000)
 			ubs_makewizb1 ();
 		else
 			ubs_makewiza1 ();
-	}
-	else
-	{
+	} else {
 		return;
-//		ubs_run();
+
 	}
 };
 
-void() ubs_awake =
-{
+void() ubs_awake = {
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
-//	self.classname = "monster_wizard";
 	setmodel (self, "progs/uberscrag.mdl");
 	setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX);
 	self.health = 2500 + skill*500;
@@ -1353,11 +1198,8 @@ void() ubs_awake =
 	self.th_pain = ubs_Pain;
 	self.th_die = ubs_die;
 	self.yaw_speed = 25;
-
 	self.enemy = activator;
-
 	spawn_tfog (self.origin);
-
 	ubs_unfurl1 ();
 };
 
@@ -1403,27 +1245,22 @@ void () monster_ubs = {
 	total_monsters = total_monsters + 1;
 
 	self.use = ubs_awake;
-
-	if (coop > 0)
-		self.use ();
+	if (coop > 0) self.use ();
 };
 
-void () spawnwiz =
-{
+void () spawnwiz = {
 	local entity newwiz;
 	local vector tempvec;
 
 	self.touch = SUB_Null;
 	self.think = SUB_Null;
-	if ((pointcontents (self.origin) == CONTENT_EMPTY))
-	{
-		if ((other == self.owner))
-		{
+	if ((pointcontents (self.origin) == CONTENT_EMPTY)) {
+		if (other == self.owner) {
 			self.think = ubshome2;
 			self.nextthink = (time + 0.1);
 			return;
 		}
-		self.owner.ident = (self.owner.ident + SPAWN_CRUCIFIED);
+		self.owner.ident = (self.owner.ident + 1);
 		newwiz = spawn ();
 		newwiz.classname = "monster_wizard";
 		newwiz.origin = (self.origin + '0 0 10');
@@ -1439,12 +1276,12 @@ void () spawnwiz =
 		newwiz.th_pain = Wiz_Pain;
 		newwiz.th_die = wiz_die;
 		tempvec = self.velocity;
-                tempvec_z = 0; // Damage? Huh?
+        tempvec_z = 0; // Damage? Huh?
 		newwiz.angles = vectoangles (tempvec);
 		newwiz.enemy = self.owner.enemy;
 		newwiz.yaw_speed = 20;
 		newwiz.takedamage = DAMAGE_AIM;
-		newwiz.temp6 = SPAWN_CRUCIFIED;
+		newwiz.temp6 = 1;
 		newwiz.nextthink = (time + 0.1);
 		newwiz.think = wiz_run1;
 		spawn_tfog (newwiz.origin);

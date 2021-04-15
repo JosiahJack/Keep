@@ -1045,7 +1045,6 @@ void() misc_drip =
 void() fx_drip = { misc_drip(); };
 
 void() misc_drip_removetouch = {
-	if (other == self.owner) return;			// Touching self, do nothing
 	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
 
 	self.touch = SUB_Null;
@@ -1055,16 +1054,22 @@ void() misc_drip_removetouch = {
 	// play a random drip sound
 	if (!(self.owner.spawnflags & MISC_DRIPSILENT)) {
 		self.lip = random() * 3;
-		if (self.lip < 1) sound (self, CHAN_AUTO, self.owner.noise1, 1, ATTN_STATIC);
-		else if (self.lip < 2) sound (self, CHAN_AUTO, self.owner.noise2, 1, ATTN_STATIC);
-		else sound (self, CHAN_AUTO, self.owner.noise3, 1, ATTN_STATIC);
+		if (self.lip < 1) {
+			if (self.owner.noise1 != "") sound (self, CHAN_AUTO, self.owner.noise1, 1, ATTN_STATIC);
+		} else if (self.lip < 2) {
+			if (self.owner.noise2 != "") sound (self, CHAN_AUTO, self.owner.noise2, 1, ATTN_STATIC);
+		} else {
+			if (self.owner.noise3 != "") sound (self, CHAN_AUTO, self.owner.noise3, 1, ATTN_STATIC);
+		}
 	}
 
-	// Damage if our owner has dmg set
-	if (self.owner.dmg) {
-		if (other.flags & FL_MONSTER || other.flags & FL_CLIENT && other.takedamage) {
-			spawn_touchblood (self,other,self.owner.dmg);
-			T_Damage (other, self, self.owner, self.owner.dmg, DAMARMOR);
+	if (other != self.owner) {
+		// Damage if our owner has dmg set
+		if (self.owner.dmg) {
+			if (other.flags & FL_MONSTER || other.flags & FL_CLIENT && other.takedamage) {
+				spawn_touchblood (self,other,self.owner.dmg);
+				T_Damage (other, self, self.owner, self.owner.dmg, DAMARMOR);
+			}
 		}
 	}
 
@@ -1081,6 +1086,7 @@ void() misc_drip_removetouch = {
 void() misc_dripremovable_think = {
 	// Extremely simplified water surface check (pre-calculated)
 	//if (self.origin_z < self.pos1_z) misc_drip_removetouch();
+	if (pointcontents(self.origin) < CONTENT_EMPTY) misc_drip_removetouch();
 	self.nextthink = time + 0.1;
 }
 

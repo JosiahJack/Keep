@@ -11,13 +11,12 @@
  can carry on using the real enemy target for calculations
  
  All the gameplay functions should use these self.enemy wrappers
- defined below to make sure they return the correct enemy!
- 
+ defined below to make sure they return the correct enemy! 
 ======================================================================*/
+
 // Detects enemytarget and returns real ENEMY angles
 // Returns the correct takedamage flag, useful for function tests
-float() SUB_takedEnemyTarget =
-{
+float() SUB_takedEnemyTarget = {
 	if (!self.enemy) return -1;
 	if (self.enemy.classtype == CT_ENEMYTARGET) {
 		if (self.enemy.state == STATE_ON) return (self.enemy.enemy.takedamage);
@@ -26,11 +25,9 @@ float() SUB_takedEnemyTarget =
 	else return (self.enemy.takedamage);
 };
 
-//----------------------------------------------------------------------
 // Detects enemytarget and returns for flags bitwise operation
 // Returns the correct entity flags, useful for function tests
-float(float bitflag) SUB_flagsEnemyTarget =
-{
+float(float bitflag) SUB_flagsEnemyTarget = {
 	if (!self.enemy) return -1;
 	if (self.enemy.classtype == CT_ENEMYTARGET) {
 		if (self.enemy.state == STATE_ON) return (self.enemy.enemy.flags & bitflag);
@@ -78,38 +75,34 @@ vector() SUB_orgEnemyTarget =
 	else return self.enemy.origin;
 };
 
-//----------------------------------------------------------------------
 // Detects enemytarget and returns the real ENEMY entity
 // Returns the correct entity, useful for function tests
-entity() SUB_entEnemyTarget =
-{
+entity() SUB_entEnemyTarget = {
 	if (!self.enemy) return world;
 	if (self.enemy.classtype == CT_ENEMYTARGET) {
 		if (self.enemy.state == STATE_ON) return self.enemy.enemy;
 		else return self.enemy;
+	} else {
+		return self.enemy;
 	}
-	else return self.enemy;
 };
 
-//----------------------------------------------------------------------
 // Returns TRUE if enemytarget system active
 // A simple test to see if enemytarget system is active
-float() SUB_EnemyTarget =
-{
+float() SUB_EnemyTarget = {
 	if (!self.enemy) return -1;
 	if (self.enemy.classtype == CT_ENEMYTARGET) {
 		if (self.enemy.state == STATE_ON) return TRUE;
 		else return FALSE;
+	} else {
+		return FALSE;
 	}
-	else return FALSE;
 };
 
-//----------------------------------------------------------------------
 // Self = monster; Will switch enemy and enemytarget around (restore)
 // Its a good idea to do this when the enemytarget is out of sight
 // Will restore the enemy to the ground height (useful for doorways)
-void() SUB_switchEnemyTarget =
-{
+void() SUB_switchEnemyTarget = {
 	if (self.enemytarget.classtype != CT_ENEMYTARGET) return;
 	self.enemytarget.state = STATE_OFF;
 	self.enemy = self.enemytarget.enemy;
@@ -118,34 +111,25 @@ void() SUB_switchEnemyTarget =
 	self.enemytargetlock = time + 2;
 };
 
-//----------------------------------------------------------------------
 // Will remove any enemytarget functionality safely as possible
 // The enemytarget system should take care of itself and safely delete
 // This is a brute force version that will make sure, "its dead jim!"
-void(entity targ) SUB_removeEnemyTarget =
-{
+void(entity targ) SUB_removeEnemyTarget = {
 	if (targ.enemytarget.classtype != CT_ENEMYTARGET) return;
 	targ.enemytarget.state = STATE_OFF;
 	targ.enemytarget.think = SUB_Remove;
 	targ.enemytarget.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 // Function called all the time when the enemytarget is active
-void() SUB_updateEnemyTarget =
-{
-	// OWNER DIED - Safely remove this entity
+void() SUB_updateEnemyTarget = {
 	if (self.owner.health < 1) {
 		self.state = STATE_OFF;
-		self.think = SUB_Remove;
+		self.think = SUB_Remove; // OWNER DIED - Safely remove this entity
 		self.nextthink = time + 0.1;
-	}
-	// TARGET DIED - Stop tracking, wait for another enemy
-	else if (self.enemy.health < 1) {
-		self.state = STATE_OFF;
-	}
-	// ENEMY ACTIVE - Update position and check for height change
-	else if (self.state == STATE_ON) {
+	} else if (self.enemy.health < 1) {
+		self.state = STATE_OFF; // TARGET DIED - Stop tracking, wait for another enemy
+	} else if (self.state == STATE_ON) { // ENEMY ACTIVE - Update position and check for height change
 		// Is there any random variance to the Z location?
 		if (self.waitmin < time && self.wait > 0) {
 			self.waitmin = time + self.wait + random()*self.wait;
@@ -170,9 +154,7 @@ void() SUB_updateEnemyTarget =
 	}
 };
 
-//----------------------------------------------------------------------
-float(entity targ, float zoffset, float rndtimer) SUB_setupEnemyTarget =
-{
+float(entity targ, float zoffset, float rndtimer) SUB_setupEnemyTarget = {
 	// Don't try to get higher than other flying units
 	// Two monsters with the same abilty will constantly rise up
 	if (targ.movetype == MOVETYPE_FLY) return FALSE;

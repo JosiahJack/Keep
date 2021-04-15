@@ -159,43 +159,49 @@ void (float stat) W_FireLaser = { HIP_FireLaser(stat); }
 void HIP_FireMjolnir2();
 
 void () HIP_FireMjolnir = {
-   local vector org;
-   local float damage;
-   local vector source;
+	local vector org;
+	local float damage;
+	local vector source;
 
-   self.attack_finished = (time + 0.400);
-   source = (self.origin + '0.000 0.000 16.000');
-   makevectors (self.v_angle);
-   traceline (source,(source + (v_forward * RANGE_PLAYAXE)),FALSE,self);
-   if ( ((trace_fraction == TRUE) && (self.ammo_cells >= 15.000)) ) {
-      source = (source + (v_forward * RANGE_PLAYAXE));
-      traceline (source,(source - (v_up * 50.000)),FALSE,self);
-      if ( ((trace_fraction > 0.300) && (trace_fraction < TRUE)) ) {
-         HIP_FireMjolnirLightning ();
-         self.attack_finished = (time + 1.000);
-         return ;
-      }
-   }
-   org = (trace_endpos - (v_forward * 4));
-   if ( trace_ent.takedamage ) {
-      damage = 50.000;
-      if ((trace_ent.classgroup == CG_ZOMBIE) && !(trace_ent.classname == "monster_mummy"))
-         damage = 70.000;
+	self.attack_finished = (time + 0.400);
+	source = (self.origin + '0.000 0.000 16.000');
+	makevectors (self.v_angle);
+	traceline (source,(source + (v_forward * RANGE_PLAYAXE)),FALSE,self);
+	if ( ((trace_fraction == TRUE) && (self.ammo_cells >= 15.000)) ) {
+		source = (source + (v_forward * RANGE_PLAYAXE));
+		traceline (source,(source - (v_up * 50.000)),FALSE,self);
+		if ( ((trace_fraction > 0.300) && (trace_fraction < TRUE)) ) {
+			HIP_FireMjolnirLightning ();
+			self.attack_finished = (time + 1.000);
+			return;
+		}
+	}
+	org = (trace_endpos - (v_forward * 4));
 
-      trace_ent.axhitme = TRUE;
-      SpawnBlood (trace_ent, org,v_forward,damage);
-      T_Damage (trace_ent,self,self,damage, DAMARMOR);
-   } else {
-      if ( (trace_fraction != TRUE) ) {
-         sound (self,CHAN_WEAPON,"hipweap/mjoltink.wav",TRUE,ATTN_NORM);
-         WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-         WriteByte (MSG_BROADCAST,TE_GUNSHOT);
-         WriteCoord (MSG_BROADCAST,org_x);
-         WriteCoord (MSG_BROADCAST,org_y);
-         WriteCoord (MSG_BROADCAST,org_z);
-      } else {
-         sound (self,CHAN_WEAPON,"knight/sword1.wav",TRUE,ATTN_NORM);
-      }
+	//----------------------------------------------------------------------
+	// REFLECTION stuff like blue shields
+	if (trace_ent.reflectaxe) Resist_Effects(trace_ent,org,VEC_ORIGIN,0,AM_NONE,SOUND_AXE_STONE,"");
+	//----------------------------------------------------------------------
+	// BLEEDING/DAMAGE stuff with unique impact sounds
+	else if ( trace_ent.takedamage ) {
+		damage = 50.000;
+		if ((trace_ent.classgroup == CG_ZOMBIE) && !(trace_ent.classname == "monster_mummy"))
+			damage = 70.000;
+
+		trace_ent.axhitme = TRUE;
+		SpawnBlood (trace_ent, org,v_forward,damage);
+		T_Damage (trace_ent,self,self,damage, DAMARMOR);
+	} else {
+		if ( (trace_fraction != TRUE) ) {
+			sound (self,CHAN_WEAPON,"hipweap/mjoltink.wav",TRUE,ATTN_NORM);
+			WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
+			WriteByte (MSG_BROADCAST,TE_GUNSHOT);
+			WriteCoord (MSG_BROADCAST,org_x);
+			WriteCoord (MSG_BROADCAST,org_y);
+			WriteCoord (MSG_BROADCAST,org_z);
+		} else {
+			sound (self,CHAN_WEAPON,"knight/sword1.wav",TRUE,ATTN_NORM);
+		}
    }
    self.attack_finished = (time + 0.400);
 };
@@ -255,12 +261,12 @@ void () W_FireProximityGrenade = {
 void() W_FireAxe = {
 	local vector source, org, vec;
 	local float src_dist, dotprod, axedmg;
-	local entity onflr, tself, tother;
+	local entity onflr;
 
 	makevectors (self.v_angle);				// Player forward angle
 	source = self.origin + '0 0 16';		// Move source point up body
 
-	if (self.flags & FL_GODMODE && self.flags & FL_NOTARGET) {
+	if (self.flags & FL_GODMODE && self.flags & FL_FLY) {
 		traceline (source, source + (v_forward* RANGE_PLAYAXE), FALSE, self);
 		if (trace_fraction < 1.0) {
 			if (trace_ent.flags & FL_MONSTER && trace_ent.health > 0) {
@@ -283,21 +289,10 @@ void() W_FireAxe = {
 				dotprod = vec * v_forward;
 				if (dotprod > 0.6) {				// Is the body infront of the player
 					onflr.origin = org;				// Move gib closer to floor
-					onflr.bodyonflr = string_null;	// no more body gibbing
-					tself = self; tother = other;	// save self/other
-					self = onflr; other = tself;	// switch around
-					if (onflr.classgroup == CG_ZOMBIE && !(onflr.classname == "monster_mummy")) {
-						self.health = 0;
-						Killed(onflr, tself);
-					}
-					else {
-						self.max_health = MON_NOGIBVELOCITY; // use minimal velocity
-						monster_ThrowGib();			// throw parts
-					}
-					
-					self = tself; other = tother;	// switch back
-					SpawnBlood (onflr, onflr.origin, '0 0 50', axedmg*4);
-					return;																// Finished
+					// Now a function in ai_gibs, used by boil explosion as well
+					monster_flrbody_gib(onflr, axedmg*4);
+					self.show_hostile = time + 1;	// wake monsters up, we hit stuff
+					return;														// Finished
 				}
 			}
 			// See if there are anymore bodies close by
@@ -309,11 +304,12 @@ void() W_FireAxe = {
 	traceline (source, source + (v_forward* RANGE_PLAYAXE), FALSE, self);
 	if (trace_fraction == 1.0) return;	// No contact, no hit
 	
+	self.show_hostile = time + 1;	// wake monsters up, we hit stuff
 	org = trace_endpos - v_forward*4;	// Back 4 units to spawn blood
 
 	//----------------------------------------------------------------------
 	// REFLECTION stuff like blue shields
-	if (trace_ent.reflectaxe) Resist_Axe(self, org);
+	if (trace_ent.reflectaxe) Resist_Effects(trace_ent,org,VEC_ORIGIN,0,AM_NONE,SOUND_AXE_STONE,"");
 	//----------------------------------------------------------------------
 	// BLEEDING/DAMAGE stuff with unique impact sounds
 	else if (trace_ent.takedamage) {
@@ -356,11 +352,10 @@ void() W_FireAxe = {
 			else
 				sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
 		}
-	}
-	//----------------------------------------------------------------------
-	// WORLD OBJECT : Target does not bleed, play stone hitting sound
-	//----------------------------------------------------------------------
-	else {
+	} else {
+		//----------------------------------------------------------------------
+		// WORLD OBJECT : Target does not bleed, play stone hitting sound
+		//----------------------------------------------------------------------
 		sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 		WriteByte (MSG_BROADCAST, TE_GUNSHOT);
@@ -402,7 +397,7 @@ void(float damage, vector dir) TraceAttack = {
 	if (!check_skycontent(org)) {
 		if (trace_ent.takedamage) {
 			// Show bullet resistance as small blood+gunshot+smoke
-			if (trace_ent.resist_shells > 0) Resist_Shells(trace_ent, org, vel, damage);
+			if (trace_ent.resist_shells > 0) Resist_Effects(trace_ent,org,vel,damage,AM_SHELLS,trace_ent.pain_sound,"");
 			else {
 				// Hitting monsters does twice the amount of blood effects
 				if (trace_ent.flags & FL_MONSTER) SpawnBlood (trace_ent, org, vel*0.2, damage*2);
@@ -702,8 +697,7 @@ void(float oz, float ox) W_FireLavaSpikes = {
 /*======================================================================
 GRENADES
 ======================================================================*/
-void() W_FireGrenade =
-{
+void() W_FireGrenade = {
 	local vector dir, avel;
 	
 	// Ran out of ammo, switch to next best weapon
@@ -914,13 +908,16 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage = {
 		// Check for any cell/lightning resistance
 		else if (trace_ent.resist_cells > 0) {
 			damage = damage * trace_ent.resist_cells;
-			Resist_Lightning(trace_ent, trace_endpos);
+			Resist_Effects(trace_ent,trace_endpos,VEC_ORIGIN,0,AM_CELLS,trace_ent.pain_sound,"");
 			if (damage > 0) {
-				// Need to fool T_Damage that damage is coming from LG
-				temp_classgroup = from.classgroup;
-				from.classgroup = CG_PROJCELLS;
-				T_Damage (trace_ent, from, from, damage, DAMARMOR);
-				from.classgroup = temp_classgroup;
+				if (from != world) {
+					// Need to fool T_Damage that damage is coming from LG
+					temp_classgroup = from.classgroup;
+					from.classgroup = CG_PROJCELLS;
+					from.classgroup = temp_classgroup;
+				} else {
+					T_Damage (trace_ent, from, from, damage, DAMARMOR);
+				}
 			}
 		}
 		else {
@@ -975,8 +972,7 @@ void(vector lstart, entity lsource, float ldamage) LightningReflection =
 // with many modifiers designed for the player and MP combat
 // This function should not be used for general lightning damage
 //----------------------------------------------------------------------
-void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage =
-{
+void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage = {
 	local entity e1, e2;
 	local vector f;
 	local float lighthit, temp_classgroup;
@@ -1021,8 +1017,7 @@ void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage =
 			if (other.classtype == CT_PLAYER)
 				trace_ent.velocity_z = trace_ent.velocity_z + 400;
 		}
-	}
-	else {
+	} else {
 		e1 = trace_ent;
 
 		traceline (p1 + f, p2 + f, FALSE, self);
@@ -1040,8 +1035,8 @@ void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage =
 	if (lighthit) {
 		// Check for any cell/lightning resistance
 		if (trace_ent.resist_cells > 0) {
-			damage = Resist_Damage(trace_ent, IT_CELLS, damage);
-			Resist_Lightning(trace_ent, trace_endpos);
+			damage = Resist_Damage(trace_ent, AM_CELLS, damage);
+			Resist_Effects(trace_ent,trace_endpos,VEC_ORIGIN,0,AM_CELLS,trace_ent.pain_sound,"");
 			if (damage > 0) {
 				// Need to fool T_Damage that damage is coming from LG
 				temp_classgroup = from.classgroup;
@@ -1049,8 +1044,7 @@ void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage =
 				T_Damage (trace_ent, from, from, damage, DAMARMOR);
 				from.classgroup = temp_classgroup;
 			}
-		}
-		else {
+		} else {
 			// Originally used 225 blood colour
 			SpawnBlood(trace_ent, trace_endpos, '0 0 100', damage*4);
 			T_Damage (trace_ent, from, from, damage, DAMARMOR);
@@ -1180,37 +1174,27 @@ void(float cl) W_FireThunderbolt = {
 };
 
 void () W_FireMultiGrenade = {
-   local entity missile;
+	local vector dir, avel;
 
 	if (self.attack_finished > time) return;
+	if (self.ammo_multi_rockets < 1) { forceweaponswitch(0.2); return;}
 
-   self.attack_finished = time + 0.6;
-   self.ammo_multi_rockets = (self.ammo_multi_rockets - TRUE);
-   self.currentammo = (self.currentammo - TRUE);
-   sound (self,CHAN_WEAPON,"weapons/grenade.wav",TRUE,ATTN_NORM);
-   self.punchangle_x = CONTENT_SOLID;
-   missile = spawn ();
-	missile.classgroup = CG_PROJGRENADES;
-   missile.owner = self;
-   missile.movetype = MOVETYPE_BOUNCE;
-   missile.solid = SOLID_BBOX;
-   missile.classname = "MultiGrenade";
-   makevectors (self.v_angle);
-   if ( self.v_angle_x ) {
-      missile.velocity = ((((v_forward * 600.000) + (v_up * 200.000)) + ((crandom () * v_right) * MOVETYPE_BOUNCE)) + ((crandom () * v_up) * MOVETYPE_BOUNCE));
-   } else {
-      missile.velocity = aim (self,10000.000);
-      missile.velocity = (missile.velocity * 600.000);
-      missile.velocity_z = 200.000;
-   }
-   missile.avelocity = '300.000 300.000 300.000';
-   missile.angles = vectoangles (missile.velocity);
-   missile.touch = MultiGrenadeTouch;
-   missile.nextthink = (time + TRUE);
-   missile.think = MultiGrenadeExplode;
-   setmodel (missile,"progs/rogue/mervup.mdl");
-   setsize (missile,VEC_ORIGIN,VEC_ORIGIN);
-   setorigin (missile,self.origin);
+	self.ammo_multi_rockets = (self.ammo_multi_rockets - TRUE);
+	self.currentammo = (self.currentammo - TRUE);
+	sound (self,CHAN_WEAPON,"weapons/grenade.wav",TRUE,ATTN_NORM);
+	self.effects = self.effects | EF_MUZZLEFLASH;
+	self.attack_finished = time + 0.6;
+	self.punchangle_x = -2;
+	makevectors (self.v_angle);
+	if ( self.v_angle_x ) {
+		dir = ((((v_forward * 600.000) + (v_up * 200.000)) + ((crandom () * v_right) * MOVETYPE_BOUNCE)) + ((crandom () * v_up) * MOVETYPE_BOUNCE));
+	} else {
+		dir = aim (self,10000.000);
+		dir = (dir * 600.000);
+		dir_z = 200.000;
+	}
+	avel = '300.000 300.000 300.000';
+	Launch_Grenade(self.origin, dir, avel, CT_PROJ_GLMULTI);
 };
 
 void () W_FireMultiRocket = {
@@ -1518,7 +1502,7 @@ void() W_Attack = {
 
 	// dprint("We have ammo\n");
 
-	if (self.weapon != IT_EXTRA_WEAPON)
+	if (self.weapon != IT_EXTRA_WEAPON && self.weapon != IT_AXE)
 		self.show_hostile = time + 1;	// wake monsters up
 
 	if (!self.selfweaponismoditems) {
@@ -1528,6 +1512,7 @@ void() W_Attack = {
 				player_saw1 ();
 				self.attack_finished = time + 0.55;
 				sound (self, CHAN_AUTO, "weapons/sawatck.wav", 1, ATTN_NORM);
+				self.show_hostile = time + 1;	// wake monsters up, we hit stuff
 			} else {
 				// Axe and Shadowaxe
 				if (random() < 0.5) sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE1, 1, ATTN_NORM);

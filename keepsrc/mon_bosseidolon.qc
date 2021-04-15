@@ -999,8 +999,7 @@ void() eidolon_start =
 //======================================================================
 /*QUAKED monster_eidolon (1 0 0) (-32 -32 -24) (32 32 128)
 ======================================================================*/
-void() monster_eidolon =
-{
+void() monster_eidolon = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 	

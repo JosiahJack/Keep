@@ -143,7 +143,7 @@ void() shal_boss_death12      =[      $puff12,        shal_boss_death13     ] {}
 void() shal_boss_death13      =[      $puff13,        shal_boss_death14     ] {sound (self, CHAN_VOICE, "shalrath/death.wav", 1, ATTN_NORM);};
 void() shal_boss_death14      =[      $puff14,        shal_boss_death15     ] {};
 void() shal_boss_death15      =[      $puff15,        shal_boss_death16     ] {};
-void() shal_boss_death16      =[      $puff16,        shal_boss_death17     ] {Shal_Gib();setmodel (self, "progs/q15/shalrath_death.mdl"); setsize (self, '-46 -40 -24', '46 40 100');};
+void() shal_boss_death16      =[      16,        shal_boss_death17     ] {Shal_Gib();setmodel (self, "progs/q15/shalrath_death.mdl"); setsize (self, '-46 -40 -24', '46 40 100');};
 void() shal_boss_death17      =[      16,        shal_boss_death18    ] {};
 void() shal_boss_death18      =[      17,        shal_boss_death19    ] {};
 void() shal_boss_death19      =[      18,        shal_boss_death20    ] {};
@@ -449,6 +449,7 @@ void() monster_shalrath_boss = {
 	precache_sound2 ("voreling/miss.wav");
 	precache_sound2 ("yakman/expsmall.wav");
 	precache_sound ("misc/summon.wav");
+	precache_sound ("player/udeath2.wav");
 
 	self.sight_sound = "shalrath/bosssight.wav";
 

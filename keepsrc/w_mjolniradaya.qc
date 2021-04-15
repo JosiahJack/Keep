@@ -174,32 +174,32 @@ void () HIP_FireMjolnir2 = {
    source = (self.origin + '0.000 0.000 16.000');
    makevectors (self.v_angle);
    traceline (source,(source + (v_forward * RANGE_PLAYAXE)),FALSE,self);
-   if ( ((trace_fraction == TRUE) && (self.ammo_cells >= 30.000)) ) {
+   if ( ((trace_fraction == TRUE) && (self.ammo_cells >= 15.000)) ) {
       source = (source + (v_forward * RANGE_PLAYAXE));
       traceline (source,(source - (v_up * 50.000)),FALSE,self);
-      if ( ((trace_fraction > 0.300) && (trace_fraction < TRUE)) ) {
-		self.ammo_cells = (self.ammo_cells - 30.000);
-		self.currentammo = (self.currentammo - 30.000);
+      // if ( ((trace_fraction > 0.300) && (trace_fraction < TRUE)) ) {
+		self.ammo_cells = (self.ammo_cells - 15.000);
+		self.currentammo = (self.currentammo - 15.000);
          SpawnLightningOrb();
-         self.attack_finished = (time + 1.000);
+         self.attack_finished = (time + 0.800);
          return ;
-      }
+      // }
    }
    org = (trace_endpos - (v_forward * 4));
    if ( trace_ent.takedamage ) {
-	if (self.ammo_cells >= 30) {
+	if (self.ammo_cells >= 15) {
       	damage = 300.000;
 	} else {
-		damage = 40;
+		damage = 80;
 	}
 
 	trace_ent.axhitme = TRUE;
 	SpawnBlood (trace_ent, org,v_forward,damage);
  	T_Damage (trace_ent,self,self,damage, DAMARMOR);
-	if (self.ammo_cells >= 30) {
+	if (self.ammo_cells >= 15) {
 		SpawnLightningOrb();
-		self.ammo_cells = (self.ammo_cells - 30.000);
-		self.currentammo = (self.currentammo - 30.000);
+		self.ammo_cells = (self.ammo_cells - 15.000);
+		self.currentammo = (self.currentammo - 15.000);
 	}
    } else {
       if ( (trace_fraction != TRUE) ) {

@@ -60,15 +60,22 @@ float FLAME_TRSPEED = 0.02;			// Trail flame standard speed
 string MODEL_PROJ_FLAMETINY = "progs/ad181/s_flametiny.spr";
 string MODEL_PROJ_FLAMESML = "progs/ad181/s_flamesml.spr";
 string MODEL_PROJ_FLAMEMED = "progs/ad181/s_flamemed.spr";
-string MODEL_PROJ_FLAMEVLRG = "progs/ad181/s_flamevlrg.spr";
+// string MODEL_PROJ_FLAMEVLRG = "progs/ad181/s_flamevlrg.spr"; // does not exist yet, Qmaster pre Bal
+string MODEL_PROJ_FLAMEVLRG = "progs/ad181/s_flamemed.spr";
 
-// FIXME : Need to create good blue flames, easier said than done!
-// Using the red flames for the moment, until new assets available
-string MODEL_PROJ_BFLAMETINY = "progs/ad181/s_flametiny.spr";
-string MODEL_PROJ_BFLAMESML = "progs/ad181/s_flamesml.spr";
-string MODEL_PROJ_BFLAMEMED = "progs/ad181/s_flamemed.spr";
-//string MODEL_PROJ_BFLAMEVLRG = "progs/ad181/s_flamevlrg.spr"; // does not exist yet, Qmaster pre Bal
-string MODEL_PROJ_BFLAMEVLRG = "progs/ad181/s_flamemed.spr";
+// Blue fire! (aka Void Knight fire)
+string MODEL_PROJ_BFLAMETINY = "progs/s_blflametiny.spr";
+string MODEL_PROJ_BFLAMESML = "progs/s_blflamesml.spr";
+string MODEL_PROJ_BFLAMEMED = "progs/s_blflamemed.spr";
+//string MODEL_PROJ_BFLAMEVLRG = "progs/s_blflamevlrg.spr"; // does not exist yet, Qmaster pre Bal
+string MODEL_PROJ_BFLAMEVLRG = "progs/s_blflamemed.spr";
+
+// Green fire!
+string MODEL_PROJ_GRFLAMETINY = "progs/s_grflametiny.spr";
+string MODEL_PROJ_GRFLAMESML = "progs/s_grflamesml.spr";
+string MODEL_PROJ_GRFLAMEMED = "progs/s_grflamemed.spr";
+// string MODEL_PROJ_GRFLAMEVLRG = "progs/s_grflamevlrg.spr"; // does not exist yet, Qmaster pre Bal
+string MODEL_PROJ_GRFLAMEVLRG = "progs/s_grflamemed.spr";
 
 //----------------------------------------------------------------------
 void() PreCache_Flame = 
@@ -90,6 +97,18 @@ void() PreCache_BlueFlame =
 	precache_model (MODEL_PROJ_BFLAMESML);		// 24 (wide) x  64 (high)
 	precache_model (MODEL_PROJ_BFLAMEMED);		// 32 (wide) x  96 (high)
 	//precache_model (MODEL_PROJ_BFLAMEVLRG);		// 48 (wide) x 128 (high)
+	precache_sound ("ambience/flames1.wav");
+	precache_sound ("ambience/flames2.wav");
+	precache_sound ("ambience/flames3.wav");
+	precache_sound ("ambience/flames4.wav");
+};
+
+void() PreCache_GreenFlame = 
+{
+	precache_model (MODEL_PROJ_GRFLAMETINY);		// 16 (wide) x  48 (high)
+	precache_model (MODEL_PROJ_GRFLAMESML);		// 24 (wide) x  64 (high)
+	precache_model (MODEL_PROJ_GRFLAMEMED);		// 32 (wide) x  96 (high)
+	//precache_model (MODEL_PROJ_GRFLAMEVLRG);		// 48 (wide) x 128 (high)
 	precache_sound ("ambience/flames1.wav");
 	precache_sound ("ambience/flames2.wav");
 	precache_sound ("ambience/flames3.wav");
@@ -326,8 +345,7 @@ float(vector waveqty) SpriteCount_Flame =
 
 //----------------------------------------------------------------------
 // target entity, origin, v_forward, colour, size, lifetime, speed
-void(entity targ, vector org, vector dir, float proj_color, float proj_size, float proj_life, float proj_speed) Launch_Flame =
-{
+void(entity targ, vector org, vector dir, float proj_color, float proj_size, float proj_life, float proj_speed) Launch_Flame = {
 	// Check if the hazard projectile limit exists and has been reached?
 	if ( !(HazardProjectile_CheckLimit(targ,1)) ) return;
 	
@@ -382,22 +400,26 @@ void(entity targ, vector org, vector dir, float proj_color, float proj_size, flo
 	if (proj_size == FLAME_SML) {
 		newmis.bbmins = '-6 -6 0'; newmis.bbmaxs = '6 6 24';
 		if (proj_color == FLAME_BLUE) setmodel (newmis, MODEL_PROJ_BFLAMESML);
+		else if (proj_color == FLAME_GREEN) setmodel (newmis, MODEL_PROJ_GRFLAMESML);
 		else setmodel (newmis, MODEL_PROJ_FLAMESML);		// 24x64 BB=12x24
 	}
 	else if (proj_size == FLAME_MED) {
 		newmis.bbmins = '-8 -8 0'; newmis.bbmaxs = '8 8 32';
 		if (proj_color == FLAME_BLUE) setmodel (newmis, MODEL_PROJ_BFLAMEMED);
+		else if (proj_color == FLAME_GREEN) setmodel (newmis, MODEL_PROJ_GRFLAMEMED);
 		else setmodel (newmis, MODEL_PROJ_FLAMEMED);		// 32x96 BB=16x32
 	}
 	/* Maybe add it later
 	else if (proj_size == FLAME_VLRG) {
 		newmis.bbmins = '-12 -12 0'; newmis.bbmaxs = '12 12 48';
 		if (proj_color == FLAME_BLUE) setmodel (newmis, MODEL_PROJ_BFLAMEVLRG);
+		else if (proj_color == FLAME_GREEN) setmodel (newmis, MODEL_PROJ_GRFLAMEVLRG);
 		else setmodel (newmis, MODEL_PROJ_FLAMEVLRG);	// 48x128 BB=24x48
 	} */
 	else {
 		newmis.bbmins = '-4 -4 0'; newmis.bbmaxs = '4 4 16';
 		if (proj_color == FLAME_BLUE) setmodel (newmis, MODEL_PROJ_BFLAMETINY);
+		else if (proj_color == FLAME_GREEN) setmodel (newmis, MODEL_PROJ_GRFLAMETINY);
 		else setmodel (newmis, MODEL_PROJ_FLAMETINY);	// 16x48 BB=8x16
 	}
 	

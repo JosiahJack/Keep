@@ -285,16 +285,17 @@ void(entity source, vector org, float velrnd, float upbase, float uprnd) SpawnPr
 //----------------------------------------------------------------------
 // SpawnBlood
 //----------------------------------------------------------------------
-void(entity targ, vector org, vector vel, float part_qty) SpawnBlood =
-{
+void(entity targ, vector org, vector vel, float part_qty) SpawnBlood = {
 	local float loop_count, part_col;
+
 	loop_count = 0;
 	vel = vel * 0.1;
 	part_qty = part_qty / 2;
 
 	// Exception - breakables don't really bleed red blood
-	if (targ.classgroup == CG_BREAKABLE) part_col = targ.bleedcolour;
-	else {
+	if (targ.classgroup == CG_BREAKABLE) {
+		part_col = targ.bleedcolour;
+	} else {
 		if (targ.poisonous) part_col = MON_BCOLOR_GREEN;
 		else if (targ.classgroup == CG_ROBOT) part_col = MON_BCOLOR_YELLOW;
 		else part_col = MON_BCOLOR_RED;
@@ -1357,6 +1358,7 @@ void() raincloud_raindrip = {
 	//dprint("Spawning a raindrop from a cloud");
 	drip = spawn();
 	drip.owner = self;
+	if (self.owner) drip.owner = self.owner;
 	drip.classname = "misc_drip";
 	drip.classtype = CT_MISCDRIP;
 	drip.classgroup = CG_TEMPENT;
@@ -1405,10 +1407,15 @@ void () raincloud_think = {
 			raincloud_raindrip();
 		}
 
+		// Dying
 		if (self.spritestarted == 2) {
 			if (self.frame >= 201) {
 				self.frame = 0;
 				self.alpha = 0.001;
+				if (self.owner) {
+					self.owner.minion_maxcount = self.owner.minion_maxcount - 1;
+					if (self.owner.minion_maxcount < 0) self.owner.minion_maxcount = 0; // just in case
+				}
 				remove(self);
 				return;
 			}

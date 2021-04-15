@@ -1,13 +1,6 @@
-/*
-===========================================================================
+// The Zerstörer!!
 
-The Zerstörer!!
-
-===========================================================================
-*/
-
-void() Z_idle = 
-{
+void() Z_idle = {
 	self.frame = self.frame + 1;
 	self.cnt = self.cnt + 1;
 
@@ -26,13 +19,12 @@ void() Z_idle =
 };
 
 
-void() zer_awake =
-{
+void() zer_awake = {
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_FLY;
 	setsize (self, '-16 -16 -24', '16 16 54');
 	setorigin(self, self.origin);
-	setmodel (self, "progs/drake/bbg.mdl");
+	setmodel (self, "progs/madfox/mon_zerstorer.mdl");
 	self.think = Z_idle;
 	self.nextthink = time + 0.1;
 
@@ -47,12 +39,11 @@ void() zer_awake =
 
 /*QUAKED monster_zer (1 0 0) (-128 -128 -24) (128 128 256)
 */
-void() monster_zer =
-{
+void() monster_zer = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	precache_model ("progs/drake/bbg.mdl");
+	precache_model ("progs/madfox/mon_zerstorer.mdl");
 	precache_sound ("boss1/out1.wav");
 
 	if (self.deathstring == "") self.deathstring = " was destroyed by the Zerstörer\n";
@@ -62,54 +53,31 @@ void() monster_zer =
 
 	self.use = zer_awake;
 };
+void() monster_zerstorer = {self.classname = "monster_zer"; monster_zer(); };
 
 //=========================================================================
-
 /* Finale explosive stuff */
 
-void() do_lavasplash =
-{
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-	remove(self);
+void() do_lavasplash = {
+	if (self.pain_finished < time) {
+		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+		WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
+		WriteCoord (MSG_BROADCAST, self.origin_x);
+		WriteCoord (MSG_BROADCAST, self.origin_y);
+		WriteCoord (MSG_BROADCAST, self.origin_z);
+		SUB_UseTargets ();
+		self.pain_finished = time + self.wait; // prevent spamming splash effects
+	}
 };
 
-void() func_lavasplash =
-{
+// keeping for legacy compat
+void() func_lavasplash = {
 	self.use = do_lavasplash;
+	if (self.wait <= 0) self.wait = 1.00; 
+	self.pain_finished = time + self.wait;
 };
 
-//===============
-
-void() do_explode =
-{
-	//T_RadiusDamage (self, self.owner, 120, world);
-
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
-
-	SUB_UseTargets ();
-
-	BecomeExplosion ();
-};
-
-void() timed_exp =
-{
-	self.think = do_explode;
-	self.nextthink = time + self.delay;
-};
-
-void() func_explode =
-{
-	self.owner = find(world, classname, "monster_zer");
-	if (self.delay)
-		self.use = timed_exp;
-	else
-		self.use = do_explode;
+void() func_explode = {
+	if (self.netname == "") self.netname = "monster_zer"; // Protect the zerstorer from explosion effects
+	func_exploder();
 };

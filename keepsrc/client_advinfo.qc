@@ -569,11 +569,11 @@ void() ammostats_phase3 =
 
 	// ERROR = No MONSTERS found?
 	if (as_monqty == 0) {
-		sprint(self.owner, "--------------------------------------\n");
-		sprint(self.owner, "\b[ERROR]\b Missing any MONSTERS!\n");
-		sprint(self.owner, " * Cannot create Ammo & Monster Stats!\n\n");
-		ammocontrol.state = AC_PHASE0;
-		return;
+		// sprint(self.owner, "--------------------------------------\n");
+		// sprint(self.owner, "\b[ERROR]\b Missing any MONSTERS!\n");
+		// sprint(self.owner, " * Cannot create Ammo & Monster Stats!\n\n");
+		// ammocontrol.state = AC_PHASE0;
+		// return;
 	}
 		
 	// Display Summary stuff for the map

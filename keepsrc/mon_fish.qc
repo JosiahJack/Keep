@@ -142,9 +142,9 @@ void() f_pain2 = {
 	
 	// Keep moving the animation frame forward
 	self.walkframe = self.walkframe + 1;
-	if (self.spawnflags & MON_FISH_SMALL)
-		self.frame = $painS1 + self.walkframe;
+	if (self.spawnflags & MON_FISH_SMALL) self.frame = $painS1 + self.walkframe;
 	else self.frame = $pain1 + self.walkframe;
+	if (self.frame >= 132) self.frame = 131;
 	
 	if (self.walkframe > 8) self.think = self.th_run;
 	if (self.walkframe > 1) ai_fish_movement("ai_pain",self.move_state_y/2);	

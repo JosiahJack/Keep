@@ -19,7 +19,7 @@ Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	Written by Frank Condello <pox@planetquake.com>
 	
 	func_train_ext can have certain "children" objects that tag along,
-	can change direction, or stop/resume at any time.
+	can change direction, or stop/resume at any time. (SUB_PushFrameMovers(); in client.qc)
 	
 	These use "smart" waypoints and trigger relays that actually control most
 	aspects of the train, but a simple train can still be setup by ignoring

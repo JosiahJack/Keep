@@ -68,8 +68,7 @@ void() vanilla_water_check;
  - One function check for all the different visibility functions
  - Designed to work with the new liquidblock entity flag
 ======================================================================*/
-float(vector org_source, vector org_targ) check_liquidblock =
-{
+float(vector org_source, vector org_targ) check_liquidblock = {
 	local float pc_source, pc_targ;
 	
 	// Is r_wateralpha set or monsters forced to check liquid surfaces?
@@ -77,15 +76,11 @@ float(vector org_source, vector org_targ) check_liquidblock =
 		// Check point contents first
 		pc_source = pointcontents(org_source);
 		pc_targ = pointcontents(org_targ);
-		// Are point content different? (like water/air)
-		if (pc_source != pc_targ) return TRUE;
+		if (pc_source != pc_targ) return TRUE; // Are point content different? (like water/air)
 		
-		// Standard traceline check (not 100% reliable)
-		if (trace_inopen && trace_inwater) return TRUE;
+		if (trace_inopen && trace_inwater) return TRUE; // Standard traceline check (not 100% reliable)
 	}
-	
-	// No liquid check required
-	return FALSE;
+	return FALSE; 	// No liquid check required
 };
 
 /*======================================================================
@@ -93,9 +88,8 @@ float(vector org_source, vector org_targ) check_liquidblock =
  Conditions added to water surface check
  - most maps are compiled with transparent water nowadays
 ======================================================================*/
-float(entity targ) visible =
-{
-	local vector	spot1, spot2;
+float(entity targ) visible = {
+	local vector spot1, spot2;
 	
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
@@ -112,11 +106,6 @@ float(entity targ) visible =
 		setorigin(debugent1, spot2);
 	}
 
-	// Does the world define any water transparency
-	//if (liquid_alpha == 1) {	
-		// sight line crossed contents
-	//	if (trace_inopen && trace_inwater) return FALSE;
-	//}
 	// Check for liquid surface block condition
 	if (check_liquidblock(spot1, spot2) == TRUE) return FALSE;
 
@@ -131,9 +120,8 @@ float(entity targ) visible =
   (nomonsters) TRUE = no block, FALSE = blocked
   self is excluded from any trace starting points
 ======================================================================*/
-float(entity targ, vector s_offset, vector t_offset, float nomonsters) visxray =
-{
-	local vector	spot1, spot2;
+float(entity targ, vector s_offset, vector t_offset, float nomonsters) visxray = {
+	local vector spot1, spot2;
 
 	// Bmodels don't have proper origins
 	if (self.bsporigin) spot1 = bmodel_origin(self) + s_offset;
@@ -142,11 +130,6 @@ float(entity targ, vector s_offset, vector t_offset, float nomonsters) visxray =
 	spot2 = targ.origin + t_offset;
 	traceline (spot1, spot2, nomonsters, self);	// custom options
 	
-	// Does the world define any water transparency
-	//if (liquid_alpha == 1) {	
-		// sight line crossed contents
-	//	if (trace_inopen && trace_inwater) return FALSE;
-	//}
 	// Check for liquid surface block condition
 	if (check_liquidblock(spot1, spot2) == TRUE) return FALSE;
 
@@ -155,8 +138,7 @@ float(entity targ, vector s_offset, vector t_offset, float nomonsters) visxray =
 		// Has the traceline gone from source>target without anything blocking?
 		if (trace_fraction == 1) return TRUE;
 		return FALSE;
-	}
-	else {
+	} else {
 		// Is the entity hit by the traceline the targ destination?
 		if (trace_ent == targ) return TRUE;
 		return FALSE;
@@ -171,8 +153,7 @@ float(entity targ, vector s_offset, vector t_offset, float nomonsters) visxray =
   (nomonsters) TRUE = no block, FALSE = blocked
   self is excluded from any trace starting points
 ======================================================================*/
-float(entity targ, vector s_offset, vector targang, float nomonsters) visang =
-{
+float(entity targ, vector s_offset, vector targang, float nomonsters) visang = {
 	local vector spot1, spot2;
 
 	// Bmodels don't have proper origins
@@ -194,8 +175,7 @@ float(entity targ, vector s_offset, vector targang, float nomonsters) visang =
 		// Has the traceline gone from source>target without anything blocking?
 		if (trace_fraction == 1) return TRUE;
 		return FALSE;
-	}
-	else {
+	} else {
 		// Is the entity hit by the traceline the targ destination?
 		if (trace_ent == targ) return TRUE;
 		return FALSE;
@@ -207,19 +187,13 @@ float(entity targ, vector s_offset, vector targang, float nomonsters) visang =
  check to see if sightline is blocked by other monsters
  Really only used in CheckAttack functions (was in org ID code)
 ======================================================================*/
-float(entity targ) visblocked =
-{
-	local vector	spot1, spot2;
+float(entity targ) visblocked = {
+	local vector spot1, spot2;
 	
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
 	traceline (spot1, spot2, FALSE, self);	// blocked by monsters
-	
-	// Does the world define any water transparency
-	//if (liquid_alpha == 1) {	
-		// sight line crossed contents
-	//	if (trace_inopen && trace_inwater) return FALSE;
-	//}
+
 	// Check for liquid surface block condition
 	if (check_liquidblock(spot1, spot2) == TRUE) return FALSE;
 
@@ -235,9 +209,8 @@ float(entity targ) visblocked =
   extra wide check using 3 traces, +/- 16 left/right and origin
   All three traces have to complete for a positive result
 ======================================================================*/
-float (entity targ, vector s_ofset, vector t_ofset) visblocked_wide =
-{
-	local vector	spot1, spot2, spot3, tr_line;
+float (entity targ, vector s_ofset, vector t_ofset) visblocked_wide = {
+	local vector spot1, spot2, spot3, tr_line;
 	local float tr_leftmon, tr_rightmon, tr_result;
 
 	tr_line = '0 0 0';
@@ -256,7 +229,6 @@ float (entity targ, vector s_ofset, vector t_ofset) visblocked_wide =
 	// If this fails then the left/right should as well
 	if (check_liquidblock(spot1, spot2) == TRUE) tr_line_x = 0;
 
-	//------------------------------------------------------------------	
 	// Traceline 2 - 32 units LEFT
 	spot3 = spot1 - (v_right * 16);
 	traceline (spot3, spot2, FALSE, self);
@@ -314,8 +286,7 @@ float (entity targ, vector s_ofset, vector t_ofset) visblocked_wide =
  - relies on self being set correctly before entering this function
  - returns 1 if the entity is in front (in sight) of self
 ======================================================================*/
-float(entity targ) infront =
-{
+float(entity targ) infront = {
 	local vector vec;
 	local float dot;
 	
@@ -332,8 +303,7 @@ float(entity targ) infront =
   returns the range catagorization of an entity reletive to self
   uses constants defined in defs.qc
 ======================================================================*/
-float(entity targ) range =
-{
+float(entity targ) range = {
 	local vector	spot1, spot2;
 	local float		r;
 		
@@ -343,23 +313,21 @@ float(entity targ) range =
 	
 	if (r < MON_RANGE_MELEE) return RANGE_MELEE;		// <120 = MELEE
 	else if (r < MON_RANGE_NEAR) {
-		if (r < (self.maxs_x + targ.maxs_x) * SQRT2 + 30) // PM:  Extend melee range for huge monsters like the dragon.
-			return RANGE_MELEE;
-		else
- 			return RANGE_NEAR;			// <500 = NEAR
+		// PM:  Extend melee range for huge monsters like the dragon.
+		if (r < (self.maxs_x + targ.maxs_x) * SQRT2 + 30) return RANGE_MELEE; // <120 = MELEE
+		else return RANGE_NEAR;							// <500 = NEAR
 	}
 	else if (r < MON_RANGE_MID) return RANGE_MID;		// <1000 = MID
-	return RANGE_FAR;																	// >1000 = FAR
+	return RANGE_FAR;									// >1000 = FAR
 };
 
 /*======================================================================
  range_distance (target entity)
  	returns the vector distance between two points
 ======================================================================*/
-float(entity targ, float flat2d) range_distance =
-{
-	local vector	spot1, spot2;
-	local float		r;
+float(entity targ, float flat2d) range_distance = {
+	local vector spot1, spot2;
+	local float r;
 		
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
@@ -374,9 +342,8 @@ float(entity targ, float flat2d) range_distance =
   check to see if (source) can get a clear shot at (targ)
   Ignores any water/air content checks
 ======================================================================*/
-float (entity source, entity targ) rangeattack_check =
-{
-	local vector	spot1, spot2;
+float (entity source, entity targ) rangeattack_check = {
+	local vector spot1, spot2;
 	local float r;
 
 	// origin+offset, otherwise cannot see player up/down slopes
@@ -410,8 +377,7 @@ float (entity source, entity targ) rangeattack_check =
   reverse = the creation of the vector can be reversed
   offset = shift the final angle clockwise. (frontal sight cone 315-45)
 ======================================================================*/
-float(entity source, entity targ, float offset, float reverse) targangle =
-{
+float(entity source, entity targ, float offset, float reverse) targangle = {
 	local float targ_dir, targ_ang;
 
 	// Calculate vector angle between two points (source, target)
@@ -424,8 +390,7 @@ float(entity source, entity targ, float offset, float reverse) targangle =
 
 // Modified version of targangle not using entities but supplied origins
 // Targets Y angles needs to be supplied as no entity reference available
-float(vector source, vector targ, float offset, float reverse, float dst_ang) viewangle =
-{
+float(vector source, vector targ, float offset, float reverse, float dst_ang) viewangle = {
 	local float targ_dir, targ_ang;
 
 	// Calculate vector angle between two points (source, target)
@@ -441,8 +406,7 @@ float(vector source, vector targ, float offset, float reverse, float dst_ang) vi
  - Checks which zone the target enemy is located in relation to source (self)
   0 = Behind (315-45), 1 = Left (45-135), 2 = Front (135-225), Right = (225-315)
 ======================================================================*/
-float(entity source, entity targ) targzone =
-{
+float(entity source, entity targ) targzone = {
 	local float target_ang;
 	
 	// Work out angle the angle of the player based on the monster (source)
@@ -460,20 +424,16 @@ float(entity source, entity targ) targzone =
  HuntTarget
   Main routine - constantly running/turning towards the enemy
 ======================================================================*/
-void() HuntTarget =
-{
-	if (self.health < 1) return;	// Dead monsters don't hunt!
-	//self.fighting       = TRUE;
-	//self.search_time    = time + 5;
-	self.oldorigin = self.origin;	// Save origin
-	self.goalentity = self.enemy;	// Focus on enemy
+void() HuntTarget = {
+	if (self.health < 1) return; // Dead monsters don't hunt!
+
+	self.oldorigin = self.origin; // Save origin
+	self.goalentity = self.enemy; // Focus on enemy
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
-	
-	// Some monsters have special wakeup animations before attacking
-	self.nextthink = time + 0.1;
-	self.think = self.th_run;		// Start running
+	self.nextthink = time + 0.1; // Some monsters have special wakeup animations before attacking
+	self.think = self.th_run; // Start running
+
 	// Default 1s wait (NM adjusted) before attacking
-	
 	if (self.ryuflags & RYU_ALERT)
 		SUB_AttackFinished (0.5);   // alert monsters don't wait as long...
 	else
@@ -489,22 +449,16 @@ void() HuntTarget =
 void() FoundTarget = {
 	if (self.health < 1) return FALSE;	// Dead monsters don't hunt!
 
-	// Check for Liquid surface block entity key
-	// if the monster has range attack, can NOW see through liquid surface
-	if (self.liquidblock == TRUE && self.th_missile)
-		self.liquidblock = FALSE;
+	// Check for Liquid surface block entity key if the monster has range attack, can NOW see through liquid surface
+	if (self.liquidblock == TRUE && self.th_missile) self.liquidblock = FALSE;
 
-
-	//----------------------------------------------------------------------
-	// If current enemy is alive and can take damage then wakeup
-	// the rest of the groupsight group using global entity
-	//----------------------------------------------------------------------
+	// If current enemy is alive and can take damage then wakeup the rest of the groupsight group using global entity
 	if (self.sightgroup != "") {
 		if (self.enemy.health > 0 && self.enemy.takedamage > DAMAGE_NO) {
-			if ( self.charmed ) {
-				if ( ((self.charmer == self.enemy) || (self.charmer == self.enemy.charmer)) ) {
+			if (self.charmed) {
+				if ((self.charmer == self.enemy) || (self.charmer == self.enemy.charmer)) {
 					self.enemy = world;
-					return ;
+					return;
 				}
 			}
 			sightgroup_entity = self;		// Highlight target for others
@@ -513,11 +467,10 @@ void() FoundTarget = {
 			HuntTarget ();					// Keep running after enemy
 			return;
 		}
-	}
-	//----------------------------------------------------------------------
-	// DEFAULT wakeup method for all monsters
-	//----------------------------------------------------------------------
-	else {
+	} else {
+		//----------------------------------------------------------------------
+		// DEFAULT wakeup method for all monsters
+		//----------------------------------------------------------------------
 		if ( (self.enemy.flags & FL_CLIENT) ) {
 			if ( self.charmed ) {
 				if ( ((self.charmer == self.enemy) || (self.charmer == self.enemy.charmer)) ) {
@@ -528,12 +481,16 @@ void() FoundTarget = {
 			sight_entity = self;			// Highlight an angry monster for others
 			sight_entity_time = time;		// reset wakeup timer
 		} else {
-			if ( self.charmed ) {
-				if ( (self.charmer == self.enemy.charmer) ) {
-					self.enemy = world;
-					return ;
+			if (self.enemy.flags & FL_MONSTER) {
+				if ( self.charmed ) {
+					if ( (self.charmer == self.enemy.charmer) ) {
+						self.enemy = world;
+						return;
+					}
 				}
-			}
+				sight_entity = self;		// Highlight an angry monster for others
+				sight_entity_time = time;	// reset wakeup timer
+			} // else, we don't stay angry at non monster or non player!
 		}
 	}
 	
@@ -549,8 +506,14 @@ void() FoundTarget = {
 			self.oldenemy = find(world, targetname, self.sighttarget);
 			if (self.oldenemy.health > 0) {
 				if (self.oldenemy.takedamage > DAMAGE_NO) {
+					if (self.charmed) {
+						if ((self.charmer == self.enemy) || (self.charmer == self.enemy.charmer)) {
+							self.enemy = world;
+							return;
+						}
+					}
 					sight_entity = self.enemy;		// Highlight target for others
-					sight_entity_time = time;		// reset wakeup timer
+					sight_entity_time = time;		// Reset wakeup timer
 					monster_sightsound();			// Always make wakeup noise!
 				}
 			}
@@ -558,9 +521,8 @@ void() FoundTarget = {
 		}
 	}
 	
-	self.show_hostile = time + 1;		// wake up other monsters
-	// Only play wakeup sound if player, not for other monsters
-	if (self.enemy.flags & FL_CLIENT && self.health > 0) monster_sightsound();
+	self.show_hostile = time + 1;		// Wake up other monsters
+	monster_sightsound();				// Make sight sound regardless of who hit us
 	HuntTarget ();						// Keep running after enemy
 };
 
@@ -571,8 +533,7 @@ void() FoundTarget = {
  - Does not pause or wait for any monster, straight to combat
  - Has no end funtion state, can decide this afterwards
 ======================================================================*/
-void(float wakeupothers) FoundHuntTarget =
-{
+void(float wakeupothers) FoundHuntTarget = {
 	if (self.health < 1) return;	// Dead monsters don't hunt!
 	if (!self.enemy) return;
 
@@ -581,10 +542,15 @@ void(float wakeupothers) FoundHuntTarget =
 
 	// Check for Liquid surface block entity key
 	// if the monster has range attack, can NOW see through liquid surface
-	if (self.liquidblock == TRUE && self.th_missile)
-		self.liquidblock = FALSE;
+	if (self.liquidblock == TRUE && self.th_missile) self.liquidblock = FALSE;
 
 	if (self.enemy.flags & FL_CLIENT && wakeupothers == TRUE) {
+		if (self.charmed) {
+			if ((self.charmer == self.enemy) || (self.charmer == self.enemy.charmer)) {
+				self.enemy = world;
+				return;
+			}
+		}
 		sight_entity = self;			// Highlight an angry monster for others
 		sight_entity_time = time;		// reset wakeup timer
 	}
@@ -593,12 +559,17 @@ void(float wakeupothers) FoundHuntTarget =
 	self.oldorigin = self.origin;		// Save origin
 	self.goalentity = self.enemy;		// Focus on enemy
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
-	SUB_AttackFinished (1);				// wait a while before first attack
+
+	// Default 1s wait (NM adjusted) before attacking
+	if (self.ryuflags & RYU_ALERT)
+		SUB_AttackFinished (0.5);   // alert monsters don't wait as long...
+	else
+		if (!self.attack_instant) SUB_AttackFinished (1); // wait a while before first attack
 };
 
 /*======================================================================
  FindTarget
- - Main routine for finding a PLAYER target
+ - Main routine for finding a target
  - Returns TRUE if an enemy was sighted
 ======================================================================*/
 float() FindTarget = {
@@ -606,34 +577,36 @@ float() FindTarget = {
 	local float r, dist;
 
 	if (self.health < 1) return FALSE;	// Dead monsters don't hunt!
+	if (intermission_running > 0) return FALSE; // If intermission is running, no sight checks
+	if ((cinematic_running > 0 || cutscene > 0) && !coop) return FALSE; // If cinematic is running in singleplayer, no sight checks
 
-	// If intermission/cinematic is running, no sight checks
-	if (intermission_running > 0) return FALSE;
-	if (cinematic_running > 0) return FALSE;
+	// Wraith AI - - - -
+    if (self.movetype == MOVETYPE_NOCLIP) {  // Most monsters aren't wraiths.
+        if (pointcontents (self.origin + self.view_ofs) == CONTENT_SOLID) return FALSE;   // Don't let wraiths see targets while in the wall.
+	}
 
-	// Reset any combat exit conditions
-	self.enemyexit = FALSE;
+	self.enemyexit = FALSE; // Reset any combat exit conditions
 
+	// Horn of Conjouring affected monsters only...these monsters are always friendly (to the player who summoned them) followers
 	if ( self.charmed ) {
 		self.effects = (self.effects | EF_DIMLIGHT);
 		if ( (self.huntingcharmer > FALSE) ) {
 			UpdateCharmerGoal ();
 			r = vlen ((self.origin - self.goalentity.origin));
 			if ( (r < MIN_CHARMER_DISTANCE) ) {
-				if ( ((self.huntingcharmer == MOVETYPE_WALK) && (r > TOOCLOSE_CHARMER_DISTANCE)) ) {
-					return ( FALSE );
-				}
+				if ( ((self.huntingcharmer == MOVETYPE_WALK) && (r > TOOCLOSE_CHARMER_DISTANCE)) ) return FALSE; // 
+
 				StopHuntingCharmer ();
-				return (TRUE);
+				return TRUE;
 			}
 		} else {
 			if ( (vlen ((self.origin - self.charmer.origin)) > MAX_CHARMER_DISTANCE) ) {
 				HuntCharmer ();
-				return (FALSE);
+				return FALSE;
 			} else {
  				if ( (vlen ((self.origin - self.charmer.origin)) < TOOCLOSE_CHARMER_DISTANCE) ) {
 					FleeCharmer ();
-					return ( FALSE );
+					return FALSE;
 				}
  			}
 		}
@@ -681,36 +654,36 @@ float() FindTarget = {
 	}
 	//----------------------------------------------------------------------
 	// PASSIVE SYSTEM CHECK
-	// passive_state + NO ambush = wake up when sight of combat/fire
+	// passive_state + NO ambush = wake up when sight of combat/fire, unless cowardly or passive temperament
 	// passive_state + Ambush = wake up from direct damage ONLY
 	//----------------------------------------------------------------------
 	if (check_passivestate_switch(self)) return FALSE;
 
-	//----------------------------------------------------------------------
 	// if the first spawnflag bit is set, the monster will only wake up on
 	// really seeing the player, not another monster getting angry
-	// Zombies have their ambush/crucified spawnflag mix up fixed
-	//----------------------------------------------------------------------
+	// Zombies had their ambush/crucified spawnflag mix up fixed, fixed in mon_zombie.qc
+	// sight_entity is assigned to self by a monster getting angry
+	// sight_entity_time is also set at the same time
 	if (sight_entity_time >= time - 0.1 && !(self.spawnflags & MON_AMBUSH) && !self.charmed ) {
-		client = sight_entity;		// Global variable
-		if (client.enemy == self.enemy) return TRUE;
+		client = sight_entity;		// Global variable, angry monster nearby
+		if (client.enemy == self.enemy) return TRUE; // we were already angry at this thing? get outta here
 	} else {
 		if ( self.charmed ) {
 			selected = world;
 			dist = CHARMED_RADIUS;
 			head = findradius (self.origin,CHARMED_RADIUS);
-		while (head) {
-			if ( (!(head.flags & FL_NOTARGET) && (head.flags & FL_MONSTER)) ) {
-				if ( ((visible (head) && (visible_distance < dist)) && (head.health > FALSE)) ) {
-					if ( (((head != self) && (head != self.charmer)) && (head.charmer != self.charmer)) ) {
- 						selected = head;
-						dist = visible_distance;
+			while (head) {
+				if ( (!(head.flags & FL_NOTARGET) && (head.flags & FL_MONSTER)) ) {
+					if ( ((visible (head) && (visible_distance < dist)) && (head.health > FALSE)) ) {
+						if ( (((head != self) && (head != self.charmer)) && (head.charmer != self.charmer)) ) {
+							selected = head;
+							dist = visible_distance;
+						}
 					}
 				}
+				head = head.chain;
 			}
-			head = head.chain;
-		}
-		if ((selected == world)) return ( FALSE );
+			if ((selected == world)) return FALSE;
  			client = selected;
 		} else {
 			client = checkclient ();		// Find a client in current PVS
@@ -731,42 +704,27 @@ float() FindTarget = {
 		else playtarg = find(world,targetname,"player");
 	}
 
-	//----------------------------------------------------------------------
 	// If current enemy = client (player), already got *that* target
-	//----------------------------------------------------------------------
-	if (client == self.enemy) return FALSE;
+	if (client == self.enemy) return FALSE; // if we assigned to a nearby angry monster sight_entity above, we'd never be here if this if were true, FYI
 
-	//----------------------------------------------------------------------
 	// Check for debug mode, menu system active
-	//----------------------------------------------------------------------
 	if (playtarg.flags & FL_NOTARGET && !self.charmed) return FALSE;
 
-	//----------------------------------------------------------------------
-	// Is the client/player >1000 = FAR do nothing, too far away
-	//----------------------------------------------------------------------
 	enemy_range = range (client);
-	if (enemy_range == RANGE_FAR) return FALSE;
+	if (enemy_range == RANGE_FAR) return FALSE; // >1000 = FAR do nothing, too far away
 		
-	//----------------------------------------------------------------------
 	// Do not wake up unless the client (player/monster) is visible
-	//----------------------------------------------------------------------
 	enemy_vis = visible(client);
 	if (!enemy_vis) return FALSE;
 
 	if (!self.charmed) {
-		//----------------------------------------------------------------------
 		// (Distance >128 && < 500) Is client infront+side and hostile?
 		// show_hostile flag is set when the player fires a weapon
-		//----------------------------------------------------------------------
 		if (enemy_range == RANGE_NEAR) {
 			if (client.show_hostile < time && !infront (client))
 				return FALSE;
-		}
-		//----------------------------------------------------------------------
-		// (Distance < 1000) Is client infront?
-		//----------------------------------------------------------------------
-		else if (enemy_range == RANGE_MID) {
-				if (!infront (client)) return FALSE;
+		} else if (enemy_range == RANGE_MID) {
+				if (!infront (client)) return FALSE; // (Distance < 1000) Is client infront?
 		}
 	}
 
@@ -774,7 +732,7 @@ float() FindTarget = {
 	// - firing a weapon
 	// - bumping into a dog
 	if (playtarg.items & IT_INVISIBILITY) {
-		if (self.classname == "monster_dog" && client.classname == "player") {
+		if (self.classtype == CT_MONDOG && client.flags & FL_CLIENT) {
 			if (r != RANGE_MELEE) return FALSE;
 		} else if (client.show_hostile < time) {
 			return FALSE;
@@ -784,13 +742,12 @@ float() FindTarget = {
 	// At this point if the enemy is <120 (melee range) the enemy
 	// will always wake up and turn around towards the player
 
-	//----------------------------------------------------------------------
 	// Finally got a target, check if its a player
 	// This is an odd sitation because at this point client *should* be
 	// the player/client and this code tries to fix the problem by
 	// searching through enemy of enemy chains
-	//----------------------------------------------------------------------
 	self.enemy = client;
+	if (self.charmed) self.passive_state = FALSE;
 
 	// Don't hurt other player charmed pets!
 	if ( !(client.flags & FL_CLIENT) && !self.charmed && !self.enemy.charmed ) {
@@ -803,42 +760,25 @@ float() FindTarget = {
 	}			
 	FoundTarget ();			// Run+turn towards new enemy
 	return TRUE;			// stop previous routine got a target
-
 };
 
-
-//======================================================================
-// ai_face (generic)
-//----------------------------------------------------------------------
-void() ai_face =
-{
-	vanilla_water_check();
+void() ai_face = {
 	if (self.health < 1) return;// Unusual check, caught elsewhere
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
 	ChangeYaw (); 				// Done in code
 };
 
-//----------------------------------------------------------------------
-// ai_forward
-//----------------------------------------------------------------------
-void(float dist) ai_forward =
-{
+void(float dist) ai_forward = {
 	vanilla_water_check();
 	walkmove (self.angles_y, dist);
 };
 
-//----------------------------------------------------------------------
 // ai_forward + ai_face
-//----------------------------------------------------------------------
-void(float dist) ai_faceforward =
-{
+void(float dist) ai_faceforward = {
 	ai_face();
-	walkmove (self.angles_y, dist);
+	ai_forward(dist);
 };
 
-//----------------------------------------------------------------------
-// ai_back + backface
-//----------------------------------------------------------------------
 void(float dist) ai_back = {
 	vanilla_water_check();
 	walkmove ( (self.angles_y+180), dist);
@@ -849,73 +789,42 @@ void(float dist) ai_backface = {
 	ai_back(dist);
 };
 
-//----------------------------------------------------------------------
-// ai_pain (does nothing, just uses ai_back instead)
-//----------------------------------------------------------------------
+// ai_pain (just uses ai_back, at some point a randomized backwards stagger vector was planned, but I'm not going to change expected behavior -Qmaster)
 void(float dist) ai_pain ={ai_back (dist);};
 
-//----------------------------------------------------------------------
-// ai_painforward
-//----------------------------------------------------------------------
 void(float dist) ai_painforward = {
 	vanilla_water_check();
-	walkmove (self.angles_y, dist);
-	// Not sure why Id used ideal_yaw when other functions use angles_y
-//	walkmove (self.ideal_yaw, dist);
+	walkmove (self.angles_y, dist); // Not sure why Id used ideal_yaw when other functions use angles_y, commonized
 };
 
-//----------------------------------------------------------------------
 // ai_turn (Very costly function, re-using FindTarget again)
-//----------------------------------------------------------------------
 void() ai_turn = {
-	vanilla_water_check();
-	if (FindTarget ()) return;
-	ChangeYaw ();			// Code function
+	if (FindTarget()) return;
+	ChangeYaw();			// Code function
 };
 
-
-//----------------------------------------------------------------------
-// FacingIdeal
-//----------------------------------------------------------------------
-float() FacingIdeal =
-{
-	local	float	delta;
+float() FacingIdeal = {
+	local float delta;
 	
 	delta = anglemod(self.angles_y - self.ideal_yaw);
 	if (delta > 45 && delta < 315) return FALSE;
 	else return TRUE;
 };
 
-//----------------------------------------------------------------------
-// ai_trackenemy
-//----------------------------------------------------------------------
-void() ai_trackenemy =
-{
-	vanilla_water_check();
+void() ai_trackenemy = {
 	if (visible(self.enemy)) {
 		self.attack_track = self.enemy.origin;
 		ai_face();
 	}
 };
 
-//----------------------------------------------------------------------
-// ai_resetangles
-//----------------------------------------------------------------------
-void() ai_resetangles =
-{
-	// There is a chance when finished a monster jump that some
-	// of the angles (X/Z) values are wrong and need resetting
-	// Should only be used after jump functions
-	self.angles_x = self.angles_z = 0;
+void() ai_resetangles = {
+	self.angles_x = self.angles_z = 0; // There is a chance when finished a monster jump that some of the angles (X/Z) values are wrong and need resetting.  Should only be used after jump functions
 };
 
-//----------------------------------------------------------------------
-// ai_charge (generic)
-//  - The monster is in a melee attack, 
-//   so get as close as possible to .enemy
-//----------------------------------------------------------------------
-void(float dist) ai_charge =
-{
+// ai_charge (generic), The monster is in a melee attack, so get as close as possible to .enemy
+void(float dist) ai_charge = {
+	vanilla_water_check();
 	ai_face ();
 	movetogoal (dist);
 };
@@ -923,16 +832,15 @@ void(float dist) ai_charge =
 //----------------------------------------------------------------------
 // ai_chargenoturn (generic)
 //----------------------------------------------------------------------
-void(float dist) ai_chargenoturn =
-{
+void(float dist) ai_chargenoturn = {
+	vanilla_water_check();
 	movetogoal (dist);
 };
 
 //----------------------------------------------------------------------
 // ai_charge_side (generic)
 //----------------------------------------------------------------------
-void() ai_charge_side =
-{
+void() ai_charge_side = {
 	local	vector	dtemp;
 	local	float	heading;
 	
@@ -952,10 +860,10 @@ void() ai_charge_side =
 //----------------------------------------------------------------------
 // ai_charge_front (generic)
 //----------------------------------------------------------------------
-void() ai_charge_front =
-{
+void() ai_charge_front = {
 	local	float	heading;
 	
+	vanilla_water_check();
 	ai_face();			// Turn towards enemy first
 
 	makevectors (self.angles);
@@ -969,11 +877,8 @@ void() ai_charge_front =
  - Turn and close until within an angle to launch a melee attack
 ======================================================================*/
 void() ai_run_melee = {
-	vanilla_water_check();
-
 	self.ideal_yaw = enemy_yaw;		// This is defined in ai_run
 	ChangeYaw ();					// Code function
-
 
 	//----------------------------------------------------------------------
 	// Facing towards the ENEMY target? (ideal_yaw)
@@ -989,8 +894,6 @@ void() ai_run_melee = {
  - Turn in place until within an angle to launch a missile attack
 ======================================================================*/
 void() ai_run_missile = {
-	vanilla_water_check();
-
 	self.ideal_yaw = enemy_yaw;		// This is defined in ai_run
 	ChangeYaw ();					// Code function
 	
@@ -1008,8 +911,6 @@ void() ai_run_missile = {
  - Turn in place until within an angle to jump attack
 ======================================================================*/
 void() ai_run_jump = {
-	vanilla_water_check();
-
 	self.ideal_yaw = enemy_yaw;		// This is defined in ai_run
 	ChangeYaw ();					// Code function
 	
@@ -1026,8 +927,7 @@ void() ai_run_jump = {
  ai_run_slide
  - Strafe sideways, but stay at aproximately the same range
 ======================================================================*/
-void(float dist) ai_run_slide =
-{
+void(float dist) ai_run_slide = {
 	local float	ofs;
 
 	vanilla_water_check();
@@ -1054,8 +954,7 @@ void(float dist) ai_run_slide =
  ai_run_sidestep
  - Turn 90 degrees and move to the side
 ======================================================================*/
-void(float dist) ai_run_sidestep =
-{
+void(float dist) ai_run_sidestep = {
 	local float	ofs;
 
 	vanilla_water_check();
@@ -1082,8 +981,7 @@ void(float dist) ai_run_sidestep =
  ai_run_backwards
  - Turn 180 degrees and move backwards
 ======================================================================*/
-void(float dist) ai_run_backward =
-{
+void(float dist) ai_run_backward = {
 	vanilla_water_check();
 
 	// Work out angle to face for enemy and then turn +/- 90 degrees
@@ -1101,8 +999,7 @@ void(float dist) ai_run_backward =
  ai_foundbreakable
   Check if the monster is allowed to break the breakable!?!
 ======================================================================*/
-float(entity source, entity targ, float ignorenoshoot) ai_foundbreakable =
-{
+float(entity source, entity targ, float ignorenoshoot) ai_foundbreakable = {
 	// Found a breakable in the way?
 	if (targ.classtype == CT_FUNCBREAK || targ.classtype == CT_FUNCBREAKMDL) {
 		// Check if a monster and nomonster damage/trigger allowed?
@@ -1127,8 +1024,7 @@ float(entity source, entity targ, float ignorenoshoot) ai_foundbreakable =
 float BRKTRACE_DIST = 128;
 float BRKTRACE_ANG = 0.35;
 
-float(float tracedist, float traceang) ai_tracebreakable =
-{
+float(float tracedist, float traceang) ai_tracebreakable = {
 	local vector spot1, spot2;
 	local float mon_height;
 	
@@ -1162,8 +1058,7 @@ float(float tracedist, float traceang) ai_tracebreakable =
  ai_immunebreakable
   Check if a breakable/pushable is immune to damage from monsters
 ======================================================================*/
-float(entity source, entity targ) ai_immunebreakable =
-{
+float(entity source, entity targ) ai_immunebreakable = {
 	// Found a breakable? (BSP or model)
 	if (targ.classtype == CT_FUNCBREAK || targ.classtype == CT_FUNCBREAKMDL) {
 		// Check no damage spawnflag?
@@ -1184,8 +1079,7 @@ float(entity source, entity targ) ai_immunebreakable =
   If any breakables found, damage them to see if they will break
   Use the triple trace forward, upward and dowward to find breakables
 ======================================================================*/
-void(float brkdmg) ai_damagebreakable =
-{
+void(float brkdmg) ai_damagebreakable = {
 	local float ldmg;
 	
 	// Setup damage modifier
@@ -1206,8 +1100,7 @@ void(float brkdmg) ai_damagebreakable =
   Check if the monster can trigger a breakable from jump attack
   Expecting SELF = monster and OTHER = breakable
 ======================================================================*/
-void(float brkdmg) ai_jumpbreakable =
-{
+void(float brkdmg) ai_jumpbreakable = {
 	if (ai_foundbreakable(self, other, TRUE) && other.brktrigjump != 0) {
 		// Found a breakable which is prone to jump damage
 		trigger_ent(other, self);
@@ -1219,8 +1112,7 @@ void(float brkdmg) ai_jumpbreakable =
  CheckBlockedBreakable
   See if any breakables are in the way (running forward)
 ======================================================================*/
-void() CheckBlockedBreakable =
-{
+void() CheckBlockedBreakable = {
 	local float brklen;
 
 	// Still busy attacking? do nothing	
@@ -1259,8 +1151,7 @@ void() CheckBlockedBreakable =
   Check if the monster (self) can attack enemy (target)
   and returns TRUE if the monster is within XYZ range
 ======================================================================*/
-float(float attackdist, float attackzaxis) ai_checkmelee =
-{
+float(float attackdist, float attackzaxis) ai_checkmelee = {
 	local vector	spot1, spot2;
 	local float 	delta, zdiff;
 
@@ -1284,11 +1175,8 @@ float(float attackdist, float attackzaxis) ai_checkmelee =
  - slashing type of damage facing forward
    really assuming the monster is stationary while attacking
 ======================================================================*/
-void() ai_melee =
-{
+void() ai_melee = {
 	local float ldmg;
-
-	vanilla_water_check();
 
 	if (!self.enemy) return;			// removed before stroke
 	ai_damagebreakable(10);				// Damage any breakables
@@ -1312,10 +1200,9 @@ void() ai_melee =
 	
 	// Some melee weapons have swing and hit as separate sounds
 	// This is trigger_once per melee combat swing
-	// No check if meleehitsound is defined or not
 	if (self.meleecontact) {
 		self.meleecontact = FALSE;
-		sound (self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_NORM);
+		if (self.meleehitsound != "") sound (self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_NORM);
 	}
 };
 
@@ -1324,11 +1211,8 @@ void() ai_melee =
  - large smashing damage overhead attack, usually a single strike
    really assuming the monster is stationary while attacking
 ======================================================================*/
-void(float dmg_multiplier) ai_meleesmash =
-{
+void(float dmg_multiplier) ai_meleesmash = {
 	local float ldmg;
-
-	vanilla_water_check();
 
 	if (!self.enemy) return;						// removed before stroke
 	ai_damagebreakable(3*dmg_multiplier);			// Damage any breakables
@@ -1371,11 +1255,8 @@ void(float dmg_multiplier) ai_meleesmash =
    this is really designed for glancing blows and monsters which are
    moving fast like they are charging at the player
 ======================================================================*/
-void() ai_melee_side =
-{
+void() ai_melee_side = {
 	local float ldmg;
-
-	vanilla_water_check();
 
 	if (!self.enemy) return;	// removed before stroke
 	ai_damagebreakable(10);		// Damage any breakables
@@ -1406,24 +1287,23 @@ void() ai_melee_side =
  - produce a large ground slam/shockwave effect
  - Used by hammer ogres, golems and barons
 ======================================================================*/
-void() ai_shockwave_think =
-{
+void() ai_shockwave_think = {
 	self.wait = rint((time - self.ltime)*10);
-	if (self.wait > 6) SUB_Remove();
-	else {
+	if (self.wait > 6) {
+		SUB_Remove();
+	} else {
 		self.frame = self.wait;
 		if (self.wait > 4) {
-			if (!self.delay) {self.delay = time;}
+			if (!self.delay) self.delay = time;
 			self.alpha = 1-((time - self.delay)*5);
 		}
 		self.angles_y = anglemod(self.angles_y + rint(random()*20));
-    self.nextthink = time + TIME_MINTICK;
+		self.nextthink = time + TIME_MINTICK;
 	}
 };
 
 //----------------------------------------------------------------------
-void(vector imp_vec, float imp_damage, float imp_radius, float imp_forward, float imp_up) ai_shockwave =
-{
+void(vector imp_vec, float imp_damage, float imp_radius, float imp_forward, float imp_up) ai_shockwave = {
 	local entity swave, sjump;
 	local vector impact, fvel;
 	local float vdist, vpercent, vdamage, vpart, impzdiff;
@@ -1526,9 +1406,11 @@ void(vector imp_vec, float imp_damage, float imp_radius, float imp_forward, floa
 };
 
 // From Drake
+// This is 'walkmove' without the vertical movement.
 float(float yaw, float dist) flat_move = {
     local   entity  swap;
 
+	vanilla_water_check();
     swap = self.enemy;
     self.enemy = world;     // This prevents 'self' from going up/down.
     dist = walkmove (yaw, dist);    // After this, dist = TRUE or FALSE.
@@ -1541,6 +1423,7 @@ float(float yaw, float dist) flat_move = {
 void(float dist) flat_goal = {
     local   entity  swap;
 
+	vanilla_water_check();
     swap = self.enemy;
     self.enemy = world;     // This prevents 'self' from going up/down.
     movetogoal (dist);

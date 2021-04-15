@@ -1082,8 +1082,7 @@ void(entity targ, vector dir) Attack_Saw =
 };
 
 void() W_FireSaw = {
-    if (cutscene || intermission_running || cinematic_running)
-        return;     // Abort if in intermission.
+    if (cutscene || intermission_running || cinematic_running) return;     // Abort if in intermission.
     makevectors (self.v_angle);
     Attack_Saw (world, v_forward);
 };
@@ -1730,4 +1729,30 @@ void(vector spot) M_Slam = {
 // DISABLED -- Secondary lightning strikes are really unfair against players.
 //        Divine_Wrath (3, 2);    // Do after Hip lightning.
     }
+};
+
+void(vector start, vector dir) Rocket_Launch = {
+    local   entity  missile;
+
+    missile = spawn ();
+    missile.master      = missile.owner     = self;
+    missile.movetype    = MOVETYPE_FLYMISSILE;
+    missile.solid       = SOLID_BBOX;
+    missile.classname   = "rocket";     // Originally "missile".
+	// set missile speed
+    missile.speed       = 1000;
+    missile.velocity    = dir * 1000;
+    missile.angles      = vectoangles(missile.velocity);
+	// set missile damage
+    missile.dmg         = 120;      // Alien Quake is 210.
+    missile.enemy       = world;
+    missile.style       = DF_ROCKET;    // Shamblers take half damage.
+	// set missile duration
+    missile.touch       = T_MissileTouch;
+    missile.nextthink   = time + 5;
+    missile.think       = SUB_Remove;
+
+    setall (missile, "progs/missile.mdl", '0 0 0', '0 0 0', start);
+
+    newmis = missile;
 };

@@ -1,6 +1,5 @@
 // Used by decapitation code to give headless "body double" the loot.
-void(entity from, entity to) Pack_Copy =
-{
+void(entity from, entity to) Pack_Copy = {
     to.arsenal      = from.arsenal;
     to.war          = from.war;
     to.healamount   = from.healamount;
@@ -35,7 +34,7 @@ void () item_artifact_berserker = {
 	precache_model (self.mdl);
 	self.noise = "items/zerkhelm.wav";
 	precache_sound (self.noise);
-        self.netname = "Berserker Helm";
+    self.netname = "Berserker Helm";
 	self.items = 0;
 	self.classtype = CT_ARTBERSERK;
 	self.part_active = PARTICLE_STYLE_PENT;

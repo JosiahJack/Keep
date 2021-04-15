@@ -995,11 +995,12 @@ void () reiver_shield_think = {
 		// Always reset Ammo Resistance to be consistent
 		self.resist_shells = self.resist_nails = 0.75;
 		self.resist_rockets = self.resist_cells = 0.75;
+		self.reflectnails = TRUE;		// Reflect nail projectiles
 	} else {
 		self.alpha = 0.0001;				// hide multi_shield
 		self.shield_time = 0;
 		self.owner.takedamage = DAMAGE_AIM; 		// regular behaviour
-
+		self.reflectnails = FALSE;		// Reflect nail projectiles
 		// Always reset Ammo Resistance to be consistent
 		self.resist_shells = self.resist_nails = 0;
 		self.resist_rockets = self.resist_cells = 0;
@@ -1048,6 +1049,9 @@ void() monster_reiver = {
 	precache_sound ("reiver/sight.wav");
 	precache_sound ("reiver/death.wav");
 	precache_sound ("reiver/vampire.wav");
+	precache_sound("player/inflame.wav");
+	precache_sound("zombie/corpse_fire.wav");
+	precache_sound("weapons/r_exp3.wav");
 
 	self.solid = SOLID_NOT;					// No interaction with world
 	self.movetype = MOVETYPE_NONE;			// Static item, no movement

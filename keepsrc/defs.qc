@@ -516,6 +516,13 @@ float AS_JUMP      = 5; // Jumping attack
 float AS_TURRET    = 6; // Turret Range attack
 float AS_SIDESTEP  = 7; // Turn 90 degrees and move to the side
 float AS_BACKWARD  = 8; // Turn 180 degrees and move backwards
+float AS_DODGING   = 9; // was 5 in hipnotic originally 
+float AS_CHASING   = 10;// Use shortest, direct path to chase target.
+float AS_VERTICAL  = 11;// Like AS_SLIDING, but vertical (up or down).
+float AS_FLANKING  = 12;// AS_SLIDING if close, AS_STRAIGHT otherwise.
+float AS_FLEEING   = 13;// Reverse of AS_STRAIGHT, used by wraith.
+float AS_REAPER    = 14;// Sucking in souls, used by wraith.
+float AS_COWARDLY  = 15;// Back off if too close.  Otherwise, as_straight.
 
 //======================================================================
 // player only fields
@@ -632,7 +639,7 @@ void(string e) objerror				= #11;
 float(vector v) vlen				= #12;
 float(vector v) vectoyaw			= #13;
 entity() spawn						= #14;
-void(entity e) remove				= #15;
+// void(entity e) remove				= #15;
 //----------------------------------------------------------------------
 // sets trace_* globals
 // nomonsters can be:

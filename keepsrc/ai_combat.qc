@@ -1,12 +1,5 @@
-/*======================================================================
- COMBAT FUNCTIONS
-
- Returns true if the inflictor can directly damage the target.  
- Used for explosions and melee attacks.
-======================================================================*/
 void(entity targ, entity attacker) ClientObituary;
 
-//-----------------------------------------------------------
 float(entity targ, entity inflictor) CanDamage = {
 	// Any entity marked with no damage is automatically excluded
 	if (targ.takedamage == DAMAGE_NO) return FALSE;
@@ -35,8 +28,7 @@ float(entity targ, entity inflictor) CanDamage = {
 };
 
 //-----------------------------------------------------------
-void(entity targ, entity attacker) Killed =
-{
+void(entity targ, entity attacker) Killed = {
 	local entity oself;
 
 	// Switch self for death functions
@@ -47,8 +39,7 @@ void(entity targ, entity attacker) Killed =
 	if (self.movetype == MOVETYPE_PUSH || self.movetype == MOVETYPE_NONE ||
 		self.classtype == CT_FUNCPUSHABLE) {	
 		self.th_die ();
-	}
-	else {
+	} else {
 		if (!self.deadflag && (self.flags & FL_MONSTER || self.flags & FL_CLIENT) ) {
 			// Object is dying, stop re-triggering
 			self.deadflag = DEAD_DYING;
@@ -105,8 +96,7 @@ float(entity targ, float damage, float drain) PowerArmor_Absorb;
 	NOARMOR     - Ingnores armour for damage reduction
 	DAMSPLASH   - Splash damage only
 ======================================================================*/
-void(entity targ, entity inflictor, entity attacker, float damage, float checkarmor) T_Damage =
-{
+void(entity targ, entity inflictor, entity attacker, float damage, float checkarmor) T_Damage = {
 	local vector dir;
 	local entity oldself;
 	local float save, saveperms, take, flinch, misc, noarmordmg, adamant, oldarmorvalue;
@@ -150,9 +140,9 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	// Berserker Helm melee damage boost, Drake permanent powerup
 	if ((attacker.perms & POW_VAMPIRE)) {
 		if (attacker.selfweaponismoditems) {
-			if (attacker.weapon == IT_MACE) damage = damage * 1.25;
+			if (attacker.weapon == IT_MACE) damage = damage * 2;
 		} else {
-			if (attacker.weapon == IT_AXE || attacker.weapon == IT2_MJOLNIR || attacker.weapon == IT_SCIMITAR || attacker.weapon == IT_RAPIER) damage = damage * 1.25;
+			if (attacker.weapon == IT_AXE || attacker.weapon == IT2_MJOLNIR || attacker.weapon == IT_SCIMITAR || attacker.weapon == IT_RAPIER) damage = damage * 2;
 		}
 	}
 
@@ -312,7 +302,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 
 	// figure momentum add
 	// This is what gives Rocket Jumps its Velocity!
-	if (inflictor != world && targ != world && (targ.movetype == MOVETYPE_WALK || targ.classname == "player")) {
+	if (inflictor != world && targ != world && (targ.movetype == MOVETYPE_WALK || (targ.flags & FL_CLIENT))) {
 		dir = targ.origin - (inflictor.absmin + inflictor.absmax) * 0.5;
 		dir = normalize(dir);
 		dir = dir*damage*8;
@@ -498,29 +488,29 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	if ( (self.flags & FL_MONSTER) && attacker != world && inflictor.classtype != CT_PROJ_BOLT1 && inflictor.classtype != CT_PROJ_BOLT2) {
 		// Is the current attacker not self and not current enemy target?
 		if (self != attacker && attacker != SUB_entEnemyTarget()) {
-			if ( self.noinfighting && attacker.flags & FL_MONSTER 
-				|| attacker.noinfighting) {
+			if ((self.noinfighting && attacker.flags & FL_MONSTER || attacker.noinfighting) && self.temperament != 4) {
 				// Prevent monsters from infighting
 				// but let them react to the player
-			}
-			else {
+			} else {
 				// If previous switch target dead, focus on new target
 				if (self.switchattacker.health < 1) self.switchtimer = 0;
 				// Is the attacker a different classgroup and switching target available?
-				if ( self.classgroup != attacker.classgroup && self.switchtimer < time) {
-					// Prevent the monster from rapidily switching targets
-					if (self.switchattacker != attacker) self.switchtimer = time + 1;
-					else self.switchtimer = time + 0.1 + random();
-					// Switch to new target
-					self.switchattacker = attacker;
+				if (self.switchtimer < time) {
+					if (self.classgroup != attacker.classgroup || self.temperament == 4) {
+						// Prevent the monster from rapidily switching targets
+						if (self.switchattacker != attacker) self.switchtimer = time + 1;
+						else self.switchtimer = time + 0.1 + random();
+						// Switch to new target
+						self.switchattacker = attacker;
 
-					// Shift previous enemy to old enemy ready for new target
-					// Only switch if the new enemy is the player! (id logic)
-					// Check for new enemy target system before switching
-					if (SUB_flagsEnemyTarget(FL_CLIENT)) self.oldenemy = SUB_entEnemyTarget();
-					if (self.enemy.classtype == CT_ENEMYTARGET) SUB_switchEnemyTarget();
-					self.enemy = attacker;		// attack the attacker!
-					FoundTarget ();				// Run+turn towards new enemy
+						// Shift previous enemy to old enemy ready for new target
+						// Only switch if the new enemy is the player! (id logic)
+						// Check for new enemy target system before switching
+						if (SUB_flagsEnemyTarget(FL_CLIENT)) self.oldenemy = SUB_entEnemyTarget();
+						if (self.enemy.classtype == CT_ENEMYTARGET) SUB_switchEnemyTarget();
+						self.enemy = attacker;		// attack the attacker!
+						FoundTarget ();				// Run+turn towards new enemy
+					}
 				}
 			}
 		}
@@ -535,6 +525,14 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		else if (targ.resist_nails > 0 && inflictor.classgroup == CG_PROJNAILS) return;
 		else if (targ.resist_rockets > 0 && inflictor.classgroup == CG_PROJROCKETS) return;
 		else if (targ.resist_cells > 0 && inflictor.classgroup == CG_PROJCELLS) return;
+		// else if (targ.resist_lava_nails > 0 && inflictor.classgroup == CG_PROJNAILS) return;
+		// else if (targ.resist_multi_rockets > 0 && inflictor.classgroup == CG_PROJROCKETS) return;
+		// else if (targ.resist_plasma > 0 && inflictor.classgroup == CG_PROJCELLS) return;
+		// else if (targ.resist_bolts > 0 && inflictor.classgroup == CG_PROJCELLS) return;
+		// else if (targ.resist_poison > 0 && inflictor.classgroup == CG_PROJCELLS) return;
+		// else if (targ.resist_bloodcrystals > 0 && inflictor.classgroup == CG_PROJCELLS) return;
+		// else if (targ.resist_voidshards > 0 && inflictor.classgroup == CG_PROJCELLS) return;
+		// else if (targ.resist_elemental > 0 && inflictor.classgroup == CG_PROJCELLS) return;
 	}
 	
 	//----------------------------------------------------------------------
@@ -563,7 +561,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		self.pain_finished = time + self.pain_timeout;
 		
 		// Ignoring pain from other monsters? (infighting)
-		if (self.pain_ignore && attacker.flags & FL_MONSTER)
+		if ((self.pain_ignore || self.temperament == 4) && attacker.flags & FL_MONSTER)
 			self.pain_finished = self.pain_finished + 1 + random();
 		else {
 			// If accumulated pain is higher, use that instead
@@ -613,8 +611,9 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 			// This is used mostly for wraiths so when they die they don't
 			// kill each other, can't get the code logic to work so its
 			// setup as a dead exception path
-			if (checkclass == IGNORECLASS && head.classtype == ignore.classtype) { }
-			else {
+			if (checkclass == IGNORECLASS && head.classtype == ignore.classtype) {
+				// Nothing
+			} else {
 				// Check for breakable/pushable monster immunity
 				// Do nothing, radius damage has no miss effect
 				if (ai_immunebreakable(attacker, head)) {
@@ -634,9 +633,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 						points = 0.5*vlen (imporg - org);
 						if (points < 0) points = 0;
 						points = damage - points;
-						
-						// Half damage if caught by own explosion
-						if (head == attacker) points = points * 0.5;
+						if (head == attacker) points = points * 0.5; // Half damage if caught by own explosion
 
 						if (points > 0 && head.health > 0) {
 							// Need CanDamage to check for anything blocking LoS
@@ -647,14 +644,12 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 								if (inflictor.classgroup == CG_PROJCELLS) {
 									// Does target have cell resistance?
 									if (head.resist_cells != 0)
-										points = Resist_Damage(head, IT_CELLS, points);
-								}
-								else {
+										points = Resist_Damage(head, AM_CELLS, points);
+								} else {
 									// Does target have rocket resistance?
 									if (head.resist_rockets != 0)
-										points = Resist_Damage(head, IT_ROCKETS, points);
+										points = Resist_Damage(head, AM_ROCKETS, points);
 								}
-
 								
 								// Any damage left? Check for poison as well
 								if (points > 0) T_Damage (head, inflictor, attacker, points, DAMARMOR);
@@ -669,42 +664,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 	}
 };
 
-/*======================================================================
-	T_BeamDamage (never used, leftover dev crap!)
-======================================================================
-void(entity attacker, float damage) T_BeamDamage =
-{
-	local float points;
-	local entity head;
-	
-	// Cannot hurt the world or enemy targets (fake flying markers)
-	if (attacker.classtype == CT_WORLD) return;
-	if (attacker.classtype == CT_ENEMYTARGET) return;
-
-	head = findradius(attacker.origin, damage+40);
-	
-	while (head) {
-		if (head.takedamage) {
-			points = 0.5*vlen (attacker.origin - head.origin);
-			if (points < 0) points = 0;
-			points = damage - points;
-			if (head == attacker) points = points * 0.5;
-			if (points > 0) {
-				if (CanDamage (head, attacker)) {
-					if (head.resist_rockets > 0) 
-						points = points * head.resist_rockets;
-					T_Damage (head, attacker, attacker, points,DAMARMOR);
-				}
-			}
-		}
-		head = head.chain;
-	}
-}; */
-
-//============
-// T_Repair
-// Add armor to an entity, within limits.  Similar to T_Heal, but for armor.
-//============
+// T_Repair, Add armor to an entity, within limits.  Similar to T_Heal, but for armor.
 float(entity e, float heal, float ignore) T_Repair = {
     local   float   full;
 
@@ -722,10 +682,8 @@ float(entity e, float heal, float ignore) T_Repair = {
     if (e.armorvalue >= full) return 0;   // Armor already fully restored.
     if (heal < 1) return 0;   // Don't damage the armor.
 
-    if (e.armorvalue + heal >= full)
-        e.armorvalue = full;
-	else
-		e.armorvalue = e.armorvalue + heal;
+    if (e.armorvalue + heal >= full) e.armorvalue = full;
+	else e.armorvalue = e.armorvalue + heal;
 
     // if (!e.armortype)
         // e.armortype = ARMOR_GRN_TYPE;

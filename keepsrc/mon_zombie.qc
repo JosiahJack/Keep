@@ -618,7 +618,6 @@ void() monster_zombie = {
 	self.headmdl = "progs/ad181/h_zombie.mdl";
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
-	//precache_model (MODEL_PROJ_FLESH); (world.qc)
 
 	// Stupid ID getting the crucified and ambush back to front on zombies
 	// Lets fix the problem and reverse the flags to match everything else

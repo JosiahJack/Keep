@@ -117,35 +117,32 @@ float(float dist) ai_up =
 float(float dist) ai_down = {return ai_up (0 - dist);};
 
 // Changes mode from fight to idle.  Does not actually change thinking.
-void() ai_calm_down =
-{
-// Reset fight status.
+void() ai_calm_down = {
+	// Reset fight status.
     self.fighting     = FALSE;
     self.search_time  = time + 3;
 
-// Forget all enemies and go idle.
+	// Forget all enemies and go idle.
     self.enemy = self.oldenemy = world;
 };
 
 // Check if self should stop running after enemy.
-float() ai_run_kill =
-{
+float() ai_run_kill = {
     local   float   winner;
 
-// Check for victory sound.  Must do first because enemy will be changed.
-// Sound is played only if enemy slain is a client.
+	// Check for victory sound.  Must do first because enemy will be changed.
+	// Sound is played only if enemy slain is a client.
     winner = FALSE;
     if (self.enemy)
-    if (self.enemy.classname == "player")
-    if (visible (self.enemy))
-    {
+    if (self.enemy.flags & FL_CLIENT)
+    if (visible (self.enemy)) {
         winner = TRUE;
         // Set yaw in case we need to face the fallen during the dance.
         self.ideal_yaw = vectoyaw (self.enemy.origin - self.origin);
     }
 
     self.enemy = world;
-// FIXME: look all around for other targets
+	// FIXME: look all around for other targets
     if (self.oldenemy.health > 0)
     {
         self.enemy = self.oldenemy;

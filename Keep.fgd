@@ -1365,6 +1365,7 @@
 	[
 		1 : "Use Particles" : 0
 	]
+	netname(string) : "Classname to protect from explosion, or targetname if classname not found (Zerstorer hack)"
 	dmg(integer) : "Damage for each Explosion"
 	duration(integer) : "Duration of Explosions"
 	speed(choices) : "Explosion Attonation" : 1 = 
@@ -1704,6 +1705,21 @@
 	spawnflags(flags) = [ 2: "Remove/Block Message" : 0 ]
 ]
 
+// Drake cutscene entities (derived from Zerstorer)
+@SolidClass base(TrigBasic) = trigger_camera : "Trigger Drake Cutscene" []
+@PointClass base(TrigBasic) = trigger_camera_point : "Trigger Drake Cutscene" []
+@PointClass base(Targetname) = trigger_gocamera : "Use to start Zerstorer Cutscene" []
+@PointClass base(Targetname,Target) size(-8 -8 -8, 8 8 8) = info_movie_camera : "8x8x8 Drake Cutscene Camera Corner Trigger" [
+	focal_point(string) : "Targetname of the object to look at when passing this corner"
+]
+@PointClass base(Targetname) = info_script : "Drake Custscene Centerprints" [
+	next_script(integer) : "Next script's script_num, set to 0 if last"
+	script_num(integer) : "This Script's reference number"
+	script_delay(integer) : "Delay before printing this script's message"
+	message(string) : "Message to centerprint"
+]
+@PointClass base(Targetname) = info_focal_point : "Drake Custscene Camera Target(same as info_target or info_notnull)" []
+
 //----------------------------------------------------------------------
 @PointClass base(TrigUpg,TrigSound,Appearflags,Targetname,Target,Target2) color(128 0 128)
 	size(-8 -8 -8, 8 8 8) = trigger_relay : "Trigger relay" [
@@ -1938,6 +1954,11 @@
 	message(string) : "Healing Message"
 	message2(string) : "Healing Expired"
 ]
+
+@SolidClass base(Targetname) = trigger_smite : "Trigger Lightning Strike Relay" [
+	cnt(integer) : "Number of lightning strikes (def=1)"
+]
+
 @SolidClass base(TrigBubbles) = func_bubbles : "Bubble generator volume" []
 @SolidClass base(Misc) = func_drips : "Dripping water volume" [
 	spawnflags(Flags) = [ 
@@ -2243,8 +2264,7 @@
 	]
 ]
 
-@PointClass base(Targetname) = info_particles : "Particle effect"
-[
+@PointClass base(Targetname) = info_particles : "Particle effect" [
 	spawnflags(flags) =
 		[
 			64 : "Start on" : 0
@@ -2377,13 +2397,31 @@
 	brkgravity(integer) : "Rubble gravity (def=1)"
 ]
 
-@PointClass size(0 0 0, 8 8 8) base(Targetname) = func_exploder : "Explosion"
+@PointClass size(-8 -8 -8, 8 8 8) base(Targetname) = func_exploder : "Explosion"
 [
 	spawnflags(flags) =
 	[
 		1 : "Use Particles" : 0
 	]
 	dmg(integer) : "Damage for each Explosion"
+	netname(string) : "Classname to protect from explosion, or targetname if classname not found (Zerstorer hack)"
+	speed(choices) : "Explosion Attonation" : 1 = 
+	[
+		0: "None"
+		1: "Normal"
+		2: "Idle"
+		3: "Static"
+	]
+	volume(string) : "Explosion Volume" : "1.0"
+]
+@PointClass size(-8 -8 -8, 8 8 8) base(Targetname) = func_explode : "Explosion"
+[
+	spawnflags(flags) =
+	[
+		1 : "Use Particles" : 0
+	]
+	dmg(integer) : "Damage for each Explosion"
+	netname(string) : "Classname to protect from explosion, or targetname if classname not found (Zerstorer hack)"
 	speed(choices) : "Explosion Attonation" : 1 = 
 	[
 		0: "None"
@@ -2677,7 +2715,7 @@
 	pos2(string) : "Skin Selection" : : "X=0, Y=0, Z=exact skin number, X->Y, Z=0 : will randomly pick a skin from the X,Y range"
 ]
 
-@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) = misc_actor : "Triggered Physics based actor for scripted sequences" [
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) studio("progs/player.mdl") = misc_actor : "Triggered Physics based actor for scripted sequences" [
 	spawnflags(Flags) = [
 		 2 : "STOP Particles" : 0 : "Disable Particles After Movement is finished"
 		 4 : "Remove Actor on ground" : 0 : "Remove the actor entity after it touches the ground"
@@ -2692,6 +2730,21 @@
 	velocity(vector) : "Physics movement" : : "Format is X Y Z velocity"
 	partname(string) : "Particle Trail" : : "useful for effects like blood trails or flames"
 	//partspawn(string) : "Triggered Particle" : : "Spawn one //particle upon being targeted"
+]
+
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) studio("progs/player.mdl") = misc_hostage : "Triggered Physics based actor for scripted sequences" [
+	spawnflags(Flags) = [
+		 1 : "Dead" : 0
+		 2 : "Fire Rockets (zerend hack)" : 0
+		 64 : "Delay Spawn" : 0
+	]
+	speed(integer) : "Move speed per ai_run frame (def=10)"
+	wait(integer) : "Time to stand until moving (def=9999999)"
+]
+
+@PointClass base(Target, Targetname) size(-8 -8 -12, 8 8 24) = actor_target : "Target Point for misc_actor" [
+	wait(integer) : "Time to stand still before moving to next actor_target (target) (def=0, stay forever)"
+	speed(integer): "How fast to run to this target (def=10)"
 ]
 
 @PointClass base(TrigOFF, Appearflags, Targetname) = misc_bob : "Bobbing models, gently up and down" [
@@ -3024,16 +3077,70 @@
 ]
 @PointClass base(Trap) = trap_lightningshooter : "Lightning Shooter" [
 	spawnflags(Flags) = [
- 		1 : "Large (Chthon)" : 0 
-		
+ 		1 : "Large (Chthon)" : 0
+		8 : "Impact Dust" : 0
+		16: "Impact Particles" : 0
 	]
+	dmg(integer) : "Damage (def=15)"
 	speed(integer) : "Projectile speed"
-	wait(integer) : "time between firing (def=1s)"
-	delay(integer) : "random time between firing"
+	wait(integer) : "minimum time between firing (def=1s), must be larger than 0"
+	delay(integer) : "added random time between firing"
+	pos1(string) : "Random wobble to source position, enter as 3 positive values, gets multiplied to be come plus or minus on each(def='0 0 0')"
+	pos2(string) : "Random wobble to end position, enter as 3 positive values, gets multiplied to be come plus or minus on each(def='0 0 0')"
+]
+@PointClass base(Targetname) = trap_lightning_triggered : "Triggered Lightning Shooter" [
+	spawnflags(Flags) = [
+ 		1 : "Random (multiplied by wait)" : 0
+		2 : "Boom (use thunderbolt sound)" : 0
+	]
+	dmg(integer) : "Damage (def=30)"
+	wait(integer) : "minimum time between firing (def=1s), must be larger than 0"
+	duration(integer) : "Time to stay on per zap (def=0.1)"
+	deathstring(string) : "Death message (def= was electrocuted, include space at beginning)"
+]
+@PointClass base(Targetname) = trap_lightning_switched : "Toggled Lightning Shooter" [
+	spawnflags(Flags) = [
+ 		1 : "Random (multiplied by wait)" : 0
+		2 : "Boom (use thunderbolt sound)" : 0
+	]
+	dmg(integer) : "Damage (def=30)"
+	wait(integer) : "minimum time between firing (def=1s), must be larger than 0"
+	duration(integer) : "Time to stay on per zap (def=0.1)"
+	deathstring(string) : "Death message (def= was electrocuted, include space at beginning)"
+]
+@PointClass = trap_lightning : "Always On Lightning Shooter" [
+	spawnflags(Flags) = [
+ 		1 : "Random (multiplied by wait)" : 0
+		2 : "Boom (use thunderbolt sound)" : 0
+	]
+	dmg(integer) : "Damage (def=30)"
+	wait(integer) : "minimum time between firing (def=1s), must be larger than 0"
+	duration(integer) : "Time to stay on per zap (def=0.1)"
+	deathstring(string) : "Death message (def= was electrocuted, include space at beginning)"
 ]
 
-@PointClass base(Trap) = trap_tesla_coil : "Lightning Shooter" []
-@PointClass base(Trap) = trap_gods_wrath : "Lightning Shooter" []
+@PointClass base(Trap) = trap_tesla_coil : "Lightning Shooter" [
+	spawnflags(Flags) = [
+ 		1 : "Attack Monsters and Players" : 0
+	]
+	dmg(integer) : "Damage (def=2+(5 * skill)), must be larger than 0"
+	wait(integer) : "minimum time between firing (def=2s), must be larger than 0"
+	duration(integer) : "Time to stay on per zap (def= -1)"
+	distance(integer) : "Attack range (def=600), must be larger than 0"
+	deathstring(string) : "Death message (def= was electrocuted, include space at beginning)"
+]
+
+@PointClass base(Trap) = trap_gods_wrath : "Lightning Shooter" [
+	spawnflags(Flags) = [
+ 		1 : "Attack Monsters and Players" : 0
+	]
+	dmg(integer) : "Damage (def=2+(5 * skill)), must be larger than 0"
+	wait(integer) : "minimum time between firing (def=2s), must be larger than 0"
+	duration(integer) : "Time to stay on per zap (def= -1)"
+	distance(integer) : "Attack range (def=600), must be larger than 0"
+	deathstring(string) : "Death message (def= was electrocuted, include space at beginning)"
+]
+
 @PointClass base(Trap) = trap_gasshooter : "Particle Shooter" [
 	spawnflags(Flags) = [ 
 		1 : "Steam" : 1 
@@ -3674,6 +3781,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 		32768 : "Can Drown" : 0 : "Monster will drown underwater (if not swimmer)"
 	]
 	angrytarget(target_destination) : "Angry target"
+	event(target_destination) : "Follow target"
 	deathtarget(target_destination) : "Death target"
 	health(integer) : "Amount of Health" :  : "Override health defined in QC"
 	exactskin(integer) : "Model Skin number" :  : "Override default skin (no range check)"
@@ -3773,6 +3881,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @baseclass base(Monster) size(-20 -20 -24, 20 20 16) = MonDog []
 @baseclass base(Monster) size(-32 -32 -24, 32 32 64) = MonDemon []
 @baseclass base(Monster) size(-16 -16 -24, 16 16 24) = MonFish []
+@baseclass base(Monster) size(-12 -12 -16, 12 12 16) = MonFishS []
 @baseclass base(Monster) size(-32 -32 -24, 32 32 64) = MonGolem []
 @baseclass base(Monster) size(-16 -16 -24, 16 16 32) = MonShort []
 @baseclass base(Monster) size(-16 -16 -24, 16 16 40) = MonTall []
@@ -3850,6 +3959,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 
 @PointClass base(MonFish) studio("progs/madfox/mon_fragy.mdl") = monster_frog : "Frog" []
 @PointClass base(MonDog) studio("progs/hexen2/mon_sheep.mdl") = monster_sheep : "Sheep" []
+@PointClass base(MonFishS) studio("progs/madfox/mon_swarm.mdl") = monster_beez : "Swarm of Beez" []
 @PointClass base(MonFish) studio("progs/heretic2/mon_ogle.mdl") = monster_ogle : "Ogle" [
 	spawnflags(flags) = [ 4 : "Flesh Mining Sounds" : 0 ]
 ]
@@ -3879,6 +3989,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @PointClass base(MonTall) studio("progs/ad171/mon_centurion.mdl") = monster_centurion : "Centurion" []
 @PointClass base(MonShort) studio("progs/ad171/mon_jim.mdl") = monster_jim : "Jim"
 [ spawnflags(flags) = [ 4 : "Rockets" : 0 ] ]
+@PointClass base(MonShort) studio("progs/drake/drone1.mdl") = monster_drone : "Jim" []
 
 @PointClass base(MonXTall) studio("progs/ad172/mon_floyd.mdl") = monster_floyd : "Floyd" [
 	spawnflags(flags) = [ 
@@ -4122,7 +4233,8 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	]
 ]
 
-//----------------------------------------------------------------------
+@PointClass base(MonShort) studio("progs/madfox/mon_zerstorer.mdl") skin(6) = monster_zerstorer : "Zerstorer" []
+
 @PointClass base(MonShort) studio("progs/ad171/mon_zombie.mdl") skin(6) = monster_zombiep : "Poison Zombie"
 [ spawnflags(flags) = [ 4 : "On Floor" : 0 ] ]
 @PointClass base(MonShort,JumpingMon) studio("progs/ad171/mon_zombiek.mdl") = monster_zombiek : "Zombie Knight"
@@ -4165,6 +4277,8 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @PointClass base(MonTiny,JumpingMon) studio("progs/ad171/mon_scorpion.mdl") = monster_wraithminion2 : "Scorpion Minion" []
 @PointClass base(MonTiny) studio("progs/wizard.mdl") = monster_nourminion : "Wizard Minion" []
 @PointClass base(MonTall) studio("progs/ad171/mon_gaunt.mdl") = monster_judgeminion : "Gaunt Minion, used for precache only" []
+
+@PointClass base(Monster) size(-32 -32 -24, 60 60 300) studio("progs/nehahra/nehah.mdl") = monster_nehahra : "Nehahra" []
 
 //----------------------------------------------------------------------
 @PointClass base(Monster) size(-128 -128 -24, 128 128 256) studio("progs/boss.mdl") = monster_boss : "Chthon" []
@@ -4373,9 +4487,8 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hknight.mdl") skin(3) = monster_hkboss : "Boss Knight" []
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hknight.mdl") skin(4) = monster_bane : "Bane" []
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/hknight.mdl") skin(6) = monster_dark_lord : "The Dark Lord" [
-	spawnflags(Flags) = 
-	[
-		4 : "Beast" : 0
+	spawnflags(Flags) = [
+		4 : "Beast (Turns into Dragon)" : 0
 	]
 ]
 @PointClass base(MonGiant) studio("progs/anaconda/anaconda.mdl") = monster_anac : "Anaconda" [
@@ -4387,6 +4500,9 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 
 @PointClass base(MonWide) studio("progs/snakeman.mdl") = monster_snakeman : "Snakeman" []
 @PointClass base(Monster) size(-16 -16 -24, 16 16 40) studio("progs/drake/baron.mdl") = monster_baron : "Baron" [
+	spawnflags(Flags) = [
+		4 : "No Jump Attacks" : 0
+	]
 	level(choices) : "Type" : 0 = [
 		0 : "Normal"
 		1 : "Fire Baron"
@@ -4501,6 +4617,13 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	delay(integer) : "Tremor Duration" : 20
 	wait(integer) : "Time between tremors" : 60
 	weapon(integer) : "X/Y Movement" : 40
+]
+
+@PointClass base(Appearflags, Targetname) color(0 255 0) size(-8 -8 -8, 8 8 8) = trigger_quake : "Harmless Earthquake (Drake)" [
+	spawnflags(Flags) = [
+		1 : "No Touch" : 0
+	]
+	wait(integer) : "Duration, must be above 0 (def=3)"
 ]
 
 @PointClass size(0 0 0, 32 32 32) base(Target) = func_clock : "Clock Hand" [

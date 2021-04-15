@@ -422,6 +422,7 @@ void() worldspawn =
 	precache_model (MODEL_PLAYER);
 	precache_model (MODEL_PLAYER_EYES);
 	precache_model (MODEL_PLAYER_HEAD);
+	precache_model ("progs/player_legs.mdl");
 	//	precache_model ("progs/gib1.mdl");		// Replaced with better models
 	//	precache_model ("progs/gib2.mdl");
 	//	precache_model ("progs/gib3.mdl");
@@ -807,12 +808,9 @@ void() worldspawn =
 	mapvar_setuparray();
 	dprint("\b[WORLD]\b Setup Shadow lightstyle array\n");	
 	switch_shadow_setuparray();
-
-	if (self.devdata & DEV_AMMO_N_HEALTH) {
-		self.deventity = ammohealthsum();
-	}
-
+	if (self.devdata & DEV_AMMO_N_HEALTH) self.deventity = ammohealthsum();
 	if (coop > 2) versus_setup();
+	Gyro_InitialiseVariables();
 
 	//----------------------------------------------------------------------
 	// Original id levels
@@ -842,6 +840,7 @@ void() StartFrame = {
 
 	framecount = framecount + 1;
 	WorldScan(); // Sets h2olevel and h2otype for ryu and wyrm dragons (Drake)
+	Gyro_Run();
 };
 
 /*======================================================================

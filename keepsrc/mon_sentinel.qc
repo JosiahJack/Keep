@@ -131,7 +131,7 @@ void() sentinel_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
-	sound (self, CHAN_VOICE, "", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "jim/explode_major.wav", 1, ATTN_NORM);
 	self.solid = SOLID_NOT;
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
@@ -156,7 +156,7 @@ void() monster_sentinel = {
 	precache_model("progs/quoth2pt2full/gib.mdl");
 	precache_model("progs/quoth2pt2full/wreckage.mdl");
 	precache_model("progs/quoth2pt2full/s_vp_pll.spr");
-
+	precache_sound("jim/explode_major.wav");
 	precache_sound("enforcer/enfire.wav");
 	precache_sound("enforcer/enfstop.wav");
 	precache_sound("sentinel/laser.wav");
@@ -208,6 +208,7 @@ void() monster_sentinel = {
 	self.resist_rockets = 0;
 	self.resist_cells = 0;
 
+	self.gibtype = GIBTYPE_METAL;
 	self.classtype = CT_MONSENTINEL;
 	self.classgroup = CG_ROBOT;			// One big happy ogre family!
 	self.classmove = MON_MOVEFLY;

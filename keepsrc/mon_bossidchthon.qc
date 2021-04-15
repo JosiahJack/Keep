@@ -390,6 +390,8 @@ void() monster_boss =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 1;
 	self.resist_rockets = self.resist_cells = 1;
+	self.reflectnails = TRUE;		// Reflect nail projectiles
+	self.reflectaxe = TRUE;			// Prevent axe damage
 
 	// Check passive system for exceptions
 	setup_passivestate_boss(self);

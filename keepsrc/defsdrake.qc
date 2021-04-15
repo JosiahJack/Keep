@@ -2,15 +2,6 @@ float   ALPHA_GHOST     = 0.7;  // Used by wraiths.
 float   ALPHA_ICE       = 0.7;  // Used by ice shards.
 float   ALPHA_ICEBALL   = 0.9;  // Used by iceballs.
 
-// Custom attack states.
-//See defshipnotic.qc  float   AS_DODGING  = 5;    // One of Hipnotic's inventions for the scourge.  
-float   AS_CHASING  = 9;    // Use shortest, direct path to chase target.
-float   AS_VERTICAL = 10;    // Like AS_SLIDING, but vertical (up or down).
-float   AS_FLANKING = 11;    // AS_SLIDING if close, AS_STRAIGHT otherwise.
-float   AS_FLEEING  = 12;    // Reverse of AS_STRAIGHT, used by wraith.
-float   AS_REAPER   = 13;   // Sucking in souls, used by wraith.
-float   AS_COWARDLY = 14;   // Back off if too close.  Otherwise, as_straight.
-
 float   ATTN_DAMAGE = 0.5;      // Default attenuation for radius damage.
 
 // arrows -------------------------------------------------------------------
@@ -65,7 +56,6 @@ float   DF_FIRE         = 512;
 float   DF_LIGHTNING    = 1024;
 float   DF_ROCKET       = 2048; // Damage caused by rockets and equivalent.
 float   DF_BURN         = 4096; // Target may ignite when damaged.
-//float   DF_13           = 8192;
 float   DF_MELEE        = 8192; // Melee attack, used to check a powerup.
 float   DF_PERCENT      = 16384;    // Remove current hp% instead of hp.
 // Radius only
@@ -521,7 +511,7 @@ vector      damage_velocity;    // Set by 'T_Damage' for gib velocity.
 .float spawnskin;
 .void()     th_revive;  // Resurrection scene.
 .void()     th_spawn;   // Respawn function.
-.void(float hello)  th_sight;   // Sight sound when spotting a target.
+.string hello_sound;
 .float      tronyn;     // Flags that do special things in his maps.
 .float      waitmin, waitmax;
 .float      xfl, xf2;   // Extra flags without C code connections.
@@ -575,12 +565,11 @@ vector      damage_velocity;    // Set by 'T_Damage' for gib velocity.
                             //  x = v_forward, y = v_right, z = v_up.
 
 // More powerups -----------------------------------------------------------
-.float      thorns_finished, thorns_time, thorns_sound; // Empathy shields
+// .float      thorns_finished, thorns_time, thorns_sound; // Empathy shields
 .float      wing_finished, wing_time, wing_sound;       // Dark-Angel Wings *
 .float      mirror_finished, mirror_time, mirror_sound, mirror_ping;  // Reflection
 .float      slow_finished, slow_time, slow_ping;    // For those hit by ice arrow.
 .float      tome_finished;       // Tome of Power.
-
 .float      fighting;   // Checks if monster is really fighting while
                         //  running.  Monsters can run to follow friends.
 
@@ -645,3 +634,20 @@ float   SQRT2   = 1.4142;   // The square root of 2.
 .vector spawnmins;
 .void() spawnfunction;
 .float repairtime;
+
+// Books -------------------------------------------------------------------
+.float      book_page;
+.float      book_time;
+.entity     book_ent;
+.string     page1, page2, page3, page4, page5, page6, page7, page8;
+
+// Cutscenes ---------------------------------------------------------------
+// Cutscenes -- Borrowed from Zerstorer.
+.string     script;         //dhm - denotes which script to read.
+.string     next_script;    //dhm - denotes the current script.
+.string     script_num;     //dhm - number for info_scripts.
+//.string     camera_point;   //dhm - target for camera to move to.
+.string     focal_point;    //dhm - focus point for camera.
+.float      script_delay;   //dhm - time until next script.
+.float      script_time;    //dhm - used for script timing.
+.float      script_count;   //dhm - ditto.

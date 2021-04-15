@@ -647,21 +647,6 @@ void() archer_revive8  =[ $deathA6,  archer_revive9  ] {};
 void() archer_revive9  =[ $deathA4,  archer_revive10 ] {};
 void() archer_revive10 =[ $deathA2,  archer_run1     ] {};
 
-// OTHER - - - - - - - - - - - - - - - -
-void(float hello) archer_sight = {
-    if (archer_lord ()) {
-        if (hello)
-            sound (self, CHAN_VOICE, "archer/growl2.wav", 1, ATTN_NORM);
-        else
-            sound (self, CHAN_VOICE, "archer/sight2.wav", 1, ATTN_NORM);
-    } else {
-        if (hello)
-            sound (self, CHAN_VOICE, "archer/growl.wav", 1, ATTN_NORM);
-        else
-            sound (self, CHAN_VOICE, "archer/sight.wav", 1, ATTN_NORM);
-    }
-};
-
 //============
 // --> QUAKED monster_archer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 //============
@@ -688,6 +673,15 @@ void() monster_archer = {
     precache_sound ("archer/growl.wav");
     precache_sound ("archer/pain.wav");
     precache_sound ("archer/sight.wav");
+
+    if (self.classname == "monster_archer_lord") {
+		self.hello_sound = "archer/growl2.wav";
+		self.sight_sound = "archer/sight2.wav";
+    } else {
+		self.hello_sound = "archer/growl1.wav";
+		self.sight_sound = "archer/sight.wav";
+    }
+
     precache_sound ("archer/crash.wav");
     precache_sound ("archer/death2.wav");
     precache_sound ("archer/growl2.wav");
@@ -735,11 +729,9 @@ void() monster_archer = {
     self.th_missile = archer_attack;
     self.th_pain = archer_pain;
     self.th_die = archer_die;
-    self.th_sight = archer_sight;
     self.th_checkattack = ArcherCheckAttack;
     self.th_revive  = archer_revive1;
     self.th_spawn   = monster_archer;
-
     self.attack_state   = AS_FLANKING;
     //if (!soul_evil || (self.skin == 1))
     //{   // Archer/Assassin of Bane.
@@ -748,8 +740,7 @@ void() monster_archer = {
     //}
 
 	// As SoE enforcer replacements, give them ammo to drop.
-    if (soul_evil)
-	self.ammo_bolts = 2;
+    if (soul_evil) self.ammo_bolts = 2;
     //monster_guns (0, 0, 20, 0, 0);
     //self.family = self.family | FAM_ARCHER;
 

@@ -35,14 +35,16 @@ void () exploder_use = {
 };
 
 void () func_exploder = {
-   precache_sound ("drake/misc/shortexp.wav");
-   precache_sound ("drake/misc/longexpl.wav");
-   self.classname = "exploder";
-   self.use = exploder_use;
-   if ( (self.dmg == FALSE) ) self.dmg = 120;
-   if ( (self.dmg < FALSE) ) self.dmg = FALSE;
-   if ( (self.speed == FALSE) ) self.speed = TRUE;
-   if ( (self.volume == FALSE) ) self.volume = TRUE;
+	precache_sound ("drake/misc/shortexp.wav");
+	precache_sound ("drake/misc/longexpl.wav");
+	self.classname = "exploder";
+	self.use = exploder_use;
+	if (!self.owner) self.owner = find(world, classname, self.netname); // if netname is set, this explosion won't harm the netname, useful for protecting bosses
+	if (!self.owner) self.owner = find(world, targetname, self.netname);
+	if ( (self.dmg == FALSE) ) self.dmg = 120;
+	if ( (self.dmg < FALSE) ) self.dmg = FALSE;
+	if ( (self.speed == FALSE) ) self.speed = TRUE;
+	if ( (self.volume == FALSE) ) self.volume = TRUE;
 };
 
 void () multi_exploder_fire = {
@@ -122,6 +124,8 @@ void () func_multi_exploder = {
    self.classname = "exploder";
    self.use = multi_exploder_use;
    setmodel (self,self.model);
+	if (!self.owner) self.owner = find(world, classname, self.netname); // if netname is set, this explosion won't harm the netname, useful for protecting bosses
+	if (!self.owner) self.owner = find(world, targetname, self.netname);
    self.movetype = MOVETYPE_NONE;
    self.modelindex = FALSE;
    self.model = "";

@@ -442,7 +442,8 @@ void() monster_drone =  {
 	self.th_die = drn_die1;
 	self.ammo_shells = 0;
 
-	self.classtype = CT_MONJIM;
+	self.gibtype = GIBTYPE_METAL;
+	self.classtype = CT_MONDRONE;
 	self.classgroup = CG_ROBOT;
 	self.classmove = MON_MOVEFLY;
 	if ( (random () < 0.500) ) {

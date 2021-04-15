@@ -781,7 +781,6 @@ void(entity inflictor, entity attacker, float damage) bane_pain =
             return;
         }
     }
-//- - - - - - - - -
 
 // Normal pain code.
     if (self.pain_finished > time)
@@ -870,50 +869,8 @@ void() bane_win =
     monster_sow ();
 };
 
-void(float hello) bane_sight =
-{
-    if (!hello)
-        sound (self, CHAN_VOICE, "drake/bane/sight.wav", 1, 0.5);
-};
-void(float hello) bane_hello =
-{
-    if (self.enemy.classname == "player")
-    {
-        if (world.model == "maps/soe1m5.bsp")
-        {   // Thou dare challenge me?!
-            Bane_Speaks ("Τθε ΒαξεΊ Τθου δαςε γθαμμεξηε νεΏ‘\n");
-        }
-        else
-        {
-            if (random() < 0.5)     // Vengeance shall be mine!
-                Bane_Speaks ("Τθε ΒαξεΊ Φεξηεαξγε σθαμμ βε νιξε‘\n");
-            else                    // Welcome to thy doom!
-                Bane_Speaks ("Τθε ΒαξεΊ Χεμγονε το τθω δοον‘\n");
-        }
-        self.th_sight = bane_sight;
-    }
-    bane_sight (hello);
-};
-
-void(float hello) lord_sight =
-{
-    if (hello)
-        sound (self, CHAN_VOICE, "hknight/idle.wav", 1, ATTN_NORM);
-    else
-        sound (self, CHAN_VOICE, "drake/archer/sight2.wav", 1, ATTN_NORM);
-};
-
-void(float hello) hknight_sight =
-{
-    if (hello)
-        sound (self, CHAN_VOICE, "hknight/idle.wav", 1, ATTN_NORM);
-    else
-        sound (self, CHAN_VOICE, "hknight/sight1.wav", 1, ATTN_NORM);
-};
-
 // Files common to all of the hell knight variants.
-void() hk_cache =
-{
+void() hk_cache = {
     precache_model ("progs/ad171/mon_hknight.mdl");
     precache_model ("progs/k_spike.mdl");
     precache_model ("progs/h_hellkn.mdl");
@@ -924,31 +881,20 @@ void() hk_cache =
     precache_sound ("hknight/idle.wav");
     precache_sound ("knight/sword1.wav");
     precache_sound ("knight/sword2.wav");
-
-//    precache_sound ("hknight/death1.wav");
-//    precache_sound ("hknight/pain1.wav");
-//    precache_sound ("hknight/sight1.wav");
 };
 
 // Classic, standard hell knight.
-void() hknight_cache =
-{
+void() hknight_cache = {
     hk_cache ();
-
     precache_sound ("hknight/death1.wav");
     precache_sound ("hknight/pain1.wav");
     precache_sound ("hknight/sight1.wav");
 };
 
 // Tougher and meaner red version with fire magic.
-void() hklord_cache =
-{
+void() hklord_cache = {
     hk_cache ();
-
     precache_model ("progs/drake/lavarock.mdl");
-
-    // Borrow sounds from archer lords.
-    // Update:  Don't use growl2.wav or growl3.wav.
     precache_sound ("drake/archer/death2.wav");
     precache_sound ("drake/archer/pain2.wav");
     precache_sound ("drake/archer/sight2.wav");
@@ -959,8 +905,7 @@ void() hklord_cache =
 };
 
 // For Rapture's hkboss.
-void() hkboss_cache =
-{
+void() hkboss_cache = {
     hknight_cache ();
     precache_sound ("drake/hknight/death1.wav");
     precache_sound ("drake/hknight/sboom.wav");
@@ -968,138 +913,9 @@ void() hkboss_cache =
     precache_model ("progs/drake/v_spike.mdl");       // Used by hkboss.
     precache_sound ("drake/hkboss/iceball.wav");      // Used by hkboss.
 };
-/*
-// Prototypes...
-void() monster_axeman;
-//============
-// QUAKED monster_hell_knight (1 0 0) (-16 -16 -24) (16 16 40) Ambush Lord
-//============
-void() monster_hell_knight =
-{
-    local   float   look;
-
-// SoE:  sf 1 upgrades, sf 2 is ambush.
-    if (!respawning)
-    {
-        if (soul_evil)
-        {
-            look = self.spawnflags & 1;
-            if (look)
-            {
-                self.spawnflags = self.spawnflags - 1;
-                if (self.classname != "monster_hkboss")
-                    self.classname  = "monster_hell_lord";
-            }
-            if (self.spawnflags & 2)
-                self.spawnflags = (self.spawnflags - 2) | 1;
-//- - - - - - - - -
-// SoE Indian Summer Hack.
-            if (look)
-            {   // nsoe1 and nsoe2 have too many Hell Lords -- downgrade some of them!
-                if (world.model == "maps/nsoe1.bsp")
-                {
-                    AddOne();   // Also called by item_health -- gross!
-                    if ((gloat == 2) || (gloat == 3))   // First two knights.
-                        self.classname  = "monster_hell_knight";
-                    else if ((gloat == 8) || (gloat == 9))
-                    {   // No lords on Easy.
-                        if (cvar("skill") == 0)
-                            self.classname  = "monster_hell_knight";
-                    }
-                    else if (gloat == 12)
-                        {self.classname = "monster_axeman";  monster_axeman();  return;}
-                }
-                else if (world.model == "maps/nsoe2.bsp")
-                {
-                    AddOne();
-                    if ((gloat == 13) || (gloat == 14)) // Near Sha'Vile.
-                        {self.classname = "monster_axeman";  monster_axeman();  return;}
-                    // 1 = City entrance, 4-5 = Outside near nailgun, 16-17 = Chapel
-                    if ((gloat == 0) || (gloat == 1) || (gloat == 4) || (gloat == 5) ||
-                    (gloat == 16) || (gloat == 17))
-                        self.classname  = "monster_hell_knight";
-                }
-            }
-//- - - - - - - - -
-        }
-        else
-        {
-            if (self.spawnflags & 2)
-                if (self.classname != "monster_hkboss")
-                    self.classname  = "monster_hell_lord";
-        }
-    }
-//- - - - - - - - -
-    if (!self.spawned)
-    {
-        if (noenemies)
-            {remove (self); return;}
-        if (self.classname == "monster_hkboss")
-            hkboss_cache ();
-        else if (self.classname == "monster_hell_lord")
-            hklord_cache ();
-        else
-            hknight_cache ();
-    }
-
-    if (self.classname == "monster_hell_lord")
-    {
-        if (soul_evil)
-            monster_purse (3, 0.75, 0.25);
-        self.skin       = SKIN_HELL_LORD;
-        self.th_missile = lord_magic;
-        self.th_sight   = lord_sight;
-        // Originally 500 health, too much.
-        monster_form ("progs/ad171/mon_hknight.mdl", '-16 -16 -24', '16 16 40', 400, -40);
-    }
-    else if (self.classname == "monster_hkboss")
-    {
-        if (soul_evil)
-            monster_purse (5, 0.75, 0.25);
-        self.skin       = SKIN_HKBOSS;
-        self.th_missile = hkboss_magic;
-        monster_form ("progs/hknight.mdl", '-16 -16 -24', '16 16 40', 900, -40);
-    }
-    else
-    {
-        if (soul_evil)
-        {
-            monster_purse (3, 0.5, 0);
-            self.skin       = (random() * 2) & 1;
-        }
-        else
-            self.skin       = self.skin & 1;    // First two only.
-        monster_form ("progs/ad171/mon_hknight.mdl", '-16 -16 -24', '16 16 40', 250, -40);
-    }
-    self.mdl_head   = "progs/h_hellkn.mdl";
-    self.mass       = MASS_MEDIUM;
-
-    self.th_stand   = hknight_stand1;
-    self.th_walk    = hknight_walk1;
-    self.th_run     = hknight_run1;
-    if (!self.th_missile)
-        self.th_missile = hknight_magic;    // Was 'hknight_magicc1'
-    self.th_melee   = baneknight_melee;
-    self.th_pain    = hknight_pain;
-    self.th_die     = hknight_die;
-    //- - - - - - - -
-//    self.th_jump    = hknight_jump1;
-    if (!self.th_sight)
-        self.th_sight   = hknight_sight;
-    self.th_revive  = hknight_revive;
-    self.th_gib     = hknight_gib;
-    self.th_spawn   = monster_hell_knight;
-    
-    self.family     = FAM_BANE;
-    self.xfl        = XFL_ARMORED;
-    self.hittype    = HIT_METAL;
-
-    monster_start ();
-};*/
 
 void() monster_hell_lord = {monster_hell_knight ();};
-void() monster_lord =
-    {self.classname = "monster_hell_lord";  monster_hell_knight ();};
+void() monster_lord = {self.classname = "monster_hell_lord";  monster_hell_knight ();};
 
 // For Rapture.
 void() monster_hkboss = {monster_hell_knight ();};
@@ -1167,6 +983,7 @@ void() monster_bane = {
 	self.pain_sound = "bane/pain.wav";
 	self.death_sound = "bane/death.wav";
 	self.sight_sound = "bane/sight.wav";
+	self.hello_sound = string_null; 
 
 	precache_sound (self.pain_sound);
 	precache_sound (self.death_sound);
@@ -1216,7 +1033,6 @@ void() monster_bane = {
 	self.th_charge = hknight_char_a1;	// Run + melee
 	self.th_pain = bane_pain;		// Stumble and pain
 	self.th_die = hknight_die;			// Face meets floor
-    self.th_sight   = bane_sight;
     self.th_win     = bane_win;
     self.th_spawn   = monster_bane;
 	if (self.deathstring == "") self.deathstring = " provided sport for Bane\n";
@@ -1229,13 +1045,10 @@ void() monster_bane = {
 	self.classgroup = CG_DCAPTAIN;	// Rule over seargent and fury knights but lesser knights are disloyal
 	self.classmove = MON_MOVEWALK;
 
-    // if (soul_evil)
-        // monster_purse (20, 1, 0.5);
+    // if (soul_evil) monster_purse (20, 1, 0.5);
 
 	monster_start();
 };
-
-
 
 //==========================================================================
 //  The Dark Lord  (Wraith in Black Armor, a bit like Tolkien's Nazgul)
@@ -1494,14 +1307,6 @@ void() darklord_die = {
     Rocket_Explosion2 (st, 32, 5);
 };
 
-void(float hello) darklord_sight = {
-    if (hello)
-        sound (self, CHAN_VOICE, "drake/darklord/idle1.wav", 1, ATTN_NORM);
-    else
-        sound (self, CHAN_VOICE, "drake/darklord/sight.wav", 1, ATTN_NORM);
-};
-
-
 //============
 // --> QUAKED monster_dark_lord (1 0 0) (-16 -16 -24) (16 16 40) Ambush Guardian Beast
 // Guardian version can raise a shield and summon wraths.
@@ -1552,6 +1357,8 @@ void() monster_dark_lord = {
     precache_sound ("drake/darklord/idle1.wav");
     precache_sound ("drake/darklord/pain.wav");
     precache_sound ("drake/darklord/sight.wav");
+	self.sight_sound = "drake/darklord/sight.wav";
+	self.hello_sound = "drake/darklord/idle1.wav"; 
     precache_sound ("drake/darklord/death.wav");
     precache_sound ("items/protect.wav");   // Powerup sound
     precache_sound ("drake/plasma/explode.wav");
@@ -1582,7 +1389,6 @@ void() monster_dark_lord = {
 
 	self.pain_sound = "drake/darklord/pain.wav";
 	self.death_sound = "drake/darklord/death.wav";
-	self.sight_sound = "drake/darklord/sight.wav";
 
 	precache_sound (self.pain_sound);
 	precache_sound (self.death_sound);
@@ -1655,7 +1461,6 @@ void() monster_dark_lord = {
     else
         self.th_pain    = hknight_pain;
 	self.th_die = darklord_die;			// Face meets floor
-    self.th_sight   = darklord_sight;
     self.th_win     = bane_win;
     self.th_spawn   = monster_bane;
 

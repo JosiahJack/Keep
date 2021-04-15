@@ -517,7 +517,7 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .string		stepc1, stepc2, stepc3, stepc4, stepc5; // Custom feet sounds
 .float		zombieflr;			// Get up frame for zombie on floor
 .string		bodyonflr;			// String used for find function
-//.string		bodyonflrtrig;		// Trigger to fire when body is axed!
+.string		bodyonflrtrig;		// Trigger to fire when body is axed!
 .float		dmgtimeframe;		// Time before damage frame can be reset
 .float		dmgcombined;		// combined damage over 1 frame (0.1 time)
 
@@ -827,9 +827,9 @@ float MON_ZOMIDHACK = 3;		// Used to switch ID hack around
 //----------------------------------------------------------------------
 // Player
 float RANGE_PLAYAXE = 72;		// Distance for fire axe (player)
-float RANGE_CHOPAXE = 64;		// Player distance to chop up bodies
-float DAMAGE_PLAYAXE1 = 20;		// Default axe damage
-float DAMAGE_PLAYAXE2 = 35;		// Enhanced axe damage
+float RANGE_CHOPAXE = 72;		// Player distance to chop up bodies, changed from 64 to match full range -Qmaster
+float DAMAGE_PLAYAXE1 = 24;		// Default axe damage, changed to match one shotgun blast (6 x 4 = 24) -Qmaster
+float DAMAGE_PLAYAXE2 = 56;		// Enhanced axe damage, was 35 (measly), changed to match double shotgun blast (14 x 4 = 56) - Qmaster
 
 //----------------------------------------------------------------------
 // Weapon damage and parameters
@@ -1013,7 +1013,8 @@ float LIFE_GRENADE = 2.5;			// Bounce, bounce, explode
 float LIFE_EGG = 1.5;				// Very quick egg hatch!
 float LIFE_FLESH = 2.5;				// Life of zombie flesh
 
-float DAMAGE_NGREFSPIKE = 4;		// Reflected Spike for NG
+float DAMAGE_NGREFSPIKE = 4;		// Reflected Spike for NG/SNG
+float DAMAGE_LNGREFSPIKE = 8;		// Reflected Lava Spike for LNG/LSNG
 float DAMAGE_NGSPIKE = 9;			// Single Spike for NG
 float DAMAGE_SNGSPIKE = 18;			// Single Spike for SNG
 float DAMAGE_RTSPIKE = 2;			// Re-touch spike damage (lying on floor)
@@ -1773,5 +1774,21 @@ float	SVC_CDTRACK			= 32;
 float	SVC_SELLSCREEN		= 33;
 float	SVC_CUTSCENE		= 34;
 */
+
+.float		minion_baseattack;	// Block base attack within melee range
+.float		minion_count;		// Current active amount of minions
+.float		minion_maxcount;	// Maximum amount of active minions
+.float		minion_trigger;		// Spawn counter for trigger event
+.float		minion_maxtrigger;	// Spawn total for trigger event
+.string		miniontarget;		// targetname string for trigger event
+.float		minion_throwspeed;  // Starting forward speed of ball
+.float		minion_throwextra;	// Extra random forward speed of ball
+.float		minion_throwside;	// Extra sideways momentum (+/-)
+.entity		minion_test;		// Test entity for minion collision
+float MIN_MAXACTIVE = 5;		// Maximum amount active at once
+float MIN_MAXTRIGGER = 5;		// How many spawns before triggering
+float MIN_THROWSPD = 200;		// Monster jump speed
+float MIN_THROWRND = 50;		// Some randomness
+float MIN_THROWSIDE = 50;		// Sideways movement (+/-)
 
 float(entity targ, vector s_offset, vector targang, float nomonsters) visang;

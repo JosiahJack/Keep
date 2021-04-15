@@ -440,6 +440,11 @@ void() monster_xmas_santa =
 		 // Nobody should be trying to kill good santa, WUT!?!
 		self.resist_shells = self.resist_nails = 1.0;
 		self.resist_rockets = self.resist_cells = 1.0;
+		self.bouncegrenade = TRUE;		// Warning to other monsters
+		self.reflectnails = TRUE;		// Reflect nail projectiles
+		self.reflectlightning = TRUE;	// Reflect lightning strikes
+		self.reflectplasma = TRUE;		// Reflect plasma projectiles
+		self.reflectaxe = TRUE;			// Prevent axe damage
 		self.nomonstercount = TRUE;
 		self.health = self.max_health = MEGADEATH;
 		self.gibhealth = MON_NEVERGIB;

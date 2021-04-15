@@ -884,52 +884,19 @@ void() item_health_potion = { item_healthvial(); } // From drake, redirect
 //======================================================================
 // armor_touch
 //======================================================================
-float(entity armplayer, entity armitem) armor_pickupcondition =
-{
+float(entity armplayer, entity armitem) armor_pickupcondition = {
 	local float arm1, arm2;
 	
 	arm1 = armplayer.armortype * armplayer.armorvalue;
 	arm2 = armitem.armortype * armitem.armorvalue;
-	
 	if (arm1 >= arm2) return TRUE;
 	else return FALSE;
 };
-void() armor_touch;
 
-/*
+void() armor_touch; // in items_keep.qc
+
 //----------------------------------------------------------------------
-void() armor_touch =
-{
-	// Cannot pickup armour if wearing something better!
-	if (armor_pickupcondition(other, self)) return;
-
-	// Check for randomizer pickup conditions
-	armour_touchrandomizer();
-	
-	other.armortype = self.armortype;
-	other.armorvalue = self.armorvalue;
-	if (self.items2) other.items2 = other.items2 - (other.items2 & (IT2_ARMOR1 | IT2_ARMOR2 | IT2_ARMOR3)) + self.items2;
-
-	sprint (other, "You got the ");
-	sprint (other, self.netname);
-	sprint (other, "\n");
-	if (self.noise != SOUND_EMPTY) 
-		sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-	stuffcmd (other, "bf\n");
-	
-	activator = other;
-	SUB_UseTargets();
-
-	// Quick exit, no need for following stuff
-	if (self.progspawnlist) return;
-	
-	item_finished();
-	check_item_respawn();
-};
-*/
-//----------------------------------------------------------------------
-void() item_armor_setup =
-{
+void() item_armor_setup = {
 	self.classgroup = CG_ARMOR;
 	if (!self.part_active) self.part_active = PARTICLE_STYLE_ARMOR;
 	self.touch2 = armor_touch;
@@ -937,9 +904,7 @@ void() item_armor_setup =
 	self.bbmaxs = '16 16 56';
 	if (self.respawn_time == 0) self.respawn_time = RESPAWN_ARMOR;
 	self.noise = "items/armor1.wav";
-
-	// Check for coop errors
-	item_coopcheck();
+	item_coopcheck(); // Check for coop errors
 	item_start ();
 };
 
@@ -1126,210 +1091,10 @@ void(entity targ) bound_other_ammo =
 	if (targ.ammo_plasma > AMMO_MAXMANA) targ.ammo_elemental = AMMO_MAXMANA;		
 };
 
-//----------------------------------------------------------------------
-/*void() weapon_touch =
-{
-	local float pickupweapon, pickupammo, moditem;
-
-	//----------------------------------------------------------------------
-	if (self.classtype == CT_UPGRADE_AXE) {
-		pickupweapon = IT_UPGRADE_AXE;
-		// Deathmatch players cannot constantly pickup weapons
-		if (deathmatch > 0 && other.moditems & pickupweapon) return;
-		// Update serverflag and highlight as MOD weapon
-		update_configflag(SVR_UPDAXE, TRUE);
-		moditem = TRUE;
-	}
-	//----------------------------------------------------------------------
-	else if (self.classtype == CT_SHOTGUN) {
-		pickupweapon = IT_SHOTGUN;
-		// Deathmatch players cannot constantly pickup weapons
-		if (deathmatch > 0 && other.items & pickupweapon) return;
-		// Coop players can use weapon spawns as ammo dispensers
-		if (coop > 0 && other.items & pickupweapon) {
-			if (other.ammo_shells > AMMO_MAXSHELLS*0.5) pickupammo = 0;
-			else pickupammo = AMMO_SHELLS_WPN;
-		}
-		else pickupammo = AMMO_SHELLS_WPN;
-		other.ammo_shells = other.ammo_shells + pickupammo;
-	}
-	//----------------------------------------------------------------------
-	else if (self.classtype == CT_UPGRADE_SSG) {
-		pickupweapon = IT_UPGRADE_SSG;
-		// Deathmatch players cannot constantly pickup weapons
-		if (deathmatch > 0 && other.moditems & pickupweapon) return;
-		// Coop players can use weapon spawns as ammo dispensers
-		if (coop > 0 && other.moditems & pickupweapon) {
-			if (other.ammo_shells > AMMO_MAXSHELLS*0.5) pickupammo = 0;
-			else pickupammo = AMMO_SHELLS_WPN;
-		}
-		else pickupammo = AMMO_SHELLS_WPN;
-		other.ammo_shells = other.ammo_shells + pickupammo;
-		// Update serverflag and highlight as MOD weapon
-		update_configflag(SVR_UPDSSG, TRUE);
-		moditem = TRUE;
-	}
-	//----------------------------------------------------------------------
-	else if (self.classtype == CT_SUPER_SHOTGUN) {
-		pickupweapon = IT_SUPER_SHOTGUN;
-		// Deathmatch players cannot constantly pickup weapons
-		if (deathmatch > 0 && other.items & pickupweapon) return;
-		// Coop players can use weapon spawns as ammo dispensers
-		if (coop > 0 && other.items & pickupweapon) {
-			if (other.ammo_shells > AMMO_MAXSHELLS*0.5) pickupammo = 0;
-			else pickupammo = AMMO_SHELLS_WPN;
-		}
-		else pickupammo = AMMO_SHELLS_WPN;
-		other.ammo_shells = other.ammo_shells + pickupammo;
-	}
-	//----------------------------------------------------------------------
-	else if (self.classtype == CT_NAILGUN) {
-		pickupweapon = IT_NAILGUN;
-		// Deathmatch players cannot constantly pickup weapons
-		if (deathmatch > 0 && other.items & pickupweapon) return;
-		// Coop players can use weapon spawns as ammo dispensers
-		if (coop > 0 && other.items & pickupweapon) {
-			if (other.ammo_nails > AMMO_MAXNAILS*0.5) pickupammo = 0;
-			else pickupammo = AMMO_NAILS_WPN;
-		}
-		else pickupammo = AMMO_NAILS_WPN;
-		other.ammo_nails = other.ammo_nails + pickupammo;
-	}
-	//----------------------------------------------------------------------
-	else if (self.classtype == CT_SUPER_NAILGUN) {
-		pickupweapon = IT_SUPER_NAILGUN;
-		// Deathmatch players cannot constantly pickup weapons
-		if (deathmatch > 0 && other.items & pickupweapon) return;
-		// Coop players can use weapon spawns as ammo dispensers
-		if (coop > 0 && other.items & pickupweapon) {
-			if (other.ammo_nails > AMMO_MAXNAILS*0.5) pickupammo = 0;
-			else pickupammo = AMMO_NAILS_WPN;
-		}
-		else pickupammo = AMMO_NAILS_WPN;
-		other.ammo_nails = other.ammo_nails + pickupammo;
-	}
-	//----------------------------------------------------------------------
-	else if (self.classtype == CT_GRENADE_LAUNCHER) {
-		pickupweapon = IT_GRENADE_LAUNCHER;
-		// Deathmatch players cannot constantly pickup weapons
-		if (deathmatch > 0 && other.items & pickupweapon) return;
-		// Coop players can use weapon spawns as ammo dispensers
-		if (coop > 0 && other.items & pickupweapon) {
-			if (other.ammo_rockets > AMMO_MAXROCKETS*0.5) pickupammo = 0;
-			else pickupammo = AMMO_ROCKETS_WPN;
-		}
-		else pickupammo = AMMO_ROCKETS_WPN;
-		other.ammo_rockets = other.ammo_rockets + pickupammo;
-	}
-	//----------------------------------------------------------------------
-	else if (self.classtype == CT_ROCKET_LAUNCHER) {
-		pickupweapon = IT_ROCKET_LAUNCHER;
-		// Deathmatch players cannot constantly pickup weapons
-		if (deathmatch > 0 && other.items & pickupweapon) return;
-		// Coop players can use weapon spawns as ammo dispensers
-		if (coop > 0 && other.items & pickupweapon) {
-			if (other.ammo_rockets > AMMO_MAXROCKETS*0.5) pickupammo = 0;
-			else pickupammo = AMMO_ROCKETS_WPN;
-		}
-		else pickupammo = AMMO_ROCKETS_WPN;
-		other.ammo_rockets = other.ammo_rockets + pickupammo;
-	}
-	//----------------------------------------------------------------------
-	else if (self.classtype == CT_UPGRADE_LG) {
-		pickupweapon = IT_UPGRADE_LG;
-		// Deathmatch players cannot constantly pickup weapons
-		if (deathmatch > 0 && other.moditems & pickupweapon) return;
-		// Coop players can use weapon spawns as ammo dispensers
-		if (coop > 0 && other.moditems & pickupweapon) {
-			if (other.ammo_cells > AMMO_MAXCELLS*0.5) pickupammo = 0;
-			else pickupammo = AMMO_CELLS_WPN;
-		}
-		else pickupammo = AMMO_CELLS_WPN;
-		other.ammo_cells = other.ammo_cells + pickupammo;
-		// Update serverflag and highlight as MOD weapon
-		update_configflag(SVR_UPDLG, TRUE);
-		moditem = TRUE;
-	}
-	//----------------------------------------------------------------------
-	else if (self.classtype == CT_LIGHTNING) {
-		pickupweapon = IT_LIGHTNING;
-		// Deathmatch players cannot constantly pickup weapons
-		if (deathmatch > 0 && other.items & pickupweapon) return;
-		// Coop players can use weapon spawns as ammo dispensers
-		if (coop > 0 && other.items & pickupweapon) {
-			if (other.ammo_cells > AMMO_MAXCELLS*0.5) pickupammo = 0;
-			else pickupammo = AMMO_CELLS_WPN;
-		}
-		else pickupammo = AMMO_CELLS_WPN;
-		other.ammo_cells = other.ammo_cells + pickupammo;
-	}
-	//----------------------------------------------------------------------
-	else return;
-
-	if (self.classtype == CT_UPGRADE_AXE && other.moditems & IT_UPGRADE_AXE)
-		sprint (other, "You got another axe to grind\n");
-	else if (self.classtype == CT_SUPER_SHOTGUN && other.moditems & IT_UPGRADE_SSG)
-		sprint (other, "You got a handful of Shells\n");
-	else if (self.classtype == CT_UPGRADE_SSG && other.moditems & IT_UPGRADE_SSG)
-		sprint (other, "You got triple barrel boomstick\n");
-	else if (self.classtype == CT_LIGHTNING && other.moditems & IT_UPGRADE_LG)
-		sprint (other, "You got some AAA batteries\n");
-	else if (self.classtype == CT_UPGRADE_LG && other.moditems & IT_UPGRADE_LG)
-		sprint (other, "You got another burst of plasma\n");
-	else {
-		sprint (other, "You got the ");
-		sprint (other, self.netname);
-		sprint (other, "\n");
-	}
-	// weapon touch sound
-	sound (other, CHAN_ITEM, "weapons/pkup.wav", 1, ATTN_NORM);
-	stuffcmd (other, "bf\n");
-
-	// Make sure no ammo is over limits
-	bound_other_ammo (other);
-	
-	// Stop the player switching to weapons already got
-	if (deathmatch > 0) {
-		// Check for new shadow axe and SG and skip weapon switch
-		if (moditem && pickupweapon == IT_UPGRADE_AXE && other.moditems & pickupweapon) pickupweapon = FALSE;
-		else if (pickupweapon == IT_SHOTGUN && other.items & pickupweapon) pickupweapon = FALSE;
-		// Stop switching to a lower tier weapon (DM Rules)
-		// if (DM_RankForWeapon(other.weapon) < DM_RankForWeapon(new)) new = FALSE;
-	}
-	
-	// Skip any weapon switch if no new weapon
-	if (pickupweapon != FALSE) {
-		// change to the weapon and add to inventory
-		other.items = other.items | pickupweapon;
-		if (moditem) other.moditems = other.moditems | pickupweapon;
-		
-		// Check for best weapon (DM only) and switch to it!
-		if (deathmatch) DM_Weapon (other.weapon, pickupweapon);
-		else other.weapon = pickupweapon;
-		W_SetCurrentAmmo(other);
-	}
-
-	// Setup respawn for co-op
-	if (coop > 0 && self.respawn_time > 0) {
-		self.respawn_time = RESPAWN_COOP;
-		self.spawnflags = self.spawnflags | ITEM_RESPAWN;
-	}
-
-	// hide item and check for respawn
-	item_finished();
-	check_item_respawn();
-	
-	activator = other;
-	SUB_UseTargets();
-	// Triggers events work once in co-op
-	if (coop > 0) { self.target = ""; self.target2 = ""; }
-};
-*/
 /*======================================================================
 	WEAPONS
 ======================================================================*/
-void() weapon_start =
-{
+void() weapon_start = {
 	self.classgroup = CG_WEAPON;
 	self.touch2 = weapon_touch;
 	self.bbmins = VEC_WPNS_MIN;
@@ -1713,66 +1478,8 @@ void() weapon_lightning =
 /*======================================================================
  AMMO
 ======================================================================*/
-/*void() ammo_touch =
-{
-	local float best;
-
-	//----------------------------------------------------------------------
-	if (self.classtype == CT_AMMOSHELLS) {
-		if (other.ammo_shells >= AMMO_MAXSHELLS) return;
-		other.ammo_shells = other.ammo_shells + self.aflag;
-	}
-	//----------------------------------------------------------------------
-	else if (self.classtype == CT_AMMONAILS) {
-		if (other.ammo_nails >= AMMO_MAXNAILS) return;
-		other.ammo_nails = other.ammo_nails + self.aflag;
-	}
-	//----------------------------------------------------------------------
-	else if (self.classtype == CT_AMMOROCKETS) {
-		if (other.ammo_rockets >= AMMO_MAXROCKETS) return;
-		other.ammo_rockets = other.ammo_rockets + self.aflag;
-	}
-	//----------------------------------------------------------------------
-	else if (self.classtype == CT_AMMOCELLS) {
-		if (other.ammo_cells >= AMMO_MAXCELLS) return;
-		other.ammo_cells = other.ammo_cells + self.aflag;
-	}
-
-	// Check/cap ammo limits
-	bound_other_ammo (other);
-	
-	sprint (other, "You got the ");
-	sprint (other, self.netname);
-	sprint (other, "\n");
-	sound (other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
-	stuffcmd (other, "bf\n");
-
-	// if the player was using his best weapon, 
-	// change up to the new one if better		
-	best = W_BestWeapon(other);
-
-	// change to a better weapon if appropriate
-	if ( other.weapon == best ) {
-		other.weapon = W_BestWeapon(other);
-		W_SetCurrentAmmo (other);
-	}
-
-	// if changed current ammo, update it
-	W_SetCurrentAmmo(other);
-
-	// hide item and check for respawn
-	item_finished();
-	check_item_respawn();
-	
-	activator = other;
-	SUB_UseTargets();
-};
-*/
-/*======================================================================
-	Setup all Ammo with global parameters
-======================================================================*/
-void() item_ammo_setup =
-{
+// Setup all Ammo with global parameters
+void() item_ammo_setup = {
 	self.frame = 0;
 	self.touch2 = ammo_touch;
 	self.classgroup = CG_AMMOITEM;
@@ -1784,8 +1491,7 @@ void() item_ammo_setup =
 
 	// Items that spawn from pots with toss velocity
 	// should not have any lid options (remove them)
-	if (self.item_tossvel > 0) 
-		self.spawnflags = self.spawnflags - (self.spawnflags & A_LID);
+	if (self.item_tossvel > 0) self.spawnflags = self.spawnflags - (self.spawnflags & A_LID);
 
 	// Query console variable 'temp1' for model upgrade option.
 	// Cannot use global vars because they don't exist at this point
@@ -3870,10 +3576,14 @@ void() item_backpack_setup =
 		self.ammo_lava_nails == 0 && self.ammo_plasma == 0 &&
 		self.ammo_bloodcrystals == 0 && self.ammo_voidshards == 0 &&
 		self.ammo_elemental == 0) {
-		dprint("\b[BACKPACK]\b is empty, removing\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		remove(self);
-		return;
+		self.ammo_shells = floor(random() * 8);
+		self.ammo_nails = floor(random() * 10);
+		self.ammo_rockets = floor(random() * 5);
+		self.ammo_cells = floor(random() * 5);
+		// dprint("\b[BACKPACK]\b is empty, removing\n");
+		// spawn_marker(self.origin, SPNMARK_YELLOW);
+		// remove(self);
+		// return;
 	}
 	
 	item_start ();

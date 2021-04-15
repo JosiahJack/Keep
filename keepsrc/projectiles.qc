@@ -1,19 +1,59 @@
 /*======================================================================
  PROJECTILE Systems
-
+ ------------------
  * Bullets (PROJECTILE)
+ * Plasma
  * Nails
  * Rockets
  * Grenades
- * Plasma
  
+ PLAYER Projectile Collision (movetypes)
+ ---------------------------------------
+ * ID software Quake originally had most player projectiles (rockets/nails)
+   use a large collision size (MOVETYPE_FLYMISSILE) and this especially
+   helped with flying enemies (scrags) that strafe around quickly.
+   
+ * AD changed all the player projectile collision boxes to a smaller
+   size (MOVETYPE_FLY) to add a greater challenge to combat and this
+   is noticeable when fighting flying monsters.
+   This change was linked to the setting of the sv_aim console command,
+   which has been changed from 0.93 to 1 in most modern quake clients.
+   The sv_aim command was used to help steer projectiles into monsters
+   to ultimately make the combat easier for keyboard only players.
+
+ * Projectiles move in discreet steps on the server and with a small
+   movetype they can often skip through objects. This was probably the
+   reason ID software had large collision and changing them to small
+   only makes combat more difficult and less fun.
+   
+ * The projectile size is now linked to a worldspawn variables which
+   defaults to 0 and will keep the original ID software default while
+   giving map makers the choice to override this option.
+   
+   There is also an impulse command (105) to toggle this setting and
+   its reported on the mod info table on the console (developer 1)
+   
+   The new worldspawn variable is - no_bigprojectiles
+   
+   This change will affect the following ammo type/weapons:
+   shells(SG/SSG/WSG), nails(NG/SNG), rockets(RL) and cells(PG).
+   
+ * There is a big projectile collision for grenades but ID software
+   never used it. All grenades are setup with MOVETYPE_BOUNCE
+   which is always a small collision.
+
 ======================================================================*/
-void() Particle_Bullet =
-{
+/*======================================================================
+ BULLET PROJECTILES 
+ * Projectile and hitscan system supported
+ * Uses original damage accumulation system
+======================================================================*/
+void() Particle_Bullet = {
 	// Is the touch function blocked?
 	if (self.waitmin > time) return;
-	if (self.delay < time) entity_remove(self, 1);
-	else {
+	if (self.delay < time) {
+		entity_remove(self, 1);
+	} else {
 		if (random() < 0.5) {
 			self.oldorigin = crandom() * '1 1 1';
 			if (random() < 0.8) self.lip = rint(random()*4);
@@ -25,11 +65,9 @@ void() Particle_Bullet =
 	}
 };
 
-//----------------------------------------------------------------------
-void() Touch_Bullet =
-{
-	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
+void() Touch_Bullet = {
 	if (self.touchedvoid) return;				// Marked for removal
+	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
 	if (other == self.owner) return;			// Touching self, do nothing
 	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
 	if (self.waitmin > time) return;			// bullet touch has been disabled
@@ -39,13 +77,19 @@ void() Touch_Bullet =
 	// Hit monster/interactive object, impact blood
 	//----------------------------------------------------------------------
 	if (other.takedamage) {
-		// Only dead center tracer and pellets do damage
+		// Due to how difficult projectile shotguns were to hit thing
+		// An extra +4 damage (dead center tracer) was added to help
+		// In AD 1.7+ the bullet projectiles are now using wide impact
+		// against monsters which means more pellets will hit.
+		// The extra tracer pellet damage is not required anymore.
+
+		// Check pellet type for damage
 		if (self.classtype == CT_PROJ_TRACEPART) self.dmg = 0;
-		else if (self.classtype == CT_PROJ_TRACE) {
+		else if (self.classtype == CT_PROJ_TRACE) self.dmg = 0;
+			// Old code kept for reference
 			// No extra trace damage for zombies, it will kill them
-			if (other.classgroup == CG_ZOMBIE && !(other.classname == "monster_mummy")) self.dmg = 0;
-			else self.dmg = DAMAGE_PTSHELL;	
-		}
+			//if (other.classgroup == CG_ZOMBIE) self.dmg = 0;
+			//else self.dmg = DAMAGE_PTSHELL;	
 		// Default shell pellet damage
 		else self.dmg = DAMAGE_PSHELL;	
 		
@@ -60,8 +104,8 @@ void() Touch_Bullet =
 		}
 		// Show bullet resistance as small blood+gunshot+smoke
 		else if (other.resist_shells > 0) {
-			self.dmg = Resist_Damage(other, IT_SHELLS, self.dmg);
-			Resist_Shells(other, self.origin, self.velocity, self.dmg);
+			self.dmg = Resist_Damage(other, AM_SHELLS, self.dmg);
+			Resist_Effects(other,self.origin,self.velocity,self.dmg,AM_SHELLS,other.pain_sound,"");
 		}
 		else {
 			// Hitting monsters does twice the amount of blood effects
@@ -70,11 +114,10 @@ void() Touch_Bullet =
 		}
 		
 		if (self.dmg > 0) T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
-	}
-	//----------------------------------------------------------------------
-	// Hit world/static object, impact particles
-	//----------------------------------------------------------------------
-	else {
+	} else {
+		//----------------------------------------------------------------------
+		// Hit world/static object, impact particles
+		//----------------------------------------------------------------------
 		// Tracer bullet, dead center and inflight particle emitter
 		// Originally did no damage, but changed to buff particle SG
 		if (self.classtype == CT_PROJ_TRACE) {
@@ -83,8 +126,7 @@ void() Touch_Bullet =
 			if (self.lip < 0.5) sound(self, CHAN_VOICE, "weapons/tink1.wav", random()*0.5, ATTN_LOW);
 			else if (self.lip < 0.7) sound(self, CHAN_VOICE, "weapons/ric2.wav", random()*0.5, ATTN_LOW);
 			else sound(self, CHAN_VOICE, "weapons/ric3.wav", random()*0.5, ATTN_LOW);
-		}
-		else {
+		} else {
 			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 			WriteByte (MSG_BROADCAST, TE_GUNSHOT);
 			WriteCoord (MSG_BROADCAST, self.origin_x);
@@ -94,24 +136,19 @@ void() Touch_Bullet =
 	}
 };
 
-//----------------------------------------------------------------------
-void(vector org, vector dir, float proj_type, float proj_speed) Launch_Bullet =
-{
+void(vector org, vector dir, float proj_type, float proj_speed) Launch_Bullet = {
 	newmis = spawn();
 	newmis.owner = self;
 	newmis.classname = "proj_bullet";	// obj name, not really used anymore
 	newmis.classtype = proj_type;		// Class type number, quick identity
 	newmis.classgroup = CG_PROJSHELLS;	// Ammo type
-	//----------------------------------------------------------------------
+
 	// Horrible hack! If the player has the TSG or quad, flag it for zombies
-	//----------------------------------------------------------------------
 	if (self.moditems & IT_UPGRADE_SSG || self.super_damage_finished > 0)
 		newmis.weapon = TRUE;
 	
-	//----------------------------------------------------------------------
 	// Switch model collision based on auto aim functionality
 	// Monsters always use large collision (otherwise infighting would be less)
-	//----------------------------------------------------------------------
 	if (self.classtype == CT_PLAYER) {
 		if (playerprojsize == 0) 
 			newmis.movetype = MOVETYPE_FLYMISSILE;	// Large collision
@@ -119,7 +156,6 @@ void(vector org, vector dir, float proj_type, float proj_speed) Launch_Bullet =
 	}
 	else newmis.movetype = MOVETYPE_FLYMISSILE;		// Default = large collision
 	
-	//----------------------------------------------------------------------
 	newmis.solid = SOLID_BBOX;
 	newmis.touch = Touch_Bullet;					// touch function
 	newmis.waitmin = 0;								// Touch function active
@@ -143,18 +179,14 @@ void(vector org, vector dir, float proj_type, float proj_speed) Launch_Bullet =
 	setmodel(newmis, newmis.mdl);				// Diamond model
 	newmis.frame = random()*15;					// Full range of sizes
 	newmis.skin = 16 + random()*7;				// Bright colours
-
 	newmis.velocity = dir * proj_speed;			// Constant speed multiplier
 	newmis.angles = vectoangles(dir);			// Create direction angle
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);	// Zero size
 	setorigin (newmis, org);					// Move to starting position
 	newmis.avelocity = vecrand(100,200,FALSE);
-	
 };
 
-//----------------------------------------------------------------------
-void(float bullet_count, vector bullet_spread, float bullet_type) Launch_Shells =
-{
+void(float bullet_count, vector bullet_spread, float bullet_type) Launch_Shells = {
 	local	vector src_origin, bullet_dir, spread_dir;
 	local float bullet_speed, var_speed;
 	
@@ -201,13 +233,9 @@ void(float bullet_count, vector bullet_spread, float bullet_type) Launch_Shells 
  * Has radius and impact touch damage
  * used by Eliminator (enforcer), Soldier and Minotaur
 ======================================================================*/
-void() Particle_Plasma =
-{
-	// projectile has touched something
-	if (self.waitmin > time) return;
-
-	// Projectile has run out of time
-	if (self.attack_finished < time) {entity_remove(self, 0.1); return;}
+void() Particle_Plasma = {
+	if (self.waitmin > time) return; // projectile has touched something
+	if (self.attack_finished < time) {entity_remove(self, 0.1); return;} // Projectile has run out of time
 	
 	// Generate sprite particles? DP not active?
 	if (random() < 0.5 && !ext_dppart) {
@@ -232,11 +260,9 @@ void() Particle_Plasma =
 	self.nextthink = time + self.speed;	
 };
 
-// Compiler forward reference
 void(vector org, vector dir, float proj_type, float proj_speed) launch_plasma;
-//----------------------------------------------------------------------
-void() Touch_PlasmaProjectile =
-{
+
+void() Touch_PlasmaProjectile = {
 	local vector org, vec, dir;
 	local entity tself;
 
@@ -281,21 +307,22 @@ void() Touch_PlasmaProjectile =
 			SpawnProjectileSmoke(self.origin, 200, 50, 150);
 			if (random() < 0.5) SpawnProjectileSmoke(self.origin, 200, 50, 250);
 			if (random() < 0.5) SpawnProjectileSmoke(self.origin, 300, 50, 150);
-		}
-		// Check for plasma/cell resistance
-		else if (other.resist_cells > 0) {
-			self.dmg = Resist_Damage(other, IT_CELLS, self.dmg);
-			Resist_Plasma(other, self.origin);
-		}
-		else {
+		} else if (other.resist_cells > 0) { // Check for cell resistance
+			self.dmg = Resist_Damage(other, AM_CELLS, self.dmg);
+			Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_CELLS,other.pain_sound,SOUND_PLASMA_HIT);
+		} else if (other.resist_plasma > 0) { // Check for plasma resistance
+			self.dmg = Resist_Damage(other, AM_PLASMA, self.dmg);
+			Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_PLASMA,other.pain_sound,SOUND_PLASMA_HIT);
+		} else {
 			// Hitting monsters does twice the amount of blood effects
 			if (other.flags & FL_MONSTER) spawn_touchblood (self, other, self.dmg*2);
 			else spawn_touchblood (self, other, self.dmg);
 
 			// Switch poisonous to poison sprite, but keep plasma explosion
 			// Otherwise this sounds confusing with a rocket explosion
-			if (self.poisonous) self.lip = EXPLODE_POISON_SMALL;
-			else {
+			if (self.poisonous) {
+				self.lip = EXPLODE_POISON_SMALL;
+			} else {
 				// Randomly pick between quoth electric and blue explosions
 				if (random() < 0.3) self.lip = EXPLODE_PLASMA_SMALL;
 				else self.lip = EXPLODE_ELECT_SMALL;
@@ -307,25 +334,17 @@ void() Touch_PlasmaProjectile =
 		if (other.classgroup == CG_ZOMBIE && !(other.classname == "monster_mummy")) self.dmg = DAMAGE_ZOMBIECLASS;
 		// Don't bother with damage if there is none!
 		if (self.dmg > 0) T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
-
-	}
-	//----------------------------------------------------------------------
-	// Hit world/static object, impact particles
-	//----------------------------------------------------------------------
-	else {
-		// New special coloured particle explosion (rogue expansion)
+	} else {
+		// Hit world/static object, impact particles
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_EXPLOSION2);
+		WriteByte (MSG_BROADCAST, TE_EXPLOSION2); // New special coloured particle explosion (rogue expansion)
 		WriteCoord (MSG_BROADCAST, self.origin_x);
 		WriteCoord (MSG_BROADCAST, self.origin_y);
 		WriteCoord (MSG_BROADCAST, self.origin_z);
 		WriteByte (MSG_BROADCAST, 35);
 		WriteByte (MSG_BROADCAST, 8);
-
-		// Poisonous sprite explosion instead
-		if (self.poisonous) self.lip = EXPLODE_POISON_SMALL;
-		// Classic quoth electric impact explosion
-		else self.lip = EXPLODE_ELECT_SMALL;
+		if (self.poisonous) self.lip = EXPLODE_POISON_SMALL; // Poisonous sprite explosion instead
+		else self.lip = EXPLODE_ELECT_SMALL; // Classic quoth electric impact explosion
 		SpawnExplosion(self.lip, self.origin, SOUND_PLASMA_HIT);
 	}
 
@@ -345,14 +364,11 @@ void() Touch_PlasmaProjectile =
 		launch_plasma(org, dir, CT_REFLECTPLASMA, SPEED_REFLECTION);
 		self = tself;
 	}
-	
-	// Remove plasma bolt
-	entity_remove(self, 1);
+
+	entity_remove(self, 1); // Remove plasma bolt
 };
 
-//----------------------------------------------------------------------
-void(vector org, vector dir, float proj_type, float proj_speed) launch_plasma =
-{
+void(vector org, vector dir, float proj_type, float proj_speed) launch_plasma = {
 	newmis = spawn ();
 	newmis.owner = self;
 	newmis.classname = "proj_plasma";	// obj name, not really used anymore
@@ -364,28 +380,22 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_plasma =
 	// The player plasma projectile use to be linked to autoaim condition
 	// Switched to larger collision, so that greater chance to hit enemies
 	// Monsters always use large collision (otherwise infighting would be less)
-	//----------------------------------------------------------------------
 	if (proj_type == CT_PLAYER) {
-		if (playerprojsize == 0) 
-			newmis.movetype = MOVETYPE_FLYMISSILE;	// Large collision
+		if (playerprojsize == 0) newmis.movetype = MOVETYPE_FLYMISSILE;	// Large collision
 		else newmis.movetype = MOVETYPE_FLY;		// Small collision
-	}
-	else {
+	} else {
 		// Monster get the raw deal, small projectile collision
 		newmis.movetype = MOVETYPE_FLY;
 		// Minotaur, Gaunt is rapid fire, don't need glow effect (slow down)
-		if (proj_type != CT_MONGAUNT && proj_type != CT_MONMINOTAUR) 
-			newmis.effects = EF_DIMLIGHT;
+		if (proj_type != CT_MONGAUNT && proj_type != CT_MONMINOTAUR) newmis.effects = EF_DIMLIGHT;
 	}
 
-	//----------------------------------------------------------------------
 	newmis.solid = SOLID_BBOX;
 	newmis.touch = Touch_PlasmaProjectile;
 	newmis.attack_finished = time + LIFE_PROJECTILE;
 	newmis.poisonous = newmis.owner.poisonous;
 	
 	// Setup model and special parameters (zombie, boss)
-	//----------------------------------------------------------------------
 	if (proj_type == CT_MONARMYPLASMA) {
 		if (newmis.poisonous) setmodel (newmis, MODEL_PROJ_PLASMAGRN);
 		else setmodel (newmis, MODEL_PROJ_PLASMA);
@@ -434,11 +444,9 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_plasma =
 	//----------------------------------------------------------------------
 	// Is DP engine active for new particle trail?
 	if (ext_dppart) {
-		newmis.traileffectnum = particleeffectnum(DPP_TRPLASMA);
-		newmis.effects = 0;
-		// Extra glow and light colour (DP mostly)
-		//newmis.effects = EF_BLUE;
-		//newmis.glow_color = 246;	// Blue/gold	
+		if (newmis.poisonous) newmis.traileffectnum = particleeffectnum(DPP_TRPOISON);
+		else newmis.traileffectnum = particleeffectnum(DPP_TRPLASMA);
+		newmis.effects = 0;	
 	}
 
 	// Manually generate blue/white particle trail
@@ -448,68 +456,42 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_plasma =
 	newmis.nextthink = time + newmis.speed;
 
 	// Standard projectile setup (origin, size and velocity)
-	//----------------------------------------------------------------------
 	newmis.velocity = dir * proj_speed;
 	if (self.classtype != CT_PLAYER) newmis.angles = vectoangles(dir);
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);		
 	setorigin (newmis, org);
 };
 
-/*======================================================================
- SMALL PROJECTILES - used all over the place ...
- 
- * player (nailgun, super nailgun)
- * Wizards (double spit)
- * Hell Knights (magic spray)
- * spike shooters (regular, super, laser)
- * Enforcers (laser)
- * Crossbow Knights (bolts)
- * Zombies (flesh)
-======================================================================*/
-// Forward compiler reference because of peircing nails function
+// SMALL PROJECTILES - used all over the place
 void(vector org, vector dir, float proj_type, float proj_speed) launch_projectile;
 
-//----------------------------------------------------------------------
-void() Think_Projectile =
-{
-	// Original projectile lifetime timer
-	if (self.attack_lifetime < time) {entity_remove(self, 0.1); return;}
-	// Make sure onground flag is never set
-	self.flags = self.flags - (self.flags & FL_ONGROUND);
-	// Keep updating velocity/angle, to prevent from stopping
-	self.velocity = self.finalangle * self.attack_speed;
+void() Think_Projectile = {
+	if (self.attack_lifetime < time) {entity_remove(self, 0.1); return;} // Original projectile lifetime timer
+	self.flags = self.flags - (self.flags & FL_ONGROUND); // Make sure onground flag is never set
+	self.velocity = self.finalangle * self.attack_speed; // Keep updating velocity/angle, to prevent from stopping
 	self.angles = vectoangles(self.finalangle);
 	self.nextthink = time + 0.1;
 	self.think = Think_Projectile;
 };
 
-//----------------------------------------------------------------------
-void() Touch_Projectile =
-{
+void() Touch_Projectile = {
 	local vector org, dir, vec;
 	local float proj_type, proj_speed, old_armortype, old_armorvalue, old_armormask;
 	local entity tself;
 	
-	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
 	if (self.touchedvoid) return;				// Marked for removal
+	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
 	if (other == self.owner) return;			// no touching self
 	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
 
-	// No more touch/world interaction
-	self.touch = SUB_Null;
+	self.touch = SUB_Null; // No more touch/world interaction
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
-
 	
-	//----------------------------------------------------------------------
-	//	Laser impact/stop sound (precached by owner)
-	if (self.classtype == CT_PROJ_LASER) {
-		if (self.attack_ricochet > 0)
-			sound (self, CHAN_WEAPON, SOUND_LASER_RIC, 1, ATTN_STATIC);
+	if (self.classtype == CT_PROJ_LASER) { //	Laser impact/stop sound (precached by owner)
+		if (self.attack_ricochet > 0) sound (self, CHAN_WEAPON, SOUND_LASER_RIC, 1, ATTN_STATIC);
 		else sound (self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
-	}
-	// Golem rock impact sound (precached by owner)
-	else if (self.classtype == CT_PROJ_GROCK) {
+	} else if (self.classtype == CT_PROJ_GROCK) { // Golem rock impact sound (precached by owner)
 		self.lip = random();
 		self.volume = 0.5 + random()*0.5;
 		if (self.lip < 0.25) sound (self, CHAN_WEAPON, SOUND_IMP_ROCK1, self.volume, ATTN_BREAK);
@@ -518,20 +500,15 @@ void() Touch_Projectile =
 		else sound (self, CHAN_WEAPON, SOUND_IMP_ROCK4, self.volume, ATTN_BREAK);
 	}
 
-	//----------------------------------------------------------------------
 	// hit something that bleeds
 	if (other.takedamage) {
-		// SNG spikes are essentially double damage (cheap way of 2 x nails)
-		if (self.classtype == CT_PROJ_SNG) self.dmg = DAMAGE_SNGSPIKE;
-		// Reflected nails (can only happen from the player)
-		else if (self.classtype == CT_PROJ_REFNG) self.dmg = DAMAGE_NGREFSPIKE;
-		// Bob and enforcer lasers are different
-		else if (self.owner.classtype == CT_MONJIM) 
-				self.dmg = DAMAGE_BOBLASER + (random() * DAMAGE_BOBLASER);
+		if (self.classtype == CT_PROJ_SNG) self.dmg = DAMAGE_SNGSPIKE; // SNG spikes are essentially double damage (cheap way of 2 x nails)
+		else if (self.classtype == CT_PROJ_REFNG) self.dmg = DAMAGE_NGREFSPIKE; // Reflected nails (can only happen from the player)
+		else if (self.classtype == CT_PROJ_REFLNG) self.dmg = DAMAGE_LNGREFSPIKE; // Reflected lava nails (can only happen from the player)
+		else if (self.owner.classtype == CT_MONJIM) self.dmg = DAMAGE_BOBLASER + (random() * DAMAGE_BOBLASER); // Bob and enforcer lasers are different
 		else if (self.classtype == CT_PROJ_LASER) self.dmg = DAMAGE_LASER;
 		else if (self.classtype == CT_PROJ_RICLASER) {
-			// Minimum damage = spike after all the bouncing around
-			if (self.dmg < DAMAGE_NGSPIKE) self.dmg = DAMAGE_NGSPIKE;
+			if (self.dmg < DAMAGE_NGSPIKE) self.dmg = DAMAGE_NGSPIKE; // Minimum damage = spike after all the bouncing around
 		}
 		else if (self.classtype == CT_PROJ_LAVANG) self.dmg = DAMAGE_LAVANGSPIKE;
 		else if (self.classtype == CT_PROJ_LAVASNG) self.dmg = DAMAGE_LAVASNGSPIKE;
@@ -608,8 +585,8 @@ void() Touch_Projectile =
 		//----------------------------------------------------------------------
 		// Check for NG/SNG nail resistance
 		if (self.classgroup == CG_PROJNAILS && other.resist_nails > 0) {
-			self.dmg = Resist_Damage(other, IT_NAILS, self.dmg);
-			Resist_Nails(other, self.origin);
+			self.dmg = Resist_Damage(other, AM_NAILS, self.dmg);
+			Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_NAILS,other.pain_sound,"");
 			self.projeffect = 0;
 			// Check for any nail reflection?
 			if (other.reflectnails && random() < other.resist_nails) {
@@ -640,6 +617,29 @@ void() Touch_Projectile =
 			old_armormask = (other.items2 & ((IT2_ARMOR1 | IT2_ARMOR2) | IT2_ARMOR3));
 			other.armortype = FALSE;
 			other.armorvalue = FALSE;
+
+			self.dmg = Resist_Damage(other, AM_LAVANAILS, self.dmg);
+			Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_LAVANAILS,other.pain_sound,"");
+			self.projeffect = 0;
+			// Check for any nail reflection?
+			if (other.reflectnails && random() < other.resist_lava_nails) {
+				org = self.origin;
+				// Random chance that nail will reflect straight back
+				if (random() < 0.2 && self.owner) 
+					dir = normalize(self.owner.origin - org);
+				else {
+					// Pick random location instead
+					// Flatten the Z axis so the reflection looks less random
+					vec = vecrand(0,100,1);
+					vec_z = random()*25;
+					vec = vec + org;
+					dir = normalize(vec - org);
+				}
+				// Switch around self to make sure reflection happens once
+				tself = self; self = other;
+				launch_projectile(org, dir, CT_PROJ_REFLNG, SPEED_REFLECTION);
+				self = tself;
+			}
 		}
 
 		//----------------------------------------------------------------------
@@ -855,7 +855,8 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 	if (proj_type == CT_PROJ_NG) setmodel (newmis, MODEL_PROJ_NG);
 	else if (proj_type == CT_PROJ_SNG) setmodel (newmis, MODEL_PROJ_SNG);
 	else if (proj_type == CT_PROJ_LAVANG || proj_type == CT_PROJ_LAVASNG) setmodel (newmis, "progs/lspike.mdl");
-	else if (proj_type == CT_PROJ_REFNG) setmodel (newmis, MODEL_PROJ_NGRED);
+	else if (proj_type == CT_PROJ_REFNG) setmodel (newmis, "progs/lspike.mdl");
+	else if (proj_type == CT_PROJ_REFLNG) setmodel (newmis, MODEL_PROJ_NG);
 	// Santa Snowball machine gun!
 	else if (proj_type == CT_PROJ_SANTA) setmodel (newmis, MODEL_PROJ_SNOWBALL);
 	// Crossbow Knight has poison/regular bolts
@@ -987,7 +988,7 @@ void() Touch_HomingMissile =
 
 				// Check for any rocket ammo resistance
 				if (other.resist_rockets > 0) {
-					self.dmg = Resist_Damage(other, IT_ROCKETS, self.dmg);
+					self.dmg = Resist_Damage(other, AM_ROCKETS, self.dmg);
 				}
 
 				//----------------------------------------------------------------------
@@ -1031,8 +1032,9 @@ void() Touch_HomingMissile =
 
 		//----------------------------------------------------------------------
 		// Rocket resistance is shown with puffs of smoke
-		if (other.resist_rockets > 0) Resist_Rockets(other, self.origin);
-		else {
+		if (other.resist_rockets > 0) {
+			Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_ROCKETS,other.pain_sound,SOUND_RESIST_ROCKET);
+		} else {
 			// Use special effect for voreball explosions in DP
 			if (ext_dppart) {
 				// DP effect name set before homing missile launched
@@ -1279,7 +1281,7 @@ void() Touch_Missile =
 
 			// Check for any rocket ammo resistance
 			if (other.resist_rockets > 0) {
-				self.dmg = Resist_Damage(other, IT_ROCKETS, self.dmg);
+				self.dmg = Resist_Damage(other, AM_ROCKETS, self.dmg);
 			}
 
 			//----------------------------------------------------------------------
@@ -1322,8 +1324,9 @@ void() Touch_Missile =
 		}
 		
 		// Rocket resistance is shown with puffs of smoke
-		if (other.resist_rockets > 0) Resist_Rockets(other, self.origin);
-		else {
+		if (other.resist_rockets > 0) {
+			Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_ROCKETS,other.pain_sound,SOUND_RESIST_ROCKET);
+		} else {
 			//----------------------------------------------------------------------
 			// Check for poison debuff (using poisonous flag)
 			if (self.poisonous == TRUE) {
@@ -1715,8 +1718,7 @@ void(vector org, vector dir, vector avel, float proj_type, float proj_speed) Lau
  * checks for breakables that can be destroyed with explosives
  * Grenade damage is based on dmg key (default = player)
 ======================================================================*/
-void() Explode_Grenade =
-{
+void() Explode_Grenade = {
 	// Block touch functions
 	if (self.state == STATE_DISABLED) return;
 	self.touch = SUB_Null;
@@ -1768,9 +1770,9 @@ void() Explode_Grenade =
 	//----------------------------------------------------------------------
 
 	// Show Rocket resistance with puffs of smoke
-	if (self.activate.resist_rockets > 0) 
-		Resist_Rockets(self.activate, self.origin);
-	else {
+	if (self.activate.resist_rockets > 0) {
+		Resist_Effects(self.activate,self.origin,VEC_ORIGIN,0,AM_ROCKETS,self.activate.pain_sound,SOUND_RESIST_ROCKET);
+	} else {
 		//----------------------------------------------------------------------
 		// Check for poison debuff (using poisonous flag)
 		if (self.poisonous == TRUE) {
@@ -1795,13 +1797,14 @@ void() Explode_Grenade =
 };
 
 //----------------------------------------------------------------------
-void() Touch_Grenade =
-{
-	if (entity_pcontent(self.origin)) {remove(self); return;}
+void() Touch_Grenade = {
 	if (self.touchedvoid) return;				// Marked for removal
+	if (entity_pcontent(self.origin)) {remove(self); return;}
 	if (other == self.owner) return;			// Touching self, do nothing
 	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
-	
+
+	self.activate = other;		// Always keep track of what to damage
+		
 	// Let minion eggs re-bounce in opposite direction
 	// Don't want them to explode like grenades
 	if (self.classtype == CT_PROJ_MEGG && other.takedamage == DAMAGE_AIM) {
@@ -1814,23 +1817,16 @@ void() Touch_Grenade =
 			// Reset egg timer if still bouncing a lot
 			if ( vlen(self.velocity) > 100 ) self.nextthink = time + LIFE_EGG;
 		}
-	}
-	else {
-		//----------------------------------------------------------------------
+	} else {
 		// Check for any func_breakables that can be triggered
 		// Any monster firing a grenade at a breakable will explode without bounce
 		// Check before damage_aim because only player/monster have that setting
-		if (ai_foundbreakable(self.owner, self.activate, TRUE)
-			&& (self.owner.flags & FL_MONSTER)) {
-			// Found a breakable which is prone to explosive damage
-			trigger_ent(self.activate, self.owner);
+		if (ai_foundbreakable(self.owner, self.activate, TRUE) && (self.owner.flags & FL_MONSTER)) {
+			trigger_ent(self.activate, self.owner); // Found a breakable which is prone to explosive damage
 			Explode_Grenade();
-		}
-		// Hit something that bleeds? (allows for grenade impact)
-		else if (self.activate.takedamage == DAMAGE_AIM) {
+		} else if (self.activate.takedamage == DAMAGE_AIM) { // Hit something that bleeds? (allows for grenade impact)
 			Explode_Grenade(); 
-		}
-		else {
+		} else {
 			// bounce sound and stop spinning
 			sound (self, CHAN_WEAPON, self.noise, 1, ATTN_NORM);
 			if (CheckZeroVector(self.velocity)) self.avelocity = '0 0 0';
@@ -1861,19 +1857,15 @@ void() ProximityBomb;
 void() ProximityGrenadeExplode;
 
 //----------------------------------------------------------------------
-void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade =
-{
-	// Check if there is space to spawn entity
-	if (entity_pcontent(org)) return;
+void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade = {
+	if (entity_pcontent(org)) return; // Check if there is space to spawn entity
 	
-	newmis = spawn ();
+	newmis = spawn();
 	newmis.owner = self;
 	newmis.classname = "proj_grenade";	// obj name, not really used anymore
 	newmis.classtype = proj_type;		// Class type number, quick identity
 	newmis.classgroup = CG_PROJGRENADES;	// Ammo type
 	newmis.movetype = MOVETYPE_BOUNCE;
-
-	//----------------------------------------------------------------------
 	newmis.solid = SOLID_BBOX;
 	newmis.touch = Touch_Grenade;
 	newmis.nextthink = time + LIFE_GRENADE;
@@ -1882,31 +1874,33 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade =
 	newmis.bbmins = newmis.bbmaxs = VEC_ORIGIN;
 	newmis.height = EXPLODE_SMALL;
 	newmis.poisonous = newmis.owner.poisonous;
+	newmis.mass = MASS_GRENADE;
+	newmis.physicsflags = newmis.physicsflags | PHYS_GYRO_BOUYANT;
 
 	// Setup model for each missile type
-	//----------------------------------------------------------------------
-	// proj_gl is used by the player (separate so easier to change)
-	if (proj_type == CT_PROJ_GL) setmodel(newmis, MODEL_PROJ_GRENADE);
-	// proj_glmon is used by any monster firing grenades
-	else if (proj_type == CT_PROJ_GLMON) {
-		if (newmis.poisonous) setmodel(newmis, MODEL_PROJ_GRENADEGRN);
-		else setmodel(newmis, MODEL_PROJ_GRENADE);
+	if (proj_type == CT_PROJ_GL) setmodel(newmis, MODEL_PROJ_GRENADE); // proj_gl is used by the player (separate so easier to change)
+	else if (proj_type == CT_PROJ_GLMULTI) { 
+		setmodel(newmis, "progs/rogue/mervup.mdl");
+		newmis.touch = MultiGrenadeTouch;
+		newmis.think = MultiGrenadeExplode;
+		newmis.nextthink = time + 1;
+		newmis.classname = "MultiGrenade";
 	}
-	else if (proj_type == CT_PROJ_FLESH) {
+	else if (proj_type == CT_PROJ_GLMON) { 
+		if (newmis.poisonous) setmodel(newmis, MODEL_PROJ_GRENADEGRN); // proj_glmon is used by any monster firing grenades
+		else setmodel(newmis, MODEL_PROJ_GRENADE);
+	} else if (proj_type == CT_PROJ_FLESH) {
 		if (newmis.poisonous) setmodel(newmis, MODEL_PROJ_FLESHP);
 		else setmodel (newmis, MODEL_PROJ_FLESH);
-	}
-	else if (proj_type == CT_PROJ_FLESHP) {
+	} else if (proj_type == CT_PROJ_FLESHP) {
 		setmodel(newmis, MODEL_PROJ_FLESHP);
 		newmis.poisonous = TRUE;
 		newmis.noise = "wraith/bounce.wav";
-	}
-	else if (proj_type == CT_PROJ_MEGG) {
+	} else if (proj_type == CT_PROJ_MEGG) {
 		if (self.classtype == CT_MONWRAITH) {
 			setmodel( newmis, MODEL_PROJ_WEGG);
 			newmis.noise = "wraith/bounce.wav";
-		}
-		else if (self.classtype == CT_MONSHAL || self.classtype == CT_MONSHALBOSS) {
+		} else if (self.classtype == CT_MONSHAL || self.classtype == CT_MONSHALBOSS) {
 			setmodel( newmis, MODEL_PROJ_SEGG);
 			newmis.noise = "shalrath/bounce.wav";
 		}
@@ -1917,59 +1911,47 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade =
 		newmis.frame = self.attachment.frame;	// Current ball size (frame)
 		newmis.think = Hatch_Egg;				// Eventually hatch
 		newmis.nextthink = time + LIFE_EGG;		// Short timer
-	}
-	else if (proj_type == CT_PROJ_SPID) {
+	} else if (proj_type == CT_PROJ_SPID) {
 		setmodel (newmis, MODEL_PROJ_SPID);
 		newmis.frame = rint((random() * 9));
-	}
-	else if (proj_type == CT_PROJ_ELF) {
+	} else if (proj_type == CT_PROJ_ELF) {
 		setmodel (newmis, MODEL_PROJ_ELF);
 		newmis.frame = rint((random() * 9));
-	}
-	else if (proj_type == CT_PROJ_SWAMP) {
+	} else if (proj_type == CT_PROJ_SWAMP) {
 		setmodel (newmis, MODEL_PROJ_SWAMP);
 		newmis.frame = rint((random() * 9));
-	}
-	else if (proj_type == CT_PROJ_VORE) {
+	} else if (proj_type == CT_PROJ_VORE) {
 		setmodel (newmis, MODEL_PROJ_VORE);
 		newmis.frame = rint((4 + random() * 4));
-	}
-	else if (proj_type == CT_PROJ_NOUR2) {
+	} else if (proj_type == CT_PROJ_NOUR2) {
 		setmodel (newmis, MODEL_PROJ_NOUR2B);
 		newmis.skin = self.skin;
 		newmis.frame = 7; // Large size
 		newmis.noise = "nour/bounce.wav";
-	}
-	else if (proj_type == CT_PROJ_CHTHON2) {
+	} else if (proj_type == CT_PROJ_CHTHON2) {
 		setmodel (newmis, MODEL_PROJ_CHTHON1);
 		newmis.skin = self.skin;
 		newmis.frame = rint((random() * 9));
 		newmis.noise = "chthon/bounce.wav";
 		newmis.dmg = self.pos3_z;
-	}
-	else if (proj_type == CT_PROJ_SHUB2) {
+	} else if (proj_type == CT_PROJ_SHUB2) {
 		setmodel (newmis, MODEL_PROJ_SHUB2);
 		newmis.frame = rint((random() * 9));
 		newmis.noise = "shub/bounce.wav";
 		newmis.dmg = self.pos3_z;
-	}
-	else if (proj_type == CT_PROJ_SHELLC) {
+	} else if (proj_type == CT_PROJ_SHELLC) {
 		setmodel(newmis, MODEL_PROJ_SHELLC);
 		newmis.touch = Touch_ShellCasing;
 		newmis.think = model_fade;
 		newmis.nextthink = time + random() + LIFE_SHELLS;
 		newmis.ltime = newmis.nextthink;
-	}
-	else if (proj_type == CT_PROJ_GLMONMULTI) {
+	} else if (proj_type == CT_PROJ_GLMONMULTI) {
 		setmodel(newmis, MODEL_PROJ_GRENADEMULTI);
 		newmis.touch = MultiGrenadeTouch;
 		newmis.think = MultiGrenadeExplode;
 		newmis.nextthink = time + 1;
-		newmis.bbmins = VEC_ORIGIN;
-		newmis.bbmaxs = VEC_ORIGIN;
 		newmis.classname = "MultiGrenade";
-	}
-	else if (proj_type == CT_PROJ_GLMONPROX) {
+	} else if (proj_type == CT_PROJ_GLMONPROX) {
 		setmodel(newmis, "progs/hipnotic/proxbomb.mdl");
 		newmis.touch = ProximityGrenadeTouch;
 		newmis.think = ProximityBomb;
@@ -1982,7 +1964,6 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade =
 	}
 	
 	// These projectile fly like grenades but are really spikes!
-	//----------------------------------------------------------------------
 	if (proj_type == CT_PROJ_SPID || proj_type == CT_PROJ_VORE ||
 		proj_type == CT_PROJ_SWAMP || proj_type == CT_PROJ_ELF ||
 		proj_type == CT_PROJ_FLESH || proj_type == CT_PROJ_FLESHP) {
@@ -1993,30 +1974,31 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade =
 	}
 	
 	// Standard projectile setup (origin, size and velocity)
-	//----------------------------------------------------------------------
 	newmis.mangle = dir;	// Save for later
 	newmis.velocity = newmis.mangle;
 	newmis.avelocity = avel;
 	newmis.angles = vectoangles(newmis.velocity);
 	setsize (newmis, newmis.bbmins, newmis.bbmaxs);
 	setorigin (newmis, org);
+
+	if (newmis.physicsflags) {
+		Gyro_Object_Activate(newmis,MASS_GRENADE);
+		if (newmis.physicsflags & PHYS_GYRO_BOUYANT) Gyro_Object_SetBouyancy(newmis,BOUY_GRENADE);
+		if (newmis.physicsflags & PHYS_GYRO_TURBULENCE) Gyro_Object_SetTurbulence(newmis,TURB_GRENADE, 0.95);
+		if (newmis.physicsflags & PHYS_GYRO_MOTIONRESIST) Gyro_Object_SetResistance(newmis,RESIST_GRENADE);
+		if (newmis.physicsflags & PHYS_GYRO_AERODYNAMIC) Gyro_Object_SetResistance(newmis,AERO_GRENADE);
+	}
 };
 
-//======================================================================
-// Generic functions for firing grenades from monsters
 // MonsterGrenadeSound = play generic load grenade sound
-// MonsterGrenadeSpeed = return generic attack speed
-// MonsterFireGrenade = fire grenade at enemy origin
-//
-//----------------------------------------------------------------------
-void() MonsterGrenadeSound =
-{ sound (self, CHAN_WEAPON, "weapons/gl_loadshort.wav", 0.1+random()*0.5, ATTN_LOW); };
-float() MonsterGrenadeSpeed =
-{ return SPEED_MONGRENADE + (skill * SPEED_MONGLSKILL); };
+void() MonsterGrenadeSound = { sound (self, CHAN_WEAPON, "weapons/gl_loadshort.wav", 0.1+random()*0.5, ATTN_LOW); };
 
-//----------------------------------------------------------------------
-void(vector grenade_org, vector grenade_enemyorg) MonsterFireGrenade =
-{
+// MonsterGrenadeSpeed = return generic attack speed
+float() MonsterGrenadeSpeed ={ return SPEED_MONGRENADE + (skill * SPEED_MONGLSKILL); };
+
+// Generic functions for firing grenades from monsters
+// MonsterFireGrenade = fire grenade at enemy origin
+void(vector grenade_org, vector grenade_enemyorg) MonsterFireGrenade = {
 	local vector ang, dir, avel;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
@@ -2029,8 +2011,7 @@ void(vector grenade_org, vector grenade_enemyorg) MonsterFireGrenade =
 		// Default grenade speed (player = 600)
 		dir = dir * SPEED_PLAYGRENADE;
 		dir_z = ELEV_ZAXIS;
-	}
-	else {
+	} else {
 		// Z Aware tracking is ENABLED (AI track player much better)
 		// One final angle adjustment (based on actual projectile origin)
 		self.attack_speed = MonsterGrenadeSpeed();
@@ -2053,24 +2034,17 @@ void(vector grenade_org, vector grenade_enemyorg) MonsterFireGrenade =
 	}
 };
 
-/*======================================================================
- Ejecting Shell Casing for SG/SSG/Upgrade
-======================================================================*/
-void() Touch_ShellCasing =
-{
-	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
+// Ejecting Shell Casing for Shotguns
+void() Touch_ShellCasing = {
 	if (self.touchedvoid) return;				// Marked for removal
+	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
 	if (other == self.owner) return;			// Touching self, do nothing
 	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
-
 	self.touch = SUB_Null;
-	if (random() < 0.5)  
-		sound(self, CHAN_VOICE, "weapons/shellc.wav", random()*0.25, ATTN_LOW);		
+	if (random() < 0.5) sound(self, CHAN_VOICE, "weapons/shellc.wav", random()*0.25, ATTN_LOW);		
 };
 
-//----------------------------------------------------------------------
-void(float shell_qty) Launch_ShellCasing =
-{
+void(float shell_qty) Launch_ShellCasing = {
 	local vector org, dir, avel;
 	
 	if ( self.health < 1 ) return;

@@ -2698,8 +2698,7 @@ STARTOFF : Starts off and waits for trigger
 Stop monsters from using jump attack
 
 ======================================================================*/
-void() trigger_monsternojump_fire =
-{
+void() trigger_monsternojump_fire = {
 	// This is after bmodel _use, _killed and _touch, so any reference
 	// to the trigger activator has to go through 'bmodel_act'
 	if (self.estate & ESTATE_BLOCK) return;

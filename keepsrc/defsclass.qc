@@ -134,15 +134,16 @@ float CT_MONRAKEGOBLIN = 122;	// Drake goblin
 float CT_MONFANGEL = 123;		// Hexen2 Fallen Angel
 float CT_MONFANGELLORD = 124;	// Hexen2 Fallen Angel Lord
 float CT_MONFISH = 125;			// Fish fish fishy
-float CT_MONOCTOPUS = 126;		// Octopussy little cuty (-Madfox)
+float CT_MONOCTOPUS = 126;		// Octopussy little cuty (Madfox)
 float CT_MONHYDRA = 127;		// Hydra from Hexen 2 - added to extras_r5 by khreathor - using extras_r5 version
 float CT_MONDYONG = 128;		// Mini Shub with extra tentacles Four Feathers MOD (Madfox)
-float CT_MONFROG = 129;			// Fragy froggy frog (-Madfox) - DENIZEN!
+float CT_MONFROG = 129;			// Fragy froggy frog (Madfox) - DENIZEN!
 float CT_MONHELLK = 130;		// Strong spikey Knights
 float CT_MONREBEL = 131;		// Rebel (crossbow bandit from Drake)
 float CT_MONSHEEP = 132;		// Sheep from Hexen 2 - DENIZEN!
 float CT_MONOGLE = 133;			// Ogle from Heretic 2 - DENIZEN!
 float CT_MONRAVEN = 134;		// Raven from Redfield's Ravenkeep - DENIZEN!
+float CT_MONBEEZ = 135;			// Beez swarm (Madfox) - DENIZEN!
 float CT_MONKNIGHT = 140;		// Small metal Knights
 float CT_MONCARNIVEAN = 141;	// Carnivean Serpentine Knight
 float CT_MONREIVER = 142;		// Reiver from Quake 1.5 mod
@@ -275,11 +276,11 @@ float CT_MONJIMROCKET = 386;		// Jim has a rocket launcher!
 float CT_MONGUG = 387;				// Gug!
 float CT_MONPOLYP = 388;			// Flying Polyp
 float CT_MONVERMIS = 389;			// Vermis
-
 float CT_MONPYRO = 390;			// Enforcer Flame (Pyro)
 float CT_MONENF_ULTRA = 391;			// Ultra Enforcer
 float CT_MONFUMIGATOR = 392;		// Poison version of the Pyro
 float CT_MONENF_MEGA = 393;			// Mega Enforcer
+float CT_MONDRONE = 394;			// Drone robot from Drake
 float CT_MONCENTURION = 395;		// Enforcer hoverboard (Plasma)
 float CT_PROJ_FABLADE = 396;		// Fallen Angel ninja blade attack
 float CT_PROJ_FASPELL = 397;		// Fallen Angel green shard attack
@@ -314,9 +315,9 @@ float CT_PROJ_MPOISON = 427;	// Minotaur Poison Bolt (nail)
 float CT_PROJ_MBLOOD = 428;		// Alternative Minotaur Bolt (nail)
 float CT_PROJ_WPOISON = 429;	// Wraith Poison Bolt (nail)
 float CT_PROJ_FURY2 = 430;		// Fury Spit with grenade trail
+float CT_PROJ_REFLNG = 431;		// Reflected (glowing red)
 
-
-
+float CT_PROJ_GLMULTI = 433;	// Rogue Multi-Grenade projectile
 float CT_PROJ_DARTARROW = 434;	// Trap_spikeshooter dart
 float CT_PROJ_BOLT1 = 435;		// Crossbow Knight Bolt +hknight trail
 float CT_PROJ_BOLT2 = 436;		// Poison

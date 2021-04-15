@@ -308,7 +308,7 @@ void() wraith_debuff_trail =
 	//----------------------------------------------------------------------
 	// Originally - BleedDeBuff(SUB_entEnemyTarget());
 	// New version - Fire explosion + burning
-	if (trace_ent.flags & FL_CLIENT) {
+	if ((trace_ent.flags & FL_CLIENT) || (trace_ent.flags & FL_MONSTER)) {
 		self.owner = self;	// Fix for T_damage inside ApplyFireDmg
 		ApplyFireDmg(SUB_entEnemyTarget(), DAMAGE_PYROWRAITH, DAMAGE_PYROWRAITH);
 	}

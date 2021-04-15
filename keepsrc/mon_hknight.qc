@@ -786,7 +786,10 @@ void() hknight_pointwakeup =
 	self.flags = self.flags | FL_MONSTER;
 
 	// Restore the nail resistance if setup to be a statue skin
-	if (self.spawnflags & MON_STATUE) self.resist_nails = 0.2;
+	if (self.spawnflags & MON_STATUE) {
+		self.resist_nails = 0.2;
+		self.reflectnails = TRUE;		// Reflect nail projectiles
+	}
 	
 	hknight_remove_attachment();		// Remove glowing sword
 	hknight_aistates();					// Restore AI state functions
@@ -860,6 +863,7 @@ void() monster_hell_knight = {
 	precache_sound ("hknight/attack1.wav");
 	precache_sound ("knight/sword2.wav");
 	precache_sound ("knight/sword2.wav");
+	self.hello_sound = "hknight/idle.wav"; 
 
 	// TE_KNIGHTSPIKE = Magic spike hitting the wall
 	// Has got to be in this location because the 
@@ -868,7 +872,11 @@ void() monster_hell_knight = {
 
 	// Always precache these stone gib models
 	precache_stonegibs();
-	
+
+	// Always reset Ammo Resistance to be consistent
+	self.resist_shells = self.resist_nails = 0;
+	self.resist_rockets = self.resist_cells = 0;	
+
 	//----------------------------------------------------------------------
 	if (self.spawnflags & MON_STATUE) {
 		self.idle_sound = "statue/idle1.wav";
@@ -877,13 +885,16 @@ void() monster_hell_knight = {
 		precache_sound (self.idle_sound);
 		precache_sound (self.idle_sound2);
 		precache_sound (self.idle_soundcom);
-
+		self.hello_sound = "statue/idle1.wav"; 
 		self.pain_sound = "statue/hurt.wav";
 		self.death_sound = "statue/death.wav";
 		self.sight_sound = "statue/sight.wav";
 		self.gib1skin = 1;					// Stoney sword
 		self.gibtype = GIBTYPE_STONE;		// Stoney gibs!
 		self.gib2mdl = self.gib3mdl = string_null;
+
+		self.resist_nails = 0.2;
+		self.reflectnails = TRUE;		// Reflect nail projectiles
 	}
 	else {
 		self.idle_sound = "hknight/idle.wav";
@@ -896,7 +907,6 @@ void() monster_hell_knight = {
 	// Cannot have if precache statements, precache duplicates as well
 	precache_sound (self.pain_sound);
 	precache_sound (self.death_sound);
-	precache_sound (self.sight_sound);
 
 	// New sword sweep/slash sounds
 	precache_sound ("weapons/sword1a.wav");
@@ -932,6 +942,8 @@ void() monster_hell_knight = {
 			if (self.classname == "monster_hell_lord") {
 				if (self.health < 1) self.health = 400;
 				self.gibhealth = MON_NEVERGIB;
+				self.sight_sound = "drake/archer/sight2.wav";
+				self.hello_sound = "hknight/idle.wav"; 
 				if (!self.skin) self.skin = 15; // Turquoise allover, looking sleek
 				if (self.deathstring == "") self.deathstring = " fell before a Hell Lord\n";
 			} else {
@@ -939,15 +951,13 @@ void() monster_hell_knight = {
 			}
 		}
 	}
+	precache_sound (self.sight_sound);
+	precache_sound (self.hello_sound);
 	self.pain_flinch = 40;					// Medium pain threshold
 	self.pain_timeout = 1.5;				// Higher than a knight
 	self.steptype = FS_TYPEHEAVY;			// Heavy player
 	self.meleeattack = rint(random()*3);	// randomize last melee attack
 	self.th_die = hknight_die;				// Face meets floor
-	
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
@@ -968,6 +978,8 @@ void() monster_hell_knight = {
 			self.pain_longanim = FALSE;		// resistant to shadow axe
 			self.pain_timeout = 2;			// high pain threshold
 			self.no_liquiddmg = TRUE;		// Immune to slime/lava
+			self.resist_nails = 0.2;
+			self.reflectnails = TRUE;		// Reflect nail projectiles
 		}
 		self.th_stand = hknight_pointsetup;	// Find target before shoot
 		self.th_run = hknight_pointfire;	// Keep Looping
@@ -989,6 +1001,8 @@ void() monster_hell_knight = {
 	// Tougher skin, less pain, heavy feet etc	
 	//----------------------------------------------------------------------
 	else if (self.spawnflags & MON_STATUE) {
+		self.resist_nails = 0.2;
+		self.reflectnails = TRUE;		// Reflect nail projectiles
 		if (self.classname == "monster_hell_knight_champion") {
 			self.classgroup = CG_DKNIGHT;	// Classic tincan!
 			hknight_aistates();

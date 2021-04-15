@@ -390,6 +390,7 @@ void() monster_pyro = {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = 0; self.resist_nails = 0.5;
 	self.resist_rockets = self.resist_cells = 0;
+	self.reflectnails = TRUE;		// Reflect nail projectiles
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
@@ -473,6 +474,7 @@ void() monster_fumigator = {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = 0; self.resist_nails = 0.5;
 	self.resist_rockets = self.resist_cells = 0;
+	self.reflectnails = TRUE;		// Reflect nail projectiles
 
 	self.th_checkattack = PyroCheckAttack;
 	self.th_stand = pyro_stand1;

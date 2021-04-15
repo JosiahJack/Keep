@@ -18,11 +18,18 @@ defsq15.qc
 dpextensions.qc
 qsextensions.qc
 qrobotdefs.qc
+
 mathlib.qc
 math.qc
 
 csqc_defs.qc
 csqc_hudkeep.qc
+
+// Gyro2 Physics
+gyro_main.qc
+gyro_forces.qc
+gyro_physics.qc
+gyro_user.qc
 
 subs.qc
 subs_soc.qc
@@ -34,6 +41,8 @@ subs_extras.qc
 subs_hexen2.qc
 subs_aoa.qc
 subs_q15.qc
+subs_nehahra.qc
+
 estate.qc
 hiprot.qc
 drake_box.qc
@@ -51,6 +60,7 @@ part_emitter.qc
 
 drake_aim.qc
 
+ai_allegiance.qc
 ai_drake.qc
 ai_doom.qc
 ai_blood.qc
@@ -82,26 +92,25 @@ fx_drake.qc
 drake_cool.qc
 drake_fire.qc
 drake_reflect.qc
+drake_cutscene.qc
+
 fablade.qc // from hexen2 used by Fallen Angel in fangel.qc
 faspell.qc // from hexen2 used by Fallen Angel in fangel.qc
 
 projectiles.qc
 projectiles_keep.qc
 projectiles_drake.qc
-
-// Gyro2 Physics
-//gyro_forces.qc
-//gyro_main.qc
-//gyro_physics.qc
-//gyro_user.qc
+projectiles_nehahra.qc
 
 precache_keep.qc
 world.qc
+
 client_cshift.qc
 client_mapvar.qc
 client_debuff.qc
 client_power.qc
 client_evilmode.qc
+legs.qc
 client.qc
 client_obituary.qc
 client_camera.qc
@@ -199,7 +208,7 @@ mon_hogreham.qc
 mon_hogremac.qc
 mon_jim.qc
 mon_lostsoul.qc
-//mon_manglioch.qc
+//mon_manglioch.qc // Does not yet exist!
 mon_megaforce.qc
 mon_minotaur.qc
 mon_pyro.qc
@@ -238,8 +247,8 @@ mon_steelclaw.qc
 mon_sweeper.qc // Hypnogogia Monsters
 mon_turretbal.qc // Hypnogogia Monsters
 mon_bossmammoth.qc // Hypnogogia Monsters
-//mon_bossphobetor.qc // Hypnogogia Monsters
-//mon_bosspsyder.qc // Hypnogogia Monsters
+//mon_bossphobetor.qc // Hypnogogia Monsters  // Does not yet exist!
+//mon_bosspsyder.qc // Hypnogogia Monsters  // Does not yet exist!
 mon_bossjudicator.qc // Justice
 
 // Hipnotic stuff
@@ -297,11 +306,18 @@ mon_hlord_dragon.qc // the Dark Lord transforms into a dragon beast
 mon_hlord.qc
 mon_rebel.qc // Crossbow bandit (enforcer derived)
 wand.qc
-
+misc_hostage.qc
 
 // Zerstorer stuff
 mon_trog.qc
 //mon_zerst.qc // Heavily modified to make use of madfox's added poses
+
+// Nehahra
+//mon_enf2.qc
+//mon_enf3.qc
+//mon_beard.qc
+mon_nehahra.qc
+//mon_mistermax.qc
 
 // Soul of Evil stuff
 mon_axeman.qc
@@ -346,13 +362,9 @@ mon_fragy.qc // Frog by madfox
 //mon_orgulus.qc // Dr. Mhorbo Orgulus by madfox
 //mon_samuri.qc // Samuri Knight by madfox
 //mon_mcorn.qc // Manticore by madfox
-//mon_swarm.qc // Bees by madfox
+mon_swarm.qc // Bees by madfox
 mon_sheep.qc // Hexen2 sheep, modified
 mon_ogle.qc // Heretic2 ogle, slightly modified
-
-//CSQC extensions start here.
-//csqc_hud_vanilla.qc
-//csqc_scoreboard.qc
 
 // Hexen 2 (most are in Drake but these weren't)
 mon_fangel.qc

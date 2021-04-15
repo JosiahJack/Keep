@@ -363,7 +363,6 @@ void() monster_xmas_elf =
 	precache_sound (self.sight_sound2);
 	precache_sound (self.sight_sound3);
 	precache_sound (self.sight_sound4);
-	self.sight_count = 4;
 
 	// Elf 1 - Melee/Jump attacks - cane impacts
 	precache_sound ("xmas/elf/cane_swipe1.wav");

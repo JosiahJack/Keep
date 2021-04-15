@@ -49,9 +49,9 @@ float lastframe;
 This is called from PostThink to advance all moving triggers each frame
 ============
 */
-void() SUB_PushFrameMovers =
-{
+void() SUB_PushFrameMovers = {
 	local entity ent;
+	local vector org, out, up;
 	
 	// Make sure this only happens once per frame (bots)
 	if (lastframe == time) return;	
@@ -60,40 +60,57 @@ void() SUB_PushFrameMovers =
 	// Find the first ent
 	ent = find(world, fmover, "moving");
 	
-	while(ent)
-	{	
+	while(ent) {	
 		// Child move
-		if (ent.owner)
-		{
+		if (ent.owner) {
 			// Ignore next frame (done moving)
 			if (ent.owner.velocity == '0 0 0') {
 				ent.fmover = string_null;
 				ent.origin = ent.owner.origin;
 				setorigin(ent, ent.origin);
-			}
-			// Parent is Blocked
-			else if ((ent.owner.attack_finished-(0.5-frametime)) > time ) {
+			} else if ((ent.owner.attack_finished-(0.5-frametime)) > time ) {
+				// Parent is Blocked
 				ent.origin = ent.owner.origin;
 				setorigin(ent, ent.origin);
-			}
-			// Lead parent a bit (seems to track better)
-			else {
+			} else {
+				// Lead parent a bit (seems to track better)
 				ent.origin = ent.owner.origin + ent.owner.velocity*frametime;
 				setorigin(ent, ent.origin);
 			}
-		}
-		// Independant func_water or func_watertrain
-		else if (ent.velocity == '0 0 0') {
+		} else if (ent.velocity == '0 0 0') {
+			// Independant func_water or func_watertrain
 			ent.fmover = string_null;// Ignore next frame (done moving)
-		}
-		// Add move for this frame
-		else {
+		} else {
+			// Add move for this frame
 			ent.origin = ent.origin + ent.velocity*frametime;
 			setorigin(ent, ent.origin);
 		}
+		ent = find(ent, fmover, "moving"); // Get the mext one
+	}	
+
+	//Handle monster attachments
+	//-----------------------------------------------------------------------
+	// Find the first ent
+	ent = find(world, hasobject, "true");
+	
+	while(ent) {
+		if (ent.flags & FL_MONSTER) {
+			// Child move
+			if (ent.entattachment) {
+				makevectors(ent.angles);
+				out = v_forward;
+				out = normalize (out);
+				// put out in front of monster
+				up = VEC_ORIGIN;
+				up_z = ent.attachment_offset_z;
+				org = ((ent.origin + (((ent.bbmaxs_x * 2)+ent.attachment_offset_x) * out)) + up);
+				setorigin(ent.entattachment,org); // ok we got it.
+				ent.entattachment.angles = ent.angles;
+			}
+		}
 		
 		// Get the mext one
-		ent = find(ent, fmover, "moving");
+		ent = find(ent, hasobject, "true");
 	}	
 };
 

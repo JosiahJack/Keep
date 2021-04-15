@@ -471,9 +471,11 @@ void() monster_enforcer = {
 	self.gib1skin = 0;
 
 	self.idle_sound = "enforcer/idle1.wav";
-	precache_sound (self.idle_sound);
 	self.sight_sound = "enforcer/sight1.wav";
-	precache_sound (self.sight_sound);
+	self.sight_sound2 = "enforcer/sight2.wav";
+	self.sight_sound3 = "enforcer/sight3.wav";
+	self.sight_sound4 = "enforcer/sight4.wav";
+	precache_sound ("enforcer/sight1.wav");
 	precache_sound ("enforcer/sight2.wav");
 	precache_sound ("enforcer/sight3.wav");
 	precache_sound ("enforcer/sight4.wav");

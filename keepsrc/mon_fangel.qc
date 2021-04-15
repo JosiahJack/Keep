@@ -315,6 +315,10 @@ void() fangel_block7 = [6, fangel_block8] {
 	self.takedamage = DAMAGE_NO;
 	self.resist_shells = self.resist_nails = 1;
 	self.resist_rockets = self.resist_cells = 1;
+	self.reflectlightning = TRUE;	// Reflect lightning strikes
+	self.reflectplasma = TRUE;		// Reflect plasma projectiles
+	self.reflectnails = TRUE;		// Reflect nail projectiles
+	self.reflectaxe = TRUE;			// Prevent axe damage
 };
 void() fangel_block8 = [7, fangel_block9] {fangel_blockthink();};
 void() fangel_block9 = [8, fangel_block10] {fangel_blockthink();};
@@ -334,6 +338,10 @@ void() fangel_block21 = [20, fangel_flyframes_check] {
 	self.takedamage = DAMAGE_YES; // Let's get hurt again
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+	self.reflectlightning = FALSE;	// Reflect lightning strikes
+	self.reflectplasma = FALSE;		// Reflect plasma projectiles
+	self.reflectnails = FALSE;		// Reflect nail projectiles
+	self.reflectaxe = FALSE;			// Prevent axe damage
 	chance = random();
 	if (chance < 0.10000) {
 		self.think = fangel_flyframes_check;

@@ -1,70 +1,62 @@
-
-//==============================================
 //===== Matt's Gyro Notepad ====================
-//==============================================
-/*
+// ----- Todo List --------------------
+// Seriously reconsider the turbulence subsystem
+// Optimise the loop-rounds for the aerodynamics subsystem
+//
+// ----- Coding Concerns --------------------
+// My power estimation function really needs further testing
+// Quadratic falloff is not mathematically accurate
+// Should forces use classname, or do they need a new gyro_force_name field?
+// What happens if a force is made into a physics object?
+// What happens if a force or object is created during Gyro's execution? (from the feedback function)
+// Falloff combiners haven't been tested fully (other than multiply)
+// Should I combine global and object turbulence into one subsystem?
 
------ Required Features --------------------
-None...
+// Qmaster updates:
+// removed unneeded debug checks in lieu of dprint requiring developer 1
+// replaced bprint with dprint
+// simplified initialization bits
+// used global engine check rather than have duplicate and possible inconsistency
+// removed a lot of horrible whitespace
+// changed \" instances to single quote '
+// removed some prints that weren't called ever
 
------ Todo List --------------------
-Seriously reconsider the turbulence subsystem
-Optimise the loop-rounds for the aerodynamics subsystem
-
------ Coding Concerns --------------------
-My power estimation function really needs further testing
-Quadratic falloff is not mathematically accurate
-Should forces use classname, or do they need a new gyro_force_name field?
-What happens if a force is made into a physics object?
-What happens if a force or object is created during Gyro's execution? (from the feedback function)
-Falloff combiners haven't been tested fully (other than multiply)
-Should I combine global and object turbulence into one subsystem?
-
-
-*/
-//====================================================
 //===== User Tweakable Parameters ====================
-//====================================================
-
 //----- Natural Bouyancy Settings --------------------
-float	GYRO_BOUYANCYMOD_AIR;
-float	GYRO_BOUYANCYMOD_WATER;
-float	GYRO_BOUYANCYMOD_SLIME;
-float	GYRO_BOUYANCYMOD_LAVA;
+float	GYRO_BOUYANCYMOD_AIR = 0.0;
+float	GYRO_BOUYANCYMOD_WATER = 1.0;
+float	GYRO_BOUYANCYMOD_SLIME = 1.2;
+float	GYRO_BOUYANCYMOD_LAVA = 1.4;
 
 //----- Natural Resistance Settings --------------------
-float	GYRO_RESISTANCEMOD_AIR;
-float	GYRO_RESISTANCEMOD_WATER;
-float	GYRO_RESISTANCEMOD_SLIME;
-float	GYRO_RESISTANCEMOD_LAVA;
+float	GYRO_RESISTANCEMOD_AIR = 0.1;
+float	GYRO_RESISTANCEMOD_WATER = 1.0;
+float	GYRO_RESISTANCEMOD_SLIME = 1.2;
+float	GYRO_RESISTANCEMOD_LAVA = 1.4;
 
 //----- Natural Turbulence Settings --------------------
-float	GYRO_TURBULENCEMOD_AIR;
-float	GYRO_TURBULENCEMOD_WATER;
-float	GYRO_TURBULENCEMOD_SLIME;
-float	GYRO_TURBULENCEMOD_LAVA;
+float	GYRO_TURBULENCEMOD_AIR = 0.1;
+float	GYRO_TURBULENCEMOD_WATER = 1.0;
+float	GYRO_TURBULENCEMOD_SLIME = 1.2;
+float	GYRO_TURBULENCEMOD_LAVA = 1.4;
 
 //----- Core Non-Constant Settings --------------------
-float	GYRO_TICKRATE;
-float	GYRO_AUTOTICKRATE;
-float	GYRO_MOTIONCORRECTION;
-float	GYRO_FORCEDEBUG;
-float	GYRO_OBJECTDEBUG;
-float	GYRO_POWERCONSTANT;
+float	GYRO_TICKRATE = 0.007; // Crank it!  Was 0.03, increased so that players with 144hz monitors have smooth buttery experience in QSS/FTE -Qmaster
+float	GYRO_POWERCONSTANT = 800;
 
+//----- Force Channels --------------------
+float	GYRO_CHANNEL_DEFAULT	= 1;
+float	GYRO_CHANNEL_EXPLOSION	= 2;
+float	GYRO_CHANNEL_METAL		= 4;
+float	GYRO_CHANNEL_ORGANIC	= 8;
+float	GYRO_CHANNEL_MAGIC		= 16;
 
-
-//============================================================
 //===== Variable and Function Declaration ====================
-//============================================================
-
 //----- Global Variable Declarations --------------------
 float	gyro_runtimer;
-float	gyro_runcount;
 float	gyro_framegrav;
 float	gyro_framemaxvel;
 float	gyro_framemaxvelneg;
-float	gyro_framedebug;
 float	gyro_displayintro;
 
 //----- Entity Motion Effectors --------------------
@@ -75,16 +67,10 @@ float	gyro_displayintro;
 .float	gyro_antigravityeffect;
 
 //----- General Function Protoypes --------------------
-void() Gyro_UserSettings;
 void() Gyro_RunPhysics;
 void() Gyro_RunForces;
 
-
-
-//===================================================
 //===== Physics Object Variables ====================
-//===================================================
-
 //----- Mass and Bouyancy --------------------
 .float	gyro_object_mass;
 .float	gyro_object_bouyancy_air;
@@ -141,12 +127,7 @@ float	gyro_feedback_power;
 float	gyro_feedback_channels;
 .void()	gyro_feedback;
 
-
-
-//===================================================
-//===== Force Entity Variables ====================
-//===================================================
-
+//===== Force Entity Variables =============================
 //----- General Force-Related Variables --------------------
 .entity	gyro_force_ignore;
 .entity	gyro_force_attach;
@@ -245,12 +226,7 @@ float	GYRO_AFFECTOR_DIRECTIONAL	= 3;
 float	GYRO_AFFECTOR_ANTIGRAVITY	= 4;
 float	GYRO_AFFECTOR_RESISTANCE	= 5;
 
-
-
-//=====================================================
 //===== Object Linked-List Control ====================
-//=====================================================
-
 //----- List Variable Declarations --------------------
 float	gyro_objectlist_size;
 entity	gyro_objectlist_head;
@@ -258,42 +234,7 @@ entity	gyro_objectlist_head;
 .entity	gyro_objectlist_prev;
 .float	gyro_objectlist_inlist;
 
-//----- Adding to the Physics Object List --------------------
-void(entity e) Gyro_ObjectList_Add =
-{
-	if (e.gyro_objectlist_inlist)
-		return;
-	e.gyro_objectlist_inlist = TRUE;
-	e.gyro_objectlist_next = gyro_objectlist_head;
-	if (gyro_objectlist_head)
-		gyro_objectlist_head.gyro_objectlist_prev = e;
-	gyro_objectlist_head = e;
-	gyro_objectlist_size = gyro_objectlist_size + 1;
-};
-
-//----- Removing from the Physics Object List --------------------
-void(entity e) Gyro_ObjectList_Remove =
-{
-	if (!e.gyro_objectlist_inlist)
-		return;
-	if (e.gyro_objectlist_prev)
-		e.gyro_objectlist_prev.gyro_objectlist_next = e.gyro_objectlist_next;
-	else
-		gyro_objectlist_head = e.gyro_objectlist_next;
-	if (e.gyro_objectlist_next)
-		e.gyro_objectlist_next.gyro_objectlist_prev = e.gyro_objectlist_prev;
-	e.gyro_objectlist_inlist = FALSE;
-	e.gyro_objectlist_next = world;
-	e.gyro_objectlist_prev = world;
-	gyro_objectlist_size = gyro_objectlist_size - 1;
-};
-
-
-
-//=====================================================
 //===== Force Linked-List Control ====================
-//=====================================================
-
 //----- List Variable Declarations --------------------
 float	gyro_forcelist_size;
 entity	gyro_forcelist_head;
@@ -302,50 +243,64 @@ entity	gyro_forcelist_head;
 .float	gyro_forcelist_inlist;
 
 //----- Adding to the Physics Object List --------------------
-void(entity e) Gyro_ForceList_Add =
-{
-	if (e.gyro_forcelist_inlist)
-		return;
+void(entity e) Gyro_ObjectList_Add = {
+	if (e.gyro_objectlist_inlist) return;
+
+	e.gyro_objectlist_inlist = TRUE;
+	e.gyro_objectlist_next = gyro_objectlist_head;
+	if (gyro_objectlist_head) gyro_objectlist_head.gyro_objectlist_prev = e;
+	gyro_objectlist_head = e;
+	gyro_objectlist_size = gyro_objectlist_size + 1;
+};
+
+//----- Removing from the Physics Object List --------------------
+void(entity e) Gyro_ObjectList_Remove = {
+	if (!e.gyro_objectlist_inlist) return;
+
+	if (e.gyro_objectlist_prev)	e.gyro_objectlist_prev.gyro_objectlist_next = e.gyro_objectlist_next;
+	else						gyro_objectlist_head = e.gyro_objectlist_next;
+
+	if (e.gyro_objectlist_next) e.gyro_objectlist_next.gyro_objectlist_prev = e.gyro_objectlist_prev;
+	e.gyro_objectlist_inlist = FALSE;
+	e.gyro_objectlist_next = world;
+	e.gyro_objectlist_prev = world;
+	gyro_objectlist_size = gyro_objectlist_size - 1;
+};
+
+//----- Adding to the Physics Object List --------------------
+void(entity e) Gyro_ForceList_Add = {
+	if (e.gyro_forcelist_inlist) return;
+
 	e.gyro_forcelist_inlist = TRUE;
 	e.gyro_forcelist_next = gyro_forcelist_head;
-	if (gyro_forcelist_head)
-		gyro_forcelist_head.gyro_forcelist_prev = e;
+	if (gyro_forcelist_head) gyro_forcelist_head.gyro_forcelist_prev = e;
 	gyro_forcelist_head = e;
 	gyro_forcelist_size = gyro_forcelist_size + 1;
 };
 
 //----- Removing from the Physics Object List --------------------
-void(entity e) Gyro_ForceList_Remove =
-{
+void(entity e) Gyro_ForceList_Remove = {
 	if (!e.gyro_forcelist_inlist)
 		return;
-	if (e.gyro_forcelist_prev)
-		e.gyro_forcelist_prev.gyro_forcelist_next = e.gyro_forcelist_next;
-	else
-		gyro_forcelist_head = e.gyro_forcelist_next;
-	if (e.gyro_forcelist_next)
-		e.gyro_forcelist_next.gyro_forcelist_prev = e.gyro_forcelist_prev;
+	if (e.gyro_forcelist_prev)	e.gyro_forcelist_prev.gyro_forcelist_next = e.gyro_forcelist_next;
+	else						gyro_forcelist_head = e.gyro_forcelist_next;
+
+	if (e.gyro_forcelist_next) e.gyro_forcelist_next.gyro_forcelist_prev = e.gyro_forcelist_prev;
 	e.gyro_forcelist_inlist = FALSE;
 	e.gyro_forcelist_next = world;
 	e.gyro_forcelist_prev = world;
 	gyro_forcelist_size = gyro_forcelist_size - 1;
 };
 
-
-
-//=================================================
 //===== Gyro Utility Functions ====================
-//=================================================
-
-//----- Perform a Rough Power Estimation --------------------
-float	gyro_accuratepower;
+//----- Perform a Power Estimation --------------------
 float(string s) Gyro_CheckExtension = #99;
 float(float x, float y) Gyro_PowerAccurate = #97;
-float(float x, float y) Gyro_PowerEstimation =
-{
-	if (gyro_accuratepower)
-		return Gyro_PowerAccurate(x, y);
+float(float x, float y) Gyro_PowerEstimation = {
 	local float	z;
+
+	if (ext_active) return Gyro_PowerAccurate(x, y);
+
 	z = 1 - x;
 	z = (z * z) + z;
 	z = 1.0 / ((y * z) + 1.0);
@@ -354,108 +309,42 @@ float(float x, float y) Gyro_PowerEstimation =
 
 //----- Safe 'Remove' Function Replacement --------------------
 void(entity e) Gyro_RemoveEntity	= #15;
-void(entity e) remove =
-{
+void(entity e) remove = {
 	Gyro_ObjectList_Remove(e);
 	Gyro_ForceList_Remove(e);
 	Gyro_RemoveEntity(e);
 };
 
-//----- Safe 'Null' Function --------------------
-void() Gyro_Null =
-{
-	return;
-};
-
-
-//===================================================
 //===== Primary Control Routines ====================
-//===================================================
-
-//----- Initialise Variables: Called only on the First Frame --------------------
-void() Gyro_InitialiseVariables =
-{
-	//----- Load User Settings --------------------
-	Gyro_UserSettings();
-	
+//----- Initialise Variables: Called only on the First Frame in world.qc --------------------
+void() Gyro_InitialiseVariables = {	
 	//----- Prepare Internal Settings --------------------
 	gyro_runtimer = 0;
-	gyro_runcount = 0;
 	gyro_displayintro = TRUE;
-	
-	//----- Check for Engine POW Support --------------------
-	gyro_accuratepower = FALSE;
-	if (cvar("pr_checkextension"))
-	{
-		if (Gyro_CheckExtension("DP_QC_SINCOSSQRTPOW"))
-			gyro_accuratepower = TRUE;
-	}
 };
 
 //----- Main Gyro Loop: Called every Frame --------------------
-void() Gyro_Run =
-{
-	//----- Initialise Variables on First Run --------------------
-	if (gyro_runcount == 0)
-		Gyro_InitialiseVariables();
-	
-	//----- Automatic Tickrate Control --------------------
-	if (GYRO_AUTOTICKRATE)
-	{
-		GYRO_TICKRATE = frametime;
-		gyro_runtimer = time - (GYRO_TICKRATE * 0.5);
-	}
+void() Gyro_Run = {	
+	gyro_runtimer = time - (GYRO_TICKRATE * 0.5);
 	
 	//----- Iterate at a Fixed Rate --------------------
-	while (gyro_runtimer < time)
-	{
-		//----- Control Gyro Timer System --------------------
-		gyro_runtimer = gyro_runtimer + GYRO_TICKRATE;
-		gyro_runcount = gyro_runcount + 1;
+	while (gyro_runtimer < time) {
+		gyro_runtimer = gyro_runtimer + GYRO_TICKRATE; // Control Gyro Timer System
+		gyro_framegrav = cvar("sv_gravity"); // Set Per-Frame Globals
+		gyro_framemaxvel = cvar("sv_maxvelocity");
+		gyro_framemaxvelneg = 0.0 - gyro_framemaxvel;
 		
-		//----- Set Per-Frame Globals --------------------
-		gyro_framegrav = cvar("sv_gravity");
-		if (GYRO_MOTIONCORRECTION)
-		{
-			gyro_framemaxvel = cvar("sv_maxvelocity");
-			gyro_framemaxvelneg = 0.0 - gyro_framemaxvel;
-		}
-		
-		//----- Run Object Physics --------------------
 		Gyro_RunForces();
 		Gyro_RunPhysics();
 		
 		//----- Display Gyro Introduction Message --------------------
-		if (gyro_displayintro)
-		{
-			if ((GYRO_FORCEDEBUG > 0) || (GYRO_OBJECTDEBUG > 0))
-			{
-				if ((time > 1.6) && (time < 2.4))
-				{
-					bprint("Gyro 2.1a (April '07) is running\nTickrate (ms): ");
-					if (GYRO_AUTOTICKRATE)
-						bprint("Auto");
-					else
-						bprint(ftos(GYRO_TICKRATE * 1000));
-					bprint(", Force debug: ");
-					bprint(ftos(GYRO_FORCEDEBUG));
-					bprint(", Object debug: ");
-					bprint(ftos(GYRO_OBJECTDEBUG));
-					bprint("\n");
-					if (gyro_accuratepower)
-						bprint("Engine power function is enabled\n");
-					gyro_displayintro = FALSE;
-				}
+		if (gyro_displayintro) {
+			if ((time > 1.6) && (time < 2.4)) {
+				dprint("Gyro 2.1a (April 2007) by Matt...updated to 2.2a (April 2021) by Qmaster is running\nTickrate (ms): ");
+				dprint(ftos(GYRO_TICKRATE * 1000));
+				dprint("\n");
+				gyro_displayintro = FALSE;
 			}
-		}
-		
-		//----- Seperate Debug Info with a Line Every Frame --------------------
-		if (gyro_framedebug)
-		{
-			bprint("===== Output on Gyro frame: ");
-			bprint(ftos(gyro_runcount));
-			bprint(" =====\n");
-			gyro_framedebug = FALSE;
 		}
 	}
 };

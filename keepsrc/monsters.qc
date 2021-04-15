@@ -93,6 +93,7 @@ void() monster_use =
 	else {
 		// delay reaction (wait one frame) so if the monster
 		// has been teleported the sound is heard correctly
+		self.switchtimer = time + 0.1 + random();
 		self.nextthink = time + 0.1;
 		self.think = FoundTarget;
 	}
@@ -226,23 +227,28 @@ void() monster_idle_sound =
   - Switched sound channel to CHAN_BODY so death always stops it
   - Randomnly get sound file cut off using voice channel
 ======================================================================*/
-void() monster_sightsound =
-{
+void() monster_sightsound = {
 	local float	rsnd;
 
-	// No monsters, dead and timer not reset?
-	if ( !(self.flags & FL_MONSTER) ) return;
+	if ( !(self.flags & FL_MONSTER) ) return; 	// No monsters, dead and timer not reset?
 	if (self.health < 1) return;
+	if (!(self.sight_sound)) return;
 	self.monster_awake = TRUE;
-	if (!self.sight_sound) return;
 	if (self.spawnflags & MON_SPAWN_NOSIGHT) return;
 	if (intermission_running > 0) return;
-	if (cinematic_running > 0) return;
+	if (cinematic_running > 0 && !coop) return;
 
 	// Only do a sight sound when necessary, otherwise it overlaps and gets messy	
 	if (self.sight_timeout < time) {
-		self.sight_timeout = time + MON_SIGHTSOUND;		// Use pre-defined reset values
-	
+		self.sight_timeout = time + MON_SIGHTSOUND;	// Use pre-defined reset values
+
+		if ((self.master || self.owner || self.charmed) && !self.enemy && !(self.master == self)) {
+			if (self.hello_sound) {
+				sound (self, CHAN_BODY, self.hello_sound, 1, ATTN_NORM);
+				return;
+			}
+		}
+
 		rsnd = random();
 		// The id enforcer has four sight sounds, which is a bit excessive
 		// Check through sight strings to find out quantity
@@ -260,17 +266,6 @@ void() monster_sightsound =
 			else if (rsnd < 0.5) sound (self, CHAN_BODY, self.sight_sound2, 1, ATTN_NORM);
 			else if (rsnd < 0.75) sound (self, CHAN_BODY, self.sight_sound3, 1, ATTN_NORM);
 			else sound (self, CHAN_BODY, self.sight_sound4, 1, ATTN_NORM);
-		}
-
-		// setup each monster with unique sight sounds (easier and quicker)
-		// ID code - A bit excessive to have four sight sounds for the enforcer and 
-		// only one for every other monster type! ... somebody sure had a favourite!
-		else if (self.classtype == CT_MONENFORCER) {
-			rsnd = random();			
-			if (rsnd < 0.25) sound (self, CHAN_BODY, self.sight_sound, 1, ATTN_NORM);
-			else if (rsnd < 0.5) sound (self, CHAN_BODY, "enforcer/sight2.wav", 1, ATTN_NORM);
-			else if (rsnd < 0.75) sound (self, CHAN_BODY, "enforcer/sight3.wav", 1, ATTN_NORM);
-			else sound (self, CHAN_BODY, "enforcer/sight4.wav", 1, ATTN_NORM);
 		} else if (self.classtype == CT_MONNEMESANT) {
 			rsnd = random();			
 			if (rsnd < 0.5) sound (self, CHAN_BODY, "nemesant/tsight1.wav", 1, ATTN_NORM);
@@ -573,12 +568,11 @@ void(entity targ, float deathfunc, float gibdeath) monster_remove_kill =
 			// Quick way to make something gib, switch on the flag for it!
 			if (gibdeath) targ.gibondeath = TRUE;
 			// Make sure monster can take damage
-			targ.takedamage = DAMAGE_YES;
+			targ.takedamage = DAMAGE_AIM;
 			// Always do enough damage to kill the monster
 			// Can be a problem for ammo resistant
 			T_Damage (targ, world, world, targ.health+1, NOARMOR);
-		}
-		else {
+		} else {
 			targ.deadflag = DEAD_DEAD;
 			targ.enemy = world;
 			targ.health = targ.gibhealth;
@@ -607,6 +601,7 @@ void(entity targ, float deathfunc, float gibdeath) monster_remove_kill =
 			// Finally stop and hide all models
 			// Should not remove monster, it might have dependancies
 			entity_hide(targ);
+			take_monster_object(targ); // drop our stuff
 			if (targ.attachment) entity_remove(targ.attachment, 0.1);
 			if (targ.attachment2) entity_remove(targ.attachment2, 0.1);
 			if (targ.attachment3) entity_remove(targ.attachment3, 0.1);
@@ -686,15 +681,24 @@ void() monster_targets =
 			if (self.health > 0) monster_sightsound ();	// Wake up sound
 			return;
 		}
-	}
-	else {
+	} else {
 		// If the monster has a target check if path_corner or something to attack?
 		// Do nothing with patrol paths if spawning angry with the player
 		if (self.target != "") {
-			self.movetarget = find(world, targetname, self.target);
+			self.charmer = world;
+			if (self.event != "") {
+				self.movetarget = self.charmer = find(world, targetname, self.event); // Search for Nehahra follow target
+				self.movespeed = FALSE; // Force out of turret mode for mapper specified follow target
+			} else {
+				self.movetarget = find(world, targetname, self.target);
+
+				// Can't find our target?  check for follow target
+				if (!self.movetarget) self.movetarget = self.charmer = find(world, targetname, self.event); // Search for Nehahra follow target instead
+			}
+
 			// Cannot chase a target if setup as a turret
 			if (self.movetarget && self.movespeed != -1) {
-				if (self.movetarget.classtype == CT_PATHCORNER) {
+				if (self.movetarget.classtype == CT_PATHCORNER || (self.charmer != world)) {
 					self.goalentity = self.movetarget;
 					self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
 					self.nextthink = time + 0.1 + random()*0.5;
@@ -705,6 +709,7 @@ void() monster_targets =
 		}
 	}
 
+	// Always follow a player who charmed us rather than our "event" target
 	if (activator.flags & FL_CLIENT && activator.horn_active == TRUE) {
 		self.charmer = activator;
 		self.charmed = TRUE;
@@ -720,10 +725,7 @@ void() monster_targets =
  monster_setup
   - Setup monster ready for action
 ======================================================================*/
-void() monster_spawn =
-{
-
-	//----------------------------------------------------------------------
+void() monster_spawn = {
 	// Check if the monster can spawn without telefragging something
 	if (self.spawnnotelefrag > 0) {
 		// Switch on world interaction
@@ -756,8 +758,7 @@ void() monster_spawn =
 			//dprint(self.classname); dprint(" is Blocked, waiting (");
 			//dprint(ftos(self.nextthink - time)); dprint(") secs\n");
 			return;
-		}
-		else {
+		} else {
 			// make sure monster is not displayed yet
 			// might have a nosight check to do
 			self.solid = SOLID_NOT;
@@ -1118,6 +1119,7 @@ void() monster_spawn =
 //======================================================================
 void() monster_spawndelay =
 {
+	dprint("Spawning delay monster!\n");
 	self.think = monster_spawn;
 	self.nextthink = time + self.spawndelay;
 };
@@ -1314,6 +1316,18 @@ void() monster_start = {
 			total_monsters = total_monsters + 1;
 		}
 	}
+
+	// Ensure randomized sightsound works
+	if (self.sight_sound) {
+		if (!self.sight_sound2) self.sight_sound2 = self.sight_sound;
+		if (!self.sight_sound3) self.sight_sound3 = self.sight_sound;
+		if (!self.sight_sound4) self.sight_sound4 = self.sight_sound;
+	}
+
+	if (self.sight_sound4) self.sight_count = 4;
+	else if (self.sight_sound3) self.sight_count = 3;
+	else if (self.sight_sound2) self.sight_count = 2;
+	else self.sight_count = 1;
 	
 	//----------------------------------------------------------------------
 	// Detect monster armour map hack
@@ -1332,8 +1346,8 @@ void() monster_start = {
 		// Check for triggered spawndelay
 		if (self.spawndelay != 0) {
 			if (self.spawndelay <= 0) self.spawndelay = 0.1 + random()*0.4;
-			self.use = monster_spawndelay;
 		}
+		self.use = monster_spawndelay;
 		
 		// Display debug diamonds
 		monster_devmarker(self);
@@ -1349,10 +1363,10 @@ void() monster_start = {
 // Map hacks are not supported in this MOD
 // There is no use in pretending otherwise!
 //======================================================================
-// void() walkmonster_start_go = { remove(self); return; };
-// void() flymonster_start_go = { remove(self); return; };
-// void() swimmonster_start_go = { remove(self); return; };
-// MUAHAHA QMASTER IS EVIL AND COMMENTED THESE OUT.  SUPPORT ALL THE HACKS!!!!!!!
+void() walkmonster_start_go = { monster_start(); };
+void() flymonster_start_go = { monster_start(); };
+void() swimmonster_start_go = { monster_start(); };
+// MUAHAHA QMASTER IS EVIL AND REDIRECTED THESE.  SUPPORT ALL THE HACKS!!!!!!!
 
 /*======================================================================
 //QUAKED monster_x (1 0 0) (x y z) (x y z) AMBUSH x x NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM

@@ -344,15 +344,13 @@ void(float dist, entity ent) Ryu_FindBestPath =
 //==========================================================================
 //  Danger Detection
 
-//------------------------------------------------------------------------//
 //  This tells the dragon whether or not it is best to stay away from
 //  the entity.  TRUE is returned if the dragon should stay away.
 //  FALSE is returned if the dragon is better off closing in on entity.
 //  Only alert dragons can spot who the entity is and what kind of
 //  weapons, items, or other abilities it has.
 //------------------------------------------------------------------------//
-float(entity ent) Ryu_KeepAway =
-{
+float(entity ent) Ryu_KeepAway = {
 // Check for burning first because even the stupid know that fire is bad.
 // FIXME:  Burning is slated for removal.
     //if (IsBurning (ent))
@@ -369,8 +367,8 @@ float(entity ent) Ryu_KeepAway =
         return FALSE;   // Has no choice but to attack up close.
 
     // If player, check his items.
-    if ((ent.classname == "player") || (ent.classname == "monster_ranger"))
-    {   // Must be alive and opposed.
+    if ((ent.flags & FL_CLIENT) || (ent.classname == "monster_ranger")) {
+		// Must be alive and opposed.
         if (ent.health > 0)
             /*if (!Align_Match (ent, self)) {
             if (ent.invincible_finished || ent.super_damage_finished)

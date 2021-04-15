@@ -1,8 +1,6 @@
 /*
 ======================================================================================
-
 BEEZ   - MadFox - 18sept2013 -
-
 ======================================================================================
 */
 
@@ -20,9 +18,10 @@ $frame stng1 stng2 stng3 stng4 stng5 stng6 stng7 stng8 stng9
 $frame die1 die2 die3 die4 die5 die6 die7 die8 die9 die10 die11 die12 die13 die14
 
 void() swrm_stand1    =[  $idle1,       swrm_stand2  ] {
-if (random() < 0.2)
-	sound (self, CHAN_VOICE, "sound/bee.wav", 1,  ATTN_IDLE);
-ai_stand();self.nextthink = time + 0.05;};
+	if (random() < 0.2) sound (self, CHAN_VOICE, "bees/bee.wav", 1,  ATTN_IDLE);
+	ai_stand();
+	self.nextthink = time + 0.05;
+};
 void() swrm_stand2    =[  $idle2,       swrm_stand3  ] {ai_stand();self.nextthink = time + 0.05;};
 void() swrm_stand3    =[  $idle3,       swrm_stand4  ] {ai_stand();self.nextthink = time + 0.05;};
 void() swrm_stand4    =[  $idle4,       swrm_stand5  ] {ai_stand();self.nextthink = time + 0.05;};
@@ -31,9 +30,10 @@ void() swrm_stand6    =[  $idle6,       swrm_stand7  ] {ai_stand();self.nextthin
 void() swrm_stand7    =[  $idle7,       swrm_stand1  ] {ai_stand();self.nextthink = time + 0.05;};
 
 void() swrm_walk1    =[  $sqrm1,       swrm_walk2  ] {
-if (random() < 0.2)
-	sound (self, CHAN_VOICE, "sound/bee.wav", 1,  ATTN_IDLE);
-ai_walk(2);self.nextthink = time + 0.05;};
+	if (random() < 0.2) sound (self, CHAN_VOICE, "bees/bee.wav", 1,  ATTN_IDLE);
+	ai_walk(2);
+	self.nextthink = time + 0.05;
+};
 void() swrm_walk2    =[  $sqrm2,       swrm_walk3  ] {ai_walk(3);self.nextthink = time + 0.05;};
 void() swrm_walk3    =[  $sqrm3,       swrm_walk4  ] {ai_walk(4);self.nextthink = time + 0.05;};
 void() swrm_walk4    =[  $sqrm4,       swrm_walk5  ] {ai_walk(3);self.nextthink = time + 0.05;};
@@ -49,9 +49,9 @@ void() swrm_walk13   =[  $sqrm13,      swrm_walk14 ] {ai_walk(2);self.nextthink 
 void() swrm_walk14   =[  $sqrm14,      swrm_walk1  ] {ai_walk(2);self.nextthink = time + 0.05;};
 
 void() swrm_run1    =[  $strif1,       swrm_run2  ] {
-if (random() < 0.2)
-	sound (self, CHAN_VOICE, "sound/bee.wav", 1,  ATTN_IDLE);
-ai_run(8);self.nextthink = time + 0.05;};
+	if (random() < 0.2) sound (self, CHAN_VOICE, "bees/bee.wav", 1,  ATTN_IDLE);
+	ai_run(8);self.nextthink = time + 0.05;
+};
 void() swrm_run2    =[  $strif2,       swrm_run3  ] {ai_run(8);self.nextthink = time + 0.05;};
 void() swrm_run3    =[  $strif3,       swrm_run4  ] {ai_run(8);self.nextthink = time + 0.05;};
 void() swrm_run4    =[  $strif4,       swrm_run5  ] {ai_run(8);self.nextthink = time + 0.05;};
@@ -79,51 +79,34 @@ void() swrm_paina6    =[  $pain6,       swrm_paina7  ] {ai_charge_side();self.ne
 void() swrm_paina7    =[  $pain7,       swrm_paina8  ] {ai_charge_side();self.nextthink = time + 0.05;};
 void() swrm_paina8    =[  $pain8,       swrm_run1    ] {ai_charge_side();self.nextthink = time + 0.05;};
 
-void(entity attacker, float damage)	swrm_pain =
-{
-	local float r;
+void(entity inflictor, entity attacker, float damage)	swrm_pain = {
+	if (self.pain_finished > time) return;
 
-	if (self.pain_finished > time)
-		return;
-
-	r = random();
-	
-	sound (self, CHAN_VOICE, "sound/bee.wav", 1, ATTN_NORM);
-	if (r < 0.85)
-	{
+	sound (self, CHAN_VOICE, "bees/bee.wav", 1, ATTN_NORM);
+	if (random() < 0.85) {
 		swrm_pain1 ();
 		self.pain_finished = time + 1;
-	}
-	else
-	{
+	} else {
 		swrm_paina1 ();
 		self.pain_finished = time + 1;
 	}
-	
 };
 
 void() swrm_stng1    =[  $stng1,       swrm_stng2  ] {
-if (random() < 0.2)
-	sound (self, CHAN_VOICE, "sound/bee1.wav", 1,  ATTN_IDLE);
-ai_face();self.nextthink = time + 0.05;};
+	if (random() < 0.2) sound (self, CHAN_VOICE, "bees/bee1.wav", 1,  ATTN_IDLE);
+	ai_face();
+	self.nextthink = time + 0.05;
+};
 void() swrm_stng2    =[  $stng2,       swrm_stng3  ] {ai_face();self.nextthink = time + 0.05;};
 void() swrm_stng3    =[  $stng3,       swrm_stng4  ] {ai_face();self.nextthink = time + 0.05;};
 void() swrm_stng4    =[  $stng4,       swrm_stng5  ] {ai_face();self.nextthink = time + 0.05;};
 void() swrm_stng5    =[  $stng5,       swrm_stng6  ] {ai_face();self.nextthink = time + 0.05;};
-void() swrm_stng6    =[  $stng6,       swrm_stng7  ] {ai_face();ai_melee();self.nextthink = time + 0.05;};
-void() swrm_stng7    =[  $stng7,       swrm_stng8  ] {ai_face();ai_melee();self.nextthink = time + 0.05;};
+void() swrm_stng6    =[  $stng6,       swrm_stng7  ] {ai_face();self.nextthink = time + 0.05;};
+void() swrm_stng7    =[  $stng7,       swrm_stng8  ] {ai_face();self.nextthink = time + 0.05;};
 void() swrm_stng8    =[  $stng8,       swrm_stng9  ] {ai_face();ai_melee();self.nextthink = time + 0.05;};
 void() swrm_stng9    =[  $stng9,       swrm_run1   ] {ai_face();self.nextthink = time + 0.05;};
 
-void() swrm_die1    =[  $die1,       swrm_die2  ] {
-
-self.velocity_x = -200 + 400*random();
-self.velocity_y = -200 + 400*random();
-self.velocity_z = 100 + 100*random();
-self.flags = self.flags - (self.flags & FL_ONGROUND);
-sound (self, CHAN_VOICE, "sound/bee2.wav", 1, ATTN_NORM);
-self.nextthink = time + 0.05;};
-
+void() swrm_die1    =[  $die1,       swrm_die2  ] {self.nextthink = time + 0.05;};
 void() swrm_die2    =[  $die2,       swrm_die3  ] {self.nextthink = time + 0.05;};
 void() swrm_die3    =[  $die3,       swrm_die4  ] {self.solid = SOLID_NOT;self.nextthink = time + 0.05;};
 void() swrm_die4    =[  $die4,       swrm_die5  ] {self.nextthink = time + 0.05;};
@@ -138,49 +121,92 @@ void() swrm_die12   =[  $die12,      swrm_die13 ] {self.nextthink = time + 0.05;
 void() swrm_die13   =[  $die13,      swrm_die14 ] {self.nextthink = time + 0.05;};
 void() swrm_die14   =[  $die14,      swrm_die14 ] {};
 
-void() swrm_die =
-{
-// check for gib
-	if (self.health < -40)
-	{
-		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
-		ThrowGib ("progs/gib2.mdl", self.health);
-		ThrowGib ("progs/gib2.mdl", self.health);
-		ThrowGib ("progs/gib2.mdl", self.health);
-		return;
-	}
+void() swrm_die = {
+	self.velocity_x = -200 + 400*random();
+	self.velocity_y = -200 + 400*random();
+	self.velocity_z = 100 + 100*random();
+	self.flags = self.flags - (self.flags & FL_ONGROUND);
+	sound (self, CHAN_VOICE, "bees/bee2.wav", 1, ATTN_NORM);
 
 	swrm_die1 ();
 };
 
+void() beez_touch = {
+	if (other.flags & FL_MONSTER || other.flags & FL_CLIENT) {
+		if (other.health > 1 && other.classname != self.classname && other.classgroup != self.classgroup) {
+			if (self.passive_state) self.passive_state = 0;
 
-void() model_swrm =
-{
-	if (deathmatch)
-	{
-		remove(self);
-		return;
+			if (!self.enemy) {
+				self.switchtimer = time + 0.1 + random();
+				self.enemy = other;
+				self.nextthink = time + 0.1;
+				self.think = FoundTarget;
+			} else {
+				if (self.switchtimer < time) {
+					self.switchtimer = time + 0.1 + random();
+					self.enemy = other;
+					self.nextthink = time + 0.1;
+					self.think = FoundTarget;
+				}
+			}
+
+			if (self.attack_finished < time) {
+				self.attack_finished = time + 0.2; // fast!
+				// Spawn some blood, cause harm and play a sound!
+				spawn_touchblood (self, other, 3);
+				T_Damage (other, self, self, 1, DAMARMOR);
+				if (random() < 0.2) sound (self, CHAN_VOICE, "bees/bee1.wav", 3 * random(),  ATTN_IDLE);
+			}
+		}
 	}
-        precache_model ("progs/swarm.mdl");
-	precache_sound ("sound/bee.wav");
-	precache_sound ("sound/bee1.wav");
-	precache_sound ("sound/bee2.wav");
+};
+
+void() monster_beez = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+
+	self.mdl = "progs/madfox/mon_swarm.mdl";
+    precache_model ("progs/madfox/mon_swarm.mdl");
+	precache_sound ("bees/bee.wav");
+	precache_sound ("bees/bee1.wav");
+	precache_sound ("bees/bee2.wav");
 	
-	self.solid = SOLID_BBOX;
-	self.movetype = MOVETYPE_TOSS;
+	self.solid = SOLID_NOT;				// No interaction with world
+	self.movetype = MOVETYPE_NONE;		// Static item, no movement
+	if (self.bboxtype < 1) self.bboxtype = BBOX_FISHS;
+	if (self.health < 1) self.health = 50;
+	self.gibhealth = MON_NEVERGIB;
+	self.gibbed = FALSE;				// Not fallen apart as of yet
+	self.pain_flinch = 10;				// pretty much always pain
+	self.steptype = FS_FLYING;			// Wandering around!
 
-	setmodel (self, "progs/swarm.mdl");
+	// Always reset Ammo Resistance to be consistent
+	self.resist_shells = self.resist_nails = 0;
+	self.resist_rockets = self.resist_cells = 0;
 
-	setsize (self, '-12 -12 -12', '12 12 12');
-	self.health = 50;
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.th_stand = swrm_stand1;
 	self.th_walk = swrm_walk1;
 	self.th_run = swrm_run1;
-	self.th_missile = swrm_stng1;
+	self.th_melee = swrm_stng1;
 	self.th_pain = swrm_pain;
 	self.th_die = swrm_die;
-		
-	flymonster_start ();
-};
+	self.touch = beez_touch;
 
+	self.passive_state = 1;
+
+	if (self.deathstring == "") {
+		if (random() < 0.5) self.deathstring = " was swarmed by Bees\n";
+		else self.deathstring = " was stung to death by Bees\n";
+	}
+
+	self.classtype = CT_MONBEEZ;
+	self.classgroup = CG_HARMLESS;
+	self.classmove = MON_MOVEFLY;
+	monster_start ();
+};

@@ -30,39 +30,6 @@ $frame death10 death11 death12 death13 death14 death15
 // Vomitus attacks are placed here since they may be called during a
 // non-attack animation scene.
 
-// Spews forth a tarbaby.
-void() Vomit_Spawn = {
-	local entity oself;
-	local entity newSpawn;
-
-	self.minion_count = self.minion_count + 1;
-	newSpawn = spawn();
-	newSpawn.classname = self.classname;
-	newSpawn.movetype = MOVETYPE_STEP;
-	setsize (newSpawn, '-16 -16 -24', '16 16 40');
-	newSpawn.health = 80;
-	newSpawn.health = 100;
-	newSpawn.owner = self;
-	self.th_pain = SUB_Null_pain;
-	setmodel (newSpawn, self.owner.mdl);
-	newSpawn.solid = SOLID_SLIDEBOX;
-	newSpawn.skin = self.skin;
-	setorigin (newSpawn, self.origin);              
-	newSpawn.think = tbaby_checknew;
-	newSpawn.nextthink = time + 0.5;
-	sound (newSpawn, CHAN_VOICE, "blob/mytosis.wav", 1, ATTN_NORM);
-    newSpawn.angles_x   = 0;
-    newSpawn.angles_y   = self.angles_y;
-    newSpawn.angles_z   = 0;
-    newSpawn.fixangle   = TRUE;
-	// Override normal ai with flying ai, since it is launched out of vomitus.
-    newSpawn.enemy      = self.enemy;
-	oself = self;
-	self = newSpawn;
-    tbaby_jump5 ();
-	self = oself;
-};
-
 // Vomits chunks of meat at the enemy.
 void(float no) Vomit_Meat = {
     local   vector  org, dir, err;
@@ -97,15 +64,74 @@ void(float no) Vomit_Meat = {
     setsize (newmis, '0 0 0', '0 0 0');
 };
 
+// Spews forth a tarbaby.
+void() Vomit_Spawn = {
+	// local entity oself;
+	local entity newSpawn;
+
+	self.minion_count = self.minion_count + 1;
+	if (self.minion_count > self.minion_maxcount) {
+		Vomit_Meat(1);
+		return;
+	}
+	newSpawn = spawn();
+	newSpawn.classname = "monster_tarbaby";
+	newSpawn.classtype = CT_MONSPAWN;
+	newSpawn.classgroup = CG_SPAWN;
+	newSpawn.movetype = MOVETYPE_STEP;
+	newSpawn.classmove = MON_MOVEWALK;
+	newSpawn.takedamage = DAMAGE_AIM;
+	monster_bbox();
+	setsize (newSpawn, newSpawn.bbmins, newSpawn.bbmaxs);
+	newSpawn.resist_shells = newSpawn.resist_nails = 0;
+	newSpawn.resist_rockets = newSpawn.resist_cells = 0;
+	newSpawn.gibhealth = MON_NEVERGIB;		// Cannot be gibbed by weapons
+	newSpawn.bboxtype = BBOX_TALL;
+	newSpawn.gibbed = FALSE;
+	newSpawn.pain_flinch = 20;
+	newSpawn.death_dmg = DAMAGE_TARBABY;
+	newSpawn.health = 80;
+	newSpawn.owner = self;
+	newSpawn.death_sound = "blob/death1.wav";
+	newSpawn.idle_sound = "blob/sight1.wav";
+	newSpawn.sight_sound = self.idle_sound;
+	newSpawn.pain_sound = self.idle_sound;
+	setmodel (newSpawn, "progs/mon_tarbaby.mdl");
+	newSpawn.solid = SOLID_SLIDEBOX;
+	newSpawn.skin = self.skin;
+	setorigin (newSpawn, self.origin);   
+	newSpawn.lastorigin = newSpawn.origin;           
+	sound (newSpawn, CHAN_VOICE, "blob/mytosis.wav", 1, ATTN_NORM);
+    newSpawn.angles_x   = 0;
+    newSpawn.angles_y   = self.angles_y;
+    newSpawn.angles_z   = 0;
+    newSpawn.fixangle   = TRUE;
+	newSpawn.th_stand = tbaby_stand1;
+	newSpawn.th_walk = tbaby_walk1;
+	newSpawn.th_run = tbaby_run1;
+	newSpawn.th_jump = tbaby_jump1;
+	newSpawn.th_jumpexit = tbaby_jump5;
+	newSpawn.th_missile = tbaby_jump1;
+	newSpawn.th_melee = tbaby_jump1;
+	newSpawn.th_die = tbaby_die1;      
+	newSpawn.th_pain = tbaby_pain;
+	// Override normal ai with flying ai, since it is launched out of vomitus.
+    newSpawn.enemy      = self.enemy;
+	newSpawn.think = tbaby_jump5;
+	newSpawn.nextthink = time + 0.05;
+	total_monsters = total_monsters + 1;
+  
+	
+	WriteByte (MSG_BROADCAST, SVC_UPDATESTAT);
+	WriteByte (MSG_BROADCAST, STAT_TOTALMONSTERS);
+	WriteLong (MSG_BROADCAST, total_monsters);
+};
+
 // Vomitus chews on the target.
 // Note:  This is called during running instead of an attack sequence.
-void() vom_melee =
-{
+void() vom_melee = {
     local   entity  targ;
     local   float   ldmg;
-
-//    if (self.gorging)
-//        return;     // It's food, so don't bite -- just run over it.
 
     targ = self.enemy;
     if (!targ)
@@ -135,9 +161,8 @@ void() vom_melee =
     T_Damage (targ, self, self, ldmg, DAMARMOR);
 };
 
-float(entity targ) IsZombieDown =
-{
-    if (targ.classname == "monster_zombie")
+float(entity targ) IsZombieDown = {
+    if (targ.classgroup == CG_ZOMBIE)
         if (targ.solid == SOLID_NOT)
             if (targ.frame == 172)  // paine11.
                 return TRUE;
@@ -146,8 +171,7 @@ float(entity targ) IsZombieDown =
 
 // Crushes all nearby corpses into edible gibs.
 // Any damage done to achieve this is given back as health to vomitus.
-void() Vomit_Crush =
-{
+void() Vomit_Crush = {
     local   entity  head, next, swap;
     local   float   hp, gh;
 
@@ -303,8 +327,7 @@ void() vom_attack10 =[ $attack10, vom_attack11 ] {ai_face();
         sound (self, CHAN_WEAPON, "drake/vomitus/flesh2.wav", 1, ATTN_NORM);
     if (self.skin)
         Vomit_Meat(0);
-    else
-    {
+    else {
         Vomit_Spawn();
         self.think = vom_end1;
     }
@@ -404,8 +427,6 @@ void() vom_die16 =[ $death15, vom_die16 ] {
 };
 
 void() vom_die = {
-	monster_death_precheck();
-
     sound (self, CHAN_VOICE, "drake/vomitus/death.wav", 1, ATTN_NORM);
     vom_die1 ();
 };
@@ -473,7 +494,7 @@ void() monster_vomit = {
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDEFLAT;
 	if (self.health < 1) self.health = 400;  // Nehahra used 300 health, but Doom cacodemon has 400.   Note from Qmaster...OK, not sure how that's relevant lol
-	self.gibhealth = -65;
+	self.gibhealth = MON_NEVERGIB;
 	self.gibbed = FALSE;
 	self.pain_flinch = 20;
 

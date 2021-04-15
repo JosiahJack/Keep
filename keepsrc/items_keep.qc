@@ -256,6 +256,7 @@ void() weapon_touch = {
 	} else {
 		sound (other, CHAN_ITEM, "weapons/pkup.wav", 1, ATTN_NORM);
 	}
+	sprint (other, "\n");
 	stuffcmd (other, "bf\n");
 
 	// Make sure no ammo is over limits

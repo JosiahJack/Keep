@@ -280,8 +280,7 @@ void() path_corner_setuptargets =
 //----------------------------------------------------------------------
 // This is a TRIGGER entry point only!
 //----------------------------------------------------------------------
-void() path_corner_use =
-{
+void() path_corner_use = {
 	// Change spawnflags NOPAUSE (-1=NO, 1=YES, 2=Toggle)
 	if (other.corner_pause) {
 		// Store the parameter locally so it can modified
@@ -296,8 +295,7 @@ void() path_corner_use =
 			if (self.spawnflags & PATHC_NOPAUSE)
 				self.spawnflags = self.spawnflags - PATHC_NOPAUSE;
 			self.wait = -1;
-		}
-		else if (self.corner_pause < 0) {
+		} else if (self.corner_pause < 0) {
 			self.spawnflags = self.spawnflags | PATHC_NOPAUSE;
 			self.wait = 0;
 		}
@@ -366,13 +364,43 @@ void() path_corner_use =
 };
 
 //----------------------------------------------------------------------
-void() path_corner_stop =
-{
+void() path_corner_stop = {
 	other.goalentity = other.movetarget = world;
 	other.pausetime = time + LARGE_TIMER;
 	other.think = other.th_stand;
 	other.nextthink = time + 0.05;
 };
+
+void() ogle_pushcart1;
+
+void(entity mon, entity obj) give_monster_object = {
+	local entity tself;
+	local vector org, out, up;
+
+	tself = self;
+	self = mon;
+	makevectors(self.angles);
+	out = v_forward;
+	out = normalize (out);
+	// put out in front of monster OBJECT_OFFSET units
+	up = VEC_ORIGIN;
+	up_z = self.attachment_offset_z;
+	org = ((self.origin + (((self.bbmaxs_x * 2)+self.attachment_offset_x) * out)) + up);
+	mon.entattachment = obj;
+	setorigin(obj,org); // ok we got it.
+	mon.hasobject = "true"; // signal that we are holding something
+	
+	if (mon.classtype == CT_MONOGLE) {
+		ogle_pushcart1();
+	}
+
+	self = tself; // restore previous self
+};
+
+void(entity mon) take_monster_object = {
+	mon.hasobject = string_null;
+	mon.entattachment = world;
+}
 
 //----------------------------------------------------------------------
 void() path_corner_touch =
@@ -388,6 +416,19 @@ void() path_corner_touch =
 
 	// Fire any event targets (activator = monster)
 	if (self.corner_event) trigger_strs(self.corner_event,other);
+
+	// We have an object to give the monster!
+	if (self.entactive && self.counttarget != "") {
+		self.entactive = FALSE;
+		self.entattachment = find(world,targetname,self.counttarget);
+		if (self.entattachment) {
+			give_monster_object(other,self.entattachment);
+			self.entattachment = world; // reset, we don't have one anymore
+		}
+	} else if (self.entactive) {
+		if (other.attachment != world) take_monster_object(other);
+	}
+
 	// Check if passive state switch active (-1=OFF, 1=ON, 2=TOGGLE)
 	if (self.corner_pstate != 0) {
 		// Only use exact values (-1,1,2) no default/else functionality
@@ -408,13 +449,10 @@ void() path_corner_touch =
 			if (self.spawnflags & PATHC_EXACT) {
 				if (self.state == STATE_ROUTE1) other.goalentity = self.movetarget;
 				else other.goalentity = self.movetarget2;
-			}
-			else {
-				// Removed random option, its not useful
-				// Its better to use exact route changes
+			} else {
 				// Default = random routes
-				//if (random() < 0.5) other.goalentity = self.movetarget;
-				//else other.goalentity = self.movetarget2;
+				if (random() < 0.5) other.goalentity = self.movetarget;
+				else other.goalentity = self.movetarget2;
 			}
 		}
 		// Default, 1 path = 1 choice

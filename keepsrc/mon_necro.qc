@@ -1099,15 +1099,6 @@ void() necro_revive9  =[ $deathA4,  necro_revive10 ] {};
 void() necro_revive10 =[ $deathA2,  necro_revive11 ] {};
 void() necro_revive11 = {self.th_run();};
 
-// OTHER - - - - - - - - - - - - - - - -
-void(float hello) necro_sight =
-{
-    if (hello)
-        sound (self, CHAN_VOICE, "necro/idle1.wav", 1, ATTN_NORM);
-    else
-        sound (self, CHAN_VOICE, "necro/sight1.wav", 1, ATTN_NORM);
-};
-
 void() necro_cache = {
 	self.mdl = "progs/drake/necro.mdl";
     precache_model ("progs/drake/necro.mdl");
@@ -1131,6 +1122,7 @@ void() necro_cache = {
 	self.pain_sound = "necro/pain1.wav";
     precache_sound ("necro/sight1.wav");
 	self.sight_sound = "necro/sight1.wav";
+	self.hello_sound = "necro/idle1.wav";
     precache_sound ("nemesant/frblfly.wav");
     precache_sound ("skullwiz/push.wav");
 };
@@ -1288,7 +1280,6 @@ void() setup_necro = {
 	}
     self.th_pain    = necro_pain;
     self.th_die     = necro_die;
-    self.th_sight   = necro_sight;
     self.th_spawn   = setup_necro;
     self.waitmax    = 0;    // Teleport delay, similar to nemesant.
 

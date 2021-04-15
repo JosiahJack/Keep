@@ -770,23 +770,6 @@ void() nemes_revive14 =[ $death3,  nemes_revive15 ] {};
 void() nemes_revive15 =[ $death2,  nemes_revive16 ] {};
 void() nemes_revive16 =[ $death1,  nemes_run1     ] {};
 
-// OTHER - - - - - - - - - - - - - - - -
-void(float hello) nemes_sight =
-{
-    if (hello)
-        sound (self, CHAN_VOICE, "nemesant/tpain.wav", 1, ATTN_NORM);
-    else
-    {
-        if (random() < 0.5)
-            sound (self, CHAN_VOICE, "nemesant/tsight1.wav", 1, ATTN_NORM);
-        else
-            sound (self, CHAN_VOICE, "nemesant/tsight2.wav", 1, ATTN_NORM);
-    }
-
-    if (self.waitmin < time + 2)
-        self.waitmin = time + 2;
-};
-
 //============
 // --> QUAKED monster_nemesant (1 0 0) (-16 -16 -24) (16 16 40) Ambush Boss
 //============
@@ -820,6 +803,9 @@ void() monster_nemesant = {
     precache_sound ("nemesant/tpain.wav");
     precache_sound ("nemesant/tsight1.wav");
     precache_sound ("nemesant/tsight2.wav");
+	self.hello_sound = "nemesant/tpain.wav";
+	self.sight_sound = "nemesant/tsight1.wav";
+	self.sight_sound2 = "nemesant/tsight2.wav";
     precache_sound ("skullwiz/push.wav");       // Melee attack.
     precache_blood (BLOOD_GREEN);
     precache_model ("progs/drake/gr_gib2.mdl");
@@ -851,8 +837,6 @@ void() monster_nemesant = {
     self.th_missile = Nemesant_Attack;
     self.th_pain    = nemes_pain;
     self.th_die     = nemes_die;
-    //- - - - - - - -
-    self.th_sight   = nemes_sight;
     self.th_spawn   = monster_nemesant;
     if (self.classname == "monster_nemesant") {
         //self.th_gib     = nemes_gib;
