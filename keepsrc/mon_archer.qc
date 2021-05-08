@@ -88,10 +88,8 @@ float() archer_check_shot = {
         // Didn't hit the intended target.  Either something else blocked
         // the scan, or the scan was complete and could not hit the target.
         // Standard 1.06 progs would just return FALSE.
-        if (trace_fraction < 1)
-        {   // don't have a clear shot
-            //if (DontHurtMe (trace_ent))
-                return FALSE;   // Don't shoot whoever is in line of fire.
+        if (trace_fraction < 1) {   // don't have a clear shot
+            if (DontHurtMe (trace_ent)) return FALSE;   // Don't shoot whoever is in line of fire.
 
             // Otherwise, whoever is in the way is a potential enemy and
             // hitting him instead of the intended target with missile
@@ -569,22 +567,20 @@ void(entity inflictor, entity attacker, float damage) archer_pain = {
     } else
         sound (self, CHAN_VOICE, "archer/pain.wav", 1, ATTN_NORM);
 
-    if (SUB_IgnorePain ())
-        return;         // No pain anims in Nightmare.
+    if (SUB_IgnorePain ()) return; // No pain anims in Nightmare.
 
-    if (self.fighting)  // In case enemy is set to master during follow AI.
-        if (self.enemy)
-        {   // In Hexen2, both redraw and pain anims redraw the bow.
-            // Here, in Quake, do not always allow a redraw.
-            damage = random();
-            if (damage < 0.25)
-                archer_painc1 ();
-            else if (damage < 0.5)
-                archer_painb1 ();
-            else
-                archer_pain1 ();
-            return;
-        }
+    // In case enemy is set to master during follow AI.
+	if (self.enemy) { // In Hexen2, both redraw and pain anims redraw the bow.
+		// Here, in Quake, do not always allow a redraw.
+		damage = random();
+		if (damage < 0.25)
+			archer_painc1 ();
+		else if (damage < 0.5)
+			archer_painb1 ();
+		else
+			archer_pain1 ();
+		return;
+	}
     archer_pain1 ();
     attacker = attacker;    // FrikQcc warning squelch!
 };

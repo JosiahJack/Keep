@@ -207,7 +207,7 @@ void() monster_oldone_tentacle = {
 	setup_passivestate_boss(self);
 
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-	total_monsters = total_monsters + 1;
+	AddToTotals(self);
 
 	if (!self.targetname) {
 		self.th_stand = oldone_stand1;

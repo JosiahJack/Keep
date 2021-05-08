@@ -92,7 +92,6 @@ void		end_sys_globals;		// flag for structure dumping
 //
 // system fields (*** = do not set in prog code, maintained by C code)
 //
-float parm17, parm18, parm19;
 .float		modelindex;		// *** model index in the precached list
 .vector		absmin, absmax;	// *** origin + mins / maxs
 
@@ -227,8 +226,8 @@ float	FL_JUMPRELEASED			= 4096;	// for jump debouncing
 
 // edict.movetype values
 float	MOVETYPE_NONE			= 0;	// never moves
-//float	MOVETYPE_ANGLENOCLIP	= 1;
-//float	MOVETYPE_ANGLECLIP		= 2;
+float	MOVETYPE_ANGLENOCLIP	= 1;
+float	MOVETYPE_ANGLECLIP		= 2;
 float	MOVETYPE_WALK			= 3;	// players only
 float	MOVETYPE_STEP			= 4;	// discrete, not real time unless fall
 float	MOVETYPE_FLY			= 5;
@@ -238,6 +237,10 @@ float	MOVETYPE_NOCLIP			= 8;
 float	MOVETYPE_FLYMISSILE		= 9;	// fly with extra size against monsters
 float	MOVETYPE_BOUNCE			= 10;
 float	MOVETYPE_BOUNCEMISSILE	= 11;	// bounce with extra size
+float	MOVETYPE_FOLLOW 		= 12;
+float	MOVETYPE_6DOF 			= 30;	/* A glorified MOVETYPE_FLY. Players using this movetype will get some flightsim-like physics, with fully independant rotations (order-dependant transforms). */
+float	MOVETYPE_WALLWALK 		= 31;	/* Players using this movetype will be able to orient themselves to walls, and then run up them. */
+float	MOVETYPE_PHYSICS 		= 32;	/* Enable the use of ODE physics upon this entity. */
 
 // edict.solid values
 float	SOLID_NOT			= 0;	// no interaction with other objects
@@ -430,67 +433,37 @@ float	EF_MUZZLEFLASH 	= 2;
 float	EF_BRIGHTLIGHT 	= 4;
 float	EF_DIMLIGHT 	= 8;
 
-/* Stuff added by DP/community
-// Fitz/QS protocol only supports effects up 256
-// defined in dpextensions.qc (here for quick reference)
-float	EF_NODRAW		= 16;
-float	EF_ADDITIVE		= 32;
-float	EF_BLUE			= 64;
-float	EF_RED			= 128;
-float	EF_NOGUNBOB		= 256;
-float	EF_FULLBRIGHT	= 512;
-float	EF_FLAME		= 1024;
-float	EF_STARDUST		= 2048;
-float	EF_NOSHADOW		= 4096;
-float	EF_NODEPTHTEST	= 8192;
-float	EF_DOUBLESIDED	= 32768;
-float	EF_RESTARTANIM_BIT	= 1048576;
-float	EF_TELEPORT_BIT	= 2097152;
-*/
-
 // messages
 float	MSG_BROADCAST	= 0;		// unreliable to all
 float	MSG_ONE			= 1;		// reliable to one (msg_entity)
 float	MSG_ALL			= 2;		// reliable to all
 float	MSG_INIT		= 3;		// write to the init string
 
-//======================================================================
 // globals
-//======================================================================
 float	movedist;
 float	gameover;			// set when a rule exits
-
 // make sure string_null remains NULL even after save/loading
 // #define string_null __NULL__
 string	string_null;		// null string, nothing should be held here
-//float	empty_float;
-
 entity	newmis;				// launch_spike sets this after spawning it
 entity	activator;			// the entity that activated a trigger or brush
 entity	damage_attacker;	// set by T_Damage
 float	framecount;
-
 float		skill, oskill;
 float 	developer;
 
-//======================================================================
 // world fields (FIXME: make globals)
-//======================================================================
 .string		wad;
 .string 	map;
 .float		worldtype;		// 0=medieval 1=metal 2=base
 
 .string		killtarget;
 
-//======================================================================
 // quakeed fields
-//======================================================================
 .float		light_lev;		// not used by game, but parsed by light util
 .float		style;
 
-//======================================================================
 // monster ai
-//======================================================================
 .void()		th_stand;
 .void()		th_walk;
 .void()		th_run;
@@ -498,12 +471,9 @@ float 	developer;
 .void()		th_melee;
 .void(entity inflictor, entity attacker, float damage) th_pain;
 .void()		th_die;
-
 .entity		oldenemy;		// mad at this player before taking damage
 .float		speed;
-
 .float	lefty;
-
 .float	search_time;
 .float	attack_state;
 
@@ -618,21 +588,6 @@ void(entity e, vector min, vector max) setsize = #4;
 // #5 was removed
 void() break						= #6;
 float() random						= #7;	// returns 0 - 1
-void(string s) dprint;
-void(entity e, float chan, string samp, float vol, float atten) sound = #8;
-
-/*-------------------------------------------------------------------------
-// A wrapper for the sound command, to help track down precache errors
-//---------------------------------------------------------------------
-void(entity e, float chan, string samp, float vol, float atten) sound_builtin = #8;
-void(entity e, float chan, string samp, float vol, float atten) sound = {
-	if (samp == "") {
-		dprint("\b[SOUND]\b Entity ("); dprint(e.classname);
-		dprint(") missing sound!\n");
-	}
-	else sound_builtin (e, chan, samp, vol, atten);
-}; */
-
 vector(vector v) normalize			= #9;
 void(string e) error				= #10;
 void(string e) objerror				= #11;
@@ -650,33 +605,47 @@ entity() spawn						= #14;
 void(vector v1, vector v2, float nomonsters, entity forent) traceline = #16;	
 entity() checkclient				= #17;	// returns a client to look for
 entity(entity start, .string fld, string match) find = #18;
+
+.float precached; // shhhhh don't think about it much ok!
 string(string s) precache_sound		= #19;
-string(string s) precache_model		= #20;
+// string(string s) precache_sound = {
+	// if (!self.precached) {
+		// self.precached = TRUE;
+		// return precache_sound_builtin(s); // hack to allow us to reuse spawn functions woot!
+	// }
+	// return string_null;
+// };
+string(string s) precache_model	= #20;
+// string(string s) precache_model = {
+	// if (!self.precached) {
+		// self.precached = TRUE;
+		// return precache_model_builtin(s); // hack to allow us to reuse spawn functions woot!
+	// }
+	// return string_null;
+// };
+
 void(entity client, string s)stuffcmd = #21;
 entity(vector org, float rad) findradius = #22;
-void(string s) bprint				= #23;
-void(entity client, string s) sprint = #24;
 void(string s) dprint				= #25;
 string(float f) ftos				= #26;
 string(vector v) vtos				= #27;
 void() coredump						= #28;	// prints all edicts
 void() traceon						= #29;	// turns statment trace on
 void() traceoff						= #30;
-void(entity e) eprint				= #31;	// prints an entire edict
 //----------------------------------------------------------------------
 .float movespeed;		// Movement speed (linked to skill)
 .float tetherlock;		// Is the monster locked from movement
+float(float yaw, float dist) noclip_move;
 float(float yaw, float dist) walkmove_builtin = #32; // returns TRUE or FALSE
 float(float yaw, float dist) walkmove = {
 	if (self.attack_state == AS_TURRET) return FALSE;
 	if (self.movespeed < 0) return FALSE;
 	if (self.tetherlock == TRUE) return FALSE;
+	if (self.movetype == MOVETYPE_NOCLIP) return noclip_move (yaw, dist); // Nehahra wraith or custom
 	return walkmove_builtin(yaw,dist);
 };
-//----------------------------------------------------------------------
-// #33 was removed
+void(entity) eprint = #33;
 float() droptofloor= #34;					// TRUE if landed on floor
-void(float style, string value) lightstyle = #35;
 float(float v) rint					= #36;	// round to nearest int
 float(float v) floor				= #37;	// largest integer <= v
 float(float v) ceil					= #38;	// smallest integer >= v
@@ -687,11 +656,10 @@ float(vector v) pointcontents		= #41;	// returns a CONTENT_*
 float(float f) fabs = #43;
 vector(entity e, float speed) aim = #44;	// returns the shooting vector
 float(string s) cvar = #45;					// return cvar.value
-void(string s) localcmd = #46;				// put string into local que
+void(string,...) localcmd = #46;
 entity(entity e) nextent = #47;				// for looping through all ents
 void(vector o, vector d, float color, float count) particle = #48;// start a particle effect
 void() ChangeYaw = #49;						// turn towards self.ideal_yaw at self.yaw_speed
-// #50 was removed
 vector(vector v) vectoangles			= #51;
 //----------------------------------------------------------------------
 // direct client message generation
@@ -715,6 +683,7 @@ void(float to, entity s) WriteEntity	= #59;
 // void(entity e) bWriteEntity = #66;
 //----------------------------------------------------------------------
 .vector lastorigin;			// Last position of an entities origin
+void(float dist) noclip_goal;
 void(float step) movetogoal_builtin = #67;
 void(float step) movetogoal = {
 	// Save origin for cinematic camera angle interpolation
@@ -723,68 +692,35 @@ void(float step) movetogoal = {
 	if (self.attack_state == AS_TURRET) return;
 	if (self.movespeed < 0) return;
 	if (self.tetherlock == TRUE) return;
+	if (self.movetype == MOVETYPE_NOCLIP) noclip_goal (step); // Nehahra wraith or custom
 	movetogoal_builtin(step);
 };
 //----------------------------------------------------------------------
-string(string s) precache_file		= #68;		// no effect except for -copy
+string(string s) precache_file		= #68;		// // Only in world.qc.  no effect except for -copy
 void(entity e) makestatic		= #69;
-void(string s) changelevel = #70;
 //#71 was removed
 void(string var, string val) cvar_set = #72;	// sets cvar.value
 void(string var, string s, string s) cvar_setlong = #72; // sets cvar.value
-//----------------------------------------------------------------------
-.float suppressCenterPrint;
-void(entity client, string s) centerprint_builtin = #73;
-void(entity client, string s, string s) centerprint_msg = #73;
-void(entity client, string s, string s, string s) centerprint_msg3 = #73;
-void(entity client, string s1, string s2, string s3) centerprint3 = {
-	// Is the centerprint message being used by something else?
-	if (!client.suppressCenterPrint)
-		centerprint_msg3(client, s1, s2, s3);
-	else {
-		// Send message to client console instead
-		sprint(client, "(centerprint) ");
-		sprint(client, s1);
-		sprint(client, s2);
-		sprint(client, s3);
-		sprint(client, "\n");
-	}
-}
-void(entity client, string s, string s, string s, string s) centerprint_msg4 = #73;
-void(entity client, string s) centerprint = {
-	// Is the centerprint message being used by something else?
-	if (!client.suppressCenterPrint)
-		centerprint_builtin(client, s);
-	else {
-		// Send message to client console instead
-		sprint(client, "(centerprint) ");
-		sprint(client, s);
-		sprint(client, "\n");
-	}
-}
-void(entity client, string s1, string s2, string s3, string s4, string s5, string s6, string s7) centerprint_msg7 = #73;
-void(entity client, string s1, string s2, string s3, string s4, string s5, string s6, string s7) centerprint7 = {
-	// Is the centerprint message being used by something else?
-	if (!client.suppressCenterPrint)
-		centerprint_msg7(client, s1, s2, s3, s4, s5, s6, s7);
-	else {
-		// Send message to client console instead
-		sprint(client, "(centerprint) ");
-		sprint(client, s1);
-		sprint(client, s2);
-		sprint(client, s3);
-		sprint(client, s4);
-		sprint(client, s5);
-		sprint(client, s6);
-		sprint(client, s7);
-		sprint(client, "\n");
-	}
-}
+
 //----------------------------------------------------------------------
 void(vector pos, string samp, float vol, float atten) ambientsound = #74;
 string(string s) precache_model2	= #75;	// not used anymore
+// string(string s) precache_model2 = {
+	// if (!self.precached) {
+		// self.precached = TRUE;
+		// return precache_model2_builtin(s); // hack to allow us to reuse spawn functions woot!
+	// }
+	// return string_null;
+// };
 string(string s) precache_sound2	= #76;	// registered version only
-string(string s) precache_file2		= #77;	// not used anymore
+// string(string s) precache_sound2 = {
+	// if (!self.precached) {
+		// self.precached = TRUE;
+		// return precache_sound2_builtin(s); // hack to allow us to reuse spawn functions woot!
+	// }
+	// return string_null;
+// };
+string(string s) precache_file2		= #77;	// Only in world.qc
 void(entity e) setspawnparms		= #78;	// set parm1... to the values at level start for coop respawn
 
 /*======================================================================

@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/info_upgrading.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+<head>
+	<title>GyroDocs - Upgrading from 2.0</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><a href="physobj.html" class="item">Physics Objects</a><a href="forces.html" class="item">Force Entities</a><a href="advanced.html" class="item">Advanced Usage</a><a href="info.html" class="item">Further Information</a><div class="layout_submenu"><a href="info_changelog.html" class="subitem">- Changelog</a><a href="info_forcemacros.html" class="subitem">- Example Forces</a><a href="info_physicsmacros.html" class="subitem">- Example Objects</a><a href="info_links.html" class="subitem">- Links and Resources</a><a href="info_upgrading.html" class="subitem subitem_selected">- Upgrading from 2.0</a></div></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Upgrading from 2.0</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p><strong>Reinstallation</strong><br />
+Gyro has changed sufficiently that it is impossible to simply overwrite the four library files with their new versions and recompile. Your first concern should be the contents of your <code>gyro_user.qc</code> file, which will contain your installation settings and possibly your macros, should you have created any. In order to proceed, you will need to make a note of what you have entered here before you proceed with the upgrade, or copy the file to a safe backup location to use as reference. You should also be aware that the bouyancy, resistance and tubulence constants (see <a href="configuring.html">configuring</a>) that were once kept in <code>gyro_main.qc</code> have now been moved into the user configuration function, and will need to be migrated appropriately. Once your new <code>gyro_user.qc</code> file has been updated, you are free to replace the main library files, but please take the precaution of making a backup before you do.</p>
+
+<p><strong>Falloff Functions</strong><br />
+One of the most major changes in Gyro 2.1a is that the previous three falloff functions have been renamed to allow expansion. The three functions <code>Gyro_Force_ApplyFalloff_Linear</code>, <code>Gyro_Force_ApplyFalloff_Quadratic</code> and <code>Gyro_Force_ApplyFalloff_Constant</code> are now named <code>Gyro_Force_ApplyFalloff_AreaLinear</code>, <code>Gyro_Force_ApplyFalloff_AreaQuadratic</code> and <code>Gyro_Force_ApplyFalloff_AreaConstant</code> respectively. Any references in your code to the old functions will need to be replaced.</p>
+
+<p><strong>Turbulence Subsystems</strong><br />
+The turbulence and global turbulence subsystems now accept an extra parameter to control the smoothness of the velocity changes they produce. The affected functions are: <code>Gyro_Object_SetTurbulence</code>, <code>Gyro_Object_SetTurbulenceMod</code>, <code>Gyro_Object_SetGlobalTurb</code> and <code>Gyro_Object_SetGlobalTurbMod</code>. More information may be found <a href="physobj_turbulence.html">here</a>. Angular turbulence is unaffected by this change and will not need updating.</p>
+
+<p><strong>Instant Force Feedback</strong><br />
+Previously, a bug existed that caused forces with the instant property to set the <code>gyro_feedback_power</code> global incorrectly when calling a feedback function. This bug has since been rectified and code that relies upon the feedback may need to be updated.</p>
+
+<p><strong>Attached Forces</strong><br />
+Two changes have been made to the behaviour of forces attached to another entity. First, should the host entity be removed from the game, the attached force will now also be removed automatically. To reinstate the previous behaviour that simply detatched the force, you will need to make use of the <a href="forces_properties_persistent.html">persistence</a> property. Secondly, should the host entity also be a physics object, the force is now able to affect it like any other object, whereas this interaction was originally forbidden. Again, the previous behaviour may be reinstated, this time by assigning an object for the force to <a href="forces_misc_ignore.html">ignore</a>.</p></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/info_upgrading.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+</html>

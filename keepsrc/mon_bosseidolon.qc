@@ -45,73 +45,16 @@ $frame painB1 painB2 painB3 painB4 painB5 painB6 painB7 painB8
 $frame painB9 painB10 painB11 painB12 painB13 painB14 painB15 painB16
 $frame painB17 painB18 painB19 painB20
 
-float EIDOLON_PHASE1 = 1;	// Trapped in cage
-float EIDOLON_PHASE2 = 2;	// Fighting
-
-//======================================================================
-// Global functions
-//======================================================================
 // Work out angle difference between player and boss
-//----------------------------------------------------------------------
-float(vector targorg, float angdiff) eidolon_angcheck =
-{
+float(vector targorg, float angdiff) eidolon_angcheck = {
 	self.ideal_yaw = vectoyaw(targorg - self.origin);
 	if ((self.ideal_yaw - angdiff) > self.angles_y) return TRUE;
 	else if ((self.ideal_yaw + angdiff)<self.angles_y) return TRUE;
 	else return FALSE;
 };
 
-//----------------------------------------------------------------------
-// Need own find player function because of arena size
-// Also setup all parameters ready to start combat quicker
-//----------------------------------------------------------------------
-float() eidolon_FindTarget =
-{
-	local entity client;
-	
-	// Get the obvious exception(s) done first
-	if (self.health < 1) return FALSE;
-	if (intermission_running > 0) return FALSE;
-	if (cinematic_running > 0) return FALSE;
-
-	// Find a client in current PVS
-	client = checkclient ();
-	
-	// Go through all the exception(s)
-	if (!client) return FALSE;
-	if (!(client.flags & FL_CLIENT)) return FALSE;
-	if (client.flags & FL_NOTARGET) return FALSE;
-	if (client.items & IT_INVISIBILITY) return FALSE;
-	
-	// Check range and visibility of player
-	enemy_vis = visible(client);
-	if (!enemy_vis) return FALSE;
-	if (!infront(client)) return FALSE;
-
-	// Finally found something
-	self.enemy = client;
-	self.oldorigin = self.origin;		// Save origin
-	self.goalentity = self.enemy;		// Focus on enemy
-	// Setup turning angle towards new enemy
-	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
-
-	// Stage 1 is trapped, boss cannot attack or run
-	if (self.style == EIDOLON_PHASE1) return FALSE;
-
-	// Move straight into run+attack
-	self.nextthink = time + 0.1;
-	self.think = self.th_run;		// Start running
-	SUB_AttackFinished (1);			// wait a while before first attack
-
-	// We have a winner!
-	return TRUE;	
-};
-
-//----------------------------------------------------------------------
 // Setup wave HP and trigger boundaries
-//----------------------------------------------------------------------
-void() eidolon_WaveSetupHP =
-{
+void() eidolon_WaveSetupHP = {
 	// Is there anymore boss waves left?
 	if (self.bosswave >= self.bosswavetotal) {
 		// Only one wave left (death is final trigger)
@@ -233,8 +176,7 @@ void() EidolonCheckAttack =
 //======================================================================
 // MONSTER STATES (stand, walk run, attack, pain and death!
 //======================================================================
-void() eidolon_idle =
-{
+void() eidolon_idle = {
 	// Do nothing if dead
 	if (self.health < 1) return;
 	if (self.walkframe == 1) monster_idle_sound();
@@ -244,22 +186,9 @@ void() eidolon_idle =
 	self.walkframe = self.walkframe + 1;
 	if (self.walkframe > 14) self.walkframe = 0;
 	self.frame = $stand1 + self.walkframe;
-	
-	// Keep looking for a player
-	eidolon_FindTarget ();
-	
-	if (self.style == EIDOLON_PHASE1) {
-		// Slow animation speed, trapped inside cage
-		self.nextthink = time + 0.1;
-		// Found a player, now track them around the room
-		if (self.enemy.flags & FL_CLIENT) {
-			if (eidolon_angcheck(self.enemy.origin, 60)) 
-				self.think = self.th_walk;
-		}
-	}
+	ai_stand(); // use global function instead
 };
 
-//----------------------------------------------------------------------
 void() eidolon_stand1 = [ $stand1, eidolon_idle ] {self.walkframe = 0;};
 
 //======================================================================
@@ -300,7 +229,7 @@ void(float fstate) eidolon_move =
 	// Phase 2 (free) walking back to center
 	else if (self.style == EIDOLON_PHASE2 && fstate == EIDOLON_WALK) {
 		// Check for player
-		if (eidolon_FindTarget ()) return;
+		if (FindTarget ()) return;
 
 		// Calculate distance to origin location (notouch function)
 		self.enemydist = vlen(self.movelast.origin - self.origin);
@@ -552,19 +481,10 @@ void() eidolon_attackC1 = [ $breath1, eidolon_attackC2 ] {ai_face();
 };
 
 //======================================================================
-// ATTACK D - Throw a bunch of rocks upward towards the player
-// Animation - death/grow, crouch down and swing arms upward
-//======================================================================
-void() eidolon_attackD1 =
-{
-};
-
-//======================================================================
 // ATTACK E - Summon monsters from blocks of stone
 // Animation - power, lean head back, put hands up right infront
 //======================================================================
-void(vector rockofs, float rockframe) Setup_attackE =
-{
+void(vector rockofs, float rockframe) Setup_attackE = {
 	local vector org;
 
 	// Check if attachment has been setup yet
@@ -707,8 +627,7 @@ void() eidolon_painA2 =
 };
 
 //----------------------------------------------------------------------
-void() eidolon_painB2 =
-{
+void() eidolon_painB2 = {
 	// Do nothing if dead
 	if (self.health < 1) return;
 	self.nextthink = time + 0.05;
@@ -727,8 +646,7 @@ void() eidolon_painA1 = [ $painA1, eidolon_painA2 ] {self.walkframe = 0;};
 void() eidolon_painB1 = [ $painB1, eidolon_painB2 ] {self.walkframe = 0;};
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) eidolon_pain =
-{
+void(entity inflictor, entity attacker, float damage) eidolon_pain = {
 	// Finish with all attachments
 	eidolon_finish_attachment();
 
@@ -752,40 +670,27 @@ void(entity inflictor, entity attacker, float damage) eidolon_pain =
 	}
 };
 
-//============================================================================
 // Oh no rocky has died!?!
-//============================================================================
-void() eidolon_explode =
-{
-	// Check for any final trigger events
-	if (self.message2 != "") trigger_strs(self.message2,self);
+void() eidolon_explode = {
+	if (self.deathtarget != "") trigger_strs(self.deathtarget,self); // Check for any final trigger events
+	entity_hide(self); // No more Boss!
 
-	// No more Boss!
-	entity_hide(self);
-	
-	// Blue ID particle explosion
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION2);
+	WriteByte (MSG_BROADCAST, TE_EXPLOSION2); // Blue ID particle explosion
 	WriteCoord (MSG_BROADCAST, self.origin_x);
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, self.origin_z);
 	WriteByte (MSG_BROADCAST, 35);
 	WriteByte (MSG_BROADCAST, 8);
-	
-	// Classic sprite/DP explosion
-	SpawnExplosion(EXPLODE_PLASMA_BIG, self.origin, "eidolon/explode_death.wav");
-
-	// Gib explosive fountain!?!
-	self.max_health = MON_GIBEXPLOSION;
+	SpawnExplosion(EXPLODE_PLASMA_BIG, self.origin, "eidolon/explode_death.wav"); // Classic sprite/DP explosion
+	self.max_health = MON_GIBEXPLOSION; // Gib explosive fountain!?!
 	ThrowGib(11, 10 + rint(random()*10));	// Small Golem rock
 	ThrowGib(12, 10 + rint(random()*10));	// Large Golem rock
 	ThrowGib(4, 5 + rint(random()*3));		// Some flesh bits
 	ThrowGib(5, 5 + rint(random()*3));
 };
 
-//----------------------------------------------------------------------
-void() eidolon_die2 = 
-{
+void() eidolon_die2 = {
 	self.nextthink = time + 0.1;
 	if (self.frame == $crouch3) self.solid = SOLID_NOT;
 	
@@ -793,8 +698,7 @@ void() eidolon_die2 =
 	if (self.walkframe < 30) {
 		self.walkframe = self.walkframe + 1;
 		self.frame = $crouch1 + self.walkframe;
-	}
-	else {
+	} else {
 		// Make sure final frame is set
 		self.frame = $crouch30;
 
@@ -841,28 +745,21 @@ void() eidolon_die2 =
 	}
 };
 
-//----------------------------------------------------------------------
-void() eidolon_die1 = [ $crouch1, eidolon_die2 ] {
-	self.walkframe = self.lip = 0;
-};
+void() eidolon_die1 = [ $crouch1, eidolon_die2 ] { self.walkframe = self.lip = 0; };
 
-//----------------------------------------------------------------------
-void() eidolon_die =
-{
+void() eidolon_die = {
 	self.deadflag = DEAD_DEAD;		// the rock finally crashed
 	self.effects = 0;				// Remove effects on death
 	eidolon_finish_attachment();	// Remove any attachments
 	eidolon_remove_attachment();
-
+	monster_death_precheck();
 	sound (self, CHAN_VOICE, "eidolon/death.wav", 1, ATTN_NORM);
-	eidolon_die1 ();
+	self.think = eidolon_die1; // Explosions should wait a bit
+	self.nextthink = time + self.ticktimer;
 };
 
-//======================================================================
 // Roar and break free from cage!
-//======================================================================
-void() eidolon_free2 =
-{
+void() eidolon_free2 = {
 	// Do nothing if dead
 	if (self.health < 1) return;
 
@@ -878,23 +775,16 @@ void() eidolon_free2 =
 	self.frame = $howl1 + self.walkframe;
 };
 
-//----------------------------------------------------------------------
 void() eidolon_free1 = [ $howl1, eidolon_free2 ] {
 	self.takedamage = DAMAGE_YES;		// Enable resistance effects
 	sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);
 	self.walkframe = 0;
 };
 
-//======================================================================
 // Setup Eidolon after trigger event
-//======================================================================
-void() eidolon_wakeup =
-{
-	self.use = SUB_Null;			// No more triggers
-	self.style = EIDOLON_PHASE2;	// Free to fight
-	
-	// Restore all think functions
-	self.th_stand = eidolon_stand1;
+void() eidolon_wakeup = {
+	self.use = monster_use; // we are normal now
+	self.th_stand = eidolon_stand1; // Restore all think functions
 	self.th_walk = eidolon_walk1;
 	self.th_run = eidolon_run1;
 	self.th_melee = eidolon_attackC1;
@@ -902,28 +792,20 @@ void() eidolon_wakeup =
 	self.th_summon = eidolon_attackE1;
 	self.th_pain = eidolon_pain;
 	self.th_die = eidolon_die;
-	
 	self.pain_finished = time + 3;		// Make pain go away
 	self.attack_finished = time + 2;	// Reset attack system
-
-	// Time for Eidolon to break free!
-	self.think = eidolon_free1;
 	self.nextthink = time + 0.1;
+	if (self.style == EIDOLON_PHASE2) {
+		self.think = self.th_stand; // Normal monster
+		monster_targets();
+	} else {
+		self.style = EIDOLON_PHASE2; // Special boss setup... Free to fight 
+		self.think = eidolon_free1; // Time for Eidolon to break free!
+	}
 };
 
-//----------------------------------------------------------------------
-void() eidolon_start =
-{
-	self.use = SUB_Null;			// Suppress trigger events
+void() eidolon_start = {
 	self.style = EIDOLON_PHASE1;	// Trapped in cage
-	self.flags = FL_MONSTER;		// Reset flag (no user settings)
-	
-	self.solid = SOLID_SLIDEBOX;
-	self.movetype = MOVETYPE_STEP;
-	setmodel(self, self.mdl);					// Setup model
-	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
-	setorigin(self, self.origin);
-	
 	self.yaw_speed = 6;				// Really slow while in cage
 	self.velocity = '0 0 0';		// Make sure stationary
 	self.deadflag = DEAD_NO;		// used to stop death re-triggering
@@ -931,7 +813,6 @@ void() eidolon_start =
 	self.dmgcombined = self.dmgtimeframe = 0;	// combined damage over 0.1s
 	self.pain_longanim = FALSE;		// No axe advantage
 	self.takedamage = DAMAGE_NO;	// Immune to damage
-	
 	self.gibhealth = -1000;			// Special death sequence
 	self.pain_finished = self.attack_finished = 0;
 	
@@ -950,26 +831,13 @@ void() eidolon_start =
 	self.bosswavetotal = 5;
 	self.bosswaveqty = 500;
 	self.max_health = self.bosswavetotal * self.bosswaveqty;
-	// Setup boss wave HP + trigger event
-	eidolon_WaveSetupHP();
+	eidolon_WaveSetupHP(); // Setup boss wave HP + trigger event
 
 	// default = No think functions
 	self.th_checkattack = EidolonCheckAttack;
 	self.th_stand = self.th_walk = self.th_run = SUB_Null;
 	self.th_missile = self.th_die = SUB_Null;
 	self.th_pain = SUB_Null_pain;
-	
-	// Check there is space for Eidolon to spawn
-	self.origin_z = self.origin_z + 1;
-	droptofloor();
-	if (!walkmove(0,0)) {
-		// this condition should be a map spawn event only
-		dprint ("\b[STUCK]\b "); dprint (self.classname);
-		dprint (" at "); dprint (vtos(self.origin));
-		dprint ("\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		remove(self);
-	}
 
 	// Tether point, save for later
 	self.movelast = spawn();
@@ -982,10 +850,6 @@ void() eidolon_start =
 	spawn_marker(self.movelast.origin+'0 0 8', SPNMARK_RED);
 	if (self.tetherrange < 32) self.tetherrange = MONAI_MAXEIDO;
 
-	// Make sure all death triggers are setup ready
-	self.message2 = self.target;
-	self.target = self.target2 = self.deathtarget = "";
-
 	// Can only stand around and walk on the spot
 	self.th_stand = eidolon_stand1;
 	self.th_walk = self.th_run = eidolon_walk1;
@@ -993,7 +857,13 @@ void() eidolon_start =
 	// Wait for trigger event to be free from cage
 	self.think = self.th_stand;
 	self.nextthink = time + 0.1;
-	self.use = eidolon_wakeup;
+	if (self.targetname != string_null) {
+		self.use = eidolon_wakeup;
+	} else {
+		self.use = SUB_Null; // Suppress further trigger events, if we were targetted
+		self.style = EIDOLON_PHASE2;
+		eidolon_wakeup();
+	}
 };
 
 //======================================================================
@@ -1050,24 +920,25 @@ void() monster_eidolon = {
 	self.bbmins = '-32 -32 -24';	// Special Size
 	self.bbmaxs = '32 32 128';
 	self.bboxtype = BBOX_CUSTOM;
-	self.flags = FL_MONSTER;		// Reset flag (no user settings)
-	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
-	self.poisonous = FALSE;			// Cannot be poisonous
-	self.deathstring = " was pulverized by the Sculptor\n";
+	if (self.bossflag >= 0) self.bossflag = TRUE; // Boss flag
+	if (self.poisonous >= 0) self.poisonous = FALSE;
+	if (self.deathstring == string_null) self.deathstring = " was pulverized by the Sculptor\n";
 	self.lastorigin = self.origin;	// Origin for camera interpolation
 	self.ticktimer = 0.05;			// Model animations at 20fps
 	
 	// Check passive system for exceptions
 	setup_passivestate_boss(self);
 	
-	self.health = self.max_health = MEGADEATH;
+	if (self.health < 1) self.health = self.max_health = MEGADEATH;
 	self.pain_finished = time + LARGE_TIMER;
 	self.takedamage = DAMAGE_NO;	// Immune to damage
 	self.gibbed = FALSE;			// Still in one piece
 	self.pain_flinch = 200;			// 1/2 Shambler level
 	self.pain_timeout = 2;			// Stop constant pain
-	self.infightextra = 3;			// Crazy damage, noinfighting
-	self.skin = 1;					// New rocky skin
+	if (self.infightextra >= 0) self.infightextra = 3; // Crazy damage, default to no infighting
+	if (self.skin >=0) self.skin = 1;	// New rocky skin
+	else self.skin = self.skin + 1; // -1 becomes 0 to force 0.
+	if (!self.exactskin) self.exactskin = self.skin; // Since we are now passing this to monster_start
 
 	// Custom feet sounds
 	self.stepc1 = "eidolon/footstep1.wav";
@@ -1081,11 +952,7 @@ void() monster_eidolon = {
 	precache_sound (self.stepc4);
 	precache_sound (self.stepc5);
 	self.steptype = FS_TYPECUSTOM;
-	
-	self.classtype = CT_MONEIDOLON;
-	self.classgroup = CG_STONE;
-	self.classmove = MON_MOVEWALK;
-	self.style = 0;
+	self.style = 0; // Current wave
 	
 	// No targetname = no trigger!
 	if (self.targetname == "") {
@@ -1094,8 +961,12 @@ void() monster_eidolon = {
 		return;
 	}
 
-	total_monsters = total_monsters + 1;
-	self.use = eidolon_start;
+	self.think1 = eidolon_start;
+
+	self.classtype = CT_MONEIDOLON;
+	self.classgroup = CG_STONE;
+	self.classmove = MON_MOVEWALK;
+	monster_start();
 };
 
 //======================================================================
@@ -1109,14 +980,11 @@ noise      : targetname of collision entity
 -------- SPAWNFLAGS --------
 -------- NOTES --------
 Target for boss lightning wave event
-
 ======================================================================*/
-void() monster_eidolon_wavetrig = 
-{
+void() monster_eidolon_wavetrig = {
 	self.classtype = CT_MONEIDOLONWAVE;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	self.takedamage = DAMAGE_NO;
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 };
-

@@ -38,36 +38,41 @@ void () versus_setup = {
 };
 
 void (entity targ) set_teamsurvivor = {
-   if (targ.versustype < 1) {
-      targ.versustype = VT_SURVIVOR;
-   } else {
-      if (developer) {
-         targ.versustype = VT_SURVIVOR;
-      } else {
-         sprint(targ,"Already on a team, can't change mid-game");
-      }
-   }   
+	if (targ.versustype < 1) {
+		targ.versustype = VT_SURVIVOR;
+		targ.alignment = GOOD;
+	} else {
+		if (developer) {
+			targ.versustype = VT_SURVIVOR;
+			targ.alignment = GOOD;
+		} else {
+			sprint(targ,"Already on a team, can't change mid-game");
+		}
+	}   
 };
 
 void (entity targ) set_teamgamemaster = {
-   if (targ.versustype < 1) {
-      targ.versustype = VT_GAMEMASTER;
-   } else {
-      if (developer) {
-         targ.versustype = VT_GAMEMASTER;
-      } else {
-         sprint(targ,"Already on a team, can't change mid-game");
-      }
-   }   
+	if (targ.versustype < 1) {
+		targ.versustype = VT_GAMEMASTER;
+		targ.alignment = EVIL;
+	} else {
+		if (developer) {
+			targ.versustype = VT_GAMEMASTER;
+			targ.alignment = EVIL;
+		} else {
+			sprint(targ,"Already on a team, can't change mid-game");
+		}
+	}   
 };
 
+// Let's Survivors know how many coins they have collected to use for purchasing weapons, items, doors, etc.
 void () print_coins = {
-	centerprint_msg(self,"Coin total: ",ftos(coins));
+	if ((coop < 3 || (coop > 2 && self.versustype == VT_SURVIVOR)) || developer) centerprint2(self,"Coin total: ",ftos(coins));
 };
 
-
+// Let's Gamemasters know how many gibs they have collected to use for purchasing more monsters or events.
 void () print_bones = {
-	centerprint_msg(self,"Gib total: ",ftos(bones));
+	if ((coop > 2 && self.versustype == VT_GAMEMASTER) || developer) centerprint2(self,"Gib total: ",ftos(bones));
 };
 
 void () item_coin_touch = {
@@ -78,9 +83,8 @@ void () item_coin_touch = {
    sprint (other, ftos(self.count));
    if (self.count == 1) sprint (other, " coin!\n");
    else sprint (other, " coins!\n");
-   stuffcmd (other, "bf\n");
+   Safe_stuffcmd (other, "bf\n");
    coins = coins + self.count;
-   //centerprint_msg(other,"Coin total: ",ftos(coins));
    sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
    item_finished();
    check_item_respawn();
@@ -109,52 +113,53 @@ void () item_coin_setskin = {
 };
 
 void () item_coin = {
-   if (self.mdl == "")
-      self.mdl = "progs/coinitem.mdl";
-
-   precache_model (self.mdl);
+	if (self.mdl == "") self.mdl = "progs/coinitem.mdl";
+	precache_model (self.mdl);
 	item_coin_setskin();
-   item_coin_setup();
+	item_coin_setup();
+};
+
+float() can_eat_bones = {
+	if (coop < 2) return FALSE;
+	if (other.versustype != VT_GAMEMASTER)  return FALSE;
+	if ( !(other.flags & FL_CLIENT) ) return FALSE;
+	return TRUE;
 };
 
 void () item_bone_touch = {
-   if (coop > 2 && other.versustype != VT_GAMEMASTER)  return;
-   if ( !(other.flags & FL_CLIENT) ) return;
-
-   sprint (other, "You got ");
-   sprint (other, ftos(self.count));
-   if (self.count == 1) sprint (other, " bone!\n");
-   else sprint (other, " bones!\n");
-   stuffcmd (other, "bf\n");
-   bones = bones + self.count;
-   //centerprint_msg(other,"Bone total: ",ftos(bones));
-   sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-   item_finished();
-   check_item_respawn();
-   activator = other;
-   SUB_UseTargets();
+	if (can_eat_bones()) {
+		sprint (other, "You got ");
+		sprint (other, ftos(self.count));
+		if (self.count == 1) sprint (other, " bone!\n");
+		else sprint (other, " bones!\n");
+		Safe_stuffcmd (other, "bf\n");
+		bones = bones + self.count;
+		sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+		item_finished();
+		check_item_respawn();
+		activator = other;
+		SUB_UseTargets();
+	}
 };
 
 void () item_bone = {
-   if (self.mdl == "")
-      self.mdl = "progs/boneitem.mdl";
-
-   precache_model (self.mdl);
-   if (self.noise == "") self.noise = "polyp/gibsplt1.wav";
-
+	if (self.mdl == "") self.mdl = "progs/boneitem.mdl";
+	precache_model (self.mdl);
+	if (self.noise == "") self.noise = "polyp/gibsplt1.wav";
 	if (!self.count) self.count = 1;
-
-   precache_sound (self.noise);
-   self.touch = item_touch;
-   self.touch2 = item_bone_touch;
-   self.bbmins = VEC_KEYS_MIN;
-   self.bbmaxs = VEC_KEYS_MAX;
-   item_start();
+	precache_sound (self.noise);
+	self.touch = item_touch;
+	self.touch2 = item_bone_touch;
+	self.bbmins = VEC_KEYS_MIN;
+	self.bbmaxs = VEC_KEYS_MAX;
+	item_start();
 };
 
 //----------------------------------------------------------------------
 void(float c) DropCoin = {
 	local entity item;
+
+	if (c < 1 || c > 99) return;
 
 	if (coop != 3) return; // not in versus mode
 
@@ -162,14 +167,10 @@ void(float c) DropCoin = {
 	item.classname = "item_coin";
 	item.origin = self.origin - '0 0 20';
 	item.count = c;
-
 	item_coin_setskin();
-
-	// Give the backpack some random toss!
 	item.velocity_z = 300;
 	item.velocity_x = -100 + (random() * 200);
 	item.velocity_y = -100 + (random() * 200);
-	
 	item.flags = FL_ITEM;
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
@@ -179,7 +180,6 @@ void(float c) DropCoin = {
 	item.touch = item_touch;
 	item.touch2 = item_coin_touch;
 	item.item_expired = 0; //coins never expire
-	
 	item.item_flrcheck = fabs(item.mins_z) + 16;
 	item.think = item_thinkloop;		// Check floor
 	item.nextthink = time + 0.3;		// Let coin drop first
@@ -198,7 +198,7 @@ void(float c) DropCoin = {
 				return;
 			}
 		} else {
-			centerprint_msg3(other,"Press \b'e'\b to purchase for ",ftos(self.cost)," coins.");
+			centerprint3(other,"Press \b'e'\b to purchase for ",ftos(self.cost)," coins.");
 			return;
 		}
 	}
@@ -220,7 +220,7 @@ void () trigger_coinpurchase_touch = {
 					return;
 				}
 			} else {
-				centerprint_msg3(other,"Press \b'e'\b to purchase for ",ftos(self.cost)," coins.");
+				centerprint3(other,"Press \b'e'\b to purchase for ",ftos(self.cost)," coins.");
 				return;
 			}
 			//activator = other;
@@ -249,7 +249,7 @@ void () trigger_gibpurchase_touch = {
 					return;
 				}
 			} else {
-				centerprint_msg3(other,"Press \b'e'\b to purchase for ",ftos(self.cost)," gibs.");
+				centerprint3(other,"Press \b'e'\b to purchase for ",ftos(self.cost)," gibs.");
 				return;
 			}
 		}

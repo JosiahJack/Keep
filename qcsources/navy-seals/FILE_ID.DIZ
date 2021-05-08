@@ -1,0 +1,9 @@
+      P r o Q C C  v 1 . 6 0
+===================================
+
+One of the best QuakeC compilers
+out.  ProQCC can decompile progs.dat
+of any size to native quakec code.
+The compiler can compile projects
+of any size, and does it 3 times
+faster then qccdos.  

@@ -598,4 +598,7 @@ float(float save, float take, vector dir) CSQC_Parse_Damage = {
 //Hud entry point!
 //showscores is set if +scores is held (check health yourself).
 void(vector virtsize, float showscores) CSQC_DrawHud = { Hud_Draw(virtsize, showscores); };
-void(float apilevel, string enginename, float engineversion) CSQC_Init = { Hud_Init(); };
+
+void(float apilevel, string enginename, float engineversion) CSQC_Init = {
+	Hud_Init();
+};

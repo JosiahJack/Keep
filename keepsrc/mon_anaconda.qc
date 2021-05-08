@@ -3,7 +3,124 @@ void anacdoom_2();
 void anacdoom_3();
 void anacdoom_4();
 void anac_awake();
-float ANAC_NOINTERMISSION = 2;
+float ANAC_INTERMISSION = 2;
+
+// Secondary coils of the anaconda, because we long
+void() coil_stand1 = [30, coil_stand1] { ai_stand(); };
+
+void() coil_rise = [0, coil_rise02] { sound(self, CHAN_WEAPON, "boss1/out1.wav", CHAN_WEAPON, ATTN_NORM); };
+void() coil_rise02 = [1, coil_rise03] {};
+void() coil_rise03 = [2, coil_rise04] {};
+void() coil_rise04 = [3, coil_rise05] {};
+void() coil_rise05 = [4, coil_rise06] {};
+void() coil_rise06 = [5, coil_rise07] {};
+void() coil_rise07 = [6, coil_rise08] {};
+void() coil_rise08 = [7, coil_rise09] {};
+void() coil_rise09 = [8, coil_rise10] {};
+void() coil_rise10 = [9, coil_rise11] {};
+void() coil_rise11 = [10, coil_rise12] {};
+void() coil_rise12 = [11, coil_rise13] {};
+void() coil_rise13 = [12, coil_rise14] {};
+void() coil_rise14 = [13, coil_rise15] {};
+void() coil_rise15 = [14, coil_rise16] {};
+void() coil_rise16 = [15, coil_rise17] {};
+void() coil_rise17 = [16, coil_run] {};
+
+void() coil_walk01 = [0, coil_walk02] { ai_walk(20); };
+void() coil_walk02 = [0, coil_walk03] { ai_face(); ai_walk(20); };
+void() coil_walk03 = [0, coil_walk04] { ai_walk(20); };
+void() coil_walk04 = [0, coil_walk01] { ai_face(); ai_walk(20); };
+
+void() coil_run = [16, coil_run01] {};
+void() coil_run01 = [15, coil_run02] {};
+void() coil_run02 = [14, coil_run03] {};
+void() coil_run03 = [13, coil_run04] {};
+void() coil_run04 = [12, coil_run05] {};
+void() coil_run05 = [11, coil_run06] {};
+void() coil_run06 = [10, coil_run07] {};
+void() coil_run07 = [9, coil_run08] {};
+void() coil_run08 = [8, coil_run09] {};
+void() coil_run09 = [7, coil_run10] {};
+void() coil_run10 = [6, coil_run11] {};
+void() coil_run11 = [5, coil_run12] {};
+void() coil_run12 = [4, coil_run13] {};
+void() coil_run13 = [3, coil_run14] {};
+void() coil_run14 = [2, coil_run15] {};
+void() coil_run15 = [1, coil_run16] {};
+void() coil_run16 = [0, coil_run17] {};
+void() coil_run17 = [36, coil_run18] {};
+void() coil_run18 = [35, coil_run19] {};
+void() coil_run19 = [34, coil_run20] {};
+void() coil_run20 = [33, coil_run21] {};
+void() coil_run21 = [32, coil_run22] {};
+void() coil_run22 = [31, SUB_Remove] {};
+
+void() coil_move = [1, coil_move1] { ai_walk(TE_LAVASPLASH); ai_face(); };
+void() coil_move1 = [2, coil_move2] { ai_walk(MOVETYPE_TOSS); ai_face(); };
+void() coil_move2 = [0, coil_whuh] { ai_walk(TE_LAVASPLASH); ai_face(); };
+
+void() coil_awake;
+
+// Say whuh now?
+void() coil_whuh = {
+	if (random() > 0.1)	coil_move();
+	else				coil_awake();
+};
+
+void(entity inflictor, entity attacker, float damage) coil_pain01 = [9, coil_pain02] { ai_pain(ATTN_NORM); };
+void() coil_pain02 = [10, coil_pain03] { ai_pain(ATTN_NORM); };
+void() coil_pain03 = [11, coil_run]{ ai_pain(ATTN_NORM); };
+
+void() coil_awake = {
+	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte(MSG_BROADCAST, TE_LAVASPLASH);
+	WriteCoord(MSG_BROADCAST, self.origin_x);
+	WriteCoord(MSG_BROADCAST, self.origin_y);
+	WriteCoord(MSG_BROADCAST, self.origin_z);
+	self.yaw_speed = 20;
+	coil_rise();
+};
+
+void() coil_explode = {
+	ThrowGib(1,floor(random() * 4));
+	ThrowGib(2,floor(random() * 4));
+	ThrowGib(3,floor(random() * 4));
+	remove(self);
+};
+
+void() monster_coil = {
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+
+	precache_sound2("blob/death1.wav");
+	precache_sound2("boss1/out1.wav");
+	precache_model2("progs/anaconda/coils.mdl");
+	self.solid = SOLID_SLIDEBOX;
+	self.movetype = MOVETYPE_STEP;
+	setmodel(self, "progs/anaconda/coils.mdl");
+	setsize(self, VEC_HULL2_MIN, VEC_HULL2_MAX); // Big blocker
+	self.health = 8000; // Not killable, not really
+	self.th_stand = coil_stand1;
+	self.th_walk = coil_walk01;
+	self.th_run = coil_awake;
+	self.th_die = coil_explode;
+	self.th_pain = coil_pain01;
+	self.th_missile = coil_run;
+	self.nomonstercount = 1;
+
+	// Always reset Ammo Resistance to be consistent
+	self.resist_shells = self.resist_nails = 0;
+	self.resist_rockets = self.resist_cells = 0;
+	if (self.deathstring == "")  self.deathstring = " was killed by a giant anaconda\n";
+
+	// Check passive system for exceptions
+	setup_passivestate_boss(self);
+
+	if(!self.classtype) self.classtype = CT_MONANACONDACOIL;
+	if (!self.classgroup) self.classgroup = CG_BOSS;
+	self.classmove = MON_MOVEWALK;	
+	monster_start();
+};
 
 void() Puke_Touch = {
 	local vector org;
@@ -670,26 +787,34 @@ void() anac_doom12 = [6, anac_doom12] {
 };
 
 void() anacdoom_1 = {
-	//local entity pos;
-	//local entity pl;
-	local entity timer;
-	/*
-	if (!(self.spawnflags & ANAC_NOINTERMISSION)) {
+	local entity pos, pl, timer;
+
+	if (self.spawnflags & ANAC_INTERMISSION) {
 		intermission_exittime = time + 10000000;
-		intermission_running = ATTN_NORM;
+		intermission_running = 1;
 		pos = find(world, classname, "info_intermission");
-		if (!pos) error("no info_intermission");
 		WriteByte(MSG_ALL, SVC_FINALE);
-		WriteString(MSG_ALL, "");
+	//	Keeping for posterity here WriteString(MSG_ALL, "Congratulations, soldier...\nYou've single handedly destroyed the\nvile Anaconda beast and all her\nspawn... Good work..\n\n-CREDITS-\nQUAKE(r) is a registered\ntrademark of Id Software, Inc.\nQUAKE(r) Scrag,Rottfish,Ogre characters\n& Textures included within this product\n(c)1996 Id Software, Inc.\nAll Rights reserved.\nLevel design: S.Thoms aka. MAGICMAN\nAnaconda skin: L.Pope\nSnakeman skin: C.Bolin\nSnakeModels+Code: S.Y.Tan aka. BUBBAH\nLevel Concept by:\nPrecision Entertainment, Inc.\n");
+		WriteString(MSG_ALL, self.message);
 		pl = find(world, classname, "player");
-		pl.angles = pos.mangle;
-		pl.takedamage = DAMAGE_NO;
-		pl.solid = SOLID_NOT;
-		pl.movetype = MOVETYPE_NONE;
-		pl.modelindex = MOVETYPE_NONE;
-		setorigin(pl, pos.origin);
-		pl = find(pl, classname, "player");
-	}*/
+		while (pl != world) {
+			pl.angles = pos.mangle;
+			pl.takedamage = DAMAGE_NO;
+			pl.solid = SOLID_NOT;
+			pl.movetype = MOVETYPE_NONE;
+			pl.modelindex = MOVETYPE_NONE;
+			setorigin(pl, pos.origin);
+			pl = find(pl, classname, "player");
+		}
+
+		// Kill all the coils...anaconda is spread everywhere!
+		pl = find(world, classname, "monster_coil");
+		while (pl != world) {
+			pl.think = coil_explode;
+			pl.nextthink = time + 0.1;
+			pl = find(pl, classname, "player");
+		}
+	}
 	timer = spawn();
 	setorigin(timer,self.origin);
 	timer.owner = self;
@@ -715,7 +840,6 @@ void() anacdoom_3 = {
 	self.owner.nextthink = time + 0.1;
 	self.think = anacdoom_4; 
 	self.nextthink = time + 0.1;
-	//sound(self.owner, CHAN_VOICE, "boss2/death.wav", ATTN_NORM, ATTN_NONE);
 	lightstyle(ATTN_NONE, "abcdefghijklmlkjihgfedcb");
 };
 
@@ -729,9 +853,7 @@ void() anacdoom_4 = {
 	self.gib1mdl = self.owner.gib1mdl;
 	self.gib2mdl = self.owner.gib2mdl;
 	self.gib3mdl = self.owner.gib3mdl;
-	float gibcount = 144;
-	if (coop > 0) gibcount = 72;
-	while (z <= gibcount) {
+	while (z <= 144) {
 		x = -64;
 		while (x <= 64) {
 			y = -64;
@@ -755,14 +877,11 @@ void() anacdoom_4 = {
 		}
 		z = z + 96;
 	}
-	//if (!(self.spawnflags & ANAC_NOINTERMISSION)) {
-	//	WriteByte(MSG_ALL, SVC_FINALE);
-	//	WriteString(MSG_ALL, "Congratulations, soldier...\nYou've single handedly destroyed the\nvile Anaconda beast and all her\nspawn... Good work..\n\n-CREDITS-\nQUAKE(r) is a registered\ntrademark of Id Software, Inc.\nQUAKE(r) Scrag,Rottfish,Ogre characters\n& Textures included within this product\n(c)1996 Id Software, Inc.\nAll Rights reserved.\nLevel design: S.Thoms aka. MAGICMAN\nAnaconda skin: L.Pope\nSnakeman skin: C.Bolin\nSnakeModels+Code: S.Y.Tan aka. BUBBAH\nLevel Concept by:\nPrecision Entertainment, Inc.\n");
-	//}
-
-	//WriteByte(MSG_ALL, SVC_CDTRACK);
-	//WriteByte(MSG_ALL, TE_EXPLOSION);
-	//WriteByte(MSG_ALL, TE_EXPLOSION);
+	if (self.spawnflags & ANAC_INTERMISSION) {
+		// WriteByte(MSG_ALL, SVC_CDTRACK);
+		WriteByte(MSG_ALL, TE_EXPLOSION);
+		WriteByte(MSG_ALL, TE_EXPLOSION);
+	}
 	lightstyle(ATTN_NONE, "z");
 	self.think = SUB_Remove;
 	self.nextthink = time + 0.1;
@@ -779,10 +898,6 @@ void() anac_explode2 = [6, anac_explode2] {
 	WriteCoord(MSG_BROADCAST, self.origin_y);
 	WriteCoord(MSG_BROADCAST, self.origin_z);
 	BecomeExplosion();
-	//if (!(self.spawnflags & ANAC_NOINTERMISSION)) {
-	//	WriteByte(MSG_ALL, SVC_FINALE);
-	//	WriteString(MSG_ALL, "Congratulations, soldier...\nAs the Anaconda's Huge body\nslithers lifeless\naway from this earth,\nyou must agree, that this\nmother of snakemen,\nthis vile devilthing,\nwas a pretty tough cookie\n\nJump through the slipgate to exit\nthis mission...\n\nGood work.\n\nLevel design: MAGICMAN\nAnaconda skin: POPE\nSnakeman skin: BOLIN\nSnakeModels + Coding: BUBBAH\n");
-	//}
 };
 
 void() anac_awake = {

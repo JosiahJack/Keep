@@ -272,50 +272,40 @@ void() trigger_shake =
 	self.use = trig_shake_use;
 };
 
-//============================================================================
+float IGNORE_ALIGNMENT = 1;
+float HATE_NEUTRAL = 2;
+float IGNORE_CURRENT_ENEMY = 4;
 
-void() enemy_anger =
-{
-	local entity	mnstr, stemp;
+void() enemy_anger = {
+	local entity mnstr, stemp, hateme;
 	
 	mnstr = find(world, targetname, self.target);
-	
+	hateme = find(world, targetname, self.sighttarget);
+	if (hateme.health < 1 || !(hateme.flags & FLx_CREATURE)) return; // maybe they died ya know
 	while (mnstr) {
-	
-		// piss'em off
-		if (mnstr.flags & FL_MONSTER) {
-			mnstr.enemy = self;
-			stemp = self;
-			self = mnstr;
-			FoundTarget();
-			self = stemp;
+		if (mnstr.flags & FL_MONSTER && ((self.spawnflags & IGNORE_CURRENT_ENEMY) || !mnstr.enemy)) {
+			if (self.spawnflags & IGNORE_ALIGNMENT || !Align_Match(mnstr,hateme)) {
+				if (self.spawnflags & HATE_NEUTRAL || mnstr.alignment != NEUTRAL) {
+					if (self.spawnflags & IGNORE_ALIGNMENT) mnstr.temperament = TEMPRA_PSYCHOTIC; // So we don't abandon them right away
+					mnstr.enemy = hateme;
+					stemp = self;
+					self = mnstr;
+					FoundTarget();
+					self = stemp;
+				}
+			}
 		}
-		
 		mnstr = find(mnstr, targetname, self.target);
 	}
 };
 
-/*QUAKED trigger_enemy (.5 .5 .5) (-8 -8 -8) (8 8 8) ?
-Hack to get a monster's attention (for "scripted" events).
+// QUAKED trigger_enemy (.5 .5 .5) (-8 -8 -8) (8 8 8) ?
+// Hack to get a monster's attention (for "scripted" events).
+// "target"		The monster(s) to anger
+// "sighttarget"	The monster to hate
+// "targetname"	Must be triggered
 
-Relies on changes to "*CheckAttack" routines in ai.qc, and wizard.qc
-
-"target"		The monster(s) to anger
-"targetname"	Must be triggered
-
-NOTES:
-
-If you're using Quiver for mapping, you'll likely need to add a "targetname"
-key to each monster type for this to work.
-
-Monsters will basically just turn and shoot at this ent until they get another
-enemy (i.e. they're shot by something else). They will shoot in the direction
-of this ent regardless if they can "see" it, or if it's blocked by the world,
-or by another monster. (Can be carefully setup to start in-fighting).
-
-*/
-void() trigger_enemy =
-{
+void() trigger_enemy = {
 	if (!self.targetname) objerror("trigger_enemy without name");
 	if (!self.target) objerror("trigger_enemy without a target");
 
@@ -325,5 +315,3 @@ void() trigger_enemy =
 		
 	self.use = enemy_anger;
 };
-
-//============================================================================

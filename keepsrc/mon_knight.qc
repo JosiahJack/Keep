@@ -294,9 +294,7 @@ void()	knight_dieb9	=[	$deathb9,	knight_dieb10] {};
 void()	knight_dieb10 = [	$deathb10,	knight_dieb11] {monster_death_postcheck();};
 void()	knight_dieb11 = [	$deathb11,	knight_dieb11] {monster_deadbody_check();};
 
-//============================================================================
-void() knight_die =
-{
+void() knight_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -308,16 +306,14 @@ void() knight_die =
 	}
 };
 
-//============================================================================
-void() knight_sword_sound =
-{
+
+void() knight_sword_sound = {
 	if (random() > 0.5) sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
 	else sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
 };
 
-//============================================================================
-void() knight_aistates =
-{
+
+void() knight_aistates = {
 	self.th_stand = knight_stand1;		// Idling on feet
 	self.th_walk = knight_walk1;		// Walking
 	self.th_run = knight_run1;			// Running
@@ -326,9 +322,7 @@ void() knight_aistates =
 	self.th_die = knight_die;			// Face meets floor
 };
 
-//----------------------------------------------------------------------
-void() knight_wakeup =
-{
+void() knight_wakeup = {
 	// Check for sudden death!
 	if (self.health < 0) return;
 	
@@ -474,8 +468,7 @@ void() monster_knight = {
 			if (self.angles_y > 360) self.angles_y = 360;
 
 			knight_aistates();			// setup AI state functions
-		}
-		else {
+		} else {
 			self.spawnstatue = TRUE;		// Start as a statue
 			self.th_stand = knight_statue;	// Stone idle sound
 			self.think1 = knight_wakeup;	// Wakeup function when triggered
@@ -494,8 +487,7 @@ void() monster_knight = {
 			self.pos1_z = fabs(self.pos1_y - self.pos1_x);
 			self.frame = self.pos1_x;		// Setup frame / pose		
 		}
-	}
-	else {
+	} else {
 		// The new knight model by Lunaran has 4 available skins to
 		// choose from. The local option will always override the
 		// worldspawn option.

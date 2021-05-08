@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/info_forcemacros.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:04 GMT -->
+<head>
+	<title>GyroDocs - Example Forces</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><a href="physobj.html" class="item">Physics Objects</a><a href="forces.html" class="item">Force Entities</a><a href="advanced.html" class="item">Advanced Usage</a><a href="info.html" class="item">Further Information</a><div class="layout_submenu"><a href="info_changelog.html" class="subitem">- Changelog</a><a href="info_forcemacros.html" class="subitem subitem_selected">- Example Forces</a><a href="info_physicsmacros.html" class="subitem">- Example Objects</a><a href="info_links.html" class="subitem">- Links and Resources</a><a href="info_upgrading.html" class="subitem">- Upgrading from 2.0</a></div></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Example Forces</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p>To act as sample code and a starting point for new force entities, Gyro provides several force macros in <code>gyro_user.qc</code>, each available for immediate use. As Gyro grows, more macros will be added to the packaged user file but, in the meantime, the current list may be found here:</p>
+
+<p><strong>Explosion</strong><br />
+Explosions are at the heart of every good FPS, and this macro will create one. A linear falloff forms a spherical area while a point affector (offset downwards to give objects more lift) provides the physical impact.</p>
+<pre>entity(vector org, float radius, float power) Gyro_ForceMacro_Explosion =
+{
+	local entity	force;
+	force = Gyro_Force_Create("explosion", org);
+	Gyro_Force_ApplyFalloff_AreaLinear(force, '1 1 1' * radius);
+	Gyro_Force_ApplyAffector_Point(force, '0 0 -16', '1 1 1', power, FALSE);
+	Gyro_Force_AddProperty_Instant(force);
+	return force;
+};</pre>
+
+<p><strong>Dampening Field</strong><br />
+As seen in The Matrix. A constant falloff ensures that any object entering the defined radius is subjected to the full strength of this force, while a strong resistance affector slows any movement to a crawl. Anti-gravity prevents any objects from 'creeping' downwards and a Gyro-controlled scale rate automatically weakens the force over time. Notice that both affectors are set to absolute, meaning their strength is irrespective of object mass.</p>
+<pre>entity(vector org, float radius, float duration) Gyro_ForceMacro_DampeningField =
+{
+	local entity	force;
+	force = Gyro_Force_Create("dampenfield", org);
+	Gyro_Force_ApplyFalloff_AreaConstant(force, '1 1 1' * radius);
+	Gyro_Force_ApplyAffector_Resistance(force, '1 1 1', 2, TRUE);
+	Gyro_Force_ApplyAffector_AntiGravity(force, 1, TRUE);
+	Gyro_Force_SetRangeScaleRate(force, -1 / duration);
+	return force;
+};</pre>
+
+<p><strong>Thumper</strong><br />
+This force will deftly blast any grounded objects into the air, thanks in part to the application of the ground-pound property. To further simulate an earthquake-style effect, the force will ignore walls.</p>
+<pre>entity(vector org, float radius, float power) Gyro_ForceMacro_Thumper =
+{
+	local entity	force;
+	force = Gyro_Force_Create("thumper", org);
+	Gyro_Force_ApplyFalloff_AreaLinear(force, '1 1 1' * radius);
+	Gyro_Force_ApplyAffector_Directional(force, '0 0 1', power, FALSE);
+	Gyro_Force_AddProperty_GroundPound(force);
+	Gyro_Force_AddProperty_IgnoreWalls(force);
+	Gyro_Force_AddProperty_Instant(force);
+	return force;
+};</pre>
+
+<p><strong>Whirdwind</strong><br />
+This is an relatively complicated force that lifts objects into the air and spins them around it's centre. Of most interest is the use of the PointMod affector, which uses a transformation matrix to push objects at a 90&deg; angle rather than directly outwards. It also shows how two falloff components may be combined to make a cylindical shape, rather than spherical.</p>
+<pre>entity(vector org, float radius, float power, float duration) Gyro_ForceMacro_Whirlwind =
+{
+	local entity	force;
+	force = Gyro_Force_Create("whirlwind", org + '0 0 32');
+	Gyro_Force_ApplyFalloff_AreaLinear(force, '1 1 0' * radius);
+	Gyro_Force_ApplyFalloff_AreaLinear(force, '0 0 1' * radius * 0.5);
+	Gyro_Force_FalloffCombine_Minimum(force);
+	Gyro_Force_SetPowerScaleRate(force, -1 / duration);
+	
+	Gyro_Force_ApplyAffector_PointMod(force, '0 0 0', '1 1 0', power, FALSE, '0 -1 0', '1 0 0', '0 0 0');
+	Gyro_Force_ApplyAffector_Point(force, '0 0 0', '1 1 1', power*(-1.2), FALSE);
+	Gyro_Force_ApplyAffector_AntiGravity(force, power, FALSE);
+	Gyro_Force_ApplyAffector_Resistance(force, '1 1 1', power, FALSE);
+	return force;
+};</pre>
+
+<p><strong>Gravity Bomb</strong><br />
+The gravity bomb is actually a combination of two separate forces, both of which use an infinite falloff of <code>'0 0 0'</code> and a special property to affect all objects on the level, even though walls. The first force is responsible for negating the effects of gravity for a few seconds, while the second gently knocks everything upwards immediately upon the bomb's detonation.</p>
+<pre>entity(float duration) Gyro_ForceMacro_GravityBomb =
+{
+	local entity	grav, bomb;
+	grav = Gyro_Force_Create("gravbomb", '0 0 0');
+	Gyro_Force_ApplyFalloff_AreaConstant(grav, '0 0 0');
+	Gyro_Force_ApplyAffector_AntiGravity(grav, 4.0, TRUE);
+	Gyro_Force_AddProperty_IgnoreWalls(grav);
+	Gyro_Force_SetPowerScaleRate(grav, -1 / duration);
+	
+	bomb = Gyro_Force_Create("gravbomb_push", '0 0 0');
+	Gyro_Force_ApplyFalloff_AreaConstant(bomb, '0 0 0');
+	Gyro_Force_ApplyAffector_Directional(bomb, '0 0 1', 0.2, TRUE);
+	Gyro_Force_AddProperty_IgnoreWalls(bomb);
+	Gyro_Force_AddProperty_Instant(bomb);
+	return grav;
+};</pre></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/info_forcemacros.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:04 GMT -->
+</html>

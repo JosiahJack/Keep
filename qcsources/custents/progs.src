@@ -1,0 +1,73 @@
+../progs.dat
+
+defs.qc
+// ###
+custdefs.qc		// the globals for the Custents code
+// ###
+subs.qc
+fight.qc
+ai.qc
+combat.qc
+items.qc
+weapons.qc
+world.qc
+client.qc
+player.qc
+monsters.qc
+doors.qc
+buttons.qc
+triggers.qc
+custents.qc		// ### where the cool Custents features are held
+plats.qc
+misc.qc
+
+ogre.qc
+demon.qc
+shambler.qc
+knight.qc
+soldier.qc
+wizard.qc
+dog.qc
+zombie.qc
+boss.qc
+
+tarbaby.qc		// registered
+hknight.qc		// registered
+fish.qc			// registered
+shalrath.qc		// registered
+enforcer.qc		// registered
+oldone.qc		// registered
+
+// ###
+missiles.qc		// custom projectile spawning code
+actors.qc         // The actor entity made for Apocalypse
+apocmisc.qc		// Other misc things added from Apocalypse
+apoccam.qc		// External view camera from Apocalypse
+srvomech.qc		// servomech, controllable and monster
+turret.qc		// ceiling gun turret
+zmaster.qc		// zombie master monster
+
+hipsubs.qc		// Hipnotic subroutines
+hipcount.qc		// Hipnotic counter
+hiptraps.qc		// Hipnotic hazards
+hiprubbl.qc		// Hipnotic rubble stuff
+hip_brk.qc		// Hipnotic breakable walls
+hip_expl.qc		// Hipnotic explosions
+hip_part.qc		// Hipnotic particle field
+hip_push.qc		// Hipnotic pushable walls
+hiprot.qc		// Hipnotic rotating code
+hipclock.qc		// Hipnotic clock
+hipmisc.qc		// Hipnotic sound stuff
+hipspawn.qc		// Hipnotic dynamic spawning
+hiptrig.qc		// Hipnotic triggers
+hipquake.qc		// Hipnotic Earthquakes
+hipwater.qc		// Hipnotic bobbing water
+
+buzzsaw.qc		// Rogue buzzsaw trap
+rogquake.qc		// Rogue earth quake
+rogplats.qc		// Rogue new platforms
+elevatr.qc		// Rogue elevator
+pendulum.qc		// Rogue pendulum
+rogmisc.qc		// Rogue misc stuff
+lightnin.qc		// Rogue relay lightning
+// ###

@@ -110,7 +110,7 @@ void() SnowmFireNails =
 		vec = (crandom()*20)*v_right + (crandom()*20)*v_up;
 		dir = normalize((self.enemy.origin + vec) - org);
 		// Generate a red hot nail projectile
-		launch_projectile(org, dir, CT_PROJ_MONNG, self.attack_speed);
+		launch_projectile(org, dir, CT_PROJ_NG, self.attack_speed);
 		loopvar = loopvar + 1;
 	}
 };
@@ -229,7 +229,7 @@ void() monster_xmas_snowman = {
 	precache_model (self.gib1mdl);				// Claw
 	precache_model (self.gib2mdl);				// Gun
 	precache_model (self.gib3mdl);				// Snow-BALLS!
-	precache_model (MODEL_PROJ_NGRED);			// Red Nails (easier to see)
+	precache_model (MODEL_PROJ_NG);				// Nails
 
 	// Idle calm/angry
 	self.idle_sound = "xmas/snowman/idle.wav";	// Rustling sound

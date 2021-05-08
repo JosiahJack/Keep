@@ -159,45 +159,27 @@ void() vermis_start_go =
 	}
 };
 
-void() vermis_start = 
-{
-	if (!(self.spawnflags & 64))
-	{
+void() vermis_start = {
+	if (!(self.spawnflags & 64)) {
 		self.nextthink = self.nextthink + random() * 0.5;
 		self.think = vermis_start_go;
-	}
-	else
-	{
+	} else {
 		vermis_start_go();
 	}
-	total_monsters = total_monsters + 1;
+	AddToTotals(self);
 };
 
-
-
-void() ai_vermis_face = 
-{
+void() ai_vermis_face =  {
 	if (visible(self.enemy))
-	{
 		self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
-	}
 	else
-	{
 		self.ideal_yaw = vectoyaw(self.oldenemyorigin - self.origin);
-	}
 	ChangeYaw();
 };
 
-void() ai_vermis_stand = 
-{
-	if (VermisFindTarget())
-	{
-		return;
-	}
-};
+void() ai_vermis_stand = { if (VermisFindTarget()) return; };
 
-float() CheckVermisAttack = 
-{
+float() CheckVermisAttack =  {
 	local vector spot1;
 	local vector spot2;
 	local entity targ;

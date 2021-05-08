@@ -230,6 +230,7 @@ void()	swampling_JumpTouch =
 	if (self.classgroup != other.classgroup && other.takedamage) {
 		if ( vlen(self.velocity) > 300 ) {
 			ldmg = 5 + 5*random();
+			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
 			T_Damage (other, self, self, ldmg, DAMARMOR);	
 			// Spawn some touch blood (no explicit direction)
 			spawn_touchblood (self, self.enemy, ldmg*3);

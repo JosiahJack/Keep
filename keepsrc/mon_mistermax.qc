@@ -1124,8 +1124,7 @@ Void function max_diea2();
       if (self.lives < 0) {
         self.think = maxcorpse;
         self.nextthink = time + 0.1;
-        killed_monsters = killed_monsters + 1;
-        WriteByte(MSG_ALL, SVC_KILLEDMONSTER);
+        AddToKills(self,self.enemy);
         max_is_dead();
         return;
         }
@@ -1969,15 +1968,15 @@ var
   head = find(world, classname, "player");
   while (head) {
     if (num == 1) {
-      stuffcmd(head, "gl_fogdensity 0.2|");
+      Safe_stuffcmd(head, "gl_fogdensity 0.2|");
       }
     if (self.method == 0) {
-      stuffcmd(head, "gl_fogdensity 0.2|");
-      stuffcmd(head, "gl_fogenable 1|");
+      Safe_stuffcmd(head, "gl_fogdensity 0.2|");
+      Safe_stuffcmd(head, "gl_fogenable 1|");
       self.method = 1;
       }
     else {
-      stuffcmd(head, "gl_fogenable 0|");
+      Safe_stuffcmd(head, "gl_fogenable 0|");
       self.method = 0;
       }
     head = find(head, classname, "player");
@@ -2395,9 +2394,9 @@ Void() comment_final = {
 
 void() ending1 = {
 	self.charmer.talk_finished = time + 3;
-	stuffcmd(self.enemy,  "play ");
-	stuffcmd(self.enemy, self.noise);
-	stuffcmd(self.enemy, "|");
+	Safe_stuffcmd(self.enemy,  "play ");
+	Safe_stuffcmd(self.enemy, self.noise);
+	Safe_stuffcmd(self.enemy, "|");
 	self.relations = 1;
 	self.think = remove_max;
 	self.nextthink = time + self.cnt;
@@ -2411,9 +2410,9 @@ void() remove_max = {
 
 void() make_comment = {
 	self.charmer.talk_finished = time + 3;
-	stuffcmd(self.enemy,  "play ");
-	stuffcmd(self.enemy, self.noise);
-	stuffcmd(self.enemy, "|");
+	Safe_stuffcmd(self.enemy,  "play ");
+	Safe_stuffcmd(self.enemy, self.noise);
+	Safe_stuffcmd(self.enemy, "|");
 };
 
 void() opens_hit_it = {

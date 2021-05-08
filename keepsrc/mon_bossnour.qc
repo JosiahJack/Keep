@@ -1035,7 +1035,7 @@ void() nour_awake = {
 	if (self.delaymonstercount) {
 		// Reset both monster count conditions
 		self.nomonstercount = self.delaymonstercount = 0;
-		total_monsters = total_monsters + 1;
+		AddToTotals(self);
 		update_hud_totals(HUD_MONSTERS);
 	}
 
@@ -1152,9 +1152,14 @@ void() monster_nour = {
 	if (self.attack_chance >= 1) self.attack_chance = 1;
 	
 	// Setup Ammo Resistance
-	if (self.spawnflags & MON_NOUR_BOSS) self.resist_cells = 1;
-	// Regular Nour is not 100% resistant
-	else self.resist_cells = 0.75;
+	if (self.spawnflags & MON_NOUR_BOSS) {
+		self.resist_cells = 1;
+		self.resist_plasma = 1;
+	} else {
+		// Regular Nour is not 100% resistant
+		self.resist_plasma = 0.75;
+		self.resist_cells = 0.75;
+	}
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = 0; 
 	self.reflectlightning = TRUE;	// Reflect lightning strikes
@@ -1208,7 +1213,7 @@ void() monster_nour = {
 			}
 		}
 		// Update count before client spawn
-		else total_monsters = total_monsters + 1;
+		else AddToTotals(self);
 		
 		// Devmarker function changes skins, save for later
 		self.frame = 0; self.exactskin = self.skin;

@@ -142,87 +142,63 @@ float(vector vmin, vector vmax, vector spot, entity ignore) BoxInThing =
     return FALSE;
 };
 
-
 //==========================================================================
 //  Entry Points
-
-// FIXME:  Add a trace that checks walls only, instead of everything.
-
-//------------------------------------------------------------------------//
 //  This checks if the path near the desired spot is blocked by
 //  walls or monsters.
-//------------------------------------------------------------------------//
-float(vector spot) EntryPoint_Trace =
-{
+float(vector spot) EntryPoint_Trace = {
     traceline (self.enemy.origin, spot, FALSE, self.enemy);
-    if (trace_fraction < 1)
-    {
-    // Unless the entity hit is the one doing the teleporting,
-    // consider the spot blocked.
-        if (trace_ent != self.owner)
-            return TRUE;
-    // Teleporting ent was hit, now check through it for more entities.
+    if (trace_fraction < 1) {
+		// Unless the entity hit is the one doing the teleporting, consider the spot blocked.
+        if (trace_ent != self.owner) return TRUE;
+		// Teleporting ent was hit, now check through it for more entities.
         traceline (trace_endpos, spot, FALSE, self.owner);
-        if (trace_fraction < 1)
-            return TRUE;
+        if (trace_fraction < 1) return TRUE;
     }
-
     return FALSE;
 };
 
-//------------------------------------------------------------------------//
-//  This traces lines from the beacon entity (self.enemy) to all eight
-//  bbox points around the destination.
-//------------------------------------------------------------------------//
-float() EntryPoint_Path =
-{
+
+//  This traces lines from the beacon entity (self.enemy) to all eight bbox points around the destination.
+float() EntryPoint_Path = {
     local   vector  spot, p;
 
     // Check origin.
     spot = self.origin;
     p = spot;
-    if (EntryPoint_Trace (p))
-        return TRUE;
+    if (EntryPoint_Trace (p)) return TRUE;
 
     // Check bbox corners.
     // Order:  1)+++  2)-++  3)+-+  4)--+  5)++-  6)-+-  7)+--  8)---
     p_x = spot_x + self.maxs_x;
     p_y = spot_y + self.maxs_y;
     p_z = spot_z + self.maxs_z;
-    if (EntryPoint_Trace (p))
-        return TRUE;
+    if (EntryPoint_Trace (p)) return TRUE;
 
     p_x = spot_x + self.mins_x;
-    if (EntryPoint_Trace (p))
-        return TRUE;
+    if (EntryPoint_Trace (p)) return TRUE;
 
     p_x = spot_x + self.maxs_x;
     p_y = spot_y + self.mins_y;
-    if (EntryPoint_Trace (p))
-        return TRUE;
+    if (EntryPoint_Trace (p)) return TRUE;
 
     p_x = spot_x + self.mins_x;
-    if (EntryPoint_Trace (p))
-        return TRUE;
+    if (EntryPoint_Trace (p)) return TRUE;
 
     p_x = spot_x + self.maxs_x;
     p_y = spot_y + self.maxs_y;
     p_z = spot_z + self.mins_z;
-    if (EntryPoint_Trace (p))
-        return TRUE;
+    if (EntryPoint_Trace (p)) return TRUE;
 
     p_x = spot_x + self.mins_x;
-    if (EntryPoint_Trace (p))
-        return TRUE;
+    if (EntryPoint_Trace (p)) return TRUE;
 
     p_x = spot_x + self.maxs_x;
     p_y = spot_y + self.mins_y;
-    if (EntryPoint_Trace (p))
-        return TRUE;
+    if (EntryPoint_Trace (p)) return TRUE;
 
     p_x = spot_x + self.mins_x;
-    if (EntryPoint_Trace (p))
-        return TRUE;
+    if (EntryPoint_Trace (p)) return TRUE;
 
     return FALSE;
 };

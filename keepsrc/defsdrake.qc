@@ -92,36 +92,13 @@ float   DFx_RESISTS     = 3969; // Acid + Cold + Fire + Lightning + Rocket
 //  such as an imp.  Dragon stays due to legacy issues (i.e., Soul of Evil).
 float   FORM_DRAGON     = 1;
 
-// hit type -----------------------------------------------------------------
-//.float  hittype;
-
 float   HIT_NORMAL  = 0;    // Default.
 float   HIT_METAL   = 1;    // Knights, centroids, and other armored guys.
 float   HIT_STONE   = 2;    // Statues, golems.
-
-
-
-// List of exotic armor.  Player can wear only one at a time.  Duh!
-// float   SUIT_COURAGE    = 1;    // Reflective half-armor.  From Zerstorer.
-// float   SUIT_DRAGON     = 2;    // Dragonscale and morph.
-// float   SUIT_ONYX       = 3;    // Indestructible.
-// float   SUIT_ONYX_POWER = 4;    // As Onyx, plus built-in power shield.
-// float   SUIT_BERSERKER  = 5;    // Demonhide - regeneration and life-saving.
-// float   SUIT_SPIRIT     = 6;    // Spirit shroud, like hyper enforcer shield.
-// float   SUIT_CHAOS      = 7;    // Variable protection, teleportation.
-// float   SUIT_NINJA      = 8;    // Jumpsuit with special powers.
-// float   SUIT_ULTRA      = 9;    // Ultra enforcer particle shield.  NPC only.
-
-// float   SUITx_ALL       = 15;   // Value must be a power of 2 minus 1.
-                                // This means 3, 7, or 15.  No higher.
-
 float   COURAGE_DAMAGE  = 10;   // Damage to armor if it reflects a rocket.
 
 //==========================================================================
 //  Sprite Frame Data
-
-// FIXME:  put unused in 's_unused.spr'.
-
 // Frames for 's_fancy.spr'.
 float   X32_PUFF_ORANGE     = 0;
 float   X32_PUFF_BLUE       = 5;
@@ -132,7 +109,7 @@ float   X32_PLASMA_ORANGE   = 21;
 float   X32_PLASMA_RED      = 27;
 float   X32_PLASMA_YELLOW   = 33;
 float   X32_PLASMA_BLUE     = 39;
-//- - - - - - - - -
+
 float   X32_STAR_ORANGE     = 45;
 float   X32_STAR_RED        = 50;
 float   X32_STAR_YELLOW     = 55;
@@ -204,7 +181,6 @@ float   FLx_NOT_MISSILE     =  296;     // Client + Monster + Item
 float   FLx_NOT_FALLING     =  515;     // Fly + Swim + Onground
 float   FLx_JUMP_READY      = 4608;     // Onground + Jumpreleased
 
-float   GIB_HEAD        = 1;    // Head gib.
 float   GIB_EAT         = 2;    // Gib can be eaten for health.
 float   GIB_DMV         = 4;    // Add damage velocity to gib velocity.
 float   GIB_BODY_HALF   = 8;    // Spawn within the lower half of body.
@@ -288,12 +264,10 @@ float   RYU_REAPER      = 8388608;  // Soul collector.
 //===========================================================================
 //  TRONYN
 //  (FIXME:  For Tronyn only -- remove for Drake.)
-
 //.float      tronyn;     // Flags that do special things in his maps.
 
 float   DJG_STRIP       = 1;    // Strips all items.
 float   DJG_BSP_SHIFT   = 2;    // Move ammo/health boxes by '-16 -16 z'.
-//
 float   DJG_SNOW        = 4;    // unf2: Use snow skins on select monsters.
 float   DJG_MEDIEVAL    = 8;    // Replace base soldiers with medieval.
 float   DJG_SOUL_EVIL   = 16;   // Soul of Evil, extra cash and variant obits.
@@ -414,7 +388,6 @@ float   WARx_AI_GUNS        =   131048;     // Guns used by monster_army npcs.
 
 float   WARx_USES_SHELLS    =       72;
 float   WARx_USES_NAILS     =      544;
-float   WARx_USES_ROCKETS   =    68864;
 float   WARx_USES_CELLS     =   192640;
 
 // IMPORTANT!!!  This next one determines what weapons are usable and
@@ -488,7 +461,6 @@ float bloodbank;      // Non-red blood types known to be precached.
 float cranked;    // TRUE = Stronger monsters and brutal falling rules.
 float cutscene;       // Set to TRUE during a cutscene.
 float doomed;     // TRUE = Monsters respawn after death.
-float gloat;      // GLObal fLOAT -- like hknight_type.
 float respawning; // Toggle used when respawning monsters.
 float soul_evil;  // TRUE = Soul of Evil mode.  Merger code.
 float super_active;
@@ -575,8 +547,6 @@ vector      damage_velocity;    // Set by 'T_Damage' for gib velocity.
 
 void SpawnMeatSprayDrake(vector org, vector vel, float btype);
 
-.float(float yaw, float dist)   th_move;    // 'walkmove' or equivalent.
-.void(float dist)   th_goal;    // 'movetogoal' or equivalent.
 .void()             th_win;     // Monsters:  sound when killing a player.
                                 // Missiles:  code prior to origin shift.
                                 // Items:  additional code after spawning

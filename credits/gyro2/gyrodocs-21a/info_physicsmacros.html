@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/info_physicsmacros.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:04 GMT -->
+<head>
+	<title>GyroDocs - Example Objects</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><a href="physobj.html" class="item">Physics Objects</a><a href="forces.html" class="item">Force Entities</a><a href="advanced.html" class="item">Advanced Usage</a><a href="info.html" class="item">Further Information</a><div class="layout_submenu"><a href="info_changelog.html" class="subitem">- Changelog</a><a href="info_forcemacros.html" class="subitem">- Example Forces</a><a href="info_physicsmacros.html" class="subitem subitem_selected">- Example Objects</a><a href="info_links.html" class="subitem">- Links and Resources</a><a href="info_upgrading.html" class="subitem">- Upgrading from 2.0</a></div></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Example Objects</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p>To act as sample code and a starting point for new physics objects, Gyro provides several object macros in <code>gyro_user.qc</code> that may be applied immediately to any entity you chose. As Gyro grows, more macros will be added to the packaged user file but, in the meantime, the current list may be found here:</p>
+
+<p><strong>Grenades</strong><br />
+Grenades are very simple objects that use Gyro's most basic subsystems. As a metallic object, they are heavy enough to experience little air resistance and lack the bouyancy to float in water.</p>
+<pre>void(entity e, float mass) Gyro_ObjectMacro_Grenade =
+{
+	Gyro_Object_Activate(e, mass);
+	Gyro_Object_SetBouyancy(e, mass*0.6);
+	Gyro_Object_SetResistance(e, mass*0.4);
+	Gyro_Object_SetAerodynamics(e, mass*0.8);
+};</pre>
+
+<p><strong>Gibs</strong><br />
+Unlike grenades, gibs are able to float in water. To create the impression of waves on the surface, gibs are given a small degree of turbulence.</p>
+<pre>void(entity e, float mass) Gyro_ObjectMacro_Gib =
+{
+	Gyro_Object_Activate(e, mass);
+	Gyro_Object_SetBouyancy(e, mass*1.2);
+	Gyro_Object_SetResistance(e, mass*0.6);
+	Gyro_Object_SetAerodynamics(e, mass*0.6);
+	Gyro_Object_SetTurbulence(e, mass*0.24, 0.95);
+	Gyro_Object_SetGlobalTurb(e, mass*0.16, 0.95);
+};</pre>
+
+<p><strong>Rockets</strong><br />
+Rockets are propelled by a constant, powerful thrust. They are mildly bouyant, which makes them appear to arc upwards when submerged. To ensure they point in correct direction while under water or when deflected by a force, they are also given a high aerodynamic level.</p>
+<pre>void(entity e, float mass, float thrustpower) Gyro_ObjectMacro_Rocket =
+{
+	Gyro_Object_Activate(e, mass);
+	Gyro_Object_SetBouyancy(e, mass*0.8);
+	Gyro_Object_SetResistanceMod(e, mass, 0.02, 1.0, 1.2, 1.4);
+	Gyro_Object_SetAerodynamics(e, mass*8.0);
+	Gyro_Object_SetThrust(e, thrustpower);
+};</pre>
+
+<p><strong>Drunk Missile</strong><br />
+A classic drunk missile launcher fires several missiles which appear to randomly duck and weave, as if intoxicated. Gyro is able to power this behaviour by applying angular turbulence to a regular dumb-fire missile.</p>
+<pre>void(entity e, float mass, float thrustpower) Gyro_ObjectMacro_DrunkMissile =
+{
+	Gyro_Object_Activate(e, mass);
+	Gyro_Object_SetBouyancy(e, mass*0.8);
+	Gyro_Object_SetResistance(e, mass*1.2);
+	Gyro_Object_SetAerodynamics(e, mass*8.0);
+	Gyro_Object_SetAngleTurb(e, mass*40.0);
+	Gyro_Object_SetThrust(e, thrustpower);
+};</pre></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/info_physicsmacros.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:04 GMT -->
+</html>

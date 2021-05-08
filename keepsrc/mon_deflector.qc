@@ -66,6 +66,8 @@ void() deflect_shieldon =
 	// Visually show resistance and reduce damage taken
 	self.resist_shells = self.resist_nails = 0.25;
 	self.resist_rockets = 0.25; self.resist_cells = 0.75;
+	self.resist_plasma = 0.75;
+	self.resist_multi_rockets = 0.25;
 };
 
 //----------------------------------------------------------------------

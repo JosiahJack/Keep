@@ -148,8 +148,6 @@ void(vector org, float radius, vector lightcolours, float style, string cubemapn
 // If is2d, the polygon will be drawn as soon as the EndPolygon
 // call is made, rather than waiting for renderscene. This allows
 // complex 2d effects.
-// FTE = void(string texturename, optional float flags, optional float is2d) R_BeginPolygon = #306;
-void(string texturename, float flag, ...) R_BeginPolygon = #306;
 // Specifies a polygon vertex with its various properties
 void(vector org, vector texcoords, vector rgb, float alpha) R_PolygonVertex = #307;
 // Ends the current polygon. At least 3 verticies must have been 
@@ -266,7 +264,7 @@ float(float framenum) getinputstate = #345;
 // Perform the engine's standard player movement prediction upon
 // the given entity using the input_* globals to describe movement
 // this may or may not take a player ent
-void(...) runstandardplayerphysics = #347;
+// void(...) runstandardplayerphysics = #347;
 // Sets the position of the view, as far as the audio subsystem is
 // concerned. This should be called once per CSQC_UpdateView as it
 // will otherwise revert to default. For reverbtype,

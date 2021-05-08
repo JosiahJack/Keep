@@ -371,7 +371,7 @@ void(entity inflictor, entity attacker, float take)	turret_pain = {
 	if (self.pain_finished > time) return;
 	self.pain_finished = time + 1;
 	sound (self, CHAN_VOICE, "turret/beamchrg.wav", 1, ATTN_NORM);
-	ThrowIt ("progs/custents/turetgib.mdl", 0 - damage,GIBx_GIB);
+	ThrowGib(11,1);
 };
 
 void() turret_die = {
@@ -391,11 +391,8 @@ void() turret_die = {
 	setmodel (dedtur, "progs/custents/dedturet.mdl");
 	setsize (self, '-10 -10 -3', '10 10 12');
 	dedtur.skin = self.skin;
-	ThrowIt ("progs/custents/h_turret.mdl", self.health,GIBx_GIB);
-	ThrowIt ("progs/custents/turetgib.mdl", self.health,GIBx_GIB);
-	ThrowIt ("progs/custents/turetgib.mdl", self.health,GIBx_GIB);
-	ThrowIt ("progs/custents/turetgib.mdl", self.health,GIBx_GIB);
-	ThrowIt ("progs/custents/turetgib.mdl", self.health,GIBx_GIB);
+	ThrowGib(25,1);
+	ThrowGib(11,4);
 };
 
 void() turret_use= {
@@ -457,9 +454,12 @@ void() monster_turret= {
 
 	self.mdl = "progs/custents/turret.mdl";
 	precache_model ("progs/custents/turret.mdl");
+	self.headmdl = "progs/custents/h_turret.mdl";
 	precache_model ("progs/custents/h_turret.mdl");
 	precache_model ("progs/custents/dedturet.mdl");
 	precache_model ("progs/custents/turetgib.mdl");
+
+	self.gib1mdl = "progs/custents/turetgib.mdl";
 
 	precache_sound ("turret/beamchrg.wav");
 	precache_sound ("turret/beammode.wav");
@@ -505,7 +505,7 @@ void() monster_turret= {
 	self.th_die = turret_die;
 	self.th_missile = turret_fire1;
 
-	total_monsters = total_monsters + 1;
+	AddToTotals(self);
 
 	self.takedamage = DAMAGE_AIM;
     self.hittype    = HIT_METAL;

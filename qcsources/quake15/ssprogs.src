@@ -1,0 +1,204 @@
+../progs.dat
+
+defs.qc
+defs_custom.qc
+
+//frikbot
+
+waypoints/map_dm1.qc
+waypoints/map_dm2.qc
+waypoints/map_dm3.qc
+waypoints/map_dm4.qc
+waypoints/map_dm5.qc
+waypoints/map_dm6.qc
+waypoints/map_ctf1.qc
+waypoints/map_ctf5.qc
+waypoints/map_ctf8.qc
+waypoints/map_ctf2m1.qc
+
+
+frikbot/bot.qc
+frikbot/bot_way.qc
+frikbot/bot_fight.qc 
+frikbot/bot_ai.qc
+frikbot/bot_misc.qc
+frikbot/bot_phys.qc
+frikbot/bot_move.qc
+frikbot/bot_ed.qc
+
+//SMC Physics
+gyro/gyro_main.qc	// added  Gyro 2.1a
+gyro/gyro_physics.qc	// added  Gyro 2.1a
+gyro/gyro_forces.qc	// added  Gyro 2.1a
+gyro/gyro_user.qc	// added  Gyro 2.1a
+gyro_smc_settings.qc	// added  Gyro settings for small mod compilation
+
+//SMC Stuff
+dpextensions.qc		// added
+check.qc		// added  bbox check algorythm
+custom_effects.qc	// added  custom effects
+flashlight.qc		// added
+flashlight_cubemap.qc	// added
+clone_monsters.qc	// added  function to multiply monsters in maps
+face.qc			// added  for evil texture effect
+
+//gamemodes
+gamemodes/ctf.qc
+
+subs.qc
+//subs_soc.qc
+subs_soc_new.qc
+settings_soc.qc
+projectiles_soc.qc
+client_debuff_soc.qc
+particle_emitters.qc
+gib_extra.qc
+scripting_extra.qc
+
+hook.qc
+
+sprite_emitter.qc
+estate.qc
+breakable.qc
+fight.qc
+ai.qc
+combat.qc
+items.qc
+
+flesh_splat.qc		// added flesh-splat effect when shooting monsters (by MaNiAc + Nahuel)
+weapon_effects.qc
+env_effects.qc
+
+weapons.qc
+world.qc
+gibs_precache.qc
+splash.qc		// added splash effect for liquids
+client.qc
+KickGibs.qc		// added gib effects
+player.qc
+monsters.qc
+//ai_checkattack_soc.qc
+revive.qc
+lg_fatality.qc
+
+
+
+part_manage.qc
+part_generate.qc
+part_emitter.qc
+
+monsters_soc.qc		//AD monster compatibility
+
+ai_subs_soc.qc
+triggers_states_soc.qc
+sounds_soc.qc
+misc_soc.qc
+doors.qc
+buttons.qc
+triggers.qc
+triggers_soc.qc
+plats.qc
+misc.qc
+skull.qc         	// added skull animation (random end of "Vengeance of the deceased" death animation)
+grimrock_trinity.qc	// added "Legend of Grimrock + Blade-Trinity"  death animation
+spider.qc		// added new walking monster type
+afrit.qc		// added new flying monster type
+hydra.qc		// added new swimming monster type
+warlord.qc		// added new walking monster type
+torment.qc		// added new walking monster type
+carnivean.qc		// added new walking monster type
+yakman.qc		// added new walking monster type
+reiver.qc		// added new flying monster type
+voreling.qc		// added new enemy for vore boss
+ogre.qc
+demon.qc
+shambler.qc
+knight.qc
+//soldier_WIPAI.qc
+soldier.qc
+wizard.qc
+dog.qc
+zombie.qc
+boss.qc
+//intershamb.qc
+hiprot.qc
+buzzsaw.qc
+pendulum.qc
+traps_soc.qc
+//traps_lightning.qc
+//traps_pendulum.qc
+//traps_sawblade.qc
+
+//pox extras
+/*
+extras_subs.qc
+extras_train.qc
+extras_buttons.qc
+extras_water.qc
+extras_triggers.qc*/
+
+//mon_dfury.qc
+//mon_lostsoul.qc
+//mon_bossnour.qc
+
+slimeboss.qc
+tarbaby.qc		// registered
+hknight.qc		// registered
+fish.qc			// registered
+shalrath.qc		// registered
+enforcer.qc		// registered
+oldone.qc		// registered
+oldone_tentacle.qc
+
+shalrath_boss.qc
+
+ghost.qc         	// added "Ancient ghosts of the fallen" death animation
+soul.qc			// added "Relieved souls of the enslaved" death animation
+lightbeam.qc		// light beam spawn addon (by Nahuel)
+
+//EXPANSION compatibility code
+
+//Hipnotic
+hipitems.qc
+HIPSCRGE.qc
+hipcount.qc
+hiprubbl.qc
+hip_expl.qc
+hip_brk.qc
+
+//Rogue
+
+new_ai.qc
+eel.qc
+invis_sw.qc
+//newitems.qc
+newplats.qc
+newmisc.qc
+elevatr.qc
+lightnin.qc
+wrath.qc
+//shield.qc
+//lava_wpn.qc
+//mult_wpn.qc
+//dragon.qc
+s_wrath.qc
+//random.qc
+//earthq.qc
+lavaman.qc
+//sphere.qc
+//dmatch.qc
+//morph.qc
+
+//Custom enemies
+dfury.qc
+dfury_boss.qc
+mon_freddie.qc
+mon_jim.qc
+knight_zombie.qc
+
+//general
+debug.qc
+
+//ending.qc
+//mummy.qc
+//timemach.qc

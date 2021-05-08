@@ -240,9 +240,7 @@ void() reiver_fireball_death = {
 
 void() reiver_fireball_touch = {
 	if (other == self.owner) return;		// don't explode on owner
-
-	// if (((other.model == "progs/spike.mdl") || (other.model == "progs/s_spike.mdl") || (other.model == "progs/grenade.mdl") || (other.model == "progs/missile.mdl")))
-		// return;		// don't explode on projectiles
+	if (other.classgroup == CG_PROJALL) return;		// don't explode on projectiles
 
 	if (other.takedamage == DAMAGE_AIM) {
 		spawn_touchblood (self, other,20);
@@ -995,6 +993,12 @@ void () reiver_shield_think = {
 		// Always reset Ammo Resistance to be consistent
 		self.resist_shells = self.resist_nails = 0.75;
 		self.resist_rockets = self.resist_cells = 0.75;
+		self.resist_plasma = 0.75;
+		self.resist_multi_rockets = 0.75;
+		// Lava nails pierce armor remember :)
+		self.resist_plasma = 0.75;
+		self.resist_bolts = 0.75;
+		self.resist_poison = 0.75;
 		self.reflectnails = TRUE;		// Reflect nail projectiles
 	} else {
 		self.alpha = 0.0001;				// hide multi_shield
@@ -1004,6 +1008,11 @@ void () reiver_shield_think = {
 		// Always reset Ammo Resistance to be consistent
 		self.resist_shells = self.resist_nails = 0;
 		self.resist_rockets = self.resist_cells = 0;
+		self.resist_plasma = 0;
+		self.resist_multi_rockets = 0;
+		self.resist_plasma = 0;
+		self.resist_bolts = 0;
+		self.resist_poison = 0;
 	}
 
 	// spawn multi_shield randomly when hunting an enemy (even when not got shot)

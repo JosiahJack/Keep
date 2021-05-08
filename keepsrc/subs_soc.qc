@@ -1,8 +1,8 @@
-//----------------------------------------------------------------------
+float(vector spot) InSolid;
+float(vector spot) InSky;
+
 // Make sure vector range is positive and integers only (Z exception)
-//----------------------------------------------------------------------
-vector(vector mrange) CheckRangeVector =
-{
+vector(vector mrange) CheckRangeVector = {
 	local vector retvec;
 	retvec_x = rint(fabs(mrange_x));
 	retvec_y = rint(fabs(mrange_y));
@@ -10,8 +10,7 @@ vector(vector mrange) CheckRangeVector =
 	return retvec;
 };
 
-vector(entity targ) bbox_volume =
-{
+vector(entity targ) bbox_volume = {
 	local vector retvec;
 	retvec_x = fabs(targ.bbmins_x) + fabs(targ.bbmaxs_x);
 	retvec_y = fabs(targ.bbmins_y) + fabs(targ.bbmaxs_y);
@@ -19,13 +18,9 @@ vector(entity targ) bbox_volume =
 	return retvec;
 };
 
-//======================================================================
 // Trigger/use all entities that match the supplied targetname
 // self is switched around so target use function works correctly
-//
-//----------------------------------------------------------------------
-void(string target_strs, entity activator_ent) trigger_strs =
-{
+void(string target_strs, entity activator_ent) trigger_strs = {
 	local entity tself, tother, tactivator, ent_list;
 
 	// Some entities constantly use this function (<0.1s trigger)
@@ -105,7 +100,6 @@ void(entity target_ent, entity activator_ent) trigger_ent =
 	}
 };
 
-//======================================================================
 // Check if the entity has solid surface below 
 // There is no entity type checks, can be any entity in theory!
 // First check is checkbottom for completel bounding box coverage
@@ -117,10 +111,8 @@ void(entity target_ent, entity activator_ent) trigger_ent =
 // monsters.qc  - monster_deadbody_check
 // ai_gibs.qc   - CheckFloorGib
 // items.qc     - item_thinkloop
-//
-//----------------------------------------------------------------------
-void(entity source, float floor_dist) ent_floorcheck =
-{
+
+void(entity source, float floor_dist) ent_floorcheck = {
 	local vector trace_pos1;
 	local float trace_dist;
 	
@@ -163,25 +155,22 @@ void(entity source, float floor_dist) ent_floorcheck =
 // - Use new FTE string functions and surface check for Darkplaces engine
 //
 //----------------------------------------------------------------------
-float(vector targ_origin) check_skycontent =
-{
+float(vector targ_origin) check_skycontent = {
 	local float surfnum;
 	local string texturename;
 
 	// projectile owner exeception (bad FPS for large maps)
 	if (self.owner.proj_noskycheck == TRUE) return FALSE;
-
-	// Does the engine supports extended surface checks?
-	// This functionality can be bad for FPS with large maps
-	// 2 ways to disabled this, worldspawn key or individually
 	else if (ext_dpsurf) {
+		// Does the engine supports extended surface checks?
+		// This functionality can be bad for FPS with large maps
+		// 2 ways to disabled this, worldspawn key or individually
 		surfnum = getsurfacenearpoint(world, targ_origin);
 		if (surfnum >= 0) {
 			texturename = getsurfacetexture(world, surfnum);
 			if (strncasecmp(texturename, "SKY", 3) == 0) return TRUE;
 		}
-	}
-	else {
+	} else {
 		// Original method for checking sky content (Fitz engines)
 		if (pointcontents(targ_origin) == CONTENT_SKY) return TRUE;
 	}
@@ -189,8 +178,7 @@ float(vector targ_origin) check_skycontent =
 };
 
 //----------------------------------------------------------------------
-float(vector bborg, float bbx, float bby, float bbz) check_skyvector =
-{
+float(vector bborg, float bbx, float bby, float bbz) check_skyvector = {
 	local vector skyorg;
 	skyorg_x = bborg_x + bbx;
 	skyorg_y = bborg_y + bby;
@@ -223,27 +211,18 @@ float(vector bborg, float bbx, float bby, float bbz) check_skyvector =
 	return FALSE;
 };*/
 
-//----------------------------------------------------------------------
 // Check point content for SOLID or SKY problems
-//----------------------------------------------------------------------
-float(vector pc_org) entity_pcontent =
-{
-	local float pcontent;
-	pcontent = pointcontents(pc_org);
-	if (pcontent == CONTENT_SOLID) return TRUE;
-	if (check_skycontent(pc_org)) return TRUE;
+float(vector pc_org) entity_pcontent = {
+	if (InSolid(pc_org)) return TRUE;
+	if (InSky(pc_org)) return TRUE;
 	return FALSE;
-}
+};
 
-//======================================================================
 // Updates totals on the HUD (checks for client to exist)
 // - Specify which total to update using constant
 // - Uses MSG_ONE because it is more reliable across many clients
 // - Other client updates (SVC_KILLEDMONSTER, SVC_FOUNDSECRET)
-// 
-//----------------------------------------------------------------------
-void(float hud_item) update_hud_totals =
-{
+void(float hud_item) update_hud_totals = {
 	// Has the client player been setup yet?
 	if (client_ent && client_ent.flags & FL_CLIENT) {
 
@@ -264,12 +243,8 @@ void(float hud_item) update_hud_totals =
 	}
 };
 
-//======================================================================
 // Reduce any entity down to a non-interactive empty marker
-//
-//----------------------------------------------------------------------
-void(entity targ) entity_stop =
-{
+void(entity targ) entity_stop = {
 	if (targ == world) return;			// Targ is wrong
 	targ.use = targ.touch = SUB_Null;	// No more touchy
 	targ.think = SUB_Null;				// No more thinking/animation
@@ -286,34 +261,24 @@ void(entity targ) entity_stop =
 	targ.attack_finished = time + LARGE_TIMER;	// Block all functions
 };
 
-//======================================================================
 // Reduce any entity down to a non-interactive empty marker
-//
-//----------------------------------------------------------------------
-void(entity targ) entity_hide =
-{
+void(entity targ) entity_hide = {
 	if (targ == world) return;			// Targ is wrong
 	entity_stop(targ);					// No world interaction
 	targ.modelindex = 0;				// Make sure no model
 	setmodel (targ, "");				// invisible
 };
 
-
-//----------------------------------------------------------------------
-void(entity targ, float removetime) entity_remove =
-{
+void(entity targ, float removetime) entity_remove = {
 	if (targ == world) return;
 	entity_hide(targ);
 	targ.think = SUB_Remove;
 	targ.nextthink = time + removetime;
 };
 
-//======================================================================
 // Show where broken monster/items are located (developer only)
 // SPNMARK_YELLOW, SPNMARK_BLUE, SPNMARK_GREEN, SPNMAKR_RED
-//----------------------------------------------------------------------
-void(vector marker_org, float marker_type) spawn_marker =
-{
+void(vector marker_org, float marker_type) spawn_marker = {
 	local entity marker;
 	
 	// Exceptions
@@ -337,8 +302,7 @@ void(vector marker_org, float marker_type) spawn_marker =
 };
 
 //----------------------------------------------------------------------
-void(vector marker_org, vector marker_ang, float marker_type) spawn_arrow =
-{
+void(vector marker_org, vector marker_ang, float marker_type) spawn_arrow = {
 	local entity marker;
 	
 	// Exceptions

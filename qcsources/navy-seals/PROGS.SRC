@@ -1,0 +1,93 @@
+..\progs.dat
+
+// generic
+defs.qc
+
+// Navy SEALs
+mydefs.qc
+
+// SEAL sQad - bot
+waypoint.hqc         // waypoint defs
+squad.hqc            // squad bot defs
+rankings.qc          // frag scoring, imported, alan.kivlin@cybersurf.co.uk
+menu.qc              // menu system
+
+// generic
+subs.qc
+fight.qc
+ai.qc                // bot modified: FindTarget, FoundTarget
+combat.qc            // bot modified: T_Damage
+                     // NS2 modified: flash grenade functions
+items.qc             // modified: health_touch, armor_touch, weapon_touch,
+                     //           ammo_touch, BackpackTouch
+                     // NS2 modified: bug found!
+weapons.qc           // modified: W_precache, ImpulseCommands
+
+// Navy SEALs
+zoom.qc
+eject.qc
+moss.qc
+mp5.qc
+mp5sd.qc
+mk23.qc
+m16.qc               // modified: grenade launch
+raw.qc
+psg1.qc
+barrett.qc
+m60.qc
+kbar.qc
+hgren.qc             // modified: grenade launch
+ashot.qc
+
+// generic
+world.qc             // modified: worldspawn
+client.qc            // modified: ClientConnect, ClientDisconnect,
+                     //           ClientObituary
+                     //           SpawnLocation
+player.qc
+monsters.qc          // modified: monster_use
+doors.qc             // modified: door_touch, secret_door_touch
+buttons.qc           // modified: button_touch
+triggers.qc          // modified: multi_trigger, multi_touch, counter_use,
+                     //           tdeath_touch, teleport_touch,
+                     //           trigger_skill_touch,
+                     //           trigger_onlyregistered_touch,
+                     //           trigger_push_touch
+plats.qc             // modified: plat_center_touch, plat_outside_touch
+misc.qc
+ogre.qc
+demon.qc
+shambler.qc
+knight.qc
+//soldier.qc
+wizard.qc
+dog.qc
+zombie.qc
+boss.qc
+tarbaby.qc		// registered
+hknight.qc		// registered
+fish.qc              	// registered
+shalrath.qc		// registered
+//enforcer.qc		// registered
+oldone.qc		// registered
+
+// Navy SEALs
+guard.qc
+pdude.qc
+
+
+// SEAL sQad - bot
+botmove.qc           // norse_move code, imported, legion@keg.zymurgy.org
+
+waypoint.qc          // waypoint implementation + map waypoints
+
+squad.qc             // squad implementation (state machine)
+squad_ai.qc          // squad member AI (hi level)
+squad_an.qc          // squad member animations
+squad_gd.qc          // squad animations for guard.mdl
+squad_bh.qc          // squad member behavior (movement)
+squad_fi.qc          // squad member firing
+squad_gm.qc          // squad bots game settings
+squad_tm.qc          // squad team implementation + AI
+
+

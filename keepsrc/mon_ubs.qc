@@ -1242,7 +1242,7 @@ void () monster_ubs = {
 	setup_passivestate_boss(self);
 
 	self.touch = monster_touch;	// 1998-09-16 Sliding/not-jumping on monsters/boxes/players fix by Maddes/Kryten
-	total_monsters = total_monsters + 1;
+	AddToTotals(self);
 
 	self.use = ubs_awake;
 	if (coop > 0) self.use ();
@@ -1287,7 +1287,7 @@ void () spawnwiz = {
 		spawn_tfog (newwiz.origin);
 		newwiz.flags = newwiz.flags | FL_FLY;
 		newwiz.flags = newwiz.flags | FL_MONSTER;
-		total_monsters = total_monsters + 1;
+		AddToTotals(self);
 		update_monster ();
 	}
 	SUB_Remove ();

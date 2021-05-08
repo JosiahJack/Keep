@@ -199,9 +199,9 @@ void() info_book_fade =
 	// and the client does NOT have any powerups active
 	if (!self.enemy.cshift_upd && (self.enemy.items & ALL_ITEMSARTIFACTS == 0)&& (self.enemy.items2 & ALL_ITEMS2ARTIFACTS == 0) && (self.enemy.moditems & ALL_MODITEMSARTIFACTS == 0)) {	
 		// Change screen background density (makes text easier to read)
-		stuffcmd(self.enemy, "v_cshift 0 0 0 ");
-		stuffcmd(self.enemy, ftos(self.lip));
-		stuffcmd(self.enemy, "\n");
+		Safe_stuffcmd(self.enemy, "v_cshift 0 0 0 ");
+		Safe_stuffcmd(self.enemy, ftos(self.lip));
+		Safe_stuffcmd(self.enemy, "\n");
 	}
 };
 
@@ -376,9 +376,7 @@ void() info_book_on =
 	}
 };
 
-//----------------------------------------------------------------------
-void() info_book_off = 
-{
+void() info_book_off =  {
 	self.estate = ESTATE_OFF;
 	self.solid = SOLID_NOT;
 	setmodel (self, "");
@@ -391,7 +389,7 @@ void() info_book_off =
 		if (self.attachment.lip != 0) {
 			self.attachment.lip = 0;
 			if (!self.enemy.cshift_upd && (self.enemy.items & ALL_ITEMSARTIFACTS == 0) && (self.enemy.items2 & ALL_ITEMS2ARTIFACTS == 0) && (self.enemy.moditems & ALL_MODITEMSARTIFACTS == 0)) {	
-				stuffcmd(self.enemy, "v_cshift 0 0 0 0\n");
+				Safe_stuffcmd(self.enemy, "v_cshift 0 0 0 0\n");
 			}
 		}
 	}
@@ -403,9 +401,7 @@ void() info_book_off =
 	}
 };
 
-//----------------------------------------------------------------------
-void() info_book_setup =
-{
+void() info_book_setup = {
 	// Setup book fade controller
 	self.attachment = spawn();
 	self.attachment.owner = self;

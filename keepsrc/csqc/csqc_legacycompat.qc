@@ -1,10 +1,7 @@
 //This file isn't needed for the simple-csqc API.
 //However, old versions of FTE, DP, or RMQe don't support the simple-csqc API, so this provides entry points that match the older API so that these older versions can use our new hud too.
-
-static float dp_fuckedsizes;	//true for DP, false for FTE
+static float dp_screwysizes;	//true for DP, false for FTE
 static float sb_showscores;		//magic name in DP
-
-
 
 //to avoid large extensions files, these are the minimum extra things needed for both dp+fte.
 void() clearscene = #300;
@@ -18,12 +15,12 @@ const float VF_SIZE = 4;
 const float VF_DRAWENGINESBAR = 20;
 const float VF_DRAWCROSSHAIR = 21;
 
-
-
-void(float vwidth, float vheight, float notmenu) CSQC_UpdateView =
-{
+void(float vwidth, float vheight, float notmenu) CSQC_UpdateView = {
+	local float screenshot_mode;
 	vector ssize = [vwidth, vheight];
 	clearscene();
+	screenshot_mode = FALSE;
+	if (cvar("r_drawviewmodel") == 0) screenshot_mode = TRUE;
 	addentities(MASK_ENGINE|MASK_VIEWMODEL);
 	setproperty(VF_MIN, '0 0');		//otherwise DP bugs out if viewsize < 100
 	setproperty(VF_SIZE, ssize);	//otherwise DP bugs out if viewsize < 100
@@ -31,23 +28,27 @@ void(float vwidth, float vheight, float notmenu) CSQC_UpdateView =
 	setproperty(VF_DRAWCROSSHAIR, TRUE);
 	renderscene();
 
-	if (dp_fuckedsizes)
-	{
+	if (dp_screwysizes) {
 		//Yes, we got told the size to use.
 		//but apparently that's not enough.
 		//reading these cvars means that we're screwed if either is set to 0 (to mean 'maintain aspect')
-		//ideally one of these will ALWAYS be 0, so yeah, expect fucked aspects in DP. Its been like this for YEARS.
+		//ideally one of these will ALWAYS be 0, so yeah, expect screwy aspects in DP. Its been like this for YEARS.
 		ssize_x = cvar("vid_conwidth");
 		ssize_y = cvar("vid_conheight");
 	}
 
-	if (!intermission)
-		intermission_time = time;	//make a guess at the intermission time...
+	if (!intermission) intermission_time = time;	//make a guess at the intermission time...
 	deathmatch = stof(serverkey("deathmatch"));
 	coop = !deathmatch && maxclients > 1;
+
+	// HUD
+	if (!screenshot_mode) {
+		CSQC_DrawHud(ssize, sb_showscores);
+		CSQC_DrawScores(ssize, sb_showscores);
+	}
 	
-	CSQC_DrawHud(ssize, sb_showscores);
-	CSQC_DrawScores(ssize, sb_showscores);
+	// Other Stuff
+	// if (checkbuiltin(setup_reverb)) DSP_UpdateListener();
 };
 
 //The following functions are just stubs, because DP INSISTS that they exist.
@@ -65,15 +66,23 @@ __weak void(float apilevel, string enginename, float engineversion) CSQC_Init =
 {
 }
 
-//we need to wrap this because its the easiest way to see if its a shitty old engine.
-//and if its shitty then we can reliably assume that its DP.
-__wrap void(float apilevel, string enginename, float engineversion) CSQC_Init =
-{
-	if (!apilevel && !enginename && !engineversion)
-	{
-		dp_fuckedsizes = TRUE;	//shitty engine
-		dprint("Assuming DP fuckage\n");
+//we need to wrap this because its the easiest way to see if its a crappy old engine.
+//and if its crappy then we can reliably assume that its DP.
+__wrap void(float apilevel, string enginename, float engineversion) CSQC_Init = {
+	if (!apilevel && !enginename && !engineversion) {
+		dp_screwysizes = TRUE;	//crappy engine
+		dprint("Assuming DP Screwy Hud Sizes\n");
 	}
+
+// #pragma target fte
+	// if (checkbuiltin(setup_reverb)) {
+		// pSeat = &g_seats[0];
+		// DSP_Init();
+	// }
+// #pragma target id
+	dprint("enginename: [ ");
+	dprint(enginename);
+	dprint(" ]\n");
 	prior(apilevel, enginename, engineversion);
 	
 	registercommand("+showscores");

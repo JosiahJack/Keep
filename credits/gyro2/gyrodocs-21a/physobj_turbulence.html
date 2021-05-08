@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/physobj_turbulence.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+<head>
+	<title>GyroDocs - Turbulence</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><a href="physobj.html" class="item">Physics Objects</a><div class="layout_submenu"><a href="physobj_aerodynamics.html" class="subitem">- Aerodynamics</a><a href="physobj_angleturb.html" class="subitem">- Angular Turbulence</a><a href="physobj_bouyancy.html" class="subitem">- Bouyancy</a><a href="physobj_hover.html" class="subitem">- Hovering</a><a href="physobj_resistance.html" class="subitem">- Motion Resistance</a><a href="physobj_thrust.html" class="subitem">- Thrust</a><a href="physobj_turbulence.html" class="subitem subitem_selected">- Turbulence</a></div><a href="forces.html" class="item">Force Entities</a><a href="advanced.html" class="item">Advanced Usage</a><a href="info.html" class="item">Further Information</a></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Turbulence</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p><strong>Gyro_Object_SetTurbulence(entity object, float turbulence, float smoothness)</strong><br />
+The turbulence subsystem will constantly apply randomised motion to physics objects. The strength of the turbulence is relative to the object's mass and determines how much velocity to add, multiplied by the power constant (rather than by gravity). The smoothness argument is new to Gyro 2.1 and permits smaller, more subtle shifts in velocity than were possible before. It should be given as a float between <code>0.0</code> and <code>1.0</code>, where higher values provide smoother velocity changes. The final turbulence level is then scaled per-environment by the <code>GYRO_TURBULENCEMOD_***</code> constants, as found <a href="configuring.html">here</a>.</p>
+
+<p><strong>Gyro_Object_SetTurbulenceMod(entity object, float turbulence, float smoothness, float airturb, float waterturb, float slimeturb, float lavaturb)</strong><br />
+This declaration encapsulates all the functionality of the above but also accepts four extra float arguments. These arguments can be used to set the environment multipliers on a per-object basis rather than using the default <code>GYRO_TURBULENCEMOD_***</code> constants.</p>
+
+<p><strong>Gyro_Object_RemoveTurbulence(entity object)</strong><br />
+Removes all turbluence properties from a specified object.</p>
+
+<div class="hr"></div>
+
+<p><strong>Gyro_Object_SetGlobalTurb(entity object, float turbulence, float smoothness)</strong><br />
+Global turbulence operates in exactly the same way as the standard turbulence above, except the random motion is shared between all objects. This is especially useful for objects floating on the surface of water, as they will move and sway together, creating a more convincing illusion of waves and ripples. The two turbulence systems are not mutually exclusive and should ideally be used together for best results.</p>
+
+<p><strong>Gyro_Object_SetGlobalTurbMod(entity object, float turbulence, float smoothness, float airturb, float waterturb, float slimeturb, float lavaturb)</strong><br />
+Global turbulence implementation of the above <code>Gyro_Object_SetTurbulenceMod()</code> function.</p>
+
+<p><strong>Gyro_Object_RemoveTurbulence(entity object)</strong><br />
+Removes all global turbluence properties from a specified object.</p>
+
+<p><i>Note: The presence of two turbulence subsystems creates a lot of unneccessary code. Later versions of Gyro may combine the two into a single subsystem, assuming a suitable way of doing it is found.</i></p></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/physobj_turbulence.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+</html>

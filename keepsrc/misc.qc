@@ -375,11 +375,15 @@ void() misc_lavaball_touch =
 			// Default = pain!
 			else T_Damage (other, self, self, self.dmg, DAMARMOR);
 		} else {
-			if (other.flags & FL_CLIENT && other.moditems & IT_ARTLAVASHIELD)
+			if (other.flags & FL_CLIENT && ((other.moditems & IT_ARTLAVASHIELD) || other.resist_fire >= 1)) {
 				// Play lava shield protection sound
 				sound (other, CHAN_ITEM, SOUND_ARTLSHIELD3, 0.5, ATTN_NORM);
-			// Default = pain!
-			else T_Damage (other, self, self, self.dmg, DAMARMOR);
+
+			} else {
+				// Default = pain!
+				if (other.resist_fire > 0) self.dmg = self.dmg * (1-other.resist_fire);
+				T_Damage (other, self, self, self.dmg, DAMARMOR);
+			}
 		}
 	}
 	misc_lavaball_reset();

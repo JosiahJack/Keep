@@ -493,7 +493,7 @@ void() hknight2_homing_touch = {
 		remove(self);
 	}
 
-	if (!((other.classgroup == CG_PROJNAILS) || (other.classgroup == CG_PROJROCKETS) || (other.classgroup == CG_PROJGRENADES))) {
+	if (!IsProjectile(other)) {
 		sound(self, CHAN_WEAPON, "warlord/homing_touch.wav", 1, ATTN_NORM);	 // To abort the homing fly-sound. Use same channel !!!!
 		remove(self);
 	}

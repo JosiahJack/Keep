@@ -334,8 +334,8 @@ void() mammoth_shieldoff =
 	self.resist_shells = self.resist_nails = 0;
 	// Phase 3 has lower resistance, outer shell broken
 	if (self.style == MM_PHASE3)
-		{ self.resist_rockets = self.resist_cells = 0.5; }
-	else { self.resist_rockets = self.resist_cells = 0.75; }
+		{ self.resist_rockets = self.resist_cells = self.resist_multi_rockets = self.resist_plasma = 0.5; }
+	else { self.resist_rockets = self.resist_cells = self.resist_multi_rockets = self.resist_plasma = 0.75; }
 	sound (self, CHAN_FEET, "mammoth/shield_off.wav", 1, ATTN_NORM);
 };
 
@@ -2209,7 +2209,7 @@ void() monster_mammoth = {
 		return;
 	}
 
-	total_monsters = total_monsters + 1;
+	AddToTotals(self);
 	self.think = mammoth_start;
 	self.nextthink = time + 0.1;
 };

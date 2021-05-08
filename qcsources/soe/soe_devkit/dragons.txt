@@ -1,0 +1,157 @@
+DRAGON INFO:
+
+
+   First of all, "monster_dragon" figures out what kind of dragon
+   you want based on the skin value you give it then reassigns
+   the classname to "monster_reddragon", "monster_bluedragon",
+   etc. and finally calls the appropriate function to create
+   the dragon.
+
+   The size for each large dragon is from '-48 -48 -24' to '48 48 48'.
+   The size for each small dragon is from '-16 -16 -24' to '16 16 24'.
+
+   To implement many of the features the dragons have,  I
+   used extra spawnflags and several edict fields defined
+   in defs.qc.  Below are detailed descriptions of what
+   spawnflags and edict fields are used and how they are used.
+
+---------- Spawnflags used ----------
+        AMBUSH - bit 1
+   This is standard for most if not all monsters.  Monsters
+   with the ambush flag wake up only when it actually sees a
+   client (read player).
+
+        PACIFIST - bit 2
+   With this flag, a dragon will wake up only when it is
+   injured or triggered by a client.  What this means it
+   that even if the dragon sees you, that alone will not
+   wake it up.  Because of this, pacifist will override
+   the effects of the ambush flag.
+
+   *Important note*:  Once a nightshade (and only a nightshade)
+    wakes up, the pacifist flag is removed.  If the nightshade
+    had the ambush flag as well, that flag remains untouched.
+
+        DORMANT/STEALTH - bit 4
+   For all dragons except the nightshade, the dormant spawnflag
+   will cause the dragon to start the level asleep.  A sleeping
+   dragon makes no noise whatsoever (because it is not flapping
+   its wings).  A dragon that is sleeping cannot see clients.
+   However, it can wake up by being alerted by other monsters,
+   if you stray within melee range, or if it gets injured or
+   triggered.
+
+   You can combine the other spawnflags to produce deeper states
+   of sleep.  A dragon with the spawnflags ambush and dormant
+   will wake only if you stray too close, or it gets injured or
+   triggered.  A dragon with pacifist and dormant will wake up
+   only when injured or triggered.
+
+   Once the dragon wakes up, the dormant flag is removed
+   permanently.  It will never go back to sleep again.
+
+   For the nightshade, dormant becomes stealth and it works
+   differently.  With stealth, the nightshade is invisible
+   and invulnerable while it is inactive.  However, it can
+   hover still or move around, and it can see clients as well
+   and wake up (unless pacifist is set).  If the nightshade
+   is stationary, it is completely silent.  If it is moving
+   while in stealth mode, you may hear eerie noises if you
+   listen carefully.  Once the nightshade wakes up, it will
+   materialize to attack.  Unlike other dragons, the dormant/
+   stealth flag is not removed.  If the target is killed, the
+   nightshade will phase out into thin air and remain cloaked
+   until it finds another target.
+
+   NOTE:  If you create a nightshade with both spawnflags
+   'pacifist' and 'dormant' and it does not have a targetname,
+   the nightshade is automatically converted into a 'misc_ghost'.
+
+        NOPAIN - bit 8
+   With this flag, the dragon can die only if it suffers
+   damage greater than or equal to its health in a single
+   frame.  Anything less is ignored.
+
+        CRANKED - bit 16
+   A dragon with this flag has greater attacking power than
+   a similar dragon without it.  Small dragons become as
+   powerful as large dragons.  Cranked large dragons have
+   awesome firepower and strength.
+
+
+        HIDDEN - bit 64
+   This applies only if the dragon has a targetname and if it
+   is not a nightshade.  A dragon with this flag starts the
+   level invisible, insubstantial, invulnerable, and in stasis.
+   The dragon will remain dormant until it is triggered.  Once
+   activated, it will appear with the teleport effects.  In
+   effect, this gives the illusion of a dragon that does not
+   exist on the level at the start, then "teleports" into the
+   level when triggered.
+
+
+        HEALTH
+   This sets the amount of the health the dragon has at the
+   start of the level.  Minimum health allowed is 1 and maximum
+   health allowed is 40000.  Default health for each dragon is
+   shown below.
+
+       Type      | Small | Large
+   --------------+-------+-------
+    Nightshade   |   50  |  250
+    Gold dragon  |  200  | 1000
+    Other dragon |  100  |  500
+
+        HEIGHT
+   This specifies the size of the dragon.  Sizes available to
+   choose from are large and small.  Default size is large.
+   Below are the values that determine size.
+
+        0 = Large ('-48 -48 -24', '48 48 48')
+        1 = Small ('-16 -16 -24', '16 16 24')
+
+        LIP (applies only to the nightshade)
+   This is the limit of the number of pawns a nightshade can
+   create and have active at one time.  For example, a lip
+   of 5 means that once it creates and owns five monsters, the
+   nightshade cannot create anymore monsters until some of the
+   monsters are destroyed.  If you do not provide a value, or
+   the value is zero, the default value is set.  If you do
+   not want the nightshade to create any monsters, give it a
+   negative lip such as -1.
+
+        Level 1 default is three zombies.  Maximum limit is six.
+        Level 2 default is six zombies.  Maximum limit is twelve.
+        Level 3 default is three nightshades.  Maximum limit is six.
+         Nightshades that are spawned by another can create up
+         to three zombies each.
+
+        POS1
+   This tells the dragon where it can find water.  If the point
+   given is not in water, it defaults to the origin (no memory).
+
+        SKIN
+   This selects the skin (appearance) and type of the dragon.
+   There are six skins available, and the values range from
+   zero to five.  If you do not provide a value or you provide
+   an invalid value (fractions are dropped BTW), the value will
+   default to zero, which gives you the red dragon.
+
+        0 = Red dragon
+        1 = Green dragon
+        2 = Blue dragon
+        3 = Gold dragon
+        4 = Nightshade
+
+        STATE
+   This defines the dragon's intelligence level.  Smart dragons do
+   things like dodge projectiles or look for water while on fire.
+   Five levels are available.  If you do not provide a proper value,
+   it will default to genius intelligence for gold dragons or to
+   high intelligence for all other dragons.
+
+        1 = Low
+        2 = Normal
+        3 = High
+        4 = Genius
+        5 = Ultimate

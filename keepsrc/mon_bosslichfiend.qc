@@ -441,7 +441,9 @@ void() lfiend_awake =
 	// Setup Ammo Resistance
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0.75;
-	
+	self.resist_multi_rockets = 0.75;
+	self.resist_plasma = 0.75;
+
 	//Resist_CheckRange(self);		// Double check values
 	Resist_Save(self);				// Save for Later
 	Resist_ChangeType(self,TRUE);	// resist everything
@@ -559,6 +561,6 @@ void() monster_lichfiend = {
 
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 
-	total_monsters = total_monsters + 1;
+	AddToTotals(self);
 	self.use = lfiend_awake;
 };

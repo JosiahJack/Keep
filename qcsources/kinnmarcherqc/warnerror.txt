@@ -1,0 +1,165 @@
+Below is a complete list of all the warnings and errors you can recieve, along with their squelch level and an explanation of each.
+
+"Expected <value>, found <value>"
+---------------------------------
+This is an error. This is a rather generic error you may encounter. The compiler was looking for something specific, usually a piece of punctuation, such as a semicolon, and it found something else entirely. This may result from not enough or too many closing parentheses, missing commas in a function call or variable declaration, missing end bracket after an animation state , or missing braces around a function's body. To correct this error, check your syntax in or around the line specified.
+
+
+"<variable> was not defined (see prototype %s(%i))"
+---------------------------------------------------
+This is an error. A constant, typically a function, was not given an initial value. All constants must be defined. To solve this error, define the variable somewhere inside the qc code.
+
+
+"Label <label name> was not defined"
+------------------------------------
+This is an error. FrikQCC encountered a goto statement that allocated a new label. The label was never placed in the code however and FrikQCC was unable to fill in the jump statement. This may have been caused by incorrect spelling of the label name. To fix this error, place the label in the code where you intended, or correct any spelling mistakes you may have made.
+
+
+"strofs exceeds INT_MAX by <some value>"
+----------------------------------------
+This is a level 1 warning. This warning alerts you that the game may not play the compiled progs.dat correctly, and that strings the game prints will likely be random gibberish or may even crash the game. This is extremely rare. To fix this, try using less or shorter strings, or try enabling the /On, /Of, /Ol or /Oc optimizations.
+
+
+"numstatements exceeds INT_MAX by <some value>"
+-----------------------------------------------
+This is a level 1 warning. This warning alerts you that some functions will cause the engine to crash with "unimplemented builtin" or may crash the entire game in mid function. This is a very rare warning, as INT_MAX is usually quite high, and a typical progs dat rarely reaches anywhere near there. To fix this, try re-using more code or try enabling the /Oi, /Ot, /Oa optimizations or turning off the /Oo optimization if present.
+
+
+"numfunctions exceeds SHRT_MAX by <some value>"
+-----------------------------------------------
+This is a level 1 warning. This is another particularly rare warning, this means you have more than 32,767 functions... an insane amount. If unpatched, the engine will crash whenever it tries to enter a function who's index is greater than 32,767. To fix this warning, delete functions you are not using, or try rewriting some of your animation code to use one function per scene.
+
+
+"numglobaldefs exceeds SHRT_MAX by <some value>"
+------------------------------------------------
+This is a level 1 warning. Although potentially more common than the above, this is still quite rare. This means there is too much global variable definitions in your progs.dat. The result of this problem will only be evident when saving or loading a game, or when a map first loads. To solve this problem, try enabling the /Od or /Oc optimizations or eliminating as many variables as you can.
+
+
+"numfielddefs exceeds SHRT_MAX by <some value>"
+-----------------------------------------------
+This is a level 1 warning. Another very rare warning, this means that your progs.dat has more than 32,767 fields. Not only would this number of fields require about 64 megs of ram alone, it seems unlikely anyone would ever encounter this. To solve this, use less fields. A lot less.
+
+
+"numpr_globals exceeds SHRT_MAX by <some value>"
+------------------------------------------------
+This is a level 1 warning. This is the most common of the engine limit exceeed warnings. This means there's more than 128k of global variable storage space, and that the format of the progs.dat is unable to index that much. This can cause a whole myriad of errors or crashes in game. To eliminate this problem: use less local, globals or constants or try the /Ot, /Or or /Oc optimizations.
+
+
+"<function name>: too many parameters. See definition file(line)" 
+or "Indirect function: too many parameters"
+-----------------------------------------------------------------
+This is a level 1 warning. This means, quite simply, that too many parameters were specified in a function call. Check the definition of the function and eliminate the undeeded parameters. This will not cause any adverse effects in the engine, but isn't likely the intended code. 
+
+
+"<function name>: vararg func cannot have more than 8 parms"
+------------------------------------------------------------
+This is a level 1 warning. Variable argument functions (and all builtin functions) cannot have more than eight parameters specified. To fix this warning, remove the extra parameters.
+
+
+"Type mismatch on parm <some value>. 
+Expected <type> found <type>. See definition file(line)"
+--------------------------------------------------------
+This is a level 1 warning. A variable you specified as a function parameter is different from the type the function takes for that parameter. Note: The first parameter of a function is called "parm 0". Check the definition of the function, and adjust or convert your parameters when calling it.
+
+
+"Assignment to constant"
+------------------------
+This is a level 1 warning. You tried to assign a new value to a constant variable. Normally, FrikQCC will assume any variable initialized to a value is constant. If left untreated, this mistake could cause all sorts of weirdness in game. As QCC has always re-used global value space for constants, changing the value of one constant 5 for example will change the value of every 5 in the progs.dat. This can cause serious problems. To solve this, either prefix the the variable definition with the "var" keyword, or remove the assignment statement.
+
+
+"<function name>: Too few parameters. See definition file(line)"
+----------------------------------------------------------------
+This is a level 1 warning. You specified too few parameters for a function. This, if unfixed can cause erratic behavior in game or crashes, as the unspecified function parms will use whatever is left in the parm globals. Check with the declaration of that function for the correct number of parameters. Note: In the original code, id declared droptofloor with two parameters, yaw and dist. This is obviously a mistake and is probably a copy paste of the walkmove or flymove function. droptofloor doesn't take any parameters. To solve this mistake in the original source, rectify the droptofloor definition by removing the uneeded parms.
+
+
+"Null 'if' statement"
+---------------------
+This is a level 1 warning. FrikQCC encountered an if () statement with no code underneath it which would be run if the condition was true. This could be because of careless commenting or a coding mistake. Although this will have no adverse affect on the running progs, it is most likely wasting a lot of time computing the condition then doing nothing with it. Fill in the if statement or eliminate it entirely to solve this problem.
+
+
+"Null 'else' statement"
+-----------------------
+This is a level 1 warning. Like the above warning, FrikQCC encountered an else statement with no code underneath which would run if the condition was false. This could be because of careless commenting or a coding mistake. Although this will have no adverse effect on the running progs, it is most likely wasting time with added jumps that aren't used. Fill in the else statement or eliminate it entirely to solve this problem.
+
+
+"Type mismatch on redeclaration of <variable name> (see original definition file(line))"
+----------------------------------------------------------------------------------------
+This is a level 1 warning. FrikQCC encountered a variable being defined a second time, only with the wrong variable type. All definitions of a variable must match. This may be the result of adding a new variable who's name has already been used. Check the original definition and alter either variable to agree, or rename one of the definitions.
+
+
+"<function name> redeclared with different number of parms (see original definition file(line))"
+------------------------------------------------------------------------------------------------
+This is a level 1 warning. A function was redeclared with a different number parameters than the original declaration. FrikQCC will continue to compile with the original declaration. To eliminate this warning, make all declarations of the function identical.
+
+
+"<function name redeclared with different parms (see original definition file(line))"
+---------------------------------------------------------------------------------------
+This is a level 1 warning. A function declaration was encountered who's parameter types did not match the original declaration of the function. FrikQCC will continue to compile with the original declaration. To eliminate this warning, make all declarations of the function identical.
+
+
+"<variable name> redeclared"
+---------------------------
+This is a level 1 warning. FrikQCC encountered a redundant definition of a local variable or function parameter. Although this should cause no adverse effects, it may have caused a problem with your code. To correct this warning, remove the redundant definition.
+
+
+"Too many closing braces"
+-------------------------
+This is a level 1 warning. The compiler ran into one too many closing braces ("}"), closing the function then closing beyond the function. This is a serious mistake in the code and will probably produce an error shortly after the warning. To fix this warning, remove the excess braces.
+
+
+"unknown pragma <value>"
+------------------------
+This is a level 1 warning. The compiler encountered a #pragma directive it did not recognize. Currently, frikqcc's precompiler directive handling is unfinished. To fix this warning, delete the #pragma
+
+
+"unknown directive <directive>"
+-------------------------------
+This is a level 1 warning. FrikQCC encountered a precompiler directive it does not recognize. Currently frikqcc's precompiler directive handling is unfinished. To fix this warning, delete the directive.
+
+
+"<function name> must return a value"
+------------------------------------- 
+This is a level 2 warning. The function specified was declared as returning a value and FrikQCC enountered a return statement with no value specified. Without this error fixed, Quake will return whatever value was left in the return global space to the calling function, which can have unexpected results. To fix this warning, return a result of the required type.
+
+
+"<function name> does not return a value"
+----------------------------
+This is a level 2 warning. The function specified was declared as a void return type and FrikQCC encountered a return statement with a value specified. Although the value will be ignored, your code may not function as you expected it to. To fix this warning, remove the offending parameter of the return statement.
+
+
+"<function name>: Type mismatch on return. Expected <type>, found <type>"
+-------------------------------------------------------------------------
+This is a level 2 warning. The value you specified in the declaration of the function doesn't match the value you supplied after a return statement. Although this mistake may have minimum impact on the game as it plays, the code may not function as you expected. Change the return statement to a variable of the correct type to eliminate this warning.
+
+
+"System defs do match internal crcs."
+-------------------------------------
+This is a level 2 warning. FrikQCC always crc checks the system global/fields part of the code. This is a way of making sure that code is the same as what's in the engine. After the crc check, if the resulting CRC does not match either frikqcc's Normal Quake CRC or it's QuakeWorld CRC values then it will emit this warning. In the engine, the game will probably error with "progs.dat system vars have been modified, progdefs.h is out of date". Most likely, you've unintentionally caused this problem by adding to the top of defs.qc, above the lines end_sys_globals and end_sys_fields. If you were following a tutorial that told you to add something to defs.qc, add it to the bottom of the file, not the top.
+
+
+"No operation performed"
+------------------------
+This is a level 2 warning. FrikQCC found a line where no function was called and no assignment was performed. Typically, conditional or arithmetic operators were used to compute a value, then that value was just thrown away. In the original QC, id made a mistake in misc.qc, there's a line that read "self.speed == 1000;". The double equals operator is a comparison operator. What id meant to put there is "self.speed = 1000;". Without this warning solved, the game will be wasting time computing the do-nothing line for no end result. To solve this warning, either remove the line or correct whatever mistake was made.
+
+
+"<function name>: not all control paths return a value"
+-------------------------------------------------------
+This is a level 2 warning. FrikQCC reached the end of a function and determined that there was at least one way through the function that did not have a return statement, or it did not find any return statement. If the function was declared as returning a value, termination of the function without a return value may cause problems in the calling function which will recieve whatever value that was left in the return global space. To solve this error, return a value fitting with the declaration of the function or alter the declaration of the function as not returning a value (Most occurences of this in the original id qc are on functions that weren't meant to return a value).
+
+
+"<variable name> redeclared on different scope (see original definition file(line))"
+------------------------------------------------------------------------------------
+This is a level 2 warning. A new local variable shares the same name as an existing globally scoped variable. This can causes serious error as the compiler may become confused as to which variable you mean within that function. To fix this warning, rename one of the variables to solve the conflict.
+
+
+"<variable name> defined local in <function name>"
+--------------------------------------------------
+This is a level 3 warning. A new globally scoped variable is of the same name as a variable already declared local in another function. Although FrikQCC will compile this with no misfunction, altering the order of these definitions will cause serious error. Under C, this would be illegal.
+
+
+"Unreferenced local variable <variable name>"
+---------------------------------------------
+This is a level 3 warning. A local variable or function parameter of the function was not used in the body of the function. In some cases this is not fixable if the function parms are needed because they are part of the type needed for a function pointer. If FrikQCC reports "somevector_x", it really means the entire vector was not used. Although this will not have any adverse effect, it is wasting precious pr_globals an globaldefs. To remove this warning, eliminate the unused variable definition or function parameter.
+
+
+

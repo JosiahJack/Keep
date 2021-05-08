@@ -108,15 +108,16 @@ void()	Tar_JumpTouch =
 	if (other.takedamage && other.classname != self.classname && other != self.owner) {
 		if ( vlen(self.velocity) > 400 ) {
 			ldmg = 10 + 10*random();
+			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
 			// Can only poison the player
-			if (other.flags & FL_CLIENT && self.poisonous) {
-				// Check if player is posioned already?
-				if (other.poisoned) T_Damage (other, self, self, ldmg * 0.25, DAMARMOR);
-				// Make sure player is posioned
-				else PoisonDeBuff(other);
+			if (ldmg) {
+				if (other.flags & FL_CLIENT && self.poisonous) {
+					if (other.poisoned) T_Damage (other, self, self, ldmg * 0.25, DAMARMOR); // Check if player is posioned already?
+					else PoisonDeBuff(other); // Make sure player is posioned
+				} else {
+					T_Damage (other, self, self, ldmg, DAMARMOR); // Everything else gets the usual tarbaby thump!
+				}
 			}
-			// Everything else gets the usual tarbaby thump!
-			else T_Damage (other, self, self, ldmg, DAMARMOR);
 			sound (self, CHAN_WEAPON, "blob/hit1.wav", 1, ATTN_NORM);
 		}
 	}

@@ -630,14 +630,6 @@ void(entity ent) changepitch = #63;
 //description:
 //equivalent to changeyaw, ent is normally self. (this was a Q2 builtin)
 
-//DP_QC_COPYENTITY
-//idea: LordHavoc
-//darkplaces implementation: LordHavoc
-//builtin definitions:
-void(entity from, entity to) copyentity = #400;
-//description:
-//copies all data in the entity to another entity.
-
 //DP_QC_CVAR_DEFSTRING
 //idea: id Software (Doom3), LordHavoc
 //darkplaces implementation: LordHavoc
@@ -713,7 +705,6 @@ float FIELD_FUNCTION = 6;
 //DP_QC_ENTITYSTRING
 void(string s) loadfromdata = #529;
 void(string s) loadfromfile = #530;
-void(string s) callfunction = #605;
 void(float fh, entity e) writetofile = #606;
 float(string s) isfunction = #607;
 void(entity e, string s) parseentitydata = #608;
@@ -737,14 +728,6 @@ string(void) getextresponse = #624;
 //sending a packet starting with "\xFF\xFF\xFF\xFFextResponse " to the
 //listening port.
 
-//DP_QC_FINDCHAIN
-//idea: LordHavoc
-//darkplaces implementation: LordHavoc
-//builtin definitions:
-entity(.string fld, string match) findchain = #402;
-//description:
-//similar to find() but returns a chain of entities like findradius.
-
 //DP_QC_FINDCHAIN_TOFIELD
 //idea: divVerent
 //darkplaces implementation: divVerent
@@ -756,23 +739,7 @@ entity(.string fld, float match, .entity tofield) findchainfloat_tofield = #403;
 //description:
 //similar to findchain() etc, but stores the chain into .tofield instead of .chain
 //actually, the .entity tofield is an optional field of the the existing findchain* functions
-
-//DP_QC_FINDCHAINFLAGS
-//idea: Sajt
-//darkplaces implementation: LordHavoc
-//builtin definitions:
-entity(.float fld, float match) findchainflags = #450;
-//description:
-//similar to findflags() but returns a chain of entities like findradius.
-
-//DP_QC_FINDCHAINFLOAT
-//idea: LordHavoc
-//darkplaces implementation: LordHavoc
-//builtin definitions:
 entity(.entity fld, entity match) findchainentity = #403;
-entity(.float fld, float match) findchainfloat = #403;
-//description:
-//similar to findentity()/findfloat() but returns a chain of entities like findradius.
 
 //DP_QC_FINDFLAGS
 //idea: Sajt
@@ -1147,21 +1114,6 @@ string(string filename) whichpack = #503;
 //URI::Escape's functionality
 string(string in) uri_escape = #510;
 string(string in) uri_unescape = #511;
-
-//DP_QC_URI_GET
-//idea: divVerent
-//darkplaces implementation: divVerent
-//loads text from an URL into a string
-//returns 1 on success of initiation, 0 if there are too many concurrent
-//connections already or if the URL is invalid
-//the following callback will receive the data and MUST exist!
-//  void(float id, float status, string data) URI_Get_Callback;
-//status is either
-//  negative for an internal error,
-//  0 for success, or
-//  the HTTP response code on server error (e.g. 404)
-//if 1 is returned by uri_get, the callback will be called in the future
-float(string url, float id) uri_get = #513;
 
 //DP_QC_URI_POST
 //idea: divVerent
@@ -1936,7 +1888,6 @@ void(vector org, vector vel, float howmany) te_spark = #411;
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc
 //builtin definitions:
-void(vector org) te_gunshot = #418;
 void(vector org) te_spike = #419;
 void(vector org) te_superspike = #420;
 void(vector org) te_explosion = #421;
@@ -2056,15 +2007,12 @@ float FILE_WRITE = 2;
 //builtin definitions:
 // all skeleton numbers are 1-based (0 being no skeleton)
 // all bone numbers are 1-based (0 being invalid)
-float(float modlindex) skel_create = #263; // create a skeleton (be sure to assign this value into .skeletonindex for use), returns skeleton index (1 or higher) on success, returns 0 on failure (for example if the modelindex is not skeletal), it is recommended that you create a new skeleton if you change modelindex, as the skeleton uses the hierarchy from the model.
-float(float skel, entity ent, float modlindex, float retainfrac, float firstbone, float lastbone) skel_build = #264; // blend in a percentage of standard animation, 0 replaces entirely, 1 does nothing, 0.5 blends half, etc, and this only alters the bones in the specified range for which out of bounds values like 0,100000 are safe (uses .frame, .frame2, .frame3, .frame4, .lerpfrac, .lerpfrac3, .lerpfrac4, .frame1time, .frame2time, .frame3time, .frame4time), returns skel on success, 0 on failure
 float(float skel) skel_get_numbones = #265; // returns how many bones exist in the created skeleton, 0 if skeleton does not exist
 string(float skel, float bonenum) skel_get_bonename = #266; // returns name of bone (as a tempstring), "" if invalid bonenum (< 1 for example) or skeleton does not exist
 float(float skel, float bonenum) skel_get_boneparent = #267; // returns parent num for supplied bonenum, 0 if bonenum has no parent or bone does not exist (returned value is always less than bonenum, you can loop on this)
 float(float skel, string tagname) skel_find_bone = #268; // get number of bone with specified name, 0 on failure, bonenum (1-based) on success, same as using gettagindex but takes modelindex instead of entity
 vector(float skel, float bonenum) skel_get_bonerel = #269; // get matrix of bone in skeleton relative to its parent - sets v_forward, v_right, v_up, returns origin (relative to parent bone)
 vector(float skel, float bonenum) skel_get_boneabs = #270; // get matrix of bone in skeleton in model space - sets v_forward, v_right, v_up, returns origin (relative to entity)
-void(float skel, float bonenum, vector org) skel_set_bone = #271; // set matrix of bone relative to its parent, reads v_forward, v_right, v_up, takes origin as parameter (relative to parent bone)
 void(float skel, float bonenum, vector org) skel_mul_bone = #272; // transform bone matrix (relative to its parent) by the supplied matrix in v_forward, v_right, v_up, takes origin as parameter (relative to parent bone)
 void(float skel, float startbone, float endbone, vector org) skel_mul_bones = #273; // transform bone matrices (relative to their parents) by the supplied matrix in v_forward, v_right, v_up, takes origin as parameter (relative to parent bones)
 void(float skeldst, float skelsrc, float startbone, float endbone) skel_copybones = #274; // copy bone matrices (relative to their parents) from one skeleton to another, useful for copying a skeleton to a corpse
@@ -2100,140 +2048,6 @@ float(float modlindex, float framenum) frameduration = #277; // returns the inte
 //animating a model with animations from another model with a compatible skeleton.
 //restricting animation blends to certain bones of a model - for example independent animation of legs, torso, head.
 //custom bone controllers - for example making eyes track a target location.
-//
-//
-//
-//example code follows...
-//
-//this helper function lets you identify (by parentage) what group a bone
-//belongs to - for example "torso", "leftarm", would return 1 ("torso") for
-//all children of the bone named "torso", unless they are children of
-//"leftarm" (which is a child of "torso") which would return 2 instead...
-float(float skel, float bonenum, string g1, string g2, string g3, string g4, string g5, string g6) example_skel_findbonegroup =
-{
-	local string bonename;
-	while (bonenum >= 0)
-	{
-		bonename = skel_get_bonename(skel, bonenum);
-		if (bonename == g1) return 1;
-		if (bonename == g2) return 2;
-		if (bonename == g3) return 3;
-		if (bonename == g4) return 4;
-		if (bonename == g5) return 5;
-		if (bonename == g6) return 6;
-		bonenum = skel_get_boneparent(skel, bonenum);
-	}
-	return 0;
-};
-// create a skeletonindex for our player using current modelindex
-void() example_skel_player_setup =
-{
-	self.skeletonindex = skel_create(self.modelindex);
-};
-// setup bones of skeleton based on an animation
-// note: animmodelindex can be a different model than self.modelindex
-void(float animmodelindex, float framegroup, float framegroupstarttime) example_skel_player_update_begin =
-{
-	// start with our standard animation
-	self.frame = framegroup;
-	self.frame2 = 0;
-	self.frame3 = 0;
-	self.frame4 = 0;
-	self.frame1time = framegroupstarttime;
-	self.frame2time = 0;
-	self.frame3time = 0;
-	self.frame4time = 0;
-	self.lerpfrac = 0;
-	self.lerpfrac3 = 0;
-	self.lerpfrac4 = 0;
-	skel_build(self.skeletonindex, self, animmodelindex, 0, 0, 100000);
-};
-// apply a different framegroup animation to bones with a specified parent
-void(float animmodelindex, float framegroup, float framegroupstarttime, float blendalpha, string groupbonename, string excludegroupname1, string excludegroupname2) example_skel_player_update_applyoverride =
-{
-	local float bonenum;
-	local float numbones;
-	self.frame = framegroup;
-	self.frame2 = 0;
-	self.frame3 = 0;
-	self.frame4 = 0;
-	self.frame1time = framegroupstarttime;
-	self.frame2time = 0;
-	self.frame3time = 0;
-	self.frame4time = 0;
-	self.lerpfrac = 0;
-	self.lerpfrac3 = 0;
-	self.lerpfrac4 = 0;
-	bonenum = 0;
-	numbones = skel_get_numbones(self.skeletonindex);
-	while (bonenum < numbones)
-	{
-		if (example_skel_findbonegroup(self.skeletonindex, bonenum, groupbonename, excludegroupname1, excludegroupname2, "", "", "") == 1)
-			skel_build(self.skeletonindex, self, animmodelindex, 1 - blendalpha, bonenum, bonenum + 1);
-		bonenum = bonenum + 1;
-	}
-};
-// make eyes point at a target location, be sure v_forward, v_right, v_up are set correctly before calling
-void(vector eyetarget, string bonename) example_skel_player_update_eyetarget =
-{
-	local float bonenum;
-	local vector ang;
-	local vector oldforward, oldright, oldup;
-	local vector relforward, relright, relup, relorg;
-	local vector boneforward, boneright, boneup, boneorg;
-	local vector parentforward, parentright, parentup, parentorg;
-	local vector u, v;
-	local vector modeleyetarget;
-	bonenum = skel_find_bone(self.skeletonindex, bonename) - 1;
-	if (bonenum < 0)
-		return;
-	oldforward = v_forward;
-	oldright = v_right;
-	oldup = v_up;
-	v = eyetarget - self.origin;
-	modeleyetarget_x =   v * v_forward;
-	modeleyetarget_y = 0-v * v_right;
-	modeleyetarget_z =   v * v_up;
-	// this is an eyeball, make it point at the target location
-	// first get all the data we can...
-	relorg = skel_get_bonerel(self.skeletonindex, bonenum);
-	relforward = v_forward;
-	relright = v_right;
-	relup = v_up;
-	boneorg = skel_get_boneabs(self.skeletonindex, bonenum);
-	boneforward = v_forward;
-	boneright = v_right;
-	boneup = v_up;
-	parentorg = skel_get_boneabs(self.skeletonindex, skel_get_boneparent(self.skeletonindex, bonenum));
-	parentforward = v_forward;
-	parentright = v_right;
-	parentup = v_up;
-	// get the vector from the eyeball to the target
-	u = modeleyetarget - boneorg;
-	// now transform it inversely by the parent matrix to produce new rel vectors
-	v_x = u * parentforward;
-	v_y = u * parentright;
-	v_z = u * parentup;
-	ang = vectoangles2(v, relup);
-	ang_x = 0 - ang_x;
-	makevectors(ang);
-	// set the relative bone matrix
-	skel_set_bone(self.skeletonindex, bonenum, relorg);
-	// restore caller's v_ vectors
-	v_forward = oldforward;
-	v_right = oldright;
-	v_up = oldup;
-};
-// delete skeleton when we're done with it
-// note: skeleton remains valid until next frame when it is really deleted
-void() example_skel_player_delete =
-{
-	skel_delete(self.skeletonindex);
-	self.skeletonindex = 0;
-};
-//
-// END OF EXAMPLES FOR FTE_CSQC_SKELETONOBJECTS
-//
 
 //KRIMZON_SV_PARSECLIENTCOMMAND
 //idea: KrimZon
@@ -2348,9 +2162,7 @@ string(float ccase, float calpha, float cnum, string s, ...) strconv = #224; // 
 string(float chars, string s, ...) strpad = #225; // pad string with spaces to a specified length, < 0 = left padding, > 0 = right padding
 string(string info, string key, string value, ...) infoadd = #226; // sets or adds a key/value pair to an infostring - note: forbidden characters are \ and "
 string(string info, string key) infoget = #227; // gets a key/value pair in an infostring, returns value or null if not found
-float(string s1, string s2, float len) strncmp = #228; // compare two strings up to the specified number of characters, if their length differs and is within the specified limit the result will be negative, otherwise it is the difference in value of their first non-matching character.
 float(string s1, string s2) strcasecmp = #229; // compare two strings with case-insensitive matching, characters a-z are considered equivalent to the matching A-Z character, no other differences, and this does not consider special characters equal even if they look similar
-float(string s1, string s2, float len) strncasecmp = #230; // same as strcasecmp but with a length limit, see strncmp
 //string(string s, float start, float length) substring = #116; // see note below
 //description:
 //various string manipulation functions

@@ -1,0 +1,33 @@
+======================================
+FrikBot version 10
+======================================
+
+This file contains details on updating old FrikBot based mods to the current
+version. Only versions 0.10, 0.10a, 0.09, 0.09a and 0.09b are covered by this
+document. To upgrade an even older version, please see the documentation
+provided with version 0.09, then follow these direction.
+
+-------------------------------------------------
+If you are upgrading a mod based on FrikBot 0.09: 
+-------------------------------------------------
+Backup up your Frikbot 0.09 files if you modified them!
+Replace all 0.09 files with the 10 files.
+
+Add bot_fight.qc above bot_ai.qc in progs.src
+
+
+Change the line in ClientDisconnect in client.qc from
+
+	if (self.ishuman)
+		clientSetFree( self.fClientNo ); // FrikBot
+
+to
+
+	ClientDisconnected(); // FrikBot
+
+ 
+-------------------------------------------------
+If you are upgrading a mod based on FrikBot 0.10: 
+-------------------------------------------------
+
+Replace all source files with the ones provided.

@@ -1,0 +1,26 @@
+../qwprogs.dat
+
+defs.qc
+subs.qc
+server.qc
+combat.qc
+items.qc
+weapons.qc
+world.qc
+client.qc
+player.qc
+spectate.qc
+
+frames.qc		//dhm - frame animation
+bloodcb.qc		//dhm - The bloodcube
+chainlit.qc		//dhm - The Crucify Spear
+wall.qc		//dhm - Exploding wall
+pbeam.qc		//dhm - The Stun gun
+
+Hipsound.qc		//dhm - Hipnotic Sound entities
+
+doors.qc
+buttons.qc
+triggers.qc
+plats.qc
+misc.qc

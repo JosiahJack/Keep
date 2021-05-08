@@ -1156,7 +1156,7 @@ void() monster_icegolem = {
 	// Check passive system for exceptions
 	setup_passivestate_boss(self);
 
-	total_monsters = total_monsters + 1;
+	AddToTotals(self);
 	self.use = iceg_setup;
 };
 

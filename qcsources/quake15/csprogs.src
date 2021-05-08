@@ -1,0 +1,13 @@
+../csprogs.dat
+
+csqc/keycodes.qc
+csqc/csprogsdefs.qc
+csqc/cs_defs.qc
+csqc/servercommands.qc
+csqc/sbardefs.qc
+csqc/menudefs.qc
+csqc/entities.qc
+csqc/maplist.qc
+//csqc/nahuel_leditor.qc
+csqc/main.qc
+

@@ -1,0 +1,51 @@
+../progs.dat
+
+defs.qc
+subs.qc
+fight.qc
+ai.qc
+combat.qc
+items.qc
+weapons.qc
+world.qc
+client.qc
+player.qc
+
+cutscene.qc    	//dhm - Movie-making stuff
+frames.qc		//dhm - frame animation
+hostage.qc		//dhm - hostage/gib-testing
+bloodcb.qc		//dhm - The bloodcube
+chainlit.qc		//dhm - The Crucify Spear
+wall.qc		//dhm - Exploding wall
+pbeam.qc		//dhm - The Stun gun
+
+Hipsound.qc		//dhm - Hipnotic Sound entities
+//Hiprot.qc		//dhm - Hipnotic rotation
+//Hipsubs.qc	//dhm - Hipnotic SUB routines
+
+monsters.qc
+doors.qc
+buttons.qc
+triggers.qc
+plats.qc
+misc.qc
+ogre.qc
+demon.qc
+shambler.qc
+knight.qc
+soldier.qc
+wizard.qc
+dog.qc
+zombie.qc
+boss.qc
+
+trog.qc		// Troglodyte - Zerstorer!!
+enforcer.qc		// registered
+enforce2.qc		// Mega-enforcer - Zerstorer!!
+turret.qc		//dhm - laser turret
+zerst.qc		//dhm - The Zerstörer!!
+tarbaby.qc		// registered
+hknight.qc		// registered
+fish.qc		// registered
+shalrath.qc		// registered
+oldone.qc		// registered

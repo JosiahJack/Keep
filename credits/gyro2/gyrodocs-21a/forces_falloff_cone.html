@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/forces_falloff_cone.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+<head>
+	<title>GyroDocs - Cone Falloff</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><a href="physobj.html" class="item">Physics Objects</a><a href="forces.html" class="item">Force Entities</a><div class="layout_submenu"><a href="forces_affectors.html" class="subitem">- Affector Components</a><a href="forces_affectors_antigrav.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Anti-gravity Affector</a><a href="forces_affectors_directional.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Directional Affector</a><a href="forces_affectors_point.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Point Affector</a><a href="forces_affectors_resistance.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Resistance Affector</a><a href="forces_affectors_scaling.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Power Scaling</a><a href="forces_falloff.html" class="subitem">- Falloff Components</a><a href="forces_falloff_area.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Area Falloff</a><a href="forces_falloff_cone.html" class="subitem subitem_selected">&nbsp;&nbsp;&nbsp;&nbsp;- Cone Falloff</a><a href="forces_falloff_combination.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Combination</a><a href="forces_falloff_scaling.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Range Scaling</a><a href="forces_properties.html" class="subitem">- Property Components</a><a href="forces_properties_aironly.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Air-only Property</a><a href="forces_properties_groundpound.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Ground-pound Property</a><a href="forces_properties_ignorewalls.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Ignore Walls Property</a><a href="forces_properties_instant.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Instant Property</a><a href="forces_properties_persistent.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Persistent Property</a><a href="forces_properties_wateronly.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Water-only Property</a><a href="forces_misc.html" class="subitem">- Miscellaneous Controls</a><a href="forces_misc_attach.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Attach to Entity</a><a href="forces_misc_ignore.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Ignore Object</a></div><a href="advanced.html" class="item">Advanced Usage</a><a href="info.html" class="item">Further Information</a></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Cone Falloff</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p><strong>Gyro_Force_ApplyFalloff_ConeLinear(entity force, vector endpoint, float startradius, float endradius)</strong><br />
+Conical falloffs are shaped by a central vector between the force's origin and the given end point, which itself is relative to the origin. The falloff is given volume by a pair of radius values - <code>startradius</code> and <code>endradius</code> for the two points, respectively - which may independently given any float values, including negatives. There is no necessity for either radius to be zero, and you may even form a cylindrical force by setting both to the same value. Decay is calculated perpendicularly to the central vector, which effectively means the force will be at it's weakest along the outer edge of the cone, rather than at points furthest from the origin. Such behaviour can be simulated by combining a cone with an appropriate spherical <a href="forces_falloff_area.html">area falloff</a>. This particular function will create a cone with linear decay.</p>
+
+<p><strong>Gyro_Force_ApplyFalloff_ConeQuadratic(entity force, vector endpoint, float startradius, float endradius)</strong><br />
+Same as the above function, but will create the cone falloff using pseudo-quadratic decay.</p>
+
+<p><strong>Gyro_Force_ApplyFalloff_ConeConstant(entity force, vector endpoint, float startradius, float endradius)</strong><br />
+Same as the above function, but will create the cone falloff using constant (boolean) decay.</p></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/forces_falloff_cone.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+</html>

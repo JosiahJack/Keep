@@ -28,14 +28,11 @@ noise : custom sound to play (looped)
 -------- NOTES --------
 Custom ambient (must be looped) sound, CANNOT toggle/switch state
 ============================================================================*/
-void() ambient_custom_loop =
-{
+void() ambient_custom_loop = {
 	// Check for sound file
 	if (self.noise == "") {
-		dprint("\b[AMB_CUSTOM_LOOP]\b Missing sound file\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		remove(self);
-		return;
+		dprint("\b[ambient_custom_loop]\b Missing sound file, defaulting to ambience/wat_cave.wav\n");
+		self.noise = "ambience/wat_cave.wav";
 	}
 	
 	precache_sound (self.noise);
@@ -51,19 +48,22 @@ void() ambient_custom_loop =
 		self.use = ambientsound_trigger_start;
 };
 
-void() fx_ambientsound = { ambient_custom_loop(); };
+void() fx_ambientsound =  {
+	if (self.noise == "") {
+		dprint("\b[fx_ambientsound]\b Missing sound file, defaulting to ambience/wat_cave.wav\n");
+		self.noise = "ambience/wat_cave.wav";
+	}
+	ambient_custom_loop();
+};
 
-//----------------------------------------------------------------------
-void() ambient_comp_hum =
-{
+void() ambient_comp_hum = {
 	self.noise = "ambience/comp1.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
-//----------------------------------------------------------------------
-void() ambient_drip =
-{
+
+void() ambient_drip = {
 	self.noise = "ambience/drip1.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;

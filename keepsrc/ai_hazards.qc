@@ -295,6 +295,7 @@ void() Touch_HazardProjectile =
 		// Resistance = 50% fire/lava attacks
 		if (other.flags & FL_CLIENT && other.moditems & IT_ARTLAVASHIELD) {
 			PlayLavaShieldSound(other);
+			if (other.resist_fire > 0) self.dmg = self.dmg * (1-other.resist_fire);
 			if (self.dmg > 0) self.dmg = floor(self.dmg * 0.5);
 		}
 	
@@ -335,8 +336,7 @@ void() Touch_HazardProjectile =
 ======================================================================*/
 // Wall of flame, left > right
 // Easy = 3(-1/1), Normal = 5(-2/2), Hard/NM = 7(-3/3)
-float(vector waveqty) SpriteCount_Flame =
-{
+float(vector waveqty) SpriteCount_Flame = {
 	float wave_count;
 	wave_count = waveqty_x + (skill * waveqty_y);
 	if (wave_count > waveqty_z) wave_count = waveqty_z;
@@ -466,53 +466,42 @@ void() Fire_Trail =
 	// Check if the hazard projectile limit exists and has been reached?
 	if ( !(HazardProjectile_CheckLimit(self.owner,1)) ) trblocked = TRUE;
 	else {
-		// default condition
-		trblocked = trstepup = FALSE;
+		trblocked = trstepup = FALSE; // default condition
 		// Move forward along the line (movedir)
 		self.pos2 = self.pos1 + (self.movedir * self.owner.proj_trdist);
 		// Is next position is solid world/geo?
-		if (pointcontents(self.pos2) == CONTENT_SOLID) {
+		if (InSolid(self.pos2)) {
 			// Check maximum step height is available?
-			if (pointcontents(self.pos2 + self.finaldest) == CONTENT_EMPTY) {
+			if (InAir(self.pos2 + self.finaldest)) {
 				// Trace down from maximum step height to find new pos
 				traceline(self.pos2 + self.finaldest, self.pos2, TRUE, self);
 				self.pos2 = trace_endpos + '0 0 8';
 				trstepup = TRUE;
-			}
-			// Max step height is solid geo/world
-			else trblocked = TRUE;
+			} else trblocked = TRUE; // Max step height is solid geo/world
 		}
 		// Is next position solid, liquid or sky?
-		if (pointcontents(self.pos2) != CONTENT_EMPTY) trblocked = TRUE;
-		else {
+		if (!InAir(self.pos2)) {
+			trblocked = TRUE;
+		} else {
 			// Can previous position see next position? nothing blocking
 			traceline(self.pos1, self.pos2, TRUE, self);
 			// 'STEP UP' will often block line of sight to next point
 			if (trace_fraction < 1 && trstepup == FALSE) trblocked = TRUE;
 			else {
-				// Find ground below next step point
-				traceline(self.pos2, self.pos2 - (self.finaldest*2), TRUE, self);
-				// Check distance between step points
-				self.t_length = fabs(self.pos1_z - trace_endpos_z);
-				// Can only step up or down a certain distance
-				if ( self.t_length > (self.owner.proj_trstep+8)) trblocked = TRUE;
-				// Check final position is not solid,liquid or sky
-				if (pointcontents(trace_endpos) != CONTENT_EMPTY) trblocked = TRUE;
+				traceline(self.pos2, self.pos2 - (self.finaldest*2), TRUE, self); // Find ground below next step point
+				self.t_length = fabs(self.pos1_z - trace_endpos_z); // Check distance between step points
+				if ( self.t_length > (self.owner.proj_trstep+8)) trblocked = TRUE; // Can only step up or down a certain distance
+				if (!InAir(trace_endpos)) trblocked = TRUE; // Check final position is not solid,liquid or sky
 			}
 		}
 		
 		// Is the next sprite blocked?
 		if (trblocked == FALSE) {
-			// Update line position (next point)
-			self.pos1 = trace_endpos;
-			// Random lifetime
-			self.height = self.owner.proj_trlife + random() + random();
-			// Setup random wobble to origin for new flame
-			self.pos3 = vecrand(0, self.owner.proj_trwobble, TRUE);
-			// Flatten any z changes first
-			self.pos3_z = 0; self.pos3 = self.pos3 + self.pos1;
-			// target, origin, v_forward, colour, size, lifetime, speed
-			Launch_Flame (self.owner, self.pos3, '0 0 0', self.lip, -1, self.height, 0);
+			self.pos1 = trace_endpos; // Update line position (next point)
+			self.height = self.owner.proj_trlife + random() + random(); // Random lifetime
+			self.pos3 = vecrand(0, self.owner.proj_trwobble, TRUE); // Setup random wobble to origin for new flame
+			self.pos3_z = 0; self.pos3 = self.pos3 + self.pos1; // Flatten any z changes first
+			Launch_Flame (self.owner, self.pos3, '0 0 0', self.lip, -1, self.height, 0); // target, origin, v_forward, colour, size, lifetime, speed
 		}
 	}
 
@@ -526,19 +515,15 @@ void() Fire_Trail =
 		setorigin(self, self.origin);
 		SpawnExplosion(self.attack_expflame, self.origin, self.noise);
 		// Any explosive damage?
-		if (self.owner.proj_trdmg > 0) 
-			T_RadiusDamage (self, self.owner, self.owner.proj_trdmg, world, DAMAGEALL);
-	}
-	else {
+		if (self.owner.proj_trdmg > 0)  T_RadiusDamage (self, self.owner, self.owner.proj_trdmg, world, DAMAGEALL);
+	} else {
 		// Keep looping
 		self.think = Fire_Trail;
 		self.nextthink = time + self.speed;
 	}
 };
 
-//----------------------------------------------------------------------
-void(vector org, vector dir, float proj_color, string proj_sfx) Launch_Trail =
-{
+void(vector org, vector dir, float proj_color, string proj_sfx) Launch_Trail = {
 	// Check if the hazard projectile limit exists and has been reached?
 	if ( !(HazardProjectile_CheckLimit(self,1)) ) return;
 	

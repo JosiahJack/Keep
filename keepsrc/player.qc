@@ -521,23 +521,13 @@ void() player_tbolt = {
             self.weaponframe = FIRE_WEAPON_FRAME;
     }
     SuperDamageSound ();
-    if (self.weapon == IT2_CHAINLIGHTNING) {
-        if (self.tome_finished) {
-			player_run ();  return;
-		} else {
-            W_FireThunderbolt (TRUE);
-		}
-    } else {
-		// Thunderbolt
-        W_FireThunderbolt (self.tome_finished);
-    }
+    W_FireThunderbolt (TRUE);
     self.attack_finished = time + 0.2;
 };
 
 void() player_chainlight1   =[$light1, player_chainlight2  ] {player_tbolt();};
 void() player_chainlight2   =[$light2, player_chainlight3  ] {
-    if (!self.tome_finished || (self.weapon != IT2_CHAINLIGHTNING))
-        self.think = player_chainlight1;     // Do before damage.
+    if ((self.weapon != IT2_CHAINLIGHTNING)) self.think = player_chainlight1;     // Do before damage.
     player_tbolt();
 };
 void() player_chainlight3   =[$light2, player_chainlight1  ] {player_tbolt();};

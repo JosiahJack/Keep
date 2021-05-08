@@ -1,0 +1,21 @@
+2/4/2002
+================================================================
+Title                   : QuakeC Source for Soul of Evil
+Filename                : oumqc.zip
+Authors                 : Robert "Fat Controller" Cruickshank
+				fatty@planetquake.com
+				http://www.planetquake.com/fatty/
+
+Description             : These are the QuakeC source files for SoE. The compiler used was
+			  QCAPE, which can be found through my website.
+
+			  Much of the material comes from the following sources:
+			  Dragons - Patrick Martin
+			  Sound players, explosions, rubble, spawns - Hipnotic/Custents
+			  DMSP - Wouter "Aardappel" van Oortmersson
+			  Frikbots - Frika-C
+
+			  Compile sequence is given in the SOE.QCP file.
+
+			  Comments and changes in the code for SoE are generally indicated
+			  by "SoE" in the comments.

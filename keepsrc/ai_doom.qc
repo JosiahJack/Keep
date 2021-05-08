@@ -136,8 +136,7 @@ void() DoomCheckAttack = {
 // DISABLED -- Monsters in Doom can attack from any range.
 //    if (enemy_range == RANGE_FAR)
 //        return FALSE;   // Don't call traceline again when we don't need to.
-    if (!self.enemy.modelindex)
-        return;   // Enemy phased out of the level.
+    if (!self.enemy.modelindex) return;   // Enemy phased out of the level.
 
     local   vector  spot1, spot2;
     local   entity  targ;

@@ -190,10 +190,22 @@ void () HIP_FireMjolnir = {
 
 		trace_ent.axhitme = TRUE;
 		SpawnBlood (trace_ent, org,v_forward,damage);
+		HIP_FireMjolnirLightning ();
 		T_Damage (trace_ent,self,self,damage, DAMARMOR);
 	} else {
 		if ( (trace_fraction != TRUE) ) {
 			sound (self,CHAN_WEAPON,"hipweap/mjoltink.wav",TRUE,ATTN_NORM);
+			local entity tester;
+			local vector tvec;
+
+			tester = spawn();
+			setorigin(tester,org);
+			setsize(tester,'-4 -4 0', '4 4 16');
+			tvec = tester.origin;
+			tvec_z = tvec_z + 10;
+			tracebox(org,'-4 -4 0', '4 4 16',tvec, TRUE, tester);
+			if (trace_fraction == TRUE) HIP_FireMjolnirLightning ();
+			remove(tester);
 			WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
 			WriteByte (MSG_BROADCAST,TE_GUNSHOT);
 			WriteCoord (MSG_BROADCAST,org_x);
@@ -369,7 +381,31 @@ void() W_FireAxe = {
  OLD STYLE BULLET SYSTEM (HITSCAN)
 ======================================================================*/
 
-//----------------------------------------------------------------------
+entity    multi_ent;
+float    multi_damage;
+
+void() ClearMultiDamage = {
+    multi_ent = world;
+    multi_damage = 0;
+};
+
+void() ApplyMultiDamage = {
+    if (!multi_ent) return;
+    T_Damage (multi_ent, self, self, multi_damage,DAMARMOR);
+};
+
+void(entity hit, float damage) AddMultiDamage = {
+    if (!hit) return;
+    
+    if (hit != multi_ent) {
+        ApplyMultiDamage ();
+        multi_damage = damage;
+        multi_ent = hit;
+    }  else {
+        multi_damage = multi_damage + damage;
+	}
+};
+
 void(vector org, float marker_time) MarkAttack = {
 	newmis = spawn();
 	newmis.classtype = CT_DEVMARKER;
@@ -409,8 +445,7 @@ void(float damage, vector dir) TraceAttack = {
 			// Check for target dummy (manually create marker)
 			if (trace_ent.classtype == CT_TARGETDUMMY) 
 				MarkAttack(org, trace_ent.wait);
-		}
-		else {
+		} else {
 			// Hit something that does not bleed (often world)
 			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 			WriteByte (MSG_BROADCAST, TE_GUNSHOT);
@@ -432,8 +467,7 @@ void(float shotcount, vector spread) FireBullets = {
 		if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self, SPEED_PLAYAIM);
 		// Straight line forward where crosshair is pointing
 		else dir = normalize(v_forward * SPEED_PLAYAIM);
-	}
-	else {
+	} else {
 		// A monster attacking a monster will not dodge
 		if (self.enemy.flags & FL_MONSTER)
 			dir = normalize(self.enemy.origin - self.origin);
@@ -541,18 +575,17 @@ void() W_FireSuperShotgun = {
 		// Only got 2 shells in the gun (reduced damage)
 		if (self.ammo_shells < 3) {
 			self.ammo_shells = 0;
-			ssg_qty = QUANTITY_SSG * 1;
+			ssg_qty = QUANTITY_SSG;
 		} else {
 			// 150% damage
 			shell_qty = 3;
 			self.ammo_shells = self.ammo_shells - 3;
 			ssg_qty = QUANTITY_SSG * 1.5;
 		}
-	}
-	else {
+	} else {
 		// Default ID SSG damage
 		self.ammo_shells = self.ammo_shells - 2;
-		ssg_qty = QUANTITY_SSG * 1;
+		ssg_qty = QUANTITY_SSG;
 	}
 
 	self.currentammo = self.ammo_shells;
@@ -864,6 +897,10 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage = {
 	f_z = 0;
 	f = f*16;
 
+	// Need to fool T_Damage that damage is coming from LG
+	temp_classgroup = from.classgroup;
+	if (from) from.classgroup = CG_PROJCELLS;
+
 	e1 = e2 = world;
 	lighthit = FALSE;
 	//	LightningDamage (org, trace_endpos, self, 10);
@@ -907,17 +944,10 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage = {
 
 		// Check for any cell/lightning resistance
 		else if (trace_ent.resist_cells > 0) {
-			damage = damage * trace_ent.resist_cells;
+			// damage = damage * trace_ent.resist_cells;
 			Resist_Effects(trace_ent,trace_endpos,VEC_ORIGIN,0,AM_CELLS,trace_ent.pain_sound,"");
 			if (damage > 0) {
-				if (from != world) {
-					// Need to fool T_Damage that damage is coming from LG
-					temp_classgroup = from.classgroup;
-					from.classgroup = CG_PROJCELLS;
-					from.classgroup = temp_classgroup;
-				} else {
-					T_Damage (trace_ent, from, from, damage, DAMARMOR);
-				}
+				T_Damage (trace_ent, from, from, damage, DAMARMOR);
 			}
 		}
 		else {
@@ -930,7 +960,8 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage = {
 			// Source = Lightning originally came from player
 			LightningReflection(trace_endpos, trace_ent, damage*0.5);
 		}
-	}	
+	}
+	if (from) from.classgroup = temp_classgroup;
 };
 
 //----------------------------------------------------------------------
@@ -1035,7 +1066,6 @@ void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage = {
 	if (lighthit) {
 		// Check for any cell/lightning resistance
 		if (trace_ent.resist_cells > 0) {
-			damage = Resist_Damage(trace_ent, AM_CELLS, damage);
 			Resist_Effects(trace_ent,trace_endpos,VEC_ORIGIN,0,AM_CELLS,trace_ent.pain_sound,"");
 			if (damage > 0) {
 				// Need to fool T_Damage that damage is coming from LG
@@ -1161,12 +1191,12 @@ void(float cl) W_FireThunderbolt = {
 	self.currentammo = self.ammo_cells = self.ammo_cells - damage;
     damage = damage * 15;
 
-// Grrr, when a beam is drawn from a client, it always starts from the
-// origin no matter the source point passed.  QuakeC can't fix this
-// without causing some other problem sore to the eyes.
+	// Grrr, when a beam is drawn from a client, it always starts from the
+	// origin no matter the source point passed.  QuakeC can't fix this
+	// without causing some other problem sore to the eyes.
     makevectors(self.v_angle);
     org = self.origin + '0 0 16';
-// Note:  Changing 1st parm won't make lightning start elsewhere from client.
+	// Note:  Changing 1st parm won't make lightning start elsewhere from client.
     if (cl)
         BurstLit_Bolt (self.origin, org + v_forward*600, self, damage, 350);
     else
@@ -1413,8 +1443,8 @@ void(entity targ) W_SetCurrentAmmo = {
 			targ.weaponmodel = "";
 		}
 	}
-	if (targ.weapon != IT_MACE && targ.weapon != IT_ICE && targ.weapon != IT_SCIMITAR && targ.weapon != IT_GUNGNIR && targ.weapon != IT_RAPIER && targ.weapon != IT_SANGUINATORS && targ.weapon != IT_VOID_STAFF)
-		targ.weaponframe = 0;		// reset weapon frame, but not for Arms of Asgard weapons
+	// if (targ.weapon != IT_MACE && targ.weapon != IT_ICE && targ.weapon != IT_SCIMITAR && targ.weapon != IT_GUNGNIR && targ.weapon != IT_RAPIER && targ.weapon != IT_SANGUINATORS && targ.weapon != IT_VOID_STAFF)
+		// targ.weaponframe = 0;		// reset weapon frame, but not for Arms of Asgard weapons
 };
 
 /*======================================================================

@@ -1,0 +1,73 @@
+../progs.dat
+
+defs.qc  		//contains new defn's
+subs.qc
+hipsubs.qc		//HIPSUBS.QC
+fight.qc
+ai.qc
+combat.qc
+items.qc
+
+ne_ambience.qc		// global (attenuationless) sound playing code.
+
+ne_trigamb.qc		// triggered ambience.  W_Precache has been transplanted here.
+weapons.qc  		//modified for Plasma Lance
+world.qc  		//modified
+client.qc
+player.qc
+monsters.qc
+doors.qc
+buttons.qc
+triggers.qc
+plats.qc
+misc.qc
+
+ne_mapobj.qc		// map objects!  yay!
+
+monsfade.qc
+
+ogre.qc
+demon.qc
+shambler.qc
+knight.qc
+soldier.qc
+wizard.qc
+dog.qc
+zombie.qc
+boss.qc
+
+tarbaby.qc		// registered
+hknight.qc		// registered
+fish.qc			// registered
+shalrath.qc		// registered
+enforcer.qc		// registered
+oldone.qc		// registered
+
+ne_triggers.qc
+ne_info.qc
+HIPTRAPS.qc		// transplanted hipnotic lightning code
+ne_items.qc		// new items
+ne_misc.qc
+
+voreling.qc
+polyp.qc
+
+drole.qc
+
+vermis_init.qc		//vermis initialization code
+vermis_ai.qc
+vermis.qc		//vermis code
+
+ne_effects.qc
+
+//HIPROT.qc		// hipnotic/ritual qc code.
+//HIP_misc.qc		// misc entities from hipnotic
+
+ne_snd.qc		// modified hipnitual sound playing ent.
+
+ne_spawnmulti.qc	// Multiple monster spawner
+
+
+
+//testing for huge monster bbox
+//bbox.qc

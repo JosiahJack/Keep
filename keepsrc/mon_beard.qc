@@ -1161,88 +1161,80 @@ Void function hknight_melee();
     }
 }
 
-Void function monster_hell_knight();
-{
+void() monster_beard = {
   if (deathmatch) {
     remove(self);
     exit;
     }
-  total_monsters = total_monsters + 1;
-  if (self.classname == "monster_beard") {
-    precache_model2("progs/beard.mdl");
-    precache_sound("ghoro/balls.wav");
-    precache_sound("ghoro/spawnb.wav");
-    setmodel(self, "progs/beard.mdl");
-    precache_sound("ghoro/talk1.wav");
-    precache_sound("ghoro/talk2.wav");
-    precache_sound("ghoro/talk3.wav");
-    precache_sound("ghoro/laugh.wav");
-    }
-  else {
-    precache_model2("progs/hknight.mdl");
-    }
-  precache_model2("progs/k_spike.mdl");
-  precache_model2("progs/h_hellkn.mdl");
-  precache_sound2("hknight/attack1.wav");
-  precache_sound2("hknight/death1.wav");
-  precache_sound2("hknight/pain1.wav");
-  precache_sound2("hknight/sight1.wav");
-  precache_sound("hknight/hit.wav");
-  precache_sound2("hknight/slash1.wav");
-  precache_sound2("hknight/idle.wav");
-  precache_sound2("hknight/grunt.wav");
-  precache_sound("knight/sword1.wav");
-  precache_sound("knight/sword2.wav");
-  precache_sound("sets/set2_4.wav");
-  precache_sound("sets/dml1_4.wav");
-  if (!(self.brain & NO_SWIM)) {
-    self.brain = self.brain | NO_SWIM;
-    }
-  if (self.classname == "monster_beard") {
-    self.lives = 8;
-    self.th_wins = beard_wins;
-    if (!(self.health)) {
-      self.health = 650;
-      }
-    if (!(self.brain & BLINK)) {
-      self.brain = self.brain | BLINK;
-      }
-    }
-  else {
-    self.health = 250;
-    }
-  if (!(self.brain & NAVLOGIC)) {
-    self.brain = self.brain | NAVLOGIC;
-    }
-  if (self.targetname == "actor19" || self.targetname == "actor20") {
-    self.th_stand = hknight_wait;
-    self.th_walk = hknight_wait;
-    }
-  else {
-    self.th_stand = hknight_stand1;
-    self.th_walk = hknight_walk1;
-    }
-  if (self.classname == "monster_beard" && world.model == "maps/neh2m1.bsp") {
-    self.th_stand = hknight_wait;
-    self.th_walk = hknight_wait;
-    }
-  self.th_run = hknight_run1;
-  self.th_melee = hknight_melee;
-  self.th_missile = hknight_magicc1;
-  self.th_pain = hknight_pain;
-  self.th_die = hknight_die;
-  if (self.brain & TRIGGER_SPAWN) {
-    self.use = hknight_start;
-    exit;
-    }
-  self.solid = SOLID_SLIDEBOX;
-  self.movetype = MOVETYPE_STEP;
-  if (!(self.model)) {
-    setmodel(self, "progs/hknight.mdl");
-    }
-  setsize(self, VEC_HULL_MIN, [16 16 40]);
-  walkmonster_start();
-}
+
+	precache_model2("progs/beard.mdl");
+	precache_sound("ghoro/balls.wav");
+	precache_sound("ghoro/spawnb.wav");
+	setmodel(self, "progs/beard.mdl");
+	precache_sound("ghoro/talk1.wav");
+	precache_sound("ghoro/talk2.wav");
+	precache_sound("ghoro/talk3.wav");
+	precache_sound("ghoro/laugh.wav");
+	precache_model2("progs/k_spike.mdl");
+	precache_model2("progs/h_hellkn.mdl");
+	precache_sound2("hknight/attack1.wav");
+	precache_sound2("hknight/death1.wav");
+	precache_sound2("hknight/pain1.wav");
+	precache_sound2("hknight/sight1.wav");
+	precache_sound("hknight/hit.wav");
+	precache_sound2("hknight/slash1.wav");
+	precache_sound2("hknight/idle.wav");
+	precache_sound2("hknight/grunt.wav");
+	precache_sound("knight/sword1.wav");
+	precache_sound("knight/sword2.wav");
+	precache_sound("sets/set2_4.wav");
+	precache_sound("sets/dml1_4.wav");
+	self.sight_sound = "ghoro/laugh.wav";
+	if (!(self.brain & NO_SWIM)) {
+	self.brain = self.brain | NO_SWIM;
+	}
+	if (self.classname == "monster_beard") {
+	self.lives = 8;
+	self.th_wins = beard_wins;
+	if (!(self.health)) {
+	self.health = 650;
+	}
+	if (!(self.brain & BLINK)) {
+	self.brain = self.brain | BLINK;
+	}
+	}
+	else {
+	self.health = 250;
+	}
+	if (!(self.brain & NAVLOGIC)) {
+	self.brain = self.brain | NAVLOGIC;
+	}
+	if (self.targetname == "actor19" || self.targetname == "actor20") {
+	self.th_stand = hknight_wait;
+	self.th_walk = hknight_wait;
+	}
+	else {
+	self.th_stand = hknight_stand1;
+	self.th_walk = hknight_walk1;
+	}
+	if (self.classname == "monster_beard" && world.model == "maps/neh2m1.bsp") {
+	self.th_stand = hknight_wait;
+	self.th_walk = hknight_wait;
+	}
+	self.th_run = hknight_run1;
+	self.th_melee = hknight_melee;
+	self.th_missile = hknight_magicc1;
+	self.th_pain = hknight_pain;
+	self.th_die = hknight_die;
+	if (self.brain & TRIGGER_SPAWN) {
+	self.use = hknight_start;
+	exit;
+	}
+
+
+	setsize(self, VEC_HULL_MIN, [16 16 40]);
+	monster_start();
+};
 
 Void function hknight_start();
 {
@@ -1286,10 +1278,6 @@ Void function hknight_begin();
     }
 }
 
-void() monster_beard = {
-	self.sight_sound = "ghoro/laugh.wav";
-	monster_hell_knight();
-};
 
 void() thinking_balls = {
 	if (self.cnt > 10) {

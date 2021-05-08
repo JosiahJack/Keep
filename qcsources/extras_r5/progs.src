@@ -1,0 +1,66 @@
+//E:/GalaxyClient/Games/Quake/extras_r4/progs.dat
+//F:/FTE/extras_r4/progs.dat
+../progs.dat
+
+defs.qc
+extras/extras_defs.qc   // pOx - additions
+
+frikbot/bot.qc
+frikbot/bot_way.qc
+frikbot/bot_fight.qc 
+frikbot/bot_ai.qc
+frikbot/bot_misc.qc
+frikbot/bot_phys.qc
+frikbot/bot_move.qc
+frikbot/bot_ed.qc
+
+subs.qc
+fight.qc
+ai.qc
+combat.qc
+items.qc
+weapons.qc
+world.qc
+client.qc
+player.qc
+monsters.qc
+doors.qc
+buttons.qc
+triggers.qc
+plats.qc
+misc.qc
+
+ogre.qc
+demon.qc
+shambler.qc
+knight.qc
+soldier.qc
+wizard.qc
+dog.qc
+zombie.qc
+boss.qc
+
+tarbaby.qc		// registered
+hknight.qc		// registered
+fish.qc			// registered
+shalrath.qc		// registered
+enforcer.qc		// registered
+oldone.qc		// registered
+
+eel.qc			// Eel from Dissolution of Eternity
+hydra.qc		// 
+
+// pOx  - additions (see each file for info)
+extras/extras_ai.qc			///	New AI behavior (khreathor)
+extras/extras_subs.qc
+extras/extras_train.qc
+extras/extras_buttons.qc
+extras/extras_emitters.qc
+extras/extras_water.qc
+extras/extras_triggers.qc
+extras/extras_misc.qc
+extras/extras_fx.qc
+extras/extras_corpse.qc
+
+// pOx - stuff from Scourge of Armagon
+hipnotic/hiprot.qc

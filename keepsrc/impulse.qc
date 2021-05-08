@@ -13,7 +13,7 @@ void() ImpulseCommands =
 
 	else if (self.impulse == 56) ToggleDragonArmor();
 	else if (self.impulse == 57) ToggleSpiritShroud();
-	else if (self.impulse == 58) ToggleBerserkerArmor(); // Quad time using armor for seconds!
+	else if (self.impulse == 58) ToggleBerserkerArmor(); // Quad time using Demonhide armor for seconds!
 	else if (self.impulse == 59) TogglePowerShield(); // Uses cells to absorb damage when hit
 	// Only these MOD options can be changed via the console
 	else if (self.impulse == 100) toggleautoaim();		// Toggle auto aim

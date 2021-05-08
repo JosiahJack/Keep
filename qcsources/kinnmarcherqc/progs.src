@@ -1,0 +1,89 @@
+../progs.dat
+
+defs.qc		// now includes hipnotic defs
+//dpextensions.qc	// darkplaces stuff
+
+misc_bdwsubs.qc
+misc_subs.qc
+monsters/m_ai.qc		// includes original fight.qc and ai.qc
+misc_combat.qc
+misc_items.qc
+itemspawn.qc
+
+misc_bdwspr.qc
+misc_gibs.qc
+
+selector.qc
+impulse.qc
+weapons.qc
+world.qc
+p_client.qc
+p_player.qc
+monsters/m_monsters.qc
+func_doors.qc
+func_buttons.qc
+func_triggers.qc
+func_plats.qc
+func_breakable.qc
+lights.qc
+ambience.qc
+misc_misc.qc
+
+//monsters/monster_turret.qc
+monsters/monster_supergrunt.qc
+
+monsters/monster_ogre.qc
+monsters/monster_demon.qc
+monsters/monster_shambler.qc
+monsters/monster_knight.qc
+monsters/monster_soldier.qc
+monsters/monster_wizard.qc
+monsters/monster_dog.qc
+monsters/monster_zombie.qc
+monsters/monster_boss.qc
+
+monsters/monster_imp.qc
+monsters/monster_shuffler.qc
+monsters/monster_spider.qc
+monsters/monster_archer.qc
+
+
+monsters/monster_tarbaby.qc  // registered
+monsters/monster_hellknight.qc  // registered
+monsters/monster_fish.qc   // registered
+monsters/monster_shalrath.qc  // registered
+monsters/monster_enforcer.qc  // registered
+monsters/monster_oldone.qc  // registered
+
+monsters/m_bdwspawn.qc
+
+// Hipnotic Quake additions
+
+hipsubs.qc
+func_hipbreak.qc
+func_hiptrain.qc
+hip_expl.qc
+hipquake.qc
+//hipcount.qc
+hipitems.qc
+
+hip_push.qc
+//func_hipparticle.qc
+
+
+func_hiprotate.qc
+//monster_scourge.qc
+//hipholes.qc
+hipclock.qc
+func_hiptriggers.qc
+misc_hipmisc.qc
+func_hipwater.qc
+//hipdecoy.qc
+
+monsters/m_paths.qc
+beamtriggers.qc
+misc_bdwmisc.qc
+deco.qc
+
+
+

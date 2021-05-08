@@ -67,11 +67,17 @@ void() megaf_shieldon =
 	// Visually show resistance and reduce damage taken
 	self.resist_shells = self.resist_nails = 0.5;
 	self.resist_rockets = self.resist_cells = 0.5;
+	self.resist_plasma = 0.5;
+	self.resist_multi_rockets = 0.5;
+	// Lava nails pierce armor remember :)
+	self.resist_plasma = 0.5;
+	self.resist_bolts = 0.5;
+	self.resist_poison = 0.5;
+	// Magical AoA weapons still go through
 };
 
 //----------------------------------------------------------------------
-void() megaf_shieldoff =
-{
+void() megaf_shieldoff = {
 	self.takedamage = DAMAGE_AIM;	// Grenades make contact
 	self.bouncegrenade = FALSE;		// Reset to default
 	self.reflectlightning = FALSE;	// Reflect lightning strikes
@@ -79,6 +85,11 @@ void() megaf_shieldoff =
 	self.reflectnails = FALSE;		// Reflect nail projectiles
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = 0; self.resist_cells = 0;
+	self.resist_plasma = 0;
+	self.resist_multi_rockets = 0;
+	self.resist_plasma = 0;
+	self.resist_bolts = 0;
+	self.resist_poison = 0;
 };
 
 //----------------------------------------------------------------------

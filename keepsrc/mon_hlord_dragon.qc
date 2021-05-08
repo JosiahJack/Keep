@@ -54,47 +54,14 @@ void() hlorddragon_melee1;
 
 //////////////////////////////////////
 // FIXME:  Use standard vars.
-.float  hlorddragonAttacking;
 .float  hlorddragonPainSequence;
 .vector hlorddragonLastVelocity;
-//////////////////////////////////////
 
-// ===================================
-// dragon_stop_attack 
-// ===================================
-void() hlorddragon_stop_attack =
-{
-    if (self.hlorddragonAttacking == FALSE)
-        return;
-
-//    skill ramp?
-    self.attack_finished = time + (random() * 2 ) + 4;
-    self.attack_finished = self.attack_finished - skill;
-    // PM:  Encore check for dark lord.
-    if (self.shots_max)
-        self.attack_finished = 0;
-    
-    self.hlorddragonAttacking = FALSE;
-// DISABLED -- Don't waste time doing this just for a debug message.
-//    if (self.movetarget)
-//    {
-//        traceline (self.origin, self.movetarget.origin, TRUE, world);
-//        if (trace_fraction == 1)
-//            return;
-//        else
-//            bprint ("Error: Dragon cannot get to next target!\n");
-//    }
-};
-
-// ===================================
-// dragon_check_attack 
-// ===================================
 void() hlorddragon_check_attack = {
     local   vector  vec;
     local   float   dot;
 
-    if (self.hlorddragonAttacking == TRUE)
-        return;
+    if (self.dragonAttacking == TRUE) return;
     if (self.enemy.health < 1)
     {
         self.enemy = self.oldenemy;
@@ -112,35 +79,27 @@ void() hlorddragon_check_attack = {
     
     if (self.enemy == world)
         FindTarget ();
-    else
-    {
+    else {
         makevectors (self.angles);
         vec = normalize (self.enemy.origin - self.origin);
         dot = vec * v_forward;
-        if (dot > 0.3)
-        {
+        if (dot > 0.3) {
             traceline (self.origin, self.enemy.origin, TRUE, world);
-            if (trace_fraction == 1)
-            {
+            if (trace_fraction == 1) {
                 dot = vlen ( self.enemy.origin - self.origin );
                 // dot was 350, but that was too much.
-                if ((dot < 250) && !self.cnt)
-                {
+                if ((dot < 250) && !self.cnt) {
                     if (random() < 0.5)
                         self.cnt = 1;   // Use missile attack next time.
-                    self.hlorddragonAttacking = TRUE;
+                    self.dragonAttacking = TRUE;
                     self.think = hlorddragon_melee1;
                     return;
-                }
-                else
-                {
+                } else {
                     self.cnt = 0;
-                    self.hlorddragonAttacking = TRUE;
+                    self.dragonAttacking = TRUE;
                     self.think = self.th_missile;
                 }
             }
-//            else
-//                bprint ("can't see player!\n");
         }
     }
 };
@@ -164,29 +123,19 @@ void() hlorddragon_untilt =
 // ===================================
 // dragon_move 
 // ===================================
-void(float dist) hlorddragon_move =
-{
-    local   vector  moveDir;
-    local   vector  moveAngles;
-    local   float   leftTurn, rightTurn, turnOffset;
-    local   entity  oldEnemy;
-    local   entity  targ;       // Goal the dragon should aim/move toward.
-    local   float   onpath;     // TRUE if flying toward path_corner.
+void(float dist) hlorddragon_move = {
+    local   vector  moveDir, moveAngles;
+    local   float   leftTurn, rightTurn, turnOffset, onpath; // onpath is TRUE if flying toward path_corner.
+    local   entity  oldEnemy, targ;       // Goal the dragon should aim/move toward.    
 
-    if (self.health < 1)
-        return;     // PM:  Removed the remove statement.
-    
-    if (self.hlorddragonAttacking == FALSE)
-        hlorddragon_check_attack();
-    
+    if (self.health < 1) return; // PM:  Removed the remove statement.
+
+    if (self.dragonAttacking == FALSE) hlorddragon_check_attack();
     oldEnemy = self.enemy;
-
-// Set the goal the dragon should seek this frame.
-    onpath = (self.movetarget.classname == "path_corner");
-    if ( onpath && (self.ryuflags & RYU_PATH) )
+    onpath = (self.movetarget.classname == "path_corner"); // Set the goal the dragon should seek this frame.
+    if (onpath && self.classtype == CT_MONWYRM)
         targ = self.movetarget;
-    else if (self.enemy)
-    {
+    else if (self.enemy) {
         if (self.enemy.health < 1)
             targ = world;
         else
@@ -200,13 +149,9 @@ void(float dist) hlorddragon_move =
         targ = world;
     self.goalentity = targ;
 
-    if (self.hlorddragonAttacking == FALSE)
-    {
-        if (targ)
-        {   // Seeking a path_corner, enemy, or master...
-            if (!onpath)
-            {   // Dragon is seeking a target, not following a path.
-                // Don't bother with fancy tilt code -- just untilt it.
+    if (self.dragonAttacking == FALSE) {
+        if (targ) {   // Seeking a path_corner, enemy, or master...
+            if (!onpath) {   // Dragon is seeking a target, not following a path.  Don't bother with fancy tilt code -- just untilt it.
                 hlorddragon_untilt ();
 
                 // Aim high above the target's head.
@@ -215,10 +160,8 @@ void(float dist) hlorddragon_move =
                 setorigin (temp_goal, temp_goal.origin);
 
                 self.enemy = temp_goal;
-                if (!oldEnemy)
-                {   // Following a master, not an enemy.
-                    if (Wyrm_WalkMove (self.angles_y, dist))
-                    {   // Direct movement successful, so stop here.
+                if (!oldEnemy) {   // Following a master, not an enemy.
+                    if (Wyrm_WalkMove (self.angles_y, dist)) {   // Direct movement successful, so stop here.
                         ai_face ();
                         self.enemy = oldEnemy;
                         return;
@@ -226,8 +169,7 @@ void(float dist) hlorddragon_move =
                 }
                 moveDir = self.origin;
                 QC_MoveToGoal (dist);
-                if (moveDir == self.origin)
-                {
+                if (moveDir == self.origin) {
                     moveDir = self.origin;
                     Wyrm_WalkMove (self.angles_y, dist);
                     if (moveDir == self.origin)
@@ -240,28 +182,22 @@ void(float dist) hlorddragon_move =
             // Following a path.
             moveDir = targ.origin - self.origin;
             moveAngles = vectoangles (moveDir);
-        }
-        else
-        {   // No path or target, so fly forward.
+        } else { // No path or target, so fly forward.
             makevectors (self.angles);
             moveDir = v_forward;
             moveAngles = self.angles;
         }
         self.enemy = targ;
-    }
-    else
-    {   // Turn toward the enemy during an attack.
+    } else { // Turn toward the enemy during an attack.
         moveDir = self.enemy.origin;
         if (targ)
-            if (!onpath)    // If moving toward enemy, fly above its head.
-                moveDir_z = moveDir_z + self.enemy.maxs_z + 40;
+            if (!onpath) moveDir_z = moveDir_z + self.enemy.maxs_z + 40; // If moving toward enemy, fly above its head.
         moveDir = moveDir - self.origin;
         moveAngles = vectoangles (moveDir);
     }
     
     turnOffset = self.angles_y - moveAngles_y;
-    if (turnOffset != 0)
-    {
+    if (turnOffset != 0) {
         turnOffset = 180 - self.angles_y;
         leftTurn = anglemod (moveAngles_y + turnOffset) - 180;
         rightTurn = 180 - anglemod (moveAngles_y + turnOffset);
@@ -271,42 +207,34 @@ void(float dist) hlorddragon_move =
         else if (rightTurn < 0)
             rightTurn = 360;
     
-    // PM:  yaw_speed already set at spawn time.
-        if (rightTurn < 180)
-        {
+		// PM:  yaw_speed already set at spawn time.
+        if (rightTurn < 180) {
             if (self.yaw_speed < rightTurn)
                 self.angles_y = self.angles_y - self.yaw_speed;
             else
                 self.angles_y = moveAngles_y;
     
-            if (rightTurn > 5)
-            {
+            if (rightTurn > 5) {
                 self.angles_z = self.angles_z + 5;
-                if (self.angles_z > 30)
-                    self.angles_z = 30;
+                if (self.angles_z > 30) self.angles_z = 30;
             }
             turnOffset = rightTurn;
-        }
-        else 
-        {
+        } else  {
             if (self.yaw_speed < rightTurn)
                 self.angles_y = self.angles_y + self.yaw_speed;
             else
                 self.angles_y = moveAngles_y;
 
-            if (leftTurn > 5)
-            {
+            if (leftTurn > 5) {
                 self.angles_z = self.angles_z - 5;
-                if (self.angles_z < -30)
-                    self.angles_z = -30;
+                if (self.angles_z < -30) self.angles_z = -30;
             }
             turnOffset = leftTurn;
         }
     }
-    else
-        hlorddragon_untilt ();
+    else hlorddragon_untilt ();
 
-// PM:  Don't use setorigin because of clipping problems.
+	// PM:  Don't use setorigin because of clipping problems.
     if (moveDir_z > 5)
         ai_up (5);     //setorigin (self, self.origin + '0 0 5');
     else if (moveDir_z < -5) 
@@ -314,67 +242,53 @@ void(float dist) hlorddragon_move =
 
     moveAngles = self.origin;
     Wyrm_WalkMove (self.angles_y, dist);
-    if (moveAngles == self.origin)
-    {
-//        bprint ("Cannot move smoothly. movetogoal..\n");
-        QC_MoveToGoal (dist);
-    }
+    if (moveAngles == self.origin) QC_MoveToGoal (dist);
     self.enemy = oldEnemy;
 };
 
-// ===================================
-// movement
-// ===================================
-
 // attack A: start - walk1  stop - walk 5
-// ================
 void() hlorddragon_atk_a1=[$drgfix1a, hlorddragon_atk_a2 ] {hlorddragon_move(17);};
 void() hlorddragon_atk_a2=[$drgfix1b, hlorddragon_atk_a3 ] {hlorddragon_move(17);hlorddragon_fireball();};
-void() hlorddragon_atk_a3=[$drgfix1c, hlorddragon_walk5  ] {hlorddragon_move(17);hlorddragon_stop_attack();};
+void() hlorddragon_atk_a3=[$drgfix1c, hlorddragon_walk5  ] {hlorddragon_move(17);dragon_stop_attack();};
 
 // attack B: start - walk3  stop - walk7
-// ================
 void() hlorddragon_atk_b1=[$drgfix2a, hlorddragon_atk_b2 ] {hlorddragon_move(17);};
 void() hlorddragon_atk_b2=[$drgfix2b, hlorddragon_atk_b3 ] {hlorddragon_move(17);hlorddragon_fireball();};
-void() hlorddragon_atk_b3=[$drgfix2c, hlorddragon_walk7  ] {hlorddragon_move(17);hlorddragon_stop_attack();};
+void() hlorddragon_atk_b3=[$drgfix2c, hlorddragon_walk7  ] {hlorddragon_move(17);dragon_stop_attack();};
 
 // attack C: start - walk5  stop - walk9
-// ================
 void() hlorddragon_atk_c1=[$drgfix3a, hlorddragon_atk_c2 ] {hlorddragon_move(17);};
 void() hlorddragon_atk_c2=[$drgfix3b, hlorddragon_atk_c3 ] {hlorddragon_move(17);hlorddragon_fireball();};
-void() hlorddragon_atk_c3=[$drgfix3c, hlorddragon_walk9  ] {hlorddragon_move(17);hlorddragon_stop_attack();};
+void() hlorddragon_atk_c3=[$drgfix3c, hlorddragon_walk9  ] {hlorddragon_move(17);dragon_stop_attack();};
 
 // attack d: start - walk7  stop - walk11
 // ================
 void() hlorddragon_atk_d1=[$drgfix4a, hlorddragon_atk_d2 ] {hlorddragon_move(17);};
 void() hlorddragon_atk_d2=[$drgfix4b, hlorddragon_atk_d3 ] {hlorddragon_move(17);hlorddragon_fireball();};
-void() hlorddragon_atk_d3=[$drgfix4c, hlorddragon_walk11 ] {hlorddragon_move(17);hlorddragon_stop_attack();};
+void() hlorddragon_atk_d3=[$drgfix4c, hlorddragon_walk11 ] {hlorddragon_move(17);dragon_stop_attack();};
 
 // attack E: start - walk9  stop - walk13
 // ================
 void() hlorddragon_atk_e1=[$drgfix5a, hlorddragon_atk_e2 ] {hlorddragon_move(17);};
 void() hlorddragon_atk_e2=[$drgfix5b, hlorddragon_atk_e3 ] {hlorddragon_move(17);hlorddragon_fireball();};
-void() hlorddragon_atk_e3=[$drgfix5c, hlorddragon_walk13 ] {hlorddragon_move(17);hlorddragon_stop_attack();};
+void() hlorddragon_atk_e3=[$drgfix5c, hlorddragon_walk13 ] {hlorddragon_move(17);dragon_stop_attack();};
 
 // attack F: start - walk11  stop - walk3
 // ================
 void() hlorddragon_atk_f1=[$drgfix6a, hlorddragon_atk_f2 ] {hlorddragon_move(17);};
 void() hlorddragon_atk_f2=[$drgfix6b, hlorddragon_atk_f3 ] {hlorddragon_move(17);hlorddragon_fireball();};
 void() hlorddragon_atk_f3=[$drgfix6c, hlorddragon_atk_f4 ] {hlorddragon_move(17);};
-void() hlorddragon_atk_f4=[$drgfix6c, hlorddragon_walk3  ] {hlorddragon_move(17);hlorddragon_stop_attack();};
+void() hlorddragon_atk_f4=[$drgfix6c, hlorddragon_walk3  ] {hlorddragon_move(17);dragon_stop_attack();};
 
 // ===================================
 // dragon walk frames
 // ===================================
 void() hlorddragon_walk1 =[ $drgfly01, hlorddragon_walk2 ] {
-    if (self.hlorddragonAttacking)
-        hlorddragon_stop_attack();
-            
+    if (self.dragonAttacking) dragon_stop_attack();          
     self.th_missile=dragon_atk_a1;
     self.hlorddragonPainSequence=1;
     hlorddragon_move(17);
-    if (random() < 0.2)
-        sound (self, CHAN_VOICE, "drake/dragon/active.wav", 0.6, ATTN_IDLE);
+    if (random() < 0.2) sound (self, CHAN_VOICE, "drake/dragon/active.wav", 0.6, ATTN_IDLE);
 };
 void() hlorddragon_walk2 =[ $drgfly02, hlorddragon_walk3 ]
     {self.th_missile=SUB_Null; dragon_move(17);};
@@ -430,27 +344,21 @@ void() hlorddragon_fireball = {
     makevectors (self.angles);
     org = self.origin + v_forward*96 + v_up*16;
 
-	//---------
-	// FIXME: Dark lord test.
     if (self.classname == "monster_dark_lord") {
-        if (random() < skill * 0.5)
-            self.shots_max = !self.shots_max;
+        if (random() < skill * 0.5) self.shots_max = !self.shots_max;
     }
-	//---------
+
     if (random() > 0.66) {
 		// Plasma
         fireType = FALSE;
         fireCount = 1;
         if (self.classname != "monster_dark_lord")  // PM:  Two is excessive for the dark lord.
-        if (skill > 1)
-            fireCount = 2;
+			if (skill > 1) fireCount = 2;
         self.shots_max = 0;     // No more attacks -- too cheap!
     } else {
-		// Fireballs
-        fireType = TRUE;
+        fireType = TRUE; // Fireballs
         fireCount = random() * skill;   // easy 0, med 0-1, hard 0-2, nm 0-3
-        fireCount = rint ( fireCount ) + 1;
-		// easy 1, med 1-2, hard 1-3, nm 1-4
+        fireCount = rint ( fireCount ) + 1; // easy 1, med 1-2, hard 1-3, nm 1-4
     }
 
     self.effects = self.effects | EF_MUZZLEFLASH;
@@ -459,8 +367,7 @@ void() hlorddragon_fireball = {
         //  This is a brutal flak/shotgun style attack.
         distortion = (random() - 0.5) * 0.25;
         if (self.classname == "monster_dark_lord") {
-            if (fireCount == 1)
-                distortion = 0;
+            if (fireCount == 1) distortion = 0;
 
             if (self.shots_max)
                 dir = self.enemy.origin;
@@ -474,34 +381,26 @@ void() hlorddragon_fireball = {
         dir = dir + v_right * distortion;
 
         sped = random() * 300 + 900;    // For the fireballs.
-        if (fireType)
-        {   sound (self, CHAN_WEAPON, "drake/dragon/fire.wav", 1, ATTN_NORM);
+        if (fireType) {
+			sound (self, CHAN_WEAPON, "drake/dragon/fire.wav", 1, ATTN_NORM);
             Meteor_Launch (self, org, dir, sped, 90);
-			//launch_fireball(org, dir);
         } else {
 			sound (self, CHAN_WEAPON, "drake/plasma/fire.wav", 1, ATTN_NORM);
 			launch_plasma(org, dir, CT_PROJ_PLASMA, sped);
         }
-
         fireCount = fireCount - 1;
     }
-
 };
 
-// ===================================
 // melee attacks
-// ===================================
 void() hlorddragon_tail = {
     local float dist;
     local vector dir;
     
-    if (!self.enemy)
-        return;
-    if (!CanDamage (self.enemy, self))
-        return;
+    if (!self.enemy) return;
+    if (!CanDamage (self.enemy, self)) return;
 
     hlorddragon_move(10);
-
     dir = self.enemy.origin - self.origin;
     dist = vlen (dir);
     if (dist < 250)
@@ -515,7 +414,7 @@ void() hlorddragon_tail = {
             self.enemy.velocity_z = 350;
         }
     }
-    hlorddragon_stop_attack();
+    dragon_stop_attack();
 };
 
 void() hlorddragon_melee1  =[$drgslh01, hlorddragon_melee2 ] {hlorddragon_move(12);};
@@ -564,15 +463,13 @@ void(entity inflictor, entity attacker, float damage) hlorddragon_pain = {
         return;
     if (skill >= 3)
         return;     // PM:  No pain in Nightmare.
-    if (self.hlorddragonAttacking)
+    if (self.dragonAttacking)
         return;     // PM:  Don't flinch while attacking.
 
     if (random() < 0.25) {
-        hlorddragon_stop_attack();
-
+        dragon_stop_attack();
         sound (self, CHAN_VOICE, "dragon/pain.wav", 1, ATTN_NORM);
         self.pain_finished = time + 2;
-
         if (self.hlorddragonPainSequence == 1)
             self.think = hlorddragon_painA1;
         else if (self.hlorddragonPainSequence == 2)
@@ -588,35 +485,11 @@ void(entity inflictor, entity attacker, float damage) hlorddragon_pain = {
     }
 };
 
-// ===================================
-// death
-// ===================================
-void(string gibname) HlordDragonAccelerate_Gib = {
-    local   vector  vel, spin;
-
-    vel = self.velocity * -1.25;
-    makevectors (vel);
-    vel = vel + v_right * (random() * 300 - 150);
-    vel = vel + v_up * (random() * 300 - 150);
-
-    spin_x = random() * 600;
-    spin_y = random() * 600;
-    spin_z = random() * 600;
-
-    Gib_Spawn (self.origin, gibname, vel, spin, 0, 0, TRUE, self.spawned);
-};
-
-void(float loop) HLordDragonViolentDeath = {
-    while (loop > 0) {
-        HlordDragonAccelerate_Gib ("progs/gib1.mdl");
-        HlordDragonAccelerate_Gib ("progs/gib2.mdl");
-        HlordDragonAccelerate_Gib ("progs/gib3.mdl");
-        loop = loop - 3;
-    }
-};
 void() hlorddragon_boom = {
     self.velocity = self.hlorddragonLastVelocity;
-    HLordDragonViolentDeath(15);
+    ThrowGib(1,15);
+    ThrowGib(2,15);
+    ThrowGib(3,15);
     self.target = "dragondoor";
     SUB_UseTargets();            
     remove(self);
@@ -641,31 +514,20 @@ void() hlorddragon_nuke = {
 };
 
 void() hlorddragon_parts = {
-    ThrowIt ("progs/drake/drggib01.mdl", -100, GIBx_GIB|GIB_SKIN_MATCH);
-    ThrowIt ("progs/drake/drggib02.mdl", -100, GIBx_GIB|GIB_SKIN_MATCH);
-    ThrowIt ("progs/drake/drggib03.mdl", -100, GIBx_GIB|GIB_SKIN_MATCH);
-    // Was "player/tornoff2.wav".
-    sound (self, CHAN_BODY, "player/teledth1.wav", 1, ATTN_NONE);
+	monster_ThrowGib();
+    sound (self, CHAN_BODY, "player/teledth1.wav", 1, ATTN_NONE); // Was "player/tornoff2.wav".
 };
 
 void() hlorddragon_explode =  {
-    if (self.deadflag > DEAD_DYING)
-        return;     // Already exploded.
+    if (self.deadflag > DEAD_DYING) return;  // Already exploded.
         
     if (vlen(self.velocity) < 100 || self.flags & FL_INWATER) {
         self.touch = SUB_Null;
-        //monster_dead (FALSE);   // It's dead for sure.
-
+		self.deadflag = self.deadflag & DEAD_DYING;
         hlorddragon_parts ();
-//- - - - - - - - -
-        // Explode for massive damage!
-        hlorddragon_nuke ();
+        hlorddragon_nuke (); // Explode for massive damage!
         Quake_Self (800, 0, self.origin, 0, 1);     // Distance was 600.
-//- - - - - - - - -
-        // We can't remove dragon now, because this may be called during a
-        // touch function, in which case the C code is looping through area
-        // links.  Delay removal for a frame.
-        self.think = hlorddragon_boom;
+        self.think = hlorddragon_boom;         // We can't remove dragon now, because this may be called during a touch function, in which case the C code is looping through area links.  Delay removal for a frame.
         self.nextthink = time + 0.100;
     } else {
         makevectors (self.angles);
@@ -697,7 +559,7 @@ void() hlorddragon_death1  =[ $drgdth01, hlorddragon_death2  ] {
     self.touch    = hlorddragon_squish;
 
     sound (self, CHAN_VOICE, "dragon/death.wav", 1, ATTN_NONE);
-    self.hlorddragonAttacking = FALSE;
+    self.dragonAttacking = FALSE;
 };
 void() hlorddragon_death2  =[ $drgdth02, hlorddragon_death3  ] {hlorddragon_explode();};
 void() hlorddragon_death3  =[ $drgdth03, hlorddragon_death4  ] {hlorddragon_explode();};
@@ -719,13 +581,15 @@ void() hlorddragon_death18 =[ $drgdth18, hlorddragon_death19 ] {hlorddragon_expl
 void() hlorddragon_death19 =[ $drgdth19, hlorddragon_death20 ] {hlorddragon_explode();};
 void() hlorddragon_death20 =[ $drgdth20, hlorddragon_death21 ] {hlorddragon_explode();};
 void() hlorddragon_death21 =[ $drgdth21, SUB_Null       ] {
-// PM:  Added explosion and other gibs.
+	// PM:  Added explosion and other gibs.
     hlorddragon_parts ();
     hlorddragon_nuke ();
     Quake_Self (600, 0, self.origin, 0, 1);
 
-//    ViolentDeath(39);   // Disintegrate into numerous gibs.
-    HLordDragonViolentDeath(15);
+	//    ViolentDeath(39);   // Disintegrate into numerous gibs.
+    ThrowGib(1,15);
+    ThrowGib(2,15);
+    ThrowGib(3,15);
     self.target = "dragondoor";
     SUB_UseTargets();            
     remove(self);
@@ -737,7 +601,7 @@ void() darklord_thebeast = {
 
     self.flags = (self.flags | FL_FLY) - (self.flags & FL_GODMODE);
     self.solid = SOLID_SLIDEBOX;
-
+	self.classtype = CT_MONWYRM;
     // HACK:  For dark lord in unf3.
     if (self.target  != "path_corner")
     if (self.target2 == "path_corner") {
@@ -746,8 +610,8 @@ void() darklord_thebeast = {
         swap = self.target;
         self.target = self.target2;
         self.target2 = swap;
-        if (self.target == "path_corner")
-        {   // Follow a path.
+        if (self.target == "path_corner") {
+			// Follow a path.
             self.movetarget = find(world, targetname, self.target);
             self.ryuflags = self.ryuflags | RYU_PATH;
         }
@@ -757,15 +621,12 @@ void() darklord_thebeast = {
     // Make sure classname stays at "monster_dark_lord".
     self.classname = "monster_dark_lord";
     self.skin = 1;      // Evil red eye black dragon.
-
-    // Reset attack related stuff.
-    self.attack_finished = 0;
     SUB_AttackFinished (2);     // Give player time, unless it's Nightmare+!
-
-    self.hlorddragonAttacking = FALSE;
-
+    self.dragonAttacking = FALSE;
     self.health = self.max_health - 1000;
-
+	self.gib1mdl = "progs/drake/drggib01.mdl";
+	self.gib2mdl = "progs/drake/drggib02.mdl";
+	self.gib3mdl = "progs/drake/drggib03.mdl";
 	setmodel (self, "progs/drake/dragon.mdl");
 	setsize (self, '-96 -96 -24', '96 96 96');
     self.mindex2    = self.modelindex;      // Remember new modelindex.
@@ -782,9 +643,6 @@ void() darklord_thebeast = {
     self.th_die     = hlorddragon_death1;
     self.sight_sound = "drake/dragon/see.wav";
 	self.hello_sound = string_null; // no hello
-    self.th_move    = Wyrm_WalkMove;
-    self.th_goal    = QC_MoveToGoal;
-
     self.hlorddragonPainSequence=1;
     self.yaw_speed = 10;    // Hardwire this now!
     self.mass = 0;          // Now it's a huge massive dragon!

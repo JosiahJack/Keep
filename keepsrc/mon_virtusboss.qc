@@ -233,13 +233,12 @@ void() newboss_finale2 = {
 };
 
 void() newboss_finale = {
-	local entity pos;
-	local entity pl;
-	killed_monsters = killed_monsters + 1;
+	local entity pos, pl;
+
+	AddToKills(self,self.enemy);
 	self.model = string_null;
 	self.mdl = string_null;
-	WriteByte(MSG_ALL, SVC_KILLEDMONSTER);
-	if (!(self.spawnflags & 2)) {
+	if (self.spawnflags & ANAC_INTERMISSION) {
 		intermission_exittime = time + 10000000;
 		intermission_running = 1;
 		pos = find(world, classname, "info_intermission");
@@ -247,7 +246,7 @@ void() newboss_finale = {
 			pos = find(world, classname, "info_boss_spot");
 		}
 		if (!pos) {
-			error("no info_intermission");
+			dprint("no info_intermission");
 		}
 	
 		WriteByte(MSG_ALL, SVC_FINALE);
@@ -272,52 +271,18 @@ void() newboss_finale = {
 	self.think = newboss_finale2;
 };
 
-void() newboss_death1 = [17, newboss_death2] {
-	sound(self, CHAN_VOICE, "boss1/death.wav", 1, ATTN_NORM);
-};
-
-void() newboss_death2 = [18, newboss_death3]
-{
-};
-
-void() newboss_death3 = [19, newboss_death4]
-{
-};
-
-void() newboss_death4 = [20, newboss_death5]
-{
-};
-
-void() newboss_death5 = [21, newboss_death6]
-{
-};
-
-void() newboss_death6 = [22, newboss_death7]
-{
-};
-
-void() newboss_death7 = [23, newboss_death8]
-{
-};
-
-void() newboss_death8 = [24, newboss_death9]
-{
-};
-
-void() newboss_death9 = [25, newboss_death10]
-{
-};
-
-void() newboss_death10 = [26, newboss_death11]
-{
-};
-
-void() newboss_death11 = [27, newboss_death12]
-{
-};
-
-void() newboss_death12 = [28, newboss_death12]
-{
+void() newboss_death1 = [17, newboss_death2] {sound(self, CHAN_VOICE, "boss1/death.wav", 1, ATTN_NORM);};
+void() newboss_death2 = [18, newboss_death3]{};
+void() newboss_death3 = [19, newboss_death4]{};
+void() newboss_death4 = [20, newboss_death5]{};
+void() newboss_death5 = [21, newboss_death6]{};
+void() newboss_death6 = [22, newboss_death7]{};
+void() newboss_death7 = [23, newboss_death8]{};
+void() newboss_death8 = [24, newboss_death9]{};
+void() newboss_death9 = [25, newboss_death10]{};
+void() newboss_death10 = [26, newboss_death11]{};
+void() newboss_death11 = [27, newboss_death12]{};
+void() newboss_death12 = [28, newboss_death12] {
 	local float z;
 	z = self.origin_z - 50;
 	sound(self, CHAN_BODY, "boss1/out1.wav", 1, ATTN_NORM);
@@ -423,15 +388,22 @@ void() monster_newboss = {
 	self.th_die = newboss_death1;
 	self.th_pain = newboss_damage;
 	self.classtype = CT_MONVIRTUS;
+	self.classgroup = CG_BOSS;
+
+	// Always reset Ammo Resistance to be consistent
+	self.resist_shells = self.resist_nails = 0;
+	self.resist_rockets = self.resist_cells = 0;
+
+	AddToTotals(self);
 
 	// No targetname = no trigger!
 	if (self.targetname == "") {
-		dprint("\b[ICEGOLEM]\b Missing targetname name!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
+		dprint("\b[VIRTUS]\b Missing targetname\n");
+		// spawn_marker(self.origin, SPNMARK_YELLOW);
+		newboss_awake();
 		return;
 	}
 
-	total_monsters = total_monsters + 1;
 	self.use = newboss_awake;
 };
 

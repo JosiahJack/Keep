@@ -525,8 +525,7 @@ void() zombie_cruc5	= [$cruc_5,zombie_cruc6] {self.nextthink = time + 0.1 + rand
 void() zombie_cruc6	= [$cruc_6,zombie_cruc1] {self.nextthink = time + 0.1 + random()*0.1;};
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) zombie_cruc_pain =
-{
+void(entity inflictor, entity attacker, float damage) zombie_cruc_pain = {
 	self.health = self.max_health;				// reset health	
 	// Any pain to moan about?
 	if (self.pain_finished < time) zombie_sound(4);
@@ -534,13 +533,13 @@ void(entity inflictor, entity attacker, float damage) zombie_cruc_pain =
 };
 
 //----------------------------------------------------------------------
-void() zombie_cruc_spawn =
-{
+void() zombie_cruc_spawn = {
 	self.use = SUB_Null;				// No more triggers
 	self.solid = SOLID_BBOX;			// Interact with objects
 	self.movetype = MOVETYPE_FLY;		// Cannot be movetype_none
 	setmodel(self, self.mdl);			// Nail to cross
 	setsize (self, self.bbmins, self.bbmaxs);
+	if (self.spawnflags & MON_ONFLOOR) setsize(self,'-16 -16 -4', '16 16 8');
 
 	// Setup exact/randon skin choices
 	self.randomskin = 4;
@@ -553,13 +552,12 @@ void() zombie_cruc_spawn =
 	self.deadflag = DEAD_NO;			// used to stop death re-triggering
 	self.view_ofs = '0 0 -24';			// Standard setup
 	self.pain_timeout = 1;				// Default
-	
+
+
 	zombie_cruc1 ();					// Time to do some moaning
 };
 
-//----------------------------------------------------------------------
-void() zombie_cruc_setup =
-{
+void() zombie_cruc_setup = {
 	// Setup AI functions
 	self.th_stand = self.th_walk = self.th_run = zombie_cruc1;
 	self.th_pain = zombie_cruc_pain; self.th_die = zombie_die;
@@ -575,7 +573,16 @@ void() zombie_cruc_setup =
 	if (self.angles_y > 360) self.angles_y = 360;
 
 	// Zombies cannot be crucified and on the floor at once!
-	self.spawnflags = self.spawnflags - (self.spawnflags & MON_ONFLOOR);
+	// EDIT: Yeah they can.  Just ask Fredrik 'PeyloW' Olsson and his temple2 map
+	if (self.spawnflags & MON_ONFLOOR) {
+		if (!(self.mangle))
+			self.angles_x = 90;
+		else
+			self.angles = self.mangle;
+
+		
+		// pff, see. easy -Qmaster
+	}
 	
 	self.flags = FL_MONSTER;			// Always reset this flag
 	self.effects = 0;					// Always reset
@@ -587,8 +594,7 @@ void() zombie_cruc_setup =
 		setmodel(self, string_null);
 		self.solid = SOLID_NOT;				// No world interaction
 		self.use = zombie_cruc_spawn;		// Wait for trigger
-	}
-	else {
+	} else {
 		// Variable start delay on all monsters to reduce packet errors
 		self.nextthink = time + 0.1 + random()*0.4;
 		self.think = zombie_cruc_spawn;

@@ -1,6 +1,6 @@
 void() weapon_touch = {
 	local float best, new;
-	local float leave, moditem, use2, useperms, usehackbank;
+	local float leave, moditem, use2, useperms, usehackbank, oldhackbank;
 
 	// if the player was using his best weapon
 	// change up to the new one if better		
@@ -12,7 +12,8 @@ void() weapon_touch = {
 	// Deathmatch/coop switch
 	if (deathmatch == 2 || coop) leave = TRUE;
 	else leave = FALSE;
-	
+	oldhackbank = self.selfweaponismoditems;
+
 	new = -1;
 	//----------------------------------------------------------------------
 	if (self.classtype == CT_AXE) {
@@ -257,7 +258,7 @@ void() weapon_touch = {
 		sound (other, CHAN_ITEM, "weapons/pkup.wav", 1, ATTN_NORM);
 	}
 	sprint (other, "\n");
-	stuffcmd (other, "bf\n");
+	Safe_stuffcmd (other, "bf\n");
 
 	// Make sure no ammo is over limits
 	bound_other_ammo (other);
@@ -295,7 +296,7 @@ void() weapon_touch = {
 		
 		// Check for best weapon (DM only) and switch to it!
 		if (deathmatch) {
-			DM_Weapon(new);
+			DM_Weapon(other,new,oldhackbank);
 		} else {
 			if (moditem == IT_UPGRADE_AXE  || self.perms & IT_CHAINSAW) {
 				other.weapon = IT_AXE;
@@ -601,7 +602,7 @@ void() ammo_touch = {
 	sprint (other, self.netname);
 	sprint (other, "\n");
 	sound (other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
-	stuffcmd (other, "bf\n");
+	Safe_stuffcmd (other, "bf\n");
 
 	// Commented out.  Don't auto switch weapons, people hate it. -Qmaster
 	// change to a better weapon if appropriate
@@ -785,9 +786,9 @@ void() item_poison = {
 ======================================================================*/
 void() artifact_touch = {
 	entity pl;
-	//----------------------------------------------------------------------
-	// Existing artifacts
-	//----------------------------------------------------------------------
+	string amboost;
+
+	amboost = string_null;
 	if (self.classtype == CT_ARTSUIT) {
 		other.rad_time = TRUE;
 		if (self.cnt < 0) other.radsuit_finished = POWERUP_VANIA;
@@ -912,7 +913,56 @@ void() artifact_touch = {
 		else other.wing_finished = time + 45;
 	}
 	else if (self.classtype == CT_ARTOPTIMIZER) {
-		other.ammo_shells = AMMO_MAXSHELLS; // max out nails ammo
+		other.maxshells = other.maxshells + self.ammo_shells;
+		other.ammo_shells = other.maxshells; // max out ammo
+		if (self.ammo_shells) amboost = strcat("Max shells increased by ",ftos(self.ammo_shells),"!\n");
+
+		other.maxnails = other.maxnails + self.ammo_nails;
+		other.ammo_nails = other.maxnails; // max out ammo
+		if (self.ammo_nails) amboost = strcat(amboost,"Max nails increased by ",ftos(self.ammo_nails),"!\n");
+
+		other.maxrockets = other.maxrockets + self.ammo_rockets;
+		other.ammo_rockets = other.maxrockets; // max out ammo
+		if (self.ammo_rockets) amboost = strcat(amboost,"Max rockets increased by ",ftos(self.ammo_rockets),"!\n");
+
+		other.maxcells = other.maxcells + self.ammo_cells;
+		other.ammo_cells = other.maxcells; // max out ammo
+		if (self.ammo_cells) amboost = strcat(amboost,"Max cells increased by ",ftos(self.ammo_cells),"!\n");
+
+		other.maxlavanails = other.maxlavanails + self.ammo_lava_nails;
+		other.ammo_lava_nails = other.maxlavanails; // max out ammo
+		if (self.ammo_lava_nails) amboost = strcat(amboost,"Max lava nails increased by ",ftos(self.ammo_lava_nails),"!\n");
+
+		other.maxmultirockets = other.maxmultirockets + self.ammo_multi_rockets;
+		other.ammo_multi_rockets = other.maxmultirockets; // max out ammo
+		if (self.ammo_multi_rockets) amboost = strcat(amboost,"Max multi-rockets increased by ",ftos(self.ammo_multi_rockets),"!\n");
+
+		other.maxplasma = other.maxplasma + self.ammo_plasma;
+		other.ammo_plasma = other.maxplasma; // max out ammo
+		if (self.ammo_plasma) amboost = strcat(amboost,"Max plasma increased by ",ftos(self.ammo_plasma),"!\n");
+
+		other.maxpoison = other.maxpoison + self.ammo_poison;
+		other.ammo_poison = other.maxpoison; // max out ammo
+		if (self.ammo_poison) amboost = strcat(amboost,"Max poison ammo increased by ",ftos(self.ammo_poison),"!\n");
+
+		other.maxbolts = other.maxbolts + self.ammo_bolts;
+		other.ammo_bolts = other.maxbolts; // max out ammo
+		if (self.ammo_bolts) amboost = strcat(amboost,"Max bolts increased by ",ftos(self.ammo_bolts),"!\n");
+
+		other.maxblood = other.maxblood + self.ammo_bloodcrystals;
+		other.ammo_bloodcrystals = other.maxblood; // max out ammo
+		if (self.ammo_bloodcrystals) amboost = strcat(amboost,"Max blood crystals increased by ",ftos(self.ammo_bloodcrystals),"!\n");
+
+		other.maxvoid = other.maxvoid + self.ammo_voidshards;
+		other.ammo_voidshards = other.maxvoid; // max out ammo
+		if (self.ammo_voidshards) amboost = strcat(amboost,"Max void shards increased by ",ftos(self.ammo_voidshards),"!\n");
+
+		other.maxmana = other.maxmana + self.ammo_elemental;
+		other.ammo_elemental = other.maxmana; // max out ammo
+		if (self.ammo_elemental) amboost = strcat(amboost,"Max elemental mana increased by ",ftos(self.ammo_elemental),"!\n");
+
+		sprint(other,amboost);
+		amboost = string_null;
 	}
 	else if (self.classtype == CT_SIGILBANE) {
 		// Give all players 250 health
@@ -938,7 +988,7 @@ void() artifact_touch = {
 	sprint (other, self.netname);
 	sprint (other,"\n");
 	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-	stuffcmd (other, "bf\n");
+	Safe_stuffcmd (other, "bf\n");
 
 	// Update player item flags (regular + mod)
 	other.items = other.items | self.items;
@@ -1135,7 +1185,7 @@ void () horn_touch = {
 	sprint (other,self.netname);
 	sprint (other,"\n");
 	sound (other,CHAN_VOICE,self.noise,TRUE,ATTN_NONE);
-	stuffcmd (other,"bf\n");
+	Safe_stuffcmd (other,"bf\n");
 	activator = other;
 	other.horn_active = TRUE;
 	SUB_UseTargets ();
@@ -1214,7 +1264,7 @@ void () circuitboard_touch = {
 	if (other.health <= 0)
 		return;
 
-	stuffcmd (other, "bf\n");
+	Safe_stuffcmd (other, "bf\n");
 	centerprint (other, "You got a 17-centimeter Fromitz board!");
 	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 	activator = other;
@@ -1280,7 +1330,7 @@ void() armor_touch = {
 	sprint (other, "\n");
 	if (self.noise != SOUND_EMPTY) 
 		sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-	stuffcmd (other, "bf\n");
+	Safe_stuffcmd (other, "bf\n");
 	
 	activator = other;
 	SUB_UseTargets();
@@ -1306,4 +1356,56 @@ void() item_flagblue = {
 
 void() item_flagred = {
 
+};
+
+void() mariomushroom_touch = {
+	if (other.flags & FL_CLIENT && other.health > 1 && other.shroom_finished < time) {
+		other.shroom_finished = time + self.cnt;
+		sound(other,CHAN_VOICE,"items/smb_powerup.wav",1,ATTN_NORM);
+		other.velocity_z = other.velocity_z + 360; // pop up
+		other.flags = other.flags - FL_ONGROUND;
+		other.view_ofs = '0 0 72';
+		other.legsattachment.scale = 2;
+		other.scale = 2;
+		setsize(other,VEC_HULL2_MIN,VEC_HULL2_MAX); // grow up
+		other.effects = other.effects | EF_BRIGHTLIGHT;
+		entity_hide(self);
+	}
+};
+
+void() item_mariomushroom = {
+	// Check for custom model setup?
+	item_debugcustomdl();
+
+	if (self.mdl == "") self.mdl = "progs/madfox/mushroom_item.mdl";
+	precache_model (self.mdl);
+	setmodel (self, self.mdl);
+	precache_sound ("items/smb_powerup.wav");
+	precache_sound ("items/smb_bowserfalls.wav");
+	precache_sound ("items/smb_stomp.wav");
+	precache_sound ("player/jumpmario.wav");
+	self.netname = "A Strange Shroom";
+	if (self.cnt <=0) self.cnt = 60;
+	self.frame = rint(random()*4);
+	self.touch2 = mariomushroom_touch;
+	self.scale = 2;
+	self.solid = SOLID_TRIGGER;
+	setmodel (self,self.mdl);
+	setsize (self, '-16 -16 -24', VEC_HULL_MAX);
+	self.estate_use = item_on;
+	self.classtype = CT_SHROOM;
+	dprint("Starting a mushroom powerup...");
+	self.touch = mariomushroom_touch;
+};
+
+void() weapon_supershotgun_upright = {
+	self.classname = "weapon_supershotgun";
+	self.mdl = "progs/lieutenant/up-shot.mdl";
+	weapon_supershotgun();
+};
+
+void() weapon_nailgun_upright = {
+	self.classname = "weapon_nailgun";
+	self.mdl = "progs/lieutenant/up-nail.mdl";
+	weapon_nailgun();
 };

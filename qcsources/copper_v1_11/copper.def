@@ -1,0 +1,2003 @@
+
+/*QUAKED path_corner (0.5 0.3 0) (-8 -8 -8) (8 8 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Monsters will continue walking towards the next target corner.
+
+Keys:
+"targetname" must be present.  The name of this pathcorner.
+"target" the next spot to move to.  If not present, stop here for good.
+"wait" The number of seconds to spend standing here
+"angle" direction to face while standing here
+*/
+
+/*QUAKED func_button (0 .5 .8) ? ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+When a button is touched, it moves some distance in the direction of its angle, triggers all of its targets, waits some time, then returns to its original position where it can be triggered again.
+
+"angle"		determines the opening direction
+"target"	all entities with a matching targetname will be used
+"speed"		override the default 40 speed
+"wait"		override the default 1 second wait (-1 = never return)
+"lip"		override the default 4 pixel lip remaining at end of move
+"health"	if set, the button must be killed instead of touched
+"sounds"
+0) steam metal
+1) wooden clunk
+2) metallic click
+3) in-out
+4) trigger noise (big light switch)
+*/
+
+/*QUAKED info_player_start (1 0 0) (-16 -16 -24) (16 16 24) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+The normal starting point for a level. Only one is allowed. Will fire its targets when a player is spawned here, with player as activator.
+
+"angle" viewing angle when spawning
+"fog_color"/"fog_density" set the fog when spawning at this spot
+*/
+
+/*QUAKED info_player_start2 (1 0 0) (-16 -16 -24) (16 16 24) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Only used on start map for the return point from an episode. Will fire its targets when a player is spawned here, with player as activator.
+
+"angle" viewing angle when spawning
+"fog_color"/"fog_density" set the fog when spawning at this spot
+*/
+
+/*QUAKED testplayerstart (1 0 0) (-16 -16 -24) (16 16 24) USE ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Debug starting point for a level.  Overrides info_player_start if present and 'USE' is checked, does nothing if 'USE' is not checked. Will fire its targets when a player is spawned, here with player as activator.
+
+"angle" viewing angle when spawning
+"fog_color"/"fog_density" set the fog when spawning at this spot
+*/
+
+/*QUAKED info_player_deathmatch (1 0 1) (-16 -16 -24) (16 16 24) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+potential spawning position for deathmatch games
+
+"angle" viewing angle when spawning
+"fog_color"/"fog_density" set the fog when spawning at this spot
+*/
+
+/*QUAKED info_player_coop (1 0 1) (-16 -16 -24) (16 16 24) TRIGGER_FIRST ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Potential spawning position(s) for coop games. Will fire its targets when a player is spawned here, with player as activator.
+
+"angle" viewing angle when spawning
+"fog_color"/"fog_density" set the fog when spawning at this spot
+
+TRIGGER_FIRST - this start won't be used to spawn coop players until triggered, so respawning players don't have to walk all the way back to the action
+*/
+
+/*QUAKED func_door (0 .5 .8) ? START_OPEN ? DONT_LINK GOLD_KEY SILVER_KEY TOGGLE CRUSHER ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Door. Opens; closes. If two doors touch, they are assumed to be connected and operate as a unit. Targetnames, spawnflags, and items are safely shared between linked doors automatically.
+
+SPAWNFLAGS
+"start_open" causes the door to move to its destination when spawned, and operate in reverse. It is used to temporarily or permanently close off an area when triggered (not usefull for touch or takedamage doors).
+"dont_link" don't link to any touching doors
+"toggle" causes the door to wait in both the start and end states for a trigger event.
+"crusher" do not reverse when blocked
+
+Key doors are always wait -1.
+
+"message"	is printed when the door is touched if it is a trigger door and it hasn't been fired yet.  if locked, will print this instead of default silver/gold message.
+"angle"		determines the opening direction
+"targetname" if set, no touch field will be spawned and a remote button or trigger activates the door, unless the door is only targeted by a target_lock.
+"health"	if set, door must be shot open
+"speed"		movement speed (100 default)
+"speed2"	make close speed different from open speed
+"wait"		wait before returning (3 default, -1 = never return)
+"lip"		lip remaining at end of move (8 default)
+"distance"	specify movement distance directly, overrides lip (-1 to explicitly not move)
+"dmg"		damage to inflict when blocked (2 default)
+"noise1-4"	override open/stop/locked/unlocked sounds, respectively
+"sounds"
+0) silent
+1) stone
+2) base
+3) stone chain
+4) hissy metal
+5) winchy secret door
+6) base secret door
+*/
+
+/*QUAKED func_door_secret (0 .5 .8) ? OPEN_ONCE 1ST_LEFT 1ST_DOWN NO_SHOOT ALWAYS_SHOOT ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Basic secret door. Slides back, then to the side. Angle determines direction of second move.  First move is v_right unless inhibited.
+
+Flags:
+"open_once" stays open
+"1st_left" First move is opposite of v_right, then toward "angle"
+"1st_down" First move is down, then toward "angle"
+"no_shoot" only opened by trigger
+"always_shoot" even if targeted, keep shootable
+
+Keys:
+"dmg" damage to inflict when blocked (default: 2). If a secret door has a targetname, it will only be opened by it's button or trigger, not by damage.
+"sounds"
+    1 = medieval
+    2 = metal
+    3 = base
+"t_width" override distance for first move
+"t_length" override distance for second move
+"dest1"+"dest2" if both set, uses dest1 and dest2 for first and second move vectors, ignoring 1st_whatever spawnflags. still needs width and length.
+"wait"  # of seconds before coming back, default 5
+*/
+
+/*QUAKED misc_explobox (0 .5 .8) (0 0 0) (32 32 64) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Large exploding box. 150 damage. 
+will do enough damage to set off other barrels at up to ~172u distance (center to center)
+
+"target"	fires targets when it explodes
+"targetname"	will explode when triggered
+"wait"		will respawn after 'wait' seconds
+"count"		will only respawn 'count' times
+*/
+
+/*QUAKED misc_explobox2 (0 .5 .8) (0 0 0) (32 32 32) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Smaller exploding box. 100 damage. REGISTERED ONLY
+will do enough damage to set off other barrels at up to ~128u distance (center to center)
+
+"target"	fires targets when it explodes
+"targetname"	will explode when triggered
+"wait"		will respawn after 'wait' seconds
+"count"		will only respawn 'count' times
+*/
+
+/*QUAKED func_explobox (0 .5 .8) ? ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Build your own exploding box!
+
+Keyvalues:
+"health"	defaults to 18
+"dmg"		damage to explode with, defaults to 150
+"target"	fires targets when it explodes
+"targetname"	will explode when triggered
+"wait"		will respawn after 'wait' seconds
+"count"		will only respawn 'count' times
+*/
+
+/*QUAKED trigger_fogblend (.5 .5 .2) ? ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Acts as a smoothly blending portal between two zones of different fog. Sets the fog for any client passing through it, blending their global fog settings between "fog_color"/"fog_density" and "fog_color2"/"fog_density2" proportional to their position within the trigger.
+The axis of motion on which the blend happens is defined by "angle", pointing to whatever zone has color2 and density2.  Trigger therefore has two 'sides' - the side that "angle" points to, and the opposite side.  
+
+"distance" - override the length of the blend period in world units - defaults to bounds size 
+	on 'angle' otherwise. this is only useful for diagonal triggers.
+
+CAVEATS:
+- will 'stuffcmd' 2 dozen times per frame so try not to make these huge
+- a bug in most quake engine ports will reset the eye position smoothing that happens when climbing stairs or riding a plat on every frame that a 'stuffcmd' is sent, so fog transitions during upwards motion will cause noticeable stuttering.
+*/
+
+/*QUAKED target_fogblend (.5 .5 .2) (-8 -8 -8) (8 8 8) ONE_WAY REVERSE GLOBAL ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Blends the fog for a client.  activator's fog will be blended from "fog_color" and "fog_density"
+to "fog_color2" and "fog_density2".  Triggering again will blend it back, unless ONE_WAY is set.
+Set REVERSE if you're tired of swapping the values by hand.
+Set GLOBAL to affect all clients in multiplayer, not just the activator.
+
+"delay" - pause before beginning to blend
+"speed" - time to spend blending, -1 for an instant change to fog2.
+"speed2" - time to spend blending back, if different than "speed". -1 for instant.
+
+CAVEATS:
+- will 'stuffcmd' 2 dozen times per frame so try not to make this take too long
+- a bug in most quake engine ports will reset the eye position smoothing that happens when climbing stairs or riding a plat on every frame that a 'stuffcmd' is sent, so fog transitions during upwards motion will cause noticeable stuttering.
+*/
+
+/*QUAKED misc_particlefield_box (0 .6 1) (-8 -8 -8) (8 8 8) START_ON INWARD OUTWARD BURST ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Makes dots appear continuously within its bounds. Trigger to toggle on or off. 
+
+"mangle" dimensions of sparkly zone
+"speed" number of clumps per second
+"speed2" number of dots per clump
+"health" color index (0-255). quake will use every color in the row (each row is 16 colors)
+"movedir" give particles a velocity
+
+Flags:
+INWARD		particles are sucked toward origin. additive with movedir.
+OUTWARD		particles are blown out from origin. additive with movedir.
+BURST		spew one second's worth of particles in one shot when triggered rather than toggling on/off
+
+Color Reference:
+0-15 grey (higher = lighter)
+16-31 dirt brown (higher = lighter)
+32-47 sky blue (higher = lighter)
+48-63 grass green (higher = lighter)
+64-79 red (higher = lighter)
+80-95 green/orange (higher = lighter)
+96-111 copper/gold (higher = lighter)
+112-127 flesh tone (higher = lighter)
+128-143 pale purple (higher = darker)
+144-159 reddish purple (higher = darker)
+160-175 pale beige (higher = darker)
+176-191 turquoise (higher = darker)
+192-207 yellow (higher = darker)
+208-223 deep blue (higher = darker)
+224-239 fire/lava (higher = lighter)
+240-255 fullbright mess
+*/
+
+/*QUAKED misc_particlefield (0 .6 1) ? START_ON INWARD OUTWARD BURST ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Makes dots appear continuously within its bounds. Trigger to toggle on or off. 
+
+"speed" number of clumps per second
+"speed2" number of dots per clump
+"health" color index (0-255). quake will use every color in the row (each row is 16 colors)
+"movedir" give particles a velocity
+
+Flags:
+INWARD		particles are sucked toward origin. additive with movedir.
+OUTWARD		particles are blown out from origin. additive with movedir.
+BURST		spew one second's worth of particles in one shot when triggered rather than toggling on/off
+
+Color Reference:
+0-15 grey (higher = lighter)
+16-31 dirt brown (higher = lighter)
+32-47 sky blue (higher = lighter)
+48-63 grass green (higher = lighter)
+64-79 red (higher = lighter)
+80-95 green/orange (higher = lighter)
+96-111 copper/gold (higher = lighter)
+112-127 flesh tone (higher = lighter)
+128-143 pale purple (higher = darker)
+144-159 reddish purple (higher = darker)
+160-175 pale beige (higher = darker)
+176-191 turquoise (higher = darker)
+192-207 yellow (higher = darker)
+208-223 deep blue (higher = darker)
+224-239 fire/lava (higher = lighter)
+240-255 fullbright mess
+*/
+
+/*QUAKED target_screenshake (0 .5 .8) (-8 -8 -8) (8 8 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Shakes the screen. Jostles the view of all clients, but doesn't physically move their bounding boxes or apply velocities.
+Keys
+"length" Duration of full intensity quake. -1 will last literally forever.
+"delay" Time to ramp up quake intensity from 0
+"wait" Time to ramp down quake intensity to 0. Total quake duration is length + delay + wait.
+"strength" Intensity of quake. 1 is a hearty rumble, 10 is spasmodic bordering on hilarious.
+"distance" Fade the intensity to 0 at this distance from the entity. Default is 0 (global).
+*/
+
+/*QUAKED target_explosion (0 .5 .8) (-8 -8 -8) (8 8 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Causes explosions, same appearance as a rocket/grenade blast.
+
+Keys
+"count" number of times to explode after triggering, default 1
+"delay" Time to wait before first explode
+"wait" Static time to wait between explosions
+"rand" Random time to wait before explosions (will sum both)
+"dmg" Do splash damage, default 0
+"deathtype" death message if the player is killed by your horrible trap
+*/
+
+/*QUAKED target_telefog (0 .5 .8) (-8 -8 -8) (8 8 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Causes a flash of teleport fog.
+
+Keys
+"count" number of times to flash after triggering, default 1
+"delay" Time to wait before first flash
+"wait" Static ime to wait between flashes
+"rand" Random time to wait before flashes (will sum both)
+*/
+
+/*QUAKED air_bubbles (0 .5 .8) (-8 -8 -8) (8 8 8) START_OFF ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+air bubble emitter. always bubbles.
+"wait" bubble interval, default 1
+"rand" random extra interval, default 0
+*/
+
+/*QUAKED target_drop (0.75 0.25 0) (-16 -16 -16) (16 16 16) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Causes all targeted items which are SUSPENDED to drop when triggered.
+*/
+
+/*QUAKED target_items (0.75 0.25 0) (-8 -8 -8) (8 8 8) TAKE OVERRIDE FLASH TEST MINIMUM ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Gives weapons, ammo, items, health, armor, and/or runes to the activating player when triggered. 
+
+Keyvalues:
+"ammo_shells" number of shells player should receive - same for _cells, _rockets, and _nails
+"health" health (will overheal beyond 100)
+"armorvalue" armor (protection color scales automatically)
+"weapon" item bitflag (not impulse number!) of the weapon the player should swap to (if he has it)
+"items" bitmask of what items the player should get (see below for reference)
+"svflags" bitmask of serverflags to alter (1/2/4/8 are the episode runes, 16+ are invisible)
+"length" length of powerup time in seconds if any are given (default 30)
+"noise" wav file to play on activator
+
+Spawnflags:
+FLASH: flash the recipient's screen when triggered, defaults to being stealthy
+MINIMUM: for numeric amounts, give the player enough to have a minimum of the amount specified
+TAKE: subtract specified inventory amounts instead of adding
+	- subtracting enough health WILL kill the player
+	- subtracting all weapons WILL break the game
+	- will fire its targets if all items can be successfully taken
+	- will print "message" and take nothing instead
+	- TAKE with MINIMUM will skip the test and take whatever it can, firing no targets either way
+OVERRIDE: force the player's inventory to all specified amounts (mainly useful triggered from spawnpoints), specify -1 for any keyvalue to force a 0 (-1 does not work for items or health)
+TEST: behaves like TAKE, but doesn't take anything 
+	- fires targets if activator has the matching inventory
+	- prints "message" if not
+	- TEST with TAKE will reverse the test (fire if player doesn't have)
+	- beware of how this interacts with triggers: it will only test the first client to touch a trigger in coop unless it has ALL_CLIENTS set
+
+Item Bitmask Reference:
+	SG	= 1		SSG	= 2
+	NG	= 4		SNG	= 8
+	GL	= 16	RL	= 32
+	LG	= 64	Axe	= 4096
+	
+	Silver	= 131072
+	Gold	= 262144
+	Ring	= 524288
+	Pent	= 1048576
+	Biosuit	= 2097152
+	Quad	= 4194304
+*/
+
+/*QUAKED item_backpack (0 .5 .5) (-16 -16 0) (16 16 40) BIG ? SUSPENDED - ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+A forgotten explorer's backpack. Grants a paltry sum of shells and nails (about half a small pack of each). Grants armor instead of any ammo the player already has maxed.
+
+Flags:
+"big" doubles shells and nails, adds 2 rockets and 4 cells, appears red
+    
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED item_health (0 .5 .5) (0 0 0) (32 32 32) SMALL MEGA SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Health box. Normally gives 25 points.
+
+Flags:
+"mega" will add 100 health, then rot you down to your maximum health limit, one point per second
+"small" gives 15 points
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED item_armor1 (0 .5 .5) (-16 -16 0) (16 16 32) ? ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Green armor, gives 100 points.
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED item_armor2 (0 .5 .5) (-16 -16 0) (16 16 32) ? ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Yellow armor, gives 150 points.
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED item_armorInv (0 .5 .5) (-16 -16 0) (16 16 32) ? ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Red armor, gives 200 armor points.
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED item_key1 (0 .5 .5) (-16 -16 -24) (16 16 32) ? ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Silver key. In order for keys to work you MUST set your maps worldtype (see worldspawn).
+
+Keys:
+"target"		fired when picked up
+*/
+
+/*QUAKED item_key2 (.5 .5 0) (-16 -16 -24) (16 16 32) ? ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Gold key. In order for keys to work you MUST set your maps worldtype (see worldspawn).
+
+Keys:
+"target"		fired when picked up
+*/
+
+/*QUAKED item_sigil (0 .5 .5) (-16 -16 -24) (16 16 32) E1 E2 E3 E4 SUSPENDED ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+End of episode sigil. Can be customized through keyvalue manipulation to serve as any generic cross-map inventory item.
+
+Flags:
+"E1 -E4" sets episode
+"SUSPENDED" do not drop to floor on spawn
+
+Keys:
+"noise" override pickup noise
+"svflags" set a serverflag other than the episode 1-4 flags on pickup
+"model" specify any model
+"message" override pickup message
+"target" entity to trigger when picked up
+"targetname" entity name
+*/
+
+/*QUAKED item_artifact_invulnerability (0 .5 .5) (-16 -16 -24) (16 16 32) ? ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Player is invulnerable for 30 seconds.
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED item_artifact_envirosuit (0 .5 .5) (-16 -16 -8) (16 16 48) ? ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Player takes no damage from water or slime for 30 seconds.
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED item_artifact_invisibility (0 .5 .5) (-16 -16 -24) (16 16 32) ? ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Player is invisible for 30 seconds. Monsters will not awaken on sight, but they will on hearing sound (like gunfire). Awakened monsters will try to attack an invisible player and do an inaccurate job, possibly starting infights. 
+monster_dog can still smell an invisible player, but monster_tarbaby can't find the player at all.
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED item_artifact_super_damage (0 .5 .5) (-16 -16 -24) (16 16 32) ? ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Quad Damage. Player's attacks do 4x damage and he stops paying attention to anything else.
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED weapon_shotgun (0 0 1) (-16 -16 0) (16 16 32) ? ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Shotgun.
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED weapon_supershotgun (0 0 1) (-16 -16 0) (16 16 32) ? ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+SuperShotgun.
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED weapon_nailgun (0 0 1) (-16 -16 0) (16 16 32) ? ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Nailgun.
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED weapon_supernailgun (0 0 1) (-16 -16 0) (16 16 32) ? ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Perforator (Super Nailgun).
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED weapon_grenadelauncher (0 0 1) (-16 -16 0) (16 16 32) ? ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Grenade Launcher.
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED weapon_rocketlauncher (0 0 1) (-16 -16 0) (16 16 32) ? ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Rocket Launcher.
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED weapon_lightning (0 0 1) (-16 -16 0) (16 16 32) ? ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Thunderbolt Cannon.
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED item_shells (0 .5 .5) (0 0 0) (32 32 32) BIG ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+20 shells for both Shotgun and SuperShotgun.
+
+Flags:
+"big" gives 40 instead of 20
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED item_spikes (0 .5 .5) (0 0 0) (32 32 32) BIG ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+25 ammo points (spikes) for Perforator and Super Perforator.
+
+Flags:
+"big" gives 50 instead of 25
+
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED item_rockets (0 .5 .5) (0 0 0) (32 32 32) BIG ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+3 ammo points (rockets) for the Rocket/Grenade Launcher.
+
+Flags:
+"big" gives 6 instead of 3
+    
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED item_cells (0 .5 .5) (0 0 0) (32 32 32) BIG ? SUSPENDED ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+6 ammo points (cells) for the  Thunderbolt (Lightning).
+
+Flags:
+"big" gives 12 instead of 6
+    
+Keys:
+"target/2/3/4/k" - entity to trigger when picked up
+"targetname" - will not spawn until triggered
+"wait" - will respawn after 'wait' seconds. fires targets every time.
+"count" - limit number of times to respawn
+*/
+
+/*QUAKED light (0 .75 0) (-8 -8 -8) (8 8 8) START_OFF ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Non-displayed light. If targeted, it will toggle between on or off. 
+
+"start_off"	starts off until triggered
+
+Keys:
+"light"		sets brightness (default: 300)
+"targetname"	entity name
+"mangle"	spotlight direction - the first # is yaw, 0 to 360 around Z. second # is pitch, 90 up to -90 down.
+"angle"		spotlight cone size
+"_softangle" spotlight inner cone size
+"wait"		scale the falloff distance.  N>1 will shorten range, n<1 will extend it
+"delay"		attenuation formula
+	0 = Linear, original id (default)
+	1 = 1/x attenuation formula
+	2 = 1/(x^2) attenuation formula
+	3 = No attenuation (light stays same brightness at any distance)
+"_color" "# # #" 0-255
+"style"
+    0 = normal
+    1 = flicker: "mmnmmommommnonmmonqnmmo"
+    2 = slow strong pulse: "abcdefghijklmnopqrstuvwxyzyxwvutsrqponmlkjihgfedcba"
+    3 = candle: "mmmmmaaaaammmmmaaaaaabcdefgabcdefg"
+    4 = fast strobe: "mamamamamama"
+    5 = slow pulse, no black: "jklmnopqrstuvwxyzyxwvutsrqponmlkj"
+    6 = flicker: "nmonqnmomnmomomno"
+    7 = candle: "mmmaaaabcdefgmmmmaaaammmaamm"
+    8 = candle2: "mmmaaammmaaammmabcdefaaaammmmabcdefmmmaaaa"
+    9 = slow strobe: "aaaaaaaazzzzzzzz"
+    10 = flourescent flicker: mmamammmmammamamaaamammma"
+    11 = slow pulse, fading to black: "abcdefghijklmnopqrrqponmlkjihgfedcba"
+
+    styles 32-62 are assigned by the light program for switchable lights 
+    (default: 0)
+"message"	override the style string directly for the assigned style (clashes will overwrite each other)
+*/
+
+/*QUAKED light_fluoro (1 1 0) (-8 -8 -8) (8 8 8) START_OFF ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Non-displayed light. Makes steady fluorescent humming sound.
+
+Flags:
+"start_off"	starts off until triggered
+
+Keys:
+"light"		sets brightness (default: 300)
+"targetname"	entity name
+"mangle"	spotlight direction - the first # is yaw, 0 to 360 around Z. second # is pitch, 90 up to -90 down.
+"angle"		spotlight cone size
+"_softangle" spotlight inner cone size
+"wait"		scale the falloff distance.  N>1 will shorten range, n<1 will extend it
+"delay"		attenuation formula
+	0 = Linear, original id (default)
+	1 = 1/x attenuation formula
+	2 = 1/(x^2) attenuation formula
+	3 = No attenuation (light stays same brightness at any distance)
+"_color" "# # #" 0-255
+"style"
+    0 = normal
+    1 = flicker: "mmnmmommommnonmmonqnmmo"
+    2 = slow strong pulse: "abcdefghijklmnopqrstuvwxyzyxwvutsrqponmlkjihgfedcba"
+    3 = candle: "mmmmmaaaaammmmmaaaaaabcdefgabcdefg"
+    4 = fast strobe: "mamamamamama"
+    5 = slow pulse, no black: "jklmnopqrstuvwxyzyxwvutsrqponmlkj"
+    6 = flicker: "nmonqnmomnmomomno"
+    7 = candle: "mmmaaaabcdefgmmmmaaaammmaamm"
+    8 = candle2: "mmmaaammmaaammmabcdefaaaammmmabcdefmmmaaaa"
+    9 = slow strobe: "aaaaaaaazzzzzzzz"
+    10 = flourescent flicker: mmamammmmammamamaaamammma"
+    11 = slow pulse, fading to black: "abcdefghijklmnopqrrqponmlkjihgfedcba"
+
+    styles 32-62 are assigned by the light program for switchable lights 
+    (default: 0)
+"message"	override the style string directly for the assigned style (clashes will overwrite each other)
+*/
+
+/*QUAKED light_fluorospark (1 1 0) (-8 -8 -8) (8 8 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Non-displayed light. Default style is 10. Makes sparking, broken fluorescent sound.
+
+Keys:
+"light"		sets brightness (default: 300)
+"mangle"	spotlight direction - the first # is yaw, 0 to 360 around Z. second # is pitch, 90 up to -90 down.
+"angle"		spotlight cone size
+"_softangle" spotlight inner cone size
+"wait"		scale the falloff distance.  N>1 will shorten range, n<1 will extend it
+"delay"		attenuation formula
+	0 = Linear, original id (default)
+	1 = 1/x attenuation formula
+	2 = 1/(x^2) attenuation formula
+	3 = No attenuation (light stays same brightness at any distance)
+"_color" "# # #" 0-255
+"style"
+    0 = normal
+    1 = flicker: "mmnmmommommnonmmonqnmmo"
+    2 = slow strong pulse: "abcdefghijklmnopqrstuvwxyzyxwvutsrqponmlkjihgfedcba"
+    3 = candle: "mmmmmaaaaammmmmaaaaaabcdefgabcdefg"
+    4 = fast strobe: "mamamamamama"
+    5 = slow pulse, no black: "jklmnopqrstuvwxyzyxwvutsrqponmlkj"
+    6 = flicker: "nmonqnmomnmomomno"
+    7 = candle: "mmmaaaabcdefgmmmmaaaammmaamm"
+    8 = candle2: "mmmaaammmaaammmabcdefaaaammmmabcdefmmmaaaa"
+    9 = slow strobe: "aaaaaaaazzzzzzzz"
+    10 = flourescent flicker: mmamammmmammamamaaamammma"
+    11 = slow pulse, fading to black: "abcdefghijklmnopqrrqponmlkjihgfedcba"
+
+    styles 32-62 are assigned by the light program for switchable lights 
+    (default: 0)
+"message"	override the style string directly for the assigned style (clashes will overwrite each other)
+*/
+
+/*QUAKED light_globe (1 1 0) (-8 -8 -8) (8 8 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Sphere globe light.  Can't be triggered.
+
+Keys:
+"light"		sets brightness (default: 300)
+"mangle"	spotlight direction - the first # is yaw, 0 to 360 around Z. second # is pitch, 90 up to -90 down.
+"angle"		spotlight cone size
+"_softangle" spotlight inner cone size
+"wait"		scale the falloff distance.  N>1 will shorten range, n<1 will extend it
+"delay"		attenuation formula
+	0 = Linear, original id (default)
+	1 = 1/x attenuation formula
+	2 = 1/(x^2) attenuation formula
+	3 = No attenuation (light stays same brightness at any distance)
+"_color" "# # #" 0-255
+"style"
+    0 = normal
+    1 = flicker: "mmnmmommommnonmmonqnmmo"
+    2 = slow strong pulse: "abcdefghijklmnopqrstuvwxyzyxwvutsrqponmlkjihgfedcba"
+    3 = candle: "mmmmmaaaaammmmmaaaaaabcdefgabcdefg"
+    4 = fast strobe: "mamamamamama"
+    5 = slow pulse, no black: "jklmnopqrstuvwxyzyxwvutsrqponmlkj"
+    6 = flicker: "nmonqnmomnmomomno"
+    7 = candle: "mmmaaaabcdefgmmmmaaaammmaamm"
+    8 = candle2: "mmmaaammmaaammmabcdefaaaammmmabcdefmmmaaaa"
+    9 = slow strobe: "aaaaaaaazzzzzzzz"
+    10 = flourescent flicker: mmamammmmammamamaaamammma"
+    11 = slow pulse, fading to black: "abcdefghijklmnopqrrqponmlkjihgfedcba"
+
+    styles 32-62 are assigned by the light program for switchable lights 
+    (default: 0)
+"message"	override the style string directly for the assigned style (clashes will overwrite each other)
+*/
+
+/*QUAKED light_torch_small_walltorch (1 1 0) (-4 -4 -12) (4 4 20) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Short wall torch. Makes crackly torch sound.
+
+Flags:
+"start_off"	starts off until triggered
+
+Keys:
+"light"		sets brightness (default: 300)
+"mangle"	spotlight direction - the first # is yaw, 0 to 360 around Z. second # is pitch, 90 up to -90 down.
+"angle"		spotlight cone size
+"_softangle" spotlight inner cone size
+"wait"		scale the falloff distance.  N>1 will shorten range, n<1 will extend it
+"delay"		attenuation formula
+	0 = Linear, original id (default)
+	1 = 1/x attenuation formula
+	2 = 1/(x^2) attenuation formula
+	3 = No attenuation (light stays same brightness at any distance)
+"_color" "# # #" 0-255
+"style"
+    0 = normal
+    1 = flicker: "mmnmmommommnonmmonqnmmo"
+    2 = slow strong pulse: "abcdefghijklmnopqrstuvwxyzyxwvutsrqponmlkjihgfedcba"
+    3 = candle: "mmmmmaaaaammmmmaaaaaabcdefgabcdefg"
+    4 = fast strobe: "mamamamamama"
+    5 = slow pulse, no black: "jklmnopqrstuvwxyzyxwvutsrqponmlkj"
+    6 = flicker: "nmonqnmomnmomomno"
+    7 = candle: "mmmaaaabcdefgmmmmaaaammmaamm"
+    8 = candle2: "mmmaaammmaaammmabcdefaaaammmmabcdefmmmaaaa"
+    9 = slow strobe: "aaaaaaaazzzzzzzz"
+    10 = flourescent flicker: mmamammmmammamamaaamammma"
+    11 = slow pulse, fading to black: "abcdefghijklmnopqrrqponmlkjihgfedcba"
+
+    styles 32-62 are assigned by the light program for switchable lights 
+    (default: 0)
+"message"	override the style string directly for the assigned style (clashes will overwrite each other)
+*/
+
+/*QUAKED light_flame_large_yellow (1 1 0) (-8 -8 -12) (8 8 20) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Large yellow flame ball.  Makes crackly torch sound.
+
+Flags:
+"start_off"	starts off until triggered
+
+Keys:
+"light"		sets brightness (default: 300)
+"mangle"	spotlight direction - the first # is yaw, 0 to 360 around Z. second # is pitch, 90 up to -90 down.
+"angle"		spotlight cone size
+"_softangle" spotlight inner cone size
+"wait"		scale the falloff distance.  N>1 will shorten range, n<1 will extend it
+"delay"		attenuation formula
+	0 = Linear, original id (default)
+	1 = 1/x attenuation formula
+	2 = 1/(x^2) attenuation formula
+	3 = No attenuation (light stays same brightness at any distance)
+"_color" "# # #" 0-255
+"style"
+    0 = normal
+    1 = flicker: "mmnmmommommnonmmonqnmmo"
+    2 = slow strong pulse: "abcdefghijklmnopqrstuvwxyzyxwvutsrqponmlkjihgfedcba"
+    3 = candle: "mmmmmaaaaammmmmaaaaaabcdefgabcdefg"
+    4 = fast strobe: "mamamamamama"
+    5 = slow pulse, no black: "jklmnopqrstuvwxyzyxwvutsrqponmlkj"
+    6 = flicker: "nmonqnmomnmomomno"
+    7 = candle: "mmmaaaabcdefgmmmmaaaammmaamm"
+    8 = candle2: "mmmaaammmaaammmabcdefaaaammmmabcdefmmmaaaa"
+    9 = slow strobe: "aaaaaaaazzzzzzzz"
+    10 = flourescent flicker: mmamammmmammamamaaamammma"
+    11 = slow pulse, fading to black: "abcdefghijklmnopqrrqponmlkjihgfedcba"
+
+    styles 32-62 are assigned by the light program for switchable lights 
+    (default: 0)
+"message"	override the style string directly for the assigned style (clashes will overwrite each other)
+
+*/
+
+/*QUAKED light_flame_small_yellow (1 1 0) (-4 -4 -12) (4 4 20) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Small yellow flame ball.  Makes crackly torch sound.
+
+Keys:
+"light"		sets brightness (default: 300)
+"mangle"	spotlight direction - the first # is yaw, 0 to 360 around Z. second # is pitch, 90 up to -90 down.
+"angle"		spotlight cone size
+"_softangle" spotlight inner cone size
+"wait"		scale the falloff distance.  N>1 will shorten range, n<1 will extend it
+"delay"		attenuation formula
+	0 = Linear, original id (default)
+	1 = 1/x attenuation formula
+	2 = 1/(x^2) attenuation formula
+	3 = No attenuation (light stays same brightness at any distance)
+"_color" "# # #" 0-255
+"style"
+    0 = normal
+    1 = flicker: "mmnmmommommnonmmonqnmmo"
+    2 = slow strong pulse: "abcdefghijklmnopqrstuvwxyzyxwvutsrqponmlkjihgfedcba"
+    3 = candle: "mmmmmaaaaammmmmaaaaaabcdefgabcdefg"
+    4 = fast strobe: "mamamamamama"
+    5 = slow pulse, no black: "jklmnopqrstuvwxyzyxwvutsrqponmlkj"
+    6 = flicker: "nmonqnmomnmomomno"
+    7 = candle: "mmmaaaabcdefgmmmmaaaammmaamm"
+    8 = candle2: "mmmaaammmaaammmabcdefaaaammmmabcdefmmmaaaa"
+    9 = slow strobe: "aaaaaaaazzzzzzzz"
+    10 = flourescent flicker: mmamammmmammamamaaamammma"
+    11 = slow pulse, fading to black: "abcdefghijklmnopqrrqponmlkjihgfedcba"
+
+    styles 32-62 are assigned by the light program for switchable lights 
+    (default: 0)
+"message"	override the style string directly for the assigned style (clashes will overwrite each other)
+
+*/
+
+/*QUAKED light_flame_small_white (1 1 0) (-4 -4 -12) (4 4 20) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Same as light_flame_small_yellow. Use that one.
+*/
+
+/*QUAKED target_lightstyle (.5 .8 .5) (-8 -8 -8) (8 8 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+This entity changes a global lightstyle when triggered. Set "style" to the lightstyle you want to override, and set "message" to the brightness pattern you want to set it to. If style is not set, and this entity targets any triggerable lights, it sets the brightness pattern of those lights when triggered instead. Note that targeting anything at a light makes it a triggerable light with its own style automatically.
+
+Setting style to -1 will override lightstyle 0, which is all static lights in the entire level.
+
+"count" limit number of uses, 0 = infinite
+"delay" pause between trigger and activation
+*/
+
+/*QUAKED target_meat_fireworks (0.7 .0 .2) (-16 -16 -16) (16 16 16) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+trigger for meat
+
+Keys
+"count" number of times of meat after triggering, default 1
+"delay" time to wait before first meat
+"wait" time to wait between meat
+"rand" max random additional to wait before meat
+"speed" speed of meat
+"mangle" override meat direction, defaults to up
+*/
+
+/*QUAKED info_null (0 0.5 0) (-4 -4 -4) (4 4 4) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Used as a positional target for spotlights, etc. Not present in game.
+*/
+
+/*QUAKED info_notnull (0 0.5 0) (-4 -4 -4) (4 4 4) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Used as a positional target for lighting. Present in game.
+*/
+
+/*QUAKED misc_external_map (0.6 0.7 0.8) (-4 -4 -4) (4 4 4)
+
+"_external_map"				Specifies the filename of the .map to import.
+"_external_map_classname"	What entity you want the external map to turn in to. You can use internal qbsp entity types such as "func_detail", or a regular bmodel classname like "func_wall" or "func_door".
+"_external_map_angles"		Rotation for the prefab, "pitch yaw roll" format. Negative pitch is UP.
+"_external_map_angle"		Short version of "_external_map_angles" for when you want to specify just a yaw rotation.
+"_external_map_scale"		Scale factor for the prefab, defaults to 1. Either specify a single value or three scales, "x y z".
+*/
+
+/*QUAKED misc_model (0.6 0.7 0.8) (-8 -8 -8) (8 8 8) TOGGLE_VIS START_INVIS ANIM_ONCE ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+display a model. will not be solid! for a misc_model which can be toggled on or off, use a func_wall_point with a targetname.
+
+"model" filename of model to stand in for this entity. can be a bsp or an mdl. 
+"mangle" exact orientation of the model, values are 'pitch yaw roll', positive pitch is down
+"frame" frame of model (0-ordinal)
+"skin" skin index on model (0-ordinal)
+"pos1" override frame with an animation (firstframe startframe lastframe)
+"pos2" if triggerable, second animation to toggle to (firstframe startframe lastframe)
+"ideal_yaw" randomly select yaw angle (for quickly scattering props)
+
+TOGGLE_VIS show/hide when triggered
+START_INVIS start hidden
+ANIM_ONCE if second triggered animation, will play once when triggered (instead of switching loops)
+
+dead player.mdl frame reference because we both know that's what you want:
+axdeth: 49 (on back (with axe (duh)))
+deatha: 60 (on face)
+deathb: 69 (sat)
+deathc: 84 (also on face)
+deathd: 93 (also on face but arms under forehead as if sad)
+deathe: 102 (on side)
+*/
+
+/*QUAKED target_heal (0.75 0.25 0) (-8 -8 -8) (8 8 8) OVERHEAL PLAYER_ONLY TRIGGER_FIRST AUTO_AMT ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Heals activator for 'healamount' when triggered. Use for healing pools, first aid dispensers, etc.
+If it has any targets, it heals them instead, even doors and buttons. This will not reset 'dead' doors or buttons with a wait of -1.
+
+Spawnflags:
+OVERHEAL	will ignore target's max_health when healing
+PLAYER_ONLY	will ignore any targets or activators which aren't clients
+TRIGGER_FIRST	will treat its first trigger as an activation, then work normally after
+AUTO_AMT	if trigger_first, will choose 'count' based on how much health the activator needs when first triggered, for dirty lazy automatic game balance
+
+Keyvalues:
+"healamount" amount to heal per use, default 5
+"count" expire after healing this much in total, default -1 (never)
+"strength" count will be multiplied by this much, default 1. -4 for the number of players.
+  "lip" if auto, never set count less than this much, defaults to healamount
+  "max_health" if auto, never set count to heal *target* above this much
+*/
+
+/*QUAKED target_kill (0.75 0.5 0) (-8 -8 -8) (8 8 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Kills ALL of its targets (1-4) as well as killtargets when triggered. for targets you really don't like.
+*/
+
+/*QUAKED target_autosave (1 .0 .5) (-8 -8 -8) (8 8 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Saves the game when triggered by a player. Never appears in multiplayer. the bprint tends to stomp any other prints on screen in most quake clients, so use a delayed trigger_relay if you fire this from an important pickup/trigger_counter/something else that puts text on screen more important than the autosave blurb.
+
+Keys:
+"message" change save file name, defaults to 'auto'
+*/
+
+/*QUAKED misc_fireball (0 .5 .8) (-8 -8 -8) (8 8 8) START_OFF BURST EXPLODE ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+LavA_Ballz
+Fires randomly. Trigger to turn on/off. 
+
+"wait" min pause between balls
+"rand" max extra pause between balls (total pause is 'wait' + 'rand' * random())
+"speed" launch velocity, defaults to 1000
+"movedir" launch direction, defaults to straight up (0 0 1)
+"mangle" amount of randomness to apply to velocity (x, y, z)
+"dmg" damage on contact, default 20
+
+Spawnflags
+START_OFF start off
+BURST fires "delay" seconds after being triggered
+EXPLODE blow up on contact, does 'dmg' damage (default 20)
+*/
+
+/*QUAKED trap_spikeshooter (0 .5 .8) (-8 -8 -8) (8 8 8) SUPERSPIKE LASER ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+When triggered, fires a spike in the direction set by "angle".
+
+"movedir" override angle with a launch vector of your choosing
+"mangle" random velocity offset
+"delay" delay before firing (for staggering shooters)
+"volume" override how loud these things are because damn
+*/
+
+/*QUAKED trap_shooter (0 .5 .8) (-8 -8 -8) (8 8 8) SUPERSPIKE LASER ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Continuously fires spikes in the direction set by "angle". Trigger to turn on, trigger again to turn off.
+Laser is only for REGISTERED. YOU PAY FOR LASER
+"wait" time between shots (1.0 default)
+"delay" delay before firing first spike, so multiple shooters can be staggered
+"movedir" override angle with a launch vector of your choosing
+*/
+
+/*QUAKED target_multiprint (.5 .5 .5) (-8 -8 -8) (8 8 8) SILENT ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+This entity will print a different string every time it"s triggered.  Prints "message", 
+"noise", "noise1", "noise2", "noise3", then "noise4."  Once all strings are used up, it will 
+fire its targets instead (so several of these can be chained if you really need that 
+many prints in a row).
+
+SILENT: Don't play the beep wav when triggered.
+*/
+
+/*QUAKED monster_boss (1 0 0) (-128 -128 -24) (128 128 256) SHOOTABLE ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Chthon. requires event_lightning to kill but that's the oldest quake mapping tutorial on the internet, you can find it
+
+SPAWNFLAGS
+"Shootable" if you can't find the tutorial and just want a chthon you can blast. health defaults to 1000.
+*/
+
+/*QUAKED event_lightning (0 1 1) (-16 -16 -16) (16 16 16) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Just for boss level. Fires targets on a successful zap.
+*/
+
+/*QUAKED monster_demon1 (1 0 0) (-32 -32 -24) (32 32 40) AMBUSH ? ? ? TRIGGERED NOTFOG NOTELEFRAG INSTAWAKE NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Fiend (Demon), 300 health points.
+
+Flags:
+"ambush"	only wake up on seeing the player, not another monster getting angry
+"Triggered"	will not spawn until triggered - triggering again will wake him up. Set 'count' to make this a multi-use spawner.
+"NoTfog" 	supress teleport glitter when spawned with 'triggered'
+"NoTelefrag" will silently fail to spawn if doing so would telefrag an existing monster. will try again automatically 2x/second until it succeeds.
+"Instawake" spawn angry at activator
+
+Keys:
+"target" entity to trigger when killed
+"targetname" entity name
+"movedir" set to a velocity to make the monster jump on awakening
+*/
+
+/*QUAKED monster_dog (1 0 0) (-32 -32 -24) (32 32 40) AMBUSH ? ? ? TRIGGERED NOTFOG NOTELEFRAG INSTAWAKE NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Dog (Rottweiler), 25 health points.
+
+Flags:
+"ambush" only wake up on seeing the player, not another monster getting angry
+"Triggered"	will not spawn until triggered - triggering again will wake him up. Set 'count' to make this a multi-use spawner.
+"NoTfog" 	supress teleport glitter when spawned with 'triggered'
+"NoTelefrag" will silently fail to spawn if doing so would telefrag an existing monster. will try again automatically 2x/second until it succeeds.
+"Instawake" spawn angry at activator
+
+Keys:
+"target" entity to trigger when killed
+"targetname" entity name
+"movedir" set to a velocity to make the monster jump on awakening
+*/
+
+/*QUAKED monster_enforcer (1 0 0) (-16 -16 -24) (16 16 40) AMBUSH ? ? ? TRIGGERED NOTFOG NOTELEFRAG INSTAWAKE NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Enforcer, 80 health points.
+
+Flags:
+"ambush" only wake up on seeing the player, not another monster getting angry
+"Triggered"	will not spawn until triggered - triggering again will wake him up. Set 'count' to make this a multi-use spawner.
+"NoTfog" 	supress teleport glitter when spawned with 'triggered'
+"NoTelefrag" will silently fail to spawn if doing so would telefrag an existing monster. will try again automatically 2x/second until it succeeds.
+"Instawake" spawn angry at activator
+
+Keys:
+"target" entity to trigger when killed
+"targetname" entity name
+"movedir" set to a velocity to make the monster jump on awakening
+*/
+
+/*QUAKED monster_fish (1 0 0) (-16 -16 -16) (16 16 16) AMBUSH ? ? ? TRIGGERED NOTFOG NOTELEFRAG INSTAWAKE NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Rotfish, 35 health points.
+
+Flags:
+"ambush" only wake up on seeing the player, not another monster getting angry
+"Triggered"	will not spawn until triggered - triggering again will wake him up. Set 'count' to make this a multi-use spawner.
+"NoTfog" 	supress teleport glitter when spawned with 'triggered'
+"NoTelefrag" will silently fail to spawn if doing so would telefrag an existing monster. will try again automatically 2x/second until it succeeds.
+"Instawake" spawn angry at activator
+
+Keys:
+"target" entity to trigger when killed
+"targetname" entity name
+*/
+
+/*QUAKED monster_hell_knight (1 0 0) (-16 -16 -24) (16 16 40) AMBUSH ? ? ? TRIGGERED NOTFOG NOTELEFRAG INSTAWAKE NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Hell Knight, 250 health points.
+
+Flags:
+"ambush" only wake up on seeing the player, not another monster getting angry
+"Triggered"	will not spawn until triggered - triggering again will wake him up. Set 'count' to make this a multi-use spawner.
+"NoTfog" 	supress teleport glitter when spawned with 'triggered'
+"NoTelefrag" will silently fail to spawn if doing so would telefrag an existing monster. will try again automatically 2x/second until it succeeds.
+"Instawake" spawn angry at activator
+
+Keys:
+"target" entity to trigger when killed
+"targetname" entity name
+"movedir" set to a velocity to make the monster jump on awakening
+*/
+
+/*QUAKED monster_knight (1 0 0) (-16 -16 -24) (16 16 40) AMBUSH ? ? ? TRIGGERED NOTFOG NOTELEFRAG INSTAWAKE NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Knight, 72 health points.
+
+Flags:
+"ambush" only wake up on seeing the player, not another monster getting angry
+"Triggered"	will not spawn until triggered - triggering again will wake him up. Set 'count' to make this a multi-use spawner.
+"NoTfog" 	supress teleport glitter when spawned with 'triggered'
+"NoTelefrag" will silently fail to spawn if doing so would telefrag an existing monster. will try again automatically 2x/second until it succeeds.
+"Instawake" spawn angry at activator
+
+Keys:
+"target" entity to trigger when killed
+"targetname" entity name
+"movedir" set to a velocity to make the monster jump on awakening
+*/
+
+/*QUAKED monster_ogre (1 0 0) (-32 -32 -24) (32 32 40) AMBUSH ? ? ? TRIGGERED NOTFOG NOTELEFRAG INSTAWAKE NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Ogre, 200 health points.
+
+Flags:
+"ambush" only wake up on seeing the player, not another monster getting angry
+
+"Triggered"	will not spawn until triggered - triggering again will wake him up. Set 'count' to make this a multi-use spawner.
+"NoTfog" 	supress teleport glitter when spawned with 'triggered'
+"NoTelefrag" will silently fail to spawn if doing so would telefrag an existing monster. will try again automatically 2x/second until it succeeds.
+"Instawake" spawn angry at activator
+
+Keys:
+"target" entity to trigger when killed
+"targetname" entity name
+"movedir" set to a velocity to make the monster jump on awakening
+*/
+
+/*QUAKED monster_oldone (1 0 0) (-128 -128 -24) (128 128 256) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+shubby
+
+explodes in gibs on death. can be killed by traditional telefrag or in several new ways:
+- being triggered "strength" times
+- being damaged for more than 10000 hp "strength" times
+both of the above cause one thrashy roary anim that flickers the lights and causes a screenshake.
+
+if the map is end.bsp, the finale cutscene will trigger, otherwise shub will just die like any other monster.
+
+Keyvalues:
+"strength" number of hits to take before exploding, defaults to 3
+*/
+
+/*QUAKED monster_shalrath (1 0 0) (-32 -32 -24) (32 32 40) AMBUSH ? ? ? TRIGGERED NOTFOG NOTELEFRAG INSTAWAKE NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Vore (Shalrath), 400 health points.
+
+Flags:
+"ambush" only wake up on seeing the player, not another monster getting angry
+
+"Triggered"	will not spawn until triggered - triggering again will wake him up. Set 'count' to make this a multi-use spawner.
+"NoTfog" 	supress teleport glitter when spawned with 'triggered'
+"NoTelefrag" will silently fail to spawn if doing so would telefrag an existing monster. will try again automatically 2x/second until it succeeds.
+"Instawake" spawn angry at activator
+
+Keys:
+"target" entity to trigger when killed
+"targetname" entity name
+"movedir" set to a velocity to make the monster jump on awakening
+*/
+
+/*QUAKED monster_shambler (1 0 0) (-32 -32 -24) (32 32 64) AMBUSH ? ? ? TRIGGERED NOTFOG NOTELEFRAG INSTAWAKE NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Shambler, 600 health points.  Rockets only have half damage when hitting the Shambler.
+
+Flags:
+"ambush" only wake up on seeing the player, not another monster getting angry
+
+"Triggered"	will not spawn until triggered - triggering again will wake him up. Set 'count' to make this a multi-use spawner.
+"NoTfog" 	supress teleport glitter when spawned with 'triggered'
+"NoTelefrag" will silently fail to spawn if doing so would telefrag an existing monster. will try again automatically 2x/second until it succeeds.
+"Instawake" spawn angry at activator
+
+Keys:
+"target" entity to trigger when killed
+"targetname" entity name
+"movedir" set to a velocity to make the monster jump on awakening
+*/
+
+/*QUAKED monster_army (1 0 0) (-16 -16 -24) (16 16 40) AMBUSH ? ? ? TRIGGERED NOTFOG NOTELEFRAG INSTAWAKE NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Grunt, 30 health points.
+
+Flags:
+"ambush" only wake up on seeing the player, not another monster getting angry
+
+"Triggered"	will not spawn until triggered - triggering again will wake him up. Set 'count' to make this a multi-use spawner.
+"NoTfog" 	supress teleport glitter when spawned with 'triggered'
+"NoTelefrag" will silently fail to spawn if doing so would telefrag an existing monster. will try again automatically 2x/second until it succeeds.
+"Instawake" spawn angry at activator
+
+Keys:
+"target" entity to trigger when killed
+"targetname" entity name
+"movedir" set to a velocity to make the monster jump on awakening
+*/
+
+/*QUAKED monster_tarbaby (1 0 0) (-16 -16 -24) (16 16 24) AMBUSH ? ? ? TRIGGERED NOTFOG NOTELEFRAG INSTAWAKE NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Spawn (Tarbaby), 80 health points.
+
+Flags:
+"ambush" only wake up on seeing the player, not another monster getting angry
+
+"Triggered"	will not spawn until triggered - triggering again will wake him up. Set 'count' to make this a multi-use spawner.
+"NoTfog" 	supress teleport glitter when spawned with 'triggered'
+"NoTelefrag" will silently fail to spawn if doing so would telefrag an existing monster. will try again automatically 2x/second until it succeeds.
+"Instawake" spawn angry at activator
+
+Keys:
+"target" entity to trigger when killed
+"targetname" entity name
+"movedir" set to a velocity to make the monster jump on awakening
+*/
+
+/*QUAKED monster_wizard (1 0 0) (-16 -16 -24) (16 16 40) AMBUSH ? ? ? TRIGGERED NOTFOG NOTELEFRAG INSTAWAKE NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Scrag (the WIZARD), 80 health points.
+
+Flags:
+"ambush" only wake up on seeing the player, not another monster getting angry
+
+"Triggered"	will not spawn until triggered - triggering again will wake him up. Set 'count' to make this a multi-use spawner.
+"NoTfog" 	supress teleport glitter when spawned with 'triggered'
+"NoTelefrag" will silently fail to spawn if doing so would telefrag an existing monster. will try again automatically 2x/second until it succeeds.
+"Instawake" spawn angry at activator
+
+Keys:
+"target" entity to trigger when killed
+"targetname" entity name
+*/
+
+/*QUAKED monster_zombie (1 0 0) (-16 -16 -24) (16 16 32) CRUCIFIED AMBUSH LYING ? TRIGGERED NOTFOG NOTELEFRAG INSTAWAKE NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Zombie, 60 health points.  If crucified, stick the bounding box back 12 pixels into the wall to look right.
+
+Flags:
+"crucified" stick the bounding box 12 pixels back into a wall to look right.
+"ambush" only wake up on seeing the player, not another monster getting angry
+"lying" will spawn knocked down and will get up when awakened - good for hiding in water
+
+"Triggered"	will not spawn until triggered - triggering again will wake him up. Set 'count' to make this a multi-use spawner.
+"NoTfog" 	supress teleport glitter when spawned with 'triggered'
+"NoTelefrag" will silently fail to spawn if doing so would telefrag an existing monster. will try again automatically 2x/second until it succeeds.
+"Instawake" spawn angry at activator
+
+Keys:
+"target" entity to trigger when killed
+"targetname" entity name
+"movedir" set to a velocity to make the monster jump on awakening
+*/
+
+/*QUAKED func_plat (0 .5 .8) ? PLAT_LOW_TRIGGER ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Plats are always drawn in the extended position, so they will light correctly.
+If the plat is the target of another trigger or button, it will start out disabled in the top position until it is triggered, when it will lower and become a normal plat.
+If the plat targets a trigger once/multiple/multiple_box, it will override the plat's default activation zone.
+
+"PLAT_LOW_TRIGGER" activation zone will only be at the bottom of the movement course, instead of the whole vertical
+
+"speed"		default 150
+"height"	implicitly determine the distance the plat moves
+"pos1"&"pos2"	directly override top and bottom positions - plat can be built anywhere else in the map
+"wait"		time to pause at apex in seconds, default 3
+"sounds"
+	1: base fast
+	2: chain slow (default if 0)
+	-1: silent
+*/
+
+/*QUAKED func_flytrain (0 .5 .8) ? ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+A func_train that follows a curved flypath and variable speed rules. Inherits movement speed from each path_corner's "speed" key.  
+If the train is the target of a button or trigger, it will not begin moving until activated.
+
+"sounds"
+0) none, or, set your own with 'noise' (stop sound) and 'noise1' (move sound)
+1) ratchet metal
+2) base plat
+*/
+
+/*QUAKED func_flytrain_point (0 .5 .8) (-8 -8 -8) (8 8 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+A func_train that follows a curved flypath and variable speed rules. Inherits movement speed from each path_corner's "speed" key.  
+If the train is the target of a button or trigger, it will not begin moving until activated.
+
+"sounds"
+0) none, or, set your own with 'noise' (stop sound) and 'noise1' (move sound)
+1) ratchet metal
+2) base plat
+*/
+
+/*QUAKED func_train (0 .5 .8) ? PATH_SPEED ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Trains are moving platforms that players can ride.
+The targets origin specifies the min point of the train at each corner. The train spawns at the first target it is pointing at.
+If the train is the target of a button or trigger, it will not begin moving until activated.
+A train will fire all targets of a pathcorner on arrival.
+Keys:
+"speed"	default 100
+"dmg"	default	2
+"sounds"
+	0) none, or, set your own with 'noise' (stop sound) and 'noise1' (move sound)
+	1) ratchet metal
+	2) base plat
+"pausetime"	pausetime at a pathcorner that doesn't specify a wait, default 0.1, -1 for continuous motion
+
+Spawnflags:
+PATH_SPEED: train will inherit 'speed' value from path_corners as it reaches them
+*/
+
+/*QUAKED func_train_point (0 .5 .8) (-8 -8 -8) (8 8 8) PATH_SPEED ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Trains are moving platforms that players can ride.
+The targets origin specifies the min point of the train at each corner. The train spawns at the first target it is pointing at.
+If the train is the target of a button or trigger, it will not begin moving until activated.
+A train will fire all targets of a pathcorner on arrival.
+Keys:
+"model" model to use
+"speed"	default 100
+"dmg"	default	2
+"sounds"
+	0) none, or, set your own with 'noise' (stop sound) and 'noise1' (move sound)
+	1) ratchet metal
+	2) base plat
+"pausetime"	pausetime at a pathcorner that doesn't specify a wait, default 0.1, -1 for continuous motion
+
+Spawnflags:
+PATH_SPEED: train will inherit 'speed' value from path_corners as it reaches them
+*/
+
+/*QUAKED func_bobbing (0 .5 .8) ? START_OFF CRUSHER ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+bobbatron 2000. does not need a 'speed' key; specify "wait" for the period and the bobbalondo 9000 does the rest. 
+trigger to freeze in place or reactivate.
+
+"angle" set bobaxis
+"distance" total distance of bob, will move half this far in either direction
+"pos1"/"pos2" ignore angle/distance and set apex offsets directly
+"wait" wavelength of bob in seconds
+"delay" phase offset to start at (0 = pos1, 0.5 = pos2, 1.0 = back at pos1 again)
+"sounds"
+0) none, or, set your own with 'noise' (stop sound) and 'noise1' (move sound)
+1) ratchet metal
+2) base plat
+
+Spawnflags
+START_OFF	start off
+CRUSHER		don't reverse when blocked
+*/
+
+/*QUAKED func_bobbing_point (0 .5 .8) (-8 -8 -8) (8 8 8) START_OFF CRUSHER ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+bobbatron 2000. does not need a 'speed' key; specify "wait" for the period and the bobbalondo 9000 does the rest. 
+trigger to freeze in place or reactivate.
+
+"angle" set bobaxis
+"distance" total distance of bob, will move half this far in either direction
+"pos1"/"pos2" ignore angle/distance and set apex offsets directly
+"wait" wavelength of bob in seconds
+"delay" phase offset to start at (0 = pos1, 0.5 = pos2, 1.0 = back at pos1 again)
+"sounds"
+0) none, or, set your own with 'noise' (stop sound) and 'noise1' (move sound)
+1) ratchet metal
+2) base plat
+
+Spawnflags
+START_OFF	start off
+CRUSHER		don't reverse when blocked
+*/
+
+/*QUAKED misc_teleporttrain (0 .5 .8) (-16 -16 -16) (16 16 16) START_INVIS CURVY ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+This is used for the final boss
+
+Spawnflags
+START_INVIS	Invisible until triggered
+CURVY	behaves like a func_flytrain, following path_corners, waiting at them (a wait of -1 on a path_corner will stop the ball until triggered again), then disappearing at the last path_corner.  Inherits movement speed from each path_corner's "speed" key. movement is smoothed out so it doesn't move in straight lines between waypoints - sharp turns near walls could make it clip out of the level and disappear for a moment, so place pathcorners carefully.
+*/
+
+/*QUAKED ambient_sound (0.3 0.1 0.6) (-10 -10 -8) (10 10 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+specify any ambient sound you want. any at all!
+
+"distance" attenuation (integer) - defaults to 0, which is the same as other ambient sounds.
+  1 = 'idle' - monster idle sound range
+  2 = 'normal' - monster bark sound range
+  3 = 'none' - loops everywhere forever (don't use this)
+
+"noise"  wav to play - don't leave off the ".wav"!
+ambience/
+  buzz1.wav	clicking sparks (ambient_flouro_buzz)
+  comp1.wav	bloops and bleeps (ambient_comp_hum)
+  drip1.wav	those drips (ambient_drip)
+  drone6.wav	deep slipgate throb (ambient_drone)
+  fire1.wav	torch crackle (ambient_)
+  fl_hum1.wav	flourescent light buzz (ambient_light_buzz)
+  hum1.wav	wispy teleporter wind (trigger_teleport sound)
+  suck1.wav	deep hollow wind (ambient_suck_wind)
+  swamp1.wav	frogs and crickets (ambient_swamp1 or 2)
+  water1.wav	eerie swooshing water (waterbrush sound)
+  wind2.wav	higher pitched hollow wind (skybrush sound)
+  windfly.wav	the wind tunnel air sound
+*/
+
+/*QUAKED ambient_suck_wind (0.3 0.1 0.6) (-10 -10 -8) (10 10 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+good old suck wind
+
+"distance" attenuation (integer) - defaults to 0, which is the same as other ambient sounds.
+  1 = 'idle' - monster idle sound range
+  2 = 'normal' - monster bark sound range
+  3 = 'none' - loops everywhere forever (don't use this)
+*/
+
+/*QUAKED ambient_drone (0.3 0.1 0.6) (-10 -10 -8) (10 10 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+more of a throb, really
+
+"distance" attenuation (integer) - defaults to 0, which is the same as other ambient sounds.
+  1 = 'idle' - monster idle sound range
+  2 = 'normal' - monster bark sound range
+  3 = 'none' - loops everywhere forever (don't use this)
+*/
+
+/*QUAKED ambient_flouro_buzz (0.3 0.1 0.6) (-10 -10 -8) (10 10 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+zaps and sparks
+
+"distance" attenuation (integer) - defaults to 0, which is the same as other ambient sounds.
+  1 = 'idle' - monster idle sound range
+  2 = 'normal' - monster bark sound range
+  3 = 'none' - loops everywhere forever (don't use this)
+*/
+
+/*QUAKED ambient_drip (0.3 0.1 0.6) (-10 -10 -8) (10 10 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+drip drip
+
+"distance" attenuation (integer) - defaults to 0, which is the same as other ambient sounds.
+  1 = 'idle' - monster idle sound range
+  2 = 'normal' - monster bark sound range
+  3 = 'none' - loops everywhere forever (don't use this)
+*/
+
+/*QUAKED ambient_comp_hum (0.3 0.1 0.6) (-10 -10 -8) (10 10 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+bleeps and bloops
+
+"distance" attenuation (integer) - defaults to 0, which is the same as other ambient sounds.
+  1 = 'idle' - monster idle sound range
+  2 = 'normal' - monster bark sound range
+  3 = 'none' - loops everywhere forever (don't use this)
+*/
+
+/*QUAKED ambient_thunder (0.3 0.1 0.6) (-10 -10 -8) (10 10 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+what
+
+"distance" attenuation (integer) - defaults to 0, which is the same as other ambient sounds.
+  1 = 'idle' - monster idle sound range
+  2 = 'normal' - monster bark sound range
+  3 = 'none' - loops everywhere forever (don't use this)
+*/
+
+/*QUAKED ambient_light_buzz (0.3 0.1 0.6) (-10 -10 -8) (10 10 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+gentle lamp hum
+
+"distance" attenuation (integer) - defaults to 0, which is the same as other ambient sounds.
+  1 = 'idle' - monster idle sound range
+  2 = 'normal' - monster bark sound range
+  3 = 'none' - loops everywhere forever (don't use this)
+*/
+
+/*QUAKED ambient_swamp1 (0.3 0.1 0.6) (-10 -10 -8) (10 10 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+swamp
+
+"distance" attenuation (integer) - defaults to 0, which is the same as other ambient sounds.
+  1 = 'idle' - monster idle sound range
+  2 = 'normal' - monster bark sound range
+  3 = 'none' - loops everywhere forever (don't use this)
+*/
+
+/*QUAKED ambient_swamp2 (0.3 0.1 0.6) (-10 -10 -8) (10 10 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+same as swamp1
+
+"distance" attenuation (integer) - defaults to 0, which is the same as other ambient sounds.
+  1 = 'idle' - monster idle sound range
+  2 = 'normal' - monster bark sound range
+  3 = 'none' - loops everywhere forever (don't use this)
+*/
+
+/*QUAKED target_sound (0.3 0.1 0.6) (-8 -8 -8) (8 8 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+play a sound when triggered.
+
+"distance" attenuation (integer) - defaults to 0, which is the same as other ambient sounds.
+  1 = 'idle' - monster idle sound range
+  2 = 'normal' - monster bark sound range
+  3 = 'none' - loops everywhere forever (don't use this)
+"volume" volume, defaults to 1.0 (full volume)
+"noise"  wav to play - don't leave off the ".wav"!
+"delay"	delay sound after trigger
+*/
+
+/*QUAKED trigger_multiple (.5 .0 .5) ? NOTOUCH ? TRIGGER_FIRST MONSTERS ALL_CLIENTS ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Variable sized repeatable trigger.
+Must be targeted at one or more entities.
+
+Flags:
+"notouch" only triggered by other entities, not by touching
+"all_clients" will trigger once per client touching it on the same frame before waiting (default behavior is to trigger only for the first touch event, ie the lowest-numbered client). use if you want to trigger a target_items or target_heal and have every client in the trigger affected by the result.
+"trigger_first" won't be touchable until triggered once by something else
+"monsters" monsters will fire this trigger (and count as activator, so be careful)
+
+Keys:
+"angle" the trigger will only fire when someone is facing the direction of the angle, use 360 for angle 0.
+"distance" dot product result to compare "angle" against. 0 is 90 degrees off (default), 0.7 is ~45 degrees.
+"delay" delay before firing (after trigger)
+"health" button must be killed to activate
+"message" message to display when triggered
+"sounds"
+    1 = secret
+    2 = beep beep
+	3 = large switch
+	4 = it is a mysteryyy
+	-1 = silent
+"noise"	choose your own .wav
+"target"  entity to trigger (required)
+"targetname"  entity name
+"wait" delay between triggerings (default: 0.2) (NOTE: wait -1 with all_clients will not work like you think.)
+*/
+
+/*QUAKED trigger_multiple_box (.5 .5 0) (-8 -8 -8) (8 8 8) ? ? TRIGGER_FIRST MONSTERS ALL_CLIENTS ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Quoth2-style cache-saving bounding box triggers: define size with "mangle", as total dimensions in xyz - trigger volume will be that size centered on the trigger_multiple_box's origin.  otherwise acts like a normal trigger.
+
+Flags:
+"all_clients" will trigger once per client touching it on the same frame before waiting (default behavior is to trigger only for the first touch event, ie the lowest-numbered client). use if you want to trigger a target_items or target_heal and have every client in the trigger affected by the result.
+"trigger_first" won't be touchable until triggered once by something else
+"monsters" monsters will fire this trigger (and count as activator, so be careful)
+
+Keys:
+"angle" the trigger will only fire when someone is facing the direction of the angle, use "360" for angle 0.
+"distance" dot product result to compare "angle" against. 0 is 90 degrees off (default), 0.7 is 45 degrees.
+"delay" delay before firing (after trigger)
+"health" button must be killed to activate
+"message" message to display when triggered
+"sounds"
+    1 = secret
+    2 = beep beep
+	3 = large switch
+	4 = it is a mysteryyy
+	-1 = silent
+"noise"	choose your own .wav
+"target"  entity to trigger (required)
+"targetname"  entity name
+"wait" delay between triggerings (default: 0.2) (NOTE: wait -1 with all_clients will not work like you think.)
+*/
+
+/*QUAKED trigger_once (.5 .0 .5) ? NOTOUCH ? TRIGGER_FIRST MONSTERS ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Variable sized trigger. Triggers once, then removes itself. You must set the key "target" to the name of another object in the level that has a matching "targetname". If notouch is set, the trigger is only fired by other entities, not by touching.
+
+Wait is always -1.
+
+Flags:
+"notouch" only triggered by other entities, not by touching
+"trigger_first" won't be touchable until triggered once by something else
+"monsters" monsters will fire this trigger (and count as activator, so be careful)
+
+Keys:
+"angle" the trigger will only fire when someone is facing the direction of the angle, use "360" for angle 0.
+"distance" dot product result to compare "angle" against. 0 is 90 degrees off (default), 0.7 is 45 degrees.
+"delay" delay before firing (after trigger)
+"health" button must be killed to activate
+"message" message to display when triggered
+"sounds"
+    1 = secret
+    2 = beep beep
+	3 = large switch
+	4 = it is a mysteryyy
+	-1 = silent
+"noise"	choose your own .wav
+"target"  entity to trigger (required)
+"targetname"  entity name
+*/
+
+/*QUAKED trigger_once_box (.5 .0 .5) ? ? ? TRIGGER_FIRST MONSTERS ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Quoth2-style cache-saving bounding box triggers: define size with "mangle", as total dimensions in xyz - trigger volume will be that size centered on the trigger_multiple_box's origin.  otherwise acts like a normal trigger.
+
+Wait is always -1.
+
+Flags:
+"trigger_first" won't be touchable until triggered once by something else
+"monsters" monsters will fire this trigger (and count as activator, so be careful)
+
+Keys:
+"angle" the trigger will only fire when someone is facing the direction of the angle, use "360" for angle 0.
+"distance" dot product result to compare "angle" against. 0 is 90 degrees off (default), 0.7 is 45 degrees.
+"delay" delay before firing (after trigger)
+"health" button must be killed to activate
+"message" message to display when triggered
+"sounds"
+    1 = secret
+    2 = beep beep
+	3 = large switch
+	4 = it is a mysteryyy
+	-1 = silent
+"noise"	choose your own .wav
+"target"  entity to trigger (required)
+"targetname"  entity name
+*/
+
+/*QUAKED target_secret (.5 .0 .5) (-8 -8 -8) (8 8 8) ? SUPERSECRET ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Secret counter trigger.  Player gets a secret credit when triggered.  Note when using a target_secret: if the item can't be picked up (because of health/armor/ammo limits already being met, etc), it won't fire its targets and thus the target_secret won't give credit. Use a trigger in that case.
+
+Set "SUPERSECRET" to hide its existence in the total until it's found.
+Keys:
+"message" message to display when triggered
+"sounds"
+    1 = secret
+    2 = beep beep
+	3 = large switch
+	4 = it is a mysteryyy
+	-1 = silent
+"noise"	choose your own .wav
+*/
+
+/*QUAKED trigger_secret (.5 .0 .5) ? ? SUPERSECRET TRIGGER_FIRST ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Secret counter trigger.  Player gets a secret credit when touched.  Set "SUPERSECRET" to hide its existence in the total until found.
+Keys:
+"message" message to display when triggered
+"sounds"
+    1 = secret
+    2 = beep beep
+	3 = large switch
+	4 = it is a mysteryyy
+	-1 = silent
+"noise"	choose your own .wav
+
+Flags:
+"SUPERSECRET" hide its existence in the total until it's found
+"trigger_first" won't be touchable until triggered once by something else
+*/
+
+/*QUAKED trigger_secret_box (.5 .0 .5) (-8 -8 -8) (8 8 8) ? SUPERSECRET TRIGGER_FIRST ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Secret counter trigger.  Player gets a secret credit when touched.  Set "SUPERSECRET" to hide its existence in the total until found.
+
+Quoth2-style edict-saving bounding box trigger: define size with "mangle", trigger volume will be that size centered on the trigger_secret_box's origin.
+
+Keys:
+"message" message to display when triggered
+"sounds"
+    1 = secret
+    2 = beep beep
+	3 = large switch
+	4 = it is a mysteryyy
+	-1 = silent
+"noise"	choose your own .wav
+
+Flags:
+"SUPERSECRET" hide its existence in the total until it's found
+"trigger_first" won't be touchable until triggered once by something else
+*/
+
+/*QUAKED target_setskill (.5 .0 .5) (-8 -8 -8) (8 8 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Sets skill level to the value of "message". Only used on start map.
+
+Keys:
+"message"
+    sets skill level
+    0 = easy
+    1 = normal
+    2 = hard
+    3 = nightmare
+*/
+
+/*QUAKED trigger_setskill (.5 .0 .5) ? ? ? TRIGGER_FIRST ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Sets skill level to the value of "message". Only used on start map.
+
+Flags:
+"trigger_first" won't be touchable until triggered once by something else
+
+Keys:
+"message"
+    sets skill level
+    0 = easy
+    1 = normal
+    2 = hard
+    3 = nightmare
+*/
+
+/*QUAKED trigger_onlyregistered (.5 .5 .5) ? ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Only fires if playing the registered version, otherwise prints the message
+*/
+
+/*QUAKED trigger_hurt (.5 .0 .5) ? KILL NO_BIOSUIT TRIGGER_FIRST NO_MONSTERS ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+any entity touching this will be hurt / to see if it still feels
+
+Keys:
+"dmg" sets damage, default is 5
+"delay" frequency of damage in seconds, default 1
+
+Flags:
+"kill" always do enough damage to kill instantly
+"no_biosuit" the biosuit protects against this trigger
+"trigger_first" won't be touchable until triggered once by something else
+"no_monsters" trigger will only hurt players
+*/
+
+/*QUAKED trigger_hurt_box (.5 .0 .5) (-8 -8 -8) (8 8 8) ? ? TRIGGER_FIRST ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Any object touching this will be hurt.
+Quoth2-style edict-saving bounding box trigger: define bounds size with "mangle" - trigger volume will be centered on the trigger_hurt_box's origin.
+Resist the urge to put a tiny one of these on every light_flame.
+
+Keys:
+"dmg" sets damage, default is 5
+"delay" frequency of damage in seconds, default 1. use -1 for maximum host_framerate pain spam.
+
+Flags:
+"trigger_first" won't be touchable until triggered once by something else
+*/
+
+/*QUAKED trigger_push (.5 .0 .5) ? PUSH_ONCE ADD_VEL TRIGGER_FIRST ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Pushes the player and Grenades.
+
+Flags:
+"push_once" removes itself after firing
+"trigger_first" won't be touchable until triggered once by something else
+"add_vel" add to the player's velocity rather than overriding it (player can still move around and push against the current)
+
+Keys:
+"angle" direction of push (-2 is down, -1 up)
+"mangle" specify a more exact direction (yaw pitch roll, positive pitch is down)
+"speed" speed of push (default: 1000)
+"speed2" in ADD_VEL
+"noise" replace default wind blow sound
+*/
+
+/*QUAKED trigger_monsterjump (.5 .0 .5) ? NO_LARGE NO_SMALL TRIGGER_FIRST ONLY_MELEES ONLY_FRONT ONLY_BELOW ADD_VEL ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Walking monsters that touch this will jump in the direction of the trigger's angle.
+
+Flags:
+NO_LARGE only monsters with 32x32 bounds
+NO_SMALL only monsters with 64x64 bounds
+TRIGGER_FIRST won't be touchable until triggered once by something else
+ONLY_MELEES only monsters with no ranged attack (dogs/fiends/spawns)
+ONLY_FRONT will only trigger if monster's enemy is in front of the monster relative to jump angle
+ONLY_BELOW will only trigger if monster's enemy is below the monster
+ADD_VEL add velocity to monster rather than setting it
+
+Keys:
+"angle" angle towards the monster jumps
+"height" the speed thrown upwards (default: 200)
+"speed" the speed thrown forward (default: 200)
+"target"  entity to trigger
+"targetname"  entity name
+"include" allow this classname of monster no matter what
+"exclude" exclude this classname of monster no matter what
+*/
+
+/*QUAKED trigger_monsterjump_box (.5 .0 .5) (-8 -8 -8) (8 8 8) NO_LARGE NO_SMALL TRIGGER_FIRST ONLY_MELEES ONLY_FRONT ONLY_BELOW ADD_VEL ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Walking monsters that touch this will jump in the direction of the trigger's angle.
+Quoth2-style edict-saving bounding box trigger: define bounds size with "mangle" - trigger volume will be centered on the trigger_monsterjump_box's origin.
+
+Flags:
+NO_LARGE only monsters with 32x32 bounds
+NO_SMALL only monsters with 64x64 bounds
+TRIGGER_FIRST won't be touchable until triggered once by something else
+ONLY_MELEES only monsters with no ranged attack (dogs/fiends/spawns)
+ONLY_FRONT will only trigger if monster's enemy is in front of the monster relative to jump angle
+ONLY_BELOW will only trigger if monster's enemy is below the monster
+ADD_VEL add velocity to monster rather than setting it
+
+Keys:
+"angle" angle towards the monster jumps
+"height" the speed thrown upwards (default: 200)
+"speed" the speed thrown forward (default: 200)
+"target"  entity to trigger
+"targetname"  entity name
+"include" allow this classname of monster no matter what
+"exclude" exclude this classname of monster no matter what
+*/
+
+/*QUAKED trigger_relay (.5 .0 .5) (-8 -8 -8) (8 8 8) MSG_ONCE RANDOM ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+This fixed size trigger cannot be touched, it can only be fired by other events.  Target this with a target_lock to selectively disable/reenable it for logic fun.
+
+Keys:
+"delay" delay before firing (after trigger)
+"killtarget" removes target
+"message" displayed when fired
+"target/2/3/4" fires target when triggered
+"targetname"  entity name (required)
+"sounds" same as other triggers, plays after 'delay'
+"noise" or, pick any wav
+"count" only fire this many times, then auto self-destruct
+
+Spawnflags:
+"MSG_ONCE"	only print its message on the first firing, otherwise it prints every time
+"RANDOM"	randomly fire one of its targets (and/or kill one of its killtargets) instead of them all
+*/
+
+/*QUAKED target_state (.5 .0 .5) (-8 -8 -8) (8 8 8) RELAY INVERSE ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Numeric variable. set 'state' to initial value. triggering this will cycle the value (swapping 0 and 1).
+
+If "RELAY" is checked, it acts as a relay instead of holding state. It fires its targets based on the value of the 'state' member of another entity, specified by setting 'state' to the value it has to match and 'include' to that entity's targetname. This can be another target_state, or any other entity which has a 'state', such as doors or plats.
+	0: off (lights/etc)/top (plats)/open (doors)/pushed (buttons)
+	1: on (lights/etc)/bottom (plats)/closed (doors)/unpushed (buttons)
+	2: going up (plats)/opening (doors)/pushing (buttons)
+	3: going down (plats)/closing (doors)/unpushing (buttons)
+A trigger_counter's 'state' is its current trigger count.
+
+Keys:
+"style" comparison to make if RELAY
+	1: self = include (default)
+	2: self < include
+	3: self <= include
+	4: self > include
+	5: self >= include
+"count" if > 1, state will be incremented on each trigger to a maximum of 'count' before cycling to 0
+"delay" delay before firing (after trigger)
+"target2/3/4/kill" targets to fire if RELAY
+
+Spawnflags:
+"INVERSE"	if RELAY, will fire if state is anything other than a match. otherwise, will decrement when triggered instead of increment
+*/
+
+/*QUAKED target_lock (0 .5 .8) (-8 -8 -8) (8 8 8) START_LOCKED LOCK_ONLY UNLOCK_ONLY ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Locks and unlocks targeted entities independent of their toggle/start_open/etc states.  Works on various entities:
+- A locked func_door won't respond to touches or triggers. Use this for doors behind temporary bars.
+- A locked func_plat behaves as an unreleased LOW_TRIGGER plat
+- A locked trigger_relay will not fire or evaluate at all
+- Locked path_corners are not considered valid patrol/train destinations
+- Locked trigger volumes (once/multi/teleport/secret/changelevel/push/monsterjump) will not activate when touched or triggered
+
+Spawnflags:
+"start_locked"	Targeted entities start out locked. 
+"lock_only"		Will only lock its targets rather than toggling
+"unlock_only"	Will only unlock its targets rather than toggling
+*/
+
+/*QUAKED trigger_counter (.5 .0 .5) (-8 -8 -8) (8 8 8) NOMESSAGE REPEAT ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Acts as an intermediary for an action that takes multiple inputs. 
+If nomessage is not set, it will print "1 more.. " etc when triggered and "sequence complete" when finished. After the counter has been triggered "count" times, it will fire all of it's targets and remove itself, unless 'repeat' has been set.
+
+Flags:
+"nomessage" disables count display
+
+Keys:
+"count" number of triggers needed to fire own target, default is 2
+"target"  entity to trigger (required)
+"targetname"  entity name (required)
+"message"	override text to print on completion
+*/
+
+/*QUAKED trigger_timer (.5 .5 .5) (-8 -8 -8) (8 8 8) START_ON ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Fires its targets once every "wait" seconds. If "count" is set, it will only fire that many times and then stop. Set "rand" to add a random extra delay to the wait interval.
+
+SPAWNFLAGS
+START_ON: do not wait until triggered to begin firing
+*/
+
+/*QUAKED target_playercount (.5 .5 .5) (-8 -8 -8) (8 8 8) LT_EQUAL BY_TWOS ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Checks the number of players currently connected when triggered, and fires exclusively one of target/2/3/4 depending on the count. If one player is connected, it only fires 'target', if two are connected it fires 'target2', and so on. 
+
+SPAWNFLAGS
+LT_EQUAL: Fires all targetnames UP TO the current player count (so with four players connected, all four targets would fire instead of just target4)
+BY_TWOS: require double the number of players for each threshhold (for scaling up to 8 players)
+*/
+
+/*QUAKED trigger_changelevel (.5 0 .5) ? no_intermission ? TRIGGER_FIRST ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+When the player touches this, he gets sent to the map listed in the "map" variable. The view will go to the info_intermission spot and display stats.
+
+Flags:
+"no_intermission" bypasses intermission screen
+"trigger_first" won't be touchable until triggered once by something else
+   
+Keys:
+"map" set to name of next map (e.g. e1m1) if no map is set, the current map will restart
+*/
+
+/*QUAKED target_changelevel (1 1 0.5) (-16 -16 -16) (16 16 16) NO_INTERMISSION ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+When the player triggers this by any means, he gets sent to the map listed in the "map" variable.  
+Spawnflags:
+NO_INTERMISSION: the view will not go to the info_intermission spot and display stats
+*/
+
+/*QUAKED info_intermission (.75 .25 .25) (-8 -8 -8) (8 8 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+This is the camera point for the intermission. Use "mangle" instead of angle, so you can set pitch or roll as well as yaw.
+Quake does a random pick if more than one exists.
+If no info_intermission entity is set, Quake uses the player start.
+
+Keys:
+"mangle" set pitch yaw roll, positive pitch is down
+"fog_color"/"fog_density" set the fog for the view from this camera
+
+*/
+
+/*QUAKED info_teleport_destination (.75 .25 .85) (-16 -16 0) (16 16 48) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+This is the destination marker for a teleporter.
+
+Keys:
+"angle" new view angle after teleporting
+"targetname" value used by teleporter
+"fog_color"/"fog_density" set the fog for anyone teleporting here
+*/
+
+/*QUAKED info_teleport_target (.5 .75 .25) (-8 -8 -8) (8 8 32) PLAYER_ONLY PUSH TRIGGER_FIRST ? NOFLASH MONSTER_ONLY ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+This is a usable destination marker that acts as its own teleporter.  When triggered, the activator is teleported to this spot.
+
+Flags:
+PLAYER_ONLY		only players will teleport
+PUSH			chuck the player forward like a trigger_teleport does
+TRIGGER_FIRST	first use turns it on, and every subsequent use teleports
+NOFLASH			don't spawn telefog or make noise
+MONSTER_ONLY	only monsters will teleport
+
+Keys:
+"fog_color"/"fog_density" set the fog for anyone teleporting here
+"count"		remove after this many uses
+*/
+
+/*QUAKED trigger_teleport (.5 .0 .5) ? PLAYER_ONLY SILENT TRIGGER_FIRST NOTRIGGER NOFLASH MONSTER_ONLY ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Any object touching this will be transported to the corresponding info_teleport_destination entity.
+You must set the "target" field, and create an object with a "targetname" field that matches.
+
+Flags:
+"player_only" only players will teleport
+"silent" no whispering from the slipgate
+"trigger_first" won't be touchable until triggered once by something else
+"notrigger" default behavior for a teleporter with a targetname is to only teleport what's touching it
+	when triggered.  this will preserve ordinary no-targetname behavior (if you're using the teleporter's
+	targetname for a killtarget for example)
+"noflash" don't spawn tfog or make noise
+"monster_only" only monsters will teleport
+
+Keys:
+"target" targetname of info_teleport_destination (required)
+"targetname" entity name (required)
+"count" remove after this many uses
+*/
+
+/*QUAKED trigger_teleport_box (.5 .0 .5) (-8 -8 -8) (8 8 8) PLAYER_ONLY SILENT TRIGGER_FIRST NOTRIGGER ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Any object touching this will be transported to the corresponding info_teleport_destination entity.
+You must set the "target" field, and create an object with a "targetname" field that matches.
+Quoth2-style edict-saving bounding box trigger: define bounds size with "mangle" - trigger volume will be centered on the trigger_teleport_box's origin.
+
+Flags:
+"player_only" only players will teleport
+"silent" no whispering from the slipgate
+"trigger_first" won't be touchable until triggered once by something else
+"notrigger" default behavior for a teleporter with a targetname is to only teleport what's touching it
+	when triggered.  this will preserve ordinary no-targetname behavior (if you're using the teleporter's
+	targetname for a killtarget for example)
+"noflash" don't spawn tfog or make noise
+
+Keys:
+"target" targetname of info_teleport_destination (required)
+"targetname" entity name (required)
+*/
+
+/*QUAKED func_void (.5 .2 0) ? ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+for holes into which one should not fall
+
+Texture this with black (or sky?) and cover the bottom of the pit with it.  Automatically offsets its own visual model upward, to hide pesky heads and scrag corpses underneath.  Also automatically spawns a start-of-plunge trigger of the same size "height" units above itself that plays a yell sound and fades out the view of clients as they start to fall in.
+
+Keyvalues
+"delay" how long the player should 'fall' before the splat, default 3
+"height" how high above the func_void the plunge trigger should spawn. do not make this high enough that players will touch it without falling in or they'll hear random screaming noises as they walk around and that'll be strange.
+"lip" distance to raise the visual model, default 32
+"fadecolor" color to fade the screen to while falling, default black
+
+Fires all "target"s/"killtarget"s when a client touches the plunge trigger (ie the yell, not the splat).
+If the func_void's first target is an info_teleport_destination, it will hurt the player for "dmg" damage and teleport him to the destination. If "dmg" is enough to kill the player when he falls in, it continues with the fade and splat as normal.
+*/
+
+/*QUAKED func_wall (0 .5 .8) ? NONSOLID TOGGLE_VIS START_INVIS ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+This is just a solid wall if not inhibited.  Changes its texture(s) to alternate ones (e.g. basebtn), if targeted.
+NOT STATIC.  Use a func_static for inconsequential bmodels.
+
+Flags:
+NONSOLID	act as a func_illusionary, but still respond to trigger events
+TOGGLE_VIS	change visibility and solidity instead of texture when triggered. starts solid and visible unless START_INVIS is checked.
+ 
+Keys:
+"targetname" entity name
+"mangle" orientation of the model, values are 'pitch yaw roll', positive pitch is down. not recommended on bmodels.
+"noise" sound to play when triggered.
+"wait" will always flip its state back again if set - absorbs repeat triggerings like doors while waiting
+*/
+
+/*QUAKED func_wall_point (0 .5 .8) (-8 -8 -8) (8 8 8) NONSOLID ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+This is just a solid wall if not inhibited.  Changes its texture(s) to alternate ones (e.g. basebtn), if triggered.
+
+Keys:
+"model" filename of model to stand in for this entity. can be a bsp or an mdl. mdls will not be solid.
+"mangle" orientation of the model, values are 'pitch yaw roll', positive pitch is down
+"noise" sound to play when triggered.
+"targetname"	entity name
+*/
+
+/*QUAKED func_static (0 .5 .8) ? ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Like a func_wall but calls makestatic.  Static entities are always nonsolid.
+*/
+
+/*QUAKED func_static_point (0 .5 .8) (-8 -8 -8) (8 8 8) ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+Like a func_wall but calls makestatic.  Static entities are always nonsolid.
+
+"model"		filename of model to stand in for this entity. can be bsp or mdl.
+*/
+
+/*QUAKED func_illusionary (0 .5 .8) ? ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+A simple entity that looks solid but lets you walk through it. Functionally identical to a func_static.
+*/
+
+/*QUAKED func_episodegate (0 .5 .8) ? E1 E2 E3 E4 ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+This bmodel will appear if the episode has already been completed, so players can't reenter it.
+If it does spawn, it fires its targets immediately.
+*/
+
+/*QUAKED func_bossgate (0 .5 .8) ? ? ? ? ? ? ? ? ? NotEasy NotNormal NotHard NotDeathmatch CoopOnly NotCoop
+This bmodel does not spawn unless players have all of the episode sigils.
+If it does spawn, it fires its targets immediately.
+*/
+
+/*QUAKED func_group (0.6 0.7 0.8) ?
+groups brushes into a group that may or may not be easier to work with
+*/
+
+/*QUAKED func_detail (0.2 .5 .6) ?
+Apparently this behaves like a detail brush. Doesn't seal against leaks.
+*/
+
+/*QUAKED func_detail_wall (0.2 .5 .6) ?
+Apparently this behaves like a detail brush. Doesn't seal against leaks. Doesn't cut geometry it touches.
+*/
+
+/*QUAKED func_detail_illusionary (0.2 .5 .6) ?
+Apparently this behaves like a detail brush. Doesn't seal against leaks. Doesn't cut geometry it touches. Non-solid.
+*/
+
+/*QUAKED worldspawn (0 0 0) ?
+
+Keys:
+"light" default light level
+"message" sets the title of the map
+"sounds" CD track to play
+"wad" which graphics wads to use. semicolon delineated, no spaces
+"worldtype" style of keys to spawn
+    0 = medieval
+    1 = metal
+    2 = base
+"gravity" how fast your dreams come crashing down
+
+"_sunlight" "#"
+"_sun_mangle" "# # 0" yaw pitch roll. pitch is 90 to -90 degrees up to down.
+"_sunlight_color" "# # #"
+
+"_dirt" use dirtmapping
+"_dirtdepth" length of dirt rays, default 128.
+"_dirtscale" Scale factor used in dirt calculations, default 1 (higher is darker)
+"_dirtgain" Exponent used in dirt calculation, default 1 (lower is darker)
+*/

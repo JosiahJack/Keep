@@ -254,7 +254,7 @@ void() monster_tur = {
 	precache_sound("weapons/spike2.wav");
 	precache_sound("tur_arm.wav");
 	
-	if (!deathmatch) total_monsters = total_monsters + 1;
+	if (!deathmatch) AddToTotals(self);
 	
 	if (self.deathstring == "") self.deathstring = " was blasted by a Turret\n";
 	self.gib1mdl = "progs/gib1.mdl";

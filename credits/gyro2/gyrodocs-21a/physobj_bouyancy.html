@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/physobj_bouyancy.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+<head>
+	<title>GyroDocs - Bouyancy</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><a href="physobj.html" class="item">Physics Objects</a><div class="layout_submenu"><a href="physobj_aerodynamics.html" class="subitem">- Aerodynamics</a><a href="physobj_angleturb.html" class="subitem">- Angular Turbulence</a><a href="physobj_bouyancy.html" class="subitem subitem_selected">- Bouyancy</a><a href="physobj_hover.html" class="subitem">- Hovering</a><a href="physobj_resistance.html" class="subitem">- Motion Resistance</a><a href="physobj_thrust.html" class="subitem">- Thrust</a><a href="physobj_turbulence.html" class="subitem">- Turbulence</a></div><a href="forces.html" class="item">Force Entities</a><a href="advanced.html" class="item">Advanced Usage</a><a href="info.html" class="item">Further Information</a></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Bouyancy</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p><strong>Gyro_Object_SetBouyancy(entity object, float bouyancy)</strong><br />
+Bouyancy affects the vertical velocity of objects when submerged in liquid. Most often, the object will be pushed upwards and either sink slowly downwards (bouyancy < mass) or rise to the surface (bouyancy > mass) of the liquid. Negative bouyancy reverses this and will accelerate the descent of the object. Final bouyancy strength for air, water, slime and lava is multiplied by the <code>GYRO_BOUYANCYMOD_***</code> globals, as found <a href="configuring.html">here</a>.</p>
+
+<p><strong>Gyro_Object_SetBouyancyMod(entity object, float bouyancy, float air, float water, float slime, float lava)</strong><br />
+An extended version of the above, this function allows you to set the environment multipliers on a per-object basis, rather than using the default <code>GYRO_BOUYANCYMOD_***</code> values.</p>
+
+<p><strong>Gyro_Object_RemoveBouyancy(entity object)</strong><br />
+Removes all bouyancy settings from the specified object.</p></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/physobj_bouyancy.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+</html>

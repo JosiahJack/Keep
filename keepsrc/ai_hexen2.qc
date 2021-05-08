@@ -23,9 +23,9 @@ local float chance = 0.00000;
 
          if ( (self.search_time < time) ) {
 
-            self.monster_stage = 0.00000;
-            self.enemy = world;
-            return ( 0.00000 );
+            self.monster_stage = FALSE;
+            ai_run_done();
+            return (FALSE);
 
          }
          return ( 0.00000 );
@@ -115,8 +115,9 @@ local float chance = 0.00000;
 };
 
 float  (float maxdist)check_z_move =  {
-local float goaldist = 0.00000;
-local entity targ;
+	local float goaldist = 0.00000;
+	local entity targ;
+
    if ( ((self.enemy != world) && visible ( self.enemy)) ) {
       targ = self.enemy;
    } else {

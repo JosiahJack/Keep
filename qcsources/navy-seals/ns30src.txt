@@ -1,0 +1,17 @@
+Ok, here is the source code for Navy Seals 3.0
+
+  Everything is in here, including the Squad Bots.  I've also included 
+the ProQCC compiler by Lee Smith.  If you have a different compiler you
+like to use, go ahead and use it, but regular QCC chokes and dies tryin
+to compile this much code.  If you want to make changes to the game, you
+will need to unpak the Pak0.pak file with a program like WinPak or QPED.
+If you have any questions with the code, feel free to e-mail me and I will
+try to help you out as best I can.  
+
+If someone reading this is wanting to take this a step further, some things 
+I feel it could use are a couple new enemies, and maybe some new weapons, 
+like explosives or something.  Also, a QuakeWorld version would be nice. 
+(I wanted to do this, but since I've had my computer back I have been just 
+too busy to try to get it started)  But most of all, just have fun with this! =)
+  
+                                                             Maverick 

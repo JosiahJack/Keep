@@ -564,16 +564,12 @@ void() monster_boglord =
 	setup_passivestate_boss(self);
 	
 	// Always reset Ammo Resistance to be consistent
-	if (self.classname == "monster_gug") {
-		self.resist_shells = self.resist_nails = 0;
-		self.resist_rockets = 0.5; self.resist_cells = 0;
-	}
-	else {
-		self.resist_shells = self.resist_nails = 0;
-		self.resist_rockets = self.resist_cells = 0.75;
-		self.reflectlightning = TRUE;	// Reflect lightning strikes
-		self.reflectplasma = TRUE;		// Reflect plasma projectiles
-	}
+	self.resist_shells = self.resist_nails = 0;
+	self.resist_rockets = self.resist_cells = 0.75;
+	self.resist_multi_rockets = 0.75;
+	self.resist_plasma = 0.75;
+	self.reflectlightning = TRUE;	// Reflect lightning strikes
+	self.reflectplasma = TRUE;		// Reflect plasma projectiles
 	
 	self.th_checkattack = BogLordCheckAttack;
 	self.th_stand = bogl_stand1;

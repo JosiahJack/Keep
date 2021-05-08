@@ -4,21 +4,19 @@
 void() SUB_Null = {};
 void() SUB_Remove = {remove(self);};
 void(entity inflictor, entity attacker, float damage) SUB_Null_pain = {};
-
 void() SUB_CalcMoveDone;
 void() SUB_CalcAngleMoveDone;
 void(vector marker_org, float marker_type) spawn_marker;
-void(float hud_item) update_hud_totals;
+void(entity thekilled, entity attacker) AddToKills;
+void(entity targ) AddToTotals;
 
 //======================================================================
 // To determine if an entity is still active this function generates
 // an unique number that can be checked/shared between linked entities
 //----------------------------------------------------------------------
-void(entity targ) gen_unique_no = 
-{
+void(entity targ) gen_unique_no = {
 	// Check if target entity has an unique number already
-	if (targ.entno_unique == 0) 
-		targ.entno_unique = rint(random()*1000) * rint(random()*1000);
+	if (targ.entno_unique == 0) targ.entno_unique = rint(random()*1000) * rint(random()*1000);
 };
 
 //======================================================================
@@ -27,8 +25,7 @@ void(entity targ) gen_unique_no =
 // This function expects the makevectors has been done already
 // makevectors (self.angles); <--- if missing, vector will be rubbish!
 //----------------------------------------------------------------------
-vector(vector attack_dir) attack_vector =
-{
+vector(vector attack_dir) attack_vector = {
 	local vector retvec;
 	retvec = v_forward * attack_dir_x;
 	retvec = retvec + (v_right * attack_dir_y);
@@ -425,10 +422,11 @@ and removes them, so some events can remove other triggers.
 
 Search for (string)targetname in all entities that
 match (string)self.target and call their .use function
-
 ======================================================================*/
-void() SUB_UseTargets =
-{
+
+void(string text) Mass_Centerprint;
+
+void() SUB_UseTargets = {
 	local entity t, stemp, otemp, act;
 
 	// -Qmaster - removed the following check due to the fact that it breaks certain hacks and logic (e.g. the high animation rate func_wall hack by Preach)
@@ -491,7 +489,7 @@ void() SUB_UseTargets =
 		t.statetarget21 = self.statetarget21;
 		t.statetarget22 = self.statetarget22;
 		t.statetarget23 = self.statetarget23;
-		t.statetarget24 = self.statetarget24;
+		t.statetarget24 = self.statetarget24; // ridiculous ain't it!
 		t.noise = self.noise;
 		return;
 	}
@@ -504,16 +502,15 @@ void() SUB_UseTargets =
 	if (self.classtype == CT_TRIGRELAYDELAY) {
 		if (self.owner.estate & ESTATE_DISABLE) return;
 	}
-	
-	//----------------------------------------------------------------------
+
 	// print any messages
-	//----------------------------------------------------------------------
 	if (activator.flags & FL_CLIENT && self.message != "") {
 		if (coop > 0) {
 			// Write message to all clients
-			msg_entity = self;
-			WriteByte (MSG_ALL, SVC_CENTERPRINT);
-			WriteString (MSG_ALL, self.message);
+			// msg_entity = self;
+			// WriteByte (MSG_ALL, SVC_CENTERPRINT);
+			// WriteString (MSG_ALL, self.message);
+			Mass_Centerprint(self.message);
 		}
 		// Write message to single client
 		else centerprint (activator, self.message);
@@ -531,23 +528,8 @@ void() SUB_UseTargets =
 		while(t) {
 			// Check for activate mosnters? Tidy up kill counter
 			if (t.flags & FL_MONSTER && t.health > 0) {
-				// If a monster marked with no monster count dies
-				// update HUD totals to reflect death properly
-				if (t.nomonstercount) {
-					if (t.classgroup == CG_HARMLESS) {
-						total_denizens = total_denizens + 1;
-					} else {
-						total_monsters = total_monsters + 1;
-						update_hud_totals(HUD_MONSTERS);
-					}
-				}	
-				// Update global monster death totals
-				if (t.classgroup == CG_HARMLESS) {
-					killed_denizens = killed_denizens + 1;
-				} else {
-					killed_monsters = killed_monsters + 1;
-					WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
-				}
+				if (t.nomonstercount) AddToTotals(self); // If a monster marked with no monster count dies update HUD totals to reflect death properly
+				AddToKills(self,activator);
 			}
 			// Added extra check to prevent player client removal!?!
 			if (!(t.flags & FL_CLIENT)) {
@@ -1080,11 +1062,10 @@ void() SUB_UseTargets =
 	some monsters refire twice automatically (using .cnt variable)
 	Change nightmare to be less range spam and better time scaling
 ======================================================================*/
-void(float normal) SUB_AttackFinished =
-{
+void(float normal) SUB_AttackFinished = {
 	local float nightadj;	// Easier to work out percentage
+
 	self.cnt = 0;			// reset checkfire counter
-	
 	if (skill == SKILL_NIGHTMARE) {
 		// Nightmare mode is just endless range attacks!
 		// I never thought this was a good way to end skill levels
@@ -1102,11 +1083,6 @@ void(float normal) SUB_AttackFinished =
 	}
 	// Easy, Nornal and Hard skill all pass through, no change
 	else self.attack_finished = time + normal;
-	//dprint("Time ("); dprint(ftos(time));
-	//dprint(") AF ("); dprint(ftos(normal));
-	//dprint(") Dif ("); dprint(ftos(self.attack_finished - time));
-	//dprint(") Att ("); dprint(ftos(self.attack_finished));
-	//dprint(")\n");
 };
 
 //----------------------------------------------------------------------

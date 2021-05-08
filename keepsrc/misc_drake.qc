@@ -1,33 +1,22 @@
-// This spawns a gib from the blood fountain.
-// Taken from Zerstorer and adapted to Drake.
-void(string gibname, vector av) FtGib = {
-    local   vector  vel;
-
-    vel_x  = (random() * 100) - 50;
-    vel_y  = (random() * 100) - 50;
-    vel_z  = self.speed + (random() * 200);
-    Gib_Spawn (self.origin, gibname, vel, av, 0, 0, TRUE, -1);
-};
-
+// This spawns a gib from the blood fountain.  Taken from Zerstorer and adapted to Drake.
 void() gibs_fly = {
     local   float   rnum; 
 
     rnum = random();
-    if (rnum < 0.15)
-    {
-        FtGib ("progs/gib1.mdl", '100 200 300');    //Zer uses gib4.mdl.
-        FtGib ("progs/gib2.mdl", '200 100 300');
-        FtGib ("progs/gib3.mdl", '100 200 300');
-        FtGib ("progs/h_player.mdl", '300 200 100');
-
+    if (rnum < 0.15) {
+		ThrowGib(1,1);
+		ThrowGib(2,1);
+		ThrowGib(3,1);
+		ThrowGib(4,1);
+		ThrowGib(25,1);
         sound (self, CHAN_AUTO, "gibfnt/gf_sbig.wav", 1, ATTN_NORM);
     }
     else if (rnum < 0.45)
-        FtGib ("progs/gib1.mdl", '100 200 300');
+        ThrowGib(1,1);
     else if (rnum < 0.85)
-        FtGib ("progs/gib2.mdl", '100 200 300');    //Zer uses gib4.mdl.
+		ThrowGib(2,1);   //Zer uses gib4.mdl.
     else
-        FtGib ("progs/gib3.mdl", '100 200 300');
+        ThrowGib(3,1);
 
     if (random() < 0.5)
         sound (self, CHAN_VOICE, "gibfnt/gf_sprt1.wav", 1, ATTN_NORM);
@@ -57,6 +46,7 @@ void() misc_gibft = {
     precache_model ("progs/gib2.mdl");
     precache_model ("progs/gib3.mdl");
     precache_model ("progs/h_player.mdl");
+	self.headmdl = "progs/h_player.mdl";
     precache_sound ("gibfnt/gf_sprt1.wav");
     precache_sound ("gibfnt/gf_sprt2.wav");
     precache_sound ("gibfnt/gf_plop.wav");
@@ -69,7 +59,7 @@ void() misc_gibft = {
     if (!self.speed) self.speed = 1000;
     if (!self.dmg) self.dmg = 5;
     if (!self.delay) self.delay = 0.5;
-
+	self.classtype = CT_MISCGIBF;
     if (self.targetname) {
         self.lefty = self.spawnflags & 4;
         if (self.spawnflags & ENT_STARTOFF) {
@@ -186,18 +176,19 @@ void() misc_bell =
 //
 // plants the object on the floor
 //============
-void() PlaceDecor =
-{
+void() PlaceDecor = {
     self.solid      = SOLID_BBOX;
     self.movetype   = MOVETYPE_TOSS;    
     self.velocity   = '0 0 0';
-    // self.origin_z   = self.origin_z + 1;    // Other items used +6.
-    // if (!droptofloor ())
-    // {
-        // print_self (self.classname, " fell out of level at ");
-        // remove (self);
-        // return;
-    // }
+	self.oldorigin = self.origin;
+    self.origin_z   = self.origin_z + 1;    // Other items used +6.
+    if (!droptofloor ()) {
+		dprint(self.classname);
+		dprint(" could not fall to floor, staying put inside something else at ");
+		dprint(vtos(self.origin)); 
+		dprint("\n");
+        self.origin = self.oldorigin;
+    }
 };
 
 //============

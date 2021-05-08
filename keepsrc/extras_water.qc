@@ -65,16 +65,14 @@ void() 	liquid_movetopos2;
 void() 	liquid_movetopos1;
 
 // Silly hack to ensure cshift happens for dead players
-void() CheckFuncWaterDeath =
-{
+void() CheckFuncWaterDeath = {
 	local entity ent;
 	local vector spot;
 	
 	spot = self.origin + self.view_ofs;
 	ent = find(world, classname, "fliquid");
 
-	while(ent)
-	{	
+	while(ent) {	
 		// FIXME! - do this right?
 		if ( (spot_x<ent.absmax_x) &&
 			 (spot_y<ent.absmax_y) &&
@@ -84,42 +82,30 @@ void() CheckFuncWaterDeath =
 			 (spot_z>ent.absmin_z)) {
 						
 			// Do the color shift
-			stuffcmd(self, "v_cshift ");
-			stuffcmd(self, ent.cshift);
-			stuffcmd(self, "\n");
-
+			Safe_stuffcmd(self, "v_cshift ");
+			Safe_stuffcmd(self, ent.cshift);
+			Safe_stuffcmd(self, "\n");
 			self.fwatershifttime = time+frametime;
 			self.fwatershift = TRUE;			
-			
 			return;// Done (or else someone made a retarded map)
 		}
-		
 		ent = find(ent, classname, "fliquid");
 	}
 };
 
-//============================================================================
-
-void() liquid_playmovesound =
-{
-	if (self.noise != string_null)
-		sound (self.aiment, CHAN_VOICE, self.noise, 1.0, ATTN_NORM);
+void() liquid_playmovesound = {
+	if (self.noise != string_null) sound (self.aiment, CHAN_VOICE, self.noise, 1.0, ATTN_NORM);
 };
 
-void() liquid_playreturnsound =
-{
-	if (self.noise1 != string_null)
-		sound (self.aiment, CHAN_VOICE, self.noise1, 1.0, ATTN_NORM);
+void() liquid_playreturnsound = {
+	if (self.noise1 != string_null) sound (self.aiment, CHAN_VOICE, self.noise1, 1.0, ATTN_NORM);
 };
 
-void() liquid_playstopsound =
-{
-	if (self.noise2 != string_null)
-		sound (self.aiment, CHAN_VOICE, self.noise2, 1.0, ATTN_NORM);
+void() liquid_playstopsound = {
+	if (self.noise2 != string_null) sound (self.aiment, CHAN_VOICE, self.noise2, 1.0, ATTN_NORM);
 };
 
-void() liquid_at_pos1 =
-{
+void() liquid_at_pos1 = {
 	setorigin(self.aiment, self.aiment.pos1);
 	liquid_playstopsound();
 	self.state = STATE_BOTTOM;
@@ -248,41 +234,7 @@ void(entity entToDrown) liquid_sound =
 		other.fwatershifttime = time + 0.1;	
 };
 
-void() vanilla_water_check =
-{
-	local vector test_vec;
-	
-	test_vec = self.maxs - '0 0 16';
-	test_vec_x = test_vec_y = 0;
-	test_vec = self.origin + test_vec;
-	
-	monster_liquid_check();
-	// if(pointcontents(test_vec) < -2)
-	// {
-		// if(!self.inBSPwater)
-		// {
-			//dprint("under water \n");
-			// self.inBSPwater = TRUE;
-		// }
-		
-		// if(self.spawnflags & CAN_DROWN || self.no_liquiddmg == 0)
-		// {
-			// self.drawntime = time + 12;
-			// self.drown_dmg = 0;
-			// self.drown_cnt = 1;
-			// liquid_drown(self);
-		// }
-	// }
-	// else if(self.inBSPwater)
-	// {
-		//dprint("above water \n");
-		// self.inBSPwater = FALSE;
-	// }
-
-};
-
-void() liquid_touch =
-{
+void() liquid_touch = {
 	local float test;
 	local vector test_vec;
 	local float c;
@@ -399,9 +351,9 @@ void() liquid_touch =
 			//other.funcwaterdmg_finished = time;
 			other.cshift_upd = TRUE;
 			// Do the color shift
-			stuffcmd(other, "v_cshift ");
-			stuffcmd(other, self.cshift);
-			stuffcmd(other, "\n");
+			Safe_stuffcmd(other, "v_cshift ");
+			Safe_stuffcmd(other, self.cshift);
+			Safe_stuffcmd(other, "\n");
 	
 			// Tell PreThink to clear the cshift when the player is out
 			other.fwatershifttime = time+frametime;

@@ -1,0 +1,1713 @@
+//
+//
+// Quake 1 Nehahra game definition file
+// for Worldcraft edited by Bal
+//
+// Please, log all the changes!
+//
+// Last changes:
+//
+// --------------------------------
+// 9.nov.1999 by Vondur
+// Added sound sequences and cinematic scripts [see bottom]
+// Some bugs fixed also
+// --------------------------------
+// --------------------------------
+// 10.nov.1999 by Vondur
+// Added Hipnotic rotation entities
+// --------------------------------
+// --------------------------------
+// 14.nov.1999 by CZG
+// Added extra light entities
+// Added custom_item and trigger_custom
+// Made play_sound_triggered and trigger_counter into PointClass
+// Added targetname as baseclass on func_button
+// Fixed bounding box on new lights and misc_corpse
+// Added weightswitches
+// --------------------------------
+// --------------------------------
+// 20.nov.1999 by CZG
+// Removed weapon_blaster that Mindcrime decided to scrap. Boo-hoo! :-(
+// Added ambient_sound
+// Fixed wrong classname on light_candlews and light_candleth
+// Fixed bounding boxes on item_s
+// --------------------------------
+// --------------------------------
+// 25.nov.1999 by CZG
+// Tweaked some light settings to awoid unnecessary errors.
+// --------------------------------
+// --------------------------------
+// 28.nov.1999 by CZG
+// Added a spawnflag and "speed" to func_plat
+// --------------------------------
+// --------------------------------
+// 08.dec.1999 by CZG
+// Updated the trigger_push.
+// Added Lip and Message to func_button
+// Updated the explosive stuff with flat rubble spawnflag.
+// Updated the func_mindcrime with control.
+// Basicly added every frigging thing I could see from update 29.
+// --------------------------------
+// --------------------------------
+// 02.Jan.2000 by CZG
+// Brought this .fgd up to par with update 32,
+// although I can't test if the trigger_fog and info_start works, as the fog
+// won't cooperate with my 3D card :-(
+// --------------------------------
+// --------------------------------
+// 20.Jan.2000 by CZG
+// This should work fine with the brains and stuff of update 37 now.
+// --------------------------------
+// --------------------------------
+// 30.Jan.2000 by CZG
+// Updated to #39. Simplified stuff, adding a few (choices)
+// --------------------------------
+// --------------------------------
+// 24.Feb.2000 by CZG
+// Should be capable with Update 44 now.
+// Spank me if not.
+// --------------------------------
+// --------------------------------
+// 07.Mar.2000 by CZG
+// Added the water rippling feature, and fixed some furgled
+// stuff with the transparencies.
+// --------------------------------
+//
+// worldspawn
+//
+
+@SolidClass = worldspawn : "World entity"
+[
+	message(string) : "Text on entering the world"
+	worldtype(choices) : "Ambience" : 0 =
+	[
+		0 : "Medieval"
+		1 : "Runic (metal)"
+		2 : "Present (base)"
+	]
+	sounds(integer) : "CD track to play" : 1
+	light(integer) : "Default light level"
+]
+
+//
+// base marker definitions
+//
+
+@baseclass = Appearflags [
+	spawnflags(Flags) =
+	[
+		256 : "Not in Easy" : 0
+		512 : "Not in Normal" : 0
+		1024 : "Not in Hard" : 0
+		2048 : "Not in Deathmatch" : 0
+	]
+]
+
+@baseclass = Targetname [ targetname(target_source) : "Name" ]
+@baseclass = Target [ target(target_destination) : "Target" ]
+
+//
+// player starts, deathmatch, coop, teleport
+//
+
+@baseclass base(Appearflags) size(-16 -16 -24, 16 16 32)
+	color(0 255 0) = PlayerClass []
+
+@PointClass base(PlayerClass) = info_player_start : "Player 1 start" []
+@PointClass base(PlayerClass) = info_player_deathmatch : "Player deathmatch start" []
+@PointClass base(PlayerClass) = info_player_coop : "Player cooperative start" []
+@PointClass base(PlayerClass) = info_player_start2 : "Player episode return point" []
+@PointClass base(PlayerClass, Targetname) = info_teleport_destination : "Teleport destination" []
+@PointClass = info_null : "info_null (spotlight target)"
+[
+	targetname(target_source) : "Name"
+]
+@PointClass = info_start : "info_start" 
+[
+	sky(string) : "Name of skybox"
+	fog_enable(choices) : "Fog when starting." : 0 =
+		[
+			0 : "Off"
+			1 : "On" 
+		]
+	fog_start(integer) : "Start drawing fog" : 50
+	fog_end(integer) : "Stop drawing fog" : 1500
+	fog_density(integer) : "Fog density (Relative)" : 1
+	fog_red(integer) : "Fog redness (Relative)" : 1
+	fog_green(integer) : "Fog greeness (Relative)" : 1
+	fog_blue(integer) : "Fog blueness (Relative)" : 1
+	gravity(integer) : "Gravity" : 800
+	walpha(integer) : "R_Wateralpha" : 1
+	wripple(integer) : "Water ripple" : 0 
+	noise(string) : "Path to ambient mod file"
+]
+
+//
+// CTF stuff
+//
+
+@PointClass size(-16 -16 -24, 16 16 32) base(Appearflags) =
+    item_flag_team1 : "CTF: Red Team Flag" []
+@PointClass size(-16 -16 -24, 16 16 32) base(Appearflags) =
+    item_flag_team2 : "CTF: Blue Team Flag" []
+@PointClass base(PlayerClass) = info_player_team1 : "CTF: Red team base start" []
+@PointClass base(PlayerClass) = info_player_team2 : "CTF: Blue team base start" []
+
+@PointClass base(Appearflags) = info_intermission : "Intermission camera" 
+[
+	mangle(string) : "Pitch & Yaw"
+]
+
+//
+// items
+//
+
+@baseclass size(0 0 0, 32 32 32) color(80 0 200) base(Appearflags) = Ammo
+[
+	spawnflags(flags) =
+	[
+		1 : "Large box" : 0
+	]
+]
+
+@PointClass base(Ammo) = item_cells : "Thunderbolt ammo" []
+@PointClass base(Ammo) = item_rockets : "Rockets" []
+@PointClass base(Ammo) = item_shells : "Shells" []
+@PointClass base(Ammo) = item_spikes : "Perforator/Nailgun ammo" []
+
+@PointClass size(0 0 0, 32 32 48) base(Appearflags) = item2_health : "Medieval health pack"
+[
+	spawnflags(flags) =
+	[
+		1 : "Rotten" : 0
+		2 : "Megahealth" : 0
+	]
+]
+
+@PointClass size(0 0 0, 32 32 16) base(Appearflags) = item_health : "Health pack"
+[
+	spawnflags(flags) =
+	[
+		1 : "Rotten" : 0
+		2 : "Megahealth" : 0
+	]
+]
+
+@PointClass base(Appearflags) =
+	item_artifact_envirosuit : "Environmental protection suit" []
+@PointClass base(Appearflags) =
+	item_artifact_super_damage : "Quad damage" []
+@PointClass base(Appearflags) =
+	item_artifact_invulnerability : "Pentagram of Protection" []
+@PointClass base(Appearflags) =
+	item_artifact_invisibility : "Ring of Shadows" []
+
+@PointClass size(-16 -16 -24, 16 16 32) base(Appearflags) =
+	item_armorInv : "200% armor (Red)" []
+@PointClass size(-16 -16 -24, 16 16 32) base(Appearflags) =
+	item_armor2 : "150% armor (Yellow)" []
+@PointClass size(-16 -16 -24, 16 16 32) base(Appearflags) =
+	item_armor1 : "100% armor (Green)" []
+@PointClass size(-16 -16 -24, 16 16 32) base(Appearflags) =
+	item_key1 : "Silver key" []
+@PointClass size(-16 -16 -24, 16 16 32) base(Appearflags) =
+	item_key2 : "Gold key" []
+@PointClass size(-16 -16 -24, 16 16 32) base(Appearflags) =
+	item_sigil : "Sigil"
+[
+	spawnflags(Flags) =
+	[
+		1 : "Episode 1" : 0
+		2 : "Episode 2" : 0
+		4 : "Episode 3" : 0
+		8 : "Episode 4" : 0
+	]
+]
+
+//
+// weapons
+//
+
+@baseclass size(-16 -16 0, 16 16 32) color(0 0 200) base(Appearflags) = Weapon []
+
+@PointClass base(Weapon) = weapon_supershotgun : "Super shotgun" []
+@PointClass base(Weapon) = weapon_nailgun : "Nailgun" []
+@PointClass base(Weapon) = weapon_supernailgun : "autoshotgun" []
+@PointClass base(Weapon) = weapon_grenadelauncher : "Grenade launcher" []
+@PointClass base(Weapon) = weapon_rocketlauncher : "Rocket launcher" []
+@PointClass base(Weapon) = weapon_lightning : "Thunderbolt" []
+@PointClass base(Weapon) = weapon_sprocket : "sprocket!" []
+@PointClass base(Weapon) = weapon_sword : "sword" []
+@PointClass base(Weapon) = weapon_gshotgun : "gshotgun" []
+
+//
+// badasses
+//
+
+@baseclass base(Appearflags, Target, Targetname) color(200 0 0) = Monster
+[
+	spawnflags(Flags) =
+	[
+		1 : "Ambush" : 0
+		32 : "Deaf 'n dumb" : 0
+	]
+	brain(Choices) : "Brain See devkit for details" : 0 =
+	[
+		0 : "0 - Brainless"
+		1 : "1 - NavLogic"
+		2 : "2 - Intrepid"
+		4 : "4 - Blink"
+		8 : "8 - No Jump"
+		16 : "16 - No swim"
+		32 : "32 - Spawned"
+	]
+	style(choices) : "TFog when spawned?" : 0 =
+	[
+		0 : "Yes"
+		1 : "No"
+	]
+	nojump(integer) : "Not jumping monster" : 0
+	event(string) : "Follow this monster"
+	relations(choices) : "Relation to player" : 0 =
+		[
+			-1 : "Normal (Jaggers and Qguys)"
+			0 : "Normal Quake monster"
+			1 : "No attack, easy to irritate"
+			2 : "Idle ally, attacks if provoked"
+			3 : "Ally that attempts to follow you"
+			4 : "Ally that never attacks"
+		]
+]
+
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_army : "Grunt sg"
+[
+	spawnflags(Flags) =
+	[
+		64 : "controls" : 0
+	]
+]
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_army2 : "Grunt sg rl"
+[
+	spawnflags(Flags) =
+	[
+		64 : "controls" : 0
+	]
+]
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_army3 : "Grunt ng"
+[
+	spawnflags(Flags) =
+	[
+		64 : "controls" : 0
+	]
+]
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_army4 : "Grunt st gl rl"
+[
+	spawnflags(Flags) =
+	[
+		64 : "controls" : 0
+	]
+]
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_enforcer : "Enforcer" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_enf2 : "Enforcer2 asg" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_enf3 : "Enforcer3 ng" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_qguy : "quake guy"
+[
+	cnt(integer) : "rl/gl" : 0
+]
+@PointClass base(Targetname, Appearflags) size(-16 -16 -24, 16 16 40) = monster_hunter : "hunter"
+[
+	impulse(choices) : "Weapons" : 1 =
+	[
+		1 : "sg"
+		2 : "asg"
+		3 : "ng"
+		4 : "ssg/sl"
+		5 : "asg/sl"
+		6 : "ng/sl"
+	]
+	state(choices) : "Alert at level load?" =
+	[
+		0 : "Yes"
+		1 : "No"
+	]
+	cnt(integer) : "delay"		
+]
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_gaunt : "gaunt" 
+[
+	spawnflags(flags) =
+		[
+			64 : "Dead, set pose" : 0
+			128 : "Crucified, alive" : 0
+		]
+	cnt(choices) : "Death pose" : 0 =
+		[
+			0 : "Random (1 or 2)"
+			1 : "Stiff"
+			2 : "Loose"
+			3 : "Boxed"
+		]
+]
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_archgaunt : "archgaunt" 
+[
+	spawnflags(flags) = 
+		[
+			64 : "Dead in coffin" : 0
+		]
+]
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_library : "library gaunt" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_cook : "ogre cook" []
+@PointClass base(Monster) size(-32 -32 -24, 32 32 40) = monster_dog : "Nasty Doggie" []
+@PointClass base(Monster) size(-32 -32 -24, 32 32 64) = monster_ogre : "Ogre" []
+@PointClass base(Monster) size(-32 -32 -24, 32 32 64) = monster_oglib : "Ogre librerian" []
+@PointClass base(Monster) size(-32 -32 -24, 32 32 64) = monster_ogre_marksman : "Ogre marksman" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_knight : "Knight" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_hell_knight : "Hell knight" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_baron : "Hell baron" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_wizard : "Scrag" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_wraith : "wraith" []
+@PointClass base(Monster) size(-32 -32 -24, 32 32 64) = monster_demon1 : "Fiend"
+[
+	spawnflags(Flags) =
+	[
+		2 : "alpha fiend" : 0
+	]
+]
+@PointClass base(Monster) size(-32 -32 -24, 32 32 64) = monster_jagger : "jagger" []
+@PointClass base(Monster) size(-32 -32 -24, 32 32 64) = monster_vomitus : "Vomitus" 
+[
+		spawnflags(flags) =
+		[
+			64 : "deflated" : 0
+		]
+]
+@PointClass base(Monster) size(-32 -32 -24, 32 32 64) = monster_shambler : "Shambler" []
+@PointClass base(Monster) size(-128 -128 -24, 128 128 256) = monster_boss : "Chthon" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 40) = monster_drone : "Drone" []
+@PointClass base(Monster) size(-32 -32 -24, 32 32 48) = monster_shalrath : "Shalrath" 
+[
+		spawnflags(flags) =
+		[
+			64 : "Ceiling" : 0
+		]
+]
+@PointClass base(Monster) size(32 32 48) = monster_tarbaby : "Tarbaby" []
+@PointClass base(Monster) size(32 32 48) = monster_fish : "Rotfish" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 32) = monster_oldone : "Shub-Niggurath" []
+@PointClass base(Monster) size(-16 -16 -24, 16 16 32) = monster_zombie : "Zombie"
+[
+	spawnflags(Flags) =
+	[
+		1 : "Crucified" : 0
+		2 : "Ambush" : 0
+		8 : "Crucified unmoving" : 0
+	]
+]
+@PointClass = monster_beard : "Bearded boss" []
+@PointClass = monster_nehahra : "Nehahra" []
+@Pointclass = info_jagnest : "jagnest" []
+@Pointclass = info_jagwater : "jagwater" 
+[
+		spawnflags(flags) =
+		[
+			1 : "info_jagout" : 0
+		]
+]
+
+//
+// lights
+//
+
+@baseclass = Light [
+	light(integer) : "Brightness" : 200
+// message added by CZG for his own greedy purposes
+	message(string): "LightDLX tags"
+	wait(string)   : "Fading"
+	delay(string)  : "Attenuation"
+//	mangle(string) : "Spotlight angle (yaw pitch 0)"
+	style(Choices) : "Appearance" : 0 =
+	[
+		0 : "Normal"
+		10: "Fluorescent flicker"
+		2 : "Slow, strong pulse"
+		11: "Slow pulse, noblack"
+		5 : "Gentle pulse"
+		1 : "Flicker A"
+		6 : "Flicker B"
+		3 : "Candle A"
+		7 : "Candle B"
+		8 : "Candle C"
+		4 : "Fast strobe"
+		9 : "Slow strobe"
+		15: "throb1"
+		16: "creepy pulse"
+		19: "Neh strobe"
+		12: "flash1"
+		13: "flash2"
+		18: "flash3"		
+	]
+]
+
+@PointClass size(-8 -8 -8, 8 8 8) base(Light, Target, Targetname) =
+	light : "Invisible lightsource"
+	[
+		spawnflags(Flags) = [ 1 : "Initially dark" : 0 ]
+	]
+@PointClass size(-8 -8 -24, 8 8 8) base(Light, Target, Targetname) =
+	light_lantern : "lantern"
+	[
+		spawnflags(Flags) = [ 1 : "Initially dark" : 0 ]
+	]
+//added by CZG
+@PointClass size(-4 -4 0, 4 4 16) base(Light, Target, Targetname) =
+	light_candle_t : "Thin candle"
+	[
+		spawnflags(Flags) = [ 1 : "Initially dark" : 0 ]
+	]
+@PointClass size(-4 -4 0, 4 4 16) base(Light, Target, Targetname) =
+	light_candle_w : "Thick candle"
+	[
+		spawnflags(Flags) = [ 1 : "Initially dark" : 0 ]
+	]
+@PointClass size(-8 -8 -16, 8 0 16) base(Light, Target, Targetname) =
+	light_candlews : "Candle on wood holder"
+	[
+		spawnflags(Flags) = [ 1 : "Initially dark" : 0 ]
+	]
+@PointClass size(-4 -4 0, 4 4 40) base(Light, Target, Targetname) =
+	light_candleth : "Candle on holder"
+	[
+		spawnflags(Flags) = [ 1 : "Initially dark" : 0 ]
+	]
+//that's what I added...
+@PointClass size(-8 -8 -24, 8 8 8) base(Light, Target, Targetname) =
+	light_swinging_lantern : "swinging lantern"
+	[
+		spawnflags(Flags) = [ 1 : "Initially dark" : 0 ]
+	]
+@PointClass size(-8 -8 -8, 8 8 8) base(Light, Targetname, Target) =
+	light_fluoro : "Fluorescent light"
+	[
+		spawnflags(Flags) = [ 1 : "Initially dark" : 0 ]
+	]
+@PointClass size(-8 -8 -8, 8 8 8) base(Light, Targetname, Target) =
+	light_fluorospark : "Sparking fluorescent light"
+	[
+		spawnflags(Flags) = [ 1 : "Initially dark" : 0 ]
+	]
+@PointClass size(-8 -8 -8, 8 8 8) base(Light, Targetname, Target) =
+	light_globe : "Globe light" []
+@PointClass size(-10 -10 -12, 12 12 18) base(Light, Targetname, Target) =
+	light_flame_large_yellow : "Large yellow flame" []
+@PointClass size(-10 -10 -12, 12 12 18) base(Light, Targetname, Target) =
+	light_flame_small_yellow : "Small yellow flame"
+	[
+		spawnflags(Flags) = [ 1 : "Initially dark" : 0 ]
+	]
+@PointClass size(-10 -10 -12, 12 12 18) base(Light, Targetname, Target) =
+	light_flame_small_white : "Small white flame"
+	[
+		spawnflags(Flags) = [ 1 : "Initially dark" : 0 ]
+	]
+@PointClass size(-10 -10 -20, 10 10 20) base(Light, Targetname, Target) =
+	light_torch_small_walltorch : "Small walltorch" []
+
+//
+// misc
+//
+
+@PointClass base(Appearflags) = air_bubbles : "Air bubbles" []
+@PointClass base(Appearflags, Targetname) =
+	event_lightning : "Chthon's lightning" []
+@PointClass base(Appearflags) = misc_fireball : "Small fireball"
+	[ speed(integer) : "Speed" : 40 ]
+@PointClass = misc_explobox : "Large nuclear container" []
+@PointClass = misc_explobox2 : "Small nuclear container" []
+@PointClass base(Targetname) = trap_spikeshooter : "Triggered shooter"
+[
+	spawnflags(Flags) =
+	[
+		1 : "Superspike" : 0
+		2 : "Laser" : 0
+	]
+]
+@PointClass base(trap_spikeshooter) = trap_shooter : "Continuous shooter" []
+
+//
+// sounds
+//
+
+@PointClass = ambient_drip        : "Dripping sound" []
+@PointClass = ambient_drone       : "Engine/machinery sound" []
+@PointClass = ambient_comp_hum    : "Computer background sounds" []
+@PointClass = ambient_flouro_buzz : "Fluorescent buzzing sound" []
+@PointClass = ambient_light_buzz  : "Buzzing sound from light" []
+@PointClass = ambient_suck_wind   : "Wind sound" []
+@PointClass = ambient_swamp1      : "Frogs croaking" []
+@PointClass = ambient_swamp2      : "Frogs croaking B" []
+@PointClass = ambient_thunder     : "Thunder sound" []
+@PointClass = ambient_swamp3      : "swamp3" []
+@PointClass = ambient_rain        : "rain" []
+@PointClass = ambient_humming     : "humming" []
+@PointClass = ambient_zzxzz       : "zzxzz" []
+@PointClass = ambient_machines    : "machines" []
+@PointClass = ambient_whnoise     : "whnoise" []
+@PointClass = ambient_nehum       : "nehum" []
+@PointClass = ambient_flies       : "flies" []
+@PointClass = ambient_moor        : "moor" []
+@PointClass = ambient_eerie       : "eerie" []
+@PointClass = ambient_fan_blowing : "fanblowing" []
+@PointClass = ambient_drain       : "drain" []
+@PointClass = ambient_sound       : "Generic ambient" 
+[
+	noise(string) : "wav file to use" 
+	volume(integer) : "Sound volume (1-0)" : 1
+]
+
+@PointClass base(Target) = play_sound : "play sound"
+[
+	volume(integer) : "Volume" : 1
+	noise(string) : "Path to .wav"
+	wait(integer) : "Base wait time" : 20
+	delay(integer) : "Random variation" : 2
+	impulse(integer) : "Channel to play on (1-7)" : 0
+	speed(choices) : "Attenuation" : 1 =
+	[
+		-1: "no attenuation"
+		1: "normal"
+		2: "idle"
+		3: "static"
+	]
+]
+@PointClass size(-8 -8 -8, 8 8 8) base(Targetname, Appearflags) = play_sound_triggered : "Triggered sound"
+[
+	spawnflags(flags) =
+	[
+		1 : "Toggle" : 0
+	]
+ 	volume(string) : "Volume" : "1.0"
+	noise(string) : "Sound to play"
+	impulse(integer) : "Channel (0 to 7)" : 0
+	speed(choices) : "Attenuation" : 1 = 
+	[
+		-1: "no attenuation"
+		1: "normal"
+		2: "idle"
+		3: "static"
+	]
+]
+@PointClass size(-8 -8 -8, 8 8 8) base(Targetname, Appearflags) = play_sound_looped : "Looped sound"
+[
+		noise(string) : ".wav to play"
+		wait(integer) : "Lenght of .wav" : 20
+	 	volume(string) : "Volume" : "1.0"
+		cnt(choices) : "On when level starts?" : 0 =
+			[
+			0 : "Yes"
+			1 : "No"
+			]
+]
+//
+// moving things
+//
+
+@baseclass base(Appearflags, Targetname) = Door
+[
+	speed(integer) : "Speed" : 100
+	sounds(choices) : "Sound" : 1 =
+	[
+		1: "Stone"
+		2: "Machine"
+		3: "Stone Chain"
+		4: "Screechy Metal"
+	]
+	wait(choices) : "Delay before close" : 4 =
+	[
+		-1 : "Stays open"
+	]
+	lip(integer) : "Lip"
+	dmg(integer) : "Damage inflicted when blocked" : 0
+	message(string) : "Message if triggered"
+	health(integer) : "Health (shoot open)" : 0
+]
+
+@SolidClass base(Door, Target) = func_door : "Basic door"
+[
+	spawnflags(flags) =
+	[
+		1 : "Starts Open" : 0
+		4 : "Don't link" : 0
+		8 : "Gold Key required" : 0
+        16: "Silver Key required" : 0
+        32: "Toggle" : 0
+	]
+	cnt(choices) : "Obituary" : 0 =
+	[
+	0 : "squished"
+	1 : "hot plate"
+	2 : "spikes"
+	3 : "diced"
+	4 : "hands of death"
+	5 : "went to hell"
+	6 : "fell into void"
+	7 : "swallowed"
+	8 : "machines"
+	9 : "furnace"
+	]			
+	alpha(string) : "Transparency (0.1 - 1.0)"
+	fullbright(choices) : "Fullbright ?" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+]
+
+@SolidClass base(Door) = func_door_secret : "Triggered door"
+[
+	spawnflags(flags) =
+	[
+		1 : "Open once only" : 0
+		2 : "Moves left first" : 0
+		4 : "Moves down first" : 0
+		8 : "Not shootable" : 0
+        16 : "Always shootable" : 0
+	]
+	alpha(string) : "Transparency (0.1 - 1.0)"
+	fullbright(choices) : "Fullbright ?" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+]
+
+@SolidClass base(Appearflags, Targetname) = func_wall : "Moving wall" 
+[
+	alpha(string) : "Transparency (0.1 - 1.0)"
+	fullbright(choices) : "Fullbright ?" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+]
+
+@SolidClass base(Targetname) = func_button : "Button"
+[
+	spawnflags(flags) =
+		[
+			8 : "Gold key required" : 0
+			16 : "Silver key required" : 0
+			64 : "Monster use" : 0
+		]
+	speed(integer) : "Speed" : 5
+	target(target_source) : "Targetted object"
+	killtarget(string) : "Killtarget"
+	health(integer) : "Health (shootable if > 0)"
+	sounds(choices) : "Sounds" : 1 =
+	[
+		1: "Steam metal"
+		2: "Wooden clunk"
+		3: "Metallic clink"
+		4: "In-out"
+		5: "Nehahra"
+	]
+	wait(choices) : "Delay before reset" : 3 =
+	[
+		-1: "Stays pressed"
+	]
+	delay(integer) : "Delay before trigger"
+	message(string) : "Message when pressed"
+	lip(integer) : "Lip" : 8
+	alpha(string) : "Transparency (0.1 - 1.0)"
+	fullbright(choices) : "Fullbright ?" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+]
+
+@SolidClass base(Targetname) = func_train : "Moving platform"
+[
+	sounds(choices) : "Sound" : 1 =
+	[
+		0: "None"
+		1: "Ratchet Metal"
+		3: "door1"
+		4: "door2"
+		5: "door3"
+		6: "door4"
+		7: "door5"
+	]
+	wait(integer) : "wait (-1)"
+	speed(integer) : "Speed (units per second)" : 64
+	target(target_source) : "First stop target"
+	dmg(integer) : "Damage on crush" : 0
+	alpha(string) : "Transparency (0.1 - 1.0)"
+	fullbright(choices) : "Fullbright ?" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+]
+
+@PointClass base(Targetname) size(16 16 16) =
+	path_corner : "Moving platform stop"
+[
+	target(target_source) : "Next stop target"
+	target2(target_source) : "Alternate stop target"
+	wait(integer) : "Wait time"
+	delay(integer) : "Delay (-1)"
+	event(string) : "Angry at..."
+]
+
+@SolidClass = func_plat : "Elevator"
+[
+	spawnflags(Flags) =
+	[
+		1 : "Low trigger" : 0
+	]
+	height(integer) : "Travel altitude (can be negative)" : 0
+	speed(integer) : "Speed" : 100
+	sounds(choices) : "Sound group" : 1 =
+	[
+		0: "None"
+		1: "Base fast"
+		2: "Chain Slow"
+
+	]
+	alpha(string) : "Transparency (0.1 - 1.0)"
+	fullbright(choices) : "Fullbright ?" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+]	
+
+@SolidClass = func_dm_only : "Deathmatch teleporter" []
+@SolidClass = func_illusionary : "Solids can be walked through" 
+[
+	alpha(string) : "Transparency (0.1 - 1.0)"
+	fullbright(choices) : "Fullbright ?" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+]
+
+@SolidClass = func_episodegate : "Episode Gate"
+[
+	spawnflags(Flags) =
+	[
+		1 : "Episode 1" : 1
+		2 : "Episode 2" : 0
+		4 : "Episode 3" : 0
+		8 : "Episode 4" : 0
+	]
+	alpha(string) : "Transparency (0.1 - 1.0)"
+	fullbright(choices) : "Fullbright ?" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+]
+
+@SolidClass = func_bossgate : "Boss gate" 
+[
+	alpha(string) : "Transparency (0.1 - 1.0)"
+	fullbright(choices) : "Fullbright ?" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+]
+
+//
+// triggers
+//
+
+@baseclass base(Target) = Trigger
+[
+	style(integer) : "Style" : 32
+	killtarget(target_source) : "Kill target"
+	sounds(choices) : "Sound style" : 3 =
+	[
+		1 : "Secret sound"
+		2 : "Beep beep"
+		3 : "Large switch"
+		4 : "Set message to text string"
+	]
+	delay(integer) : "Delay before trigger" : 2
+	message(string) : "Message (set sound too!)"
+]
+
+@SolidClass = trigger_changelevel : "Trigger: Change level"
+[
+	map(string) : "New map name"
+	demo(string) : "Demo cutscene to play"
+	spawnflags(flags) =
+	[
+		1: "No Intermission" : 0
+	]
+]
+
+@SolidClass base(Trigger, Targetname) = trigger_once : "Trigger: Activate once"
+[
+	spawnflags(flags) = [ 1: "Entity only" : 0 ]
+]
+@SolidClass base(Trigger, Targetname) = trigger_multiple : "Trigger: Activate multiple"
+[
+	spawnflags(flags) = [ 1: "Entity only" : 0 ]
+	wait(integer) : "Delay before reset" : 10
+]
+@SolidClass base(Trigger) = trigger_onlyregistered : "Trigger: Registered only"
+[
+	spawnflags(flags) = [ 1: "Entity only" : 0 ]
+]
+@SolidClass base(Trigger, Targetname) = trigger_secret : "Trigger: Secret"
+[
+	spawnflags(flags) = [ 1: "Entity only" : 0 ]
+	wait(integer) : "Delay before reset" : 10
+]
+
+@SolidClass base(Target, Targetname) = trigger_teleport : "Trigger teleport"
+[
+	spawnflags(Flags) =
+	[
+		1 : "Player only" : 0
+		2 : "Silent" : 0
+	]
+]
+@SolidClass base(Target, Targetname) = trigger_qtele : "Trigger teleport silent"
+[
+	spawnflags(Flags) =
+	[
+		1 : "Player only" : 0
+		2 : "Silent" : 0
+	]
+]
+
+// need updates:
+
+@SolidClass = trigger_setskill : "Trigger set skill"
+[
+	message(choices) : "Skill to change to" : 1 =
+	[
+        0 : "Easy"
+        1 : "Medium"
+        2 : "Hard"
+        3 : "Nightmare!"
+	]
+]
+@PointClass base(Trigger, Targetname) = trigger_relay : "Trigger relay"
+[
+]
+@SolidClass base(Trigger) = trigger_monsterjump : "Trigger monster jump"
+[
+	speed(integer) : "Jump Speed" : 40
+	height(integer) : "Jump Height" : 128
+]
+@PointClass base(Trigger, Targetname) = trigger_counter : "Trigger counter"
+[
+	spawnflags(flags) = [ 1: "No Message" : 0 ]
+	count(integer) : "Count before activation" : 2
+]
+@SolidClass base(Targetname) = trigger_push : "Trigger player push"
+[
+	spawnflags(flags) = [
+			      1: "Once Only" : 0
+			      2: "Start on" : 0 
+			    ]
+	speed(integer) : "Speed of push" : 40
+	sounds(integer) : "Silent push" : 0
+]
+@SolidClass base(Trigger) = trigger_hurt : "Trigger player hurt"
+[
+	dmg(integer) : "Damage" : 10
+	cnt(choices) : "Obituary" : 0 =
+	[
+	0 : "squished"
+	1 : "hot plate"
+	2 : "spikes"
+	3 : "diced"
+	4 : "hands of death"
+	5 : "went to hell"
+	6 : "fell into void"
+	7 : "swallowed"
+	8 : "machines"
+	9 : "furnace"
+	]			
+]
+//
+//Fogginess, could use some improvement...
+//
+@SolidClass = trigger_fog : "Trigger_fog" 
+[
+	spawnflags(flags) =
+		[
+			32 : "Reset to defaults" : 0
+		]
+	fog_disable(choices) : "Turn fog on/off" : 1 =
+		[
+			1 : "Off"
+			0 : "On"
+		]
+	fog_start(integer) : "Start drawing fog" : 50
+	fog_end(integer) : "Stop drawing fog" : 1500
+	fog_density(string) : "Fog density (Relative)"
+	fog_red(string) : "Fog redness (Relative)"	
+	fog_green(string) : "Fog greeness (Relative)"
+	fog_blue(string) : "Fog blueness (Relative)"
+]
+@SolidClass base(Trigger, Targetname) = trigger_console : "trigger_console"
+[
+	event(string) : "Console command"
+	wait(choices) : "Delay before reset" : 4 =
+		[
+			-1 : "Once only"
+		]
+]
+@PointClass base(Targetname) = info_throw_rubble : "Rubble thrower"
+[
+	cnt(integer) : "Power of throw" : 2000
+	dmg(choices) : "Rubble skin" : 0 =
+	[
+	0 : "Brown"
+	1 : "Grey"
+	]
+	blink(string) : "Rubble transparency (1-0)"
+]
+@PointClass base(Targetname) = misc_boom : "Misc_boom" []
+//
+//	
+//
+//
+//
+// Nehahra
+//
+
+@SolidClass base(Targetname) = func_mindcrime : "Mindcrime"
+[
+	spawnflags(flags) = [
+			    1 : "Controlable" : 0
+			    2 : "Throw upwards" : 0
+			    4 : "Spin" : 0
+			    ]
+	target(string) : "target"
+	speed(choices) : "Damage on touch" : 0 =
+		[
+		0 : "No damage"
+		]
+	impulse(choices) : "Behaviour on ground" : 1 =
+	[
+        0 : "Normal"
+        1 : "Become pushable"
+        2 : "Burst (Set sound & skin)"
+        3 : "Bounce or float"
+	]
+	cnt(choices) : "Obituary" : 0 =
+	[
+	0 : "squished"
+	1 : "hot plate"
+	2 : "spikes"
+	3 : "diced"
+	4 : "hands of death"
+	5 : "went to hell"
+	6 : "fell into void"
+	7 : "swallowed"
+	8 : "machines"
+	9 : "furnace"
+	]			
+	sounds(choices) : "Sound" : 0 =
+	[
+	0 : "generic 1"
+	1 : "generic 2"
+	2 : "generic 3"
+	3 : "wood"
+	4 : "glass"
+	5 : "weird"
+	6 : "metal"
+	7 : "clay"
+	]
+	dmg(choices) : "Skin" : 0 =
+	[
+	0 : "Brown"
+	1 : "Grey"
+	2 : "Wood (Frubble only)"
+	]
+	angles(integer) : "Angle to throw at. (Set flag)"
+	boost(integer) : "Speed to throw at. (Set flag)"
+	nojump(integer) : "Negative upwards velocity. (Set flag)"
+	ammo_shells(choices) : "Throw some shells" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+	ammo_nails(choices) : "Throw some nails" : 0  =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+	ammo_cells(choices) : "Throw some cells" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		] 
+	ammo_rockets(choices) : "Throw some rockets" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		] 
+	armorvalue(choices) : "Throw some armor" : 0 =
+		[
+		0 : "No"
+		1 : "Green"
+		2 : "Yellow"
+		3 : "Red"
+		]
+	items(choices) : "Item value. Flagwise" : 0 =
+		[
+			0 : "0 - None"
+			2 : "2 - Super shotgun"
+			4 : "4 - Nailgun"
+			8 : "8 - Super nailgun"
+			16 : "16 - Grenade launcher"
+			32 : "32 - Rocket launcher"
+			64 : "64 - Thunderbolt"
+			128 : "128 - Sprocket"
+			65536 : "65536 - Health"
+			2097152 : "2097152 - Biosuit"
+			4194304 : "4194304 - Quad damage"
+			8388608 : "8388608 - Flying artifact"
+		]
+// Gee, can you say high numbers?
+	alpha(string) : "Transparency (0.1 - 1.0)"
+	blink(string) : "Rubble transparency (0.1 - 1.0)"
+	fullbright(choices) : "Fullbright ?" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+]
+@SolidClass base(Targetname) = func_earthquake : "earthquake"
+[
+	cnt(integer) : "length"
+]
+@SolidClass = func_pushable : "Pushable object"
+[
+	alpha(string) : "Transparency (0.1 - 1.0)"
+	fullbright(choices) : "Fullbright ?" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+]
+@PointClass size(-4 -4 -4, 4 4 4) base(Target) = info_weight_switch : "Weight switch"
+[
+]
+@PointClass base(target) = main_weight_switch : "Main weight switch"
+[
+]
+@SolidClass base(Targetname) = func_explodable : "explodable"
+[
+	spawnflags(flags) = [
+			    1 : "Flat rubble" : 0
+			    ]
+	target(string) : "target"
+	health(integer) : "Health" : 100
+	dmg(choices) : "Skin" : 0 =
+	[
+	0 : "Brown"
+	1 : "Grey"
+	2 : "Wood (Frubble only)"
+	]
+	sounds(choices) : "sound" : 0 =
+	[
+	0 : "generic 1"
+	1 : "generic 2"
+	2 : "generic 3"
+	3 : "wood"
+	4 : "glass"
+	5 : "weird"
+	6 : "metal"
+	7 : "clay"
+	]
+	ammo_shells(choices) : "Throw some shells" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+	ammo_nails(choices) : "Throw some nails" : 0  =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+	ammo_cells(choices) : "Throw some cells" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		] 
+	ammo_rockets(choices) : "Throw some rockets" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		] 
+	armorvalue(choices) : "Throw some armor" : 0 =
+		[
+		0 : "No"
+		1 : "Green"
+		2 : "Yellow"
+		3 : "Red"
+		]
+	items(choices) : "Item value. Flagwise" : 0 =
+		[
+			0 : "0 - None"
+			2 : "2 - Super shotgun"
+			4 : "4 - Nailgun"
+			8 : "8 - Super nailgun"
+			16 : "16 - Grenade launcher"
+			32 : "32 - Rocket launcher"
+			64 : "64 - Thunderbolt"
+			128 : "128 - Sprocket"
+			65536 : "65536 - Health"
+			2097152 : "2097152 - Biosuit"
+			4194304 : "4194304 - Quad damage"
+			8388608 : "8388608 - Flying artifact"
+		]
+	alpha(string) : "Transparency (0.1 - 1.0)"
+	blink(string) : "Rubble transparency (0.1 - 1.0)"
+	fullbright(choices) : "Fullbright ?" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+]
+@SolidClass base(Targetname) = func_sobject : "sobject"
+[
+	spawnflags(flags) = [
+			    1 : "Flat rubble" : 0
+			    ]
+	target(string) : "target"
+	health(integer) : "health" : 10
+	dmg(choices) : "Skin" : 0 =
+	[
+	0 : "Brown"
+	1 : "Grey"
+	2 : "Wood (Frubble only)"
+	]
+	sounds(choices) : "sound" : 0 =
+	[
+	0 : "generic 1"
+	1 : "generic 2"
+	2 : "generic 3"
+	3 : "wood"
+	4 : "glass"
+	5 : "weird"
+	6 : "metal"
+	7 : "clay"
+	]
+	ammo_shells(choices) : "Throw some shells" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+	ammo_nails(choices) : "Throw some nails" : 0  =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+	ammo_cells(choices) : "Throw some cells" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		] 
+	ammo_rockets(choices) : "Throw some rockets" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		] 
+	armorvalue(choices) : "Throw some armor" : 0 =
+		[
+		0 : "No"
+		1 : "Green"
+		2 : "Yellow"
+		3 : "Red"
+		]
+	items(choices) : "Item value. Flagwise" : 0 =
+		[
+			0 : "0 - None"
+			2 : "2 - Super shotgun"
+			4 : "4 - Nailgun"
+			8 : "8 - Super nailgun"
+			16 : "16 - Grenade launcher"
+			32 : "32 - Rocket launcher"
+			64 : "64 - Thunderbolt"
+			128 : "128 - Sprocket"
+			65536 : "65536 - Health"
+			2097152 : "2097152 - Biosuit"
+			4194304 : "4194304 - Quad damage"
+			8388608 : "8388608 - Flying artifact"
+		]
+	alpha(string) : "Transparency (0.1 - 1.0)"
+	blink(string) : "Rubble transparency (0.1 - 1.0)"
+	fullbright(choices) : "Fullbright ?" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+]
+@SolidClass = func_quakedmg : "quakedmg"
+[
+	spawnflags(flags) = [
+			    1 : "Flat rubble" : 0
+			    ]
+	dmg(choices) : "Skin" : 0 =
+	[
+	0 : "Brown"
+	1 : "Grey"
+	2 : "Wood (Frubble only)"
+	]
+	sounds(choices) : "sound" : 0 =
+	[
+	0 : "generic 1"
+	1 : "generic 2"
+	2 : "generic 3"
+	3 : "wood"
+	4 : "glass"
+	5 : "weird"
+	6 : "metal"
+	7 : "clay"
+	]
+	ammo_shells(choices) : "Throw some shells" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+	ammo_nails(choices) : "Throw some nails" : 0  =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+	ammo_cells(choices) : "Throw some cells" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		] 
+	ammo_rockets(choices) : "Throw some rockets" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		] 
+	armorvalue(choices) : "Throw some armor" : 0 =
+		[
+		0 : "No"
+		1 : "Green"
+		2 : "Yellow"
+		3 : "Red"
+		]
+	items(choices) : "Item value. Flagwise" : 0 =
+		[
+			0 : "0 - None"
+			2 : "2 - Super shotgun"
+			4 : "4 - Nailgun"
+			8 : "8 - Super nailgun"
+			16 : "16 - Grenade launcher"
+			32 : "32 - Rocket launcher"
+			64 : "64 - Thunderbolt"
+			128 : "128 - Sprocket"
+			65536 : "65536 - Health"
+			2097152 : "2097152 - Biosuit"
+			4194304 : "4194304 - Quad damage"
+			8388608 : "8388608 - Flying artifact"
+		]
+	alpha(string) : "Transparency (0.1 - 1.0)"
+	blink(string) : "Rubble transparency (0.1 - 1.0)"
+	fullbright(choices) : "Fullbright ?" : 0 =
+		[
+		0 : "No"
+		1 : "Yes"
+		]
+]
+@PointClass base(Targetname) = misc_smokemaker : "Smokemaker"
+[
+	speed(integer) : "Speed of smoke" : 2000
+	cnt(string) : "Frequency"
+	wait(integer) : "Smoke lifetime"
+]
+@PointClass base(Appearflags) = misc_slime_ball : "Ball of green gunk"
+	[ speed(integer) : "Speed" : 40 ]
+
+@PointClass size(-16 -16 -32, 16 16 16) = misc_barrel : "explosive barrel"
+[
+	frame(choices) : "frame" : 0 =
+	[
+	0 : "small"
+	1 : "medium"
+	2 : "large"
+	]
+]
+@PointClass size(-24 -24 -24, 24 24 0) = misc_corpse : "corpse"
+[
+	targetname(string) : "name"
+	cnt(choices) : "type" : 0 =
+	[
+	0 : "player 1"
+	1 : "player 2"
+	3 : "player 3"
+	4 : "player 4"
+	5 : "grunt 1"
+	6 : "grunt 2"
+	7 : "enf2 1"
+	8 : "enf2 2"
+	]
+]
+
+//
+// Misc 
+//
+
+@PointClass = misc_hummer : "Hummer" []
+@PointClass = misc_vend : "Vending machine"
+[
+	skin(choices) : "Type" : 0 =
+		[
+		0 : "Peej soda"
+		1 : "Snack #1"
+		2 : "Cold drinks"
+		3 : "Snack #2"
+		]
+]
+@PointClass = misc_sign : "Forge city sign"
+[
+	skin(choices) : "Skin" : 0 =
+		[
+		0 : "Route 160, east"
+		1 : "Route 160, west"
+		2 : "Route 90, east"
+		3 : "Route 90, west"
+		4 : "Route 60, east"
+		5 : "Route 60, west"
+		6 : "Danger of death"
+		]
+	frame(choices) : "Frame" : 0 =
+		[
+		0 : "Freestanding sign"
+		1 : "Wall mounted sign"
+		2 : "Generic sign"
+		]
+	cnt(choices) : "Solid?" : 0 =
+		[
+		0 : "Yes"
+		1 : "No"
+		]
+]
+@PointClass = misc_motel : "Motel sign" []
+@Pointclass base(Targetname) = misc_fscreen : "Computer screen" 
+[
+	frame(choices) : "Size" : 0 =
+		[
+		0 : "0"
+		1 : "1"
+		2 : "2"
+		3 : "3"
+		4 : "4"
+		5 : "5"
+		]
+]
+@Pointclass base(Target) : "Valve" []
+@PointClass = misc_tree : "Tree"
+[
+	model(string) : "Model to use"
+	frame(integer) : "Frame to use"
+	skin(integer) : "Skin to use"
+	cnt(choices) : "Solid?" : 0 =
+	[
+	0 : "Yes"
+	1 : "No"
+	]
+]
+@PointClass = misc_misc : "Idle model"
+[
+	model(string) : "Model to use"
+]
+@PointClass = efx_lightning : "lightning"
+[
+	targetname(string) : "name"
+]
+@PointClass = efx_snow : "snow" []
+@PointClass = func_raining : "rain" 
+	[
+	targetname(string) : "Name"
+	cnt(choices) : "Rain color" : 0 =
+		[
+		0 : "watery blue"
+		1 : "Dark, dirty"
+		2 : "Red, blood"
+		3 : "Blue"
+		4 : "Green"
+		]
+	frame(choices) : "Radius" : 0 =
+		[
+		0 : "Aprox. 150 units"
+		1 : "Aprox. 700 units"
+		2 : "Less than 100 units"
+		]
+]
+@PointClass = floating_gibs : "floating gibs"
+[
+	count(integer) : "count"
+	delay(integer) : "delay"
+	targetname(string) : "name"
+]
+@PointClass base(Targetname) = info_particles : "Particle effect"
+[
+	spawnflags(flags) =
+		[
+			64 : "Start on" : 0
+		]
+	method(choices) : "Method" : 0 =
+		[
+			0 : "Normal"
+			1 : "One sided radial"
+			2 : "Two sided radial"
+		]
+	movedir(string) : "Direction vector (X Y Z)" 
+	duration(string) : "Particle lifetime"
+	wait(string) : "Wait before beginning"
+	cnt(integer) : "Color index (0 - 255)"
+	endtime(choices) : "Length of effect" : 0 =
+		[
+			-1 : "Don't stop"
+		]
+	delay(string) : "Time between each particle"
+	impulse(integer) : "Radius" 
+	speed(integer) : "Rotation speed (-360 > 360)"
+]
+@pointclass = item_artifact_regeneration : "regen" []
+@pointclass = item_artifact_flight : "flight" []
+@pointclass = item_artifact_resurrection : "resurrection" []
+@Solidclass = func_object : "func_object" []
+@Solidclass = func_cover : "func_cover"
+[
+	targetname(string) : "name"
+	spawnflags(flags) = [ 1: "invisble" : 0 ]
+]
+@Solidclass = func_remove : "func_remove" 
+[
+	spawnflags(flags) = 
+				[ 
+				64 : "Teleport effect" : 0 
+				128 : "Remove all" : 0
+				]
+]
+@Solidclass = func_pain : "func_pain"
+[
+	dmg(integer) : "damage"
+	targetname(string) : "name"
+	cnt(choices) : "Obituary" : 0 =
+	[
+	0 : "squished"
+	1 : "hot plate"
+	2 : "spikes"
+	3 : "diced"
+	4 : "hands of death"
+	5 : "went to hell"
+	6 : "fell into void"
+	7 : "swallowed"
+	8 : "machines"
+	9 : "furnace"
+	]			
+]
+@Solidclass = func_bobbingwater : "bobbingwater"
+[
+	speed(integer) : "speed"
+]
+@Solidclass = func_bobbingobject : "bobbingobject"
+[
+	speed(integer) : "speed"
+	targetname(string) : "name"
+]
+@SolidClass base(Targetname) = func_drift : "Floating object" [ ]
+
+//
+//Added by Vondur
+//
+
+// Sound Sequences
+
+@PointClass = ambient_toggle : "Sound sequence"
+[
+	noise(string) : "noise"
+	noise1(string) : "noise1"
+	noise2(string) : "noise2"	
+	noise3(string) : "noise3"	
+	noise4(string) : "noise4"
+	delay(integer) : "min time between sounds" : 5
+	wait(integer) : "max time between sounds" : 10
+	impulse(integer) : "1 - whole level" : 0
+]
+
+@PointClass = ambient_global : "Global sound"
+[
+	noise(string) : "noise"
+	volume(integer) : "volume" : 1	
+]
+
+@PointClass = snd_beat_toggle : "Rhythm"
+[
+	volume(integer) : "times to play" : 1
+	noise(string) : "first wav"
+	noise1(string) : "second wav"
+	delay(integer) : "time between beats" : 2	
+	wait(integer) : "time before" : 20	
+	targetname(target_source) : "Name"
+]
+
+//
+// Cinematic Scripts
+//
+
+@PointClass = info_idscale : "Wave Effect"
+[	
+	targetname(target_source) : "Name"
+	message(integer) : "Wave effect" : 1
+]
+@SolidClass base(Trigger) = trigger_camera : "Trigger Camera"
+[
+	script(integer) : "Starting script number" : 0
+	script_delay(integer) : "Delay on first page" : 0
+]	
+@PointClass = info_camera : "Movie Camera"
+[	
+	targetname(target_source) : "Name"
+]
+@PointClass = info_script : "Script Machine"
+[	
+	script_num(integer) : "Script number" : 0
+	next_script(integer) : "Next script number (0 if final)" : 0
+	script_delay(integer) : "NEXT page delay" : 0	
+	message(string) : "Message"
+	target(target_source) : "Target"
+]
+@PointClass = info_movecam : "Active Camera Finder"
+[	
+	targetname(target_source) : "info_camera name"
+]
+@PointClass = info_fadeout : "Fadeout picture"
+[	
+	targetname(target_source) : "Name"
+	speed(integer) : "0.01 quick -0.1 slow" : 0
+	spawnflags(flags) = [ 1: "Red Color" : 0 ]
+]
+@PointClass = info_fadein : "Fadein picture"
+[	
+	targetname(target_source) : "Name"
+	speed(integer) : "0.01 quick -0.1 slow" : 0
+	spawnflags(flags) = [ 1: "Red Color" : 0 ]
+]
+
+
+//
+// Hipnotic Rotation Geometry
+//
+
+@PointClass size(-4 -4 -4, 4 4 4) base(Targetname) = info_rotate : "Point of rotation" []
+@PointClass size(-8 -8 -8, 8 8 8) base(Targetname, Target) = func_rotate_entity : "Creates rotating entity"
+[
+	spawnflags(flags) =
+	[
+		1 : "Toggle" : 0
+		2 : "Start on" : 0
+	]
+	deathtype(string) : "Kill Message"
+	rotate(string) : "Rate of rotation (x y z)"
+	target(string) : "Center of rotation"
+	speed(string) : "Speed (0 to full) time"
+]
+@PointClass base(Targetname, Target) = path_rotate : "path_rotate"
+[
+	spawnflags(flags) =
+	[
+		1 : "Rotation" : 0
+		2 : "Angles" : 0
+		4 : "Stop" : 0
+		8 : "No Rotate" : 0
+		16 : "Damage" : 0
+		32 : "Move Time" : 0
+		64 : "Set Damage" : 0
+	]
+	rotate(string) : "Rotation (x y z)"
+	angles(string) : "Angles (x y z)"
+	noise(string) : "Wait Noise"
+	noise1(string) : "Move Noise"
+	wait(integer) : "Wait Time"
+	event(string) : "Event Target"
+	message(string) : "Event Message"
+	dmg(integer) : "Damage"
+	speed(integer) : "Move Time(if flaged) or Speed"
+]
+@PointClass size(-8 -8 -8, 8 8 8) base(Targetname, Target) = func_rotate_train : "Moving platform"
+[
+	noise1(string) : "Train move noise"
+	noise(string) : "Train stop noise"
+	path(string) : "First path_rotate"
+	deathtype(string) : "Kill Message"
+	speed(integer) : "Speed" : 100
+	dmg(integer) : "Damage" : 0
+	sounds(choices) : "Sound" : 1 =
+	[
+		0: "None"
+		1: "Ratchet Metal"
+	]
+]
+@SolidClass base(Targetname, Target) = rotate_object : "Object to be rotated"[]
+@PointClass size(-8 -8 -8, 8 8 8) base(Targetname, Target) = func_rotate_door : "Create rotating door"
+[
+	spawnflags(flags) =
+	[
+		1 : "Stay open" : 0
+	]
+	dmg(integer) : "Damage" : 2
+	speed(integer) : "Time to rotate" : 10
+	angles(string) : "Angles (x y z)"
+	rotate(string) : "Rotate (x y z)"
+	sounds(choices) : "Sound" : 1 =
+	[
+		0: "None"
+		1: "Medieval (default)"
+		2: "Metal"
+		3: "Base"
+	]	
+]
+@SolidClass base(Targetname) = func_movewall : "Emulate collision on rotating brushes"
+[
+	spawnflags(flags) =
+	[
+		1 : "Visible" : 1
+		2 : "Damage on touch" : 0
+		4 : "Non-Solid" : 0
+	]
+	dmg(integer) : "Damage"
+]
+
+
+//End of Vondur's addition
+
+// Custom items added by CZG
+@PointClass size(-8 -8 0, 8 8 32) base(Target) = custom_item : "Customizable item"
+[
+	effects(choices) : "Effects" =
+	[
+		1 : "Yellow particles"
+		4 : "Bright glow"
+		8 : "Flickering glow"
+	]
+	noise(string) : "Pickup sound" 
+	netname(string) : "Name of item"
+	model(string) : "Model to use"
+	skin(integer) : "Skin # to use" : 1
+	frame(integer) : "Frame # to use" : 1
+]
+@SolidClass base(Target) = trigger_custom : "Trigger for custom_item"
+[
+	noise1(string) : "Locked sound"
+	noise(string) : "Sound when triggered"
+	event(string) : "Name of item to use"
+]

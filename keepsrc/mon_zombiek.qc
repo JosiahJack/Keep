@@ -272,8 +272,7 @@ void() zombiek_melee =
 // Jump + melee attack
 // Melee Attack 1 - Smash, chop overhead to ground (19->10/11 frames)
 //============================================================================
-void()	zombiek_JumpTouch =
-{
+void()	zombiek_JumpTouch = {
 	local float ldmg;
 	
 	if (self.health < 1) return;
@@ -284,7 +283,8 @@ void()	zombiek_JumpTouch =
 
 	if ( CanDamage(other, self) ) {
 		if ( vlen(self.velocity) > 300 ) {
-		  ldmg = 10 + 10*random();
+			ldmg = 10 + 10*random();
+			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
 			T_Damage (other, self, self, ldmg, DAMARMOR);	
 			spawn_touchblood (self, self.enemy, ldmg*3);
 		}

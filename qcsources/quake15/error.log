@@ -1,0 +1,8 @@
+error: defs.qc:44:"DEATHTYPE_LAVA" is not a type
+error: defs.qc:45:"DEATHTYPE_SLIME" is not a type
+error: defs.qc:46:"DEATHTYPE_WATER" is not a type
+error: defs.qc:47:"DEATHTYPE_BULLET" is not a type
+error: defs.qc:48:"DEATHTYPE_EXPLOSION" is not a type
+error: defs.qc:49:"DEATHTYPE_NAIL" is not a type
+error: defs.qc:50:"DEATHTYPE_AXE" is not a type
+error: defs.qc:497:Type mismatch on redeclaration of deathtype (see original definition defs.qc(43))

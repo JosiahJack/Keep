@@ -104,7 +104,7 @@ void() item_artifact_optimizer = {
 	precache_model (self.mdl);
 	self.noise = "items/optimize.wav";
 	precache_sound (self.noise);
-    self.netname = "Shotgun Optimizer";
+    self.netname = "Optimizer";
 	self.perms = POW_SHOTTYMAN;
 	self.classtype = CT_ARTOPTIMIZER;
 	self.part_active = PARTICLE_STYLE_ARMOR;
@@ -219,26 +219,21 @@ void() gem_pulse =
 // Moved 'Life_Up' to Potions section.
 
 // Called when something bumps into item_treasure.
-void() treasure_touch =
-{
-    if (other.health <= 0)
-        return;
+void() treasure_touch = {
+    if (other.health <= 0) return;
+    if (!(other.xfl & XFL_ITEMS)) return;
 
-    if (!(other.xfl & XFL_ITEMS))
-        return;
-
-// Pickup effects.
-    Safe_sprint (other, "You found ");
-    Safe_sprint (other, self.netname);
-    Safe_sprint (other, "\n");
+	// Pickup effects.
+    sprint (other, "You found ");
+    sprint (other, self.netname);
+    sprint (other, "\n");
     sound (other, CHAN_ITEM, "drake/items/treasure.wav", 1, ATTN_NORM);
     Safe_stuffcmd (other, "bf\n");
 
-// Reward with max hp increase -- not in SoE!
-// SoE:  Increase armor, ignoring max, like in classic Doom.
-// Note:  If adding shops, add to gp in addition to armor/hp boost.
-    if (!self.healamount)
-        self.healamount = 5;
+	// Reward with max hp increase -- not in SoE!
+	// SoE:  Increase armor, ignoring max, like in classic Doom.
+	// Note:  If adding shops, add to gp in addition to armor/hp boost.
+    if (!self.healamount) self.healamount = 5;
     if (self.healtype)
         T_Heal (other, self.healamount, TRUE);
     else
@@ -434,7 +429,7 @@ void() item_armor_exotic = {
 		if (self.mdl == "") { self.mdl = "progs/drake/armor.mdl"; self.skin = 3; }
 		self.classtype = CT_ARMORBERSERKER;
 		self.perms = POW_ARMORBERSERKER;
-		if (self.netname == "") self.netname = "Berserker Armor"; // formerly demonhide
+		if (self.netname == "") self.netname = "Demonhide Armor"; // formerly Bersker, confusing with Berserker Helm
 		if (self.armortype <= 0) self.armortype = ARMOR_BERSERKER_TYPE;
 		if (self.armorvalue <= 0) self.armorvalue = ARMOR_BERSERKER_VALUE;
 		self.respawn_style = PARTICLE_BURST_RED + PARTICLE_BURST_RING;

@@ -328,12 +328,11 @@ void() DecodeWorldParms =
 		dprint(")\n");
 	}
 	
-	//----------------------------------------------------------------------
 	// Adding weapons to existing inventory
 	if (world.give_weapons) {
 		parm_items = parm_items | (world.give_weapons & ALL_WEAPONS);		
 	}
-	//----------------------------------------------------------------------
+
 	if (world.take_weapons > 0 || world.no_axestart) {
 		if (world.take_weapons >= 9999999) {
 			parm_items = 0;   //take all
@@ -415,8 +414,12 @@ void() DecodeWorldParms =
 		dprint("\b[CLIENT]\b Ammo Shells ("); dprint(ftos(tlow8)); dprint(") To (");
 		if (world.currentammo) tlow8 = world.ammo_shells;
 		else if (tlow8 < world.ammo_shells) tlow8 = world.ammo_shells;
-		if (tlow8 > AMMO_MAXSHELLS) tlow8 = AMMO_MAXSHELLS;
-		else if (tlow8 < 0) tlow8 = 0;
+		if (world.maxshells > 0) {
+			if (tlow8 > world.maxshells) tlow8 = world.maxshells;
+		} else {
+			if (tlow8 > AMMO_MAXSHELLS) tlow8 = AMMO_MAXSHELLS;
+		}
+		if (tlow8 < 0) tlow8 = 0;
 		dprint(ftos(tlow8)); dprint(")\n");
 		parm3 = encode(tlow8,tmid8,thi8); //store shells back in parm3
 	}
@@ -424,8 +427,12 @@ void() DecodeWorldParms =
 		dprint("\b[CLIENT]\b Ammo Spikes ("); dprint(ftos(tmid8)); dprint(") To (");
 		if (world.currentammo) tmid8 = world.ammo_nails;
 		else if (tmid8 < world.ammo_nails) tmid8 = world.ammo_nails;
-		if (tmid8 > AMMO_MAXNAILS) tmid8 = AMMO_MAXNAILS;
-		else if (tmid8 < 0) tmid8 = 0;
+		if (world.maxnails > 0) {
+			if (tmid8 > world.maxnails) tmid8 = world.maxnails;
+		} else {
+			if (tmid8 > AMMO_MAXNAILS) tmid8 = AMMO_MAXNAILS;
+		}
+		if (tmid8 < 0) tmid8 = 0;
 		dprint(ftos(tmid8)); dprint(")\n");
 		parm3 = encode(tlow8,tmid8,thi8); //store nails back in parm3
 	}
@@ -433,8 +440,12 @@ void() DecodeWorldParms =
 		dprint("\b[CLIENT]\b Ammo Rockets ("); dprint(ftos(thi8)); dprint(") To (");
 		if (world.currentammo) thi8 = world.ammo_rockets;
 		else if (thi8 < world.ammo_rockets) thi8 = world.ammo_rockets;
-		if (thi8 > AMMO_MAXROCKETS) thi8 = AMMO_MAXROCKETS;
-		else if (thi8 < 0) thi8 = 0;
+		if (world.maxrockets > 0) {
+			if (thi8 > world.maxrockets) thi8 = world.maxrockets;
+		} else {
+			if (thi8 > AMMO_MAXROCKETS) thi8 = AMMO_MAXROCKETS;
+		}
+		if (thi8 < 0) thi8 = 0;
 		dprint(ftos(thi8)); dprint(")\n");
 		parm3 = encode(tlow8,tmid8,thi8); //store rockets back in parm3
 	}
@@ -447,8 +458,12 @@ void() DecodeWorldParms =
 		dprint("\b[CLIENT]\b Ammo Cells ("); dprint(ftos(tlow8)); dprint(") To (");
 		if (world.currentammo) tlow8 = world.ammo_cells;
 		else if (tlow8 < world.ammo_cells) tlow8 = world.ammo_cells;
-		if (tlow8 > AMMO_MAXROCKETS) tlow8 = AMMO_MAXROCKETS;
-		else if (tlow8 < 0) tlow8 = 0;
+		if (world.maxcells > 0) {
+			if (tlow8 > world.maxcells) tlow8 = world.maxcells;
+		} else {
+			if (tlow8 > AMMO_MAXCELLS) tlow8 = AMMO_MAXCELLS;
+		}
+		if (tlow8 < 0) tlow8 = 0;
 		dprint(ftos(tlow8)); dprint(")\n");	
 		parm4 = encode(tlow8,tmid8,thi8); //store cells back in parm4
 	}
@@ -456,8 +471,12 @@ void() DecodeWorldParms =
 		dprint("\b[CLIENT]\b Ammo Bolts ("); dprint(ftos(tmid8)); dprint(") To (");
 		if (world.currentammo) tmid8 = world.ammo_bolts;
 		else if (tmid8 < world.ammo_bolts) tmid8 = world.ammo_bolts;
-		if (tmid8 > AMMO_MAXBOLTS) tmid8 = AMMO_MAXBOLTS;
-		else if (tmid8 < 0) tmid8 = 0;
+		if (world.maxbolts > 0) {
+			if (tmid8 > world.maxbolts) tmid8 = world.maxbolts;
+		} else {
+			if (tmid8 > AMMO_MAXBOLTS) tmid8 = AMMO_MAXBOLTS;
+		}
+		if (tmid8 < 0) tmid8 = 0;
 		dprint(ftos(tmid8)); dprint(")\n");
 		parm4 = encode(tlow8,tmid8,thi8); //store bolts back in parm4
 	}
@@ -465,8 +484,12 @@ void() DecodeWorldParms =
 		dprint("\b[CLIENT]\b Ammo Poison ("); dprint(ftos(thi8)); dprint(") To (");
 		if (world.currentammo) thi8 = world.ammo_poison;
 		else if (thi8 < world.ammo_poison) thi8 = world.ammo_poison;
-		if (thi8 > AMMO_MAXPOISON) thi8 = AMMO_MAXPOISON;
-		else if (thi8 < 0) thi8 = 0;
+		if (world.maxpoison > 0) {
+			if (thi8 > world.maxpoison) thi8 = world.maxpoison;
+		} else {
+			if (thi8 > AMMO_MAXPOISON) thi8 = AMMO_MAXPOISON;
+		}
+		if (thi8 < 0) thi8 = 0;
 		dprint(ftos(thi8)); dprint(")\n");
 		parm4 = encode(tlow8,tmid8,thi8); //store poison back in parm4
 	}
@@ -479,8 +502,12 @@ void() DecodeWorldParms =
 		dprint("\b[CLIENT]\b Ammo Lava Nails ("); dprint(ftos(tlow8)); dprint(") To (");
 		if (world.currentammo) tlow8 = world.ammo_lava_nails;
 		else if (tlow8 < world.ammo_lava_nails) tlow8 = world.ammo_lava_nails;
-		if (tlow8 > AMMO_MAXLAVANAILS) tlow8 = AMMO_MAXLAVANAILS;
-		else if (tlow8 < 0) tlow8 = 0;
+		if (world.maxlavanails > 0) {
+			if (tlow8 > world.maxlavanails) tlow8 = world.maxlavanails;
+		} else {
+			if (tlow8 > AMMO_MAXLAVANAILS) tlow8 = AMMO_MAXLAVANAILS;
+		}
+		if (tlow8 < 0) tlow8 = 0;
 		dprint(ftos(tlow8)); dprint(")\n");	
 		parm5 = encode(tlow8,tmid8,thi8); //store lava_nails back in parm5
 	}
@@ -488,8 +515,12 @@ void() DecodeWorldParms =
 		dprint("\b[CLIENT]\b Ammo Multi-Rockets ("); dprint(ftos(tmid8)); dprint(") To (");
 		if (world.currentammo) tmid8 = world.ammo_multi_rockets;
 		else if (tmid8 < world.ammo_multi_rockets) tmid8 = world.ammo_multi_rockets;
-		if (tmid8 > AMMO_MAXMULTIROCKETS) tmid8 = AMMO_MAXMULTIROCKETS;
-		else if (tmid8 < 0) tmid8 = 0;
+		if (world.maxmultirockets > 0) {
+			if (tmid8 > world.maxmultirockets) tmid8 = world.maxmultirockets;
+		} else {
+			if (tmid8 > AMMO_MAXMULTIROCKETS) tmid8 = AMMO_MAXMULTIROCKETS;
+		}
+		if (tmid8 < 0) tmid8 = 0;
 		dprint(ftos(tmid8)); dprint(")\n");
 		parm5 = encode(tlow8,tmid8,thi8); //store multi_rockets back in parm5
 	}
@@ -497,8 +528,12 @@ void() DecodeWorldParms =
 		dprint("\b[CLIENT]\b Ammo Plasma ("); dprint(ftos(thi8)); dprint(") To (");
 		if (world.currentammo) thi8 = world.ammo_plasma;
 		else if (thi8 < world.ammo_plasma) thi8 = world.ammo_plasma;
-		if (thi8 > AMMO_MAXPLASMA) thi8 = AMMO_MAXPLASMA;
-		else if (thi8 < 0) thi8 = 0;
+		if (world.maxplasma > 0) {
+			if (thi8 > world.maxplasma) thi8 = world.maxplasma;
+		} else {
+			if (thi8 > AMMO_MAXPLASMA) thi8 = AMMO_MAXPLASMA;
+		}
+		if (thi8 < 0) thi8 = 0;
 		dprint(ftos(thi8)); dprint(")\n");
 		parm5 = encode(tlow8,tmid8,thi8); //store plasma back in parm5
 	}
@@ -510,8 +545,12 @@ void() DecodeWorldParms =
 		dprint("\b[CLIENT]\b Ammo Blood Crystals ("); dprint(ftos(tlow8)); dprint(") To (");
 		if (world.currentammo) tlow8 = world.ammo_bloodcrystals;
 		else if (tlow8 < world.ammo_bloodcrystals) tlow8 = world.ammo_bloodcrystals;
-		if (tlow8 > AMMO_MAXBLOOD) tlow8 = AMMO_MAXBLOOD;
-		else if (tlow8 < 0) tlow8 = 0;
+		if (world.maxblood > 0) {
+			if (tlow8 > world.maxblood) tlow8 = world.maxblood;
+		} else {
+			if (tlow8 > AMMO_MAXBLOOD) tlow8 = AMMO_MAXBLOOD;
+		}
+		if (tlow8 < 0) tlow8 = 0;
 		dprint(ftos(tlow8)); dprint(")\n");	
 		parm17 = encode(tlow8,tmid8,thi8); //store bloodcrystals back in parm17
 	}
@@ -519,8 +558,12 @@ void() DecodeWorldParms =
 		dprint("\b[CLIENT]\b Ammo Void Shards ("); dprint(ftos(tmid8)); dprint(") To (");
 		if (world.currentammo) tmid8 = world.ammo_voidshards;
 		else if (tmid8 < world.ammo_voidshards) tmid8 = world.ammo_voidshards;
-		if (tmid8 > AMMO_MAXVOID) tmid8 = AMMO_MAXVOID;
-		else if (tmid8 < 0) tmid8 = 0;
+		if (world.maxvoid > 0) {
+			if (tmid8 > world.maxvoid) tmid8 = world.maxvoid;
+		} else {
+			if (tmid8 > AMMO_MAXVOID) tmid8 = AMMO_MAXVOID;
+		}
+		if (tmid8 < 0) tmid8 = 0;
 		dprint(ftos(tmid8)); dprint(")\n");
 		parm17 = encode(tlow8,tmid8,thi8); //store voidshards back in parm17
 	}
@@ -528,13 +571,16 @@ void() DecodeWorldParms =
 		dprint("\b[CLIENT]\b Ammo Plasma ("); dprint(ftos(thi8)); dprint(") To (");
 		if (world.currentammo) thi8 = world.ammo_elemental;
 		else if (thi8 < world.ammo_elemental) thi8 = world.ammo_elemental;
-		if (thi8 > AMMO_MAXMANA) thi8 = AMMO_MAXMANA;
-		else if (thi8 < 0) thi8 = 0;
+		if (world.maxmana > 0) {
+			if (thi8 > world.maxmana) thi8 = world.maxmana;
+		} else {
+			if (thi8 > AMMO_MAXMANA) thi8 = AMMO_MAXMANA;
+		}
+		if (thi8 < 0) thi8 = 0;
 		dprint(ftos(thi8)); dprint(")\n");
 		parm17 = encode(tlow8,tmid8,thi8); //store elemental_mana back in parm17
 	}
 
-	//----------------------------------------------------------------------
 	// Update player armour type and quantity
 	if (world.armortype > 0) {
 		// Remove any previous armour types from the HUD
@@ -1073,6 +1119,11 @@ void() PutClientInServer =
 
 	self.wing_finished = self.wing_time = 0;
 
+	self.aura_finished = 0;
+	self.water_blessed = 0;
+
+	self.alignment = GOOD;
+
 	// Check if Arcane Key Inventory message is blocked/suppressed
 	if (world.ckeyhint == TRUE) self.ckeyhint = TRUE;
 
@@ -1106,6 +1157,31 @@ void() PutClientInServer =
 
 	// Reset randomizer counters
 	self.randomshells = self.randomcells = 0;
+
+	if (world.maxshells > 0) self.maxshells = world.maxshells;
+	else self.maxshells = AMMO_MAXSHELLS;
+	if (world.maxnails > 0) self.maxnails = world.maxnails;
+	else self.maxnails = AMMO_MAXNAILS;
+	if (world.maxrockets > 0) self.maxrockets = world.maxrockets;
+	else self.maxrockets = AMMO_MAXROCKETS;
+	if (world.maxcells > 0) self.maxcells = world.maxcells;
+	else self.maxcells = AMMO_MAXCELLS;
+	if (world.maxlavanails > 0) self.maxlavanails = world.maxlavanails;
+	else self.maxlavanails = AMMO_MAXLAVANAILS;
+	if (world.maxmultirockets > 0) self.maxmultirockets = world.maxmultirockets;
+	else self.maxmultirockets = AMMO_MAXMULTIROCKETS;
+	if (world.maxplasma > 0) self.maxplasma = world.maxplasma;
+	else self.maxplasma = AMMO_MAXPLASMA;
+	if (world.maxpoison > 0) self.maxpoison = world.maxpoison;
+	else self.maxpoison = AMMO_MAXPOISON;
+	if (world.maxbolts > 0) self.maxbolts = world.maxbolts;
+	else self.maxbolts = AMMO_MAXBOLTS;
+	if (world.maxblood > 0) self.maxblood = world.maxblood;
+	else self.maxblood = AMMO_MAXBLOOD;
+	if (world.maxvoid > 0) self.maxvoid = world.maxvoid;
+	else self.maxvoid = AMMO_MAXVOID;
+	if (world.maxmana > 0) self.maxmana = world.maxmana;
+	else self.maxmana = AMMO_MAXMANA;
 	
 	//	spot = SelectSpawnPoint ();
 	self.origin = spot.origin + '0 0 1';
@@ -1320,20 +1396,7 @@ void() PlayerPreThink =
 
 	makevectors (self.v_angle);	
 
-	// pOx - START - func_water & func_ladder support
-	// Set cshift back to normal if eyes are out of func_water
-	//if (self.fwatershifttime < time) {
-		// self.cshift_col = '130 80 50';
-		// self.cshift_den = 5;
-		// self.cshift_step = 10;
-		// self.cshift_upd = TRUE;		// Update screen colour
-		// self.cshift_time = -1;		// Update striaght away
-		// stuffcmd(self, "v_cshift 130 80 50 0\n");
-		// if (self.fwatershift) {
-			// self.fwatershift = FALSE;
-		// }
-	// }
-
+	// func_water screen tinting
 	if (self.fwatershift) {
 		ResetDebuffScreen(self);
 		self.fwatershift = FALSE;
@@ -1501,10 +1564,10 @@ void() PlayerPreThink =
 	// When the player/client starts in the map they don't want any velocity	
 	if (time < self.pausetime) self.velocity = '0 0 0';
 
-	if (!( deathmatch || coop )) { // adds player´s legs to 1st person view  (meant for Single player only !)
+	if ((autocvar_player_legs_visibility) && (!cvar("chase_active")) && !( deathmatch || coop ) && !(self.invisible_finished > time)) {	// adds player´s legs to 1st person view  (meant for Single player only !)
 		if (self.visible_legs_helper == 0) {
 			self.visible_legs_helper = 1;
-			player_legs (self);
+			self.legsattachment = player_legs (self);
 		}
 	}
 };
@@ -1516,12 +1579,38 @@ void() PlayerFly_PostThink = {
         if (self.h2olevel < 2)
             self.velocity = self.velocity * 0.7;
 };
+
+enumflags
+{
+	PLAYER_KEEPALIVE,
+	PLAYER_MODELINDEX,
+	PLAYER_ORIGIN,
+	PLAYER_ORIGIN_Z,
+	PLAYER_ANGLES_X,
+	PLAYER_ANGLES_Y,
+	PLAYER_ANGLES_Z,
+	PLAYER_VELOCITY,
+	PLAYER_VELOCITY_Z,
+	PLAYER_FLAGS,
+	PLAYER_WEAPON,
+	PLAYER_ITEMS,
+	PLAYER_HEALTH,
+	PLAYER_ARMOR,
+	PLAYER_MOVETYPE,
+	PLAYER_VIEWOFS,
+	PLAYER_BASEFRAME,
+	PLAYER_FRAME,
+	PLAYER_AMMO1,
+	PLAYER_AMMO2,
+	PLAYER_AMMO3,
+	PLAYER_UNUSED1,
+	PLAYER_UNUSED2
+};
 	
 //----------------------------------------------------------------------
 // PlayerPostThink - Called every frame after physics are run
 //----------------------------------------------------------------------
-void() PlayerPostThink =
-{
+void() PlayerPostThink = {
 	if (prethink == TRUE && postthink == FALSE) {
 		// Check for the player? 
 		// - first couple of frames the player is not setup correctly
@@ -1547,9 +1636,9 @@ void() PlayerPostThink =
 			// liquid alpha is used by the monster visible system
 			if (world.water_alpha) {
 				liquid_alpha = world.water_alpha;
-				stuffcmd(self, "\nr_wateralpha ");
+				Safe_stuffcmd(self, "\nr_wateralpha ");
 				lftos(self, liquid_alpha ,1,3, BUFFER_STUFFCMD);
-				stuffcmd(self, "\n");
+				Safe_stuffcmd(self, "\n");
 				dprint("\b[CLIENT]\b Water Alpha (");
 				lftos(self, liquid_alpha ,1,3, BUFFER_DPRINT);
 				dprint(")\n");
@@ -1585,6 +1674,7 @@ void() PlayerPostThink =
 
 	// pOx - Advance frame based entities (noclip)
 	SUB_PushFrameMovers();
+	self.SendFlags = self.SendFlags | PLAYER_ORIGIN;
 
 	// Special systems that pause the QC/Game
 	if (intermission_running > 0) return;	// intermission or finale
@@ -1740,8 +1830,7 @@ void() PlayerPostThink =
 						dprint("[SLIDING] Unbreakable obj at ");
 						dprint(vtos(self.jumptouch.origin));
 						dprint("\n");
-					}
-					else {
+					} else {
 						// From the player origin down to the feet is 22 (def) units
 						// The breakable bbox edge (maxs) should be below feet
 						if ( (self.jumptouch.origin_z + self.jumptouch.bbmaxs_z) < self.origin_z-self.view_ofs_z &&
@@ -1754,6 +1843,18 @@ void() PlayerPostThink =
 							self.jumptouch.nodebuginfo = TRUE;
 							trigger_ent(self.jumptouch, self);
 						}
+					}
+				}
+				if (self.jumptouch.flags & FLx_CREATURE) {
+					if (self.shroom_finished > time) {
+						makevectors (self.v_angle);
+						self.finalangle = normalize(v_forward);
+						self.finalangle_z = 0; // flatten out
+						self.velocity = self.velocity + (self.finalangle * 200);
+						sound(self,CHAN_VOICE,"items/smb_stomp.wav",1,ATTN_NORM);
+						self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST + 200; // Big Jump for Big Dude!
+						T_Damage(self.jumptouch,self,self,400,DAMARMOR);
+						break;
 					}
 				}
 				// Keep cycling through radius list
@@ -1769,10 +1870,11 @@ void() PlayerPostThink =
 		// Landed deep (waist high) in water
 		if (self.watertype == CONTENT_WATER) {
 			// Player hits water surface
-			sound (self, CHAN_BODY, "player/h2ojump.wav", 1, ATTN_NORM);
+			if (!(self.perms & POW_ARMORNINJA)) sound (self, CHAN_BODY, "player/h2ojump.wav", 1, ATTN_NORM);
+
 			// Check if damage can be applied after hitting water surface
 			// Cannot check jump flag velocity because player hit water
-			if (map_falldmgwater > 0 && !(self.perms & POW_ARMORNINJA)) {
+			if (map_falldmgwater > 0 && !((self.perms & POW_ARMORNINJA) || self.water_blessed)) {
 				T_Damage (self, world, world, map_falldmgwater, DAMARMOR);
 				// Play on different channel so it does not conflict
 				sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
@@ -1780,7 +1882,7 @@ void() PlayerPostThink =
 			}
 		}
 		else if (self.jump_flag < map_fallspeedhigh) {
-			if (!(self.perms & POW_ARMORNINJA)) {
+			if (!((self.perms & POW_ARMORNINJA) || self.water_blessed)) { // Prevent fall damage with Ninja Armor or Water Shrine desecration
 				if (map_falldmg > 0) {
 					T_Damage (self, world, world, map_falldmg, DAMARMOR);
 					sound (self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM);
@@ -1788,9 +1890,9 @@ void() PlayerPostThink =
 				}
 				else sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
 			}
-		}
-		else
+		} else {
 			if (!(self.perms & POW_ARMORNINJA)) sound (self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM);
+		}
 
 		self.jump_flag = 0;
 	}
@@ -1812,8 +1914,7 @@ void() PlayerPostThink =
 };
 
 //----------------------------------------------------------------------
-void() PlayerJump =
-{
+void() PlayerJump = {
 	if (self.flags & FL_WATERJUMP) return;
 	
 	if (self.waterlevel >= 2) {
@@ -1827,6 +1928,7 @@ void() PlayerJump =
 			if (random() < 0.5) sound (self, CHAN_BODY, "misc/water1.wav", 1, ATTN_NORM);
 			else sound (self, CHAN_BODY, "misc/water2.wav", 1, ATTN_NORM);
 		}
+		if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
 		return;
 	}
 
@@ -1869,10 +1971,12 @@ void() PlayerJump =
 			// Reset maximum amount of air jumps (for level 1-4 item)
 			self.jumpboots_airlvl = self.jumpboots_airmax;
 			// Combination sound of original jump + jump boots
-			sound (self, CHAN_BODY, SOUND_ARTJUMPBOOTS3A, 1, ATTN_NORM);
+			if (self.shroom_finished > time) sound (self, CHAN_BODY, "player/jumpmario.wav", 1, ATTN_NORM);
+			else sound (self, CHAN_BODY, SOUND_ARTJUMPBOOTS3A, 1, ATTN_NORM);
 			// Jumps boots don't really work until in the air
 			// Start with original jump height
 			self.velocity_z = self.velocity_z + map_jumpheight;
+			if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
 		}
 		// Still in the air (no ground contact)
 		// Allow for infinite jumps (airmax = -1)
@@ -1893,9 +1997,11 @@ void() PlayerJump =
 				// Count down on maximum jump level
 				self.jumpboots_airlvl = self.jumpboots_airlvl - 1;
 				// Whoosh, more power
-				sound (self, CHAN_BODY, SOUND_ARTJUMPBOOTS3B, 1, ATTN_NORM);
+				if (self.shroom_finished > time) sound (self, CHAN_BODY, "player/jumpmario.wav", 1, ATTN_NORM);
+				else sound (self, CHAN_BODY, SOUND_ARTJUMPBOOTS3B, 1, ATTN_NORM);
 				// Add jump boot height, different from basic jump
 				self.velocity_z = self.jumpboots_height;
+				if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
 			}
 			// No more power!
 			else {
@@ -1904,7 +2010,8 @@ void() PlayerJump =
 					// Don't play the sound constantly
 					self.jumpboots_sound = time + 0.2;
 					// clickty click
-					sound (self, CHAN_BODY, SOUND_ARTJUMPBOOTS3C, 1, ATTN_NORM);
+					if (self.shroom_finished > time) sound (self, CHAN_BODY, "player/jumpmario.wav", 1, ATTN_NORM);
+					else sound (self, CHAN_BODY, SOUND_ARTJUMPBOOTS3C, 1, ATTN_NORM);
 				}
 			}
 		}
@@ -1929,6 +2036,7 @@ void() PlayerJump =
 				// Never increase the forward velocity beyond limit
 				// Otherwise the velocity could grow too fast
 				self.velocity = self.velocity + (self.finalangle * (self.jumpboots_forward - self.t_length));
+				if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
 			}
 		}
 	}
@@ -1944,7 +2052,8 @@ void() PlayerJump =
 		self.button2 = 0;
 		
 		// player jumping sound
-		sound (self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM);
+		if (self.shroom_finished > time) sound (self, CHAN_BODY, "player/jumpmario.wav", 1, ATTN_NORM);
+		else sound (self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM);
 		makevectors(self.v_angle);
 		self.velocity = v_forward * (map_jumpheight*1);
 	}
@@ -1961,33 +2070,35 @@ void() PlayerJump =
 		self.button2 = 0;
 		
 		// player jumping sound
-		sound (self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM);
+		if (self.shroom_finished > time) sound (self, CHAN_BODY, "player/jumpmario.wav", 1, ATTN_NORM);
+		else sound (self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM);
 		self.velocity_z = self.velocity_z + map_jumpheight;
+		if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
 	}
 };
 
 //----------------------------------------------------------------------
 // Deals with water, slime and lava
 //----------------------------------------------------------------------
-void() WaterMove =
-{
+void() WaterMove = {
 	//dprint (ftos(self.waterlevel));
 	// Fix noclip water gasping bug by giving air to the player
 	if (self.movetype == MOVETYPE_NOCLIP) {
-		self.air_finished = time + 1; 
+		self.air_finished = time + 10; 
 		return;
 	}
 	if (self.health < 0) return;
 
 	if (self.waterlevel != 3) {
-		if (self.air_finished < time)
-			sound (self, CHAN_VOICE, "player/gasp2.wav", 1, ATTN_NORM);
-		else if (self.air_finished < time + 9)
-			sound (self, CHAN_VOICE, "player/gasp1.wav", 1, ATTN_NORM);
-		self.air_finished = time + 12;
+		if (self.air_finished < time) {
+			if (!self.air_blessed) sound (self, CHAN_VOICE, "player/gasp2.wav", 1, ATTN_NORM);
+		} else if (self.air_finished < time + 9) {
+			if (!self.air_blessed) sound (self, CHAN_VOICE, "player/gasp1.wav", 1, ATTN_NORM);
+		}
+		self.air_finished = time + WATER_AIR;
 		self.dmg = map_hazarddmg_x;
 	}
-	else if (self.air_finished < time) {	// drown!
+	else if (self.air_finished < time && !self.air_blessed) {	// drown!
 		if (self.pain_finished < time) {
 			// Keep increasing drowning damage
 			self.dmg = self.dmg + map_hazarddmg_x;
@@ -2006,7 +2117,7 @@ void() WaterMove =
 		return;
 	}
 
-	if (self.watertype == CONTENT_LAVA) {	// do damage
+	if (self.watertype == CONTENT_LAVA && self.resist_fire < 1) {	// do damage
 		// Check for lava shield and play reminder it exists
 		if (self.moditems & IT_ARTLAVASHIELD) PlayLavaShieldSound(self);
 		else {
@@ -2014,14 +2125,14 @@ void() WaterMove =
 				if (self.radsuit_finished > time) self.dmgtime = time + 1;
 				else self.dmgtime = time + 0.2;
 				// Lava damage is crazy high the deeper you go
-				if (self.funcwaterdmg_finished < time) T_Damage (self, world, world, map_hazarddmg_z*self.waterlevel, DAMARMOR);
+				if (self.funcwaterdmg_finished < time) T_Damage (self, world, world, map_hazarddmg_z*self.waterlevel*(1-self.resist_fire), DAMARMOR);
 			}
 		}
 	}
-	else if (self.watertype == CONTENT_SLIME) {	// do damage
+	else if (self.watertype == CONTENT_SLIME && self.resist_acid < 1) {	// do damage
 		if (self.dmgtime < time && self.radsuit_finished < time && self.therm_finished < time) {
 			self.dmgtime = time + 1;
-			if (self.funcwaterdmg_finished < time) T_Damage (self, world, world, map_hazarddmg_y*self.waterlevel, DAMARMOR);
+			if (self.funcwaterdmg_finished < time) T_Damage (self, world, world, map_hazarddmg_y*self.waterlevel * (1-self.resist_acid), DAMARMOR);
 		}
 	}
 	
@@ -2145,8 +2256,7 @@ void() ClientKill =
 //----------------------------------------------------------------------
 // Called when a player connects to a server
 //----------------------------------------------------------------------
-void() ClientConnect =
-{
+void() ClientConnect = {
 	bprint (self.netname);
 	bprint (" entered the game\n");
 	

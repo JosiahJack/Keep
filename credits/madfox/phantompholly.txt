@@ -1,0 +1,58 @@
++==========================================================================================+
+Title                   : Phantom Pholly
+Filename                : ph7583
+Author                  : Madfox
+Email Address           : http://gimli@home.nl
+Description             : Quake1 Single Player
+			  
+Monsters  Easy:145     Normal :156    Hard :159
+			  
+			  
+Additional Credits to   : ID Software
+			 
++==========================================================================================+
+
+* Play Information *
+
+Level Name              : Phantom Pholly
+Single Player           : Yes
+Cooperative 2-4 Player  : Yes
+Deathmatch 1-4 Player   : Yes
+Difficulty Settings     : Yes  
+Coloured light          : Yes
+Game                    : Quake1 - Proxysm Mod - Not needed for this pack, all included.
+                          Curious? See the link, great deathmatch pak with new weapons.
+                          http://developer.chaoticbox.com/quake.php?tab=poxgoodies  
+
+* Construction *
+
+Base            : Q1 level,completely from scratch.
+
+Build Time      : 24-10-05   -   18-03-07
+
+Editor(s) used  : Quark6.1 - -6.3 - 6.5 
+
+Known Bugs      : Might be unsuspected monster encounters, demon that hangs
+                  on slope walls. Gondola sometimes tends to damage on sidewalls.
+
+Thanks          : Quake, author of the Proxysm Mod, Aguire for knowhow and great                  
+                  advice in mapping odds, Sielwolf for attending me on texering doors and                   
+                  lavapit, jPL for orientating map advice, and Trinca for their                      
+                  patient betatesting, Preach for his newboss qc help, Tyran for his 
+                  tyrlight and enlightment, Metslime for func_board, 
+                  meself for retex animated textures and not losing mine thing.
+           
+Intention       : make a marine-mine base oriented in cave style
+                  
+SetUp           : Unzip files in a subdirectory in Quake1        
+                  Name it "phantom" and play " quake.exe -game phantom +map ph7583 "
+                  
+Any support I will apreciately rejoyce, just email.      
+You may distribute and modify this level, as long as you give
+me credit, but more of all ID Sofware & Gandalf Technology.
+
++==========================================================================================+
+
+				- Madfox 18 maart 2007.
+
++==========================================================================================+

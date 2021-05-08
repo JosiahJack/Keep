@@ -1,6 +1,8 @@
 ../../csprogs.dat
 qsextensions.qc	//builtins and lots of extensions
-
+defs.h
+math.qc
+env_sound.qc // OpenAL preset reverb zone structs
 csqc_hud_vanilla.qc				//The actual hud code. self-contained, except for qc extensions.
 csqc_scoreboard.qc				//Code for the deathmatch scoreboard overlay. self-contained except for qc extensions
 

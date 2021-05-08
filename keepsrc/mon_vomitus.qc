@@ -119,12 +119,7 @@ void() Vomit_Spawn = {
     newSpawn.enemy      = self.enemy;
 	newSpawn.think = tbaby_jump5;
 	newSpawn.nextthink = time + 0.05;
-	total_monsters = total_monsters + 1;
-  
-	
-	WriteByte (MSG_BROADCAST, SVC_UPDATESTAT);
-	WriteByte (MSG_BROADCAST, STAT_TOTALMONSTERS);
-	WriteLong (MSG_BROADCAST, total_monsters);
+	AddToTotals(self);
 };
 
 // Vomitus chews on the target.
@@ -226,23 +221,19 @@ void(float dist) ai_vomit_run  = {
 	   if (self.gorging) {
 		   if ((self.enemy.health <= 0) && (self.enemy.solid == SOLID_NOT))
 			   {walkmove (self.angles_y, dist);  return;}
-		   if (self.enemy.touch == Gib_Touch)
+		   if (self.enemy.touch == TouchGib)
 			   {walkmove (self.angles_y, dist);  return;}
 	   } else {
             // Move over the fallen zombie and crush it for an instakill.
             if (IsZombieDown (self.enemy))
                 {walkmove (self.angles_y, dist);  return;}
             // Turn around so it can bite the target while on the run.
-            if (self.enemy)
-                ai_face ();
+            if (self.enemy) ai_face ();
         }
     }
     ai_run(dist);
 };
 
-//==========================================================================
-
-// STAND - - - - - - - - - - - - - - - -
 void() vom_stand1 =[ $walk1, vom_stand2 ] {ai_vomit_stand();};
 void() vom_stand2 =[ $walk2, vom_stand3 ] {ai_vomit_stand();};
 void() vom_stand3 =[ $walk3, vom_stand4 ] {ai_vomit_stand();};
@@ -252,17 +243,15 @@ void() vom_stand6 =[ $walk4, vom_stand7 ] {ai_vomit_stand();};
 void() vom_stand7 =[ $walk3, vom_stand8 ] {ai_vomit_stand();};
 void() vom_stand8 =[ $walk2, vom_stand1 ] {ai_vomit_stand();};
 
-// WALK - - - - - - - - - - - - - - - -
-void() vom_idle_sfx =
-{
-// Yes, use attn_norm instead of attn_idle.
+void() vom_idle_sfx = {
+	// Yes, use attn_norm instead of attn_idle.
     sound (self, CHAN_VOICE, "gibfnt/gf_plop.wav", 1, ATTN_NORM);
 };
+
 void() vom_walk1  =[ $walk1,  vom_walk2  ] {
-    if (random() < 0.5)
-        vom_idle_sfx();
+    if (random() < 0.5) vom_idle_sfx();
     ai_vomit_walk(2);
-};   // 3
+};
 void() vom_walk2  =[ $walk2,  vom_walk3  ] {ai_vomit_walk(2);};
 void() vom_walk3  =[ $walk3,  vom_walk4  ] {ai_vomit_walk(2);};
 void() vom_walk4  =[ $walk4,  vom_walk5  ] {ai_vomit_walk(2);};
@@ -288,7 +277,6 @@ void() vom_walk23 =[ $walk23, vom_walk24 ] {ai_turn();};
 void() vom_walk24 =[ $walk24, vom_walk25 ] {ai_turn();};
 void() vom_walk25 =[ $walk25, vom_walk1  ] {ai_turn();};
 
-// RUN - - - - - - - - - - - - - - - - -
 void() vom_run1  =[ $run1,  vom_run2  ] {
     if (random() < 0.2)
         vom_idle_sfx();
@@ -407,16 +395,16 @@ void(float dm) vom_gib = {
 void() vom_die1  =[ $death1,  vom_die2    ] {};
 void() vom_die2  =[ $death2,  vom_die3    ] {};
 void() vom_die3  =[ $death3,  vom_die4    ] {};
-void() vom_die4  =[ $death4,  vom_die5    ] {};
+void() vom_die4  =[ $death4,  vom_die5    ] { DropCoin(2);};
 void() vom_die5  =[ $death5,  vom_die6    ] {};
-void() vom_die6  =[ $death6,  vom_die7    ] {/*monster_drop();*/};
+void() vom_die6  =[ $death6,  vom_die7    ] { DropCoin(3);};
 void() vom_die7  =[ $death7,  vom_die8    ] {};
-void() vom_die8  =[ $death8,  vom_die9    ] {};
+void() vom_die8  =[ $death8,  vom_die9    ] { DropCoin(3);};
 void() vom_die9  =[ $death9,  vom_die10   ] {};
-void() vom_die10 =[ $death10, vom_die11   ] {};
+void() vom_die10 =[ $death10, vom_die11   ] { DropCoin(3);};
 void() vom_die11 =[ $death11, vom_die12   ] {};
 void() vom_die12 =[ $death12, vom_die13   ] {};
-void() vom_die13 =[ $death13, vom_die14   ] {};
+void() vom_die13 =[ $death13, vom_die14   ] { DropCoin(3);};
 void() vom_die14 =[ $death14, vom_die15   ] {};
 void() vom_die15 =[ $death15, vom_die16   ] {};
 void() vom_die16 =[ $death15, vom_die16 ] {

@@ -14,10 +14,19 @@ float CG_AMMOITEM = 200;		// All ammo items/packs
 float CG_PROJALL = 205;			// All monster projectiles
 float CG_PROJSHELLS = 210;		// To help with combining shell damage
 float CG_PROJNAILS = 220;		// Testing ammo resistance in t_damage
+float CG_PROJLAVANAILS = 221;	// Testing ammo resistance in t_damage
 float CG_PROJROCKETS = 230;		// Includes homing missiles
+float CG_PROJMULTIROCKETS = 231;// Includes homing missiles
 float CG_PROJGRENADES = 235;	// Separated for extra testing
+float CG_PROJBOLTS = 236;		// Crossbow bolts
+float CG_PROJBOLTSPOISON = 237;	// Poisoned Crossbow bolts
+float CG_PROJBLOODCRYSTALS = 238;// Sanguinators
+float CG_PROJVOID = 239;		// Void Staff
 float CG_PROJCELLS = 240;		// Mainly used for plasma
-float CG_PROJHAZARD = 241;		// Hazard projectiles (flame/plasma)
+float CG_PROJPLASMAROGUE = 241;	// Just for the Rogue Plasma lightning ball
+float CG_PROJHAZARD = 242;		// Hazard projectiles (flame/plasma)
+float CG_PROJMAGIC = 243;		// Elemental Mana attacks and other magic projectiles
+float CG_PROJICE = 244;			// Cold stuff like Elemental Tome, Snowman snowballs, Ice Golem rocks
 float CG_MINIONEGG = 245;		// Special minion eggs
 float CG_WEAPON = 250;			// All weapon items
 float CG_PROGRESSION = 260;		// All progression items
@@ -57,7 +66,7 @@ float CG_ZOMBIE = 685;			// (3) Zombie, Knight, Mummy
 float CG_XMAS = 686;			// (4) Elf, Raindeer, Snowman, Santa
 float CG_BOSS = 690;			// (3) Cthon, Old one, Anaconda
 float CG_DRAGON = 695;			// (9) Rogue Dragon, Drake Dragons (7 variants), Drake Dragon King
-float CG_HARMLESS = 777;		// (1) Frog
+float CG_HARMLESS = 777;		// (1) Sheep, Frogs, Ogles, Bees, Ravens
 
 //======================================================================
 // Unique Class Types for quicker entity searches
@@ -144,6 +153,7 @@ float CT_MONSHEEP = 132;		// Sheep from Hexen 2 - DENIZEN!
 float CT_MONOGLE = 133;			// Ogle from Heretic 2 - DENIZEN!
 float CT_MONRAVEN = 134;		// Raven from Redfield's Ravenkeep - DENIZEN!
 float CT_MONBEEZ = 135;			// Beez swarm (Madfox) - DENIZEN!
+float CT_MONSABERENFORCER = 136;// Saber Enforcer
 float CT_MONKNIGHT = 140;		// Small metal Knights
 float CT_MONCARNIVEAN = 141;	// Carnivean Serpentine Knight
 float CT_MONREIVER = 142;		// Reiver from Quake 1.5 mod
@@ -172,6 +182,10 @@ float CT_MONVIRTUS = 198;		// Virtus worm boss
 float CT_MONINQUISITOR = 199;	// Inquisitor boss for Twilight of the Idols
 // New (death) Knight series (sock/necros)
 float CT_MONDGUARD = 200;		// HD Knight (Guard)
+float CT_MONANACONDACOIL = 201;	// Anaconda coils
+float CT_MONSPELLMAS = 202;		// Baseboss from madfox's Phantom Pholly map (very similar but not the same as Virtus boss)
+
+
 float CT_MONDCROSS = 205;		// HD Knight (Crossbow)
 float CT_MONDFURY = 210;		// HD Knight (Fury)
 float CT_MONDFURYBOSS = 211;	// Brigade Commander (Quake 1.5)
@@ -193,15 +207,16 @@ float CT_MONHOGRE = 250;		// HD Ogre (Chainsaw)
 float CT_MONHOGREMAC = 255;		// HD Ogre (Mace)
 float CT_MONHOGREHAM = 260;		// HD Ogre (Hammer)
 
-// New base monster series (Inspired by lunaran/Quoth)
-float CT_MONARMYROCKET = 270;	// Army Soldier (Rocket)
+
+float CT_MONARMYROCKET = 270;	// Army Soldier (Rocket) // New base monster series (Inspired by lunaran/Quoth)
 float CT_MONARMYGRENADE = 272;	// Army Soldier (Grenade)
 float CT_MONARMYPLASMA = 275;	// Army Soldier (Plasma)
 float CT_MONARMYSPIKE = 276;	// Army Soldier (Nail)
 float CT_MONARMYCYBORG = 277;	// Army Soldier (Perforator)
-
-
+float CT_MONBANE = 278;			// Drake Bane boss
+float CT_MONDARKLORD = 279;		// Drake Dark Lord boss
 float CT_MONDEFENDER = 280;		// Enforcer SSG/GL (Defender)
+float CT_MONSUPERENFORCER = 284;// Lieutenant Enforcer, red with perforator from back2forwards by The Lieutenant
 float CT_MONELIMATOR = 285;		// Enforcer Plasma (Eliminator)
 float CT_MONMEGAFORCE = 286;	// Mega Enforcer (Plasma+Rocket)
 float CT_MONDEFLECTOR = 287;	// The Deflector (Plasma+Rocket)
@@ -241,10 +256,10 @@ float CT_MONICEGOLEM = 335;		// Giant Ice Golem (shards+ground slam)
 float CT_MONICEGOLEMWAVE = 337;	// Wave targets for boss Ice Golem
 float CT_MONMINOTAUR = 340;		// Large tank like bull (magic/charge)
 float CT_MONEIDOLON = 345;		// Large demon boss Eidolon
-
+float CT_MONFLYTRAPGROUND = 346;// Flytrap on the ground with button and tech base -madfox
 float CT_MONEIDOLONWAVE = 347;	// Wave targets for boss Eidolon
-
-
+float CT_MONFLYTRAP = 348;		// Flytrap standing up, just normal plant -madfox
+float CT_MONWRAITHNEHAHRA = 349;
 float CT_MONWRAITH = 350;		// Undead wraith (Burning debuff)
 // Twisted Xmas MOD (Twisted Matrix)
 float CT_MONELF = 351;			// Little melee (knight)
@@ -301,7 +316,7 @@ float CT_PROJ_SSG = 412;		// SSG projectile
 
 float CT_PROJ_NG = 415;			// NG projectile
 float CT_PROJ_SNG = 416;		// SNG projectile
-float CT_PROJ_MONNG = 417;		// NG monster projectile (glowing red)
+float CT_PROJ_MONNG = 417;		// Lava nailgun monster projectile (glowing red)
 float CT_PROJ_REFNG = 418;		// Reflected (glowing red)
 float CT_PROJ_HKN = 419;		// Hell Knight Spike
 float CT_PROJ_WBONE = 420;		// Wraith Bone Bolt (nail)
@@ -316,7 +331,7 @@ float CT_PROJ_MBLOOD = 428;		// Alternative Minotaur Bolt (nail)
 float CT_PROJ_WPOISON = 429;	// Wraith Poison Bolt (nail)
 float CT_PROJ_FURY2 = 430;		// Fury Spit with grenade trail
 float CT_PROJ_REFLNG = 431;		// Reflected (glowing red)
-
+float CT_PROJ_HKN_BLUE = 432;	// Blue Hell Knight Spike, used by Void Knight(NewHouse) and Saber Enforcer(back2forwards by The Lieutenant)
 float CT_PROJ_GLMULTI = 433;	// Rogue Multi-Grenade projectile
 float CT_PROJ_DARTARROW = 434;	// Trap_spikeshooter dart
 float CT_PROJ_BOLT1 = 435;		// Crossbow Knight Bolt +hknight trail
@@ -477,7 +492,7 @@ float CT_BUBBLE = 682;			// Bubbles
 float CT_MISCMODEL = 690;		// Misc Model
 
 float CT_MISCSMOKE = 692;		// Misc Smoke
-
+float CT_SHROOM = 693;			// Mario Mushroom that makes player bigger for a little while
 float CT_MISCGIBF = 694;		// Misc Gib fountain
 
 //----------------------------------------------------------------------
@@ -514,7 +529,7 @@ float CT_ARMORCOURAGE = 792;	// Courage
 float CT_ARMORDRAGON = 793;		// Dragonscale
 float CT_ARMORONYX = 794;		// Onyx
 float CT_ARMORONYXPOWER = 795;	// Power
-float CT_ARMORBERSERKER = 796;  // Demon
+float CT_ARMORBERSERKER = 796;  // Demonhide
 float CT_ARMORSPIRIT = 797;		// Spirit
 float CT_ARMORCHAOS = 798;		// Chaos
 float CT_ARMORNINJA = 799;		// Ninja

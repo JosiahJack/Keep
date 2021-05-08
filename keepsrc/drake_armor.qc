@@ -29,7 +29,7 @@ void(entity ent) BerserkerArmor_Awaken = {
     if (!(other.flags & FL_CLIENT)) return;
 
     sound (ent, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
-    centerprint (ent, "Berserker Armor!\nPress 'K' to expend for Quad Damage!");
+    centerprint (ent, "Demonhide Armor!\nPress 'K' to expend for Quad Damage!\nKills repair armor while equipped.");
 };
 
 void(entity ent) SpiritArmor_Awaken = {

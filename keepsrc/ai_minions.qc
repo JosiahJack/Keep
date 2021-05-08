@@ -11,8 +11,7 @@
 void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade;
 
 //----------------------------------------------------------------------
-void() setup_minionsupport =
-{
+void() setup_minionsupport = {
 	// Reset all counters
 	self.minion_active = TRUE;
 	self.minion_count = 0;

@@ -672,6 +672,7 @@ void () monster_armagon = {
    // Always reset Ammo Resistance to be consistent
    self.resist_shells = self.resist_nails = 0;
    self.resist_rockets = 0; self.resist_cells = 0.5;
+	self.resist_plasma = 0.5;
 
 	// Check passive system for exceptions
 	setup_passivestate_boss(self);

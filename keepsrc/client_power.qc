@@ -81,6 +81,20 @@ void(entity targ, float powtimer) ResetPowerQuad =
 		}
 	}
 };
+
+void(entity targ) ResetPowerShroom = {
+	dprint("Shroom reset\n");
+	targ.shroom_finished = 0;
+	setsize(targ,VEC_HULL_MIN,VEC_HULL_MAX);
+	sound(targ,CHAN_VOICE,"items/smb_bowserfalls.wav",1,ATTN_NORM);
+	targ.velocity = '0 0 1'; // FULL STOP! (almost) Hope you weren't in the air
+	targ.flags = targ.flags - FL_ONGROUND;
+	targ.effects = targ.effects - EF_BRIGHTLIGHT;
+	targ.legsattachment.scale = 1;
+	targ.scale = 1;
+	targ.view_ofs = '0 0 22';
+};
+
 // Quad screen effect is shared by several items
 void(entity targ) ResetPowerQuadItem = {
 	targ.items = targ.items - (targ.items & IT_QUAD);
@@ -213,6 +227,7 @@ void(entity targ, float powtimer, float novania) ResetPowerSystem =
 	ResetPowerThermSuit(targ);
 	ResetPowerPent(targ, powtimer);
 	ResetPowerQuad(targ, powtimer);
+	if (targ.shroom_finished > 0) ResetPowerShroom(targ);
 	ResetPowerSharp(targ, powtimer);
 	ResetPowerPiercer(targ, powtimer);
 	ResetPowerLevitation(targ);
@@ -299,14 +314,14 @@ void() ClientPowerups =
 		if (self.invisible_finished < time + PWR_FADING) {
 			if (self.invisible_time == 1) {
 				sprint (self, "Ring of Shadows magic is fading\n");
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTINV2, 1, ATTN_NORM);
 				self.invisible_time = time + 1;
 			}
 			
 			if (self.invisible_time < time) {
 				self.invisible_time = time + 1;
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 			}
 		}
 		// Update inventory and timers
@@ -336,20 +351,20 @@ void() ClientPowerups =
 	// - Give player standard 12s of air after suit finishes
 	//----------------------------------------------------------------------
 	if (self.radsuit_finished > 0) {
-		self.air_finished = time + 12;		// don't drown
+		self.air_finished = time + WATER_AIR;		// don't drown
 
 
 	// sound and screen flash when items starts to run out
 		if (self.radsuit_finished < time + 3) {
 			if (self.rad_time == 1) {
 				sprint (self, "Air supply in Biosuit expiring\n");
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTSUIT2, 1, ATTN_NORM);
 				self.rad_time = time + 1;
 			}
 			if (self.rad_time < time) {
 				self.rad_time = time + 1;
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 			}
 		}
 		// Update inventory and timers
@@ -361,19 +376,19 @@ void() ClientPowerups =
 	// - Give player standard 12s of air after suit finishes
 	//----------------------------------------------------------------------
 	if (self.therm_finished > 0) {
-		self.air_finished = time + 12;		// don't drown
+		self.air_finished = time + WATER_AIR;		// don't drown
 
 	// sound and screen flash when items starts to run out
 		if (self.therm_finished < time + 3) {
 			if (self.therm_time == 1) {
 				sprint (self, "Thermal protection suit is expiring\n");
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTSUIT2, 1, ATTN_NORM);
 				self.therm_time = time + 1;
 			}
 			if (self.therm_time < time) {
 				self.therm_time = time + 1;
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 			}
 		}
 		// Update inventory and timers
@@ -389,13 +404,13 @@ void() ClientPowerups =
 		if (self.lavashield_finished < time + 3) {
 			if (self.lavashield_time == 1) {
 				sprint (self, "Aegis is falling apart!\n");
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTLSHIELD2, 1, ATTN_NORM);
 				self.lavashield_time = time + 1;
 			}
 			if (self.lavashield_time < time) {
 				self.lavashield_time = time + 1;
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 			}
 		}	
 		// Update inventory and timers
@@ -408,7 +423,7 @@ void() ClientPowerups =
 	// - Give player 12s of air after suit finishes
 	//----------------------------------------------------------------------
 	if (self.wetsuit_finished > 0) {
-		self.air_finished = time + 12;		// don't drown
+		self.air_finished = time + WATER_AIR;		// don't drown
 
 		// Produce particle bubbles
 		if (self.waterlevel == 3) {
@@ -450,13 +465,13 @@ void() ClientPowerups =
 			self.wetsuit_sound = time + 4;	// Stop breathing sound
 			if (self.wetsuit_time == 1) {
 				sprint (self, "Air supply in Wet suit expiring\n");
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTWETS2, 1, ATTN_NORM);
 				self.wetsuit_time = time + 1;
 			}
 			if (self.wetsuit_time < time) {
 				self.wetsuit_time = time + 1;
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 			}
 		}
 		// Update inventory and timers
@@ -474,13 +489,13 @@ void() ClientPowerups =
 		if (self.invincible_finished < time + 3) {
 			if (self.invincible_time == 1) {
 				sprint (self, "Protection is almost burned out\n");
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTPENT2, 1, ATTN_NORM);
 				self.invincible_time = time + 1;
 			}
 			if (self.invincible_time < time) {
 				self.invincible_time = time + 1;
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 			}
 		}	
 		// Update inventory and timers
@@ -496,13 +511,13 @@ void() ClientPowerups =
 		if (self.super_damage_finished < time + 3) {
 			if (self.super_time == 1) {
 				sprint (self, "Quad Damage is wearing off\n");
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTQUAD2, 1, ATTN_NORM);
 				self.super_time = time + 1;
 			}	  
 			if (self.super_time < time) {
 				self.super_time = time + 1;
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 			}
 		}
 		// Update inventory and timers
@@ -519,13 +534,13 @@ void() ClientPowerups =
 		if (self.blastbelt_finished < time + 3) {
 			if (self.blastbelt_time == 1) {
 				sprint (self, "Blast belt is failing\n");
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTBLASTBELT2, 1, ATTN_NORM);
 				self.blastbelt_time = time + 1;
 			}
 			if (self.blastbelt_time < time) {
 				self.blastbelt_time = time + 1;
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 			}
 		}	
 		// Update inventory and timers
@@ -540,13 +555,13 @@ void() ClientPowerups =
 		if (self.jumpboots_finished < time + 3) {
 			if (self.jumpboots_time == 1) {
 				sprint (self, "Jump Boots are wearing off\n");
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTJUMPBOOTS2, 1, ATTN_NORM);
 				self.jumpboots_time = time + 1;
 			}	  
 			if (self.jumpboots_time < time) {
 				self.jumpboots_time = time + 1;
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 			}
 		}
 		// Update inventory and timers
@@ -562,13 +577,13 @@ void() ClientPowerups =
 		if (self.sharpshoot_finished < time + 3) {
 			if (self.sharpshoot_time == 1) {
 				sprint (self, "Sharpshooter has almost gone\n");
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTSHARP2, 1, ATTN_NORM);
 				self.sharpshoot_time = time + 1;
 			}
 			if (self.sharpshoot_time < time) {
 				self.sharpshoot_time = time + 1;
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 			}
 		}	
 		// Update inventory and timers
@@ -584,13 +599,13 @@ void() ClientPowerups =
 		if (self.nailpiercer_finished < time + 3) {
 			if (self.nailpiercer_time == 1) {
 				sprint (self, "Nail Piercer is wearing off\n");
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTNAILP2, 1, ATTN_NORM);
 				self.nailpiercer_time = time + 1;
 			}	  
 			if (self.nailpiercer_time < time) {
 				self.nailpiercer_time = time + 1;
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 			}
 		}
 		// Update inventory and timers
@@ -606,13 +621,13 @@ void() ClientPowerups =
 		if (self.wing_finished < time + 3) {
 			if (self.wing_time == 1) {
 				sprint (self, "Boots of Levitation are fading\n");
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, "ambience/wingend.wav", 1, ATTN_NORM);
 				self.wing_time = time + 1;
 			}	  
 			if (self.wing_time < time) {
 				self.wing_time = time + 1;
-				stuffcmd (self, "bf\n");
+				Safe_stuffcmd (self, "bf\n");
 			}
 		}
 		// Update inventory and timers
@@ -621,6 +636,10 @@ void() ClientPowerups =
 
 	if (self.tome_finished < time) {
 		self.tome_finished = 0;
+	}
+
+	if (self.shroom_finished < time) {
+		if (self.shroom_finished > 0) ResetPowerShroom(self);
 	}
 
 	//------------------------------------------------------------------

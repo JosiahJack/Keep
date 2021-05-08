@@ -1,0 +1,39 @@
+==============================================================
+Filename               : Q1_Alruin.zip
+File                   : Alruin.mdl / Q1_Alruin.txt 
+Author                 : Madfox
+Email Adress           : catweazel@kpnhome.nl
+Description            : Quake 1 monster
+
+Additional Credits to  : ID Software
+
+==============================================================
+
+* Play Inormation *
+
+Level Name              : /
+Single Player           : /
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Monsters            : yes
+New Sounds              : /
+qC                      : /
+
+==============================================================
+
+* Construction *
+
+Base              : Made by form of the Darkyoung :
+                  : CthulhuWars.com.
+Build Time        : four weeks.
+Editor(s) Used    : Qmle Wally Quark4.07 AM2016
+Known Bugs        : gabs keep wobling in benefit of skin file.
+GameOption        : Almost qc moted.
+
+You may distribute  but keep file intact,  give me some credit
+when distributing, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 4 februari 2021  

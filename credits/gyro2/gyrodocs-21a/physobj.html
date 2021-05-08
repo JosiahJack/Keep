@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/physobj.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:43:52 GMT -->
+<head>
+	<title>GyroDocs - Physics Objects</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><a href="physobj.html" class="item item_selected">Physics Objects</a><div class="layout_submenu"><a href="physobj_aerodynamics.html" class="subitem">- Aerodynamics</a><a href="physobj_angleturb.html" class="subitem">- Angular Turbulence</a><a href="physobj_bouyancy.html" class="subitem">- Bouyancy</a><a href="physobj_hover.html" class="subitem">- Hovering</a><a href="physobj_resistance.html" class="subitem">- Motion Resistance</a><a href="physobj_thrust.html" class="subitem">- Thrust</a><a href="physobj_turbulence.html" class="subitem">- Turbulence</a></div><a href="forces.html" class="item">Force Entities</a><a href="advanced.html" class="item">Advanced Usage</a><a href="info.html" class="item">Further Information</a></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Physics Objects</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p>Gyro is broken down into two main systems - objects and forces. The object system is what actually moves and controls your entities, and includes subsystems like bouyancy, turbulence and thrust. The force system does not directly affect entities - it only passes information to the object system, which then applies the motion itself. To this end, every entity that you want Gyro to work with must first be set as a physics object, using the following functions:</p>
+
+<p>
+<strong>Gyro_Object_Activate(entity object, float mass)</strong><br />
+Informs Gyro that the specified entity is an active physics object, and is to be considered in every physics interaction. Mass is defined in arbitrary units, left to your choice - grams, kilograms or pounds, for example - but should be consistent throughout your mod. It will be used in nearly all calculations once set, and cannot be changed without first clearing all physical properties from the entity. If the object has been previously deactivated, this function will reactivate it and ignore the discard the new mass.</p>
+
+<p>
+<strong>Gyro_Object_Deactivate(entity object)</strong><br />
+Deactivates a physics object without removing physical properties. The entity will become invisible to Gyro, but can be reactivated, all properties intact, with the function above. You do not need to deactivate or clear the physics of an object before you call remove() on it.
+</p>
+
+<p>
+<strong>Gyro_Object_ClearPhysics(entity object)</strong><br />
+Strips all of physics settings from an entity, making it invisible to Gyro. The entity can be activated again with completely new properties.</p>
+
+<div class="hr"></div>
+
+<p>Once an entity has been declared as a physics object, it can be controlled by the following subsystems:</p>
+
+<p>
+<a href="physobj_aerodynamics.html">Aerodynamics</a><br />
+<a href="physobj_angleturb.html">Angular turbulence</a><br />
+<a href="physobj_bouyancy.html">Bouyancy</a><br />
+<a href="physobj_hover.html">Hovering</a><br />
+<a href="physobj_resistance.html">Motion resistance</a><br />
+<a href="physobj_thrust.html">Thrust</a><br />
+<a href="physobj_turbulence.html">Turbulence</a><br />
+</p></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/physobj.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:43:54 GMT -->
+</html>

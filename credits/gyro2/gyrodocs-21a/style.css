@@ -1,0 +1,40 @@
+
+/*--- primary layout -------------------------------------*/
+body {font-family:Verdana, Arial, Helvetica, sans-serif;font-size:12px;background-color:#A69977;padding:0;margin:15px 20px;}
+
+div#layout_leftcolumn {float:left;width:260px;}
+div#layout_rightcolumn {margin-left:280px;}
+
+
+/*--- left-hand menu -------------------------------------*/
+div#layout_menu {border:1px solid #000000;background-color:#444455;}
+div#layout_menu div.heading {padding:4px 6px;font-size:16px;font-weight:bold;color:#DDDDEE;border-bottom:1px solid #000000;}
+div#layout_menu div.layout_submenu {background-color:#E9EAE7;border-top:1px solid #444455;padding:1px 0px 2px 0px;}
+
+div#layout_menu a.item {background-color:#707080;color:#DDDDEE;display:block;font-weight:bold;text-decoration:none;padding:5px;width:248px;border-top:1px solid #444455;}
+div#layout_menu a.item:hover {background-color:#9999AA;color:#FFFFFF;}
+div#layout_menu a.item_selected {background-color:#9999AA;color:#FFFFFF;}
+div#layout_menu a.item_selected:hover {background-color:#9999AA;color:#FFFFFF;}
+div#layout_menu a.notop {border-top:0;}
+
+div#layout_menu div.layout_submenu a.subitem {color:#444455;display:block;font-weight:bold;text-decoration:none;padding:2px 6px 3px 6px;width:246px;}
+div#layout_menu div.layout_submenu a.subitem:hover {color:#4444FF;}
+div#layout_menu div.layout_submenu a.subitem_selected {color:#4444FF;}
+div#layout_menu div.layout_submenu a.subitem_selected:hover {color:#4444FF;}
+
+
+/*--- right-hand content -------------------------------------*/
+div#layout_content {border:1px solid #000000;background-color:#E9EAE7;}
+div#layout_content div.heading {padding:4px 6px;font-size:16px;font-weight:bold;color:#DDDDEE;border-bottom:1px solid #000000;background-color:#444455;text-align:right;}
+div#layout_content div.content {padding:6px 8px;line-height:1.3;}
+
+div#layout_content div.content p {margin:10px 0px 15px 0px;padding:0px;}
+div#layout_content div.content pre {font-family:"Courier New", Courier, monospace;background-color:#FFFFFF;padding:5px;border:1px dashed #000000;margin:0px 30px 15px 30px;}
+div#layout_content div.content code{font-family:"Courier New", Courier, monospace;}
+div#layout_content div.content em {font-style:normal;font-weight:normal;color:#4444FF;}
+div#layout_content div.content strong {font-weight:bold;font-style:normal;font-size:14px;color:#444455;}
+div#layout_content div.content div.hr{border:1px solid #444455;margin:20px 15px 20px 20px;}
+
+div#layout_content div.content a {color:#4444FF;text-decoration:none;font-weight:bold;}
+div#layout_content div.content a:hover {color:#4444FF;text-decoration:underline;font-weight:bold;}
+

@@ -1,0 +1,143 @@
+=========================
+
+QUAKE MONSTER PACK (v1.0)
+
+=========================
+
+
+File:	 monpack.zip
+Version: 1.0 (look for many future versions)
+Date: 	 7-27-97
+Author:	 Ben Cline
+Email:	 clineb@ix.netcom.com
+Credits: Mod credits at bottom,
+	 Bubbah (for not minding me giving his Snakeman a couple of new sounds), 
+	 Jonathan Daughtrey for graphic editing help 
+	 (http://www.planetquake.com/quakeplace),
+	 and a BIG thanks to Roscoe A. Sincero for help on the QC editing 
+	 (http://www.gameaholic.com/idgames/quakec)
+
+
+-=Please visit the Quake Monster Pack website=-
+       http://pw1.netcom.com/~clineb/quake
+
+
+
+* Overall *
+-----------
+Quake C      : yes
+New Sounds   : yes (a bunch + more)
+New MDL      : yeah, a shitload
+                - New monsters
+                - New weapons
+QC Files     : No (mail me if you want them, though)
+New BSP      : Nope
+
+
+
+* Description *
+---------------
+This patch adds several new monsters to the game, as well as two new weapons.
+(This patch is probably one of the first add-ons to contain this many new monsters, 
+than most Quake -C modifications, I must add). Not only that, but I basacally improved
+some of the new monster's sounds (ones that never had any new sounds to begin with).
+
+	The new monsters featured in this version are:
+
+		- Bazooka Babe 
+		- Blarg
+		- Chthon Scrag
+		- Drone
+		- Gremlin
+		- Lava Man
+		- Manga Babe
+		- Snakeman
+		- Willy The Spider 
+
+	The new weapons are:
+		
+		- Gatling Gun
+		- Flame Thrower (my new version)
+
+				*note: The Phantom Swordsman was supposed to be included in 
+				       this version, but I didn't get a chance to configure
+				       it, so I'll just wait until version 2.0 to add him.
+				       
+
+
+* Improvements *
+----------------
+
+- The Flame Thrower is now just strong enough to gib Zombies
+- The Chthon Scrag was too powerful before, so I lowered it's energy a bit
+- The Spider has two new sounds - when it fires its venom, and when you shoot it
+- The Snakeman has three new sounds - when its idle, when it spots you, and when it dies
+- The Manga Babe's "WAAAAA-HA!!" sound has been taken out, because it sounded really stupid
+- The Drone will make a "bleep-bleep" sound when it spots you (since it had no sight sound before)
+- There is a death notification (eg: Player was shot by a Grunt) for each fo the new monsters
+- There is a new console/startup background
+
+
+
+* How it works *
+----------------
+
+ - The Blarg replaces some of the Fiends
+ - The Chthon Scrag replaces some of the regular Scrags (mostly all)
+ - Drones replace some of the Enforcers
+ - The Snakeman and the Spider replace all of the Ogres
+ - The Spider also replaces some of the Tarbabys (aka:Spawn)
+ - The Lava Man replaces some of the Shamblers
+ - The Bazooka Babe replaces some Death Knights, and some Enforcers too
+ - The Manga Babe replaces some of the Grunts, and some knights too 
+ - Gremlins replace some of the Zombies, and some of the khights too	
+
+ - The Gatling Gun replaces all Supder Nailguns
+ - The Flame Thrower replaces all Grenade Launchers
+
+
+
+* Installation *
+----------------
+Make a directory in your Quake folder called "monpack".
+Then, unzip the file in that directory.
+After that, run:
+
+	c:\quake\quake -game monpack
+	
+		If it all worked correctly, you should see a new 
+		startup (console) screen, as well as a new demo.
+
+
+
+* Coming up in the next version *
+--------------------------------------------
+In the next version I'll include these new monsters:
+		
+		- The Phantom Swordsman (was previously intended for this version)
+		- The Goblin (possibly a new, and better skin)
+		- Cyberdemon (I hope someone will give it a better skin)
+		- The Dragon (with a killer new skin from Rogue's version)
+		- The Electric eel
+
+Also, I'll include these new weapons:
+
+		- The Plasma Gun (Doom version, WILL add better sounds)
+		- Proximety Mines
+		- Possibly a whole lot more, as I find the QC files
+
+
+
+* Model credits *
+-----------------
+Tritian, PHLIPT, and Christopher Bolin - for the Gatling Gun  
+Ken Turner - for Willy The Spider,
+Bubbah - for the Snakeman, Bazooka Babe, and Blarg,
+Jacob Fenwick, Robin Ball, and Jim Dodge - for the Drone,
+BrAdeAlDo - for the Chthon Scrag,
+Ludovic Texier - for the Manga Babe,
+Ritual (formely known as Hipnotic) Entertainment - for the Gremlin
+and
+Rogue Entertainment - for the Lava Man
+
+

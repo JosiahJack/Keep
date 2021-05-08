@@ -658,6 +658,7 @@ void() monster_dprince =
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = self.resist_rockets = 0;
 	self.resist_cells = 0.75;
+	self.resist_plasma = 0.75;
 	self.reflectlightning = TRUE;	// Reflect lightning strikes
 	self.reflectplasma = TRUE;		// Reflect plasma projectiles
 

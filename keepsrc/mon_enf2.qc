@@ -697,7 +697,7 @@ Void function monster_enf2();
     remove(self);
     exit;
     }
-  total_monsters = total_monsters + 1;
+
   precache_model2("progs/mark3.mdl");
   precache_model2("progs/h_enf2.mdl");
   precache_sound2("enforcer/death1.wav");

@@ -1,0 +1,225 @@
+/****************************************************************************/
+/*                                                                          */
+/*    project    : S.E.A.L. sQuad       (c) 1997 William van der Sterren    */
+/*                                                                          */
+/*      file     : waypoint.hqc "definitions for waypoint system"           */
+/*      author(s): William van der Sterren                                  */
+/*      version  : 0.5                                                      */
+/*                                                                          */
+/*      date (last revision):  Sep 08, 97                                   */
+/*      date (creation)     :  Sep 08, 97                                   */
+/*                                                                          */
+/*                                                                          */
+/*      revision history                                                    */
+/*      -- date ---- | -- revision ---------------------- | -- revisor --   */
+/*                   |                                    |                 */
+/*                                                                          */
+/****************************************************************************/
+
+/* documentation
+
+   waypoints define path for sQuad bots, and instruct these bots how
+   to behave.
+
+   a waypoint is defined by:
+   - classname  == "waypoint"
+   - name          unique name for the waypoint, used to define
+                   previous and next waypoints (see below)
+
+                   A LEVEL SHOULD AT LEAST CONTAIN TWO WAYPOINTS,
+                   NAMED "start" AND "exit" respectively.
+
+                   waypoint name is stored in netname
+
+   - number        waypoint number, should be a unique integer 99 < n < 1000;
+                   the hundreds in waypoint number (n % 100) will be used
+                   in the near future to define areas for the bots, so
+                   the bots will be able to patrol inside areas. It is
+                   advised to give neighbouring areas area numbers that
+                   are close together (4XX, 3XX and 2XX, for example).
+
+                   waypoint number is stored in ammo_shells
+
+   - previous waypoint,
+   - next waypoint
+                   sQuad bots travel either in positive or negative direction.
+                   The travel direction determines what waypoint a bot
+                   will walk to after visiting a waypoint.
+                   If they travel in negative direction, bots will walk
+                   towards a waypoint's previous waypoint. If they travel
+                   in positive direction, bots will walk towards a waypoint's
+                   next waypoint.
+                   It is allowed (and sometimes necessary) to set a waypoint's
+                   previous and next waypoint to the same waypoint.
+                   If is not allowed to provided invalid waypoint references
+                   for previous or next waypoint.
+
+                   previous waypoint is stored in noise1
+                   next waypoint is stored in noise2
+
+   - button to be triggered [optional]
+                   sQuad bots sometimes have trouble to press a button;
+                   In those cases, define a waypoint close to the button
+                   that triggers the button if the bot visits the waypoint.
+
+                   button to be triggered is stored in noise3
+                   [not yet implemented]!
+
+   - program bot waypoint visiting direction
+                   for some waypoint nodes, for example the start and exit
+                   waypoints, as well as for dead-end waypoints, it is
+                   necessary to set the waypoint visiting direction.
+
+                   typically, start defines positive direction, exit
+                   defines negative direction, other waypoints define
+                   both positive and negative direction!
+
+                   ALL WAYPOINT, EXCEPT FOR start, exit, AND dead-end
+                   WAYPOINTS SHOULD DEFINE BOTH POSITIVE AND NEGATIVE
+                   VISITING DIRECTIONS.
+
+                   waypoint visiting direction is stored in spawnflags[01]
+
+   - script direction
+                   scripting behavior, attached to waypoints, typically
+                   assembly and spread points
+
+   - program bot formation behavior
+                   at some waypoints, a bot sQuad should (re)assemble.
+                   To enforce this assembly, a waypoint can define a
+                   formation.
+                   Currently, two formations are available:
+
+                      // square formation,
+                      //                ^
+                      //                3
+                      //       <-  <1       2>
+                      //                4
+                      //                v
+
+                    and:
+
+                      // line formation
+                      //             <- 180 ->
+                      //       <-  <1  2   3    4>
+                      //             v    v
+
+                   At the time of writing, a bot sQuad assembles at
+                   most one time at any assembly point. This is planned
+                   to change, using a time out.
+
+                   More formations are also planned
+
+                   The formation is stored in spawnflags[23]
+
+
+   - program bot entry/exit behavior (spread out)
+                   at some waypoints, a bot sQuad enters or leaves a
+                   room. To have the bots react more realistically
+                   (and tactically), waypoints may instruct the bots
+                   to spread out if they visit the waypoint.
+                   The scripting direction flags determine when
+                   spread out is to occur.
+
+                   The formation is stored in spawnflags[78]
+
+   - offset distance for spread out/waypoint assembly
+
+                   The formation is stored in ammo_cells
+
+  WorldCraft 1.5 sw entity definition file:
+    //
+    // Navy SEAL sQuad bot waypoint entities
+    //
+    @PointClass size(64 64 32) = waypoint : "Waypoint"
+    [
+            spawnflags(flags) =
+            [
+                    1 : "+ Direction"      : 1
+                    2 : "- Direction"      : 1
+                    4 : "+ Script"         : 0
+                    8 : "- Script"         : 0
+                   16 : "Line Formation"   : 0
+                   32 : "Square Formation" : 0
+                   64 : "Reserved"         : 0
+                  128 : "Spread"           : 0
+            ]
+            netname(string)      : "Waypoint name" : "start"
+            ammo_shells(integer) : "Waypoint nr. <area><id>" : 101
+            ammo_cells(integer)  : "Assembly Offset"         : 0
+            noise1(string)       : "Previous waypoint" : "REQUIRED"
+            noise2(string)       : "Next waypoint" : "REQUIRED"
+            noise3(string)       : "Button to be pressed" : ""
+    ]
+
+*/
+//
+// Waypoint initialization, creation and information
+//
+
+// prototypes - spawn function
+void   ()                               waypoint;
+
+// prototypes - for use in other modules
+void   ()                               Waypoint_Precache;
+void   ()                               Waypoint_Init;
+entity (entity member)                  Waypoint_Nearest;
+entity (entity member)                  Waypoint_NearestInContents;
+entity (entity waypoint)                Waypoint_Next;
+entity (entity waypoint)                Waypoint_Previous;
+void   ()                               Waypoint_Touch;
+void   (entity waypoint, float visit)   Waypoint_UpdateLastVisitTime;
+float  (entity waypoint)                Waypoint_GetTimeSincePreviousVisit;
+entity (float  waypointnumber)          Waypoint_Get;
+entity (string waypointname)            Waypoint_GetByName;
+float  (entity waypoint)                Waypoint_GetNumber;
+float  (entity waypoint)                Waypoint_GetVisitingDirection;
+void   (string waypoint, float flag,
+        float  offset)                  Waypoint_AddScript;
+float  (entity waypoint, float dir)     Waypoint_IsAssemblyLocation;
+float  (entity waypoint, float dir)     Waypoint_IsSpreadLocation;
+float  (entity waypoint)                Waypoint_GetAssemblyYaw;
+float  (entity waypoint)                Waypoint_GetAssemblyFormation;
+float  (entity waypoint)                Waypoint_GetAssemblyOffset;
+float  (entity waypoint, entity viewer) Waypoint_IsVisible;
+float  ()                               Waypoint_AreAvailable;
+
+// prototypes - debugging
+void ()                                 Waypoint_ToggleVisibility;
+void (entity waypoint)                  Waypoint_Show;
+void (entity waypoint)                  Waypoint_Hide;
+void ()                                 Waypoint_PlotPosition;
+
+
+// prototypes - internal use only
+
+// constants - types
+float WAYPOINT_NORMAL             =  0;
+
+// constants - flags
+float FL_WAYPOINT_DIR_POS         =  1;
+float FL_WAYPOINT_DIR_NEG         =  2;
+float FL_WAYPOINT_SCRIPT_POS      =  4;
+float FL_WAYPOINT_SCRIPT_NEG      =  8;
+float FL_WAYPOINT_ASSEMBLY_LINE   = 16;
+float FL_WAYPOINT_ASSEMBLY_SQUARE = 32;
+float FL_WAYPOINT_SPREAD          =128;
+
+
+// constants - defs
+float WAYPOINT_REACHEDDISTANCE   =  32;     // max. distance to reach waypoint
+float WAYPOINT_DEBUG             =   0;     // toggle debugging visualization
+                                            // of waypoints for squad members
+float WAYPOINT_BOTH_DIRS         =   0;     // can be traversed in both dirs
+float WAYPOINT_POSITIVE_DIR_ONLY =   1;     // traverse to next only
+float WAYPOINT_NEGATIVE_DIR_ONLY =   2;     // traverse to prev only
+
+
+// constants - impulses
+float WAYPOINT_PLOTPOSITION      = 120;
+float WAYPOINT_TOGGLEVISIBILITY  = 121;
+
+
+// globals
+float  waypointsVisible;
+

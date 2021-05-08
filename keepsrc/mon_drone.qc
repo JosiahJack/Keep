@@ -426,6 +426,7 @@ void() monster_drone =  {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = 0; self.resist_cells = 0.5;
+	self.resist_plasma = 0.5;
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);

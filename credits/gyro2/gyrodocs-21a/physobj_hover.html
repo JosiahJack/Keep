@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/physobj_hover.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+<head>
+	<title>GyroDocs - Hovering</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><a href="physobj.html" class="item">Physics Objects</a><div class="layout_submenu"><a href="physobj_aerodynamics.html" class="subitem">- Aerodynamics</a><a href="physobj_angleturb.html" class="subitem">- Angular Turbulence</a><a href="physobj_bouyancy.html" class="subitem">- Bouyancy</a><a href="physobj_hover.html" class="subitem subitem_selected">- Hovering</a><a href="physobj_resistance.html" class="subitem">- Motion Resistance</a><a href="physobj_thrust.html" class="subitem">- Thrust</a><a href="physobj_turbulence.html" class="subitem">- Turbulence</a></div><a href="forces.html" class="item">Force Entities</a><a href="advanced.html" class="item">Advanced Usage</a><a href="info.html" class="item">Further Information</a></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Hovering</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p><strong>Gyro_Object_SetHover(entity object, float power, float distance, float tap)</strong><br />
+Hovering objects are pushed upwards by the ground immediately below them, much like a hovercraft is kept afloat by the cusion of air underneath it. The power argument represents the full strength of the hover at the object's origin, which will diminish linearly for the given distance argument. The power is, as usual, relative to the mass of the object and therefore must exceed it if the object is to become airborne. Tracelines are used to determine the strength of the hover and the direction the object is pushed in, which will cause the object to respond realistically to uneven and broken ground. The amount of traces used every iteration is set by the tap argument and should ideally range between 5-15, depending on the required speed and accuracy.</p>
+
+<p><strong>Gyro_Object_RemoveHover(entity object)</strong><br />
+Removes all hover-related properties from a given object.</p></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/physobj_hover.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+</html>

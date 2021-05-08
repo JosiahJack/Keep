@@ -220,6 +220,7 @@ float ID_GUNGNIR = 28;
 float BBOX_ARMAGON = 23;	// -48 -48 -24, 48 48 84
 float BBOX_VERMIS = 24;		// -64 -64 -512, 64 64 256
 float ARMOR_BLUE = 2;			// Display a blue armour
+// Normal max ammo counts:
 float AMMO_MAXSHELLS = 200;		// Maximum ammo the player can carry
 float AMMO_MAXNAILS = 200;		// Shells use to be 100
 float AMMO_MAXROCKETS = 100;
@@ -232,6 +233,20 @@ float AMMO_MAXBOLTS = 100;
 float AMMO_MAXBLOOD = 100;
 float AMMO_MAXVOID = 100;
 float AMMO_MAXMANA = 100;
+
+.float maxshells;		// Maximum ammo the player can carry
+.float maxnails;
+.float maxrockets;
+.float maxcells;
+.float maxlavanails;
+.float maxmultirockets;
+.float maxplasma;
+.float maxpoison;
+.float maxbolts;
+.float maxblood;
+.float maxvoid;
+.float maxmana;
+
 float AMMO_POISON_LGR = 10;
 float AMMO_POISON_SML = 5;
 float AMMO_BOLTS_LGR = 16;
@@ -374,6 +389,17 @@ float AM_POISON = 8;
 float AM_BLOODCRYSTALS = 9;
 float AM_VOIDSHARDS = 10;
 float AM_ELEMENTAL = 11;
+float AM_ACID = 12;
+float AM_FIRE = 13;
+float AM_COLD = 14;
+
+.float		lightning_timer;	// Cool down for LG resist effect
+
+// Projectile resistance (% protection) for monsters
+.float resist_shells;
+.float resist_nails;
+.float resist_rockets;
+.float resist_cells;
 .float resist_lava_nails;
 .float resist_multi_rockets;
 .float resist_plasma;
@@ -382,6 +408,14 @@ float AM_ELEMENTAL = 11;
 .float resist_bloodcrystals;
 .float resist_voidshards;
 .float resist_elemental;
+
+// elemental resistance ---------------Drake------------------------------------------
+.float      resist_acid;    // slime, acid.
+// .float      resist_rocket;  // damage caused by rocket or railgun. duplicate of resist_rockets
+.float      resist_fire;    // lava, flames.
+// .float      resist_light;   // electrical attacks such as lightning bolts. duplicate of resist_cells
+.float      resist_cold;    // ice.
+
 .float save_shells;
 .float save_nails;
 .float save_rockets;
@@ -394,6 +428,13 @@ float AM_ELEMENTAL = 11;
 .float save_bloodcrystals;
 .float save_voidshards;
 .float save_elemental;
+.float save_acid;
+.float save_fire;
+.float save_cold;
+
+.float aura_finished;
+.float aura_type;
+.float water_blessed;
 
 // Monster attachments (like carts for ogles, or pushables, and other misc_model's)
 .vector attachment_offset;
@@ -424,3 +465,37 @@ float PHYS_GYRO_HOVER		 = 8;
 float PHYS_GYRO_THRUST		 = 16;
 float PHYS_GYRO_AERODYNAMIC	 = 32;
 float PHYS_GYRO_ANGTURBULENCE= 64;
+
+.float m_iRoomType;
+.float m_iRadius;
+.float fov;
+
+// Copper has a lot of nice changes.  Some people don't like them.  Sometimes you don't want all of them.
+// Well, take your pick.  Enable however many of them you want.
+.float copperoptions;
+float COPPER_SHOTGUN_PIERCE 		= 1;
+float COPPER_IMPRECISE_VOREBALLS 	= 2;
+float COPPER_SEMI_Z_AWARE_OGRES 	= 4;
+float COPPER_ONE_HIT_AXE_ZOMBIES 	= 8;
+float COPPER_DOWNED_ZOMBIE_GIB 		= 16;
+float COPPER_TURRET_ENFORCERS		= 32;
+float COPPER_TARBABY_JUMP_CALMING	= 64;
+float COPPER_CHTHON_SPD_PROGRESSION = 128;
+float COPPER_FORGETFUL_INFIGHTERS	= 256;
+float COPPER_COOP_PARTY_ITEMSHARE	= 512;
+float COPPER_COOP_BACKPACK_PROTECT	= 1024;
+float COPPER_COOP_MEGAH_PARTY_HEAL	= 2048;
+float COPPER_FAST_NAILGUN_NAILS		= 4096;
+float COPPER_TWOSHOT_PERFORATOR		= 8192;
+
+.float doomoptions;
+float DOOM_SHOTGUNS_KNOCKBACK		= 1;
+float DOOM_PLASMAGUN				= 2;
+
+.float spirit_blessed;
+.float air_blessed;
+float SPAWNFLAG_LASER = 2;
+.float shroom_finished;
+float SHROOM_JUMP_BOOST = 200;
+.entity legsattachment;
+.float flight_finished;

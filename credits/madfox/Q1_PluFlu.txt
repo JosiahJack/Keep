@@ -1,0 +1,44 @@
+=================================================================================
+Title                  : Q1_PluFlu.zip
+Filename               : Plumivitius Fluctuaris
+Author                 : Madfox
+Email Adress           : catweazel@kpnmail.nl
+Description            : New Quake 1 model
+
+Additional Credits to  : ID Software
+
+=================================================================================
+
+* Play Inormation *
+
+Level Name              : Dionaea muscipula
+Single Player           : /
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Models              : yes
+New Sounds              : yes
+qC                      : /
+
+=================================================================================
+
+* Construction *
+
+Base              : New model for a Dionaea muscipula, Venus Trap Fly.
+Build Time        : 12 houres
+Editor(s) Used    : PSP AM2014 QMLE CORELDRAW5   
+Known Bugs        : /
+Specific          : plumivitius fluctuaris is a standing model.
+<                 : Q1_VEn_Fly.txt/this file.   .
+Thanks            : Third proof. Mail Franz Xavier for the idea.
+GameOption        : Compile te carnivor.qc, name the monster_carnivor. 
+                
+
+Live long and propsper! Make the Quake1 Universe get bigger and bigger!
+
+================================================================================= 
+
+Madfox 10 juli 2017
+
+=================================================================================
+

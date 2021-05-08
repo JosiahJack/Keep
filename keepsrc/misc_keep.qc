@@ -224,7 +224,7 @@ void() W_Bomb = {
 		self.cross_finished = 0;
 		self.cross_time = 0;
 		self.cross_start = 2;
-		stuffcmd(self, "v_cshift 0 0 0 0\n");
+		Safe_stuffcmd(self, "v_cshift 0 0 0 0\n");
 	}
 	T_RadiusDamage(bomb, self, 512, self,DAMAGEALL);
 	T_Damage(self, self, self, -666,DAMARMOR);
@@ -409,4 +409,24 @@ void() misc_fan = {
 	self.estate_off = misc_fan_off;
 	self.walkframe = 0;
 	misc_fan_run();
+};
+
+
+// Rotating fan hack from tfl4 by Anders Persson
+.vector r_wall;
+.float r_wall_x_spin;
+.float r_wall_y_spin;
+.float r_wall_z_spin;
+
+void() rotating_wall = {
+	setmodel(self, self.model);
+	self.solid = SOLID_BBOX;
+	self.movetype = MOVETYPE_FLY;
+	self.classname = "r_wall";
+	self.origin_x = self.r_wall_x;
+	self.origin_y = self.r_wall_y;
+	self.origin_z = self.r_wall_z;
+	self.avelocity_x = self.r_wall_x_spin;
+	self.avelocity_y = self.r_wall_y_spin;
+	self.avelocity_z = self.r_wall_z_spin;
 };

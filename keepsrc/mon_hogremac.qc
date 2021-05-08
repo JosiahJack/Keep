@@ -189,6 +189,7 @@ void() hogre_JumpTouch =
 	if ( CanDamage(other, self) ) {
 		if ( vlen(self.velocity) > 300 ) {
 		  ldmg = 20 + 10*random();
+			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
 			T_Damage (other, self, self, ldmg, DAMARMOR);	
 			spawn_touchblood (self, self.enemy, ldmg*3);
 		}

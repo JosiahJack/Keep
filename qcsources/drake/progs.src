@@ -1,0 +1,222 @@
+//- - - - - - - - - - - - - - - - - - -
+// IMPORTANT!
+// FrikQcc, FTEqcc, or some other enhanced QC compiler with optimization
+// options is required.  This is because an unoptimized progs.dat
+// compiled from the Drake mod code has too many 'numpr_globals'.
+//
+// Instructions may be found at the bottom of this file.
+//
+// Now to the rest of progs.src.
+//- - - - - - - - - - - - - - - - - - -
+../progs.dat
+
+// DEFS /==================//
+defs.qc         // Quake defs.  Named '!datasys.qc' in Nehahra source.
+const.qc        // Preset globals.
+tag.qc          // FIXME:  Merge with summon.qc.
+global.qc       // Global variables.
+entity.qc       // Entity fields.  Named '!objdata.qc' in Nehahra source.
+proto.qc        // Function prototypes.
+//- DarkPlaces -
+//dpextensions.qc
+//sv_user.qc
+// FRIKBOT /===============//
+// Insert map_*.qc here.
+
+bot.qc
+bot_way.qc
+bot_fight.qc
+bot_ai.qc
+bot_misc.qc
+bot_phys.qc
+bot_move.qc
+//bot_ed.qc
+// GENERAL /===============//
+subs.qc
+copy.qc
+math.qc
+check.qc
+aim.qc
+box.qc
+fx.qc
+// COMBAT /================//
+align.qc
+death.qc
+armor.qc
+combat.qc
+blood.qc
+hp.qc
+reflect.qc
+// ITEMS /=================//
+ambient.qc
+zero.qc
+triggers.qc
+func.qc
+misc.qc
+cache.qc
+world.qc
+respawn.qc
+//- - Weapons - -
+//rod.qc
+war.qc
+weapons.qc      // basic rockets, spikes, shotgun, and melee.
+fire.qc
+light.qc        // lightning bolts and plasma orbs
+ice.qc
+wind.qc
+wand.qc
+xbow.qc
+mirv.qc
+//drill.qc
+//rail.qc
+hook.qc
+cool.qc
+thor.qc     // Mjolnir
+shot.qc
+mong.qc     // Guns for monsters.
+//- - - - - - - -
+bloodcb.qc
+gibs.qc
+items.qc
+items2.qc
+ammo.qc
+give.qc
+chest.qc        // Should be in misc.qc, but needs to be compiled after items.
+// PLAYER /================//
+swap.qc         // This or swap.dp, NOT both!
+//swapdp.qc       // DarkPlaces version of 'swap.qc'.
+pow.qc
+player.qc
+baha.qc         // For players in dragon form.
+client.qc
+impulse.qc
+pets.qc         // More impulses.
+// ZERSTORER /=============//
+cutscene.qc
+hostage.qc
+zer.qc          // Zerstorer triggers and functions.
+zbbeg.qc
+// HIPNOTIC /==============//
+// Note:  Many files have been absorbed by others.
+// Only huge isolated chunks (such as rotating)
+// remain in their own file.
+rotate.qc
+spawn.qc
+tesla.qc
+// TRONYN /================//
+rogue.qc        // Mission Pack #2 stuff used in merger.
+tronyn.qc
+// MONSTERS /==============//
+id.qc           // identification numbers, not ID software.
+goal.qc
+ai.qc
+doom.qc
+revive.qc
+monsters.qc
+gorn.qc         // Decapitation and other kills.
+soul.qc
+
+ogre.qc
+demon.qc
+shambler.qc
+knight.qc
+army.qc         // Renamed from 'soldier.qc'
+wizard.qc
+dog.qc
+zombie.qc
+chthon.qc       // Renamed from 'boss.qc'
+
+tarbaby.qc      // Registered
+hknight.qc      // Registered
+fish.qc         // Registered
+shalrath.qc     // Registered
+enforcer.qc     // Registered
+oldone.qc       // Registered
+
+armagon.qc      // Mission Pack #1
+gremlin.qc      // Mission Pack #1
+//mine.qc         // Mission Pack #1 (spike mine)
+scor.qc         // Mission Pack #1
+
+dragon.qc       // Mission Pack #2
+eel.qc          // Mission Pack #2
+guardian.qc     // Mission Pack #2
+//sword.qc        // Mission Pack #2
+wrath.qc        // Mission Pack #2 / Nehahra (wraith)   fixme:  invin. bug
+wrath2.qc       // Mission Pack #2
+
+archer.qc       // Hexen II
+imp.qc          // Hexen II
+necro.qc        // Hexen II (sort of...)
+skullwiz.qc     // Hexen II
+spider.qc       // Hexen II
+yakman.qc       // Hexen II: PoP
+
+//drole.qc        // Quoth
+//gaunt.qc        // Quoth
+//gug.qc          // Quoth
+//vermis.qc       // Quoth
+// No voreling -- spiders are close enough.
+
+//
+axeman.qc       // Custom (Coven of Ebony)
+baron.qc        // Custom (Nehahra)
+cyber.qc        // Custom (cyber.zip/Doom2)
+//drone.qc        // Custom (misc)
+golem.qc        // Custom (Drake)
+nemesant.qc     // Qtest (Zerstorer)
+ranger.qc       // Custom (Drake)
+ryu.qc          // Qtest (Dragons)
+shade.qc        // Qtest (Dragons)
+//turret.qc       // Custom (AirQuake/OUM)
+vomitus.qc      // Qtest (Nehahra)
+//
+
+// FIXME:  Put unused monsters here.
+
+summon.qc
+doomcube.qc
+//q.qc
+dmsp.qc
+//h.qc
+hack.qc
+
+//- - - - - - - - - - - - - - - - - - -
+// FTE QuakeC Compiler Instructions
+//
+// I use FTEqccgui (build 3343).
+//
+// Goto to Options
+// * Click 'O3'.
+// * Uncheck 'assignments'.  (Optional, but see 'M_Select' in 'mong.qc'.)
+// * Click 'Apply'.
+// Now to the main window...
+// * Click 'Compile'.
+//- - - - - - - - - - - - - - - - - - -
+// FrikQcc Instructions
+//
+// NOTE:  Unmodified dpextensions.qc does NOT compile!
+// Use fteqcc instead for DarkPlaces progs.
+//
+// I use FrikQcc v2.5 (NOT v2.6 or v2.7) to compile the progs.
+//
+// USE THE FOLLOWING OPTIONS:
+// /Ot = eliminate temps (temporary variables)
+// /Oi = shorten ifs
+// /Op = non-vector parms
+// /Oc = eliminate constant defs/names
+// /Od = eliminate duplicate defs
+// /Os = hash lookup in CopyString
+// /Ol = eliminate local, static and immediate names
+//
+// Do *NOT* use the following:
+// /On = eliminate unneeded function names (breaks saved games)
+// /Of = strip filenames (random crashing)
+// /Ou = remove unreferenced variable defs/names (random crashing?)
+// /O2 = use all optimizations (breaks stuff as above)
+//
+// Command should look something like this:
+//   frikqcc /Ot /Oi /Op /Oc /Od /Os /Ol
+//- - - - - - - - - - - - - - - - - - -
+
+//===========================/  END OF FILE  /===========================//

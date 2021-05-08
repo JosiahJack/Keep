@@ -454,15 +454,23 @@ void()	dfury_boss_die17	=[	$death17,	dfury_boss_die17] {};
 
 // creates as many gib-sets as defined in cvar 'gibsmultiplier'
 void(float maxgibs, float gibscounter) producegibs_dfury_boss =	{
-	if (gibscounter >= maxgibs)
+	if (gibscounter >= maxgibs) {
 		return;
-	else {
-		ThrowIt ("progs/gib1.mdl", self.health, GIBx_GIB);
-		ThrowIt ("progs/q15/gib_4.mdl", self.health, GIBx_GIB);
-		ThrowIt ("progs/q15/gib_5.mdl", self.health, GIBx_GIB);
-		ThrowIt ("progs/q15/gib_knfoot_l.mdl", self.health, GIBx_GIB);
-		ThrowIt ("progs/q15/gib_knfoot_r.mdl", self.health, GIBx_GIB); 
-		ThrowIt ("progs/q15/w_dknightsword.mdl", self.health, GIBx_GIB);  	
+	} else {
+		// Bit hacky :\
+		self.gibtype = GIBTYPE_BLOOD;
+		ThrowGib(1, 1);
+		self.gib1mdl = "progs/q15/gib_4.mdl";
+		ThrowGib(11, 1);
+		self.gib1mdl = "progs/q15/gib_5.mdl";
+		ThrowGib(11, 1);
+		self.gibtype = GIBTYPE_METAL;
+		self.gib1mdl = "progs/q15/gib_knfoot_l.mdl"; 	
+		ThrowGib(11, 1);
+		self.gib1mdl = "progs/q15/gib_knfoot_r.mdl"; 	
+		ThrowGib(11, 1);
+		self.gib1mdl = "progs/q15/w_dknightsword.mdl";
+		ThrowGib(11, 1);
 	}
 	gibscounter = gibscounter + 1;
 	producegibs_dfury_boss (maxgibs, gibscounter);
@@ -658,7 +666,8 @@ void()	dfury_boss_JumpTouch = {
 	if (other.takedamage) {
 		if ( vlen(self.velocity) > 100 ) {
 			ldmg = 50 + 10*random();	// default 40
-			if (other.classname == "player") T_Damage (other, self, self, 40, DAMARMOR);	
+			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
+			if (other.classname == "player") T_Damage (other, self, self, ldmg, DAMARMOR);	
 		}
 	}
 

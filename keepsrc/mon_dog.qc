@@ -200,8 +200,7 @@ void() dog_atta8	=[	$attack8,	dog_run1	] {ai_charge(10);};
 //============================================================================
 // range - springy feet
 //============================================================================
-void() Dog_JumpTouch =
-{
+void() Dog_JumpTouch = {
 	local	float	ldmg;
 
 	if (self.health < 1) return;
@@ -220,6 +219,7 @@ void() Dog_JumpTouch =
 		if ( vlen(self.velocity) > 300 ) {
 			ldmg = 10 + 10*random();
 			if (self.classname == "monster_hell_hound") ldmg = ldmg + 10;
+			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
 			T_Damage (other, self, self, ldmg, DAMARMOR);	
 			// Spawn some touch blood (no explicit direction)
 			spawn_touchblood (self.enemy, self.enemy, ldmg*3);

@@ -10,7 +10,7 @@ float() fangel_check_incoming =  {
 
    if ((range(self.enemy) <= RANGE_MELEE))  return(FALSE);
 
-   if ( (fov ( self, self.enemy, 30.00000) && ((self.enemy.attack_finished + 0.75000) > time)) ) {
+   if ( (infront(self.enemy) && ((self.enemy.attack_finished + 0.75000) > time)) ) {
       self.camera_time = 0.00000;
       self.think = fangel_block1;
       return(TRUE);
@@ -75,7 +75,7 @@ void  ()fangel_find_spot =  {
       vec = normalize ( vec);
       vec = (self.enemy.origin + (vec * radius));
       vec_z = ((vec_z + 20 + (random() * 20)) + self.enemy.view_ofs_z);
-      tracebox ( self.origin, vec, self.mins, self.maxs, FALSE, self);
+      tracebox ( self.origin, self.mins, self.maxs, vec, FALSE, self);
       if ( (trace_fraction == 1.00000) ) {
          dist = (self.origin_z - vec_z);
          if ( (dist < -20.00000) ) {
@@ -293,12 +293,11 @@ void() fangel_blockthink = {
 
    if (self.velocity != '0.00000 0.00000 0.00000') self.velocity = (self.velocity * 0.70000); // Woah nelly, slow er on down there
 
-
    //check_z_move(3.00000);
    if (self.camera_time) {
       self.camera_time -= 1.00000; // hang on until 
    } else {
-      if ( (fov ( self, self.enemy, 30.00000) && ((self.enemy.attack_finished + 0.75000) > time)) ) {
+      if ( (infront(self.enemy) && ((self.enemy.attack_finished + 0.75000) > time)) ) {
          self.camera_time += 1.00000;
       }
    }
@@ -567,26 +566,6 @@ void() fangel_painframes9 = [141, fangel_painframes10] {fangel_paincheck();};
 void() fangel_painframes10 = [142, fangel_painframes11] {fangel_paincheck();};
 void() fangel_painframes11 = [143, fangel_painframes12] {fangel_paincheck();};
 void() fangel_painframes12 = [144, fangel_painframes1] {fangel_fly1();};
-
-// void() fangel_lightning = {
-	// local vector org;
-
-	// org = (self.origin - '0.00000 0.00000 5.00000');
-	// traceline ( org, ((self.enemy.absmin + self.enemy.absmax) * 0.50000), TRUE, self);
-	// if ( (trace_fraction == 1.00000) ) {
-		// self.effects |= EF_MUZZLEFLASH;
-		// WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		// WriteByte (MSG_BROADCAST, TE_BEAM);
-		// WriteEntity (MSG_BROADCAST, self);
-		// WriteCoord (MSG_BROADCAST, org_x);
-		// WriteCoord (MSG_BROADCAST, org_y);
-		// WriteCoord (MSG_BROADCAST, org_z);
-		// WriteCoord (MSG_BROADCAST, self.origin_x);
-		// WriteCoord (MSG_BROADCAST, self.origin_y);
-		// WriteCoord (MSG_BROADCAST, self.origin_z + 16);
-		// LightningDamage ( self.origin, trace_endpos, self, 3.00000);
-	// }
-// };
 
 void() fangel_fly1 = [185, fangel_fly2] {ai_face();};
 void() fangel_fly2 = [186, fangel_fly3] {ai_face();};

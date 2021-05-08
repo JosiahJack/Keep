@@ -1,0 +1,2446 @@
+//======================================================================
+// ENTITIES FGD file
+// 
+// MOD    : AD v1.50P1 - (Arcane Dimensions)
+// Date   : 18th December 2016
+// Author : Simon "Sock" OCallaghan
+// Website: www.simonoc.com
+// Editor : Worldcraft, Jackhammer, TrenchBroom 1/2
+//
+//======================================================================
+
+@baseclass = Appearflags [
+	spawnflags(Flags) =
+	[
+		256 : "Not in Easy" : 0 : "Will not spawn for EASY skill"
+		512 : "Not in Normal" : 0 : "Will not spawn for NORMAL skill"
+		1024 : "Not in Hard" : 0 : "Will not spawn for HARD skill"
+		2048 : "Not in Deathmatch" : 0 : "Will not spawn for DEATHMATCH skill"
+	]
+]
+@baseclass = targetname [ targetname(target_source) : "targetname" ]
+@baseclass = target [ target(target_destination) : "target" ]
+@baseclass = target2 [ target2(target_destination) : "target2" ]
+
+
+//======================================================================
+//
+// WORLDSPAWN
+//
+//======================================================================
+@SolidClass = worldspawn : "World entity"
+[
+	//----------------------------------------------------------------------
+	worldtype(choices) : "World Type" : 0 = [
+		0 : "Medieval"
+		1 : "Runic (metal)"
+		2 : "Present (base)"
+	]
+	wad(string) : "Wads" : "" : "list of Wad Files used by compiler (; for seperation)"
+	message(string) : "Level Name"
+	sounds(integer) : "CD track" :  : "CD track to automatically play"
+
+	//----------------------------------------------------------------------
+	light(integer) : "Ambient light" :  : "Set a global minimum light level of 'n' across the whole map. This is an easy way to eliminate completely dark areas of the level, however you may lose some contrast as a result, so use with care. Default 0"
+	sky(string) : "Sky Texture" : : "6 sided cube for sky brushes (night_)"
+	_range(integer) : "Global light range" :  : "Scales the brightness range of all lights without affecting their fade discance. Values of n more than 0.5 makes lights brighter and n less than 0.5 makes lights less bright. The same effect can be achieved on individual lights by adjusting both the 'light' and 'wait' attributes"
+	_dist(integer) : "Global light scale" :  : "Scales the fade distance of all lights by a factor of n. If n is more than 1 lights fade more quickly with distance and if n is less than 1, lights fade more slowly with distance and light reaches further"
+	_anglescale(integer) : "Light angle scale" :  : "Sets a scaling factor for how much influence the angle of incidence of sunlight on a surface has on the brightness of the surface. n must be between 0.0 and 1.0. Smaller values mean less attenuation, with zero meaning that angle of incidence has no effect at all on the brightness. Default 0.5"
+	_gamma(integer) : "Lightmap gamma" :  : "Adjust brightness of final lightmap. Default 1, >1 is brighter, <1 is darker"
+
+	//----------------------------------------------------------------------
+	// Ericw/Tyran's new compile tools (www.celephais.net/board/view_thread.php?id=61211)
+	//----------------------------------------------------------------------
+	_sunlight(integer) : "Sunlight" :  : "Set the brightness of the sunlight coming from an unseen sun in the sky. Sky brushes (or more accurately bsp leafs with sky contents) will emit sunlight at an angle specified by the _sun_mangle key. Default 0"
+	_sunlight_color(string) : "Sunlight color R G B" :  : "Specify red(r), green(g) and blue(b) components for the colour of the sunlight. RGB component values are between 0 and 1. Default is white light (1 1 1)"
+	_sunlight_mangle(string) : "Sunlight mangle (Yaw pitch roll)" :  : "Specifies the direction of sunlight using yaw(x), pitch(y) and roll(z) in degrees. Yaw specifies the angle around the Z-axis from 0 to 359 degrees and pitch specifies the angle from 90 (straight up) to -90 (straight down). Roll has no effect, so use any value (e.g. 0). Default is straight down (0 -90 0)"
+	_sun_mangle(string) : "Duplicate version of sunlight_mangle"
+	_sunlight_penumbra(integer) : "Sunlight penumbra in degrees" :  : "Specifies the penumbra width, in degrees, of sunlight. Useful values are 3-4 for a gentle soft edge, or 10-20+ for more diffuse sunlight. Default is 0"
+	_sunlight_dirt(integer) : "Sunlight dirt" :  : "1 enables dirtmapping (ambient occlusion) on sunlight, -1 to disable (making it illuminate the dirtmapping shadows). Default is to use the value of '_dirt'"
+
+	// Ambient bounce light (multiple suns in a dome)
+	_sunlight2(integer) : "Sunlight 2 brightness" :  : "Set the brightness of a large dome of lights positioned around the map (16K unit radius). Useful for simulating higly diffused light (e.g. cloudy skies) in outdoor areas. Default 0"
+	_sunlight2_color(string) : "Sunlight 2 color R G B" :  : "Specifies the colour of _sunlight2, same format as _sunlight_color. Default is white light (1 1 1)"
+	_sunlight2_dirt(integer) : "Sublight 2 dirt" :  : "1 enables dirtmapping (ambient occlusion) on sunlight2, -1 to disable. Default is to use the value of '_dirt'"
+
+	_dirt(integer) : "Dirt mapping (AO)" :  : "1 enables dirtmapping (ambient occlusion) on all lights, borrowed from q3map2. This adds shadows to corners and crevices. You can override the global setting for specific lights with the _dirt light entity key or _sunlight_dirt, _sunlight2_dirt, and _minlight_dirt worldspawn keys. Default is no dirtmapping (-1)"
+	_dirtmode(integer) : "Dirt mode" :  : "Choose between ordered (0, default) and randomized (1) dirtmapping."
+	_dirtscale(integer) : "Dirt scale" : 0.5 : "Scale factor used in dirt calculations, default 1. Lower values (e.g. 0.5) make the dirt fainter, 2.0 would create much darker shadows"
+	_dirtgain(integer) : "Dirt gain" : 1 : "Exponent used in dirt calculation, default 1. Lower values (e.g. 0.5) make the shadows darker and stretch further away from corners"
+	_dirtdepth(integer) : "Dirt depth" : 128 : "Maximum depth of occlusion checking for dirtmapping, default 128."
+	_minlight_dirt(integer) : "Minlight dirt" :  : "1 enables dirtmapping (ambient occlusion) on minlight, -1 to disable. Default is to use the value of '_dirt'"
+	
+	//----------------------------------------------------------------------
+	gravity(integer) : "Gravity" :  : "gravity of map, default = 800"
+	fog(string) : "Fog Command" :  : "console command, Den/R/G/B example = (0.05 0.3 0.3 0.3)"
+	fog_density(integer) : "Fog Density" :  : "Global fog density (required for trigger_fog)"
+	fog_colour(string) : "Fog Colour" :  : "Global fog colour, example = (Red Green Blue)"
+	fog_dpextra(string) : "Fog DP Extra" :  : "extra DP fog parameters, default = (1 0 8192 1024 32)"
+	water_alpha(string) : "Water Alpha" :  : "Water Alpha, default = (1.00)"
+	particlemax(integer) : "Particles" :  : "Amount of ACTIVE particles per map"
+
+	//----------------------------------------------------------------------
+	no_item_offset(choices) : "Item Offset for ammo/health" = [
+		-1 : "Disabled"
+		 0 : "Use Default"
+		 1 : "Enabled"
+	]
+	no_item_rotate(choices) : "Item Rotate for ammo/health" = [
+		-1 : "Disabled"
+		 0 : "Use Default"
+		 1 : "Enabled"
+	]
+	no_zaware(choices) : "Monsters - Z Aware attacks" = [
+		-1 : "Disabled"
+		 0 : "Use Default"
+		 1 : "Enabled"
+	]
+	no_liquiddmg(choices) : "Monsters - slime/lava Damage" = [
+		-1 : "Disabled"
+		 0 : "Use Default"
+		 1 : "Enabled"
+	]
+	knight_defskin(choices) : "Default Red knight skin" = [
+		0 : "Default - Red"
+		1 : "No colour, grey"
+		2 : "Vertical stripes"
+		3 : "Swampy green/red"
+	]
+	bodyflrcheck(choices) : "Monster dead body check floor" = [
+		0 : "(Default) No Check"
+		1 : "Yes - Check for gravity"
+	]
+	bodyfadeaway(integer) : "Monster dead body fade timer" : : "Time in seconds"
+
+	//----------------------------------------------------------------------
+	upgrade_axe(choices) : "Upgrade Axe" = [
+		-1 : "Remove from Inventory"
+		 0 : "Use Default"
+		 1 : "Add to Inventory"
+	]
+	upgrade_ssg(choices) : "Upgrade Shotgun" = [
+		-1 : "Remove from Inventory"
+		 0 : "Use Default"
+		 1 : "Add to Inventory"
+	]
+	upgrade_lg(choices) : "Upgrade Lightning Gun" = [
+		-1 : "Remove from Inventory"
+		 0 : "Use Default"
+		 1 : "Add to Inventory"
+	]
+
+	//----------------------------------------------------------------------
+	give_weapons(integer) : "Give weapons at start" :  : "SG=1, SSG=2, NG=4, SNG=8, GL=16, RL=32, LG=64"
+	take_weapons(integer) : "Take weapons away at start" :  : "SG=1, SSG=2, NG=4, SNG=8, GL=16, RL=32, LG=64"
+	max_health(integer) : "Minimum Health at start" :  : "Update player health if below this value"
+	reset_health(integer) : "Reset Health at start" :  : "Reset player health to this value"
+	currentammo(choices) : "Setup Players Ammo" = [
+		0 : "Minimum values"
+		1 : "Reset values"
+	]
+	ammo_shells(integer) : "Ammo Shells" :  : "Player starting quantity"
+	ammo_nails(integer) : "Ammo Nails" :  : "Player starting quantity"
+	ammo_rockets(integer) : "Ammo Rockets" :  : "Player starting quantity"
+	ammo_cells(integer) : "Ammo Cells" :  : "Player starting quantity"
+	armortype(choices) : "Armour Type" = [
+		0 : "No Armour given"
+		1 : "Green Armour"
+		2 : "Yellow Ammour"
+		3 : "Red Armour"
+	]
+	armourvalue(integer) : "Armour Quantity" :  : "Quantity of armour to reset player (100/150/200)"
+]
+
+//======================================================================
+//
+// Ambient Sounds
+//
+//======================================================================
+@Baseclass base(targetname,Appearflags) size(-16 -16 -8, 16 16 8) color(128 25 204) = Sound []
+@PointClass base(Sound) = ambient_comp_hum : "Computer background sounds" []
+@PointClass base(Sound) = ambient_drip : "Dripping sound" []
+@PointClass base(Sound) = ambient_drone : "Engine/machinery sound" []
+@PointClass base(Sound) = ambient_flouro_buzz : "Fluorescent buzzing sound" []
+@PointClass base(Sound) = ambient_hum1 : "Teleporter Hum sound" []
+@PointClass base(Sound) = ambient_light_buzz : "Buzzing sound from light" []
+@PointClass base(Sound) = ambient_suck_wind : "Wind sound" []
+@PointClass base(Sound) = ambient_swamp1 : "Frogs croaking" []
+@PointClass base(Sound) = ambient_swamp2 : "Frogs croaking B" []
+@PointClass base(Sound) = ambient_thunder : "Thunder sound" []
+@PointClass base(Sound) = ambient_custom_sound : "Ambient Custom Sound"
+[
+	spawnflags(Flags) = [
+		2 : "Play Once" : 0 : "When triggered plays once"
+		64 : "Start OFF" : 0 : "Starts off and waits for trigger"
+	]
+
+	target(string) : "Sound Trigger" : : "fires each time sound played"
+	volume(integer) : "Volume" :  : "volume of sound (default=1, capped at 1)"
+	noise(string) : "Sound Primary" :  : "sound file (ambience/windgust1a.wav)"
+	noise(string) : "Sound Stop" :  : "sound file (ambience/switch6_off.wav)"
+	noise(string) : "Sound Random" :  : "sound file (ambience/windgust1b.wav)"
+	wait(integer) : "Random time" :  : "Time between sounds (default 20)"
+	delay(integer) : "Minimum time" :  : "Time between sounds (default 2)"
+	waitmin(integer) : "Starting delay" :  : "initial starting time of sound (delay + random() x waitmin)"
+	waitmin2(integer) : "Do Not Silence" : : "Will not silence sound if switching off"
+	impulse(integer) : "Channel" :  : "channel to play sound (0-7) (0 automatic is default)"
+	speed(integer) : "Attenuation" :  : "-1=no attenuation, 1=normal (default), 2=idle, 3=static, 4=quiet"
+]
+@PointClass base(Sound) = ambient_custom_loop : "Ambient Custom Loop"
+[
+	volume(integer) : "Volume" :  : "volume of sound (default=1, capped at 1)"
+	noise(string) : "Custom sound" :  : "looped sound file to play (ambience/windgust1.wav)"
+]
+
+//======================================================================
+//
+// INFO entities - player starts, deathmatch, coop, teleport
+//
+//======================================================================
+@baseclass base(Appearflags) flags(Angle) studio("progs/player.mdl")
+	size(-16 -16 -24, 16 16 24) offset(0 0 24) color(255 0 0)
+	= PlayerClass [
+		target(string) : "target(s) fired when used"
+	]
+@baseclass = StartSpawn2 [ startspawn2(integer) : "Unique spawn location number matching a trigger_changelevel" ]
+
+//----------------------------------------------------------------------
+@PointClass base(PlayerClass) = info_player_start : "Player Start" []
+@PointClass base(PlayerClass,StartSpawn2) = info_player_start2 : "Player Return" []
+@PointClass base(PlayerClass,StartSpawn2) = info_player_coop : "Player COOP Start" [
+	spawnflags(Flags) = [ 64 : "Start OFF" : 0 : "Start off" ]
+]
+@PointClass base(PlayerClass) = info_player_deathmatch : "Player DM Start" [
+	spawnflags(Flags) = [ 64 : "Start OFF" : 0 : "Start off" ]
+]
+@PointClass base(Appearflags, targetname) flags(Angle)
+	size(-16 -16 -24, 16 16 24) offset(0 0 24) color(255 128 128)
+	= info_teleport_destination : "Teleport destination" [
+		target(string) : "target(s) fired when used"
+	]
+@PointClass base(Appearflags) = info_intermission : "Intermission camera" [
+	spawnflags(Flags) = [
+		1 : "Not Intermission" : 0 : "Exclude from intermission"
+		2 : "Solid Interaction" : 0 : "Solid world interaction"
+	]
+	target(string) : "target(s) fire when used as a viewing camera"
+	mangle(string) : "Mangle (Pitch Yaw Roll)"
+	fog_density(integer) : "Fog density (Must be >0 to activate feature)"
+	fog_colour(vector) : "Fog colours (def=0.1 0.1 0.1)"
+	speed(integer) : "Fog time to change (def=2s)"
+]
+@PointClass base(Appearflags) size(-16 -16 -24, 16 16 40) color(153 0 192)
+	= info_skullwiz_destination : "Skull Wizard Tele Dest" [
+	targetname(string) : "Unique name in chain group"
+	target(string) : "Next entity in chain"
+	distance(integer) : "Min distance before spawning"
+]
+
+//----------------------------------------------------------------------
+@PointClass base(targetname) = info_target : "info_target (Invisible entity)" []
+@PointClass base(targetname) = info_null : "info_null (spotlight target)" []
+@PointClass base(targetname) = info_notnull : "info_notnull (map hack)" [
+	use(string) : "self.use"
+	think(string) : "self.think"
+	nextthink(integer) : "nextthink"
+]
+
+//======================================================================
+//
+// ITEM entities
+//
+//======================================================================
+@baseclass size(-16 -16 0, 16 16 32) = ItemSize []
+@baseclass size(-16 -16 -24, 16 16 32) offset(0 0 24) = PowerupSize []
+@baseclass size(-16 -16 -24, 16 16 32) = ArmourSize []
+@baseclass size(-16 -16 -24, 16 16 32) offset(0 0 24) = KeySize []
+@baseclass base(Appearflags,targetname,target) flags(Angle) = Items [
+	spawnflags(Flags) = [
+		16 : "Respawn" : 0 : "Can respawn after being picked up"
+		32 : "Floating" : 0 : "Spawns floating, trigger entity to drop it"
+		64 : "Start OFF" : 0 : "Starts off and waits for trigger to spawn"
+		128 : "No Particles" : 0 : "No particle or effects active on this entity"
+	]
+	upgrade_axe(choices) : "Axe Upgrade" = [
+		 0 : "Do Nothing"
+		 1 : "Only spawn if got upgrade"
+	]
+	upgrade_ssg(choices) : "Shotgun Upgrade" = [
+		 0 : "Do Nothing"
+		 1 : "Only spawn if got upgrade"
+	]
+	upgrade_lg(choices) : "Lightning Gun Upgrade" = [
+		 0 : "Do Nothing"
+		 1 : "Only spawn if got upgrade"
+	]
+	message(string) : "Message when picked up"
+	respawn_time(integer) : "Respawn time (=-1 instant)"
+	respawn_count(integer) : "Total times to respawn"
+	respawn_trig(choices) : "respawn trigger condition" = [
+		 0 : "Default Respawn"
+		 1 : "Wait for trigger"
+	]
+]
+@baseclass = ItemWorldType [
+	skin_override(choices) = [
+		0 : "Worldspawn Worldtype"
+		1 : "Base Green"
+		2 : "Medieval Wood"
+	]
+]
+@baseclass color(80 0 200) base(Items,ItemSize,ItemWorldType) = AmmoBase [
+	spawnflags(flags) = [
+		1 : "Large box" : 0
+	]
+	frame_box(integer) : "animation frame (1-7)"
+	aflag(integer) : "ammo quantity"
+]
+@baseclass = AmmoLid [ spawnflags(flags) = [ 2 : "Lid" : 0 ] ]
+@baseclass = PowerTimer [ cnt(integer) : "Duration override (def=30)" ]
+
+//----------------------------------------------------------------------
+@PointClass base(Items,ItemSize,ItemWorldType) studio("progs/health_25.mdl") = item_health : "Health pak" [
+	spawnflags(flags) = [
+		1 : "Rotten" : 0
+		2 : "Megahealth" : 0
+	]
+]
+//----------------------------------------------------------------------
+@PointClass base(AmmoBase,AmmoLid) studio("progs/ammo_shells0.mdl") = item_shells : "Shells" [
+	spawnflags(flags) = [ 2 : "Lid" : 0 ]
+]
+@PointClass base(AmmoBase,AmmoLid) studio("progs/ammo_nails0.mdl") = item_spikes : "Nails" [
+	spawnflags(flags) = [ 2 : "Lid" : 0 ]
+]
+@PointClass base(AmmoBase) studio("progs/ammo_rockets0.mdl") = item_rockets : "Rockets" []
+@PointClass base(AmmoBase) studio("progs/ammo_battery0.mdl") = item_cells : "Cells" []
+@PointClass base(AmmoBase) studio("progs/ammo_cells0.mdl") = item_plasma : "Cells (Alt)" []
+//----------------------------------------------------------------------
+@PointClass base(Items,ArmourSize) studio("progs/armor.mdl") skin(0) = 
+	item_armor1 : "100% armor (Green)" []
+@PointClass base(Items,ArmourSize) studio("progs/armor.mdl") skin(1) = 
+	item_armor2 : "150% armor (Yellow)" []
+@PointClass base(Items,ArmourSize) studio("progs/armor.mdl") skin(2) = 
+	item_armorInv : "200% armor (Red)" []
+//----------------------------------------------------------------------
+@PointClass base(Items,KeySize) studio("progs/key_medieval.mdl") skin(2) = item_key1 : "Silver key" []
+@PointClass base(Items,KeySize) studio("progs/key_medieval.mdl") skin(6) = item_key2 : "Gold key" []
+@PointClass base(Items,KeySize) = item_keyx : "Custom key" [
+	spawnflags(Flags) = [
+		1 : "Custom Key 1" : 0
+		2 : "Custom Key 2" : 0
+		4 : "Custom Key 3" : 0
+		8 : "Custom Key 4" : 0
+	]
+	mdl(string) : "model name to load/display (progs/model.mdl)"
+	netname(string) : "XXX Part of pickup string 'You got the XXX'"
+	skin(integer) : "Skin number for custom model"
+	message2(choices) : "Particle Style" = [
+		"KEYGOLD" : "KEYGOLD - Yellow"
+		"KEYSILVER" : "KEYSILVER - Blue"
+		"KEYRED" : "KEYRED - Red"
+		"KEYGREEN" : "KEYGREEN - Green"
+		"KEYPURPLE" : "KEYPURPLE - Purple"
+		"KEYWHITE" : "KEYWHITE - White"
+	]
+]
+//----------------------------------------------------------------------
+@PointClass base(Items,KeySize) = item_custom : "Custom Pickup Item" [
+	mdl(string) : "model name to load/display (progs/model.mdl)"
+	netname(string) : "XXX Part of pickup string 'You got the XXX'"
+	noise(string) : "Pickup Sound (def=weapons/lock4.wav)"
+	pos1(string) : "Pickup bounding box minimum (def=-16 -16 -24)"
+	pos2(string) : "Pickup bounding box maximum (def=16 16 32)"
+	skin(integer) : "Skin number for custom model"
+	bodyfadeaway(integer) : "Model will fade away on pickup"
+	part_active(choices) : "Particle Pickup Setup" = [
+		0 : "Not Active"
+		1 : "Active"
+	]
+	part_ofs(string) : "Particle Origin Offset"
+	part_tcount(integer) : "Particle Quantity (def=20)"
+	part_life(integer) : "Particle Life time (def=2s)"
+	part_style(choices) : "Particle Colour" = [
+		0 : "Default - White"
+		1 : "Yellow"
+		2 : "Green"
+		3 : "Red"
+		4 : "Blue"
+		5 : "Purple"
+		6 : "Fire"
+		7 : "White"
+	]
+	part_movetype(choices) : "Particle Movement" = [
+		0 : "Default - Center"
+		2 : "Center"
+		3 : "Up"
+		4 : "Shockwave"
+		5 : "Skull"
+		6 : "Lost"
+		7 : "Minotaur"
+	]	
+]
+//----------------------------------------------------------------------
+@PointClass base(Items,KeySize) studio("progs/key_rune1.mdl") = item_sigil : "Sigil" [
+	spawnflags(Flags) = [
+		1 : "Episode 1" : 0
+		2 : "Episode 2" : 0
+		4 : "Episode 3" : 0
+		8 : "Episode 4" : 0
+	]
+]
+//----------------------------------------------------------------------
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/artifact_envsuit.mdl") = 
+	item_artifact_envirosuit : "Environmental Protection Suit" [
+	exactskin(choices) : "Exact Skin" = [
+		0 : "Default"
+		1 : "Green"
+		2 : "Brown"
+		3 : "Aqua"
+		4 : "Blue"
+	]	
+]
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/artifact_wetsuit.mdl") = 
+	item_artifact_wetsuit : "Under Water Wet Suit" [
+	exactskin(choices) : "Exact Skin" = [
+		0 : "Default"
+		1 : "Green"
+		2 : "Brown"
+		3 : "Aqua"
+		4 : "Blue"
+	]	
+]
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/artifact_pent.mdl") = 
+	item_artifact_invulnerability : "Pentagram of Protection" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/artifact_invis.mdl") = 
+	item_artifact_invisibility : "Ring of Shadows" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/artifact_quad.mdl") = 
+	item_artifact_super_damage : "Quad damage" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/artifact_tome.mdl") = 
+	item_artifact_tomeofpower : "Tome of Power" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/artifact_piercer.mdl") = 
+	item_artifact_nail_piercer : "Nail Piercer" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/artifact_sharp.mdl") = 
+	item_artifact_sharp_shooter : "Sharp Shooter" []
+
+//----------------------------------------------------------------------
+@PointClass base(Items,PowerupSize) studio("progs/w_backpack.mdl") = 
+	item_backpack : "Backpack full of random amounts of ammo" [
+	spawnflags(Flags) = [
+		1 : "Shells" : 0
+		2 : "Nails" : 0
+		4 : "Rockets" : 0
+		8 : "Cells" : 0
+	]
+	count(integer) : "Amount (random) of ammo to give"
+	ammo_shells(integer) : "Exact amount of shells"
+	ammo_nails(integer) : "Exact amount of spikes"
+	ammo_rockets(integer) : "Exact amount of rockets"
+	ammo_cells(integer) : "Exact amount of cells"
+	armorvalue(integer) : "Armour Shards"
+	armortype(choices) : "Armour Quantity" = [
+		0 : "Do Nothing"
+		1 : "Random Quantity (use count)"
+	]
+	exactskin(choices) : "Backpack skin" = [
+		0 : "Original brown"
+		1 : "Green"
+		2 : "Blue"
+		3 : "Red"
+		4 : "Yellow"
+		5 : "Swampy"
+		6 : "White"
+		7 : "Pale"
+	]
+]
+	
+//======================================================================
+//
+// WEAPON entities
+//
+//======================================================================
+@baseclass size(-16 -16 0, 16 16 56) color(0 0 200) base(Appearflags) = Weapon [
+	spawnflags(Flags) = [
+		16 : "Respawn" : 0 : "Can respawn after being picked up"
+		32 : "Floating" : 0 : "Spawns floating, trigger entity to drop it"
+		64 : "Start OFF" : 0 : "Starts off and waits for trigger to spawn"
+		128 : "No Particles" : 0 : "No particle or effects active on this entity"
+	]
+	upgrade_axe(choices) : "Axe Upgrade" = [
+		 0 : "Do Nothing"
+		 1 : "Only spawn if got upgrade"
+	]
+	upgrade_ssg(choices) : "Shotgun Upgrade" = [
+		 0 : "Do Nothing"
+		 1 : "Only spawn if got upgrade"
+	]
+	upgrade_lg(choices) : "Lightning Gun Upgrade" = [
+		 0 : "Do Nothing"
+		 1 : "Only spawn if got upgrade"
+	]
+	message(string) : "Message when picked up"
+	respawn_time(integer) : "Respawn time (=-1 instant)"
+	respawn_count(integer) : "Total times to respawn"
+	respawn_trig(choices) : "respawn trigger condition" = [
+		 0 : "Default Respawn"
+		 1 : "Wait for trigger"
+	]
+]
+
+//----------------------------------------------------------------------
+@PointClass base(Weapon) studio("progs/g_shot2.mdl") = weapon_supershotgun : "Super shotgun" []
+@PointClass base(Weapon) studio("progs/g_nail.mdl") = weapon_nailgun : "Nailgun" []
+@PointClass base(Weapon) studio("progs/g_nail2.mdl") = weapon_supernailgun : "Perforator" []
+@PointClass base(Weapon) studio("progs/g_rock.mdl") = weapon_grenadelauncher : "Grenade launcher" []
+@PointClass base(Weapon) studio("progs/g_rock2.mdl") = weapon_rocketlauncher : "Rocket launcher" []
+@PointClass base(Weapon) studio("progs/g_light.mdl") = weapon_lightning : "Thunderbolt" []
+
+@PointClass base(Weapon) studio("progs/g_shot1.mdl") = weapon_shotgun : "Sawn-off Shotgun" []
+@PointClass base(Weapon) studio("progs/g_shadaxe.mdl") = weapon_upgrade_axe : "Shadow Axe" []
+@PointClass base(Weapon) studio("progs/g_shot3.mdl") = weapon_upgrade_ssg : "Widowmaker Shotgun" []
+@PointClass base(Weapon) studio("progs/g_plasma.mdl") = weapon_upgrade_lg : "Plasma Gun" []
+
+//======================================================================
+//
+// FUNCTIONS
+//
+//======================================================================
+@baseclass base(Appearflags,targetname,target) flags(Angle) = FuncItems [
+	spawnflags(Flags) = [
+		64 : "Start OFF" : 0 : "Start off & wait for trigger"
+	]
+	_dirt(integer) : "Dirt mapping (override)"
+	_minlight(integer) : "Min light for all surface"
+	_mincolor(string) : "Min light color R G B"
+	_shadow(choices) : "Shadows" = [
+		0 : "Do Nothing"
+		1 : "Cast shadows"
+	]
+	_shadowself(choices) : "Self Shadow" = [
+		0 : "Do Nothing"
+		1 : "Cast shadows on Self"
+	]
+]
+
+//----------------------------------------------------------------------
+@SolidClass base(FuncItems) = func_button : "Button" [
+	spawnflags(flags) = [
+        32: "Start Disabled" : 0
+	]
+	speed(integer) : "Speed (def=40)"
+	wait(integer) : "Delay before reset (def=1)"
+	delay(integer) : "Delay before trigger"
+	lip(integer) : "Lip (def=4)"
+	health(integer) : "Health (shootable)"
+	sounds(choices) : "Sounds" = [
+		0 : "Steam metal"
+		1 : "Wooden clunk"
+		2 : "Metallic clink"
+		3 : "In-out"
+		4 : "Silent"
+		5 : "Custom"
+	]
+	noise(string) : "Custom sound - 1st move"
+	noise1(string) : "Custom sound - 2nd move"
+	message(string) : "Message" 
+]
+
+//----------------------------------------------------------------------
+@SolidClass base(FuncItems) = func_door : "Door (Basic)" [
+	spawnflags(flags) = [
+		1 : "Start Open" : 0
+		2 : "Spawn trigger field" : 0
+		4 : "Don't link" : 0
+		8 : "Gold Key" : 0
+        16: "Silver Key" : 0
+        32: "Toggle" : 0
+	]
+	speed(integer) : "Speed (def=100)"
+	yaw_speed(integer) : "Speed (returning)"
+	wait(integer) : "Delay before close (def=4)"
+	lip(integer) : "Lip (def=8)"
+	health(integer) : "Health (shootable)"
+	dmg(integer) : "Damage when blocked (def=2)"
+	message(string) : "Message if triggered"
+	sounds(choices) : "Sound" = [
+		0 : "Silent"
+		1 : "Stone"
+		2 : "Base"
+		3 : "Stone Chain"
+		4 : "Screechy Metal"
+		5 : "Custom"
+	]
+	locksounds(choices) : "Sound (locked)" = [
+		0 : "Default talktalk"
+		1 : "Short rattle"
+		2 : "Medium rattle"
+		3 : "Long rattle"
+	]
+	noise(string) : "Custom sound - Locked"
+	noise1(string) : "Custom sound - moving"
+	noise2(string) : "Custom sound - Stopped"
+	noise3(string) : "Custom sound - Locked"
+	noise4(string) : "Custom sound - Key open"
+	customkey(choices) : "Custom Key" = [
+		0 : "Do nothing"
+		1 : "Custom Key 1"
+		2 : "Custom Key 2"
+		3 : "Custom Key 3"
+		4 : "Custom Key 4"
+	]
+	message2(string) : "Custom key message"
+]
+
+//----------------------------------------------------------------------
+@SolidClass base(FuncItems) = func_door_secret : "Door (Secret)" [
+	spawnflags(flags) = [
+		1 : "Open once only" : 0
+		2 : "Moves left first" : 0
+		4 : "Moves down first" : 0
+		8 : "Not shootable" : 0
+       16 : "Always shootable" : 0
+	]
+	speed(integer) : "Speed (def=50)"
+	yaw_speed(integer) : "Speed (returning)"
+	t_width(integer) : "First distance"
+	t_length(integer) : "Second distance"
+	wait(integer) : "Delay before close (def=5)"
+	dmg(integer) : "Damage when blocked (def=2)"
+	message(string) : "Message if touched"
+	sounds(choices) : "Sound" = [
+		1 : "Medieval"
+		2 : "Metal"
+		3 : "Base (default)"
+		4 : "Silent"
+		5 : "Custom"
+	]
+	locksounds(choices) : "Sound (locked)" = [
+		0 : "Default talktalk"
+		1 : "Short rattle"
+		2 : "Medium rattle"
+		3 : "Long rattle"
+	]
+	noise(string) : "Custom sound - Locked"
+	noise1(string) : "Custom sound - Open"
+	noise2(string) : "Custom sound - Opening"
+	noise3(string) : "Custom sound - Closed"
+]
+
+//----------------------------------------------------------------------
+@SolidClass base(FuncItems) = func_plat : "Platform" [	
+	spawnflags(Flags) = [
+		1 : "Low trigger" : 0
+		4 : "Min trigger" : 0
+		8 : "Start Lower" : 0
+		16 : "Start Open" : 0
+        32: "Start Disabled" : 0
+	]
+	speed(integer) : "Speed (def=150)"
+	height(integer) : "Distance to move"
+	sounds(choices) : "Sound" = [
+		1 : "Base (fast)"
+		2 : "Medieval (default)"
+		4 : "Silent"
+		5 : "Custom"
+	]
+	noise(string) : "Custom sound - Moving"
+	noise1(string) : "Custom sound - Stopped"
+]	
+
+//----------------------------------------------------------------------
+@SolidClass base(FuncItems) = func_train : "Train" [
+	spawnflags(Flags) = [
+		1 : "Start ON" : 0
+		2 : "Non Solid" : 0
+		4 : "Use Model" : 0
+		8 : "Touch damage" : 0
+		32: "Start Reversed" : 0
+	]
+	mdl(string) : "Use a model"
+	speed(integer) : "Speed (def=100)"
+	dmg(integer) : "block damage (def=2)"
+	sounds(choices) : "Sound" = [
+		0 : "Silent"
+		1 : "Ratchet Metal"
+		5 : "Custom"
+	]
+	noise(string) : "Custom sound - Stopped"
+	noise1(string) : "Custom sound - Moving"
+]
+
+//----------------------------------------------------------------------
+@PointClass base(Appearflags) flags(Angle) size(-8 -8 -24, 8 8 24) = path_corner : "Path Corner" [
+	spawnflags(Flags) = [
+		1 : "Exact logic" : 0
+		2 : "Instant" : 0
+		4 : "Reverse" : 0
+		8 : "No Pause" : 0
+	]
+	targetname(target_source) : "Name of path corner"
+	corner_event(string) : "target to trigger when used"
+	corner_route(choices) : "Change route logic" = [
+		0 : "Do nothing"
+		1 : "Forward"
+		2 : "Alt Forward"
+		3 : "Backward"
+		4 : "Exact"
+		5 : "Random"
+	]
+	corner_switch(choices) : "Change reverse state" = [
+		-1 : "No"
+		 0 : "Do Nothing"
+		 1 : "Yes"
+		 2 : "Toggle"
+	]
+	corner_pause(choices) : "Change pause state" = [
+		-1 : "No"
+		 0 : "Do Nothing"
+		 1 : "Yes"
+		 2 : "Toggle"
+	]
+	corner_speed(integer) : "Change speed of target path_corner"
+	state(choices) : "Starting route" = [
+		0 : "Do Nothing"
+		1 : "Forward"
+		2 : "Alt Forward"
+		3 : "Backward"
+	]
+	target(target_destination) : "targetname of Forward route"
+	target2(target_destination) : "targetname of Alt Forward route"
+	targetback(target_destination) : "targetname of backward route"
+	wait(integer) : "Wait at corner"
+	delay(integer) : "Random delay at corner"
+	alpha(integer) : "Visual Arrow (def=0.35)"
+	speed(integer) : "Speed between corners (def=100)"
+]
+
+//----------------------------------------------------------------------
+@SolidClass base(FuncItems) = func_wall : "Wall" [
+	spawnflags(Flags) = [
+		2 : "A Frame" : 0
+		16: "Mod Check" : 0
+	]
+]
+@SolidClass base(FuncItems) = func_illusionary : "Wall Illusionary" [
+	spawnflags(Flags) = [
+		2 : "A Frame" : 0
+	]
+]
+@SolidClass base(FuncItems) = func_episodegate : "Episode Gate" [
+	spawnflags(Flags) = [
+		1 : "Episode 1" : 0
+		2 : "Episode 2" : 0
+		4 : "Episode 3" : 0
+		8 : "Episode 4" : 0
+	]
+]
+@SolidClass base(FuncItems) = func_bossgate : "Boss gate" []
+//----------------------------------------------------------------------
+@SolidClass base(FuncItems) = func_laser : "Lasers" [
+	spawnflags(Flags) = [
+		2 : "Solid" : 0
+		4 : "No Damage" : 0
+	]
+	message(string) : "Switched off Message"
+	message2(string) : "Switched on Message"
+	wait(integer) : "-1 = display switched message once"
+	dmg(integer) : "Touch damage (1 per 0.1s)"
+	alpha(integer) : "Alpha variance (def 0.5)"
+	spr_frame(choices) : "Particle Type" = [
+		0  : "Nothing"
+		1  : "Yellow"
+		2  : "Green"
+		4  : "Red"
+		8  : "Blue"
+		16 : "Purple"
+		32 : "Fire"
+		64 : "White"
+	]
+	angle(integer) : "Movement of particles (def=-2 down)"
+	part_limit(integer) : "Maximum active particles (def=25)"
+	part_life(integer) : "Lifetime of particle (def=2s)"
+	part_velrand(string) : "Random movement of particles (def='4 4 4')"
+	part_vol(string) : "Size of area for particles (def=bmodel)"
+	wakeup_dist(integer) : "Distance to wakeup particles (def=768)"
+	spawn_base(integer) : "Min time spawn particles (def=0.1s)"
+	spawn_rand(integer) : "Random amount spawn particles (def=0.1s)"
+	sounds(choices) : "Sounds" = [
+		0 : "Silent"
+		1 : "Laser"
+		2 : "Power"
+		5 : "Custom"
+	]
+	noise1(string) : "Custom sound : Switch ON"
+	noise2(string) : "Custom sound : Switch OFF"
+]
+//----------------------------------------------------------------------
+@SolidClass base(FuncItems) = func_skill : "Skill Select" [
+	spawnflags(Flags) = [
+		1 : "Start Open" : 0
+	]
+	target(target_destination) : "target - Particle Emitters"
+	target2(target_destination) : "target2 - When touched/damaged"
+	style(choices) : "Skill level" = [
+		0 : "Easy (default)"
+		1 : "Normal"
+		2 : "Hard"
+		3 : "Nightmare"
+	]
+	message2(string) : "Alternative touch/damage message"
+	health(integer) : "Can be damaged instead of touched"
+	speed(integer) : "Movement Speed (def=100)"
+	lip(integer) : "Lip (def=8)"
+	noise1(string) : "Custom sound : Stopped"
+	noise2(string) : "Custom sound : Start/Loop"
+	noise3(string) : "Custom sound : Touch"
+]
+//----------------------------------------------------------------------
+@SolidClass base(FuncItems) = func_bob : "Bobbing Bmodel" [	
+	spawnflags(Flags) = [
+		4 : "NonSolid" : 0
+	]
+	height(integer) : "Intensity (def=4)"
+	count(integer) : "Cycle timer (def=2, min=1)"
+	waitmin(integer) : "Speed up scale (def=1)"
+	waitmin(integer) : "Slow down scale (def=0.75)"
+	delay(integer) : "Delay start (-1=random)"
+]	
+//----------------------------------------------------------------------
+@SolidClass base(FuncItems) = func_explobox : "Exploding Brushwork" [
+	noise(string) : "Custom Sound - Explosion"
+	health(integer) : "Health (def=15)"
+	dmg(integer) : "Radius Damage (def=160)"
+]
+
+//======================================================================
+//
+// TRIGGERS
+//
+//======================================================================
+@baseClass base(Appearflags) = TrigOFF [ 
+	spawnflags(flags) = [ 64 : "Start OFF" : 0 ] ]
+@baseClass = TrigSound [
+	sounds(choices) : "Sound style" : 0 = [
+		0 : "Default"
+		1 : "Secret"
+		2 : "Beep beep"
+		3 : "Large switch"
+		4 : "Silent"
+		5 : "Custom"
+		6 : "Secret 2"
+	]
+	noise(string) : "Custom Sound - Triggered"
+]
+@baseClass = TrigUpg [
+	upgrade_axe(choices) : "Axe Upgrade" = [
+		 0 : "Do Nothing"
+		 1 : "Only trigger if got upgrade"
+	]
+	upgrade_ssg(choices) : "Shotgun Upgrade" = [
+		 0 : "Do Nothing"
+		 1 : "Only trigger if got upgrade"
+	]
+	upgrade_lg(choices) : "Lightning Gun Upgrade" = [
+		 0 : "Do Nothing"
+		 1 : "Only trigger if got upgrade"
+	]
+]
+
+//----------------------------------------------------------------------
+@baseClass base(TrigUpg,TrigSound,Appearflags,targetname,target)
+	flags(Angle) color(128 0 128) = TrigBasic [
+	spawnflags(flags) = [ 
+		1 : "No Touch" : 0
+		64 : "Start OFF" : 0
+	]
+	health(integer) : "Health"
+	delay(integer) : "Delay before trigger"
+	message(string) : "Message when triggered"
+	killtarget(string) : "Kill target" : : "Use trigger_entitystate_off instead!"
+]
+@SolidClass base(TrigBasic) = trigger_once : "Trigger ONCE" [
+	spawnflags(flags) = [ 
+		8 : "In View" : 0
+		16: "MOD Check" : 0
+		32: "Monsters" : 0
+	]
+	t_length(integer) : "Inview Distance"
+]
+@SolidClass base(TrigBasic) = trigger_multiple : "Trigger MULTIPLE" [
+	spawnflags(flags) = [ 
+		16: "MOD Check" : 0
+		32: "Monsters" : 0
+	]
+	wait(choices) : "Wait before reset" = [
+		-1 : "Never reset"
+		 4 : "Default"
+	]
+]
+@SolidClass base(TrigBasic) = trigger_secret : "Trigger Secret" [
+	spawnflags(flags) = [ 2: "Remove/Block Message" : 0 ]
+]
+
+//----------------------------------------------------------------------
+@PointClass base(TrigUpg,TrigSound,Appearflags,targetname,target,target2) color(128 0 128)
+	size(-8 -8 -8, 8 8 8) = trigger_relay : "Trigger relay" [
+	spawnflags(flags) = [ 2: "Random" : 0 ]
+	cnt(integer) : "Random Time Qty to add to delay"
+	wait(choices) : "Wait before reset" = [
+		-1 : "Trigger Once"
+		 0 : "Always reset"
+	]
+	delay(integer) : "Delay before trigger"
+	message(string) : "Message when triggered"
+	waitmin(integer) : "% random chance (0.0-1.0)"
+]
+
+@PointClass base(TrigOFF,TrigSound,targetname,target) color(128 0 25)
+	size(-8 -8 -8, 8 8 8) = trigger_counter : "Trigger counter" [
+	spawnflags(flags) = [ 1: "No Messages" : 0 ]
+	message(string) : "Final Message"
+	message2(string) : "Final Message (cannot be blocked)"
+	count(integer) : "Count before firing"
+	delay(integer) : "Delay before trigger"
+]
+
+@PointClass base(targetname,target) color(128 0 128)
+	size(-8 -8 -16, 8 8 16) = trigger_itemrespawnupd : "Change respawn flag" [
+	spawnflags(flags) = [ 16: "Respawn" : 0 ]
+]
+
+@PointClass base(TrigSound,targetname,target) color(128 128 0)
+	size(-8 -8 -16, 8 8 16) = trigger_clientmsg : "Client message" [
+	message(string) : "Message when triggered"
+]
+
+@PointClass base(targetname,target) color(128 0 25) size(-8 -8 -16, 8 8 16)
+	= trigger_monstermovespeed : "Change movement speed" [
+	wait(choices) : "Only work Once" = [
+		-1 : "Trigger Once"
+		 0 : "Always reset"
+	]
+	state(choices) : "Monster Movement" = [
+		-1 : "No Movement"
+		 0 : "Toggle (Default)"
+		 1 : "Free Movement"
+	]
+]
+
+@PointClass base(targetname,target) color(128 0 128)
+	size(-8 -8 -16, 8 8 16) = trigger_monsterkill : "Remove Monster(s)" [
+	spawnflags(Flags) = [
+		16 : "Death Function" : 0
+	]
+]
+
+@PointClass base(targetname,target,target2) color(128 0 128)
+	size(-8 -8 -16, 8 8 16) = trigger_monsterattack : "Force Monster Attack" [
+]
+
+//----------------------------------------------------------------------
+@SolidClass base(TrigOFF,targetname,target) 
+	= trigger_teleport : "Trigger Teleport" [
+	spawnflags(Flags) = [
+		1 : "Player only" : 0
+		2 : "Silent" : 0
+		4 : "Start ON" : 0
+	]
+	wait(choices) : "Wait before reset" = [
+		-1 : "Trigger Once"
+		 0 : "Always reset"
+	]
+	speed(integer) : "Speed after teleport (def=300)"
+	volume(integer) : "Teleport hum sound (def=0.5)"
+	noise(string) : "Custom Sound to play"
+	waitmin(integer) : "Custom Sound Length"
+]
+@SolidClass base(TrigOFF,targetname,target) flags(Angle)
+	= trigger_push : "Trigger Push" [
+	spawnflags(flags) = [ 
+		1 : "Once Only" : 0
+		2 : "Silent" : 0
+		4 : "No Monsters" : 0
+	]
+	speed(integer) : "Speed of push (def=1000)"
+]
+@SolidClass base(TrigOFF,targetname,target) flags(Angle)
+	= trigger_fog : "Trigger Fog" [
+	speed(integer) : "Time to fade (-1=Instant)"
+	wait(choices) : "Wait before reset" = [
+		-1 : "Trigger Once"
+		 0 : "Always reset"
+		 2 : "Default"
+	]
+	fog_density(integer) : "Fog Density (def=0.1)"
+	fog_colour(string) : "Fog Colour (0.1 0.1 0.1)"
+]
+@SolidClass base(TrigOFF,targetname,target) flags(Angle)
+	= trigger_ladder : "Trigger Ladder" [
+	waitmin(integer) : "Time between climbing sound"
+	speed(integer) : "Velocity to climb (def=160)"
+	sounds(choices) : "Sounds" = [
+		1 : "Metal"
+		2 : "Wood (def)"
+		3 : "Rope"
+		4 : "Silent"
+		5 : "Custom"
+	]
+	noise1(string) : "Custom Sound - Climb 1"
+	noise2(string) : "Custom Sound - Climb 2"
+	noise3(string) : "Custom Sound - Climb 3"
+	noise4(string) : "Custom Sound - Climb 4"
+]
+//----------------------------------------------------------------------
+@BaseClass base(TrigOFF,targetname) flags(Angle) = TrigBubbles [
+	spawnflags(flags) = [ 2 : "Bubbles" : 0 ]
+	count(integer) : "Bubble active total"
+	height(integer) : "Max Travel distance"
+	style(choices) : "Bubble Type" = [
+		1 : "Grey"
+		2 : "Brown 1"
+		3 : "Blue 1"
+		4 : "Green 1"
+		5 : "Red 1"
+		6 : "Brown 2"
+		7 : "Pink / Yellow"
+		8 : "Brown 3"
+		9 : "Purple 1"
+		10: "Purple 2"
+		11: "Brown 4"
+		12: "Green 2"
+		13: "Yellow"
+		14: "Blue 2"
+		15: "Red 2"
+	]
+]
+@SolidClass base(TrigBubbles, target) = trigger_hurt : "Trigger Hurt" [
+	spawnflags(flags) = [ 
+		4 : "Monster ONLY" : 0	
+		16: "MOD Check" : 0
+		32: "Falling" : 0
+	]
+	dmg(integer) : "Damage (def=5)"
+	wait(integer) : "Time between pain touch (def=1s)"
+	speed(integer) : "Falling Velocity (def=300)"
+]
+@SolidClass base(TrigBubbles) = trigger_heal : "Trigger Heal" [
+	target(target_destination) : "target - first heal"
+	target2(target_destination) : "target - healing expired"
+	wait(integer) : "Time between heals (def=1s)"
+	healamount(integer) : "Heal Amount (def=10)"
+	max_health(integer) : "Max Amount to Heal (def=50)"
+	sounds(choices) : "Sounds" = [
+		0 : "Silent"
+		1 : "Heal 15"
+		2 : "Heal 25"
+		3 : "Heal 100"
+		4 : "Respawn"
+		5 : "Custom"
+	]
+	noise(string) : "Custom Sound"
+	lip(choices) : "Block Message" = [
+		0 : "Do Nothing"
+		1 : "Block Healing"
+		2 : "Block All"
+	]
+	message(string) : "Healing Message"
+	message2(string) : "Healing Expired"
+]
+
+//----------------------------------------------------------------------
+@SolidClass base(TrigOFF,targetname,target) = trigger_changelevel : "Trigger Change Level" [
+	spawnflags(flags) = [ 
+		1: "No Intermission" : 0
+		2: "Reset Inventory" : 0
+	]
+	map(string) : "Next map name" : : "Leave blank to reload same map"
+	startspawn2(integer) : "Spawn number in next map (1-7)"
+]
+@SolidClass base(TrigOFF,targetname,target) = trigger_setskill : "Trigger Set Skill" [
+	health(integer) : "Health"
+	wait(integer) : "Time between re-trigger (def=0.2)"
+	message(choices) : "Skill to change to" = [
+        0 : "Easy"
+        1 : "Medium"
+        2 : "Hard"
+        3 : "Nightmare!"
+	]
+]
+@SolidClass base(targetname) = trigger_touchsound : "Trigger Touch Sounds" [
+	spawnflags(flags) = [
+		8 : "World Geo"
+		16: "Drain"
+	]
+	message(choices) : "Sounds" = [
+        0 : "Default"
+        1 : "Water (DEF)"
+        2 : "Slime"
+        3 : "Lava"
+		4 : "Silent"
+		5 : "Custom"
+	]
+	noise(string) : "Custom Touch Sound"
+	noise1(string) : "Custom Exit Sound"
+	noise2(string) : "Custom Drain Sound"
+	speed(integer) : "Drain Time"
+	yaw_speed(integer) : "Drain Movement"
+	water_alpha(integer) : "Water Alpha"
+]
+@SolidClass base(TrigOFF,targetname) = trigger_rune : "Trigger Rune" [
+	spawnflags(flags) = [
+		1 : "Rune 1"
+		2 : "Rune 2"
+		4 : "Rune 3"
+		8 : "Rune 4"
+	]
+	health(integer) : "Health"
+	target(target_destination) : "RUNE MIXTURE - targets to fire"
+	noise1(target_destination) : "RUNE 1 - targets to fire"
+	noise2(target_destination) : "RUNE 2 - targets to fire"
+	noise3(target_destination) : "RUNE 3 - targets to fire"
+	noise4(target_destination) : "RUNE 4 - targets to fire"
+]
+@SolidClass base(TrigOFF,targetname,target) = trigger_void : "Trigger Void" [
+	spawnflags(flags) = [
+		1 : "Ignore Clients"
+		2 : "Ignore Monsters"
+		4 : "Ignore Ammo"
+		8 : "Ignore Minion eggs"
+		16: "Ignore Temporary ents"
+		32: "Ignore Items"
+	]
+]
+
+//----------------------------------------------------------------------
+@SolidClass base(TrigOFF,targetname,target) = trigger_monsterjump : "Trigger Monster Jump" [
+	spawnflags(flags) = [
+		2 : "Flying Monsters"
+		4 : "Swimming Monsters"
+	]
+	wait(choices) : "Wait before reset" = [
+		-1 : "Trigger Once"
+		 0 : "Always reset"
+	]
+	speed(integer) : "Jump Speed (def=200)"
+	height(integer) : "Jump Height (def=200)"
+	noise1(string) : "Monster classname ONLY can use trigger"
+]
+@SolidClass base(TrigOFF,targetname,target) = trigger_drolejump : "Trigger Drole Jump" [
+	wait(choices) : "Wait before reset" = [
+		-1 : "Trigger Once"
+		 0 : "Always reset"
+	]
+	speed(integer) : "Jump Speed (def=200)"
+	height(integer) : "Jump Height (def=200)"
+]
+@SolidClass base(TrigOFF,targetname,target) = trigger_nomonjump : "Stop Monster Jumping" [
+	wait(choices) : "Wait before reset" = [
+		-1 : "Trigger Once"
+		 0 : "Always reset"
+	]
+	delay(integer) : "Delay Jumping (def=0.5)"
+	waitmin(integer) : "Re-trigger timer (def=0.1s)"
+	noise1(string) : "Monster classname ONLY can use trigger"
+]
+@SolidClass base(TrigOFF,targetname,target) = trigger_monsterturret : "Trigger Monster Turret" [
+	wait(choices) : "Wait before reset" = [
+		-1 : "Trigger Once"
+		 0 : "Always reset"
+	]
+	count(choices) : "Random chance to pause" = [
+		-1 : "Constant"
+		0.25 : "Default"
+	]
+	noise1(string) : "Monster classname ONLY can use trigger"
+]
+
+//----------------------------------------------------------------------
+@PointClass base(Appearflags,targetname) size(-8 -8 -16, 8 8 16) color(192 128 255)
+	= trigger_entitystate_on : "Entity state ON" [
+	target(target_destination) : "targets to affect"
+	target2(target_destination) : "More targets to affect"
+]
+@PointClass base(Appearflags,targetname) size(-8 -8 -16, 8 8 16) color(192 128 255)
+	= trigger_entitystate_off : "Entity state OFF" [
+	target(target_destination) : "targets to affect"
+	target2(target_destination) : "More targets to affect"
+]
+@PointClass base(Appearflags,targetname) size(-8 -8 -16, 8 8 16) color(192 128 255)
+	= trigger_entitystate_disable : "Entity state DISABLE" [
+	target(target_destination) : "targets to affect"
+	target2(target_destination) : "More targets to affect"
+]
+@PointClass base(Appearflags,targetname) size(-8 -8 -16, 8 8 16) color(192 128 255)
+	= trigger_entitystate_reset : "Entity state RESET" [
+	target(target_destination) : "targets to affect"
+	target2(target_destination) : "More targets to affect"
+]
+@PointClass base(Appearflags,targetname) size(-8 -8 -16, 8 8 16) color(192 128 255)
+	= trigger_entitystate_aframe : "Entity state AFRAME" [
+	target(target_destination) : "targets to affect"
+	target2(target_destination) : "More targets to affect"
+	state(integer) : "Aframe state 0=0-x, 1=A"
+]
+
+
+//======================================================================
+//
+// MISC entities
+//
+//======================================================================
+@PointClass base(Appearflags,targetname) size(-8 -8 -8, 8 8 8)
+	color(0 128 192) flags(Angle) = misc_particle : "Particle Emitter" [
+	spawnflags(Flags) = [ 64 : "Start off" : 0 ]
+	target(string) : "target destination of effect"
+	target2(string) : "Name of particle template"
+	message(choices) : "Particle Style" = [
+		"ALTAR" : "ALTAR - Blood red"
+		"ARMOR1" : "ARMOR1 - Green"
+		"ARMOR2" : "ARMOR2 - Yellow"
+		"ARMOR3" : "ARMOR3 - Red"
+		"BOOK" : "BOOK Runes"
+		"ELECTRIC" : "ELECTRIC stream"
+		"FCIRCLE" : "FCIRCLE - Floor circle"
+		"FLAMES" : "FLAMES - Small"
+		"FLAMEL" : "FLAMEL - Large"
+		"JUMPAD" : "JUMPPAD - Upward"
+		"KEYGOLD" : "KEYGOLD - Yellow"
+		"KEYSILVER" : "KEYSILVER - Blue"
+		"KEYRED" : "KEYRED - Red"
+		"KEYGREEN" : "KEYGREEN - Green"
+		"KEYPURPLE" : "KEYPURPLE - Purple"
+		"KEYWHITE" : "KEYWHITE - White"
+		"MEGAH" : "MEGAH - MegaHealth"
+		"PENT" : "PENT - of protection"
+		"PORTAL" : "PORTAL - White"
+		"QUAD" : "QUAD - Damage"
+		"SIGIL" : "SIGIL - Purple"
+		"SKILL" : "SKILL - Pillar"
+		"SRING" : "SRING - Ring of Shadows"
+		"SUIT" : "SUIT - Env suit"
+	]
+]
+@PointClass base(Appearflags,targetname) size(-8 -8 -8, 8 8 8)
+	color(0 128 192) flags(Angle) = misc_particletemplate : "Particle Template" [
+	spr_name1(string) : "Sprite filename 1"
+	spr_name2(string) : "Sprite filename 2"
+	spr_name3(string) : "Sprite filename 3"
+	part_movetype(integer) : "Movement (def=8)"
+	part_limit(integer) : "Max active particles (def=25)"
+	part_life(integer) : "Life time (def=1s)"
+	part_ofs(string) : "Emitter offset (XYZ)"
+	part_veltype(choices) : "Velocity Type" = [
+		0 : "Volume"
+		1 : "Circumference"
+		2 : "Random Circumference"
+		3 : "Spiral"
+		5 : "Explosion"
+	]
+	part_velbase(string) : "Velocity Direction (Additive)"
+	part_vel(string) : "Velocity Linear/random"
+	part_velrand(string) : "Velocity random wobble"
+	part_velrot(integer) : "Velocity rotation (Y Axis only)"
+	part_vol(string) : "Volume to spawn within"
+	wakeup_dist(integer) : "Wake up distance (def=1024)"
+	wakeup_timer(integer) : "Wake up timer (def=1s)"
+	spawn_base(integer) : "Spawn rate time (0.1s)"
+	spawn_rand(integer) : "Spawn rate randomness"
+	dpp_name(string) : "DP Particle effect name"
+	dpp_wait(integer) : "DP spawn rate timer (def=0.1s)"
+	dpp_rnd(integer) : "DP spawn rate randomness"
+	dpp_vel(string) : "DP directional velocity"
+]
+@PointClass base(Appearflags,targetname) size(-8 -8 -8, 8 8 8)
+	color(0 128 192) = misc_particle_burst : "Particle Burst Emitter" [
+	part_ofs(string) : "Particle Origin Offset"
+	part_tcount(integer) : "Particle Quantity (def=20)"
+	part_life(integer) : "Particle Life time (def=2s)"
+	part_style(choices) : "Particle Colour" = [
+		0 : "Default - White"
+		1 : "Yellow"
+		2 : "Green"
+		3 : "Red"
+		4 : "Blue"
+		5 : "Purple"
+		6 : "Fire"
+		7 : "White"
+	]
+	part_movetype(choices) : "Particle Movement" = [
+		0 : "Default - Center"
+		2 : "Center"
+		3 : "Up"
+		4 : "Shockwave"
+		5 : "Skull"
+		6 : "Lost"
+		7 : "Minotaur"
+	]	
+]
+@PointClass base(Appearflags,targetname) size(-8 -8 -8, 8 8 8)
+	color(0 128 192) flags(Angle) = misc_builtineffects : "Particle Builtin" [
+	target(string) : "target destination of effect"
+	wait(integer) : "Start Delay (def=0)"
+	delay(integer) : "Start Delay (random)"
+	count(choices) : "Type of effect" = [
+		0 : "TE_SPIKE (default)"
+		1 : "TE_SUPERSPIKE"
+		2 : "TE_GUNSHOT"
+		3 : "TE_EXPLOSION"
+		4 : "TE_TAREXPLOSION"
+		5 : "TE_LIGHTNING1"
+		6 : "TE_LIGHTNING2"
+		7 : "TE_WIZSPIKE"
+		8 : "TE_KNIGHTSPIKE"
+		9 : "TE_LIGHTNING3"
+		10: "TE_LAVASPLASH"
+		11: "TE_TELEPORT"
+	]
+]	
+//----------------------------------------------------------------------
+@BaseClass base(Appearflags, targetname) size(-8 -8 -8, 8 8 8)
+	color(0 128 192) = Misc [
+	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
+]
+@PointClass base(Misc) = misc_fireball : "Small fireball" [
+	spawnflags(Flags) = [ 
+		32 : "Slime" : 0
+	]
+	speed(integer) : "Speed (def=1000)"
+	dmg(integer) : "Impact Damage (def=5)"
+	delay(integer) : "Spawn time (def=3)"
+	wait(integer) : "Spawn time randomness (def=5)"
+]
+@PointClass base(Misc) = air_bubbles : "Floating Bubble" []
+@PointClass base(Misc) = misc_drip : "Falling water" [
+	spawnflags(Flags) = [ 
+		2 : "Silent" : 0
+		16 : "Blood" : 0
+		32 : "Slime" : 0
+	]
+	wait(integer) : "Random time between drips"
+]
+//----------------------------------------------------------------------
+@PointClass base(Appearflags, targetname) size(-8 -8 -8, 8 8 192)
+	color(128 128 192) = misc_smoke : "Smoke Model/Particle" [
+	spawnflags(Flags) = [
+		 2 : "No DP Model" : 0
+		 4 : "No DP Effects" : 0
+		64 : "Start Off" : 0
+	]
+	target(string) : "Custom direction for smoke"
+	angles(string) : "Pitch Roll Yaw"
+	exactskin(choices) : "Type of Smoke" = [
+		0 : "Gunsmoke (Default)"
+		1 : "Soot (darker)"
+		2 : "Steam"
+		3 : "Toxin"
+		4 : "Plague"
+		5 : "Incense"
+		6 : "Lithium"
+		7 : "Flames"
+	]
+	alpha(integer) : "Alpha of model (def=0.65)"
+	wait(integer) : "DP Time between Spawning"
+	delay(integer) : "DP Time randomness"
+	height(integer) : "DP % of velocity direction"
+]
+//----------------------------------------------------------------------
+@PointClass base(Appearflags, targetname) size(-8 -8 -8, 8 8 8)
+	color(128 192 128) flags(Angle) = misc_spark : "Sparks" [
+	spawnflags(Flags) = [
+		 2 : "Blue" : 0
+		 4 : "Pale White" : 0
+		 8 : "Red" : 0
+		64 : "Start Off" : 0
+	]
+	target(string) : "target a light to sync"
+	wait(integer) : "Time delay between sparks"
+	cnt(integer) : "Quantity of sparks"
+	fixangle(integer) : "Random Y direction of sparks"
+	speed(integer) : "Velocity speed (def=40)"
+	height(integer) : "Velocity random (def=+/- 20)"
+	sounds(choices) : "Sounds" = [
+		1 : "Sparks"
+		4 : "Silent"
+		5 : "Custom"
+	]
+	noise(string) : "Custom sound for spark"
+]
+
+//----------------------------------------------------------------------
+@PointClass base(Appearflags, targetname) size(-8 -8 -8, 8 8 8)
+	color(128 128 224) flags(Angle) = misc_shake : "Shaking" [
+	spawnflags(Flags) = [ 2 : "Screen ONLY" : 0 ]
+	count(integer) : "Radius of shake (def=200)"
+	wait(integer) : "Duration of shake (def=2s)"
+	dmg(integer) : "Strength at center (def=200)"
+	sounds(integer) : "Sounds 1=Rumble"
+	noise1(string) : "Custom Sound - Start"
+	noise2(string) : "Custom Sound - Finish"
+]
+
+//----------------------------------------------------------------------
+@PointClass base(Appearflags, targetname) size(-16 -16 -16, 16 16 16)
+	color(255 128 64) = misc_model : "Misc Models" [
+	spawnflags(Flags) = [
+		 2 : "Collison" : 0
+		64 : "Start Off" : 0
+	]
+	mdl(string) : "Model to load (progs/model.mdl)"
+	angles(string) : "pitch roll yaw" : : "up/down, angle, tilt left/right "
+	ideal_yaw(choices) : "Y axis rotation" = [
+		0 : "No rotation"
+		1 : "Random"
+	]
+	pos1(string) : "Frame Selection" : : "X=0, Y=0, Z=exact frame number, X->Y, Z=0 : will randomly pick a frame from the X,Y range, X->Y, Z=-1 : will animate between the X,Y range, can forward or backward setup"
+	pos2(string) : "Skin Selection" : : "X=0, Y=0, Z=exact skin number, X->Y, Z=0 : will randomly pick a skin from the X,Y range"
+]
+
+//----------------------------------------------------------------------
+@PointClass base(Appearflags, targetname) size(-16 -16 -24, 16 16 32)
+	color(255 128 64) = misc_player : "Misc Player" [
+	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
+	angle(integer) : "facing angle -1=random"
+	frame(choices) : "Body Pose" = [
+		0 : "Default"
+		49 : "On Back"
+		60 : "Face Down 1"
+		69 : "Against Wall"
+		84 : "Face Down 2"
+		93 : "Face Down 3"
+		102 : "On Side"
+	]
+	exactskin(choices) : "Body Skin" = [
+		-1 : "Random"
+		0 : "Default"
+		1 : "Default + Blood"
+		2 : "Green Armour"
+		3 : "Green + Blood"
+		4 : "Yellow Armour"
+		5 : "Yellow + Blood"
+		6 : "Red Armour"
+		7 : "Red + Blood"
+	]
+]
+
+//----------------------------------------------------------------------
+@PointClass base(Appearflags, targetname) size(-32 -32 -24, 32 32 64)
+	color(255 128 64) = misc_demon : "Misc Demon" [
+	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
+	angle(integer) : "facing angle -1=random"
+	frame(choices) : "Body Pose" = [
+		53 : "On Back"
+	]
+	exactskin(choices) : "Body Skin" = [
+		-1 : "Random"
+		0 : "Default"
+		1 : "Green"
+	]
+]
+
+//----------------------------------------------------------------------
+@PointClass base(Appearflags, targetname) size(-16 -16 -24, 16 16 40)
+	color(192 64 0) = misc_dknight : "Misc Death Knight" [
+	spawnflags(Flags) = [ 64 : "Start Off" : 0 ]
+	angle(integer) : "facing angle -1=random"
+	frame(choices) : "Body Pose" = [
+		223 : "On Front"
+		243 : "On Back"
+	]
+]
+
+//----------------------------------------------------------------------
+@SolidClass base(Appearflags, targetname) = misc_bob : "Bobbing models" [
+    mdl(string) : "Model name (progs/candle.mdl)"
+	height(integer) : "Intensity (def=4)"
+	count(integer) : "Cycle timer (def=2, min=1)"
+	waitmin(integer) : "Speed up scale (def=1)"
+	waitmin(integer) : "Slow down scale (def=0.75)"
+	delay(integer) : "Delay start (-1=random)"
+]	
+
+//----------------------------------------------------------------------
+@PointClass base(Appearflags, targetname, target, target2) size(-16 -16 -8, 16 16 8)
+	color(0 128 128) flags(Angle) = misc_textbook : "Misc Text Books" [
+	spawnflags(Flags) = [
+		 1 : "No Model + Effects" : 0
+		 2 : "Plinth1" : 0
+		 4 : "Plinth2" : 0
+		 8 : "StoryLine" : 0
+		16 : "Plinth Collision" : 0
+		32 : "Facing Angle Only" : 0
+		64 : "Start Off" : 0
+		128: "No Effects" : 0
+	]
+	v_angle(string) : "Viewing angle (def='30 60 0')"
+	exactskin(choices) : "Book Cover" = [
+		0 : "Brown 1"
+		1 : "Brown 2"
+		2 : "Green 1"
+		3 : "Green 2"
+		4 : "Blue 1"
+		5 : "Blue 2"
+		6 : "Red 1"
+		7 : "Red 2"
+	]
+	randomskin(integer) : "Range for random skin"
+	pos1(string) : "Touch trigger minimum size"
+	pos2(string) : "Touch trigger maximum size"
+	message(string) : "Header message"
+	message2(string) : "Body text 1"
+	message3(string) : "Body text 2"
+	message4(string) : "Body text 3"
+]
+
+//----------------------------------------------------------------------
+@PointClass base(Appearflags, targetname, target) size(-16 -16 -8, 16 16 8)
+	color(0 128 256) flags(Angle) = misc_textstory : "Misc Text Story" [
+	message(string) : "Header message"
+	message2(string) : "Body text 1"
+	message3(string) : "Body text 2"
+	message4(string) : "Body text 3"
+]
+
+//----------------------------------------------------------------------
+@PointClass base(Appearflags, targetname, target) size(-16 -16 -8, 16 16 8)
+	color(0 16 256) flags(Angle) = misc_textstoryctrl : "Misc Story Controller" []
+
+//----------------------------------------------------------------------
+@PointClass size(-32 -32 -24, 32 32 64) color(0 128 128) 
+	flags(Angle) = misc_targetdummy : "Misc target Dummies" [
+	spawnflags(Flags) = [
+		 1 : "Knight" : 0
+		 2 : "Wizard" : 0
+		 4 : "Ogre" : 0
+		 8 : "Hell Knight" : 0
+		16 : "Zombie" : 0
+		32 : "Demon" : 0
+		64 : "Shalrath" : 0
+		128: "Shambler" : 0
+	]
+	noise1(string) : "targetnumber tracking weapon used"
+	noise2(string) : "targetnumber tracking enemy distance"
+	noise3(string) : "targetnumber tracking damage"
+	noise4(string) : "targetnumber tracking % efficency"
+	wait(integer) : "Impact marker removal time"
+]
+@PointClass base(targetname) size(-4 -4 -8, 4 4 8) color(128 128 0) 
+	flags(Angle) = misc_targetnumber : "Ingame numbers" [
+	pos1(string) : "X=top digits, Y=lower digits"
+]
+
+//-----------------------------------------------------------------------------
+@BaseClass base(Appearflags, targetname) 
+	color(0 128 192) flags(Angle) = EBox [
+	spawnflags(Flags) = [
+		32 : "Floating" : 0
+		64 : "Start Off" : 0
+	]
+	skin_override(choices) : "Skin Type" = [
+		0 : "Original ID (def)"
+		1 : "Rubicon2"
+		2 : "Quoth Plasma"
+		3 : "Quoth Toxic"
+		4 : "Medieval Wood (light)"
+		5 : "Medieval Wood (dark)"
+	]
+	noise(string) : "Custom Sound - Explosion"
+	health(integer) : "Health (def=15)"
+	dmg(integer) : "Radius Damage (def=160)"
+]
+@PointClass base(EBox) size(-16 -16 0, 16 16 64) studio("progs/explode_box1.mdl") = misc_explobox : "Large box" []
+@PointClass base(EBox) size(-16 -16 0, 16 16 32) studio("progs/explode_box2.mdl") = misc_explobox2 : "Small box" []
+
+
+//======================================================================
+//
+// TRAP entities
+//
+//======================================================================
+@BaseClass base(Appearflags,targetname,target) size(-8 -8 -8, 8 8 8) 
+	color(0 128 192) flags(Angle) = Trap [
+	spawnflags(Flags) = [ 
+		32 : "Toggle" : 0
+		128 : "Tracking" : 0
+	]
+]
+//----------------------------------------------------------------------
+@PointClass base(Trap) = trap_spikeshooter : "Spike Shooter" [
+	spawnflags(Flags) = [
+		1 : "SNG Spike" : 0
+		2 : "Laser" : 0
+		4 : "Wizard" : 0
+		8 : "Hell Knight" : 0
+	]
+	speed(integer) : "Projectile speed"
+	wait(integer) : "time between firing (def=1s)"
+	delay(integer) : "random time between firing"
+]
+@PointClass base(Trap) = trap_grenadeshooter : "Grenade Shooter" [
+	spawnflags(Flags) = [ 1 : "Player" : 0 ]
+	speed(integer) : "Projectile speed"
+	wait(integer) : "time between firing (def=1s)"
+	delay(integer) : "random time between firing"
+]
+@PointClass base(Trap) = trap_rocketshooter : "Rocket Shooter" [
+	spawnflags(Flags) = [
+		1 : "Lava" : 0
+		2 : "Fireball" : 0
+		4 : "Jim" : 0
+	]
+	speed(integer) : "Projectile speed"
+	wait(integer) : "time between firing (def=1s)"
+	delay(integer) : "random time between firing"
+]
+@PointClass base(Trap) = trap_lightningshooter : "Lightning Shooter" [
+	spawnflags(Flags) = [
+		1 : "Cthton" : 0
+		16 : "Particles" : 0
+	]
+	wait(integer) : "time between firing (def=1s)"
+	delay(integer) : "random time between firing"
+	volume(integer) : "Sound volume (def=0.75)"
+	pos1(string) : "random XYZ wobble to source"
+	pos2(string) : "random XYZ wobble to target"
+]
+@PointClass base(Trap) = trap_gasshooter : "Particle Shooter" [
+	spawnflags(Flags) = [ 
+		1 : "Steam" : 1 
+		2 : "Fire" : 0
+		4 : "Poison" : 0
+		16 : "Silent" : 0
+	]
+	wait(integer) : "Spawn time delay (def=0.05s)"
+	waitmin(integer) : "Auto switch off timer (def=0.5s)"
+	speed(integer) : "Velocity speed (def=200)"
+	dmg(integer) : "Touch Damage (def=1)"
+]
+//----------------------------------------------------------------------
+@BaseClass base(Appearflags,targetname,target) = Trap_Pendulum [
+	spawnflags(Flags) = [
+		1 : "Reverse" : 0 : "Start at frame 12 instead of 0"
+		2 : "One Swing" : 0 : "swing back & forth and then stop"
+		64 : "Start OFF" : 0
+	]
+	dmg(integer) : "Touch Damage (def=5)"
+	waitmin(integer) : "Time between Touch Damage (def=0.5s)"
+	wait(integer) : "Starting Delay"
+]
+@PointClass base(Trap_Pendulum) size(-8 -192 -24, 8 0 24) = trap_pendlong : "Long Pendulum" []
+@PointClass base(Trap_Pendulum) size(-192 -8 -24, 0 8 24) = trap_pendlongx : "Long Pendulum X Axis" []
+@PointClass base(Trap_Pendulum) size(-8 -128 -24, 8 0 24) = trap_pendshort : "Short Pendulum" []
+@PointClass base(Trap_Pendulum) size(-128 -8 -24, 0 8 24) = trap_pendshortx : "Short Pendulum X Axis" []
+//----------------------------------------------------------------------
+@BaseClass base(Appearflags,targetname,target) = Trap_SawBlade [
+	spawnflags(Flags) = [
+		1 : "Start ON" : 0
+		2 : "Reverse" : 0 : "Start at frame 12 instead of 0"
+		64 : "Start OFF" : 0
+	]
+	speed(integer) : "Speed Travel (def=100)"
+	yaw_speed(integer) : "Speed Rotation (def=180)"
+	dmg(integer) : "Touch Damage (def=4)"
+	waitmin(integer) : "Damage pause ON state (def=0.1s)"
+	height(integer) : "Damage pause OFF state (def=1s)"
+	lip(choices) : "Deceleration time" = [
+		-1 : "Instant Stop"
+		 2 : "Default"
+	]
+	sounds(choices) : "Sounds" = [
+		0 : "Silent (def)"
+		1 : "Woodmill"
+		5 : "Custom"
+	]
+	noise(string) : "Custom Sound - Stopping"
+	noise1(string) : "Custom Sound - Moving"
+]
+@PointClass base(Trap_SawBlade) size(-4 -32 -32, 4 32 32) = trap_sawbladey : "Saw Blade on Y axis" []
+@PointClass base(Trap_SawBlade) size(-32 -4 -32, 32 4 32) = trap_sawbladex : "Saw Blade on X axis" []
+
+
+//======================================================================
+//
+// LIGHT entities
+//
+//======================================================================
+@baseclass base(targetname,target) = Light [
+	light(integer) : "Brightness" :  : "Set the light intensity. Negative values are also allowed and will cause the entity to subtract light cast by other entities. Default 300"
+	_color(string) : "Light color" :  : "Specify red(r), green(g) and blue(b) components for the colour of the light. RGB component values are between 0 and 1. Default is white light ('1 1 1')"
+	wait(integer) : "Fade distance multiplier" :  : "Scale the fade distance of the light by 'n'. Values of n more than 1 make the light fade more quickly with distance, and values less than 1 make the light fade more slowly (and thus reach further). Default 1"
+	delay(choices) : "Attenuation" :  : "Select an attenuation formula for the light: 0 = Linear attenuation (default). 1 = 1/x attenuation. 2 = 1/(x^2) attenuation. 3 = No attenuation (same brightness at any distance). 4 = 'local minlight' - No attenuation and like minlight, it won't raise the lighting above it's light value. Unlike minlight, it will only affect surfaces within line of sight of the entity. 5 = 1/(x^2) attenuation, but slightly more attenuated and without the extra bright effect that 'delay 2' has near the source"  = [
+		0 : "Linear falloff (Default)"
+		1 : "Inverse distance falloff"
+		2 : "Inverse distance squared"
+		3 : "No falloff"
+		4 : "Local minlight"
+		5 : "Inverse distance 2"
+	]
+	mangle(string) : "Spotlight direction" :  : "Turns the light into a spotlight and specifies the direction of light using yaw(x), pitch(y) and roll(z) in degrees. Yaw specifies the angle around the Z-axis from 0 to 359 degrees and pitch specifies the angle from 90 (straight up) to -90 (straight down). Roll has no effect, so use any value (e.g. 0). Often easier than the 'target' method"
+	angle(integer) : "Spotlight cone angle" :  : "Specifies the angle in degrees for a spotlight cone. Default 40"
+	style(choices) : "Appearance" = [
+		0 : "Normal"
+		10: "Fluorescent flicker"
+		2 : "Slow, strong pulse"
+		11: "Slow pulse, noblack"
+		5 : "Gentle pulse"
+		1 : "Flicker A"
+		6 : "Flicker B"
+		3 : "Candle A"
+		7 : "Candle B"
+		8 : "Candle C"
+		4 : "Fast strobe"
+		9 : "Slow strobe"
+	]
+	_dirt(integer) : "Dirt map (override)" :  : "Overrides the worldspawn setting of '_dirt' for this particular light. -1 to disable dirtmapping (ambient occlusion) for this light, making it illuminate the dirtmapping shadows. 1 to enable ambient occlusion for this light. Default is to defer to the worldspawn setting"
+	_dirtscale(integer) : "Dirt scale (override)" :  : "Override the global '_dirtscale' or '_dirtgain' settings to change how this light is affected by dirtmapping (ambient occlusion). See descriptions of these keys in the worldspawn section"
+	_deviance(integer) : "Deviance" :  : "Split up the light into a sphere of randomly positioned lights within radius 'n' (in world units). Useful to give shadows a wider penumbra. '_samples' specifies the number of lights in the sphere. The 'light' value is automatically scaled down for most lighting formulas (except linear and non-additive minlight) to attempt to keep the brightness equal. Default is 0, do not split up lights"
+	_samples(integer) : "No. of Deviance lights" :  : "Number of lights to use for '_deviance'. Default 16 (only used if '_deviance' is set)"
+	_surface(string) : "Surface light texture name" :  : "Makes surfaces with the given texture name emit light, by using this light as a template which is copied across those surfaces. Lights are spaced about 128 units (though possibly closer due to bsp splitting) apart and positioned 2 units above the surfaces"
+	_surface_offset(integer) : "Surface light offset" :  : "Controls the offset lights are placed above surfaces for '_surface'. Default 2"
+	_softangle(integer) : "Spotlight soft angle" :  : "Specifies the angle in degrees for an inner spotlight cone (must be less than the 'angle' cone. Creates a softer transition between the full brightness of the inner cone to the edge of the outer cone. Default 0 (disabled)"
+	_anglescale(integer) : "Light angle scale" :  : "Sets a scaling factor for how much influence the angle of incidence of light on a surface has on the brightness of the surface. n must be between 0.0 and 1.0. Smaller values mean less attenuation, with zero meaning that angle of incidence has no effect at all on the brightness. Default 0.5"
+]
+@baseclass size(-8 -8 -8, 8 8 8) base(Light) = LightPoint [] 
+@baseclass size(-10 -10 -20, 10 10 20) base(Light) = LightTorch []
+@baseclass size(-10 -10 -12, 12 12 18) offset(0 0 12) base(Light) = LightFlame []
+@baseclass = LightOff [ spawnflags(flags) = [ 1 : "Start Off" : 0 ] ]
+
+//----------------------------------------------------------------------
+@PointClass base(LightPoint,LightOff) iconsprite("sprites/light.spr") = 
+	light : "Invisible lightsource" []
+@PointClass base(LightPoint,LightOff) iconsprite("sprites/light.spr") = 
+	light_fluoro : "Fluorescent light" [
+	spawnflags(flags) = [
+		2 : "No Sound" : 0
+	]
+]
+@PointClass base(LightPoint) iconsprite("sprites/light.spr") = 
+	light_fluorospark : "Sparking fluorescent light" [
+	spawnflags(flags) = [
+		2 : "No Sound" : 0
+	]
+]
+@PointClass base(LightPoint,LightOff) sprite("progs/s_light.spr") = 
+	light_globe : "Globe light" [
+	spawnflags(flags) = [
+		4 : "No Static" : 0
+	]
+]
+
+//----------------------------------------------------------------------
+@PointClass base(LightTorch,LightOff) studio("progs/flame.mdl") = 
+	light_torch_small_walltorch : "Small walltorch" [
+	spawnflags(flags) = [
+		2 : "No Sound" : 0
+		4 : "No Static" : 0
+		128 : "No Particles" : 0
+	]
+]
+@PointClass base(LightFlame,LightOff) studio("progs/flame2.mdl") sequence(0) = 
+	light_flame_small_yellow : "Small yellow flame" [
+	spawnflags(flags) = [
+		2 : "No Sound" : 0
+		4 : "No Static" : 0
+		128 : "No Particles" : 0
+	]
+]
+@PointClass base(LightFlame,LightOff) studio("progs/flame2.mdl") sequence(1) = 
+	light_flame_large_yellow : "Large yellow flame" [
+	spawnflags(flags) = [
+		2 : "No Sound" : 0
+		4 : "No Static" : 0
+		128 : "No Particles" : 0
+	]
+]
+
+//----------------------------------------------------------------------
+@PointClass base(Light,LightOff) size(-4 -4 -16, 4 4 16) sequence(1)
+	studio("progs/misc_candle2.mdl") = light_candle : "Church candle" [
+	spawnflags(flags) = [
+		2 : "Flame Off" : 0
+		8 : "DP Shadows" : 0
+	]
+	height(choices) : "Size" = [
+		-1: "Random"
+		0 : "Default"
+		1 : "Short"
+		2 : "Medium"
+		3 : "Regular"
+	]
+	t_width(choices) : "Width" = [
+		-1: "Random"
+		0 : "Default"
+		1 : "Regular"
+		2 : "Fat"
+		3 : "Thin"
+	]
+	lip(integer) : "Move model down def=16"
+]
+@PointClass base(Light, LightOff) size(-10 -10 -20, 10 10 20) studio("progs/misc_lightpost.mdl") =
+	light_postlight : "Light Post (from Quoth)" []
+@PointClass base(Light, LightOff) size(-10 -10 -20, 10 10 20) studio("progs/misc_lighttube.mdl") =
+	light_tubelight : "Light Tube (from Quoth)" []
+@PointClass base(Light, LightOff) size(-10 -10 -20, 10 10 20) studio("progs/misc_fixture1.mdl") =
+	light_fixture1 : "Light Fixture (from Rubicon)" [
+	fixangle(integer) : "Angle of model"
+]
+
+
+//======================================================================
+//
+// HIPNOTIC/RITUAL ROTATION STUFF
+//
+//======================================================================
+@baseclass base(Appearflags,targetname,target) flags(Angle) = HipItems [
+	_dirt(integer) : "Dirt mapping (override)"
+	_minlight(integer) : "Min light for all surface"
+	_mincolor(string) : "Min light color R G B"
+	_shadow(choices) : "Shadows" = [
+		0 : "Do Nothing"
+		1 : "Cast shadows"
+	]
+	_shadowself(choices) : "Self Shadow" = [
+		0 : "Do Nothing"
+		1 : "Cast shadows on Self"
+	]
+]
+
+//----------------------------------------------------------------------
+@PointClass base(Appearflags,targetname) size(-4 -4 -4, 4 4 4) = 
+	info_rotate : "Rotating Objects pivot point" []
+@PointClass base(Appearflags,targetname,target) size(-8 -8 -8, 8 8 8) =
+	func_rotate_entity : "Rotating Object" [
+	spawnflags(flags) = [
+		1 : "Toggle" : 0
+		2 : "Start ON" : 0
+	]
+	rotate(integer) : "Rotation Rate"
+	speed(integer) : "Spin up time"
+]
+@PointClass base(Appearflags,targetname,target) size(-8 -8 -8, 8 8 8) =
+	path_rotate : "Rotating path corner" [
+	spawnflags(flags) = [
+		1 : "Rotation" : 0 : " Rotate train at rate specified by 'rotate'"
+		2 : "Angles" : 0 : "Rotate to the angles specified by 'angles'"
+		4 : "Stop" : 0 : "stop train and wait to be retriggered"
+		8 : "No Rotate" : 0 : "stop train rotating when waiting to be triggered"
+		16: "Damage" : 0 : "Cause damage based on 'dmg'"
+		32: "Move Time" : 0 : "Interpret 'speed' as the length of time to take moving"
+		64: "Set Damage" : 0 : "Set all targets damage to 'dmg'"
+	]
+	event(string) : "target to trigger" : "Trigger target when train arrives at corner"
+	noise(string) : "Custom stop sound"
+	noise1(string) : "Custom start sound"
+	speed(integer) : "Set speed of train"
+]
+@PointClass base(Appearflags,targetname,target) size(-8 -8 -8, 8 8 8) =
+	func_rotate_train : "Rotating Platform" [
+	path(string) : "Starting position"
+	speed(integer) : "Travel Speed (def=100)"
+	dmg(integer) : "blocking damage (def=0)"
+	sounds(choices) : "Sounds" = [
+		0 : "Silent"
+		1 : "Metal"
+	]
+	noise(string) : "Custom sound - stop"
+	noise1(string) : "Custom sound - moving"
+]
+@SolidClass base(HipItems) = func_movewall : "Rotating Collision" [
+	spawnflags(flags) = [
+		1 : "Visible" : 0 : "Causes brush to be displayed"
+		2 : "Touch" : 0 : "Cause damage when touched by player"
+		4 : "No Solid" : 0 : "makes the brush non-solid"
+	]
+	dmg(integer) : "Touch/Block Damage"
+]
+@SolidClass base(HipItems) = rotate_object : "Rotating Object" []
+@PointClass base(Appearflags,targetname) size(-8 -8 -8, 8 8 8) =
+	func_rotate_door : "Rotating Door" [
+	spawnflags(flags) = [
+		1 : "Stay Open" : 0 : "Reopen after closing, stops a once only door from closing"
+	]
+	target(target_destination) : "Target rotate_object"
+	target2(target_destination) : "Target2 info_rotate (move on spawn)"
+	dmg(integer) : "Blocking damage (def=2)"
+	speed(integer) : "Time to Rotate open/close"
+	sounds(choices) : "Sounds" = [
+		1 : "Medieval (def)"
+		2 : "Metal"
+		3 : "Base"
+		4 : "Silent"
+	]
+]
+
+//======================================================================
+//
+// BREAKABLES
+//
+//======================================================================
+@BaseClass base(Appearflags,targetname,target,target2) = Break [
+	spawnflags(flags) = [
+		1 : "Start off" : 0 : "Start hidden"
+		2 : "No Damage" : 0 : "Cannot be damaged"
+		4 : "Explosion" : 0 : "Produces explosion"
+		8 : "Silent" : 0 : "No Breaking Sounds"
+		16 : "Damage" : 0 : "Rubble does damage"
+		32: "No Monster" : 0 : "Immune to monster damage"
+		64: "No Sound" : 0 : "No Impact Sounds"
+		128: "No Rotate" : 0 : "No Y rotation for rubble"
+	]
+	style(choices) : "Style Default" = [
+		1 : "Rock (default)"
+		2 : "Wood"
+		3 : "Glass"
+		4 : "Metal"
+		5 : "Brick"
+		6 : "Ceramic"
+		10: "Custom"
+	]
+	brksound(choices) : "Sound Breaking" = [
+		0 : "Use Default"
+		1 : "Rock"
+		2 : "Wood"
+		3 : "Glass"
+		4 : "Metal"
+		5 : "Brick"
+		6 : "Ceramic"
+		10: "Custom"
+	]
+	brkimpsound(choices) : "Sound Impact" = [
+		0 : "Use Default"
+		1 : "Rock"
+		2 : "Wood"
+		3 : "Glass"
+		4 : "Metal"
+		5 : "Brick"
+		6 : "Ceramic"
+		10: "Custom"
+	]
+	brkobjects(choices) : "Model Texture/Type" = [
+		 0 : "Use Default"
+		10 : "rock4_1 (dark bricks)"
+		11 : "rock4_2 (light stone)"
+		12 : "rock3_8 (light vertical)"
+		13 : "city5_3 (plaster)"
+		14 : "stone1_7b (blue stone)"
+		15 : "cliff4 (Black rock)"
+		20 : "dung01_3 (dark)"
+		21 : "dung01_2 (light)"
+		22 : "wizwood1_7 (mouldy)"
+		30 : "window1_2 (blue sqr)"
+		31 : "window01_4 (red)"
+		32 : "window02_1 (yellow)"
+		40 : "metal1_2 (gen brown)"
+		41 : "metal4_5"
+		42 : "metal7_7"
+		50 : "wbrick1_5 (large brown)"
+		51 : "city2_3 (small sewer)"
+		52 : "city6_8 (small drywall)"
+		53 : "wiz1_4 (large white)"
+		54 : "city2_1 (small red)"
+		60 : "ceramic_1"
+	]
+	noise(string) : "Custom Sound - Initial Break"
+	noise1(string) : "Custom Sound - Impact 1"
+	noise2(string) : "Custom Sound - Impact 2"
+	noise3(string) : "Custom Sound - Impact 3"
+	noise4(string) : "Custom Sound - Impact 4"
+	brkobj1(string) : "Custom Model - Rubble 1"
+	brkobj2(string) : "Custom Model - Rubble 2"
+	brkobj3(string) : "Custom Model - Rubble 3"
+	brkobj4(string) : "Custom Model - Rubble 4"
+	health(integer) : "Health"
+	count(integer) : "Rubble Qty to spawn (def=4)"
+	cnt(choices) : "Rubble (Random) to spawn" = [
+		-1 : "No random qty"
+		 0 : "Default = 4"
+	]
+	dmg(integer) : "Explosive Radius Damage"
+	pos1(string) : "Particle colour" : : "x=start particle colour, y=random range, z=quantity"
+	brkvelbase(string) : "Velocity Base (def=50 50 100)"
+	brkveladd(string) : "Velocity Extra (def=100 100 150)"
+	brkavel(integer) : "Velocity Rotation (def=200)"
+	brkfade(integer) : "Rubble fade timer (def=4)"
+	brkmondmg(integer) : "Damage multiplier for monster damage"
+	angles(vector) : "Direction to throw rubble"
+	brktrigjump(integer) : "Monster jump only"
+	brktrigmissile(integer) : "Explosive dmg only"
+	brktrignoplayer(integer) : "No player damage"
+	brkgravity(integer) : "Rubble gravity (def=1)"
+]
+
+//----------------------------------------------------------------------
+@SolidClass base(Break) = func_breakable : "Breakable" []
+@PointClass base(Break) = func_breakable_spawner : "Breakable Spawner" []
+@SolidClass base(Appearflags,targetname) = func_breakable_wall : "Breakable Wall" [
+	spawnflags(flags) = [
+		1 : "Start ON" : 0 : "Start visual to player"
+		2 : "Solid" : 0 : "Has player collision"
+		4 : "Fadeout" : 0 : "Fadeaway once triggered"
+	]
+	wait(choices) : "Trigger Quantity" = [
+		0 : "Multiple Times"
+		-1: "Once Only"
+	]
+	waitmin(integer) : "Fadeout timer"
+]
+@PointClass base(Appearflags,targetname) size(-8 -8 -8, 8 8 8) = 
+	trigger_monsterbreak : "Trigger monster + breakable" [
+	spawnflags(flags) = [
+		1 : "No Delay" : 0 : "Instantly trigger"
+		2 : "Wake Animation" : 0 : "Use Special monster animation"
+	]
+	target(string) : "targets func_breakable"
+	target2(string) : "targets Monster"
+	wait(integer) : "Time Delay before firing breakable (def=0.2s)"
+]
+@PointClass base(Appearflags,targetname) size(-4 -4 -4, 4 4 4) = 
+	trigger_explode : "Trigger Sprite Explosion" [
+	spawnflags(flags) = [
+		2 : "NoParticles" : 0 : "No old particle effect"
+	]
+	dmg(integer) : "Explosive radius (def=40)"
+	delay(integer) : "Delay before explosion"
+	noise(string) : "Explosive Wav file to play"
+	wait(integer) : "Re-trigger (def=-1 trig once)"
+	style(choices) : "Explosion Type" = [
+		0 : "Explosive"
+		1 : "Plasma"
+		2 : "Poison"
+		3 : "Electric"
+		4 : "Burst (Smoke/Flame/Poison)"
+	]
+	height(choices) : "Explosion Size" = [
+		1 : "Small (Default)"
+		2 : "Medium"
+		3 : "Large"
+		-1 : "Random"
+	]
+]
+
+	
+//======================================================================
+//
+// MONSTERS
+//
+//======================================================================
+@baseclass base(Appearflags,targetname,target,target2) 
+flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
+	spawnflags(flags) = [
+		1 : "Ambush" : 0 : "Wakeup when player is seen"
+		8 : "Silent" : 0 : "No wakeup sight sound"
+		16 : "NoIdle" : 0 : "No idle sounds (cupboard monster)"
+		32 : "NoGFX" : 0 : "No teleport spawn effect or sound"
+		64 : "Delay" : 0 : "Will wait for trigger before spawning"
+		128 : "Angry" : 0 : "Will spawn angry at the player"
+	]
+	angrytarget(target_destination) : "Angry target"
+	deathtarget(target_destination) : "Death target"
+	health(integer) : "Amount of Health" :  : "Override health defined in QC"
+	exactskin(integer) : "Model Skin number" :  : "Override default skin (no range check)"
+	upgrade_axe(choices) : "Axe Upgrade" = [
+		 0 : "Do Nothing"
+		 1 : "Only spawn if got upgrade"
+	]
+	upgrade_ssg(choices) : "Shotgun Upgrade" = [
+		 0 : "Do Nothing"
+		 1 : "Only spawn if got upgrade"
+	]
+	upgrade_lg(choices) : "Lightning Gun Upgrade" = [
+		 0 : "Do Nothing"
+		 1 : "Only spawn if got upgrade"
+	]
+	nomonstercount(choices) : "Monster Count Total" = [
+		 0 : "Default"
+		 1 : "No Counter"
+	]
+	infightextra(integer) : "Infighting Damage" :  : "Damage multiplier when infighting"
+	pain_ignore(choices) : "Monster Pain" = [
+		 0 : "Default"
+		 1 : "Ignore"
+	]
+	noinfighting(choices) : "Monster Infighting" = [
+		 0 : "Default"
+		 1 : "Ignore"
+	]
+	no_liquiddmg(choices) : "Slime/Lava Damage" = [
+		 0 : "Default"
+		 1 : "No Damage"
+	]
+	no_zaware(choices) : "Monster Z Aware" = [
+		 0 : "Default"
+		 1 : "Disabled"
+	]
+	bboxtype(choices) : "Bounding Box Override" = [
+		 0 : "Default"
+		 1 : "Tiny"
+		 4 : "Short"
+		 5 : "Tall"
+		 7 : "Wide"
+		 8 : "Giant"
+		 10 : "Massive"
+	]
+	gibondeath(choices) : "Gib/Explode on Death" = [
+		 0 : "Default"
+		 1 : "Explode on death"
+	]
+	bodyfadeaway(integer) : "Body fade time" :  : "Time (secs) before body/head fades"
+	movespeed(choices) : "Movement Speed" = [
+		-1 : "No Movement (turret)"
+		 1 : "Free Movement"
+	]
+	turrethealth(integer) : "% of HP turret is release"
+	turrettarget(target_destination) : "Trigger on turret % HP release"
+]
+@baseclass base(Monster) size(-16 -16 -24, 16 16 16) = MonTiny []
+@baseclass base(Monster) size(-32 -32 -24, 32 32 40) = MonDog []
+@baseclass base(Monster) size(-32 -32 -24, 32 32 64) = MonDemon []
+@baseclass base(Monster) size(-16 -16 -24, 16 16 24) = MonFish []
+@baseclass base(Monster) size(-32 -32 -24, 32 32 64) = MonGolem []
+@baseclass base(Monster) size(-16 -16 -24, 16 16 32) = MonShort []
+@baseclass base(Monster) size(-16 -16 -24, 16 16 40) = MonTall []
+@baseclass base(Monster) size(-32 -32 -24, 32 32 64) = MonWide []
+@baseclass base(Monster) size(-32 -32 -24, 32 32 64) = MonGiant []
+@baseclass base(Monster) size(-32 -32 -24, 32 32 64) = MonMassive []
+
+//----------------------------------------------------------------------
+@PointClass base(MonShort) studio("progs/mon_soldier.mdl") skin(0) = monster_army : "Soldier" []
+@PointClass base(MonShort) studio("progs/mon_soldier.mdl") skin(4) = monster_army_rocket : "Rocket Soldier" []
+@PointClass base(MonShort) studio("progs/mon_soldier.mdl") skin(6) = monster_army_grenade : "Grenade Soldier" []
+@PointClass base(MonShort) studio("progs/mon_soldier.mdl") skin(8) = monster_army_plasma : "Plasma Soldier" []
+
+//----------------------------------------------------------------------
+@PointClass base(MonDemon) studio("progs/mon_demon.mdl") = monster_demon1 : "Fiend" [
+	poisonous(integer) : "Poison attack+skin" : : "Change skin + poison dmg"
+]
+@PointClass base(MonDog) studio("progs/mon_dog.mdl") = monster_dog : "Nasty Doggie" []
+
+//----------------------------------------------------------------------
+@PointClass base(MonFish) studio("progs/mon_fish.mdl") = monster_fish : "Rotfish" [
+	spawnflags(flags) = [ 2 : "Small" : 0 ]
+]
+@PointClass base(MonGolem) studio("progs/mon_golem.mdl") = monster_golem : "Golem" [
+	spawnflags(flags) = [ 
+		2 : "Start as Statue" : 0
+		4 : "Melee+Stomp Only" : 0
+	]
+	frame(integer) : "Statue Pose def=48" :  : "Override statue pose"
+	pos1(string) : "Statue Idle range" :  : "X->Y, Z=0 ; Idle animation range to pick from"
+]
+
+//----------------------------------------------------------------------
+@PointClass base(MonTall) studio("progs/mon_enforcer.mdl") skin(0) = monster_enforcer : "Enforcer" []
+@PointClass base(MonTall) studio("progs/mon_enforcer.mdl") skin(4) = monster_defender : "Defender" []
+@PointClass base(MonTall) studio("progs/mon_enforcer.mdl") skin(6) = monster_eliminator : "Eliminator" []
+@PointClass base(MonTall) studio("progs/mon_fumigator.mdl") = monster_fumigator : "Fumigator" []
+@PointClass base(MonTall) studio("progs/mon_pyro.mdl") = monster_pyro : "Pyro" []
+@PointClass base(MonTall) studio("progs/mon_centurion.mdl") = monster_centurion : "Centurion" []
+@PointClass base(MonShort) studio("progs/mon_jim.mdl") = monster_jim : "Jim"
+[ spawnflags(flags) = [ 4 : "Rockets" : 0 ] ]
+
+//----------------------------------------------------------------------
+@PointClass base(MonShort) studio("progs/mon_knight.mdl") = monster_knight : "Knight" [
+	spawnflags(flags) = [ 
+		2 : "Stone Statue" : 0
+		4 : "Not Frozen" : 0
+	]
+	frame(integer) : "Statue Pose def=44" :  : "Override statue pose"
+	pos1(string) : "Statue Idle range" :  : "X->Y, Z=0 ; Idle animation range to pick from"
+]
+@PointClass base(MonTall) studio("progs/mon_hknight.mdl") = monster_hell_knight : "Hell knight" [
+	spawnflags(flags) = [ 
+		2 : "Stone Statue" : 0
+		4 : "Not Frozen" : 0
+	]
+	frame(integer) : "Statue Pose def=73" :  : "Override statue pose"
+	pos1(string) : "Statue Idle range" :  : "X->Y, Z=0 ; Idle animation range to pick from"
+]
+@PointClass base(MonTall) studio("progs/mon_hknight.mdl") = monster_hell_pointknight : "Hell knight" [
+	spawnflags(flags) = [ 
+		2 : "Stone Skin" : 0
+		128: "N/A" : 0
+	]
+	target(target_destination) : "target" :  : "target for electricity"
+	target2(target_destination) : "target2" : : "trigger to fire no pointing"
+	t_length(integer) : "target random wobble" : : "0 = default 5"
+	dmg(integer) : "target contact damage" : : "0 = default 5"
+	pos1(string) : "XYZ lightning offset" : : "uses v_forward/v_right/v_up"
+	pos2(string) : "XYZ lightning random" : : "uses v_forward/v_right/v_up"
+	pos3(string) : "Animation frame set" : : "Start/Finish/Direction"
+]
+@PointClass base(MonShort) studio("progs/mon_dguard.mdl") = monster_dguard : "Death Guard" []
+@PointClass base(MonShort) studio("progs/mon_dcrossbow.mdl") = monster_dcrossbow : "Crossbow Knight"
+[ spawnflags(flags) = [ 4 : "Tracking" : 0 ] ]
+@PointClass base(MonTall) studio("progs/mon_dknight.mdl") = monster_dknight : "Death Knight" []
+@PointClass base(MonTall) studio("progs/mon_dfury.mdl") = monster_dfury : "Fury Knight" []
+@PointClass base(MonTall) studio("progs/mon_dsergeant.mdl") = monster_dsergeant : "Sergeant Knight" []
+
+//----------------------------------------------------------------------
+@PointClass base(MonWide) studio("progs/mon_ogre.mdl") = monster_ogre : "Ogre"
+[ spawnflags(flags) = [ 4 : "Green Skin" : 0 ] ]
+@PointClass base(MonWide) studio("progs/mon_ogrefish.mdl") = monster_ogre_fishing : "Ogre Fishing"
+[ spawnflags(flags) = [ 4 : "Green Skin" : 0 ] ]
+@PointClass base(MonWide) studio("progs/mon_hogre.mdl") = monster_hogre : "Hunter Ogre"
+[ spawnflags(flags) = [ 4 : "Metal Skin" : 0 ] ]
+@PointClass base(MonWide) studio("progs/mon_hogremac.mdl") = monster_hogremac : "Hunter Ogre Mace"
+[ spawnflags(flags) = [ 4 : "Metal Skin" : 0 ] ]
+@PointClass base(MonWide) studio("progs/mon_hogreham.mdl") = monster_hogreham : "Hunter Ogre Hammer"
+[ spawnflags(flags) = [ 4 : "Metal Skin" : 0 ] ]
+
+//----------------------------------------------------------------------
+@PointClass base(MonGiant) studio("progs/mon_drole.mdl") = monster_drole : "Drole" []
+@PointClass base(MonGiant) studio("progs/mon_minotaur.mdl") = monster_minotaur : "Minotaur"
+[ spawnflags(flags) = [ 4 : "Minions" : 0 ] ]
+@PointClass base(MonWide) studio("progs/mon_shalrath.mdl") = monster_shalrath : "Shalrath"
+[ spawnflags(flags) = [ 4 : "Minions" : 0 ] ]
+@PointClass base(MonGiant) studio("progs/mon_freddie.mdl") = monster_freddie : "Freddie" [
+	spawnflags(flags) = [
+		2 : "Laser" : 0
+	]
+]
+@PointClass base(MonGiant) studio("progs/mon_seeker.mdl") = monster_seeker : "Seeker" [
+	spawnflags(flags) = [
+		4 : "Shield" : 0
+	]
+	state(choices) : "Arm setup" = [
+		0 : "Both Arms (def)"
+		1 : "Left Arm"
+		2 : "Right Arm"
+	]
+	target2(target_destination) : "target2" : : "triggered when shield turned off"
+]
+
+//----------------------------------------------------------------------
+@PointClass base(MonMassive) studio("progs/shambler.mdl") = monster_shambler : "Shambler" [
+	poisonous(integer) : "Poison attack+skin" : : "Change skin + poison dmg"
+]
+
+//----------------------------------------------------------------------
+@PointClass base(MonTiny) studio("progs/mon_lostsoul.mdl") = monster_lostsoul : "Lost Soul" []
+@PointClass base(MonTiny) studio("progs/mon_spiderb.mdl") = monster_spider : "Spider" [
+	spawnflags(flags) = [ 
+		2 : "Large Green" : 0
+		4 : "On Ceiling" : 0 
+	]
+]
+@PointClass base(MonTiny) studio("progs/mon_scorpion.mdl") = monster_scorpion : "Scorpion"
+[ spawnflags(flags) = [ 4 : "Stinger" : 0 ] ]
+@PointClass base(MonTiny) studio("progs/mon_voreling.mdl") = monster_voreling : "Voreling" [
+	spawnflags(flags) = [
+		2 : "Large Purple" : 0
+		4 : "On Ceiling" : 0
+	]
+]
+//----------------------------------------------------------------------
+@PointClass base(MonTall) studio("progs/mon_tarbaby.mdl") = monster_tarbaby : "Tarbaby" [
+	spawnflags(flags) = [ 4 : "Jump Less" : 0 ]
+	death_dmg(integer) : "Damage on Death def=120" :  : "Damage on Death"
+	poisonous(choices) : "Poison Attack" = [
+		0 : "Jump attack (def)"
+		1 : "Poison attack"
+	]
+]
+@PointClass base(MonShort) studio("progs/mon_tarbaby.mdl") = monster_boil : "Boil" [
+	spawnflags(flags) = [ 
+		2 : "Hanging" : 0
+		4 : "Hobbled" : 0
+	]
+	death_dmg(integer) : "Damage on Death def=100" :  : "Damage on Death"
+	t_width(integer) : "Radius Damage Range"
+	wait(integer) : "Blood squirt timer"
+	poisonous(integer) : "Poisonous gib/explosion"
+]
+
+//----------------------------------------------------------------------
+@PointClass base(MonTall) studio("progs/wizard.mdl") = monster_wizard : "Wizard"
+[ spawnflags(flags) = [ 4 : "Always Above" : 0 ] ]
+@PointClass base(MonWide) studio("progs/mon_wraith.mdl") = monster_wraith : "Wraith"
+[ spawnflags(flags) = [ 
+		2 : "Scorpions" : 0
+		4 : "Spiders" : 0
+	]
+]
+@PointClass base(MonTall) studio("progs/mon_skullwiz.mdl") = monster_skullwiz : "Skull Wizard"
+[ spawnflags(flags) = [ 
+		2 : "Guardian" : 0 
+		4 : "Minions" : 0 
+	]
+	bodyphased (integer) : "Starts phased out"
+	bodystatic (integer) : "Prevents teleporting"
+]
+@PointClass base(MonTall) studio("progs/mon_gargoyle.mdl") = monster_gargoyle : "Gargoyle" [
+	spawnflags(flags) = [ 
+		2 : "Statue" : 0
+		4 : "Perch" : 0 
+	]
+]
+@PointClass base(MonTall) studio("progs/mon_gaunt.mdl") = monster_gaunt : "Gaunt"
+[ spawnflags(flags) = [ 4 : "Perch" : 0 ] ]
+
+//----------------------------------------------------------------------
+@PointClass base(MonShort) studio("progs/mon_zombie.mdl") skin(6) = monster_mummy : "Poison Zombie"
+[ spawnflags(flags) = [ 4 : "On Floor" : 0 ] ]
+@PointClass base(MonShort) studio("progs/mon_zombiek.mdl") = monster_zombiek : "Zombie Knight"
+[ spawnflags(flags) = [ 4 : "On Floor" : 0 ] ]
+@PointClass base(MonShort) studio("progs/mon_zombie.mdl") = monster_zombie : "Zombie"
+[ spawnflags(flags) = [ 
+		1 : "Crucified" : 0
+		2 : "Ambush" : 0
+		4 : "OnFloor" : 0
+	]
+	sequence(choices) : "Pose (editor)" = [
+		0 : "Normal"
+		173 : "OnFloor"
+		192: "Crucified"
+	]
+]
+
+//----------------------------------------------------------------------
+@PointClass base(MonTiny) studio("progs/mon_gargoyle.mdl") = monster_minotaurminion : "Gargoyle Minion" []
+@PointClass base(MonTiny) studio("progs/mon_voreling.mdl") = monster_shalrathminion : "Voreling Minion" []
+@PointClass base(MonTiny) studio("progs/mon_lostsoul.mdl") = monster_skullwizminion : "Lost Soul Minion" []
+@PointClass base(MonTiny) studio("progs/mon_spiderb.mdl") = monster_wraithminion : "Spider Minion" []
+@PointClass base(MonTiny) studio("progs/mon_scorpion.mdl") = monster_wraithminion2 : "Scorpion Minion" []
+@PointClass base(MonTiny) studio("progs/wizard.mdl") = monster_nourminion : "Wizard Minion" []
+
+//----------------------------------------------------------------------
+@PointClass size(-80 -80 -24, 80 80 256) studio("progs/mon_bosschthon.mdl") = monster_boss : "Chthon" []
+@PointClass size(-80 -80 -24, 80 80 256) studio("progs/mon_bosschthon.mdl") = monster_chthon : "Chthon"
+[
+	spawnflags(flags) = [ 
+		2 : "Red (new)" : 0
+		4 : "Green" : 0
+	]
+	targetname(string) : "monster / trigger name"
+	target(string) : "Wave Final trigger"
+	bosswave(integer) : "Total boss waves (1-5)"
+	bosswaveqty(integer) : "Health each wave"
+	resist_shells(integer) : "Shell resistance (0-1)"
+	resist_nails(integer) : "Nail resistance (0-1)"
+	resist_rockets(integer) : "Rocket reistance (0-1)"
+	resist_cells(integer) : "Cell resistance (0-1)"
+	pos1(string) : "Att1 Speed Base/Skill/- (250 50 0)"
+	pos2(string) : "Att1 Dmg Base/Rnd/Splash (100 20 120)"
+	pos3(string) : "Att2 Forward/Up/Dmg (300 500 40)"
+	dest2(string) : "Att2 Spawn location (0 0 96)"
+	noise1(string) : "Wave 1 trigger"
+	noise2(string) : "Wave 2 trigger"
+	noise3(string) : "Wave 3 trigger"
+	noise4(string) : "Wave 4 trigger"
+	deathtype(string) : "Death message (optional)"
+]
+@PointClass size(-128 -128 -24, 128 128 192) studio("progs/oldone.mdl") = monster_oldone : "Shub-Niggurath" []
+@PointClass size(-128 -128 -24, 128 128 192) studio("progs/oldone.mdl") = monster_shub : "Shub-Niggurath"
+[
+	spawnflags(flags) = [ 2 : "Trig Dmg" : 0 ]
+	targetname(string) : "monster / trigger name"
+	target(string) : "Wave Final trigger"
+	bosswave(integer) : "Total boss waves (1-5)"
+	bosswaveqty(integer) : "Health each wave"
+	resist_shells(integer) : "Shell resistance (0-1)"
+	resist_nails(integer) : "Nail resistance (0-1)"
+	resist_rockets(integer) : "Rocket reistance (0-1)"
+	resist_cells(integer) : "Cell resistance (0-1)"
+	pos1(string) : "Att1 Speed Base/Skill/- (200 20 0)"
+	pos2(string) : "Att1 Dmg Base/Rnd/Splash (0 0 40)"
+	pos3(string) : "Att2 Forward/Up/Dmg (300 500 40)"
+	dest1(string) : "Att1 Spawn location (0 0 128)"
+	dest2(string) : "Att2 Spawn location (0 0 128)"
+	noise1(string) : "Wave 1 trigger"
+	noise2(string) : "Wave 2 trigger"
+	noise3(string) : "Wave 3 trigger"
+	noise4(string) : "Wave 4 trigger"
+	deathtype(string) : "Death message (optional)"
+]
+@PointClass size(-128 -128 -192, 128 128 24) studio("progs/oldone.mdl") = monster_shubupsd : "Shub Upside Down"
+[
+	spawnflags(flags) = [ 2 : "Trig Dmg" : 0 ]
+	targetname(string) : "monster / trigger name"
+	target(string) : "Wave Final trigger"
+	bosswave(integer) : "Total boss waves (1-5)"
+	bosswaveqty(integer) : "Health each wave"
+	resist_shells(integer) : "Shell resistance (0-1)"
+	resist_nails(integer) : "Nail resistance (0-1)"
+	resist_rockets(integer) : "Rocket reistance (0-1)"
+	resist_cells(integer) : "Cell resistance (0-1)"
+	pos1(string) : "Att1 Speed Base/Skill/- (200 20 0)"
+	pos2(string) : "Att1 Dmg Base/Rnd/Splash (0 0 40)"
+	pos3(string) : "Att2 Forward/Up/Dmg (600 0 40)"
+	dest1(string) : "Att1 Spawn location (0 0 128)"
+	dest2(string) : "Att2 Spawn location (0 0 128)"
+	noise1(string) : "Wave 1 trigger"
+	noise2(string) : "Wave 2 trigger"
+	noise3(string) : "Wave 3 trigger"
+	noise4(string) : "Wave 4 trigger"
+	deathtype(string) : "Death message (optional)"
+]
+
+@PointClass size(-16 -16 -24, 16 16 40) studio("progs/mon_bossnour.mdl") = monster_nour : "Nour" [
+	targetname(string) : "monster / trigger name"
+	target(string) : "Wave Final trigger"
+	noise(string) : "Intro burst trigger (breakables?)"
+	noise1(string) : "Wave 1 trigger"
+	noise2(string) : "Wave 2 trigger"
+	noise3(string) : "Wave 3 trigger"
+]
+
+@PointClass size(-32 -32 -24, 32 32 128) studio("progs/mon_bosseidolon.mdl") skin(1) = monster_eidolon : "Eidolon" [
+	targetname(string) : "monster / trigger name"
+	target(string) : "Wave Final trigger"
+	noise1(string) : "Wave 1 trigger ent"
+	noise2(string) : "Wave 2 trigger ent"
+	noise3(string) : "Wave 3 trigger ent"
+	noise4(string) : "Wave 4 trigger ent"
+]
+@PointClass base(Appearflags) size(-32 -32 -4, 32 32 4) =
+	monster_eidolon_wavetrig : "Eidolon Wave Trigger" [
+	targetname(string) : "Name of wave event"
+	target(string) : "Trigger Wave Adds"
+	target2(string) : "Trigger Event"
+	noise(string) : "Collision Model"
+]
+
+@PointClass size(-32 -32 -24, 32 32 128) studio("progs/mon_bossicegolem.mdl") = monster_icegolem : "Ice Golem" [
+	targetname(string) : "monster / trigger name"
+	target(string) : "Wave Final trigger"
+	noise1(string) : "Wave 1 trigger ent"
+	noise2(string) : "Wave 2 trigger ent"
+	noise3(string) : "Wave 3 trigger ent"
+	noise4(string) : "Wave 4 trigger ent"
+]
+@PointClass base(Appearflags) size(-32 -32 -8, 32 32 8) =
+	monster_icegolem_wavetrig : "Ice Golem Wave Trigger" [
+	targetname(string) : "Name of wave event"
+	target(string) : "Trigger Wave Adds"
+	noise1(string) : "Trigger Event 1"
+	noise2(string) : "Trigger Event 2"
+]
+	
+@PointClass base(Appearflags, targetname) size(-16 -16 -16, 16 16 16) =
+	event_lightning : "Chthon's lightning" []
+@PointClass base(Appearflags, targetname) size(-8 -8 -8, 8 8 8) =
+	misc_teleporttrain : "Shub-Niggurath Flying ball" []
+
+//======================================================================
+//
+// New Editor/Compiler features
+//
+//======================================================================
+@SolidClass = func_detail : "Detail brush" []
+@SolidClass = func_group : "Group brush" []
+
+//======================================================================
+//
+// Broken / Removed Stuff
+//
+//======================================================================
+//@PointClass size(-8 -8 -8, 8 8 8) = item_weapon : "Not used anymore"  []
+//@PointClass size(-8 -8 -8, 8 8 8) = misc_noisemaker : "Not used anymore"  []
+//@PointClass size(-8 -8 -8, 8 8 8) = noclass : "Not used anymore"  []
+//@PointClass size(-8 -8 -8, 8 8 8) = test_spawn : "Not used anymore"  []
+//@PointClass size(-8 -8 -8, 8 8 8) = testplayerstart : "Not used anymore"  []
+//@PointClass size(-8 -8 -8, 8 8 8) = viewthing : "Not used anymore"  []
+//@SolidClass = test_fodder : "Not used anymore"  []
+//@SolidClass = test_goaway : "Not used anymore"  []
+//@SolidClass = test_teleport : "Not used anymore"  []
+@SolidClass = trigger_onlyregistered : "Not used anymore" []
+

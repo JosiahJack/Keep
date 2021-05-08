@@ -591,7 +591,7 @@ void() monster_nehahra = {
 	self.th_run = nehahra_goal;
 	self.th_pain = SUB_Null_pain;
 	self.th_die = nehahra_die;
-	total_monsters = total_monsters + 1;
+	AddToTotals(self);
 	self.origin_z = self.origin_z + 1;
 	self.button1 = 90;
 	droptofloor();

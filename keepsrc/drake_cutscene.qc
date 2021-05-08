@@ -68,47 +68,39 @@ void(entity o) spawn_dummy = {
     }
     else
         s.empathy_finished = s.empathy_time = 0;
-// Cross of Deflection
-    if (o.cross_finished)
-    {   s.cross_finished = o.cross_finished - time;
-        if (o.cross_time)
-            s.cross_time = o.cross_time - time;
-    }
-    else
-        s.cross_finished = s.cross_time = 0;
-// Dark Angel Wings
-    if (o.wing_finished)
-    {   s.wing_finished = o.wing_finished - time;
-        if (o.wing_time)
-            s.wing_time = o.wing_time - time;
-    }
-    else
-        s.wing_finished = s.wing_time = 0;
-// Amulet of Reflection
-    if (o.mirror_finished)
-    {   s.mirror_finished = o.mirror_finished - time;
-        if (o.mirror_time)
-            s.mirror_time = o.mirror_time - time;
-    }
-    else
-        s.mirror_finished = s.mirror_time = 0;
-// Tome of Power
+
+	// Cross of Deflection
+    if (o.cross_finished) {
+		s.cross_finished = o.cross_finished - time;
+        if (o.cross_time) s.cross_time = o.cross_time - time;
+    } else s.cross_finished = s.cross_time = 0;
+
+	// Dark Angel Wings
+    if (o.wing_finished) {   s.wing_finished = o.wing_finished - time;
+        if (o.wing_time) s.wing_time = o.wing_time - time;
+    } else s.wing_finished = s.wing_time = 0;
+
+	// Amulet of Reflection
+    if (o.mirror_finished) {   s.mirror_finished = o.mirror_finished - time;
+        if (o.mirror_time) s.mirror_time = o.mirror_time - time;
+    } else s.mirror_finished = s.mirror_time = 0;
+
+	// Tome of Power
     if (o.tome_finished) s.tome_finished = o.tome_finished - time;
     else s.tome_finished = 0;
 
-// FIXME:  Called during touch func, don't set directly?
+	// FIXME:  Called during touch func, don't set directly?
     setorigin (s, o.origin);
 
-// PM:  Link player to dummy, for now.
+	// PM:  Link player to dummy, for now.
     if (o)  //.classname == "player")
-        if (!o.trigger_field)
-            o.trigger_field  = s;
+        if (!o.trigger_field) o.trigger_field  = s;
 };
 
 // PM:  Removed 'name_player'; no longer needed.
 void() go_back = {
-local   entity  t, c, cvars, old;
-local   string  val;
+	local   entity  t, c, cvars, old;
+	local   string  val;
 
     t = find (world, classname, "dummy");
     if (!t) objerror ("couldn't find dummy");
@@ -134,7 +126,7 @@ local   string  val;
     c.items         = t.items;
     c.enemy         = t.enemy;      // PM:  Restore client's original enemy.
 
-// Restore powerups
+	// Restore powerups
     if (t.invincible_finished)
     {   c.invincible_finished = time + t.invincible_finished;
         if (t.invincible_time)
@@ -182,7 +174,7 @@ local   string  val;
     c.movetype      = MOVETYPE_WALK;
     c.nextthink     = time;
     c.think         = player_run;   // PM:  Reset player anim frames.
-    c.air_finished = time + 12; // No gasping from you!
+    c.air_finished = time + WATER_AIR; // No gasping from you!
     c.dmg = 2;        // initial water damage
     c.xfl           = c.xfl | XFL_ITEMS;     // Restore pickup again.
 
@@ -190,7 +182,7 @@ local   string  val;
 	// found the camera.  It is best to change the classname back to player now.
     c.classname     = "player";
     cutscene = 0;       // Cutscene OFF
-    stuffcmd (c, "-forward\n");
+    Safe_stuffcmd (c, "-forward\n");
 
 	// Look for any CVARSET entities to restore old cvars that
 	// were changed for the cut-scene
@@ -208,7 +200,7 @@ local   string  val;
 
     val = ftos (c.cnt);
     cvar_set ("viewsize", val);      //restore old viewsize
-//    stuffcmd (c, "sizedown\nsizeup\n");   //hack-fix for GLquake
+//    Safe_stuffcmd (c, "sizedown\nsizeup\n");   //hack-fix for GLquake
 
     t.nextthink = time + 0.1;
     t.think = SUB_Remove;
@@ -419,78 +411,67 @@ void() go_camera = {
 		control.think       = move_camera;
 	}
 
-// Setting script_count to 0 is what triggers the script to play,
-// It will then play the script number.
-    if (!self.script)
-        dprint ("trigger_camera needs a script number!");
+	// Setting script_count to 0 is what triggers the script to play,
+	// It will then play the script number.
+    if (!self.script) dprint ("trigger_camera needs a script number!");
     self.script_count = 0;
 
     self.cnt = cvar("viewsize");
     cvar_set ("viewsize", "120");     //Full screen
     // PM:  Vision sets 'v_idlescale' for swaying screen.  Not in Drake!
-    stuffcmd (self, "sizedown\nsizeup\n");   //hack-fix for GLquake
-
+    Safe_stuffcmd (self, "sizedown\nsizeup\n");   //hack-fix for GLquake
     setorigin (self, self.enemy.origin);
 
-//- - - - - - - - -
-// PM:  Space invasion prevention.
-// Make the dummy solid to prevent monsters or other junk from occupying
-// the space where the player stood before the cutscene started.
-// After all, the player will be placed back when the cutscene ends,
-// and we don't want him stuck inside a monster or something.
-//
-// We need to wait until after the player becomes the camera, before we can
-// make the dummy solid.  If we make the dummy solid as it spawned, the
-// player could get stuck inside the dummy (instead of moving) between
-// trigger activation and transformation to camera.
-//
-// In Vision code, player becomes camera a frame or so after trigger
-// activation.  In Zer code, player becomes camera at the same time
-// the trigger activates.
-//
-// Note:  If you still have trouble getting a Vision cutscene to work in a
-// certain level, move the following code to the top of 'look_ahead'.
-// Doing so would be less than ideal since the check would get called every
-// frame during the cutscene, instead of just once here.
-// The only level that still has problems with dummy made solid now
-// is 'vision.bsp', which has its own pak.  Tronyn's maps, the levels
-// that really matter, have no problems.
-//- - - - - - - - -
-// 'self' is the player-turned-camera entity.
+	//- - - - - - - - -
+	// PM:  Space invasion prevention.
+	// Make the dummy solid to prevent monsters or other junk from occupying
+	// the space where the player stood before the cutscene started.
+	// After all, the player will be placed back when the cutscene ends,
+	// and we don't want him stuck inside a monster or something.
+	//
+	// We need to wait until after the player becomes the camera, before we can
+	// make the dummy solid.  If we make the dummy solid as it spawned, the
+	// player could get stuck inside the dummy (instead of moving) between
+	// trigger activation and transformation to camera.
+	//
+	// In Vision code, player becomes camera a frame or so after trigger
+	// activation.  In Zer code, player becomes camera at the same time
+	// the trigger activates.
+	//
+	// Note:  If you still have trouble getting a Vision cutscene to work in a
+	// certain level, move the following code to the top of 'look_ahead'.
+	// Doing so would be less than ideal since the check would get called every
+	// frame during the cutscene, instead of just once here.
+	// The only level that still has problems with dummy made solid now
+	// is 'vision.bsp', which has its own pak.  Tronyn's maps, the levels
+	// that really matter, have no problems.
+	//- - - - - - - - -
+	// 'self' is the player-turned-camera entity.
     // '!self.trigger_field' is the world, and its classname is worldspawn.
-    if (self.trigger_field.classname == "dummy")
-    {
+    if (self.trigger_field.classname == "dummy") {
         self.trigger_field.solid = SOLID_BBOX;
         setsize (self.trigger_field, self.mins, self.maxs);
-
         self.trigger_field = world;     // Unlink now that it's done.
     }
-//- - - - - - - - -
 };
 
 // PM:  Called from either touch or use.
-void(entity who) camera_activate =
-{
-// only activate for player, 1st time touched
-    if (who.health <= 0)
-        return;
-    if (who.deadflag)       // In case of Alien Quake facehugger kill.
-        return;
-    if (who.classname != "player")
-        return;
-
-// You can't touch/use this again.
-    self.touch  = self.use  = SUB_Null;
-
-// If player is on ground, take him off ground so no one gets confused
-    who.flags = who.flags - (who.flags & FL_ONGROUND);
-
-// put a dummy where the player was
-    spawn_dummy (who);
-
-// find camera
+void(entity who) camera_activate = {
     local   entity  t;
 
+	// only activate for player, 1st time touched
+    if (who.health <= 0) return;
+    if (who.deadflag) return; // In case of Alien Quake facehugger kill.
+    if (who.classname != "player") return;
+
+	// You can't touch/use this again.
+    self.touch  = self.use  = SUB_Null;
+
+	// If player is on ground, take him off ground so no one gets confused
+    who.flags = who.flags - (who.flags & FL_ONGROUND);
+
+	// put a dummy where the player was
+    spawn_dummy (who);
     t = find (world, targetname, self.target);
 //    if (vision)
 //    {

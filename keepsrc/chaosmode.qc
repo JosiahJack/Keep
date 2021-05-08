@@ -1794,7 +1794,7 @@ void() monster_gibrandomizer =
 		self.activate.moditems = self.activate.moditems | IT_UPGRADE_AXE;
 		rnd_playsurprise(self.activate, RND_SURPRISEPOS);
 		centerprint(self.activate,"You got the Shadow Axe!!!\n");
-		stuffcmd (self.activate, "bf\n");
+		Safe_stuffcmd (self.activate, "bf\n");
 		self.activate.weapon = IT_AXE;
 		W_SetCurrentAmmo(self.activate);
 	}
@@ -1805,8 +1805,7 @@ void() monster_gibrandomizer =
 // Check for weapon fragments (shotgun/plasma)
 // Called from items.qc / ammo_touch
 //----------------------------------------------------------------------
-void() ammo_touchrandomizer =
-{
+void() ammo_touchrandomizer = {
 	local float wpnupg;
 	// Check for randomizer system
 	if (check_randflags() == FALSE) return;
@@ -1832,7 +1831,7 @@ void() ammo_touchrandomizer =
 			other.moditems = other.moditems | IT_UPGRADE_SSG;
 			rnd_playsurprise(other, RND_SURPRISEPOS);
 			centerprint(other,"You got the Widowmaker Shotgun!!!\n");
-			stuffcmd (other, "bf\n");
+			Safe_stuffcmd (other, "bf\n");
 			other.weapon = IT_SUPER_SHOTGUN;
 			W_SetCurrentAmmo(other);
 		}
@@ -1853,7 +1852,7 @@ void() ammo_touchrandomizer =
 			other.moditems = other.moditems | IT_UPGRADE_LG;
 			rnd_playsurprise(other, RND_SURPRISEPOS);
 			centerprint(other,"You got the Plasma Gun!!!\n");
-			stuffcmd (other, "bf\n");
+			Safe_stuffcmd (other, "bf\n");
 			other.weapon = IT_LIGHTNING;
 			W_SetCurrentAmmo(other);
 		}
@@ -1886,7 +1885,7 @@ void() health_touchrandomizer =
 			other.radsuit_finished = time + POWERUP_TIMER;
 			other.items = other.items | IT_SUIT;
 			sprint (other, "You got the Environment Suit\n");
-			stuffcmd (other, "bf\n");
+			Safe_stuffcmd (other, "bf\n");
 			centerprint(other,"You also found the Environment Suit!\n");
 			rnd_playsurprise(other, RND_SURPRISEPOS);
 		}
@@ -1919,7 +1918,7 @@ void() armour_touchrandomizer =
 			other.blastbelt_finished = time + POWERUP_TIMER;
 			other.moditems = other.moditems | IT_ARTBLASTBELT;
 			sprint (other, "You got the Blast Belt\n");
-			stuffcmd (other, "bf\n");
+			Safe_stuffcmd (other, "bf\n");
 			centerprint(other,"You also found the Blast Belt!\n");
 			rnd_playsurprise(other, RND_SURPRISEPOS);
 		}
@@ -1949,7 +1948,7 @@ void() artifact_touchrandomizer =
 			other.lavashield_finished = time + self.cnt;
 			other.moditems = other.moditems | IT_ARTLAVASHIELD;
 			sprint (other, "You got the Aegis of Chthon\n");
-			stuffcmd (other, "bf\n");
+			Safe_stuffcmd (other, "bf\n");
 			centerprint(other,"You also found Aegis of Chthon!\n");
 			rnd_playsurprise(other, RND_SURPRISEPOS);
 		}
@@ -1964,7 +1963,7 @@ void() artifact_touchrandomizer =
 			other.blastbelt_finished = time + self.cnt;
 			other.moditems = other.moditems | IT_ARTBLASTBELT;
 			sprint (other, "You got the Blast Belt\n");
-			stuffcmd (other, "bf\n");
+			Safe_stuffcmd (other, "bf\n");
 			centerprint(other,"You also found the Blast Belt!\n");
 			rnd_playsurprise(other, RND_SURPRISEPOS);
 		}
@@ -1982,7 +1981,7 @@ void() artifact_touchrandomizer =
 			other.jumpboots_finished = time + self.cnt;
 			other.moditems = other.moditems | IT_ARTJUMPBOOTS;
 			sprint (other, "You got the Jump Boots\n");
-			stuffcmd (other, "bf\n");
+			Safe_stuffcmd (other, "bf\n");
 			centerprint(other,"You also found the Jump Boots!\n");
 			rnd_playsurprise(other, RND_SURPRISEPOS);
 		}

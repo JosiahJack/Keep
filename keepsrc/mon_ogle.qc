@@ -227,7 +227,7 @@ void() ogle_hammerb11= [128, ogle_hammerb12	] {ai_stand();};
 void() ogle_hammerb12= [129, ogle_hammerb13	] {ai_stand();};
 void() ogle_hammerb13= [130, ogle_hammerb14	] {ai_stand();};
 void() ogle_hammerb14= [131, ogle_hammerb15	] {ai_stand();};
-void() ogle_hammerb15= [132, ogle_wipebrow1	] {ai_stand();ogle_mining_sound(); if (random() < 0.5) ogle_hammerb1();};
+void() ogle_hammerb15= [132, ogle_wipebrow1	] {ai_stand();ogle_mining_sound(); if (random() < 0.8) ogle_hammerb1();};
 
 void() ogle_wipebrow1 = [133, ogle_wipebrow2	] {ai_stand();};
 void() ogle_wipebrow2 = [134, ogle_wipebrow3	] {ai_stand();self.state = OGLE_STANDING;};
@@ -256,14 +256,14 @@ void() ogle_wipebrowlow1;
 
 void() ogle_hammerlowa1 = [149, ogle_hammerlowa2	] {ai_stand();self.state = OGLE_MINING;ogle_mining_sound();};
 void() ogle_hammerlowa2 = [150, ogle_hammerlowa3	] {ai_stand();};
-void() ogle_hammerlowa3 = [151, ogle_hammerlowa4	] {ai_stand();if (random() < 0.08) ogle_wipebrowlow1();};
+void() ogle_hammerlowa3 = [151, ogle_hammerlowa4	] {ai_stand();if (random() < 0.05) ogle_wipebrowlow1();};
 void() ogle_hammerlowa4 = [152, ogle_hammerlowa5	] {ai_stand();};
 void() ogle_hammerlowa5 = [153, ogle_hammerlowa6	] {ai_stand();};
 void() ogle_hammerlowa6 = [154, ogle_hammerlowa7	] {ai_stand();};
 void() ogle_hammerlowa7 = [155, ogle_hammerlowb1	] {ai_stand();if (random() < 0.2) ogle_mine();};
 
 void() ogle_hammerlowb1 = [156, ogle_hammerlowb2	] {ai_stand();self.state = OGLE_MINING;ogle_mining_sound();};
-void() ogle_hammerlowb2 = [157, ogle_hammerlowb3	] {ai_stand();if (random() < 0.08) ogle_wipebrowlow1();};
+void() ogle_hammerlowb2 = [157, ogle_hammerlowb3	] {ai_stand();if (random() < 0.05) ogle_wipebrowlow1();};
 void() ogle_hammerlowb3 = [158, ogle_hammerlowb4	] {ai_stand();};
 void() ogle_hammerlowb4 = [159, ogle_hammerlowb5	] {ai_stand();};
 void() ogle_hammerlowb5 = [160, ogle_hammerlowb6	] {ai_stand();};
@@ -283,12 +283,12 @@ void() ogle_wipebrowlow10= [172, ogle_hammerlowa1	] {ai_stand();if (random() < 0
 
 void() ogle_walk1;
 
-void() ogle_pushcart1 = [173, ogle_pushcart2	] {ai_walk(4);self.state = OGLE_PUSHING;if (!self.attachment) ogle_walk1();};
+void() ogle_pushcart1 = [173, ogle_pushcart2	] {ai_walk(4); monster_footstep(FALSE);self.state = OGLE_PUSHING;if (!self.attachment) ogle_walk1();};
 void() ogle_pushcart2 = [174, ogle_pushcart3	] {ai_walk(4);if (!self.attachment) ogle_walk1();};
 void() ogle_pushcart3 = [175, ogle_pushcart4	] {ai_walk(4);if (!self.attachment) ogle_walk1();};
 void() ogle_pushcart4 = [176, ogle_pushcart5	] {ai_walk(4);if (!self.attachment) ogle_walk1();};
 void() ogle_pushcart5 = [177, ogle_pushcart6	] {ai_walk(4);if (!self.attachment) ogle_walk1();};
-void() ogle_pushcart6 = [178, ogle_pushcart7	] {ai_walk(4);if (!self.attachment) ogle_walk1();};
+void() ogle_pushcart6 = [178, ogle_pushcart7	] {ai_walk(4);monster_footstep(FALSE); if (!self.attachment) ogle_walk1();};
 void() ogle_pushcart7 = [179, ogle_pushcart8	] {ai_walk(4);if (!self.attachment) ogle_walk1();};
 void() ogle_pushcart8 = [180, ogle_pushcart1	] {ai_walk(4);if (!self.attachment) ogle_walk1();};
 
@@ -322,7 +322,7 @@ void() ogle_leaning_idle6 = [202, ogle_leaning_idle1] {
 	local float rand;
 
 	rand = random();
-	if (rand > 0.5) ogle_leaning_wipebrow1();
+	if (rand > 0.8) ogle_leaning_wipebrow1();
 
 	if (rand < 0.1) ogle_relax_to_standa1();
 	else if (rand < 0.05) ogle_relax_to_standb1();
@@ -413,14 +413,14 @@ void(entity inflictor, entity attacker, float damage) ogle_pain = {
 	}
 };
 
-void() ogle_walk1 = [217, ogle_walk2	] {ai_walk(4); self.state = FALSE;};
-void() ogle_walk2 = [218, ogle_walk3	] {ai_walk(2);};
-void() ogle_walk3 = [219, ogle_walk4	] {ai_walk(2);};
-void() ogle_walk4 = [220, ogle_walk5	] {ai_walk(2);};
-void() ogle_walk5 = [221, ogle_walk6	] {ai_walk(2);};
-void() ogle_walk6 = [222, ogle_walk7	] {ai_walk(4);};
-void() ogle_walk7 = [223, ogle_walk8	] {ai_walk(2);};
-void() ogle_walk8 = [224, ogle_walk1	] {ai_walk(2);};
+void() ogle_walk1 = [217, ogle_walk2	] {ai_walk(4); monster_footstep(FALSE); self.state = FALSE; if (self.attachment) ogle_pushcart1();};
+void() ogle_walk2 = [218, ogle_walk3	] {ai_walk(2); if (self.attachment) ogle_pushcart1();};
+void() ogle_walk3 = [219, ogle_walk4	] {ai_walk(2); if (self.attachment) ogle_pushcart1();};
+void() ogle_walk4 = [220, ogle_walk5	] {ai_walk(2); if (self.attachment) ogle_pushcart1();};
+void() ogle_walk5 = [221, ogle_walk6	] {ai_walk(2); monster_footstep(FALSE); if (self.attachment) ogle_pushcart1();};
+void() ogle_walk6 = [222, ogle_walk7	] {ai_walk(4); if (self.attachment) ogle_pushcart1();};
+void() ogle_walk7 = [223, ogle_walk8	] {ai_walk(2); if (self.attachment) ogle_pushcart1();};
+void() ogle_walk8 = [224, ogle_walk1	] {ai_walk(2); if (self.attachment) ogle_pushcart1();};
 
 void() ogle_chargea1 = [224, ogle_chargea2	] {ai_charge(12);};
 void() ogle_chargea2 = [225, ogle_chargea3	] {ai_charge(10);};
@@ -524,14 +524,18 @@ void() monster_ogle =  {
 	self.th_stand = ogle_mine;
 	self.th_walk = ogle_walk1; // sleepnir walking?
 	self.th_run = ogle_run1;
-
+	self.steptype = FS_TYPELIGHT;
 	if (self.deathstring == "")  self.deathstring = " was mined by an Ogle\n";
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
 
-	self.passive_state = 1;
+	// Standard DENIZEN AI
+	if (!self.alignment) self.alignment = NEUTRAL;
+	if (!self.passive_state) self.passive_state = 1;
+	if (!self.temperament) self.temperament = TEMPRA_PASSIVE;
+	if (!self.vulnerability) self.vulnerability = VULN_RESISTANT;
 
 	self.classtype = CT_MONOGLE;
 	self.classgroup = CG_HARMLESS;

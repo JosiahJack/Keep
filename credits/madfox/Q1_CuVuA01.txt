@@ -1,0 +1,45 @@
+=================================================================================
+Title                  : Q1_CaVuA01.zip
+Filename               : carnivoris Vulgaris
+Author                 : Madfox
+Email Adress           : catweazel@kpnmail.nl
+Description            : New Quake 1 model
+
+Additional Credits to  : ID Software
+
+=================================================================================
+
+* Play Inormation *
+
+Level Name              : /
+Single Player           : /
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Models              : yes
+New Sounds              : /
+qC                      : yes
+
+=================================================================================
+
+* Construction *
+
+Base              : New model for a Dionaea muscipula, Venus Trap Fly.
+Build Time        : some weeks.
+Editor(s) Used    : PSP AM2014 QMLE CORELDRAW5   
+Known Bugs        : Small flat whip outer vertex animation.
+Specific          : bouncing box centrated to the control point.
+<                 : ie. player can walk into animation. 
+<                 : this is the lying model with button size.   .
+Thanks            : Final proof. Mail Franz Xavier for the idea.
+GameOption        : Compile te CaVuA01.qc, name the monster info_fli. 
+                
+
+Live long and propsper! Make the Quake1 Universe get bigger and bigger!
+
+================================================================================= 
+
+Madfox 19 juli 2017
+
+=================================================================================
+

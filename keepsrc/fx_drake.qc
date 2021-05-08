@@ -324,18 +324,14 @@ void(entity attacker, vector spot, float damage, float dflags, string dtype)
     ShockWave (end + '0 0 4', 8, 4, "progs/drake/s_wave.spr");
 };
 
-void(entity attacker, vector spot, float damage) Thunderstrike =
-    {Thunderstrike_Ex (attacker, spot, damage, DF_NONE, "lightning");};
+void(entity attacker, vector spot, float damage) Thunderstrike = {Thunderstrike_Ex (attacker, spot, damage, DF_NONE, "lightning");};
 
-void() Ice_Touch =
-{
+void() Ice_Touch = {
     local   float   chunks, damage;
     local   vector  spot;
 
-    if (pointcontents(self.origin) <= CONTENT_LAVA)     // Lava or sky.
-        {remove(self);  return;}
-    //if (Reflected ())
-        //return;
+    if (pointcontents(self.origin) <= CONTENT_LAVA) {remove(self);  return;} // Lava or sky.
+    if (Reflected ()) return;
 
     self.touch = SUB_Null;      // Stack overflow prevention.
     chunks = TRUE;
@@ -607,8 +603,8 @@ void(vector start) IceMine_Spawn =
     ice.bloodtype    = CHUNKS_ICE;
     ice.hittype      = HIT_STONE;
     ice.th_die       = IceMine_Die;
-    //ice.resist_cold  = 1;    // Immune to cold.
-    //ice.resist_fire  = -1;   // Fire melts ice!
+    ice.resist_cold  = 1;    // Immune to cold.
+    ice.resist_fire  = 0;   // Fire melts ice!
 // set missile duration
     ice.touch        = IceMine_Touch;
     ice.think1       = Iceball_Explode;

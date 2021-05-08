@@ -137,9 +137,7 @@ void(string action, float value) ai_fish_movement= {
 	///////////////////////////////////
 	///	Do things every animation frame
 	handleFuncWaterSwimming();
-	///////////////////////////////////
 
-	///	Remember every action execute vanilla_water_check()
 	if(action == "ai_walk") {
 		ai_walk(value);
 	} else if(action == "ai_run") {
@@ -152,4 +150,4 @@ void(string action, float value) ai_fish_movement= {
 		}
 		ai_charge(value);
 	}
-}
+};

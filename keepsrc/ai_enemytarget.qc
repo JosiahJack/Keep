@@ -52,14 +52,12 @@ vector() SUB_angEnemyTarget =
 //----------------------------------------------------------------------
 // Detects enemytarget and returns real ENEMY health
 // Returns the correct entity health, useful for function tests
-float() SUB_healthEnemyTarget =
-{
+float() SUB_healthEnemyTarget = {
 	if (!self.enemy) return -1;
 	if (self.enemy.classtype == CT_ENEMYTARGET) {
 		if (self.enemy.state == STATE_ON) return self.enemy.enemy.health;
 		else return self.enemy.health;
-	}
-	else return self.enemy.health;
+	} else return self.enemy.health;
 };
 
 //----------------------------------------------------------------------
@@ -106,8 +104,7 @@ void() SUB_switchEnemyTarget = {
 	if (self.enemytarget.classtype != CT_ENEMYTARGET) return;
 	self.enemytarget.state = STATE_OFF;
 	self.enemy = self.enemytarget.enemy;
-	// If switching back to old enemy tracking system then block
-	// enemy targeting for a couple of secounds
+	// If switching back to old enemy tracking system then block enemy targeting for a couple of secounds
 	self.enemytargetlock = time + 2;
 };
 

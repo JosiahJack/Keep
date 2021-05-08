@@ -1,0 +1,247 @@
+Source file: progs.src
+outputfile: ../progs.dat
+compiling defs.qc
+compiling extras/extras_defs.qc
+compiling gyro/gyro_main.qc
+compiling gyro/gyro_physics.qc
+in function Gyro_RunPhysics_Bouyancy (line 181),
+gyro/gyro_physics.qc:184: warning F304: You may wish to add brackets after that ! operator
+in function Gyro_RunPhysics_Resistance (line 330),
+gyro/gyro_physics.qc:333: warning F304: You may wish to add brackets after that ! operator
+in function Gyro_RunPhysics_Turbulence (line 699),
+gyro/gyro_physics.qc:702: warning F304: You may wish to add brackets after that ! operator
+in function Gyro_RunPhysics_GlobalTurb (line 821),
+gyro/gyro_physics.qc:824: warning F304: You may wish to add brackets after that ! operator
+compiling gyro/gyro_forces.qc
+in function Gyro_Force_SetRangeScale (line 250),
+gyro/gyro_forces.qc:251: warning F306: Local "scale" hides global with same name
+defs.qc:335:    .float scale  is defined here
+in function Gyro_Force_SetPowerScale (line 300),
+gyro/gyro_forces.qc:301: warning F306: Local "scale" hides global with same name
+defs.qc:335:    .float scale  is defined here
+in function Gyro_Force_Solver_Falloff (line 925),
+gyro/gyro_forces.qc:963: warning Q206: Gyro_Force_Solver_Falloff: not all control paths return a value
+in function Gyro_Force_Solver_Affector (line 1045),
+gyro/gyro_forces.qc:1125: warning F304: You may wish to add brackets after that ! operator
+in function Gyro_Force_Solver (line 1138),
+gyro/gyro_forces.qc:1165: warning F304: You may wish to add brackets after that ! operator
+gyro/gyro_forces.qc:1176: warning F304: You may wish to add brackets after that ! operator
+in function Gyro_RunForces (line 80),
+gyro/gyro_forces.qc:1382: warning F304: You may wish to add brackets after that ! operator
+compiling gyro/gyro_user.qc
+at global scope,
+gyro/gyro_user.qc:50: warning: Expected punctuation
+gyro/gyro_user.qc:50: warning: Expected punctuation
+gyro/gyro_user.qc:50: warning: Expected punctuation
+gyro/gyro_user.qc:50: warning: Expected punctuation
+gyro/gyro_user.qc:50: warning: Expected punctuation
+gyro/gyro_user.qc:50: warning: Expected punctuation
+gyro/gyro_user.qc:50: warning: Expected punctuation
+gyro/gyro_user.qc:50: warning: Missing semicolon at end of definition
+in function Gyro_ForceMacro_DampeningField (line 123),
+gyro/gyro_user.qc:124: warning F306: Local "duration" hides global with same name
+extras/extras_defs.qc:69:    .float duration  is defined here
+in function Gyro_ForceMacro_Whirlwind (line 150),
+gyro/gyro_user.qc:151: warning F306: Local "duration" hides global with same name
+extras/extras_defs.qc:69:    .float duration  is defined here
+in function Gyro_ForceMacro_GravityBomb (line 168),
+gyro/gyro_user.qc:169: warning F306: Local "duration" hides global with same name
+extras/extras_defs.qc:69:    .float duration  is defined here
+compiling frikbot/mathlib.qc
+compiling waypoints/map_dm1.qc
+compiling waypoints/map_dm2.qc
+compiling waypoints/map_dm3.qc
+compiling waypoints/map_dm4.qc
+compiling waypoints/map_dm5.qc
+compiling waypoints/map_dm6.qc
+compiling frikbot/bot.qc
+compiling frikbot/bot_way.qc
+in function DynamicWaypoint (line 243),
+frikbot/bot_way.qc:298: warning F304: You may wish to add brackets after that ! operator
+compiling frikbot/bot_fight.qc
+in function bot_fight_style (line 359),
+frikbot/bot_fight.qc:445: warning F304: You may wish to add brackets after that ! operator
+compiling frikbot/bot_ai.qc
+compiling frikbot/bot_misc.qc
+in function BotName (line 279),
+frikbot/bot_misc.qc:248: warning Q206: BotName: not all control paths return a value
+in function sisible (line 271),
+frikbot/bot_misc.qc:811: warning Q206: sisible: not all control paths return a value
+compiling frikbot/bot_phys.qc
+in function SV_AddGravity (line 365),
+frikbot/bot_phys.qc:366: warning F306: Local "scale" hides global with same name
+defs.qc:335:    .float scale  is defined here
+in function SV_CheckOnGround (line 430),
+frikbot/bot_phys.qc:451: warning Q105: too few parameters on call to droptofloor
+defs.qc:791:    float(float yaw, float dist) droptofloor  is defined here
+in function botCheckForStep (line 461),
+frikbot/bot_phys.qc:474: warning Q105: too few parameters on call to droptofloor
+defs.qc:791:    float(float yaw, float dist) droptofloor  is defined here
+compiling frikbot/bot_move.qc
+compiling frikbot/bot_ed.qc
+compiling subs.qc
+compiling fight.qc
+compiling ai.qc
+compiling combat.qc
+compiling items.qc
+in function weapon_touch (line 795),
+items.qc:883: warning F304: You may wish to add brackets after that ! operator
+in function key_touch (line 1416),
+items.qc:1432: warning F304: You may wish to add brackets after that ! operator
+in function BackpackTouch (line 1842),
+items.qc:1933: warning F304: You may wish to add brackets after that ! operator
+compiling weapons.qc
+compiling world.qc
+compiling client.qc
+in function PutClientInServer (line 196),
+client.qc:938: warning F307: type mismatch: void() to void(entity attacker, float damage) entity.th_pain
+compiling player.qc
+compiling monsters.qc
+in function monster_touch (line 852),
+monsters.qc:70: warning F304: You may wish to add brackets after that ! operator
+compiling doors.qc
+in function door_touch (line 39),
+doors.qc:312: warning F304: You may wish to add brackets after that ! operator
+in function fd_secret_use (line 765),
+doors.qc:781: warning F307: type mismatch: void() to void(entity attacker, float damage) entity.th_pain
+in function fd_secret_done (line 756),
+doors.qc:868: warning F307: type mismatch: void() to void(entity attacker, float damage) entity.th_pain
+in function func_door_secret (line 924),
+doors.qc:974: warning F307: type mismatch: void() to void(entity attacker, float damage) entity.th_pain
+compiling buttons.qc
+compiling triggers.qc
+compiling plats.qc
+compiling misc.qc
+compiling monsters/ogre.qc
+compiling monsters/fiend.qc
+compiling monsters/shambler.qc
+compiling monsters/knight.qc
+compiling monsters/grunt.qc
+compiling monsters/scrag.qc
+compiling monsters/rottweiler.qc
+in function monster_dog (line 368),
+monsters/rottweiler.qc:397: warning F307: type mismatch: void() to void(entity attacker, float damage) entity.th_pain
+compiling monsters/zombie.qc
+compiling monsters/cthon.qc
+compiling monsters/spawn.qc
+compiling monsters/hellknight.qc
+compiling monsters/rotfish.qc
+compiling monsters/vore.qc
+in function monster_shalrath (line 250),
+monsters/vore.qc:287: warning F307: type mismatch: void() to void(entity attacker, float damage) entity.th_pain
+compiling monsters/enforcer.qc
+compiling monsters/shub.qc
+in function monster_oldone (line 302),
+monsters/shub.qc:331: warning F307: type mismatch: void() to void(entity attacker, float damage) entity.th_pain
+compiling skins.qc
+compiling rules.qc
+compiling info.qc
+in function PlayerSkinInfo (line 1095),
+info.qc:259: warning: Result of comparison is constant
+compiling debug.qc
+compiling resume.qc
+compiling extras/extras_subs.qc
+compiling extras/extras_train.qc
+compiling extras/extras_buttons.qc
+in function switch_toggle (line 248),
+extras/extras_buttons.qc:291: warning F304: You may wish to add brackets after that ! operator
+compiling extras/extras_emitters.qc
+in function effector_destroy (line 117),
+extras/extras_emitters.qc:121: warning F304: You may wish to add brackets after that ! operator
+in function effector_push (line 131),
+extras/extras_emitters.qc:135: warning F304: You may wish to add brackets after that ! operator
+in function effector_gravity (line 147),
+extras/extras_emitters.qc:151: warning F304: You may wish to add brackets after that ! operator
+in function effector_turbulence (line 165),
+extras/extras_emitters.qc:171: warning F304: You may wish to add brackets after that ! operator
+extras/extras_emitters.qc:178: warning F304: You may wish to add brackets after that ! operator
+extras/extras_emitters.qc:180: warning F304: You may wish to add brackets after that ! operator
+extras/extras_emitters.qc:182: warning F304: You may wish to add brackets after that ! operator
+in function effector_attract (line 193),
+extras/extras_emitters.qc:199: warning F304: You may wish to add brackets after that ! operator
+in function effector_friction (line 218),
+extras/extras_emitters.qc:222: warning F304: You may wish to add brackets after that ! operator
+in function t_effector_friction (line 248),
+extras/extras_emitters.qc:260: warning F304: You may wish to add brackets after that ! operator
+in function t_effector_attract (line 283),
+extras/extras_emitters.qc:305: warning F304: You may wish to add brackets after that ! operator
+in function t_effector_trubulence (line 331),
+extras/extras_emitters.qc:350: warning F304: You may wish to add brackets after that ! operator
+in function t_effector_gravity (line 372),
+extras/extras_emitters.qc:381: warning F304: You may wish to add brackets after that ! operator
+in function t_effector_push (line 403),
+extras/extras_emitters.qc:419: warning F304: You may wish to add brackets after that ! operator
+in function t_effector_destroy (line 438),
+extras/extras_emitters.qc:447: warning F304: You may wish to add brackets after that ! operator
+in function particle_touch (line 537),
+extras/extras_emitters.qc:560: warning: too many parameters
+weapons.qc:188:    void(float damage) spawn_touchblood  is defined here
+in function emitter_find (line 749),
+extras/extras_emitters.qc:756: warning F304: You may wish to add brackets after that ! operator
+compiling extras/extras_water.qc
+compiling extras/extras_triggers.qc
+in function shake_think (line 179),
+extras/extras_triggers.qc:213: warning F304: You may wish to add brackets after that ! operator
+compiling extras/extras_misc.qc
+in function ladder_touch (line 36),
+extras/extras_misc.qc:59: warning F304: You may wish to add brackets after that ! operator
+in function explobsp_explode (line 208),
+extras/extras_misc.qc:226: warning Q105: too few parameters on call to T_RadiusDamage
+combat.qc:528:    void(entity inflictor, entity attacker, float damage, entity ignore, string dtype) T_RadiusDamage  is defined here
+in function func_explobsp (line 266),
+extras/extras_misc.qc:284: warning F307: type mismatch: void() to void(entity attacker, float damage) entity.th_pain
+in function func_breakaway (line 343),
+extras/extras_misc.qc:359: warning F304: You may wish to add brackets after that ! operator
+extras/extras_misc.qc:362: warning F307: type mismatch: void() to void(entity attacker, float damage) entity.th_pain
+compiling extras/extras_fx.qc
+in function fx_spark (line 180),
+extras/extras_fx.qc:194: warning F304: You may wish to add brackets after that ! operator
+in function fx_drip (line 351),
+extras/extras_fx.qc:376: warning F304: You may wish to add brackets after that ! operator
+in function fx_sound (line 456),
+extras/extras_fx.qc:486: warning F304: You may wish to add brackets after that ! operator
+compiling extras/extras_corpse.qc
+in function corpse_touch (line 36),
+extras/extras_corpse.qc:42: warning F304: You may wish to add brackets after that ! operator
+in function become_corpse (line 74),
+extras/extras_corpse.qc:105: warning F307: type mismatch: void() to void(entity attacker, float damage) entity.th_pain
+Progs should run on any QuakeC VM
+at global scope,
+defs.qc:965: warning Q302: correct_ftos  no references.
+note: You can use the noref prefix or pragma to silence this message.
+defs.qc:1180: warning Q302: saved4  no references.
+in function weapon_range (line 219),
+frikbot/bot_fight.qc:221: warning Q302: grendist  no references.
+frikbot/bot_fight.qc:222: warning Q302: heightdiff  no references.
+in function bot_angle_set (line 836),
+frikbot/bot_ai.qc:839: warning Q302: voffset  no references.
+in function frik_movetogoal (line 257),
+frikbot/bot_move.qc:474: warning Q302: start  no references.
+frikbot/bot_move.qc:474: warning Q302: stop  no references.
+frikbot/bot_move.qc:474: warning Q302: ang  no references.
+at global scope,
+ai.qc:66: warning Q302: current_yaw  no references.
+in function bubble_bob2 (line 512),
+player.qc:515: warning Q302: vtmp1  no references.
+player.qc:515: warning Q302: modi  no references.
+in function train_ext_blocked (line 283),
+extras/extras_train.qc:285: warning Q302: cchain  no references.
+in function train_ext_wait (line 208),
+extras/extras_train.qc:560: warning Q302: cchain  no references.
+in function emitter_emit (line 585),
+extras/extras_emitters.qc:639: warning Q302: ent  no references.
+in function CheckFuncWaterDeath (line 77),
+extras/extras_water.qc:71: warning Q302: rgb  no references.
+extras/extras_water.qc:72: warning Q302: i  no references.
+in function liquid_touch (line 194),
+extras/extras_water.qc:197: warning Q302: r  no references.
+extras/extras_water.qc:197: warning Q302: g  no references.
+extras/extras_water.qc:197: warning Q302: b  no references.
+extras/extras_water.qc:197: warning Q302: i  no references.
+in function func_explobsp (line 266),
+extras/extras_misc.qc:268: warning Q302: spot  no references.
+in function func_breakaway (line 343),
+extras/extras_misc.qc:345: warning Q302: spot  no references.
+Compile finished: ../progs.dat
+Not writing linenumbers file due to conflicting optimisation (try -Ono-f)
+Done. 93 warnings

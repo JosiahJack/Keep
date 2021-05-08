@@ -340,8 +340,7 @@ void() idchthon_death9 = [$death9, idchthon_death10] {
 };
 // No plans to support map hacks anymore, function name changed
 void() idchthon_death10 = [$death9, idchthon_death10] {
-	killed_monsters = killed_monsters + 1;
-	WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+	AddToKills(self,self.enemy);
 	SUB_UseTargets ();
 	entity_hide(self);
 };
@@ -408,7 +407,7 @@ void() monster_boss =
 
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 	// Does not go through monster spawn functions
-	total_monsters = total_monsters + 1;
+	AddToTotals(self);
 	self.use = idchthon_awake;
 };
 

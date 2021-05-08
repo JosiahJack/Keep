@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/configuring.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:43:52 GMT -->
+<head>
+	<title>GyroDocs - Configuring</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><div class="layout_submenu"><a href="installing.html" class="subitem">- Installing</a><a href="configuring.html" class="subitem subitem_selected">- Configuring</a></div><a href="physobj.html" class="item">Physics Objects</a><a href="forces.html" class="item">Force Entities</a><a href="advanced.html" class="item">Advanced Usage</a><a href="info.html" class="item">Further Information</a></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Configuring</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p>Gyro configuration is done mostly through a small function at the top of <code>gyro_user.qc</code>. This function is called <code>Gyro_UserSettings()</code> and holds the following settings:</p>
+
+<p>
+<strong>GYRO_AUTOTICKRATE</strong>
+<br />
+When this is set to <code>1</code> (or <code>TRUE</code>), Gyro will attempt to run once every frame, effectively matching the user's framerate or the server's own tickrate. When set to <code>0</code> (or <code>FALSE</code>), Gyro will run at it's own constant tickrate. It is recommended that you leave this at it's default value of <code>TRUE</code>.</p>
+
+<p>
+<strong>GYRO_TICKRATE</strong>
+<br />
+Should you choose to run Gyro at a constant tickrate, you can specify the delay between iterations here. The value is given in seconds, and should ideally fall between <code>0.01</code> and <code>0.05</code>.
+</p>
+
+<p>
+<strong>GYRO_MOTIONCORRECTION</strong>
+<br />
+The velocity of an entity is limited by the sv_maxvelocity console variable and, because it operations on individual axes, can alter the trajectory of fast-moving projectiles. When this is set to <code>TRUE</code>, Gyro will attempt to correct these abnormalities.</p>
+
+<p>
+<strong>GYRO_POWERCONSTANT</strong>
+<br />
+Many of Gyro's systems (such as bouyancy) are tied directly to the set gravity. In order to maintain consistency, gravity-independent systems are scaled by the fixed power constant. Unless your mod is based around a different gravity value, you should leave this at <code>800</code>.</p>
+
+<p>
+<strong>GYRO_FORCEDEBUG</strong>
+<br />
+This sets the debugging level for Gyro's force systems. A value of <code>0</code> will produce no debug output. A value of <code>1</code> will only display the most major messages, mostly pertaining to the creation and destruction of forces. Finally, a value of <code>2</code> will show the most verbose debugging information and is recommended only for the most troublesome of bugs.</p>
+
+<p>
+<strong>GYRO_OBJECTDEBUG</strong>
+<br />
+Same as the above, but for physics objects. Set both to <code>0</code> to hide all of Gyro's output, including the initialisation message.</p>
+
+<p>It is worth noting that none of the above settings are constants and, therefore, they can be changed during runtime. This is particularly useful when debugging, as you can effectively hide all the messages you aren't interested in.</p>
+
+<div class="hr"></div>
+
+<p>The following settings are also non-constant values, but should not be changed during runtime:</p>
+
+<p>
+<strong>GYRO_BOUYANCYMOD_***</strong>
+<br />
+These four values control the initial bouyancy multipliers of newly created physics objects. Under the default settings (<code>0.0</code>, <code>1.0</code>, <code>1.2</code> and <code>1.4</code>), air has zero bouyancy, while the liquids offer bouyancy between 100-140%. You should not need to change these values as bouyancy levels can be specified on a per-object basis.</p>
+
+<p>
+<strong>GYRO_RESISTANCEMOD_***</strong>
+<br />
+Just as above, but for the motion resistance subsystem.</p>
+
+<p>
+<strong>GYRO_TURBULENCEMOD_***</strong>
+<br />
+Just as above, but for the turbulence subsystems.</p></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/configuring.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:43:52 GMT -->
+</html>

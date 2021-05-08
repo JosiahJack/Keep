@@ -706,8 +706,7 @@ void() monster_dcrossbow = {
 	self.attack_offset = '20 12 28';	// Where to fire bolt from
 	
 	// check for sniper mode, no distance checks for attacks
-	if (self.spawnflags & MON_DCROSSSNIPER)
-		self.enemymaxdist = TRUE;
+	if (self.spawnflags & MON_DCROSSSNIPER) self.enemymaxdist = TRUE;
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;

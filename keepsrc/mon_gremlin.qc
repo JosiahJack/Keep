@@ -230,9 +230,9 @@ float () GremlinFindTarget = {
       gorge = world;
       head = nextent (world);
       while ( (head != world) ) {
-         if ( ((head.health < TRUE) && (head.flags & (FL_MONSTER | FL_CLIENT))) ) {
+         if ( ((head.health < TRUE) && (head.flags & FLx_CREATURE)) ) {
             result = fabs ((head.origin_z - self.origin_z));
-            if ( (((visible (head) && (result < 80.000)) && (head.gorging == FALSE)) && (visible_distance < dist)) ) {
+            if (visible(head) && result < 80.000 && head.gorging == FALSE) {
                dist = visible_distance;
                gorge = head;
             }
@@ -882,11 +882,9 @@ void (entity inflictor, entity attacker, float damage) gremlin_pain = {
       self.enemy = attacker;
       FoundTarget ();
    }
-   if ( (self.touch == Gremlin_JumpTouch) )
-      return ;
 
-   if ( (self.pain_finished > time) )
-      return ;
+   if ( (self.touch == Gremlin_JumpTouch) ) return;
+   if ( (self.pain_finished > time) ) return;
 
    self.pain_finished = (time + TRUE);
    r = random ();
@@ -986,7 +984,8 @@ void () Gremlin_MeleeAttack = {
       gremlin_gorge1 ();
    } else {
       if ( (self.stoleweapon == TRUE) ) {
-         objerror ("gremlin meleeing with stolen weapon");
+         GremlinWeaponAttack();
+		return;
       } else {
          if ( ((self.enemy.flags & FL_CLIENT) && (random () < 0.400)) ) {
             if ( GremlinAttemptWeaponSteal () )
@@ -1136,22 +1135,21 @@ float () GremlinWeaponAttack = {
 			}
 		}
 	}
-	return ( TRUE );
+	return (TRUE);
 };
 
 void () Gremlin_MissileAttack = {
    if ( self.stoleweapon ) {
       if ( GremlinWeaponAttack () ) {
-         return ;
+         return;
       } else {
          if ( ((random () < 0.100) && (self.flags & FL_ONGROUND)) ) {
             gremlin_jump1 ();
-            return ;
+            return;
          }
       }
    }
-   if ( (self.flags & FL_ONGROUND) )
-      gremlin_jump1 (); // jumpy little buggers
+   if ( (self.flags & FL_ONGROUND) ) gremlin_jump1 (); // jumpy little buggers
 };
 
 void() GremlinCheckAttack;
@@ -1222,31 +1220,6 @@ void () monster_gremlin = {
    precache_sound ("enforcer/enfstop.wav");
 
    gremlin_setup();
-};
-
-void () GremlinCheckAttack = {
-   local vector spot1;
-   local vector spot2;
-   local entity targ;
-   local float chance;
-
-   targ = self.enemy;
-   if ( (time < self.attack_finished) )
-      return;
-
-   spot1 = self.origin;
-   spot2 = targ.origin;
-   if ( ((vlen ((spot2 - spot1)) <= 90.000) && (self.stoleweapon == FALSE)) ) {
-      self.attack_state = AS_MELEE;
-      return;
-   }
-   chance = (0.030 + self.stoleweapon);
-   //if ( (random () < chance) ) {
-   if (self.stoleweapon) {
-      self.attack_state = AS_MISSILE;
-      return;
-   }
-   return;
 };
 
 void (float side) Gremlin_Melee = {
@@ -1340,8 +1313,8 @@ void () Gremlin_Split = {
    gremlin_spawn1 ();
    self.enemy = world;
    self.gorging = FALSE;
+   AddToTotals(self);
    self = temp;
-   update_hud_totals(HUD_MONSTERS);
 };
 
 void (float side) Gremlin_Gorge = {
@@ -1373,8 +1346,7 @@ void (float side) Gremlin_Gorge = {
 };
 
 void () Gremlin_JumpTouch = {
-   if ( (self.health <= FALSE) )
-      return ;
+   if ( (self.health <= FALSE) ) return ;
 
    if ( !checkbottom (self) ) {
       if ( (self.flags & FL_ONGROUND) ) {

@@ -1,0 +1,81 @@
+warning: Q116: weapons.qc:90:Local org redeclared
+warning: Q302: weapons.qc:111:Unreferenced local variable mpuff from line 89
+warning: Q302: weapons.qc:403:Unreferenced local variable mpuff from line 374
+warning: Q302: weapons.qc:586:Unreferenced local variable mpuff from line 546
+warning: Q302: weapons.qc:708:Unreferenced local variable rand from line 672
+warning: Q302: weapons.qc:742:Unreferenced local variable rand from line 712
+warning: Q206: subs.qc:25:SetMovedir: not all control paths return a value
+warning: Q116: fight.qc:299:Local enemy_yaw redeclared
+warning: Q302: fight.qc:342:Unreferenced local variable chance from line 298
+warning: Q302: ai.qc:490:Unreferenced local variable mtemp_x from line 476
+warning: Q302: ai.qc:746:Unreferenced local variable delta_x from line 679
+warning: Q302: ai.qc:746:Unreferenced local variable direct from line 681
+warning: Q302: ai.qc:746:Unreferenced local variable ang_rint from line 681
+warning: Q302: ai.qc:746:Unreferenced local variable ang_floor from line 681
+warning: Q302: ai.qc:746:Unreferenced local variable ang_ceil from line 681
+warning: Q301: items.qc:108:healamount defined as local in T_Heal
+warning: Q302: items.qc:204:Unreferenced local variable amount from line 152
+warning: Q401: items.qc:383:In function Deathmatch_Weapon parameter old is unused
+warning: Q302: items.qc:515:Unreferenced local variable oldz from line 508
+warning: Q302: items.qc:938:Unreferenced local variable stemp from line 912
+warning: Q302: items.qc:938:Unreferenced local variable best from line 913
+warning: Q302: items.qc:1067:Unreferenced local variable stemp from line 1048
+warning: Q302: items.qc:1067:Unreferenced local variable best from line 1049
+warning: Q302: items.qc:1179:Unreferenced local variable stemp from line 1121
+warning: Q302: items.qc:1179:Unreferenced local variable best from line 1122
+warning: Q302: world.qc:373:Unreferenced local variable e from line 362
+warning: Q206: client.qc:128:FindIntermission: not all control paths return a value
+warning: Q302: client.qc:315:Unreferenced local variable pos from line 286
+warning: Q302: client.qc:748:Unreferenced local variable old_self from line 718
+warning: Q302: client.qc:794:Unreferenced local variable start_x from line 753
+warning: Q302: client.qc:964:Unreferenced local variable mspeed from line 925
+warning: Q302: client.qc:964:Unreferenced local variable aspeed from line 925
+warning: Q302: client.qc:964:Unreferenced local variable r from line 926
+warning: Q302: client.qc:1164:Unreferenced local variable mspeed from line 1131
+warning: Q302: client.qc:1164:Unreferenced local variable aspeed from line 1131
+warning: Q302: client.qc:1164:Unreferenced local variable r from line 1132
+warning: Q302: monsters.qc:117:Unreferenced local variable stemp from line 69
+warning: Q302: monsters.qc:117:Unreferenced local variable etemp from line 70
+warning: Q302: buttons.qc:140:Unreferenced local variable gtemp from line 88
+warning: Q302: buttons.qc:140:Unreferenced local variable ftemp from line 88
+warning: Q301: triggers.qc:2:stemp defined as local in walkmonster_start_go
+warning: Q301: triggers.qc:2:stemp defined as local in BackpackTouch
+warning: Q301: triggers.qc:2:stemp defined as local in powerup_touch
+warning: Q301: triggers.qc:2:stemp defined as local in sigil_touch
+warning: Q301: triggers.qc:2:stemp defined as local in key_touch
+warning: Q301: triggers.qc:2:stemp defined as local in ammo_touch
+warning: Q301: triggers.qc:2:stemp defined as local in weapon_touch
+warning: Q301: triggers.qc:2:stemp defined as local in SUB_UseTargets
+warning: Q301: triggers.qc:2:stemp defined as local in SUB_CalcAngleMoveEnt
+warning: Q301: triggers.qc:2:stemp defined as local in SUB_CalcMoveEnt
+warning: Q301: triggers.qc:2:otemp defined as local in SUB_UseTargets
+warning: Q301: triggers.qc:2:s defined as local in BackpackTouch
+warning: Q301: triggers.qc:2:s defined as local in health_touch
+warning: Q301: triggers.qc:2:old defined as local in weapon_touch
+warning: Q301: triggers.qc:2:old defined as local in Deathmatch_Weapon
+warning: Q301: triggers.qc:2:old defined as local in W_FireSpikes
+warning: Q301: triggers.qc:2:old defined as local in W_FireSuperSpikes
+warning: Q302: triggers.qc:252:Unreferenced local variable junk from line 224
+warning: Q302: plats.qc:223:Unreferenced local variable t from line 150
+warning: Q302: misc.qc:480:Unreferenced local variable vtmp1_x from line 447
+warning: Q302: ogre.qc:124:Unreferenced local variable mpuff from line 92
+warning: Q401: ogre.qc:352:In function ogre_pain parameter attacker is unused
+warning: Q401: ogre.qc:352:In function ogre_pain parameter damage is unused
+warning: Q401: demon.qc:139:In function demon1_pain parameter attacker is unused
+warning: Q302: demon.qc:297:Unreferenced local variable vec_x from line 280
+warning: Q401: shambler.qc:289:In function sham_pain parameter attacker is unused
+warning: Q401: knight.qc:167:In function knight_pain parameter attacker is unused
+warning: Q401: knight.qc:167:In function knight_pain parameter damage is unused
+warning: Q401: soldier.qc:172:In function army_pain parameter attacker is unused
+warning: Q401: soldier.qc:172:In function army_pain parameter damage is unused
+warning: Q206: wizard.qc:180:WizardAttackFinished: not all control paths return a value
+warning: Q401: wizard.qc:365:In function Wiz_Pain parameter attacker is unused
+warning: Q302: dog.qc:322:Unreferenced local variable vec_x from line 306
+warning: Q302: zombie.qc:196:Unreferenced local variable mpuff from line 164
+warning: Q401: zombie.qc:462:In function zombie_pain parameter attacker is unused
+warning: Q401: hknight.qc:381:In function hknight_pain parameter attacker is unused
+warning: Q116: enforcer.qc:76:Local vec redeclared
+warning: Q401: enforcer.qc:251:In function enf_pain parameter attacker is unused
+warning: Q401: enforcer.qc:251:In function enf_pain parameter damage is unused
+warning: Q401: lieutenant.qc:136:In function super_enforcer_pain parameter attacker is unused
+warning: Q401: lieutenant.qc:136:In function super_enforcer_pain parameter damage is unused

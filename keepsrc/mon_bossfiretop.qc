@@ -198,8 +198,7 @@ void() ftop_death9 = [$death9, ftop_death10] {
 	WriteCoord (MSG_BROADCAST, self.origin_z);
 };
 void() ftop_death10 = [$death9, ftop_death11] {
-	killed_monsters = killed_monsters + 1;
-	WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+	AddToKills(self,self.enemy);
 	entity_hide(self);
 };
 void() ftop_death11 = { remove(self); };
@@ -373,8 +372,10 @@ void() monster_firetopboss = {
 	// The health is reset everytime pain is received
 	self.resist_shells = self.resist_nails = 1;
 	self.resist_rockets = self.resist_cells = 0.9;
+	self.resist_multi_rockets = 0.9;
+	self.resist_plasma = 0.9;
 	
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-	total_monsters = total_monsters + 1;
+	AddToTotals(self);
 	self.use = ftop_wakeup;
 };

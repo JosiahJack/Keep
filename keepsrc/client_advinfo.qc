@@ -97,13 +97,13 @@ void() display_ammostats =
 		// The world ammo quantities can be over max holdable values
 		// But these values are given to the player on spawn and capped!
 		// There is no point using any of the excess qty for the stats
-		if (world.ammo_shells > AMMO_MAXSHELLS) shellqty[AC_WORLDSPN] = AMMO_MAXSHELLS;
+		if (world.ammo_shells > world.maxshells) shellqty[AC_WORLDSPN] = world.maxshells;
 		else shellqty[AC_WORLDSPN] = world.ammo_shells;
-		if (world.ammo_nails > AMMO_MAXNAILS) nailqty[AC_WORLDSPN] = AMMO_MAXNAILS;
+		if (world.ammo_nails > world.maxnails) nailqty[AC_WORLDSPN] = world.maxnails;
 		else nailqty[AC_WORLDSPN] = world.ammo_nails;
-		if (world.ammo_rockets > AMMO_MAXROCKETS) rockqty[AC_WORLDSPN] = AMMO_MAXROCKETS;
+		if (world.ammo_rockets > world.maxrockets) rockqty[AC_WORLDSPN] = world.maxrockets;
 		else rockqty[AC_WORLDSPN] = world.ammo_rockets;
-		if (world.ammo_cells > AMMO_MAXCELLS) cellqty[AC_WORLDSPN] = AMMO_MAXCELLS;
+		if (world.ammo_cells > world.maxcells) cellqty[AC_WORLDSPN] = world.maxcells;
 		else cellqty[AC_WORLDSPN] = world.ammo_cells;
 		
 		// Self/owner should be player
@@ -1342,9 +1342,9 @@ void() NextSecretCamera =
 	secloc_cam.enemy.cnt = secloc_cam.count;
 	// Centerprint message about secret number found
 	if (secloc_cam.enemy.estate & ESTATE_BLOCK)
-		centerprint_msg3(self, "Secret (", ftos(secloc_cam.enemy.cnt), ") Disabled\n");
+		centerprint3(self, "Secret (", ftos(secloc_cam.enemy.cnt), ") Disabled\n");
 	else
-		centerprint_msg3(self, "Secret (", ftos(secloc_cam.enemy.cnt), ")\n");
+		centerprint3(self, "Secret (", ftos(secloc_cam.enemy.cnt), ")\n");
 	setorigin(self, secloc_cam.enemy.oldorigin);
 
 	// Keep search for more secrets

@@ -222,8 +222,7 @@ void() light_off =
 };
 
 //----------------------------------------------------------------------
-void() light_customstyle_finish =
-{
+void() light_customstyle_finish = {
 	// Check for style errors above compiler light boundary
 	// Only for lights with style range issues + customstyles remap/string
 	if (self.style >= mapstyle_start && self.targetname == "") {
@@ -280,10 +279,10 @@ void() light_customstyle_finish =
 		self.use = entity_state_use;
 		if (!self.estate_on) self.estate_on = light_on;
 		if (!self.estate_off) self.estate_off = light_off;
-		if (self.spawnflags & LIGHT_STARTOFF) self.estate_off();
-		else self.estate_on();
-	}
-	else {
+		if (self.spawnflags & LIGHT_STARTOFF) {
+			self.estate_off();
+		} else self.estate_on();
+	} else {
 		// No more world interaction required (no targetname)
 		// Either remove light or make it static (model exists)
 		if (self.classtype == CT_LIGHT) remove(self);
@@ -291,9 +290,9 @@ void() light_customstyle_finish =
 	}
 };
 
-//----------------------------------------------------------------------
-void() light_customstyle_start =
-{
+float THUNDER_FLASH = 2;  // From temple2
+
+void() light_customstyle_start = {
 	// Need to check style and remap values are within range FIRST
 	// Will be serious crash because its an index for fixed size array
 	if (self.style < 0 || self.style >= LIGHT_MAXLIGHTSTYLE) {
@@ -392,6 +391,10 @@ void() light =
 	// If any model defined, cache it
 	if (self.mdl != "") precache_model (self.mdl);
 	self.classtype = CT_LIGHT;
+
+	// Custom style still overrides thunder spawnflag, it's too rare.  From temple2
+	if (self.targetname && self.spawnflags & THUNDER_FLASH && !self.customstyle_string) self.customstyle_string = "mhkcgkhf";
+
 	// Check for any custom light styles
 	light_customstyle_start();
 };
@@ -1090,8 +1093,7 @@ void() light_candle_off =
 };
 
 //----------------------------------------------------------------------
-void() light_candle_setup =
-{
+void() light_candle_setup = {
 	// Setup model and no world interaction
 	setmodel (self, self.mdl);
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
@@ -1102,12 +1104,6 @@ void() light_candle_setup =
 
 	// Setting the angle key in the editor to UP/DOWN = random rotation	
 	if (self.angles_y <= 0) self.angles_y = rint(random()*359);
-	
-	// Setup light
-	if (self.spawnflags & LIGHT_FLAMEOFF) {
-		self.estate = ESTATE_OFF;
-		self.frame = (self.t_width-1)*2;
-	}
 
 	// Check for static option (default is now static if no target)
 	if (self.spawnflags & ENT_SPNSTATIC) makestatic(self);
@@ -1118,11 +1114,15 @@ void() light_candle_setup =
 		// Check for any custom light styles
 		light_customstyle_start();
 	}
+
+	// Setup light
+	if (self.spawnflags & LIGHT_FLAMEOFF) {
+		light_candle_off();
+	}
 };
 
 //----------------------------------------------------------------------
-void() light_candle =
-{
+void() light_candle = {
 	// Cannot have randomly selected models for prechache
 	// Quickload will re-run all spawn functions and try to select
 	// a different candle model which is not precached
@@ -1165,7 +1165,15 @@ void() light_candle =
 			self.estate = ESTATE_OFF;
 			self.use = entity_state_use;
 			self.estate_on = light_candle_setup;
+		} else {
+			if (self.targetname != "" && self.spawnflags & 1) {
+				// Use the entity state system for max compatibility
+				self.estate = ESTATE_OFF;
+				self.use = entity_state_use;
+				self.estate_on = light_candle_setup;
+			} else {
+				light_candle_setup();
+			}
 		}
-		else light_candle_setup();
 	}
 };

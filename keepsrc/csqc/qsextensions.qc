@@ -231,9 +231,31 @@ const float EV_INTEGER = 8;
 .float viewzoom;			/*rescales the user's fov*/
 .float modelflags;			/*provides additional modelflags to use (effects&EF_NOMODELFLAGS to replace the original model's)*/
 
+float VF_ACTIVESEAT = 202;	/* The 'seat' number, used when running splitscreen. */
+float VF_VIEWENTITY = 206;	/* Changes the RF_EXTERNALMODEL flag on entities to match the new selection, and removes entities flaged with RF_VIEWENTITY. Requires cunning use of .entnum and typically requires calling addentities(MASK_VIEWMODEL) too. */
 
 //Supported Extension Constants
+// edict.movetype values
+float	MOVETYPE_NONE			= 0;	// never moves
+float	MOVETYPE_ANGLENOCLIP	= 1;
+float	MOVETYPE_ANGLECLIP		= 2;
+float	MOVETYPE_WALK			= 3;	// players only
+float	MOVETYPE_STEP			= 4;	// discrete, not real time unless fall
+float	MOVETYPE_FLY			= 5;
+float	MOVETYPE_TOSS			= 6;	// gravity
+float	MOVETYPE_PUSH			= 7;	// no clip to world, push and crush
+float	MOVETYPE_NOCLIP			= 8;
+float	MOVETYPE_FLYMISSILE		= 9;	// fly with extra size against monsters
+float	MOVETYPE_BOUNCE			= 10;
+float	MOVETYPE_BOUNCEMISSILE	= 11;	// bounce with extra size
 const float MOVETYPE_FOLLOW	= 12;
+float MOVE_OTHERONLY = 256;
+// edict.solid values
+float	SOLID_NOT			= 0;	// no interaction with other objects
+float	SOLID_TRIGGER		= 1;	// touch on edge, but not blocking
+float	SOLID_BBOX			= 2;	// touch on edge, block
+float	SOLID_SLIDEBOX		= 3;	// touch on edge, but not an onground
+float	SOLID_BSP			= 4;	// bsp clip, touch on edge, block
 const float SOLID_CORPSE	= 5;
 const float CLIENTTYPE_DISCONNECT	= 0;
 const float CLIENTTYPE_REAL			= 1;
@@ -261,6 +283,13 @@ const float FILE_READ		= 0;
 const float FILE_APPEND		= 1;
 const float FILE_WRITE		= 2;
 
+float	CONTENT_EMPTY		= -1;
+float	CONTENT_SOLID		= -2;
+float	CONTENT_WATER		= -3;
+float	CONTENT_SLIME		= -4;
+float	CONTENT_LAVA		= -5;
+float	CONTENT_SKY			= -6;
+
 
 //Vanilla Builtin list (reduced, so as to avoid conflicts)
 void(vector) makevectors = #1;
@@ -274,12 +303,16 @@ void(string n) objerror = #11;
 float(vector) vlen = #12;
 entity() spawn = #14;
 void(entity e) remove = #15;
+void(vector v1, vector v2, float nomonsters, entity forent) traceline = #16;
+entity(entity start, .string fld, string match) find = #18;
 void(string,...) dprint = #25;
 string(float) ftos = #26;
 string(vector) vtos = #27;
+void(entity) eprint = #33;
 float(float n) rint = #36;
 float(float n) floor = #37;
 float(float n) ceil = #38;
+float(vector v) pointcontents		= #41;	// returns a CONTENT_*
 float(float n) fabs = #43;
 float(string) cvar = #45;
 void(string,...) localcmd = #46;
@@ -455,7 +488,7 @@ int(float) ftoi = #0; /*
 
 float(int) itof = #0; /*
 		Converts the given true integer into a float without depending on extended qcvm instructions. */
-
+vector pmove_org;
 #ifndef dotproduct
 #define dotproduct(v1,v2) ((vector)(v1)*(vector)(v2))
 #endif
@@ -470,15 +503,11 @@ float(float modidx, float framenum) frameduration = #277; /*
 
 void(float buf, float fl) WriteFloat = #280;
 string(float modidx, float framenum) frametoname = #284;
-float(string name) checkcommand = #294; /*
-		Checks to see if the supplied name is a valid command, cvar, or alias. Returns 0 if it does not exist. */
-
-float(string name) iscachedpic = #316; /*
-		Checks to see if the image is currently loaded. Engines might lie, or cache between maps. */
-
-string(string name, optional float trywad) precache_pic = #317; /*
-		Forces the engine to load the named image. If trywad is specified, the specified name must any lack path and extension. */
-
+float(string name) checkcommand = #294; /*Checks to see if the supplied name is a valid command, cvar, or alias. Returns 0 if it does not exist. */
+float(float property) getproperty = #309;
+vector(float property) getpropertyvec = #309;
+float(string name) iscachedpic = #316; /*Checks to see if the image is currently loaded. Engines might lie, or cache between maps. */
+string(string name, optional float trywad) precache_pic = #317; /*Forces the engine to load the named image. If trywad is specified, the specified name must any lack path and extension. */
 #define draw_getimagesize drawgetimagesize
 vector(string picname) drawgetimagesize = #318; /*
 		Returns the dimensions of the named image. Images specified with .lmp should give the original .lmp's dimensions even if texture replacements use a different resolution. */
@@ -608,7 +637,6 @@ entity(entity from, optional entity to) copyentity = #400; /*
 void(entity ent, float colours) setcolors = #401; /*
 		Changes a player's colours. The bits 0-3 are the lower/trouser colour, bits 4-7 are the upper/shirt colours. */
 
-entity(.string field, string match) findchain = #402;
 entity(.float fld, float match) findchainfloat = #403;
 void(vector org, vector dir, float count) te_blood = #405;
 void(vector mincorner, vector maxcorner, vector vel, float howmany, float color) te_particlerain = #409;
@@ -887,3 +915,33 @@ const float K_PAUSE = 153;
 
 //Reset this back to normal.
 #pragma noref 0
+
+float() isserver = #350; /* Returns non-zero whenever the local console can directly affect the server (ie: listen servers or single-player). Compat note: DP returns 0 for single-player. */
+void(vector origin, vector forward, vector right, vector up, optional float reverbtype) SetListener = #351; /* Sets the position of the view, as far as the audio subsystem is concerned. This should be called once per CSQC_UpdateView as it will otherwise revert to default. For reverbtype, see setup_reverb or treat as 'underwater'. */
+typedef struct {
+	float flDensity;
+	float flDiffusion;
+	float flGain;
+	float flGainHF;
+	float flGainLF;
+	float flDecayTime;
+	float flDecayHFRatio;
+	float flDecayLFRatio;
+	float flReflectionsGain;
+	float flReflectionsDelay;
+	vector flReflectionsPan;
+	float flLateReverbGain;
+	float flLateReverbDelay;
+	vector flLateReverbPan;
+	float flEchoTime;
+	float flEchoDepth;
+	float flModulationTime;
+	float flModulationDepth;
+	float flAirAbsorptionGainHF;
+	float flHFReference;
+	float flLFReference;
+	float flRoomRolloffFactor;
+	int   iDecayHFLimit;
+} reverbinfo_t;
+void(float reverbslot, reverbinfo_t *reverbinfo, int sizeofreverinfo_t) setup_reverb = #0:setup_reverb; /* Part of FTE_CSQC_REVERB Reconfigures a reverb slot for weird effects. Slot 0 is reserved for no effects. Slot 1 is reserved for underwater effects. Reserved slots will be reinitialised on snd_restart, but can otherwise be changed. These reverb slots can be activated with SetListener. Note that reverb will currently only work when using OpenAL. */
+

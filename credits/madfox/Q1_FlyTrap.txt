@@ -1,0 +1,46 @@
+=================================================================================
+Title                  : Q1_FlyTrap.zip
+Filename               : Q1_FlyTrap
+Author                 : Madfox
+Email Adress           : catweazel@kpnmail.nl
+Description            : New Quake 1 model
+
+Additional Credits to  : ID Software
+
+=================================================================================
+
+* Play Inormation *
+
+Level Name              : Dionaea muscipula
+Single Player           : /
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Models              : yes
+New Sounds              : yes
+qC                      : /
+
+=================================================================================
+
+* Construction *
+
+Base              : New model for a Dionaea muscipula, Venus Trap Fly.
+Build Time        : 12 houres
+Editor(s) Used    : PSP AM2014 QMLE CORELDRAW5   
+Known Bugs        : /
+Specific          : plumivitius is a standing model.
+<                 : carnivorus is a button sized model.
+<                 : I kept both model skin in fullbrights as they shine.
+Thanks            : Third proof. Just a side project that came up to me.
+<                 : worked out real well I think.
+GameOption        : Compile te carnivor.qc, name the monster_carnivor. 
+                
+
+Live long and propsper! Make the Quake1 Universe get bigger and bigger!
+
+================================================================================= 
+
+Madfox 11 februari 2021
+
+=================================================================================
+

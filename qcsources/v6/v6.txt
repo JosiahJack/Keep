@@ -1,0 +1,128 @@
+friday august 1st, 1997
+================================================================
+                             NOTE 
+
+This is a big level and needs more than the standard 8 megs of memory to load.
+On my machine it will run with 9 megs but i'd suggest giving it as much spare 
+memmory as you got. Run Quake with the -winmem # parameter, where # is the 
+amount of megs of ram your giving quake. Also I wouldn't suggest higher than 
+minium resolution.
+================================================================
+
+Title                          : Vivisect Six
+Filename                       : v6.bsp
+Author (Map, Skins, Textures)  : Zied Rieke
+Email Address                  : Riekez@carleton.edu
+			  Please mail me about this level - I love/need 
+                    feedback - especially feedback that says more 
+                    than "I really liked your level"
+Description             : Full Quake map and patch, designed for Single play, 
+                          Coop and Deathmatch
+
+Code, Suggestion credits to   : Nathan Vasil
+
+
+Additional Credits to   : id software - My heros, inventers of a new way of life
+			  Hipnotic for textures
+			  Ben Morris for WorldCraft
+			  Crash for copywrite page
+
+Level name and late teen years identity : Skinny Puppy
+
+=================================================================
+About The Code
+
+Nathan lived with me for a couple of days and did all the code for this level.
+Now he lives a couple of blocks away and you can contact him through my email 
+address no problem. He too dreams of working for a video game company some day.
+
+He did too many little fixes and patches to remember or mention here, but some 
+of the ones that come to mind are:
+
+Multiple player starts   (to use this patch in your level-just put in more than one
+    normal player starts)
+
+Ogre AI   (Ogres move in a random direction when you have the higher ground)
+
+Fiend AI  (Fiends check their left and right edge to see if they can make a jump before 
+             doing so)
+
+Enforcer and Flying Enforcer AI  (Flying Enforcers are basically a new monster, 
+             monster_enforcerfly. Both use a aiming code that compensates for circle strafeing 
+             and other simple non linear movements) 
+
+Slow Strobes  (The timing of the slow strobe light setting was changed to try and match my 
+          blinking texture)
+
+No trigger_secrets in Deathmatch
+
+Triggers take "Not in easy" "Not in normal" etc flags
+
+=================================================================
+
+Other Levels by Author	: Dextromethrophan (Quake)
+			  http://www.cdrom.com/pub/quake/levels/d-f/dxmf.zip
+			  Three of Clubs (Quake)
+			  http://www.cdrom.com/pub/quake/levels/deathmatch/0-3/3oc.zip
+
+                    (This isn't a deathmatch level, its a single player level, it got to this 
+                     directory by means of a long and complicated mistake)    
+
+================================================================
+I am actively seeking employment in the games industry.
+If you can help, please get in touch.
+================================================================
+
+================================================================
+
+* Play Information *
+
+Single Player           : Yes 
+Cooperative             : Yes
+Deathmatch              : Yes (I never tried it with anything but Reapers please email comments
+           as this is my first deathmatch attempt)            
+Difficulty Settings     : Yes (only normal and hard have different monsters)
+New Sounds              : No
+New Graphics            : Yes
+			  Some new textures derviative of ids and hipnotic textures from SoA. 
+                    Also an Enforcer Skin.
+New Music               : No
+Demos Replaced          : None
+
+* Other Stuff *
+
+Base                    : New level from scratch
+Editor(s) used          : WorldCraft 1.1a, Paint Shop Pro 4.0, Meddle, Qped
+Known Bugs              : None
+Build Time              : since my second level (a month maybe two months I'm not sure)
+Texture Wad used        : get yerself Base.Wad from The Forge (worldcraft editing site)
+Compile machine         : P100, 98mb RAM, some kinda Cirrus 3D card.
+QBSP Time               : maybe an hour
+Light (-extra) Time 	: 14900 seconds (almost 5 hours)
+VIS (-level 4) Time     : about 14 hours (I did this four times!)
+
+
+* Additional Information *
+
+Unzip into the quake directory
+Choose Run from your start menu, type "c:\quake [or whatever] -game v6 +map v6 -winmem 9
+
+
+* Copyright / Permissions *
+
+Authors MAY NOT use this level as a base to build additional
+levels.
+
+Authors may do whatever they like with the new textures and skin so long as they credit me 
+and this level in their use.
+
+Authors may include this progs.dat with their levels so long as they credit Nathan Vasil and
+this level in their use.
+
+This BSP may be distributed ONLY over the Internet and/or BBS systems.
+You are NOT authorized to put this BSP on any CD or distribute it in
+any way without my express written permission. Don't even TRY and put it 
+on a cd-rom by saying that you asked my permission and I didn't reply
+within a certain time period so you took that as a yes!
+
+

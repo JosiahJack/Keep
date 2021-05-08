@@ -141,7 +141,7 @@ void(float prevskill) Client_ResetEvilmode =
 		if (self.moditems & IT_UPGRADE_AXE) {
 			sprint(self, "Shadow Axe removed!\n");
 			sprint(self, "You feel your power fading!\n");
-			stuffcmd(self, "bf\n");
+			Safe_stuffcmd(self, "bf\n");
 			self.moditems = self.moditems - (self.moditems & IT_UPGRADE_AXE);
 			self.items = self.items | IT_AXE;
 			self.weapon = IT_AXE;
@@ -172,5 +172,5 @@ void() Client_DispEvilmsg =
 	else if (rndmsg < 9) sprint(self, " - After eons of time \bEVIL\b is alive! -");
 					else sprint(self, "- \bEVIL\b hands find righteous purpose! -");
 	sprint(self,"\n\n");
-	stuffcmd(self, "bf\n");
+	Safe_stuffcmd(self, "bf\n");
 };

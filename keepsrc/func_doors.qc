@@ -234,7 +234,7 @@ void() func_door_link =
 					if ( !(linkdoor.spawnflags & DOOR_DONT_LINK)) { 
 						dprint("\b[CROSSLINK]\b really bad situation, must fix!\n");
 						dprint("-----------------------------------------------\n");
-						eprint(linkdoor.enemy); 
+						dprint(linkdoor.enemy.classname); 
 						dprint("-----------------------------------------------\n\n");
 					}
 				}

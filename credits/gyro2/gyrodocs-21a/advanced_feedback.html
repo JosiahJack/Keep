@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/advanced_feedback.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+<head>
+	<title>GyroDocs - Feedback Functions</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><a href="physobj.html" class="item">Physics Objects</a><a href="forces.html" class="item">Force Entities</a><a href="advanced.html" class="item">Advanced Usage</a><div class="layout_submenu"><a href="advanced_feedback.html" class="subitem subitem_selected">- Feedback Functions</a><a href="advanced_channels.html" class="subitem">- Force Channels</a></div><a href="info.html" class="item">Further Information</a></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Feedback Functions</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p>Any physics object may be assigned a feedback function to be triggered whenever it interacts with a force. This function may perform all manner of operations, such as changing physical properties or even destroying the object if it is subjected to an explosion force, for example. For an object to recieve feedback, you must first define an zero-argument function (or use the built-in <code>Gyro_Object_FeedbackDebug()</code> routine) to perform any necessary actions, then have your object's <code>.gyro_object_feedback</code> field point to it. Before feedback is called, three global variables will be set and may be used to influence the object's response:</p>
+
+<p><strong>string gyro_feedback_name</strong><br />
+This string is the user-defined name of the force, specified during it's creation with <code>Gyro_Force_Create(name, origin)</code>.</p>
+
+<p><strong>float gyro_feedback_power</strong><br />
+Representation of the power the force exerted upon the object, relative to the object's mass.</p>
+
+<p><strong>float gyro_feedback_channels</strong><br />
+A bitwise representation of the channels the force and object are interacting on.</p>
+
+<p>Additionally, bouyant objects will receive the following feedback when they are submerged in water, slime or lava:</p>
+<pre>gyro_feedback_name     = "water"
+gyro_feedback_power    = (object's bouyancy)
+gyro_feedback_channels = 0.0</pre>
+
+<p>Bouyancy feedback saves the need to make manual pointcontent checks when objects need to behave differently underwater. Projectiles such as nails may need their movetype altered if they are to behave realistically under such conditions, which ties in closely with their behaviour under the influence of regular forces.</p></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/advanced_feedback.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+</html>

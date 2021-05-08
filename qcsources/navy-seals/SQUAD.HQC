@@ -1,0 +1,380 @@
+/****************************************************************************/
+/*                                                                          */
+/*    project    : S.E.A.L. sQuad       (c) 1997 William van der Sterren    */
+/*                                                                          */
+/*      file     : squad.hqc    "definitions for squad member and team"     */
+/*      author(s): William van der Sterren                                  */
+/*      version  : 0.5                                                      */
+/*                                                                          */
+/*      date (last revision):  Sep 08, 97                                   */
+/*      date (creation)     :  Oct 05, 97                                   */
+/*                                                                          */
+/*                                                                          */
+/*      revision history                                                    */
+/*      -- date ---- | -- revision ---------------------- | -- revisor --   */
+/*      Oct 05, 1997 | added posture methods              | william         */
+/*                                                                          */
+/****************************************************************************/
+
+
+//
+// Squad header file
+//
+
+// Squad defs
+// sQuad member field
+.float      squadmemberstate;       // state of member/team
+.float      squadmembernextstate;   // next state, used in state wait
+.entity     squadPreviousWaypoint;
+.float      squadWaypointDirection; // visit waypoints in order/reverse order
+
+.float      squadStrafeDirection;   // strafe to right or to left
+.entity     squadmarker;            // reference point, various purposes,
+                                    // points to world if not in use
+.vector     forbiddenarea;          // point around which items shall not
+                                    // be hunted for.
+.vector     squadSpotAngles;        // direction and sector to spot/watch
+
+.entity     squadleader;
+.float      memberid;               // 0...3, 0 == leader
+.float      formation;              // bit[0..3] denote presence of members
+                                    // with memberid's 0..3
+.entity     stuff;                  // stuff the bot looks for
+
+
+/* re-used entity fields:
+.vector     dest                    // grenade launch speed
+.vector     dest1                   // _x left side space, _y right side
+                                    // space, _z time last check
+.float      weaponframe             // member role (handgunsoldier,
+                                    //              machinegunsoldier)
+*/
+
+
+// constants - limits
+float SQUAD_MAX         = 1;    // max number of active squads
+float SQUAD_MEMBERSMAX;         // max number of squad members (incl leader),
+                                // max 4
+float SQUAD_CREATEDELAY = 0.2;  // "inter-creation time" of squad members,
+                                // to prevent telefragging
+
+// constants - impulses
+float SQUAD_INFO        = 110;
+
+
+// constants - defs
+float  SQUAD_NO_DROPTIME            =   0;
+float  SQUAD_ROCKET_DIVE_DISTANCE   = 750;
+float  SQUAD_ROCKET_DIVE_TIME       =   1.0;
+float  SQUAD_WAYPOINT_DIRECTION_POS =   0;
+float  SQUAD_WAYPOINT_DIRECTION_NEG =   1;
+float  SQUAD_STRAFE_DIRECTION_RIGHT =   0;
+float  SQUAD_STRAFE_DIRECTION_LEFT  =   1;
+float  SQUAD_MAXHUNTTIME            =   5.0;
+float  SQUAD_MAXWAYPOINTTIME        =   7.5;
+float  SQUAD_MAXSPREADTIME          =   2.5;
+float  SQUAD_PRE_ATTACKDELAY        =   0.2;
+float  SQUAD_CHANGEWEAPON_DELAY     =   0.75;
+float  SQUAD_FORBIDDENAREA_DIST     = 500;
+float  SQUAD_TURNRIGHT              =   1;
+float  SQUAD_TURNLEFT               =   2;
+float  SQUAD_ROTATIONSTEP           =   3;
+float  SQUAD_TEAMREGROUPTIME        =  20.0;
+float  SQUAD_TEAMSPREADOUTTIME      =   3.0;
+float  SQUAD_FORMATIONPOINTDIST     =  16;
+float  SQUAD_DIRECTIONUPDATEPERIOD  =   0.1;
+float  SQUAD_MAX_NODES_SEARCH       =  16;
+float  SQUAD_SPREAD_INTERGRENADETIME=   2;
+float  SQUAD_INTERCHECKTIME         =   4;
+float  SQUAD_AMBUSHDURATION         =  20;
+
+
+// constants - member states
+float SQUAD_MEMBERUNDEFINED          =  0;
+float SQUAD_MEMBERWAIT               =  1;
+float SQUAD_MEMBERRELOAD             =  2;
+float SQUAD_MEMBERPATROL             =  3;
+float SQUAD_MEMBERHUNTSTUFF          =  4;
+float SQUAD_MEMBERHUNTENEMY          =  5;
+float SQUAD_MEMBERSTRAFE             =  6;
+float SQUAD_MEMBERDEFEND             =  7;
+float SQUAD_MEMBERATTACK             =  8;
+float SQUAD_MEMBERPAIN               =  9;
+float SQUAD_MEMBERDIE                = 10;
+float SQUAD_MEMBERASSEMBLE           = 11;
+float SQUAD_MEMBERPOSITION           = 12;
+float SQUAD_MEMBERGUARD              = 13;
+float SQUAD_MEMBERRUNTOHELP          = 14;
+float SQUAD_MEMBERSPREAD             = 15;
+float SQUAD_MEMBERCHECK              = 16;
+float SQUAD_MEMBERRUNFORCOVER        = 17;
+float SQUAD_MEMBERDRAW               = 18;
+float SQUAD_MEMBERAMBUSH             = 19;
+
+// constants - team states
+float SQUAD_TEAMUNCOORDINATED        = 32;
+float SQUAD_TEAMREGROUP              = 64;
+float SQUAD_TEAMCREATE               = 96;
+float SQUAD_TEAMCREATEASSEMBLE       =128;
+float SQUAD_TEAMSPREADOUT            =160;
+float SQUAD_TEAMAMBUSH               =192;
+float SQUAD_TEAMWAIT                 =224;
+
+// constants - team composition
+float SQUAD_TEAM_HANDGUNONLY         =  1;
+float SQUAD_TEAM_MACHINEGUNONLY      =  2;
+float SQUAD_TEAM_MIXED               =  0;
+
+// constants - member postures
+float SQUAD_POSTURE_UNDEFINED        =  0;
+float SQUAD_POSTURE_STAND            =  1;
+float SQUAD_POSTURE_SIT              =  2;
+float SQUAD_POSTURE_LAY              =  3;
+float SQUAD_POSTURE_ROLL             =  4;
+
+// constants - member reload state
+float SQUAD_RELOAD_UNNEEDED          =  0;
+float SQUAD_RELOAD_URGENT            =  1;
+float SQUAD_RELOAD_IMMEDIATE         =  2;
+
+// constants - member roles
+float SQUAD_ROLE_HANDGUNSOLDIER      =  1;
+float SQUAD_ROLE_MACHINEGUNSOLDIER   =  2;
+
+// constants - grenade throwing
+float SQUAD_FRAG_GRENADE             =  0;
+float SQUAD_FLASHBANG_GRENADE        =  1;
+float SQUAD_NO_GRENADE               = -1;
+
+// constants - locations
+vector SQUAD_FORBIDDENAREA           = '-1000 -1000 -1000';
+
+// constants - debugging
+float  SQUAD_MEMBER_STATECHANGEINFO;  //= 1; // TRUE or FALSE
+float  SQUAD_TEAM_STATECHANGEINFO;    //= 0; // TRUE or FALSE
+
+// constants - copyright
+string SQUAD_CREATOR;
+
+
+
+// prototypes - game settings           (squad_gm.qc)
+float ()                                Squad_Game_IsInfiltrate;
+float ()                                Squad_Game_IsInfiltrateStartToExit;
+float ()                                Squad_Game_IsInfiltrateExitToStart;
+void  (entity client)                   Squad_Game_SetMissionStartToExit;
+void  (entity client)                   Squad_Game_SetMissionExitToStart;
+float ()                                Squad_Game_DoesSquadAutoRespawn;
+void  (entity client)                   Squad_Game_ToggleSquadAutoRespawn;
+float ()                                Squad_Game_DoesHaveItems;
+void  (entity client)                   Squad_Game_ToggleItemAvailability;
+void  ()                                Squad_Game_RemoveItems;
+float ()                                Squad_Game_GetSquadComposition;
+void  (entity client)                   Squad_Game_ToggleSquadComposition;
+
+
+
+// prototypes - information             (squad.qc)
+void ()                                 Squad_Info;
+string (float state)                    Squad_StateToString;
+string (float posture)                  Squad_PostureToString;
+
+
+// prototypes - life cycle              (squad.qc)
+void   ()                               Squad_Precache;
+void   (entity member, float state)     Squad_SetState;
+float  (entity member)                  Squad_GetState;
+void   (entity member)                  Squad_MemberInit;
+void   (entity member)                  Squad_MemberInitRole;
+void   ()                               Squad_MemberDeactivate;
+void   ()                               Squad_RespawnMember;
+void   (entity member)                  Squad_MemberAnnounce;
+vector (entity member)                  Squad_MemberFeetPosition;
+void   (entity member, float factor)    Squad_AdjustHeight;
+void   (entity member, float position)  Squad_SetPosture;
+float  (entity member)                  Squad_GetPosture;
+float  (entity member)                  Squad_GetRole;
+float  (entity member, float role)      Squad_SetRole;
+float  (entity member)                  Squad_MemberCanRoll;
+
+
+// prototypes - animation               (squad_an.qc)
+void ()                                 Squad_Anim_Wait;
+void ()                                 Squad_Anim_Draw;
+void ()                                 Squad_Anim_Check;
+void ()                                 Squad_Anim_Walk;
+void ()                                 Squad_Anim_Run;
+void ()                                 Squad_Anim_Stuff;
+void ()                                 Squad_Anim_Strafe;
+void ()                                 Squad_Anim_Die;
+void ()                                 Squad_Anim_Defend;
+void ()                                 Squad_Anim_Roll;
+void ()                                 Squad_Anim_Pain;
+void ()                                 Squad_Anim_Reload;
+void ()                                 Squad_Anim_Attack;
+void (float fGrenadeType)               Squad_Anim_AttackHandGrenade;
+
+
+// prototypes - (low level) behavior    (squad_bh.qc)
+void   ()                               Squad_EveryFrame;
+void   (float distance)                 Squad_Behavior_Move;
+void   (float distance)                 Squad_Behavior_Strafe;
+void   (entity member, entity waypoint) Squad_Behavior_ReachedWaypoint;
+void   (entity member, entity waypoint) Squad_Behavior_SelectNextWaypoint;
+void   (entity member)                  Squad_Behavior_ReselectWaypoint;
+void   (entity member, entity waypoint) Squad_Behavior_ReselectOtherWaypoint;
+float  (entity member1, entity member2) Squad_Behavior_WaypointNodeDistance;
+void   (entity member)                  Squad_Behavior_DetermineWaypointDirection;
+void   (entity member)                  Squad_Behavior_TrySit;
+
+
+// prototypes - AI (hi level behavior)  (squad_ai.qc)
+void   ()                               Squad_AI_Wait;
+void   (float distance)                 Squad_AI_Walk;
+void   (float distance)                 Squad_AI_Run;
+void   (float distance)                 Squad_AI_Assault;
+void   (entity member)                  Squad_AI_StrafeStart;
+void   ()                               Squad_AI_StrafeFinish;
+void   ()                               Squad_AI_RollFinish;
+void   ()                               Squad_AI_CheckFinish;
+void   ()                               Squad_AI_GrenadeFinish;
+void   ()                               Squad_AI_DrawFinish;
+entity (vector position,
+        entity associatedEntity)        Squad_AI_CreateMarker;
+void   (entity marker, vector position) Squad_AI_UpdateMarker;
+void   (entity marker)                  Squad_AI_DestroyMarker;
+void   (entity member)                  Squad_AI_HeadForMarker;
+entity (entity marker)                  Squad_AI_GetMarkerEntity;
+void   (entity member, float angle,
+        float sector)                   Squad_AI_InitSpotting;
+void   (entity member, entity waypoint) Squad_AI_TryAssembly;
+float  ()                               Squad_AI_IncomingRocketDetect;
+float  ()                               Squad_AI_IncomingGrenadeDetect;
+void   (entity member)                  Squad_AI_InitSidesInfo;
+float  (entity member)                  Squad_AI_CheckSides;
+float  ()                               Squad_AI_DetectStuff;
+void   (entity stufffound)              Squad_AI_FoundStuff;
+void   (float distance)                 Squad_AI_HuntStuff;
+void   (entity member, entity item)     Squad_AI_TouchedStuff;
+float  ()                               Squad_AI_DetectTarget;
+void   (entity targetfound)             Squad_AI_FoundTarget;
+void   (float distance)                 Squad_AI_ChargeTarget;
+void   ()                               Squad_AI_StartAttack;
+void   (float am)                       Squad_AI_EveryAttack;
+void   (entity attacker, float damage)  Squad_AI_ReceiveDamage;
+void   ()                               Squad_AI_NeedIgnorePain;
+void   ()                               Squad_AI_FinishedPain;
+float  (entity member, entity other)    Squad_AI_ShouldUseHandGrenade;
+void   ()                               Squad_AI_AttackHandGrenade;
+void   ()                               Squad_AI_AttackSomeHandgun;
+void   ()                               Squad_AI_AttackSomeMachinegun;
+void   (entity member)                  Squad_AI_StartReload;
+void   (entity member)                  Squad_AI_PerformReload;
+void   ()                               Squad_AI_FinishedReload;
+float  (entity member)                  Squad_AI_GetReloadUrgency;
+float  (entity member, entity enemy)    Squad_AI_BestWeapon;
+void   (entity member, float somewpn)   Squad_AI_ChangeWeapon;
+entity (entity member, entity subject)  Squad_AI_HasClearLineOfFire;
+float  (entity receiver, entity sender) Squad_AI_AskMoveOutOfWay;
+float  (entity member)                  Squad_AI_IsMemberAttacking;
+void   (entity member, entity enemy)    Squad_AI_ConsiderChangeDirection;
+float  (entity member, entity subject)  Squad_AI_DoesSeeSubjectThruTeam;
+float  (entity subject)                 Squad_AI_IsInFront;
+
+// prototypes - weapon handling         (squad_fi.qc)
+vector ()                               Squad_FI_FireDirection;
+void   ()                               Squad_FI_FireHandgun;
+void   ()                               Squad_FI_FireMachinegun;
+entity (entity member, entity receiver) Squad_FI_CanThrowGrenade;
+void   (vector speed, float fGrenType)  Squad_FI_ThrowHandGrenade;
+
+// prototypes - team                    (squad_tm.qc)
+string (float memberstate)              Squad_Team_StateToString;
+float  (entity squad)                   Squad_Team_GetState;
+void   (entity squad,
+        float  squadstate)              Squad_Team_SetState;
+float  (entity squad)                   Squad_Team_IsRegrouping;
+void   (entity squad)                   Squad_Team_PrepareCreatePositions;
+void   ()                               Squad_Team_Create;
+void   ()                               Squad_Team_Idle;
+void   ()                               Squad_Team_Wait;
+void   ()                               Squad_Team_Regroup;
+void   ()                               Squad_Team_SpreadOut;
+void   ()                               Squad_Team_Ambush;
+void   (entity squad)                   Squad_Team_Degroup;
+void   (entity squad,
+        entity waypoint, entity member) Squad_Team_StartRegroup;
+void   (entity squad, entity member)    Squad_Team_StartAmbush;
+void   (entity squad)                   Squad_Team_StartAttack;
+void   (entity squad, entity member)    Squad_Team_JoinAssembly;
+void   (entity squad, entity member,
+        entity position)                Squad_Team_JoinFormation;
+void   (entity squad, entity member)    Squad_Team_LeaveAssembly;
+void   (entity squad, entity member)    Squad_Team_LeaveFormation;
+void   (entity member)                  Squad_Team_ArriveAtAssembly;
+void   (entity member,
+        entity assemblyposition)        Squad_Team_ArriveAtPosition;
+void   (entity member)                  Squad_Team_DismissFromFormation;
+
+void   (entity squad,
+        entity point1, entity point2)   Squad_Team_StartSpreadOut;
+float  (entity squad,
+        entity point1, entity point2)   Squad_Team_NeedsSpreadOut;
+entity ()                               Squad_Team_SelectSpawnPoint;
+float  (entity member)                  Squad_Team_IsPointMan;
+void   (entity member)                  Squad_Team_Join;
+void   (entity member)                  Squad_Team_Leave;
+void   (entity member,
+        entity waypoint)                Squad_Team_UpdateMemberPosition;
+entity (float teamId, entity waypoint)  Squad_Team_SpawnAssemblyPositions;
+void   (float teamId)                   Squad_Team_RemoveAssemblyPositions;
+float  (entity member, entity aTarget,
+        float  totalTargets)            Squad_Team_MaybeRequestAssistance;
+float  (entity team, entity member)     Squad_Team_GetWaypointDirection;
+float  (entity team, entity subject)    Squad_Team_ShouldUseGrenade;
+float  (entity team, entity member)     Squad_Team_HasLostTouchWithEnemy;
+
+
+// miscellaneous - grenade destination prediction
+void   ()                               W_PredictMissileDestination;
+
+
+
+// globals squad
+float   activeSquads;                 // initialized in Squad_Precache
+
+
+// globals teams
+entity teamAlpha;
+
+// globals team Alpha
+float  alphaTeamSize;                 // initialized in Squad_Precache
+float  alphaNextDropMoment;           // time to drop next team member (0 == don't drop)
+
+// team behavior specific globals
+entity alphaPointMember;              // most forward alpha member
+float  alphaPointWaypoint;            // number of most forward waypoint visited
+
+float  alphaTeamConfig;               // bit-flags for teammembers
+entity alpha1;
+entity alpha2;
+entity alpha3;
+entity alpha4;
+
+entity alphaAssemblyLocation;
+float  alphaAssemblyFormation;
+float  alphaAssemblyYaw;
+entity alphaAssembly1;
+entity alphaAssembly2;
+entity alphaAssembly3;
+entity alphaAssembly4;
+
+
+// game mode - squad composition
+float  squadTeamComposition;
+
+// model bug
+float  pdudemodelindex;
+float  guardmodelindex;
+
+

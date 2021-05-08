@@ -1,0 +1,15 @@
+Vine.mdl by Preach (andrew.denner@btinternet.com)
+
+Time to plant some vegetation in your map! This model will decorate bare surfaces in your map, making your medieval walls look vibrant or your base maps overgrow and abandoned. And at just a shade over 40 triangles per model, why not add two!
+
+The model comes with 7 poses for the vine, and the following 4 skins:
+Tropical Vine
+Poison Ivy
+Desiccated 
+Autumnal Tips
+
+If you go for making a custom skin, I advise trying to match the shading on the existing skins, the upper pair of leaves are shaded darker, and on all four leaves one half is brighter. The skinmapping ensures that the lighter halves of the leaf always face up, and that the smaller, darker leaves are overshadowed by larger, more prominent ones
+
+The model is designed to tightly hug a wall in your map, and so the polygons only face in one direction. To get the right placement, position the origin of the model 8 units away from the wall it will be rooted to. In the case of the 'limp' frames, the origin should be 64 units from the ground, and in the case of the 'creep' frame 32 units from the second wall that it wraps around.
+
+2013-08-19: This model was recompiled using the latest version of md3tomdl to fix the normals

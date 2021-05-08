@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/installing.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:43:52 GMT -->
+<head>
+	<title>GyroDocs - Installing</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><div class="layout_submenu"><a href="installing.html" class="subitem subitem_selected">- Installing</a><a href="configuring.html" class="subitem">- Configuring</a></div><a href="physobj.html" class="item">Physics Objects</a><a href="forces.html" class="item">Force Entities</a><a href="advanced.html" class="item">Advanced Usage</a><a href="info.html" class="item">Further Information</a></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Installing</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p>Gyro is provided as four .qc files and must be installed into an existing mod or source base. Once you are ready to proceed, you should follow the steps below:</p>
+
+<p>
+<strong>Step 1</strong><br />
+Copy the four .qc files (<code>gyro_forces.qc</code>, <code>gyro_main.qc</code>, <code>gyro_physics.qc</code> and <code>gyro_user.qc</code>) into the source folder of your mod.</p>
+
+<p>
+<strong>Step 2</strong><br />
+You now need to add these files to your <code>progs.src</code> file, just under <code>defs.qc</code>, as shown below:</p>
+<pre>defs.qc
+<em>gyro_main.qc</em>
+<em>gyro_physics.qc</em>
+<em>gyro_forces.qc</em>
+<em>gyro_user.qc</em>
+subs.qc
+fight.qc
+...</pre>
+
+<p>
+<strong>Step 3</strong><br />
+Load <code>defs.qc</code> and find, near the bottom, the <code>remove()</code> function. You will need to alter this into a forward declaration by removing the "<code>= #15</code>" part, leaving the line as:</p>
+<pre>void(entity e) remove;</pre>
+
+<p>
+<strong>Step 4</strong><br />
+In order for Gyro to run, we must add a single line to <code>world.qc</code>, in the <code>StartFrame()</code> function. It can be found near the bottom of the file and needs to look something like this:</p>
+<pre>	...
+	skill = cvar("skill");
+	framecount = framecount + 1;
+	<em>Gyro_Run();</em>
+};</pre>
+
+<p>
+<strong>Step 5</strong><br />
+Installation complete! When you are satisfied that Gyro is installed correctly, you may proceed onto the <a href="configuring.html">configuration stage</a>.</p></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/installing.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:43:52 GMT -->
+</html>

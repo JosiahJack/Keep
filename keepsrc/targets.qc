@@ -1131,18 +1131,16 @@ message : Skybox name (eg moonrise_)
 Load/Change Skybox for all clients
 
 ======================================================================*/
-void(entity targ) trigger_skybox_change =
-{
+void(entity targ) trigger_skybox_change = {
 	// Write skybox change to all clients
 	// console command has to be lowercase
-	stuffcmd(targ, "sky ");
-	stuffcmd(targ, trig_skybox);
-	stuffcmd(targ, "\n");
+	Safe_stuffcmd(targ, "sky ");
+	Safe_stuffcmd(targ, trig_skybox);
+	Safe_stuffcmd(targ, "\n");
 };
 
 //----------------------------------------------------------------------
-void() trigger_skybox_use =
-{
+void() trigger_skybox_use = {
 	// Check for entity state system block
 	if (self.estate & ESTATE_BLOCK) return;
 	
@@ -1369,24 +1367,8 @@ void() trigger_monsterkill_use =
 				self.enemy.deadflag = DEAD_DEAD;
 				self.enemy.enemy = world;
 				self.enemy.health = self.enemy.gibhealth;
-
-				// If a monster marked with no monster count dies
-				// update HUD totals to reflect death properly
-				if (self.enemy.nomonstercount) {
-					if (self.enemy.classgroup == CG_HARMLESS) {
-						total_denizens = total_denizens + 1;
-					} else {
-						total_monsters = total_monsters + 1;
-						update_hud_totals(HUD_MONSTERS);
-					}
-				}	
-				// Update global monster death totals
-				if (self.enemy.classgroup == CG_HARMLESS) {
-					killed_denizens = killed_denizens + 1;
-				} else {
-					killed_monsters = killed_monsters + 1;
-					WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
-				}
+				if (self.enemy.nomonstercount) AddToTotals(self); // If a monster marked with no monster count dies update HUD totals to reflect death properly
+				AddToKills(self,activator);
 
 				// Stop all animation think functions
 				self.enemy.think = SUB_Null;

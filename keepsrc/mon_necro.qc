@@ -404,8 +404,7 @@ void() necro_run = {
 
 				// Necro boss may teleport instead if shield cannot be raised.
 				if (self.classname == "monster_necromancer")
-					if (necro_teledef ())
-						return;
+					if (necro_teledef ()) return;
 
 				shieldoff();
 			}
@@ -426,28 +425,21 @@ void() necro_run = {
             targ = world;
             if (self.enemy)
                 targ = self.enemy;
-            else if (!self.fighting)
-                targ = self.master;
+            else
+                targ = self.charmer;
 
             if (targ)
             if (!visible (targ))
             if (necro_teleport (targ, targ.origin, TRUE)) {
-				// Teleport to the enemy.
-                self.search_time = time;    //+ 5;
+                self.search_time = time;//+ 5; // Teleport to the enemy.
                 return;
             }
         }
-        // Didn't teleport, so run.
-		// DISABLED -- With teleport, faster run seems to be a liability for necro.
-		//        if (!QC_CloseEnough (d * 2))
-		//            d = d * 2;
     }
-	// Move.  All running frames use the same speed.
-    ai_run(d);
+    ai_run(d); // Move.  All running frames use the same speed.
 };
 
-// Update:  Acolytes use necro_run() instead of ai_run(16) since the
-// necro boss uses all three necro modes.
+// Update:  Acolytes use necro_run() instead of ai_run(16) since the necro boss uses all three necro modes.
 void() necro1_run1  =[ $Sirun1,  necro1_run2  ] {necro_idlesound(); monster_footstep(FALSE); necro_run();};
 void() necro1_run2  =[ $Sirun3,  necro1_run3  ] {necro_run();};
 void() necro1_run3  =[ $Sirun5,  necro1_run4  ] {necro_run();};
@@ -758,7 +750,7 @@ void() necro4_attack = {
     self.worldtype = 0;
     safe = !InMeleeRange(80);
 
-// Check for cursing.
+	// Check for cursing.
     if (safe) {
         if (self.height >= NECRO_SORCERER)      // Not in acolyte mode.
         if (!self.enemy.curse_type)
@@ -922,45 +914,36 @@ void() necro_painswitch =
 
 // Check for weapon breakage and update ai accordingly.
 // As weapon breaks, the necro uses stronger moves.  Only boss should use.
-float() Necro_WeaponBroke =
-{
+float() Necro_WeaponBroke = {
     local   vector  org, vel, spin;
     local   float   head, shaft;
 
-// Check which parts need to break.
+	// Check which parts need to break.
     head = shaft = FALSE;
-    if (self.height < NECRO_WARLOCK)
-    {
-        if (self.health <= self.max_health / 2)
-            shaft = TRUE;
-        if (self.height < NECRO_SORCERER)
-        {
-            if (self.health <= self.max_health * 5 / 6)
-                head = TRUE;
-            else if (!shaft)
-                return FALSE;   // Nothing broke.
+    if (self.height < NECRO_WARLOCK) {
+        if (self.health <= self.max_health / 2) shaft = TRUE;
+        if (self.height < NECRO_SORCERER) {
+            if (self.health <= self.max_health * 5 / 6) head = TRUE;
+            else if (!shaft) return FALSE;   // Nothing broke.
         }
-        else if (!shaft)
-            return FALSE;   // Nothing broke.
+        else if (!shaft) return FALSE;   // Nothing broke.
     }
     else
         return FALSE;   // Weapon already broke!
 
     makevectors (self.angles);
 
-// Sickle head.
-    if (head)
-    {
+	// Sickle head.
+    if (head) {
         sound (self, CHAN_AUTO, "misc/metalbrk.wav", 1, ATTN_NORM);
-    
         vel = VelocityForDamage (0);
         spin_x = random()*600;
         spin_y = random()*600;
         spin_z = random()*600;
         org = self.origin + v_forward*17 + v_right*20 + v_up*31;    // '16.57 19.78 30.68'
-        Gib_Spawn (org, "progs/drake/nec_rod1.mdl", vel, spin, 0, 0, 0, TRUE);
-        if (!shaft)
-        {
+		if (self.gib1mdl != "") ThrowGib(11, 1);
+
+        if (!shaft) {
             self.height     = NECRO_SORCERER;
             self.th_stand   = necro2_stand1;
             self.th_walk    = necro2_walk1;
@@ -970,18 +953,17 @@ float() Necro_WeaponBroke =
         }
     }
 
-// Shaft.
-    if (shaft)
-    {
+	// Shaft.
+    if (shaft) {
         sound (self, CHAN_AUTO, "misc/woodbrk.wav", 1, ATTN_NORM);
-    
         vel = VelocityForDamage (0);
         vel = vel + v_right*50;
         spin_x = random()*600;
         spin_y = random()*600;
         spin_z = random()*600;
         org = self.origin + v_forward*15 + v_right*10 + v_up*25;
-        Gib_Spawn (org, "progs/drake/nec_rod2.mdl", vel, spin, 0, 0, 0, TRUE);
+		if (self.gib2mdl != "") ThrowGib(12, 1);
+
 
         vel = VelocityForDamage (0);
         vel = vel - v_right*50;
@@ -989,7 +971,7 @@ float() Necro_WeaponBroke =
         spin_y = random()*600;
         spin_z = random()*600;
         org = self.origin + v_forward*15 - v_right*7 + v_up*15;     // '14.12 9.67 24.54'
-        Gib_Spawn (org, "progs/drake/nec_rod3.mdl", vel, spin, 0, 0, 0, TRUE);
+		if (self.gib3mdl != "") ThrowGib(13, 1);
     
         self.height     = NECRO_WARLOCK;
         self.th_stand   = necro3_stand1;
@@ -1062,19 +1044,9 @@ void() necro_die10 =[ $deathA19, necro_die11 ] {ai_forward(1);monster_death_post
 void() necro_die11 =[ $deathA20, necro_die11 ] {ai_forward(1);monster_deadbody_check();};
 
 void() necro_die = {
-// Note:  Wand may be a handgun in the final release, so don't let the
-// sorcerer drop his wand.
+	self.gib1mdl = self.gib2mdl = self.gib3mdl = string_null; // Don't drop more wands!
 
-// Now to our death animation...
-//- - - - -
-    // if (Shattered ())
-        // return;
-    // if (Decapitated ())
-    // {
-        // monster_decap ('0 0 28', necro_decap1);
-        // return;
-    // }
-//- - - - -
+	// Wand is usable weapon so don't let the sorcerer drop his wand.
 	monster_death_precheck();
 
 	if (!self.gibbed) {
@@ -1235,6 +1207,10 @@ void() setup_necro = {
 	self.pain_flinch = 70;				// High pain threshold
 	self.blockudeath = TRUE;			// no humanoid death sound
     self.mass = MASS_MEDIUM;
+
+	self.gib1mdl = "progs/drake/nec_rod1.mdl";
+	self.gib2mdl = "progs/drake/nec_rod2.mdl";
+	self.gib3mdl = "progs/drake/nec_rod3.mdl";
 
 	if (self.classtype == CT_MONACOLYTE) {
 		self.th_stand   = necro1_stand1;

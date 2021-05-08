@@ -16,60 +16,7 @@ $frame decap1 decap2 decap3 decap4 decap5 decap6 decap7 decap8 decap9
 $frame decap10 decap11 decap12 decap13
 $frame decapb1 decapb2 decapb3 decapb4 decapb5 decapb6
 
-//------------------------------------------------------------------------//
-//  The dragon hovers in place.  If a water-fearing dragon is
-//  underwater, it will escape the pool if possible. 
-//
-//  The dragon glides along its path.  Like ryu_stand(), a
-//  water-fearing dragon will try to escape from any body of
-//  water if it is placed in one.
-//------------------------------------------------------------------------//
-void(float dist) ryu_idle = {
-    if (Ryu_HatesWater ()) {
-        if (self.h2olevel) {
-            if (Ryu_LeaveWater (self.speed)) return;
-			// Dragon could not rise toward air.  If in walk mode, increase
-			// speed in the hope of finding another way toward air faster.
-            if (dist) dist = self.speed; // In walk mode.
-        }
-    }
-
-    ryu_untilt ();  // Undo any angle changes due to evasion.
- 
-    if (Ryu_InGuardMode ()) return; // Don't move if guarding.
-
-    if (dist) safe_goal (dist);
-};
-
-void() ryu_stand = {
-    if (FindTarget()) return;
-
-    ryu_idle (0);   // This will eject the dragon from water.
-    //ai_pet_stay ();
-};
-
-void() ryu_walk = {
-    if (self.master) { // Warning: 'self.master == self' causes weirdness.
-        if (self.ryuflags & RYU_PATROL) {
-            if (!FindTarget ()) { // check for noticing a player
-                ryu_idle (0);   // If underwater, get out!
-                //ai_pet_patrol (SPEED_RYU_MIN);
-            }
-        } else {
-            self.th_run ();     // Override walk and run after master.
-		}
-        return;
-    }
-
-    if (FindTarget()) return;
-
-    ryu_idle (SPEED_RYU_MIN);
-};
-
-//------------------------------------------------------------------------//
-//  This checks whether the dragon is allowed to attack its target
-//  when one is in air while the other is in liquid.
-//------------------------------------------------------------------------//
+//  This checks whether the dragon is allowed to attack its target when one is in air while the other is in liquid.
 float() Ryu_BlockCrossfire = {
     local float elements;
 
@@ -77,237 +24,29 @@ float() Ryu_BlockCrossfire = {
         elements = self.ryuflags & RYU_ELEMENTS;
         if (elements == RYU_USE_LITE) return FALSE;   // Shoot lightning into water to fry targets.
         else if (elements == RYU_USE_ICE) {   // Don't shoot ice if either endpoint is in lava.
-            if (self.h2otype == CONTENT_LAVA)
+            if (self.h2otype == CONTENT_LAVA) {
                 if (self.h2olevel > 1) return TRUE;    // Mouth in lava.
+			}
             if (self.enemy.h2otype == CONTENT_LAVA) return TRUE;    // Target covered under lava.
         }
-        // Check alert AFTER element check.
-        if (self.ryuflags & RYU_ALERT) return FALSE;   // Smart enough to aim through water.
+        if (self.ryuflags & RYU_ALERT) return FALSE;   // Check alert AFTER element check. Smart enough to aim through water.
     }
     return TRUE; // Cannot attack at all.
 };
 
-//------------------------------------------------------------------------//
-//  This checks if the dragon's target can be seen.  This is different
-//  from the original visible() function in that some dragons can see
-//  a swimming target through the water.
-//------------------------------------------------------------------------//
-float(entity targ) ryu_visible = {
-    local vector spot1, spot2;
-    
-    spot1 = self.origin + self.view_ofs;
-    spot2 = targ.origin + targ.view_ofs;
-    traceline (spot1, spot2, TRUE, self);   // see through other monsters
-    
-    // Some dragons can see targets through liquid while others cannot.
-    if (trace_inopen)
-        if (trace_inwater)
-            if (Ryu_BlockCrossfire ())
-                if (vlen(self.enemy.origin - self.origin) > 120)
-                    return FALSE;
-
-    return (trace_fraction == 1);
-};
-
-//------------------------------------------------------------------------//
-//  The dragon rotates in place (via multiple calls to this function)
-//  until it faces its opponent.  Upon facing an opponent, the dragon
-//  will launch an attack.
-//------------------------------------------------------------------------//
-void() ryu_run_attack =
-{
-    // Rotate to face opponent.
-    self.ideal_yaw = enemy_yaw;
-    ChangeYaw ();
-
-    // Check if dragon is facing opponent.  If so, attack!
-    if (FacingIdeal ())
-    {
-        self.attack_state = AS_STRAIGHT;
-
-        // Check for melee attack first.
-        if (enemy_range == RANGE_MELEE)
-            if (self.th_melee)
-            {
-                self.th_melee ();
-                return;
-            }
-
-        // Not close enough for melee, so shoot instead if possible.
-        if (self.th_missile)
-            if (!Ryu_NoShot (self))
-            {
-                //if (!IsGhost (self.enemy))
-                //{
-                    self.th_missile ();
-                    return;
-               // }
-            }
-    }
-
-    if (Ryu_InGuardMode ())
-        return;     // Guarding -- don't move.
-
-    // Break off the attack if a projectile or some other danger is nearby.
-    if (Ryu_DetectDanger (self.speed))
-        self.attack_state = AS_STRAIGHT;
-};
-
-//------------------------------------------------------------------------//
 //  This checks if the dragon is able to attack the target.
-//------------------------------------------------------------------------//
-float() Draco_CanAttackTarget =
-{
-    if (!enemy_vis)
-        return FALSE;   // Standard.  Must see the target.
-    if (!self.enemy.takedamage)
-        return FALSE;   // In case mega-enforcer shields stays on long.
+float() Draco_CanAttackTarget = {
+    if (!enemy_vis) return FALSE;   // Standard.  Must see the target.
+    if (!self.enemy.takedamage) return FALSE;   // In case mega-enforcer shields stays on long.
     // Don't let water-hating dragons get stuck trying to shoot zombies
     // that are underwater to death -- it is useless.
     if (Ryu_HatesWater ())
         if (self.enemy.xfl & XFL_ZOMBIE)    // Anyone harmed only by scar.
             if (!self.h2olevel)
-                if (self.enemy.h2olevel > 2)
-                    return FALSE;
+                if (self.enemy.h2olevel > 2) return FALSE;
 
     return TRUE;
 };
-
-//------------------------------------------------------------------------//
-//  This is the dragons' version of 'ai_pet_follow'.
-//------------------------------------------------------------------------//
-void(float dist) ryu_follow =
-{
-    // Running while not in combat, so treat this like walking.
-    if (FindTarget ())
-        return;
-
-    ryu_untilt ();  // Undo any angle changes due to evasion.
-
-    // If the dragon does not like water, stay away from it.
-    if (Ryu_GetOutOfWater (self.speed))
-        return;
-
-    //ai_pet_follow (dist);
-};
-
-//------------------------------------------------------------------------//
-//  The dragon is flying around while fighting.  It may attack,
-//  dodge missiles, or just simply move toward the opponent at
-//  normal running speed.
-//------------------------------------------------------------------------//
-void() ryu_run =
-{
-    local   float   guarding, standby;
-    local   float   dist;
-
-    dist = self.speed;
-
-    guarding = Ryu_InGuardMode ();
-    if (guarding)
-        standby = 1;
-    else
-        standby = 5;    // Standard.
-
-//- - - - - - - - - - - - - -
-    if (!self.fighting)
-        if (self.master)
-            {ryu_follow (dist);  return;}
-
-// see if the enemy is dead
-    if (self.enemy.health <= 0)
-        if (ai_run_kill ())
-            return;
-//- - - - - - - - - - - - - -
-
-// DISABLED:  Monsters reveal themselves only when waking up or attacking.
-// This change was done due to the new alignment rules.
-//    self.show_hostile = time + 1;        // wake up other monsters
-
-// check knowledge of enemy
-    enemy_vis = ryu_visible(self.enemy);
-    if (enemy_vis)
-        self.search_time = time + 5;
-
-// look for other targets if current target is unavailable.
-// Do this in single-player and DM because of minions and their alignment.
-    if (self.search_time < time)
-    {
-        // Hasn't seen enemy in a while.  Get out of strafe mode.
-        if (self.attack_state == AS_SLIDING)
-            self.attack_state = AS_STRAIGHT;
-
-        if (FindTarget ())
-            return;
-
-        if (self.master)
-            if (self.enemy != self.master)
-                {ai_run_done(); return;}  // Stop chase and return to master.
-    }
-
-//    enemy_infront = infront(self.enemy);
-    enemy_range = range(self.enemy);
-    enemy_yaw = vectoyaw(self.enemy.origin - self.origin);
-
-    if (self.attack_state == AS_MELEE)
-        {ryu_run_attack (); return;}
-
-    if (guarding)
-    {   // If in guard mode, hover in place and face the enemy before attack.
-        ryu_untilt ();
-        if (enemy_vis)
-        {
-            self.attack_state = AS_STRAIGHT;
-            self.ideal_yaw = enemy_yaw;
-            ChangeYaw ();
-            DragonCheckAttack ();
-        }
-        return;
-    }
-
-    // Hunt mode.
-    if (enemy_vis)
-        DragonCheckAttack ();
-
-    // Avoid projectiles or other threats.
-    //if (!ImmuneToDamage (self))
-        if (Ryu_DetectDanger (self.speed))
-            return;
-
-    ryu_untilt ();  // Undo any angle changes due to evasion.
-
-    // If the dragon does not like water, stay away from it.
-    if (Ryu_GetOutOfWater (self.speed))
-        return;
-
-// Check if dragon is in strafe mode.
-    if (self.attack_state == AS_SLIDING)
-    {
-    // Set enemy to world for the first move so dragon stays at same
-    // altitude.  Dragon should not sink toward enemy if it is trying
-    // to fly up and away for whatever reason.
-        local   entity  e;
-
-        e = self.enemy;
-        self.enemy = world;
-        safe_goal (dist);
-        self.enemy = e;
-
-        Ryu_VerticalSlide (dist, self.enemy);
-        return;
-    }
-
-// head straight in
-    // Fast, larger dragons sometimes have trouble closing in for melee.
-    // In close range, check if normal speed is too fast.  If so, fly in
-    // at minimum speed.
-    dist = self.speed;
-    if (enemy_range == RANGE_NEAR)
-        if (QC_CloseEnough (dist))
-            dist = SPEED_RYU_MIN;
-    safe_goal (dist);
-};
-
 
 ////////////////////////////////////////////////////////////////////////////
 //  1.4.  Wyrm AI                                                         //
@@ -316,48 +55,40 @@ void() ryu_run =
 ////////////////////////////////////////////////////////////////////////////
 
 // Movement when not on a path.
-void() wyrm_glide =
-{
+void() wyrm_glide = {
     local   entity  swap;
     local   float   sped, ofs, left;
 
-// Fly at walk speed when idle or run speed when mad at someone.
+	// Fly at walk speed when idle or run speed when mad at someone.
     sped = 20;
-    if (self.enemy)
-        if (!(self.spawnflags & SPAWN_SLOW))
-            sped = 32;
+    if (self.enemy && !(self.spawnflags & SPAWN_SLOW)) sped = 32;
 
-// Change angles.
+	// Change angles.
     ofs = anglemod(self.angles_y - self.ideal_yaw);
-    if (ofs >= 180)
-        {left = 1;  ofs = ofs - 360;}
-    else
-        left = 0;
+    if (ofs >= 180) {
+		left = 1;  ofs = ofs - 360;
+	} else left = 0;
     ChangeYaw ();
     if (fabs(ofs) <= self.yaw_speed)
         {ryu_untilt ();  left = 1;}
     else
         {ryu_tilt (left, 32);  left = 0;  sped = 20;}
 
-// Forward movement.
+	// Forward movement.
     swap = self.enemy;
     self.enemy = world;
-//- - - - - - - - -
-    if (!self.th_move (self.angles_y, sped))
-    {   // Something got in the way.
-        if (left)
-            self.ideal_yaw = anglemod(self.ideal_yaw + 180);
+
+    if (!Wyrm_WalkMove(self.angles_y, sped)) { // Something got in the way.
+        if (left) self.ideal_yaw = anglemod(self.ideal_yaw + 180);
     }
-//- - - - - - - - -
     self.enemy = swap;
 };
 
 // Normal move.
-void(entity targ) wyrm_move =
-{
+void(entity targ) wyrm_move = {
     local   entity  swap, oe;
     local   float   sped, ofs, left, oy, nopath;
-    local   vector  ang;
+    local   vector  oang;
 
     if (self.movetarget)
         nopath = FALSE;
@@ -374,9 +105,9 @@ void(entity targ) wyrm_move =
     self.ideal_yaw = vectoyaw(targ.origin - self.origin);
 
     // Remember previous angles in case we need to change them back.
-    ang = self.angles;
+    oang = self.angles;
     oy = self.ideal_yaw;
-// Change angles.
+	// Change angles.
     ofs = anglemod(self.angles_y - self.ideal_yaw);
     if (ofs >= 180)
         {left = 1;  ofs = ofs - 360;}
@@ -388,25 +119,22 @@ void(entity targ) wyrm_move =
     else
         {ryu_tilt (left, sped);  sped = 20;}
 
-// Forward movement.
+	// Forward movement.
     swap = self.enemy;
-    if (nopath || (targ != self.enemy))
-        self.enemy = world;
+    if (nopath || (targ != self.enemy)) self.enemy = world;
 
     oe = self.enemy;
-    if (!self.th_move (self.angles_y, sped))
-    {   // Something got in the way.
-        if (!self.enemy)
-        {   // Restore previous angles then bump around with movetogoal.
+    if (!Wyrm_WalkMove(self.angles_y, sped)) { // Something got in the way.
+        if (!self.enemy) {   // Restore previous angles then bump around with movetogoal.
             self.ideal_yaw = oy;
-            self.angles = ang;
-            self.th_goal (sped);
+            self.angles = oang;
+            QC_MoveToGoal(sped);
             ryu_untilt ();
         }
     }
     self.enemy = oe;    // In case of change by trigger_hurt and the like.
 
-// Vertical movement.  Must have a path to be allowed.
+	// Vertical movement.  Must have a path to be allowed.
     if (!nopath)
         if (targ)           // If FALSE, no target to follow.
             if (!self.enemy)    // If FALSE, done already with builtin move.
@@ -422,213 +150,24 @@ void(entity targ) wyrm_move =
     self.enemy = swap;
 };
 
-// Checks if a target is inview for the wyrm.
-float(entity targ) wyrm_inview =
-{
-    local   vector  spot1, spot2;
-
-    if (targ.health <= 0)
-        return FALSE;   // Dead or the world -- No target!
-    if (!targ.modelindex)
-        return FALSE;   // sf64 and/or eth wraith.  Treat as non-existant.
-    if (targ != self.enemy)
-    {
-        if (targ.flags & FL_NOTARGET)
-            return FALSE;   // Target has stealth.
-        // This is boss AI, so ignore invisibility ring.
-    }
-
-// Is the target in front of the dragon?
-    makevectors (self.angles);
-    spot1 = targ.origin;
-    spot1_z = self.origin_z;    // Ignore elevation difference.
-    spot1 = normalize (spot1 - self.origin);
-    if (spot1 * v_forward < 0)      // Was <= 0.3.
-        return FALSE;   // In the rear.
-
-// Can the dragon see the target?
-    spot1 = self.origin + self.view_ofs;
-    spot2 = targ.origin + targ.view_ofs;
-    traceline (spot1, spot2, TRUE, self);
-    // This is a boss -- cross contents won't save you, mwahaha!
-    if (trace_fraction != 1)
-        return FALSE;   // Cannot see target.
-
-    // Note:  Don't bother checking for friendly fire.  Attacks tend
-    // to spread out a bit, so a simple traceline check won't cut it.
-    // Besides, the boss doesn't care about small fry getting in the way.
-
-    return TRUE;    // "Rebel base in range!" -- Star Wars.
-};
-
-// TRUE = Dragon roared and won't attack, FALSE = May attack.
-// Roaring stops dragon from attacking instantly, unless in Nightmare.
-float(entity targ) wyrm_see_new =
-{
-    if (!self.enemy)
-    {   // Found an enemy, so roar.
-        self.enemy = targ;  // Must do before warning other monsters.
-        monster_sightsound();
-        if (skill < 3)
-            return TRUE;    // Just roar only.
-    }
-    else
-    {   // Replace oldenemy with previous enemy.
-        if (self.enemy != targ)
-            self.oldenemy = self.enemy;
-    }
-    self.enemy = targ;
-    return FALSE;
-};
-
-// Scan for an enemy to attack.
-void() wyrm_scan =
-{
-    // Update enemy list if target dies.
-    if (self.enemy)
-    {
-        if (self.enemy.health <= 0)
-        {
-            self.attack_finished = 0;
-            if (self.enemy.classname == "player")
-                if (self.enemy.enemy == self)
-                {   // Killed a PC, so gloat for a moment.
-                    if (self.th_win)
-                        self.th_win ();
-                }
-            if (self.oldenemy.health <= 0)
-                self.enemy = world;
-            else
-                self.enemy = self.oldenemy;
-            self.oldenemy = world;
-        }
-    }
-
-    if (cutscene)
-        return;     // Don't search for targets during a cutscene.
-
-// NOTE:  As a wyrm, check for enemies only.
-// Don't bother checking for players to serve even if good aligned.
-// What the latter means is an NPC wyrm must be triggered to ally with PC.
-    // Check for missile attack.
-    if (self.attack_finished <= time)
-    {
-        local   entity  targ, seen;
-
-        seen = world;
-        /*if (self.alignment == GOOD)
-        {
-//            targ = CheckTarget (blacky);
-//            if (wyrm_inview (targ))
-//                {if (wyrm_see_new (targ)) return;  seen = targ;}
-//            if (!seen)
-            {
-                targ = findradius (self.origin, 2000);
-                while (targ)
-                {
-                    if (targ.alignment == EVIL)
-                    if (targ.health > 0)
-                    if (wyrm_inview (targ))
-                        {if (wyrm_see_new (targ)) return;  seen = targ;}
-                    if (seen)
-                        targ = world;
-                    else
-                        targ = targ.chain;
-                }
-            }
-            if (!seen)
-            {
-            // No bad guy to fry?  Check for rogues.  Don't waste time
-            // with clients even if commanded by a player in deathmatch.
-                targ = CheckTarget (whitey);
-                if (!UnitedWeStand (targ))
-                {   // Ally turned bad?
-                    if (wyrm_inview (targ))
-                        {if (wyrm_see_new (targ)) return;  seen = targ;}
-                }
-            }
-        }*/
-        //else
-        //{   // Check for a player first, then npc next.
-            // Don't use checkclient because wyrm attacks are checked only
-            // in one frame once per animation cycle.
-            targ = RandomPlayer ();
-            if (targ != self.enemy)     // If FALSE, check targ later.
-                if (wyrm_inview (targ))
-                    {if (wyrm_see_new (targ)) return;  seen = targ;}
-            // Divide attacks between pcs and npcs when applicable.
-            if (!seen || (random() < 0.5))
-            {
-                targ = CheckTarget (self.enemy);    // FIXME:  Use findradius?
-                if (wyrm_inview (targ))
-                    {if (wyrm_see_new (targ)) return;  seen = targ;}
-            }
-        //}
-
-        if (!seen)
-        {   // No fresh meat?  Check its current targets.
-            if (self.enemy)
-            {
-                if (!wyrm_inview (self.enemy))
-                {   // Current enemy not found.
-                    targ = world;
-                    if (self.oldenemy)
-                        if (wyrm_inview (self.oldenemy))
-                            targ = self.enemy;
-                    if (targ)
-                    {   // Secondary enemy found, so swap targets.
-                        self.enemy = self.oldenemy;
-                        self.oldenemy = targ;
-                    }
-                    else
-                    {   // No targets handy.  If target is still visible,
-                        // dragon has a small chance to fire anyway.
-                        if (random() < (1 - (self.yaw_speed * 0.02)))
-                            return;
-                        if (!visible (self.enemy))
-                            return;
-                    }
-                }
-            }
-        }
-
-        if (self.enemy)
-        {
-            if (self.th_missile)
-                self.think = self.th_missile;
-        }
-    }
-};
-
-
 ////////////////////////////////////////////////////////////////////////////
 //  2.1.  Dragon Attacks                                                  //
 ////////////////////////////////////////////////////////////////////////////
 
-//- - - - - - - - - - - - - - - - - - -
 //  NOTE:  Use of fields normally unused (by monsters) in standard Quake.
-//  Mod-makers beware!  If other custom code uses these fields,
-//  make sure they do not interfere with their use by the dragons.
+//  Mod-makers beware!  If other custom code uses these fields, make sure they do not interfere with their use by the dragons.
 //
 // .worldtype = attack type dragon will use; like .weapon for clients.
 // .count     = max shots per salvo; like .ammo_shells for clients.
 // .height    = shot damage.
 // .volume    = shots remaining in a salvo.
-//
+
 // Update 9/3/09:  count/volume replaced buy shots_max/shots_left.
-//
 //  NOTE #2:  There are even more such recycled fields further below.
-//- - - - - - - - - - - - - - - - - - -
 
-//==========================================================================
 //  Dragon Melee
-
-//------------------------------------------------------------------------//
-//  This returns the point of the dragon's mouth relative to its origin.
-//  All frames from 8 to 16 are part of the attack scene.
-//------------------------------------------------------------------------//
-vector() Ryu_Offset =
-{
+//  This returns the point of the dragon's mouth relative to its origin. All frames from 8 to 16 are part of the attack scene.
+vector() Ryu_Offset = {
     local   float   fr;
 
     // HACK:  If nightshade, convert its frames to dragon frames.
@@ -637,39 +176,25 @@ vector() Ryu_Offset =
     else
         fr = self.frame;
 
-// Now find where the dragon's mouth is.
-// FIXME:  Wyrm spawn?
-    if (self.maxs_x > 96)
-    {   // Wyrm drake/dragon2.mdl.  Assumes +20.
+	// Now find where the dragon's mouth is.
+    if (self.classtype == CT_MONWYRM) {
+		// Wyrm drake/dragon2.mdl.  Assumes +20.
         fr = self.frame;    // Define 'fr'!
-
         if (fr==16)  return '88 -9 2';    if (fr==15)  return '92 -7 20';
         if (fr==14)  return '94 -1 32';   if (fr==13)  return '86 -1 36';
-//        if (fr==12)  return '72 -1 48';   if (fr==11)  return '80 -1 32';
-//        if (fr==10)  return '94 -1 24';
         return '96 -1 20';
     }
-//    if (self.flags & FL_MONSTER)
-    {   // Half-scale drake/dragon1.mdl.  Assumes +2.
-        if (fr==16)  return '43 -5 -6';   if (fr==15)  return '46 -3 2';
-        if (fr==14)  return '47 -1 8';    if (fr==13)  return '41 -1 12';
-//        if (fr==12)  return '35 -1 17';   if (fr==11)  return '39 -1 10';
-//        if (fr==10)  return '46 -1 4';
-        return '47 -1 3';
-    }
+	// Half-scale drake/dragon1.mdl.  Assumes +2.
+	if (fr==16)  return '43 -5 -6';   if (fr==15)  return '46 -3 2';
+	if (fr==14)  return '47 -1 8';    if (fr==13)  return '41 -1 12';
+	return '47 -1 3';
 };
 
-//------------------------------------------------------------------------//
-//  The dragon makes a bite attack.
-//------------------------------------------------------------------------//
 void() Ryu_Bite = {
     // Check if the bite attack can hit.
-    if (!InMeleeRange (RYU_RANGE_MELEE))
-        return;
-    if (!CanDamage (self.enemy, self))
-        return;
-    if (!self.enemy.takedamage)   // For mega-enforcer.
-        return;
+    if (!InMeleeRange (RYU_RANGE_MELEE)) return;
+    if (!CanDamage (self.enemy, self)) return;
+    if (!self.enemy.takedamage) return; // For mega-enforcer.
 
     // Bite attack is successful.
     local   vector  org;        // Location of dragon's head.
@@ -684,10 +209,8 @@ void() Ryu_Bite = {
     // Note:  x = ((maxs_x / 16) - 1 + random + cranked) * 5.
     // Update 4/23/2009:  Do 15-20 damage for standard.  Wyrms multiply damage.
     damage = 15 + random()*5;
-    if (cranked)
-        damage = damage + 5;
-    if (self.spawnflags & SPAWN_WYRM)   // Moot since wyrms can't bite.
-        damage = damage * 4;
+    if (cranked) damage = damage + 5;
+    if (self.spawnflags & SPAWN_WYRM) damage = damage * 4; // Moot since wyrms can't bite.
     sound (self, CHAN_WEAPON, "demon/dhit2.wav", 1, ATTN_NORM);
     T_Damage (self.enemy, self, self, damage,DAMARMOR);
 
@@ -699,13 +222,7 @@ void() Ryu_Bite = {
     SpawnMeatSprayDrake (org, dir, self.enemy.bloodtype);
 };
 
-
-//==========================================================================
-//  Dragon Aiming
-//------------------------------------------------------------------------//
-//  This returns the spot where a projectile will strike.  Dragons
-//  will shoot at the spot where the target is currently standing.
-//------------------------------------------------------------------------//
+//  Dragon Aiming. This returns the spot where a projectile will strike.  Dragons will shoot at the spot where the target is currently standing.
 vector() Ryu_TargetPoint = {
     local vector end;
 
@@ -725,13 +242,7 @@ vector() Ryu_TargetPoint = {
     return (self.origin + v_forward*1024 - '0 0 16');
 };
 
-
-//==========================================================================
-//  Missile Attacks
-
-//------------------------------------------------------------------------//
 //  This creates a fireball shot by a dragon.  Used by both PCs and NPCs.
-//------------------------------------------------------------------------//
 void(vector start, vector dir, float sped, float up, float damage) Ryu_Fire = {
     if (damage) {
         // Big super fireball.
@@ -740,15 +251,12 @@ void(vector start, vector dir, float sped, float up, float damage) Ryu_Fire = {
         newmis.movetype   = MOVETYPE_TOSS;
     } else {
         // Normal fireball.
-        // Fuse is (10 * reach / speed) + 1.  If speed is double the reach,
-        // duration is 6 frames.  Fade anim is 3 frames, so the pre-fade
-        // duration is 3 frames.
+        // Fuse is (10 * reach / speed) + 1.  If speed is double the reach, duration is 6 frames.  Fade anim is 3 frames, so the pre-fade duration is 3 frames.
         // NOTE:  Don't use self.height for damage here because of PC use.
         Fireball_Launch (self, start, dir, sped, 9);
         newmis.delay      = time + 0.3;
         newmis.noise      = "dragon/firehit.wav";
-        if (Fireball_InWater (newmis))
-            return;
+        if (Fireball_InWater (newmis)) return;
     }
     // Note:  Make sure the damage flags field is same one used in 'fire.qc'.
     newmis.style      = newmis.style | DF_SAFE;   // Harmless to attacker.
@@ -763,7 +271,6 @@ void(vector start, vector dir, float sped, float up, float damage) Ryu_Fire = {
         self.effects = self.effects | EF_MUZZLEFLASH;
 };
 
-//------------------------------------------------------------------------//
 //  Ryu_Multishot (formerly Ryu_Ice)
 //
 //  This creates a shotgun burst of ice (or whatever).
@@ -773,7 +280,6 @@ void(vector start, vector dir, float sped, float up, float damage) Ryu_Fire = {
 //  p2 = Endpoint 1, generally where the target is when attack is launched.
 //  p3 = Endpoint 2, where the target is predicted to be after some time.
 //  p4 = Endpoint 3, a point chosen somewhere between p2 and p3.  Aim here!
-//------------------------------------------------------------------------//
 void(vector p1, vector p2, float sped, float damage, entity targ, float shots, float atype)  Ryu_Multishot = {
     local   float   bomb;
     local   float   sped2;      // New speed for hellball.
@@ -816,21 +322,16 @@ void(vector p1, vector p2, float sped, float damage, entity targ, float shots, f
 
         if (atype & RYU_ELEMENTS == RYU_USE_ICE) {
             // Ice spray.
-            if (bomb)
-            {   // Explosive iceballs.
+            if (bomb) { // Explosive iceballs.
                 Iceball_Toss (p1, dir, sped2, self.height);
                 newmis.velocity_z = newmis.velocity_z + 200;
-            }
-            else
-            {   // Ice shards.  Default damage is 9, so raise it if too weak.
+            } else { // Ice shards.  Default damage is 9, so raise it if too weak.
                 Ice_Launch (p1, dir, sped2);    // Use 'sped' for same speed.
                 newmis.delay = time + 0.7;  // Total duration.  Was 0.8.
             }
             if (newmis.dmg < damage)
                 newmis.dmg = damage;
-        }
-        else if (bomb)
-        {
+        } else if (bomb) {
             if (atype == RYU_USE_FIRE)
                 Ryu_Fire (p1, dir, sped2, 200, self.height);
             else if (atype == RYU_USE_LITE)
@@ -841,18 +342,10 @@ void(vector p1, vector p2, float sped, float damage, entity targ, float shots, f
                 newmis.velocity_z = newmis.velocity_z + 200;
             }
         }
-        // ELSE unknown attack type and do nothing.
     }
 };
 
-
-//==========================================================================
-//  Missile Spawning
-
-//------------------------------------------------------------------------//
-//  This spawns a missile at the dragon's mouth then launches said
-//  missile at the target.  The missile cast varies by type.
-//------------------------------------------------------------------------//
+//  This spawns a missile at the dragon's mouth then launches said missile at the target.  The missile cast varies by type.
 void() Ryu_Shot_Fire = {
     local   entity  targ;   // Use shot leading if targ != world;
     local   vector  dir;    // Vector from 'start' to 'end'.
@@ -948,17 +441,14 @@ void() Ryu_Shot_Fire = {
 
 // Used for delayed calls to Ryu_Shot_Fire by Ryu_Shot.
 void() Ryu_Shot_Think = {
-    if (self.owner.health > 0)
-        SUB_Think (self.owner, Ryu_Shot_Fire);
-
+    if (self.owner.health > 0) SUB_Think (self.owner, Ryu_Shot_Fire);
     remove (self);
 };
 
-// This calls the dragon's missile spawning function now or later.
-// If delayed, a dummy entity to spawned to call the delayed function
-// at the time designated by 'pause'.
+// This calls the dragon's missile spawning function now or later. If delayed, a dummy entity to spawned to call the delayed function at the time designated by 'pause'.
 void(float pause) Ryu_Shot = {
     local entity echo;
+
     if (pause) {
         echo = spawn();
 		echo.classgroup = CG_PROJALL;
@@ -969,10 +459,6 @@ void(float pause) Ryu_Shot = {
         Ryu_Shot_Fire ();
 };
 
-
-////////////////////////////////////////////////////////////////////////////
-//  3.1.  Sounds                                                          //
-////////////////////////////////////////////////////////////////////////////
 void() ryu_sfx_fly = {
     // Not while Quad is sounding.
     if (self.super_sound < time) {
@@ -1005,19 +491,8 @@ void() ryu_sfx_fire = {
 
 void() ryu_sfx_idle = {sound (self, CHAN_VOICE, "dragon/idle1.wav", 1, ATTN_NORM);};
 
-////////////////////////////////////////////////////////////////////////////
-//  3.2.  Animation                                                       //
-////////////////////////////////////////////////////////////////////////////
-//============
-// MOVEMENT
-//============
-//------------------------------------------------------------------------//
 //  Fly animation forward.  Used for stand, walk, and run anims.
-//
-//  Stand = Dragon hovers in place.
-//  Walk  = The dragon slowly glides along its path.
-//  Run   = The dragon flies quickly toward the enemy.
-//------------------------------------------------------------------------//
+//  Stand = Dragon hovers in place.   Walk  = The dragon slowly glides along its path.   Run   = The dragon flies quickly toward the enemy.
 void() wyrm_fly_anim = {
     local   float   fadd;
 
@@ -1030,48 +505,44 @@ void() wyrm_fly_anim = {
 
     self.frame = $fly1 + fadd;
     self.walkframe = self.walkframe + 1;
-
-    if ( self.frame == $fly8 )
-        ryu_sfx_fly ();
+    if ( self.frame == $fly8 ) ryu_sfx_fly ();
 };
 
-void() ryu_stand1 =[ $fly1, ryu_stand1  ] {wyrm_fly_anim(); ryu_stand();};
-void() ryu_walk1  =[ $fly1, ryu_walk1   ] {wyrm_fly_anim(); ryu_walk();};
-void() ryu_run1   =[ $fly1, ryu_run1    ] {wyrm_fly_anim(); ryu_run();};
+void() ryu_stand1 =[ $fly1, ryu_stand1  ] {wyrm_fly_anim(); ai_stand();};
+
+void() ryu_walk1  =[ $fly1, ryu_walk1   ] {wyrm_fly_anim(); ai_walk(SPEED_RYU_MIN);};
+
+void() ryu_run1   =[ $fly1, ryu_run1    ] {wyrm_fly_anim(); ai_run(self.speed);};
 
 void() wyrm_fly   =[ $fly1, wyrm_fly    ] {
     wyrm_fly_anim();
 
     // Custom move and attack AI.
-    if (self.movetarget)
-        wyrm_move (self.movetarget);
-    else
-        wyrm_glide ();
+    if (self.enemy)
+        wyrm_move (self.enemy);
+    else {
+		if (self.charmer || self.movetarget) wyrm_glide ();
+	}
 
-    if ( self.frame == $fly1 ) wyrm_scan ();
+    if ( self.frame == $fly1 ) ai_stand(); // just updates seeing an enemy
 };
 
 void() wyrm_start = {
-    if (self.movetarget.classname != "path_corner") {
+    if (self.movetarget.classtype != CT_PATHCORNER && !self.charmer) {
         self.movetarget = world;
         self.ideal_yaw = self.angles_y;
     }
-
     self.th_stand = self.th_walk = self.th_run = wyrm_fly;
     wyrm_fly ();
 };
 
 void() wyrm_go = {
-    if (self.ryuflags & RYU_PATH)
+    if (self.classtype == CT_MONWYRM)
         wyrm_fly ();
     else
         ryu_run1 ();
 };
 
-
-//============
-// ATTACKS
-//============
 void() dragon_bite1  =[ $attack1,  dragon_bite2  ] {W_ShowHostile(); ryu_melee();};
 void() dragon_bite2  =[ $attack2,  dragon_bite3  ] {ryu_melee();};
 void() dragon_bite3  =[ $attack3,  dragon_bite4  ] {ryu_melee();};
@@ -1090,52 +561,35 @@ void() dragon_bite15 =[ $attack3,  dragon_bite16 ] {ryu_melee();};
 void() dragon_bite16 =[ $attack2,  dragon_bite17 ] {ryu_melee(); Ryu_Bite ();};
 void() dragon_bite17 =[ $attack1,  ryu_go     ] {ryu_melee(); self.attack_state = AS_STRAIGHT; self.walkframe = 0;};
 
+// Check if missile attack is effective or not.
 float(float chance) Ryu_CanBite = {
-    // Check if missile attack is effective or not.
-    if (!self.th_missile)
-        return TRUE;    // Can't shoot.
-    if (Ryu_NoShot (self))
-        return TRUE;    // Not allowed to fire.
-    if (self.enemy.solid <= SOLID_TRIGGER)
-        return TRUE;    // Missile attacks pass through non-solid enemies.
+    if (!self.th_missile) return TRUE; // Can't shoot.
+    if (Ryu_NoShot (self)) return TRUE; // Not allowed to fire.
+    if (self.enemy.solid <= SOLID_TRIGGER) return TRUE; // Missile attacks pass through non-solid enemies.
 
-    if (Ryu_BlockCrossfire ()) {
-        // Not allowed to see into water, so check contents.
-        traceline (self.origin, self.enemy.origin, TRUE, self);
-        if (trace_inopen)
-            if (trace_inwater)
-                return TRUE;    // Can't see through water.
-    }
+	// Check for liquid surface block condition
+	if (check_liquidblock(self.origin, self.enemy.origin)) return FALSE;
 
     // Now check if the dragon really wants to bite.
     if (random() < chance)
-        if (InMeleeRange (RYU_RANGE_MELEE))
-            return TRUE;
+        if (InMeleeRange (RYU_RANGE_MELEE)) return TRUE;
 
-    // Don't bite -- fire away instead.
-    return FALSE;
+    return FALSE; // Don't bite -- fire away instead.
 };
 
-//------------------------------------------------------------------------//
-//  Melee attack start.  About midway into the animation, the dragon
-//  decides whether to bite or to shoot something.  This is used by
-//  smart dragons to foil the 'run in-and-out' strategy used by players.
-//  (Also called 'shambler dance' by the authors of Quoth.)
-//
-//  That is, run in to trigger melee attack, then run away to make said
-//  attack whiff.  
-//------------------------------------------------------------------------//
+//  Melee attack start.  About midway into the animation, the dragon decides whether to bite or to shoot something.  This is used by
+//  smart dragons to foil the 'run in-and-out' strategy used by players. (Also called 'shambler dance' by the authors of Quoth.)
+//  That is, run in to trigger melee attack, then run away to make said attack whiff.  
 void() dragon_strike = {
-    local   float   chance;
+    local float chance;
 
     if (self.inpain >= time) {
-	// Dragon wants to circle-strafe and shoot.
+		// Dragon wants to circle-strafe and shoot.
         self.attack_state = AS_SLIDING;
         if (random() < 0.5) self.lefty = !self.lefty;
         chance = 0;
     } else {
-	// Try to close in.  High chance of bite.  Always bite zombies
-        // or anyone else who is hurt only by scar damage.
+		// Try to close in.  High chance of bite.  Always bite zombies or anyone else who is hurt only by scar damage.
         self.attack_state = AS_STRAIGHT;
         if (Ryu_KeepAway (self.enemy))
             chance = 0;     // Always shoot if trying to get away.
@@ -1144,7 +598,6 @@ void() dragon_strike = {
         else
             chance = 0.8;   // Standard.
     }
-
     // If dragon can bite the target, do it.
     if (Ryu_CanBite (chance))
         dragon_bite1 ();
@@ -1152,15 +605,11 @@ void() dragon_strike = {
         self.th_missile ();   // Shoot at target.  Assumes th_missile exists.
 };
 
-//------------------------------------------------------------------------//
-//  This makes the dragon decide whether or not to use meteor instead
-//  of fire spray.
-//------------------------------------------------------------------------//
+//  This makes the dragon decide whether or not to use meteor instead of fire spray.
 float() Ryu_UseSpecial = {
     local   float   atype;
 
-    if (self.spawnflags & SPAWN_WYRM)
-        return TRUE;    // Big enough to spam multiple destructive blasts.
+    if (self.spawnflags & SPAWN_WYRM) return TRUE;    // Big enough to spam multiple destructive blasts.
 
     // Smaller dragons choose between several small shots or one big blast.
     // Most small shots are faster and fatter but have limited range.
@@ -1169,49 +618,38 @@ float() Ryu_UseSpecial = {
     // so if the enemy is in range and not a zombie, spray away!
     atype = self.worldtype & RYU_ELEMENTS;
     if (atype == RYU_USE_FIRE) {
-	// If water is in the way, shoot meteors to penetrate it.
-        if (self.h2olevel >= 2)
-            return TRUE;    // Underwater.  Only meteors are effective.
+		// If water is in the way, shoot meteors to penetrate it.
+        if (self.h2olevel >= 2) return TRUE; // Underwater.  Only meteors are effective.
         if (self.enemy)
-            if (self.enemy.h2olevel >= 3)
-                return TRUE;    // Target is underwater.
+            if (self.enemy.h2olevel >= 3) return TRUE;    // Target is underwater.
     }
     if (self.enemy) {
-	// If enemy is a zombie or too far away, lob big shots.
+		// If enemy is a zombie or too far away, lob big shots.
         if (self.enemy.xfl & XFL_ZOMBIE) {
             // Zombies need high damage to kill.
-            if (atype != RYU_USE_FIRE)      // Fire causes scar damage.
-                return TRUE;
+            if (atype != RYU_USE_FIRE) return TRUE; // Fire causes scar damage.
         }
 
         // All acid shots have same flight.
         if (atype != RYU_USE_ACID) {
-            if (vlen(self.enemy.origin - self.origin) > RYU_RANGE_BEST)
-                return TRUE;
+            if (vlen(self.enemy.origin - self.origin) > RYU_RANGE_BEST) return TRUE;
         }
     }
     return FALSE;   // Spray small shots.
 };
 
-//------------------------------------------------------------------------//
 //  This selects the attack used based on type.
-//------------------------------------------------------------------------//
 void() Ryu_SetAttack = {
-    local   float   shots;
-    local   float   element;
-    local   float   fts;    // Frames To Shoot.
-    local   float   multi;  // Multishot attack if TRUE.
+    local   float   shots, element, fts, multi; // fts = Frames To Shoot. multi = Multishot attack if TRUE.
 
-// Select attack type.
+	// Select attack type.
     element = self.worldtype = self.ryuflags & RYU_ELEMENTS;
     if (Ryu_UseSpecial ()) self.worldtype = self.worldtype | RYU_BOMB;
 
-// Select attack based on type and change the thinking logic accordingly.
-//- - - - - - - - - - - - - - - - - - -
-// Recycled field alert!
-// .wait        = time to add between shots in a salvo.
-// .delay       = time between an attack function call and the attack itself.
-//- - - - - - - - - - - - - - - - - - -
+	// Select attack based on type and change the thinking logic accordingly.
+	// Recycled fields alert!
+	// .wait        = time to add between shots in a salvo.
+	// .delay       = time between an attack function call and the attack itself.
     if (self.worldtype & RYU_BOMB) {
         if (self.spawnflags & SPAWN_WYRM)
             shots = 4;
@@ -1221,14 +659,13 @@ void() Ryu_SetAttack = {
             self.height = 40;
         else
             self.height = 80;
-        if (cranked)    // Increase damage by 50% if true.
-            self.height = self.height * 3 / 2;
+        if (cranked) self.height = self.height * 3 / 2; // Increase damage by 50% if true.
 
         self.shots_max = self.shots_left = shots;
         self.wait = 0.6 / shots;
         self.delay = 0.3;
     } else {
-	// Generic projectile attacks
+		// Generic projectile attacks
         if (cranked)
             shots = 12;
         else
@@ -1249,8 +686,7 @@ void() Ryu_SetAttack = {
             else
                 {if (shots > 9) {self.height = shots; shots = 9;}}
             // Ice check.
-            if (self.worldtype == RYU_USE_ICE)
-                multi = TRUE;
+            if (self.worldtype == RYU_USE_ICE) multi = TRUE;
         }
         // Shots.
         self.shots_max = self.shots_left = shots;
@@ -1258,10 +694,9 @@ void() Ryu_SetAttack = {
         if (shots > fts)
             self.wait = fts / 10 / shots;
         else
-            self.wait = 0.1;
-        // Attack delay.
-        // Note:  Multishot attacks launches all ammo in an instant, so treat
-        // them as single-shot.
+            self.wait = 0.1; // Attack delay.
+
+        // Note:  Multishot attacks launches all ammo in an instant, so treat them as single-shot.
         if ((self.shots_left <= 1) || multi)
             self.delay = 0.3;  // $attack9
         else if (self.shots_left <= 2)
@@ -1280,8 +715,7 @@ void() ryu_rapid_fire = {
     else if (self.wait < 0.01)
         self.wait = 0.01; // 10 shots per frame max -- spamtastic.
 
-    // Note:  Start _click with 0.1 or higher to delay attack.
-    // 0.1 is for ten frames per second, the default animation rate.
+    // Note:  Start _click with 0.1 or higher to delay attack. 0.1 is for ten frames per second, the default animation rate.
     while (self.delay < 0.1) {
         if (self.shots_left == self.shots_max) ryu_sfx_fire(); // Play sound on the first shot.
         Ryu_Shot (self.delay); // Spawn the attack.
@@ -1291,15 +725,14 @@ void() ryu_rapid_fire = {
 };
 
 void() dragon_ranged = {
-    if (self.ryuflags & RYU_PATH)
+    if (self.classtype == CT_MONWYRM)
         wyrm_move (self.enemy);
     else
         ryu_missile ();
 };
 void() dragon_missile1  =[ $attack1,  dragon_missile2  ] {
     W_ShowHostile ();
-    if (!(self.ryuflags & RYU_PATH))
-        Ryu_StrafeOption ();
+    if (self.classtype != CT_MONWYRM) Ryu_StrafeOption ();
     dragon_ranged();
 };
 void() dragon_missile2  =[ $attack2,  dragon_missile3  ] {dragon_ranged();};
@@ -1319,8 +752,7 @@ void() dragon_missile15 =[ $attack3,  dragon_missile16 ] {dragon_ranged();};
 void() dragon_missile16 =[ $attack2,  dragon_missile17 ] {dragon_ranged();};
 void() dragon_missile17 =[ $attack1,  ryu_go        ] {
     dragon_ranged();
-    if (self.ryuflags & RYU_PATH)
-        self.attack_finished = time + (1.2 * (3 - skill));
+    if (self.classtype == CT_MONWYRM) self.attack_finished = time + (1.2 * (3 - skill));
     self.walkframe = 0;
 };
 
@@ -1352,27 +784,20 @@ void(entity inflictor, entity attacker, float damage) wyrm_pain = {
     if (self.pain_finished > time) return;
     
     self.pain_finished = time + 1;
-
-    if (self.ryuflags & RYU_PATH) {
-	// Wyrm:  Spin toward attacker if not on a path.
-        // Do only if it can show pain at this time.
-        if (!self.movetarget)       // Must not have a path to follow.
+    if (self.classtype == CT_MONWYRM) {
+		// Wyrm:  Spin toward attacker if not on a path. Do only if it can show pain at this time.
+        if (!self.movetarget || self.charmer != self.movetarget)       // Must not have a path to follow.
             if (attacker)
                 if (self.enemy == attacker)
                     if (self.attack_finished <= time)   // Don't spin if it can't attack.
-                        if (visible (attacker))
-                            self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
+                        if (visible (attacker)) self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
     }
-
     r = 400;
     sfx = "dragon/pain1.wav";
     sound (self, CHAN_VOICE, sfx, 1, ATTN_NORM);
-    if ((random() * r) > damage)
-        return;         // didn't flinch
-    if (damage < self.health * 0.01)    // FIXME:  Use max_health instead?
-        return;         // Damage dealt is too low to cause flinching.
-    if (SUB_IgnorePain ())
-        return;         // No pain anims in Nightmare.
+    if ((random() * r) > damage) return; // didn't flinch
+    if (damage < self.max_health * 0.01) return; // Damage dealt is too low to cause flinching.
+    if (SUB_IgnorePain ()) return; // No pain anims in Nightmare.
 
     self.inpain = time + 2; // Strafe soon after pain.
     self.attack_state = AS_STRAIGHT;
@@ -1389,11 +814,11 @@ void(entity inflictor, entity attacker, float damage) wyrm_pain = {
         dragon_painc1 ();
 };
 
-void() dragon_die1  =[ $death1,   dragon_die2  ] {};
-void() dragon_die2  =[ $death2,   dragon_die3  ] {monster_check_gib();};
+void() dragon_die1  =[ $death1,   dragon_die2  ] {DropCoin(2);};
+void() dragon_die2  =[ $death2,   dragon_die3  ] {DropCoin(4);monster_check_gib();};
 void() dragon_die3  =[ $death3,   dragon_die4  ] {monster_check_gib(); self.solid      = SOLID_NOT; };
 void() dragon_die4  =[ $death4,   dragon_die5  ] {};
-void() dragon_die5  =[ $death5,   dragon_die6  ] {/*monster_drop();*/};
+void() dragon_die5  =[ $death5,   dragon_die6  ] {};
 void() dragon_die6  =[ $death6,   dragon_die7  ] {};
 void() dragon_die7  =[ $death7,   dragon_die8  ] {};
 void() dragon_die8  =[ $death8,   dragon_die9  ] {};
@@ -1403,18 +828,17 @@ void() dragon_die11 =[ $death11,  dragon_die12 ] {};
 void() dragon_die12 =[ $death12,  dragon_die13 ] {monster_death_postcheck();};
 void() dragon_die13 =[ $death13,  dragon_die13  ] { monster_deadbody_check(); };
 
-void() dragon_dieb1 =[ $deathb1,  dragon_dieb2 ] {};
-void() dragon_dieb2 =[ $deathb2,  dragon_dieb3 ] {monster_check_gib();};
+void() dragon_dieb1 =[ $deathb1,  dragon_dieb2 ] {DropCoin(2); };
+void() dragon_dieb2 =[ $deathb2,  dragon_dieb3 ] {DropCoin(4);monster_check_gib();};
 void() dragon_dieb3 =[ $deathb3,  dragon_dieb4 ] {monster_check_gib(); self.solid      = SOLID_NOT; };
 void() dragon_dieb4 =[ $deathb4,  dragon_dieb5 ] {};
-void() dragon_dieb5 =[ $deathb5,  dragon_dieb6 ] {/*monster_drop();*/monster_death_postcheck();};
+void() dragon_dieb5 =[ $deathb5,  dragon_dieb6 ] { monster_death_postcheck();};
 void() dragon_dieb6 =[ $deathb6,  dragon_dieb6  ] { monster_deadbody_check(); };
 
 void() dragon_die = {
     monster_death_precheck();
 
-    // Snap tilt angles back to zero now.
-    self.angles_x = self.angles_z = 0;
+    self.angles_x = self.angles_z = 0; // Snap tilt angles back to zero now.
 
     if (!self.gibbed) {
         self.velocity_x = -200 + 400*random();
@@ -1431,19 +855,17 @@ void() dragon_die = {
     }
 };
 
-//==========================================================================
-
 void() wyrm_explode = {
     local   entity  swap;
-    local   vector  org;
-    local   vector  vx, vy, vz;
+    local   vector  org, vx, vy, vz;
 
-    // Lavasplash particles form a box with a size of 270x270x64.
-    // 135 * 1.4142 = 190.9188.  So use 160 damage for explosion radius of 200.
-    // Damage first, then effects.
-    T_RadiusDamage (self, self, 160, self, DAMAGEALL);
+    // Lavasplash particles form a box with a size of 270x270x64. 135 * 1.4142 = 190.9188.  So use 160 damage for explosion radius of 200.
+    T_RadiusDamage (self, self, 160, self, DAMAGEALL); // Damage first, then effects.
     sound (self, CHAN_BODY, "boss1/out1.wav", 1, ATTN_NORM);
     Tent_Point (TE_LAVASPLASH, self.origin - '0 0 32');
+	self.gib1mdl = "progs/drake/dr2_lw.mdl";
+	self.gib1mdl = "progs/drake/dr2_rw.mdl";
+	self.gib1mdl = "progs/drake/dr2_tail.mdl";
 
     // The big fireball at the center.
     swap = self;
@@ -1451,31 +873,24 @@ void() wyrm_explode = {
     setorigin (self, swap.origin + '0 0 24');
     WarpExplosion ();
     self = swap;
-
-    // Spawn dragon parts.
-    self.health = -99;      // Some gibs get some velocity.
-
+    self.health = -99;      // Spawn dragon parts. Some gibs get some velocity.
     org = self.origin;
     makevectors (self.angles);
     vx = v_forward;  vy = v_right;  vz = v_up;
-
     sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
-    // Throw dragon parts first.
-    // They will be thrown from a point relative to the body instead of randomly.
+    // Throw dragon parts first.  They will be thrown from a point relative to the body instead of randomly.
     // Since we do not want to update corpse origin, don't use setorigin.
     self.origin = org - vy*72 - vz*20;
-    ThrowIt ("progs/drake/dr2_lw.mdl", self.health, GIB_SKIN_MATCH);
+	ThrowGib(11, 1);
     self.origin = org + vy*72 - vz*20;
-    ThrowIt ("progs/drake/dr2_rw.mdl", self.health, GIB_SKIN_MATCH);
+    ThrowGib(12, 1);
     if ( self.frame == $deathb6 )
         self.origin = org - vx*72 - vz*20;
     else
         self.origin = org + vx*72 - vz*20;
-    ThrowIt ("progs/drake/dr2_tail.mdl", self.health, GIB_SKIN_MATCH);
+	ThrowGib(13, 1);
     self.origin = org;      // Restore origin.
-
-    // Throw random meat chunks.
-    ThrowGib (2, 5);
+    ThrowGib (2, 5); // Throw random meat chunks.
     ThrowGib (3, 2);
 
     // Throw the head.  Now we can set origin for real.
@@ -1488,7 +903,7 @@ void() wyrm_explode = {
 };
 
 void() ryu_go = {
-    if (self.ryuflags & RYU_PATH)
+    if (self.classtype == CT_MONWYRM)
         wyrm_fly ();
     else
         ryu_run1 ();
@@ -1505,14 +920,14 @@ void() wyrm_die1  =[ $death1,  wyrm_die2  ] {};
 void() wyrm_die2  =[ $death2,  wyrm_die3  ] {};
 void() wyrm_die3  =[ $death3,  wyrm_die4  ] {};
 void() wyrm_die4  =[ $death4,  wyrm_die5  ] {};
-void() wyrm_die5  =[ $death5,  wyrm_die6  ] {/*monster_drop();*/};
+void() wyrm_die5  =[ $death5,  wyrm_die6  ] {DropCoin(4);};
 void() wyrm_die6  =[ $death6,  wyrm_die7  ] {death_puff();};
 void() wyrm_die7  =[ $death7,  wyrm_die8  ] {};
 void() wyrm_die8  =[ $death8,  wyrm_die9  ] {};
 void() wyrm_die9  =[ $death9,  wyrm_die10 ] {};
 void() wyrm_die10 =[ $death10, wyrm_die11 ] {};
 void() wyrm_die11 =[ $death11, wyrm_die12 ] {death_puff();};
-void() wyrm_die12 =[ $death12, wyrm_die13 ] {};
+void() wyrm_die12 =[ $death12, wyrm_die13 ] {DropCoin(2);};
 void() wyrm_die13 =[ $death13, wyrm_die14 ] {death_puff(); self.nextthink = time + 0.2;};
 void() wyrm_die14 =[ $death13, wyrm_die15 ] {death_puff(); self.nextthink = time + 0.3;};
 void() wyrm_die15 =[ $death13, wyrm_die16 ] {death_puff(); self.nextthink = time + 0.2;};
@@ -1522,11 +937,11 @@ void() wyrm_dieb1  =[ $deathb1,  wyrm_dieb2  ] {};
 void() wyrm_dieb2  =[ $deathb2,  wyrm_dieb3  ] {};
 void() wyrm_dieb3  =[ $deathb3,  wyrm_dieb4  ] {};
 void() wyrm_dieb4  =[ $deathb4,  wyrm_dieb5  ] {};
-void() wyrm_dieb5  =[ $deathb5,  wyrm_dieb6  ] {/*monster_drop();*/};
+void() wyrm_dieb5  =[ $deathb5,  wyrm_dieb6  ] {DropCoin(4);};
 void() wyrm_dieb6  =[ $deathb6,  wyrm_dieb7  ] {death_puff(); self.nextthink = time + 0.5;};
 void() wyrm_dieb7  =[ $deathb6,  wyrm_dieb8  ] {death_puff(); self.nextthink = time + 0.4;};
 void() wyrm_dieb8  =[ $deathb6,  wyrm_dieb9  ] {death_puff(); self.nextthink = time + 0.3;};
-void() wyrm_dieb9  =[ $deathb6,  wyrm_dieb10 ] {death_puff(); self.nextthink = time + 0.2;};
+void() wyrm_dieb9  =[ $deathb6,  wyrm_dieb10 ] {death_puff(); DropCoin(2); self.nextthink = time + 0.2;};
 void() wyrm_dieb10 =[ $deathb6,  wyrm_dieb10 ] {death_puff(); wyrm_countdown();};
 
 // Special death for the dragon king.
@@ -1549,16 +964,10 @@ void() wyrm_die = {
     	// Shove it up a little for the fallback death anim.
         self.velocity_z = 250 + 100*random();
         wyrm_die1 ();
-    }
-    else
+    } else
         wyrm_dieb1 ();
 };
 
-//==========================================================================
-
-//============
-// REVIVE
-//============
 void() dragon_revive1  =[ $death12, dragon_revive2  ] {};
 void() dragon_revive2  =[ $death11, dragon_revive3  ] {};
 void() dragon_revive3  =[ $death10, dragon_revive4  ] {};
@@ -1570,7 +979,7 @@ void() dragon_revive8  =[ $death5,  dragon_revive9  ] {};
 void() dragon_revive9  =[ $death4,  dragon_revive10 ] {};
 void() dragon_revive10 =[ $death3,  dragon_revive11 ] {};
 void() dragon_revive11 =[ $death2,  dragon_revive12 ] {};
-void() dragon_revive12 =[ $death1,  ryu_run      ] {};
+void() dragon_revive12 =[ $death1,  ryu_run1      ] {};
 
 void() dragon_reviveb1 =[ $deathb5, dragon_reviveb2 ] {};
 void() dragon_reviveb2 =[ $deathb4, dragon_reviveb3 ] {};
@@ -1592,11 +1001,9 @@ float   RYUSKIN_RED        = 0;
 float   RYUSKIN_GREEN      = 1;
 float   RYUSKIN_BLUE       = 2;
 float   RYUSKIN_WHITE      = 3;
-float   RYUSKIN_GOLD       = 4;        // Kept only for Soul of Evil.
+float   RYUSKIN_GOLD       = 4; // Kept only for Soul of Evil.
 
-//============
 // --> QUAKED monster_ryu (1 0 0) (-56 -56 -24) (56 56 56) Ambush Boss Fast Slow
-//============
 void() monster_ryu = {
     local float powlevel, element, evade;
 
@@ -1657,21 +1064,26 @@ void() monster_ryu = {
     evade = TRUE;
     element = self.ryuflags & RYU_ELEMENTS;
     if (element == RYU_USE_ACID) {
-		/*ent.resist_acid = 0.5;*/ evade = FALSE;
+		self.resist_acid = 0.5;
+		self.resist_poison = 0.5;
+		evade = FALSE;
 		precache_model ("progs/drake/s_fancy.spr");	// careful!!! 176 frames!!!!!
 		if (self.deathstring == "")  self.deathstring = " was melted by a Dragon\n";
 	} else if (element == RYU_USE_LITE) {
         self.resist_cells = 0.5;
+		self.resist_plasma = 0.5;
 		precache_model ("progs/drake/s_fancy.spr");	// careful!!! 176 frames!!!!!
 		if (self.deathstring == "")  self.deathstring = " was blasted by a Dragon\n";
     } else if (element == RYU_USE_ICE) {
-        /*self.resist_cold = 0.5; self.resist_fire = -0.5;*/ evade = FALSE;
+        self.resist_cold = 1;
+		self.resist_fire = 0;
+		evade = FALSE;
 		if (self.deathstring == "")  self.deathstring = " was iced by a Dragon\n";
     } else {
 		// Default to fire.
         element=RYU_USE_FIRE;
-		/*self.resist_fire = 0.5;
-		self.resist_cold = -0.5;*/
+		self.resist_fire = 1;
+		self.resist_cold = 0;
 		if (self.deathstring == "")  self.deathstring = " was fried by a Dragon\n";
 	}
 
@@ -1711,12 +1123,14 @@ void() monster_ryu = {
 		self.mdl = "progs/drake/dragon2.mdl";
         self.th_stand = self.th_walk = self.th_run = wyrm_start;
         self.ryuflags = self.ryuflags | RYU_PATH;
-	if (self.bboxtype < 1) self.bboxtype = BBOX_WYRM;
-	if (self.health < 1) self.health = 3000;
+		self.xfl = self.xfl | XFL_IMMUNITY | XFL_BOSS;
+		if (self.bboxtype < 1) self.bboxtype = BBOX_WYRM;
+		if (self.health < 1) self.health = 3000;
 		self.gibhealth = MON_NEVERGIB;
         self.th_die     = wyrm_die;
 		self.bossflag = TRUE;
 		self.classtype = CT_MONWYRM;
+		if (self.fov == 0) self.fov = -1; // Force 0 = full wide angle 180deg view, age old drake custom default
     } else {
         self.headmdl   = "progs/drake/dr1_head.mdl";
 		self.mdl = "progs/drake/dragon1.mdl";
@@ -1726,8 +1140,8 @@ void() monster_ryu = {
         self.th_die     = dragon_die;
         self.th_melee   = dragon_strike;
         self.th_revive  = dragon_revive;
-	if (self.bboxtype < 1) self.bboxtype = BBOX_RYU;
-	if (self.health < 1) self.health = 750;
+		if (self.bboxtype < 1) self.bboxtype = BBOX_RYU;
+		if (self.health < 1) self.health = 750;
 		self.gibhealth = -90;
         if (!self.yaw_speed) self.yaw_speed = 20;    // Same as walkmonster.
     }
@@ -1737,11 +1151,8 @@ void() monster_ryu = {
     self.th_pain    = wyrm_pain;
     self.th_checkattack   = DragonCheckAttack;
     self.th_win     = dragon_win;
-    self.th_move    = Wyrm_WalkMove;
-    self.th_goal    = QC_MoveToGoal;
+    self.xfl        = self.xfl | XFL_IMMUNITY | XFL_GHOST_BANE;
 
-    //self.xfl        = XFL_IMMUNITY | XFL_GHOST_BANE;
-    
     // Always reset Ammo Resistance to be consistent
     self.resist_shells = self.resist_nails = 0;
     self.resist_rockets = self.resist_cells = 0;

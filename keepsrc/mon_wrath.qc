@@ -189,10 +189,10 @@ void () monster_wrath = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-   self.mdl = "progs/rogue/wrath.mdl";
-   self.gib1mdl = "progs/drake/wrthgib1.mdl";
-   self.gib2mdl = "progs/drake/wrthgib2.mdl";
-   self.gib3mdl = "progs/drake/wrthgib3.mdl";
+   if (!self.mdl) self.mdl = "progs/rogue/wrath.mdl";
+   if (!self.mdl) self.gib1mdl = "progs/drake/wrthgib1.mdl";
+   if (!self.mdl) self.gib2mdl = "progs/drake/wrthgib2.mdl";
+   if (!self.mdl) self.gib3mdl = "progs/drake/wrthgib3.mdl";
 
    precache_model ("progs/rogue/wrath.mdl");
    precache_model ("progs/drake/w_ball.mdl");
@@ -244,7 +244,7 @@ void () monster_wrath = {
    self.th_pain = wrath_pain;
    self.th_die = wrath_die01;
 
-   self.classtype = CT_MONWRAITH;
+   if (!self.classtype) self.classtype = CT_MONWRAITH;
    self.classgroup = CG_SPIDER;
    self.classmove = MON_MOVEFLY;
 	if (self.deathstring == "")  self.deathstring = " was disintegrated by a Wrath\n";

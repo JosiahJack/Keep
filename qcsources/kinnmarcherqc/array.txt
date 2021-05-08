@@ -1,0 +1,39 @@
+
+"Easier to Use" Arrays
+----------------------
+
+FrikQCC 2.5 implements global arrays that I personally find easier to use than JP Grossman's entity field hacks. First off to declare an array, you, unlike C, place the size of the array next to the type, like so:
+
+float[5] newarray;
+
+This defines 5 elements (note the elements are actually numbered 0, 1, 2, 3 and 4. This is like C and unlike BASIC, if you're used to that). In addition, you've automatically declared a special "array header" variable, but you don't need to worry about that now.
+
+To access the elements of the array, you use the square brackets again:
+
+newarray[1] = 56.6;
+bprint(ftos(newarray[1]));
+
+Would print 56.6. You can of course use a variable to index into the array:
+
+int i;
+
+i = 0;
+while (i < 5)
+{
+	newarray[i] = 33.3;
+	i = i + 1;
+}
+
+The above code would completely fill newarray with 33.3. There is another, more advanced and less useful way you can access the elements of an array. You see, at declaration time, frikqcc will set up a unique name for each element of the array - much like vectors in QuakeC have always been handled, and you can use these names rather than indexing with [] if you need a quick way into the array. The format of the names is the name of the array, the underscore character and the number of the index.
+
+newarray_0 = 33.3;
+newarray_1 = 33.3;
+newarray_2 = 33.3;
+newarray_3 = 33.3;
+newarray_4 = 33.3;
+
+Would again fill newarray with the value 33.3. You can also do multi dimensional arrays with frikqcc. A multidimensional array is essentially an array of arrays. Consider the following:
+
+float[5][5] biggerarray;
+
+This would declare 5 * 5 elements, or 25 elements aswell as 6 array header vars

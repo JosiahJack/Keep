@@ -33,6 +33,11 @@ void() PrecacheAll = {
 	precache_sound ("items/inv3.wav");
 	precache_sound ("items/inv2.wav");
 	precache_sound ("items/suit2.wav");
+	precache_sound ("wraith/soul.wav");
+	precache_sound ("shade/taunt.wav");
+	precache_sound ("wraith/rych1.wav");
+	precache_sound ("wraith/select.wav");
+	precache_sound ("wraith/return.wav");
 	//precache_sound ("items/suit3.wav");
 	precache_sound (SOUND_ARTINV1);
 	precache_sound (SOUND_ARTQUAD1);
@@ -94,7 +99,9 @@ void() PrecacheAll = {
 	precache_sound ("items/jumpboots3c.wav");
 	precache_sound ("misc/dsslop.wav");
 
+	precache_model ("progs/nehahra/soul.mdl");
 	precache_model ("progs/null.mdl");
+	precache_model ("progs/drake/null_256.spr");
 	precache_model ("progs/beamhit.spr");
 	precache_model ("progs/custents/dring.spr");
 	precache_model ("progs/k_spike.mdl");
@@ -157,7 +164,9 @@ void() PrecacheAll = {
 	precache_model ("progs/drake/arrow.mdl");
 	precache_model ("progs/ad181/proj_minoblood.mdl");
 	precache_model ("progs/ad171/proj_lazgrn.mdl");
-
+	precache_model ("progs/q15/player_legs1_suit.mdl");
+	precache_model ("progs/q15/player_legs1.mdl");
+	precache_model ("progs/q15/player_legs2.mdl");
 	precache_model ("progs/aoa/v_flak.mdl");
 	precache_model ("progs/aoa/v_gungnir.mdl");
 	precache_model ("progs/aoa/v_ice.mdl");

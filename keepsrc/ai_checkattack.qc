@@ -1,32 +1,19 @@
-/*======================================================================
- SPECIFIC AI LOGIC ROUTINES
+// Specific routines for certain monster types to determine if they can melee or missile (range) attack
+// Always working 1 frame behind the ai_run function. Moved demon/wizard checkattack routines here (split locations)
 
- * Specific routines for certain monster types to determine if
-   they can melee or missile (range) attack
- * Always working 1 frame behind the ai_run function
- * Moved demon/wizard checkattack routines here (split locations)
- 
- CheckAttack (generic)
-======================================================================*/
-void() CheckAttack =
-{
-	// Does the monster have a clear shot to the player?
-	// sightline can be blocked by other monsters
-	if (visblocked(self.enemy)) return;
-		
-	//----------------------------------------------------------------------
+void() CheckAttack = {
+	if (visblocked(self.enemy)) return; // Does the monster have a clear shot to the player? sightline can be blocked by other monsters
+
 	// Melee attack
 	// enemy_range is checked before this function (ai_run - ai.qc)
 	// If the monster is within melee range they instantly attack
-	//----------------------------------------------------------------------
 	if (ai_checkmelee(MONAI_MELEEKNIGHT,FALSE) && self.th_melee) {
 		self.attack_state = AS_MELEE;
 		self.th_melee ();
 		return;
 	}
-	//----------------------------------------------------------------------
+
 	// If setup to be a turret, check range attack only
-	//----------------------------------------------------------------------
 	if (self.movespeed < 0 && self.th_missile) {
 		if (time < self.attack_finished) return;
 		SUB_AttackFinished (2 + random());
@@ -34,30 +21,22 @@ void() CheckAttack =
 		return;
 	}
 	
-	//----------------------------------------------------------------------
-	// Range attack
-	// The attack chance percentages are constant across skill levels
-	//----------------------------------------------------------------------
 	if (!self.th_missile) return;
 	if (time < self.attack_finished) return;
 	if (enemy_range == RANGE_FAR) return;
 
-	// range < 120 map units
-	if (enemy_range == RANGE_MELEE) {
+	// Range attack.  The attack chance percentages are constant across skill levels
+
+	if (enemy_range == RANGE_MELEE) { // range < 120 map units
 		self.attack_chance = 0.9;
 		self.attack_finished = 0;
-	}
-	// range < 500 map units
-	else if (enemy_range == RANGE_NEAR) {
+	} else if (enemy_range == RANGE_NEAR) { // range < 500 map units
 		if (self.th_melee) self.attack_chance = 0.2;
 		else self.attack_chance = 0.4;
-	}
-	// range < 1000 map units
-	else if (enemy_range == RANGE_MID) {
+	} else if (enemy_range == RANGE_MID) { // range < 1000 map units
 		if (self.th_melee) self.attack_chance = 0.05;
 		else self.attack_chance = 0.1;
-	}
-	else self.attack_chance = 0;
+	} else self.attack_chance = 0;
 
 	if (random () < self.attack_chance) {
 		SUB_AttackFinished (2*random());
@@ -68,11 +47,8 @@ void() CheckAttack =
 /*======================================================================
  SoldierCheckAttack (Rocket version has melee)
 ======================================================================*/
-void() SoldierCheckAttack =
-{
-	//----------------------------------------------------------------------
+void() SoldierCheckAttack = {
 	// If setup to be a turret, check range attack only
-	//----------------------------------------------------------------------
 	if (self.movespeed < 0) {
 		if (time < self.attack_finished) return;
 		if (visblocked(self.enemy)) return;
@@ -80,12 +56,11 @@ void() SoldierCheckAttack =
 		self.attack_state = AS_MISSILE;
 		return;
 	}
-	//----------------------------------------------------------------------
+
 	// If enemy is within melee range, just keep on attacking!
 	// Original ID behaviour is 10% chance to not attack in melee range
 	// This has changed so that the soldier is more agressive up close
 	// The army rocket has a special behaviour for melee range
-	//----------------------------------------------------------------------
 	if (self.classtype != CT_MONARMYROCKET && enemy_range == RANGE_MELEE) {
 		self.attack_state = AS_MISSILE;
 		return;
@@ -105,14 +80,11 @@ void() SoldierCheckAttack =
 				self.attack_state = AS_MELEE;
 				self.th_melee ();
 				return;
-			}
-			else setorigin(self, self.oldorigin);
+			} else setorigin(self, self.oldorigin);
 		}
 	}
-	
-	//----------------------------------------------------------------------
+
 	// Range attack (bullets)
-	//----------------------------------------------------------------------
 	if (time < self.attack_finished) return;
 	if (enemy_range == RANGE_FAR) return;	
 	if (enemy_range == RANGE_MELEE) self.attack_chance = 0.9;		// range < 120 map units
@@ -127,11 +99,8 @@ void() SoldierCheckAttack =
 	}
 };
 
-/*======================================================================
- PyrpCheckAttack (Melee=FIRE!)
-======================================================================*/
-void() PyroCheckAttack =
-{
+// PyrpCheckAttack (Melee=FIRE!)
+void() PyroCheckAttack = {
 	// Does the monster have a clear shot to the player?
 	// sightline can be blocked by other monsters
 	if (visblocked(self.enemy)) return;
@@ -143,46 +112,29 @@ void() PyroCheckAttack =
 	}
 };
 
-/*======================================================================
- ShamCheckAttack
-======================================================================*/
-void() ShamCheckAttack =
-{
-	//----------------------------------------------------------------------
+// ShamCheckAttack
+void() ShamCheckAttack = {
+
 	// Melee attack(claws/overhead smash)
-	//----------------------------------------------------------------------
 	if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL)) {
 		self.attack_state = AS_MELEE;
-		// Don't wait for next frame, melee attack straight away 
-		// (different id behaviour)
-		self.th_melee ();
+		self.th_melee (); // Don't wait for next frame, melee attack straight away (different id behaviour)
 		return;
 	}
 
-	//----------------------------------------------------------------------
 	// Range attack (lightning)
-	//----------------------------------------------------------------------
 	if (!enemy_vis) return;
 	if (time < self.attack_finished) return;
 	if (self.enemydist > MONAI_SHAMRANGE && !self.attack_sniper) return;
-
-	// Does the monster have a clear shot to the player?
-	// sightline can be blocked by other monsters
-	if (visblocked(self.enemy)) return;
-
+	if (visblocked(self.enemy)) return; // Does the monster have a clear shot to the player? sightline can be blocked by other monsters
 
 	SUB_AttackFinished (2 + (2*random()));
 	self.attack_state = AS_MISSILE;							
 };
 
-/*======================================================================
- BogLordCheckAttack (Shambler model)
-======================================================================*/
-void() BogLordCheckAttack =
-{
-	//----------------------------------------------------------------------
+// BogLordCheckAttack (Shambler model)
+void() BogLordCheckAttack = {
 	// Special attack setup (more aggressive)
-	//----------------------------------------------------------------------
 	if (self.attack_rage > 0) {
 		// Can the monster attack and see the enemy?
 		// There is no intelligent sight check, its just rage!
@@ -2174,28 +2126,22 @@ void() SpawnCheckAttack =
 /*======================================================================
  DemonCheckAttack
 ======================================================================*/
-void() DemonCheckAttack =
-{
-	//----------------------------------------------------------------------
+void() DemonCheckAttack = {
 	// Melee attack (CLAWS)
-	//----------------------------------------------------------------------
 	// Check that within range of a claw attack
 	if (ai_checkmelee(MONAI_MELEEDEMON,FALSE)) {
 		self.attack_state = AS_MELEE;
 		return;
 	}
-	//----------------------------------------------------------------------
+
 	// If setup to be a turret, randomly do melee attacks
-	//----------------------------------------------------------------------
 	if (self.movespeed < 0) {
 		if (random() < MONAI_TURRETMODE) return;
 		self.attack_state = AS_MELEE;
 		return;
 	}
-	//----------------------------------------------------------------------
-	// Range attack (JUMP)
-	//----------------------------------------------------------------------
-	// Time for another jump?
+
+	// Range attack (JUMP) Time for another jump?
 	if (self.jump_flag < time) {
 		// Stop the demon over or under jumping the enemy
 		if (self.origin_z + self.mins_z > self.enemy.origin_z + self.enemy.mins_z
@@ -2230,22 +2176,16 @@ void() DemonCheckAttack =
 	}
 };
 
-/*======================================================================
- ScorpionCheckAttack (high damage pincher)
-======================================================================*/
-void() ScorpionCheckAttack =
-{
-	//----------------------------------------------------------------------
+// ScorpionCheckAttack (high damage pincher)
+void() ScorpionCheckAttack = {
 	// Melee attack (CLAWS)
-	//----------------------------------------------------------------------
 	if (ai_checkmelee(MONAI_MELEESCORPION,FALSE)) {
 		self.attack_state = AS_MELEE;
 		self.th_melee ();
 		return;
 	}
-	//----------------------------------------------------------------------
+
 	// If setup to be a turret, do range attacks
-	//----------------------------------------------------------------------
 	if (self.movespeed < 0) {
 		if (time < self.attack_finished) return;
 		SUB_AttackFinished (2 + random());
@@ -2253,9 +2193,7 @@ void() ScorpionCheckAttack =
 		return;
 	}
 	
-	//----------------------------------------------------------------------
 	// Range attack (JUMP/TAIL)
-	//----------------------------------------------------------------------
 	if (!enemy_vis) return;
 	if (time < self.attack_finished) return;
 
@@ -2273,8 +2211,7 @@ void() ScorpionCheckAttack =
 			self.count = 0;				// Number of times jumped
 			self.attack_state = AS_JUMP;
 		}
-	}
-	else {
+	} else {
 		if (enemy_range == RANGE_MELEE) self.attack_chance = 0.9;		// range < 120 map units
 		else if (enemy_range == RANGE_NEAR) self.attack_chance = 0.6;	// range < 500 map units
 		else if (enemy_range == RANGE_MID) self.attack_chance = 0.2;	// range < 1000 map units
@@ -2289,8 +2226,7 @@ void() ScorpionCheckAttack =
 /*======================================================================
  DogCheckAttack
 ======================================================================*/
-void()	DogCheckAttack =
-{
+void()	DogCheckAttack = {
 	//----------------------------------------------------------------------
 	// Melee attack (BITE)
 	//----------------------------------------------------------------------
@@ -2333,20 +2269,15 @@ void()	DogCheckAttack =
 /*======================================================================
  SpiderCheckAttack
 ======================================================================*/
-void() SpiderCheckAttack =
-{
-	//----------------------------------------------------------------------
+void() SpiderCheckAttack = {
 	// Melee attack (BITE)
-	//----------------------------------------------------------------------
-	// Check that within range of a bite attack
-	if (ai_checkmelee(MONAI_MELEESPIDER,FALSE)) {
+	if (ai_checkmelee(MONAI_MELEESPIDER,FALSE)) { // Check that within range of a bite attack
 		self.attack_state = AS_MELEE;
 		return;
 	}
-	//----------------------------------------------------------------------
+
 	// Range attack (Large Green Spider = SPIT)
 	// Behaves like a wizards; strafe, spit goo
-	//----------------------------------------------------------------------
 	if (self.spawnflags & MON_SPIDER_LARGE) {
 		if (!enemy_vis) return;
 		if (time < self.attack_finished) return;
@@ -2381,14 +2312,10 @@ void() SpiderCheckAttack =
 				self.th_slide ();
 			}
 		}
-	}
-	//----------------------------------------------------------------------
-	// Range attack (Small Brown Spider = JUMP)
-	// Behaves like a dog; run and jump
-	//----------------------------------------------------------------------
-	else {
-		// Is it time to jump?
-		if (self.jump_flag < time) {
+	} else {
+		// Range attack (Small Brown Spider = JUMP)
+		// Behaves like a dog; run and jump
+		if (self.jump_flag < time) { // Is it time to jump?
 			// Stop the spider over or under jumping the enemy
 			if (self.origin_z + self.mins_z > self.enemy.origin_z + self.enemy.mins_z
 			+ 0.75 * self.enemy.size_z) return;
@@ -2407,12 +2334,10 @@ void() SpiderCheckAttack =
 	}
 };
 
-
 /*======================================================================
  SteelclawCheckAttack
 ======================================================================*/
-void() SteelclawCheckAttack =
-{
+void() SteelclawCheckAttack = {
 	//----------------------------------------------------------------------
 	// Melee attack (BITE)
 	//----------------------------------------------------------------------
@@ -2679,4 +2604,201 @@ void () LavaManCheckAttack = {
 
    self.attack_state = AS_MISSILE;
    SUB_AttackFinished ((random()));
+};
+
+void () GremlinCheckAttack = {
+   local vector spot1;
+   local vector spot2;
+   local entity targ;
+   local float chance;
+
+   targ = self.enemy;
+   if ( (time < self.attack_finished) )
+      return;
+
+   spot1 = self.origin;
+   spot2 = targ.origin;
+   if ( ((vlen ((spot2 - spot1)) <= 90.000) && (self.stoleweapon == FALSE)) ) {
+      self.attack_state = AS_MELEE;
+      return;
+   }
+   chance = (0.030 + self.stoleweapon);
+   //if ( (random () < chance) ) {
+   if (self.stoleweapon) {
+      self.attack_state = AS_MISSILE;
+      return;
+   }
+   return;
+};
+
+void() DragonCheckAttack = {
+    local   vector  spot1, spot2;
+    local   entity  targ;
+    local   float   nofire;     // Melee only if TRUE.
+    local   float   chance, reach;
+
+    // Check if the dragon has a breath weapon.
+    if (self.th_missile)
+        nofire = FALSE;
+    else
+        nofire = TRUE;
+
+    // Check if dragon can see the target.
+    targ = self.enemy;
+    spot1 = self.origin + self.view_ofs;
+    spot2 = targ.origin + targ.view_ofs;
+    chance = 1;     // Melee attack enabled.
+
+    traceline (spot1, spot2, FALSE, self);
+    if (trace_ent != targ) {
+        // Could not see the target.
+        if (trace_fraction < 1) {   // Blocked by obstacle.  If blocked by monster, flag it so
+            targ = trace_ent; // dragon may try to move around it vertically.
+			if (targ) {
+				if (targ.solid == SOLID_SLIDEBOX) {
+					if (targ.health > 0) self.attack_state = AS_SLIDING;
+				}
+			}
+            if (DontHurtMe (targ)) return FALSE;
+
+			// Whoever blocked the way is an enemy too, so continue the check.
+            chance = 0;     // Disable melee this time.
+            targ = self.enemy;
+        } else {
+			// Target is non-solid.  (e.g., downed zombies, nightshade.)
+            // Dragon can try to engage it in melee, provided the target is
+            // vulnerable to damage.  Don't use missile attack because it
+            // will pass through the enemy harmlessly.
+
+            if (!targ.takedamage) return;
+
+            if (self.ryuflags & RYU_ELEMENTS != RYU_USE_LITE) nofire = TRUE;
+        }
+    }
+
+    // If target is reachable within melee range, the dragon will attack
+    // the target if the dragon has a melee attack.
+    if (enemy_range == RANGE_MELEE)
+        if (chance)
+            if (self.th_melee)
+                if (CanDamage (targ, self)) { self.attack_state = AS_MELEE; return ; }
+
+	// missile attack
+    // Check if the dragon can shoot.
+    if (nofire) {
+        self.attack_state = AS_STRAIGHT;
+        return;
+    }
+    if (Ryu_NoShot (self)) return;
+
+    // Check if allowed to attack.
+    if (time < self.attack_finished) return;
+
+	// Determine the chance that the dragon will use its breath weapon.
+    if (enemy_range == RANGE_MELEE) { // Any dragon will almost certainly attack within melee range.
+        self.attack_finished = 0;
+        chance = 0.9;
+    } else if (enemy_range == RANGE_NEAR) { // Short range (120-500)
+        chance = 0.2;
+    } else {
+        reach = RYU_RANGE_MAX;
+        if (vlen(spot2 - spot1) > reach) { // Target is outside of attack range.
+            self.attack_state = AS_STRAIGHT;
+            return;
+        }
+        if (enemy_range == RANGE_MID)
+            chance = 0.1;   // Medium range (500-1000)
+        else
+            chance = 0.02;  // Long range (1000+)
+    }
+
+	// The dragon decides whether to attack or move on.
+    if (random () < chance) {
+        SUB_AttackFinished ((random() * 2 + 1));   // Reversed in custom 'ai.qc' too.
+        self.th_missile ();
+        return;
+    }
+// If the function made it this far, the dragon moves on.
+};
+
+//------------------------------------------------------------------------//
+//  Check if an attack can be made.
+//------------------------------------------------------------------------//
+void() Shade_CheckAttack = {
+    if (enemy_range > RANGE_MID)
+    {  // Nightshade cannot attack from long range (1000+).
+        self.attack_state = AS_STRAIGHT;    // Don't fly too far away.
+        return;
+    }
+
+    local   vector  spot1, spot2;
+    local   entity  targ;
+    local   float   chance;
+    local   float   pause;
+
+    targ = self.enemy;
+    spot1 = self.origin + self.view_ofs;
+    spot2 = targ.origin + targ.view_ofs;
+
+    // FIXME:  Add wall check here if necessary.  Currently,
+    //         enemy_vis in dark_run does this already...
+
+    // Check if attack is blocked by creature.
+    // If so, flag it so dragon may try to move around it vertically.
+    traceline (spot1, spot2, FALSE, self);
+    if ((trace_ent != targ) && (trace_fraction < 1))
+    {
+        targ = trace_ent;
+        if (targ)
+            if (targ.solid == SOLID_SLIDEBOX)
+                if (targ.health)
+                    self.attack_state = AS_SLIDING;
+
+        return;
+    }
+
+    // If target is reachable within melee range, so attack if possible.
+    if (enemy_range == RANGE_MELEE)
+        if (self.th_melee)
+            if (CanDamage (targ, self))
+            {
+                self.attack_state = AS_MELEE;
+                return;
+            }
+
+// missile attack
+    // Check if nightshade can shoot.
+    if (!self.th_missile)
+    {
+        self.attack_state = AS_STRAIGHT;
+        return;
+    }
+    //if (IsGhost (self.enemy))
+    //{  // Missiles can't hit.
+    //    self.attack_state = AS_STRAIGHT;
+    //    return;
+    //}
+        
+    // Check if allowed to attack.
+    if (time < self.attack_finished)
+        return;
+
+    // Determine the chance that the nightshade will attack.
+    if (enemy_range == RANGE_MELEE)
+        {self.attack_finished = 0; chance = 0.9;}
+    else if (enemy_range == RANGE_NEAR)      // Short range (120-500)
+        chance = 0.2;
+    else //if (enemy_range == RANGE_MID)       // Medium range (500-1000)
+        chance = 0.05;
+
+    if (random () < chance)
+    {
+        self.th_missile ();
+        pause = random() * 2 + 1;
+        SUB_AttackFinished (pause);
+        return;
+    }
+
+    // If the function made it this far, the nightshade moves on.
+    return;
 };

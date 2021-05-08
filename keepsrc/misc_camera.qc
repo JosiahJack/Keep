@@ -59,11 +59,11 @@ misc_camera					- Spawning function for camera system
 ======================================================================*/
 void(entity targ, vector cs_col, float cs_den) camera_controller_cshift = 
 {
-	stuffcmd(targ, "v_cshift ");
-	stuffcmd(targ, ftos(rint(cs_col_x))); stuffcmd(targ, " ");
-	stuffcmd(targ, ftos(rint(cs_col_y))); stuffcmd(targ, " ");
-	stuffcmd(targ, ftos(rint(cs_col_z))); stuffcmd(targ, " ");
-	stuffcmd(targ, ftos(rint(cs_den))); stuffcmd(targ, "\n");	
+	Safe_stuffcmd(targ, "v_cshift ");
+	Safe_stuffcmd(targ, ftos(rint(cs_col_x))); Safe_stuffcmd(targ, " ");
+	Safe_stuffcmd(targ, ftos(rint(cs_col_y))); Safe_stuffcmd(targ, " ");
+	Safe_stuffcmd(targ, ftos(rint(cs_col_z))); Safe_stuffcmd(targ, " ");
+	Safe_stuffcmd(targ, ftos(rint(cs_den))); Safe_stuffcmd(targ, "\n");	
 };
 
 //----------------------------------------------------------------------

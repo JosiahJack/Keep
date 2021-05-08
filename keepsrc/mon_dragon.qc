@@ -45,16 +45,15 @@ void (float gibCount) ViolentDeath = {
 };
 
 void () dragon_stop_attack = {
-   if (self.dragonAttacking == FALSE)
-      return ;
+	if (self.dragonAttacking == FALSE)return;
 
-   self.attack_finished = (time + (random () * FL_SWIM) );
-   self.dragonAttacking = FALSE;
-   traceline (self.origin,self.movetarget.origin,TRUE,world);
-   if ( (trace_fraction == TRUE) )
-      return ;
-   else
-      bprint ("Error: Dragon cannot get to next target!\n");
+	self.attack_finished = (time + (random () * 2) );
+	if (self.classtype == CT_MONWYRM) {
+		self.attack_finished = self.attack_finished + 4;
+		self.attack_finished = self.attack_finished - skill;
+		if (self.shots_max) self.attack_finished = 0; // PM:  Encore check for dark lord.
+	}
+	self.dragonAttacking = FALSE;
 };
 
 void () dragon_check_attack = {
@@ -616,37 +615,13 @@ void () monster_dragon = {
 	// Check passive system for exceptions
 	setup_passivestate_boss(self);
 
-   total_monsters = (total_monsters + TRUE);
+   AddToTotals(self);
    self.nextthink = (self.nextthink + 0.100);
 	if (self.deathstring == "")  self.deathstring = " was annihilated by the Dragon\n";
    self.think = dragon_activate;
 };
 
-void () dragon_corner_touch = {
-   if (other.movetarget != self)
-      return ;
-
-   if (other.classname != "monster_dragon")
-      return ;
-
-   other.movetarget = find (world,targetname,self.target);
-   other.goalentity = other.movetarget;
-   other.target = self.target;
-   if (!other.movetarget)
-      objerror ("dragon_corner: no target found");
-};
-
 void () dragon_corner = {
-   if ( !self.targetname )
-      objerror ("dragon_corner: no targetname");
-
-   if ( !self.target )
-      objerror ("dragon_corner: no target");
-
-   self.solid = SOLID_TRIGGER;
-   self.movetype = MOVETYPE_NONE;
-   self.touch = dragon_corner_touch;
-   self.modelindex = FALSE;
-   self.model = "";
-   setsize (self,'-16.000 -16.000 -16.000','16.000 16.000 16.000');
+	self.classname = "path_corner";
+	path_corner();
 };

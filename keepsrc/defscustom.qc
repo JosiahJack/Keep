@@ -239,7 +239,6 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .entity		sound_emitter;		// Used by various entities for add sound
 .float		check_weather;		// Checks for weather system on sound emitters
 .float		entno_unique;		// Unique number for linking entities
-//.string		str_unique;			// Unique string name for testing
 .string		ckeyname1, ckeyname2, ckeyname3, ckeyname4;	// Custom key netnames
 .float		ckeyskin1, ckeyskin2, ckeyskin3, ckeyskin4;	// Custom key skins
 .float		ckeyhudskin;		// Override of Custom key HUD skin
@@ -534,10 +533,6 @@ float MONAI_BOSS_SUMRND = 128;	// Default random value
 
 // Minions (rest of the parameters in ai_minions.qc)
 .float		minion_active;		// is the minion system active
-
-// Projectile resistance (% protection) for monsters
-.float		resist_shells, resist_nails, resist_rockets, resist_cells;
-.float		lightning_timer;	// Cool down for LG resist effect
 
 // Quoth extra entity keys to reduce console spam
 .float		quothflags;			// Not used for anything in this MOD
@@ -1737,44 +1732,6 @@ string SOUND_FS_GIANT3 = "steps/giant3.wav";
 string SOUND_FS_GIANT4 = "steps/giant4.wav";
 string SOUND_FS_GIANT5 = "steps/giant5.wav";
 
-/* For reference only
-float	SVC_BAD				= 0;
-float	SVC_NOP				= 1;
-float	SVC_DISCONNECT		= 2;
-float	SVC_UPDATESTAT		= 3;
-float	SVC_VERSION			= 4;
-float	SVC_SETVIEW			= 5;
-float	SVC_SOUND			= 6;
-float	SVC_TIME			= 7;
-float	SVC_PRINT			= 8;
-float	SVC_STUFFTEXT		= 9;
-float	SVC_SETANGLE		= 10;
-float	SVC_SERVERINFO		= 11;
-float	SVC_LIGHTSTYLE		= 12;
-float	SVC_UPDATENAME		= 13;
-float	SVC_UPDATEFRAGS		= 14;
-float	SVC_CLIENTDATA		= 15;
-float	SVC_STOPSOUND		= 16;
-float	SVC_UPDATECOLORS	= 17;
-float	SVC_PARTICLE		= 18;
-float	SVC_DAMAGE			= 19;
-float	SVC_SPAWNSTATIC		= 20;
-float	SVC_SPAWNBINARY		= 21;
-float	SVC_SPAWNBASELINE	= 22;
-float	SVC_TEMPENTITY		= 23;
-float	SVC_SETPAUSE		= 24;
-float	SVC_SIGNONNUM		= 25;
-float	SVC_CENTERPRINT		= 26;
-float	SVC_KILLEDMONSTER	= 27;
-float	SVC_FOUNDSECRET		= 28;
-float	SVC_SPAWNSTATICSOUND= 29;
-float	SVC_INTERMISSION	= 30;
-float	SVC_FINALE			= 31;
-float	SVC_CDTRACK			= 32;
-float	SVC_SELLSCREEN		= 33;
-float	SVC_CUTSCENE		= 34;
-*/
-
 .float		minion_baseattack;	// Block base attack within melee range
 .float		minion_count;		// Current active amount of minions
 .float		minion_maxcount;	// Maximum amount of active minions
@@ -1792,3 +1749,6 @@ float MIN_THROWRND = 50;		// Some randomness
 float MIN_THROWSIDE = 50;		// Sideways movement (+/-)
 
 float(entity targ, vector s_offset, vector targang, float nomonsters) visang;
+
+float EIDOLON_PHASE1 = 1;	// Trapped in cage
+float EIDOLON_PHASE2 = 2;	// Fighting

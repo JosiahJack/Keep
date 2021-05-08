@@ -205,39 +205,33 @@ void () lavaman_death9 = [ 56.000, lavaman_death10 ] {
    WriteCoord (MSG_BROADCAST,self.origin_z);
 };
 void () lavaman_death10 = [ 56.000, lavaman_death10 ] {
-   killed_monsters = killed_monsters + 1;
-   WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+   AddToKills(self,self.enemy);
    SUB_UseTargets ();
    remove (self);
 };
 
 void () lavaman_touch = {
-   local float damg;
+	local float damg;
 
-   if ( (other == self.owner) )
-      return ;
+	if ( (other == self.owner) ) return ;
+	if ( (pointcontents (self.origin) == CONTENT_SKY) ) { remove (self); return ; }
 
-   if ( (pointcontents (self.origin) == CONTENT_SKY) ) {
-      remove (self);
-      return ;
-   }
-   damg = 40;
-   if (other.health && !(other.moditems & IT_ARTLAVASHIELD) && !(other.therm_finished > 0)) {
-      if ( (other.classname == "monster_shambler") )
-         damg = (damg * 0.500);
-
+	damg = 40;
+	if (other.health && !(other.moditems & IT_ARTLAVASHIELD) && !(other.therm_finished > 0) && other.resist_fire < 1) {
+		if ( (other.classname == "monster_shambler") ) damg = (damg * 0.500);
 		if  (other.classname == "monster_boss" || other.classname == "monster_chthon") damg = 0;
 
-      T_Damage (other,self,self.owner,damg, DAMARMOR);
-   }
-   T_RadiusDamage (self,self.owner,40,world,DAMAGEALL);
-   self.origin = (self.origin - (FL_CLIENT * normalize (self.velocity)));
-   WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-   WriteByte (MSG_BROADCAST,TE_EXPLOSION);
-   WriteCoord (MSG_BROADCAST,self.origin_x);
-   WriteCoord (MSG_BROADCAST,self.origin_y);
-   WriteCoord (MSG_BROADCAST,self.origin_z);
-   BecomeExplosion ();
+		if (other.resist_fire > 0) damg = damg * (1-other.resist_fire);
+		T_Damage (other,self,self.owner,damg, DAMARMOR);
+	}
+	T_RadiusDamage (self,self.owner,40,world,DAMAGEALL);
+	self.origin = (self.origin - (FL_CLIENT * normalize (self.velocity)));
+	WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST,TE_EXPLOSION);
+	WriteCoord (MSG_BROADCAST,self.origin_x);
+	WriteCoord (MSG_BROADCAST,self.origin_y);
+	WriteCoord (MSG_BROADCAST,self.origin_z);
+	BecomeExplosion ();
 };
 
 void (float AttackNumber) lavaman_missile = {

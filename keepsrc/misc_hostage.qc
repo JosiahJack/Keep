@@ -108,19 +108,6 @@ void() Actor_use = {
 	}
 };
 
-void() GibActor = {
-    self.frame = 0; // FIXME:  Debug messages in developer mode.
-	ThrowIt ("progs/h_player.mdl", self.health, GIBx_GIB);
-	ThrowIt ("progs/gib1.mdl", self.health, GIBx_GIB);
-	ThrowIt ("progs/gib2.mdl", self.health, GIBx_GIB);
-	ThrowIt ("progs/gib3.mdl", self.health, GIBx_GIB);
-    self.deadflag = DEAD_DEAD;
-
-    if (damage_attacker.classname == "teledeath")	sound (self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
-    else if (random() < 0.5)						sound (self, CHAN_VOICE, "player/gib.wav", 1, ATTN_NONE);
-    else											sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NONE);
-};
-
 void() ActorDie = {
     local float i;
 
@@ -130,7 +117,15 @@ void() ActorDie = {
     self.movetype   = MOVETYPE_TOSS;
     if (self.velocity_z < 10) self.velocity_z = self.velocity_z + random()*300;
 
-    if (self.health < -20) {self.frame = 0; GibActor (); return;}
+    if (self.health < -20) {
+		self.frame = 0;
+		monster_ThrowGib();
+		self.deadflag = DEAD_DEAD;
+		if (damage_attacker.classname == "teledeath")	sound (self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE);
+		else if (random() < 0.5)						sound (self, CHAN_VOICE, "player/gib.wav", 1, ATTN_NONE);
+		else											sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NONE);
+		return;
+	}
 
     player_death_sound();
     self.angles_x = 0;
@@ -337,7 +332,10 @@ void() misc_hostage = {
     self.attack_finished    = 0;
     self.xfl = XFL_NO_SCAN; // PM: Don't check for drowning or frying.
 
-    if (self.spawnflags & HOSTAGE_DEAD) total_monsters = total_monsters + 1;
+	self.headmdl = "progs/h_player.mdl";
+	self.gib1mdl = "progs/gib1.mdl";
+	self.gib2mdl = "progs/gib2.mdl";
+	self.gib3mdl = "progs/gib3.mdl";
 
     if (self.wait)	self.pausetime = time + self.wait;
     else			self.pausetime = 9999999;
@@ -354,24 +352,17 @@ void() misc_hostage = {
     self.th_melee   = Actor_attack;
     self.th_pain    = actor_pain;
     self.th_die     = ActorDie;
-    self.th_move    = walkmove; // PM:  Needed for expanded ai.
-    self.th_goal    = movetogoal;
+    if (self.spawnflags & HOSTAGE_DEAD) AddToTotals(self);
 
 	//TRIGGER_SPAWN - Qmaster: Whoa...talk about legacy.  Is this the first usage of 64 for delay spawn???
-    if (self.spawnflags & 64) {
-        self.use = actor_sf64start;
-        return;
-    }
+    if (self.spawnflags & 64) { self.use = actor_sf64start; return; }
 
     self.use = Actor_use;
-
     self.solid = SOLID_SLIDEBOX;        
     self.movetype = MOVETYPE_STEP;    // They just stand on the ground
-
     setmodel (self, "progs/player.mdl");
     setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
     setorigin (self, self.origin);
-
     self.nextthink = time + 0.1;
     self.think = actor_start;
 };
@@ -382,7 +373,6 @@ void() ActorJump = {
 
     vel = self.origin - self.oldorigin;
     self.velocity = normalize(vel) * (self.speed * 10);
-
     if (self.waterlevel >= 2) {
         if (self.watertype == CONTENT_WATER) self.velocity_z = 100;
         else if (self.watertype == CONTENT_SLIME) self.velocity_z = 80;

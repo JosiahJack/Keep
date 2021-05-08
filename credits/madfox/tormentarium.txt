@@ -1,0 +1,64 @@
+==============================================================
+Title                  : Tormentarium
+Filename               : tormentarium.bsp
+Author                 : Madfox
+Email Adress           : gimli@home.nl
+Description            : Quake 1 level
+
+Additional Credits to  : ID Software
+
+=======================================================================
+
+* Play Information *
++=====================================================================+
+
+Level Name                     : Tormentarium
+Single Player                   : yes
+Cooperative 2-4 Player   : yes
+Deathmatch 1-4 Player   : yes
+Difficult Settings              : yes
+New Static Entity              : rota.mdl as waterfall - plug.mdl as pertuum - crow.mdl as cargoyle
+                                          : grate.mdl as func_witz - huit.mdl as fluidcoil - tessla.mdl as blitz.
+Texture                             : witzraz.t.ga is the window hr texture, place it where you keep HR tex. 
+                                   
+==============================================================
+
+* Construction *
+
+Base                 : Kinky pipe generator with a cave shape. 
+Build Time        : okt 2009 - sept 2012.
+Editor(s) Used  : Quark Qmle Wally Quark6.3 Am2005
+Known Bugs     : pipes may stumble and glide movement as they're 64x64. 
+                           : some texture misalignments where my nails got stuck. 
+Thanks              : Preach, for his clearing the model shape and interpolation.
+                          : Metslime and Necros for their additional hints.
+                          : MechTech for func_wall, progsref and explaining the tessla effect.
+                          : Ijed and neg!ke for beating me up to finish the level.
+                          : Ericw - Than - Shambler - Trinca - Spy for the demo's!
+                         : iD Software, and all that made Quake go.
+ GameOption   : Place in a subdirectory Quake 
+                          : "-game torro +map tormentarium ".
+                          : large level,  try fitzquake085, or use -mem 32.
+    
+You may distribute and modiy this level, as long as you give
+me credit, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 1 september 2012
+
+==============================================================
+
+Updated : 
+
+I'm not bullitproof. The first demo's showed me a leak in the first pipe.
+This caused shooting through walls and was dued to my overreacting on hom's.
+Just bricking it up with an old pipe was crying for trouble.
+Mechtech helped me out by introducing func_walls which helped vis from 26 houres to 9. 
+Also added two lifts for comfortable backtracking.
+Thanks for the demo's, they explained a lot to me.
+
+Madfox 16 sept 2012.
+
+================================================================
+          

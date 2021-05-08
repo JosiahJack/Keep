@@ -1,0 +1,43 @@
+=======================================================
+		Quake Pine Tree Models
+=======================================================
+
+pinetree.mdl
+pinetreem.mdl
+pine_scraggy.mdl
+
+Created by: Redfield
+
+Toools used:
+Blender
+Photoshop
+mtPaint
+
+These highly detailed spiky pine tree models are a great way to quickly create a forest environment in Quake. There are 3 models: a tall very wide pine (pinetree.mdl), a shorter medium sized one (pinetreem.mdl) and a very sraggy old pine missing some branches (pine_scraggy.mdl). Note: These models require an engine that supports alpha masking on mdls. 
+
+These trees were modelled using a large number of alpha cards, all duplicated in place with flipped normals because typical Quake engines cannot render double sided normals. The trees each have their own animation frames for a very subtle swaying animation. Because of the poor mdl format there is some vertex wobble in the animation. You can also leave the trees static by not defining any frames. The frames are as follows:
+
+pinetree.mdl: 20 frames (0-19)
+pinetreem.mdl: 20 frames (0-19)
+pine_scraggy.mdl: 16 frames (0-15)
+
+Quake models only recieve very soft light at the origin of the model from the brush beneath the model. When placing these trees you can create very nice shadows and also darken the model more naturally by placing a shadow casting skip brush between the model origin and the principal light source (ie. sun). The brush is ideally thin, tall, wide and angled to face the sun. You should not place it directly on top of the origin or this may make the model black. Place it just in front of the origin (try between 1 and 8 units away), between it and the sun. Experiment with the size and shape of the skip brush to change the shape of the trees shadow and its brightness.
+
+Example:
+								
+                                                       
+	I			(O)
+       III    I
+      IIIII   I
+     IIIIIII  I
+	I     I
+	    Skip
+       Tree Brush		Sun        
+
+
+
+
+Disclaimer:
+You are free to use these models in your Quake map or mod project. Do not commercially exploit these models.
+
+Redfield                              				

@@ -280,6 +280,5 @@ void() monster_oldone =
 	self.th_die = finale_1;
 	shub = self;
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-	total_monsters = total_monsters + 1;
+	AddToTotals(self);
 };
-

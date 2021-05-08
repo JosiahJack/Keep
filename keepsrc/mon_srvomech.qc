@@ -602,16 +602,15 @@ void(entity targent) cservo_control_on=
 	WriteAngle( MSG_ONE, self.aiment.angles_x); 
 	WriteAngle( MSG_ONE, self.aiment.angles_y);
 	WriteAngle( MSG_ONE, self.aiment.angles_z);
-	stuffcmd(targent, "exec mech.cfg\n");
-	stuffcmd(targent, "wait\n");
+	Safe_stuffcmd(targent, "exec mech.cfg\n");
+	Safe_stuffcmd(targent, "wait\n");
 	targent.camofs = '0 160 40';
 	sprint(targent, "Press F7 to Toggle the Apoc Cam\n");
 
 	sound (self, CHAN_VOICE, "mech/pow_up.wav", 1, ATTN_NORM);
 };
 
-void(entity targent) cservo_control_off=
-{
+void(entity targent) cservo_control_off= {
 	local entity targcam, tmpent;
 
 	targcam = self.movetarget;
@@ -627,7 +626,7 @@ void(entity targent) cservo_control_off=
 		msg_entity = targent;
 		WriteByte (MSG_ONE, SVC_SETVIEWPORT);
 		WriteEntity (MSG_ONE, targent.cament);
-		stuffcmd(targent, "cl_bob 0; wait\n");
+		Safe_stuffcmd(targent, "cl_bob 0; wait\n");
 	}
 	else
 	{
@@ -637,10 +636,10 @@ void(entity targent) cservo_control_off=
 		self = tmpent;
 	}
 
-	stuffcmd(targent, "exec config.cfg\n");
-	stuffcmd(targent, "wait\n");
-	stuffcmd(targent, "exec autoexec.cfg\n");
-	stuffcmd(targent, "wait\n");
+	Safe_stuffcmd(targent, "exec config.cfg\n");
+	Safe_stuffcmd(targent, "wait\n");
+	Safe_stuffcmd(targent, "exec autoexec.cfg\n");
+	Safe_stuffcmd(targent, "wait\n");
 };
 
 //=======================================================================

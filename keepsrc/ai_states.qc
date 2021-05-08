@@ -1,41 +1,55 @@
 /*======================================================================
  Three basic types of behaviour is Quake, stand, walk and run
 ======================================================================*/
-void monster_poisoned_check();
-
-float() ai_objekt = {
-	local vector megadeth;
-
-	if (self.charmer.health < 1 && self.classname != "monster_hunter" && self.charmer.classtype != CT_PATHCORNER) {
-		self.charmer = world;
-		self.goalentity = world;
-		self.th_stand();
-		return FALSE;
-	}
-
-	megadeth = self.charmer.origin - self.origin;
-	if (vlen(megadeth) < 100) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
-};
+float(vector targorg, float angdiff) eidolon_angcheck;
+float() Ryu_HatesWater;
+float(float dist) Ryu_LeaveWater;
+float(float dist) Ryu_GetOutOfWater
+void() ryu_untilt;
+float(entity ent) Ryu_NoShot;
+float(float dist) Ryu_DetectDanger;
+void(float dist, entity ent) Ryu_VerticalSlide;
+float(float dist) Shade_AvoidGhost;
+void() DragonCheckAttack;
+void() Shade_CheckAttack;
+void() ryu_run_attack;
+float   SPEED_RYU_MIN   = 8;
+float   SPEED_RYU_SLOW  = 20;
+float   RYU_RANGE_MELEE = 120;
+float   RYU_RANGE_BEST  = 750;      // Maximum range for shot spray.
+float   RYU_RANGE_MAX   = 2000;     // Maximum attack range.
 
 void() ai_stand = {
 	self.lastorigin = self.origin;		// Save for cinematic interpolation
 	if (self.health < 1) return;		// Health < 0, no more standing
-	monster_liquid_check();				// Check for liquid damage
 	check_tethertimer();				// Check for tethering system
-	monster_poisoned_check();			// Check and apply poison
-	if (FindTarget ()) return;			// Found a player?
+	MonsterDeBuff();			// Check and apply poison
 
-	if (!self.charmed) {
-		if (self.charmer) {
-			if (ai_objekt()) {
-				self.goalentity = self.charmer;
-				self.th_walk(); // continue following, they've moved further away than 100 units
+	if (self.classtype == CT_MONEIDOLON) {
+		FindTarget (); // Keep looking for a player
+		if (self.style == EIDOLON_PHASE1) { //1
+			self.nextthink = time + 0.1; // Slow animation speed, trapped inside cage
+			if (self.enemy.flags & FLx_CREATURE) { // Found a player, now track them around the room
+				if (eidolon_angcheck(self.enemy.origin, 60)) 
+					self.think = self.th_walk;
 			}
 		}
+		return;
+	}
+
+	if (FindTarget ()) return; // Found a player?
+
+	//  The dragon hovers in place.  If a water-fearing dragon is underwater, it will escape the pool if possible. 
+	//  The dragon glides along its path.  Like ryu_stand(), a
+	//  water-fearing dragon will try to escape from any body of
+	//  water if it is placed in one.
+	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
+		if (Ryu_HatesWater ()) {
+			if (self.h2olevel) {
+				if (Ryu_LeaveWater (self.speed)) return;
+			}
+		}
+		ryu_untilt ();  // Undo any angle changes due to evasion.
 	}
 
 	// Double check there is a goalentity, no pause and no turret
@@ -45,8 +59,7 @@ void() ai_stand = {
 		ChangeYaw ();
 		self.th_walk ();
 	} else {
-		// Only test ground walking monsters (no fly/swim/static)
-		// Check global map variable first (default = off)
+		// Only test ground walking monsters (no fly/swim/static).  Check global map variable first (default = off)
 		if (map_bodyflrcheck == TRUE && self.classmove == MON_MOVEWALK) ent_floorcheck(self, FLOOR_TRACE_MONSTER);
 	}
 };
@@ -54,18 +67,15 @@ void() ai_stand = {
 void(float dist) ai_walk = {
 	local vector vertdiff;
 	
-	if (self.health < 1) return;		// Health < 0, no more walking
-	// Turret monsters don't walk, they stand around
-	if (self.movespeed < 0) { self.th_stand(); return; }
-	monster_liquid_check();				// Check for liquid damage
-	monster_poisoned_check();			// Check and apply poison
-	movedist = dist;
-	if (FindTarget ()) return;			// Found a player?
-	
+	if (self.health < 1) return; // Health < 0, no more walking
+	if (self.movespeed < 0) { self.th_stand(); return; } // Turret monsters don't walk, they stand around
+
+	MonsterDeBuff(); // Check and apply poison
+	if (FindTarget ()) return; // Found a player?
+
 	// Allow for flying units to move up/down between path corners
 	if (self.classmove == MON_MOVEFLY) {
-		// Allow for some Z axis tolerance
-		if (fabs(self.origin_z - self.goalentity.origin_z) > MON_ZTOL) {
+		if (fabs(self.origin_z - self.goalentity.origin_z) > MON_ZTOL) { // Allow for some Z axis tolerance
 			if (self.move_elev == 0) self.move_elev = MON_ZMOVEMENT;
 			if (self.origin_z < self.goalentity.origin_z) 
 				self.origin_z = self.origin_z + self.move_elev;
@@ -79,68 +89,81 @@ void(float dist) ai_walk = {
 		}
 	}
 
-	// Horn of conjouring monsters just follow player
-	if (!self.charmed) { 
-		if (self.charmer) { // have a follow target
-			if (ai_objekt()) {
-				self.goalentity = world; // stop for a bit, our follow target is closer than 100 units
-				self.th_stand();
-			} else {
-				self.goalentity = self.charmer; // continue following
-				// Move to goal (code function)
-				movetogoal (dist);
+	//  The dragon hovers in place.  If a water-fearing dragon is underwater, it will escape the pool if possible. 
+	//  The dragon glides along its path.  Like ryu_stand(), a
+	//  water-fearing dragon will try to escape from any body of
+	//  water if it is placed in one.
+	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
+		if (Ryu_HatesWater ()) {
+			if (self.h2olevel) {
+				if (Ryu_LeaveWater (self.speed)) return;
+				// Dragon could not rise toward air.  If in walk mode, increase
+				// speed in the hope of finding another way toward air faster.
+				dist = self.speed; // In walk mode.
 			}
 		}
-	} else {
-		// Move to goal (code function)
-		movetogoal (dist);
+		ryu_untilt ();  // Undo any angle changes due to evasion.
 	}
+
+	if (self.temperament == TEMPRA_COWARDLY && self.charmer) dist = dist * 2.5;
+	else if (self.temperament == TEMPRA_CALM && self.charmer) dist = dist * 2;
+	movedist = dist;
+	movetogoal(dist);
 };
 
 void() CheckAttack;
 
 void(float dist) ai_run = {
-	if (self.health < 1) return;	// Health < 0, no more running
-	vanilla_water_check();			// Check for liquid damage
+	local float winner;
+	local entity e, client;
 
-	// Moved within vanilla water check above to work with water trains
-	//monster_liquid_check();			// Check for liquid damage
-	monster_poisoned_check();			// Check and apply poison
+	if (self.health < 1) return;	// Health < 0, no more running
+	MonsterDeBuff();			// Check and apply poison
+
 	movedist = dist;
+	winner = FALSE;
+    if (self.enemy) {
+		if ((self.enemy.flags & FLx_CREATURE) && visible (self.enemy)) {
+			winner = TRUE;
+			self.ideal_yaw = vectoyaw (self.enemy.origin - self.origin); // Set yaw in case we need to face the fallen during the dance.
+		}
+	}
 
 	if (self.hasobject == "true") take_monster_object(self); // drop our stuff
 
 	// Is the enemy dead or no longer taking damage?
 	if (SUB_healthEnemyTarget() < 1 || SUB_takedEnemyTarget() == DAMAGE_NO || self.enemyexit) {
-		// Reset any exit conditions
-		self.enemyexit = FALSE;
-		// Remove any enemy target entity tracking
-		SUB_switchEnemyTarget();
-		// Reset enemy and target system
-		self.enemy = self.goalentity = self.movetarget = world;
-			
+		self.enemyexit = FALSE; // Reset any exit conditions
+		SUB_switchEnemyTarget(); // Remove any enemy target entity tracking
+		self.enemy = self.goalentity = self.movetarget = world; // Reset enemy and target system
+
 		// Is the old enemy still alive and can it be damaged?
 		if (self.oldenemy.health > 0 && self.oldenemy.takedamage > 0) {
 			self.enemy = self.oldenemy;
 			HuntTarget ();
 		} else {
-			// Was this a passive monster before combat?
-			if (self.passive_mode == TRUE) {
+			if (self.passive_mode == TRUE) { // Was this a passive monster before combat?
 				// Return to passive monster state (reset)
 				self.passive_state = MON_PASSIVESTATE_RESET;
 				check_passivestate_system(self);
+				if (self.charmer) HuntCharmer(); // Go follow our leader again
 			} else {
-				// Monster busy with something else?
-				if (self.target != "") 
-					self.movetarget = find(world, targetname, self.target);
-				// Check for path corners (patrols) and return to stand/walk
-				if (self.movetarget.classtype == CT_PATHCORNER) {
+				if (self.charmer) {
+					HuntCharmer(); // Go follow our leader again
+					return; // Exit run function
+				}
+
+				// Go back on the beat
+				if (self.target != "") self.movetarget = find(world, targetname, self.target); // Monster busy with something else?
+				 
+				if (self.movetarget.classtype == CT_PATHCORNER) { // Check for path corners (patrols) and return to stand/walk
 					self.goalentity = self.movetarget;
 					self.think = self.th_walk;
-				}
-				else self.think = self.th_stand;
+				} else self.think = self.th_stand;
 			}
-
+			if (winner)
+				if (self.th_win) {self.th_win (); return;}   // We have a winner!
+			monster_sow ();
 			return; // Exit run function
 		}
 	}
@@ -152,13 +175,61 @@ void(float dist) ai_run = {
 	if (enemy_vis) {
 		// Used to wake up other enemies
 		self.search_time = time + 5;
+		self.calm_memory_finished = time + 2;
 		// The last time the enemy was in sight
 		self.enemylastseen = time;
+	} else {
+		if (IsLoyal(self)) {
+			if (!self.charmer) { // already have a leader to follow
+				client = SeeFriendly(); // hey buddy!
+				if (client) {
+					if ((IsLeader(client))) {
+						// dprint("Hey buddy, when did you get here?\n");
+						self.enemy = self.oldenemy = world;
+						self.charmer = client;
+						self.charmed = TRUE;
+						self.goalentity = self.movetarget = self.charmer;
+						self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
+						self.nextthink = time + 0.1 + random()*0.5;
+						self.think = self.th_walk;
+						return;
+					}
+				}
+			}
+		}
+		if (self.temperament == TEMPRA_COWARDLY) self.search_time = time - 1; // forget it, too SCARY!
 	}
 
-	//----------------------------------------------------------------------
-	// look for other coop players
-	if (coop && self.search_time < time) {
+	// look for other coop players or go back to leader
+	if ((coop || self.charmer) && self.search_time < time) {
+		if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM || self.classtype == CT_MONSHADE) {
+			// Hasn't seen enemy in a while.  Get out of strafe mode.
+			if (self.attack_state == AS_SLIDING) self.attack_state = AS_STRAIGHT;
+		}
+		if (self.charmer) {  // already have a leader to follow
+			// dprint("Ok boss, let's get out of here\n");
+			self.enemy = self.oldenemy = world;
+			HuntCharmer();	
+			FindTarget();
+			return;
+		} else {
+			if (IsLoyal(self) && self.calm_memory_finished < time) { // Find a leader
+				client = SeeFriendly(); // hey buddy!
+				if (client) {
+					if ((IsLeader(client))) {
+						dprint("Hey buddy, what's up?\n");
+						self.enemy = self.oldenemy = world;
+						self.charmer = client;
+						self.charmed = TRUE;
+						self.goalentity = self.movetarget = self.charmer;
+						self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
+						self.nextthink = time + 0.1 + random()*0.5;
+						self.think = self.th_walk;
+						return;
+					}
+				}
+			}
+		}
 		if (FindTarget ()) return;
 	}
 
@@ -166,41 +237,82 @@ void(float dist) ai_run = {
 	enemy_infront = infront(SUB_entEnemyTarget());
 	enemy_range = range(SUB_entEnemyTarget());
 	enemy_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
+
+	// Dragonz are special :|
+	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM || self.classtype == CT_MONSHADE) {
+		if (self.attack_state == AS_MELEE) {
+			//  The dragon rotates in place until it faces its opponent.
+			self.ideal_yaw = enemy_yaw;
+			ChangeYaw();
+
+			// Check if dragon is facing opponent.  If so, attack!
+			if (FacingIdeal ()) {
+				self.attack_state = AS_STRAIGHT;
+
+				// Check for melee attack first.
+				if (enemy_range == RANGE_MELEE)
+					if (self.th_melee) {
+						self.th_melee ();
+						return;
+					}
+
+				if (self.classtype == CT_MONSHADE) {
+				    // Break off the attack if too close to another nightshade.
+					if (Shade_AvoidGhost (self.speed)) self.attack_state = AS_STRAIGHT;
+					return;
+				}
+
+				// Not close enough for melee, so shoot instead if possible.
+				if (self.th_missile)
+					if (!Ryu_NoShot (self)) {
+						//if (!IsGhost (self.enemy))
+						//{
+							self.th_missile ();
+							return;
+					   // }
+					}
+			}
+			// Break off the attack if a projectile or some other danger is nearby.
+			if (Ryu_DetectDanger (self.speed)) self.attack_state = AS_STRAIGHT;
+			return;
+		}
+
+		if (self.classtype == CT_MONSHADE) {
+			if (enemy_vis) Shade_CheckAttack ();
+		} else {
+			if (enemy_vis) DragonCheckAttack (); // Hunt mode.
+			if (!ImmuneToDamage (self))
+				if (Ryu_DetectDanger (self.speed)) return; // Avoid projectiles or other threats.
+
+			ryu_untilt (); // Undo any angle changes due to evasion.
+			if (Ryu_GetOutOfWater (self.speed)) return; // If the dragon does not like water, stay away from it.
+		}
+	}
+
 	self.enemydist = range_distance(SUB_entEnemyTarget(), FALSE);
 
-	//----------------------------------------------------------------------
 	// Check for temporary turret mode via trigger_monsterturret
-	//----------------------------------------------------------------------
 	if (self.turretactive.classtype == CT_TRIGMONTURRET && enemy_vis && self.th_missile) {
 		if (self.turrettimer < time) {
 			// Is there a chance to pause?
-			if (random() < self.turretactive.count) 
-				self.turrettimer = time + 1 + random()*2;
-
+			if (random() < self.turretactive.count)  self.turrettimer = time + 1 + random()*2;
 			self.attack_state = AS_TURRET;
 			ai_run_missile ();
 			return;
 		}
 	}
 	
-	//----------------------------------------------------------------------
 	// Check if tether system is active
-	//----------------------------------------------------------------------
 	if (check_tethersystem() && self.health > 0) {
 		self.tetherlock = TRUE;
 		if (self.th_tether) self.think = self.th_tether;
 		return;
 	}
 
-	//----------------------------------------------------------------------
-	// Check for the passive state system (reset/timer etc)
-	//----------------------------------------------------------------------
-	if (check_passivestate_system(self)) return;
+	if (check_passivestate_system(self)) return; // Check for the passive state system (reset/timer etc)
 	
-	//----------------------------------------------------------------------
-	// Check if blocked by breakables
-	CheckBlockedBreakable();
-	
+	CheckBlockedBreakable(); // Check if blocked by breakables
+
 	if (self.attack_state == AS_MISSILE) {
 		ai_run_missile (); return;
 	} else if (self.attack_state == AS_JUMP) {
@@ -209,30 +321,60 @@ void(float dist) ai_run = {
 		ai_run_melee (); return;
 	}
 
-	// This has to go after range/melee attack state checks
-	// otherwise the AI will not do anything
-	// These checks are for the next frame, not this one
-	// Exception : wizards need to strafe quickly
+	// This has to go after range/melee attack state checks otherwise the AI will not do anything
+	// These checks are for the next frame, not this one.  Exception : wizards need to strafe quickly
 
 	// Some monsters don't have distance checks, like wizards
 	// All monsters have checkattack defined, no need for ifs and buts!
-	if (self.enemymaxdist || self.enemydist < MON_MAX_RANGE) 
+	if (self.enemymaxdist || self.attack_sniper || self.enemydist < MON_MAX_RANGE) {
 		if (!self.th_checkattack) {
 			self.th_checkattack = CheckAttack;
 		} else {
 			self.th_checkattack ();
 		}
+	}
 
-	//----------------------------------------------------------------------
 	if (self.attack_state == AS_SLIDING) {
-		ai_run_slide (dist); return;
+		// Check if dragon is in strafe mode.
+		if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
+			// Set enemy to world for the first move so dragon stays at same
+			// altitude.  Dragon should not sink toward enemy if it is trying
+			// to fly up and away for whatever reason.
+			e = self.enemy;
+			self.enemy = world;
+			movetogoal (dist);
+			self.enemy = e;
+			Ryu_VerticalSlide (dist, self.enemy);
+			return;
+		}
+		ai_run_slide (dist); return; // normal
 	} else if (self.attack_state == AS_SIDESTEP) {
 		ai_run_sidestep (dist); return;
 	} else if (self.attack_state == AS_BACKWARD) {
 		ai_run_backward (dist); return;
 	}
 
-	// head straight towards the enemy
-	// unless of course I am a turret!
-	movetogoal (dist);
+	// head straight in
+    // Fast, larger dragons sometimes have trouble closing in for melee.
+    // In close range, check if normal speed is too fast.  If so, fly in
+    // at minimum speed.
+	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
+		if (enemy_range == RANGE_NEAR)
+			if (QC_CloseEnough (dist)) dist = SPEED_RYU_MIN;
+	} else{
+		if (self.classtype == CT_MONSHADE) {
+			if (self.velocity == '0 0 0')
+				movetogoal (SPEED_RYU_MIN);
+			else
+				movetogoal (self.speed);
+
+			// Check if in strafe mode.
+			if (self.attack_state == AS_SLIDING) {
+				Ryu_VerticalSlide (self.speed, self.enemy);
+				if (pointcontents (self.origin) == CONTENT_SOLID) self.attack_state = AS_STRAIGHT;
+			}
+		} else {
+			movetogoal(dist); // head straight towards the enemy...unless of course I am a turret!
+		}
+	}
 };

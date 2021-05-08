@@ -40,15 +40,15 @@ void () command_use_server = {
 	if (self.spawnflags & CMD_ACTIVATOR_ONLY) {
 		pent = other;
 		if (pent != world && pent.flags & FL_CLIENT) {
-			stuffcmd(pent,self.message);
+			Safe_stuffcmd(pent,self.message);
 			if (!(self.spawnflags & CMD_DO_NOT_TERMINATE)) {
-				stuffcmd(pent,"\n");
+				Safe_stuffcmd(pent,"\n");
 			}
 		} else {
 			if (activator != world && activator.flags & FL_CLIENT) {
-					stuffcmd(activator,self.message);
+					Safe_stuffcmd(activator,self.message);
 				if (!(self.spawnflags & CMD_DO_NOT_TERMINATE)) {
-					stuffcmd(activator,"\n");
+					Safe_stuffcmd(activator,"\n");
 				}
 			}
 		}
@@ -57,9 +57,9 @@ void () command_use_server = {
 		pent = find(world,classname,"player");
 		while (pent) {
 			if (pent != world && pent.flags & FL_CLIENT) {
-				stuffcmd(pent,self.message);
+				Safe_stuffcmd(pent,self.message);
 				if (!(self.spawnflags & CMD_DO_NOT_TERMINATE)) {
-					stuffcmd(pent,"\n");
+					Safe_stuffcmd(pent,"\n");
 				}
 			}
 			pent = find(world, classname, "player");

@@ -28,10 +28,10 @@ float() CanSelfRevive = {
 
 									v1 = self.mins; v2 = self.maxs;
 									setsize (self, self.bbmins, self.bbmaxs);
-									if (safe_move (0, 0)) return TRUE;
+									if (walkmove (0, 0)) return TRUE;
 									setsize (self, v1, v2);
 								} else {
-									if (safe_move (0, 0)) return TRUE;
+									if (walkmove (0, 0)) return TRUE;
 								}
 							}
 						}
@@ -134,10 +134,8 @@ float(entity ent, entity god) monster_revive = {
         // Reset other enemy dependant fields.
         self.goalentity = self.enemy;
         if (self.enemy) {
-			self.fighting = TRUE;
             self.search_time = time + 5;
         } else {
-			self.fighting = FALSE;
             self.search_time = time + 3;
         }
 

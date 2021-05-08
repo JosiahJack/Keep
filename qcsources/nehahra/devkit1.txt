@@ -1,0 +1,3235 @@
+CHEAT CODES:
+
+MAX =           GOD MODE
+SCRAG =         FLY MODE
+WRAITH =        NOCLIP
+MONSTER =       NOTARGET
+GIMME =         GIVE
+
+IMPULSE 222 =   YE OLD IMPULSE 9
+
+
+ENJOY.
+
+--MINDCRIME
+AUGUST 18, 2000
+
+
+
+THE NEHAHRA PROJECT
+-----------------------------------
+Master Key, Edition 1, Version 1.9
+-----------------------------------
+-Mindcrime
+-----------------------------------
+
+I.      Engine Notes and General Notes
+II.     Weapons, Artifacts, Etc,
+
+                weapon_sprocket
+                weapon_gshotgun
+                item_artifact_flight
+                item_artifact_regeneration
+                item_artifact_resurrection
+
+III.    Custom Items
+
+                custom_item
+                trigger_custom
+
+IV.     Added Features
+V.      Destroyable Objects (and the things they do)
+
+                func_explodable
+                func_sobject
+                func_quakedmg
+                func_mindcrime
+
+VI.     Other Functions and Triggers
+
+                func_object
+                func_earthquake
+                func_cover
+                func_remove
+                func_pain
+                func_bobbingwater
+                func_bobbingobject
+                func_drift
+                trigger_qtele
+                func_pushable
+                info_weight_switch
+                main_weight_switch
+
+VII.    Atmosphere (In more ways than one)
+
+                info_start
+                trigger_fog
+                misc_smokemaker
+                misc_tree
+                floating_gibs
+                info_particles
+                efx_lightning
+                efx_snow
+                func_raining
+                light_lantern
+                light_swinging_lantern
+                light_candle_t
+                light_candle_w
+                light_candlews
+                light_candleth
+
+VIII.   Sound
+
+                ambient_thunder
+                ambient_swamp3
+                ambient_rain
+                ambient_zzxzz
+                ambient_machines
+                ambient_whnoise
+                ambient_nehum
+                ambient_flies
+                ambient_sizzle
+                ambient_moor
+                ambient_eerie
+                ambient_fan_blowing
+                ambient_drain
+                ambient_secj
+                ambient_sphum
+                ambient_toggle
+                ambient_sound
+                ambient_global
+                play_sound
+                play_sound_triggered
+                play_sound_looped
+                snd_beat_toggle
+
+VIV.    Triggered Events and Cinematic Scripts
+
+                trigger_console
+                info_throw_rubble
+                misc_boom
+                info_idscale
+                trigger_camera
+                info_camera
+                info_script
+                info_movecam
+                info_fadein
+                info_fadeout
+                info_levelend
+
+X.      Miscellaneous Stuff
+
+                misc_hummer
+                monster_labguy
+                misc_slime_ball
+                misc_barrel
+                misc_corpse
+                misc_sign
+                misc_motel
+                misc_fscreen
+                misc_valve
+                monster_qforge
+                item2_health
+                spawn_monster
+
+XI.     Monsters (New Ones and Derivatives)
+
+                monster_ogre & monster_ogre_marksman
+                monster_army
+                monster_army2
+                monster_army3
+                monster_army4
+                "SPAWNFLAG_DEAF"
+                monster_enf2
+                monster_enf3
+                monster_shambler
+                monster_shalrath
+                monster_qguy
+                monster_wraith
+                monster_gaunt
+                monster_archgaunt
+                monster_library
+                monster_oglib
+                monster_cook
+                "The Alpha Fiend"
+                monster_hunter
+                monster_vomitus
+                monster_baron
+
+XII.    The Jagger (An Unusual Monster)
+
+                monster_jagger
+                info_jagnest
+                info_jagwater
+                info_jagout
+
+XIII.   The Psychology of Monsters
+
+                "spawnflags" (SPAWNFLAG_DUMB)
+                "nojump"
+                "event"
+                "brain"
+                "relations"
+                "targetname" (The Actor Chart)
+                path_danger
+
+XIV.    The Bosses of Nehahra
+
+                monster_beard
+                monster_nehahra
+                the_mister
+
+#######################################################################################
+#######################################################################################
+####
+####            I.  Engine Notes and General Notes
+####
+#######################################################################################
+#######################################################################################
+
+ENGINE:
+
+You can have transparent objects now.  Func_walls or what have you.  Any
+visible brush function.  You set a new field on it:
+
+        "alpha"
+
+        In this field you give a number between 0.1 - 0.9 for a
+        transparent result.  0.9 being less transparent than
+        0.1, like wateralpha.
+
+NOTE: This even works on monsters! ((However, a Wraith's .alpha is already
+set))
+-----------
+
+Also, there are also new fields called...
+
+
+        "fullbright"
+
+        Set this to 1 on anything (i.e. a transparent brush) and it
+        will be fullbright.
+
+        "skyboxsize"
+
+        Adjust how big the skybox is.  Setting this to 2048 could
+           improve texture quality. ((set this in Worldspawn))
+
+QUAKEC:
+
+Included in the progs.dat are the HIPNOTIC Rotate Entities & FUNCTIONS
+
+INFO_ROTATE
+FUNC_ROTATE_ENTITY
+PATH_ROTATE
+FUNC_ROTATE_TRAIN
+FUNC_MOVEWALL
+ROTATE_OBJECT
+FUNC_ROTATE_DOOR
+
+Refer to Hipnotic's documentation on these and their use.
+
+
+#######################################################################################
+####
+####            II.  Weapons, Artifacts, etc
+####                                  
+#######################################################################################
+#######################################################################################
+
+The weapon setup is as follows:
+
+
+ #1 ---------SWORD
+
+ #2 ---------Standard Quake SHOTGUN :P
+
+ #3 ---------Standard Quake SUPER SHOTGUN
+
+ #4 ---------THE NAILGUN 
+
+ #5 ---------SUPER NAILGUN
+
+ #6 ---------GRENADE LAUNCHER
+
+ #7 ---------ROCKET LAUNCHER
+
+ #8 ---------THUNDERBOLT
+
+ #9 ---------THE SPROCKET (Impulse 9 to select)
+
+ #10 --------THE AUTOSHOTGUN (Impulse 100 to select)
+
+
+The function names of the new weapons you can pick up are:
+
+weapon_sprocket
+weapon_gshotgun 
+
+----------------------------------------
+-------ITEM_ARTIFACT_REGENERATION-------
+----------------------------------------
+
+Unlike other powerups, this one does not wear off.  Once you have it, you have it.
+It regenerates health points, the lower in health you get, the faster it will work.
+
+----------------------------------
+-----ITEM_ARTIFACT_FLIGHT---------
+----------------------------------
+
+A new powerup (certainly not a new concept), this one runs out like Quake's
+regular artifacts. (you may notice that the Item_Artifact_Regeneration
+never runs out).
+
+
+----------------------------------------
+------ITEM_ARTIFACT_RESURRECTION--------
+----------------------------------------
+
+This powerup does not run out.  You cannot carry more than one.  It
+does nothing...that is while you're alive.
+When you die and the screen tilts, you'd usually strike a key or move
+the mouse to restart the level.  If you have this puppy, that doesn't
+happen.  Instead, you slowly lift off the ground and you are back on
+your feet (artifact used up, you can't rise from the dead again
+unless you find another item_artifact_resurrection).
+
+Like anything else, this artifact has its limitations.  It cannot resurrect
+a body from a head (i.e. gibbed).  Nor can it resurrect the player in voids
+or lava; as the body is too damaged.
+
+#######################################################################################
+####
+####            III.  Custom Items
+####                                  
+#######################################################################################
+#######################################################################################
+
+---------------------------------
+---------MISC_MISC---------------
+---------------------------------
+
+This is just an MDL you can stick in your level anywhere you want.
+
+  "model"       give the name of the model with its path and file
+                extensions.
+
+                        i.e. "progs/key2.mdl"
+
+Note, this is only for show, it does nothing.
+
+---------------------------------
+---------CUSTOM_ITEM-------------
+---------------------------------
+
+You can place this custom item in your level.  It's model could be
+anything, the sound it makes when you pick it up, anything, etc.
+It adds nothing to your inventory as a client, BUT the TRIGGER_CUSTOM
+depends on it, later described, first the fields.
+
+
+        "noise"         this is the sound it makes when you pick it up.
+                        *optional*
+
+                        i.e.  boss/pop1.wav
+
+        "netname"       the name of the item.
+
+                        i.e.  gib of power              :>
+
+        "model"         the filename of the model in its path.
+
+                        i.e.  progs/gib2.mdl
+
+        "effects"       what effects the model has.
+
+                        1 = EF_BRIGHTFIELD
+
+                        I believe these are those yellow particles...
+
+                        4 = EF_BRIGHTLIGHT
+
+                        Glows like the keys.
+
+                        8 = EF_DIMLIGHT
+
+                        The "glow" when you have the Pentagram of Protection
+
+****Advanced Fields*****
+
+        "skin"          if you are using a model that has more than one
+                        skin and wanna use something other than the default.
+
+        "frame"         if you are using a model that has frame, like
+                        one of the monster models (I don't know why you
+                        would).  Some minimal knowledge in MDLs or a
+                        trip through an MDL editor and you should be
+                        able to discern which frame you want.
+
+                        If you want to use a model with multiple frames
+                        and want to know what frame number a certain thing
+                        is (like a final death frame of a progs/ogre.mdl,
+                        let me know. I'll tell ya.
+
+---------------------------------------
+-----TRIGGER_CUSTOM--------------------
+---------------------------------------
+
+This is a trigger brush.  This will trigger its targets if and only if
+the player has picked up (technically 'removed') the CUSTOM_ITEM (or ALL
+custom_items if you used more than one) with the *netname* that you
+set in the Trigger_Custom's field "event".
+
+If they don't have it, it will give them a message that they should go get it.
+Otherwise, it will trigger its targets and remove itself as it is no
+longer needed.
+
+        "noise1"        the sound it makes when it denies you.
+                        That is, when you haven't got the custom item yet.
+
+        "noise"         the sound it makes when it triggers its targets.
+
+        "target"        mandatory field.  What targets it will trigger.
+                        Doors, events, anything.
+
+        "event"         the "netname" of the item it looks for
+
+
+WHAT DOES THIS ALL MEAN?  Well, kids, it means, if you really wanted to
+go totally apeshit, that you could riddle your level with different
+key sets and items. (Reminiscent of Blood perhaps?)  Cabinets, secrets,
+the sky is the limit.  That's just scratching the surface, the limitations
+of this feature is dictated by your imagination only.  You could be
+quite innovative with custom_item and trigger_custom.
+
+NOTE #1:
+
+You are not restricted to one item.  If you have five "gibs of power" (heh)
+on your level and you set the trigger_custom to "gib of power" (like its
+netname), it will NOT trigger *until* all five gibs are picked up.
+
+NOTE #2:
+
+The Trigger_Custom does have one other use.  It operates like a
+trigger_once when you boil it right down.  If there is no custom item
+on the level, it will just trigger its targets when the player
+steps in it.  The difference between this and a trigger_once is
+that you can use the "noise" field to make it play a custom sound
+or any sound from Quake or Nehahra for that matter.  Although you
+may already know how to do this without this function :>
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+INCLUDED CUSTOM MODELS
+----------------------------------
+These are models you can use for the custom entities if you'd like.
+Sometimes additional fields are grouped with the model name if it's
+important.  You can thank ArchMage for these.
+
+If you need anything else, I'll see what I can do.
+
+
+        "model"         "progs/boltkey.mdl"
+
+        "model"         "progs/airkey.mdl"
+
+        "model"         "progs/catkey.mdl"
+
+        "model"         "progs/bloodkey.mdl"
+
+        "model"         "progs/earthkey.mdl"
+
+        "model"         "progs/spikekey.mdl"
+
+        "model"         "progs/firekey.mdl"
+
+        "model"         "progs/runekey.mdl"
+
+----------------
+        "model"         "progs/key2.mdl"
+
+        "skin"          0 = tan
+                        1 = yellow
+                        2 = orange
+                        3 = rusted
+                        4 = black, smokey
+----------------
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+SOUND SUGGESTIONS
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+This is just a list of a few common sounds in Quake that may be
+befitting.  Remember of course, that you can use ANY sound.
+
+"doors/medtry.wav"              medieval world door sounds
+"doors/meduse.wav"
+"doors/runetry.wav"             runic world door sounds
+"doors/runeuse.wav"
+"doors/basetry.wav"             modern world door sounds
+"doors/baseuse.wav"
+
+The above sounds.  "Use" is when activated.  "Try" is when you
+try the door but don't have a key :{
+
+"misc/secret.wav"               secret sound
+"misc/talk.wav"                 uhhh (!?)
+"misc/trigger1.wav"             trigger switch sound
+
+
+#######################################################################################
+#######################################################################################
+####
+####            IV.  Added Features
+####
+#######################################################################################
+#######################################################################################
+
+
+Regarding:  Spikeshooters
+
+
+Set the spawnflags to 4 to get it to shoot rockets.
+
+
+-------------------------------
+--------INFO_PLAYER_START------
+-------------------------------
+
+If you want the engine to use a specific player model (as you can see
+the model in chase_active and cutscenes).  Set these fields:
+
+        "forcemodel"    Set to 1 to activate this feature
+        "pmodel"        Set 0-5 to set the model
+
+                        0 = standard Qguy
+                        1 = Grunt
+                        2 = Ogre Mutant
+                        3 = Labguy
+                        4 = Major Bent
+                        5 = Jack Torres
+
+-------------------------------
+--------FUNC_BUTTON------------
+-------------------------------
+
+
+You can set the SOUNDS field to 4 or 5 for normal sounding switch sounds.
+
+You can ALSO give it a "spawnflags" 64 if you want monsters to be able
+to trigger the button (for whatever reason :) )
+
+New Additions:
+
+You can make the func_button only work if the player has a certain
+key.
+
+        "spawnflags" = "8"     "Requires Gold Key"
+        "spawnflags" = "16"    "Requires Silver Key"
+
+Set them both and well, it requires they have both keys.
+
+-------------------------------------
+--------FUNC_TRAIN------------
+-------------------------------------
+
+----------> "wait"
+
+Under the WAIT field.  If you set it to -1, the train will stop and will not restart until it is triggered.
+
+----------> "sounds"
+
+Also, under SOUNDS, you can use 3,4,5,6, or 7, these are sounds ripped from the normal Quake doors, just in case you wanted something different but oddly familiar.  Something neat to play with.
+
+
+-------------------------------------
+--------FUNC_DOOR--------------
+-------------------------------------
+
+-----------> "cnt"
+
+You can set the *CNT* field and set an appropriate death message (later described in 
+FUNC_PAIN).
+
+
+---------------------------------------
+----------TRIGGER_HURT----------
+---------------------------------------
+
+--------------> "cnt"
+
+You can set the death type to something appropriate.  See *Death Type* fields in the new function FUNC_PAIN .  You will use the *cnt* field
+
+
+
+--------------------------------------
+--------TRIGGER_PUSH------------------
+--------------------------------------
+
+--------------> "sounds"
+
+Set this to 1 if you want the trigger_push to be silent (no windfly sound)
+
+--------------> "targetname"
+
+Set this to make it triggerable.  Toggles between push and no push.
+
+--------------> "spawnflags"
+
+PUSH ONCE = 1
+START ON = 2
+
+Set a spawnflag 2 on it if you want the toggable Trigger_push to begin
+the level in a pushing state.  On.
+
+
+-------------------------------------
+----------PATH_CORNER---------
+-------------------------------------
+
+----------> "delay"
+
+Set the delay to -1 to make them stop if you don't already know how
+to make them do this without it.
+
+----------> "event"
+
+If you set the EVENT field (string), put in the targetname of the monster
+you want this monster to get angry at :>  When he gets to that path, he
+will get angry at monster of choice.
+
+----------> "target2"
+
+If you use this field, target an alternate path_corner as the next
+in the sequence.  When the monster reaches this path_corner, he will
+select either the path_corner's "target" or "target2". This allows
+monsters to walk unpredictable paths.
+
+NOTE:  This is especially important if you are using Spawn_monster
+(later described) as you will want the spawned monster to roam.
+
+
+---------------------------------------
+----------TRIGGER_CHANGELEVEL----------
+---------------------------------------
+
+        "noise"         set this to the filename of a WAV file
+                        to play when the player exits.
+
+                           i.e.  cuts1/opening.wav
+
+In Deathmatch or Coop, when you leave a level, it will go to the next one
+in the progression.  HOWEVER, in single player you may wish to send the
+player to a demo cutscene  ((the demo cutscene itself will trigger the
+console to load the next map in the sequence afterward)).
+
+A new field
+
+        "demo"          enter the name of the demo file, do not
+                        use the .DEM extension.
+
+                        i.e.   "demo" = "demo1"
+
+
+
+#######################################################################################
+#######################################################################################
+####
+####            V.  Destroyable Objects (and the things they can do)
+####
+#######################################################################################
+#######################################################################################
+
+There are brush entities:  FUNC_EXPLODABLE, FUNC_SOBJECT, FUNC_QUAKEDMG.
+
+Use the following fields:
+
+"blink"
+
+If you set this to a number between 0.1 and 0.9 it will set the "alpha"
+field of its thrown rubble to this number, thereby making the rubble
+translucent.  I.e. like glass.  I'd go higher than 0.5.. 0.6-0.9 perhaps.
+
+
+"sounds"
+
+The type of sound it will make when it breaks.
+
+ #        Description
+ ----    -----------------------
+ 0      Generic 1.
+ 1      Generic 2.
+ 2      Generic 3.
+ 3      Wood
+ 4      Glass
+ 5      I haven't the slightest idea what this is supposed 2b
+ 6      Metal
+ 7      Clay
+
+
+"health"
+
+Defaults are 100 Points for 'func_explodable's and 10 for 'func_sobject's.
+NOTE:  'func_quakedmg's health does not need to be set, nor can it be :)
+
+"spawnflags"
+
+
+0       (default)       rubble chunks
+1                       flat rubble
+
+
+"dmg"
+
+This will dictate the color of the rubble it creates when it breaks apart.
+
+0 - brown
+1 - grey
+
+NOTE:  There is an additional skin for flat pieces
+
+2 -  wood
+
+
+-----------------------------
+-------FUNC_EXPLODABLE-------
+-----------------------------
+
+This is an brush that is shootable, destroyable.
+
+---------------------------------
+-------FUNC_SOBJECT--------------
+---------------------------------
+
+This is like a FUNC_EXPLODABLE, but this is more fragile, takes less damage to kill it and it spawns smaller pieces.  
+
+-----------------------------------
+-----FUNC_QUAKEDMG---------
+------------------------------------
+
+The Seekout() Command will destroy these suckers one by one
+during an earthquake.(Note:  It does this automatically during a Quake)
+One of the quirky advantages of this is you could make a Func_Quakedmg
+the sole barrier between a client and a secret, but it is not a 
+certainty that this secret will be available to them every time. :>
+
+
+--------------------------------
+----FUNC_MINDCRIME--------------
+--------------------------------
+
+Assign this to an object and that object is able to fall or be thrown
+and do a variety of different things.
+
+Its usefulness is only limited by your imagination.
+You could create traps with this, atmospheric stuff with it, reveal
+passageways with it.  God, it's a lil bit of everything rolled into one.
+Functioning like a FUNC_EXPLODABLE in a way, you set it's health.  When
+it suffers this amount of damage, it will then fall straight down
+from whereever you put it.  It will do the same if triggered.
+Once it hits the ground....
+
+.....FIELDS :>
+
+------> *impulse*  (0, 1, 2, or 3)
+
+This governs how it'll act when it hits the ground.
+
+        0 = nothing special, just the plain old BSP object it is.
+            Imagine a makeshift bridge that falls off the ceiling :>
+
+        1 = Becomes a pushable object.  You cannot push this
+            off ledges, but it could be useful.
+            Also be sure not to use this if there is a possibility
+           x that a moron player could push it in a position
+            whereby they cannot get out :>
+
+        2 = will bust apart (Func_Explodable)
+
+        3 = becomes an unmoveable object, but when it hits the
+           ground it will bounce a bit.  I realize that sounds
+           kind of lame....but if it falls into water, it'll float.
+           :)....kinda....((CONFIRMED NOT TO WORK))
+
+------> *cnt*
+
+An appropriate death message, see FUNC_PAIN
+
+------> *sounds*
+
+An appropriate sound for when(and if) it explodes, see FUNC_EXPLODABLE
+
+------> *dmg*
+
+An appropriate rubble skin for when(and if) it explodes, see FUNC_EXPLODABLE
+
+------> *speed*
+
+You can make the FUNC_MINDCRIME lethal when it falls.  If you do not
+set the *speed* field, it will not do any damage if a client or monster
+happens to be beneath it.  If you set the *speed* field, the object
+acts like a FUNC_PAIN in between the states of falling from its original
+position and hitting the ground.  Set it low and it's still damaging.
+Set it very high (like 100 :>) and it'll gib ya instantly.
+
+------> *target*
+
+Use as normal.  It will trigger its targets when it first begins to fall
+(NOT when it hits the ground).  I did it this way in case any of you
+wanted to make brushes around it (like support beams) that you'd trigger
+and blow up as the thing falls or something.
+
+-----> *targetname*
+
+For when the player needs a kick in the ass, trigger it and it will act
+as if the player shot it off the wall/ceiling/whatever. Also more ideal
+for traps.
+
+
+########## FOR ADDITIONAL CONTROL ###############
+
+-----> *spawnflags*  (((1 & 2)))
+
+MC_CONTROL = 1
+
+This will enable you to control the func_mindcrime when it is killed/
+triggered.  You can throw it in a given direction..remember...gravity kills.
+
+MC_UP = 2
+
+Spawnflag 2 enables the func_mindcrime to be blasted UP when it is killed/
+triggered.
+
+
+----------------
+
+Yes.....you can use both spawnflags for maximum control and enjoyment :)
+
+Here are the fields that work with the spawnflags.
+
+
+-----> *angles*   (((for MC_CONTROL)))
+
+Use the exact same method as you would for a func_door.  This will throw
+the func_mindcrime in the intended direction when it is triggered/killed.
+This is a VECTOR ((0 180 0)) not a FLOAT ((180))
+
+-----> *boost*    (((for MC_CONTROL)))
+
+This is how fast it will move in that intended direction.  High numbers
+taking preference.  (i.e. 400 won't get it very far).  Play around with it.
+Tinker with it enough and you'll be able to throw the object where you
+want it.
+
+-----> *nojump*   (((for MC_UP)))
+
+for every point under 0, this will increase the func_mindcrime's velocity on
+the Z scale. -500 is a good place to start.  This is if you want the object
+to go UP...before it comes down.  Set it very high and you could simulate
+objects thrown from explosions.
+
+
+-------------------------------------------------------------------
+---FUNC_MINDCRIME, FUNC_EXPLODABLE, FUNC_SOBJECT, FUNC_QUAKEDMG----
+-------------------------------------------------------------------
+---------------------Yielding ITEMS!!!!----------------------------
+-------------------------------------------------------------------
+
+Just when you thought these functions have it all, it's time to
+introduce a new feature.  It will work on any explodable, including
+func_mindcrimes if you use them in an explodable capacity.
+
+Ain't it just cool when you go running through a game, you can blow
+up crates and shit, and get the goodies inside.  Yes, of course, you
+can already do this in Quake 1.  But Mindcrime hath decreed that it
+is a pain in the ass for you mappers to set it up properly
+and your time could be better spent building awestrickening
+architecture! Muhaha.
+
+This will throw items much like backpacks are thrown.  They will not
+be thrown far but try not to create situations where there's a cliff
+or a lava pit right next to it :P
+
+The items will be thrown when the rubble is thrown.
+
+Here's the fields and how to use them.
+
+-----> "ammo_shells"
+
+Well, this is pretty self explanatory.  If you set this to 1 (or any
+number other than 0, the explodable will yield a box of shells).
+It works the same way with the next three fields which should be
+self explanatory.
+
+----> "ammo_nails"
+----> "ammo_cells"
+----> "ammo_rockets"
+
+Wow, that was easy.  Remember, you can throw one of each or combinations.
+The limitation...the price to pay...thou shalt not throw more than one
+box of the same type of ammunition or the Quake Gods shall sacrifice
+you to Damaul's shed.
+
+----> "armorvalue"
+
+This will throw out some armor for us to grab, unless it's set to 0, the
+default.  Higher the #, better the armor.
+
+        1       =       IT_ARMOR1
+        2       =       IT_ARMOR2
+        3       =       IT_ARMOR3
+
+----> "items"
+
+This one is liable to give you a migraine.  You use flags
+on this particular field.  These are worked just like spawnflags.
+If you don't know how to set it up in your mapping editor, spending
+a bit of time with a calculator wouldn't kill you :>
+
+The following are the only items currently supported...
+
+
+DOUBLE BARREL SHOTGUN   =       2
+NAILGUN                 =       4
+SUPER NAILGUN           =       8
+GRENADE LAUNCHER        =       16
+ROCKET LAUNCHER         =       32
+LIGHTNING               =       64
+SPROCKET                =       128
+HEALTH                  =       65536 
+BIO SUIT                =       2097152
+QUAD DAMAGE (yay!)      =       4194304
+FLYING ARTIFACT         =       8388608
+
+
+#######################################################################################
+#######################################################################################
+####
+####            VI.  Other Functions and Triggers
+####
+#######################################################################################
+#######################################################################################
+
+---------------------------------
+-----FUNC_OBJECT-----------------
+---------------------------------
+
+Make a pushable BSP object.  Able to be pushed off ledges.  Do not use this for
+particularly large objects.
+
+---------------------------------
+-------FUNC_EARTHQUAKE-----------
+---------------------------------
+
+NOTE:  Really a trigger.
+
+This will trigger an earthquake.  During said earthquake, it will randomly
+seek out FUNC_QUAKEDMGs (described later) and destroy them.  Do NOT depend
+on the earthquake to blow up anything in particular.  Use a trigger and
+FUNC_EXPLODABLE for important events.
+You can set the
+
+"cnt"
+
+field to reflect the length of the earthquake.  It defaults to 30.
+
+---------------------------------
+---------FUNC_COVER--------
+---------------------------------
+
+FUNC_COVER once activated via its
+
+"targetname"
+
+...will simply disappear.  Gone!  Of course, you know that
+using the "killtarget" field on something else creates the same effect.
+Set the 
+
+"spawnflag"
+
+to 1 if you want the cover to be invisible: an invisible wall
+of clipping that does not yield to bullets, rockets, etc.
+
+-----------------------------
+------FUNC_REMOVE------
+------------------------------
+
+It does nothing but remove monsters when they step into it.  Good for
+cutscenes and eliminating actors when their time on the "stage" has
+ended.  Just keep in mind, if you use this for whatever reason, that monsters
+passing through this will disappear, gone, poof, *pop*, into sweet oblivion and
+off the edicts table.
+
+Set *spawnflags* to 64 if you want it to spawn a teleport field when it
+removes something.
+
+Set *spawnflags* to 128 if you want it to remove ALL things except the
+player.  This includes grenades, rockets, nails, items, functions, etc.
+
+----------------------------------------
+----------FUNC_PAIN----------------
+----------------------------------------
+
+This will inflict damage on any entity touching it.
+entity "func_pain" "Func2->Damage" "Causes damage"
+
+Set the *dmg* field to a number appropriate to how much damage you want the client to take every moment he touches it.  Set this low, because it delivers pain SWIFTLY!  Unless of course, you wanna gib the player, do not pass go, do not collect 200$.  If you set it at 5, the damage it gives is about one third to one half that of Lava.
+
+{
+        "dmg"                         int             "How much damage?  Set it low"
+        "targetname"                  str             "Its trigger name"
+        "cnt"                         deth_types      "Death Type"
+        model
+}
+
+You can set the ***DEATH TYPE**** here.  That is, if the FUNC_PAIN kills the client, what kind of death message will the client receive.  To do this, you create a 
+
+*cnt*  field and put one of the following numbers in it:
+
+{
+   0     "squished---generic message"
+   1     "Hot Plate"
+
+   Say you have a plate of metal sitting over a bunch of flames.  That sucker'd be hot.
+  This will give you an appropriate death message.
+
+   2     "Spikes"
+
+   This might say  "PLAYER WAS IMPALED".  This is if you decide to build some spikes to fall on.  Or even some spikes to run into (say a Wind Tunnel throw the client straight into a set of long spikes).
+
+   3     "Diced"
+
+This might say "PLAYER IS GOING HOME IS SEVERAL BOXES".  Possible use, well, say you throw the player through a wind tunnel (heh, wind tunnel, easiest example) and straight into a razor sharp grate that gibs him into pieces.  Well, this would be appropriate.
+
+   4     "Hands of Death"
+
+This says "PLAYER DIED AT THE HANDS OF DEATH".  I don't know what to use it for really.  Maybe inspiration will hit you :P
+
+   5     "Went to Hell"
+
+This might say "PLAYER WENT TO HELL THE FAST WAY DOWN".  This would probably be more appropriate for a TRIGGER_HURT.  Say you build a board that has big holes that lead into the nothing.... or maybe a "bottomless pit".
+
+   6     "Fell into the Void"
+
+I planned on having a few boards where you could fall off into the blackness if you're not too careful.  This is the appropriate message.
+
+   7     "Swallowed"
+  
+PLAYER WAS SWALLOWED.  rofl.  I dunno.  Let's say if you made a big BSP statue with an open mouth and you could somehow fall in.  Heheheh.
+
+ 8     "Machines"
+   
+Basically, the client is killed by a machine of some kind.
+
+9     "Furnace"
+
+If you make an area of let's say a ventilation system and the player could accidentally fall into the furnace.  Or just go waltzing through the flames.  This one's good.
+
+
+****Other Death Messages*****
+
+This type of thing is highly customizable and new ones can be added with little to no effort.  If you as a mapper would like your own, start counting up from 9, let me know what kind of message(s) you want for what number and I can implement it with barely any effort :)
+
+----------------------------------------
+---------FUNC_BOBBINGWATER--------------
+----------------------------------------
+
+Used to emulate water.  To use, create a thin water brush and center it
+on the water line of the body of water to bob.  The amount of the bob
+is the depth of the brush.
+
+"speed" is how long in seconds it takes the brush to do one full bob.
+
+----------------------------------------
+----------FUNC_BOBBINGOBJECT------------
+----------------------------------------
+
+Uses the same code for bobbing water except this is a solid brush.
+
+"speed" is how long in seconds it takes the brush to do one full bob.
+   
+*targetname*    This makes the object switchable.
+
+
+NOTE:  You will probably want to make it a one time thing.
+Because of how the code makes it move, it will often get caught on itself
+and freeze for a while IF you have it STOP and then RESTART again via
+a func_button or trigger.
+
+
+"dmg"           If you set this, it will also act like a function_pain.
+
+"cnt"           This sets an appropriate death message
+                (SEE FUNC_PAIN)
+
+"sounds"     1,2,3, machinery sounds...0 = no sounds
+
+This is good if you have, say a Crate that's floating in the water or some
+kind of machine going.
+
+New SPAWNFLAG
+
+START_ON : Real = 64;
+
+(bobbing when the level loads up)
+
+PAIN_UNDER: Real = 32
+
+(this will make it only inflict damage [see "dmg"] to entities beneath it.
+
+----------------------------
+----FUNC_DRIFT--------------
+----------------------------
+
+NOTE:  This ain't exactly what I'd call STABLE
+
+This brush entity will drift about as if floating.  It will drift on the
+x, y axis only, always keeping its Z position.
+
+Notes:
+
+The Func_drift is pushable as a player running into it and guiding it
+can change its direction.  Another inherent thing to consider is, if you
+happened to make a vessel out of a func_drift, like a boat or something.
+As long as you gave it rails that are just high enough to block the player
+(i.e. they cannot jump on top of it or cannot step up onto it just by
+moving).  Then the player could push in the direction he wants to go
+and the func_drift would go in it. (if that made any sense whatsoever)
+
+Also, something you could use to your advantage.  Notice how the
+func_drift doesn't drift much when you're standing on top of it.  Only
+when you move, it moves.  But because it becomes so stable, you could
+probably use it for other things.  Like a stepping stone across a pool of
+lava or something.
+
+Give it a *targetname* and it will not begin drifting from its
+starting position UNTIL TRIGGERED.
+
+-----------------------------------------
+---------TRIGGER_QTELE------------
+-----------------------------------------
+
+Use it exactly like a TRIGGER_TELEPORT.  It's just silent and generates no
+teleport fog.
+
+-----------------------------
+-----FUNC_PUSHABLE-----------
+-----------------------------
+
+This is an object that is pushable.  You could create a pushable wall with
+this and so forth.  The difference between this and the "func_object" is
+you cannot push this off ledges and func_objects will not work in 
+conjunction with...
+
+***********Weight Switches***************
+
+This is going to describe a new feature.  Understand that you cannot
+create two networks of these switches.  Add however many info_weight_switches
+you want AND *ONE* MAIN_WEIGHT_SWITCH
+
+-------------------------------
+-----INFO_WEIGHT_SWITCH--------
+-------------------------------
+
+Make it small, it's just a marker.  Set it close to the ground like an
+item.   What it does is wait for a FUNC_PUSHABLE
+(**ANY Func_Pushable**) to be pushed into it. 
+  When that happens, the following things will happen:
+
+1.  It will make the FUNC_PUSHABLE no longer pushable and make a sound.
+2.  It will trigger whatever *target*s you have given it.
+
+3.  ((This one's a tad more complicated))
+
+        It will look for other Info_Weight_Switches.  If it finds NONE,
+        it will automatically trigger the next entity to be described,
+        the MAIN_WEIGHT_SWITCH.  And then it will remove itself as its
+        purpose has been served.
+
+        If it does find another Info_Weight_Switch, it will remove itself
+        and not mess with the MAIN_WEIGHT_SWITCH.  Only when the last
+        FUNC_PUSHABLE is pushed into position (on the final info_weight_
+        switch) will the MAIN_WEIGHT_SWITCH be triggered.
+
+   Need plain English?  You could set up a puzzle of sorts whereby objects
+   have to pushed into certain positions to open a door (probably a secret).
+   The door will open because it will be triggered by....
+
+
+----------------------------
+-----MAIN_WEIGHT_SWITCH-----
+----------------------------
+
+Once the last INFO_WEIGHT_SWITCH on the board goes off, the Main_Weight_
+Switch will automatically trigger its targets (i.e. a door, a chain of
+events, anything).
+
+You need not give the Main_Weight_Switch a *targetname*.
+
+
+
+
+#######################################################################################
+#######################################################################################
+####
+####            VII.  Atmosphere (In more ways than one)
+####
+#######################################################################################
+#######################################################################################
+
+
+---------------------
+---INFO_START----------
+---------------------
+
+It does not matter where you place this point entity on the map.
+This will set default settings for a level when it loads including but not
+limited to FOG, WATERALPHA settings, and GRAVITY.  It also sets the
+skybox to the sky you wish to use.
+
+You use an info_start if you want fog & certain fog settings active when the
+level first loads or certain variables set to certain things.  You are also
+describing in its fields, the "default" which trigger_fog will use
+ (see trigger_fog) should you be using fog.
+
+Fields for Fog:
+
+        "fog_enable"           1 or 0 (True or False)
+
+        "fog_density"           (float) [[defaults to 0.8]]
+
+        This effects the density of the fog.
+
+        "fog_red"               0.0 - 1.0
+
+        How much red to put in the fog.
+
+        "fog_green"             0.0 - 1.0
+
+        How much green :>
+
+        "fog_blue"              0.0 - 1.0
+
+        How much blue.
+
+
+Other fields:
+
+        "method"                Set to 1 to make items respawn
+                                as if it were a Deathmatch
+                                Game
+
+        "gravity"               (float) defaults to 800
+        "walpha"                Wateralpha settings
+        "wripple"               Defaults to 0, off
+                                Set this to turn on the
+                                water rippling feature.
+                                5-10 is subtle, 20+ more
+                                ripply, etc
+
+        "noise"                 enter the name of a .mod file
+                                and it will play this .mod
+
+        "sky"                   (string) enter the name of the sky
+                                you wish to use if the level uses
+                                a Q2 style skybox.
+
+                                Example:
+
+                                "sky" == "blah"
+                                this will load "blah**.tga" all six
+                                graphics starting with "blah".
+
+                                SKIES USED IN NEHAHRA ALREADY:
+
+                                oberon_
+                                lear_
+                                mtnsun_
+                                czg_void
+                                cliffedge
+                                snow2
+                                iceworld4
+
+
+OTHER NOTES:
+
+The Info_start also functions as a level supervisor.  Rather than having four
+dozen monsters constantly checking for Lava, the info_start does all the
+work for them.  Thinking of nothing else but making sure everything goes
+as planned.  It also functions as a pain inflictor when the monster is
+indeed in lava. (Note: It is ideal to have a separate object doing
+damage rather than the Worldspawn damaging them or them damaging themselves.
+Bizarre side effects are not uncommon.)
+
+---------------------------
+------TRIGGER_FOG----------
+---------------------------
+
+This will change fog settings for a client who comes through it.
+Use the FOG FIELDS described for INFO_START.  Turning on and off the
+fog of course uses the field:
+
+        "fog_enable"           1 or 0 (True or False)
+
+NOTE: You can completely change the fog settings by using the Fog Fields
+as described in the Info_start.
+
+If you want the trigger_fog to set the fog settings to the default
+(as set by INFO_START) then give it a spawnflag 32.
+
+----------------------------------------
+----------MISC_SMOKEMAKER---------------
+----------------------------------------
+
+This point entity generates smoke which rises straight up from where you
+put it.  It might be necessary to place a few next to each other.  This
+feature, however, can become wearing on the engine if abused.  Keep your
+eye on game speed.
+
+What this actually does is release a very miniscule object up which has
+a grenade tracer in it as often as you tell it.  How fast this object
+moves is based on:
+
+    "speed"
+
+        This defaults to 2000.  How fast the object moves up from the
+        misc_smokemaker.
+
+    "cnt"
+
+        How often another object is released (how thick the smoke)
+
+    "wait"
+
+        How long the object lives in seconds.
+        ((This in conjunction with "speed" also affects thickness and
+        how high the smoke rises before dissipating. Do NOT count on
+        the ceiling to make it disappear.   It rises NOCLIP and will
+        pass through architecture...which I suppose you could use
+        to your advantage in certain circumstances...)
+
+    "targetname"
+
+        If you give it a targetname, it will not begin smoking
+        until triggered.  Then, if you wish, you can toggle it by
+        triggering it more like a switch.
+
+----------------------------------------
+-----------MISC_TREE--------------------
+----------------------------------------
+
+Yes, folks.  We now have trees.  YAY.  They are all without leaves
+but I'm sure you will make good use of them :P  You can set their
+angles to allow variety.
+
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+        "model"         the filename of the tree model to use.
+
+                        AVAILABLE TREES
+
+                        "progs/tree1.mdl"
+                        "progs/tree2.mdl"
+                        "progs/tree3.mdl"
+                        "progs/tree4.mdl"
+
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+        "frame"         which frame to use (if it has more than one)
+
+                        TREE    FRAMES          NOTES
+                        1       0 (just 0)      Zerstorer tree
+
+                        2       0-5             gnarled thing
+                                                frame 5 is curled over
+
+                        3       0-5             stubby
+                                                frame 5 is leaning over
+
+                        4       0-5             generic kinda tree
+                                                frame 5 is leaning over
+
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+        "skin"          what color
+
+                        0 =     light brown bark
+                        1 =     medium brown bark
+                        2 =     dark brown bark
+                        3 =     very dark, nearly black
+                        4 =     grey, ashy, dead looking
+
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 
+        "cnt"           miscellaneous flag, set this to 1 to make
+                        the tree NOT SOLID.
+
+
+----------------------------------------
+------FLOATING_GIBS---------------------
+----------------------------------------
+
+Point Entity.
+
+This will generate a number of Gibs....that float...
+by your specifications.  Place the Floating_Gibs entity UNDERWATER, probably
+at the bottom of wherever you are going to put them.  They are solid,
+moveable, and gibbable (gibbable gibs, imagine that).
+
+The fields....
+
+*count*    How many Floating Gibs you want to generate.  That is...
+                the TOTAL NUMBER of Gibs you want to generate.
+                Once it has spawned this many, it will remove itself.
+                (((NOTE:  Watch your edicts)))
+
+*delay*    How long in seconds it should wait inbetween releasing another
+                floating gib.  Frequency of them, in other words, in seconds.
+
+
+*targetname*    If you give it a targetname, it becomes switchable.
+                It will not release any Gibs until TRIGGERED.
+                As I'm sure you can imagine how effectively these
+                yummy, floating gibs can be.  Heh.
+
+
+--------------------------
+----INFO_PARTICLES--------
+--------------------------
+
+This nifty point entity gives off particles by your specifications.
+This entity has been extensively tested.  It functions properly but
+it may take you some getting used to.
+
+Let's go through the many many fields :)
+
+        "targetname"
+
+        This makes the info_particles triggerable and toggable.
+        Able to turn them on and off like a light switch.
+
+        "spawnflags"
+
+        START_ON : Real = 64;
+        particles will be going when level begins.
+
+        "method"
+
+        0 = normal, gives off particles
+        1 = will give off particles in a radius on one side relative
+            to the point entity.
+        2 = will give off particles in a radius on two sides.
+
+        ((Imagine particles revolving around a central point))
+
+        "movedir"
+
+        This is a VECTOR, use it like mangle.  This is the initial
+        direction the particles move.
+
+        "duration"
+
+        This is the lifetime of each particle in seconds.
+
+        "wait"
+
+        How long to wait before giving off particles in seconds.
+
+        "cnt"
+
+        The color of the particles.  Uses color index.
+        0 - 255.
+
+        "endtime"
+
+        the amount of time before the particles stop emitting,
+        set to -1 for ongoing emission (unless triggered to
+        stop and go)
+
+        "delay"
+
+        This is the length of time between particles.  This is
+        measured in seconds, the default is 0.1
+
+        "impulse"
+
+        If you've set "method" to 1 or 2, this sets the length of
+        the radius.
+
+        "speed"
+
+        -360 to 360 (0 = none)
+
+         how fast the particle train goes around in the given radius.
+         "speed" == "1" means it gives off a particle at every degrees
+         (0 - 360 degrees in its rotation).  Use this only if you
+         have set method to 1 or 2.
+
+         Use a positive number to go counter clockwise.
+         Use a negative number for clockwise.
+
+
+
+------------------------
+---EFX_LIGHTNING--------
+------------------------
+
+Point entity.
+
+Something to play with, this will occasionally fire a beam of
+electricity straight down.  A point entity.   I imagine you could use
+it in conjunction with ambient_thunder and rain for an intesting effect...
+
+If give it a "targetname", it will only fire when triggered.
+
+-------------------------
+----EFX_SNOW-------------
+-------------------------
+
+Point Entity.
+
+This makes falling snow in a radius around where you place this point
+entity.
+
+
+-------------------------------
+-------FUNC_RAINING------------
+-------------------------------
+
+TYPE:  POINT ENTITY (NOT A BRUSH)
+((don't ask me why it was given the prefix func_, cuz I dunno))
+
+Here's the welcome addition to the Pak.  Nehahra rain is a unique,
+never before done approach to rain in Quake.  Here are some rules
+to follow.  While they are not set in stone and you are free to
+experiment, if you break one of the rules than you do it at your
+own level's peril :>  Here are the Seven deadly sins of
+func_raining :>
+
+1.      Using them everywhere
+
+2.      Placing the marker at any other height than where it should
+                begin to fall. Heh.
+
+3.      Making the rain fall a *grotesque* amount of distance.
+
+4.      Placing the marker directly over ground/objects/BSP
+                areas that are higher than the area around it.
+
+        I. e. you place the marker directly over a crate. All the droplets
+                will stop at the height of the crate.  The Nehahra rain
+                *seems* to be many objects, but in actuality is only ONE
+                small object that falls straight down from the marker.
+
+
+5.      Not remembering that the rain falls in a radius regardless
+                of whether BSP architecture should block it off.
+                The only exception to this is the actual
+                object that falls from the marker described in
+                previous commandment :>
+
+        I.e. you place a func_raining marker next to a thin wall.  It
+                falls in a radius on both sides of the wall.  It doesn't
+                care.  It has a radius and it falls in it.
+
+6.      Beckoning the evil Packet Overflow spirits by trying to make
+                the rain fuller by putting a bunch of markers mere
+                units from each other.
+
+7.      Not respecting the Edict Gods. See Sin #1, #3, and #6.
+
+
+------>  "targetname"
+
+If you set this, it will not begin raining until triggered.  If it is
+triggered a second time, it will remove itself (hence the rain stops).
+
+----->  "cnt"
+
+The color of the rain.
+
+        0       =       default (watery blue)
+        1       =       dark, dirty
+        2       =       red, blood
+        3       =       blue
+        4       =       green
+
+----->  "frame"
+
+This determines the scope of the rain.  How big the radius.
+
+        0       =       default (about the size of a grid in QME :p)
+        1       =       about triple the size of 0, very big
+        2       =       very localized, even more so than 0.
+
+
+
+-----------------------------------------
+-----**----->NEW LIGHTSTYLES<-----**-----
+-----------------------------------------
+
+
+Description wise, it's pretty subjective.  I'll just tell you my
+impression of the new lightstyles.
+
+15------>       Slow, deliberate throb.  Periods of darkness, then
+                a slow deliberate pulse, then darkness, then repeat.
+
+16------>       Subtle, yet somewhat creepy pulse.
+17------>       a tame flicker every now and then, like an old
+                        neon sign might when it's bulbs are
+                        about to go.
+19------>       This is like a strobe, except the intensity (not
+                frequency) of the flashes rises and falls.  Going
+                from black to white...to a halfway point where there's
+                barely any flicker, then back to black and white, etc.
+
+12,13,18---->   This is the simplest..yet easiest.  This lightstyle is
+                pitch black most of the time.  About every 7 seconds or
+                so, there is a very bright yet very very brief flash.
+                Blink, and you'll miss it.  You might wonder, why have
+                3 of them?  Welp, all three of these do the same and
+                are on the same timing but the flash is offset.
+
+      Example:  Let's say you have three doors (or three demon face
+        thingies like in the beginning hallway of e1m3).  You set a
+        12 on one, a 13 on another, and 18 on the last one.  The
+        following result will occur:
+
+        Darkness, Darkness, Darkness
+        12 goes off
+        Darkness, Darkness, Darkness,
+        13 goes off
+        Darkness, Darkness, Darkness,
+        18 goes off
+        <back to beginning>
+
+
+--------------------------------
+---------LIGHT_LANTERN----------
+--------------------------------
+
+Medieval lantern, hangs from something.
+
+---------------------------------------                                
+--------LIGHT_SWINGING_LANTERN---------
+---------------------------------------
+
+Rather cool, swings back and forth like the wind is blowing it.
+
+-------------------------------------
+------LIGHT_CANDLE_T-----------------
+-------------------------------------
+
+A thin lit candle.
+
+-------------------------------------
+-----LIGHT_CANDLE_W------------------
+-------------------------------------
+
+A wide lit candle.
+
+-------------------------------------
+-----LIGHT_CANDLEWS------------------
+-------------------------------------
+a lit candle on a small wooden shelf, to go on a wall.
+
+----------------------------------
+-----LIGHT_CANDLETH---------------
+----------------------------------
+
+a thin lit candle on a(n arguably brass) candle holder.
+
+
+#######################################################################################
+#######################################################################################
+####
+####            VIII.  SOUND
+####
+#######################################################################################
+#######################################################################################
+
+----------------------------------------------------
+----NEW AMBIENT SOUNDS, INSTALLMENT ONE-------------
+----------------------------------------------------
+
+
+AMBIENT_THUNDER
+
+Thunder is periodic now.
+
+AMBIENT_SWAMP3
+
+A new Swamp ambient sound
+
+AMBIENT_RAIN
+
+The correct ambience to place near rain.  It's the sound of rain falling
+afterall.
+
+AMBIENT_HUMMING
+
+This is a rather creepy ambience.  Maybe good for a medieval level where
+something imminently bad waits nearby.  You be the judge.  It sounds
+like monks humming, a far off monotone humming.
+
+AMBIENT_ZZXZZ
+
+This ambience sounds like a buzzing noise.  Hard to explain.
+It pulses in and out, silence inbetween.  Another creepy sound.
+
+AMBIENT_MACHINES
+
+This ambience sounds like gears or some kind of engine going.  A little
+squeaky, like rusted appendages.
+
+AMBIENT_WHNOISE
+
+The Sound of White Noise, pulses inbetween.
+
+AMBIENT_NEHUM
+
+Kinda sounds like the electric hum of lights or subtle feedback from a guitar
+amplifier if you know what that sounds like.  Pretty much sounds like the
+buzz of street lights.
+
+AMBIENT_FLIES
+
+The sound of buzzing insects.  It's a subtle sound and works absolute wonders
+with the mood.  Use it where appropriate.  (Perhaps you might use it in an
+exterior spot where there are Fiends.  The Fiends have a new idle animation
+where they occasionally itch themselves much like a dog would :>)
+
+AMBIENT_SIZZLE
+
+Something's cooking...
+
+AMBIENT_MOOR
+
+Wasteland sounds.  Flies.  Some strange electrical sounds in the background.
+
+AMBIENT_EERIE
+
+This is a looped WAV of some eerie music.  
+
+AMBIENT_FAN_BLOWING
+
+From Hipnotic....
+
+AMBIENT_DRAIN
+
+Draining water, sounds like a plug, kinda...
+
+AMBIENT_SECJ
+
+Somewhat unsettling music, it plays through the whole level so beware!
+
+AMBIENT_SPHUM
+
+This is a weird hum, Gothic-like.  I like it quite a bit :)
+
+------------------------------------
+-------AMBIENT_TOGGLE---------------
+------------------------------------
+NOTE:  This is possibly not functioning.
+
+This is an ambient sound entity which uses 5 sounds and alternates
+them at a frequency you tell it to.  While 5 sounds might seem a
+lot to you, you don't have to make all of them the same.  It's
+also a good way to control the frequency of them.  Say you make
+it use WAV1, WAV1, WAV2, WAV2, WAV3...WAV1 40% of the time,
+WAV2 40% of the time, WAV3 20% of the time.  It does not go
+through them consecutively, it draws them at random.
+
+Here's the fields.
+
+
+        "delay"         minimum time it should wait in between
+                        sounds in seconds.
+
+        "wait"          maximum amount of time it will wait AFTER
+                        it reaches the minimum that it will play
+                        the next sound.
+
+        "impulse"       set this to 1 if you want it to be heard
+                        throughout the entire level.
+
+        "noise"         name of first WAV file
+        "noise1"        name of second WAV file
+        "noise2"        name of third WAV file
+        "noise3"        name of fourth WAV file
+        "noise4"        name of fifth WAV file
+
+
+GENERAL RULES:
+
+You can have it use any WAV in Quake or Nehahra that you like EXCEPT
+looped WAV files (most are listed in next entity description).
+
+Some additional sounds have been added for use with this entity,
+should you want to use them.  Their names are as follows and their
+descriptions (though the descriptions are my impressions of them,
+it's up to you to decide what the hell they sound like :>)
+
+"sets/set1_1.wav"       Techy
+"sets/set1_2.wav"       Techy #2
+
+"sets/set2_1.wav"       I just caught a chill
+"sets/set2_2.wav"       Just got chillier :> 
+"sets/set2_3.wav"       dark, foreboding
+"sets/set2_4.wav"       something heavy just slammed
+"sets/set2_5.wav"       a whirlwind just went by
+"sets/set2_6.wav"       low hum, medieval, something lurks nearby
+
+"sets/set3_1.wav"       an owl
+"sets/set3_2.wav"       distant peals of thunder
+"sets/set3_3.wav"       distant peals of thunder (different sound)
+
+"sets/set4_1.wav"       a grandfather clock??
+"sets/set4_2.wav"       one *GONG* from a big bell
+
+...New sound set added by Damaul
+
+
+"sets/dml1_1.wav"       
+"sets/dml1_2.wav"
+"sets/dml1_3.wav"
+"sets/dml1_4.wav"
+"sets/dml1_5.wav"
+
+------------------------------------
+------AMBIENT_SOUND-----------------
+------------------------------------
+
+This is a generic ambient sound marker.  You can play an ambient sound
+at the volume you want.
+
+        "noise"         name of the WAV file.  See list in Ambient_Global.
+
+        "volume"        0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0
+                        (set the volume of the ambient sound)
+
+------------------------------------
+-------AMBIENT_GLOBAL---------------
+------------------------------------
+
+This will make an ambient sound that can be heard anywhere in the level.
+You set the name of the WAV file in the "noise" field.  The WAV file
+must be a looping WAV file.  Examples follow.
+
+"ambience/class1.wav"
+"ambience/class2.wav"
+"ambience/class3.wav"
+"ambience/rain.wav"
+"ambience/drain.wav"
+"ambience/filt.wav"
+"ambience/maydn.wav"
+"ambience/maydn2.wav"
+"ambience/bugs.wav"
+"ambience/bush.wav"
+"ambience/begths.wav"
+"ambience/flash.wav"
+"ambience/whn.wav"
+"ambience/rych1.wav"
+"ambience/amsizl.wav"
+"ambience/sphum.wav"
+"ambience/drone6.wav"
+"ambience/drip1.wav"
+"ambience/fl_hum1.wav"
+"ambience/comp1.wav"
+"ambience/fire1.wav"
+"ambience/suck.wav"
+"ambience/wind2.wav"
+"ambience/buzz1.wav"
+"ambience/water1.wav"
+"ambience/swamp1.wav"
+"ambience/swamp2.wav"
+"ambience/swamp3.wav"
+"ambience/hum1.wav"
+
+
+--------------------------------
+-------PLAY_SOUND----------
+---------------------------------
+
+Plays a sound on a periodic basis.  The following fields apply:
+
+*volume*  how loud (1 default full volume)
+*noise*   sound to play.  I.e.    "boss1/out1.wav"
+*wait*    random time between sounds (default 20)
+*delay*   minimum delay between sounds (default 2)
+"impulse" channel on which to play sound (0-7) (0 automatic is default)
+*speed* attenuation factor
+   -1 - no attenuation
+    1 - normal
+    2 - idle
+    3 - static
+
+--------------------------------------------
+---------PLAY_SOUND_TRIGGERED---------------
+--------------------------------------------
+
+When this is activated (self.use), it plays a sound.  Observe the fields.
+
+"toggle" determines whether sound should be stopped when triggered again
+"volume" how loud (1 default full volume)
+"noise" sound to play
+"impulse" channel on which to play sound (0-7) (0 automatic is default)
+"speed" attenuation factor
+   -1 - no attenuation
+    1 - normal
+    2 - idle
+    3 - static
+
+
+--------------------------------------------
+---------PLAY_SOUND_LOOPED------------------
+--------------------------------------------
+This handy function plays a sound that is not ordinarily looped, looped.
+You have to provide it with the length of the WAV so it knows when to
+repeat-- a good way to do it is to take the length of the Wav file and
+knock off about .2 seconds, but that's only a suggestion :)
+
+You could also set the interval very high and get a periodic sound.  In a
+way, play_sound can do what this function does and more.  So it's here
+for convenience only--not really necessity.
+
+
+        "noise"         name of WAV file and path, which it will play
+        "wait"         the amount of seconds to wait before playing it
+                                again.
+
+                        i.e. "wait" == "1.24" (1.24 seconds)
+
+        "volume"        how loud the sound is, defaults to 1 (full volume)
+
+        "targetname"    if it has one it becomes triggerable
+                        play_sound_looped will start ON.  Triggering it
+                        turns it on and off.
+
+        "cnt"           Set to 1 and it will start OFF, used in
+                        conjunction with "targetname"
+
+-----------------------------------------
+---------SND_BEAT_TOGGLE-----------------
+-----------------------------------------
+
+NOTE: May be broken
+
+This uses two WAV files which you can use to create a rhythm.
+
+        "noise"         the name of the first WAV file
+        "noise1"        the name of the second WAV file
+        "volume"        the number of times to play a WAV file
+                        before possibly switching to another.
+        "delay"         the amount of time inbetween 'beats'
+        "wait"          the amount of time to wait before starting
+
+
+        "targetname"    if you set this field, it will start only
+                        when triggered.  If you trigger it a second
+                        time, it will stop playing and remove itself.
+
+
+
+#######################################################################################
+#######################################################################################
+####
+####            VIV.  Triggered Events and Cinematic Scripts
+####
+#######################################################################################
+#######################################################################################
+
+Not the best cutscene code in the world but sufficient.
+
+------------------------------
+-----TRIGGER_CONSOLE----------
+------------------------------
+
+Used like any other trigger.  It moonlights as a trigger_multiple, but its
+main function is sending a command directly to the client's console.
+
+        "event"         command
+
+        "target"        target to trigger
+
+
+NOTE:  DO *NOT* use a Trigger_Console to manipulate fog settings unless you
+want FOG-FUCKAGE in Saved Games
+
+------------------------------
+-----INFO_THROW_RUBBLE--------
+------------------------------
+
+Wherever this is placed, when you TRIGGER it, it will throw a rubbleset.
+That is, it will throw 3 pieces of rubble and then remove itself.
+
+The fields...
+
+*cnt*    The intensity of the throw.  The higher the number, the
+           farther and faster the pieces will fly.
+*dmg*    Use this to set an appropriate skin for the rubble.
+
+*targetname*     duh, heh, give it a name so it can be triggered.
+
+This is a feature that might come in handy should you want to throw
+rubble but don't want to bother with making a solid, visible brush
+(i.e. FUNC_EXPLODABLES, etc,.)
+
+
+-------------------------------------
+-------------MISC_BOOM---------------
+-------------------------------------
+
+When this is triggered, it will make an explosion.  It's self.use means
+boom.
+
+   *targetname*  so the trigger mechanism knows how to find it :P
+ 
+-----------------------------------
+----------INFO_IDSCALE-------------
+-----------------------------------
+
+When this is triggered, it will take what's in the *message* field and
+set the V_IDLESCALE with it.  Where you put this in a map is irrelevant.
+
+Example:    "message"   1   (like an intermission)
+
+V_IDLESCALE is the server variable that governs how still your view is as a client.  Normally it's set at 0, no movement.  Set it at 1 and you will get the very subtle wavering effect that you do in regular Quake Intermissions.  Set it higher and the screen will waver more.
+This would be something you could play around with if, let's say you had a room where there were nauseous fumes.  Lemme tell you, once that V_IDLESCALE starts going, you can get motion sickness playing it.  Heheh.  Just make sure if you set the IDLESCALE to 1 or higher when entering an area, you also make a trigger that sets it back to normal.
+
+
+----------------------------------------------
+----------TRIGGER_CAMERA-------------
+----------------------------------------------
+
+Use like any other trigger.  This will trigger a camera for a cutscene.
+The following fields apply.
+
+  *targetname*     If you give it a targetname and trigger this from
+                        something else, it will act as if the client
+                        touched it.  (not working????)
+
+  *delay*          amount of time to wait before triggering cutscene
+  *target*         This will target an INFO_CAMERA)
+  *script*         Give the starting SCRIPT NUMBER
+  *script_delay*   The number of seconds we should stay on the first
+                        script page.
+
+
+-----------------------------------------
+----------INFO_CAMERA-------------
+-----------------------------------------
+
+This functions as  a MOVIE CAMERA.
+
+  *targetname*     The name of the camera as triggered by TRIGGER_CAMERA
+
+		(OR an Info_Script, read up on INFO_SCRIPT)
+
+-----------------------------------------
+---------INFO_SCRIPT----------------
+-----------------------------------------
+
+This functions as a script machine.
+
+  *script_num*    Its script number.
+  *next_script*   The next script number to go to
+                        Set this to 0 (zero) if it is the final script
+                          in the set
+  *script_delay*  Signify how many seconds we should display the NEXT
+                        page.
+  *message*       Put in the text you want to display here.
+  *target*        This will trigger a target (like an explosion)
+               This will also change camera angle if you make the
+                target another INFO_CAMERA.
+                  Also see INFO_IDSCALE.
+
+
+------------------------------------------------------
+---------------INFO_MOVECAM-------------------
+-------------------------------------------------------
+
+When this is triggered, it will find an active camera (thus the one running
+a current cutscene) and will move the camera toward itself.  It will continue
+to do until the camera has reached it, the cutscene ends, or another
+info_movecam is activated.
+
+   *speed*              the default setting is 1.  This is how
+                        fast it will move the camera.  Play
+                        around with it to get a feel for it. :>
+
+------------------------------------------------------
+--------------INFO_FADEOUT & INFO_FADEIN--------------
+------------------------------------------------------
+
+It doesn't matter where you put these entities.  One fades the picture in
+from a solid color (black or red), the other fades the picture out to a
+solid color :>  Only valid when a cutscene is in progress.
+
+Have an info_script trigger them.
+
+        "speed"         how fast it fades.
+                        0.01 very quick fade
+                        0.1  gradual but slow fade.
+
+        "spawnflags"    set to 1 if you want the color to be red
+
+
+----------------------------------
+-----INFO_LEVELEND----------------
+----------------------------------
+Point Entity.  When triggered, it ends the level just as if the client
+stepped through a trigger_changelevel.
+
+        "targetname"    So you can trigger it.
+        "map"           The map to load next
+                        same format as trigger_changelevel
+
+
+#######################################################################################
+#######################################################################################
+####
+####            X.  Miscellaneous Stuff
+####
+#######################################################################################
+#######################################################################################
+ -------------------------
+ ----MISC_HUMMER----------
+ -------------------------
+
+ This is a car.... a hummer.
+
+    "skin"    0 or 1, two different skins.  This is indestructible.
+                just sits there (:
+
+ -------------------------
+ ----MONSTER_LABGUY-------
+ -------------------------
+
+ This creates a laboratory dude, human guy (i.e. the opening Nehahra
+ cutscenes) whereever you set him, he'll work controls and oversee
+ stuff.  If he is threatened, he will run.  He does not have an
+ attack, he is only cannon fodder.
+
+ NOTE:  You will need to make sure there are some path_danger entities
+ around for him to follow (or Path_Corners as he will try to find these
+ next)
+
+ -------------------------
+ ----MISC_VEND------------
+ -------------------------
+
+ This is a vending machine :)
+
+        "skin"
+
+        0       =       Peej Soda Machine =) Mmmm.
+        1       =       Snack Vending Machine #1
+        2       =       COLD DRINKS!
+        3       =       Snack Vending Machine #2
+                        (you can almost make out the brands on the
+                                bags of junk food :) )
+
+ -------------------------
+ ----MISC_SLIME_BALL-------
+ -------------------------
+
+ This works exactly like the MISC_FIREBALL except it throws a green chunk
+ with a green trail.  I'd only use it for light colored slime.
+
+
+ -------------------------
+ ----MISC_BARREL----------
+ -------------------------
+
+ It's the same concept as an explobox.  What this is going to do is
+ explode when it's accumulated enough damage but it will throw slime(acid)
+ within a radius.  It *kinda* does that now but I'm very far from satisifed
+ with it.
+
+ Like the exploboxes, barrels are pushable.  Right now, they float on water
+ and explode in lava like the exploboxes do.  I intend to do something
+ special with these too.  A chemical reaction when you toss them in water
+ (and/or when you toss them in water and then blow them up).
+
+ Fields you should concern yourself with.
+
+
+ *frame*        Set this number to the size of the barrel you want.
+                     Numbers 0, 1, or 2.
+
+ They currently come in three sizes as you can see.  0 is a lil thing.
+ 1 is medium sized, bigger, but taller.  2 is big and fat.  Variety is
+ always good :)
+
+ -----------------------------
+ ----MISC_CORPSE--------------
+ -----------------------------
+
+ This will place a corpse where ever you put this entity.  Currently, our
+ corpses of once alive monsters disappear after a while to preserve speed.
+ These do not disappear.  However, I have added a means of getting rid
+ of them if you so choose.  If you trigger them, they will gib.  You could
+ probably use this to create some effect if you wanted :>
+
+ ..fields
+
+ *targetname*  its trigger name
+ *cnt*         the type of corpse and which death frame to use
+
+        0, 1, 2, 3, 4 ===  Dead Player
+                 5, 6 ===  Dead Grunt
+                 7, 8 ===  Dead Monster Enf2
+
+NOTE:  The corpses have souls, if you have wraiths in your level.  They
+will surely liberate them of it :)
+
+----------------------------------------
+-----------MISC_SIGN--------------------
+----------------------------------------
+
+These are various signs for Forge City.  First, let's go through the
+different sign graphics available.
+
+        "skin"          what the sign displays
+
+                0 = Route 160, East
+                1 = Route 160, West
+                2 = Route 90, East
+                3 = Route 90, West
+                4 = Route 60, East
+                5 = Route 60, West
+                6 = "Danger of Death.  Keep Out!"
+                    ((electrical zap symbol))
+
+        "frame"         shape of the sign itself.
+
+                0 = Roadway Route sign, free standing.
+                  ((Note: this is currently a solid object BUT
+                  if you wish for it to be illusionary.  Set
+                  its "cnt" to 1))
+
+                1 = Wall mounted sign, only the main sign displays
+                   ((Note: main sign being Route 160, 90, 60 or
+                   The Danger of Death sign.))
+
+                2 = Generic sign.  Not solid.  You stick it on a wall.
+
+
+        Thoughts...If you wanted a sign that displayed West or East only,
+        you could use Frame 1 flipped backwards as the backside of the
+        wall support is indeed the smaller sign.
+                
+---------------------------------------------------
+------------MISC_MOTEL-----------------------------
+---------------------------------------------------
+This is an large hotel sign that is bolted onto the side of a building.
+It's a bit larger than a shambler.  Good rule of thumb is to make sure
+it will be flush against the building and is turned exactly AWAY from the
+building.
+
+---------------------------------------------------
+------------MISC_FSCREEN---------------------------
+---------------------------------------------------
+You would position this on the wall like you would a walltorch, be
+sure it is facing AWAY from the wall :)
+
+Used in Forge City.  Works in conjunction with the MISC_VALVE in Forge.
+It will read "SYSTEM NOMINAL" until triggered, then it will read a
+blinking "SYSTEM OVERLOAD" and trigger its targets!, if triggered yet
+again, it will just blink "ERROR" over and over again.
+
+        "frame"         (0 - 5)  Different sizes for the screen, so
+                        you can adjust which size is best for you.
+                        0 is small while 5 is large.
+
+---------------------------------------------------
+-------------MISC_VALVE----------------------------
+---------------------------------------------------
+This operates like a button.  A knob that rotates and moves up
+when the client touches it, when it reaches the top it will
+trigger its target.  Be sure to give it a target :P
+
+Place it on the wall like you would a walltorch and make sure it's
+facing away from the wall.
+
+---------------------------------------------------
+-----------MONSTER_QFORGE--------------------------
+---------------------------------------------------
+
+Dying Qguy with instructions to tell the client.  Trigger him to make
+him say stuff.
+
+UNIQUE TO FORGE CITY
+
+---------------------------------------------------
+------------ITEM2_HEALTH------------
+---------------------------------------------------
+
+MEDIEVAL POTION (health substitute)
+
+Use Spawnflag 2 to make a Megahealth potion.
+
+
+
+
+-----------------------------------
+-------SPAWN_MONSTER---------------
+-----------------------------------
+
+This entity (used like an info_destination of sorts) will spawn monsters on
+the level by your specifications.  The fields....
+
+"targetname"
+
+Type in the function name of the monster you want to spawn from this point.
+The following are implemented:
+
+monster_fish, monster_army, monster_qguy, monster_dog, monster_knight,
+monster_enforcer, monster_enf2, monster_zombie
+
+[[[[If you want a spawner for a type of monster not described here, let
+me know and I'll add it on]]]]
+
+"cnt"
+
+Set the self.cnt to the MAXIMUM NUMBER of it's own monster type that can be
+on the level.  If the number of monsters (of only the type set in its
+*targetname*) exceeds the CNT, it will NOT spawn another.  It will wait.
+
+
+"delay"
+
+It's self.delay describes the frequency of the spawns.  How often it will
+attempt to spawn a new monster in MINUTES.  1 = 1 minute
+  .5 = 30 seconds, etc.
+
+"impulse"
+
+Enable a certain weapon (esp. in use with monster_army, see text
+on monster_army)
+
+"target"
+
+This gives the spawn monster a target (i.e. a path_corner)
+
+"relations"
+
+set the relations of the spawned monsters (remember -1 makes evil
+qguys)
+
+"method"
+
+If set to 1, the monster will be already angry at the client.
+
+NOTE:
+
+This spawns a tfog when it spawns them, EXCEPT the fish.
+
+
+#######################################################################################
+#######################################################################################
+####
+####            XI.  Monsters-- New ones and derivatives. 
+####
+#######################################################################################
+#######################################################################################
+
+NOTE:  You can now set the health manually on any monster.  Just by giving
+them a field called "health" and plugging in a new number.  The following are
+the normal defaults for the monsters:
+
+This is in order of strength, sometimes with notes on why they are so high.
+
+ARCHGAUNT LIBRARIAN     666  [magical resistance, Hierarchs-in-the-making]
+BEARD                   650  [armor, magic resistance, high ranking]
+SHAMBLER                600
+WRAITH                  600  [ethereal, splash damage only. NOTE: they
+                                increase their health with the more souls
+                                          they take]
+ARCHGAUNT               500  [magical resistance]
+BARON                   500  [armor and stubborness]
+JAGGER                  480  [thick skinned]
+SHALRATH (VORE)         400
+OGRE LIBRARIAN          375  [all attitude, the perks of being a bitch to
+                                the archgaunt librarians]
+DEMON (Alpha Fiend)     375
+DEMON (Normal Fiend)    300
+VOMITUS                 300
+COOK                    280  [do not taunt the happy ogre cook!]
+HKNIGHT                 250
+GAUNT                   200  [magical resistance]
+ENFORCER 3              190  [focused, big, and too dumb to know when he
+                                should die]
+ENFORCER 2              160  [large, concealed armor, armor shard trench coat]
+QUAKE DUDE              120  [armor]
+HUNTER (tsemoch)        120  [trained, focused, and regenerates damage]
+ENFORCER                90
+WIZARD (scrags)         80
+ZOMBIE                  80
+KNIGHT                  75
+SOLDIER (grunts)        42
+DOG                     25
+FISH                    25
+
+
+-----------------------------------------------
+------MONSTER_OGRE & MONSTER_OGRE_MARKSMAN-----
+-----------------------------------------------
+
+Ogre's now shoot nails as Id originally intended.  However, they included
+the Monster_Ogre_Marksman classname too, though there really is no
+difference between them.  Now there is.  Therefore:
+
+monster_ogre              = shoots nails
+monster_ogre_marksman     = shoots grenades if you were counting on those
+                                grenades for a place in your level.
+
+
+------------------------------------------
+-----------MONSTER_ARMY(s)-------
+------------------------------------------
+
+These have now been split up into three classes.  While I could have just as easily used SPAWNFLAGS, I decided to make them seperate classnames to make the code a little smoother.
+
+
+New descriptions.
+
+MONSTER_ARMY   Fires shotgun
+MONSTER_ARMY2  Shotgun....and Rockets!
+MONSTER_ARMY3  Nails only
+MONSTER_ARMY4  Shotgun, Grenades and Rockets (oh my)
+
+
+----------------------------------------
+---->>>>Monster Spawnflags<---------------
+----------------------------------------
+
+SPAWNFLAG_DUMB = 32  (Later described in the Monster Behavior Chapter)
+
+Monster_Army's and enforcers only (not monster_enf2 & monster_enf3).
+
+64 = they'll be working controls while they are idle.
+
+
+ALSO NOTE, that Monster_Army(s) and Monster_enforcer(s) now strafe and
+dodge.  Often jumping to get out of the way.
+
+Use the "nojump" field to control this.  Set it to 1 if you don't want
+them to jump.
+
+
+----------------------------------------
+---------MONSTER_ENF2-----------
+---------------------------------------
+
+Half ogre????
+Mark2 Enforcer, uses an autoshotgun.  Tall guy, trench coat.  He's the size
+of an ENFORCER.
+
+------------------------------------
+--------------MONSTER_ENF3----------
+------------------------------------
+
+The offspring of a genetic experiment.  Half ogre.
+
+Mark3 enforcer, fires a nailgun...and can use the same weapon in
+direct melee, a set of nasty rotating blades.  The weapon he uses
+ actually morphs back and forth.  Err, you'd have to test him out
+ to know what I mean.  He's a little taller than the enforcer, not much.
+   You could get away with using him as if he were the exact same size
+    as the enforcer.
+
+--------------------------------------
+------------MONSTER_SHAMBLER----------
+--------------------------------------
+
+Set his "spawnflags" to 64 if you want a sleeping shambler.
+Shamblers sleep upright and slumped over.  They will not wake unless
+you shoot them, touch them, make another shambler upset in their
+proximity, or something triggers them.  Enjoy.
+
+---------------------------------------
+-----------MONSTER_SHALRATH------------
+---------------------------------------
+
+The Vore is now more versatile.  If the
+Shalrath has enough clearance, he will act like a jumping spider
+at times, making him harder to hit.  If the ceiling is especially
+high, he may latch onto the ceiling and hang upside down, whipping
+more Vore balls at ya.
+
+You can start them off hanging from the ceiling if you like by setting
+their "spawnflags" to 64.  Wherever you put them, it is assured you
+will find them at the highest possible point on the X, Y axis that
+you placed them.  My recommendation is to put the shalrath a bit off
+the ground but DO NOT stick him on the ceiling in the Map itself.
+The preliminary droptofloor() function drops all objects to the floor
+at each start up.  If you set a monster too high, it's possible that
+Quake will just remove it, considering it a "walkmonster in wall".  Enjoy.
+
+---------------------------------------
+------------MONSTER_QGUY---------------
+---------------------------------------
+
+Replaced with a Quake Guy, fully capable of taking care of himself.
+He will get angry and attack other monsters (not the
+client unless motivated) and other monsters will attack him as if he were another
+client.
+
+Set the *cnt* field to 1 if you don't want them to ever use Rockets or
+Grenades.
+
+See Section XIII regarding "relations" settings.  It is also possible
+to create qguys who are not friendly :)
+
+---------------------------------------------------
+------------MONSTER_WRAITH--------------------------
+----------------------------------------------------
+
+
+A Wraithlike creature.  He roams freely, can go through walls.
+Collects souls.
+
+Only bursts of enormous energy harm him. I.e. Explosions.
+
+
+----------------------------------------------------
+---------------MONSTER_GAUNT------------------------
+----------------------------------------------------
+
+A Wizard-like creature (no, not like the monster_wizard scrag).  They wander.  They roam.  They talk their own language, hehehe.
+
+They use a variety of different magics for an attack,
+
+NOTE:  If you don't want them to react and talk with another.
+Place their starting positions whereby they cannot see another gaunt.
+
+  "spawnflags"
+
+You can have crucified gaunts.  The only thing I'll mention is, only their
+hands are "nailed".  Their feet are free.
+
+  CRUCIFIED_ALIVE       =       128
+
+This creates a crucified gaunt (i.e. the crucified zombies) but he's
+very much alive; he's killable and gibbable.
+
+  DEAD_GAUNT            =       64
+
+In conjunction with this spawnflag, you can use the flag:
+
+  "cnt"
+
+        0 = Randomized (Selection 1 or 2) ((default))
+        1 = Crucified Stiff
+
+        Like his bones have locked in place in a tensed position.
+
+        2 = Crucified Loose
+
+        Dead weight crucified
+
+        3 = 'Boxed'
+
+        You might stick this flush against a post and facing away
+        from it.  A partially disrobed gaunt on his knees with his
+        hands "tied" back and his head slumped forward.  This is
+        not something you would put on a wall, but on the floor.
+
+-----------------------------------------------
+----------------MONSTER_ARCHGAUNT--------------
+-----------------------------------------------
+
+The stronger version of the Gaunt, a new model to go with it.  Their
+concept...Elder Gaunts, some are evil, but others are unhappy with
+the younger generations of Gaunt and current management of the lands
+of Quake.  So I encourage the use of the *relations* feature with them, but
+it's only a suggestion.  There should be plenty of archgaunts that
+aren't friendly too.
+
+        "spawnflags"            ARCHGAUNT_FUNERAL = 64
+
+This is an Archgaunt, lying on his back with his arms crossed over his
+chest (as people are positioned in a coffin).  I'm sure you could think
+of an interesting place or two to use it.
+
+-------------------------------------
+------MONSTER_LIBRARY----------------
+-------------------------------------
+
+The Librarian version of the ArchGaunt.  He just reads his book
+whereever you put him.  The first time he sees the client, he'll
+say "shshshshsh", then he'll look up to the client from time to
+time if they are in view.  He will not attack the client unless
+he is disturbed from his reading (i.e. you shoot him, somebody
+else shoots him whether intentional or accidental). He gets cranky
+when he's disturbed :)
+
+---------------------------------------
+-------MONSTER_OGLIB-------------------
+---------------------------------------
+
+This is an Ogre who pushes a book cart, give him some path_corners.
+
+
+---------------------------------------
+---------MONSTER_COOK------------------
+---------------------------------------
+
+An Ogre....with a frying pan.
+
+Set his "impulse" field to 1 to shut off comments.
+
+
+---------> "sounds"
+
+0, 1, 2, 3
+
+These are different sets of comments so we don't have every ogre cook
+giving the same spiel.  Scripted comments...
+
+Have I mentioned that scripts are the instruments of Satan??
+
+
+------------------------------------
+----------"The Alpha Fiend"---------
+------------------------------------
+
+There's a new monster, kinda.
+
+ALPHA_DEMON: monster spawnflag = 2
+
+This will create an Alpha fiend if you use this flag on a fiend,
+he uses slightly different animation, walks
+closer to erect and is pretty vicious.  He is also a little stronger
+in the health department.
+
+-------------------------
+----MONSTER_HUNTER-------
+-------------------------
+
+The bizarre race of Tsemoch!  These
+"assassins" begin hunting you the moment a level begins, they use some rather
+unorthodox ways of navigation, but they can be very formidable opponents
+when they work together as a team.
+
+They specialize in ambushes and surprise.  Unlike other Quake monsters
+where you can run into them, they get angry, and you can run off, up a
+platform, wherever and the monster will be stuck in whatever part of the
+level you left them, the assassin is not limited.  They can find the
+client anywhere.  If the client leaves them alive, it is a certainty that
+they will see the assassin again (unless they leave the level before
+the assassin finds them).
+
+Fields to manipulate their behavior:
+
+*impulse*       use this field to dictate which weapons they can use.
+                If you don't set this field, it's okay, it'll default to 1.
+
+                1       =       Super Shotgun only
+                2       =       Automatic Shotgun only (ouch)
+                3       =       Nails only
+                4       =       Super Shotgun/Sprocket
+                5       =       AutoShotgun/Sprocket
+                6       =       Nails/Sprocket
+
+*state*         set this to 1 *if* you do not want them to automatically
+                start hunting the client when the level begins.  This
+                does not shut off their navigation routines, it only makes
+                it so you have to initially come to them.  It does, however
+                (most of the time) make them less aggressive in their
+                hunting as well.
+
+                Remember, you could still trigger him to make him angry
+                by setting a targetname and having a trigger, er, trigger
+                him. (That made a lot of sense, didn't it)
+
+*method*        You will notice that Tsemoch sometimes appear long after
+                you have killed everything.  In theory, where there are
+                some Tsemoch, they have called others to respond.  The
+                trick of this is, the Tsemoch actually respawn (except
+                Tsemoch that are gibbed, a fun bit of trivia).  HOWEVER,
+                should you want to turn this feature off.  Set their
+                "method" to "-1"
+
+------------------------------------
+--------MONSTER_VOMITUS-------------
+------------------------------------
+
+I have revived the Vomitus from the old Q1test.  He's slow, he's ugly, and
+he'll blow acid covered bloody chunks at ya if you're not careful.
+
+When he dies, he sort of "deflates" into a puddle on the floor.  If you set
+his spawnflags to 64, he will begin the level as a "puddle" and will rise
+when he spots a client or some other monster pisses it off.
+
+An annoyance monster.  Not very dangerous.
+
+-----------------------------------------
+----------MONSTER_BARON------------------
+-----------------------------------------
+
+A few steps up from a Death Knight.  He's more powerful than the death
+knight, though he's much like them.  He has a number of attacks including
+the death knight firestorm, the hefty claymore he wields, and a powerful
+hand smash.  He can also jump at times.  If you don't want him to jump, use
+ the "nojump" field, set it to 1.
+
+
+#######################################################################################
+#######################################################################################
+####
+####            XII.  The Jagger.....an unusual monster
+####
+#######################################################################################
+#######################################################################################
+
+
+----------------------------------------
+---------------MONSTER_JAGGER-----------
+----------------------------------------
+
+Size:  Somewhere between a dog and a fiend.
+
+     Jaggers are not naturally predisposed to attacking the client or
+     anything else for that matter.  If they feel threatened or their space
+     is being invaded, they will get upset--all monsters included.
+     Otherwise, they can be easily maneuvered around and peacefully handled.
+     They will seek out water and hunt fish.  Either looking for specially
+     designed markers just for them, or even Swamp Ambient sounds (1-3).
+     Don't bother giving them Targets (as if you'd want them to follow a
+     Path_Corner).  They'll just ignore it.
+
+     NOTE:  You can trigger them to make them pissed off.  It sets
+                their relations to -1. (See Psychology of Monsters)
+
+     Okay.  Jaggers come with a lot of accessories.  You can use some of them.
+     Hell, you could use none of them.
+
+
+The...
+
+>>>>>----------------------------------------------
+>>>>>-------------INFO_JAGNEST---------------
+>>>>>----------------------------------------------
+
+acts as a marker for the Jagger's nest :>  The Jaggers will return to this
+ place often to make sure nothing is amiss, stockpile a few dead fish.
+ Any entities (like the client) who are too close to their home, the
+ Jaggers are liable to completely go medieval on them!  A cave of some
+ kind is probably ideal.  Not an underwater cave as they are air breathing
+ creatures (theoretically).
+
+
+>>>-------------------------------------------
+>>>------------INFO_JAGWATER----------
+>>>-------------------------------------------
+
+act like doors to and from the water, they will use it to jump at.   This
+is just a marker.  Place this at the surface of the water RIGHT AT the
+point where you'd like them to jump IN the water or OUT of the water.
+ If you do not place this in a level, be aware that the Jagger will NEVER
+ intentionally enter the water (or exit the water if he is already in it).
+ The one exception would be if you made a slope down into the water where
+  they can easily walk in and out.
+
+Put the entrance "info_jagwater" where ever you like...
+
+Then put another "info_jagwater" where you want them to jump out (preferably
+above the waterline) and set the SPAWNFLAG to 1, 2, anything but Zero.
+They'll use this as an exit.
+
+If you don't wanna mess with Spawnflags.  Create a new entity called
+
+----------------------------
+-----INFO_JAGOUT------------
+----------------------------
+
+it will function exactly the same.
+
+
+#######################################################################################
+#######################################################################################
+####
+####            XIII.  The Psychology of Monsters 
+####
+#######################################################################################
+#######################################################################################
+
+SPAWNFLAGS
+
+Quake monsters in the past never got upset or even noticed when you happened
+to chuck a grenade from around the corner.  They seem deaf and blind.  Well,
+not any more.  Now, monsters can often "hear" what's going on and pay
+attention to deadly objects like grenades and rockets.  An Ogre may be in
+another part of the level, but if you fire a rocket on your side of the wall,
+he is liable to "hear" it and become upset long before you get to him.
+The monsters are becoming more aware.  HOWEVER, because this feature
+could seriously spoil setup situations where you need a monster to never get
+angry in advance (like monsters you have in an isolated box not far away
+that are supposed to teleport at a certain time).  You can set a spawnflag
+to turn off this awareness.
+
+SPAWNFLAG_DUMB = 32
+
+This makes 'em deaf and dumb, like the ol' Quake monsters we know and love.
+
+
+Using Quake monsters is no longer so cut and dry, at least, not if you don't want
+it to be.  You will find you can control them more than ever before.  
+
+((Fields ["nojump", "event", "brain", "relations"))
+
+###############
+#1	"nojump"
+###############
+
+If you set their
+
+*nojump*
+
+to 1, then the monster will not try to jump
+down off ledges. This is to ensure that that monster you stick up on a coign
+of vantage point (like a strategically placed Ogre, doesn't jump down).
+Some monsters already don't jump like the knights.  A lot of times, they
+are able to assess the situation and decide whether or not jumping is a
+good idea.  Of course, some monsters are dumber than others.
+
+This also keeps monsters from jumping to dodge (those that do)
+((This still works, but this exact feature has been added to #3))
+
+##############
+#2	"event"
+##############
+
+If you set a field
+
+*event* 
+
+and stick the targetname of a monster in here.  That monster becomes his
+self.objekt.
+
+What the {self.objekt} does is quite simple.  The monster will seek
+out this objekt as he would any goal (i.e. path corner).  However, when he
+is close enough, he will stop walking.  If the objekt moves, he will follow
+the objekt.  Boiling it down, all monsters think:
+
+"If I have a self.objekt, I'm going to follow it until it dies or I die :>"
+
+NOTE:  Try to not pair up monsters who can't keep up with each other.
+     If this sort of thing is trivial to you, it won't hurt anything
+     one way or the other.  Just don't expect...well, an example..
+
+        EXAMPLE:  You take a grunt and give him a MONSTER_ENF3 as a
+                self.objekt.  The Monster_Enf3 runs...even when walking.
+                The grunts lil ole prowl will never keep up.
+                  Do it the other way around and the Monster_Enf3 has
+                        no problems catching up and can take breathers
+                        in between 
+
+
+#################
+#3      "brain"
+#################
+
+This describes their traits, tactics, and mentality to a degree.  This
+field is used with flags.
+
+The list below:
+
+NAVLOGIC        =       1  (Move to last location I saw enemy)
+INTREPID        =       2  (No fear, No retreat)
+BLINK           =       4  (A good way to fudge)
+NO_JUMP         =       8  (Don't jump)
+NO_SWIM         =       16 (Don't swim)
+
+All monsters do not support these features, observe the list below:
+
+monster_zombie
+monster_fish
+monster_tarbaby <spawn>
+monster_vomitus
+monster_wraith
+monster_fish
+monster_jagger
+monster_nehahra (later described in 'Bosses of Nehahra')
+
+
+TRIGGER_SPAWN   =       32 (Appear only when triggered)
+
+Some individual features of self.brain are not supported by certain
+monsters so don't waste your time setting them.  Others already
+have them builtin, so setting it is unnecessary.
+
+Now, the wonders of:
+
+                           ------------
+                           NAVLOGIC = 1
+
+        NO SUPPORT:     monster_hunter  (They don't need it)
+
+        BUILTIN:        monster_enforcer
+                        monster_enf2
+                        monster_enf3
+                        monster_hell_knight
+                        monster_baron
+                        monster_shalrath
+                        monster_cook (heh)
+                        monster_gaunt
+                        monster_archgaunt
+                        monster_qguy
+
+
+This is a simple addition that can make for all the difference in
+the world at times.  Movetogoal is not always ideal and can make
+monsters poke around or take the wrong corner.  They'll still do
+that to a degree if you set this flag, BUT there is great overall
+improvement in pursuit and chasing scenarios.
+
+When a monster loses sight of you, he will remember the last place
+he saw you and pursue that area first.  If he has to jump down off
+a platform to reach it, he will..in theory :)
+
+EXAMPLE:
+
+Say you are being chased by a pissed off Shambler with NAVLOGIC
+enabled and you're on your last leg.  You sprint down a long corridor with
+an angry abominable snowman at your heels.  There is a side hallway to the
+right and you see, just up ahead, that the corridor turns off to the right.
+
+        Scenario One:  No NAVLOGIC
+
+        You hightail it to the end of the hall as the Shambler blasts
+        another bolt at ya, passing the sidehall.  You continue down
+        the corridor to the right.  The shambler doesn't see you, but
+        knows your general direction, so he moves to the right.  Then
+        sensing the sidehallway, he takes it..instead of continuing down
+        the corridor.
+
+        Scenario Two:  With NAVLOGIC
+
+        You pass the sidehall and continue down the corridor as it
+        turns off to the right.  The shambler last saw you at
+        the end of the hall, so he goes directly for that position.
+        He shambles past the sidehall to where the corridor takes
+        a turn and then movetogoal() moves him in the right
+        direction.  Only, NAVLOGIC made sure he went down the
+        right hall.
+
+                              -------------
+                              INTREPID = 2
+
+        NO SUPPORT:  NONE
+        BUILTIN:  NONE (Read details)
+
+Monsters often gauge distances and look for contents when
+planning a move or especially taking a jump.  While they
+often blunder into lava or water anyway, perhaps dodging
+a missile or grenade (makes the game so fun, doesn't it?),
+they are at least semi-cautious.  If you have set the
+INTREPID flag in their brain, they'll never even bother
+looking for threatening substances and just take a mad
+dive down after you, or try to pursue you relentlessly
+without care of personal injury.  This also means that
+monsters that normally "retreat", that is, back up when
+injured (like grunts, enforcers, enf2s, ogres), will not.
+They'll stand there and take it like a man..or eh an ogre.
+Some monsters are just naturally intrepid (like shamblers)
+or don't bother trying to jump off platforms (like shamblers
+and knights, etc)
+
+NOTE:  This also kills their dodging routines.  They will not
+dodge if they are INTREPID.
+
+                              ----------------
+                              BLINK = 4
+
+        NO SUPPORT:     monster_hunter (they already have their own system)
+
+        BUILTIN:        monster_beard
+
+It's often said that cheaters never win and people hate bots who
+fudge.  Well, bots are supposed to replicate human players, monsters
+are monsters and do what they please, especially with magic at their
+disposal.  Blink is pretty complicated or maybe I just know in advance
+that I'm that long-winded and will make it sound that complicated.  This
+does not make them better fighters, make them "blink" their eyes, or
+enable them to recite Cyrano De Bergerac.  It is a navigation tool
+they can use to catch up with the client, should they be stuck somewhere.
+Because 10 doors, three platforms, a teleport, and a large drop ago, you
+ran into a monster but were so swift that you left him in the dust.  Well,
+if he doesn't have BLINK enabled, he's gonna run around hopelessly in
+la la land looking for you.  However, with BLINK, there's a good chance
+he can catch up with you in a hurry, or at least get himself in the
+same time zone.  The beauty of it is, you'll almost never catch them in
+the act as this is something they do "behind your back".
+
+I should also mention that they do not use this solely for the purpose of
+catching up with the client.  They may very well do it to confuse or
+try a different approach.  Sometimes you may leave a monster in a room, run
+off for a bit to collect some ammo and health, and when you return, you
+wonder why the hell you didn't run into him on the way and where did he go?
+
+Blink relies on two things, a third as a last ditch effort.
+TRIGGER_TELEPORT and INFO_TELEPORT_DESTINATION are the first two.  If
+you have very few teleports in your level, like only a few, your level
+may not be a good candidate for 'Blinking'.  The only way to know for
+sure is to test it out on your level.  He alternates between three methods.
+
+--> Fudge Factor One
+
+If the monster senses you are very far away, he'll look for a teleporter.
+If sees one, he'll take it.  Novel idea, I know.  HOWEVER, consider this.
+You breezed through and pissed this monster off and now you're about
+2,500 units away and long out of sight and range.  Surely, he could
+have thought of taking that teleporter when you left the room, computed it
+was the right move, and done it a while back.  But all that calculating
+just ain't healthy for our friend, good ol' Quake.  To move our archgaunt
+to that teleporter now, it'll take from now til next X-mas.  Quake is
+a fast game and we ain't got that kind of time, but he probably would be
+to that teleporter right now had he thought of it earlier.  So, you know
+what?  Where we are is Point A and that teleporter is Point B, to hell
+with the distance in between.  *Blink* ((then teleport)) Yay.
+
+-->  Fudge Factor Two
+
+Whoa, the client is way far away.  Blam, let's look in a big radius around
+him for teleport destinations.  Wow, found a few.  Ok, this one's closer
+than the other to the client.  Ok, this point in the
+level is closer to the client than I currently am.  BLAM.  *Blink*
+We're there and full and ready to ride the network of teleporters until
+we're at an acceptable distance (or "in the neighborhood" as I say).
+
+-->  Fudge Factor Three
+     (Last Ditch Effort.  Item Blink)
+
+Damn!  No teleporters to ride.  Well, let's think.  Check to see if the
+client is above me aways.  Yes, he is.  Shit, I probably gotta reach
+that height to have a path at him, to get closer at the very least.
+Let's look for items nearby.  Ammo, guns, keys, doesn't matter.  Found
+a few.  They're higher than me, therefor they make a nice marker.
+Now in order to reach that thing, I'd have to seriously navigate this area
+and figure my way up there, but considering that Id Software made me as
+blind as a bat (*Mindcrime inserts bitch & moan about lack of good
+builtin navigation, Film at Eleven*) I'm just gonna skip over the hard
+part, as that'd take much too much thinking, and do a quick, silent
+teleport to that location.  Ok, I'm there.  Can I move freely or am I stuck
+in something?  Not stuck, good.  Back to movetogoal to find me that
+client!  May not be in the same neighborhood, but I'm getting closer
+to his altitude.  Chances are, I might be able to close in on him.
+
+
+                              ----------------
+                              NO_JUMP = 8
+
+I'm not gonna jump unless my life depends on it and/or I have a moment
+of temporary insanity.  This simply sets the field "nojump" to 1.  I
+added this flag just in case you wanted to save on amount of TXT in your
+BSP.  Believe it or not, there is a limit to the text length :< 
+
+                              ----------------
+                              NO_SWIM = 16
+
+Only the following monsters can swim: (Not including fish but, you know :P)
+
+monster_army (all varieties)
+monster_qguy
+monster_enforcer
+monster_hunter
+monster_enf2
+monster_ogre
+
+If, for whatever reason, you need or want to shut off this feature.  You
+use this flag in their self.brain.  They will NOT swim with this flag,
+just sink like normal.  This is also means they will not intentionally
+jump in the water.
+
+                              ----------------------
+                              TRIGGER_SPAWN = 32
+
+        FEATURE SUPPORTS:       MONSTER_ARMY(s)
+                                MONSTER_ENF(s)/MONSTER_ENFORCER
+                                MONSTER_KNIGHT
+                                MONSTER_HELL_KNIGHT
+                                MONSTER_BARON
+                                MONSTER_HUNTER
+                                MONSTER_DEMON
+                                MONSTER_JAGGER
+                                MONSTER_GAUNT
+                                MONSTER_ARCHGAUNT
+                                MONSTER_SHALRATH
+                                MONSTER_SHAMBLER
+                                MONSTER_WIZARD
+                                MONSTER_ZOMBIE
+
+If you set this flag to the .brain, the monster will appear in the exact
+spot you placed them when triggered.  Beforehand, there will be no trace
+of them being there whatsoever.  This feature is likely to save you a
+lot of trouble in appointing info_teleport_destinations, those cute
+black boxes outside of the level, and trigger_teleports.
+
+There is one field that goes along with this that you also set on the
+monster...
+
+        "style"         if set to 1 and there is a teleport fog when
+                        they appear.
+
+                        Otherwise, there is not.
+
+
+
+#################
+#4      "relations"
+#################
+
+*relations*
+
+If you set the *relations* field on supported monsters, it will have this
+effect depending on the setting.
+
+-1      =       Monster_Qguy & monster_jagger ONLY.  Normal Quake monster.
+0       =       the default, normal Quake monster
+1       =       will not attack the client, but won't help him either
+                liable to turn on the client at the drop of a hat.
+2       =       an idle ally, they will become upset at any
+                monster who has a client enemy.  They won't get angry
+                at the client unless the client hurts them or
+                poses some kind of a threat whether intentional or
+                unintentional.
+3       =       same as 2, but these guys make an attempt to follow
+                you around.
+4       =       They will not attack the client under any circumstance.
+                They'll also follow you.
+
+Regarding the MONSTER_QGUY, the Qguy defaults on relations 2.  If, by
+chance, you wanted to make evil qguys who want to kill you just like the
+normal monsters.  Set their relations to -1.
+
+Setting a monster_jagger's relations to -1 makes them more hostile as
+well.
+
+This is a list of monsters this does not support.  If you set the relations
+field on these monsters, you may not see any results whatever *or*
+you may observe some very strange, indecisive behavior.  You are
+forewarned.
+
+---unsupported monsters---
+
+Wraiths, monster_library, monster_cook, monster_jagger
+
+Note on Gaunts:
+
+You can set the *relations* field on them BUT they are less faithful, if there
+is a Gaunt that is angry at the client in the equation, they'll always
+take that gaunt's side.  Piss off one, piss off the whole brotherhood :>
+
+
+---------------------------------------------------------
+-------------------->>>>>THE ACTOR CHART
+---------------------------------------------------------
+
+NOTE:  One of the earliest additions to the Nehahra game code,
+        not very logical, in fact, seems quite weird and
+        overextended, but what the hell, I left it in.
+
+If you set the targetnames of any of the following monsters
+as shown.  They will do nothing until triggered.  Then, if they
+have a movetarget, they'll go. They'll walk.  They'll stand.
+Whatever they would have done...but nothing until triggered.
+
+I put this here for cutscenes BUT if you use them properly, you can 
+make sure a monster is mozying on by at the right time.
+
+
+MONSTER                         TARGETNAME
+------------                  ----------------
+MONSTER_ENF2                    actor1, actor2, actor3
+MONSTER_ARMY                   actor7, actor8
+                                actor4, actor5
+MONSTER_QGUY                    actor6, actor9, actor10
+MONSTER_WRAITH                  actor11, actor12
+MONSTER_ENFORCER                actor13, actor14
+MONSTER_ENF3                    actor15, actor16
+MONSTER_KNIGHT                  actor17, actor18
+MONSTER_HKNIGHT                 actor19, actor20
+MONSTER_OGRE                    actor21, actor22
+MONSTER_GAUNT                   actor23, actor24, actor25
+
+
+-----------------------------------
+--------PATH_DANGER----------------
+-----------------------------------
+
+You use this like a path_corner, targeting other path_dangers.  It also
+supports the use of multiple paths ("target" and "target2") like path_
+corner does.
+
+If you want lab guys to get away, you'll need to set up path_dangers.
+
+NOTE:  You do not make the path_danger the monster's target.  When the
+time comes to flee, he will look for path_dangers, and once he finds one,
+he'll ride the chain.
+
+
+#######################################################################################
+#######################################################################################
+####
+####            XIV.  The Bosses of Nehahra
+####
+#######################################################################################
+#######################################################################################
+
+--------------------------------------------------------
+-----------------MONSTER_BEARD--------------------------
+--------------------------------------------------------
+
+
+This is the Captain of the Death Knights.  Long beard.  Darker armor.
+ Glowing red eyes.  He's a beauty and he doesn't go down that easy.
+
+The only way to kill a Monster_Beard is to gib him or kill him a number
+of times.  He will assuredly
+get back up and come back after you until you do.  He has one unique
+attack which are glowing fireballs that rotate around him and then
+launch at you.  It's a good way to become toast, but he can just barely
+control the power he has been granted.  It can be taken advantage of.
+ 
+
+--------------------------------------------------------
+-----------------MONSTER_NEHAHRA------------------------
+--------------------------------------------------------
+
+He's big, he's ugly, and he'll squash you like the bug you are.  He
+has a variety of attacks including a kick, a smash, and fire breath
+that can ignite you.  He definitely gets the best boss award in my book.
+
+Nehahra's massive frame is comprised of not one, but several bounding boxes.
+He takes damage locationally.  Attacks to his legs or
+feet are not very potent.  Attacks to his main body are normal damage.
+But when you hit him the head with your attacks, you do X4 damage to him
+as if you had the Quad.  Now, if you put the Quad in the equation,
+you're doing serious damage and that 50,000 health doesn't seem so big
+any more.
+
+Now, the very edges of his sides do protrude from his bounding boxes
+(like his hands) so slanted walls would be a good idea.  Reservations
+have to be made for a guy so big.
+
+One of his unusual features is the ability to destroy architecture.
+He can sense if something is a Func_explodable, func_sobject, or even
+a func_mindcrime.  Mind you, Nehahra does not run on a script of any
+kind.  He just KNOWS if it's in his way and then he removes it by
+giving it a nice hand smash from Hell.
+
+
+-------------------------------
+-------"THE_MISTER"------------
+-------------------------------
+
+The final boss of Nehahra only appears in NEHEND.BSP.  There is no
+monster function to place in a map.  He appears there and only there :)
+

@@ -1,0 +1,41 @@
+../progs.dat
+
+defs.qc
+defs2.qc        // Dragons
+subs.qc
+fight.qc
+ai.qc
+combat.qc
+items.qc
+weapons.qc
+fire.qc         // Dragons
+world.qc
+client.qc
+player.qc
+monsters.qc
+doors.qc
+buttons.qc
+triggers.qc
+plats.qc
+misc.qc
+tree.qc         // Dragons (for test map only)
+
+ogre.qc
+demon.qc
+shambler.qc
+knight.qc
+soldier.qc
+wizard.qc
+dog.qc
+zombie.qc
+boss.qc
+
+tarbaby.qc        // registered
+hknight.qc        // registered
+fish.qc            // registered
+shalrath.qc        // registered
+enforcer.qc        // registered
+oldone.qc        // registered
+aim.qc      // Dragons
+goal.qc     // Dragons
+ryu.qc      // Dragons

@@ -51,20 +51,22 @@ float DEBUFF_POISON_STEP = 7;
 float DEBUFF_POISON_DMG = 1;			// Damage Over Time
 float DEBUFF_POISON_DMGMON = 15;		// Damage Over Time For Monsters, higher to be more effective
 
+void(entity targ) ResetAuraEffects;
+
 //----------------------------------------------------------------------
 // Various debuff reset functions, used all over the place
 //----------------------------------------------------------------------
-void(entity targ) ResetDebuffScreen =
-{
-	targ.cshift_upd = FALSE;
-	targ.cshift_time = LARGE_TIMER;
-	stuffcmd(targ, "v_cshift 0 0 0 0\n");
-	targ.cshift_col = '0 0 0';
-	targ.cshift_den = 0;
+void(entity targ) ResetDebuffScreen = {
+	if (targ.flags & FL_CLIENT) {
+		targ.cshift_upd = FALSE;
+		targ.cshift_time = LARGE_TIMER;
+		Safe_stuffcmd(targ, "v_cshift 0 0 0 0\n");
+		targ.cshift_col = '0 0 0';
+		targ.cshift_den = 0;
+	}
 };
 
-void(entity targ) ResetDebuffBurning =
-{ targ.burning = targ.burning_qty = 0; };
+void(entity targ) ResetDebuffBurning = { targ.burning = targ.burning_qty = 0; };
 
 void(entity targ) ResetDebuffRotting = {
 	targ.rotting = 0; 
@@ -83,7 +85,7 @@ void(entity targ) ResetDebuffBleeding =
 void(entity targ) ResetDebuffSystem =
 {
 	// This only works for player clients
-	if (!(targ.flags & FL_CLIENT)) return;
+	if (!(targ.flags & FLx_CREATURE)) return;
 	
 	ResetDebuffScreen(targ);
 	ResetDebuffBurning(targ);
@@ -94,13 +96,16 @@ void(entity targ) ResetDebuffSystem =
 //----------------------------------------------------------------------
 // Core debuff function, run every frame from client.qc
 //----------------------------------------------------------------------
-void() ClientDeBuff =
-{
+void() ClientDeBuff = {
 	// Check is self is a NOT player (client) FIRST!
 	// Bug fix from ericw on func msgboard
 	// #655 posted by ericw on 2018/04/10 09:53:36
 	if (!(self.flags & FL_CLIENT)) return;
-	
+
+	if (self.aura_type >= 0) {
+		if (self.aura_finished < time) ResetAuraEffects(self); // Reset aura
+	}
+
 	// If player is dead or intermission running, turn everything off
 	// Cinematic camera system exception is later on in code
 	if (intermission_running > 0 || self.health < 1) {
@@ -110,6 +115,8 @@ void() ClientDeBuff =
 
 	// Check for burning debuff (DoT)
 	if (self.burning) {
+		if (self.aura_finished > time && self.aura_type == 1) self.burning_qty = 0;
+
 		// Is it time for a debuff update
 		if (self.burning_time < time) {
 			if (self.burning_qty > 0) {
@@ -133,6 +140,7 @@ void() ClientDeBuff =
 				// Subtract burning damage from counters
 				self.burning_qty = self.burning_qty - self.debuff_qty;
 				
+				if (self.resist_fire > 0) self.burning_qty = self.burning_qty * (1-self.resist_fire);
 				// Use global damage function (has death checks)
 				T_Damage (self, world, world, self.debuff_qty, NOARMOR);
 			}
@@ -143,26 +151,11 @@ void() ClientDeBuff =
 			ResetDebuffBurning(self);
 		}
 	}
-
-	// Are we in a movable water brush?
-	// if (!self.fwatershift && self.waterlevel >= 3) {
-		// if (self.fwatershifttime < time) {
-			// self.cshift_upd = TRUE;		// Update screen colour
-			// self.cshift_time = -1;		// Update striaght away
-			// self.cshift_col = '130 80 50';
-			// self.cshift_den = DEBUFF_BLEED_DEN;
-			// self.cshift_step = FALSE;
-		// } else {
-			// self.fwatershift = TRUE;
-			// self.cshift_den = FALSE;
-		// }
-	// } else {
-		// self.fwatershift = TRUE;
-		// if (!self.burning && !self.poisoned && !self.bleeding) self.cshift_den = FALSE;
-	// }
 	
 	// Check for poisoned debuff (DoT)
 	if (self.poisoned) {
+		if (self.aura_finished > time && self.aura_type == 0) self.poisoned_qty = 0;
+
 		// Is it time for a debuff update
 		if (self.poisoned_time < time) {
 			if (self.poisoned_qty > 0) {
@@ -196,6 +189,8 @@ void() ClientDeBuff =
 
 	// Check for bleeding debuff (HoT)
 	if (self.bleeding) {
+		if (self.aura_finished > time && self.aura_type == 4) self.bleeding_qty = 0;
+
 		// Is it time for a debuff update
 		if (self.bleeding_time < time) {
 			if (self.bleeding_qty > 0) {
@@ -228,30 +223,40 @@ void() ClientDeBuff =
 
 	// Check for rotting debuff (DoT)
 	if (self.rotting) {
-		// Is it time for a debuff update
-		if (self.rotting_time < time) {
-			if (self.health > self.max_health) {
-				// Reset rotting tick timer
-				self.rotting_time = time + 1;
-				// Directly subject health from player
-				self.health = self.health - self.rotting_qty;
+		if (self.aura_finished < time && self.aura_type != 4) {
+			// Is it time for a debuff update
+			if (self.rotting_time < time) {
+				if (self.health > self.max_health) {
+					// Reset rotting tick timer
+					self.rotting_time = time + 1;
+
+					if (self.curse_finished > time && self.curse_type == CURSE_WEAKEN) {
+						self.health = self.health - self.rotting_qty - self.curse_ping;
+					} else {
+						// Directly subject health from player
+						self.health = self.health - self.rotting_qty;
+					}
+				}
 			}
+			// Reset (if over max) HP and remove inventory item
+			if (self.health <= self.max_health) ResetDebuffRotting(self);
+		} else {
+			ResetDebuffRotting(self);
 		}
-		// Reset (if over max) HP and remove inventory item
-		if (self.health <= self.max_health) ResetDebuffRotting(self);
 	}
 
 	// Check for regeneration powerups (HoT).  Berserker and amulet of regeneration do not stack, only 1 healing amount
 	if (self.perms & POW_REGEN || self.perms & POW_ARMORBERSERKER || self.perms & POW_REGENLESSER) {
+		ResetDebuffRotting(self);
+
 		// Is it time for a debuff update
 		if (self.regen_time < time) {
 			if (self.health < self.max_health) {
-				// Reset rotting tick timer
 				if (self.perms & POW_REGENLESSER && !(self.perms & POW_REGEN) || (self.perms & POW_ARMORBERSERKER))
 					self.regen_time = time + 3;
 				else
 					self.regen_time = time + 1;
-				// Directly subject health from player
+
 				if (self.rotting_qty < 1) self.rotting_qty = 1; // Guarantee at least 1 health increase
 				self.health = self.health + self.rotting_qty;
 				if (self.health > self.max_health) self.health = self.max_health;
@@ -262,7 +267,7 @@ void() ClientDeBuff =
 	if (self.perms & POW_ARMORSPIRIT && (self.items2 & IT2_ARMOR1 || self.items2 & IT2_ARMOR2 || self.items2 & IT2_ARMOR3)) {
 		if (self.repairtime < time) {
 			self.repairtime = time + 1;
-			if (self.armorvalue < 100) self.armorvalue = self.armorvalue + 1; // recharge armor
+			if (self.armorvalue < 100) T_Repair(self,1,FALSE); // recharge armor
 		}
 	}
 	
@@ -313,15 +318,15 @@ void() ClientDeBuff =
 				// Don't update the screen if an artifact is active
 				// The engine will be updating at the same time
 				if ((self.items & ALL_ITEMSARTIFACTS == 0) && (self.items2 & ALL_ITEMS2ARTIFACTS == 0) && (self.moditems & ALL_MODITEMSARTIFACTS == 0)) {
-					stuffcmd(self, "v_cshift ");
-					stuffcmd(self, ftos(rint(self.cshift_col_x)));
-					stuffcmd(self, " ");
-					stuffcmd(self, ftos(rint(self.cshift_col_y)));
-					stuffcmd(self, " ");
-					stuffcmd(self, ftos(rint(self.cshift_col_z)));
-					stuffcmd(self, " ");
-					stuffcmd(self, ftos(rint(self.cshift_den)));
-					stuffcmd(self, "\n");
+					Safe_stuffcmd(self, "v_cshift ");
+					Safe_stuffcmd(self, ftos(rint(self.cshift_col_x)));
+					Safe_stuffcmd(self, " ");
+					Safe_stuffcmd(self, ftos(rint(self.cshift_col_y)));
+					Safe_stuffcmd(self, " ");
+					Safe_stuffcmd(self, ftos(rint(self.cshift_col_z)));
+					Safe_stuffcmd(self, " ");
+					Safe_stuffcmd(self, ftos(rint(self.cshift_den)));
+					Safe_stuffcmd(self, "\n");
 				}
 			}
 		}
@@ -331,9 +336,7 @@ void() ClientDeBuff =
 	else if (self.cshift_time < time) ResetDebuffScreen(self);
 };
 
-//----------------------------------------------------------------------
-void(entity targ) BleedDeBuff =
-{
+void(entity targ) BleedDeBuff = {
 	local float pain_type;
 	
 	// Sanity check!
@@ -377,8 +380,7 @@ void(entity targ) BleedDeBuff =
 };
 
 //----------------------------------------------------------------------
-void(entity targ, float rotoverride) RotDeBuff =
-{
+void(entity targ, float rotoverride) RotDeBuff = {
 	// Only need to check for player/client
 	if (targ.flags & FL_CLIENT == FALSE) return;
 
@@ -396,15 +398,14 @@ void(entity targ, float rotoverride) RotDeBuff =
 };
 
 //----------------------------------------------------------------------
-void(entity targ) BurnDeBuff =
-{
+void(entity targ) BurnDeBuff = {
 	local float debuffqty;
 	
 	// Do not stack burning time beyond a certain limit
 	// Cannot be burning if knee deep in water
 	// Immune to debuff if using Pent of Protection or BioSuit
 	if (targ.burning_qty > DEBUFF_BURN_MAX) return;
-	if (targ.flags & FL_CLIENT == FALSE) return;
+	if (targ.flags & FLx_CREATURE == FALSE) return;
 	if (targ.waterlevel >= 3) return;
 	if (targ.items & (IT_INVULNERABILITY | IT_SUIT)) return;
 	
@@ -419,20 +420,20 @@ void(entity targ) BurnDeBuff =
 	targ.burning_qty = targ.burning_qty + debuffqty;
 	if (targ.burning_qty > DEBUFF_BURN_MAX) targ.burning_qty = DEBUFF_BURN_MAX;
 
-	targ.cshift_upd = TRUE;		// Update screen colour
-	targ.cshift_time = -1;		// Update striaght away
-	targ.cshift_col = DEBUFF_BURN_COL;
-	targ.cshift_den = DEBUFF_BURN_DEN;
-	targ.cshift_step = DEBUFF_BURN_STEP;
+	if (targ.flags & FL_CLIENT) {
+		targ.cshift_upd = TRUE;		// Update screen colour
+		targ.cshift_time = -1;		// Update striaght away
+		targ.cshift_col = DEBUFF_BURN_COL;
+		targ.cshift_den = DEBUFF_BURN_DEN;
+		targ.cshift_step = DEBUFF_BURN_STEP;
+	}
 };
 
-//----------------------------------------------------------------------
-void(entity targ) PoisonDeBuff =
-{
+void(entity targ) PoisonDeBuff = {
 	local float debuffqty;
 	
 	// Immune to debuff if using Pent of Protection or BioSuit
-	if (targ.flags & FL_CLIENT == FALSE) return;
+	if (targ.flags & FLx_CREATURE == FALSE) return;
 	if (targ.items & (IT_INVULNERABILITY | IT_SUIT)) return;
 	if (targ.poisoned) return;	// Only poison once
 	
@@ -441,16 +442,19 @@ void(entity targ) PoisonDeBuff =
 	debuffqty = floor(skill + 3 + 2*random());
 	// Air tanks help reduce poison debuff duration
 	if (targ.moditems & IT_ARTWETSUIT) debuffqty = floor(debuffqty * 0.5);
+
 	// Is there any poison debuff time left?
 	if (debuffqty > 0) {
 		targ.poisoned = TRUE;
 		targ.poisoned_time = -1;
 		targ.poisoned_qty = debuffqty;
-		targ.cshift_upd = TRUE;		// Update screen colour
-		targ.cshift_time = -1;		// Update striaght away
-		targ.cshift_col = DEBUFF_POISON_COL;
-		targ.cshift_den = DEBUFF_POISON_DEN;
-		targ.cshift_step = DEBUFF_POISON_STEP;
+		if (targ.flags & FL_CLIENT) {
+			targ.cshift_upd = TRUE;		// Update screen colour
+			targ.cshift_time = -1;		// Update striaght away
+			targ.cshift_col = DEBUFF_POISON_COL;
+			targ.cshift_den = DEBUFF_POISON_DEN;
+			targ.cshift_step = DEBUFF_POISON_STEP;
+		}
 	}
 };
 
@@ -468,13 +472,15 @@ void(entity targ, float playdmg, float mondmg) ApplyFireDmg =
 
 	// Bio suit reduction - easy=80%, normal=70%, hard=60%, nm=50%
 	reduction = 0.2 + skill * 0.1;
-	
+
 	// Damage is different for monsters/players
 	if (targ.flags & FL_MONSTER) firedamage = mondmg;
 	else if (targ.items & IT_SUIT) firedamage = rint(playdmg * reduction);
 	else firedamage = playdmg;
+
+	if (targ.resist_fire > 0) firedamage = firedamage * (1-targ.resist_fire);
 	
 	// Final damage (no armour save)
 	T_Damage (targ, self, self.owner, firedamage, NOARMOR);
-	BurnDeBuff(targ);
+	if (targ.resist_fire < 1) BurnDeBuff(targ);
 };

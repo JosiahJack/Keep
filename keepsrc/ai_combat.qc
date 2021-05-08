@@ -27,6 +27,84 @@ float(entity targ, entity inflictor) CanDamage = {
 	return FALSE;
 };
 
+//============
+// --> QUAKED trigger_victory (.5 .5 .5) (-8 -8 -8) (8 8 8)
+// Drake entity.
+// This fixed size trigger cannot be touched, it can only be fired by
+// killing the last monster on a level (i.e., 100% kills).
+//
+// It can contain killtargets, targets, delays, and messages.
+//============
+void() trigger_victory = {};
+
+void(entity targ) AddToTotals = {
+	if (self.classtype == CT_MONANACONDACOIL) return; // The coils are part of monster_anaconda
+
+	if (targ.classgroup == CG_HARMLESS) {
+		total_denizens = total_denizens + 1;
+		targ.xfl = targ.xfl | XFL_PET; // Denizens don't add to frags
+	} else {
+		total_monsters = total_monsters + 1;
+		targ.xfl = targ.xfl | XFL_ADD_TO_KILL; // Added here.  Some monsters have special clones, like monster_bane that don't add to either count
+	}
+	update_hud_totals(HUD_MONSTERS);
+};
+
+float(entity e, float heal, float ignore) T_Repair;
+
+void(entity thekilled, entity attacker) AddToKills = {
+    local entity victory, swap;
+
+    if (thekilled.xfl & XFL_ADD_TO_KILL && self.classtype != CT_MONANACONDACOIL) { // Marked as a countable enemy
+        // thekilled.xfl = thekilled.xfl - XFL_ADD_TO_KILL;  // Count only once.  -Qmaster: Nope.  Well, we might have been revived alright. th_revive should add to the count by 1
+        killed_monsters = killed_monsters + 1;
+		if (killed_monsters > total_monsters) total_monsters = killed_monsters; // Just in case!
+        WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+
+		// Apply any benefits to the thing that killed us
+		if (attacker) {
+			// Update 5/14/10:  Kills recharge demonhide armor.
+			if (attacker.perms & POW_ARMORBERSERKER) T_Repair(attacker,attacker.armortype * 10,TRUE); // Repair armor up to 250.  Note to hackers, good way to have monsters heal themselves when infighting other monsters. -Qmaster
+
+			// SoE:  Killing monsters adds to frags.  And in Versus mode. -Qmaster
+			if (attacker.flags & FL_CLIENT) {
+				if (deathmatch || (coop > 2 && attacker.versustype != VT_GAMEMASTER)) {
+					 attacker.frags = attacker.frags + 1;
+				}
+			}
+		}
+
+		// PM:  Activate 'all clear' triggers at 100% kills.
+        if (killed_monsters == total_monsters) { // Just reached 100% kills.
+            victory = find (world, classname, "trigger_victory");
+			swap = self;
+			self = thekilled;
+            while (victory) {
+                activator = attacker;
+				SUB_UseTargets ();
+				victory = find (victory, classname, "trigger_victory");
+            }
+			self = swap;
+        }
+    } else if (thekilled.xfl & XFL_PET) {
+		killed_denizens = killed_denizens + 1;
+		if (killed_denizens > total_denizens) total_denizens = killed_denizens; // Just in case!
+
+		// Apply any benefits to the thing that killed us
+		if (attacker) {
+			// Update 5/14/10:  Kills recharge demonhide armor.
+			if (attacker.perms & POW_ARMORBERSERKER) T_Repair(attacker,attacker.armortype * 10,TRUE); // Repair armor up to 250.  Note to hackers, good way to have monsters heal themselves when infighting other monsters. -Qmaster
+
+			// SoE:  Killing monsters adds to frags.  And in Versus mode if we are evil. -Qmaster
+			if (attacker.flags & FL_CLIENT) {
+				if (deathmatch || (coop > 2 && attacker.versustype == VT_GAMEMASTER)) {
+					 attacker.frags = attacker.frags + 1;
+				}
+			}
+		}
+	}
+};
+
 //-----------------------------------------------------------
 void(entity targ, entity attacker) Killed = {
 	local entity oself;
@@ -48,14 +126,7 @@ void(entity targ, entity attacker) Killed = {
 		
 			// bump the monster counter
 			if (self.flags & FL_MONSTER) {
-				if (!self.nomonstercount) {
-					if (self.classgroup == CG_HARMLESS) {
-						killed_denizens = killed_denizens + 1;
-					} else {
-						killed_monsters = killed_monsters + 1;
-						WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
-					}
-				}
+				if (!self.nomonstercount) AddToKills(self,attacker);
 			}
 		
 			ClientObituary(self, attacker);
@@ -63,16 +134,12 @@ void(entity targ, entity attacker) Killed = {
 	
 			if (self.flags & FL_MONSTER) monster_death_use();
 			self.th_die ();
-		}
-		// Completely ****up setup for the oldone boss with a weird target
-		// field and mess of triggers around it! This elseif is just an
-		// exception so it works, anyway no one fights the oldone!
-		else if (!self.deadflag && self.classtype == CT_MONIDSHUB) {
+		} else if (!self.deadflag && self.classtype == CT_MONIDSHUB) {
+			// Completely messed up setup for the oldone boss with a weird target
+			// field and mess of triggers around it! This elseif is just an
+			// exception so it works, anyway no one fights the oldone!
 			self.deadflag = DEAD_DEAD;
-			killed_monsters = killed_monsters + 1;
-			WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
-
-			if (targ.classgroup == CG_HARMLESS) killed_denizens = killed_denizens + 1;
+			AddToKills(self,attacker);
 			self.th_die ();
 		}
 	}		
@@ -99,11 +166,73 @@ float(entity targ, float damage, float drain) PowerArmor_Absorb;
 void(entity targ, entity inflictor, entity attacker, float damage, float checkarmor) T_Damage = {
 	local vector dir;
 	local entity oldself;
-	local float save, saveperms, take, flinch, misc, noarmordmg, adamant, oldarmorvalue;
+	local float save, saveperms, take, flinch, misc, noarmordmg, adamant, oldarmorvalue, saveresist;
 
 	// Cannot hurt the world or enemy targets (fake flying markers)
 	if (targ.classtype == CT_WORLD) return;
 	if (targ.classtype == CT_ENEMYTARGET) return;
+
+	if (targ.items2 & IT2_MJOLNIR && targ.weapon == IT2_MJOLNIR && !targ.selfweaponismoditems && (inflictor.classgroup == CG_PROJCELLS || inflictor.classgroup == CG_PROJPLASMAROGUE || attacker.classtype == CT_MONSHAM || attacker.classtype == CT_MONGAUNT)) damage = damage * 0.5; // 50% lightning protection while holding mjolnir
+
+
+	// resist_fire is the odd one out here. There were too many edge cases not handled by classgroups so they exist in individual locations
+
+
+	if (attacker.poisonous || inflictor.poisonous) {
+		if (targ.resist_acid > 0) damage = Resist_Damage(targ, AM_ACID, damage);
+	}
+
+	if (inflictor.classgroup == CG_PROJCELLS) {
+		if (targ.resist_cells > 0) damage = Resist_Damage(targ, AM_CELLS, damage);
+	}
+
+	if (inflictor.classgroup == CG_PROJROCKETS || inflictor.classgroup == CG_PROJGRENADES) {
+		if (targ.resist_rockets > 0) damage = Resist_Damage(targ, AM_ROCKETS, damage);
+	}
+
+	if (inflictor.classgroup == CG_PROJSHELLS) {
+		if (targ.resist_shells > 0) damage = Resist_Damage(targ, AM_SHELLS, damage);
+	}
+
+	if (inflictor.classgroup == CG_PROJNAILS) {
+		if (targ.resist_nails > 0) damage = Resist_Damage(targ, AM_NAILS, damage);
+	}
+
+	if (inflictor.classgroup == CG_PROJLAVANAILS) {
+		if (targ.resist_lava_nails > 0) damage = Resist_Damage(targ, AM_LAVANAILS, damage);
+	}
+
+	if (inflictor.classgroup == CG_PROJMULTIROCKETS) {
+		if (targ.resist_multi_rockets > 0) damage = Resist_Damage(targ, AM_MULTI_ROCKETS, damage);
+	}
+
+	if (inflictor.classgroup == CG_PROJPLASMAROGUE) {
+		if (targ.resist_plasma > 0) damage = Resist_Damage(targ, AM_PLASMA, damage);
+	}
+
+	if (inflictor.classgroup == CG_PROJBOLTS) {
+		if (targ.resist_bolts > 0) damage = Resist_Damage(targ, AM_BOLTS, damage);
+	}
+
+	if (inflictor.classgroup == CG_PROJBOLTSPOISON) {
+		if (targ.resist_poison > 0) damage = Resist_Damage(targ, AM_POISON, damage);
+	}
+
+	if (inflictor.classgroup == CG_PROJBLOODCRYSTALS) {
+		if (targ.resist_bloodcrystals > 0) damage = Resist_Damage(targ, AM_BLOODCRYSTALS, damage);
+	}
+
+	if (inflictor.classgroup == CG_PROJVOID) {
+		if (targ.resist_voidshards > 0) damage = Resist_Damage(targ, AM_VOIDSHARDS, damage);
+	}
+
+	if (inflictor.classgroup == CG_PROJMAGIC) {
+		if (targ.resist_elemental > 0) damage = Resist_Damage(targ, AM_ELEMENTAL, damage);
+	}
+
+	if (inflictor.classgroup == CG_PROJICE) {
+		if (targ.resist_elemental > 0) damage = Resist_Damage(targ, AM_COLD, damage);
+	}
 
 	// Is the monster dying and going through death animation?
 	if (targ.flags & FL_MONSTER && targ.health < 1) {
@@ -120,25 +249,18 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		return;
 	}
 
-	// If target cannot take damage, no point doing damage
-	if (targ.takedamage == DAMAGE_NO) return;
+	if (targ.takedamage == DAMAGE_NO) return; // If target cannot take damage, no point doing damage
 
-	// Check for breakable/pushables being immune to monster damage
-	// This check is present in all projectiles functions instead
-	// Its not really necessary here because its about monsters
-	// if (ai_immunebreakable(attacker, targ)) return;
+	damage_attacker = attacker; // used by buttons and triggers to set activator for target firing
 
-	// used by buttons and triggers to set activator for target firing
-	damage_attacker = attacker;
-
-	// check for quad damage powerup on the attacker
-	if (attacker.super_damage_finished > 0) damage = ceil(damage * 4);
-
-	if (attacker.curse_type == CURSE_WEAKEN)
-		damage = damage * 0.5;
+	if (attacker.super_damage_finished > 0 && targ.classtype != CT_MONINQUISITOR) damage = ceil(damage * 4); // check for quad damage powerup on the attacker
+	if (attacker.curse_type == CURSE_WEAKEN) damage = damage * 0.5;
+	if (targ.spirit_blessed) damage = damage * 0.25; // 25% Protection of the Watchers from Spirit Shrine desecration
+	if (attacker.shroom_finished > time) damage = damage * 1.5; // 50% damage boost when shroomed up!
+	if (targ.shroom_finished > time) damage = damage * 0.5; // 50% damage protection when shroomed up!
 
 	// Berserker Helm melee damage boost, Drake permanent powerup
-	if ((attacker.perms & POW_VAMPIRE)) {
+	if ((attacker.perms & POW_VAMPIRE) || (attacker.shroom_finished > time)) {
 		if (attacker.selfweaponismoditems) {
 			if (attacker.weapon == IT_MACE) damage = damage * 2;
 		} else {
@@ -146,8 +268,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		}
 	}
 
-	if (targ.classname == "monster_death_lord" && targ.shield == 1)
-		damage = damage * 0.5;
+	if (targ.classname == "monster_death_lord" && targ.shield == 1) damage = damage * 0.5;
 
 	// co-op team play damage avoidance
 	if ( (teamplay == 1) && (targ.team > 0) && (targ.team == attacker.team) ) return;
@@ -155,20 +276,22 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	// Poor zombies, they have so many exceptional ways to die!
 	if (targ.classgroup == CG_ZOMBIE && !(targ.classname == "monster_mummy")) {
 		// If a zombie falls into slime or lava, instant death
-		if (targ.watertype == CONTENT_SLIME || targ.watertype == CONTENT_LAVA) {
-			// gib health is usually negative, hence the fabs
-			damage = fabs(targ.gibhealth * 4);
+		if (targ.watertype == CONTENT_SLIME) {
+			damage = fabs(targ.gibhealth * 4); // gib health is usually negative, hence the fabs
+			damage = damage * (1-targ.resist_acid);
 			//dprint("\b[T_DAMAGE]\b Instant death, in slime or lava\n");
+		}
+		if (targ.watertype == CONTENT_LAVA) {
+			damage = fabs(targ.gibhealth * 4); // gib health is usually negative, hence the fabs
+			damage = damage * (1-targ.resist_fire);
 		}
 		// Exploding boils always destroy zombies
 		if (attacker.classtype == CT_MONBOIL) damage = fabs(targ.gibhealth * 2);
 	}
 	
 	// Are monsters infighting and is there a damage modifier active?
-	if (attacker.infightextra && targ.flags & FL_MONSTER)
-		damage = ceil(damage * attacker.infightextra);
+	if (attacker.infightextra && targ.flags & FL_MONSTER) damage = ceil(damage * attacker.infightextra);
 
-	//----------------------------------------------------------------------
 	// Check for plasma burn/explosion on fatal hit
 	if (inflictor.classtype == CT_PROJ_PLASMA && attacker.flags & FL_CLIENT) {
 		if ((targ.health-damage < 0) && attacker.plasma_burn < time && random() < 0.2) {
@@ -183,22 +306,18 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		}
 	}
 
-	// FIXME:  Too messy, rewrite.
-    if (targ.xfl & XFL_BOSS) {
-        // SoE:  Bane clones.
-        if (targ.classname == attacker.classname)
-            if ((targ.classname == "monster_bane") || (targ.classname == "monster_morph"))
-                //if (Ally_Check (targ, attacker))
-                    return;     // Bane can't hurt himself and his clones.
-        // Minion immunity.
-        if (targ == attacker.master)
-            //if (Ally_Check (targ, attacker))
-                return;     // Immune to minions' attacks.
-    }
-// - - - - - - - - - - - - - - - - - - -
+	if (Align_Match(attacker,targ)) {
+		if (targ.vulnerability == VULN_SERAPHIC || (targ.vulnerability == VULN_UNDEAD && targ.classname == attacker.classname)) return; // Seraphic allies don't hurt each other
+		if (targ.vulnerability == VULN_RESISTANT) damage = damage * 0.5; // 50% damage when resistant
+	}
 
-	
-	//----------------------------------------------------------------------
+	damage = Align_DamageModifier(targ,attacker,damage,FALSE); // False because we don't know if this is a touch 
+	if (!damage) return;
+
+	if (targ.classtype == CT_MONBANE && targ.classtype == attacker.classtype) {
+        if (Ally_Check (targ, attacker)) return;     // Bane can't hurt himself and his clones.
+	}
+
 	// Check for monster/breakable extra damage key condition
 	// The key is usually checked with ai_damagebreakable function
 	// Needs to be checked with projectiles as well
@@ -207,25 +326,18 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	}
 	
 	// Blast Belt resistance prevents armour being decreased
-	if (checkarmor == DAMSPLASH && targ.flags & FL_CLIENT 
-		&& targ.moditems & IT_ARTBLASTBELT) noarmordmg = TRUE;
-	// Default for any kind of damage through this function
-	else noarmordmg = FALSE;
+	if (checkarmor == DAMSPLASH && targ.flags & FL_CLIENT && targ.moditems & IT_ARTBLASTBELT) noarmordmg = TRUE;
+	else noarmordmg = FALSE; // Default for any kind of damage through this function
 
-	//----------------------------------------------------------------------
-	// Special artifact combo setups for extra abilities 
-	//----------------------------------------------------------------------
+
+	// Special artifact combo setups for extra abilities:
 	// Blast Belt + Quad reduces incoming damage by 50%
-	if (targ.flags & FL_CLIENT && targ.moditems & IT_ARTBLASTBELT
-		&& targ.items & IT_QUAD) damage = ceil(damage * 0.5);
+	if (targ.flags & FL_CLIENT && targ.moditems & IT_ARTBLASTBELT && targ.items & IT_QUAD) damage = ceil(damage * 0.5);
 
 	// Lava Shield + Pentagram prevents armour from being damaged
-	if (targ.flags & FL_CLIENT && targ.moditems & IT_ARTLAVASHIELD
-		&& targ.items & IT_INVULNERABILITY) noarmordmg = TRUE;	
+	if (targ.flags & FL_CLIENT && targ.moditems & IT_ARTLAVASHIELD && targ.items & IT_INVULNERABILITY) noarmordmg = TRUE;	
 
-	//----------------------------------------------------------------------
 	// save damage based on the target's armor level
-	//----------------------------------------------------------------------
 	save = 0;
 	saveperms = 0;
 	adamant = 0;
@@ -311,6 +423,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		targ.velocity = targ.velocity + dir;
 	}
 	
+	// Wand knockback
 	if (attacker.weapon == IT2_CROSS) {
 		float z_add = 150;
 		if (inflictor.classtype == CT_WANDBIGSPARK) z_add = z_add * 2;
@@ -329,10 +442,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	}
 
 	// check for godmode or invincibility
-	if (targ.flags & FL_GODMODE || targ.invincible_finished >= time) {
-		PlayPentagramSound(targ);
-		return;
-	}
+	if (targ.flags & FL_GODMODE || targ.invincible_finished >= time) { PlayPentagramSound(targ); return; }
 
 	// Warlord special dodging.  From Quake 1.5, simplified a little.   -Qmaster
 	if (targ.classtype == CT_MONWARLORD) {
@@ -346,11 +456,8 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 			}
 		}	
 	}	
-
-	//----------------------------------------------------------------------
-	// do the damage
-	//----------------------------------------------------------------------
-	targ.health = targ.health - take;
+	
+	targ.health = targ.health - take; // do the damage
 
 	// Apply berserker helm life leech to heal the attacker if the target still has health
 	if (attacker.perms & POW_VAMPIRE && targ.health > 0) {
@@ -382,14 +489,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	// Fire any targets (once only) when this condition is met
 	//----------------------------------------------------------------------
 	if (targ.turrethealth > 0) {
-		// Warning/reset about trying to % HP trigger a boss monster
-		if (targ.bossflag > 0) {
-			dprint("\b[MONSTER]\b Cannot add HP triggers to bosses!\n");
-			targ.turrethealth = targ.turrethealth2 = 0;
-			targ.turrettarget = targ.turrettarget2 = "";
-		}
-		// HP % trigger's only work for monsters
-		else if (targ.flags & FL_MONSTER) {
+		if (targ.flags & FL_MONSTER) {
 			// Check if HP % trigger should happen? (less than = event)
 			if (targ.health < (targ.max_health * targ.turrethealth)) {
 				// Trigger HP debug info (developer 1 mode)
@@ -410,15 +510,13 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 						// Reset health + target fields
 						targ.turrethealth = targ.turrethealth2 = 0;
 						targ.turrettarget = targ.turrettarget2 = "";
-					}
-					else {
+					} else {
 						// Copy over targets
 						targ.turrethealth = targ.turrethealth2;
 						targ.turrettarget = targ.turrettarget2;
 						targ.turrethealth2 = 0; // Reset					
 					}
-				}
-				else {
+				} else {
 					// Reset health + target fields
 					targ.turrethealth = 0;
 					targ.turrettarget = "";
@@ -455,61 +553,55 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		// Only register damage against zombies if SSG upgrade or Quad!
 		if (inflictor.classgroup == CG_PROJSHELLS && inflictor.weapon) {
 			// Has the accumulator gone over the max health?
-			if (targ.dmgcombined > targ.max_health) {
-				targ.health = targ.gibhealth;
-			}
+			if (targ.dmgcombined > targ.max_health) targ.health = targ.gibhealth;
 		}
 	}
 
-	/*----------------------------------------------------------------------
-	// Axe upgrade will gib enemies if they are killed with the axe
-	// A bit excessive on the gibbing, disabled for the moment
-	if (attacker.moditems & IT_SHADAXE && attacker.weapon == IT_AXE) {
-		if (targ.health < 1 && targ.gibhealth) targ.health = targ.gibhealth;
-	} */
-
-	//----------------------------------------------------------------------
 	// Has the monster died?
-	//----------------------------------------------------------------------
 	if (targ.health < 1) {
 		Killed (targ, attacker);
 		return;
 	}
 	
-	//----------------------------------------------------------------------
 	// Switch self (foundtarget and pain function need self correct)
 	// self restored before end of function
 	oldself = self;
 	self = targ;
-	//----------------------------------------------------------------------
+
 	// react to the damage - only if a monster
-	// No reaction if attacker is world (env trap, door, etc) 
-	//----------------------------------------------------------------------
+	// No reaction if attacker is world (env trap, door, etc) or a crossbow bolt (stealth weapon)
 	if ( (self.flags & FL_MONSTER) && attacker != world && inflictor.classtype != CT_PROJ_BOLT1 && inflictor.classtype != CT_PROJ_BOLT2) {
 		// Is the current attacker not self and not current enemy target?
 		if (self != attacker && attacker != SUB_entEnemyTarget()) {
-			if ((self.noinfighting && attacker.flags & FL_MONSTER || attacker.noinfighting) && self.temperament != 4) {
-				// Prevent monsters from infighting
-				// but let them react to the player
-			} else {
-				// If previous switch target dead, focus on new target
-				if (self.switchattacker.health < 1) self.switchtimer = 0;
-				// Is the attacker a different classgroup and switching target available?
-				if (self.switchtimer < time) {
-					if (self.classgroup != attacker.classgroup || self.temperament == 4) {
-						// Prevent the monster from rapidily switching targets
-						if (self.switchattacker != attacker) self.switchtimer = time + 1;
-						else self.switchtimer = time + 0.1 + random();
-						// Switch to new target
-						self.switchattacker = attacker;
+			if (!Align_Match(self,attacker) || IsInsane(self)) { // Don't get angry at friends, unless insane
+				if ((self.noinfighting && attacker.flags & FL_MONSTER || attacker.noinfighting) && !(IsInsane(self))) {
+					// Prevent monsters from infighting
+					// but let them react to the player
+				} else {
+					// If previous switch target dead, focus on new target
+					if (self.switchattacker.health < 1) self.switchtimer = 0;
+					// Is the attacker a different classgroup and switching target available?
+					if (self.switchtimer < time) {
+						if (self.classgroup != attacker.classgroup || IsInsane(self)) {
+							// Prevent the monster from rapidily switching targets
+							if (self.switchattacker != attacker) self.switchtimer = time + 1;
+							else self.switchtimer = time + 0.1 + random();
+							// Switch to new target
+							self.switchattacker = attacker;
 
-						// Shift previous enemy to old enemy ready for new target
-						// Only switch if the new enemy is the player! (id logic)
-						// Check for new enemy target system before switching
-						if (SUB_flagsEnemyTarget(FL_CLIENT)) self.oldenemy = SUB_entEnemyTarget();
-						if (self.enemy.classtype == CT_ENEMYTARGET) SUB_switchEnemyTarget();
-						self.enemy = attacker;		// attack the attacker!
-						FoundTarget ();				// Run+turn towards new enemy
+							// Shift previous enemy to old enemy ready for new target
+							// Only switch if the new enemy is the player! (id logic)
+							// Check for new enemy target system before switching
+							if (SUB_flagsEnemyTarget(FL_CLIENT)) self.oldenemy = SUB_entEnemyTarget();
+							if (self.enemy.classtype == CT_ENEMYTARGET) SUB_switchEnemyTarget();
+							self.enemy = attacker;		// attack the attacker!
+							dprint("Enemy pain switch: s.alignment = ");
+							dprint(ftos(self.alignment));
+							dprint(", o.alignment = ");
+							dprint(ftos(self.enemy.alignment));
+							dprint("\n");
+							FoundTarget ();				// Run+turn towards new enemy
+						}
 					}
 				}
 			}
@@ -525,14 +617,14 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		else if (targ.resist_nails > 0 && inflictor.classgroup == CG_PROJNAILS) return;
 		else if (targ.resist_rockets > 0 && inflictor.classgroup == CG_PROJROCKETS) return;
 		else if (targ.resist_cells > 0 && inflictor.classgroup == CG_PROJCELLS) return;
-		// else if (targ.resist_lava_nails > 0 && inflictor.classgroup == CG_PROJNAILS) return;
-		// else if (targ.resist_multi_rockets > 0 && inflictor.classgroup == CG_PROJROCKETS) return;
-		// else if (targ.resist_plasma > 0 && inflictor.classgroup == CG_PROJCELLS) return;
-		// else if (targ.resist_bolts > 0 && inflictor.classgroup == CG_PROJCELLS) return;
-		// else if (targ.resist_poison > 0 && inflictor.classgroup == CG_PROJCELLS) return;
-		// else if (targ.resist_bloodcrystals > 0 && inflictor.classgroup == CG_PROJCELLS) return;
-		// else if (targ.resist_voidshards > 0 && inflictor.classgroup == CG_PROJCELLS) return;
-		// else if (targ.resist_elemental > 0 && inflictor.classgroup == CG_PROJCELLS) return;
+		else if (targ.resist_lava_nails > 0 && inflictor.classgroup == CG_PROJLAVANAILS) return;
+		else if (targ.resist_multi_rockets > 0 && inflictor.classgroup == CG_PROJMULTIROCKETS) return;
+		else if (targ.resist_plasma > 0 && inflictor.classgroup == CG_PROJPLASMAROGUE) return;
+		else if (targ.resist_bolts > 0 && inflictor.classgroup == CG_PROJBOLTS) return;
+		else if (targ.resist_poison > 0 && inflictor.classgroup == CG_PROJBOLTSPOISON) return;
+		else if (targ.resist_bloodcrystals > 0 && inflictor.classgroup == CG_PROJBLOODCRYSTALS) return;
+		else if (targ.resist_voidshards > 0 && inflictor.classgroup == CG_PROJVOID) return;
+		else if (targ.resist_elemental > 0 && inflictor.classgroup == CG_PROJMAGIC) return;
 	}
 	
 	//----------------------------------------------------------------------
@@ -561,7 +653,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		self.pain_finished = time + self.pain_timeout;
 		
 		// Ignoring pain from other monsters? (infighting)
-		if ((self.pain_ignore || self.temperament == 4) && attacker.flags & FL_MONSTER)
+		if ((self.pain_ignore || IsInsane(self)) && attacker.flags & FL_MONSTER)
 			self.pain_finished = self.pain_finished + 1 + random();
 		else {
 			// If accumulated pain is higher, use that instead
@@ -573,10 +665,9 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 			// nightmare mode monsters don't go into pain frames often
 			if (skill == SKILL_NIGHTMARE && targ.classgroup != CG_ZOMBIE) self.pain_finished = time + 5;
 
-			// Exceptions to pain not being blocked (even nightmare!)
-			// If the monster is in slime or lava always go into pain
-			if (self.watertype == CONTENT_SLIME || self.watertype == CONTENT_LAVA)
-				self.pain_finished = time + 0.3;
+			// Exceptions to pain not being blocked (even nightmare!).  If the monster is in slime or lava always go into pain
+			if (self.watertype == CONTENT_SLIME && !self.resist_acid) self.pain_finished = time + 0.3;
+			if (self.watertype == CONTENT_LAVA && !self.resist_fire) self.pain_finished = time + 0.3;
 		}
 	}
 	self = oldself;
@@ -589,8 +680,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	attacker - (self.owner) = monster/player OR (self) = direct attack
 	ignore   - (other) = Original target OR (world) = no exceptions
 ======================================================================*/
-void(entity inflictor, entity attacker, float damage, entity ignore, float checkclass) T_RadiusDamage =
-{
+void(entity inflictor, entity attacker, float damage, entity ignore, float checkclass) T_RadiusDamage = {
 	local	float 	points;
 	local	entity	head;
 	local	vector	org, imporg;
@@ -621,8 +711,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 				// Check for any breakable which is prone to explosive damage
 				else if (ai_foundbreakable(attacker, head,TRUE) && head.brktrigmissile !=0) {
 					trigger_ent(head, attacker);
-				}
-				else {
+				} else {
 					// Can be damaged and NOT immune to radius (splash) damage
 					if (head.takedamage > 0 && head.noradiusdmg == 0) {
 						// This formula is using bounding box size which means
@@ -640,16 +729,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 							// It will do several traces (source->target) to check
 							// for any blocking entities (lifts, doors, walls etc)
 							if (CanDamage (head, inflictor)) {
-								// Two types of splash damage (rocket / cell)
-								if (inflictor.classgroup == CG_PROJCELLS) {
-									// Does target have cell resistance?
-									if (head.resist_cells != 0)
-										points = Resist_Damage(head, AM_CELLS, points);
-								} else {
-									// Does target have rocket resistance?
-									if (head.resist_rockets != 0)
-										points = Resist_Damage(head, AM_ROCKETS, points);
-								}
+
 								
 								// Any damage left? Check for poison as well
 								if (points > 0) T_Damage (head, inflictor, attacker, points, DAMARMOR);
@@ -685,11 +765,13 @@ float(entity e, float heal, float ignore) T_Repair = {
     if (e.armorvalue + heal >= full) e.armorvalue = full;
 	else e.armorvalue = e.armorvalue + heal;
 
-    // if (!e.armortype)
-        // e.armortype = ARMOR_GRN_TYPE;
-        // if (e.flags & FL_CLIENT)
-            // if (!(e.items2 & IT2_ARMOR1) || !(e.items2 & IT2_ARMOR2) || !(e.items2 & IT2_ARMOR3))
-                // e.items2 = e.items2 | IT2_ARMOR1;
-    //}
+	if (e.curse_type == CURSE_ARMOR) {
+		e.armorvalue = e.armorvalue - heal; // flip it!
+		if (e.armorvalue < 0) {
+			e.armorvalue = 0;
+			e.armortype = 0;
+		}
+	}
+
     return heal;        // Return amount healed instead of TRUE.
 };

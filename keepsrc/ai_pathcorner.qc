@@ -1,12 +1,12 @@
-//======================================================================
-// Path_Corner FUNCTIONS
-//======================================================================
 float PATHC_EXACT = 1;		// Exact route logic
 float PATHC_INSTANT = 2;	// Instantly move to this path_corner
 float PATHC_REVERSE = 4;	// Train direction is reversed at this corner
 float PATHC_NOPAUSE = 8;	// Train does not pause on this corner
-
 float PATHC_RESET = 15;		// Use to reset spawnflags
+float PATHC_TARGET1 = 16;	// Has target been found
+float PATHC_TARGET2 = 32;	// Has target2 been found
+float PATHC_BACKLINK = 64;	// Backward path route
+float PATHC_DEADEND = 128;	// no targets found
 
 float ARROW_PRIMARY = 1.5;	// Active route highlight
 float ARROW_GREEND = 0;
@@ -14,11 +14,6 @@ float ARROW_BROWN = 1;
 float ARROW_GREENL = 2;
 float ARROW_WHITE = 3;
 float ARROW_RED   = 4;
-
-float PATHC_TARGET1 = 16;	// Has target been found
-float PATHC_TARGET2 = 32;	// Has target2 been found
-float PATHC_BACKLINK = 64;	// Backward path route
-float PATHC_DEADEND = 128;	// no targets found
 
 float STATE_ROUTE1 = 1;		// Route 1 is the priority (forward)
 float STATE_ROUTE2 = 2;		// Route 2 is the priority (forward)
@@ -53,9 +48,9 @@ NOPAUSE   : Train does not pause on this path corner
 Node based path routing system
 
 ======================================================================*/
-entity(string arrowmdl, vector arroworg) path_corner_spawnarrow =
-{
+entity(string arrowmdl, vector arroworg) path_corner_spawnarrow = {
 	local entity arrow;
+
 	arrow = spawn();
 	arrow.classtype = CT_ATTACHMENT;
 	arrow.movetype = MOVETYPE_NONE;
@@ -78,8 +73,7 @@ entity(string arrowmdl, vector arroworg) path_corner_spawnarrow =
 // Original logic did not cope with broken or missing target/target2
 // Moved red arrow updates to the end to catch all broken links
 //----------------------------------------------------------------------
-void() path_corner_updatearrow =
-{
+void() path_corner_updatearrow = {
 	// ROUTE 2 (forward2) active
 	if (self.spawnflags & PATHC_TARGET2 && self.state == STATE_ROUTE2) {
 		if (self.attachment) { self.attachment.skin = ARROW_GREENL; self.attachment.alpha = self.alpha; }
@@ -100,32 +94,26 @@ void() path_corner_updatearrow =
 	}
 
 	// Draw any broken/missing routes with RED arrows
-	if (!(self.spawnflags & PATHC_TARGET1) && self.attachment) {
-		self.attachment.skin = ARROW_RED; self.attachment.alpha = self.alpha; }
-	if (!(self.spawnflags & PATHC_TARGET2) && self.attachment2) {
-		self.attachment2.skin = ARROW_RED; self.attachment2.alpha = self.alpha; }
-	if (!(self.spawnflags & PATHC_BACKLINK) && self.attachment3) {
-		self.attachment3.skin = ARROW_RED; self.attachment3.alpha = self.alpha; }
+	if (!(self.spawnflags & PATHC_TARGET1) && self.attachment) { self.attachment.skin = ARROW_RED; self.attachment.alpha = self.alpha; }
+	if (!(self.spawnflags & PATHC_TARGET2) && self.attachment2) { self.attachment2.skin = ARROW_RED; self.attachment2.alpha = self.alpha; }
+	if (!(self.spawnflags & PATHC_BACKLINK) && self.attachment3) { self.attachment3.skin = ARROW_RED; self.attachment3.alpha = self.alpha; }
 };
 
 //----------------------------------------------------------------------
-void() path_corner_setuparrow =
-{
-	// Visual AI pathing only active in dev mode
-	if (query_configflag(SVR_DEVHELPER)) return;
+void() path_corner_setuparrow = {
+	if (query_configflag(SVR_DEVHELPER)) return; // Visual AI pathing only active in dev mode
 
-	// Setup default alpha for arrows
-	if (!self.alpha) self.alpha = 0.35;
+	if (!self.alpha) self.alpha = 0.35; // Setup default alpha for arrows
 	
 	// Draw back link arrow
 	if (self.spawnflags & PATHC_BACKLINK) {
 		self.attachment3 = path_corner_spawnarrow( self.mdl, self.oldorigin+'0 0 -8');
 		self.movedir = normalize(self.movetarget3.oldorigin - self.oldorigin);
 		self.attachment3.angles = vectoangles(self.movedir);
-	}
-	// Missing backlink, this is a bad situation!
-	// Highlight this problem with a pointing up RED arrow
-	else {
+	} else {
+		// Missing backlink, this is a bad situation!
+		// Highlight this problem with a pointing up RED arrow
+
 		// There is no back link, so use forward target instead
 		if (self.spawnflags & PATHC_TARGET1) self.oldenemy = self.movetarget;
 		else self.oldenemy = self;
@@ -142,10 +130,10 @@ void() path_corner_setuparrow =
 		self.attachment = path_corner_spawnarrow( self.headmdl, self.oldorigin);
 		self.movedir = normalize(self.movetarget.oldorigin - self.oldorigin);
 		self.attachment.angles = vectoangles(self.movedir);
-	}
-	// Missing forward link (deadend)
-	// Highlight this issue with a pointing up RED arrow
-	else {
+	} else {
+		// Missing forward link (deadend)
+		// Highlight this issue with a pointing up RED arrow
+
 		// There is no forward link, so use back link instead
 		if (self.spawnflags & PATHC_BACKLINK) self.oldenemy = self.movetarget3;
 		else self.oldenemy = self;
@@ -162,14 +150,12 @@ void() path_corner_setuparrow =
 		self.movedir = normalize(self.movetarget2.oldorigin - self.oldorigin);
 		self.attachment2.angles = vectoangles(self.movedir);
 	}
-	
-	// Update arrows if route logic active
-	path_corner_updatearrow();
+
+	path_corner_updatearrow(); // Update arrows if route logic active
 };
 
 //----------------------------------------------------------------------
-void() path_corner_setuptargets =
-{
+void() path_corner_setuptargets = {
 	local entity fdest;
 	
 	// Reset primary, secondary and backlink target entities
@@ -225,8 +211,7 @@ void() path_corner_setuptargets =
 			// Keep searching for path_corner entity
 			else fdest = find(fdest, targetname, self.targetback);
 		}
-	}
-	else {
+	} else {
 		// Setup back link name, if none exist use targetname
 		self.targetback = self.targetname;
 		
@@ -346,8 +331,7 @@ void() path_corner_use = {
 		dprint("Corner ("); dprint(self.targetname);
 		dprint(") Route ("); dprint(ftos(self.state));
 		dprint(")\n");
-	}
-	else {
+	} else {
 		// Toggle route selection if EXACT routing logic is active
 		// and the path corner has multiple routes available
 		if (self.spawnflags & PATHC_EXACT && self.spawnflags & PATHC_TARGET2) {
@@ -389,22 +373,15 @@ void(entity mon, entity obj) give_monster_object = {
 	mon.entattachment = obj;
 	setorigin(obj,org); // ok we got it.
 	mon.hasobject = "true"; // signal that we are holding something
-	
-	if (mon.classtype == CT_MONOGLE) {
-		ogle_pushcart1();
-	}
-
 	self = tself; // restore previous self
 };
 
 void(entity mon) take_monster_object = {
 	mon.hasobject = string_null;
 	mon.entattachment = world;
-}
+};
 
-//----------------------------------------------------------------------
-void() path_corner_touch =
-{
+void() path_corner_touch = {
 	if (!(other.flags & FL_MONSTER)) return;	// ONLY Monsters can use path corners
 	if (other.health < 1) return;				// Dead things don't need path guidance
 	if (other.enemy) return;					// In combat, no time to follow paths
@@ -466,9 +443,7 @@ void() path_corner_touch =
 			other.pausetime = time + self.wait + random()*self.delay;
 			other.think = other.th_stand;
 			other.nextthink = time + 0.05;
-		}
-		// no pause, turn and keep walking towards next goal
-		else {
+		} else { // no pause, turn and keep walking towards next goal
 			other.ideal_yaw = vectoyaw(other.goalentity.origin - other.origin);
 			other.pausetime = 0;
 		}
@@ -480,8 +455,7 @@ void() path_corner_touch =
 //----------------------------------------------------------------------
 // Used by monsters, func_trains and tether system
 //----------------------------------------------------------------------
-void() path_corner =
-{
+void() path_corner = {
 	// Really need to prevent path corners with no targetname
 	// otherwise it will cause problems with linking later
 	if (self.targetname == "") {
@@ -517,8 +491,7 @@ void() path_corner =
 	// Work out which (random/toggle) route logic is active
 	if (self.spawnflags & PATHC_EXACT) {
 		// If state is specified and outside range, reset
-		if (self.state < STATE_ROUTE1 || self.state > STATE_ROUTE3)
-			self.state = STATE_ROUTE1;
+		if (self.state < STATE_ROUTE1 || self.state > STATE_ROUTE3) self.state = STATE_ROUTE1;
 	}
 	else self.state = STATE_ROUTE1;
 	// Cannot start with route 2 (alt forward) if target2 is empty!?!
@@ -539,23 +512,20 @@ void() path_corner =
 		while (self.lip > 0) {
 			self.lip = self.lip - 1;
 			self.oldorigin = self.oldorigin + '0 0 8';
-			if (pointcontents(self.oldorigin) != CONTENT_SOLID)
-				self.lip = -1;
+			if (pointcontents(self.oldorigin) != CONTENT_SOLID) self.lip = -1;
 		}
 	}
 	// Origin is still in something solid, reset
 	if (self.lip != -1) self.oldorigin = self.origin;
 
 	// Check for alt corner speed (its really a duplicate of speed)
-	if (self.corner_speed > 0 && self.speed == 0)
-		self.speed = self.corner_speed;
+	if (self.corner_speed > 0 && self.speed == 0) self.speed = self.corner_speed;
 	
 	// Check for dead end path_corner
 	if (self.target == "") self.spawnflags = self.spawnflags | PATHC_DEADEND;
 
-	// Allow 1 frame for path_corners to spawn
+	// Allow time for path_corners to spawn
 	// Got to start linking before func_train (2nd frame)
 	self.think = path_corner_setuptargets;
 	self.nextthink = time + 0.1;
-	
 };

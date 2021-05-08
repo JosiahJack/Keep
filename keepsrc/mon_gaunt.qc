@@ -200,6 +200,7 @@ void(vector p1, vector p2, entity from, float damage) GauntLightningDamage =
 	local entity e1;
 	local entity e2;
 	local vector f;
+	local float preserve_classgroup;
 	f = p2 - p1;
 	normalize(f);
 	f_x = MSG_BROADCAST - f_y;
@@ -215,8 +216,11 @@ void(vector p1, vector p2, entity from, float damage) GauntLightningDamage =
 	}
 	if (trace_ent.takedamage)
 	{
+		preserve_classgroup = from.classgroup;
+		if (from) from.classgroup = CG_PROJCELLS;
 		particle(trace_endpos, '0 0 100', 225, damage * SECRET_1ST_DOWN);
 		T_Damage(trace_ent, from, from, damage, DAMARMOR);
+		if (from) from.classgroup = preserve_classgroup;
 		if (self.classname == "player")
 		{
 			if (other.classname == "player")
@@ -941,6 +945,7 @@ void() monster_gaunt =
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = 0;
 	self.resist_cells = 0.25;
+	self.resist_plasma = 0.25;
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);

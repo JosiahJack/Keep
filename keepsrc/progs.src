@@ -15,8 +15,10 @@ defsdrake.qc
 defshexen2.qc
 defsaoa.qc
 defsq15.qc
-dpextensions.qc
-qsextensions.qc
+defsredfield.qc
+dpextensions.qc //Lots of stuff
+qsextensions.qc //And more
+fteextensions.qc //Now it's a party!
 qrobotdefs.qc
 
 mathlib.qc
@@ -75,8 +77,8 @@ ai_ammoresist.qc
 fx_nehahra.qc
 fx_q15.qc
 hiphorn.qc
+ai_sight.qc
 ai_subs.qc
-ai_subskeep.qc
 ai_states.qc
 ai_combat.qc
 ai_combatkeep.qc
@@ -105,9 +107,11 @@ projectiles_nehahra.qc
 precache_keep.qc
 world.qc
 
+shrine.qc
 client_cshift.qc
 client_mapvar.qc
 client_debuff.qc
+monster_debuff.qc
 client_power.qc
 client_evilmode.qc
 legs.qc
@@ -118,8 +122,6 @@ client_info.qc
 client_advinfo.qc
 misc_globalstate.qc
 monsters.qc
-monsters_drake.qc
-drake_respawn.qc
 items.qc
 items_keep.qc
 drake_armor.qc
@@ -167,6 +169,8 @@ sounds.qc
 soundskeep.qc
 misc_rubicon2.qc
 versus.qc
+
+soul.qc
 
 // Monsters
 mon_demon.qc
@@ -318,6 +322,9 @@ mon_trog.qc
 //mon_beard.qc
 mon_nehahra.qc
 //mon_mistermax.qc
+//mon_archgaunt.qc
+//mon_jagger.qc
+//mon_wraith_nehahra.qc // drake's version
 
 // Soul of Evil stuff
 mon_axeman.qc
@@ -350,12 +357,15 @@ mon_snakeman.qc
 mon_wspider.qc
 mon_anaconda.qc
 mon_virtusboss.qc
+vigil.qc // From Wright's Vigil map, had a useful triggerable Congratulations Intermission
+//mon_redback.qc // From tefdbl3 by T. H. Johansen (TJ)
 
 // Keep stuff
 qrobot.qc // Qmaster's super syncronized trains, boring right, until the whole world is made of them
 mon_inquisitor.qc // Inquisitor by Qmaster, model from Hexen II
 mon_octa.qc // Octopus by madfox
 //mon_lampoon.qc // Lampoon fish by madfox
+//mon_rhynch.qc // Jelly Fish by madfox
 //mon_balrog.qc // Balrog by madfox
 //mon_xogre.qc // Elden Ogre by madfox derived from QTest
 mon_fragy.qc // Frog by madfox
@@ -365,6 +375,8 @@ mon_fragy.qc // Frog by madfox
 mon_swarm.qc // Bees by madfox
 mon_sheep.qc // Hexen2 sheep, modified
 mon_ogle.qc // Heretic2 ogle, slightly modified
+mon_flytrap.qc // Venus Fly Trap by madfox
+mon_spellmas.qc // Red worm boss called Baseboss from madfox's Phantom Pholly map.  Interesting trivia, this is probably the only mod that combines hipnotic and extras_r4
 
 // Hexen 2 (most are in Drake but these weren't)
 mon_fangel.qc
@@ -379,6 +391,12 @@ mon_dfury_boss.qc
 mon_shalrath_boss.qc
 mon_reiver.qc
 mon_oldone_tentacle.qc
+
+// The Lieutenant (of lthsp3, back2forward, etc.)
+// mon_sknight.qc // Crossbow normal Knight
+
+// Redfield
+mon_raven.qc
 
 // Hipnotic spawn - must be LAST
 hipspawn.qc

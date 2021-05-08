@@ -26,6 +26,7 @@ void()	Frag_JumpTouch = {
 	if (other.takedamage) {
 		if ( vlen(self.velocity) > 300 ) {
 			ldmg = 10 + 10*random();
+			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
 			T_Damage (other, self, self, ldmg, DAMARMOR);	
 		}
 	}
@@ -269,7 +270,11 @@ void() monster_fragy = {
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
 
-	self.passive_state = 1;
+	// Standard DENIZEN AI
+	if (!self.alignment) self.alignment = NEUTRAL;
+	if (!self.passive_state) self.passive_state = 1;
+	if (!self.temperament) self.temperament = TEMPRA_PASSIVE;
+	if (!self.vulnerability) self.vulnerability = VULN_RESISTANT;
 
 	self.classtype = CT_MONFROG;
 	self.classgroup = CG_HARMLESS;

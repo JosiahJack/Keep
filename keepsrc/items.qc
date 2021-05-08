@@ -342,7 +342,7 @@ void() item_touch =
 				return;
 			}
 		} else {
-			centerprint_msg3(other,"Press \b'e'\b to purchase for ",ftos(self.cost)," coins.");
+			centerprint3(other,"Press \b'e'\b to purchase for ",ftos(self.cost)," coins.");
 			return;
 		}
 	}
@@ -503,14 +503,15 @@ void() item_on =
 {
 	self.estate = ESTATE_ON;
 	self.movetype = MOVETYPE_NONE;
-
+	if (self.classtype == CT_SHROOM) dprint("...item...on!?!?!\n");
 	// Restore any effect flags settings (various dlight glows)
 	if (self.savedeffects > 0) self.effects = self.savedeffects;
 	
 	// Check for delayed/trigger_once functionality?
-	if (self.spawnflags & ENT_STARTOFF || self.attack_finished > time)
+	if (self.spawnflags & ENT_STARTOFF || self.attack_finished > time) {
+		if (self.classtype == CT_SHROOM) dprint("...hiding shroom!?!?!\n");
 		self.solid = SOLID_NOT;
-	else {
+	} else {
 		// Restore movement, solid and model parameters
 		if(self.spawnflags & ITEM_FLOATING) self.movetype = MOVETYPE_NONE;
 		else self.movetype = MOVETYPE_TOSS;
@@ -523,6 +524,7 @@ void() item_on =
 		// Setup touch/damage/bounding box functionality
 		self.think = SUB_Null;
 		item_restore();
+		if (self.classtype == CT_SHROOM) dprint("finished shroom!\n");
 	}
 };
 
@@ -612,6 +614,7 @@ void() item_start =
 
 		if (self.spawnflags & ENT_STARTOFF) self.estate_off();
 		else {
+			if (self.classtype == CT_SHROOM) { item_on(); return; }
 			// delay drop to floor to make sure all doors have been spawned
 			// spread think times so they don't all happen at same time
 			self.nextthink = time + 0.1 + random()*0.5;
@@ -661,17 +664,16 @@ float (entity targ, float t_healamount, float ignore) T_Heal =
 };
 
 //----------------------------------------------------------------------
-void() health_touch =
-{
+void() health_touch = {
 	local string s;
 
 	// Megahealth?  Ignore max_health...
 	if (self.classtype == CT_HEALMEGA) {
 		if (other.health >= other.mega_health) return;
 		if (!T_Heal(other, self.healamount, 1)) return;
-	}
-	else { 
+	} else {
 		if (!T_Heal(other, self.healamount, 0)) return;
+		if (self.classtype == CT_HEALVIAL) ResetDebuffRotting(other);
 	}
 		
 	// Check for randomizer megahealth
@@ -687,7 +689,7 @@ void() health_touch =
 	sprint(other, " health\n");
 	if (self.noise != SOUND_EMPTY) 
 		sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-	stuffcmd (other, "bf\n");
+	Safe_stuffcmd (other, "bf\n");
 	
 	activator = other;
 	SUB_UseTargets();
@@ -695,7 +697,7 @@ void() health_touch =
 	// Megahealth = rot down the player's super health
 	// Moved functionality to debuff (rotting) system
 	// Rotting_Qty is set to zero (default) on item spawn
-	if (self.classtype == CT_HEALMEGA) RotDeBuff(other, self.rotting_qty);
+	if (self.classtype == CT_HEALMEGA && !(self.perms & POW_REGEN || self.perms & POW_ARMORBERSERKER || self.perms & POW_REGENLESSER)) RotDeBuff(other, self.rotting_qty);
 
 	// Quick exit, no need for following stuff
 	if (self.progspawnlist) return;
@@ -1049,46 +1051,37 @@ void() item_armorInv =
 	item_armor_setup();
 };
 
-/*======================================================================
- Deathmatch Weapon Rules
-======================================================================*/
-float(float w) DM_RankForWeapon =
-{
-	if (w == IT_LIGHTNING) return 1;
-	if (w == IT_ROCKET_LAUNCHER) return 2;
-	if (w == IT_SUPER_NAILGUN) return 3;
-	if (w == IT_GRENADE_LAUNCHER) return 4;
-	if (w == IT_SUPER_SHOTGUN) return 5;
-	if (w == IT_NAILGUN) return 6;
-	return 7;	// Axe
-};
+float GetWepIDIndex (float wep, float inhackbank);
+vector GetWepIT_FromID(float id);
 
-//----------------------------------------------------------------------
-void(float new) DM_Weapon =
-{
+// Deathmatch Weapon Rules
+void(entity targ, float new, float oldhackbank) DM_Weapon = {
 	local float oldrank, newrank;
+	local vector retid;
 
-// change self.weapon if desired
-	oldrank = DM_RankForWeapon (self.weapon);
-	newrank = DM_RankForWeapon (new);
-	if ( newrank < oldrank ) self.weapon = new;
+	// change targ.weapon if desired
+	oldrank = GetWepIDIndex(targ.weapon, oldhackbank); // passed along old value so it corresponded, targ.weapon not changed yet
+	newrank = GetWepIDIndex (new, targ.selfweaponismoditems); // But we already changed selfweaponismoditems before getting here
+	if ( newrank > oldrank ) {
+		retid = GetWepIT_FromID(new);
+		targ.weapon = retid_x;
+		targ.selfweaponismoditems = retid_y;
+	}
 };
 
-//----------------------------------------------------------------------
-void(entity targ) bound_other_ammo =
-{
-	if (targ.ammo_shells > AMMO_MAXSHELLS) targ.ammo_shells = AMMO_MAXSHELLS;
-	if (targ.ammo_nails > AMMO_MAXNAILS) targ.ammo_nails = AMMO_MAXNAILS;
-	if (targ.ammo_rockets > AMMO_MAXROCKETS) targ.ammo_rockets = AMMO_MAXROCKETS;		
-	if (targ.ammo_cells > AMMO_MAXCELLS) targ.ammo_cells = AMMO_MAXCELLS;
-	if (targ.ammo_bolts > AMMO_MAXBOLTS) targ.ammo_bolts = AMMO_MAXBOLTS;
-	if (targ.ammo_poison > AMMO_MAXPOISON) targ.ammo_poison = AMMO_MAXPOISON;
-	if (targ.ammo_lava_nails > AMMO_MAXLAVANAILS) targ.ammo_lava_nails = AMMO_MAXLAVANAILS;
-	if (targ.ammo_multi_rockets > AMMO_MAXMULTIROCKETS) targ.ammo_multi_rockets = AMMO_MAXMULTIROCKETS;
-	if (targ.ammo_plasma > AMMO_MAXPLASMA) targ.ammo_plasma = AMMO_MAXPLASMA;		
-	if (targ.ammo_plasma > AMMO_MAXBLOOD) targ.ammo_bloodcrystals = AMMO_MAXBLOOD;		
-	if (targ.ammo_plasma > AMMO_MAXVOID) targ.ammo_voidshards = AMMO_MAXVOID;		
-	if (targ.ammo_plasma > AMMO_MAXMANA) targ.ammo_elemental = AMMO_MAXMANA;		
+void(entity targ) bound_other_ammo = {
+	if (targ.ammo_shells > targ.maxshells) targ.ammo_shells = targ.maxshells;
+	if (targ.ammo_nails > targ.maxnails) targ.ammo_nails = targ.maxnails;
+	if (targ.ammo_rockets > targ.maxrockets) targ.ammo_rockets = targ.maxrockets;	
+	if (targ.ammo_cells > targ.maxcells) targ.ammo_cells = targ.maxcells;
+	if (targ.ammo_bolts > targ.maxbolts) targ.ammo_bolts = targ.maxbolts;
+	if (targ.ammo_poison > targ.maxpoison) targ.ammo_poison = targ.maxpoison;
+	if (targ.ammo_lava_nails > targ.maxlavanails) targ.ammo_lava_nails = targ.maxlavanails;
+	if (targ.ammo_multi_rockets > targ.maxmultirockets) targ.ammo_multi_rockets = targ.maxmultirockets;
+	if (targ.ammo_plasma > targ.maxplasma) targ.ammo_plasma = targ.maxplasma;	
+	if (targ.ammo_bloodcrystals > targ.maxblood) targ.ammo_bloodcrystals = targ.maxblood;
+	if (targ.ammo_voidshards > targ.maxvoid) targ.ammo_voidshards = targ.maxvoid;
+	if (targ.ammo_elemental > targ.maxmana) targ.ammo_elemental = targ.maxmana;	
 };
 
 /*======================================================================
@@ -1350,7 +1343,7 @@ void() weapon_supernailgun =
 	// Check for custom model setup?
 	item_debugcustomdl();
 	if (self.mdl == "") self.mdl = MODEL_GWEAP_SNG;
-	precache_model (self.mdl);
+	if (!self.precached) precache_model (self.mdl);
 	self.weapon = IT_SUPER_NAILGUN;
 	self.classtype = CT_SUPER_NAILGUN;
 	if (self.netname == "") self.netname = "Super Nailgun";
@@ -1807,7 +1800,7 @@ void() key_touch =
 	sprint (other,"\n");
 	if (self.noise != SOUND_EMPTY) 
 		sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-	stuffcmd (other, "bf\n");
+	Safe_stuffcmd (other, "bf\n");
 	
 	// Add key to player inventory (items / customkey)
 	if (self.moditems > 0) {
@@ -2122,7 +2115,7 @@ void() item_custom_touch =
 	sprint (other,"\n");
 	if (self.noise != SOUND_EMPTY) 
 		sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-	stuffcmd (other, "bf\n");
+	Safe_stuffcmd (other, "bf\n");
 	
 	activator = other;
 	SUB_UseTargets();
@@ -2232,7 +2225,7 @@ void() sigil_touch =
 	//centerprint (other, "You got the rune!");
 	if (self.noise != SOUND_EMPTY) 
 		sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-	stuffcmd (other, "bf\n");
+	Safe_stuffcmd (other, "bf\n");
 	
 	// Add rune to server! not player
 	update_configflag(self.customkey, TRUE);
@@ -2334,7 +2327,7 @@ void() tomeofpower_touch =
 	sprint (other, self.netname);
 	sprint (other,"\n");
 	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-	stuffcmd (other, "bf\n");
+	Safe_stuffcmd (other, "bf\n");
 	
 	// This is a trigger once condition (regardless of coop)
 	item_finished();
@@ -3312,7 +3305,7 @@ void() BackpackTouch =
 	} else {
 		sound (other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
 	}
-	stuffcmd (other, "bf\n");
+	Safe_stuffcmd (other, "bf\n");
 
 	// Check ammo limts, change to best weapon and set ammo type
 	bound_other_ammo (other);
@@ -3736,6 +3729,41 @@ void() DropHealthpack =
 	item.item_flrcheck = fabs(item.mins_z) + 16;
 	item.think = item_thinkloop;		// Check floor
 	item.nextthink = time + 0.3;		// Let item drop first
+};
+
+void(string m, float wep, float clas) DropWeapon = {
+	local entity item;
+	// No cache no drops!
+	if (healthcache <= 0) return;
+	if (!m) return; // can't spawn nothing!
+
+	item = spawn();
+	item.classname = "weapon_toss";
+	item.origin = self.origin + '0 0 20';
+	item.mdl = m;
+	item.weapon = wep;
+	item.classtype = clas;
+	item.velocity_z = 300;
+	item.velocity_x = -100 + (random() * 200);
+	item.velocity_y = -100 + (random() * 200); // Give it some random toss!
+	
+	// Setup item correctly
+	item.flags = FL_ITEM;
+	item.solid = SOLID_TRIGGER;
+	item.movetype = MOVETYPE_TOSS;
+	item.touch = item_touch;
+	item.respawn_time = 0; // Once only
+	item.classgroup = CG_WEAPON;
+	item.touch2 = weapon_touch;
+	item.item_expired = 0;
+	setmodel (item, item.mdl);
+	item.bbmins = VEC_WPNS_MIN;
+	item.bbmaxs = VEC_WPNS_MAX;
+	setsize(item, item.bbmins, item.bbmaxs);
+	item.item_flrcheck = fabs(item.mins_z) + 16;
+	item.think = item_thinkloop;		// Check floor
+	item.nextthink = time + 0.3;		// Let item drop first
+	dprint("Tossed a weapon!\n");
 };
 
 //----------------------------------------------------------------------

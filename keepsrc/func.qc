@@ -897,7 +897,7 @@ void() func_chaos_touch =
 		set_randflags(self.style);
 		if (self.message2 != "") centerprint(other, self.message2);
 		else centerprint(other,"Chaos mode has been enabled!\n");
-		stuffcmd (other, "bf\n");
+		Safe_stuffcmd (other, "bf\n");
 	}
 	
 	// Force quick update
@@ -954,7 +954,7 @@ void() func_skill_touch =
 			sprint(other," has been selected!");
 		}
 		sprint(other,"\n");
-		stuffcmd (other, "bf\n");
+		Safe_stuffcmd (other, "bf\n");
 		
 		// Change skill level
 		cvar_set ("skill", ftos(self.style));

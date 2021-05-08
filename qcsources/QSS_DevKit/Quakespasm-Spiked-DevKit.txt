@@ -1,0 +1,144 @@
+QuakeSpasm-Spiked
+
+  ---------
+  1.  About
+
+  This is a set of examples intended for use with the Quakespasm-Spiked engine.
+  It should also be perfectly usable for FTE also, but isn't intended to provide much extended
+  functionality beyond that supported by QSS.
+  With certain exceptions, it should also function correctly with DP.
+
+  Included source files are intended to be compiled with fteqcc(gui). Other QCCs are
+  untested, but due to the use of qcc-specific extensions they're unlikely to work.
+
+  -------------
+  2.  Downloads
+
+  Parts of the sourcecode for this branch are available from:
+  https://github.com/Shpoike/Quakespasm
+  Other parts are found on FTEQW's svn.
+
+  Zip should eventually be available from:
+  http://fte.triptohell.info/moodles/qss/
+
+  -------------
+  3.  New Toys!
+      (This is all relative to the regular QuakeSpasm at the time of writing)
+
+      Windows users should probably just setup a file association for .src files to open with (the included) fteqccgui.
+      Such users can then just double-click whichever .src file they want to compile and go from there.
+
+      Linux users will need to compile with a commandline version of fteqcc. Use the -srcfile argument to use a non-default .src file.
+      eg:
+        cd simplecsqc/src && fteqcc -srcfile csprogs_simple.src
+
+  ----------------------
+  3.1.  QuakeC
+
+  o  QSS supports a hud-only version of CSQC.
+     QSS's CSQC support is still fairly young, so expect breakages (please report them if you find them!).
+
+     . simplecsqc/src/csprogs_simple.src
+       Compile this for a csprogs that contains a vanilla-like hud.
+       Note that if you want the hipnotic/quoth or rogue hud as a base, then you
+       should edit this file to use csqc_hud_hipnotic.qc or csqc_hud_rogue.qc instead of csqc_hud_vanilla.qc
+
+     . simplecsqc/src/progs_simple.src
+       The alternative way to compile a simple-csqc hud is to directly embed it within the ssqc progs.
+       Compile from this file for that.
+       Note that the id1 source isn't included, but will be read from ../../id1/src/*.qc if you already them there.
+       Hopefully this weirdness should make it slightly easier to mix+match.
+       To clarify, building the csqc entry points into ssqc only makes sense if you wish to
+       use a single progs for both the client and server VMs.
+       This method of using csqc is NOT supported in DP, but will work in QSS and current versions of FTE.
+
+     . simplecsqc/src/csprogs_menusys.qc
+       This combines the hud logic with my menusys mod.
+       The menu widgets will work fine in both QSS and FTE, with a few workarounds so that it works in DP also.
+       However the menus themselves contain a lot of FTE-only cvars, which are greyed out in engines that do not define those cvars (like QSS or DP). A mod that were to use these menus would likely wish to present a cleaner set of options, or presumably limit itself to only mod-specific options, and to defer to the engine's normal options menu for the rest.
+       Do note that as the menus are implemented in csqc, they will NOT function unless you are already on a map.
+
+  o  To adapt the provided hud code to your mod, first import the apropriate csqc_hud_*.qc file into your [cs]progs.dat, probably renaming it in the process.
+     For example, Arcane Dimensions uses the field 'moditems' to store new mod-specific things (like whether the weapons are upgraded).
+     This new field is not known to the csqc right now, so that needs to be fixed inside the ssqc.
+     Place the following into worldspawn: clientstat(STAT_MODITEMS, EV_FLOAT, moditems);
+       (If you want your mod to still work in vanilla/quakespasm/etc, you should checkextension("EXT_CSQC") first.)
+     You can then read the local player's moditems field from csqc using getstatf(STAT_MODITEMS) - note how the provided hud code caches the results into sitems+shealth+etc for simplicity.
+     A note regarding STAT_MODITEMS:
+         You'll need to define this yourself, with the same value on both ends, however acceptable values are limited according to the following rules:
+         stats between 0 and 31 are reserved for the engine. If you know what these stats do then that's fine, but don't change their behaviour unless you really know what you're doing. These stats will normally have a full range in FTE+QSS, but if the user restricts network protocols then they will regain their 8bit limits.
+         stats 32-127 are free for your exclusive use. Without protocol extensions, these stats will read as 0.
+         stats 128-255 are undefined. They'll probably work just fine (with default protocol extensions), but the end of the range might be used to convey physics values for clients to use in prediction. If you've got your own physics code then that's fine, but either way be sure to allocate from the low numbers first.
+     Then in the part of the code that draws the stuff, you can check if(smoditems&IT_UPGRADE_LG) and draw a different image instead of the regular LG gun.
+     Note that it is not recommended to change the items stat too much, if only because it means your mod will not work when csqc is disabled.
+     If your csqc is used with the wrong ssqc, your stats will either be set to 0, or conflict with that mod's custom stats.
+     One thing to be aware of with custom artwork is that of replacement content. You'll likely want to match the existing content, but whether that content is low-res or high-res is an annoying dilema.
+     
+
+  o  For completeness, I am including the parts of my menusys mod that do not apply to nor work with QSS.
+     Instead, start with simplecsqc/src/csprogs_menusys.src instead of any .src files inside the menusys dir.
+     I am not saying that this is the way that menus must be made, but this is a working example of a complete menu mod.
+     Its inclusion may also help enforce some standards when it comes to cvar names too, which is never a bad thing.
+     A simple Quake-like menu can be implemented much more simply vs menusys's inheritance-nightmare + widget-tree. That said, widget trees make mouse interactivity easier.
+     Do note that menusys's goal was never to 'feel quakey'.
+
+  o  I'm including my lame mapscript code.
+     To use in your own mod, just include script.qc somewhere at the end. It'll wrap your existing SUB_UseTargets function.
+     To use in a closed-source mod, consult the comments inside the mapscript/src/progs_merge.qc file.
+     This has been sitting on my HD a while, and is still almost completely untested, but is included as an example of string processing and because it might potentially be very useful if more mature.
+     I am certain that someone like Sock or Preach could make this much more usable+useful...
+     I'm not going to document the script language much. The example should be enough for now.
+     This uses the findentityfield builtin (for performance reasons), so is not expected to work in DP, but will work in both QSS+FTE.
+
+  ----------------------
+  3.2.  Particles
+
+  o  Baker's e1m1_effects 'mod' is included, as an awkward example of things a mapper could potentially do to add particle effects.
+
+  o  You can find some more extensive particle effects in id1/particles/*.cfg
+
+  ----------------------
+  3.3.  Mapping features
+
+  o  QSS supports bspx for coloured lights. You can use the -bspx argument with eg ericw's light util to create a map using this.
+     This removes the need to distribute an additional .lit file with your maps.
+     However, doing so means that this coloured lighting will not be available to engines that lack support for this.
+
+  o  Lightmap scaling is supported by QSS. This can be utilised via ericw's qbsp+light tools.
+
+  o  Jumbo lightmaps are supported. This reduces the need for lightmap subdivisions and can
+      yield higher performance on large surfaces, if compiled for it.
+	Enabled by running qbsp with eg -subdivide 4080.
+
+  o  Particles can be attached to point entities using the "emiteffect" field.
+
+  o  Surface emitters can be created with a worldspawn field
+
+  --------
+  4.  Todo
+
+  o  Everything.
+
+  -----------
+  5.  Copyright
+
+  o  Quake, Quakespasm, and QSS are released under the GNU GENERAL PUBLIC
+     LICENSE Version 2: http://www.gnu.org/licenses/gpl-2.0.html
+
+  o  Additional devkit code is licensed on a per-file basis, but all is GPL v2+ compatible.
+
+  -------------------
+  6.  Links / Contact
+
+  Homepage: http://fte.triptohell.info/moodles/qss/
+
+  Source + Issue tracker: https://github.com/Shpoike/Quakespasm
+
+  Forum: http://www.celephais.net/board/view_thread.php?id=61351
+
+  ------------
+  7.  Footnote
+
+  Wow, you actually read this far? dude, you must be bored.
+  Go play a computer game or something. Go now!
+

@@ -238,7 +238,8 @@ void() mino_JumpTouch =
 
 	if ( CanDamage(other, self) ) {
 		if ( vlen(self.velocity) > 300 ) {
-		  ldmg = 20 + 10*random();
+			ldmg = 20 + 10*random();
+			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
 			T_Damage (other, self, self, ldmg, DAMARMOR);	
 			spawn_touchblood (self, self.enemy, ldmg*3);
 		}
@@ -779,6 +780,8 @@ void() monster_minotaur = {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = 0; self.resist_cells = 0.5;
+	self.resist_multi_rockets = 0.5;
+	self.resist_plasma = 0.5;
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);

@@ -15,9 +15,9 @@ void (string rubblename) hipThrowRubble = {
    new.origin = self.origin;
    setmodel (new,rubblename);
    setsize (new,VEC_ORIGIN,VEC_ORIGIN);
-   new.velocity_x = (70.000 * crandom ());
-   new.velocity_y = (70.000 * crandom ());
-   new.velocity_z = (140.000 + (70.000 * random ()));
+   new.velocity_x = ((self.mangle_x) + 70.000 * crandom ());
+   new.velocity_y = ((self.mangle_y) + 70.000 * crandom ());
+   new.velocity_z = ((self.mangle_z) + 140.000 + (70.000 * random ()));
    new.movetype = MOVETYPE_BOUNCE;
    new.solid = SOLID_BBOX;
    new.avelocity_x = (random () * 600.000);
@@ -33,27 +33,17 @@ void (string rubblename) hipThrowRubble = {
 };
 
 void () hip_rubble_use = {
-   local float which;
-   local float index;
+   local float which, index;
 
    index = FALSE;
-   do {
+   while (index < self.count) {
       which = self.cnt;
-      if ( (self.cnt == FALSE) ) {
-         which = (TRUE + (MOVETYPE_WALK * random ()));
-         which = floor (which);
-      }
-      if ( (which == 1) ) {
-         hipThrowRubble ("progs/hipnotic/rubble1.mdl");
-      } else {
-         if ( (which == 2) ) {
-            hipThrowRubble ("progs/hipnotic/rubble3.mdl");
-         } else {
-            hipThrowRubble ("progs/hipnotic/rubble2.mdl");
-         }
-      }
+      if (!self.cnt) which = floor(3 * random ());
+      if (which == 1) hipThrowRubble ("progs/hipnotic/rubble1.mdl");
+      if (which == 2) hipThrowRubble ("progs/hipnotic/rubble3.mdl");
+      if (which == 3) hipThrowRubble ("progs/hipnotic/rubble2.mdl");
       index = (index + TRUE);
-   } while ( (index < self.count) );
+   }
 };
 
 void () func_rubble = {
@@ -63,6 +53,7 @@ void () func_rubble = {
    precache_sound ("zombie/z_hit.wav");
    self.classname = "rubble";
    self.cnt = FALSE;
+	if (!self.count) self.count = 1;
    self.use = hip_rubble_use;
 };
 
@@ -70,7 +61,8 @@ void () func_rubble1 = {
    precache_model ("progs/hipnotic/rubble1.mdl");
    precache_sound ("zombie/z_hit.wav");
    self.classname = "rubble1";
-   self.cnt = TRUE;
+   self.cnt = 1;
+	if (!self.count) self.count = 1;
    self.use = hip_rubble_use;
 };
 
@@ -78,7 +70,8 @@ void () func_rubble2 = {
    precache_model ("progs/hipnotic/rubble3.mdl");
    precache_sound ("zombie/z_hit.wav");
    self.classname = "rubble2";
-   self.cnt = FL_SWIM;
+   self.cnt = 2;
+	if (!self.count) self.count = 1;
    self.use = hip_rubble_use;
 };
 
@@ -86,6 +79,7 @@ void () func_rubble3 = {
    precache_model ("progs/hipnotic/rubble2.mdl");
    precache_sound ("zombie/z_hit.wav");
    self.classname = "rubble3";
-   self.cnt = MOVETYPE_WALK;
+   self.cnt = 3;
+	if (!self.count) self.count = 1;
    self.use = hip_rubble_use;
 };

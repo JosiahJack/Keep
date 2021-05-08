@@ -50,12 +50,12 @@ void() bane_shadow = {
 //
 // Checks if entity is unable to fly.
 float(entity ent) Grounded = {
-    if (ent.movetype != MOVETYPE_FLY)
-        if (ent.movetype != MOVETYPE_NOCLIP)
-            if (ent.movetype != MOVETYPE_FLYMISSILE)
-                if (!(ent.flags & FL_FLY))
-                    if (!ent.wing_finished)  // Boots provide stability.
-                        return TRUE;
+		if (ent.movetype != MOVETYPE_FLY)
+			if (ent.movetype != MOVETYPE_NOCLIP)
+				if (ent.movetype != MOVETYPE_FLYMISSILE)
+					if (!(ent.flags & FL_FLY))
+						if (!ent.wing_finished)  // Boots provide stability.
+							return TRUE;
 
     return FALSE;   // I can fly!
 };
@@ -123,8 +123,7 @@ void() Quake_Think = [ 0, Quake_Think ] {
             }
 
             dizzy = TRUE;
-            if ((head.flags & FL_MONSTER) && !(head.fighting)) dizzy = FALSE; // Don't drift -- take damage only.
-
+            if ((head.flags & FL_MONSTER) && !head.enemy) dizzy = FALSE; // Don't drift -- take damage only.
             org = Midpoint (head);
 
             if (radius)	dist = 1 - (vlen(self.origin - org) / radius);
@@ -134,8 +133,7 @@ void() Quake_Think = [ 0, Quake_Think ] {
 
 			// Shake view.  Only creatures can see.
             if (head.flags & FLx_CREATURE) {
-                if (head.classname == "player")
-                {   // FIXME:  Cameras in cutscene won't shake.
+                if (head.classname == "player") {
                     upper = 100;
                     // FIXME:  Should this vary by magnitude?
                     head.punchangle_x = crandom() * self.mangle_x;
@@ -198,11 +196,6 @@ void() Quake_Think = [ 0, Quake_Think ] {
         }
         head = head.chain;
     }
-
-	// Zer quakes ping once every 0.15 sec, but I'll use standard 10 fps
-	// in Drake.  Quakes in Quoth seem to ping at least as quickly.
-	// DISABLED -- 10 fps stuff done in anim. macro above.
-	// self.nextthink = time + 0.1;
 };
 
 // Note:  Quake can ping for 'damage' up to five times if it lasts
@@ -314,8 +307,6 @@ void() trigger_quake = {
     if (!(self.spawnflags & 1)) self.touch = tq_touch; // PM:  Added notouch flag.
 };
 
-
-//==========================================================================
 //  Wrath of God
 // WOG stands for 'Wrath Of God'.
 float   WOG_DAMAGE  = 80;

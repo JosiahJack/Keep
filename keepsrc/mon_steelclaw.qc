@@ -190,7 +190,7 @@ void() steelc_JumpTouch =
 	// Prevents packs from killing themselves
 	if (self.classgroup != other.classgroup && other.takedamage) {
 		sound (self, CHAN_VOICE, "steelclaw/jumphit.wav", 1, ATTN_NORM);
-		BleedDeBuff(other);
+		if (Align_DamageModifier(other,self,1, TRUE)) BleedDeBuff(other);
 		spawn_touchblood (self, self.enemy, 100);
 	}
 

@@ -33,48 +33,37 @@
 // Checks if entity has reflection from shield or armor.
 // Return values: 0 = none, 1 = shield, 2 = courage armor.
 float(entity ent, vector spot, float damage) HasReflection = {
-// Check for artifact because it toggles particle field off and on during
-// the three second warning.
-    if (ent.mirror_finished)
-        return TRUE;
-// Non-artifact sources of reflection require an active particle field.
-    if (ent.effects & EF_BRIGHTFIELD)
-        return TRUE;
-// Update 7/16/09:  Shub shields
+	// Check for artifact because it toggles particle field off and on during
+	// the three second warning.
+    if (ent.mirror_finished) return TRUE;
+	// Non-artifact sources of reflection require an active particle field.
+    if (ent.effects & EF_BRIGHTFIELD) return TRUE;
+	// Update 7/16/09:  Shub shields
     if (ent.xfl & XFL_SHIELDS)
-        if (ent.classname == "monster_oldone")
-            return TRUE;
-// Update:  Entity can reflect frontal attacks if wearing courage armor.
+        if (ent.classname == "monster_oldone") return TRUE;
+
+	// Update:  Entity can reflect frontal attacks if wearing courage armor.
     if (ent.armorvalue >= damage)
-    /*if (UseCourage (ent, spot))
-    {
+    if (UseCourage (ent, spot)) {
         if (damage)     // Mess with hud only if there is damage.
         if (ent.takedamage)
-        if ( !((ent.flags & FL_GODMODE) || ent.invincible_finished) )
-        {   // Degrade armor only if vulnerable to damage.
-            if (ent.armorvalue > damage)
-            {
+        if ( !((ent.flags & FL_GODMODE) || ent.invincible_finished) ) { // Degrade armor only if vulnerable to damage.
+            if (ent.armorvalue > damage) {
                 ent.armorvalue = ent.armorvalue - damage;
-// DISABLED -- Armor flash.
+				// DISABLED -- Armor flash.
                // if (ent.flags & FL_CLIENT)
-                   // if (damage > 0)
-                       // ent.dmg_save = ent.dmg_save + damage;
-            }
-            else
-            {   // Strip armor.
-                Armor_Remove (ent);
+                   // if (damage > 0) ent.dmg_save = ent.dmg_save + damage;
+            } else {   // Strip armor.
+                // Armor_Remove (ent);
             }
         }
         return 2;   // In case we need a non-zero value other than TRUE.
-    }*/
-// No reflection.
-    return FALSE;
+    }
 
-	return FALSE;
+    return FALSE; // No reflection.
 };
 
-void(entity ent, entity shot) ReflectMissile =
-{
+void(entity ent, entity shot) ReflectMissile = {
     if (shot.movetype == MOVETYPE_NONE)
         return;     // Can't move.
 
@@ -156,36 +145,32 @@ void() ReflectThink =
 // 'self' is assumed to be the missile to be reflected.
 // 'other' is assumed to be the target struck by the missile.
 //- - - - - - - - -
-float(float damage) Reflected_Damage =
-{
-    if (self)
-    {
-        local   float   yes;
+float(float damage) Reflected_Damage = {
+    local float yes;
 
+    if (self) {
         yes = HasReflection (other, self.origin, damage);
-        if (yes)
-        {
-        // It is possible for missile to get sandwiched between multiple
-        // targets with reflection, before the missile redirects from the
-        // first contact.  If that happens, pass until the missile can move.
-        // That way, the missile will not get stuck.
-            if (self.think != ReflectThink)
-            {
-            // We cannot reflect the missile now because the engine hasn't
-            // run all of the physics code yet.  Delay reflection until the
-            // next tic.
+        if (yes) {
+			// It is possible for missile to get sandwiched between multiple
+			// targets with reflection, before the missile redirects from the
+			// first contact.  If that happens, pass until the missile can move.
+			// That way, the missile will not get stuck.
+            if (self.think != ReflectThink) {
+				// We cannot reflect the missile now because the engine hasn't
+				// run all of the physics code yet.  Delay reflection until the
+				// next tic.
                 self.owner = other;
-            // Save normal thinking.
+				// Save normal thinking.
                 self.tracer_time = self.nextthink;
                 self.th_win = self.think;
-            // Set thinking to reflection code ASAP.
+				// Set thinking to reflection code ASAP.
                 self.nextthink = 0.01;
                 self.think = ReflectThink;
             }
             return yes;
         }
     }
-// Missile was not reflected, so proceed as normal.
+	// Missile was not reflected, so proceed as normal.
     return FALSE;
 };
 
@@ -193,10 +178,8 @@ float() Reflected = {return Reflected_Damage (self.dmg);};
 
 // Turns on a particle field for 'ent' then repels missiles within the field.
 // Note:  EF_BRIGHTFIELD has a radius of 80, centered on entity's origin.
-void(entity ent) ReflectorShield =
-{
-    if (!ent)
-        return;
+void(entity ent) ReflectorShield = {
+    if (!ent) return;
 
     local   entity  shot;
 
@@ -234,22 +217,12 @@ void(entity ent) ReflectorShield =
 // shot:  Missile to be redirected.
 // org:  Reflector source point.
 //- - - - - - - - -
-void(entity shot, vector org) Block_Missile =
-{
-// DISABLED -- Test code.  Do *NOT* use -- doesn't do all I need.
-//    oe = head.enemy;
-//    ReflectMissile (self, head);
-//    head.enemy = oe;
-//    if (head.enemy == self)
-//        head.owner = world;     // Let homing missile hit target.
-//- - - - - - - - -
-
+void(entity shot, vector org) Block_Missile = {
     local   entity  ent;
 
     ent = self;
 
-    if (shot.movetype == MOVETYPE_NONE)
-        return;     // Can't move.
+    if (shot.movetype == MOVETYPE_NONE) return;     // Can't move.
 
 // Reset fields that may affect its movement.
     if (!shot.speed)

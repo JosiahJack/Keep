@@ -461,7 +461,7 @@ void() pgibtouch = {
 	self.nextthink = time + random() * 5;
 	if (other.takedamage == DAMAGE_AIM) {
 		sound(self, CHAN_WEAPON, "zombie/z_hit.wav", 1, ATTN_NORM);
-		T_Damage(other, self, self.owner.owner, 5,DAMARMOR);
+		T_Damage(other, self, self.owner.owner, self.dmg,DAMARMOR);
 		SUB_Remove();
 	}
 };
@@ -475,9 +475,15 @@ void(string gibname, float dm) throwpolypgib = {
 	setmodel(new, gibname);
 	setsize(new, VEC_ORIGIN, VEC_ORIGIN);
 	new.classname = "polypgib";
+	new.owner = self;
+	new.dmg = 5;
 	new.velocity = VelocityForDamage(dm);
 	new.movetype = MOVETYPE_BOUNCE;
 	new.solid = SOLID_BBOX;
+	if (new.owner.classtype == CT_MONINQUISITOR) {
+		setsize(new,'-8 -8 -8', '8 8 8');
+		new.dmg = 5 + (random() * 5);
+	}
 	new.avelocity_x = random() * 600;
 	new.avelocity_y = random() * 600;
 	new.avelocity_z = random() * 600;

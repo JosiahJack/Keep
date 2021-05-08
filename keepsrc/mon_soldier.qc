@@ -244,6 +244,7 @@ void()	army_plasma_atk9 =[	$shoot9, army_run1	] {ai_face();};
 void() army_nailfire = {
 	local	vector	dir, org;
 	local	entity	en;
+	local float type;
 	
 	if (!self.enemy) return;
 	if (self.health < 1) return;
@@ -262,13 +263,19 @@ void() army_nailfire = {
 	org = self.origin + v_up*12 - v_right*-12 + v_forward*19;
 	dir = normalize (dir - org);
 
+	type = CT_PROJ_NG;
+	if (self.classtype == CT_MONSUPERENFORCER || self.classtype == CT_MONARMYCYBORG) {
+		if (self.spawnflags & ARMY_LAVANG) type = CT_PROJ_LAVASNG; // lava nails
+		else type = CT_PROJ_SNG; // normal
+	} else {
+		if (self.spawnflags & ARMY_LAVANG) type = CT_PROJ_MONNG;
+	}
+
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	if (self.classtype == CT_MONARMYCYBORG) sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
+	if (self.classtype == CT_MONARMYCYBORG || self.classtype == CT_MONSUPERENFORCER) sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
 	else sound (self, CHAN_WEAPON, "weapons/rocket1i_q15.wav", 1, ATTN_NORM);
-	if (self.spawnflags & ARMY_LAVANG)
-		launch_projectile(org, dir, CT_PROJ_MONNG, self.attack_speed);
-	else 
-		launch_projectile(org, dir, CT_PROJ_NG, self.attack_speed);
+
+	launch_projectile(org, dir, type, self.attack_speed);
 };
 
 //----------------------------------------------------------------------
@@ -513,7 +520,7 @@ void() monster_army =
 	}
 	self.classgroup = CG_ARMY;
 	self.classmove = MON_MOVEWALK;
-	
+	if (!self.temperament) self.temperament = TEMPRA_PSYCHOTIC;
 	monster_start();
 };
 

@@ -513,7 +513,7 @@ void() monster_shub = {
 	setup_passivestate_boss(self);
 	
 	// Does not go through monster spawn functions
-	total_monsters = total_monsters + 1;
+	AddToTotals(self);
 	
 	// Default is no spawn delay, wait for trigger
 	if (!(self.spawnflags & MON_SPAWN_DELAY)) {

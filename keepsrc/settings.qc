@@ -899,12 +899,12 @@ void() togglepixels =
 	sprint(self, "\b[SETTINGS]\b texture filtering ("); 
 	if (pixelmode == TRUE) {
 		pixelmode = FALSE;
-		stuffcmd(self, "\ngl_texturemode GL_LINEAR_MIPMAP_LINEAR\n");
+		Safe_stuffcmd(self, "\ngl_texturemode GL_LINEAR_MIPMAP_LINEAR\n");
 		sprint(self, "blurry)\n");
 	}
 	else {
 		pixelmode = TRUE;
-		stuffcmd(self, "\ngl_texturemode GL_NEAREST_MIPMAP_LINEAR\n");
+		Safe_stuffcmd(self, "\ngl_texturemode GL_NEAREST_MIPMAP_LINEAR\n");
 		sprint(self, "crispy)\n");
 	}
 };
@@ -1162,20 +1162,20 @@ void() toggleweather =
 	// FTE/QSS only supports one console command for weather
 	// Engine does not remember setting and resets it
 	if (checkextension("FTE_SV_POINTPARTICLES"))
-		if (weathersys == TRUE) stuffcmd(self, "\nr_part_rain 1\n");
-		else stuffcmd(self, "\nr_part_rain 0\n");
+		if (weathersys == TRUE) Safe_stuffcmd(self, "\nr_part_rain 1\n");
+		else Safe_stuffcmd(self, "\nr_part_rain 0\n");
 	else {
 		// DP engine remembers rain/snow weather settings
 		// DP has separate commands for weather types
 		if (weathersys == TRUE) {
 			// Weather enabled
-			stuffcmd(self, "\ncl_particles_rain 1\n");
-			stuffcmd(self, "\ncl_particles_snow 1\n");
+			Safe_stuffcmd(self, "\ncl_particles_rain 1\n");
+			Safe_stuffcmd(self, "\ncl_particles_snow 1\n");
 		}
 		else {
 			// Weather disabled
-			stuffcmd(self, "\ncl_particles_rain 0\n");
-			stuffcmd(self, "\ncl_particles_snow 0\n");
+			Safe_stuffcmd(self, "\ncl_particles_rain 0\n");
+			Safe_stuffcmd(self, "\ncl_particles_snow 0\n");
 		}
 	}	
 };
@@ -1530,7 +1530,7 @@ void() TogglePowerShield = {
 		sound (self, CHAN_AUTO, "me/me_son.wav", 1, ATTN_NORM);
 		sprint(self, "Power Shield activated.\n");
 	}
-	stuffcmd (self, "bf\n");
+	Safe_stuffcmd (self, "bf\n");
 };
 
 void() ToggleSpiritShroud = {
@@ -1544,20 +1544,20 @@ void() ToggleSpiritShroud = {
 	sound (self, CHAN_AUTO, SOUND_ARTINV1, 1, ATTN_NORM);
 	self.perms = self.perms - (self.perms & POW_ARMORSPIRIT); // use it up
 	centerprint(self,"Spirit Shroud raised.\nYou vanish in a puff of smoke!");
-	stuffcmd (self, "bf\n");
+	Safe_stuffcmd (self, "bf\n");
 };
 
 void() ToggleBerserkerArmor = {
-	if (!(self.perms & POW_ARMORBERSERKER)) { sprint(self, "Player has no Berserker Armor to activate.\n"); return; } // no power shield on player
-	if (self.super_damage_finished == POWERUP_VANIA || self.super_damage_finished > time) { centerprint(self,"Quad already active!\n saving Berserker for later."); return; }
+	if (!(self.perms & POW_ARMORBERSERKER)) { sprint(self, "Player has no Demonhide Armor (Quad)\n to activate.\n"); return; } // no power shield on player
+	if (self.super_damage_finished == POWERUP_VANIA || self.super_damage_finished > time) { centerprint(self,"Quad already active!\n saving Demonhide Armor for later."); return; }
 	sound (self, CHAN_AUTO, SOUND_ARTQUAD1, 1, ATTN_NORM);
 	self.super_damage_finished = time + POWERUP_TIMER;		
 	self.super_sound = time + 1;
 	self.items = self.items & IT_QUAD;
 	self.super_time = TRUE;
 	self.perms = self.perms - (self.perms & POW_ARMORBERSERKER); // use it up
-	centerprint(self,"Berserker Armor used!\nYou feel like a killing machine!");
-	stuffcmd (self, "bf\n");
+	centerprint(self,"Demonhide Armor used!\nYou feel like a killing machine!");
+	Safe_stuffcmd (self, "bf\n");
 };
 
 void(entity targ) ResetDebuffSystem;
@@ -1572,7 +1572,7 @@ void() ToggleDragonArmor = {
 	ResetDebuffSystem(other);
 	self.perms = self.perms - (self.perms & POW_ARMORDRAGON); // use it up
 	centerprint(self,"Dragonscale Armor used!\nYou are invincible for a time!");
-	stuffcmd (self, "bf\n");
+	Safe_stuffcmd (self, "bf\n");
 };
 
 /*======================================================================

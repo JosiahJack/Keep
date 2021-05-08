@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/forces_misc_ignore.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+<head>
+	<title>GyroDocs - Ignore Object</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><a href="physobj.html" class="item">Physics Objects</a><a href="forces.html" class="item">Force Entities</a><div class="layout_submenu"><a href="forces_affectors.html" class="subitem">- Affector Components</a><a href="forces_affectors_antigrav.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Anti-gravity Affector</a><a href="forces_affectors_directional.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Directional Affector</a><a href="forces_affectors_point.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Point Affector</a><a href="forces_affectors_resistance.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Resistance Affector</a><a href="forces_affectors_scaling.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Power Scaling</a><a href="forces_falloff.html" class="subitem">- Falloff Components</a><a href="forces_falloff_area.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Area Falloff</a><a href="forces_falloff_cone.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Cone Falloff</a><a href="forces_falloff_combination.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Combination</a><a href="forces_falloff_scaling.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Range Scaling</a><a href="forces_properties.html" class="subitem">- Property Components</a><a href="forces_properties_aironly.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Air-only Property</a><a href="forces_properties_groundpound.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Ground-pound Property</a><a href="forces_properties_ignorewalls.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Ignore Walls Property</a><a href="forces_properties_instant.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Instant Property</a><a href="forces_properties_persistent.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Persistent Property</a><a href="forces_properties_wateronly.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Water-only Property</a><a href="forces_misc.html" class="subitem">- Miscellaneous Controls</a><a href="forces_misc_attach.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Attach to Entity</a><a href="forces_misc_ignore.html" class="subitem subitem_selected">&nbsp;&nbsp;&nbsp;&nbsp;- Ignore Object</a></div><a href="advanced.html" class="item">Advanced Usage</a><a href="info.html" class="item">Further Information</a></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Ignore Object</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p><strong>Gyro_Force_Ignore(entity force, entity object)</strong><br />
+With this function, each force may be instructed to ignore a single physics object, rendering the two unable to interact with each other. This may be used to prevent a player-equipped dampening field from slowing it's owner, for example. As no un-ignore function is provided, you may return the force to it's default state by setting it to ignore the <code>world</code> entity. Larger groups of objects may be ignored through the use of <a href="advanced_channels.html">force channels</a>.</p></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/forces_misc_ignore.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+</html>

@@ -180,4 +180,4 @@ stuffcmds
 
 //-----------------------------------------------------------
 // start demos if not already running a server
-// startdemos demo1 demo2 demo3
+startdemos demo1 demo2 demo3

@@ -1,4 +1,45 @@
-// MONSTER AMMO RESISTANCE SYSTEM
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Mod attributions: Arcane Dimensions (AD)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+//=============================================================================
+//
+// Stats:
+// Entity count: 0 - Utility functions only.
+// Function count: 6
+//
+//
+// Implements: Ammo Resistance System
+//
+// Description:
+// Handles changing damage value and creating effects to indicate
+// inneffectiveness of certain weapons against certain monsters.
+//=============================================================================
+
 float(entity targ, float resist_type, float damage) Resist_Damage = {
 	local float ret_damage;
 
@@ -15,6 +56,9 @@ float(entity targ, float resist_type, float damage) Resist_Damage = {
 	else if (resist_type == AM_BLOODCRYSTALS) ret_damage = damage * (1 - targ.resist_bloodcrystals);
 	else if (resist_type == AM_VOIDSHARDS) ret_damage = damage * (1 - targ.resist_voidshards);
 	else if (resist_type == AM_ELEMENTAL) ret_damage = damage * (1 - targ.resist_elemental);
+	else if (resist_type == AM_ACID) ret_damage = damage * (1 - targ.resist_acid);
+	else if (resist_type == AM_FIRE) ret_damage = damage * (1 - targ.resist_fire);
+	else if (resist_type == AM_COLD) ret_damage = damage * (1 - targ.resist_cold);
 	return ret_damage;
 };
 
@@ -55,6 +99,15 @@ void(entity targ) Resist_CheckRange = {
 
 	if (targ.resist_elemental < 0) targ.resist_elemental = 0;
 	else if (targ.resist_elemental > 1) targ.resist_elemental = 1;
+
+	if (targ.resist_acid < 0) targ.resist_acid = 0;
+	else if (targ.resist_acid > 1) targ.resist_acid = 1;
+
+	if (targ.resist_fire < 0) targ.resist_fire = 0;
+	else if (targ.resist_fire > 1) targ.resist_fire = 1;
+
+	if (targ.resist_cold < 0) targ.resist_cold = 0;
+	else if (targ.resist_cold > 1) targ.resist_cold = 1;
 };
 
 // Store the ammo resistance for switching later
@@ -177,7 +230,7 @@ void(entity targ, vector org, vector vel, float damage, float type, string hitso
 		SpawnProjectileSmoke(org, 300, 50, 150);
 	}
 
-	if (type == AM_CELLS) {
+	if (type == AM_CELLS || type == AM_COLD) {
 		if (targ.resist_cells < 1) {
 			Resist_Sound(targ,hitsound); // Only play pain sound if we can still get hurt slightly
 			if (random() < 0.4) SpawnProjectileMeat(targ, org, 200, 50, 150); // Same for meat as pain sound
@@ -197,7 +250,7 @@ void(entity targ, vector org, vector vel, float damage, float type, string hitso
 		}
 	}
 
-	if (type == AM_LAVANAILS) {
+	if (type == AM_LAVANAILS || type == AM_FIRE) {
 		if (targ.resist_lava_nails < 1) Resist_Sound(targ,hitsound); // Only play pain sound if we can still get hurt slightly
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 		if (random() < 0.5) WriteByte (MSG_BROADCAST, TE_SPIKE);
@@ -243,7 +296,7 @@ void(entity targ, vector org, vector vel, float damage, float type, string hitso
 		SpawnProjectileSmoke(org, 300, 50, 150); // Extra smoke puffs
 	}
 
-	if (type == AM_POISON) {
+	if (type == AM_POISON || type == AM_ACID) {
 		if (targ.resist_poison < 1) {
 			Resist_Sound(targ,hitsound); // Only play pain sound if we can still get hurt slightly
 			SpawnProjectileMeat(targ, org, 200, 50, 150);

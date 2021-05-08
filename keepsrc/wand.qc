@@ -107,18 +107,16 @@ void(vector start) Flare_Spawn =
 //  a full spray of mini-shots.  For example, if it takes one second
 //  to charge a spray of three shots, it takes one more second for the
 //  super shot.
-float(entity ent) Zapper_Level =
-{
+float(entity ent) Zapper_Level = {
     local   float   tnt;
 
-    if (ent.attack_finished > time)
-        return 0;       // Can't shoot yet.
-    if (ent.tome_finished)
-    {   ent.zapper_time = 0;    // In case tome wears off before discharge.
+    if (ent.attack_finished > time) return 0; // Can't shoot yet.
+
+    if (ent.tome_finished) {
+		ent.zapper_time = 0; // In case tome wears off before discharge.
         return WAND_FULL + 2;
     }
-    if (time < ent.zapper_time)
-        return 0;       // Don't let rollover mess up counters.
+    if (time < ent.zapper_time) return 0; // Don't let rollover mess up counters.
 
 // 0-1 = 1, 1-2 = 2, 2-3 = 3, 3-5 = 4.
     tnt = ceil((time - ent.zapper_time) / WAND_DELAY);
@@ -130,17 +128,11 @@ float(entity ent) Zapper_Level =
 };
 
 void() WandSpark_Touch = {
-    if (pointcontents(self.origin) == CONTENT_SKY)
-        {remove (self); return;}
-    //if (Reflected ())
-        //return;
+    if (pointcontents(self.origin) == CONTENT_SKY) {remove (self); return;}
+    if (Reflected ()) return;
 
     self.touch = SUB_Null;      // Stack overflow prevention.
-
-// hit something that bleeds
-    if (other.takedamage)
-        T_Damage (other, self, self.master, self.dmg, DAMARMOR);
-
+    if (other.takedamage) T_Damage (other, self, self.master, self.dmg, DAMARMOR); // hit something that bleeds
     self.origin = self.origin - 8*normalize(self.velocity);
     BecomeFancy (X32_CUT_ORANGE, 4);
 };
@@ -148,12 +140,10 @@ void() WandSpark_Touch = {
 // Note:  'shots' is number of hitscan shots.
 // Does not include the two freebie side missiles.
 void(vector start, vector dir, float shots) FireSparks = {
-    local   entity  targ, attacker;
-    local   vector  end, end2, d1;
-    local   float   damage, dist, mid, fr, sparx;
-//    local   float   fx;
+    local   float   damage, dist, mid, fr, sparx, fx;
     local   string  dtype;
-    local   vector  glitter;
+    local   vector  end, end2, d1, glitter;
+    local   entity  targ, attacker;
 
     attacker = self;
     dtype = "sparks";
@@ -161,20 +151,18 @@ void(vector start, vector dir, float shots) FireSparks = {
     dist = WAND_RANGE;
     fr = X32_SPARK_ORANGE;
     sparx = TRUE;
-    // Note:  Changed 225 to 97 so blood won't spawn in ports.
-    glitter = '233 97 1';
-//    fx = EF_MUZZLEFLASH;
+    glitter = '233 97 1'; // Note:  Changed 225 to 97 so blood won't spawn in ports.
+	fx = EF_MUZZLEFLASH;
 
-// Check for ToP override.
-    if (shots < 1)
-    {
+	// Check for ToP override.
+    if (shots < 1) {
         shots = 5;
         damage = 5;     // Heretic damage is d8 per shot.
         dist = 2048;
         fr = X32_CUT_ORANGE;
         sparx = FALSE;
         glitter_z = 0;
-//        fx = 0;
+		fx = 0;
 
     // Fire the two side projectiles.
     // Remember, spikes lasts up to six seconds.
@@ -184,9 +172,8 @@ void(vector start, vector dir, float shots) FireSparks = {
         launch_projectile (start, end, CT_PROJ_HKN, 600);
         newmis.dmg = damage;
         newmis.touch = WandSpark_Touch;
-	newmis.classtype = CT_WANDSPARK;
-        if (shots > 1)
-        {
+		newmis.classtype = CT_WANDSPARK;
+        if (shots > 1) {
             d1_x = 0 - d1_x;
             end = Aim_Scatter (dir, d1);
             //Knightspike_Launch (start, end, 600);
@@ -199,13 +186,11 @@ void(vector start, vector dir, float shots) FireSparks = {
 
 // Start multi-trace attack.  Uses MultiDamage_* functions.
     mid = (shots + 1) * 0.5;
-    MultiDamage_Clear ();
-    while (shots > 0)
-    {
-        if (mid == 1)
+	ClearMultiDamage ();
+    while (shots > 0) {
+        if (mid == 1) {
             d1 = dir;
-        else
-        {
+        } else {
             d1_x = (shots - mid) * 2.8125;  d1_y = crandom()*0.5;  d1_z = 1;
             d1 = Aim_Scatter (dir, d1);
         }
@@ -214,11 +199,10 @@ void(vector start, vector dir, float shots) FireSparks = {
         end = trace_endpos;
         end2 = end - d1*8;
         // Note:  Reflection merely stops the beam.
-        if (trace_fraction < 1)
-        {
-            MultiDamage_Add (targ, damage, 0, dtype);
+        if (trace_fraction < 1) {
+			AddMultiDamage (targ, damage);
             self = spawn();
-//            self.effects = fx;
+			self.effects = fx;
             setall (self, "progs/null.spr", '0 0 0', '0 0 0', end2); //was null_256
             // Play sizzle sounds at reduced volume and attenuation.
             sound (self, CHAN_AUTO, "enforcer/enfstop.wav", 0.5, ATTN_STATIC);
@@ -227,13 +211,12 @@ void(vector start, vector dir, float shots) FireSparks = {
         }
         shots = shots - 1;
     }
-    MultiDamage_Apply (dtype);
+    ApplyMultiDamage ();
 };
 
 // Shoots one big explosive shot.
 // If multiple shots are desired, rewrite to use explosive shotgun code.
-void(vector start, vector dir) FireBigSpark =
-{
+void(vector start, vector dir) FireBigSpark = {
 // Doom damage d3*5.  Heretic damage d8+6 (ToP d8*7).
     local   entity  targ, attacker;
     local   vector  end, end2;
@@ -295,10 +278,9 @@ void() W_FireSparks = {
     //GhostTouch_On ();
     if (self.tome_finished)
         FireSparks (org, dir, 0);
-    else if (charge <= WAND_FULL)
-    {
-        if (!charge)
-        {   // Player is holding attack button down for rapid-fire.
+    else if (charge <= WAND_FULL) {
+        if (!charge) {
+			// Player is holding attack button down for rapid-fire.
             // Scatter shots a bit like in Heretic.
             local   vector  err;
     
@@ -309,11 +291,6 @@ void() W_FireSparks = {
             charge = 1;
         }
         FireSparks (org, dir, charge);
-    }
-    else
+    } else
         FireBigSpark (org, dir);
-    //GhostTouch_Off ();
 };
-
-
-//===========================/  END OF FILE  /===========================//

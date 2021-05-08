@@ -1,0 +1,81 @@
+hcc  - a hexen 2 c compiler/decompiler
+programming: eric hobbs
+
+send all responses bug reports to:     jlhobbs@ma.ultranet.com
+
+many thanks to whoever wrote unqcc it inspired me to write this,
+ I used your file loading procedure in my code  so thanks :-)
+
+
+included in this hcc.zip:hcc.exe , this file and the hexen 2 source code decompiled with hcc 
+   NOTE the provided source will compile with hcc.exeand run with the registered version of hexen 2 the demo does not support modified games ;-)  
+
+installation:
+ final structure should look like this "... \hexen II\mygame\progs"
+ change directories to your hexen 2 dir.
+ create a directory(mygame in this example do not use data1 as this is used by the original version)
+ change dir to mygame.
+ create a dir named progs
+ change dirs to progs. 
+  unzip hcc.zip into this directory
+ run hcc, this will recompile the source provided
+ hexen2 can then be run with the command line "-game mygame"
+
+
+command line:
+"hcc"  will work just like qcc does( ie: make the progs.dat file from the source)
+"hcc -dcc" will decompile the progs.dat file in the current directoy
+"hcc -dcc -asm <funtionname>" will decompile filename to the console (just redirect it to a file to see it)
+"hcc -dcc -dump -asm <functionname>" same as above but it will show instructions(opcodes and parms) as well
+
+NOTE: due to the uncertainty of some instructions minor modifications must be made to the output of hcc.exe in order for it to compile using hcc.exe
+empty braces are a result of either a programming error or some sort of testing done by the original coders.
+some function headers will need to be created due to the fact that they were put in header files in the original source.
+an example of this is T_Damage in fight.hc
+
+example:
+if you compiled this
+
+if(self.owner == world){
+    self.owner == other; // note the use of the equal(==) instead of the assignment(=)
+}
+
+it would decompile as this
+
+if(self.owner == world){
+
+}
+
+this would give an error, most likely " } is not a name"
+this is why I added " -dump -asm" to the command line in order to see unprinted instructions
+
+
+new instructions:
+
+hexen supports the full quake instruction setas well as  "+=,-=,*=,/=,->,|=,^="
+hexen has support for arrays(must be global)of floats and vectors.  a 5 element array of vectors would be created as follows
+vector vecarray[5] = {'0 0 0', '1 1 1', '2 2 2' , '3 3 3', '4 4 4'};
+each element can be accessed by using the "->" operator(note: this is my own convention not a c or raven software convention)
+accessing the nth element of vecarray would look like this
+vecarray->n;
+were n is an offset from the beginning of the array
+vecarray->0 == '0 0 0';
+there is builtin bounds checking so hexen will stop with an out of bounds error if
+you go beyond the end of the array(ie "vecarray->5" would fail, 0 through n-1 are valid,were n is the number of elements)
+builtin support for frame cycling using
+AdvanceFrame(float a,float b);
+Advance frame will advance the current frame number of self by one and lock it unto the range (a b) when b is reached it
+appears that the variable "cycle_wrapped" is set to true, false otherwise.
+builtin support for advancing the nextthink field def
+AdvanceThinkTime(entity a,float b)
+would expand to:
+entity.nextthink += b;
+random has been expanded to 6 forms(note: again this may or may not be how raven does it)
+float random();//return a float between 0 and 1
+float random(float n);//return a float between 0 and n
+float random(float a,floatb);//return a float between a and b
+***vector random();//return a vector between '0 0 0' and '1 1 1' *** this for has not been tested
+vector random(vector a);//return a vectorbetween '0 0 0' and a
+vector random(vector a,vector b);//return a vector between a and b
+
+ 

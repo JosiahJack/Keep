@@ -6,3 +6,5 @@ float WELD_DAMAGE_RADIUS = 70;
 .float fullbright;
 .vector xgoal;
 .float lives;
+.float relations;
+.string soul;

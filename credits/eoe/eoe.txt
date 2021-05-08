@@ -1,0 +1,38 @@
+
+	Epochs of Enmity Read Me.
+	-------------------------
+
+	How to install:
+	
+	Unzip the downloaded package and drag the folder marked "eoe"
+	into your main folder where Quake is installed.
+
+	Launch the game
+
+	Press the escape key to bring up the console
+	(or the tilde key if already in game)
+
+	Type "game eoe" (no quotations)
+
+	If done correctly, the EoE menu screen will appear. Start the game!
+
+	-------------------------	
+
+	Please read the EoE PDF for more information.
+
+	============================================================
+	Distribution / Copyright / Permissions 
+
+	Copyright (c) 2020 - EoE team
+
+	All rights reserved.
+
+	Quake is a registered trademark of id Software, Inc.
+
+	This episode may be electronically distributed only at NO CHARGE to 
+	the recipient in its current state, MUST include this txt & pdf file, 
+	and may NOT be modified IN ANY WAY.
+ 
+	UNDER NO CIRCUMSTANCES IS THIS EPISODE TO BE DISTRIBUTED ON
+	PHYSICAL MEDIUM WITHOUT PRIOR WRITTEN PERMISSION.
+	============================================================

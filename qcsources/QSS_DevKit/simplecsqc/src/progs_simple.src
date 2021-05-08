@@ -1,0 +1,47 @@
+../progs.dat
+
+//you're expected to have the vanilla ssqc code somewhere, or equivelent.
+#pragma includedir "../../id1/src"
+../../qsextensions.qc	//we need extra builtins.
+
+//Note that if you have CleanQC or something with additional files, then you'll need to figure those out yourself. Sorry.
+defs.qc
+subs.qc
+fight.qc
+ai.qc
+combat.qc
+items.qc
+weapons.qc
+world.qc
+client.qc
+player.qc
+monsters.qc
+doors.qc
+buttons.qc
+triggers.qc
+plats.qc
+misc.qc
+
+ogre.qc	//shareware monsters
+demon.qc
+shambler.qc
+knight.qc
+soldier.qc
+wizard.qc
+dog.qc
+zombie.qc
+boss.qc
+
+tarbaby.qc	//registered monsters
+hknight.qc
+fish.qc
+shalrath.qc
+enforcer.qc
+oldone.qc
+
+
+
+//CSQC extensions start here.
+csqc_hud_vanilla.qc
+csqc_scoreboard.qc
+//don't bother with compat with dp, it wouldn't work anyway.

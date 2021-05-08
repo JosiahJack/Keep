@@ -1,0 +1,75 @@
+ARENA MODE ENTITIES:
+
+func_spawn - give a func_spawn the targetname "DMSP_boss" and in Arena games this monster (in SOE Arena, a Dragon) will
+appear as a 'boss' at the end of the level.
+info_dmsp_spawn - an entity which functions, in addition to info_player_deathmatch, as a spawnspot for monster in arena
+mode. Basically, place these to increase the chances of monsters spawning in a certain area - they are not mandatory.
+
+CUT SCENE ENTITIES:
+
+see cutscenes.txt
+
+MISCELLANEOUS:
+
+func_exploder - creates explosions. from Scourge of Armagon, explanation can be found in entity section at The Forge
+(http://www.planetquake.com/worldcraft)
+func_spawn and func_spawn_small - also from Scourge, a much better way of spawning items and enemies. Also see the Forge.
+misc_corpse - a corpse. not used much.
+misc_explobox - replaced with a medieval barrel
+misc_meat - a pile of gibs. doggies like it.
+misc_tree - set a key 'cnt.' the values 0, 1, or 2 set the type of tree.
+
+
+MONSTER CHANGES:
+
+monster_dog - dogs will munch on misc_meat if present instead of attacking the player (used in soe1m2).
+monster_army - replaced by a lesser Goblin
+monster_enforcer - replaced by a larger Goblin
+monster_shambler - setting a key 'skin' to '1' results in the black shamblers seen in soe2m5. spawnflag 2 (value 4)
+adds the explosive attacks.
+monster_demon1 - setting a key 'skin' to '1' results in the black fiends seen in soe2m5.
+monster_knight - some will randomly be tougher with different skins.
+monster_hell_knight - spawnflag 2 (value 4) gives him more health and fireball attack; skins are 0)silver 1)hell lord 2)bane
+monster_wizard - unless 'skin' is set to '1', you will get a "drake" - green skin. setting skin to 1 returns to default skin.
+
+
+NEW ITEMS:
+
+item_artifact_empathy_shields - empathy shields
+item_dragon - summons a dragon to fight for you, in SP or DM.
+
+
+NEW MONSTERS::
+
+monster_axeman - set a key 'skin' and choose a value - 0) default 2) thug 3) ogre 4) zombie (latter two are unused).
+monster_acolyte - least powerful variety of magician
+monster_sorceror - mid-level magician
+monster_warlock - a very nasty magician
+monster_trogboss - the end boss as seen in soe2m5
+monster_troglodyte - a 'normal' variation of the trogboss (not used in soe).
+monster_bane - episode one end boss as seen in soe1m5
+monster_dragon - requires a lot more explanation. see dragons.txt
+
+
+NEW SOUNDS:
+
+all ambient sounds have been altered, as well as the secret sound. Additionally there are a few other sounds, such as
+random_wind.
+
+
+SETTING GAMEPLAY MODES:
+
+Default mode is Quest. To set Arena mode, you will need a special trigger_changelevel with spawnflag 2 (value 4) set.
+
+
+VARIOUS TRICKS:
+
+ladders - simply brushwork covered with tiny invisible stairs (use the 'clip' brush).
+readable items - although you can use trigger_read, for shorter things we just used trigger_once or trigger_multiple.
+scrolling text - simply a cut-scene with a func_door in front of it. The func_door uses a texture which has the text on it.
+                 You will need two triggers to start this - a trigger_camera to start the cut-scene, and a trigger_once to
+                 start the door moving.
+
+SUPPORT:
+
+If you need help with something, feel free to email Tronyn (netgames@netdp.com) and/or Fat Controller (fatty@planetquake.com)

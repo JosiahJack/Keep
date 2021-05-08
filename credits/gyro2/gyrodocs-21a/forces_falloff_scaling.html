@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/forces_falloff_scaling.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+<head>
+	<title>GyroDocs - Range Scaling</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><a href="physobj.html" class="item">Physics Objects</a><a href="forces.html" class="item">Force Entities</a><div class="layout_submenu"><a href="forces_affectors.html" class="subitem">- Affector Components</a><a href="forces_affectors_antigrav.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Anti-gravity Affector</a><a href="forces_affectors_directional.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Directional Affector</a><a href="forces_affectors_point.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Point Affector</a><a href="forces_affectors_resistance.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Resistance Affector</a><a href="forces_affectors_scaling.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Power Scaling</a><a href="forces_falloff.html" class="subitem">- Falloff Components</a><a href="forces_falloff_area.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Area Falloff</a><a href="forces_falloff_cone.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Cone Falloff</a><a href="forces_falloff_combination.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Combination</a><a href="forces_falloff_scaling.html" class="subitem subitem_selected">&nbsp;&nbsp;&nbsp;&nbsp;- Range Scaling</a><a href="forces_properties.html" class="subitem">- Property Components</a><a href="forces_properties_aironly.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Air-only Property</a><a href="forces_properties_groundpound.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Ground-pound Property</a><a href="forces_properties_ignorewalls.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Ignore Walls Property</a><a href="forces_properties_instant.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Instant Property</a><a href="forces_properties_persistent.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Persistent Property</a><a href="forces_properties_wateronly.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Water-only Property</a><a href="forces_misc.html" class="subitem">- Miscellaneous Controls</a><a href="forces_misc_attach.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Attach to Entity</a><a href="forces_misc_ignore.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Ignore Object</a></div><a href="advanced.html" class="item">Advanced Usage</a><a href="info.html" class="item">Further Information</a></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Range Scaling</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p><strong>Gyro_Force_SetRangeScale(entity force, float scale)</strong><br />
+This function may be used to scale the effective range of a force's falloff components during runtime. The given scale may be any value above zero and, on newly created forces, defaults to <code>1.0</code>. Repeated applications of this function are not cumulative, meaning that scaling by <code>2.0</code> and then <code>3.0</code> will not produce six times the range, only three times, as this was the last applied scale. This is an important consideration to make when dealing with the function below.</p>
+
+<p><strong>Gyro_Force_SetRangeScaleRate(entity force, float scalerate)</strong><br />
+With this function, the above range scale of a force may be set to change automatically over time. The given scalerate value determines by how much the force's scale increases every second - starting at a scale of <code>1.0</code> with a scalerate of <code>0.5</code>, for example, will cause the scale to rise to <code>1.5</code> a second later, then <code>2.0</code> a second after that. You may also provide a negative scalerate to create diminshing or otherwise short-term forces. Should the total scale ever reach or fall below zero the force entity will be destroyed automatically, unless instructed otherwise by the application of the <a href="forces_properties_persistent.html">persistent property</a>.</p>
+
+<p><i>Note: Similar functions are provided to control a force's <a href="forces_affectors_scaling.html">power scale</a>.</i></p></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/forces_falloff_scaling.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+</html>

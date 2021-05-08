@@ -566,6 +566,6 @@ void() monster_chthon = {
 	}
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 	// Does not go through monster spawn functions
-	total_monsters = total_monsters + 1;
+	AddToTotals(self);
 	self.use = xxchthon_awake;
 };

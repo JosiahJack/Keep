@@ -1,0 +1,23 @@
+
+// load the base configuration
+exec default.cfg
+
+// load the last saved configuration
+exec config.cfg
+
+// run a user script file if present
+exec autoexec.cfg
+
+// run smc script file if present
+exec smc_config.cfg
+
+// reconfigure stuff to not break on dp-specifics
+exec qss_smc.cfg
+
+//
+// stuff command line statements
+//
+stuffcmds
+
+// start demos if not allready running a server
+startdemos demo1 demo2 demo3

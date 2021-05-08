@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/forces_properties.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+<head>
+	<title>GyroDocs - Property Components</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><a href="physobj.html" class="item">Physics Objects</a><a href="forces.html" class="item">Force Entities</a><div class="layout_submenu"><a href="forces_affectors.html" class="subitem">- Affector Components</a><a href="forces_affectors_antigrav.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Anti-gravity Affector</a><a href="forces_affectors_directional.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Directional Affector</a><a href="forces_affectors_point.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Point Affector</a><a href="forces_affectors_resistance.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Resistance Affector</a><a href="forces_affectors_scaling.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Power Scaling</a><a href="forces_falloff.html" class="subitem">- Falloff Components</a><a href="forces_falloff_area.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Area Falloff</a><a href="forces_falloff_cone.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Cone Falloff</a><a href="forces_falloff_combination.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Combination</a><a href="forces_falloff_scaling.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Range Scaling</a><a href="forces_properties.html" class="subitem subitem_selected">- Property Components</a><a href="forces_properties_aironly.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Air-only Property</a><a href="forces_properties_groundpound.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Ground-pound Property</a><a href="forces_properties_ignorewalls.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Ignore Walls Property</a><a href="forces_properties_instant.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Instant Property</a><a href="forces_properties_persistent.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Persistent Property</a><a href="forces_properties_wateronly.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Water-only Property</a><a href="forces_misc.html" class="subitem">- Miscellaneous Controls</a><a href="forces_misc_attach.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Attach to Entity</a><a href="forces_misc_ignore.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Ignore Object</a></div><a href="advanced.html" class="item">Advanced Usage</a><a href="info.html" class="item">Further Information</a></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Property Components</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p>Property components are used to alter the standard behaviour of force entities and the methods they use to interact with physics objects. They may, for example, restrict a force to operating only under water or allow it to interact with objects otherwise blocked by a solid obstruction. Properties are applied like flags and, as such, have no individual settings beyond their basic on/off states.</p>
+
+<p>Each property will have two functions associated with it - one to add the property to a force, and another to remove it. Additionally, there is a function to remove all properties from a force, thus resetting it to the default state:</p>
+
+<p><strong>Gyro_Force_ClearProperties(entity force)</strong><br />
+Removes all active properties from a given force entity, returning it to it's default state.</p>
+
+<div class="hr"></div>
+
+<p>The following property components are available:</p>
+
+<p>
+<a href="forces_properties_aironly.html">Air-only property</a><br />
+<a href="forces_properties_groundpound.html">Ground-pound property</a><br />
+<a href="forces_properties_ignorewalls.html">Ignore walls property</a><br />
+<a href="forces_properties_instant.html">Instant property</a><br />
+<a href="forces_properties_persistent.html">Persistent property</a><br />
+<a href="forces_properties_wateronly.html">Water-only property</a>
+</p></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/forces_properties.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+</html>

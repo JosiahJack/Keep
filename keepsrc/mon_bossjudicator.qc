@@ -1177,7 +1177,8 @@ void() judge_JumpTouch =
 	// Do not damage other demons with jump attacks
 	if (self.classtype != other.classtype && other.takedamage) {
 		if ( vlen(self.velocity) > 300 ) {
-		  ldmg = 20 + 10*random();
+			ldmg = 20 + 10*random();
+			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
 			T_Damage (other, self, self, ldmg, DAMARMOR);	
 			SpawnMeatSpray(self, other, FALSE);
 			SpawnMeatSpray(self, other, FALSE);
@@ -1774,8 +1775,7 @@ void()	judge_painA3 =[ $painA3, judge_painA4 ] {};
 void()	judge_painA4 =[ $painA4, judge_run ] {};
 
 //----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) judge_pain =
-{
+void(entity inflictor, entity attacker, float damage) judge_pain = {
 	// Hide any glowing/sprite attachments
 	if (self.classtype == CT_MONJUSTICE) justice_finish_attachment();
 
@@ -1991,7 +1991,7 @@ void() judge_awake =
 	if (self.delaymonstercount) {
 		// Reset both monster count conditions
 		self.nomonstercount = self.delaymonstercount = 0;
-		total_monsters = total_monsters + 1;
+		AddToTotals(self);
 		update_hud_totals(HUD_MONSTERS);
 	}
 
@@ -2159,6 +2159,8 @@ void() monster_judicator = {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0.75;
+	self.resist_multi_rockets = 0.75;
+	self.resist_plasma = 0.75;
 	self.reflectlightning = TRUE;	// Reflect lightning strikes
 	self.reflectplasma = TRUE;		// Reflect plasma projectiles
 
@@ -2203,9 +2205,7 @@ void() monster_judicator = {
 			// dprint("\b[JUDGE]\b ("); dprint(self.targetname);
 			// dprint(") - no monster count\n");
 		// }
-	}
-	// Update count before client spawn
-	else total_monsters = total_monsters + 1;
+	} else AddToTotals(self); // Update count before client spawn
 	
 	// Devmarker function changes skins, save for later
 	self.frame = 0; self.exactskin = self.skin;
@@ -2270,7 +2270,7 @@ void() monster_judicator = {
 		// if (self.delaymonstercount) {
 			// Reset both monster count conditions
 			// self.nomonstercount = self.delaymonstercount = 0;
-			// total_monsters = total_monsters + 1;
+			// AddToTotals(self);
 			// update_hud_totals(HUD_MONSTERS);
 		// }
 

@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/forces.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:43:54 GMT -->
+<head>
+	<title>GyroDocs - Force Entities</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><a href="physobj.html" class="item">Physics Objects</a><a href="forces.html" class="item item_selected">Force Entities</a><div class="layout_submenu"><a href="forces_affectors.html" class="subitem">- Affector Components</a><a href="forces_affectors_antigrav.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Anti-gravity Affector</a><a href="forces_affectors_directional.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Directional Affector</a><a href="forces_affectors_point.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Point Affector</a><a href="forces_affectors_resistance.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Resistance Affector</a><a href="forces_affectors_scaling.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Power Scaling</a><a href="forces_falloff.html" class="subitem">- Falloff Components</a><a href="forces_falloff_area.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Area Falloff</a><a href="forces_falloff_cone.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Cone Falloff</a><a href="forces_falloff_combination.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Combination</a><a href="forces_falloff_scaling.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Range Scaling</a><a href="forces_properties.html" class="subitem">- Property Components</a><a href="forces_properties_aironly.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Air-only Property</a><a href="forces_properties_groundpound.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Ground-pound Property</a><a href="forces_properties_ignorewalls.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Ignore Walls Property</a><a href="forces_properties_instant.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Instant Property</a><a href="forces_properties_persistent.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Persistent Property</a><a href="forces_properties_wateronly.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Water-only Property</a><a href="forces_misc.html" class="subitem">- Miscellaneous Controls</a><a href="forces_misc_attach.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Attach to Entity</a><a href="forces_misc_ignore.html" class="subitem">&nbsp;&nbsp;&nbsp;&nbsp;- Ignore Object</a></div><a href="advanced.html" class="item">Advanced Usage</a><a href="info.html" class="item">Further Information</a></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Force Entities</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p>Forces make up the second half of Gyro's subsystems and can represent anything from a thunderous explosion to a gentle gust of wind. They are created by combining a series of individual components to produce a final, tangible result. You can create and manipulate forces with the following functions:</p>
+
+<p><strong>Gyro_Force_Create(string forcename, vector origin)</strong><br />
+This function will create an empty force at the specified origin. Unlike many of Gyro's routines, this will return an entity reference to the newly created force, which you will need to retain in order to apply components and possibly to remove the force when you no longer need it. It is not recommended that you treat the force entity as a standard entity, although you may safely use the <code>.think</code> and <code>.nextthink</code> if required. The force name is used for identification during debugging and for the <a href="advanced_feedback.html">feedback</a> function and may be any string you feel is appropriate.</p>
+
+<p><strong>Gyro_Force_Remove(entity force)</strong><br />
+Removes the specified force entity from the game. You may also call the standard <code>remove()</code> function directly, but this is not advised and may break compatibility in later versions of Gyro.</p>
+
+<div class="hr"></div>
+
+<p>Once an empty force has been created, you should apply some components to it so it may interact with your physics objects. The following component types and functions are available:</p>
+
+<p>
+<a href="forces_affectors.html">Affector components</a><br />
+<a href="forces_falloff.html">Falloff components</a><br />
+<a href="forces_properties.html">Property components</a><br />
+<a href="forces_misc.html">Miscellaneous controls</a>
+</p>
+
+<p>Due to the initial learning curve involved with the components, several useful forces have been pre-built as macros within the <code>gyro_user.qc</code> file to serve as examples and starting points for your own forces. They are not bound to any of the core Gyro code, so you are free to edit them or add your own macros to the list.</p></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/forces.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:02 GMT -->
+</html>

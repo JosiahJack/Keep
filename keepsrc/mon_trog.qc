@@ -440,7 +440,7 @@ void() nemes_fast2  =[ $attackb2,  nemes_fast3  ] {ai_face();};
 void() nemes_fast3  =[ $attackb3,  nemes_fast4  ] {ai_face();};
 void() nemes_fast4  =[ $attackb4,  nemes_fast5  ] {ai_face();};
 void() nemes_fast5  =[ $attackb5,  nemes_fast6  ] {
-    local   float   dist, boss, mask;
+    local   float   dist, boss, mask, zot;
 
     ai_face();
     sound (self, CHAN_VOICE, "nemesant/frblatck.wav", 1, ATTN_NORM);
@@ -448,41 +448,38 @@ void() nemes_fast5  =[ $attackb5,  nemes_fast6  ] {
 
 	// The mage has more options when not bound by Zerstorer mode.
 	dist = vlen(self.enemy.origin - self.origin);
-	//zot = FALSE;
+	zot = FALSE;
 
 	// Update 6/6/10:  Only the boss version can shoot lightning.
 	boss = FALSE;
 	if (self.classname != "monster_nemesant") boss = TRUE;
 
-	//if (boss)
-        //if (IsGhost (self.enemy))
-        //    if ( !((dist > 600) || (self.h2olevel == 3)) )
-        //        zot = TRUE;
+	if (boss && self.enemy.movetype == MOVETYPE_NOCLIP && self.enemy.solid == SOLID_TRIGGER) {
+           if ( !((dist > 600) || (self.h2olevel == 3)) ) zot = TRUE; // close enough and out of water
+	}
 
 	// If TRUE, Only lightning is effective, at least in Drake.
-	//if (zot) {
-	//Nemesant_Bolt ();
-	//self.nextthink = time + 0.2;
-	//} else {
+	if (zot) {
+		Nemesant_Bolt ();
+		self.nextthink = time + 0.2;
+	} else {
 		// Use standard book of tricks.
 		if ((dist <= 120) && (self.enemy.flags & FL_ONGROUND)) {
 			// Try to push enemy away from melee.	
 			ai_repel ();
 			self.attack_finished = 0;   // Don't delay for next attack.
 		} else {
-			// Use pattern like Dracula in Castlevania: SotN.
-			// Launch three fireballs then magic missiles.
-			// Update:  Attack counter is shared by all.
-			mask = AddOne() & 3;
-			if (mask == 3) {
+			// Use pattern like Dracula in Castlevania: SotN.  Launch three fireballs then magic missiles.
+			self.meleeattack = self.meleeattack + 1;
+			if (self.meleeattack == 3) {
+				self.meleeattack = 0;
 				// Use magic missiles sometimes if enemy is not immune.
 				if (!(self.enemy.armortype == ARMOR_RED_TYPE)) {
 					Nemesant_Missiles ();
 					return;
 				}
-            		} else if (!mask && boss) {
-				// The boss gets to shoot lightning every fourth shot.
-                		// Must be inrange and out of the water.
+            } else if (!self.meleeattack && boss) {
+				// The boss gets to shoot lightning every fourth shot. Must be inrange and out of the water.
 				if ( !((dist > 600) || (self.waterlevel == 3)) ) {
 					Nemesant_Bolt ();
 					self.nextthink = time + 0.2;
@@ -491,7 +488,7 @@ void() nemes_fast5  =[ $attackb5,  nemes_fast6  ] {
 			}
 			Nemesant_FireBall ();   // The original.
 		}
-	//}
+	}
 };
 void() nemes_fast6  =[ $attackb6,  nemes_fast7  ] {ai_face();};
 void() nemes_fast7  =[ $attackb2,  nemes_fast8  ] {ai_face();};
@@ -640,30 +637,20 @@ void() nemes_pain4  =[ $pain4,  nemes_pain5  ] {};
 void() nemes_pain5  =[ $pain5,  nemes_pain6  ] {};
 void() nemes_pain6  =[ $pain6,  nemes_run1   ] {};
 
-void(entity inflictor, entity attacker, float damage) nemes_pain =
-{
-    if (self.pain_finished > time)
-        return;
-    if (( self.frame >= $attack1 ) && ( self.frame <= $attack15 ))
-    {   // Casting the big spell, so be resistant to pain like the arch-vile.
-        if (prandom() > 10)
-            return;     // Failed to break its concentration.
+void(entity inflictor, entity attacker, float damage) nemes_pain = {
+    if (self.pain_finished > time) return;
+    if (( self.frame >= $attack1 ) && ( self.frame <= $attack15 )) { // Casting the big spell, so be resistant to pain like the arch-vile.
+        if (prandom() > 10) return;     // Failed to break its concentration.
     }
 
     self.pain_finished = time + 0.5;
-
     sound (self, CHAN_VOICE, "nemesant/tpain.wav", 1, ATTN_NORM);
-    if (random()*70 > damage)
-        return;         // didn't flinch
-    if (SUB_IgnorePain ())
-        return;         // No pain anims in Nightmare.
-    if (self.classname != "monster_nemesant")
-    {   // Make boss versions harder to flinch and stunlock.
-        if (self.lip > time)
-            return;     // Too soon to flinch.
+    if (random()*70 > damage) return;         // didn't flinch
+    if (SUB_IgnorePain ()) return;         // No pain anims in Nightmare.
+    if (self.classname != "monster_nemesant") { // Make boss versions harder to flinch and stunlock.
+        if (self.lip > time) return;     // Too soon to flinch.
         self.lip = time + 2;
     }
-
     self.attack_finished = 0;   // So mage can counterattack after recovery.
     nemes_pain1 ();
     attacker = attacker;    // FrikQcc warning squelch!
@@ -677,7 +664,7 @@ void() nemes_decap1  =[ $decap1,  nemes_decap2  ] {blood_spray('0 0 28', 1);
     self.flags = self.flags - (self.flags & FL_ONGROUND);
 };
 void() nemes_decap2  =[ $decap2,  nemes_decap3  ] {blood_spray('-4 -1 27', 2);};
-void() nemes_decap3  =[ $decap3,  nemes_decap4  ] {blood_spray('-6 -1 26', 1); /*monster_drop();*/};
+void() nemes_decap3  =[ $decap3,  nemes_decap4  ] {blood_spray('-6 -1 26', 1);  DropCoin(4);};
 void() nemes_decap4  =[ $decap4,  nemes_decap5  ] {blood_spray('-8 -1 25', 1);};
 void() nemes_decap5  =[ $decap5,  nemes_decap6  ] {blood_spray('-11 0 23', 1);};
 void() nemes_decap6  =[ $decap6,  nemes_decap7  ] {};
@@ -695,7 +682,7 @@ void() nemes_decap17 =[ $decap17, nemes_decap17 ] {};
 
 void() nemes_death1  =[ $death1,  nemes_death2  ] {};
 void() nemes_death2  =[ $death2,  nemes_death3  ] {};
-void() nemes_death3  =[ $death3,  nemes_death4  ] {/*monster_drop();*/};
+void() nemes_death3  =[ $death3,  nemes_death4  ] { DropCoin(4);};
 void() nemes_death4  =[ $death4,  nemes_death5  ] {};
 void() nemes_death5  =[ $death5,  nemes_death6  ] {};
 void() nemes_death6  =[ $death6,  nemes_death7  ] {};
@@ -726,8 +713,7 @@ void() nemes_death17 =[ $death17, nemes_death17 ] {};
 //    return FALSE;
 //};
 
-void() nemes_die =
-{
+void() nemes_die = {
     //if (Shattered ())
     //    return;
     //if (Decapitated ())
@@ -830,7 +816,6 @@ void() monster_nemesant = {
     if (self.health < 1) self.health = 280;
     self.gibhealth = -40;
     self.mass       = MASS_HEAVY;
-
     self.th_stand   = nemes_stand1;
     self.th_walk    = nemes_walk1;
     self.th_run     = nemes_run1;
@@ -841,17 +826,8 @@ void() monster_nemesant = {
     if (self.classname == "monster_nemesant") {
         //self.th_gib     = nemes_gib;
         self.th_revive  = nemes_revive1;
-        //if (soul_evil)
-        //    monster_purse (3, 0.5, 0.5);
+        //if (soul_evil) monster_purse (3, 0.5, 0.5);
     }
-    // ELSE... Boss versions can neither be beheaded nor revived.
-    //else
-    //{
-        //if (self.classname != "monster_cultlord")
-            //self.th_gib     = nemes_gib;
-        //if (soul_evil)
-        //    monster_purse (10, 1, 0.5);  // 10 items, 50% gem.
-    //}
 
 	if (self.classname == "monster_trogboss") setup_passivestate_boss(self);  // Check passive system for exceptions
 	
@@ -880,27 +856,20 @@ void() monster_nemesant = {
 // SoE entity.
 void() monster_trogboss = {
     self.lip = 0;
-    if (self.skin != 2)
-        self.skin = 1;
+    if (self.skin != 2) self.skin = 1;
     self.xfl  = XFL_BOSS;
-    if (!self.health)
-        self.health = 1600;
-
+    if (!self.health) self.health = 1600;
 	if (self.deathstring == "") self.deathstring = " failed to impress the Master Nemesant\n";
     monster_nemesant ();
 };
 
 // Original classname from Zerstorer.
 void() monster_troglodyte = {
-    if (world.model == "maps/coe4.bsp")
-        {self.classname = "monster_trogboss";  monster_trogboss();}
-//    else if (world.model == "maps/e3secret1.bsp")
-//        {self.classname = "monster_trogboss";  monster_trogboss();}
-    else
-        {self.classname = "monster_nemesant";  monster_nemesant();}
+    if (world.model == "maps/coe4.bsp") {
+		self.classname = "monster_trogboss";  monster_trogboss();
+	} else {
+		self.classname = "monster_nemesant";  monster_nemesant();
+	}
 };
 
 // Todo (maybe):  Add purple mind-flayer version that can rez bad guys.
-
-
-//===========================/  END OF FILE  /===========================//

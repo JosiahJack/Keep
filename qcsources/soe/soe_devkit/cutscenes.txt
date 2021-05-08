@@ -1,0 +1,95 @@
+Cut-scene Construction Kit    	by Darin McNeil		1/15/96
+===================================================================
+
+	First, cut-scenes will only activate in single-player.
+During multiplayer, the triggers are removed.  A level made with
+cut-scenes will play fine without the progs.dat, but the player will
+receive a bunch of errors when starting the level.  Similar to
+starting a CTF map without running its progs.dat.
+===================================================================
+
+	The progs.dat included allows for cut-scenes to be designed
+into custom levels.  The level-designer places a trigger in the
+level, and when the player touches it he/she is transported to a
+camera entity in the level.  Script entities are placed in the level
+and their message keys are displayed during the cut-scene.  The player
+remains in camera mode until the last script is displayed.  The player
+then returns to the game in the same condition as they were when
+they left.
+	I will provide a simple example, and explain its operation.
+-----------------------------------------------------
+{
+  "classname" "trigger_camera"
+  "script" "1"			//The starting script number.
+  "script_delay" "4"		//The duration to display it.
+  "target" "camera1"		//The camera to move the player to.
+  "targetname" "monster1" 	//This monster must be killed before the
+					//trigger is operational.
+  {
+	//brush data deleted.
+  }
+}
+{
+  "classname" "info_movie_camera"
+  "origin" "134 200 304"
+  "targetname" "camera1"	//The camera is linked to the trigger.
+  "mangle" "20 180 0"		// 'pitch yaw roll'  just like intermission.
+  "script_num" "2"
+}
+{
+  "classname" "info_script"
+  "origin" "-164 100 107"	//Place the scripts in the level, anywhere.
+  "script_num" "1"		//The script number.
+  "next_script" "2"		//The next script to display.
+  "script_delay" "4"		//The duration to display it.
+  "message" "This is the first page of script.\n"
+}
+{
+  "classname" "info_script"
+  "origin" "-164 100 107"	//Same origin as above, copy&paste.  :)
+  "script_num" "2"		//The script number.
+  "next_script" "0"		//'0' signifies the final script of the scene.
+  "script_delay" "5"		//The duration to display it.
+  "message" "This one comes next, and then stops.\n"
+}
+-------------------------------------------------------------------
+
+	The trigger_camera and the info_movie_camera are linked just as
+you would normally link objects, such as teleports with their destination.
+The trigger_camera also starts the script sequence, by naming the first
+script and the duration to display it (in seconds).  The cut-scene is
+exited only by reaching a script with a '0' in the "next_script" field.
+If you want no scripts during the scene, or want to pause with a blank
+screen between scripts, just put a info_script in the sequence that has
+a "message" as "".  The operation is pretty straight-forward.
+	No model is placed where the player was, it would be simple to do,
+but I didn't need to.  It only would be needed if you wanted a cut-scene
+that showed the main character standing in place.   :)
+	If monsters are attacking the player when he hits the trigger_camera
+they will continue to move towards him as a camera, but they will not
+attack it.  They will just run around it looking kind of nervous.  You
+can link a monster to the trigger, and the trigger will not work until
+the monster has been killed.  I placed my cameras in areas that the player
+had not been to already to make extra certain that no leftover monsters
+were running towards the camera.  Monsters that have not seen you already
+will NOT mistakingly target the camera during a cut-scene.
+
+	I also made a few miscellaneous items for my level.  One is a pile
+of gibs that a dog will happily munch on instead of attack you.  It's
+good just for ambience.  I also made a hostage.  They are kinda of goofy,
+probably beaten senseless.  Shamblers are the only monsters that will
+target hostages as enemies.  The hostage turns to face the shambler when
+attacked.  Both are just hacks I thought would be neato.
+	Use them if you like.  There is also a finale sequence that 
+contains quite of few custom entities, I will let you go through the 
+code if you really want to learn about that.  Here are the classnames 
+for the meat and the hostage:
+
+  "classname" "misc_meat"
+  "classname" "misc_hostage"
+
+	I can't think of anything else you need to know about the CCK right
+now.  I may have left something out, but you should be able to follow
+the code and figure out what's going on.  99% of the code is in 
+cutscenes.qc, with small changes in client.qc, defs.qc, dog.qc, shambler.qc.
+The code shoud merge easily with any other single player patch.

@@ -601,7 +601,11 @@ void() monster_sheep =  {
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
 
-	self.passive_state = 1;
+	// Standard DENIZEN AI
+	if (!self.alignment) self.alignment = NEUTRAL;
+	if (!self.passive_state) self.passive_state = 1;
+	if (!self.temperament) self.temperament = TEMPRA_PASSIVE;
+	if (!self.vulnerability) self.vulnerability = VULN_RESISTANT;
 
 	self.classtype = CT_MONSHEEP;
 	self.classgroup = CG_HARMLESS;

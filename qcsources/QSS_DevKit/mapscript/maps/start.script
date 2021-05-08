@@ -1,0 +1,31 @@
+test
+{
+	dprint "Hello World"
+	set cnt 1
+	if cnt == 1
+	{
+		dprint "cnt is 1"
+	}
+	if cnt == 2
+	{
+		dprint "cnt is 2 (WRONG)"
+	}
+	set cnt 2
+	if cnt == 2
+	{
+		dprint "cnt is 2"
+	}
+
+	dprint "Start sleeping"
+	while cnt == 2
+	{
+		sleep 1
+		dprint "Sleeper!"
+	}
+	dprint "Stop sleeping"
+}
+
+done
+{
+	set cnt 0
+}

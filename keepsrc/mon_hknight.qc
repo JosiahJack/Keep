@@ -311,8 +311,7 @@ void()	hknight_watk22	=[	$w_attack22,	hknight_run1	] {monster_footstep(FALSE); a
 // Attack 3 - W_Attack (two handed slashing attack)
 
 //----------------------------------------------------------------------
-void() hknight_melee =
-{
+void() hknight_melee = {
 	self.meleeattack = self.meleeattack + 1;
 
 	if (self.meleeattack == 1) hknight_slice1 ();
@@ -324,8 +323,7 @@ void() hknight_melee =
 };
 
 //============================================================================
-void(float offset) hknight_shot =
-{
+void(float offset) hknight_shot = {
 	local	vector	offang;
 	local	vector	org, dir;
 	
@@ -352,7 +350,8 @@ void(float offset) hknight_shot =
     } else if (self.classname == "monster_dark_lord") {
         NecroBolt_Launch (org, dir);
     } else {
-		launch_projectile (org, dir, CT_PROJ_HKN, self.attack_speed);
+		if (self.classtype == self.classtype == CT_MONSABERENFORCER) launch_projectile (org, dir, CT_PROJ_HKN_BLUE, self.attack_speed);
+		else launch_projectile (org, dir, CT_PROJ_HKN, self.attack_speed);
 	}
 };
 
@@ -644,7 +643,11 @@ void(entity inflictor, entity attacker, float damage) hknight_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		if (self.pain_sound2) {
+			if (random() < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+			else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+		} else sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+
 		if (self.pain_check == 1) hknight_pain1 ();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
@@ -706,9 +709,11 @@ void() hknight_die =
         self.death_sound = "bane/death.wav";
     }	
 
+	if (self.classtype == CT_MONSABERENFORCER) self.death_sound = "enforcer/death1.wav";
+
 	// regular death
 	if (!self.gibbed) {
-	sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
 		if (random() > 0.5) hknight_die1 ();	// Forward - standard
 		else hknight_dieb1 ();					// Backward - standard
 	}
@@ -842,11 +847,11 @@ void() monster_hell_knight = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	self.mdl = "progs/ad171/mon_hknight.mdl";			// Original ID Knight + extra skins
-	self.headmdl = "progs/h_hellkn.mdl";
-	self.gib1mdl = "progs/ad171/w_hknightsword.mdl";	// Unique sword
-	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
-	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot
+	if (!self.mdl) self.mdl = "progs/ad171/mon_hknight.mdl";			// Original ID Knight + extra skins
+	if (!self.headmdl) self.headmdl = "progs/h_hellkn.mdl";
+	if (!self.gib1mdl) self.gib1mdl = "progs/ad171/w_hknightsword.mdl";	// Unique sword
+	if (!self.gib2mdl) self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
+	if (!self.gib3mdl) self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot
 
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
@@ -855,7 +860,7 @@ void() monster_hell_knight = {
 	precache_model (self.gib2mdl);
 	precache_model (self.gib3mdl);
 
-	self.gib1sound = GIB_IMPACT_METALA;
+	if (self.classtype != CT_MONSABERENFORCER) self.gib1sound = GIB_IMPACT_METALA;
 	if (random() < 0.5) self.gib2mdl = string_null;
 	if (random() < 0.5) self.gib3mdl = string_null;
 
@@ -863,7 +868,8 @@ void() monster_hell_knight = {
 	precache_sound ("hknight/attack1.wav");
 	precache_sound ("knight/sword2.wav");
 	precache_sound ("knight/sword2.wav");
-	self.hello_sound = "hknight/idle.wav"; 
+	if (self.classtype != CT_MONSABERENFORCER) self.hello_sound = "hknight/idle.wav"; 
+	else self.hello_sound = "enforcer/idle1.wav"; 
 
 	// TE_KNIGHTSPIKE = Magic spike hitting the wall
 	// Has got to be in this location because the 
@@ -879,9 +885,9 @@ void() monster_hell_knight = {
 
 	//----------------------------------------------------------------------
 	if (self.spawnflags & MON_STATUE) {
-		self.idle_sound = "statue/idle1.wav";
-		self.idle_sound2 = "statue/idle2.wav";
-		self.idle_soundcom = "statue/comidle.wav";
+		if (!self.idle_sound) self.idle_sound = "statue/idle1.wav";
+		if (!self.idle_sound2) self.idle_sound2 = "statue/idle2.wav";
+		if (!self.idle_soundcom) self.idle_soundcom = "statue/comidle.wav";
 		precache_sound (self.idle_sound);
 		precache_sound (self.idle_sound2);
 		precache_sound (self.idle_soundcom);
@@ -895,14 +901,13 @@ void() monster_hell_knight = {
 
 		self.resist_nails = 0.2;
 		self.reflectnails = TRUE;		// Reflect nail projectiles
-	}
-	else {
-		self.idle_sound = "hknight/idle.wav";
+	} else {
+		if (!self.idle_sound) self.idle_sound = "hknight/idle.wav";
 		precache_sound (self.idle_sound);
 
-		self.pain_sound = "hknight/pain1.wav";
-		self.death_sound = "hknight/death1.wav";
-		self.sight_sound = "hknight/sight1.wav";
+		if (!self.pain_sound) self.pain_sound = "hknight/pain1.wav";
+		if (!self.death_sound) self.death_sound = "hknight/death1.wav";
+		if (!self.sight_sound) self.sight_sound = "hknight/sight1.wav";
 	}
 	// Cannot have if precache statements, precache duplicates as well
 	precache_sound (self.pain_sound);
@@ -1112,5 +1117,47 @@ void() monster_hell_pointknight = {
 		// return;
 	}
 	// Loop back through existing hell knight function
+	monster_hell_knight();
+};
+
+// Light Saber Enforcer from back2forwards by The Lieutenant
+void() monster_hell_knight_enforcer = {
+	self.spawnflags = self.spawnflags - (self.spawnflags & MON_STATUE); // Force non-statue for this guy, we have a light saber after all
+	self.spawnflags = self.spawnflags - (self.spawnflags & MON_POINT_KNIGHT); // Force normality
+	self.classname = "monster_enforcer";
+	self.classtype = CT_MONSABERENFORCER;
+	self.mdl = ("progs/lieutenant/hknight.mdl");
+	self.headmdl = "progs/h_mega.mdl";
+	precache_model("progs/newhouse/vk_spike.mdl");
+	precache_model2 ("progs/h_mega.mdl");
+	
+	precache_sound2 ("hknight/attack1.wav");
+	precache_sound ("hknight/hit.wav");		// used by C code, so don't sound2
+	precache_sound2 ("hknight/slash1.wav");
+	precache_sound2 ("hknight/idle.wav");
+	precache_sound2 ("hknight/grunt.wav");
+	precache_sound ("knight/sword1.wav");
+	precache_sound ("knight/sword2.wav");
+	
+	self.death_sound = "enforcer/death1.wav";
+	if (!self.idle_sound) self.idle_sound = "enforcer/idle1.wav";
+	if (!self.sight_sound) self.sight_sound = "enforcer/sight1.wav";
+	if (!self.sight_sound2) self.sight_sound2 = "enforcer/sight2.wav";
+	if (!self.sight_sound3) self.sight_sound3 = "enforcer/sight3.wav";
+	if (!self.sight_sound4) self.sight_sound4 = "enforcer/sight4.wav";
+	self.idle_sound = "enforcer/idle1.wav";
+	self.pain_sound = "enforcer/pain1.wav";
+	self.pain_sound2 = "enforcer/pain2.wav";
+	precache_sound2 ("enforcer/death1.wav");
+	precache_sound2 ("enforcer/idle1.wav");
+	precache_sound2 ("enforcer/pain1.wav");
+	precache_sound2 ("enforcer/pain2.wav");
+	precache_sound2 ("enforcer/sight1.wav");
+	precache_sound2 ("enforcer/sight2.wav");
+	precache_sound2 ("enforcer/sight3.wav");
+	precache_sound2 ("enforcer/sight4.wav");
+	self.exactskin = 0;
+	if (self.health <= 0) self.health = 105;
+	if (self.deathstring == "") self.deathstring = " was cauterized by a Saber Enforcer\n";
 	monster_hell_knight();
 };

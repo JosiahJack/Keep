@@ -60,26 +60,21 @@ local float 	ldmg;
 	T_Damage (self.enemy, self, self, ldmg);
 };
 
-void()	BFish_JumpTouch =
-{
+void()	BFish_JumpTouch = {
 	local	float	ldmg;
 
-	if (self.health <= 0)
-		return;
+	if (self.health <= 0) return;
 		
-	if (other.takedamage)
-	{
-		if ( vlen(self.velocity) > 300 )
-		{
+	if (other.takedamage) {
+		if ( vlen(self.velocity) > 300 ) {
 			ldmg = 10 + 10*random();
+			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
 			T_Damage (other, self, self, ldmg);	
 		}
 	}
 
-	if (!checkbottom(self))
-	{
-		if (self.flags & FL_ONGROUND)
-		{	// jump randomly to not get hung up
+	if (!checkbottom(self)) {
+		if (self.flags & FL_ONGROUND) {	// jump randomly to not get hung up
 			self.touch = SUB_Null;
 			self.think = bfish_atka1;
 			self.nextthink = time + 0.1;
@@ -92,8 +87,6 @@ void()	BFish_JumpTouch =
 	self.think = bfish_run1;
 	self.nextthink = time + 0.1;
 };
-
-//====================================================================
 
 void() bfish_stand1  =[      $wank1,        bfish_stand2        ] {ai_stand();};
 void() bfish_stand2  =[      $wank2,        bfish_stand3        ] {ai_stand();};

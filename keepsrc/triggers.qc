@@ -2238,8 +2238,7 @@ STARTOFF : Requires trigger to activate
 Variable sized bmodel used to take powerups from the player
 
 ======================================================================*/
-void() trigger_takeartifact_fire =
-{
+void() trigger_takeartifact_fire = {
 	local float inv_artifact;
 	
 	// Is the trigger blocked? (trigger_once)
@@ -2308,9 +2307,7 @@ void() trigger_takeartifact_fire =
 	}
 };
 
-//----------------------------------------------------------------------
-void() trigger_takeartifact =
-{
+void() trigger_takeartifact = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 	if (check_bmodel_notouch()) return;	// NO touch + NO targetname!
 	

@@ -198,7 +198,11 @@ void() monster_beez = {
 	self.th_die = swrm_die;
 	self.touch = beez_touch;
 
-	self.passive_state = 1;
+	// Standard DENIZEN AI
+	if (!self.alignment) self.alignment = NEUTRAL;
+	if (!self.passive_state) self.passive_state = 1;
+	if (!self.temperament) self.temperament = TEMPRA_PASSIVE;
+	if (!self.vulnerability) self.vulnerability = VULN_RESISTANT;
 
 	if (self.deathstring == "") {
 		if (random() < 0.5) self.deathstring = " was swarmed by Bees\n";

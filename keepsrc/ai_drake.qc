@@ -6,62 +6,50 @@ void HuntTarget ();
 // PM:  Checks if 'self' should attack even though 'ent' is in the way.
 // Called by 'CheckAttack' and their monster-specific equivalents.
 //===========
-float(entity ent) DontHurtMe =
-{
-    if (ent.flags & FLx_CREATURE)   // Blocked by a possible target.
-        if (self.enemy.solid > SOLID_TRIGGER)   // Don't waste time if FALSE.
-		{
+float(entity ent) DontHurtMe = {
+    if (ent.flags & FLx_CREATURE) {   // Blocked by a possible target.
+        if (self.enemy.solid > SOLID_TRIGGER) { // Don't waste time if FALSE.
 			//if (!Align_Match (self, ent))
 				//return FALSE;   // Enemies.
-			if (ent.enemy == self)
-				return FALSE;   // Mad at attacker.
-			if (self.oldenemy == ent)
-				return FALSE;   // Attacker has a grudge against ent.
+			if (ent.enemy == self) return FALSE;   // Mad at attacker.
+			if (self.oldenemy == ent) return FALSE;   // Attacker has a grudge against ent.
 		}
+	}
     return TRUE;
 };
 
-//- - - - - - - - -
 // Like checkclient, but for monsters.
 // Checks if a given target is available for attacking.
 // The entity targ is supposed to be the current entity on a given hitlist.
-entity(entity targ) CheckTarget =
-{
-    if (targ.health > 0)
-        if (visible (targ))
-            return targ;
+entity(entity targ) CheckTarget = {
+    if (targ.health > 0) {
+        if (visible (targ)) return targ;
+	}
     return world;
 };
 
-//- - - - - - - - -
 // SOW = Stand or walk.  Called at the end of a victory dance.
-void() monster_sow =
-{
-    if (self.movetarget)
+void() monster_sow = {
+    if (self.movetarget || self.charmer)
         self.th_walk ();
     else
         self.th_stand ();
 };
 
-//- - - - - - - - -
 // Tells the monster to go straight up, if distance is positive.
 // A negative distance will make the monster go down instead.
 // Returns TRUE if fully or partially successful at moving.
 //
 // Originally from Dragons.
-//- - - - - - - - -
-float(float dist) ai_up =
-{
+float(float dist) ai_up = {
     local   entity  box, os;
     local   entity  swap;
     local   vector  spot;
 
-    if (dist < 0)
-    {
+    if (dist < 0) {
         dist = 0 - dist;    // 'fabs' it.
         temp_goal.origin_z = self.origin_z - 40 - dist;     // Going down.
-    }
-    else
+    } else
         temp_goal.origin_z = self.origin_z - 30 + dist;     // Going up.
     setorigin (temp_goal, temp_goal.origin);
 
@@ -69,10 +57,8 @@ float(float dist) ai_up =
 
     swap = self.enemy;
     self.enemy = temp_goal;
-    while (dist > 0)
-    {
-        if (dist < 8)   // walkmove moves self up or down 8 units at a time.
-        {   // Last run through loop.
+    while (dist > 0) {
+        if (dist < 8) { // walkmove moves self up or down 8 units at a time. Last run through loop.
             // Go through the trouble of moving less than 8 units.
             // Create a dummy to move for the monster.  If the dummy
             // can move, it is safe to set origin directly for monster.
@@ -88,83 +74,32 @@ float(float dist) ai_up =
             setorigin (box, self.origin);
             os = self;
             self = box;
-            if (safe_move (self.angles_y, 0))
-            {   // Dummy moved, now move the monster precisely.
-                if (self.origin_z > self.oldorigin_z)
-                {   // Going up.
+            if (walkmove (self.angles_y, 0)) { // Dummy moved, now move the monster precisely.
+                if (self.origin_z > self.oldorigin_z) { // Going up.
                     os.origin_z = os.origin_z + dist;
                     setorigin (os, os.origin);
-                }
-                else if (self.origin_z < self.oldorigin_z)
-                {   // Going down.
+                } else if (self.origin_z < self.oldorigin_z) { // Going down.
                     os.origin_z = os.origin_z - dist;
                     setorigin (os, os.origin);
                 }
             }
             remove (box);
             self = os;
-        }
-        else
-            safe_move (self.angles_y, 0);    // Fails only in solid.
-
+        } else {
+            walkmove (self.angles_y, 0);    // Fails only in solid.
+		}
         dist = dist - 8;
     }
     self.enemy = swap;
-
     return (self.origin != spot);
 };
 
 float(float dist) ai_down = {return ai_up (0 - dist);};
 
-// Changes mode from fight to idle.  Does not actually change thinking.
-void() ai_calm_down = {
-	// Reset fight status.
-    self.fighting     = FALSE;
-    self.search_time  = time + 3;
-
-	// Forget all enemies and go idle.
-    self.enemy = self.oldenemy = world;
-};
-
-// Check if self should stop running after enemy.
-float() ai_run_kill = {
-    local   float   winner;
-
-	// Check for victory sound.  Must do first because enemy will be changed.
-	// Sound is played only if enemy slain is a client.
-    winner = FALSE;
-    if (self.enemy)
-    if (self.enemy.flags & FL_CLIENT)
-    if (visible (self.enemy)) {
-        winner = TRUE;
-        // Set yaw in case we need to face the fallen during the dance.
-        self.ideal_yaw = vectoyaw (self.enemy.origin - self.origin);
-    }
-
-    self.enemy = world;
-	// FIXME: look all around for other targets
-    if (self.oldenemy.health > 0)
-    {
-        self.enemy = self.oldenemy;
-        self.oldenemy = world;
-        // FIXME:  Replace with simpler version without the thinking.
-        HuntTarget ();
-    }
-    else
-    {
-        ai_calm_down ();
-        if (winner)
-            if (self.th_win)
-                {self.th_win ();  return TRUE;}   // We have a winner!
-        monster_sow ();
-        return TRUE;
-    }
-    return FALSE;
-};
-
 // Monster is done running and going back to stand/walk.
 void() ai_run_done = {
-    ai_calm_down ();
+    self.search_time  = time + 3; // Reset fight status.
+    self.enemy = self.oldenemy = world; // Forget all enemies and go idle.
     monster_sow ();
 };
 
@@ -199,9 +134,47 @@ void(float dist) ai_run_bank = {
     else
         {ofs = -90;  flip = (self.angles_z > 0);}
 
-    if (!safe_move (self.ideal_yaw + ofs, dist))  // Do this first to move!
+    if (!walkmove (self.ideal_yaw + ofs, dist))  // Do this first to move!
         if (flip)
             self.lefty = !self.lefty;
+};
+
+//=============
+// ai_run_side
+//
+// Move to the side of ideal_yaw.  Assumes ideal_yaw was set prior to a
+// call to this function.  Called by 'ai_run_strafe'.
+//=============
+void(float dist) ai_run_side = {
+    local   float   ofs;
+    
+    if (self.lefty) ofs = 90;
+    else ofs = -90;
+
+    if (walkmove (self.ideal_yaw + ofs, dist)) return;
+
+    self.lefty = !self.lefty;
+    walkmove (self.ideal_yaw - ofs, dist);
+};
+
+//=============
+// ai_run_strafe (formerly ai_run_slide)
+//
+// Strafe sideways, but stay at aproximately the same range
+// PM:  Renamed to 'ai_run_strafe', and added float argument 'dist'.
+//
+// The above description, which describes circle-strafing, is only true if
+// enemy_yaw updates each frame, which is true only if this is called from
+// ai_run.  If called directly, enemy_yaw probably will not be set, and the
+// monster will simply move to the side.
+//
+// For guaranteed circle-strafing, do the following:
+//  {ai_face(); ai_run_side(dist); ai_face();}
+//=============
+void(float dist) ai_run_strafe = {
+    self.ideal_yaw = enemy_yaw;
+    ChangeYaw ();
+    ai_run_side (dist);
 };
 
 // Adds 'fadd' to frame 'fr'.  Used to animate monsters.
@@ -211,4 +184,21 @@ void(float fr, float fadd, float fmax) WalkFrame_Add =
         self.walkframe = 0;
     self.frame = fr + self.walkframe;
     self.walkframe = self.walkframe + fadd;
+};
+
+// Set contents of monster's purse.
+void(float loop, float drop_chance, float gem_chance) monster_purse = {
+    self.purse = '0 0 0';
+    self.purse_z = parms_pack (loop, drop_chance * 100, gem_chance * 100);
+    while (loop > 0)
+    {
+        if (random() < drop_chance)
+        {
+            if (random() < gem_chance)
+                self.purse_y = self.purse_y + 1;    // Gem
+            else
+                self.purse_x = self.purse_x + 1;    // Coin
+        }
+        loop = loop - 1;
+    }
 };

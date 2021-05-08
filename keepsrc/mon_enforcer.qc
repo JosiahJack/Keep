@@ -32,6 +32,8 @@ $frame paind1 paind2 paind3 paind4 paind5 paind6 paind7 paind8
 $frame paind9 paind10 paind11 paind12 paind13 paind14 paind15 paind16
 $frame paind17 paind18 paind19
 
+float ENFORCER_LAVANG = 8192;
+
 //============================================================================
 void()	enf_stand1	=[	$stand1,	enf_stand2	] {monster_idle_sound(); ai_stand();};
 void()	enf_stand2	=[	$stand2,	enf_stand3	] {ai_stand();};
@@ -59,8 +61,24 @@ void()	enf_walk14	=[	$walk14,	enf_walk15	] {ai_walk(3);};
 void()	enf_walk15	=[	$walk15,	enf_walk16	] {ai_walk(4);};
 void()	enf_walk16	=[	$walk16,	enf_walk1	] {ai_walk(2);};
 
-float MEGA_ENF = 2;
+void()	lth_walk1	=[	$walk1 ,	lth_walk2	] {monster_idle_sound(); ai_walk(2);};
+void()	lth_walk2	=[	$walk2 ,	lth_walk3	] {ai_walk(4);};
+void()	lth_walk3	=[	$walk3 ,	lth_walk4	] {ai_walk(4);};
+void()	lth_walk4	=[	$walk4 ,	lth_walk5	] {ai_walk(3);};
+void()	lth_walk5	=[	$walk5 ,	lth_walk6	] {ai_walk(1);};
+void()	lth_walk6	=[	$walk6 ,	lth_walk7	] {ai_walk(2);};
+void()	lth_walk7	=[	$walk7 ,	lth_walk8	] {ai_walk(2);};
+void()	lth_walk8	=[	$walk8 ,	lth_walk9	] {ai_walk(1);};
+void()	lth_walk9	=[	$walk9 ,	lth_walk10	] {ai_walk(2);};
+void()	lth_walk10	=[	$walk10,	lth_walk11	] {ai_walk(4);};
+void()	lth_walk11	=[	$walk11,	lth_walk12	] {ai_walk(4);};
+void()	lth_walk12	=[	$walk12,	lth_walk13	] {ai_walk(1);};
+void()	lth_walk13	=[	$walk13,	lth_walk14	] {ai_walk(2);};
+void()	lth_walk14	=[	$walk14,	lth_walk15	] {ai_walk(3);};
+void()	lth_walk15	=[	$walk15,	lth_walk16	] {ai_walk(4);};
+void()	lth_walk16	=[	$walk16,	lth_walk1	] {ai_walk(2);};
 
+float MEGA_ENF = 2;
 float ULTRA_ENF = 4;
 void enforcer_updateshield();
 void menf_ratk1();
@@ -271,9 +289,12 @@ void()	enf_paind17	=[	$paind17,	enf_paind18	] {ai_pain(1); enforcer_updateshield
 void()	enf_paind18	=[	$paind18,	enf_paind19	] { enforcer_updateshield(); };
 void()	enf_paind19	=[	$paind19,	enf_run1	] { enforcer_updateshield(); };
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) enf_pain =
-{
+void()	lth_paina1	=[	50,	lth_paina2	] {};
+void()	lth_paina2	=[	51,	lth_paina3	] {};
+void()	lth_paina3	=[	52,	lth_paina4	] {};
+void()	lth_paina4	=[	53,	enf_run1	] {};
+
+void(entity inflictor, entity attacker, float damage) enf_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -282,7 +303,9 @@ void(entity inflictor, entity attacker, float damage) enf_pain =
 		self.lip = random ();
 		if (self.lip < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
-	
+
+		if (self.classtype == CT_MONSUPERENFORCER) { lth_paina1(); return; }
+
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
 			if (self.lip < 0.2) enf_paina1 ();
@@ -334,7 +357,8 @@ void()	enf_fdie9	=[	$fdeath9,	enf_fdie10	] {};
 void()	enf_fdie10	=[	$fdeath10,	enf_fdie11	] {monster_death_postcheck();};
 void()	enf_fdie11	=[	$fdeath11,	enf_fdie11	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
+void()	lth_fdie1;
+
 void() enf_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
@@ -342,6 +366,13 @@ void() enf_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "enforcer/death1.wav", 1, ATTN_NORM);
+		if (self.classtype == CT_MONSUPERENFORCER) {
+			if (self.spawnflags & ENFORCER_LAVANG) DropWeapon(MODEL_GWEAP_LSNG,IT_LAVA_SUPER_NAILGUN,CT_LAVASNG);
+			else DropWeapon(MODEL_GWEAP_SNG,IT_SUPER_NAILGUN,CT_SUPER_NAILGUN);
+			lth_fdie1();
+			return;
+		}
+
 		if (random() > 0.5) enf_die1 ();
 		else enf_fdie1 ();
 	}
@@ -350,12 +381,11 @@ void() enf_die = {
 /*======================================================================
  QUAKED monster_enforcer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 ======================================================================*/
-void() monster_base_enforcer =
-{
+void() monster_base_enforcer = {
 	local float r;
 	
-	self.mdl = "progs/mon_enforcer.mdl";
-	self.headmdl = "progs/h_enforcer.mdl";
+	if (!self.mdl) self.mdl = "progs/mon_enforcer.mdl";
+	if (!self.headmdl) self.headmdl = "progs/h_enforcer.mdl";
 	if (!self.gib1mdl) self.gib1mdl = "progs/ad171/w_enforcergun.mdl";	// Unique weapon
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
@@ -372,35 +402,37 @@ void() monster_base_enforcer =
 		self.pain_sound = "enforcer/pain1.wav";
 		self.pain_sound2 = "enforcer/pain2.wav";
 	}
-	self.gib1sound = GIB_IMPACT_WOOD;
+	if (!self.gib1sound) self.gib1sound = GIB_IMPACT_WOOD;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
-	self.gibhealth = -35;
-	self.gibbed = FALSE;
-	self.pain_flinch = 20;				// low pain threshold
+	if (!self.gibhealth) self.gibhealth = -35;
+	self.gibbed = FALSE;\
 	if (self.classtype == CT_MONENF_ULTRA) self.pain_flinch = 80; // high pain threshhold
 	if (self.classtype == CT_MONENF_MEGA) self.pain_flinch = 50; // medium pain threshold
+	if (self.classtype == CT_MONSUPERENFORCER) self.pain_flinch = 100; // medium pain threshold
+	if (!self.pain_flinch) self.pain_flinch = 20;				// low pain threshold
 	self.pain_longanim = TRUE;			// Long pain animation for axe
-	self.steptype = FS_TYPEHEAVY;		// heavy player
-	self.attack_offset = '28 8.5 16';	// End of Gun
+	if (!self.steptype) self.steptype = FS_TYPEHEAVY;		// heavy player
+	if (CheckZeroVector(self.attack_offset)) self.attack_offset = '28 8.5 16';	// End of Gun
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
-	if (self.classtype == CT_MONELIMATOR) self.resist_cells = 0.5;
-	if (self.classtype == CT_MONDEFENDER) self.resist_rockets = 0.5;
-	if (self.classtype == CT_MONENF_MEGA) self.resist_cells = 0.75;
+
+	if (self.classtype == CT_MONELIMATOR) {self.resist_cells = 0.5;self.resist_plasma = 0.5;}
+	if (self.classtype == CT_MONDEFENDER) {self.resist_rockets = 0.5;self.resist_multi_rockets = 0.5;}
+	if (self.classtype == CT_MONENF_MEGA) {self.resist_cells = 0.75;self.resist_plasma = 0.75;}
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
 	
-	self.th_stand = enf_stand1;
-	self.th_walk = enf_walk1;
-	self.th_run = enf_run1;
-	self.th_pain = enf_pain;
-	self.th_die = enf_die;
+	if (!self.th_stand) self.th_stand = enf_stand1;
+	if (!self.th_walk) self.th_walk = enf_walk1;
+	if (!self.th_run) self.th_run = enf_run1;
+	if (!self.th_pain) self.th_pain = enf_pain;
+	if (!self.th_die) self.th_die = enf_die;
 
 	self.classgroup = CG_ENFORCER;
 	self.classmove = MON_MOVEWALK;
@@ -416,7 +448,7 @@ void() monster_enforcer = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 	
-	self.classtype = CT_MONENFORCER;
+	if (!self.classtype) self.classtype = CT_MONENFORCER;
 	precache_model (MODEL_PROJ_LASER);	// Originally - progs/laser.mdl
 	precache_model2 ("progs/enforcer.mdl");
 	precache_model2 ("progs/h_mega.mdl");
@@ -462,19 +494,21 @@ void() monster_enforcer = {
 			self.classtype = CT_MONENF_MEGA;
 			if (self.deathstring == "") self.deathstring = " was vaporized by a Mega-enforcer\n";
 		} else {
-			if (self.health < 1) self.health = 80;
-			self.exactskin = rint((random()*3)-0.5);
-			if (self.deathstring == "")  self.deathstring = " was blasted by an Enforcer\n";
+			if (self.classtype == CT_MONENFORCER) {
+				if (self.health < 1) self.health = 80;
+				if (self.exactskin >=0) self.exactskin = rint((random()*3)-0.5);
+				if (self.deathstring == "")  self.deathstring = " was blasted by an Enforcer\n";
+				self.ammo_cells = rint(1 + random()*2);
+				self.gib1skin = 0;
+			}
 		}
 	}
-	self.ammo_cells = rint(1 + random()*2);
-	self.gib1skin = 0;
 
-	self.idle_sound = "enforcer/idle1.wav";
-	self.sight_sound = "enforcer/sight1.wav";
-	self.sight_sound2 = "enforcer/sight2.wav";
-	self.sight_sound3 = "enforcer/sight3.wav";
-	self.sight_sound4 = "enforcer/sight4.wav";
+	if (!self.idle_sound) self.idle_sound = "enforcer/idle1.wav";
+	if (!self.sight_sound) self.sight_sound = "enforcer/sight1.wav";
+	if (!self.sight_sound2) self.sight_sound2 = "enforcer/sight2.wav";
+	if (!self.sight_sound3) self.sight_sound3 = "enforcer/sight3.wav";
+	if (!self.sight_sound4) self.sight_sound4 = "enforcer/sight4.wav";
 	precache_sound ("enforcer/sight1.wav");
 	precache_sound ("enforcer/sight2.wav");
 	precache_sound ("enforcer/sight3.wav");
@@ -485,7 +519,7 @@ void() monster_enforcer = {
 	precache_sound ("enforcer/enfstop.wav");
 	
 	//self.th_missile = enf_atk1;
-	self.th_missile = enforcer_attack;
+	if (!self.th_missile) self.th_missile = enforcer_attack;
 
 	monster_base_enforcer();
 };
@@ -556,6 +590,114 @@ void() monster_eliminator = {
 	self.th_missile = elim_atk1;
 	self.th_checkattack = EliminatorCheckAttack;
 	if (self.deathstring == "")  self.deathstring = " was assasinated by a Eliminator\n";
+
+	monster_base_enforcer();
+};
+
+void() army_nailfire;
+void() super_enforcer_fire = {
+	ai_face();
+	army_nailfire();
+};
+
+void()	lth_run1	=[	$run1  ,	lth_run2	] {
+if (random() < 0.2)
+	sound (self, CHAN_VOICE, "enforcer/idle1.wav", 1, ATTN_IDLE);
+ai_run(18);};
+void()	lth_run2	=[	$run2  ,	lth_run3	] {ai_run(14);};
+void()	lth_run3	=[	$run3  ,	lth_run4	] {ai_run(7);};
+void()	lth_run4	=[	$run4  ,	lth_run5	] {ai_run(12);};
+void()	lth_run5	=[	$run5  ,	lth_run6	] {ai_run(14);};
+void()	lth_run6	=[	$run6  ,	lth_run7	] {ai_run(14);};
+void()	lth_run7	=[	$run7  ,	lth_run8	] {ai_run(7);};
+void()	lth_run8	=[	$run8  ,	lth_run1	] {ai_run(11);};
+
+void()	lth_atk1	=[	$attack1,	lth_atk2	] {ai_face();};
+void()	lth_atk2	=[	$attack2,	lth_atk3	] {ai_face();};
+void()	lth_atk3	=[	$attack3,	lth_atk4	] {ai_face();};
+void()	lth_atk4	=[	$attack4,	lth_atk5	] {ai_face();};
+void()	lth_atk5	=[	$attack5,	lth_atk6	] {ai_face();};
+void()	lth_atk6	=[	$attack6,	lth_atk7	] {
+	super_enforcer_fire();
+	self.effects = self.effects | EF_MUZZLEFLASH;
+};
+void()	lth_atk7	=[	$attack7,	lth_atk8	] {
+	super_enforcer_fire();
+	if (random() < 0.9) {
+		self.think = lth_atk6;
+		self.nextthink = time + 0.1;
+	}
+};
+void()	lth_atk8	=[	$attack8,	lth_atk9	] {};
+void()	lth_atk9	=[	$attack3,	lth_atk10	] {};
+void()	lth_atk10	=[	$attack2,	lth_atk11	] {};
+void()	lth_atk11	=[	$attack1,	lth_run1	] {};
+
+void()	lth_fdie1	=[	39,	lth_fdie2	] {};
+void()	lth_fdie2	=[	40,	lth_fdie3	] {monster_check_gib();};
+void()	lth_fdie3	=[	41,	lth_fdie4	] {monster_check_gib();};
+void()	lth_fdie4	=[	42,	lth_fdie5	] {self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
+void()	lth_fdie5	=[	43,	lth_fdie6	] {};
+void()	lth_fdie6	=[	44,	lth_fdie7	] {};
+void()	lth_fdie7	=[	45,	lth_fdie8	] {};
+void()	lth_fdie8	=[	46,	lth_fdie9	] {};
+void()	lth_fdie9	=[	47,	lth_fdie10	] {};
+void()	lth_fdie10	=[	48,	lth_fdie11	] {monster_death_postcheck();};
+void()	lth_fdie11	=[	49,	lth_fdie11	] {monster_deadbody_check();};
+
+// Lieutant Enforcer from back2forwards by the Lieutenant
+void() monster_super_enforcer = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+	
+
+	self.classtype = CT_MONSUPERENFORCER;
+	precache_model2 ("progs/s_spike.mdl");
+	precache_model (MODEL_GWEAP_SNG);
+	precache_model (MODEL_GWEAP_LSNG);
+	precache_model ("progs/g_nail2.mdl");
+	// We drop the super nailgun on death :)
+	if (world.devdata & DEV_AMMO_N_HEALTH && self.spawnflags & ENFORCER_LAVANG) world.deventity.ammo_lava_nails = world.deventity.ammo_lava_nails + AMMO_LAVA_NAILS_WPN;
+	else if (world.devdata & DEV_AMMO_N_HEALTH)  world.deventity.ammo_nails = world.deventity.ammo_nails + AMMO_NAILS_WPN;
+
+	if (self.health < 1) {
+		if (skill == 0)
+			self.health = 100;
+		else
+			self.health = 120;
+	}
+	self.armortype = 0.8; // What the heck??
+	self.armorvalue = 1000; //Well...guess I'll leave it for posterity reasons
+
+	if (self.spawnflags & ENFORCER_LAVANG) {
+		self.ammo_lava_nails = rint(2 + random()*2);
+	} else {
+		self.ammo_nails = rint(2 + random()*2);
+	}
+
+	precache_sound2 ("enforcer/pain1.wav");
+	precache_sound2 ("enforcer/pain2.wav");
+	precache_sound2 ("enforcer/sight1.wav");
+	precache_sound2 ("enforcer/sight2.wav");
+	precache_sound2 ("enforcer/sight3.wav");
+	precache_sound2 ("enforcer/sight4.wav");
+	precache_sound2 ("enforcer/death1.wav");
+	precache_model2 ("progs/lieutenant/enforce2.mdl");
+	self.headmdl = "progs/h_mega.mdl";
+	self.mdl = "progs/lieutenant/enforce2.mdl";
+	precache_model2 ("progs/h_mega.mdl");
+
+	self.th_stand 	= enf_stand1;
+	self.th_walk 	= lth_walk1;
+	self.th_run 	= lth_run1;
+	self.gibhealth = MON_NEVERGIB;
+	// self.th_pain 	= super_enforcer_pain;
+	// self.th_die 	= super_enforcer_die;
+	self.th_missile = lth_atk1;
+
+	if (self.deathstring == "")  self.deathstring = " was nailed by a Lieutenant Enforcer\n";
 
 	monster_base_enforcer();
 };

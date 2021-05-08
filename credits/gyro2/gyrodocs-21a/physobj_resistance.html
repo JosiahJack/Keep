@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/physobj_resistance.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+<head>
+	<title>GyroDocs - Motion Resistance</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><a href="physobj.html" class="item">Physics Objects</a><div class="layout_submenu"><a href="physobj_aerodynamics.html" class="subitem">- Aerodynamics</a><a href="physobj_angleturb.html" class="subitem">- Angular Turbulence</a><a href="physobj_bouyancy.html" class="subitem">- Bouyancy</a><a href="physobj_hover.html" class="subitem">- Hovering</a><a href="physobj_resistance.html" class="subitem subitem_selected">- Motion Resistance</a><a href="physobj_thrust.html" class="subitem">- Thrust</a><a href="physobj_turbulence.html" class="subitem">- Turbulence</a></div><a href="forces.html" class="item">Force Entities</a><a href="advanced.html" class="item">Advanced Usage</a><a href="info.html" class="item">Further Information</a></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Motion Resistance</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p><strong>Gyro_Object_SetResistance(entity object, float resist)</strong><br />
+Motion resistance will scale the velocity and angle velocity of an object every Gyro iteration. This will commonly be used to slow objects down as they experience the resistive forces associated with motion, such as air and water resistance. Negative resist values, however, will accelerate objects. The strength of the resistance is relative to the object's mass and further scaled by the <code>GYRO_RESISTANCEMOD_***</code> constants, as shown <a href="configuring.html">here</a>, before being applied to the object.</p>
+
+<p><strong>Gyro_Object_SetResistanceMod(entity object, float resist, float air, float water, float slime, float lava)</strong><br />
+This is an extended version of the above function. It accepts four extra arguments to control the resistance multipliers on a per-object basis rather than falling back to the default <code>GYRO_RESISTANCEMOD_***</code> constants.</p>
+
+<p><strong>Gyro_Object_RemoveResistance(entity object)</strong><br />
+Removes all resistance from a given object.</p></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/physobj_resistance.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+</html>

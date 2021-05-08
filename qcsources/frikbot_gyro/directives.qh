@@ -1,0 +1,13 @@
+//#define DEBUG 1				// for additional dprint commands
+
+//#define DEBUG_CLIENTVIEW 1	// Debug function for client view bug by Maddes
+
+//#define DEBUG_MAPS 1			// for testing maps
+
+//#define DEBUG_SHOTS 1			// for testing simultaneous shots
+
+//#define DEBUG_QCEXEC 1		// for adding example code of QCExec capability of newer engines
+
+//#define EXAMPLE_NVS 1			// for adding example of Network Versioning System
+								// (SVCs enhancements are not defined yet, this example only
+								// works with the Quake port from the Quake Info Pool)

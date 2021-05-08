@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/advanced_channels.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+<head>
+	<title>GyroDocs - Force Channels</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body><div id="layout_leftcolumn">
+	<div id="layout_menu">
+		<div class="heading">Menu</div><a href="index.html" class="item notop">Introduction</a><a href="physobj.html" class="item">Physics Objects</a><a href="forces.html" class="item">Force Entities</a><a href="advanced.html" class="item">Advanced Usage</a><div class="layout_submenu"><a href="advanced_feedback.html" class="subitem">- Feedback Functions</a><a href="advanced_channels.html" class="subitem subitem_selected">- Force Channels</a></div><a href="info.html" class="item">Further Information</a></div>
+</div><div id="layout_rightcolumn">
+	<div id="layout_content">
+		<div class="heading">
+			<div style="float:left;">Force Channels</div>
+			Gyro 2.1a		</div>
+		<div class="content"><p>In some cases, it may be beneficial for certain objects to be ignored when calculating force interactions - a magnet, for example, should not attract non-metallic objects. To facilitate this filtering, objects and forces may each be assigned to one or more force channels, and interactions will only be performed if the two share a common channel. In the previous example, this may be the magnetic channel. The <code>gyro_user.qc</code> file provides a collection of sample channels for your convenience but, since Gyro does not directly use any of them, you are free to create your own (remember to define them as seperate bit values). The only exception is <code>GYRO_CHANNEL_DEFAULT</code>, to which all objects and forces are automatically added upon their creation. Channels may be assigned with the following functions:</p>
+
+<p><strong>Gyro_Object_SetChannels(entity object, float channels)</strong><br />
+<strong>Gyro_Force_SetChannels(entity force, float channels)</strong><br />
+These functions will directly set the active force channels of an object or force, overwriting any previous channel information. Since channels are stored as bits, you may use bitwise operators to assign to more than one channel, as so: <code>GYRO_CHANNEL_DEFAULT&nbsp;|&nbsp;GYRO_CHANNEL_ORGANIC</code>.</p>
+
+<p><strong>Gyro_Object_AddChannels(entity object, float channels)</strong><br />
+<strong>Gyro_Force_AddChannels(entity force, float channels)</strong><br />
+Assigns an object or force to the given channel(s) while retaining any existing channel information.</p>
+
+<p><strong>Gyro_Object_RemoveChannels(entity object, float channels)</strong><br />
+<strong>Gyro_Force_RemoveChannels(entity force, float channels)</strong><br />
+Removes an object or force from the given channel(s).</p></div>
+	</div>
+</div><div style="clear:both;"></div>
+</body>
+
+<!-- Mirrored from quakematt.quakedev.com/gyrodocs/2.1a/advanced_channels.html by HTTrack Website Copier/3.x [XR&CO'2007], Sun, 27 May 2007 00:44:03 GMT -->
+</html>

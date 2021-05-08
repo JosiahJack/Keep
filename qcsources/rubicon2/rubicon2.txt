@@ -1,0 +1,104 @@
+February 12, 2011 (version 1.1)
+=============================================================================
+Title                   : Rubicon 2
+Original Release        : February 11, 2011
+Filename                : rubicon2.zip
+Authors                 : John Fitzgibbons "metlslime"
+                          Christian Grawert "czg"
+Email Address           : johnfitz@u.washington.edu
+Homepage                : http://www.celephais.net
+
+(update version 1.1 -- fixed the crash when the game attempted to play
+the included demos, caused by missing precaches)
+
+Rubicon 2 is a new Quake experience with three large single-player levels,
+plus a custom mod featuring new enemies, sounds, textures, mapmodels,
+hazards, and more. It should run with any Quake engine, but for the optimal
+experience I recommend Fitzquake (http://www.celephais.net/fitzquake) or any
+derivative engine such as Quakespasm or RMQ.
+
+The ideal engine for this mod would support overbright lighting, fullbrights,
+per-entity alpha, and worldspawn fog. In addition, engines that fix the 
+large model culling bug and the pink edges on sprites bug will be better.
+
+I plan to release textures, source code, map files, etc. soon.  Keep an eye
+on celephais.net for news.
+
+=============================================================================
+
+* Installation Instructions *
+
+Unzip pak0.pak and rubicon2.txt into the quake/rubicon2/ directory. Start
+quake with the "-game rubicon2" switch, and choose 'new game' from the menu.
+
+* New Monsters *
+
+DREADNAUGHT
+Armed with a flamethrower and enough fuel to torch a small city, the
+dreadnaught can do more damage at close range than any other enemy. Keep your
+distance and you should be safe. If you do catch fire, dive into the nearest
+water, pick up a health pack, or simply wait -- the fire will eventually burn
+out. Wearing a biosuit helps, too.
+
+CENTURION
+The centurion’s flying platform allows him to overtake targets quickly, but
+his high-powered nailgun is dangerous even at a distance. Some centurions
+have learned to exploit the experimental technology of the flying platform to
+"phase" through solid matter. It is not currently known how this works.
+
+AUTOMATON
+These security robots were commonly nicknamed "Floyd" becayse of the FLD
+model designation. Their corroded metal brains are not sophisticated enough
+to understand fear, hesitation, or doubt. Be careful -- each automaton is
+powered by a primitive atomic core that will explode if breached! On the
+other hand, that could be useful...
+
+* New Entities *
+
+LADDERS
+Walk up to a ladder and hold the "jump" button to climb. Turn away from the
+ladder to let go and fall.
+
+BREAKABLE PANELS
+Keep an eye out for damaged panels and grates -- they could be hiding a
+secret area!
+
+SECURITY LASERS
+Lasers are impassible barriers, used to block off secure zones. Each laser
+control circuit uses a different color code. When you switch off a specific
+circuit, all lasers of the same color will be disabled.
+
+STEAM VENTS
+High-pressure steam vents spew deadly vapor. Use a valve to seal off the vent
+before proceeding.
+
+TURRETS
+Armored turrets that track your position. They cannot be damaged directly.
+Find another way to disable them.
+
+* Map Credits *
+
+start  -- "Welcome to Rubicon 2" by metlslime
+
+rub2m1 -- "Hydroexploitation Plant" by metlslime
+
+rub2m2 -- "Subterranean Spookworks" by metlslime
+
+rub2m3 -- "A Thousand Years Into The Past" by czg
+
+* Special Thanks *
+
+id Software for Quake (http://www.idsoftware.com/)
+Robert Duffy for QERadiant (http://www.qeradiant.com/)
+SleepwalkR for his map converter (http://rem.fov120.com/)
+aguirRe for his modified tools (http://user.tninet.se/~xir870k/)
+FrikaC for frikqcc (http://www.inside3d.com/frikbot/frikqcc/)
+Rene Post for qME (http://www.xs4all.nl/~renep/quakeme/)
+Beta testers: Vondur, Blitz, gb
+
+* Copyright / Permissions *
+
+Copyright 2011 John Fitzgibbons/Christian Grawert. This archive may not be
+distributed commercially, may not be distributed in modified or incomplete
+form, and may not be distributed in any way that misrepresents its
+authorship. Aside from those restrictions, you may distribute it freely.

@@ -209,31 +209,25 @@ void() bane_jump5   =[ $char_a5,  bane_jump6 ] {self.nextthink = time + 0.5;};
 void() bane_jump6   =[ $char_a6,  bane_jump1 ] {self.nextthink = time + 3;};
 void() bane_jump7   =[ $char_a8,  hknight_char_a10 ] {};
 
-void() Bane_JumpTouch =
-{
+void() Bane_JumpTouch = {
     local   float   ldmg;
 
-    if (self.health <= 0)
-        return;
+    if (self.health <= 0) return;
         
-    if (other.takedamage)
-    {
-        if ( vlen(self.velocity) > 400 )
-        {
+    if (other.takedamage) {
+        if ( vlen(self.velocity) > 400 ) {
             ldmg = 40 + 10*random();
+			ldmg = Align_DamageModifier(other,self,ldmg, TRUE);
             T_Damage (other, self, self, ldmg, DAMARMOR);    
-            if (self.health <= 0)
-                return;     // PM:  Killed by thorns (empathy shields).
-            if (( self.frame == $char_a4 ) || ( self.frame == $char_a5 ))
-            {
+            if (self.health <= 0) return;     // PM:  Killed by thorns (empathy shields).
+            if (( self.frame == $char_a4 ) || ( self.frame == $char_a5 )) {
                 self.frame = $char_a6;  // Go to a stab frame.
                 sound (self, CHAN_WEAPON, "weapons/axhit.wav", 1, ATTN_NORM);
             }
         }
     }
 
-    if (!checkbottom(self))
-    {
+    if (!checkbottom(self)) {
         if (self.flags & FL_ONGROUND)
         {    // jump randomly to not get hung up
 //dprint ("popjump\n");
@@ -275,41 +269,12 @@ float() CheckBaneJump = {
     return TRUE;
 };
 
-/* DISABLED
-// 8/9/10:  Jumping anim.
-void() hknight_jumptouch =
-{
-// If it is the Bane attacking, use its attack code instead.
-    if (self.enemy)
-    if (self.enemy == other)
-    if ((self.classname == "monster_bane") || (self.classname == "monster_dark_lord"))
-    {
-        self.touch = Bane_JumpTouch;
-        Bane_JumpTouch ();
-        return;
-    }
-
-    if (self.health <= 0)
-        return;
-
-    self.touch = SUB_Null;
-    self.think = hknight_run6;
-    self.nextthink = time + 0.1;
-};
-// velocity and onground assumed to be set by jump trigger.
-void() hknight_jump1   =[ $char_a4,  hknight_jump2 ] {self.touch = hknight_jumptouch;};
-void() hknight_jump2   =[ $char_a5,  hknight_run6  ] {self.nextthink = time + 3;};
-*/
-
-//============================================================================
 // BANE AI
-
+//============================================================================
 void(float dist) ai_run_strafe;
 
-void() bane_strafe =
-{
-    if (self.classname == "monster_bane")
-    {
+void() bane_strafe = {
+    if (self.classname == "monster_bane") {
         // Strafing distance was defined by movedist, which could be
         // anything.  Drake has removed movedist, and since this progs
         // is based on Drake, set distance here.
@@ -476,6 +441,34 @@ void() bane_magicd13 =[ $magica3,  bane_magicd14 ] {};
 void() bane_magicd14 =[ $magica2,  bane_magicd15 ] {};
 void() bane_magicd15 =[ $magica1,  hknight_run1  ] {};
 
+//  Clones
+void() clone_die = {
+	// Copied from 'eyes.qc'...
+    self.takedamage = DAMAGE_NO;    // PM:  Needed in Drake.
+    self.modelindex = 0;
+    self.solid      = SOLID_NOT;
+    self.movetype   = MOVETYPE_NONE;
+	// Use ten seconds in case of clone spawned thunderstorm.
+    self.nextthink  = time + 5;     // Delay removal so obituaries work.
+    self.think      = SUB_Remove;
+    Burn_Null (self);
+    spawn_tfog (self.origin); // Poof!
+};
+
+void() clone_spawn = {
+    local entity kage;       // Watching too much Naruto, eh?
+
+    kage = spawn();
+    copyentity (self, kage);
+    setorigin (kage, self.origin);
+    EntryPoint_Spawn (kage, self, self.origin, EntryPoint_Random);
+    kage.targetname = kage.killtarget = kage.target = kage.target2 = string_null;
+    kage.spawned    = TRUE;
+    kage.th_die     = clone_die;
+    kage.owner     = self;
+    kage.xfl        = kage.xfl - (kage.xfl & XFL_ADD_TO_KILL); // Clones automatically vanish when their owner dies, so don't count them.  One for all and all for one.
+};
+
 //============================================================================
 // ATTACK #7 (Teleportation and Cloning -- also Bane exclusive)
 
@@ -500,37 +493,31 @@ void() bane_magice8  =[ $magicb8,  bane_magice9  ] {hk_face();
 void() bane_magice9  =[ $magicb8,  bane_magice10 ] {self.alpha = 0.2;
     self.modelindex = self.mindex2;
     hk_face();
-    if (self.cnt > 0)
-    {
+    if (self.cnt > 0) {
         self.cnt = self.cnt - 1;    // Do before cloning.
         // Don't let the clones spawn more clones.
-        //if (self.master.classname != self.classname)
-            //clone_spawn();      // Only the master can clone himself.
+        if (self.owner.classname != self.classname)
+            clone_spawn();      // Only the master can clone himself.
     }
 };
 void() bane_magice10 =[ $magicb8,  bane_magice11 ] {self.alpha = 0.4; hk_face();};
 void() bane_magice11 =[ $magicb9,  bane_magice12 ] {self.alpha = 0.6; hk_face();};
 void() bane_magice12 =[ $magicb10, bane_magice13 ] {self.alpha = 0.8; hk_face();};
 void() bane_magice13 =[ $magicb11, bane_magice14 ] {self.alpha = 0; hk_face();
-    if (self.cnt < 1)
-    {   if (walkmove (0, 0))
-        {
+    if (self.cnt < 1) {
+		if (walkmove (0, 0)) {
             self.takedamage = DAMAGE_AIM;
             self.solid      = SOLID_SLIDEBOX;
             self.skin       = SKIN_BANE;
-        // Last minute feature:  The Bane speaks!
+			// Last minute feature:  The Bane speaks!
             if (!self.master)
-            if (self.height)
-            {
-                if (self.height & BANE_CLONE)
-                {
+            if (self.height) {
+                if (self.height & BANE_CLONE) {
                     if (random() < 0.5)     // Die, maggot!
                         Bane_Speaks ("Ôèå Âáîåº Äéå¬ íáççïô¡\n");
                     else                    // Now die!
                         Bane_Speaks ("Ôèå Âáîåº Îï÷ äéå¡\n");
-                }
-                else if (self.height & BANE_RAGE)
-                {
+                } else if (self.height & BANE_RAGE) {
                     if (random() < 0.5)     // Behold my power!
                         Bane_Speaks ("Ôèå Âáîåº Âåèïìä¬ íù ðï÷åò¡\n");
                     else                    // Feel my wrath!
@@ -541,37 +528,28 @@ void() bane_magice13 =[ $magicb11, bane_magice14 ] {self.alpha = 0; hk_face();
             return;
         }
     }
-// Either not done cloning, or unable to move at current location.
-// Either way, use dimensional travel magic again.
+	// Either not done cloning, or unable to move at current location.
+	// Either way, use dimensional travel magic again.
     self.think = bane_magice8;
 };
+
 void() bane_magice14 =[ $magicb12, bane_magice15 ] {hk_face();};
 void() bane_magice15 =[ $magicb13, hknight_run1  ] {hk_face();};
 
-//===========================================================================
-
-void() hknight_magic =
-{
+void() hknight_magic = {
 //    if (cranked && (random() < 0.25))
 //        hknight_magica1 ();
 //    else
         hknight_magicc1 ();
 };
 
-void() lord_magic =
-{
-    local   float   r;
-    local   float   add, opt;
+void() lord_magic = {
+    local float r, add, opt;
 
     add = 1;
     opt = 2;
-
-    if (M_FirewallCheck ())     // In fire.qc.
-        opt = opt + 1;
-    // Using 50 and 100 as sides of a right triangle, hypotenuse is 111.8.
-    if (M_MeteorCheck ('50 0 112'))     // In boss.qc.  Was '50 -50 100'.
-        {add = 0;  opt = opt + 1;}
-
+    if (M_FirewallCheck ()) opt = opt + 1;
+    if (M_MeteorCheck ('50 0 112')) {add = 0;  opt = opt + 1;} // Using 50 and 100 as sides of a right triangle, hypotenuse is 111.8.
     r = random() * opt + add;
     if (r <= 1)
         hknight_magica1 ();     // Meteor
@@ -584,8 +562,7 @@ void() lord_magic =
 };
 
 // FIXME:  Is this done aside from missing corpse scan/use?
-void() darklord_magic =
-{
+void() darklord_magic = {
 // Todo:
 // If close, use slam, charge, or melee.
 // else, shoot or summon.
@@ -613,13 +590,15 @@ void() darklord_magic =
     hknight_magicb1 ();     // Magic missile straight
 };
 
-void() hkboss_magic =
-{
-// Pattern:  1 pillar, 2 bombs, 1 spray.
-// Old behavior should be magica->magicb->magicc, but it seemed to favor B?
-    local   float   r;
+void() hkboss_magic = {
+	local float r;
 
-    r = AddOne() & 3;
+	self.meleeattack = self.meleeattack + 1;
+	if (self.meleeattack > 255) self.meleeattack = 0; // capture fix from Drake's AddOne() but don't use global float aka gloat
+
+	// Pattern:  1 pillar, 2 bombs, 1 spray.
+	// Old behavior should be magica->magicb->magicc, but it seemed to favor B?
+    r = self.meleeattack & 3;
     if (!r)
         hknight_magica1 ();
     else if (r != 3)
@@ -628,8 +607,7 @@ void() hkboss_magic =
         hknight_magicc1 ();
 };
 
-void() bane_magic =
-{
+void() bane_magic = {
 // PM:  Jumping done at charge anim.  However...
 // If enemy is low enough that CheckForCharge would abort, then we can
 // check for jumping.  We want the Bane to occasionally jump down toward
@@ -1041,7 +1019,7 @@ void() monster_bane = {
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
 
-	self.classtype = CT_MONHELLK;
+	self.classtype = CT_MONBANE;
 	self.classgroup = CG_DCAPTAIN;	// Rule over seargent and fury knights but lesser knights are disloyal
 	self.classmove = MON_MOVEWALK;
 
@@ -1092,8 +1070,7 @@ void() darklord_fast6 =[ $run6, darklord_fast7 ] {monster_footstep(FALSE); dk_fa
 void() darklord_fast7 =[ $run7, darklord_fast8 ] {dk_fast(21);};
 void() darklord_fast8 =[ $run8, darklord_fast1 ] {dk_fast(13);};
 
-void() dk_shield =
-{
+void() dk_shield = {
     if (self.minion_count < 1)  // FIXME:  Check for wraths.
     {
         if (self.flags & FL_GODMODE)
@@ -1103,9 +1080,7 @@ void() dk_shield =
         }
         if (!self.mirror_finished)
             self.effects = self.effects - (self.effects & EF_BRIGHTFIELD);
-    }
-    else
-    {
+    } else {
         if (!(self.flags & FL_GODMODE))
         {
             self.flags = self.flags | FL_GODMODE;
@@ -1115,43 +1090,22 @@ void() dk_shield =
     }
 };
 
-void(float d) dk_slow =
-{
-    if (!self.fighting)
-        {darklord_fast1 ();  return;}
-    if (self.enemy)
-        if (!visible (self.enemy))
-            {darklord_fast1 ();  return;}
-    dk_shield ();
-    ai_run(d);
-};
-void(float d) dk_fast =
-{
-    if (self.fighting)
-        if (self.enemy)
-            if (visible (self.enemy))
-                {darklord_run1 ();  return;}
+void(float d) dk_slow = {
+    if (!self.enemy) {darklord_fast1 ();  return;}
+    if (!visible (self.enemy)) {darklord_fast1 ();  return;}
     dk_shield ();
     ai_run(d);
 };
 
-//===========================================================================
-
-void(float d) dk_charge =
-{
-//    bane_shadow ();
-    hk_charge(d*2);
+void(float d) dk_fast = {
+	if (self.enemy)
+		if (visible (self.enemy)) {darklord_run1 ();  return;}
+    dk_shield ();
+    ai_run(d);
 };
 
-void() dk_idle_sound =
-{
-    if (random() < 0.2)
-        sound (self, CHAN_VOICE, "drake/darklord/idle1.wav", 1, ATTN_NORM);
-//    if (random() < 0.5)
-//        sound (self, CHAN_VOICE, "drake/darklord/sword1.wav", 1, ATTN_NORM);
-//    else
-//        sound (self, CHAN_VOICE, "drake/darklord/sword2.wav", 1, ATTN_NORM);
-};
+void(float d) dk_charge = { hk_charge(d*2); };
+void() dk_idle_sound = { if (random() < 0.2) sound (self, CHAN_VOICE, "drake/darklord/idle1.wav", 1, ATTN_NORM); };
 
 void() darklord_slice1  =[ $slice1,  darklord_slice2  ] {dk_idle_sound(); dk_charge(9);};
 void() darklord_slice2  =[ $slice3,  darklord_slice3  ] {monster_footstep(FALSE); dk_charge(19);};
@@ -1221,8 +1175,7 @@ void() darklord_fall8  =[ $stand8,  darklord_fall9  ] {ai_forward(10);};
 void() darklord_fall9  =[ $stand9,  darklord_fall10 ] {ai_forward(11);};
 void() darklord_fall10 =[ $stand1, darklord_fall11 ] {};
 void() darklord_fall11 =[ $stand2, darklord_fall12 ] {};
-void() darklord_fall12 =[ $stand3, darklord_thebeast ]
-{
+void() darklord_fall12 =[ $stand3, darklord_thebeast ] {
     Quake_Level (0, self.origin, 5);
     self.nextthink = time + 3;
 };
@@ -1243,23 +1196,18 @@ void(entity inflictor, entity attacker, float damage) darklord_pain = {
         self.th_melee   = SUB_Null;
         self.th_missile = SUB_Null;
         self.th_pain    = SUB_Null_pain;
-
-        SUB_RemovePowerups ();
-
-        // Fake death.
-        sound (self, CHAN_VOICE, "drake/darklord/death.wav", 1, ATTN_NORM);
-    
+        self.effects    = 0;    // PM:  Erase shield, lights, and the rest.
+		self.jump_time  = 0;
+		self.zapper_time        = 0;
+        sound (self, CHAN_VOICE, "drake/darklord/death.wav", 1, ATTN_NORM); // Fake death.
         makevectors (self.angles);
         st = '-2 0 28';
         st = self.origin + v_forward*st_x + v_right*st_y + v_up*st_z;
         Rocket_Explosion2 (st, 32, 5);
         darklord_fall1 ();
-
         return;
     }
-
-// Proceed as usual.
-    hknight_pain (inflictor, attacker, damage);
+    hknight_pain (inflictor, attacker, damage); // Proceed as usual.
 };
 
 //============================================================================
@@ -1471,7 +1419,7 @@ void() monster_dark_lord = {
 	// Check passive system for exceptions
 	setup_passivestate_boss(self);
 
-	self.classtype = CT_MONHELLK;
+	self.classtype = CT_MONDARKLORD;
 	self.classgroup = CG_DCAPTAIN;	// Rule over seargent and fury knights but lesser knights are disloyal
 	self.classmove = MON_MOVEWALK;
 

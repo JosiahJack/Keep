@@ -217,29 +217,36 @@ void(entity inflictor, entity attacker, float take) boil_pain =
 
 //============================================================================
 void() boil_explode = {
+	local entity head;
+	local float cand;
+
 	// Needs special version of radius damage function (T_RadiusDamage)
 	// Boss monsters are always immune to this kind of damage
 	// Needs to do infighting damage before T_Damage function
 	// There is no rocket resistance to this kind damage!
 	// Must pass on self.enemy so that any death triggers work properly
-	//
+
 	self.enemytarget = findradius(self.origin, self.death_dmg+40);
 	// Loop through chain list
 	while(self.enemytarget) {
+		cand = FALSE;
 		// Ignore self and world and can never damage bosses
 		if (self.enemytarget != world && self.enemytarget != self && self.enemytarget.bossflag == 0) {
 			// Check for any breakables which are prone to explosive damage
-			if (ai_foundbreakable(self.enemy, self.enemytarget,TRUE) && 
-			self.enemytarget.brktrigmissile != 0) {
+			if (ai_foundbreakable(self.enemy, self.enemytarget,TRUE) && self.enemytarget.brktrigmissile != 0) {
 				trigger_ent(self.enemytarget, self.enemy);
-			}
-			else {
+			} else {
 				// Can be damaged and NOT immune to radius (splash) damage
 				if (self.enemytarget.takedamage > 0 && self.enemytarget.noradiusdmg == 0) {
+					if (CanDamage (self.enemytarget, self)) cand = TRUE; // Need CanDamage to check for anything blocking LoS
+
 					// Make sure monsters take more damage
-					if (self.enemytarget.flags & FL_MONSTER)
+					if (self.enemytarget.flags & FL_MONSTER) {
+						if (self.enemytarget.bodyonflr == MON_ONFLR) {
+							if (cand && (self.enemytarget.health > FALSE)) monster_flrbody_gib(self.enemytarget, (self.death_dmg * self.infightextra));
+						}
 						self.dmg = self.death_dmg * self.infightextra;
-					else {
+					} else {
 						// Use original radius formula for non monsters
 						self.pos1 = self.enemytarget.origin + (self.enemytarget.mins + self.enemytarget.maxs)*0.5;
 						self.dmg = 0.5*vlen (self.origin - self.pos1);
@@ -248,53 +255,18 @@ void() boil_explode = {
 					}
 					
 					if (self.dmg > 0 && self.enemytarget.health > 0) {
-						// Need CanDamage to check for anything blocking LoS
-						if (CanDamage (self.enemytarget, self))
+						if (cand) {
 							// Pass on self.enemy so death triggers fire correctly
 							T_Damage (self.enemytarget, self, self.enemy, self.dmg, DAMARMOR);
 							// make sure to check for poisonous and apply debuff
 							if (self.dmg > 0 && self.poisonous == TRUE) PoisonDeBuff(self.enemytarget);
+						}
 					}
 				}
 			}
 		}
-		// Move forward in chain to next entity
-		self.enemytarget = self.enemytarget.chain;
+		self.enemytarget = self.enemytarget.chain; // Move forward in chain to next entity
 	}
-	
-	/*----------------------------------------------------------------------
-	// I really liked this idea of the boil destroying any monster
-	// bodies lying closeby, BUT this is a serious processor drain
-	// on maps with a huge amount of monsters.
-	// Every monster that dies is marked and left on the floor and
-	// this function would search them all everytime a boil explodes!
-	//
-	// The code below works fine, BUT it should only be enabled
-	// for maps with small amount of available monsters
-	//----------------------------------------------------------------------
-	
-	// Check for any nearby dead/lying bodies
-	self.enemytarget = find(world, bodyonflr, MON_ONFLR);
-	self.dmg = self.death_dmg * self.infightextra;
-	// restrict size of dead body search list
-	self.count = 64;
-
-	// Cycle through list of "marked" dead bodies
-	// These entities cannot be found by a findradius command
-	// They are setup nonsolid and have to be checked manually
-	while (self.enemytarget) {
-		// Work out how close the body is to the boil
-		self.enemydist = vlen(self.origin - self.enemytarget.origin);
-		if (self.enemydist < self.death_dmg+40) {
-			// Use shadow axe gib function (moved to ai_gib)
-			monster_flrbody_gib(self.enemytarget, self.dmg);
-		}
-		// Only check the first xx dead bodies in the list
-		self.count = self.count - 1;
-		if (self.count < 1) self.enemytarget = world;
-		else self.enemytarget = find(self.enemytarget, bodyonflr, MON_ONFLR);
-	}
-	*/
 	
 	// Switch explosions effect based on poison flag
 	if (self.poisonous) {
@@ -305,8 +277,7 @@ void() boil_explode = {
 		WriteCoord (MSG_BROADCAST, self.origin_z);
 		WriteByte (MSG_BROADCAST, 51);
 		WriteByte (MSG_BROADCAST, 8);
-	}
-	else {
+	} else {
 		// Show classic grenade explosion effect
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 		WriteByte (MSG_BROADCAST, TE_EXPLOSION);
@@ -319,8 +290,7 @@ void() boil_explode = {
 };
 
 //----------------------------------------------------------------------
-void() boil_die =
-{
+void() boil_die = {
 	// Upward fountain of gibs
 	self.max_health = MON_GIBFOUNTAIN;
 	monster_death_precheck();

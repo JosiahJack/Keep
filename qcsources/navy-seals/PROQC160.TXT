@@ -1,0 +1,194 @@
+============
+ProQCC v1.60                                                      6/18/97
+============
+"Awesome" - Inside.QC
+
+Features:
+        * Decompiles progs.dat no matter what size to native qc
+        * Compiles regular quakec code 3 times faster then qccdos
+        * Compiles projects no matter what size
+        * Now has the fastest compiler ever
+        * Cool looking interface
+        * Can now log errors during compiling/decompiling to error.log
+
+This is a modification to John Carmack's Quake-C compiler.  It allows for
+decompiling to qcc native code, and it is a compiler that is well over 3
+times faster then the standard qcc.
+
+Command line options:
+         By default, ProQCC looks for progs.src in the current directory
+           -dec [datfile]       : decompile progs.dat
+           -src <directory>     : look in a different directory
+           -copy <srcdir>       : build a clean data tree
+           -pak <srcdir>        : build a clean pak file
+           -bspmodels <gamedir> : bsp all bmodels
+           -nolog               : does not write error.log if there are
+                                  errors during compiling/decompiling
+
+After taking a look at Armin Rigo's deacc/reacc programs, I thought it was
+awesome, the only problem was that I wasn't used to the source files it
+produced, and didn't really have time to learn it.  I already had a super
+fast qc compiler in the works, and decided to try to add a decompiler to it.
+
+This is probably the fastest quakec compiler out.  Just as a benchmark, I
+compiled the standard v1.01 code using both normal qcc and proqcc.  The
+normal qcc took 10 seconds on my P200, 32 Meg RAM, Win95 and took 3 seconds
+using ProQCC.  This is for the compiler in proqcc.exe, the slower version,
+but it can compile projects of any size, and is quite a bit faster then
+qccdos.  In proqccf.exe, it compiles well over 10 times as fast as qccdos,
+but doesn't compile projects of any size.  Use which ever suits your needs.
+
+Incase any programmers out there wondered how I achieved the speed for this
+compiler, I use hash tables for the list of opcodes and all constants and
+defined variables.  I use DJGPP v2 to compile, and have optimized it for
+Pentiums.
+
+The usage is the same as standard qcc except for decompiling, use
+proqcc -dec to decompile the progs.dat in the current directory.  You can
+also use proqcc -dec [yourprogs.dat] to decompile yourprogs.dat.
+
+With the decompiler, it usually works perfectly fine, however sometimes it
+gets confused.  This happens when it can't determine the return type of the
+function or entity function field.  When this happens, it makes the function
+a float (which is usually right) also it marks all its prototypes with a
+comment that is '/* Warning: Could not determine return type */' (original
+don't you think) you can usually figure out what it should be easily.
+You sometimes need to edit by hand what it outputs.  If it crashes with
+an error message of "DEC_FastImmediate - Index (%i) out of bounds" then
+try decompiling it with the 'industrial strength' decompiler, if you're
+using that and get a similar message about DEC_Immediate, then email me
+and tell me what you're decompiling (It shouldn't happen =)!
+
+Another thing, I've gotten some mail about this, the error in line 153 of 
+misc.qc that you'll get during recompilation is NOT ProQCC's fault.  Seems
+id screwed up on this one.
+
+Global variables are only initialized if their name starts with uppercase
+letters. Otherwise their (potential) initial value is enclosed in a comment.
+This works for all vital system constant such as TRUE, FL_xx, etc.
+but e.g. the chase cam mod uses some lowercase constants. Again, check the
+source and fix by hand.
+
+Couple of bugs in the decompiling functions.  Sometimes when ProQCC gets
+confused it doesn't decompile perfect, you may get some errors if you try
+to compile it right away, but it's nothing that you shouldn't be able to
+logically figure out.  Since there are so many changed features in this
+version I haven't been able to test it as much as I would like, so there
+is a chance that this is buggy.
+
+Common Errors in
+decompiled source files         How to fix them
+-----------------------         ---------------
+misc.qc, line 153: not a name   delete the 'if (!self.speed)...' part
+there are several definitions   delete all those and make one that is
+ like float org_x, float org_y   vector org;
+ etc.
+
+In future versions, I hope to speed up the decompiling, and somehow make
+it able to decompile any progs.dat no matter how large (DONE!).  NEW: I
+would like to be able to set the maximum no local immediates (controls how
+fast or good it decompiles) via the command line, right now it's a #define.
+
+Another thing I'd like to do is to make the decompiler bullet-proof.  Right
+now it produces errors in the code it generates, this isn't really a bad
+thing, because after all, you weren't supposed to be able to decompile things
+in the first place =).  So a little qc knowlege about how to fix things
+should be a requirement.  
+
+ProQCC is now distributed with WiCKeD Development's QcBud, Steven
+Possehl/John Bock's ClanRing CTF, and David Hesprich's Quake Server
+Mods.  There also is a possibility parts of it will be included in
+Rene Post's QuakeME 4.0.
+
+Just for legal purposes, Lee Smith takes no responsiblity for use or misuse
+of this program.  He is not responsible for any damage caused by it or any
+people who you piss off by ganking their qc patches.  This program is not
+a production of id Software, and will not be supported by id.  
+
+You may distribute this Quake modification in any electronic format as long
+as all the files in this archive remain intact and unmodified and are
+distributed together.  Also, please tell me if you are going to include this
+on a CD, I'd just like to know.
+
+Porting Issues:
+    As of right now, I only have access to DOS and Windows, so I can't do
+    any ports to other OS's.  If any kind soul wants to do a port to another
+    system, like Linux, AIX, Macintosh, etc, sent me some mail and we'll
+    see what we can do.  Just a note, with all the text mode color and such,
+    porting it to another OS would be a pretty hard task (I think).  
+
+Changes since v0.90:
+    Added a timer, tells how long it took to compile/decompile.
+    Sped up the decompiling routine (a little).  Hope to speed it up
+        even more in the future.
+    Stupid me, I always run Win95, so I don't worry about a DPMI server,
+        for those of you who run dos, I've included cwsdpmi that djgpp uses
+        as a DPMI server for dos.
+    Small bug fixes.
+
+Changes since v0.92:
+    Almost total rewrite of compiling routines.  Due to some mail I've
+        recieved from people who would rather have the ability to compile
+        larger projects then just sheer speed.
+    Doubled number of maximum local immediates in the decompiling
+        functions, this makes it go much slower, BUT I think it will
+        decompile ANY progs.dat you throw at it :) 
+        (FvF and ZeusBot decompile fine now).
+
+Changes since v0.95:
+    You now have 2 different options for decompiling.  Use the normal -dec
+        option for it to be very slow, but you can decompile progs.dat any
+        size.  Or you can use -fastdec for it to decompile fast, but the
+        progs.dat must be under 500k (good for small mods).  
+    Included proqccw.exe, proqcc compiled as a native win32 console
+        application, should run a bit faster under Win95 or NT4.
+
+Changes since v0.97:
+    In the future I'd like to build a BSP to MAP converter that actually
+        works good.  Look around for it in the future.  Also might put up
+        a web page for my programs.
+    Fixed a couple of wierd little bugs.
+    Sped up compiling a bit.  
+    Improved decompiling a little bit.  
+
+Changes since v0.99:
+    Made the error messages easier to understand.
+    Fixed it crashing all the time for no reason.
+    Took out the -fastdec option, it wasn't any faster then -dec.
+    The big addition is the cool looking interface.
+    Took out the Win32 console version of ProQCC, because after running
+        some tests, I found out it is not any faster then the DOS version.
+    That scrambler came out right before I wanted to upload this version,
+        so I didn't have time to write a descrambler (if that's possible)
+        But I will be working on it for the next release.  Hope that
+        program doesn't catch on =).
+
+Changes since v1.50:
+    Added the progress indicator for decompiling, still have to figure out
+       how to do it for compiling.
+    Fixed a few little bugs.
+    Added graceful crashing.  Now it doesn't exit with the ugly DJGPP
+       crash screen.
+    Fixed the error messages.  Don't know how that got by me last time =)
+    Increased the pr_globals from 40000 to 100000 that should solve any
+       problems you would have compiling HUGE projects (ie. QkrMods)
+
+Changes since v1.52:
+    Added writing errors to a logfile.
+    Not much else left to do (the reason for the 2 months between releases)
+    Working on WinQCC, stay tuned to the Quake news pages for more
+       info.
+
+Changes since v1.53:
+    Fixed up interface.
+    Fixed error logging, and made it look better also. (sorry!)
+    Several other small things.
+
+Feel free to email me with comments/suggestions on ProQCC!
+I frequent #quake and #quakeed, so you might catch me on there.
+Also I'm on inferno.idsoftware.com daily, might see me there too.
+
+---
+Lee Smith
+lees@infoave.net
+Chaos on IRC/Quake

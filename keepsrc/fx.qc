@@ -1,9 +1,10 @@
 void Touch_Missile();
 float HasReflection(entity ent, vector spot, float damage);
+float(float damage) Reflected_Damage;
+float() Reflected;
 
 /*======================================================================
  PROJECTILE Explosion and Blood functions
- 
 ======================================================================*/
 // Classic ID rocket/grenade explosion
 // Not used anymore, left for map hackers!
@@ -339,8 +340,7 @@ void(entity source, entity targ, float damage) spawn_touchblood =
 // Changed parameters to add source and destination of attack
 // Changed velocity to side so it is calculated correctly from angles
 //======================================================================
-void(entity source, entity targ, float side) SpawnMeatSpray =
-{
+void(entity source, entity targ, float side) SpawnMeatSpray = {
 	local vector org;
 
 	makevectors(source.angles);
@@ -380,8 +380,7 @@ void(entity source, entity targ, float side) SpawnMeatSpray =
 //================
 // SpawnMeatSprayDrake - from drake mod's version
 //================
-void(vector org, vector vel, float btype) SpawnMeatSprayDrake =
-{
+void(vector org, vector vel, float btype) SpawnMeatSprayDrake = {
     local   string  text;
 
     if (btype == BLOOD_RED)
@@ -419,7 +418,7 @@ void(vector org, vector vel, float btype) SpawnMeatSprayDrake =
         gib.bloodtype   = btype;
         gib.delay       = time + 1;
         gib.nextthink   = 0.01;
-        gib.think       = MeatSprayThink;
+        gib.think       = s;
         gib.modelindex  = 0;
     }
     setsize (gib, '0 0 0', '0 0 0');        
@@ -879,10 +878,22 @@ void() InitLightning =
 //  This inflicts damage to an entity hit by the lightning bolt.
 //------------------------------------------------------------------------//
 void LightningBlood (entity targ,vector org,float damage);
-
+float(entity source, entity targ) ai_immunebreakable;
+void(entity targ, vector org, vector vel, float damage, float type, string hitsound, string burstsound) Resist_Effects;
 
 void(entity targ, entity inflictor, entity attacker, vector org, float damage, string dtype) BoltDamage = {
-    LightningBlood (targ, org, damage);
+	if (ai_immunebreakable(attacker, targ)) {
+		// This is resist lightning function without pain sound
+		// Don't spawn smoke constantly (let the sprite finish)
+		if (inflictor.lightning_timer < time) {
+			inflictor.lightning_timer = time + 0.3;
+			SpawnExplosion(EXPLODE_BURST_SMOKE, org, "");
+		}
+		SpawnProjectileSmoke(org, 200, 50, 150);
+	} else {
+		if (targ.resist_cells > 0) Resist_Effects(targ,org,VEC_ORIGIN,0,AM_CELLS,targ.pain_sound,"");
+		else SpawnBlood(targ, org, '0 0 100', damage*4);
+	}
     T_Damage (targ, inflictor, attacker, damage, DAMARMOR);
 };
 
@@ -1048,19 +1059,15 @@ void() SmartBall_Bounce =
     self.think = SmartBall_Think;
 };
 
-void() SmartBall_Touch =
-{
-    if (pointcontents(self.origin) == CONTENT_SKY)
-        {remove(self); return;}     // Disappeared into space.
-    //if (Reflected_Damage (COURAGE_DAMAGE))
-    //    return;     // Bounced off reflective shield.
+void() SmartBall_Touch = {
+    if (pointcontents(self.origin) == CONTENT_SKY) {remove(self); return;}     // Disappeared into space.
+    if (Reflected_Damage (COURAGE_DAMAGE)) return;     // Bounced off reflective shield.
 
-// Explode if...
-// 1) Entity struck can take damage.
-// 2) Fireball bounced more than three times.  One more than HipLaser.
-// 3) Target is already dead.
-    if (other.takedamage || (self.count >= 3) || (self.enemy.health <= 0))
-    {   // Go BOOM!
+	// Explode if...
+	// 1) Entity struck can take damage.
+	// 2) Fireball bounced more than three times.  One more than HipLaser.
+	// 3) Target is already dead.
+    if (other.takedamage || (self.count >= 3) || (self.enemy.health <= 0)) {   // Go BOOM!
         Touch_Missile();
         return;
     }
@@ -1355,10 +1362,11 @@ void() misc_drip_removetouch;
 void() raincloud_raindrip = {
 	local entity drip;
 
-	//dprint("Spawning a raindrop from a cloud");
+	// dprint("Spawning a raindrop from a cloud");
 	drip = spawn();
 	drip.owner = self;
-	if (self.owner) drip.owner = self.owner;
+	if (self.owner) drip.charmer = self.owner;
+	drip.owner = self;
 	drip.classname = "misc_drip";
 	drip.classtype = CT_MISCDRIP;
 	drip.classgroup = CG_TEMPENT;
@@ -1425,7 +1433,7 @@ void () raincloud_think = {
 	}
 
 	// Time to die out
-	if (self.pain_finished < time && !(self.cnt == -1)) {
+	if (self.flight_finished < time && !(self.cnt == -1)) {
 		self.spritestarted = 2; // dying state
 	}
 
@@ -1454,7 +1462,7 @@ void () spawn_raincloud = {
 	if (self.impulse <= 0) self.impulse = 0.05; // default delay between frames
 	if (!self.search_time) self.search_time = 2 + (random() * 3); // Time to drift before changing direction
 	self.bubble_count = 0;
-	self.pain_finished = time + self.cnt;
+	self.flight_finished = time + self.cnt;
 	if (self.targetname != "") {
 		self.use = raincloud_use;
 		return;

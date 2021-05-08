@@ -605,7 +605,7 @@ void() monster_ogre_precache =
 
 	// Load additional models/sounds for nail ogre
 	if (self.spawnflags & MON_OGRE_NAIL) {
-		// Default attack - red glowing nails
+		// Default attack - red glowing lava nails
 		precache_model (MODEL_PROJ_NGRED);
 		precache_sound("ogre/nail_fire.wav");
 		// Default amount of nails to burst fire (5x9=45dmg)
@@ -710,8 +710,7 @@ void() monster_ogre_marksman = {
 };
 
 //----------------------------------------------------------------------
-void() monster_ogre_fishing =
-{
+void() monster_ogre_fishing = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 		
@@ -760,9 +759,6 @@ void() monster_ogre_fishing =
 		self.ammo_rockets = 4;	// More rockets than fish!
 		self.health = 150;		// Lower HP than regular
 	}
-
-	// Fishing ogre can never uses nails, grenades only
-	self.spawnflags = self.spawnflags - (self.spawnflags & MON_OGRE_NAIL);
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;

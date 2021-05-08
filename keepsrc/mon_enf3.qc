@@ -824,7 +824,6 @@ void() monster_enf3 = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	total_monsters = total_monsters + 1;
 	precache_sound("enforcer/death1.wav");
 	precache_model2("progs/mark4.mdl");
 	precache_model2("progs/h_enf3.mdl");

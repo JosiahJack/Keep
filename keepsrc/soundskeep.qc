@@ -255,3 +255,7 @@ void() ambient_zzxzz = {
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
+
+void() env_sound = {
+
+};

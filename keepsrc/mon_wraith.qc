@@ -840,15 +840,15 @@ void() monster_wraith = {
 	precache_model (self.gib2mdl);
 	precache_model (self.gib3mdl);
 	
-	self.idle_sound = "wraith/idle1.wav";
-	self.idle_sound2 = "wraith/idle2.wav";
-	self.idle_soundcom = "wraith/idle3.wav";
+	if (!self.idle_sound) self.idle_sound = "wraith/idle1.wav";
+	if (!self.idle_sound2) self.idle_sound2 = "wraith/idle2.wav";
+	if (!self.idle_soundcom) self.idle_soundcom = "wraith/idle3.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
 	precache_sound (self.idle_soundcom);
 	
 	precache_sound ("wraith/death1.wav");
-	self.pain_sound = "wraith/pain1.wav";
+	if (!self.pain_sound) self.pain_sound = "wraith/pain1.wav";
 	precache_sound (self.pain_sound);
 
 	precache_sound ("wraith/attack1.wav");	// HITSCAN bolt

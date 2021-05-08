@@ -199,7 +199,7 @@ void (entity inflictor, entity attacker, float damage, float radius, entity igno
 							if (CanDamage (head, inflictor)) {
 								// #ryanscissorhands: This splash damage is NOT part of rocket resistance, hence commenting out the subsequent two lines
 								//if (head.resist_rockets > 0)
-								//	points = Resist_Damage(head, AM_ROCKETS, points);
+								//	points = Resist_Damage(head, AM_ROCKETS, points); // We do this inside T_Damage now for consistency and reduced duplicate code. -Qmaster
 								
 								// Zombies should really be blown from explosives
 								// especially from ogre grenades right under their feet
@@ -840,7 +840,7 @@ void(float vertical, float horizontal) IceSpikeProjectile =
 
 	IceSpike = spawn();
 	IceSpike.owner = self;
-	IceSpike.classgroup = CG_PROJALL;
+	IceSpike.classgroup = CG_PROJICE;
 	IceSpike.movetype = MOVETYPE_FLYMISSILE;
 	IceSpike.solid = SOLID_BBOX;
 	IceSpike.touch = IceSpikeTouch;

@@ -66,8 +66,7 @@ float MMLOOP_TRIGGER = -2;
 // This is essentially a QC version of ChangeYaw() function
 // Can cope with any axis as its take all parameters
 //----------------------------------------------------------------------
-float(float curr_ang, float ideal_ang, float turn_speed) misc_model_turning =
-{
+float(float curr_ang, float ideal_ang, float turn_speed) misc_model_turning = {
 	local float move_ang, ret_ang;
 	
 	// Current/ideal as integers are easier to compare
@@ -573,10 +572,11 @@ void() misc_model =
 {
 	// Is the model defined using the noise key?
 	if (!self.mdl) {
-		dprint("\b[MISCMDL]\b Missing model to load\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		remove(self);
-		return;
+		dprint("\b[MISCMDL]\b Missing model to load. Making it a Shambler! ;) \n");
+		self.mdl = "progs/ad171/mon_shambler.mdl";
+		// spawn_marker(self.origin, SPNMARK_YELLOW);
+		// remove(self);
+		// return;
 	}
 
 	// TRIGGER sound setup + volume (def=custom sound)

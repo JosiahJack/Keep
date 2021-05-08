@@ -186,7 +186,7 @@ void()	pinch_jumptouch =
 	// Prevents packs from killing themselves
 	if (self.classgroup != other.classgroup && other.takedamage) {
 		sound (self, CHAN_VOICE, "scorpion/jumphit.wav", 1, ATTN_NORM);
-		BleedDeBuff(other);
+		if (Align_DamageModifier(other,self,1, TRUE)) BleedDeBuff(other);
 		spawn_touchblood (self, self.enemy, 100);
 	}
 

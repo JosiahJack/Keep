@@ -1,0 +1,4 @@
+credits go to seven for fixes for elevator, plasmagun & buzzsaws
+and for giving me help with how to apply nail-pos fix
+
+modified ent-files by seven, R2M7 modified again by me (talisa)

@@ -118,7 +118,7 @@ void () monster_spikemine = {
    self.nextthink = (time + 0.200);
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 	if (self.deathstring == "") self.deathstring = " was obliterated by a Spikemine\n";
-   total_monsters = (total_monsters + TRUE);
+   AddToTotals(self);
    self.flags = (self.flags | FL_MONSTER);
    //self.deathtype = "was blasted by a spike mine";
 };

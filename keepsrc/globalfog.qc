@@ -15,8 +15,7 @@
 // (Long Float TO String) Format and print a number to the console
 // - str_player : needs to be a client for various buffer commands
 // - buffer : BUFFER_STUFFCMD, BUFFER_SPRINT, BUFFER_DPRINT
-void(entity str_player, float str_num, float topbit, float botbit, float buffer) lftos =
-{
+void(entity str_player, float str_num, float topbit, float botbit, float buffer) lftos = {
 	local float str_counter, str_pow, str_result, str_remain, str_first;
 	
 	str_counter = topbit;		// Upper number length
@@ -26,7 +25,7 @@ void(entity str_player, float str_num, float topbit, float botbit, float buffer)
 
 	// Deal with negative state first
 	if (str_num < 0) {
-		if (buffer & BUFFER_STUFFCMD) stuffcmd(str_player, "-");
+		if (buffer & BUFFER_STUFFCMD) Safe_stuffcmd(str_player, "-");
 		else if (buffer & BUFFER_SPRINT) sprint(str_player, "-");
 		else if (buffer & BUFFER_DPRINT) dprint("-");
 	}
@@ -57,7 +56,7 @@ void(entity str_player, float str_num, float topbit, float botbit, float buffer)
 		// Fill front of number with spaces
 		if (str_counter > 1 && str_result == 0 && str_first == FALSE) {
 			// Print space to buffer type
-			if (buffer & BUFFER_STUFFCMD) stuffcmd(str_player, " ");
+			if (buffer & BUFFER_STUFFCMD) Safe_stuffcmd(str_player, " ");
 			else if (buffer & BUFFER_SPRINT) sprint(str_player, " ");
 			else if (buffer & BUFFER_DPRINT) dprint(" ");
 		}
@@ -65,7 +64,7 @@ void(entity str_player, float str_num, float topbit, float botbit, float buffer)
 		else if (str_result > 0 || str_first) {
 			str_first = TRUE;
 			// Print digit to buffer type
-			if (buffer & BUFFER_STUFFCMD) stuffcmd(str_player, ftos(str_result));
+			if (buffer & BUFFER_STUFFCMD) Safe_stuffcmd(str_player, ftos(str_result));
 			else if (buffer & BUFFER_SPRINT) sprint(str_player, ftos(str_result));
 			else if (buffer & BUFFER_DPRINT) dprint(ftos(str_result));
 		}
@@ -79,7 +78,7 @@ void(entity str_player, float str_num, float topbit, float botbit, float buffer)
 	if (botbit <= 0) {
 		// Check for zero value
 		if (!str_first) {
-			if (buffer & BUFFER_STUFFCMD) stuffcmd(str_player, "0");
+			if (buffer & BUFFER_STUFFCMD) Safe_stuffcmd(str_player, "0");
 			else if (buffer & BUFFER_SPRINT) sprint(str_player, "0");
 			else if (buffer & BUFFER_DPRINT) dprint("0");
 		}
@@ -91,12 +90,12 @@ void(entity str_player, float str_num, float topbit, float botbit, float buffer)
 		// Print decimal point to buffer type
 		if (!str_first) {
 			str_first = TRUE;
-			if (buffer & BUFFER_STUFFCMD) stuffcmd(str_player, "0.");
+			if (buffer & BUFFER_STUFFCMD) Safe_stuffcmd(str_player, "0.");
 			else if (buffer & BUFFER_SPRINT) sprint(str_player, "0.");
 			else if (buffer & BUFFER_DPRINT) dprint("0.");
 		}
 		else {
-			if (buffer & BUFFER_STUFFCMD) stuffcmd(str_player, ".");
+			if (buffer & BUFFER_STUFFCMD) Safe_stuffcmd(str_player, ".");
 			else if (buffer & BUFFER_SPRINT) sprint(str_player, ".");
 			else if (buffer & BUFFER_DPRINT) dprint(".");
 		}
@@ -127,7 +126,7 @@ void(entity str_player, float str_num, float topbit, float botbit, float buffer)
 		if (str_result > 0 || str_first) {
 			str_first = TRUE;
 			// Print digit to buffer type
-			if (buffer & BUFFER_STUFFCMD) stuffcmd(str_player, ftos(str_result));
+			if (buffer & BUFFER_STUFFCMD) Safe_stuffcmd(str_player, ftos(str_result));
 			else if (buffer & BUFFER_SPRINT) sprint(str_player, ftos(str_result));
 			else if (buffer & BUFFER_DPRINT) dprint(ftos(str_result));
 		}
@@ -148,15 +147,12 @@ float(float fogrange) fog_check_range =
 	return fabs(fogrange);
 };
 
-//======================================================================
 // Main fog functions
-//======================================================================
-void(entity client) change_fog  =
-{
+void(entity client) change_fog  = {
 	if (!fog_control) return;
 	
 	// Update fog parameters to console buffer
-	stuffcmd(client, "\n\n\nfog ");
+	Safe_stuffcmd(client, "\n\n\nfog ");
 	// Fog density can be in the range of 0-99
 	lftos(client, fog_control.fog_currden, 2,3, BUFFER_STUFFCMD);
 
@@ -168,25 +164,22 @@ void(entity client) change_fog  =
 	// if (ext_dpfog) lftos(client, fog_control.fog_currden+0.05, 1,3, BUFFER_STUFFCMD); 
 	// else lftos(client, fog_control.fog_currden, 1,3, BUFFER_STUFFCMD);
 	
-	stuffcmd(client, " "); 
+	Safe_stuffcmd(client, " "); 
 	lftos(client, fog_control.fog_currcol_x, 1,3, BUFFER_STUFFCMD); 
-	stuffcmd(client, " "); 
+	Safe_stuffcmd(client, " "); 
 	lftos(client, fog_control.fog_currcol_y, 1,3, BUFFER_STUFFCMD); 
-	stuffcmd(client, " "); 
+	Safe_stuffcmd(client, " "); 
 	lftos(client, fog_control.fog_currcol_z, 1,3, BUFFER_STUFFCMD); 
 	// Extra fog parameters for DarkPlaces extended engines
 	if (ext_dpfog) {
-		stuffcmd(client, " ");
-		stuffcmd(client, fog_control.fog_dpextra);
+		Safe_stuffcmd(client, " ");
+		Safe_stuffcmd(client, fog_control.fog_dpextra);
 	}
-	stuffcmd(client, "\n");
+	Safe_stuffcmd(client, "\n");
 };
 
-//----------------------------------------------------------------------
 // Main fog controller loop
-//----------------------------------------------------------------------
-void() fog_controller_think =
-{
+void() fog_controller_think = {
 	// Has there been a change detected?
 	if (self.state == STATE_SETUP) {
 		// If fog fade time too low, instantly switch
@@ -195,8 +188,7 @@ void() fog_controller_think =
 			self.fog_currden = self.fog_targden;
 			self.fog_currcol = self.fog_targcol;
 			change_fog(self.owner);
-		}
-		else {
+		} else {
 			// Setup gradual fade of fog over time
 			self.state = STATE_ON;
 			// divide the fade time into segments (minimum 0.05)
@@ -365,10 +357,10 @@ void(entity client) change_skyfog  =
 	if (!skyfog_control) return;
 	
 	// Update fog parameters to console buffer
-	stuffcmd(client, "\n\n\nr_skyfog ");
+	Safe_stuffcmd(client, "\n\n\nr_skyfog ");
 	// Fog density should be in the range of 0-1
 	lftos(client, skyfog_control.skyfog_currden, 1,3, BUFFER_STUFFCMD);
-	stuffcmd(client, "\n");
+	Safe_stuffcmd(client, "\n");
 };
 
 //----------------------------------------------------------------------
