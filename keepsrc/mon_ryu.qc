@@ -191,18 +191,14 @@ vector() Ryu_Offset = {
 };
 
 void() Ryu_Bite = {
+    local float damage;
+
     // Check if the bite attack can hit.
     if (!InMeleeRange (RYU_RANGE_MELEE)) return;
     if (!CanDamage (self.enemy, self)) return;
     if (!self.enemy.takedamage) return; // For mega-enforcer.
 
     // Bite attack is successful.
-    local   vector  org;        // Location of dragon's head.
-    local   vector  dir;        // Velocity of meat chunk.
-    local   float   damage;
-
-    org = Ryu_Offset ();
-
     // Inflict the damage.  Scar damage hurts and kills zombies.
     // Like many of Quake2 monsters' melee attacks, damage ranges from
     // x to x+5, while x is a multiple of 5, and damage has a minimum of 5.
@@ -213,13 +209,7 @@ void() Ryu_Bite = {
     if (self.spawnflags & SPAWN_WYRM) damage = damage * 4; // Moot since wyrms can't bite.
     sound (self, CHAN_WEAPON, "demon/dhit2.wav", 1, ATTN_NORM);
     T_Damage (self.enemy, self, self, damage,DAMARMOR);
-
-    // Throw a piece of meat from the dragon's head (mouth).
-    makevectors (self.angles);
-    org = self.origin + (v_forward*org_x) + (v_right*org_y) + (v_up*org_z);
-    dir = (random() * -50) * v_forward;
-    dir = dir + ((random() * 200 - 100) * v_right);
-    SpawnMeatSprayDrake (org, dir, self.enemy.bloodtype);
+    SpawnMeatSpray(self, self.enemy,(crandom() * 200) - 100); // Throw a piece of meat from the dragon's head (mouth).
 };
 
 //  Dragon Aiming. This returns the spot where a projectile will strike.  Dragons will shoot at the spot where the target is currently standing.
@@ -543,7 +533,7 @@ void() wyrm_go = {
         ryu_run1 ();
 };
 
-void() dragon_bite1  =[ $attack1,  dragon_bite2  ] {W_ShowHostile(); ryu_melee();};
+void() dragon_bite1  =[ $attack1,  dragon_bite2  ] { self.show_hostile = time + 1; ryu_melee(); };
 void() dragon_bite2  =[ $attack2,  dragon_bite3  ] {ryu_melee();};
 void() dragon_bite3  =[ $attack3,  dragon_bite4  ] {ryu_melee();};
 void() dragon_bite4  =[ $attack4,  dragon_bite5  ] {ryu_melee();};
@@ -731,7 +721,7 @@ void() dragon_ranged = {
         ryu_missile ();
 };
 void() dragon_missile1  =[ $attack1,  dragon_missile2  ] {
-    W_ShowHostile ();
+    self.show_hostile = time + 1;   // wake monsters up
     if (self.classtype != CT_MONWYRM) Ryu_StrafeOption ();
     dragon_ranged();
 };
@@ -899,7 +889,7 @@ void() wyrm_explode = {
     else
         org = org - (vx * 88);
     setorigin (self, org);
-    ThrowHead ();
+	ThrowGib (25,1); // headmdl
 };
 
 void() ryu_go = {
@@ -995,7 +985,13 @@ void() dragon_revive = {
         dragon_revive1 ();
 };
 
-void() dragon_win = { ryu_sfx_idle();  monster_sow(); };
+void() dragon_win = {
+	ryu_sfx_idle();
+    if (self.movetarget || self.charmer)
+        self.th_walk ();
+    else
+        self.th_stand ();
+};
 
 float   RYUSKIN_RED        = 0;
 float   RYUSKIN_GREEN      = 1;

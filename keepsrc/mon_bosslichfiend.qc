@@ -142,8 +142,7 @@ float() lfiend_WaveCheck =
 //----------------------------------------------------------------------
 // Check the tether system
 //----------------------------------------------------------------------
-float() lfiend_CheckTether =
-{
+float() lfiend_CheckTether = {
 	self.t_length = vlen(self.origin - self.movelast.origin);
 	// Check the most obvious first, inside tether range?
 	if (self.t_length < MONAI_MAXLFIEND) return FALSE;
@@ -153,43 +152,6 @@ float() lfiend_CheckTether =
 			return FALSE;
 		// Stop moving around
 		else return TRUE;
-	}
-};
-	
-//----------------------------------------------------------------------
-// Boss Fiend game play logic
-//----------------------------------------------------------------------
-void() LfiendCheckAttack = 
-{
-	//----------------------------------------------------------------------
-	// Check Melee range and start clawing at the player
-	//----------------------------------------------------------------------
-	if (self.enemydist < MONAI_MELEELFIEND) {
-		self.attack_state = AS_MELEE;
-		return;
-	}
-
-	//----------------------------------------------------------------------
-	// Range attacks (Fireballs, Giant Spheres and Firestorms)
-	//----------------------------------------------------------------------
-	// Only range attack if cooldown has finished
-	if (time > self.attack_finished) {
-		// Quick fireball attacks
-		if (self.enemydist < MONAI_CLOSELFIEND && random() < 0.75) {
-			// Skill 0=3s, 1=2.25s, 2=1.5s, 3=0.75s
-			self.attack_speed = (4 - skill) * 0.75;
-			self.attack_finished = time + self.attack_speed + random();
-			self.attack_state = AS_MISSILE;
-			return;
-		}
-		// Summon giant sphere of Doom!
-		else {
-			// Skill 0=4s, 1=3s, 2=2s, 3=1s
-			self.attack_speed = (4 - skill) * 1;
-			self.attack_finished = time + self.attack_speed + random();
-			self.attack_state = AS_JUMP;
-			return;
-		}
 	}
 };
 
@@ -557,7 +519,7 @@ void() monster_lichfiend = {
 	}
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 

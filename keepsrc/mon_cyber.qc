@@ -186,7 +186,7 @@ void() cyber_die18 =[ $shoot3, cyber_die18    ] {
 	SpawnExplosion(EXPLODE_MED,self.origin + '0 -10 40',"");
 	SpawnExplosion(EXPLODE_MED,self.origin + '0 10 40',"");
     sound (self, 5, "cyber/boom.wav", 1, ATTN_NORM);
-    ThrowHead();
+    ThrowGib (25,1); // headmdl
     ThrowGib (13,1);
     ThrowGib (12,5);
 	ThrowGib (11,1);
@@ -246,7 +246,6 @@ void() monster_cyberdemon = {
     self.th_missile = cyber_missile1;
     self.th_pain    = cyber_pain;
     self.sight_sound = "cyber/cybsee.wav";
-	//self.th_checkattack = DoomCheckAttack;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	self.th_updmissile = army_rocket_think;	// Update flying rocket

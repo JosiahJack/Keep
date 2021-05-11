@@ -807,7 +807,6 @@ void() monster_minotaur = {
 	if (self.spawnflags & MON_MINOTAUR_MINIONS) {
 		if (self.poisonous < 0) {
 			self.poisonous = FALSE;			// Special version (blood/fire)
-			//precache_bloodgibs();			// precache gibs (in world.qc)
 			self.gibtype = GIBTYPE_BLOOD;	// blood trails
 			self.part_style = PARTICLE_BURST_RED;
 		}
@@ -824,7 +823,6 @@ void() monster_minotaur = {
 	}
 	else {
 		self.poisonous = FALSE;			// Default White version
-		//precache_bloodgibs();			// precache gibs (in world.qc)
 		self.gibtype = GIBTYPE_BLOOD;	// blood trails
 		self.part_style = PARTICLE_BURST_BLUE;
 	}

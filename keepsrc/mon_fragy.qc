@@ -187,14 +187,6 @@ void() frag_die = {
 	}
 };
 
-float()	CheckFragMelee = {
-	if (enemy_range == RANGE_MELEE) {
-		self.attack_state = AS_MELEE;
-		return TRUE;
-	}
-	return FALSE;
-};
-
 float()	CheckFragJump = {
 	local	vector	dist;
 	local	float	d;
@@ -210,19 +202,6 @@ float()	CheckFragJump = {
 	if (d > 150) return FALSE;
 		
 	return TRUE;
-};
-
-void()	FragCheckAttack = {
-	// if close enough for slashing, go for it
-	if (CheckFragMelee ()) {
-		self.attack_state = AS_MELEE;
-		return;
-	}
-	
-	if (CheckFragJump ()) {
-		self.attack_state = AS_MISSILE;
-		return;
-	}
 };
 
 //QUAKED monster_fragy (1 0 0) (-16 -16 -24) (16 16 24) Ambush

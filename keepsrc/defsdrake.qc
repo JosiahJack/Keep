@@ -165,14 +165,10 @@ float   BLOOD_GREEN     = 57;       // For acid-blooded ala Alien Quake.
 float   BLOOD_RED       = 73;       // Standard blood red color.
 float   BLOOD_SPARKS    = 105;      // For machines like drones or robots.
 float   BLOOD_PURPLE    = 145;      // For tarbaby.
-//float   BLOOD_BLUE      = 209;      // For cacodemons.
-//float   BLOOD_SHAFT     = 225;      // Alternate blood red color.
+float   BLOOD_BLUE      = 209;      // For cacodemons.
+float   BLOOD_SHAFT     = 225;      // Alternate blood red color.
 float   BLOOD_FIRE      = 233;      // For lava monsters like Chthon.
 float   CHUNKS_ICE      = -41;      // For ice chunks.
-
-float   BB_GREEN    = 1; // Blood bits for bloodbank
-float   BB_PURPLE   = 2;
-float   BB_FIRE     = 4;
 
 //float   FLx_MOVE            =    3;     // Fly + Swim
 float   FLx_CREATURE        =   40;     // Client + Monster
@@ -456,8 +452,6 @@ float   XSF_BODY_DOUBLE = 4096; // Spawned decapitated body double.
 float   XSF_CUBE_SPAWN  = 8192; // Spawned by cube, used in telefrag check.
 float   XSF_GHOST_HACK  = 16384;    // nsoe1:  Ghost can be hit by any melee.
 
-
-float bloodbank;      // Non-red blood types known to be precached.
 float cranked;    // TRUE = Stronger monsters and brutal falling rules.
 float cutscene;       // Set to TRUE during a cutscene.
 float doomed;     // TRUE = Monsters respawn after death.
@@ -545,8 +539,6 @@ vector      damage_velocity;    // Set by 'T_Damage' for gib velocity.
 .float      fighting;   // Checks if monster is really fighting while
                         //  running.  Monsters can run to follow friends.
 
-void SpawnMeatSprayDrake(vector org, vector vel, float btype);
-
 .void()             th_win;     // Monsters:  sound when killing a player.
                                 // Missiles:  code prior to origin shift.
                                 // Items:  additional code after spawning
@@ -591,14 +583,7 @@ float PUSH_CURRENT = 2;     // Zerstorer -- "Silent" PUSH for water currents.
 float PUSH_JUMP_ONLY = 4;   // Drake -- Push only when jump is pressed.
 
 .float jump_time;		// Used by custom trigger_jump Q3 style jump pad
-
 .entity fallen; // used for ressurection by Necromancer, Bane, HLord
-
-float   COS30   = 0.866;
-float   COS45   = 0.7071;
-float   COS60   = 0.5;
-float   SQRT2   = 1.4142;   // The square root of 2.
-
 .string spawnclassname;
 .string summontarget;
 .vector spawnmins;
@@ -621,3 +606,12 @@ float   SQRT2   = 1.4142;   // The square root of 2.
 .float      script_delay;   //dhm - time until next script.
 .float      script_time;    //dhm - used for script timing.
 .float      script_count;   //dhm - ditto.
+
+// Elements
+// PM:  Kept due to legacy.
+// Ordered by Horoscopes?
+// e.g., Ares=Fire, Taurus=Earth, Gemini=Air, Cancer=Water.
+float   BARON_FIRE  = 1;
+float   BARON_EARTH = 2;
+float   BARON_AIR   = 3;
+float   BARON_WATER = 4;

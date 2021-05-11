@@ -293,33 +293,20 @@ void() hk_face = {ai_face();  bane_strafe();};
 
 // Here for incidental damage in case enemy runs up to melee range while
 // the sword is coming down during the magica animation.
-void() magica_sword_chop =
-{
-    local   float   ldmg, side;
+void() magica_sword_chop = {
+    local   float   ldmg;
     local   vector  delta;
     
-    ai_face ();
-    // movement done elsewhere.
-
+    ai_face (); // movement done elsewhere.
     delta = self.enemy.origin - self.origin;
-
-    if (!InMeleeRange (80))     // 100 is too long.
-        return;
-    if (!CanDamage (self.enemy, self))
-        return;
-    // if (self.classname != "monster_bane")
-        // if (self.classname != "monster_dark_lord")
-            // if (IsGhost (self.enemy))
-                // return;     // Not allowed to hit wraith.
+    if (!InMeleeRange (80)) return; // 100 is too long.
+    if (!CanDamage (self.enemy, self)) return;
 
     sound (self, CHAN_WEAPON, "weapons/axhit.wav", 1, ATTN_NORM);
     makevectors (self.angles);
     ldmg = 20 + 10*random();    // Player normally does 20 damage with axe.
-    side = crandom() * 50;
-    delta = (side * v_right) + (50 * v_up);
-
     T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
-    SpawnMeatSprayDrake (self.origin + v_forward*16, delta, self.enemy.bloodtype);
+    SpawnMeatSpray (self, self.enemy, (crandom() * 50) + 50);
 };
 
 // Bane summons a thunderstorm.
@@ -608,82 +595,57 @@ void() hkboss_magic = {
 };
 
 void() bane_magic = {
-// PM:  Jumping done at charge anim.  However...
-// If enemy is low enough that CheckForCharge would abort, then we can
-// check for jumping.  We want the Bane to occasionally jump down toward
-// the enemy, much like old SoE.
-// Update:  If enemy is above, try to teleport to higher ground occasionally.
-    if (random() < 0.25)
-        if (CheckBaneJump ())
-        {
-            if (self.origin_z - self.enemy.origin_z > 20)
-                {bane_jump1 ();  return;}
-            if (!self.waitmax)  // Only if using new AI.
-                if (self.enemy.origin_z - self.origin_z > 20)
-                    {bane_magice1 ();  return;}
+	// PM:  Jumping done at charge anim.  However...
+	// If enemy is low enough that CheckForCharge would abort, then we can
+	// check for jumping.  We want the Bane to occasionally jump down toward
+	// the enemy, much like old SoE.
+	// Update:  If enemy is above, try to teleport to higher ground occasionally.
+    if (random() < 0.25) {
+        if (CheckBaneJump ()) {
+            if (self.origin_z - self.enemy.origin_z > 20) {bane_jump1 ();  return;}
+            if (!self.waitmax && ((self.enemy.origin_z - self.origin_z) > 20)) {bane_magice1 ();  return;} // Only if using new AI.
         }
+	}
 
-// Check for thunderstorm.
+	// Check for thunderstorm.
     if (!self.waitmax)
         if (skill >= 1)
             if (!bane_has_storm ())
                 if (random() < 0.5)
-                    if (UpIsSky (self.enemy.origin))
-                        {bane_magica1 ();  return;}   // Start a thunderstorm!
+                    if (UpIsSky (self.enemy.origin)) {bane_magica1 ();  return;}   // Start a thunderstorm!
 
-// Spray some fireballs.
+	// Spray some fireballs.
     if (random() <= 0.5)
         hknight_magicb1 ();
     else
         hknight_magicc1 ();
 };
 
-//===========================================================================
-
 void(float side) bane_melee = {
-    if (self.classname != "monster_bane")
-		if (self.classname != "monster_dark_lord")
-			return;
-
     local   float   ldmg;
     local   vector  delta;
+
+    if ((self.classname != "monster_bane") && (self.classname != "monster_dark_lord")) return;
     
-    ai_face ();
-    // movement done elsewhere.
-
+    ai_face (); // movement done elsewhere.
     delta = self.enemy.origin - self.origin;
-
-    if (!InMeleeRange (80))     // 100 is too long.
-        return;
-    if (!CanDamage (self.enemy, self))
-        return;
+    if (!InMeleeRange (80)) return; // 100 is too long.
+    if (!CanDamage (self.enemy, self)) return;
     // Let the Bane hit ghosts.  He's just that badass.
     // Update:  Dark Lord is Bane-Lite, at least in human form...
-
     sound (self, CHAN_WEAPON, "drake/bane/hit.wav", 1, ATTN_NORM);
     makevectors (self.angles);
     ldmg = 10 + 5*random();
-    if (side)
-        delta = side * v_right;
-    else
-    {
-        side = crandom() * 50;
-        delta = (side * v_right) + (50 * v_up);
-    }
-
     T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
-    SpawnMeatSprayDrake (self.origin + v_forward*16, delta, self.enemy.bloodtype);
+    SpawnMeatSpray(self, self.enemy, (crandom() * 50) + (50 * side));
 };
 
-void(float d) hk_charge =
-{
-    if ((self.classname == "monster_bane") || (self.classname == "monster_dark_lord"))
-    {
-        local   float   dist;
+void(float d) hk_charge = {
+    local float dist;
 
+    if ((self.classname == "monster_bane") || (self.classname == "monster_dark_lord")) {
         dist = d * 2;
-        if (!QC_CloseEnough (dist))
-            d = dist;   // Move double speed.
+        if (!QC_CloseEnough (dist)) d = dist;   // Move double speed.
     }
     ai_charge (d);
 };
@@ -704,8 +666,6 @@ void() bane_smash5  =[ $smash7,  bane_smash6  ] {hk_charge(12); ai_melee();};
 void() bane_smash6  =[ $smash8,  bane_smash7  ] {hk_charge(2); ai_melee();};
 void() bane_smash7  =[ $smash9,  bane_smash8  ] {monster_footstep(FALSE); hk_charge(3); ai_melee();};
 void() bane_smash8  =[ $smash11, hknight_run1 ] {hk_charge(0);};
-
-//============================================================================
 
 void() bane_watk1  =[ $w_attack1,  bane_watk2  ] {hk_charge(2);};
 void() bane_watk2  =[ $w_attack5,  bane_watk3  ] {bane_melee(0); ai_melee();};
@@ -806,16 +766,13 @@ void() baneknight_melee =
     sound (self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM);
     fast = 1;
     if (!SUB_QuickAttack ())
-        if (self.classname == "monster_hell_knight")
-            fast = 0;
-    if (fast)
-    {
+        if (self.classname == "monster_hell_knight") fast = 0;
+    if (fast) {
         if (hknight_type == 1)
             bane_slice1 ();
         else if (hknight_type == 2)
             bane_smash1 ();
-        else if (hknight_type == 3)
-        {
+        else if (hknight_type == 3) {
             bane_watk1 ();
             hknight_type = 0;
         }
@@ -826,25 +783,18 @@ void() baneknight_melee =
         hknight_slice1 ();
     else if (hknight_type == 2)
         hknight_smash1 ();
-    else if (hknight_type == 3)
-    {
+    else if (hknight_type == 3) {
         hknight_watk1 ();
         hknight_type = 0;
     }
 };
 
-//==============================================================================
-
-void() bane_win =
-{
-// Update:  Changed from ATTN_NORM to ATTN_NONE for level-wide low laugh.
-    sound (self, CHAN_VOICE, "drake/bane/laugh.wav", 1, ATTN_NONE);
-// DISABLED -- Player can't really listen if he's dead.
-//    if (self.height)
-//        if (!self.master)     // Death is only the beginning.
-//            bprint ("װטו ֲבמו÷ ִובפט יף ןמלש פטו גוחיממימח®\n");
-
-    monster_sow ();
+void() bane_win = {
+    sound (self, CHAN_VOICE, "drake/bane/laugh.wav", 1, ATTN_NONE); // Update:  Changed from ATTN_NORM to ATTN_NONE for level-wide low laugh.
+    if (self.movetarget || self.charmer)
+        self.th_walk ();
+    else
+        self.th_stand ();
 };
 
 // Files common to all of the hell knight variants.
@@ -852,7 +802,6 @@ void() hk_cache = {
     precache_model ("progs/ad171/mon_hknight.mdl");
     precache_model ("progs/k_spike.mdl");
     precache_model ("progs/h_hellkn.mdl");
-
     precache_sound ("hknight/attack1.wav");
     precache_sound ("hknight/hit.wav");    // used by C code, so don't sound2
     precache_sound ("hknight/slash1.wav");
@@ -1023,7 +972,7 @@ void() monster_bane = {
 	self.classgroup = CG_DCAPTAIN;	// Rule over seargent and fury knights but lesser knights are disloyal
 	self.classmove = MON_MOVEWALK;
 
-    // if (soul_evil) monster_purse (20, 1, 0.5);
+    if (soul_evil) monster_purse (20, 1, 0.5);
 
 	monster_start();
 };
@@ -1417,14 +1366,13 @@ void() monster_dark_lord = {
 	self.resist_rockets = self.resist_cells = 0;
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
 	self.classtype = CT_MONDARKLORD;
 	self.classgroup = CG_DCAPTAIN;	// Rule over seargent and fury knights but lesser knights are disloyal
 	self.classmove = MON_MOVEWALK;
 
-    // if (soul_evil)
-        // monster_purse (20, 1, 0.5);
+    if (soul_evil) monster_purse (20, 1, 0.5);
 
 	monster_start();
 };

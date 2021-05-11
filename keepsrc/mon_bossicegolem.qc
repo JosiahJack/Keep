@@ -196,49 +196,10 @@ void() iceg_CheckCombo =
 	}
 };
 
-//----------------------------------------------------------------------
-// Ice Golem game play logic
-//----------------------------------------------------------------------
-void() IcegCheckAttack = 
-{
-	//----------------------------------------------------------------------
-	// Check Melee range and constantly fire
-	//----------------------------------------------------------------------
-	if (self.enemydist < MONAI_MELEEICEG) {
-		self.attack_finished = time + 1;
-		self.attack_state = AS_MELEE;
-		return;
-	}
-	// Walk around a bit
-	if (time < self.attack_finished) return;
-
-	//----------------------------------------------------------------------
-	// Floor stomp attack
-	//----------------------------------------------------------------------
-	if (self.enemydist < MONAI_STOMPICEG && random() < 0.5) {
-		self.attack_finished = time + ((4-skill)*0.5) + random() + random();
-		self.th_slide ();
-		return;
-	}
-	
-	//----------------------------------------------------------------------
-	// Range attacks (O Rings + Ceiling Rubble)
-	//----------------------------------------------------------------------
-	if (!enemy_vis) return;
-	
-	// Does the monster have a clear shot to the player?
-	// sightline can be blocked by other monsters
-	if (!visblocked_wide(self.enemy, self.attack_offset, self.enemy.view_ofs)) {
-		self.attack_finished = time + ((4-skill)*0.6) + random() + random();
-		self.attack_state = AS_MISSILE;
-	}
-};
-
 //======================================================================
 // MONSTER STATES (stand, walk run, attack, pain and death!
 //======================================================================
-void() iceg_idleframe = 
-{
+void() iceg_idleframe = {
 	// Do nothing if dead
 	if (self.health < 1) return;
 	if (self.walkframe == 0) monster_idle_sound();
@@ -988,7 +949,7 @@ void() iceg_setup =
 	self.skin = 1;					// Frozen skin
 
 	self.blockudeath = TRUE;		// No humanoid death
-	self.bleedcolour = 16;			// Brown dust/dirt
+	self.bloodtype = self.bleedcolour = MON_BCOLOR_BROWN;			// Brown dust/dirt
 	self.meleerange = MONAI_MELEEGOLEM;
 	self.attack_offset = '10 0 112';	// Ice storm
 
@@ -1154,7 +1115,7 @@ void() monster_icegolem = {
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
 	AddToTotals(self);
 	self.use = iceg_setup;

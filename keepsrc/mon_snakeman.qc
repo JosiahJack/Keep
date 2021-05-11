@@ -203,7 +203,7 @@ void() snake_die = {
 	self.pain_finished = time + LARGE_TIMER;
 	if (self.gibbed) {
 		// Throw extra gibs
-		ThrowHead(); //2nd uzi
+		ThrowGib (25,1); // headmdl //2nd uzi
 		ThrowGib(12,1);
 		return;
 	}

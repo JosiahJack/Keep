@@ -168,6 +168,9 @@ float(entity targ, vector s_offset, vector targang, float nomonsters) visang = {
 float(entity targ) visblocked = {
 	local vector spot1, spot2;
 	
+	if (!targ) return FALSE; // Can't check against the world
+	if (targ == self) return FALSE; // Can't block ourself
+
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
 	traceline (spot1, spot2, FALSE, self);	// blocked by monsters
@@ -177,8 +180,7 @@ float(entity targ) visblocked = {
 
 	visible_distance = vlen ((trace_endpos - spot1));
 	// Original ID behaviour for this type of function
-	// Traceline entity hit = enemy?
-	if (trace_ent == targ) return FALSE;
+	if (trace_ent == targ) return FALSE; // Traceline entity hit = enemy?
 	return TRUE;
 };
 
@@ -547,6 +549,8 @@ float(entity decider, entity targ) GetAngryOnPain = {
 	return FALSE;
 };
 
+void () polyp_wake1_prethink;
+
 /*======================================================================
  HuntTarget
   Go into main routine - constantly running/turning towards the enemy
@@ -558,7 +562,11 @@ void() HuntTarget = {
 	self.goalentity = self.enemy; // Focus on enemy
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
 	self.nextthink = time + 0.1; // Some monsters have special wakeup animations before attacking
-	self.think = self.th_run; // Start running
+	if (self.classtype == CT_MONPOLYP && self.startonground == 1) {
+		self.think = polyp_wake1_prethink;
+	} else {
+		self.think = self.th_run; // Start running
+	}
 
 	// Default 1s wait (NM adjusted) before attacking
 	if (self.ryuflags & RYU_ALERT)

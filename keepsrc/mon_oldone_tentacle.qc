@@ -204,7 +204,7 @@ void() monster_oldone_tentacle = {
 	self.resist_rockets = self.resist_cells = 0;
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 	AddToTotals(self);

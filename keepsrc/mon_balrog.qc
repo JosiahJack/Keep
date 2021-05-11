@@ -254,19 +254,8 @@ void()	blrog_die17	=[	$die17, 	blrog_die18	] {};
 void()	blrog_die18	=[	$die18, 	blrog_die19	] {};
 void()	blrog_die19	=[	$die19, 	blrog_die19	] {};
 
-void() blrog_die =
-{
-	// check for gib
-	if (self.health < -40)
-	{
-		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
-		ThrowHead ("progs/h_knight.mdl", self.health);
-		ThrowGib ("progs/gib1.mdl", self.health);
-		ThrowGib ("progs/gib2.mdl", self.health);
-		ThrowGib ("progs/gib3.mdl", self.health);
-		
-		return;
-	}
+void() blrog_die = {
+
 
 	// regular death
 	sound (self, CHAN_VOICE, "rog/death1.wav", 1, ATTN_NORM);
@@ -274,8 +263,7 @@ void() blrog_die =
         self.solid = SOLID_NOT;
 };
 
-void() blrog_pause =
-{
+void() blrog_pause = {
 	sound ( self, CHAN_VOICE, "statue/see.wav", 1, ATTN_NORM);
    
 	self.takedamage = DAMAGE_AIM;
@@ -286,18 +274,14 @@ void() blrog_pause =
 	self.th_pain = blrog_pain;
 	self.th_die = blrog_die;
 	self.use = SUB_Null;
-	
 	self.think = blrog_run1;
-
 	self.enemy = activator;
 	self.nextthink = time + 0.1;
 	self.think = FoundTarget;
-		
 	self.delay = 0;
 };
 
-void() blrog_pause1 =
-{
+void() blrog_pause1 = {
 	self.takedamage = DAMAGE_NO;
 	self.use = blrog_pause;
 	self.think = blrog_pause1;
@@ -387,4 +371,4 @@ void() monster_balrog = {
 		self.th_die = blrog_die;
     } 
 	monster_start ();
-};	 
+};

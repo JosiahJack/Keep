@@ -83,12 +83,10 @@ $frame deathb9 deathb10 deathb11 deathb12 deathb13 deathb14 deathb15 deathb16
 $frame deathb17 deathb18 deathb19 deathb20
 
 void() dcrossbow_hold1;
-void() dcrossbow_slide1;
 void() dcrossbow_checkmelee;
 void() dcrossbow_crossbow_sound;
 float CROSS_DOWN = 1;
 float CROSS_UP = 2;
-float CROSS_TIMEOUT = 1;
 
 //===========================================================================
 void()	dcrossbow_standA1	=[	$standA1,	dcrossbow_standA2	] {ai_stand();};
@@ -346,47 +344,7 @@ void()	dcrossbow_fire24 =[	$tfire24,	dcrossbow_fire26] {};
 void()	dcrossbow_fire26 =[	$tfire26,	dcrossbow_fire28] {ai_face();};
 void()	dcrossbow_fire28 =[	$tfire28,	dcrossbow_fire30] {ai_face();};
 void()	dcrossbow_fire30 =[	$tfire30,	dcrossbow_hold1] {ai_face();
-	self.weaponswitch = time + CROSS_TIMEOUT;			// Don't exit straight away
-};
-
-//===========================================================================
-void() dcrossbow_checkattack =
-{
-	local float boltspeed;
-
-	// Always return if monster is dead!
-	if (self.health < 1) return;
-
-	// Check to see if enemy is dead? back to run/hunt cycle
-	if (self.enemy.health < 1) dcrossbow_stop1();
-	else {
-		// is the enemy visible? (liquid check)
-		if (visible(self.enemy)) {
-			self.weaponswitch = time + CROSS_TIMEOUT;
-			// Is the enemy blocked by another enemy?
-			if (!visblocked_wide(self.enemy, self.attack_offset, '0 0 0')) {
-				// Is the enemy within melee range?
-				if (ai_checkmelee(MONAI_MELEEKNIGHT,FALSE)) self.th_melee();
-				else {
-					// Skill level adjustment for bolt speed
-					boltspeed = SPEED_DCROSS + (skill*SPEED_BOLTSKILL);
-					self.attack_track = SUB_Tracking(self.attack_track, self.attack_offset, self.enemy, boltspeed);
-		
-					// Chance of attack? start out low and get better chance+tracking over time	
-					self.attack_chance = self.attack_chance + 0.2;
-					if (random() < self.attack_chance) dcrossbow_fire1();
-				}
-			}
-		}
-		else {
-			// Have not see player for a while, stop wating and hunt for them
-			if (self.weaponswitch < time+0.1) dcrossbow_stop1();
-			else {
-				// If cannot see player try strafe side to side first before hunt mode
-				if (self.attack_state == AS_MISSILE) self.think = dcrossbow_slide1;
-			}
-		}
-	}
+	self.weaponswitch = time + 1;			// Don't exit straight away
 };
 
 //----------------------------------------------------------------------------
@@ -420,7 +378,7 @@ void()	dcrossbow_slideup4 =[	$tready4,	dcrossbow_slideup5	] {};
 void()	dcrossbow_slideup5 =[	$tready5,	dcrossbow_slideup6	] {ai_face();};
 void()	dcrossbow_slideup6 =[	$tready6,	dcrossbow_slideup7	] {monster_footstep(FALSE);};
 void()	dcrossbow_slideup7 =[	$tready7,	dcrossbow_slide1	] {ai_face();
-	self.weaponswitch = time + CROSS_TIMEOUT;			// Don't exit straight away
+	self.weaponswitch = time + 1;			// Don't exit straight away
 	self.weaponstate = CROSS_UP;		// Crossbow animation in correct state for slide/hold
 };
 
@@ -463,7 +421,7 @@ void()	dcrossbow_ready4 =[	$tready4,	dcrossbow_ready5	] {};
 void()	dcrossbow_ready5 =[	$tready5,	dcrossbow_ready6	] {ai_face();};
 void()	dcrossbow_ready6 =[	$tready6,	dcrossbow_ready7	] {monster_footstep(FALSE);};
 void()	dcrossbow_ready7 =[	$tready7,	dcrossbow_hold1	] {ai_face();
-	self.weaponswitch = time + CROSS_TIMEOUT;	// Don't exit straight away
+	self.weaponswitch = time + 1;	// Don't exit straight away
 	self.weaponstate = CROSS_UP;				// Crossbow animation in correct state for slide/hold
 };
 

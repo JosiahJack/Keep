@@ -1,6 +1,54 @@
-/*======================================================================
- MOD CUSTOM SETTINGS
-======================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Arcane Dimensions (AD)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 64
+//
+// Implements: Special Arcane Dimensions settings and developer cheats
+//
+// Description:
+// Cuustomization is from three different source:
+// quake.rc < worldspawn < impulse commands (top priority)
+//
+// The serverflags is the ONLY variable that is passed between MAP loads
+// and that variable is not available straightaway! Once the worldspawn
+// is loaded (first thing to happen) the serverflags is still empty
+// and the functions have to cope with it 'out of sync' until later.
+//
+// After worldspawn is loaded, the combination of the quake.rc (TEMP1)
+// is merged with the keys on worldspawn and all spawning functions
+// use the configflags until it can be sync'd with serverflags.
+//
+// The configflags is setup to be temporary so that any previous value
+// from a quickload does not interfere with it.
+//=============================================================================
+
 void() toggleautoaim;		// Toggle auto aim
 void() toggleprojsize;		// Toggle player projectile size
 void() togglezaware;		// Toggle Z aware monsters
@@ -14,21 +62,16 @@ void() toggleupgradeaxe;	// Toggle Axe Upgrade (inventory only)
 void() toggleupgradessg;	// Toggle Shotgun Upgrade (inventory only)
 void() toggleupgradelg;		// Toggle Lightning Upgrade (inventory only)
 void() togglepixels;		// Toggle Texture modes
-
 void() togglecoopartifacts;	// Toggle COOP can drop artifacts
 void() togglecoopammoboxes;	// Toggle COOP ammo boxes to respawn
 void() togglecoopweapons;	// Toggle COOP weapons to respawn
 void() togglecoophealth;	// Toggle COOP health packs to respawn
 void() togglecooppowerups;	// Toggle COOP powerups to respawn
-
 void() toggleweather;		// Toggle weather systems
 float() query_weathersystem;// Query weather system console vars
 void(float hpshift) togglehpmax; // Toggle Health Max levels
 void() toggledevhelpers;	// Toggle dev helpers (mark/arrows)
 void() togglebodyremoval;	// Toggle monster body fade/removal
-void() togglenotargetblock;	// Toggle notarget block on items
-// void() togglenomwheelskip;	// Toggle no mouse wheel skip
-
 void() showbits_configflag;	// Display exact values of flag
 void() display_configflag;	// Display config flag
 void() display_playinfo;	// Display Player information
@@ -37,16 +80,12 @@ void() display_mapvar;		// Display Map Variables
 void() display_customkeys;	// Display Custom Key inventory
 void() CycleThroughHuds;	// Cycle through different custom HUDS
 void() CycleParticleDebug;	// Cycle particle debug messages
-
 void(float sigil_bit) givesigil;	// Gives runes
 void(float key_bit) givekey;		// Gives Silver/Gold key
-
 void() CycleWeaponCommand;			// Mouse wheel stuff
 void() CycleWeaponReverseCommand;	// Mouse wheel stuff
 void() CheatCommand;				// Classic impulse 9
-
 void() LavaShieldCheat;		// Can go for a swim in lava
-// void() AirTankCheat;		// Underwater breathing only
 void() BlastBeltCheat;		// Splash/Direct damage reduction
 void() JumpBootsCheat;		// Double/Triple/Quad jumping
 void() SharpshooterCheat;	// Reduces shotgun spread patterns
@@ -56,7 +95,6 @@ void() PentagramCheat;		// Takes no damage, loses armour!
 void() InvisibleCheat;		// Can sneak around like notarget
 void() QuadDamageCheat;		// 4 x damage modifier
 void() TomeOfPowerCheat;
-
 void() StartIntermissionCamera;
 float() impulse_playeronly;
 
@@ -73,35 +111,18 @@ void() display_randflags;	// Display current settings
 void() display_randupgrade;	// Display weapon upgrades
 void() reset_randomizer;	// Reset seed for randomizer
 
-/*======================================================================
- Show MOD name and version
-======================================================================*/
-void() display_version =
-{
-	// if (impulse_playeronly()) return;		// Player only
+// Show MOD name and version
+void() display_version = {
+	// Default return conditions (must be player)
+	if ( !(self.flags & FL_CLIENT) ) return;
 	
-	// self.impulse = 0;
-	// sprint(self,"\b[INFO]\b Arcane Dimensions V");
-	// lftos(self, mod_version, 1, 2, BUFFER_SPRINT);
-	// if (mod_patch > 0) {
-		// sprint(self, " Patch ");
-		// sprint(self, ftos(rint(mod_patch)));
-	// }
-	// if (mod_beta > 0) {
-		// sprint(self, " (Beta");
-		// sprint(self, ftos(rint(mod_beta)));
-		// sprint(self, ")");
-	// }
-	// sprint(self, " \n");
+	self.impulse = 0;
+	sprint(self,MOD_VERSION);
 };
 
-/*======================================================================
- Prints origin and mangle to console screen
- Useful for creating good locations for intermission camera's
- ** Been replaced with viewpos and setview console commands **
-======================================================================*/
-void() display_playinfo =
-{
+// Prints origin and mangle to console screen.  Useful for creating good locations for intermission camera's
+// ** Been replaced with viewpos and setview console commands in some engines **
+void() display_playinfo = {
 	if (impulse_playeronly()) return;		// Player only
 	
 	self.impulse = 0;
@@ -110,12 +131,8 @@ void() display_playinfo =
 	sprint(self,")\n");
 };
 
-
-/*======================================================================
- Prints which custom keys the player has in their inventory
-======================================================================*/
-void() display_customkeys =
-{
+// Prints which custom keys the player has in their inventory
+void() display_customkeys = {
 	local string ckey_str1, ckey_str2, ckey_str3, ckey_str4;
 	local float ckey_count;
 	
@@ -153,44 +170,38 @@ void() display_customkeys =
 		// if 4 keys are present, then squash the last two key names together
 		// The maximum amount of strings that centerprint can handle is 7
 		// A bit of shame, because only needed one more string!
-		if (ckey_count == 4)
+		if (ckey_count == 4) {
 			centerprint7 (self, "-[ \bArcane Key Inventory\b ]-\nYou have the following\n\n", ckey_str1, "\n", ckey_str2, "\n", ckey_str3, ckey_str4);
-		else
+		} else {
 			// Space out title and keys (does not print key 4)
 			centerprint7 (self, "-[ \bArcane Key Inventory\b ]-\nYou have the following\n\n", ckey_str1, "\n", ckey_str2, "\n", ckey_str3, "\n");
-	}
-	else 
+		}
+	} else {
 		// Should always say the state of the inventory
 		centerprint(self, "-[ \bArcane Key Inventory\b ]-\n\nIs Empty!\n"); 
+	}
 };
 
-/*======================================================================
- Cycle through all custom HUDs using scratch1 cvar
-======================================================================*/
-void() CycleThroughHuds =
-{
+// Cycle through all custom HUDs using scratch1 cvar
+void() CycleThroughHuds = {
 	local float hudact;
+
 	if (impulse_playeronly()) return;		// Player only
-	// Is the CSQC functionality enabled/disabled?
-	// This entity key is updated (on client) by CSQC when active
-	// spike has broken this check in qss dev builds :(
+	// Is the CSQC functionality enabled/disabled?.  This entity key is updated (on client) by CSQC when active
 	if (self.ext_csqc == FALSE) {
 		sprint(self, "[IMPULSE] Custom HUDS not supported!\n");
 		return;
 	}
-	// Have the HUDs been disabled on purpose?
-	if (cvar("cl_nocsqc") == 1 || cvar("scratch1") < 0) {
+	if (cvar("cl_nocsqc") == 1 || cvar("scratch1") < 0) { // Have the HUDs been disabled on purpose?
 		sprint(self, "[IMPULSE] Custom HUDS are disabled!\n");
 		return;
 	}
-	// Reset input buffer
-	self.impulse = 0;	
-	// Read current custom hud
-	hudact = cvar("scratch1");
-	// Move forward 1 hud and check range
-	hudact = hudact + 1;
+	self.impulse = 0; // Reset input buffer
+	hudact = cvar("scratch1"); // Read current custom hud
+	hudact = hudact + 1; // Move forward 1 hud and check range
 	if (hudact > 9) hudact = 0;
 	cvar_set("scratch1", ftos(hudact));
+
 	// Let the player know what hud is active
 	if (hudact == 1) centerprint(self, "1 = Inventory Around middle\n");
 	else if (hudact == 2) centerprint(self, "2 = Inventory on Screen Sides\n");
@@ -204,11 +215,8 @@ void() CycleThroughHuds =
 	else centerprint(self, "0 = Classic Quake HUD!\n");
 };
 
-/*======================================================================
- Standard error reporting
-======================================================================*/
-float() impulse_playeronly =
-{
+// Standard error reporting
+float() impulse_playeronly = {
 	if (!(self.flags & FL_CLIENT)) {
 		// Message goes to console, no client available!
 		dprint("[Impulse ");
@@ -219,22 +227,7 @@ float() impulse_playeronly =
 	else return FALSE;
 };
 
-//----------------------------------------------------------------------
-float() impulse_devonlymode =
-{
-	return FALSE;
-	// if (developer == FALSE) {
-		// sprint(self, "[Impulse ");
-		// sprint(self, ftos(self.impulse));
-		// sprint(self, "] only works in \bDeveloper\b mode!\n");
-		// return TRUE;
-	// }
-	// else return FALSE;
-};
-
-//----------------------------------------------------------------------
-void() impulse_notvalid =
-{
+void() impulse_notvalid = {
 	if (!(self.flags & FL_CLIENT)) return;
 	if (self.impulse > 0) {
 		sprint(self, "[Impulse ");
@@ -244,40 +237,31 @@ void() impulse_notvalid =
 	}
 };
 
-//----------------------------------------------------------------------
-float() impulse_activecameras =
-{
+float() impulse_activecameras = {
 	// no console feedback
 	if (intermission_running > 0) {
 		sprint(self, "[Impulse ");
 		sprint(self, ftos(self.impulse));
 		sprint(self, "] cannot work, \bIntermission\b active!\n");
 		return TRUE;
-	}
-	else if (cinematic_running > 0) {
+	} else if (cinematic_running > 0) {
 		sprint(self, "[Impulse ");
 		sprint(self, ftos(self.impulse));
 		sprint(self, "] cannot work, \bCinematic\b active!\n");
 		return TRUE;
-	}
-	else return FALSE;
+	} else return FALSE;
 };
 
-//----------------------------------------------------------------------
-float() impulse_dmcoopmode =
-{
+float() impulse_dmcoopmode = {
 	if (deathmatch > 0 || (coop > 0 && coop < 4)) {
 		sprint(self, "[Impulse ");
 		sprint(self, ftos(self.impulse));
 		sprint(self, "] does not work in \bDM\b or \bCoop\b mode!\n");
 		return TRUE;
-	}
-	else return FALSE;
+	} else return FALSE;
 };
 
-//----------------------------------------------------------------------
-float() impulse_cooponlymode =
-{
+float() impulse_cooponlymode = {
 	if (coop == FALSE) {
 		sprint(self, "[Impulse ");
 		sprint(self, ftos(self.impulse));
@@ -287,9 +271,7 @@ float() impulse_cooponlymode =
 	else return FALSE;
 };
 
-//----------------------------------------------------------------------
-float() impulse_skill03only =
-{
+float() impulse_skill03only = {
 	if (skill < 0 || skill > SKILL_NIGHTMARE) {
 		sprint(self, "[Impulse ");
 		sprint(self, ftos(self.impulse));
@@ -299,113 +281,8 @@ float() impulse_skill03only =
 	else return FALSE;
 };
 
-/*======================================================================
- ImpulseCommands
-======================================================================
-void() ImpulseCommands =
-{
-	if (self.impulse >= 1 && self.impulse <= 8) W_ChangeWeapon (self);
-	else if (self.impulse == 10) CycleWeaponCommand();
-	else if (self.impulse == 12) CycleWeaponReverseCommand();
-
-	// Only these MOD options can be changed via the console
-	else if (self.impulse == 100) toggleautoaim();		// Toggle auto aim
-	else if (self.impulse == 105) toggleprojsize();		// Toggle player proj size
-	else if (self.impulse == 110) togglezaware();		// Toggle Z aware monsters
-	else if (self.impulse == 115) togglepixels();		// Toggle texture modes
-	else if (self.impulse == 120) togglefootstep();		// Toggle footstep sound
-	else if (self.impulse == 125) toggleliquiddmg();	// Toggle liquid damage
-	else if (self.impulse == 130) toggleshotgunproj();	// Toggle SG Projectile
-	else if (self.impulse == 135) toggleshotguncase();	// Toggle SG Casing
-	else if (self.impulse == 137) toggletrackmissile();	// Toggle tracking missiles on death
-	else if (self.impulse == 140) display_version();	// Display MOD config flag
-	else if (self.impulse == 142) display_playinfo();	// Display Player information
-	else if (self.impulse == 145) StartIntermissionCamera();
-
-	else if (self.impulse == 150) togglecoopartifacts();// Toggle COOP can drop artifacts
-	else if (self.impulse == 152) togglecoopweapons();	// Toggle COOP weapons to respawn
-	else if (self.impulse == 154) togglecoophealth();	// Toggle COOP health to respawn
-	else if (self.impulse == 156) togglecoopammoboxes();// Toggle COOP ammo boxes to respawn
-	else if (self.impulse == 158) togglecooppowerups();	// Toggle COOP powerups to respawn
-
-	else if (self.impulse == 160) toggleweather();		// Toggle Weather Systems
-	else if (self.impulse == 162) togglehpmax(0.25);	// Toggle HP Max 0.25/0.5/0.75/1.0
-	else if (self.impulse == 164) togglehpmax(0.50);	// Toggle HP Max between 0.5/1.0
-	else if (self.impulse == 166) togglenotargetblock();// Toggle notarget block on items
-	else if (self.impulse == 168) togglenomwheelskip(); // Toggle no mouse wheel skip
-	else if (self.impulse == 170) togglebodyremoval();	// Toggle monster body fade/removal
-	else if (self.impulse == 175) display_customkeys();	// Display Custom Key inventory
-	else if (self.impulse == 178) CycleThroughHuds();	// Cycle through different custom HUDS
-
-	else if (self.impulse == 180) display_secrets();	// Display a list of secret locations
-	else if (self.impulse == 182) display_secretlocs();	// Display secret locations
-	else if (self.impulse == 184) display_monsleft();	// Display a list of monsters left
-	else if (self.impulse == 185) display_monsqty();	// Display a table of monster type/qty
-	else if (self.impulse == 186) display_ammostats();	// Display a list of Ammo Stats
-
-	else if (self.impulse == 190) display_randomizer();	// Display current random seed
-	else if (self.impulse == 192) display_randflags();	// Display current settings
-	else if (self.impulse == 194) display_randupgrade();// Display weapon upgrades
-	else if (self.impulse == 196) reset_randomizer();	// Reset seed for Chaos system
-	
-	// Only works developer only)
-	else if (self.impulse == 200) toggleupgradeaxe();	// Toggle Axe Upgrade
-	//else if (self.impulse == 202) toggleupgradehook();	// Toggle GrappleHook Upgrade
-	else if (self.impulse == 205) toggleupgradessg();	// Toggle Shotgun Upgrade
-	else if (self.impulse == 210) toggleupgradelg();	// Toggle Lightning Upgrade
-	else if (self.impulse == 220) display_configflag();	// Display MOD config flag
-	else if (self.impulse == 222) showbits_configflag();// Show exact values of flag
-	else if (self.impulse == 225) display_mapvar();		// Display all map variables
-	else if (self.impulse == 230) toggledevhelpers();	// Toggle Dev Helpers (mark/arrow)
-	else if (self.impulse == 235) CycleParticleDebug();	// Cycle particle debug
-
-	else if (self.impulse == 240) givesigil(SVR_RUNE_ALL);	// Give all sigils to player
-	else if (self.impulse == 241) givesigil(SVR_RUNE_KEY1);	// Give various sigil to player
-	else if (self.impulse == 242) givesigil(SVR_RUNE_KEY2);	// Will be reset on map load
-	else if (self.impulse == 243) givesigil(SVR_RUNE_KEY3);	// Mainly used for testing
-	else if (self.impulse == 244) givesigil(SVR_RUNE_KEY4);
-
-	else if (self.impulse == 245) givekey(IT_KEY1 + IT_KEY2);	// Both
-
-	// The classic all weapons+ammo cheat (should be developer=1)
-	else if (self.impulse == 9) CheatCommand();
-	// All artifact cheat commands
-	else if (self.impulse == 246) LavaShieldCheat();
-	else if (self.impulse == 247) AirTankCheat();
-	else if (self.impulse == 248) BlastBeltCheat();
-	else if (self.impulse == 249) JumpBootsCheat();
-	else if (self.impulse == 250) SharpshooterCheat();
-	else if (self.impulse == 251) NailPiercerCheat();
-	else if (self.impulse == 252) EnvSuitCheat();
-	else if (self.impulse == 253) PentagramCheat();
-	else if (self.impulse == 254) InvisibleCheat();
-	else if (self.impulse == 255) QuadDamageCheat();
-
-	self.impulse = 0;
-};
-
-//======================================================================
- The MOD can be customizied from three different source:
- quake.rc < worldspawn < impulse commands (top priority)
- 
- The serverflags is the ONLY variable that is passed between MAP loads
- and that variable is not available straightaway! Once the worldspawn
- is loaded (first thing to happen) the serverflags is still empty
- and the functions have to cope with it 'out of sync' until later.
- 
- after worldspawn is loaded, the combination of the quake.rc (TEMP1)
- is merged with the keys on worldspawn and all spawning functions
- use the configflags until it can be sync'd with serverflags.
- 
- The configflags is setup to be temporary so that any previous value
- from a quickload does not interfere with it.
- 
-======================================================================*/
-// Assume that serverflags not setup yet, merge worldspawn with configflag
-// Once serverflags available, then sync everything together
-void(float regbitflag, float worldvalue) update_worldspawn =
-{
-	// Is the bit value TRUE?
+// Assume that serverflags not setup yet, merge worldspawn with configflag once serverflags available, then sync everything together
+void(float regbitflag, float worldvalue) update_worldspawn = {
 	if (worldvalue > 0) configflag = configflag | regbitflag;
 	// Only take about a bit value from configflag if bit value is present
 	else if (worldvalue < 0) {
@@ -413,12 +290,8 @@ void(float regbitflag, float worldvalue) update_worldspawn =
 	}
 };
 
-//----------------------------------------------------------------------
-// The worldspawn key values always override the quake.rc values and
-// should be merged with the console variable when loading a map
-// serverflags is not available before spawn functions
-void() sycn_worldspawn =
-{
+// The worldspawn key values always override the quake.rc values and should be merged with the console variable when loading a map serverflags is not available before spawn functions
+void() sycn_worldspawn = {
 	// Check console variables defined in quake.rc file
 	if (cvar("saved1") > 0) update_worldspawn(SVR_SPRPARTON, TRUE);
 	if (cvar("saved2") > 0) update_worldspawn(SVR_FOOTSTEP, TRUE);
@@ -437,34 +310,26 @@ void() sycn_worldspawn =
 	update_worldspawn(SVR_LIQDAM, self.no_liquiddmg);
 };
 
-//----------------------------------------------------------------------
 // Reset the serverflag to console + worldspawn settings
-// This only needs to be done when loading a new map or changelevel
-// quickload cannot run this function it will damage inventory
-void() sync_serverflags =
-{
+// This only needs to be done when loading a new map or changelevel quickload cannot run this function it will damage inventory
+void() sync_serverflags = {
 	local float checkflag;
 	
 	if (serverflags & SVR_LIVE) {
 		dprint("\b[SERVERFLAG]\b MAP LOAD reset/sync\n");
 		// Take 1-8 runes, 9-16 worldspawn merge, 17-23 mod/console options
 		checkflag = (serverflags & SVR_RUNEFLAG) + (temp1flag & SVR_WORLDFLAG) + (configflag & SVR_HIGHFLAG);
-		// Update the serverflags ready for future updates
-		serverflags =  configflag = checkflag;	
+		serverflags =  configflag = checkflag; // Update the serverflags ready for future updates
 	}
 };
 
-//----------------------------------------------------------------------
 // Update configflag and if the serverflags is active, update that as well!
-void(float regbitflag, float regbitvalue) update_configflag =
-{
-	// Is the bit value TRUE?
+void(float regbitflag, float regbitvalue) update_configflag = {
 	if (regbitvalue == TRUE) {
 		configflag = configflag | regbitflag;
 		if (serverflags & SVR_LIVE) serverflags = serverflags | regbitflag;
-	}
-	// If the bit value FALSE
-	else {
+	} else {
+		// If the bit value is FALSE
 		configflag = configflag - (configflag & regbitflag);
 		if (serverflags & SVR_LIVE) {
 			serverflags = serverflags - (serverflags & regbitflag);
@@ -482,26 +347,20 @@ void(float regbitflag, float regbitvalue) update_configflag =
 		else temp1flag = temp1flag - (temp1flag & regbitflag);
 		// Write any changes to the console variable (TEMP1)
 		cvar_set("temp1", ftos(temp1flag));
-	}		
+	}
 };
 
-//----------------------------------------------------------------------
-float(float regbitflag) query_configflag =
-{
+float(float regbitflag) query_configflag = {
 	// Return bitflag value so multiple bits can be tested together
 	return (configflag & regbitflag);
 };
 
-//----------------------------------------------------------------------
-float(float regbitflag) query_temp1flag =
-{
+float(float regbitflag) query_temp1flag = {
 	// Return bitflag value so multiple bits can be tested together
 	return (temp1flag & regbitflag);
 };
 
-//----------------------------------------------------------------------
-void() showbits_configflag =
-{
+void() showbits_configflag = {
 	local float loopcnt, bitcnt;
 	
 	dprint("\n\b[CONFIG]\b Configflag (");
@@ -545,35 +404,24 @@ void() showbits_configflag =
 	dprint("-----------------------------------\n");
 };
 
-//----------------------------------------------------------------------
-// Once global variables are available (client/server is setup)
-// Sync the serverflag with the configflag
-//----------------------------------------------------------------------
-void() sync_configflag =
-{
+// Once global variables are available (client/server is setup).  Sync the serverflag with the configflag
+void() sync_configflag = {
 	local float checkflag;
 	
-	// At this point the live data is all over the place and needs to be merged
-	// The serverflag can contain (rune keys and console options) if quickload
-	// and the configflag contains default + worldspawn keys
+	// At this point the live data is all over the place and needs to be merged.
+	// The serverflag can contain (rune keys and console options) if quickload and the configflag contains default + worldspawn keys
 	if (serverflags & SVR_LIVE) {
 		dprint("\b[SERVERFLAG]\b LIVE data detected\n");
 		// Take 1-16 runes & spawn options, 17-23 mod/console options
 		checkflag = (serverflags & SVR_LOWFLAG) + (configflag & SVR_HIGHFLAG);
-
-		// Make sure all flags are in sync with each other
-		configflag = serverflags = checkflag | SVR_LIVE;
-	}
-	else {
+		configflag = serverflags = checkflag | SVR_LIVE; // Make sure all flags are in sync with each other
+	} else {
 		dprint("\b[SERVERFLAG]\b new game detected\n");
-		// Update the serverflags ready for future updates
-		serverflags =  configflag | SVR_LIVE;	
+		serverflags =  configflag | SVR_LIVE; // Update the serverflags ready for future updates
 	}
 };
 
-//----------------------------------------------------------------------
-void() display_configflag =
-{
+void() display_configflag = {
 	// No warning message, called from client.qc
 	if (developer == FALSE) return;
 
@@ -583,7 +431,6 @@ void() display_configflag =
 	if (configflag & SVR_LIVE) dprint(") L\n");
 	else dprint(")\n");
 	dprint("--------------------------------------\n");
-
 	// Particle system
 	if (query_configflag(SVR_PARTICLES)) dprint("+ Particle System enabled\n");
 	else dprint("- Particle System disabled\n");
@@ -743,8 +590,7 @@ void() display_configflag =
 		dprint(ftos(map_falldmgwater)); dprint(")\n");
 	}
 	
-	// Visual settings - fog / wateralpha / gravity
-	// AD 1.8 removed SVR_NOFOGCMDS (winquake idea)
+	// Visual settings - fog / wateralpha / gravity.  AD 1.8 removed SVR_NOFOGCMDS (winquake idea)
 	if (fog_active && fog_control) {
 		dprint("+ Gfog ("); 
 		lftos(self, fog_control.fog_currden, 2,3, BUFFER_DPRINT); dprint(")(");
@@ -803,19 +649,13 @@ void() display_configflag =
 		if (coop_powerups == FALSE) dprint("- COOP powerups respawn FALSE\n");
 		else dprint("+ COOP powerups respawn TRUE\n");
 	}
-	
 	dprint("--------------------------------------\n");
 };
 
-/*======================================================================
- Give the player various sigils (serverflag)
- Give the player silver/gold keys
-======================================================================*/
-void(float sigil_bit) givesigil =
-{
+// Give the player various sigils (serverflag)
+void(float sigil_bit) givesigil = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
-	if (impulse_devonlymode()) return;		// Dev mode only
 
 	dprint("\b[SIGIL]\b Server updated ("); 
 	dprint(ftos(sigil_bit)); dprint(")\n");
@@ -825,12 +665,10 @@ void(float sigil_bit) givesigil =
 	if (sigil_bit & SVR_RUNE_KEY4) update_configflag(SVR_RUNE_KEY4,TRUE);
 };
 
-//----------------------------------------------------------------------
-void(float key_bit) givekey =
-{
+// Give the player silver/gold keys
+void(float key_bit) givekey = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
-	if (impulse_devonlymode()) return;		// Dev mode only
 
 	dprint("\b[KEYS]\b Inventory updated ("); 
 	dprint(ftos(key_bit)); dprint(")\n");
@@ -838,11 +676,7 @@ void(float key_bit) givekey =
 	if (key_bit & IT_KEY2) self.items = self.items | IT_KEY2;
 };
 
-/*======================================================================
- TOGGLE MOD features
-======================================================================*/
-void() toggleautoaim =
-{
+void() toggleautoaim = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	
@@ -857,9 +691,7 @@ void() toggleautoaim =
 	else sprint(self, "OFF)\n");
 };
 
-//----------------------------------------------------------------------
-void() toggleprojsize = 
-{
+void() toggleprojsize = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	
@@ -873,9 +705,7 @@ void() toggleprojsize =
 	else sprint(self, "LARGE)\n");
 };
 
-//----------------------------------------------------------------------
-void() togglezaware =
-{	
+void() togglezaware = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	
@@ -889,29 +719,24 @@ void() togglezaware =
 	else sprint(self, "Enabled)\n");
 };
 
-//----------------------------------------------------------------------
-void() togglepixels =
-{	
+void() togglepixels = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	
 	self.impulse = 0;	
 	sprint(self, "\b[SETTINGS]\b texture filtering ("); 
 	if (pixelmode == TRUE) {
-		pixelmode = FALSE;
+		pixelmode = FALSE; // WHAT AM I DOIN!!!!  OOOOOOH!.....fine grumble grumble
 		Safe_stuffcmd(self, "\ngl_texturemode GL_LINEAR_MIPMAP_LINEAR\n");
 		sprint(self, "blurry)\n");
-	}
-	else {
+	} else {
 		pixelmode = TRUE;
 		Safe_stuffcmd(self, "\ngl_texturemode GL_NEAREST_MIPMAP_LINEAR\n");
 		sprint(self, "crispy)\n");
 	}
 };
 
-//----------------------------------------------------------------------
-void() togglefootstep =
-{
+void() togglefootstep = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	
@@ -925,9 +750,7 @@ void() togglefootstep =
 	else sprint(self, "ON)\n");
 };
 
-//----------------------------------------------------------------------
-void() toggleliquiddmg =
-{
+void() toggleliquiddmg = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	
@@ -941,11 +764,7 @@ void() toggleliquiddmg =
 	else sprint(self, "ON)\n");
 };
 
-/*======================================================================
- TOGGLE AI path extra info (default ON)
-======================================================================*/
-void() toggleaipath =
-{
+void() toggleaipath = {
 	// Default return conditions (must be player)
 	if ( !(self.flags & FL_CLIENT) ) return;
 	
@@ -961,9 +780,7 @@ void() toggleaipath =
 	sprint(self, "Reload / Quickload map to see changes!\n");
 };
 
-//----------------------------------------------------------------------
-void() toggleshotgunproj =
-{
+void() toggleshotgunproj = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	
@@ -977,9 +794,7 @@ void() toggleshotgunproj =
 	else sprint(self, "ON)\n");
 };
 
-//----------------------------------------------------------------------
-void() toggleshotguncase =
-{
+void() toggleshotguncase = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	
@@ -993,25 +808,7 @@ void() toggleshotguncase =
 	else sprint(self, "ON)\n");
 };
 
-//----------------------------------------------------------------------
-// void() togglenomwheelskip =
-// {
-	// if (impulse_activecameras()) return;	// Are cameras active
-	// if (impulse_playeronly()) return;		// Player only
-
-	// self.impulse = 0;
-	// Toggle the state of the console variable using the server flag
-	// if (query_configflag(SVR_MWHEELSKIP)) update_configflag(SVR_MWHEELSKIP, FALSE);
-	// else update_configflag(SVR_MWHEELSKIP, TRUE);
-	
-	// sprint(self, "\b[Impulse]\b Mouse Wheel NG/SNG skip ("); 
-	// if (query_configflag(SVR_MWHEELSKIP)) sprint(self, "OFF)\n");
-	// else sprint(self, "ON)\n");
-// };
-
-//----------------------------------------------------------------------
-void() toggletrackmissile = 
-{
+void() toggletrackmissile = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	
@@ -1025,9 +822,7 @@ void() toggletrackmissile =
 	else sprint(self, "ON)\n");
 };
 
-//----------------------------------------------------------------------
-void() togglecoopartifacts =
-{	
+void() togglecoopartifacts = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	if (impulse_cooponlymode()) return;		// Coop only
@@ -1037,16 +832,13 @@ void() togglecoopartifacts =
 	if (coop_artifacts == TRUE) {
 		coop_artifacts = FALSE;
 		sprint(self, "OFF)\n");
-	}
-	else {
+	} else {
 		coop_artifacts = TRUE;
 		sprint(self, "ON)\n");
 	}
 };
 
-//----------------------------------------------------------------------
-void() togglecoopweapons =
-{	
+void() togglecoopweapons = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	if (impulse_cooponlymode()) return;		// Coop only
@@ -1056,16 +848,13 @@ void() togglecoopweapons =
 	if (coop_weapons == TRUE) {
 		coop_weapons = FALSE;
 		sprint(self, "ON)\n");
-	}
-	else {
+	} else {
 		coop_weapons = TRUE;
 		sprint(self, "OFF)\n");
 	}
 };
 
-//----------------------------------------------------------------------
-void() togglecoopammoboxes =
-{	
+void() togglecoopammoboxes = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	if (impulse_cooponlymode()) return;		// Coop only
@@ -1075,16 +864,13 @@ void() togglecoopammoboxes =
 	if (coop_ammoboxes == TRUE) {
 		coop_ammoboxes = FALSE;
 		sprint(self, "OFF)\n");
-	}
-	else {
+	} else {
 		coop_ammoboxes = TRUE;
 		sprint(self, "ON)\n");
 	}
 };
 
-//----------------------------------------------------------------------
-void() togglecoophealth =
-{	
+void() togglecoophealth = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	if (impulse_cooponlymode()) return;		// Coop only
@@ -1094,16 +880,13 @@ void() togglecoophealth =
 	if (coop_health == TRUE) {
 		coop_health = FALSE;
 		sprint(self, "OFF)\n");
-	}
-	else {
+	} else {
 		coop_health = TRUE;
 		sprint(self, "ON)\n");
 	}
 };
 
-//----------------------------------------------------------------------
-void() togglecooppowerups =
-{	
+void() togglecooppowerups = {	
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	if (impulse_cooponlymode()) return;		// Coop only
@@ -1113,27 +896,19 @@ void() togglecooppowerups =
 	if (coop_powerups == TRUE) {
 		coop_powerups = FALSE;
 		sprint(self, "OFF)\n");
-	}
-	else {
+	} else {
 		coop_powerups = TRUE;
 		sprint(self, "ON)\n");
 	}
 };
 
-//----------------------------------------------------------------------
-float() query_weathersystem =
-{
-	// No advanced engine active
-	if (!ext_active) return FALSE;
-	// No rain/show particle extensions
-	if (!ext_dprain || !ext_dpsnow) return FALSE;
-	// Finally check weather sys variable (unreliable)
-	return weathersys;
+float() query_weathersystem = {
+	if (!ext_active) return FALSE; // No advanced engine active
+	if (!ext_dprain || !ext_dpsnow) return FALSE; // No rain/show particle extensions
+	return weathersys; // Finally check weather sys variable (unreliable)
 };
 
-//----------------------------------------------------------------------
-void() toggleweather =
-{
+void() toggleweather = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 
@@ -1161,18 +936,17 @@ void() toggleweather =
 	
 	// FTE/QSS only supports one console command for weather
 	// Engine does not remember setting and resets it
-	if (checkextension("FTE_SV_POINTPARTICLES"))
+	if (checkextension("FTE_SV_POINTPARTICLES")) {
 		if (weathersys == TRUE) Safe_stuffcmd(self, "\nr_part_rain 1\n");
 		else Safe_stuffcmd(self, "\nr_part_rain 0\n");
-	else {
+	} else {
 		// DP engine remembers rain/snow weather settings
 		// DP has separate commands for weather types
 		if (weathersys == TRUE) {
 			// Weather enabled
 			Safe_stuffcmd(self, "\ncl_particles_rain 1\n");
 			Safe_stuffcmd(self, "\ncl_particles_snow 1\n");
-		}
-		else {
+		} else {
 			// Weather disabled
 			Safe_stuffcmd(self, "\ncl_particles_rain 0\n");
 			Safe_stuffcmd(self, "\ncl_particles_snow 0\n");
@@ -1180,9 +954,7 @@ void() toggleweather =
 	}	
 };
 
-//----------------------------------------------------------------------
-void() togglebodyremoval =
-{
+void() togglebodyremoval = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 
@@ -1197,24 +969,7 @@ void() togglebodyremoval =
 	else sprint(self, "OFF)\n");
 };
 
-//----------------------------------------------------------------------
-void() togglenotargetblock =
-{
-	if (impulse_activecameras()) return;	// Are cameras active
-	if (impulse_playeronly()) return;		// Player only
-
-	self.impulse = 0;
-	// Toggle notarget block on items
-	map_notargetblock =  1 - map_notargetblock;
-	
-	sprint(self, "\b[Impulse]\b notarget item block ("); 
-	if (map_notargetblock > 0) sprint(self, "OFF)\n");
-	else sprint(self, "ON)\n");
-};
-
-//----------------------------------------------------------------------
-void() display_randomizer =
-{
+void() display_randomizer = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 
@@ -1223,9 +978,7 @@ void() display_randomizer =
 	displaycenter_randomseed();
 };
 
-//----------------------------------------------------------------------
-void() display_randflags =
-{
+void() display_randflags = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 
@@ -1234,9 +987,7 @@ void() display_randflags =
 	displaydebug_randflags();
 };
 
-//----------------------------------------------------------------------
-void() display_randupgrade =
-{
+void() display_randupgrade = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 
@@ -1245,9 +996,7 @@ void() display_randupgrade =
 	displaydebug_weaponupgrades();
 };
 
-//----------------------------------------------------------------------
-void() reset_randomizer =
-{
+void() reset_randomizer = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 
@@ -1256,62 +1005,36 @@ void() reset_randomizer =
 	rnd_ResetRandomSeed(RND_ACTIVERESET);
 };
 
-/*======================================================================
- Require DEVELOPER mode to be active
-======================================================================*/
-//----------------------------------------------------------------------
-void(float hpshift) togglehpmax =
-{
+// Cycle health in 25 increments, 25, 50, 75, ...250, 25... Skips 0.
+// or in 50 increments, 50, 100, ...250, 50... Skips 0.
+void(float hpshift) togglehpmax = {
 	local entity playent;
 	
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
-	if (impulse_devonlymode()) return;		// Dev mode only
 	if (impulse_skill03only()) return;		// skill 0-3 only
 	
 	self.impulse = 0;
+	sprint(self, "\b[Impulse]\b Change Maximum Health. Was: ");
+	sprint(self, ftos(self.max_health));
+	self.max_health = self.max_health + hpshift;
+	if (self.max_health > HEAL_MEGAMAX) self.max_health = hpshift;
+	if (self.max_health < 1) self.max_health = 25;
+	self.health = self.max_health;
+	sprint(self, ", Now: "); 
+	sprint(self, ftos(self.max_health));
+	sprint(self, "\n");
 	
-	// Setup default
-	if (self.tog_health <= 0) self.tog_health = 1;
-
-	// Update visuals
-	sprint(self, "\b[Impulse]\b Max HP/Mega ("); 
-	sprint(self, ftos(HEAL_PLAYMAX * self.tog_health));
-	// Update toggle health values + check for errors
-	self.tog_health = self.tog_health - hpshift;
-	if (self.tog_health <= 0) self.tog_health = 1;
-	// Update visuals
-	sprint(self, ") - ("); 
-	sprint(self, ftos(HEAL_PLAYMAX * self.tog_health));
-	sprint(self, ")\n");
-	
-	// Find first client
-	playent = find(world, classname, "player");
-	while (playent) {
-		playent.tog_health = self.tog_health;
-		// Have to work from default constants
-		playent.max_health = HEAL_PLAYMAX * playent.tog_health;
-		playent.mega_health = HEAL_MEGAMAX * playent.tog_health;
-		// Double check max is not negative or zero
-		if (playent.max_health <= 0) playent.max_health = HEAL_PLAYMAX;
-		if (playent.mega_health <= 0) playent.mega_health = HEAL_MEGAMAX;
-		// Cap health with new/current maximum
-		if (playent.health > playent.max_health) {
-			// Tiny damage to trigger client animation/sound
-			T_Damage(playent, world, world, 1, NOARMOR);
-			playent.health = playent.max_health;	
-		}			
-		// Find more (coop) player/clients
-		playent = find(playent, classname, "player");
+	playent = find(world, classname, "player"); // Have to do all, we could be player 3 for all we know
+	while (playent) { // Find first client, likely self in singleplayer
+		playent.health = playent.max_health = self.max_health;	
+		playent = find(playent, classname, "player"); // Find more (coop) player/clients
 	}	
 };
 
-//----------------------------------------------------------------------
-void() toggleupgradeaxe =
-{
+void() toggleupgradeaxe = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
-	if (impulse_devonlymode()) return;		// Dev mode only
 	if (impulse_skill03only()) return;		// skill 0-3 only
 	
 	self.impulse = 0;
@@ -1319,84 +1042,18 @@ void() toggleupgradeaxe =
 		dprint("\b[Impulse]\b Shadow Axe Removed\n"); 
 		self.moditems = self.moditems - IT_UPGRADE_AXE;
 		update_configflag(SVR_UPDAXE, FALSE);
-	}
-	else {
-		// Cannot have Shadow Axe AND Grapple Hook
-		// if (self.moditems & IT_UPGRADE_GHOOK) {
-			// dprint ("\b[Impulse]\b Removing Grapple Hook!\n");
-			// self.moditems = self.moditems - (self.moditems & IT_UPGRADE_GHOOK);
-			// update_configflag(SVR_UPDGHOOK, FALSE);
-		// }
+	} else {
 		dprint("\b[Impulse]\b Shadow Axe Added\n"); 
 		self.moditems = self.moditems | IT_UPGRADE_AXE;
 		update_configflag(SVR_UPDAXE, TRUE);
-		// Switch to new weapon
-		self.weapon = IT_AXE;
+		self.weapon = IT_AXE; // Switch to new weapon
 	}
-		
-	if (self.weapon == IT_AXE) W_SetCurrentAmmo(self);
-};
-
-/*
-// Forward compiler reference
-void() GrappleHook_Setup;
-void() GrappleHook_Display;
-//----------------------------------------------------------------------
-void() toggleupgradehook =
-{
-	if (impulse_activecameras()) return;	// Are cameras active
-	if (impulse_playeronly()) return;		// Player only
-	if (impulse_devonlymode()) return;		// Dev mode only
-	if (impulse_skill03only()) return;		// skill 0-3 only
-	
-	self.impulse = 0;
-	// Does the hook entity exist?
-	if (!self.hookent) GrappleHook_Setup();
-	
-	// Have grapple hook already?
-	if (self.moditems & IT_UPGRADE_GHOOK) {
-		if (self.gh_hookstyle == GNC_HOOKLINE) {
-			self.gh_hookstyle = GNC_HOOKBOOST;
-			dprint("\b[Impulse]\b BOOST Grapple Hook Style\n"); 
-		}
-		// Trick version not implemented, cycle around instead
-		//else if (self.gh_hookstyle == GNC_HOOKBOOST) {
-			//self.gh_hookstyle = GNC_HOOKTRICK;
-			//dprint("\b[Impulse]\b TRICK Grapple Hook Style\n"); 
-		//}
-		else {
-			dprint("\b[Impulse]\b Grapple Hook Removed!\n"); 
-			self.moditems = self.moditems - IT_UPGRADE_GHOOK;
-			update_configflag(SVR_UPDGHOOK, FALSE);
-		}
-	}
-	else {
-		// Cannot have Shadow Axe AND Grapple Hook
-		if (self.moditems & IT_UPGRADE_AXE) {
-			dprint("\b[Impulse]\b Removing Shadow Axe!\n");
-			self.moditems = self.moditems - (self.moditems & IT_UPGRADE_AXE);
-			update_configflag(SVR_UPDAXE, FALSE);
-		}
-		dprint("\b[Impulse]\b LINE Grapple Hook Added\n"); 
-		self.moditems = self.moditems | IT_UPGRADE_GHOOK;
-		self.gh_hookstyle = GNC_HOOKLINE;
-		update_configflag(SVR_UPDGHOOK, TRUE);
-		// Switch to new weapon
-		self.weapon = IT_AXE;
-	}
-		
-	// Display Hook stats and update v_model
-	GrappleHook_Display();
 	W_SetCurrentAmmo(self);
 };
-*/
 
-//----------------------------------------------------------------------
-void() toggleupgradessg =
-{
+void() toggleupgradessg = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
-	if (impulse_devonlymode()) return;		// Dev mode only
 	if (impulse_skill03only()) return;		// skill 0-3 only
 	
 	self.impulse = 0;
@@ -1415,20 +1072,16 @@ void() toggleupgradessg =
 	W_SetCurrentAmmo(self);
 };
 
-//----------------------------------------------------------------------
-void() toggleupgradelg =
-{
+void() toggleupgradelg = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
-	if (impulse_devonlymode()) return;		// Dev mode only
 	if (impulse_skill03only()) return;		// skill 0-3 only
 	
 	self.impulse = 0;
 	if (self.moditems & IT_UPGRADE_LG) {
 		dprint("\b[Impulse]\b Plasma Gun Removed\n"); 
 		self.moditems = self.moditems - IT_UPGRADE_LG;
-	}
-	else {
+	} else {
 		dprint("\b[Impulse]\b Plasma Gun Added\n"); 
 		self.moditems = self.moditems | IT_UPGRADE_LG;
 		// Switch to new weapon
@@ -1439,12 +1092,9 @@ void() toggleupgradelg =
 	W_SetCurrentAmmo(self);
 };
 
-//----------------------------------------------------------------------
-void() toggledevhelpers =
-{
+void() toggledevhelpers = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
-	if (impulse_devonlymode()) return;		// Dev mode only
 
 	self.impulse = 0;
 
@@ -1457,30 +1107,20 @@ void() toggledevhelpers =
 	else sprint(self, "ON)\n");
 };
 
-//----------------------------------------------------------------------
-void() CycleParticleDebug =
-{
+void() CycleParticleDebug = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
-	if (impulse_devonlymode()) return;		// Dev mode only
 	
 	self.impulse = 0;
-	
 	part_debug = part_debug + 1;
 	if (part_debug > PARTICLE_DEBUGMAX) part_debug = 0;
-
 	sprint(self, "\b[Impulse]\b Particle debug level (");
 	sprint(self, ftos(part_debug));
 	sprint(self, ")\n");
 };
 
-
-/*======================================================================
- IMPULSE 9
- Gives the player certain weapons and ammo (CHEAT COMMAND)
-======================================================================*/
-void() CheatCommand =
-{
+// Gives the player all non-override weapons and ammo
+void() CheatCommand = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
@@ -1490,8 +1130,8 @@ void() CheatCommand =
 	dprint("\b[Impulse 249]\b Weapon Cheat Command\n");
 	dprint("- Use Impulse 245 to get silver/gold keys!\n");
 	self.impulse = 0;
-	self.ammo_rockets = 100;
-	self.ammo_nails = 150;
+	self.ammo_rockets = self.maxrockets;
+	self.ammo_nails = self.maxnails;
 	self.ammo_shells = 150;
 	self.ammo_cells = 150;
 	self.ammo_lava_nails = 200;
@@ -1502,7 +1142,6 @@ void() CheatCommand =
 	self.ammo_bloodcrystals = 100;	
 	self.ammo_voidshards = 100;	
 	self.ammo_elemental = 100;	
-
 	self.moditems = self.moditems | IT_UPGRADE_AXE | IT_UPGRADE_SSG | IT_ICE | 
 									IT_MACE | IT_VOID_STAFF | IT_FLAK | IT_SANGUINATORS | 
 									IT_SCIMITAR | IT_RAPIER; // Left out IT_UPGRADE_LG since I like the LG better -Qmaster
@@ -1575,30 +1214,9 @@ void() ToggleDragonArmor = {
 	Safe_stuffcmd (self, "bf\n");
 };
 
-/*======================================================================
- Artifact IMPULSE commands
-======================================================================*/
-// void() AirTankCheat =
-// {
-	// if (impulse_activecameras()) return;	// Are cameras active
-	// if (impulse_playeronly()) return;		// Player only
-	// if (impulse_devonlymode()) return;		// Dev mode only
-	// if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
-	// if (impulse_skill03only()) return;		// skill 0-3 only
-
-	// self.impulse = 0;
-	// dprint("\b[Impulse 247]\b Air Tank Cheat\n");
-	// self.wetsuit_time = 1;
-	// self.wetsuit_finished = POWERUP_VANIA;	// Infinite
-	// self.moditems = self.moditems | IT_ARTWETSUIT;
-// };
-
-//----------------------------------------------------------------------
-void() LavaShieldCheat =
-{
+void() LavaShieldCheat = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
-	if (impulse_devonlymode()) return;		// Dev mode only
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
@@ -1609,12 +1227,9 @@ void() LavaShieldCheat =
 	self.moditems = self.moditems | IT_ARTLAVASHIELD;
 };
 
-//----------------------------------------------------------------------
-void() BlastBeltCheat =
-{
+void() BlastBeltCheat = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
-	if (impulse_devonlymode()) return;		// Dev mode only
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
@@ -1625,12 +1240,9 @@ void() BlastBeltCheat =
 	self.moditems = self.moditems | IT_ARTBLASTBELT;
 };
 
-//----------------------------------------------------------------------
-void() JumpBootsCheat =
-{
+void() JumpBootsCheat = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
-	if (impulse_devonlymode()) return;		// Dev mode only
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
@@ -1644,12 +1256,9 @@ void() JumpBootsCheat =
 	self.moditems = self.moditems | IT_ARTJUMPBOOTS;
 };
 
-//----------------------------------------------------------------------
-void() SharpshooterCheat =
-{
+void() SharpshooterCheat = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
-	if (impulse_devonlymode()) return;		// Dev mode only
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
@@ -1661,12 +1270,9 @@ void() SharpshooterCheat =
 	self.moditems = self.moditems | IT_ARTSHARP;
 };
 
-//----------------------------------------------------------------------
-void() NailPiercerCheat =
-{
+void() NailPiercerCheat = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
-	if (impulse_devonlymode()) return;		// Dev mode only
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
@@ -1678,12 +1284,9 @@ void() NailPiercerCheat =
 	self.moditems = self.moditems | IT_ARTPIERCE;
 };
 
-//----------------------------------------------------------------------
-void() EnvSuitCheat =
-{
+void() EnvSuitCheat = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
-	if (impulse_devonlymode()) return;		// Dev mode only
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
@@ -1694,12 +1297,9 @@ void() EnvSuitCheat =
 	self.items = self.items | IT_SUIT;
 };
 
-//----------------------------------------------------------------------
-void() PentagramCheat =
-{
+void() PentagramCheat = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
-	if (impulse_devonlymode()) return;		// Dev mode only
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
@@ -1710,9 +1310,7 @@ void() PentagramCheat =
 	self.items = self.items | IT_INVULNERABILITY;
 };
 
-//----------------------------------------------------------------------
-void() InvisibleCheat =
-{
+void() InvisibleCheat = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
@@ -1725,9 +1323,7 @@ void() InvisibleCheat =
 	self.items = self.items | IT_INVISIBILITY;
 };
 
-//----------------------------------------------------------------------
-void() QuadDamageCheat =
-{
+void() QuadDamageCheat = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
@@ -1740,9 +1336,7 @@ void() QuadDamageCheat =
 	self.items = self.items | IT_QUAD;
 };
 
-//----------------------------------------------------------------------
-void() TomeOfPowerCheat =
-{
+void() TomeOfPowerCheat = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode

@@ -83,29 +83,19 @@ float() archer_check_shot = {
 
     traceline (spot1, spot2, ARROW_FLY, self);
 
-    if (trace_ent != targ)
-    {
+    if (trace_ent != targ) {
         // Didn't hit the intended target.  Either something else blocked
         // the scan, or the scan was complete and could not hit the target.
         // Standard 1.06 progs would just return FALSE.
         if (trace_fraction < 1) {   // don't have a clear shot
-            if (DontHurtMe (trace_ent)) return FALSE;   // Don't shoot whoever is in line of fire.
-
+			if (!(trace_ent.flags & FLx_CREATURE) || self.enemy.solid <= SOLID_TRIGGER || Align_Match(self,trace_ent) || trace_ent.enemy == self || trace_ent == self.oldenemy) return FALSE; // Don't shoot whoever is in line of fire.
             // Otherwise, whoever is in the way is a potential enemy and
             // hitting him instead of the intended target with missile
             // attacks is still useful.
-        }
-        else
-        {   // Target is non-solid.  It could be a wraith, downed zombie,
-            // or something in spectator mode.  Attack only if target is
-            // a ghost.
-            if (targ.takedamage != DAMAGE_AIM)
-                return FALSE;
-            //if (!IsGhost (targ))
-                //return FALSE;
-// Commented out because those with no mindex should have DAMAGE_NO too.
-//            if (!targ.modelindex)
-//                return FALSE;
+        } else {
+			// Target is non-solid.  It could be a wraith, downed zombie, or something in spectator mode.  Attack only if target is a ghost.
+            if (targ.takedamage != DAMAGE_AIM) return FALSE;
+            //if (!IsGhost (targ)) return FALSE;
         }
     }
 
@@ -114,50 +104,10 @@ float() archer_check_shot = {
     // FIXME:  Is the 'fish check' necessary here?
     if (trace_inopen)
         if (trace_inwater)
-            if (!(self.ryuflags & RYU_ALERT))   // PM:  Alert support.
-                return FALSE;            // sight line crossed contents
+            if (!(self.ryuflags & RYU_ALERT)) return FALSE;            // sight line crossed contents
 
     return TRUE;
 };
-
-// Basically a copy of CheckAttack except for spot1 and spot2 in the
-// traceline check.
-void() ArcherCheckAttack = {
-    if (enemy_range == RANGE_FAR)
-        return;   // Don't call traceline again when we don't need to.
-    if (!archer_check_shot ())
-        return;
-    if (time < self.attack_finished)
-        return;
-
-    local   float   chance;
-
-    if (enemy_range == RANGE_MELEE)
-    {
-        chance = 0.9;
-        self.attack_finished = 0;
-    }
-    else if (enemy_range == RANGE_NEAR)
-            chance = 0.4;
-    else if (enemy_range == RANGE_MID)
-            chance = 0.1;
-    else //if (enemy_range == RANGE_LONG)     // PM:  New range!
-            chance = 0.04;
-//    else
-//        chance = 0;
-
-    if (random () < chance) {
-        chance = 2*random();
-        self.th_missile ();
-        SUB_AttackFinished (chance);
-        return;
-    }
-
-    return;
-};
-
-
-//=============================================================================
 
 float() archer_lord = {return (self.classname == "monster_archer_lord");};
 
@@ -586,16 +536,6 @@ void(entity inflictor, entity attacker, float damage) archer_pain = {
 };
 
 // DEATH - - - - - - - - - - - - - - - -
-void() archer_decap1  =[ $decap1,  archer_decap2  ] {ai_back(3); blood_spray('0 0 27', 1);};
-void() archer_decap2  =[ $decap3,  archer_decap3  ] {ai_back(9); blood_spray('-7 -1 26', 2);};
-void() archer_decap3  =[ $decap5,  archer_decap4  ] {blood_spray('-4 -1 23', 1); self.solid = SOLID_NOT; DropBackpack(); };
-void() archer_decap4  =[ $decap7,  archer_decap5  ] {}; //blood_spray('0 1 16', 1);};
-void() archer_decap5  =[ $decap9,  archer_decap6  ] {blood_spray('2 0 8', -1);};
-void() archer_decap6  =[ $decap11, archer_decap7  ] {};
-void() archer_decap7  =[ $decap13, archer_decap8  ] {};
-void() archer_decap8  =[ $decap15, archer_decap9  ] {};
-void() archer_decap9  =[ $decap17, archer_decap9  ] {};
-
 void() archer_die1  =[ $deathA2,  archer_die2  ] {ai_back(3);};
 void() archer_die2  =[ $deathA4,  archer_die3  ] {ai_back(2);};
 void() archer_die3  =[ $deathA6,  archer_die4  ] {ai_back(2); self.solid = SOLID_NOT; DropBackpack(); };
@@ -612,14 +552,9 @@ void() archer_die10 =[ $deathA20, archer_die11 ] {
 void() archer_die11 =[ $deathA22, archer_die11  ] {};
 
 void() archer_die = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
-	//if (Shattered ()) return;
-	//if (Decapitated ()) { monster_decap ('0 0 27', archer_decap1); return; }
-
-	// Clear weapon sound
-	sound (self, CHAN_WEAPON, SOUND_EMPTY, 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, SOUND_EMPTY, 1, ATTN_NORM); // Clear weapon sound
 
 	// regular death
 	if (!self.gibbed) {

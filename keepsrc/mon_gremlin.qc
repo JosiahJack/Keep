@@ -924,14 +924,6 @@ void () gremlin_die10 = [ 113.000, gremlin_die11 ] { ai_forward (TRUE); };
 void () gremlin_die11 = [ 114.000, gremlin_die12 ] { ai_forward (FL_SWIM); };
 void () gremlin_die12 = [ 115.000, gremlin_die12 ] {};
 
-void () gremlin_gib = {
-   sound (self,CHAN_VOICE,"player/udeath.wav",TRUE,ATTN_NORM);
-   ThrowHead ();
-   ThrowGib (1,1);
-   ThrowGib (1,1);
-   ThrowGib (1,1);
-};
-
 void () gremlin_flip1 = [ 116.000, gremlin_flip2 ] {
    ai_face ();
    makevectors (self.angles);
@@ -947,7 +939,7 @@ void () gremlin_flip3 = [ 118.000, gremlin_flip4 ] {};
 void () gremlin_flip4 = [ 119.000, gremlin_flip5 ] {};
 void () gremlin_flip5 = [ 120.000, gremlin_flip6 ] {};
 void () gremlin_flip6 = [ 121.000, gremlin_flip7 ] { self.touch = Gremlin_FlipTouch; };
-void () gremlin_flip7 = [ 122.000, gremlin_gib ] { self.nextthink = (time + MOVETYPE_WALK); };
+void () gremlin_flip7 = [ 122.000, gremlin_flip8 ] { self.nextthink = (time + MOVETYPE_WALK); };
 void () gremlin_flip8 = [ 123.000, gremlin_flip8 ] { self.solid = SOLID_NOT; };
 
 void () gremlin_die = {
@@ -963,7 +955,7 @@ void () gremlin_die = {
    dot = (vec * v_forward);
    if ( (self.health < -35.000) ) {
       sound (self,CHAN_VOICE,"player/udeath.wav",TRUE,ATTN_NORM);
-      ThrowHead ();
+      ThrowGib(25,1); // headmdl
 	ThrowGib (1,1);
 	ThrowGib (1,1);
 	ThrowGib (1,1);

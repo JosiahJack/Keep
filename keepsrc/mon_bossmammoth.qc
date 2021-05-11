@@ -151,13 +151,6 @@ $frame grenadeB17 grenadeB18 grenadeB19 grenadeB20
 // Constant variables for phases, animations and weapon types
 //-----------------------------------------------------------------------
 
-// Style
-float MM_PHASE0 = 0;		// Phase 0 - Locked
-float MM_PHASE1 = 1;		// Phase 1 - Lasers
-float MM_PHASE2 = 2;		// Phase 2 - Rockets
-float MM_PHASE3 = 3;		// Phase 3 - Lasers + Grenades
-float MM_PHASE4 = 4;		// Phase 4 - Death
-
 // State
 float MM_LOCKED = 0;		// Start position
 float MM_STAND = 5;			// Bobbing up/down
@@ -726,11 +719,7 @@ void(float startblock, float endblock) mammoth_tiltbody =
 	self.fixangle = TRUE;
 };
 
-//----------------------------------------------------------------------
-// Check the tether system
-//----------------------------------------------------------------------
-float() mammoth_CheckTether =
-{
+float() mammoth_CheckTether = {
 	local float currentdist;
 	
 	currentdist = vlen(self.origin - self.movelast.origin);
@@ -738,106 +727,14 @@ float() mammoth_CheckTether =
 	if (currentdist < self.tetherrange) return FALSE;
 	else {
 		// If player or tether close to each other?
-		if (infront(self.movelast) && infront(SUB_entEnemyTarget()) )
-			return FALSE;
+		if (infront(self.movelast) && infront(SUB_entEnemyTarget()) ) return FALSE;
 		// Stop moving around
 		else return TRUE;
 	}
 };
 	
-//----------------------------------------------------------------------
-// Mammoth game play logic
-//----------------------------------------------------------------------
-void() mammothCheckAttack = 
-{
-	local vector armorg, eorg;
-	
-	// Check for boss wave trigger events
-	if (mammoth_WaveCheck() == TRUE) return;
-
-	//----------------------------------------------------------------------
-	// setup enemytarget if one is not active
-	//----------------------------------------------------------------------
-	if (self.enemy.classtype != CT_ENEMYTARGET) {
-		if (SUB_setupEnemyTarget(self.enemy, self.height, MONAI_ABOVETIMER)) {
-			self.enemy = self.enemytarget;
-		}
-	}
-
-	//----------------------------------------------------------------------
-	// Melee attack (Dumping fire on to player/floor)
-	// this has always got to be available, no cooldown
-	//----------------------------------------------------------------------
-	// Flatten distance checks, the mammoth is constantly flying
-	self.enemydist = range_distance(SUB_entEnemyTarget(), TRUE);
-	// Any sprite space left for hazard projectiles? (def=14 frames)
-	// There is no skill difference with the fire/dump attack
-	if (HazardProjectile_CheckLimit(self, self.proj_attqty_z)) {
-		if (self.enemydist < MONAI_MELEEMAMMOTH) {
-			self.attack_state = AS_MELEE;
-			return;
-		}
-	}
-	
-	//----------------------------------------------------------------------
-	// Mammoth is a very wide and needs more visibility checks,
-	// especially for the arms during phase 1 & 2.
-	// Phase 3 = central attacks, front and top only
-	//----------------------------------------------------------------------
-	self.attack_sidedeny = FALSE;
-	if (!enemy_vis) {
-		// Work out enemy origin + vertical offset
-		eorg = self.enemy.origin + self.enemy.view_ofs;
-		makevectors(self.angles);
-		
-		// Phase 3 has no arms, use left/right side of body instead
-		if (self.style == MM_PHASE3) armorg = self.origin + attack_vector('30 24 46');
-		else armorg = self.origin + attack_vector('30 38 46');
-
-		traceline (armorg, eorg, TRUE, self);
-		if (trace_fraction == 1) enemy_vis = TRUE;
-		else {
-			// first arm was blocked, try second instead
-			if (self.style == MM_PHASE3) armorg = self.origin + attack_vector('30 -24 46');
-			else armorg = self.origin + attack_vector('30 -38 46');
-
-			traceline (armorg, eorg, TRUE, self);
-			if (trace_fraction == 1) enemy_vis = TRUE;
-		}
-		// Partly blocked, so use agressive attack instead
-		if (enemy_vis) self.attack_sidedeny = TRUE;
-	}
-	
-	//----------------------------------------------------------------------
-	// Range attacks (Laser, Rockets, Arc and Grenades)
-	//----------------------------------------------------------------------
-	// Range attack if cooldown has finished and can see enemy
-	if (self.attack_finished < time && enemy_vis) {
-		// Is the enemy close enough for attack?
-		// If the mammoth at maximum tether range, keep firing!
-		if (mammoth_CheckTether() || self.enemydist < MONAI_RANGEMAMMOTH) {
-			SUB_AttackFinished(2 + random());
-			self.attack_state = AS_MISSILE;
-			return;
-		}
-	}
-
-	//----------------------------------------------------------------------
-	// Maintain distance (strafe)
-	//----------------------------------------------------------------------
-	// Don't strafe if at max tether range
-	if (mammoth_CheckTether()) return;
-	if (enemy_range >= RANGE_MID || !enemy_vis) {
-		if (self.attack_state != AS_STRAIGHT) self.attack_state = AS_STRAIGHT;
-	}
-	else self.attack_state = AS_SLIDING;
-};
-
-//======================================================================
 // Different projectile attacks
-//----------------------------------------------------------------------
-void(vector offset, float side) mammoth_laser =
-{
+void(vector offset, float side) mammoth_laser = {
 	local vector org, dir, vec;
 	local float sideoff;
 
@@ -857,16 +754,13 @@ void(vector offset, float side) mammoth_laser =
 		if (self.attack_offset_x <= 0) {
 			sideoff = side * (3 + random() + random());
 			self.attack_offset_x = sideoff;
-		}
-		else sideoff = self.attack_offset_x;
-	}
-	else {
+		} else sideoff = self.attack_offset_x;
+	} else {
 		// Remember side offsets for left/right
 		if (self.attack_offset_y <= 0) {
 			sideoff = side * (3 + random() + random());
 			self.attack_offset_y = sideoff;
-		}
-		else sideoff = self.attack_offset_y;
+		} else sideoff = self.attack_offset_y;
 	}
 	dir = SUB_orgEnemyTarget() + (v_up * 12) + (v_right * sideoff);
 	vec = normalize(dir - org);
@@ -893,8 +787,8 @@ void(vector offset, float side) mammoth_laser =
 		//          because its designed for hard/nm skill
 	
 		// Reset the tracking system if EASY/NORMAL/HARD skill or Attack 1
-		if (skill <= SKILL_HARD || self.state == MM_ATTACKLASER1) 
-			self.attack_sidestep = self.walkframe;
+		if (skill <= SKILL_HARD || self.state == MM_ATTACKLASER1) self.attack_sidestep = self.walkframe;
+
 		// Is this the first prediction point for tracking?
 		if (self.walkframe == self.attack_sidestep)
 			self.attack_track = SUB_Tracking(SUB_orgEnemyTarget(), offset, SUB_entEnemyTarget(), self.attack_speed);
@@ -908,9 +802,7 @@ void(vector offset, float side) mammoth_laser =
 	launch_projectile(org, vec, CT_PROJ_LASER, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
-void(vector offset, float side) mammoth_rocket =
-{
+void(vector offset, float side) mammoth_rocket = {
 	local vector org, dir, vec;
 	local float sideoff;
 	
@@ -2189,7 +2081,7 @@ void() monster_mammoth = {
 	if (self.volume > 1) self.volume = 1;
 	
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
 	// default = No think functions
 	self.th_checkattack = mammothCheckAttack;

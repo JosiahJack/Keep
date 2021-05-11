@@ -297,7 +297,7 @@ void () mummy_paine30 = [ 191.000, mummy_run1 ] {};
 void () mummy_die = {
    self.health = -35.000;
    sound (self,CHAN_VOICE,"zombie/z_gib.wav",TRUE,ATTN_NORM);
-   ThrowHead();
+   ThrowGib (25,1); // headmdl
    ThrowGib (1,2);
    ThrowGib (2,2);
    ThrowGib (3,2);

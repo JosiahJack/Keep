@@ -286,15 +286,28 @@ void (entity inflictor, entity attacker, float damage) overlord_pain = {
 };
 
 void (string gibName) ol_toss = {
-   local vector flingVelocity;
-   local entity myGib;
+	local vector flingVelocity;
+	local entity myGib;
 
-   makevectors (self.angles);
-   flingVelocity = ((v_forward * 250.000) + (v_up * 300.000));
-   flingVelocity = (flingVelocity + (v_up * ((random () * 100.000) - 50.000)));
-   flingVelocity = (flingVelocity + (v_right * ((random () * 200.000) - 100.000)));
-   myGib = StartGib (gibName);
-   myGib.velocity = flingVelocity;
+	makevectors (self.angles);
+	flingVelocity = ((v_forward * 250.000) + (v_up * 300.000));
+	flingVelocity = (flingVelocity + (v_up * ((random () * 100.000) - 50.000)));
+	flingVelocity = (flingVelocity + (v_right * ((random () * 200.000) - 100.000)));
+
+	myGib = spawn ();
+	setmodel (myGib,gibName);
+	setsize (myGib,VEC_ORIGIN,VEC_ORIGIN);
+	myGib.movetype = MOVETYPE_BOUNCE;
+	myGib.classtype = CT_TEMPGIB;
+	myGib.classgroup = CG_MISCENT;
+	myGib.solid = SOLID_NOT;
+	setorigin(myGib, self.origin);
+	myGib.think = SUB_Remove;
+	myGib.ltime = time;
+	myGib.nextthink = ((time + 10) + (random () * 10));
+	myGib.frame = FALSE;
+	myGib.flags = FALSE;
+	myGib.velocity = flingVelocity;
 };
 
 void () overlord_die01 = [ 91.000, overlord_die02 ] { self.nextthink = (time + 0.050); };

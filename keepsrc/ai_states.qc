@@ -161,9 +161,12 @@ void(float dist) ai_run = {
 					self.think = self.th_walk;
 				} else self.think = self.th_stand;
 			}
-			if (winner)
-				if (self.th_win) {self.th_win (); return;}   // We have a winner!
-			monster_sow ();
+			if (winner && self.th_win) {self.th_win (); return;}   // We have a winner!
+
+			if (self.movetarget || self.charmer)
+				self.th_walk ();
+			else
+				self.th_stand ();
 			return; // Exit run function
 		}
 	}

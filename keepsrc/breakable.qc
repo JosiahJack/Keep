@@ -631,7 +631,7 @@ void(entity inflictor, entity attacker, float damage)	funcbreakable_pain =
 	makevectors(inflictor.angles);
 	vel = -v_up*2;
 	while(loop_count < 4) {
-		particle (inflictor.origin, vel*0.1, self.bleedcolour + rint(random()*7), damage);
+		particle (inflictor.origin, vel*0.1, self.bloodtype + rint(random()*7), damage);
 		loop_count = loop_count + 1;
 	}
 };
@@ -1264,7 +1264,7 @@ void() breakable_on =
 		self.takedamage = DAMAGE_YES;
 		self.th_pain = funcbreakable_pain;
 		self.th_die = funcbreakable_death;
-		self.bleedcolour = self.pos1_x;
+		self.bloodtype = self.bleedcolour = self.pos1_x;
 		// Setup location (origin) to spawn particles
 		if (self.bsporigin) self.oldorigin = bmodel_origin(self);
 		else self.oldorigin = self.origin;

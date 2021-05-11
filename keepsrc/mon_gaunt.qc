@@ -42,9 +42,6 @@ $frame deathA1 deathA2 deathA3 deathA4 deathA5 deathA6 deathA7 deathA8
 // (101) Fall forward
 $frame deathB1 deathB2 deathB3 deathB4 deathB5 deathB6 deathB7 deathB8
 
-void() gaunt_run1;
-void() gaunt_side1;
-
 void(float dist) gaunt_hadj = {
 	local float hadj;
 	local vector hadjvec;
@@ -92,64 +89,7 @@ void(float dist) gaunt_hadj = {
 	}
 };
 
-void() GauntCheckAttackQuoth = {
-	local vector spot1;
-	local vector spot2;
-	local entity targ;
-	local float chance;
-	if (time < self.attack_finished) return 0;
-	if (!enemy_vis) return 0;
-
-	if (enemy_range == RANGE_FAR) {
-		if (self.attack_state != AS_STRAIGHT) {
-			self.attack_state = AS_STRAIGHT;
-			gaunt_run1();
-		}
-		return;
-	}
-	targ = self.enemy;
-	spot1 = self.origin + self.view_ofs;
-	spot2 = targ.origin + targ.view_ofs;
-	traceline(spot1, spot2, 0, self);
-	if (trace_ent != targ) {
-		if (self.attack_state != AS_STRAIGHT) {
-			self.attack_state = AS_STRAIGHT;
-			gaunt_run1();
-		}
-		return;
-	}
-	if (enemy_range == RANGE_MELEE) {
-		chance = 0.9;
-	} else {
-		if (enemy_range == RANGE_NEAR) {
-			chance = 0.3;
-		} else {
-			if (enemy_range == RANGE_MID) {
-				chance = 0.05;
-			} else {
-				chance = MSG_BROADCAST;
-			}
-		}
-	}
-	if (random() < chance) {
-		self.attack_state = AS_MISSILE;
-		return;
-	}
-	if (enemy_range > RANGE_NEAR) {
-		if (self.attack_state != AS_STRAIGHT) {
-			self.attack_state = AS_STRAIGHT;
-			gaunt_run1();
-		}
-	} else {
-		if (self.attack_state != AS_SLIDING) {
-			self.attack_state = AS_SLIDING;
-			gaunt_side1();
-		}
-	}
-};
-
-void() GauntAttackFinished = 
-{
+void() GauntAttackFinished = {
 	if (enemy_range >= RANGE_MID || !enemy_vis)
 	{
 		self.attack_state = AS_STRAIGHT;

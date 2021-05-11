@@ -2,77 +2,15 @@ void() T_MissileTouch;
 void(entity ent, float chan) StopSound;
 
 // This creates an explosion sprite entity from scratch.
-void(vector spot) MakeExplosion =
-{
+void(vector spot) MakeExplosion = {
     local   entity  swap;
 
     swap = self;
-
     self = spawn();
     setsize (self, '0 0 0', '0 0 0');        
     setorigin (self, spot);
     BecomeExplosion ();
-
     self = swap;
-};
-
-//======================================
-//  Standard Rockets
-//======================================
-// PM:  Replaced owner with master for all missiles because of reflection.
-void() T_MissileExplode = {
-    if (!self.dmg)
-        self.dmg = 120;
-
-    if (self.enemy)     // Don't check health, just if there is a target.
-    {
-        // History lesson:  Doom's rockets did 1d8*20 (20-160) damage on
-        // a direct hit, and did full radius damage to everyone.
-        // Cyberdemon took full damage from direct hits, but none from
-        // any splash.
-        local   float   damage;
-
-        if (self.worldtype == MDAM_TWENTY)
-        {
-            if (self.dmg < 20)
-                damage = random() * self.dmg;
-            else
-                damage = (self.dmg - 20) + (random() * 20);
-        }
-        else if (self.worldtype == MDAM_FULL)
-            damage = self.dmg;
-        else if (self.worldtype == MDAM_GRENADE)
-            damage = SUB_ExploDamage (other, self, self.dmg);
-        else
-            damage = SUB_RandomDamage (self.dmg);
-    // PM:  For rewritten shal-rath missiles.
-        if (self.style & DF_ZKILL)
-            if (self.enemy.classname == "monster_zombie")
-                damage = self.enemy.health + 50;
-    //- - - - - - - - -
-        T_Damage (self.enemy, self, self.master, damage, DAMARMOR);
-    }
-    // Don't do radius damage to the enemy, because all the damage
-    // was done in the impact.
-    T_RadiusDamage (self, self.master, self.dmg, self.enemy, DAMAGEALL);
-// DISABLED -- Not sure I want to do fragmentation this way.
-//    if (self.th_win)
-//        self.th_win ();   // For fragmenting attacks such as gugs' bilebombs.
-
-// PM:  Don't set origin directly during a touch function because of
-// possible link scrambling.  May cause FitzQuake to crash otherwise.
-    self.origin = self.origin - 8*normalize(self.velocity);
-    if (self.think1) {
-        // Alternate explosion code defined, so use that instead.
-        self.think1();
-    } else {
-        // Standard explosion procedure.
-        Rocket_Explosion1 (self.origin);
-        BecomeExplosion2 ();
-    }
-// PM:  In classic Doom, target took damage from both impact AND explosion.
-//  The only exception was if the target was either the cyberdemon or
-//  spider mastermind, both of whom had immunity to splash damage.
 };
 
 //==========================================================================
@@ -94,12 +32,9 @@ float   LIGHTZERO_MIN       = 4;    // Minimum light when storming.
 float   LIGHTZERO_MAX       = 25;   // Maximum light allowed.
 
 // Calls 'lightstyle(0, <foo>)'.
-void() LightZero_Update =
-{
-//    dprint(ftos(lightzero_level)); dprint("\n");
+void() LightZero_Update = {
     lightzero_level = floor (lightzero_level);
-    if (lightzero_level < 5)
-    {
+    if (lightzero_level < 5) {
         if (lightzero_level < 1)
             lightstyle(LIGHT_ZERO, "a");
         else if (lightzero_level == 1)
@@ -110,9 +45,7 @@ void() LightZero_Update =
             lightstyle(LIGHT_ZERO, "d");
         else //if (lightzero_level == 4)
             lightstyle(LIGHT_ZERO, "e");
-    }
-    else if (lightzero_level < 10)
-    {
+    } else if (lightzero_level < 10) {
         if (lightzero_level == 5)
             lightstyle(LIGHT_ZERO, "f");
         else if (lightzero_level == 6)
@@ -123,9 +56,7 @@ void() LightZero_Update =
             lightstyle(LIGHT_ZERO, "i");
         else //if (lightzero_level == 9)
             lightstyle(LIGHT_ZERO, "j");
-    }
-    else if (lightzero_level < 15)
-    {
+    } else if (lightzero_level < 15) {
         if (lightzero_level == 10)
             lightstyle(LIGHT_ZERO, "k");
         else if (lightzero_level == 11)
@@ -470,119 +401,98 @@ void(vector start, vector dir, float sped, float damage) Iceball_Toss =
     newmis.think1   = Iceball_Explode;
 };
 
+
+
 //==========================================================================
 //  Ice Mines
+void() IceMine_Explode;
 
 // Treat destroyed mines as barrels.
-void() IceMine_Die =
-{
-    if (self.trigger_field)
-        {remove (self.trigger_field);  self.trigger_field = world;}
+void() IceMine_Die = {
+    if (self.trigger_field) {remove (self.trigger_field);  self.trigger_field = world;}
     self.th_die= SUB_Null;      // Don't 'die' again if damaged more.
     self.touch = SUB_Null;      // Stack overflow prevention.
     self.solid = SOLID_NOT;
-    self.enemy = world;
     self.nextthink = 0.01;
-    self.think = T_MissileExplode;
+    self.think = IceMine_Explode;
 };
 
-void(entity targ) IceMine_Explode =
-{
-    if (self.trigger_field)
-        {remove (self.trigger_field);  self.trigger_field = world;}
+void() IceMine_Explode = {
+    if (self.trigger_field) {remove (self.trigger_field);  self.trigger_field = world;}
     self.touch = SUB_Null;      // Stack overflow prevention.
-    self.enemy = targ;          // For modified T_MissileExplode.
-    T_MissileExplode ();
+	T_RadiusDamage (self, self, self.dmg, world, DAMAGEALL); // Explosive damage and sound+fx
+	particle_explode(self.origin, 50+random()*50, 1, self.part_style, PARTICLE_BURST_CENTER); // Particle explosion drifting upward
+	particle (self.origin, '0 0 0', 0, 255); // Special type (hard-coded) of particle explosion that only works if particle count=255 :)
+	self.origin = self.origin + '0 0 32';
+	SpawnExplosion(EXPLODE_BURST_SMOKE, self.origin, self.noise);
+	entity_hide(self);
 };
 
-void() IceMine_Touch =
-{
-// Target must either be shootable or a creature.
+void() IceMine_Touch = {
+	// Target must either be shootable or a creature.
     if (other.takedamage != DAMAGE_AIM)
-        if (!(other.flags & FLx_CREATURE))
-            return;
-// Don't explode on attacker.
-    if (other == self.master)
-        return;
+        if (!(other.flags & FLx_CREATURE)) return;
+	// Don't explode on attacker.
+    if (other == self.master) return;
 
-// Removed sky and reflection checks because they do not apply to land mines.
-    IceMine_Explode (other);
+    IceMine_Explode(); // Removed sky and reflection checks because they do not apply to land mines.
 };
 
 void() mine1 =[ 1, mine2    ] {};
 void() mine2 =[ 2, mine3    ] {
-    local   float   pc;
+    local float pc;
 
     pc = pointcontents(self.origin);
-    if (pc == CONTENT_LAVA)
-        {IceMine_Explode (world);  return;}
-    if (self.delay > time)
-        self.think = mine2;
+    if (pc == CONTENT_LAVA) {IceMine_Explode();  return;}
+    if (self.delay > time) self.think = mine2;
 
-    if (self.flags & FL_ONGROUND)
-        return;     // Attached to the ground.
+    if (self.flags & FL_ONGROUND) return;     // Attached to the ground.
 
-// Float check.  Ice is less dense than water.
-    if ((pc == CONTENT_WATER) || (pc == CONTENT_SLIME))
-    {   // Float to the surface;
+	// Float check.  Ice is less dense than water.
+    if ((pc == CONTENT_WATER) || (pc == CONTENT_SLIME)) {
+		// Float to the surface;
         self.movetype = MOVETYPE_FLY;
-//        self.flags = self.flags - (self.flags & FL_ONGROUND);
+		self.flags = self.flags - (self.flags & FL_ONGROUND);
         self.velocity_z = self.velocity_z + 48;
         if (self.velocity_z > 48)
             self.velocity_z = 48;
-    }
-    else
+    } else
         self.movetype = MOVETYPE_TOSS;
 };
-void() mine3 =[ 3, SUB_Null ] {IceMine_Explode (world);};
+void() mine3 =[ 3, SUB_Null ] {IceMine_Explode();};
 
 // Made so monsters who step on the iceball will explode it.
-void() IceMineTrigger_Touch =
-{
+void() IceMineTrigger_Touch = {
     local   entity  ice, swap;
 
     ice = self.owner;
 
-    if (!ice || (ice == self))
-        {remove (self);  return;}
+    if (!ice || (ice == self)) {remove (self);  return;}
+    if (!(other.flags & FL_MONSTER)) return; // Other things should be able touch the iceball itself.
+    if (other == ice.master) return; // Iceball owner is immune.
+    if (!(ice.flags & FL_ONGROUND) || (ice.velocity != '0 0 0')) return; // Anything can touch iceball if it's moving.
 
-    if (!(other.flags & FL_MONSTER))
-        return;     // Other things should be able touch the iceball itself.
-//    if (other == ice.owner)
-//        return;     // Iceball owner is immune.
-    if (other == ice.master)
-        return;     // Iceball owner is immune.
-    if (!(ice.flags & FL_ONGROUND) || (ice.velocity != '0 0 0'))
-        return;     // Anything can touch iceball if it's moving.
-
-// Set off the mine!
-    if (other)
-        other.flags = other.flags - (other.flags & FL_ONGROUND);
+	// Set off the mine!
+    if (other) other.flags = other.flags - (other.flags & FL_ONGROUND);
     self.touch = SUB_Null;
     swap = self;
     self = ice;
-
     self.trigger_field = world;
     self.touch = SUB_Null;      // Stack overflow prevention.
-    self.enemy = other;         // For modified T_MissileExplode.
     self.owner = other;         // Pass through the mine.
-    T_MissileExplode ();
-
+    IceMine_Explode();
     self = swap;
     remove (self);
 };
 
-void() IceMineTrigger_Think =[ 0, IceMineTrigger_Think ]
-{
-    if (self.owner)
-        setorigin (self, self.owner.origin);
+void() IceMineTrigger_Think =[ 0, IceMineTrigger_Think ] {
+    if (self.owner) setorigin (self, self.owner.origin);
 };
 
-void(vector start) IceMine_Spawn =
-{
+void(vector start) IceMine_Spawn = {
     local   entity  ice, swap;
 
-// Spawn the ice mine.
+	// Spawn the ice mine.
     ice = spawn ();
     ice.owner        = world;
     ice.master       = self;
@@ -590,14 +500,11 @@ void(vector start) IceMine_Spawn =
     ice.solid        = SOLID_BBOX;
 	ice.classgroup = CG_PROJALL;
     ice.classname    = "ice";
-// set missile speed
-    ice.velocity     = '0 0 0';
+    ice.velocity     = '0 0 0'; // set missile speed
     ice.avelocity    = '0 0 0';
     ice.angles       = '0 0 0';
-// set missile damage
-    ice.dmg          = 90;
+    ice.dmg          = 90; // set missile damage
     ice.style        = DF_COLD;
-// set miscellaneous
     ice.health       = 25;   // Barrels use 20 hp.
     ice.takedamage   = DAMAGE_YES;
     ice.bloodtype    = CHUNKS_ICE;
@@ -605,31 +512,27 @@ void(vector start) IceMine_Spawn =
     ice.th_die       = IceMine_Die;
     ice.resist_cold  = 1;    // Immune to cold.
     ice.resist_fire  = 0;   // Fire melts ice!
-// set missile duration
     ice.touch        = IceMine_Touch;
     ice.think1       = Iceball_Explode;
     ice.frame        = 0;
     ice.alpha        = ALPHA_ICEBALL;
     ice.think        = mine1;
-    ice.nextthink    = time + 0.1;
+    ice.nextthink    = time + 0.1; // set missile duration
     ice.delay        = time + 30;
 
     setall (ice, "progs/drake/iceball.mdl", '-16 -16 0', '16 16 16', start);
 
-// Set the mine on the floor.
-//    if (pointcontents(start) == CONTENT_EMPTY)
-    {
-        swap = self;
-        self = ice;
-        droptofloor();
-        self = swap;
-    }
+	// Set the mine on the floor.
+	swap = self;
+	self = ice;
+	droptofloor();
+	self = swap;
 
-// Spawn touch field.
-// With solid_bbox and movetype_toss, monsters can walk on the iceball
-// without exploding it, which is unfair.  Therefore, place a trigger
-// field over the iceball so anytime a monster tries to walk on the ice,
-// the iceball will explode as expected.
+	// Spawn touch field.
+	// With solid_bbox and movetype_toss, monsters can walk on the iceball
+	// without exploding it, which is unfair.  Therefore, place a trigger
+	// field over the iceball so anytime a monster tries to walk on the ice,
+	// the iceball will explode as expected.
     swap = spawn ();
     swap.master     = swap.owner    = ice;
     swap.movetype   = MOVETYPE_NONE;
@@ -638,13 +541,10 @@ void(vector start) IceMine_Spawn =
     swap.think      = IceMineTrigger_Think;
     swap.touch      = IceMineTrigger_Touch;
     setall (swap, "", '-16 -16 0', '16 16 32', start);
-
     ice.trigger_field  = swap;      // Link touch field to the iceball.
     newmis = ice;       // In case we need to modify the mine later.
-
-// Spawning effects.
     sound (ice, CHAN_AUTO, "weapons/freeze.wav", 1, ATTN_NORM);
-    ShockWave (ice.origin + '0 0 4', RING_ICE, 3, "progs/drake/s_wave.spr");
+    ShockWave (ice.origin + '0 0 4', RING_ICE, 3, "progs/drake/s_wave.spr"); // Spawning effects.
 };
 
 //==========================================================================
@@ -706,51 +606,40 @@ void() Tornado_Attack =
 };
 
 // Thinking for the smoke particles in the tornado.
-void() tornado2 =[ 0, tornado2 ]
-{
-    if (self.delay <= time)
-    {
-        remove (self);
-        return;
-    }
+void() tornado2 =[ 0, tornado2 ] {
+	local float cosx, siny;
+    local vector spot, dir;
 
-    local   vector  spot, trig, dir;
+    if (self.delay <= time) { remove (self); return; }
 
     self.speed = self.speed + 8;
     self.height = self.height + 24;
     self.cnt = anglemod (self.cnt + 47);
     spot = self.oldorigin;
     spot_z = spot_z + self.height;
-    trig = CoSine (self.cnt);
-    dir = (('1 0 0' * self.speed) * trig_x) + (('0 1 0' * self.speed) * trig_y);
+    cosx = mathlib_cos(self.cnt);
+	siny = mathlib_sin(self.cnt);
+    dir = (('1 0 0' * self.speed) * cosx) + (('0 1 0' * self.speed) * siny);
     spot = spot + dir;
-
     setorigin (self, spot);
 };
 
 // Think function for the tornado.  Spawns all of its effects.
-void() tornado1 =[ 0, tornado1 ]
-{
-    if (self.delay <= time)
-    {
+void() tornado1 =[ 0, tornado1 ] {
+    if (self.delay <= time) {
         super_active = FALSE;
         StopSound (self, 6);
         remove (self);
         return;
     }
 
-// FIXME:  Use different sound that loops?
-    if (self.t_width < time)
-    {
+    if (self.t_width < time) {
         self.t_width = time + 1;
         sound (self, CHAN_AUTO, "drake/baron/tornado.wav", 1, ATTN_NORM);
     }
-
     Tornado_Attack ();
-
     self.height = (self.height + 3) & 7;
     self.cnt = anglemod(self.cnt + 107);
-
     newmis = spawn();
     newmis.owner      = self;
     newmis.movetype   = MOVETYPE_NOCLIP;
@@ -767,51 +656,55 @@ void() tornado1 =[ 0, tornado1 ]
 };
 
 // Spawns an immobile tornado that sucks in and damages targets.
-void(vector start) Tornado_Spawn =
-{
-    if (super_active)
-        return;     // Uses many edicts and particles, only one at a time.
+void(vector start) Tornado_Spawn = {
+    if (super_active) return; // Uses many edicts and particles, only one at a time.
 
     traceline (start, start - '0 0 256', TRUE, self);
-    if (trace_fraction == 1)
-        return;     // No ground.
+    if (trace_fraction == 1) return; // No ground.
 
     start = trace_endpos + '0 0 2';
-    super_active = TRUE;    // Only one big effect at a time please.
+    super_active = TRUE; // Only one big effect at a time please.
 
     local   entity  wind;
 
-// Spawn the tornado.
+	// Spawn the tornado.
     wind = spawn ();
     wind.owner        = world;
     wind.master       = self;
     wind.movetype     = MOVETYPE_NONE;    // Immobile.  No MOVETYPE_FLY.
     wind.solid        = SOLID_NOT;
     wind.classname    = "tornado";
-// set missile speed
+	// set missile speed
     wind.velocity     = '0 0 0';
-// set missile damage
+	// set missile damage
     wind.dmg          = 2;      // 20/sec * 5 sec = 100.
-// set miscellaneous
+	// set miscellaneous
     wind.takedamage   = DAMAGE_NO;
-// set missile duration
+	// set missile duration
     wind.touch        = SUB_Null;
     wind.frame        = 0;
     wind.think        = tornado1;
     wind.nextthink    = time + 0.1;
     wind.delay        = time + 5;
     wind.t_width      = 0;
-
     setall (wind, "", '0 0 0', '0 0 0', start);
-
-// Spawning effects.
+	// Spawning effects.
     ShockWave (wind.origin + '0 0 4', RING_QUAKE, 4, "progs/drake/s_wave.spr");
 };
 
 // Was named 'Knightball_Explode'.
-void() Orange_Explosion =
-{
+void() Orange_Explosion = {
     local   float   r;
+
+	// Explosive damage and sound+fx
+	T_RadiusDamage (self, self, self.dmg, world, DAMAGEALL);
+
+	// Particle explosion drifting upward
+	particle_explode(self.origin, 50+random()*50, 1, self.part_style, PARTICLE_BURST_UPWARD);
+	
+	// Special type (hard-coded) of particle explosion
+	// that only works if particle count=255 :)
+	particle (self.origin, '0 0 0', 0, 255);
 
     r = random() * 3;
     if (r < 1)
@@ -820,6 +713,7 @@ void() Orange_Explosion =
         Rocket_Explosion2 (self.origin, 230, 8);
     else
         Rocket_Explosion2 (self.origin, 232, 8);
+
     BecomeExplosion ();
 };
 

@@ -40,23 +40,36 @@ float FANGEL_STAGE_FLOAT   =  2.00000;
 float FANGEL_STAGE_SIDESTEP   =  3.00000;
 
 void  ()fangel_check_wing =  {
-	local float retval = 0.00000;
-   enemy_infront = visible ( self.enemy);
-   if ( ((self.monster_stage == FANGEL_STAGE_FLY) && (random() < 0.50000)) ) {
-      enemy_infront = 0.00000;
-   }
-   if ( enemy_infront ) {
-      enemy_range = range ( self.enemy);
-      if ( (random() < 0.50000) ) {
-         retval = Hexen2CheckMonsterAttack ( MA_FAR_MELEE, 1.00000);
-      } else {
-         retval = Hexen2CheckMonsterAttack ( MA_MISSILE, 1.00000);
-      }
+	local float chance, visib;
+
+	visib = visible ( self.enemy);
+	if ( ((self.monster_stage == FANGEL_STAGE_FLY) && (random() < 0.50000))) visib = FALSE;
+	if (visib) {
+		enemy_range = range ( self.enemy);
+			if (time > self.attack_finished) {
+				if (enemy_range != RANGE_FAR) {
+					chance = 0.5;
+					if (enemy_range == RANGE_NEAR) {
+						chance = 0.20000;
+					} else if (enemy_range == RANGE_MID) {
+						if (self.th_melee)
+							chance = 0.05000;
+						else
+							chance = 0.10000;
+					}
+
+					if (random() < chance) {
+						if (random() < 0.5)
+							self.th_melee();
+						else
+							self.th_missile();
+						SUB_AttackFinished ( random(8.00000,0.00000));
+						return;
+					}
+				}
+			}
    } else {
-      retval = MA_NOATTACK;
-   }
-   if ( (retval != MA_SUCCESSFUL) ) {
-      fangel_check_incoming ( );
+      fangel_check_incoming();
    }
 };
 
@@ -235,11 +248,38 @@ void ()fangel_float =  {
    }
 };
 
+float  (float maxdist) check_z_move =  {
+	local float goaldist = 0.00000;
+	local entity targ;
+
+   if (self.enemy && visible(self.enemy)) {
+      targ = self.enemy;
+   } else {
+      if (self.goalentity) {
+         targ = self.goalentity;
+      } else {
+         return FALSE;
+      }
+   }
+   if (targ.origin_z != self.absmin_z) {
+      goaldist = (((targ.absmin_z + targ.absmax_z) * 0.5) - ((self.absmax_z + self.absmin_z) * 0.5));
+      maxdist = fabs(maxdist);
+      if (fabs(goaldist) > maxdist) {
+         if (goaldist > 0) {
+            goaldist = maxdist;
+         } else {
+            goaldist = maxdist * -1;
+         }
+      }
+      if (!walkmove(self.angles_y, goaldist)) return FALSE;
+   }
+   return TRUE;
+};
+
 
 void  (float thrust)fangel_move =  {
-   //check_z_move ( (thrust / 2.00000));
+   check_z_move((thrust/2));
    if ( (self.monster_stage == FANGEL_STAGE_WAIT) ) {
-	  //fangel_float ( );
       fangel_wait();
       return ;
    } else {
@@ -291,15 +331,13 @@ void  ()fangel_wing_fire =  {
 void() fangel_blockthink = {
    ai_face();
 
-   if (self.velocity != '0.00000 0.00000 0.00000') self.velocity = (self.velocity * 0.70000); // Woah nelly, slow er on down there
+   if (!CheckZeroVector(self.velocity)) self.velocity = self.velocity * 0.7; // Woah nelly, slow er on down there
 
-   //check_z_move(3.00000);
+   check_z_move(3);
    if (self.camera_time) {
-      self.camera_time -= 1.00000; // hang on until 
+      self.camera_time -= 1; // hang on until 
    } else {
-      if ( (infront(self.enemy) && ((self.enemy.attack_finished + 0.75000) > time)) ) {
-         self.camera_time += 1.00000;
-      }
+      if (infront(self.enemy) && ((self.enemy.attack_finished + 0.75000) > time)) self.camera_time += 1;
    }
 };
 

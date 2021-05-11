@@ -109,10 +109,10 @@ void() monster_rebel = {
     self.gibhealth = -40;
 	// self.ryuflags = RYU_ALERT | RYU_REBEL;
 
-    // if (soul_evil) {
+    if (soul_evil) {
         // monster_guns (0, 0, 20, 0, 0);
-        // monster_purse (2, 0.5, 0);
-    // }
+        monster_purse (2, 0.5, 0);
+    }
     
     self.gibbed = FALSE;
     self.pain_flinch = 20;

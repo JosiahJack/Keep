@@ -837,8 +837,7 @@ void() M_Lightwall =
 //==========================================================================
 //  Knight Fireball -- Used by hell knight and baron.
 
-void(vector start, vector dir) KnightBall_Launch =
-{
+void(vector start, vector dir) KnightBall_Launch = {
     local   entity  missile;
 
     missile = spawn ();
@@ -861,9 +860,7 @@ void(vector start, vector dir) KnightBall_Launch =
 // set missile duration
     missile.touch       = Touch_Missile;
     missile.nextthink   = time + 5;
-    missile.think       = T_MissileExplode;
-    missile.think1      = Orange_Explosion;
-
+    missile.think       = Orange_Explosion;
     missile.frame       = 2;
     setall (missile, "progs/drake/k_ball.mdl", '0 0 0', '0 0 0', start);
 
@@ -973,10 +970,9 @@ void(entity targ, vector dir) Attack_Saw =
 		// Blood!
         vec = ((random()*300) - 150) * v_right + (100 * v_forward);
         SpawnBlood (targ, trace_endpos, '0 0 5', damage);
-        if (self.weaponframe & 1)
-            SpawnMeatSprayDrake (self.origin + dir*16, vec, targ.bloodtype);
-		// Damage!
-        pain = FeelsPain (targ);
+        if (self.weaponframe & 1) SpawnMeatSpray(self,targ,(crandom() * 300));
+		
+        pain = FeelsPain (targ); // Damage!
         T_Damage (targ, self, self, damage, DAMARMOR);
 
         if (trace_ent.flags & FL_MONSTER){
@@ -1114,7 +1110,7 @@ void(vector spot) Sidewind_Face = {
     if (self.lefty)
     {   // Oscillate up and down slightly.
         up = (self.cnt & 7) * 45;
-        up = SUB_cos(up) * 5;
+        up = mathlib_cos(up) * 5;
         self.cnt = self.cnt + 1;
     }
     else
@@ -1152,29 +1148,18 @@ void(vector vec, float sped) Sidewind_Go = {
     self.velocity = v_forward * sped;
 };
 
-//- - - - - - - - -
-// The above three functions may be used for other similar missiles.
-//
-// The next three functions are designed specifically for the
-// mega enforcers' sidewinder missiles (which the player may use too).
-// but are also used for the Necromancer boss's Necrosnake attack
-//- - - - - - - - -
-void() Sidewinder_Think =
-{
-    if (self.delay < time)
-    {   // Out of gas.
-        if (self.style & DF_ROCKET)
-        {   // Update 4/2/10:  Explode instead of disappearing.
-            self.enemy = world;     // Thanks to my bonehead way of doing T_MissileExplode.
-            T_MissileExplode ();
-        }
-        else    // For acolytes' venom shots.
-            remove (self);
+// The next three functions are designed specifically for the mega enforcers' sidewinder missiles (which the player may use too). but are also used for the Necromancer boss's Necrosnake attack
+void() Sidewinder_Think = {
+    local vector vec;
+    local float sped;
+
+    if (self.delay < time) {
+		// Out of gas.
+        if (self.style & DF_ROCKET) {
+            Touch_Missile();
+        } else remove (self); // For acolytes' venom shots.
         return;
     }
-
-    local   vector  vec;
-    local   float   sped;
 
     if (self.enemy)
         sped = ( !(self.enemy.items & IT_INVISIBILITY) && !(self.enemy.flags & FL_NOTARGET) );
@@ -1310,68 +1295,25 @@ void(vector start, vector dir, float sped) NecroSnake_Launch = {
     newmis.movetype     = MOVETYPE_FLYMISSILE;
     newmis.solid        = SOLID_BBOX;
     newmis.classname    = "wizspike";
-	// set missile speed
     newmis.speed        = sped;
     newmis.velocity     = dir * sped;
     newmis.angles       = vectoangles(newmis.velocity);
-	// set missile damage
     newmis.dmg          = 9;
     newmis.enemy        = self.enemy;
-	// set missile special stuff
     newmis.worldtype    = TE_WIZSPIKE;
     newmis.speed        = sped;
     newmis.yaw_speed    = 10;
     newmis.ideal_yaw    = self.angles_y;
     // Get the spot we want to hit if fired straight without a target.
     newmis.pos2         = start + (dir * ((newmis.speed + newmis.height) * 5));
-	// set missile duration
     newmis.touch        = NecroSnake_Touch;     //spike_touch;
     newmis.delay        = time + 5;     // Total duration
     newmis.nextthink    = time + 0.1;
     newmis.think        = Sidewinder_Think;
-
-    setall (newmis, "progs/w_spike.mdl", '0 0 0', '0 0 0', start);
+    setall(newmis, "progs/w_spike.mdl", '0 0 0', '0 0 0', start);
 };
 
-
-//==========================================================================
-//  Explosive Runes -- Used by Ebon Sorcerer.
-void() NecroBomb_Explode = {
-    self.enemy = world;
-    T_MissileExplode ();
-};
-
-void() NecroBomb_Touch = {
-    if (other != self.owner)
-    if (self.wait < time) {
-        // We cannot use solid_trigger self to explode because that will
-        // break links as soon as a set* builtin is called in an explosion
-        // function.  To circumvent this problem, spawn a dummy entity
-        // to do all the damage and explosion stuff.  In the meantime,
-        // self will be removed like an item.
-        local   entity  ent;
-
-        // Make the rune disappear as a taken item.
-        self.touch = SUB_Null;      // Stack overflow prevention.
-        self.solid = SOLID_NOT;
-        self.model = string_null;    //string_null;
-
-        // Spawn dummy, copy necessary fields, then explode.
-        ent = spawn();
-        ent.master    = ent.owner = self.master;
-        ent.touch     = SUB_Null; 
-        ent.solid     = SOLID_NOT;
-        ent.style     = self.style;
-        ent.dmg       = self.dmg;
-        ent.classname = self.classname;
-        setorigin (ent, self.origin);
-        SUB_Think (ent, NecroBomb_Explode);
-
-        remove (self);      // Remove the rune.
-    }
-};
-
-// Deposits an explosive rune where the necro is standing.
+//  Explosive Runes -- Used by Ebon Sorcerer.  Deposits an explosive rune where the necro is standing.
 void(vector org) NecroBomb = {
     newmis = spawn();
 	newmis.classgroup = CG_PROJALL;
@@ -1379,22 +1321,17 @@ void(vector org) NecroBomb = {
     newmis.movetype     = MOVETYPE_FLY;
     newmis.solid        = SOLID_TRIGGER;
     newmis.classname    = "necrobomb";
-	// set missile speed
     newmis.velocity     = '0 0 0';
     newmis.angles       = '0 0 0';
     newmis.angles_y     = random() * 360;   //self.angles_y;
-	// set missile damage
     newmis.style        = DF_ROCKET;
     newmis.dmg          = 70;
-	// set missile duration
-    newmis.touch        = NecroBomb_Touch;
+    newmis.touch        = Touch_Missile;
     newmis.wait         = time + 0.2;
     newmis.nextthink    = time + 1;     //(1 + random()) * 0.5
-    newmis.think        = NecroBomb_Explode;
-
+    newmis.think        = Touch_Missile;
     setall (newmis, "progs/drake/nec_rune.mdl", '-16 -16 -24', '16 16 32', org);
 };
-
 
 //==========================================================================
 //  Necrobolt -- Used by Ebon Warlock and Dark Lord

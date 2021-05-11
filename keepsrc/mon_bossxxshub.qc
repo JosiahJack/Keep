@@ -510,7 +510,7 @@ void() monster_shub = {
 	}
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 	
 	// Does not go through monster spawn functions
 	AddToTotals(self);

@@ -266,7 +266,7 @@ void() monster_oldone =
 	self.reflectaxe = TRUE;			// Prevent axe damage
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
 	if (self.deathstring == "")  self.deathstring = " became one with Shub-Niggurath\n";
 

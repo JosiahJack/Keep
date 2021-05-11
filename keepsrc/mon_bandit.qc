@@ -84,20 +84,19 @@ void() bandit_fire =
 
 // SoE:  Check if shot is blocked.  Used by rebel to avoid friendly fire.
 void() bandit_short = {
-    if (self.ryuflags & RYU_REBEL) {
-        local   vector  p1, p2;
+    local vector p1, p2;
 
+    if (self.ryuflags & RYU_REBEL) {
         p1 = self.origin + self.view_ofs;
         p2 = self.enemy.origin + self.enemy.view_ofs;
 
         traceline (p1, p2, ARROW_FLY, self);
-        if (trace_ent != self.enemy)
-        if (trace_fraction < 1)
-        if (trace_ent.flags & FLx_CREATURE)
-        if (DontHurtMe (trace_ent)) {
-            StopSound (self, CHAN_WEAPON);
-            self.think = army_run1;
-        }
+        if (trace_ent != self.enemy) {
+			if ((trace_fraction < 1) && (trace_ent.flags & FLx_CREATURE) && (self.enemy.solid <= SOLID_TRIGGER || Align_Match(self,trace_ent) || trace_ent.enemy == self || trace_ent == self.oldenemy)) {
+				StopSound (self, CHAN_WEAPON);
+				self.think = army_run1;
+			}
+		}
     }
 };
 
@@ -319,7 +318,7 @@ void() monster_bandit = {
     self.ryuflags   = RYU_INSANE;
     //if (soul_evil)
     //    monster_guns (0, 0, 10, 0, 0);
-    //monster_purse (2, 0.2, 0);      // Bandits may drop some coins.
+    monster_purse (2, 0.2, 0);      // Bandits may drop some coins.
 	// SoE:  Modified stats for nsoe2 rebel fighters.
 
     // if (!self.skin && (self.spawnflags & SPAWN_WHITE) && !self.spawned)

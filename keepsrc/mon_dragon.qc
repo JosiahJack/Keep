@@ -613,7 +613,7 @@ void () monster_dragon = {
    self.dragonPainSequence = TRUE;
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
    AddToTotals(self);
    self.nextthink = (self.nextthink + 0.100);

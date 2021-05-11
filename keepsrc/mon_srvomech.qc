@@ -354,7 +354,7 @@ void() servo_gibbed6 =[ 21, servo_gibbed7]
 	setorigin(self, tmpvec);
 	self.angles = tmpself.angles;
 	self.skin = tmpself.skin;
-	ThrowHead("progs/custents/h_servo.mdl", -100);
+	ThrowGib (25,1); // headmdl "progs/custents/h_servo.mdl"
 	self.velocity = v_forward*300 + '0 0 250';
 	sound (self, CHAN_VOICE, "drake/misc/shortexp.wav", 1, ATTN_NORM);	
 };
@@ -438,78 +438,6 @@ void() servo_vollyattack=
 
 //=======================================================================
 
-float(entity targ) ServoInfront=
-{
-	local vector vec;
-	local float dot;
-
-	vec = self.aiment.angles;
-	vec_x = vec_x + self.aiment.rotate_type;
-	makevectors (vec);
-	vec = normalize (targ.origin - self.aiment.origin);
-	dot = vec * v_forward;
-
-	if ( dot > 0.7)
-	{
-		return TRUE;
-	}
-	return FALSE;
-};
-
-float() ServomechCheckAttack=
-{
-	local vector	spot1, spot2;	
-	local entity	targ;
-	local float		chance;
-
-	targ = self.enemy;
-	
-	if(!ServoInfront(self.enemy))
-		return FALSE;
-
-// see if any entities are in the way of the shot
-	spot1 = self.origin + self.view_ofs;
-	spot2 = targ.origin + targ.view_ofs;
-
-	traceline (spot1, spot2, FALSE, self);
-
-	if (trace_ent != targ)
-		return FALSE;		// don't have a clear shot
-			
-	if (trace_inopen && trace_inwater)
-		return FALSE;			// sight line crossed contents
-
-	if (time < self.attack_finished)
-		return FALSE;
-
-	if (enemy_range == RANGE_MELEE)
-	{
-		self.th_missile ();
-		SUB_AttackFinished (0.2);
-		return TRUE;
-	}
-		
-	if (enemy_range == RANGE_FAR)
-		chance = 0.05;
-	else if (enemy_range == RANGE_NEAR)
-		chance = 0.3;
-	else if (enemy_range == RANGE_MID)
-		chance = 0.15;
-	else
-		return FALSE;
-
-	if (random () < chance)
-	{
-		self.th_missile ();
-		SUB_AttackFinished (0.2);
-		return TRUE;
-	}
-
-	return FALSE;
-};
-
-//=======================================================================
-
 void() monster_servomech =
 {
 	local entity bodent;
@@ -542,9 +470,9 @@ void() monster_servomech =
 	self.pos1 = '0 0 0';
 	self.yaw_speed = 30;
 	self.view_ofs = '0 0 12';
-	if(!self.skin)
-		self.skin = 1;
+	if(!self.skin) self.skin = 1;
 
+	self.fov = 0.7;
 	self.th_stand = servo_stand;
 	self.th_walk = servo_walk1;
 	self.th_run = servo_run1;
@@ -1280,8 +1208,7 @@ void() trigger_servomech_use=
 	sprint(activator, "No servomech responded.\n");
 };
 
-void() trigger_servomech=
-{
+void() trigger_servomech = {
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 
@@ -1296,69 +1223,4 @@ void() trigger_servomech=
 		self.invincible_finished = 0;
 
 	self.use = trigger_servomech_use;
-};
-
-//=======================================================================
-
-/*
-FindMechTarget
-
-Used to make monsters check for attackable, player controlled servomechs
-*/
-float() FindMechTarget=
-{
-	local entity client;
-	local float r;
-	
-	client = checkmech;
-	if (!client)
-		return FALSE;
-
-	if (client == self.enemy)
-		return FALSE;
-
-	r = range (client);
-	if (r == RANGE_FAR)
-		return FALSE;
-
-	if (!visible (client))
-		return FALSE;
-
-	if (client.enemy.classname == "controlled_servomech")
-	{
-		if (r == RANGE_MID)
-		{
-			if (client.show_hostile < time && !infront (client))
-				return FALSE;
-		}
-		else
-		{
-			if(client.show_hostile < time)
-				return FALSE;
-		}
-	}
-	else
-	{
-			if (client.show_hostile < time && !infront (client))
-				return FALSE;
-	}
-
-//
-// got one
-//
-	self.enemy = client;
-
-	if (self.enemy.classname != "controlled_servomech")
-	{
-		self.enemy = self.enemy.enemy;
-		if (self.enemy.classname != "controlled_servomech")
-		{
-			self.enemy = world;
-			return FALSE;
-		}
-	}
-
-	FoundTarget ();
-
-	return TRUE;
 };

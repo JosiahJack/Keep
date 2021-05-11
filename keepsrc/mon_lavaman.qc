@@ -1,23 +1,5 @@
 void (float AttackNumber) lavaman_missile;
 
-void () lavaman_hunt = {
-   local entity possibleEnemy;
-   local vector viewPoint;
-
-   if ( (self.enemy.health <= FALSE) ) {
-      viewPoint = (self.origin + '0.000 0.000 96.000');
-      possibleEnemy = find (self.enemy,classname,"player");
-      traceline (viewPoint,possibleEnemy.origin,TRUE,world);
-      if ( (trace_fraction == TRUE) )
-         self.enemy = possibleEnemy;
-   }
-   if ( self.enemy ) {
-      ai_face ();
-      self.movetarget = self.enemy;
-      self.goalentity = self.enemy;
-   }
-};
-
 void () lavaman_rise1 = [ 0.000, lavaman_rise2 ] { sound (self,CHAN_WEAPON,"boss1/out1.wav",TRUE,ATTN_NORM); };
 void () lavaman_rise2 = [ 1.000, lavaman_rise3 ] { sound (self,CHAN_VOICE,"boss1/sight1.wav",TRUE,ATTN_NORM); };
 void () lavaman_rise3 = [ 2.000, lavaman_rise4 ] {};
@@ -38,109 +20,82 @@ void () lavaman_rise17 = [ 16.000, lavaman_fire1 ] {};
 
 void () lavaman_fire1;
 
-void () lavaman_stand = {
-   //if ( self.enemy ) {
-   //   LavaManCheckAttack ();
-   //} else {
-   //   lavaman_hunt ();
-   //}
-   ai_stand ();
-};
-
 void () lavaman_idle1 = [ 17.000, lavaman_idle2 ] {
    if ( (random () < 0.200) )
       sound (self,CHAN_VOICE,"boss1/sight1.wav",TRUE,ATTN_NORM);
 };
 
-void () lavaman_idle2 = [ 18.000, lavaman_idle3 ] { lavaman_stand (); };
-void () lavaman_idle3 = [ 19.000, lavaman_idle4 ] { lavaman_stand (); };
-void () lavaman_idle4 = [ 20.000, lavaman_idle5 ] { lavaman_stand (); };
-void () lavaman_idle5 = [ 21.000, lavaman_idle6 ] { lavaman_stand (); };
-void () lavaman_idle6 = [ 20.000, lavaman_idle7 ] { lavaman_stand (); };
-void () lavaman_idle7 = [ 19.000, lavaman_idle8 ] { lavaman_stand (); };
-void () lavaman_idle8 = [ 18.000, lavaman_idle9 ] { lavaman_stand (); };
-void () lavaman_idle9 = [ 17.000, lavaman_idle1 ] { lavaman_stand (); };
+void () lavaman_idle2 = [ 18.000, lavaman_idle3 ] { ai_stand (); };
+void () lavaman_idle3 = [ 19.000, lavaman_idle4 ] { ai_stand (); };
+void () lavaman_idle4 = [ 20.000, lavaman_idle5 ] { ai_stand (); };
+void () lavaman_idle5 = [ 21.000, lavaman_idle6 ] { ai_stand (); };
+void () lavaman_idle6 = [ 20.000, lavaman_idle7 ] { ai_stand (); };
+void () lavaman_idle7 = [ 19.000, lavaman_idle8 ] { ai_stand (); };
+void () lavaman_idle8 = [ 18.000, lavaman_idle9 ] { ai_stand (); };
+void () lavaman_idle9 = [ 17.000, lavaman_idle1 ] { ai_stand (); };
 
-void () lavaman_walk = {
-   //if ( self.enemy ) {
-   //   LavaManCheckAttack ();
-   //} else {
-   //   lavaman_hunt ();
-   //}
-   ai_walk (FL_SWIM);
-};
-
-void () lavaman_walk1 = [ 17.000, lavaman_walk2 ] { lavaman_walk (); };
-void () lavaman_walk2 = [ 18.000, lavaman_walk3 ] { lavaman_walk (); };
-void () lavaman_walk3 = [ 19.000, lavaman_walk4 ] { lavaman_walk (); };
-void () lavaman_walk4 = [ 20.000, lavaman_walk5 ] { lavaman_walk (); };
-void () lavaman_walk5 = [ 21.000, lavaman_walk6 ] { lavaman_walk (); };
-void () lavaman_walk6 = [ 22.000, lavaman_walk7 ] { lavaman_walk (); };
-void () lavaman_walk7 = [ 23.000, lavaman_walk8 ] { lavaman_walk (); };
-void () lavaman_walk8 = [ 24.000, lavaman_walk9 ] { lavaman_walk (); };
-void () lavaman_walk9 = [ 25.000, lavaman_walk10 ] { lavaman_walk (); };
-void () lavaman_walk10 = [ 26.000, lavaman_walk11 ] { lavaman_walk (); };
-void () lavaman_walk11 = [ 27.000, lavaman_walk12 ] { lavaman_walk (); };
-void () lavaman_walk12 = [ 28.000, lavaman_walk13 ] { lavaman_walk (); };
-void () lavaman_walk13 = [ 29.000, lavaman_walk14 ] { lavaman_walk (); };
-void () lavaman_walk14 = [ 30.000, lavaman_walk15 ] { lavaman_walk (); };
-void () lavaman_walk15 = [ 31.000, lavaman_walk16 ] { lavaman_walk (); };
-void () lavaman_walk16 = [ 32.000, lavaman_walk17 ] { lavaman_walk (); };
-void () lavaman_walk17 = [ 33.000, lavaman_walk18 ] { lavaman_walk (); };
-void () lavaman_walk18 = [ 34.000, lavaman_walk19 ] { lavaman_walk (); };
-void () lavaman_walk19 = [ 35.000, lavaman_walk20 ] { lavaman_walk (); };
-void () lavaman_walk20 = [ 36.000, lavaman_walk21 ] { lavaman_walk (); };
-void () lavaman_walk21 = [ 37.000, lavaman_walk22 ] { lavaman_walk (); };
-void () lavaman_walk22 = [ 38.000, lavaman_walk23 ] { lavaman_walk (); };
-void () lavaman_walk23 = [ 39.000, lavaman_walk24 ] { lavaman_walk (); };
-void () lavaman_walk24 = [ 40.000, lavaman_walk25 ] { lavaman_walk (); };
-void () lavaman_walk25 = [ 41.000, lavaman_walk26 ] { lavaman_walk (); };
-void () lavaman_walk26 = [ 42.000, lavaman_walk27 ] { lavaman_walk (); };
-void () lavaman_walk27 = [ 43.000, lavaman_walk28 ] { lavaman_walk (); };
-void () lavaman_walk28 = [ 44.000, lavaman_walk29 ] { lavaman_walk (); };
-void () lavaman_walk29 = [ 45.000, lavaman_walk30 ] { lavaman_walk (); };
-void () lavaman_walk30 = [ 46.000, lavaman_walk31 ] { lavaman_walk (); };
+void () lavaman_walk1 = [ 17.000, lavaman_walk2 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk2 = [ 18.000, lavaman_walk3 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk3 = [ 19.000, lavaman_walk4 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk4 = [ 20.000, lavaman_walk5 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk5 = [ 21.000, lavaman_walk6 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk6 = [ 22.000, lavaman_walk7 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk7 = [ 23.000, lavaman_walk8 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk8 = [ 24.000, lavaman_walk9 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk9 = [ 25.000, lavaman_walk10 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk10 = [ 26.000, lavaman_walk11 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk11 = [ 27.000, lavaman_walk12 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk12 = [ 28.000, lavaman_walk13 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk13 = [ 29.000, lavaman_walk14 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk14 = [ 30.000, lavaman_walk15 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk15 = [ 31.000, lavaman_walk16 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk16 = [ 32.000, lavaman_walk17 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk17 = [ 33.000, lavaman_walk18 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk18 = [ 34.000, lavaman_walk19 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk19 = [ 35.000, lavaman_walk20 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk20 = [ 36.000, lavaman_walk21 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk21 = [ 37.000, lavaman_walk22 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk22 = [ 38.000, lavaman_walk23 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk23 = [ 39.000, lavaman_walk24 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk24 = [ 40.000, lavaman_walk25 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk25 = [ 41.000, lavaman_walk26 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk26 = [ 42.000, lavaman_walk27 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk27 = [ 43.000, lavaman_walk28 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk28 = [ 44.000, lavaman_walk29 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk29 = [ 45.000, lavaman_walk30 ] { ai_walk (FL_SWIM); };
+void () lavaman_walk30 = [ 46.000, lavaman_walk31 ] { ai_walk (FL_SWIM); };
 void () lavaman_walk31 = [ 47.000, lavaman_walk1 ] {};
 
-void () lavaman_run = {
-   //if ( self.enemy ) {
-   //   LavaManCheckAttack ();
-   //} else {
-   //   lavaman_hunt ();
-   //}
-   ai_run (FL_SWIM);
-};
-
-void () lavaman_run1 = [ 17.000, lavaman_run2 ] { lavaman_run (); };
-void () lavaman_run2 = [ 18.000, lavaman_run3 ] { lavaman_run (); };
-void () lavaman_run3 = [ 19.000, lavaman_run4 ] { lavaman_run (); };
-void () lavaman_run4 = [ 20.000, lavaman_run5 ] { lavaman_run (); };
-void () lavaman_run5 = [ 21.000, lavaman_run6 ] { lavaman_run (); };
-void () lavaman_run6 = [ 22.000, lavaman_run7 ] { lavaman_run (); };
-void () lavaman_run7 = [ 23.000, lavaman_run8 ] { lavaman_run (); };
-void () lavaman_run8 = [ 24.000, lavaman_run9 ] { lavaman_run (); };
-void () lavaman_run9 = [ 25.000, lavaman_run10 ] { lavaman_run (); };
-void () lavaman_run10 = [ 26.000, lavaman_run11 ] { lavaman_run (); };
-void () lavaman_run11 = [ 27.000, lavaman_run12 ] { lavaman_run (); };
-void () lavaman_run12 = [ 28.000, lavaman_run13 ] { lavaman_run (); };
-void () lavaman_run13 = [ 29.000, lavaman_run14 ] { lavaman_run (); };
-void () lavaman_run14 = [ 30.000, lavaman_run15 ] { lavaman_run (); };
-void () lavaman_run15 = [ 31.000, lavaman_run16 ] { lavaman_run (); };
-void () lavaman_run16 = [ 32.000, lavaman_run17 ] { lavaman_run (); };
-void () lavaman_run17 = [ 33.000, lavaman_run18 ] { lavaman_run (); };
-void () lavaman_run18 = [ 34.000, lavaman_run19 ] { lavaman_run (); };
-void () lavaman_run19 = [ 35.000, lavaman_run20 ] { lavaman_run (); };
-void () lavaman_run20 = [ 36.000, lavaman_run21 ] { lavaman_run (); };
-void () lavaman_run21 = [ 37.000, lavaman_run22 ] { lavaman_run (); };
-void () lavaman_run22 = [ 38.000, lavaman_run23 ] { lavaman_run (); };
-void () lavaman_run23 = [ 39.000, lavaman_run24 ] { lavaman_run (); };
-void () lavaman_run24 = [ 40.000, lavaman_run25 ] { lavaman_run (); };
-void () lavaman_run25 = [ 41.000, lavaman_run26 ] { lavaman_run (); };
-void () lavaman_run26 = [ 42.000, lavaman_run27 ] { lavaman_run (); };
-void () lavaman_run27 = [ 43.000, lavaman_run28 ] { lavaman_run (); };
-void () lavaman_run28 = [ 44.000, lavaman_run29 ] { lavaman_run (); };
-void () lavaman_run29 = [ 45.000, lavaman_run30 ] { lavaman_run (); };
-void () lavaman_run30 = [ 46.000, lavaman_run31 ] { lavaman_run (); };
+void () lavaman_run1 = [ 17.000, lavaman_run2 ] { ai_run (FL_SWIM); };
+void () lavaman_run2 = [ 18.000, lavaman_run3 ] { ai_run (FL_SWIM); };
+void () lavaman_run3 = [ 19.000, lavaman_run4 ] { ai_run (FL_SWIM); };
+void () lavaman_run4 = [ 20.000, lavaman_run5 ] { ai_run (FL_SWIM); };
+void () lavaman_run5 = [ 21.000, lavaman_run6 ] { ai_run (FL_SWIM); };
+void () lavaman_run6 = [ 22.000, lavaman_run7 ] { ai_run (FL_SWIM); };
+void () lavaman_run7 = [ 23.000, lavaman_run8 ] { ai_run (FL_SWIM); };
+void () lavaman_run8 = [ 24.000, lavaman_run9 ] { ai_run (FL_SWIM); };
+void () lavaman_run9 = [ 25.000, lavaman_run10 ] { ai_run (FL_SWIM); };
+void () lavaman_run10 = [ 26.000, lavaman_run11 ] { ai_run (FL_SWIM); };
+void () lavaman_run11 = [ 27.000, lavaman_run12 ] { ai_run (FL_SWIM); };
+void () lavaman_run12 = [ 28.000, lavaman_run13 ] { ai_run (FL_SWIM); };
+void () lavaman_run13 = [ 29.000, lavaman_run14 ] { ai_run (FL_SWIM); };
+void () lavaman_run14 = [ 30.000, lavaman_run15 ] { ai_run (FL_SWIM); };
+void () lavaman_run15 = [ 31.000, lavaman_run16 ] { ai_run (FL_SWIM); };
+void () lavaman_run16 = [ 32.000, lavaman_run17 ] { ai_run (FL_SWIM); };
+void () lavaman_run17 = [ 33.000, lavaman_run18 ] { ai_run (FL_SWIM); };
+void () lavaman_run18 = [ 34.000, lavaman_run19 ] { ai_run (FL_SWIM); };
+void () lavaman_run19 = [ 35.000, lavaman_run20 ] { ai_run (FL_SWIM); };
+void () lavaman_run20 = [ 36.000, lavaman_run21 ] { ai_run (FL_SWIM); };
+void () lavaman_run21 = [ 37.000, lavaman_run22 ] { ai_run (FL_SWIM); };
+void () lavaman_run22 = [ 38.000, lavaman_run23 ] { ai_run (FL_SWIM); };
+void () lavaman_run23 = [ 39.000, lavaman_run24 ] { ai_run (FL_SWIM); };
+void () lavaman_run24 = [ 40.000, lavaman_run25 ] { ai_run (FL_SWIM); };
+void () lavaman_run25 = [ 41.000, lavaman_run26 ] { ai_run (FL_SWIM); };
+void () lavaman_run26 = [ 42.000, lavaman_run27 ] { ai_run (FL_SWIM); };
+void () lavaman_run27 = [ 43.000, lavaman_run28 ] { ai_run (FL_SWIM); };
+void () lavaman_run28 = [ 44.000, lavaman_run29 ] { ai_run (FL_SWIM); };
+void () lavaman_run29 = [ 45.000, lavaman_run30 ] { ai_run (FL_SWIM); };
+void () lavaman_run30 = [ 46.000, lavaman_run31 ] { ai_run (FL_SWIM); };
 void () lavaman_run31 = [ 47.000, lavaman_run1 ] {};
 
 void () lavaman_fire1 = [ 57.000, lavaman_fire2 ] { ai_face (); };
@@ -276,8 +231,7 @@ void (float AttackNumber) lavaman_missile = {
    fireball.think = SUB_Remove;
    fireball.nextthink = (time + MOVETYPE_TOSS);
    sound (self,CHAN_WEAPON,"boss1/throw.wav",TRUE,ATTN_NORM);
-   if ( (self.enemy.health <= FALSE) )
-      lavaman_idle1 ();
+   if ( (self.enemy.health <= FALSE) ) lavaman_idle1 ();
 };
 
 void () lavaman_awake = {

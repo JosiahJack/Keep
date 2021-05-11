@@ -763,7 +763,7 @@ void() monster_seeker =
 	self.pain_longanim = FALSE;			// cannot be chopped with shadow axe
 	if (self.death_dmg < 1) self.death_dmg = DAMAGE_SEEKER;
 	self.bouncegrenade = TRUE;			// Grenades bounce
-	self.bleedcolour = MON_BCOLOR_WHITE;	// Grey dust
+	self.bloodtype = self.bleedcolour = MON_BCOLOR_WHITE;	// Grey dust
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;

@@ -556,7 +556,7 @@ void() monster_chthon = {
 	self.style = 0;
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 	
 	// No targetname = no trigger!
 	if (self.targetname == "") {

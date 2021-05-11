@@ -171,8 +171,6 @@ void(entity attacker, vector spot, float dmg1, float dmg2, float dflags, string 
 
 //==========================================================================
 //  Explosion Effects
-// Checks if a given point in space is in water.
-float(vector spot) VecInWater = {return (pointcontents(spot) <= CONTENT_WATER);};
 
 // This enforces air resistance on embers and updates their angles.
 // NOTE:  Modified flame has ember scene; frames start at 2, ends at 7.
@@ -221,82 +219,61 @@ void(float ents) Ember_Shower =
         dir = v_forward;
 
         traceline (self.origin, self.origin + dir*64, FALSE, other);
-        if (trace_fraction == 1.0)
-        {
+        if (trace_fraction == 1.0) {
             // Ember will not impact the wall immediately.
             fire = spawn();
-        //- - - - - - - - -
             fire.walkframe  = random() * 2 + 2.5;   //4.5;
             fire.walkframe  = floor(fire.walkframe);
-
             fire.frame      = $ember1 + fire.walkframe;
             fire.think      = Ember_Think;
-        //- - - - - - - - -
             fire.solid      = SOLID_BBOX;
             fire.movetype   = MOVETYPE_TOSS;
             fire.owner      = other;
-
             fire.velocity   = dir * (200 + random() * 800);
             fire.angles     = vectoangles(dir) + '90 0 0';
-
             fire.delay      = time + 0.5 + random();    // Time when it fades.
-
             fire.touch      = SUB_Remove;
             fire.nextthink  = time + 0.1;
-
             setall (fire, "progs/drake/flame2.mdl", '0 0 0', '0 0 0', self.origin);
-
             ents = ents - 1;
-            if (ents <= 0)
-                return;
+            if (ents <= 0) return;
         }
-
         loop = loop - 1;
     }
 };
 
 // Spawns an ember and smoke in most of its think frames.
-void() Smokey_Think =
-{
-    if (self.wait > time)
-        if (self.enemy.modelindex)
-    {
-        // Make a thin trail of smoke above the flame, plus a few embers.
-        local   float   ftime;
+void() Smokey_Think = {
+	local float ftime;
+	local vector spot;
 
-        ftime = floor(time * 10);
-        if (ftime & 1)
-        {
-            local   vector  spot;
-
-            spot = Midpoint (self.enemy);
-            MakeSmoke (spot, 5);
-            if (ftime & 2)
-                {if (!VecInWater (spot))  MakeFlame (self.enemy);}
-        }
-        self.nextthink = time + 0.1;
-        return;
-    }
+    if (self.wait > time) {
+        if (self.enemy.modelindex) {
+			ftime = floor(time * 10);
+			if (ftime & 1) {
+				spot = Midpoint (self.enemy);
+				MakeSmoke (spot, 5); // Make a thin trail of smoke above the flame, plus a few embers.
+				if ((ftime & 2) && !InLiquid(spot)) MakeFlame (self.enemy);
+			}
+			self.nextthink = time + 0.1;
+			return;
+		}
+	}
     remove (self);
 };
 
 // This creates an entity that produces smoke and a few embers around
 // a given target 'ent'.  Used on targets that die from burning.
-void(entity ent) Smokey =
-{
-    // Create the fire.
-    newmis = spawn();
-
+void(entity ent) Smokey = {
+    newmis = spawn(); // Create the fire.
     newmis.solid      = SOLID_NOT;
     newmis.takedamage = DAMAGE_NO;
     newmis.enemy      = ent;
     newmis.wait       = time + 1 + random() * 2;
     newmis.nextthink  = 0.01;
     newmis.think      = Smokey_Think;
-
     setall (newmis, "", '0 0 0', '0 0 0', VEC_ORIGIN);
 };
-
 
 //==========================================================================
 //  Burn Control
@@ -465,7 +442,7 @@ void() Burn_Think = {
 
         // Enemy is already dead so damaging it is unnecessary.
         // Flame has different effects depending on its contents.
-        if (VecInWater (spot)) { // Hide the flame and make more steam in its place.
+        if (InLiquid(spot)) { // Hide the flame and make more steam in its place.
             // Think of it as a fire so hot even water can't snuff it fully.
             if (self.model == self.mdl) {
                 setmodel (self, "");
@@ -539,7 +516,7 @@ void(entity victim, entity attacker, float damage) Burn_New = {
         if (victim.health <= 0) return; // Dead!  Don't add more dynamic light to slow game.
         if (Burn_Not (victim)) return; // Target can't ignite, so stop.  Assumes Napalm (one of my old QC mods) style burns.
         spot = Burn_Point (victim);
-        if (VecInWater (spot)) return; // Flame will be out as soon as it spawns, so abort.
+        if (InLiquid(spot)) return; // Flame will be out as soon as it spawns, so abort.
         if (victim.flags & FL_CLIENT) victim.pain_finished = 0; // Hack:  Reset pain for players so they can scream now.
     } else { // Assume death mode -- called by 'Burn_Killer'.
         spot = Burn_Point (victim);
@@ -735,15 +712,10 @@ void(entity attacker, entity victim, vector spot) FloorFire =
     self = swap;
 };
 
-//------------------------------------------------------------------------//
 //  This checks if a flame should drop after a fireball impact.
-//------------------------------------------------------------------------//
-float(entity fire, float chance) FloorFire_ZoneCheck =
-{
-    if (random() < chance)
-    {
-        if (VecInWater (fire.origin))
-            return FALSE;       // Don't drop underwater.
+float(entity fire, float chance) FloorFire_ZoneCheck = {
+    if (random() < chance) {
+        if (InLiquid(fire.origin)) return FALSE;       // Don't drop underwater.
 
         // Drop flame if it is not inside or directly above the owner.
         local   entity  ent;
@@ -759,15 +731,11 @@ float(entity fire, float chance) FloorFire_ZoneCheck =
         if (spot_y < (ent.absmin_y - 21))  return TRUE;
         if (spot_z < (ent.absmin_z - 21))  return TRUE;
     }
-
     return FALSE;
 };
 
-//------------------------------------------------------------------------//
 //  This checks if a fireball impacts the floor.
-//------------------------------------------------------------------------//
-float() FloorFire_FloorCheck =
-{
+float() FloorFire_FloorCheck = {
     local   vector  p1, p2, vel;
     local   float   dot;
 
@@ -969,63 +937,34 @@ void() Meteor_Touch = {
     Meteor_Explode ();
 };
 
-//------------------------------------------------------------------------//
-//  This checks the big fireball.  It loses strength if it travels
-//  through water.  While active, the fireball leaves behind a trail
-//  of steam or embers.
-//------------------------------------------------------------------------//
+//  This checks the big fireball.  It loses strength if it travels through water.  While active, the fireball leaves behind a trail of steam or embers.
 void() Meteor_Think = {
-//- - - - - - - - -
-// Particle trail.
-    local   float   rgb;
-    local   float   density;
+    local   float   rgb,   density;
 
-    // Default trail is steam.
-    rgb = 6;
+    rgb = 6; // Default trail is steam.
     density = 16;
-
-    if (VecInWater (self.origin))
-    {   // Fireball loses strength in water.  Loses 10 damage per frame.
-        // Used to be 10% damage in Dragons.
-        self.dmg = self.dmg - 10;
-        if (self.dmg < 0)
-            self.dmg = 0;
-    }
-    else if (!VecInWater (self.oldorigin))
-    {   // Fireball has not been in water lately, so make an ember trail.
-        rgb = 233;
+    if (InLiquid(self.origin)) {
+        self.dmg = self.dmg - 10; // Fireball loses strength in water.  Loses 10 damage per frame.  Used to be 10% damage in Dragons.
+        if (self.dmg < 0) self.dmg = 0;
+    } else if (!InLiquid(self.oldorigin)) {
+        rgb = 233; // Fireball has not been in water lately, so make an ember trail.
         density = 8;
     }
-    Meteor_Trail (rgb, density, TRUE);
-//- - - - - - - - -
-    Fireball_Update ();
-
-    // Fizzle if it lost all power.
-    if (self.dmg <= 0)
-        {Meteor_Fizzle (self); return;}
-
-    // The fireball will explode after a period of time.
-    if (self.delay < time)
-        {Meteor_Explode (); return;}
-
-    // Fire is still burning, check again.
-    self.nextthink  = time + 0.1;
+    Meteor_Trail (rgb, density, TRUE); // Particle trail.
+    Fireball_Update (); 
+    if (self.dmg <= 0) {Meteor_Fizzle (self); return;} // Fizzle if it lost all power.
+    if (self.delay < time) {Meteor_Explode (); return;} // The fireball will explode after a period of time.
+    self.nextthink  = time + 0.1; // Fire is still burning, check again.
 };
 
 //------------------------------------------------------------------------//
 //  This creates a large, highly explosive fireball.
 //------------------------------------------------------------------------//
-void(entity attacker, vector start, vector dir, float sped, float damage)
-    Meteor_Launch =
-{
+void(entity attacker, vector start, vector dir, float sped, float damage) Meteor_Launch = {
     local   entity  fire;
     local   vector  ofs;
     local   string  text;
 
-//    if (qrack)
-//        {ofs = '0 0 0'; text = "progs/drake/flame2a.mdl";}
-//    else
-//        {ofs = '90 0 0'; text = "progs/drake/flame2.mdl";}
 	ofs = '90 0 0';
 	text = "progs/drake/flame2.mdl";
     fire = spawn();
@@ -1041,28 +980,20 @@ void(entity attacker, vector start, vector dir, float sped, float damage)
     fire.think      = Meteor_Think;
     fire.master     = fire.owner    = attacker;
     fire.enemy      = world;
-    fire.delay      = time + 5;     // Was (8000 / sped), like in Quake2.
+    fire.delay      = time + 5; // Was (8000 / sped), like in Quake2.
     fire.wait       = 0;
     fire.dmg        = damage;
     fire.classname  = "fire";
-    fire.style      = DFx_FIREBALL | DF_ROCKET;
+    fire.style      = DFx_FIREBALL | DF_ROCKET; // Added rocket type flag so shamblers take less damage.
     fire.pos1       = ofs;
-    // Added rocket type flag so shamblers take less damage.
-
     fire.effects    = fire.effects | EF_DIMLIGHT;
     fire.oldorigin  = start;
-
     setall (fire, text, '0 0 0', '0 0 0', start);
-
-    // So fireball can be changed later.
-    newmis = fire;
+    newmis = fire; // So fireball can be changed later.
 };
-
 
 //==========================================================================
 //  Firewalls
-
-//
 //  The firewall is divided into two major parts:  the spawner and the
 //  flames.  The spawner is an invisible missile that spawns flames
 //  on the ground below it.  The flames are stationary flame missiles
@@ -1078,13 +1009,11 @@ void(entity attacker, vector start, vector dir, float sped, float damage)
 //  Functions below:
 //   Firelink_*** = Flames in the firewall.
 //   Firewall_*** = Invisible fire spawning missile.
-//
 
 float   SPEED_FIREWALL  = 400;      // Don't change!
 
 // Animate the flame links in the firewall.
-void() Firelink_Think = [ $flamec, Firelink_Think ]
-{
+void() Firelink_Think = [ $flamec, Firelink_Think ] {
     self.walkframe = self.walkframe + 1;
     if (self.walkframe > 3)     // FIXME:  Use 2 for Drake.
         remove (self);
@@ -1093,35 +1022,29 @@ void() Firelink_Think = [ $flamec, Firelink_Think ]
 };
 
 // Oh dear!  Someone crossed the firewall.
-void() Firelink_Touch =
-{
+void() Firelink_Touch = {
     local   float   damage;
 
-    if (self.wait > time)
-        return;     // Already burnt someone recently.
-    if (!other.takedamage)
-        return;
-    if (other == self.owner)
-        return;     // Don't harm attacker.
+    if (self.wait > time) return; // Already burnt someone recently.
+    if (!other.takedamage) return;
+    if (other == self.owner) return; // Don't harm attacker.
 
     if (self.dmg < 1)
         damage = 1;
     else
         damage = (random() + 1) * self.dmg;
+
     T_Damage (other, self, self.master, damage, DAMARMOR);
     self.wait = time + 0.1;    // Wait until then to damage again.
-// Play burning sounds.
-    if (self.t_width < time)
-    {
-        sound (self, CHAN_BODY, "weapons/fwallhit.wav", 1, ATTN_NORM);
+    if (self.t_width < time) {
+        sound (self, CHAN_BODY, "weapons/fwallhit.wav", 1, ATTN_NORM); // Play burning sounds.
         self.t_width = time + 0.5;
     }
 };
 
 // Assumes 'self' is the firewall spawner missile.
 // 'hot' = Spawn fire if TRUE, or spawn steam if FALSE.
-void(vector spot, float hot) Firelink_Spawn =
-{
+void(vector spot, float hot) Firelink_Spawn = {
     local   entity  fire;
 
     fire = spawn();
@@ -1134,16 +1057,13 @@ void(vector spot, float hot) Firelink_Spawn =
     fire.frame      = $flamec;
     fire.walkframe  = 0;
     fire.wait       = 0;    // Time to burn on touch.
-    if (hot)
-    {
+    if (hot) {
         fire.volume     = 233;  // Particle color - embers.
         fire.cnt        = 1;    // Particle count.
         // 17/7 = 2.42857.  Hexen2 dmg was 3.
         fire.dmg        = ceil(self.dmg * 0.075);
         setmodel (fire, "progs/drake/flame2.mdl");
-    }
-    else    // It's in liquid so no flame model.
-    {
+    } else { // It's in liquid so no flame model.
         fire.volume     = 1;    // Steam
         fire.cnt        = 5;
         fire.dmg        = 0;    // Hot spot, minor damage.
@@ -1151,7 +1071,6 @@ void(vector spot, float hot) Firelink_Spawn =
     }
     setsize (fire, '0 0 0', '0 0 0');        
     setorigin (fire, spot);
-
     fire.nextthink  = time + 0.05;
     fire.think      = Firelink_Think;
     fire.touch      = Firelink_Touch;
@@ -1161,47 +1080,34 @@ void() Firewall_Think = {
     local   float   pc;
     local   vector  spot;
 
-    if (self.delay <= time)
-        {remove (self);  return;}   // Time's up.
+    if (self.delay <= time) {remove (self);  return;}   // Time's up.
     pc = pointcontents (self.origin);
-    if (pc == CONTENT_SOLID)
-        {remove (self);  return;}   // In the void.
+    if (pc == CONTENT_SOLID) {remove (self);  return;}   // In the void.
 
     traceline (self.origin, self.origin - '0 0 600', TRUE, self);
     spot = trace_endpos;
     pc = pointcontents (spot);
 
-// Spawn a flame only if there is open space on the ground.
+	// Spawn a flame only if there is open space on the ground.
     if (trace_fraction < 1)
     if (pc != CONTENT_SOLID)
     if (pc != CONTENT_SKY)
         Firelink_Spawn (spot, (pc == CONTENT_EMPTY));
-// The rest of the spawner missile think.
-    if (self.enemy)
-    {   // Steer toward the enemy.
-        spot = self.enemy.origin + self.enemy.view_ofs;
-//        if (1)
-//        {   // Change pitch and yaw.  Aim_Lead plots intercept point.
-//            spot = Aim_Lead (self.origin, spot, SPEED_FIREWALL, self.enemy);
-//            Missile_Face (spot);    // Update angles toward desired point.
-//        }
-//        else
-        {   // Change yaw only.  Aim_Line plots intercept course.
-            // Use 'normalize(spot - self.origin)' instead to follow directly.
-            spot = Aim_Line (self.origin, spot, SPEED_FIREWALL, self.enemy);
-            self.ideal_yaw = vectoyaw(spot);
-            self.ideal_yaw = anglemod(self.ideal_yaw);
-            ChangeYaw ();
-        }
-        // Update direction.
-        spot = self.angles;
+	// The rest of the spawner missile think.
+    if (self.enemy) { // Steer toward the enemy.
+        spot = self.enemy.origin + self.enemy.view_ofs; // Use 'normalize(spot - self.origin)' instead to follow directly.
+		spot = Aim_Line (self.origin, spot, SPEED_FIREWALL, self.enemy); // Aim_Line plots intercept course.
+		self.ideal_yaw = vectoyaw(spot);
+		self.ideal_yaw = anglemod(self.ideal_yaw);
+		ChangeYaw (); // Change yaw only.   
+        spot = self.angles; // Update direction.
         spot_x = 0 - spot_x;
         makevectors (spot);
-        self.movedir  = v_forward;
+        self.movedir = v_forward;
     }
-    self.velocity   = self.movedir * self.speed;
-    self.angles     = vectoangles(self.velocity);
-    self.nextthink  = time + 0.05;
+    self.velocity = self.movedir * self.speed;
+    self.angles  = vectoangles(self.velocity);
+    self.nextthink = time + 0.05;
 };
 
 // Explode like Maulotaur firewall.
@@ -1245,7 +1151,7 @@ void() Firewall_Touch = {
     self.enemy = world;
     // FIXME:  Should spawn a dummy to explode at spot, then remove self.
     setorigin (self, spot);     // FIXME:  Maybe this is bad if SOLID_TRIGGER?
-    T_MissileExplode ();
+    Touch_Missile();
 };
 
 void(vector start, vector dir, float boom, entity targ) Firewall_Spawn = {

@@ -15,31 +15,26 @@ void() s_explode4 = [3,	s_explode5] {};
 void() s_explode5 = [4,	s_explode6] {};
 void() s_explode6 = [5,	SUB_Remove] {};
 
-void() s_explode_think =
-{
-    if (self.frame >= self.cnt)
-        {SUB_Remove ();  return;}
+void() s_explode_think = {
+    if (self.frame >= self.cnt) {SUB_Remove ();  return;}
 
     self.frame = self.frame + 1;
     self.nextthink = time + self.wait;
-    if (self.frame == self.cnt)
-        self.think = SUB_Remove;
+    if (self.frame == self.cnt) self.think = SUB_Remove;
 };
 
 //----------------------------------------------------------------------
 // General purpose animated spite function
 // Types: Small, medium, big, plasma, puffpuff!
 //----------------------------------------------------------------------
-void() SpawnExplosion_think =
-{
+void() SpawnExplosion_think = {
 	self.frame = self.frame + 1;
 	if (self.frame > self.count) SUB_Remove();
 	else self.nextthink = time + self.speed;
 };
 
 //----------------------------------------------------------------------
-void(float sprite_type, vector org, string expl_sound) SpawnExplosion =
-{
+void(float sprite_type, vector org, string expl_sound) SpawnExplosion = {
 	local string spr_name;
 	local float spr_count, spr_speed;
 	
@@ -52,8 +47,7 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion =
 			spr_count = 5;
 			spr_speed = 0.1;
 		}
-	}
-	else if (sprite_type == EXPLODE_MED) {
+	} else if (sprite_type == EXPLODE_MED) {
 		if (ext_dppart)
 			pointparticles(particleeffectnum(DPP_TEEXPLODE), org, '0 0 0', 1);
 		else {
@@ -61,8 +55,7 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion =
 			spr_count = 13;
 			spr_speed = 0.05;
 		}
-	}
-	else if (sprite_type == EXPLODE_BIG) {
+	} else if (sprite_type == EXPLODE_BIG) {
 		if (ext_dppart)
 			pointparticles(particleeffectnum(DPP_TEEXPLODE), org, '0 0 0', 1);
 		else {
@@ -70,8 +63,7 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion =
 			spr_count = 16;
 			spr_speed = 0.05;
 		}
-	}
-	else if (sprite_type == EXPLODE_PLASMA_SMALL) {
+	} else if (sprite_type == EXPLODE_PLASMA_SMALL) {
 		if (ext_dppart)
 			pointparticles(particleeffectnum(DPP_TEPLASMA), org, '0 0 0', 1);
 		else {
@@ -79,8 +71,7 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion =
 			spr_count = 12;
 			spr_speed = 0.05;
 		}
-	}
-	else if (sprite_type == EXPLODE_PLASMA_MED || sprite_type == EXPLODE_PLASMA_BIG) {
+	} else if (sprite_type == EXPLODE_PLASMA_MED || sprite_type == EXPLODE_PLASMA_BIG) {
 		if (ext_dppart)
 			pointparticles(particleeffectnum(DPP_TEPLASMABIG), org, '0 0 0', 1);
 		else {
@@ -88,8 +79,7 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion =
 			spr_count = 12;
 			spr_speed = 0.05;
 		}
-	}
-	else if (sprite_type == EXPLODE_POISON_SMALL) {
+	} else if (sprite_type == EXPLODE_POISON_SMALL) {
 		if (ext_dppart)
 			pointparticles(particleeffectnum(DPP_TEPOISON), org, '0 0 0', 1);
 		else {
@@ -97,8 +87,7 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion =
 			spr_count = 12;
 			spr_speed = 0.05;
 		}
-	}
-	else if (sprite_type == EXPLODE_POISON_MED || sprite_type == EXPLODE_POISON_BIG) {
+	} else if (sprite_type == EXPLODE_POISON_MED || sprite_type == EXPLODE_POISON_BIG) {
 		if (ext_dppart)
 			pointparticles(particleeffectnum(DPP_TEPOISONMED), org, '0 0 0', 1);
 		else {
@@ -106,8 +95,7 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion =
 			spr_count = 12;
 			spr_speed = 0.05;
 		}
-	}
-	else if (sprite_type == EXPLODE_ELECT_SMALL || sprite_type == EXPLODE_ELECT_MED
+	} else if (sprite_type == EXPLODE_ELECT_SMALL || sprite_type == EXPLODE_ELECT_MED
 		|| sprite_type == EXPLODE_ELECT_BIG) {
 		if (ext_dppart)
 			pointparticles(particleeffectnum(DPP_TEPLASMA), org, '0 0 0', 1);
@@ -116,10 +104,9 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion =
 			spr_count = 4;
 			spr_speed = 0.1;
 		}
-	}
-	// This must be pre-cached by entity using it!
-	// This is not cached in worldspawn as its rarely used
-	else if (sprite_type == EXPLODE_ICE_BIG) {
+	} else if (sprite_type == EXPLODE_ICE_BIG) {
+		// This must be pre-cached by entity using it!
+		// This is not cached in worldspawn as its rarely used
 		if (ext_dppart)
 			pointparticles(particleeffectnum(DPP_TEPLASMA), org, '0 0 0', 1);
 		else {
@@ -127,8 +114,7 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion =
 			spr_count = 9;
 			spr_speed = 0.1;
 		}
-	}
-	else if (sprite_type == EXPLODE_BURST_SMOKE) {
+	} else if (sprite_type == EXPLODE_BURST_SMOKE) {
 		if (ext_dppart)
 			pointparticles(particleeffectnum(DPP_TEBSMOKE), org, '0 0 0', 1);
 		else {
@@ -136,8 +122,7 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion =
 			spr_count = 6;
 			spr_speed = 0.05;
 		}
-	}
-	else if (sprite_type == EXPLODE_BURST_FLAME) {
+	} else if (sprite_type == EXPLODE_BURST_FLAME) {
 		if (ext_dppart)
 			pointparticles(particleeffectnum(DPP_TEBFLAME), org, '0 0 0', 1);
 		else {
@@ -145,8 +130,7 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion =
 			spr_count = 6;
 			spr_speed = 0.05;
 		}
-	}
-	else if (sprite_type == EXPLODE_BURST_POISON) {
+	} else if (sprite_type == EXPLODE_BURST_POISON) {
 		if (ext_dppart)
 			pointparticles(particleeffectnum(DPP_TEBPOISON), org, '0 0 0', 1);
 		else {
@@ -154,11 +138,9 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion =
 			spr_count = 6;
 			spr_speed = 0.05;
 		}
-	}
-	else return;
+	} else return; // NO EXPLOSION, let's get outta here!
 
-	// Always spawn a temporary entity
-	// Need one for sprite and/or explosion sound
+	// Always spawn a temporary entity.  Need one for sprite and/or explosion sound
 	newmis = spawn();
 	newmis.classgroup = CG_TEMPENT;
 	newmis.movetype = MOVETYPE_NONE;
@@ -173,11 +155,9 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion =
 		newmis.effects = 32;		// Additive blending
 		newmis.count = spr_count;	// Total frames
 		newmis.speed = spr_speed;	// Frame speed
-
 		newmis.think = SpawnExplosion_think;
 		newmis.nextthink = time + newmis.speed;
-	}
-	else {
+	} else {
 		// No sprite required but need entity for sound to play
 		// Allow for sound to finish and just remove
 		setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
@@ -186,17 +166,12 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion =
 	}
 
 	// Play any explosion sounds on temporary entity
-	if (expl_sound != "") {
-		sound(newmis, CHAN_WEAPON, expl_sound, 1, ATTN_NORM);
-	}
+	if (expl_sound != "") sound(newmis, CHAN_WEAPON, expl_sound, 1, ATTN_NORM);
 };
 
-//----------------------------------------------------------------------
 // Should not be used anymore, this is the old ID system
 // Use SpawnExplosion instead, copes with DP effects better
-//----------------------------------------------------------------------
-void() BecomeExplosion =
-{
+void() BecomeExplosion = {
 	self.touch = SUB_Null;
 	self.velocity = '0 0 0';
 	self.movetype = MOVETYPE_NONE;
@@ -207,9 +182,7 @@ void() BecomeExplosion =
 	self.think = SUB_Remove;
 };
 
-//----------------------------------------------------------------------
-void(vector org, float velrnd, float upbase, float uprnd) SpawnProjectileSmoke =
-{
+void(vector org, float velrnd, float upbase, float uprnd) SpawnProjectileSmoke = {
 	newmis = spawn();
 	newmis.classtype = CT_TEMPPHYS;
 	newmis.classgroup = CG_TEMPENT;
@@ -225,9 +198,7 @@ void(vector org, float velrnd, float upbase, float uprnd) SpawnProjectileSmoke =
 	newmis.think = SUB_Remove;
 };
 
-//----------------------------------------------------------------------
-void(vector org, vector veldir, float velbase, float velrnd) SpawnVelocitySmoke =
-{
+void(vector org, vector veldir, float velbase, float velrnd) SpawnVelocitySmoke = {
 	newmis = spawn();
 	newmis.classtype = CT_TEMPPHYS;
 	newmis.classgroup = CG_TEMPENT;
@@ -241,9 +212,7 @@ void(vector org, vector veldir, float velbase, float velrnd) SpawnVelocitySmoke 
 	newmis.think = SUB_Remove;
 };
 
-//----------------------------------------------------------------------
-void(entity source, entity targ) ProjectileType =
-{
+void(entity source, entity targ) ProjectileType = {
 	// Projectile types (Poison/Robot/Stone/Blood)
 	if (source.poisonous) {
 		setmodel (targ, MODEL_PROJ_FLESHP);
@@ -261,12 +230,8 @@ void(entity source, entity targ) ProjectileType =
 	if (ext_dppart) DPP_blood_trail(targ);
 };
 
-//----------------------------------------------------------------------
-// Mainly used to show resistance to an ammo type
-// Also used by boils for their idle gibs
-//----------------------------------------------------------------------
-void(entity source, vector org, float velrnd, float upbase, float uprnd) SpawnProjectileMeat =
-{
+// Mainly used to show resistance to an ammo type.  Also used by boils for their idle gibs
+void(entity source, vector org, float velrnd, float upbase, float uprnd) SpawnProjectileMeat = {
 	newmis = spawn ();
 	newmis.classtype = CT_TEMPGIB;
 	newmis.classgroup = CG_TEMPENT;
@@ -289,13 +254,14 @@ void(entity source, vector org, float velrnd, float upbase, float uprnd) SpawnPr
 void(entity targ, vector org, vector vel, float part_qty) SpawnBlood = {
 	local float loop_count, part_col;
 
+	if (targ.bleedcolour != targ.bloodtype) targ.bleedcolour = targ.bloodtype; // fix it just in case
 	loop_count = 0;
 	vel = vel * 0.1;
 	part_qty = part_qty / 2;
 
 	// Exception - breakables don't really bleed red blood
 	if (targ.classgroup == CG_BREAKABLE) {
-		part_col = targ.bleedcolour;
+		part_col = targ.bloodtype;
 	} else {
 		if (targ.poisonous) part_col = MON_BCOLOR_GREEN;
 		else if (targ.classgroup == CG_ROBOT) part_col = MON_BCOLOR_YELLOW;
@@ -304,7 +270,7 @@ void(entity targ, vector org, vector vel, float part_qty) SpawnBlood = {
 	
 	// Loop through particle count creating bursts of particles
 	while(loop_count < 4) {
-		if (loop_count == 2 && targ.bleedcolour > 0) part_col = targ.bleedcolour;
+		if (loop_count == 2 && targ.bloodtype > 0) part_col = targ.bloodtype;
 		particle (org, vel, part_col + rint(random()*7), part_qty);
 		loop_count = loop_count + 1;
 	}
@@ -315,8 +281,7 @@ void(entity targ, vector org, vector vel, float part_qty) SpawnBlood = {
 // Triggered by Touch_Bullet, Touch_PlasmaProjectile, Touch_Projectile
 // Used by monsters - DFURY, DOG, FISH, SCORPION, SPIDER, VORELING, ZOMBIEK
 //----------------------------------------------------------------------
-void(entity source, entity targ, float damage) spawn_touchblood =
-{
+void(entity source, entity targ, float damage) spawn_touchblood = {
 	local vector org, vel;
 
 	// The vel calculation uses v_up/right, make sure vectors is setup
@@ -334,6 +299,19 @@ void(entity source, entity targ, float damage) spawn_touchblood =
 	SpawnBlood (targ, source.origin + org, vel, damage);
 };
 
+// Spawns a particle trail for an invisible blood model.
+// Useful for any monster with blood of unusual color (like black or blue).
+// It could be motor oil, antifreeze, milk, or fruit juice for all we know.
+void() MeatSprayThink = {
+    local   vector  dir;
+
+    if (self.delay <= time) {remove(self); return;}
+
+    dir = normalize (self.velocity);
+    particle (self.origin, dir, self.bloodtype, 10);
+    self.nextthink = time + 0.100;
+};
+
 //======================================================================
 // SpawnMeatSpray
 // Changed to remove dependance on 'self' for missile origin
@@ -341,19 +319,24 @@ void(entity source, entity targ, float damage) spawn_touchblood =
 // Changed velocity to side so it is calculated correctly from angles
 //======================================================================
 void(entity source, entity targ, float side) SpawnMeatSpray = {
+	local float btype;
 	local vector org;
+    local string text;
 
+	text = string_null;
+	btype = targ.bloodtype;
+    if (btype == BLOOD_RED) text = "progs/q15/zom_gib.mdl";
+    if (btype == BLOOD_GREEN) text = "progs/drake/gr_gib.mdl";
+    if (btype == BLOOD_PURPLE) text = "progs/drake/pur_gib.mdl";
+    if (btype == BLOOD_FIRE) text = "progs/drake/ember.mdl";
 	makevectors(source.angles);
-
-	// Check for a melee offset? - Special vector offset
-	if (CheckZeroVector(source.meleeoffset)) org = v_forward * 16;
+	if (CheckZeroVector(source.meleeoffset)) org = v_forward * 16; // Check for a melee offset? - Special vector offset
 	else org = attack_vector(source.meleeoffset);
-	
-	// Create starting point to spawn
-	org = org + source.origin;
+	org = org + source.origin; // Create starting point to spawn
 
-	if (targ.bleedcolour) SpawnBlood(targ, org, v_up*2, 100);
-	else {
+	if (targ.bloodtype) {
+		SpawnBlood(targ, org, v_up*2, 100);
+	} else {
 		newmis = spawn ();
 		newmis.classtype = CT_TEMPGIB;
 		newmis.classgroup = CG_TEMPENT;
@@ -369,73 +352,28 @@ void(entity source, entity targ, float side) SpawnMeatSpray = {
 		// Use side velocity to determine which direction to throw
 		newmis.velocity = ((crandom()*16) * v_forward) + (side * v_right);
 		newmis.velocity_z = newmis.velocity_z + 150 + 50*random();
-		
 		newmis.avelocity = vecrand(100,200,FALSE);
-		// set newmis duration
-		newmis.nextthink = time + 1 + random()*3;
-		newmis.think = SUB_Remove;
+		if (btype) {
+			newmis.velocity_z = newmis.velocity_z + 100; // Drake used 250 instead of 150
+			newmis.avelocity   = '3000 1000 2000';
+		}
+
+		if (text != string_null)
+			setmodel (newmis, text); // Oh hey we actually have substance!
+		else
+			newmis.modelindex  = 0; // Invisible blood dripper
+
+		newmis.bloodtype   = btype;
+		newmis.delay       = time + 1 + random()*3;
+		newmis.nextthink   = 0.01;
+		newmis.think       = MeatSprayThink; // All spray should do this for specialty blood colors
 	}
 };
 
-//================
-// SpawnMeatSprayDrake - from drake mod's version
-//================
-void(vector org, vector vel, float btype) SpawnMeatSprayDrake = {
-    local   string  text;
-
-    if (btype == BLOOD_RED)
-        text = "progs/zom_gib.mdl";
-    else if (btype == BLOOD_GREEN)
-        {if (bloodbank & BB_GREEN) text = "progs/drake/gr_gib.mdl";}
-    else if (btype == BLOOD_PURPLE)
-        {if (bloodbank & BB_PURPLE) text = "progs/drake/pur_gib.mdl";}
-    else if ((btype == BLOOD_FIRE) && (bloodbank & BB_FIRE))
-        {text = "progs/drake/ember.mdl";}
-    else if (btype != BLOOD_DARK)
-        return;     // Unable to spew gore.
-
-    local   entity  gib;
-
-    gib = spawn ();
-    gib.owner       = self;
-    gib.movetype    = MOVETYPE_BOUNCE;
-    gib.solid       = SOLID_NOT;
-	gib.classtype = CT_TEMPGIB;
-
-    gib.velocity    = vel;
-    gib.velocity_z  = gib.velocity_z + 250 + 50*random();
-    gib.avelocity   = '3000 1000 2000';
-
-// set missile duration
-    if (text)
-    {
-        gib.nextthink   = time + 1;
-        gib.think       = SUB_Remove;
-        setmodel (gib, text);
-    }
-    else
-    {
-        gib.bloodtype   = btype;
-        gib.delay       = time + 1;
-        gib.nextthink   = 0.01;
-        gib.think       = s;
-        gib.modelindex  = 0;
-    }
-    setsize (gib, '0 0 0', '0 0 0');        
-    setorigin (gib, org);
-};
-
-
 // ==============================================================================
-// Drake effects:
+// Drake Temporary Entities    PM:  These are common within the qc progs.
 // ==============================================================================
-//==========================================================================
-//  Temporary Entities
-
-// PM:  These are common within the qc progs.
-
-void(float fx, vector spot) Tent_Point =
-{
+void(float fx, vector spot) Tent_Point = {
     WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
     WriteByte (MSG_BROADCAST, fx);
     WriteCoord (MSG_BROADCAST, spot_x);
@@ -443,8 +381,7 @@ void(float fx, vector spot) Tent_Point =
     WriteCoord (MSG_BROADCAST, spot_z);
 };
 
-void(float fx, entity src, vector p1, vector p2) Tent_Beam =
-{
+void(float fx, entity src, vector p1, vector p2) Tent_Beam = {
     WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
     WriteByte (MSG_BROADCAST, fx);
     WriteEntity (MSG_BROADCAST, src);   // If client, origin overrides p1.

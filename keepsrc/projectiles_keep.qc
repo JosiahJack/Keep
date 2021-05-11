@@ -54,53 +54,45 @@ void(vector org, float snd) spawn_small_explosion = {
 
 //----------Hipnotic weapon functions-----------------------------------
 void () HIP_LaserTouch = {
-   local vector org;
-   local vector spot1;
-   local vector spot2;
-   local vector oldvel;
-   local float r;
+	local vector org, spot1, spot2, oldvel;
 
-   self.owner = world;
-   self.cnt = (self.cnt + TRUE);
-   if ( (pointcontents (self.origin) == CONTENT_SKY) ) {
-      remove (self);
-      return ;
-   }
-   oldvel = normalize (self.old_velocity);
-   spot1 = (self.origin - (FL_INWATER * oldvel));
-   spot2 = (self.origin + (FL_INWATER * oldvel));
-   traceline (spot1,spot2,FALSE,self);
-   self.origin = trace_endpos;
-   org = self.origin;
-   if ( other.health ) {
-      if ( (self.lastvictim == other) ) {
-         self.dmg = (self.dmg / FL_SWIM);
-      }
-      spawn_touchblood (self, other, self.dmg);
-      T_Damage (other,self,self.lastvictim,self.dmg,DAMARMOR);
-   } else {
-      if ( ((self.cnt == 3) || (random () < 0.150)) ) {
-         WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-         WriteByte (MSG_BROADCAST,TE_GUNSHOT);
-         WriteCoord (MSG_BROADCAST,org_x);
-         WriteCoord (MSG_BROADCAST,org_y);
-         WriteCoord (MSG_BROADCAST,org_z);
-      } else {
-         self.dmg = (0.900 * self.dmg);
-         self.velocity = (oldvel + (FL_SWIM * trace_plane_normal));
-         self.velocity = normalize (self.velocity);
-         self.velocity = (self.speed * self.velocity);
-         self.old_velocity = self.velocity;
-         if ( (self.flags & FL_ONGROUND) )
-            self.flags = (self.flags - FL_ONGROUND);
-
-         r = random ();
-         sound (self,CHAN_WEAPON,"hipweap/laserric.wav",TRUE,ATTN_STATIC);
-         return ;
-      }
-   }
-   sound (self,CHAN_WEAPON,"enforcer/enfstop.wav",TRUE,ATTN_STATIC);
-   remove (self);
+	self.owner = world;
+	self.cnt = (self.cnt + TRUE);
+	if (pointcontents(self.origin) == CONTENT_SKY) {
+		remove (self);
+		return;
+	}
+	oldvel = normalize (self.old_velocity);
+	spot1 = (self.origin - (16 * oldvel));
+	spot2 = (self.origin + (16 * oldvel));
+	traceline (spot1,spot2,FALSE,self);
+	self.origin = trace_endpos;
+	org = self.origin;
+	if (other.health > 0 && other.takedamage) {
+		if (self.lastvictim == other) self.dmg = (self.dmg / 2);
+		spawn_touchblood (self, other, self.dmg);
+		T_Damage (other,self,self.lastvictim,self.dmg,DAMARMOR);
+	} else {
+		if ( ((self.cnt == 3) || (random () < 0.150)) ) {
+			WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
+			WriteByte (MSG_BROADCAST,TE_GUNSHOT);
+			WriteCoord (MSG_BROADCAST,org_x);
+			WriteCoord (MSG_BROADCAST,org_y);
+			WriteCoord (MSG_BROADCAST,org_z);
+		} else {
+			// Ricochet up to 3 times
+			self.dmg = (0.900 * self.dmg); // Reduce damage 10% each ricochet, we lose energy on impact
+			self.velocity = (oldvel + (2 * trace_plane_normal)); // Mirror direction along impact plane normal
+			self.velocity = normalize (self.velocity);
+			self.velocity = (self.speed * self.velocity);
+			self.old_velocity = self.velocity;
+			if (self.flags & FL_ONGROUND) self.flags = (self.flags - FL_ONGROUND);
+			sound (self,CHAN_WEAPON,"hipweap/laserric.wav",TRUE,ATTN_STATIC);
+			return;
+		}
+	}
+	sound (self,CHAN_WEAPON,"enforcer/enfstop.wav",TRUE,ATTN_STATIC);
+	remove (self);
 };
 
 void () HIP_LaserThink = {
@@ -119,36 +111,35 @@ void (vector org, vector vec, float light) HIP_LaunchLaser = {
 	} else {
 		sound (self,CHAN_WEAPON,"hipweap/laserg.wav",TRUE,ATTN_NORM);
 	}
-   vec = normalize (vec);
-   newmis = spawn ();
+	vec = normalize (vec);
+	newmis = spawn ();
 	newmis.classgroup = CG_PROJALL;
-   newmis.owner = self;
-   newmis.classname = "hiplaser";
-   newmis.lastvictim = self;
-   newmis.movetype = MOVETYPE_FLYMISSILE;
-   newmis.solid = SOLID_BBOX;
-   if ( light )
-      newmis.effects = EF_DIMLIGHT;
+	newmis.owner = self;
+	newmis.classname = "hiplaser";
+	newmis.lastvictim = self;
+	newmis.movetype = MOVETYPE_FLYMISSILE;
+	newmis.solid = SOLID_BBOX;
+	if (light) newmis.effects = EF_DIMLIGHT;
 
 	if (self.perms | IT_BLASTER && self.weapon == IT_SHOTGUN) {
 		setmodel (newmis,"progs/ad171/proj_laz.mdl");
 	} else {
 		setmodel (newmis,"progs/hipnotic/lasrspik.mdl");
 	}
-   setsize (newmis,VEC_ORIGIN,VEC_ORIGIN);
-   setorigin (newmis,org);
-   newmis.speed = 1000.000;
-   newmis.dmg = 18.000;
+	setsize (newmis,VEC_ORIGIN,VEC_ORIGIN);
+	setorigin (newmis,org);
+	newmis.speed = 1000.000;
+	newmis.dmg = 18.000;
 	if (self.perms | IT_BLASTER && self.weapon == IT_SHOTGUN) newmis.dmg = 24; // slight boost for blaster to at least match AD shotgun boost
-   newmis.velocity = (vec * newmis.speed);
-   newmis.old_velocity = newmis.velocity;
-   newmis.angles = vectoangles (newmis.velocity);
-   newmis.avelocity = '0.000 0.000 400.000';
-   newmis.nextthink = time;
-   newmis.attack_finished = (time + MOVETYPE_FLY);
-   newmis.think = HIP_LaserThink;
-   newmis.touch = HIP_LaserTouch;
-   newmis.count = FALSE;
+	newmis.velocity = (vec * newmis.speed);
+	newmis.old_velocity = newmis.velocity;
+	newmis.angles = vectoangles (newmis.velocity);
+	newmis.avelocity = '0.000 0.000 400.000';
+	newmis.nextthink = time;
+	newmis.attack_finished = (time + MOVETYPE_FLY);
+	newmis.think = HIP_LaserThink;
+	newmis.touch = HIP_LaserTouch;
+	newmis.count = FALSE;
 };
 
 void (vector p1, vector p2, entity from, float damage) HIP_HammerDamage = {

@@ -5,7 +5,7 @@
 //
 // Compiled by Qmaster
 //
-// Mod attributions: Arcane Dimensions (AD)
+// Attributions: My own, Arms of Asgaard (AoA) and Arcane Dimensions (AD)
 //
 //
 // Distribution / Copyright / Permissions 
@@ -26,12 +26,9 @@
 // All of these resources may be electronically distributed only at 
 // NO CHARGE to the recipient.
 //
-//=============================================================================
-//
 // Stats:
 // Entity count: 0 - Utility functions only.
 // Function count: 6
-//
 //
 // Implements: Ammo Resistance System
 //

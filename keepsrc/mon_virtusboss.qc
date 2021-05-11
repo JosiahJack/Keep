@@ -381,7 +381,7 @@ void() monster_newboss = {
 	self.max_health = self.health;
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 	if (self.deathstring == "") self.deathstring = " was destroyed by a Virtus Worm\n";

@@ -142,9 +142,6 @@ float(entity ent, entity god) monster_revive = {
         // Sever all targeting links.
         self.targetname = self.killtarget = self.target = self.target2 = string_null;
 
-        // SoE: Undo super drop bonus, and refill purse.
-        //monster_purse_reset ();
-
         // Restore physical properties then re-animate.
         self.solid      = SOLID_SLIDEBOX;
         //self.takedamage = DAMAGE_AIM; // NOT YET, wait until fully rezzed! -Qmaster

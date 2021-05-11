@@ -1,5 +1,3 @@
-float() DGuardCheckAttack;
-
 void() deathguard_hit = {
 	if (vlen(self.enemy.origin - self.origin) > 100) {
 		if (random() < 0.5) {
@@ -305,6 +303,7 @@ void() monster_deathguard = {
 	self.th_missile = deathguard_fire1;
 	self.th_pain = deathguard_pain;
 	self.th_die = deathguard_die;
+	self.th_checkattack = DGuardCheckAttack;
 
 	self.classtype = CT_MONDGUARD;
 	self.classgroup = CG_KNIGHT;
@@ -318,64 +317,3 @@ void() monster_death_guard = {
 	self.classname = "monster_deathguard";
 	monster_deathguard();
 };
-
-float() DGuardCheckAttack = {
-	local vector spot1;
-	local vector spot2;
-	local entity targ;
-	local float chance;
-	local float dgdist;
-	targ = self.enemy;
-	spot1 = self.origin + self.view_ofs;
-	spot2 = targ.origin + targ.view_ofs;
-	traceline(spot1, spot2, 0, self);
-	if (trace_ent != targ)
-	{
-		return 0;
-	}
-	if (trace_inopen && trace_inwater)
-	{
-		return 0;
-	}
-	dgdist = vlen(self.enemy.origin - self.origin);
-	if (dgdist < 100)
-	{
-		self.th_melee();
-		return 1;
-	}
-	else
-	{
-		if (dgdist < 190 && dgdist > 140)
-		{
-			deathguard_charge1();
-			return 1;
-		}
-	}
-	if (time < self.attack_finished)
-	{
-		return 0;
-	}
-	if (enemy_range == RANGE_FAR)
-	{
-		return 0;
-	}
-	if (dgdist < 300)
-	{
-		return 0;
-	}
-	else
-	{
-		if (dgdist >= 300)
-		{
-			chance = 0.5;
-		}
-	}
-	if (random() < chance)
-	{
-		self.th_missile();
-		SUB_AttackFinished(1.4 * random() + 0.8);
-		return 1;
-	}
-	return 0;
-};
-

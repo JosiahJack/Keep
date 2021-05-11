@@ -102,44 +102,30 @@ void(float dist) ai_charge = {
 	movetogoal (dist);
 };
 
-//----------------------------------------------------------------------
-// ai_chargenoturn (generic)
-//----------------------------------------------------------------------
 void(float dist) ai_chargenoturn = {
 	MonsterDeBuff();
 	movetogoal (dist);
 };
 
-//----------------------------------------------------------------------
-// ai_charge_side (generic)
-//----------------------------------------------------------------------
 void() ai_charge_side = {
 	local	vector	dtemp;
 	local	float	heading;
 	
 	MonsterDeBuff();
 	ai_face();
-
-	// aim to the left of the enemy for a flyby
-	makevectors (self.angles);
+	makevectors (self.angles); // aim to the left of the enemy for a flyby
 	dtemp = self.enemy.origin - (30 * v_right);
 	heading = vectoyaw(dtemp - self.origin);
-	
 	walkmove(heading, 20);
 };
 
-//----------------------------------------------------------------------
-// ai_charge_front (generic)
-//----------------------------------------------------------------------
 void() ai_charge_front = {
 	local	float	heading;
 	
 	MonsterDeBuff();
 	ai_face();			// Turn towards enemy first	
-
 	makevectors (self.angles);
 	heading = vectoyaw(self.enemy.origin - self.origin);
-	
 	walkmove(heading, 10);
 };
 
@@ -689,7 +675,6 @@ float(float yaw, float dist) flat_move = {
     return dist;
 };
 
-// From Drake
 // This is 'movetogoal' without the vertical movement.
 void(float dist) flat_goal = {
     local   entity  swap;
@@ -701,6 +686,119 @@ void(float dist) flat_goal = {
     self.enemy = swap;
 };
 
+// Tells the monster to go straight up, if distance is positive.
+// A negative distance will make the monster go down instead.
+// Returns TRUE if fully or partially successful at moving.
+//
+// Originally from Dragons.
+float(float dist) ai_up = {
+    local entity  box, os, swap;
+    local vector  spot;
+
+    if (dist < 0) {
+        dist = 0 - dist;    // 'fabs' it.
+        temp_goal.origin_z = self.origin_z - 40 - dist;     // Going down.
+    } else {
+        temp_goal.origin_z = self.origin_z - 30 + dist;     // Going up.
+	}
+
+    setorigin (temp_goal, temp_goal.origin);
+    spot = self.origin;
+    swap = self.enemy;
+    self.enemy = temp_goal;
+    while (dist > 0) {
+        if (dist < 8) { // walkmove moves self up or down 8 units at a time. Last run through loop.  Go through the trouble of moving less than 8 units.
+            box = spawn(); // Create a dummy to move for the monster.  If the dummy can move, it is safe to set origin directly for monster.
+            box.oldorigin   = self.origin;
+            box.angles      = self.angles;
+            box.solid       = self.solid;
+            box.movetype    = self.movetype;
+            box.flags       = self.flags & FLx_NOT_FALLING;
+            box.enemy       = self.enemy;
+            box.owner       = self;     // Pass through monster.
+            setsize (box, self.mins, self.maxs);
+            setorigin (box, self.origin);
+            os = self;
+            self = box;
+            if (walkmove (self.angles_y, 0)) { // Dummy moved, now move the monster precisely.
+                if (self.origin_z > self.oldorigin_z) { // Going up.
+                    os.origin_z = os.origin_z + dist;
+                    setorigin (os, os.origin);
+                } else if (self.origin_z < self.oldorigin_z) { // Going down.
+                    os.origin_z = os.origin_z - dist;
+                    setorigin (os, os.origin);
+                }
+            }
+            remove (box);
+            self = os;
+        } else {
+            walkmove (self.angles_y, 0);    // Fails only in solid.
+		}
+        dist = dist - 8;
+    }
+    self.enemy = swap;
+    return (self.origin != spot);
+};
+
+float(float dist) ai_down = {return ai_up (0 - dist);};
+
+// Custom strafing AI for Dragons!
+// Move to the side of ideal_yaw.  Assumes ideal_yaw was set prior to a call to this function.  While similar to 'ai_run_slide', this function has two important differences.
+// * Only one move attempt is made.  If it fails, it does not get a second try to move to the other side.
+// * If the move fails, the 'lefty' value is toggled only if 'self' was leaning toward the side it tried to move to.
+// * This is used to help provide the illusion of a momentum change.
+void(float dist) ai_run_bank = {
+    local float ofs, flip;
+    
+    if (self.lefty) {
+		ofs = 90;  flip = (self.angles_z < 0);
+    } else {
+		ofs = -90;  flip = (self.angles_z > 0);
+	}
+
+    if (!walkmove (self.ideal_yaw + ofs, dist)) { // Do this first to move!
+        if (flip) self.lefty = !self.lefty;
+	}
+};
+
+//=============
+// ai_run_side
+//
+// Move to the side of ideal_yaw.  Assumes ideal_yaw was set prior to a
+// call to this function.  Called by 'ai_run_strafe'.
+//=============
+void(float dist) ai_run_side = {
+    local   float   ofs;
+    
+    if (self.lefty) ofs = 90;
+    else ofs = -90;
+
+    if (walkmove (self.ideal_yaw + ofs, dist)) return;
+
+    self.lefty = !self.lefty;
+    walkmove (self.ideal_yaw - ofs, dist);
+};
+
+//=============
+// ai_run_strafe (formerly ai_run_slide)
+//
+// Strafe sideways, but stay at aproximately the same range
+// PM:  Renamed to 'ai_run_strafe', and added float argument 'dist'.
+//
+// The above description, which describes circle-strafing, is only true if
+// enemy_yaw updates each frame, which is true only if this is called from
+// ai_run.  If called directly, enemy_yaw probably will not be set, and the
+// monster will simply move to the side.
+//
+// For guaranteed circle-strafing, do the following:
+//  {ai_face(); ai_run_side(dist); ai_face();}
+//=============
+void(float dist) ai_run_strafe = {
+    self.ideal_yaw = enemy_yaw;
+    ChangeYaw ();
+    ai_run_side (dist);
+};
+
 // From Quake 1.5 to move enemy towards destEnt
 void (entity destEnt, float trackSpeed) ai_track = {
    local vector dir;
@@ -708,4 +806,79 @@ void (entity destEnt, float trackSpeed) ai_track = {
    dir = (destEnt.origin + destEnt.view_ofs);
    dir = normalize ((dir - self.origin));
    self.velocity = (dir * trackSpeed);
+};
+
+void(float dist) ai_run;
+void(float dist) ai_walk;
+
+// Only used by Quoth Polyp
+void(float dist) ai_walkfly = {
+	local vector oldorg;
+	local vector reqvel;
+	local float d;
+	
+	oldorg = self.origin;
+	self.movetype = MOVETYPE_STEP;
+	ai_walk(dist);
+	d = vlen(self.origin - oldorg);
+	self.velocity = VEC_ORIGIN;
+	if (d <= dist + 5) {
+		self.movetype = MOVETYPE_FLY;
+		reqvel = normalize(self.origin - oldorg) * dist * 7;
+		setorigin(self, oldorg);
+		self.velocity = reqvel;
+	}
+};
+
+// Only used by Quoth Sentinel
+void(float dist) ai_runfly = {
+	local vector oldorg;
+	local vector reqvel;
+	local float d;
+	
+	oldorg = self.origin;
+	self.movetype = MOVETYPE_STEP;
+	ai_run(dist);
+	d = vlen(self.origin - oldorg);
+	self.velocity = VEC_ORIGIN;
+	if (d <= dist + 5) {
+		self.movetype = MOVETYPE_FLY;
+		reqvel = normalize(self.origin - oldorg) * dist * 7;
+		setorigin(self, oldorg);
+		self.velocity = reqvel;
+	}
+};
+
+void(float scratch_noise) ai_melee_carnivean = {
+	local vector	delta;
+	local float 	ldmg;
+
+	if (!self.enemy) return;		// removed before stroke
+
+	delta = self.enemy.origin - self.origin;
+	if (vlen(delta) > 100) return;
+		
+	ldmg = (random() + random() + random()) * 4;
+	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	makevectors (self.angles);
+	if (self.meleetimer < time) { // Only spawn blood/gore/sound every second
+		self.meleetimer = time + 1;
+		SpawnBlood (self.enemy, self.origin + v_forward*50 + v_up*2, VEC_ORIGIN, 17);
+		SpawnMeatSpray(self, self.enemy, crandom () * 100);	// spawn a little gore
+	}
+
+	if (scratch_noise) sound (self, CHAN_AUTO, "demon/dhit2.wav", 0.5, ATTN_NORM);
+};
+
+void() ai_melee_torment = {
+	local vector	delta;
+	local float 	ldmg;
+
+	if (!self.enemy) return;		// removed before stroke
+		
+	delta = self.enemy.origin - self.origin;
+	if (vlen(delta) > 77) return;
+		
+	ldmg = (random() + random() + random()) * 4;
+	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
 };

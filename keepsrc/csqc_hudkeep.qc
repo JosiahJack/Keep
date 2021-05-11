@@ -1810,6 +1810,8 @@ void (vector pos, vector virtsize) Hud_DrawSBar9 =
 {
 };
 
+float(float a, float b) mod;
+
 //======================================================================
 // SCOREBOARD BARS
 //

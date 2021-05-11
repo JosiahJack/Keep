@@ -285,7 +285,8 @@ void() misc_statue =
         local   vector  trig;
         local   float   vx, vy;
 
-        trig = CoSine (self.angles_y);
+        trig_x = mathlib_cos(self.angles_y);
+		trig_y = mathlib_sin(self.angles_y);
         vx = fabs(16 * trig_x) & 31 + 32;
         vy = fabs(16 * trig_y) & 31 + 32;
 

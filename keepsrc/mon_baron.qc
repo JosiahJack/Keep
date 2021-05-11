@@ -73,16 +73,6 @@ $frame decapb1 decapb2 decapb3 decapb4 decapb5 decapb6
 // Spawnflags
 float   BSF_NO_JUMP = 4;    // Disables jumping.
 
-// Elements
-//
-// PM:  Kept due to legacy.
-// Ordered by Horoscopes?
-// e.g., Ares=Fire, Taurus=Earth, Gemini=Air, Cancer=Water.
-float   BARON_FIRE  = 1;
-float   BARON_EARTH = 2;
-float   BARON_AIR   = 3;
-float   BARON_WATER = 4;
-
 //==========================================================================
 //  Stand
 
@@ -174,58 +164,58 @@ void() baron_walk15 =[ $run5,  baron_walk16 ] {ai_walk(6);};
 void() baron_walk16 =[ $run6,  baron_walk17 ] {ai_walk(6);};
 void() baron_walk17 =[ $run6,  baron_walk6  ] {ai_walk(6);};
 
-void() baron_walk =
-{
+void() baron_walk = {
     if (baron_sword_drawn ())
         baron_walk6 ();     // Start jogging.
     else
         baron_walk1 ();     // Draw sword then move.
 };
 
-
-//==========================================================================
 //  Victory
-
-void() baron_look6  =[ $crstand1,  baron_look6  ]
-{
+void() baron_look6  =[ $crstand1,  baron_look6  ] {
     WalkFrame_Add ( $crstand1, 1, 18 );
-    if (self.walkframe == 18)
-        self.think = monster_sow;
+    if (self.walkframe == 18) {
+		if (self.movetarget || self.charmer)
+			self.think = self.th_walk;
+		else
+			self.think = self.th_stand;
+	}
     ai_stand ();
 };
 
-void() baron_owned1  =[ $point1,  baron_owned1  ]
-{
+void() baron_owned1  =[ $point1,  baron_owned1  ] {
     WalkFrame_Add ( $point1, 1, 10 );
-    if (self.walkframe == 10)
-        self.think = monster_sow;
+    if (self.walkframe == 10) {
+		if (self.movetarget || self.charmer)
+			self.think = self.th_walk;
+		else
+			self.think = self.th_stand;
+	}
     ai_stand ();
 };
 
-void() baron_win =
-{
-    if (baron_sword_drawn ())
-    {
-        local   float   r;
+void() baron_win = {
+	local float r;
 
+    if (baron_sword_drawn ()) {
         r = random();
-        if (r >= 0.3)
-        {
-            if (r < 0.6)
-            {   sound (self, CHAN_VOICE, "drake/baron/idle.wav", 1, ATTN_NORM);
+        if (r >= 0.3) {
+            if (r < 0.6) {
+				sound (self, CHAN_VOICE, "drake/baron/idle.wav", 1, ATTN_NORM);
                 self.walkframe = 5;
                 baron_look6 ();
-            }
-            else
-            {   self.walkframe = 0;
+            } else {
+				self.walkframe = 0;
                 baron_owned1 ();
             }
             return;
         }
     }
-    monster_sow ();
+    if (self.movetarget || self.charmer)
+        self.th_walk ();
+    else
+        self.th_stand ();
 };
-
 
 //==========================================================================
 //  Run
@@ -309,19 +299,8 @@ void() baron_blam9  =[ $blam3,  baron_blam10 ] {ai_charge(3);};
 void() baron_blam10 =[ $blam2,  baron_blam11 ] {ai_charge(3); baron_sword();};
 void() baron_blam11 =[ $blam1,  baron_run    ] {ai_charge(3); baron_sword();};
 
-void() baron_meat =
-{
-    local   vector  org;
-
-    makevectors (self.angles);
-    org = self.origin + v_forward*16;
-    SpawnMeatSprayDrake (org, v_right * 150, self.enemy.bloodtype);
-    SpawnMeatSprayDrake (org, v_right * -150, self.enemy.bloodtype);
-};
-
 void() baron_throw1;
-void() baron_fist =
-{
+void() baron_fist = {
     local   vector  delta;
     
     ai_face ();
@@ -380,9 +359,8 @@ void() baron_fist =
     // Inflict the damage.
     sound (self, CHAN_WEAPON, "drake/baron/smash.wav", 1, ATTN_NORM);
     T_Damage (self.enemy, self, self, damage,DAMARMOR);
-
-    // Throw a piece of meat.
-    baron_meat ();
+	SpawnMeatSpray(self, self.enemy,crandom() * 150); // Throw 2 pieces of meat.
+	SpawnMeatSpray(self, self.enemy,crandom() * 150);
 };
 
 void() baron_throw1  =[ $smack11, baron_throw2  ] {ai_face();};
@@ -439,7 +417,7 @@ void() baron_melee =
 
 // Returns TRUE if baron can summon an earth elemental.
 // This only checks if summoning is allowed; nothing gets spawned here.
-float() BaronGolem_Check = {return (/*self.pets*/0 < ceil(skill / 2) + 1);};
+float() BaronGolem_Check = {return (self.minion_count < ceil(skill / 2) + 1);};
 
 //==========================================================================
 //  Missile
@@ -551,20 +529,16 @@ void() Baron_Earth =
 // Geyser stuff.
 float   GEYSER_MOVE     = 50;
 
-void(vector spot) QuakeWave =
-    {ShockWave (spot, RING_QUAKE, 5, "progs/drake/s_wave.spr");};
+void(vector spot) QuakeWave = {ShockWave (spot, RING_QUAKE, 5, "progs/drake/s_wave.spr");};
 
-void() Geyser_Erupt =
-{
+void() Geyser_Erupt = {
     local   entity  swap;
-    local   vector  org, dir, trig;
-    local   float   loop, sped;
-    local   float   ang, qcos, qsin;
+    local   vector  org, dir;
+    local   float   loop, sped, ang, qcos, qsin;
 
-// Trace down to find endpoint...In case the ground was moved or deleted,
+	// Trace down to find endpoint...In case the ground was moved or deleted,
     traceline (self.origin + '0 0 1', self.origin - '0 0 2047', TRUE, self);
-    if (trace_fraction == 1)
-        return;     // No ground to erupt from.
+    if (trace_fraction == 1) return; // No ground to erupt from.
     org = trace_endpos + '0 0 1';
     setorigin (self, org);
 
@@ -572,48 +546,38 @@ void() Geyser_Erupt =
     sound (self, CHAN_WEAPON, "drake/misc/wallbrk.wav", 1, ATTN_NORM);
     QuakeWave (self.origin);
 
-// Do rock spray from below.
+	// Do rock spray from below.
     swap = self;
     self = self.owner;
-
     loop = random() * 3 + 5;
-    while (loop > 0)
-    {
+    while (loop > 0) {
         // Find cosine and sine of offset angle.
-        ang = random() * 30 + 60;   // 60-90 degrees, 90 is straight up.
-        trig = CoSine (ang);
-        qcos = trig_x;
-        qsin = trig_y;
-
+        ang = random() * 30 + 60;   // 60-90 degrees, 90 is straight up. 
+        qcos = mathlib_cos(ang);
+        qsin = mathlib_sin(ang);
         dir = '0 0 0';
         dir_y = random() * 360;
         makevectors (dir);
         dir = (v_forward * qcos) + (v_up * qsin);
         sped = random() * 100 + 500;    //830;
-
         Earth_Launch (org, dir, sped);
         newmis.movetype     = MOVETYPE_TOSS;
         newmis.master       = newmis.owner      = self;
-
         loop = loop - 1;
     }
-
     self = swap;
     remove (self);
 };
 
-void() Geyser_NextThink =
-{
+void() Geyser_NextThink = {
     self.nextthink = time + 0.05;
-    if (self.delay <= self.nextthink)
-    {
+    if (self.delay <= self.nextthink) {
         self.nextthink  = self.delay;
         self.think      = Geyser_Erupt;
     }
 };
 
-void() Geyser_Think =
-{
+void() Geyser_Think = {
     local   vector  spot;
 
     self.distance = self.distance + GEYSER_MOVE;
@@ -627,8 +591,7 @@ void() Geyser_Think =
     Geyser_NextThink ();
 };
 
-void() Baron_Geyser =
-{
+void() Baron_Geyser = {
 // If target is within 'droptofloor' distance, spawn a geyser at his feet.
     traceline (self.enemy.origin, self.enemy.origin - '0 0 256', TRUE, self);
     if (trace_fraction == 1)
@@ -750,6 +713,7 @@ void() baron_slam = {
         }
     }
 };
+
 void() baron_slam1  =[ $smack1,  baron_slam2  ] {sound (self, CHAN_WEAPON, "drake/baron/woosh.wav", 1, ATTN_NORM); ai_charge(2); self.dest = self.enemy.origin;};
 void() baron_slam2  =[ $smack2,  baron_slam3  ] {ai_charge(2);};
 void() baron_slam3  =[ $smack3,  baron_slam4  ] {ai_charge(2);};
@@ -773,12 +737,13 @@ void() baron_cast5  =[ $magica3,  baron_cast6  ] {ai_face();
     else if (self.level == BARON_FIRE)
         Fireworks (self, self.dest, 90, 60, DF_SAFE, "fire");
     else if (self.level == BARON_EARTH) {
-        //if (BaronGolem_Check ())
+        if (BaronGolem_Check ()) {
             //if (!SpawnMonster_Attack (self, CT_MONGOLEM))
             //{
             //    if (visible (self.enemy))    // FIXME:  ???
             //        SpawnMonster (self, self.origin, CT_MONGOLEM, EntryPoint_Fan);
             //}
+		}
     } else { // Lightnign bolt from the sky.
         LightZero_Set (20, 1, -4);
         Thunderstrike (self, self.dest, 80);
@@ -1078,7 +1043,8 @@ void() baron_jumptouch = {
                 self.nextthink = time + 3;
                 self.think = baron_jump7;
             }
-            baron_meat ();
+            SpawnMeatSpray(self, self.enemy,crandom() * 150); // Throw 2 pieces of meat.
+			SpawnMeatSpray(self, self.enemy,crandom() * 150);
             self.frame = $blam6;  // Go to a stab frame.
             sound (self, CHAN_WEAPON, "weapons/axhit.wav", 1, ATTN_NORM);
         }
@@ -1183,26 +1149,6 @@ void(entity inflictor, entity attacker, float damage) baron_pain = {
     attacker = attacker;    // Appease FrikQcc.
 };
 
-
-//==========================================================================
-//  Death
-
-// SOLID_NOT used to be set at the fifth death frame.
-// Now it is set as in Nehahra.
-void() baron_decap1  =[ $decap1,  baron_decap2  ] {blood_spray ('-5 14 22', 1);};
-void() baron_decap2  =[ $decap2,  baron_decap3  ] {blood_spray ('3 9 18', 2); ai_forward(2);};
-void() baron_decap3  =[ $decap3,  baron_decap4  ] {blood_spray ('-6 6 18', 1); ai_back(2);};
-void() baron_decap4  =[ $decap4,  baron_decap5  ] {blood_spray ('-16 -10 13', 1); ai_back(6);};
-void() baron_decap5  =[ $decap5,  baron_decap6  ] {ai_back(2);};
-void() baron_decap6  =[ $decap6,  baron_decap6     ] {ai_back(8);};
-
-void() baron_decapb1  =[ $decapb1,  baron_decapb2  ] {blood_spray ('4 4 28', 1);};
-void() baron_decapb2  =[ $decapb2,  baron_decapb3  ] {blood_spray ('7 2 24', 1);};
-void() baron_decapb3  =[ $decapb3,  baron_decapb4  ] {blood_spray ('0 3 15', 1);ai_forward(7);};
-void() baron_decapb4  =[ $decapb4,  baron_decapb5  ] {blood_spray ('4 4 6', 1);};
-void() baron_decapb5  =[ $decapb5,  baron_decapb6  ] {blood_spray ('3 4 5', -1); ai_forward(20);};
-void() baron_decapb6  =[ $decapb6,  baron_decapb6      ] {ai_forward(2);};
-
 void() baron_diea1  =[ $diea1,  baron_diea2  ] {};
 void() baron_diea2  =[ $diea2,  baron_diea3  ] {ai_forward(2); monster_check_gib(); self.solid = SOLID_NOT;};
 void() baron_diea3  =[ $diea3,  baron_diea4  ] {ai_back(2); monster_check_gib();};
@@ -1230,10 +1176,6 @@ void() baron_die = {
     }
 };
 
-
-//==========================================================================
-//  Revive
-
 void() baron_revivea1  =[ $diea5,  baron_revivea2  ] {};
 void() baron_revivea2  =[ $diea4,  baron_revivea3  ] {};
 void() baron_revivea3  =[ $diea3,  baron_revivea4  ] {};
@@ -1251,53 +1193,6 @@ void() baron_revive = {
         baron_reviveb1 ();
     else
         baron_revivea1 ();
-};
-
-
-float() BaronBossCheckAttack = {
-	// If target is not in LOS, use an attack that doesn't care about line-of-fire.
-	// This will harass a player that tries to hide and spam grenades from a
-	// safe spot.
-    if (enemy_range <= RANGE_MID)
-    if (time >= self.attack_finished)
-    if (self.waitmax < time)    // Use only after a delay.
-    if (random() < 0.01) {
-
-        local   float   r;
-
-        r = random();
-        if (self.level == BARON_FIRE) {
-            baron_cast1 ();
-        } else if (self.level == BARON_EARTH) {
-            if ((r < 0.5) && !super_active && Grounded (self.enemy))
-                baron_slam1();
-            else if (BaronGolem_Check ())
-                baron_cast1();
-            else
-                return FALSE;
-        }
-        else if (self.level == BARON_AIR) {
-            if (UpIsSky (self.enemy.origin)) {
-                if ((r < 0.5) && !super_active)
-                    baron_slam1();
-                else
-                    baron_cast1();
-            } else if (!super_active)
-                baron_slam1();
-            else
-                return FALSE;
-        } else if (self.level == BARON_WATER) {
-            if ((r < 0.5) && !super_active)
-                baron_cast1();
-            else
-                baron_slam1();
-        }
-        else
-            return FALSE;
-        SUB_AttackFinished (2*r);
-        return TRUE;
-    }
-    return FALSE;
 };
 
 //============
@@ -1406,8 +1301,7 @@ void() monster_baron = {
 				if (self.deathstring == "")  self.deathstring = " was blown away by the Wind Baron\n";
 			}
         } else {
-			//if (cvar("skill") >= 1)
-			//    self.th_harass = BaronBossCheckAttack;
+			if (cvar("skill") >= 1) self.th_checkattack = BaronBossCheckAttack; // Only on hard??
 			if ( (random () < 0.500) ) {
 				if (self.deathstring == "")  self.deathstring = " became a Baron's thrill kill\n";
 			} else {
@@ -1447,10 +1341,10 @@ void() monster_baron = {
     //self.purse      = '3 0.75 0.25';
     //self.hittype    = HIT_METAL;
 
-    //if (soul_evil)
-    //    monster_purse (self.purse_x, self.purse_y, self.purse_z);
-    //else
-    //    self.purse = '0 0 0';
+    if (soul_evil)
+       monster_purse (self.purse_x, self.purse_y, self.purse_z);
+    else
+       self.purse = '0 0 0';
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;

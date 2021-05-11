@@ -1,34 +1,55 @@
-/*======================================================================
- HAZARD PROJECTILE Systems
- ------------------------
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Arcane Dimensions (AD)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 14
+//
+// Implements: Hazard Projectile Systems for monster projectiles
+//
+// Description:
+// Hazard projectiles are about denying movement space to players
+// and creating a temporary hazard to naviagate around
+//
+// Players who jump a lot and have greater DM focused movement skills,
+// will find hazard damage projectiles easier to deal with.
+//
+// Hazard projectiles often have particle emitters or effects
+// which can quickly drag down engine FPS. All hazard projectiles
+// need to maintain counters to help performance.
+//
+// Kill triggers can be dangerous on monsters that use hazard
+// projectiles because the counters are not zero'd correctly
+//
+// Void triggers do cope with hazard projectile counters
+//=============================================================================
 
- * Flame (SPRITES)
- * Blobs (MODELS)
-
- * Hazard projectiles are about denying movement space to players
-   and creating a temporary hazard to naviagate around
-   
- * Players who jump a lot and have greater DM focused movement skills,
-   will find hazard damage projectiles easier to deal with.
- 
- * Hazard projectiles often have particle emitters or effects
-   which can quickly drag down engine FPS. All hazard projectiles
-   need to maintain counters to help performance.
-
- * Kill triggers can be dangerous on monsters that use hazard
-   projectiles because the counters are not zero'd correctly
-   
- * Void triggers do cope with hazard projectile counters
- 
-======================================================================*/	
 float PROJ_MAXLIMIT = 32;		// Fire sprite limit per monster
-
-.float		proj_count;			// Floor model/sprite active counter
-.float		proj_limit;			// Maximum amount of floor model/sprite active
-.vector		proj_attqty;		// Proj Count = Base (X) * (Skill * Y) Maximum = Z
-.float		proj_attarc;		// Proj Arc Easy=-1/1, Normal=-2/2, Hard=-3/3
-.entity		proj_source;		// Source entity for the floor projectiles
-
 float FLAME_RED = 0;				// Default colour
 float FLAME_GREEN = 1;				// Not implemented (Add later)
 float FLAME_BLUE = 2;				// Extra blue version
@@ -39,7 +60,11 @@ float FLAME_TINY = 1;				// 50% chance
 float FLAME_SML = 2;				// 30% chance
 float FLAME_MED = 5;				// 20% chance
 float FLAME_VLRG = 10;				// Not implemented (Add later)
-
+.float		proj_count;			// Floor model/sprite active counter
+.float		proj_limit;			// Maximum amount of floor model/sprite active
+.vector		proj_attqty;		// Proj Count = Base (X) * (Skill * Y) Maximum = Z
+.float		proj_attarc;		// Proj Arc Easy=-1/1, Normal=-2/2, Hard=-3/3
+.entity		proj_source;		// Source entity for the floor projectiles
 .entity		proj_trcont;		// Controller entity for flame lines
 .float		proj_trqty;			// Fire trail quantity of flames to create
 .float		proj_trdist;		// Fire trail distance for each flame segment
@@ -56,30 +81,23 @@ float FLAME_TRWOBBLE = 8;			// Trail flame random XY wobble
 float FLAME_TREXPLODE = 40;			// Trail flame xxplosive damage
 float FLAME_TRLIFE = 8;				// Trail flame life time
 float FLAME_TRSPEED = 0.02;			// Trail flame standard speed
-
 string MODEL_PROJ_FLAMETINY = "progs/ad181/s_flametiny.spr";
 string MODEL_PROJ_FLAMESML = "progs/ad181/s_flamesml.spr";
 string MODEL_PROJ_FLAMEMED = "progs/ad181/s_flamemed.spr";
 // string MODEL_PROJ_FLAMEVLRG = "progs/ad181/s_flamevlrg.spr"; // does not exist yet, Qmaster pre Bal
 string MODEL_PROJ_FLAMEVLRG = "progs/ad181/s_flamemed.spr";
-
-// Blue fire! (aka Void Knight fire)
-string MODEL_PROJ_BFLAMETINY = "progs/s_blflametiny.spr";
+string MODEL_PROJ_BFLAMETINY = "progs/s_blflametiny.spr"; // Blue fire! (aka Void Knight fire)
 string MODEL_PROJ_BFLAMESML = "progs/s_blflamesml.spr";
 string MODEL_PROJ_BFLAMEMED = "progs/s_blflamemed.spr";
 //string MODEL_PROJ_BFLAMEVLRG = "progs/s_blflamevlrg.spr"; // does not exist yet, Qmaster pre Bal
 string MODEL_PROJ_BFLAMEVLRG = "progs/s_blflamemed.spr";
-
-// Green fire!
-string MODEL_PROJ_GRFLAMETINY = "progs/s_grflametiny.spr";
+string MODEL_PROJ_GRFLAMETINY = "progs/s_grflametiny.spr"; // Green fire!
 string MODEL_PROJ_GRFLAMESML = "progs/s_grflamesml.spr";
 string MODEL_PROJ_GRFLAMEMED = "progs/s_grflamemed.spr";
 // string MODEL_PROJ_GRFLAMEVLRG = "progs/s_grflamevlrg.spr"; // does not exist yet, Qmaster pre Bal
 string MODEL_PROJ_GRFLAMEVLRG = "progs/s_grflamemed.spr";
 
-//----------------------------------------------------------------------
-void() PreCache_Flame = 
-{
+void() PreCache_Flame = {
 	precache_model (MODEL_PROJ_FLAMETINY);		// 16 (wide) x  48 (high)
 	precache_model (MODEL_PROJ_FLAMESML);		// 24 (wide) x  64 (high)
 	precache_model (MODEL_PROJ_FLAMEMED);		// 32 (wide) x  96 (high)
@@ -90,9 +108,7 @@ void() PreCache_Flame =
 	precache_sound ("ambience/flames4.wav");
 };
 
-//----------------------------------------------------------------------
-void() PreCache_BlueFlame = 
-{
+void() PreCache_BlueFlame = {
 	precache_model (MODEL_PROJ_BFLAMETINY);		// 16 (wide) x  48 (high)
 	precache_model (MODEL_PROJ_BFLAMESML);		// 24 (wide) x  64 (high)
 	precache_model (MODEL_PROJ_BFLAMEMED);		// 32 (wide) x  96 (high)
@@ -103,8 +119,7 @@ void() PreCache_BlueFlame =
 	precache_sound ("ambience/flames4.wav");
 };
 
-void() PreCache_GreenFlame = 
-{
+void() PreCache_GreenFlame = {
 	precache_model (MODEL_PROJ_GRFLAMETINY);		// 16 (wide) x  48 (high)
 	precache_model (MODEL_PROJ_GRFLAMESML);		// 24 (wide) x  64 (high)
 	precache_model (MODEL_PROJ_GRFLAMEMED);		// 32 (wide) x  96 (high)
@@ -115,14 +130,9 @@ void() PreCache_GreenFlame =
 	precache_sound ("ambience/flames4.wav");
 };
 
-//----------------------------------------------------------------------
-// Is there any space left to spawn a hazard projectile?
-// return TRUE if counter is lower than limit
-//----------------------------------------------------------------------
-float(entity targ, float maxextra) HazardProjectile_CheckLimit =
-{
-	// Can't do a limit check if no limit (proj_limit) is set!
-	// This allows for an override to be defined on attacker
+// Is there any space left to spawn a hazard projectile?  Return TRUE if counter is lower than limit
+float(entity targ, float maxextra) HazardProjectile_CheckLimit = {
+	// Can't do a limit check if no limit (proj_limit) is set!  This allows for an override to be defined on attacker
 	if (targ.proj_limit <= 0) {
 		// Use global particle max to create limit
 		// This is a good idea on paper, but this is trashing fps
@@ -142,12 +152,8 @@ float(entity targ, float maxextra) HazardProjectile_CheckLimit =
 	else return FALSE;
 };
 
-//----------------------------------------------------------------------
-// Single function for any increase in the projectile counter
-// Double check the source entity exists first
-//----------------------------------------------------------------------
-void(entity targ) HazardProjectile_AddCounter =
-{
+// Single function for any increase in the projectile counter.  Double check the source entity exists first
+void(entity targ) HazardProjectile_AddCounter = {
 	// Does the source exist?
 	if (targ.proj_source != world) {
 		// Update counters on source entity
@@ -157,24 +163,17 @@ void(entity targ) HazardProjectile_AddCounter =
 	}
 };
 
-//----------------------------------------------------------------------
 // Final function to decrease counters and remove entity
-//----------------------------------------------------------------------
-void(entity targ) HazardProjectile_Finished =
-{
+void(entity targ) HazardProjectile_Finished = {
 	// Does the source exist?
 	if (targ.proj_source != world) {
 		// Update counters on source entity
-		if (targ.proj_source.proj_count > 0) {
-			targ.proj_source.proj_count = targ.proj_source.proj_count - 1;
-		}
+		if (targ.proj_source.proj_count > 0) targ.proj_source.proj_count = targ.proj_source.proj_count - 1;
 	}
-	// Only do this once
-	targ.proj_source = world;
+	targ.proj_source = world; // Only do this once
 
 	// Puff of smoke
-	if (targ.part_exitpuff)
-		SpawnExplosion(EXPLODE_BURST_SMOKE, targ.origin+targ.view_ofs, "");
+	if (targ.part_exitpuff) SpawnExplosion(EXPLODE_BURST_SMOKE, targ.origin+targ.view_ofs, "");
 	
 	// Stop any ambient sounds
 	if (targ.part_exitsound) {
@@ -186,21 +185,15 @@ void(entity targ) HazardProjectile_Finished =
 
 	// Fade entity?
 	if (targ.part_exitfade) {
-		// Stop world interaction
-		entity_stop(targ);
+		entity_stop(targ); // Stop world interaction
 		targ.nextthink = time + 0.02;
 		targ.think = model_fade;
-	}
-	// Remove entity
-	else entity_remove(targ, 0.1);
+	} else entity_remove(targ, 0.1); // Remove entity
 };
 
-//----------------------------------------------------------------------
 void() HazardProjectile_Exit = { HazardProjectile_Finished(self); };
 
-//----------------------------------------------------------------------
-void() Animate_HazardProjectile =
-{
+void() Animate_HazardProjectile = {
 	// Check if owner of flame is busy and needs flame to stop!
 	if (self.owner.part_exitbusy > 0 && self.part_exitbusy == FALSE) {
 		// Kill the entity this frame (0) or the next (+0.05)
@@ -238,8 +231,7 @@ void() Animate_HazardProjectile =
 					pointparticles(particleeffectnum(DPP_FLAMES), self.origin, '0 0 0', 1);
 			}
 		}
-	}
-	else {
+	} else {
 		// Random particle spark
 		if (random() < 0.05) SpawnProjectileSmoke(self.origin, 200, 50, 250);
 		// Random particle burst, expects defaults have been setup
@@ -252,9 +244,7 @@ void() Animate_HazardProjectile =
 	self.nextthink = time + 0.1;	
 };
 
-//----------------------------------------------------------------------
-void() Touch_HazardProjectile =
-{
+void() Touch_HazardProjectile = {
 	if (self.touchedvoid) return;				// Marked for removal
 	if (check_skycontent(self.origin)) { HazardProjectile_Finished(self); return;}
 	if (other == self.owner) return;			// Touching attacker, do nothing
@@ -290,22 +280,17 @@ void() Touch_HazardProjectile =
 			}
 		}
 
-		//----------------------------------------------------------------------
-		// LAVA SHIELD
-		// Resistance = 50% fire/lava attacks
+		// LAVA SHIELD Resistance = 50% fire/lava attacks
 		if (other.flags & FL_CLIENT && other.moditems & IT_ARTLAVASHIELD) {
 			PlayLavaShieldSound(other);
 			if (other.resist_fire > 0) self.dmg = self.dmg * (1-other.resist_fire);
 			if (self.dmg > 0) self.dmg = floor(self.dmg * 0.5);
 		}
 	
-		//----------------------------------------------------------------------
-		// Add any monster infighting modifiers (no negative or zero)
-		// Round down the damage to integers (can cause logic issues)
+		// Add any monster infighting modifiers (no negative or zero).  Round down the damage to integers (can cause logic issues)
 		if (self.infightextra <= 0) self.infightextra = 1;
 		if (self.dmg > 0) self.dmg = floor(self.infightextra * self.dmg);
-		
-		//----------------------------------------------------------------------
+
 		// FINALLY any damage?
 		if (self.dmg > 0) {
 			// Spawn some blood, cause harm and play a sound!
@@ -318,8 +303,7 @@ void() Touch_HazardProjectile =
 				sound (self, CHAN_WEAPON, self.part_soundtouch, self.volume, ATTN_FEET);
 			}
 		}
-	}
-	else {
+	} else {
 		// Any impact/miss sound defined?
 		if (self.part_soundmiss != "") {
 			sound (self, CHAN_WEAPON, self.part_soundmiss, 1, ATTN_FEET);
@@ -385,8 +369,7 @@ void(entity targ, vector org, vector dir, float proj_color, float proj_size, flo
 	// Update hazard projectile counters
 	newmis.proj_source = targ;
 	HazardProjectile_AddCounter(newmis);
-	
-	//----------------------------------------------------------------------
+
 	// Allow for random selection of sprite size
 	if (proj_size <= 0) {
 		newmis.lip = random();
@@ -402,8 +385,7 @@ void(entity targ, vector org, vector dir, float proj_color, float proj_size, flo
 		if (proj_color == FLAME_BLUE) setmodel (newmis, MODEL_PROJ_BFLAMESML);
 		else if (proj_color == FLAME_GREEN) setmodel (newmis, MODEL_PROJ_GRFLAMESML);
 		else setmodel (newmis, MODEL_PROJ_FLAMESML);		// 24x64 BB=12x24
-	}
-	else if (proj_size == FLAME_MED) {
+	} else if (proj_size == FLAME_MED) {
 		newmis.bbmins = '-8 -8 0'; newmis.bbmaxs = '8 8 32';
 		if (proj_color == FLAME_BLUE) setmodel (newmis, MODEL_PROJ_BFLAMEMED);
 		else if (proj_color == FLAME_GREEN) setmodel (newmis, MODEL_PROJ_GRFLAMEMED);
@@ -429,11 +411,8 @@ void(entity targ, vector org, vector dir, float proj_color, float proj_size, flo
 	newmis.walkframe = rint(random() * FRAME_FLAME);
 	if (newmis.walkframe >= FRAME_FLAME) newmis.walkframe = 0;
 	newmis.frame = newmis.walkframe;
-
-	// Movement done in projectile tick function
-	newmis.velocity = dir;
+	newmis.velocity = dir; // Movement done in projectile tick function
 	newmis.avelocity = '0 0 0';
-
 	newmis.lip = random();
 	if (newmis.lip < 0.25) newmis.noise = "ambience/flames1.wav";
 	else if (newmis.lip < 0.5) newmis.noise = "ambience/flames2.wav";
@@ -441,9 +420,7 @@ void(entity targ, vector org, vector dir, float proj_color, float proj_size, flo
 	else newmis.noise = "ambience/flames4.wav";
 	sound(newmis, CHAN_VOICE, newmis.noise, 0.3, ATTN_IDLE);
 	newmis.volume = time + 1;
-	
-	// Setup particle defaults for hazard emitter
-	if (proj_color == FLAME_BLUE) newmis.part_trstyle = PARTICLE_TRAIL_PLASMA;
+	if (proj_color == FLAME_BLUE) newmis.part_trstyle = PARTICLE_TRAIL_PLASMA; // Setup particle defaults for hazard emitter
 	newmis.part_trstyle = PARTICLE_TRAIL_YELLOW;
 	Default_ParticleTrail(newmis);
 	// Manually animate the sprite flames
@@ -456,8 +433,7 @@ void(entity targ, vector org, vector dir, float proj_color, float proj_size, flo
  * Uses sprites for animation/flame effect
  * Has radius and impact touch damage
 ======================================================================*/
-void() Fire_Trail =
-{
+void() Fire_Trail = {
 	local float trblocked, trstepup;
 	
 	// Is the flame trail active?
@@ -536,7 +512,6 @@ void(vector org, vector dir, float proj_color, string proj_sfx) Launch_Trail = {
 	self.proj_trcont.classname = "proj_trail";
 	self.proj_trcont.classtype = CT_CONTROL;
 	self.proj_trcont.classgroup = CG_PROJHAZARD;
-
 	self.proj_trcont.solid = SOLID_NOT;
 	self.proj_trcont.movetype = MOVETYPE_NONE;
 	self.proj_trcont.origin = self.origin + '0 0 64';
@@ -585,22 +560,14 @@ void(vector org, vector dir, float proj_color, string proj_sfx) Launch_Trail = {
 	traceline(org, org - self.proj_trcont.finaldest, TRUE, self);
 	self.proj_trcont.pos1 = trace_endpos;
 	
-	// Start with initial flame
-	// target, origin, v_forward, colour, size, lifetime, speed
+	// Start with initial flame.  target, origin, v_forward, colour, size, lifetime, speed
 	Launch_Flame (self, self.proj_trcont.pos1, '0 0 0', self.proj_trcont.lip, -1, -1, 0);
-
-	// Keep the conga line going ...
-	self.proj_trcont.think = Fire_Trail;
+	self.proj_trcont.think = Fire_Trail; // Keep the conga line going ...
 	self.proj_trcont.nextthink = time + self.proj_trcont.speed;
 };
 
-/*======================================================================
- HAZARD PROJECTILES 
- * Uses models and particle/trails for effects
- * Has radius and impact touch damage
-======================================================================*/
-void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard =
-{
+// Uses models and particle/trails for effects.  Has radius and impact touch damage
+void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard = {
 	// Check if the hazard projectile limit exists and has been reached?
 	if ( !(HazardProjectile_CheckLimit(self,1)) ) return;
 	
@@ -609,18 +576,13 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard =
 	newmis.classname = "proj_hazard";	// obj name, not really used anymore
 	newmis.classtype = proj_type;		// Class type number, quick identity
 	newmis.classgroup = CG_PROJHAZARD;	// Special Hazard Projectile Type
-
 	newmis.movetype = MOVETYPE_BOUNCE;	// Bounce like a grenade, classic arc
 	newmis.solid = SOLID_BBOX;			// trigger is limited, use bbox until touch
 	newmis.bbmins = '-4 -4 0'; 			// Save for touch function
 	newmis.bbmaxs = '4 4 0';
-
-	// Setup Touch function and lifetime timer
-	newmis.touch = Touch_HazardProjectile;
+	newmis.touch = Touch_HazardProjectile; // Setup Touch function and lifetime timer
 	newmis.attack_finished = time + LIFE_HAZARD + random() + random();
-
-	// Update hazard projectile counters
-	newmis.proj_source = self;
+	newmis.proj_source = self; // Update hazard projectile counters
 	HazardProjectile_AddCounter(newmis);
 
 	// Monsters do extra (quad) damage to other monsters
@@ -630,15 +592,13 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard =
 	}
 
 	// Setup model for each missile type
-	//----------------------------------------------------------------------
 	if (proj_type == CT_PROJ_DPRINCE2) {
 		setmodel(newmis, self.attack_proj2);
 		newmis.part_qctrail = TRUE;
 		newmis.part_trstyle = self.part_trstyle;
 		newmis.frame = rint((random() * 9));
 		newmis.part_soundmiss = "dknight/dprince_miss.wav";
-	}
-	else if (proj_type == CT_PROJ_SWEEPER2) {
+	} else if (proj_type == CT_PROJ_SWEEPER2) {
 		setmodel(newmis, self.attack_proj2);
 		newmis.part_qctrail = TRUE;
 		newmis.part_trstyle = self.part_trstyle;
@@ -647,7 +607,6 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard =
 	}
 	
 	// Standard projectile setup (origin, size and velocity)
-	//----------------------------------------------------------------------
 	newmis.velocity = dir;
 	newmis.avelocity = avel;
 	newmis.angles = vectoangles(newmis.velocity);
@@ -663,7 +622,6 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard =
 	newmis.nextthink = time + 0.1;
 
 	// Special particle trail
-	//----------------------------------------------------------------------
 	if (newmis.part_qctrail == TRUE ) {
 		// Is DP/FTE/QSS engine active for particle trail feature?
 		if (ext_dppart && newmis.dpp_name != "") {
@@ -674,4 +632,3 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard =
 		newmis.nextthink = time + 0.02;
 	}
 };
-

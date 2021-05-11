@@ -305,7 +305,7 @@ void() turret_die= {
 	setmodel (dedtur, "progs/custents/dedturet.mdl");
 	setsize (self, '-10 -10 -3', '10 10 12');
 	dedtur.skin = self.skin;
-	ThrowHead ();
+	ThrowGib (25,1); // headmdl
 	ThrowGib (11,4);
 };
 

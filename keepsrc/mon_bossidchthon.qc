@@ -393,7 +393,7 @@ void() monster_boss =
 	self.reflectaxe = TRUE;			// Prevent axe damage
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
 	self.th_stand = idchthon_idle1;
 	self.th_walk = idchthon_idle1;

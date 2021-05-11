@@ -114,7 +114,7 @@ void() monster_coil = {
 	if (self.deathstring == "")  self.deathstring = " was killed by a giant anaconda\n";
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
 	if(!self.classtype) self.classtype = CT_MONANACONDACOIL;
 	if (!self.classgroup) self.classgroup = CG_BOSS;
@@ -977,7 +977,7 @@ void() monster_anac = {
 	if (self.deathstring == "")  self.deathstring = " was killed by a giant anaconda\n";
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
 	if(!self.classtype) self.classtype = CT_MONANACONDA;
 	if (!self.classgroup) self.classgroup = CG_BOSS;
@@ -985,4 +985,3 @@ void() monster_anac = {
 
 	monster_start();
 };
-

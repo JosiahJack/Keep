@@ -1,16 +1,49 @@
-/*======================================================================
- ImpulseCommands
-======================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: All
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 1
+//
+// Implements: Impulse Commands System for keybinds and cheats
+//
+// Description:
+// Handles custom keybinds, weapon changes, and cheat codes.
+//=============================================================================
+
 void() print_coins;
 void() print_bones;
 void() usecommand;
 
-void() ImpulseCommands =
-{
-	if ((self.impulse >= 1 && self.impulse <= 9) || (self.impulse >= 60 && self.impulse <= 64) || (self.impulse >= 75 && self.impulse <= 89)) W_ChangeWeapon (self);
+void() ImpulseCommands = {
+	if ((self.impulse >= 1 && self.impulse <= 8) || (self.impulse >= 60 && self.impulse <= 64) || (self.impulse >= 75 && self.impulse <= 90)) W_ChangeWeapon (self);
 	else if (self.impulse == 10) CycleWeaponCommand();
 	else if (self.impulse == 12) CycleWeaponReverseCommand();
-
 	else if (self.impulse == 56) ToggleDragonArmor();
 	else if (self.impulse == 57) ToggleSpiritShroud();
 	else if (self.impulse == 58) ToggleBerserkerArmor(); // Quad time using Demonhide armor for seconds!
@@ -38,28 +71,21 @@ void() ImpulseCommands =
 	else if (self.impulse == 158) togglecooppowerups();	// Toggle COOP powerups to respawn
 	else if (self.impulse == 159) usecommand(); // USE such as for purchases in versus mode coop 3
 	else if (self.impulse == 160) toggleweather();		// Toggle Weather Systems
-	else if (self.impulse == 162) togglehpmax(0.25);	// Toggle HP Max 0.25/0.5/0.75/1.0
-	else if (self.impulse == 164) togglehpmax(0.50);	// Toggle HP Max between 0.5/1.0
-	// else if (self.impulse == 166) togglenotargetblock();// Toggle notarget block on items  Don't like notarget blocking pickups - Qmaster
-	// else if (self.impulse == 168) togglenomwheelskip(); // Toggle no mouse wheel skip
+	else if (self.impulse == 162) togglehpmax(25);	// Cycle health in 25 increments, 25, 50, 75, ...250, 25. Skips 0.
+	else if (self.impulse == 164) togglehpmax(50);	// Cycle health in 50 increments, 50, 100, ...250, 50... Skips 0.
 	else if (self.impulse == 170) togglebodyremoval();	// Toggle monster body fade/removal
 	else if (self.impulse == 175) display_customkeys();	// Display Custom Key inventory
 	else if (self.impulse == 178) CycleThroughHuds();	// Cycle through different custom HUDS
-
 	else if (self.impulse == 180) display_secrets();	// Display a list of secret locations
 	else if (self.impulse == 182) display_secretlocs();	// Display secret locations
 	else if (self.impulse == 184) display_monsleft();	// Display a list of monsters left
 	else if (self.impulse == 185) display_monsqty();	// Display a table of monster type/qty
 	else if (self.impulse == 186) display_ammostats();	// Display a list of Ammo Stats
-
 	else if (self.impulse == 190) display_randomizer();	// Display current random seed
 	else if (self.impulse == 192) display_randflags();	// Display current settings
 	else if (self.impulse == 194) display_randupgrade();// Display weapon upgrades
 	else if (self.impulse == 196) reset_randomizer();	// Reset seed for Chaos system
-
-	// Only works developer only)
 	else if (self.impulse == 200) toggleupgradeaxe();	// Toggle Axe Upgrade
-	//else if (self.impulse == 202) toggleupgradehook();	// Toggle GrappleHook Upgrade
 	else if (self.impulse == 205) toggleupgradessg();	// Toggle Shotgun Upgrade
 	else if (self.impulse == 210) toggleupgradelg();	// Toggle Lightning Upgrade
 	else if (self.impulse == 220) display_configflag();	// Display MOD config flag
@@ -74,21 +100,17 @@ void() ImpulseCommands =
 	else if (self.impulse == 242) givesigil(SVR_RUNE_KEY2);	// Will be reset on map load
 	else if (self.impulse == 243) givesigil(SVR_RUNE_KEY3);	// Mainly used for testing
 	else if (self.impulse == 244) givesigil(SVR_RUNE_KEY4);
-
 	else if (self.impulse == 245) givekey(IT_KEY1 + IT_KEY2);	// Both
-
 	else if (self.impulse == 246) LavaShieldCheat();
 	// else if (self.impulse == 247) AirTankCheat();
 	else if (self.impulse == 247) BlastBeltCheat();
 	else if (self.impulse == 248) TomeOfPowerCheat();
-	// Legacy cheat commands
-	else if (self.impulse == 249) CheatCommand();
+	else if (self.impulse == 249 || self.impulse == 9 || self.impulse == 13) CheatCommand();
 	else if (self.impulse == 250) SharpshooterCheat();
 	else if (self.impulse == 251) NailPiercerCheat();
 	else if (self.impulse == 252) EnvSuitCheat();
 	else if (self.impulse == 253) PentagramCheat();
 	else if (self.impulse == 254) InvisibleCheat();
 	else if (self.impulse == 255) QuadDamageCheat();
-
 	self.impulse = 0;
 };

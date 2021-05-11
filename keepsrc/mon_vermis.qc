@@ -1834,7 +1834,7 @@ void() monster_vermis = {
 	self.th_die = vermis_die;
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;

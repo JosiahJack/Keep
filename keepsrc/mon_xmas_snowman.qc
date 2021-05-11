@@ -271,7 +271,7 @@ void() monster_xmas_snowman = {
 	self.poisonous = FALSE;				// Not Supported
 	self.meleeoffset = '24 0 20';		// Claw attack offset
 	self.attack_offset = '24 0 20';		// Run + Gun vector
-	self.bleedcolour = MON_BCOLOR_SILVER;// Red is odd for snow
+	self.bloodtype = self.bleedcolour = MON_BCOLOR_SILVER;// Red is odd for snow
 	if (self.deathstring == "") self.deathstring = " was smashed on a Snowman\n";
 
 	// Default amount of nails to burst fire (5x9=45dmg)

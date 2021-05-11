@@ -333,63 +333,6 @@ void (entity missile, float mspeed, float accuracy) UbsMissile = {
 
 void () ubs_run;
 
-float () ubsCheckAttack = {
-	local vector spot1, spot2;
-	local entity targ;
-	local float chance;
-
-	if ((time < self.attack_finished)) return (FALSE);
-
-	if ((enemy_range == RANGE_FAR)) {
-		if ((self.attack_state != AS_STRAIGHT)) {
-			self.attack_state = AS_STRAIGHT;
-			ubs_run ();
-		}
-		return (FALSE);
-	}
-
-	targ = self.enemy;
-
-	// see if any entities are in the way of the shot
-	spot1 = (self.origin + self.view_ofs);
-	spot2 = (targ.origin + targ.view_ofs);
-	traceline (spot1, spot2, FALSE, self);
-	if ((trace_ent != targ)) {
-		if ((self.attack_state != AS_STRAIGHT)) {
-			self.attack_state = AS_STRAIGHT;
-			ubs_run ();
-		}
-		return (FALSE);
-	}
-
-	if ((enemy_range == RANGE_MELEE))
-		chance = 0.9;
-	else if ((enemy_range == RANGE_NEAR))
-		chance = 0.6;
-	else if ((enemy_range == RANGE_MID))
-		chance = 0.2;
-	else
-		chance = 0;
-
-	if ((random () < chance)) {
-		self.attack_state = AS_MISSILE;
-		return (TRUE);
-	}
-
-	if ((enemy_range == RANGE_MID)) {
-		if ((self.attack_state != AS_STRAIGHT)) {
-			self.attack_state = AS_STRAIGHT;
-			ubs_run ();
-		}
-	} else {
-		if ((self.attack_state != AS_SLIDING) && (random() < 0.5)) {
-			self.attack_state = AS_SLIDING;
-			ubs_side ();
-		}
-	}
-	return FALSE;
-};
-
 void () ubsAttackFinished = {
 	if (((enemy_range >= RANGE_MID) || !enemy_vis)) {
 		self.attack_state = AS_STRAIGHT;
@@ -1239,7 +1182,7 @@ void () monster_ubs = {
 	if (self.deathstring == "") self.deathstring = " was splayed by the Uber Scrag\n";
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
 	self.touch = monster_touch;	// 1998-09-16 Sliding/not-jumping on monsters/boxes/players fix by Maddes/Kryten
 	AddToTotals(self);

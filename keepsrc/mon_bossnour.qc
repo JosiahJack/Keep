@@ -159,61 +159,6 @@ float() nour_CheckTether =
 		else return TRUE;
 	}
 };
-	
-//----------------------------------------------------------------------
-// Nour game play logic
-//----------------------------------------------------------------------
-void() NourCheckAttack = 
-{
-	//----------------------------------------------------------------------
-	// setup enemytarget if one is not active
-	//----------------------------------------------------------------------
-	if (self.enemy.classtype != CT_ENEMYTARGET) {
-		if (SUB_setupEnemyTarget(self.enemy, self.height, MONAI_ABOVETIMER)) {
-			self.enemy = self.enemytarget;
-		}
-	}
-
-	//----------------------------------------------------------------------
-	// Check Melee range and constantly fire
-	//----------------------------------------------------------------------
-	if (self.enemydist < MONAI_MELEENOUR) {
-		self.attack_state = AS_MELEE;
-		return;
-	}
-	
-	//----------------------------------------------------------------------
-	// Range attacks (Spit and Bomb)
-	// Attack_chance override (percentage 0-1 chance)
-	//----------------------------------------------------------------------
-	// Only range attack if cooldown has finished
-	if (time > self.attack_finished) {
-		// Fast/intense nail/spit attack
-		if (self.enemydist < MONAI_CLOSENOUR || self.attack_chance > random()) {
-			// Skill 0=3s, 1=2.25s, 2=1.5s, 3=0.75s
-			self.attack_speed = (4 - skill) * 0.75;
-			self.attack_finished = time + self.attack_speed + random();
-			self.attack_state = AS_MELEE;
-			return;
-		}
-		// Large rocket bomb attack with floor damage
-		else {
-			// Skill 0=4s, 1=3s, 2=2s, 3=1s
-			self.attack_speed = (4 - skill) * 1;
-			self.attack_finished = time + self.attack_speed + random();
-			self.attack_state = AS_MISSILE;
-			return;
-		}
-	}
-
-	//----------------------------------------------------------------------
-	// Maintain distance (strafe)
-	//----------------------------------------------------------------------
-	if (enemy_range >= RANGE_MID || !enemy_vis) {
-		if (self.attack_state != AS_STRAIGHT) self.attack_state = AS_STRAIGHT;
-	}
-	else self.attack_state = AS_SLIDING;
-};
 
 //======================================================================
 // MONSTER STATES (stand, walk run, attack, pain and death!
@@ -1192,7 +1137,7 @@ void() monster_nour = {
 		self.reflectaxe = TRUE;			// Prevent axe damage
 	
 		// Check passive system for exceptions
-		setup_passivestate_boss(self);
+		setup_passivestate(self);
 	
 		// No targetname = no trigger!
 		if (self.targetname == "") {

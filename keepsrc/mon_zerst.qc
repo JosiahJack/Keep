@@ -49,7 +49,7 @@ void() monster_zer = {
 	if (self.deathstring == "") self.deathstring = " was destroyed by the Zerstörer\n";
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestatev(self);
 
 	self.use = zer_awake;
 };

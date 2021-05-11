@@ -89,7 +89,6 @@ void() PrecacheAll = {
 	precache_sound ("weapons/Lncharow.wav");
 	precache_sound ("weapons/mirv1.wav");
     precache_sound ("knight/sword1.wav");
-
 	precache_sound ("weapons/axe_flesh.wav");
 	precache_sound ("items/blastbelt2.wav");
 	precache_sound ("items/lavashield2.wav");
@@ -98,7 +97,6 @@ void() PrecacheAll = {
 	precache_sound ("items/jumpboots3b.wav");
 	precache_sound ("items/jumpboots3c.wav");
 	precache_sound ("misc/dsslop.wav");
-
 	precache_model ("progs/nehahra/soul.mdl");
 	precache_model ("progs/null.mdl");
 	precache_model ("progs/drake/null_256.spr");
@@ -175,7 +173,12 @@ void() PrecacheAll = {
 	precache_model ("progs/aoa/v_sanguinators.mdl");
 	precache_model ("progs/aoa/v_scimitar.mdl");
 	precache_model ("progs/aoa/v_voidstaff.mdl");
-
 	precache_aoa();
 	precache_poisongibs();
+	// Drake blood
+	precache_model ("progs/drake/blood.mdl"); 		// BLOOD_RED
+	precache_model ("progs/drake/blood_gr.mdl"); 	// BLOOD_GREEN
+	precache_model ("progs/drake/gr_gib.mdl"); 		// BLOOD_GREEN
+	precache_model ("progs/drake/pur_gib.mdl"); 	// BLOOD_PURPLE
+	precache_model ("progs/drake/ember.mdl"); 		// BLOOD_FIRE
 };

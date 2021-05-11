@@ -597,31 +597,6 @@ void () armagon_stand_attack = {
       armagon_slaser1 ();
    if ( (self.cnt == TRUE) ) { armagon_run1 (); return; }
 };
-float () ArmagonCheckAttack = {
-   local vector spot1;
-   local vector spot2;
-   local entity targ;
-   local float ang;
-   local float delta;
-   local float dist;
-
-   self.lefty = FALSE;
-   targ = self.enemy;
-   spot1 = (self.origin + self.view_ofs);
-   spot2 = (targ.origin + targ.view_ofs);
-   traceline (spot1,spot2,FALSE,self);
-   if ( ((trace_ent != targ) && !self.charmed) ) return (FALSE);
-   if ( (trace_inopen && trace_inwater) ) return (FALSE);
-   if ( (time < self.attack_finished) ) return (FALSE);
-
-   ang = (self.angles_y + self.fixangle);
-   delta = (self.ideal_yaw - ang);
-   dist = vlen ((spot2 - spot1));
-   if ( (((fabs (delta) > MOVETYPE_BOUNCE) && (dist > 200)) || (self.enemy.classname != "player")) ) return ( FALSE );
-   if ( (dist < 400.000) ) { self.th_melee (); return ( TRUE ); }
-   self.lefty = TRUE;
-   return ( FALSE );
-};
 
 void () monster_armagon = {
    local entity body;
@@ -675,7 +650,7 @@ void () monster_armagon = {
 	self.resist_plasma = 0.5;
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
    self.gibhealth = -1000000;
    self.gibbed = FALSE;

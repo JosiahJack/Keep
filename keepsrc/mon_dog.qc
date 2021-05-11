@@ -242,12 +242,16 @@ void() Dog_JumpTouch = {
 //----------------------------------------------------------------------
 void() dog_leap1	=[	$leap1,		dog_leap2	] {ai_face();};
 void() dog_leap2	=[	$leap2,		dog_leap3	] {
+	local float g;
+
 	ai_face();
 	self.jump_flag = time;	// No jump time limits
 	self.touch = Dog_JumpTouch;
 	makevectors (self.angles);
 	self.velocity = v_forward * 300 + '0 0 200';
-	if (self.classname == "monster_hell_hound") self.velocity = v_forward * 600 + ('0 0 200' * Gs());
+    g = cvar("sv_gravity") / 800;
+    if (self.gravity) g = g * self.gravity;
+	if (self.classname == "monster_hell_hound") self.velocity = v_forward * 600 + ('0 0 200' * g);
 	self.origin_z = self.origin_z + 4;
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.oldorigin = self.origin;

@@ -1,51 +1,5 @@
 float MONCENTROID_LAVASPIK = 8192; // use lava nails
 
-float () ScourgeCheckAttack = {
-   local vector spot1;
-   local vector spot2;
-   local entity targ;
-   local float chance;
-
-   targ = self.enemy;
-   spot1 = (self.origin + self.view_ofs);
-   spot2 = (targ.origin + targ.view_ofs);
-   if ( (vlen ((spot1 - spot2)) <= 100.000) ) {
-      if ( CanDamage (self.enemy,self) ) {
-         self.attack_state = AS_MELEE;
-         return ( TRUE );
-      }
-   }
-   if ( (time < self.attack_finished) )
-      return ( FALSE );
-
-   if ( !enemy_vis )
-      return ( FALSE );
-
-   chance = (spot2_z - spot1_z);
-   if ( (chance > 64) ) {
-      return ( FALSE );
-   } else {
-      if ( (chance < -200.000) )
-         return ( FALSE );
-   }
-   if ( (vlen ((spot1 - spot2)) > 1000.000) )
-      return ( FALSE );
-
-   if ( (vlen ((spot1 - spot2)) < 150) )
-      return ( FALSE );
-
-   traceline (spot1,spot2,FALSE,self);
-   if ( (trace_inopen && trace_inwater) )
-      return ( FALSE );
-
-   if ( (trace_ent != targ) )
-      return ( FALSE );
-
-   self.attack_state = AS_MISSILE;
-   SUB_AttackFinished ((2 + (2 * random ())));
-   return ( TRUE );
-};
-
 void (float ox) SCOURGE_FireSpikes = {
    local vector src;
    local vector vec;
@@ -377,7 +331,7 @@ void () scourge_die = {
    scourge_think ();
    if ( (self.health < -35.000) ) {
       sound (self,CHAN_VOICE,"player/udeath.wav",TRUE,ATTN_NORM);
-      ThrowHead ();
+      ThrowGib (25,1); // headmdl
       ThrowGib (1,1);
       ThrowGib (2,1);
       ThrowGib (3,1);

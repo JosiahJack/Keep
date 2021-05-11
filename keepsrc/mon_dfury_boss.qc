@@ -347,27 +347,10 @@ void() bossdeath_2 = {
 	shake.think = screenshake;
 	shake.attack_finished = time + 1;
 	shake.nextthink = time + 0.1;
-	
 	sound(self.owner, CHAN_AUTO, "ambience/coaled_monster_explode.wav", .8, ATTN_NONE);
 	sound(self.owner, CHAN_AUTO, "dfury/boss_explode.wav", 1, ATTN_NONE);
-
-	ThrowBody ("progs/q15/gib_sboss.mdl", self.health-100);
-	ThrowBody ("progs/q15/gib_sboss.mdl", self.health-100);
-	ThrowBody ("progs/q15/gib_sboss.mdl", self.health-50);
-	ThrowBody ("progs/q15/gib_sboss.mdl", self.health-100);
-	ThrowBody ("progs/q15/gib_sboss.mdl", self.health-50);
-	ThrowBody ("progs/q15/gib_sboss.mdl", self.health-100);
-	ThrowBody ("progs/q15/gib_sboss.mdl", self.health-100);
-	ThrowBody ("progs/q15/gib_sboss.mdl", self.health-50);
-	ThrowBody ("progs/q15/gib_sboss.mdl", self.health-100);
-	ThrowBody ("progs/q15/gib_sboss.mdl", self.health-50);
-	ThrowBody ("progs/q15/gib_sboss.mdl", self.health-50);
-	ThrowBody ("progs/q15/gib_sboss.mdl", self.health-100);
-	ThrowBody ("progs/q15/gib_sboss.mdl", self.health-100);
-	ThrowBody ("progs/q15/gib_sboss.mdl", self.health-50);
-	ThrowBody ("progs/q15/gib_sboss.mdl", self.health-100);
-	ThrowBody ("progs/q15/gib_sboss.mdl", self.health-50);
-	
+	self.gib1mdl = "progs/q15/gib_sboss.mdl";
+	ThrowGib(11, 16);
 	remove(self.owner);
 	remove(self);
 }

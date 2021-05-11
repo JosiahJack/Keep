@@ -679,7 +679,7 @@ Void function mark3_die();
     ThrowGib("progs/gib1.mdl", self.health);
     ThrowGib("progs/gib2.mdl", self.health);
     ThrowGib("progs/gib3.mdl", self.health);
-    ThrowHead("progs/h_enf2.mdl", self.health);
+    ThrowGib(25,1); // headmdl "progs/h_enf2.mdl"
     exit;
     }
   enf2_deathsound();

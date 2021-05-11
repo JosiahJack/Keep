@@ -1,23 +1,55 @@
-/*======================================================================
- Pushables bmodels
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Mod attributions: Arcane Dimensions (AD), derived from Hipnotic
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0 - Utility functions only.
+// Function count: 6
+//
+// Implements: Pushables Brush Models (bmodels)
+//
+// Description:
+// * Looked at the code from Hipnotic Interactive (hip_push.qc)
+// - It uses a proxy entity for the player to interact with
+// - Movement is done by constantly updating origin
+// - Code seems really experimental and a horrible mess
+//
+// * Looked at the code from the Nehara mod (push.qc)
+// - It uses the original bmodel entity with velocity instead
+// - Has one push sound type and moves XY directions
+//
+// * AD solution is inspired by Nehara code 
+// - It uses the original bmodel and velocity movement
+// - Switches movetype/solid so players can stand on top
+// - Fades the bmodel (via alpha) so it does not block view
+// - Works with entity state system, reset very useful if stuck
+// - Works really close with breakables (target2 triggers)
+//=============================================================================
 
- * Looked at the code from Hipnotic Interactive (hip_push.qc)
-   - It uses a proxy entity for the player to interact with
-   - Movement is done by constantly updating origin
-   - Code seems really experimental and a horrible mess
-
-   * Looked at the code from the Nehara mod (push.qc)
-   - It uses the original bmodel entity with velocity instead
-   - Has one push sound type and moves XY directions
-
-   * AD solution is inspired by Nehara code 
-   - It uses the original bmodel and velocity movement
-   - Switches movetype/solid so players can stand on top
-   - Fades the bmodel (via alpha) so it does not block view
-   - Works with entity state system, reset very useful if stuck
-   - Works really close with breakables (target2 triggers)
- 
-======================================================================*/
 float PUSH_DAMAGE = 2;		// Can receive damage (from anything) 
 float PUSH_NOFLRCHECK = 8;	// No floor below check for movement
 float PUSH_FLOATING = 16;	// Start floating on spawn (like items)
@@ -62,6 +94,7 @@ noise1     : Custom move sound 1 (style=10)
 noise2     : Custom move sound 2
 noise3     : Custom move sound 3
 bleedcolour: Impact particle colour (starting point on palette)
+bloodtype: Impact particle colour (starting point on palette)
 target     : target(s) to fire when pushable is dead (once only)
 deathtarget: target(s) to fire when pushable is dead (once only)
 target2    : points to a func_breakable_spawner to trigger on death
@@ -84,41 +117,30 @@ Moveable brushwork (pushable)
 */
 //======================================================================
 
-//----------------------------------------------------------------------
-void() func_pushable_push =
-{
+void() func_pushable_push = {
 	self.movetype = MOVETYPE_STEP;	// Default monster move type
 	self.solid = SOLID_SLIDEBOX;	// Discrete movement stepping
 	self.state = STATE_PUSH;		// Can be moved by player
 };
 
-//----------------------------------------------------------------------
-void() func_pushable_solid = 
-{
+void() func_pushable_solid = {
 	self.movetype = MOVETYPE_PUSH;	// Blocks projectiles
 	self.solid = SOLID_BSP;			// Square bounding box
 	self.state = STATE_SOLID;		// No world interaction
 	self.inpain = FALSE;			// Reset touch flag
 };
 
-//----------------------------------------------------------------------
-void() func_pushable_movement =
-{
-	// Block entity state exceptions
-	if (self.estate & ESTATE_BLOCK) return;
+void() func_pushable_movement = {
+	if (self.estate & ESTATE_BLOCK) return; // Block entity state exceptions
+	if (self.oldorigin == self.origin && !self.inpain) return; // Block movement if nothing has changed
 
-	// Block movement if nothing has changed
-	if (self.oldorigin == self.origin && !self.inpain) return;
 	self.oldorigin = self.origin;
-	// Reset touch function flag
-	self.inpain = FALSE;
+	self.inpain = FALSE; // Reset touch function flag
 	
 	// Check for moving sound
 	if (self.attack_finished < time && self.state == STATE_PUSH) {
-		// Random start to setup blending and overlap
-		self.attack_finished = time + self.waitmin + (random()*self.waitmin);
-		// Make sure sound WAVs don't repeat in a row
-		self.lefty = self.meleeattack;
+		self.attack_finished = time + self.waitmin + (random()*self.waitmin); // Random start to setup blending and overlap
+		self.lefty = self.meleeattack; // Make sure sound WAVs don't repeat in a row
 		while (self.lefty == self.meleeattack) { 
 			self.lefty = rint(random()*3);
 		}
@@ -171,18 +193,12 @@ void() func_pushable_movement =
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_pushable_touch =
-{
+void() func_pushable_touch = {
 	// Block entity state exceptions
 	if (self.estate & ESTATE_BLOCK) return;
 
 	// Allow for pushables to stack
-	if (other.classtype == CT_FUNCPUSHABLE && other.state == STATE_PUSH) {
-		// Switch to solid block
-		func_pushable_solid();
-		return;
-	}
+	if (other.classtype == CT_FUNCPUSHABLE && other.state == STATE_PUSH) { func_pushable_solid();  return; } // Switch to solid block
 	
 	// Only works for the player
 	if ( !(other.flags & FL_CLIENT) ) return;
@@ -223,66 +239,51 @@ void() func_pushable_touch =
 	
 	self.finalangle = self.oldenemy.angles;
 	self.finaldest = self.oldenemy.velocity;
-
-	// Setup origin of player (at feet level)
-	self.pos3 = self.dest1 - self.dest2;
-	
-	// Work out true min/max for bmodel using origin (offset)
-	self.bbmins = self.origin + self.mins;
+	self.pos3 = self.dest1 - self.dest2; // Setup origin of player (at feet level)
+	self.bbmins = self.origin + self.mins; // Work out true min/max for bmodel using origin (offset)
 	self.bbmaxs = self.origin + self.maxs;
 
 	// Check if player is above/below pushable
-	if (self.pos3_z >= self.bbmaxs_z) 
+	if (self.pos3_z >= self.bbmaxs_z) {
 		func_pushable_solid();		// Stop the bmodel interacting with player
-	else {
+	} else {
 		func_pushable_push();		// bmodel can be moved (again)
 		func_pushable_movement();	// Move the pushable block
 	}
 };
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) func_pushable_pain =
-{
+void(entity inflictor, entity attacker, float damage) func_pushable_pain = {
 	local float loop_count;
 	local vector vel;
 
-	// default = Pushables cannot die
-	if (!(self.spawnflags & PUSH_DAMAGE)) {self.health = MEGADEATH; return;}
-	// Block entity state exceptions
-	if (self.estate & ESTATE_BLOCK) return;
+	if (!(self.spawnflags & PUSH_DAMAGE)) {self.health = MEGADEATH; return;} // default = Pushables cannot die
+	if (self.estate & ESTATE_BLOCK) return; // Block entity state exceptions
 
 	// Something is trying to wear down the pushable with damage
 	// work out facing angle and project particles upward
 	makevectors(inflictor.angles);
 	vel = -v_up*2;
 	while(loop_count < 4) {
-		particle (inflictor.origin, vel*0.1, self.bleedcolour + rint(random()*7), damage);
+		particle (inflictor.origin, vel*0.1, self.bloodtype + rint(random()*7), damage);
 		loop_count = loop_count + 1;
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_pushable_death =
-{
-	// default = Pushables cannot die
-	if (!(self.spawnflags & PUSH_DAMAGE)) {self.health = MEGADEATH; return;}
-	// Block entity state exceptions
-	if (self.estate & ESTATE_BLOCK) return;
-	
-	// Work out current bmodel origin
-	self.oldorigin = bmodel_origin(self);
+void() func_pushable_death = {
+	if (!(self.spawnflags & PUSH_DAMAGE)) {self.health = MEGADEATH; return;} // default = Pushables cannot die
+	if (self.estate & ESTATE_BLOCK) return; // Block entity state exceptions
+
+	self.oldorigin = bmodel_origin(self); // Work out current bmodel origin
 	
 	// Check for breakable spawners
 	if (self.target2 != "") {
 		self.enemy = find (world, targetname, self.target2);
 		// Make sure its a breakable spawner ONLY!
 		if (self.enemy.classtype == CT_FUNCBREAKSPN) {
-			// Copy over pushable bmodel origin and volume to breakable
-			self.enemy.origin = self.oldorigin;
+			self.enemy.origin = self.oldorigin; // Copy over pushable bmodel origin and volume to breakable
 			setorigin(self.enemy, self.enemy.origin);
 			self.enemy.brkvol = self.size;
-			// Use entity which killed pushable for breakable direction
-			trigger_ent(self.enemy, self.activate);
+			trigger_ent(self.enemy, self.activate); // Use entity which killed pushable for breakable direction
 		}
 	}
 
@@ -293,7 +294,6 @@ void() func_pushable_death =
 		WriteCoord (MSG_BROADCAST, self.oldorigin_x);
 		WriteCoord (MSG_BROADCAST, self.oldorigin_y);
 		WriteCoord (MSG_BROADCAST, self.oldorigin_z);
-		
 		SpawnExplosion(EXPLODE_SMALL, self.oldorigin, SOUND_REXP3);
 		T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
 	}
@@ -303,14 +303,11 @@ void() func_pushable_death =
 	if (self.target != "") trigger_strs(self.target, self.activate);
 
 	// Any final words ...
-	if (self.activate.flags & FL_CLIENT && self.message != "")
-		centerprint (self.activate, self.message);
+	if (self.activate.flags & FL_CLIENT && self.message != "") centerprint (self.activate, self.message);
 	
 	// Fire once condition?
-	if (self.wait < 0) {
-		self.target = self.deathtarget = self.message = "";
-	}
-	
+	if (self.wait < 0) self.target = self.deathtarget = self.message = "";
+
 	// Check for any pushable above? (fake physics)
 	self.move_state = bmodel_origin(self);
 	
@@ -318,20 +315,15 @@ void() func_pushable_death =
 	traceline(self.move_state, self.move_state + '0 0 1024', FALSE, self);
 
 	// Check for a pushable entity above (but not touching)
-	if (trace_ent != self && trace_ent.classtype == CT_FUNCPUSHABLE)
-		trigger_ent(trace_ent, self);
+	if (trace_ent != self && trace_ent.classtype == CT_FUNCPUSHABLE) trigger_ent(trace_ent, self);
 	
-	// Switch off entity instead of hide/remove
-	// So the pushable can be reset again
+	// Switch off entity instead of hide/remove so the pushable can be reset again
 	self.estate_off();
 };
 
-//======================================================================
 // The pushable needs a controller to reach to the touch function
 // and to reset the alpha fade if the pushable is not being touched
-//======================================================================
-void() pushable_controller_think =
-{
+void() pushable_controller_think = {
 	// Keep the controller alive
 	self.think = pushable_controller_think;
 	self.nextthink = time + 0.1;
@@ -356,9 +348,7 @@ void() pushable_controller_think =
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_pushable_controller_setup =
-{
+void() func_pushable_controller_setup = {
 	// Check if controller entity been setup
 	if (!self.attachment) self.attachment = spawn();
 
@@ -377,11 +367,7 @@ void() func_pushable_controller_setup =
 	self.attachment.nextthink = time + 0.1;
 };
 
-//======================================================================
-// Entity state functions
-//======================================================================
-void() func_pushable_use =
-{
+void() func_pushable_use = {
 	// Switch on pushable first
 	if (self.estate == ESTATE_OFF) entity_state_on();
 	else {
@@ -393,9 +379,7 @@ void() func_pushable_use =
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_pushable_reset = 
-{	
+void() func_pushable_reset = {	
 	// If the block starts off(disabled) then do nothing
 	if (self.spawnflags & ENT_STARTOFF) return;
 
@@ -406,9 +390,7 @@ void() func_pushable_reset =
 	self.estate_on();	
 };
 
-//----------------------------------------------------------------------
-void() func_pushable_off = 
-{
+void() func_pushable_off = {
 	// Do nothing if pushable is already off
 	if (self.estate == ESTATE_OFF) return;
 	
@@ -420,9 +402,7 @@ void() func_pushable_off =
 	self.takedamage = DAMAGE_NO;
 };
 
-//----------------------------------------------------------------------
-void() func_pushable_on = 
-{
+void() func_pushable_on = {
 	// Do nothing if pushable is already on
 	if (self.estate == ESTATE_ON) return;
 	
@@ -449,92 +429,75 @@ void() func_pushable_on =
 	else func_pushable_solid();
 };
 
-//======================================================================
-// Main entity definition
-//======================================================================
-void() func_pushable =
-{
+void() func_pushable = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
-	//------------------------------------------------------------------
 	// make sure initial break sound is within range types (def=rock)
-	if (self.style < PTYPE_ROCK || self.style > PTYPE_CUSTOM) 
-		self.style = PTYPE_ROCK;
+	if (self.style < PTYPE_ROCK || self.style > PTYPE_CUSTOM) self.style = PTYPE_ROCK;
 		
 	// Medium drag sound with light brown impact particles
 	if (self.style == PTYPE_WOOD) {
 		self.noise1 = SOUND_PUSH_WOOD1;
 		self.noise2 = SOUND_PUSH_WOOD2;
 		self.noise3 = SOUND_PUSH_WOOD3;
-		if (self.bleedcolour <= 0) self.bleedcolour = 112;
-	}
-	// Light drag sound with light yellow impact particles
-	else if (self.style == PTYPE_GLASS) {
+		if (self.bleedcolour <= 0) self.bleedcolour = self.bloodtype = 112;
+		if (self.bloodtype <= 0) self.bleedcolour = self.bloodtype = 112;
+	} else if (self.style == PTYPE_GLASS) {
+		// Light drag sound with light yellow impact particles
 		self.noise1 = SOUND_PUSH_GLASS1;
 		self.noise2 = SOUND_PUSH_GLASS2;
 		self.noise3 = SOUND_PUSH_GLASS3;
-		if (self.bleedcolour <= 0) self.bleedcolour = 96;
-	}
-	// Medium drag sound with green/brown impact particles
-	else if (self.style == PTYPE_METAL) {
+		if (self.bleedcolour <= 0) self.bleedcolour = self.bloodtype = 96;
+		if (self.bloodtype <= 0) self.bleedcolour = self.bloodtype = 96;
+	} else if (self.style == PTYPE_METAL) {
+		// Medium drag sound with green/brown impact particles
 		self.noise1 = SOUND_PUSH_METAL1;
 		self.noise2 = SOUND_PUSH_METAL2;
 		self.noise3 = SOUND_PUSH_METAL3;
-		if (self.bleedcolour <= 0) self.bleedcolour = 80;
-	}
-	// Light drag sound with brown impact particles
-	else if (self.style == PTYPE_BRICK) {
+		if (self.bleedcolour <= 0) self.bleedcolour = self.bloodtype = 80;
+		if (self.bloodtype <= 0) self.bleedcolour = self.bloodtype = 80;
+	} else if (self.style == PTYPE_BRICK) {
+		// Light drag sound with brown impact particles
 		self.noise1 = SOUND_PUSH_BRICK1;
 		self.noise2 = SOUND_PUSH_BRICK2;
 		self.noise3 = SOUND_PUSH_BRICK3;
-		if (self.bleedcolour <= 0) self.bleedcolour = 80;
-	}
-	// Custom sounds with white/grey impact particles
-	else if (self.style == PTYPE_CUSTOM) {
+		if (self.bleedcolour <= 0) self.bleedcolour = self.bloodtype = 80;
+		if (self.bloodtype <= 0) self.bleedcolour = self.bloodtype = 80;
+	} else if (self.style == PTYPE_CUSTOM) {
+		// Custom sounds with white/grey impact particles
 		if (self.noise1 == "") self.noise1 = SOUND_EMPTY;
 		if (self.noise2 == "") self.noise2 = SOUND_EMPTY;
 		if (self.noise3 == "") self.noise3 = SOUND_EMPTY;
-		if (self.bleedcolour <= 0) self.bleedcolour = 1;
-	}
-	// *** DEFAULT ***
-	// Heavy drag sound with brown impact particles
-	else {
+		if (self.bleedcolour <= 0) self.bleedcolour = self.bloodtype = 1;
+		if (self.bloodtype <= 0) self.bleedcolour = self.bloodtype = 1;
+	} else {
+		// *** DEFAULT ***
+		// Heavy drag sound with brown impact particles
 		self.noise1 = SOUND_PUSH_ROCK1;
 		self.noise2 = SOUND_PUSH_ROCK2;
 		self.noise3 = SOUND_PUSH_ROCK3;
-		if (self.bleedcolour <= 0) self.bleedcolour = 80;
+		if (self.bleedcolour <= 0) self.bleedcolour = self.bloodtype = 80;
+		if (self.bloodtype <= 0) self.bleedcolour = self.bloodtype = 80;
 	}
 	
 	// Cache all sounds
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
-
 	self.classtype = CT_FUNCPUSHABLE;
 	self.classgroup = CG_BREAKABLE;
 	self.bsporigin = TRUE;
 	self.mdl = self.model;
-
-	// Save starting position and reset angles
-	self.mangle = self.angles;
+	self.mangle = self.angles; // Save starting position and reset angles
 	self.angles = '0 0 0';
-
-	// Default parameters and states
-	if (!self.speed) self.speed = 1;
+	if (!self.speed) self.speed = 1; // Default parameters and states
 	if (!self.wait) self.wait = 2;
-	
-	// Length of dragging sounds
-	if (!self.waitmin) self.waitmin = 0.5;
-	// Create halway point for random start
-	self.waitmin = self.waitmin * 0.5;
-	// Start with pushing state
-	self.state = STATE_PUSH;
+	if (!self.waitmin) self.waitmin = 0.5; // Length of dragging sounds
+	self.waitmin = self.waitmin * 0.5; // Create halway point for random start
+	self.state = STATE_PUSH; // Start with pushing state
 	self.pain_finished = -1;
-	// Setup default alpha fade (lower) value
-	if (!self.waitmin2) self.waitmin2 = 0.6;
+	if (!self.waitmin2) self.waitmin2 = 0.6; // Setup default alpha fade (lower) value
 	self.alpha = 1;
-
-	// setup pain/die functions
 	self.th_pain = func_pushable_pain;
 	self.th_die = func_pushable_death;
 	
@@ -546,15 +509,11 @@ void() func_pushable =
 		else self.health = MEGADEATH;
 	}
 	self.max_health = self.health;
-	
-	// Setup the bmodel ready for interaction
-	func_pushable_solid();
+	func_pushable_solid(); // Setup the bmodel ready for interaction
 	setmodel(self, self.mdl);
 	setorigin(self, VEC_ORIGIN);
 	setsize(self, self.mins, self.maxs);
-	
-	// Work out average size of block
-	self.t_width = rint((self.size_x + self.size_y) * 0.5);
+	self.t_width = rint((self.size_x + self.size_y) * 0.5); // Work out average size of block
 	
 	// Check for spawning conditions (nightmare, coop)
 	// Needs to exist after entity has been added to work for BSPorigin

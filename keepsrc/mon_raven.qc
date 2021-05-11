@@ -28,31 +28,6 @@ $frame stand21 stand22 stand23 stand24 stand25 stand26
 
 void() raven_melee;
 
-/*======================================================================
- RavenCheckAttack (melee only)
-======================================================================*/
-void() RavenCheckAttack =
-{
-	
-	//----------------------------------------------------------------------
-	// Hitscan attack (Claw/Bite)
-	// Uses larger range then attack completes after closer distance check
-	//----------------------------------------------------------------------
-	// Cannot see enemy? stop chasing enemytarget
-	if (!enemy_vis) return;
-	if (time < self.attack_finished) return;
-	if (self.enemydist > MONAI_RANGERAVEN) return;
-	
-	// Does the monster have a clear shot to the player?
-	// sightline can be blocked by other monsters
-	if (visblocked(self.enemy)) return;
-	
-	self.attack_state = AS_MISSILE;
-	self.th_missile ();
-	return;
-};
-
-//============================================================================
 void()	raven_stand1	=[	$stand1,		raven_stand2	] {ai_stand();};
 void()	raven_stand2	=[	$stand2,		raven_stand3	] {ai_stand();};
 void()	raven_stand3	=[	$stand3,		raven_stand4	] {ai_stand();};

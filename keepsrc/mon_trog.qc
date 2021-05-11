@@ -226,7 +226,7 @@ void() nemes_track =
     local   float   up, old;
 
     up = (self.cnt & 7) * 45;
-    up = SUB_sin(up) * 5;       // Other sidewinder code uses cosine.
+    up = mathlib_sin(up) * 5;       // Other sidewinder code uses cosine.
     self.cnt = self.cnt + 1;
 
     vec = self.enemy.origin + self.enemy.view_ofs;
@@ -656,30 +656,6 @@ void(entity inflictor, entity attacker, float damage) nemes_pain = {
     attacker = attacker;    // FrikQcc warning squelch!
 };
 
-// DEATH - - - - - - - - - - - - - - - -
-void() nemes_decap1  =[ $decap1,  nemes_decap2  ] {blood_spray('0 0 28', 1);
-    self.velocity_x = -200 + 400*random();
-    self.velocity_y = -200 + 400*random();
-    self.velocity_z = 100 + 100*random();
-    self.flags = self.flags - (self.flags & FL_ONGROUND);
-};
-void() nemes_decap2  =[ $decap2,  nemes_decap3  ] {blood_spray('-4 -1 27', 2);};
-void() nemes_decap3  =[ $decap3,  nemes_decap4  ] {blood_spray('-6 -1 26', 1);  DropCoin(4);};
-void() nemes_decap4  =[ $decap4,  nemes_decap5  ] {blood_spray('-8 -1 25', 1);};
-void() nemes_decap5  =[ $decap5,  nemes_decap6  ] {blood_spray('-11 0 23', 1);};
-void() nemes_decap6  =[ $decap6,  nemes_decap7  ] {};
-void() nemes_decap7  =[ $decap7,  nemes_decap8  ] {};
-void() nemes_decap8  =[ $decap8,  nemes_decap9  ] {};
-void() nemes_decap9  =[ $decap9,  nemes_decap10 ] {};
-void() nemes_decap10 =[ $decap10, nemes_decap11 ] {};
-void() nemes_decap11 =[ $decap11, nemes_decap12 ] {};
-void() nemes_decap12 =[ $decap12, nemes_decap13 ] {};
-void() nemes_decap13 =[ $decap13, nemes_decap14 ] {};
-void() nemes_decap14 =[ $decap14, nemes_decap15 ] {};
-void() nemes_decap15 =[ $decap15, nemes_decap16 ] {};
-void() nemes_decap16 =[ $decap16, nemes_decap17 ] {};
-void() nemes_decap17 =[ $decap17, nemes_decap17 ] {};
-
 void() nemes_death1  =[ $death1,  nemes_death2  ] {};
 void() nemes_death2  =[ $death2,  nemes_death3  ] {};
 void() nemes_death3  =[ $death3,  nemes_death4  ] { DropCoin(4);};
@@ -698,35 +674,7 @@ void() nemes_death15 =[ $death15, nemes_death16 ] {};
 void() nemes_death16 =[ $death16, nemes_death17 ] {};
 void() nemes_death17 =[ $death17, nemes_death17 ] {};
 
-//float(float dm) nemes_gib =
-//{
-//    if (self.health < self.gibhealth)
-//    {
-//        sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
-    // Zerstorer spawned gib2.mdl * 3.
-//        ThrowGib ("progs/gib1.mdl", dm);
-//        ThrowGib ("progs/gib2.mdl", dm);
-//        ThrowGib ("progs/gib3.mdl", dm);
-//        ThrowHead ("progs/h_nemes.mdl", dm);
-//        return TRUE;
-//    }
-//    return FALSE;
-//};
-
 void() nemes_die = {
-    //if (Shattered ())
-    //    return;
-    //if (Decapitated ())
-    //{
-    //    monster_decap ('0 0 28', nemes_decap1);
-    //    return;
-    //}
-//- - - - -
-// check for gib
-    //if (self.th_gib)
-    //    if (nemes_gib (self.health))
-    //        return;
-
     self.velocity_x = -200 + 400*random();
     self.velocity_y = -200 + 400*random();
     self.velocity_z = 200 + 100*random();   // PM:  Used to be 300.
@@ -756,18 +704,15 @@ void() nemes_revive14 =[ $death3,  nemes_revive15 ] {};
 void() nemes_revive15 =[ $death2,  nemes_revive16 ] {};
 void() nemes_revive16 =[ $death1,  nemes_run1     ] {};
 
-//============
 // --> QUAKED monster_nemesant (1 0 0) (-16 -16 -24) (16 16 40) Ambush Boss
-//============
 void() monster_nemesant = {
 	// Check for any random monster setups
 	if (self.classname != "monster_trogboss") {
 		if (monster_checkrandomizer() == TRUE) return;
 	}
-
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
-    
+  
     self.mdl = "progs/drake/nemesant.mdl";
     self.headmdl = "progs/drake/h_nemes.mdl";
     precache_model ("progs/drake/nemesant.mdl");
@@ -775,7 +720,6 @@ void() monster_nemesant = {
     precache_model ("progs/k_spike.mdl");   // For sidewinder missiles.
     precache_model ("progs/drake/smartbal.mdl");  // Homing bouncing fireball.
     precache_model ("progs/drake/warp2.mdl");     // Big explosion.
-
     precache_sound ("hknight/attack1.wav");
     precache_sound ("hknight/hit.wav");    // used by C code, so don't sound2
     precache_sound ("nemesant/frblatck.wav");
@@ -793,16 +737,15 @@ void() monster_nemesant = {
 	self.sight_sound = "nemesant/tsight1.wav";
 	self.sight_sound2 = "nemesant/tsight2.wav";
     precache_sound ("skullwiz/push.wav");       // Melee attack.
-    precache_blood (BLOOD_GREEN);
+	precache_model ("progs/drake/blood_gr.mdl");
+	precache_model ("progs/drake/gr_gib.mdl");
     precache_model ("progs/drake/gr_gib2.mdl");
     precache_model ("progs/drake/s_wave.spr");
     precache_model ("progs/drake/s_expbig.spr");
-
     precache_model ("progs/drake/wizard.mdl");
     precache_model ("progs/drake/h_drake.mdl");
     precache_model ("progs/h_wizard.mdl");
     precache_model ("progs/w_spike.mdl");
-
     precache_sound ("wizard/hit.wav");        // used by c code
     precache_sound ("wizard/wattack.wav");
     precache_sound ("wizard/wdeath.wav");
@@ -810,7 +753,6 @@ void() monster_nemesant = {
     precache_sound ("wizard/widle2.wav");
     precache_sound ("wizard/wpain.wav");
     precache_sound ("wizard/wsight.wav");
-
     self.solid = SOLID_NOT;		// No interaction with world
     self.movetype = MOVETYPE_NONE;	// Static item, no movement
     if (self.health < 1) self.health = 280;
@@ -826,10 +768,10 @@ void() monster_nemesant = {
     if (self.classname == "monster_nemesant") {
         //self.th_gib     = nemes_gib;
         self.th_revive  = nemes_revive1;
-        //if (soul_evil) monster_purse (3, 0.5, 0.5);
+        if (soul_evil) monster_purse (3, 0.5, 0.5);
     }
 
-	if (self.classname == "monster_trogboss") setup_passivestate_boss(self);  // Check passive system for exceptions
+	setup_passivestate(self);  // Check passive system for exceptions
 	
     self.waitmin    = time + 5;     // Wait for idle sounds
 

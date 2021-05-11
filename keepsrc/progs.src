@@ -1,105 +1,153 @@
-../progs.dat
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: All, see credits folder
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 0
+//
+// Implements: Compile order and what files are included
+//
+// Description:
+// This lists each code file to include in the mod.
+// The order is important since the compiler needs to know about functions
+// ahead of time so it can confirm the data types and arguments all match.
+//=============================================================================
 
-defs.qc
-defskeep.qc
-defsclass.qc
-defsextras.qc
-defscustom.qc
-defshipnotic.qc
-defsnehahra.qc
-defsrogue.qc
-defsrubicon.qc
-defsquoth.qc
-defskinn.qc
-defsdrake.qc
-defshexen2.qc
-defsaoa.qc
-defsq15.qc
-defsredfield.qc
-dpextensions.qc //Lots of stuff
-qsextensions.qc //And more
-fteextensions.qc //Now it's a party!
-qrobotdefs.qc
+// Comment format:			// STATE Notes	
+// STATEs:					// <Implemented (blank> It works in-game, or should.
+							// REFINED: Tested in-game Formatted to standards,
+							//          removed redundancy, general checks.
+							// FINALIZED: It's done. Add comment header, final
+							//            code cleanups. Added to documentation.
+							// N/A Does not apply.
 
-mathlib.qc
-math.qc
+// progs.src				// REFINED You are looking at it.
+// COPYING.TXT				// N/A GNU GPL v2.0 License
+// qc_highlight.xml			// N/A Handy highlighting for IDE's
 
-csqc_defs.qc
-csqc_hudkeep.qc
+//====================== Start of actual mod code =============================
+../progs.dat				// N/A Places progs.dat file one folder up
+
+// Definitions
+//-----------------------------------------------------------------------------
+defs.qc						// Base entity field and globals definitions
+defskeep.qc					// Definitions for Keep
+defsclass.qc				// Definitions for class system
+defsextras.qc				// Definitions for extras_r5 and extras_r4
+defscustom.qc				// Definitions for Arcane Dimensions and Keep
+defshipnotic.qc				// Definitions for Hipnotic
+defsnehahra.qc				// Definitions for Nehahra
+defsrogue.qc				// Definitions for Rogue
+defsrubicon.qc				// Definitions for Rubicon, Rubicon 2, and RRP
+defsquoth.qc				// Definitions for Quoth 1 and up
+defskinn.qc					// Definitions for Kinn Marcher and Bastion
+defsdrake.qc				// Definitions for Drake (SOE, Rapture, Something W)
+defshexen2.qc				// Definitions for Hexen 2
+defsaoa.qc					// Definitions for Arms of Asgaard (AoA)
+defsq15.qc					// Definitions for Quake 1.5 (q15)
+defsredfield.qc				// Definitions for Redfield's Ravenkeep
+dpextensions.qc 			// Darkplaces Engine definitions and API hooks
+qsextensions.qc 			// QSS Engine definitions and API hooks
+fteextensions.qc 			// FTE Engine definitions and API hooks
+qrobotdefs.qc				// Definitions for Qmaster's programmable xyz robots
+csqc_defs.qc				// Handles for csqc references
+csqc_hudkeep.qc				// Handles for csqc hud specific references
+
+// Globally used subroutins aka subs, including math and physics
+//-----------------------------------------------------------------------------
+mathlib.qc					// REFINED Math functions library
 
 // Gyro2 Physics
-gyro_main.qc
-gyro_forces.qc
-gyro_physics.qc
-gyro_user.qc
+gyro_main.qc				// Main Gyro physics updates
+gyro_forces.qc				// Gyro physics force calculations
+gyro_physics.qc				// Gyro physics physical calculations
+gyro_user.qc				// Gyro physics API hook functions
 
-subs.qc
-subs_soc.qc
-subs_kinn.qc
-subs_keep.qc
-subs_drake.qc
-subs_rubicon.qc
-subs_extras.qc
-subs_hexen2.qc
-subs_aoa.qc
-subs_q15.qc
-subs_nehahra.qc
+subs.qc						// Standard subroutines
+subs_soc.qc					// Arcane Dimensions (AD) subroutines
+subs_kinn.qc				// Kinn Marcher and Bastion subroutines
+subs_keep.qc				// Keep subroutines
+subs_drake.qc				// Drake subroutines
+subs_rubicon.qc				// Rubicon, Rubicon 2, RRP subroutines
+subs_extras.qc				// extras_r5, extras_r4 subroutines
+subs_hexen2.qc				// Hexen 2 subroutines
+subs_aoa.qc					// Arms of Asgaard (AoA subroutines
+subs_q15.qc					// Quake 1.5 subroutines
+subs_nehahra.qc				// Nehahra subroutines
 
-estate.qc
-hiprot.qc
-drake_box.qc
-globalfog.qc
-chaosmode.qc
-settings.qc
-impulse.qc
-breakable.qc
-pushable.qc
+// Systems
+//-----------------------------------------------------------------------------
+estate.qc					// Arcane Dimensions (AD) Entity State System
+hiprot.qc					// Hipnotic Rotation System
+globalfog.qc				// Arcane Dimensions (AD) Fog and Skyfog Change System
+chaosmode.qc				// Arcane Dimensions (AD) and Copper Nightmare/Evil/Chaos Mode
+settings.qc					// REFINED Arcane Dimensions (AD) Mod Settings System
+impulse.qc					// REFINED Keybinds and Cheats System
+breakable.qc				// Arcane Dimensions (AD) Breakable Brush Models System
+// breakables_qmaster.qc	// progs_dump Breakable Brush Models System
+pushable.qc					// REFINED Pushable Brush Models System
 switchshad.qc
-
 part_manage.qc
 part_generate.qc
 part_emitter.qc
-
 drake_aim.qc
-
-ai_allegiance.qc
-ai_drake.qc
-ai_doom.qc
-ai_blood.qc
+ai_allegiance.qc			// REFINED Definitions and subroutines for AI behavior System
 ai_gibs.qc
-ai_gibskeep.qc
-ai_enemytarget.qc
-ai_passive.qc
+ai_enemytarget.qc			// REFINED AI System for flying monsters to stay above their enemy
+ai_passive.qc				// REFINED Passive State System for friendly(ish) monsters and denizens
 ai_tether.qc
-ai_pathcorner.qc
+ai_pathcorner.qc			// REFINED Path Following System for monsters and trains
 fx.qc
-ai_ammoresist.qc
+ai_ammoresist.qc			// REFINED Ammo Resistance System effects and damage functions
 fx_nehahra.qc
 fx_q15.qc
 hiphorn.qc
 ai_sight.qc
 ai_subs.qc
 ai_states.qc
-ai_combat.qc
-ai_combatkeep.qc
-ai_minions.qc
-ai_fly.qc // from Quoth
-ai_hexen2.qc
-ai_hazards.qc
-ai_checkattack.qc
-ai_q15.qc
+ai_combat.qc				// REFINED Damage System for all damage application
+ai_minions.qc				// REFINED Minion System for monsters spawning monsters and minion eggs
+ai_hazards.qc				// REFINED Hazard Projectile System
+ai_checkattack.qc			// REFINED Check routines form monsters to decide when and which attacks
 
-// Drake stuff and subs used later
+// Projectiles and Effects
+//-----------------------------------------------------------------------------
+// Drake
 fx_drake.qc
 drake_cool.qc
 drake_fire.qc
 drake_reflect.qc
 drake_cutscene.qc
 
-fablade.qc // from hexen2 used by Fallen Angel in fangel.qc
-faspell.qc // from hexen2 used by Fallen Angel in fangel.qc
+fablade.qc 					// from Hexen 2 used by Fallen Angel in fangel.qc
+faspell.qc 					// from Hexen 2 used by Fallen Angel in fangel.qc
 
-projectiles.qc
+projectiles.qc				// Projectile System for all projectiles that cause damage
 projectiles_keep.qc
 projectiles_drake.qc
 projectiles_nehahra.qc

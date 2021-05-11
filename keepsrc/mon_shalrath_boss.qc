@@ -172,26 +172,12 @@ void(entity inflictor, entity attacker, float damage) shalrath_boss_pain = {
 };
 
 void() shalrath_boss_die = {
-	// check for gib
-	/*if (self.health < -90) {
-		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
-		ThrowHead ("progs/q15/h_shal.mdl", self.health);
-		ThrowGib ("progs/q15/gib1.mdl", self.health);
-		ThrowGib ("progs/q15/gib2.mdl", self.health);
-		ThrowGib ("progs/q15/gib3.mdl", self.health);
-		return;
-	}*/
-
 	sound (self, CHAN_VOICE, "shalrath/death.wav", 1, ATTN_NORM);
 	shal_boss_death1();
 	self.solid = SOLID_NOT;
 };
 
-//================
-//Shalrath Queen attacks
-//================
 void() ShalBossGrenadeExplode;
-// void() ShalBossSpawnTouch;
 void() ShalBossGrenadeTouch;
 void() ShalBossMissileTouch;
 void() ShalBossHome;

@@ -360,7 +360,7 @@ void() monster_firetopboss = {
 	self.deadflag = DEAD_NO;
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
 	if (self.deathstring == "")  self.deathstring = " was destroyed by the Firetop Guardian\n";
 	self.lastorigin = self.origin;	// Origin for camera interpolation

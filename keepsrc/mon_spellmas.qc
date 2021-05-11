@@ -195,7 +195,7 @@ void() monster_spellmaster = {
 	self.gibbed = FALSE;
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);

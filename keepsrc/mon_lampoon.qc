@@ -241,28 +241,9 @@ void() bfish_die16 =[      $die16,       bfish_die17       ] {};
 void() bfish_die17 =[      $die17,       bfish_die17       ] {};
 
 /*==============
-CheckBFishMelee
-
-Returns TRUE if a melee attack would hit right now
-==============*/
-float()	CheckBFishMelee =
-{
-	if (enemy_range == RANGE_MELEE)
-	{	// FIXME: check canreach
-		self.attack_state = AS_MELEE;
-
-		return TRUE;
-	}
-
-	return FALSE;
-};
-
-/*==============
 CheckBFishJump
-
 ==============*/
-float()	CheckBFishJump =
-{
+float()	CheckBFishJump = {
 	local	vector	dist;
 	local	float	d;
 
@@ -285,25 +266,6 @@ float()	CheckBFishJump =
 		
 	return TRUE;
 };
-
-float()	BFishCheckAttack =
-{	
-	// if close enough for slashing, go for it
-	if (CheckBFishMelee ())
-	{
-		self.attack_state = AS_MELEE;
-		return TRUE;
-	}
-	
-	if (CheckBFishJump ())
-	{
-		self.attack_state = AS_MISSILE;
-		return TRUE;
-	}
-	
-	return FALSE;
-};
-
 
 /*QUAKED monster_fish (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 */

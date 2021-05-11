@@ -230,11 +230,8 @@ float() judge_WaveCheck =
 	return FALSE;
 };
 
-//----------------------------------------------------------------------
 // Check the tether system
-//----------------------------------------------------------------------
-float() judge_CheckTether =
-{
+float() judge_CheckTether = {
 	local float currentdist;
 	
 	// Check for boss mode
@@ -250,77 +247,9 @@ float() judge_CheckTether =
 		else return TRUE;
 	}
 };
-	
-/*======================================================================
- JudgeCheckAttack
-======================================================================*/
-void() JudgeCheckAttack =
-{
-	//----------------------------------------------------------------------
-	// Special melee attack for monster infighting
-	//----------------------------------------------------------------------
-	if (self.enemy.flags & FL_MONSTER) {
-		// If monster outside of melee range, blast them with range
-		if (self.enemydist > self.meleerange) self.attack_state = AS_MISSILE;
-		else self.attack_state = AS_MELEE;
-		return;
-	}
 
-	//----------------------------------------------------------------------
-	// Check for Blast Belt and create random chance of detecting it
-	//----------------------------------------------------------------------
-	if (self.enemy.flags & FL_CLIENT && self.enemy.moditems & IT_ARTBLASTBELT)
-		self.attack_chance = random();
-	else self.attack_chance = 0;
-	
-	//----------------------------------------------------------------------
-	// Melee attack (Special fist ground smash)
-	//----------------------------------------------------------------------
-	if (self.enemydist < MONAI_MELEEJUDGE && self.attack_chance < 0.5) {
-		self.attack_state = AS_MELEE;
-		return;
-	}
-	
-	//----------------------------------------------------------------------
-	// Range attack conditions
-	//----------------------------------------------------------------------
-	// Can see the enemy?
-	if (!enemy_vis) return;
-	// Does the monster have a clear shot to the player?
-	if (visblocked(self.enemy)) return;
-	
-	//----------------------------------------------------------------------
-	// Mid Range attack (JUMP)
-	//----------------------------------------------------------------------
-	// Jumped recently, facing right direction and not blocked?
-	if ( self.jump_flag < time && infront(self.enemy) ) {
-		// Check for enemy above? (z axis)
-		if (self.enemy.origin_z <= self.origin_z) {
-			// Is the judge within the right range?
-			if (self.enemydist > self.jumprange_x &&
-				self.enemydist < self.jumprange_y) {
-				// Block any range attacks for a while
-				SUB_AttackFinished (random());
-				self.jumptouch = world;		// Reset last object touched
-				self.count = 0;				// Number of times jumped
-				self.th_jump ();
-				return;
-			}
-		}
-	}
-	//----------------------------------------------------------------------
-	// Range attack (Spikes or Flames)
-	//----------------------------------------------------------------------
-	if (time < self.attack_finished) return;
-	self.attack_state = AS_MISSILE;
-	SUB_AttackFinished (2 + random());
-};
-
-//============================================================================
-// Attachment management (create, finish and delete)
-//============================================================================
-void() justice_create_attachment =
-{
+// Attachment management (create, finish and remove)
+void() justice_create_attachment = {
 	if (!self.attachment) {
 		self.attachment = spawn();
 		self.attachment.owner = self;
@@ -328,27 +257,21 @@ void() justice_create_attachment =
 	}
 };
 
-//----------------------------------------------------------------------
-void() justice_finish_attachment =
-{
+void() justice_finish_attachment = {
 	if (self.attachment) {
 		setmodel(self.attachment, "");
 		self.attachment.state = STATE_OFF;
 	}
 };
 
-//----------------------------------------------------------------------
-void() justice_remove_attachment =
-{
+void() justice_remove_attachment = {
 	if (self.attachment) {
 		self.attachment.think = SUB_Remove;
 		self.attachment.nextthink = time + 0.1;
 	}
 };
 
-//----------------------------------------------------------------------
-void(float att_frame) justice_update_attachment =
-{
+void(float att_frame) justice_update_attachment = {
 	makevectors(self.angles);
 	self.attachment.origin = self.origin + attack_vector(self.meleeoffset);
 	setorigin(self.attachment, self.attachment.origin);
@@ -356,9 +279,7 @@ void(float att_frame) justice_update_attachment =
 	self.attachment.frame = att_frame;
 };
 
-//----------------------------------------------------------------------
-void() justice_setup_attachment = 
-{
+void() justice_setup_attachment = {
 	// Check if attachment has been setup yet
 	if (!self.attachment) justice_create_attachment();
 	self.attachment.state = STATE_ON;
@@ -368,11 +289,7 @@ void() justice_setup_attachment =
 	justice_update_attachment(0);
 };
 
-//======================================================================
-// Standing around
-//----------------------------------------------------------------------
-void() judge_standframe =
-{
+void() judge_standframe = {
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -915,9 +832,7 @@ void(float fire_explode) judge_fireflamewall =
 	self.proj_attarc = self.proj_attarc + 1;
 };
 
-//----------------------------------------------------------------------
-void() judge_flamewall =
-{
+void() judge_flamewall = {
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -2189,7 +2104,7 @@ void() monster_judicator = {
 	self.reflectaxe = TRUE;			// Prevent axe damage
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
 	// No targetname = no trigger!
 	// if (self.targetname == "") {

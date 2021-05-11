@@ -459,14 +459,11 @@ void()	sheep_look60 	=[193,	sheep_wait1] {
 };
 
 void() sheep_bite =  {
-	local vector vel;
-
 	makevectors ( self.angles);
 	traceline ( (self.origin + self.view_ofs), ((self.origin + self.view_ofs) + (v_forward * 36.00000)), FALSE, self);
 	if (trace_ent.takedamage) {
-		vel = (v_forward * (random() * 100 + 100));     //+ (v_up * 50);
 		sound ( self, CHAN_VOICE, "sheep/bite.wav", 1.00000, ATTN_NORM);
-		SpawnBloodSpray(trace_ent.origin, vel);
+		SpawnMeatSpray(self,trace_ent,(crandom() * 100) + 100);
 		T_Damage(trace_ent, self, self, 5, DAMARMOR);
 		self.attack_finished = (time + 0.2 + (random() * 0.8));
 	}

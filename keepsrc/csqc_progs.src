@@ -1,6 +1,0 @@
-../csprogs.dat
-
-//fteextensions.qc // Not needed
-csqc_defsclient.qc
-csqc_defs.qc
-csqc_hudkeep.qc

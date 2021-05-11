@@ -184,7 +184,6 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .float		nightmare;			// Only spawn entity if nightmare skill active
 .float		cooponly;			// Only spawn entity if coop gameplay active
 .float		mega_health;		// Mega Health Maximum (checked in items.qc)
-.float		tog_health;			// Toggle percentage for health max/mega
 .entity		mega_rotdown;		// Entity defined on player for mega countdown
 .float		rotting_qty;		// Total ammount to rot down (DoT)
 .float		startspawn2;		// player_start2 unique spawn location number
@@ -217,7 +216,10 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .float		touchedliquid;		// true/false flag if touched fake liquid
 .string		touchedsound;		// Sound string for fake liquid exit 
 .string		headmdl;			// Head model for gib routine
+
+// Now using Drake's bloodtype everywhere
 .float		bleedcolour;		// Alternative colour for 'bleeding' objects
+
 .float		locksounds;			// Locked sound for doors etc
 .float		persistentkey;		// Silver/Gold/Custom key not removed on doors
 .float		skin_override;		// Override skin selection based on world theme

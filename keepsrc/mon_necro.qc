@@ -1013,23 +1013,6 @@ void(entity inflictor, entity attacker, float damage) necro_pain = {
     necro_painswitch ();
 };
 
-// DEATH - - - - - - - - - - - - - - - -
-// Special decapitation code.
-void() necro_decap1  =[ $decap2,  necro_decap2  ] {blood_spray('0 0 28', 1);};
-void() necro_decap2  =[ $decap4,  necro_decap3  ] {blood_spray('-9 0 29', 2);monster_check_gib();};
-void() necro_decap3  =[ $decap6,  necro_decap4  ] {blood_spray('-12 0 26', 1);monster_check_gib();};
-void() necro_decap4  =[ $decap8,  necro_decap5  ] {};
-void() necro_decap5  =[ $decap10, necro_decap6  ] {};
-void() necro_decap6  =[ $decap12, necro_decap7  ] {};
-void() necro_decap7  =[ $decap14, necro_decap8  ] {blood_spray('7 -1 24', -1);};
-void() necro_decap8  =[ $decap16, necro_decap9  ] {ai_forward(4);};
-void() necro_decap9  =[ $decap18, necro_decap10 ] {ai_forward(4);};
-void() necro_decap10 =[ $decap19, necro_decap11 ] {ai_forward(1);monster_death_postcheck();};
-void() necro_decap11 =[ $decap20, necro_decap11     ] {ai_forward(1);monster_deadbody_check();};
-// Yes, use monster_remove to dispose of the body since the necro is a
-// head gib.  The think function should be safe enough for body to use.
-// Update:  decap_end used instead so body doesn't vanish instantly.
-
 // Standard death functions.
 void() necro_die1  =[ $deathA2,  necro_die2  ] {};
 void() necro_die2  =[ $deathA4,  necro_die3  ] {monster_check_gib();};

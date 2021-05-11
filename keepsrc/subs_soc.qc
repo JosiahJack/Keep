@@ -564,8 +564,7 @@ vector(vector iorg, vector org_offset, entity targ, float zspeed) SUB_Tracking =
   * Added support for variable origin locations and proj speeds
   * Added support for distance scaling linked to skill levels
 ======================================================================*/
-float(float theta, vector sorg, vector mdest, float zspeed) SUB_Elevation =
-{
+float(float theta, vector sorg, vector mdest, float zspeed) SUB_Elevation = {
 	local float a, b, c; 	//constants in the equation to be solved
 	local vector ofs; 		//displacement we wish the projectile to travel
 	local float y, z; 		//horizontal and vertical components of ofs

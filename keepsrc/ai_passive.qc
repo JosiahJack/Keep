@@ -1,3 +1,42 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Arcane Dimensions (AD)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 8
+//
+// Implements: Passive State System for denizens and friendly-ish monsters
+//
+// Description:
+// Handles changing passive state switching, calming down, and checks if
+// passive is possible.
+//=============================================================================
+
 .float		passive_mode;		// A monster with passive abilities
 .float		passive_state;		// Passive monster state 0=OFF, 1=ON, -1=NOT SET
 .float		passive_timer;		// When was the last time monster saw enemy?
@@ -13,8 +52,7 @@ float MON_PASSIVESTATE_ON = 1;		// Passive mode active
 float MON_PASSIVESTATE_TOGGLE = 2;	// Toggle states (0>1 1>0)
 float MON_PASSIVESTATE_RESET = 5;	// Going back to Passive mode
 
-// TRUE = gets angry, don't get passive
-// FALSE = we can be passive
+// TRUE = gets angry, don't get passive.  FALSE = we can be passive.
 float(entity targ) check_passivestate_exception = {
 	if (!(targ.flags & FL_MONSTER)) return TRUE;
 	if (targ.health < 1) return TRUE;
@@ -30,8 +68,7 @@ float(entity targ) check_passivestate_exception = {
 void(entity targ) setup_passivestate = {
 	if (check_passivestate_exception(targ)) return;
 	
-	// Check map worldspawn and monster for passive states
-	// Setup all default parameters for passive monsters
+	// Check map worldspawn and monster for passive states.  Setup all default parameters for passive monsters
 	if (map_passivestate || targ.passive_state == MON_PASSIVESTATE_ON || targ.ryuflags & RYU_CALM) {
 		targ.passive_mode = TRUE;
 		if (targ.alignment == EVIL) targ.alignment = NEUTRAL; // don't affect good monsters
@@ -42,9 +79,6 @@ void(entity targ) setup_passivestate = {
 	}
 };
 
-// Check for passive state on bosses
-void(entity targ) setup_passivestate_boss = { setup_passivestate(targ); };
-
 // Fire event trigger strings (empty check done in trigger_strs function)
 void(entity targ) trigger_passivestate_event = {
 	if (targ.passive_eventon != "" && targ.passive_state == MON_PASSIVESTATE_ON)
@@ -53,8 +87,7 @@ void(entity targ) trigger_passivestate_event = {
 		trigger_strs(targ.passive_eventoff, world);
 };
 
-// Decide if the passive monster can switch to aggressive state
-// Return TRUE if need to stay passive, FALSE to carry on with changing to angry
+// Decide if the passive monster can switch to aggressive state.  Return TRUE if need to stay passive, FALSE to carry on with changing to angry
 float(entity targ) check_passivestate_switch = {
 	if (targ.passive_state == MON_PASSIVESTATE_ON) {
 		// Check for ambush flag exception, and that we aren't cowardly or passive temperament

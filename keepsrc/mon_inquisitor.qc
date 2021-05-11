@@ -573,30 +573,6 @@ void(entity inflictor, entity attacker, float damage) inquisitor_pain = {
 	else inquisitor_pain1();
 }
 
-void() InquisitorCheckAttack = {
-	local float rnd, dist;
-
-	dist = vlen(self.enemy.origin - self.origin);
-
-	if (dist <= 350) { inquisitor_magica1(); return; } // Staff plant storm cloud
-
-	rnd = random() * 100;
-	// What should we do now, 25% chance good enough for all attacks?
-	if (rnd < 25)
-		inquisitor_magica1(); // Staff plant storm cloud
-	else if (rnd < 50)
-		inquisitor_magicb1();
-	else if (rnd < 75)
-		inquisitor_magicc1();
-	else {
-		// Can see the enemy?
-		if ((!enemy_vis || visblocked(self.enemy)) || random() < 0.2)
-			inquisitor_magicd1(); // Bile bomb at enemy's feet when we can't see them
-		else
-			inquisitor_magicb1(); // Bone attack
-	}
-};
-
 /*======================================================================
  QUAKED monster_inquisitor (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 ======================================================================*/
@@ -689,7 +665,7 @@ void() monster_inquisitor = {
 	self.resist_rockets = self.resist_cells = 0;
 
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);

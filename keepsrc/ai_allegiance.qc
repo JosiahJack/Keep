@@ -5,7 +5,7 @@
 //
 // Compiled by Qmaster
 //
-// Mod attributions: My own, though heavily inspired by Drake
+// Attributions: My own, though heavily inspired by Drake
 //
 //
 // Distribution / Copyright / Permissions 
@@ -26,12 +26,9 @@
 // All of these resources may be electronically distributed only at 
 // NO CHARGE to the recipient.
 //
-//=============================================================================
-//
 // Stats:
 // Entity count: 0 - Utility functions only.
 // Function count: 9
-//
 //
 // Implements: AI Behavior Values and Allegiance System
 //
@@ -46,9 +43,12 @@
 // Allegiance System Variables
 // We have 3 variables that determine behavior on a monster.
 // Alignment, Temprament, and Vulnerability
+//
 // All 3 can be changed by the mapper per monster.
 // All monsters default to 0 for all 3, which is Evil Angry Normal
 // Monsters now look for any other monster or player, noy just players
+//=============================================================================
+
 // All 3 are integers with the following ranges:
 
 // Alignment (0 - 2)

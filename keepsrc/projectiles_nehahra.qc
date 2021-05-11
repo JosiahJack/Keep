@@ -100,7 +100,7 @@ void(vector org, vector dir) WeldFire = {
 	weld.event = "mthret";
 	weld.touch = WeldTouch;
 	if (self.classname == "monster_nehahra") {
-		if (((self.enemy.bleedcolour > 0) || (!(self.enemy.flags & FL_MONSTER)) && !(self.enemy.flags & FL_CLIENT))) { // could be max mister
+		if (((self.enemy.bloodtype > 0) || (!(self.enemy.flags & FL_MONSTER)) && !(self.enemy.flags & FL_CLIENT))) { // could be max mister
 			weld.touch = nehahra_wreckbsp;
 		}
 	}

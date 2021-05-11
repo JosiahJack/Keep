@@ -305,7 +305,8 @@ vector(vector dir, vector vtan) Aim_Tangent = {
     // Combine the tangent side vector to the old directional vector.
     mx = vlen (dir);
     dir = normalize (dir);
-    vang = Vangles (dir);
+    dir   = vectoangles(dir);
+    dir_x = anglemod(0 - dir_x);  // 'vectoangles' reverses pitch -- fix it!
     makevectors (vang);
     dir = dir + (vtan_x * v_right) + (vtan_y * v_up);
     dir = normalize (dir);
@@ -316,32 +317,30 @@ vector(vector dir, vector vtan) Aim_Tangent = {
 // spread:  x = horizontal, y = vertical, z = 0/1 for randomize/set.
 vector(vector dir, vector spread) Aim_Scatter = {
     // Randomize the angles before converting them into tangents.
-    if (!spread_z)
-        {spread_x = crandom() * spread_x;  spread_y = crandom() * spread_y;}
-    spread_x = SUB_tan (spread_x);  spread_y = SUB_tan (spread_y);
+    if (!spread_z) {
+		spread_x = crandom() * spread_x;  
+		spread_y = crandom() * spread_y;
+	}
+    spread_x = mathlib_tan(spread_x);
+	spread_y = mathlib_tan(spread_y);
 
     // Combine the tangent side vector to the old directional vector.
     return Aim_Tangent (dir, spread);
 };
 
-vector(vector dir, vector spread) Maim_Scatter =
-{
+vector(vector dir, vector spread) Maim_Scatter = {
     local   float   r;
 
-    if (self.enemy.invisible_finished || (self.enemy.items & IT_INVISIBILITY))
-    {
+    if (self.enemy.invisible_finished || (self.enemy.items & IT_INVISIBILITY)) {
         r = random() * 4;   // Monsters have 25% chance to guess right.
         r = floor(r) * 5;   // Aim up to 15 degrees to either side.
-        if (random() < 0.5)
-            r = 0 - r;
-    }
-    else
-        r = 0;
+        if (random() < 0.5) r = 0 - r;
+    } else r = 0;
 
     // Randomize the angles before converting them into tangents.
     if (!spread_z)
         {spread_x = crandom() * spread_x;  spread_y = crandom() * spread_y;}
-    spread_x = SUB_tan (spread_x + r);  spread_y = SUB_tan (spread_y);
+    spread_x = mathlib_tan(spread_x + r);  spread_y = mathlib_tan(spread_y);
 
     // Combine the tangent side vector to the old directional vector.
     return Aim_Tangent (dir, spread);

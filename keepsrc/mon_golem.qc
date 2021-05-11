@@ -671,7 +671,7 @@ void() setup_golem = {
 	self.infightextra = 3;			// Triple damage to other monsters
 	self.steptype = FS_TYPEGIANT;	// Giant sound
 	self.blockudeath = TRUE;		// No humanoid death
-	self.bleedcolour = 16;			// Brown dust/dirt
+	self.bloodtype = self.bleedcolour = MON_BCOLOR_BROWN;			// Brown dust/dirt
 	self.no_liquiddmg = TRUE;		// Immune to slime/lava
 	self.meleerange = MONAI_MELEEGOLEM;
 	self.attack_offset = '10 0 30';		// Rock storm

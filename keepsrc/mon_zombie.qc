@@ -471,8 +471,7 @@ void(float frameno) zombie_onground = {
  6 = get up and moan about it
  7 = fire zombie gib
 ============================================================================*/
-void(float type) zombie_sound =
-{
+void(float type) zombie_sound = {
 	// check for gibbed or idle sound block
 	if (self.health < 1) return;
 	if (self.spawnflags & MON_SPAWN_NOIDLE && type < 3) return;
@@ -661,9 +660,8 @@ void() monster_zombie = {
 	if (!self.classtype) self.classtype = CT_MONZOMBIE;
 	self.classgroup = CG_ZOMBIE;			// One big happy zombie family!
 	self.classmove = MON_MOVEWALK;
-	if (!self.exactskin) self.randomskin = 4;
-	if (self.deathstring == "")
-		self.deathstring = " joins the Zombies\n";
+	if (!self.exactskin) self.randomskin = 2;
+	if (self.deathstring == "") self.deathstring = " joins the Zombies\n";
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;

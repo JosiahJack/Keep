@@ -2215,7 +2215,7 @@ void(entity targ) W_ChangeWeapon = {
 			// if (InModItems(targ, IT_UPGRADE_LG)) gotgun = TRUE;
 		// }
 	}
-	else if (targ.impulse == 9) {
+	else if (targ.impulse == 90) {
 		checkvec = WeaponSlotPickOneOfThree(targ, IT_EXTRA_WEAPON, IT2_LASER_CANNON, IT2_CHAINLIGHTNING, IN_ITEMS1, IN_ITEMS2, IN_ITEMS2);
 		fl = checkvec_x;
 		gotgun = checkvec_y;

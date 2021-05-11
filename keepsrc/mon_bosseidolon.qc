@@ -79,8 +79,7 @@ void() eidolon_WaveSetupHP = {
 //----------------------------------------------------------------------
 // Check if HP reached next wave, walk to center and fire targets
 //----------------------------------------------------------------------
-float() eidolon_WaveCheck =
-{
+float() eidolon_WaveCheck = {
 	// Check for boss wave boundary event
 	if (self.health > 1 && self.health < self.bosswavetrig) {
 		// Check for wave boundary triggers
@@ -109,68 +108,6 @@ float() eidolon_WaveCheck =
 		return TRUE;
 	}
 	return FALSE;
-};
-
-//----------------------------------------------------------------------
-// Eidolon game play logic
-//----------------------------------------------------------------------
-void() EidolonCheckAttack = 
-{
-	local float currentdist;
-	
-	// Check for boss wave trigger events
-	if (eidolon_WaveCheck() == TRUE) return;
-
-	//----------------------------------------------------------------------
-	// Check the tether system
-	//----------------------------------------------------------------------
-	currentdist = vlen(self.origin - self.movelast.origin);
-	//self.t_width = vlen(self.enemy.origin - self.movelast.origin);
-	// Is the boss at maximum range?
-	if (currentdist > self.tetherrange) {
-		// Can the boss see the player?
-		if (enemy_vis) self.attack_state = AS_MELEE;
-		else {
-			// At max range + cannot see player, exit combat
-			self.enemytarget = self.enemy;
-			self.enemy = world;
-			self.goalentity = self.movetarget = self.movelast;
-			self.attack_state = AS_STRAIGHT;
-			self.think = self.th_walk;
-		}
-		return;
-	}
-		
-	//----------------------------------------------------------------------
-	// Check Melee range and constantly fire
-	//----------------------------------------------------------------------
-	if (self.enemydist < MONAI_CLOSEEIDO) {
-		self.attack_state = AS_MELEE;
-		return;
-	}
-
-	//----------------------------------------------------------------------
-	// Range attacks (Boulder + Rock Storm)
-	//----------------------------------------------------------------------
-	// Only range attack if cooldown has finished
-	if (time > self.attack_finished) {
-		// Intense rock storm attack
-		if (self.enemydist < MONAI_MEDIUMEIDO && random() < 0.75) {
-			// Skill 0=3s, 1=2.25s, 2=1.5s, 3=0.75s
-			self.attack_speed = (4 - skill) * 0.75;
-			self.attack_finished = time + self.attack_speed + random();
-			self.attack_state = AS_MELEE;
-			return;
-		}
-		// Large boulder attack
-		else {
-			// Skill 0=4s, 1=3s, 2=2s, 3=1s
-			self.attack_speed = (4 - skill) * 1;
-			self.attack_finished = time + self.attack_speed + random();
-			self.attack_state = AS_MISSILE;
-			return;
-		}
-	}
 };
 
 //======================================================================
@@ -927,7 +864,7 @@ void() monster_eidolon = {
 	self.ticktimer = 0.05;			// Model animations at 20fps
 	
 	// Check passive system for exceptions
-	setup_passivestate_boss(self);
+	setup_passivestate(self);
 	
 	if (self.health < 1) self.health = self.max_health = MEGADEATH;
 	self.pain_finished = time + LARGE_TIMER;
