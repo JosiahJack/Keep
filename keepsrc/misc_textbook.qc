@@ -225,9 +225,7 @@ void(float fadedir) info_book_fadesetup =
 	}
 };
 
-//----------------------------------------------------------------------
-void() info_book_displaystory =
-{
+void() info_book_displaystory = {
 	// is this book part of a storyline?
 	// The controller has been setup/validated already
 	if (self.spawnflags & MISCBOOK_STORY) {
@@ -266,15 +264,13 @@ void() info_book_displaystory =
 	else centerprint_msg(self.enemy, self.message, self.message2);
 
 	// Check for any additional trigger events
-	if (self.target != "") {
+	if (self.target != "") { // No need to do all targets, special setup for target2
 		trigger_strs(self.target, self.enemy);
 		self.target = "";
 	}
 };
 
-//----------------------------------------------------------------------
-void() info_book_touch =
-{
+void() info_book_touch = {
 	local float book_yaw, book_angle1, book_angle2, play_yaw, play_angle;
 
 	if (self.estate & ESTATE_BLOCK) return;

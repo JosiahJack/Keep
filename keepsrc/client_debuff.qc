@@ -1,26 +1,59 @@
-/*======================================================================
-  CheckDeBuff - Check for negative buffs affecting the player
-======================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: My own and Arcane Dimensions (AD)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 13
+//
+// Implements: Player Buff System
+//
+// Description:
+// Functions for applying, removing, and updating effects for various buffs
+// such as burning and poison.  Also used to apply shrine aura effects.
+//=============================================================================
 
+.float		cshift_func;		// 1=Screen flash, 3=artifacts, 5=debuff
+.float		cshift_upd;			// Screen updates (v_cshift) are active
+.float		cshift_time;		// Timer (0.1s tick) for screen updates
+.vector		cshift_col;			// RGB / XYZ values for screen colour
+.float		cshift_den;			// Screen colour density
+.float		cshift_step;		// Quantity to reduce density by per tick
 .float		debuff_sound;		// Heartbeat sound when tick happens
 .float		debuff_qty;			// Quantity to do something with (temp)
-
 .float		bleeding;			// Bleeding debuff status
 .float		bleeding_time;		// Timer (1s tick) for screen/sound update
 .float		bleeding_qty;		// Total amount of health stored (HoT)
-
 .float		rotting;			// Rotting debuff status (DoT)
 .float		rotting_time;		// Timer (1s tick) for health update
-
 .float		regen_time; 
-
-// Has to be defined early in defscustom.qc because of the randomizer.qc
-//.float		rotting_qty;		// Total ammount to rot down (DoT)
-
 .float		burning;			// Burning debuff status
 .float		burning_time;		// Timer (1s tick) for screen/sound update
 .float		burning_qty;		// Total amount of damage stored (DoT)
-
 .float		poisoned;			// Poison debuff status
 .float		poisoned_time;		// Timer (1s tick) for screen/sound update
 .float		poisoned_qty;		// Total amount of damage stored (DoT)
@@ -30,10 +63,10 @@ vector DEBUFF_BLEED_COL = '50 35 0';		// Dark Orange
 float DEBUFF_BLEED_DEN = 80;
 float DEBUFF_BLEED_STEP = 10;
 
+// Bleed debuff
 vector DEBUFF_START_BLEED_COL = '200 0 0';	// Strong red
 float DEBUFF_START_BLEED_DEN = 160;
 float DEBUFF_START_BLEED_STEP = 7;
-
 float DEBUFF_BLEED_MIN = 5;				// Minimum health to apply debuff
 float DEBUFF_BLEED_DMG = 10;			// Immunity with pent/envsuit
 
@@ -53,9 +86,9 @@ float DEBUFF_POISON_DMGMON = 15;		// Damage Over Time For Monsters, higher to be
 
 void(entity targ) ResetAuraEffects;
 
-//----------------------------------------------------------------------
+void(entity targ) ResetCShift = { Safe_stuffcmd(targ, "v_cshift 0 0 0 0\n"); };
+
 // Various debuff reset functions, used all over the place
-//----------------------------------------------------------------------
 void(entity targ) ResetDebuffScreen = {
 	if (targ.flags & FL_CLIENT) {
 		targ.cshift_upd = FALSE;
@@ -75,15 +108,11 @@ void(entity targ) ResetDebuffRotting = {
 	targ.items2 = targ.items2 - (targ.items2 & IT2_SUPERHEALTH);
 };
 
-void(entity targ) ResetDebuffPoisoned =
-{ targ.poisoned = targ.poisoned_qty = 0; };
+void(entity targ) ResetDebuffPoisoned = { targ.poisoned = targ.poisoned_qty = 0; };
 
-void(entity targ) ResetDebuffBleeding =
-{ targ.bleeding = targ.bleeding_qty = 0; };
+void(entity targ) ResetDebuffBleeding = { targ.bleeding = targ.bleeding_qty = 0; };
 
-//----------------------------------------------------------------------
-void(entity targ) ResetDebuffSystem =
-{
+void(entity targ) ResetDebuffSystem = {
 	// This only works for player clients
 	if (!(targ.flags & FLx_CREATURE)) return;
 	
@@ -93,9 +122,7 @@ void(entity targ) ResetDebuffSystem =
 	ResetDebuffBleeding(targ);
 };
 
-//----------------------------------------------------------------------
 // Core debuff function, run every frame from client.qc
-//----------------------------------------------------------------------
 void() ClientDeBuff = {
 	// Check is self is a NOT player (client) FIRST!
 	// Bug fix from ericw on func msgboard
@@ -159,8 +186,7 @@ void() ClientDeBuff = {
 		// Is it time for a debuff update
 		if (self.poisoned_time < time) {
 			if (self.poisoned_qty > 0) {
-				// Reset poisoned tick timer
-				self.poisoned_time = time + 1;
+				self.poisoned_time = time + 1; // Reset poisoned tick timer
 
 				// Give priority to bleeding(heal)
 				if (!self.bleeding) {
@@ -171,16 +197,11 @@ void() ClientDeBuff = {
 					self.cshift_den = DEBUFF_POISON_DEN;
 					self.cshift_step = DEBUFF_POISON_STEP;
 				}
-				
-				// Setup default poison damage
-				self.debuff_qty = DEBUFF_POISON_DMG;
-				// Check poison does not exceed damage left
-				if (self.poisoned_qty < self.debuff_qty) self.debuff_qty = self.poisoned_qty;
-				// Subtract poison damage from counters
-				self.poisoned_qty = self.poisoned_qty - self.debuff_qty;
-				
-				// Use global damage function (has death checks)
-				T_Damage (self, world, world, self.debuff_qty, NOARMOR);
+
+				self.debuff_qty = DEBUFF_POISON_DMG; // Setup default poison damage
+				if (self.poisoned_qty < self.debuff_qty) self.debuff_qty = self.poisoned_qty; // Check poison does not exceed damage left
+				self.poisoned_qty = self.poisoned_qty - self.debuff_qty; // Subtract poison damage from counters
+				T_Damage (self, world, world, self.debuff_qty, NOARMOR); // Use global damage function (has death checks)
 			}
 		}
 		// Check if poison has finished?
@@ -331,33 +352,20 @@ void() ClientDeBuff = {
 			}
 		}
 	}
-	// Reset cshift if nothing is active (engine does not reset)
-	// This is to catch new games or quickload resets
+	// Reset cshift if nothing is active (engine does not reset).  This is to catch new games or quickload resets
 	else if (self.cshift_time < time) ResetDebuffScreen(self);
 };
 
 void(entity targ) BleedDeBuff = {
 	local float pain_type;
 	
-	// Sanity check!
-	if (!(targ.flags & FL_CLIENT)) return;
-	// Check for bleeding and minimum amount of health for debuff
-	if (targ.health <= DEBUFF_BLEED_MIN) return;
-	if (targ.bleeding == TRUE) {
-		// Do minimum damage, checked min does not kill before
-		T_Damage (targ, self, self, DEBUFF_BLEED_MIN, DAMARMOR);
-		return;
-	}
-	// Immune to debuff if using Pent of Protection or BioSuit
-	if (targ.items & (IT_INVULNERABILITY | IT_SUIT)) {
-		T_Damage (targ, self, self, DEBUFF_BLEED_DMG, DAMARMOR);
-		return;
-	}
-	
-	// Starting bleeding!
-	targ.bleeding = TRUE;
-	// Pause before bleeding Healing starts (def=1s)
-	targ.bleeding_time = time + map_bleedingdmg_z;
+	if (!(targ.flags & FL_CLIENT)) return; // Sanity check!
+	if (targ.health <= DEBUFF_BLEED_MIN) return; // Check for bleeding and minimum amount of health for debuff
+	if (targ.bleeding == TRUE) { T_Damage (targ, self, self, DEBUFF_BLEED_MIN, DAMARMOR); return; } // Do minimum damage, checked min does not kill before
+	if (targ.items & (IT_INVULNERABILITY | IT_SUIT)) { T_Damage (targ, self, self, DEBUFF_BLEED_DMG, DAMARMOR); return; } // Immune to debuff if using Pent of Protection or BioSuit
+
+	targ.bleeding = TRUE; // Starting bleeding!
+	targ.bleeding_time = time + map_bleedingdmg_z; // Pause before bleeding Healing starts (def=1s)
 
 	// Pick a random player sound
 	pain_type = rint(random() * 3);
@@ -371,7 +379,6 @@ void(entity targ) BleedDeBuff = {
 	// Reduce HP down to % (def=0.25) and restore the rest later on
 	targ.health = rint(targ.bleeding_qty * map_bleedingdmg_x);
 	targ.bleeding_qty = targ.bleeding_qty - targ.health;
-
 	targ.cshift_upd = TRUE;		// Update screen colour
 	targ.cshift_time = -1;		// Update striaght away
 	targ.cshift_col = DEBUFF_START_BLEED_COL;
@@ -379,25 +386,19 @@ void(entity targ) BleedDeBuff = {
 	targ.cshift_step = DEBUFF_START_BLEED_STEP;
 };
 
-//----------------------------------------------------------------------
 void(entity targ, float rotoverride) RotDeBuff = {
-	// Only need to check for player/client
-	if (targ.flags & FL_CLIENT == FALSE) return;
+	if (targ.flags & FL_CLIENT == FALSE) return; // Only need to check for player/client
 
-	// Extra Health is added via item pickup
-	targ.rotting = TRUE;
+	targ.rotting = TRUE; // Extra Health is added via item pickup
 	
 	// Check for a rotting override value
 	if (rotoverride <= 1) targ.rotting_qty = 1;
 	else targ.rotting_qty = rotoverride;
 	
-	// Always give inventory item
-	targ.items2 = targ.items2 | IT2_SUPERHEALTH;
-	// 5s second pause to start of HP rot
-	targ.rotting_time = time + 5;
+	targ.items2 = targ.items2 | IT2_SUPERHEALTH; // Always give inventory item
+	targ.rotting_time = time + 5; // 5s second pause to start of HP rot
 };
 
-//----------------------------------------------------------------------
 void(entity targ) BurnDeBuff = {
 	local float debuffqty;
 	
@@ -405,7 +406,7 @@ void(entity targ) BurnDeBuff = {
 	// Cannot be burning if knee deep in water
 	// Immune to debuff if using Pent of Protection or BioSuit
 	if (targ.burning_qty > DEBUFF_BURN_MAX) return;
-	if (targ.flags & FLx_CREATURE == FALSE) return;
+	if (targ.flags & FLx_CREATURE == FALSE) return; // Affects players and monsters
 	if (targ.waterlevel >= 3) return;
 	if (targ.items & (IT_INVULNERABILITY | IT_SUIT)) return;
 	
@@ -433,7 +434,7 @@ void(entity targ) PoisonDeBuff = {
 	local float debuffqty;
 	
 	// Immune to debuff if using Pent of Protection or BioSuit
-	if (targ.flags & FLx_CREATURE == FALSE) return;
+	if (targ.flags & FLx_CREATURE == FALSE) return; // Affects players and monsters 
 	if (targ.items & (IT_INVULNERABILITY | IT_SUIT)) return;
 	if (targ.poisoned) return;	// Only poison once
 	
@@ -458,11 +459,8 @@ void(entity targ) PoisonDeBuff = {
 	}
 };
 
-//----------------------------------------------------------------------
 // Used by Pyro and Wraith; consistent damage from both monsters
-//----------------------------------------------------------------------
-void(entity targ, float playdmg, float mondmg) ApplyFireDmg =
-{
+void(entity targ, float playdmg, float mondmg) ApplyFireDmg = {
 	local float reduction, firedamage;
 
 	if (targ.flags & FL_CLIENT) {
@@ -479,8 +477,7 @@ void(entity targ, float playdmg, float mondmg) ApplyFireDmg =
 	else firedamage = playdmg;
 
 	if (targ.resist_fire > 0) firedamage = firedamage * (1-targ.resist_fire);
-	
-	// Final damage (no armour save)
-	T_Damage (targ, self, self.owner, firedamage, NOARMOR);
+
+	T_Damage (targ, self, self.owner, firedamage, NOARMOR); // Final damage (no armour save, fire burns through)
 	if (targ.resist_fire < 1) BurnDeBuff(targ);
 };

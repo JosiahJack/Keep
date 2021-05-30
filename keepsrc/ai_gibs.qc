@@ -93,28 +93,30 @@ float GIBTYPE_STONE = 1;		// Stone/rubble
 float GIBTYPE_WOOD = 2;			// Woodchip
 float GIBTYPE_GLASS = 3;		// Glass impact sounds
 float GIBTYPE_METAL = 4;		// Metal scraps
+float GIBTYPE_CERAMIC = 5;		// Ceramic pot shards
 float GIBTYPE_POISON = 10;		// Poisoned flesh
 float GIBTYPE_ICE = 16;
+
 float MON_BCOLOR_BROWN = 16;	// Brown dust/dirt
 float MON_BCOLOR_RED = 68;		// Red index colour
 float MON_BCOLOR_GREEN = 52;	// Green index
 float MON_BCOLOR_YELLOW = 192;	// Bright yellow, not gold
 float MON_BCOLOR_SILVER = 36;	// Silver/Ice
 float MON_BCOLOR_WHITE = 4;		// Grey/white
-string GIB_SOUND_HEAVY = "gibs/gibheavy1.wav";
-string GIB_SOUND_HEAVY2 = "gibs/gibheavy2.wav";
-string GIB_SOUND_METALA = "gibs/gibmetala.wav";
-string GIB_SOUND_METALB = "gibs/gibmetalb.wav";
-string GIB_SOUND_CHAIN = "gibs/gibchain.wav";
-string GIB_SOUND_WOOD = "gibs/gibwood.wav";
+string GIB_SOUND_HEAVY = "ad171/gibs/gibheavy1.wav";
+string GIB_SOUND_HEAVY2 = "ad171/gibs/gibheavy2.wav";
+string GIB_SOUND_METALA = "ad171/gibs/gibmetala.wav";
+string GIB_SOUND_METALB = "ad171/gibs/gibmetalb.wav";
+string GIB_SOUND_CHAIN = "ad171/gibs/gibchain.wav";
+string GIB_SOUND_WOOD = "ad171/gibs/gibwood.wav";
 string GIB_SOUND_UDEATH = "player/udeath.wav";
-string GIB_SOUND_ACID = "gibs/gibacid.wav";
-string GIB_SOUND_SDEATH = "gibs/stonedeath.wav";
+string GIB_SOUND_ACID = "ad171/gibs/gibacid.wav";
+string GIB_SOUND_SDEATH = "ad171/gibs/stonedeath.wav";
 string GIB1_BLOOD = "progs/ad171/gib_1.mdl";
 string GIB2_BLOOD = "progs/ad171/gib_2.mdl";
 string GIB3_BLOOD = "progs/ad171/gib_3.mdl";
 string GIB4_BLOOD = "progs/ad171/gib_4.mdl";
-string GIB5_BLOOD = "progs/ad171/gib_5.mdl";
+string GIB5_BLOOD = "progs/q15/gib_5.mdl";
 string GIB1_STONE = "progs/ad171/gib_s1.mdl";
 string GIB2_STONE = "progs/ad171/gib_s2.mdl";
 string GIB3_STONE = "progs/ad171/gib_s3.mdl";
@@ -125,20 +127,20 @@ string GIB2_POISON = "progs/ad171/gib_p2.mdl";
 string GIB3_POISON = "progs/ad171/gib_p3.mdl";
 string GIB4_POISON = "progs/ad171/gib_p4.mdl";
 string GIB5_POISON = "progs/ad171/gib_p5.mdl";
-string GIB1_SOUND = "gibs/gib1.wav";
-string GIB3_SOUND = "gibs/gib3.wav";
-string GIB5_SOUND = "gibs/gib5.wav";
-string GIBHIT1_SOUND = "gibs/gibhit1.wav";
-string GIBHIT2_SOUND = "gibs/gibhit2.wav";
-string GIBHIT3_SOUND = "gibs/gibhit3.wav";
-string GIBHIT4_SOUND = "gibs/gibhit4.wav";
-string GIBHIT5_SOUND = "gibs/gibhit5.wav";
-string GIBHIT1_STONESOUND = "gibs/gibstone1.wav";
-string GIBHIT3_STONESOUND = "gibs/gibstone3.wav";
-string GIBHIT5_STONESOUND = "gibs/gibstone5.wav";
-string GIBHIT1_METALSOUND = "gibs/gibmetal1.wav";
-string GIBHIT3_METALSOUND = "gibs/gibmetal3.wav";
-string GIBHIT5_METALSOUND = "gibs/gibmetal5.wav";
+string GIB1_SOUND = "ad171/gibs/gib1.wav";
+string GIB3_SOUND = "ad171/gibs/gib3.wav";
+string GIB5_SOUND = "ad171/gibs/gib5.wav";
+string GIBHIT1_SOUND = "ad171/gibs/gibhit1.wav";
+string GIBHIT2_SOUND = "ad171/gibs/gibhit2.wav";
+string GIBHIT3_SOUND = "ad171/gibs/gibhit3.wav";
+string GIBHIT4_SOUND = "ad171/gibs/gibhit4.wav";
+string GIBHIT5_SOUND = "ad171/gibs/gibhit5.wav";
+string GIBHIT1_STONESOUND = "ad171/gibs/gibstone1.wav";
+string GIBHIT3_STONESOUND = "ad171/gibs/gibstone3.wav";
+string GIBHIT5_STONESOUND = "ad171/gibs/gibstone5.wav";
+string GIBHIT1_METALSOUND = "ad171/gibs/gibmetal1.wav";
+string GIBHIT3_METALSOUND = "ad171/gibs/gibmetal3.wav";
+string GIBHIT5_METALSOUND = "ad171/gibs/gibmetal5.wav";
 float GIB_FADETIME = 10;
 
 float(entity e, float heal, float ignore) T_Repair;
@@ -210,6 +212,8 @@ void(entity gibent) DPP_blood_trail = {
 	else if (gibent.gibtype == GIBTYPE_GLASS) {}
 	// Nothing for wood at this moment
 	else if (gibent.gibtype == GIBTYPE_METAL) {}
+	// Nothing for ceramic at this moment
+	else if (gibent.gibtype == GIBTYPE_CERAMIC) {}
 	// Glowing green blobs splashed about
 	else if (gibent.gibtype == GIBTYPE_POISON) {
 		gibent.traileffectnum = particleeffectnum(DPP_TRPBLOOD);
@@ -229,16 +233,9 @@ vector(float gibforce) DirectionForDamage = {
 	
 	// Gentle fountain, not much upward motion
 	if (gftype == MON_GIBFOUNTAIN) {
-		gvel_x = crandom()*100;
-		gvel_y = crandom()*100;
-		gvel_z = 100 + (100 * random());
-		return gvel;
+		return NewVector(crandom()*100,crandom()*100,100+(100*random()));
 	} else if (gftype == MON_GIBEXPLOSION) {
-		// Party popper version (large explosion)
-		gvel_x = crandom()*250;
-		gvel_y = crandom()*250;
-		gvel_z = 400 + (100 * random());
-		return gvel;
+		return NewVector(crandom()*250,crandom()*250,400+(100*random())); // Party popper version, large explosion
 	} else if (gftype == MON_XYGIBVELOCITY) {
 		// Back to front vector so gib will travel away from enemy
 		gvel = vectoangles(self.origin - self.enemy.origin);
@@ -254,9 +251,8 @@ vector(float gibforce) DirectionForDamage = {
 		gvel = gvel + (v_right * (100 * crandom()));
 		gvel_z = 30;
 	} else if (gftype == MON_GIBTARGET) {
-		// Designed for non monster entities (overwrites self entity keys)
-		// Check for any target entity tracking setup
-		if (self.target != "") TargetMovedir(self, FALSE);
+		// Designed for non monster entities (overwrites self entity keys).  Check for any angletarget entity tracking setup
+		if (self.target != "") TargetMovedir(self, FALSE); // Converted from angletarget, not used to run entity I/O
 		// default movedir movement
 		gvel = self.movedir * (self.speed + (self.gibvel_x * random()));
 		// Add Left/Right random velocity
@@ -369,6 +365,12 @@ void() TouchGib = {
 				if (self.lip < 1) self.noise = GIBHIT1_METALSOUND;
 				else if (self.lip < 2) self.noise = GIBHIT3_METALSOUND;
 				else self.noise = GIBHIT5_METALSOUND;
+			} else if (self.gibtype == GIBTYPE_CERAMIC) {
+				self.lip = random() * 4;
+				if (self.lip < 1) self.noise = SOUND_IMP_CERAMIC1;
+				else if (self.lip < 2) self.noise = SOUND_IMP_CERAMIC2;
+				else if (self.lip < 3) self.noise = SOUND_IMP_CERAMIC3;
+				else self.noise = SOUND_IMP_CERAMIC4;
 			} else {
 				self.lip = random() * 5;
 				if (self.lip < 1) self.noise = GIBHIT1_SOUND;
@@ -394,7 +396,7 @@ void(float gib_no, float gib_qty) ThrowGib = {
 		gibitem.physicsflags = gibitem.physicsflags | PHYS_GYRO_BOUYANT | PHYS_GYRO_MOTIONRESIST;
 
 		// Make sure stone, metal, and glass don't float
-		if (self.gibtype == GIBTYPE_STONE || self.gibtype == GIBTYPE_METAL || self.gibtype == GIBTYPE_GLASS) gibitem.physicsflags = 0;
+		if (self.gibtype == GIBTYPE_STONE || self.gibtype == GIBTYPE_METAL || self.gibtype == GIBTYPE_GLASS || self.gibtype == GIBTYPE_CERAMIC) gibitem.physicsflags = 0;
 
 		// Check for any touch/contact damage / explosions
 		if (self.gib1dmg > 0) gibitem.gib1dmg = self.gib1dmg;
@@ -502,6 +504,7 @@ void(float gib_no, float gib_qty) ThrowGib = {
 			gibitem.avelocity = '0 0 0';
 			gibitem.avelocity_y = 200 + random() * 200;
 			gibitem.angles_y = gibitem.ideal_yaw = random() * 360;
+			gibitem.headmdl = "TRUE";
 		} else {
 			// Make sure gibs fountain items have correct origins
 			if (self.classtype == CT_MISCGIBF) gibitem.oldorigin = self.origin;
@@ -654,7 +657,7 @@ void() monster_ThrowGib = {
 	}				
 
 	// Throw head last because all previous gibs rely on the origin
-	if (self.headmdl != "") {
+	if (self.headmdl != string_null) {
 		if (self.max_health == MON_NOGIBVELOCITY) ThrowGib(4, rint(random()*4)); // If monster set for low velocity throw extra gibs instead
 		else ThrowGib(25, 1); // Throw a head gib instead of switch to one
 	}
@@ -692,7 +695,7 @@ float() Gib_Eaten = {
 		entity_hide(self); // Remove the gib
 	}	
     if (self.healamount < 1) return FALSE;   // Gib has no food value.
-	if (self.classtype != CT_MONVOMITUS) return FALSE; // only vomitus can eat gibs
+	if (other.classtype != CT_MONVOMITUS) return FALSE; // only vomitus can eat gibs
 
     leave = 1;
 
@@ -701,10 +704,9 @@ float() Gib_Eaten = {
 
     if ((!(other.xfl & XFL_HUNGRY)) && leave) return FALSE;
 
-	
-    if (self.tronyn) { // Do the eating effects.
+    if (self.headmdl != string_null) { // Do the eating effects for heads, assigned to "TRUE" on heads when heads are tossed
     	// The big crunch when eating a head!
-        sound (other, CHAN_ITEM, "cube/bc_gulp.wav", 1, ATTN_NORM);
+        sound (other, CHAN_ITEM, "zerstorer/cube/bc_gulp.wav", 1, ATTN_NORM);
         gibs = 3;
         while (gibs > 0) {
             SpawnMeatSpray (self,other, 100 * crandom()); // Throw some meat chunks.
@@ -721,7 +723,7 @@ float() Gib_Eaten = {
         self.nextthink  = 0.01;
         self.think      = RemoveGib;
     } else {
-    	sound (other, CHAN_ITEM, "cube/bc_attck.wav", 1, ATTN_NORM);
+    	sound (other, CHAN_ITEM, "zerstorer/cube/bc_attck.wav", 1, ATTN_NORM);
         remove (self);
     }
     Safe_stuffcmd (other, "bf\n");

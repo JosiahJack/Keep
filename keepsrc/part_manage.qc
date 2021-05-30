@@ -320,14 +320,12 @@ void() extend_particlechain =
 	part_control.waitmin = TRUE;
 };
 
-//----------------------------------------------------------------------
 float PARTICLE_ORIGIN_VOL = 0;			// Pick random point inside volume
 float PARTICLE_ORIGIN_CIRCLE = 1;		// Move around circumference of circle
 float PARTICLE_ORIGIN_RANDCIRCLE = 2;	// Randomly point on circumference
 float PARTICLE_ORIGIN_SPIRAL = 3;		// Spiral outwards to circumference
 float PARTICLE_ORIGIN_CENTER = 5;		// Explosion style from center
 
-//----------------------------------------------------------------------
 // particle BURST explosions
 float PARTICLE_BURST_YELLOW = 1;		// gold, yellow, yellow
 float PARTICLE_BURST_GREEN = 2;			// light green, green, green
@@ -336,6 +334,7 @@ float PARTICLE_BURST_BLUE = 8;			// blue, grey, blue
 float PARTICLE_BURST_PURPLE = 16;		// purple, grey, purple
 float PARTICLE_BURST_FIRE = 32;			// gold, red, grey (used by ogre)
 float PARTICLE_BURST_WHITE = 64;		// white, grey, grey
+float PARTICLE_BURST_DBLUE = 128;			// blue, grey, blue
 // Particle BURST styles
 float PARTICLE_BURST_RING = 256;		// Circular particle burst
 float PARTICLE_BURST_CENTER = 512;		// Central particle burst
@@ -344,7 +343,7 @@ float PARTICLE_BURST_SHOCKWAVE = 4096;	// Floor impact shockwave
 float PARTICLE_BURST_SKULLUP = 8192;	// Skull wizard teleport
 float PARTICLE_BURST_LOSTUP = 16384;	// Lost souls particle burn
 float PARTICLE_BURST_MINOTAUR = 32768;	// Minotaur magic attack over
-//----------------------------------------------------------------------
+
 float PARTICLE_TRAIL_YELLOW = 1;		// gold, yellow, yellow
 float PARTICLE_TRAIL_GREEN = 2;			// light green, green, green
 float PARTICLE_TRAIL_RED = 3;			// grey, red, red
@@ -354,7 +353,7 @@ float PARTICLE_TRAIL_FIRE = 6;			// gold, red, grey
 float PARTICLE_TRAIL_WHITE = 7;			// white, grey, grey
 float PARTICLE_TRAIL_PLASMA = 10;		// Plasma weapons
 float PARTICLE_TRAIL_POISON = 11;		// Poisonous weapons
-//----------------------------------------------------------------------
+
 // Map referenced particles
 float PARTICLE_STYLE_CUSTOM = 1;		// Custom particle defined in map
 float PARTICLE_STYLE_WEATHER = 5;		// Various weather type effects
@@ -517,6 +516,7 @@ string DPP_RINGPARTY = "DPP_ITSPART_RINGY";
 string DPP_RINGPARTG = "DPP_ITSPART_RINGG";
 string DPP_RINGPARTR = "DPP_ITSPART_RINGR";
 string DPP_RINGPARTB = "DPP_ITSPART_RINGB";
+string DPP_RINGPARTDB = "DPP_ITSPART_RINGDB";
 string DPP_RINGPARTP = "DPP_ITSPART_RINGP";
 string DPP_RINGPARTW = "DPP_ITSPART_RINGW";
 
@@ -525,6 +525,7 @@ string DPP_BURSTPARTY = "DPP_ITSPART_BURSTY";
 string DPP_BURSTPARTG = "DPP_ITSPART_BURSTG";
 string DPP_BURSTPARTR = "DPP_ITSPART_BURSTR";
 string DPP_BURSTPARTB = "DPP_ITSPART_BURSTB";
+string DPP_BURSTPARTDB = "DPP_ITSPART_BURSTDB";
 string DPP_BURSTPARTP = "DPP_ITSPART_BURSTP";
 string DPP_BURSTPARTW = "DPP_ITSPART_BURSTW";
 

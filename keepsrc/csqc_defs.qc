@@ -1,20 +1,54 @@
-//======================================================================
-// Author : Simon "Sock" OCallaghan
-// Website: www.simonoc.com
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
 //
-// This is a special defs file with all the relevant CSQC references
-// Should be included into progs and csprogs to reduce duplicates
+// Compiled by Qmaster
 //
-//----------------------------------------------------------------------
-// The CSQC files are setup to be self contained and easy to port
-// to other MODS, but some stuff needs to exist in other QC files
-// In world.qc the extra variables for AD are located there
+// Attributions: Arcane Dimensions (AD)
+// 					Author : Simon "Sock" OCallaghan
+//					Website: www.simonoc.com
 //
-//----------------------------------------------------------------------
-// Special Variables used by CSQC (Client Side Quake C)
-// The engine will keep these insync between server and client
-// Defined with the addstat/clientstat command DP/FTE
-//----------------------------------------------------------------------
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 0
+// Builtin Function count: 79
+//
+// Implements: Definitions for CSQC HUD
+//
+// Description:
+// This is a special defs file with all the relevant CSQC references for ID1
+// relevant items.
+//
+// Should be included into progs and csprogs to reduce duplicates.
+//
+// The CSQC files are setup to be self contained and easy to port to other
+// MODS, but some stuff needs to exist in other QC files.  In world.qc the
+// extra variables for AD are located there.
+//
+// Special Variables used by CSQC (Client Side Quake C).  The engine will keep
+// these insync between server and client.  Defined with the addstat/clientstat
+// command DP/FTE.
+//=============================================================================
 
 const float CLIENT_HEALTH = 0;			// Player's health
 const float CLIENT_WEAPONMODELI = 2;	// Modelindex of current viewmodel
@@ -59,9 +93,7 @@ const float CLIENT_RUNEFLAG = 61;		// self.serverflagstemp
 const float CLIENT_DENIZENS = 62;		// world denizens total
 const float CLIENT_DENIZENSKILLED = 63;	// world denizens killed
 
-//----------------------------------------------------------------------
 // Duplicate of IT_ references in defs.qc
-//----------------------------------------------------------------------
 const float CSQC_SHOTGUN = 1<<0;			// 1
 const float CSQC_SUPER_SHOTGUN = 1<<1;		// 2
 const float CSQC_NAILGUN = 1<<2;			// 4
@@ -107,18 +139,14 @@ const float EV_FUNCTION = 6;
 const float EV_POINTER = 7;
 const float EV_INTEGER = 8;
 
-// ======================================================================
 // This is a merge of three (DP/FTE/QSS) engine def files
 // dpextensions+csprogsdefs from SVN ICCULUS site (DP trunk)
 // fteexentions from triptohell website
 // qsextensions from QSS devkit on triptohell website
 // 
 // CSQC range #300-#399
-// ======================================================================
 
-// ----------------------------------------------------------------------
 // DP/FTE extensions ONLY
-// ----------------------------------------------------------------------
 // Forgets all rentities, polygons, and temporary dlights. 
 // Resets all view properties to their default values.
 void() clearscene = #300;
@@ -178,7 +206,7 @@ void(string name) freepic = #319;
 // even in engines that support it.
 // If UTF-8 is globally enabled in the engine, then that encoding
 // is used (without additional markup), otherwise it is raw quake chars.
-// Software engines may assume a size of '8 8 0', rgb='1 1 1', 
+// Software engines may expect a size of '8 8 0', rgb='1 1 1', 
 // alpha=1, flag&3=0, but it is not an error to draw out of the screen.
 float(vector position, string text, vector scale, vector rgb, float alpha, float flag) drawstring = #321;
 // Retrieves the value of the given EV_STRING stat, as a tempstring.
@@ -215,7 +243,7 @@ vector(string picname) draw_getimagesize = #318;
 // char instead (or display as a ? if outside the 32-127 range).
 // size should normally be something like '8 8 0'.
 // rgb should normally be '1 1 1' and alpha normally 1.
-// Software engines may assume the named defaults.
+// Software engines may expect the named defaults.
 // Note that ALL text may be rescaled on the X axis due to 
 // variable width fonts. The X axis may even be ignored completely.
 float(vector position, float character, vector scale, vector rgb, float alpha, float flag) drawcharacter = #320;
@@ -244,7 +272,7 @@ vector(vector position, string text, vector scale, vector rgb, float alpha, floa
 // If usecolours is 1, markup that does not affect the string
 // width will be ignored. Will always be decoded as UTF-8 if
 // UTF-8 is globally enabled.
-// If the char size is not specified, '8 8 0' will be assumed
+// If the char size is not specified, '8 8 0' will be default expectation.
 // float(string text, float usecolours, optional vector fontsize) stringwidth = #327;
 // QSS/FTE = float(string text, float usecolours, optional vector fontsize) stringwidth = #327;
 float(string text, float allowColorCodes, vector size) stringwidth = #327;
@@ -317,8 +345,7 @@ void(float effectnum, entity ent, vector start, vector end) trailparticles = #33
 // 'veladd' property (while orgadd will push the particles along it).
 // Decals will use it as a hint to align to the correct surface.
 // In both cases, it should normally be a unit vector, but other
-// lengths will still work. If it has length 0 then FTE will
-// assume downwards
+// lengths will still work. If it has length 0 then FTE will expect downwards
 void(float effectnum, vector origin, optional vector dir, optional float count) pointparticles = #337;
 
 // conflicts with void(entity client, string s1) centerprint = #73;
@@ -371,19 +398,13 @@ float(float playernum, string keyname, optional float assumevalue) getplayerkeyf
 float() isdemo = #349;
 // Returns if the client is acting as the server (aka: listen server)
 float() isserver = #350;
-// Register the given console command, for easy console use.
-// Console commands that are later used will invoke CSQC_ConsoleCommand
+// Register the given console command, for easy console use.  Console commands that are later used will invoke CSQC_ConsoleCommand
 void(string cmdname) registercommand = #352;
-// Quickly check to see if the entity is currently free. This
-// function is only valid during the two-second non-reuse window,
-// after that it may give bad results. Try one second to make it
-// more robust.
+// Quickly check to see if the entity is currently free. This function is only valid during the two-second non-reuse window, after that it may give bad results. Try one second to make it more robust.
 float(entity ent) wasfreed = #353;
-// Look up a key in the server's public serverinfo string
-string(string key) serverkey = #354;
-// Version of serverkey that returns the value as a float
-// (which avoids tempstrings)
-float(string key, optional float assumevalue) serverkeyfloat = #0;
+string(string key) serverkey = #354; // Look up a key in the server's public serverinfo string
+float(string key, optional float assumevalue) serverkeyfloat = #0; // Version of serverkey that returns the value as a float (which avoids tempstrings)
+
 // Use proper case; refer to the id1 Write* functions!
 float() ReadByte = #360;
 float() ReadChar = #361;
@@ -394,7 +415,4 @@ float() ReadAngle = #365;
 string() ReadString = #366;
 float() ReadFloat = #367;
 float() readentitynum = #368;
-// Replaces the title of the game window, as seen when 
-// task switching or just running in windowed mode
-void(string newcaption) setwindowcaption = #0;
-
+void(string newcaption) setwindowcaption = #0; // Replaces the title of the game window, as seen when task switching or just running in windowed mode

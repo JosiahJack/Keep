@@ -66,15 +66,13 @@ This fixed size trigger cannot be touched, it can only be fired by other events.
 Can contain killtargets, targets, delays, and messages.
 
 ======================================================================*/
-void() trigger_relay_fire = 
-{
+void() trigger_relay_fire = {
 	// Entity state off or triggered once?
 	if (self.estate & ESTATE_BLOCK) return;
 	if (self.attack_finished > time) return;
 
 	// Keep toggling between target/target2
-	// Uses trigger_strs function instead of SUB_UseTargets
-	// the original targets need to be stored elsewhere (noise3/4)
+	// Uses trigger_strs function instead of SUB_UseTargets.  The original targets need to be stored elsewhere (noise3/4)
 	if (self.spawnflags & TRIG_REPEATTARGET) {
 		// Still active?
 		if (!self.lefty) {
@@ -84,17 +82,14 @@ void() trigger_relay_fire =
 				if (self.state == TRIG_RELAYSW1) {
 					sound (self, CHAN_BODY, self.noise1, self.volume, ATTN_NORM);
 					self.target = self.noise3;
-				}
-				else {
+				} else {
 					sound (self, CHAN_BODY, self.noise2, self.volume, ATTN_NORM);
 					self.target = self.noise4;
 				}
 				// Fire final state position
-				if (self.target != "") trigger_strs(self.target, self);
+				if (self.target != "") trigger_strs(self.target, self); // Special case, toggles between target and target2.
 			}
-			
-			// Stop re-trigger functionality
-			self.think = SUB_Null;
+			self.think = SUB_Null; // Stop re-trigger functionality
 			return;
 		}
 		
@@ -103,20 +98,14 @@ void() trigger_relay_fire =
 		if (self.state == TRIG_RELAYSW1) {
 			self.nextthink = time + self.wait + (random() * self.delay);
 			sound (self, CHAN_BODY, self.noise1, self.volume, ATTN_NORM);
-		}
-		else {
+		} else {
 			self.nextthink = time + self.wait2 + (random() * self.delay2);
 			sound (self, CHAN_BODY, self.noise2, self.volume, ATTN_NORM);
 		}
-		// Keep on looping
-		self.think = trigger_relay_fire;
-	}
-	else {
-		// Setup to trigger once?
-		if (self.wait < 0) self.attack_finished = time + LARGE_TIMER;
-		// Play any trigger sounds
-		if (self.noise != "") 
-			sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+		self.think = trigger_relay_fire; // Keep on looping
+	} else {
+		if (self.wait < 0) self.attack_finished = time + LARGE_TIMER; // Setup to trigger once?
+		if (self.noise != "") sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play any trigger sounds
 	}
 	
 	// Randomly pick between target/target2
@@ -125,68 +114,48 @@ void() trigger_relay_fire =
 	if (self.spawnflags & TRIG_RANDOMTARGET) {
 		if (random() < self.waitmin) self.target = self.noise3;
 		else self.target = self.noise4;
-	}
-	// Toggle target between target/target2
-	// SUB_UseTargets will fire both target strings if found
-	// the random choices need to be stored elsewhere (noise3/4)
-	else if (self.spawnflags & TRIG_TOGGLETARGET) {
+	} else if (self.spawnflags & TRIG_TOGGLETARGET) { // Toggle target between target/target2
+		// SUB_UseTargets will fire both target strings if found.  The random choices need to be stored elsewhere (noise3/4).
 		if (self.state == TRIG_RELAYSW1) {
 			self.target = self.noise3; 
 			self.state = TRIG_RELAYSW2;
-		}
-		else {
+		} else {
 			self.target = self.noise4; 
 			self.state =TRIG_RELAYSW1;
 		}
 	}
-	
-	// Repeat has different trigger because of wait/delay fields
-	if (self.spawnflags & TRIG_REPEATTARGET) {
+
+	if (self.spawnflags & TRIG_REPEATTARGET) { // Repeat has different trigger because of wait/delay fields
 		// Use trigger string(s) instead of Sub_use
-		if (self.target != "") trigger_strs(self.target, self);
-	}
-	else {
-		// One thing to note about trigger_relay is that it does not change the
-		// activator global variable to the entity that used this trigger last
-		// This is handy for client test triggers (like trigger_secret)
-		SUB_UseTargets();
+		if (self.target != "") trigger_strs(self.target, self); // Special case, toggles between target and target2
+	} else {
+		SUB_UseTargets(); // One thing to note about trigger_relay is that it does not change the activator global variable to the entity that used this trigger last.  This is handy for client test triggers (like trigger_secret)
 	}
 };
 
-//----------------------------------------------------------------------
-void() trigger_relay_use =
-{
-	// Repeat functionality? - Toggle state
-	if (self.spawnflags & TRIG_REPEATTARGET) {
+void() trigger_relay_use = {
+	if (self.spawnflags & TRIG_REPEATTARGET) { // Repeat functionality? - Toggle state
 		if (self.lefty) self.lefty = FALSE;
 		else self.lefty = TRUE;
 	}
-	// Trigger relay main routine
-	trigger_relay_fire();
+	trigger_relay_fire(); // Trigger relay main routine
 };
 
-//----------------------------------------------------------------------
-void() trigger_relay_off =
-{
+void() trigger_relay_off = {
 	self.estate = ESTATE_OFF;
 	self.lefty = FALSE;
-	// Switch off any running sounds
-	sound (self, CHAN_VOICE, SOUND_EMPTY, 1, ATTN_NORM);
-	sound (self, CHAN_BODY, SOUND_EMPTY, 1, ATTN_NORM);
+	StopSound(self,CHAN_VOICE);
+	StopSound(self,CHAN_BODY); // Switch off any running sounds
 };
 
-//----------------------------------------------------------------------
-void() trigger_relay_reset =
-{
+void() trigger_relay_reset = {
 	self.estate = ESTATE_ON;
 	self.state = TRIG_RELAYSW1;
 	self.attack_finished = 0;
 	self.lefty = FALSE;
 };
 
-//----------------------------------------------------------------------
-void() trigger_relay =
-{
+void() trigger_relay = {
 	self.classtype = CT_TRIGRELAY;		// Class type
 	self.classgroup = CG_TARGETS;
 
@@ -201,8 +170,7 @@ void() trigger_relay =
 		return;
 	}
 
-	// Setup and precache any sounds + volume
-	trigger_bmodel_sounds();
+	trigger_bmodel_sounds(); // Setup and precache any sounds + volume
 	
 	// Setup toggle/repeat cycle state (check for override)
 	if (self.state == TRIG_RELAYSW2) self.state = TRIG_RELAYSW2;
@@ -299,9 +267,9 @@ STARTOFF  : Requires trigger to activate
 A counter which triggers target(s) when complete
 
 ======================================================================*/
-void() trigger_counter_updateno =
-{
+void() trigger_counter_updateno = {
 	local entity tdfind, tself, tother;
+	
 	if (self.counttarget == "") return;
 	
 	if (self.lip >= 0) self.targetnumber = self.height - self.count;
@@ -316,16 +284,11 @@ void() trigger_counter_updateno =
 	}
 };
 
-//----------------------------------------------------------------------
-void() trigger_counter_reset =
-{
-	// Reset counter to initial (spawning) value
-	self.count = self.height;
+void() trigger_counter_reset = {
+	self.count = self.height; // Reset counter to initial (spawning) value
 };
 
-//----------------------------------------------------------------------
-void() trigger_counter_use =
-{
+void() trigger_counter_use = {
 	if (self.estate & ESTATE_BLOCK) return;
 	
 	// Check for any pre-count messages
@@ -661,10 +624,10 @@ SNOW : Check for snow effect being active
 Triggers target(s) when certain engine active
 
 ======================================================================*/
-void() trigger_engine_fire =
-{
-	// Parameter to check at of tests
-	self.aflag = FALSE;
+void() trigger_engine_fire = {
+	local entity sactivator; // Temporary activator
+	
+	self.aflag = FALSE; // Parameter to check at of tests
 	
 	// Check each engine type for conditions
 	// This trigger will not reset the activator
@@ -691,20 +654,17 @@ void() trigger_engine_fire =
 			if (self.wait < 0) {
 				self.attack_finished = LARGE_TIMER;
 				self.estate = ESTATE_OFF;
-			}
-			// Slow down re-trigger events
-			else self.attack_finished = time + self.waitmin;
+			} else self.attack_finished = time + self.waitmin; // Slow down re-trigger events
 
-			// Check if target string exists
-			if (self.target != "") trigger_strs(self.target, self.bmodel_act);
+			sactivator = activator;
+			activator = self.bmodel_act;
+			if (HasTargets(self)) SUB_UseTargets(); // Check if target string exists
+			activator = sactivator;
 		}
-
 	}
 };
 
-//----------------------------------------------------------------------
-void() trigger_engine_use =
-{
+void() trigger_engine_use = {
 	if (self.estate & ESTATE_BLOCK) return;
 	if (self.attack_finished > time) return;
 
@@ -712,13 +672,10 @@ void() trigger_engine_use =
 	if (self.delay > 0) {
 		self.think = trigger_engine_fire;
 		self.nextthink = time + self.delay;
-	}
-	else trigger_engine_fire();
+	} else trigger_engine_fire();
 };		
 
-//----------------------------------------------------------------------
-void() trigger_engine =
-{
+void() trigger_engine = {
 	self.classtype = CR_TRIGENG;
 	self.classgroup = CG_TARGETS;
 
@@ -757,27 +714,24 @@ wait    : -1 = will only trigger once
 Attach a particle emitter to the player (FTE/QSS engines only)
 
 ======================================================================*/
-void() trigger_playerparticles_use = 
-{
+void() trigger_playerparticles_use = {
+	local entity sactivator;
+	
 	if (self.estate & ESTATE_BLOCK) return;
 	if ( !(other.flags & FL_CLIENT) ) return;
 	if (self.attack_finished > time) return;
 	// This only works with FTE
 	if (!ext_ftepart) return;
 
-	// Store player/client for later
-	self.enemy = other;
+	self.enemy = other; // Store player/client for later
 	
 	// Check if the entity attachment is active
 	if (!self.enemy.entattachment) {
 		self.enemy.entattachment = spawn();
-		// Link back to trigger entity
-		self.enemy.entattachment.owner = self;
+		self.enemy.entattachment.owner = self; // Link back to trigger entity
 		self.enemy.entattachment.solid = SOLID_NOT;
 		self.enemy.entattachment.movetype = MOVETYPE_NOCLIP;
-		
-		// Setup empty model for protocol problems
-		self.enemy.entattachment.mdl = MODEL_EMPTY;
+		self.enemy.entattachment.mdl = MODEL_EMPTY; // Setup empty model for protocol problems
 		setmodel(self.enemy.entattachment, self.enemy.entattachment.mdl);
 		setorigin(self.enemy.entattachment, self.enemy.origin);
 		setsize(self.enemy.entattachment, VEC_ORIGIN, VEC_ORIGIN);
@@ -791,16 +745,16 @@ void() trigger_playerparticles_use =
 		self.enemy.entattachment.noise = self.noise;
 		// example - '90 0 0', "fte_weather.ent_playerrain"
 		self.enemy.entattachment.emiteffectnum = particleeffectnum(self.noise);
-	}
-	else {
-		// Disable attachment
-		self.enemy.entactive = FALSE;
-		// Turn off particle emitter
-		self.entattachment.emiteffectnum = particleeffectnum("");
+	} else {
+		self.enemy.entactive = FALSE; // Disable attachment
+		self.entattachment.emiteffectnum = particleeffectnum(""); // Turn off particle emitter
 	}
 	
 	// Check if target string exists
-	if (self.target != "") trigger_strs(self.target, self.enemy);
+	sactivator = activator;
+	activator = self.enemy;
+	if (HasTargets(self)) SUB_UseTargets();
+	activator = sactivator;
 
 	// Setup trigger to only work once?
 	if (self.wait < 0) {
@@ -809,9 +763,7 @@ void() trigger_playerparticles_use =
 	}
 };
 
-//----------------------------------------------------------------------
-void() trigger_playerparticles_off =
-{
+void() trigger_playerparticles_off = {
 	self.estate = ESTATE_OFF;
 	// Only work if FTE/QSS engine
 	if (!ext_ftepart) return;
@@ -941,7 +893,7 @@ void() trigger_lightstyle_setup =
 	}
 
 	// Check if the target is valid?
-	if (self.target != "") {
+	if (self.target != "") { // Only target, target2 used for special setup.
 		// Find the target (should be spawned by now)
 		self.enemy = find(world, targetname, self.target);
 		// Is target valid entity?
@@ -950,16 +902,12 @@ void() trigger_lightstyle_setup =
 			if (self.enemy.targetname != "" && self.enemy.style >= 0 && 
 				self.enemy.style < LIGHT_MAXLIGHTSTYLE ) {
 				self.style = self.enemy.style;
-			}
-			else {
+			} else {
 				dprint("\b[TRIG_LS]\b target not valid switch light!\n");
 				self.enemy = world;
 			}
-		}
-		else dprint("\b[TRIG_LS]\b invalid target entity!\n");
-	}
-	// No target light defined
-	else self.enemy = world;
+		} else dprint("\b[TRIG_LS]\b invalid target entity!\n");
+	} else self.enemy = world; // No target light defined
 
 	// Style has to be different to re-map
 	if (self.customstyle_remap > 0 && self.customstyle_remap == self.style) {
@@ -968,16 +916,13 @@ void() trigger_lightstyle_setup =
 		remove(self);
 		return;
 	}
-	
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
+
+	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_use = trigger_lightstyle_use;
 	self.estate = ESTATE_ON;
 };
 
-//----------------------------------------------------------------------
-void() trigger_lightstyle =
-{
+void() trigger_lightstyle = {
 	self.classtype = CT_TRIGLIGHTSTYLE;
 	self.classgroup = CG_TARGETS;
 	
@@ -1489,7 +1434,7 @@ Triggered entity producing damage + sprite explosion
 targetname : trigger entity (works with entity state system)
 dmg    : explosive radius damage (def=40, -1=no damage)
 delay  : time delay to explosion (def=0s)
-noise  : string name for explosion sound (def=weapons/r_exp3b.wav)
+noise  : string name for explosion sound (def=weapons/r_exp3.wav)
 wait   : re-trigger explosions (def=-1 trigger once)
 style  : 0=Explosion, 1=Plasma, 2=Poison, 3=Electric, 4=Burst (Smoke/Flame/Poison)
 height : 0=Small, 1=Medium, 2=Large, -1=Random
@@ -1584,15 +1529,12 @@ void() trig_explode_fire =
 	SpawnExplosion(self.lip, self.origin, self.noise);
 };
 
-//----------------------------------------------------------------------
-void() trig_explode_use =
-{
+void() trig_explode_use = {
 	if (self.estate & ESTATE_BLOCK) return;
 	if (self.attack_finished > time) return;
-	
-	// Check for Trigger once setting
-	if (self.wait < 0) self.attack_finished = LARGE_TIMER;
-	
+
+	if (self.wait < 0) self.attack_finished = LARGE_TIMER; // Check for Trigger once setting
+
 	// Check for explosion delay or straight away blow up
 	if (self.delay > 0) {
 		self.nextthink = time + self.delay;
@@ -1601,9 +1543,7 @@ void() trig_explode_use =
 	else trig_explode_fire();
 };
 
-//----------------------------------------------------------------------
-void() trigger_explode =
-{
+void() trigger_explode = {
 	// Default settings
 	self.classtype = CT_TRIGEXPLODE;
 	self.classgroup = CG_TARGETS;

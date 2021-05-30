@@ -287,7 +287,7 @@ void() megaf_plasma3 = [ $attack3, megaf_plasma14] {ai_face();};
 
 // Plasma Burn Loop
 void() megaf_plasma14 = [ $attack14, megaf_plasma15] {ai_face();
-	sound (self, CHAN_WEAPON, "enforcer/elim_pg_load.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM);};
 void() megaf_plasma15 = [ $attack15, megaf_plasma16] {ai_face();};
 void() megaf_plasma16 = [ $attack16, megaf_plasma17] {megaf_fire_plasma();};
 void() megaf_plasma17 = [ $attack17, megaf_plasma18] {};
@@ -553,7 +553,7 @@ void() monster_megaforce = {
 	precache_sound ("megaforce/rocket_hit.wav");
 
 	// Extra load/fire sounds
-	precache_sound ("enforcer/elim_pg_load.wav");
+	precache_sound ("ad171/enforcer/elim_pg_load.wav");
 	precache_sound (SOUND_PLASMA_FIRE);
 	precache_sound (SOUND_PLASMA_HIT);
 

@@ -333,23 +333,25 @@ void() ClientPowerups =
 			self.frame = 0;
 		}
 	} else {
-		if (mindex_hammer && self.weapon == IT2_MJOLNIR) {
-            //if (self.hammer_finished)
-            //    self.modelindex = mindex_hamout;
-            //else
-                self.modelindex = mindex_hammer;
-        }
-        else if (mindex_saw && self.weapon == IT_AXE && self.perms & IT_CHAINSAW)
-            self.modelindex = mindex_saw;
-        else
-            self.modelindex = modelindex_player;
+		if (self.in_a_vehicle) {
+			self.modelindex = modelindex_eyes;
+		} else {
+			if (mindex_hammer && self.weapon == IT2_MJOLNIR) {
+				//if (self.hammer_finished)
+				//    self.modelindex = modelindex_hamout;
+				//else
+					self.modelindex = mindex_hammer;
+			}
+			else if (mindex_saw && self.weapon == IT_AXE && self.perms & IT_CHAINSAW)
+				self.modelindex = mindex_saw;
+			else
+				self.modelindex = modelindex_player;
+		}
 	}
 
-	//----------------------------------------------------------------------
 	// Env Suit	
 	// - Flash screen 3s before running out
 	// - Give player standard 12s of air after suit finishes
-	//----------------------------------------------------------------------
 	if (self.radsuit_finished > 0) {
 		self.air_finished = time + WATER_AIR;		// don't drown
 
@@ -622,7 +624,7 @@ void() ClientPowerups =
 			if (self.wing_time == 1) {
 				sprint (self, "Boots of Levitation are fading\n");
 				Safe_stuffcmd (self, "bf\n");
-				sound (self, CHAN_AUTO, "ambience/wingend.wav", 1, ATTN_NORM);
+				sound (self, CHAN_AUTO, "drake/ambience/wingend.wav", 1, ATTN_NORM);
 				self.wing_time = time + 1;
 			}	  
 			if (self.wing_time < time) {

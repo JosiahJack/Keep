@@ -520,7 +520,7 @@ void() monster_voreling = {
 	if (!(self.spawnflags & MON_VORELING_LARGE) || 
 		self.classtype == CT_CACHEVORELING) {
 		self.mdl = "progs/ad171/mon_voreling.mdl";
-		self.gib1mdl = "progs/ad171/gib_voreleg.mdl";		// Single Leg
+		self.gib1mdl = "progs/q15/gib_voreleg.mdl";		// Single Leg, q15 has added frame
 
 		precache_model (self.mdl);
 		precache_model (self.gib1mdl);
@@ -669,7 +669,7 @@ void(vector minion_org, entity minion_targ) minion_voreling =
 	}
 	else {	
 		minion.mdl = "progs/ad171/mon_voreling.mdl";		// Creamy delight
-		minion.gib1mdl = "progs/ad171/gib_voreleg.mdl";	// Single Leg
+		minion.gib1mdl = "progs/q15/gib_voreleg.mdl"; // Single Leg, q15 has added frame
 	}
 	
 	minion.idle_sound = "voreling/idle.wav";

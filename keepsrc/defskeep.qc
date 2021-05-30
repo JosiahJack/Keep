@@ -1,9 +1,46 @@
-//======================================================================
-// MOD    : Keep.
-// Compiled by Qmaster (aka Josiah Jack)
-// With numerous contributions from...well...everywhere.  See keep/credits/ folder or refer to the Readme Tome
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: All, see credits folder
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 0
+//
+// Implements: Compile order and what files are included
+//
+// Description:
+// Definitions for Keep mod's specific functions or random one variable
+// definitions from tiny mods that didn't justify having a separate
+// file.
+//
+// And now for some sayings:
 //
 // You keep what you kill (and kill with).
+// -Qmaster
 //
 // One mod to rule them all
 // One mod to find them
@@ -11,11 +48,10 @@
 // and in Quake bind them
 // -ijed
 //======================================================================
-string MOD_VERSION		= "\b[INFO]\b Keep Mod, version 0.91\n";
 
+string MOD_VERSION		= "\b[INFO]\b Keep Mod, version 0.91\n";
 .float mapversion;
 .string target3, target4;
-
 float total_denizens; // Used to track total harmless denizens
 float killed_denizens; // Used to track harmless creature kills
 
@@ -102,7 +138,6 @@ float IT_ARTJUMPBOOTS		= 1048576;		//20 JCR Jump Boots (1-4 power levels)
 float IT_ARTSHARP			= 2097152;		//21 Reduce SG/SSG/RG spread pattern
 float IT_ARTPIERCE			= 4194304;		//22 NG/SNG Nails travel through enemy bodies
 float IT_ARTTOME			= 8388608;		//23 Tome of Power (event trigger)
-
 float ALL_MODITEMSARTIFACTS = 16646144; // All items that affect screen overlay cshift
 .float serverflagstemp;
 .float selfweaponismoditems; 	// HACK FOR HACKBANK! Used to carry more than 24 weapons which is all we can fit in the float's bits
@@ -157,7 +192,7 @@ WEAPON KEYBOARD ORDER
 0 - Wand, Mjolnir, Gungnir (3)
 
 WEAPON CYCLING ORDER										NORMAL e.g.
-UniqueID Wepname												HACKBANK e.g.
+UniqueID Wepname												HACKBANK e.g. (indented)
 1  Grapple													IT2_GRAPPLE
 2  Axe/Shadowaxe/Chainsaw									IT_AXE
 3  Mace															IT_MACE
@@ -216,10 +251,11 @@ float ID_CHAINLIGHTNING = 25;
 float ID_WANDCROSS2 = 26;
 float ID_MJOLNIR = 27;
 float ID_GUNGNIR = 28;
-//========================================================================================================
+
 float BBOX_ARMAGON = 23;	// -48 -48 -24, 48 48 84
 float BBOX_VERMIS = 24;		// -64 -64 -512, 64 64 256
 float ARMOR_BLUE = 2;			// Display a blue armour
+
 // Normal max ammo counts:
 float AMMO_MAXSHELLS = 200;		// Maximum ammo the player can carry
 float AMMO_MAXNAILS = 200;		// Shells use to be 100
@@ -278,11 +314,10 @@ string SOUND_ARTPSHIELD1 = "shield/pickup.wav";			// Pickup
 string SOUND_ARTPSHIELD2 = "shield/hit.wav";			// Active
 string SOUND_ARTPSHIELD3 = "shield/fadeout.wav";		// Fading
 string SOUND_ARTCROSS2 = "items2/crosuse.wav";			// Active
-string SOUND_ARTEMPATH2 = "hipitems/empathy2.wav";		// Active
+string SOUND_ARTEMPATH2 = "hipnotic/items/empathy2.wav";		// Active
 
 .float slimealpha;
 .float lavaalpha;
-//.float oldgravity;
 .float versustype;
 .float therm_finished;
 .float therm_time;
@@ -294,12 +329,9 @@ string SOUND_ARTEMPATH2 = "hipitems/empathy2.wav";		// Active
 float wavenumber;
 float DEV_AMMO_N_HEALTH = 1;
 .float funcwaterdmg_finished;
-
-// Versus gamemode
 float COOP_VERSUS = 3;
 float VT_SURVIVOR = 2;
 float VT_GAMEMASTER = 4;
-
 float GLOBALSTATE_1 	= 1.000;
 float GLOBALSTATE_2  	= 2.000;
 float GLOBALSTATE_3    	= 4.000;
@@ -350,12 +382,10 @@ float globalstate;
 .string statetarget22;
 .string statetarget23;
 .string statetarget24;
-
 .float usingfinished;
 float numsurvivors;
 float numgamemasters;
 .float cost;
-//float versus_setup_istrue;
 .float spritestarted;
 .float useold_axe;
 .float take_perms;
@@ -364,10 +394,7 @@ float coins;  // Currency for survival player(s)
 float bones;  // Currency for gamemaster player(s) (called gibs in-game)
 string g_axemodel;
 string v_axemodel;
-
 .vector dest;	// Could not find this in the source, added
-//.vector lastpos;
-
 .entity gravtrigent; //the trigger_setgravity we are in
 .float gravtrig; //bit to say whether or not we are in a gravity trigger
 
@@ -393,7 +420,7 @@ float AM_ACID = 12;
 float AM_FIRE = 13;
 float AM_COLD = 14;
 
-.float		lightning_timer;	// Cool down for LG resist effect
+.float lightning_timer;	// Cool down for LG resist effect
 
 // Projectile resistance (% protection) for monsters
 .float resist_shells;
@@ -431,7 +458,6 @@ float AM_COLD = 14;
 .float save_acid;
 .float save_fire;
 .float save_cold;
-
 .float aura_finished;
 .float aura_type;
 .float water_blessed;
@@ -446,14 +472,13 @@ float BOUY_GRENADE = 1.2;
 float RESIST_GRENADE = 0.4;
 float TURB_GRENADE = 0.24;
 float AERO_GRENADE = 0.8;
-
 float MASS_MINIGRENADE = 0.2;
 float BOUY_MINIGRENADE = 0.3;
 float RESIST_MINIGRENADE = 3;
-
 float MASS_GIB = 1.5;
 float BOUY_GIB = 2.2;
 float RESIST_GIB = 1.8;
+
 .float ubs_deflapped;
 
 // Enhance the gyro physics for  setting multiple physics effects at once, if desired
@@ -470,8 +495,7 @@ float PHYS_GYRO_ANGTURBULENCE= 64;
 .float m_iRadius;
 .float fov;
 
-// Copper has a lot of nice changes.  Some people don't like them.  Sometimes you don't want all of them.
-// Well, take your pick.  Enable however many of them you want.
+// Copper has a lot of nice changes.  Some people don't like them.  Sometimes you don't want all of them.  Well, take your pick.  Enable however many of them you want.
 .float copperoptions;
 float COPPER_SHOTGUN_PIERCE 		= 1;
 float COPPER_IMPRECISE_VOREBALLS 	= 2;
@@ -487,11 +511,9 @@ float COPPER_COOP_BACKPACK_PROTECT	= 1024;
 float COPPER_COOP_MEGAH_PARTY_HEAL	= 2048;
 float COPPER_FAST_NAILGUN_NAILS		= 4096;
 float COPPER_TWOSHOT_PERFORATOR		= 8192;
-
 .float doomoptions;
 float DOOM_SHOTGUNS_KNOCKBACK		= 1;
 float DOOM_PLASMAGUN				= 2;
-
 .float spirit_blessed;
 .float air_blessed;
 float SPAWNFLAG_LASER = 2;
@@ -499,3 +521,36 @@ float SPAWNFLAG_LASER = 2;
 float SHROOM_JUMP_BOOST = 200;
 .entity legsattachment;
 .float flight_finished;
+float SPARKS_BLUE = 2;
+float SPARKS_PALE = 4;
+.vector movedir2;
+float FL_NOSELECT = 8192;	// Ignored by entity selector
+float MONSTER_FLAK_OGRE	= 4;
+.float spikecount;
+.float idleweaponframe;	// this is set to be the stationary idle weapon frame used when the player is not firing.  It is different for each weapon and must therefore be set on each weapon change
+.float monsterflags;
+float MF_COMMANDER	= 1;		// beefier version
+float HX_FRAME_TIME   =  0.05000;
+float AF_NORMAL   =  0.00000;
+float AF_BEGINNING   =  1.00000;
+float AF_END   =  2.00000;
+.float ring_regen_time;
+.float ring_flight_time;
+.float ring_water_time;
+.float monster_stage;
+.float monster_duration;
+.float monster_awake;
+.float camera_time;
+.float spell_angle;
+.float lifetime;
+.float safe_time;
+.float splash_time;
+.entity movechain;
+.string partname;
+.float dodge_finished;
+.float dodging;
+.entity owner2;
+.float projectile_type;
+float num_beams;
+
+float MAX_BEAMS = 128; // Engine side is only 24!!!! What the heck???

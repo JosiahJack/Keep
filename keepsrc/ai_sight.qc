@@ -1,41 +1,72 @@
-/*======================================================================
- AI (monster) FUNCTIONALITY
- 
- Visibility checks
- - float(vector org_source, vector org_targ) check_liquidblock
- - float(entity targ) visible
- - float(entity targ, vector s_offset, vector t_offset, float nomonsters) visxray
- - float(entity targ, vector s_offset, vector targang, float nomonsters) visang
- - float(entity targ) visblocked
- - float (entity targ, vector s_ofset, vector t_ofset) visblocked_wide
- - float(entity targ) infront
- 
- Distance checks
- - float(entity targ) range
- - float(entity targ, float flat2d) range_distance
- - float (entity source, entity targ) rangeattack_check
- 
- Angle checks
- - float(entity source, entity targ, float offset, float reverse) targangle
- - float(entity source, entity targ) targzone
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Mine plus Arcane Dimensions(AD) and Drake influences
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 19
+//
+// Implements: Monster Sight System
+//
+// Description:
+// Determines when to get angry on sight of both players and monsters depending
+// on the alignment of the monster in sight and the monster checking, as well
+// as our temperament.  Also decides when to follow if a leader is seen.
+//
+// Visibility checks
+// - float(vector org_source, vector org_targ) check_liquidblock
+// - float(entity targ) visible
+// - float(entity targ, vector s_offset, vector t_offset, float nomonsters) visxray
+// - float(entity targ, vector s_offset, vector targang, float nomonsters) visang
+// - float(entity targ) visblocked
+// - float (entity targ, vector s_ofset, vector t_ofset) visblocked_wide
+// - float(entity targ) infront
+//
+// Distance checks
+// - float(entity targ) range
+// - float(entity targ, float flat2d) range_distance
+// - float (entity source, entity targ) rangeattack_check
+//
+// Angle checks
+// - float(entity source, entity targ, float offset, float reverse) targangle
+// - float(entity source, entity targ) targzone
+//
+// Hunt & Target Enemies
+// - void() HuntTarget
+// - void() FoundTarget
+// - void(float wakeupothers) FoundHuntTarget
+// - float() FindTarget
+//=============================================================================
 
- Hunt & Target Enemies
- - void() HuntTarget
- - void() FoundTarget
- - void(float wakeupothers) FoundHuntTarget
- - float() FindTarget
-*/
-
-/*======================================================================
- check_liquidblock
- - Checks pointcontents of source+target because traceline parms
-   are not 100% reliable for flagging water/air content
- - One function check for all the different visibility functions
- - Designed to work with the new liquidblock entity flag
-======================================================================*/
 void() MonsterDeBuff;
 float() Ryu_BlockCrossfire;
 
+// Checks pointcontents of source+target because traceline parms are not 100% reliable for flagging water/air content
+// One function check for all the different visibility functions.  Designed to work with the new liquidblock entity flag
 float(vector org_source, vector org_targ) check_liquidblock = {
 	local float pc_source, pc_targ;
 	
@@ -56,14 +87,10 @@ float(vector org_source, vector org_targ) check_liquidblock = {
 			}
 		}
 	}
-	return FALSE; 	// No liquid check required
+	return FALSE; // No liquid check required
 };
 
-/*======================================================================
- visible (target entity)
- Conditions added to water surface check
- - most maps are compiled with transparent water nowadays
-======================================================================*/
+// Conditions added to water surface check.  Most maps are compiled with transparent water nowadays
 float(entity targ) visible = {
 	local vector spot1, spot2;
 	
@@ -71,8 +98,7 @@ float(entity targ) visible = {
 	spot2 = targ.origin + targ.view_ofs;
 	traceline (spot1, spot2, TRUE, self);	// see through other monsters
 	
-	// Debug system (enabled via axe) uses funcs from subs_soc.qc
-	// This will draw a diamond model where the AI is looking
+	// Debug system (enabled via axe) uses funcs from subs_soc.qc.  This will draw a diamond model where the AI is looking
 	if (self.debuglvl) {
 		if (!debugent1) debugent1 = spawn_devmarker(self.origin);
 		spot1 = vectoangles(self.origin - trace_endpos);
@@ -89,13 +115,10 @@ float(entity targ) visible = {
 	return FALSE;
 };
 
-/*======================================================================
- visxray (variable options)
-  Returns TRUE if there is no blocking, FALSE if something in the way
-  Custom options for variable source/target offsets and monster blocking
-  (nomonsters) TRUE = no block, FALSE = blocked
-  self is excluded from any trace starting points
-======================================================================*/
+
+// Returns TRUE if there is no blocking, FALSE if something in the way
+// Custom options for variable source/target offsets and monster blocking
+// (nomonsters) TRUE = no block, FALSE = blocked.  self is excluded from any trace starting points
 float(entity targ, vector s_offset, vector t_offset, float nomonsters) visxray = {
 	local vector spot1, spot2;
 
@@ -110,8 +133,7 @@ float(entity targ, vector s_offset, vector t_offset, float nomonsters) visxray =
 	if (check_liquidblock(spot1, spot2) == TRUE) return FALSE;
 
 	visible_distance = vlen ((trace_endpos - spot1));
-	// monster blocking changes which test to use
-	if (nomonsters) {
+	if (nomonsters) { // monster blocking changes which test to use
 		// Has the traceline gone from source>target without anything blocking?
 		if (trace_fraction == 1) return TRUE;
 		return FALSE;
@@ -122,14 +144,9 @@ float(entity targ, vector s_offset, vector t_offset, float nomonsters) visxray =
 	}
 };
 
-/*======================================================================
- visang (works similar to visxray function)
-  The enemy location is based on the source facing angles
-  Returns TRUE if there is no blocking, FALSE if something in the way
-  Custom options for variable source offsets and monster blocking
-  (nomonsters) TRUE = no block, FALSE = blocked
-  self is excluded from any trace starting points
-======================================================================*/
+// The enemy location is based on the source facing angles.  Returns TRUE if there is no blocking, FALSE if something in the way
+// Custom options for variable source offsets and monster blocking
+// (nomonsters) TRUE = no block, FALSE = blocked.  self is excluded from any trace starting points
 float(entity targ, vector s_offset, vector targang, float nomonsters) visang = {
 	local vector spot1, spot2;
 
@@ -137,19 +154,14 @@ float(entity targ, vector s_offset, vector targang, float nomonsters) visang = {
 	if (self.bsporigin) spot1 = bmodel_origin(self) + s_offset;
 	else spot1 = self.origin + s_offset;
 
-	// Use supplied ang + v_forward for direction
 	makevectors(targang);
-	spot2 = spot1 + (v_forward * 4096);
+	spot2 = spot1 + (v_forward * 4096); // Use supplied ang + v_forward for direction
+	traceline (spot1, spot2, nomonsters, self); // Trace a line using angle vector instead of enemy origin
 	
-	// Trace a line using angle vector instead of enemy origin
-	traceline (spot1, spot2, nomonsters, self);
-	
-	// Check for liquid surface block condition
-	if (check_liquidblock(spot1, spot2) == TRUE) return FALSE;
+	if (check_liquidblock(spot1, spot2) == TRUE) return FALSE; // Check for liquid surface block condition
 
 	visible_distance = vlen ((trace_endpos - spot1));
-	// monster blocking changes which test to use
-	if (nomonsters) {
+	if (nomonsters) { // monster blocking changes which test to use
 		// Has the traceline gone from source>target without anything blocking?
 		if (trace_fraction == 1) return TRUE;
 		return FALSE;
@@ -160,11 +172,8 @@ float(entity targ, vector s_offset, vector targang, float nomonsters) visang = {
 	}
 };
 
-/*======================================================================
- visblocked (target entity)
- check to see if sightline is blocked by other monsters
- Really only used in CheckAttack functions (was in org ID code)
-======================================================================*/
+// Check to see if sightline is blocked by other monsters
+// Really only used in CheckAttack functions (was in org ID code)
 float(entity targ) visblocked = {
 	local vector spot1, spot2;
 	
@@ -175,12 +184,11 @@ float(entity targ) visblocked = {
 	spot2 = targ.origin + targ.view_ofs;
 	traceline (spot1, spot2, FALSE, self);	// blocked by monsters
 
-	// Check for liquid surface block condition
-	if (check_liquidblock(spot1, spot2) == TRUE) return FALSE;
+	if (check_liquidblock(spot1, spot2) == TRUE) return FALSE; // Check for liquid surface block condition
 
 	visible_distance = vlen ((trace_endpos - spot1));
-	// Original ID behaviour for this type of function
-	if (trace_ent == targ) return FALSE; // Traceline entity hit = enemy?
+	
+	if (trace_ent == targ) return FALSE; // Original ID behaviour for this type of function.  Traceline entity hit = enemy?
 	return TRUE;
 };
 
@@ -415,146 +423,9 @@ float(entity source, entity targ) targzone = {
 	else return TARGET_BACK;
 };
 
-// Reaction Events:
-// sight
-// near
-// hear
-// pain
-
-// Sight
-// Normal is to only get angry when seeing a player in front of us and nothing blocked
-
-// Near
-// Normal is to only get angry when a player is near and no wall in between
-
-// Hear
-// Normal is to only hear when ambush flag isn't checked
-
-// Pain
-// Normal is to get angry at anything that hurts us so long as the classname is different
-
-
-// Normal monsters are
-	// alignment == EVIL - attack GOOD, but not EVIL
-	// temperament == TEMPRA_ANGRY - react on sight, hear, pain, and nearness, if same alignment will attack if not same classgroup
-	// vulnerability == VULN_NORMAL - full damage from same alignment monsters
-
-float(entity decider, entity targ) GetAngryOnSight = {
-	if (!decider || !targ) return FALSE;
-	if (decider.enemy) return FALSE; 	// already have an enemy
-
-	if (decider.alignment == EVIL) {
-		if (decider.temperament == TEMPRA_ANGRY) {
-			return Align_Opposing(decider,targ);
-		} else if (decider.temperament == TEMPRA_COWARDLY) {
-			return Align_Opposing(decider,targ);
-		} else if (decider.temperament == TEMPRA_PASSIVE) {
-			return FALSE;
-		} else if (decider.temperament == TEMPRA_CALM) {
-			if (targ.alignment == NEUTRAL) return FALSE;
-			if (targ.alignment == GOOD) return TRUE;
-			if (targ.alignment == EVIL) return FALSE;
-		} else if (IsInsane(decider)) {
-			return TRUE;
-		}
-	} else if (decider.alignment == GOOD) {
-		if (decider.temperament == TEMPRA_ANGRY) {
-			if (targ.alignment == NEUTRAL) return FALSE; // they're not bothering us
-			if (Classgroup_Match(decider, targ)) return FALSE; // they're in my faction
-			if (Align_Match(decider, targ)) return FALSE; // they're on my team
-			return TRUE; // fight fight fight
-		} else if (decider.temperament == TEMPRA_COWARDLY) {
-			if (targ.alignment == NEUTRAL) return FALSE; // they're not bothering us
-			if (Classgroup_Match(decider, targ)) return FALSE; // they're in my faction
-			if (Align_Match(decider, targ)) return FALSE; // they're on my team
-			return TRUE; // fight fight fight
-		} else if (decider.temperament == TEMPRA_PASSIVE) {
-
-		} else if (decider.temperament == TEMPRA_CALM) {
-
-		} else if (IsInsane(decider)) {
-			return TRUE;
-		}
-	} else {
-		// We are neutral and don't care.  Much.
-	}
-	return FALSE;
-};
-
-float(entity decider, entity targ) GetAngryOnNear = {
-	if (!decider || !targ) return FALSE;
-	if (decider.enemy) return FALSE; 	// already have an enemy
-
-	if (decider.alignment == NEUTRAL) return FALSE;
-	
-	if (decider.temperament == TEMPRA_ANGRY) {
-		
-	} else if (decider.temperament == TEMPRA_COWARDLY) {
-
-	} else if (decider.temperament == TEMPRA_PASSIVE) {
-
-	} else if (decider.temperament == TEMPRA_CALM) {
-
-	} else if (IsInsane(decider)) {
-		return TRUE;
-	}
-	return FALSE;
-};
-
-float(entity decider, entity targ) GetAngryOnHear = {
-	if (!decider || !targ) return FALSE;
-	if (decider.enemy) return FALSE; 	// already have an enemy
-
-	if (decider.alignment == EVIL) {
-		if (decider.temperament == TEMPRA_ANGRY) {
-			return Align_Opposing(decider,targ);
-		} else if (decider.temperament == TEMPRA_COWARDLY) {
-			return Align_Opposing(decider,targ);
-		} else if (decider.temperament == TEMPRA_PASSIVE) {
-			return FALSE;
-		} else if (decider.temperament == TEMPRA_CALM) {
-			return Align_Opposing(decider,targ);
-		} else if (IsInsane(decider)) {
-			return TRUE;
-		}
-	} else if (decider.alignment == GOOD) {
-		if (decider.temperament == TEMPRA_ANGRY) {
-			if (targ.alignment == NEUTRAL) return FALSE; // they're not bothering us
-			if (Classgroup_Match(decider, targ)) return FALSE; // they're in my faction
-			if (Align_Match(decider, targ)) return FALSE; // they're on my team
-			return TRUE; // fight fight fight
-		} else if (decider.temperament == TEMPRA_COWARDLY) {
-			if (targ.alignment == NEUTRAL) return FALSE; // they're not bothering us
-			if (Classgroup_Match(decider, targ)) return FALSE; // they're in my faction
-			if (Align_Match(decider, targ)) return FALSE; // they're on my team
-			return TRUE; // fight fight fight
-		} else if (decider.temperament == TEMPRA_PASSIVE) {
-
-		} else if (decider.temperament == TEMPRA_CALM) {
-
-		} else if (IsInsane(decider)) {
-			return TRUE;
-		}
-	} else {
-		// We are neutral and don't care.  Much.
-	}
-	return FALSE;
-};
-
-float(entity decider, entity targ) GetAngryOnPain = {
-	if (targ.classname != decider.classname) return TRUE; // Normal
-	if (targ.classtype != decider.classtype) return TRUE;
-	if (Align_Opposing(decider,targ)) return TRUE;
-	if (targ.enemy == decider) return TRUE;
-	return FALSE;
-};
-
 void () polyp_wake1_prethink;
 
-/*======================================================================
- HuntTarget
-  Go into main routine - constantly running/turning towards the enemy
-======================================================================*/
+// Go into main routine - constantly running/turning towards the enemy
 void() HuntTarget = {
 	if (self.health < 1) return; // Dead monsters don't hunt!
 
@@ -575,12 +446,9 @@ void() HuntTarget = {
 		if (!self.attack_instant) SUB_AttackFinished (1); // wait a while before first attack	
 };
 
-/*======================================================================
- FoundTarget
- - An enemy target has been found, wakeup and hunt target
- - Used by FindTarget once an enemy target has been found
- - used by T_Damage (combat.qc) for infighting
-======================================================================*/
+// An enemy target has been found, wakeup and hunt target
+// Used by FindTarget once an enemy target has been found
+// used by T_Damage (combat.qc) for infighting
 void() FoundTarget = {
 	if (self.health < 1) return FALSE;	// Dead monsters don't hunt!
 
@@ -611,12 +479,8 @@ void() FoundTarget = {
 		} // else, we don't stay angry at non monster or non player!
 	}
 	
-	//----------------------------------------------------------------------
-	// This will cause a group of monsters to all attack the same target
-	// Using the global sight enemy system which works with FindTarget()
-	// Always check for an empty sighttarget first because the
-	// the global sight entity could have an empty targetname
-	//----------------------------------------------------------------------
+	// This will cause a group of monsters to all attack the same target using the global sight enemy system which works with FindTarget()
+	// Always check for an empty sighttarget first because the the global sight entity could have an empty targetname
 	if (self.sighttarget != "") {
 		if (self.enemy.targetname == self.sighttarget) {
 			// Make sure the sight target is alive before chasing it
@@ -747,7 +611,6 @@ float() FindTarget = {
 	}
 
 	MonsterDeBuff();
-
 	self.enemyexit = FALSE; // Reset any combat exit conditions
 
 	// All following monsters (could be evil) such as Horn of Conjouring monsters (always friendly to the player who summoned them)
@@ -864,8 +727,6 @@ float() FindTarget = {
 			}
 		}
 	}
-	// dprint("Infront or close!\n");
-
 	// The only two things that alert monsters when invisible besides damage: firing a weapon or bumping into a dog
 	if (client.items & IT_INVISIBILITY) {
 		if (self.classtype == CT_MONDOG && client.flags & FL_CLIENT) {

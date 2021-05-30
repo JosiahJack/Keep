@@ -42,7 +42,7 @@ void() rebel_fire = {
     dir = self.enemy.origin + dir;
     dir = Maim_Line (org, dir, AKARROW_SPEED_FLY, self.enemy, '0 0 0');
 
-    sound (self, CHAN_WEAPON, "archer/arrowr.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "drake/archer/arrowr.wav", 1, ATTN_NORM);
     AkArrow_Launch (org, dir, 0);
 };
 
@@ -95,11 +95,11 @@ void() monster_rebel = {
 	precache_sound2 ("enforcer/pain2.wav");
 	precache_sound2 ("enforcer/death1.wav");
 
-    precache_sound ("archer/arrow1.wav");
-    precache_sound ("archer/arrow2.wav");
-    precache_sound ("archer/arrow3.wav");
-    precache_sound ("archer/arrowbrk.wav");
-    precache_sound ("archer/arrowr.wav");
+    precache_sound ("drake/archer/arrow1.wav");
+    precache_sound ("drake/archer/arrow2.wav");
+    precache_sound ("drake/archer/arrow3.wav");
+    precache_sound ("drake/archer/arrowbrk.wav");
+    precache_sound ("drake/archer/arrowr.wav");
 
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;

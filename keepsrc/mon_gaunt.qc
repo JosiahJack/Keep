@@ -275,7 +275,7 @@ void(float offset) gaunt_lightning = {
 };
 
 void() gauntwings =
-{ sound(self, CHAN_ITEM, "gaunt/wings1.wav", 1, ATTN_IDLE); };
+{ sound(self, CHAN_ITEM, "ad171/gaunt/wings1.wav", 1, ATTN_IDLE); };
 void() 	gaunt_finish_attachment;
 
 //============================================================================
@@ -424,7 +424,7 @@ void() gaunt_plasma = {
 	local vector org, dir;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "gaunt/plasma_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/gaunt/plasma_fire.wav", 1, ATTN_NORM);
 
 	makevectors (self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
@@ -480,7 +480,7 @@ void(float elecframe) gaunt_elecupdate = {
 		setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
 		self.attachment.movetype = MOVETYPE_NONE;
 		self.attachment.solid = SOLID_NOT;
-		sound (self, CHAN_WEAPON, "gaunt/plasma_start.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/gaunt/plasma_start.wav", 1, ATTN_NORM);
 	}
 
 	ai_face();					// Turn towards enemy
@@ -635,15 +635,13 @@ void() gaunt_deathB6 = [ $deathB6, gaunt_deathB7 ] {};
 void() gaunt_deathB7 = [ $deathB7, gaunt_deathB8 ] {monster_death_postcheck();};
 void() gaunt_deathB8 = [ $deathB8, gaunt_deathB8 ] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
-void() gaunt_die =
-{
+void() gaunt_die = {
 	// Check for perching gaunt, need to blow up in gibs
 	// In an awkward pose that does not go well into death animations
 	if (self.spawnflags & MON_GAUNT_PERCH) self.gibondeath = TRUE;
 
-	// Make sure any wings sound is silenced
-	sound (self, CHAN_ITEM, SOUND_EMPTY, 1, ATTN_NORM);
+	StopSound(self,CHAN_ITEM); // Make sure any wings sound is silenced
+
 	
 	// If casting electricity, make it explode!
 	if (self.attachment) {
@@ -665,7 +663,7 @@ void() gaunt_die =
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "gaunt/death.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "quoth2pt2full/gaunt/death.wav", 1, ATTN_NORM);
 		self.velocity_x = -200 + 400*random();
 		self.velocity_y = -200 + 400*random();
 		self.velocity_z = 100 + 100*random();
@@ -806,22 +804,24 @@ void() monster_gaunt =
 	precache_model ("progs/quoth2pt2full/g_fx.mdl");		// Lightning effect
 	precache_model (MODEL_PROJ_GAPLASMA);	// Plasma spike/bolt
 
-	self.idle_sound = "gaunt/idle1.wav";
-	self.idle_sound2 = "gaunt/idle3.wav";
-	self.idle_soundcom = "gaunt/idle2.wav";
+	self.idle_sound = "quoth2pt2full/gaunt/idle1.wav";
+	self.idle_sound2 = "quoth2pt2full/gaunt/idle3.wav";
+	self.idle_soundcom = "quoth2pt2full/gaunt/idle2.wav";
+	self.idle_soundcom2 = "ad171/gaunt/idle2.wav"; // Different than quoth's, different tempo and no reverb
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
 	precache_sound (self.idle_soundcom);
+	precache_sound (self.idle_soundcom2);
 
-	precache_sound ("gaunt/wings1.wav");
-	precache_sound ("gaunt/plasma_start.wav");
-	precache_sound ("gaunt/plasma_fire.wav");
+	precache_sound ("ad171/gaunt/wings1.wav");
+	precache_sound ("ad171/gaunt/plasma_start.wav");
+	precache_sound ("ad171/gaunt/plasma_fire.wav");
 	
-	self.pain_sound = "gaunt/pain.wav";
+	self.pain_sound = "quoth2pt2full/gaunt/pain.wav";
 	precache_sound (self.pain_sound);
-	precache_sound ("gaunt/death.wav");
+	precache_sound ("quoth2pt2full/gaunt/death.wav");
 
-	self.sight_sound = "gaunt/sight.wav";
+	self.sight_sound = "quoth2pt2full/gaunt/sight.wav";
 	precache_sound (self.sight_sound);
 
 	// Check for poisonous entity flag
@@ -991,14 +991,13 @@ void(vector minion_org, entity minion_targ, float minion_sflag) minion_gaunt =
 	minion.mdl = "progs/ad171/mon_gaunt.mdl";
 	minion.headmdl = "progs/ad171/h_gaunt.mdl";
 	minion.weaponglow = "progs/ad171/mon_gaunt_elec.mdl";
-
-	minion.idle_sound = "gaunt/idle1.wav";
-	minion.idle_sound2 = "gaunt/idle2.wav";
-	minion.idle_soundcom = "gaunt/idle2.wav";
-	minion.sight_sound = "gaunt/sight.wav";
-	minion.pain_sound = "gaunt/pain.wav";
-	minion.death_sound = "gaunt/death.wav";
-	
+	minion.idle_sound = "quoth2pt2full/gaunt/idle1.wav";
+	minion.idle_sound2 = "quoth2pt2full/gaunt/idle2.wav";
+	minion.idle_soundcom = "quoth2pt2full/gaunt/idle2.wav";
+	minion.idle_soundcom2 = "ad171/gaunt/idle2.wav";
+	minion.sight_sound = "quoth2pt2full/gaunt/sight.wav";
+	minion.pain_sound = "quoth2pt2full/gaunt/pain.wav";
+	minion.death_sound = "quoth2pt2full/gaunt/death.wav";
 	minion.nextthink = time + 0.01;
 	minion.think = setup_gaunt;
 };

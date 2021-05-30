@@ -64,21 +64,21 @@ float PTYPE_BRICK = 5;
 float PTYPE_CUSTOM = 10;	// Custom push sounds
 
 // Three sounds to randomly pick from 0.5s each
-string SOUND_PUSH_ROCK1 = "pushable/rock_m1.wav";
-string SOUND_PUSH_ROCK2 = "pushable/rock_m2.wav";
-string SOUND_PUSH_ROCK3 = "pushable/rock_m3.wav";
-string SOUND_PUSH_WOOD1 = "pushable/wood_m1.wav";
-string SOUND_PUSH_WOOD2 = "pushable/wood_m2.wav";
-string SOUND_PUSH_WOOD3 = "pushable/wood_m3.wav";
-string SOUND_PUSH_GLASS1 = "pushable/glass_m1.wav";
-string SOUND_PUSH_GLASS2 = "pushable/glass_m2.wav";
-string SOUND_PUSH_GLASS3 = "pushable/glass_m3.wav";
-string SOUND_PUSH_METAL1 = "pushable/metal_m1.wav";
-string SOUND_PUSH_METAL2 = "pushable/metal_m2.wav";
-string SOUND_PUSH_METAL3 = "pushable/metal_m3.wav";
-string SOUND_PUSH_BRICK1 = "pushable/brick_m1.wav";
-string SOUND_PUSH_BRICK2 = "pushable/brick_m2.wav";
-string SOUND_PUSH_BRICK3 = "pushable/brick_m3.wav";
+string SOUND_PUSH_ROCK1 = "ad171/pushable/rock_m1.wav";
+string SOUND_PUSH_ROCK2 = "ad171/pushable/rock_m2.wav";
+string SOUND_PUSH_ROCK3 = "ad171/pushable/rock_m3.wav";
+string SOUND_PUSH_WOOD1 = "ad171/pushable/wood_m1.wav";
+string SOUND_PUSH_WOOD2 = "ad171/pushable/wood_m2.wav";
+string SOUND_PUSH_WOOD3 = "ad171/pushable/wood_m3.wav";
+string SOUND_PUSH_GLASS1 = "ad171/pushable/glass_m1.wav";
+string SOUND_PUSH_GLASS2 = "ad171/pushable/glass_m2.wav";
+string SOUND_PUSH_GLASS3 = "ad171/pushable/glass_m3.wav";
+string SOUND_PUSH_METAL1 = "ad171/pushable/metal_m1.wav";
+string SOUND_PUSH_METAL2 = "ad171/pushable/metal_m2.wav";
+string SOUND_PUSH_METAL3 = "ad171/pushable/metal_m3.wav";
+string SOUND_PUSH_BRICK1 = "ad171/pushable/brick_m1.wav";
+string SOUND_PUSH_BRICK2 = "ad171/pushable/brick_m2.wav";
+string SOUND_PUSH_BRICK3 = "ad171/pushable/brick_m3.wav";
 
 // Which touch state (used for fading)
 float STATE_PUSH = 1;
@@ -297,28 +297,14 @@ void() func_pushable_death = {
 		SpawnExplosion(EXPLODE_SMALL, self.oldorigin, SOUND_REXP3);
 		T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
 	}
-	
-	// Fire death targets (check DT first, because target can have uses)
-	if (self.deathtarget != "") trigger_strs(self.deathtarget, self.activate);
-	if (self.target != "") trigger_strs(self.target, self.activate);
 
-	// Any final words ...
-	if (self.activate.flags & FL_CLIENT && self.message != "") centerprint (self.activate, self.message);
-	
-	// Fire once condition?
-	if (self.wait < 0) self.target = self.deathtarget = self.message = "";
-
-	// Check for any pushable above? (fake physics)
-	self.move_state = bmodel_origin(self);
-	
-	// Trace up and see if anything is above
-	traceline(self.move_state, self.move_state + '0 0 1024', FALSE, self);
-
-	// Check for a pushable entity above (but not touching)
-	if (trace_ent != self && trace_ent.classtype == CT_FUNCPUSHABLE) trigger_ent(trace_ent, self);
-	
-	// Switch off entity instead of hide/remove so the pushable can be reset again
-	self.estate_off();
+	if (HasTargets(self)) SUB_UseTargets();
+	if (self.activate.flags & FL_CLIENT && self.message != "") centerprint (self.activate, self.message); // Any final words ...
+	if (self.wait < 0) clear_trigstrs(self); // Fire once condition?
+	self.move_state = bmodel_origin(self); // Check for any pushable above? (fake physics)
+	traceline(self.move_state, self.move_state + '0 0 1024', FALSE, self); // Trace up and see if anything is above
+	if (trace_ent != self && trace_ent.classtype == CT_FUNCPUSHABLE) trigger_ent(trace_ent, self); // Check for a pushable entity above (but not touching)
+	self.estate_off(); // Switch off entity instead of hide/remove so the pushable can be reset again
 };
 
 // The pushable needs a controller to reach to the touch function

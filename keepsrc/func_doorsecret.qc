@@ -202,9 +202,7 @@ void() func_door_secret_on =
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_door_secret_off =
-{
+void() func_door_secret_off = {
 	// Stop re-triggering OFF state
 	if (self.estate == ESTATE_OFF) return;
 
@@ -213,9 +211,7 @@ void() func_door_secret_off =
 	self.solid = SOLID_NOT;
 	setmodel (self, "");
 	self.velocity = '0 0 0';
-	
-	// Reset health, position and frame back to default
-	sound (self, CHAN_VOICE, SOUND_EMPTY, self.volume, ATTN_NORM);
+	StopSound(self,CHAN_VOICE); // Reset health, position and frame back to default
 	self.takedamage = DAMAGE_NO;
 	self.think = SUB_Null;
 	
@@ -231,16 +227,12 @@ void() func_door_secret_off =
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_door_secret_disable =
-{
+void() func_door_secret_disable = {
 	// Block damage function
 	self.takedamage = DAMAGE_NO;
 };
 
-//----------------------------------------------------------------------
-void() func_door_secret_reset =
-{
+void() func_door_secret_reset = {
 	// If the door is still OFF then leave it
 	if (self.spawnflags & ENT_STARTOFF) return;
 	
@@ -256,18 +248,14 @@ void() func_door_secret_reset =
 
 };
 
-//----------------------------------------------------------------------
-void () func_door_secret_blocked =
-{
+void () func_door_secret_blocked = {
 	if (self.estate == ESTATE_OFF) return;
 	if (time < self.attack_finished) return;
 	self.attack_finished = time + 0.5;
 	T_Damage (other, self, self, self.dmg, DAMARMOR);
 };
 
-//----------------------------------------------------------------------
-void () func_door_secret =
-{
+void () func_door_secret = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 	
 	// Setup all empty/silent sound files first
@@ -281,13 +269,11 @@ void () func_door_secret =
 		self.noise1 = "doors/basesec2.wav";
 		self.noise2 = "doors/basesec1.wav";
 		self.noise3 = "doors/basesec2.wav";
-	}
-	else if (self.sounds == 1) {
+	} else if (self.sounds == 1) {
 		self.noise1 = "doors/latch2.wav";
 		self.noise2 = "doors/winch2.wav";
 		self.noise3 = "doors/drclos4.wav";
-	}
-	else if (self.sounds == 2) {
+	} else if (self.sounds == 2) {
 		self.noise1 = "doors/airdoor2.wav";
 		self.noise2 = "doors/airdoor1.wav";
 		self.noise3 = "doors/airdoor2.wav";
@@ -295,16 +281,16 @@ void () func_door_secret =
 
 	// locked sound (targetname + message)
 	if (self.noise == "") self.noise = SOUND_TALK;
-	if (self.locksounds == 1) self.noise = "doors/rattle1.wav";
-	else if (self.locksounds == 2) self.noise = "doors/rattle2.wav";
-	else if (self.locksounds == 3) self.noise = "doors/rattle6.wav";
+	if (self.locksounds == 1) self.noise = "ad171/doors/rattle1.wav";
+	else if (self.locksounds == 2) self.noise = "ad171/doors/rattle2.wav";
+	else if (self.locksounds == 3) self.noise = "ad171/doors/rattle6.wav";
 	else if (self.locksounds == 13) self.noise = "misc/trigger1.wav";
 	else if (self.locksounds == 14) self.noise = SOUND_EMPTY; 
-	else if (self.locksounds == 16) self.noise = "misc/secret3.wav";
-	else if (self.locksounds == 21) self.noise = "doors/rattle_tech1.wav";
-	else if (self.locksounds == 22) self.noise = "doors/rattle_tech2.wav";
-	else if (self.locksounds == 23) self.noise = "doors/rattle_tech3.wav";
-	else if (self.locksounds == 24) self.noise = "doors/rattle_tech4.wav";
+	else if (self.locksounds == 16) self.noise = "ad171/misc/secret3.wav";
+	else if (self.locksounds == 21) self.noise = "ad171/doors/rattle_tech1.wav";
+	else if (self.locksounds == 22) self.noise = "ad171/doors/rattle_tech2.wav";
+	else if (self.locksounds == 23) self.noise = "ad171/doors/rattle_tech3.wav";
+	else if (self.locksounds == 24) self.noise = "ad171/doors/rattle_tech4.wav";
 
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
@@ -348,11 +334,10 @@ void () func_door_secret =
 	if (self.message != "") self.touch = func_door_secret_touch;
 	self.blocked = func_door_secret_blocked;
 
-	// Damn annoying that the targetname is being used like this because
+	// Annoying that the targetname is being used like this because
 	// there could have been a better way of doing this functionality
 	// == "" Secret_door can be damaged to be opened
 	// != "" Secret door cannot be damaged and requires trigger to work
-	//
 	if (self.targetname == "" && !(self.spawnflags & SECRET_NO_SHOOT)) {
 		self.spawnflags = self.spawnflags | SECRET_ALWAYS_SHOOT;
 	}

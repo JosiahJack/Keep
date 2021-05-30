@@ -94,11 +94,8 @@ float() eidolon_WaveCheck = {
 			self.attachment2 = find(world, targetname, self.noise);
 			if (self.attachment2.classtype == CT_MONEIDOLONWAVE) {
 				// Spawn any adds to keep player busy
-				if (self.attachment2.target != "") 
-					trigger_strs(self.attachment2.target, self);
-				
-				// Turn around and fire at crystal
-				self.th_summon();
+				if (HasTargets(self.attachment2)) SUB_UseTargetsOnEnt(self.attachment2);
+				self.th_summon(); // Turn around and fire at crystal
 			}
 		}
 
@@ -306,7 +303,7 @@ void(vector rockofs, float rockframe) Setup_attackA =
 		setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
 
 		// Start throwing rock sound
-		sound (self, CHAN_WEAPON, "eidolon/attacka.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/eidolon/attacka.wav", 1, ATTN_NORM);
 	}
 
 	// Turn towards enemy and update model attachment
@@ -404,7 +401,7 @@ void() eidolon_attackC2 = {
 	
 	// Start demon roar and then rocks!?!
 	if (self.frame == $breath4)
-		sound (self, CHAN_WEAPON, "eidolon/attackc.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/eidolon/attackc.wav", 1, ATTN_NORM);
 	
 	// Rock breath!?!
 	if (self.frame > $breath17 && self.frame < $breath35)
@@ -438,7 +435,7 @@ void(vector rockofs, float rockframe) Setup_attackE = {
 		self.attachment.skin = 1;
 
 		// Start long growl
-		sound (self, CHAN_VOICE, "eidolon/attacke.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "ad171/eidolon/attacke.wav", 1, ATTN_NORM);
 		sound (self, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM);
 	}
 	
@@ -619,7 +616,7 @@ void() eidolon_explode = {
 	WriteCoord (MSG_BROADCAST, self.origin_z);
 	WriteByte (MSG_BROADCAST, 35);
 	WriteByte (MSG_BROADCAST, 8);
-	SpawnExplosion(EXPLODE_PLASMA_BIG, self.origin, "eidolon/explode_death.wav"); // Classic sprite/DP explosion
+	SpawnExplosion(EXPLODE_PLASMA_BIG, self.origin, "ad171/eidolon/explode_death.wav"); // Classic sprite/DP explosion
 	self.max_health = MON_GIBEXPLOSION; // Gib explosive fountain!?!
 	ThrowGib(11, 10 + rint(random()*10));	// Small Golem rock
 	ThrowGib(12, 10 + rint(random()*10));	// Large Golem rock
@@ -669,15 +666,15 @@ void() eidolon_die2 = {
 
 			// Play some arching lightning sounds
 			if (random() < 0.5) {
-				if (random() < 0.5) sound (self, CHAN_BODY, "eidolon/elec_arch1.wav", 1, ATTN_NORM);
-				else sound (self, CHAN_BODY, "eidolon/elec_arch2.wav", 1, ATTN_NORM);
+				if (random() < 0.5) sound (self, CHAN_BODY, "ad171/eidolon/elec_arch1.wav", 1, ATTN_NORM);
+				else sound (self, CHAN_BODY, "ad171/eidolon/elec_arch2.wav", 1, ATTN_NORM);
 			}
 		}
 	
 		// Cycle through end phase
 		self.lip = self.lip + 1;
 		self.nextthink = time + 0.1;	// Slow down to regular time
-		if (self.lip == 26) sound (self, CHAN_AUTO, "eidolon/implode_death.wav", 1, ATTN_NONE);
+		if (self.lip == 26) sound (self, CHAN_AUTO, "ad171/eidolon/implode_death.wav", 1, ATTN_NONE);
 		if (self.lip > 40) eidolon_explode();
 	}
 };
@@ -690,7 +687,7 @@ void() eidolon_die = {
 	eidolon_finish_attachment();	// Remove any attachments
 	eidolon_remove_attachment();
 	monster_death_precheck();
-	sound (self, CHAN_VOICE, "eidolon/death.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "ne_ruins/eidolon/death.wav", 1, ATTN_NORM);
 	self.think = eidolon_die1; // Explosions should wait a bit
 	self.nextthink = time + self.ticktimer;
 };
@@ -803,9 +800,7 @@ void() eidolon_start = {
 	}
 };
 
-//======================================================================
-/*QUAKED monster_eidolon (1 0 0) (-32 -32 -24) (32 32 128)
-======================================================================*/
+// QUAKED monster_eidolon (1 0 0) (-32 -32 -24) (32 32 128)
 void() monster_eidolon = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
@@ -821,36 +816,36 @@ void() monster_eidolon = {
 	self.gib1frame = self.gib2frame = 9;
 
 	// sight/pain/death sounds
-	self.idle_sound = "eidolon/idle1.wav";
-	self.idle_sound2 = "eidolon/idle2.wav";
-	self.pain_sound = "eidolon/pain.wav";
-	self.sight_sound = "eidolon/sight.wav";
+	self.idle_sound = "ad171/eidolon/idle1.wav";
+	self.idle_sound2 = "ad171/eidolon/idle2.wav";
+	self.pain_sound = "ad171/eidolon/pain.wav";
+	self.sight_sound = "ne_ruins/eidolon/sight.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
 	precache_sound (self.pain_sound);
 	precache_sound (self.sight_sound);
 
 	// Final death sequence
-	precache_sound ("eidolon/death.wav");
-	precache_sound ("eidolon/explode_death.wav");
-	precache_sound ("eidolon/implode_death.wav");
-	precache_sound ("eidolon/elec_arch1.wav");
-	precache_sound ("eidolon/elec_arch2.wav");
+	precache_sound ("ne_ruins/eidolon/death.wav");
+	precache_sound ("ad171/eidolon/explode_death.wav");
+	precache_sound ("ad171/eidolon/implode_death.wav");
+	precache_sound ("ad171/eidolon/elec_arch1.wav");
+	precache_sound ("ad171/eidolon/elec_arch2.wav");
 	
 	// Attack A - Throw Boulder - range attack
-	precache_sound ("eidolon/attacka.wav");
-	precache_sound ("eidolon/rock_hit1.wav");
-	precache_sound ("eidolon/rock_hit2.wav");
+	precache_sound ("ad171/eidolon/attacka.wav");
+	precache_sound ("ad171/eidolon/rock_hit1.wav");
+	precache_sound ("ad171/eidolon/rock_hit2.wav");
 
 	// Attack C - Rockstorm - range attack
-	precache_sound ("eidolon/attackc.wav");
+	precache_sound ("ad171/eidolon/attackc.wav");
 	precache_sound (SOUND_IMP_ROCK1);
 	precache_sound (SOUND_IMP_ROCK2);
 	precache_sound (SOUND_IMP_ROCK3);
 	precache_sound (SOUND_IMP_ROCK4);
 
 	// Attack E - Lightning at summoning crystal - range attack
-	precache_sound ("eidolon/attacke.wav");
+	precache_sound ("ad171/eidolon/attacke.wav");
 	
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
@@ -878,16 +873,15 @@ void() monster_eidolon = {
 	if (!self.exactskin) self.exactskin = self.skin; // Since we are now passing this to monster_start
 
 	// Custom feet sounds
-	self.stepc1 = "eidolon/footstep1.wav";
-	self.stepc2 = "eidolon/footstep2.wav";
-	self.stepc3 = "eidolon/footstep3.wav";
-	self.stepc4 = "eidolon/footstep4.wav";
-	self.stepc5 = "eidolon/footstep1.wav";
+	self.stepc1 = "ne_ruins/eidolon/step1.wav";
+	self.stepc2 = "ne_ruins/eidolon/step2.wav";
+	self.stepc3 = "ne_ruins/eidolon/step3.wav";
+	self.stepc4 = "ne_ruins/eidolon/step4.wav";
+	self.stepc5 = "ne_ruins/eidolon/step1.wav"; //why?
 	precache_sound (self.stepc1);
 	precache_sound (self.stepc2);
 	precache_sound (self.stepc3);
 	precache_sound (self.stepc4);
-	precache_sound (self.stepc5);
 	self.steptype = FS_TYPECUSTOM;
 	self.style = 0; // Current wave
 	

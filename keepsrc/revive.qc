@@ -89,7 +89,7 @@ float(entity ent, entity god) monster_revive = {
     res = CanSelfRevive ();
     if (res) {
 		// Play classic arch-vile resurrection sound.
-        sound (self, CHAN_AUTO, "misc/dsslop.wav", 1, ATTN_NORM);
+        sound (self, CHAN_AUTO, "drake/misc/dsslop.wav", 1, ATTN_NORM);
         self.pain_finished  = time + 1;  // Don't interrupt reanimation.
 
         //Align_Add (self, good);  Not worried about alignment, default will be against player. -Qmaster

@@ -155,16 +155,14 @@ void() hogremac_smash10=[	$smash10,	hogremac_smash11 ] {ai_face();
 	makevectors (self.angles);				// Put impact infront of ogre
 	self.finalangle = self.origin + (v_forward * 56) + (-v_up * 22);
 	particle_explode(self.finalangle, 24, 0.5, PARTICLE_BURST_FIRE, PARTICLE_BURST_SHOCKWAVE); 
-	sound (self, CHAN_WEAPON, "ogre/ham_hit.wav", 1, ATTN_IDLE);
+	sound (self, CHAN_WEAPON, "ad171/ogre/ham_hit.wav", 1, ATTN_IDLE);
 };
 void() hogremac_smash11=[	$smash11,	hogremac_smash12 ] {};
 void() hogremac_smash12=[	$smash12,	hogremac_smash13 ] {};
 void() hogremac_smash13=[	$smash13,	hogremac_smash14 ] {ai_face();};
 void() hogremac_smash14=[	$smash14,	hogremac_run1	] {ai_face();};
 
-//----------------------------------------------------------------------
-void() hogremac_melee =
-{
+void() hogremac_melee = {
 	// Mace ogres don't get interrupted with pain for melee
 	self.pain_finished = time + 2;
 	self.lip = random();
@@ -382,14 +380,12 @@ void(float soundtype) hogremac_sound =
 	if (soundtype == 1) sound (self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
 	else if (soundtype == 2) sound (self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM);
 	else if (soundtype == 3) sound (self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM);
-	else if (soundtype == 4) sound (self, CHAN_VOICE, "ogre/ham_swipe.wav", 1, ATTN_IDLE);
+	else if (soundtype == 4) sound (self, CHAN_VOICE, "ad171/ogre/ham_swipe.wav", 1, ATTN_IDLE);
 };
 
-//----------------------------------------------------------------------
 // Special wakeup animation for attacking/breaking something infront
 // The monster should be setup facing the right direction before call
 // Starts in large overhead swing downwards (no damage checks)
-//----------------------------------------------------------------------
 void() hogremac_wakeup1a	=[	$smash7,		hogremac_wakeup2a ] {monster_sightsound();};
 void() hogremac_wakeup2a	=[	$smash6,		hogremac_wakeup3a ] {};
 void() hogremac_wakeup3a	=[	$smash8,		hogremac_wakeup4a ] {};
@@ -445,8 +441,8 @@ void() monster_hogremac = {
 	precache_sound (self.pain_sound);		// Pain
 	
 	precache_sound ("ogre/ogsawatk.wav");	// Attack
-	precache_sound ("ogre/ham_swipe.wav");	// mace swipe
-	precache_sound ("ogre/ham_hit.wav");	// mace hit ground
+	precache_sound ("ad171/ogre/ham_swipe.wav");	// mace swipe
+	precache_sound ("ad171/ogre/ham_hit.wav");	// mace hit ground
 	
 	self.meleehitsound = GIB_SOUND_HEAVY;
 	precache_sound (self.meleehitsound);	// mace hit

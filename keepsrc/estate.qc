@@ -1,7 +1,6 @@
 /*======================================================================
 Entity State System
 -------------------
-
 When Quake first came out there were strict limitations on how many entities
 could exist and be active at the same time. The quick fix solution to this
 problem was to use the killtargets key so that entities could be removed. 
@@ -32,26 +31,28 @@ and turns off any visual aids like animated textures.
 The second method is via a brand new set of entities which can affect 
 multiple targets at once and are much easier (visually) to see what is
 going on because most editors draw target lines. 
-
 ======================================================================*/
 
-//----------------------------------------------------------------------
 // These entity states are monitored and updated by the entity
 void() entity_state_on = { 
 	if (self.estate_on) self.estate_on(); 
 	else self.estate = ESTATE_ON;
 };
+
 void() entity_state_off = { 
 	if (self.estate_off) self.estate_off();
 	else self.estate = ESTATE_OFF;
 };
+
 void() entity_state_disable = { 
 	if (self.estate_disable) self.estate_disable();
 	self.estate = ESTATE_DISABLE;
 };
+
 void() entity_state_reset = { 
 	if (self.estate_reset) self.estate_reset();
 };
+
 void() entity_state_aframe = {
 	// Only switch frames if the entity has a function defintion
 	// This will restrict to entities designed for this change
@@ -61,9 +62,7 @@ void() entity_state_aframe = {
 	}
 };
 
-//----------------------------------------------------------------------
-void() entity_state_use =
-{
+void() entity_state_use = {
 	// Does the firing entity have specific state requests?
 	if (other.estate_trigger) {
 		if (other.estate_trigger & ESTATE_ON) entity_state_on();
@@ -71,8 +70,7 @@ void() entity_state_use =
 		else if (other.estate_trigger & ESTATE_DISABLE) entity_state_disable();
 		else if (other.estate_trigger & ESTATE_RESET) entity_state_reset();
 		else if (other.estate_trigger & ESTATE_AFRAME) entity_state_aframe();
-	}
-	else {
+	} else {
 		// Check if disabled first
 		if (self.estate == ESTATE_DISABLE) return;
 		
@@ -102,8 +100,7 @@ volume  : Volume for all custom sounds played (def=1, range=0-1)
 -------- NOTES --------
 Switch the target(s) entity state X
 ======================================================================*/
-void(string targstr) trigger_entitystate_target =
-{
+void(string targstr) trigger_entitystate_target = {
 	local entity t, stemp, otemp;
 	
 	// Start looking for targets to update
@@ -126,25 +123,44 @@ void(string targstr) trigger_entitystate_target =
 	}
 };
 
-//----------------------------------------------------------------------
-void() trigger_entitystate_fire =
-{
+void() trigger_entitystate_fire = {
 	// Play any trigger sounds
-	if (self.noise != "") 
-		sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+	if (self.noise != "") sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
 	// Check for multiple target commands
 	if (self.target != "") trigger_entitystate_target(self.target);
 	if (self.target2 != "") trigger_entitystate_target(self.target2);
 	if (self.target3 != "") trigger_entitystate_target(self.target3);
 	if (self.target4 != "") trigger_entitystate_target(self.target4);
+	if (self.statetarget1 != "") trigger_entitystate_target(self.statetarget1);
+	if (self.statetarget2 != "") trigger_entitystate_target(self.statetarget2);
+	if (self.statetarget3 != "") trigger_entitystate_target(self.statetarget3);
+	if (self.statetarget4 != "") trigger_entitystate_target(self.statetarget4);
+	if (self.statetarget5 != "") trigger_entitystate_target(self.statetarget5);
+	if (self.statetarget6 != "") trigger_entitystate_target(self.statetarget6);
+	if (self.statetarget7 != "") trigger_entitystate_target(self.statetarget7);
+	if (self.statetarget8 != "") trigger_entitystate_target(self.statetarget8);
+	if (self.statetarget9 != "") trigger_entitystate_target(self.statetarget9);
+	if (self.statetarget10 != "") trigger_entitystate_target(self.statetarget10);
+	if (self.statetarget11 != "") trigger_entitystate_target(self.statetarget11);
+	if (self.statetarget12 != "") trigger_entitystate_target(self.statetarget12);
+	if (self.statetarget13 != "") trigger_entitystate_target(self.statetarget13);
+	if (self.statetarget14 != "") trigger_entitystate_target(self.statetarget14);
+	if (self.statetarget15 != "") trigger_entitystate_target(self.statetarget15);
+	if (self.statetarget16 != "") trigger_entitystate_target(self.statetarget16);
+	if (self.statetarget17 != "") trigger_entitystate_target(self.statetarget17);
+	if (self.statetarget18 != "") trigger_entitystate_target(self.statetarget18);
+	if (self.statetarget19 != "") trigger_entitystate_target(self.statetarget19);
+	if (self.statetarget20 != "") trigger_entitystate_target(self.statetarget20);
+	if (self.statetarget21 != "") trigger_entitystate_target(self.statetarget21);
+	if (self.statetarget22 != "") trigger_entitystate_target(self.statetarget22);
+	if (self.statetarget23 != "") trigger_entitystate_target(self.statetarget23);
+	if (self.statetarget24 != "") trigger_entitystate_target(self.statetarget24);
 
 	// TRIGGER_ONCE functionality
 	if (self.wait < 0) self.attack_finished = time + LARGE_TIMER;
 };	
 
-//----------------------------------------------------------------------
-void() trigger_entitystate_use =
-{
+void() trigger_entitystate_use = {
 	// Is the trigger blocked? (trigger_once)
 	if (self.attack_finished > time) return;
 

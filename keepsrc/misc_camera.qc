@@ -15,17 +15,14 @@ float CINECAM_MAXSHIFT = 255;	// Maximm value for density
 float CINECAM_FADEUP = 1;		// Fading directions
 float CINECAM_FADEDOWN = 2;
 
-// Camera Controller loop/tick speed
-float CINECAM_CONTIME = 0.05;	// Controller tick rate (speed)
+float CINECAM_CONTIME = 0.05;	// Camera Controller loop tick rate (speed)
 
 // Camera System states
 float CINECAM_OFF = 0;			// Waiting for a camera
-
 float CINECAM_STARTUP = 4;		// Save client info and start sequence
 float CINECAM_FADEOUT = 6;		// Start fading out current view
 float CINECAM_NEXTCAM = 8;		// Switch camera and focus
 float CINECAM_FADEIN = 10;		// Start fading in current camera
-
 float CINECAM_MESSAGE = 14;		// Show messages and setup timers
 float CINECAM_WAIT = 16;		// Waiting player input
 float CINECAM_EXIT = 20;		// Back to player position
@@ -45,20 +42,16 @@ float CINECAM_FIXANGLE_OFF = 0;		// Always reset camera angle
 float CINECAM_FIXANGLE_ACTIVE = 1;	// Read first angle only
 float CINECAM_FIXANGLE_DONE = 2;	// First angle read and done
 
-/*======================================================================
-Cinematic camera control functions
+// Cinematic camera control functions
+// camera_controller_cshift	- Updates console with new cshift parameters
+// camera_tracking_finish		- Finish camera tracking movement 
+// camera_controller_think		- Main cinematic controller loop
+// camera_controller_setup		- Setup controller, movement and fakeplay ents
+// misc_camera_use				- Trigger function for camera's
+// misc_camera_colcheck		- Way to validate RGB background colours
+// misc_camera					- Spawning function for camera system
 
-camera_controller_cshift	- Updates console with new cshift parameters
-camera_tracking_finish		- Finish camera tracking movement 
-camera_controller_think		- Main cinematic controller loop
-camera_controller_setup		- Setup controller, movement and fakeplay ents
-misc_camera_use				- Trigger function for camera's
-misc_camera_colcheck		- Way to validate RGB background colours
-misc_camera					- Spawning function for camera system
-
-======================================================================*/
-void(entity targ, vector cs_col, float cs_den) camera_controller_cshift = 
-{
+void(entity targ, vector cs_col, float cs_den) camera_controller_cshift = {
 	Safe_stuffcmd(targ, "v_cshift ");
 	Safe_stuffcmd(targ, ftos(rint(cs_col_x))); Safe_stuffcmd(targ, " ");
 	Safe_stuffcmd(targ, ftos(rint(cs_col_y))); Safe_stuffcmd(targ, " ");
@@ -66,73 +59,44 @@ void(entity targ, vector cs_col, float cs_den) camera_controller_cshift =
 	Safe_stuffcmd(targ, ftos(rint(cs_den))); Safe_stuffcmd(targ, "\n");	
 };
 
-//----------------------------------------------------------------------
-void() camera_tracking_finish =
-{
+void() camera_tracking_finish = {
 	self.attack_finished = 0;
 	self.velocity = '0 0 0';
 };
 
-//----------------------------------------------------------------------
-void(entity targ) camera_reset_buttons = 
-{ 
-	if (targ.flags & FL_CLIENT) {
-		targ.button0 = targ.button1 = targ.button2 = 0;
-	}
-};
-
-//----------------------------------------------------------------------
-float(entity targ) camera_check_buttons =
-{
-	// Check client + buttons
+// Check client + buttons, true if player and any button is pressed.
+float(entity targ) camera_check_buttons = {
 	if (targ.flags & FL_CLIENT) {
 		if (targ.button0 || targ.button1 || targ.button2) return TRUE;
 	}
-	// Default
 	return FALSE;
 };
 
-//----------------------------------------------------------------------
-void(entity targ) camera_check_skip =
-{
-	// Is cinematic skip function enabled?
-	if (cam_exit == CINECAM_SKIP_ACTIVE) {
-		// Check for exit condition buttons (fire/jump)
-		if (camera_check_buttons(targ)) {
-			// Don't need buttons anymore
-			camera_reset_buttons(targ);
-			// Start to exit cinematic ASAP
-			cam_exit = CINECAM_SKIP_DONE;
+void(entity targ) camera_check_skip = {
+	if (cam_exit == CINECAM_SKIP_ACTIVE) { // Is cinematic skip function enabled?
+		if (camera_check_buttons(targ)) { // Check for exit condition buttons (fire/jump)
+			if (targ.flags & FL_CLIENT) targ.button0 = targ.button1 = targ.button2 = 0; // Don't need buttons anymore
+			cam_exit = CINECAM_SKIP_DONE; // Start to exit cinematic ASAP
 		}
 	}
 };
 
-//----------------------------------------------------------------------
-float(float cam_angle1, float cam_angle2) camera_check_anglezero =
-{
-	// Smallest / Largest camera angle
-	local float cam_anglesmall, cam_anglelarge;
-	// Camera small/large angle distance and wrap distance
-	local float cam_angledist, cam_anglewrap;
+float(float cam_angle1, float cam_angle2) camera_check_anglezero = {
+	local float cam_anglesmall, cam_anglelarge; // Smallest / Largest camera angle
+	local float cam_angledist, cam_anglewrap; // Camera small/large angle distance and wrap distance
 	
 	// Guard against interpolating across the 360<->0 discontinuity
 	cam_anglelarge = mathlib_max(cam_angle1, cam_angle2);
 	cam_anglesmall = mathlib_min(cam_angle1, cam_angle2);
 
-	// This is the distance between the yaws if we don't cross 360.
-	cam_angledist = cam_anglelarge - cam_anglesmall;
-	// This is the distance if we do cross 360. i.e. "359" and "1" would
-	// have an angle_wrap of "2" and direct_dist of "358".
-	cam_anglewrap = (360 - cam_anglelarge) + cam_anglesmall;
+	cam_angledist = cam_anglelarge - cam_anglesmall; // This is the distance between the yaws if we don't cross 360.
+	cam_anglewrap = (360 - cam_anglelarge) + cam_anglesmall; // This is the distance if we do cross 360. i.e. "359" and "1" would have an angle_wrap of "2" and direct_dist of "358".
 
-	// Is it shorter to cross the 360<->0 boundary?
-	if (cam_anglewrap < cam_angledist) return TRUE;
+	if (cam_anglewrap < cam_angledist) return TRUE; // Is it shorter to cross the 360<->0 boundary?
 	else return FALSE;
 };
 
-//----------------------------------------------------------------------
-float(float baxis_start, float baxis_control, float baxis_end, float baxis_time) bezier_axis =
-{
+float(float baxis_start, float baxis_control, float baxis_end, float baxis_time) bezier_axis = {
 	local float baxis_1, baxis_2, baxis_3, baxis_return;
 	
 	// Work out bezier curve position 
@@ -144,9 +108,7 @@ float(float baxis_start, float baxis_control, float baxis_end, float baxis_time)
 	return baxis_return;
 };
 
-//----------------------------------------------------------------------
-vector(vector bez_start, vector bez_control, vector bez_end, float bez_timemax, float bez_timeleft) bezier_curve =
-{
+vector(vector bez_start, vector bez_control, vector bez_end, float bez_timemax, float bez_timeleft) bezier_curve = {
 	local vector bez_result;
 	local float bez_time;
 	
@@ -164,19 +126,13 @@ vector(vector bez_start, vector bez_control, vector bez_end, float bez_timemax, 
 	return bez_result;
 };
 
-//----------------------------------------------------------------------
 // Bezier curve debug system (developer = 1 only)
 // Display the curve with yellow diamonds
-//----------------------------------------------------------------------
-void() misc_camera_bezier_debug =
-{
-	// Block debug info regardless (help reduce ents)
-	if (self.nodebuginfo == TRUE) return;
-	
-	// Find the bezier curve CONTROL point
-	self.attachment2 = find(world, targetname, self.controltarget);
-	// Find the bezier curve END point
-	self.attachment3 = find(world, targetname, self.target);
+void() misc_camera_bezier_debug = {
+	if (self.nodebuginfo == TRUE) return; // Block debug info regardless (help reduce ents)
+
+	self.attachment2 = find(world, targetname, self.controltarget); // Find the bezier curve CONTROL point
+	self.attachment3 = find(world, targetname, self.target); // Find the bezier curve END point
 
 	// Display debug markers for start/control/end locations
 	spawn_marker(self.origin, SPNMARK_RED);
@@ -194,17 +150,12 @@ void() misc_camera_bezier_debug =
 	}
 };
 
-//======================================================================
 // Main loop for cinematic controller (all states)
-//======================================================================
-void() camera_controller_think =
-{
+void() camera_controller_think = {
 	self.think = camera_controller_think;
 	self.nextthink = time + CINECAM_CONTIME;
 
-	//---------------------------------------------------------------------
 	// Check first if camera/client are setup
-	//---------------------------------------------------------------------
 	if (cam_active == CINECAM_SETUP) {
 		// Check there is a camera to focus on
 		if (cam_focus.classtype != CT_MISCCAM) cam_active = CINECAM_OFF;
@@ -212,35 +163,24 @@ void() camera_controller_think =
 		else cam_active = CINECAM_STARTUP;
 	}
 	
-	//---------------------------------------------------------------------
 	// Save player details and start cinematic system
-	//---------------------------------------------------------------------
 	if (cam_active == CINECAM_STARTUP) {
-		// Cinematic time!
-		cinematic_running = TRUE;
+		cinematic_running = TRUE; // Cinematic time!
 		cam_locked = FALSE;		// No angle update
 		cam_movement = FALSE;	// No movement tracking
 		cam_fakeplay = FALSE;	// The invisible man
 		cam_angle = '0 0 0';	// Reset angles
 		cam_lastanglevalid = FALSE;	// Reset angle smoothing
-		
-		// Reset player location markers
-		self.attachment = self.attachment2 = world;
-		
+		self.attachment = self.attachment2 = world; // Reset player location markers
+
 		// Check for fake player model on first camera in chain
 		if (cam_focus.spawnflags & CINECAM_FUNC_PLAYER) {
-			// fake player model active
-			cam_fakeplay = TRUE;
-			// Check for special player location entity
-			if (cam_focus.modeltarget != "") {
+			cam_fakeplay = TRUE; // fake player model active
+			if (cam_focus.modeltarget != "") { // Check for special player location entity
 				self.attachment = find(world, targetname, cam_focus.modeltarget);
-				// Found the target entity?
-				if (self.attachment) {
-					// Spawn a dev marker (can be blocked)
-					if (developer > 0 && !self.nodebuginfo) 
-						spawn_marker(self.attachment.origin, SPNMARK_RED);
-					// Info_teleport_destination are fined tuned for trig_teleport
-					if (self.attachment.classtype == CT_MISCTELEPORT) {
+				if (self.attachment) { // Found the target entity?
+					if (developer > 0 && !self.nodebuginfo) spawn_marker(self.attachment.origin, SPNMARK_RED); // Spawn a dev marker (can be blocked)
+					if (self.attachment.classtype == CT_MISCTELEPORT) { // Info_teleport_destination are fined tuned for trig_teleport
 						self.attachment.origin = self.attachment.origin - '0 0 27';
 						self.attachment.angles = self.attachment.mangle;
 					}
@@ -251,11 +191,8 @@ void() camera_controller_think =
 		// Check for any special returning position for the player
 		if (cam_focus.returntarget != "") {
 			self.attachment2 = find(world, targetname, cam_focus.returntarget);
-			// Found the target entity?
-			if (self.attachment2) {
-				// Spawn a dev marker (can be blocked)
-				if (developer > 0 && !self.nodebuginfo) 
-					spawn_marker(self.attachment2.origin, SPNMARK_RED);
+			if (self.attachment2) { // Found the target entity?
+				if (developer > 0 && !self.nodebuginfo) spawn_marker(self.attachment2.origin, SPNMARK_RED); // Spawn a dev marker (can be blocked)
 				// Info_teleport_destination are fined tuned for trig_teleport
 				if (self.attachment2.classtype == CT_MISCTELEPORT) {
 					self.attachment2.origin = self.attachment2.origin - '0 0 27';
@@ -269,17 +206,14 @@ void() camera_controller_think =
 		else self.deathtarget = cam_focus.deathtarget;
 
 		// Check for cinematic skip functionality
-		if (cam_focus.spawnflags & CINECAM_FUNC_SKIPABLE)
-			cam_exit = CINECAM_SKIP_ACTIVE;		// Chck for button inputs
+		if (cam_focus.spawnflags & CINECAM_FUNC_SKIPABLE) cam_exit = CINECAM_SKIP_ACTIVE;		// Chck for button inputs
 		else cam_exit = CINECAM_SKIP_OFF;		// No skip function
 
 		// Check for constant fixed angles on all cameras
-		if (cam_focus.spawnflags & CINECAM_FUNC_FIXEDANGLE) 
-			cam_fixangle = CINECAM_FIXANGLE_ACTIVE;	// Read first camera
+		if (cam_focus.spawnflags & CINECAM_FUNC_FIXEDANGLE) cam_fixangle = CINECAM_FIXANGLE_ACTIVE;	// Read first camera
 		else cam_fixangle = CINECAM_FIXANGLE_OFF;	// Reset everytime
 
-		// Save the current HUD settings for later
-		cam_hudsize = cvar("viewsize");
+		cam_hudsize = cvar("viewsize"); // Save the current HUD settings for later
 		cam_crosshair = cvar("crosshair");
 		
 		// Save player parameters
@@ -298,20 +232,13 @@ void() camera_controller_think =
 		cam_client.solid = SOLID_NOT;
 		cam_client.movetype = MOVETYPE_NONE;
 		setsize(cam_client, VEC_ORIGIN, VEC_ORIGIN);
-		// Stop any further movement (will translate to cinematics)
-		cam_client.velocity = cam_client.avelocity = '0 0 0';
-		
-		// Fade out of first camera (player)
-		cam_sequence = CINECAM_SEQ_FIRST;
-		// Skip the fade out from player camera for spawning players
-		if (cam_startup) cam_active = CINECAM_NEXTCAM;
-		// Start with fading out current player camera
-		else cam_active = CINECAM_FADEOUT;
+		cam_client.velocity = cam_client.avelocity = '0 0 0'; // Stop any further movement (will translate to cinematics)
+		cam_sequence = CINECAM_SEQ_FIRST; // Fade out of first camera (player)
+		if (cam_startup) cam_active = CINECAM_NEXTCAM; // Skip the fade out from player camera for spawning players
+		else cam_active = CINECAM_FADEOUT; // Start with fading out current player camera
 	}
 
-	//---------------------------------------------------------------------
 	// Sort out wait timers, centerprint messages and sounds
-	//---------------------------------------------------------------------
 	if (cam_active == CINECAM_MESSAGE) {
 		// Is cinematic skip done?
 		if (cam_exit != CINECAM_SKIP_DONE) {
@@ -332,31 +259,24 @@ void() camera_controller_think =
 		cam_active = CINECAM_WAIT;
 	}
 
-	//---------------------------------------------------------------------
 	// Wait for timer or player input
-	//---------------------------------------------------------------------
 	if (cam_active == CINECAM_WAIT) {
 		// Is cinematic skip in progress?
 		if (cam_exit == CINECAM_SKIP_DONE) {
 			// Exit as quick as possible (no fading)
 			cam_active = CINECAM_NEXTCAM;
 			cam_sequence = CINECAM_SEQ_LAST;
-		}
-		else {
+		} else {
 			// Waiting for a key press (jump/fire/use)
 			// This has to be done before camera_check_skip
 			// Otherwise the button values are reset
 			if (self.attack_finished == -1) {
-				// Any buttons pressed? (fire/jump)
-				if (camera_check_buttons(cam_client)) {
-					camera_reset_buttons(cam_client);
+				if (camera_check_buttons(cam_client)) { // Any buttons pressed? (fire/jump)
+					if (cam_client.flags & FL_CLIENT) cam_client.button0 = cam_client.button1 = cam_client.button2 = 0;
 					self.pain_finished = TRUE;
 				}
-			}
-			// Has the wait timer expired?
-			else if (self.attack_finished < time) self.pain_finished = TRUE;
-			// Check for skip functionality
-			else camera_check_skip(cam_client);
+			} else if (self.attack_finished < time) self.pain_finished = TRUE; // Has the wait timer expired?
+			else camera_check_skip(cam_client); // Check for skip functionality
 		
 			// Time to exit current camera?
 			if (self.pain_finished) {
@@ -368,25 +288,20 @@ void() camera_controller_think =
 				if (cam_focus.target == "") {
 					// End of sequence, back to player
 					cam_sequence = CINECAM_SEQ_LAST;
-				}
-				else {
+				} else {
 					// search for target camera
 					self.enemy = find(world, targetname, cam_focus.target);
 					// Found a misc camera?
 					if (self.enemy.classtype == CT_MISCCAM) {
 						self.enemy.movetarget3 = cam_focus;
 						cam_focus = self.enemy;
-					}
-					// Next target is not a camera!?!
-					else cam_sequence = CINECAM_SEQ_LAST;
+					} else cam_sequence = CINECAM_SEQ_LAST; // Next target is not a camera!?!
 				}
 			}
 		}
 	}
 
-	//---------------------------------------------------------------------
 	// Fade OUT camera (player if first camera)
-	//---------------------------------------------------------------------
 	if (cam_active == CINECAM_FADEOUT) {
 		// Check if fade out is active (spawnflags)
 		if (cam_focus.spawnflags & CINECAM_FUNC_FADEOUT) {
@@ -402,9 +317,7 @@ void() camera_controller_think =
 		else cam_active = CINECAM_NEXTCAM;
 	}
 	
-	//---------------------------------------------------------------------
 	// Switch to next camera (player if last camera)
-	//---------------------------------------------------------------------
 	if (cam_active == CINECAM_NEXTCAM) {
 		// If fading IN active, update background colour before switch
 		if (cam_focus.spawnflags & CINECAM_FUNC_FADEIN)
@@ -469,8 +382,7 @@ void() camera_controller_think =
 			cam_locked = FALSE;
 			cam_movement = FALSE;
 			cam_bezier = FALSE;
-		}
-		else {
+		} else {
 			// Switch to Next cinematic camera
 			setorigin(cam_client, cam_focus.origin);
 			cam_client.view_ofs = cam_focus.view_ofs;
@@ -508,8 +420,7 @@ void() camera_controller_think =
 						// Move directly to movement location
 						setorigin(cam_client, cam_focus.origin);
 						cam_movement = FALSE;
-					}
-					else {
+					} else {
 						// Setup camera tracking entity to start at client
 						setorigin(cam_track, cam_focus.origin);
 						cam_track.angles = cam_focus.angles;
@@ -532,9 +443,7 @@ void() camera_controller_think =
 						cam_bezier = TRUE;
 					}
 				}
-			}
-			// Movement of Camera (Linear)
-			else if (cam_focus.sighttarget != "") {
+			} else if (cam_focus.sighttarget != "") { // Movement of Camera (Linear)
 				// search for target entity (info_target)
 				self.enemy = find(world, targetname, cam_focus.sighttarget);
 				
@@ -552,8 +461,7 @@ void() camera_controller_think =
 						// Move directly to movement location
 						setorigin(cam_client, cam_focus.origin);
 						cam_movement = FALSE;
-					}
-					else {
+					} else {
 						// Setup camera tracking entity to start at client
 						setorigin(cam_track, cam_focus.origin);
 						cam_track.angles = cam_focus.angles;
@@ -605,14 +513,9 @@ void() camera_controller_think =
 						// Got to reverse the pitch angle because 
 						// v_angle is upside down (special carmack code)
 						cam_focus.angles_x = -cam_focus.angles_x;
-					}
-					// Cannot have a focalpoint if no angletarget
-					else cam_focus.focalpoint = 0;
-
+					} else cam_focus.focalpoint = 0; // Cannot have a focalpoint if no angletarget
 				}
-				
-				// Update camera from existing angles key
-				cam_angle = cam_focus.angles;
+				cam_angle = cam_focus.angles; // Update camera from existing angles key
 			}
 			
 			// First camera? Hide player and HUD
@@ -635,8 +538,7 @@ void() camera_controller_think =
 						// Read target entity (often has angle key)
 						self.dest2 = self.attachment.origin;
 						self.dest3 = self.attachment.angles;
-					}
-					else {
+					} else {
 						// read origin/angles from player
 						self.dest2 = self.pos4;
 						self.dest3 = self.finalangle;
@@ -659,24 +561,14 @@ void() camera_controller_think =
 		}
 		
 		// Check for any trigger events when viewing the camera
-		// The screen can be solid background colour at this point
-		// Anything could be spawned and would not be seen!
-		// If the mapper wants stuff to trigger once, its best to
-		// use wait = -1 on trigger_relays instead.
-		//
-		// Must use cam_seq check because can have single cam setup
-		// Otherwise the triggers will be fired twice (camera exit)
-		//
-		if (cam_sequence != CINECAM_SEQ_LAST && cam_focus.target2 != "")
-			trigger_strs(cam_focus.target2, cam_client);
-		
-		// Fade IN function
-		cam_active = CINECAM_FADEIN;
+		// The screen can be solid background colour at this point.  Anything could be spawned and would not be seen!
+		// If the mapper wants stuff to trigger once, its best to use wait = -1 on trigger_relays instead.
+		// Must use cam_seq check because can have single cam setup otherwise the triggers will be fired twice (camera exit)
+		if (cam_sequence != CINECAM_SEQ_LAST && cam_focus.target2 != "") trigger_strs(cam_focus.target2, cam_client);	
+		cam_active = CINECAM_FADEIN; // Fade IN function
 	}
 		
-	//---------------------------------------------------------------------
 	// Fade IN camera (player if last camera)
-	//---------------------------------------------------------------------
 	if (cam_active == CINECAM_FADEIN) {
 		// Check if fade IN is active (spawnflags)
 		if (cam_focus.spawnflags & CINECAM_FUNC_FADEIN) {
@@ -690,11 +582,8 @@ void() camera_controller_think =
 			if (cam_sequence == CINECAM_SEQ_LAST) self.state = CINECAM_EXIT;
 			else self.state = CINECAM_MESSAGE;	// Next function
 			cam_active = CINECAM_FADE;		// Start fade process
-		}
-		// Skip over fade IN
-		else {
-			// Reset cshift, otherwise screen could be background colour
-			camera_controller_cshift(cam_client, cam_focus.pos2, CINECAM_MINSHIFT);
+		} else { // Skip over fade IN
+			camera_controller_cshift(cam_client, cam_focus.pos2, CINECAM_MINSHIFT); // Reset cshift, otherwise screen could be background colour
 			
 			// Last camera in sequence?
 			if (cam_sequence == CINECAM_SEQ_LAST) cam_active = CINECAM_EXIT; 
@@ -702,39 +591,23 @@ void() camera_controller_think =
 		}
 	}
 
-	//---------------------------------------------------------------------
 	// Exit and back to previous player position
-	//---------------------------------------------------------------------
 	if (cam_active == CINECAM_EXIT) {
-		// Let player be damaged again
-		cam_client.takedamage = DAMAGE_AIM;
-		// Clear keys so no esc/jump/shoot functions are triggered
-		camera_reset_buttons(cam_client);
-		// Make sure no weapon frame for 0.1s after cinematic
-		cam_client.attack_finished = time + 0.1;
-		// Restore air timer (>3s viewing camera and will get gasp sounds)
-		cam_client.air_finished = time + WATER_AIR;
-		// Remove onground flag to make sure engine resets properly
-		cam_client.flags = cam_client.flags - (cam_client.flags & FL_ONGROUND);
-		// Finally switch off cinematic system
-		cinematic_running = FALSE;
+		cam_client.takedamage = DAMAGE_AIM; // Let player be damaged again
+		if (cam_client.flags & FL_CLIENT) cam_client.button0 = cam_client.button1 = cam_client.button2 = 0; // Clear keys so no esc/jump/shoot functions are triggered
+		cam_client.attack_finished = time + 0.1; // Make sure no weapon frame for 0.1s after cinematic
+		cam_client.air_finished = time + WATER_AIR; // Restore air timer (>3s viewing camera and will get gasp sounds)
+		cam_client.flags = cam_client.flags - (cam_client.flags & FL_ONGROUND); // Remove onground flag to make sure engine resets properly
+		cinematic_running = FALSE; // Finally switch off cinematic system
 		cam_active = CINECAM_OFF;
-		
-		// Check for any exit/finished cinematic triggers
-		if (self.deathtarget != "")
-			trigger_strs(self.deathtarget, cam_client);
-
-		// Make sure player animation restarts
-		cam_client.think = player_stand1;
+		if (self.deathtarget != "") trigger_strs(self.deathtarget, cam_client); // Check for any exit/finished cinematic triggers
+		cam_client.think = player_stand1; // Make sure player animation restarts
 		cam_client.nextthink = time + 0.1;
 	}
 	
-	//---------------------------------------------------------------------
 	// Main fade in/out loop for active camera
-	//---------------------------------------------------------------------
 	if (cam_active == CINECAM_FADE) {
-		// Check for skip function
-		camera_check_skip(cam_client);
+		camera_check_skip(cam_client); // Check for skip function
 		
 		// Is cinematic skip done?
 		if (cam_exit == CINECAM_SKIP_DONE) {
@@ -750,25 +623,19 @@ void() camera_controller_think =
 		if (self.count >= CINECAM_MAXSHIFT) {
 			self.count = CINECAM_MAXSHIFT;
 			cam_active = self.state;
-		}
-		else if (self.count <= CINECAM_MINSHIFT) {
+		} else if (self.count <= CINECAM_MINSHIFT) {
 			self.count = CINECAM_MINSHIFT;
 			cam_active = self.state;
 		}
 
-		// Update v_cshift
-		camera_controller_cshift(cam_client, cam_colour, self.count);
+		camera_controller_cshift(cam_client, cam_colour, self.count); // Update v_cshift
 	}
 };
 
-//======================================================================
-// When the fake player is displayed via the camera system
-// This function keeps the model animated like the real player
-//----------------------------------------------------------------------
-void() camera_player_animate =
-{
-	// Stop animating if disabled
-	if (!self.state) return;
+// When the fake player is displayed via the camera system.  This function keeps the model animated like the real player.
+void() camera_player_animate = {
+	if (!self.state) return; // Stop animating if disabled
+
 	self.walkframe = self.walkframe + 1;
 	if (self.walkframe > 16) self.walkframe = 12;
 	self.frame = self.walkframe;
@@ -776,15 +643,10 @@ void() camera_player_animate =
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 // Check if the camera controller entity is setup and running
-//----------------------------------------------------------------------
-void() camera_controller_setup = 
-{
-	// Does controller exist?
-	if (!cam_control) {
-		// Default state is off
-		cam_active = CINECAM_OFF;
+void() camera_controller_setup = {
+	if (!cam_control) { // Does controller exist?
+		cam_active = CINECAM_OFF; // Default state is off
 		
 		// The Controller
 		cam_control = spawn();					// Create an entity
@@ -797,9 +659,7 @@ void() camera_controller_setup =
 		setsize(cam_control, VEC_ORIGIN, VEC_ORIGIN);
 
 		// Setup Fake Player Model
-		// The player entity is moved around between camera's
-		// For cinematics that require the player this placeholder
-		// entity will create the illusion of the player
+		// The player entity is moved around between cameras.  For cinematics that require the player this placeholder entity will create the illusion of the player
 		cam_player = spawn();
 		cam_player.state = FALSE;
 		cam_player.solid = SOLID_NOT;
@@ -812,9 +672,7 @@ void() camera_controller_setup =
 		cam_player.th_altstand = camera_player_animate;
 
 		// Setup Camera Tracking entity
-		// To prevent the player moving the camera while the cinematic
-		// is active, a simple entity does the camera movement and
-		// the player entity mirrors this origin instead
+		// To prevent the player moving the camera while the cinematic is active, a simple entity does the camera movement and the player entity mirrors this origin instead
 		cam_track = spawn();
 		cam_track.owner = cam_control;
 		cam_track.classtype = CT_CONTROL;
@@ -831,58 +689,7 @@ void() camera_controller_setup =
 	}
 };
 
-//======================================================================
-/*QUAKED misc_camera (1 0.5 0.5) (-16 -16 -16) (16 16 16) PLAYER SKIPABLE FADEOUT FADEIN FIXEDANGLE ENDCAMERA x x Not_Easy Not_Normal Not_Hard Not_DM
-In game cinematic camera (Does not work in coop/dm mode)
--------- KEYS --------
-targetname   : Camera name for linking into target chains
-target       : Points to the next camera in a chain/sequence
-angletarget  : Direction the camera will face (use info_target)
-angles       : Direction the camera will face (Pitch Yaw Roll setup)
-focalpoint   : Always focus the camera on angletarget (=1 enabled)
-angleblend   : Blend between current/last camera angles (def=0.03 range=0-1)
-target2      : Additional target(s) to trigger when camera VIEWED
-deathtarget  : Additional target(s) to trigger when cinematic FINISHED
-modeltarget  : Location of fake player mdl (use info_camera_destination)
-returntarget : Location of returning player (use info_camera_destination)
-pos1         : Camera starting BACKGROUND colour (R/G/B)
-pos2         : Camara finishing BACKGROUND colour (R/G/B)
-waitmin      : Fade OUT previous camera, time (def=1s, minimum=0.1s)
-waitmin2     : Fade IN this camera, time (def=1s, minimum=0.1s)
-waitmin3     : Speed at which camera moves towards sighttarget
-sighttarget  : Position the camera will travel towards (use info_target)
-controltarget: Bezier Curve control point (has angletarget defaults)
-wait         : Time to wait while showing camera (-1 = wait for key)
-message      : message to centerprint when camera is viewed
-message2     : message to centerprint to client if coop is active
-sounds       : 1=Secret,2=talk(def),3=switch,4=silent,5=custom,6=secret2
-noise        : custom sound to play when messaged is centerprinted
-nodebuginfo  : All debug info displayed via developer=1 is blocked
--------- SPAWNFLAGS --------
-PLAYER       : Show the player model when starting cinematics
-SKIPABLE     : Allow the cinematic to be skipped (exit after fade)
-FADEOUT      : Fade OUT previous camera (time = waitmin)
-FADEIN       : Fade IN this camera (time = waitmin2)
-FIXEDANGLE   : All cameras in a chain will use the first camera angle
-ENDCAMERA	 : Only the fade in/out work, the origin/angle are ignored
--------- NOTES --------
-In game cinematic camera will fade/move based on times in seconds.
-The first fade (out) is from previous camera to background colour.
-The second fade (in) is to current camera view. The linear movement
-will start at the same time as the fade in process.
-Start -> Fade Out(waitmin1) -> Fade In(waitmin2) / Movement (waitmin3)
-Once 'Fade in' has finshed then the pause timer (wait) starts.
-Waitmin3 = Waitmin2 + Wait (Sync everything to finish together)
-To sync the final camera to a player start, finish 22 map units above
-angles = up/down, angle, tilt left/right 'pitch roll yaw'
-up/left = negative value, down/right = positive value
-deathtarget, modeltarget & returntarget have to be defined on first camera
-Be aware that coop is not supported, so be careful of trigger events
-and decide on a coop "not working" message2.
-
-======================================================================*/
-void() misc_camera_use = 
-{
+void() misc_camera_use = {
 	// Cannot use camera's during intermission
 	if (intermission_running > 0) return;
 	// Stop if cinematic running already
@@ -913,27 +720,68 @@ void() misc_camera_use =
 	cam_active = CINECAM_SETUP;
 };
 
-//----------------------------------------------------------------------
-float(float cc_value) misc_camera_colrange =
-{
-	// Make sure cshift colours are in range (0-255)
+// Make sure cshift colours are in range (0-255)
+float(float cc_value) misc_camera_colrange = {
 	if (cc_value < 0) return 0;
 	else if (cc_value > CINECAM_MAXSHIFT) return CINECAM_MAXSHIFT;
 	else return cc_value;
 };
 
-//----------------------------------------------------------------------
-void(vector cc_check) misc_camera_colcheck =
-{
-	// Make sure RBG colour ranges are correct
+// Make sure RBG colour ranges are correct
+void(vector cc_check) misc_camera_colcheck = {
 	cc_check_x = misc_camera_colrange(cc_check_x);
 	cc_check_y = misc_camera_colrange(cc_check_y);
 	cc_check_z = misc_camera_colrange(cc_check_z);
 };
 
-//----------------------------------------------------------------------
-void() misc_camera =
-{
+// QUAKED misc_camera (1 0.5 0.5) (-16 -16 -16) (16 16 16) PLAYER SKIPABLE FADEOUT FADEIN FIXEDANGLE ENDCAMERA x x Not_Easy Not_Normal Not_Hard Not_DM
+// In game cinematic camera (Does not work in coop/dm mode)
+// -------- KEYS --------
+// targetname   : Camera name for linking into target chains
+// target       : Points to the next camera in a chain/sequence
+// angletarget  : Direction the camera will face (use info_target)
+// angles       : Direction the camera will face (Pitch Yaw Roll setup)
+// focalpoint   : Always focus the camera on angletarget (=1 enabled)
+// angleblend   : Blend between current/last camera angles (def=0.03 range=0-1)
+// target2      : Additional target(s) to trigger when camera VIEWED
+// deathtarget  : Additional target(s) to trigger when cinematic FINISHED
+// modeltarget  : Location of fake player mdl (use info_camera_destination)
+// returntarget : Location of returning player (use info_camera_destination)
+// pos1         : Camera starting BACKGROUND colour (R/G/B)
+// pos2         : Camara finishing BACKGROUND colour (R/G/B)
+// waitmin      : Fade OUT previous camera, time (def=1s, minimum=0.1s)
+// waitmin2     : Fade IN this camera, time (def=1s, minimum=0.1s)
+// waitmin3     : Speed at which camera moves towards sighttarget
+// sighttarget  : Position the camera will travel towards (use info_target)
+// controltarget: Bezier Curve control point (has angletarget defaults)
+// wait         : Time to wait while showing camera (-1 = wait for key)
+// message      : message to centerprint when camera is viewed
+// message2     : message to centerprint to client if coop is active
+// sounds       : 1=Secret,2=talk(def),3=switch,4=silent,5=custom,6=secret2
+// noise        : custom sound to play when messaged is centerprinted
+// nodebuginfo  : All debug info displayed via developer=1 is blocked
+// -------- SPAWNFLAGS --------
+// PLAYER       : Show the player model when starting cinematics
+// SKIPABLE     : Allow the cinematic to be skipped (exit after fade)
+// FADEOUT      : Fade OUT previous camera (time = waitmin)
+// FADEIN       : Fade IN this camera (time = waitmin2)
+// FIXEDANGLE   : All cameras in a chain will use the first camera angle
+// ENDCAMERA	 : Only the fade in/out work, the origin/angle are ignored
+// -------- NOTES --------
+// In game cinematic camera will fade/move based on times in seconds.
+// The first fade (out) is from previous camera to background colour.
+// The second fade (in) is to current camera view. The linear movement
+// will start at the same time as the fade in process.
+// Start -> Fade Out(waitmin1) -> Fade In(waitmin2) / Movement (waitmin3)
+// Once 'Fade in' has finshed then the pause timer (wait) starts.
+// Waitmin3 = Waitmin2 + Wait (Sync everything to finish together)
+// To sync the final camera to a player start, finish 22 map units above
+// angles = up/down, angle, tilt left/right 'pitch roll yaw'
+// up/left = negative value, down/right = positive value
+// deathtarget, modeltarget & returntarget have to be defined on first camera
+// Be aware that coop is not supported, so be careful of trigger events
+// and decide on a coop "not working" message2.
+void() misc_camera = {
 	// Cinematics will not work in DM mode
 	if (deathmatch) { remove(self); return; }
 	
@@ -964,11 +812,9 @@ void() misc_camera =
 
 	// Found bezier curve setup
 	if (self.controltarget != "") {
-		// If no angle target setup, use next camera
-		if (self.angletarget == "") {
+		if (self.angletarget == "") { // If no angle target setup, use next camera
 			self.angletarget = self.target;
-			// Focus on next camera instead
-			self.focalpoint = TRUE;
+			self.focalpoint = TRUE; // Focus on next camera instead
 		}
 	}
 	
@@ -978,12 +824,9 @@ void() misc_camera =
 		self.focalpoint = 0; 
 	}
 	
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
+	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.use = misc_camera_use;
-	
-	// Create camera controller
-	camera_controller_setup();
+	camera_controller_setup(); // Create camera controller
 	
 	// Check for bezier debug mode (display curves)
 	// Can block debug info (start/control/end/arrows)
@@ -993,45 +836,34 @@ void() misc_camera =
 	}
 };
 
-/*======================================================================
- Write a config/text file
- 
- * generates file in the DATA subdirectory under MOD folder
- * Uses currently loaded map file with _cam extension added
- * requires the FRIK file system extensions (advanced engine only)
- * requires advanced FTE string commands (included in QSS/DP as well)
- 
- // Example use of sprintf
- string = sprintf("\"%s\" \"%s\"\n", entityfieldname(entno), getentityfieldstring(entno, self));
-
-======================================================================*/
-void(float filehandle, string entkey, string entval) misc_camera_str =
-{
+void(float filehandle, string entkey, string entval) misc_camera_str = {
 	local string expstr;
 	if (entval == "") return;
 	expstr = strcat("\"", entkey, "\" \"", entval, "\"\n");
 	fputs(filehandle, expstr);
 };
 
-//----------------------------------------------------------------------
-void(float filehandle, string entkey, float entval) misc_camera_float =
-{
+void(float filehandle, string entkey, float entval) misc_camera_float = {
 	if (entval == 0) return;
 	misc_camera_str(filehandle, entkey, ftos(entval));
 };
 
-//----------------------------------------------------------------------
-void(float filehandle, string entkey, vector entval) misc_camera_vec =
-{
+void(float filehandle, string entkey, vector entval) misc_camera_vec = {
 	local string expstr;
 	if (CheckZeroVector(entval) == TRUE) return;
 	expstr = strcat(ftos(entval_x), " ", ftos(entval_y), " ", ftos(entval_z));
 	misc_camera_str(filehandle, entkey, expstr);
 };
 
-//----------------------------------------------------------------------
-void() misc_camera_filewrite =
-{
+// Write a config/text file
+// * generates file in the DATA subdirectory under MOD folder
+// * Uses currently loaded map file with _cam extension added
+// * requires the FRIK file system extensions (advanced engine only)
+// * requires advanced FTE string commands (included in QSS/DP as well)
+//
+// Example use of sprintf
+// string = sprintf("\"%s\" \"%s\"\n", entityfieldname(entno), getentityfieldstring(entno, self));
+void() misc_camera_filewrite = {
 	local string camfile;
 	local entity cament;
 	local float camfilelen, charpos, camfh;
@@ -1040,27 +872,19 @@ void() misc_camera_filewrite =
 	if (!ext_active) return;		// Check for advanced engines
 	if (!ext_frikfile) return;		// Check for Frik file system
 	if (!ext_ftestrings) return;	// Check for advanced string functions
-	//if (!ext_sprintf) return;		// Check for C code sprintf exposure
 	if (world.model == "") return;	// Check for map name
-	
-	// Find out current map name
-	camfile = world.model;
+
+	camfile = world.model; // Find out current map name
 	camfilelen = strlen(camfile);
-	// Search at beginning for directory prefix
-	charpos = strstrofs(camfile, "/", 0);
-	// Any prefix detected? (Cut directory)
-	if (charpos > 0) camfile = substring(camfile, charpos+1, camfilelen);
+	charpos = strstrofs(camfile, "/", 0); // Search at beginning for directory prefix
+	if (charpos > 0) camfile = substring(camfile, charpos+1, camfilelen); // Any prefix detected? (Cut directory)
 
 	// Search for .bsp extension
 	camfilelen = strlen(camfile);
 	charpos = strstrofs(camfile, ".", 0);
-	// Any model (.bsp) extensions? (Cut it!)
-	if (charpos > 0) camfile = substring(camfile, 0, charpos);
-
-	// Add new file extension and file type
-	camfile = strcat(camfile, "_cam.txt");
-	// Open new (overwrite) file ready for export
-	camfh = fopen(camfile, FILE_WRITE);
+	if (charpos > 0) camfile = substring(camfile, 0, charpos); // Any model (.bsp) extensions? (Cut it!)
+	camfile = strcat(camfile, "_cam.txt"); // Add new file extension and file type
+	camfh = fopen(camfile, FILE_WRITE); // Open new (overwrite) file ready for export
 
 	// Search for any misc_camera entities
 	cament = find(world, classname, "misc_camera");
@@ -1114,9 +938,5 @@ void() misc_camera_filewrite =
 		// Next camera entity
 		cament = find(cament, classname, "misc_camera");
 	}
-	
-	// Close file
-	fclose(camfh);
+	fclose(camfh); // Close file
 };
-
-

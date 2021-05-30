@@ -98,8 +98,7 @@ void(float AttackNumber) dfury_boss_shot2 = {
 	missile.owner = self;
 	missile.solid = SOLID_BBOX;
 	missile.movetype = MOVETYPE_FLYMISSILE;
-	precache_model ("progs/q15/proj_fury1.mdl");
-	setmodel (missile, "progs/q15/proj_fury1.mdl");
+	setmodel (missile, "progs/ad171/proj_fury1.mdl");
 	setsize (missile, '0 0 0', '0 0 0');		
 
 	if ( AttackNumber == 1) {
@@ -443,16 +442,16 @@ void(float maxgibs, float gibscounter) producegibs_dfury_boss =	{
 		// Bit hacky :\
 		self.gibtype = GIBTYPE_BLOOD;
 		ThrowGib(1, 1);
-		self.gib1mdl = "progs/q15/gib_4.mdl";
+		self.gib1mdl = "progs/ad171/gib_4.mdl";
 		ThrowGib(11, 1);
 		self.gib1mdl = "progs/q15/gib_5.mdl";
 		ThrowGib(11, 1);
 		self.gibtype = GIBTYPE_METAL;
-		self.gib1mdl = "progs/q15/gib_knfoot_l.mdl"; 	
+		self.gib1mdl = "progs/ad171/gib_knfoot_l.mdl"; 	
 		ThrowGib(11, 1);
-		self.gib1mdl = "progs/q15/gib_knfoot_r.mdl"; 	
+		self.gib1mdl = "progs/ad171/gib_knfoot_r.mdl"; 	
 		ThrowGib(11, 1);
-		self.gib1mdl = "progs/q15/w_dknightsword.mdl";
+		self.gib1mdl = "progs/ad171/w_dknightsword.mdl";
 		ThrowGib(11, 1);
 	}
 	gibscounter = gibscounter + 1;
@@ -671,7 +670,7 @@ void()	dfury_boss_JumpTouch = {
 
 
 void() dfury_boss_pause = {
-	sound ( self, CHAN_AUTO, "misc/wallbrk.wav", 1, ATTN_NONE);
+	sound ( self, CHAN_AUTO, "drake/misc/wallbrk.wav", 1, ATTN_NONE);
 	self.skin = 1;
 	self.takedamage = DAMAGE_AIM;
 	self.th_stand = dfury_boss_stand1;
@@ -708,12 +707,11 @@ void() monster_dfury_boss = {
 	precache_model ("progs/q15/proj_summon.mdl");
 	precache_model ("progs/q15/gib_sboss.mdl");
 	precache_model ("progs/gib1.mdl");
-	precache_model ("progs/q15/proj_fury1.mdl");
-	precache_model ("progs/q15/gib_4.mdl");
+	precache_model ("progs/ad171/gib_4.mdl");
 	precache_model ("progs/q15/gib_5.mdl");
-	precache_model ("progs/q15/gib_knfoot_l.mdl");
-	precache_model ("progs/q15/gib_knfoot_r.mdl");
-	precache_model ("progs/q15/w_dknightsword.mdl");
+	precache_model ("progs/ad171/gib_knfoot_l.mdl");
+	precache_model ("progs/ad171/gib_knfoot_r.mdl");
+	precache_model ("progs/ad171/w_dknightsword.mdl");
 	precache_model ("progs/drake/s_explod.spr");
 	precache_sound ("dfury/boss_explode.wav");
 	precache_sound ("dfury/boss_death1.wav");
@@ -734,7 +732,7 @@ void() monster_dfury_boss = {
 	precache_sound ("walk/dfuryboss3.wav");
 	precache_sound ("misc/summon.wav");
 	precache_sound ("knight/dropsword.wav");
-	precache_sound ("misc/wallbrk.wav");
+	precache_sound ("drake/misc/wallbrk.wav");
 	precache_sound ("knight/sword1.wav");
 	precache_sound ("knight/sword2.wav");
 
@@ -746,19 +744,19 @@ void() monster_dfury_boss = {
 	precache_model (MODEL_PROJ_GARGOYLEGRN);	// acid/smoke wiz projectile
 	precache_model ("progs/ad171/gib_gargwing1.mdl");
 	precache_model ("progs/ad171/gib_gargwing2.mdl");
-	precache_sound ("gargoyle/idle1.wav");
-	precache_sound ("gargoyle/perch1.wav");
-	precache_sound ("gargoyle/perch2.wav");
-	precache_sound ("gargoyle/attack1.wav");	// Doom imp fireball!
-	precache_sound ("gargoyle/swoop1.wav");
-	precache_sound ("gargoyle/swoop2.wav");
-	precache_sound ("gargoyle/swoop1hit.wav");
-	precache_sound ("gargoyle/wings1.wav");
-	precache_sound ("gargoyle/pain75.wav");
-	precache_sound ("gargoyle/pain100.wav");
-	precache_sound ("gargoyle/death1.wav");
-	precache_sound ("gargoyle/sight1.wav");
-
+	precache_sound ("ad171/gargoyle/idle1.wav");
+	precache_sound ("ad171/gargoyle/perch1.wav");
+	precache_sound ("ad171/gargoyle/perch2.wav");
+	precache_sound ("ad171/gargoyle/attack1.wav");	// Doom imp fireball!
+	precache_sound ("ad171/gargoyle/swoop1.wav");
+	precache_sound ("ad171/gargoyle/swoop2.wav");
+	precache_sound ("ad171/gargoyle/swoop1hit.wav");
+	precache_sound ("ad171/gargoyle/wings1.wav");
+	precache_sound ("ad171/gargoyle/pain75.wav");
+	precache_sound ("ad171/gargoyle/pain100.wav");
+	precache_sound ("ad171/gargoyle/death1.wav");
+	precache_sound ("ad171/gargoyle/sight1.wav");
+	precache_model ("progs/ad171/proj_fury1.mdl");
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 	setmodel (self, "progs/q15/dfury_boss.mdl");

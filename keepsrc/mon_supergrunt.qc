@@ -472,7 +472,7 @@ void() sgrunt_die =  {
 		sgrunt_damage_skin();
 
 		// regular death
-		sound(self, CHAN_VOICE, "gibs/ut2gib1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "kinn/gibs/ut2gib1.wav", 1, ATTN_NORM);
 
 		// head explodes on death...
 		makevectors(self.angles);
@@ -519,7 +519,7 @@ void() monster_super_grunt = {
 	precache_sound ("sgrunt/melee2.wav");
 	precache_sound ("sgrunt/hovatck1.wav");
 
-	precache_sound ("gibs/ut2gib1.wav");		
+	precache_sound ("kinn/gibs/ut2gib1.wav");		
 	precache_sound ("weapons/plasexpl.wav");
 
 	if (random() < 0.5)	

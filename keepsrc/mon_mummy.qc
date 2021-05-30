@@ -353,7 +353,7 @@ void () monster_mummy = {
 
    self.mdl = "progs/rogue/mon_mummy.mdl";
    precache_model (self.mdl);
-   self.headmdl = "progs/h_zombie.mdl";
+   self.headmdl = "progs/ad181/h_zombie.mdl";
    precache_model (self.headmdl);
    precache_model ("progs/zom_gib.mdl");
    precache_sound ("zombie/z_idle.wav");

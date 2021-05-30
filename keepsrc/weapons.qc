@@ -194,7 +194,7 @@ void () HIP_FireMjolnir = {
 		T_Damage (trace_ent,self,self,damage, DAMARMOR);
 	} else {
 		if ( (trace_fraction != TRUE) ) {
-			sound (self,CHAN_WEAPON,"hipweap/mjoltink.wav",TRUE,ATTN_NORM);
+			sound (self,CHAN_WEAPON,"hipnotic/weapons/mjoltink.wav",TRUE,ATTN_NORM);
 			local entity tester;
 			local vector tvec;
 
@@ -234,7 +234,7 @@ void () W_FireProximityGrenade = {
    NumProximityGrenades = (NumProximityGrenades + TRUE);
    self.ammo_rockets = (self.ammo_rockets - TRUE);
    self.currentammo = (self.currentammo - TRUE);
-   sound (self,CHAN_WEAPON,"hipweap/proxbomb.wav",TRUE,ATTN_NORM);
+   sound (self,CHAN_WEAPON,"hipnotic/weapons/proxbomb.wav",TRUE,ATTN_NORM);
    self.punchangle_x = CONTENT_SOLID;
    missile = spawn ();
 	missile.classgroup = CG_PROJGRENADES;
@@ -505,9 +505,9 @@ void() W_FireShotgun = {
 	// Change weapon sound if using Projectile Pellets
 	// IMPORTANT - default for Projectile Pellets is ON = 0
 	if (!query_configflag(SVR_SHOTGPROJ))
-		sound (self ,CHAN_WEAPON, "weapons/sg2.wav", 1, ATTN_NORM);
+		sound (self ,CHAN_WEAPON, "ad171/weapons/sg2.wav", 1, ATTN_NORM); // ever so subtle sound of a shell ejecting added to normal
 	else
-		sound (self ,CHAN_WEAPON, "weapons/sg1.wav", 1, ATTN_NORM);
+		sound (self ,CHAN_WEAPON, "weapons/guncock.wav", 1, ATTN_NORM); // vanilla single barrel shotgun
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
 
@@ -554,9 +554,9 @@ void() W_FireSuperShotgun = {
 	// Change weapon sound if using Shotgun Upgrade or Projectile Pellets
 	// IMPORTANT - default for Projectile Pellets is ON = 0
 	if (self.moditems & IT_UPGRADE_SSG || !query_configflag(SVR_SHOTGPROJ)) {
-		sound (self ,CHAN_WEAPON, "weapons/ssg2.wav", 1, ATTN_NORM);
+		sound (self ,CHAN_WEAPON, "ad171/weapons/ssg2.wav", 1, ATTN_NORM);
 	} else{ 
-		sound (self ,CHAN_WEAPON, "weapons/ssg1.wav", 1, ATTN_NORM);
+		sound (self ,CHAN_WEAPON, "weapons/shotgn2.wav", 1, ATTN_NORM);
 	}
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
@@ -798,7 +798,7 @@ void () W_Fire_Crossbow = {
 	self.currentammo = self.ammo_bolts = self.ammo_bolts - 1;
 
 	makevectors (self.v_angle);
-	sound (self, CHAN_WEAPON, "weapons/crossbow_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/weapons/crossbow_fire.wav", 1, ATTN_NORM);
 
 	if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self, SPEED_PLAYSPIKE);
 	// Straight line forward where crosshair is pointing
@@ -817,7 +817,7 @@ void () W_Fire_Crossbow_Poison = {
 	self.currentammo = self.ammo_poison = self.ammo_poison - 1;
 
 	makevectors (self.v_angle);
-	sound (self, CHAN_WEAPON, "weapons/crossbow_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/weapons/crossbow_fire.wav", 1, ATTN_NORM);
 
 	if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN)  dir = aim(self, SPEED_PLAYSPIKE);
 	// Straight line forward where crosshair is pointing
@@ -875,7 +875,7 @@ void() W_FirePlasma = {
 	// Straight line forward where crosshair is pointing
 	else dir = normalize(v_forward * SPEED_PLAYPLASMA);
 
-	sound (self, CHAN_WEAPON, "weapons/plasma_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/weapons/plasma_fire.wav", 1, ATTN_NORM);
 	self.currentammo = self.ammo_cells = self.ammo_cells - 1;
 	
 	org = self.origin + v_forward*8 + '0 0 16';
@@ -884,7 +884,6 @@ void() W_FirePlasma = {
 
 void(vector lstart, entity lsource, float ldamage) LightningReflection;
 
-//----------------------------------------------------------------------
 void(vector p1, vector p2, entity from, float damage) LightningDamage = {
 	local entity e1, e2;
 	local vector f;
@@ -1270,7 +1269,7 @@ void () W_FirePlasmaGun = {
 
    self.ammo_plasma = (self.ammo_plasma - TRUE);
    self.currentammo = (self.currentammo - TRUE);
-   sound (self,CHAN_WEAPON,"plasma/fire.wav",0.500,ATTN_NORM);
+   sound (self,CHAN_WEAPON,"rogue/plasma/fire.wav",0.500,ATTN_NORM);
    self.punchangle_x = CONTENT_SOLID;
    missile = spawn ();
 	missile.classgroup = CG_PROJCELLS;
@@ -1287,28 +1286,23 @@ void () W_FirePlasmaGun = {
    setmodel (missile,"progs/plasma.mdl");
    setsize (missile,VEC_ORIGIN,VEC_ORIGIN);
    setorigin (missile,((self.origin + (v_forward * FL_CLIENT)) + '0.000 0.000 16.000'));
-   sound (missile,CHAN_WEAPON,"plasma/flight.wav",TRUE,ATTN_NORM);
+   sound (missile,CHAN_WEAPON,"rogue/plasma/flight.wav",TRUE,ATTN_NORM);
    missile.think = PlasmaGroundOut;
    missile.nextthink = (time + MOVETYPE_FLY);
    self.attack_finished = time + 0.8;
 };
 
-/*======================================================================
- PLAYER WEAPON UPDATES AND AMMO CHECKS
- 
- W_SetCurrentAmmo   - Update HUD icons based on self.weapon value
- W_BestWeapon       - returns best weapon LG > SNG > SSG > NG > SG > Axe
-                      interesting that the function does not return GL/RL
- W_CheckNoAmmo      - Ammo check for attack function
- W_Attack           - Main function that fire weapons (player animations)
-                      Will automatically wakeup any nearby monsters
- W_ChangeWeapon     - Change weapon based on availabilty and ammo
- CycleWeaponCommand - Move forward or backward through active weapons
- CycleWeaponReverseCommand
- W_WeaponFrame      - Called every frame, catches impulse event
- SuperDamageSound   - Plays quad damage sound
+// PLAYER WEAPON UPDATES AND AMMO CHECKS
+// W_SetCurrentAmmo   - Update HUD icons based on self.weapon value
+// W_BestWeapon       - returns best weapon LG > SNG > SSG > NG > SG > Axe, interesting that the function does not return GL/RL
+// W_CheckNoAmmo      - Ammo check for attack function
+// W_Attack           - Main function that fire weapons (player animations).  Will automatically wakeup any nearby monsters
+// W_ChangeWeapon     - Change weapon based on availabilty and ammo
+// CycleWeaponCommand - Move forward or backward through active weapons
+// CycleWeaponReverseCommand
+// W_WeaponFrame      - Called every frame, catches impulse event
+// SuperDamageSound   - Plays quad damage sound
 
-======================================================================*/
 void(entity targ) W_SetCurrentAmmo = {
 	if (intermission_running > 0) return;	// intermission or finale
 	if (cinematic_running > 0) return;		// Remote camera active
@@ -1383,7 +1377,7 @@ void(entity targ) W_SetCurrentAmmo = {
 			targ.weaponmodel = MODEL_VWEAP_PLASM;
 		} else if (targ.weapon == IT2_LASER_CANNON) {
 			targ.currentammo = targ.ammo_cells;
-			targ.weaponmodel = "progs/drake/v_laserg.mdl";
+			targ.weaponmodel = "progs/hipnotic/v_laserg.mdl";
 		} else if (targ.weapon == IT_EXTRA_WEAPON) {
 			if (targ.ammo_poison > 0) {
 				targ.currentammo = targ.ammo_poison;
@@ -1541,8 +1535,8 @@ void() W_Attack = {
 				// Chainsaw (overrides axes once acquired)
 				player_saw1 ();
 				self.attack_finished = time + 0.55;
-				sound (self, CHAN_AUTO, "weapons/sawatck.wav", 1, ATTN_NORM);
-				self.show_hostile = time + 1;	// wake monsters up, we hit stuff
+				sound (self, CHAN_AUTO, "zerstorer/weapons/sawatck.wav", 1, ATTN_NORM);
+				self.show_hostile = time + 1; // wake monsters up, we hit stuff
 			} else {
 				// Axe and Shadowaxe
 				if (random() < 0.5) sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE1, 1, ATTN_NORM);

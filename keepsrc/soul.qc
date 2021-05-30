@@ -31,7 +31,7 @@ void() Soul_Think = [ 0, Soul_Think ] {
 
     self.nextthink = time + 0.05;
     if (self.wait < time) {
-        sound (self, CHAN_BODY, "wraith/soul.wav", 1, ATTN_IDLE);
+        sound (self, CHAN_BODY, "nehahra/wraith/soul.wav", 1, ATTN_IDLE);
         self.wait = random() * 60 + time;
     }
 
@@ -87,9 +87,9 @@ void() Soul_Think = [ 0, Soul_Think ] {
         T_Heal (reaper, 50, TRUE);
 		// FIXME:  Find another, more general way if more monsters use this.
         if (reaper.classname == "monster_nightshade")
-            sound (reaper, CHAN_VOICE, "shade/taunt.wav", 1, ATTN_NORM);
+            sound (reaper, CHAN_VOICE, "drake/shade/taunt.wav", 1, ATTN_NORM);
         else
-            sound (reaper, CHAN_VOICE, "wraith/rych1.wav", 1, ATTN_IDLE);
+            sound (reaper, CHAN_VOICE, "nehahra/wraith/rych1.wav", 1, ATTN_IDLE);
         Soul_Remove ();
     }
 };
@@ -166,11 +166,11 @@ float() Wraith_FindSoul = {
         if (head.h2otype != CONTENT_SOLID) { // Got one!
 			// FIXME:  Find another, more general way if more monsters use this.
             if (self.classname == "monster_nightshade") { // Use voice channel to override others.
-                sound (self, CHAN_VOICE, "shade/screech.wav", 1, ATTN_NORM);
-                sound (head, 6, "shade/screech.wav", 1, ATTN_IDLE);
+                sound (self, CHAN_VOICE, "drake/shade/screech.wav", 1, ATTN_NORM);
+                sound (head, 6, "drake/shade/screech.wav", 1, ATTN_IDLE);
             } else { // Nehahra used item channel for selection.
-                sound (self, CHAN_ITEM, "wraith/select.wav", 1, ATTN_IDLE);
-                sound (head, 6, "wraith/select.wav", 1, ATTN_IDLE);
+                sound (self, CHAN_ITEM, "nehahra/wraith/select.wav", 1, ATTN_IDLE);
+                sound (head, 6, "nehahra/wraith/select.wav", 1, ATTN_IDLE);
             }
             Soul_Spawn (head);
             return TRUE;
@@ -200,7 +200,7 @@ void() aether_out1 = { // Phase out start.
     self.solid      = SOLID_NOT;
     self.takedamage = DAMAGE_NO;
     self.effects    = self.effects | EF_DIMLIGHT;
-    sound (self, CHAN_VOICE, "wraith/return.wav", 1, 0.5);  // Was ATTN_NONE.
+    sound (self, CHAN_VOICE, "nehahra/wraith/return.wav", 1, 0.5);  // Was ATTN_NONE.
     self.th_melee   = SUB_Null;
     self.th_missile = SUB_Null;
 };
@@ -211,16 +211,15 @@ void() aether_out2 =
     self.modelindex = 0;
 };
 
-void() aether_in1 =
-{   // Phase in start.
+void() aether_in1 = { // Phase in start.
     self.velocity   = '0 0 0';
     self.effects    = self.effects | EF_DIMLIGHT;
     self.flags      = self.flags - (self.flags & FL_NOTARGET);
     self.modelindex = self.mindex2;
-    sound (self, CHAN_VOICE, "wraith/return.wav", 1, 0.5);  // Was ATTN_NONE.
+    sound (self, CHAN_VOICE, "nehahra/wraith/return.wav", 1, 0.5);  // Was ATTN_NONE.
 };
-void(void() hth, void() miss) aether_in2 =
-{   // Phase in end.
+
+void(void() hth, void() miss) aether_in2 = { // Phase in end.
     self.effects    = self.effects - (self.effects & EF_DIMLIGHT);
     self.solid      = SOLID_TRIGGER;
     self.takedamage = DAMAGE_AIM;

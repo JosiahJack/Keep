@@ -473,7 +473,7 @@ void() monster_floyd = {
 	precache_sound (SOUND_PLASMA_HIT);
 
 	self.death_sound = "floyd/death.wav";
-	self.death_sound2 = "seeker/explode_major.wav";
+	self.death_sound2 = "ad171/seeker/explode_major.wav";
 	precache_sound (self.death_sound);
 	precache_sound (self.death_sound2);
 	self.pain_sound = "floyd/pain.wav";

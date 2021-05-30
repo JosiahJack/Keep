@@ -46,10 +46,9 @@ $frame swoopout1 swoopout2 swoopout3 swoopout4 swoopout5 swoopout6 swoopout7 swo
 $frame swoopout9 swoopout10 swoopout11 swoopout12 swoopout13 swoopout14 swoopout15
 
 void() gargoylewings =
-{ sound(self, CHAN_ITEM, "gargoyle/wings1.wav", 1, ATTN_IDLE); };
+{ sound(self, CHAN_ITEM, "ad171/gargoyle/wings1.wav", 1, ATTN_IDLE); };
 void() garg_fbfinish;
 
-//======================================================================
 void()	garg_idle1	=[	$fly2,	garg_idle2	] {monster_idle_sound();ai_stand();};
 void()	garg_idle2	=[	$fly4,	garg_idle3	] {ai_stand();};
 void()	garg_idle3	=[	$fly6,	garg_idle4	] {gargoylewings();ai_stand();};
@@ -135,7 +134,7 @@ void(float fbframe, vector fbofs) garg_fbupdate =
 		setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
 		self.attachment.movetype = MOVETYPE_NONE;
 		self.attachment.solid = SOLID_NOT;
-		sound (self, CHAN_WEAPON, "gargoyle/attack1.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/gargoyle/attack1.wav", 1, ATTN_NORM);
 	}
 
 	ai_face();					// Turn towards enemy
@@ -318,25 +317,20 @@ void(entity inflictor, entity attacker, float damage) garg_pain =
 	}
 };
 
-//============================================================================
 void()	garg_death1	=[	$death1,	garg_death2	] {};
 void()	garg_death2	=[	$death3,	garg_death3	] {monster_check_gib();};
-void()	garg_death3	=[	$death5,	garg_death4	] {monster_check_gib();
-	self.solid = SOLID_NOT;};
+void()	garg_death3	=[	$death5,	garg_death4	] {monster_check_gib(); self.solid = SOLID_NOT;};
 void()	garg_death4	=[	$death7,	garg_death5	] {};
 void()	garg_death5	=[	$death9,	garg_death6	] {};
 void()	garg_death6	=[	$death11,	garg_death7	] {};
 void()	garg_death7	=[	$death13,	garg_death8	] {monster_death_postcheck();};
 void()	garg_death8	=[	$death14,	garg_death8	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
-void() garg_die =
-{
+void() garg_die = {
 	// Statues don't die!
 	if (self.spawnflags & MON_STATUE) return;
 	
-	// Make sure any wings sound is silenced
-	sound (self, CHAN_ITEM, SOUND_EMPTY, 1, ATTN_NORM);
+	StopSound(self,CHAN_ITEM); // Make sure any wings sound is silenced
 
 	// Check for perching gargoyles, need to blow up in gibs
 	// In an awkward pose that does not go well into death animations
@@ -362,7 +356,7 @@ void() garg_die =
 	
 	// If not gibbed, then drop to ground
 	if (!self.gibbed) { 
-		sound (self, CHAN_VOICE, "gargoyle/death1.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "ad171/gargoyle/death1.wav", 1, ATTN_NORM);
 		self.flags = FL_MONSTER;				// reset all flag conditions
 		self.movetype = MOVETYPE_TOSS;			// Affected by gravity
 		self.velocity_x = -200 + 400*random();
@@ -405,33 +399,32 @@ void() monster_gargoyle = {
 	precache_model (self.gib1mdl);
 	precache_model (self.gib2mdl);
 
-	self.idle_sound = "gargoyle/idle1.wav";
-	self.idle_soundcom = "gargoyle/perch1.wav";
-	self.idle_soundcom2 = "gargoyle/perch2.wav";
+	self.idle_sound = "ad171/gargoyle/idle1.wav";
+	self.idle_soundcom = "ad171/gargoyle/perch1.wav";
+	self.idle_soundcom2 = "ad171/gargoyle/perch2.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_soundcom);
 	precache_sound (self.idle_soundcom2);
 
-	precache_sound ("gargoyle/attack1.wav");	// Doom imp fireball!
-	precache_sound ("gargoyle/swoop1.wav");
-	precache_sound ("gargoyle/swoop2.wav");
-	precache_sound ("gargoyle/swoop1hit.wav");
-	precache_sound ("gargoyle/wings1.wav");
+	precache_sound ("ad171/gargoyle/attack1.wav");	// Doom imp fireball!
+	precache_sound ("ad171/gargoyle/swoop1.wav");
+	precache_sound ("ad171/gargoyle/swoop2.wav");
+	precache_sound ("ad171/gargoyle/swoop1hit.wav");
+	precache_sound ("ad171/gargoyle/wings1.wav");
 	
-	self.pain_sound = "gargoyle/pain75.wav";
-	self.pain_sound2 = "gargoyle/pain100.wav";
+	self.pain_sound = "ad171/gargoyle/pain75.wav";
+	self.pain_sound2 = "ad171/gargoyle/pain100.wav";
 	precache_sound (self.pain_sound);
 	precache_sound (self.pain_sound2);
-	precache_sound ("gargoyle/death1.wav");
+	precache_sound ("ad171/gargoyle/death1.wav");
 
-	self.sight_sound = "gargoyle/sight1.wav";
+	self.sight_sound = "ad171/gargoyle/sight1.wav";
 	precache_sound (self.sight_sound);
 
 	// Cache gargoyle is a special class used for precache only
 	if (self.classtype != CT_CACHEGARGOYLE) setup_gargoyle();
 };
-	
-//----------------------------------------------------------------------------
+
 void() monster_minotaurminion = { 
 	self.classtype = CT_CACHEGARGOYLE; 
 	monster_gargoyle();
@@ -439,8 +432,8 @@ void() monster_minotaurminion = {
 
 // From Kinn
 void() monster_imp = {
-if (self.deathstring == "")  self.deathstring = " was incinerated by an Imp\n";
-monster_gargoyle();
+	if (self.deathstring == "")  self.deathstring = " was incinerated by an Imp\n";
+	monster_gargoyle();
 };
 
 // From Kinn
@@ -452,15 +445,13 @@ void() monster_impling = {
 
 // From Quake 1.5
 void() monster_afrit = {
-if (self.deathstring == "")  self.deathstring = " was burned down by the Afrits\n";
-self.classname = "monster_imp";
-monster_gargoyle();
-}
+	if (self.deathstring == "")  self.deathstring = " was burned down by the Afrits\n";
+	self.classname = "monster_imp";
+	monster_gargoyle();
+};
 
 
-//----------------------------------------------------------------------------
-void() setup_gargoyle =
-{
+void() setup_gargoyle = {
 	// Randomize gib parts
 	if (random() < 0.5) self.gib1mdl = string_null;
 	else if (random() < 0.5) self.gib2mdl = string_null;
@@ -504,8 +495,7 @@ void() setup_gargoyle =
 		dprint("\b[GARGOYLE]\b Cannot be perch and statue!\n");
 		self.spawnflags = self.spawnflags - MON_GARGOYLE_PERCH;
 	}	
-	
-	//----------------------------------------------------------------------
+
 	// Perched Gargoyles have special idle animation + idle sounds
 	// The AI needs to be setup 40 units forward and 24 units up
 	// to be positioned feet flat on perch surface
@@ -518,8 +508,8 @@ void() setup_gargoyle =
 	// Randomly picks a frame position from perch animation set
 	else if (self.spawnflags & MON_STATUE) {
 		// Setup stone idle sounds
-		self.idle_sound = "statue/idle1.wav";
-		self.idle_sound2 = "statue/idle2.wav";
+		self.idle_sound = "ad171/statue/idle1.wav";
+		self.idle_sound2 = "ad171/statue/idle2.wav";
 		precache_sound (self.idle_sound);
 		precache_sound (self.idle_sound2);
 		
@@ -588,12 +578,12 @@ void(vector minion_org, entity minion_targ) minion_gargoyle =
 	minion.gib1mdl = "progs/ad171/gib_gargwing1.mdl";	// Left wing
 	minion.gib2mdl = "progs/ad171/gib_gargwing2.mdl";	// Right wing
 
-	minion.pain_sound = "gargoyle/pain75.wav";
-	minion.pain_sound2 = "gargoyle/pain100.wav";
-	minion.idle_sound = "gargoyle/idle1.wav";
-	minion.idle_soundcom = "gargoyle/perch1.wav";
-	minion.idle_soundcom2 = "gargoyle/perch2.wav";
-	minion.sight_sound = "gargoyle/sight1.wav";
+	minion.pain_sound = "ad171/gargoyle/pain75.wav";
+	minion.pain_sound2 = "ad171/gargoyle/pain100.wav";
+	minion.idle_sound = "ad171/gargoyle/idle1.wav";
+	minion.idle_soundcom = "ad171/gargoyle/perch1.wav";
+	minion.idle_soundcom2 = "ad171/gargoyle/perch2.wav";
+	minion.sight_sound = "ad171/gargoyle/sight1.wav";
 	
 	minion.nextthink = time + 0.01;
 	minion.think = setup_gargoyle;

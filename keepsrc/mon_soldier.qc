@@ -134,7 +134,7 @@ void() army_fire_rocket =
 	// if cannot see enemy fire at last known location
 	ai_trackenemy();
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "soldier/rocket_fire.wav", 1, ATTN_NORM);	
+	sound (self, CHAN_WEAPON, "ad171/soldier/rocket_fire.wav", 1, ATTN_NORM);	
 
 	self.attack_speed = 250;
 	makevectors (self.angles);
@@ -170,11 +170,10 @@ void() army_rocket_think =
 	}
 };
 
-//----------------------------------------------------------------------
 void()	army_rocket_atk1 =[	$load1,	army_load2	] {ai_face();
 	self.pain_finished = time + 1.3;
 	self.attack_track = self.enemy.origin;
-	sound (self, CHAN_WEAPON, "soldier/rocket_load.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_WEAPON, "ad171/soldier/rocket_load.wav", 1, ATTN_NORM);};
 void()	army_load2	=[	$load2,	army_load3	] {ai_trackenemy();};
 void()	army_load3	=[	$load3,	army_load4	] {ai_trackenemy();};
 void()	army_load4	=[	$load4,	army_load5	] {ai_trackenemy();};
@@ -210,28 +209,23 @@ void()	army_grenade_atk7 =[	$shoot7, army_grenade_atk8	] {ai_face();};
 void()	army_grenade_atk8 =[	$shoot8, army_grenade_atk9	] {};
 void()	army_grenade_atk9 =[	$shoot9, army_run1	] {ai_face();};
 
-//======================================================================
-void() army_plasma_fire = 
-{
+void() army_plasma_fire = {
 	local vector org, vec;
 
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "weapons/plasma_fire.wav", 1, ATTN_NORM);
-
+	sound (self, CHAN_WEAPON, "ad171/weapons/plasma_fire.wav", 1, ATTN_NORM);
 	makevectors (self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	vec = normalize(self.enemy.origin - self.origin);
-
 	launch_plasma(org, vec, CT_PROJ_PLASMA, SPEED_PLASMA);
 };
 
-//----------------------------------------------------------------------
 void()	army_plasma_atk1 =[	$shoot1, army_plasma_atk2	] {
 	self.pain_finished = time + 1.3;
-	sound (self, CHAN_WEAPON, "enforcer/elim_pg_load.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM);};
 void()	army_plasma_atk2 =[	$shoot2, army_plasma_atk3	] {ai_face();};
 void()	army_plasma_atk3 =[	$shoot3, army_plasma_atk4	] {ai_face();};
 void()	army_plasma_atk4 =[	$shoot4, army_plasma_atk5	] {ai_face();};
@@ -540,9 +534,9 @@ void() monster_army_rocket =
 	if (random() < 0.35 && self.ammo_rockets < 1) self.ammo_rockets = 1;
 
 	// Extra load/fire sounds (from Quoth MOD)
-	precache_sound ("soldier/rocket_load.wav");
-	precache_sound ("soldier/rocket_fire.wav");
-	precache_sound ("soldier/rocket_hit.wav");
+	precache_sound ("ad171/soldier/rocket_load.wav");
+	precache_sound ("ad171/soldier/rocket_fire.wav");
+	precache_sound ("ad171/soldier/rocket_hit.wav");
 
 	if (self.poisonous) precache_model (MODEL_PROJ_ROCKETGRN);
 	
@@ -554,9 +548,7 @@ void() monster_army_rocket =
 	monster_army();
 };
 
-//----------------------------------------------------------------------
-void() monster_army_grenade =
-{	
+void() monster_army_grenade = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
 	// Check all spawn exceptions (monsters.qc)
@@ -598,7 +590,7 @@ void() monster_army_plasma =
 	if (random() < 0.35 && self.ammo_cells < 1) self.ammo_cells = 1;
 
 	// Extra load/fire sounds (from Quoth MOD)
-	precache_sound ("enforcer/elim_pg_load.wav");
+	precache_sound ("ad171/enforcer/elim_pg_load.wav");
 	precache_sound (SOUND_PLASMA_FIRE);
 	precache_sound (SOUND_PLASMA_HIT);
 	
@@ -608,7 +600,6 @@ void() monster_army_plasma =
 	monster_army();
 };
 
-//----------------------------------------------------------------------
 void() monster_army_spike = {	
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
@@ -631,7 +622,6 @@ void() monster_army_spike = {
 	monster_army();
 };
 
-//----------------------------------------------------------------------
 void() monster_army_cyborg = {	
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;

@@ -339,8 +339,8 @@ A func_wall that can be toggled on and off
 Originally from hip_part.qc by Hipnotic (Quake expansion pack 1)
 -------- KEYS --------
 targetname  : trigger entity (works with entity state system)
-noise       : Switched OFF sound (def=misc/laseroff.wav)
-noise1      : Switched ON sound (def=misc/laseron.wav)
+noise       : Switched OFF sound (def=ad171/misc/laseroff.wav)
+noise1      : Switched ON sound (def=ad171/misc/laseron.wav)
 noise2      : Touch damage sound (weapons/laser_hit.wav)
 wait        : wait between damage (def=0.5)
 dmg         : Contact damage (def=0)
@@ -392,9 +392,7 @@ void() func_togglewall_on =
 	sound(self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
 };
 
-//----------------------------------------------------------------------
-void() func_togglewall_off = 
-{
+void() func_togglewall_off = {
 	self.estate = ESTATE_OFF;
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
@@ -402,13 +400,11 @@ void() func_togglewall_off =
 	sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
 };
 
-//----------------------------------------------------------------------
-void() func_togglewall =
-{
+void() func_togglewall = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
-	if (self.noise == "") self.noise = "misc/laseroff.wav";
-	if (self.noise1 == "") self.noise1 = "misc/laseron.wav";
+	if (self.noise == "") self.noise = "ad171/misc/laseroff.wav";
+	if (self.noise1 == "") self.noise1 = "ad171/misc/laseron.wav";
 	if (self.noise2 == "") self.noise2 = "weapons/laser_hit.wav";
 	precache_sound(self.noise);
 	precache_sound(self.noise1);
@@ -755,12 +751,12 @@ void() func_laser =
 	// Pre-cache sounds and setup sound emitter
 	if (self.sounds > 0 && self.sounds < 3) {
 		if (self.sounds == 1) {
-			self.noise1 = "misc/laseron.wav";
-			self.noise2 = "misc/laseroff.wav";
+			self.noise1 = "ad171/misc/laseron.wav";
+			self.noise2 = "ad171/misc/laseroff.wav";
 		}
 		else if (self.sounds == 2) {
-			self.noise1 = "ambience/power_on.wav";
-			self.noise2 = "ambience/power_off.wav";
+			self.noise1 = "ad171/ambience/power_on.wav";
+			self.noise2 = "ad171/ambience/power_off.wav";
 		}
 		precache_sound(self.noise1);
 		precache_sound(self.noise2);
@@ -827,34 +823,27 @@ STARTOFF  : Starts off and waits for trigger
 Visual skill/chaos selection/update function
 
 ======================================================================*/
-void() func_pillar_particles = 
-{
-	// Any particle emitter targetnames?
-	if (self.target != "") {
-		// Find first one in world
-		self.enemy = find(world,targetname,self.target);
+void() func_pillar_particles = {
+	if (self.target != "") { // Any particle emitter targetnames? No need to check for more, only uses target.
+		self.enemy = find(world,targetname,self.target); // Find first one in world
 		while (self.enemy) {
-			// Found a particle emitter?
-			if (self.enemy.classtype == CT_PARTICLEEMIT) {
+			if (self.enemy.classtype == CT_PARTICLEEMIT) { // Found a particle emitter?
 				// pillar status?  0= +0 (on) 1= +A (off)
 				if (self.frame == 0) misc_particle_on(self.enemy);
 				else misc_particle_off(self.enemy);
 			}
-			// Keep searching for more targets in chain
-			self.enemy = find(self.enemy,targetname,self.target);
+			self.enemy = find(self.enemy,targetname,self.target); // Keep searching for more targets in chain
 		}
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_chaos_check = 
-{
+void() func_chaos_check = {
 	// If blocked by entity state system do nothing
 	if (self.estate & ESTATE_BLOCK) return;
 	if (!(self.spawnflags & FUNC_SKILLCHAOSMODE)) return;
 
 	// Read console variable
-	self.randomized = read_randflags();
+	self.randomized =  clean_randflags(cvar("scratch3"));
 	// Has the console variable been changed?
 	if (self.lefty != self.randomized) {
 		// Update current flag (lefty)
@@ -888,13 +877,13 @@ void() func_chaos_touch =
 	self.pausetime = time + self.waitmin;
 
 	// Read chaos mode flag (scratch3)
-	self.randomized = read_randflags();
+	self.randomized =  clean_randflags(cvar("scratch3"));
 	// Switch chaos mode on/off
 	if (self.randomized == self.style) {
 		disable_randflags();
 	}
 	else {
-		set_randflags(self.style);
+		cvar_set("scratch3", ftos(self.style));
 		if (self.message2 != "") centerprint(other, self.message2);
 		else centerprint(other,"Chaos mode has been enabled!\n");
 		Safe_stuffcmd (other, "bf\n");

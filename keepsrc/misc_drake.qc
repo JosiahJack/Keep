@@ -9,7 +9,7 @@ void() gibs_fly = {
 		ThrowGib(3,1);
 		ThrowGib(4,1);
 		ThrowGib(25,1);
-        sound (self, CHAN_AUTO, "gibfnt/gf_sbig.wav", 1, ATTN_NORM);
+        sound (self, CHAN_AUTO, "zerstorer/gibfnt/gf_sbig.wav", 1, ATTN_NORM);
     }
     else if (rnum < 0.45)
         ThrowGib(1,1);
@@ -19,9 +19,9 @@ void() gibs_fly = {
         ThrowGib(3,1);
 
     if (random() < 0.5)
-        sound (self, CHAN_VOICE, "gibfnt/gf_sprt1.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "zerstorer/gibfnt/gf_sprt1.wav", 1, ATTN_NORM);
     else
-        sound (self, CHAN_VOICE, "gibfnt/gf_sprt2.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "zerstorer/gibfnt/gf_sprt2.wav", 1, ATTN_NORM);
 
     self.nextthink = time + (random() * 5) + 3;
     self.think = gibs_fly;
@@ -47,10 +47,10 @@ void() misc_gibft = {
     precache_model ("progs/gib3.mdl");
     precache_model ("progs/h_player.mdl");
 	self.headmdl = "progs/h_player.mdl";
-    precache_sound ("gibfnt/gf_sprt1.wav");
-    precache_sound ("gibfnt/gf_sprt2.wav");
-    precache_sound ("gibfnt/gf_plop.wav");
-    precache_sound ("gibfnt/gf_sbig.wav");
+    precache_sound ("zerstorer/gibfnt/gf_sprt1.wav");
+    precache_sound ("zerstorer/gibfnt/gf_sprt2.wav");
+    precache_sound ("zerstorer/gibfnt/gf_plop.wav");
+    precache_sound ("zerstorer/gibfnt/gf_sbig.wav");
     //self.classname  = "blood";
     if (!self.wait) self.wait = 2;
     self.nextthink  = time + (random() * self.wait);
@@ -249,47 +249,36 @@ void() statue_crumble =
 
 // If a client stands on a statue, smash it.  Stops client from using
 // the statue as a platform to reach places he shouldn't yet.
-void() crumble_check =
-{
+void() crumble_check = {
     if (other.flags & FLx_CREATURE)
         if (other.movetype == MOVETYPE_WALK)
             if (other.health > 0)
 //                if (other.absmin_z >= self.absmax_z)
-                if (other.origin_z + other.mins_z >= self.origin_z + self.maxs_z)
-                {   // Crumble after touch loop.
+                if (other.origin_z + other.mins_z >= self.origin_z + self.maxs_z) { // Crumble after touch loop.
                     self.touch = SUB_Null;
                     self.nextthink = time + 0.1;
                     self.think = statue_crumble;
                 }
 };
-//- - - - - - - - -
 
-//============
 // --> QUAKED misc_statue (.8 .5 .5) (-32 -32 -24) (32 32 80)
 // A statue of the player.  Used in soeexit.bsp.
-//============
-void() misc_statue =
-{
-    if (world.model == "maps/soeexit.bsp")
-    {   // PM:  Replaced by bigger player model made for this purpose.
+void() misc_statue = {
+	local vector trig;
+	local float vx, vy;
+
+    if (world.model == "maps/soeexit.bsp") { // PM:  Replaced by bigger player model made for this purpose.
         self.mdl    = "progs/drake/hero.mdl";
         self.skin   = 0;
         self.frame  = 0;
         self.pos1   = '-32 -32 -24';
         self.pos2   = '32 32 80';
         //self.touch  = barrel_touch;     // Walk on statue.
-    }
-    else
-    {   // Default to angel statue.  Since the model is rectangular,
-        // calculate the bbox dimensions.
-        local   vector  trig;
-        local   float   vx, vy;
-
+    } else { // Default to angel statue.  Since the model is rectangular, calculate the bbox dimensions.
         trig_x = mathlib_cos(self.angles_y);
 		trig_y = mathlib_sin(self.angles_y);
         vx = fabs(16 * trig_x) & 31 + 32;
         vy = fabs(16 * trig_y) & 31 + 32;
-
         self.mdl    = "progs/drake/anglstat.mdl";
         self.skin   = 0;
         self.frame  = 0;
@@ -300,99 +289,58 @@ void() misc_statue =
         self.pos2_y = vy;
         self.pos2_z = 120;
         self.touch  = crumble_check;
-
 		self.gib1mdl = "progs/drake/imp_rock.mdl";
         precache_model (self.gib1mdl);
 		self.gib2mdl = "progs/drake/st_gib3.mdl";
         precache_model (self.gib2mdl);
-
         precache_sound ("drake/misc/wallbrk.wav");
     }
-
+	self.gibtype = GIBTYPE_STONE;
     misc_decor ();
 };
 
-//============
-// --> QUAKED misc_statue_angel (.8 .5 .5) (-60 -60 -0) (60 60 120)
 // A statue of Hexen2's praying angel.  For Arcanum.
-//============
 void() misc_statue_angel = {misc_statue ();};
 
-//==========================================================================
-//  Trees
-
-void(entity inflictor, entity attacker, float damage) tree_pain =
-{
-    if (self.pain_finished > time)
-        return;
+void(entity inflictor, entity attacker, float damage) tree_pain = {
+    if (self.pain_finished > time) return;
 
     sound (self, CHAN_VOICE, "drake/misc/met2wd.wav", 1, ATTN_NORM);
     self.pain_finished = time + 0.1;    //2;
 };
 
-void() tree_die =   //[ 0, SUB_Remove]
-{
+void() tree_die = {
     monster_death_use ();
-
     sound (self, CHAN_VOICE, "drake/misc/woodbrk.wav", 1, ATTN_NORM);
-
-// PM:  Use Drake gib functions so that carnivores can't eat tree splinters.
-    if (self.health > -50)
-        self.health = -50;  // So gibs have some velocity.
-
+    if (self.health > -50) self.health = -50;  // So gibs have some velocity.
 	ThrowGib(11, 1); // gib1mdl
 	ThrowGib(12, 1); // gib2mdl
 	ThrowGib(13, 1); // gib3mdl
 	ThrowGib(25, 1); // headmdl
-
-// PM:  Don't remove self now because we may be in the middle of a
-// damage chain, such as one made by T_RadiusDamage.
 	setmodel(self, "progs/null.spr");
     self.nextthink = time + 0.1;
-    self.think = SUB_Remove;
-
+    self.think = SUB_Remove; // PM:  Don't remove self now because we may be in the middle of a damage chain, such as one made by T_RadiusDamage.
     self.solid = SOLID_NOT;
     self.takedamage = DAMAGE_NO;
 };
 
-//============
-// --> QUAKED misc_tree (0 .5 .8) (-16 -16 0) (16 16 86)
-// A tree!
-//============
-void() misc_tree =
-{
+void() misc_tree = {
     self.cnt = floor(self.cnt);
-    if ((self.cnt < 0) || (self.cnt > 3))
-        self.cnt = 0;
+    if ((self.cnt < 0) || (self.cnt > 3)) self.cnt = 0;
 
-// FIXME:  Reverse for Drake.
-    if (!self.cnt)
-    {
+    if (!self.cnt) {
         self.mdl = "progs/drake/tree.mdl";
         self.pos1 = '-16 -16 0';
         self.pos2 = '16 16 128';
-
-        // Update 2/12/2011:  Snow skin for unf2.
-        if (world.tronyn & DJG_SNOW)
-            self.skin = 1;
-    }
-    else
-    {
+    } else {
         self.mdl = "progs/drake/tree_zer.mdl";
         self.pos1 = '-16 -16 0';
         self.pos2 = '16 16 86';
-        if (self.cnt == 2)
-            self.skin = 1;
-
-        // Update 2/12/2011:  Snow skin for unf2.
-        if (world.tronyn & DJG_SNOW)
-            self.skin = 2;
+        if (self.cnt == 2) self.skin = 1;
     }
 
-    if (self.spawnflags & 1)
-    {
-        if (!self.health)
-            self.health = 200;
+    if (self.spawnflags & 1) {
+        if (!self.health) self.health = 200;
         self.max_health = self.health;
         self.th_pain = tree_pain;
         self.th_die  = tree_die;
@@ -408,9 +356,8 @@ void() misc_tree =
         precache_sound ("drake/misc/met2wd.wav");
         precache_sound ("drake/misc/woodbrk.wav");
         self.bloodtype = 17;    // Roughly tree sap color.
-    }
-    else
-        self.takedamage = DAMAGE_NO;
+    } else self.takedamage = DAMAGE_NO;
 
+	self.gibtype = GIBTYPE_WOOD;
     misc_decor ();
 };

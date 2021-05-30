@@ -133,14 +133,14 @@ void() digst_close8 =[	112 , digst_close9] {};
 void() digst_close9 =[	111 , digst1] {};
 
 // Post-Melee
-void() digst1       =[  28,       digst2  ]     {self.takedamage = DAMAGE_NO; if (self.temperament != TEMPRA_COWARDLY) sound(self,CHAN_VOICE,"drake/cube/bc_gulp.wav",1,ATTN_NORM);};
+void() digst1       =[  28,       digst2  ]     {self.takedamage = DAMAGE_NO; if (self.temperament != TEMPRA_COWARDLY) sound(self,CHAN_VOICE,"zerstorer/cube/bc_gulp.wav",1,ATTN_NORM);};
 void() digst2       =[  29,       digst3  ]     {};
 void() digst3       =[  30,       digst4  ]     {};
 void() digst4       =[  31,       digst5  ]     {};
 void() digst5       =[  32,       digst6  ]     {};
 void() digst6       =[  33,       digst7  ]     {};
 void() digst7       =[  34,       digst8  ]     {};
-void() digst8       =[  35,       digst9  ]     {if (self.temperament != TEMPRA_COWARDLY) sound(self,CHAN_VOICE,"drake/cube/bc_gulp.wav",1,ATTN_NORM);};
+void() digst8       =[  35,       digst9  ]     {if (self.temperament != TEMPRA_COWARDLY) sound(self,CHAN_VOICE,"zerstorer/cube/bc_gulp.wav",1,ATTN_NORM);};
 void() digst9       =[  36,       digst10 ]     {};
 void() digst10      =[  37,       digst11 ]     {};
 void() digst11      =[  38,       digst12 ]     {};
@@ -310,7 +310,7 @@ void() info_fli = {
 	precache_sound ("ad171/swampling/death.wav");
 	precache_sound ("ad171/swampling/idle2.wav");
 	precache_sound ("ad171/swampling/idle3.wav");
-	precache_sound ("drake/cube/bc_gulp.wav");
+	precache_sound ("zerstorer/cube/bc_gulp.wav");
 	self.idle_sound = "ad171/swampling/idle3.wav";
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_NONE;
@@ -331,7 +331,7 @@ void() info_fli = {
 	self.use = test1;
 
   	if (self.deathstring == "") self.deathstring = " was ingested by a Mechanized Venus Fly Trap\n";
-
+	self.classmove = MON_MOVENONE;
 	monster_start();
 };
 
@@ -522,7 +522,7 @@ void() monster_flytrap = {
 	precache_sound ("ad171/swampling/death.wav");
 	precache_sound ("ad171/swampling/idle2.wav");
 	precache_sound ("ad171/swampling/idle3.wav");
-	precache_sound ("drake/cube/bc_gulp.wav");
+	precache_sound ("zerstorer/cube/bc_gulp.wav");
 	self.idle_sound = "ad171/swampling/idle3.wav";
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_NONE;
@@ -542,6 +542,6 @@ void() monster_flytrap = {
 	self.vulnerability = VULN_NORMAL;
 
 	if (self.deathstring == "") self.deathstring = " was ingested by a Venus Fly Trap\n";
-
+	self.classmove = MON_MOVENONE;
 	monster_start();
 };

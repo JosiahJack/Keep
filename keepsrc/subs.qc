@@ -1,6 +1,43 @@
-/*======================================================================
- SUB FUNCTIONS
-======================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: All
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 28
+//
+// Implements: Subroutines and Entity I/O System
+//
+// Description:
+// Various utility subroutine functions used everywhere as well as the main
+// target->targetname entity I/O system.  Runs all forms of target such as
+// target2, target3, target4, statetarget1 - statetarget32, killtarget, etc.
+//=============================================================================
+
 void() SUB_Null = {};
 void() SUB_Remove = {remove(self);};
 void(entity inflictor, entity attacker, float damage) SUB_Null_pain = {};
@@ -10,23 +47,16 @@ void(vector marker_org, float marker_type) spawn_marker;
 void(entity thekilled, entity attacker) AddToKills;
 void(entity targ) AddToTotals;
 
-//======================================================================
-// To determine if an entity is still active this function generates
-// an unique number that can be checked/shared between linked entities
-//----------------------------------------------------------------------
+// To determine if an entity is still active this function generates an unique number that can be checked/shared between linked entities.
 void(entity targ) gen_unique_no = {
-	// Check if target entity has an unique number already
-	if (targ.entno_unique == 0) targ.entno_unique = rint(random()*1000) * rint(random()*1000);
+	if (targ.entno_unique == 0) targ.entno_unique = rint(random()*1000) * rint(random()*1000); // Check if target entity has an unique number already
 };
 
-//======================================================================
-// Most of the monsters have an attack_offset setup to spawn their
-// proejctiles in the right location relative to their gun model
-// This function expects the makevectors has been done already
-// makevectors (self.angles); <--- if missing, vector will be rubbish!
-//----------------------------------------------------------------------
+// Most of the monsters have an attack_offset setup to spawn their proejctiles in the right location relative to their gun model.
+// This function expects the makevectors has been done already.  makevectors (self.angles); <--- if missing, vector will be rubbish!
 vector(vector attack_dir) attack_vector = {
 	local vector retvec;
+
 	retvec = v_forward * attack_dir_x;
 	retvec = retvec + (v_right * attack_dir_y);
 	retvec = retvec + (v_up * attack_dir_z);
@@ -34,40 +64,28 @@ vector(vector attack_dir) attack_vector = {
 };
 
 float(vector checkpos, vector abmax, vector abmin) SUB_CheckPointInBounds = {
-	if ((checkpos_x < abmax_x) && (checkpos_y < abmax_y) && (checkpos_z < abmax_z) && (checkpos_x > abmin_x) && (checkpos_y > abmin_y) && (checkpos_z > abmin_z))
-		return TRUE;
+	if ((checkpos_x < abmax_x) && (checkpos_y < abmax_y) && (checkpos_z < abmax_z) && (checkpos_x > abmin_x) && (checkpos_y > abmin_y) && (checkpos_z > abmin_z)) return TRUE;
 	return FALSE;
 };
 
-//======================================================================
-// Bmodels have a 0,0,0 origin key, need to calculate from mins/maxs
-// This function will return the true origin using mins/max vectors
-//----------------------------------------------------------------------
-vector(entity bmodel_ent) bmodel_origin =
-{
+// Bmodels have a 0,0,0 origin key, need to calculate from mins/maxs.  This function will return the true origin using mins/max vectors
+vector(entity bmodel_ent) bmodel_origin = {
 	local vector vdiff, vorigin;
 
 	// Calculate the middle point of the mins/maxs size vectors
 	vdiff_x = (bmodel_ent.maxs_x - bmodel_ent.mins_x) / 2;
 	vdiff_y = (bmodel_ent.maxs_y - bmodel_ent.mins_y) / 2;
 	vdiff_z = (bmodel_ent.maxs_z - bmodel_ent.mins_z) / 2;
-
-	// The mins vector is an absolute value of where the Bmodel is located
-	// Add mins vector to middle point to get true origin
-	// When bmodel do move they also update their origin co-ordinates
-	// So any additional movement needs to be added as well
+	
+	// The mins vector is an absolute value of where the Bmodel is located.  Add mins vector to middle point to get true origin
+	// When bmodel do move they also update their origin co-ordinates, so any additional movement needs to be added as well.
 	// This means that bmodels can be tracked by movement functions
 	vorigin = bmodel_ent.origin + bmodel_ent.mins + vdiff;
-	
-	// Return origin
-	return vorigin;
+	return vorigin; // Return origin
 };
 
-//----------------------------------------------------------------------
-// This is version is using the bbmin/bbmax entity keys instead
-// Useful if the entity is hidden and want to know origin
-vector(entity bmodel_ent) bmodel_bborigin =
-{
+// This is version is using the bbmin/bbmax entity keys instead.  Useful if the entity is hidden and want to know origin
+vector(entity bmodel_ent) bmodel_bborigin = {
 	local vector vdiff, vorigin;
 	vdiff_x = (bmodel_ent.bbmaxs_x - bmodel_ent.bbmins_x) * 0.5;
 	vdiff_y = (bmodel_ent.bbmaxs_y - bmodel_ent.bbmins_y) * 0.5;
@@ -76,11 +94,8 @@ vector(entity bmodel_ent) bmodel_bborigin =
 	return vorigin;
 };
 
-//======================================================================
 // Check for bmodel errors, model key empty (can crash engine)
-//----------------------------------------------------------------------
-float() check_bmodel_keys =
-{
+float() check_bmodel_keys = {
 	if (self.model == "") {
 		// this error can be fatal for most engines, show warning
 		dprint ("\b[BMODEL]\b "); dprint (self.classname);
@@ -109,74 +124,52 @@ float() check_bmodel_keys =
 	else return FALSE;
 };
 	
-/*======================================================================
-QuakeEd only writes a single float for angles (bad idea), 
-so up and down are just constant angles.
-======================================================================*/
-void() SetMovedir =
-{
+// QuakeEd only writes a single float for angles (bad idea), so up and down are just constant angles.
+void() SetMovedir = {
 	if (self.angles == '0 -1 0') self.movedir = '0 0 1';
 	else if (self.angles == '0 -2 0') self.movedir = '0 0 -1';
 	else {
 		makevectors (self.angles);
 		self.movedir = v_forward;
 	}
-	// Bmodels need angles key reset otherwise twisted on spawn
-	self.angles = '0 0 0';
+	self.angles = '0 0 0'; // Bmodels need angles key reset otherwise twisted on spawn
 };
 
-//----------------------------------------------------------------------
-float(vector check_vec) CheckZeroVector =
-{
-	if (check_vec_x == 0 && check_vec_y == 0 && check_vec_z == 0)
-		return TRUE;
+float(vector check_vec) CheckZeroVector = {
+	if (check_vec_x == 0 && check_vec_y == 0 && check_vec_z == 0) return TRUE;
 	else return FALSE;
 };
 
-//----------------------------------------------------------------------
-// Some entities have directional parameters (angles -> movedir)
-// This function searches for an angletarget entity (useful for tracking)
-// Always finds the first target key (will fail if multiple targets)
-//----------------------------------------------------------------------
-void(entity targ, float return_target) TargetMovedir =
-{
+// Some entities have directional parameters (angles -> movedir).  This function searches for an angletarget entity (useful for tracking).
+// Always finds the first target key (will fail if multiple targets).
+void(entity targ, float return_target) TargetMovedir = {
 	local entity angle_dest;
 	local vector targ_origin, angle_dest_origin;
+
+	if (targ.angletarget == "") return; // Exit if no angletarget defined
 	
-	// Exit if no angletarget defined
-	if (targ.angletarget == "") return;
-	
-	// Find angle target entity
-	angle_dest = find(world, targetname, targ.angletarget);
+	angle_dest = find(world, targetname, targ.angletarget); // Find angle target entity
 	if (angle_dest) {
-		// Check for Bmodel origin for targ/angle_dest
-		if (targ.bsporigin) targ_origin = bmodel_origin(targ);
+		if (targ.bsporigin) targ_origin = bmodel_origin(targ); // Check for Bmodel origin for targ/angle_dest
 		else targ_origin = targ.origin;
 		if (angle_dest.bsporigin) angle_dest_origin = bmodel_origin(angle_dest);
 		else angle_dest_origin = angle_dest.origin;
-		
-		// Calculate facing angle towards target
-		self.movedir = normalize(angle_dest_origin - targ_origin);
-		
-		// Return variables for calling function (def=FALSE)
-		if (return_target) {
+
+		self.movedir = normalize(angle_dest_origin - targ_origin); // Calculate facing angle towards target
+
+		if (return_target) { // Modify variables for the calling function (def=FALSE).  Black box activity detected.
 			self.movetarget = angle_dest;	// Target entity
 			self.dest1 = angle_dest_origin;	// Target origin
 		}
 	}
 };
 
-//----------------------------------------------------------------------
+// Used by thinks to automatically set default arguments
 void() TargetMovedirReturn = { TargetMovedir(self, TRUE); };
 
-/*======================================================================
-InitTrigger
-======================================================================*/
-void() InitTrigger =
-{
-	// trigger angles are used for one-way touches.  An angle of 0 is assumed
-	// to mean no restrictions, so use a yaw of 360 instead.
-	if (CheckZeroVector(self.angles) == FALSE) SetMovedir ();
+// Setup triggers.  Angles are used for one-way touches.  An angle of 0 is assumed to mean no restrictions, so use a yaw of 360 instead.
+void() InitTrigger = {
+	if (CheckZeroVector(self.angles) == FALSE) SetMovedir();
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_NONE;
 	self.mdl = self.model;		// Save model for later
@@ -200,57 +193,40 @@ void() InitPointTrigger = {
     setsize (self, v1, v2);     // Calling 'setmodel' resets entity size.
 };
 
-/*======================================================================
-SUB_CalcMove
-
-calculate self.velocity and self.nextthink to reach dest from
-self.origin traveling at speed
-======================================================================*/
-void() SUB_FacingAngle_Tick =
-{
-	// Decrease move/face time
-	self.faceangle_time = self.faceangle_time - self.faceangle_div;
-	// Is the movetime over? on to tidy up function
-	if (self.faceangle_time <= 0) SUB_CalcMoveDone();
+// Calculate self.velocity and self.nextthink to reach dest from self.origin traveling at speed.
+void() SUB_FacingAngle_Tick = {
+	self.faceangle_time = self.faceangle_time - self.faceangle_div; // Decrease move/face time
+	
+	if (self.faceangle_time <= 0) SUB_CalcMoveDone(); // Is the movetime over? on to tidy up function
 	else {
-		// Adjust angles slowly to match final angle
-		self.angles = self.angles + self.faceangle_inc;
-		// The 'moving time' does not always divide perfectly
-		// Allow for final remainder to be last division
-		if (self.faceangle_time < self.faceangle_div)
-			self.nextthink = time + self.faceangle_time;
+		self.angles = self.angles + self.faceangle_inc; // Adjust angles slowly to match final angle
+		
+		// The 'moving time' does not always divide perfectly.  Allow for final remainder to be last division
+		if (self.faceangle_time < self.faceangle_div) self.nextthink = time + self.faceangle_time;
 		else self.nextthink = time + self.faceangle_div;
-		// Keep ticking through this function
-		self.think = SUB_FacingAngle_Tick;
+		
+		self.think = SUB_FacingAngle_Tick; // Keep ticking through this function
 	}
 };
 
-//----------------------------------------------------------------------
-void(float movetime) SUB_FacingAngle_Setup =
-{
+void(float movetime) SUB_FacingAngle_Setup = {
 	local vector facediff;
 	local float divtime;
-	
-	// Convert angle difference to 0-360 scale
-	facediff = vectormod(self.finalangle - self.angles);
+
+	facediff = vectormod(self.finalangle - self.angles); // Convert angle difference to 0-360 scale
 	// Check for 0/360 boundary and reverse difference
 	if (facediff_x > 180) facediff_x = facediff_x - 360;
 	if (facediff_y > 180) facediff_y = facediff_y - 360;
 	if (facediff_z > 180) facediff_z = facediff_z - 360;
-	
-	// Tick rate of 0.05 is 20fps, the engine will struggle with <0.02
-	if (self.faceangle_div < 0.02) self.faceangle_div = 0.05;
+	if (self.faceangle_div < 0.02) self.faceangle_div = 0.05; // Tick rate of 0.05 is 20fps, the engine will struggle with <0.02
 	divtime = movetime / self.faceangle_div;
 	self.faceangle_inc = facediff / divtime;
-	
 	self.faceangle_time = movetime;
-	// Nothing has moved yet, so wait a bit
-	self.nextthink = time + self.faceangle_div;
+	self.nextthink = time + self.faceangle_div; // Nothing has moved yet, so wait a bit
 	self.think = SUB_FacingAngle_Tick;
 };
 
-void(vector tdest, float tspeed, void() func) SUB_CalcMove =
-{
+void(vector tdest, float tspeed, void() func) SUB_CalcMove = {
 	local vector vdestdelta;
 	local float len, traveltime;
 
@@ -258,13 +234,10 @@ void(vector tdest, float tspeed, void() func) SUB_CalcMove =
 	self.think1 = func;					// Finished moving function
 	self.finaldest = tdest;				// Final origin (Overwrite existing values)
 	self.think = SUB_CalcMoveDone;		// Tidy up function
-
 	vdestdelta = tdest - self.origin;	// set destdelta to the vector needed to move
 	len = vlen (vdestdelta);			// calculate length of vector
 	traveltime = len / tspeed;			// divide by speed to get time to reach dest
-
-	// Check if faceangle is active on a func bmodel mover?
-	if (self.faceangle > 0 && self.bsporigin > 0) self.faceangle = FALSE;
+	if (self.faceangle > 0 && self.bsporigin > 0) self.faceangle = FALSE; // Check if faceangle is active on a func bmodel mover?
 	
 	// If move distance or time too small, snap to final location
 	if (traveltime < 0.1 || tdest == self.origin) {
@@ -274,186 +247,110 @@ void(vector tdest, float tspeed, void() func) SUB_CalcMove =
 		else self.nextthink = time + 0.1;
 		return;
 	}
-	
+
+	if (self.classname == "fliquid") self.fmover = "moving"; // Update for moving liquids - from extras_r4/r5.  No sense having a separate SUB_fCalcMove for a one line difference.
+
 	// scale the destdelta vector by the time spent traveling to get velocity
 	self.velocity = vdestdelta * (1/traveltime);	// qcc won't take vec/float
 	if (self.bsporigin > 0) self.nextthink = self.ltime + traveltime;
 	else self.nextthink = time + traveltime;
-	
-	// Check for any facing angle functionality
-	if (self.faceangle > 0) SUB_FacingAngle_Setup(traveltime);
+
+	if (self.faceangle > 0) SUB_FacingAngle_Setup(traveltime); // Check for any facing angle functionality
 };
 
-/*======================================================================
-After moving, set origin to exact final destination
-======================================================================*/
-void()  SUB_CalcMoveDone =
-{
+// After moving, set origin to exact final destination rather than last value that is very very close but not quite.
+void()  SUB_CalcMoveDone = {
+	if (self.classname == "fliquid") self.fmover = string_null; // Update for moving liquids - from extras_r4/r5
 	self.velocity = '0 0 0';
 	setorigin(self, self.finaldest);
 	self.nextthink = -1;
 	if (self.think1) self.think1();
 };
 
-//----------------------------------------------------------------------
-// Not used anywhere
-//----------------------------------------------------------------------
-void(entity ent, vector tdest, float tspeed, void() func) SUB_CalcMoveEnt =
-{
-	local entity	stemp;
-	stemp = self;
-	self = ent;
-
-	SUB_CalcMove (tdest, tspeed, func);
-	self = stemp;
-};
-
-/*======================================================================
-SUB_CalcMoveEntity
-
-calculate self.velocity and self.nextthink to reach dest from
-self.origin traveling at speed
-======================================================================*/
-void() SUB_MoveEntityDone =
-{
-	self.movetype = self.classmove;
-	SUB_CalcMoveDone();
-};
-
-//----------------------------------------------------------------------
-void(vector tdest, float tspeed, void() func) SUB_CalcMoveEntity =
-{
-	local vector	vdestdelta;
-	local float		traveltime;
-
-	if (!tspeed) tspeed = 4;			// Create default travel time if none specified
-	self.classmove = self.movetype;		// save previous movetype
-	self.movetype = MOVETYPE_FLY;		// Allow entity to move smoothly
-	self.think1 = func;					// Store final function
-	self.finaldest = tdest;				// Store final destination
-	
-	vdestdelta = tdest - self.origin;	// set destdelta to the vector needed to move
-	traveltime = 1 / tspeed;					// Work out percentage travel velocity
-	self.velocity = vdestdelta * traveltime;	// Calc time travel fraction
-
-	self.nextthink = time + tspeed;
-	self.think = SUB_MoveEntityDone;
-};
-
-/*======================================================================
-SUB_CalcAngleMove
-
-calculate self.avelocity and self.nextthink to reach destangle from
-self.angles rotating 
-
-The calling function should make sure self.think is valid
-======================================================================*/
-void(vector destangle, float tspeed, void() func) SUB_CalcAngleMove =
-{
-local vector	destdelta;
-local float		len, traveltime;
-
-	if (!tspeed)  dprint("[SUB_CALC_ANGLE] No speed is defined!");
-		
-	// set destdelta to the vector needed to move
-	destdelta = destangle - self.angles;
-	
-	// calculate length of vector
-	len = vlen (destdelta);
-	
-	// divide by speed to get time to reach dest
-	traveltime = len / tspeed;
-
-	// set nextthink to trigger a think when dest is reached
-	self.nextthink = self.ltime + traveltime;
-
-	// scale the destdelta vector by the time spent traveling to get velocity
-	self.avelocity = destdelta * (1 / traveltime);
-	
-	self.think1 = func;
-	self.finalangle = destangle;
-	self.think = SUB_CalcAngleMoveDone;
-};
-
-/*======================================================================
-After rotating, set angle to exact final angle
-======================================================================*/
-void() SUB_CalcAngleMoveDone =
-{
-	self.angles = self.finalangle;
-	self.avelocity = '0 0 0';
-	self.nextthink = -1;
-	if (self.think1)
-		self.think1();
-};
-
-//----------------------------------------------------------------------
-// Not used anywhere
-//----------------------------------------------------------------------
-void(entity ent, vector destangle, float tspeed, void() func) SUB_CalcAngleMoveEnt =
-{
-	local entity		stemp;
-	stemp = self;
-	self = ent;
-	SUB_CalcAngleMove (destangle, tspeed, func);
-	self = stemp;
-};
-
-//----------------------------------------------------------------------
-void() DelayThink =
-{
+void() DelayThink = {
 	activator = self.enemy;
 	SUB_UseTargets ();
 	remove(self);
 };
 
-/*======================================================================
-SUB_UseTargets
+// Checks if an entity has any target variables defined and returns TRUE if so.  Useful to know if a monster should not be removed before runing targets.
+float(entity t) HasTargets = {
+	if (t.killtarget ||
+		t.target ||
+		t.target2 ||
+		t.target3 ||
+		t.target4 ||
+		t.statetarget1 ||
+		t.statetarget2 ||
+		t.statetarget3 ||
+		t.statetarget4 ||
+		t.statetarget5 ||
+		t.statetarget6 ||
+		t.statetarget7 ||
+		t.statetarget8 ||
+		t.statetarget9 ||
+		t.statetarget10 ||
+		t.statetarget11 ||
+		t.statetarget12 ||
+		t.statetarget13 ||
+		t.statetarget14 ||
+		t.statetarget15 ||
+		t.statetarget16 ||
+		t.statetarget17 ||
+		t.statetarget18 ||
+		t.statetarget19 ||
+		t.statetarget20 ||
+		t.statetarget21 ||
+		t.statetarget22 ||
+		t.statetarget23 || // ridiculous ain't it!
+		t.statetarget24 ) return TRUE;
+	return FALSE;
+};
 
-the global "activator" should be set to the entity that initiated the firing.
-
-If self.delay is set, a DelayedUse entity will be created that will actually
-do the SUB_UseTargets after that many seconds have passed.
-
-Centerprints any self.message to the activator.
-
-Removes all entities with a targetname that match self.killtarget,
-and removes them, so some events can remove other triggers.
-
-Search for (string)targetname in all entities that
-match (string)self.target and call their .use function
-======================================================================*/
+// Clear all target strings
+void (entity t) clear_trigstrs = {
+	t.killtarget = string_null;
+	t.target = string_null;
+	t.target2 = string_null;
+	t.target3 = string_null;
+	t.target4 = string_null;
+	t.statetarget1 = string_null;
+	t.statetarget2 = string_null;
+	t.statetarget3 = string_null;
+	t.statetarget4 = string_null;
+	t.statetarget5 = string_null;
+	t.statetarget6 = string_null;
+	t.statetarget7 = string_null;
+	t.statetarget8 = string_null;
+	t.statetarget9 = string_null;
+	t.statetarget10 = string_null;
+	t.statetarget11 = string_null;
+	t.statetarget12 = string_null;
+	t.statetarget13 = string_null;
+	t.statetarget14 = string_null;
+	t.statetarget15 = string_null;
+	t.statetarget16 = string_null;
+	t.statetarget17 = string_null;
+	t.statetarget18 = string_null;
+	t.statetarget19 = string_null;
+	t.statetarget20 = string_null;
+	t.statetarget21 = string_null;
+	t.statetarget22 = string_null;
+	t.statetarget23 = string_null;
+	t.statetarget24 = string_null;
+};
 
 void(string text) Mass_Centerprint;
 
+// Runs all targets for entity I/O.  The global "activator" should be set to the entity that initiated the firing.
+// If self.delay is set, a DelayedUse entity will be created that will actually do the SUB_UseTargets after that many seconds have passed.  Centerprints any self.message to the activator.
+// Removes all entities with a targetname that match self.killtarget, and removes them, so some events can remove other triggers.
+// Search for (string)targetname in all entities that match (string)self.target and call their .use function
 void() SUB_UseTargets = {
 	local entity t, stemp, otemp, act;
 
-	// -Qmaster - removed the following check due to the fact that it breaks certain hacks and logic (e.g. the high animation rate func_wall hack by Preach)
-	//----------------------------------------------------------------------
-	// Check for recursive loops!?!
-	//----------------------------------------------------------------------
-	/*if (self.targetname != "") {
-		if (self.targetname == self.target || self.targetname == self.target2) {
-			dprint("\n----------------------------------------\n");
-			dprint("\b[USE_TARGET]\b target == targetname, really bad!!!\n");
-			dprint(self.classname);
-			dprint(" ("); dprint(self.targetname); dprint(") at "); 
-			if (self.bsporigin) dprint(vtos(bmodel_origin(self)));
-			else dprint(vtos(self.origin));
-			dprint("\ntarg ("); dprint(self.target);
-			dprint(") targ2 ("); dprint(self.target2);
-			dprint(") kill ("); dprint(self.killtarget);
-			dprint(")\n----------------------------------------\n");
-			return;
-		}
-	}*/
-	//----------------------------------------------------------------------
-	// check for a delay
-	//----------------------------------------------------------------------
-	if (self.delay) {
-	// create a temp object to fire at a later time
-		t = spawn();
+	if (self.delay) { // check for a delay
+		t = spawn(); // create a temp object to fire at a later time after time + self.delay
 		t.classname = "DelayedUse";
 		t.classtype = CT_TRIGRELAYDELAY;
 		t.owner = self;
@@ -494,62 +391,37 @@ void() SUB_UseTargets = {
 		return;
 	}
 	
-	//----------------------------------------------------------------------
-	// Check if previous delay has been disabled
-	// Unfortunately start off = OFF state and not easy to check for
-	// because some entities use that spawnflag bit for other things!
-	//----------------------------------------------------------------------
-	if (self.classtype == CT_TRIGRELAYDELAY) {
-		if (self.owner.estate & ESTATE_DISABLE) return;
-	}
+	// Check if previous delay has been disabled.  Unfortunately start off = OFF state and not easy to check for because some entities use that spawnflag bit for other things!
+	if (self.classtype == CT_TRIGRELAYDELAY && (self.owner.estate & ESTATE_DISABLE)) return;
 
 	// print any messages
 	if (activator.flags & FL_CLIENT && self.message != "") {
-		if (coop > 0) {
-			// Write message to all clients
-			// msg_entity = self;
-			// WriteByte (MSG_ALL, SVC_CENTERPRINT);
-			// WriteString (MSG_ALL, self.message);
-			Mass_Centerprint(self.message);
-		}
-		// Write message to single client
-		else centerprint (activator, self.message);
-		// Default noise = classic beep beep sound
-		if (self.noise == "") sound (activator, CHAN_VOICE, SOUND_TALK, 1, ATTN_NORM);
+		if (coop > 0) Mass_Centerprint(self.message);
+		else centerprint (activator, self.message); // Write message to single client
+		
+		if (self.noise == "") sound (activator, CHAN_VOICE, SOUND_TALK, 1, ATTN_NORM); // Default noise = classic boop boop sound
 	}
 
-	//----------------------------------------------------------------------
-	// kill targets
-	// I really do hate this function because there is hardly any checks
-	// on entities being removed, added a player check for sanity!
-	//----------------------------------------------------------------------
+	// sock: I really do hate this function because there is hardly any checks on entities being removed; added a player check for sanity!
 	if (self.killtarget != "") {
 		t = find (world, targetname, self.killtarget);
 		while(t) {
-			// Check for activate mosnters? Tidy up kill counter
-			if (t.flags & FL_MONSTER && t.health > 0) {
+			if (t.flags & FL_MONSTER && t.health > 0) { // Check for activate mosnters? Tidy up kill counter
 				if (t.nomonstercount) AddToTotals(self); // If a monster marked with no monster count dies update HUD totals to reflect death properly
 				AddToKills(self,activator);
 			}
-			// Added extra check to prevent player client removal!?!
-			if (!(t.flags & FL_CLIENT)) {
-				// Try to minimize the entity chain damage, check for
-				// entity attachments and delete them as well!
+			if (!(t.flags & FL_CLIENT)) { // Added extra check to prevent player client removal!?!
+				// Try to minimize the entity chain damage, check for entity attachments and delete them as well!
 				if (t.attachment) remove(t.attachment);
 				if (t.attachment2) remove(t.attachment2);
 				if (t.attachment3) remove(t.attachment3);
 				// Make sure any unique ent number is reset
 				if (t.entno_unique > 0) t.entno_unique = 0;
-				// Remove entity from chain list
-				remove (t);
+				remove (t); // Remove entity from chain list.  BOOM! She gone
 			}
-			// Find the next killtarget
-			t = find (t, targetname, self.killtarget);
+			t = find (t, targetname, self.killtarget); // Find the next killtarget
 		} 
 	}
-	//----------------------------------------------------------------------
-	// fire targets
-	//----------------------------------------------------------------------
 	if (self.target != "") {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.target);
@@ -568,7 +440,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.target);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.target2 != "") {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.target2);
@@ -586,7 +457,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.target2);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.target3 != "") {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.target3);
@@ -604,7 +474,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.target3);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.target4 != "") {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.target4);
@@ -622,7 +491,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.target4);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget1 != "" && (globalstate & GLOBALSTATE_1)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget1);
@@ -640,7 +508,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget1);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget2 != "" && (globalstate & GLOBALSTATE_2)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget2);
@@ -658,7 +525,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget2);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget3 != "" && (globalstate & GLOBALSTATE_3)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget3);
@@ -676,7 +542,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget3);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget4 != "" && (globalstate & GLOBALSTATE_4)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget4);
@@ -694,7 +559,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget4);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget5 != "" && (globalstate & GLOBALSTATE_5)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget5);
@@ -712,7 +576,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget5);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget6 != "" && (globalstate & GLOBALSTATE_6)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget6);
@@ -730,7 +593,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget6);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget7 != "" && (globalstate & GLOBALSTATE_7)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget7);
@@ -748,7 +610,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget7);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget8 != "" && (globalstate & GLOBALSTATE_8)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget8);
@@ -766,7 +627,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget8);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget9 != "" && (globalstate & GLOBALSTATE_9)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget9);
@@ -784,7 +644,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget9);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget10 != "" && (globalstate & GLOBALSTATE_10)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget10);
@@ -802,7 +661,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget10);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget11 != "" && (globalstate & GLOBALSTATE_11)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget11);
@@ -820,7 +678,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget11);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget12 != "" && (globalstate & GLOBALSTATE_12)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget12);
@@ -838,7 +695,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget12);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget13 != "" && (globalstate & GLOBALSTATE_13)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget13);
@@ -856,7 +712,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget13);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget14 != "" && (globalstate & GLOBALSTATE_14)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget14);
@@ -874,7 +729,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget14);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget15 != "" && (globalstate & GLOBALSTATE_15)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget15);
@@ -892,7 +746,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget15);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget16 != "" && (globalstate & GLOBALSTATE_16)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget16);
@@ -910,7 +763,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget16);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget17 != "" && (globalstate & GLOBALSTATE_17)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget17);
@@ -928,7 +780,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget17);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget18 != "" && (globalstate & GLOBALSTATE_18)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget18);
@@ -946,7 +797,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget18);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget19 != "" && (globalstate & GLOBALSTATE_19)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget19);
@@ -964,7 +814,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget19);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget20 != "" && (globalstate & GLOBALSTATE_20)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget20);
@@ -982,7 +831,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget20);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget21 != "" && (globalstate & GLOBALSTATE_21)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget21);
@@ -1000,7 +848,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget21);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget22 != "" && (globalstate & GLOBALSTATE_22)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget22);
@@ -1018,7 +865,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget22);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget23 != "" && (globalstate & GLOBALSTATE_23)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget23);
@@ -1036,7 +882,6 @@ void() SUB_UseTargets = {
 			t = find (t, targetname, self.statetarget23);
 		} 
 	}
-	//----------------------------------------------------------------------
 	if (self.statetarget24 != "" && (globalstate & GLOBALSTATE_24)) {
 		act = activator;	// ID Code - Never switch around, not sure why it is here?
 		t = find (world, targetname, self.statetarget24);
@@ -1056,40 +901,38 @@ void() SUB_UseTargets = {
 	}
 };
 
-/*======================================================================
- SUB_AttackFinished
-	in nightmare mode, all attack_finished times become 0
-	some monsters refire twice automatically (using .cnt variable)
-	Change nightmare to be less range spam and better time scaling
-======================================================================*/
-void(float normal) SUB_AttackFinished = {
-	local float nightadj;	// Easier to work out percentage
+// Safe wrapper function to use instead of trigger_strs so all targets get ran and not just one
+void(entity t) SUB_UseTargetsOnEnt = {
+	local entity stemp;
+	
+	if (!HasTargets(t)) return; // No targets to run
+	stemp = self;
+	self = t;
+	SUB_UseTargets();
+	self = stemp;
+};
 
-	self.cnt = 0;			// reset checkfire counter
+// Increases attack finished by specified value.  In nightmare mode, all attack_finished times become 0.
+// Some monsters refire twice automatically (using .cnt variable).  Change nightmare to be less range spam and better time scaling.
+void(float normal) SUB_AttackFinished = {
+	local float nightadj; // Easier to work out percentage
+
+	self.cnt = 0; // reset checkfire counter
 	if (skill == SKILL_NIGHTMARE) {
-		// Nightmare mode is just endless range attacks!
-		// I never thought this was a good way to end skill levels
-		// Changed nightmare mode to 50-75% decrease in time
-		// Exceptions to nightmare mode (minion spawning) - 75-100% time
+		// Nightmare mode is just endless range attacks!  I never thought this was a good way to end skill levels.
+		// Changed nightmare mode to 50-75% decrease in time.  Exceptions to nightmare mode (minion spawning) - 75-100% time.
 		nightadj = 0.5 + (random()*0.25);
 		if (self.minion_active) nightadj = nightadj + 0.25;
 		// The original ID shamblers were lightning turrets on Nightmare
-		// Shamblers don't scale with skill levels in AD because
-		// they don't have projectiles, so they need a switch instead
-		// On Nightmare skill Shamblers go from 2-4s to 1s!
-		// Instead of 2-4s, NM is 0.6-1.2s, Average 1.2s +2 frames
+		// Shamblers don't scale with skill levels in AD because they don't have projectiles, so they need a switch instead.
+		// On Nightmare skill Shamblers go from 2-4s to 1s!  Instead of 2-4s, NM is 0.6-1.2s, Average 1.2s +2 frames.
 		if (self.classtype == CT_MONSHAM) nightadj = 0.4;
 		self.attack_finished = time + (normal*nightadj);
-	}
-	// Easy, Nornal and Hard skill all pass through, no change
-	else self.attack_finished = time + normal;
+	} else self.attack_finished = time + normal; // Easy, Nornal and Hard skill all pass through, no change
 };
 
-//----------------------------------------------------------------------
 // Used by soliders and enforcers (special double fire mode)
-//----------------------------------------------------------------------
-void (void() thinkst) SUB_CheckRefire =
-{
+void (void() thinkst) SUB_CheckRefire = {
 	if (skill != SKILL_NIGHTMARE) return;
 	if (self.cnt == 1) return;
 	if (!visible (self.enemy)) return;
@@ -1097,85 +940,25 @@ void (void() thinkst) SUB_CheckRefire =
 	self.think = thinkst;
 };
 
-//----------------------------------------------------------------------
-// Not used anywhere in QC
-//----------------------------------------------------------------------
-/*float() SUB_CountTargets =
-{
-	local entity t;
-	local float i;
-	
-	i = 0;
-	if (self.target != "") {
-		t = world;
-		do	{
-			t = find(t, targetname, self.target);
-			if (!t) break;
-			i = i + 1;
-		} while ( 1 );
-	}
-	return i;
-};*/
-
-/*======================================================================
- ChooseTurn 
- - can't find any reference to this in the QC
-======================================================================*/
-/*void(vector dest3) ChooseTurn =
-{
-	local vector	dir, newdir;
-	
-	dir = self.origin - dest3;
-
-	newdir_x = trace_plane_normal_y;
-	newdir_y = 0 - trace_plane_normal_x;
-	newdir_z = 0;
-	
-	if (dir * newdir > 0) {
-		dir_x = 0 - trace_plane_normal_y;
-		dir_y = trace_plane_normal_x;
-	}
-	else {
-		dir_x = trace_plane_normal_y;
-		dir_y = 0 - trace_plane_normal_x;
-	}
-
-	dir_z = 0;
-	self.ideal_yaw = vectoyaw(dir);	
-};*/
-
-/*======================================================================
- SPAWN_TFOG and SPAWN_TDEATH
- 
- These functions were originally in triggers.qc, but are used all
- over the place by monsters, items and players. Subs seems a better
- home for these generic functions.
-
- ======================================================================*/
-void() play_teleport =
-{
+void() play_teleport = {
 	self.lip = random() * 5;
 	if (self.lip < 1) self.noise = "misc/r_tele1.wav";
 	else if (self.lip < 2) self.noise = "misc/r_tele2.wav";
 	else if (self.lip < 3) self.noise = "misc/r_tele3.wav";
 	else if (self.lip < 4) self.noise = "misc/r_tele4.wav";
 	else self.noise = "misc/r_tele5.wav";
-
 	sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 	self.nextthink = time + 2;	// Allow time for the sound to finish
 	self.think = SUB_Remove;	// tidy up function
 };
 
-//----------------------------------------------------------------------
-void(vector org) spawn_tfog =
-{
+void(vector org) spawn_tfog = {
 	local entity spawneffect;
 	
 	spawneffect = spawn ();
 	spawneffect.origin = org;
 	spawneffect.nextthink = time + 0.2;
 	spawneffect.think = play_teleport;
-
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_TELEPORT);
 	WriteCoord (MSG_BROADCAST, org_x);
@@ -1185,16 +968,11 @@ void(vector org) spawn_tfog =
 
 void(entity targ, float hpminimum, float had_regen) Client_CheckMaxHP;
 
-//----------------------------------------------------------------------
-void() tdeath_touch =
-{
-	// Cannot telefrag yourself!?!
-	if (other == self.owner) return;
-	// Check if found a breakable than cannot be broken
-	if (ai_foundbreakable(self, other, FALSE)) return;
+void() tdeath_touch = {
+	if (other == self.owner) return; // Cannot telefrag yourself!?!
+	if (ai_foundbreakable(self, other, FALSE)) return; // Check if found a breakable than cannot be broken
 	
-	// A boss cannot be telefragged (except shub)
-	// Telefrag entity trying to telefrag boss instead!?!
+	// A boss cannot be telefragged (except shub).  Telefrag entity trying to telefrag boss instead!?!
 	if (other.bossflag == TRUE) {
 		if (other.classtype != CT_MONIDSHUB) {
 			T_Damage (self.owner, other, other, MEGADEATH, NOARMOR); // Chaos cannot protect you from bosses!
@@ -1202,11 +980,9 @@ void() tdeath_touch =
 		}
 	}
 
-	// frag anyone who teleports in on top of an invincible player
-	if (other.flags & FL_CLIENT) {
+	if (other.flags & FL_CLIENT) { // Frag anyone who teleports in on top of an invincible player
 		if (other.invincible_finished > time || other.perms & POW_ARMORCHAOS) self.classname = "teledeath2";
-		// other monsters explode themselves
-		if ( !(self.owner.flags & FL_CLIENT) ) {
+		if ( !(self.owner.flags & FL_CLIENT) ) { // other monsters explode themselves
 			T_Damage (self.owner, self, self, MEGADEATH, NOARMOR);
 			return;
 		}
@@ -1225,9 +1001,7 @@ void() tdeath_touch =
 	}
 };
 
-//----------------------------------------------------------------------
-void(vector org, entity death_owner) spawn_tdeath =
-{
+void(vector org, entity death_owner) spawn_tdeath = {
 	local entity death;
 
 	death = spawn();
@@ -1241,40 +1015,5 @@ void(vector org, entity death_owner) spawn_tdeath =
 	death.touch = tdeath_touch;
 	death.nextthink = time + 0.2;
 	death.think = SUB_Remove;
-	
-	// This is extremely costly on the engine because it re-checks
-	// every trigger in the map to see if it is touching something
-	force_retouch = 2;
+	force_retouch = 2; // !! This is extremely costly on the engine because it re-checks every trigger in the map to see if it is touching something.
 };
-
-/*======================================================================
- SUB_Elevat (Alternative version, not used anymore, left for reference)
-  Calculates the Elevation for Z Aware monsters
-  * Original formula WIKI with QC help from ericw
-======================================================================*/
-/*float(vector source, vector targ, float zspeed) SUB_Elevat =
-{
-	local float g;				// Gravity
-	local float targx, targy;	// Sub parts of distance
-	local float v2, v4;			// speed*speed & speed*speed*speed*speed
-	local vector dist;			// Distance to travel	
-	local float ang, theta;
-	
-	g = map_gravity;			// default 800
-	dist = targ - source;		// vector distance
-	targy = dist_z;				// Up direction
-	dist_z = 0;
-	targx = vlen(dist);			// X,Y direction
-
-	v2 = zspeed * zspeed;
-	v4 = v2 * v2;
-	
-	// First part of equation
-	ang = v4 - (g * ( (g * targx * targx) + (2 * targy * v2) ) );
-	// Cap elevation angle at default value
-	//if(ang < 0) return ELEV_DEFAULT;
-
-	// Second section of equation
-	theta = mathlib_atan2 ((v2 - mathlib_sqrt(ang)) / (g * targx),1);
-	return theta;
-}; */

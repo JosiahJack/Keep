@@ -1,12 +1,45 @@
-/*======================================================================
-Intermission Camera System
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Arcane Dimensions (AD)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 5
+//
+// Implements: Intermission Camera System
+//
+// Description:
+// SetupIntermissionCamera - Find/setup all camera(s)
+// StartIntermissionCamera - Setup player ready for viewing
+// NextIntermissionCamera - Move player to first/next camera
+// CycleIntermissionCamera - wait for player input
+// FinishIntermissionCamera - No more viewing
+//=============================================================================
 
- SetupIntermissionCamera - Find/setup all camera(s)
- StartIntermissionCamera - Setup player ready for viewing
- NextIntermissionCamera - Move player to first/next camera
- CycleIntermissionCamera - wait for player input
- FinishIntermissionCamera - No more viewing
-======================================================================*/
 float CAMERA_NOINTERMIS = 1;	// Will not work if intermission active
 float CAMERA_SOLID = 2;			// Intermission camera interacts with world
 float INTERMISSION_ACTIVE = 2;	// Regular Intermission active
@@ -14,18 +47,14 @@ float INTERMISSION_RUNE = 3;	// Check for end of episode
 float INTERMISSION_ENDGAME = 4;	// End of game!?! (set in oldone.qc)
 float INTERMISSION_CAMERA = 10;	// Special Camera only mode
 
-//----------------------------------------------------------------------
-void() SetupIntermissionCamera = 
-{
+void() SetupIntermissionCamera = {
 	local entity intercam, prevcam;
 
-	// Is the infomission camera chain been setup already?
-	if (camera_ent) return;	
+	if (camera_ent) return;	// Intermission camera chain been setup already?
 
 	// Try to find the first intermission camera
 	intercam = find (world, classname, "info_intermission");
 	prevcam = world;
-	
 	if (intercam) {
 		// Cycle through all intermission cameras and link them together
 		while(intercam) {
@@ -45,8 +74,7 @@ void() SetupIntermissionCamera =
 		prevcam.owner = camera_ent;
 		dprint("\b[CAMERA]\b Intermissions found (");
 		dprint(ftos(camera_ent.count)); dprint(")\n");
-	}
-	else {
+	} else {
 		dprint("\b[CAMERA]\b Intermissions missing!\n");
 		// Cannot find any info_intermission cameras, so use player start
 		// If there is no player start then use player's last location!
@@ -68,18 +96,14 @@ void() SetupIntermissionCamera =
 	}
 };
 
-//----------------------------------------------------------------------
-void() FinishIntermissionCamera =
-{
+void() FinishIntermissionCamera = {
 	// skip any text in deathmatch
 	if (deathmatch) { GotoNextMap (); return; }
 	
 	intermission_exittime = time + 1;
 	intermission_running = intermission_running + 1;
 
-	//----------------------------------------------------------------------
-	// run some text if at the end of an each episode
-	//----------------------------------------------------------------------
+	// Run some text if at the end of an each episode
 	if (intermission_running == INTERMISSION_RUNE) {
 		if (world.model == "maps/e1m7.bsp") {
 			WriteByte (MSG_ALL, SVC_CDTRACK);
@@ -94,41 +118,31 @@ void() FinishIntermissionCamera =
 				WriteString (MSG_ALL, "As the corpse of the monstrous entity\nChthon sinks back into the lava whence\nit rose, you grip the Rune of Earth\nMagic tightly. Now that you have\nconquered the Dimension of the Doomed,\nrealm of Earth Magic, you are ready to\ncomplete your task. A Rune of magic\npower lies at the end of each haunted\nland of Quake. Go forth, seek the\ntotality of the four Runes!");
 			}
 			return;
-		}
-		else if (world.model == "maps/e2m6.bsp") {
+		} else if (world.model == "maps/e2m6.bsp") {
 			WriteByte (MSG_ALL, SVC_CDTRACK);
 			WriteByte (MSG_ALL, 2);
 			WriteByte (MSG_ALL, 3);
-
 			WriteByte (MSG_ALL, SVC_FINALE);
 			WriteString (MSG_ALL, "The Rune of Black Magic throbs evilly in\nyour hand and whispers dark thoughts\ninto your brain. You learn the inmost\nlore of the Hell-Mother; Shub-Niggurath!\nYou now know that she is behind all the\nterrible plotting which has led to so\nmuch death and horror. But she is not\ninviolate! Armed with this Rune, you\nrealize that once all four Runes are\ncombined, the gate to Shub-Niggurath's\nPit will open, and you can face the\nWitch-Goddess herself in her frightful\notherworld cathedral.");
 			return;
-		}
-		else if (world.model == "maps/e3m6.bsp") {
+		} else if (world.model == "maps/e3m6.bsp") {
 			WriteByte (MSG_ALL, SVC_CDTRACK);
 			WriteByte (MSG_ALL, 2);
 			WriteByte (MSG_ALL, 3);
-
 			WriteByte (MSG_ALL, SVC_FINALE);
 			WriteString (MSG_ALL, "The charred viscera of diabolic horrors\nbubble viscously as you seize the Rune\nof Hell Magic. Its heat scorches your\nhand, and its terrible secrets blight\nyour mind. Gathering the shreds of your\ncourage, you shake the devil's shackles\nfrom your soul, and become ever more\nhard and determined to destroy the\nhideous creatures whose mere existence\nthreatens the souls and psyches of all\nthe population of Earth.");
 			return;
-		}
-		else if (world.model == "maps/e4m7.bsp") {
+		} else if (world.model == "maps/e4m7.bsp") {
 			WriteByte (MSG_ALL, SVC_CDTRACK);
 			WriteByte (MSG_ALL, 2);
 			WriteByte (MSG_ALL, 3);
-
 			WriteByte (MSG_ALL, SVC_FINALE);
 			WriteString (MSG_ALL, "Despite the awful might of the Elder\nWorld, you have achieved the Rune of\nElder Magic, capstone of all types of\narcane wisdom. Beyond good and evil,\nbeyond life and death, the Rune\npulsates, heavy with import. Patient and\npotent, the Elder Being Shub-Niggurath\nweaves her dire plans to clear off all\nlife from the Earth, and bring her own\nfoul offspring to our world! For all the\ndwellers in these nightmare dimensions\nare her descendants! Once all Runes of\nmagic power are united, the energy\nbehind them will blast open the Gateway\nto Shub-Niggurath, and you can travel\nthere to foil the Hell-Mother's plots\nin person.");
 			return;
 		}
-		// No special end text? go straight to next map
-		GotoNextMap();
-	}
-	//----------------------------------------------------------------------
-	// If the player has all four runes, print more text!?!
-	//----------------------------------------------------------------------
-	else if (intermission_running == INTERMISSION_ENDGAME) {
+		GotoNextMap(); // No special end text? go straight to next map
+	} else if (intermission_running == INTERMISSION_ENDGAME) {
+		// If the player has all four runes, print more text!?!
 		if (!cvar("registered")) {	
 			// shareware episode has been completed, go to sell screen
 			WriteByte (MSG_ALL, SVC_SELLSCREEN);
@@ -140,27 +154,13 @@ void() FinishIntermissionCamera =
 			WriteString (MSG_ALL, "Now, you have all four Runes. You sense\ntremendous invisible forces moving to\nunseal ancient barriers. Shub-Niggurath\nhad hoped to use the Runes Herself to\nclear off the Earth, but now instead,\nyou will use them to enter her home and\nconfront her as an avatar of avenging\nEarth-life. If you defeat her, you will\nbe remembered forever as the savior of\nthe planet. If she conquers, it will be\nas if you had never been born.");
 			return;
 		}
-	}
-	// Finished episode text and shub waking up text, then finally next map!
-	else GotoNextMap();
+	} else GotoNextMap(); // Finished episode text and shub waking up text, then finally next map!
 };
 
-//----------------------------------------------------------------------
-void() NextIntermissionCamera = 
-{
-	// This method is unreliable, it is better to move the players
-	// origin like the orginal method used by the id QC
-	//msg_entity = self;
-	//WriteByte(MSG_ALL, SVC_SETVIEW);
-	//WriteEntity(MSG_ALL, self.goalentity);
-	
-	// Exclude the special intermission cameras (special impulse)
-	if (camera_ent.count > 1 && intermission_running > 0
-		&& intermission_running < INTERMISSION_CAMERA) {
-		// Cycle through list trying to find a camera
-		// designed for the intermission at the end of a map
-		// Can have special cameras designed for impulse 145!
-		while(self.goalentity.spawnflags & CAMERA_NOINTERMIS) {
+void() NextIntermissionCamera = {
+	if (camera_ent.count > 1 && intermission_running > 0 && intermission_running < INTERMISSION_CAMERA) { // Exclude the special intermission cameras (special impulse)
+		// Cycle through list trying to find a camera.  Designed for the intermission at the end of a map.
+		while(self.goalentity.spawnflags & CAMERA_NOINTERMIS) { // Can have special cameras designed for impulse 145!
 			self.goalentity = self.goalentity.owner;
 		}
 	}
@@ -175,17 +175,16 @@ void() NextIntermissionCamera =
 	if (self.goalentity.spawnflags & CAMERA_SOLID) {
 		self.solid = SOLID_TRIGGER;
 		setsize(self, VEC_HULLE_MIN, VEC_HULLE_MAX);
-	}
-	// no interaction, static
-	else {
+	} else {
+		// no interaction, static
 		self.solid = SOLID_NOT;
 		setsize(self, VEC_ORIGIN, VEC_ORIGIN);
 	}
 	
 	// If target exists on camera fire triggers (once)
-	if (self.goalentity.target != "") {
-		trigger_strs(self.goalentity.target, self); 
-		self.goalentity.target = "";
+	if (HasTargets(self.goalentity)) {
+		SUB_UseTargetsOnEnt(self.goalentity);
+		clear_trigstrs(self.goalentity);
 	}
 
 	// CHANGE fog for intermission camera
@@ -209,9 +208,7 @@ void() NextIntermissionCamera =
 	}
 };
 
-//----------------------------------------------------------------------
-void() CycleIntermissionCamera =
-{
+void() CycleIntermissionCamera = {
 	// Is the intermission camera still being setup?
 	if (intermission_running < INTERMISSION_ACTIVE) return;
 	if (self.waitmin > time) return;		// delay input from keyboard
@@ -235,15 +232,11 @@ void() CycleIntermissionCamera =
 	}
 };
 
-//----------------------------------------------------------------------
-void() StartIntermissionCamera = 
-{
+void() StartIntermissionCamera = {
 	if (camera_ent) {
-		// Switch self to client (stored when client is setup)
-		self = client_ent;
+		self = client_ent; // Switch self to client (stored when client is setup)
 		
-		// Switch on notarget so monsters don't attack player
-		// Add god mode to prevent any damage, is reset on map change
+		// Switch on notarget so monsters don't attack player.  Add god mode to prevent any damage, is reset on map change
 		self.flags = self.flags + (FL_NOTARGET || FL_GODMODE);
 		self.flags = self.flags - (self.flags & FL_ONGROUND);
 	
@@ -258,14 +251,9 @@ void() StartIntermissionCamera =
 		self.frame = self.weaponframe = 0;	// reset all frames
 		self.waitmin = time + 0.5;			// Delay before start
 		self.think = SUB_Null;				// Stop player.qc
-
-		// Finish artifacts timers, except vania items
-		ResetPowerSystem(self,0,FALSE);
-
-		// Setup default - first camera to look through
-		self.goalentity = camera_ent;
-		// Is there more than 1 camera and intermission time?
-		// Always start at the first camera if using camera test mode
+		ResetPowerSystem(self,0,FALSE); // Finish artifacts timers, except vania items
+		self.goalentity = camera_ent; // Setup default - first camera to look through
+		// Is there more than 1 camera and intermission time?  Always start at the first camera if using camera test mode
 		if (camera_ent.count > 1 && intermission_running > 0) {
 			// Randomly pick a camera to cycle forward to
 			self.lip = rint(random() * camera_ent.count);
@@ -274,15 +262,10 @@ void() StartIntermissionCamera =
 				self.lip = self.lip - 1;				// Keep looping
 			}
 		}
-
-		// Switch player to the currently selected camera
-		NextIntermissionCamera();
+		NextIntermissionCamera(); // Switch player to the currently selected camera
 		
-		// Check if end of map intermission is really running? 
-		// Can enter this function via camera test mode (impulse xxx)
+		// Check if end of map intermission is really running?  Can enter this function via camera test mode (impulse xxx)
 		if (intermission_running == 0) intermission_running = INTERMISSION_CAMERA;
 		else intermission_running = INTERMISSION_ACTIVE;
-	}
-	// If camera entity not setup, go straight to next map
-	else FinishIntermissionCamera ();
+	} else FinishIntermissionCamera (); // If camera entity not setup, go straight to next map
 };

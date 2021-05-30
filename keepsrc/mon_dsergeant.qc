@@ -74,15 +74,12 @@ $frame deathb1 deathb2 deathb3 deathb4 deathb5 deathb6 deathb7 deathb8
 $frame deathb9 deathb10 deathb11 deathb12 deathb13 deathb14 deathb15 deathb16
 $frame deathb17 deathb18 deathb19 deathb20
 
-void() dsergeant_sword_sound;		// Sword swipe sounds
 void(float soundtype) dsergeant_grunt_sound;
 
 // Different types of grunting sounds
 float DSERG_SOUND_SIDESWING = 1;
 float DSERG_SOUND_OVERSMASH = 2;
 float DSERG_SOUND_RUNSWING = 3;
-
-//===========================================================================
 
 void()	dsergeant_standA1	=[	$standA1,	dsergeant_standA2	] {ai_stand();};
 void()	dsergeant_standA2	=[	$standA2,	dsergeant_standA3	] {ai_stand();};
@@ -149,10 +146,9 @@ void()	dsergeant_standC22	=[	$standC22,	dsergeant_standC23	] {ai_stand();};
 void()	dsergeant_standC23	=[	$standC23,	dsergeant_standC24	] {ai_stand();};
 void()	dsergeant_standC24	=[	$standC24,	dsergeant_stand1	] {ai_stand();};
 
-//===========================================================================
 // skipped 7 frames to reduce the animation down to 2.4s (10fps)
 void()	dsergeant_standD1	=[	$standD1,	dsergeant_standD2	] {ai_stand();
-	sound (self, CHAN_VOICE, "dknight/dserg_hbreath.wav", 1,  ATTN_IDLE);};
+	sound (self, CHAN_VOICE, "ad171/dknight/dserg_hbreath.wav", 1,  ATTN_IDLE);};
 void()	dsergeant_standD2	=[	$standD2,	dsergeant_standD3	] {ai_stand();};
 void()	dsergeant_standD3	=[	$standD4,	dsergeant_standD4	] {ai_stand();};
 void()	dsergeant_standD4	=[	$standD6,	dsergeant_standD5	] {ai_stand();};
@@ -248,10 +244,9 @@ void() CheckForSergeantCharge =
 	}
 };
 
-//----------------------------------------------------------------------
 // Charging attack B - single swing of flail
 void() dsergeant_char_b1 =[	$char_b1, dsergeant_char_b2 ] {ai_charge(23);
-	dsergeant_sword_sound();CheckForSergeantCharge();};
+	SwordSwipeSound();CheckForSergeantCharge();};
 void() dsergeant_char_b2 =[	$char_b2, dsergeant_char_b3 ] {ai_charge(17);
 	monster_footstep(FALSE);CheckForSergeantCharge();};
 void() dsergeant_char_b3 =[	$char_b3, dsergeant_char_b4 ] {ai_charge(12);
@@ -266,7 +261,7 @@ void() dsergeant_char_b6 =[	$char_b6, dsergeant_char_b1 ] {ai_charge(8);
 //----------------------------------------------------------------------
 // Charging attack A - swinging flail left to right infront
 void()	dsergeant_char_a1	=[	$char_a1,	dsergeant_char_a2	] {ai_charge(20);
-	dsergeant_sword_sound();CheckForSergeantCharge();};
+	SwordSwipeSound();CheckForSergeantCharge();};
 void()	dsergeant_char_a2	=[	$char_a2,	dsergeant_char_a3	] {ai_charge(25);
 	monster_footstep(FALSE);CheckForSergeantCharge();};
 void()	dsergeant_char_a3	=[	$char_a3,	dsergeant_char_a4	] {ai_charge(18);
@@ -278,7 +273,7 @@ void()	dsergeant_char_a5	=[	$char_a5,	dsergeant_char_a6	] {ai_charge(14);
 void()	dsergeant_char_a6	=[	$char_a6,	dsergeant_char_a7	] {ai_charge(20);
 	CheckForSergeantCharge();};
 void()	dsergeant_char_a7	=[	$char_a7,	dsergeant_char_a8	] {ai_charge(21);
-	dsergeant_sword_sound();CheckForSergeantCharge();};
+	SwordSwipeSound();CheckForSergeantCharge();};
 void()	dsergeant_char_a8	=[	$char_a8,	dsergeant_char_a9	] {ai_charge(13);
 	monster_footstep(FALSE);CheckForSergeantCharge();};
 void()	dsergeant_char_a9	=[	$char_a9,	dsergeant_char_a10] {	ai_charge(20);
@@ -290,14 +285,11 @@ void()	dsergeant_char_a11=[	$char_a11,dsergeant_char_a12] {ai_charge(18);
 void()	dsergeant_char_a12=[	$char_a12,dsergeant_char_b1	] {ai_charge(16);
 	CheckForSergeantCharge();};
 
-//----------------------------------------------------------------------
-void() dsergeant_charging =
-{
+void() dsergeant_charging = {
 	if (random() < 0.35) dsergeant_char_a1 ();	// Slow left+right swing
 	else dsergeant_char_b1 ();									// fast spin around head
 };
 
-//===========================================================================
 // Melee Attack 1 - Slice (one hand swinging run attack)
 void()	dsergeant_slice1	=[	$slice2,	dsergeant_slice2	] {ai_charge(9);};
 void()	dsergeant_slice2	=[	$slice4,	dsergeant_slice3	] {ai_charge(6);monster_footstep(FALSE);};
@@ -305,7 +297,7 @@ void()	dsergeant_slice3	=[	$slice5,	dsergeant_slice4	] {ai_charge(13);};
 void()	dsergeant_slice4	=[	$slice6,	dsergeant_slice5	] {ai_charge(4);
 	dsergeant_grunt_sound(DSERG_SOUND_SIDESWING);};
 void()	dsergeant_slice5	=[	$slice7,	dsergeant_slice6	] {ai_charge(7);monster_footstep(FALSE);};
-void()	dsergeant_slice6	=[	$slice8,	dsergeant_slice7	] {ai_charge(15);dsergeant_sword_sound();};
+void()	dsergeant_slice6	=[	$slice8,	dsergeant_slice7	] {ai_charge(15);SwordSwipeSound();};
 void()	dsergeant_slice7	=[	$slice9,	dsergeant_slice8	] {ai_charge(8);
 	self.meleecontact = TRUE;ai_meleesmash(30);};
 void()	dsergeant_slice8	=[	$slice10,	dsergeant_slice9	] {ai_charge(2);monster_footstep(FALSE);};
@@ -320,7 +312,7 @@ void()	dsergeant_smash3	=[	$smash3,	dsergeant_smash4	] {ai_charge(13);};
 void()	dsergeant_smash4	=[	$smash4,	dsergeant_smash5	] {ai_charge(9);monster_footstep(FALSE);};
 void()	dsergeant_smash5	=[	$smash5,	dsergeant_smash6	] {ai_charge(11);
 	dsergeant_grunt_sound(DSERG_SOUND_OVERSMASH);};
-void()	dsergeant_smash6	=[	$smash6,	dsergeant_smash7	] {ai_charge(10);dsergeant_sword_sound();};
+void()	dsergeant_smash6	=[	$smash6,	dsergeant_smash7	] {ai_charge(10);SwordSwipeSound();};
 void()	dsergeant_smash7	=[	$smash7,	dsergeant_smash8	] {ai_charge(7);};
 void()	dsergeant_smash8	=[	$smash8,	dsergeant_smash9	] {ai_charge(12);
 self.meleecontact = TRUE;ai_meleesmash(30);monster_footstep(FALSE);};
@@ -336,7 +328,7 @@ void()	dsergeant_smash14	=[	$smash14,	dsergeant_run1	] {ai_charge(0);};
 void()	dsergeant_watk1	=[	$w_attack1,	dsergeant_watk2	] {ai_charge(2);};
 void()	dsergeant_watk2	=[	$w_attack2,	dsergeant_watk3	] {ai_charge(0);monster_footstep(FALSE);};
 void()	dsergeant_watk3	=[	$w_attack3,	dsergeant_watk4	] {ai_charge(0);};
-void()	dsergeant_watk4	=[	$w_attack4,	dsergeant_watk5	] {ai_charge(0);dsergeant_sword_sound();};
+void()	dsergeant_watk4	=[	$w_attack4,	dsergeant_watk5	] {ai_charge(0);SwordSwipeSound();};
 void()	dsergeant_watk5	=[	$w_attack5,	dsergeant_watk6	] {ai_charge(0);
 	dsergeant_grunt_sound(DSERG_SOUND_RUNSWING);};
 void()	dsergeant_watk6	=[	$w_attack6,	dsergeant_watk7	] {ai_charge(0);};
@@ -350,7 +342,7 @@ void()	dsergeant_watk12=[	$w_attack12,dsergeant_watk13] {ai_charge(2);};
 void()	dsergeant_watk13=[	$w_attack13,dsergeant_watk14] {ai_charge(0);};
 void()	dsergeant_watk14=[	$w_attack14,dsergeant_watk15] {ai_charge(0);
 	dsergeant_grunt_sound(DSERG_SOUND_RUNSWING);};
-void()	dsergeant_watk15=[	$w_attack15,dsergeant_watk16] {ai_charge(0);dsergeant_sword_sound();};
+void()	dsergeant_watk15=[	$w_attack15,dsergeant_watk16] {ai_charge(0);SwordSwipeSound();};
 void()	dsergeant_watk16=[	$w_attack16,dsergeant_watk17] {ai_charge(1);monster_footstep(FALSE);};
 void()	dsergeant_watk17=[	$w_attack17,dsergeant_watk18] {ai_charge(1);
 	self.meleecontact = TRUE;ai_meleesmash(20);};
@@ -369,23 +361,19 @@ void() dsergeant_melee =
 	else dsergeant_watk1 ();
 };
 
-//===========================================================================
 // Death Sergeant Homing Missile Attack
-//===========================================================================
-void() SergMissile =
-{
+void() SergMissile = {
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 	// Removing a fired homing missiles looks weird
 	//if (!visxray(self.enemy, self.attack_offset, '0 0 10', FALSE)) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "dknight/dserg_magic.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/dknight/dserg_magic.wav", 1, ATTN_NORM);
 	self.attack_speed = SPEED_SERGMISSILE + (skill * SPEED_SERGSKILL);
 	Launch_HomingMissile (self.attack_offset, '0 0 10', CT_PROJ_SERG, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
 // Hell Knight - 11 frames / Death Knight - 14 frames (skipped 1, 10,14)
 // Death Knight frames trimmed down to match Hell Knight (damage ratio)
 // Block pain function from interrupting magic attack
@@ -503,34 +491,19 @@ void() dsergeant_die =
 	}
 };
 
-//============================================================================
-void() dsergeant_sword_sound =
-{
-	self.meleecontact = TRUE;
-	self.lip = random();
-	if (self.lip < 0.25) sound (self, CHAN_WEAPON, "weapons/sword1a.wav", 1, ATTN_NORM);
-	else if (self.lip < 0.5) sound (self, CHAN_WEAPON, "weapons/sword2a.wav", 1, ATTN_NORM);
-	else if (self.lip < 0.75) sound (self, CHAN_WEAPON, "weapons/sword1b.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_WEAPON, "weapons/sword2b.wav", 1, ATTN_NORM);
-};
-
-//============================================================================
-void(float soundtype) dsergeant_grunt_sound =
-{
+void(float soundtype) dsergeant_grunt_sound = {
 	if (soundtype == DSERG_SOUND_SIDESWING)
-		sound (self, CHAN_WEAPON, "dknight/dfury_grunt2.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/dknight/dfury_grunt2.wav", 1, ATTN_NORM);
 	else if (soundtype == DSERG_SOUND_OVERSMASH)
-		sound (self, CHAN_WEAPON, "dknight/dfury_leap.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/dknight/dfury_leap.wav", 1, ATTN_NORM);
 	else {
 		self.weaponswitch = 0.6 + random()*0.4;
-		if (random() < 0.5) sound (self, CHAN_WEAPON, "dknight/dfury_grunt3.wav", self.weaponswitch, ATTN_NORM);
-		else sound (self, CHAN_WEAPON, "dknight/dfury_grunt4.wav", self.weaponswitch, ATTN_NORM);
+		if (random() < 0.5) sound (self, CHAN_WEAPON, "ad171/dknight/dfury_grunt3.wav", self.weaponswitch, ATTN_NORM);
+		else sound (self, CHAN_WEAPON, "ad171/dknight/dfury_grunt4.wav", self.weaponswitch, ATTN_NORM);
 	}
 };
 
-/*======================================================================
-QUAKED monster_dsergeant (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
+// QUAKED monster_dsergeant (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_dsergeant = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
@@ -557,31 +530,25 @@ void() monster_dsergeant = {
 	precache_sound (self.idle_sound);
 
 	// Special extra sounds
-	precache_sound ("dknight/dserg_hbreath.wav");	// Special long sigh (idle animation)
-	precache_sound ("dknight/dserg_magic.wav");		// New Spike ball launch sound
+	precache_sound ("ad171/dknight/dserg_hbreath.wav");	// Special long sigh (idle animation)
+	precache_sound ("ad171/dknight/dserg_magic.wav");		// New Spike ball launch sound
 	precache_sound ("hknight/death1.wav");
 	self.pain_sound = "hknight/pain1.wav";
 	precache_sound (self.pain_sound);
 
 	// Jingle, Jangle of the flail chain
-	self.sight_sound = "dknight/dserg_sight.wav";
+	self.sight_sound = "ad171/dknight/dserg_sight.wav";
 	precache_sound (self.sight_sound);
 	
 	// Heavy thud sound	
 	self.meleehitsound = GIB_SOUND_HEAVY2;
 	precache_sound (self.meleehitsound);
 
-	// New sword sweep/slash sounds
-	precache_sound ("weapons/sword1a.wav");
-	precache_sound ("weapons/sword1b.wav");
-	precache_sound ("weapons/sword2a.wav");
-	precache_sound ("weapons/sword2b.wav");
-
 	// New grunt sounds during combat
-	precache_sound ("dknight/dfury_grunt2.wav");
-	precache_sound ("dknight/dfury_grunt3.wav");
-	precache_sound ("dknight/dfury_grunt4.wav");
-	precache_sound ("dknight/dfury_leap.wav");
+	precache_sound ("ad171/dknight/dfury_grunt2.wav");
+	precache_sound ("ad171/dknight/dfury_grunt3.wav");
+	precache_sound ("ad171/dknight/dfury_grunt4.wav");
+	precache_sound ("ad171/dknight/dfury_leap.wav");
 
 	// Check for poisonous entity flag
 	if (self.poisonous) {

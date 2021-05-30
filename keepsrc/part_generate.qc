@@ -483,6 +483,7 @@ void(entity part_ent, float part_style) particle_style =
 		else if (part_style & PARTICLE_BURST_GREEN) setmodel (part_ent, PART_DOTSML_LGREEN);
 		else if (part_style & PARTICLE_BURST_RED) setmodel (part_ent, PART_DOTSML_GREY);
 		else if (part_style & PARTICLE_BURST_BLUE) setmodel (part_ent, PART_DOTSML_BLUE);
+		else if (part_style & PARTICLE_BURST_DBLUE) setmodel (part_ent, PART_DOTSML_DBLUE);
 		else if (part_style & PARTICLE_BURST_PURPLE) setmodel (part_ent, PART_DOTSML_PURP);
 		else if (part_style & PARTICLE_BURST_FIRE) setmodel (part_ent, PART_TORCH1);
 		else setmodel (part_ent, PART_DOTSML_WHITE);
@@ -493,6 +494,7 @@ void(entity part_ent, float part_style) particle_style =
 		else if (part_style & PARTICLE_BURST_GREEN) setmodel (part_ent, PART_DOTSML_GREEN);
 		else if (part_style & PARTICLE_BURST_RED) setmodel (part_ent, PART_DOTSML_RED);
 		else if (part_style & PARTICLE_BURST_BLUE) setmodel (part_ent, PART_DOTSML_GREY);
+		else if (part_style & PARTICLE_BURST_DBLUE) setmodel (part_ent, PART_DOTSML_DBLUE);
 		else if (part_style & PARTICLE_BURST_PURPLE) setmodel (part_ent, PART_DOTSML_GREY);
 		else if (part_style & PARTICLE_BURST_FIRE) setmodel (part_ent, PART_DOTSML_GOLD);
 		else setmodel (part_ent, PART_DOTSML_GREY);
@@ -503,6 +505,7 @@ void(entity part_ent, float part_style) particle_style =
 		else if (part_style & PARTICLE_BURST_GREEN) setmodel (part_ent, PART_DOTMED_GREEN);
 		else if (part_style & PARTICLE_BURST_RED) setmodel (part_ent, PART_DOTMED_RED);
 		else if (part_style & PARTICLE_BURST_BLUE) setmodel (part_ent, PART_DOTMED_BLUE);
+		else if (part_style & PARTICLE_BURST_DBLUE) setmodel (part_ent, PART_DOTMED_DBLUE);
 		else if (part_style & PARTICLE_BURST_PURPLE) setmodel (part_ent, PART_DOTMED_PURP);
 		else if (part_style & PARTICLE_BURST_FIRE) setmodel (part_ent, PART_DOTMED_GREY);
 		else setmodel (part_ent, PART_DOTMED_GREY);
@@ -536,6 +539,7 @@ void(vector ring_org, vector ring_dir, vector ring_rdir, float ring_rad, float r
 		else if (ring_style & PARTICLE_BURST_GREEN) dpp_string = DPP_RINGPARTG;
 		else if (ring_style & PARTICLE_BURST_RED) dpp_string = DPP_RINGPARTR;
 		else if (ring_style & PARTICLE_BURST_BLUE) dpp_string = DPP_RINGPARTB;
+		else if (ring_style & PARTICLE_BURST_DBLUE) dpp_string = DPP_RINGPARTDB;
 		else if (ring_style & PARTICLE_BURST_PURPLE) dpp_string = DPP_RINGPARTP;
 		else dpp_string = DPP_RINGPARTW;
 	}
@@ -721,6 +725,7 @@ void(vector e_org, float e_qty, float e_speed, float e_dist, float p_style) part
 		else if (p_style & PARTICLE_BURST_GREEN) dpp_string = DPP_BURSTPARTG;
 		else if (p_style & PARTICLE_BURST_RED) dpp_string = DPP_BURSTPARTR;
 		else if (p_style & PARTICLE_BURST_BLUE) dpp_string = DPP_BURSTPARTB;
+		else if (p_style & PARTICLE_BURST_DBLUE) dpp_string = DPP_BURSTPARTDB;
 		else if (p_style & PARTICLE_BURST_PURPLE) dpp_string = DPP_BURSTPARTP;
 		else dpp_string = DPP_BURSTPARTW;
 	}
@@ -789,6 +794,7 @@ void(vector e_org, float e_qty, float e_time, float p_style, float e_style) part
 			else if (p_style & PARTICLE_BURST_GREEN) dpp_string = DPP_BURSTPARTG;
 			else if (p_style & PARTICLE_BURST_RED) dpp_string = DPP_BURSTPARTR;
 			else if (p_style & PARTICLE_BURST_BLUE) dpp_string = DPP_BURSTPARTB;
+			else if (p_style & PARTICLE_BURST_DBLUE) dpp_string = DPP_BURSTPARTDB;
 			else if (p_style & PARTICLE_BURST_PURPLE) dpp_string = DPP_BURSTPARTP;
 			else dpp_string = DPP_BURSTPARTW;
 			pointparticles(particleeffectnum(dpp_string), e_org, '0 0 0', e_qty);
@@ -889,6 +895,7 @@ void(vector e_org, vector e_dest, float e_qty, float e_time, float e_volume, flo
 		else if (p_style & PARTICLE_BURST_GREEN) dpp_string = DPP_BURSTPARTG;
 		else if (p_style & PARTICLE_BURST_RED) dpp_string = DPP_BURSTPARTR;
 		else if (p_style & PARTICLE_BURST_BLUE) dpp_string = DPP_BURSTPARTB;
+		else if (p_style & PARTICLE_BURST_DBLUE) dpp_string = DPP_BURSTPARTDB;
 		else if (p_style & PARTICLE_BURST_PURPLE) dpp_string = DPP_BURSTPARTP;
 		else dpp_string = DPP_BURSTPARTW;
 		// Create some random volume displacement at origin/destination
@@ -950,6 +957,7 @@ void(vector debuff_center, float debuff_volsize, float debuff_qty, float debuff_
 		else if (debuff_style & PARTICLE_BURST_GREEN) dpp_string = DPP_RINGPARTG;
 		else if (debuff_style & PARTICLE_BURST_RED) dpp_string = DPP_RINGPARTR;
 		else if (debuff_style & PARTICLE_BURST_BLUE) dpp_string = DPP_RINGPARTB;
+		else if (debuff_style & PARTICLE_BURST_DBLUE) dpp_string = DPP_RINGPARTDB;
 		else if (debuff_style & PARTICLE_BURST_PURPLE) dpp_string = DPP_RINGPARTP;
 		else dpp_string = DPP_RINGPARTW;
 	}
@@ -1014,6 +1022,7 @@ void(vector dust_center, float dust_qty, float dust_volsize, float dust_style) p
 		else if (dust_style & PARTICLE_BURST_GREEN) dpp_string = DPP_RINGPARTG;
 		else if (dust_style & PARTICLE_BURST_RED) dpp_string = DPP_RINGPARTR;
 		else if (dust_style & PARTICLE_BURST_BLUE) dpp_string = DPP_RINGPARTB;
+		else if (dust_style & PARTICLE_BURST_DBLUE) dpp_string = DPP_RINGPARTDB;
 		else if (dust_style & PARTICLE_BURST_PURPLE) dpp_string = DPP_RINGPARTP;
 		else dpp_string = DPP_RINGPARTW;
 	}

@@ -12,7 +12,6 @@
   
 ======================================================================*/
 float PSWITCH_STARTDIS = 32;		// Switch starts in disabled state
-//----------------------------------------------------------------------
 
 /*QUAKED func_pressureswitch (0 .5 .8) ? x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 Pressure switch (bmodel) with touch state only
@@ -38,9 +37,7 @@ STARTOFF : Starts off and waits for trigger
 Pressure switch (bmodel) with touch state only
 */
 
-//----------------------------------------------------------------------
-void() func_pswitch_ready =
-{
+void() func_pswitch_ready = {
 	// Check for entity state changes
 	if (self.estate & ESTATE_BLOCK) return;
 
@@ -67,9 +64,7 @@ void() func_pswitch_return =
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_pswitch_finished =
-{
+void() func_pswitch_finished = {
 	// Check for any completed message
 	if (self.message != "") {
 		// Write message to all clients
@@ -80,9 +75,9 @@ void() func_pswitch_finished =
 	}
 	
 	// Check for any completed trigger(s)
-	if (self.target != "") {
-		trigger_strs(self.target, world);
-		if (self.wait < 0) self.target = "";
+	if (HasTargets(self)) {
+		SUB_UseTargets();
+		if (self.wait < 0) clear_trigstrs(self);
 	}
 
 	self.frame = 1;
@@ -95,9 +90,7 @@ void() func_pswitch_finished =
 	self.nextthink = time + 0.2;
 };
 
-//----------------------------------------------------------------------
-void() func_pswitch_use = 
-{
+void() func_pswitch_use = {
 	// Check for entity state changes
 	if (self.estate & ESTATE_BLOCK) return;
 	// Block trigger events if moving pressure plate
@@ -123,9 +116,7 @@ void() func_pswitch_use =
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_pswitch_on = 
-{
+void() func_pswitch_on = {
 	// Stop re-triggering ON state
 	if (self.estate == ESTATE_ON) return;
 
@@ -145,9 +136,7 @@ void() func_pswitch_on =
 	self.frame = 0;
 };
 
-//----------------------------------------------------------------------
-void() func_pswitch_off = 
-{
+void() func_pswitch_off = {
 	// Stop re-triggering OFF state
 	if (self.estate == ESTATE_OFF) return;
 
@@ -155,18 +144,14 @@ void() func_pswitch_off =
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
 	setmodel (self, "");
-	
-	// Reset position and frame back to default
-	sound (self, CHAN_VOICE, SOUND_EMPTY, 1, ATTN_NORM);
+	StopSound(self,CHAN_VOICE); // Reset position and frame back to default
 	setorigin(self, self.pos1);
 	self.state = STATE_UP;
 	self.think = SUB_Null;
 	self.frame = 0;
 };
 
-//----------------------------------------------------------------------
-void() func_pressureswitch =
-{
+void() func_pressureswitch = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	// Setup all empty/silent sound files first

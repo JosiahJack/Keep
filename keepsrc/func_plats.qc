@@ -165,9 +165,7 @@ void() func_plat_on =
 	}	
 };
 
-//----------------------------------------------------------------------
-void() func_plat_off =
-{
+void() func_plat_off = {
 	// Stop re-triggering OFF state
 	if (self.estate == ESTATE_OFF) return;
 
@@ -175,9 +173,7 @@ void() func_plat_off =
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
 	setmodel (self, "");
-	
-	// Stop all movement sounds
-	sound (self, CHAN_VOICE, SOUND_EMPTY, self.volume, ATTN_NORM);
+	StopSound(self,CHAN_VOICE); // Stop all movement sounds
 
 	if (self.state != STATE_DISABLED) {
 		// Reset health, position and frame back to default
@@ -187,25 +183,19 @@ void() func_plat_off =
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_plat_disable =
-{
+void() func_plat_disable = {
 	// Lock platform in current location
 	self.estate = ESTATE_DISABLE;
 };
 
-//----------------------------------------------------------------------
-void() func_plat_blocked =
-{
+void() func_plat_blocked = {
 	T_Damage (other, self, self, 1, DAMARMOR);
 	
 	if (self.state == STATE_UP) func_plat_go_down ();
 	else if (self.state == STATE_DOWN) func_plat_go_up ();
 };
 
-//----------------------------------------------------------------------
-void() func_plat =
-{
+void() func_plat = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 	
 	// default sound = medieval
@@ -301,11 +291,10 @@ void() func_plat =
 	func_plat_trigger_spawn ();
 	self.blocked = func_plat_blocked;
 	
-	// Damn annoying that the targetname is being used like this because
+	// Annoying that the targetname is being used like this because
 	// there could have been a better way to do this type of functionality
 	// == "" Platform starts in lower position (default)
 	// != "" Platform starts in upper position and requires trigger to work
-	//
 	if (self.targetname != "" && !(self.spawnflags & PLAT_START_LOWER) )
 		self.state = STATE_DISABLED;
 	else setorigin (self, self.pos2);	// Start in lower position

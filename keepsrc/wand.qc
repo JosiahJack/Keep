@@ -1,17 +1,7 @@
-//==========================================================================
-//
-//  ZAPPER (Flare Gun or the Ruby Wand)
-//
-//==========================================================================
+// ZAPPER (Flare Gun or the Ruby Wand)
 
-//==========================================================================
-//  Flares
-
-// Flares are spawned from explosions caused by the zapper when fired
-// at maximum power.
-
-void() FlareGlitter_Think =
-{
+// Flares are spawned from explosions caused by the zapper when fired at maximum power.
+void() FlareGlitter_Think = {
     self.frame = self.frame + 4;
     if (self.flags & FL_ONGROUND)
         self.nextthink = time + 0.1;
@@ -20,52 +10,49 @@ void() FlareGlitter_Think =
     self.think = SUB_Remove;
 };
 
-void() FlareGlitter =
-{
+void() FlareGlitter = {
     local   vector  ang;
 
     ang_x = random() * 90;      // Aim downward.
-    if (self.flags & FL_ONGROUND)
-        ang_x = 0 - ang_x;
+    if (self.flags & FL_ONGROUND) ang_x = 0 - ang_x;
     ang_y = random() * 360;
     ang_z = 0;
     makevectors (ang);
-
     newmis = spawn();
     newmis.movetype     = MOVETYPE_BOUNCE;
     newmis.solid        = SOLID_NOT;        // Was SOLID_TRIGGER;
     newmis.velocity     = v_forward * 150;
     newmis.gravity      = 0.5;      // Don't fall as quickly.
     newmis.classname    = "glitter";
-//    newmis.touch        = SUB_Remove;
-// FIXME:  Merge with explosion sprite to save a model slot?
     newmis.frame        = 70;
     if (self.flags & FL_ONGROUND)
         newmis.nextthink    = time + 0.1;
     else
         newmis.nextthink    = time + 0.2;
     newmis.think        = FlareGlitter_Think;
-
-    setall (newmis, "progs/drake/s_spark.spr", '0 0 0', '0 0 0', self.origin);
+    setall (newmis, "progs/drake/s_spark.spr", VEC_ORIGIN, VEC_ORIGIN, self.origin);
 };
 
-void() Flare_Think =
-{
-    if (self.delay <= time)
-    {   if (self.effects & EF_BRIGHTLIGHT)
-            {self.effects = EF_DIMLIGHT;  self.delay = time + 2;}   // Was T+3.
-        else
-            {remove (self);  return;}
+void() Flare_Think = {
+    local float den;
+
+    if (self.delay <= time) { 
+		if (self.effects & EF_BRIGHTLIGHT) {
+            self.effects = EF_DIMLIGHT;
+			self.delay = time + 2; // Was T+3.
+        } else {
+            remove (self);
+			return;
+		}
     }
 
     self.nextthink  = time + 0.1;
     self.think      = Flare_Think;
 
     if (self.lefty)
-        FlareGlitter ();
-    else
-    {   // Spawn some particles at the source.
-        local   float   den;
+        FlareGlitter();
+    else { // Spawn some particles at the source.
+
 
         den = ceil(self.delay - time) * 4;
         particle (self.origin, '0 0 0', 232, den);
@@ -74,8 +61,7 @@ void() Flare_Think =
 };
 
 // Activates the spark generator that was spawned recently.
-void() Flare_Activate =
-{
+void() Flare_Activate = {
     self.velocity     = '0 0 -10';
     self.effects      = EF_BRIGHTLIGHT;     //EF_DIMLIGHT;
     self.delay        = time + 3;
@@ -85,18 +71,14 @@ void() Flare_Activate =
 // Spawns an invisible spark generator.  Because we want the explosion
 // sprite visible without extra stuff in the way, the generator isn't
 // active until a few frames later, when the explosion is almost over.
-void(vector start) Flare_Spawn =
-{
-// Effect is harmless, so owner can be anyone.
-    newmis = spawn ();
-    newmis.master       = newmis.owner     = world;
+void(vector start) Flare_Spawn = {
+    newmis = spawn (); 
+    newmis.owner = world; // Effect is harmless, so owner can be anyone.
     newmis.movetype     = MOVETYPE_FLY;
     newmis.solid        = SOLID_NOT;
     newmis.classname    = "flare";
-// set newmis duration
-    newmis.nextthink    = time + 0.4;
+    newmis.nextthink    = time + 0.4; // set newmis duration
     newmis.think        = Flare_Activate;
-
     setall (newmis, "progs/null.spr", '0 0 0', '0 0 0', start); //was null_256.spr
 };
 
@@ -118,7 +100,7 @@ float(entity ent) Zapper_Level = {
     }
     if (time < ent.zapper_time) return 0; // Don't let rollover mess up counters.
 
-// 0-1 = 1, 1-2 = 2, 2-3 = 3, 3-5 = 4.
+	// 0-1 = 1, 1-2 = 2, 2-3 = 3, 3-5 = 4.
     tnt = ceil((time - ent.zapper_time) / WAND_DELAY);
     if (tnt >= (WAND_FULL * 2 - 1))     // e.g., best 3 out of 5.
         return WAND_FULL + 1;
@@ -137,8 +119,7 @@ void() WandSpark_Touch = {
     BecomeFancy (X32_CUT_ORANGE, 4);
 };
 
-// Note:  'shots' is number of hitscan shots.
-// Does not include the two freebie side missiles.
+// Note:  'shots' is number of hitscan shots.  Does not include the two freebie side missiles.
 void(vector start, vector dir, float shots) FireSparks = {
     local   float   damage, dist, mid, fr, sparx, fx;
     local   string  dtype;
@@ -164,11 +145,9 @@ void(vector start, vector dir, float shots) FireSparks = {
         glitter_z = 0;
 		fx = 0;
 
-    // Fire the two side projectiles.
-    // Remember, spikes lasts up to six seconds.
+		// Fire the two side projectiles.  Remember, spikes lasts up to six seconds.
         d1_x = (shots - 1) * 1.40625;  d1_y = 0;  d1_z = 1;
         end = Aim_Scatter (dir, d1);
-        //Knightspike_Launch (start, end, 600);   //18*35=630.
         launch_projectile (start, end, CT_PROJ_HKN, 600);
         newmis.dmg = damage;
         newmis.touch = WandSpark_Touch;
@@ -214,10 +193,9 @@ void(vector start, vector dir, float shots) FireSparks = {
     ApplyMultiDamage ();
 };
 
-// Shoots one big explosive shot.
-// If multiple shots are desired, rewrite to use explosive shotgun code.
+// Shoots one big explosive shot.  Doom damage d3*5.  Heretic damage d8+6 (ToP d8*7).
 void(vector start, vector dir) FireBigSpark = {
-// Doom damage d3*5.  Heretic damage d8+6 (ToP d8*7).
+
     local   entity  targ, attacker;
     local   vector  end, end2;
     local   float   damage, splash;
@@ -230,12 +208,9 @@ void(vector start, vector dir) FireBigSpark = {
     end = trace_endpos;
     end2 = end - dir*8;
 
-    if (targ)
-    {
-        if (targ.classname == "monster_zombie")
-        {   // Update 11/2/09:  Let max charge obliterate (unarmored) zombies.
-            if (damage < targ.health)
-                damage = targ.health;
+    if (targ) {
+        if (targ.classgroup == CG_ZOMBIE && targ.classtype != CT_MONMUMMY) { // Update 11/2/09:  Let max charge obliterate (unarmored) zombies.
+            if (damage < targ.health) damage = targ.health;
         }
         T_Damage (targ, attacker, attacker, damage, DAMARMOR);
     }
@@ -247,43 +222,35 @@ void(vector start, vector dir) FireBigSpark = {
     Rocket_Explosion2 (end2, 224, 16);
     BecomeFancy (X80_SPARK_ORANGE, 6);
     self = attacker;
-
     Flare_Spawn (end2);
 };
 
 void() W_FireSparks = {
-    local   vector  dir, org;
-    local   float   charge;
+    local vector dir, org, err;
+    local float charge;
 
     // Using IT2_CROSS for the wand
     if (self.weapon == IT2_CROSS)
         charge = self.currentammo;
     else
         charge = 0;     // This shouldn't happen, but if so...
-// Update 4/5/10:  Use all accumulated energy.
-    if (charge > WAND_FULL + 1)
-        charge = WAND_FULL + 1;
+
+	// Update 4/5/10:  Use all accumulated energy.
+    if (charge > WAND_FULL + 1) charge = WAND_FULL + 1;
     self.currentammo = 0;
     self.zapper_time = time + WAND_DELAY;
     self.attack_finished = time + WAND_DELAY;
-
-    // Was "weapons/gldhit.wav".
-    sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM); // Was "weapons/gldhit.wav".
     // Since weapon is a magic wand, no recoil effects are needed.
-
     makevectors (self.v_angle);
     org = self.origin + v_forward*8 + '0 0 16';
     dir = aim(self, 100000);
 
-    //GhostTouch_On ();
     if (self.tome_finished)
         FireSparks (org, dir, 0);
     else if (charge <= WAND_FULL) {
         if (!charge) {
-			// Player is holding attack button down for rapid-fire.
-            // Scatter shots a bit like in Heretic.
-            local   vector  err;
-    
+			// Player is holding attack button down for rapid-fire.  Scatter shots a bit like in Heretic.
             err_x = random();  err_x = err_x - random();  err_x = err_x * 2;
             err_y = crandom();  // Was random() - 0.5;
             err_z = 1;
@@ -291,6 +258,5 @@ void() W_FireSparks = {
             charge = 1;
         }
         FireSparks (org, dir, charge);
-    } else
-        FireBigSpark (org, dir);
+    } else FireBigSpark (org, dir);
 };

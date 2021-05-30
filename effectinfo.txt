@@ -2891,6 +2891,20 @@ gravity -0.01					// Float up
 airfriction 0.4
 rotate 0 360 45 90				// swirl and rotate
 
+effect DPP_ITSPART_RINGDB
+count 2
+type static
+color 0x40405a 0x545470			// really dark / dark blue
+tex 62 64						// Large Solid Dots
+size 0.5 2
+sizeincrease 0.5
+alpha 128 256 40				// slow dissipation
+velocityoffset 0 0 10
+velocityjitter 4 4 12			// Small velocity adjustment
+gravity -0.01					// Float up
+airfriction 0.4
+rotate 0 360 45 90				// swirl and rotate
+
 effect DPP_ITSPART_RINGP
 count 2
 type static
@@ -2960,6 +2974,18 @@ effect DPP_ITSPART_BURSTB
 count 1
 type static
 color 0x545470 0x8b8bc1			// dark/light blue
+tex 62 64						// Small Quake dots
+size 0.5 2						// Small and stretched
+sizeincrease 0.5
+alpha 128 192 64				// Strong colour and quick fade
+velocityjitter 32 32 32			// large cube
+airfriction 0.65
+rotate 0 360 45 90				// swirl and rotate
+
+effect DPP_ITSPART_BURSTDB
+count 1
+type static
+color 0x40405a 0x545470			// really dark / dark blue
 tex 62 64						// Small Quake dots
 size 0.5 2						// Small and stretched
 sizeincrease 0.5

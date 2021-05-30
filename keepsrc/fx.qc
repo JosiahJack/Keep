@@ -23,17 +23,13 @@ void() s_explode_think = {
     if (self.frame == self.cnt) self.think = SUB_Remove;
 };
 
-//----------------------------------------------------------------------
-// General purpose animated spite function
-// Types: Small, medium, big, plasma, puffpuff!
-//----------------------------------------------------------------------
+// General purpose animated spite function.  Types: Small, medium, big, plasma, puffpuff!
 void() SpawnExplosion_think = {
 	self.frame = self.frame + 1;
 	if (self.frame > self.count) SUB_Remove();
 	else self.nextthink = time + self.speed;
 };
 
-//----------------------------------------------------------------------
 void(float sprite_type, vector org, string expl_sound) SpawnExplosion = {
 	local string spr_name;
 	local float spr_count, spr_speed;
@@ -166,11 +162,11 @@ void(float sprite_type, vector org, string expl_sound) SpawnExplosion = {
 	}
 
 	// Play any explosion sounds on temporary entity
+	if (self.owner.classtype == CT_MONEEL) expl_sound = "ad171/eel/impact1.wav";
 	if (expl_sound != "") sound(newmis, CHAN_WEAPON, expl_sound, 1, ATTN_NORM);
 };
 
-// Should not be used anymore, this is the old ID system
-// Use SpawnExplosion instead, copes with DP effects better
+// Should not be used anymore, this is the old ID system.  Use SpawnExplosion instead, copes with DP effects better.
 void() BecomeExplosion = {
 	self.touch = SUB_Null;
 	self.velocity = '0 0 0';
@@ -217,12 +213,10 @@ void(entity source, entity targ) ProjectileType = {
 	if (source.poisonous) {
 		setmodel (targ, MODEL_PROJ_FLESHP);
 		targ.gibtype = GIBTYPE_POISON;
-	}
-	else if (source.classgroup == CG_ROBOT || source.classgroup == CG_STONE) {
+	} else if (source.classgroup == CG_ROBOT || source.classgroup == CG_STONE) {
 		setmodel (targ, MODEL_PROJ_SMOKE);
 		targ.gibtype = GIBTYPE_STONE;
-	}
-	else {
+	} else {
 		setmodel (targ, MODEL_PROJ_FLESH);
 		targ.gibtype = GIBTYPE_BLOOD;
 	}
@@ -237,8 +231,7 @@ void(entity source, vector org, float velrnd, float upbase, float uprnd) SpawnPr
 	newmis.classgroup = CG_TEMPENT;
 	newmis.movetype = MOVETYPE_BOUNCE;
 	newmis.solid = SOLID_NOT;
-	// Projectile types (Poison/Robot/Stone/Blood)
-	ProjectileType(source, newmis);
+	ProjectileType(source, newmis); // Projectile types (Poison/Robot/Stone/Blood)
 	setorigin (newmis, org);
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);		
 	newmis.velocity = vecrand(0,velrnd,TRUE);
@@ -248,9 +241,7 @@ void(entity source, vector org, float velrnd, float upbase, float uprnd) SpawnPr
 	newmis.think = SUB_Remove;
 };
 
-//----------------------------------------------------------------------
 // SpawnBlood
-//----------------------------------------------------------------------
 void(entity targ, vector org, vector vel, float part_qty) SpawnBlood = {
 	local float loop_count, part_col;
 
@@ -276,11 +267,8 @@ void(entity targ, vector org, vector vel, float part_qty) SpawnBlood = {
 	}
 };
 
-//----------------------------------------------------------------------
-// spawn_touchblood
 // Triggered by Touch_Bullet, Touch_PlasmaProjectile, Touch_Projectile
 // Used by monsters - DFURY, DOG, FISH, SCORPION, SPIDER, VORELING, ZOMBIEK
-//----------------------------------------------------------------------
 void(entity source, entity targ, float damage) spawn_touchblood = {
 	local vector org, vel;
 
@@ -312,12 +300,10 @@ void() MeatSprayThink = {
     self.nextthink = time + 0.100;
 };
 
-//======================================================================
 // SpawnMeatSpray
 // Changed to remove dependance on 'self' for missile origin
 // Changed parameters to add source and destination of attack
 // Changed velocity to side so it is calculated correctly from angles
-//======================================================================
 void(entity source, entity targ, float side) SpawnMeatSpray = {
 	local float btype;
 	local vector org;
@@ -370,15 +356,78 @@ void(entity source, entity targ, float side) SpawnMeatSpray = {
 	}
 };
 
-// ==============================================================================
-// Drake Temporary Entities    PM:  These are common within the qc progs.
-// ==============================================================================
+// Drake Temporary Entities.  PM: These are common within the qc progs.
 void(float fx, vector spot) Tent_Point = {
     WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
     WriteByte (MSG_BROADCAST, fx);
     WriteCoord (MSG_BROADCAST, spot_x);
     WriteCoord (MSG_BROADCAST, spot_y);
     WriteCoord (MSG_BROADCAST, spot_z);
+};
+
+void() SUB_BeamRemove = {
+	num_beams = num_beams - 1;
+	if (num_beams < 0) num_beams = 0;
+	remove(self);
+};
+
+void(float fx, entity src, vector p1, vector p2) Tent_Beam;
+
+// Engine C Code conversion to QC of CL_ParseBeam.  We need a whole lot more than just one progs/beam.mdl!!
+// Oh and the beams are all different lengths.  Yay modders :/  Supposed to be 32 apparently.
+// Nehahra beam is 32 long
+// Drake beam is 31 long
+// Custents beam is 48 long
+// Redfield beam is 32 long
+// Kurok beam is 32 long
+// Check your precaches in old non-QSS/FTE/DP engines!
+//
+// Example:
+// QC_ParseBeam(0,"progs/redfield/beam.mdl", self, org, trace_endpos, 32);
+void(float fx, string m, entity src, vector start, vector end, float length) QC_ParseBeam = {
+	local float loop, numneeded, dist;
+	local entity beam;
+	local vector turnangle;
+
+	dprint("QC_ParseBeam\n");
+	// If src is a client, src.origin overrides start position vector.
+	if (fx == TE_BEAM || fx == TE_LIGHTNING1 || fx == TE_LIGHTNING2) { Tent_Beam(fx,src, start,end); return;} // Normal vanilla beams
+	if (m == "progs/beam.mdl") { Tent_Beam(TE_BEAM,src, start,end); return;} // Vanilla beam
+	if (!m) { Tent_Beam(TE_BEAM,src, start,end); return;} // Vanilla beam
+
+	if (num_beams >= MAX_BEAMS) { dprint("Beam effect list overflow! More than 128!\n"); return; } // Exceeded max qc beams
+	dprint(" beam activate!\n");	
+	if (length <= 0) length = 32; // default
+	dist = vlen(end-start);
+	if (length <= dist) numneeded = 1;
+	else numneeded = ceil(dist/length); // Ceil to get at least 2
+
+	dist = dist / length; // Reuse dist to store spacing needed, this isn't rounded, yes I know I just divided this a second ago
+	while (loop < numneeded) {
+		if (num_beams < MAX_BEAMS) {
+			beam = spawn();
+			num_beams = num_beams + 1;
+			setmodel(beam,m);
+			beam.nextthink = time + 0.2;
+			beam.think = SUB_BeamRemove;
+			beam.movedir = normalize(end - start);
+			setsize(beam,VEC_ORIGIN,VEC_ORIGIN);
+			setorigin(beam,start + (beam.movedir * loop * dist));
+			beam.velocity = beam.avelocity = VEC_ORIGIN;
+
+			// Use Gyro aerodynamics code to align to movedir facing angle
+			turnangle = vectoangles(beam.movedir);
+			turnangle = turnangle - beam.angles;
+			while (turnangle_x > 180.0) turnangle_x = turnangle_x - 360.0;
+			while (turnangle_x < -180.0) turnangle_x = turnangle_x + 360.0;
+			while (turnangle_y > 180.0) turnangle_y = turnangle_y - 360.0;
+			while (turnangle_y < -180.0) turnangle_y = turnangle_y + 360.0;
+			while (turnangle_z > 180.0) turnangle_z = turnangle_z - 360.0;
+			while (turnangle_z < -180.0) turnangle_z = turnangle_z + 360.0;
+			beam.angles = turnangle;
+		}
+		loop = loop + 1;
+	}
 };
 
 void(float fx, entity src, vector p1, vector p2) Tent_Beam = {
@@ -411,33 +460,7 @@ void(vector spot, float rgb, float add) Tent_Explosion2 = {
     WriteByte (MSG_BROADCAST, add);     // Range is from rgb to rgb+add-1.
 };
 
-// Generic beam.
-// NOTE:  Nehahra engine feature.  Not available in standard Quake.
-//void(string text, entity src, vector p1, vector p2) Tent_NehBeam =
-//{
-//    WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-//    WriteByte (MSG_BROADCAST, 17);      // TE_LIGHTNING4
-//    WriteString (MSG_BROADCAST, text);
-//    WriteEntity (MSG_BROADCAST, src);   // If client, p1 is always origin.
-//    WriteCoord (MSG_BROADCAST, p1_x);
-//    WriteCoord (MSG_BROADCAST, p1_y);
-//    WriteCoord (MSG_BROADCAST, p1_z);
-//    WriteCoord (MSG_BROADCAST, p2_x);
-//    WriteCoord (MSG_BROADCAST, p2_y);
-//    WriteCoord (MSG_BROADCAST, p2_z);
-//};
-
-//void(vector p1, vector p2, vector ang) Tent_TomazRail =
-//{   // MSG_BROADCAST should be 0.
-//    WriteByte (0, SVC_TEMPENTITY); WriteByte (0, 17);
-//    WriteCoord (0, p1_x); WriteCoord (0, p1_y); WriteCoord (0, p1_z);
-//    WriteCoord (0, p2_x); WriteCoord (0, p2_y); WriteCoord (0, p2_z);
-//    WriteCoord (0, ang_x); WriteCoord (0, ang_y); WriteCoord (0, ang_z);
-//};
-
-//- - - - - - - - -
-void(vector spot) R_Exp3 =
-{
+void(vector spot) R_Exp3 = {
     local   entity  e;
 
     e = spawn();
@@ -448,42 +471,33 @@ void(vector spot) R_Exp3 =
 
 void(vector spot) Rocket_Explosion1 = {
     R_Exp3 (spot);
-
     Tent_Explosion (spot);
 };
 
-void(vector spot, float rgb, float add) Rocket_Explosion2 =
-{
+void(vector spot, float rgb, float add) Rocket_Explosion2 = {
     R_Exp3 (spot);
-
     Tent_Explosion2 (spot, rgb, add);
 };
 
-void(vector spot) Rocket_TarExplosion =
-{
+void(vector spot) Rocket_TarExplosion = {
     R_Exp3 (spot);
-
     WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
     WriteByte (MSG_BROADCAST, TE_TAREXPLOSION);
     WriteCoord (MSG_BROADCAST, spot_x);
     WriteCoord (MSG_BROADCAST, spot_y);
     WriteCoord (MSG_BROADCAST, spot_z);
 };
-//- - - - - - - - -
 
 void() Old_Explosion1 = {Rocket_Explosion1 (self.origin);  BecomeExplosion ();};
 
-//==========================================================================
 //  Common Explosions
-
 //float   CX_ORANGE   = 0;
 //float   CX_RED      = 1;
 //float   CX_YELLOW   = 2;
 //float   CX_BLUE     = 3;
 //float   CX_PURPLE   = 4;
 
-void(vector spot, float r) Colored_Explosion =
-{
+void(vector spot, float r) Colored_Explosion = {
     local   float   base, add;
 
     if (r == 3)
@@ -694,8 +708,7 @@ void(float rgb, float density, float full) Meteor_Trail =
 };
 
 // 'waitmin' = slow color, 'waitmax' = fast color.
-void(entity shot, float rgb) Laser_Color =
-{
+void(entity shot, float rgb) Laser_Color = {
     shot.skin = rgb;
     if (rgb == 3)   // Blue
         {shot.waitmin = 9;  shot.waitmax = 41;}
@@ -708,25 +721,18 @@ void(entity shot, float rgb) Laser_Color =
     // Note:  For orange, I replaced 225 with 97 to stop blood in some ports.
 };
 
-//==========================================================================
 //  Nemesant Effects
-
-// PM:  Like BecomeExplosion, but for the Nemesant's signature explosion.
+// PM: Like BecomeExplosion, but for the Nemesant's signature explosion.
 // In Drake, some bosses use this for their post-mortem explosions.
-void() WarpExplosion =
-{
-    sound (self, CHAN_AUTO, "nemesant/bigboom.wav", 1, ATTN_NORM);
+void() WarpExplosion = {
+    sound (self, CHAN_AUTO, "zerstorer/trog/bigboom.wav", 1, ATTN_NORM);
     Tent_Point (TE_EXPLOSION, self.origin);
     FlameWave ();       // PM:  New shockwave effect at ground zero.
-// DISABLED -- Quake effects may be a bit excessive.
-//    Quake_Spawn (300, 0, self.origin, 0, 1);
     BecomeTheBigFire ();    // Replaced old fireball mdl with big sprite.
 };
 
-//- - - - - - - - -
 // PM:  Moved circle drawing code from Zerstorer's misc.qc to here.
-void(vector Center, float Radius, float CColor) DrawCircleXY =
-{
+void(vector Center, float Radius, float CColor) DrawCircleXY = {
 local   float   MajorAxis, MinorAxis;
 local   float   RadSqminusMajAxis, MinAxisSqThreshold;
 local   vector  circlepos, vel;
@@ -766,17 +772,14 @@ local   vector  circlepos, vel;
     } while ( MajorAxis <= MinorAxis );
 };
 
-//==========================================================================
 //  LIGHTNING (Custom addition)
 //
 //  This is an edict set aside for the sole purpose of referencing
 //  reflected lightning bolts.
-//==========================================================================
 entity  lightning;
 
 // Used by lightning code to draw reflected lightning bolts.
-void() InitLightning =
-{ 
+void() InitLightning = {
     lightning = spawn();
     setsize (move_box, VEC_ORIGIN, VEC_ORIGIN);
     move_box.solid      = SOLID_NOT;
@@ -785,7 +788,6 @@ void() InitLightning =
 	dprint("\b[SETUP]\b Drake lightning is now setup\n");
 };
 
-//==========================================================================
 //  Normal Lightning Bolt
 
 // Creates a discharge effect.
@@ -804,16 +806,14 @@ void() InitLightning =
   //      SUB_Think (ent, War_FindBestWeapon);
 
 // FIXME:  In DarkPlaces, clients can set lightning color for themselves.
- //   sound (self, CHAN_AUTO, "plasma/explode.wav", 1, ATTN_NORM);
+ //   sound (self, CHAN_AUTO, "rogue/plasma/explode.wav", 1, ATTN_NORM);
  //   Rocket_Explosion2 (ent.origin, 244, 3);
 //    MakeFancy (ent.origin, X56_PLASMA_BLUE, 6);
     // PM:  Added rocket damage flag for shamblers' resistance.
 //    T_RadiusDamage (ent, ent, damage, world, DAMAGEALL);
 //};
 
-//------------------------------------------------------------------------//
 //  This inflicts damage to an entity hit by the lightning bolt.
-//------------------------------------------------------------------------//
 void LightningBlood (entity targ,vector org,float damage);
 float(entity source, entity targ) ai_immunebreakable;
 void(entity targ, vector org, vector vel, float damage, float type, string hitsound, string burstsound) Resist_Effects;
@@ -861,17 +861,12 @@ void(entity targ, vector org, float damage) LightningBlood =
     }
 };
 
-//------------------------------------------------------------------------//
 //  This strikes all entities hit by the lightning bolt.
-//------------------------------------------------------------------------//
-void(vector p1, vector p2, entity attacker, float damage, entity inflictor,
-    float fx, string dtype) LightningBolt =
-{
 // The old lightning code spawned two more invisible beams at weird places
 // that could damage and kill more enemies (or teammates).  The new code
 // below creates a single piercing bolt that hits everything in its path,
 // like the railgun.  Lightning in many games (e.g., D&D, Diablo) pierce.
-
+void(vector p1, vector p2, entity attacker, float damage, entity inflictor, float fx, string dtype) LightningBolt = {
     local   entity  ruler;
     local   entity  ignore;
     local   entity  targ;
@@ -882,26 +877,18 @@ void(vector p1, vector p2, entity attacker, float damage, entity inflictor,
     local   float   yes;
     local   float   first;
 
-    //GhostTouch_On ();
-
     first =
     yes = TRUE;
     ruler = inflictor;
-
     dir = p2 - p1;
     delta = vlen(dir);  // Get total length in case of reflection.
     dir = normalize(dir);
-
-    while (ruler)
-    {
+    while (ruler) {
         ignore = inflictor = ruler;
         ruler = world;      // End loop unless set otherwise by reflection.
         start = p1;
-
-        do
-        {
+        do {
             traceline (p1, p2, FALSE, ignore);
-    
             p1 = trace_endpos;
             targ = trace_ent;
 
@@ -938,46 +925,32 @@ void(vector p1, vector p2, entity attacker, float damage, entity inflictor,
         // hitting himself and preventing the bolt from piercing anymore.
         // (Note:  If attacker is inside the monster because of noclip,
         // he can still hit himself.)
-            if (ignore)     // Always world if 'p2 == trace_endpos'.
-            {
+            if (ignore) { // Always world if 'p2 == trace_endpos'.
                 dist = vlen(p2 - p1);
                 if (dist > 1)
                     p1 = p1 + dir;
                 else
                     ignore = world;   // Not enough distance left, so just stop.
             }
-        }
-        while (ignore);
+        } while (ignore); // end do{}while
 
-        // Draw the lightning bolt between the two points.
-        Tent_Beam (fx, inflictor, start, p1);
+		QC_ParseBeam(fx,string_null, inflictor, start, p1, 32); // Draw the lightning bolt between the two points.
     }
-
-    //GhostTouch_Off ();
 };
-void(vector p1, vector p2, entity attacker, float damage) LightningBolt1 =
-    { LightningBolt (p1, p2, attacker, damage, attacker, TE_LIGHTNING1, "lightning"); };
-void(vector p1, vector p2, entity attacker, float damage) LightningBolt2 =
-    { LightningBolt (p1, p2, attacker, damage, attacker, TE_LIGHTNING2, "lightning"); };
 
-//==========================================================================
 //  Smart Fireballs -- Used by nemesant (and SoE sorcerer).
-
-void() SmartBall_Think =
-{
-    if (self.delay <= time)
-        {remove(self); return;}
+void() SmartBall_Think = {
+    if (self.delay <= time) {remove(self); return;}
 
     self.angles = vectoangles(self.velocity);
 
-// Changed particle count from 25 at 10/sec to 10 at 20/sec.
-// Note:  2000 speed rocket trails spawn 11 at about 50/sec.
+	// Changed particle count from 25 at 10/sec to 10 at 20/sec.
+	// Note:  2000 speed rocket trails spawn 11 at about 50/sec.
     particle (self.origin, '0 0 1', 233, 10);   //particle (self.origin, '0 0 1', 233, 25);
     self.nextthink = time + 0.05;               //self.nextthink = time + 0.1;
 };
 
-void() SmartBall_Bounce =
-{
+void() SmartBall_Bounce = {
     local   vector  p1, p2;
     local   float   up;
 
@@ -1010,7 +983,7 @@ void() SmartBall_Touch = {
     }
 
     // PM:  Removed 'hknight/hit.wav'.
-    sound (self, CHAN_WEAPON, "nemesant/frblfly.wav", 0.6, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "zerstorer/trog/frblfly.wav", 0.6, ATTN_NORM);
     self.count = self.count + 1;
     self.think = SmartBall_Bounce;
     self.nextthink = time + 0.01;
@@ -1023,11 +996,9 @@ void(vector start, vector dir, vector add) SmartBall_Launch = {
     newmis.solid        = SOLID_BBOX;
 	newmis.classgroup = CG_PROJALL;
     newmis.classname    = "fireball";
-// set missile speed
     newmis.speed        = 600;
     newmis.velocity     = (dir * 600) + add;
     newmis.angles       = vectoangles(newmis.velocity);
-// set missile damage
     if (cranked)
         newmis.dmg          = 60;
     else
@@ -1035,15 +1006,12 @@ void(vector start, vector dir, vector add) SmartBall_Launch = {
     newmis.enemy        = self.enemy;
     newmis.style        = DF_ROCKET | DF_SAFE;
     newmis.worldtype    = MDAM_GRENADE;
-// set missile special stuff
     newmis.count        = 0;
-// set missile duration
     newmis.touch        = SmartBall_Touch;
     newmis.delay        = time + 20;    // Total duration
     newmis.nextthink    = time + 0.1;
     newmis.think        = SmartBall_Think;
 	newmis.classtype 	= CT_PROJ_SMARTBALL;
-
     setall (newmis, "progs/drake/smartbal.mdl", '0 0 0', '0 0 0', start);
 };
 
@@ -1059,21 +1027,18 @@ void(vector st) M_FireSmart = {
     up = '0 0 0';
     up_z = Aim_TossUp (p1, p2, 600);
     dir = Maim_SmartBall (p1, p2, 600, up_z, targ, '0 0 0');
-    if (!targ)
-    {   // In case we can't hit enemy, just lob it straight ahead.
+    if (!targ) { // In case we can't hit enemy, just lob it straight ahead.
         TraceToss (p1, up + dir*600, FALSE, self, 5);
         if (trace_ent != self.enemy)
             up_z = 200;
     }
 
     self.effects = self.effects | EF_MUZZLEFLASH;
-    sound (self, CHAN_AUTO, "nemesant/frblfly.wav", 0.6, ATTN_NORM);
-
+    sound (self, CHAN_AUTO, "zerstorer/trog/frblfly.wav", 0.6, ATTN_NORM);
     SmartBall_Launch (p1, dir, up);
 };
 
-void() death_puff =
-{
+void() death_puff = {
     local   vector  spot;
     local   entity  puff;
 
@@ -1081,7 +1046,6 @@ void() death_puff =
     spot_y = random();
     spot_z = random() * 0.5;
     spot = Anypoint (self, spot);
-
     puff = spawn();
     setorigin (puff, spot);
     puff.effects = EF_MUZZLEFLASH;
@@ -1089,78 +1053,38 @@ void() death_puff =
     SUB_Think (puff, BecomeExplosion);  // FIXME:  Invisible in Qrack.
 };
 
-// Like ShockWave, but show only the top side.
-// Use for mini-rings, when you need a lot of them.
-void(vector spot, float base, float add, string text) HalfWave =
-{
+// Like ShockWave, but show only the top side.  Use for mini-rings, when you need a lot of them.
+void(vector spot, float base, float add, string text) HalfWave = {
     local   entity  wav1, ts;
     local   vector  ang;
 
     traceline (spot, spot - '0 0 64', TRUE, world);
-    if (trace_fraction >= 1.0)
-        return;     // Too far from ground.
-    // Removed slope check.
+    if (trace_fraction >= 1.0) return;     // Too far from ground.
 
+    // Removed slope check.
     spot = trace_endpos + trace_plane_normal * 2;
     ang = vectoangles(trace_plane_normal);
     ang_y = anglemod(ang_y + 180);
 
-// Top side.
+	// Top side.
     wav1 = spawn();
     wav1.angles     = ang;
     setorigin (wav1, spot);
 
-// Thinking
+	// Thinking
     ts = self;
     self = wav1;
     BecomeAnyExplosion (base, add, text);
     self = ts;
 };
 
-//==========================================================================
-//  Wind Wall -- for SoE
-
-//- - - - - - - - -
-// Missile_Up -- Variation of 'ReflectMissile'.
-// Redirects a missile straight up.
-//
-// Entity who is reflecting the shot is assumed to be 'self'.
-//
-// shot:  Missile to be redirected.
-//- - - - - - - - -
-void(entity shot) Missile_Up =
-{
-    if (shot.movetype == MOVETYPE_NONE)
-        return;     // Can't move.
-
-// Reset fields that may affect its movement.
-    if (!shot.speed)
-        shot.speed = vlen(shot.velocity);
-    shot.movedir = '0 0 1';
-    shot.velocity = shot.movedir * shot.speed;
-    shot.dest = shot.velocity;      // For lasers and spikes.
-    shot.angles = vectoangles(shot.movedir);
-    if (shot.pos1_x)    // For fireballs.
-        shot.angles_x = shot.angles_x + shot.pos1_x;
-    shot.oldorigin = shot.origin;   // For particle trails.
-// Unstick missile if engine thinks it is on the ground.
-    shot.flags = shot.flags - (shot.flags & FL_ONGROUND);
-    shot.groundentity = world;
-// Special:  If remote controlled mirv, sever link.
-    if (shot.master)
-        if (shot.master.mirv1 == shot)
-            shot.master.mirv1 = world;
-};
-
-// Spawns a dust cloud upward.  Used by Storm Baron's gust attack.
-void(entity ent) Particle_Gust =
-{
-    local   vector  spot;
-    local   float   loop;
+//  Wind Wall.  Spawns a dust cloud upward.  Used by Storm Baron's gust attack.
+void(entity ent) Particle_Gust = {
+    local vector spot;
+    local float loop;
 
     loop = 9;
-    while (loop > 0)
-    {
+    while (loop > 0) {
         loop = loop - 1;
         spot_x = random() * 2 - 0.5;
         spot_y = random() * 2 - 0.5;
@@ -1447,9 +1371,9 @@ void () misc_raincloud = {
 	precache_model (self.path);
 	precache_model (self.headmdl);
 	
-	if (!self.noise1) self.noise1 = "misc/drip1.wav";
-	if (!self.noise2) self.noise2 = "misc/drip2.wav";
-	if (!self.noise3) self.noise3 = "misc/drip3.wav";
+	if (!self.noise1) self.noise1 = "ad171/misc/drip1.wav";
+	if (!self.noise2) self.noise2 = "ad171/misc/drip2.wav";
+	if (!self.noise3) self.noise3 = "ad171/misc/drip3.wav";
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);

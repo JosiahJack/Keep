@@ -205,10 +205,10 @@ void() bogl_smash1  =[ $smash1,  bogl_smash2 ] { ai_charge(2);
 	if (self.meleeattack > 2) self.meleeattack = 0;
 	// Never play the same melee sound twice
 	if (self.meleeattack == 0) {
-		sound (self, CHAN_VOICE, "boglord/melee1.wav", 1, ATTN_NORM);}
+		sound (self, CHAN_VOICE, "ad171/boglord/melee1.wav", 1, ATTN_NORM);}
 	else if (self.meleeattack == 1) {
-		sound (self, CHAN_VOICE, "boglord/melee2.wav", 1, ATTN_NORM);}
-	else {sound (self, CHAN_VOICE, "boglord/melee3.wav", 1, ATTN_NORM);}
+		sound (self, CHAN_VOICE, "ad171/boglord/melee2.wav", 1, ATTN_NORM);}
+	else {sound (self, CHAN_VOICE, "ad171/boglord/melee3.wav", 1, ATTN_NORM);}
 };
 void() bogl_smash2  =[ $smash2,  bogl_smash3 ] {monster_footstep(FALSE);
 	bogl_slimeball('21 70 60','32 -53 64',0,6);};
@@ -243,7 +243,7 @@ void() bogl_lightning =
 
 	// Setup skill based attack speed
 	self.attack_speed = SPEED_BLORDBOLT + (skill * SPEED_BLORDSKILL);
-	sound (self, CHAN_WEAPON, "boglord/bolt_fire.wav", 1, ATTN_NORM);	
+	sound (self, CHAN_WEAPON, "ad171/boglord/bolt_fire.wav", 1, ATTN_NORM);	
 
 	// Aim around player
 	makevectors (self.angles);
@@ -327,7 +327,7 @@ void(vector leftofs, vector rightofs, float sbframe) bogl_casting =
 //----------------------------------------------------------------------
 void() bogl_magic1 =[ $magic1, bogl_magic2 ] {ai_face();
 	self.pain_finished = time + 1;
-	sound (self, CHAN_WEAPON, "boglord/attack2.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_WEAPON, "ad171/boglord/attack2.wav", 1, ATTN_NORM);};
 void() bogl_magic2 =[ $magic2, bogl_magic3 ] {
 	bogl_casting('0 53 86','21 -10 102',0);};
 void() bogl_magic3 =[ $magic3, bogl_magic4 ] {
@@ -339,7 +339,7 @@ void() bogl_magic5 =[ $magic5, bogl_magic6 ] {
 void() bogl_magic6 =[ $magic6, bogl_magic9 ] {bogl_lightning();
 	// Finished with growing ball of energy
 	bogl_finish_attachment();
-	SpawnExplosion(self.part_life, self.pos3, "boglord/slime_explode.wav");
+	SpawnExplosion(self.part_life, self.pos3, "ad171/boglord/slime_explode.wav");
 };
 void() bogl_magic9 =[ $magic9, bogl_magic10 ] {bogl_lightning();};
 void() bogl_magic10 =[ $magic10, bogl_magic11 ] {bogl_lightning();monster_footstep(FALSE);};
@@ -347,9 +347,7 @@ void() bogl_magic11 =[ $magic11, bogl_magic12 ] {
 	if (skill == SKILL_NIGHTMARE) bogl_lightning();};
 void() bogl_magic12 =[ $magic12, bogl_run1 ] {};
 
-//============================================================================
-void() bogl_tetherattack =
-{
+void() bogl_tetherattack = {
 	// Completely randomize tether attack chance 50/50
 	// Both attacks have different advantages with different
 	// skill levels, might as well make it equal chance
@@ -410,7 +408,7 @@ void() bogl_die =
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "boglord/death1.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "ad171/boglord/death1.wav", 1, ATTN_NORM);
 		bogl_death1 ();
 	}
 	else {
@@ -434,7 +432,7 @@ void() bogl_die =
 //----------------------------------------------------------------------
 void() bogl_wakeup1 =[ $smash7,		bogl_wakeup2 ] {};
 void() bogl_wakeup2 =[ $smash8,		bogl_wakeup3 ] {
-	sound (self, CHAN_VOICE, "boglord/melee3.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_VOICE, "ad171/boglord/melee3.wav", 1, ATTN_NORM);};
 void() bogl_wakeup3 =[ $smash9,		bogl_wakeup4 ] {};
 void() bogl_wakeup4 =[ $smash10,	bogl_wakeup5 ] {};
 void() bogl_wakeup5 =[ $smash11,	bogl_wakeup6 ] {};
@@ -443,8 +441,7 @@ void() bogl_wakeup6 =[ $smash12,	bogl_run1 ] {};
 /*======================================================================
 QUAKED monster_boglord (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 ======================================================================*/
-void() monster_boglord =
-{
+void() monster_boglord = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
@@ -501,36 +498,32 @@ void() monster_boglord =
 	precache_model (MODEL_PROJ_BLORDBOLT1);	// Large Bolt Projectile
 	precache_model (MODEL_PROJ_BLORDBOLT2);
 	
-	self.idle_sound = "boglord/idle1.wav";
-	self.idle_sound2 = "boglord/idle2.wav";
+	self.idle_sound = "ad171/boglord/idle1.wav";
+	self.idle_sound2 = "ad171/boglord/idle2.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
 
-	precache_sound ("boglord/death1.wav");
-	self.pain_sound = "boglord/pain1.wav";
-	self.pain_sound2 = "boglord/pain2.wav";
+	precache_sound ("ad171/boglord/death1.wav");
+	self.pain_sound = "ad171/boglord/pain1.wav";
+	self.pain_sound2 = "ad171/boglord/pain2.wav";
 	precache_sound (self.pain_sound);
 	precache_sound (self.pain_sound2);
 
-	precache_sound ("boglord/melee1.wav");
-	precache_sound ("boglord/melee2.wav");
-	precache_sound ("boglord/melee3.wav");
-	precache_sound ("boglord/bolt_fire.wav");
+	precache_sound ("ad171/boglord/melee1.wav");
+	precache_sound ("ad171/boglord/melee2.wav");
+	precache_sound ("ad171/boglord/melee3.wav");
+	precache_sound ("ad171/boglord/bolt_fire.wav");
 	
 	// Slime arc attack (not used anymore)
-	precache_sound ("boglord/attack2.wav");
-	precache_sound ("boglord/slime_explode.wav");
-	precache_sound ("boglord/slime_miss.wav");
-	
-	// Melee attacks no longer used anymore
-	//self.meleehitsound = "boglord/smack.wav";
-	//precache_sound (self.meleehitsound);
+	precache_sound ("ad171/boglord/attack2.wav");
+	precache_sound ("ad171/boglord/slime_explode.wav");
+	precache_sound ("ad171/boglord/slime_miss.wav");
 
-	self.sight_sound = "boglord/sight.wav";
+	self.sight_sound = "ad171/boglord/sight.wav";
 	precache_sound (self.sight_sound);
-	precache_sound ("boglord/thud.wav");
-	precache_sound ("boglord/bangdoor1.wav");
-	precache_sound ("boglord/bangdoor2.wav");
+	precache_sound ("ad171/boglord/thud.wav");
+	precache_sound ("ad171/boglord/bangdoor1.wav");
+	precache_sound ("ad171/boglord/bangdoor2.wav");
 
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement

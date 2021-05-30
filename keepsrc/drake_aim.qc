@@ -1,34 +1,65 @@
-//entity(entity attacker) Grapple_Pull_Who;
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Drake by Patrick Martin
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 0
+//
+// Implements: Shot Leading System for monster aiming
+//
+// Description:
+// Adjusts firing angles based on target's velocity for smart aiming.
+//
+// The set of numbers in the 'spread' vectors passed to these aim
+// functions are angles, not their tangents.
+//
+// Why pass the angles?  Because the values returned by crandom() with
+// tangents passed to it tends to favor the edges.  For example, passing
+// a tangent of 10000000 to crandom will very likely return a value that,
+// if you calcualated its inverse tangent, be 89.x degrees.
+//
+// By passing the angle instead, there is no bias for any angle, assuming
+// the random() function does its job.  After randomization, the angle may
+// be converted to a tangent for whatever purpose.
+//=============================================================================
 
-//==========================================================================
-//  Shot Leading
-
-//------------------------------------------------------------------------//
-//  This returns the coefficient that multiplies an entity's velocity.
-//------------------------------------------------------------------------//
+// This returns the coefficient that multiplies an entity's velocity.
 float(entity ent) Aim_SpeedMod = {
-    local   float   sped;
+    local   float sped;
 
     sped = 1;
-// SoE:  Biosuit killed the wetsuit and took its stuff.
-    if (ent.flags & FL_CLIENT)
-    {   // Only a player is affected by all of these events.
-        if (ent.waterlevel == 3)
-        {
-            if (ent.radsuit_finished)
-                sped = 1.5;
+    if (ent.flags & FL_CLIENT) { // Only a player is affected by all of these events.
+        if (ent.waterlevel == 3) {
+            if (ent.wetsuit_finished > time) sped = 1.5;
+        } else if (ent.waterlevel == 2) {
+            if (ent.wetsuit_finished > time) sped = 1.25;
         }
-        else if (ent.waterlevel == 2)
-        {
-            if (ent.radsuit_finished)
-                sped = 1.25;
-        }
-        else if (ent.form_active == FORM_DRAGON)
-            sped = 1.429;       // 10/7 or 1.428571...
-
-        // Update: 10/29/10:  Check all sources of slow.
-        if ((ent.curse_type == CURSE_SLOW) || ent.slow_finished)
-            sped = sped / 2;
+        if ((ent.curse_type == CURSE_SLOW) || ent.slow_finished) sped = sped / 2; // Update: 10/29/10:  Check all sources of slow.
     }
     return sped;
 };
@@ -49,33 +80,23 @@ float(entity ent) IsFalling = {
 
 //  Check if target's vertical velocity should be ignored.
 float(entity ent) Aim_IgnoreZ = {
-    // A player swimming along the surface of water has a velocity that
-    // oscillates up and down constantly and should be ignored.
-    //
+    // A player swimming along the surface of water has a velocity that oscillates up and down constantly and should be ignored.
     // Flight via Dark Angel wings also has a similar effect in the air.
-    // Update:  Wings replaced by Boots of Levitation.  However, it is
-    // probably a good idea to keep the same item check code.
-    //- - - - - - -
-    if (ent.movetype == MOVETYPE_WALK)      //(ent.classname == "player")
-    {
-        if (!(ent.flags & FL_ONGROUND))
-        {
+    if (ent.movetype == MOVETYPE_WALK) {
+        if (!(ent.flags & FL_ONGROUND)) {
             if (ent.waterlevel)
-                if (ent.waterlevel < 3)
-                    return TRUE;    // Swimming along water surface.
+                if (ent.waterlevel < 3) return TRUE;    // Swimming along water surface.
 
             if (ent.wing_finished)
                 if (ent.button2)
-                    if (ent.waterlevel < 2)
-                        return TRUE;    // Flying with Dark Angel wings.
+                    if (ent.waterlevel < 2) return TRUE;    // Flying with Dark Angel wings.
         }
     }
     return FALSE;
 };
 
-//------------------------------------------------------------------------//
 //  This tries to predict where the target will go, then returns that spot.
-//
+
 //  NOTE:  This only works on targets that have a velocity value.
 //  In Quake, only players have a constantly updated velocity.  Monsters
 //  do not update their velocity because they move in steps, unless it is
@@ -88,11 +109,9 @@ float(entity ent) Aim_IgnoreZ = {
 //  QuakeC and using them may involve running more code than necessary when
 //  a more primitive yet simplier way (as far as Quake is concerned) of
 //  getting an answer that is "close enough" is sufficient.
-//------------------------------------------------------------------------//
 vector(vector p1, vector p2, float sped, entity targ) Aim_Lead = {
     local   float   mx, loop, airtime;
-    local   float   xyz;    // TRUE = Use all three dimensions.
-    // local   float   wired;  // TRUE = Riding a grapple cable.
+    local   float   xyz; // TRUE = Use all three dimensions.
     local   vector  lead, tv, spot;
     local   float   fell; // Distance fallen.
     local   float   gforce; // Target gravity.
@@ -282,22 +301,6 @@ float(vector p1, vector p2, float sped) Aim_TossUp = {
     return up;
 };
 
-//==========================================================================
-//  Monster Aiming
-//
-//- NOTE - - - - - -
-// The set of numbers in the 'spread' vectors passed to these aim
-// functions are angles, not their tangents.
-//
-// Why pass the angles?  Because the values returned by crandom() with
-// tangents passed to it tends to favor the edges.  For example, passing
-// a tangent of 10000000 to crandom will very likely return a value that,
-// if you calcualated its inverse tangent, be 89.x degrees.
-//
-// By passing the angle instead, there is no bias for any angle, assuming
-// the random() function does its job.  After randomization, the angle may
-// be converted to a tangent for whatever purpose.
-//- - - - - - - - -
 vector(vector dir, vector vtan) Aim_Tangent = {
     local   vector  vang;
     local   float   mx;
@@ -346,20 +349,12 @@ vector(vector dir, vector spread) Maim_Scatter = {
     return Aim_Tangent (dir, spread);
 };
 
-
-//- - - - - - - - -
-// Constants
 float   SHOT_TIME_TOSS      = 5;
 float   SHOT_TIME_BOUNCE    = 2.5;      // Assuming grenades.
 float   SMARTBALL           = -1;   // Used instead of a movetype to do hack.
 
-//------------------------------------------------------------------------//
-//  This returns the directional vector needed for a monster to hit its
-//  target.
-//
-//  NOTE:  The vector returned can be smaller than a unit vector.
-//  (Really, it should not because that is cheating.  Oh well.)
-//------------------------------------------------------------------------//
+// This returns the directional vector needed for a monster to hit its target.
+// NOTE:  The vector returned can be smaller than a unit vector.  (Really, it should not because that is cheating.  Oh well.)
 vector(vector p1, vector p2, float sped, float up, entity targ, float ex, float fuse, float mtype)  Aim_Ballistic = {
     if (!sped) return '0 0 0';     // Avoid divison by zero.
 
@@ -371,16 +366,14 @@ vector(vector p1, vector p2, float sped, float up, entity targ, float ex, float 
     vup_z = up;
 
 	// Locate the point we want to aim at.
-    if (targ)
-    {
+    if (targ) {
         dir = Aim_Lead (p1, p2, sped, targ);
         if (ex < 1)
             dir = p2 + ((dir - p2) * ex);   // Partial leading.
         // Check if the path to the projected endpoint is clear.
         // NOTE:  This does not check if monsters are in the way.
         traceline (p1, dir, TRUE, self);
-        if (trace_fraction == 1)
-            p2 = dir;   // Success.
+        if (trace_fraction == 1) p2 = dir;   // Success.
     }
     self.dest = p2;
 
@@ -510,7 +503,7 @@ vector(vector p1, vector p2, float sped, entity targ, float ex) Aim_LineEx = {
             traceline (p1, dir, TRUE, self);
             if (trace_fraction == 1) p2 = dir;   // Success.
         }
-	} //else if no speed, assume instant-hit... and avoid division by zero.
+	} //else if no speed, do instant-hit... and avoid division by zero.
     dir = normalize (p2 - p1);
     return dir;
 };

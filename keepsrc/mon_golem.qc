@@ -125,7 +125,6 @@ void() golem_walk32 =[ $walk32, golem_walk33 ] {golem_ai_walk();};
 void() golem_walk33 =[ $walk33, golem_walk34 ] {golem_ai_walk();};
 void() golem_walk34 =[ $walk34, golem_walk1 ] {golem_ai_walk();};
 
-//============================================================================
 void() golem_ai_run = {
 	if (self.frame == $run1 || self.frame == $run13)
 		{ ai_run(0); monster_footstep(FALSE); }
@@ -159,12 +158,9 @@ void() golem_run21 =[ $run21, golem_run22 ] {golem_ai_run();};
 void() golem_run22 =[ $run22, golem_run23 ] {golem_ai_run();};
 void() golem_run23 =[ $run23, golem_run1 ] {golem_ai_run();};
 
-//============================================================================
 // MELEE - Punch or Pound the ground with fist
-//============================================================================
 void(float dist) golem_mcharge = { ai_charge(dist);self.nextthink = time + 0.05;};
 
-//----------------------------------------------------------------------
 void() golem_punch1 = [ $punch1, golem_punch2 ] {golem_mcharge(5);};
 void() golem_punch2 = [ $punch2, golem_punch3 ] {golem_mcharge(5);};
 void() golem_punch3 = [ $punch3, golem_punch4 ] {golem_mcharge(5);};
@@ -174,11 +170,11 @@ void() golem_punch6 = [ $punch6, golem_punch7 ] {golem_mcharge(5);};
 void() golem_punch7 = [ $punch7, golem_punch8 ] {golem_mcharge(5);};
 void() golem_punch8 = [ $punch8, golem_punch9 ] {golem_mcharge(5);};
 void() golem_punch9 = [ $punch9, golem_punch10 ] {golem_mcharge(5);
-	sound (self, CHAN_VOICE, "golem/melee_swipe.wav", 1, ATTN_IDLE);};
+	sound (self, CHAN_VOICE, "ad171/golem/melee_swipe.wav", 1, ATTN_IDLE);};
 void() golem_punch10 = [ $punch10, golem_punch11 ] {golem_mcharge(4);};
 void() golem_punch11 = [ $punch11, golem_punch12 ] {golem_mcharge(3);monster_footstep(FALSE);};
 void() golem_punch12 = [ $punch12, golem_punch13 ] {golem_mcharge(2);
-	self.meleehitsound = "golem/melee_pound.wav";
+	self.meleehitsound = "ad171/golem/melee_pound.wav";
 	self.meleecontact = TRUE;ai_meleesmash(20);
 	self.meleecontact = FALSE;
 };
@@ -195,7 +191,6 @@ void() golem_punch22 = [ $punch22, golem_punch23 ] {golem_mcharge(5);};
 void() golem_punch23 = [ $punch23, golem_punch24 ] {golem_mcharge(5);};
 void() golem_punch24 = [ $punch24, golem_run1 ] {golem_mcharge(5);monster_footstep(FALSE);};
 
-//----------------------------------------------------------------------
 void() golem_pound1 = [ $pound1, golem_pound2 ] {golem_mcharge(5);};
 void() golem_pound2 = [ $pound2, golem_pound3 ] {golem_mcharge(5);};
 void() golem_pound3 = [ $pound3, golem_pound4 ] {golem_mcharge(5);};
@@ -205,11 +200,11 @@ void() golem_pound6 = [ $pound6, golem_pound7 ] {golem_mcharge(5);};
 void() golem_pound7 = [ $pound7, golem_pound8 ] {golem_mcharge(5);};
 void() golem_pound8 = [ $pound8, golem_pound9 ] {golem_mcharge(5);};
 void() golem_pound9 = [ $pound9, golem_pound10 ] {golem_mcharge(5);
-	sound (self, CHAN_VOICE, "golem/melee_swipe.wav", 1, ATTN_IDLE);};
+	sound (self, CHAN_VOICE, "ad171/golem/melee_swipe.wav", 1, ATTN_IDLE);};
 void() golem_pound10 = [ $pound10, golem_pound11 ] {golem_mcharge(4);};
 void() golem_pound11 = [ $pound11, golem_pound12 ] {golem_mcharge(3);monster_footstep(FALSE);};
 void() golem_pound12 = [ $pound12, golem_pound13 ] {golem_mcharge(2);
-	self.meleehitsound = "golem/melee_pound.wav";
+	self.meleehitsound = "ad171/golem/melee_pound.wav";
 	self.meleecontact = TRUE;ai_meleesmash(40);
 	self.meleecontact = FALSE;
 };
@@ -239,12 +234,12 @@ void() golem_knock9 = [ $knock9, golem_knock10 ] {golem_mcharge(7);};
 void() golem_knock10 = [ $knock10, golem_knock11 ] {golem_mcharge(6);};
 void() golem_knock11 = [ $knock11, golem_knock12 ] {golem_mcharge(5);monster_footstep(FALSE);};
 void() golem_knock12 = [ $knock12, golem_knock13 ] {golem_mcharge(5);
-	sound (self, CHAN_VOICE, "golem/melee_swipe.wav", 1, ATTN_IDLE);};
+	sound (self, CHAN_VOICE, "ad171/golem/melee_swipe.wav", 1, ATTN_IDLE);};
 void() golem_knock13 = [ $knock13, golem_knock14 ] {golem_mcharge(4);};
 void() golem_knock14 = [ $knock14, golem_knock15 ] {golem_mcharge(3);};
 void() golem_knock15 = [ $knock15, golem_knock16 ] {golem_mcharge(2);};
 void() golem_knock16 = [ $knock16, golem_knock17 ] {golem_mcharge(1);
-	self.meleehitsound = "golem/melee_punch.wav";
+	self.meleehitsound = "ad171/golem/melee_punch.wav";
 	self.meleecontact = TRUE;ai_meleesmash(30);
 	// If punch made contact, lift the enemy off ground
 	if (self.meleecontact == FALSE) {
@@ -294,7 +289,7 @@ void() golem_stomp10 = [ $stomp10, golem_stomp11 ] {golem_footstomp();};
 void() golem_stomp11 = [ $stomp11, golem_stomp12 ] {golem_footstomp();};
 void() golem_stomp12 = [ $stomp12, golem_stomp13 ] {golem_footstomp();};
 void() golem_stomp13 = [ $stomp13, golem_stomp14 ] {
-	golem_footstomp(); self.meleehitsound = "golem/groundslam.wav";
+	golem_footstomp(); self.meleehitsound = "ad171/golem/groundslam.wav";
 	ai_shockwave(MONAI_STOMPIMPACT, MONAI_STOMPDAMAGE, MONAI_STOMPRADIUS, MONAI_STOMPFORWARD, MONAI_STOMPUP);
 };
 void() golem_stomp14 = [ $stomp14, golem_stomp15 ] {golem_footstomp();};
@@ -374,12 +369,11 @@ void() golem_rockstorm =
 	}
 };
 
-//----------------------------------------------------------------------
 void() golem_magtime = {self.nextthink = time + 0.05;};
 
 void() golem_magic1 = [ $magic1, golem_magic2 ] {golem_magtime();ai_face();
 	self.pain_finished = time + 1.5;
-	sound (self, CHAN_WEAPON, "golem/rockstorm.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/golem/rockstorm.wav", 1, ATTN_NORM);
 };
 void() golem_magic2 = [ $magic2, golem_magic3 ] {golem_magtime();};
 void() golem_magic3 = [ $magic3, golem_magic4 ] {golem_magtime();ai_face();};
@@ -473,9 +467,7 @@ void() golem_death20 = [ $death20, golem_death21] {ai_forward(2);};
 void() golem_death21 = [ $death21, golem_death22] {ai_forward(2);monster_death_postcheck();};
 void() golem_death22 = [ $death22, golem_death22] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
-void() golem_die =
-{
+void() golem_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 	
@@ -486,22 +478,18 @@ void() golem_die =
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "golem/death.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "ne_ruins/h2golem/death.wav", 1, ATTN_NORM);
 		golem_death1 ();
 	}
 };
 
-//============================================================================
 // Wakeup From Statue form
-//============================================================================
 void() golem_birth = {
 	if (random() < 0.8) SpawnProjectileSmoke(self.origin, 200, 50, 250);
 	self.nextthink = time + 0.05;
 };
 
-//----------------------------------------------------------------------
-void() golem_wakefinished =
-{
+void() golem_wakefinished = {
 	// No longer need statue spawnflag, remove it
 	if (self.spawnflags & MON_STATUE) 
 		self.spawnflags = self.spawnflags - MON_STATUE;
@@ -522,9 +510,7 @@ void() golem_wakefinished =
 	golem_birth();					// more rubble
 };
 
-//----------------------------------------------------------------------
-void() golem_wake1 =[ $birth1, golem_wake2 ] {golem_birth();
-	sound (self, CHAN_BODY, "golem/wakestatue.wav", 1, ATTN_NORM);};
+void() golem_wake1 =[ $birth1, golem_wake2 ] {golem_birth();sound (self, CHAN_BODY, "ad171/golem/wakestatue.wav", 1, ATTN_NORM);};
 void() golem_wake2 =[ $birth2, golem_wake3 ] {golem_birth();ai_forward(2);};
 void() golem_wake3 =[ $birth3, golem_wake4 ] {golem_birth();ai_forward(3);};
 void() golem_wake4 =[ $birth4, golem_wake5 ] {golem_birth();ai_forward(4);};
@@ -594,65 +580,54 @@ void() golem_statue =
  	self.nextthink = time + 5 + random()*5;
 };
 
-/*======================================================================
-QUAKED monster_golem (1 0.2 0) (-16 -16 -24) (16 16 24)
-======================================================================*/
-void() setup_golem;
-void() monster_golem = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/ad171/mon_golem.mdl";
-	precache_model (self.mdl);
+// Precaches all the golem related models and sounds
+void() precache_monster_golem = {
+	precache_model ("progs/ad171/mon_golem.mdl");
 	precache_model (MODEL_PROJ_RINGSHOCK);
 	precache_model (MODEL_PROJ_GROCK1);
 	precache_model (MODEL_PROJ_GROCK2);
-	
-	self.gibtype = GIBTYPE_STONE;		// Stoney gibs!
-	self.gib1mdl = MODEL_PROJ_GROCK1;	// small golem rock
-	self.gib2mdl = MODEL_PROJ_GROCK2;	// medium golem rock
-	self.gib1frame = self.gib2frame = 9;
-
-	// Idle1a-1b (long sound) idle2a-2b (short sound)
-	self.idle_sound = "golem/idle1a.wav";
-	self.idle_sound2 = "golem/idle1b.wav";
-	self.idle_soundcom = "golem/idle2a.wav";
-	self.idle_soundcom2 = "golem/idle2b.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-	precache_sound (self.idle_soundcom);
-	precache_sound (self.idle_soundcom2);
-	
-	// Break free of statue pose
-	precache_sound ("golem/wakestatue.wav");
-	
-	// Several melee smack sounds and giant ground slam
-	precache_sound ("golem/melee_swipe.wav");
-	precache_sound ("golem/melee_punch.wav");
-	precache_sound ("golem/melee_pound.wav");
-	precache_sound ("golem/groundslam.wav");
-	
-	// Rockstorm - range attack
-	precache_sound ("golem/rockstorm.wav");
+	precache_sound ("ne_ruins/h2golem/foley3.wav");
+	precache_sound ("ne_ruins/h2golem/foley4.wav");
+	precache_sound ("ne_ruins/h2golem/foley1.wav");
+	precache_sound ("ne_ruins/h2golem/foley2.wav");
+	precache_sound ("ad171/golem/wakestatue.wav"); // Break free of statue pose
+	precache_sound ("ad171/golem/melee_swipe.wav"); // Several melee smack sounds and giant ground slam
+	precache_sound ("ad171/golem/melee_punch.wav");
+	precache_sound ("ad171/golem/melee_pound.wav");
+	precache_sound ("ad171/golem/groundslam.wav");
+	precache_sound ("ad171/golem/rockstorm.wav"); // Rockstorm - range attack
 	precache_sound (SOUND_IMP_ROCK1);
 	precache_sound (SOUND_IMP_ROCK2);
 	precache_sound (SOUND_IMP_ROCK3);
 	precache_sound (SOUND_IMP_ROCK4);
-	
-	self.pain_sound = "golem/pain1.wav";
-	self.pain_sound2 = "golem/pain2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-	precache_sound ("golem/death.wav");
+	precache_sound ("ne_ruins/h2golem/pain1.wav");
+	precache_sound ("ne_ruins/h2golem/pain2.wav");
+	precache_sound ("ne_ruins/h2golem/death.wav");
+	precache_sound ("ad171/golem/sight.wav");
+};
 
-	// Roar!
-	self.sight_sound = "golem/sight.wav";
-	precache_sound (self.sight_sound);
+void() setup_golem;
 
+// QUAKED monster_golem (1 0.2 0) (-16 -16 -24) (16 16 24)
+void() monster_golem = {
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/ad171/mon_golem.mdl";
+	self.gibtype = GIBTYPE_STONE;				// Stoney gibs!
+	self.gib1mdl = MODEL_PROJ_GROCK1;			// small golem rock
+	self.gib2mdl = MODEL_PROJ_GROCK2;			// medium golem rock
+	self.gib1frame = self.gib2frame = 9;
+	self.idle_sound = "ne_ruins/h2golem/foley3.wav";		// idle1a-1b (long sound) 
+	self.idle_sound2 = "ne_ruins/h2golem/foley4.wav";
+	self.idle_soundcom = "ne_ruins/h2golem/foley1.wav";	// idle2a-2b (short sound)
+	self.idle_soundcom2 = "ne_ruins/h2golem/foley2.wav";
+	self.pain_sound = "ne_ruins/h2golem/pain1.wav";
+	self.pain_sound2 = "ne_ruins/h2golem/pain2.wav";
+	self.sight_sound = "ad171/golem/sight.wav";		// Roar!
+	precache_monster_golem();
 	if (self.classtype != CT_CACHEGOLEM) setup_golem();
 };
 
-//----------------------------------------------------------------------------
 void() monster_necrominiongolem = { 
 	self.classtype = CT_CACHEGOLEM; 
 	monster_golem();
@@ -772,13 +747,13 @@ void(vector minion_org, entity minion_targ) minion_golem = {
 	minion.gib2mdl = MODEL_PROJ_GROCK2;	// Right wing
 	minion.gibtype = GIBTYPE_STONE;		// Stoney gibs!
 	minion.gib1frame = minion.gib2frame = 9;
-	minion.pain_sound = "golem/pain1.wav";
-	minion.pain_sound2 = "golem/pain2.wav";
-	minion.idle_sound = "golem/idle1a.wav";
-	minion.idle_sound2 = "golem/idle1b.wav";
-	minion.idle_soundcom = "golem/idle2a.wav";
-	minion.idle_soundcom2 = "golem/idle2b.wav";
-	minion.sight_sound = "golem/sight.wav";
+	minion.pain_sound = "ne_ruins/h2golem/pain1.wav";
+	minion.pain_sound2 = "ne_ruins/h2golem/pain2.wav";
+	minion.idle_sound = "ne_ruins/h2golem/foley3.wav";
+	minion.idle_sound2 = "ne_ruins/h2golem/foley4.wav";
+	minion.idle_soundcom = "ne_ruins/h2golem/foley1.wav";
+	minion.idle_soundcom2 = "ne_ruins/h2golem/foley2.wav";
+	minion.sight_sound = "ad171/golem/sight.wav"; // louder than ne_ruins version
 
 	minion.nextthink = time + 0.01;
 	minion.think = setup_golem;

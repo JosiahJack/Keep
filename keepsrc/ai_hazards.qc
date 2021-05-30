@@ -177,10 +177,10 @@ void(entity targ) HazardProjectile_Finished = {
 	
 	// Stop any ambient sounds
 	if (targ.part_exitsound) {
-		sound(targ, CHAN_WEAPON, SOUND_EMPTY, 1, 1);
-		sound(targ, CHAN_VOICE, SOUND_EMPTY, 1, 1);
-		sound(targ, CHAN_ITEM, SOUND_EMPTY, 1, 1);
-		sound(targ, CHAN_BODY, SOUND_EMPTY, 1, 1);
+		StopSound(targ,CHAN_WEAPON);
+		StopSound(targ,CHAN_VOICE);
+		StopSound(targ,CHAN_ITEM);
+		StopSound(targ,CHAN_BODY);
 	}
 
 	// Fade entity?
@@ -597,13 +597,13 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard = {
 		newmis.part_qctrail = TRUE;
 		newmis.part_trstyle = self.part_trstyle;
 		newmis.frame = rint((random() * 9));
-		newmis.part_soundmiss = "dknight/dprince_miss.wav";
+		newmis.part_soundmiss = "ad181/dknight/dprince_miss.wav";
 	} else if (proj_type == CT_PROJ_SWEEPER2) {
 		setmodel(newmis, self.attack_proj2);
 		newmis.part_qctrail = TRUE;
 		newmis.part_trstyle = self.part_trstyle;
 		newmis.frame = rint((random() * 9));
-		newmis.part_soundmiss = "sweeper/hazard_miss.wav";
+		newmis.part_soundmiss = "ad181/sweeper/hazard_miss.wav";
 	}
 	
 	// Standard projectile setup (origin, size and velocity)

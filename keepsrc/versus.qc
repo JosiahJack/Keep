@@ -93,7 +93,7 @@ void () item_coin_touch = {
 };
 
 void () item_coin_setup = {
-   if (self.noise == "") self.noise = "items/money.wav";
+   if (self.noise == "") self.noise = "drake/items/money.wav";
 
    precache_sound (self.noise);
    self.touch = item_touch;
@@ -155,7 +155,6 @@ void () item_bone = {
 	item_start();
 };
 
-//----------------------------------------------------------------------
 void(float c) DropCoin = {
 	local entity item;
 
@@ -174,7 +173,7 @@ void(float c) DropCoin = {
 	item.flags = FL_ITEM;
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
-	self.noise = "items/money.wav";
+	self.noise = "drake/items/money.wav";
 	setmodel (item, "progs/coinitem.mdl");
 	setsize (item, '-16 -16 -24', '16 16 32');
 	item.touch = item_touch;

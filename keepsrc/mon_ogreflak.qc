@@ -117,7 +117,7 @@ void() BDW_OgreFireFlak = {
 	if (self.spawnflags & MONOGRE_LAVAFLAK) {
 		sound(self, CHAN_WEAPON, "ogre/wnalfire_lava.wav", 1, ATTN_NORM);
 	} else {
-		sound(self, CHAN_WEAPON, "ogre/wnalfire.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "kinn/ogre/wnalfire.wav", 1, ATTN_NORM);
 	}
 	ang = vectoangles(self.enemy.origin - self.origin);
 	makevectors(ang);	
@@ -197,21 +197,17 @@ void() monster_ogre_spikeshooter = {
 	precache_sound (self.idle_sound);
 	self.idle_soundcom = "ogre/ogidle2.wav";
 	precache_sound (self.idle_soundcom);
-
 	precache_sound ("ogre/ogdth.wav");
 	self.pain_sound = "ogre/ogpain1.wav";
 	precache_sound (self.pain_sound);
-	
 	precache_sound ("ogre/ogdrag.wav");
 	precache_sound ("ogre/ogsawatk.wav");
-
 	self.sight_sound = "ogre/ogwake.wav";
 	precache_sound (self.sight_sound);
-
 	precache_model("progs/kinn/flak.mdl");
 	precache_model("progs/spike.mdl");
-	precache_sound("ogre/wnalfire.wav");
-	precache_sound("ogre/wnalfire_lava.wav");
+	precache_sound("kinn/ogre/wnalfire.wav");
+	precache_sound("ogre/wnalfire_lava.wav"); // Qmaster merged in the hiss from lava nailgun
 	precache_sound("weapons/skotch.wav");
 
 	self.solid = SOLID_NOT;				// No interaction with world

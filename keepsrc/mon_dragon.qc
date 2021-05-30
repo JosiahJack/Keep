@@ -8,42 +8,6 @@ float DT_ROOM_B    = 2.000;
 float DT_ROOM_C    = 4.000;
 float DRAGON_ROGUE = 2;
 
-void (string gibname, float dm) AccelerateGib = {
-   local entity new;
-   local float offset1;
-
-   new = spawn ();
-	new.classtype = CT_TEMPGIB;
-   new.origin = self.origin;
-   setmodel (new,gibname);
-   setsize (new,'-8.000 -8.000 -8.000','8.000 8.000 8.000');
-   new.velocity = (-1.250 * self.velocity);
-   makevectors (new.velocity);
-   offset1 = ((random () * 300.000) - 150.000);
-   new.velocity = (new.velocity + (v_right * offset1));
-   offset1 = ((random () * 300.000) - 150.000);
-   new.velocity = (new.velocity + (v_up * offset1));
-   new.movetype = MOVETYPE_BOUNCE;
-   new.solid = SOLID_NOT;
-   new.avelocity_x = (random () * 600.000);
-   new.avelocity_y = (random () * 600.000);
-   new.avelocity_z = (random () * 600.000);
-   new.think = SUB_Remove;
-   new.ltime = time;
-   new.nextthink = ((time + 10) + (random () * 10));
-   new.frame = FALSE;
-   new.flags = FALSE;
-};
-
-void (float gibCount) ViolentDeath = {
-   while ( (gibCount > FALSE) ) {
-      AccelerateGib (GIB1_BLOOD,(-4 * gibCount));
-      AccelerateGib (GIB2_BLOOD,(-6 * gibCount));
-      AccelerateGib (GIB3_BLOOD,(-8 * gibCount));
-      gibCount = (gibCount - 3);
-   }
-};
-
 void () dragon_stop_attack = {
 	if (self.dragonAttacking == FALSE)return;
 
@@ -227,7 +191,7 @@ void () dragon_walk1 = [ 1.000, dragon_walk2 ] {
    self.dragonPainSequence = TRUE;
    dragon_move (17.000);
    if ( (random () < 0.200) )
-      sound (self,CHAN_VOICE,"dragon/active.wav",TRUE,ATTN_IDLE);
+      sound (self,CHAN_VOICE,"rogue/dragon/active.wav",TRUE,ATTN_IDLE);
 };
 void () dragon_walk2 = [ 2.000, dragon_walk3 ] { self.th_missile = SUB_Null; dragon_move (17.000); };
 void () dragon_walk3 = [ 3.000, dragon_walk4 ] { self.th_missile = dragon_atk_b1; dragon_move (17.000); self.dragonPainSequence = 2; };
@@ -254,7 +218,7 @@ void () FireballTouch = {
    org = self.origin;
    org_z = (org_z+8);
    T_Damage (other,self,self.owner,3,DAMARMOR);
-   sound (self,CHAN_WEAPON,"misc/quakeend.wav",TRUE,ATTN_NORM);
+   sound (self,CHAN_WEAPON,"hipnotic/misc/quakeend.wav",TRUE,ATTN_NORM);
    partcnt = 40;
    partcolor = 232;
    while ( partcnt > FALSE ) {
@@ -307,7 +271,7 @@ void () dragon_fireball = {
    local float distortion;
    local float vdistortion;
 
-   sound (self,CHAN_VOICE,"dragon/active.wav",TRUE,ATTN_NORM);
+   sound (self,CHAN_VOICE,"rogue/dragon/active.wav",TRUE,ATTN_NORM);
    makevectors (self.angles);
    org = ((self.origin + (v_forward * 112.000)) + (v_up * FL_MONSTER));
    dir = normalize ((self.enemy.origin - org));
@@ -420,13 +384,12 @@ void () dragon_painF3 = [ 79.000, dragon_walk2 ] { dragon_move (12); };
 void (entity inflictor, entity attacker, float damage) dragon_pain = {
    local float r;
 
-   if (self.pain_finished > time)
-      return ;
+   if (self.pain_finished > time) return;
 
    r = random ();
    if ( (r < 0.250) ) {
       dragon_stop_attack ();
-      sound (self,CHAN_VOICE,"dragon/pain.wav",TRUE,ATTN_NORM);
+      sound (self,CHAN_VOICE,"rogue/dragon/pain.wav",TRUE,ATTN_NORM);
       self.pain_finished = (time + 2);
       if ( (self.dragonPainSequence == 1) ) {
          self.think = dragon_painA1;
@@ -443,9 +406,7 @@ void (entity inflictor, entity attacker, float damage) dragon_pain = {
                   if ( (self.dragonPainSequence == 5) ) {
                      self.think = dragon_painC1;
                   } else {
-                     if ( (self.dragonPainSequence == 6) )
-                        self.think = dragon_painB1;
-
+                     if (self.dragonPainSequence == 6) self.think = dragon_painB1;
                   }
                }
             }
@@ -455,11 +416,13 @@ void (entity inflictor, entity attacker, float damage) dragon_pain = {
 };
 
 void () dragon_boom2 = {
-   self.velocity = self.dragonLastVelocity;
-   ViolentDeath (15);
-   self.target = "dragondoor";
-   SUB_UseTargets ();
-   remove (self);
+	self.velocity = self.dragonLastVelocity;
+	ThrowGib(1,5);
+	ThrowGib(2,5);
+	ThrowGib(3,5);
+	self.target = "dragondoor";
+	SUB_UseTargets ();
+	remove (self);
 };
 
 void () dragon_boom1 = {
@@ -502,18 +465,18 @@ void () dragon_squish = {
 };
 
 void () dragon_death1 = [ 80.000, dragon_death2 ] {
-   if ( (self.dragonDeathState > FALSE) )
-      return ;
+	if ( (self.dragonDeathState > FALSE) ) return;
 
-   self.dragonDeathState = DDIE_FALLING;
-   self.use = SUB_Null;
-   makevectors (self.angles);
-   self.velocity = ((300.000 * v_forward) - (40 * v_up));
-   self.flags = (self.flags - (self.flags & FL_ONGROUND));
-   setsize (self,VEC_HULL_MIN,VEC_HULL_MAX);
-   self.touch = dragon_squish;
-   sound (self,CHAN_VOICE,"dragon/death.wav",TRUE,ATTN_NONE);
-   self.dragonAttacking = FALSE;
+	self.dragonDeathState = DDIE_FALLING;
+	self.use = SUB_Null;
+	SUB_UseTargets ();
+	makevectors (self.angles);
+	self.velocity = ((300.000 * v_forward) - (40 * v_up));
+	self.flags = (self.flags - (self.flags & FL_ONGROUND));
+	setsize (self,VEC_HULL_MIN,VEC_HULL_MAX);
+	self.touch = dragon_squish;
+	sound (self,CHAN_VOICE,"rogue/dragon/death.wav",TRUE,ATTN_NONE);
+	self.dragonAttacking = FALSE;
 };
 void () dragon_death2 = [ 81.000, dragon_death3 ] { dragon_explode (); };
 void () dragon_death3 = [ 82.000, dragon_death4 ] { dragon_explode (); };
@@ -534,7 +497,12 @@ void () dragon_death17 = [ 96.000, dragon_death18 ] { dragon_explode (); };
 void () dragon_death18 = [ 97.000, dragon_death19 ] { dragon_explode (); };
 void () dragon_death19 = [ 98.000, dragon_death20 ] { dragon_explode (); };
 void () dragon_death20 = [ 99.000, dragon_death21 ] { dragon_explode (); };
-void () dragon_death21 = [ 100.000, dragon_death21 ] { ViolentDeath (39.000); SUB_UseTargets (); remove (self); };
+void () dragon_death21 = [ 100.000, dragon_death21 ] {
+    ThrowGib(1,13);
+    ThrowGib(2,13);
+    ThrowGib(3,13);	
+	remove (self);
+};
 
 void () dragon_use = {
    if ( (self.health < TRUE) ) { self.use = SUB_Null; return ; }
@@ -589,13 +557,12 @@ void () monster_dragon = {
    precache_model ("progs/drake/drggib01.mdl");
    precache_model ("progs/drake/drggib02.mdl");
    precache_model ("progs/drake/drggib03.mdl");
-   precache_sound ("dragon/see.wav");
-   precache_sound ("dragon/active.wav");
-   precache_sound ("dragon/attack.wav");
-   precache_sound ("misc/quakeend.wav");
-   precache_sound ("misc/quakeend.wav");
-   precache_sound ("dragon/pain.wav");
-   precache_sound ("dragon/death.wav");
+   precache_sound ("rogue/dragon/see.wav");
+   precache_sound ("rogue/dragon/active.wav");
+   precache_sound ("rogue/dragon/attack.wav");
+   precache_sound ("hipnotic/misc/quakeend.wav");
+   precache_sound ("rogue/dragon/pain.wav");
+   precache_sound ("rogue/dragon/death.wav");
    self.dragonInRoom = DT_ROOM_A;
    self.dragonInTransit = FALSE;
    self.dragonAttacking = FALSE;

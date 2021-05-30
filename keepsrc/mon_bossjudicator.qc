@@ -166,21 +166,8 @@ float JUSTICESPD_SMASH = 22.9;
 // Forward compiler refeence
 void(float finalstate, float soundtype) judge_checksword;
 
-//============================================================================
-void() judge_sword_sound =
-{
-	self.lip = random();
-	if (self.lip < 0.25) sound (self, CHAN_WEAPON, "weapons/sword1a.wav", 1, ATTN_NORM);
-	else if (self.lip < 0.5) sound (self, CHAN_WEAPON, "weapons/sword2a.wav", 1, ATTN_NORM);
-	else if (self.lip < 0.75) sound (self, CHAN_WEAPON, "weapons/sword1b.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_WEAPON, "weapons/sword2b.wav", 1, ATTN_NORM);
-};
-
-//----------------------------------------------------------------------
 // Setup wave HP and trigger boundaries
-//----------------------------------------------------------------------
-void() judge_WaveSetupHP =
-{
+void() judge_WaveSetupHP = {
 	// Is there anymore boss waves left?
 	if (self.bosswave >= self.bosswavetotal) {
 		// Only one wave left (death is final trigger)
@@ -362,7 +349,7 @@ void() judge_tauntframe =
 	if (self.pausetime > 0) self.pausetime = self.pausetime + 0.1;
 
 	// Sword swoosh/whoosh noises
-	if (self.walkframe == 3 || self.walkframe == 12) judge_sword_sound();
+	if (self.walkframe == 3 || self.walkframe == 12) SwordSwipeSound();
 	
 	// Update frame and move forward
 	// 00 01 02 03 04 05 06 07 -- (forward)
@@ -392,7 +379,7 @@ void() judge_idleCframe =
 	if (self.pausetime > 0) self.pausetime = self.pausetime + 0.1;
 
 	// Sword swoosh/whoosh noises
-	if (self.walkframe == 1 || self.walkframe == 22) judge_sword_sound();
+	if (self.walkframe == 1 || self.walkframe == 22) SwordSwipeSound();
 	
 	// Update frame and move forward
 	// 00 01 02 03 04 05 06 07 08 09 10 11 12 (forward)
@@ -587,7 +574,7 @@ void() judge_chargeframe =
 
 	// Beginning of animation block
 	// Sword swoosh/whoosh noises
-	if (self.walkframe == 2 || self.walkframe == 8) judge_sword_sound();
+	if (self.walkframe == 2 || self.walkframe == 8) SwordSwipeSound();
 	// Stompy feet sounds
 	else if (self.walkframe == 0 || self.walkframe == 3 ||
 		self.walkframe == 6 || self.walkframe == 9) monster_footstep(FALSE);
@@ -636,7 +623,7 @@ void() judge_swingframe =
 	}
 
 	// Sword swoosh/whoosh noises
-	if (self.walkframe == 2 || self.walkframe == 7) judge_sword_sound();
+	if (self.walkframe == 2 || self.walkframe == 7) SwordSwipeSound();
 	// sword meets flesh! or air ...
 	else if (self.walkframe == 3 || self.walkframe == 8) {
 		if (self.classtype == CT_MONJUDGE)
@@ -681,7 +668,7 @@ void() judge_smashframe =
 	}
 
 	// Sword swoosh/whoosh noises
-	if (self.walkframe == 3) judge_sword_sound();
+	if (self.walkframe == 3) SwordSwipeSound();
 	// sword meets flesh! or ground ...
 	else if (self.walkframe == 5) {
 		if (self.classtype == CT_MONJUDGE)
@@ -1348,9 +1335,7 @@ void() judge_finishsword =
 	else judge_runframe();
 };
 
-//----------------------------------------------------------------------
-void() judge_movesword =
-{
+void() judge_movesword = {
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
 		if (judge_WaveCheck() == TRUE) {self.th_summon(); return;}
@@ -1374,7 +1359,7 @@ void() judge_movesword =
 			else self.customsound = "justice/sword_sheath.wav";
 			sound (self, CHAN_WEAPON, self.customsound, 1, ATTN_NORM);
 		}
-		else if (self.blendsfx == JUDGE_SFXSWOOSH) judge_sword_sound();
+		else if (self.blendsfx == JUDGE_SFXSWOOSH) SwordSwipeSound();
 	}
 	// Step through animation (check direction)
 	if (self.blenddir == 1) self.frame = self.blendstart + self.walkframe;
@@ -2017,12 +2002,6 @@ void() monster_judicator = {
 	// New sword sweep/slash sounds
 	precache_sound ("judge/sword_draw.wav");
 	precache_sound ("judge/sword_sheath.wav");
-	
-	// New sword sweep/slash sounds
-	precache_sound ("weapons/sword1a.wav");
-	precache_sound ("weapons/sword1b.wav");
-	precache_sound ("weapons/sword2a.wav");
-	precache_sound ("weapons/sword2b.wav");
 
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
@@ -2293,12 +2272,6 @@ void() monster_justice = {
 	// New sword sweep/slash sounds
 	precache_sound ("justice/sword_draw.wav");
 	precache_sound ("justice/sword_sheath.wav");
-	
-	// New sword sweep/slash sounds
-	precache_sound ("weapons/sword1a.wav");
-	precache_sound ("weapons/sword1b.wav");
-	precache_sound ("weapons/sword2a.wav");
-	precache_sound ("weapons/sword2b.wav");
 
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement

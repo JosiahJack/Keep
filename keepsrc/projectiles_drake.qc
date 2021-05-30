@@ -7,7 +7,7 @@ void() Axe_Watch;
 // Magic arrow explosion code.
 void() AkArrow_Explode = {
     self.count = self.count & 3;
-    sound (self, CHAN_AUTO, "archer/explode.wav", 1, ATTN_NORM);
+    sound (self, CHAN_AUTO, "drake/archer/explode.wav", 1, ATTN_NORM);
     Colored_Explosion (self.origin, self.count);
     BecomeFancy (X80_SPARK_ORANGE + (self.count * 6), 6);
 };
@@ -46,22 +46,22 @@ void() AkArrow_Wood_Touch = {
     if (other.takedamage) {
         spawn_touchblood (self, other, self.dmg);
         T_Damage (other, self, self.master, self.dmg,DAMARMOR);
-        sound (self, CHAN_WEAPON, "archer/arrow1.wav", 1, ATTN_IDLE);
+        sound (self, CHAN_WEAPON, "drake/archer/arrow1.wav", 1, ATTN_IDLE);
         remove (self);
         return;
     }
     if (other.solid != SOLID_BSP) { // Break on impact. e.g., shielded mega enforcer.
         org = self.origin - 8*normalize(self.velocity);
-        sound (self, CHAN_WEAPON, "archer/arrowbrk.wav", 1, ATTN_IDLE);
+        sound (self, CHAN_WEAPON, "drake/archer/arrowbrk.wav", 1, ATTN_IDLE);
         Tent_Point (TE_GUNSHOT, org);
         remove (self);
         return;
     }
 	// Imbed into the surface.
     if (random() < 0.5)
-        sound (self, CHAN_WEAPON, "archer/arrow2.wav", 1, ATTN_IDLE);
+        sound (self, CHAN_WEAPON, "drake/archer/arrow2.wav", 1, ATTN_IDLE);
     else
-        sound (self, CHAN_WEAPON, "archer/arrow3.wav", 1, ATTN_IDLE);
+        sound (self, CHAN_WEAPON, "drake/archer/arrow3.wav", 1, ATTN_IDLE);
     self.movetype = MOVETYPE_NONE;
     self.velocity = self.avelocity = '0 0 0';
     // Reset think so arrow sticks in wall for a moment then vanishes.
@@ -156,7 +156,6 @@ void(vector start, vector dir, float type) AkArrow_Launch = {
     setall (newmis, "progs/drake/arrow.mdl", '0 0 0', '0 0 0', start);
 };
 
-//==========================================================================
 //  Throwing Axe
 
 // This removes the axe if its surface moves or if its been out too long.
@@ -170,19 +169,14 @@ void() Axe_Watch = {
         self.nextthink = time + 0.100;
 };
 
-//==========================================================================
 //  Burst Lightning
 //  The "Burst" is a form of chain lightning cast at a target.  If the
 //  target is struck, and there are more targets near the one first struck,
 //  secondary bolts will erupt from the primary target and strike as many
 //  extra targets as possible.
 //
-//  This form of chain lightning is based from the description of the
-//  Chain Lightning spell in the 3rd edition of Dungeons and Dragons.
-
-//  This returns the endpoint where a bolt of chain lightning should
-//  strike.  The spot returned is usually the center of the target struck.
-//------------------------------------------------------------------------//
+//  This form of chain lightning is based from the description of the Chain Lightning spell in the 3rd edition of Dungeons and Dragons.
+//  This returns the endpoint where a bolt of chain lightning should strike.  The spot returned is usually the center of the target struck.
 vector(entity attacker, entity targ, vector start, vector end) ChainLit_Point = {
     local   vector  spot;
 
@@ -204,43 +198,33 @@ vector(entity attacker, entity targ, vector start, vector end) ChainLit_Point = 
         dist = floor (d_ideal / 30) * 30;
         if (dist >= d_impact)
             end = start + dir*dist;
-        else
-        {
+        else {
             spot = start + dir*(dist+30);
             if (spot_x >= targ.absmin_x)
               if (spot_x <= targ.absmax_x)
                 if (spot_y >= targ.absmin_y)
                   if (spot_y <= targ.absmax_y)
                     if (spot_z >= targ.absmin_z)
-                      if (spot_z <= targ.absmax_z)
-                        end = spot;
+                      if (spot_z <= targ.absmax_z) end = spot;
         }
     }
-
     return end;
 };
 
 // Called within 'BurstLit_Chain' below.
-float(entity targ, entity inflictor, entity attacker, float damage,
-    vector spot, string dtype, float bang)  BurstLit_Trace =
-{
+float(entity targ, entity inflictor, entity attacker, float damage, vector spot, string dtype, float bang)  BurstLit_Trace = {
     local   vector  end;
 
     if (targ.flags & FL_CLIENT)
         end = targ.origin;      // Use origin because of TE beam code for clients.
     else
         end = Midpoint (targ);
-    //- - - - -
+
     // Update:  Traceline must hit intended target!
-    // Targets can take damage from one bolt once because they
-    // can neither stack nor pierce.
-    //
-    // Note:  Ghost touch code must be called before calling
-    // this function if ghosts are to be hit.
-    //- - - - -
+    // Targets can take damage from one bolt once because they can neither stack nor pierce.
+    // Note:  Ghost touch code must be called before calling this function if ghosts are to be hit.
     traceline (spot, end, FALSE, inflictor);    // 3rd was TRUE.
-    if (trace_ent == targ)
-    {
+    if (trace_ent == targ) {
         // Draw from source point to target point, except for players.
         // For players, draw from target point to source point
         // because engine always draws from origin in case of player.
@@ -259,10 +243,8 @@ float(entity targ, entity inflictor, entity attacker, float damage,
     return FALSE;
 };
 
-// Shoots multiple lightning bolts at nearby targets from a common point.
-// Used by burst lightning gun.  Also used by plasma discharge.
-void(entity inflictor, entity attacker, float damage, entity ignore,
-    vector spot, string dtype, vector pak, float bang)  BurstLit_Chain = {
+// Shoots multiple lightning bolts at nearby targets from a common point.  Used by burst lightning gun.  Also used by plasma discharge.
+void(entity inflictor, entity attacker, float damage, entity ignore, vector spot, string dtype, vector pak, float bang)  BurstLit_Chain = {
     local   entity  head, saved;
     local   float   hits, nff, radius, hi;
 
@@ -274,7 +256,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore,
     saved = world;
     head = findradius (spot, radius);
     while (head) {
-    // Notarget/stealth won't save you from discharge.
+		// Notarget/stealth won't save you from discharge.
         if (head.takedamage == DAMAGE_AIM)      // Was flags & FLx_CREATURE.
         if (head != attacker)
         if (head != ignore)
@@ -288,34 +270,27 @@ void(entity inflictor, entity attacker, float damage, entity ignore,
 					saved = head;
 				} else if (BurstLit_Trace (head, inflictor, attacker, damage, spot, dtype, bang)) {
 					hits = hits + 1;
-					if (hits >= hi)
-						return;
+					if (hits >= hi) return;
 				}
 			}
         }
         head = head.chain;
     }
-// Now we zap the saved targets because we ran out of other targets.
+	// Now we zap the saved targets because we ran out of other targets.
     while (saved) {
         if (BurstLit_Trace (saved, inflictor, attacker, damage, spot, dtype, bang)) {
             hits = hits + 1;
-            if (hits >= hi)
-                return;
+            if (hits >= hi) return; // I hate to burst your chain, but...
         }
         saved = saved.chain2;
     }
 };
 
-// Fires a fat bolt of lightning, then splits into three thinner bolts
-// after hitting a target.
-void(vector p1, vector p2, entity attacker, float damage, float reach)
-    BurstLit_Bolt =
-{
-//- - - - - - - - -
+// Fires a fat bolt of lightning, then splits into three thinner bolts after hitting a target.
 // 'inflictor' = Don't hit this entity during the traceline.
 // 'src'       = From whom the lightning gets drawn from.
 // 'targ'      = Target by traceline.
-//- - - - - - - - -
+void(vector p1, vector p2, entity attacker, float damage, float reach) BurstLit_Bolt = {
     local   entity  inflictor, src, targ;
     local   vector  pak;
     local   float   boing;
@@ -325,9 +300,6 @@ void(vector p1, vector p2, entity attacker, float damage, float reach)
     pak_z = 3;          // Max number of targets.
 
     inflictor = src = attacker;
-
-    //GhostTouch_On ();
-//- - - - - - - - -
     while (src) {
 		// Scan for a hit.
         reach = vlen(p2 - p1);
@@ -342,8 +314,7 @@ void(vector p1, vector p2, entity attacker, float damage, float reach)
 
 		// Draw beam.
         if (targ.takedamage)    // Hit something?  Aim bolt at its center.
-            if (!boing)
-                p2 = ChainLit_Point (attacker, targ, p1, p2);
+            if (!boing) p2 = ChainLit_Point (attacker, targ, p1, p2);
         Tent_Beam (TE_LIGHTNING1, src, p1, p2);   // Use the fat beam.
         src = world;    // Unless reflected later, end loop when done.
 
@@ -358,23 +329,17 @@ void(vector p1, vector p2, entity attacker, float damage, float reach)
                 src = lightning;
             }
         } else {
-            if (targ.takedamage)
-            {
+            if (targ.takedamage) {
                 // Direct hit does full damage and splits the beam.
                 BoltDamage (targ, inflictor, attacker, p2, damage, "thunderbolt");
                 BurstLit_Chain (targ, attacker, damage * 2 / 3, targ, p2, "thunderbolt", pak, FALSE);
             }
         }
     }
-//- - - - - - - - -
-    //GhostTouch_Off ();
 };
 
 // Called by exploding plasma balls.  Also by Mjolnir.
-void() RyuPlasma_Discharge =
-{
-// Reference for DoE plasma discharge stats.
-// BurstLit_Chain (self, self.owner, 50, world, self.origin, self.classname, '0 320 5', TRUE);
+void() RyuPlasma_Discharge = {
     local   vector  pak;
     local string damagetype = "";
 
@@ -385,8 +350,7 @@ void() RyuPlasma_Discharge =
     BurstLit_Chain (self, self.owner, (self.dmg*0.5), self.enemy, self.origin, damagetype, pak, TRUE);
 };
 
-void() RyuPlasma_Explode =
-{
+void() RyuPlasma_Explode = {
     if (!self.dmg)
         self.dmg = 100;
     if (!self.distance)
@@ -421,7 +385,7 @@ void() RyuPlasma_Explode =
     // Note:  Radius damage was 70.
     T_RadiusDamage (self, self.owner, self.dmg*0.7, self.enemy, DAMAGEALL);
 
-    sound (self, CHAN_AUTO, "plasma/explode.wav", 1, ATTN_NORM);
+    sound (self, CHAN_AUTO, "rogue/plasma/explode.wav", 1, ATTN_NORM);
     self.origin = self.origin - 8*normalize(self.velocity);
     setorigin (self, self.origin);      // PM:  Do it right.
     Tent_Explosion2 (self.origin, 244, 3);
@@ -867,8 +831,7 @@ void(vector start, vector dir) KnightBall_Launch = {
     newmis = missile;
 };
 
-void(vector st, float lo) M_FireKnight =
-{
+void(vector st, float lo) M_FireKnight = {
     local   vector  p1, p2, dir;
     local   entity  targ;
 
@@ -881,7 +844,9 @@ void(vector st, float lo) M_FireKnight =
     p2 = Aimpoint (self.enemy);
     if (lo)
         p2_z = self.enemy.absmin_z + 1;
-    dir = Maim_Line (p1, p2, 1000, targ, '0 0 0');
+
+	dir = normalize(p2 - p1);
+    // dir = Maim_Line (p1, p2, 1000, targ, '0 0 0');
 
     self.effects = self.effects | EF_MUZZLEFLASH;
     sound (self, CHAN_WEAPON, "drake/baron/fireball.wav", 1, ATTN_NORM);
@@ -918,8 +883,7 @@ void(entity targ, vector dir) Attack_Saw =
 				if (onflr.classgroup == CG_ZOMBIE && !(targ.classname == "monster_mummy")) {
 					self.health = 0;
 					Killed(onflr, tself);
-				}
-				else {
+				} else {
 					self.max_health = MON_NOGIBVELOCITY; // use minimal velocity
 					monster_ThrowGib();			// throw parts
 				}
@@ -952,14 +916,6 @@ void(entity targ, vector dir) Attack_Saw =
         dtype = "chainsaw";     // Normal kill.
         // dflags = DF_SCAR | DF_MELEE;
         damage = 40;
-        // if (trace_fraction <= 0.5) {
-			// Deep hit.
-            // dtype = "saw_decap";    // Chop off the head.
-            // if (targ.xsf & XSF_BODY_DOUBLE)     // Chop up flimsy bodies.
-                // if (targ.max_health < 50)
-                    // if (targ.health > damage)
-                        // damage = targ.health;
-        // }
 
 		// Suck life like Heretic's necro gauntlets.
         //if (self.tome_finished) {
@@ -978,14 +934,14 @@ void(entity targ, vector dir) Attack_Saw =
         if (trace_ent.flags & FL_MONSTER){
             targ.velocity = targ.velocity * 0.5;
 		// Sounds.
-			sound (self, CHAN_WEAPON, "weapons/sawguts.wav", 1, ATTN_NORM);
+			sound (self, CHAN_WEAPON, "zerstorer/weapons/sawguts.wav", 1, ATTN_NORM);
 			if (targ.hittype == HIT_METAL || targ.spawnflags & MON_OGRE_GREEN || targ.spawnflags & MON_HOGRE_METAL)
 				if (pain && (targ.pain_finished > time))
-					sound (self, CHAN_AUTO, "weapons/clang.wav", 1, ATTN_NORM);
+					sound (self, CHAN_AUTO, "drake/weapons/clang.wav", 1, ATTN_NORM);
 
 			if (targ.hittype == HIT_STONE)
 				if (pain && (targ.pain_finished > time))
-					sound (self, CHAN_AUTO, "weapons/axhitwal.wav", 1, ATTN_NORM);
+					sound (self, CHAN_AUTO, "drake/weapons/axhitwal.wav", 1, ATTN_NORM);
 
 			self.punchangle_x = -8;
 		}
@@ -1212,51 +1168,39 @@ void() Sidewinder_Think = {
 };
 
 // Update 4/2/10:  Adapted for player use.  Mega enforcer still uses this.
-void(vector start, vector dir, entity targ) Sidewinder_Launch =
-{
+void(vector start, vector dir, entity targ) Sidewinder_Launch = {
     newmis = spawn ();
 	newmis.classgroup = CG_PROJALL;
     newmis.master       = newmis.owner      = self;
     newmis.movetype     = MOVETYPE_FLYMISSILE;
     newmis.solid        = SOLID_BBOX;
     newmis.classname    = "rocket";
-// set missile speed
     newmis.yaw_speed    = 30;   // For sidewinding code.
     newmis.speed        = 450;
     newmis.height       = 50;
     newmis.velocity     = dir * (450 + (random() * 50));
     newmis.angles       = vectoangles(newmis.velocity);
-// set missile damage
     newmis.dmg          = 90;
     newmis.style        = DF_ROCKET;
-// set missile special stuff
     newmis.oldenemy     =
     newmis.enemy        = targ;
     newmis.ideal_yaw    = newmis.angles_y;
-//- - - - - - - - -
     newmis.cnt          = 0;
     newmis.lefty        = 1;
-    // Get the spot we want to hit if fired straight without a target.
-    newmis.pos2         = start + (dir * ((newmis.speed + newmis.height) * 5));
-//- - - - - - - - -
-// set missile duration
+    newmis.pos2         = start + (dir * ((newmis.speed + newmis.height) * 5)); // Get the spot we want to hit if fired straight without a target.
     newmis.touch        = T_MissileTouch;
     newmis.delay        = time + 2.5;       // Total duration
     newmis.nextthink    = time + 0.2;       // Was T+0.25
     newmis.think        = Sidewinder_Think;
     newmis.think1       = Old_Explosion1;
-
     setall (newmis, "progs/drake/memissil.mdl", '0 0 0', '0 0 0', start);
 };
 
-//====================
-// W_FireSidewinder
-//====================
 void() W_FireSidewinder = {
     if (self.ammo_rockets < 1) return;
 
     self.currentammo = self.ammo_rockets = self.ammo_rockets - 1;
-    sound (self, CHAN_WEAPON, "weapons/stunfire.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "zerstorer/weapons/stunfire.wav", 1, ATTN_NORM);
     self.punchangle_x = -2;
 
     local   vector  start, dir;
@@ -1537,8 +1481,8 @@ void(float lo, float hi) Thor_Slam =
     base.struck_by_mjolnir = 1;
     base.think     = SUB_Remove;
     base.nextthink = time + 1;
-    sound (base, CHAN_AUTO, "hipweap/mjolslap.wav", 1, ATTN_NORM);
-    sound (base, CHAN_WEAPON, "hipweap/mjolhit.wav", 1, ATTN_NORM);
+    sound (base, CHAN_AUTO, "hipnotic/weapons/mjolslap.wav", 1, ATTN_NORM);
+    sound (base, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
     if (self.flags & FL_CLIENT)
         makevectors (self.v_angle);
     else

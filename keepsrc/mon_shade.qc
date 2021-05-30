@@ -1,17 +1,47 @@
-//==========================================================================
-//  shade.qc -- by Patrick Martin
-//--------------------------------------------------------------------------
-//  Nightshade, a.k.a. the wraith dragon.
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
 //
-//  The nightshade shares some of the code and files used by the dragons.
-//  However, it is treated as a separate monster.
+// Compiled by Qmaster
 //
-//  In addition, the nightshade has its own model.  It is derived from
-//  the dragon model, but most of the scenes are different.
-//  The spawn scene is placed first so the phasing effects animate
-//  properly on Quake engines that support frame interpolation.
+// Attributions: Patrick Martin and Drake mod
 //
-//  Frames:
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 
+// Function count: 
+//
+// Implements: Nightshade, a.k.a. the wraith dragon.
+//
+// Description:
+// The nightshade shares some of the code and files used by the dragons.
+// However, it is treated as a separate monster.
+//
+// In addition, the nightshade has its own model.  It is derived from
+// the dragon model, but most of the scenes are different.
+// The spawn scene is placed first so the phasing effects animate
+// properly on Quake engines that support frame interpolation.
+//
+// Frames:
 //     0 -  6  Form
 //     7 - 14  Hover
 //    15 - 23  Attack (for melee or missile)
@@ -21,12 +51,10 @@
 //    42 - 59  Aether
 //    60 - 77  Death
 //
-//  Update:  With Nehahra-style wraiths added, the medium dragon is the
-//  only size that looks good with all of the other ghosts.
-//
-//  NOTE:  Should be compiled *after* "zombie.qc" and "ryu*.qc" files.
-//
-//==========================================================================
+// Update:  With Nehahra-style wraiths added, the medium dragon is the
+// only size that looks good with all of the other ghosts.
+//=============================================================================
+
 $cd progs/shade
 $origin 0 0 24
 $base base 
@@ -39,70 +67,62 @@ $frame attack7 attack8 attack9
 $frame pain1 pain2 pain3 pain4 pain5 pain6
 $frame painb1 painb2 painb3 painb4 painb5 painb6
 $frame painc1 painc2 painc3 painc4 painc5 painc6
-
-//$frame aether1 aether2 aether3 aether4 aether5 aether6 aether7 aether8
-//$frame aether9 aether10 aether11 aether12 aether13 aether14 aether15
-//$frame aether16 aether17 aether18
-
 $frame nova1 nova2 nova3 nova4 nova5 nova6 nova7 nova8 nova9 nova10
 $frame nova11 nova12 nova13 nova14 nova15 nova16 nova17 nova18
 
 // This finds the best path to avoid danger, then moves the monster along the path.
 void(float dist, entity ent) Shade_FindBestPath = {
-    local   float   yaw;
-    local   entity  targ;
+    local float yaw, tz, sz;
+    local entity targ;
 
     yaw = vectoyaw (ent.origin - self.origin);
-    yaw = Ryu_ChangeCourse (yaw - self.angles_y);
+	yaw = anglemod (yaw - self.angles_y);
+    if (yaw < 60)   yaw = -90;   	  // Dodge right.
+    else if (yaw < 120)  yaw = 0;     // Continue straight ahead.
+    else if (yaw < 180)  yaw = -90;   // Dodge right.
+    else if (yaw < 240)  yaw = 90;    // Dodge left.
+    else if (yaw < 300)  yaw = 0;     // Continue straight ahead.
+    else yaw = 90;                    // Dodge left.
+	
     // Ghost monsters cannot be blocked.
 
-// Set new course and head in that direction if possible.
-// Formerly 'Shade_Dodge (self.angles_y + yaw, dist, ent);'.
-// void(float newyaw, float dist, entity threat) Shade_Dodge =
-// This forces the nightshade to dodge the threat entity.
+	// Set new course and head in that direction if possible.
+	// Formerly 'Shade_Dodge (self.angles_y + yaw, dist, ent);'.
+	// void(float newyaw, float dist, entity threat) Shade_Dodge =
+	// This forces the nightshade to dodge the threat entity.
     yaw = self.angles_y + yaw;
-
-// Strafe away from the detected danger.
-    noclip_move (yaw, dist);
-
+    noclip_move (yaw, dist); // Strafe away from the detected danger.
     targ = self.goalentity;
 
-// Face its goal.
+	// Face its goal.
     self.ideal_yaw = vectoyaw (targ.origin - self.origin);
     ChangeYaw ();
 
-// Next, check if the monster should slide vertically away from its goal.
-    if (targ != ent)
-    {
-        // For elevation, if dragon is between the goal and threat entity,
-        // don't slide vertically away from goal.
-        local   float   tz, sz;
-
+	// Next, check if the monster should slide vertically away from its goal.
+    if (targ != ent) {
+        // For elevation, if dragon is between the goal and threat entity, don't slide vertically away from goal.
         tz = targ.origin_z;
         sz = self.origin_z + self.view_ofs_z;
-        if (tz < sz)
-            {if (sz < ent.origin_z)  return;}
-        else if (tz > sz)
-            {if (sz > ent.origin_z)  return;}
+        if (tz < sz) {
+            if (sz < ent.origin_z) return;
+        } else if (tz > sz) {
+            if (sz > ent.origin_z) return;
+		}
     }
     Ryu_VerticalSlide (dist, targ);
 };
 
-
 // Close in on the opponent.
 void() dark_melee = {
     ai_face();
-    movetogoal (SPEED_RYU_MIN);
+    movetogoal(SPEED_RYU_MIN);
 };
 
 // Face and close in on the opponent while attacking.
 void() dark_missile = {
     ai_face();
-    if (!QC_CloseEnough (SPEED_RYU_MIN)) walkmove (self.angles_y, SPEED_RYU_MIN); // Don't pass through goal.
+    if (!QC_CloseEnough(SPEED_RYU_MIN)) walkmove (self.angles_y, SPEED_RYU_MIN); // Don't pass through goal.
 };
-
-// 'souls' function for nightshade.
-void() dark_souls = {ai_face ();  self.gorging = TRUE;};
 
 ////////////////////////////////////////////////////////////////////////////
 //  2.  Pawns -- Zombies                                                  //
@@ -192,7 +212,7 @@ void() Shade_Meat = {
     dir = Maim_Toss (org, dir, sped, up, world, '0 0 0');
     mx = vlen(dir);
 
-    sound (self, CHAN_WEAPON, "shade/spawn.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "drake/shade/spawn.wav", 1, ATTN_NORM);
 
 	// Fire # of shots equal to max zombies.
     arc = 0.06;
@@ -253,9 +273,9 @@ void() shade_sfx_idle = {
 
 			r = random ();
 			if (r < 0.5)
-				sound (self, CHAN_VOICE, "shade/idle.wav", 1, ATTN_NORM);
+				sound (self, CHAN_VOICE, "drake/shade/idle.wav", 1, ATTN_NORM);
 			else
-				sound (self, CHAN_VOICE, "shade/taunt.wav", 1, ATTN_NORM);
+				sound (self, CHAN_VOICE, "drake/shade/taunt.wav", 1, ATTN_NORM);
 
 			// Don't make any more noise for a while.
 			self.waitmin = time + 3;
@@ -338,9 +358,9 @@ void()  shadow_walk = {
 void() shade_sfx_fly = {
     if (self.super_sound < time) { // Not while Quad is sounding.
         if (self.h2olevel <= 1) // Not while in the water.
-            sound (self, CHAN_BODY, "shade/fly.wav", 1, ATTN_NORM);
+            sound (self, CHAN_BODY, "drake/shade/fly.wav", 1, ATTN_NORM);
         else if ((self.h2otype == CONTENT_WATER) || (self.h2otype == CONTENT_SLIME))
-            sound (self, CHAN_BODY, "dragon/flywater.wav", 1, ATTN_NORM);
+            sound (self, CHAN_BODY, "drake/dragon/flywater.wav", 1, ATTN_NORM);
     }
 }; 
 
@@ -458,9 +478,9 @@ void(entity inflictor, entity attacker, float damage) shadow_pain = {
 
     self.pain_finished = time + 0.5; 
     if (random() < 0.5)
-        sound (self, CHAN_VOICE, "shade/pain.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "drake/shade/pain.wav", 1, ATTN_NORM);
     else
-        sound (self, CHAN_VOICE, "shade/pain2.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "drake/shade/pain2.wav", 1, ATTN_NORM);
 
     if (SUB_IgnorePain ()) return; // No pain anims in Nightmare.
     if (self.waitmin > time) {
@@ -537,9 +557,9 @@ void() shadow_die = {
         self.alpha      = 0.7;
         self.movetype   = MOVETYPE_NONE;    // Freeze monster in place.
         if (random() < 0.5)
-            sound (self, CHAN_VOICE, "shade/death2.wav", 1, ATTN_NORM);
+            sound (self, CHAN_VOICE, "drake/shade/death2.wav", 1, ATTN_NORM);
         else
-            sound (self, CHAN_VOICE, "shade/death.wav", 1, ATTN_NORM);
+            sound (self, CHAN_VOICE, "drake/shade/death.wav", 1, ATTN_NORM);
     //}
 };
 
@@ -557,22 +577,22 @@ void() monster_nightshade = {
     precache_model ("progs/drake/dr1_head.mdl");  // Gib (head)
 
     precache_sound ("demon/dhit2.wav");
-    precache_sound ("dragon/flywater.wav");
-    precache_sound ("shade/death.wav");
-    precache_sound ("shade/death2.wav");
-    precache_sound ("shade/fly.wav");
-    precache_sound ("shade/idle.wav");
-    precache_sound ("shade/moan.wav");
-    precache_sound ("shade/pain.wav");
-    precache_sound ("shade/pain2.wav");
-    precache_sound ("shade/screech.wav");
-    precache_sound ("shade/sing.wav");
-    precache_sound ("shade/spawn.wav");
-    precache_sound ("shade/taunt.wav");
+    precache_sound ("drake/dragon/flywater.wav");
+    precache_sound ("drake/shade/death.wav");
+    precache_sound ("drake/shade/death2.wav");
+    precache_sound ("drake/shade/fly.wav");
+    precache_sound ("drake/shade/idle.wav");
+    precache_sound ("drake/shade/moan.wav");
+    precache_sound ("drake/shade/pain.wav");
+    precache_sound ("drake/shade/pain2.wav");
+    precache_sound ("drake/shade/screech.wav");
+    precache_sound ("drake/shade/sing.wav");
+    precache_sound ("drake/shade/spawn.wav");
+    precache_sound ("drake/shade/taunt.wav");
     precache_sound ("wizard/hit.wav");   // used by C code, so don't sound2
-    precache_sound ("wraith/soul.wav");
+    precache_sound ("nehahra/wraith/soul.wav");
 
-    self.sight_sound = "shade/sing.wav";
+    self.sight_sound = "drake/shade/sing.wav";
 
     self.mdl = "progs/drake/shade.mdl";
     self.headmdl = "progs/drake/dr1_head.mdl";

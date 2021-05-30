@@ -120,9 +120,9 @@ float(entity targ) check_passivestate_system = {
 	if (targ.passive_state == MON_PASSIVESTATE_ON) {
 		// Reset timer if monster can see enemy
 		if (enemy_vis) targ.passive_timer = time + targ.passive_resettimer;
+		
 		// If timer has expired, use reset function
-		if (time > targ.passive_timer)
-			targ.passive_state = MON_PASSIVESTATE_RESET;
+		if (time > targ.passive_timer) targ.passive_state = MON_PASSIVESTATE_RESET;
 	}
 
 	// Check for monsters going back into passive state
@@ -137,22 +137,20 @@ float(entity targ) check_passivestate_system = {
 		// Check for any turning on triggers
 		trigger_passivestate_event(targ);
 		
-		// Disable the tether system with the tetherlock key
-		// otherwise the monster cannot return to patrols
+		// Disable the tether system with the tetherlock key otherwise the monster cannot return to patrols
 		targ.tetherlock = FALSE;
 
 		// Remove any enemy target system if active
 		SUB_removeEnemyTarget(targ);
 		targ.enemy = targ.goalentity = targ.movetarget = world;
 		// Check for any targets before combat
-		if (targ.target != "") 
-			targ.movetarget = find(world, targetname, targ.target);
+		if (targ.target != "") targ.movetarget = find(world, targetname, targ.target); // Not used for entity I/O, no need to check other targets
+		
 		// Check for path corners (patrols) and return to stand/walk
 		if (targ.movetarget.classtype == CT_PATHCORNER) {
 			targ.goalentity = targ.movetarget;
 			targ.think = targ.th_walk;
-		}
-		else targ.think = targ.th_stand;
+		} else targ.think = targ.th_stand;
 		return TRUE;
 	}
 	return FALSE;

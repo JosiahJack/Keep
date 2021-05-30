@@ -158,7 +158,7 @@ void() monster_wspider = {
 	precache_model ("progs/ad171/gib_spidlegg.mdl");
 	precache_model ("progs/gib2.mdl");
 	precache_model2("progs/spider.mdl");
-	precache_model2("progs/sp_spike.mdl");
+	precache_model2("progs/w_spike.mdl"); // ID1 scrag/wizard spit
 	precache_sound2("spider/fire.wav");
 	precache_sound2("shalrath/attack2.wav");
 	precache_sound2("shalrath/death.wav");

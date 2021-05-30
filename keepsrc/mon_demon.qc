@@ -81,10 +81,9 @@ void(float side) Demon_Claw =
 	// same goes for enemies that cannot be damaged (world geo mostly)
 	if (!ai_checkmelee(MONAI_MELEEDEMON,FALSE) || !self.enemy.takedamage) {
 		// Melee claw miss sound
-		if (random() < 0.5) sound (self, CHAN_WEAPON, "weapons/sword1a.wav", 1, ATTN_NORM);
-		else sound (self, CHAN_WEAPON, "weapons/sword1b.wav", 1, ATTN_NORM);
-	}
-	else {
+		if (random() < 0.5) sound (self, CHAN_WEAPON, "ad171/weapons/sword1a.wav", 1, ATTN_NORM);
+		else sound (self, CHAN_WEAPON, "ad171/weapons/sword1b.wav", 1, ATTN_NORM);
+	} else {
 		// Check for poisonous attribute (new poison version)
 		if (self.poisonous) PoisonDeBuff(self.enemy);
 
@@ -282,16 +281,11 @@ void() monster_demon1 =
 
 	self.idle_sound = "demon/idle1.wav";
 	precache_sound (self.idle_sound);
-
 	self.pain_sound = "demon/dpain1.wav";
 	precache_sound (self.pain_sound);
 	precache_sound ("demon/ddeath.wav");
-
 	precache_sound ("demon/dhit2.wav");
 	precache_sound ("demon/djump.wav");
-	precache_sound ("weapons/sword1a.wav");
-	precache_sound ("weapons/sword1b.wav");
-
 	self.sight_sound = "demon/sight2.wav";
 	precache_sound (self.sight_sound);
 

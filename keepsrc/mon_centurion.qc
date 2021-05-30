@@ -27,17 +27,14 @@ $frame paind1 paind2 paind3 paind4 paind5 paind6 paind7 paind8
 $frame paind9 paind10 paind11 paind12 paind13 paind14 paind15 paind16
 $frame paind17 paind18 paind19
 
-void() centurionhover =
-{
+void() centurionhover = {
 	if (self.waitmin < time) {
 		self.waitmin = time + 4 + random()*4;
-		sound(self, CHAN_ITEM, "enforcer/cent_hover.wav", 1, ATTN_IDLE);
+		sound(self, CHAN_ITEM, "ad171/enforcer/cent_hover.wav", 1, ATTN_IDLE);
 	}
 };
 
-//============================================================================
-void()	cent_stand1	=[	$stand1,	cent_stand2	] {
-	centurionhover();monster_idle_sound();ai_stand();};
+void()	cent_stand1	=[	$stand1,	cent_stand2	] {centurionhover();monster_idle_sound();ai_stand();};
 void()	cent_stand2	=[	$stand2,	cent_stand3	] {ai_stand();};
 void()	cent_stand3	=[	$stand3,	cent_stand4	] {ai_stand();};
 void()	cent_stand4	=[	$stand4,	cent_stand5	] {ai_stand();};
@@ -90,9 +87,7 @@ void() cent_fire =
 	launch_plasma(org, vec, CT_PROJ_PLASMA, SPEED_PLASMA);
 };
 
-//----------------------------------------------------------------------
-void()	cent_atk1	=[	$attack1,	cent_atk2	] {
-	sound (self, CHAN_WEAPON, "enforcer/elim_pg_load.wav", 1, ATTN_NORM);};
+void()	cent_atk1	=[	$attack1,	cent_atk2	] {sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM);};
 void()	cent_atk2	=[	$attack2,	cent_atk3	] {ai_face();};
 void()	cent_atk3	=[	$attack3,	cent_atk4	] {ai_face();};
 void()	cent_atk4	=[	$attack4,	cent_atk5	] {ai_face();};
@@ -109,20 +104,17 @@ void()	cent_atk12	=[	$attack8,	cent_atk13	] {};
 void()	cent_atk13	=[	$attack9,	cent_atk14	] {ai_face();};
 void()	cent_atk14	=[	$attack10,	cent_run1	] {ai_face();SUB_CheckRefire (cent_atk1);};
 
-//============================================================================
 void()	cent_paina1	=[	$paina1,	cent_paina2	] {};
 void()	cent_paina2	=[	$paina2,	cent_paina3	] {};
 void()	cent_paina3	=[	$paina3,	cent_paina4	] {};
 void()	cent_paina4	=[	$paina4,	cent_run1	] {};
 
-//----------------------------------------------------------------------
 void()	cent_painb1	=[	$painb1,	cent_painb2	] {};
 void()	cent_painb2	=[	$painb2,	cent_painb3	] {};
 void()	cent_painb3	=[	$painb3,	cent_painb4	] {};
 void()	cent_painb4	=[	$painb4,	cent_painb5	] {};
 void()	cent_painb5	=[	$painb5,	cent_run1	] {};
 
-//----------------------------------------------------------------------
 void()	cent_painc1	=[	$painc1,	cent_painc2	] {};
 void()	cent_painc2	=[	$painc2,	cent_painc3	] {};
 void()	cent_painc3	=[	$painc3,	cent_painc4	] {};
@@ -132,7 +124,6 @@ void()	cent_painc6	=[	$painc6,	cent_painc7	] {};
 void()	cent_painc7	=[	$painc7,	cent_painc8	] {};
 void()	cent_painc8	=[	$painc8,	cent_run1	] {};
 
-//----------------------------------------------------------------------
 void()	cent_paind1	=[	$paind1,	cent_paind2	] {};
 void()	cent_paind2	=[	$paind2,	cent_paind3	] {};
 void()	cent_paind3	=[	$paind3,	cent_paind4	] {};
@@ -153,9 +144,7 @@ void()	cent_paind17=[	$paind17,	cent_paind18 ] {ai_pain(1);};
 void()	cent_paind18=[	$paind18,	cent_paind19 ] {};
 void()	cent_paind19=[	$paind19,	cent_run1	 ] {};
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) cent_pain =
-{
+void(entity inflictor, entity attacker, float damage) cent_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -175,10 +164,8 @@ void(entity inflictor, entity attacker, float damage) cent_pain =
 	}
 };
 
-//============================================================================
 // Every death frame spawn some smoke and detect impact!
-void() cent_crash =
-{
+void() cent_crash = {
 	if (self.state) {
 		// Spawn projectile smoke trails or smoke sprites
 		if (random() < 0.5) SpawnProjectileSmoke(self.origin, 150, 50, 150);
@@ -194,11 +181,9 @@ void() cent_crash =
 	}
 };
 
-//----------------------------------------------------------------------
 void()	cent_die1	=[	$death1,	cent_die2	] {cent_crash();};
 void()	cent_die2	=[	$death2,	cent_die3	] {monster_check_gib();cent_crash();};
-void()	cent_die3	=[	$death3,	cent_die4	] {monster_check_gib();
-self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();cent_crash();};
+void()	cent_die3	=[	$death3,	cent_die4	] {monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();cent_crash();};
 void()	cent_die4	=[	$death4,	cent_die5	] {cent_crash();};
 void()	cent_die5	=[	$death5,	cent_die6	] {cent_crash();};
 void()	cent_die6	=[	$death6,	cent_die7	] {cent_crash();};
@@ -211,11 +196,9 @@ void()	cent_die12	=[	$death12,	cent_die13	] {cent_crash();};
 void()	cent_die13	=[	$death13,	cent_die14	] {monster_death_postcheck();cent_crash();};
 void()	cent_die14	=[	$death14,	cent_die14	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
 void()	cent_fdie1	=[	$fdeath1,	cent_fdie2	] {cent_crash();};
 void()	cent_fdie2	=[	$fdeath2,	cent_fdie3	] {monster_check_gib();cent_crash();};
-void()	cent_fdie3	=[	$fdeath3,	cent_fdie4	] {monster_check_gib();
-	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();cent_crash();};
+void()	cent_fdie3	=[	$fdeath3,	cent_fdie4	] {monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();cent_crash();};
 void()	cent_fdie4	=[	$fdeath4,	cent_fdie5	] {cent_crash();};
 void()	cent_fdie5	=[	$fdeath5,	cent_fdie6	] {cent_crash();};
 void()	cent_fdie6	=[	$fdeath6,	cent_fdie7	] {cent_crash();};
@@ -225,14 +208,11 @@ void()	cent_fdie9	=[	$fdeath9,	cent_fdie10	] {cent_crash();};
 void()	cent_fdie10	=[	$fdeath10,	cent_fdie11	] {monster_death_postcheck();cent_crash();};
 void()	cent_fdie11	=[	$fdeath11,	cent_fdie11	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
-void() cent_die =
-{
+void() cent_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
-	// Kill hoverboard sound
-	sound(self, CHAN_ITEM, SOUND_EMPTY, 1, ATTN_IDLE);
+	StopSound(self,CHAN_ITEM); // Kill hoverboard sound
 	
 	// regular death
 	if (!self.gibbed) {
@@ -250,9 +230,7 @@ void() cent_die =
 	}
 };
 
-/*======================================================================
- QUAKED monster_centurion (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
+// QUAKED monster_centurion (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_centurion = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
@@ -280,12 +258,12 @@ void() monster_centurion = {
 	precache_sound ("enforcer/sight4.wav");
 
 	// Extra load/fire sounds (from Quoth MOD)
-	precache_sound ("enforcer/elim_pg_load.wav");
+	precache_sound ("ad171/enforcer/elim_pg_load.wav");
 	precache_sound (SOUND_PLASMA_FIRE);
 	precache_sound (SOUND_PLASMA_HIT);
 	
 	// Originally from rubicon2 (re-processed)
-	precache_sound ("enforcer/cent_hover.wav");
+	precache_sound ("ad171/enforcer/cent_hover.wav");
 	precache_sound (GIB_SOUND_WOOD);
 
 	// Check for poisonous entity flag

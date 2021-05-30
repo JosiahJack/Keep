@@ -623,13 +623,10 @@ void(float frameno) zombiek_onground = {
 	}
 };
 
-//----------------------------------------------------------------------
 // Puts the zombie on the floor based on the angle of attack
 // 270-360, 360-90 : Fall forward (3 checks Left, middle, right)
 // 180-270, 90-180 : Fall backward
-//----------------------------------------------------------------------
-void() zombiek_knockdown =
-{
+void() zombiek_knockdown = {
 	local float enemy_ang, comp_ang;
 	
 	// Work out which direction the damage came from (enemy)
@@ -685,17 +682,14 @@ void() zombiek_knockdown =
 	}
 };
 
-/*============================================================================
- All sounds used
- 2 = strutting the stuff (walking)
- 3 = running (in slow motion)
- 4 = all pain routines (zombiek_paina1, _painb1, _painc1, _paind1)
- 5 = its a knockout!
- 6 = get up and moan about it
- 7 = sword swipe
-============================================================================*/
-void(float type) zombiek_sound =
-{
+// All sounds used
+// 2 = strutting the stuff (walking)
+// 3 = running (in slow motion)
+// 4 = all pain routines (zombiek_paina1, _painb1, _painc1, _paind1)
+// 5 = its a knockout!
+// 6 = get up and moan about it
+// 7 = sword swipe
+void(float type) zombiek_sound = {
 	// check for gibbed or idle sound block
 	if (self.health < 1) return;
 	if (self.spawnflags & MON_SPAWN_NOIDLE && type < 3) return;
@@ -706,28 +700,20 @@ void(float type) zombiek_sound =
 	 	self.idletimer = time + 1 + (random()*2);
 		if (self.lip < 0.2)
 			sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
-	}
-	else if (type == 3 && self.idletimer < time) {
+	} else if (type == 3 && self.idletimer < time) {
 	 	self.idletimer = time + 1 + (random()*2);
 		if (self.lip < 0.2) sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
 		if (self.lip > 0.8) sound (self, CHAN_VOICE, "zombie/z_idle1.wav", 1, ATTN_IDLE);
-	}
-	else if (type == 4) {
+	} else if (type == 4) {
 		if (self.lip < 0.25) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		else if (self.lip < 0.5) sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
-	}
-	else if (type == 5) {
+	} else if (type == 5) {
 		sound (self, CHAN_BODY, "zombie/z_fall.wav", 1, ATTN_NORM);
-	}
-	else if (type == 6) {
+	} else if (type == 6) {
 		if (self.lip < 0.5) sound (self, CHAN_VOICE, "zombie/z_idle.wav", 1, ATTN_IDLE);
 		else sound (self, CHAN_VOICE, "zombie/z_idle1.wav", 1, ATTN_IDLE);
-	}
-	else if (type == 7) {
-		if (self.lip < 0.25) sound (self, CHAN_WEAPON, "weapons/sword1a.wav", 1, ATTN_NORM);
-		else if (self.lip < 0.5) sound (self, CHAN_WEAPON, "weapons/sword2a.wav", 1, ATTN_NORM);
-		else if (self.lip < 0.75) sound (self, CHAN_WEAPON, "weapons/sword1b.wav", 1, ATTN_NORM);
-		else sound (self, CHAN_WEAPON, "weapons/sword2b.wav", 1, ATTN_NORM);
+	} else if (type == 7) {
+		SwordSwipeSound();
 	}
 };
 
@@ -751,27 +737,17 @@ void() monster_zombiek = {
 	self.headmdl = "progs/ad171/h_zombiek.mdl";
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
-
 	self.gib1mdl = "progs/ad171/w_zombiesword.mdl";	// Unique sword
 	self.gib1sound = GIB_IMPACT_METALA;
 	precache_model (self.gib1mdl);
-
 	precache_sound ("zombie/z_idle.wav");	// Idle A
 	precache_sound ("zombie/z_idle1.wav");	// Idle B
-
 	self.pain_sound = "zombie/z_pain.wav";
 	self.pain_sound2 = "zombie/z_pain1.wav";
 	precache_sound (self.pain_sound);
 	precache_sound (self.pain_sound2);
-
 	precache_sound ("zombie/z_fall.wav");	// Impact - floor
 	precache_sound ("zombie/z_gib.wav");	// Death sound
-
-	// New sword sweep/slash sounds
-	precache_sound ("weapons/sword1a.wav");
-	precache_sound ("weapons/sword1b.wav");
-	precache_sound ("weapons/sword2a.wav");
-	precache_sound ("weapons/sword2b.wav");
 
 	// New sight sound, mixture of knight + zombie
 	self.sight_sound = "zombie/zk_sight.wav";

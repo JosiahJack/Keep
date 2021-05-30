@@ -359,7 +359,7 @@ if (self.pain_finished > time)	return;
 
 	painChoice = random();
 	self.pain_finished = time + 2;
-	sound (self, CHAN_VOICE, "guard/pain1.wav", 1, ATTN_NORM );
+	sound (self, CHAN_VOICE, "rogue/guard/pain1.wav", 1, ATTN_NORM );
 
 	if ( painChoice > 0.6)
 		self.think = morph_painB1;
@@ -404,7 +404,7 @@ void() morph_die20 = [ $mfdth20, morph_die21 ] {};
 void() morph_die21 = [ $mfdth21, morph_die21 ] { remove(self); };
 
 void() morph_die = {
-	sound ( self, CHAN_VOICE, "guard/death.wav", 1, ATTN_NORM);
+	sound ( self, CHAN_VOICE, "rogue/guard/death.wav", 1, ATTN_NORM);
 
 	self.solid = SOLID_NOT;
 	self.think = morph_die1;
@@ -414,7 +414,7 @@ void() morph_die = {
 
 
 
-void() morph_wake1 = [ $start01, morph_wake2 ] { sound ( self, CHAN_VOICE, "guard/see1.wav", 1, ATTN_NORM );
+void() morph_wake1 = [ $start01, morph_wake2 ] { sound ( self, CHAN_VOICE, "rogue/guard/see1.wav", 1, ATTN_NORM );
  };
 void() morph_wake2 = [ $start02, morph_wake3 ] {};
 void() morph_wake3 = [ $start03, morph_wake4 ] {};
@@ -483,8 +483,8 @@ void() morph_setup = {
 	if (self.owner)
 		self.mdl = self.owner.mdl;
 
-	self.pain_sound = "guard/pain1.wav";
-	self.sight_sound = "guard/see1.wav";
+	self.pain_sound = "rogue/guard/pain1.wav";
+	self.sight_sound = "rogue/guard/see1.wav";
 
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
@@ -614,12 +614,9 @@ void() monster_morph = {
 	precache_model ("progs/rogue/mon_morph_eg.mdl");
 	precache_model ("progs/laser.mdl");
 	precache_sound ("enforcer/enfire.wav");
-	precache_sound ("guard/death.wav");
-
-	precache_sound ("guard/pain1.wav");
-
-	precache_sound ("guard/see1.wav");
-
+	precache_sound ("rogue/guard/death.wav");
+	precache_sound ("rogue/guard/pain1.wav");
+	precache_sound ("rogue/guard/see1.wav");
 
 	morph_setup();
 };

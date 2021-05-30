@@ -1,45 +1,32 @@
-/*=============================================================================
-PYRO - Originally from Rubicon2 by John Fitzgibbons
-FUMIGATOR - Green/Poison version of the Pyro
-==============================================================================*/
+// PYRO - Originally from Rubicon2 by John Fitzgibbons
+// FUMIGATOR - Green/Poison version of the Pyro
+
 $cd id1/models/enforcer
 $origin 0 -6 24
 $base base		
 $skin skin
-
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9 walk10
 $frame walk11 walk12 walk13 walk14 walk15 walk16
-
 $frame run1 run2 run3 run4 run5 run6 run7 run8
-
 $frame attack1 attack2 attack3 attack4 attack5 attack6
 $frame attack7 attack8 attack9 attack10
-
 $frame death1 death2 death3 death4 death5 death6 death7 death8
 $frame death9 death10 death11 death12 death13 death14
-
 $frame fdeath1 fdeath2 fdeath3 fdeath4 fdeath5 fdeath6 fdeath7 fdeath8
 $frame fdeath9 fdeath10 fdeath11
-
 $frame paina1 paina2 paina3 paina4
-
 $frame painb1 painb2 painb3 painb4 painb5
-
 $frame painc1 painc2 painc3 painc4 painc5 painc6 painc7 painc8
 
-//----------------------------------------------------------------------
-void() pyro_soundreset =
-{
+void() pyro_soundreset = {
 	//turn off flame sound
 	if (self.attack_finished > time)
 		sound (self, CHAN_WEAPON, self.noise4, 1, ATTN_NORM);
 	//play sound anyway to be sure the channel is silent
-	else sound (self, CHAN_WEAPON, SOUND_EMPTY, 0, ATTN_NORM);
+	else StopSound(self,CHAN_WEAPON);
 };
 
-//============================================================================
 void()	pyro_stand1	=[	$stand1,	pyro_stand2	] {monster_idle_sound(); ai_stand();};
 void()	pyro_stand2	=[	$stand2,	pyro_stand3	] {ai_stand();};
 void()	pyro_stand3	=[	$stand3,	pyro_stand4	] {ai_stand();};
@@ -48,7 +35,6 @@ void()	pyro_stand5	=[	$stand5,	pyro_stand6	] {ai_stand();};
 void()	pyro_stand6	=[	$stand6,	pyro_stand7	] {ai_stand();};
 void()	pyro_stand7	=[	$stand7,	pyro_stand1	] {ai_stand();};
 
-//============================================================================
 void()	pyro_walk1	=[	$walk1,		pyro_walk2	] {monster_idle_sound();ai_walk(2);};
 void()	pyro_walk2	=[	$walk2,		pyro_walk3	] {monster_footstep(FALSE); ai_walk(4);};
 void()	pyro_walk3	=[	$walk3,		pyro_walk4	] {ai_walk(4);};
@@ -364,8 +350,8 @@ void() monster_pyro = {
 	precache_sound ("enforcer/sight4.wav");
 
 	// Extra sound/sprite assets (from Rubicon2 MOD)
-	self.noise3 = "enforcer/pyro_flameon.wav";
-	self.noise4 = "enforcer/pyro_flameoff.wav";
+	self.noise3 = "ad171/enforcer/pyro_flameon.wav";
+	self.noise4 = "ad171/enforcer/pyro_flameoff.wav";
 	precache_sound (self.noise3);
 	precache_sound (self.noise4);
 	precache_model (SBURST_FLAME);		// Flame on
@@ -445,8 +431,8 @@ void() monster_fumigator = {
 	precache_sound ("enforcer/sight4.wav");
 
 	// Extra sound/sprite assets (from Rubicon2 MOD)
-	self.noise3 = "enforcer/fum_poisonon.wav";
-	self.noise4 = "enforcer/fum_poisonoff.wav";
+	self.noise3 = "ad171/enforcer/fum_poisonon.wav";
+	self.noise4 = "ad171/enforcer/fum_poisonoff.wav";
 	precache_sound (self.noise3);
 	precache_sound (self.noise4);
 	precache_model (SBURST_POISON);		// Poison on

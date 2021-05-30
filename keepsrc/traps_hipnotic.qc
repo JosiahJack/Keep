@@ -243,7 +243,7 @@ void () trap_tesla_think = {
       self.think = trap_tesla_think;
       trap_tesla_scan ();
       if ( (self.tesla_numtargets > FALSE) ) {
-         if ( (self.wait > FALSE) ) sound (self,CHAN_AUTO,"misc/tesla.wav",TRUE,ATTN_NORM);
+         if ( (self.wait > FALSE) ) sound (self,CHAN_AUTO,"hipnotic/misc/tesla.wav",TRUE,ATTN_NORM);
          self.attack_state = TRUE;
          self.nextthink = (time + self.wait);
          return ;
@@ -254,7 +254,7 @@ void () trap_tesla_think = {
       if ( (self.attack_state == TRUE) ) {
          trap_tesla_scan ();
          while ( (self.tesla_numtargets > FALSE) ) {
-            sound (self,CHAN_AUTO,"hipweap/mjolhit.wav",TRUE,ATTN_NORM);
+            sound (self,CHAN_AUTO,"hipnotic/weapons/mjolhit.wav",TRUE,ATTN_NORM);
             SpawnTeslaLightning (self.tesla_target);
             self.tesla_target = self.tesla_target.next_ent;
             self.tesla_numtargets = (self.tesla_numtargets - TRUE);
@@ -279,8 +279,8 @@ void () trap_tesla_think = {
 };
 
 void () trap_tesla_coil = {
-   precache_sound ("misc/tesla.wav");
-   precache_sound ("hipweap/mjolhit.wav");
+   precache_sound ("hipnotic/misc/tesla.wav");
+   precache_sound ("hipnotic/weapons/mjolhit.wav");
    if ( (self.wait == FALSE) ) self.wait = FL_SWIM;
    if ( (self.dmg == FALSE) ) self.dmg = (FL_SWIM + (MOVETYPE_FLY * cvar ("skill")));
    if ( (self.duration == FALSE) ) self.duration = CONTENT_EMPTY;

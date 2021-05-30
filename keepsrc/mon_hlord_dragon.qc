@@ -280,36 +280,29 @@ void() hlorddragon_atk_f2=[$drgfix6b, hlorddragon_atk_f3 ] {hlorddragon_move(17)
 void() hlorddragon_atk_f3=[$drgfix6c, hlorddragon_atk_f4 ] {hlorddragon_move(17);};
 void() hlorddragon_atk_f4=[$drgfix6c, hlorddragon_walk3  ] {hlorddragon_move(17);dragon_stop_attack();};
 
-// ===================================
-// dragon walk frames
-// ===================================
 void() hlorddragon_walk1 =[ $drgfly01, hlorddragon_walk2 ] {
     if (self.dragonAttacking) dragon_stop_attack();          
     self.th_missile=dragon_atk_a1;
     self.hlorddragonPainSequence=1;
     hlorddragon_move(17);
-    if (random() < 0.2) sound (self, CHAN_VOICE, "drake/dragon/active.wav", 0.6, ATTN_IDLE);
+    if (random() < 0.2) sound (self, CHAN_VOICE, "rogue/dragon/active.wav", 0.6, ATTN_IDLE);
 };
-void() hlorddragon_walk2 =[ $drgfly02, hlorddragon_walk3 ]
-    {self.th_missile=SUB_Null; dragon_move(17);};
+void() hlorddragon_walk2 =[ $drgfly02, hlorddragon_walk3 ] {self.th_missile=SUB_Null; dragon_move(17);};
 void() hlorddragon_walk3 =[ $drgfly03, hlorddragon_walk4 ] { 
     self.th_missile=hlorddragon_atk_b1; hlorddragon_move(17);
     self.hlorddragonPainSequence=2;
 };
-void() hlorddragon_walk4 =[ $drgfly04, hlorddragon_walk5 ]
-    {self.th_missile=SUB_Null; hlorddragon_move(17);};
+void() hlorddragon_walk4 =[ $drgfly04, hlorddragon_walk5 ] {self.th_missile=SUB_Null; hlorddragon_move(17);};
 void() hlorddragon_walk5 =[ $drgfly05, hlorddragon_walk6 ] { 
     self.th_missile=dragon_atk_c1; hlorddragon_move(17);
     self.hlorddragonPainSequence=3;
 };
-void() hlorddragon_walk6 =[ $drgfly06, hlorddragon_walk7 ]
-    {self.th_missile=SUB_Null; hlorddragon_move(17);};
+void() hlorddragon_walk6 =[ $drgfly06, hlorddragon_walk7 ] {self.th_missile=SUB_Null; hlorddragon_move(17);};
 void() hlorddragon_walk7 =[ $drgfly07, hlorddragon_walk8 ] {
     self.th_missile=dragon_atk_d1; hlorddragon_move(17);
     self.hlorddragonPainSequence=4;
 };
-void() hlorddragon_walk8 =[ $drgfly08, hlorddragon_walk9 ]
-    {self.th_missile=SUB_Null; hlorddragon_move(17);};
+void() hlorddragon_walk8 =[ $drgfly08, hlorddragon_walk9 ] {self.th_missile=SUB_Null; hlorddragon_move(17);};
 void() hlorddragon_walk9 =[ $drgfly09, hlorddragon_walk10 ] {
     if (self.h2olevel <= 1)     // Not while in the water.
         sound (self, CHAN_BODY, "drake/dragon/fly1.wav", 1, ATTN_NORM);
@@ -318,8 +311,7 @@ void() hlorddragon_walk9 =[ $drgfly09, hlorddragon_walk10 ] {
     self.th_missile=dragon_atk_e1; dragon_move(17);
     self.dragonPainSequence=5;
 };
-void() hlorddragon_walk10 =[ $drgfly10, hlorddragon_walk11 ]
-    {self.th_missile=SUB_Null; hlorddragon_move(17);};
+void() hlorddragon_walk10 =[ $drgfly10, hlorddragon_walk11 ] {self.th_missile=SUB_Null; hlorddragon_move(17);};
 void() hlorddragon_walk11 =[ $drgfly11, hlorddragon_walk12 ] {
     self.th_missile=hlorddragon_atk_f1; hlorddragon_move(17);
     self.hlorddragonPainSequence=6;
@@ -339,7 +331,7 @@ void() hlorddragon_fireball = {
     local   float   fireType;
     local   float   sped;       // For the modified attacks.
     
-    sound (self, CHAN_VOICE, "drake/dragon/attack1.wav", 1, ATTN_NORM);
+    sound (self, CHAN_VOICE, "rogue/dragon/attack.wav", 1, ATTN_NORM);
 
     makevectors (self.angles);
     org = self.origin + v_forward*96 + v_up*16;
@@ -385,7 +377,7 @@ void() hlorddragon_fireball = {
 			sound (self, CHAN_WEAPON, "drake/dragon/fire.wav", 1, ATTN_NORM);
             Meteor_Launch (self, org, dir, sped, 90);
         } else {
-			sound (self, CHAN_WEAPON, "drake/plasma/fire.wav", 1, ATTN_NORM);
+			sound (self, CHAN_WEAPON, "rogue/plasma/fire.wav", 1, ATTN_NORM);
 			launch_plasma(org, dir, CT_PROJ_PLASMA, sped);
         }
         fireCount = fireCount - 1;
@@ -468,7 +460,7 @@ void(entity inflictor, entity attacker, float damage) hlorddragon_pain = {
 
     if (random() < 0.25) {
         dragon_stop_attack();
-        sound (self, CHAN_VOICE, "dragon/pain.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "rogue/dragon/pain.wav", 1, ATTN_NORM);
         self.pain_finished = time + 2;
         if (self.hlorddragonPainSequence == 1)
             self.think = hlorddragon_painA1;
@@ -548,17 +540,13 @@ void() hlorddragon_squish = {
 };
 
 void() hlorddragon_death1  =[ $drgdth01, hlorddragon_death2  ] {
-// PM:  deadflag should be set by modified Killed.
-//    self.deadflag = DEAD_DYING;
     self.use      = SUB_Null;
     makevectors (self.angles);
     self.velocity = 300 * v_forward - 40 * v_up;
     self.flags    = self.flags - (self.flags & FL_ONGROUND);
-    // PM:  Use the bigger hull2 size instead of hull.
-    setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX);
+    setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX); // PM: Use the bigger hull2 size instead of hull.
     self.touch    = hlorddragon_squish;
-
-    sound (self, CHAN_VOICE, "dragon/death.wav", 1, ATTN_NONE);
+    sound (self, CHAN_VOICE, "rogue/dragon/death.wav", 1, ATTN_NONE);
     self.dragonAttacking = FALSE;
 };
 void() hlorddragon_death2  =[ $drgdth02, hlorddragon_death3  ] {hlorddragon_explode();};
@@ -581,17 +569,14 @@ void() hlorddragon_death18 =[ $drgdth18, hlorddragon_death19 ] {hlorddragon_expl
 void() hlorddragon_death19 =[ $drgdth19, hlorddragon_death20 ] {hlorddragon_explode();};
 void() hlorddragon_death20 =[ $drgdth20, hlorddragon_death21 ] {hlorddragon_explode();};
 void() hlorddragon_death21 =[ $drgdth21, SUB_Null       ] {
-	// PM:  Added explosion and other gibs.
-    hlorddragon_parts ();
+    hlorddragon_parts (); // PM: Added explosion and other gibs.
     hlorddragon_nuke ();
     Quake_Self (600, 0, self.origin, 0, 1);
-
-	//    ViolentDeath(39);   // Disintegrate into numerous gibs.
-    ThrowGib(1,15);
-    ThrowGib(2,15);
-    ThrowGib(3,15);
+    ThrowGib(1,13);
+    ThrowGib(2,13);
+    ThrowGib(3,13);
     self.target = "dragondoor";
-    SUB_UseTargets();            
+    SUB_UseTargets();
     remove(self);
 };
 
@@ -633,7 +618,6 @@ void() darklord_thebeast = {
     self.dest1  = '-96 -96 -24';
     self.dest2  = '96 96 96';
     self.spawnskin  = self.skin;
-    
     self.th_stand   = hlorddragon_walk1;
     self.th_walk    = hlorddragon_walk1;
     self.th_run     = hlorddragon_walk1;
@@ -641,7 +625,7 @@ void() darklord_thebeast = {
     self.th_missile = SUB_Null;     // Constantly changes while walking.
     self.th_pain    = hlorddragon_pain;
     self.th_die     = hlorddragon_death1;
-    self.sight_sound = "drake/dragon/see.wav";
+    self.sight_sound = "rogue/dragon/see.wav";
 	self.hello_sound = string_null; // no hello
     self.hlorddragonPainSequence=1;
     self.yaw_speed = 10;    // Hardwire this now!
@@ -649,6 +633,5 @@ void() darklord_thebeast = {
     self.bloodtype = BLOOD_RED;     // It's flesh and blood now.
     self.ryuflags = self.ryuflags | RYU_NO_WATER;
     self.xfl      = self.xfl | XFL_IMMUNITY;
-
     hlorddragon_walk1 ();
 };

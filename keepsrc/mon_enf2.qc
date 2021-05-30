@@ -314,7 +314,7 @@ Void function mark3_atk4();
 {
   if (self.health < 25) {
     if (random() < 0.5) {
-      sound(self, CHAN_WEAPON, "weapons/shotdud.wav", 1, ATTN_NORM);
+      sound(self, CHAN_WEAPON, "nehahra/weapons/shotdud.wav", 1, ATTN_NORM);
       #53 mark3_atk7;
       exit;
       }
@@ -396,10 +396,9 @@ var
     }
   self.pain_finished = time + 0.6;
   if (r < 0.5) {
-    sound(self, CHAN_VOICE, "enf2/pain1.wav", 1, ATTN_NORM);
-    }
-  else {
-    sound(self, CHAN_VOICE, "enf2/pain2.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "nehahra/enf2/pain1.wav", 1, ATTN_NORM);
+    } else {
+    sound(self, CHAN_VOICE, "nehahra/enf2/pain2.wav", 1, ATTN_NORM);
     }
   mark3_paina1();
 }
@@ -691,30 +690,30 @@ Void function mark3_die();
     }
 }
 
-Void function monster_enf2();
-{
+Void function monster_enf2() = {
   if (deathmatch) {
     remove(self);
     exit;
     }
 
-  precache_model2("progs/mark3.mdl");
-  precache_model2("progs/h_enf2.mdl");
-  precache_sound2("enforcer/death1.wav");
-  precache_sound2("enf2/sight1.wav");
-  precache_sound2("enf2/comeon.wav");
-  precache_sound2("enf2/pain1.wav");
-  precache_sound2("enf2/pain2.wav");
-  precache_sound("enf2/sight2.wav");
-  precache_sound("enf2/sight3.wav");
-  precache_sound("enf2/sight4.wav");
-  precache_sound("enf2/sight5.wav");
-  precache_sound("enf2/death1.wav");
-  precache_sound("enf2/death2.wav");
-  precache_sound("enf2/death3.wav");
-  precache_sound("enf2/idle1.wav");
-  precache_sound("enf2/idle2.wav");
-  precache_sound("enf2/idle3.wav");
+  precache_model("progs/mark3.mdl");
+  precache_model("progs/h_enf2.mdl");
+  precache_sound("enforcer/death1.wav");
+  precache_sound("nehahra/enf2/sight1.wav");
+  precache_sound("nehahra/enf2/comeon.wav");
+  precache_sound("nehahra/enf2/pain1.wav");
+  precache_sound("nehahra/enf2/pain2.wav");
+	precache_sound("nehahra/weapons/shotdud.wav");
+  precache_sound("nehahra/enf2/sight2.wav");
+  precache_sound("nehahra/enf2/sight3.wav");
+  precache_sound("nehahra/enf2/sight4.wav");
+  precache_sound("nehahra/enf2/sight5.wav");
+  precache_sound("nehahra/enf2/death1.wav");
+  precache_sound("nehahra/enf2/death2.wav");
+  precache_sound("nehahra/enf2/death3.wav");
+  precache_sound("nehahra/enf2/idle1.wav");
+  precache_sound("nehahra/enf2/idle2.wav");
+  precache_sound("nehahra/enf2/idle3.wav");
   if (!(self.brain & NAVLOGIC)) {
     self.brain = self.brain | NAVLOGIC;
     }
@@ -862,18 +861,18 @@ var
   if (self.enemy.classname == "player") {
     rsnd = rint(random() * MOVETYPE_WALK);
     if (rsnd == 1) {
-      sound(self, CHAN_VOICE, "enf2/comeon.wav", 1, ATTN_NORM);
+      sound(self, CHAN_VOICE, "nehahra/enf2/comeon.wav", 1, ATTN_NORM);
       }
     else {
       if (rsnd == FL_SWIM) {
-        sound(self, CHAN_VOICE, "enf2/sight1.wav", 1, ATTN_NORM);
+        sound(self, CHAN_VOICE, "nehahra/enf2/sight1.wav", 1, ATTN_NORM);
         }
       else {
         if (rsnd == 0) {
-          sound(self, CHAN_VOICE, "enf2/sight4.wav", 1, ATTN_NORM);
+          sound(self, CHAN_VOICE, "nehahra/enf2/sight4.wav", 1, ATTN_NORM);
           }
         else {
-          sound(self, CHAN_VOICE, "enf2/sight3.wav", 1, ATTN_NORM);
+          sound(self, CHAN_VOICE, "nehahra/enf2/sight3.wav", 1, ATTN_NORM);
           }
         }
       }
@@ -881,18 +880,18 @@ var
     }
   rsnd = rint(random() * MOVETYPE_WALK);
   if (rsnd == 1) {
-    sound(self, CHAN_VOICE, "enf2/comeon.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "nehahra/enf2/comeon.wav", 1, ATTN_NORM);
     }
   else {
     if (rsnd == FL_SWIM) {
-      sound(self, CHAN_VOICE, "enf2/sight4.wav", 1, ATTN_NORM);
+      sound(self, CHAN_VOICE, "nehahra/enf2/sight4.wav", 1, ATTN_NORM);
       }
     else {
       if (rsnd == 0) {
-        sound(self, CHAN_VOICE, "enf2/sight5.wav", 1, ATTN_NORM);
+        sound(self, CHAN_VOICE, "nehahra/enf2/sight5.wav", 1, ATTN_NORM);
         }
       else {
-        sound(self, CHAN_VOICE, "enf2/sight2.wav", 1, ATTN_NORM);
+        sound(self, CHAN_VOICE, "nehahra/enf2/sight2.wav", 1, ATTN_NORM);
         }
       }
     }
@@ -904,14 +903,14 @@ var
 {
   num = random() + random();
   if (num < 0.6) {
-    sound(self, CHAN_VOICE, "enf2/idle1.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "nehahra/enf2/idle1.wav", 1, ATTN_NORM);
     exit;
     }
   if (num < 1.2) {
-    sound(self, CHAN_VOICE, "enf2/idle2.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "nehahra/enf2/idle2.wav", 1, ATTN_NORM);
     exit;
     }
-  sound(self, CHAN_VOICE, "enf2/idle3.wav", 1, ATTN_NORM);
+  sound(self, CHAN_VOICE, "nehahra/enf2/idle3.wav", 1, ATTN_NORM);
 }
 
 Void function enf2_deathsound();
@@ -920,12 +919,12 @@ var
 {
   num = random() + random();
   if (num < 0.6) {
-    sound(self, CHAN_VOICE, "enf2/death1.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "nehahra/enf2/death1.wav", 1, ATTN_NORM);
     exit;
     }
   if (num < 1.2) {
-    sound(self, CHAN_VOICE, "enf2/death2.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "nehahra/enf2/death2.wav", 1, ATTN_NORM);
     exit;
     }
-  sound(self, CHAN_VOICE, "enf2/death3.wav", 1, ATTN_NORM);
+  sound(self, CHAN_VOICE, "nehahra/enf2/death3.wav", 1, ATTN_NORM);
 }

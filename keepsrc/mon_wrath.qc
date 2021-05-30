@@ -91,7 +91,7 @@ void () wrath_attack = {
          wrath_at_c01 ();
       }
    }
-   sound (self,CHAN_VOICE,"wrath/watt.wav",TRUE,ATTN_NORM);
+   sound (self,CHAN_VOICE,"rogue/wrath/watt.wav",TRUE,ATTN_NORM);
 };
 
 void () wrath_pn_a01 = [ 55.000, wrath_pn_a02 ] {};
@@ -130,7 +130,7 @@ void (entity inflictor, entity attacker, float damage) wrath_pain = {
       wrath_pn_b01 ();
    }
    self.pain_finished = (time + 3);
-   sound (self,CHAN_VOICE,"wrath/wpain.wav",TRUE,ATTN_NORM);
+   sound (self,CHAN_VOICE,"rogue/wrath/wpain.wav",TRUE,ATTN_NORM);
 };
 
 void () wrath_die02 = [ 73.000, wrath_die03 ] {};
@@ -161,8 +161,8 @@ void () wrath_die15 = [ 86.000, wrath_die15 ] {
 		WriteCoord (MSG_BROADCAST, self.origin_z);
 	}
 	
-	// Play original explosion sound or replacement
-	sound(self, CHAN_WEAPON, SOUND_REXP3, 1, ATTN_NORM);
+	R_Exp3(self.origin); // Play original explosion sound or replacement
+
 	// Stop thinking and hide entity (prevent wraith_death15 loop)
 	self.nextthink = LARGE_TIMER;
 	self.think = SUB_Null;
@@ -174,7 +174,7 @@ void () wrath_die01 = {
 	monster_death_precheck();
 	self.solid = SOLID_NOT;
 
-	sound (self,CHAN_VOICE,"wrath/wdthc.wav",TRUE,ATTN_NORM);
+	sound (self,CHAN_VOICE,"rogue/wrath/wdthc.wav",TRUE,ATTN_NORM);
 
 	// Make sure body stays floating up where it finally dies
 	// and do not drop to the ground (reset by monster_death_use func)
@@ -199,22 +199,22 @@ void () monster_wrath = {
    precache_model ("progs/drake/wrthgib1.mdl");
    precache_model ("progs/drake/wrthgib2.mdl");
    precache_model ("progs/drake/wrthgib3.mdl");
-   precache_sound ("wrath/wsee.wav");
-   precache_sound ("wrath/watt.wav");
+   precache_sound ("rogue/wrath/wsee.wav");
+   precache_sound ("rogue/wrath/watt.wav");
 
-   self.pain_sound = "wrath/wpain.wav";
-   precache_sound ("wrath/wpain.wav");
+   self.pain_sound = "rogue/wrath/wpain.wav";
+   precache_sound ("rogue/wrath/wpain.wav");
 
-   precache_sound ("wrath/wdthc.wav");
+   precache_sound ("rogue/wrath/wdthc.wav");
 
-   self.idle_sound = "wraith/idle1.wav";
-   self.idle_sound2 = "wraith/idle2.wav";
-   self.idle_soundcom = "wraith/idle3.wav";
+   self.idle_sound = "ad171/wraith/idle1.wav";
+   self.idle_sound2 = "ad171/wraith/idle2.wav";
+   self.idle_soundcom = "ad171/wraith/idle3.wav";
    precache_sound (self.idle_sound);
    precache_sound (self.idle_sound2);
    precache_sound (self.idle_soundcom);
 
-   self.sight_sound = "wrath/wsee.wav";
+   self.sight_sound = "rogue/wrath/wsee.wav";
    precache_sound (self.sight_sound);
 
    self.solid = SOLID_NOT;				// No interaction with world
@@ -321,7 +321,7 @@ void () WrathMissileTouch = {
       T_Damage (other,self,self,110.000,DAMARMOR);
 
    T_RadiusDamage (self,self.owner,20.000,world,DAMAGEALL);
-   sound (self,CHAN_WEAPON,"weapons/r_exp3.wav",TRUE,ATTN_NORM);
+   R_Exp3(self.origin);
    WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
    WriteByte (MSG_BROADCAST,TE_EXPLOSION);
    WriteCoord (MSG_BROADCAST,self.origin_x);

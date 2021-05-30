@@ -470,11 +470,10 @@ void() monster_turret= {
 		precache_sound ("enforcer/enfstop.wav");
 	} else if(self.spawnflags & TUR_LASERS) {
 		precache_model ("progs/missile.mdl");
-		precache_sound ("weapons/sgun1.wav");
 	} else if(self.spawnflags & TUR_PPC) {
 		precache_model ("progs/custents/beam.mdl");
 		precache_sound ("turret/beamhit.wav");
-		precache_sound ("hipweap/mjolhit.wav");
+		precache_sound ("hipnotic/weapons/mjolhit.wav");
 	} else }
 		precache_sound ("turret/plasbult.wav");
 	}

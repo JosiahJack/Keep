@@ -101,15 +101,11 @@ float(float curr_ang, float ideal_ang, float turn_speed) misc_model_turning = {
 	return (ret_ang);
 };
 
-//----------------------------------------------------------------------
-void() misc_model_findtarget =
-{
+void() misc_model_findtarget = {
 	// Any target (path_corner) defined?
-	if (self.target != "") {
-		// Find the entity in world
-		self.goalentity = find(world, targetname, self.target);
-		// only works with path corner entities! - Reset
-		if (self.goalentity.classtype != CT_PATHCORNER) self.target = "";
+	if (self.target != "") { // only works with path corner entities!
+		self.goalentity = find(world, targetname, self.target); // Find the entity in world
+		if (self.goalentity.classtype != CT_PATHCORNER) self.target = ""; // Reset if not a path corner
 		else {
 			// Directional vector (finishing point)
 			self.dest1 = self.goalentity.origin - self.origin;
@@ -132,9 +128,7 @@ void() misc_model_findtarget =
 	if (self.target == "") self.goalentity = world;
 };
 
-//----------------------------------------------------------------------
-void() misc_model_movetarget = 
-{
+void() misc_model_movetarget = {
 	// Has the model reached the path_corner?
 	if (self.count >= self.t_length) {
 		// Suppress any console errors
@@ -530,9 +524,7 @@ void() misc_model_off =
 	self.spawnflags = self.spawnflags - (self.spawnflags & MISC_MDLSETUP);
 };
 
-//----------------------------------------------------------------------
-float(float minrange, float maxrange, float checker) misc_model_CheckRange =
-{
+float(float minrange, float maxrange, float checker) misc_model_CheckRange = {
 	local float retrange;
 	
 	// Obvious parameter errors
@@ -547,29 +539,7 @@ float(float minrange, float maxrange, float checker) misc_model_CheckRange =
 	return retrange;
 };
 
-//----------------------------------------------------------------------
-float(float minrange, float maxrange) misc_model_RandomRange =
-{
-	local float fullrange, retrange;
-	
-	// Obvious parameter errors
-	if (minrange == maxrange) return minrange;
-	if (maxrange < minrange) return maxrange;
-	// Create range first and then add to minimum
-	fullrange = maxrange - minrange;
-	retrange = minrange + (random() * fullrange);
-	// Make sure no fractions or negative numbers
-	retrange = rint(fabs(retrange));
-	// Double check within the specified range
-	if (retrange < minrange) retrange = minrange;
-	else if (retrange > maxrange) retrange = maxrange;
-	// Thats all folks!
-	return retrange;
-};
-
-//----------------------------------------------------------------------
-void() misc_model =
-{
+void() misc_model = {
 	// Is the model defined using the noise key?
 	if (!self.mdl) {
 		dprint("\b[MISCMDL]\b Missing model to load. Making it a Shambler! ;) \n");
@@ -585,12 +555,11 @@ void() misc_model =
 	
 	// TOGGLE sound setup
 	if (self.locksounds == 1) {
-		self.noise1 = "misc/laseron.wav";
-		self.noise2 = "misc/laseroff.wav";
-	}
-	else if (self.locksounds == 2) {
-		self.noise1 = "ambience/power_on.wav";
-		self.noise2 = "ambience/power_off.wav";
+		self.noise1 = "ad171/misc/laseron.wav";
+		self.noise2 = "ad171/misc/laseroff.wav";
+	} else if (self.locksounds == 2) {
+		self.noise1 = "ad171/ambience/power_on.wav";
+		self.noise2 = "ad171/ambience/power_off.wav";
 	}
 	if (self.noise1 != "") precache_sound(self.noise1);
 	if (self.noise2 != "") precache_sound(self.noise2);
@@ -607,8 +576,7 @@ void() misc_model =
 	// Change default model state (def=on)
 	if (self.state == 0) self.state = STATE_ON;
 	else self.state = STATE_OFF;
-	
-	// ---------------------------------------------------------
+
 	// Check for any skin/frame values (Quoth compatibility)
 	if (self.frame > 0) { self.pos1 = '0 0 0'; self.pos1_z = self.frame; }
 	if (self.skin > 0) { self.pos2 = '0 0 0'; self.pos2_z = self.skin; }
@@ -646,30 +614,24 @@ void() misc_model =
 		return;
 	}
 
-	// ---------------------------------------------------------
 	// No animation loops defined
 	self.aflag = FALSE;
 	// Has a FRAME range been defined?
 	if (self.pos1_x != self.pos1_y) {
-		// ---------------------------------------------------------
-		// Make sure the range is the right way around
-		// X has to be the lowest number of the two (X/Y)
+		// Make sure the range is the right way around.  X has to be the lowest number of the two (X/Y)
 		if (self.pos1_x > self.pos1_y) {
 			self.frame_box = self.pos1_x;
 			self.pos1_x = self.pos1_y;
 			self.pos1_y = self.frame_box;
 		}
-		// ---------------------------------------------------------
+
 		// Static FRAME range AND random pick
 		if (self.pos1_z == 0) {
 			// Double check lower limit is not negative
 			if (self.pos1_x < 0) self.pos1_x = 0;
 			// Find random range number
-			self.pos1_z = misc_model_RandomRange(self.pos1_x, self.pos1_y);
-		}
-		// ---------------------------------------------------------
-		// Animated FRAME range
-		else {
+			self.pos1_z = SUB_RandomRange(self.pos1_x, self.pos1_y);
+		} else { // Animated FRAME range
 			// Always set this, only -1/0 are valid values
 			self.pos1_z = NEGATIVE;
 			self.aflag = TRUE;
@@ -678,57 +640,45 @@ void() misc_model =
 			if (self.framestart == 0) self.framestart = self.pos1_x;
 			// Random starting position
 			else if (self.framestart < 0)
-				self.framestart = misc_model_RandomRange(self.pos1_x, self.pos1_y);
+				self.framestart = SUB_RandomRange(self.pos1_x, self.pos1_y);
 			// Exact starting position
 			else self.framestart = misc_model_CheckRange(self.pos1_x, self.pos1_y, self.framestart);
 		}
-	}
-	else {
-		// If no exact FRAME bas specified, reset FRAME to default = 0
-		if (self.pos1_z < 1) self.pos1 = '0 0 0';
+	} else {
+		if (self.pos1_z < 1) self.pos1 = '0 0 0'; // If no exact FRAME bas specified, reset FRAME to default = 0.
 	}
 		
 	// Has a SKIN range been defined?
 	if (self.pos2_x != self.pos2_y) {
-		// ---------------------------------------------------------
-		// Make sure the range is the right way around
-		// X has to be the lowest number of the two (X/Y)
+		// Make sure the range is the right way around.  X has to be the lowest number of the two (X/Y)
 		if (self.pos2_x > self.pos2_y) {
 			self.frame_box = self.pos2_x;
 			self.pos2_x = self.pos2_y;
 			self.pos2_y = self.frame_box;
 		}
-		// ---------------------------------------------------------
-		// Static SKIN range AND random pick
-		if (self.pos2_z == 0) {
+
+		if (self.pos2_z == 0) { // Static SKIN range AND random pick
 			// Double check lower limit is not negative
 			if (self.pos2_x < 0) self.pos2_x = 0;
 			// Find random range number + range checks
-			self.pos2_z = misc_model_RandomRange(self.pos2_x, self.pos2_y);
-		}
-		// ---------------------------------------------------------
-		// Animated SKIN range
-		else {
-			// Always set this, only -1/0 are valid values
-			self.pos2_z = NEGATIVE;
+			self.pos2_z = SUB_RandomRange(self.pos2_x, self.pos2_y);
+		} else { // Animated SKIN range
+			self.pos2_z = NEGATIVE; // Always set this, only -1/0 are valid values
 			self.aflag = TRUE;
 
 			// Default is start at beginning of range
 			if (self.skinstart == 0) self.skinstart = self.pos2_x;
 			// Random starting position
 			else if (self.skinstart < 0)
-				self.skinstart = misc_model_RandomRange(self.pos2_x, self.pos2_y);
+				self.skinstart = SUB_RandomRange(self.pos2_x, self.pos2_y);
 			// Exact starting position
 			else self.skinstart = misc_model_CheckRange(self.pos2_x, self.pos2_y, self.skinstart);
 		}
-	}
-	else {
-		// If no exact SKIN bas specified, reset SKIN to default = 0
-		if (self.pos2_z < 1) self.pos2 = '0 0 0';
+	} else {
+		if (self.pos2_z < 1) self.pos2 = '0 0 0'; // If no exact SKIN bas specified, reset SKIN to default = 0
 	}
 
-	// Any rotation angle setup?
-	if (!CheckZeroVector(self.rotateangles)) self.aflag = TRUE;
+	if (!CheckZeroVector(self.rotateangles)) self.aflag = TRUE; // Any rotation angle setup?
 	
 	// Setup DEFAULT animation direction, speed and status
 	if (self.aflag == TRUE) {

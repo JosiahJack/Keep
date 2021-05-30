@@ -255,13 +255,11 @@ void() hknight2_minigrenade_explode = {
 	} else {
 		if (ext_dppart) pointparticles(particleeffectnum("multigrenade_explosion"), self.origin, '0 0 0', 1);
 	}
-	sound(self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
+	R_Exp3(self.origin);
 	BecomeExplosion ();
 };
 
-
-void(float offsetAngle) hknight2_minigrenade_launch =
-{
+void(float offsetAngle) hknight2_minigrenade_launch = {
 	local	entity missile;
 	local	float	tempRand;
 	
@@ -271,11 +269,10 @@ void(float offsetAngle) hknight2_minigrenade_launch =
 	missile.solid = SOLID_BBOX;
 	missile.classname = "MiniGrenade";
 		
-// set missile speed	
+	// set missile speed	
 	missile.v_angle = self.v_angle;
 	missile.v_angle_y = missile.v_angle_y + offsetAngle;
 	makevectors (missile.v_angle);
-		
 	missile.velocity = v_forward*100 + v_up*400;
 	tempRand = (crandom()*60) - 30;
 	missile.velocity = missile.velocity + tempRand * v_forward;
@@ -283,24 +280,20 @@ void(float offsetAngle) hknight2_minigrenade_launch =
 	missile.velocity = missile.velocity + tempRand * v_right;
 	tempRand = (crandom()*60) - 30;
 	missile.velocity = missile.velocity + tempRand * v_up;
-
 	missile.avelocity = '300 300 300';
 	missile.angles = vectoangles(missile.velocity);
 	missile.touch = hknight2_multigrenade_touch;
-	
 	setmodel (missile, "progs/q15/h_grenade2.mdl");
 	setsize (missile, '0 0 0', '0 0 0');		
 	setorigin (missile, self.origin);
 	missile.scale = 0.7;	
 
-// set missile duration
+	// set missile duration
 	missile.nextthink = time + 1 + (crandom() * 0.5);
 	missile.think = hknight2_minigrenade_explode;
 };
 
-
-void() hknight2_multigrenade_explode =
-{
+void() hknight2_multigrenade_explode = {
 	hknight2_minigrenade_launch(0);
 	hknight2_minigrenade_launch(72);
 	hknight2_minigrenade_launch(144);
@@ -308,7 +301,6 @@ void() hknight2_multigrenade_explode =
 	hknight2_minigrenade_launch(288);
 	remove (self);
 };
-
 
 void() hknight2_multigrenade_touch = {
 	if (other == self.owner) return;		// don't explode on owner
@@ -323,7 +315,7 @@ void() hknight2_multigrenade_touch = {
 
 void() hknight2_grenade_explode = {
 	T_RadiusDamage (self, self.owner, 40, world,DAMAGEALL);
-	sound(self, CHAN_VOICE, "weapons/r_exp3.wav", 1, ATTN_NORM);
+	R_Exp3(self.origin);
 
 	if (other.health) {
 		if (ext_dppart) pointparticles(particleeffectnum("multigrenade_explosion_nodebris"), self.origin, '0 0 0', 1);
@@ -478,8 +470,8 @@ void(entity inflictor, entity attacker, float damage) hknight2_homing_pain = {
 };
 
 void() hknight2_homing_death = {
-	sound(self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
-	remove (self);
+	R_Exp3(self.origin);
+	remove(self);
 };
 
 void() hknight2_homing_touch = {

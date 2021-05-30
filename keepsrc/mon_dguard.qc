@@ -74,11 +74,7 @@ $frame deathC9 deathC10 deathC11 deathC12 deathC13 deathC14
 $frame deathD1 deathD2 deathD3 deathD4 deathD5 deathD6 deathD7 deathD8
 $frame deathD9 deathD10 deathD11 deathD12 deathD13 deathD14 deathD15
 
-void() dguard_sword_sound;
-
-//===========================================================================
-void()	dguard_standA1	=[	$standA1,	dguard_standA2	] {
-	self.idlebusy = TRUE; ai_stand();};
+void()	dguard_standA1	=[	$standA1,	dguard_standA2	] {self.idlebusy = TRUE; ai_stand();};
 void()	dguard_standA2	=[	$standA2,	dguard_standA3	] {ai_stand();};
 void()	dguard_standA3	=[	$standA3,	dguard_standA4	] {ai_stand();};
 void()	dguard_standA4	=[	$standA4,	dguard_standA5	] {ai_stand();};
@@ -91,9 +87,7 @@ void()	dguard_standA10	=[	$standA10,	dguard_standA11	] {ai_stand();};
 void()	dguard_standA11	=[	$standA11,	dguard_standA12	] {ai_stand();};
 void()	dguard_standA12	=[	$standA12,	dguard_stand1	] {ai_stand();};
 
-//===========================================================================
-void()	dguard_standB1	=[	$standB1,	dguard_standB2	] {
-	self.idlebusy = TRUE; ai_stand();};
+void()	dguard_standB1	=[	$standB1,	dguard_standB2	] {self.idlebusy = TRUE; ai_stand();};
 void()	dguard_standB2	=[	$standB2,	dguard_standB3	] {ai_stand();};
 void()	dguard_standB3	=[	$standB3,	dguard_standB4	] {ai_stand();};
 void()	dguard_standB4	=[	$standB4,	dguard_standB5	] {ai_stand();};
@@ -231,7 +225,7 @@ void()	dguard_run6	=[	$run6,	dguard_run1	] {ai_run(12);};
 void()	dguard_runatk1	=[	$slice2,	dguard_runatk2	] {ai_charge(20);};
 void()	dguard_runatk2	=[	$slice3,	dguard_runatk3	] {ai_charge_side();};
 void()	dguard_runatk3	=[	$slice4,	dguard_runatk4	] {monster_footstep(FALSE); ai_charge_side();};
-void()	dguard_runatk4	=[	$slice5,	dguard_runatk5	] {ai_charge_side(); dguard_sword_sound();};
+void()	dguard_runatk4	=[	$slice5,	dguard_runatk5	] {ai_charge_side(); SwordSwipeSound();};
 void()	dguard_runatk5	=[	$slice7,	dguard_runatk6	] {monster_footstep(FALSE); ai_melee_side();};
 void()	dguard_runatk6	=[	$slice8,	dguard_runatk7	] {ai_melee_side();};
 void()	dguard_runatk7	=[	$slice9,	dguard_runatk8	] {ai_melee_side();};
@@ -240,46 +234,40 @@ void()	dguard_runatk9	=[	$slice11,	dguard_runatk10	] {ai_melee_side();};
 void()	dguard_runatk10	=[	$slice13,	dguard_runatk11	] {monster_footstep(FALSE); ai_charge_side();};
 void()	dguard_runatk11	=[	$slice14,	dguard_run1	] {ai_charge(10);};
 
-//===========================================================================
 // Melee Attack 1b - Charging attack A - swinging sword left to right infront
 // Knight - 11 frames (skipped 1)
-
-void()	dguard_runatkB1	=[	$char_a2,		dguard_runatkB2	] {monster_footstep(FALSE); ai_charge(20); dguard_sword_sound();};
+void()	dguard_runatkB1	=[	$char_a2,		dguard_runatkB2	] {monster_footstep(FALSE); ai_charge(20); SwordSwipeSound();};
 void()	dguard_runatkB2	=[	$char_a3,	dguard_runatkB3	] {ai_charge_side();};
 void()	dguard_runatkB3	=[	$char_a4,	dguard_runatkB4	] {ai_charge_side();};
 void()	dguard_runatkB4	=[	$char_a5,	dguard_runatkB5	] {monster_footstep(FALSE); ai_charge_side();};
 void()	dguard_runatkB5	=[	$char_a6,	dguard_runatkB6	] {ai_melee_side();};
-void()	dguard_runatkB6	=[	$char_a7,	dguard_runatkB7	] {ai_melee_side(); dguard_sword_sound();};
+void()	dguard_runatkB6	=[	$char_a7,	dguard_runatkB7	] {ai_melee_side(); SwordSwipeSound();};
 void()	dguard_runatkB7	=[	$char_a8,	dguard_runatkB8	] {monster_footstep(FALSE); ai_melee_side();};
 void()	dguard_runatkB8	=[	$char_a9,	dguard_runatkB9	] {ai_melee_side();};
 void()	dguard_runatkB9	=[	$char_a10,	dguard_runatkB10	] {ai_melee_side();};
 void()	dguard_runatkB10=[	$char_a11,	dguard_runatkB11	] {monster_footstep(FALSE); ai_melee_side();};
 void()	dguard_runatkB11=[	$char_a12,	dguard_run1	] {ai_charge(10);};
 
-//===========================================================================
 // Melee Attack 2a - Smash (chop overhead to ground)
 // Knight - 11 frames (skipped (1, 11, 14, 15)
-
 void()	dguard_atk1	=[	$smash2,		dguard_atk2	] {ai_charge(0);};
 void()	dguard_atk2	=[	$smash3,		dguard_atk3	] {ai_charge(7);};
 void()	dguard_atk3	=[	$smash4,		dguard_atk4	] {monster_footstep(FALSE); ai_charge(4);};
 void()	dguard_atk4	=[	$smash5,		dguard_atk5	] {ai_charge(0);};
 void()	dguard_atk5	=[	$smash6,		dguard_atk6	] {ai_charge(3);};
-void()	dguard_atk6	=[	$smash7,		dguard_atk7	] {ai_charge(4); ai_melee(); dguard_sword_sound();};
+void()	dguard_atk6	=[	$smash7,		dguard_atk7	] {ai_charge(4); ai_melee(); SwordSwipeSound();};
 void()	dguard_atk7	=[	$smash8,		dguard_atk8	] {monster_footstep(FALSE); ai_charge(1); ai_melee();};
 void()	dguard_atk8	=[	$smash9,		dguard_atk9	] {ai_charge(3); ai_melee();};
 void()	dguard_atk9	=[	$smash10,		dguard_atk10] {ai_charge(1);};
 void()	dguard_atk10=[	$smash12,		dguard_atk11] {ai_charge(1);};
 void()	dguard_atk11=[	$smash13,		dguard_run1	] {ai_charge(5);};
 
-//============================================================================
 // Melee Attack 2b - W_Attack (two handed slashing attack)
-
 void()	dguard_atkB1	=[	$w_attack2,		dguard_atkB2	] {monster_footstep(FALSE); ai_charge(0);};
 void()	dguard_atkB2	=[	$w_attack3,		dguard_atkB3	] {ai_charge(7);};
 void()	dguard_atkB3	=[	$w_attack4,		dguard_atkB4	] {ai_charge(4);};
 void()	dguard_atkB4	=[	$w_attack5,		dguard_atkB5	] {ai_charge(0);};
-void()	dguard_atkB5	=[	$w_attack6,		dguard_atkB6	] {ai_charge(3); dguard_sword_sound();};
+void()	dguard_atkB5	=[	$w_attack6,		dguard_atkB6	] {ai_charge(3); SwordSwipeSound();};
 void()	dguard_atkB6	=[	$w_attack7,		dguard_atkB7	] {monster_footstep(FALSE); ai_charge(4); ai_melee();};
 void()	dguard_atkB7	=[	$w_attack8,		dguard_atkB8	] {ai_charge(1); ai_melee();};
 void()	dguard_atkB8	=[	$w_attack9,		dguard_atkB9	] {ai_charge(3); ai_melee();};
@@ -288,7 +276,7 @@ void()	dguard_atkB10=	[	$w_attack11,	dguard_atkB11] {ai_charge(1);};
 void()	dguard_atkB11	=[	$w_attack12,	dguard_atkB12	] {ai_charge(0);};
 void()	dguard_atkB12	=[	$w_attack13,	dguard_atkB13	] {ai_charge(7);};
 void()	dguard_atkB13	=[	$w_attack14,	dguard_atkB14	] {ai_charge(4);};
-void()	dguard_atkB14	=[	$w_attack15,	dguard_atkB15	] {ai_charge(0); dguard_sword_sound();};
+void()	dguard_atkB14	=[	$w_attack15,	dguard_atkB15	] {ai_charge(0); SwordSwipeSound();};
 void()	dguard_atkB15	=[	$w_attack16,	dguard_atkB16	] {ai_charge(3);};
 void()	dguard_atkB16	=[	$w_attack17,	dguard_atkB17	] {monster_footstep(FALSE); ai_charge(4); ai_melee();};
 void()	dguard_atkB17	=[	$w_attack18,	dguard_atkB18	] {ai_charge(1); ai_melee();};
@@ -297,15 +285,12 @@ void()	dguard_atkB19	=[	$w_attack20,	dguard_atkB20] {ai_charge(1);};
 void()	dguard_atkB20=[	$w_attack21,		dguard_atkB21] {ai_charge(1);};
 void()	dguard_atkB21=[	$w_attack22,		dguard_run1	] {ai_charge(5);};
 
-//============================================================================
 // Cycle between melee attacks
 // Attack 1a - Slice (one hand slashing run attack)
 // Attack 1b - Char_A (swinging sword left to right infront)
 // Attack 2a - Smash (chop overhead to ground)
 // Attack 2b - W_Attack (two handed slashing attack)
-
-void() dguard_melee =
-{
+void() dguard_melee = {
 	local float		len;
 
 	// decide if now is a good swing time
@@ -324,13 +309,12 @@ void() dguard_melee =
 	}
 };
 
-//============================================================================
 void()	dguard_painA1	=[	$painA1,		dguard_painA2	] {};
 void()	dguard_painA2	=[	$painA2,		dguard_painA3	] {};
 void()	dguard_painA3	=[	$painA3,		dguard_painA4	] {};
 void()	dguard_painA4	=[	$painA4,		dguard_painA5	] {};
 void()	dguard_painA5	=[	$painA5,		dguard_run1	] {};
-//----------------------------------------------------------------------
+
 void()	dguard_painD1	=[	$painD1,		dguard_painD2	] {};
 void()	dguard_painD2	=[	$painD2,		dguard_painD3	] {};
 void()	dguard_painD3	=[	$painD3,		dguard_painD4	] {};
@@ -342,9 +326,8 @@ void()	dguard_painD8	=[	$painD8,		dguard_painD9	] {monster_footstep(FALSE);};
 void()	dguard_painD9	=[	$painD9,		dguard_painD10	] {};
 void()	dguard_painD10=[	$painD10,		dguard_painD11	] {};
 void()	dguard_painD11=[	$painD11,		dguard_run1	] {};
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage)	dguard_pain =
-{
+
+void(entity inflictor, entity attacker, float damage)	dguard_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -437,9 +420,8 @@ void()	dguard_dieD12	=[	$deathD12,	dguard_dieD13	] {};
 void()	dguard_dieD13	=[	$deathD13,	dguard_dieD14	] {};
 void()	dguard_dieD14	=[	$deathD14,	dguard_dieD15	] {monster_death_postcheck();};
 void()	dguard_dieD15	=[	$deathD15,	dguard_dieD15 ] {monster_deadbody_check();};
-//----------------------------------------------------------------------
-void() dguard_die =
-{
+
+void() dguard_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -452,21 +434,8 @@ void() dguard_die =
 	}
 };
 
-//============================================================================
-void() dguard_sword_sound =
-{
-	self.lip = random();
-	if (self.lip < 0.25) sound (self, CHAN_WEAPON, "weapons/sword1a.wav", 1, ATTN_NORM);
-	else if (self.lip < 0.5) sound (self, CHAN_WEAPON, "weapons/sword2a.wav", 1, ATTN_NORM);
-	else if (self.lip < 0.75) sound (self, CHAN_WEAPON, "weapons/sword1b.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_WEAPON, "weapons/sword2b.wav", 1, ATTN_NORM);
-};
-
-/*======================================================================
-QUAKED monster_dguard (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
-void() monster_dguard =
-{
+// QUAKED monster_dguard (1 0 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_dguard = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
 	// Check all spawn exceptions (monsters.qc)
@@ -494,12 +463,6 @@ void() monster_dguard =
 	precache_sound ("knight/kdeath.wav");
 	self.pain_sound = "knight/khurt.wav";
 	precache_sound (self.pain_sound);
-
-	// New sword sweep/slash sounds
-	precache_sound ("weapons/sword1a.wav");
-	precache_sound ("weapons/sword1b.wav");
-	precache_sound ("weapons/sword2a.wav");
-	precache_sound ("weapons/sword2b.wav");
 	
 	self.sight_sound = "knight/ksight.wav";
 	precache_sound (self.sight_sound);

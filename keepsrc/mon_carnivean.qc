@@ -100,17 +100,13 @@ void() carniv_projectile_rock_homing = {
 	self.think = carniv_projectile_rock_homing;	
 };
 
-
-void() carniv_projectile_rock_no_homing =
-{
+void() carniv_projectile_rock_no_homing = {
 	self.frame = self.frame + 1;		// animation
 	if (self.frame >= 23)
 		self.frame = 0;
 	self.nextthink = time + 0.05;
 	self.think = carniv_projectile_rock_no_homing;	
 };
-
-
 
 void() carniv_projectile_flame_touch = {
 	if (other == self.owner) return;// don't explode on owner
@@ -119,7 +115,7 @@ void() carniv_projectile_flame_touch = {
 		spawn_touchblood (self,other,20);
 		T_Damage (other, self, self.owner, 20, DAMARMOR);
 		if (ext_dppart) pointparticles(particleeffectnum("torment_hellrod_explosion"), self.origin, '0 0 0', 1);
-	 	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 0.7, ATTN_NORM);
+		R_Exp3(self.origin);
 		if (self.cnt == 1) {
 			// checks if carniveans projectile impact inflame the player
 			if (random() <= 0.3) {
@@ -128,15 +124,13 @@ void() carniv_projectile_flame_touch = {
 				sound (other, 120, "zombie/corpse_fire.wav", 1, ATTN_NORM); 	       	// play fire loop sound
 			}
 		}
-	} else {
-		// wall
+	} else { // wall
 		T_RadiusDamage (self, self.owner, 50, other, DAMAGEALL);	// don't do radius damage to the other, because all the damage was done in the impact
 		if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion"), self.origin, '0 0 0', 1);
-	 	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 0.7, ATTN_NORM);
+	 	R_Exp3(self.origin);
 	}
 	remove (self);
 };
-
 
 void() carniv_projectile = {
 	local entity missile;
@@ -457,7 +451,6 @@ void() monster_carnivean = {
 	precache_model("progs/q15/h_carnivean.mdl");
 	precache_model("progs/q15/carniv_rocks.mdl");
 	precache_model("progs/k_spike.mdl");
-	
 	precache_sound("demon/fall_backwards.wav");
 	precache_sound("demon/dhit2.wav");
 	precache_sound("carnivean/rock_throw.wav");
@@ -473,11 +466,9 @@ void() monster_carnivean = {
 	precache_sound("carnivean/step2.wav");
 	precache_sound("player/inflame.wav");
 	precache_sound("zombie/corpse_fire.wav");
-	precache_sound("weapons/r_exp3.wav");
 	precache_sound("ambience/coaled_monster_explode.wav");
 
 	self.sight_sound = "carnivean/scream.wav";
-
 	self.solid = SOLID_NOT;					// No interaction with world
 	self.movetype = MOVETYPE_NONE;			// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;
@@ -485,7 +476,6 @@ void() monster_carnivean = {
 	self.gibhealth = -60;
 	self.gibbed = FALSE;
 	self.pain_flinch = 20;
-	
 	self.th_stand = carniv_stand;
 	self.th_walk = carniv_walk1;
 	self.th_run = carniv_run1;

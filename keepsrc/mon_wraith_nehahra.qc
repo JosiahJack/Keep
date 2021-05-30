@@ -14,16 +14,16 @@ void() wraith_idle_sfx =
     {
         if (random() < 0.2)
         {   if (random() < 0.8)
-                sound (self, CHAN_VOICE, "wraith/idle.wav", 1, ATTN_IDLE);
+                sound (self, CHAN_VOICE, "nehahra/wraith/idle.wav", 1, ATTN_IDLE);
             else
-                sound (self, CHAN_VOICE, "wraith/weird.wav", 1, ATTN_IDLE);
+                sound (self, CHAN_VOICE, "nehahra/wraith/weird.wav", 1, ATTN_IDLE);
         }
     }
 };
 
 void() wraith_stand_fx = {
     if (random() < 0.3) SUB_Flash ();
-    if (random() < 0.05) sound (self, CHAN_VOICE, "wraith/idle.wav", 1, ATTN_IDLE);
+    if (random() < 0.05) sound (self, CHAN_VOICE, "nehahra/wraith/idle.wav", 1, ATTN_IDLE);
 };
 
 // AETHER - - - - - - - - - - - - - - -
@@ -71,7 +71,7 @@ void() wraith_appear17 =[ $aether2,  wraith_appear18 ] {};
 void() wraith_appear18 =[ $aether1,  wrath_run1      ] {aether_in2(wraith_melee, wraith_attack);};
 
 void() wraith_souls1  =[ $attack1,  wraith_souls2  ] {ai_face();
-    sound (self, CHAN_VOICE, "wraith/talk1.wav", 1, ATTN_IDLE);
+    sound (self, CHAN_VOICE, "nehahra/wraith/talk1.wav", 1, ATTN_IDLE);
     self.gorging = TRUE;
 //- - - - - - - - -
 // If skipping phasing anim to attack, make sure wraith can take damage.
@@ -94,7 +94,7 @@ void() wraith_souls4  =[ $attack12, wraith_souls3  ] {ai_face();
 float(float d, float run) ai_wraith1 = {
         if (ai_aether (wraith_aether1, wraith_appear1))
             return TRUE;
-        ai_wraith ("wraith/speak.wav");
+        ai_wraith ("nehahra/wraith/speak.wav");
         if (run)
         {   if (ai_souls (d, wraith_souls1)) return TRUE;
         } else {
@@ -203,7 +203,7 @@ void() ai_drain =
 	// Play effects.
     self.effects = self.effects | EF_MUZZLEFLASH;
     if (!self.t_width)
-        sound (self, CHAN_WEAPON, "wraith/drain.wav", 1, ATTN_NORM);
+        sound (self, CHAN_WEAPON, "nehahra/wraith/drain.wav", 1, ATTN_NORM);
     self.t_width = self.t_width + 1;
 
     makevectors (self.angles);
@@ -257,7 +257,7 @@ void(float ofs) wrath_shot =
     newmis.classname = "knightspike";
     if (self.skin)
     {   // Wraith
-        sound (self, CHAN_WEAPON, "baron/throb.wav", 1, ATTN_NORM);
+        sound (self, CHAN_WEAPON, "nehahra/baron/throb.wav", 1, ATTN_NORM);
         setmodel (newmis, "progs/wr_spike.mdl");
         setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
         if (self.classname == "monster_wraith_lord")
@@ -327,7 +327,7 @@ void() wrath_attack =
 {
     local   float   r;
 
-    sound (self, CHAN_VOICE, "wrath/watt.wav", 1, ATTN_NORM);
+    sound (self, CHAN_VOICE, "rogue/wrath/watt.wav", 1, ATTN_NORM);
     r = random();
     if (self.enemy.classname == "monster_zombie")
     {   // Blast zombies out of existance.
@@ -383,14 +383,14 @@ void() wrath_pain =
     }
             
     self.pain_finished = time + 3;
-    sound (self, CHAN_VOICE, "wrath/wpain.wav", 1, ATTN_NORM);
+    sound (self, CHAN_VOICE, "rogue/wrath/wpain.wav", 1, ATTN_NORM);
     if (r < 0.07)
         wrath_pain1 ();
     else 
         wrath_painb1 ();
 };
 
-void() wrath_die1  =[ $death2, wrath_die2  ] { sound (self, CHAN_VOICE, "wrath/wdthc.wav", 1, ATTN_NORM); };
+void() wrath_die1  =[ $death2, wrath_die2  ] { sound (self, CHAN_VOICE, "rogue/wrath/wdthc.wav", 1, ATTN_NORM); };
 void() wrath_die2 =[ $death3,  wrath_die3  ] {};
 void() wrath_die3 =[ $death4,  wrath_die4  ] {};
 void() wrath_die4 =[ $death5,  wrath_die5  ] {};
@@ -409,7 +409,7 @@ void() wrath_die9 =[ $death15, SUB_Null    ] {
 void(float hello) wrath_sight =
 {
     if (!hello)
-        sound (self, CHAN_VOICE, "wrath/wsee.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "rogue/wrath/wsee.wav", 1, ATTN_NORM);
 };
 
 void() wraith_walk1  =[ $form17, wraith_walk2  ] {ai_wraith_walk(8);};
@@ -522,9 +522,9 @@ void(entity attacker, float damage) wraith_pain =
     {
         r = random();
         if (r < 0.5)    //0.3)
-            sound (self, CHAN_VOICE, "wraith/growl2.wav", 1, ATTN_NORM);
+            sound (self, CHAN_VOICE, "nehahra/wraith/growl2.wav", 1, ATTN_NORM);
         else //if (r < 0.6)
-            sound (self, CHAN_VOICE, "wraith/idle2.wav", 1, ATTN_NORM);
+            sound (self, CHAN_VOICE, "nehahra/wraith/idle2.wav", 1, ATTN_NORM);
 //        else
 //            r = 0;
         self.pain_finished = time + 2;
@@ -556,9 +556,9 @@ void() wraith_die   =[ $deathb1,  wraith_die1  ] {
     self.takedamage = DAMAGE_NO;
     self.movetype = MOVETYPE_NONE;  // Freeze monster in place.
     if (random() < 0.2)
-        sound (self, CHAN_VOICE, "wraith/talk3.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "nehahra/wraith/talk3.wav", 1, ATTN_NORM);
     else
-        sound (self, CHAN_VOICE, "wraith/call.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "nehahra/wraith/call.wav", 1, ATTN_NORM);
 };
 // Use setorigin to force relink in case model is still not visible.
 // Just don't call it in the same frame of a th_die call in case of loop.
@@ -577,9 +577,9 @@ void() wraith_die10 =[ $deathb10, wraith_die10  ] {entity_hide (self);};
 void(float hello) wraith_sight =
 {
     if (hello)
-        sound (self, CHAN_VOICE, "wraith/idle.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "nehahra/wraith/idle.wav", 1, ATTN_NORM);
     else
-        sound (self, CHAN_VOICE, "wraith/talk1.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "nehahra/wraith/talk1.wav", 1, ATTN_NORM);
 };
 
 float STATE_DRIFT_TAIL_LEFT = 1;
@@ -643,29 +643,29 @@ void() monster_wraith_nehahra = {
 	precache_model("progs/s_null.spr");
 	precache_model("progs/nehahra/wr_spike.mdl");
 	precache_model("progs/nehahra/soul.mdl");
-	precache_sound("wraith/soul.wav");
-	precache_sound("wraith/idle.wav");
-	precache_sound("wraith/idle2.wav");
-	precache_sound("baron/throb.wav");
-	precache_sound("wraith/rych1.wav");
-	precache_sound("wraith/call.wav");
-	precache_sound("wraith/talk1.wav");
-	precache_sound("wraith/weird.wav");
-	precache_sound("wraith/speak.wav");
-	precache_sound("wraith/growl2.wav");
-	precache_sound("wraith/talk3.wav");
-	precache_sound("wraith/return.wav");
-	precache_sound("wraith/select.wav");
-    precache_sound ("hkboss/iceball.wav");
+	precache_sound("nehahra/wraith/soul.wav");
+	precache_sound("nehahra/wraith/idle.wav");
+	precache_sound("nehahra/wraith/idle2.wav");
+	precache_sound("nehahra/baron/throb.wav");
+	precache_sound("nehahra/wraith/rych1.wav");
+	precache_sound("nehahra/wraith/call.wav");
+	precache_sound("nehahra/wraith/talk1.wav");
+	precache_sound("nehahra/wraith/weird.wav");
+	precache_sound("nehahra/wraith/speak.wav");
+	precache_sound("nehahra/wraith/growl2.wav");
+	precache_sound("nehahra/wraith/talk3.wav");
+	precache_sound("nehahra/wraith/return.wav");
+	precache_sound("nehahra/wraith/select.wav");
+    precache_sound ("drake/hkboss/iceball.wav");
     precache_sound ("hknight/attack1.wav");
-    precache_sound ("wraith/drain.wav");
+    precache_sound ("nehahra/wraith/drain.wav");
     precache_model ("progs/drake/v_spike.mdl");
 
-	self.sight_sound = "wraith/talk1.wav";
-	self.idle_sound = "wraith/idle.wav";
-	self.idle_sound2 = "wraith/idle2.wav";
-	self.pain_sound = "wraith/growl2.wav";
-	self.pain_sound2 = "wraith/idle2.wav";
+	self.sight_sound = "nehahra/wraith/talk1.wav";
+	self.idle_sound = "nehahra/wraith/idle.wav";
+	self.idle_sound2 = "nehahra/wraith/idle2.wav";
+	self.pain_sound = "nehahra/wraith/growl2.wav";
+	self.pain_sound2 = "nehahra/wraith/idle2.wav";
 
 	if (self.health < 1) self.health = 600;
 	self.exactskin = 1; // Drake:  Wraith is now a wrath variant.

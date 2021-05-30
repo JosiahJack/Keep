@@ -1,12 +1,50 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: All, but originally Arcane Dimensions (AD)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 
+// Function count: 
+//
+// Implements: Classgroup and Classtype System
+//
+// Description:
+// Defines the integer value classtype as a unique identifier for an entity
+// type.
+//
+// Defines the integer value classgroup as a unique categorical identifier.
+//=============================================================================
+
 .float		classtype;			// Class type - used for quick reference
 .float		classgroup;			// Class group - used for quick reference
 .float		classmove;			// 1=Walk, 2=Fly, 4=Swim
 .float		classproj;			// Projectile used by entity class
 
-//======================================================================
-// Unique Class Groups for quicker searches (mostly items)
-// Previous system used classname (slow string search)
-//======================================================================
+// Unique Class Groups for quicker searches (mostly items).  Previous system used classname (slow string search).  Monster classgroups are useful for infighting grouping checks
 float CG_PLAYERS = 50;			// All player/clients
 float CG_LIGHTS = 70;			// All light type entities
 float CG_HEALTH = 100;			// All health pack types (15/25/+100)
@@ -43,10 +81,6 @@ float CG_TARGETS = 445;			// All target types
 float CG_FUNCMOVER = 450;		// All FUNC movers
 float CG_HIPROTATE = 460;		// All Hipnotic rotation stuff
 float CG_MONSTERS = 500;		// Default
-
-//----------------------------------------------------------------------
-// Useful for infighting grouping checks
-//----------------------------------------------------------------------
 float CG_ARMY = 600;			// (4) Shotgun, Rocket Launcher and Plasma
 float CG_ENFORCER = 610;		// (5) Standard, Grenade and Flame, Pyro, Centurion
 float CG_DEMON = 615;			// (3) Demon, Drole, Minotaur, Boglord, Lichfiend, Hephaestus
@@ -68,20 +102,15 @@ float CG_BOSS = 690;			// (3) Cthon, Old one, Anaconda
 float CG_DRAGON = 695;			// (9) Rogue Dragon, Drake Dragons (7 variants), Drake Dragon King
 float CG_HARMLESS = 777;		// (1) Sheep, Frogs, Ogles, Bees, Ravens
 
-//======================================================================
-// Unique Class Types for quicker entity searches
-// Previous system used classname (slow string search)
-//======================================================================
+// Unique Class Types for quicker entity searches.  Previous system used classname (slow string search)
 float CT_WORLD = 1;				// World entity
 float CT_PLAYER = 7;			// Player (007)
-
 float CT_SPAWNSP = 10;			// Spawn location - Single Player
 float CT_SPAWNCOOP = 11;		// Spawn location - Coop
 float CT_SPAWNDM = 12;			// Spawn location - Deathmatch
 float CT_CONTROL = 15;			// Controller entity
 float CT_CAMERA = 16;			// Camera entity (info_intermission)
 float CT_MISCCAM = 18;			// Misc Camera entity
-
 float CT_LIGHT = 20;			// Light entity
 float CT_LIGHTSTATIC = 21;		// Static light entity
 float CT_SOUNDEMITTER = 22;		// Sound emitter
@@ -113,10 +142,9 @@ float CT_STORYCHAPTER = 60;		// Story chapter for story system
 
 float CT_TARGETDUMMY = 90;		// Misc target dummy
 float CT_TARGETNUMBER = 95;		// Misc number drawn ingame
+float CT_MONKARASUSPELL = 96;	// Spell targets for Karasu, by Redfield
 
-//----------------------------------------------------------------------
 // Class Types for all monsters 
-//----------------------------------------------------------------------
 float CT_MONARMY = 100;			// Army Soldier
 float CT_MONARMYAXE = 101;		// Axe Grunt
 float CT_MONNEMESANT = 102;		// Zerstorer Nemesant plus Drake additions
@@ -154,9 +182,15 @@ float CT_MONOGLE = 133;			// Ogle from Heretic 2 - DENIZEN!
 float CT_MONRAVEN = 134;		// Raven from Redfield's Ravenkeep - DENIZEN!
 float CT_MONBEEZ = 135;			// Beez swarm (Madfox) - DENIZEN!
 float CT_MONSABERENFORCER = 136;// Saber Enforcer
+float CT_MONSPIRIT = 137;		// Ghostly invisible sword warrior, Redfield's eyes version
+float CT_MONKARASU = 138;		// Lord Karasu the Master of Raven Keep! by Redfield
+float CT_MONWOLF = 139;			// The Moonlight Guardian! by Redfield
 float CT_MONKNIGHT = 140;		// Small metal Knights
 float CT_MONCARNIVEAN = 141;	// Carnivean Serpentine Knight
 float CT_MONREIVER = 142;		// Reiver from Quake 1.5 mod
+float CT_MONHUNTRESS = 143;		// Elena the Blood Huntress! by Redfield
+
+
 float CT_MONOGRE = 150;			// Chainsaw wielding manics
 float CT_MONOGREFISH = 155;		// Madfox fishing ogre
 float CT_MONSHAL = 160;			// Shalrath / Vore
@@ -297,23 +331,27 @@ float CT_MONFUMIGATOR = 392;		// Poison version of the Pyro
 float CT_MONENF_MEGA = 393;			// Mega Enforcer
 float CT_MONDRONE = 394;			// Drone robot from Drake
 float CT_MONCENTURION = 395;		// Enforcer hoverboard (Plasma)
+
 float CT_PROJ_FABLADE = 396;		// Fallen Angel ninja blade attack
 float CT_PROJ_FASPELL = 397;		// Fallen Angel green shard attack
-//----------------------------------------------------------------------
+float CT_ELENABLAST = 398;	// Targets for Elena fireblast trigger
+float CT_PROJ_FIREWORK = 399;		// Fireworks
+
 // Class Types for all projectiles in game (there is a lot!)
-//----------------------------------------------------------------------
 float CT_PROJ_TRACE = 400;		// Tracer shot (true aim)
 float CT_PROJ_SMARTBALL = 401;		// Nemesant bouncing fire ball
 float CT_PROJ_TRACEPART = 402;	// Tracer shot (extra particles)
+float CT_PROJ_ZRING = 403;		// Zena ring
+float CT_FIREWORKSHOOTER = 404;		// Fireworks
 float CT_PROJ_SHELLC = 405;		// Shellcase projectile
 float CT_PROJ_WILLY = 406;		// Willy the Spider projectile
 float CT_PROJ_CYBER = 407;		// Cyber Demon rocket
-
-
+float CT_MISCBELL = 408;		// Misc Bell
+float CT_HEALGEM = 409;			// New Lifegem for Ravenkeep
 float CT_PROJ_SG = 410;			// SG projectile
 float CT_PROJ_SSG = 412;		// SSG projectile
-
-
+float CT_HEALBEER = 413;		// New Q Brew for Ravenkeep
+float CT_SPIRITTELEPORT = 414;		// info_skullwiz_destination
 float CT_PROJ_NG = 415;			// NG projectile
 float CT_PROJ_SNG = 416;		// SNG projectile
 float CT_PROJ_MONNG = 417;		// Lava nailgun monster projectile (glowing red)
@@ -336,7 +374,7 @@ float CT_PROJ_GLMULTI = 433;	// Rogue Multi-Grenade projectile
 float CT_PROJ_DARTARROW = 434;	// Trap_spikeshooter dart
 float CT_PROJ_BOLT1 = 435;		// Crossbow Knight Bolt +hknight trail
 float CT_PROJ_BOLT2 = 436;		// Poison
-float CT_PROJ_NOUR3 = 437;		// Nour Lightning Bolt
+
 float CT_PROJ_ENFHKN = 438;		// Ultra Enforcer knight spike
 float CT_PROJ_LAVANG = 439;		// Lava nailgun
 float CT_PROJ_LASER = 440;		// Enforcer/Traps/Bob Laser
@@ -397,9 +435,7 @@ float CT_PROJ_SHAL = 495;		// Shalrath spike ball +purple trail
 float CT_PROJ_SERG = 496;		// Death Sergeant spike ball +hknight trail
 float CT_PROJ_SHUB1 = 497;		// Custom Shub homing spike attack
 float CT_PROJ_RAINDEER = 498;	// Raindeer rocket
-
-
-//----------------------------------------------------------------------
+float CT_PROJ_KSPHERE = 499;		// Lord Karasu energy sphere
 float CT_UPGRADE_AXE = 500;		// Shadow Axe
 float CT_AXE = 501;				// Axe
 float CT_RAPIER = 502;			// Ghost Rapier
@@ -412,7 +448,15 @@ float CT_GUNGNIR = 508;			// Gungnir
 float CT_SANGUINATORS = 509;	// Sanguinators
 float CT_SUPER_SHOTGUN = 510;	// Super Shotgun
 float CT_FLAK = 511;			// Flak Cannon
+float CT_PROJ_KLIGHT = 512;		// Lord Karasu lightning
+float CT_PROJ_KSPELL = 513;		// Lord Karasu spell runes
+float CT_PROJ_MOONSWORD = 514;		// Moonlight Guardian sword
 float CT_UPGRADE_SSG = 515;		// The Widowmaker Shotgun
+float CT_PROJ_EVEBULLET = 516;		// Evelyn pistol bullet
+float CT_PROJ_BLDSPEAR = 517;		// Huntress blood spears
+float CT_PROJ_ELENAFIRE = 518;		// Huntress fireball
+
+
 float CT_NAILGUN = 520;			// Nailgun
 float CT_LAVANG = 521;			// Lava nailgun
 float CT_SUPER_NAILGUN = 525;	// Super Nailgun
@@ -484,7 +528,7 @@ float CT_MISCSPARK = 672;		// Misc Spark
 float CT_MISCSHAKE = 676;		// Misc Shake of screen/player
 
 float CT_MISCMARSH = 678;		// Misc Marsh lights (Quoth)
-
+float CT_MISCVASE = 679;		// Redfields breakable vase with lick of flame on top
 float CT_MISCDRIP = 680;		// Misc Drip (water)
 
 float CT_BUBBLE = 682;			// Bubbles
@@ -495,7 +539,6 @@ float CT_MISCSMOKE = 692;		// Misc Smoke
 float CT_SHROOM = 693;			// Mario Mushroom that makes player bigger for a little while
 float CT_MISCGIBF = 694;		// Misc Gib fountain
 
-//----------------------------------------------------------------------
 float CT_AMMOPACK = 700;		// Ammo Backpacks
 float CT_AMMODROPPACK = 701;	// Dropped Ammo Backpacks from monsters
 float CT_AMMORANDOM = 702;		// Random Ammo Backpack
@@ -573,7 +616,6 @@ float CT_FUNCBOSSGATE = 880;	// Final boss gate (not used anymore)
 float CT_FUNCPLAT = 890;		// Old platform system
 float CT_FUNCLIFT = 895;		// New platform system
 
-//----------------------------------------------------------------------
 float CT_TRIGONCE = 900;		// Once, volume
 
 float CT_TRIGMULTI = 905;		// Multiple, volume
@@ -632,4 +674,3 @@ float CT_TRIGMONATT = 987;		// Trigger monster to attack something
 float CT_TRIGMONATTACK = 988;	// Trigger monster to attack something
 
 float CT_TRIGVOID = 999;		// Skybox garbage collector!
-//----------------------------------------------------------------------

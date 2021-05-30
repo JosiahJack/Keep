@@ -12,9 +12,6 @@
 // Note 9/11/10:  Point is moot now since Tronyn used it in some of his maps.
 // Moved custom fields to defs.qc.
 
-// draw a line to the hook
-void(entity h, entity player) GrappleTrail = {Tent_Beam (13, h, h.origin, player.origin + '0 0 16');};
-
 void(entity h) GrappleSever = {
     local   entity  src;
 
@@ -99,7 +96,7 @@ void() GrappleTrack = {
         else
             dflags = DF_NONE;
         // Use Zerstorer's chainsaw grinding noise.
-        sound (self, CHAN_WEAPON, "weapons/sawguts.wav", 1, ATTN_NORM);     //"pendulum/hit.wav"
+        sound (self, CHAN_WEAPON, "zerstorer/weapons/sawguts.wav", 1, ATTN_NORM);
         T_Damage (self.enemy, self, self.master, self.dmg, DAMARMOR);
         // PM:  Removed 'makevectors (self.v_angle)'.
         spray_x = 100 * crandom();
@@ -125,9 +122,9 @@ void() GrappleAnchor = {
     self.touch = SUB_Null; // Stack overflow prevention.
     if (other.takedamage || (other.solid != SOLID_BSP)) {   // PM:  Removed teammate immunity.
         if (other.hittype == HIT_METAL)
-            sfx = "weapons/clang.wav";
+            sfx = "drake/weapons/clang.wav";
         else if (other.hittype == HIT_STONE)
-            sfx = "weapons/axhitwal.wav";
+            sfx = "drake/weapons/axhitwal.wav";
         else if ((self.master.hook == self) && !self.count)
             sfx = "shambler/smack.wav";
         else    // Not grabbing, so just thump.
@@ -217,7 +214,7 @@ void() W_FireGrapple = {
     if (self.hook) return; // reject subsequent calls from player.qc
 
     self.punchangle_x = -2; // bump him
-    sound (self, CHAN_WEAPON, "weapons/chain1.wav", 1, ATTN_NORM); // chain out sound (loops)
+    sound (self, CHAN_WEAPON, "drake/weapons/chain1.wav", 1, ATTN_NORM); // chain out sound (loops)
     makevectors (self.v_angle);
     Grapple_Launch (self, self.origin + v_forward * 16 + '0 0 16', v_forward);
 };
@@ -251,7 +248,7 @@ void() GrappleService = {
 
     if (!self.hook.state) { // Hook is flying and not attached to anything yet.
         // just draw a line to the hook
-        if (vlen(self.hook.origin - self.origin) > HOOK_NEAR) GrappleTrail (self.hook, self);
+        if (vlen(self.hook.origin - self.origin) > HOOK_NEAR) QC_ParseBeam(0,"progs/drake/beam.mdl", self.hook, self.hook.origin, self.origin + '0 0 16', 31);
         if (!self.button0 && self.weapon == IT2_GRAPPLE) GrappleSever (self.hook);
         return;
     }
@@ -291,5 +288,5 @@ void() GrappleService = {
         targ.flags = targ.flags - (targ.flags & FL_ONGROUND);
     }
 
-    if (vlen(self.hook.origin - self.origin) > HOOK_NEAR) GrappleTrail (self.hook, self);
+    if (vlen(self.hook.origin - self.origin) > HOOK_NEAR) QC_ParseBeam(0,"progs/drake/beam.mdl", self.hook, self.hook.origin, self.origin + '0 0 16', 31);
 };

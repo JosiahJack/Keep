@@ -286,8 +286,7 @@ void() seek_run = { self.walkframe = 0; self.lefty = TRUE; seek_walkframe(); };
 //============================================================================
 // Melee attack
 //============================================================================
-void() seek_punch =
-{
+void() seek_punch = {
 	local float ldmg;
 	
 	if (!self.enemy) return;
@@ -297,17 +296,16 @@ void() seek_punch =
 	if (!ai_checkmelee(MONAI_MELEESEEKER,MONAI_MELEEZTALL)) return;// Too far away
 
 	// Melee hit sound
-	sound (self, CHAN_WEAPON, "seeker/punch1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/seeker/punch1.wav", 1, ATTN_NORM);
 	ldmg = (random() + random() + random()) * 20;
 	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
 	SpawnMeatSpray (self, self.enemy, -150);
 	SpawnMeatSpray (self, self.enemy, -150);
 };
 
-//----------------------------------------------------------------------
 void() seek_melee1 = [ $punch1, seek_melee2 ] {ai_face();
 	self.pain_finished = time + 1;	// Block pain animation
-	sound (self, CHAN_VOICE, "seeker/melee1.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_VOICE, "ad171/seeker/melee1.wav", 1, ATTN_NORM);};
 void() seek_melee2 = [ $punch2, seek_melee3 ] {ai_charge(15);};
 void() seek_melee3 = [ $punch3, seek_melee4 ] {ai_charge(20);};
 void() seek_melee4 = [ $punch4, seek_melee5 ] {ai_charge(25);};
@@ -318,11 +316,8 @@ void() seek_melee8 = [ $punch8, seek_melee9 ] {};
 void() seek_melee9 = [ $punch9, seek_melee10 ] {};
 void() seek_melee10 = [ $punch10, seek_run ] {};
 
-//============================================================================
 // Range attack - 3 rockets from each arm
-//============================================================================
-void(vector leftofs, vector rightofs) seek_attack =
-{
+void(vector leftofs, vector rightofs) seek_attack = {
 	local vector org, dir, vec;
 	
 	if (!self.enemy) return;
@@ -359,7 +354,7 @@ void(vector leftofs, vector rightofs) seek_attack =
 				}
 			}
 			else {
-				sound (self, CHAN_WEAPON, "seeker/rocket_fire.wav", 1, ATTN_NORM);	
+				sound (self, CHAN_WEAPON, "ad171/seeker/rocket_fire.wav", 1, ATTN_NORM);	
 				Launch_Missile (org, dir, '0 0 0', CT_PROJ_SEEKER, self.attack_speed);
 			}
 		}
@@ -384,7 +379,7 @@ void(vector leftofs, vector rightofs) seek_attack =
 				}
 			}
 			else {
-				sound (self, CHAN_WEAPON, "seeker/rocket_fire.wav", 1, ATTN_NORM);	
+				sound (self, CHAN_WEAPON, "ad171/seeker/rocket_fire.wav", 1, ATTN_NORM);	
 				Launch_Missile (org, dir, '0 0 0', CT_PROJ_SEEKER, self.attack_speed);
 			}
 		}
@@ -412,13 +407,13 @@ void() seek_fireframe =
 		if (self.enemydist < MONAI_RANGESWSEEKER) {
 			// Upgrade lasers to plasma with hard skill+
 			if (skill > SKILL_NORMAL) 
-				sound (self, CHAN_VOICE, "seeker/range_plasma.wav", 1, ATTN_NORM);
+				sound (self, CHAN_VOICE, "ad171/seeker/range_plasma.wav", 1, ATTN_NORM);
 			// Lasers at close range ONLY
-			else sound (self, CHAN_VOICE, "seeker/range_laser.wav", 1, ATTN_NORM);
+			else sound (self, CHAN_VOICE, "ad171/seeker/range_laser.wav", 1, ATTN_NORM);
 			self.weaponstate = TRUE;
 		}
 		else {
-			sound (self, CHAN_VOICE, "seeker/range_rocket.wav", 1, ATTN_NORM);
+			sound (self, CHAN_VOICE, "ad171/seeker/range_rocket.wav", 1, ATTN_NORM);
 			self.weaponstate = FALSE;
 		}
 	}
@@ -443,7 +438,7 @@ void() seek_fire = { self.walkframe = 0; seek_fireframe(); };
 void() seek_arm_explode =
 {
 	particle_dust(self.pos2, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
-	SpawnExplosion(EXPLODE_BIG, self.pos2, "seeker/explode_major.wav");
+	SpawnExplosion(EXPLODE_BIG, self.pos2, "ad171/seeker/explode_major.wav");
 	SpawnProjectileSmoke(self.pos2, 150, 50, 150);
 	SpawnProjectileSmoke(self.pos2, 150, 50, 150);
 	SpawnProjectileSmoke(self.pos2, 150, 50, 150);
@@ -530,7 +525,7 @@ void() seek_explode =
 	T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
 	
 	// Classic sprite/DP explosion
-	SpawnExplosion(EXPLODE_BIG, self.origin, "seeker/explode_major.wav");
+	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/seeker/explode_major.wav");
 	SpawnProjectileSmoke(self.origin, 150, 150, 150);
 	SpawnProjectileSmoke(self.origin, 150, 150, 150);
 	SpawnProjectileSmoke(self.origin, 150, 150, 150);
@@ -581,7 +576,7 @@ void() seek_dieframe =
 		SpawnProjectileSmoke(self.pos1, 200, 250, 100);
 		SpawnProjectileSmoke(self.pos1, 200, 250, 100);
 		if (random() < 0.5)
-			SpawnExplosion(EXPLODE_MED, self.pos1, "seeker/explode_minor.wav");
+			SpawnExplosion(EXPLODE_MED, self.pos1, "ad171/seeker/explode_minor.wav");
 	}
 };
 
@@ -592,7 +587,7 @@ void() seek_die =
 	monster_death_precheck();
 
 	// Long death sound with comedy bing at the end!
-	sound (self, CHAN_VOICE, "seeker/death1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "ad171/seeker/death1.wav", 1, ATTN_NORM);
 	// reset custom origins for body/arm gib parts
 	self.gib1origin = self.gib2origin = '0 0 0';
 	self.max_health = MON_GIBFOUNTAIN;
@@ -602,7 +597,7 @@ void() seek_die =
 	makevectors(self.angles);
 	self.pos1 = self.origin + attack_vector('8 0 24');
 	particle_dust(self.pos1, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
-	SpawnExplosion(EXPLODE_BIG, self.pos1, "seeker/explode_major.wav");
+	SpawnExplosion(EXPLODE_BIG, self.pos1, "ad171/seeker/explode_major.wav");
 	SpawnProjectileSmoke(self.pos1, 200, 250, 100);
 	
 	// Random chance of head flying off body with both arms!
@@ -636,9 +631,7 @@ void() seek_shield =
 	seek_stand();
 };
 
-//----------------------------------------------------------------------
-void() seek_wakeup =
-{
+void() seek_wakeup = {
 	// Check for sudden death!
 	if (self.health < 0) return;
 	
@@ -647,7 +640,7 @@ void() seek_wakeup =
 	self.spawnflags = self.spawnflags - (self.spawnflags & MON_SEEK_SHIELD);
 	
 	// Switch off shield sound
-	sound (self, CHAN_WEAPON, "ambience/power_off.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/ambience/power_off.wav", 1, ATTN_NORM);
 	// Switch OFF any particle emitter
 	if (self.part_emitter) misc_particle_off(self.part_emitter);
 	
@@ -667,11 +660,9 @@ void() seek_wakeup =
 	monster_targets();					// Check for targets
 };
 
-/*======================================================================
-QUAKED monster_seeker (1 0 0) (-32 -32 -24) (32 32 64) Ambush
-======================================================================*/
-void() monster_seeker =
-{
+
+// QUAKED monster_seeker (1 0 0) (-32 -32 -24) (32 32 64) Ambush
+void() monster_seeker = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
 	// Check all spawn exceptions (monsters.qc)
@@ -696,48 +687,48 @@ void() monster_seeker =
 	self.gib1frame = 2;					// 3 frames choose from
 	self.gibtype = GIBTYPE_METAL;		// Metal impact sounds
 	
-	self.idle_sound = "seeker/idle1.wav";
-	self.idle_sound2 = "seeker/idle2.wav";
+	self.idle_sound = "ad171/seeker/idle1.wav";
+	self.idle_sound2 = "ad171/seeker/idle2.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
 
-	self.pain_sound = "seeker/pain1.wav";
-	self.pain_sound2 = "seeker/pain2.wav";
+	self.pain_sound = "ad171/seeker/pain1.wav";
+	self.pain_sound2 = "ad171/seeker/pain2.wav";
 	precache_sound (self.pain_sound);
 	precache_sound (self.pain_sound2);
 
-	precache_sound ("seeker/death1.wav");
-	precache_sound ("seeker/explode_minor.wav");
-	precache_sound ("seeker/explode_major.wav");
+	precache_sound ("ad171/seeker/death1.wav");
+	precache_sound ("ad171/seeker/explode_minor.wav");
+	precache_sound ("ad171/seeker/explode_major.wav");
 	// Power off sound for shield setup
-	precache_sound ("ambience/power_off.wav");
+	precache_sound ("ad171/ambience/power_off.wav");
 	
 	// Range attack 1 - rockets
-	precache_sound("seeker/range_rocket.wav");
-	precache_sound("seeker/rocket_fire.wav");
-	precache_sound("seeker/rocket_hit.wav");
+	precache_sound("ad171/seeker/range_rocket.wav");
+	precache_sound("ad171/seeker/rocket_fire.wav");
+	precache_sound("ad171/seeker/rocket_hit.wav");
 	// Range attack 2 - lasers
 	precache_model (MODEL_PROJ_LASER);
-	precache_sound("seeker/range_laser.wav");
+	precache_sound("ad171/seeker/range_laser.wav");
 	precache_sound ("enforcer/enfire.wav");
 	precache_sound ("enforcer/enfstop.wav");
 	// Range attack 3 - plasma
 	precache_model (MODEL_PROJ_PLASMA);
-	precache_sound ("seeker/range_plasma.wav");
+	precache_sound ("ad171/seeker/range_plasma.wav");
 	precache_sound (SOUND_PLASMA_FIRE);
 	precache_sound (SOUND_PLASMA_HIT);
 
 	// Melee attack - giant punch
-	precache_sound ("seeker/melee1.wav");
-	precache_sound ("seeker/punch1.wav");
+	precache_sound ("ad171/seeker/melee1.wav");
+	precache_sound ("ad171/seeker/punch1.wav");
 	
 	// Sparking from broken arm
 	self.noise2 = "progs/ad171/misc_spark.mdl";
-	self.noise3 = "misc/spark.wav";
+	self.noise3 = "ad171/misc/spark.wav";
 	precache_model (self.noise2);
 	precache_sound (self.noise3);
 	
-	self.sight_sound = "seeker/sight1.wav";
+	self.sight_sound = "ad171/seeker/sight1.wav";
 	precache_sound (self.sight_sound);
 
 	// Check for any custom arm setups
@@ -770,11 +761,11 @@ void() monster_seeker =
 	self.resist_rockets = 0.5; self.resist_cells = 0;
 	
 	// Custom feet sounds (specific order)
-	self.stepc1 = "seeker/footstep1.wav";
-	self.stepc2 = "seeker/footstep2.wav";
-	self.stepc3 = "seeker/footstep1.wav";
-	self.stepc4 = "seeker/footstep2.wav";
-	self.stepc5 = "seeker/footstep3.wav";
+	self.stepc1 = "ad171/seeker/footstep1.wav";
+	self.stepc2 = "ad171/seeker/footstep2.wav";
+	self.stepc3 = "ad171/seeker/footstep1.wav";
+	self.stepc4 = "ad171/seeker/footstep2.wav";
+	self.stepc5 = "ad171/seeker/footstep3.wav";
 	precache_sound (self.stepc1);
 	precache_sound (self.stepc2);
 	precache_sound (self.stepc3);

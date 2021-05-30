@@ -234,7 +234,7 @@ void()	ghost_followers = {
 // homing fireball (shootable or not)
 void() reiver_fireball_death = {
 	if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion_nodebris"), self.origin, '0 0 0', 1);
-	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 0.85, ATTN_NORM);
+	R_Exp3 (self.origin);
 	remove (self);
 };
 
@@ -246,7 +246,7 @@ void() reiver_fireball_touch = {
 		spawn_touchblood (self, other,20);
 		T_Damage (other, self, self.owner, 20, DAMARMOR);	// default 20
 		if (ext_dppart) pointparticles(particleeffectnum("torment_hellrod_explosion"), self.origin, '0 0 0', 1);
-	 	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 0.7, ATTN_NORM);
+	 	R_Exp3 (self.origin);
 		// checks if fireball inflame the player
 		if (random() <= 0.3) {
 			ApplyFireDmg(SUB_entEnemyTarget(), DAMAGE_PYROWRAITH, DAMAGE_PYROWRAITH);
@@ -257,7 +257,7 @@ void() reiver_fireball_touch = {
 		// wall
 		T_RadiusDamage (self, self.owner, 20 + 10, other, DAMAGEALL); // don't do radius damage to the other, because all the damage was done in the impact
 		if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion_nodebris"), self.origin, '0 0 0', 1);
-	 	sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 0.8, ATTN_NORM);
+	 	R_Exp3 (self.origin);
 	}
 	remove (self);
 };
@@ -276,7 +276,7 @@ void() reiver_fireball_homing = {
 	// when it got stuck, remove it
 	if (self.origin == self.oldorigin) {
 		T_RadiusDamage (self, self.owner, 20 + 10, self.owner, DAMAGEALL);
-		sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 0.7, ATTN_NORM);
+		R_Exp3(self.origin);
 		if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion_nodebris"), self.origin, '0 0 0', 1);
 		remove (self);
 		return;
@@ -293,20 +293,14 @@ void() reiver_fireball_homing = {
 };
 
 
-void() reiver_fireball_no_homing =
-{
+void() reiver_fireball_no_homing = {
 	self.movetype = MOVETYPE_FLYMISSILE;
 
-	if (self.enemy.health < 1)
-	{
-		remove(self);
-		return;
-	}
+	if (self.enemy.health < 1) { remove(self); return; }
 
-	if (self.attack_finished < time)
-	{
+	if (self.attack_finished < time) {
 		T_RadiusDamage (self, self.owner, 20 + 10, self.owner, DAMAGEALL);
-		sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 0.7, ATTN_NORM);
+		R_Exp3(self.origin);
 		if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion_nodebris"), self.origin, '0 0 0', 1);
 		remove (self);
 		return;
@@ -315,7 +309,7 @@ void() reiver_fireball_no_homing =
 	if (self.origin == self.oldorigin) {
 		 // when it got stuck
 		T_RadiusDamage (self, self.owner, 20 + 10, self.owner, DAMAGEALL);
-		sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 0.7, ATTN_NORM);
+		R_Exp3(self.origin);
 		if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion_nodebris"), self.origin, '0 0 0', 1);
 		remove (self);
 		return;
@@ -324,7 +318,6 @@ void() reiver_fireball_no_homing =
 	self.nextthink = time + 0.2;
 	self.think = reiver_fireball_no_homing;	
 };
-
 
 void() reiver_fireball = {
 	local entity missile;
@@ -392,7 +385,7 @@ void()	reiver_idle13	=[	$idle13, reiver_idle1	] {ai_stand();self.nextthink = tim
 void()	reiver_run1;
 
 void()	reiver_underground1	=[	$raise1,	reiver_underground2	] {ai_stand();self.nextthink = time + 0.08; 
-	sound (self, CHAN_VOICE, "misc/null.wav", 1, ATTN_NORM);	// make him sight sound a little later in this animation !
+	StopSound(self,CHAN_VOICE); // make him sight sound a little later in this animation !
 	sound (self, CHAN_WEAPON, "player/inflame.wav", 1, ATTN_NORM); 	// play flame ignition sound
 	self.alpha = 1;};
 void() reiver_underground2	=[	$raise2,	reiver_underground3	] {ai_stand();self.nextthink = time + 0.08;};
@@ -899,7 +892,7 @@ void() reiver_death_touch = {
 		//if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion"), self.origin, '0 0 0', 1);
 		if (ext_dppart) pointparticles(particleeffectnum("rocket_explosion"), self.origin, '0 0 0', 1);
 		if (ext_dppart) pointparticles(particleeffectnum("blood_corpse_gib"), self.origin, '0 0 0', 1);
-		sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 0.7, ATTN_NORM);
+		R_Exp3(self.origin);
 		// self.delete_painskin = 1;	 	 // remove painskin 
 		remove (self);
 		return;
@@ -909,7 +902,7 @@ void() reiver_death_touch = {
 		//if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion"), self.origin, '0 0 0', 1);
 		if (ext_dppart) pointparticles(particleeffectnum("rocket_explosion"), self.origin, '0 0 0', 1);
 		if (ext_dppart) pointparticles(particleeffectnum("blood_corpse_gib"), self.origin, '0 0 0', 1);
-		sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 0.7, ATTN_NORM);
+		R_Exp3(self.origin);
 		// self.delete_painskin = 1;	 	 // remove painskin 
 		remove (self);
 		return;
@@ -922,9 +915,8 @@ void() reiver_death_touch = {
 		//if (ext_dppart) pointparticles(particleeffectnum("grenade_explosion"), self.origin, '0 0 0', 1);
 		if (ext_dppart) pointparticles(particleeffectnum("rocket_explosion"), self.origin, '0 0 0', 1);
 		if (ext_dppart) pointparticles(particleeffectnum("blood_corpse_gib"), self.origin, '0 0 0', 1);
-		sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 0.7, ATTN_NORM);
-		// self.delete_painskin = 1;	 	 // remove painskin 
-		remove (self);
+		R_Exp3(self.origin);
+		remove(self);
 		return;
 	}
 	self.oldorigin = self.origin;
@@ -1055,7 +1047,6 @@ void() monster_reiver = {
 	precache_sound ("reiver/vampire.wav");
 	precache_sound("player/inflame.wav");
 	precache_sound("zombie/corpse_fire.wav");
-	precache_sound("weapons/r_exp3.wav");
 
 	self.solid = SOLID_NOT;					// No interaction with world
 	self.movetype = MOVETYPE_NONE;			// Static item, no movement

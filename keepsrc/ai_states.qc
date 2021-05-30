@@ -1,10 +1,46 @@
-/*======================================================================
- Three basic types of behaviour is Quake, stand, walk and run
-======================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: All
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 3
+//
+// Implements: AI Core System of stand, walk, and run
+//
+// Description:
+// Standing is for when a monster is staying in place in idle animations.
+// Walk is when a monster is following a path or a leader.
+// Run is when a monster is in combat mode and actively chasing an enemy.
+//=============================================================================
+
 float(vector targorg, float angdiff) eidolon_angcheck;
 float() Ryu_HatesWater;
 float(float dist) Ryu_LeaveWater;
-float(float dist) Ryu_GetOutOfWater
 void() ryu_untilt;
 float(entity ent) Ryu_NoShot;
 float(float dist) Ryu_DetectDanger;
@@ -13,25 +49,25 @@ float(float dist) Shade_AvoidGhost;
 void() DragonCheckAttack;
 void() Shade_CheckAttack;
 void() ryu_run_attack;
-float   SPEED_RYU_MIN   = 8;
-float   SPEED_RYU_SLOW  = 20;
-float   RYU_RANGE_MELEE = 120;
-float   RYU_RANGE_BEST  = 750;      // Maximum range for shot spray.
-float   RYU_RANGE_MAX   = 2000;     // Maximum attack range.
+float SPEED_RYU_MIN   = 8;
+float SPEED_RYU_SLOW  = 20;
+float RYU_RANGE_MELEE = 120;
+float RYU_RANGE_BEST  = 750; // Maximum range for shot spray.
+float RYU_RANGE_MAX   = 2000;// Maximum attack range.
 
+// Waiting around mode
 void() ai_stand = {
 	self.lastorigin = self.origin;		// Save for cinematic interpolation
 	if (self.health < 1) return;		// Health < 0, no more standing
 	check_tethertimer();				// Check for tethering system
-	MonsterDeBuff();			// Check and apply poison
+	MonsterDeBuff();					// Check and apply poison
 
 	if (self.classtype == CT_MONEIDOLON) {
 		FindTarget (); // Keep looking for a player
 		if (self.style == EIDOLON_PHASE1) { //1
 			self.nextthink = time + 0.1; // Slow animation speed, trapped inside cage
 			if (self.enemy.flags & FLx_CREATURE) { // Found a player, now track them around the room
-				if (eidolon_angcheck(self.enemy.origin, 60)) 
-					self.think = self.th_walk;
+				if (eidolon_angcheck(self.enemy.origin, 60)) self.think = self.th_walk;
 			}
 		}
 		return;
@@ -40,13 +76,11 @@ void() ai_stand = {
 	if (FindTarget ()) return; // Found a player?
 
 	//  The dragon hovers in place.  If a water-fearing dragon is underwater, it will escape the pool if possible. 
-	//  The dragon glides along its path.  Like ryu_stand(), a
-	//  water-fearing dragon will try to escape from any body of
-	//  water if it is placed in one.
+	//  The dragon glides along its path.  Like ryu_stand(), a water-fearing dragon will try to escape from any body of water if it is placed in one.
 	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
 		if (Ryu_HatesWater ()) {
 			if (self.h2olevel) {
-				if (Ryu_LeaveWater (self.speed)) return;
+				if (Ryu_LeaveWater(self.speed)) return;
 			}
 		}
 		ryu_untilt ();  // Undo any angle changes due to evasion.
@@ -64,6 +98,7 @@ void() ai_stand = {
 	}
 };
 
+// Path/leader following mode
 void(float dist) ai_walk = {
 	local vector vertdiff;
 	
@@ -90,15 +125,12 @@ void(float dist) ai_walk = {
 	}
 
 	//  The dragon hovers in place.  If a water-fearing dragon is underwater, it will escape the pool if possible. 
-	//  The dragon glides along its path.  Like ryu_stand(), a
-	//  water-fearing dragon will try to escape from any body of
-	//  water if it is placed in one.
+	//  The dragon glides along its path.  Like ryu_stand(), a water-fearing dragon will try to escape from any body of water if it is placed in one.
 	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
 		if (Ryu_HatesWater ()) {
 			if (self.h2olevel) {
-				if (Ryu_LeaveWater (self.speed)) return;
-				// Dragon could not rise toward air.  If in walk mode, increase
-				// speed in the hope of finding another way toward air faster.
+				if (Ryu_LeaveWater(self.speed)) return;
+				// Dragon could not rise toward air.  If in walk mode, increase speed in the hope of finding another way toward air faster.
 				dist = self.speed; // In walk mode.
 			}
 		}
@@ -113,13 +145,13 @@ void(float dist) ai_walk = {
 
 void() CheckAttack;
 
+// Combat mode.  This is the primary AI for all monsters.
 void(float dist) ai_run = {
 	local float winner;
 	local entity e, client;
 
 	if (self.health < 1) return;	// Health < 0, no more running
 	MonsterDeBuff();			// Check and apply poison
-
 	movedist = dist;
 	winner = FALSE;
     if (self.enemy) {
@@ -288,7 +320,7 @@ void(float dist) ai_run = {
 				if (Ryu_DetectDanger (self.speed)) return; // Avoid projectiles or other threats.
 
 			ryu_untilt (); // Undo any angle changes due to evasion.
-			if (Ryu_GetOutOfWater (self.speed)) return; // If the dragon does not like water, stay away from it.
+			if (Ryu_HatesWater() && self.h2olevel && Ryu_LeaveWater(self.speed)) return; // If a dragon hates and is in water, this makes dragon rise out of it.
 		}
 	}
 
@@ -362,8 +394,9 @@ void(float dist) ai_run = {
     // In close range, check if normal speed is too fast.  If so, fly in
     // at minimum speed.
 	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
-		if (enemy_range == RANGE_NEAR)
-			if (QC_CloseEnough (dist)) dist = SPEED_RYU_MIN;
+		dist = self.speed;
+		if (enemy_range == RANGE_NEAR && QC_CloseEnough (dist)) dist = SPEED_RYU_MIN;
+		movetogoal(dist);
 	} else{
 		if (self.classtype == CT_MONSHADE) {
 			if (self.velocity == '0 0 0')
@@ -377,7 +410,7 @@ void(float dist) ai_run = {
 				if (pointcontents (self.origin) == CONTENT_SOLID) self.attack_state = AS_STRAIGHT;
 			}
 		} else {
-			movetogoal(dist); // head straight towards the enemy...unless of course I am a turret!
+			movetogoalplus(dist); // head straight towards the enemy...unless of course I am a turret!
 		}
 	}
 };

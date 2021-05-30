@@ -381,7 +381,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 					saveperms = PowerArmor_Absorb(targ,take,TRUE); // only does something if damage is greater than 2
 				} else {
 					targ.powershield_active = FALSE;
-					sound (targ, CHAN_AUTO, "me/me_soff.wav", 1, ATTN_NORM);
+					sound (targ, CHAN_AUTO, "zerstorer/me/me_soff.wav", 1, ATTN_NORM);
 				}
 			}
 		}
@@ -575,11 +575,6 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 							if (SUB_flagsEnemyTarget(FL_CLIENT)) self.oldenemy = SUB_entEnemyTarget();
 							if (self.enemy.classtype == CT_ENEMYTARGET) SUB_switchEnemyTarget();
 							self.enemy = attacker;		// attack the attacker!
-							dprint("Enemy pain switch: s.alignment = ");
-							dprint(ftos(self.alignment));
-							dprint(", o.alignment = ");
-							dprint(ftos(self.enemy.alignment));
-							dprint("\n");
 							FoundTarget ();				// Run+turn towards new enemy
 						}
 					}

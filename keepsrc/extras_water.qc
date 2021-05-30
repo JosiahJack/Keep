@@ -15,51 +15,47 @@ along with this program; if not, write to the Free Software Foundation,
 Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-/*
-	Written by Frank Condello <pox@planetquake.com>
-	
-	Moving water volumes - honest and for true.
+// Written by Frank Condello <pox@planetquake.com>
 
-	Dependant on additions in client.qc.
-	Uses frame-based movment routines in extra_subs.qc.
+// Moving water volumes - honest and for true.
 
-	------------------------------------------------------------------------------------
-	GETTING THE INSIDE FACES TO DRAW PROPERLY:
-	
-	METHOD 1:
-	Use a custom QBSP util with func_water support (this does NOT require an engine mod)
-	(eQBSP v1.0b for MacOS supports this - code/binaries available from www.planetquake.com/paroxysm/)
-	Avoid butting func_water surfaces right up against solid geometry or you'll get z-fighting
-	artifacts where real water wouldn't (extend "hidden" edges into a solid wall).
-	
-	METHOD 2 (hackaround):
-	Add thin (1 unit) brushes for visible edges, but make sure these brushes DON'T touch
-	the main volume (1 unit away), or the face will be consumed by QBSP!
-	
-	NOTE:
-	Software Quake seems to occasionally disagree with these, causing them to not render properly
-	(looks like a Z buffer related problem). This is not limited to func_water, but the odd intersecting
-	geometry sometimes required by func_water makes it more prone to expose this bug. TEST YOUR MAPS!
-	These problems can usually be overcome by butting up the water edges with it's "container" geometry
-	(Yes that's exaclty what I warned against previously). You can disable mirroring in eQBSP per-entity
-	by setting the "_nomirror" key to a non-zero value, and use "METHOD 2" to backface the problem brush.
-	
-	Unavoidable differences between func_water and real water:
-	1. Underwater surfaces don't warp
-	2. Surface is always opaque
-	
-	------------------------------------------------------------------------------------
-	NOTE:
-	
-	I've made no effort to make func_water's color shifts play nice with other entities that
-	might use custom color shifts. It may make sense to store the cshift in a vector+float so
-	it can be combined with other cshifts, but right now it's an easy-to-deal-with string.
-	Real water overrides v_cshift anyway, so it makes sense to leave func_water as it is, and
-	give it's cshift priorty over other entites (making it behave just like real water).
-	
-*/
- 
-//============================================================================
+// Dependant on additions in client.qc.
+// Uses frame-based movment routines in extra_subs.qc.
+
+// ------------------------------------------------------------------------------------
+// GETTING THE INSIDE FACES TO DRAW PROPERLY:
+
+// METHOD 1:
+// Use a custom QBSP util with func_water support (this does NOT require an engine mod)
+// (eQBSP v1.0b for MacOS supports this - code/binaries available from www.planetquake.com/paroxysm/)
+// Avoid butting func_water surfaces right up against solid geometry or you'll get z-fighting
+// artifacts where real water wouldn't (extend "hidden" edges into a solid wall).
+
+// METHOD 2 (hackaround):
+// Add thin (1 unit) brushes for visible edges, but make sure these brushes DON'T touch
+// the main volume (1 unit away), or the face will be consumed by QBSP!
+
+// NOTE:
+// Software Quake seems to occasionally disagree with these, causing them to not render properly
+// (looks like a Z buffer related problem). This is not limited to func_water, but the odd intersecting
+// geometry sometimes required by func_water makes it more prone to expose this bug. TEST YOUR MAPS!
+// These problems can usually be overcome by butting up the water edges with it's "container" geometry
+// (Yes that's exaclty what I warned against previously). You can disable mirroring in eQBSP per-entity
+// by setting the "_nomirror" key to a non-zero value, and use "METHOD 2" to backface the problem brush.
+
+// Unavoidable differences between func_water and real water:
+// 1. Underwater surfaces don't warp
+// 2. Surface is always opaque
+
+// ------------------------------------------------------------------------------------
+// NOTE:
+
+// I've made no effort to make func_water's color shifts play nice with other entities that
+// might use custom color shifts. It may make sense to store the cshift in a vector+float so
+// it can be combined with other cshifts, but right now it's an easy-to-deal-with string.
+// Real water overrides v_cshift anyway, so it makes sense to leave func_water as it is, and
+// give it's cshift priorty over other entites (making it behave just like real water).
+
 float EASEUNDERCURRENT = 16;
 void() 	liquid_movetopos2;
 void() 	liquid_movetopos1;
@@ -71,23 +67,15 @@ void() CheckFuncWaterDeath = {
 	
 	spot = self.origin + self.view_ofs;
 	ent = find(world, classname, "fliquid");
-
 	while(ent) {	
-		// FIXME! - do this right?
-		if ( (spot_x<ent.absmax_x) &&
-			 (spot_y<ent.absmax_y) &&
-			 (spot_z<ent.absmax_z) &&
-			 (spot_x>ent.absmin_x) && 
-			 (spot_y>ent.absmin_y) && 
-			 (spot_z>ent.absmin_z)) {
-						
+		if ( (spot_x<ent.absmax_x) && (spot_y<ent.absmax_y) && (spot_z<ent.absmax_z) && (spot_x>ent.absmin_x) &&  (spot_y>ent.absmin_y) &&  (spot_z>ent.absmin_z)) {
 			// Do the color shift
 			Safe_stuffcmd(self, "v_cshift ");
 			Safe_stuffcmd(self, ent.cshift);
 			Safe_stuffcmd(self, "\n");
 			self.fwatershifttime = time+frametime;
 			self.fwatershift = TRUE;			
-			return;// Done (or else someone made a retarded map)
+			return;
 		}
 		ent = find(ent, classname, "fliquid");
 	}
@@ -114,19 +102,16 @@ void() liquid_at_pos1 = {
 		if (self.wait > 0) {
 			self.think = liquid_movetopos2;
 			self.nextthink = time + self.wait;
-		} else if (!self.wait)
-			liquid_movetopos2();
+		} else if (!self.wait) liquid_movetopos2();
 	}
-	
-	
+
 	if (self.target) {
 		activator = self.enemy;
 		SUB_UseTargets();
 	}
 };
 
-void() liquid_at_pos2 =
-{
+void() liquid_at_pos2 = {
 	setorigin(self.aiment, self.aiment.pos2);
 	liquid_playstopsound();
 	self.state = STATE_TOP;
@@ -134,8 +119,7 @@ void() liquid_at_pos2 =
 	if (self.wait > 0) {
 		self.think = liquid_movetopos1;
 		self.nextthink = time + self.wait;
-	} else if (!self.wait)
-		liquid_movetopos1();
+	} else if (!self.wait) liquid_movetopos1();
 	
 	// Fire targets	
 	if (self.target) {
@@ -144,85 +128,52 @@ void() liquid_at_pos2 =
 	}
 };
 
-void() liquid_movetopos1 =
-{
+void() liquid_movetopos1 = {
 	self.state = STATE_DOWN;
 	setorigin(self.aiment, self.aiment.dest2);
 	liquid_playreturnsound();
-	// Frame-based move for non-clippers
-	SUB_fCalcMove(self.pos1, self.speed2, liquid_at_pos1);
+	SUB_CalcMove(self.pos1, self.speed2, liquid_at_pos1); // Frame-based move for non-clippers
 };
 
-void() liquid_movetopos2 =
-{
+void() liquid_movetopos2 = {
 	self.state = STATE_UP;
 	setorigin(self.aiment, self.aiment.dest1);
 	liquid_playmovesound();
-	// Frame-based move for non-clippers
-	SUB_fCalcMove(self.pos2, self.speed, liquid_at_pos2);
+	SUB_CalcMove(self.pos2, self.speed, liquid_at_pos2); // Frame-based move for non-clippers
 };
 
-void() liquid_use =
-{	
+void() liquid_use = {
 	if (self.nextthink > time) return;// waiting or moving
 	
 	self.enemy = activator;
 	
 	if (self.state == STATE_BOTTOM)
-		liquid_movetopos2();
+		liquid_movetopos2(); // Start moving
 	else if (self.state == STATE_TOP)
-		liquid_movetopos1();
-	
-	// ...already started moving
+		liquid_movetopos1(); // Start moving
 };
 
-/*
-=======================================================
-liquid_drown
-
-(khreathor)
-Drown function for monsters;
-=======================================================
-*/
-void(entity entToDrown) liquid_drown =
-{
-	if(other.flags & FL_SWIM)
-		return;
+// Drown function for monsters (khreathor)
+void(entity entToDrown) liquid_drown = {
+	if(entToDrown.flags & FL_SWIM) return;
+	if (!(entToDrown.flags & FL_CLIENT || entToDrown.flags & FL_MONSTER)) return;
+	if(entToDrown.takedamage == DAMAGE_NO) return;
+	if(entToDrown.health < 0) return;
+	if(entToDrown.bodyonflr == MON_ONFLR) return;
 	
-	if(entToDrown.takedamage == DAMAGE_NO)
-		return;
-	
-	if(entToDrown.health < 0)
-		return;
-	
-	if(entToDrown.classname == "monster_corpse")
-		return;
-	
-	if(entToDrown.drawntime < time && entToDrown.spawnflags & CAN_DROWN)
-	{
+	if(entToDrown.drawntime < time && entToDrown.spawnflags & CAN_DROWN) {
 		sound (self, CHAN_BODY, "player/drown1.wav", 1, ATTN_NORM);
-		DeathBubblesOnEntity(entToDrown,5);
+		death_bubbles(5);
 		// drowning damage formula 5*(x^2/10 + 1) // (khreathor)
 		entToDrown.drown_dmg = 5 * (entToDrown.drown_cnt * entToDrown.drown_cnt * 0.1 + 1);
-		
-		if(entToDrown.health < entToDrown.drown_dmg)
-		{
-			entToDrown.drown_dmg = entToDrown.health;
-		}
-		
+		if(entToDrown.health < entToDrown.drown_dmg) entToDrown.drown_dmg = entToDrown.health;
 		T_Damage (entToDrown, world, world, entToDrown.drown_dmg,DAMARMOR);
-		//dprint("drown_cnt: ");
-		//dprint(ftos(entToDrown.drown_cnt));
-		//dprint(" | drown_dmg: ");
-		//dprint(ftos(entToDrown.drown_dmg));
-		//dprint("\n");
 		entToDrown.drawntime = time + 1;
 		entToDrown.drown_cnt = entToDrown.drown_cnt + 1;
 	}
 };
 
-void(entity entToDrown) liquid_sound =
-{
+void(entity entToDrown) liquid_sound = {
 	if (other.fwatershifttime < time && other.watertype)
 		{			
 			other.watertype = self.watertype;
@@ -600,5 +551,3 @@ void() func_watertrain =
 	self.nextthink = time + 0.2;// start after first frame to allow train to move to it's startpoint
 	self.think = func_watertrain_init;
 };
-
-//============================================================================

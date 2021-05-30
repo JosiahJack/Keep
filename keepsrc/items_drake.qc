@@ -32,7 +32,7 @@ float(entity who) Pack_Empty = {
 void () item_artifact_berserker = {
 	self.mdl = "progs/drake/zerkhelm.mdl";
 	precache_model (self.mdl);
-	self.noise = "items/zerkhelm.wav";
+	self.noise = "drake/items/zerkhelm.wav";
 	precache_sound (self.noise);
     self.netname = "Berserker Helm";
 	self.items = 0;
@@ -54,7 +54,7 @@ void () item_artifact_berserker = {
 void () item_artifact_equalizer = {
 	self.mdl = "progs/drake/gemini.mdl";
 	precache_model (self.mdl);
-	self.noise = "items/equalize.wav";
+	self.noise = "drake/items/equalize.wav";
 	precache_sound (self.noise);
     self.netname = "Twin Shot";
 	self.items = 0;
@@ -73,9 +73,9 @@ void () item_artifact_equalizer = {
 void () item_artifact_levitation = {
 	self.mdl = "progs/drake/levitate.mdl";
 	precache_model (self.mdl);
-	self.noise = "items/levitate.wav";
-	self.noise1 = "ambience/wingget.wav";
-	self.noise2 = "ambience/wingend.wav";
+	self.noise = "drake/items/levitate.wav";
+	self.noise1 = "drake/ambience/wingget.wav";
+	self.noise2 = "drake/ambience/wingend.wav";
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
@@ -102,7 +102,7 @@ void () item_artifact_levitation = {
 void() item_artifact_optimizer = {
 	self.mdl = "progs/drake/shotty.mdl";
 	precache_model (self.mdl);
-	self.noise = "items/optimize.wav";
+	self.noise = "drake/items/optimize.wav";
 	precache_sound (self.noise);
     self.netname = "Optimizer";
 	self.perms = POW_SHOTTYMAN;
@@ -254,23 +254,19 @@ void() treasure_touch = {
 //
 // Note:  In Drake, maximum health gets raised by 1 permanently.
 //============
-void() item_treasure =
-{
+void() item_treasure = {
     if (soul_evil)
     if (!self.healtype)
-    if (!(self.xsf & XSF_CHEST_HACK))
-    {   // Treasure type.
-        if (self.spawnflags & 1)
-            {self.healtype = 1;  self.spawnflags = self.spawnflags - 1;}
-        else
-            self.healtype = 0;
+	if (self.spawnflags & 1) {
+		self.healtype = 1;  
+		self.spawnflags = self.spawnflags - 1;
+	} else self.healtype = 0;
 
-        // Size.
-        if (self.spawnflags & 2)
-            self.spawnflags = self.spawnflags - 2;
-        else
-            self.spawnflags = self.spawnflags | 1;
-    }
+	// Size.
+	if (self.spawnflags & 2)
+		self.spawnflags = self.spawnflags - 2;
+	else
+		self.spawnflags = self.spawnflags | 1;
 
     self.classname = "item_treasure";
     if (self.spawnflags & 1)
@@ -332,11 +328,8 @@ void() item_treasure =
 // --> QUAKED item_treasure_gem (.83 .69 .22) (-16 -16 -24) (16 16 32)
 // Large gems
 //============
-void() item_treasure_gem =
-{
+void() item_treasure_gem = {
 	precache_sound("drake/items/treasure.wav");
-    if (self.xsf & XSF_CHEST_HACK)
-        self.skin       = -1;   // Random color.
     self.healtype = 1;
     item_treasure ();
 };
@@ -418,9 +411,7 @@ void() item_armor_exotic = {
 		if (self.armorvalue <= 0) self.armorvalue = ARMOR_ONYXPOWER_VALUE;
 		self.respawn_style = PARTICLE_BURST_YELLOW + PARTICLE_BURST_RING;
 		if (!self.part_active) self.part_active = PARTICLE_STYLE_KEYGOLD;
-		precache_sound("me/me_soff.wav"); // shield off
-		precache_sound("me/me_son.wav"); // shields up!
-		precache_sound("me/me_fire1.wav"); // shield hit
+		precache_sound("zerstorer/me/me_fire1.wav"); // shield hit
 		if (self.aflag < 1) self.aflag = AMMO_CELLS_WPN;
 	}
 	// Demon

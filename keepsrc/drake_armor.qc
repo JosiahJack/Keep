@@ -12,7 +12,7 @@ float(entity targ, float damage, float drain) PowerArmor_Absorb = {
 		if (targ.ammo_cells < 0) targ.ammo_cells = 0;
 		//Update_PowerArmor (targ);
 		Particle_Cube (targ, 241, 241);
-		sound (targ, CHAN_AUTO, "me/me_fire1.wav", 1, ATTN_NORM);
+		sound (targ, CHAN_AUTO, "zerstorer/me/me_fire1.wav", 1, ATTN_NORM);
 	}
     return save;
 };

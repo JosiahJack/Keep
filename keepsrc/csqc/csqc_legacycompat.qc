@@ -62,12 +62,9 @@ __weak float(string str) CSQC_ConsoleCommand =
 	tokenize_console(str);
 	return FALSE;
 };
-__weak void(float apilevel, string enginename, float engineversion) CSQC_Init =
-{
-}
+__weak void(float apilevel, string enginename, float engineversion) CSQC_Init = {};
 
-//we need to wrap this because its the easiest way to see if its a crappy old engine.
-//and if its crappy then we can reliably assume that its DP.
+// We need to wrap this because its the easiest way to see if its a crappy old engine, and if its crappy then it's probably DP.
 __wrap void(float apilevel, string enginename, float engineversion) CSQC_Init = {
 	if (!apilevel && !enginename && !engineversion) {
 		dp_screwysizes = TRUE;	//crappy engine
@@ -92,8 +89,7 @@ __wrap void(float apilevel, string enginename, float engineversion) CSQC_Init = 
 };
 
 //but we need to figure out when +showscores etc are pressed...
-__wrap float(string str) CSQC_ConsoleCommand =
-{
+__wrap float(string str) CSQC_ConsoleCommand = {
 	if (prior(str))
 		return TRUE;
 	string c = argv(0);

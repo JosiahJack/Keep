@@ -166,7 +166,7 @@ void() xxshub_attack1 =
 	
 	SUB_AttackFinished (2 + 2*random());
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "shub/attack1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/shub/attack1.wav", 1, ATTN_NORM);
 
 	// Skill level adjustment
 	self.attack_speed = self.pos1_x + (skill*self.pos1_y);
@@ -200,15 +200,12 @@ void() xxshub_shakeattack =
 	Launch_Grenade(org, dir, avel, CT_PROJ_SHUB2);
 };
 
-//----------------------------------------------------------------------
-void() xxshub_shakeframe =
-{
-
+void() xxshub_shakeframe = {
 	// Randomnly fire grenades outward
 	if (random() < 0.5) xxshub_shakeattack();
 	
 	if (self.walkframe == 0) {
-		sound (self, CHAN_WEAPON, "shub/attack2.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/shub/attack2.wav", 1, ATTN_NORM);
 		self.effects = self.effects | EF_MUZZLEFLASH;
 	}
 	
@@ -230,26 +227,18 @@ void() xxshub_shakeframe =
 			self.style = SHUB_PHASE2;
 			self.think = self.th_stand;
 		}
-	}
-	
-	// Update frame and keep on shaking!
-	else self.frame = $shake1 + self.walkframe;	
+	} else self.frame = $shake1 + self.walkframe; // Update frame and keep on shaking!
 };
 
-//----------------------------------------------------------------------
-void() xxshub_attack2 =
-{ 
+void() xxshub_attack2 = {
 	//if (self.spawnflags & SHUB_NEEDS_2ND_TRIG && self.use == xxshub_wakeup) return FALSE; // don't start attacking until 2nd trigger
 	Resist_ChangeType(self, TRUE);
 	self.walkframe = self.count = 0; 
 	xxshub_shakeframe();
 };
 
-//============================================================================
 // PAIN (ignored, just keeps on firing)
-//============================================================================
-void(entity inflictor, entity attacker, float damage) xxshub_pain =
-{
+void(entity inflictor, entity attacker, float damage) xxshub_pain = {
 	// Shub been hit, wakeup and start attacking
 	if (self.style == SHUB_PHASE1) {self.use(); return;}
 	self.pain_finished = time + 2 + random()*2;
@@ -272,11 +261,8 @@ void(entity inflictor, entity attacker, float damage) xxshub_pain =
 	}
 };
 
-//===========================================================================
 // FINAL DEATH - shake it baby and explode
-//===========================================================================
-void() xxshub_explode =
-{
+void() xxshub_explode = {
 	// No more Boss!
 	entity_hide(self);
 	
@@ -290,7 +276,7 @@ void() xxshub_explode =
 	WriteByte (MSG_BROADCAST, 8);
 	
 	// Classic sprite/DP explosion
-	SpawnExplosion(EXPLODE_BIG, self.origin, "shub/explode_death.wav");
+	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/shub/explode_death.wav");
 
 	// Gib explosive fountain!?!
 	ThrowGib(11, 10 + rint(random()*10));	// large blobs
@@ -298,16 +284,13 @@ void() xxshub_explode =
 	ThrowGib(5, 10 + rint(random()*3));
 };
 
-//----------------------------------------------------------------------
-void() xxshub_deathframe =
-{
+void() xxshub_deathframe = {
 	// Throw debris out from top of shub
 	self.pos3 = vecrand(100,100,TRUE);
 	self.pos3_z = 128 + random()*128;
 	SpawnProjectileSmoke(self.origin+self.pos3, 200, 50, 150);
 	// Random chance of gib + explosion
-	if (random() < 0.25)	
-		SpawnExplosion(EXPLODE_MED, self.origin+self.pos3, SOUND_REXP3);
+	if (random() < 0.25) SpawnExplosion(EXPLODE_MED, self.origin+self.pos3, SOUND_REXP3);
 
 	// Move frame forward, check for conditions
 	self.walkframe = self.walkframe + 1;
@@ -317,8 +300,7 @@ void() xxshub_deathframe =
 	}
 	
 	if (self.walkframe > 19) xxshub_explode();
-	// Update frame and keep on shaking!
-	else {
+	else { // Update frame and keep on shaking!
 		self.frame = $shake1 + self.walkframe;	
 		// Keep on looping around
 		self.nextthink = time + 0.1;
@@ -326,16 +308,14 @@ void() xxshub_deathframe =
 	}
 };
 
-//----------------------------------------------------------------------
-void() xxshub_die =
-{
+void() xxshub_die = {
 	self.style = SHUB_PHASE4;		// Game Over for Shub!
 	self.deadflag = DEAD_DEAD;		// the rock finally crashed
 	self.effects = 0;				// Remove effects on death
 	self.solid = SOLID_NOT;			// no longer need to block
 	self.max_health = MON_GIBEXPLOSION;
 
-	sound (self, CHAN_VOICE, "shub/death1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "ad171/shub/death1.wav", 1, ATTN_NORM);
 	self.walkframe = self.count = 0;
 	xxshub_deathframe();
 };
@@ -441,25 +421,25 @@ void() monster_shub = {
 	self.gib1mdl = MODEL_PROJ_SHUB2;
 	self.gib1frame = 9;
 	
-	self.idle_sound = "shub/idle1.wav";
-	self.idle_sound2 = "shub/idle2.wav";
+	self.idle_sound = "ad171/shub/idle1.wav";
+	self.idle_sound2 = "ad171/shub/idle2.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
 
 	// Att1 : Homing missile
 	// Att2 : Grenade spam
-	precache_sound ("shub/attack1.wav");
-	precache_sound ("shub/attack2.wav");
-	precache_sound ("shub/bounce.wav");
+	precache_sound ("ad171/shub/attack1.wav");
+	precache_sound ("ad171/shub/attack2.wav");
+	precache_sound ("ad171/wraith/bounce.wav");
 	
-	self.pain_sound = "shub/pain1.wav";
-	self.pain_sound2 = "shub/pain2.wav";
+	self.pain_sound = "ad171/shub/pain1.wav";
+	self.pain_sound2 = "ad171/shub/pain2.wav";
 	precache_sound (self.pain_sound);
 	precache_sound (self.pain_sound2);
-	precache_sound ("shub/death1.wav");
-	precache_sound ("shub/explode_death.wav");
+	precache_sound ("ad171/shub/death1.wav");
+	precache_sound ("ad171/shub/explode_death.wav");
 	
-	self.sight_sound = "shub/sight1.wav";
+	self.sight_sound = "ad171/shub/sight1.wav";
 	precache_sound (self.sight_sound);
 	
 	self.solid = SOLID_NOT;			// No interaction with world

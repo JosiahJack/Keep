@@ -159,9 +159,7 @@ void() func_button_fire =
 	SUB_CalcMove (self.pos2, self.speed, func_button_wait);
 };
 
-//----------------------------------------------------------------------
-void() func_button_use =
-{
+void() func_button_use = {
 	// Deal with DELAY functionality first
 	if (self.spawnflags & ENT_STARTOFF) self.estate_on();
 	else {
@@ -173,35 +171,22 @@ void() func_button_use =
 	}
 };
 
-//----------------------------------------------------------------------
 // Default state for buttons, touch trigger
-//----------------------------------------------------------------------
-void() func_button_touch =
-{
+void() func_button_touch = {
 	if ( !(other.flags & FL_CLIENT) ) return;
 	self.enemy = other;
 	func_button_fire();
 };
 
-//----------------------------------------------------------------------
 // Only active if health set on trigger, touch function disabled
-//----------------------------------------------------------------------
-void() func_button_killed =
-{
+void() func_button_killed = {
 	self.enemy = damage_attacker;
 	self.health = self.max_health;
 	self.takedamage = DAMAGE_NO;	// wil be reset upon return
 	func_button_fire();
 };
 
-//----------------------------------------------------------------------
-// do nothing, just don't come all the way back out
-//----------------------------------------------------------------------
-void() func_button_blocked = { };
-
-//----------------------------------------------------------------------
-void() func_button_on = 
-{
+void() func_button_on = {
 	// Stop re-triggering ON state
 	if (self.estate == ESTATE_ON) return;
 
@@ -227,9 +212,7 @@ void() func_button_on =
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_button_off = 
-{
+void() func_button_off = {
 	// Stop re-triggering OFF state
 	if (self.estate == ESTATE_OFF) return;
 
@@ -239,7 +222,7 @@ void() func_button_off =
 	setmodel (self, "");
 	
 	// Reset health, position and frame back to default
-	sound (self, CHAN_VOICE, SOUND_EMPTY, self.volume, ATTN_NORM);
+	StopSound(self,CHAN_VOICE);
 	self.takedamage = DAMAGE_NO;
 	setorigin(self, self.pos1);
 	self.state = STATE_BOTTOM;
@@ -247,9 +230,7 @@ void() func_button_off =
 	self.frame = 0;
 };
 
-//----------------------------------------------------------------------
-void() func_button_disable =
-{
+void() func_button_disable = {
 	// Block damage function and show alternative texture
 	self.estate = ESTATE_DISABLE;
 	self.takedamage = DAMAGE_NO;
@@ -258,9 +239,7 @@ void() func_button_disable =
 	SUB_CalcMove (self.pos2, self.speed, func_button_wait);
 };
 
-//=============================================================================
-void() func_button =
-{
+void() func_button = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	// Setup all empty/silent sound files first
@@ -339,7 +318,7 @@ void() func_button =
 	}
 	// Important OR condition (touching only)
 	else self.touch = func_button_touch;
-	self.blocked = func_button_blocked;
+	self.blocked = SUB_Null; // do nothing, just don't come all the way back out
 
 	// Setup Entity State functionality
 	if (self.targetname != "") self.use = entity_state_use;
@@ -353,8 +332,5 @@ void() func_button =
 		// Check for any final setup conditions
 		self.think = func_button_final_setup;
 		self.nextthink = self.ltime + 0.1;
-	}
-	// Original setup, no delay on spawn
-	else func_button_final_setup();
+	} else func_button_final_setup(); // Original setup, no delay on spawn
 };
-

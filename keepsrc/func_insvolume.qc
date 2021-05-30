@@ -1,34 +1,48 @@
-//======================================================================
-/*QUAKED func_insidevolume (0 .5 .8) ? PLAYER MONSTER ITEM PUSHABLE x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
-Function to test if an entity bounding box is inside of this volume
--------- KEYS --------
-targetname : trigger entity (works with entity state system)
-target  : Name of target(s) to trigger when fully INSIDE (fires every 0.1s)
-target2 : Name of target(s) to trigger when partial INSIDE (fires every 0.1s)
-message : Name of target(s) to trigger when exit VOLUME (fires on exit only)
-wait    : -1 = Fire the fully/exit volume target(s) once
-delay   : Delay time before volume controller becomes active
-message2: Name of the only entity that can interact with this volume
-no_deadbody : 1 = Monster dead bodies don't work with volume test
--------- SPAWNFLAGS --------
-PLAYER    : Will react to player(s)
-MONSTER   : Will react to monster(s)
-ITEM      : Will react to item(s)
-PUSHABLE  : Will react to pushable(s)
-STARTOFF  : Starts off and waits for trigger
--------- NOTES --------
-Function to test if an entity bounding box is inside of this volume
-
-======================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: All, see credits folder
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 8
+//
+// Implements: func_insidevolume
+//
+// Description:
+// Causes targets to fire when entities are inside the volume, partially
+// inside the volume, and/or exiting the volume.  Super useful!
+//=============================================================================
 
 float FUNC_INSVOLPLAYER = 1;
 float FUNC_INSVOLMONSTER = 2;
 float FUNC_INSVOLITEM = 4;
 float FUNC_INSVOLPUSHABLE = 8;
 
-//----------------------------------------------------------------------
-float(entity targ) func_insvolume_check =
-{
+float(entity targ) func_insvolume_check = {
 	local vector targ_mins, targ_maxs;
 	
 	// Is the touching entity linked to anthing?
@@ -91,15 +105,12 @@ float(entity targ) func_insvolume_check =
 	if (targ_maxs_x > self.owner.dest2_x) return FALSE;
 	if (targ_maxs_y > self.owner.dest2_y) return FALSE;
 	if (targ_maxs_z > self.owner.dest2_z) return FALSE;
-	
-	// Finally something INSIDE the volume!
-	self.owner.targetnumber = TRUE;
+
+	self.owner.targetnumber = TRUE; // Finally something INSIDE the volume!
 	return FALSE;
 };
 
-//----------------------------------------------------------------------
-void(entity targ) func_insvolume_add =
-{
+void(entity targ) func_insvolume_add = {
 	if (self.tno1 == world) { self.tno1 = targ; targ.touching = self; }
 	else if (self.tno2 == world) { self.tno2 = targ; targ.touching = self; }
 	else if (self.tno3 == world) { self.tno3 = targ; targ.touching = self; }
@@ -109,71 +120,49 @@ void(entity targ) func_insvolume_add =
 		// A warning message for mappers to ignore! :P
 		if (self.pain_finished < time) {
 			self.pain_finished = time + 3;
-			dprint("\b[INSVOL]\b More than 5 entities touching!\n");
+			if (developer > 1) dprint("\b[INSVOL]\b More than 5 entities touching!\n");
 		}
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_insvolume_touch =
-{
-	// Block functionality if state wrong
-	if (self.estate & ESTATE_BLOCK) return;
-	
-	// Already checking this (other) entity?
-	if (other.touching == self) return;
+void() func_insvolume_touch = {
+	if (self.estate & ESTATE_BLOCK) return; // Block functionality if state wrong
+	if (other.touching == self) return; // Already checking this (other) entity?
 
 	// Check for an exact entity condition
 	if (self.message2 != "") { 
 		// Is the touching entity the correct entity?
 		if (self.message2 != other.targetname) return;
 	}
-	
-	// Default = no touch
-	self.lefty = FALSE;
-	
+
+	self.lefty = FALSE; // Default = no touch
+
 	// Test for all the different entity types
-	if (self.spawnflags & FUNC_INSVOLPLAYER && other.flags & FL_CLIENT)
-		self.lefty = TRUE;
+	if (self.spawnflags & FUNC_INSVOLPLAYER && other.flags & FL_CLIENT) self.lefty = TRUE;
 	else if (self.spawnflags & FUNC_INSVOLMONSTER && other.flags & FL_MONSTER) {
-		// Test for dead/living monsters?
-		if (self.no_deadbody == 0) self.lefty = TRUE;
-		else if (self.no_deadbody == 1 && other.health > 0) 
-			self.lefty = TRUE;
-	}
-	else if (self.spawnflags & FUNC_INSVOLITEM && other.flags & FL_ITEM)
-		self.lefty = TRUE;
-	else if (self.spawnflags & FUNC_INSVOLPUSHABLE && other.classtype == CT_FUNCPUSHABLE)
-		self.lefty = TRUE;
+		if (self.no_deadbody == 0) self.lefty = TRUE; // Test for dead/living monsters?
+		else if (self.no_deadbody == 1 && other.health > 0)  self.lefty = TRUE;
+	} else if (self.spawnflags & FUNC_INSVOLITEM && other.flags & FL_ITEM) self.lefty = TRUE;
+	else if (self.spawnflags & FUNC_INSVOLPUSHABLE && other.classtype == CT_FUNCPUSHABLE) self.lefty = TRUE;
 	
-	// If wrong type touching volume?
-	if (self.lefty == FALSE) return;
+	if (self.lefty == FALSE) return; // If wrong type touching volume?
 
 	// Add entity to volume list to keep checking
-	if (other.touching == world) 
-		func_insvolume_add(other);
+	if (other.touching == world) func_insvolume_add(other);
 };
 
-//----------------------------------------------------------------------
-void() func_insvolume_on =
-{
-	// Stop re-triggering ON state
-	if (self.estate == ESTATE_ON) return;
+void() func_insvolume_on = {
+	if (self.estate == ESTATE_ON) return; // Stop re-triggering ON state
 
-	// No longer need this spawnflag, remove it
-	self.spawnflags = self.spawnflags - (self.spawnflags & ENT_STARTOFF);
-	
+	self.spawnflags = self.spawnflags - (self.spawnflags & ENT_STARTOFF); // No longer need this spawnflag, remove it
 	self.estate = ESTATE_ON;
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_TRIGGER;
 	setsize (self, self.bbmins, self.bbmaxs);
 };
 
-//----------------------------------------------------------------------
-void() func_insvolume_off =
-{
-	// Stop re-triggering OFF state
-	if (self.estate == ESTATE_OFF) return;
+void() func_insvolume_off = {
+	if (self.estate == ESTATE_OFF) return; // Stop re-triggering OFF state
 
 	self.estate = ESTATE_OFF;
 	self.movetype = MOVETYPE_NONE;
@@ -181,19 +170,14 @@ void() func_insvolume_off =
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 };
 
-//----------------------------------------------------------------------
-void() func_insvolume_controller_think =
-{
-	// Keep the controller looping
-	self.think = func_insvolume_controller_think;
+void() func_insvolume_controller_think = {
+	self.think = func_insvolume_controller_think; // Keep the controller looping
 	self.nextthink = time + 0.1;
 	self.owner.targetnumber = FALSE;
-	
-	// If switched off/disabled
-	if (self.owner.estate & ESTATE_BLOCK) return;
 
-	// If no entities touching volume, do nothing
-	// This is a way to slow down the constant triggering
+	if (self.owner.estate & ESTATE_BLOCK) return; // If switched off/disabled
+
+	// If no entities touching volume, do nothing.  This is a way to slow down the constant triggering
 	if (self.owner.tno1 != world || self.owner.tno2 != world ||
 		self.owner.tno3 != world || self.owner.tno4 != world ||
 		self.owner.tno5 != world) {
@@ -208,52 +192,58 @@ void() func_insvolume_controller_think =
 		// Any entities pass the volume test? (FULL, PARTIAL and EXIT)
 		if (self.owner.targetnumber == TRUE) {
 			// FULLY inside the volume
-			if (self.owner.target != "") {
+			if (self.owner.target != "") { // No need to check all targets, special setup for 3 states.
 				trigger_strs(self.owner.target, self.owner);
 				if (self.owner.wait < 0) self.owner.target = "";
 			}
-		}
-		else if (self.owner.targetnumber == NEGATIVE) {
+		} else if (self.owner.targetnumber == NEGATIVE) {
 			// Just EXIT the volume
-			if (self.owner.message != "") {
+			if (self.owner.message != "") { // No need to check all targets, special setup for 3 states.
 				trigger_strs(self.owner.message, self.owner);
 				if (self.owner.wait < 0) self.owner.message = "";
 			}
-		}
-		else {
+		} else {
 			// PARTIALLY inside the volume
-			if (self.owner.target2 != "") {
+			if (self.owner.target2 != "") { // No need to check all targets, special setup for 3 states.
 				trigger_strs(self.owner.target2, self.owner);
 			}
 		}
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_insvolume_controller_setup =
-{
-	// Check if controller entity been setup
-	if (!self.attachment) self.attachment = spawn();
-
-	// Setup link back to inside volume
-	self.attachment.owner = self;
+void() func_insvolume_controller_setup = {
+	if (!self.attachment) self.attachment = spawn(); // Check if controller entity been setup
+	self.attachment.owner = self; // Setup link back to inside volume
 	self.attachment.classtype = CT_CONTROL;
 	self.attachment.movetype = MOVETYPE_NONE;
 	self.attachment.solid = SOLID_NOT;
-	
-	// Setup controller above model origin location
-	self.oldorigin = bmodel_origin(self);
+	self.oldorigin = bmodel_origin(self); // Setup controller above model origin location
 	setorigin(self.attachment, self.oldorigin + '0 0 32');
 	setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
-	
-	// Start controller think loop
-	self.attachment.think = func_insvolume_controller_think;
+	self.attachment.think = func_insvolume_controller_think; // Start controller think loop
 	self.attachment.nextthink = time + 0.1 + self.delay;
 };
 
-//======================================================================
-void() func_insidevolume =
-{
+// QUAKED func_insidevolume (0 .5 .8) ? PLAYER MONSTER ITEM PUSHABLE x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+// Function to test if an entity bounding box is inside of this volume
+// -------- KEYS --------
+// targetname : trigger entity (works with entity state system)
+// target  : Name of target(s) to trigger when fully INSIDE (fires every 0.1s)
+// target2 : Name of target(s) to trigger when partial INSIDE (fires every 0.1s)
+// message : Name of target(s) to trigger when exit VOLUME (fires on exit only)
+// wait    : -1 = Fire the fully/exit volume target(s) once
+// delay   : Delay time before volume controller becomes active
+// message2: Name of the only entity that can interact with this volume
+// no_deadbody : 1 = Monster dead bodies don't work with volume test
+// -------- SPAWNFLAGS --------
+// PLAYER    : Will react to player(s)
+// MONSTER   : Will react to monster(s)
+// ITEM      : Will react to item(s)
+// PUSHABLE  : Will react to pushable(s)
+// STARTOFF  : Starts off and waits for trigger
+// -------- NOTES --------
+// Function to test if an entity bounding box is inside of this volume
+void() func_insidevolume = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	// No trigger/movement angles

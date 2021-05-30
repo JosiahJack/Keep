@@ -69,57 +69,50 @@ void() ambient_drip = {
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
-//----------------------------------------------------------------------
-void() ambient_drone =
-{
-	self.noise = "ambience/drone6.wav";
+
+void() ambient_drone = {
+	self.noise = "ad171/ambience/drone6.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
-//----------------------------------------------------------------------
-void() ambient_flouro_buzz =
-{
+
+void() ambient_flouro_buzz = {
 	self.noise = "ambience/buzz1.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
-//----------------------------------------------------------------------
-void() ambient_light_buzz =
-{
+
+void() ambient_light_buzz = {
 	self.noise = "ambience/fl_hum1.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
-//----------------------------------------------------------------------
-void() ambient_suck_wind =
-{
+
+void() ambient_suck_wind = {
 	self.noise = "ambience/suck1.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
-//----------------------------------------------------------------------
-void() ambient_swamp1 =
-{
+
+void() ambient_swamp1 = {
 	self.noise = "ambience/swamp1.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
-//----------------------------------------------------------------------
-void() ambient_swamp2 =
-{
-	self.noise = "ambience/swamp2.wav";
+
+void() ambient_swamp2 = {
+	self.noise = "drake/ambience/swamp2.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
-//----------------------------------------------------------------------
-void() ambient_thunder =
-{
+
+void() ambient_thunder = {
 	self.noise = "ambience/thunder1.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
@@ -176,9 +169,9 @@ Play a sound on a periodic basis
 targetname : trigger entity (works with entity state system)
 target  : targets to trigger each time sound is played
 volume  : volume of sound (default 1, capped at 1)
-noise   : primary sound (ambience/windgust1a.wav)
-noise1  : stop sound (anbience/switch_6off.wav)
-noise2  : random sound (ambience/windgust1b.wav)
+noise   : primary sound (ad171/ambience/windgust1a.wav)
+noise1  : stop sound (ad171/ambience/switch_6off.wav)
+noise2  : random sound (ad171/ambience/windgust1b.wav)
 wait    : random time between sounds (default 20, =-1 no random element)
 delay   : minimum time between sounds (default 2)
 waitmin : Starting time (waitmin + random() x waitmin, =-1 no delay)
@@ -191,9 +184,8 @@ STARTOFF : Starts off and waits for trigger
 -------- NOTES --------
 Play a sound on a periodic basis
 */
-//======================================================================
-void() ambient_custom_stop =
-{
+
+void() ambient_custom_stop = {
 	// Cannot block via entity state because there is an 'off sound'
 	// Need to check against entity internal state for off state
 	if (self.state == STATE_OFF) return;
@@ -211,13 +203,11 @@ void() ambient_custom_stop =
 		sound (self, self.impulse, self.noise1, self.volume, self.speed);
 	else {
 		// If aflag is defined, do not cut off sound
-		if (!self.waitmin2) sound (self, self.impulse, SOUND_EMPTY, self.volume, self.speed);
+		if (!self.waitmin2) StopSound(self,self.impulse);
 	}
 };
 
-//----------------------------------------------------------------------
-void() ambient_custom_play =
-{
+void() ambient_custom_play = {
 	// Block everything except ON entity state
 	if (self.estate & ESTATE_BLOCK) return;
 
@@ -237,15 +227,13 @@ void() ambient_custom_play =
 			// never has multiple sounds
 			sound (self, self.impulse, self.noise, self.volume, self.speed);
 		}
-	}
-	else {
+	} else {
 		// Check for multiple random sounds
 		if (self.noise2 != "" && random() < 0.5)
 			sound (self, self.impulse, self.noise2, self.volume, self.speed);
 		else sound (self, self.impulse, self.noise, self.volume, self.speed);
 		
-		// If any targets defined, trigger them
-		if (self.target != "") trigger_strs(self.target, self);
+		if (HasTargets(self)) SUB_UseTargets(); // If any targets defined, trigger them
 	}
 	
 	// Keep playing sound?
@@ -279,30 +267,22 @@ void() ambient_custom_use =
 	}
 };
 
-//----------------------------------------------------------------------
-void() ambient_custom_on =
-{
+void() ambient_custom_on = {
 	self.estate = ESTATE_ON;
 	ambient_custom_play();
 };
 
-//----------------------------------------------------------------------
-void() ambient_custom_off =
-{
+void() ambient_custom_off = {
 	self.estate = ESTATE_OFF;
 	ambient_custom_stop();
 };
 
-//----------------------------------------------------------------------
-void() ambient_custom_disable =
-{
+void() ambient_custom_disable = {
 	self.state = STATE_OFF;
-	sound (self, self.impulse, SOUND_EMPTY, self.volume, self.speed);
+	StopSound(self,self.impulse);
 };
 
-//----------------------------------------------------------------------
-void() ambient_custom_sound =
-{
+void() ambient_custom_sound = {
 	// Check for sound file
 	if (self.noise == "") {
 		dprint("\b[AMBIENT_SOUND]\b Missing sound file at ");
@@ -360,17 +340,13 @@ void() play_sound_triggered = {
 	ambient_custom_sound(); 
 };
 
-//----------------------------------------------------------------------
-void() ambient_custom_water =
-{
-	if (self.noise == "") self.noise = "ad171/ambience/water1.wav";
+void() ambient_custom_water = {
+	if (self.noise == "") self.noise = "ambience/water1.wav";
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.75;
 	ambient_custom_loop();
 };
 
-//----------------------------------------------------------------------
-void() ambient_custom_rain =
-{
+void() ambient_custom_rain = {
 	if (self.count == 1) {
 		// Long dripping water sound
 		self.noise = "ad171/ambience/rain1_nl.wav";
@@ -378,8 +354,7 @@ void() ambient_custom_rain =
 		if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.4;
 		// Sound is 7s long, 0.1s for overlap
 		self.delay = 6.9;
-	}
-	else {
+	} else {
 		// Very short intense rain sound
 		self.noise = "ad171/ambience/rain2_nl.wav";
 		if (!self.speed) self.speed = 1;
@@ -574,9 +549,7 @@ void() ambient_custom_wood =
 	ambient_custom_sound();
 };
 
-//----------------------------------------------------------------------
-void() ambient_custom_chime =
-{
+void() ambient_custom_chime = {
 	if (self.noise == "") self.noise = "ad171/ambience/chimes.wav";
 	if (!self.speed) self.speed = 2;
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;

@@ -19,7 +19,7 @@ void () light_lantern2 = {
 	// Allow for custom models
 	if (self.mdl == "") self.mdl = "progs/ad171/misc_lantern.mdl";
 	precache_model(self.mdl);
-	if (self.noise == "") self.noise = "ambience/fire1.wav";
+	if (self.noise == "") self.noise = "ad171/ambience/fire1.wav";
 	precache_sound (self.noise);
 	if (!self.waitmin) self.waitmin = 2.165;
 
@@ -56,7 +56,7 @@ void() light_beacon = {
 	if (self.spawnflags & 1) self.skin = 1;
 
 	// Allow for custom models
-	if (self.mdl == "") self.mdl = "progs/rubicon2/beacon.mdl";
+	if (self.mdl == "") self.mdl = "progs/rrp/beacon.mdl";
 	precache_model (self.mdl);
 	self.angles_y = self.fixangle;
 

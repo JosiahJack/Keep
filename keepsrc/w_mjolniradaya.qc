@@ -1,9 +1,4 @@
 // Initially written by Qmaster and tested in the Keep mod
-// Add to world.qc or maybe to weapon_mjolnir() = {};
-//	precache_sound ("bfg/bfg.wav");
-//	precache_sound ("ambience/thunder3.wav");
-//	precache_model ("progs/s_light4.spr");
-//	precache_model ("progs/drake/s_fancy.spr");
 
 // Add in your defs somewhere, if in defs.qc, must be below "void		end_sys_globals;"
 // .float spritestarted; 
@@ -161,7 +156,7 @@ void () SpawnLightningOrb = {
 	light.attack_finished = time + 1.9;
 	light.think1 = lightning_orb_death;
 	light.nextthink = (time + 0.5);
-	sound (light,CHAN_AUTO,"ambience/thunder3.wav",TRUE,ATTN_NORM);
+	sound (light,CHAN_AUTO,"nehahra/ambience/thunder3.wav",TRUE,ATTN_NORM);
 	//SpawnOrbLightning(light.origin,250,1.9);  // find and create lightning traces
 };
 
@@ -203,7 +198,7 @@ void () HIP_FireMjolnir2 = {
 	}
    } else {
       if ( (trace_fraction != TRUE) ) {
-         sound (self,CHAN_WEAPON,"hipweap/mjoltink.wav",TRUE,ATTN_NORM); //tink, nothin
+         sound (self,CHAN_WEAPON,"hipnotic/weapons/mjoltink.wav",TRUE,ATTN_NORM); //tink, nothin
          WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
          WriteByte (MSG_BROADCAST,TE_GUNSHOT);
          WriteCoord (MSG_BROADCAST,org_x);

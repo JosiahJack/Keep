@@ -1147,45 +1147,29 @@ void() vermis_spore_think =
 	self.think = vermis_spore_think;
 };
 
-void(float xoff, float yoff, float zoff) vermis_shoot = 
-{
+void(float xoff, float yoff, float zoff) vermis_shoot = {
 	local entity missile;
-	local vector org;
-	local float t;
-	local vector d;
-	local vector vec;
-	local float dist;
-	local float numspores;
+	local vector org, d, vec;
+	local float t, dist, numspores;
+
 	if (visible(self.enemy))
-	{
 		dist = vlen(self.enemy.origin - self.origin);
-	}
 	else
-	{
 		dist = vlen(self.oldenemyorigin - self.origin);
-	}
-	if (dist < 450)
-	{
+
+	if (dist < 450) {
 		numspores = 5;
-	}
-	else
-	{
+	} else {
 		if (dist < 800)
-		{
 			numspores = 8;
-		}
 		else
-		{
-			numspores = TE_BEAM;
-		}
+			numspores = 13;
 	}
-	if (numspores == 0)
-	{
-		numspores = 1;
-	}
+
+	if (numspores == 0) numspores = 1;
+
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	while (numspores > 0)
-	{
+	while (numspores > 0) {
 		missile = spawn();
 		missile.classgroup = CG_PROJALL;
 		missile.owner = self;
@@ -1193,17 +1177,14 @@ void(float xoff, float yoff, float zoff) vermis_shoot =
 		missile.solid = SOLID_BBOX;
 		makevectors(self.angles);
 		org = self.origin + v_right * xoff + v_forward * yoff + v_up * zoff;
-		if (visible(self.enemy))
-		{
+		if (visible(self.enemy)) {
 			t = vlen(self.enemy.origin - org) / 1800;
 			vec = self.enemy.velocity;
 			vec_z = 0;
 			d = self.enemy.origin + t * vec;
 			vec = normalize(d - org);
 			missile.velocity = vec;
-		}
-		else
-		{
+		} else {
 			missile.velocity = normalize(self.oldenemyorigin - org);
 		}
 		missile.velocity = missile.velocity * 600 + (400 * random() - 200) * v_right + (300 * random() - 150) * v_up;

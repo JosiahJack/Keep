@@ -2655,3 +2655,100 @@ void() SGruntCheckAttack = {
 	self.attack_state = AS_MISSILE;
 	SUB_AttackFinished (3 + 3*random());
 };
+
+void() KarasuCheckAttack = {
+	// Melee attack(punch)
+	if (ai_checkmelee(MONAI_MELEEKARASU, FALSE)) {
+		// Increasing chance of lightning strike with skill
+		// Easy = 25%, Normal = 35%, Hard = 45%, NM = 55%
+		self.attack_chance = 0.25 + (skill * 0.1);
+		
+		if (random() < self.attack_chance) self.attack_state = AS_MISSILE;
+		else { self.attack_state = AS_MELEE; self.th_melee (); }
+		return;
+	}
+
+	// Range attack (beam, lightning, rocks)
+	if (!enemy_vis) return;
+	if (time < self.attack_finished) return;
+	if (self.enemydist > MONAI_KARASURANGE && !self.attack_sniper) return;
+
+	// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
+	if (visblocked(self.enemy)) return;
+
+	SUB_AttackFinished (2 + (2*random()));
+	self.attack_state = AS_MISSILE;
+};
+
+void() WolfCheckAttack = {
+	// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
+	if (visblocked(self.enemy)) return;
+		
+	// Melee attack uses larger check distance then shorter check before attack
+	if (ai_checkmelee(MONAI_MELEEWOLF, MONAI_MELEEZTALL)) {
+		self.attack_state = AS_MELEE;
+		self.th_melee (); 
+		return;
+	}
+
+	// Range attack (energy sword)
+	if (!enemy_vis) return;
+	if (time < self.attack_finished) return;
+	if (self.enemydist > MONAI_WOLFRANGE && !self.attack_sniper) return;
+
+	SUB_AttackFinished (2 + (2*random()));
+	self.attack_state = AS_MISSILE;
+};
+
+void() HuntressCheckAttack = {
+	// Melee attack(swords)
+	if (ai_checkmelee(MONAI_MELEEHUNTRESS, FALSE)) {
+		// Increasing chance of ranged attack with skill
+		// Easy = 15%, Normal = 25%, Hard = 35%, NM = 45%
+		self.attack_chance = 0.15 + (skill * 0.1);
+		
+		if (random() < self.attack_chance) {
+			self.attack_state = AS_MISSILE;
+		} else {
+			self.attack_state = AS_MELEE;
+			self.th_melee ();
+		}
+		return;
+	}
+
+	// Mid Range attack (JUMP).  Jumped recently, facing right direction and not blocked?
+	if ( self.jump_flag < time && infront(self.enemy) && !visblocked(self.enemy) ) {
+		// Check for enemy above? (z axis)
+		if (self.enemy.origin_z <= self.origin_z) {
+			// Is the huntress within the right range?
+			if (self.enemydist > MONAI_JUMPELENANEAR &&
+				self.enemydist < MONAI_JUMPELENAFAR) {
+				SUB_AttackFinished (random());
+				self.jumptouch = world;			// Reset last object touched
+				self.count = 0;				// Number of times jumped
+				if (random() < 0.7) self.th_jump ();
+				else {
+					self.th_missile ();
+				}
+				return;
+			}
+		}
+	}
+
+	// Range attack (pistol, spears)
+	if (!enemy_vis) return;
+	if (time < self.attack_finished) return;
+
+	// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
+	if (visblocked(self.enemy)) return;
+
+	SUB_AttackFinished (2 + (2*random()));
+	self.attack_state = AS_MISSILE;
+};
+
+void() SpiritCheckAttack = {
+	if (self.enemydist < MONAI_MELEESPIRIT) {
+		self.attack_state = AS_MELEE;
+		return;
+	}
+};

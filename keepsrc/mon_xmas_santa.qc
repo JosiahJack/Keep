@@ -76,22 +76,14 @@ void() santa_seatB4 = [ $sitB4, santa_seatB5 ] {};
 void() santa_seatB5 = [ $sitB5, santa_seatB6 ] {};
 void() santa_seatB6 = [ $sitB6, santa_seatB1 ] {self.th_stand();};
 
-//----------------------------------------------------------------------
-void() santa_trigger =
-{
-	// Trigger Once
-	if (self.waitmin > time) return;
+void() santa_trigger = {
+	if (self.waitmin > time) return; // Trigger Once
+	
 	self.waitmin = LARGE_TIMER;
 	self.use = SUB_Null;
-	
-	// "My dear boy, you saved me!"
-	sound(self, CHAN_WEAPON, self.noise2, 1, ATTN_NORM);
-	
-	// Fire all triggers/sounds/messages
-	SUB_UseTargets();
-	
-	// Fade out santa (+delete model)
-	self.think = model_fade;
+	sound(self, CHAN_WEAPON, self.noise2, 1, ATTN_NORM); // "My dear boy, you saved me!"
+	SUB_UseTargets(); // Fire all triggers/sounds/messages
+	self.think = model_fade; // Fade out santa (+delete model)
 	self.nextthink = time + 2 + random();
 	self.ltime = self.nextthink;
 };

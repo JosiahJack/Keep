@@ -152,16 +152,13 @@ void()	enf_atk12	=[	$attack8,	enf_atk13	] {};
 void()	enf_atk13	=[	$attack9,	enf_atk14	] {ai_face();};
 void()	enf_atk14	=[	$attack10,	enf_run1	] {ai_face();SUB_CheckRefire (enf_atk1);};
 
-//============================================================================
 // - Defender enforcer (ssg/gl attack)
-//----------------------------------------------------------------------
-void() defender_ssg =
-{
+void() defender_ssg = {
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "enforcer/def_ssg_fire.wav", 1, ATTN_NORM);	
+	sound (self, CHAN_WEAPON, "ad171/enforcer/def_ssg_fire.wav", 1, ATTN_NORM);	
 	
 	// Choose between a projectile or hit-scan system
 	if (query_configflag(SVR_SHOTGPROJ)) 
@@ -172,9 +169,7 @@ void() defender_ssg =
 	}
 };
 
-//----------------------------------------------------------------------
-void()	def_atkssg1	=[	$attack1,	def_atkssg2	] {
-	sound (self, CHAN_WEAPON, "enforcer/def_ssg_load.wav", 1, ATTN_NORM);};
+void()	def_atkssg1	=[	$attack1,	def_atkssg2	] {sound (self, CHAN_WEAPON, "ad171/enforcer/def_ssg_load.wav", 1, ATTN_NORM);};
 void()	def_atkssg2	=[	$attack2,	def_atkssg3	] {monster_footstep(FALSE);ai_face();};
 void()	def_atkssg3	=[	$attack3,	def_atkssg4	] {ai_face();};
 void()	def_atkssg4	=[	$attack4,	def_atkssg5	] {ai_face();};
@@ -186,16 +181,13 @@ void()	def_atkssg8	=[	$attack8,	def_atkssg9	] {};
 void()	def_atkssg9	=[	$attack9,	def_atkssg10] {ai_face();};
 void()	def_atkssg10=[	$attack10,	enf_run1	] {SUB_CheckRefire (def_atkssg1);};
 
-//----------------------------------------------------------------------
 void()	def_atkgl1	=[	$attack1,	def_atkgl2	] {ai_face();};
 void()	def_atkgl2	=[	$attack2,	def_atkgl3	] {monster_footstep(FALSE);ai_face();};
 void()	def_atkgl3	=[	$attack3,	def_atkgl4	] {ai_face();
 	MonsterGrenadeSound(); self.attack_speed = MonsterGrenadeSpeed();
 	self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed); };
-void()	def_atkgl4	=[	$attack4,	def_atkgl5	] {ai_face();
-	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
-void()	def_atkgl5	=[	$attack5,	def_atkgl6	] {ai_face();
-	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
+void()	def_atkgl4	=[	$attack4,	def_atkgl5	] {ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
+void()	def_atkgl5	=[	$attack5,	def_atkgl6	] {ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed); };
 void()	def_atkgl6	=[	$attack6,	def_atkgl7	] {ai_face();
 	makevectors(self.angles);
 	self.pos1 = self.origin + attack_vector(self.attack_offset);
@@ -206,18 +198,14 @@ void()	def_atkgl8	=[	$attack8,	def_atkgl9	] {};
 void()	def_atkgl9	=[	$attack9,	def_atkgl10] {ai_face();};
 void()	def_atkgl10=[	$attack10,	enf_run1	]{ai_face();};
 
-
-//============================================================================
 // - Eliminator enforcer (plasma attack)
-//----------------------------------------------------------------------
-void() eliminator_fire =
-{
+void() eliminator_fire = {
 	local vector org, vec;
 
 	if (!self.enemy) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "weapons/plasma_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
 
 	makevectors (self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
@@ -226,9 +214,8 @@ void() eliminator_fire =
 	launch_plasma(org, vec, CT_PROJ_PLASMA, SPEED_PLASMA);
 };
 
-//----------------------------------------------------------------------
 void()	elim_atk1	=[	$attack1,	elim_atk2	] {
-	sound (self, CHAN_WEAPON, "enforcer/elim_pg_load.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM);};
 void()	elim_atk2	=[	$attack2,	elim_atk3	] {monster_footstep(FALSE);ai_face();};
 void()	elim_atk3	=[	$attack3,	elim_atk4	] {ai_face();};
 void()	elim_atk4	=[	$attack4,	elim_atk5	] {ai_face();};
@@ -245,20 +232,17 @@ void()	elim_atk12	=[	$attack8,	elim_atk13	] {};
 void()	elim_atk13	=[	$attack9,	elim_atk14	] {ai_face();};
 void()	elim_atk14	=[	$attack10,	enf_run1	] {ai_face();SUB_CheckRefire (elim_atk1);};
 
-//============================================================================
 void()	enf_paina1	=[	$paina1,	enf_paina2	] {};
 void()	enf_paina2	=[	$paina2,	enf_paina3	] {};
 void()	enf_paina3	=[	$paina3,	enf_paina4	] {};
 void()	enf_paina4	=[	$paina4,	enf_run1	] {};
 
-//----------------------------------------------------------------------
 void()	enf_painb1	=[	$painb1,	enf_painb2	] {};
 void()	enf_painb2	=[	$painb2,	enf_painb3	] {};
 void()	enf_painb3	=[	$painb3,	enf_painb4	] {};
 void()	enf_painb4	=[	$painb4,	enf_painb5	] {};
 void()	enf_painb5	=[	$painb5,	enf_run1	] { enforcer_updateshield(); };
 
-//----------------------------------------------------------------------
 void()	enf_painc1	=[	$painc1,	enf_painc2	] {};
 void()	enf_painc2	=[	$painc2,	enf_painc3	] {monster_footstep(FALSE);};
 void()	enf_painc3	=[	$painc3,	enf_painc4	] {};
@@ -268,7 +252,6 @@ void()	enf_painc6	=[	$painc6,	enf_painc7	] { enforcer_updateshield(); };
 void()	enf_painc7	=[	$painc7,	enf_painc8	] { enforcer_updateshield(); };
 void()	enf_painc8	=[	$painc8,	enf_run1	] { enforcer_updateshield(); };
 
-//----------------------------------------------------------------------
 void()	enf_paind1	=[	$paind1,	enf_paind2	] {};
 void()	enf_paind2	=[	$paind2,	enf_paind3	] {};
 void()	enf_paind3	=[	$paind3,	enf_paind4	] {monster_footstep(FALSE);};
@@ -326,7 +309,6 @@ void(entity inflictor, entity attacker, float damage) enf_pain = {
 	}
 };
 
-//============================================================================
 void()	enf_die1	=[	$death1,	enf_die2	] {};
 void()	enf_die2	=[	$death2,	enf_die3	] {monster_check_gib();};
 void()	enf_die3	=[	$death3,	enf_die4	] {monster_check_gib();
@@ -343,11 +325,9 @@ void()	enf_die12	=[	$death12,	enf_die13	] {ai_forward(5);};
 void()	enf_die13	=[	$death13,	enf_die14	] {monster_death_postcheck();};
 void()	enf_die14	=[	$death14,	enf_die14	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
 void()	enf_fdie1	=[	$fdeath1,	enf_fdie2	] {};
 void()	enf_fdie2	=[	$fdeath2,	enf_fdie3	] {monster_check_gib();};
-void()	enf_fdie3	=[	$fdeath3,	enf_fdie4	] {monster_check_gib();
-	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
+void()	enf_fdie3	=[	$fdeath3,	enf_fdie4	] {monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
 void()	enf_fdie4	=[	$fdeath4,	enf_fdie5	] {};
 void()	enf_fdie5	=[	$fdeath5,	enf_fdie6	] {};
 void()	enf_fdie6	=[	$fdeath6,	enf_fdie7	] {};
@@ -378,9 +358,7 @@ void() enf_die = {
 	}
 };
 
-/*======================================================================
- QUAKED monster_enforcer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
+// QUAKED monster_enforcer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_base_enforcer = {
 	local float r;
 	
@@ -441,7 +419,6 @@ void() monster_base_enforcer = {
 
 void enforcer_spawnshieldfx();
 
-//----------------------------------------------------------------------
 void() monster_enforcer = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
@@ -523,8 +500,7 @@ void() monster_enforcer = {
 
 	monster_base_enforcer();
 };
-	
-//----------------------------------------------------------------------
+
 void() monster_defender = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
@@ -539,16 +515,16 @@ void() monster_defender = {
 	self.exactskin = 3 + rint((random()*3)-0.5);
 	self.gib1skin = 1;
 
-	self.idle_sound = "enforcer/def_idle1.wav";
-	self.idle_sound2 = "enforcer/def_idle2.wav";
+	self.idle_sound = "ad171/enforcer/def_idle1.wav";
+	self.idle_sound2 = "ad171/enforcer/def_idle2.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
-	self.sight_sound = "enforcer/def_sight1.wav";
+	self.sight_sound = "ad171/enforcer/def_sight1.wav";
 	precache_sound (self.sight_sound);
 
 	// Extra load/fire sounds (from Quoth MOD)
-	precache_sound ("enforcer/def_ssg_load.wav");
-	precache_sound ("enforcer/def_ssg_fire.wav");
+	precache_sound ("ad171/enforcer/def_ssg_load.wav");
+	precache_sound ("ad171/enforcer/def_ssg_fire.wav");
 	
 	self.th_missile = def_atkgl1;
 	self.th_melee = def_atkssg1;
@@ -560,7 +536,6 @@ void() monster_defender = {
 	monster_base_enforcer();
 };
 
-//----------------------------------------------------------------------
 void() monster_eliminator = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
@@ -575,15 +550,15 @@ void() monster_eliminator = {
 	self.exactskin = 6 + rint((random()*3)-0.5);
 	self.gib1skin = 2;
 
-	self.idle_sound = "enforcer/elim_idle1.wav";
-	self.idle_sound2 = "enforcer/elim_idle2.wav";
+	self.idle_sound = "ad171/enforcer/elim_idle1.wav";
+	self.idle_sound2 = "ad171/enforcer/elim_idle2.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
-	self.sight_sound = "enforcer/elim_sight1.wav";
+	self.sight_sound = "ad171/enforcer/elim_sight1.wav";
 	precache_sound (self.sight_sound);
 
 	// Extra load/fire sounds (from Quoth MOD)
-	precache_sound ("enforcer/elim_pg_load.wav");
+	precache_sound ("ad171/enforcer/elim_pg_load.wav");
 	precache_sound (SOUND_PLASMA_FIRE);
 	precache_sound (SOUND_PLASMA_HIT);
 	
@@ -601,8 +576,7 @@ void() super_enforcer_fire = {
 };
 
 void()	lth_run1	=[	$run1  ,	lth_run2	] {
-if (random() < 0.2)
-	sound (self, CHAN_VOICE, "enforcer/idle1.wav", 1, ATTN_IDLE);
+if (random() < 0.2) sound (self, CHAN_VOICE, "enforcer/idle1.wav", 1, ATTN_IDLE);
 ai_run(18);};
 void()	lth_run2	=[	$run2  ,	lth_run3	] {ai_run(14);};
 void()	lth_run3	=[	$run3  ,	lth_run4	] {ai_run(7);};
@@ -651,7 +625,6 @@ void() monster_super_enforcer = {
 	if (monster_checkrandomizer() == TRUE) return;
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
-	
 
 	self.classtype = CT_MONSUPERENFORCER;
 	precache_model2 ("progs/s_spike.mdl");
@@ -693,8 +666,6 @@ void() monster_super_enforcer = {
 	self.th_walk 	= lth_walk1;
 	self.th_run 	= lth_run1;
 	self.gibhealth = MON_NEVERGIB;
-	// self.th_pain 	= super_enforcer_pain;
-	// self.th_die 	= super_enforcer_die;
 	self.th_missile = lth_atk1;
 
 	if (self.deathstring == "")  self.deathstring = " was nailed by a Lieutenant Enforcer\n";

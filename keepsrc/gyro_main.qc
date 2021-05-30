@@ -1,4 +1,45 @@
-//===== Matt's Gyro Notepad ====================
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Matthew "Quake Matt" Lawrence
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 8
+// Builtin Function count: 3
+//
+// Implements: Gyro Physics System main routines
+//
+// Description:
+// Implements the physics starter functions for enabling Gyro physics on an
+// entity.  Gyro physics is a library of specialty forces to apply to any
+// entity.  Such forces include buoyancy, turbulence, air resistance, rotating
+// to orient with velocity direction, etc.
+//
+// Matt's Gyro Notepad
 // ----- Todo List --------------------
 // Seriously reconsider the turbulence subsystem
 // Optimise the loop-rounds for the aerodynamics subsystem
@@ -12,7 +53,7 @@
 // Falloff combiners haven't been tested fully (other than multiply)
 // Should I combine global and object turbulence into one subsystem?
 
-// Qmaster updates:
+// Qmaster Updates:
 // removed unneeded debug checks in lieu of dprint requiring developer 1
 // replaced bprint with dprint
 // simplified initialization bits
@@ -20,6 +61,10 @@
 // removed a lot of horrible whitespace
 // changed \" instances to single quote '
 // removed some prints that weren't called ever
+//
+// Added buoyancy to gibs by default.
+// Added slight resistance in liquids to grenade projectiles.
+//=============================================================================
 
 //===== User Tweakable Parameters ====================
 //----- Natural Bouyancy Settings --------------------

@@ -303,22 +303,14 @@ void() item_progspawn_touch =
 	}
 };
 
-//----------------------------------------------------------------------
-void() item_proglist_controller_setup =
-{
-	local float error_ekey, error_flag, error_targ, error_spawn;
-	local float exit_targ, respawn_spnflag, float_spnflag, coop_warning;
+void() item_proglist_controller_setup = {
+	local float error_ekey, error_flag, error_targ, error_spawn, exit_targ, respawn_spnflag, float_spnflag, coop_warning;
 	
-	// Setup counters for total list items and spawn markers
-	self.waitmin = self.waitmin2 = 0;
-	// Setup all error conditions
-	error_ekey = error_flag = error_targ = error_spawn = FALSE;
+	self.waitmin = self.waitmin2 = 0; // Setup counters for total list items and spawn markers
+	error_ekey = error_flag = error_targ = error_spawn = FALSE; // Setup all error conditions
 	exit_targ = coop_warning = respawn_spnflag = float_spnflag = FALSE;
 
-	// All these error checks are done on the controller so that
-	// they only happen once, otherwise all spawn markers would
-	// generate them to the console! (too much spam)
-	//
+	// All these error checks are done on the controller so that they only happen once, otherwise all spawn markers would generate them to the console! (too much spam)
 	// CHECK progression list for errors
 	self.sighttarget = self.target;
 	self.goalentity = find(world, targetname, self.sighttarget);
@@ -326,15 +318,11 @@ void() item_proglist_controller_setup =
 	dprint("--------------------------------------\n");
 	dprint("No Ekey Item Targ Class\n");
 	while (self.goalentity) {
-		// Increase counter and setup next target string
-		self.waitmin = self.waitmin + 1;
+		self.waitmin = self.waitmin + 1; // Increase counter and setup next target string
 		self.sighttarget = self.goalentity.target;
-		
-		// Zero pad list numbers (alignment reasons)
-		if (self.waitmin < 9) dprint("0");
+		if (self.waitmin < 9) dprint("0"); // Zero pad list numbers (alignment reasons)
 		dprint(ftos(self.waitmin));
-		// All entities in list have to marked with new entity key
-		if (self.goalentity.progspawnlist) dprint(" Yes ");
+		if (self.goalentity.progspawnlist) dprint(" Yes "); // All entities in list have to marked with new entity key
 		else { dprint(" No  "); error_ekey = TRUE; }
 		// All entities in list have to be ITEM class
 		if (self.goalentity.flags & FL_ITEM) dprint(" Yes ");
@@ -345,37 +333,27 @@ void() item_proglist_controller_setup =
 		if (self.goalentity.spawnflags & ITEM_RESPAWN) respawn_spnflag = TRUE;
 		if (self.goalentity.spawnflags & ITEM_FLOATING) float_spnflag = TRUE;
 		
-		// FATAL ERROR: Empty target strings when used with the
-		// FIND command will return player entity instead of world!
+		// FATAL ERROR: Empty target strings when used with the FIND command will return player entity instead of world!
 		if (self.goalentity.target != "") dprint(" Yes ");
 		else { dprint(" END "); exit_targ = TRUE; }
-		// Finally show item class type (good for multiple lists)
-		dprint(" "); dprint(self.goalentity.classname);
+		dprint(" "); dprint(self.goalentity.classname); // Finally show item class type (good for multiple lists)
 		dprint("\n");
 		
-		// Any FATAL exit conditions found yet?
-		if (exit_targ) self.goalentity = world;
+		if (exit_targ) self.goalentity = world; // Any FATAL exit conditions found yet?
 		else {
-			// Find next entity in prog list
-			self.goalentity = find(world, targetname, self.sighttarget);
-			// Check for 2nd entity target being setup wrong
-			if (self.waitmin == 1 && !self.goalentity) error_targ = TRUE;
+			self.goalentity = find(world, targetname, self.sighttarget); // Find next entity in prog list
+			if (self.waitmin == 1 && !self.goalentity) error_targ = TRUE; // Check for 2nd entity target being setup wrong
 		}
 		
 	}
-	// Close table
-	dprint("--------------------------------------\n");
+	dprint("--------------------------------------\n"); // Close table
 
 	// CHECK spawn markers for errors
 	self.goalentity = find(world, targetname, self.target2);
 	while (self.goalentity) {
-		// Count spawn markers
-		self.waitmin2 = self.waitmin2 + 1;
-		// All spawn markers need to be same entity type
-		if (self.goalentity.classtype != CT_PROGSPAWN)
-			error_spawn = TRUE;
-		// Find next spawn marker
-		self.goalentity = find(self.goalentity, targetname, self.target2);
+		self.waitmin2 = self.waitmin2 + 1; // Count spawn markers
+		if (self.goalentity.classtype != CT_PROGSPAWN) error_spawn = TRUE; // All spawn markers need to be same entity type
+		self.goalentity = find(self.goalentity, targetname, self.target2); // Find next spawn marker
 	}
 	
 	// ERROR check if entity key is defined on all of list?
@@ -403,8 +381,7 @@ void() item_proglist_controller_setup =
 		self.state = STATE_OFF;
 	}
 	// WARNINGS if extra spawnflags are used on items
-	if (respawn_spnflag)
-		dprint("\b[PROG_LIST]\b RESPAWN spawnflag ignored!\n");
+	if (respawn_spnflag) dprint("\b[PROG_LIST]\b RESPAWN spawnflag ignored!\n");
 	
 	// ERROR check if spawn markers contain wrong entity types?
 	if (error_spawn) {
@@ -422,8 +399,7 @@ void() item_proglist_controller_setup =
 	}
 
 	// Any errors occured? - Close table
-	if (self.state == STATE_OFF)
-		dprint("--------------------------------------\n\n");
+	if (self.state == STATE_OFF) dprint("--------------------------------------\n\n");
 	else {
 		// FINALLY Setup all spawn markers
 		self.goalentity = find(world, targetname, self.target2);
@@ -445,9 +421,7 @@ void() item_proglist_controller_setup =
 	}
 };
 
-//----------------------------------------------------------------------
-void() item_proglist_controller = 
-{
+void() item_proglist_controller = {
 	// The first item in the progression list is unique, this
 	// would be the perfect location for the controller.
 	// Has it been setup yet?

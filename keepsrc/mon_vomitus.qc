@@ -55,7 +55,7 @@ void(float no) Vomit_Meat = {
     {   // Bigger gibs...
         newmis.dmg = random() * 15 + 15;
         if (up < 0.4)
-            setmodel (newmis, "progs/h_zombie.mdl");
+            setmodel (newmis, "progs/ad181/h_zombie.mdl");
         else if (up < 0.7)
             setmodel (newmis, "progs/gib2.mdl");
         else
@@ -101,7 +101,7 @@ void() Vomit_Spawn = {
 	newSpawn.skin = self.skin;
 	setorigin (newSpawn, self.origin);   
 	newSpawn.lastorigin = newSpawn.origin;           
-	sound (newSpawn, CHAN_VOICE, "blob/mytosis.wav", 1, ATTN_NORM);
+	sound (newSpawn, CHAN_VOICE, "rogue/blob/mytosis.wav", 1, ATTN_NORM);
     newSpawn.angles_x   = 0;
     newSpawn.angles_y   = self.angles_y;
     newSpawn.angles_z   = 0;
@@ -245,7 +245,7 @@ void() vom_stand8 =[ $walk2, vom_stand1 ] {ai_vomit_stand();};
 
 void() vom_idle_sfx = {
 	// Yes, use attn_norm instead of attn_idle.
-    sound (self, CHAN_VOICE, "gibfnt/gf_plop.wav", 1, ATTN_NORM);
+    sound (self, CHAN_VOICE, "zerstorer/gibfnt/gf_plop.wav", 1, ATTN_NORM);
 };
 
 void() vom_walk1  =[ $walk1,  vom_walk2  ] {
@@ -290,14 +290,13 @@ void() vom_run6  =[ $run6,  vom_run7  ] {ai_vomit_run(4);};
 void() vom_run7  =[ $run7,  vom_run8  ] {ai_vomit_run(4);};
 void() vom_run8  =[ $run8,  vom_run1  ] {ai_vomit_run(4);};
 
-// ATTACK - - - - - - - - - - - - - - -
 void() vom_end1 =[ $attack11, vom_end2     ] {ai_face();};
 void() vom_end2 =[ $attack12, vom_end3     ] {ai_face();};
 void() vom_end3 =[ $attack13, vom_run1     ] {ai_face();};
 
 void() vom_attack1  =[ $attack1,  vom_attack2  ] {
     self.pain_finished = time + 1.2;    // Ignore pain during attack.
-    sound (self, CHAN_WEAPON, "drake/gibfnt/gf_sprt1.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "zerstorer/gibfnt/gf_sprt1.wav", 1, ATTN_NORM);
     ai_face();
 };
 void() vom_attack2  =[ $attack2,  vom_attack3  ] {ai_face();};
@@ -362,7 +361,7 @@ void(entity inflictor, entity attacker, float damage) vom_pain = {
         return;
 
     self.pain_finished = time + 2;
-    sound (self, CHAN_VOICE, "drake/vomitus/groan.wav", 1, ATTN_NORM);        
+    sound (self, CHAN_VOICE, "nehahra/vomit/groan.wav", 1, ATTN_NORM);        
 
     if (SUB_IgnorePain ())
         return;         // No pain anims in Nightmare.
@@ -448,10 +447,10 @@ void() monster_vomit = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-    precache_sound ("drake/cube/bc_attck.wav");
-    precache_sound ("drake/cube/bc_gulp.wav");
+    precache_sound ("zerstorer/cube/bc_attck.wav");
+    precache_sound ("zerstorer/cube/bc_gulp.wav");
     precache_model ("progs/drake/h_vomit.mdl");
-    precache_model ("progs/h_zombie.mdl");
+    precache_model ("progs/ad181/h_zombie.mdl");
 	self.gib1mdl = "progs/drake/tar_gib.mdl";
     precache_model ("progs/drake/tar_gib.mdl");
 	self.mdl = "progs/drake/vomitus.mdl";
@@ -460,13 +459,13 @@ void() monster_vomit = {
 	precache_model ("progs/mon_tarbaby.mdl");
     precache_sound ("blob/death1.wav");
     precache_sound ("fish/bite.wav");
-	self.idle_sound = "drake/gibfnt/gf_plop.wav";
-    precache_sound ("drake/gibfnt/gf_plop.wav");
-	self.sight_sound = "drake/gibfnt/gf_sbig.wav";
-    precache_sound ("drake/gibfnt/gf_sbig.wav");
-    precache_sound ("drake/gibfnt/gf_sprt1.wav");
-	self.pain_sound = "drake/vomitus/groan.wav";
-    precache_sound ("drake/vomitus/groan.wav");
+	self.idle_sound = "zerstorer/gibfnt/gf_plop.wav";
+    precache_sound ("zerstorer/gibfnt/gf_plop.wav");
+	self.sight_sound = "zerstorer/gibfnt/gf_sbig.wav";
+    precache_sound ("zerstorer/gibfnt/gf_sbig.wav");
+    precache_sound ("zerstorer/gibfnt/gf_sprt1.wav");
+	self.pain_sound = "nehahra/vomit/groan.wav";
+    precache_sound ("nehahra/vomit/groan.wav");
     precache_sound ("drake/vomitus/death.wav");
     precache_sound ("drake/vomitus/flesh1.wav");
     precache_sound ("drake/vomitus/flesh2.wav");
@@ -476,7 +475,7 @@ void() monster_vomit = {
 	precache_sound ("blob/hit1.wav");
 	precache_sound ("blob/land1.wav");
 	precache_sound ("blob/sight1.wav");
-	precache_sound ("blob/mytosis.wav");
+	precache_sound ("rogue/blob/mytosis.wav");
 
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement

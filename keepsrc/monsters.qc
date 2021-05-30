@@ -229,21 +229,17 @@ void() monster_sightsound = {
 			else sound (self, CHAN_BODY, self.sight_sound4, 1, ATTN_NORM);
 		} else if (self.classtype == CT_MONNEMESANT) {
 			rsnd = random();			
-			if (rsnd < 0.5) sound (self, CHAN_BODY, "nemesant/tsight1.wav", 1, ATTN_NORM);
-			else sound (self, CHAN_BODY, "nemesant/tsight2.wav", 1, ATTN_NORM);
+			if (rsnd < 0.5) sound (self, CHAN_BODY, "zerstorer/trog/tsight1.wav", 1, ATTN_NORM);
+			else sound (self, CHAN_BODY, "zerstorer/trog/tsight2.wav", 1, ATTN_NORM);
 		}
 		else sound (self, CHAN_BODY, self.sight_sound, 1, ATTN_NORM);
 	}
 };
 
-/*======================================================================
- monster_footstep
-  This function will play a footstep sound
-  * Types : Slow, Drag, Light, Medium, Heavy, Large
-  * called from animation blocks to sync with sound
-======================================================================*/
-void(float altfoot) monster_footstep = 
-{
+// This function will play a footstep sound
+// * Types : Slow, Drag, Light, Medium, Heavy, Large
+// * called from animation blocks to sync with sound
+void(float altfoot) monster_footstep = {
 	local float footstep, footstepnext, footvol;
 	local string footstepwav;
 	
@@ -470,69 +466,40 @@ void() monster_deadbody_check =
 	}
 };
 
-/*======================================================================
- monster_death_use
-  - When a mosnter dies, it fires all of its targets with the current
-		enemy as activator.
-======================================================================*/
-void() monster_death_use =
-{
+// When a mosnter dies, it fires all of its targets with the current enemy as activator.
+void() monster_death_use = {
 	// fall to ground or stop swimming
 	if (self.flags & FL_FLY) self.flags = self.flags - FL_FLY;
 	if (self.flags & FL_SWIM) self.flags = self.flags - FL_SWIM;
 
 	// Always use a deathtarget if one defined
 	if (self.deathtarget != "") {
-		// Validate deathtarget exists before firing it
-		self.movelast = find(world, targetname, self.deathtarget);
+		self.movelast = find(world, targetname, self.deathtarget); // Validate deathtarget exists before firing it
 		// Deathtarget valid, switch around and fire targets
 		if (self.movelast) self.target = self.deathtarget;
 	}
-
-	// Is there no target defined?
-	if (self.target == "") return;
-
 	activator = self.enemy;
 	SUB_UseTargets ();
 };
 
-/*======================================================================
- monster_remove_kill
-  - A clean way to kill/remove a monster from a map
-  - deathfunc to go through existing death function
-  - gibdeath for explosion of blood and guts
-======================================================================*/
-void(entity targ, float deathfunc, float gibdeath) monster_remove_kill =
-{
-	dprint("\b[MON_KILL]\b "); dprint(targ.classname);
+// A clean way to kill/remove a monster from a map.  deathfunc to go through existing death function.  gibdeath for explosion of blood and guts
+void(entity targ, float deathfunc, float gibdeath) monster_remove_kill = {
+	dprint("\b[MON_KILL]\b ");
+	dprint(targ.classname);
 	dprint(" dropped dead!\n");
-	// There are always exceptions to the use of the monster flag
-	// Point Hell knights don't use monster flag to prevent damage!
-	if (targ.spawnflags & MON_POINT_KNIGHT && targ.health > 0) 
-		targ.flags = targ.flags | FL_MONSTER;
+	// There are always exceptions to the use of the monster flag.  Point Hell knights don't use monster flag to prevent damage!
+	if (targ.spawnflags & MON_POINT_KNIGHT && targ.health > 0) targ.flags = targ.flags | FL_MONSTER;
 	
-	if (targ.bossflag) {
-		dprint("\b[MON_KILL]\b Cannot kill bosses this way!\n");
-		spawn_marker(targ.origin, SPNMARK_YELLOW);
-		return;
-	}
-	
-	// only work with monsters, can't be dead, dying or negative health!
+	// Only work with monsters, can't be dead, dying or negative health!
 	if (targ.flags & FL_MONSTER && targ.health > 0 && !targ.deadflag) {
 		// Check for any targets (counters will broken otherwise)
-		if (self.target != "") trigger_strs(self.target, self);
-		if (self.target2 != "") trigger_strs(self.target2, self);
+		if (HasTargets(self)) SUB_UseTargets();
 		
-		// Check if death function is required for monster
-		// Also double check they have a death function setup!
+		// Check if death function is required for monster.  Also double check they have a death function setup!
 		if (deathfunc && targ.th_die) {
-			// Quick way to make something gib, switch on the flag for it!
-			if (gibdeath) targ.gibondeath = TRUE;
-			// Make sure monster can take damage
-			targ.takedamage = DAMAGE_AIM;
-			// Always do enough damage to kill the monster
-			// Can be a problem for ammo resistant
-			T_Damage (targ, world, world, targ.health+1, NOARMOR);
+			if (gibdeath) targ.gibondeath = TRUE; // Quick way to make something gib, switch on the flag for it!
+			targ.takedamage = DAMAGE_AIM; // Make sure monster can take damage
+			T_Damage (targ, world, world, targ.health+1, NOARMOR); // Always do enough damage to kill the monster.  Can be a problem for ammo resistant
 		} else {
 			targ.deadflag = DEAD_DEAD;
 			targ.enemy = world;
@@ -579,52 +546,38 @@ void(entity attacker, float damage) monster_pain_check =
 	else self.pain_check = 1;
 };
 
-/*======================================================================
- monster_targets (second part of setup function)
-  - Checks for any targets to get angry at or stand/walk around
-======================================================================*/
-void() monster_targets =
-{
-	// Reset everything first
-	self.enemy = self.goalentity = self.movetarget = world;
+// Second part of setup function).  Checks for any targets to get angry at or stand/walk around
+void() monster_targets = {
+	self.enemy = self.goalentity = self.movetarget = world; // Reset everything first
 
-	//----------------------------------------------------------------------
-	// * Monsters can spawn angry at the player/activator
-	// * the target key can point to a path_corner
-	// * If the target key points at another monster they will infight
-	//----------------------------------------------------------------------
+	// Monsters can spawn angry at the player/activator.  The target key can point to a path_corner.  If the target key points at another monster they will infight
 	if (self.spawnflags & MON_SPAWN_ANGRY || self.angrytarget) {
-		// Check if the activator is a player? if not find a player
-		if (activator.flags & FL_CLIENT) self.enemy = activator;
-		else self.enemy = checkclient ();
+		if (activator.flags & FL_CLIENT && !Align_Match(self,activator)) self.enemy = activator; // Check if the activator is a player? if not find a player
+		else self.enemy = SeeOpposing();
 		
-		// Double check enemy is player and has notarget or wearing RoS?
-		if (self.enemy.flags & FL_CLIENT) {
-			if (self.enemy.flags & FL_NOTARGET) self.enemy = world;
-			else if (self.enemy.items & IT_INVISIBILITY) self.enemy = world;
-		}
-		// If the activator not a player, reset to world
-		// Cannot get angry at triggers, use angrytarget for infighting
-		else self.enemy = world;
-			
 		// If an alternative angry target defined, find it and attack!	
 		if (self.angrytarget) {
 			self.oldenemy = find(world, targetname, self.angrytarget);
 			// Is the attack target a monster and spawned/active (take damage)
-			if (self.oldenemy.flags & FL_MONSTER && self.oldenemy.takedamage != DAMAGE_NO)
-				self.enemy = self.oldenemy;
+			if (self.oldenemy.flags & FLx_CREATURE && self.oldenemy.takedamage != DAMAGE_NO) self.enemy = self.oldenemy;
 		}
 
-		// Check the enemy is a player/monster and alive
-		if (self.enemy.flags & (FL_CLIENT | FL_MONSTER) && self.enemy.health > 0 && self.health > 0) {
-			self.nextthink = time + 0.1;
-			self.think = FoundTarget;
-			if (self.health > 0) monster_sightsound ();	// Wake up sound
-			return;
+		if (self.enemy.flags & FLx_CREATURE) {
+			if (self.enemy.flags & FL_CLIENT) { // Double check enemy is player and has notarget or wearing RoS?
+				if (self.enemy.flags & FL_NOTARGET) self.enemy = world;
+				else if (self.enemy.items & IT_INVISIBILITY) self.enemy = world;
+			}
+
+			// Check the enemy is a player/monster and alive
+			if (self.enemy.health > 0 && self.health > 0) {
+				self.nextthink = time + 0.1;
+				self.think = FoundTarget;
+				if (self.health > 0) monster_sightsound ();	// Wake up sound
+				return;
+			}
 		}
 	} else {
-		// If the monster has a target check if path_corner or something to attack?
-		// Do nothing with patrol paths if spawning angry with the player
+		// If the monster has a target check if path_corner or something to attack?  Do nothing with patrol paths if spawning angry with the player
 		if (self.target != "") {
 			self.charmer = world;
 			if (self.event != "") {
@@ -1169,20 +1122,13 @@ void() monster_bbox =  {
 	else { self.bbmins = '-16 -16 -24'; self.bbmaxs = '16 16 40'; }
 };
 
-//======================================================================
-// monster_checkspawn - check all spawn conditions
-// return TRUE = do NOT spawn, got a problem
-//======================================================================
-float() monster_checkspawn =
-{
-	// Classic exception - Multiplayer (modes 1 & 2)
-	if (deathmatch) { entity_hide(self); return TRUE; }
-	// This will break progression if monster is used with a counter
-	if (cvar("nomonsters") != 0) { remove(self); return TRUE; }
-	// Check for spawning (entity keys) conditions (nightmare, coop)
-	// uses entity_hide instead of remove(self) - done in check
+// Check all spawn conditions.  return TRUE = do NOT spawn, got a problem
+float() monster_checkspawn = {
+	if (deathmatch) { entity_hide(self); return TRUE; } // Classic exception - Multiplayer (modes 1 & 2)
+	if (cvar("nomonsters") != 0) { remove(self); return TRUE; } // This will break progression if monster is used with a counter
+	// Check for spawning (entity keys) conditions (nightmare, coop).  Uses entity_hide instead of remove(self) - done in check
 	if (check_nightmare() == TRUE){
-		if (self.target != "") {
+		if (HasTargets(self)) {
 			dprint("WARNING: Hiding monster on nightmare but monster has a target!");
 			dprint(vtos(self.origin));
 			dprint("\n");
@@ -1190,79 +1136,49 @@ float() monster_checkspawn =
 		return TRUE;
 	}
 	if (check_coop() == TRUE) {
-		if (self.target != "") {
-			dprint("WARNING: Hiding monster on coop but monster has a target!");
+		if (HasTargets(self)) {
+			dprint("WARNING: Hiding monster on coop but monster has targe(s)! ");
 			dprint(vtos(self.origin));
 			dprint("\n");
 		}
 		return TRUE;
 	}
-
-	// No more execeptions
-
-	// Let's do some global checks, whaddya say?
+	
+	// No more execeptions; let's do some more fun special global checks, whaddya say?
 	if (self.brain & 32) self.spawnflags = self.spawnflags | MON_SPAWN_DELAY; // Nehahra support
 	return FALSE;
 };
 
-/*======================================================================
- walkmonster_start
-  - Main entry point for ALL monster routines
-======================================================================*/
+// Main entry point for ALL monster routines
 void() monster_start = {
 	self.flags = FL_MONSTER;			// Always reset this flag
 	self.ticktimer = 0.1;				// Model animations at 10fps
 	self.skin_override = self.skin;		// Save for later
 	self.frame_override = self.frame;
 	
-	// Check for spawning conditions (nightmare, coop)
-	// if (check_nightmare() == TRUE) return;
-	// if (check_coop() == TRUE) return;
-
-	if (monster_checkspawn()) return;
-
+	if (monster_checkspawn()) return; // Check for spawning conditions (nightmare, coop)
+		
 	if (coop > 2 && self.purse_x < 1) self.purse_x = 1; // Give at least 1 coin on death
-
-	// Warning if effects flag is active before spawning
-	if (self.effects) {
-		// dprint("\b[MONSTER]\b Effects flag active\n");
-		self.savedeffects = self.effects;
-	}
-	// Reset effects flag because some engines will show effects
-	// This is especially obvious for delay spawned monsters
-	self.effects = 0;
-
+	if (self.effects) self.savedeffects = self.effects;
+	self.effects = 0; // Reset effects flag because some engines will show effects.  This is especially obvious for delay spawned monsters.
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-
 	self.oldorigin = self.origin;		// Save origin
 	self.max_health = self.health;		// Save max health
 	if (!self.gibhealth) self.gibhealth = 0 - self.health;	// Default gib health
 	if (self.turrethealth < 0 || self.turrethealth > 1) self.turrethealth = 0.5;
-
-	// Check if jump function has been disabled?
-	if (self.jump_flag < 0) self.jump_flag = LARGE_TIMER;
-	
-	// Default attack function and class group
-	if (!self.th_checkattack) self.th_checkattack = CheckAttack;
+	if (self.jump_flag < 0) self.jump_flag = LARGE_TIMER; // Check if jump function has been disabled?
+	if (!self.th_checkattack) self.th_checkattack = CheckAttack; // Default attack function and class group
 	if (!self.classgroup) self.classgroup = CG_MONSTERS;
-	
-	// Highlight monsters with forced no_zaware entity key
-	if (self.no_zaware && developer > 0 && !query_configflag(SVR_DEVHELPER)) 
-		spawn_marker(self.origin+'0 0 32', SPNMARK_WHITE);
+	if (self.no_zaware && developer > 0 && !query_configflag(SVR_DEVHELPER)) spawn_marker(self.origin+'0 0 32', SPNMARK_WHITE); // Highlight monsters with forced no_zaware entity key
+	monster_bbox(); // Setup bounding box based on presets
 
-	// Setup bounding box based on presets
-	monster_bbox();
-
-	// Cannot delay spawn a monster if nothing can trigger it!?!
-	if (self.spawnflags & MON_SPAWN_DELAY && self.targetname == "") {
+	if (self.spawnflags & MON_SPAWN_DELAY && self.targetname == "") { // Cannot delay spawn a monster if nothing can trigger it!?!
 		dprint("\b[MONSTER]\b Cannot delay spawn without targetname! Spawning immediately\n");
 		self.spawnflags = self.spawnflags - MON_SPAWN_DELAY;
 	}
 	
-	// Allow mappers to spawn monsters that don't affect monster count
-	// I know this can be a dangerous if used incorrectly, but good for statues
-	// delaymonstercount = update count on spawn instead of death
-	if (self.nomonstercount > 0 || self.delaymonstercount > 0) 	{
+	// Allow mappers to spawn monsters that don't affect monster count.  I know this can be a dangerous if used incorrectly, but good for statues.
+	if (self.nomonstercount > 0 || self.delaymonstercount > 0) { // delaymonstercount = update count on spawn instead of death
 		// Some maps have way too many no monster counts
 		if (world.no_moncountdevmsg <= 0) {
 			dprint("\b[MONSTER]\b ("); dprint(self.targetname);
@@ -1271,9 +1187,8 @@ void() monster_start = {
 	} else {
 		AddToTotals(self); // Default state - update monster total
 	}
-
-	// Ensure randomized sightsound works
-	if (self.sight_sound) {
+	
+	if (self.sight_sound) { // Ensure randomized sightsound works
 		if (!self.sight_sound2) self.sight_sound2 = self.sight_sound;
 		if (!self.sight_sound3) self.sight_sound3 = self.sight_sound;
 		if (!self.sight_sound4) self.sight_sound4 = self.sight_sound;
@@ -1284,15 +1199,8 @@ void() monster_start = {
 	else if (self.sight_sound2) self.sight_count = 2;
 	else self.sight_count = 1;
 	
-	//----------------------------------------------------------------------
-	// Detect monster armour map hack
-	// if (self.armorvalue || self.armortype) {
-		// This hack really should be stopped, no point upsetting mappers at this point
-		// self.armorvalue = self.armortype = 0;
-		// dprint("\b[MAPHACKS]\b Using armor on monsters, use health key instead!\n");
-	// }
-	// Qmaster is evil again :)
-
+	// Allow monster armor maphack.  Qmaster is evil again :)
+	
     self.mindex2 = self.modelindex;      // Remember original modelindex.
 
 	if (self.spawnflags & MON_SPAWN_DELAY) {
@@ -1300,28 +1208,20 @@ void() monster_start = {
 		self.solid = SOLID_NOT;				// No world interaction
 		// Check for triggered spawndelay
 		if (self.spawndelay != 0) {
-			if (self.spawndelay <= 0) self.spawndelay = 0.1 + random()*0.4;
+			if (self.spawndelay < 0) self.spawndelay = 0.1 + random()*0.4;
 		}
-		self.use = monster_spawndelay;
-		
-		// Display debug diamonds
-		monster_devmarker(self);
-	}
-	else {
-		// Variable start delay on all monsters to reduce packet errors
-		self.nextthink = time + 0.1 + random()*0.4;
+		self.use = monster_spawndelay;	
+		monster_devmarker(self); // Display debug diamonds
+	} else {
+		self.nextthink = time + 0.1 + random()*0.4; // Variable start delay on all monsters to reduce packet errors
 		self.think = monster_spawn;
 	}
 };
 
-//======================================================================
-// Map hacks are not supported in this MOD
-// There is no use in pretending otherwise!
-//======================================================================
+// Map hacks are supported in this MOD.  Qmaster is evil again.
 void() walkmonster_start_go = { monster_start(); };
 void() flymonster_start_go = { monster_start(); };
 void() swimmonster_start_go = { monster_start(); };
-// MUAHAHA QMASTER IS EVIL AND REDIRECTED THESE.  SUPPORT ALL THE HACKS!!!!!!!
 
 /*======================================================================
 //QUAKED monster_x (1 0 0) (x y z) (x y z) AMBUSH x x NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM

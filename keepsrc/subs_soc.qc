@@ -1,3 +1,41 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Arcane Dimensions (AD)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 24
+//
+// Implements: Arcane Dimensions and global subroutines by sock
+//
+// Description:
+// Utility functions for AD features and other useful global functions.
+//=============================================================================
+
 float(vector spot) InSolid;
 float(vector spot) InSky;
 
@@ -62,13 +100,8 @@ void(string target_strs, entity activator_ent) trigger_strs = {
 	}
 };
 
-//======================================================================
-// Trigger/use the entity supplied and activator
-// self is switched around so target use function works correctly
-//
-//----------------------------------------------------------------------
-void(entity target_ent, entity activator_ent) trigger_ent =
-{
+// Trigger/use the entity supplied and activator self is switched around so target use function works correctly
+void(entity target_ent, entity activator_ent) trigger_ent = {
 	local entity tself, tother, tactivator;
 
 	dprint("\b[ENT_TRIG]\b Ent ("); dprint(ftos(target_ent.classtype));
@@ -111,21 +144,15 @@ void(entity target_ent, entity activator_ent) trigger_ent =
 // monsters.qc  - monster_deadbody_check
 // ai_gibs.qc   - CheckFloorGib
 // items.qc     - item_thinkloop
-
 void(entity source, float floor_dist) ent_floorcheck = {
 	local vector trace_pos1;
 	local float trace_dist;
-	
-	// if (!checkbottom(source)) = disabled
-	//  too expensive, 5 traces (4 corners + center) and liquid check
 
 	// Tracedown directly from origin for floor check
 	trace_pos1 = source.origin;
 	trace_pos1_z = trace_pos1_z - FLOOR_TRACE_DIST;
 	traceline (source.origin, trace_pos1, TRUE, source);
-	
-	// Work out distance from origin to floor
-	trace_dist = source.origin_z - trace_endpos_z;
+	trace_dist = source.origin_z - trace_endpos_z; // Work out distance from origin to floor
 	
 	// Check if the floor is too far away? (usually 24 units)
 	if (trace_dist > floor_dist && source.flags & FL_ONGROUND) {
@@ -149,12 +176,7 @@ void(entity source, float floor_dist) ent_floorcheck = {
 	}
 };
 
-//======================================================================
-// Check for contact with sky brushes
-// - Use pointcontent() for Typical/Enhanced Quake engines
-// - Use new FTE string functions and surface check for Darkplaces engine
-//
-//----------------------------------------------------------------------
+// Check for contact with sky brushes.  Use pointcontent() for Typical/Enhanced Quake engines.  Use new FTE string functions and surface check for Darkplaces engine.
 float(vector targ_origin) check_skycontent = {
 	local float surfnum;
 	local string texturename;
@@ -177,7 +199,6 @@ float(vector targ_origin) check_skycontent = {
 	return FALSE;
 };
 
-//----------------------------------------------------------------------
 float(vector bborg, float bbx, float bby, float bbz) check_skyvector = {
 	local vector skyorg;
 	skyorg_x = bborg_x + bbx;
@@ -187,34 +208,10 @@ float(vector bborg, float bbx, float bby, float bbz) check_skyvector = {
 	else return FALSE;
 };
 
-//----------------------------------------------------------------------
-// This function was about testing volume projectiles against sky brushes
-// Unfortunately on advanced engines (DP/FTE/QSS) it can trash frame rate
-// This is especially apparent on very large maps
-// Function disabled - it was a bad idea, left as a reminder
-//----------------------------------------------------------------------
-/*float(entity targ) check_skyvolume = 
-{
-	// Negative Z corners
-	if (check_skyvector(targ.origin, -targ.size_x, -targ.size_y, -targ.size_z)) return TRUE;
-	if (check_skyvector(targ.origin,  targ.size_x, -targ.size_y, -targ.size_z)) return TRUE;
-	if (check_skyvector(targ.origin, -targ.size_x,  targ.size_y, -targ.size_z)) return TRUE;
-	if (check_skyvector(targ.origin,  targ.size_x,  targ.size_y, -targ.size_z)) return TRUE;
-	
-	// Positive Z corners
-	if (check_skyvector(targ.origin, -targ.size_x, -targ.size_y, targ.size_z)) return TRUE;
-	if (check_skyvector(targ.origin,  targ.size_x, -targ.size_y, targ.size_z)) return TRUE;
-	if (check_skyvector(targ.origin, -targ.size_x,  targ.size_y, targ.size_z)) return TRUE;
-	if (check_skyvector(targ.origin,  targ.size_x,  targ.size_y, targ.size_z)) return TRUE;
-	
-	// No contact!
-	return FALSE;
-};*/
-
 // Check point content for SOLID or SKY problems
 float(vector pc_org) entity_pcontent = {
 	if (InSolid(pc_org)) return TRUE;
-	if (InSky(pc_org)) return TRUE;
+	if (check_skycontent(pc_org)) return TRUE;
 	return FALSE;
 };
 
@@ -255,7 +252,7 @@ void(entity targ) entity_stop = {
 	targ.movetype = MOVETYPE_NONE;		// Stationary
 	targ.solid = SOLID_NOT;				// no world interaction
 	setsize (targ, VEC_ORIGIN, VEC_ORIGIN);		// No size, no impact
-	targ.velocity = targ.avelocity = '0 0 0';	// Frozen velocity
+	targ.velocity = targ.avelocity = VEC_ORIGIN;// Frozen velocity
 	targ.spawnflags = targ.effects = 0;			// reset flags
 	targ.waitmin = time + LARGE_TIMER;			// Block touch function
 	targ.attack_finished = time + LARGE_TIMER;	// Block all functions
@@ -301,7 +298,6 @@ void(vector marker_org, float marker_type) spawn_marker = {
 	if (engine == ENG_DPEXT) marker.effects = marker.effects + EF_NOSHADOW;
 };
 
-//----------------------------------------------------------------------
 void(vector marker_org, vector marker_ang, float marker_type) spawn_arrow = {
 	local entity marker;
 	
@@ -327,9 +323,7 @@ void(vector marker_org, vector marker_ang, float marker_type) spawn_arrow = {
 	if (engine == ENG_DPEXT) marker.effects = marker.effects + EF_NOSHADOW;
 };
 
-//----------------------------------------------------------------------
-entity(vector spawn_org) spawn_devmarker =
-{
+entity(vector spawn_org) spawn_devmarker = {
 	local entity spawn_ent;
 	
 	spawn_ent = spawn();
@@ -342,12 +336,8 @@ entity(vector spawn_org) spawn_devmarker =
 	return spawn_ent;
 };
 
-//----------------------------------------------------------------------
-// This is designed for delay spawn monsters ONLY!
-// It will certainly do crazy things if not used correctly
-//----------------------------------------------------------------------
-void(entity targ) monster_devmarker =
-{
+// This is designed for delay spawn monsters ONLY!  It will certainly do crazy things if not used correctly
+void(entity targ) monster_devmarker = {
 	// Exceptions
 	if (query_configflag(SVR_DEVHELPER)) return;
 	if (developer == 0) return;
@@ -361,12 +351,8 @@ void(entity targ) monster_devmarker =
 	targ.frame = 0;	
 };
 
-//----------------------------------------------------------------------
-// Check for SKILL spawning conditions (frame 0 check ONLY)
-// Returns FALSE = do nothing  TRUE = inhibit spawning
-//----------------------------------------------------------------------
-float() check_nightmare =
-{
+// Check for SKILL spawning conditions (frame 0 check ONLY).  Returns FALSE = do nothing  TRUE = inhibit spawning
+float() check_nightmare = {
 	// Check for nightmare skill only spawning
 	if (self.nightmare == TRUE) {
 		// Double check the coop console variable, not setup till frame 1+
@@ -386,12 +372,8 @@ float() check_nightmare =
 	return FALSE;
 };
 
-//----------------------------------------------------------------------
-// Check for COOP spawning conditions (frame 0 check ONLY)
-// Returns FALSE = do nothing  TRUE = inhibit spawning
-//----------------------------------------------------------------------
-float() check_coop =
-{
+// Check for COOP spawning conditions (frame 0 check ONLY).  Returns FALSE = do nothing  TRUE = inhibit spawning
+float() check_coop = {
 	// Check for coop only spawning conditions
 	if (self.cooponly == TRUE || self.cooponly == NEGATIVE) {
 		// Double check the coop console variable, not setup till frame 1+
@@ -399,10 +381,10 @@ float() check_coop =
 		if (coop_cvar != TRUE) { coop = cvar("coop"); coop_cvar = TRUE; }
 		
 		// Only one condition will let a cooponly item spawn
-		// cooponly =  1  coop = 0 inhibit = TRUE
-		// cooponly =  1  coop = 1 inhibit = FALSE
-		// cooponly = -1  coop = 0 inhibit = TRUE
-		// cooponly = -1  coop = 1 inhibit = TRUE
+		// cooponly =  1 coop  = 0 inhibit = TRUE
+		// cooponly =  1 coop >= 1 inhibit = FALSE
+		// cooponly = -1 coop  = 0 inhibit = TRUE
+		// cooponly = -1 coop >= 1 inhibit = TRUE
 		if (self.cooponly == TRUE && coop > 0) return FALSE;
 		else {
 			// Check for BSP entities has origin is different
@@ -417,31 +399,14 @@ float() check_coop =
 	return FALSE;
 };
 
-//======================================================================
-// Clear all trigger strings
-//
-//----------------------------------------------------------------------
-void (entity targ) clear_trigstrs =
-{
-	if (targ.target != "") targ.target = string_null;
-	if (targ.target2 != "") targ.target2 = string_null;
-	if (targ.killtarget != "") targ.killtarget = string_null;
-};
-
-//======================================================================
-// Vector randomizer, used mostly for avelocity setups
-// Used all over the place; monsters, weapons and gibs!
-// 
-//----------------------------------------------------------------------
-vector(float base, float rndmix, float plusminus) vecrand =
-{
+// Vector randomizer, used mostly for avelocity setups.  Used all over the place; monsters, weapons and gibs!
+vector(float base, float rndmix, float plusminus) vecrand = {
 	local vector vecmix;
 	if (plusminus) {
 		vecmix_x = base + crandom() * rndmix; 
 		vecmix_y = base + crandom() * rndmix; 
 		vecmix_z = base + crandom() * rndmix; 
-	}
-	else {
+	} else {
 		vecmix_x = base + random() * rndmix; 
 		vecmix_y = base + random() * rndmix; 
 		vecmix_z = base + random() * rndmix; 
@@ -449,13 +414,8 @@ vector(float base, float rndmix, float plusminus) vecrand =
 	return vecmix;
 };
 
-//======================================================================
-// model_fade : Gradually fade out a model over time 
-// * Optionally entity removal if height = 0
-//
-//----------------------------------------------------------------------
-void() model_fade =
-{
+// Gradually fade out a model over time.  Optionally entity removal if height = 0
+void() model_fade = {
 	if (coop > 2) {
 		self.think = SUB_Null;
 		return; // Keep gibs for versus mode :)
@@ -477,25 +437,21 @@ void() model_fade =
     self.nextthink = time + FADEMODEL_TIME;
 };
 
+// skill_chanceattack
+// Calculate chance to attack player based on skill level and distance
+// The standard ID range formula
+// (enemy_range == RANGE_MELEE) chance = 0.9
+// (enemy_range == RANGE_NEAR) chance = 0.4
+// (enemy_range == RANGE_MID) chance = 0.05
+// else chance = 0;
+// The problem with this formula is that the chance factor is not gradual
+// and will spike in chance when close to range boundaries
+// Also this formula has no skill modifiers leading to limited gameplay rules
 
-/*======================================================================
- skill_chanceattack
-  Calculate chance to attack player based on skill level and distance
-  The standard ID range formula
-	(enemy_range == RANGE_MELEE) chance = 0.9
-	(enemy_range == RANGE_NEAR) chance = 0.4
-	(enemy_range == RANGE_MID) chance = 0.05
-	else chance = 0;
-	The problem with this formula is that the chance factor is not gradual
-	and will spike in chance when close to range boundaries
-	Also this formula has no skill modifiers leading to limited gameplay rules
-  
-======================================================================*/
-float() SUB_ChanceAttack =
-{
+float() SUB_ChanceAttack = {
 	local float chrange, chskill, chance;
 	
-	chrange = chskill = 0;					// taniwha patch
+	chrange = chskill = 0; // taniwha patch
 	
 	// Upper and lower limits of range have fixed chance rates
 	if (self.enemydist > MON_MAX_RANGE) chance =  0.05;
@@ -518,12 +474,9 @@ float() SUB_ChanceAttack =
 	else return FALSE;
 };
 
-/*======================================================================
- skill_subattack
-  Calculate attack_finished time based on skill level
-======================================================================*/
-float (float min_time, float ranbase_time) SUB_SkillAttack =
-{
+// skill_subattack
+// Calculate attack_finished time based on skill level
+float (float min_time, float ranbase_time) SUB_SkillAttack = {
 	local float ran_time, sub_time;
 	
 	// Easy = min + random(base + 1.5)    Normal = min + random(base + 1.0)
@@ -534,13 +487,10 @@ float (float min_time, float ranbase_time) SUB_SkillAttack =
 	return sub_time;
 };
 
-/*======================================================================
- SUB_Tracking
- Progressively tracks the origin of enemies making attacks more accurate
-  * Original code by Necros (http://shoresofnis.com/)
-======================================================================*/
-vector(vector iorg, vector org_offset, entity targ, float zspeed) SUB_Tracking =
-{
+// SUB_Tracking
+// Progressively tracks the origin of enemies making attacks more accurate
+// * Original code by Necros (http://shoresofnis.com/)
+vector(vector iorg, vector org_offset, entity targ, float zspeed) SUB_Tracking = {
 	local vector vec, org;
 	local float diff;
 
@@ -557,20 +507,20 @@ vector(vector iorg, vector org_offset, entity targ, float zspeed) SUB_Tracking =
 	return iorg;
 };
 
-/*======================================================================
- SUB_Elevation
-  Calculates the Elevation for Z Aware monsters
-  * Original code by Preach (https://tomeofpreach.wordpress.com/)
-  * Added support for variable origin locations and proj speeds
-  * Added support for distance scaling linked to skill levels
-======================================================================*/
+// SUB_Elevation
+// Calculates the Elevation for Z Aware monsters
+// * Original code by Preach (https://tomeofpreach.wordpress.com/)
+// * Added support for variable origin locations and proj speeds
+// * Added support for distance scaling linked to skill levels
 float(float theta, vector sorg, vector mdest, float zspeed) SUB_Elevation = {
 	local float a, b, c; 	//constants in the equation to be solved
 	local vector ofs; 		//displacement we wish the projectile to travel
 	local float y, z; 		//horizontal and vertical components of ofs
 	local float tan_theta; 	//trig values of the angle theta
 	local vector vec, eorg;
-	local float dist, sperc;
+	local float dist, sperc, oldtheta;
+	
+	if (world.copperoptions & COPPER_SEMI_Z_AWARE_OGRES) theta = 18; // ID1 default according to Copper
 
 	// Place projectile destination at player head level
 	if (self.classtype == CT_MONSPIDER) mdest = mdest + ELEV_SPID_OFS;
@@ -590,11 +540,9 @@ float(float theta, vector sorg, vector mdest, float zspeed) SUB_Elevation = {
 		sperc = 0.45 + skill*0.15;
 		eorg = sorg + (vec * (dist*sperc));
 		ofs = eorg - sorg;
-	}
-	else ofs = mdest - sorg;
+	} else ofs = mdest - sorg;
 		
 	//calculate how far we are firing
-	//	ofs = mdest - sorg;
 	z = ofs_z;
 	ofs_z = 0;
 	y = vlen(ofs);
@@ -604,49 +552,25 @@ float(float theta, vector sorg, vector mdest, float zspeed) SUB_Elevation = {
 	a = 0.5 * map_gravity * y * y / (zspeed * zspeed);
 	b = -y;
 	c = a + z;
- 
-	//check if the destination is too far to reach
-	if(b*b < 4*a*c) return ELEV_DEFAULT;
-
-	//calculate the tan value of the given theta
-	tan_theta = mathlib_tan(theta);
-
-	//reuse ang to create the improved firing direction
-	theta = mathlib_atan2(a*tan_theta*tan_theta - c, 2*a*tan_theta + b);
-
-	//constrain the values to stop anything too mad happening
-	while(theta > 90) theta = theta - 180;
+	if(b*b < 4*a*c) {
+		if (world.copperoptions & COPPER_SEMI_Z_AWARE_OGRES)
+			return 18; // ID1 default according to Copper
+		else
+			return ELEV_DEFAULT; //check if the destination is too far to reach
+	}
+	if (world.copperoptions & COPPER_SEMI_Z_AWARE_OGRES) {
+		y = 0; // Reset loop counter
+		// newton raphson to within 1 degree, no more than 4x
+		while (fabs(oldtheta - theta) > 1 && y < 4) {
+			oldtheta = theta;
+			tan_theta = mathlib_tan(theta);
+			theta = mathlib_atan2(a*tan_theta*tan_theta - c, 2*a*tan_theta + b);
+			y += 1; // Increment loop counter until we hit 4
+		}
+	} else {
+		tan_theta = mathlib_tan(theta); //calculate the tan value of the given theta
+		theta = mathlib_atan2(a*tan_theta*tan_theta - c, 2*a*tan_theta + b); //reuse ang to create the improved firing direction
+	}
+	while(theta > 90) theta = theta - 180; //constrain the values to stop anything too mad happening
 	return theta;
 };
-
-/*======================================================================
- SUB_Elevat (Alternative version, not used anymore, left for reference)
-  Calculates the Elevation for Z Aware monsters
-  * Original formula WIKI with QC help from ericw
-======================================================================*/
-/*float(vector source, vector targ, float zspeed) SUB_Elevat =
-{
-	local float g;				// Gravity
-	local float targx, targy;	// Sub parts of distance
-	local float v2, v4;			// speed*speed & speed*speed*speed*speed
-	local vector dist;			// Distance to travel	
-	local float ang, theta;
-	
-	g = map_gravity;			// default 800
-	dist = targ - source;		// vector distance
-	targy = dist_z;				// Up direction
-	dist_z = 0;
-	targx = vlen(dist);			// X,Y direction
-
-	v2 = zspeed * zspeed;
-	v4 = v2 * v2;
-	
-	// First part of equation
-	ang = v4 - (g * ( (g * targx * targx) + (2 * targy * v2) ) );
-	// Cap elevation angle at default value
-	//if(ang < 0) return ELEV_DEFAULT;
-
-	// Second section of equation
-	theta = mathlib_atan2 ((v2 - mathlib_sqrt(ang)) / (g * targx),1);
-	return theta;
-}; */

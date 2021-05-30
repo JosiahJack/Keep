@@ -253,7 +253,7 @@ void() weapon_touch = {
 	}
 	// weapon touch sound
 	if (self.classtype == CT_CHAINSAW) {
-		sound (other, CHAN_ITEM, "weapons/sawidle.wav", 1, ATTN_NORM);
+		sound (other, CHAN_ITEM, "zerstorer/weapons/sawidle.wav", 1, ATTN_NORM);
 	} else {
 		sound (other, CHAN_ITEM, "weapons/pkup.wav", 1, ATTN_NORM);
 	}
@@ -1037,11 +1037,11 @@ void () item_powerup_belt = {
 	// Check for custom model setup?
 	item_debugcustomdl();
 
-	if (self.mdl == "") self.mdl = "progs/rogue/beltup.mdl";
+	if (self.mdl == "") self.mdl = "progs/ad180/artifact_blastbelt.mdl"; // sock originally did an orange skin version of rogue/beltup.mdl.  Changed to new model.  Adding here to have 2nd skin as an option.
 	precache_model (self.mdl);
-	if (self.noise == "") self.noise = "belt/pickup.wav";
-	self.noise1 = "belt/use.wav";
-	self.noise2 = "belt/fadeout.wav";
+	if (self.noise == "") self.noise = "rogue/belt/pickup.wav";
+	self.noise1 = "rogue/belt/use.wav";
+	self.noise2 = "rogue/belt/fadeout.wav";
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
@@ -1064,8 +1064,8 @@ void () item_artifact_empathy_shields = {
 
 	if (self.mdl == "") self.mdl = "progs/hipnotic/empathy.mdl";
 	precache_model (self.mdl);
-	if (self.noise == "") self.noise = "hipitems/empathy.wav";
-	self.noise1 = "hipitems/empathy2.wav";
+	if (self.noise == "") self.noise = "hipnotic/items/empathy.wav";
+	self.noise1 = "hipnotic/items/empathy2.wav";
 	self.noise2 = "items/suit2.wav";
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
@@ -1201,10 +1201,10 @@ void () item_artifact_horn = {
 	self.touch2 = horn_touch;
 	if (self.mdl == "") self.mdl = "progs/hipnotic/horn.mdl";
 	precache_model ("progs/hipnotic/horn.mdl");
-	precache_sound ("hipitems/horn.wav");
+	precache_sound ("hipnotic/items/horn.wav");
 	setmodel (self,self.mdl);
 	if (self.netname == "") self.netname = "Horn of Conjuring";
-	if (self.noise == "") self.noise = "hipitems/horn.wav";
+	if (self.noise == "") self.noise = "hipnotic/items/horn.wav";
 	self.classtype = CT_ARTHORN;
 	setsize (self,VEC_HULL_MIN,VEC_HULL_MAX);
 	item_start ();
@@ -1280,7 +1280,7 @@ void () item_circuitboard = {
 	// Check for custom model setup?
 	item_debugcustomdl();
 
-	if (self.mdl == "") self.mdl = "progs/fromitz.mdl";
+	if (self.mdl == "") self.mdl = "progs/rrp/fromitz.mdl";
 	precache_model (self.mdl);
 	setmodel (self, self.mdl);
 	if (self.noise == "") self.noise = "items/protect.wav";

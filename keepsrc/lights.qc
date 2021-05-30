@@ -34,11 +34,8 @@ float LIGHT_BSP2LIGHTSTYLE = 256;
 // The array is setup from world.qc before anything loads
 string light_style_str[LIGHT_MAXLIGHTSTYLE];
 
-//----------------------------------------------------------------------
 // Allow the compile to change the starting point for target lights
-//----------------------------------------------------------------------
-void() light_style_boundary =
-{
+void() light_style_boundary = {
 	// Check worldspawn key for starting point of target lights
 	if (world.compilerstyle_start == 0) mapstyle_start = LIGHT_COMPILERSTYLE;
 	else mapstyle_start = world.compilerstyle_start;
@@ -46,13 +43,10 @@ void() light_style_boundary =
 	if (mapstyle_start < LIGHT_IDSTYLE) mapstyle_start = LIGHT_IDSTYLE;
 };
 
-//----------------------------------------------------------------------
 // Setup all vanilla light styles into a small array (16 strings)
 // These light styles can be referenced later for switchable lights
 // Originally was setup in world.qc file (not saved strings)
-//----------------------------------------------------------------------
-void() light_style_setuparray =
-{
+void() light_style_setuparray = {
 	local float loopint;
 	
 	// 0 normal
@@ -80,7 +74,6 @@ void() light_style_setuparray =
 	// 11 SLOW PULSE NOT FADE TO BLACK
 	light_style_str[11] = "abcdefghijklmnopqrrqponmlkjihgfedcba";
 	
-	//----------------------------------------------------------------------
 	// Setup default ("m") for all the custom map styles (12-63)
 	loopint = LIGHT_IDSTYLE;
 	while (loopint < LIGHT_MAXLIGHTSTYLE) {
@@ -88,15 +81,27 @@ void() light_style_setuparray =
 		loopint = loopint + 1;
 	}
 
-	//----------------------------------------------------------------------
 	// Setup vanilla + custom light style table (def=0-31)
-	loopint = 0;
-	while (loopint < mapstyle_start) {
-		lightstyle(loopint, light_style_str[loopint]);
-		loopint = loopint + 1;
-	}
+	// loopint = 0;
+	// while (loopint < mapstyle_start) {
+		// lightstyle(loopint, light_style_str[loopint]);
+		// loopint = loopint + 1;
+	// }
+
+   lightstyle (FALSE,"m");
+   lightstyle (TRUE,"mmnmmommommnonmmonqnmmo");
+   lightstyle (FL_SWIM,"abcdefghijklmnopqrstuvwxyzyxwvutsrqponmlkjihgfedcba");
+   lightstyle (MOVETYPE_WALK,"mmmmmaaaaammmmmaaaaaabcdefgabcdefg");
+   lightstyle (MOVETYPE_STEP,"mamamamamama");
+   lightstyle (MOVETYPE_FLY,"jklmnopqrstuvwxyzyxwvutsrqponmlkj");
+   lightstyle (MOVETYPE_TOSS,"nmonqnmomnmomomno");
+   lightstyle (MOVETYPE_PUSH,"mmmaaaabcdefgmmmmaaaammmaamm");
+   lightstyle (FL_CLIENT,"mmmaaammmaaammmabcdefaaaammmmabcdefmmmaaaa");
+   lightstyle (MOVETYPE_FLYMISSILE,"aaaaaaaazzzzzzzz");
+   lightstyle (MOVETYPE_BOUNCE,"mmamammmmammamamaaamammma");
+   lightstyle (MOVETYPE_BOUNCEMISSILE,"abcdefghijklmnopqrrqponmlkjihgfedcba");
+   lightstyle (63.000,"a");
 	
-	//----------------------------------------------------------------------
 	// styles 32-62 are assigned by the light program for switchable lights
 	// 63 testing? No idea why this is done like this, maybe for savefile?
 	//lightstyle(63, "a");
@@ -113,9 +118,7 @@ void() play_light_sound =
 	sound (self, CHAN_VOICE, self.owner.noise, self.owner.volume, ATTN_STATIC);
 };
 
-//----------------------------------------------------------------------
-void() setup_light_sound = 
-{
+void() setup_light_sound = {
 	if (!self.volume) self.volume = 0.5;
 	if ( !(self.spawnflags & LIGHT_NOSOUND) && self.noise != "" ) {
 		if (self.targetname) {
@@ -131,31 +134,21 @@ void() setup_light_sound =
 	}
 };
 
-//----------------------------------------------------------------------
-void() setup_light_static =
-{
-	// Default = static, check for exception spawnflag
-	if (self.spawnflags & LIGHT_NOSTATIC) return;
-	// Setup any models that are defined
-	if (self.mdl) setmodel (self, self.mdl);
-	// Cannot have static entities and particle emitters!
-	if (self.part_emitter && self.part_static == FALSE) return;
-	// Goodbye entity, no longer interactive with QC
-	makestatic (self);
+void() setup_light_static = {
+	if (self.spawnflags & LIGHT_NOSTATIC) return; // Default = static, check for exception spawnflag
+	if (self.mdl) setmodel (self, self.mdl); // Setup any models that are defined
+	if (self.part_emitter && self.part_static == FALSE) return; // Cannot have static entities and particle emitters!
+	makestatic (self); // Goodbye entity, no longer interactive with QC
 };
 
-//----------------------------------------------------------------------
-void() setup_vanilla_nostatic =
-{
-	// Setup particle static flag
+// Setup particle static flag
+void() setup_vanilla_nostatic = {
 	if (self.spawnflags & LIGHT_NOSTATIC) self.part_static = FALSE;
 	else if (self.targetname != "") self.part_static = FALSE;
 	else self.part_static = TRUE;	
 };
 
-//----------------------------------------------------------------------
-void() setup_quoth_nostatic =
-{
+void() setup_quoth_nostatic = {
 	// Need to change around spawnflags; 2 -> 4 bitflags
 	if (self.spawnflags & LIGHT_QUOTHNOSTAT) {
 		self.spawnflags = self.spawnflags - (self.spawnflags & LIGHT_QUOTHNOSTAT);
@@ -163,9 +156,7 @@ void() setup_quoth_nostatic =
 	}
 };
 
-//----------------------------------------------------------------------
-void(float pe_style) setup_light_particle =
-{
+void(float pe_style) setup_light_particle = {
 	if (self.spawnflags & LIGHT_NOEFFECTS) return;
 	// Spawn particle emitter if particles active and not blocked
 	if (query_configflag(SVR_PARTICLES) == SVR_PARTICLES ) {
@@ -176,9 +167,7 @@ void(float pe_style) setup_light_particle =
 	}
 };
 
-//----------------------------------------------------------------------
-void() light_part_emitter_on =
-{
+void() light_part_emitter_on = {
 	if (self.part_emitter) {
 		if (ext_dppart && self.part_emitter.state == STATE_OFF)
 			pointparticles(particleeffectnum(DPP_BURSTFLAME), self.origin, '0 0 0', 1);
@@ -190,25 +179,24 @@ void() light_part_emitter_on =
 	}
 };
 
-//----------------------------------------------------------------------
-void() light_on =
-{
+void() light_on = {
 	self.estate = ESTATE_ON;
 	// Setup any models, like torches etc
 	if (self.mdl) setmodel (self, self.mdl);
 	
 	// Light style defined?
-	if (self.style > 0)
-		// Update light style (use array to get the latest)
-		lightstyle(self.style, light_style_str[self.style]);
+	if (self.style > 0) {
+		dprint("Light style set to : ");
+		dprint(ftos(self.style));
+		dprint("\n");
+		lightstyle(self.style, light_style_str[self.style]); // Update light style (use array to get the latest)
+	}
 
 	// Switch on particle emitters
 	light_part_emitter_on();
 };
 
-//----------------------------------------------------------------------
-void() light_off =
-{
+void() light_off = {
 	self.estate = ESTATE_OFF;
 	if (self.mdl) {
 		self.modelindex = 0;
@@ -217,11 +205,9 @@ void() light_off =
 	// Switch off light style
 	lightstyle(self.style, "a");
 	// Stop any sounds
-	if (self.attachment) 
-		sound (self.attachment, CHAN_VOICE, SOUND_EMPTY, 1, ATTN_STATIC);
+	if (self.attachment) StopSound(self.attachment,CHAN_VOICE);
 };
 
-//----------------------------------------------------------------------
 void() light_customstyle_finish = {
 	// Check for style errors above compiler light boundary
 	// Only for lights with style range issues + customstyles remap/string
@@ -301,8 +287,7 @@ void() light_customstyle_start = {
 		dprint(") out of range!\n");
 		remove(self);
 		return;
-	}
-	else if (self.customstyle_remap < 0 || self.customstyle_remap >= LIGHT_MAXLIGHTSTYLE) {
+	} else if (self.customstyle_remap < 0 || self.customstyle_remap >= LIGHT_MAXLIGHTSTYLE) {
 		spawn_marker(self.origin, SPNMARK_YELLOW);
 		dprint("\b[LIGHT]\b remap style ("); dprint(ftos(self.customstyle_remap));
 		dprint(") out of range!\n");
@@ -319,11 +304,10 @@ void() light_customstyle_start = {
 		self.customstyle_remap = 0;
 		self.think = light_customstyle_finish;
 		self.nextthink = time + 0.1;
-	}
-	// Re-map lightstyles MUST happen after custom lightstyle strings
-	// These lights will have problems being static because of timing
-	// Static lights need to be converted early to work properly
-	else if (self.customstyle_remap > 0 && self.style > 0) {
+	} else if (self.customstyle_remap > 0 && self.style > 0) {
+		// Re-map lightstyles MUST happen after custom lightstyle strings
+		// These lights will have problems being static because of timing
+		// Static lights need to be converted early to work properly
 		// Will be redefined later
 		self.customstyle_string = "";
 		self.think = light_customstyle_finish;
@@ -567,24 +551,19 @@ void() light_torch_on =
 	light_part_emitter_on();
 };
 
-//----------------------------------------------------------------------
-void() light_torch_off =
-{
+void() light_torch_off = {
 	self.frame = 1;
 	self.estate = ESTATE_OFF;
 	lightstyle(self.style, "a");
-	if (self.attachment) 
-		sound (self.attachment, CHAN_VOICE, SOUND_EMPTY, 1, ATTN_STATIC);
+	if (self.attachment) StopSound(self.attachment,CHAN_VOICE);
 };
 
-//----------------------------------------------------------------------
-void() light_torch_small_walltorch =
-{
+void() light_torch_small_walltorch = {
 	// Allow for custom models
 	if (self.mdl == "") self.mdl = "progs/flame.mdl";
 	precache_model (self.mdl);
 	// Allow for custom sounds
-	if (self.noise == "") self.noise = "ambience/fire1.wav";
+	if (self.noise == "") self.noise = "ad171/ambience/fire1.wav";
 	precache_sound (self.noise);
 	// Default for fire1 sound
 	if (!self.waitmin) self.waitmin = 2.165;
@@ -645,7 +624,7 @@ void() light_flame_large_yellow =
 	if (self.mdl == "") self.mdl = "progs/flame2.mdl";
 	precache_model (self.mdl);
 	// Allow for custom sounds
-	if (self.noise == "") self.noise = "ambience/fire1.wav";
+	if (self.noise == "") self.noise = "ad171/ambience/fire1.wav";
 	precache_sound (self.noise);
 	// The default length of the ambient fire1 sound
 	if (!self.waitmin) self.waitmin = 2.165;
@@ -707,7 +686,7 @@ void() light_flame_small_yellow =
 	if (self.mdl == "") self.mdl = "progs/flame2.mdl";
 	precache_model (self.mdl);
 	// Allow for custom sounds
-	if (self.noise == "") self.noise = "ambience/fire1.wav";
+	if (self.noise == "") self.noise = "ad171/ambience/fire1.wav";
 	precache_sound (self.noise);
 	// The default length of the ambient fire1 sound
 	if (!self.waitmin) self.waitmin = 2.165;
@@ -863,7 +842,7 @@ void() light_flame_pyre =
 
 //======================================================================
 /*QUAKED light_flame_brazier_short (0 .5 0) (-8 -8 -16) (8 8 8) LIGHTOFF NOTSTATIC x x x x x NOPARTICLES
-{ model(":progs/brazshrt.mdl"); }
+{ model(":progs/quoth2pt2full/brazshrt.mdl"); }
 Short brazier (from Quoth)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -891,9 +870,8 @@ NOPARTICLES: No particle or effects active
 Short brazier (from Quoth)
 
 ======================================================================*/
-void() light_flame_brazier_short =
-{
-	self.mdl = "progs/brazshrt.mdl";
+void() light_flame_brazier_short = {
+	self.mdl = "progs/quoth2pt2full/brazshrt.mdl";
 	precache_model (self.mdl);
 
 	// Default = static entity, check done in static function
@@ -909,7 +887,7 @@ void() light_flame_brazier_short =
 
 //======================================================================
 /*QUAKED light_flame_brazier_tall (0 .5 0) (-8 -8 -64) (8 8 8) LIGHTOFF NOTSTATIC x x x x x NOPARTICLES
-{ model(":progs/braztall.mdl"); }
+{ model(":progs/quoth2pt2full/braztall.mdl"); }
 Long brazier (from Quoth)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -937,25 +915,21 @@ NOPARTICLES: No particle or effects active
 Long brazier (from Quoth)
 
 ======================================================================*/
-void() light_flame_brazier_tall =
-{
-	self.mdl = "progs/braztall.mdl";
+void() light_flame_brazier_tall = {
+	self.mdl = "progs/quoth2pt2full/braztall.mdl";
 	precache_model (self.mdl);
-
-	// Default = static entity, check done in static function
 	self.classtype = CT_LIGHTSTATIC;
-	setup_quoth_nostatic();
+	setup_quoth_nostatic(); // Default = static entity, check done in static function
 	setup_vanilla_nostatic();
 	setup_light_sound();
 	setup_light_particle(PARTICLE_STYLE_FLAMES);
 
-	// Check for any custom light styles
-	light_customstyle_start();
+	light_customstyle_start(); // Check for any custom light styles
 };
 
 //======================================================================
 /*QUAKED light_torch_long_walltorch (0 .5 0) (-8 -8 -48) (8 8 80) LIGHTOFF NOTSTATIC x x x x x NOPARTICLES
-{ model(":progs/longtrch.mdl"); }
+{ model(":progs/ad181/misc_longtrch.mdl"); }
 Long wall torch (from Quoth)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -977,15 +951,14 @@ _softangle : Spotlight soft angle (def=0)
 _anglescale: Light angle scale (def=0.5)
 -------- SPAWNFLAGS --------
 LIGHTOFF   : Starts off and waits for trigger
-NOTSTATIC  : Not static entity (useful for switchable lights)
+NOTSTATIC  : Not static entity (useful for switchable liFghts)
 NOPARTICLES: No particle or effects active
 -------- NOTES --------
 Long wall torch (from Quoth)
 
 ======================================================================*/
-void() light_torch_long_walltorch =
-{
-	self.mdl = "progs/longtrch.mdl";
+void() light_torch_long_walltorch = {
+	self.mdl = "progs/ad181/misc_longtrch.mdl";
 	precache_model (self.mdl);
 
 	// Default = static entity, check done in static function

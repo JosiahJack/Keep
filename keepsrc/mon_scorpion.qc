@@ -89,8 +89,8 @@ void(float side) pinch_melee =
 	// Can the target bleed?
 	if (!self.enemy.takedamage) return;
 
-	if (self.meleeattack < 1) sound(self, CHAN_WEAPON, "scorpion/clawattack1.wav", TRUE, TRUE);
-	else sound(self, CHAN_WEAPON, "scorpion/clawattack2.wav", TRUE, TRUE);
+	if (self.meleeattack < 1) sound(self, CHAN_WEAPON, "ad171/scorpion/clawattack1.wav", TRUE, TRUE);
+	else sound(self, CHAN_WEAPON, "ad171/scorpion/clawattack2.wav", TRUE, TRUE);
 	self.meleeattack = 1 - self.meleeattack;
 
 	// Scorpion claw = 1-12 Damage
@@ -100,7 +100,6 @@ void(float side) pinch_melee =
 	SpawnMeatSpray (self, self.enemy, side);
 };
 
-//----------------------------------------------------------------------
 void()	pinch_claw1	=[	$attackB2,		pinch_claw2	] {ai_face();};
 void()	pinch_claw2	=[	$attackB4,		pinch_claw3	] {ai_face();};
 void()	pinch_claw3	=[	$attackB6,		pinch_claw4	] {ai_face();};
@@ -120,8 +119,8 @@ float TAILOFFSET = 8;
 //----------------------------------------------------------------------
 void() pinch_tailsound =
 {
-	if (self.meleeattack < 1) sound(self, CHAN_WEAPON, "scorpion/tailfire1.wav", TRUE, TRUE);
-	else sound(self, CHAN_WEAPON, "scorpion/tailfire2.wav", TRUE, TRUE);
+	if (self.meleeattack < 1) sound(self, CHAN_WEAPON, "ad171/scorpion/tailfire1.wav", TRUE, TRUE);
+	else sound(self, CHAN_WEAPON, "ad171/scorpion/tailfire2.wav", TRUE, TRUE);
 	self.meleeattack = 1 - self.meleeattack;
 };
 
@@ -155,8 +154,8 @@ void(vector tailofs) pinch_tailspike =
 
 //----------------------------------------------------------------------
 void()	pinch_tail1	=[	$attackA2,		pinch_tail2	] {ai_face();
-	if (self.lefty < 1) sound (self, CHAN_VOICE, "scorpion/tailattack1.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_VOICE, "scorpion/tailattack2.wav", 1, ATTN_NORM);
+	if (self.lefty < 1) sound (self, CHAN_VOICE, "ad171/scorpion/tailattack1.wav", 1, ATTN_NORM);
+	else sound (self, CHAN_VOICE, "ad171/scorpion/tailattack2.wav", 1, ATTN_NORM);
 	self.lefty = 1 - self.lefty;
 };
 void()	pinch_tail2	=[	$attackA4,		pinch_tail3	] {ai_face();};
@@ -185,7 +184,7 @@ void()	pinch_jumptouch =
 	// Do not damage other scorpions with jump attacks
 	// Prevents packs from killing themselves
 	if (self.classgroup != other.classgroup && other.takedamage) {
-		sound (self, CHAN_VOICE, "scorpion/jumphit.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "ad171/scorpion/jumphit.wav", 1, ATTN_NORM);
 		if (Align_DamageModifier(other,self,1, TRUE)) BleedDeBuff(other);
 		spawn_touchblood (self, self.enemy, 100);
 	}
@@ -206,8 +205,8 @@ void()	pinch_jumptouch =
 //----------------------------------------------------------------------------
 void() pinch_leap1	=[	$attackC1, pinch_leap2	] {ai_face();
 	self.jump_flag = time + MONAI_JUMPSCORPTIME;
-	if (self.lefty < 1) sound (self, CHAN_VOICE, "scorpion/jumpattack1.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_VOICE, "scorpion/jumpattack2.wav", 1, ATTN_NORM);
+	if (self.lefty < 1) sound (self, CHAN_VOICE, "ad171/scorpion/jumpattack1.wav", 1, ATTN_NORM);
+	else sound (self, CHAN_VOICE, "ad171/scorpion/jumpattack2.wav", 1, ATTN_NORM);
 	self.lefty = 1 - self.lefty;
 };
 void() pinch_leap2	=[	$attackC3, pinch_leap3	] {ai_face(); };
@@ -386,13 +385,13 @@ void() monster_scorpion =
 	
 	// IDLE/COMBAT and SIGHT sounds
 	if (self.spawnflags & MON_SCORPION_STINGER) {
-		self.idle_sound = "scorpion/idle1.wav";
-		self.idle_sound2 = "scorpion/idle2.wav";
-		self.sight_sound = "scorpion/sight1.wav";
+		self.idle_sound = "ad171/scorpion/idle1.wav";
+		self.idle_sound2 = "ad171/scorpion/idle2.wav";
+		self.sight_sound = "ad171/scorpion/sight1.wav";
 
-		precache_sound("scorpion/jumpattack1.wav");
-		precache_sound("scorpion/jumpattack2.wav");
-		precache_sound("scorpion/jumphit.wav");
+		precache_sound("ad171/scorpion/jumpattack1.wav");
+		precache_sound("ad171/scorpion/jumpattack2.wav");
+		precache_sound("ad171/scorpion/jumphit.wav");
 		if (self.health < 1) self.health = 120;
 		self.gibhealth = -25;
 		self.idlemoreoften = TRUE;		// More creepy idle sounds
@@ -400,14 +399,14 @@ void() monster_scorpion =
 	}
 	else {
 		precache_model (MODEL_PROJ_SCORP);		// Large green spike
-		self.idle_sound = "scorpion/warning1.wav";
-		self.idle_sound2 = "scorpion/warning2.wav";
-		self.sight_sound = "scorpion/hiss.wav";
+		self.idle_sound = "ad171/scorpion/warning1.wav";
+		self.idle_sound2 = "ad171/scorpion/warning2.wav";
+		self.sight_sound = "ad171/scorpion/hiss.wav";
 
-		precache_sound("scorpion/tailfire1.wav");
-		precache_sound("scorpion/tailfire2.wav");
-		precache_sound("scorpion/tailattack1.wav");
-		precache_sound("scorpion/tailattack2.wav");
+		precache_sound("ad171/scorpion/tailfire1.wav");
+		precache_sound("ad171/scorpion/tailfire2.wav");
+		precache_sound("ad171/scorpion/tailattack1.wav");
+		precache_sound("ad171/scorpion/tailattack2.wav");
 		if (self.health < 1) self.health = 80;
 		self.gibhealth = -20;
 		if (!self.exactskin) self.exactskin = rint((random()*3)-0.5);
@@ -417,15 +416,15 @@ void() monster_scorpion =
 	precache_sound (self.sight_sound);
 
 	// death/pain/attack sounds
-	self.pain_sound = "scorpion/pain1.wav";
-	self.pain_sound2 = "scorpion/pain2.wav";
+	self.pain_sound = "ad171/scorpion/pain1.wav";
+	self.pain_sound2 = "ad171/scorpion/pain2.wav";
 	precache_sound(self.pain_sound);
 	precache_sound(self.pain_sound2);
-	self.death_sound = "scorpion/death1.wav";
+	self.death_sound = "ad171/scorpion/death1.wav";
 	precache_sound(self.death_sound);
 
-	precache_sound("scorpion/clawattack1.wav");
-	precache_sound("scorpion/clawattack2.wav");
+	precache_sound("ad171/scorpion/clawattack1.wav");
+	precache_sound("ad171/scorpion/clawattack2.wav");
 
 	// Cache scorpion is a special class used for precache only
 	if (self.classtype != CT_CACHESCORPION) setup_scorpion();
@@ -530,12 +529,12 @@ void(vector minion_org, entity minion_targ) minion_scorpion =
 	minion.gibhealth = -20;
 	minion.health = 80;
 
-	minion.idle_sound = "scorpion/warning1.wav";
-	minion.idle_sound2 = "scorpion/warning2.wav";
-	minion.sight_sound = "scorpion/hiss.wav";
+	minion.idle_sound = "ad171/scorpion/warning1.wav";
+	minion.idle_sound2 = "ad171/scorpion/warning2.wav";
+	minion.sight_sound = "ad171/scorpion/hiss.wav";
 
-	minion.pain_sound = "spider/pain1.wav";
-	minion.pain_sound2 = "spider/pain2.wav";
+	minion.pain_sound = "ad171/spider/pain1.wav";
+	minion.pain_sound2 = "ad171/spider/pain2.wav";
 	
 	minion.nextthink = time + 0.01;
 	minion.think = setup_scorpion;

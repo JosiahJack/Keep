@@ -1,25 +1,47 @@
-// Change multi_wait function in triggers.qc to the following to allow for resettable counters:
-/*
-void () multi_wait = {
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Qmaster
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 0
+//
+// Implements: Definitions for QRobots, programmable XYZ Robots
+//
+// Description:
+// Definitions for use on func_qrobots and their helper entities to have fully
+// programmable, synchronizing, fully autonomous, xyz coordinate robots.
+//
+// Inspired by real life xyz robots, in particular Sepro robots, though with
+// some STAR Automation and Yushin America inspiration as well.
+//
+// Also a relic before array support... so... well here it is.
+//=============================================================================
 
-   if ( self.max_health ) {
-
-      self.health = self.max_health;
-      self.takedamage = DAMAGE_YES;
-      self.solid = SOLID_BBOX;
-
-   }
-   if ( self.classname == "counter" ) {
-
-      self.count = self.oldcount;
-   }
-};
-*/
-
-// ================================
-// =======Robot Definitions========
-// ================================
-float COUNTER_RESETS   = 2;
 .float oldcount;
 .string syncerbot;
 .string homeinfo;

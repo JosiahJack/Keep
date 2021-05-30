@@ -459,7 +459,7 @@ void  ()fangel_death = {
 	monster_death_precheck();
 
 	self.th_run = SUB_Null;
-	self.idle_sound = "misc/null.wav";
+	self.idle_sound = SOUND_EMPTY;
 
 	// regular death
 	if (!self.gibbed) {

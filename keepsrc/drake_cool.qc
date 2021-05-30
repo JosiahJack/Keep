@@ -1,3 +1,4 @@
+// by Patrick Martin
 // Special effects.  Some of which are used by the Bane.
 //==========================================================================
 //  Shadows
@@ -87,7 +88,7 @@ void() Quake_Think = [ 0, Quake_Think ] {
 	// The blessed may avoid damage and chaos.
 
     if (self.delay <= time) {
-        if (!self.spawnflags) sound (self, CHAN_VOICE, "misc/quakeend.wav", 1, ATTN_NORM);
+        if (!self.spawnflags) sound (self, CHAN_VOICE, "hipnotic/misc/quakeend.wav", 1, ATTN_NORM);
         remove (self);
         return;
     }
@@ -171,25 +172,19 @@ void() Quake_Think = [ 0, Quake_Think ] {
 				// Add movement.
 				// Note:  Too much trouble discriminating which objects can be
 				// moved without problems, so move only creatures for now.
-                if ((head.flags & FLx_CREATURE) || (head.xf2 & XF2_QUAKE)) {
+                if (head.flags & FLx_CREATURE) {
                     if (head.flags & FL_ONGROUND) {
-						// Bump target up a bit.  We need this for players at
-                        // least for impaired movement.  Monsters will thump
-                        // a lot, if z is too high, and that sucks.  Hmmm...
+						// Bump target up a bit.  We need this for players at least for impaired movement.  Monsters will thump a lot, if z is too high, and that sucks.  Hmmm...
                         up = ((random() * 100) + 25) * dist;
                         if (up > upper) up = upper;
                         head.velocity_z = head.velocity_z + up;
                     }
-
-					// Random drifting.
-					dir = '0 1 0' * (random() * 360);
+					dir = '0 1 0' * (random() * 360); // Random drifting.
 					makevectors (dir);
 					dir = v_forward;
                     
-                    // dir_z is already 0, so no need for 'dir_z = 0;'.
-                    // Note:  vel*25 from Hexen2 is too much, so use *8.
-                    // Update:  Monster does not drift if not fighting.
-                    if (dizzy) head.velocity = head.velocity + (dir * (damage * 8 * random()));
+                    // dir_z is already 0, so no need for 'dir_z = 0;'.  Note:  vel*25 from Hexen2 is too much, so use *8.
+                    if (dizzy) head.velocity = head.velocity + (dir * (damage * 8 * random())); // Update:  Monster does not drift if not fighting.
                     head.flags = head.flags - (head.flags & FL_ONGROUND);
                 }
             }
@@ -198,8 +193,7 @@ void() Quake_Think = [ 0, Quake_Think ] {
     }
 };
 
-// Note:  Quake can ping for 'damage' up to five times if it lasts
-// long enough, at least 1.5 seconds.
+// Note:  Quake can ping for 'damage' up to five times if it lasts long enough, at least 1.5 seconds.
 void(entity attacker, float radius, float damage, vector spot, float dflags, float secs, vector tilt) Quake_Spawn = {
     local   entity  quaker;
     local   float   attn;
@@ -218,7 +212,7 @@ void(entity attacker, float radius, float damage, vector spot, float dflags, flo
         dflags = dflags | DF_SAFE;
         dtype = "quake";
     } else {
-		// Assume quake was spawned by a missile, so inherit its attack type.
+		// Expect earthquake was spawned by a missile, so inherit its attack type.
 		// Watch out for types that cause special deaths, such as fire.
         dtype = self.classname;
     }
@@ -244,7 +238,7 @@ void(entity attacker, float radius, float damage, vector spot, float dflags, flo
     quaker.spawnflags   = dflags & DF_TIMED;    // Silent if true.
     setsize (quaker, '0 0 0', '0 0 0');        
     setorigin (quaker, spot);
-    if (!quaker.spawnflags) sound (quaker, CHAN_VOICE, "misc/quake.wav", 1, attn); // Update 4/9/2009:  Variable attenuation instead of ATTN_NORM.
+    if (!quaker.spawnflags) sound (quaker, CHAN_VOICE, "hipnotic/misc/quake.wav", 1, attn); // Update 4/9/2009:  Variable attenuation instead of ATTN_NORM.
 };
 
 void(float radius, float damage, vector spot, float dflags, float secs) Quake_Self = {Quake_Spawn (self, radius, damage, spot, dflags, secs, VEC_QUAKE);};
@@ -276,14 +270,13 @@ put in "wait".  Place the richter scale of the quake in the "dmg" field.
 It will also trigger all targets like a 'trigger_once'.
 */
 
-void() tq_remove = {SUB_UseTargets();  SUB_Remove();};
-
 void(entity who) tq_go = {
     if (who.health <= 0 || who.classname != "player") return;
 
-// Use Drake's quake code instead.
+	// Use Drake's quake code instead.
     Quake_Self (0, 0, VEC_ORIGIN, DF_NONE, self.wait);
-    tq_remove ();
+    SUB_UseTargets();
+	SUB_Remove();
 };
 
 void() tq_use = {tq_go (activator);};
@@ -291,14 +284,16 @@ void() tq_touch = {tq_go (other);};
 
 void() trigger_quake = {
     if (deathmatch /*|| coop*/) { // This will use then remove the quake.
-        self.think      = tq_remove;
+        self.think      = SUB_Remove;
+		self.delay = 0.2;
+		SUB_UseTargets();
         self.nextthink  = time + 0.2;
         return;
     }
 
 	// Disabled because sounds were precached by worldspawn already.
-	precache_sound ("misc/quake.wav");
-	precache_sound ("misc/quakeend.wav");
+	precache_sound ("hipnotic/misc/quake.wav");
+	precache_sound ("hipnotic/misc/quakeend.wav");
     InitTrigger();
 
 	if (self.wait <= 0) self.wait = 3;
@@ -451,7 +446,7 @@ void() divine_use = {
 
 void() trigger_smite = {
     precache_sound ("drake/bane/thunder.wav");
-    precache_sound ("hipweap/mjolhit.wav");
+    precache_sound ("hipnotic/weapons/mjolhit.wav");
 
     self.attack_finished = 0;
     if (!self.cnt) self.cnt = 1;
@@ -536,7 +531,7 @@ void() bane_storm4  =[ 0, bane_storm5  ]
         if (random() < 0.5)
             sound (self, CHAN_AUTO, "ambience/thunder1.wav", zot, ATTN_NONE);
         else
-            sound (self, CHAN_AUTO, "ambience/thunder2.wav", zot, ATTN_NONE);
+            sound (self, CHAN_AUTO, "drake/ambience/thunder2.wav", zot, ATTN_NONE);
         self.pain_finished = time + 5;
     }
     bane_storm_target ();

@@ -59,11 +59,10 @@ void () scourge_think = {
       self.lastvictim = trig;
       self.state = TRUE;
    }
-   if ( ((self.spawnsilent == FALSE) && (self.spawnmulti == TRUE)) ) {
-      sound (self,CHAN_BODY,"misc/null.wav",TRUE,ATTN_IDLE);
+   if (((self.spawnsilent == FALSE) && (self.spawnmulti == TRUE))) {
+		StopSound(self,CHAN_BODY);
    } else {
-      if ( ((self.spawnsilent == TRUE) && (self.spawnmulti == FALSE)) )
-         sound (self,CHAN_BODY,"scourge/walk.wav",TRUE,ATTN_IDLE);
+      if (((self.spawnsilent == TRUE) && (self.spawnmulti == FALSE))) sound (self,CHAN_BODY,"hipnotic/scourge/walk.wav",TRUE,ATTN_IDLE);
    }
    self.spawnmulti = self.spawnsilent;
 };
@@ -99,7 +98,7 @@ void () scourge_stand12 = [ 11.000, scourge_stand1 ] { ai_stand (); scourge_thin
 
 void () scourge_walk1 = [ 12.000, scourge_walk2 ] {
    if ( (random () < 0.100) )
-      sound (self,CHAN_VOICE,"scourge/idle.wav",TRUE,ATTN_IDLE);
+      sound (self,CHAN_VOICE,"hipnotic/scourge/idle.wav",TRUE,ATTN_IDLE);
 
    self.spawnsilent = TRUE;
    scourge_think ();
@@ -113,7 +112,7 @@ void () scourge_walk6 = [ 17.000, scourge_walk1 ] { ai_walk (8); };
 
 void () scourge_run1 = [ 12.000, scourge_run2 ] {
 	if ( (random () < 0.100) )
-	sound (self,CHAN_VOICE,"scourge/idle.wav",TRUE,ATTN_IDLE);
+	sound (self,CHAN_VOICE,"hipnotic/scourge/idle.wav",TRUE,ATTN_IDLE);
 	self.spawnsilent = TRUE;
 	scourge_think ();
 	ai_run (18.000); };
@@ -241,7 +240,7 @@ void () scourge_melee4 = [ 23.000, scourge_melee5 ] {
 
 void () scourge_melee5 = [ 24.000, scourge_melee6 ] {
 
-   sound (self,CHAN_WEAPON,"scourge/tailswng.wav",TRUE,ATTN_NORM);
+   sound (self,CHAN_WEAPON,"hipnotic/scourge/tailswng.wav",TRUE,ATTN_NORM);
    ai_charge (MOVETYPE_WALK);
 
 };
@@ -269,19 +268,8 @@ void () scourge_melee9 = [ 28.000, scourge_melee10 ] {
    ai_face ();
 
 };
-
-void () scourge_melee10 = [ 29.000, scourge_melee11 ] {
-
-   ai_face ();
-
-};
-
-void () scourge_melee11 = [ 30.000, scourge_run1 ] {
-
-   ai_face ();
-   SUB_CheckRefire (scourge_melee1);
-
-};
+void () scourge_melee10 = [ 29.000, scourge_melee11 ] { ai_face (); };
+void () scourge_melee11 = [ 30.000, scourge_run1 ] { ai_face (); SUB_CheckRefire (scourge_melee1); };
 
 void () scourge_pain1 = [ 31.000, scourge_pain2 ] {
 
@@ -289,17 +277,8 @@ void () scourge_pain1 = [ 31.000, scourge_pain2 ] {
    scourge_think ();
 
 };
-
-void () scourge_pain2 = [ 32.000, scourge_pain3 ] {
-
-
-};
-
-void () scourge_pain3 = [ 33.000, scourge_pain4 ] {
-
-
-};
-
+void () scourge_pain2 = [ 32.000, scourge_pain3 ] {};
+void () scourge_pain3 = [ 33.000, scourge_pain4 ] {};
 void () scourge_pain4 = [ 34.000, scourge_pain5 ] {
 
 
@@ -314,7 +293,7 @@ void (entity inflictor, entity attacker, float damage) scourge_pain = {
    if ( (self.pain_finished > time) )
       return ;
 
-   sound (self,CHAN_VOICE,"scourge/pain.wav",TRUE,ATTN_NORM);
+   sound (self,CHAN_VOICE,"hipnotic/scourge/pain.wav",TRUE,ATTN_NORM);
    self.pain_finished = (time + FL_SWIM);
    scourge_pain1 ();
 };
@@ -338,7 +317,7 @@ void () scourge_die = {
       return ;
 
    }
-   sound (self,CHAN_VOICE,"scourge/pain2.wav",TRUE,ATTN_NORM);
+   sound (self,CHAN_VOICE,"hipnotic/scourge/pain2.wav",TRUE,ATTN_NORM);
    scourge_die1 ();
 };
 
@@ -401,22 +380,21 @@ void () monster_scourge = {
 	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/hipnotic/mon_scor.mdl";
-	precache_model2 ("progs/hipnotic/mon_scor.mdl");
+	precache_model("progs/hipnotic/mon_scor.mdl");
 
 	self.headmdl = "progs/hipnotic/h_scourg.mdl";
-	precache_model2 ("progs/hipnotic/h_scourg.mdl");
-
-	precache_model2 ("progs/hipnotic/laser.mdl");
-	precache_model2 ("progs/ad171/s_light.mdl");
-	precache_model2 ("progs/spike.mdl");
-	precache_sound ("misc/null.wav");
-	precache_sound ("scourge/idle.wav");
-	precache_sound ("scourge/pain.wav");
-	precache_sound ("scourge/pain2.wav");
-	precache_sound ("scourge/sight.wav");
-	precache_sound ("scourge/tailswng.wav");
-	precache_sound ("scourge/walk.wav");
-	precache_sound2 ("shambler/smack.wav");
+	precache_model("progs/hipnotic/h_scourg.mdl");
+	precache_model("progs/hipnotic/laser.mdl");
+	precache_model("progs/ad171/s_light.mdl");
+	precache_model("progs/spike.mdl");
+	precache_sound("hipnotic/scourge/idle.wav");
+	precache_sound("hipnotic/scourge/pain.wav");
+	precache_sound("hipnotic/scourge/pain2.wav");
+	// precache_sound("nsoe/scourge/pain3.wav");
+	precache_sound("hipnotic/scourge/sight.wav");
+	precache_sound("hipnotic/scourge/tailswng.wav");
+	precache_sound("hipnotic/scourge/walk.wav");
+	precache_sound("shambler/smack.wav");
    	
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;

@@ -135,7 +135,7 @@ void() mino_run =
 // Short howl animation to switch to rage mode
 //----------------------------------------------------------------------
 void() mino_howl1 =[ $howl1, mino_howl2 ] {
-	sound (self, CHAN_WEAPON, "minotaur/attack1long.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_WEAPON, "ad171/minotaur/attack1long.wav", 1, ATTN_NORM);};
 void() mino_howl2 =[ $howl3, mino_howl3 ] {};
 void() mino_howl3 =[ $howl5, mino_howl4 ] {};
 void() mino_howl4 =[ $howl7, mino_howl5 ] {};
@@ -162,12 +162,12 @@ void(float side) mino_claw =
 
 	if (!ai_checkmelee(MONAI_MELEEMINOTAUR,MONAI_MELEEZTALL) || !self.enemy.takedamage) {
 		// Melee claw miss sound
-		sound (self, CHAN_WEAPON, "minotaur/swipe.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/minotaur/swipe.wav", 1, ATTN_NORM);
 	}
 	else {
 		// Melee claw hit sound
-		if (self.lefty) sound (self, CHAN_WEAPON, "minotaur/strike1.wav", 1, ATTN_NORM);
-		else sound (self, CHAN_WEAPON, "minotaur/strike2.wav", 1, ATTN_NORM);
+		if (self.lefty) sound (self, CHAN_WEAPON, "ad171/minotaur/strike1.wav", 1, ATTN_NORM);
+		else sound (self, CHAN_WEAPON, "ad171/minotaur/strike2.wav", 1, ATTN_NORM);
 		self.lefty = 1 - self.lefty;
 		ldmg = 12 + 6*random();
 		// Rage attack is once per animation frame, more deadly
@@ -431,7 +431,7 @@ void(vector orgofs, float angofs) minotaur_fire =
 // Main projectile plasma/poison attack of both types of minotaur
 //----------------------------------------------------------------------
 void() mino_magic1 =[ $magic1, mino_magic2 ] {ai_face();
-	if (random() < 3) sound (self, CHAN_BODY, "minotaur/attack1start.wav", 1, ATTN_NORM);};
+	if (random() < 3) sound (self, CHAN_BODY, "ad171/minotaur/attack1start.wav", 1, ATTN_NORM);};
 void() mino_magic2 =[ $magic3, mino_magic3 ] {minotaur_hands('34 0 44','-20 30 20',0);};
 void() mino_magic3 =[ $magic5, mino_magic4 ] {minotaur_hands('30 -12 64','-20 44 28',1);};
 void() mino_magic4 =[ $magic7, mino_magic5 ] {minotaur_hands('15 -16 88','-10 56 48',2);};
@@ -440,7 +440,7 @@ void() mino_magic6 =[ $magic11, mino_magic7 ] {minotaur_hands('16 -36 72','-12 4
 void() mino_magic7 =[ $magic13, mino_magic8 ] {minotaur_hands('36 -20 56','24 32 68',5);};
 
 void() mino_magic8 =[ $magic15, mino_magic9 ] {
-	sound (self, CHAN_WEAPON, "minotaur/bolt_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/minotaur/bolt_fire.wav", 1, ATTN_NORM);
 	minotaur_hands('40 -3 46','40 1 44',6);minotaur_fire('40 0 45',-2);};
 void() mino_magic9 =[ $magic17, mino_magic10 ] {ai_back(8);
 	minotaur_hands('32 -2 44','32 2 44',5);minotaur_fire('32 0 44',-1);};
@@ -461,7 +461,7 @@ void() mino_magic13 =[ $magic25, mino_magic14 ] {
 	// Spawn a mist of blue/green particles where projectiles came from
 	particle_explode(self.finalangle, 50, 3, self.part_style, PARTICLE_BURST_MINOTAUR);
 	// Random chance of final growl at player
-	if (random() < 0.3) sound (self, CHAN_BODY, "minotaur/attack1end.wav", 1, ATTN_NORM);
+	if (random() < 0.3) sound (self, CHAN_BODY, "ad171/minotaur/attack1end.wav", 1, ATTN_NORM);
 };
 void() mino_magic14 =[ $magic27, mino_magic15 ] {};
 void() mino_magic15 =[ $magic29, mino_magic16 ] {ai_face();};
@@ -508,7 +508,7 @@ void(float dbframe) mino_sumball =
 void() mino_summon1 =[ $howl1, mino_summon2 ] {ai_face();self.pain_finished = time + 2;};
 void() mino_summon2 =[ $howl3, mino_summon3 ] {ai_face();};
 void() mino_summon3 =[ $howl5, mino_summon4 ] {ai_face();mino_sumeffect();
-	sound (self, CHAN_BODY, "minotaur/attack1long.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_BODY, "ad171/minotaur/attack1long.wav", 1, ATTN_NORM);};
 void() mino_summon4 =[ $howl7, mino_summon5 ] {mino_sumeffect();};
 void() mino_summon5 =[ $howl9, mino_summon6 ] {mino_sumeffect();};
 void() mino_summon6 =[ $howl11, mino_summon7 ] {mino_sumeffect();};
@@ -696,7 +696,7 @@ void() mino_die =
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "minotaur/death.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "ad171/minotaur/death.wav", 1, ATTN_NORM);
 		mino_death1 ();
 	}
 };
@@ -733,32 +733,32 @@ void() monster_minotaur = {
 	else if (self.lip < 0.5) self.gib2mdl = self.gib4mdl;
 	else if (self.lip < 0.75) self.gib3mdl = self.gib4mdl;
 
-	self.idle_sound = "minotaur/idle1.wav";
-	self.idle_sound2 = "minotaur/idle2.wav";
-	self.idle_soundcom = "minotaur/idle1com.wav";
-	self.idle_soundcom2 = "minotaur/idle2com.wav";
+	self.idle_sound = "ad171/minotaur/idle1.wav";
+	self.idle_sound2 = "ad171/minotaur/idle2.wav";
+	self.idle_soundcom = "ad171/minotaur/idle1com.wav";
+	self.idle_soundcom2 = "ad171/minotaur/idle2com.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
 	precache_sound (self.idle_soundcom);
 	precache_sound (self.idle_soundcom2);
 
-	precache_sound ("minotaur/swipe.wav");		// claw misses
-	precache_sound ("minotaur/strike1.wav");	// claw hit1
-	precache_sound ("minotaur/strike2.wav");	// claw hit2
+	precache_sound ("ad171/minotaur/swipe.wav");		// claw misses
+	precache_sound ("ad171/minotaur/strike1.wav");	// claw hit1
+	precache_sound ("ad171/minotaur/strike2.wav");	// claw hit2
 
-	precache_sound ("minotaur/attack1start.wav");	// Short roar
-	precache_sound ("minotaur/attack1end.wav");		// Short roar
-	precache_sound ("minotaur/attack1long.wav");	// Enter rage mode
-	precache_sound ("minotaur/bolt_fire.wav");		// fire projectile
+	precache_sound ("ad171/minotaur/attack1start.wav");	// Short roar
+	precache_sound ("ad171/minotaur/attack1end.wav");		// Short roar
+	precache_sound ("ad171/minotaur/attack1long.wav");	// Enter rage mode
+	precache_sound ("ad171/minotaur/bolt_fire.wav");		// fire projectile
 	precache_sound (SOUND_PLASMA_HIT);				// impact sounds
 
-	precache_sound ("minotaur/death.wav");
-	self.pain_sound = "minotaur/pain1.wav";
-	self.pain_sound2 = "minotaur/pain2.wav";
+	precache_sound ("ad171/minotaur/death.wav");
+	self.pain_sound = "ad171/minotaur/pain1.wav";
+	self.pain_sound2 = "ad171/minotaur/pain2.wav";
 	precache_sound (self.pain_sound);
 	precache_sound (self.pain_sound2);
 
-	self.sight_sound = "minotaur/sight1.wav";
+	self.sight_sound = "ad171/minotaur/sight1.wav";
 	precache_sound (self.sight_sound);
 
 	self.solid = SOLID_NOT;			// No interaction with world

@@ -255,12 +255,10 @@ void()	blrog_die18	=[	$die18, 	blrog_die19	] {};
 void()	blrog_die19	=[	$die19, 	blrog_die19	] {};
 
 void() blrog_die = {
-
-
 	// regular death
 	sound (self, CHAN_VOICE, "rog/death1.wav", 1, ATTN_NORM);
-        blrog_die1();
-        self.solid = SOLID_NOT;
+	blrog_die1();
+	self.solid = SOLID_NOT;
 };
 
 void() blrog_pause = {
@@ -307,10 +305,10 @@ void() monster_balrog = {
 		precache_model ( "progs/statgib1.mdl");
 		precache_model ( "progs/statgib2.mdl");
 		precache_model ( "progs/statgib3.mdl");
-		precache_sound ( "statue/see.wav");
-		precache_sound ( "statue/idle.wav");
-		precache_sound ( "statue/pain.wav");
-		precache_sound ( "statue/death.wav");
+		precache_sound ( "rogue/statue/see.wav");
+		precache_sound ( "ad171/statue/idle1.wav");
+		precache_sound ( "rogue/statue/pain.wav");
+		precache_sound ( "rogue/statue/death.wav");
 	} else {
 
 	precache_sound ("rog/death1.wav");

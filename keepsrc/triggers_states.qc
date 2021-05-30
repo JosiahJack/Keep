@@ -45,8 +45,8 @@ void() trigger_bmodel_sounds =
 	else if (self.sounds == 2) self.noise = SOUND_TALK;
 	else if (self.sounds == 3) self.noise = "misc/trigger1.wav";
 	else if (self.sounds == 4) self.noise = SOUND_EMPTY;
-	else if (self.sounds == 6) self.noise = "misc/secret3.wav";
-	else if (self.sounds == 7) self.noise = "misc/secret2.wav";
+	else if (self.sounds == 6) self.noise = "ad171/misc/secret3.wav";
+	else if (self.sounds == 7) self.noise = "drake/misc/secret2.wav";
 	// precache any sounds that have been defined
 	if (self.noise != "") precache_sound(self.noise);
 	// setup default volume (entity key override)
@@ -106,13 +106,10 @@ void() trigger_bmodel_inview =
 	self.think = trigger_bmodel_inview;
 };
 
-//----------------------------------------------------------------------
 //  the trigger was just touched/killed/used
 //  self.bmodel_act should be set to the activator so it can be held 
 //  through a delay so wait for the delay time before firing
-//----------------------------------------------------------------------
-void() trigger_bmodel_fire =
-{
+void() trigger_bmodel_fire = {
 	// Is the trigger blocked? (trigger_once)
 	if (self.attack_finished > time) return;
 	

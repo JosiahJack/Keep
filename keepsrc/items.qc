@@ -42,7 +42,6 @@ float RESPAWN_ARTIFACT1 = 60;		// Quad + Suit
 float RESPAWN_ARTIFACT2 = 300;		// Pent + Invisibilty
 float RESPAWN_BACKPACK = 30;		// Random Ammo Drop
 float RESPAWN_COOP = 5;				// Default timer for coop
-
 float RESPAWN_PARTICLES = 32;		// Particle burst for ring/center
 float RESPAWN_EXPTIME = 1;			// Particles burst lifetime
 float RESPAWN_EXPRADIUS = 12;		// Particle ring radius
@@ -54,27 +53,25 @@ void() weapon_touch;
 void() ammo_touch;
 void() artifact_touch;
 
-//----------------------------------------------------------------------
-// Some items have pickup conditions which prevent targets
-// from firing when coop mode is active, show console warning
-//----------------------------------------------------------------------
-void() item_coopcheck =
-{
-	// coop active?
-	if (coop <= 0) return;
-	// Coop checks for prog list done elsewhere
-	if (self.progspawnlist) return;
-	// Check for any target(s) on coop sensitive items?
-	if (self.target != "" || self.target2 != "") {
+// Some items have pickup conditions which prevent targets from firing when coop mode is active, show console warning
+void() item_coopcheck = {
+	if (coop <= 0) return; // coop active?
+	if (self.progspawnlist) return; // Coop checks for prog list done elsewhere
+	
+	if (HasTargets(self)) { // Check for any target(s) on coop sensitive items?
 		dprint("\b[Coop]\b (");
 		dprint(self.classname);
-		dprint(") unreliable target(s) in coop!\n");
+		dprint(") unreliable target(s) in coop on item at: '\n");
+		dprint(ftos(self.origin_x));
+		dprint(" ");
+		dprint(ftos(self.origin_y));
+		dprint(" ");
+		dprint(ftos(self.origin_z));
+		dprint("'\n");
 	}
 };
 
-//----------------------------------------------------------------------
 // Setup skin parameter for ammo and health items
-//----------------------------------------------------------------------
 // world.worldtype			Model style				Skin
 // 0 = default (Medieval)	wood / flasks			1
 // 1 = runic / metal		wood / flasks			1
@@ -84,9 +81,7 @@ void() item_coopcheck =
 // 0 = default				-						-
 // 1 = base					green / square packs	0
 // 2 = Medieval				wood / flasks			1
-//----------------------------------------------------------------------
-float(entity targ) item_skintype =
-{
+float(entity targ) item_skintype = {
 	// Go through medieval exceptions based on table above
 	if (world.worldtype == 0 && !targ.skin_override) return SKIN_MEDIEVAL;
 	else if (world.worldtype == 1 && !targ.skin_override) return SKIN_MEDIEVAL;
@@ -94,17 +89,11 @@ float(entity targ) item_skintype =
 	else return SKIN_BASE;
 };
 
-//----------------------------------------------------------------------
 // Check floor under item and animated skin for new BASE health boxes
-//----------------------------------------------------------------------
-void() item_thinkloop =
-{
-	// Check for entity states
-	if (self.estate & ESTATE_BLOCK) return;
-	// Has the item been turned off?
-	if (self.attack_finished > time) return;
-	// Has the item removal timer been reached?
-	if (self.item_expired > 0 && self.item_expired < time) remove(self);
+void() item_thinkloop = {
+	if (self.estate & ESTATE_BLOCK) return; // Check for entity states
+	if (self.attack_finished > time) return; // Has the item been turned off?
+	if (self.item_expired > 0 && self.item_expired < time) remove(self); // Has the item removal timer been reached?
 	
 	if (self.item_skinanim > 0) {
 		self.item_skincycle = self.item_skincycle + 1;
@@ -115,35 +104,27 @@ void() item_thinkloop =
 				self.item_skinanim_no = 0;
 			}
 		}
-		// Update skin
-		self.skin = self.item_skinanim_no;
+		self.skin = self.item_skinanim_no; // Update skin
 	}
 
-	// Check floor below item (global function)
-	if (self.item_flrcheck > 0) {
+	if (self.item_flrcheck > 0) { // Check floor below item (global function)
 		ent_floorcheck(self, self.item_flrcheck);
-		// Record any movement for respawn function
-		self.oldorigin = self.origin;
+		self.oldorigin = self.origin; // Record any movement for respawn function
 	}
-
-	// Keep checking
-	self.think = item_thinkloop;
+	self.think = item_thinkloop; // Keep checking
 	self.nextthink = time + 0.1;
 };
 
 void() item_estate_setup;
-//----------------------------------------------------------------------
-void() item_reset =
-{
+
+void() item_reset = {
 	// Reset trigger_once conditions
 	self.attack_finished = 0;
 	if (!self.estate_on) item_estate_setup();
 	self.estate_on();
 };
 
-//----------------------------------------------------------------------
-void() item_debugcustomdl =
-{
+void() item_debugcustomdl = {
 	if (self.mdl != "") {
 		dprint("\b[ITEMS]\b "); dprint(self.classname);
 		dprint(" with Custom mdl ("); dprint(self.mdl);
@@ -152,9 +133,7 @@ void() item_debugcustomdl =
 	}
 };
 
-//----------------------------------------------------------------------
-void() item_finished =
-{
+void() item_finished = {
 	// Check for coop respawn options
 	// This system can easily be abused by switching coop on/off
 	// But its better the respawns are added, rather than not
@@ -168,16 +147,13 @@ void() item_finished =
 				if (self.respawn_time > RESPAWN_COOP) self.respawn_time = RESPAWN_COOP;
 				self.spawnflags = self.spawnflags | ITEM_RESPAWN;
 			}
-		}
-		else if (self.classgroup == CG_HEALTH) {
+		} else if (self.classgroup == CG_HEALTH) {
 			if (coop_health == TRUE && self.respawn_time > 0)
 				self.spawnflags = self.spawnflags | ITEM_RESPAWN;
-		}
-		else if (self.classgroup == CG_AMMOITEM) {
+		} else if (self.classgroup == CG_AMMOITEM) {
 			if (coop_ammoboxes == TRUE && self.respawn_time > 0)
 				self.spawnflags = self.spawnflags | ITEM_RESPAWN;
-		}
-		else if (self.classgroup == CG_ARTIFACT) {
+		} else if (self.classgroup == CG_ARTIFACT) {
 			if (coop_powerups == TRUE && self.respawn_time > 0)
 				self.spawnflags = self.spawnflags | ITEM_RESPAWN;
 		}
@@ -188,9 +164,7 @@ void() item_finished =
 	self.estate_off();
 };
 
-//----------------------------------------------------------------------
-void() item_respawn =
-{
+void() item_respawn = {
 	// Classic quake re-spawn sound
 	sound (self, CHAN_VOICE, SOUND_RESPAWN, 1, ATTN_NORM);
 
@@ -210,9 +184,7 @@ void() item_respawn =
 	self.estate_reset();
 };
 
-//----------------------------------------------------------------------
 // Re-direction for map hacks (not used normally)
-//----------------------------------------------------------------------
 void() SUB_regen = {
 //	self.model = self.mdl;
 //	self.solid = SOLID_TRIGGER;
@@ -221,9 +193,7 @@ void() SUB_regen = {
 	item_reset();
 };
 
-//----------------------------------------------------------------------
-void() alphafade_item_respawn =
-{
+void() alphafade_item_respawn = {
 	if (self.waitmin > time) {
 		self.speed = 1 - ((self.waitmin - time) / self.respawn_time);
 		self.alpha = 0.1 + ((self.speed*0.4)*random());
@@ -238,9 +208,7 @@ void() alphafade_item_respawn =
 	else item_respawn();
 };
 
-//----------------------------------------------------------------------
-void() start_item_respawn =
-{
+void() start_item_respawn = {
 	// Is the item being respawned at the moment?
 	if (self.waitmin > time) return;
 	// Is the item setup to instantly respawn? (time = -1)
@@ -253,8 +221,7 @@ void() start_item_respawn =
 		}
 		// Instantly spawn item
 		item_respawn();
-	}
-	else {
+	} else {
 		// deathmatch 2 is the silly old rules
 		if (deathmatch == 1 || self.spawnflags & ITEM_RESPAWN) {
 			setmodel(self,self.mdl);
@@ -287,16 +254,12 @@ void() start_item_respawn =
 	}
 };
 
-//----------------------------------------------------------------------
-void() check_item_respawn =
-{
+void() check_item_respawn = {
 	// Respawn feature is waiting for trigger
 	if (!self.respawn_trig) start_item_respawn();
 };
 
-//----------------------------------------------------------------------
-void() item_use =
-{
+void() item_use = {
 	// Check for any trigger respawn conditions first
 	// Respawn spawnflag, trigger condition and not trigger once
 	if (self.spawnflags & ITEM_RESPAWN && self.respawn_trig &&
@@ -308,10 +271,8 @@ void() item_use =
 
 		// Was item setup to be floating?
 		if(self.spawnflags & ITEM_FLOATING){
-			// Removed checkbottom check, it often fails and leaves
-			// items floating in midair when they should fall
-			// if (!checkbottom(self)) - left for comment only
-			// A quick toss of the item
+			// Removed checkbottom check, it often fails and leaves items floating in midair when they should fall
+			// A quick toss of the item instead
 			self.movetype = MOVETYPE_TOSS;	
 			self.origin_z = self.origin_z + 4;
 			self.flags = self.flags - (self.flags & FL_ONGROUND);
@@ -319,9 +280,7 @@ void() item_use =
 	}
 };
 
-//----------------------------------------------------------------------
-void() item_touch =
-{
+void() item_touch = {
 	if (self.touchedvoid) {entity_hide(self); return;}
 	if (self.estate & ESTATE_BLOCK) return;
 	
@@ -547,9 +506,7 @@ void() item_off =
 	}
 };
 
-//----------------------------------------------------------------------
-void() item_estate_setup =
-{
+void() item_estate_setup = {
 	// check for map hacks (redirects to item_delay)
 	if (self.use == SUB_regen) self.use = SUB_regen;
 	// Setup Entity State functionality
@@ -560,9 +517,7 @@ void() item_estate_setup =
 	self.estate_reset = item_reset;
 };
 
-//----------------------------------------------------------------------
-void() item_start =
-{
+void() item_start = {
 	self.oldorigin = self.origin;		// Save origin
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	self.flags = self.flags | FL_ITEM;
@@ -623,11 +578,8 @@ void() item_start =
 	}
 };
 
-//======================================================================
 // HEALTH FLASK/BOX
-//======================================================================
-float(entity hpplayer, entity hpitem) health_pickupcondition =
-{
+float(entity hpplayer, entity hpitem) health_pickupcondition = {
 	// Simple test first, player dead?
 	if (hpplayer.health <= 0) return TRUE;
 	
@@ -642,15 +594,12 @@ float(entity hpplayer, entity hpitem) health_pickupcondition =
 	return FALSE;
 };
 
-//----------------------------------------------------------------------
 // targ - entity to receive healing
 // t_healamount - the quanity to heal entity with
 // ignore - whether to ignore max health amount
 // returns FALSE if cannot heal entity by healamount
 // returns TRUE if healamount applied
-//
-float (entity targ, float t_healamount, float ignore) T_Heal =
-{
+float (entity targ, float t_healamount, float ignore) T_Heal = {
 	if (targ.health <= 0) return FALSE;
 	if ((!ignore) && (targ.health >= other.max_health)) return FALSE;
 	t_healamount = ceil(t_healamount);
@@ -663,7 +612,6 @@ float (entity targ, float t_healamount, float ignore) T_Heal =
 	return TRUE;
 };
 
-//----------------------------------------------------------------------
 void() health_touch = {
 	local string s;
 
@@ -706,7 +654,6 @@ void() health_touch = {
 	check_item_respawn();
 };
 
-//----------------------------------------------------------------------
 /*QUAKED item_health (0.3 0.3 1) (-16 -16 0) (16 16 32) ROTTEN MEGA x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
 { model(":progs/health_25.mdl"); }
 15, 25 or 100 Health
@@ -998,8 +945,7 @@ void() item_armor2 =
 		if (self.netname == "") self.netname = "Blue Armor";
 		self.respawn_style = PARTICLE_BURST_BLUE + PARTICLE_BURST_RING;
 		self.skin = 3;
-	}
-	else {
+	} else {
 		if (self.netname == "") self.netname = "Yellow Armor";
 		self.respawn_style = PARTICLE_BURST_YELLOW + PARTICLE_BURST_RING;
 		self.skin = 1;
@@ -1338,12 +1284,11 @@ NOEFFECTS : No particle or effects active
 Super Perforator (Super Nailgun)
 
 ======================================================================*/
-void() weapon_supernailgun =
-{
+void() weapon_supernailgun = {
 	// Check for custom model setup?
 	item_debugcustomdl();
 	if (self.mdl == "") self.mdl = MODEL_GWEAP_SNG;
-	if (!self.precached) precache_model (self.mdl);
+	precache_model (self.mdl);
 	self.weapon = IT_SUPER_NAILGUN;
 	self.classtype = CT_SUPER_NAILGUN;
 	if (self.netname == "") self.netname = "Super Nailgun";
@@ -1557,13 +1502,13 @@ void() item_shells =
 	// Check for custom model setup?
 	item_debugcustomdl();
 	if (self.spawnflags & A_LARGE) {
-		if (self.mdl == "") self.mdl = "progs/ad181/ammo_shells1.mdl";
-		if (self.headmdl == "") self.headmdl = "progs/ad181/ammo_lidlarge.mdl";
+		if (self.mdl == "") self.mdl = "progs/ad171/ammo_shells1.mdl";
+		if (self.headmdl == "") self.headmdl = "progs/ad171/ammo_lidlarge.mdl";
 		if (self.aflag < 1) self.aflag = AMMO_SHELLS_LGR;
 	}
 	else {
-		if (self.mdl == "") self.mdl = "progs/ad181/ammo_shells0.mdl";
-		if (self.headmdl == "") self.headmdl = "progs/ad181/ammo_lidsmall.mdl";
+		if (self.mdl == "") self.mdl = "progs/ad171/ammo_shells0.mdl";
+		if (self.headmdl == "") self.headmdl = "progs/ad171/ammo_lidsmall.mdl";
 		if (self.aflag < 1) self.aflag = AMMO_SHELLS_SML;
 	}
 
@@ -1685,8 +1630,7 @@ NOEFFECTS : No particle or effects active
 5 or 10 Rockets for the Grenade (GL) or Rocket Launcher (RL)
 
 ======================================================================*/
-void() item_rockets =
-{
+void() item_rockets = {
 	// Check for any random monster setups
 	if (ammo_checkrandomizer() == TRUE) return;
 
@@ -1695,8 +1639,7 @@ void() item_rockets =
 	if (self.spawnflags & A_LARGE) {
 		if (self.mdl == "") self.mdl = "progs/ad171/ammo_rockets1.mdl";
 		if (self.aflag < 1) self.aflag = AMMO_ROCKETS_LGR;
-	}
-	else {
+	} else {
 		if (self.mdl == "") self.mdl = "progs/ad171/ammo_rockets0.mdl";
 		if (self.aflag < 1) self.aflag = AMMO_ROCKETS_SML;
 	}
@@ -1712,35 +1655,29 @@ void() item_rockets =
 	item_ammo_setup();
 };
 
-/*======================================================================
-//QUAKED item_cells (0 .5 .8) (0 0 0) (32 32 32) BIG
-
-//QUAKED item_cells (0 .5 .8) (-16 -16 0) (16 16 32) BIG x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
-{ model(":progs/ad171/ammo_battery0.mdl"); }
-6 or 12 Medieval Battery
--------- KEYS --------
-targetname    : toggle state (use trigger ent for exact state)
-skin_override : Override world type 1=Base Green, 2=Medieval Wood
-aflag         : Ammo quantity override
-upgrade_ssg  : = 1 will only spawn if shotgun upgrade active on server
-upgrade_axe  : = 1 will only spawn if axe upgrade active on server
-upgrade_lg   : = 1 will only spawn if lightning gun upgrade active on server
-message       : centerprint message when item is picked up
-respawn_time  : time to wait before respawning (=-1 instant)
-respawn_count : Total amount of times to respawn (counts down to zero)
-respawn_trig : = 1 Wait for trigger before respawning
--------- SPAWNFLAGS --------
-BIG      : Double Ammo and different model
-RESPAWN  : Can respawn after being picked up
-FLOAT    : No drop to floor test
-STARTOFF : Starts off and waits for trigger
-NOEFFECTS : No particle or effects active
--------- NOTES --------
-6 or 12 Medieval Battery (cells) for the Thunderbolt (LG)
-
-======================================================================*/
-void() item_cells =
-{
+// QUAKED item_cells (0 .5 .8) (-16 -16 0) (16 16 32) BIG x x x RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+// { model(":progs/ad171/ammo_battery0.mdl"); }
+// 6 or 12 Medieval Battery
+// -------- KEYS --------
+// targetname    : toggle state (use trigger ent for exact state)
+// skin_override : Override world type 1=Base Green, 2=Medieval Wood
+// aflag         : Ammo quantity override
+// upgrade_ssg  : = 1 will only spawn if shotgun upgrade active on server
+// upgrade_axe  : = 1 will only spawn if axe upgrade active on server
+// upgrade_lg   : = 1 will only spawn if lightning gun upgrade active on server
+// message       : centerprint message when item is picked up
+// respawn_time  : time to wait before respawning (=-1 instant)
+// respawn_count : Total amount of times to respawn (counts down to zero)
+// respawn_trig : = 1 Wait for trigger before respawning
+// -------- SPAWNFLAGS --------
+// BIG      : Double Ammo and different model
+// RESPAWN  : Can respawn after being picked up
+// FLOAT    : No drop to floor test
+// STARTOFF : Starts off and waits for trigger
+// NOEFFECTS : No particle or effects active
+// -------- NOTES --------
+// 6 or 12 Medieval Battery (cells) for the Thunderbolt (LG)
+void() item_cells = {
 	// Check for any random monster setups
 	if (ammo_checkrandomizer() == TRUE) return;
 
@@ -1766,18 +1703,13 @@ void() item_cells =
 	item_ammo_setup();
 };
 
-//======================================================================
 // KEYS (Silver, Gold and Custom)
-//======================================================================
-void() key_touchbindmsg =
-{ 
+void() key_touchbindmsg = {
 	sound (self.enemy, CHAN_VOICE, SOUND_TALK, 1, ATTN_NORM);
 	centerprint(self.enemy, "Press 'i' Key to open Inventory\nTo see what \bArcane keys\b you have!\n");
 };
 
-//----------------------------------------------------------------------
-float(entity keyplayer, entity keyitem) key_pickupcondition =
-{
+float(entity keyplayer, entity keyitem) key_pickupcondition = {
 	// Check if the player has the custom key already?
 	if (keyitem.classtype == CT_CUSTOMKEY) {
 		if (keyplayer.moditems & keyitem.moditems) return TRUE;
@@ -1789,17 +1721,15 @@ float(entity keyplayer, entity keyitem) key_pickupcondition =
 };
 
 void(float tvalue, string tdstr) trigger_timer_updateno;
-//----------------------------------------------------------------------
-void() key_touch =
-{
+
+void() key_touch = {
 	// Check if player has the key already
 	if (key_pickupcondition(other, self)) return;
 	
 	sprint (other, "You got the ");
 	sprint (other, self.netname);
 	sprint (other,"\n");
-	if (self.noise != SOUND_EMPTY) 
-		sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+	if (self.noise != SOUND_EMPTY) sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 	Safe_stuffcmd (other, "bf\n");
 	
 	// Add key to player inventory (items / customkey)
@@ -1985,7 +1915,7 @@ void() item_key2 =
 
 //======================================================================
 /*QUAKED item_keyx (0 .5 .8) (-16 -16 -24) (16 16 32) CKEY1 CKEY2 CKEY3 CKEY4 RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
-{ model(":progs/key_medieval.mdl"); }
+{ model(":progs/ad171/key_medieval.mdl"); }
 Custom key
 -------- KEYS --------
 targetname    : toggle state (use trigger ent for exact state)
@@ -3301,7 +3231,7 @@ void() BackpackTouch =
 
 	sprint (other, " from a backpack\n");
 	if (self.perms & IT_CHAINSAW) {
-		sound (other, CHAN_ITEM, "weapons/sawidle.wav", 1, ATTN_NORM);
+		sound (other, CHAN_ITEM, "zerstorer/weapons/sawidle.wav", 1, ATTN_NORM);
 	} else {
 		sound (other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
 	}
@@ -3582,13 +3512,11 @@ void() item_backpack_setup =
 	item_start ();
 };
 
-//----------------------------------------------------------------------
-void() item_backpack =
-{
+void() item_backpack = {
 	self.mdl = MODEL_BACKPACK;
 	precache_model (self.mdl);
 	
-	if (self.noise == "") self.noise = "items/backpack_ammo.wav";
+	if (self.noise == "") self.noise = "ad171/items/backpack_ammo.wav";
 	precache_sound(self.noise);
 
 	self.flags = FL_ITEM;
@@ -3618,10 +3546,8 @@ void() item_backpack =
 
 void() item_artifact_super_pack = { self.classname = "item_backpack"; item_backpack(); };
 
-//----------------------------------------------------------------------
-void() item_backpack_armour =
-{
-	if (self.noise == "") self.noise = "items/backpack_armour.wav";
+void() item_backpack_armour = {
+	if (self.noise == "") self.noise = "ad171/items/backpack_armour.wav";
 	precache_sound(self.noise);
 	self.classtype = CT_ARMORITEMPACK;
 
@@ -3630,17 +3556,13 @@ void() item_backpack_armour =
 	if (self.spawnflags & BACKPACK_GRNTYPE) {
 		self.armortype = ARMOR_GRN_TYPE; self.exactskin = 1;
 		if (self.armorvalue < 1) self.armorvalue = BACKARMGRN;
-	}
-	else if (self.spawnflags & BACKPACK_YELTYPE) {
+	} else if (self.spawnflags & BACKPACK_YELTYPE) {
 		self.armortype = ARMOR_YEL_TYPE; self.exactskin = 4;
 		if (self.armorvalue < 1) self.armorvalue = BACKARMYEL;
-	}
-	else if (self.spawnflags & BACKPACK_REDTYPE) {
+	} else if (self.spawnflags & BACKPACK_REDTYPE) {
 		self.armortype = ARMOR_RED_TYPE; self.exactskin = 3;
 		if (self.armorvalue < 1) self.armorvalue = BACKARMRED;
-	}
-	// default = shards, no armour type
-	else {
+	} else { // default = shards, no armour type
 		self.armortype = 0; self.exactskin = 4;
 		if (self.armorvalue < 1) self.armorvalue = BACKARMGRN;
 	}
@@ -3655,9 +3577,7 @@ void() item_backpack_armour =
 	item_backpack();
 };
 
-//----------------------------------------------------------------------
-void() DropHealthpack =
-{
+void() DropHealthpack = {
 	local entity item;
 	// No cache no drops!
 	if (healthcache <= 0) return;

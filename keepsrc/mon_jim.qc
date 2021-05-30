@@ -57,7 +57,7 @@ void(float fstate) jim_update =
 	if (self.t_width < time) {
 		self.t_width = time + 0.9;
 		// Play on auto channel so it overlaps with existing sound
-		sound (self, CHAN_AUTO, "jim/gunidle2.wav", 0.3, ATTN_WEAPON);
+		sound (self, CHAN_AUTO, "ad171/jim/gunidle2.wav", 0.3, ATTN_WEAPON);
 	}
 
 	// Time for an idle sound?
@@ -220,7 +220,7 @@ void() jim_rocket =
 	if ( visxray(self.enemy, self.attack_offset, '0 0 -12', FALSE) ) return;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "jim/rocket_fire.wav", 1, ATTN_NORM);	
+	sound (self, CHAN_WEAPON, "ad171/jim/rocket_fire.wav", 1, ATTN_NORM);	
 
 	makevectors (self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
@@ -264,8 +264,8 @@ void() jim_attack =
 //----------------------------------------------------------------------------
 void() jim_fire1 =[ $idle1, jim_fire2 ] {jim_update(JS_IDLE);
 	if (self.classtype == CT_MONJIM) 
-		sound (self, CHAN_WEAPON, "jim/laser_load.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_WEAPON, "jim/rocket_load.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/jim/laser_load.wav", 1, ATTN_NORM);
+	else sound (self, CHAN_WEAPON, "ad171/jim/rocket_load.wav", 1, ATTN_NORM);
 };
 void() jim_fire2 =[ $idle1, jim_fire3 ] {jim_update(JS_IDLE);jim_attack();
 	if (skill < SKILL_HARD) jim_vel(0.4);
@@ -401,7 +401,7 @@ void() jim_dying2 =
 	if (self.cnt > 5) self.cnt = 0;
 
 	// Medium explosion + sound OR smoke projectile trail
-	if (random() > 0.7) SpawnExplosion(EXPLODE_MED, self.origin, "jim/explode_minor.wav");
+	if (random() > 0.7) SpawnExplosion(EXPLODE_MED, self.origin, "ad171/jim/explode_minor.wav");
 	else if (random() < 0.3) SpawnProjectileSmoke(self.origin, 150, 50, 150);
 
 	// Turn down towards the ground
@@ -430,33 +430,30 @@ void() jim_is_dead =
 	particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
-	SpawnExplosion(EXPLODE_BIG, self.origin, "jim/explode_major.wav");
+	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/jim/explode_major.wav");
 
 	// Goto final resting place
 	entity_hide(self);
 };
 
-
-//----------------------------------------------------------------------------
-void() jim_die = 
-{
+void() jim_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
 	// Flush every sound channel to kill gun buzzing sound
-	sound(self, CHAN_WEAPON, SOUND_EMPTY, 1, ATTN_NORM);
-	sound(self, CHAN_VOICE, SOUND_EMPTY, 1, ATTN_NORM);
-	sound(self, CHAN_ITEM, SOUND_EMPTY, 1, ATTN_NORM);
-	sound(self, CHAN_FEET, SOUND_EMPTY, 1, ATTN_NORM);
-	sound(self, CHAN_EXTRA1, SOUND_EMPTY, 1, ATTN_NORM);
-	sound(self, CHAN_EXTRA2, SOUND_EMPTY, 1, ATTN_NORM);
+	StopSound(self,CHAN_WEAPON);
+	StopSound(self,CHAN_VOICE);
+	StopSound(self,CHAN_ITEM);
+	StopSound(self,CHAN_FEET);
+	StopSound(self,CHAN_EXTRA1);
+	StopSound(self,CHAN_EXTRA2);
 
 	// Special explosive death event 
 	// First function creates the upward spiral (negative avelocity)
 	// Second function accents the spiral (1s forward movement)
 	// Third final impact (touch function goes here as well)
 	//
-	sound (self, CHAN_VOICE, "jim/death1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "ad171/jim/death1.wav", 1, ATTN_NORM);
 	self.solid = SOLID_NOT;			// No world colision
 	self.movetype = MOVETYPE_FLY;	// Free velocity movement
 	self.touch = jim_is_dead;		// still can touch stuff
@@ -472,7 +469,7 @@ void() jim_die =
 
 	// Spawn dust and sprite explosion
 	particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
-	SpawnExplosion(EXPLODE_BIG, self.origin, "jim/explode_minor.wav");
+	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/jim/explode_minor.wav");
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 
 	jim_dying1();
@@ -492,17 +489,17 @@ void() monster_jim = {
 	precache_model (self.mdl);
 	
 	// death/pain/attack sounds
-	precache_sound("jim/death1.wav");
-	self.pain_sound = "jim/pain1.wav";
-	self.pain_sound2 = "jim/pain2.wav";
+	precache_sound("ad171/jim/death1.wav");
+	self.pain_sound = "ad171/jim/pain1.wav";
+	self.pain_sound2 = "ad171/jim/pain2.wav";
 	precache_sound(self.pain_sound);
 	precache_sound(self.pain_sound2);
 	
-	precache_sound("jim/explode_minor.wav");
-	precache_sound("jim/explode_major.wav");
-	precache_sound("jim/gunidle2.wav");		// Long buzzing sound
+	precache_sound("ad171/jim/explode_minor.wav");
+	precache_sound("ad171/jim/explode_major.wav");
+	precache_sound("ad171/jim/gunidle2.wav");		// Long buzzing sound
 
-	self.sight_sound = "jim/sight1.wav";
+	self.sight_sound = "ad171/jim/sight1.wav";
 	precache_sound (self.sight_sound);
 	
 	self.solid = SOLID_NOT;				// No interaction with world
@@ -546,15 +543,15 @@ void() monster_jim = {
 		if (self.health < 1) self.health = 50;
 
 		// Classic idle sound + new variant
-		self.idle_sound = "jim/idle1.wav";
-		self.idle_sound2 = "jim/idle3.wav";
+		self.idle_sound = "ad171/jim/idle1.wav";
+		self.idle_sound2 = "ad171/jim/idle3.wav";
 		precache_sound (self.idle_sound);
 		precache_sound (self.idle_sound2);
 
 		// Projectile fire and impact (used in projectiles)
-		precache_sound("jim/rocket_load.wav");		// Wind up
-		precache_sound("jim/rocket_fire.wav");		// Fire
-		precache_sound("jim/rocket_hit.wav");		// Impact	
+		precache_sound("ad171/jim/rocket_load.wav");		// Wind up
+		precache_sound("ad171/jim/rocket_fire.wav");		// Fire
+		precache_sound("ad171/jim/rocket_hit.wav");		// Impact	
 		if (self.deathstring == "")  self.deathstring = " was blown away by Jim\n";
 	}
 	else {
@@ -562,14 +559,14 @@ void() monster_jim = {
 		if (self.health < 1) self.health = 100;
 		
 		// Classic idle sound + new variant
-		self.idle_sound = "jim/idle1.wav";
-		self.idle_sound2 = "jim/idle2.wav";
+		self.idle_sound = "ad171/jim/idle1.wav";
+		self.idle_sound2 = "ad171/jim/idle2.wav";
 		precache_sound (self.idle_sound);
 		precache_sound (self.idle_sound2);
 
 		// Projectile fire and impact (used in projectiles)
 		precache_model (MODEL_PROJ_LASER);		// Enforcer laser model
-		precache_sound("jim/laser_load.wav");		// Wind up
+		precache_sound("ad171/jim/laser_load.wav");		// Wind up
 		precache_sound ("enforcer/enfire.wav");		// Fire
 		precache_sound ("enforcer/enfstop.wav");	// Impact
 		if (self.deathstring == "")  self.deathstring = " was cauterized by Jim\n";

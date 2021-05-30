@@ -216,9 +216,7 @@ void() display_mapvar =
 	dprint("--------------------------------------\n");
 };
 
-//----------------------------------------------------------------------
-void() trigger_mapvar_base_use =
-{
+void() trigger_mapvar_base_use = {
 	// Block entity state exceptions
 	if (self.estate & ESTATE_BLOCK) return;
 	// Is the trigger blocked? (trigger_once)
@@ -242,10 +240,9 @@ void() trigger_mapvar_base_use =
 
 	// Check for On/Off target(s)
 	if (self.lefty == FALSE) {
-		if (self.target != "") trigger_strs(self.target, activator);
-	}
-	else {
-		if (self.target2 != "") trigger_strs(self.target2, activator);
+		if (self.target != "") trigger_strs(self.target, activator); // Special target and...
+	} else {
+		if (self.target2 != "") trigger_strs(self.target2, activator); // target2 use only, no other targets checks needed.
 	}
 
 	// Check for switchable bmodel
@@ -266,9 +263,7 @@ void() trigger_mapvar_base_use =
 	else self.attack_finished = time + self.wait;
 };
 
-//----------------------------------------------------------------------
-void() trigger_mapvar_base =
-{
+void() trigger_mapvar_base = {
 	// Check for any missing keys
 	if (self.targetname == "") dprint("\b[MAPVAR]\b Missing targetname!\n");
 	// Remove any negative or fractions

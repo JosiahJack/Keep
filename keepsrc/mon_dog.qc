@@ -372,7 +372,7 @@ void(vector st) Dog_Fire = {
 };
 
 void() dog_fire1  =[ $attack1, dog_fire2  ] {ai_face();};
-void() dog_fire2  =[ $attack3, dog_fire3  ] {ai_face(); sound (self, CHAN_WEAPON, "dragon/fire.wav", 1, ATTN_NORM); Dog_Fire('25 2 6');};
+void() dog_fire2  =[ $attack3, dog_fire3  ] {ai_face(); sound (self, CHAN_WEAPON, "drake/dragon/fire.wav", 1, ATTN_NORM); Dog_Fire('25 2 6');};
 void() dog_fire3  =[ $attack3, dog_fire4  ] {ai_face(); Dog_Fire('25 2 6');};
 void() dog_fire4  =[ $attack2, dog_fire5  ] {ai_face(); Dog_Fire('25 2 2');};
 void() dog_fire5  =[ $attack1, dog_run1   ] {ai_face();};
@@ -406,8 +406,8 @@ void() monster_dog = {
 	precache_sound ("dog/ddeath.wav");
 	self.pain_sound = "dog/dpain1.wav";
 	precache_sound (self.pain_sound);
-	precache_sound ("dragon/fire.wav");
-	precache_sound ("dragon/firehit.wav");
+	precache_sound ("drake/dragon/fire.wav");
+	precache_sound ("drake/dragon/firehit.wav");
 
 	self.sight_sound = "dog/dsight.wav";
 	precache_sound (self.sight_sound);
@@ -425,6 +425,8 @@ void() monster_dog = {
 		self.pain_flinch = 50;				// Med response to pain
 		if (self.deathstring == "") self.deathstring = " was scorched by a Hell Hound\n";
 	} else {
+		self.gib1mdl = "progs/q15/gib_dogleg.mdl";
+		precache_model (self.gib1mdl);
 		self.pain_flinch = 10;				// Easy response to pain
 		self.classtype = CT_MONDOG;
 	}

@@ -136,7 +136,7 @@ void() hogreham_smash10	=[	$smash10,	hogreham_smash11 ] {ai_face();
 	makevectors (self.angles);				// Put impact infront of ogre
 	self.finalangle = self.origin + (v_forward * 56) + (-v_up * 22);
 	particle_explode(self.finalangle, 24, 0.5, PARTICLE_BURST_FIRE, PARTICLE_BURST_SHOCKWAVE); 
-	sound (self, CHAN_WEAPON, "ogre/ham_hit.wav", 1, ATTN_IDLE);
+	sound (self, CHAN_WEAPON, "ad171/ogre/ham_hit.wav", 1, ATTN_IDLE);
 };
 void() hogreham_smash11	=[	$smash11,	hogreham_smash12 ] {};
 void() hogreham_smash12	=[	$smash12,	hogreham_smash13 ] {};
@@ -167,7 +167,7 @@ void() hogreham_slam10	=[	$slam10,	hogreham_slam11 ] {ai_charge(8);};
 void() hogreham_slam11	=[	$slam11,	hogreham_slam12 ] {ai_charge(8);};
 void() hogreham_slam12	=[	$slam12,	hogreham_slam13 ] {ai_charge(4);};
 void() hogreham_slam13	=[	$slam13,	hogreham_slam14 ] {
-	ai_chargenoturn(4); self.meleehitsound = "ogre/ham_wave.wav";
+	ai_chargenoturn(4); self.meleehitsound = "ad171/ogre/ham_wave.wav";
 	ai_shockwave(MONAI_HAMMERIMPACT, MONAI_HAMMERDAMAGE, MONAI_HAMMERRADIUS, MONAI_HAMMERFORWARD, MONAI_HAMMERUP);
 };
 void() hogreham_slam14	=[	$slam14,	hogreham_slam15 ] {ai_chargenoturn(3);};
@@ -329,9 +329,8 @@ void()	hogreham_dieB11	=[	$deathB11,	hogreham_dieB12	] {};
 void()	hogreham_dieB12	=[	$deathB12,	hogreham_dieB13	] {};
 void()	hogreham_dieB13	=[	$deathB13,	hogreham_dieB14	] {monster_death_postcheck();};
 void()	hogreham_dieB14	=[	$deathB14,	hogreham_dieB14	] {monster_deadbody_check();};
-//----------------------------------------------------------------------
-void() hogreham_die =
-{
+
+void() hogreham_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -343,13 +342,11 @@ void() hogreham_die =
 	}
 };
 
-//============================================================================
-void(float soundtype) hogreham_sound =
-{
+void(float soundtype) hogreham_sound = {
 	if (soundtype == 1) sound (self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
 	else if (soundtype == 2) sound (self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM);
 	else if (soundtype == 3) sound (self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM);
-	else if (soundtype == 4) sound (self, CHAN_VOICE, "ogre/ham_swipe.wav", 1, ATTN_IDLE);
+	else if (soundtype == 4) sound (self, CHAN_VOICE, "ad171/ogre/ham_swipe.wav", 1, ATTN_IDLE);
 };
 
 //----------------------------------------------------------------------
@@ -411,9 +408,9 @@ void() monster_hogreham = {
 	precache_sound (self.pain_sound);		// Pain
 	
 	precache_sound ("ogre/ogsawatk.wav");	// Attack
-	precache_sound ("ogre/ham_swipe.wav");	// hammer swipe
-	precache_sound ("ogre/ham_hit.wav");	// hammer hit ground
-	precache_sound ("ogre/ham_wave.wav");	// hammer shockwave
+	precache_sound ("ad171/ogre/ham_swipe.wav");	// hammer swipe
+	precache_sound ("ad171/ogre/ham_hit.wav");	// hammer hit ground
+	precache_sound ("ad171/ogre/ham_wave.wav");	// hammer shockwave
 	
 	self.meleehitsound = GIB_SOUND_HEAVY;
 	precache_sound (self.meleehitsound);	// hammer hit

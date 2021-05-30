@@ -211,7 +211,7 @@ void() func_door_link =
 			// This is the conditions for a door getting automatic open trigger
 			// Door CANNOT be damaged (shoot trigger) and NO key item required
 			if (self.health == 0 && self.items == 0) {
-				// Damn annoying that the targetname is being used like this because
+				// Annoying that the targetname is being used like this because
 				// there could have been a better way to do this type of functionality
 				// == "" door has special trigger around to open door
 				// != "" door requires trigger event to open
@@ -529,9 +529,7 @@ void() func_door_touch =
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_door_on =
-{
+void() func_door_on = {
 	// Stop re-triggering ON state
 	if (self.estate == ESTATE_ON) return;
 
@@ -558,9 +556,7 @@ void() func_door_on =
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_door_off =
-{
+void() func_door_off = {
 	// Stop re-triggering OFF state
 	if (self.estate == ESTATE_OFF) return;
 
@@ -571,9 +567,7 @@ void() func_door_off =
 	self.velocity = '0 0 0';
 	self.takedamage = DAMAGE_NO;
 	self.think = SUB_Null;
-
-	// Stop all movement sounds
-	sound (self, CHAN_VOICE, SOUND_EMPTY, self.volume, ATTN_NORM);
+	StopSound(self,CHAN_VOICE); // Stop all movement sounds
 	
 	// Reset Door position if NOT key or working once
 	if (self.items == 0 && self.wait != -1) {
@@ -582,17 +576,13 @@ void() func_door_off =
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_door_disable =
-{
+void() func_door_disable = {
 	// Block damage function and show alternative texture
 	self.takedamage = DAMAGE_NO;
 	self.frame = 1 - self.frame_override;	// Turn off alt textures
 };
 
-//----------------------------------------------------------------------
-void() func_door_reset =
-{
+void() func_door_reset = {
 	// If the door is still OFF then leave it
 	if (self.spawnflags & ENT_STARTOFF) return;
 	
@@ -617,9 +607,7 @@ void() func_door_reset =
 	self.think = SUB_Null;
 };
 
-//----------------------------------------------------------------------
-void() func_door_blocked =
-{
+void() func_door_blocked = {
 	// Always reset midstart flag (its no longer needed)
 	if (self.midstart) self.midstart = FALSE;
 	// Do the block damage
@@ -632,9 +620,7 @@ void() func_door_blocked =
 	}
 };
 
-//----------------------------------------------------------------------
-void() func_door =
-{
+void() func_door = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	// Setup all empty/silent sound files first
@@ -688,16 +674,16 @@ void() func_door =
 
 	// locked sound (targetname + message)
 	if (self.noise == "") self.noise = SOUND_TALK;
-	if (self.locksounds == 1) self.noise = "doors/rattle1.wav";
-	else if (self.locksounds == 2) self.noise = "doors/rattle2.wav";
-	else if (self.locksounds == 3) self.noise = "doors/rattle6.wav";
+	if (self.locksounds == 1) self.noise = "ad171/doors/rattle1.wav";
+	else if (self.locksounds == 2) self.noise = "ad171/doors/rattle2.wav";
+	else if (self.locksounds == 3) self.noise = "ad171/doors/rattle6.wav";
 	else if (self.locksounds == 13) self.noise = "misc/trigger1.wav";
 	else if (self.locksounds == 14) self.noise = SOUND_EMPTY; 
-	else if (self.locksounds == 16) self.noise = "misc/secret3.wav";
-	else if (self.locksounds == 21) self.noise = "doors/rattle_tech1.wav";
-	else if (self.locksounds == 22) self.noise = "doors/rattle_tech2.wav";
-	else if (self.locksounds == 23) self.noise = "doors/rattle_tech3.wav";
-	else if (self.locksounds == 24) self.noise = "doors/rattle_tech4.wav";
+	else if (self.locksounds == 16) self.noise = "ad171/misc/secret3.wav";
+	else if (self.locksounds == 21) self.noise = "ad171/doors/rattle_tech1.wav";
+	else if (self.locksounds == 22) self.noise = "ad171/doors/rattle_tech2.wav";
+	else if (self.locksounds == 23) self.noise = "ad171/doors/rattle_tech3.wav";
+	else if (self.locksounds == 24) self.noise = "ad171/doors/rattle_tech4.wav";
 
 	//Pre-cache all sounds
 	precache_sound (self.noise);

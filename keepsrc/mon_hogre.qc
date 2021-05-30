@@ -228,9 +228,7 @@ void()	hogre_painB11	=[	$painB11,	hogre_painB12 ] {ai_forward(2);};
 void()	hogre_painB12	=[	$painB12,	hogre_painB13 ] {ai_forward(2);};
 void()	hogre_painB13	=[	$painB13,	hogre_run1    ] {monster_footstep(FALSE); ai_forward(2);};
 
-//----------------------------------------------------------------------
 // painC - Fall down
-//----------------------------------------------------------------------
 void()	hogre_painC1 =[	$painC1,	hogre_painC2	] {ai_pain(5);};
 void()	hogre_painC2 =[	$painC2,	hogre_painC3	] {ai_pain(2);};
 void()	hogre_painC3 =[	$painC3,	hogre_painC4	] {};
@@ -249,9 +247,7 @@ void()	hogre_painC15=[	$painC15,	hogre_painC16	] {ai_forward(4);};
 void()	hogre_painC16=[	$painC16,	hogre_painC17	] {ai_forward(5);};
 void()	hogre_painC17=[	$painC17,	hogre_run1	] {ai_forward(4);};
 
-//======================================================================
-void(entity inflictor, entity attacker, float damage) hogre_pain =
-{
+void(entity inflictor, entity attacker, float damage) hogre_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -267,8 +263,7 @@ void(entity inflictor, entity attacker, float damage) hogre_pain =
 				self.pain_finished = time + 2;
 				// Stagger backwards
 				hogre_painB1 ();
-			}
-			else {
+			} else {
 				self.pain_finished = time + 2;
 				// Fall on the floor
 				hogre_painC1 ();
@@ -280,8 +275,7 @@ void(entity inflictor, entity attacker, float damage) hogre_pain =
 			if (random() < 0.5) {
 				self.pain_finished = time + 1.3;
 				hogre_painC1 ();	// Fall to ground
-			}
-			else {
+			} else {
 				self.pain_finished = time + 1.7;
 				hogre_painB1 ();	// Stagger backwards
 			}
@@ -289,13 +283,10 @@ void(entity inflictor, entity attacker, float damage) hogre_pain =
 	}
 };
 
-//----------------------------------------------------------------------
 // (146 - 155) deathSilly (comedy death)
-//----------------------------------------------------------------------
 void()	hogre_dieS1	=[	$deathS1,	hogre_dieS2	] {ai_forward(14);};
 void()	hogre_dieS2	=[	$deathS2,	hogre_dieS3	] {monster_check_gib();ai_forward(14);};
-void()	hogre_dieS3	=[	$deathS3,	hogre_dieS4	] {monster_check_gib();ai_forward(3);
-	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
+void()	hogre_dieS3	=[	$deathS3,	hogre_dieS4	] {monster_check_gib();ai_forward(3); self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
 void()	hogre_dieS4	=[	$deathS4,	hogre_dieS5	] {ai_forward(1);};
 void()	hogre_dieS5	=[	$deathS5,	hogre_dieS6	] {ai_forward(1);};
 void()	hogre_dieS6	=[	$deathS6,	hogre_dieS7	] {ai_forward(1);};
@@ -304,13 +295,10 @@ void()	hogre_dieS8	=[	$deathS8,	hogre_dieS9	] {hogre_sound(3);};	// Chainsaw hit
 void()	hogre_dieS9	=[	$deathS9,	hogre_dieS10] {monster_death_postcheck();};
 void()	hogre_dieS10=[	$deathS10,	hogre_dieS10] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
 // (156 - 165) deathA (Forward)
-//----------------------------------------------------------------------
 void()	hogre_dieA1	=[	$deathA1,	hogre_dieA2	] {ai_forward(14);};
 void()	hogre_dieA2	=[	$deathA2,	hogre_dieA3	] {monster_check_gib();ai_forward(14);};
-void()	hogre_dieA3	=[	$deathA3,	hogre_dieA4	] {monster_check_gib();ai_forward(3);
-	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
+void()	hogre_dieA3	=[	$deathA3,	hogre_dieA4	] {monster_check_gib();ai_forward(3);self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
 void()	hogre_dieA4	=[	$deathA4,	hogre_dieA5	] {ai_forward(1);};
 void()	hogre_dieA5	=[	$deathA5,	hogre_dieA6	] {ai_forward(1);};
 void()	hogre_dieA6	=[	$deathA6,	hogre_dieA7	] {ai_forward(1);};
@@ -319,13 +307,10 @@ void()	hogre_dieA8	=[	$deathA8,	hogre_dieA9	] {hogre_sound(3);};	// Chainsaw hit
 void()	hogre_dieA9	=[	$deathA9,	hogre_dieA10] {monster_death_postcheck();};
 void()	hogre_dieA10=[	$deathA10,	hogre_dieA10] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
 // (166 - 179) deathB (Backward)
-//----------------------------------------------------------------------
 void()	hogre_dieB1	=[	$deathB1,	hogre_dieB2	] {ai_back(4);};
 void()	hogre_dieB2	=[	$deathB2,	hogre_dieB3	] {monster_check_gib();ai_back(10);};
-void()	hogre_dieB3	=[	$deathB3,	hogre_dieB4	] {monster_check_gib();ai_back(3);
-	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
+void()	hogre_dieB3	=[	$deathB3,	hogre_dieB4	] {monster_check_gib();ai_back(3);self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); };
 void()	hogre_dieB4	=[	$deathB4,	hogre_dieB5	] {ai_back(1);};
 void()	hogre_dieB5	=[	$deathB5,	hogre_dieB6	] {};
 void()	hogre_dieB6	=[	$deathB6,	hogre_dieB7	] {};
@@ -338,9 +323,7 @@ void()	hogre_dieB12=[	$deathB12,	hogre_dieB13] {};
 void()	hogre_dieB13=[	$deathB13,	hogre_dieB14] {monster_death_postcheck();};
 void()	hogre_dieB14=[	$deathB14,	hogre_dieB14] {monster_deadbody_check();};
 
-//======================================================================
-void() hogre_die =
-{
+void() hogre_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -353,20 +336,16 @@ void() hogre_die =
 	}
 };
 
-//============================================================================
-void(float soundtype) hogre_sound =
-{
+void(float soundtype) hogre_sound = {
 	if (soundtype == 1) sound (self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
 	else if (soundtype == 2) sound (self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM);
 	else if (soundtype == 3) sound (self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM);
-	else if (soundtype == 4) sound (self, CHAN_WEAPON, "ogre/ogleap.wav", 1, ATTN_NORM);
+	else if (soundtype == 4) sound (self, CHAN_WEAPON, "ad171/ogre/ogleap.wav", 1, ATTN_NORM);
 };
 
-//----------------------------------------------------------------------
 // Special wakeup animation for attacking/breaking something infront
 // The monster should be setup facing the right direction before call
 // Starts in large overhead swing downwards (no damage checks)
-//----------------------------------------------------------------------
 void() hogre_wakeup1a	=[	$smash7,	hogre_wakeup2a ] {monster_sightsound();};
 void() hogre_wakeup2a	=[	$smash6,	hogre_wakeup3a ] {};
 void() hogre_wakeup3a	=[	$smash8,	hogre_wakeup4a ] {};
@@ -392,16 +371,12 @@ void() hogre_wakeup1 = {
 	else hogre_wakeup1b();
 };
 
-/*======================================================================
 //QUAKED monster_hogre (0.5 0.75 0) (-32 -32 -24) (32 32 64) AMBUSH x METAL NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
-{ model(":progs/ad171/mon_hogre.mdl"); }
-Ogre, 200 health points.
--------- KEYS --------
--------- SPAWNFLAGS --------
-METAL : Chain mail metal armour and +100HP
--------- NOTES --------
-
-======================================================================*/
+// { model(":progs/ad171/mon_hogre.mdl"); }
+// Ogre, 200 health points.
+// -------- KEYS --------
+// -------- SPAWNFLAGS --------
+// METAL : Chain mail metal armour and +100HP
 void() monster_hogre = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
@@ -432,15 +407,12 @@ void() monster_hogre = {
 	precache_sound (self.idle_sound);
 	self.idle_soundcom = "ogre/ogidle2.wav";
 	precache_sound (self.idle_soundcom);
-
 	precache_sound ("ogre/ogdrag.wav");		// Chainsaw scrap on floor sound
 	precache_sound ("ogre/ogdth.wav");		// Death sound
 	self.pain_sound = "ogre/ogpain1.wav";
 	precache_sound (self.pain_sound);		// Pain
-	
 	precache_sound ("ogre/ogsawatk.wav");	// Attack
-	precache_sound ("ogre/ogleap.wav");		// Leap Attack
-
+	precache_sound ("ad171/ogre/ogleap.wav");		// Leap Attack
 	self.sight_sound = "ogre/ogwake.wav";
 	precache_sound (self.sight_sound);
 
@@ -453,7 +425,6 @@ void() monster_hogre = {
 	self.pain_longanim = TRUE;
 	self.steptype = FS_TYPESLOW;
 	self.meleerange = MONAI_MELEEOGRE;	// Chainsaw range
-
 	
 	// Standard ogre health 200 with metal+ option
 	if (self.health < 1) self.health = 200;
@@ -482,7 +453,7 @@ void() monster_hogre = {
 	self.th_missile = hogre_shoot1;
 	self.th_pain = hogre_pain;
 	self.th_wakeup = hogre_wakeup1;
-	
+
 	self.ammo_rockets = 2;
 	self.classtype = CT_MONHOGRE;		// new style hunter ogre
 	self.classgroup = CG_OGRE;			// One big happy ogre family!

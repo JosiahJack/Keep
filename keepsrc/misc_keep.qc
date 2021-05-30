@@ -153,7 +153,7 @@ void() ringprethink = {
 	self.nextthink = time + 0.1;
 	self.think = ringthink;
 	self.avelocity = '0 0 200';
-	setmodel(self, "progs/shockwave.mdl");
+	setmodel(self, "progs/quoth2pt2full/shockwave.mdl");
 };
 
 void() W_Bomb = {
@@ -166,7 +166,7 @@ void() W_Bomb = {
 	bomb.solid = SOLID_NOT;
 	setsize(bomb, VEC_ORIGIN, VEC_ORIGIN);
 	setorigin(bomb, self.origin);
-	setmodel(bomb, "progs/boom.mdl");
+	setmodel(bomb, "progs/ne_ruins/boom.mdl");
 	bomb.think = bombthink;
 	bomb.nextthink = time + 0.1;
 	bomb.owner = self;
@@ -239,8 +239,8 @@ void() info_bomb = {
 	precache_model("progs/v_bomb.mdl");
 	precache_model("progs/smlexp.spr");
 	precache_model("progs/bigexp.spr");
-	precache_model("progs/boom.mdl");
-	precache_model("progs/shockwave.mdl");
+	precache_model("progs/ne_ruins/boom.mdl");
+	precache_model("progs/quoth2pt2full/shockwave.mdl");
 	self.use = W_Bomb;
 };
 
@@ -326,9 +326,7 @@ void () light_globecolor = {
 
 };
 
-// Madfox destroyable fast fan model
-// 0-14 run
-// 15 broke
+// Madfox destroyable fast fan model.  0-14 run.  15 broke
 void() misc_fan_break = {
 	self.frame = 15;
 	self.think = SUB_Null;

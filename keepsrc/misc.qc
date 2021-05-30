@@ -1,10 +1,6 @@
 void() misc_model;
 
-/*======================================================================
- MISC ENTITIES
-======================================================================*/
 float MISC_STARTOFF = 1;		// Start OFF (use DELAY instead!)
-
 float MISC_FBALLSLIME = 32;		// Slime green fire ball
 float MISC_DRIPSILENT = 2;		// misc_drip has no sound on splash
 float MISC_DRIPBLOOD = 16;		// blood red drips
@@ -17,61 +13,9 @@ float MISC_SPARKRED = 8;		// misc_spark produces Red sparks
 float MISC_COLLISION = 2;		// misc_model has collision enabled
 float MISC_MOVEMENT = 4;		// misc_model can be moved around
 float MISC_SHAKEVIEWONLY = 2;	// No velocity movement
-
 float MISC_EXPLBOX_MAX = 5;		// Maximum amount of skins available
 
-/*======================================================================
-//QUAKED misc_explobox (0 0.5 0.8) (-16 -16 0) (16 16 64) x x x x x FLOAT STARTOFF
-{ model(":progs/ad171/explode_box1.mdl"); }
-Large exploding box
--------- KEYS --------
-target        : trigger events when box explodes
-skin_override : 0=original, 1=rubicon2, 3=plasma, 4=toxic, 5-6=wood
-noise         : Explosion sound (def=weapons/r_exp3.wav)
-health        : Amount of health before exploding (def=15)
-dmg           : Override radius damage (def=160)
--------- SPAWNFLAGS --------
-FLOAT    : No drop to floor test
-STARTOFF : Starts off and waits for trigger
--------- NOTES --------
-Large exploding box
-
-//QUAKED misc_explobox2 (0 0.5 0.8) (-16 -16 0) (16 16 32) x x x x x FLOAT STARTOFF
-{ model(":progs/ad171/explode_box2.mdl"); }
-Small exploding box
--------- KEYS --------
-target        : trigger events when box explodes
-skin_override : 0=original, 1=rubicon2, 3=plasma, 4=toxic, 5-6=wood
-noise         : Explosion sound (def=weapons/r_exp3.wav)
-health        : Amount of health before exploding (def=15)
-dmg           : Override radius damage (def=160)
--------- SPAWNFLAGS --------
-FLOAT    : No drop to floor test
-STARTOFF : Starts off and waits for trigger
--------- NOTES --------
-Small exploding box
-
-//QUAKED func_explobox (0 0.5 0.8) ? x x x x x x STARTOFF x
-Exploding box (bmodel)
--------- KEYS --------
-target      : trigger events when box explodes
-noise       : Explosion sound (def=weapons/r_exp3.wav)
-health      : Amount of health before exploding (def=15)
-dmg         : Override radius damage (def=160)
-_dirt       : -1 = will be excluded from dirtmapping
-_minlight   : Minimum light level for any surface of the brush model
-_mincolor   : Minimum light color for any surface (def='1 1 1' RGB)
-_shadow     : Will cast shadows on other models and itself
-_shadowself : Will cast shadows on itself
--------- SPAWNFLAGS --------
-STARTOFF : Starts off and waits for trigger
--------- NOTES --------
-Exploding box (bmodel)
-
-======================================================================*/
-
 // Animate model skin slowly = 0.3s
-//----------------------------------------------------------------------
 void()	misc_ebox_0 = [0, misc_ebox_0] {
 	if (self.attack_finished < time) {
 		self.lefty = 1 - self.lefty;
@@ -81,35 +25,23 @@ void()	misc_ebox_0 = [0, misc_ebox_0] {
 };
 void(string gibname, float dm) throwpolypgib;
 
-//----------------------------------------------------------------------
 void() misc_explod_delay = {
-	// Explosive damage and sound+fx
-	T_RadiusDamage (self, self, self.dmg, world, DAMAGEALL);
-
-	// Particle explosion drifting upward
-	particle_explode(self.origin, 50+random()*50, 1, self.part_style, PARTICLE_BURST_UPWARD);
-	
-	// Play original explosion sound
-	//sound (self, CHAN_WEAPON, self.noise, 1, ATTN_NORM);
-	// Special type (hard-coded) of particle explosion
-	// that only works if particle count=255 :)
-	particle (self.origin, '0 0 0', 0, 255);
-
-	// Check for any explosion triggers
-	if (self.target != "") trigger_strs(self.target, other);
-
+	T_RadiusDamage (self, self, self.dmg, world, DAMAGEALL); // Explosive damage and sound+fx
+	particle_explode(self.origin, 50+random()*50, 1, self.part_style, PARTICLE_BURST_UPWARD); // Particle explosion drifting upward
+	particle (self.origin, '0 0 0', 0, 255); // Special type (hard-coded) of particle explosion that only works if particle count=255 :)
+	if (HasTargets(self)) SUB_UseTargets(); // Check for any explosion triggers
 	self.origin = self.origin + '0 0 32';
 	if (self.classname == "misc_biobox_l" || self.classname == "misc_biobox_s") {
 		SpawnExplosion(EXPLODE_POISON_MED, self.origin, self.noise);
-		throwpolypgib("progs/polypgib.mdl", -40);
-		throwpolypgib("progs/polypgib.mdl", -40);
-		throwpolypgib("progs/polypgib.mdl", -40);
-		throwpolypgib("progs/polypgib.mdl", -50);
-		throwpolypgib("progs/polypgib.mdl", -50);
-		throwpolypgib("progs/polypgib.mdl", -60);
-		throwpolypgib("progs/polypgib.mdl", -60);
-		throwpolypgib("progs/polypgib.mdl", -75);
-		throwpolypgib("progs/polypgib.mdl", -75);
+		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -40);
+		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -40);
+		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -40);
+		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -50);
+		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -50);
+		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -60);
+		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -60);
+		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -75);
+		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -75);
 	} else {
 		if (self.classname == "misc_plasmabox_l" || self.classname == "misc_plasmabox_s") {
 			particle_explode(self.origin, 50+random()*50, 2, PARTICLE_BURST_BLUE, PARTICLE_BURST_UPWARD);
@@ -122,25 +54,18 @@ void() misc_explod_delay = {
 };
 
 // Blow up the box
-//----------------------------------------------------------------------
-void() misc_explod_fire =
-{
+void() misc_explod_fire = {
 	local entity ent_explode;
 	
 	if (self.attack_finished > time) return;
+	
 	self.attack_finished = time + LARGE_TIMER;
-
-	// Save origin for later
-	if (self.bsporigin) self.oldorigin = bmodel_origin(self);
+	if (self.bsporigin) self.oldorigin = bmodel_origin(self); // Save origin for later
 	else self.oldorigin = self.origin;
 	
-	// Switch off everything
-	self.estate_off();
+	self.estate_off(); // Switch off everything
 	
-	// Stop recursive loops with T_RadiusDamage
-	// Delay each explosion so its not all at once
-	// Spawn the explosion/dmg/fx as a new entity
-	// func_explode does not want to set correct origin
+	// Stop recursive loops with T_RadiusDamage so delay each explosion so its not all at once.  Spawn the explosion/dmg/fx as a new entity func_explode does not want to set correct origin
 	ent_explode = spawn();
 	setorigin(ent_explode, self.oldorigin);
 	ent_explode.noise = self.noise;
@@ -150,52 +75,39 @@ void() misc_explod_fire =
 	ent_explode.nextthink = 0.01 + random()*0.1;
 };
 
-//----------------------------------------------------------------------
-void() misc_explobox_use =
-{
+void() misc_explobox_use = {
 	// If box is setup off, switch on first
 	if (self.spawnflags & ENT_STARTOFF) {
 		self.spawnflags = self.spawnflags - ENT_STARTOFF;
 		self.estate_on();
 	}
-	// No toggle function, just blow it up!
-	else misc_explod_fire();
+	else misc_explod_fire(); // No toggle function, just blow it up!
 };
 
-//----------------------------------------------------------------------
-void() misc_explobox_on =
-{
-	// If the box has exploded, do nothing
-	if (self.attack_finished > time) return;
-	// Stop re-triggering ON state
-	if (self.estate == ESTATE_ON) return;
+void() misc_explobox_on = {
+	if (self.attack_finished > time) return; // If the box has exploded, do nothing
+	if (self.estate == ESTATE_ON) return; // Stop re-triggering ON state
 
 	self.estate = ESTATE_ON;
 	if (self.bsporigin) {
 		self.solid = SOLID_BSP;
 		self.movetype = MOVETYPE_PUSH;
-	}
-	else {
+	} else {
 		self.solid = SOLID_BBOX;
 		self.movetype = MOVETYPE_NONE;
 	}
 	setmodel (self, self.mdl);
-	// Set skin unless using special misc_biobox or plasmabox from Quoth
-	if (self.classname != "misc_biobox_l" || self.classname != "misc_biobox_s" || self.classname != "misc_plasmabox_l" || self.classname != "misc_plasmabox_s") { 
-		self.skin = self.skin_override*2;
-	}
-	setsize(self, self.bbmins, self.bbmaxs);
 	
+	// Set skin unless using special misc_biobox or plasmabox from Quoth
+	if (self.classname != "misc_biobox_l" || self.classname != "misc_biobox_s" || self.classname != "misc_plasmabox_l" || self.classname != "misc_plasmabox_s") self.skin = self.skin_override*2;
+	setsize(self, self.bbmins, self.bbmaxs);
 	self.th_die = misc_explod_fire;
 	self.takedamage = DAMAGE_AIM;
-	
 	self.nextthink = time + 0.1;
 	self.think = misc_ebox_0;
 };
 
-//----------------------------------------------------------------------
-void() misc_explobox_off = 
-{
+void() misc_explobox_off =  {
 	self.estate = ESTATE_OFF;
 	self.solid = SOLID_NOT;
 	self.model = "";
@@ -204,20 +116,16 @@ void() misc_explobox_off =
 	self.think = SUB_Null;
 };
 
-//----------------------------------------------------------------------
-void() misc_explobox_setup =
-{
+void() misc_explobox_setup = {
 	if (self.noise == "") self.noise = SOUND_REXP3;
 	precache_sound (self.noise);
-
 	self.classtype = CT_EXPLO_BOX;
 	self.classgroup = CG_MISCENT;
 	if (self.health < 1) self.health = 15;		// ID def = 20
 	if (!self.dmg) self.dmg = 160;
-	// Check and setup default box skin
-	// 0=Original, 1=rubicon2, 2=plasma, 3=toxic, 4=Light wood, 5=dark wood
-	if (self.skin_override < 1 || self.skin_override > MISC_EXPLBOX_MAX)
-		self.skin_override = 0;
+	
+	// Check and setup default box skin.  0=Original, 1=rubicon2, 2=plasma, 3=toxic, 4=Light wood, 5=dark wood
+	if (self.skin_override < 1 || self.skin_override > MISC_EXPLBOX_MAX) self.skin_override = 0;
 	
 	// Setup particle explosion colour
 	if (self.skin_override == 2) self.part_style = PARTICLE_BURST_BLUE;
@@ -230,8 +138,7 @@ void() misc_explobox_setup =
 		setmodel (self, self.mdl);	// set size and link into world
 		self.bbmins = self.mins;	// Save bmodel bounds for later
 		self.bbmaxs = self.maxs;
-	}
-	else {
+	} else {
 		// Query console variable 'temp1' for model upgrade option.
 		// Cannot use global vars because they don't exist at this point
 		// Move the new centered exploding models to match old box origin
@@ -248,8 +155,7 @@ void() misc_explobox_setup =
 			}
 		}
 
-		// Temporarily enable model/bbox for collision test
-		// Finalize box location (check drop to floor)
+		// Temporarily enable model/bbox for collision test.  Finalize box location (check drop to floor)
 		if( !(self.spawnflags & ITEM_FLOATING) ) {
 			setmodel (self, self.mdl);
 			setsize(self, self.bbmins, self.bbmaxs);
@@ -276,9 +182,21 @@ void() misc_explobox_setup =
 	else self.estate_on();
 };
 
-//----------------------------------------------------------------------
-void() misc_explobox =
-{
+//QUAKED misc_explobox (0 0.5 0.8) (-16 -16 0) (16 16 64) x x x x x FLOAT STARTOFF
+// { model(":progs/ad171/explode_box1.mdl"); }
+// Large exploding box
+// -------- KEYS --------
+// target        : trigger events when box explodes
+// skin_override : 0=original, 1=rubicon2, 3=plasma, 4=toxic, 5-6=wood
+// noise         : Explosion sound (def=weapons/r_exp3.wav)
+// health        : Amount of health before exploding (def=15)
+// dmg           : Override radius damage (def=160)
+// -------- SPAWNFLAGS --------
+// FLOAT    : No drop to floor test
+// STARTOFF : Starts off and waits for trigger
+// -------- NOTES --------
+// Large exploding box
+void() misc_explobox = {
 	self.mdl = "progs/ad171/explode_box1.mdl";	// maps/b_explob.bsp
 	precache_model (self.mdl);
 	self.bbmins = '-16 -16 0';
@@ -286,43 +204,65 @@ void() misc_explobox =
 	misc_explobox_setup();
 };
 
-void() misc_explobox2 =
-{
-	self.mdl = "progs/ad171/explode_box2.mdl";	// maps/b_explob2.bsp
+// QUAKED misc_explobox2 (0 0.5 0.8) (-16 -16 0) (16 16 32) x x x x x FLOAT STARTOFF
+// { model(":progs/ad171/explode_box2.mdl"); }
+// Small exploding box
+// -------- KEYS --------
+// target        : trigger events when box explodes
+// skin_override : 0=original, 1=rubicon2, 3=plasma, 4=toxic, 5-6=wood
+// noise         : Explosion sound (def=weapons/r_exp3.wav)
+// health        : Amount of health before exploding (def=15)
+// dmg           : Override radius damage (def=160)
+// -------- SPAWNFLAGS --------
+// FLOAT    : No drop to floor test
+// STARTOFF : Starts off and waits for trigger
+// -------- NOTES --------
+// Small exploding box
+void() misc_explobox2 = {
+	self.mdl = "progs/ad171/explode_box2.mdl";
 	precache_model (self.mdl);
 	self.bbmins = '-16 -16 0';
 	self.bbmaxs = '16 16 32';
 	misc_explobox_setup();
 };
 
-void() misc_barrel =
-{
-	self.mdl = "maps/b_barrel.bsp";	// maps/b_explob2.bsp
+void() misc_barrel = {
+	self.mdl = "maps/nsoe2/b_barrel.bsp";
 	precache_model (self.mdl);
 	self.bbmins = '-32 -32 0';
 	self.bbmaxs = '32 32 64';
 	misc_explobox_setup();
 };
 
-//----------------------------------------------------------------------
-void () func_explobox =
-{
+// QUAKED func_explobox (0 0.5 0.8) ? x x x x x x STARTOFF x
+// Exploding box (bmodel)
+// -------- KEYS --------
+// target      : trigger events when box explodes
+// noise       : Explosion sound (def=weapons/r_exp3.wav)
+// health      : Amount of health before exploding (def=15)
+// dmg         : Override radius damage (def=160)
+// _dirt       : -1 = will be excluded from dirtmapping
+// _minlight   : Minimum light level for any surface of the brush model
+// _mincolor   : Minimum light color for any surface (def='1 1 1' RGB)
+// _shadow     : Will cast shadows on other models and itself
+// _shadowself : Will cast shadows on itself
+// -------- SPAWNFLAGS --------
+// STARTOFF : Starts off and waits for trigger
+// -------- NOTES --------
+// Exploding box (bmodel)
+void () func_explobox = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 	
 	self.mdl = self.model;					// Brushwork version
 	self.bsporigin = TRUE;					// bmodel object
 	self.angles = '0 0 0';					// Make sure no angle twist
 	self.skin_override = 0;				// Only bsp skins
-	// Cannot be setup floating (always remove flag)
-	self.spawnflags = self.spawnflags - (self.spawnflags & ITEM_FLOATING);
+	self.spawnflags = self.spawnflags - (self.spawnflags & ITEM_FLOATING); // Cannot be setup floating (always remove flag)
 	misc_explobox_setup();
 };
 
-//----------------------------------------------------------------------
 // Vanilla ID map hack (not used directly anymore)
-//----------------------------------------------------------------------
-void() barrel_explode =
-{
+void() barrel_explode = {
 	self.enemy = spawn();
 	setorigin(self.enemy, self.origin+'0 0 32');
 	self.enemy.noise = SOUND_REXP3;
@@ -331,25 +271,9 @@ void() barrel_explode =
 	self.enemy.nextthink = 0.01 + random()*0.1;
 };
 
-//======================================================================
-/*QUAKED misc_fireball (0 .5 .8) (-8 -8 -8) (8 8 8) x x x x x SLIME STARTOFF x
-Lava Balls, with damage on impact
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-speed : vertical speed (default 1000)
-dmg   : impact damage (default 5)
-delay : base time between spawning fireballs (default 3)
-wait  : random time default 5 (= time + self.delay + (random() x self.wait) ) 
--------- SPAWNFLAGS --------
-SLIME  : Green slime version (smoke trail)
-STARTOFF : Always Starts off and waits for trigger
--------- NOTES --------
-Lava Balls, with damage on impact
-*/
-//======================================================================
 void() misc_lavaball_fly;
-void() misc_lavaball_reset =
-{
+
+void() misc_lavaball_reset = {
 	self.touch = SUB_Null;
 	self.flags = 0;
 	self.modelindex = 0;			// Make sure no model
@@ -362,26 +286,19 @@ void() misc_lavaball_reset =
 	self.think = misc_lavaball_fly;
 };
 
-//----------------------------------------------------------------------
-void() misc_lavaball_touch =
-{
+void() misc_lavaball_touch = {
 	self.touch = SUB_Null;
 	if (other.takedamage) {
 		// Check for lava shield?
 		if (self.spawnflags & MISC_FBALLSLIME) {
 			if (other.flags & FL_CLIENT && other.items & IT_SUIT)
-				// Play envirosuit protection sound
-				sound (other, CHAN_ITEM, SOUND_ARTSUIT3, 0.5, ATTN_NORM);
-			// Default = pain!
-			else T_Damage (other, self, self, self.dmg, DAMARMOR);
+				sound (other, CHAN_ITEM, SOUND_ARTSUIT3, 0.5, ATTN_NORM); // Play envirosuit protection sound
+			else T_Damage (other, self, self, self.dmg, DAMARMOR); // Default = pain!
 		} else {
-			if (other.flags & FL_CLIENT && ((other.moditems & IT_ARTLAVASHIELD) || other.resist_fire >= 1)) {
-				// Play lava shield protection sound
-				sound (other, CHAN_ITEM, SOUND_ARTLSHIELD3, 0.5, ATTN_NORM);
-
+			if (other.flags & FL_CLIENT && ((other.moditems & IT_ARTLAVASHIELD) || other.resist_fire >= 1) || other.therm_finished > time) {
+				sound (other, CHAN_ITEM, SOUND_ARTLSHIELD3, 0.5, ATTN_NORM); // Play lava shield protection sound
 			} else {
-				// Default = pain!
-				if (other.resist_fire > 0) self.dmg = self.dmg * (1-other.resist_fire);
+				if (other.resist_fire > 0) self.dmg = self.dmg * (1-other.resist_fire); // Default = pain!
 				T_Damage (other, self, self, self.dmg, DAMARMOR);
 			}
 		}
@@ -389,9 +306,7 @@ void() misc_lavaball_touch =
 	misc_lavaball_reset();
 };
 
-//----------------------------------------------------------------------
-void() misc_lavaball_fly =
-{
+void() misc_lavaball_fly = {
 	if (self.estate & ESTATE_BLOCK) return;
 	
 	setmodel (self, self.mdl);
@@ -404,13 +319,12 @@ void() misc_lavaball_fly =
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 
 	// Check for any target entity tracking setup
-	if (self.target == "") {
+	if (self.target == "") { // No need to track other targets, used for direction only
 		// default misc_fireball movement
 		self.velocity_x = (random() * 100) - 50;
 		self.velocity_y = (random() * 100) - 50;
 		self.velocity_z = self.speed + (random() * 200);
-	}
-	else {
+	} else {
 		// Setup tracking vector (using movedir) = traps.qc
 		TargetMovedir(self, FALSE);
 		self.velocity = self.movedir * (self.speed + (random() * 200));
@@ -423,17 +337,26 @@ void() misc_lavaball_fly =
 	self.touch = misc_lavaball_touch;
 };
 
-//----------------------------------------------------------------------
-void() misc_lavaball_on =
-{
+void() misc_lavaball_on = {
 	self.estate = ESTATE_ON;
 	self.nextthink = time + self.delay + (random() * self.wait);
 	self.think = misc_lavaball_fly;
 };
 
-//----------------------------------------------------------------------
-void() misc_fireball =
-{
+// QUAKED misc_fireball (0 .5 .8) (-8 -8 -8) (8 8 8) x x x x x SLIME STARTOFF x
+// Lava Balls, with damage on impact
+// -------- KEYS --------
+// targetname : toggle state (use trigger ent for exact state)
+// speed : vertical speed (default 1000)
+// dmg   : impact damage (default 5)
+// delay : base time between spawning fireballs (default 3)
+// wait  : random time default 5 (= time + self.delay + (random() x self.wait) ) 
+// -------- SPAWNFLAGS --------
+// SLIME  : Green slime version (smoke trail)
+// STARTOFF : Always Starts off and waits for trigger
+// -------- NOTES --------
+// Lava Balls, with damage on impact
+void() misc_fireball = {
 	if (self.spawnflags & MISC_FBALLSLIME) self.mdl = MODEL_PROJ_SLIME;
 	else self.mdl = MODEL_PROJ_LAVA;
 	precache_model (self.mdl);
@@ -571,16 +494,14 @@ void() misc_gibfountain_on =
 	// Display spawn direction with angle model
 	if (self.lip) {
 		self.lip = FALSE;	// Once only
-		if (self.target != "") TargetMovedir(self, FALSE);
+		if (self.target != "") TargetMovedir(self, FALSE); // Movement target only, no need to check other targets
 		spawn_arrow(self.origin, vectoangles(self.movedir), 0);
 	}
 	// Start spewing (no delay so it can be triggered properly)
 	misc_gibfountain_fly();
 };
 
-//----------------------------------------------------------------------
-void() misc_gibfountain =
-{
+void() misc_gibfountain = {
 	// Setup/load extra gib types (Check for previous precache)
 	if (self.gibtype == GIBTYPE_STONE) {
 		// Only bother to precache if NOT done already
@@ -629,8 +550,7 @@ void() misc_gibfountain =
 	}
 	// Empty sound files
 	else if (self.sounds == 4) {
-		self.noise = "misc/null.wav";
-		self.noise1 = "misc/null.wav";
+		self.noise = self.noise1 = SOUND_EMPTY;
 	}
 	
 	// Check if ANY custom sounds have been defined
@@ -657,12 +577,9 @@ void() misc_gibfountain =
 	// Extra randomness to speed/velocity of gib (forward/right/up)
 	if (CheckZeroVector(self.gibvel)) self.gibvel = '200 100 0';
 
-	// Direction system priority = ANGLES > TARGET > ANGLETARGET
-	//------------------------------------------------------------------
-	// Check for empty angles setup?
+	// Direction system priority = ANGLES > TARGET > ANGLETARGET.  Check for empty angles setup?
 	if (CheckZeroVector(self.angles)) {
-		// No angles defined, create default direction
-		// Target/Angletarget are checked when gib is thrown/spawned
+		// No angles defined, create default direction.  Target/Angletarget are checked when gib is thrown/spawned
 		self.angles = '0 -1 0';
 		// priority = TARGET > ANGLETARGET
 		// Target has to be defined for gib to be thrown properly
@@ -721,20 +638,16 @@ void() misc_bubble_split =
 	bubble.nextthink = time + 0.5;
 	bubble.think = misc_bubble_bob;
 	bubble.touch = misc_bubble_remove;
-
 	bubble.frame = 1;
 	bubble.cnt = 10;
 	setsize (bubble, '-8 -8 -8', '8 8 8');
-
 	self.frame = 1;		// Smaller bubble
 	self.cnt = 10;
 	if (self.waterlevel != 3) remove (self);
 };
 
-//----------------------------------------------------------------------
-void() misc_bubble_bob =
-{
-	local float		rnd1, rnd2, rnd3;
+void() misc_bubble_bob = {
+	local float rnd1, rnd2, rnd3;
 
 	self.cnt = self.cnt + 1;
 	if (self.cnt == 4) misc_bubble_split();
@@ -743,27 +656,20 @@ void() misc_bubble_bob =
 	rnd1 = self.velocity_x + (-10 + (random() * 20));
 	rnd2 = self.velocity_y + (-10 + (random() * 20));
 	rnd3 = self.velocity_z + 10 + random() * 10;
-
 	if (rnd1 > 10) rnd1 = 5;
 	if (rnd1 < -10) rnd1 = -5;
-		
 	if (rnd2 > 10) rnd2 = 5;
 	if (rnd2 < -10) rnd2 = -5;
-		
 	if (rnd3 < 10) rnd3 = 15;
 	if (rnd3 > 30) rnd3 = 25;
-	
 	self.velocity_x = rnd1;
 	self.velocity_y = rnd2;
-	self.velocity_z = rnd3;
-		
+	self.velocity_z = rnd3;		
 	self.nextthink = time + 0.5;
 	self.think = misc_bubble_bob;
 };
 
-//----------------------------------------------------------------------
-void() misc_bubble_spawn =
-{
+void() misc_bubble_spawn = {
 	local entity bubble;
 	if (self.estate & ESTATE_BLOCK) return;
 	
@@ -979,9 +885,9 @@ void() misc_drip =
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
 	
-	self.noise1 = "misc/drip1.wav";
-	self.noise2 = "misc/drip2.wav";
-	self.noise3 = "misc/drip3.wav";
+	self.noise1 = "ad171/misc/drip1.wav";
+	self.noise2 = "ad171/misc/drip2.wav";
+	self.noise3 = "ad171/misc/drip3.wav";
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
@@ -1163,9 +1069,9 @@ void() func_drips = {
 	precache_model (self.path);
 	precache_model (self.headmdl);
 	
-	if (!self.noise1) self.noise1 = "misc/drip1.wav";
-	if (!self.noise2) self.noise2 = "misc/drip2.wav";
-	if (!self.noise3) self.noise3 = "misc/drip3.wav";
+	if (!self.noise1) self.noise1 = "ad171/misc/drip1.wav";
+	if (!self.noise2) self.noise2 = "ad171/misc/drip2.wav";
+	if (!self.noise3) self.noise3 = "ad171/misc/drip3.wav";
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
@@ -1291,8 +1197,7 @@ angles = 'pitch roll yaw' up/down, angle, tilt left/right
 up/left = negative value, down/right = positive value
 
 ======================================================================*/
-void() misc_smoke_model = 
-{
+void() misc_smoke_model = {
 	self.count = self.count + 1;
 	if (self.count > 59) self.count = 0;
 	self.frame = self.count;
@@ -1300,8 +1205,7 @@ void() misc_smoke_model =
 	self.nextthink = time + 0.1;
 };
 
-void() misc_smoke_on =
-{
+void() misc_smoke_on = {
 	self.estate = ESTATE_ON;
 
 	// Switch on particle emitter if was setup
@@ -1317,21 +1221,16 @@ void() misc_smoke_on =
 	}
 };
 
-//----------------------------------------------------------------------
-void() misc_smoke_off =
-{
+void() misc_smoke_off = {
 	self.estate = ESTATE_OFF;
 	// Turn off model if setup
 	if (self.mdl != "") self.model = "";
 };
 
-//----------------------------------------------------------------------
-void() misc_smoke_setup =
-{
+void() misc_smoke_setup = {
 	// If target is setup, calculate new facing angle
-	if (self.target != "") {
-		if (!self.movetarget)
-			self.movetarget = find(world, targetname, self.target);
+	if (self.target != "") { // Used for angles only
+		if (!self.movetarget) self.movetarget = find(world, targetname, self.target);
 		
 		if (self.movetarget) {
 			// Check for a Bmodel object (special origin)
@@ -1354,10 +1253,8 @@ void() misc_smoke_setup =
 	else entity_state_on();
 };
 
-//----------------------------------------------------------------------
-void() misc_smoke =
-{
-	self.mdl = "progs/misc_smoke.mdl";
+void() misc_smoke = {
+	self.mdl = "progs/ad181/misc_smoke.mdl";
 	precache_model (self.mdl);
 
 	self.classtype = CT_MISCSMOKE;
@@ -1538,7 +1435,7 @@ void() misc_spark =
 {
 	self.mdl = "progs/ad171/misc_spark.mdl";
 	precache_model (self.mdl);
-	if (self.sounds == 1) self.noise = "misc/spark.wav";
+	if (self.sounds == 1) self.noise = "ad171/misc/spark.wav";
 	if (self.noise != "") precache_sound (self.noise);
 	
 	self.classtype = CT_MISCSPARK;
@@ -1629,9 +1526,7 @@ void() misc_shake_think =
 	self.think = misc_shake_think;
 };
 
-//----------------------------------------------------------------------
-void() misc_shake_on = 
-{
+void() misc_shake_on = {
 	self.estate = ESTATE_ON;
 
 	// Play earthquake LOOP sound
@@ -1643,14 +1538,11 @@ void() misc_shake_on =
 	self.think = misc_shake_think;
 };
 
-//----------------------------------------------------------------------
-void() misc_shake =
-{	
+void() misc_shake = {
 	if (self.sounds == 1) {
-		self.noise1 = "misc/rumbleloop.wav";
-		self.noise2 = "misc/rumbleoff.wav";
-	}
-	else {
+		self.noise1 = "ad171/misc/rumbleloop.wav";
+		self.noise2 = "ad171/misc/rumbleoff.wav";
+	} else {
 		if (self.noise1 == "") self.noise1 = SOUND_EMPTY;
 		if (self.noise2 == "") self.noise2 = SOUND_EMPTY;
 	}
@@ -1670,11 +1562,8 @@ void() misc_shake =
 	self.estate = ESTATE_OFF;
 };
 
-//======================================================================
 // All dead bodies use the same on/off states
-//======================================================================
-void() misc_deadbody_on =
-{
+void() misc_deadbody_on = {
 	if (self.gibbed == TRUE) return;
 
 	self.estate = ESTATE_ON;			// Show entity
@@ -1880,8 +1769,7 @@ Spawns a builtin particle effect, will toggle if active
 Always starts off, requires triggers to activate
 
 ======================================================================*/
-void() misc_builtineffects_fire =
-{
+void() misc_builtineffects_fire = {
 	// Check if disabled/off first
 	if (self.estate & ESTATE_BLOCK) self.state = STATE_OFF;
 	if (self.state == STATE_OFF) return;
@@ -1930,8 +1818,7 @@ void() misc_builtineffects_fire =
 		else if (self.lip == 2) sound (self.movetarget, CHAN_VOICE, "misc/r_tele3.wav", 1, ATTN_NORM);
 		else if (self.lip == 3) sound (self.movetarget, CHAN_VOICE, "misc/r_tele4.wav", 1, ATTN_NORM);
 		else sound (self.movetarget, CHAN_VOICE, "misc/r_tele5.wav", 1, ATTN_NORM);
-	}	
-	else if (self.count == TE_LIGHTNING1 || self.count == TE_LIGHTNING2 || 
+	} else if (self.count == TE_LIGHTNING1 || self.count == TE_LIGHTNING2 || 
 		self.count == TE_LIGHTNING3) {
 		// Play lightning sound (LG weapon hit)
 		// Stop the sound constantly playing
@@ -1955,9 +1842,7 @@ void() misc_builtineffects_fire =
 	else self.state = STATE_OFF;
 };
 
-//----------------------------------------------------------------------
-void() misc_builtineffects_use =
-{
+void() misc_builtineffects_use = {
 	// Check if disabled/off first
 	if (self.estate & ESTATE_BLOCK) return;
 	
@@ -1968,15 +1853,9 @@ void() misc_builtineffects_use =
 	misc_builtineffects_fire();
 };
 
-//----------------------------------------------------------------------
-void() misc_builtineffects_reset =
-{
-	self.state = STATE_OFF;
-};
+void() misc_builtineffects_reset = { self.state = STATE_OFF; };
 
-//----------------------------------------------------------------------
-void() misc_builtineffects_setup =
-{
+void() misc_builtineffects_setup = {
 	// Find any target destinations
 	if (self.target != "") self.movetarget = find(world, targetname, self.target);
 	else self.movetarget = self;
@@ -1998,9 +1877,7 @@ void() misc_builtineffects_setup =
 	self.state = STATE_OFF;
 };
 
-//----------------------------------------------------------------------
-void() misc_builtineffects =
-{
+void() misc_builtineffects = {
 	// Precache sounds for effects
 	if (self.count == TE_LAVASPLASH) precache_sound ("boss1/out1.wav");
 

@@ -1,15 +1,44 @@
-//==========================================================================
-//  check.qc -- by Patrick Martin               Last updated:  9-8-1997
-//--------------------------------------------------------------------------
-//  This file contains code that determines whether an entity or a
-//  location is inside the various contents found in Quake.
-//==========================================================================
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/ 
+//
+// Compiled by Qmaster
+//
+// Attributions: Drake by Patrick Martin but as used in Quake 1.5 by BloodShot
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 2
+//
+// Implements: Quake 1.5 subroutine functions and utilities
+//
+// Description:
+// Simple utility functions for q15 features.
+//=============================================================================
 
-//-------------------------------------------------------- New Code --------
-//  This checks for obstacles such as solid entities or walls inside
-//  the bbox and along its borders.  If an obstacle is met, FALSE is
-//  returned.
-//--------------------------------------------------------------------------
+//  check.qc -- by Patrick Martin               Last updated:  9-8-1997
+//  This file contains code that determines whether an entity or a location is inside the various contents found in Quake.
+//  This checks for obstacles such as solid entities or walls inside the bbox and along its borders.  If an obstacle is met, FALSE is returned.
 float(entity head, vector spot) PM_TraceCheck = {
 	local   vector  p1, p2;
 
@@ -97,11 +126,7 @@ float(entity head, vector spot) PM_TraceCheck = {
 	return (trace_fraction == 1);
 };
 
-//-------------------------------------------------------- New Code --------
-//  This checks if a bbox is inside a wall or sky.  The bbox's origin
-//  and corners are checked.  If any one points is within a solid or sky,
-//  TRUE is returned.
-//--------------------------------------------------------------------------
+//  This checks if a bbox is inside a wall or sky.  The bbox's origin and corners are checked.  If any one points is within a solid or sky, TRUE is returned.
 float(entity head, vector spot) PM_InWall = {
 	local   vector  p;
 
@@ -176,81 +201,4 @@ float(entity head, vector spot) PM_InWall = {
 	p_x = spot_x + head.mins_x;
 	if (pointcontents(p) == CONTENT_SOLID)  return TRUE;
 	return (pointcontents(p) == CONTENT_SKY);
-};
-
-//-------------------------------------------------------- New Code --------
-//  This is a variation of InWall.  The bbox is checked if it is a
-//  empty air; that is not inside solid, water, or anything else.
-//  If any one point is within a brush, FALSE is returned.
-//--------------------------------------------------------------------------
-float(entity head, vector spot) PM_InEmpty = {
-    local   vector  p;
-
-	// Check origin.
-	p = spot;
-	if (pointcontents(p) != CONTENT_EMPTY)  return FALSE;
-
-	// Check bbox faces.
-	// Order:  1)-00  2)+00  3)0-0  4)0+0  5)00-  6)00+
-	p_x = spot_x + head.mins_x;
-	if (pointcontents(p) != CONTENT_EMPTY)  return FALSE;
-
-	p_x = spot_x + head.maxs_x;
-	if (pointcontents(p) != CONTENT_EMPTY)  return FALSE;
-
-	p = spot;
-	p_y = spot_y + head.mins_y;
-	if (pointcontents(p) != CONTENT_EMPTY)  return FALSE;
-
-	p_y = spot_y + head.maxs_y;
-	if (pointcontents(p) != CONTENT_EMPTY)  return FALSE;
-
-	p = spot;
-	p_z = spot_z + head.mins_z;
-	if (pointcontents(p) != CONTENT_EMPTY)  return FALSE;
-
-	p_z = spot_z + head.maxs_z;
-	if (pointcontents(p) != CONTENT_EMPTY)  return FALSE;
-
-	// Check bbox corners.
-	// Order:  1)+++  2)-++  3)+-+  4)--+  5)++-  6)-+-  7)+--  8)---
-	p_x = spot_x + head.maxs_x;
-	p_y = spot_y + head.maxs_y;
-	if (pointcontents(p) != CONTENT_EMPTY)  return FALSE;
-
-	p_x = spot_x + head.mins_x;
-	if (pointcontents(p) != CONTENT_EMPTY)  return FALSE;
-
-	p_x = spot_x + head.maxs_x;
-	p_y = spot_y + head.mins_y;
-	if (pointcontents(p) != CONTENT_EMPTY)  return FALSE;
-
-	p_x = spot_x + head.mins_x;
-	if (pointcontents(p) != CONTENT_EMPTY)  return FALSE;
-
-	p_x = spot_x + head.maxs_x;
-	p_y = spot_y + head.maxs_y;
-	p_z = spot_z + head.mins_z;
-	if (pointcontents(p) != CONTENT_EMPTY)  return FALSE;
-
-	p_x = spot_x + head.mins_x;
-	if (pointcontents(p) != CONTENT_EMPTY)  return FALSE;
-
-	p_x = spot_x + head.maxs_x;
-	p_y = spot_y + head.mins_y;
-	if (pointcontents(p) != CONTENT_EMPTY)  return FALSE;
-
-	p_x = spot_x + head.mins_x;
-	return (pointcontents(p) == CONTENT_EMPTY);
-};
-
-//-------------------------------------------------------- New Code --------
-//  This checks if the entity is in a body of liquid.
-//--------------------------------------------------------------------------
-float(entity head) PM_InLiquid = {
-	if (pointcontents(head.origin) == CONTENT_WATER)  return TRUE;
-	if (pointcontents(head.origin) == CONTENT_SLIME)  return TRUE;
-	if (pointcontents(head.origin) == CONTENT_LAVA)   return TRUE;
-
-	return FALSE;    // Entity is not in liquid.
 };

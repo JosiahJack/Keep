@@ -160,7 +160,7 @@ void() nehahra_deathbeams = {
 	local entity mark;
 	local vector vec;
 
-	sound(self, CHAN_AUTO, "sets/set2_4.wav", 1, ATTN_NONE);
+	sound(self, CHAN_AUTO, "nehahra/sets/set2_4.wav", 1, ATTN_NONE);
 	mark = spawn();
 	mark.solid = SOLID_NOT;
 	mark.fullbright = 1;

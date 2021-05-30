@@ -78,7 +78,7 @@ float SVR_RUNEFLAG		= 255;		// Bits  1- 8 - Runes and Keys
 float SVR_LOWFLAG		= 65535;		// Bits  1-16 - rune keys and spawn settings
 float SVR_WORLDFLAG 	= 65280;	// Bits  9-16 - default/worldspawn options
 float SVR_HIGHFLAG		= 8323072;	// Bits 17-23 - these options carry over
-//----------------------------------------------------------------------
+
 float SVR_RUNE_KEY1 	= 1;		// Rune 1
 float SVR_RUNE_KEY2		= 2;		// Rune 2
 float SVR_RUNE_KEY3		= 4;		// Rune 3
@@ -95,14 +95,12 @@ float SVR_UPDAXE 		= 4096;		// Upgrade Axe, +75% dmg, gib zombies
 float SVR_UPDSSG		= 8192;		// Upgrade Super Shotgun, +50% dmg, uses 3 shells
 float SVR_UPDLG 		= 16384;		// Upgrade Lightning Gun, Direct+Splashdamage
 float SVR_ITEMROTATE 	= 32768;		// Always randomly rotate ammo items
-// float SVR_WEATHER	= 65536;		// Turn OFF All weather systems
 float SVR_SHOTGPROJ		= 131072;	// Turn OFF Shotgun projectiles
 float SVR_SHOTGCASE		= 262144;	// Turn OFF Shotgun casings
 float SVR_ZAWARE		= 524288;		// Turn OFF Z aware monsters
 float SVR_FOOTSTEP		= 1048576;	// Turn OFF Enemy/player footsteps
 float SVR_AIPATH		= 2097152;		// Turn OFF AI path corner extra info
 float SVR_LIQDAM		= 4194304;		// Turn OFF Liquid damage checks for monsters
-//========================================================================================================
 
 //wad image names in array form, for easier access.
 static string number[10] = {

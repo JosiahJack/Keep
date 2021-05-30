@@ -19,7 +19,7 @@ void() CyberDemonFireMissile = {
 	// if cannot see enemy fire at last known location
 	ai_trackenemy();
 	self.effects = self.effects | EF_MUZZLEFLASH;
-    sound (self, CHAN_WEAPON, "cyber/cybfire.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "drake/cyber/cybfire.wav", 1, ATTN_NORM);
 	makevectors (self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = normalize(self.attack_track - org);
@@ -51,9 +51,9 @@ void(float mad) cyber_anim = {
     if (self.flags & FL_ONGROUND)
     {   // Footstep.
         if ( self.frame == $walk1 )
-            sound (self, 6, "cyber/cybhoof.wav", 1, ATTN_NORM);
+            sound (self, 6, "drake/cyber/cybhoof.wav", 1, ATTN_NORM);
         else if ( self.frame == $walk6 )
-            sound (self, 6, "cyber/cybmet.wav", 1, ATTN_NORM);
+            sound (self, 6, "drake/cyber/cybmet.wav", 1, ATTN_NORM);
     }
 
 	// Update 7/24/09:  Cyber moves 16 every 3 frames in Doom, and Doom ran
@@ -61,7 +61,7 @@ void(float mad) cyber_anim = {
     if (mad) {
         ai_run (18);
         if (prandom() < 3)
-            sound (self, CHAN_VOICE, "cyber/cybidle.wav", 1, ATTN_IDLE);
+            sound (self, CHAN_VOICE, "drake/cyber/cybidle.wav", 1, ATTN_IDLE);
     } else
         ai_walk (18);
 };
@@ -117,7 +117,7 @@ void(entity inflictor, entity attacker, float damage) cyber_pain = {
 	// To keep Mr. C. faithful to his incarnation in Doom, the Nightmare
 	// no pain rules of Drake (which mirrors Quake2's) are not used here.
     if (prandom() < 20) {
-        sound (self, CHAN_VOICE, "cyber/cybpain.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "drake/cyber/cybpain.wav", 1, ATTN_NORM);
         self.pain_finished = time + 0.1;    // Just one frame.
         self.ryuflags = self.ryuflags | RYU_JUSTHIT;
         cyber_pain1();
@@ -131,7 +131,7 @@ void(entity inflictor, entity attacker, float damage) cyber_pain = {
 
 void() cyber_die1  =[ $walk1,  cyber_die2  ] { 	
     // In Doom, the cyderdemon death cry was heard everywhere at full volume.
-    sound (self, 7, "cyber/cybdie.wav", 1, ATTN_NONE);
+    sound (self, 7, "drake/cyber/cybdie.wav", 1, ATTN_NONE);
     ai_back(3);
 };
 void() cyber_die2  =[ $walk2,  cyber_die3  ] {ai_back(3);};
@@ -140,18 +140,16 @@ void() cyber_die4  =[ $walk4,  cyber_die5  ] {ai_back(3);};
 void() cyber_die5  =[ $walk5,  cyber_die6  ] {ai_back(3);};
 void() cyber_die6  =[ $walk6,  cyber_die7  ] {ai_back(3);};
 void() cyber_die7  =[ $walk7,  cyber_die8  ] {ai_back(3);};
-void() cyber_die8  =[ $walk1,  cyber_die9  ] {ai_back(3);
-    sound (self, 5, "cyber/servo.wav", 1, ATTN_NORM);
-};
-void() cyber_die9  =[ $shoot1, cyber_die10 ] 
-{   ai_back(3);
-    SpawnExplosion (EXPLODE_MED,self.origin + '0 20 60',"weapons/r_exp3.wav");
+void() cyber_die8  =[ $walk1,  cyber_die9  ] {ai_back(3); sound (self, 5, "drake/cyber/servo.wav", 1, ATTN_NORM); };
+void() cyber_die9  =[ $shoot1, cyber_die10 ] {
+	ai_back(3);
+    SpawnExplosion (EXPLODE_MED,self.origin + '0 20 60',SOUND_REXP3);
 };
 void() cyber_die10 =[ $shoot2, cyber_die11 ] {ai_back(3);};
-void() cyber_die11 =[ $shoot2, cyber_die12 ] { ai_back(3); SpawnExplosion(EXPLODE_MED,self.origin + '0 -20 -40',"weapons/r_exp3.wav"); };
-void() cyber_die12 =[ $shoot3, cyber_die13 ] { sound (self, CHAN_VOICE, "cyber/cybdie.wav", 1, ATTN_NORM); ai_back(3); };
+void() cyber_die11 =[ $shoot2, cyber_die12 ] { ai_back(3); SpawnExplosion(EXPLODE_MED,self.origin + '0 -20 -40',SOUND_REXP3); };
+void() cyber_die12 =[ $shoot3, cyber_die13 ] { sound (self, CHAN_VOICE, "drake/cyber/cybdie.wav", 1, ATTN_NORM); ai_back(3); };
 void() cyber_die13 =[ $shoot3, cyber_die14 ] {
-	SpawnExplosion(EXPLODE_MED,self.origin + '-20 0 20',"weapons/r_exp3.wav");
+	SpawnExplosion(EXPLODE_MED,self.origin + '-20 0 20',SOUND_REXP3);
     SpawnExplosion(EXPLODE_MED,self.origin + '20 0 20',"");
 	SpawnExplosion(EXPLODE_MED,self.origin + '0 -20 20',"");
 	SpawnExplosion(EXPLODE_MED,self.origin + '0 20 20',"");
@@ -181,11 +179,11 @@ void() cyber_die18 =[ $shoot3, cyber_die18    ] {
     SUB_Think (newmis, BecomeTheBigFire);
     SUB_Think (newmis, FlameWave);
     Quake_Self (300, 0, self.origin, 0, 0.5);
-	SpawnExplosion(EXPLODE_MED,self.origin + '-10 0 40',"weapons/r_exp3.wav");
+	SpawnExplosion(EXPLODE_MED,self.origin + '-10 0 40',SOUND_REXP3);
 	SpawnExplosion(EXPLODE_MED,self.origin + '10 0 40',"");
 	SpawnExplosion(EXPLODE_MED,self.origin + '0 -10 40',"");
 	SpawnExplosion(EXPLODE_MED,self.origin + '0 10 40',"");
-    sound (self, 5, "cyber/boom.wav", 1, ATTN_NORM);
+    sound (self, 5, "drake/cyber/boom.wav", 1, ATTN_NORM);
     ThrowGib (25,1); // headmdl
     ThrowGib (13,1);
     ThrowGib (12,5);
@@ -213,16 +211,16 @@ void() monster_cyberdemon = {
 	precache_model ("progs/drake/s_wave.spr");
 	precache_model ("progs/gib1.mdl");
 	precache_model ("progs/gib3.mdl");
-	precache_sound ("soldier/rocket_hit.wav");
-	precache_sound ("cyber/cybsee.wav");
-	precache_sound ("cyber/cybdie.wav");
-	precache_sound ("cyber/cybhoof.wav");
-	precache_sound ("cyber/cybpain.wav");	
-	precache_sound ("cyber/cybmet.wav");
-	precache_sound ("cyber/cybfire.wav");
-	precache_sound ("cyber/cybidle.wav");
-	precache_sound ("cyber/boom.wav");
-	precache_sound ("cyber/servo.wav");
+	precache_sound ("ad171/soldier/rocket_hit.wav");
+	precache_sound ("drake/cyber/cybsee.wav");
+	precache_sound ("drake/cyber/cybdie.wav");
+	precache_sound ("drake/cyber/cybhoof.wav");
+	precache_sound ("drake/cyber/cybpain.wav");	
+	precache_sound ("drake/cyber/cybmet.wav");
+	precache_sound ("drake/cyber/cybfire.wav");
+	precache_sound ("drake/cyber/cybidle.wav");
+	precache_sound ("drake/cyber/boom.wav");
+	precache_sound ("drake/cyber/servo.wav");
 	
 	self.headmdl = "progs/drake/h_cyber.mdl";
 	self.gib1mdl = "progs/gib1.mdl";
@@ -245,7 +243,7 @@ void() monster_cyberdemon = {
     // Update 12/30/2009:  Removed melee now that Doom style movement is in.
     self.th_missile = cyber_missile1;
     self.th_pain    = cyber_pain;
-    self.sight_sound = "cyber/cybsee.wav";
+    self.sight_sound = "drake/cyber/cybsee.wav";
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	self.th_updmissile = army_rocket_think;	// Update flying rocket
@@ -253,7 +251,8 @@ void() monster_cyberdemon = {
 	// Immune to all splash damage as in Doom.
 	// Also, immune to burning because his model is too big (i.e., looks bad).
 	// Has boss flag because its Heretic counterpart, the Maulotaur, has it.
-    //self.xfl        = XFL_FIREANGEL | XFL_NO_BURN | XFL_BOSS;
+    self.xfl = XFL_FIREANGEL | XFL_NO_BURN | XFL_BOSS;
+	self.resist_fire = 1;
 
 	// PM:  I don't think Doom has yaw speeds, and monsters can turn 180 degrees at any given moment.
     self.yaw_speed = 60;        // Fast, but not instant turning.

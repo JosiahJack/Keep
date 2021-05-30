@@ -146,11 +146,8 @@ float() iceg_WaveCheck =
 			self.attachment2 = find(world, targetname, self.noise);
 			if (self.attachment2.classtype == CT_MONICEGOLEMWAVE) {
 				// Spawn any adds to keep player busy
-				if (self.attachment2.target != "") 
-					trigger_strs(self.attachment2.target, self);
-				
-				// Turn around and blow up breakables
-				self.th_jump();
+				if (HasTargets(self.attachment2)) SUB_UseTargetsOnEnt(self.attachment2);
+				self.th_jump(); // Turn around and blow up breakables
 			}
 		}
 
@@ -325,12 +322,12 @@ void() iceg_knock9 = [ $knock9, iceg_knock10 ] {iceg_mcharge(7);};
 void() iceg_knock10 = [ $knock10, iceg_knock11 ] {iceg_mcharge(6);};
 void() iceg_knock11 = [ $knock11, iceg_knock12 ] {iceg_mcharge(5);monster_footstep(FALSE);};
 void() iceg_knock12 = [ $knock12, iceg_knock13 ] {iceg_mcharge(5);
-	sound (self, CHAN_VOICE, "golem/melee_swipe.wav", 1, ATTN_IDLE);};
+	sound (self, CHAN_VOICE, "ad171/golem/melee_swipe.wav", 1, ATTN_IDLE);};
 void() iceg_knock13 = [ $knock13, iceg_knock14 ] {iceg_mcharge(4);};
 void() iceg_knock14 = [ $knock14, iceg_knock15 ] {iceg_mcharge(3);};
 void() iceg_knock15 = [ $knock15, iceg_knock16 ] {iceg_mcharge(2);};
 void() iceg_knock16 = [ $knock16, iceg_knock17 ] {iceg_mcharge(1);
-	self.meleehitsound = "golem/melee_punch.wav";
+	self.meleehitsound = "ad171/golem/melee_punch.wav";
 	self.meleecontact = TRUE;ai_meleesmash(30);
 	// If punch made contact, lift the enemy off ground
 	if (self.meleecontact == FALSE) {
@@ -438,11 +435,11 @@ void(entity targ) iceg_icestorm =
 	// Play random firing sound
 	self.lip = random();
 	if (self.lip < 0.3) 
-		sound (self, CHAN_WEAPON, "golem/iceshard1.wav", 1, ATTN_IDLE);
+		sound (self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard1.wav", 1, ATTN_IDLE);
 	else if (self.lip  < 0.6)
-		sound (self, CHAN_WEAPON, "golem/iceshard2.wav", 1, ATTN_IDLE);
+		sound (self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard2.wav", 1, ATTN_IDLE);
 	else
-		sound (self, CHAN_WEAPON, "golem/iceshard3.wav", 1, ATTN_IDLE);
+		sound (self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard3.wav", 1, ATTN_IDLE);
 	
 	// Make sure facing the right direction
 	ai_face();
@@ -471,12 +468,11 @@ void(entity targ) iceg_icestorm =
 	Launch_Missile (org, dir, '0 0 0', CT_PROJ_ICEG1, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
 void() iceg_magtime = {self.nextthink = time + 0.05;};
 
 void() iceg_magic1 = [ $magic1, iceg_magic2 ] {iceg_magtime();ai_face();
 	self.pain_finished = time + 1.5;
-	sound (self, CHAN_WEAPON, "golem/icestorm.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/golem/icestorm.wav", 1, ATTN_NORM);
 };
 void() iceg_magic2 = [ $magic2, iceg_magic3 ] {iceg_magtime();};
 void() iceg_magic3 = [ $magic3, iceg_magic4 ] {iceg_magtime();ai_face();};
@@ -586,7 +582,7 @@ void() iceg_stomp10 = [ $stomp10, iceg_stomp11 ] {iceg_footstomp();};
 void() iceg_stomp11 = [ $stomp11, iceg_stomp12 ] {iceg_footstomp();};
 void() iceg_stomp12 = [ $stomp12, iceg_stomp13 ] {iceg_footstomp();};
 void() iceg_stomp13 = [ $stomp13, iceg_stomp14 ] {
-	iceg_footstomp(); self.meleehitsound = "golem/groundslam.wav";
+	iceg_footstomp(); self.meleehitsound = "ad171/golem/groundslam.wav";
 	ai_shockwave(MONAI_STOMPIMPACT, MONAI_STOMPDAMAGE, MONAI_STOMPICERADIUS, MONAI_STOMPFORWARD, MONAI_STOMPUP);
 	// spawn ceiling rubble above player/enemy
 	iceg_ceilingrubble();
@@ -740,18 +736,15 @@ void() iceg_waveboundary =
 		// Time to blow stuff up, switch on resistance and roar!
 		self.style = ICEG_PHASE3;
 		Resist_ChangeType(self, TRUE);
-		sound (self, CHAN_WEAPON, "golem/icestorm.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/golem/icestorm.wav", 1, ATTN_NORM);
 		// Start turning towards target (using walk animation)
 		self.walkframe = 0;
 		iceg_turnframe();
 	}
 };
 
-//============================================================================
 // PAIN (no pain animations)
-//============================================================================
-void(entity inflictor, entity attacker, float damage) iceg_pain =
-{
+void(entity inflictor, entity attacker, float damage) iceg_pain = {
 	// Check for boss wave trigger events
 	if (iceg_WaveCheck() == TRUE) {self.th_jump(); return;}
 
@@ -829,22 +822,18 @@ void() iceg_death22 = [ $death22, iceg_startfade] {
 	self.movetype = MOVETYPE_NONE;
 };
 
-//----------------------------------------------------------------------
-void() iceg_die =
-{
+void() iceg_die = {
 	self.deadflag = DEAD_DEAD;	// Nour bites the dust
 	self.effects = 0;			// Remove effects on death
 	self.style = ICEG_PHASE4;	// Heavy Water
 	self.max_health = MON_GIBEXPLOSION;
 
-	sound (self, CHAN_BODY, "golem/death.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "ne_ruins/h2golem/death.wav", 1, ATTN_NORM);
 	self.solid = SOLID_NOT;
 	iceg_death1 ();
 };
 
-//============================================================================
 // Wakeup From Statue form
-//============================================================================
 void() iceg_birth = {
 	if (random() < 0.4) SpawnProjectileSmoke(self.origin, 200, 100, 100);
 	if (random() < 0.8) SpawnProjectileSmoke(self.origin, 200, 50, 250);
@@ -881,7 +870,7 @@ void() iceg_wake1 =[ $birth1, iceg_wake2 ] {
 	self.attack_finished = time + 2;	// Reset attack system
 
 	iceg_birth();
-	sound (self, CHAN_BODY, "golem/wakestatue.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "ad171/golem/wakestatue.wav", 1, ATTN_NORM);
 };
 void() iceg_wake2 =[ $birth2, iceg_wake3 ] {iceg_birth();ai_forward(2);};
 void() iceg_wake3 =[ $birth3, iceg_wake4 ] {iceg_birth();ai_forward(3);};
@@ -1015,9 +1004,7 @@ void() iceg_setup =
 	self.use = iceg_wake1;
 };
 
-/*======================================================================
-QUAKED monster_icegolem (1 0.2 0) (-32 -32 -24) (32 32 128)
-======================================================================*/
+// QUAKED monster_icegolem (1 0.2 0) (-32 -32 -24) (32 32 128)
 void() monster_icegolem = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
@@ -1035,23 +1022,23 @@ void() monster_icegolem = {
 	self.gib1frame = self.gib2frame = 9;
 
 	// Idle1a-1b (long sound) idle2a-2b (short sound)
-	self.idle_sound = "golem/idle1a.wav";
-	self.idle_sound2 = "golem/idle1b.wav";
-	self.idle_soundcom = "golem/idle2a.wav";
-	self.idle_soundcom2 = "golem/idle2b.wav";
+	self.idle_sound = "ne_ruins/h2golem/foley3.wav";
+	self.idle_sound2 = "ne_ruins/h2golem/foley4.wav";
+	self.idle_soundcom = "ne_ruins/h2golem/foley1.wav";
+	self.idle_soundcom2 = "ne_ruins/h2golem/foley2.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
 	precache_sound (self.idle_soundcom);
 	precache_sound (self.idle_soundcom2);
 	
 	// Break free of statue pose
-	precache_sound ("golem/wakestatue.wav");
+	precache_sound ("ad171/golem/wakestatue.wav");
 	
 	// Several melee smack sounds and giant ground slam
-	precache_sound ("golem/melee_swipe.wav");
-	precache_sound ("golem/melee_punch.wav");
-	precache_sound ("golem/melee_pound.wav");
-	precache_sound ("golem/groundslam.wav");
+	precache_sound ("ad171/golem/melee_swipe.wav");
+	precache_sound ("ad171/golem/melee_punch.wav");
+	precache_sound ("ad171/golem/melee_pound.wav");
+	precache_sound ("ad171/golem/groundslam.wav");
 
 	// Used for ceiling rubble breakables
 	precache_sound (SOUND_BRK_ROCK);
@@ -1071,21 +1058,21 @@ void() monster_icegolem = {
 	if (self.brkfade <= 0) self.brkfade = 4;
 	
 	// Ice Storm - range attack
-	precache_sound ("golem/icestorm.wav");
-	precache_sound ("golem/iceshard1.wav");
-	precache_sound ("golem/iceshard2.wav");
-	precache_sound ("golem/iceshard3.wav");
-	precache_sound ("golem/iceshard_impact.wav");
+	precache_sound ("ad171/golem/icestorm.wav");
+	precache_sound ("ne_ruins/h2golem/iceshard1.wav");
+	precache_sound ("ne_ruins/h2golem/iceshard2.wav");
+	precache_sound ("ne_ruins/h2golem/iceshard3.wav");
+	precache_sound ("ne_ruins/h2golem/frosthit.wav");
 	precache_model (SEXP_ICE_BIG);		// Shard impact (ne_ruin)
 	
-	self.pain_sound = "golem/pain1.wav";
-	self.pain_sound2 = "golem/pain2.wav";
+	self.pain_sound = "ne_ruins/h2golem/pain1.wav";
+	self.pain_sound2 = "ne_ruins/h2golem/pain2.wav";
 	precache_sound (self.pain_sound);
 	precache_sound (self.pain_sound2);
-	precache_sound ("golem/death.wav");
+	precache_sound ("ne_ruins/h2golem/death.wav");
 
 	// Roar!
-	self.sight_sound = "golem/sight.wav";
+	self.sight_sound = "ad171/golem/sight.wav";
 	precache_sound (self.sight_sound);
 
 	self.solid = SOLID_NOT;			// No interaction with world
@@ -1134,8 +1121,7 @@ noise2     : trigger name of column 2
 Target for boss column smash wave event
 
 ======================================================================*/
-void() monster_icegolem_wavetrig = 
-{
+void() monster_icegolem_wavetrig = {
 	self.classtype = CT_MONICEGOLEMWAVE;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;

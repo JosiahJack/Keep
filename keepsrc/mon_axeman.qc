@@ -43,28 +43,28 @@ void() axe_run4 =[$axrun4,axe_run5] {ai_run(20); };
 void() axe_run5 =[$axrun5,axe_run6] {ai_run(36); };
 void() axe_run6 =[$axrun6,axe_run1] {ai_run(45); };
 
-void() axe_atk1 =[$axatt1,axe_atk2] { sound (self, CHAN_WEAPON, "axeman/axe1.wav", 1, ATTN_NORM); ai_charge(0); };
+void() axe_atk1 =[$axatt1,axe_atk2] { sound (self, CHAN_WEAPON, "drake/axeman/axe1.wav", 1, ATTN_NORM); ai_charge(0); };
 void() axe_atk2	=[$axatt2,axe_atk3] {ai_charge(28); ai_melee(); };
 void() axe_atk3	=[$axatt3,axe_atk4] {ai_charge(16); ai_melee(); };
 void() axe_atk4	=[$axatt4,axe_atk5] {ai_charge(0); ai_melee(); };
 void() axe_atk5	=[$axatt5,axe_atk6] {ai_charge(6); };
 void() axe_atk6	=[$axatt6,axe_run1] {ai_charge(8); };
 
-void() axe_atkb1 =[$axattb1,axe_atk2] { sound (self, CHAN_WEAPON, "axeman/axe1.wav", 1, ATTN_NORM); ai_charge(0); };
+void() axe_atkb1 =[$axattb1,axe_atk2] { sound (self, CHAN_WEAPON, "drake/axeman/axe1.wav", 1, ATTN_NORM); ai_charge(0); };
 void() axe_atkb2 =[$axattb2,axe_atk3] {ai_charge(28); ai_melee(); };
 void() axe_atkb3 =[$axattb3,axe_atk4] {ai_charge(16); ai_melee(); };
 void() axe_atkb4 =[$axattb4,axe_atkb5] {ai_charge(0); };
 void() axe_atkb5 =[$axattb5,axe_atkb6] {ai_charge(6); };
 void() axe_atkb6 =[$axattb6,axe_run1] {ai_charge(8); };
 
-void() axe_atkc1 =[$axatt1,axe_atkc2] { sound (self, CHAN_WEAPON, "axeman/axe1.wav", 1, ATTN_NORM); ai_charge(0); };
+void() axe_atkc1 =[$axatt1,axe_atkc2] { sound (self, CHAN_WEAPON, "drake/axeman/axe1.wav", 1, ATTN_NORM); ai_charge(0); };
 void() axe_atkc2 =[$axattc2,axe_atkc3] {ai_charge(28); };
 void() axe_atkc3 =[$axattc3,axe_atkc4] {ai_charge(16); ai_melee(); };
 void() axe_atkc4 =[$axattc4,axe_atkc5] {ai_charge(0); ai_melee(); };
 void() axe_atkc5 =[$axattc5,axe_atkc6] {ai_charge(6); };
 void() axe_atkc6 =[$axattc6,axe_run1] {ai_charge(8); };
 
-void() axe_atkd1 =[$axattd1,axe_atkd2] { sound (self, CHAN_WEAPON, "axeman/axe1.wav", 1, ATTN_NORM); ai_charge(0); };
+void() axe_atkd1 =[$axattd1,axe_atkd2] { sound (self, CHAN_WEAPON, "drake/axeman/axe1.wav", 1, ATTN_NORM); ai_charge(0); };
 void() axe_atkd2 =[$axattd2,axe_atkd3] {ai_charge(28); ai_melee(); };
 void() axe_atkd3 =[$axattd3,axe_atkd4] {ai_charge(16); ai_melee(); };
 void() axe_atkd4 =[$axattd4,axe_atkd5] {ai_charge(0); };
@@ -124,35 +124,33 @@ void() axe_die = {
 	}
 };
 
-// monster_axeman (1 0 0) (-16 -16 -24) (16 16 40) Ambush, Ferocious axe-wielding maniac :)
+void() precache_monster_ax = {
+	precache_model ("progs/mon_axeman.mdl");
+	precache_model ("progs/h_knight.mdl");
+	precache_sound ("drake/axeman/adeath1.wav");
+	precache_sound ("drake/axeman/axe1.wav");
+	precache_sound ("drake/axeman/axe2.wav");
+	precache_sound ("dguard/idle.wav");
+	precache_sound ("dguard/pain1.wav");
+	precache_sound ("ad171/dknight/dfury_grunt4.wav");
+	precache_sound ("dguard/death2.wav");
+};
 
+// monster_axeman (1 0 0) (-16 -16 -24) (16 16 40) Ambush, Ferocious axe-wielding maniac :)
 void() monster_ax = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
+	precache_monster_ax();
 	self.mdl = "progs/mon_axeman.mdl";
 	self.headmdl = "progs/h_knight.mdl";
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_sound ("axeman/adeath1.wav");
-	precache_sound ("axeman/axe1.wav");
-	precache_sound ("axeman/axe2.wav");
-
 	self.gib1sound = GIB_IMPACT_METALA;
 	self.idle_sound = "dguard/idle.wav";
-	precache_sound ("dguard/idle.wav");
-
 	self.pain_sound = "dguard/pain1.wav";
-	precache_sound ("dguard/pain1.wav");
-
-	self.sight_sound = "dknight/dfury_grunt4.wav";
-	precache_sound ("dknight/dfury_grunt4.wav");
-
-	self.death_sound = "dguard/death2.wav";
-	precache_sound (self.death_sound);
-
+	self.sight_sound = "ad171/dknight/dfury_grunt4.wav";  // I didn't like his original sound, too harsh. -Qmaster
+	self.death_sound = "dguard/death2.wav"; // I didn't like his original sound, too harsh. -Qmaster
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -178,7 +176,6 @@ void() monster_ax = {
 	self.th_melee = axe_atk;
 	self.th_pain = axe_pain;
 	self.th_die = axe_die;
-
 	self.classtype = CT_MONDKNIGHT;
 	self.classgroup = CG_DKNIGHT;
 	self.classmove = MON_MOVEWALK;
@@ -190,7 +187,6 @@ void() monster_ax = {
 			if (self.skin) {if (self.deathstring == "")  self.deathstring = " was bushwhacked by a Forest Thug\n"; }
 		}
 	}
-
 	monster_start ();
 };
 

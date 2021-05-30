@@ -54,7 +54,7 @@ void() deathguard_charge5 = [110, deathguard_charge6] { ai_charge(18); dg_slice(
 void() deathguard_charge6 = [111, deathguard_run1] { ai_charge(20); dg_slice(2); };
 
 void() deathguard_slowcharge1 = [112, deathguard_slowcharge2] {
-	ai_charge(TE_BEAM);
+	ai_charge(13);
 	if (random() < 0.5) {
 		sound(self, CHAN_VOICE, "knight/sword1.wav", 1, ATTN_NORM);
 	} else {
@@ -140,7 +140,7 @@ void() deathguard_fire4 = [96, deathguard_fire5] { ai_shotcheck(); ai_face(); };
 void() deathguard_fire5 = [97, deathguard_fire6] { ai_shotcheck(); ai_face(); };
 void() deathguard_fire6 = [98, deathguard_fire7] { ai_shotcheck(); ai_face(); };
 void() deathguard_fire7 = [99, deathguard_fire8] { ai_shotcheck(); ai_face(); };
-void() deathguard_fire8 = [100, deathguard_fire9] { ai_shotcheck(); ai_face(); sound(self, CHAN_VOICE, "dknight/dserg_magic.wav", 1, ATTN_NORM); };
+void() deathguard_fire8 = [100, deathguard_fire9] { ai_shotcheck(); ai_face(); sound(self, CHAN_VOICE, "ad171/dknight/dserg_magic.wav", 1, ATTN_NORM); };
 void() deathguard_fire9 = [101, deathguard_fire10] { ai_shotcheck(); ai_face(); deathguard_shot(); };
 void() deathguard_fire10 = [102, deathguard_fire11] { ai_face(); };
 void() deathguard_fire11 = [103, deathguard_fire12] { ai_face(); };
@@ -261,7 +261,7 @@ void() monster_deathguard = {
 	self.idle_sound = "dguard/idle.wav";
 	precache_sound(self.idle_sound);
 	precache_sound("dguard/fire.wav");
-	precache_sound("dknight/dserg_magic.wav");
+	precache_sound("ad171/dknight/dserg_magic.wav");
 	precache_sound("dguard/death1.wav");
 	precache_sound("dguard/death2.wav");
 	precache_sound("dguard/pain1.wav");

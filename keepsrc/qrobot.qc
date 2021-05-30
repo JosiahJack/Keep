@@ -1,5 +1,38 @@
-// QMASTER'S QROBOT.QC
-//============================================================
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Qmaster
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 3
+// Function count: 13
+//
+// Implements: QRobots, programmable XYZ Robots
+//
+// Description:
 // This is a qoordinate axis robot with programmable points. 
 // In other words, you specify the points in space that you 
 // want the robot to move to, up to 50 points but not less
@@ -63,11 +96,12 @@
 //.wait		float for initial wait period before moving after triggered or after map spawn, if you want it to wait
 //.syncent#		entity for holding targets for func_robot_controller (up to 20 robots)
 //
-//============================================================
+//=============================================================================
+
 void() robot_thinkgo;
 void() robot_use_turnoff;
 
-void(vector tdest, float ttime, void() func) robot_move= {
+void(vector tdest, float ttime, void() func) robot_move = {
 	local vector vdestdelta;
 
 	self.think1 = func;
@@ -85,608 +119,309 @@ void(vector tdest, float ttime, void() func) robot_move= {
 	self.velocity = vdestdelta * (1/ttime); // velocity = d * 1/t = d/t but qcc won't take vector/float
 };
 
+// Sets current timers and move point to the next point in the program
 vector(float index) robot_getpoint = {
-	// I wish I had arrays and switch case statments :(
-	self.syncerbot = string_null;
+	self.syncerbot = string_null; // I wish I had arrays and switch case statments :(     You do now dimwit. -Qmaster of the future
 
+	// Boiler plate boiler plate ooh ahh ooh ahhhh boiler plate! ba doo doo doo doo
 	if (index == 1) {
-		if (self.waitpoint1)
-			self.wait = self.waitpoint1;
-
-		if (self.duration1)
-			self.duration = self.duration1;
-
-		if (self.synctarg1)
-			self.syncerbot = self.synctarg1;
-
+		if (self.waitpoint1) self.wait = self.waitpoint1;
+		if (self.duration1) self.duration = self.duration1;
+		if (self.synctarg1) self.syncerbot = self.synctarg1;
 		return self.point1;
 	}
 	if (index == 2) {
-		if (self.waitpoint2)
-			self.wait = self.waitpoint2;
-
-		if (self.duration2)
-			self.duration = self.duration2;
-
-		if (self.synctarg2)
-			self.syncerbot = self.synctarg2;
-
+		if (self.waitpoint2) self.wait = self.waitpoint2;
+		if (self.duration2) self.duration = self.duration2;
+		if (self.synctarg2) self.syncerbot = self.synctarg2;
 		return self.point2;
 	}
 	if (index == 3) {
-		if (self.waitpoint3)
-			self.wait = self.waitpoint3;
-
-		if (self.duration3)
-			self.duration = self.duration3;
-
-		if (self.synctarg3)
-			self.syncerbot = self.synctarg3;
-
+		if (self.waitpoint3) self.wait = self.waitpoint3;
+		if (self.duration3) self.duration = self.duration3;
+		if (self.synctarg3) self.syncerbot = self.synctarg3;
 		return self.point3;
 	}
 	if (index == 4) {
-		if (self.waitpoint4)
-			self.wait = self.waitpoint4;
-
-		if (self.duration4)
-			self.duration = self.duration4;
-
-		if (self.synctarg4)
-			self.syncerbot = self.synctarg4;
-
+		if (self.waitpoint4) self.wait = self.waitpoint4;
+		if (self.duration4) self.duration = self.duration4;
+		if (self.synctarg4) self.syncerbot = self.synctarg4;
 		return self.point4;
 	}
 	if (index == 5) {
-		if (self.waitpoint5)
-			self.wait = self.waitpoint5;
-
-		if (self.duration5)
-			self.duration = self.duration5;
-
-		if (self.synctarg5)
-			self.syncerbot = self.synctarg5;
-
+		if (self.waitpoint5) self.wait = self.waitpoint5;
+		if (self.duration5) self.duration = self.duration5;
+		if (self.synctarg5) self.syncerbot = self.synctarg5;
 		return self.point5;
 	}
 	if (index == 6) {
-		if (self.waitpoint6)
-			self.wait = self.waitpoint6;
-
-		if (self.duration6)
-			self.duration = self.duration6;
-
-		if (self.synctarg6)
-			self.syncerbot = self.synctarg6;
-
+		if (self.waitpoint6) self.wait = self.waitpoint6;
+		if (self.duration6) self.duration = self.duration6;
+		if (self.synctarg6) self.syncerbot = self.synctarg6;
 		return self.point6;
 	}
 	if (index == 7) {
-		if (self.waitpoint7)
-			self.wait = self.waitpoint7;
-
-		if (self.duration7)
-			self.duration = self.duration7;
-
-		if (self.synctarg7)
-			self.syncerbot = self.synctarg7;
-
+		if (self.waitpoint7) self.wait = self.waitpoint7;
+		if (self.duration7) self.duration = self.duration7;
+		if (self.synctarg7) self.syncerbot = self.synctarg7;
 		return self.point7;
 	}
 	if (index == 8) {
-		if (self.waitpoint8)
-			self.wait = self.waitpoint8;
-
-		if (self.duration8)
-			self.duration = self.duration8;
-
-		if (self.synctarg8)
-			self.syncerbot = self.synctarg8;
-
+		if (self.waitpoint8) self.wait = self.waitpoint8;
+		if (self.duration8) self.duration = self.duration8;
+		if (self.synctarg8) self.syncerbot = self.synctarg8;
 		return self.point8;
 	}
 	if (index == 9) {
-		if (self.waitpoint9)
-			self.wait = self.waitpoint9;
-
-		if (self.duration9)
-			self.duration = self.duration9;
-
-		if (self.synctarg9)
-			self.syncerbot = self.synctarg9;
-
+		if (self.waitpoint9) self.wait = self.waitpoint9;
+		if (self.duration9) self.duration = self.duration9;
+		if (self.synctarg9) self.syncerbot = self.synctarg9;
 		return self.point9;
 	}
 	if (index == 10) {
-		if (self.waitpoint10)
-			self.wait = self.waitpoint10;
-
-		if (self.duration10)
-			self.duration = self.duration10;
-
-		if (self.synctarg10)
-			self.syncerbot = self.synctarg10;
-
+		if (self.waitpoint10) self.wait = self.waitpoint10;
+		if (self.duration10) self.duration = self.duration10;
+		if (self.synctarg10) self.syncerbot = self.synctarg10;
 		return self.point10;
 	}
 	if (index == 11) {
-		if (self.waitpoint11)
-			self.wait = self.waitpoint11;
-
-		if (self.duration11)
-			self.duration = self.duration11;
-
-		if (self.synctarg11)
-			self.syncerbot = self.synctarg11;
-
+		if (self.waitpoint11) self.wait = self.waitpoint11;
+		if (self.duration11) self.duration = self.duration11;
+		if (self.synctarg11) self.syncerbot = self.synctarg11;
 		return self.point11;
 	}
 	if (index == 12) {
-		if (self.waitpoint12)
-			self.wait = self.waitpoint12;
-
-		if (self.duration12)
-			self.duration = self.duration12;
-
-		if (self.synctarg12)
-			self.syncerbot = self.synctarg12;
-
+		if (self.waitpoint12) self.wait = self.waitpoint12;
+		if (self.duration12) self.duration = self.duration12;
+		if (self.synctarg12) self.syncerbot = self.synctarg12;
 		return self.point12;
 	}
 	if (index == 13) {
-		if (self.waitpoint13)
-			self.wait = self.waitpoint13;
-
-		if (self.duration13)
-			self.duration = self.duration13;
-
-		if (self.synctarg13)
-			self.syncerbot = self.synctarg13;
-
+		if (self.waitpoint13) self.wait = self.waitpoint13;
+		if (self.duration13) self.duration = self.duration13;
+		if (self.synctarg13) self.syncerbot = self.synctarg13;
 		return self.point13;
 	}
 	if (index == 14) {
-		if (self.waitpoint14)
-			self.wait = self.waitpoint14;
-
-		if (self.duration14)
-			self.duration = self.duration14;
-
-		if (self.synctarg14)
-			self.syncerbot = self.synctarg14;
-
+		if (self.waitpoint14)self.wait = self.waitpoint14;
+		if (self.duration14) self.duration = self.duration14;
+		if (self.synctarg14) self.syncerbot = self.synctarg14;
 		return self.point14;
 	}
 	if (index == 15) {
-		if (self.waitpoint15)
-			self.wait = self.waitpoint15;
-
-		if (self.duration15)
-			self.duration = self.duration15;
-
-		if (self.synctarg15)
-			self.syncerbot = self.synctarg15;
-
+		if (self.waitpoint15) self.wait = self.waitpoint15;
+		if (self.duration15) self.duration = self.duration15;
+		if (self.synctarg15) self.syncerbot = self.synctarg15;
 		return self.point15;
 	}
 	if (index == 16) {
-		if (self.waitpoint16)
-			self.wait = self.waitpoint16;
-
-		if (self.duration16)
-			self.duration = self.duration16;
-
-		if (self.synctarg16)
-			self.syncerbot = self.synctarg16;
-
+		if (self.waitpoint16) self.wait = self.waitpoint16;
+		if (self.duration16) self.duration = self.duration16;
+		if (self.synctarg16) self.syncerbot = self.synctarg16;
 		return self.point16;
 	}
 	if (index == 17) {
-		if (self.waitpoint17)
-			self.wait = self.waitpoint17;
-
-		if (self.duration17)
-			self.duration = self.duration17;
-
-		if (self.synctarg17)
-			self.syncerbot = self.synctarg17;
-
+		if (self.waitpoint17) self.wait = self.waitpoint17;
+		if (self.duration17) self.duration = self.duration17;
+		if (self.synctarg17) self.syncerbot = self.synctarg17;
 		return self.point17;
 	}
 	if (index == 18) {
-		if (self.waitpoint18)
-			self.wait = self.waitpoint18;
-
-		if (self.duration18)
-			self.duration = self.duration18;
-
-		if (self.synctarg18)
-			self.syncerbot = self.synctarg18;
-
+		if (self.waitpoint18) self.wait = self.waitpoint18;
+		if (self.duration18) self.duration = self.duration18;
+		if (self.synctarg18) self.syncerbot = self.synctarg18;
 		return self.point18;
 	}
 	if (index == 19) {
-		if (self.waitpoint19)
-			self.wait = self.waitpoint19;
-
-		if (self.duration19)
-			self.duration = self.duration19;
-
-		if (self.synctarg19)
-			self.syncerbot = self.synctarg19;
-
+		if (self.waitpoint19) self.wait = self.waitpoint19;
+		if (self.duration19) self.duration = self.duration19;
+		if (self.synctarg19) self.syncerbot = self.synctarg19;
 		return self.point19;
 	}
 	if (index == 20) {
-		if (self.waitpoint20)
-			self.wait = self.waitpoint20;
-
-		if (self.duration20)
-			self.duration = self.duration20;
-
-		if (self.synctarg20)
-			self.syncerbot = self.synctarg20;
-
+		if (self.waitpoint20) self.wait = self.waitpoint20;
+		if (self.duration20) self.duration = self.duration20;
+		if (self.synctarg20) self.syncerbot = self.synctarg20;
 		return self.point20;
 	}
 	if (index == 21) {
-		if (self.waitpoint21)
-			self.wait = self.waitpoint21;
-
-		if (self.duration21)
-			self.duration = self.duration21;
-
-		if (self.synctarg21)
-			self.syncerbot = self.synctarg21;
-
+		if (self.waitpoint21) self.wait = self.waitpoint21;
+		if (self.duration21) self.duration = self.duration21;
+		if (self.synctarg21) self.syncerbot = self.synctarg21;
 		return self.point21;
 	}
 	if (index == 22) {
-		if (self.waitpoint22)
-			self.wait = self.waitpoint22;
-
-		if (self.duration22)
-			self.duration = self.duration22;
-
-		if (self.synctarg22)
-			self.syncerbot = self.synctarg22;
-
+		if (self.waitpoint22) self.wait = self.waitpoint22;
+		if (self.duration22) self.duration = self.duration22;
+		if (self.synctarg22) self.syncerbot = self.synctarg22;
 		return self.point22;
 	}
 	if (index == 23) {
-		if (self.waitpoint23)
-			self.wait = self.waitpoint23;
-
-		if (self.duration23)
-			self.duration = self.duration23;
-
-		if (self.synctarg23)
-			self.syncerbot = self.synctarg23;
-
+		if (self.waitpoint23) self.wait = self.waitpoint23;
+		if (self.duration23) self.duration = self.duration23;
+		if (self.synctarg23) self.syncerbot = self.synctarg23;
 		return self.point23;
 	}
 	if (index == 24) {
-		if (self.waitpoint24)
-			self.wait = self.waitpoint24;
-
-		if (self.duration24)
-			self.duration = self.duration24;
-
-		if (self.synctarg24)
-			self.syncerbot = self.synctarg24;
-
+		if (self.waitpoint24) self.wait = self.waitpoint24;
+		if (self.duration24) self.duration = self.duration24;
+		if (self.synctarg24) self.syncerbot = self.synctarg24;
 		return self.point24;
 	}
 	if (index == 25) {
-		if (self.waitpoint25)
-			self.wait = self.waitpoint25;
-
-		if (self.duration25)
-			self.duration = self.duration25;
-
-		if (self.synctarg25)
-			self.syncerbot = self.synctarg25;
-
+		if (self.waitpoint25) self.wait = self.waitpoint25;
+		if (self.duration25) self.duration = self.duration25;
+		if (self.synctarg25) self.syncerbot = self.synctarg25;
 		return self.point25;
 	}
 	if (index == 26) {
-		if (self.waitpoint26)
-			self.wait = self.waitpoint26;
-
-		if (self.duration26)
-			self.duration = self.duration26;
-
-		if (self.synctarg26)
-			self.syncerbot = self.synctarg26;
-
+		if (self.waitpoint26) self.wait = self.waitpoint26;
+		if (self.duration26) self.duration = self.duration26;
+		if (self.synctarg26) self.syncerbot = self.synctarg26;
 		return self.point26;
 	}
 	if (index == 27) {
-		if (self.waitpoint27)
-			self.wait = self.waitpoint27;
-
-		if (self.duration27)
-			self.duration = self.duration27;
-
-		if (self.synctarg27)
-			self.syncerbot = self.synctarg27;
-
+		if (self.waitpoint27) self.wait = self.waitpoint27;
+		if (self.duration27) self.duration = self.duration27;
+		if (self.synctarg27) self.syncerbot = self.synctarg27;
 		return self.point27;
 	}
 	if (index == 28) {
-		if (self.waitpoint28)
-			self.wait = self.waitpoint28;
-
-		if (self.duration28)
-			self.duration = self.duration28;
-
-		if (self.synctarg28)
-			self.syncerbot = self.synctarg28;
-
+		if (self.waitpoint28) self.wait = self.waitpoint28;
+		if (self.duration28) self.duration = self.duration28;
+		if (self.synctarg28) self.syncerbot = self.synctarg28;
 		return self.point28;
 	}
 	if (index == 29) {
-		if (self.waitpoint29)
-			self.wait = self.waitpoint29;
-
-		if (self.duration29)
-			self.duration = self.duration29;
-
-		if (self.synctarg29)
-			self.syncerbot = self.synctarg29;
-
+		if (self.waitpoint29) self.wait = self.waitpoint29;
+		if (self.duration29) self.duration = self.duration29;
+		if (self.synctarg29) self.syncerbot = self.synctarg29;
 		return self.point29;
 	}
 	if (index == 30) {
-		if (self.waitpoint30)
-			self.wait = self.waitpoint30;
-
-		if (self.duration30)
-			self.duration = self.duration30;
-
-		if (self.synctarg30)
-			self.syncerbot = self.synctarg30;
-
+		if (self.waitpoint30) self.wait = self.waitpoint30;
+		if (self.duration30) self.duration = self.duration30;
+		if (self.synctarg30) self.syncerbot = self.synctarg30;
 		return self.point30;
 	}
 	if (index == 31) {
-		if (self.waitpoint31)
-			self.wait = self.waitpoint31;
-
-		if (self.duration31)
-			self.duration = self.duration31;
-
-		if (self.synctarg31)
-			self.syncerbot = self.synctarg31;
-
+		if (self.waitpoint31) self.wait = self.waitpoint31;
+		if (self.duration31) self.duration = self.duration31;
+		if (self.synctarg31) self.syncerbot = self.synctarg31;
 		return self.point31;
 	}
 	if (index == 32) {
-		if (self.waitpoint32)
-			self.wait = self.waitpoint32;
-
-		if (self.duration32)
-			self.duration = self.duration32;
-
-		if (self.synctarg32)
-			self.syncerbot = self.synctarg32;
-
+		if (self.waitpoint32) self.wait = self.waitpoint32;
+		if (self.duration32) self.duration = self.duration32;
+		if (self.synctarg32) self.syncerbot = self.synctarg32;
 		return self.point32;
 	}
 	if (index == 33) {
-		if (self.waitpoint33)
-			self.wait = self.waitpoint33;
-
-		if (self.duration33)
-			self.duration = self.duration33;
-
-		if (self.synctarg33)
-			self.syncerbot = self.synctarg33;
-
+		if (self.waitpoint33) self.wait = self.waitpoint33;
+		if (self.duration33) self.duration = self.duration33;
+		if (self.synctarg33) self.syncerbot = self.synctarg33;
 		return self.point33;
 	}
 	if (index == 34) {
-		if (self.waitpoint34)
-			self.wait = self.waitpoint34;
-
-		if (self.duration34)
-			self.duration = self.duration34;
-
-		if (self.synctarg34)
-			self.syncerbot = self.synctarg34;
-
+		if (self.waitpoint34) self.wait = self.waitpoint34;
+		if (self.duration34) self.duration = self.duration34;
+		if (self.synctarg34) self.syncerbot = self.synctarg34;
 		return self.point34;
 	}
 	if (index == 35) {
-		if (self.waitpoint35)
-			self.wait = self.waitpoint35;
-
-		if (self.duration35)
-			self.duration = self.duration35;
-
-		if (self.synctarg35)
-			self.syncerbot = self.synctarg35;
-
+		if (self.waitpoint35) self.wait = self.waitpoint35;
+		if (self.duration35) self.duration = self.duration35;
+		if (self.synctarg35) self.syncerbot = self.synctarg35;
 		return self.point35;
 	}
 	if (index == 36) {
-		if (self.waitpoint36)
-			self.wait = self.waitpoint36;
-
-		if (self.duration36)
-			self.duration = self.duration36;
-
-		if (self.synctarg36)
-			self.syncerbot = self.synctarg36;
-
+		if (self.waitpoint36) self.wait = self.waitpoint36;
+		if (self.duration36) self.duration = self.duration36;
+		if (self.synctarg36) self.syncerbot = self.synctarg36;
 		return self.point36;
 	}
 	if (index == 37) {
-		if (self.waitpoint37)
-			self.wait = self.waitpoint37;
-
-		if (self.duration37)
-			self.duration = self.duration37;
-
-		if (self.synctarg37)
-			self.syncerbot = self.synctarg37;
-
+		if (self.waitpoint37) self.wait = self.waitpoint37;
+		if (self.duration37) self.duration = self.duration37;
+		if (self.synctarg37) self.syncerbot = self.synctarg37;
 		return self.point37;
 	}
 	if (index == 38) {
-		if (self.waitpoint38)
-			self.wait = self.waitpoint38;
-
-		if (self.duration38)
-			self.duration = self.duration28;
-
-		if (self.synctarg38)
-			self.syncerbot = self.synctarg38;
-
+		if (self.waitpoint38) self.wait = self.waitpoint38;
+		if (self.duration38) self.duration = self.duration28;
+		if (self.synctarg38) self.syncerbot = self.synctarg38;
 		return self.point38;
 	}
 	if (index == 39) {
-		if (self.waitpoint39)
-			self.wait = self.waitpoint39;
-
-		if (self.duration39)
-			self.duration = self.duration39;
-
-		if (self.synctarg39)
-			self.syncerbot = self.synctarg39;
-
+		if (self.waitpoint39) self.wait = self.waitpoint39;
+		if (self.duration39) self.duration = self.duration39;
+		if (self.synctarg39) self.syncerbot = self.synctarg39;
 		return self.point39;
 	}
 	if (index == 40) {
-		if (self.waitpoint40)
-			self.wait = self.waitpoint40;
-
-		if (self.duration40)
-			self.duration = self.duration40;
-
-		if (self.synctarg40)
-			self.syncerbot = self.synctarg40;
-
+		if (self.waitpoint40) self.wait = self.waitpoint40;
+		if (self.duration40) self.duration = self.duration40;
+		if (self.synctarg40) self.syncerbot = self.synctarg40;
 		return self.point40;
 	}
 	if (index == 41) {
-		if (self.waitpoint41)
-			self.wait = self.waitpoint41;
-
-		if (self.duration41)
-			self.duration = self.duration41;
-
-		if (self.synctarg41)
-			self.syncerbot = self.synctarg41;
-
+		if (self.waitpoint41) self.wait = self.waitpoint41;
+		if (self.duration41) self.duration = self.duration41;
+		if (self.synctarg41) self.syncerbot = self.synctarg41;
 		return self.point41;
 	}
 	if (index == 42) {
-		if (self.waitpoint42)
-			self.wait = self.waitpoint42;
-
-		if (self.duration42)
-			self.duration = self.duration42;
-
-		if (self.synctarg42)
-			self.syncerbot = self.synctarg42;
-
+		if (self.waitpoint42) self.wait = self.waitpoint42;
+		if (self.duration42) self.duration = self.duration42;
+		if (self.synctarg42) self.syncerbot = self.synctarg42;
 		return self.point42;
 	}
 	if (index == 43) {
-		if (self.waitpoint43)
-			self.wait = self.waitpoint43;
-
-		if (self.duration43)
-			self.duration = self.duration43;
-
-		if (self.synctarg43)
-			self.syncerbot = self.synctarg43;
-
+		if (self.waitpoint43) self.wait = self.waitpoint43;
+		if (self.duration43) self.duration = self.duration43;
+		if (self.synctarg43) self.syncerbot = self.synctarg43;
 		return self.point43;
 	}
 	if (index == 44) {
-		if (self.waitpoint44)
-			self.wait = self.waitpoint44;
-
-		if (self.duration44)
-			self.duration = self.duration44;
-
-		if (self.synctarg44)
-			self.syncerbot = self.synctarg44;
-
+		if (self.waitpoint44) self.wait = self.waitpoint44;
+		if (self.duration44) self.duration = self.duration44;
+		if (self.synctarg44) self.syncerbot = self.synctarg44;
 		return self.point44;
 	}
 	if (index == 45) {
-		if (self.waitpoint45)
-			self.wait = self.waitpoint45;
-
-		if (self.duration45)
-			self.duration = self.duration45;
-
-		if (self.synctarg45)
-			self.syncerbot = self.synctarg45;
-
+		if (self.waitpoint45) self.wait = self.waitpoint45;
+		if (self.duration45) self.duration = self.duration45;
+		if (self.synctarg45) self.syncerbot = self.synctarg45;
 		return self.point45;
 	}
 	if (index == 46) {
-		if (self.waitpoint46)
-			self.wait = self.waitpoint46;
-
-		if (self.duration46)
-			self.duration = self.duration46;
-
-		if (self.synctarg46)
-			self.syncerbot = self.synctarg46;
-
+		if (self.waitpoint46) self.wait = self.waitpoint46;
+		if (self.duration46) self.duration = self.duration46;
+		if (self.synctarg46) self.syncerbot = self.synctarg46;
 		return self.point46;
 	}
 	if (index == 47) {
-		if (self.waitpoint47)
-			self.wait = self.waitpoint47;
-
-		if (self.duration47)
-			self.duration = self.duration47;
-
-		if (self.synctarg47)
-			self.syncerbot = self.synctarg47;
-
+		if (self.waitpoint47) self.wait = self.waitpoint47;
+		if (self.duration47) self.duration = self.duration47;
+		if (self.synctarg47) self.syncerbot = self.synctarg47;
 		return self.point47;
 	}
 	if (index == 48) {
-		if (self.waitpoint48)
-			self.wait = self.waitpoint48;
-
-		if (self.duration48)
-			self.duration = self.duration48;
-
-		if (self.synctarg48)
-			self.syncerbot = self.synctarg48;
-
+		if (self.waitpoint48) self.wait = self.waitpoint48;
+		if (self.duration48) self.duration = self.duration48;
+		if (self.synctarg48) self.syncerbot = self.synctarg48;
 		return self.point48;
 	}
 	if (index == 49) {
-		if (self.waitpoint49)
-			self.wait = self.waitpoint49;
-
-		if (self.duration49)
-			self.duration = self.duration49;
-
-		if (self.synctarg49)
-			self.syncerbot = self.synctarg49;
-
+		if (self.waitpoint49) self.wait = self.waitpoint49;
+		if (self.duration49) self.duration = self.duration49;
+		if (self.synctarg49) self.syncerbot = self.synctarg49;
 		return self.point49;
 	}
 	if (index == 50) {
-		if (self.waitpoint50)
-			self.wait = self.waitpoint50;
-
-		if (self.duration50)
-			self.duration = self.duration50;
-
-		if (self.synctarg50)
-			self.syncerbot = self.synctarg50;
-
+		if (self.waitpoint50) self.wait = self.waitpoint50;
+		if (self.duration50) self.duration = self.duration50;
+		if (self.synctarg50) self.syncerbot = self.synctarg50;
 		return self.point50;
 	}
 
@@ -750,32 +485,25 @@ void() robot_wait = {
 	robot_thinkgo();	
 };
 
+// This function steps through the program until we hit the correct starting point then returns it.
 vector(vector pnt) robot_relativecoord_get = {
-	// This function steps through the program until we hit
-	// the correct starting point then returns it.
-
 	local float indexer;
 	local vector vtemp;	
 
 	for (indexer = TRUE; indexer != self.poindex; indexer = (indexer + TRUE)) {
 		vtemp = robot_getpoint(indexer+TRUE);
-		if (vtemp == VEC_ORIGIN)
-		{
+		if (vtemp == VEC_ORIGIN) {
 			indexer = FALSE; // reset indexer. we reached the end of the program list
 			continue; 	 // goto end of for loop to increment indexer by 1, execute for loop again
 		}
 		pnt = (pnt + vtemp);
 	}
 
-	if (pnt == VEC_ORIGIN)
-		pnt = (self.homepoint + robot_getpoint(TRUE));
-
+	if (pnt == VEC_ORIGIN) pnt = (self.homepoint + robot_getpoint(TRUE));
 	return pnt;
 };
 
-//==================================
-//=====Main Movement Function=======
-//==================================
+// Main Movement Function
 void() robot_thinkgo = {
 	self.curpoint = robot_getpoint(self.poindex);
 	if (self.curpoint == VEC_ORIGIN) {
@@ -793,10 +521,10 @@ void() robot_thinkgo = {
 	robot_move(self.curpoint, self.duration, robot_wait);
 };
 
+// Home sweet origin position
 void() info_home = {};
 
-//======Our Beloved Coordinate Axis Robot======
-//---------------------------------------------
+// Our Beloved Coordinate Axis Robot
 void() func_robot = {
 	local entity targ;
 
@@ -805,9 +533,7 @@ void() func_robot = {
 	self.use = robot_use_turnon;
 	setmodel (self, self.model);
 	setsize (self, self.mins , self.maxs);
-
-	if (!self.poindex || self.poindex > 50)
-		self.poindex = TRUE;
+	if (!self.poindex || self.poindex > 50) self.poindex = TRUE;
 
 	if (self.homeinfo) {
 		targ = find (world,targetname,self.homeinfo);
@@ -817,17 +543,10 @@ void() func_robot = {
 	self.curpoint = self.oldcurpoint;
 	setorigin(self, self.oldcurpoint - self.mins);
 	self.poindex = (self.poindex + 1);
-	if (!self.point1)
-		self.point1 = VEC_ORIGIN;
-
-	if (!self.point2)
-		self.point2 = '16 16 0';
-
-	if (!self.duration1)
-		self.duration1 = 1;
-
-	if (!self.duration2)
-		self.duration2 = 1;
+	if (!self.point1) self.point1 = VEC_ORIGIN;
+	if (!self.point2) self.point2 = '16 16 0';
+	if (!self.duration1) self.duration1 = 1;
+	if (!self.duration2) self.duration2 = 1;
 
 	if (!self.targetname) {
 		if (self.wait) {
@@ -841,8 +560,6 @@ void() func_robot = {
 		self.think = robot_thinkgo;
 	}
 };
-//----------------------------------------------
-//==============================================
 
 void() robot_controller_use_targets = {
 	local entity stemp;
@@ -923,83 +640,71 @@ void() robot_controller_use_targets = {
 		self.syncent9.targetname = "badjoojoomagumbo";
 	}
 
-	if (self.syncent10)
-	{
+	if (self.syncent10) {
 		self.syncent10.use = robot_use_turnon;
 		targname10 = self.syncent10.targetname;
 		self.syncent10.targetname = "badjoojoomagumbo";
 	}
 
-	if (self.syncent11)
-	{
+	if (self.syncent11) {
 		self.syncent11.use = robot_use_turnon;
 		targname11 = self.syncent11.targetname;
 		self.syncent11.targetname = "badjoojoomagumbo";
 	}
 
-	if (self.syncent12)
-	{
+	if (self.syncent12) {
 		self.syncent12.use = robot_use_turnon;
 		targname12 = self.syncent12.targetname;
 		self.syncent12.targetname = "badjoojoomagumbo";
 	}
 
-	if (self.syncent13)
-	{
+	if (self.syncent13) {
 		self.syncent13.use = robot_use_turnon;
 		targname13 = self.syncent13.targetname;
 		self.syncent13.targetname = "badjoojoomagumbo";
 	}
 
-	if (self.syncent14)
-	{
+	if (self.syncent14) {
 		self.syncent14.use = robot_use_turnon;
 		targname14 = self.syncent14.targetname;
 		self.syncent14.targetname = "badjoojoomagumbo";
 	}
 
-	if (self.syncent15)
-	{
+	if (self.syncent15) {
 		self.syncent15.use = robot_use_turnon;
 		targname15 = self.syncent15.targetname;
 		self.syncent15.targetname = "badjoojoomagumbo";
 	}
 
-	if (self.syncent16)
-	{
+	if (self.syncent16) {
 		self.syncent16.use = robot_use_turnon;
 		targname16 = self.syncent16.targetname;
 		self.syncent16.targetname = "badjoojoomagumbo";
 	}
 
-	if (self.syncent17)
-	{
+	if (self.syncent17) {
 		self.syncent17.use = robot_use_turnon;
 		targname17 = self.syncent17.targetname;
 		self.syncent17.targetname = "badjoojoomagumbo";
 	}
 
-	if (self.syncent18)
-	{
+	if (self.syncent18) {
 		self.syncent18.use = robot_use_turnon;
 		targname18 = self.syncent18.targetname;
 		self.syncent18.targetname = "badjoojoomagumbo";
 	}
 
-	if (self.syncent19)
-	{
+	if (self.syncent19) {
 		self.syncent19.use = robot_use_turnon;
 		targname19 = self.syncent19.targetname;
 		self.syncent19.targetname = "badjoojoomagumbo";
 	}
 
-	if (self.syncent20)
-	{
+	if (self.syncent20) {
 		self.syncent20.use = robot_use_turnon;
 		targname20 = self.syncent20.targetname;
 		self.syncent20.targetname = "badjoojoomagumbo";
 	}
-
 
 	// Syncronized start. All together now...GO!!
 	temptarget = self.target;
@@ -1032,80 +737,70 @@ void() robot_controller_use_targets = {
 		self = stemp;
 	}
 
-	if (self.syncent4)
-	{
+	if (self.syncent4) {
 		stemp = self;
 		self = self.syncent4;
 		self.targetname = targname4;
 		self = stemp;
 	}
 
-	if (self.syncent5)
-	{
+	if (self.syncent5) {
 		stemp = self;
 		self = self.syncent5;
 		self.targetname = targname5;
 		self = stemp;
 	}
 
-	if (self.syncent6)
-	{
+	if (self.syncent6) {
 		stemp = self;
 		self = self.syncent6;
 		self.targetname = targname6;
 		self = stemp;
 	}
 
-	if (self.syncent7)
-	{
+	if (self.syncent7) {
 		stemp = self;
 		self = self.syncent7;
 		self.targetname = targname7;
 		self = stemp;
 	}
 
-	if (self.syncent8)
-	{
+	if (self.syncent8) {
 		stemp = self;
 		self = self.syncent8;
 		self.targetname = targname8;
 		self = stemp;
 	}
 
-	if (self.syncent9)
-	{
+	if (self.syncent9) {
 		stemp = self;
 		self = self.syncent9;
 		self.targetname = targname9;
 		self = stemp;
 	}
 
-	if (self.syncent10)
-	{
+	if (self.syncent10) {
 		stemp = self;
 		self = self.syncent10;
 		self.targetname = targname10;
 		self = stemp;
 	}
 
-	if (self.syncent11)
-	{
+	if (self.syncent11) {
 		stemp = self;
 		self = self.syncent11;
 		self.targetname = targname11;
 		self = stemp;
 	}
 
-	if (self.syncent12)
-	{
+	if (self.syncent12) {
 		stemp = self;
 		self = self.syncent12;
 		self.targetname = targname12;
 		self = stemp;
 	}
 
-	if (self.syncent13)
-	{
+	if (self.syncent13) {
 		stemp = self;
 		self = self.syncent13;
 		self.targetname = targname13;
@@ -1166,75 +861,31 @@ void() robot_controller_use_targets = {
 
 void() robot_controller_use = {
 	self.count = (self.count - TRUE);
+	if ((self.oldcount - self.count) == 1) self.syncent1 = other;
+	if ((self.oldcount - self.count) == 2) self.syncent2 = other;
+	if ((self.oldcount - self.count) == 3) self.syncent3 = other;
+	if ((self.oldcount - self.count) == 4) self.syncent4 = other;
+	if ((self.oldcount - self.count) == 5) self.syncent5 = other;
+	if ((self.oldcount - self.count) == 6) self.syncent6 = other;
+	if ((self.oldcount - self.count) == 7) self.syncent7 = other;
+	if ((self.oldcount - self.count) == 8) self.syncent8 = other;
+	if ((self.oldcount - self.count) == 9) self.syncent9 = other;
+	if ((self.oldcount - self.count) == 10) self.syncent10 = other;
+	if ((self.oldcount - self.count) == 11) self.syncent11 = other;
+	if ((self.oldcount - self.count) == 12) self.syncent12 = other;
+	if ((self.oldcount - self.count) == 13) self.syncent13 = other;
+	if ((self.oldcount - self.count) == 14) self.syncent14 = other;
+	if ((self.oldcount - self.count) == 15) self.syncent15 = other;
+	if ((self.oldcount - self.count) == 16) self.syncent16 = other;
+	if ((self.oldcount - self.count) == 17) self.syncent17 = other;
+	if ((self.oldcount - self.count) == 18) self.syncent18 = other;
+	if ((self.oldcount - self.count) == 19) self.syncent19 = other;
+	if ((self.oldcount - self.count) == 20) self.syncent20 = other;
 
-	if ((self.oldcount - self.count) == 1)
-		self.syncent1 = other;
-
-	if ((self.oldcount - self.count) == 2)
-		self.syncent2 = other;
-
-	if ((self.oldcount - self.count) == 3)
-		self.syncent3 = other;
-
-	if ((self.oldcount - self.count) == 4)
-		self.syncent4 = other;
-
-	if ((self.oldcount - self.count) == 5)
-		self.syncent5 = other;
-
-	if ((self.oldcount - self.count) == 6)
-		self.syncent6 = other;
-
-	if ((self.oldcount - self.count) == 7)
-		self.syncent7 = other;
-
-	if ((self.oldcount - self.count) == 8)
-		self.syncent8 = other;
-
-	if ((self.oldcount - self.count) == 9)
-		self.syncent9 = other;
-
-	if ((self.oldcount - self.count) == 10)
-		self.syncent10 = other;
-
-	if ((self.oldcount - self.count) == 11)
-		self.syncent11 = other;
-
-	if ((self.oldcount - self.count) == 12)
-		self.syncent12 = other;
-
-	if ((self.oldcount - self.count) == 13)
-		self.syncent13 = other;
-
-	if ((self.oldcount - self.count) == 14)
-		self.syncent14 = other;
-
-	if ((self.oldcount - self.count) == 15)
-		self.syncent15 = other;
-
-	if ((self.oldcount - self.count) == 16)
-		self.syncent16 = other;
-
-	if ((self.oldcount - self.count) == 17)
-		self.syncent17 = other;
-
-	if ((self.oldcount - self.count) == 18)
-		self.syncent18 = other;
-
-	if ((self.oldcount - self.count) == 19)
-		self.syncent19 = other;
-
-	if ((self.oldcount - self.count) == 20)
-		self.syncent20 = other;
-
-	if (self.count)
-		return;
-
-	if (self.count < FALSE)
-		return;
+	if (self.count) return;
+	if (self.count < FALSE) return;
 
 	self.enemy = activator;
-
 	if (!self.count) {
 		self.think = robot_controller_use_targets;
 		self.nextthink = time + self.delay;

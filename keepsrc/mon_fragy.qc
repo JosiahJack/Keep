@@ -120,7 +120,7 @@ void() frag_jump2 =[       $jump2,        frag_jump3        ] {
 		self.flags = self.flags - FL_ONGROUND;
 };
 
-void() frag_jump3 =[       $jump3,        frag_jump4        ] {sound (self, CHAN_VOICE, "gibs/gibhit1.wav", 1, ATTN_NORM);};
+void() frag_jump3 =[       $jump3,        frag_jump4        ] {sound (self, CHAN_VOICE, "ad171/gibs/gibhit1.wav", 1, ATTN_NORM);};
 void() frag_jump4 =[       $jump4,        frag_jump5        ] {};
 void() frag_jump5 =[       $jump5,        frag_jump6        ] {};
 void() frag_jump6 =[       $jump6,        frag_jump7        ] {};
@@ -218,7 +218,7 @@ void() monster_fragy = {
 	precache_sound ("fish/idle.wav");
 	precache_sound ("ad171/voreling/death.wav");
 	precache_sound ("ad171/voreling/jumpland.wav");
-	precache_sound ("gibs/gibhit1.wav");
+	precache_sound ("ad171/gibs/gibhit1.wav");
 
 	self.idle_sound = "fish/idle.wav";
 

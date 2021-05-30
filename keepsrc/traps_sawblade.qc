@@ -170,9 +170,7 @@ void() trap_sawblade_setup =
 	}
 };
 
-//----------------------------------------------------------------------
-void() trap_sawblade_on =
-{
+void() trap_sawblade_on = {
 	// Stop re-triggering ON state
 	if (self.estate == ESTATE_ON) return;
 
@@ -182,14 +180,11 @@ void() trap_sawblade_on =
 	self.movetype = MOVETYPE_NOCLIP;		// Free movement
 	setmodel (self, self.mdl);				// Show bmodel/model
 	setsize (self, self.bbmins , self.bbmaxs);	// Use pre-defined size
-	// Stop any current sounds, new sound will play in func_train function
-	sound (self, CHAN_VOICE, SOUND_EMPTY, 1, ATTN_NORM);
+	StopSound(self,CHAN_VOICE); // Stop any current sounds, new sound will play in func_train function
 	self.velocity = self.avelocity = '0 0 0';	// reset velocity/rotation
 };
 
-//----------------------------------------------------------------------
-void() trap_sawbladey =
-{
+void() trap_sawbladey = {
 	// 0 = No sound, 1 = buzzzzz, 5 = custom
 	if (self.sounds > 0) {
 		if (self.sounds == 1) {

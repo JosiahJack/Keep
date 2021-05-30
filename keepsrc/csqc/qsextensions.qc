@@ -397,7 +397,7 @@ string(string s1, optional string s2, optional string s3, optional string s4, op
 string(string s, float start, float length) substring = #116;
 vector(string s) stov = #117;
 string(string s, ...) strzone = #118; /*
-		Create a semi-permanent copy of a string that only becomes invalid once strunzone is called on the string (instead of when the engine assumes your string has left scope). */
+		Create a semi-permanent copy of a string that only becomes invalid once strunzone is called on the string (instead of when the engine thinks your string has left scope). */
 
 void(string s) strunzone = #119; /*
 		Destroys a string that was allocated by strunzone. Further references to the string MAY crash the game. */

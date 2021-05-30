@@ -1,14 +1,49 @@
-/*======================================================================
- All CSQC functions (AD ONLY VERSION)
- 
- * This file is heavily influenced by QSS devkit (credit=spike)
- * re-written some functions to make better sense to me
- * Contains all HUD elements for full quake interface (SP/Coop/Dm)
- * Sripped out the experimental stuff included in devkit
- * Converted most of the hardcoded values into constants
- * Added loads of extra comments to show what is going on
-  
-======================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Arcane Dimensions (AD)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 57
+//
+// Implements: Definitions for non-ID1 HUD items and weapons display.
+//
+// Description:
+// Establishes all the specific variables for CSQC to hook into for Keep mod
+// specific items.
+//
+// This file is heavily influenced by QSS devkit (credit=spike)
+// re-written some functions to make better sense to me
+// Contains all HUD elements for full quake interface (SP/Coop/Dm)
+// Sripped out the experimental stuff included in devkit
+// Converted most of the hardcoded values into constants
+// Added loads of extra comments to show what is going on
+//=============================================================================
+
 float nocsqc;				// CSQC State (0=on, 1=off)
 float detectDP;				// Detect DP engine (using wrapper)
 float sitems;				// CSQC copy of .items
@@ -17,40 +52,30 @@ float sweapon;				// CSQC copy of .weapon
 float shealth;				// CSQC copy of .health
 float smoditems;			// CSQC copy of .moditems
 float sperms;				// CSQC copy of .perms
-
 float sb_showscores;		// Show lower tab scores
 float painfinishtime;		// Track player damage for hud face
-
 float intermission;			// in intermission
 float intermission_time;	// when the intermission started
-
 float player_localentnum;	// Entity number that csqc is attached to
 float numclientseats;		// coop or splitscreen?
 float maxclients;			// maximum players possible on this server
 float cltime;				// increases regardless of pause or game speed
-
 .float ext_csqc;			// Client Server Quake C HUD alive!
 string CSQC_PING = "csqcping";	// Test command to check if CSCQ alive
-
 float CSQC_HUDREV = 100;	// Offset to reverse hud layout
 
-//----------------------------------------------------------------------
 // Duplicate of IT_ references in defscustom.qc (AD only stuff)
-//----------------------------------------------------------------------
 const float CSQC_UPGRADE_SSG = 1<<1;	// 2
 const float CSQC_UPGRADE_LG = 1<<6;		// 64
 const float CSQC_UPGRADE_AXE = 1<<11;	// 4096
-
 const float CSQC_CKEY1 = 1<<13;			// 8192
 const float CSQC_CKEY2 = 1<<14;			// 16384
 const float CSQC_CKEY3 = 1<<15;			// 32768
 const float CSQC_CKEY4 = 1<<16;			// 65536
-
 const float CSQC_ARTLAVASHIELD = 1<<18;	// 131072
 const float CSQC_ARTAIRTANK = 1<<19;	// 262144
 const float CSQC_ARTBLASTBELT = 1<<20;	// 524288
 const float CSQC_ARTJUMPBOOTS = 1<<21;	// 1048576
-
 const float CSQC_ARTSHARP = 1<<22;		// 2097152
 const float CSQC_ARTPIERCE = 1<<23;		// 4194304
 const float CSQC_ARTTOME = 1<<24;		// 8388608
@@ -78,7 +103,6 @@ vector HUDRGB_DEF = '1 1 1';
 float baralpha;				// Read scr_sbaralpha variable
 float hudalpha;				// All gfx on hud bars
 
-//----------------------------------------------------------------------
 // These constants are only used in CSQC_UpdateView
 float MASK_ENGINE = 1;
 float MASK_VIEWMODEL = 2;
@@ -87,7 +111,6 @@ float VF_SIZE = 4;
 float VF_DRAWENGINESBAR = 20;
 float VF_DRAWCROSSHAIR = 21;
 
-//----------------------------------------------------------------------
 // Statue, Inventory(split) and Score bars
 float HUDTYPE_0 = 0;	// Default ID layout + upside down version
 float HUDTYPE_1 = 4;	// Side version 1
@@ -122,7 +145,6 @@ string ammoqty[8] = { "gfx/ad_ibar_shell1.lmp", "gfx/ad_ibar_nail1.lmp",
 // Ranking (168 x 24), Complete (184 x 24), Inter (160 x 144)
 string backlmp[3] = { "gfx/ranking.lmp", "gfx/complete.lmp", "gfx/inter.lmp" };
 
-//----------------------------------------------------------------------
 // Regular (24x24) brown numbers
 string adn24[10] = {
 	"gfx/adn_0.lmp", "gfx/adn_1.lmp", "gfx/adn_2.lmp", "gfx/adn_3.lmp", "gfx/adn_4.lmp",
@@ -177,38 +199,29 @@ string ibrunes[16] = {
 	"gfx/adib_sigil13.lmp", "gfx/adib_sigil14.lmp", "gfx/adib_sigil15.lmp", "gfx/adib_sigil16.lmp"
 };
 
-//----------------------------------------------------------------------
-// All weapon HUD graphics are prefixed with certain characters which
-// means all weapon filenames can be generated with string commands
-// CSQC is really an advanced (QSS/FTE/DP) engine only thing and its
-// very likely that FTE_STRINGS is supported for string manipulation
-//----------------------------------------------------------------------
-// Total weapons to precache pics + flash timers
-float WPN_ICONS = 9;
-// Total actual weapon slots (AD = 2 upgrades)
-float WPN_SLOTS = 7;
-// Record when weapons have been added (flash mechanic)
-float flashtime[WPN_ICONS];
+// All weapon HUD graphics are prefixed with certain characters which means all weapon filenames can be generated with string commands
+// CSQC is really an advanced (QSS/FTE/DP) engine only thing and its very likely that FTE_STRINGS is supported for string manipulation
+float WPN_ICONS = 9; // Total weapons to precache pics + flash timers
+float WPN_SLOTS = 7; // Total actual weapon slots (AD = 2 upgrades)
+float flashtime[WPN_ICONS]; // Record when weapons have been added (flash mechanic)
 
-// Shotgun, SuperShotgun, Nailgun, SuperNailGun, GrenadeLauncher
-// RocketLauncher, LightningGun, WidowMaker, PlasmaGun, ShadowAxe
+// Shotgun, SuperShotgun, Nailgun, SuperNailGun, GrenadeLauncher, RocketLauncher, LightningGun, WidowMaker, PlasmaGun, ShadowAxe
 string weaponnames[WPN_ICONS] = {
 	"shotgun.lmp", "sshotgun.lmp", "nailgun.lmp", "snailgun.lmp", "grenade.lmp",
 	"rocket.lmp", "lightng.lmp", "widowm.lmp", "plasma.lmp"
 };
 // OFF / ON gfx (reflects active weapon)
 string weaponselect[2] = { "gfx/adw_", "gfx/adws_" };
+
 // Special flash set for when the player gets weapon
 string weaponflash[5] = { "gfx/adx1_","gfx/adx2_","gfx/adx3_","gfx/adx4_","gfx/adx5_" };
 
-//----------------------------------------------------------------------
 // Frame 00-04 : Regular HP 100/80/60/40/20
 // Frame 05-09 : InPain  HP 100/80/60/40/20
 // Frame 10    : Invisibility Ring + Pentagram! 
 // Frame 11    : Quad Damage
 // Frame 12    : Invisibility Ring
 // Frame 13    : Pentagram (invulnerability)
-//----------------------------------------------------------------------
 string faceid[14] = {
 	"gfx/adf_5.lmp", "gfx/adf_4.lmp", "gfx/adf_3.lmp", "gfx/adf_2.lmp", "gfx/adf_1.lmp",
 	"gfx/adf_p5.lmp", "gfx/adf_p4.lmp", "gfx/adf_p3.lmp", "gfx/adf_p2.lmp", "gfx/adf_p1.lmp",
@@ -219,9 +232,7 @@ string facead[4] = {
 	"gfx/adf_evil.lmp", "gfx/adf_evilquad.lmp", "gfx/adf_evilpent.lmp", "gfx/adf_evilinv.lmp"
 };
 
-//----------------------------------------------------------------------
 // Stubs for extra CSQC functions (not all supported)
-//----------------------------------------------------------------------
 // Can query or check anything types on the console here
 float(string str) CSQC_ConsoleCommand = {
 	tokenize_console(str);
@@ -235,8 +246,7 @@ float(string str) CSQC_ConsoleCommand = {
 float(float evtype, float scanx, float chary, float devid) CSQC_InputEvent = {
 	return FALSE;
 };
-// This is linked to client dmg_take / dmg_save / dmg_inflictor fields
-// returning TRUE will block the red flash damage stuff
+// This is linked to client dmg_take / dmg_save / dmg_inflictor fields returning TRUE will block the red flash damage stuff
 float(float save, float take, vector dir) CSQC_Parse_Damage = {
 	painfinishtime = time + 0.2;
 	return FALSE;
@@ -255,27 +265,20 @@ void(string printmsg, float printlvl) CSQC_Parse_Print = {
 	print(printmsg);
 };
 
-// Running on the Server side of CSCQ listening for commands back
-// This is never called on the client side of the progs
+// Running on the Server side of CSCQ listening for commands back.  This is never called on the client side of the progs
 void(string str) SV_ParseClientCommand = {
 	local string ostr, cmd;
-	// Save command string for later
-	ostr = str;
-	// Search for tokens in string
-	tokenize_console(str);
-	// Find the first argument of the command
-	cmd = argv(0);	
-	// Is this my (AD CSQC) command?
-	if (cmd == CSQC_PING) self.ext_csqc = TRUE;
-	// Pass through original command
-	else clientcommand(self, ostr);
+
+	ostr = str; // Save command string for later
+	tokenize_console(str); // Search for tokens in string
+	cmd = argv(0); // Find the first argument of the command
+
+	if (cmd == CSQC_PING) self.ext_csqc = TRUE; // Is this my (AD CSQC) command?
+	else clientcommand(self, ostr); // Pass through original command
 };
 
-//======================================================================
 // Display 24pixel numbers to HUD (cope with red version)
-//----------------------------------------------------------------------
-void(vector pos, float value, float threshhold) Hud_DrawNoFont24 =
-{
+void(vector pos, float value, float threshhold) Hud_DrawNoFont24 = {
 	local string val_str, disp_str;
 	local float disp_col, disp_len, disp_no;
 
@@ -308,9 +311,7 @@ void(vector pos, float value, float threshhold) Hud_DrawNoFont24 =
 	}	
 };
 
-//----------------------------------------------------------------------
-void(vector pos, float value) Hud_DrawNoFont16 =
-{
+void(vector pos, float value) Hud_DrawNoFont16 = {
 	local string val_str;
 	local float disp_len, disp_no;
 
@@ -338,11 +339,8 @@ void(vector pos, float value) Hud_DrawNoFont16 =
 	}	
 };
 
-//----------------------------------------------------------------------
 // Display 24pixel characters to HUD (limited chars available)
-//----------------------------------------------------------------------
-void(vector pos, string num) Hud_DrawCharFont24 =
-{
+void(vector pos, string num) Hud_DrawCharFont24 = {
 	float i, c;
 	// Endless loop until end of string
 	// Keep moving draw pos forward (pos_x)
@@ -367,11 +365,8 @@ void(vector pos, string num) Hud_DrawCharFont24 =
 	}
 };
 
-//----------------------------------------------------------------------
 // Draws small 8 pixel numbers to HUD (white/yellow/red text options)
-//----------------------------------------------------------------------
-void(vector pos, float value, float digit, float zerofill, float fontcol) Hud_DrawNoFont8 =
-{
+void(vector pos, float value, float digit, float zerofill, float fontcol) Hud_DrawNoFont8 = {
 	local string val_str;
 	local float disp_len, disp_no;
 
@@ -413,11 +408,8 @@ void(vector pos, float value, float digit, float zerofill, float fontcol) Hud_Dr
 	}	
 };
 
-//----------------------------------------------------------------------
 // Change HUD face to reflect Health, Pain or Powerups
-//----------------------------------------------------------------------
-void(vector pos) Hud_DrawFace =
-{
+void(vector pos) Hud_DrawFace = {
 	string face;
 	local float hpframe;
 
@@ -427,22 +419,16 @@ void(vector pos) Hud_DrawFace =
 		else if (sitems & CSQC_INVULNERABILITY) face = facead[2];
 		else if (sitems & CSQC_INVISIBILITY) face = facead[3];
 		else face = facead[0];
-	}
-	// Regular Ranger
-	else {
+	} else { // Regular Ranger
 		// Start with InvRing as it has two states
 		if (sitems & CSQC_INVISIBILITY) {
 			// InvRing + Pentagram!?! WUT!?! SandyP E4 design!
 			if (sitems & CSQC_INVULNERABILITY) face = faceid[10];
 			// Just InvRing only
 			else face = faceid[12];
-		}
-		// Quad only
-		else if (sitems & CSQC_QUAD) face = faceid[11];
-		// Pentagram only
-		else if (sitems & CSQC_INVULNERABILITY) face = faceid[13];
-		// Regular face
-		else {
+		} else if (sitems & CSQC_QUAD) face = faceid[11]; // Quad only
+		else if (sitems & CSQC_INVULNERABILITY) face = faceid[13]; // Pentagram only
+		else { // Regular face
 			// Work out face based on HP (100/80/60/40/20)
 			hpframe = floor(shealth / 20);
 			// Check for negative and upper (MegaHP) limits
@@ -459,19 +445,16 @@ void(vector pos) Hud_DrawFace =
 	drawpic(pos, face, HUDSIZE_24, HUDRGB_DEF, hudalpha, 0);
 };
 
-//----------------------------------------------------------------------
 // Update a weapon icon with selection or flash features
-//----------------------------------------------------------------------
-static void(float num, vector gfx_size, vector pos) Hud_DrawWeapon =
-{
+static void(float num, vector gfx_size, vector pos) Hud_DrawWeapon = {
 	local string prefix, file_str;
 	local float flash;
 	
 	// The weapon flash is done every 0.1s and repeated twice!
 	// When the player gets a new weapon the time is reset
 	// This function will count the time difference for flashing
-	// Convert the flash time to a 0-10+ range
-	flash = (time - flashtime[num])*10;
+	
+	flash = (time - flashtime[num])*10; // Convert the flash time to a 0-10+ range
 	
 	// Has the flash happened twice? (finished)
 	if (flash >= 10) {
@@ -485,16 +468,13 @@ static void(float num, vector gfx_size, vector pos) Hud_DrawWeapon =
 				prefix = weaponselect[1];
 			// Default = no weapon selection
 			else prefix = weaponselect[0];
-		}
-		else {
+		} else {
 			// Work out if this weapon is currently selected
 			if (sweapon == (1<<num)) prefix = weaponselect[1];
 			// Default is no highlight
 			else prefix = weaponselect[0];
 		}
-	}
-	// Flashing!
-	else {
+	} else { // Flashing!
 		// Is the flash into second phase?
 		if (flash < 0) flash = 0;
 		else if (flash >= 5) flash = flash - 5;
@@ -503,7 +483,7 @@ static void(float num, vector gfx_size, vector pos) Hud_DrawWeapon =
 	}
 	// Merge prefix type (defined above) to weapon filename
 	// Without string (str) functions this would involve a giant table
-	// This sorta assumes that CSQC is running on an advanced engine
+	// Expects that CSQC is running on an advanced engine
 	// QSS/FTE/DP all support FTE_STRINGS extra str functions
 	file_str = strcat(prefix, weaponnames[num]);
 	
@@ -511,30 +491,20 @@ static void(float num, vector gfx_size, vector pos) Hud_DrawWeapon =
 	drawpic(pos, file_str, gfx_size, HUDRGB_DEF, hudalpha, 0);
 };
 
-//----------------------------------------------------------------------
-// Sanity check to make sure custom key skins are alway in range
-// If this is out of range, the array will overflow and error!
-//----------------------------------------------------------------------
-float (float hudvar) Hud_CKeyRange =
-{
+// Sanity check to make sure custom key skins are alway in range.  If this is out of range, the array will overflow and error!
+float (float hudvar) Hud_CKeyRange = {
 	local float ret_val;
-	// Find out variable value
-	ret_val = getstatf(hudvar);
+	
+	ret_val = getstatf(hudvar); // Find out variable value
+
 	// Sanity check, ALWAYS make sure within range!
 	if (ret_val >= CKEY_ARRAY) ret_val = 0;
 	else if (ret_val <= 0) ret_val = 0;
 	return ret_val;
 };
 
-//======================================================================
-// INVENTORY BARS
-//
-// - shows ammo quanity, key/runes and powerups
-// - multiple setups for different hud layouts
-//
-//======================================================================
-void (vector pos, vector br) Hud_DrawIBar0a =
-{
+// Shows ammo quanity, key/runes and powerups.  Multiple setups for different hud layouts
+void (vector pos, vector br) Hud_DrawIBar0a = {
 	// Draw background bar using scr_sbaralpha default
 	drawpic(pos, backgrd[HUDTYPE_0+3], [320, 16], HUDRGB_DEF, baralpha, 0);
 
@@ -584,9 +554,7 @@ void (vector pos, vector br) Hud_DrawIBar0a =
 		drawpic(pos+[304,0], ibitems[11], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector br) Hud_DrawIBar0b =
-{
+void (vector pos, vector br) Hud_DrawIBar0b = {
 	local vector topcol, botcol;
 	local string player_frags;
 	local float i;
@@ -628,8 +596,7 @@ void (vector pos, vector br) Hud_DrawIBar0b =
 			// Move forward to next hud space
 			pos_x += 8*4;
 		}
-	}
-	else {
+	} else {
 		// Draw Custom Keys
 		if (smoditems & CSQC_CKEY1)
 			drawpic(pos+[192,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN1)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
@@ -652,9 +619,7 @@ void (vector pos, vector br) Hud_DrawIBar0b =
 	}
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector br) Hud_DrawIBar1a =
-{
+void (vector pos, vector br) Hud_DrawIBar1a = {
 	// Draw background bar using scr_sbaralpha default
 	drawpic(pos, backgrd[HUDTYPE_1+2], [96, 48], HUDRGB_DEF, baralpha, 0);
 
@@ -684,9 +649,7 @@ void (vector pos, vector br) Hud_DrawIBar1a =
 	}
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector br) Hud_DrawIBar1b =
-{
+void (vector pos, vector br) Hud_DrawIBar1b = {
 	local vector topcol, botcol;
 	local string player_frags;
 	local float i, j;
@@ -745,8 +708,7 @@ void (vector pos, vector br) Hud_DrawIBar1b =
 				drawcharacter(pos+[24+(j*32),0], 0xe011, HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);
 			}
 		}
-	}
-	else {
+	} else {
 		// Draw Custom Keys
 		if (smoditems & CSQC_CKEY1)
 			drawpic(pos+[0,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN1)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
@@ -769,9 +731,7 @@ void (vector pos, vector br) Hud_DrawIBar1b =
 	}
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector br) Hud_DrawIBar2a =
-{
+void (vector pos, vector br) Hud_DrawIBar2a = {
 	// Draw background bar using scr_sbaralpha default
 	drawpic(pos, backgrd[HUDTYPE_2+2], [48, 96], HUDRGB_DEF, baralpha, 0);
 
@@ -800,9 +760,8 @@ void (vector pos, vector br) Hud_DrawIBar2a =
 			drawpic(pos+[32,80], ibitems[4], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
 	}
 };
-//----------------------------------------------------------------------
-void (vector pos, vector br) Hud_DrawIBar2b =
-{
+
+void (vector pos, vector br) Hud_DrawIBar2b = {
 	local vector topcol, botcol;
 	local string player_frags;
 	local float i, j;
@@ -859,8 +818,7 @@ void (vector pos, vector br) Hud_DrawIBar2b =
 				drawcharacter(pos+[24,0+(j*32)], 0xe011, HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);
 			}
 		}
-	}
-	else {
+	} else {
 		// Draw Custom Keys
 		if (smoditems & CSQC_CKEY1)
 			drawpic(pos+[0,16], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN1)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
@@ -883,19 +841,11 @@ void (vector pos, vector br) Hud_DrawIBar2b =
 	}
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector br) Hud_DrawIBar3a =
-{
-};
+void (vector pos, vector br) Hud_DrawIBar3a = {};
 
-//----------------------------------------------------------------------
-void (vector pos, vector br) Hud_DrawIBar3b =
-{
-};
+void (vector pos, vector br) Hud_DrawIBar3b = {};
 
-//----------------------------------------------------------------------
-void (vector pos, vector br) Hud_DrawIBar4a =
-{
+void (vector pos, vector br) Hud_DrawIBar4a = {
 	local vector topcol, botcol;
 	local string player_frags;
 	local float i, j;
@@ -904,12 +854,9 @@ void (vector pos, vector br) Hud_DrawIBar4a =
 	drawpic(pos, backgrd[HUDTYPE_4+2], [48, 64], HUDRGB_DEF, baralpha, 0);
 
 	// Draw Classic ID powerups
-	if (sitems & CSQC_INVISIBILITY)
-		drawpic(pos+[0,16], ibitems[0], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (sitems & CSQC_INVULNERABILITY)
-		drawpic(pos+[16,16], ibitems[1], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (sitems & CSQC_SUIT)
-		drawpic(pos+[0,32], ibitems[2], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (sitems & CSQC_INVISIBILITY) drawpic(pos+[0,16], ibitems[0], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (sitems & CSQC_INVULNERABILITY) drawpic(pos+[16,16], ibitems[1], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (sitems & CSQC_SUIT) drawpic(pos+[0,32], ibitems[2], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
 
 	// Draw Quad/Sharp/Pierce combo
 	if (smoditems & CSQC_ARTSHARP)
@@ -920,14 +867,10 @@ void (vector pos, vector br) Hud_DrawIBar4a =
 		drawpic(pos+[16,32], ibitems[3], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
 
 	// Draw New AD poweerups
-	if (smoditems & CSQC_ARTJUMPBOOTS)
-		drawpic(pos+[0,48], ibitems[8], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (smoditems & CSQC_ARTBLASTBELT)
-		drawpic(pos+[16,48], ibitems[9], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (smoditems & CSQC_ARTAIRTANK)
-		drawpic(pos+[32,48], ibitems[10], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (smoditems & CSQC_ARTLAVASHIELD)
-		drawpic(pos+[32,32], ibitems[11], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);	
+	if (smoditems & CSQC_ARTJUMPBOOTS) drawpic(pos+[0,48], ibitems[8], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (smoditems & CSQC_ARTBLASTBELT) drawpic(pos+[16,48], ibitems[9], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (smoditems & CSQC_ARTAIRTANK) drawpic(pos+[32,48], ibitems[10], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (smoditems & CSQC_ARTLAVASHIELD) drawpic(pos+[32,32], ibitems[11], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);	
 
 	//should probably show team scores, but this mimics vanilla
 	if (deathmatch) {
@@ -952,33 +895,22 @@ void (vector pos, vector br) Hud_DrawIBar4a =
 				drawcharacter(pos+[24,0+(j*32)], 0xe011, HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);
 			}
 		}
-	}
-	else {
+	} else {
 		// Draw Custom Keys
-		if (smoditems & CSQC_CKEY1)
-			drawpic(pos+[32,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN1)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (smoditems & CSQC_CKEY2)
-			drawpic(pos+[32,8], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN2)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (smoditems & CSQC_CKEY3)
-			drawpic(pos+[32,16], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN3)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (smoditems & CSQC_CKEY4)
-			drawpic(pos+[32,24], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN4)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (smoditems & CSQC_CKEY1) drawpic(pos+[32,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN1)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (smoditems & CSQC_CKEY2) drawpic(pos+[32,8], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN2)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (smoditems & CSQC_CKEY3) drawpic(pos+[32,16], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN3)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (smoditems & CSQC_CKEY4) drawpic(pos+[32,24], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN4)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
 			
 		// Draw Runes (special size + location)
-		if (sitems2 & CSQC_RUNE1)
-			drawpic(pos+[0,0], ibrunes[4], HUDSIZE_816, HUDRGB_DEF, hudalpha, 0);
-		if (sitems2 & CSQC_RUNE2)
-			drawpic(pos+[8,0], ibrunes[5], HUDSIZE_816, HUDRGB_DEF, hudalpha, 0);
-		if (sitems2 & CSQC_RUNE3)
-			drawpic(pos+[16,0], ibrunes[6], HUDSIZE_816, HUDRGB_DEF, hudalpha, 0);
-		if (sitems2 & CSQC_RUNE4)
-			drawpic(pos+[24,0], ibrunes[7], HUDSIZE_816, HUDRGB_DEF, hudalpha, 0);
+		if (sitems2 & CSQC_RUNE1) drawpic(pos+[0,0], ibrunes[4], HUDSIZE_816, HUDRGB_DEF, hudalpha, 0);
+		if (sitems2 & CSQC_RUNE2) drawpic(pos+[8,0], ibrunes[5], HUDSIZE_816, HUDRGB_DEF, hudalpha, 0);
+		if (sitems2 & CSQC_RUNE3) drawpic(pos+[16,0], ibrunes[6], HUDSIZE_816, HUDRGB_DEF, hudalpha, 0);
+		if (sitems2 & CSQC_RUNE4) drawpic(pos+[24,0], ibrunes[7], HUDSIZE_816, HUDRGB_DEF, hudalpha, 0);
 	}
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector br) Hud_DrawIBar4b =
-{
+void (vector pos, vector br) Hud_DrawIBar4b = {
 	// Draw background bar using scr_sbaralpha default
 	drawpic(pos, backgrd[HUDTYPE_4+3], [48, 64], HUDRGB_DEF, baralpha, 0);
 
@@ -1001,10 +933,8 @@ void (vector pos, vector br) Hud_DrawIBar4b =
 			drawpic(pos+[32,48], ibitems[4], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
 	}
 };
-	
-//----------------------------------------------------------------------
-void (vector pos, vector br) Hud_DrawIBar5a =
-{
+
+void (vector pos, vector br) Hud_DrawIBar5a = {
 	local vector topcol, botcol;
 	local string player_frags;
 	local float i, j;
@@ -1013,12 +943,9 @@ void (vector pos, vector br) Hud_DrawIBar5a =
 	drawpic(pos, backgrd2[HUDTYPE_5+2], [64, 48], HUDRGB_DEF, baralpha, 0);
 
 	// Draw Classic ID powerups
-	if (sitems & CSQC_INVISIBILITY)
-		drawpic(pos+[0,16], ibitems[0], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (sitems & CSQC_INVULNERABILITY)
-		drawpic(pos+[16,16], ibitems[1], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (sitems & CSQC_SUIT)
-		drawpic(pos+[32,16], ibitems[2], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (sitems & CSQC_INVISIBILITY) drawpic(pos+[0,16], ibitems[0], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (sitems & CSQC_INVULNERABILITY) drawpic(pos+[16,16], ibitems[1], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (sitems & CSQC_SUIT) drawpic(pos+[32,16], ibitems[2], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
 
 	// Draw Quad/Sharp/Pierce combo
 	if (smoditems & CSQC_ARTSHARP)
@@ -1029,14 +956,10 @@ void (vector pos, vector br) Hud_DrawIBar5a =
 		drawpic(pos+[48,16], ibitems[3], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
 
 	// Draw New AD poweerups
-	if (smoditems & CSQC_ARTJUMPBOOTS)
-		drawpic(pos+[0,32], ibitems[8], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (smoditems & CSQC_ARTBLASTBELT)
-		drawpic(pos+[16,32], ibitems[9], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (smoditems & CSQC_ARTAIRTANK)
-		drawpic(pos+[32,32], ibitems[10], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (smoditems & CSQC_ARTLAVASHIELD)
-		drawpic(pos+[48,32], ibitems[11], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);	
+	if (smoditems & CSQC_ARTJUMPBOOTS) drawpic(pos+[0,32], ibitems[8], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (smoditems & CSQC_ARTBLASTBELT) drawpic(pos+[16,32], ibitems[9], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (smoditems & CSQC_ARTAIRTANK) drawpic(pos+[32,32], ibitems[10], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (smoditems & CSQC_ARTLAVASHIELD) drawpic(pos+[48,32], ibitems[11], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);	
 
 	//should probably show team scores, but this mimics vanilla
 	if (deathmatch) {
@@ -1063,33 +986,22 @@ void (vector pos, vector br) Hud_DrawIBar5a =
 				drawcharacter(pos+[24+(j*32),0], 0xe011, HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);
 			}
 		}
-	}
-	else {
+	} else {
 		// Draw Runes (special size + location)
-		if (sitems2 & CSQC_RUNE1)
-			drawpic(pos+[0,0], ibrunes[4], HUDSIZE_816, HUDRGB_DEF, hudalpha, 0);
-		if (sitems2 & CSQC_RUNE2)
-			drawpic(pos+[8,0], ibrunes[5], HUDSIZE_816, HUDRGB_DEF, hudalpha, 0);
-		if (sitems2 & CSQC_RUNE3)
-			drawpic(pos+[16,0], ibrunes[6], HUDSIZE_816, HUDRGB_DEF, hudalpha, 0);
-		if (sitems2 & CSQC_RUNE4)
-			drawpic(pos+[24,0], ibrunes[7], HUDSIZE_816, HUDRGB_DEF, hudalpha, 0);
+		if (sitems2 & CSQC_RUNE1) drawpic(pos+[0,0], ibrunes[4], HUDSIZE_816, HUDRGB_DEF, hudalpha, 0);
+		if (sitems2 & CSQC_RUNE2) drawpic(pos+[8,0], ibrunes[5], HUDSIZE_816, HUDRGB_DEF, hudalpha, 0);
+		if (sitems2 & CSQC_RUNE3) drawpic(pos+[16,0], ibrunes[6], HUDSIZE_816, HUDRGB_DEF, hudalpha, 0);
+		if (sitems2 & CSQC_RUNE4) drawpic(pos+[24,0], ibrunes[7], HUDSIZE_816, HUDRGB_DEF, hudalpha, 0);
 
 		// Draw Custom Keys
-		if (smoditems & CSQC_CKEY1)
-			drawpic(pos+[32,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN1)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (smoditems & CSQC_CKEY2)
-			drawpic(pos+[48,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN2)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (smoditems & CSQC_CKEY3)
-			drawpic(pos+[32,8], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN3)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (smoditems & CSQC_CKEY4)
-			drawpic(pos+[48,8], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN4)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (smoditems & CSQC_CKEY1) drawpic(pos+[32,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN1)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (smoditems & CSQC_CKEY2) drawpic(pos+[48,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN2)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (smoditems & CSQC_CKEY3) drawpic(pos+[32,8], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN3)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (smoditems & CSQC_CKEY4) drawpic(pos+[48,8], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN4)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
 	}
 };	
 
-//----------------------------------------------------------------------
-void (vector pos, vector br) Hud_DrawIBar5b =
-{
+void (vector pos, vector br) Hud_DrawIBar5b = {
 	// no point drawing, nothing to show!
 	if (sweapon == 0) return;
 	// Draw background bar using scr_sbaralpha default
@@ -1114,10 +1026,8 @@ void (vector pos, vector br) Hud_DrawIBar5b =
 			drawpic(pos+[32,72], ibitems[4], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
 	}
 };	
-	
-//----------------------------------------------------------------------
-void (vector pos, vector br) Hud_DrawIBar6 =
-{
+
+void (vector pos, vector br) Hud_DrawIBar6 = {
 	local vector topcol, botcol;
 	local string player_frags;
 	local float i;
@@ -1160,12 +1070,9 @@ void (vector pos, vector br) Hud_DrawIBar6 =
 	}
 
 	// Draw Classic ID powerups
-	if (sitems & CSQC_INVISIBILITY)
-		drawpic(pos+[0,8], ibitems[0], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (sitems & CSQC_INVULNERABILITY)
-		drawpic(pos+[16,8], ibitems[1], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (sitems & CSQC_SUIT)
-		drawpic(pos+[32,8], ibitems[2], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (sitems & CSQC_INVISIBILITY) drawpic(pos+[0,8], ibitems[0], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (sitems & CSQC_INVULNERABILITY) drawpic(pos+[16,8], ibitems[1], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (sitems & CSQC_SUIT) drawpic(pos+[32,8], ibitems[2], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
 
 	// Draw Quad/Sharp/Pierce combo
 	if (smoditems & CSQC_ARTSHARP)
@@ -1176,14 +1083,10 @@ void (vector pos, vector br) Hud_DrawIBar6 =
 		drawpic(pos+[48,8], ibitems[3], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
 
 	// Draw New AD poweerups
-	if (smoditems & CSQC_ARTJUMPBOOTS)
-		drawpic(pos+[64,8], ibitems[8], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (smoditems & CSQC_ARTBLASTBELT)
-		drawpic(pos+[80,8], ibitems[9], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (smoditems & CSQC_ARTAIRTANK)
-		drawpic(pos+[96,8], ibitems[10], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (smoditems & CSQC_ARTLAVASHIELD)
-		drawpic(pos+[112,8], ibitems[11], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);	
+	if (smoditems & CSQC_ARTJUMPBOOTS) drawpic(pos+[64,8], ibitems[8], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (smoditems & CSQC_ARTBLASTBELT) drawpic(pos+[80,8], ibitems[9], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (smoditems & CSQC_ARTAIRTANK) drawpic(pos+[96,8], ibitems[10], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (smoditems & CSQC_ARTLAVASHIELD) drawpic(pos+[112,8], ibitems[11], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);	
 
 	//should probably show team scores, but this mimics vanilla
 	if (deathmatch) {
@@ -1210,51 +1113,34 @@ void (vector pos, vector br) Hud_DrawIBar6 =
 			// Move forward to next hud space
 			pos_x += 8*4;
 		}
-	}
-	else {
+	} else {
 		// Draw Runes (special size + location)
-		if (sitems2 & CSQC_RUNE1)
-			drawpic(pos+[0,0], ibrunes[0], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (sitems2 & CSQC_RUNE2)
-			drawpic(pos+[16,0], ibrunes[1], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (sitems2 & CSQC_RUNE3)
-			drawpic(pos+[32,0], ibrunes[2], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (sitems2 & CSQC_RUNE4)
-			drawpic(pos+[48,0], ibrunes[3], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (sitems2 & CSQC_RUNE1) drawpic(pos+[0,0], ibrunes[0], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (sitems2 & CSQC_RUNE2) drawpic(pos+[16,0], ibrunes[1], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (sitems2 & CSQC_RUNE3) drawpic(pos+[32,0], ibrunes[2], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (sitems2 & CSQC_RUNE4) drawpic(pos+[48,0], ibrunes[3], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
 
 		// Draw Custom Keys
-		if (smoditems & CSQC_CKEY1)
-			drawpic(pos+[64,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN1)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (smoditems & CSQC_CKEY2)
-			drawpic(pos+[80,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN2)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (smoditems & CSQC_CKEY3)
-			drawpic(pos+[96,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN3)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (smoditems & CSQC_CKEY4)
-			drawpic(pos+[112,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN4)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (smoditems & CSQC_CKEY1) drawpic(pos+[64,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN1)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (smoditems & CSQC_CKEY2) drawpic(pos+[80,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN2)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (smoditems & CSQC_CKEY3) drawpic(pos+[96,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN3)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (smoditems & CSQC_CKEY4) drawpic(pos+[112,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN4)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
 	}
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector br, float grid) Hud_DrawIBar7a =
-{
-	// Draw background bar using scr_sbaralpha default
-	if(grid >0 && grid <=1) 
-		drawpic(pos, backgrd2[HUDTYPE_7+2], [96, 64], HUDRGB_DEF, grid, 0);
+void (vector pos, vector br, float grid) Hud_DrawIBar7a = {	
+	if(grid >0 && grid <=1) drawpic(pos, backgrd2[HUDTYPE_7+2], [96, 64], HUDRGB_DEF, grid, 0); // Draw background bar using scr_sbaralpha default
 
-	// Alpha HP value only (no background
-	Hud_DrawNoFont24(pos+[24,0], shealth, 25);
+	Hud_DrawNoFont24(pos+[24,0], shealth, 25); // Alpha HP value only (no background
 
 	// Deal with Pentagram first, its a simple test/update
 	if (sitems & CSQC_INVULNERABILITY) {
-		// Make sure 666 is in 24 pixel giant red numbers!
-		Hud_DrawNoFont16(pos+[48,28], 666);
-		// Draw a pentagram symbol in the armour HUD slot
-		drawpic(pos+[24,24], sbitems[10], HUDSIZE_24, HUDRGB_DEF, hudalpha, 0);
-	}
-	else {
+		Hud_DrawNoFont16(pos+[48,28], 666); // Make sure 666 is in 24 pixel giant red numbers!
+		drawpic(pos+[24,24], sbitems[10], HUDSIZE_24, HUDRGB_DEF, hudalpha, 0); // Draw a pentagram symbol in the armour HUD slot
+	} else {
 		// Show armour type/quantity active
-		if (getstatf(CLIENT_ARMOR) > 0)
-			Hud_DrawNoFont16(pos+[48,28], getstatf(CLIENT_ARMOR));
+		if (getstatf(CLIENT_ARMOR) > 0) Hud_DrawNoFont16(pos+[48,28], getstatf(CLIENT_ARMOR));
+
 		// Only 3 armour types (green/yellow/red)
 		if (sitems2 & CSQC2_ARMOR1)
 			drawpic(pos+[24,24], sbitems[7], HUDSIZE_24, HUDRGB_DEF, hudalpha, 0);
@@ -1265,13 +1151,11 @@ void (vector pos, vector br, float grid) Hud_DrawIBar7a =
 		// Draw empty armour icon
 		else drawpic(pos+[24,24], sbitems[6], HUDSIZE_24, HUDRGB_DEF, hudalpha, 0);
 	}
+
 	// Draw Classic ID powerups
-	if (sitems & CSQC_INVISIBILITY)
-		drawpic(pos+[8,48], ibitems[0], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (sitems & CSQC_INVULNERABILITY)
-		drawpic(pos+[8,32], ibitems[1], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (sitems & CSQC_SUIT)
-		drawpic(pos+[8,16], ibitems[2], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (sitems & CSQC_INVISIBILITY) drawpic(pos+[8,48], ibitems[0], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (sitems & CSQC_INVULNERABILITY) drawpic(pos+[8,32], ibitems[1], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (sitems & CSQC_SUIT) drawpic(pos+[8,16], ibitems[2], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
 
 	// Draw Quad/Sharp/Pierce combo
 	if (smoditems & CSQC_ARTSHARP)
@@ -1282,32 +1166,23 @@ void (vector pos, vector br, float grid) Hud_DrawIBar7a =
 		drawpic(pos+[8,0], ibitems[3], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
 
 	// Draw New AD poweerups
-	if (smoditems & CSQC_ARTJUMPBOOTS)
-		drawpic(pos+[24,48], ibitems[8], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (smoditems & CSQC_ARTBLASTBELT)
-		drawpic(pos+[40,48], ibitems[9], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (smoditems & CSQC_ARTAIRTANK)
-		drawpic(pos+[56,48], ibitems[10], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
-	if (smoditems & CSQC_ARTLAVASHIELD)
-		drawpic(pos+[72,48], ibitems[11], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);	
+	if (smoditems & CSQC_ARTJUMPBOOTS) drawpic(pos+[24,48], ibitems[8], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (smoditems & CSQC_ARTBLASTBELT) drawpic(pos+[40,48], ibitems[9], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (smoditems & CSQC_ARTAIRTANK) drawpic(pos+[56,48], ibitems[10], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
+	if (smoditems & CSQC_ARTLAVASHIELD) drawpic(pos+[72,48], ibitems[11], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);	
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector br, float grid) Hud_DrawIBar7b =
-{
+void (vector pos, vector br, float grid) Hud_DrawIBar7b = {
 	local vector topcol, botcol;
 	local string player_frags;
 	local float ammorow,i,j;
 	
 	// Draw background bar using scr_sbaralpha default
-	if(grid >0 && grid <=1) 
-		drawpic(pos, backgrd2[HUDTYPE_7+3], [104, 56], HUDRGB_DEF, grid, 0);
+	if(grid >0 && grid <=1) drawpic(pos, backgrd2[HUDTYPE_7+3], [104, 56], HUDRGB_DEF, grid, 0);
 
 	// Draw silver/gold key
-	if (sitems & CSQC_KEY1)
-		drawpic(pos+[72,0], sbitems[12], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-	if (sitems & CSQC_KEY2)
-		drawpic(pos+[72,8], sbitems[13], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+	if (sitems & CSQC_KEY1) drawpic(pos+[72,0], sbitems[12], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+	if (sitems & CSQC_KEY2) drawpic(pos+[72,8], sbitems[13], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
 
 	// Show ammo type + quantity
 	if (sweapon > 0 && sweapon < CSQC_AXE) {
@@ -1358,32 +1233,22 @@ void (vector pos, vector br, float grid) Hud_DrawIBar7b =
 				drawcharacter(pos+[96,0+(j*8)], 0xe011, HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);
 			}
 		}
-	}
-	else {
+	} else {
 		// Draw Custom Keys
-		if (smoditems & CSQC_CKEY1)
-			drawpic(pos+[72,16], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN1)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (smoditems & CSQC_CKEY2)
-			drawpic(pos+[72,24], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN2)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (smoditems & CSQC_CKEY3)
-			drawpic(pos+[72,32], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN3)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (smoditems & CSQC_CKEY4)
-			drawpic(pos+[72,40], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN4)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (smoditems & CSQC_CKEY1) drawpic(pos+[72,16], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN1)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (smoditems & CSQC_CKEY2) drawpic(pos+[72,24], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN2)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (smoditems & CSQC_CKEY3) drawpic(pos+[72,32], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN3)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (smoditems & CSQC_CKEY4) drawpic(pos+[72,40], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN4)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+
 		// Draw Runes (regular size)
-		if (sitems2 & CSQC_RUNE1)
-			drawpic(pos+[88,16], ibrunes[8], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (sitems2 & CSQC_RUNE2)
-			drawpic(pos+[88,24], ibrunes[9], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (sitems2 & CSQC_RUNE3)
-			drawpic(pos+[88,32], ibrunes[10], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-		if (sitems2 & CSQC_RUNE4)
-			drawpic(pos+[88,40], ibrunes[11], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (sitems2 & CSQC_RUNE1) drawpic(pos+[88,16], ibrunes[8], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (sitems2 & CSQC_RUNE2) drawpic(pos+[88,24], ibrunes[9], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (sitems2 & CSQC_RUNE3) drawpic(pos+[88,32], ibrunes[10], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+		if (sitems2 & CSQC_RUNE4) drawpic(pos+[88,40], ibrunes[11], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
 	}
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector br, float grid) Hud_DrawIBar7c =
-{
+void (vector pos, vector br, float grid) Hud_DrawIBar7c = {
 	// Draw background bar using scr_sbaralpha default
 	if(grid >0 && grid <=1) 
 		drawpic(pos, backgrd2[HUDTYPE_6+1], [32, 128], HUDRGB_DEF, grid, 0);
@@ -1408,31 +1273,14 @@ void (vector pos, vector br, float grid) Hud_DrawIBar7c =
 	}
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector br) Hud_DrawIBar8a =
-{
-};
+void (vector pos, vector br) Hud_DrawIBar8a = {};
 
-//----------------------------------------------------------------------
-void (vector pos, vector br) Hud_DrawIBar8b =
-{
-};
+void (vector pos, vector br) Hud_DrawIBar8b = {};
 
-//----------------------------------------------------------------------
-void (vector pos, vector br) Hud_DrawIBar9 =
-{
-};
+void (vector pos, vector br) Hud_DrawIBar9 = {};
 
-//======================================================================
-// STATUS BARS
-//
-// - shows armour / health and current ammo/qty
-// - multiple setups for different hud layouts
-//
-//======================================================================
-// SBar1 is default ID layout, used for Huds 0,2,3
-void (vector pos, vector virtsize) Hud_DrawSBar0 =
-{
+// Shows armour / health and current ammo/qty.  Multiple setups for different hud layouts.  SBar1 is default ID layout, used for Huds 0,2,3
+void (vector pos, vector virtsize) Hud_DrawSBar0 = {
 	// Draw primary HUD bar (Armour/Face/Health/Ammo)
 	drawpic(pos, backgrd[HUDTYPE_0], [320, 24], HUDRGB_DEF, baralpha, 0);
 
@@ -1467,8 +1315,7 @@ void (vector pos, vector virtsize) Hud_DrawSBar0 =
 			drawpic(pos+[224,0], sbitems[5], HUDSIZE_24, HUDRGB_DEF, hudalpha, 0);
 		else
 			drawpic(pos+[224,0], sbitems[4], HUDSIZE_24, HUDRGB_DEF, hudalpha, 0);
-	}
-	else {
+	} else {
 		// Show ammo type + quantity
 		if (sweapon > 0) Hud_DrawNoFont24(pos+[248,0], getstatf(CLIENT_AMMO), 10);
 		if (sitems & CSQC_SHELLS)
@@ -1492,9 +1339,7 @@ void (vector pos, vector virtsize) Hud_DrawSBar0 =
 	}
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector virtsize) Hud_DrawSBar4a =
-{
+void (vector pos, vector virtsize) Hud_DrawSBar4a = {
 	// Draw primary HUD bar (Armour/Face/Health/Ammo)
 	drawpic(pos, backgrd[HUDTYPE_4+0], [96, 48], HUDRGB_DEF, baralpha, 0);
 
@@ -1504,8 +1349,7 @@ void (vector pos, vector virtsize) Hud_DrawSBar4a =
 		Hud_DrawNoFont24(pos+[0,24], 666, 666);
 		// Draw a pentagram symbol in the armour HUD slot
 		drawpic(pos+[72,24], sbitems[10], HUDSIZE_24, HUDRGB_DEF, hudalpha, 0);
-	}
-	else {
+	} else {
 		// Show armour type/quantity active
 		Hud_DrawNoFont24(pos+[0,24], getstatf(CLIENT_ARMOR), 25);
 		// Only 3 armour types (green/yellow/red)
@@ -1525,9 +1369,7 @@ void (vector pos, vector virtsize) Hud_DrawSBar4a =
 	
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector virtsize) Hud_DrawSBar4b =
-{
+void (vector pos, vector virtsize) Hud_DrawSBar4b = {
 	// Draw primary HUD bar (Armour/Face/Health/Ammo)
 	drawpic(pos, backgrd[HUDTYPE_4+1], [96, 48], HUDRGB_DEF, baralpha, 0);
 	
@@ -1548,8 +1390,7 @@ void (vector pos, vector virtsize) Hud_DrawSBar4b =
 			drawpic(pos+[0,24], sbitems[5], HUDSIZE_24, HUDRGB_DEF, hudalpha, 0);
 		else
 			drawpic(pos+[0,24], sbitems[4], HUDSIZE_24, HUDRGB_DEF, hudalpha, 0);
-	}
-	else {
+	} else {
 		// Show ammo type + quantity
 		if (sweapon > 0) Hud_DrawNoFont24(pos+[24,24], getstatf(CLIENT_AMMO), 10);
 		if (sitems & CSQC_SHELLS)
@@ -1571,9 +1412,7 @@ void (vector pos, vector virtsize) Hud_DrawSBar4b =
 	}
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector virtsize) Hud_DrawSBar5a =
-{
+void (vector pos, vector virtsize) Hud_DrawSBar5a = {
 	// Draw face first (bar is over face)
 	Hud_DrawFace(pos+[8,8]);
 	// Draw primary HUD bar (Armour/Face/Health/Ammo)
@@ -1588,8 +1427,7 @@ void (vector pos, vector virtsize) Hud_DrawSBar5a =
 		Hud_DrawNoFont16(pos+[64,28], 666);
 		// Draw a pentagram symbol in the armour HUD slot
 		drawpic(pos+[40,24], sbitems[10], HUDSIZE_24, HUDRGB_DEF, hudalpha, 0);
-	}
-	else {
+	} else {
 		// Show armour type/quantity active
 		if (getstatf(CLIENT_ARMOR) > 0)
 			Hud_DrawNoFont16(pos+[64,28], getstatf(CLIENT_ARMOR));
@@ -1612,9 +1450,7 @@ void (vector pos, vector virtsize) Hud_DrawSBar5a =
 	}
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector virtsize) Hud_DrawSBar5b =
-{
+void (vector pos, vector virtsize) Hud_DrawSBar5b = {
 	local float ammorow;
 	
 	// no point drawing, nothing to show!
@@ -1628,8 +1464,7 @@ void (vector pos, vector virtsize) Hud_DrawSBar5b =
 			drawpic(pos+[24,0], sbitems[5], HUDSIZE_24, HUDRGB_DEF, hudalpha, 0);
 		else
 			drawpic(pos+[24,0], sbitems[4], HUDSIZE_24, HUDRGB_DEF, hudalpha, 0);
-	}
-	else {
+	} else {
 		ammorow = 24;
 		// Show ammo type + quantity
 		Hud_DrawNoFont24(pos+[-48,0], getstatf(CLIENT_AMMO), 10);
@@ -1663,11 +1498,8 @@ void (vector pos, vector virtsize) Hud_DrawSBar5b =
 	}
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector virtsize, float bckgrd) Hud_DrawSBar6 =
-{
-	// Draw primary HUD bar (Armour/Face/Health/Ammo)
-	if (bckgrd) drawpic(pos, backgrd2[HUDTYPE_6+0], [416, 24], HUDRGB_DEF, baralpha, 0);
+void (vector pos, vector virtsize, float bckgrd) Hud_DrawSBar6 = {
+	if (bckgrd) drawpic(pos, backgrd2[HUDTYPE_6+0], [416, 24], HUDRGB_DEF, baralpha, 0); // Draw primary HUD bar (Armour/Face/Health/Ammo)
 
 	// Deal with Pentagram first, its a simple test/update
 	if (sitems & CSQC_INVULNERABILITY) {
@@ -1675,8 +1507,7 @@ void (vector pos, vector virtsize, float bckgrd) Hud_DrawSBar6 =
 		Hud_DrawNoFont24(pos+[40,0], 666, 666);
 		// Draw a pentagram symbol in the armour HUD slot
 		drawpic(pos+[16,0], sbitems[10], HUDSIZE_24, HUDRGB_DEF, hudalpha, 0);
-	}
-	else {
+	} else {
 		// Show armour type/quantity active
 		Hud_DrawNoFont24(pos+[40,0], getstatf(CLIENT_ARMOR), 25);
 		// Only 3 armour types (green/yellow/red)
@@ -1700,8 +1531,7 @@ void (vector pos, vector virtsize, float bckgrd) Hud_DrawSBar6 =
 			drawpic(pos+[224,0], sbitems[5], HUDSIZE_24, HUDRGB_DEF, hudalpha, 0);
 		else
 			drawpic(pos+[224,0], sbitems[4], HUDSIZE_24, HUDRGB_DEF, hudalpha, 0);
-	}
-	else {
+	} else {
 		// Show ammo type + quantity
 		if (sweapon > 0) Hud_DrawNoFont24(pos+[248,0], getstatf(CLIENT_AMMO), 10);
 		if (sitems & CSQC_SHELLS)
@@ -1734,15 +1564,9 @@ void (vector pos, vector virtsize, float bckgrd) Hud_DrawSBar6 =
 	}
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector virtsize, float grid) Hud_DrawSBar7a =
-{
-	// Draw primary HUD bar (Armour/Health)
-	if(grid >0 && grid <=1) 
-		drawpic(pos, backgrd2[HUDTYPE_7+0], [72, 48], HUDRGB_DEF, grid, 0);
-
-	// Alpha HP value only (no background
-	Hud_DrawNoFont24(pos+[0,0], shealth, 25);
+void (vector pos, vector virtsize, float grid) Hud_DrawSBar7a = {
+	if(grid >0 && grid <=1) drawpic(pos, backgrd2[HUDTYPE_7+0], [72, 48], HUDRGB_DEF, grid, 0); // Draw primary HUD bar (Armour/Health)
+	Hud_DrawNoFont24(pos+[0,0], shealth, 25); // Alpha HP value only (no background
 
 	// Deal with Pentagram first, its a simple test/update
 	if (sitems & CSQC_INVULNERABILITY) {
@@ -1750,8 +1574,7 @@ void (vector pos, vector virtsize, float grid) Hud_DrawSBar7a =
 		Hud_DrawNoFont16(pos+[24,28], 666);
 		// Draw a pentagram symbol in the armour HUD slot
 		drawpic(pos+[0,24], sbitems[10], HUDSIZE_24, HUDRGB_DEF, hudalpha, 0);
-	}
-	else {
+	} else {
 		// Show armour type/quantity active
 		if (getstatf(CLIENT_ARMOR) > 0)
 			Hud_DrawNoFont16(pos+[24,28], getstatf(CLIENT_ARMOR));
@@ -1767,76 +1590,46 @@ void (vector pos, vector virtsize, float grid) Hud_DrawSBar7a =
 	}
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector virtsize, float grid) Hud_DrawSBar7b =
-{
+void (vector pos, vector virtsize, float grid) Hud_DrawSBar7b = {
 	// Draw primary HUD bar (Ammo/Keys)
-	if(grid >0 && grid <=1) 
-		drawpic(pos, backgrd2[HUDTYPE_7+1], [88, 40], HUDRGB_DEF, grid, 0);
+	if(grid >0 && grid <=1) drawpic(pos, backgrd2[HUDTYPE_7+1], [88, 40], HUDRGB_DEF, grid, 0);
 
 	// Draw Custom Keys
-	if (smoditems & CSQC_CKEY1)
-		drawpic(pos+[72,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN1)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-	if (smoditems & CSQC_CKEY2)
-		drawpic(pos+[72,8], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN2)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-	if (smoditems & CSQC_CKEY3)
-		drawpic(pos+[72,16], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN3)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-	if (smoditems & CSQC_CKEY4)
-		drawpic(pos+[72,24], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN4)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+	if (smoditems & CSQC_CKEY1) drawpic(pos+[72,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN1)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+	if (smoditems & CSQC_CKEY2) drawpic(pos+[72,8], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN2)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+	if (smoditems & CSQC_CKEY3) drawpic(pos+[72,16], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN3)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+	if (smoditems & CSQC_CKEY4) drawpic(pos+[72,24], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN4)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
 
 	// Show ammo type + quantity
-	if (sweapon > 0 && sweapon < CSQC_AXE) 
-		Hud_DrawNoFont24(pos+[0,0], getstatf(CLIENT_AMMO), 10);
+	if (sweapon > 0 && sweapon < CSQC_AXE)  Hud_DrawNoFont24(pos+[0,0], getstatf(CLIENT_AMMO), 10);
 
 	// Draw silver/gold key
-	if (sitems & CSQC_KEY1)
-		drawpic(pos+[40,24], sbitems[12], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
-	if (sitems & CSQC_KEY2)
-		drawpic(pos+[56,24], sbitems[13], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+	if (sitems & CSQC_KEY1) drawpic(pos+[40,24], sbitems[12], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
+	if (sitems & CSQC_KEY2) drawpic(pos+[56,24], sbitems[13], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
 };
 
-//----------------------------------------------------------------------
-void (vector pos, vector virtsize) Hud_DrawSBar8a =
-{
-};
+void (vector pos, vector virtsize) Hud_DrawSBar8a = {};
 
-//----------------------------------------------------------------------
-void (vector pos, vector virtsize) Hud_DrawSBar8b =
-{
-};
+void (vector pos, vector virtsize) Hud_DrawSBar8b = {};
 
-//----------------------------------------------------------------------
-void (vector pos, vector virtsize) Hud_DrawSBar9 =
-{
-};
+void (vector pos, vector virtsize) Hud_DrawSBar9 = {};
 
 float(float a, float b) mod;
 
-//======================================================================
-// SCOREBOARD BARS
-//
-// - shows monster/secret quantities and map info
-// - multiple setups for different hud layouts
-//
-//======================================================================
-void(vector pos, float bx, float by, float bwidth, float bheight, float pixelspeed, string draw_str) Hud_ScrollTextBox =
-{
+// Shows monster/secret quantities and map info.  Multiple setups for different hud layouts
+void(vector pos, float bx, float by, float bwidth, float bheight, float pixelspeed, string draw_str) Hud_ScrollTextBox = {
 	local float str_width, str_double, str_speed;
 	local string wide_str;
 	
 	// draw debug visual box to show area on screen
 	//drawfill( pos+[bx,by], [bwidth,bheight], HUDRGB_DEF, 0.1, 0);
+	str_width = stringwidth( draw_str, TRUE, HUDSIZE_8); // Find out width of string in pixels (using font 8)
 
-	// Find out width of string in pixels (using font 8)
-	str_width = stringwidth( draw_str, TRUE, HUDSIZE_8);
 	// String less than window width?
 	if (str_width < bwidth) {
-		// Center the map name string in the box area
-		str_double = (bwidth - str_width) / 2;
-		// Display string normally (no scrolling required)
-		drawstring( pos+[bx+str_double, by], draw_str, HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);
-	}
-	else {
+		str_double = (bwidth - str_width) / 2; // Center the map name string in the box area
+		drawstring( pos+[bx+str_double, by], draw_str, HUDSIZE_8, HUDRGB_DEF, hudalpha, 0); // Display string normally (no scrolling required)
+	} else {
 		// Create double length string with boundary marker
 		wide_str = strcat(draw_str, " /// ", draw_str);
 		// Setup clip (scissor) area for exclusive drawing
@@ -1851,11 +1644,8 @@ void(vector pos, float bx, float by, float bwidth, float bheight, float pixelspe
 	}
 };
 
-//----------------------------------------------------------------------
 // Quakespasm scoreboard layout (no time) 
-//----------------------------------------------------------------------
-void(vector pos) Hud_DrawScoreBar_QS =
-{
+void(vector pos) Hud_DrawScoreBar_QS = {
 	local string skill_str, map_str;
 	local float digit;
 	
@@ -1883,18 +1673,12 @@ void(vector pos) Hud_DrawScoreBar_QS =
 	Hud_ScrollTextBox(pos, 8, 4, 304, 8, 16, map_str);
 };
 
-//----------------------------------------------------------------------
 // QS scoreboard layout (time at bottom and skill with map name) 
-//----------------------------------------------------------------------
-void(vector pos) Hud_DrawScoreBar_QSClock =
-{
+void(vector pos) Hud_DrawScoreBar_QSClock = {
 	local string skill_str, map_str;
-	local float digit, skill_no;
-	local float nsecs, nmins;
+	local float digit, skill_no, nsecs, nmins;
 	
-	// Clear status bar ready for map info/scores
-	drawpic(pos, backgrd[HUDTYPE_0+1], [320, 24], HUDRGB_DEF, baralpha, 0);
-	// Display headings
+	drawpic(pos, backgrd[HUDTYPE_0+1], [320, 24], HUDRGB_DEF, baralpha, 0); // Clear status bar ready for map info/scores	// Display headings
 	drawstring(pos+[8,12], "Kills:", HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);
 	drawstring(pos+[80,12], "/", HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);	
 	//drawstring(pos+[112,12], "Time", HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);
@@ -1913,27 +1697,22 @@ void(vector pos) Hud_DrawScoreBar_QSClock =
 	Hud_DrawNoFont8(pos+[128,12], nmins, 3, FALSE, HUDFONT_WHITE);
 	drawstring(pos+[152,12], ":", HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);	
 	Hud_DrawNoFont8(pos+[162,12], nsecs, 2, TRUE, HUDFONT_WHITE);
-	// Display map skill level
-	skill_no = stof(autocvar(skill, "1"));
+	skill_no = stof(autocvar(skill, "1")); // Display map skill level
 	if (skill_no == 0) skill_str = "Easy";
 	else if (skill_no == 1) skill_str = "Normal";
 	else if (skill_no == 2) skill_str = "Hard";
 	else if (skill_no == 3) skill_str = "Nightmare";
 	else skill_str = "Unknown";
-	// Level designers Map name + Skill level name
-	map_str = strcat(world.message, " (", skill_str, ")");
+	map_str = strcat(world.message, " (", skill_str, ")"); 	// Level designers Map name + Skill level name
 	Hud_ScrollTextBox(pos, 8, 4, 304, 8, 16, map_str);
 };
 
-//----------------------------------------------------------------------
 // The original ID scoreboard layout (no skill, map filename)
-//----------------------------------------------------------------------
-void(vector pos) Hud_DrawScoreBar_ID =
-{
+void(vector pos) Hud_DrawScoreBar_ID = {
 	local float nsecs, nmins;
 	
-	// Clear status bar ready for map info/scores
-	drawpic(pos, backgrd[HUDTYPE_0+1], [320, 24], HUDRGB_DEF, baralpha, 0);
+	drawpic(pos, backgrd[HUDTYPE_0+1], [320, 24], HUDRGB_DEF, baralpha, 0); // Clear status bar ready for map info/scores
+
 	// Display headings
 	drawstring(pos+[8,4], "Monsters:", HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);	
 	drawstring(pos+[104,4], "/", HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);	
@@ -1941,50 +1720,43 @@ void(vector pos) Hud_DrawScoreBar_ID =
 	drawstring(pos+[104,12], "/", HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);	
 	drawstring(pos+[184,4], "Time :", HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);
 	drawstring(pos+[256,4], ":", HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);	
+
 	// Display monster/secret totals
 	Hud_DrawNoFont8(pos+[80,4], getstatf(CLIENT_KILLEDMONSTERS), 3, FALSE, HUDFONT_WHITE);
 	Hud_DrawNoFont8(pos+[112,4], getstatf(CLIENT_TOTALMONSTERS), 3, FALSE, HUDFONT_WHITE);
 	Hud_DrawNoFont8(pos+[80,12], getstatf(CLIENT_FOUNDSECRETS), 3, FALSE, HUDFONT_WHITE);
 	Hud_DrawNoFont8(pos+[112,12], getstatf(CLIENT_TOTALSECRETS), 3, FALSE, HUDFONT_WHITE);
+
 	// Work out time passed
 	nmins = floor(time/60);
 	nsecs = floor(time - nmins*60);
 	Hud_DrawNoFont8(pos+[232,4], nmins, 3, FALSE, HUDFONT_WHITE);
 	Hud_DrawNoFont8(pos+[264,4], nsecs, 2, TRUE, HUDFONT_WHITE);
-	// Level designers Map name
-	Hud_ScrollTextBox(pos, 140, 12, 176, 8, 16, world.message);
+	Hud_ScrollTextBox(pos, 140, 12, 176, 8, 16, world.message); // Level designers Map name
 };
 
-//======================================================================
-// SCOREBOARD - DEATHMATCH
-// - Shows table of players with frags/ping
-//
-//======================================================================
-vector(string picname, float height) Hud_AspectSize =
-{
+// Shows table of players with frags/ping
+vector(string picname, float height) Hud_AspectSize = {
 	local vector sz;
+
 	sz = drawgetimagesize(picname);
 	return [sz_x * height/sz_y, height];
 };
 
-//----------------------------------------------------------------------
-void(string picname, float screenwidth, vector pos, float height) Hud_CentrePic =
-{
+void(string picname, float screenwidth, vector pos, float height) Hud_CentrePic = {
 	local vector sz;
+
 	sz = Hud_AspectSize(picname, height);
 	pos_x += (screenwidth-sz_x)/2;
 	drawpic(pos, picname, sz, HUDRGB_DEF, hudalpha, 0);
 };
 
-//----------------------------------------------------------------------
-void(vector virtmin, vector virtsize) Hud_DrawDeathmatch_Table =
-{
+void(vector virtmin, vector virtsize) Hud_DrawDeathmatch_Table = {
 	local float isspec, i; 
 	local vector pos, topcol, botcol;
 	string player_name, player_frags, player_ping;
 	
-	// Working copy
-	pos = virtmin;
+	pos = virtmin; // Working copy
 	
 	// Check for 16 players?
 	player_name = getplayerkeyvalue(-16, "name");
@@ -2027,8 +1799,7 @@ void(vector virtmin, vector virtsize) Hud_DrawDeathmatch_Table =
 		// Which type of player? Spectator or Active?
 		if (isspec)
 			drawstring(pos+[4,0], "spec", [8,8], HUDRGB_DEF, hudalpha, 0);
-		else
-		{
+		else {
 			// Draw skin colours (alpha was 0.75 hardcoded)
 			drawfill(pos+[0,0], [40,4], topcol, 0.75, 0);
 			drawfill(pos+[0,4], [40,4], botcol, 0.75, 0);
@@ -2042,24 +1813,16 @@ void(vector virtmin, vector virtsize) Hud_DrawDeathmatch_Table =
 				drawcharacter(pos+[32,0], 0xe011, HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);
 			}
 		}
-		// Finally draw player name
-		drawstring(pos+[64,0], player_name, HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);
+		drawstring(pos+[64,0], player_name, HUDSIZE_8, HUDRGB_DEF, hudalpha, 0); // Finally draw player name
 	}
 };
 
-//======================================================================
-// SCOREBOARD - Intermission
-// - Shows summary of monster/secrets completed
-//
-//======================================================================
-void(vector virtmin, vector virtsize) Hud_DrawIntermission =
-{
+// Shows summary of monster/secrets completed
+void(vector virtmin, vector virtsize) Hud_DrawIntermission = {
 	local vector pos;
-	// Create positions based on virtual screen
-	pos = virtmin + (virtsize-[320,200])/2;
-
-	// Draw Intermission title and table info (Time/secret/kill)
-	Hud_CentrePic(backlmp[1], 320, pos+[0,24], 24);
+	
+	pos = virtmin + (virtsize-[320,200])/2; // Create positions based on virtual screen
+	Hud_CentrePic(backlmp[1], 320, pos+[0,24], 24); // Draw Intermission title and table info (Time/secret/kill)
 	drawpic(pos+[0,56], backlmp[2], [160,144], HUDRGB_DEF, hudalpha, 0);
 	
 	// Generate complete string and then draw 1 character at time
@@ -2070,24 +1833,13 @@ void(vector virtmin, vector virtsize) Hud_DrawIntermission =
 	Hud_DrawCharFont24(pos+[144, 144], sprintf("%3.0f/%.0f", getstatf(CLIENT_KILLEDMONSTERS), getstatf(CLIENT_TOTALMONSTERS)));
 };
 
-//======================================================================
-// DRAW HUD (main entry point)
-//
-// - Updates client/sever variables and setup weapon flash timers
-// - Decide which huds to draw based on scratch1 variable
-//
-//======================================================================
-void(vector virtsize, float showscores) CSQC_DrawHud =
-{
+// Main entry point.  Updates client/sever variables and setup weapon flash timers.  Decide which huds to draw based on scratch1 variable
+void(vector virtsize, float showscores) CSQC_DrawHud = {
 	local vector pos, hudbar;
-	local float oitems, omoditems, operms, i;
-	local float hudviewsize, hudlayout, hudreverse, hudgrid;
-	local float hud_xofs, hud_yofs, hud_mofs, hudscale;
+	local float oitems, omoditems, operms, i, hudviewsize, hudlayout, hudreverse, hudgrid, hud_xofs, hud_yofs, hud_mofs, hudscale;
+
+	oitems = sitems; omoditems = smoditems; operms = sperms; // Save previous HUD versions for flash function
 	
-	// Save previous HUD versions for flash function
-	oitems = sitems; omoditems = smoditems; operms = sperms;
-	
-	//------------------------------------------------------------------
 	// All variables have to be specially setup and passed between
 	// progs and csprogs as they are not connected in VM space
 	// By default CSQC has 30 (most commonly used) parameters setup
@@ -2095,7 +1847,7 @@ void(vector virtsize, float showscores) CSQC_DrawHud =
 	// to make them reaable again (I blame spike for this mess)
 	// The downside to this bitswapping mess is that the serverflags
 	// is not passed to CSQC completely, only the first 9bits (runes)
-	//------------------------------------------------------------------
+
 	// getstatbits is re-using getstatf with 2 extra optional parameters
 	sitems = getstatbits(CLIENT_ITEMS, 0, 23);	
 	sitems2 = getstatbits(CLIENT_ITEMS, 23, 9);
@@ -2104,17 +1856,12 @@ void(vector virtsize, float showscores) CSQC_DrawHud =
 	smoditems = getstatf(CLIENT_MODITEMS);
 	sperms = getstatf(CLIENT_PERMS);
 
-	// Don't show HUD, intermission or dead
-	if (intermission || shealth <= 0) return;
-	
-	//------------------------------------------------------------------
-	// Read console variable for background HUD alpha
-	baralpha = cvar("scr_sbaralpha");
-	if (baralpha == 0) baralpha = 0.75;
-	// Default is 1 for everything else
-	hudalpha = 1;
+	if (intermission || shealth <= 0) return; // Don't show HUD, intermission or dead
 
-	//------------------------------------------------------------------
+	baralpha = cvar("scr_sbaralpha"); // Read console variable for background HUD alpha
+	if (baralpha == 0) baralpha = 0.75;
+	hudalpha = 1; // Default is 1 for everything else
+
 	// Check if any weapons have been added to the inventory
 	// Update time so the flash function can detect it
 	// Check for player count for splitscreen!?! QSS/FTE feature
@@ -2138,18 +1885,15 @@ void(vector virtsize, float showscores) CSQC_DrawHud =
 		}
 	}
 
-	//------------------------------------------------------------------
 	// Find out how much of the HUD is being displayed
 	// 100 = InfoBar & StatusBar (ALL=Default)
 	// 110 = StatusBar Only
 	// 120 = Nothing
-	//------------------------------------------------------------------
-	// Read current HUD size
-	hudviewsize = cvar("viewsize");
+	
+	hudviewsize = cvar("viewsize"); // Read current HUD size
 	// Any HUD to display?
 	if (hudviewsize < 120) {
-		// Override scoreboard - check if no player health
-		if (shealth <= 0) showscores = TRUE;
+		if (shealth <= 0) showscores = TRUE; // Override scoreboard - check if no player health
 		// Find out mid point of screen
 		pos_x = virtsize_x/2;
 		pos_y = 0; pos_z = 0;
@@ -2164,17 +1908,12 @@ void(vector virtsize, float showscores) CSQC_DrawHud =
 			hudreverse = TRUE;
 			hudlayout = hudlayout - CSQC_HUDREV;
 		}
-		// Check for negative range issues
-		if (hudlayout < 0) hudlayout = 0;
 		
-		// Find out HUD virtual scaling
-		hudscale = cvar("scr_sbarscale");
-		// Always have a default if cvar does not exist!
-		if (hudscale < 1) hudscale = 1;
-		
-		//------------------------------------------------------------------
-		// Default (status/inventory) at bottom
-		if (hudlayout == 0) {
+		if (hudlayout < 0) hudlayout = 0; // Check for negative range issues
+		hudscale = cvar("scr_sbarscale"); // Find out HUD virtual scaling
+		if (hudscale < 1) hudscale = 1; // Always have a default if cvar does not exist!
+
+		if (hudlayout == 0) { // Default (status/inventory) at bottom
 			// Setup top/bottom Y offset for all 3 parts (bottom=default)
 			// Inventory bar split into 2, hence the hudbar variable mess
 			// Literally every part of the hud is in a different place!
@@ -2190,10 +1929,7 @@ void(vector virtsize, float showscores) CSQC_DrawHud =
 				// Draw ammo quantites + keys
 				Hud_DrawIBar0b(pos + [hud_xofs, hudbar_z], virtsize);
 			}
-		}
-		//------------------------------------------------------------------
-		// Side Inventory Bar (locked to the status bar)
-		else if (hudlayout == 1) {
+		} else if (hudlayout == 1) { // Side Inventory Bar (locked to the status bar)
 			// Setup top/bottom Y offset (bottom=default)
 			if (hudreverse == FALSE) hud_yofs = virtsize_y-24;
 			else hud_yofs = 0;
@@ -2207,10 +1943,7 @@ void(vector virtsize, float showscores) CSQC_DrawHud =
 				Hud_DrawIBar1a(pos + [hud_xofs+304, hud_yofs], virtsize);
 				Hud_DrawIBar1b(pos + [hud_xofs-80, hud_yofs], virtsize);
 			}
-		}
-		//------------------------------------------------------------------
-		// Side Inventory Bar (Double width icons)
-		else if (hudlayout == 2) {
+		} else if (hudlayout == 2) { // Side Inventory Bar (Double width icons)
 			// Setup top/bottom Y offset (bottom=default)
 			if (hudreverse == FALSE) hud_yofs = virtsize_y-24;
 			else hud_yofs = 0;
@@ -2224,16 +1957,10 @@ void(vector virtsize, float showscores) CSQC_DrawHud =
 				Hud_DrawIBar2b([0, hud_yofs], virtsize);
 				Hud_DrawIBar2a([virtsize_x-48, hud_yofs], virtsize);
 			}
-		}
-		//------------------------------------------------------------------
-		// Side Inventory Bar (Single icons down sides)
-		else if (hudlayout == 3) {
-		}
-		//------------------------------------------------------------------
-		// Doom layout (markie)
-		// Designed for 1440+ screen with middle gap adjusting to width
-		// 960=-48, 1280=-16, 1440=0, 1680=24, 1920=48
-		else if (hudlayout == 4) {
+		} else if (hudlayout == 3) { // Side Inventory Bar (Single icons down sides)
+		} else if (hudlayout == 4) { // Doom layout (markie)
+			// Designed for 1440+ screen with middle gap adjusting to width
+			// 960=-48, 1280=-16, 1440=0, 1680=24, 1920=48
 			// Setup top/bottom Y offset (bottom=default)
 			if (hudreverse == FALSE) hud_yofs = virtsize_y-48;
 			else hud_yofs = 0;
@@ -2252,10 +1979,7 @@ void(vector virtsize, float showscores) CSQC_DrawHud =
 				Hud_DrawIBar4a(pos + [hud_xofs-(48+hud_mofs), hud_yofs], virtsize);
 				Hud_DrawIBar4b(pos + [hud_xofs+320+hud_mofs, hud_yofs], virtsize);
 			}
-		}
-		//------------------------------------------------------------------
-		// Quake Champions layout (markie)
-		else if (hudlayout == 5) {
+		} else if (hudlayout == 5) { // Quake Champions layout (markie)
 			// Setup top/bottom Y offset (bottom=default)
 			if (hudreverse == FALSE) hud_yofs = virtsize_y-48;
 			else hud_yofs = 0;
@@ -2283,10 +2007,7 @@ void(vector virtsize, float showscores) CSQC_DrawHud =
 			if (hudreverse == FALSE) hud_yofs = virtsize_y-24;
 			else hud_yofs = 0;
 			if (showscores) Hud_DrawScoreBar_QS(pos + [hud_xofs, hud_yofs]);
-		}
-		//------------------------------------------------------------------
-		// Wide screen layout (bal)
-		else if (hudlayout == 6) {
+		} else if (hudlayout == 6) { // Wide screen layout (bal)
 			// Setup top/bottom Y offset (bottom=default)
 			if (hudreverse == FALSE) hud_yofs = virtsize_y-24;
 			else hud_yofs = 0;
@@ -2298,8 +2019,7 @@ void(vector virtsize, float showscores) CSQC_DrawHud =
 				if (showscores) Hud_DrawScoreBar_QSClock(pos + [hud_xofs-32, hud_yofs]);
 				// Re-use previous Sbar function with no background option
 				else Hud_DrawSBar6(pos + [hud_xofs-32, hud_yofs], virtsize, FALSE);
-			}
-			else if (hudviewsize <= 110) {
+			} else if (hudviewsize <= 110) {
 				if (showscores) {
 					// Switch to extra wide + scoreboard on top
 					Hud_DrawIBar6(pos + [0 - (640/2), hud_yofs], virtsize);
@@ -2310,10 +2030,7 @@ void(vector virtsize, float showscores) CSQC_DrawHud =
 					Hud_DrawSBar6(pos + [0 - (416/2), hud_yofs], virtsize, TRUE);
 				}
 			}
-		}
-		//------------------------------------------------------------------
-		// Central HUD layout (fairweather)
-		else if (hudlayout == 7) {
+		} else if (hudlayout == 7) { // Central HUD layout (fairweather)
 			hudgrid = FALSE;
 			// The hud elements are around the middle of the screen
 			hud_xofs = virtsize_x/2; hud_yofs = virtsize_y/2;
@@ -2337,21 +2054,15 @@ void(vector virtsize, float showscores) CSQC_DrawHud =
 				else hud_yofs = 0;
 				Hud_DrawScoreBar_QSClock(pos + [(0 - (320/2)), hud_yofs]);
 			}
-		}
-		//------------------------------------------------------------------
-		// Quake Live layout (giftmacher)
-		else if (hudlayout == 8) {
-		}
-		//------------------------------------------------------------------
-		// ??? (sock)
-		else if (hudlayout == 9) {
+		} else if (hudlayout == 8) { // Quake Live layout (giftmacher)
+
+		} else if (hudlayout == 9) { // ??? (sock)
+
 		}
 	}
 };
 
-//----------------------------------------------------------------------
-void(vector virtsize, float showscores) CSQC_DrawScores =
-{
+void(vector virtsize, float showscores) CSQC_DrawScores = {
 	shealth = getstatf(CLIENT_HEALTH);
 	if (intermission || showscores || shealth <= 0) {
 		if (deathmatch) Hud_DrawDeathmatch_Table('0 0 0', virtsize);
@@ -2359,11 +2070,8 @@ void(vector virtsize, float showscores) CSQC_DrawScores =
 	}
 };
 
-//----------------------------------------------------------------------
 // This is mainly used by DP (hence all the scene stuff)
-//----------------------------------------------------------------------
-void(float vwidth, float vheight, float notmenu) CSQC_UpdateView =
-{
+void(float vwidth, float vheight, float notmenu) CSQC_UpdateView = {
 	local vector ssize;
 	ssize_x = vwidth; ssize_y = vheight; ssize_z = 0;
 	
@@ -2401,11 +2109,8 @@ void(float vwidth, float vheight, float notmenu) CSQC_UpdateView =
 	CSQC_DrawScores(ssize, sb_showscores);
 };
 
-//----------------------------------------------------------------------
 // Registers HUD gfx images (all setup in string arrays)
-//----------------------------------------------------------------------
-void(float apilevel, string enginename, float engineversion) CSQC_Init =
-{
+void(float apilevel, string enginename, float engineversion) CSQC_Init = {
 	local float i, wadonly;
 	
 	// Is the CSQC functionality enabled/disabled?
@@ -2458,11 +2163,8 @@ void(float apilevel, string enginename, float engineversion) CSQC_Init =
 	}
 };
 
-//----------------------------------------------------------------------
 // Wrapper for CSQC_Init to try and detect DP engine
-//----------------------------------------------------------------------
-__wrap void(float apilevel, string enginename, float engineversion) CSQC_Init =
-{
+__wrap void(float apilevel, string enginename, float engineversion) CSQC_Init = {
 	// Try to detect DP engine (needed for CSQC_UpdateView later)
 	if (!apilevel && !enginename && !engineversion) detectDP = TRUE;
 	// Execute previous CSQC_Init function
@@ -2476,11 +2178,8 @@ __wrap void(float apilevel, string enginename, float engineversion) CSQC_Init =
 	//registercommand("+showteamscores");
 };
 
-//----------------------------------------------------------------------
 // Wrapper for CSQC_ConsoleCommand to show different scoreboards
-//----------------------------------------------------------------------
-__wrap float(string str) CSQC_ConsoleCommand =
-{
+__wrap float(string str) CSQC_ConsoleCommand = {
     if (prior(str))
         return TRUE;
     string c = argv(0);

@@ -339,8 +339,7 @@
 	]
 ]
 
-@PointClass base(Appearflags,Targetname) = ambient_custom_sound : "Ambient Custom Sound"
-[
+@PointClass base(Appearflags,Targetname) = ambient_custom_sound : "Ambient Custom Sound" [
 	target(string) : "Sound Trigger" : : "Fires each time the sound is played."
 	volume(integer) : "Volume" :  : "volume of sound (default=1, capped at 1)"
 	noise(string) : "Sound Primary" :  : "Path/sound file (ambience/windgust1a.wav)."
@@ -599,6 +598,14 @@
 	fog_colour(string) : "Fog colours (def=0.1 0.1 0.1)"
 	speed(integer) : "Fog time to change (def=2s)"
 ]
+@PointClass base(Appearflags,Targetname, Target) size(-16 -16 -24, 16 16 40) color(153 0 192) = trigger_vigend : "Go to Congratulations Intermission" [
+	message(integer) : "Initial long message"
+	message2(integer) : "Message to display after delay"
+	delay(integer) : "Time between messages(def=28)"
+	pos1(integer) : "Position to spawn player"
+	pos2(integer) : "Position to spawn 2nd player(Martin) at 2nd message"
+	cnt(integer) : "Frame to spawn 2nd player(Martin) at(def=14)"
+]
 @PointClass base(Appearflags) size(-16 -16 -24, 16 16 40) color(153 0 192)
 	= info_skullwiz_destination : "Skull Wizard Tele Dest" [
 	targetname(string) : "Unique name in chain group"
@@ -616,6 +623,10 @@
 	use(string) : "self.use"
 	think(string) : "self.think"
 	nextthink(integer) : "nextthink"
+]
+@PointClass size(-16 -16 -24, 16 16 32) color(255 128 128) flags(Angle) = info_camera_destination : "Marker for a Cinematic Camera System" [
+	targetname(target_source) : "Name (use w/misc_camera)"
+	angles(integer) : "Facing angle" : : "Ex: 0 360 0 (pitch yaw roll)"
 ]
 
 @PointClass base(Targetname) = info_command : "Trigger Send Console Command" [
@@ -648,6 +659,7 @@
 	delay(integer) : "Delay B4 Start (def=0.1)"
 	wait(integer) : "Wait (def=1, -1=once)"
 ]
+
 
 //======================================================================
 //
@@ -831,7 +843,7 @@
 ]
 
 
-@PointClass base(Items,KeySize) studio("progs/fromitz.mdl") = item_circuitboard : "17mm Fromitz Board!" []
+@PointClass base(Items,KeySize) studio("progs/rrp/fromitz.mdl") = item_circuitboard : "17mm Fromitz Board!" []
 
 @PointClass base(Items,KeySize) = item_custom : "Custom Pickup Item" [
 	mdl(string) : "model name to load/display (progs/model.mdl)"
@@ -946,12 +958,9 @@
 	netname(string) : "Override name of pickup"
 ]
 
-@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/suit2.mdl") = 
-	item_artifact_lavasuit : "Thermal Protection Suit" []
-@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/rogue/beltup.mdl") = 
-	item_powerup_belt : "Anti-gravity belt" []
-@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/rogue/shield.mdl") = 
-	item_powerup_shield : "Power Shield" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/suit2.mdl") = item_artifact_lavasuit : "Thermal Protection Suit" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/ad180/artifact_blastbelt.mdl") = item_powerup_belt : "Anti-gravity belt" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/rogue/shield.mdl") = item_powerup_shield : "Power Shield" []
 @PointClass base(Items,PowerupSize,PowerTimer) studio("progs/ad171/artifact_wetsuit.mdl") = item_artifact_wetsuit : "Under Water Wet Suit" [
 	exactskin(choices) : "Exact Skin" = [
 		0 : "Default"
@@ -962,14 +971,17 @@
 	]
 	cnt(integer) : "Duration override (def = -1 for inifinite)"
 ]
-@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/hipnotic/empathy.mdl") = 
-	item_artifact_empathy_shields : "Empathy Shield" []
-@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/quoth2pt2full/trinity.mdl") = 
-	item_artifact_trinity : "Trinity" []
-@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/quoth2pt2full/cross.mdl") = 
-	item_artifact_cross : "Cross of Deflection" []
-@PointClass base(Items,PowerupSize) studio("progs/hipnotic/horn.mdl") = 
-	item_artifact_horn : "Horn of Conjuring" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/hipnotic/empathy.mdl") = item_artifact_empathy_shields : "Empathy Shield" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/quoth2pt2full/trinity.mdl") = item_artifact_trinity : "Trinity" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/quoth2pt2full/cross.mdl") = item_artifact_cross : "Cross of Deflection" []
+@PointClass base(Items,PowerupSize) studio("progs/hipnotic/horn.mdl") = item_artifact_horn : "Horn of Conjuring" []
+
+@PointClass base(Items) size(-32 -32 -24, 32 32 40) studio("progs/qrally/sumabase.mdl") = item_rallycar : "Drivable Vehicle" []
+
+
+@PointClass base(Items,PowerupSize) studio("progs/madfox/mushroom_item.mdl") = item_mariomushroom : "A Strange Shroom" []
+
+
 @PointClass base(Items,PowerupSize,PowerTimer) = 
 	item_artifact_random : "Random Powerup or Backpack" []
 @PointClass base(Items,PowerupSize) = 
@@ -994,23 +1006,21 @@
 		1 : "Red Respawning"
 	]
 ]
-@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/drake/life_up.mdl") = 
-	item_artifact_vitality : "Heart of Darkness" []
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/drake/life_up.mdl") = item_artifact_vitality : "Heart of Darkness" []
 
-//_____item_backpack_armour Settings_____
 @baseclass  = BackPackArmourSettings [
     armorvalue(integer) : "Armour Amount - override def(15)/30/45) "
 ]
-//_____BACK PACK ARMOR_____
-@PointClass base(Targetname,BackPackArmourSettings,Items,PowerupSize) studio("progs/ad181/w_backpack.mdl") = item_backpack_armour : "Backpack with exact amounts of armor" [
+
+@PointClass base(Targetname,BackPackArmourSettings,Items,PowerupSize) studio("progs/ad171/w_backpack.mdl") = item_backpack_armour : "Backpack with exact amounts of armor" [
 	spawnflags(Flags) = [
 		1 : "Green Armor" : 0
 		2 : "Yellow Armor" : 0
 		4 : "Red Armor" : 0
 	]	
 ]
-//----------------------------------------------------------------------
-@PointClass base(Items,PowerupSize) studio("progs/ad181/w_backpack.mdl") = item_backpack : "Backpack full of random/exact amounts of ammo" [
+
+@PointClass base(Items,PowerupSize) studio("progs/ad171/w_backpack.mdl") = item_backpack : "Backpack full of random/exact amounts of ammo" [
 	spawnflags(Flags) = [
 		1 : "Shells" : 0
 		2 : "Nails" : 0
@@ -1064,6 +1074,25 @@
 	target(target_destination) : "Must point to the first item in the progresion list"
 	target2(target_destination) : "Targets to fire when the spawn marker is used"
 	message(string) : "message to display when triggered"
+]
+
+@PointClass size(-16 -16 -16, 16 16 16) color(255 200 128) flags(Angle) = info_shrine : "Shrine Effects (bless if player targets, desecrate if breakable)" [
+	style(choices) : "Shrine Type" = [
+		0 : "Earth"
+		1 : "Water"
+		2 : "Air"
+		3 : "Fire"
+		4 : "Blood"
+		5 : "Spirit"
+	]
+	targetname(target_source) : "Name (required)"
+	target(target_source) : "Angry target, only if respects were payed before desecration"
+	message(string) : "god Name(def=Cthulhu)"
+	ckeyname1(string) : "Optional text to add after respect message"
+	ckeyname2(string) : "Optional text to add after desecration message"
+	proj_limit(integer) : "Projection limit radius for the aura(def=384)"
+	delay(integer) : "Time interval between aura effects(def=0.5 or 0.3 depending on type)"
+	cnt(integer) : "Bless amount per blessing interval(def=1)"
 ]
 	
 //======================================================================
@@ -1130,7 +1159,7 @@
 @PointClass base(Weapon) studio("progs/drake/g_grpple.mdl") = weapon_grapple : "Grappling Hook" []
 // @PointClass base(Weapon) studio("progs/drake/g_xbow.mdl") = weapon_dcrossbow : "Ice Crossbow" []
 @PointClass base(Weapon) studio("progs/drake/g_wand.mdl") = weapon_wand : "Wand" []
-@PointClass base(Weapon) studio("progs/g_axe.mdl") = weapon_sword : "Sword" []
+@PointClass base(Weapon) studio("progs/rrp/g_axe.mdl") = weapon_sword : "Sword" []
 @PointClass base(Weapon) studio("progs/drake/g_light2.mdl") = weapon_chain_lightning : "Chain Lightning Gun" []
 @PointClass base(Weapon) studio("progs/w_blaster.mdl") = weapon_blaster : "Laser Blaster" []
 @PointClass base(Weapon) studio("progs/nehahra/mg_sh2.mdl") = weapon_gshotgun : "Auto Shotgun" []
@@ -1652,7 +1681,8 @@
 		3 : "Large switch"
 		4 : "Silent"
 		5 : "Custom"
-		6 : "Secret 2"
+		6 : "Secret 3 (MWubwubwub)"
+		7 : "Secret 2 (Bell)"
 	]
 	noise(string) : "Custom Sound - Triggered"
 ]
@@ -1775,9 +1805,26 @@
 		3 : "Large switch"
 		4 : "Silent"
 		5 : "Custom"
-		6 : "Secret 2"
+		6 : "Secret 3 (MWubwubwub)"
+		7 : "Secret 2 (Bell)"
 	]
 	noise(string) : "Custom Sound"
+]
+
+//_____TRIGGER TAKEARTIFACT_____
+@SolidClass base(Appearflags, Targetname, Target, TrigSound) = trigger_takeartifact : "Trigger volume used to remove powerups from the player" [
+    spawnflags(flags) = [ 
+	    1 : "No Touch" : 0  : "Triggered via other entities"  
+		2 : "id" : 0 : "Remove id artifacts (Quad, Pentgram, Ring, Envsuit)" 
+		4 : "Arcane Dimensions" : 0 : "Remove AD artifacts (Nail Piercer, Sharp Shooter)"
+		8 : "Vania" : 0 : "Remove Vania artifacts (Jump Boots, Blast Belt, Lavashield, Wetsuit)"
+		64 : "Start OFF" : 0 : "Starts off, waits for trigger" 
+	]
+	message(string) : "Message to display when triggered"
+	waitmin(integer) : "Override timer for powerup, anything below value is ignored (def=0)"
+	waitmin2(integer) : "Slow down timer for trigger working again (def=0.1s)"
+	waitmin3(integer) : "Slow down timer for sound playing (def=1s)"
+	wait(integer) : "-1 = trigger once functionality (def=0)"
 ]
 
 @PointClass base(Targetname,Target) color(128 0 128)
@@ -2083,7 +2130,6 @@
 
 @SolidClass base(TrigOFF) = trigger_earthquake_kill : "Kill level-wide earthquakes" []
 
-
 //----------------------------------------------------------------------
 @SolidClass base(TrigOFF,Targetname,Target) = trigger_monsterjump : "Trigger Monster Jump" [
 	spawnflags(flags) = [
@@ -2136,6 +2182,16 @@
 	height(integer) : "Speed - thrown upwards (def 50)"	
 ]
 
+@PointClass base(Targetname) size (-8 -8 -8, 8 8 8) color(220 0 255) = trigger_victory : "Runs targets after all monsters have been killed" []
+@PointClass base(Targetname) size (-8 -8 -8, 8 8 8) color(220 0 255) = trigger_enemy : "Makes multiple target enemies fight a single enemy" [
+	spawnflags(flags) = [
+		1 : "Ignore Alignment"
+		2 : "Hate Neutral Sighttarget"
+		4 : "Forget Current Enemy"
+	]
+	sighttarget(string) : "Monster to hate"
+]
+
 @SolidClass base(TrigOFF,Targetname,Target) = trigger_monsterturret : "Trigger Monster Turret" [
 	wait(choices) : "Wait before reset" = [
 		-1 : "Trigger Once"
@@ -2153,21 +2209,61 @@
 	= trigger_entitystate_on : "Entity state ON" [
 	target(target_destination) : "Targets to affect"
 	target2(target_destination) : "More Targets to affect"
+    sounds(choices) : "Sound style" : 0 = [
+		0 : "Default"
+		1 : "Secret"
+		2 : "Beep beep"
+		3 : "Large switch"
+		4 : "Silent"
+		5 : "Custom"
+		6 : "Secret 3 (MWubwubwub)"
+		7 : "Secret 2 (Bell)"
+	]
 ]
 @PointClass base(Appearflags,Targetname) size(-8 -8 -16, 8 8 16) color(192 128 255)
 	= trigger_entitystate_off : "Entity state OFF" [
 	target(target_destination) : "Targets to affect"
 	target2(target_destination) : "More Targets to affect"
+    sounds(choices) : "Sound style" : 0 = [
+		0 : "Default"
+		1 : "Secret"
+		2 : "Beep beep"
+		3 : "Large switch"
+		4 : "Silent"
+		5 : "Custom"
+		6 : "Secret 3 (MWubwubwub)"
+		7 : "Secret 2 (Bell)"
+	]
 ]
 @PointClass base(Appearflags,Targetname) size(-8 -8 -16, 8 8 16) color(192 128 255)
 	= trigger_entitystate_disable : "Entity state DISABLE" [
 	target(target_destination) : "Targets to affect"
 	target2(target_destination) : "More Targets to affect"
+    sounds(choices) : "Sound style" : 0 = [
+		0 : "Default"
+		1 : "Secret"
+		2 : "Beep beep"
+		3 : "Large switch"
+		4 : "Silent"
+		5 : "Custom"
+		6 : "Secret 3 (MWubwubwub)"
+		7 : "Secret 2 (Bell)"
+	]
 ]
 @PointClass base(Appearflags,Targetname) size(-8 -8 -16, 8 8 16) color(192 128 255)
 	= trigger_entitystate_reset : "Entity state RESET" [
 	target(target_destination) : "Targets to affect"
 	target2(target_destination) : "More Targets to affect"
+    sounds(choices) : "Sound style" : 0 = [
+		0 : "Default"
+		1 : "Secret"
+		2 : "Beep beep"
+		3 : "Large switch"
+		4 : "Silent"
+		5 : "Custom"
+		6 : "Secret 3 (MWubwubwub)"
+		7 : "Secret 2 (Bell)"
+	]
 ]
 
 //_____ENTITY STATE AFRAME_____
@@ -2178,6 +2274,16 @@
 	state(choices) : "Aframe state" :  : "0=Primary frame(s)(+0,+1,+2 etc) and 1=Alternate frame(s)(+a,+b,+c etc)" = [
 		0 : "Primary Frame(s)"
 		1 : "Alternate Frame(s)"
+	]
+    sounds(choices) : "Sound style" : 0 = [
+		0 : "Default"
+		1 : "Secret"
+		2 : "Beep beep"
+		3 : "Large switch"
+		4 : "Silent"
+		5 : "Custom"
+		6 : "Secret 3 (MWubwubwub)"
+		7 : "Secret 2 (Bell)"
 	]
 ]
 
@@ -2225,7 +2331,8 @@
 		3 : "Large switch"
 		4 : "Silent"
 		5 : "Custom"
-		6 : "Secret 2"
+		6 : "Secret 3 (MWubwubwub)"
+		7 : "Secret 2 (Bell)"
 	]
 	noise(string) : "Custom Sound (triggered)"
 ]
@@ -2433,6 +2540,56 @@
 ]
 
 @PointClass size(-8 -8 -8, 8 8 8) base(Targetname) = misc_boom : "Boss Explosion Effect" []
+
+@PointClass base(Appearflags,Targetname) size(-16 -16 -16,16 16 16) color(255 128 128) flags(Angle) = misc_camera : "Ingame cinematic camera(No COOP/DM), will fade/move based on times in seconds. The first fade (out) is from  previous camera to background colour. The second fade (in) is to current camera view. The linear movementwill  start at the same time as the fade in process. Start -> Fade Out(waitmin1) -> Fade In(waitmin2)  / Movement (waitmin3) Once 'Fade in' has finshed then the pause timer (wait) starts.Waitmin3 = Waitmin2 + Wait (Sync everything to finish together) To sync the final camera to a player start, finish 22 map units above angles = up/down, angle, tilt left/right 'pitch roll yaw'up/left = negative value, down/right = positive valuedeathtarget, modeltarget & returntarget have to be defined on first cameraBe aware that coop is not supported, so be careful of trigger eventsand decide on a coop not working message2." [
+	spawnflags(Flags) = [ 
+		1 : "Player" : 0 : "Show the player model when starting cinematics"
+		2 : "Skipable" : 0 : "Allow the cinematic to be skipped (exit after fade)"
+		4 : "Fadeout" : 0 : "Fade OUT previous camera (time = waitmin)"
+		8 : "Fadein" : 0 : "Fade IN this camera (time = waitmin2)"
+	   16 : "Fixed Angle" : 0 : "All cameras in a chain will use the first camera angle"
+	   32 : "End Camera" : 0 : "Only the fade in/out work, the origin/angle are ignored"
+	]
+	targetname(target_source) : "Name" : : "Camera name for linking into target chains."
+	message(string) : "Message" : : "Text to centerprint when camera is viewed."
+    message2(string) : "Message (coop warning)" : : "Text to centerprint if coop is active."
+	target(target_destination) : "Target (next cam)" : : "Points to the next camera in a chain/sequence"
+	target2(target_destination) : "Target2 (Starting of cinematic)" : : "Additional target(s) to trigger when camera is viewed"
+	deathtarget(target_destination) : "Targets (Finishing of cinematic)" : : "Additional target(s) to trigger when the cinematic finishes."
+    sounds(choices) : "Sound style" : 0 = [
+		0 : "Default"
+		1 : "Secret"
+		2 : "Beep beep"
+		3 : "Large switch"
+		4 : "Silent"
+		5 : "Custom"
+		6 : "Secret 3 (MWubwubwub)"
+		7 : "Secret 2 (Bell)"
+	]
+	noise(sound): "Custom sound" : : "Sound to play when message is centerprinted."
+	angles(integer) : "Direction the camera will face (Pitch Yaw Roll setup)"
+	angletarget(target_destination) : "Direction the camera will face (using info_target)"
+	focalpoint(choices) : "Camera Focal Point" : : "Always focus the camera on angletarget (=1 enabled)" = [
+		 0 : "Default"
+		1 : "angletarget "
+	]
+	angleblend(integer) : "Blend between current/last camera angles (def=0.03 range=0-1)"
+	modeltarget(integer) : "Location of fake player mdl (use info_camera_destination)"
+	returntarget(integer) : "Location of returning player (use info_camera_destination)"
+	pos1(color255) : "Starting Background colour"
+	pos2(color255) : "Finishing Background colour"
+	waitmin(integer) : "Fade OUT prev cam (def=1s)" : : "Fade OUT time (def=1s, minimum=0.1s)"
+	waitmin2(integer) : "Fade IN this cam (def=1s)" : : "Fade IN time (def=1s, minimum=0.1s)"
+	sighttarget(target_destination) : "Position the camera will travel towards (use info_target)"
+	waitmin3(integer) : "Speed at which camera moves towards sighttarget"
+	wait(integer) : "Time to wait while showing camera (-1 = wait for key)"
+	controltarget(integer) : "Bezier Curve control point (has angletarget defaults)"
+
+	nodebuginfo(choices) :"Debug Info" : :  "All debug info displayed via developer=1 is blocked" = [
+		 0 : "Default"
+		 1 : "Block"
+	]
+]	
 
 //_____WEATHER_____
 @SolidClass base(TrigOFF,Targetname) = misc_weather : "A BModel(brushwork) based particle emitter which produces weather effects" [
@@ -2655,23 +2812,106 @@
 	noise2(string) : "Custom Sound - Finish"
 ]
 
-//----------------------------------------------------------------------
-@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) studio(mdl) = misc_model : "Misc Models" [
+//_____Misc MODEL_____
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) model({ 
+	"path": mdl,
+	// "skin": pos2,
+    "skin": __show_skin,
+    //"frame": pos1
+    "frame": __show_frame
+}) = misc_model : "Misc Models - Load custom models(.MDL files), as props, that are not predefined in the base game/mod. They can be setup with specific frame/skin and animation groups. Note - Having knowledge of at least opening/viewing '.mdl' files(ex QME) is recommended if customizing the settings." [
 	spawnflags(Flags) = [
-		 2 : "Collison" : 0
-		64 : "Start Off" : 0
+		 2 : "Collison" : 0 : "Model bbox collision enabled"
+		 4 : "Moveable" : 0 : "Model can be moved around like an item"
+	   32 : "Static" : 0 : "Makes entity static upon spawn (frame 0)"
+	   64 : "Start OFF" : 0 : "Starts off, waits for trigger"
+	]
+	target(string) : "Path_corner entities to start moving towards on spawn"
+	faceangle(integer) : "Set to 1 to rotate the model towards it's destination path_corner"
+	yaw_speed(integer) : "Turning speed of model twowards path_corner if using faceangle=1 (def=15)"
+	movespeed(integer) : "Movement (map units) per second towards path_corners if using faceangle=1 (def=50)"
+	speed(integer) : "Override for frame/skin animation speed (def=0.1s)"
+	mdl(string) : "Model Selection (ex progs/model.mdl)"
+	angle(integer) : "facing angle of model (-1 = random position)"
+	ideal_yaw(choices) : "Random Rotation (Y axis)" = [
+		0 : "OFF(def)"
+		1 : "Enabled"
+	]
+    sounds(choices) : "Sound style" : 0 = [
+		0 : "Default"
+		1 : "Secret"
+		2 : "Beep beep"
+		3 : "Large switch"
+		4 : "Silent"
+		5 : "Custom"
+		6 : "Secret 3 (MWubwubwub)"
+		7 : "Secret 2 (Bell)"
+	]
+	angles(string) : "'pitch yaw roll' up/down, angle, tilt left/right" : : "up/down, angle, tilt left/right"
+	frame(integer) : "exact frame number (Quoth entity compatibility)"
+	framestart(integer) : "FRAME Starting point, 0=def, X=-1 Random, X=0+ Exact"
+	frameloop(integer) : "FRAME type, 0=Constant, 1+=Range+stop, -1=Toggle, -2=Trigger+wait"
+	skin(string) : "exact skin number (Quoth entity compatibility)"
+	skinstart(string) : "SKIN Starting point, 0=def, X=-1 Random, X=0+ Exact"
+	skinloop(string) : "SKIN type, 0=Constant, 1+=Range+stop, -1=Toggle, -2=Trigger+wait"
+	mangle(string) : "'pitch yaw roll' override (Quoth entity compatibility)"
+	alphastart(integer) : "ALPHA fade IN time for misc_model (1=Fade in over 1s)"
+	bbmins(integer) : "Model bounding box override (only works with collision)"
+	bbmaxs(integer) : "Model bounding box override"
+	view_ofs (integer) : "Extra offset for origin (ideal for light origin issues)"
+	delay(integer) : "Spawning delay for models on func movers (works once)"
+	locksounds(integer) : "TOGGLE 1=laser, 2=power, 4=silent, 5=custom"
+	noise(string) : "Custom sound to play with animation TRIGGER"
+	noise1(string) : "Custom sound to play when animation TOGGLE ON"
+	noise2(string) : "Custom sound to play when animation TOGGLE OFF"
+	volume(integer) : "Volume for all custom sounds played (def=1, range=0-1)"
+	lip(integer) : "Frame/skin animation direction -2=random, -1=back, 1=forward(def)"
+	state(integer) : "Automatic start of frame/skin animations (0=ON, -1/1=OFF)"
+	rotateloop(integer) : "ROTATE type, 0=Constant, 1+=Range+stop, -1=Toggle, -2=Trigger+wait"
+	rotateangles(integer) : "ROTATE axis (XYZ) changing (+/-) angles over time"
+
+	//Testing frame selection/display		
+	pos1(string) : "Frame Selection" : : "X=0, Y=0, Z=exact frame number, X->Y, Z=0 | will randomly pick a frame from the X,Y range, X->Y, Z=-1 | will animate between the X,Y range, can forward or backward setup."
+	__show_frame(integer) : "Editor only! Display a single frame, use ps1 to setup frames used in-game"
+	//Testing skin selection/display
+	pos2(string) : "Skin Selection" : : "X=0, Y=0, Z=exact skin number, X->Y, Z=0 | will randomly pick a skin from the X,Y range."
+	__show_skin(integer) : "Editor only! Display a specific skin, use pos2 to setup the skin used in-game"
+]
+//socks 'radiant gtk model entry
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) model({ 
+    "path": mdl,
+    "skin": pos2,
+    "frame": pos1
+}) = misc_gtkmodel : "Misc Models - MDL files that can be setup with specific frame/skin and animate groups." [
+	spawnflags(Flags) = [
+		 2 : "Collison" : 0 : "Model bbox collision enabled"
+		 4 : "Moveable" : 0 : "Model can be moved around like an item"
+	   32 : "Statue" : 0 : "Turn entity into static upon spawn (frame 0)"
+	   64 : "Start OFF" : 0 : "Starts off, waits for trigger"
 	]
 	mdl(string) : "Model to load (progs/model.mdl)"
-	angles(string) : "Pitch Yaw Roll" : : "up/down, angle, tilt left/right "
-	mangle(string) : "Override Pitch Roll Yaw" : : "up/down, angle, tilt left/right "
+	angle(integer) : "facing angle"
+	angles(string) : "pitch roll yaw" : : "up/down, angle, tilt left/right "
 	ideal_yaw(choices) : "Y axis rotation" = [
 		0 : "No rotation"
 		1 : "Random"
 	]
-	avelocity(string) : "Rotation Velocity (x y z)" 
-	pos1(string) : "Frame Selection" : : "X=0, Y=0, Z=exact frame number, X->Y, Z=0 : will randomly pick a frame from the X,Y range, X->Y, Z=-1 : will animate between the X,Y range, can forward or backward setup"
-	pos2(string) : "Skin Selection" : : "X=0, Y=0, Z=exact skin number, X->Y, Z=0 : will randomly pick a skin from the X,Y range"
+	pos1(string) : "Frame Selection" : : "X=0, Y=0, Z=exact frame number, X->Y, Z=0 | will randomly pick a frame from the X,Y range, X->Y, Z=-1 | will animate between the X,Y range, can forward or backward setup."
+	pos2(string) : "Skin Selection" : : "X=0, Y=0, Z=exact skin number, X->Y, Z=0 | will randomly pick a skin from the X,Y range."
+	speed(integer) : "Override for frame animation speed (def=0.1s)"
+	lip(choices) : "Frame animation direction" = [
+		-2 : "Random"
+		-1 : "Backwards"
+		1 : "Forward (default)"
+	]
 ]
+@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) model({ 
+    "path": mdl,
+    "skin": pos2,
+    "frame": pos1
+	}) = mapobject_custom : "This is a duplicate of misc_model for quoth map compatibility" []
+
+
 
 @PointClass base(TrigOFF, Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) studio("progs/madfox/fanhouse.mdl") = misc_fan [
 	spawnflags(Flags) = [
@@ -2680,39 +2920,6 @@
 	]
 	mangle(string) : "Model Rotation as Pitch Roll Yaw"
 	speed(integer) : "Time between frames (def=0.1)"
-]
-
-@PointClass base(TrigOFF, Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) = misc_gtkmodel : "Misc Models - MDL files that can be setup with specific frame/skin and animate groups." [
-	spawnflags(Flags) = [
-		 2 : "Collison" : 0
-		 4 : "Moveable" : 0
-		32 : "Statue" : 0
-	]
-	mdl(string) : "Model to load (progs/model.mdl)"
-	angle(integer) : "facing angle"
-	angles(string) : "Pitch Yaw Roll" : : "up/down, angle, tilt left/right "
-	ideal_yaw(choices) : "Y axis rotation" = [
-		0 : "No rotation"
-		1 : "Random"
-	]
-	pos1(string) : "Frame Selection" : : "X=0, Y=0, Z=exact frame number, X->Y, Z=0 | will randomly pick a frame from the X,Y range, X->Y, Z=-1 | will animate between the X,Y range, can forward or backward setup."
-	pos2(string) : "Skin Selection" : : "X=0, Y=0, Z=exact skin number, X->Y, Z=0 | will randomly pick a skin from the X,Y range."
-]
-
-@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) = mapobject_custom : "Misc Models" [
-	spawnflags(Flags) = [
-		 2 : "Collison" : 0
-		64 : "Start Off" : 0
-	]
-	mdl(string) : "Model to load (progs/model.mdl)"
-	angles(string) : "Pitch Yaw Roll" : : "up/down, angle, tilt left/right "
-	mangle(string) : "Override Pitch Roll Yaw" : : "up/down, angle, tilt left/right "
-	ideal_yaw(choices) : "Y axis rotation" = [
-		0 : "No rotation"
-		1 : "Random"
-	]
-	pos1(string) : "Frame Selection" : : "X=0, Y=0, Z=exact frame number, X->Y, Z=0 : will randomly pick a frame from the X,Y range, X->Y, Z=-1 : will animate between the X,Y range, can forward or backward setup"
-	pos2(string) : "Skin Selection" : : "X=0, Y=0, Z=exact skin number, X->Y, Z=0 : will randomly pick a skin from the X,Y range"
 ]
 
 @PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) studio("progs/player.mdl") = misc_actor : "Triggered Physics based actor for scripted sequences" [
@@ -2930,6 +3137,12 @@
 	]
 ]
 
+@PointClass base(Appearflags, Targetname) size(-16 -16 -24, 16 16 40) studio("progs/player.mdl") = misc_deadplayer : "Player Corpse" [
+	pos1(integer) : "Orientation (def='0 90 180' on back)"
+	frame(integer) : "Pose frame (def=93 on back)"
+]
+
+
 
 //@PointClass base(Appearflags, Targetname) size(-16 -16 -24, 16 16 16) studio({"path": "progs/ad171/gib_1.mdl", "skin":skin, "frame":frame})= gib_misc_1 : "Gib item" [
 //	angle(integer) : "Facing angle"
@@ -3028,18 +3241,14 @@
 ]
 @PointClass base(EBox) size(-16 -16 0, 16 16 64) studio("progs/ad171/explode_box1.mdl") = misc_explobox : "Large box" []
 @PointClass base(EBox) size(-16 -16 0, 16 16 32) studio("progs/ad171/explode_box2.mdl") = misc_explobox2 : "Small box" []
-@PointClass base(EBox) size(-32 -32 0, 32 32 64) studio("maps/b_barrel.bsp") = misc_barrel : "Small box" []
-
-@PointClass base(EBox) size(-16 -16 0, 16 16 64) studio("progs/b_bio_l.bsp") = misc_biobox_l : "Large box" []
-@PointClass base(EBox) size(-16 -16 0, 16 16 32) studio("progs/b_bio_s.bsp") = misc_biobox_s : "Small box" []
-
-@PointClass base(EBox) size(-16 -16 0, 16 16 64) studio("progs/b_plas_l.bsp") = misc_plasmabox_l : "Large box" []
-@PointClass base(EBox) size(-16 -16 0, 16 16 32) studio("progs/b_plas_s.bsp") = misc_plasmabox_s : "Small box" []
+@PointClass base(EBox) size(-32 -32 0, 32 32 64) studio("maps/nsoe2/b_barrel.bsp") = misc_barrel : "Small box" []
+@PointClass base(EBox) size(-16 -16 0, 16 16 64) studio("maps/quoth2pt2full/b_bio_l.bsp") = misc_biobox_l : "Large box" []
+@PointClass base(EBox) size(-16 -16 0, 16 16 32) studio("maps/quoth2pt2full/b_bio_s.bsp") = misc_biobox_s : "Small box" []
+@PointClass base(EBox) size(-16 -16 0, 16 16 64) studio("maps/quoth2pt2full/b_plas_l.bsp") = misc_plasmabox_l : "Large box" []
+@PointClass base(EBox) size(-16 -16 0, 16 16 32) studio("maps/quoth2pt2full/b_plas_s.bsp") = misc_plasmabox_s : "Small box" []
 
 //======================================================================
-//
 // TRAP entities
-//
 //======================================================================
 @BaseClass base(Appearflags,Targetname,Target) size(-8 -8 -8, 8 8 8) 
 	color(0 128 192) flags(Angle) = Trap [
@@ -3048,7 +3257,7 @@
 		128 : "Tracking" : 0
 	]
 ]
-//----------------------------------------------------------------------
+
 @PointClass base(Trap) = trap_spikeshooter : "Spike Shooter" [
 	spawnflags(Flags) = [
 		1 : "SNG Spike" : 0
@@ -3297,6 +3506,10 @@
 		0 : "Default(OFF)"
 		1 : "USE as a Sun"
 	]
+
+	spawnflags(Flags) = [
+		2: "Thunder Flash Style (needs targetname)" : 0
+	]
 ]
 @baseclass size(-8 -8 -8, 8 8 8) base(Light) = LightPoint [] 
 @baseclass size(-8 -8 -24, 8 8 24) base(Light) = LightTorch []
@@ -3334,7 +3547,7 @@
 		128 : "No Particles" : 0
 	]
 ]
-@PointClass base(LightTorch,LightOff) studio("progs/longtrch.mdl") = 
+@PointClass base(LightTorch,LightOff) studio("progs/ad181/misc_longtrch.mdl") = 
 	light_torch_long_walltorch : "Long walltorch" [
 	spawnflags(flags) = [
 		2 : "No Sound" : 0
@@ -3369,7 +3582,7 @@
 	]
 ]
 
-@PointClass base(LightFlame,LightOff) studio("progs/quoth2pt2full/brazshrt.mdl") = 
+@PointClass base(LightFlame,LightOff) size(-8 -8 -16, 8 8 20) offset(0 0 12) studio("progs/quoth2pt2full/brazshrt.mdl") = 
 	light_flame_brazier_short : "Short Brazier" [
 	spawnflags(flags) = [
 		2 : "No Sound" : 0
@@ -3378,7 +3591,7 @@
 	]
 ]
 
-@PointClass base(LightFlame,LightOff) studio("progs/quoth2pt2full/braztall.mdl") = 
+@PointClass base(LightFlame,LightOff) size(-8 -8 -64, 8 8 20) offset(0 0 12)  studio("progs/quoth2pt2full/braztall.mdl") = 
 	light_flame_brazier_tall : "Tall Brazier" [
 	spawnflags(flags) = [
 		2 : "No Sound" : 0
@@ -3459,7 +3672,7 @@
 	]		
 ]
 
-@PointClass base(Light,LightOff) size(-4 -4 -16, 4 4 16) studio("progs/rubicon2/beacon.mdl") =
+@PointClass base(Light,LightOff) size(-4 -4 -16, 4 4 16) studio("progs/rrp/beacon.mdl") =
 	light_beacon : "Tech beacon light" [
 	spawnflags(flags) = [
 		1 : "Blinking (skin=1)" : 0
@@ -3875,6 +4088,24 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	]
 	passive_resettimer(integer) : "Time to reset passive(def=0)"
 	angles(angle) : "Pitch Yaw Roll (set Y to -1 for random)"
+	alignment(choices) : "Alignment" = [
+		 0 : "Evil (Default)"
+		 1 : "Good (players are always good)"
+		 2 : "Neutral (don't care unless bothered)"
+	]
+	temperament(choices) : "Temperament" = [
+		 0 : "Angry (Default)"
+		 1 : "Cowardly (follows leaders)"
+		 2 : "Passive"
+		 3 : "Calm (follows leaders)"
+		 4 : "Psychotic"
+	]
+	vulnerability(choices) : "Same Side Vulnerability" = [
+		 0 : "Full (Normal)"
+		 1 : "Half (Resistant)"
+		 2 : "Invulnerable (Seraphic)"
+		 3 : "Undead (Seraphic to Same Group and Zombies, Resistant to Others)"
+	]
 ]
 @baseclass base(Monster) size(-16 -16 -24, 16 16 16) = MonTiny []
 @baseclass base(Monster) size(-20 -20 -20, 20 20 20) = MonSquare []
@@ -3910,16 +4141,19 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") skin(6) = monster_army_grenade : "Grenade Soldier" []
 @PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") skin(8) = monster_army_plasma : "Plasma Soldier" []
 @PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") skin(10) = monster_army_spike : "Nail Soldier" [
-	spawnflags(Flags) =
-	[
+	spawnflags(Flags) = [
+		8192 : "Lava Nails" : 0
+	]
+]
+@PointClass base(MonShort) studio("progs/lieutenant/enforce2.mdl") = monster_super_enforcer : "Lieutenant Enforcer" [
+	spawnflags(Flags) = [
 		8192 : "Lava Nails" : 0
 	]
 ]
 @PointClass base(MonShort) studio("progs/drake/soldier.mdl") skin(4) = monster_army_cyborg : "Soldier" []
-@PointClass base(MonTiny) studio("progs/hipnotic/spikmine.mdl") skin(8) = monster_spikemine : "Spike Mine" []
+@PointClass base(MonTiny) studio("progs/hipnotic/mon_spikmine.mdl") skin(8) = monster_spikemine : "Spike Mine" []
 @PointClass base(MonFlat) studio("progs/hipnotic/mon_scor.mdl") = monster_scourge : "Centroid" [
-	spawnflags(Flags) =
-	[
+	spawnflags(Flags) = [
 		8192 : "Lava Nails" : 0
 	]
 ]
@@ -3956,6 +4190,9 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 		4 : "Liquid Blocks Sight" : 0
 	]
 ]
+
+@PointClass base(MonFlat) studio("progs/madfox/mon_flytrap.mdl") = monster_flytrap_ground : "Flytrap Trap" []
+@PointClass base(MonTall) studio("progs/madfox/mon_flytrap_standing.mdl") = monster_flytrap : "Flytrap Plant" []
 
 @PointClass base(MonFish) studio("progs/madfox/mon_fragy.mdl") = monster_frog : "Frog" []
 @PointClass base(MonDog) studio("progs/hexen2/mon_sheep.mdl") = monster_sheep : "Sheep" []
@@ -4035,6 +4272,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @PointClass base(MonTall) studio("progs/ad171/mon_hknight.mdl") skin(3) = monster_hell_knight_champion : "Champion knight" [
 	skin(integer) : "Skin (def=3)"
 ]
+@PointClass base(MonTall) studio("progs/lieutenant/hknight.mdl") = monster_hell_knight_enforcer : "Saber Enforcer" []
 @PointClass base(MonShort) studio("progs/ad171/mon_dguard.mdl") = monster_dguard : "Death Guard (AD) " +
 "Very weak guard with a sword. Part of the Death Brigade." +
 "Good for placing early on for axe only combat or as support." []
@@ -4195,6 +4433,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @PointClass base(MonTall) studio("progs/wizard.mdl") = monster_wizard : "Wizard"
 [ spawnflags(flags) = [ 4 : "Always Above" : 0 ] ]
 @PointClass base(MonWide) studio("progs/rogue/wrath.mdl") = monster_wrath : "Wrath" []
+@PointClass base(MonWide) studio("progs/nehahra/wraith.mdl") = monster_wraith_nehahra : "Ghost Wraith" []
 @PointClass base(MonWide) studio("progs/rogue/s_wrath.mdl") = monster_super_wrath : "Wrath" []
 @PointClass base(MonWide) studio("progs/ad171/mon_wraith.mdl") = monster_wraith : "Wraith"
 [ spawnflags(flags) = [ 
@@ -4424,6 +4663,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 ]
 
 @PointClass base(MonVermis) studio("progs/quoth2pt2full/vermis.mdl") = monster_vermis : "Vermis" []
+@PointClass base(MonMassive) studio("progs/madfox/mon_spellmas.mdl") = monster_spellmaster : "Baseboss (very similar to Virtus boss, not the same)" []
 @PointClass base(MonMassive) studio("progs/virtus/newboss.mdl") = monster_virtus: "Virtus Boss"
 [
 	spawnflags(Flags) = 
@@ -4636,19 +4876,19 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	dmg(string) : "Duration of quake" : "0.8"
 ]
 
-@PointClass size(0 0 0, 32 32 32) base(Targetname) = func_rubble : "Toss Random Rubble" [
+@PointClass size(0 0 0, 32 32 32) base(Targetname) studio("progs/hipnotic/rubble3.mdl") = func_rubble : "Toss Random Rubble" [
 	count(integer) : "# of Rubble Chunks" : 1
 ]
 
-@PointClass size(0 0 0, 8 8 8) base(Targetname) = func_rubble1 : "Toss Small Rubble" [
+@PointClass size(0 0 0, 8 8 8) base(Targetname) studio("progs/hipnotic/rubble1.mdl") = func_rubble1 : "Toss Small Rubble" [
 	count(integer) : "# of Rubble Chunks" : 1
 ]
 
-@PointClass size(0 0 0, 16 16 16) base(Targetname) = func_rubble2 : "Toss Medium Rubble" [
+@PointClass size(0 0 0, 16 16 16) base(Targetname) studio("progs/hipnotic/rubble2.mdl") = func_rubble2 : "Toss Medium Rubble" [
 	count(integer) : "# of Rubble Chunks" : 1
 ]
 
-@PointClass size(0 0 0, 32 32 32) base(Targetname) = func_rubble3 : "Toss Large Rubble" [
+@PointClass size(0 0 0, 32 32 32) base(Targetname) studio("progs/hipnotic/rubble3.mdl") = func_rubble3 : "Toss Large Rubble" [
 	count(integer) : "# of Rubble Chunks" : 1
 ]
 

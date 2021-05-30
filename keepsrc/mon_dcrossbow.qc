@@ -300,7 +300,7 @@ void() dcrossbow_shot =
 
 	// Flash effect to show where bolt is coming from	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "weapons/crossbow_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/weapons/crossbow_fire.wav", 1, ATTN_NORM);
 
 	// Skill level adjustment
 	self.attack_speed = SPEED_DCROSS + (skill*SPEED_BOLTSKILL);
@@ -335,7 +335,7 @@ void()	dcrossbow_fire12 =[	$tfire12,	dcrossbow_fire13] {};
 void()	dcrossbow_fire13 =[	$tfire13,	dcrossbow_fire14] {};
 void()	dcrossbow_fire14 =[	$tfire14,	dcrossbow_fire15] {};
 void()	dcrossbow_fire15 =[	$tfire15,	dcrossbow_fire16] {
-	sound (self, CHAN_WEAPON, "weapons/crossbow_rdy.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_WEAPON, "ad171/weapons/crossbow_rdy.wav", 1, ATTN_NORM);};
 void()	dcrossbow_fire16 =[	$tfire16,	dcrossbow_fire18] {};
 void()	dcrossbow_fire18 =[	$tfire18,	dcrossbow_fire20] {};
 void()	dcrossbow_fire20 =[	$tfire20,	dcrossbow_fire22] {};
@@ -565,14 +565,12 @@ void()	dcrossbow_dieb17	=[	$deathb17,	dcrossbow_dieb18	] {};
 void()	dcrossbow_dieb18	=[	$deathb18,	dcrossbow_dieb19	] {};
 void()	dcrossbow_dieb19	=[	$deathb19,	dcrossbow_dieb20	] {monster_death_postcheck();};
 void()	dcrossbow_dieb20	=[	$deathb20,	dcrossbow_dieb20	] {monster_deadbody_check();};
-//----------------------------------------------------------------------
-void() dcrossbow_die =
-{
+
+void() dcrossbow_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
-	// Clear weapon sound
-	sound (self, CHAN_WEAPON, SOUND_EMPTY, 1, ATTN_NORM);
+	StopSound(self,CHAN_WEAPON); // Clear weapon sound
 
 	// regular death
 	if (!self.gibbed) {
@@ -582,15 +580,9 @@ void() dcrossbow_die =
 	}
 };
 
-//============================================================================
-void() dcrossbow_crossbow_sound =
-{
-	sound (self, CHAN_WEAPON, "weapons/crossbow_swipe.wav", 1, ATTN_NORM);
-};
+void() dcrossbow_crossbow_sound = { sound (self, CHAN_WEAPON, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_NORM); };
 
-/*======================================================================
-QUAKED monster_dcrossbow (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
+// QUAKED monster_dcrossbow (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_dcrossbow = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
@@ -614,9 +606,9 @@ void() monster_dcrossbow = {
 	if (random() < 0.5) self.gib2mdl = string_null;
 	if (random() < 0.5) self.gib3mdl = string_null;
 
-	self.idle_sound = "dknight/dcross_idle.wav";
+	self.idle_sound = "ad171/dknight/dcross_idle.wav";
 	precache_sound (self.idle_sound);
-	self.idle_soundcom = "dknight/dcross_idlecom.wav";
+	self.idle_soundcom = "ad171/dknight/dcross_idlecom.wav";
 	precache_sound (self.idle_soundcom);
 
 	self.pain_sound = "knight/khurt.wav";
@@ -624,18 +616,18 @@ void() monster_dcrossbow = {
 	precache_sound ("knight/kdeath.wav");
 
 	// Crossbow and bolt sounds
-	precache_sound ("weapons/bolt_hit1.wav");
-	precache_sound ("weapons/bolt_hit2.wav");
-	precache_sound ("weapons/bolt_hit3.wav");
-	precache_sound ("weapons/bolt_hit4.wav");
-	precache_sound ("weapons/crossbow_fire.wav");
-	precache_sound ("weapons/crossbow_swipe.wav");
+	precache_sound ("ad171/weapons/bolt_hit1.wav");
+	precache_sound ("ad171/weapons/bolt_hit2.wav");
+	precache_sound ("ad171/weapons/bolt_hit3.wav");
+	precache_sound ("ad171/weapons/bolt_hit4.wav");
+	precache_sound ("ad171/weapons/crossbow_fire.wav");
+	precache_sound ("ad171/weapons/crossbow_swipe.wav");
 
 	// Heavy wood sound
-	self.meleehitsound = "weapons/crossbow_hit1.wav";
+	self.meleehitsound = "ad171/weapons/crossbow_hit1.wav";
 	precache_sound (self.meleehitsound);
 
-	self.sight_sound = "weapons/crossbow_rdy.wav";
+	self.sight_sound = "ad171/weapons/crossbow_rdy.wav";
 	precache_sound (self.sight_sound);
 
 	// Check for poisonous entity flag

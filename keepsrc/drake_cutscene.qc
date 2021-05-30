@@ -1,4 +1,4 @@
-// Heavily modified for Drake.
+// Heavily modified for Drake by Patrick Martin
 
 // player_run prototype is in proto.qc.
 void() DHM_CalcMoveDone;
@@ -679,32 +679,22 @@ local   entity  scrpt;
     }
 };
 
-void() NextLevel;
-
-//- - - - - - - - -
 // PM:  Player thinking during a cutscene.  Called by 'PlayerPreThink'.
-void() Cutscene_Think =
-{
+void() Cutscene_Think = {
   /* --------------------------------------------
     If we are in camera mode, play the script.
      -------------------------------------------- */
         // PM:  Allow player to stop cutscene on any map.
         if (self.impulse)
-            if (self.script_count != 1000000)
-            {
+            if (self.script_count != 1000000) {
                 local   entity  goback;     // PM:  dhm's cutscene code.
 
                 self.script_count = 1000000;
-                if (world.model == "maps/soeexit.bsp")
-                {   // Hack:  Jump directly to intermission/credits.
-                    NextLevel ();
-                    return;
-                }
+
                 // If cut-scene has ended, and user tries to exit, don't
                 // spawn a second go_back control entity.
                 goback = find(world, classname, "going_back");
-                if (!goback)
-                {
+                if (!goback) {
                    sprint(self, "...\n");
                    goback = spawn();
                    goback.nextthink = time + 1.5;
@@ -731,5 +721,4 @@ void() Cutscene_Think =
 // page, and of course a "message" field with the text to display.
 //
 // PM:  Use 'info_notnull' instead.
-//============
 void() info_script = {};

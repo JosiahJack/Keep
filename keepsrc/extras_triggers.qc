@@ -112,10 +112,7 @@ void() chat_chat =
 	WriteByte(MSG_ALL, 8);
 	WriteByte(MSG_ALL, 2);// svc_disconnect
 	WriteString(MSG_ALL, "\n");
-	
-	if (self.target)
-		SUB_UseTargets();
-	
+	if (HasTargets(self)) SUB_UseTargets();
 	remove(self);
 };
 

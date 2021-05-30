@@ -186,7 +186,7 @@ void() path_corner_setuptargets = {
 	self.movetarget = self.movetarget2 = self.movetarget3 = world; // Reset primary, secondary and backlink target entities
 
 	// PRIMARY TARGET (target / self.movetarget)
-	if (self.target != "") {
+	if (self.target != "") { // Not used for entity I/O, just pathing
 		fdest = find (world, targetname, self.target);
 		while(fdest) {
 			if (fdest.classtype == CT_PATHCORNER) {
@@ -199,10 +199,9 @@ void() path_corner_setuptargets = {
 			else fdest = find(fdest, targetname, self.target);
 		}
 	}
-	//------------------------------------------------------------
+
 	// SECONDARY TARGET (target2 / self.movetarget2)
-	//------------------------------------------------------------
-	if (self.target2 != "") {
+	if (self.target2 != "") { // Not used for entity I/O, just pathing
 		fdest = find (world, targetname, self.target2);
 		while(fdest) {
 			if (fdest.classtype == CT_PATHCORNER) {
@@ -216,8 +215,7 @@ void() path_corner_setuptargets = {
 		}
 	}
 
-	// BACKLINK TARGET (targetback / self.movetarget3)
-	// Has the path corner back link override key been used?  If this override string does not exist, weird things will happen 
+	// BACKLINK TARGET (targetback / self.movetarget3)  Has the path corner back link override key been used?  If this override string does not exist, weird things will happen 
 	if (self.targetback != "") {
 		fdest = find (world, targetname, self.targetback);
 		while(fdest) {
@@ -373,8 +371,7 @@ void(entity mon, entity obj) give_monster_object = {
 	makevectors(self.angles);
 	out = v_forward;
 	out = normalize (out);
-	up = VEC_ORIGIN;
-	up_z = self.attachment_offset_z; // put out in front of monster OBJECT_OFFSET units
+	up = NewVector(0,0,self.attachment_offset_z);  // put out in front of monster OBJECT_OFFSET units
 	org = ((self.origin + (((self.bbmaxs_x * 2)+self.attachment_offset_x) * out)) + up);
 	mon.entattachment = obj;
 	setorigin(obj,org); // ok we got it.

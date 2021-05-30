@@ -1,4 +1,43 @@
-void() precache_aoa = //precache all models and sounds for aoa weapons
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/ 
+//
+// Compiled by Qmaster
+//
+// Attributions: Arms of Asgard (AoA) by ryanscissorhands
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 18
+//
+// Implements: Arms of Asgard weapons' subroutine functions
+//
+// Description:
+// Simple utility functions for AoA weapons and their effects.
+//=============================================================================
+
+//precache all models and sounds for aoa weapons
+void() precache_aoa =
 {
 	//#aoa precache sounds
 	precache_sound ("aoa/melee_meat.wav");
@@ -47,7 +86,6 @@ void() precache_aoa = //precache all models and sounds for aoa weapons
 	precache_sound ("aoa/rockattack.wav");
 	precache_sound ("aoa/fastboulder.wav");
 	precache_sound ("aoa/slowboulder.wav");
-	precache_sound ("drake/weapons/r_exp3a.wav");
 	precache_sound ("aoa/flakshot.wav");
 	precache_sound ("aoa/hhs.wav"); //mace third attack (Tome of Power)
 	precache_sound ("aoa/mildarmor.wav");

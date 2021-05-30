@@ -375,12 +375,10 @@ This entity cannot be damaged and is always touchable once activated
 Can be switched on/off using entity state system (including tele hum sound)
 
 ======================================================================*/
-void() trigger_teleport_sound =
-{
+void() trigger_teleport_sound = {
 	// Has the original bmodel trigger been deleted!?!
 	if (!self.owner) {
-		// Clear sound channel with silence (full volume)
-		sound (self, CHAN_VOICE, SOUND_EMPTY, 1, ATTN_NORM);
+		 StopSound(self,CHAN_VOICE); // Clear sound channel with silence (full volume)
 		return;
 	}
 	// Has the trigger been hidden/removed?
@@ -410,8 +408,7 @@ void() trigger_teleport_sound =
 		
 		// If teleport off or disabled, do nothing
 		if (self.estate & ESTATE_BLOCK) {
-			// Clear sound channel with silence (full volume)
-			sound (self, CHAN_VOICE, SOUND_EMPTY, 1, ATTN_NORM);
+			StopSound(self,CHAN_VOICE); // Clear sound channel with silence (full volume)
 			self.fly_sound = LARGE_TIMER;
 		}
 		// trigger has been switched on, reset sound
@@ -506,9 +503,7 @@ void() trigger_teleport_debug =
 	}
 };
 
-//----------------------------------------------------------------------
-void() trigger_teleport_touch =
-{
+void() trigger_teleport_touch = {
 	if (self.estate & ESTATE_BLOCK) return;		// Entity off/disabled?
 	// Use to block ent_startoff, but estate_block takes care of it
 	if (self.attack_finished > time) return;	// Trigger once?
@@ -537,12 +532,11 @@ void() trigger_teleport_touch =
 	}
 	
 	// New AD feature, fire targets on teleporter destination
-	if (self.goalentity.target != "") {
-		trigger_strs(self.goalentity.target, other);	// Fire all targets
-		if (self.wait2 < 0) self.goalentity.target = "";// only work once
+	if (HasTargets(self.goalentity)) {
+		SUB_UseTargetsOnEnt(self.goalentity);
+		if (self.wait2 < 0 || self.goalentity.wait < 1) clear_trigstrs(self.goalentity);// only work once
 	}
 
-	//------------------------------------------------------------------
 	// Fire all targets on trigger teleporter entity (ID code)
 	// not sure why? the target *should* be pointing at info_destination
 	// Mapper could use killtarget or message strings instead
@@ -717,12 +711,9 @@ void() trigger_teleport_touch =
 			// Use default velocity vector
 			else other.velocity = v_forward * self.speed;
 
-			// This a stupid bullshit hack to get around the problem
-			// with up/down angles being back to front for models
+			// This a stupid hack to get around the problem with up/down angles being back to front for models
 			// One day I will come back and fix this stupid hack!?!
-			if (self.goalentity.mangle_x == 90 || self.goalentity.mangle_x == 270)
-				other.angles_x = -other.angles_x;
-			
+			if (self.goalentity.mangle_x == 90 || self.goalentity.mangle_x == 270) other.angles_x = -other.angles_x;
 		}
 		// This is usually used for gibs
 		else if (!other.health) {
@@ -896,7 +887,7 @@ void() trigger_teleport =
 	self.estate_use = trigger_teleport_use;
 	self.use = entity_state_use;
 	
-	// Damn annoying that the targetname is being used like this because
+	// Annoying that the targetname is being used like this because
 	// there could have been a better way to do this type of functionality
 	// == "" teleporter works fine (starts on)
 	// != "" teleporter requires trigger activation
@@ -1251,8 +1242,7 @@ void() trigger_push_fire =
 	// Check for no monster exception
 	if (self.spawnflags & TRIG_PUSHNOMONSTER && self.bmodel_act.flags & FL_MONSTER) return;
 
-	// If custom push direction setup, calculate new facing angle
-	if (self.target != "") {
+	if (self.target != "") { // If custom push direction setup, calculate new facing angletarget
 		self.angletarget = self.target;
 		TargetMovedir(self, FALSE);
 	}
@@ -1517,26 +1507,23 @@ void() trigger_ladder =
 	if (!self.sounds) self.sounds = 2;
 	if (self.sounds == 1) {				// Metal
 		if(!self.waitmin) self.waitmin = 0.45;
-		self.noise1 = "player/ladmetal1.wav";
-		self.noise2 = "player/ladmetal2.wav";
-		self.noise3 = "player/ladmetal3.wav";
-		self.noise4 = "player/ladmetal4.wav";
-	}
-	else if (self.sounds == 2) {		// Wood
+		self.noise1 = "ad171/player/ladmetal1.wav";
+		self.noise2 = "ad171/player/ladmetal2.wav";
+		self.noise3 = "ad171/player/ladmetal3.wav";
+		self.noise4 = "ad171/player/ladmetal4.wav";
+	} else if (self.sounds == 2) {		// Wood
 		if(!self.waitmin) self.waitmin = 0.4;
-		self.noise1 = "player/ladwood1.wav";
-		self.noise2 = "player/ladwood2.wav";
-		self.noise3 = "player/ladwood3.wav";
-		self.noise4 = "player/ladwood4.wav";
-	}
-	else if (self.sounds == 3) {		// Old Rope
+		self.noise1 = "ad171/player/ladwood1.wav";
+		self.noise2 = "ad171/player/ladwood2.wav";
+		self.noise3 = "ad171/player/ladwood3.wav";
+		self.noise4 = "ad171/player/ladwood4.wav";
+	} else if (self.sounds == 3) {		// Old Rope
 		if(!self.waitmin) self.waitmin = 0.7;
-		self.noise1 = "player/ladrope1.wav";
-		self.noise2 = "player/ladrope2.wav";
-		self.noise3 = "player/ladrope3.wav";
-		self.noise4 = "player/ladrope4.wav";
-	}
-	else {
+		self.noise1 = "ad171/player/ladrope1.wav";
+		self.noise2 = "ad171/player/ladrope2.wav";
+		self.noise3 = "ad171/player/ladrope3.wav";
+		self.noise4 = "ad171/player/ladrope4.wav";
+	} else {
 		// Custom or empty
 		if (!self.waitmin) self.waitmin = 0.5;
 		if (self.noise1 == "") self.noise1 = SOUND_EMPTY;
@@ -1574,9 +1561,7 @@ void() trigger_ladder =
 		if (CheckZeroVector(self.pos2)) self.pos2 = '25 15 90';
 		// Can't have both velocity + fteskin systems active once
 		self.spawnflags = self.spawnflags - (self.spawnflags & TRIG_LADDERFTESKIN);
-	}
-	// Enable FTE Skin/Ladder system (reqs FTE engine)
-	else if (self.spawnflags & TRIG_LADDERFTESKIN) {
+	} else if (self.spawnflags & TRIG_LADDERFTESKIN) { // Enable FTE Skin/Ladder system (reqs FTE engine)
 		self.spawnflags = self.spawnflags - (self.spawnflags & TRIG_LADDERVELOCITY);
 		self.skin = -16;
 	}
@@ -1586,31 +1571,27 @@ void() trigger_ladder =
 	trigger_bmodel_setup();
 };
 
-//======================================================================
-/*QUAKED trigger_fallspeed (.5 .5 .5) ? NOTOUCH x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
-Change the player velocity speed checks for fall damage
-------- KEYS --------
-targetname     : trigger entity (works with entity state system)
-target         : trigger all these targets when activated
-jump_height    : The player jump height (def=270) initial boast from standing still
-fall_speedlow  : Fall Speed for any checks (def=-300) must be negative no.
-fall_speedhigh : Fall Speed for damage check (def=-650) must be negative no.
-fall_speeddebug: Display players fall velocity to console (1=ON, -1=OFF)
-fall_dmg       : Fall damage for player (def=5, -1=no dmg/sound)
-fall_dmgwater  : Fall damage into water (>0 for dmg/sound, -1=no dmg/sound)
-wait           : -1=will only fire targets once (switches off)
-sounds         : 1=Secret,2=talk,3=switch,4=silent,6=secret2
-noise          : custom sound to play when triggered
-message        : message to display when triggered
--------- SPAWNFLAGS --------
-NOTOUCH  : can only be triggered via other entities
-STARTOFF : Requires trigger to activate
-------- NOTES --------
-Change the player velocity speed checks for fall damage
-
-======================================================================*/
-void() player_fallspeed_reset =
-{
+// QUAKED trigger_fallspeed (.5 .5 .5) ? NOTOUCH x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+// Change the player velocity speed checks for fall damage
+// ------- KEYS --------
+// targetname     : trigger entity (works with entity state system)
+// target         : trigger all these targets when activated
+// jump_height    : The player jump height (def=270) initial boast from standing still
+// fall_speedlow  : Fall Speed for any checks (def=-300) must be negative no.
+// fall_speedhigh : Fall Speed for damage check (def=-650) must be negative no.
+// fall_speeddebug: Display players fall velocity to console (1=ON, -1=OFF)
+// fall_dmg       : Fall damage for player (def=5, -1=no dmg/sound)
+// fall_dmgwater  : Fall damage into water (>0 for dmg/sound, -1=no dmg/sound)
+// wait           : -1=will only fire targets once (switches off)
+// sounds         : 1=Secret,2=talk,3=switch,4=silent,6=secret2
+// noise          : custom sound to play when triggered
+// message        : message to display when triggered
+// -------- SPAWNFLAGS --------
+// NOTOUCH  : can only be triggered via other entities
+// STARTOFF : Requires trigger to activate
+// ------- NOTES --------
+// Change the player velocity speed checks for fall damage
+void() player_fallspeed_reset = {
 	map_jumpheight = DEF_JUMPHEIGHT;
 	map_fallspeedlow = DEF_FALLSPEEDLOW;
 	map_fallspeedhigh = DEF_FALLSPEEDHIGH;
@@ -1619,14 +1600,9 @@ void() player_fallspeed_reset =
 	map_fallspeeddebug = FALSE;
 };
 
-//----------------------------------------------------------------------
-void() player_fallspeed_setup =
-{
-	//----------------------------------------------------------------------
-	// Check for any custom player jump height settings
-	if (self.jump_height > 0) map_jumpheight = self.jump_height;
+void() player_fallspeed_setup = {
+	if (self.jump_height > 0) map_jumpheight = self.jump_height; // Check for any custom player jump height settings
 	
-	//----------------------------------------------------------------------
 	// Low speed cannot be positive
 	if (self.fall_speedlow > 0)
 		dprint("\b[WORLD]\b LOW Player Fall Speed must be negative\n");
@@ -1645,7 +1621,6 @@ void() player_fallspeed_setup =
 			dprint("\b[WORLD]\b Player Fall Speed HIGH must be less than LOW\n");
 	}
 	
-	//----------------------------------------------------------------------
 	// Allow for zero fall damage, use negative values
 	if (self.fall_dmg < 0) map_falldmg = 0;
 	else if (self.fall_dmg > 0) map_falldmg = self.fall_dmg;
@@ -1659,9 +1634,7 @@ void() player_fallspeed_setup =
 	else if (self.fall_speeddebug > 0) map_fallspeeddebug = TRUE;
 };
 
-//----------------------------------------------------------------------
-void() trigger_fallspeed_fire =
-{
+void() trigger_fallspeed_fire = {
 	// Is the trigger turned off or disabled?
 	if (self.estate & ESTATE_BLOCK) return;
 	// Is the trigger blocked? (trigger_once)
@@ -1673,12 +1646,9 @@ void() trigger_fallspeed_fire =
 
 	// Check for any trigger events (noise/delay etc)
 	// Play the sound ON the activator and display message
-	if (self.message != "" && activator.flags & FL_CLIENT) 
-		centerprint (activator, self.message);
-	if (self.noise != "") 
-		sound (activator, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
-	if (self.target != "") 
-		trigger_strs(self.target, activator);
+	if (self.message != "" && activator.flags & FL_CLIENT) centerprint (activator, self.message);
+	if (self.noise != "") sound (activator, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
+	if (HasTargets(self)) SUB_UseTargets(); 
 	
 	// Is the trigger repeatable?
 	if (self.wait < 0) {
@@ -1690,9 +1660,7 @@ void() trigger_fallspeed_fire =
 	else self.attack_finished = time + self.wait;
 };
 
-//----------------------------------------------------------------------
-void() trigger_fallspeed =
-{
+void() trigger_fallspeed = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 	if (check_bmodel_notouch()) return;	// NO touch + NO targetname!
 
@@ -1713,7 +1681,7 @@ void() trigger_fallspeed =
 Change the player maximum hp and maximum mega values
 ------- KEYS --------
 targetname  : trigger entity (works with entity state system)
-target      : trigger all these targets when activated
+target      : trigger all targets when activated
 max_health  : Maximum Health for ALL the player / client
 mega_health : Maximum Health for picking up the mega health item
 count       : Skill level (0=ALL, 1=EASY, 2=NORMAL, 4=HARD, 8=NM, 15=ALL)
@@ -1728,8 +1696,7 @@ STARTOFF : Requires trigger to activate
 Change the player maximum hp and maximum mega values
 
 ======================================================================*/
-void() trigger_maxhp_fire =
-{
+void() trigger_maxhp_fire = {
 	local entity playent;
 	
 	// Is the trigger turned off or disabled?
@@ -1774,8 +1741,7 @@ void() trigger_maxhp_fire =
 		centerprint (activator, self.message);
 	if (self.noise != "") 
 		sound (activator, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
-	if (self.target != "") 
-		trigger_strs(self.target, activator);
+	if (HasTargets(self)) SUB_UseTargets();
 	
 	// Is the trigger repeatable?
 	if (self.wait < 0) {
@@ -1787,9 +1753,7 @@ void() trigger_maxhp_fire =
 	else self.attack_finished = time + self.wait;
 };
 
-//----------------------------------------------------------------------
-void() trigger_maxhp =
-{
+void() trigger_maxhp = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 	if (check_bmodel_notouch()) return;	// NO touch + NO targetname!
 
@@ -1902,11 +1866,8 @@ void() trigger_gravity_fire =
 				self.lip = TRUE;
 			}
 		}
-	}
-	// Entity gravity
-	else {
-		// Check for multiple targets?
-		if (self.target != "") {
+	} else { // Entity gravity
+		if (self.target != "") { // Check for multiple targets? Only check target, special use for target2.
 			// Build initial list from world
 			ent_list = find(world, targetname, self.target);
 			// Cycle through list
@@ -2152,7 +2113,7 @@ void() trigger_velocity_fire =
 			else centerprint(self.enemy, self.message);
 		}
 		// Fire target(s) if trigger successful
-		if (self.target != "") trigger_strs(self.target, self.bmodel_act);
+		if (self.target != "") trigger_strs(self.target, self.bmodel_act); // Special setup, no extra targets checked.
 
 		// Grenades will keep bounding after hitting the trigger
 		// Allow mappers to override this behaviour (entity key)
@@ -2693,32 +2654,22 @@ noise1 : specify classname that CAN use this trigger (noise1=monster_dog)
 STARTOFF : Starts off and waits for trigger
 -------- NOTES --------
 Stop monsters from using jump attack
-
-======================================================================*/
+=====================================================================*/
 void() trigger_monsternojump_fire = {
-	// This is after bmodel _use, _killed and _touch, so any reference
-	// to the trigger activator has to go through 'bmodel_act'
+	// This is after bmodel _use, _killed and _touch, so any reference to the trigger activator has to go through 'bmodel_act'
 	if (self.estate & ESTATE_BLOCK) return;
 	if (self.attack_finished > time) return;
+	if (!(self.bmodel_act.flags & FL_MONSTER)) return; // Block non-monsters
+	if (self.noise1 != string_null && self.bmodel_act.classname != self.noise1) return; // Is there any classname exception setup?
 	
-	// Block non-monsters
-	if (!(self.bmodel_act.flags & FL_MONSTER)) return;
+	// Check for any extra triggers
+	if (HasTargets(self)) {
+		SUB_UseTargets();
+		clear_trigstrs(self); // Fire them once!
+	}
 
-	// Is there any classname exception setup?
-	if (self.noise1 != "") {
-		if (self.bmodel_act.classname != self.noise1) return;
-	}
-	
-	// Check for any extra triggers, fire them once!
-	if (self.target != "") {
-		trigger_strs(self.target, activator);
-		self.target = "";
-	}
-	
-	// Update jump flag to block jump attacks
-	self.bmodel_act.jump_flag = time + self.delay;
-	// Restrict the trigger to 0.1s re-triggering
-	self.attack_finished = time + self.waitmin;
+	self.bmodel_act.jump_flag = time + self.delay; // Update jump flag to block jump attacks
+	self.attack_finished = time + self.waitmin; // Restrict the trigger to 0.1s re-triggering
 
 	// Setup to trigger push once?
 	if (self.wait < 0) {
@@ -2727,46 +2678,24 @@ void() trigger_monsternojump_fire = {
 	}
 };
 
-//----------------------------------------------------------------------
-void() trigger_monsternojump =
-{
+void() trigger_monsternojump = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	self.classtype = CT_TRIGNOJUMP;
 	self.classgroup = CG_TRIGGERS;
 	InitTrigger ();
-		
 	if (!self.delay) self.delay = 0.5;
 	if (!self.waitmin) self.waitmin = 0.1;
-
-	// No trigger damage functionality and always touchable!
-	self.spawnflags = self.spawnflags | TRIG_ALWAYTOUCH | TRIG_NODAMAGE;
-	
-	// Setup Entity State functionality
-	self.estate_fire = trigger_monsternojump_fire;
+	self.spawnflags = self.spawnflags | TRIG_ALWAYTOUCH | TRIG_NODAMAGE; // No trigger damage functionality and always touchable!
+	self.estate_fire = trigger_monsternojump_fire; // Setup Entity State functionality
 	self.touch = trigger_bmodel_anytouch;
 	trigger_bmodel_setup();
 };
 
-//----------------------------------------------------------------------
 // Re-direct because it was renamed to be more consistent
 void() trigger_nomonjump = { trigger_monsternojump(); };
 
-//======================================================================
-/*QUAKED trigger_monsterdrop (0 .5 .5) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
-Drop monster(s) to floor
--------- KEYS --------
-targetname : trigger entity (works with entity state system)
-wait   : -1 = trigger_once functionality
-height : the speed thrown upwards (def 50)
--------- SPAWNFLAGS --------
-STARTOFF : Starts off and waits for trigger
--------- NOTES --------
-Drop monster(s) to floor
-======================================================================*/
-
-void() trigger_monsterdrop_use =
-{
+void() trigger_monsterdrop_use = {
 	if (self.estate & ESTATE_BLOCK) return;
 	if (self.attack_finished > time) return;
 	if (self.target == "") return;
@@ -2796,9 +2725,17 @@ void() trigger_monsterdrop_use =
 	}
 };
 
-//----------------------------------------------------------------------
-void() trigger_monsterdrop =
-{
+// QUAKED trigger_monsterdrop (0 .5 .5) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+// Drop monster(s) to floor
+// -------- KEYS --------
+// targetname : trigger entity (works with entity state system)
+// wait   : -1 = trigger_once functionality
+// height : the speed thrown upwards (def 50)
+// -------- SPAWNFLAGS --------
+// STARTOFF : Starts off and waits for trigger
+// -------- NOTES --------
+// Drop monster(s) to floor
+void() trigger_monsterdrop = {
 	self.classtype = CT_TRIGMONDROP;
 	self.classgroup = CG_TARGETS;
 
@@ -2807,40 +2744,15 @@ void() trigger_monsterdrop =
 	if (check_coop() == TRUE) return;
 
 	if (!self.height) self.height = 50;
-		
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
+	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_use = trigger_monsterdrop_use;
 	self.estate = ESTATE_ON;
 };
 
-//======================================================================
-/*QUAKED trigger_monsterjump (.5 .5 .5) ? x FLYING SWIMMING x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
-Push monsters in a certain direction
--------- KEYS --------
-targetname : trigger entity (works with entity state system)
-target     : target entity for custom direction
-target2    : targets to fire when the trigger is used
-wait       : -1 = trigger_once functionality
-angle      : direction of push (-2 is down, -1 up)
-angletarget: targeting entity used for custom direction
-mangle     : facing direction for activating the trigger
-speed      : the speed thrown forward (def 200)
-height     : the speed thrown upwards (def 200)
-noise1     : specify classname that CAN use this trigger (noise1=monster_dog)
--------- SPAWNFLAGS --------
-FLYING   : Will affect flying monsters
-SWIMMING  : Will affect swimming monsters
-STARTOFF : Starts off and waits for trigger
--------- NOTES --------
-Push monsters in a certain direction
-This entity cannot be damaged and is always touchable once activated
-
-======================================================================*/
-void() trigger_monsterjump_fire =
-{
-	// This is after bmodel _use, _killed and _touch, so any reference
-	// to the trigger activator has to go through 'bmodel_act'
+void() trigger_monsterjump_fire = {
+	local entity sactivator;
+	
+	// This is after bmodel _use, _killed and _touch, so any reference to the trigger activator has to go through 'bmodel_act'
 	if (self.estate & ESTATE_BLOCK) return;
 	if (self.attack_finished > time) return;
 	
@@ -2871,19 +2783,15 @@ void() trigger_monsterjump_fire =
 		if (self.bmodel_act.classtype == CT_MONDROLE && !self.bmodel_act.attack_rage) return;
 	}
 	
-	// Check for any triggers, fire them once!
-	if (self.target != "") {
-		trigger_strs(self.target, activator);
-		self.target = "";
-	}
-	// Check for any additional targets (no activator set)
-	if (self.target2 != "") trigger_strs(self.target2, activator);
+	sactivator = activator;
+	activator = self.bmodel_act;
+	if (HasTargets(self)) SUB_UseTargets(); // Check for any triggers and fire away
+	activator = sactivator;
 	
 	// Flying/Swimming monsters only need a push in the right direction
 	if (self.bmodel_act.flags & FL_FLY || self.bmodel_act.flags & FL_SWIM) {
 		self.bmodel_act.velocity = self.movedir * self.speed;
-	}
-	else {
+	} else {
 		// set XY even if not on ground, so the jump will clear lips
 		self.bmodel_act.velocity_x = self.movedir_x * self.speed;
 		self.bmodel_act.velocity_y = self.movedir_y * self.speed;
@@ -2901,47 +2809,53 @@ void() trigger_monsterjump_fire =
 	}
 };
 
-//----------------------------------------------------------------------
-void() trigger_monsterjump =
-{
+// QUAKED trigger_monsterjump (.5 .5 .5) ? x FLYING SWIMMING x x x STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+// Push monsters in a certain direction
+// -------- KEYS --------
+// targetname : trigger entity (works with entity state system)
+// target     : target entity for custom direction
+// target2    : targets to fire when the trigger is used
+// wait       : -1 = trigger_once functionality
+// angle      : direction of push (-2 is down, -1 up)
+// angletarget: targeting entity used for custom direction
+// mangle     : facing direction for activating the trigger
+// speed      : the speed thrown forward (def 200)
+// height     : the speed thrown upwards (def 200)
+// noise1     : specify classname that CAN use this trigger (noise1=monster_dog)
+// -------- SPAWNFLAGS --------
+// FLYING   : Will affect flying monsters
+// SWIMMING  : Will affect swimming monsters
+// STARTOFF : Starts off and waits for trigger
+// -------- NOTES --------
+// Push monsters in a certain direction
+// This entity cannot be damaged and is always touchable once activated
+void() trigger_monsterjump = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	self.classtype = CT_TRIGMONJUMP;
 	self.classgroup = CG_TRIGGERS;
 	
-	// Check for a facing angle (used later in fire function)
-	if (!CheckZeroVector(self.mangle)) {
+	if (!CheckZeroVector(self.mangle)) { // Check for a facing angle (used later in fire function)
 		makevectors (self.mangle);
 		self.movedir2 = v_forward;
-	}
-	// Default setup (not used)
-	else self.movedir2 = '0 0 0';
-	// Default jump angle is 360, needs to be set BEFORE InitTrigger
-	if (self.angles_y == 0) self.angles_y = 360;
+	} else self.movedir2 = VEC_ORIGIN; // Default setup (not used)
+	
+	if (self.angles_y == 0) self.angles_y = 360; // Default jump angle is 360, needs to be set BEFORE InitTrigger
 	InitTrigger ();
-
 	if (!self.speed) self.speed = 200;
 	if (!self.height) self.height = 200;
-
-	// No trigger damage functionality and always touchable!
-	self.spawnflags = self.spawnflags | TRIG_ALWAYTOUCH | TRIG_NODAMAGE;
-	
-	// Setup Entity State functionality
-	self.estate_fire = trigger_monsterjump_fire;
+	self.spawnflags = self.spawnflags | TRIG_ALWAYTOUCH | TRIG_NODAMAGE; // No trigger damage functionality and always touchable!
+	self.estate_fire = trigger_monsterjump_fire; // Setup Entity State functionality
 	self.touch = trigger_bmodel_anytouch;
 	trigger_bmodel_setup();
-
-	// If target is setup, calculate new facing angle
-	if (self.target != "") {
+	if (self.target != "") { // If target is setup, calculate new facing angletarget. Not used for targets, no need to check all.
 		self.angletarget = self.target;
 		self.nextthink = time + 1 + random();
 		self.think = TargetMovedirReturn;
 	}
 };
 
-//----------------------------------------------------------------------
-void() trigger_drolejump =
-{
+void() trigger_drolejump = {
 	self.noise1 = "monster_drole";
 	trigger_monsterjump();
 };
@@ -3148,45 +3062,29 @@ Heals any player who touches this trigger, can be triggered on/off and produces
 bubbles within the bounding box of the trigger when spawnflag enabled
 
 ======================================================================*/
-void() trigger_heal_touch =
-{
+void() trigger_heal_touch = {
 	if (self.estate & ESTATE_BLOCK) return;		// Function off/disabled
 	if (self.attack_finished > time) return;	// Touch blocked (temporary)
 	if ( !(other.flags & FL_CLIENT) ) return;	// Only works with clients
 	if (other.health < 1 ) return;				// Cannot heal, target is dead
 	if (self.health < 1) return;				// Run out of health
 	
-	// Do not constantly check healing, use wait
-	self.attack_finished = time + self.wait;
+	self.attack_finished = time + self.wait; // Do not constantly check healing, use wait
+	if (!T_Heal(other, self.healamount, 0)) return; // Can the pool heal the player?
 
-	// Can the pool heal the player?
-	if (!T_Heal(other, self.healamount, 0)) return;
-
-	// Healing sound		
-	sound (other, CHAN_BODY, self.noise, self.volume, ATTN_NORM);
-	// Has the pool run out of health?
-	if (self.max_health > 0) self.health = self.health - self.healamount;
-		
-	// Has the healing trigger expired?
-	if (self.health < 1) {
-		// Only block message lip=1 healing 2=all messages
-		if (self.lip < 2) centerprint (other, self.message2);
-		// Fire any targets once (finish of healing cycle)
-		if (self.target2 != "") {trigger_strs(self.target2, other);self.target2 = "";}
-		// Switch off healing trigger
-		entity_state_off();
-	}
-	else {
-		// Fire any targets once (start of healing cycle)
-		if (self.target != "") {trigger_strs(self.target, other);self.target = "";}
-		// Display healing message (check for lip block)
-		if (!self.lip) centerprint (other, self.message);
+	sound (other, CHAN_BODY, self.noise, self.volume, ATTN_NORM); // Healing sound
+	if (self.max_health > 0) self.health = self.health - self.healamount; // Has the pool run out of health?
+	if (self.health < 1) { // Has the healing trigger expired?
+		if (self.lip < 2) centerprint (other, self.message2); // Only block message lip=1 healing 2=all messages
+		if (self.target2 != "") {trigger_strs(self.target2, other); self.target2 = "";} // Fire any targets once (finish of healing cycle)
+		entity_state_off(); // Switch off healing trigger
+	} else {
+		if (self.target != "") {trigger_strs(self.target, other);self.target = "";} // Fire any targets once (start of healing cycle)
+		if (!self.lip) centerprint (other, self.message); // Display healing message (check for lip block)
 	}
 };	
 
-//----------------------------------------------------------------------
-void() trigger_heal_on =
-{
+void() trigger_heal_on = {
 	if (self.health > 0) {
 		self.estate = ESTATE_ON;
 		self.solid = SOLID_TRIGGER;
@@ -3197,21 +3095,16 @@ void() trigger_heal_on =
 	}
 };
 
-//----------------------------------------------------------------------
-void() trigger_heal_reset =
-{
+void() trigger_heal_reset = {
 	if (self.max_health > 0) {
-		// Reset health, targets and switch on entity 
-		self.health = self.max_health;
+		self.health = self.max_health; // Reset health, targets and switch on entity 
 		if (self.noise1 != "") self.target = self.noise1;
 		if (self.noise2 != "") self.target2 = self.noise2;
 		self.estate_on();
 	}
 };
 
-//----------------------------------------------------------------------
-void() trigger_heal =
-{
+void() trigger_heal = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	self.classtype = CT_TRIGHEAL;
@@ -3233,10 +3126,7 @@ void() trigger_heal =
 	if (!self.wait) self.wait = 1;					// Default trigger time
 	if (self.healamount < 1) self.healamount = 10;	// Quantity to heal each touch trigger
 	if (!self.max_health) self.max_health = 50;		// Default max healing
-	// Cannot have healamount large than max, need to cap healamount
-	if (self.max_health > 0 && self.max_health < self.healamount) 
-		self.healamount = self.max_health;
-
+	if (self.max_health > 0 && self.max_health < self.healamount) self.healamount = self.max_health; // Cannot have healamount large than max, need to cap healamount
 	if (self.max_health < 0) self.health = 100;		// max < 0 = Infinite healing
 	else self.health = self.max_health;				// Reset total ready
 		
@@ -3244,8 +3134,8 @@ void() trigger_heal =
 	if (!self.message2) self.message2 = "The Healing Pool has expired!";
 	
 	// Save any trigger names for reset events	
-	if (self.target != "" ) self.noise1 = self.target;
-	if (self.target2 != "" ) self.noise2 = self.target2;
+	if (self.target != "" ) self.noise1 = self.target; // No need to check all targets, special setup that only uses target and...
+	if (self.target2 != "" ) self.noise2 = self.target2; // ...target2, no need to check all targets.
 
 	// Setup Entity State functionality
 	if (self.targetname != "") self.use = entity_state_use;
@@ -3405,7 +3295,7 @@ void() trigger_touchsound =
 	trigger_bmodel_volume(1);
 	
 	if (self.spawnflags & TRIG_TSOUNDDRAIN) {
-		if (self.noise2 == "") self.noise2 = "ambience/liquid_drain.wav";
+		if (self.noise2 == "") self.noise2 = "ad171/ambience/liquid_drain.wav";
 		precache_sound(self.noise2);
 		// Create an entity to play drain sound
 		// bmodel origins are at 0,0,0 so never play properly

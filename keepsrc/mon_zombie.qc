@@ -619,7 +619,7 @@ void() monster_zombie = {
 		return;
 	}
 
-	self.mdl = "progs/ad181/mon_zombie.mdl";
+	self.mdl = "progs/ad171/mon_zombie.mdl";
 	self.headmdl = "progs/ad181/h_zombie.mdl";
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
@@ -708,7 +708,7 @@ void() monster_zombiep = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	self.mdl = "progs/ad181/mon_zombie.mdl";
+	self.mdl = "progs/ad171/mon_zombie.mdl";
 	self.headmdl = "progs/ad181/h_zombie.mdl";
 	precache_model (self.mdl);
 	precache_model (self.headmdl);

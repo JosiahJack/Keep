@@ -73,7 +73,7 @@ void()	raven_glide14	=[	$glide14,		raven_glide15	] {ai_walk(8);};
 void()	raven_glide15	=[	$glide15,		raven_glide16	] {ai_walk(8);};
 void()	raven_glide16	=[	$glide16,		raven_glide17	] {ai_walk(8);};
 void()	raven_glide17	=[	$glide17,		raven_glide18	] {ai_walk(8);
-	sound (self, CHAN_VOICE, "raven/wings.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_VOICE, "redfield/raven/wings.wav", 1, ATTN_NORM);};
 void()	raven_glide18	=[	$glide18,		raven_glide19	] {ai_walk(8);};
 void()	raven_glide19	=[	$glide19,		raven_glide20	] {ai_walk(8);};
 void()	raven_glide20	=[	$glide20,		raven_glide21	] {ai_walk(8);};
@@ -107,7 +107,7 @@ void()	raven_eat20	=[	$eat22,		raven_eat1	] {ai_stand();};
 void()	raven_takeoff1	=[	$takeoff1,		raven_takeoff2	] {ai_run(8);};
 void()	raven_takeoff2	=[	$takeoff2,		raven_takeoff3	] {ai_run(8);};
 void()	raven_takeoff3	=[	$takeoff3,		raven_takeoff4	] {ai_run(8);
-	sound (self, CHAN_VOICE, "raven/wings.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_VOICE, "redfield/raven/wings.wav", 1, ATTN_NORM);};
 void()	raven_takeoff4	=[	$takeoff4,		raven_takeoff5	] {ai_run(8);};
 void()	raven_takeoff5	=[	$takeoff5,		raven_takeoff6	] {ai_run(8);};
 void()	raven_takeoff6	=[	$takeoff6,		raven_takeoff7	] {ai_run(8);};
@@ -121,7 +121,7 @@ void()	raven_takeoff12	=[	$takeoff12,		raven_run7	] {ai_run(8);};
 //============================================================================
 void()	raven_run1	=[	$fly1,		raven_run2	] {ai_face(); ai_run(28);};
 void()	raven_run2	=[	$fly2,		raven_run3	] {ai_run(28);
-	sound (self, CHAN_VOICE, "raven/wings.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_VOICE, "redfield/raven/wings.wav", 1, ATTN_NORM);};
 void()	raven_run3	=[	$fly3,		raven_run4	] {ai_run(28);};
 void()	raven_run4	=[	$fly4,		raven_run5	] {ai_run(28);};
 void()	raven_run5	=[	$fly5,		raven_run6	] {ai_run(28);};
@@ -135,7 +135,7 @@ void()	raven_run11	=[	$fly11,		raven_run1	] {ai_run(28);};
 //============================================================================
 void()	raven_hover1	=[	$fly1,		raven_hover2	] {ai_stand();};
 void()	raven_hover2	=[	$fly2,		raven_hover3	] {ai_stand();
-	sound (self, CHAN_VOICE, "raven/wings.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_VOICE, "redfield/raven/wings.wav", 1, ATTN_NORM);};
 void()	raven_hover3	=[	$fly3,		raven_hover4	] {ai_stand();};
 void()	raven_hover4	=[	$fly4,		raven_hover5	] {ai_stand();};
 void()	raven_hover5	=[	$fly5,		raven_hover6	] {ai_stand();};
@@ -152,7 +152,7 @@ void()	raven_atk2  	=[ 	$atk2, 		raven_atk3 	] {ai_charge(26);};
 void()	raven_atk3  	=[ 	$atk3, 		raven_atk4 	] {ai_charge(26);};
 void()	raven_atk4  	=[ 	$atk4, 		raven_atk5 	] {ai_charge(26);};
 void()	raven_atk5  	=[ 	$atk5, 		raven_atk6 	] {ai_charge(24);raven_melee();
-	sound (self, CHAN_VOICE, "raven/rclaw.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_VOICE, "redfield/raven/rclaw.wav", 1, ATTN_NORM);};
 void()	raven_atk6  	=[ 	$atk6, 		raven_atk7 	] {ai_charge(26);};
 void()	raven_atk7  	=[ 	$atk7, 		raven_atk8 	] {ai_charge(24);raven_melee();};
 void()	raven_atk8  	=[ 	$atk8, 		raven_atk9 	] {ai_charge(26);};
@@ -160,19 +160,17 @@ void()	raven_atk9  	=[ 	$atk9, 		raven_atk10 	] {ai_charge(26);};
 void()	raven_atk10  	=[ 	$atk10, 	raven_atk11 	] {ai_charge(26);};
 void()	raven_atk11  	=[ 	$atk11, 	raven_atk12	] {ai_charge(26);};
 void()	raven_atk12  	=[ 	$atk12, 	raven_atk13	] {ai_charge(24);raven_melee();
-	sound (self, CHAN_VOICE, "raven/rsnap.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_VOICE, "redfield/raven/rsnap.wav", 1, ATTN_NORM);};
 void()	raven_atk13  	=[ 	$atk13, 	raven_atk14 	] {ai_charge(26);};
 void()	raven_atk14  	=[ 	$atk14, 	raven_atk15	] {ai_charge(26);};
 void()	raven_atk15  	=[ 	$atk15, 	raven_atk16	] {ai_charge(24);raven_melee();
-	sound (self, CHAN_VOICE, "raven/ravencall.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_VOICE, "redfield/raven/ravencall.wav", 1, ATTN_NORM);};
 void()	raven_atk16  	=[ 	$atk16, 	raven_atk17	] {ai_charge(26);};
 void()	raven_atk17  	=[ 	$atk17, 	raven_atk18	] {ai_charge(26);};
 void()	raven_atk18  	=[ 	$atk18, 	raven_atk19	] {ai_charge(26);};
 void()	raven_atk19  	=[ 	$atk19, 	raven_run1 	] {ai_charge(26);};
 
-//------------------------------------------------------------------------
-void() raven_glidechoose =
-{
+void() raven_glidechoose = {
 	if (random() < 0.5)
 	{
 		raven_glide1 ();
@@ -183,12 +181,8 @@ void() raven_glidechoose =
 	}
 };
 
-//======================================================================
-// Raven Claw and Bite --- This is not a melee attack! Uses very short
-// hitscan to circumvent flying monster z axis melee calculations. 
-//======================================================================
-void() raven_melee =
-{
+// Raven Claw and Bite --- This is not a melee attack! Uses very short hitscan to circumvent flying monster z axis melee calculations. 
+void() raven_melee = {
 	local float ldmg;
 	local vector org, dir;
 	if (self.health < 1) return;
@@ -197,30 +191,19 @@ void() raven_melee =
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = self.enemy.origin + '0 0 16' - org;
 	dir = normalize (dir);
-
 	self.enemydist = MONAI_RANGERAVEN2;
-	
-	// Trace direct line of lightning in front of Raven
-	traceline (org, self.origin + dir*self.enemydist, TRUE, self);
-
-	// Raven claws! 2-6 Damage
-	ldmg = (random() + random() + random()) * 2;
+	traceline (org, self.origin + dir*self.enemydist, TRUE, self); // Trace direct line in front of Raven
+	ldmg = (random() + random() + random()) * 2; // Raven claws! 2-6 Damage
 	if (ldmg < 2) ldmg = 2;	
 	// Check for any breakables first
 	if (ai_foundbreakable(self, trace_ent, FALSE)) {
 		T_Damage (trace_ent, self, self, ldmg, DAMARMOR);
-	}
-	// Random hitscan damage
-	else LightningDamage (org, trace_endpos, self, ldmg);
-	
-	// Spawn some touch blood (no explicit direction)
-	spawn_touchblood (self, self.enemy, ldmg*3);
+	} else LightningDamage (org, trace_endpos, self, ldmg); // Random hitscan damage
 
+	spawn_touchblood (self, self.enemy, ldmg*3); // Spawn some touch blood (no explicit direction)
 };
 
-//----------------------------------------------------------------------
-void() raven_wakeup =
-{
+void() raven_wakeup = {
 	// Dead already?
 	if (self.health < 1) return;
 
@@ -249,9 +232,7 @@ void() raven_wakeup =
 	raven_takeoff1();
 };
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) raven_pain =
-{
+void(entity inflictor, entity attacker, float damage) raven_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -267,11 +248,9 @@ void(entity inflictor, entity attacker, float damage) raven_pain =
 	}
 };
 
-//============================================================================
 void() raven_death1 =[ $death1, raven_death2 ] {};
 void() raven_death2 =[ $death2, raven_death3 ] {monster_check_gib();};
-void() raven_death3 =[ $death3, raven_death4 ] {monster_check_gib();
-	self.solid = SOLID_NOT;};
+void() raven_death3 =[ $death3, raven_death4 ] {monster_check_gib(); self.solid = SOLID_NOT;};
 void() raven_death4 =[ $death4, raven_death5 ] {};
 void() raven_death5 =[ $death5, raven_death6 ] {};
 void() raven_death6 =[ $death6, raven_death7 ] {};
@@ -283,38 +262,34 @@ void() raven_death11 =[ $death11, raven_death12 ] {};
 void() raven_death12 =[ $death12, raven_death13 ] {monster_death_postcheck();};
 void() raven_death13 =[ $death13, raven_death13 ] {monster_deadbody_check();};
 
-//============================================================================
 void() raven_deathb1 =[ $deathb1, raven_deathb2 ] {};
 void() raven_deathb2 =[ $deathb2, raven_deathb3 ] {monster_check_gib();};
-void() raven_deathb3 =[ $deathb3, raven_deathb4 ] {monster_check_gib();
-	self.solid = SOLID_NOT;};
+void() raven_deathb3 =[ $deathb3, raven_deathb4 ] {monster_check_gib(); self.solid = SOLID_NOT;};
 void() raven_deathb4 =[ $deathb4, raven_deathb5 ] {};
 void() raven_deathb5 =[ $deathb5, raven_deathb6 ] {};
 void() raven_deathb6 =[ $deathb6, raven_deathb7 ] {monster_death_postcheck();};
 void() raven_deathb7 =[ $deathb7, raven_deathb7 ] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
-void() raven_die =
-{
+void() raven_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
-	if (!self.gibbed) { 
-		if (random() < 0.5) {sound (self, CHAN_VOICE, "raven/rdeath.wav", 1, ATTN_NORM);}
-		else
-		{sound (self, CHAN_VOICE, "raven/rdeathb.wav", 1, ATTN_NORM);}
+	if (!self.gibbed) {  //normal death
+		if (random() < 0.5) {sound (self, CHAN_VOICE, "redfield/raven/rdeath.wav", 1, ATTN_NORM);}
+		else sound(self, CHAN_VOICE, "redfield/raven/rdeathb.wav", 1, ATTN_NORM);
 		self.flags = FL_MONSTER;			// reset all flag conditions
 		self.movetype = MOVETYPE_TOSS;			// Affected by gravity
 		self.velocity_x = -100 + 200*random();
 		self.velocity_y = -100 + 200*random();
 		self.velocity_z = 100 + 100*random();
-		raven_death1 ();			//normal death
+		if (random() < 0.5)
+			raven_deathb1 (); 
+		else
+			raven_death1 ();
 	}
 };
 
-/*======================================================================
-QUAKED monster_raven (1 0 0) (-16 -16 -24) (16 16 16) Ambush
-======================================================================*/
+// QUAKED monster_raven (1 0 0) (-16 -16 -24) (16 16 16) Ambush
 void() monster_raven = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
@@ -331,19 +306,19 @@ void() monster_raven = {
 	precache_model (self.gib1mdl);
 	precache_model (self.gib2mdl);
 
-	self.idle_sound = "raven/ravencall.wav";
+	self.idle_sound = "redfield/raven/ravencall.wav";
 	precache_sound (self.idle_sound);
 
-	precache_sound ("raven/wings.wav");
-	precache_sound ("raven/rdeath.wav");
-	precache_sound ("raven/rdeathb.wav");
-	self.pain_sound = "raven/rpain.wav";
+	precache_sound ("redfield/raven/wings.wav");
+	precache_sound ("redfield/raven/rdeath.wav");
+	precache_sound ("redfield/raven/rdeathb.wav");
+	self.pain_sound = "redfield/raven/rpain.wav";
 	precache_sound (self.pain_sound);
 
-	precache_sound ("raven/rclaw.wav");
-	precache_sound ("raven/rsnap.wav");
+	precache_sound ("redfield/raven/rclaw.wav");
+	precache_sound ("redfield/raven/rsnap.wav");
 
-	self.sight_sound = "raven/rsight.wav";
+	self.sight_sound = "redfield/raven/rsight.wav";
 	precache_sound (self.sight_sound);
 
 	self.solid = SOLID_NOT;				// No interaction with world
@@ -360,31 +335,25 @@ void() monster_raven = {
 	self.th_checkattack = RavenCheckAttack;
 	self.th_pain = raven_pain;
 	self.th_die = raven_die;
-		
-	
-	//----------------------------------------------------------------------
+
 	// Perched and feeding ravens have special idle animation + idle sounds
 	if (self.spawnflags & MON_RAVEN_PERCH) {
 		self.th_stand = self.th_walk = raven_stand1;
 		self.th_run = self.th_missile = raven_wakeup;
-	}
-	else if (self.spawnflags & MON_RAVEN_FEED) {
+	} else if (self.spawnflags & MON_RAVEN_FEED) {
 		self.th_stand = self.th_walk = raven_eat1;
 		self.th_run = self.th_missile = raven_wakeup;
-	}
-	else if (self.spawnflags & MON_RAVEN_FEED && MON_RAVEN_PERCH) {
+	} else if (self.spawnflags & MON_RAVEN_FEED && MON_RAVEN_PERCH) {
 		self.spawnflags = self.spawnflags - (self.spawnflags & MON_RAVEN_PERCH);
 		self.th_stand = self.th_walk = raven_eat1;
 		self.th_run = self.th_missile = raven_wakeup;
+	} else { // Default Raven setup
+		self.th_stand = raven_hover1;
+		self.th_walk = raven_glidechoose;
+		self.th_run = raven_run1;
+		self.th_missile = raven_atk1;
 	}
-	//----------------------------------------------------------------------
-	// Default Raven setup
-	else {
-	self.th_stand = raven_hover1;
-	self.th_walk = raven_glidechoose;
-	self.th_run = raven_run1;
-	self.th_missile = raven_atk1;
-	}
+
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
@@ -402,6 +371,5 @@ void() monster_raven = {
 	self.classtype = CT_MONRAVEN;
 	self.classgroup = CG_HARMLESS;
 	self.classmove = MON_MOVEFLY;
-
 	monster_start();
 };

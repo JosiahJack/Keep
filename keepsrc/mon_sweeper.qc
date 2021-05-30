@@ -611,9 +611,7 @@ void() sweeper_shield =
 	sweeper_stand();
 };
 
-//----------------------------------------------------------------------
-void() sweeper_wakeup =
-{
+void() sweeper_wakeup = {
 	// Check for sudden death!
 	if (self.health < 0) return;
 	
@@ -622,7 +620,7 @@ void() sweeper_wakeup =
 	self.spawnflags = self.spawnflags - (self.spawnflags & MON_SWEEPER_SHIELD);
 	
 	// Switch off shield sound
-	sound (self, CHAN_WEAPON, "ambience/power_off.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/ambience/power_off.wav", 1, ATTN_NORM);
 	// Switch OFF any particle emitter
 	if (self.part_emitter) misc_particle_off(self.part_emitter);
 	
@@ -641,11 +639,8 @@ void() sweeper_wakeup =
 	monster_targets();				// Check for targets
 };
 
-/*======================================================================
-QUAKED monster_sweeper (1 0 0) (-16 -16 -24) (16 16 24) Ambush
-======================================================================*/
-void() monster_sweeper =
-{
+// QUAKED monster_sweeper (1 0 0) (-16 -16 -24) (16 16 24) Ambush
+void() monster_sweeper = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
@@ -705,7 +700,7 @@ void() monster_sweeper =
 	self.death_sound = "sweeper/explode_major.wav";
 	precache_sound (self.death_sound);
 	// Power off sound for shield setup
-	precache_sound ("ambience/power_off.wav");
+	precache_sound ("ad171/ambience/power_off.wav");
 	
 	self.sight_sound = "sweeper/sight1.wav";
 	precache_sound (self.sight_sound);

@@ -6,31 +6,29 @@ void(entity targ) ResetAuraEffects = {
 	if (targ.flags & FL_MONSTER) { targ.aura_type = -1; return; }
 
 	if (targ.aura_type == 0) { // Earth
-		dprint("Reset Earth shrine effects\n");
+		if (developer > 1) dprint("Reset Earth shrine effects\n");
 		targ.resist_acid = targ.save_acid; 				// Return to normal resistance
 
 	} else if (targ.aura_type == 1) { // Water
-		dprint("Reset Water shrine effects\n");
+		if (developer > 1) dprint("Reset Water shrine effects\n");
 		targ.resist_lava_nails = targ.save_lava_nails; 	// Return to normal resistance
 		targ.resist_fire = targ.save_fire; 				// Return to normal resistance
 
 	} else if (targ.aura_type == 2) { // Air
-		dprint("Reset Air shrine effects\n");
+		if (developer > 1) dprint("Reset Air shrine effects\n");
 		targ.air_finished = time; 						// No air left!  Suck it down!	
 		targ.air_blessed = 0;
 
 	} else if (targ.aura_type == 3) { // Fire
-		dprint("Reset Fire shrine effects\n");
+		if (developer > 1) dprint("Reset Fire shrine effects\n");
 		targ.resist_cold = targ.save_cold;
 
 	} else if (targ.aura_type == 4) { // Blood
-		dprint("Reset Blood shrine effects\n");
+		if (developer > 1) dprint("Reset Blood shrine effects\n");
 		// None
-		
 	} else if (targ.aura_type == 5) { // Spirit
-		dprint("Reset Spirit shrine effects\n");
+		if (developer > 1) dprint("Reset Spirit shrine effects\n");
 		// None
-		
 	}
 	targ.aura_type = -1;
 };
@@ -120,7 +118,7 @@ void() shrine_desecrate = {
 };
 
 void() shrine_desecrate_angry = {
-	if (self.target != "") {
+	if (HasTargets(self)) {
 		SUB_UseTargets();
 		clear_trigstrs(self); // Only fire targets once, remove any further triggering
 	}

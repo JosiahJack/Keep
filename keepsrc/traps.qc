@@ -235,21 +235,21 @@ void() trap_spikeshooter = {
 	}
 	else if (self.spawnflags & TRAP_CROSSBOLTS) {
 		self.mdl = MODEL_PROJ_WIZ;
-		self.noise = "weapons/crossbow_fire.wav";
+		self.noise = "ad171/weapons/crossbow_fire.wav";
 		self.volume = 0.5;
 		self.classproj = CT_PROJ_BOLT1;
 		if (!self.speed) self.speed = SPEED_DCROSS + (skill * SPEED_BOLTSKILL);
 	}
 	else if (self.spawnflags & TRAP_POISONBOLTS) {
 		self.mdl = MODEL_PROJ_WIZ;
-		self.noise = "weapons/crossbow_fire.wav";
+		self.noise = "ad171/weapons/crossbow_fire.wav";
 		self.volume = 0.5;
 		self.classproj = CT_PROJ_BOLT2;
 		if (!self.speed) self.speed = SPEED_DCROSS + (skill * SPEED_BOLTSKILL);
 	}
 	else if (self.spawnflags & TRAP_DARTS) {
 		self.mdl = MODEL_PROJ_WIZ;
-		self.noise = "weapons/Lncharow.wav";
+		self.noise = "weapons/lncharow.wav";
 		self.volume = 0.5;
 		self.classproj = CT_PROJ_DARTARROW;
 		if (!self.speed) self.speed = SPEED_DCROSS + (skill * SPEED_BOLTSKILL);
@@ -384,7 +384,7 @@ void() trap_rocketshooter =
 	else if (self.spawnflags & TRAP_FIREROCKET) {
 		self.mdl = MODEL_PROJ_GARGOYLE;
 		precache_model (self.mdl);
-		self.noise = "gargoyle/attack1.wav";
+		self.noise = "ad171/gargoyle/attack1.wav";
 		precache_sound (self.noise);
 
 		self.classproj = CT_PROJ_GARG;
@@ -395,7 +395,7 @@ void() trap_rocketshooter =
 		precache_model (self.mdl);
 		self.noise = "weapons/sgun1.wav";
 		precache_sound (self.noise);
-		precache_sound ("jim/rocket_hit.wav");
+		precache_sound ("ad171/jim/rocket_hit.wav");
 
 		self.classproj = CT_PROJ_JIM2;
 		if (!self.speed) self.speed = SPEED_RLPLAYER;
@@ -558,9 +558,8 @@ void() trap_gasshooter_think =
 	}
 };
 
-//----------------------------------------------------------------------
-void() trap_gasshooter_spawn =
-{
+void() trap_gasshooter_spawn = {
+
 	local entity partemit;
 	
 	// Check if disabled/off first
@@ -575,13 +574,11 @@ void() trap_gasshooter_spawn =
 	partemit.classgroup = CG_PROJALL;
 	partemit.owner = self;
 	partemit.frame = partemit.cnt = 0;
-
 	partemit.movetype = MOVETYPE_FLY;	// Fly, no gravity, but contact
 	partemit.solid = SOLID_TRIGGER;		// collision, touch required
 	setmodel (partemit, self.mdl);
 	setorigin (partemit, self.origin);
 	setsize (partemit, VEC_ORIGIN, VEC_ORIGIN);
-
 	partemit.oldorigin = vecrand(0,20,TRUE);
 	partemit.velocity = (self.movedir * self.speed) + partemit.oldorigin;
 	partemit.angles_z = random() * 360;
@@ -605,29 +602,22 @@ void() trap_gasshooter_spawn =
 	}
 };
 
-//----------------------------------------------------------------------
-void() trap_gasshooter_off =
-{ 
+void() trap_gasshooter_off = { 
 	self.estate = ESTATE_OFF;
 	// If gas shooter currently on, play switch off sound
 	if (self.state == STATE_ON) 
 		sound (self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
-	else sound (self, CHAN_VOICE, SOUND_EMPTY, 1, ATTN_NORM);
+	else StopSound(self,CHAN_VOICE);
 	self.state = STATE_OFF;
 };
 
-//----------------------------------------------------------------------
-void() trap_gasshooter_reset =
-{ 
+void() trap_gasshooter_reset = { 
 	self.estate = ESTATE_ON;
-	// clear any sounds playing
-	sound (self, CHAN_VOICE, SOUND_EMPTY, 1, ATTN_NORM);
+	StopSound(self,CHAN_VOICE); // clear any sounds playing
 	self.state = STATE_OFF;
 };
 
-//----------------------------------------------------------------------
-void() trap_gasshooter_on =
-{ 
+void() trap_gasshooter_on = { 
 	self.estate = ESTATE_ON;
 	self.state = STATE_ON;
 	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
@@ -635,9 +625,7 @@ void() trap_gasshooter_on =
 	trap_gasshooter_spawn();
 };
 
-//----------------------------------------------------------------------
-void() trap_gasshooter_use =
-{
+void() trap_gasshooter_use = {
 	// Check if disabled/off first
 	if (self.estate & ESTATE_BLOCK) return;
 	
@@ -649,24 +637,19 @@ void() trap_gasshooter_use =
 	if (self.state == STATE_ON) {
 		self.state = STATE_OFF;
 		sound (self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
-	}
-	else trap_gasshooter_on();
+	} else trap_gasshooter_on();
 };
 
-//----------------------------------------------------------------------
-void() trap_gasshooter =
-{
+void() trap_gasshooter = {
 	if (self.spawnflags & TRAP_GASFIRE) {
 		self.mdl = SBURST_FLAME;
 		self.noise1 = "traps/flame_loop.wav";
 		self.noise2 = "traps/flame_off.wav";
-	}
-	else if (self.spawnflags & TRAP_GASPOISON) {
+	} else if (self.spawnflags & TRAP_GASPOISON) {
 		self.mdl = SBURST_POISON;
 		self.noise1 = "traps/steam_loop.wav";
 		self.noise2 = "traps/steam_off.wav";
-	}
-	else {
+	} else {
 		// Steam particles is the default
 		self.spawnflags = self.spawnflags | TRAP_GASSTEAM;
 		self.mdl = SBURST_STEAM;

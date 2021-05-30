@@ -324,10 +324,9 @@ void(vector offset) nour_spike =
 	launch_projectile (sorg, dir, CT_PROJ_NOUR1, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
 void() nour_atta1	=[	$shota1, nour_atta2] {ai_face();
 	self.pain_finished = time + 1;
-	sound (self, CHAN_WEAPON, "nour/attack1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/nour/attack1.wav", 1, ATTN_NORM);
 };
 void() nour_atta2	=[ $shota2, nour_atta3] {ai_face();};
 void() nour_atta3	=[ $shota3, nour_atta4] {ai_face();};
@@ -340,11 +339,8 @@ void() nour_atta9	=[ $shota9, nour_atta10] {};
 void() nour_atta10	=[ $shota10, nour_atta11] {};
 void() nour_atta11	=[ $shota11, nour_run1] {};
 
-//======================================================================
 // ATTACK B - Fire one large blob (grenade) of spit
-//======================================================================
-void(vector bombofs) Fire_NourBomb =
-{
+void(vector bombofs) Fire_NourBomb = {
 	local vector org, torg, ang, dir, avel;
 
 	// Finished with bomb effect
@@ -354,7 +350,7 @@ void(vector bombofs) Fire_NourBomb =
 	if (self.health < 1) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "nour/attack1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/nour/attack1.wav", 1, ATTN_NORM);
 	
 	ai_face();
 	makevectors(self.angles);
@@ -372,9 +368,7 @@ void(vector bombofs) Fire_NourBomb =
 	Launch_Grenade(org, dir, avel, CT_PROJ_NOUR2);
 };
 
-//----------------------------------------------------------------------
-void(vector bombofs, float bombframe) Setup_NourBomb =
-{
+void(vector bombofs, float bombframe) Setup_NourBomb = {
 	local vector org;
 	if (self.health < 1) return;
 	
@@ -392,7 +386,7 @@ void(vector bombofs, float bombframe) Setup_NourBomb =
 		self.attachment.skin = 0;
 
 		// Start growing bomb sound
-		sound (self, CHAN_WEAPON, "nour/attack2.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/nour/attack2.wav", 1, ATTN_NORM);
 	}
 
 	// Turn towards enemy and update model attachment
@@ -408,10 +402,7 @@ void(vector bombofs, float bombframe) Setup_NourBomb =
 	particle_explode(self.attachment.origin, 10+random()*10, 0.5+random(), PARTICLE_BURST_YELLOW, 0);
 };
 
-//----------------------------------------------------------------------
-void() nour_attb1	=[ $shotb1, nour_attb2] {ai_face();
-	self.pain_finished = time + 1.5;
-};
+void() nour_attb1	=[ $shotb1, nour_attb2] {ai_face();self.pain_finished = time + 1.5;};
 void() nour_attb2	=[ $shotb2, nour_attb3] {ai_face();};
 void() nour_attb3	=[ $shotb3, nour_attb4] {ai_face();};
 void() nour_attb4	=[ $shotb4, nour_attb5] {ai_face();};
@@ -429,11 +420,8 @@ void() nour_attb15	=[ $shotb15, nour_attb16] {};
 void() nour_attb16	=[ $shotb16, nour_attb17] {ai_face();};
 void() nour_attb17	=[ $shotb17, nour_run1] {ai_face();};
 
-//======================================================================
 // ATTACK C - Summon wizards around boss
-//======================================================================
-void() Spawn_NourFog =
-{
+void() Spawn_NourFog = {
 	// Randomly pick from teleport sounds
 	self.lip = random() * 5;
 	if (self.lip < 1) self.noise = "misc/r_tele1.wav";
@@ -513,7 +501,7 @@ void(vector minofs, float minframe) Setup_NourMin =
 		self.attachment.skin = 1;
 
 		// Start Spawning sound
-		sound (self, CHAN_WEAPON, "nour/attack2.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/nour/attack2.wav", 1, ATTN_NORM);
 	}
 
 	// Move the energy ball into position infront of the nour
@@ -548,8 +536,8 @@ void(vector minofs, float minframe) Setup_NourMin =
 		
 		// Play some arching lightning sounds
 		if (random() < 0.5) {
-			if (random() < 0.5) sound (self.bossminchain, CHAN_BODY, "nour/elec_arch1.wav", 1, ATTN_NORM);
-			else sound (self.bossminchain, CHAN_BODY, "nour/elec_arch2.wav", 1, ATTN_NORM);
+			if (random() < 0.5) sound (self.bossminchain, CHAN_BODY, "ad171/nour/elec_arch1.wav", 1, ATTN_NORM);
+			else sound (self.bossminchain, CHAN_BODY, "ad171/nour/elec_arch2.wav", 1, ATTN_NORM);
 		}
 
 		// Next spawn point
@@ -695,7 +683,7 @@ void() nour_explode =
 		T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
 	
 	// Classic sprite/DP explosion
-	SpawnExplosion(EXPLODE_PLASMA_BIG, self.origin, "nour/explode_death.wav");
+	SpawnExplosion(EXPLODE_PLASMA_BIG, self.origin, "ad171/nour/explode_death.wav");
 
 	// Gib explosive fountain!?!
 	self.max_health = MON_GIBEXPLOSION;
@@ -746,8 +734,8 @@ void() nour_die9 = [ $death9, nour_die9 ] {
 
 		// Play some arching lightning sounds
 		if (random() < 0.5) {
-			if (random() < 0.5) sound (self, CHAN_BODY, "nour/elec_arch1.wav", 1, ATTN_NORM);
-			else sound (self, CHAN_BODY, "nour/elec_arch2.wav", 1, ATTN_NORM);
+			if (random() < 0.5) sound (self, CHAN_BODY, "ad171/nour/elec_arch1.wav", 1, ATTN_NORM);
+			else sound (self, CHAN_BODY, "ad171/nour/elec_arch2.wav", 1, ATTN_NORM);
 		}
 	}
 	// Check for a random bolt of plasma
@@ -755,7 +743,7 @@ void() nour_die9 = [ $death9, nour_die9 ] {
 	
 	// Cycle through end phase
 	self.lip = self.lip + 1;
-	if (self.lip == 26) sound (self, CHAN_AUTO, "nour/implode_death.wav", 1, ATTN_NONE);
+	if (self.lip == 26) sound (self, CHAN_AUTO, "ad171/nour/implode_death.wav", 1, ATTN_NONE);
 	if (self.lip == 40) nour_explode();
 };
 
@@ -770,7 +758,7 @@ void() nour_die =
 	nour_finish_attachment();	// Remove any attachments
 	nour_remove_attachment();
 
-	sound (self, CHAN_VOICE, "nour/death.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "ad171/nour/death.wav", 1, ATTN_NORM);
 	self.velocity_x = -200 + 400*random();
 	self.velocity_y = -200 + 400*random();
 	self.velocity_z = 100 + 100*random();
@@ -850,7 +838,7 @@ void() nour_revealframe =
 {
 	// Beginning of animation block
 	if (self.walkframe == 3) 
-		sound (self, CHAN_BODY, "nour/reveal.wav", 1, ATTN_NORM);
+		sound (self, CHAN_BODY, "ad171/nour/reveal.wav", 1, ATTN_NORM);
 	else if (self.walkframe == 23)
 		sound (self, CHAN_VOICE, self.idle_sound, 1, ATTN_NORM);
 	
@@ -1045,31 +1033,31 @@ void() monster_nour = {
 	precache_model (MODEL_PROJ_NOUR2B);	// Growing ball
 	precache_model (MODEL_PROJ_NOUR2P);	// Warping projectile
 	precache_model (MODEL_PROJ_NOUR2S);	// Explosive pieces
-	precache_model ("progs/ad171/proj_nour3.mdl");
+	precache_model (MODEL_PROJ_LIGHTNING2);
 	precache_model (SBURST_POISON);		// Poison Burst
 
 	// sight/pain/death sounds
-	self.idle_sound = "nour/idle1.wav";
-	self.pain_sound = "nour/pain.wav";
-	self.sight_sound = "nour/sight.wav";
+	self.idle_sound = "ad171/nour/idle1.wav";
+	self.pain_sound = "ad171/nour/pain.wav";
+	self.sight_sound = "ad171/nour/sight.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.pain_sound);
 	precache_sound (self.sight_sound);
-	precache_sound ("nour/reveal.wav");
+	precache_sound ("ad171/nour/reveal.wav");
 
 	// Final death sequence
-	precache_sound ("nour/death.wav");
-	precache_sound ("nour/explode_death.wav");
-	precache_sound ("nour/elec_arch1.wav");
-	precache_sound ("nour/elec_arch2.wav");
-	precache_sound ("nour/implode_death.wav");
+	precache_sound ("ad171/nour/death.wav");
+	precache_sound ("ad171/nour/explode_death.wav");
+	precache_sound ("ad171/nour/elec_arch1.wav");
+	precache_sound ("ad171/nour/elec_arch2.wav");
+	precache_sound ("ad171/nour/implode_death.wav");
 
 	// Attack A - Wizard style spit
 	// Attack B - Large explosive ball
-	precache_sound ("nour/attack1.wav");
-	precache_sound ("nour/attack2.wav");
-	precache_sound ("nour/explode2.wav");
-	precache_sound ("nour/bounce.wav");
+	precache_sound ("ad171/nour/attack1.wav");
+	precache_sound ("ad171/nour/attack2.wav");
+	precache_sound ("ad171/nour/explode2.wav");
+	precache_sound ("ad171/wraith/bounce.wav");
 	
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement

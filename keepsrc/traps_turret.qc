@@ -368,10 +368,9 @@ void() trap_turret= {
 	precache_sound ("enforcer/enfire.wav");
 	precache_sound ("enforcer/enfstop.wav");
 	precache_model ("progs/missile.mdl");
-	precache_sound ("weapons/sgun1.wav");
 	precache_model ("progs/custents/beam.mdl");
 	precache_sound ("turret/beamhit.wav");
-	precache_sound ("hipweap/mjolhit.wav");
+	precache_sound ("hipnotic/weapons/mjolhit.wav");
 	precache_sound ("turret/plasbult.wav");
 
 	self.solid = SOLID_SLIDEBOX;
@@ -542,12 +541,7 @@ void() func_turret = {
 	local entity helper;
 	local vector org;
 
-	if (self.sounds == 0) {
-		precache_sound ("misc/null.wav");
-		precache_sound ("misc/null.wav");
-		self.noise1 = "misc/null.wav";
-		self.noise2 = "misc/null.wav";
-	}
+	if (self.sounds == 0) self.noise1 = self.noise2 = SOUND_EMPTY;
 	if (self.sounds == 1) {
 		precache_sound ("doors/drclos4.wav");
 		precache_sound ("doors/doormv1.wav");
@@ -583,8 +577,7 @@ void() func_turret = {
 	setmodel (self, self.model);
 	self.use = turret_func_use;
 	
-	if (!self.speed)
-		self.speed = 100;
+	if (!self.speed) self.speed = 100;
 
 	self.pos1 = self.origin + self.movedir; //inactive position
 	self.pos2 = self.origin; //active position
@@ -632,7 +625,6 @@ void() func_turret = {
 	self.th_pain = turret_pain;
 	self.th_die = turret_die;
 	self.th_missile = turret_fire1;
-
 	self.takedamage = DAMAGE_AIM;
 	self.ideal_yaw = self.angles * '0 1 0';
 	self.yaw_speed = 30;

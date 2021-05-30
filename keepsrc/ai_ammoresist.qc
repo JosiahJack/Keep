@@ -5,7 +5,7 @@
 //
 // Compiled by Qmaster
 //
-// Attributions: My own, Arms of Asgaard (AoA) and Arcane Dimensions (AD)
+// Attributions: My own, Arms of Asgard (AoA) and Arcane Dimensions (AD)
 //
 //
 // Distribution / Copyright / Permissions 

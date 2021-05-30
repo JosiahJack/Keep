@@ -542,22 +542,16 @@ void(entity targent) cservo_control_off= {
 	local entity targcam, tmpent;
 
 	targcam = self.movetarget;
-
 	dummy_remove(targent);
-
 	targent.rcam = world;
 	targcam.owner = world;
-
 	targent.camofs = '0 64 30';
-	if(targent.cament)
-	{
+	if(targent.cament) {
 		msg_entity = targent;
-		WriteByte (MSG_ONE, SVC_SETVIEWPORT);
+		WriteByte (MSG_ONE, SVC_SETVIEW);
 		WriteEntity (MSG_ONE, targent.cament);
 		Safe_stuffcmd(targent, "cl_bob 0; wait\n");
-	}
-	else
-	{
+	} else {
 		tmpent = self;
 		self = targent;
 		W_SetCurrentAmmo();
@@ -569,8 +563,6 @@ void(entity targent) cservo_control_off= {
 	Safe_stuffcmd(targent, "exec autoexec.cfg\n");
 	Safe_stuffcmd(targent, "wait\n");
 };
-
-//=======================================================================
 
 void() cservo_attack;
 void() cservo_stand;

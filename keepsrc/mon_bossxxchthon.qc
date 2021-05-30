@@ -150,18 +150,15 @@ void() xxchthon_idleframe =
 //----------------------------------------------------------------------
 void() xxchthon_idle ={ self.walkframe = 0; xxchthon_idleframe(); };
 
-//===========================================================================
 // ATTACK 1 - Constant fireballs
-//===========================================================================
-void(vector orgofs) xxchthon_missile =
-{
+void(vector orgofs) xxchthon_missile = {
 	local vector offang, org, vec, dir, mdest, avel;
 	local float projlen;
 
 	// No enemy or player dead?
 	if (!self.enemy) return;
 	
-	sound (self, CHAN_WEAPON, "chthon/attack1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/chthon/attack1.wav", 1, ATTN_NORM);
 	offang = vectoangles (self.enemy.origin - self.origin);	
 	makevectors (offang);
 	org = self.origin + attack_vector(orgofs);
@@ -317,7 +314,7 @@ void(entity inflictor, entity attacker, float damage) xxchthon_pain =
 //============================================================================
 void() xxchthon_lavasplash =
 {
-	sound (self, CHAN_BODY, "chthon/lavasplash.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "ad171/chthon/lavasplash.wav", 1, ATTN_NORM);
 	if (ext_dppart) {
 		// Two different types of liquid splash (only DP)
 		if (self.spawnflags & MON_CHTHON_GREEN) 
@@ -372,25 +369,20 @@ void() xxchthon_death7 = [$death7, xxchthon_death8] {xxchthon_explosion();};
 void() xxchthon_death8 = [$death8, xxchthon_death9] {xxchthon_explosion();};
 void() xxchthon_death9 = [$death9, xxchthon_explode] {xxchthon_lavasplash();};
 
-//----------------------------------------------------------------------
-void() xxchthon_die =
-{
+void() xxchthon_die = {
 	self.style = CHTHON_PHASE4;		// Game Over for Chthon!
 	self.deadflag = DEAD_DEAD;		// the rock finally crashed
 	self.effects = 0;				// Remove effects on death
 	self.solid = SOLID_NOT;			// no longer need to block
 	self.max_health = MON_GIBEXPLOSION;
 
-	sound (self, CHAN_VOICE, "chthon/death1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "ad171/chthon/death1.wav", 1, ATTN_NORM);
 	xxchthon_death1 ();
 };
 
-//============================================================================
 // RISE up from the swirling liquid
-//============================================================================
 void() xxchthon_rise1	=[	$rise1, xxchthon_rise2 ] {xxchthon_lavasplash();};
-void() xxchthon_rise2	=[	$rise2, xxchthon_rise3 ] {
-	sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);};
+void() xxchthon_rise2	=[	$rise2, xxchthon_rise3 ] {sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);};
 void() xxchthon_rise3	=[	$rise3, xxchthon_rise4 ] {};
 void() xxchthon_rise4	=[	$rise4, xxchthon_rise5 ] {ai_face();};
 void() xxchthon_rise5	=[	$rise5, xxchthon_rise6 ] {};
@@ -466,9 +458,7 @@ void() xxchthon_awake =
 	xxchthon_rise1 ();
 };
 
-/*======================================================================
- QUAKED monster_chthon (1 0 0) (-128 -128 -24) (128 128 256)
-======================================================================*/
+// QUAKED monster_chthon (1 0 0) (-128 -128 -24) (128 128 256)
 void() monster_chthon = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
@@ -489,8 +479,7 @@ void() monster_chthon = {
 		self.gibtype = GIBTYPE_POISON;
 		self.poisonous = TRUE;
 		if (self.deathstring == "") self.deathstring = " was blown apart by Poison Chthon\n";
-	}
-	else {
+	} else {
 		// Check for new red/fire skin
 		if (self.spawnflags & MON_CHTHON_RED) {
 			self.skin = self.gib1skin = 1;
@@ -502,22 +491,22 @@ void() monster_chthon = {
 		self.dpp_name = "TR_BOSSCHTHON";
 	}
 
-	self.idle_sound = "chthon/idle1.wav";
+	self.idle_sound = "ad171/chthon/idle1.wav";
 	precache_sound (self.idle_sound);
 
 	// Attack/throw/electric sound
-	precache_sound ("chthon/attack1.wav");
+	precache_sound ("ad171/chthon/attack1.wav");
 	precache_sound ("weapons/rocket1i.wav");
-	precache_sound ("chthon/bounce.wav");
+	precache_sound ("ad171/wraith/bounce.wav");
 	
-	self.pain_sound = "chthon/pain1.wav";
+	self.pain_sound = "ad171/chthon/pain1.wav";
 	precache_sound (self.pain_sound);
-	precache_sound ("chthon/death1.wav");
+	precache_sound ("ad171/chthon/death1.wav");
 
 	// Rise from lava roar + splash
-	self.sight_sound = "chthon/sight1.wav";
+	self.sight_sound = "ad171/chthon/sight1.wav";
 	precache_sound (self.sight_sound);
-	precache_sound ("chthon/lavasplash.wav");
+	precache_sound ("ad171/chthon/lavasplash.wav");
 
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement

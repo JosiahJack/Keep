@@ -107,7 +107,7 @@ void(vector st) warlock_fire =
     local   vector  org, dir, vec;
     local   entity  targ;       // Lead shots toward this target.
 
-    sound (self, CHAN_WEAPON, "necro/att_w.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "drake/necro/att_w.wav", 1, ATTN_NORM);
     self.effects = self.effects | EF_MUZZLEFLASH;
 
     targ = world;
@@ -152,9 +152,9 @@ void() necro_idlesound =
     // Use voice channel instead of auto -- don't want slain magi talking.
         wr = random();
         if (wr > 0.7) 
-            sound (self, CHAN_VOICE, "necro/idle1.wav", 1, ATTN_NORM);
+            sound (self, CHAN_VOICE, "drake/necro/idle1.wav", 1, ATTN_NORM);
         else if (wr < 0.3)
-            sound (self, CHAN_VOICE, "necro/idle2.wav", 1, ATTN_NORM);
+            sound (self, CHAN_VOICE, "drake/necro/idle2.wav", 1, ATTN_NORM);
         self.waitmin = time + 10;
     }
 };
@@ -538,9 +538,9 @@ void() necro1_attack3  =[ $Siatak6,  necro1_attack4  ] {ai_face();
             self.cnt = 1;
     }
     if (self.cnt)
-        sound (self, CHAN_WEAPON, "necro/att_a2.wav", 1, ATTN_NORM);
+        sound (self, CHAN_WEAPON, "drake/necro/att_a2.wav", 1, ATTN_NORM);
     else
-        sound (self, CHAN_WEAPON, "necro/att_a.wav", 1, ATTN_NORM);
+        sound (self, CHAN_WEAPON, "drake/necro/att_a.wav", 1, ATTN_NORM);
     acolyte_fire();
 // Make small poison cloud.  'makevectors' called in above function.
     local   vector  org;
@@ -726,13 +726,13 @@ void() necro_activate_special = {
 				if (damage > 120) damage = 120; // limit damage so it's not crazy hard when we explode a monster_boglord for instance
 				Tent_Explosion2 (self.origin, rgb, 16);
 				if (sfx == 1)
-					sound (self, CHAN_AUTO, "necro/pop1.wav", 1, ATTN_NORM);
+					sound (self, CHAN_AUTO, "drake/necro/pop1.wav", 1, ATTN_NORM);
 				else if (sfx == 2)
-					sound (self, CHAN_AUTO, "necro/pop2.wav", 1, ATTN_NORM);
+					sound (self, CHAN_AUTO, "drake/necro/pop2.wav", 1, ATTN_NORM);
 				else if (sfx == 3)
-					sound (self, CHAN_AUTO, "necro/pop3.wav", 1, ATTN_NORM);
+					sound (self, CHAN_AUTO, "drake/necro/pop3.wav", 1, ATTN_NORM);
 				else
-					sound (self, CHAN_AUTO, "necro/pop4.wav", 1, ATTN_NORM);
+					sound (self, CHAN_AUTO, "drake/necro/pop4.wav", 1, ATTN_NORM);
 				T_RadiusDamage(self, swap, damage, self, DAMAGEALL);
 			}
 			self = swap;
@@ -756,7 +756,7 @@ void() necro4_attack = {
         if (!self.enemy.curse_type)
         if (random() < 0.5) {
             self.worldtype = NSA_CURSE;
-            sound (self, CHAN_AUTO, "necro/curse.wav", 1, ATTN_NORM);
+            sound (self, CHAN_AUTO, "drake/necro/curse.wav", 1, ATTN_NORM);
             necro_cast ();
             return;
         }
@@ -795,7 +795,7 @@ void() necro4_attack = {
             }
             if (self.fallen) {
                 self.worldtype = NSA_CORPSE_EXPLOSION;
-                sound (self, CHAN_AUTO, "necro/pop.wav", 1, ATTN_NORM);
+                sound (self, CHAN_AUTO, "drake/necro/pop.wav", 1, ATTN_NORM);
                 necro_cast ();
                 return;
             }
@@ -843,7 +843,7 @@ void() necro4_attack = {
         // Now see if necro will summon something.
             if (self.worldtype)
             {
-                sound (self, CHAN_AUTO, "necro/summon.wav", 1, ATTN_NORM);
+                sound (self, CHAN_AUTO, "drake/necro/summon.wav", 1, ATTN_NORM);
                 necro_cast ();
                 return;
             }
@@ -935,7 +935,7 @@ float() Necro_WeaponBroke = {
 
 	// Sickle head.
     if (head) {
-        sound (self, CHAN_AUTO, "misc/metalbrk.wav", 1, ATTN_NORM);
+        sound (self, CHAN_AUTO, "drake/misc/metalbrk.wav", 1, ATTN_NORM);
         vel = VelocityForDamage (0);
         spin_x = random()*600;
         spin_y = random()*600;
@@ -955,7 +955,7 @@ float() Necro_WeaponBroke = {
 
 	// Shaft.
     if (shaft) {
-        sound (self, CHAN_AUTO, "misc/woodbrk.wav", 1, ATTN_NORM);
+        sound (self, CHAN_AUTO, "drake/misc/woodbrk.wav", 1, ATTN_NORM);
         vel = VelocityForDamage (0);
         vel = vel + v_right*50;
         spin_x = random()*600;
@@ -990,7 +990,7 @@ void(entity inflictor, entity attacker, float damage) necro_pain = {
     if (Necro_WeaponBroke ()) {
 		// Must go into pain for weapon breaking effects to look right.
         self.pain_finished = time + 1;
-        sound (self, CHAN_VOICE, "necro/pain1.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "drake/necro/pain1.wav", 1, ATTN_NORM);
         necro_painswitch ();
         return;
     }
@@ -998,7 +998,7 @@ void(entity inflictor, entity attacker, float damage) necro_pain = {
     if (self.pain_finished > time)
         return;   // Don't make multiple pain sounds right after each other.
 
-    sound (self, CHAN_VOICE, "necro/pain1.wav", 1, ATTN_NORM);
+    sound (self, CHAN_VOICE, "drake/necro/pain1.wav", 1, ATTN_NORM);
     self.pain_finished = time + 1;      // time + 0.5 is too short.
 
     if (random()*50 > damage)       // Was flat 40.
@@ -1034,9 +1034,9 @@ void() necro_die = {
 
 	if (!self.gibbed) {
 		if (random() < 0.5)
-			sound (self, CHAN_VOICE, "necro/death1.wav", 1, ATTN_NORM);
+			sound (self, CHAN_VOICE, "drake/necro/death1.wav", 1, ATTN_NORM);
 		else
-			sound (self, CHAN_VOICE, "necro/death2.wav", 1, ATTN_NORM);
+			sound (self, CHAN_VOICE, "drake/necro/death2.wav", 1, ATTN_NORM);
 		necro_die1 ();
 	}
 };
@@ -1063,59 +1063,58 @@ void() necro_cache = {
     precache_model ("progs/drake/smartbal.mdl");
     precache_model ("progs/w_spike.mdl");
     precache_model ("progs/drake/nec_rune.mdl");
-    precache_sound ("curse/x_armor.wav");
-    precache_sound ("necro/att_a.wav");
-    precache_sound ("necro/att_a2.wav");
-    precache_sound ("necro/att_w.wav");
-    precache_sound ("necro/death1.wav");
-    precache_sound ("necro/death2.wav");
-    precache_sound ("necro/idle1.wav");
-    precache_sound ("necro/idle2.wav");
-	self.idle_sound = "necro/idle1.wav";
-	self.idle_soundcom = "necro/idle2.wav";
-    precache_sound ("necro/pain1.wav");
-	self.pain_sound = "necro/pain1.wav";
-    precache_sound ("necro/sight1.wav");
-	self.sight_sound = "necro/sight1.wav";
-	self.hello_sound = "necro/idle1.wav";
-    precache_sound ("nemesant/frblfly.wav");
-    precache_sound ("skullwiz/push.wav");
+    precache_sound ("drake/curse/x_armor.wav");
+    precache_sound ("drake/necro/att_a.wav");
+    precache_sound ("drake/necro/att_a2.wav");
+    precache_sound ("drake/necro/att_w.wav");
+    precache_sound ("drake/necro/death1.wav");
+    precache_sound ("drake/necro/death2.wav");
+    precache_sound ("drake/necro/idle1.wav");
+    precache_sound ("drake/necro/idle2.wav");
+	self.idle_sound = "drake/necro/idle1.wav";
+	self.idle_soundcom = "drake/necro/idle2.wav";
+    precache_sound ("drake/necro/pain1.wav");
+	self.pain_sound = "drake/necro/pain1.wav";
+    precache_sound ("drake/necro/sight1.wav");
+	self.sight_sound = "drake/necro/sight1.wav";
+	self.hello_sound = "drake/necro/idle1.wav";
+    precache_sound ("zerstorer/trog/frblfly.wav");
+    precache_sound ("drake/skullwiz/push.wav");
 };
 
-//----------------------------------------------------------------------------
 void() necro_boss_cache = {
     precache_model ("progs/drake/nec_rod1.mdl");
     precache_model ("progs/drake/nec_rod2.mdl");
     precache_model ("progs/drake/nec_rod3.mdl");
     precache_model ("progs/drake/s_spark.spr");
-    precache_sound ("curse/x_armor.wav");
-    precache_sound ("curse/x_damage.wav");
-    precache_sound ("curse/x_muddle.wav");
-    precache_sound ("curse/x_slow.wav");
-    precache_sound ("curse/x_weaken.wav");
-    precache_sound ("misc/metalbrk.wav");
-    precache_sound ("misc/woodbrk.wav");
-    precache_sound ("necro/curse.wav");
-    precache_sound ("necro/pop.wav");
-    precache_sound ("necro/pop1.wav");
-    precache_sound ("necro/pop2.wav");
-    precache_sound ("necro/pop3.wav");
-    precache_sound ("necro/pop4.wav");
-    precache_sound ("necro/summon.wav");
+    precache_sound ("drake/curse/x_armor.wav");
+    precache_sound ("drake/curse/x_damage.wav");
+    precache_sound ("drake/curse/x_muddle.wav");
+    precache_sound ("drake/curse/x_slow.wav");
+    precache_sound ("drake/curse/x_weaken.wav");
+    precache_sound ("drake/misc/metalbrk.wav");
+    precache_sound ("drake/misc/woodbrk.wav");
+    precache_sound ("drake/necro/curse.wav");
+    precache_sound ("drake/necro/pop.wav");
+    precache_sound ("drake/necro/pop1.wav");
+    precache_sound ("drake/necro/pop2.wav");
+    precache_sound ("drake/necro/pop3.wav");
+    precache_sound ("drake/necro/pop4.wav");
+    precache_sound ("drake/necro/summon.wav");
 
     precache_model ("progs/drake/ice.mdl");
     precache_model ("progs/drake/k_ball.mdl");
-    precache_sound ("dragon/icehit.wav");
-    precache_sound ("grem/attack.wav");     // Replaces Hexen2 imp slash sfx.
-    precache_sound ("imp/die.wav");
-    precache_sound ("imp/fireball.wav");
-    precache_sound ("imp/fly.wav");
-    precache_sound ("imp/flywater.wav");
-    precache_sound ("imp/shard.wav");
-    precache_sound ("imp/swoop.wav");
-    precache_sound ("imp/up.wav");
-    precache_sound ("misc/pushston.wav");
-    precache_sound ("misc/wallbrk.wav");
+    precache_sound ("drake/dragon/icehit.wav");
+    precache_sound ("hipnotic/grem/attack.wav");     // Replaces Hexen2 imp slash sfx.
+    precache_sound ("drake/imp/die.wav");
+    precache_sound ("drake/imp/fireball.wav");
+    precache_sound ("drake/imp/fly.wav");
+    precache_sound ("drake/imp/flywater.wav");
+    precache_sound ("drake/imp/shard.wav");
+    precache_sound ("drake/imp/swoop.wav");
+    precache_sound ("drake/imp/up.wav");
+    precache_sound ("drake/misc/pushston.wav");
+    precache_sound ("drake/misc/wallbrk.wav");
     precache_model ("progs/drake/s_wave2.spr");
 
     precache_model ("progs/drake/akarrow.mdl");
@@ -1124,20 +1123,19 @@ void() necro_boss_cache = {
     precache_model ("progs/drake/st_gib1.mdl");
     precache_model ("progs/drake/st_gib2.mdl");
     precache_model ("progs/drake/st_gib3.mdl");
-    precache_sound ("golem/death.wav");
-    precache_sound ("golem/sight.wav");
-    precache_sound ("golem/step.wav");
+    precache_sound ("ne_ruins/h2golem/death.wav");
+    precache_sound ("drake/golem/sight.wav");
+    precache_sound ("drake/golem/step.wav");
     precache_sound ("hknight/grunt.wav");
     precache_sound ("hknight/slash1.wav");
-    precache_sound ("misc/wallbrk.wav");
+    precache_sound ("drake/misc/wallbrk.wav");
     precache_sound ("shambler/smack.wav");
-    precache_sound ("weapons/mirv1.wav");   // In case MIRV is forbidden.
+    precache_sound ("drake/weapons/mirv1.wav");   // In case MIRV is forbidden.
 };
 
-//============
-// --> QUAKED monster_necromancer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-//============
 void() setup_necro;
+
+// --> QUAKED monster_necromancer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_necromancer = {
     local float nec;
 
@@ -1168,9 +1166,7 @@ void() monster_necromancer = {
     self.height = nec;
 
     necro_cache ();
-	if (!nec) {
-		necro_boss_cache ();
-	}
+	if (!nec) necro_boss_cache ();
 
 	// Cache gargoyle is a special class used for precache only
 	if (self.classtype != CT_CACHENECRO) setup_necro();
@@ -1190,7 +1186,6 @@ void() setup_necro = {
 	self.pain_flinch = 70;				// High pain threshold
 	self.blockudeath = TRUE;			// no humanoid death sound
     self.mass = MASS_MEDIUM;
-
 	self.gib1mdl = "progs/drake/nec_rod1.mdl";
 	self.gib2mdl = "progs/drake/nec_rod2.mdl";
 	self.gib3mdl = "progs/drake/nec_rod3.mdl";
@@ -1225,7 +1220,6 @@ void() setup_necro = {
         self.ryuflags   = RYU_ALERT;
         self.purse      = '20 1 0.5';
         self.xfl        = XFL_BOSS;
-
         self.th_stand   = necro1_stand1;
         self.th_walk    = necro1_walk1;
         self.th_run     = necro1_run1;

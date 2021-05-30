@@ -310,7 +310,7 @@ This is an actor-robot whose behavior is fully scriptable.
 "speed"  How fast the actor runs.  Default == 10.
 
 ACTOR_DEAD(1) makes the actor a non-living entity until triggered.  It will affect monster-count,
-and will attack the player after it has been triggered.  (specially made for 'damned')
+and will attack the player after it has been triggered.  (specially made for 'da*ned')
 
 TRIGGER_SPAWN(64) causes the actor to not spawn until it is triggered.  If "style" is set
 for the actor it will cause a teleport-splash when it spawns.
@@ -318,8 +318,6 @@ for the actor it will cause a teleport-splash when it spawns.
 void() misc_hostage = {
     if (deathmatch || coop) {remove (self); return;}
 
-	precache_sound("weapons/guncock.wav");
-	precache_sound("weapons/sgun1.wav");
     self.origin             = self.origin + '0 0 56';
     self.classname          = self.netname  = "actor";
     self.health             = 150;
@@ -331,7 +329,6 @@ void() misc_hostage = {
     self.show_hostile       = 0;
     self.attack_finished    = 0;
     self.xfl = XFL_NO_SCAN; // PM: Don't check for drowning or frying.
-
 	self.headmdl = "progs/h_player.mdl";
 	self.gib1mdl = "progs/gib1.mdl";
 	self.gib2mdl = "progs/gib2.mdl";
@@ -342,9 +339,7 @@ void() misc_hostage = {
 
     self.walkframe  = 0;
     self.frame      = $stand1;
-
     if (!self.speed) self.speed = 10;
-
     self.th_stand   = actor_stand1;
     self.th_walk    = actor_run;
     self.th_run     = actor_run;

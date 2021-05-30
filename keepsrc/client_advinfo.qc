@@ -1,6 +1,42 @@
-/*======================================================================
- Player/client debug info functions
-======================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Arcane Dimensions (AD)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 17
+//
+// Implements: Player debug info functions
+//
+// Description:
+// System for displaying monster, ammo, health stats.
+// Also has system for displaying locations of all secret areas.
+//=============================================================================
+
 entity ammocontrol;			// Stats controller
 
 // Ammo controller phases
@@ -10,7 +46,6 @@ float AC_PHASE2 = 2;		// Ammo stats
 float AC_PHASE3 = 3;		// Weapon stats
 float AC_PHASE4 = 4;		// Armour + HP stats
 float AC_PHASE5 = 5;		// Final stats table
-
 float AC_AMMOQTY = 0;		// Sub total
 float AC_SMALLBOX = 1;		// Total small ammo boxes
 float AC_LARGEBOX = 2;		// Total large ammo boxes
@@ -21,21 +56,17 @@ float AC_MONSTER = 6;		// Total from monsters
 float AC_WORLDSPN = 7;		// Duplicate + Capped worldspawn
 float AC_SHOTSTART = 8;		// Shotgun start weapon detection
 float AC_AMMOFINAL = 9;		// Final total (0+4+5+6+7)
-
 float MAX_AMMOARRAY = 10;	// Total of S+N+R+C sets
 float MAX_WPNDISP = 25;		// Limit of Weapon display
 float MAX_AMMODISP = 400;	// Limit of Ammo display
 float NOHP_MONARRAY = 0;	// Health for special monsters (boss or >9999)
-
 float MAX_MONCOUNT = 400;	// limit of monster display (display_monsleft)
 float MAX_MONARRAY = 50;	// Size of monster array (display_monsqty)
 
-//----------------------------------------------------------------------
 // Define all arrays for Ammo and Monster Stats
 // 0=Total found, 1=Small box, 2=Large box
 // 3=Worldspawn, 4=Player, 5=Backpacks, 6=Monsters
 // 7=Final (0+3+4+5+6)
-//----------------------------------------------------------------------
 float shellqty[MAX_AMMOARRAY], nailqty[MAX_AMMOARRAY];
 float rockqty[MAX_AMMOARRAY], cellqty[MAX_AMMOARRAY];
 // Totals for weapon, ammo, and monsters
@@ -56,11 +87,8 @@ void() ammostats_phase3;
 void() ammostats_phase4;
 void() ammostats_phase5;
 
-//----------------------------------------------------------------------
-void(entity targ, float ammoqty, string zero10, string zero100, string zero1000, string zero10000, string zero100000) zerofill_number =
-{
-	// Cap number based on strings
-	if (ammoqty > 99999 && zero100000 == "") ammoqty = 99999;
+void(entity targ, float ammoqty, string zero10, string zero100, string zero1000, string zero10000, string zero100000) zerofill_number = {
+	if (ammoqty > 99999 && zero100000 == "") ammoqty = 99999; // Cap number based on strings
 	if (ammoqty > 9999 && zero10000 == "") ammoqty = 9999;
 	if (ammoqty > 999 && zero1000 == "") ammoqty = 999;
 	if (ammoqty > 99 && zero100 == "") ammoqty = 99;
@@ -73,10 +101,9 @@ void(entity targ, float ammoqty, string zero10, string zero100, string zero1000,
 	sprint(targ, ftos(ammoqty));	
 };
 
-//======================================================================
-void() display_ammostats =
-{
+void() display_ammostats = {
 	local float statloop;
+
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 
@@ -115,16 +142,12 @@ void() display_ammostats =
 	}
 };
 
-//----------------------------------------------------------------------
 // PHASE 1 : WEAPON stats
-//----------------------------------------------------------------------
-void() ammostats_phase1 =
-{
+void() ammostats_phase1 = {
 	local float as_shadaxe, as_windowmaker, as_plasmagun;
 	local entity entlist;
-	//----------------------------------------------------------------
+
 	// List of all WEAPON pickups in the map
-	//----------------------------------------------------------------
 	as_wpnqty = as_shadaxe = as_plasmagun = as_windowmaker = 0;
 	as_artsuit = as_artpent = as_artinv = as_artquad = 0;
 
@@ -137,7 +160,6 @@ void() ammostats_phase1 =
 	entlist = nextent(world);
 	// Keep looping through entity list
 	while (entlist) {
-		//----------------------------------------------------------------
 		// Only interested in weapon pickups
 		if (entlist.flags & FL_ITEM && entlist.classgroup == CG_WEAPON) {
 			as_wpnqty = as_wpnqty + 1;
@@ -157,8 +179,7 @@ void() ammostats_phase1 =
 					// Check for zombie damage alternative
 					if (entlist.classtype == CT_UPGRADE_SSG) as_windowmaker = TRUE;
 				}
-			}
-			else if (entlist.classtype == CT_NAILGUN || entlist.classtype == CT_SUPER_NAILGUN) {
+			} else if (entlist.classtype == CT_NAILGUN || entlist.classtype == CT_SUPER_NAILGUN) {
 				nailqty[AC_WEAPON] = nailqty[AC_WEAPON] + entlist.aflag;
 				nailqty[AC_SHOTSTART] = TRUE;
 				// Reached display limit?
@@ -170,8 +191,7 @@ void() ammostats_phase1 =
 					sprint(self.owner, " "); sprint(self.owner, entlist.netname);
 					sprint(self.owner, "\n");
 				}
-			}
-			else if (entlist.classtype == CT_GRENADE_LAUNCHER || entlist.classtype == CT_ROCKET_LAUNCHER) {
+			} else if (entlist.classtype == CT_GRENADE_LAUNCHER || entlist.classtype == CT_ROCKET_LAUNCHER) {
 				rockqty[AC_WEAPON] = rockqty[AC_WEAPON] + entlist.aflag;
 				rockqty[AC_SHOTSTART] = TRUE;
 				// Reached display limit?
@@ -183,8 +203,7 @@ void() ammostats_phase1 =
 					sprint(self.owner, " "); sprint(self.owner, entlist.netname);
 					sprint(self.owner, "\n");
 				}
-			}
-			else if (entlist.classtype == CT_LIGHTNING || entlist.classtype == CT_UPGRADE_LG) {
+			} else if (entlist.classtype == CT_LIGHTNING || entlist.classtype == CT_UPGRADE_LG) {
 				cellqty[AC_WEAPON] = cellqty[AC_WEAPON] + entlist.aflag;
 				cellqty[AC_SHOTSTART] = TRUE;
 				// Reached display limit?
@@ -198,23 +217,18 @@ void() ammostats_phase1 =
 					// Check for zombie damage alternative
 					if (entlist.classtype == CT_UPGRADE_LG) as_plasmagun = TRUE;
 				}
-			}
-			// Report the shadow axe (no ammo interest)
-			else if (entlist.classtype == CT_UPGRADE_AXE && as_wpnqty <= MAX_WPNDISP) {
+			} else if (entlist.classtype == CT_UPGRADE_AXE && as_wpnqty <= MAX_WPNDISP) {
+				// Report the shadow axe (no ammo interest)
 				zerofill_number(self.owner, as_wpnqty, "0", "", "", "", "");
 				sprint(self.owner, "   --   -- Shadow Axe\n");
 				// Alternative way to deal with zombies
 				as_shadaxe = TRUE;
-			}
-			else {
-				// unknown weapon type
-				if (as_wpnqty <= MAX_WPNDISP) 
-					zerofill_number(self.owner, as_wpnqty, "0", "", "", "", "");
-					sprint(self.owner, "   --   -- Unknown Weapon\n");
+			} else {
+				if (as_wpnqty <= MAX_WPNDISP) zerofill_number(self.owner, as_wpnqty, "0", "", "", "", "");
+				sprint(self.owner, "   --   -- Unknown Weapon\n"); // unknown weapon type
 			}
 		}
 	
-		//----------------------------------------------------------------
 		// Only interested in artifact items
 		if (entlist.flags & FL_ITEM && entlist.classgroup == CG_ARTIFACT) {	
 			if (entlist.classtype == CT_ARTSUIT)
@@ -226,14 +240,11 @@ void() ammostats_phase1 =
 			else if (entlist.classtype == CT_ARTQUAD)
 				as_artquad = as_artquad + 1;
 		}
-
-		// Keep search through ALL of the entity list
-		entlist = nextent(entlist);
+		entlist = nextent(entlist); // Keep search through ALL of the entity list
 	}
-	// Any ITEM weapons found?
-	if (as_wpnqty == 0) sprint(self.owner, "NO weapon pickups found!\n");
-	// Warn mappers that the weapon display was limited
-	// Cannot display too many items, will hit memory issues
+	
+	if (as_wpnqty == 0) sprint(self.owner, "NO weapon pickups found!\n"); // Any ITEM weapons found?
+	// Warn mappers that the weapon display was limited.  Cannot display too many items, will hit memory issues
 	if (as_wpnqty > MAX_WPNDISP) {
 		sprint(self.owner, " * Found ("); sprint(self.owner, ftos(as_wpnqty));
 		sprint(self.owner, ") showing ("); sprint(self.owner, ftos(MAX_WPNDISP));
@@ -248,16 +259,12 @@ void() ammostats_phase1 =
 	ammocontrol.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 // PHASE 2 : AMMO boxes + BACKPACK stats
-//----------------------------------------------------------------------
-void() ammostats_phase2 =
-{
+void() ammostats_phase2 = {
 	local float mixedval;
 	local entity entlist;
-	//----------------------------------------------------------------
+
 	// List of all AMMO pickups in the map
-	//----------------------------------------------------------------
 	as_wpnqty = as_backammo = 0;
 	//                    1234567890123456789012345678901234567890
 	sprint(self.owner,   "--------------------------------------\n");
@@ -270,13 +277,11 @@ void() ammostats_phase2 =
 		// Only interested in ammo items
 		if (entlist.flags & FL_ITEM && entlist.classgroup == CG_AMMOITEM) {
 			if (entlist.classtype == CT_AMMOSHELLS) {
-				// Update ammo stats
-				as_ammoqty = as_ammoqty + 1;
+				as_ammoqty = as_ammoqty + 1; // Update ammo stats
 				shellqty[AC_AMMOQTY] = shellqty[AC_AMMOQTY] + entlist.aflag;
 				if (entlist.spawnflags & A_LARGE) shellqty[AC_LARGEBOX] = shellqty[AC_LARGEBOX] + 1;
 				else shellqty[AC_SMALLBOX] = shellqty[AC_SMALLBOX] + 1;
-				if (entlist.spawnflags & ITEM_RESPAWN || entlist.use == SUB_regen)
-					shellqty[AC_RESPAWN] = shellqty[AC_RESPAWN] + entlist.aflag;
+				if (entlist.spawnflags & ITEM_RESPAWN || entlist.use == SUB_regen) shellqty[AC_RESPAWN] = shellqty[AC_RESPAWN] + entlist.aflag;
 				
 				// Reached display limit?
 				if (as_ammoqty <= MAX_AMMODISP) {
@@ -296,8 +301,7 @@ void() ammostats_phase2 =
 					sprint(self.owner, entlist.netname);
 					sprint(self.owner, "\n");
 				}
-			}
-			else if (entlist.classtype == CT_AMMONAILS) {
+			} else if (entlist.classtype == CT_AMMONAILS) {
 				// Update ammo stats
 				as_ammoqty = as_ammoqty + 1;
 				nailqty[AC_AMMOQTY] = nailqty[AC_AMMOQTY] + entlist.aflag;
@@ -324,8 +328,7 @@ void() ammostats_phase2 =
 					sprint(self.owner, entlist.netname);
 					sprint(self.owner, "\n");
 				}
-			}
-			else if (entlist.classtype == CT_AMMOROCKETS) {
+			} else if (entlist.classtype == CT_AMMOROCKETS) {
 				// Update ammo stats
 				as_ammoqty = as_ammoqty + 1;
 				rockqty[AC_AMMOQTY] = rockqty[AC_AMMOQTY] + entlist.aflag;
@@ -352,8 +355,7 @@ void() ammostats_phase2 =
 					sprint(self.owner, entlist.netname);
 					sprint(self.owner, "\n");
 				}
-			}
-			else if (entlist.classtype == CT_AMMOCELLS) {
+			} else if (entlist.classtype == CT_AMMOCELLS) {
 				// Update ammo stats
 				as_ammoqty = as_ammoqty + 1;
 				cellqty[AC_AMMOQTY] = cellqty[AC_AMMOQTY] + entlist.aflag;
@@ -380,9 +382,8 @@ void() ammostats_phase2 =
 					sprint(self.owner, entlist.netname);
 					sprint(self.owner, "\n");
 				}
-			}
-			// Fixed ammo setup? (count set = random)
-			else if (entlist.classtype == CT_AMMOITEMPACK && entlist.count == 0) {
+			} else if (entlist.classtype == CT_AMMOITEMPACK && entlist.count == 0) {
+				// Fixed ammo setup? (count set = random)
 				// Reset counters
 				mixedval = 0;
 				// Check for any ammo in backpack?
@@ -428,24 +429,19 @@ void() ammostats_phase2 =
 		ammocontrol.state = AC_PHASE0;
 		return;
 	}
-	// Warn mappers that the ammo display was limited
-	// Cannot display too many items, will hit memory issues
+	// Warn mappers that the ammo display was limited.  Cannot display too many items, will hit memory issues
 	if (as_ammoqty > MAX_AMMODISP) {
 		sprint(self.owner, " * Found ("); sprint(self.owner, ftos(as_ammoqty));
 		sprint(self.owner, ") showing ("); sprint(self.owner, ftos(MAX_AMMODISP));
 		sprint(self.owner, ") only\n");
 	}
-	// next stage of stats
-	ammocontrol.state = AC_PHASE3;
+	ammocontrol.state = AC_PHASE3; // next stage of stats
 	ammocontrol.think = ammostats_phase3;
 	ammocontrol.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 // Display MONSTER Summary for the map
-//----------------------------------------------------------------------
-void(entity targ) ammostats_monsummary =
-{
+void(entity targ) ammostats_monsummary = {
 	//              1234567890123456789012345678901234567890
 	sprint(targ,   "======================================\n");
 	sprint(targ, "\bMonstrs Qty NoC Dly +NM +CO Zomb    HP\b\n");
@@ -468,11 +464,8 @@ void(entity targ) ammostats_monsummary =
 	sprint(targ, "\n"); 
 };
 
-//----------------------------------------------------------------
 // Display ARTIFACT Summary for the map
-//----------------------------------------------------------------
-void(entity targ) ammostats_artsummary =
-{
+void(entity targ) ammostats_artsummary = {
 	local float artqty;
 	//              1234567890123456789012345678901234567890
 	sprint(targ,   "--------------------------------------\n");
@@ -493,15 +486,11 @@ void(entity targ) ammostats_artsummary =
 	sprint(targ, "\n"); 
 };
 
-//----------------------------------------------------------------------
 // PHASE 3 : Count MONSTERS and display summary table
-//----------------------------------------------------------------------
-void() ammostats_phase3 =
-{
+void() ammostats_phase3 = {
 	local entity entlist;
-	//----------------------------------------------------------------
+
 	// FIND all MONSTERS in the map
-	//----------------------------------------------------------------
 	as_monqty = as_monlist = as_finalmonhp = as_zombiehp = 0;
 	as_nightonly = as_cooponly = 0;
 	as_monzombie = as_mondelay = as_monnocount = 0;
@@ -585,25 +574,19 @@ void() ammostats_phase3 =
 	ammocontrol.think = ammostats_phase4;
 	ammocontrol.nextthink = time + 0.1;
 };
-	
-//----------------------------------------------------------------------
+
 // PHASE 4 : Count ARMOUR and HEALTH packs
-//----------------------------------------------------------------------
-void() ammostats_phase4 =
-{
+void() ammostats_phase4 = {
 	local entity entlist;
-	//----------------------------------------------------------------
+
 	// FIND all armour/health packs
-	//----------------------------------------------------------------
 	as_armgrnqty = as_armyelqty = as_armredqty = as_armhpqty = 0;
 	as_hp15qty = as_hp25qty = as_hp100qty = as_hpqty = as_hpsec = 0;
 	as_backgrnqty = as_backyelqty = as_backredqty = 0;
 	as_backarmqty = as_backarmsec = as_hpfinal = 0;
-	
-	// Start from beginning of entity list, world!
-	entlist = nextent(world);
-	// Keep looping through entity list
-	while (entlist) {
+
+	entlist = nextent(world); // Start from beginning of entity list, world!
+	while (entlist) { // Keep looping through entity list
 		// Interested in health items
 		if (entlist.flags & FL_ITEM && entlist.classgroup == CG_HEALTH) {
 			as_hpqty = as_hpqty + entlist.healamount;
@@ -692,18 +675,14 @@ void() ammostats_phase4 =
 	ammocontrol.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 // PHASE 5 : Finally display data tables
-//----------------------------------------------------------------------
-void() ammostats_phase5 =
-{
+void() ammostats_phase5 = {
 	local float subtwbm, subtsml, subtlrg, totalrock;
 	local float hpmon_ammo_ratio, hparm_hpmon_ratio;
 	local float nozombammo, nozombmonhp, nobackammo, shotgunstart;
 	local float nobackshell, nobacknail, nobackrock, nobackcell;
-	//----------------------------------------------------------------
+
 	// Final table 
-	//----------------------------------------------------------------
 	//                    1234567890123456789012345678901234567890
 	sprint(self.owner,   "--------------------------------------\n");
 	sprint(self.owner, "\bSource        Shell  Nail  Rock   Cell\b\n");
@@ -769,18 +748,13 @@ void() ammostats_phase5 =
 	sprint(self.owner, "  "); zerofill_number(self.owner, rockqty[AC_MONSTER], " ", " ", " ", "", "");
 	sprint(self.owner, "   "); zerofill_number(self.owner, cellqty[AC_MONSTER], " ", " ", " ", "", "");
 	sprint(self.owner,"\n");
-	//sprint(self.owner, " * World qty capped, player excluded\n");
-	
 	totalrock = rockqty[AC_AMMOQTY] + rockqty[AC_BACKPACK] + rockqty[AC_WORLDSPN] + rockqty[AC_WEAPON] + rockqty[AC_MONSTER];
-	if (totalrock < as_monzombie)
-		sprint(self.owner, " * Rocket quantity less than zombies!\n");
-	
+	if (totalrock < as_monzombie) sprint(self.owner, " * Rocket quantity less than zombies!\n");
 	// List of all ammo stats
 	sprint(self.owner,   "--------------------------------------\n");
 	sprint(self.owner, "\bAmmo   Sml Lrg  Qty Wpn WBM Dmg  Total\b\n");
 	//                    xxxxxx xxx xxx xxxx xxx xxx xxx  xxxxxx
 	//                    Total  xxx xxx                   xxxxxx
-	
 	subtwbm = shellqty[AC_WORLDSPN] + shellqty[AC_BACKPACK] + shellqty[AC_MONSTER];
 	shellqty[AC_AMMOFINAL] = ( shellqty[AC_AMMOQTY] + shellqty[AC_WEAPON] + subtwbm ) * DAMAGE_SHELL;
 	as_finalammo = shellqty[AC_AMMOFINAL];
@@ -792,7 +766,6 @@ void() ammostats_phase5 =
 	sprint(self.owner, " "); zerofill_number(self.owner, DAMAGE_SHELL, " ", " ", "", "", "");
 	sprint(self.owner, "  "); zerofill_number(self.owner, shellqty[AC_AMMOFINAL], "0", "0", "0", " ", "");
 	sprint(self.owner, " \n");
-
 	subtwbm = nailqty[AC_WORLDSPN] + nailqty[AC_BACKPACK] + nailqty[AC_MONSTER];
 	nailqty[AC_AMMOFINAL] = (nailqty[AC_AMMOQTY] + nailqty[AC_WEAPON] + subtwbm) * DAMAGE_NGSPIKE;
 	as_finalammo = as_finalammo + nailqty[AC_AMMOFINAL];
@@ -804,7 +777,6 @@ void() ammostats_phase5 =
 	sprint(self.owner, " "); zerofill_number(self.owner, DAMAGE_NGSPIKE, " ", " ", "", "", "");
 	sprint(self.owner, "  "); zerofill_number(self.owner, nailqty[AC_AMMOFINAL], "0", "0", "0", " ", "");
 	sprint(self.owner, " \n");
-
 	subtwbm = rockqty[AC_WORLDSPN] + rockqty[AC_BACKPACK] + rockqty[AC_MONSTER];
 	rockqty[AC_AMMOFINAL] = (rockqty[AC_AMMOQTY] + rockqty[AC_WEAPON] + subtwbm) * DAMAGE_PLAYGRENADE;
 	as_finalammo = as_finalammo + rockqty[AC_AMMOFINAL];
@@ -816,7 +788,6 @@ void() ammostats_phase5 =
 	sprint(self.owner, " "); zerofill_number(self.owner, DAMAGE_PLAYGRENADE, " ", " ", "", "", "");
 	sprint(self.owner, "  "); zerofill_number(self.owner, rockqty[AC_AMMOFINAL], "0", "0", "0", " ", "");
 	sprint(self.owner, " \n");
-
 	subtwbm = cellqty[AC_WORLDSPN] + cellqty[AC_BACKPACK] + cellqty[AC_MONSTER];
 	cellqty[AC_AMMOFINAL] = (cellqty[AC_AMMOQTY] + cellqty[AC_WEAPON] + subtwbm) * DAMAGE_LGPLAYER;
 	as_finalammo = as_finalammo + cellqty[AC_AMMOFINAL];
@@ -828,10 +799,8 @@ void() ammostats_phase5 =
 	sprint(self.owner, " "); zerofill_number(self.owner, DAMAGE_LGPLAYER, " ", " ", "", "", "");
 	sprint(self.owner, "  "); zerofill_number(self.owner, cellqty[AC_AMMOFINAL], "0", "0", "0", " ", "");
 	sprint(self.owner, " \n");
-
 	subtsml = shellqty[AC_SMALLBOX] + nailqty[AC_SMALLBOX] + rockqty[AC_SMALLBOX] + cellqty[AC_SMALLBOX];
 	subtlrg = shellqty[AC_LARGEBOX] + nailqty[AC_LARGEBOX] + rockqty[AC_LARGEBOX] + cellqty[AC_LARGEBOX];
-	
 	sprint(self.owner, "Total  "); 
 	zerofill_number(self.owner, subtsml, " ", " ", "", "", "");
 	sprint(self.owner, " "); 
@@ -839,13 +808,9 @@ void() ammostats_phase5 =
 	sprint(self.owner, "                  ");
 	zerofill_number(self.owner, as_finalammo, "0", " ", " ", " ", " ");
 	sprint(self.owner, " \n");
-	
-	//----------------------------------------------------------------
+
 	// Display FINAL Stats for the map
-	//----------------------------------------------------------------
-	// How much ammo there is in the map compared to monster HP
-	// Positive ratio means MORE THAN ENOUGH ammo to deal with monsters
-	// Negative ratio means NOT ENOUGH ammo to deal with  all monsters
+	// How much ammo there is in the map compared to monster HP.  Positive ratio means MORE THAN ENOUGH ammo to deal with monsters.  Negative ratio means NOT ENOUGH ammo to deal with  all monsters
 	//                    1234567890123456789012345678901234567890
 	sprint(self.owner,   "======================================\n");
 	sprint(self.owner, "\bSkill (\b"); sprint(self.owner, ftos(skill));
@@ -855,7 +820,6 @@ void() ammostats_phase5 =
 	//                    No Zombies   xx.xx xxxxxx xxxxxx xx.xx
 	//                    No Backpacks xx.xx xxxxxx xxxxxx xx.xx
 	//                    Shotgun Strt xx.xx xxxxxx xxxxxx xx.xx
-
 	// Standard ratio (no accounting for explosives)
 	hpmon_ammo_ratio = as_finalammo / as_finalmonhp;
 	hparm_hpmon_ratio = (as_hpfinal / as_finalmonhp)*1000;
@@ -868,9 +832,7 @@ void() ammostats_phase5 =
 	sprint(self.owner, " ");
 	lftos(self.owner, hpmon_ammo_ratio, 2, 2, BUFFER_SPRINT);
 	sprint(self.owner, "\n"); 
-
-	// Zombie ratio (need explosives to be destroyed)
-	// Skip this condition if no zombies on map!
+	// Zombie ratio (need explosives to be destroyed).  Skip this condition if no zombies on map!
 	if (as_monzombie > 0) {
 		nozombmonhp = as_finalmonhp-as_zombiehp;
 		nozombammo = as_finalammo - (as_monzombie * DAMAGE_PLAYGRENADE);
@@ -887,8 +849,7 @@ void() ammostats_phase5 =
 		sprint(self.owner, "\n"); 
 	}
 
-	// No backpack option, often given as secret items
-	// Detect any backpacks (as_backammo) and subtract ammo
+	// No backpack option, often given as secret items.  Detect any backpacks (as_backammo) and subtract ammo
 	if (as_backammo == TRUE) {
 		nobackshell = shellqty[AC_BACKPACK] * DAMAGE_SHELL;
 		nobacknail = nailqty[AC_BACKPACK] * DAMAGE_NGSPIKE;
@@ -911,17 +872,13 @@ void() ammostats_phase5 =
 	// Check for Shotgun Start (Have ammo, but missing gun)
 	shotgunstart = FALSE;
 	// Shotguns + shell ammo
-	if (shellqty[AC_SHOTSTART] == FALSE && shellqty[AC_AMMOFINAL] > 0)
-		shotgunstart = TRUE;
+	if (shellqty[AC_SHOTSTART] == FALSE && shellqty[AC_AMMOFINAL] > 0) shotgunstart = TRUE;
 	// Nailguns + nail ammo
-	if (nailqty[AC_SHOTSTART] == FALSE && nailqty[AC_AMMOFINAL] > 0)
-		shotgunstart = TRUE;
+	if (nailqty[AC_SHOTSTART] == FALSE && nailqty[AC_AMMOFINAL] > 0) shotgunstart = TRUE;
 	// Grenade and rocket launcher + rocket ammo
-	if (rockqty[AC_SHOTSTART] == FALSE && rockqty[AC_AMMOFINAL] > 0)
-		shotgunstart = TRUE;
+	if (rockqty[AC_SHOTSTART] == FALSE && rockqty[AC_AMMOFINAL] > 0) shotgunstart = TRUE;
 	// Lightning and plasma gun + cell ammo
-	if (cellqty[AC_SHOTSTART] == FALSE && rockqty[AC_AMMOFINAL] > 0)
-		shotgunstart = TRUE;
+	if (cellqty[AC_SHOTSTART] == FALSE && rockqty[AC_AMMOFINAL] > 0) shotgunstart = TRUE;
 		
 	// Any ammo + weapon missing?
 	if (shotgunstart == TRUE) {
@@ -947,26 +904,19 @@ void() ammostats_phase5 =
 		lftos(self.owner, hpmon_ammo_ratio, 2, 2, BUFFER_SPRINT);
 		sprint(self.owner, "\n");
 	}
-		
-	// Last stage
-	ammocontrol.state = AC_PHASE0;
+	ammocontrol.state = AC_PHASE0; // Last stage
 };
 	
-//======================================================================
 // Display monsters left alive in map
-//======================================================================
-void() display_monsleft =
-{
+void() display_monsleft = {
 	local float entcount, montotal, monalive, mondead;
 	local entity entlist;
 	
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 
-	// flush keyboard buffer
-	self.impulse = 0;
-	// Reset counters
-	entcount = montotal = monalive = mondead = 0;
+	self.impulse = 0; // flush keyboard buffer
+	entcount = montotal = monalive = mondead = 0; // Reset counters
 
 	sprint(self, "\b[-- Monsters Alive and Kicking --]\b\n"); 
 	sprint(self, "--------------------------------------\n");
@@ -981,8 +931,7 @@ void() display_monsleft =
 		entcount = entcount + 1;
 		// Only interested in monsters (regular + boss)
 		if (entlist.flags & FL_MONSTER || entlist.bossflag) {
-			// Keep counting up monsters
-			montotal = montotal + 1;
+			montotal = montotal + 1; // Keep counting up monsters
 			
 			if (entlist.health > 0) {
 				monalive = monalive + 1;
@@ -1005,12 +954,9 @@ void() display_monsleft =
 					sprint(self, ftos(MAX_MONCOUNT));
 					sprint(self, "monsters!\n");
 				}
-			}
-			// Monster found is dead
-			else mondead = mondead + 1;			
-		}		
-		// Keep search through ALL of the entity list
-		entlist = nextent(entlist);
+			} else mondead = mondead + 1; // Monster found is dead	
+		}			
+		entlist = nextent(entlist); // Keep search through ALL of the entity list
 	}
 	sprint(self, "--------------------------------------\n");
 	sprint(self, "Monster Total ("); sprint(self, ftos(montotal));
@@ -1021,55 +967,32 @@ void() display_monsleft =
 	sprint(self, "\n\n");
 };
 
-//======================================================================
 // Display quantity of different monster types
-//======================================================================
-void() display_monsqty =
-{
-	// Monster Array of quantity/hp differences
-	local entity asmonent[MAX_MONARRAY];
-	local float asmonqty[MAX_MONARRAY], asmonhp[MAX_MONARRAY];
-
-	local float monloop, monfound, monarrayfull, subtmonhp;
-	local entity entlist;
+void() display_monsqty = {
+	local entity asmonent[MAX_MONARRAY], entlist; // Monster Array of quantity/hp differences
+	local float asmonqty[MAX_MONARRAY], asmonhp[MAX_MONARRAY], monloop, monfound, monarrayfull, subtmonhp;
 	
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 
-	// flush keyboard buffer
-	self.impulse = 0;
+	self.impulse = 0; // flush keyboard buffer
 
-	//----------------------------------------------------------------
 	// FIND all MONSTERS in the map
-	//----------------------------------------------------------------
 	as_monqty = as_monlist = as_finalmonhp = 0;
 	as_nightonly = as_cooponly = as_backammo = 0;
 	as_monzombie = as_zombiehp = as_mondelay = as_monnocount = 0;
 	monarrayfull = FALSE;
-	
-	// Start from beginning of entity list, world!
-	entlist = nextent(world);
-	// Keep looping through entity list
-	while (entlist) {
-		// Only interested in monsters
-		if (entlist.flags & FL_MONSTER) {
-			// Spawn exceptions
-			if (entlist.nightmare == TRUE)
-				as_nightonly = as_nightonly + 1;
-			if (entlist.cooponly == TRUE)
-				as_cooponly = as_cooponly + 1;
-			
-			// Is the monster designed for nightmare skill only?
-			if (entlist.nightmare && skill != SKILL_NIGHTMARE) {
+	entlist = nextent(world); // Start from beginning of entity list, world!
+	while (entlist) { // Keep looping through entity list
+		if (entlist.flags & FL_MONSTER) { // Only interested in monsters
+			if (entlist.nightmare == TRUE) as_nightonly = as_nightonly + 1; // Spawn exceptions
+			if (entlist.cooponly == TRUE) as_cooponly = as_cooponly + 1;
+			if (entlist.nightmare && skill != SKILL_NIGHTMARE) { // Is the monster designed for nightmare skill only?
 				// Easier to do nothing
-			}
-			// Is the monster designed for coop only?
-			else if (entlist.cooponly && coop == FALSE) {
+			} else if (entlist.cooponly && coop == FALSE) { // Is the monster designed for coop only?
 				// Easier to do nothing
-			}
-			else {
-				// Total monsters in map might be different to HUD
-				// Exceptions = nomonstercount, delaymonstercount
+			} else {
+				// Total monsters in map might be different to HUD.  Exceptions = nomonstercount, delaymonstercount
 				as_monqty = as_monqty + 1;
 				
 				// Include any backpack ammo drops
@@ -1087,58 +1010,44 @@ void() display_monsqty =
 					}
 				}
 				// Keep track of spawn delay monsters
-				if (entlist.spawnflags & MON_SPAWN_DELAY)
-					as_mondelay = as_mondelay + 1;
+				if (entlist.spawnflags & MON_SPAWN_DELAY) as_mondelay = as_mondelay + 1;
 				// Keep track of monsters with no count
-				if (entlist.nomonstercount > 0 || entlist.delaymonstercount > 0)
-					as_monnocount = as_monnocount + 1;
+				if (entlist.nomonstercount > 0 || entlist.delaymonstercount > 0) as_monnocount = as_monnocount + 1;
 				// Keep track of all monster HP, exclude negative + boss
 				if (entlist.max_health > 0 && !entlist.bossflag) {
 					// Some monsters reset HP later
-					if (entlist.reset_health > 0) 
-						as_finalmonhp = as_finalmonhp + entlist.reset_health;
-					// Anything over 9999 is a special setup (don't include it)
-					else if (entlist.max_health < 9999) {
+					if (entlist.reset_health > 0)  as_finalmonhp = as_finalmonhp + entlist.reset_health;
+					else if (entlist.max_health < 9999) { // Anything over 9999 is a special setup (don't include it)
 						as_finalmonhp = as_finalmonhp + entlist.max_health;	
 					}
 				}
-				
-				// ------------------------------------------------------
+
 				// Is this the FIRST monster in the LIST?
 				if (as_monlist == 0) {
-					// Add first monster to front of list
-					asmonent[as_monlist] = entlist;
+					asmonent[as_monlist] = entlist; // Add first monster to front of list
 					asmonqty[as_monlist] = 1;
 					if (entlist.bossflag) asmonhp[as_monlist] = NOHP_MONARRAY;
 					else asmonhp[as_monlist] = entlist.max_health;
-					// First entry in list
-					as_monlist = 1;
-				}
-				// --------------------------------------------------
-				// Search through monster LIST for possible match
-				else {
+					as_monlist = 1; // First entry in list
+				} else { // Search through monster LIST for possible match
 					monloop = 0;
 					monfound = FALSE;
 					// Loop through list
 					while (monloop < as_monlist) {
 						// Found monster in list?
-						// This condition will always setup boss monsters
-						// in separate table entries (HP reset to zero)
+						// This condition will always setup boss monsters in separate table entries (HP reset to zero).
 						if (entlist.classtype == asmonent[monloop].classtype
 							&& entlist.max_health == asmonhp[monloop]) {
-							// Found monster, update quantity and exit
-							asmonqty[monloop] = asmonqty[monloop] + 1;
+							asmonqty[monloop] = asmonqty[monloop] + 1; // Found monster, update quantity and exit
 							monfound = TRUE;
 						}
-						// Keep looping through list
-						monloop = monloop + 1;
+
+						monloop = monloop + 1; // Keep looping through list
 					}
 
-					// --------------------------------------------------
 					// Was the new monster found in the LIST?
 					if (monfound == FALSE) {
-						// only add monsters if array is large enough
-						if (as_monlist < MAX_MONARRAY) {						
+						if (as_monlist < MAX_MONARRAY) { // only add monsters if array is large enough					
 							// Add monster to list
 							asmonent[as_monlist] = entlist;
 							asmonqty[as_monlist] = 1;
@@ -1146,28 +1055,22 @@ void() display_monsqty =
 							else asmonhp[as_monlist] = entlist.max_health;
 							// Increase list counter
 							as_monlist = as_monlist + 1;
-						}
-						// Reach limit of array
-						else monarrayfull = TRUE;
+						} else monarrayfull = TRUE; // Reach limit of array
 					}
 				}
 			}
 		}
-		// Keep search through ALL of the entity list
-		entlist = nextent(entlist);
+		entlist = nextent(entlist); // Keep search through ALL of the entity list
 	} 
 
-	// ERROR = No MONSTERS found?
 	if (as_monqty == 0) {
 		sprint(self, "--------------------------------------\n");
-		sprint(self, "\b[ERROR]\b Missing any MONSTERS!\n");
-		sprint(self, " * Cannot create Monster Stats!\n\n");
+		sprint(self, "No Monsters!\n");
+		sprint(self, " * Cannot create Monster Stats\n\n");
 		return;
 	}
 		
-	//----------------------------------------------------------------
 	// Display MONSTER ARRAY for the map
-	//----------------------------------------------------------------
 	monloop = 0;
 	sprint(self, "\b[-- Advanced Monsters Statistics --]\b\n"); 
 	sprint(self, "--------------------------------------\n");
@@ -1177,11 +1080,8 @@ void() display_monsqty =
 	while (monloop < as_monlist) {
 		zerofill_number(self, monloop+1, "0", "", "", "", "");
 		sprint(self, " ");
-		
-		// Check for any special cases (reset_health)
-		if (asmonent[monloop].reset_health > 0) {
-			asmonhp[monloop] = asmonent[monloop].reset_health;
-		}
+		if (asmonent[monloop].reset_health > 0) asmonhp[monloop] = asmonent[monloop].reset_health; // Check for any special cases (reset_health)
+
 		// Display monster quantity, individual HP and subtotal
 		if (asmonent[monloop].bossflag == FALSE) {
 			zerofill_number(self, asmonqty[monloop], "0", " ", " ", "", "");
@@ -1190,71 +1090,49 @@ void() display_monsqty =
 			sprint(self, " "); 
 			subtmonhp = asmonhp[monloop] * asmonqty[monloop];
 			zerofill_number(self, subtmonhp, "0", " ", " ", " ", " ");
-		}
-		// BOSS monsters are usually a special setup
-		// They might as well be zero HP for this table
-		else {
+		} else {
+			// BOSS monsters are usually a special setup.  They might as well be zero HP for this table
 			zerofill_number(self, asmonqty[monloop], "0", " ", " ", "", "");
 			sprint(self, " "); 
 			zerofill_number(self, 0, " ", " ", " ", "", "");
 			sprint(self, " "); 
 			zerofill_number(self, 0, " ", " ", " ", " ", " ");
 		}
-		// Display monster name
 		sprint(self, " ");
-		sprint(self, asmonent[monloop].classname);
+		sprint(self, asmonent[monloop].classname); // Display monster name
 		sprint(self, "\n");
-		// Keep looping through list
-		monloop = monloop + 1;
+		monloop = monloop + 1; // Keep looping through list
 	}
-	// Is monster array is full?
-	if (monarrayfull == TRUE) {
-		sprint(self, " * Monster Array table is incomplete\n");
-	}
-
-	// Display Summary stuff for the map
-	ammostats_monsummary(self);
+	if (monarrayfull == TRUE) sprint(self, " * Monster Array table is full.\n");
+	ammostats_monsummary(self);	// Display Summary stuff for the map
 };
 
-//======================================================================
 // Find and display secret locations
-//======================================================================
-void() display_secrets =
-{
+void() display_secrets = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
+
 	if (secloc_running) {
 		sprint(self, "[Impulse ");
 		sprint(self, ftos(self.impulse));
 		sprint(self, "] cannot work, \bSecret Cam\b active!\n");
 		return;
 	}
-
-	// flush keyboard buffer
-	self.impulse = 0;
-	// Spawn secret trigger camera entity
-	if (!secloc_cam) secloc_cam = spawn();
+	self.impulse = 0; // flush keyboard buffer
+	if (!secloc_cam) secloc_cam = spawn(); // Spawn secret trigger camera entity
 	secloc_cam.count = 0;
-
 	sprint(self, "\n--------------------------------------\n");
 	sprint(self, "List of secret locations:\n\n");
-	
-	// Search entity list for secrets
-	secloc_cam.enemy = find(world, classname, "trigger_secret");
-	// If no secrets exist, tell player and exit
-	if (!secloc_cam.enemy) { sprint(self, "No secrets found!\n"); return; }
+	secloc_cam.enemy = find(world, classname, "trigger_secret"); // Search entity list for secrets
 
-	// Keep looping through triggers
-	while (secloc_cam.enemy) {
-		// Found a secret!
-		secloc_cam.count = secloc_cam.count + 1;
+	if (!secloc_cam.enemy) { sprint(self, "No secrets found!\n"); return; } // If no secrets exist, tell player and exit
+
+	while (secloc_cam.enemy) { // Keep looping through triggers
+		secloc_cam.count = secloc_cam.count + 1; // Found a secret!
 		secloc_cam.enemy.cnt = secloc_cam.count;
-		// Update console display
-		sprint(self, "(");
-		// make sure table is aligned by zero filling
-		if (secloc_cam.enemy.cnt < 10) sprint(self, "0");
-		// display secret no + XYZ origin location
-		sprint(self, ftos(secloc_cam.enemy.cnt)); 
+		sprint(self, "("); // Update console display
+		if (secloc_cam.enemy.cnt < 10) sprint(self, "0"); // make sure table is aligned by zero filling
+		sprint(self, ftos(secloc_cam.enemy.cnt));  // display secret no + XYZ origin location
 		sprint(self, ") = ");
 		sprint(self, vtos(secloc_cam.enemy.oldorigin)); 
 		if (CheckZeroVector(secloc_cam.enemy.oldorigin)) sprint(self, " [Err]");
@@ -1262,8 +1140,7 @@ void() display_secrets =
 		else if (secloc_cam.enemy.estate & ESTATE_DISABLE) sprint(self, "[Disabled]");
 		sprint(self, "\n");
 		
-		// Keep search for more secrets
-		secloc_cam.enemy = find(secloc_cam.enemy, classname, "trigger_secret");
+		secloc_cam.enemy = find(secloc_cam.enemy, classname, "trigger_secret"); // Keep search for more secrets
 	}
 	sprint(self, "--------------------------------------\n");
 	sprint(self, "Total secrets found ("); 
@@ -1271,9 +1148,7 @@ void() display_secrets =
 	sprint(self, ")\n\n");
 };
 
-//----------------------------------------------------------------------
-void() FinishSecretCamera =
-{
+void() FinishSecretCamera = {
 	// Restore player core parameters (NO save)
 	setmodel (self, MODEL_PLAYER);
 	modelindex_player = self.modelindex;
@@ -1281,8 +1156,7 @@ void() FinishSecretCamera =
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_WALK;
 	self.takedamage = DAMAGE_AIM;
-	// Don't restore any velocity, wierd stuff will happen
-	self.velocity = self.avelocity = '0 0 0';
+	self.velocity = self.avelocity = '0 0 0'; // Don't restore any velocity, wierd stuff will happen
 
 	// Restore STORED player parameters
 	self.flags = secloc_cam.flags;
@@ -1306,19 +1180,13 @@ void() FinishSecretCamera =
 	secloc_cam.angles = secloc_cam.v_angle = '0 0 0';
 	secloc_cam.weaponmodel = string_null;
 	secloc_cam.weaponframe = 0;
-	
-	// Restore pre/post player functions
-	secloc_running = FALSE;	
-	// flush keyboard buffers
-	self.impulse = 0;
-	self.button0 = self.button1 = self.button2 = 0;
+	secloc_running = FALSE;	// Restore pre/post player functions
+
+	self.impulse = self.button0 = self.button1 = self.button2 = 0; // flush keyboard buffers
 };
 
-//----------------------------------------------------------------------
-void() SaveSecretCamera =
-{
-	// Block pre/post player functions
-	secloc_running = TRUE;	
+void() SaveSecretCamera = {
+	secloc_running = TRUE; // Block pre/post player functions
 
 	// SAVE player parameters
 	secloc_cam.flags = self.flags;
@@ -1332,13 +1200,10 @@ void() SaveSecretCamera =
 	secloc_cam.weaponframe = self.weaponframe;	
 };
 
-//----------------------------------------------------------------------
-void() NextSecretCamera =
-{
+void() NextSecretCamera = {
 	if (!secloc_cam.enemy) { FinishSecretCamera(); return; }
 	
-	// Find next secret location
-	secloc_cam.count = secloc_cam.count + 1;
+	secloc_cam.count = secloc_cam.count + 1; // Find next secret location
 	secloc_cam.enemy.cnt = secloc_cam.count;
 	// Centerprint message about secret number found
 	if (secloc_cam.enemy.estate & ESTATE_BLOCK)
@@ -1347,58 +1212,39 @@ void() NextSecretCamera =
 		centerprint3(self, "Secret (", ftos(secloc_cam.enemy.cnt), ")\n");
 	setorigin(self, secloc_cam.enemy.oldorigin);
 
-	// Keep search for more secrets
-	secloc_cam.enemy = find(secloc_cam.enemy, classname, "trigger_secret");
+	secloc_cam.enemy = find(secloc_cam.enemy, classname, "trigger_secret"); // Keep search for more secrets
 };
 
-//----------------------------------------------------------------------
-void() CheckSecretCamera =
-{
+void() CheckSecretCamera = {
 	if (impulse_playeronly()) return;		// Player only
 	if (!secloc_running) return;
 	if (self.waitmin > time) return;		// delay input
 	
 	// check for jump button to exit
 	if (self.button1 || self.button2) {
-		// Time to exit
-		FinishSecretCamera();
-	}
-	// check for attack button to switch cameras
-	else if (self.button0) {
+		FinishSecretCamera(); // Time to exit
+	} else if (self.button0) { // check for attack button to switch cameras
 		self.button0 = self.button1 = self.button2 = 0;
 		self.waitmin = time + 0.5;
-		// Next secret
-		NextSecretCamera();
+		NextSecretCamera(); // Next secret
 	}
 };
 
-//----------------------------------------------------------------------
-void() display_secretlocs =
-{
+void() display_secretlocs = {
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 	if (secloc_running) return;
 
-	// flush keyboard buffer
-	self.impulse = 0;
-	// Spawn secret trigger camera entity
-	if (!secloc_cam) secloc_cam = spawn();
+	self.impulse = 0; // flush keyboard buffer
+	if (!secloc_cam) secloc_cam = spawn(); // Spawn secret trigger camera entity
 	secloc_cam.count = 0;
-	
-	// Search entity list for secrets
-	secloc_cam.enemy = find(world, classname, "trigger_secret");
-	// If no secrets exist, tell player and exit
-	if (!secloc_cam.enemy) { sprint(self, "No secrets found!\n"); return; }
-
-	// Save player parameters
-	SaveSecretCamera();
-
-	// Switch on notarget so monsters don't attack player
-	// Add god mode to prevent any damage
-	self.flags = self.flags + (FL_NOTARGET || FL_GODMODE);
+	secloc_cam.enemy = find(world, classname, "trigger_secret"); // Search entity list for secrets
+	if (!secloc_cam.enemy) { sprint(self, "No secrets found!\n"); return; } // If no secrets exist, tell player and exit
+	SaveSecretCamera(); // Save player parameters
+	self.flags = self.flags + (FL_NOTARGET || FL_GODMODE); // Switch on notarget so monsters don't attack player.  Add god mode to prevent any damage
 	self.flags = self.flags - (self.flags & FL_ONGROUND);		
 		
-	// reset player model to nothing and no world interaction
+	// Reset player model to nothing and no world interaction
 	self.view_ofs = self.velocity = self.avelocity = '0 0 0';
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;		// no more movement
@@ -1408,6 +1254,5 @@ void() display_secretlocs =
 	self.weaponmodel = string_null;		// No vmodel updates
 	self.frame = self.weaponframe = 0;	// reset all frames
 	
-	// Display first camera
-	NextSecretCamera();
+	NextSecretCamera(); // Display first camera
 };

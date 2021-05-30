@@ -84,7 +84,6 @@ $frame deathb9 deathb10 deathb11 deathb12 deathb13 deathb14
 
 void() dfury_standL1;
 void() dfury_magic;
-void() dfury_sword_sound;					// Sword swipe sounds
 void(float soundtype) dfury_grunt_sound;	// Grunting while attacking
 
 // Different types of grunting sounds
@@ -228,10 +227,10 @@ void()	dfury_run6	=[	$run6,	dfury_run1	] {ai_run(15);};
 //===========================================================================
 // Melee Attack 1 - Slice (bring swords together and pull apart)
 void()	dfury_slice1	=[	$slice2,	dfury_slice2	] {dfury_grunt_sound(DFURY_SOUND_PULLAPART);ai_charge(9);};
-void()	dfury_slice2	=[	$slice3,	dfury_slice3	] {ai_charge(10); dfury_sword_sound();};
+void()	dfury_slice2	=[	$slice3,	dfury_slice3	] {ai_charge(10); SwordSwipeSound();};
 void()	dfury_slice3	=[	$slice4,	dfury_slice4	] {ai_charge(17);};
 void()	dfury_slice4	=[	$slice5,	dfury_slice5	] {monster_footstep(FALSE); ai_charge(4);};
-void()	dfury_slice5	=[	$slice6,	dfury_slice6	] {ai_charge(11); dfury_sword_sound(); ai_melee();};
+void()	dfury_slice5	=[	$slice6,	dfury_slice6	] {ai_charge(11); SwordSwipeSound(); ai_melee();};
 void()	dfury_slice6	=[	$slice7,	dfury_slice7	] {ai_charge(19); ai_melee();};
 void()	dfury_slice7	=[	$slice8,	dfury_slice8	] {ai_charge(12); ai_melee();};
 void()	dfury_slice8	=[	$slice9,	dfury_slice9	] {ai_charge(6); ai_melee();};
@@ -246,7 +245,7 @@ void()	dfury_smash2	=[	$smash3,	dfury_smash3	] {ai_charge(13);};
 void()	dfury_smash3	=[	$smash4,	dfury_smash4	] {ai_charge(9); monster_footstep(FALSE);};
 void()	dfury_smash4	=[	$smash5,	dfury_smash5	] {ai_charge(11);};
 void()	dfury_smash5	=[	$smash6,	dfury_smash6	] {dfury_grunt_sound(DFURY_SOUND_OVERSMASH);ai_charge(10);};
-void()	dfury_smash6	=[	$smash7,	dfury_smash7	] {ai_charge(7); dfury_sword_sound();};
+void()	dfury_smash6	=[	$smash7,	dfury_smash7	] {ai_charge(7); SwordSwipeSound();};
 void()	dfury_smash7	=[	$smash8,	dfury_smash8	] {ai_charge(12); monster_footstep(FALSE);};
 void()	dfury_smash8	=[	$smash9,	dfury_smash9	] {ai_charge(2);self.meleecontact = TRUE; ai_meleesmash(40);};
 void()	dfury_smash9	=[	$smash10,	dfury_smash10	] {ai_charge(3); ai_melee();self.meleecontact = FALSE;};
@@ -260,7 +259,7 @@ void()	dfury_rswing1	=[	$rswing2,	dfury_rswing3	] {ai_charge(2);};
 void()	dfury_rswing3	=[	$rswing3,	dfury_rswing4	] {dfury_grunt_sound(DFURY_SOUND_LRFURY);ai_charge(5);};
 void()	dfury_rswing4	=[	$rswing4,	dfury_rswing5	] {ai_charge(8);ai_melee();monster_footstep(FALSE);};
 void()	dfury_rswing5	=[	$rswing5,	dfury_rswing6	] {ai_charge(7);ai_melee();};
-void()	dfury_rswing6	=[	$rswing6,	dfury_rswing7	] {ai_charge(5);ai_melee(); dfury_sword_sound();};
+void()	dfury_rswing6	=[	$rswing6,	dfury_rswing7	] {ai_charge(5);ai_melee(); SwordSwipeSound();};
 void()	dfury_rswing7	=[	$rswing7,	dfury_rswing8	] {ai_charge(2);monster_footstep(FALSE);};
 void()	dfury_rswing8	=[	$rswing8,	dfury_run1	] {ai_charge(1);
 	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE) && self.enemy.health > 0) self.think = dfury_lswing3;
@@ -272,7 +271,7 @@ void()	dfury_lswing1	=[	$lswing2,	dfury_lswing3	] {ai_charge(2);};
 void()	dfury_lswing3	=[	$lswing3,	dfury_lswing4	] {dfury_grunt_sound(DFURY_SOUND_OPTIONAL);ai_charge(5);};
 void()	dfury_lswing4	=[	$lswing4,	dfury_lswing5	] {ai_charge(8);ai_melee();monster_footstep(FALSE);};
 void()	dfury_lswing5	=[	$lswing5,	dfury_lswing6	] {ai_charge(7);ai_melee();};
-void()	dfury_lswing6	=[	$lswing6,	dfury_lswing7	] {ai_charge(5);ai_melee(); dfury_sword_sound();};
+void()	dfury_lswing6	=[	$lswing6,	dfury_lswing7	] {ai_charge(5);ai_melee(); SwordSwipeSound();};
 void()	dfury_lswing7	=[	$lswing7,	dfury_lswing8	] {ai_charge(2);monster_footstep(FALSE);};
 void()	dfury_lswing8	=[	$lswing8,	dfury_run1	] {ai_charge(1);
 	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE) && self.enemy.health > 0) self.think = dfury_rswing3;
@@ -345,7 +344,7 @@ void()	dfury_lunge8	=[	$lunge8,	dfury_lunge8	] {
 // Landed with thrush attack
 void()	dfury_lunge9	=[	$lunge9,	dfury_lunge10	] {ai_melee();};
 void()	dfury_lunge10	=[	$lunge10,	dfury_lunge11	] {ai_charge(5);ai_melee();};
-void()	dfury_lunge11	=[	$lunge11,	dfury_lunge12	] {ai_charge(4);ai_melee();dfury_sword_sound();};
+void()	dfury_lunge11	=[	$lunge11,	dfury_lunge12	] {ai_charge(4);ai_melee();SwordSwipeSound();};
 void()	dfury_lunge12	=[	$lunge12,	dfury_lunge13	] {ai_charge(1);ai_melee();};
 void()	dfury_lunge13	=[	$lunge13,	dfury_lunge14	] {ai_charge(1);ai_melee();monster_footstep(FALSE);};
 void()	dfury_lunge14	=[	$lunge14,	dfury_lunge15	] {ai_charge(1);};
@@ -365,7 +364,7 @@ void()	dfury_watk4	=[	$w_attack4,	dfury_watk5	] {ai_charge(18);};
 void()	dfury_watk5	=[	$w_attack5,	dfury_watk6	] {ai_charge(18);dfury_grunt_sound(DFURY_SOUND_RUNSWING);};
 void()	dfury_watk6	=[	$w_attack6,	dfury_watk7	] {ai_charge(18);};
 void()	dfury_watk7	=[	$w_attack7,	dfury_watk8	] {ai_charge(19);monster_footstep(FALSE);};
-void()	dfury_watk8	=[	$w_attack8,	dfury_watk9	] {ai_charge(22);dfury_sword_sound();ai_melee();};
+void()	dfury_watk8	=[	$w_attack8,	dfury_watk9	] {ai_charge(22);SwordSwipeSound();ai_melee();};
 void()	dfury_watk9	=[	$w_attack9,	dfury_watk10] {ai_charge(23);ai_melee(); };
 void()	dfury_watk10=[	$w_attack10,dfury_watk11] {ai_charge(21); ai_melee();};
 void()	dfury_watk11=[	$w_attack11,dfury_watk12] {ai_charge(19);};
@@ -373,7 +372,7 @@ void()	dfury_watk12=[	$w_attack12,dfury_watk13] {ai_charge(19);};
 void()	dfury_watk13=[	$w_attack13,dfury_watk14] {ai_charge(18);};
 void()	dfury_watk14=[	$w_attack14,dfury_watk15] {ai_charge(18);dfury_grunt_sound(DFURY_SOUND_OPTIONAL);};
 void()	dfury_watk15=[	$w_attack15,dfury_watk16] {ai_charge(18);};
-void()	dfury_watk16=[	$w_attack16,dfury_watk17] {ai_charge(19);dfury_sword_sound();ai_melee();};
+void()	dfury_watk16=[	$w_attack16,dfury_watk17] {ai_charge(19);SwordSwipeSound();ai_melee();};
 void()	dfury_watk17=[	$w_attack17,dfury_watk18] {ai_charge(19); monster_footstep(FALSE); ai_melee();};
 void()	dfury_watk18=[	$w_attack18,dfury_watk19] {ai_charge(21); ai_melee();};
 void()	dfury_watk19=[	$w_attack19,dfury_watk20] {ai_charge(22);};
@@ -679,33 +678,21 @@ void() dfury_die =
 	}
 };
 
-//============================================================================
-void() dfury_sword_sound =
-{
-	self.weaponstate = random();
-	if (self.weaponstate < 0.25) sound (self, CHAN_WEAPON, "weapons/sword1a.wav", 1, ATTN_NORM);
-	else if (self.weaponstate < 0.5) sound (self, CHAN_WEAPON, "weapons/sword2a.wav", 1, ATTN_NORM);
-	else if (self.weaponstate < 0.75) sound (self, CHAN_WEAPON, "weapons/sword1b.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_WEAPON, "weapons/sword2b.wav", 1, ATTN_NORM);
-};
-
-//============================================================================
-void(float soundtype) dfury_grunt_sound =
-{
+void(float soundtype) dfury_grunt_sound = {
 	if (soundtype == DFURY_SOUND_PULLAPART)
-		sound (self, CHAN_WEAPON, "dknight/dfury_grunt3.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/dknight/dfury_grunt3.wav", 1, ATTN_NORM);
 	else if (soundtype == DFURY_SOUND_OVERSMASH)
-		sound (self, CHAN_WEAPON, "dknight/dfury_grunt4.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/dknight/dfury_grunt4.wav", 1, ATTN_NORM);
 	else if (soundtype == DFURY_SOUND_JUMP)
-		sound (self, CHAN_WEAPON, "dknight/dfury_leap.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/dknight/dfury_leap.wav", 1, ATTN_NORM);
 	else {
 		if (soundtype == DFURY_SOUND_OPTIONAL && random() < 0.8) return;
 		self.weaponstate = random();
 		self.weaponswitch = 0.6 + random()*0.4;
-		if (self.weaponstate < 0.25) sound (self, CHAN_WEAPON, "dknight/dfury_grunt1.wav", self.weaponswitch, ATTN_NORM);
-		else if (self.weaponstate < 0.5) sound (self, CHAN_WEAPON, "dknight/dfury_grunt2.wav", self.weaponswitch, ATTN_NORM);
-		else if (self.weaponstate < 0.75) sound (self, CHAN_WEAPON, "dknight/dfury_grunt3.wav", self.weaponswitch, ATTN_NORM);
-		else sound (self, CHAN_WEAPON, "dknight/dfury_grunt4.wav", self.weaponswitch, ATTN_NORM);
+		if (self.weaponstate < 0.25) sound (self, CHAN_WEAPON, "ad171/dknight/dfury_grunt1.wav", self.weaponswitch, ATTN_NORM);
+		else if (self.weaponstate < 0.5) sound (self, CHAN_WEAPON, "ad171/dknight/dfury_grunt2.wav", self.weaponswitch, ATTN_NORM);
+		else if (self.weaponstate < 0.75) sound (self, CHAN_WEAPON, "ad171/dknight/dfury_grunt3.wav", self.weaponswitch, ATTN_NORM);
+		else sound (self, CHAN_WEAPON, "ad171/dknight/dfury_grunt4.wav", self.weaponswitch, ATTN_NORM);
 	}
 };
 
@@ -751,25 +738,19 @@ void() monster_dfury = {
 	precache_sound ("hknight/hit.wav");				
 
 	// Double sword swipe (like death knight++)
-	self.sight_sound = "dknight/dfury_sight.wav";
+	self.sight_sound = "ad171/dknight/dfury_sight.wav";
 	precache_sound (self.sight_sound);
 	
 	// Heavy thud sound	
 	self.meleehitsound = GIB_SOUND_HEAVY2;
 	precache_sound (self.meleehitsound);
 
-	// New sword sweep/slash sounds
-	precache_sound ("weapons/sword1a.wav");
-	precache_sound ("weapons/sword1b.wav");
-	precache_sound ("weapons/sword2a.wav");
-	precache_sound ("weapons/sword2b.wav");
-
 	// New grunt sounds during combat
-	precache_sound ("dknight/dfury_grunt1.wav");
-	precache_sound ("dknight/dfury_grunt2.wav");
-	precache_sound ("dknight/dfury_grunt3.wav");
-	precache_sound ("dknight/dfury_grunt4.wav");
-	precache_sound ("dknight/dfury_leap.wav");
+	precache_sound ("ad171/dknight/dfury_grunt1.wav");
+	precache_sound ("ad171/dknight/dfury_grunt2.wav");
+	precache_sound ("ad171/dknight/dfury_grunt3.wav");
+	precache_sound ("ad171/dknight/dfury_grunt4.wav");
+	precache_sound ("ad171/dknight/dfury_leap.wav");
 
 	// Check for poisonous entity flag
 	if (self.poisonous) {

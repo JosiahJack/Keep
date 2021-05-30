@@ -189,20 +189,16 @@ void(entity inflictor, entity attacker, float damage) tbaby_pain =
 	}
 };
 
-//======================================================================
 // Death of the Tarbaby!
-//======================================================================
 void() tbaby_finished = { 
 	// Can drop health packs! - randomizer
 	if (self.healamount > 0) DropHealthpack();
 	// Hide monster
 	entity_hide(self);
 };
-//----------------------------------------------------------------------
+
 // The final insult, exploding death!
-//----------------------------------------------------------------------
-void() tbaby_explode =
-{
+void() tbaby_explode = {
 	self.deadflag = DEAD_FINISHED;
 	// Tarbabies explode when they die
 	T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
@@ -218,16 +214,14 @@ void() tbaby_explode =
 	// Sprite explosion for Fitz engines
 	// Check for DP particle system as visuals is done with TE_TAREXPLOSION
 	if (!ext_dppart) SpawnExplosion(EXPLODE_SMALL, self.origin, SOUND_REXP3);
-	else sound(self, CHAN_WEAPON, SOUND_REXP3, 1, ATTN_NORM);
+	else R_Exp3(self.origin);
 	
 	// Hide monster
 	tbaby_finished();
 };
-//----------------------------------------------------------------------
+
 // Waiting 1 frame to explode!
-//----------------------------------------------------------------------
-void() tbaby_die1 =
-{ 
+void() tbaby_die1 = {
 	self.deadflag = DEAD_EXPLODE;
 	self.takedamage = DAMAGE_NO;
 	self.frame = $exp;
@@ -235,13 +229,10 @@ void() tbaby_die1 =
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 // The tarbaby has 1 frame delay before exploding and it can cause
 // problems with all the functions. This is to make sure everything
 // returns to the part of the death journey of the spawn!
-//----------------------------------------------------------------------
-void() tbaby_finaldeath =
-{
+void() tbaby_finaldeath = {
 	// Check death states
 	if (self.deadflag == DEAD_DEAD) tbaby_die1();
 	else if (self.deadflag == DEAD_EXPLODE) tbaby_explode();
@@ -249,22 +240,16 @@ void() tbaby_finaldeath =
 	else tbaby_finished();
 };
 
-//----------------------------------------------------------------------
 // Classic death function
-//----------------------------------------------------------------------
-void() tbaby_die =
-{
+void() tbaby_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 	// Start death explosion
 	tbaby_finaldeath();
 };
 
-//======================================================================
 //QUAKED monster_tarbaby (1 0 0) (-16 -16 -24) (16 16 24) Ambush x Lessjump
-//======================================================================
-void() monster_tarbaby =
-{
+void() monster_tarbaby = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
 	// Check all spawn exceptions (monsters.qc)
@@ -325,6 +310,5 @@ void() monster_tarbaby =
 	if (self.randomized > 0) {
 		self.nextthink = time + 0.1 + (random()*0.2);
 		self.think = monster_start;
-	}
-	else monster_start();
+	} else monster_start();
 };

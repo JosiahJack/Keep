@@ -222,7 +222,7 @@ void() Bane_JumpTouch = {
             if (self.health <= 0) return;     // PM:  Killed by thorns (empathy shields).
             if (( self.frame == $char_a4 ) || ( self.frame == $char_a5 )) {
                 self.frame = $char_a6;  // Go to a stab frame.
-                sound (self, CHAN_WEAPON, "weapons/axhit.wav", 1, ATTN_NORM);
+                sound (self, CHAN_WEAPON, "drake/weapons/axhit.wav", 1, ATTN_NORM);
             }
         }
     }
@@ -302,7 +302,7 @@ void() magica_sword_chop = {
     if (!InMeleeRange (80)) return; // 100 is too long.
     if (!CanDamage (self.enemy, self)) return;
 
-    sound (self, CHAN_WEAPON, "weapons/axhit.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "drake/weapons/axhit.wav", 1, ATTN_NORM);
     makevectors (self.angles);
     ldmg = 20 + 10*random();    // Player normally does 20 damage with axe.
     T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
@@ -371,20 +371,19 @@ void() darklord_magicb8  =[ $magicb8,  darklord_magicb9  ] {hk_face(); hknight_s
     org = self.origin + (v_forward*16) + (v_right*2) + (v_up*24);
     MakeFancy (org, X32_STAR_RED, 2);
     self.effects = self.effects | EF_MUZZLEFLASH;
-    sound (self, CHAN_WEAPON, "drake/plasma/fire.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "rogue/plasma/fire.wav", 1, ATTN_NORM);
 //    SUB_AttackFinished (3);
     M_Reload (3);   // Three second delay before next salvo in non-NM.
 };
 void() darklord_magicb9  =[ $magicb9,  darklord_magicb10 ] {hk_face(); hknight_shot(-1);};
 void() darklord_magicb10 =[ $magicb10, hknight_magicb11  ] {hk_face(); hknight_shot(1);};
 
-//============================================================================
 // ATTACK #4 (Firewall -- Used by Hell Lords)
 void() hknight_magicd1  =[ $magica1,  hknight_magicd2  ] {hk_face();};
 void() hknight_magicd2  =[ $magica14, hknight_magicd3  ] {hk_face();};
 void() hknight_magicd3  =[ $magica13, hknight_magicd4  ] {hk_face();};
 void() hknight_magicd4  =[ $magica12, hknight_magicd5  ] {hk_face();};
-void() hknight_magicd5  =[ $magica11, hknight_magicd6  ] {hk_face(); sound (self, CHAN_WEAPON, "weapons/fwalltap.wav", 1, ATTN_NORM);};
+void() hknight_magicd5  =[ $magica11, hknight_magicd6  ] {hk_face(); sound (self, CHAN_WEAPON, "drake/weapons/fwalltap.wav", 1, ATTN_NORM);};
 void() hknight_magicd6  =[ $magica10, hknight_magicd7  ] {hk_face();};
 void() hknight_magicd7  =[ $magica9,  hknight_magicd8  ] {hk_face(); M_Firewall();};
 void() hknight_magicd8  =[ $magica8,  hknight_magicd9  ] {hk_face();};
@@ -826,9 +825,9 @@ void() hklord_cache = {
     precache_sound ("drake/archer/pain2.wav");
     precache_sound ("drake/archer/sight2.wav");
     precache_sound ("boss1/throw.wav");
-    precache_sound ("weapons/fwall.wav");
-    precache_sound ("weapons/fwallhit.wav");
-    precache_sound ("weapons/fwalltap.wav");
+    precache_sound ("drake/weapons/fwall.wav");
+    precache_sound ("drake/weapons/fwallhit.wav");
+    precache_sound ("drake/weapons/fwalltap.wav");
 };
 
 // For Rapture's hkboss.
@@ -870,7 +869,7 @@ void() monster_bane = {
 	precache_model ("progs/drake/s_wave.spr");
 
     precache_sound ("ambience/thunder1.wav");
-    precache_sound ("ambience/thunder2.wav");
+    precache_sound ("drake/ambience/thunder2.wav");
     precache_sound ("drake/bane/death.wav");
     precache_sound ("drake/bane/growl.wav");
     precache_sound ("drake/bane/hit.wav");
@@ -881,9 +880,9 @@ void() monster_bane = {
     precache_sound ("hknight/slash1.wav");
     precache_sound ("knight/sword1.wav");
     precache_sound ("knight/sword2.wav");
-    precache_sound ("hipweap/mjolhit.wav");
+    precache_sound ("hipnotic/weapons/mjolhit.wav");
     precache_sound ("drake/misc/dsslop.wav");
-    precache_sound ("weapons/axhit.wav");
+    precache_sound ("drake/weapons/axhit.wav");
 
 	self.gib1mdl = "progs/ad171/w_hknightsword.mdl";	// Unique sword
 	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
@@ -907,20 +906,14 @@ void() monster_bane = {
 	self.idle_sound = "hknight/idle.wav";
 	precache_sound (self.idle_sound);
 
-	self.pain_sound = "bane/pain.wav";
-	self.death_sound = "bane/death.wav";
-	self.sight_sound = "bane/sight.wav";
+	self.pain_sound = "drake/bane/pain.wav";
+	self.death_sound = "drake/bane/death.wav";
+	self.sight_sound = "drake/bane/sight.wav";
 	self.hello_sound = string_null; 
 
 	precache_sound (self.pain_sound);
 	precache_sound (self.death_sound);
 	precache_sound (self.sight_sound);
-
-	// New sword sweep/slash sounds
-	precache_sound ("weapons/sword1a.wav");
-	precache_sound ("weapons/sword1b.wav");
-	precache_sound ("weapons/sword2a.wav");
-	precache_sound ("weapons/sword2b.wav");
 	
     self.mass = MASS_MEDIUM;
     self.skin = SKIN_BANE;
@@ -1232,7 +1225,7 @@ void() monster_dark_lord = {
 	precache_model ("progs/drake/s_wave.spr");
 
     precache_sound ("ambience/thunder1.wav");
-    precache_sound ("ambience/thunder2.wav");
+    precache_sound ("drake/ambience/thunder2.wav");
     precache_sound ("drake/bane/death.wav");
     precache_sound ("drake/bane/growl.wav");
     precache_sound ("drake/bane/laugh.wav");
@@ -1242,9 +1235,9 @@ void() monster_dark_lord = {
     precache_sound ("hknight/slash1.wav");
     precache_sound ("knight/sword1.wav");
     precache_sound ("knight/sword2.wav");
-    precache_sound ("drake/hipweap/mjolhit.wav");
+    precache_sound ("hipnotic/weapons/mjolhit.wav");
     precache_sound ("drake/misc/dsslop.wav");
-    precache_sound ("weapons/axhit.wav");
+    precache_sound ("drake/weapons/axhit.wav");
 	precache_sound ("drake/archer/sight2.wav");
 
     precache_model ("progs/drake/r_bolt.mdl");
@@ -1258,8 +1251,8 @@ void() monster_dark_lord = {
 	self.hello_sound = "drake/darklord/idle1.wav"; 
     precache_sound ("drake/darklord/death.wav");
     precache_sound ("items/protect.wav");   // Powerup sound
-    precache_sound ("drake/plasma/explode.wav");
-    precache_sound ("drake/plasma/fire.wav");
+    precache_sound ("rogue/plasma/explode.wav");
+    precache_sound ("rogue/plasma/fire.wav");
     precache_sound ("drake/skullwiz/gate.wav");   // For wrath summoning.
 
 	self.gib1mdl = "progs/ad171/w_hknightsword.mdl";	// Unique sword
@@ -1279,40 +1272,28 @@ void() monster_dark_lord = {
 
 	precache_sound ("hknight/attack1.wav");
 	precache_sound ("knight/sword2.wav");
-	precache_sound ("hknight/hit.wav");	
-			
+	precache_sound ("hknight/hit.wav");			
 	self.idle_sound = "drake/darklord/idle1.wav";
 	precache_sound (self.idle_sound);
-
 	self.pain_sound = "drake/darklord/pain.wav";
 	self.death_sound = "drake/darklord/death.wav";
-
 	precache_sound (self.pain_sound);
 	precache_sound (self.death_sound);
 	precache_sound (self.sight_sound);
-
-	// New sword sweep/slash sounds
-	precache_sound ("weapons/sword1a.wav");
-	precache_sound ("weapons/sword1b.wav");
-	precache_sound ("weapons/sword2a.wav");
-	precache_sound ("weapons/sword2b.wav");
-
     precache_model ("progs/drake/dragon.mdl");
     precache_model ("progs/drake/drggib01.mdl");
     precache_model ("progs/drake/drggib02.mdl");
     precache_model ("progs/drake/drggib03.mdl");
     precache_model ("progs/drake/plasma.mdl");
-    
-    precache_sound ("drake/dragon/see.wav");
-    precache_sound ("drake/dragon/active.wav");
-    precache_sound ("drake/dragon/attack1.wav");
+    precache_sound ("rogue/dragon/see.wav");
+    precache_sound ("rogue/dragon/active.wav");
+    precache_sound ("rogue/dragon/attack.wav");
     precache_sound ("drake/dragon/fly1.wav");
     precache_sound ("drake/dragon/flywater.wav");
-    precache_sound ("drake/dragon/pain.wav");
-    precache_sound ("drake/dragon/death.wav");
+    precache_sound ("rogue/dragon/pain.wav");
+    precache_sound ("rogue/dragon/death.wav");
 	precache_sound ("drake/dragon/fire.wav");
     precache_sound ("shambler/smack.wav");
-	
     self.mass = MASS_MEDIUM;
     self.skin = SKIN_DARK_LORD;
 	self.solid = SOLID_NOT;				// No interaction with world

@@ -72,27 +72,19 @@ Flags:
 "Not Animated" Banner is not animated.
 "Big" Banner is twice as big: 128 wide by 288 long.
 */
-void () misc_flag =
-{
+void () misc_flag = {
 	precache_model ("progs/rubicon2/flag.mdl");
 	setmodel (self, "progs/rubicon2/flag.mdl");
 	self.frame = (self.spawnflags & 3);
 	makestatic (self);
 };
 
-/*
-===============================================================================
-misc_sparks
-===============================================================================
-*/
-
 void()	sparks_fade1 = [0, sparks_fade2] {self.alpha = 0.8; self.nextthink = time + 0.05;};
 void()	sparks_fade2 = [0, sparks_fade3] {self.alpha = 0.6; self.nextthink = time + 0.05;};
 void()	sparks_fade3 = [0, sparks_fade4] {self.alpha = 0.4; self.nextthink = time + 0.05;};
 void()	sparks_fade4 = [0, SUB_Remove]   {self.alpha = 0.2; self.nextthink = time + 0.05;};
 
-void() sparks_use =
-{
+void() sparks_use = {
 	if (self.spawnflags & ENT_STARTOFF)
 		self.spawnflags = self.spawnflags - ENT_STARTOFF;
 	else
@@ -101,33 +93,26 @@ void() sparks_use =
 
 void() make_sparks;
 
-void() spark_turnofflight = 
-{
+void() spark_turnofflight = {
 	SUB_UseTargets();
 	self.think = make_sparks;
 	self.nextthink = time + (random() + 0.5)*self.wait - 0.15;
 }
 
-void() make_sparks =
-{
-	  
-	if (self.spawnflags & ENT_STARTOFF)
-	{
+void() make_sparks = {
+	local entity spark;
+	
+	if (self.spawnflags & ENT_STARTOFF) {
 		self.nextthink = time + 0.1;
 		self.think = make_sparks;
-	}
-	else
-	{
+	} else {
 		local float i;
 		i = -0.25*self.cnt + random()*0.5*self.cnt;
-		while (i < self.cnt)
-		{
-			
-			local entity spark;
+		while (i < self.cnt) {
 			spark = spawn();
 			spark.owner = self;
 			spark.classtype = CT_TEMPSPARK;
-			setmodel (spark, "progs/spark.mdl");
+			setmodel (spark, "progs/rrp/spark.mdl");
 			setorigin (spark, self.origin);
 			spark.movetype = MOVETYPE_BOUNCE;
 			spark.solid = SOLID_TRIGGER;
@@ -156,7 +141,7 @@ void() make_sparks =
 			i = i + 1;
 		}
 		if (self.sounds == 1)
-			sound (self, CHAN_AUTO, "misc/spark.wav", 1, ATTN_STATIC);
+			sound (self, CHAN_AUTO, "rrp/misc/spark.wav", 1, ATTN_STATIC);
 		SUB_UseTargets();
 		self.nextthink = time + 0.1 + random() * 0.1;
 		self.think = spark_turnofflight;
@@ -182,17 +167,13 @@ Keys:
 0)	no sound
 1)	sparks
 */
-void() misc_sparks =
-{
-	precache_model ("progs/spark.mdl");
-	precache_sound ("misc/spark.wav");
+void() misc_sparks = {
+	precache_model ("progs/rrp/spark.mdl");
+	precache_sound ("rrp/misc/spark.wav");
 		
-	if (!self.movedir)
-		self.movedir = '0 0 -30';
-	if (!self.wait)
-		self.wait = 2;
-	if (!self.cnt)
-		self.cnt = 15;
+	if (!self.movedir) self.movedir = '0 0 -30';
+	if (!self.wait) self.wait = 2;
+	if (!self.cnt) self.cnt = 15;
 	
 	self.use = sparks_use;
 	self.nextthink = time + random()*0.1;

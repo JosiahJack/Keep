@@ -1,43 +1,16 @@
-void() redback_stand1 = [7, redback_stand2]
-{
-	ai_stand();
-};
+void() redback_stand1 = [7, redback_stand2] {ai_stand();};
+void() redback_stand2 = [8, redback_stand3] {ai_stand();};
+void() redback_stand3 = [9, redback_stand4] {ai_stand();};
+void() redback_stand4 = [10, redback_stand5] {ai_stand();};
+void() redback_stand5 = [9, redback_stand6] {ai_stand();};
+void() redback_stand6 = [8, redback_stand1] {ai_stand();};
 
-void() redback_stand2 = [8, redback_stand3]
-{
-	ai_stand();
-};
-
-void() redback_stand3 = [9, redback_stand4]
-{
-	ai_stand();
-};
-
-void() redback_stand4 = [10, redback_stand5]
-{
-	ai_stand();
-};
-
-void() redback_stand5 = [9, redback_stand6]
-{
-	ai_stand();
-};
-
-void() redback_stand6 = [8, redback_stand1]
-{
-	ai_stand();
-};
-
-void() redback_run1 = [0, redback_run2]
-{
-	if (random() < 0.15)
-	{
-		sound(self, CHAN_VOICE, "weapons/ax1.wav", 1, ATTN_IDLE);
-		if (self.flags & FL_ONGROUND)
-		{
+void() redback_run1 = [0, redback_run2{
+	if (random() < 0.15) {
+		sound(self, CHAN_VOICE, "weapons/ax1.wav", 1, ATTN_IDLE); // vanilla sound
+		if (self.flags & FL_ONGROUND) {
 			traceline(self.origin, self.origin + v_forward * MAX_CHARMER_DISTANCE + '0 0 -250', 1, self);
-			if (!trace_inwater)
-			{
+			if (!trace_inwater) {
 				self.flags = self.flags - (self.flags & FL_ONGROUND);
 				makevectors(self.angles);
 				self.velocity = self.velocity + v_forward * (MIN_CHARMER_DISTANCE + random() * 300);
@@ -45,40 +18,17 @@ void() redback_run1 = [0, redback_run2]
 			}
 		}
 	}
-	if (random() < 0.1)
-	{
+	if (random() < 0.1) {
 		sound(self, CHAN_VOICE, "wizard/widle1.wav", 1, ATTN_IDLE);
-	}
-	else
-	{
-		if (random() < 0.1)
-		{
-			sound(self, CHAN_VOICE, "wizard/widle2.wav", 1, ATTN_IDLE);
-		}
+	} else {
+		if (random() < 0.1) sound(self, CHAN_VOICE, "wizard/widle2.wav", 1, ATTN_IDLE);
 	}
 	ai_run(MOVETYPE_BOUNCEMISSILE);
 };
-
-void() redback_run2 = [1, redback_run3]
-{
-	ai_run(13);
-};
-
-void() redback_run3 = [2, redback_run4]
-{
-	ai_run(TE_EXPLOSION2);
-};
-
-void() redback_run4 = [3, redback_run5]
-{
-	ai_run(13);
-};
-
-void() redback_run5 = [4, redback_run6]
-{
-	ai_run(TE_EXPLOSION2);
-};
-
+void() redback_run2 = [1, redback_run3] {ai_run(13);};
+void() redback_run3 = [2, redback_run4] {ai_run(TE_EXPLOSION2);};
+void() redback_run4 = [3, redback_run5] {ai_run(13);};
+void() redback_run5 = [4, redback_run6] {ai_run(TE_EXPLOSION2);};
 void() redback_run6 = [5, redback_run7]
 {
 	ai_run(13);

@@ -298,21 +298,16 @@ void() train_ext_blocked =
 	}
 };
 
-void() train_ext_move =
-{
+void() train_ext_move = {
 	local entity cchain;
 	
-	// Warp to next waypoint
+	// Warp instantly to next waypoint
 	if (self.speed == -1) {	
 		setorigin (self, self.dest-self.mins);
 		self.nextthink = self.ltime + 0.001;
-	// Move to next waypoint
-	} else {		
+	} else { // Move at speed to next waypoint	
 		train_ext_playtravelsound();
-		if (self.cshift)// independant func_watertrain
-			SUB_fCalcMove (self.dest-self.mins, self.speed, self.think);
-		else
-			SUB_CalcMove (self.dest-self.mins, self.speed, self.think);
+		SUB_CalcMove (self.dest-self.mins, self.speed, self.think);
 	}
 	
 	// Update children
@@ -329,8 +324,7 @@ void() train_ext_move =
 	}
 };
 
-void() train_ext_changedir =
-{	
+void() train_ext_changedir = {
 	train_ext_playchangedirsound();
 	
 	// Change direction	
@@ -633,8 +627,7 @@ void() train_ext_previous = // Reverse
 	train_ext_move();
 };
 
-void() train_ext_next = // Forward
-{
+void() train_ext_next = { // Forward
 	if (self.think == train_ext_init) return;
 
 	// dprint("FROM:");
@@ -683,16 +676,14 @@ void() train_ext_next = // Forward
 	train_ext_move();
 };
 	
-void() train_ext_init =
-{
+void() train_ext_init = {
 	local entity	way, stemp, wtemp;
 	
 	// Find the first waypoint
 	way = find (world, targetname, self.target);
 	
 	// Be strict about this
-	if (way.classname != "train_waypoint")
-		 objerror ("train_ext_init: illegal target type");
+	if (way.classname != "train_waypoint") objerror ("train_ext_init: illegal target type");
 	
 	// First waypoint requires speed & target (or else we aint moving!)
 	if (!way.target) objerror ("train_ext_init: first waypoint requires target");
@@ -703,10 +694,8 @@ void() train_ext_init =
 	stemp = self;// Save the train
 	
 	// Link all the waypoints 
-	while(way != stemp)
-	{	
-		if (way.classname != "train_waypoint")
-			objerror ("train_ext_init: illegal target type");
+	while(way != stemp) {	
+		if (way.classname != "train_waypoint") objerror ("train_ext_init: illegal target type");
 		
 		self.next = way;
 		way.previous = self;
@@ -731,8 +720,7 @@ void() train_ext_init =
 			way = stemp;// break
 		}
 		// Get the next target
-		else
-			way = find(world, targetname, self.target);
+		else way = find(world, targetname, self.target);
 	}
 		
 	// Restore self to the train
@@ -756,16 +744,12 @@ void() train_ext_init =
 	
 	// Decide if we're facing a good way to start
 	if (self.goalentity == self.next) {// At first waypoint
-
 		if (self.state == REVERSE) {
 			if (self.goalentity.previous == self.goalentity) {// endpoint - can't move
 				self.deadflag = WRONGWAY;
 				self.use = train_ext_atend;
 			}
-		} else
-			self.deadflag = RIGHTWAY;
-
-
+		} else self.deadflag = RIGHTWAY;
 	} else if (self.goalentity.next == self.goalentity) {// At last waypoint
 		
 		if (self.state == FORWARD) {// have to be in reverse to allow move here
@@ -776,17 +760,13 @@ void() train_ext_init =
 
 	} else // somewhere in the middle
 		self.deadflag = FREEMOVE;
-	
-//	self.velocity = '0 0 0';
-	
-	if (self.spawnflags & START_ON)
-		self.nextthink = self.ltime + time + 0.1;
+		
+	if (self.spawnflags & START_ON) self.nextthink = self.ltime + time + 0.1;
 };
 
-void() train_ext_precachenoise =
-{
-	if (!self.noise) self.noise = "misc/null.wav";
-	if (!self.noise1) self.noise1 = "misc/null.wav";
+void() train_ext_precachenoise = {
+	if (!self.noise) self.noise = SOUND_EMPTY;
+	if (!self.noise1) self.noise1 = SOUND_EMPTY;
 	if (self.noise4) precache_sound(self.noise4);
 	if (self.noise5)
 		precache_sound(self.noise5);

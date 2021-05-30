@@ -282,11 +282,9 @@ void() lost_charge_touch =
 	}
 };
 
-//----------------------------------------------------------------------------
-void()	lost_charge1 =
-{
+void()	lost_charge1 = {
 	// Play hiss sound, sighted enemy, charging
-	sound (self, CHAN_WEAPON, "lostsoul/charge.wav", 1, ATTN_NORM);	
+	sound (self, CHAN_WEAPON, "ad171/lostsoul/charge.wav", 1, ATTN_NORM);	
 	
 	self.count = 0;				// reset start of animation block
 	lost_flymode();				// allow velocity updates
@@ -345,7 +343,7 @@ void() lost_bite =
 	// Can the target bleed?
 	if (enemy_targ.takedamage < 1) return;
 
-	sound (self, CHAN_WEAPON, "lostsoul/bite.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/lostsoul/bite.wav", 1, ATTN_NORM);
 
 	// Lost Soul bite is very weak
 	ldmg = (random() + random() + random()) * 3;
@@ -495,7 +493,7 @@ void() lost_die2 = [ $pain2, lost_die2 ] {
 	if (random() < 0.5) self.lip = EXPLODE_SMALL;
 	else if (random() < 0.9) self.lip = EXPLODE_MED;
 	else self.lip = EXPLODE_BIG;
-	SpawnExplosion(self.lip, self.origin, "lostsoul/death.wav");
+	SpawnExplosion(self.lip, self.origin, "ad171/lostsoul/death.wav");
 	// Goto final resting place
 	entity_remove(self, 0.1);
 };
@@ -526,17 +524,17 @@ void() monster_lostsoul =
 	self.mdl = "progs/ad171/mon_lostsoul.mdl";
 	precache_model (self.mdl);
 
-	self.idle_sound = "lostsoul/idle1.wav";
-	self.idle_sound2 = "lostsoul/idle2.wav";
+	self.idle_sound = "ad171/lostsoul/idle1.wav";
+	self.idle_sound2 = "ad171/lostsoul/idle2.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
 	
-	precache_sound ("lostsoul/charge.wav");		// charge hiss/scream
-	precache_sound ("lostsoul/bite.wav");		// chomp with teeth
+	precache_sound ("ad171/lostsoul/charge.wav");		// charge hiss/scream
+	precache_sound ("ad171/lostsoul/bite.wav");		// chomp with teeth
 
-	self.pain_sound = "lostsoul/pain1.wav";
+	self.pain_sound = "ad171/lostsoul/pain1.wav";
 	precache_sound (self.pain_sound);
-	precache_sound ("lostsoul/death.wav");
+	precache_sound ("ad171/lostsoul/death.wav");
 	
 	// Cache lost soul is a special class used for precache only
 	if (self.classtype != CT_CACHELOSTSOUL) setup_lostsoul();
@@ -638,9 +636,9 @@ void(vector minion_org, entity minion_targ) minion_lostsoul =
 	
 	minion.mdl = "progs/ad171/mon_lostsoul.mdl";
 
-	minion.pain_sound = "lostsoul/pain1.wav";
-	minion.idle_sound = "lostsoul/idle1.wav";
-	minion.idle_sound2 = "lostsoul/idle2.wav";
+	minion.pain_sound = "ad171/lostsoul/pain1.wav";
+	minion.idle_sound = "ad171/lostsoul/idle1.wav";
+	minion.idle_sound2 = "ad171/lostsoul/idle2.wav";
 	
 	minion.nextthink = time + 0.01;
 	minion.think = setup_lostsoul;

@@ -382,30 +382,29 @@ void() monster_knight = {
 	precache_model (self.gib3mdl);
 
 	self.purse_x = 5; //Give a coin
-	
 	self.gib1sound = GIB_IMPACT_METALA;
 	if (random() < 0.5) self.gib2mdl = "";
 	if (random() < 0.5) self.gib3mdl = "";
 
 	if (self.deathstring == "")  self.deathstring = " was slashed by a Knight\n";
 
-	//----------------------------------------------------------------------
 	if (self.spawnflags & MON_STATUE) {
-		self.idle_sound = "statue/idle1.wav";
-		self.idle_sound2 = "statue/idle2.wav";
-		self.idle_soundcom = "statue/comidle.wav";
+		self.idle_sound = "ad171/statue/idle1.wav";
+		self.idle_sound2 = "ad171/statue/idle2.wav";
+		self.idle_soundcom = "rogue/statue/idle.wav";
 		precache_sound (self.idle_sound);
 		precache_sound (self.idle_sound2);
 		precache_sound (self.idle_soundcom);
-		
-		self.sight_sound = "statue/sight.wav";
-		self.pain_sound = "statue/hurt.wav";
-		self.death_sound = "statue/death.wav";
+		if (random() < 0.5)
+			self.sight_sound = "ad171/statue/sight.wav";
+		else
+			self.sight_sound = "rogue/statue/see.wav";
+		self.pain_sound = "rogue/statue/pain.wav";
+		self.death_sound = "rogue/statue/death.wav";
 		self.gib1skin = 1;					// Stoney sword
 		self.gibtype = GIBTYPE_STONE;		// Stoney gibs!
 		self.gib2mdl = self.gib3mdl = string_null;
-	}
-	else {
+	} else {
 		self.idle_sound = "knight/idle.wav";
 		precache_sound (self.idle_sound);
 		

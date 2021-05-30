@@ -260,8 +260,7 @@ void() HipCntDown =
 };
 
 // Override velocity if a player jumps within one.
-void() tjump_touch =
-{
+void() tjump_touch = {
     if (other.health <= 0)
         return;
     if (other.classname != "player")    //if (!(other.flags & FLx_CREATURE))
@@ -290,7 +289,7 @@ void() tjump_touch =
 // Up, up, and away!
     if (!(self.spawnflags & PUSH_CURRENT))
     {   // First sound overrides jump sound.  Second sound is standard push sound.
-        sound (other, CHAN_BODY, "items/reflect.wav", 1, ATTN_NORM);
+        sound (other, CHAN_BODY, "drake/items/reflect.wav", 1, ATTN_NORM);
         sound (other, CHAN_AUTO, "ambience/windfly.wav", 1, ATTN_NORM);
     }
     if (self.speed)
@@ -308,29 +307,20 @@ void() tjump_touch =
 //    if (self.spawnflags & PUSH_ONCE)
 //        {remove (self);  return;}
 
-// Hipnotic's cnt stuff - - - - - - - -
-    HipCntDown ();
-//- - - - - - - - - - - - - - - - - - -
+    HipCntDown (); // Hipnotic's cnt stuff 
+
 };
 
-//============
 // --> QUAKED trigger_jump (.5 .5 .5) ? PUSH_ONCE PUSH_CURRENT PUSH_JUMP_ONLY
 // Pushes the player up
-//============
-void() trigger_jump_spawn =
-{
+void() trigger_jump_spawn = {
     precache_sound ("ambience/windfly.wav");
-    precache_sound ("items/reflect.wav");       // Bounce sound.
+    precache_sound ("drake/items/reflect.wav");       // Bounce sound.
 
     // 'InitTrigger' already done elsewhere.
     self.touch = tjump_touch;
-
-    if (!self.height)
-        self.height = 1000;     // PM:  Use 900 in roman3 and unforgiven2.
-// Hipnotic's cnt stuff - - - - - - - -
-    if (!self.cnt)
-        self.cnt = -1;
-//- - - - - - - - - - - - - - - - - - -
+    if (!self.height) self.height = 1000;     // PM:  Use 900 in roman3 and unforgiven2.
+    if (!self.cnt) self.cnt = -1; // Hipnotic's cnt stuff
 };
 
 void() trigger_jump = {InitTrigger ();  trigger_jump_spawn ();};
@@ -623,51 +613,38 @@ void() gib_misc_3 = {
 */
 
 // Touch trigger that prevents things from falling too fast.
-void() trigger_dive_touch =
-{
-// PM:  Use wind flag on projectiles to catch them.
-// Replaced grenade classname check with wind flag check.
+void() trigger_dive_touch = {
+// PM:  Use wind flag on projectiles to catch them.  Replaced grenade classname check with wind flag check.
     if (!(other.flags & FL_ONGROUND))
     if ((other.health > 0) || (other.xfl & XFL_WIND))
-    if (other.velocity_z < self.speed)
-    {
+    if (other.velocity_z < self.speed) {
         other.velocity_z = self.speed;
-        if (other.classname == "player")
-        {
-            if (other.fly_sound < time)
-            {
+        if (other.classname == "player") {
+            if (other.fly_sound < time) {
                 other.fly_sound = time + 1.5;
-                if (!(self.spawnflags & PUSH_CURRENT))
-                    sound (other, CHAN_AUTO, "ambience/windfly.wav", 1, ATTN_NORM);
+                if (!(self.spawnflags & PUSH_CURRENT)) sound (other, CHAN_AUTO, "ambience/windfly.wav", 1, ATTN_NORM);
             }
         }
     }
 };
 
-void() push_use2 =   // This function is Zerstorer stuff.
-{
+// This function is Zerstorer stuff.
+void() push_use2 = { 
     if (self.solid == SOLID_NOT)
         self.solid = SOLID_TRIGGER;
     else
         self.solid = SOLID_NOT;
 };
 
-//============
-// --> QUAKED trigger_dive (.5 .5 .5) ? x PUSH_CURRENT
-// Slows downward velocity to prevent falling damage.
-//============
-void() trigger_dive_spawn =
-{
-//    InitTrigger ();
+// QUAKED trigger_dive (.5 .5 .5) ? x PUSH_CURRENT
+// Slows downward velocity to prevent falling damage. Zerstorer stuff.
+void() trigger_dive_spawn = {
     precache_sound ("ambience/windfly.wav");
     self.touch = trigger_dive_touch;
-    if (!self.speed)
-        self.speed = -500;
-//- - - - - - - - -
-// Zerstorer stuff
-    if (self.targetname)
-        {self.solid = SOLID_NOT; self.use = push_use2;}
-//- - - - - - - - -
+    if (!self.speed) self.speed = -500;
+    if (self.targetname) {self.solid = SOLID_NOT; self.use = push_use2;}
 };
+
 void() trigger_dive = {InitTrigger ();  trigger_dive_spawn();};
+
 void() trigger_dive_point = {InitPointTrigger ();  trigger_dive_spawn();};

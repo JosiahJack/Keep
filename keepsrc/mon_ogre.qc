@@ -84,23 +84,18 @@ void() ogre_run6	=[	$run6,		ogre_run7	] {monster_footstep(FALSE);ai_run(4);};
 void() ogre_run7	=[	$run7,		ogre_run8	] {ai_run(13);};
 void() ogre_run8	=[	$run8,		ogre_run1	] {ai_run(24);};
 
-/*======================================================================
- Range - Grenades (uses generic attack function in projectiles.qc)
- Nail - Alternative firemode (based on nail ogre from Marcher Fortress)
-======================================================================*/
-void() OgreFireADNails =
-{
+// Range - Grenades (uses generic attack function in projectiles.qc)
+// Nail - Alternative firemode (based on nail ogre from Marcher Fortress)
+void() OgreFireADNails = {
 	local vector org, dir, vec;
 	local float loopvar;
 	
-	// Check for death?
-	if (self.health < 1) return;
-	loopvar = 0;
+	if (self.health < 1) return; // Check for death?
 
-	// Light up face, setup projectile speed and play fire sound
-	self.effects = self.effects | EF_MUZZLEFLASH;
+	loopvar = 0;
+	self.effects = self.effects | EF_MUZZLEFLASH; // Light up face, setup projectile speed and play fire sound
 	self.attack_speed = SPEED_NAILOGREPROJ + (skill * SPEED_NAILOGRESKILL);
-	sound(self, CHAN_WEAPON, "ogre/nail_fire.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "ad171/ogre/nail_fire.wav", 1, ATTN_NORM);
 
 	// turn and face your enemy!
 	makevectors (self.angles);
@@ -117,7 +112,6 @@ void() OgreFireADNails =
 	}
 };
 
-//----------------------------------------------------------------------
 void() ogre_adnail1 =[ $shoot1, ogre_adnail2 ] {ai_face();};
 void() ogre_adnail2 =[ $shoot2, ogre_adnail3 ] {ai_face();};
 void() ogre_adnail3 =[ $shoot2, ogre_adnail4 ] {ai_face();};
@@ -126,11 +120,7 @@ void() ogre_adnail5 =[ $shoot4, ogre_adnail6 ] {};
 void() ogre_adnail6 =[ $shoot5, ogre_adnail7 ] {};
 void() ogre_adnail7 =[ $shoot6, ogre_run1  ] {ai_face();};
 
-/*======================================================================
- MELEE - Chainsaw
-======================================================================*/
-void(float side, float dmgmultipler) chainsaw =
-{
+void(float side, float dmgmultipler) chainsaw = {
 	local float ldmg;
 	
 	if (!self.enemy) return;
@@ -367,11 +357,9 @@ void() ogre_die =
 	}
 };
 
-//----------------------------------------------------------------------
 // Special wakeup animation for attacking/breaking something infront
 // The monster should be setup facing the right direction before call
 // Starts in large overhead swing downwards (no damage checks)
-//----------------------------------------------------------------------
 void() ogre_wakeup1	=[	$smash7,	ogre_wakeup2] {monster_sightsound();};
 void() ogre_wakeup2	=[	$smash6,	ogre_wakeup3] {};
 void() ogre_wakeup3	=[	$smash8,	ogre_wakeup4] {};
@@ -382,9 +370,7 @@ void() ogre_wakeup7	=[	$smash12,	ogre_wakeup8 ] {};
 void() ogre_wakeup8	=[	$smash13,	ogre_wakeup9 ] {};
 void() ogre_wakeup9	=[	$smash14,	ogre_run1	] {};
 
-//======================================================================
 // From the crazy mind of Madfox, comes fishing ogre!?!
-//======================================================================
 float OGREFISH_FISHY = 0;
 float OGREFISH_FISHING = 19;
 float OGREFISH_CATCH = 79;
@@ -392,11 +378,8 @@ float ANIMATION_OGREFLAP = 18;
 float ANIMATION_OGREFISH = 59;
 float ANIMATION_OGRECATCH = 25;
 
-//----------------------------------------------------------------------
 // Special idle animation - Flappy the fish waggles tail
-//----------------------------------------------------------------------
-void() ogre_flappyfish =
-{
+void() ogre_flappyfish = {
 	// If dead, no more updates
 	if (self.health < 1) return;
 
@@ -404,8 +387,7 @@ void() ogre_flappyfish =
 	self.frame = OGREFISH_FISHY + self.walkframe;
 
 	// Check for special frame conditions
-	if (self.walkframe == 0)
-		sound (self, CHAN_VOICE, "ogre/ogrefish_flappy.wav", 1, ATTN_NORM);
+	if (self.walkframe == 0) sound (self, CHAN_VOICE, "ad171/ogre/ogrefish_flappy.wav", 1, ATTN_NORM);
 	
 	// Move frame forward, check for conditions
 	self.walkframe = self.walkframe + 1;
@@ -416,11 +398,8 @@ void() ogre_flappyfish =
 	else self.think = ogre_flappyfish;
 };
 
-//----------------------------------------------------------------------
 // Special idle animation - Ogre finally catches something!
-//----------------------------------------------------------------------
-void() ogre_catchfish =
-{
+void() ogre_catchfish = {
 	// If dead, no more updates
 	if (self.health < 1) return;
 
@@ -429,9 +408,9 @@ void() ogre_catchfish =
 
 	// Check for special frame conditions
 	if (self.walkframe == 6)
-		sound (self, CHAN_VOICE, "ogre/ogrefish_out.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "ad171/ogre/ogrefish_out.wav", 1, ATTN_NORM);
 	if (self.walkframe == 24)
-		sound (self, CHAN_VOICE, "ogre/ogrefish_in.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "ad171/ogre/ogrefish_in.wav", 1, ATTN_NORM);
 	
 	// Move frame forward, check for conditions
 	self.walkframe = self.walkframe + 1;
@@ -442,9 +421,7 @@ void() ogre_catchfish =
 	else self.think = ogre_catchfish;
 };
 
-//----------------------------------------------------------------------
-void() ogre_fishing =
-{
+void() ogre_fishing = {
 	// If dead, no more updates
 	if (self.health < 1) return;
 
@@ -467,7 +444,7 @@ void() ogre_fishing =
 		}
 		// Classic ogre idle + water
 		else if (self.lip < 0.3) 
-			sound (self, CHAN_VOICE, "ogre/ogrefish_idle.wav", 1, ATTN_NORM);
+			sound (self, CHAN_VOICE, "ad171/ogre/ogrefish_idle.wav", 1, ATTN_NORM);
 	}
 	
 	if (self.idlebusy == FALSE) {
@@ -478,9 +455,7 @@ void() ogre_fishing =
 	}
 };
 
-//----------------------------------------------------------------------
 // Re-using fall down pain animation
-//----------------------------------------------------------------------
 void()	ogre_fishd6	=[ $paind6,	ogre_fishd7	] {};
 void()	ogre_fishd7	=[ $paind7,	ogre_fishd8	] {};
 void()	ogre_fishd8	=[ $paind8,	ogre_fishd9	] {};
@@ -515,7 +490,6 @@ void()	ogre_fishd16=[ $paind16, ogre_run1 ] {
 	self.th_die = ogre_die;
 };
 
-//----------------------------------------------------------------------
 void() ogre_fishwakeup = {
 	self.use = SUB_Null;	// Stop re-triggering
 	monster_sightsound();	// Classic wakeup sound
@@ -546,13 +520,10 @@ void() ogre_fishwakeup = {
 	ogre_fishd6();
 };
 
-//----------------------------------------------------------------------
 void(entity inf, entity att, float dam) ogre_fishpain = {ogre_fishwakeup();};
 void() ogre_fishdie = {};
 
-//----------------------------------------------------------------------
-void() ogre_fishsetup =
-{
+void() ogre_fishsetup = {
 	// Take direct damage only and grenades bounce!
 	self.takedamage = DAMAGE_YES;
 	self.noradiusdmg = TRUE;
@@ -586,8 +557,7 @@ void() ogre_fishsetup =
 /*======================================================================
  QUAKED monster_ogre (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 ======================================================================*/
-void() monster_ogre_precache =
-{
+void() monster_ogre_precache = {
 	self.mdl = "progs/ad171/mon_ogre.mdl";		// Rogue Ogre
 	self.headmdl = "progs/h_ogre.mdl";
 	self.gib1mdl = "progs/ad171/w_chainsaw.mdl";	// Chainsaw
@@ -607,7 +577,7 @@ void() monster_ogre_precache =
 	if (self.spawnflags & MON_OGRE_NAIL) {
 		// Default attack - red glowing lava nails
 		precache_model (MODEL_PROJ_NGRED);
-		precache_sound("ogre/nail_fire.wav");
+		precache_sound("ad171/ogre/nail_fire.wav");
 		// Default amount of nails to burst fire (5x9=45dmg)
 		if (self.attack_count < 1) self.attack_count = 5;
 	}
@@ -631,9 +601,7 @@ void() monster_ogre_precache =
 	precache_sound (self.sight_sound);
 };
 
-//----------------------------------------------------------------------
-void() monster_ogre =
-{
+void() monster_ogre = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
 	// Check all spawn exceptions (monsters.qc)
@@ -703,13 +671,11 @@ void() monster_ogre =
 	monster_start();
 };
 
-//----------------------------------------------------------------------
 void() monster_ogre_marksman = {
 	if (self.deathstring == "")  self.deathstring = " was blasted by a marksman Ogre\n";
 	monster_ogre ();
 };
 
-//----------------------------------------------------------------------
 void() monster_ogre_fishing = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
@@ -720,10 +686,10 @@ void() monster_ogre_fishing = {
 	// Extra fishing ogre precache stuff
 	self.weaponglow = "progs/ad171/mon_ogrefish.mdl";
 	precache_model (self.weaponglow);
-	precache_sound ("ogre/ogrefish_out.wav");
-	precache_sound ("ogre/ogrefish_in.wav");
-	precache_sound ("ogre/ogrefish_idle.wav");
-	precache_sound ("ogre/ogrefish_flappy.wav");
+	precache_sound ("ad171/ogre/ogrefish_out.wav");
+	precache_sound ("ad171/ogre/ogrefish_in.wav");
+	precache_sound ("ad171/ogre/ogrefish_idle.wav");
+	precache_sound ("ad171/ogre/ogrefish_flappy.wav");
 
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
@@ -754,8 +720,7 @@ void() monster_ogre_fishing = {
 		self.ammo_rockets = 6;	// Tons of rockets!
 		self.health = 350;		// Much stronger
 		self.skin = 1;			// Green (Rogue) skin
-	}
-	else {
+	} else {
 		self.ammo_rockets = 4;	// More rockets than fish!
 		self.health = 150;		// Lower HP than regular
 	}
@@ -778,7 +743,6 @@ void() monster_ogre_fishing = {
 	monster_start();
 };
 
-//----------------------------------------------------------------------
 void() monster_ogre_fishing_ghost = {
 	// Special spawnflag (code only)
 	self.spawnflags = self.spawnflags | MON_GHOST_ONLY;

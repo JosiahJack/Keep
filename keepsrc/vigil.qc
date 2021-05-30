@@ -66,7 +66,7 @@ void() vigtrig = {
 	timer.pos2 = self.pos2;
 	if (CheckZeroVector(self.pos1)) timer.pos1 = '-1532 64 -1124';
 	timer.message = self.message2;
-	if (self.target) SUB_UseTargets();
+	if (HasTargets(self)) SUB_UseTargets();
 };
 
 void() trigger_vigend = {
@@ -84,12 +84,6 @@ void() trigger_vigend = {
 // Vigil prevented cheating yourself quad, but not much else.
 // I already have func_rubble elsewhere.  The thunder triggers are done elsewhere too.
 // This was in weapons.qc under impulse stuff:
-	// if (self.impulse == MOVETYPE_FLYMISSILE)
-	// {
-		// centerprint(self, "This is no place for cheating");
-	// }
+// if (self.impulse == MOVETYPE_FLYMISSILE) centerprint(self, "This is no place for cheating");
 //...
-	// if (self.impulse == 255)
-	// {
-		// centerprint(self, "This is no place for cheating");
-	// }
+// if (self.impulse == 255) centerprint(self, "This is no place for cheating");

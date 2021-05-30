@@ -1,7 +1,42 @@
-//======================================================================
-// Author : Simon "Sock" OCallaghan
-// Website: www.simonoc.com
-//======================================================================
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Arcane Dimensions (AD)
+// 					Author : Simon "Sock" OCallaghan
+//					Website: www.simonoc.com
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 0
+//
+// Implements: Definitions for Arcane Dimensions (AD) features
+//
+// Description:
+// Defines the variables used for all AD features.
+//=============================================================================
+
 nosave float configflag;		// Temp cvar used to hold serverflags until live
 nosave float temp1flag;			// Temp cvar used to hold temp1 console flag
 nosave float prethink; 			// runs everytime the map is start/load/quickload
@@ -76,7 +111,6 @@ float		mod_beta;			// Beta version of mod
 .float		no_trackondeath;	// Homing missiles stop tracking when monster dead
 .float		upgrade_axe;		// Upgrade the axe with new weapon
 .float		upgrade_ssg;		// Upgrade Super Shotgun with new weapon
-//.float		upgrade_ghook;		// Upgrade the axe with grapple hook KEEP USES ROGUE GRAPPLE INSTEAD
 .float		upgrade_lg;			// Upgrade Lightning Gun with new weapon
 .float		no_item_offset; 	// All ammo + heal items to use central rotation
 .float		no_item_rotate;		// No random rotated for all items (ammo/heal/misc)
@@ -171,7 +205,7 @@ vector		cam_newangle;		// The new angle direction to look
 vector		cam_lastangle;		// Last value of cam_angle
 float		cam_lastanglevalid;	// Is lastangle is valid?
 .float		angleblend;			// Blend between current/last camera angles
-float CINECAM_ANGLEBLEND = 0.03;// Camera angle blend fraction
+float		CINECAM_ANGLEBLEND = 0.03;// Camera angle blend fraction
 float		secloc_running;		// QC flag for secret location camera
 entity		secloc_cam;			// Camera entity keeping track of stuff
 
@@ -200,8 +234,6 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .string		message3;			// Used by misc_books for addtional text
 .string		message4;			// Used by misc_books for addtional text
 .string		target2;			// Secondary target field (additional fires)
-// .string		target3;			// Third target field (additional fires)  Keep already had in defskeep.qc
-// .string		target4;			// Fourth target field (additional fires)  Keep already had in defskeep.qc
 .string		timertarget;		// Timer target updated every frame tic
 .string		counttarget;		// Count target updated for trigger_count
 .void()		touch2;				// Used by items for final touch function
@@ -216,10 +248,7 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .float		touchedliquid;		// true/false flag if touched fake liquid
 .string		touchedsound;		// Sound string for fake liquid exit 
 .string		headmdl;			// Head model for gib routine
-
-// Now using Drake's bloodtype everywhere
-.float		bleedcolour;		// Alternative colour for 'bleeding' objects
-
+.float		bleedcolour;		// Alternative colour for 'bleeding' objects.  Now using Drake's bloodtype everywhere
 .float		locksounds;			// Locked sound for doors etc
 .float		persistentkey;		// Silver/Gold/Custom key not removed on doors
 .float		skin_override;		// Override skin selection based on world theme
@@ -262,7 +291,6 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .float		presstype;			// 0/1 if touching entity type is valid
 .float		presstimersound;	// Timer for sound FX (stops repeating)
 .float		no_deadbody;		// Monster dead bodies don't work with trigger
-
 
 // Item respawning parameter
 .float		respawn_time;		// Amount of time to spend respawning item
@@ -356,13 +384,11 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .void()		th_updmissile;		// Update monster missiles while flying
 .void()		th_gibdie;			// Special function for gib death
 .void()		th_summon;			// Special boss ONLY summon mode
-
 .float		liquidbase;			// Liquid content at base of model (feet)
 .float		liquidcheck;		// Timer to prevent over checking of liqdmg
 .float		liquidblock;		// Cannot see through liquids for wakeup
 .float		distmin;			// Minimum amount of distance to teleport
 .float		distmax;			// Maximum amount of distance to teleport
-
 .float		attack_elev;		// Iternative attack angle for zaware monsters
 .float		move_elev;			// Z movement adjustment for flying units
 .vector		move_state;			// AI state movement; Stand, Walk & Run
@@ -373,7 +399,6 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .float		reflectnails;		// All NG/SNG projectiles are reflected
 .float		reflectaxe;			// All axe/shadow damage is reflected
 .entity		reflectent;			// Entity to generate lightning from
-
 .vector		attack_track;		// Iternative tracking for range attacks
 .vector		attack_origin;		// Enemy Origin for tracking range attacks
 .float		attack_active;		// Attack state has been actived
@@ -403,14 +428,12 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .string		attack_proj1;		// Attack 1 projectile for R/B monsters
 .string		attack_proj2;		// Attack 2 projectile for R/B monsters
 .float		attack_steering;	// Percentage to steer by over time
-
 .float		meleeattack;		// Which type of melee attack is happening
 .float		meleerange;			// Distance used for checking melee contact
 .float		meleetimer;			// Blood and gore sound/effect timer
 .string		meleehitsound;		// Sound to play when melee impacts on enemy
 .float		meleecontact;		// Flag set if monster has melee contact sound
 .vector		meleeoffset;		// Offset for melee contact (spawning blood)
-
 .float		plasma_burn;		// Timer to stop constant plasma explosions
 .float		weaponstate;		// State of the weapon (up/down etc)
 .float		weaponswitch;		// Switch timer for different weapons
@@ -439,7 +462,6 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .string		turretclosing;		// Targets to fire when turret is closing
 .float		turretlocked;		// Turret locked, will not hide in wall
 .float		wakeup_angle;		// Turret closed, wakeup angle adjustment
-
 .float		pain_flinch;		// Random chance to ignore this much damage
 .float		pain_longanim;		// Force monster into long pain animations
 .float		pain_finstate;		// Store the current pain finished state
@@ -453,7 +475,6 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .float		death_dmg;			// Used by tarbaby for explosive damage on death
 .string		deathstring;		// Used by client for player death messages
 .string		customsound;		// Custom sound for Judicator/Justice sounds
-
 .float		idlebusy;			// Busy with an alternative idle animation
 .float		idlereverse;		// Reverse direction for idle animation
 .float		idletimer;			// Idle sound timer (next time to check)
@@ -470,13 +491,11 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .string		sight_sound4;		// Sight sound wav file 4
 .float		sight_count;		// Total amount of sight sounds defined
 .float		sight_nofront;		// Monster has no infront check
-
 .float		enemydist;			// Distance the enemy is from the monster
 .float		enemymaxdist;		// Maximum distance enemy is out of range
 .entity		lostenemy;			// Lost soul enemy before losing sight
 .float		losttimer;			// Lost soul idle timer after losing sight
 .float		lostsearch;			// Lost soul searching for previous enemy
-
 .string		angrytarget;		// Alternative target to attack upon spawn
 .string		deathtarget;		// Alternative target to fire when dying
 .string		angletarget;		// Will create custom bmodel move direction
@@ -504,13 +523,11 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .vector		rotateangles;		// ROTATE axis (XYZ) changing (+/-) angles
 .float		alphastart;			// ALPHA fade IN time for misc_model
 .float		alphadiff;			// ALPHA fade range left for diff start positions
-
 .float		eventswitch;		// Toggles the event on/off conditions
 .float		eventontrigger;		// Number used to start an event sequence
 .string		eventontarget;		// Target to fire when event is switched on
 .float		eventofftrigger;	// Number used to stop an event sequence
 .string		eventofftarget;		// Target to fire when event is switched off
-
 .float		steptype;			// Primary footstep type
 .float		altsteptype;		// Secondary footstep type
 .float		steplast;			// Last footstep sound
@@ -521,7 +538,6 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .string		bodyonflrtrig;		// Trigger to fire when body is axed!
 .float		dmgtimeframe;		// Time before damage frame can be reset
 .float		dmgcombined;		// combined damage over 1 frame (0.1 time)
-
 .float		bosswave;			// Current wave of the boss (backwards)
 .float		bosswavetotal;		// Total amount of boss waves
 .float		bosswaveqty;		// Total HP for each boss wave
@@ -540,11 +556,9 @@ float MONAI_BOSS_SUMRND = 128;	// Default random value
 .float		quothflags;			// Not used for anything in this MOD
 .float		notelefrag;			// Prevents monster spawn telefrag
 
-//----------------------------------------------------------------------
 float ENG_UNKNOWN = 0;			// Default engine type
 float ENG_FITZ = 1;				// Fitz clone engines
 float ENG_DPEXT = 2;			// Engine with Darkplaces extensions
-
 float DEF_GRAVITY = 800;		// Default gravity for maps
 float DEF_JUMPHEIGHT = 270;		// Default player jump height
 float DEF_FALLSPEEDLOW = -300;	// Default Low player fall Speed
@@ -571,7 +585,6 @@ float FLOOR_TRACE_MONSTER = 40;	// Distance for monster/body checks
 float FLOOR_TRACE_GIBS = 16;	// Distance for gib/head checks
 float FLOOR_TRACE_BREAK = 16;	// Distance for breakable checks
 
-//----------------------------------------------------------------------
 // Server flags (only way to carry items over between maps)
 // bits 1-4 Runes, 5-8 Additional keys/items
 float SVR_RUNE_KEY1 = 1;		// Rune 1
@@ -579,19 +592,16 @@ float SVR_RUNE_KEY2 = 2;		// Rune 2
 float SVR_RUNE_KEY3 = 4;		// Rune 3
 float SVR_RUNE_KEY4 = 8;		// Rune 4
 float SVR_RUNE_ALL = 15;		// Runes 1-4 (together)
-
 float SVR_SPAWN_BIT1 = 16;		// 3 bit spawn location
 float SVR_SPAWN_BIT2 = 32;		// Supports 7 locations 001-111
 float SVR_SPAWN_BIT3 = 64;		// Set via trigger_change_level
-
 float SVR_LIVE = 128;			// Bit      8 - Serverflag has active data
 float SVR_RUNEFLAG = 255;		// Bits  1- 8 - Runes and Keys
 float SVR_LOWFLAG = 65535;		// Bits  1-16 - rune keys and spawn settings
 float SVR_WORLDFLAG = 65280;	// Bits  9-16 - default/worldspawn options
 float SVR_HIGHFLAG = 8323072;	// Bits 17-23 - these options carry over
 
-// MOD Options that can only be changed via temp1 console variable
-// These affect the spawning functions of monster / items
+// MOD Options that can only be changed via temp1 console variable.  These affect the spawning functions of monster / items
 float SVR_ITEMOFFSET = 256;		// Toggle item offset (corner/center)
 float SVR_SPRPARTON = 512;		// Always use sprite particles (default OFF)
 float SVR_PARTICLES = 1024;		// Turn ON particle system (default OFF)
@@ -600,10 +610,8 @@ float SVR_UPDAXE = 4096;		// Upgrade Axe, +75% dmg, gib zombies
 float SVR_UPDSSG = 8192;		// Upgrade Super Shotgun, +50% dmg, uses 3 shells
 float SVR_UPDLG = 16384;		// Upgrade Lightning Gun, Direct+Splashdamage
 float SVR_ITEMROTATE = 32768;		// Always randomly rotate ammo items
-// float SVR_UPDGHOOK = 32768;		// Upgrade Grapple Hook, +dmg, +flying, -axes // Not used like this by Keep, grapple treated as normal weapon
-// MOD Options that can be changed via impulse commands (need a map loaded)
-// These options will override the temp1 console variable
-// float SVR_WEATHER = 65536;		// Turn OFF All weather systems
+
+// MOD Options that can be changed via impulse commands (need a map loaded).  These options will override the temp1 console variable
 float SVR_SHOTGPROJ = 131072;	// Turn OFF Shotgun projectiles
 float SVR_SHOTGCASE = 262144;	// Turn OFF Shotgun casings
 float SVR_ZAWARE = 524288;		// Turn OFF Z aware monsters
@@ -631,31 +639,23 @@ float ART_BLASTBELT_DD = 0.5;	// Direct damage
 float ART_JUMPBOOTS_AIRMAX = 4;	// Max amount of jumps available
 float ART_JUMPHEIGHT = 360;		// Second jump height
 float ART_JUMPFORWARD = 320;	// Jump speed forward
-
-//----------------------------------------------------------------------
 float SKILL_EASY = 0;		// Skill level constants
 float SKILL_NORMAL = 1;
 float SKILL_HARD = 2;
 float SKILL_NIGHTMARE = 3;
 float SKILL_EVIL = 4;		// Evil nightmare (max 50hp)
-
 float HP_EASY = 1;			// HP skill level constants
 float HP_NORMAL = 2;
 float HP_HARD = 4;
 float HP_NIGHTMARE = 8;
-
 float HUD_SECRETS = 2;		// Update secrets screen counter
 float HUD_MONSTERS = 4;		// Update monster screen counter
-
 float BUFFER_STUFFCMD = 1;	// Long float print function (lftos)
 float BUFFER_SPRINT = 2;	// Defined in subs.soc.qc
 float BUFFER_DPRINT = 4;
-
-//----------------------------------------------------------------------
 float STATE_SETUP = -1;		// Setup state (on/off functions)
 float STATE_ON	= 1;		// Stupid idea to have on states as 0
 float STATE_OFF	= 2;		// Impossible to test for 0 as 'not setup' is 0
-
 float ENT_SPNSTATIC = 32;	// Will convert entity to static on spawn
 float ENT_STARTOFF = 64;	// Global spawnflags setting
 float ESTATE_BLOCK = 6;		// Blocked OFF+DISABLE
@@ -665,25 +665,20 @@ float ESTATE_OFF = 2;		// Switch OFF
 float ESTATE_DISABLE = 4;	// Disabled (blocks toggle)
 float ESTATE_RESET = 8;		// Reset parameters
 float ESTATE_AFRAME = 16;	// Changes Aframe only
-
 float TARGET_BACK = 0;		// Behind - 315-45
 float TARGET_LEFT = 1;		// Side - 45-135
 float TARGET_FRONT = 2;		// Front - 135-225
 float TARGET_RIGHT = 3;		// Right - 225-315
-
 float SPNMARK_YELLOW = 0;	// Error something is broken!
 float SPNMARK_BLUE = 1;		// Delay spawn monster/item
 float SPNMARK_GREEN = 2;	// Delay spawn mosnter with no counter
 float SPNMARK_RED = 3;		// Nightmare only spawn
 float SPNMARK_PURPLE = 4;	// Coop only spawn
 float SPNMARK_WHITE = 5;	// Monsters with no Z Aware functionality
-
-//----------------------------------------------------------------------
 float LADDER_NONE = 0;		// No player contact with ladder
 float LADDER_JUMP = 1;		// Jump movement system (rubicon2)
 float LADDER_VEL = 2;		// Push velocity system (extra4)
 
-//----------------------------------------------------------------------
 // Environmental damage
 float LIQUID_TIMER = 1;		// Amount of time to check for liquid damage
 float MON_MULTIPLIER = 10;	// Multiplier for liquid damage against monsters
@@ -693,7 +688,6 @@ float LIQUID_DMG = 1;		// Base damage from normal water drowning
 float SLIME_DAMAGE = 4;		// Acid burning
 float LAVA_DAMAGE = 10;		// Getting crispy.  Oh yeah we like it hot!
 
-//----------------------------------------------------------------------
 // Footstep types (slow, drag, light, medium, heavy, large, giant)
 float FS_TYPESLOW = 1;		// Demon, Dogs, Ogres, Zombies
 float FS_TYPEDRAG = 2;		// Alt Zombie foot
@@ -705,7 +699,6 @@ float FS_TYPEGIANT = 7;		// Golem
 float FS_TYPECUSTOM = 9;	// Defined/precached by monster
 float FS_FLYING = 10;		// Exclusion, no happy feet!
 
-//----------------------------------------------------------------------
 // Monster constant values
 float MON_MOVENONE = 0;
 float MON_MOVEWALK = 1;				// Walking Monster
@@ -769,6 +762,7 @@ float MON_SWAMPLING_LARGE = 2;		// Large Green spitting version
 float MON_SWAMPLING_CEILING = 4;	// Swampling starts on the ceiling
 float MON_GARGOYLE_PERCH = 4;		// Start in perched position
 float MON_GAUNT_PERCH = 4;		// Start in perched position
+
 // Underwater enemies (liquid block option for all of them)
 float MON_LIQUIDBLOCK = 4;			// Liquids block sightlines (fish/eel)
 float MON_FISH_SMALL = 2;		// Smaller and faster fish!
@@ -783,6 +777,7 @@ float MON_CHTHON_GREEN = 4;		// Green skin + Slime balls
 float MON_SHUB_DMGTRIG = 2;		// Can be triggered with damage
 float MON_SHUB_UPSIDE = 4;		// Setup upside (ceiling pose)
 float MON_NOUR_BOSS = 2;			// Boss version (with waves+minions)
+
 // Minion spawner options
 float MON_MINOTAUR_MINIONS = 4;		// Allow the Minotaur to spawn gargoyles
 float MON_SHALRATH_MINIONS = 4;		// Allow the Shalrath to spawn vorlings
@@ -804,7 +799,6 @@ float MON_TURRETB_PLASMA = 4;		// Fire plasma bolts instead of laser
 float MON_DPRINCE_FIRE = 2;			// Fire bolt/burning and skin 1
 float MON_DEFLECTOR_PLASMA = 2;		// Plasma/Rockets attacks and skin 1
 float MON_JUDGE_BLUE = 4;			// Blue flame setup/explosions
-
 float MON_JIM_ROCKET = 4;		// Rocket version of Jim the Robot
 float MON_SCORPION_STINGER = 4;		// Black stinger scorpion (debuff)
 float MON_TARBYLESSJUMP = 4;		// Will not constantly jump around
@@ -821,14 +815,12 @@ float MON_ZOMCRUCIFIED = 1;		// Zombies - crucified
 float MON_ZOMBAMBUSH = 2;		// Zombies - Ambush (ID hack)
 float MON_ZOMIDHACK = 3;		// Used to switch ID hack around
 
-//----------------------------------------------------------------------
 // Player
 float RANGE_PLAYAXE = 72;		// Distance for fire axe (player)
 float RANGE_CHOPAXE = 72;		// Player distance to chop up bodies, changed from 64 to match full range -Qmaster
 float DAMAGE_PLAYAXE1 = 24;		// Default axe damage, changed to match one shotgun blast (6 x 4 = 24) -Qmaster
 float DAMAGE_PLAYAXE2 = 56;		// Enhanced axe damage, was 35 (measly), changed to match double shotgun blast (14 x 4 = 56) - Qmaster
 
-//----------------------------------------------------------------------
 // Weapon damage and parameters
 float SPEED_PLAYAIM = 10000;		// Player auto aim distance
 float SPEED_PLAYERSG = 2000;		// Player speed for SG
@@ -850,7 +842,6 @@ float DAMAGE_SHELL = 4;				// Single Shotgun Shell (hitscan)
 float DAMAGE_PSHELL = 4;			// Single Shotgun Shell (projectile)
 float DAMAGE_PTSHELL = 4;			// Dead center tracer shell (proj only)
 float LIFE_SHELLS = 6;				// Lifetime before being removed
-
 float SPEED_PLAYSPIKE = 1000;		// Player speed for Spikes
 float SPEED_TRAPSPIKE = 500;		// Trap shooters
 float SPEED_HKSPIKE = 200;			// Hell Knight (def=300)
@@ -867,149 +858,113 @@ float SPEED_ELF = 600;				// Dark Elf (snowballs)
 float SPEED_FLAME = 600;			// Flying flames (sprite)
 float SPEED_LAVABALL = 250;			// Boss Lava balls
 float SPEED_LAVASKILL = 50;			// Lavaball speed addition based on skill 250=easy, 300=normal, 350=hard, 400=nm
-
 float SPEED_RLPLAYER = 1000;		// Player rocket speed
 float SPEED_PLAYGRENADE = 600;		// Player speed for Grenades
 float SPEED_MONGRENADE = 500;		// Ogre grenade speed (org 600)
 float SPEED_MONGLSKILL = 50;		// 500=easy, 550=normal, 600=hard, 650=nm
 float SPEED_ZOMBFLESH = 550;		// Zombie flesh speed (org 600)
 float SPEED_ZOMBIESKILL = 25;		// 550=easy, 575=normal, 600=hard, 625=nm
-
 float SPEED_PLAYPLASMA = 900;		// Player speed for Plasma
 float SPEED_REFLECTION = 600;		// Reflection speed for Plasma/Lightning
 float SPEED_LASER = 600;			// Enforcer laser speed
 float SPEED_PLASMA = 600;			// Eliminator plasma speed
-
 float SPEED_ROCSTEERDIS = 160;		// How close to target before stop steering
 float SPEED_ROCSTEERDISSKILL = 20;	// 160=Easy, 140=Normal, 120=Hard, 100=NM
 float SPEED_ROCSTEERINC = 70;		// Steering missile speed increase (0.1 tick)
 float SPEED_ROCSTEERINCSKILL = 10;	// 70=Easy, 80=Normal, 90=Hard, 100=NM
 float SPEED_ROCSTEERBASE = 0.7;		// Base percentage of steering accuracy
 float SPEED_ROCSTEERINCACC = 0.1;	// Increase accuracy of steering
-
 float SPEED_JIMPROJ = 575;			// Crazy flying jim robot laz0r/rockets!?
 float SPEED_JIMPROJSKILL = 75;		// 575=easy, 650=normal, 725=hard, nm=800
 float SPEED_SENTPROJ = 575;			// Crazy flying jim robot laz0r/rockets!?
 float SPEED_SENTPROJSKILL = 75;		// 575=easy, 650=normal, 725=hard, nm=800
-
 float SPEED_TURRETBPROJ = 575;		// Wall mounted turret speed
 float SPEED_TURRETBPROJSKILL = 75;	// 575=easy, 650=normal, 725=hard, 800=nm
 float SPEED_SWEEPERPROJ = 575;		// Slow flying robot laz0r/spikes!?
 float SPEED_SWEEPERPROJSKILL = 75;	// 575=easy, 650=normal, 725=hard, 800=nm
-
 float SPEED_MAMMOTHLAZ = 600;		// The "fridge" Mammoth
 float SPEED_MAMMOTHLAZSKILL = 200;	// 600=easy, 800=normal, 1000=hard, 1200=nm
 float SPEED_MAMMOTHROCK = 700;		// The "fridge" Mammoth
 float SPEED_MAMMOTHROCKSKILL = 100;	// 700=easy, 800=normal, 900=hard, 1000=nm
-
 float SPEED_ARMYROCKPROJ = 575;		// Army rocketeer (red skin version)
 float SPEED_ARMYROCKPROJSKILL = 75;	// 575=easy, 650=normal, 725=hard, 800=nm
-
 float SPEED_DGQFB = 700;			// Chainmail Hell Knight from Quoth
 float SPEED_DGQFBSKILL = 100;		// 700=easy, 800=normal, 900=hard, 1000=nm
-
 float SPEED_SEEKROCK = 575;			// Large UV ugly robot from rrp
 float SPEED_SEEKROCKSKILL = 75;		// 575=easy, 650=normal, 725=hard, nm=800
 float SPEED_SEEKLAZ = 400;			// Base speed of Laser attacks
 float SPEED_SEEKLAZSKILL = 225;		// 400=easy, 625=normal, 850=hard, 1075=nm
-
 float SPEED_RAINDROCK = 575;		// Mobile xmas meat wagaon
 float SPEED_RAINDROCKSKILL = 75;	// 575=easy, 650=normal, 725=hard, nm=800
-
 float SPEED_DFURYSPIKE = 400;		// Base speed of Fury attack A/B
 float SPEED_DFURYSKILL = 225;		// 400=easy, 625=normal, 850=hard, 1075=nm
-
 float SPEED_BARONMISSILE = 650;		// Spike ball attack
 float SPEED_BARONSKILL = 100;		// 550=easy, 650=normal, 750=hard, 850=nm
-
 float SPEED_JUDGEMISSILE = 650;		// Blood/Fire arrow attack
 float SPEED_JUDGESKILL = 150;		// 650=easy, 800=normal, 950=hard, 1100=nm
 float SPEED_JUSTICEMISSILE = 400;	// Blood/Fire arrow attack
 float SPEED_JUSTICESKILL = 225;		// 400=easy, 625=normal, 850=hard, 1075=nm
-
 float SPEED_NOURSPIKE = 600;		// Base speed of Nour attack A/B
 float SPEED_NOURSKILL = 200;		// 600=easy, 800=normal, 1000=hard, 1200=nm
 float SPEED_NOURBOMB = 600;			// Grenade bounce speed (no skill change)
-
 float SPEED_GARGMISSILE = 500;		// Gargoyle rocket speed
 float SPEED_GARGSKILL = 150;		// 500=easy, 650=normal, 800=hard, 950=nm
-
 float SPEED_SWIZMISSILE = 525;		// Skull wizard rocket speed
 float SPEED_SWIZSKILL = 75;			// 525=easy, 600=normal, 675=hard, 750=nm
 float DAMAGE_SWIZPOISON = 30;		// Direct damage from Poison Rocket
-
 float SPEED_MEGAFROCKET = 525;		// Mega Enforcer ROCKET attack
 float SPEED_MEGAFRSKILL = 75;		// 525=easy, 600=normal, 675=hard, 750=nm
 float SPEED_MEGAFBOLT = 450;		// Mega Enforcer plasma bolt speed
 float SPEED_MEGAFBSKILL = 150;		// 450=easy, 600=normal, 750=hard, 900=nm
 float MONAI_MEGAFMAX = 30;			// Maximum amount of plasma to fire
 float MONAI_RANGEMEGAF = 350;		// Switch between rockets and plasma
-
 float SPEED_DEFLECTROCKET = 525;	// Mega Enforcer ROCKET attack
 float SPEED_DEFLECTRSKILL = 75;		// 525=easy, 600=normal, 675=hard, 750=nm
 float SPEED_DEFLECTBOLT = 450;		// Mega Enforcer plasma bolt speed
 float SPEED_DEFLECTBSKILL = 150;	// 450=easy, 600=normal, 750=hard, 900=nm
 float MONAI_DEFLECTMAX = 30;		// Maximum amount of plasma to fire
 float MONAI_RANGEDEFLECT = 350;		// Switch between rockets and plasma
-
 float SPEED_MINOBOLT = 500;			// Minotaur plasma bolt speed
 float SPEED_MINOSKILL = 150;		// 500=easy, 650=normal, 800=hard, 950=nm
-
 float SPEED_DPRINCEBOLT = 500;		// Dark Prince plasma bolt speed
 float SPEED_DPRINCESKILL = 150;		// 500=easy, 650=normal, 800=hard, 950=nm
-
 float SPEED_GAUNTBOLT = 500;		// Gaunt plasma bolt speed
 float SPEED_GAUNTSKILL = 150;		// 500=easy, 650=normal, 800=hard, 950=nm
-
 float SPEED_FLOYDBOLT = 500;		// Floyd plasma bolt speed
 float SPEED_FLOYDSKILL = 150;		// 500=easy, 650=normal, 800=hard, 950=nm
-
 float SPEED_EELBOLT = 300;			// Eel plasma bolt speed
 float SPEED_EELSKILL = 100;			// 300=easy, 400=normal, 500=hard, 600=nm
-
 float SPEED_SANTAPROJ = 600;		// Santa snowball attack
 float SPEED_SANTASKILL = 200;		// 600=easy, 800=normal, 1000=hard, 1200=nm
 float MONAI_SANTAMAX = 30;			// Maximum amount of projectiles to fire
-
 float SPEED_FREDDIEPROJ = 500;		// Freddie spike/laser bolt speed
 float SPEED_FREDDIESKILL = 150;		// 500=easy, 650=normal, 800=hard, 950=nm
-
 float SPEED_NAILOGREPROJ = 500;		// Nail Ogre spike speed
 float SPEED_NAILOGRESKILL = 150;	// 500=easy, 650=normal, 800=hard, 950=nm
-
 float SPEED_NAILSNOWMPROJ = 500;		// Snowman Nail spike speed
 float SPEED_NAILSNOWMSKILL = 150;	// 500=easy, 650=normal, 800=hard, 950=nm
-
 float SPEED_SHALMISSILE = 225;		// Shalrath intial speed of homing missile
 float SPEED_SHALSKILL = 25;			// 225=easy, 250=normal, 275=hard, 300=nm
 float SPEED_SERGMISSILE = 220;		// Death Sergeant homing missile initial speed
 float SPEED_SERGSKILL = 20;			// 220=easy, 240=normal, 260=hard, 280=nm
-
 float SPEED_SCORPTAIL = 400;		// Scorpion Tail Swipe (large arc infront)
 float SPEED_SCORPSKILL = 100;		// 400=easy, 500=normal, 600=hard, 700=nm
-
 float SPEED_GOLEMSPIKE = 400;		// Base speed of Golem Rock storm attacks
 float SPEED_GOLEMSKILL = 225;		// 400=easy, 625=normal, 850=hard, 1075=nm
-
 float SPEED_EIDOROCK = 400;			// Base speed of Eidolon boulder attack
 float SPEED_EIDOSKILL = 150;		// 400=easy, 550=normal, 700=hard, 850=nm
 float SPEED_EIDOSPIKE = 400;		// Base speed of Eidolon rock storm attacks
 float SPEED_EIDOSKILLSP = 225;		// 400=easy, 625=normal, 850=hard, 1075=nm
-
 float SPEED_ICEGSHARD = 600;		// Base speed for Ice Golem Shard attack
 float SPEED_ICEGSKILL = 200;		// 600=easy, 800=normal, 1000=hard, 1200=nm
-
 float SPEED_BLORDBALL = 400;		// Base speed of Bog Lord melee balls
 float SPEED_BLORDSKILL = 225;		// 400=easy, 625=normal, 850=hard, 1075=nm
-float SPEED_BLORDBOLT = 600;		// Base speed of Bog Lord bolts
-									// 600=easy, 825=normal, 1025=hard, 1275=nm
-
+float SPEED_BLORDBOLT = 600;		// Base speed of Bog Lord bolts.  600=easy, 825=normal, 1025=hard, 1275=nm
 float LIFE_PROJECTILE = 6;			// Lifetime before being removed
 float LIFE_ROCKET = 5;				// Disappear in a puff of smoke!
 float LIFE_GRENADE = 2.5;			// Bounce, bounce, explode
 float LIFE_EGG = 1.5;				// Very quick egg hatch!
 float LIFE_FLESH = 2.5;				// Life of zombie flesh
-
 float DAMAGE_NGREFSPIKE = 4;		// Reflected Spike for NG/SNG
 float DAMAGE_LNGREFSPIKE = 8;		// Reflected Lava Spike for LNG/LSNG
 float DAMAGE_NGSPIKE = 9;			// Single Spike for NG
@@ -1020,12 +975,10 @@ float DAMAGE_LAVASNGSPIKE = 30;			// Single Spike for SNG
 float DAMAGE_PLAYGRENADE = 120;		// Direct damage from player grenade
 float DAMAGE_MONGRENADE = 40;		// Toned down grenade damage
 float DAMAGE_MONROCKET = 40;		// Toned down rocket damage
-
 float ELEV_ZAXIS = 200;				// Standard default Z axis adjustment
 float ELEV_DEFAULT = 30;			// Zaware default elevation if range too far
 vector ELEV_VIEW_OFS = '0 0 12';	// Zaware target adjustment
 vector ELEV_SPID_OFS = '0 0 -16';	// Hit low
-
 vector DAMAGE_RLPLAYER = '100 20 120';	// Base + Random, Splash
 vector DAMAGE_RLFURY = '20 0 20';		// Fury rockets - Equal Direct/Radius
 vector DAMAGE_RLDPRINCE = '20 0 20';	// Prince rockets - Equal Direct/Radius
@@ -1049,11 +1002,9 @@ vector DAMAGE_RLBLORD = '30 0 10';		// Bog Lord Slime - Low Direct/Splash
 vector DAMAGE_SMARTBALL = '30 10 40';		// Nemesant smart fire ball chasing projectile
 vector DAMAGE_RLCYBER = '40 0 40';		// Cyber Demon
 float DAMAGE_RLKILLZOM = 60;			// Direct Damage to kill zombie
-
 vector DAMAGE_HMSHAL = '0 0 40';		// Homing Missile splashdamage
 vector DAMAGE_HMSERG = '0 0 40';
 vector DAMAGE_HMSHUB = '0 0 40';
-
 vector DAMAGE_PLASMA = '15 5 20';		// Default plasma (very high)
 vector DAMAGE_PGPLAYER = '45 0 20';		// Player plasma (very high)
 vector DAMAGE_PGREFLECT = '15 0 0';		// Plasma reflection (very low)
@@ -1067,30 +1018,25 @@ vector DAMAGE_PGFLOYD = '15 0 0';		// Direct damage only
 vector DAMAGE_PGDEFLECT = '15 0 0';		// Direct damage only
 vector DAMAGE_PGMEGAF = '15 0 0';		// Direct damage only
 vector DAMAGE_PGGREMLIN = '15 5 20';	// Gremlin gets same as player, stole player's plasma gun
-
 vector DAMAGE_BLEEDING = '0.25 5 2';	// Percentage, HoT, Pause
-
 float DAMAGE_LGPLAYER = 30;			// Player Lightning gun (per 0.1s)
 float DAMAGE_LASER = 15;			// Lasers! (traps AND enforcers)
 float DAMAGE_BOGLORD = 20;			// Very high and fast damage
 float DAMAGE_BOBLASER = 5;			// Weak laser (x + random()*x) 5-10dmg
 float DAMAGE_FLESH = 10;			// Flesh from zombies
 float DAMAGE_ZOMBIECLASS = 120;		// Instant death to any zombie class
-
 float SPEED_WRAITHBONE = 400;		// Wraith Nail Storm (large arc infront)
 float SPEED_WBONESKILL = 100;		// 400=easy, 500=normal, 600=hard, 700=nm
 float DAMGE_WRAITHBOLT = 10;		// Biosuit protection from debuff, base dmg
 float DAMAGE_PYROWRAITH = 20;		// Damage from Wraith flame bolt
 float DAMAGE_WRAITH = 120;			// Explosive damage from wraiths (org=80)
-
 float SPEED_PYROFLAME = 250;		// Base speed of flames
 float SPEED_PYROSKILL = 50;			// 250=easy, 300=normal, 350=hard, 400=nm
 float DAMAGE_PYROFLAME = 4;			// Damage from each pyro flame
 float DAMAGE_MONFLAME = 20;			// Damage to any monster
 float DAMAGE_FUMPOISON = 2;			// Damage from each fumigator burst
 
-// Both crossbow and fury projectiles need to cap at 1100 for NM skill
-// Otherwise they are close to impossible to avoid due to spread pattern
+// Both crossbow and fury projectiles need to cap at 1100 for NM skill.  Otherwise they are close to impossible to avoid due to spread pattern
 float SPEED_DCROSS = 500;			// Base speed of projectile bolts
 float SPEED_BOLTSKILL = 200;		// 500=easy, 700=normal, 900=hard, 1100=nm
 float DAMAGE_BOLT0 = 5;				// Bolt damge against crossbow knights only
@@ -1107,14 +1053,12 @@ float DAMAGE_FREDDIE = 40;			// Explosive damage from Freddie
 float DAMAGE_FLOYD = 50;			// Explosive damage from Floyd (1/2 original)
 float DAMAGE_RAINDEER = 20;			// Explosive damage from raindeer
 float DAMAGE_SNOWMAN = 40;			// Explosive damage from Snowman
-
 float SPEED_LOSTSTART = 400;		// Initial charging speed
 float SPEED_LOSTCHARGE = 50;		// Charging speed multiplier
 float SPEED_LOSTMAX = 800;			// Charging Maximum speed
 float DAMAGE_LOSTSOUL = 40;			// Explosive damage from lost soul
 float DAMAGE_LOSTCHARGE = 10;		// Charging damage for lost soul
 
-//----------------------------------------------------------------------
 // Generic melee/jump attack distances
 float MONAI_MELEEFRONT = 70;		// Front attacks reach further (original = 60)
 float MONAI_MELEESIDE = 60;			// Side attacks less distance
@@ -1162,7 +1106,6 @@ float MONAI_JUMPSWAMPLINGDIST = 500;// Forward distance modifier
 float MONAI_RANGESWEEPER = 250;		// Range for switching mine/spike
 float MONAI_RANGEMINESWEEPER = 64;	// Minimum floor space to fire mines
 float MONAI_RANGEDPRINCE = 300;		// Mid Range switch (floor damage)
-
 float MONAI_JUMPTIMEOUT = 2;		// Time between jumps
 float MONAI_RUNPAUSE = 128;			// If enemy this close, stop pause and run!
 
@@ -1176,12 +1119,10 @@ float MONAI_MELEESPIDER = 60;		// Distance for spider bite
 float MONAI_JUMPSPIDERNEAR = 80;	// SPIDER Jump attack ranges
 float MONAI_JUMPSPIDERFAR = 200;
 float MONAI_JUMPSPIDERDIST = 400;	// Forward distance modifier
-
 float MONAI_MELEEVORELING = 60;		// Distance for voreling bite
 float MONAI_JUMPVORELINGNEAR = 80;	// VORELING Jump attack ranges
 float MONAI_JUMPVORELINGFAR = 200;
 float MONAI_JUMPVORELINGDIST = 500;	// Forward distance modifier
-
 float MONAI_MELEESWAMPLING = 60;	// Distance for bite attack
 float MONAI_JUMPSWAMPLINGNEAR = 80;	// Jump attack ranges
 float MONAI_JUMPSWAMPLINGFAR = 200;
@@ -1192,7 +1133,6 @@ float MONAI_JUMPSCORPTIME = 1;		// Special timer for scorpion
 float MONAI_MELEESCORPION = 80;		// Distance for scorpion claws
 float MONAI_JUMPSCORPNEAR = 80;		// SCORPION Jump attack ranges
 float MONAI_JUMPSCORPFAR = 300;		// long jump distance!
-
 float MONAI_JUMPSTEELTIME = 1;		// Jump timer
 float MONAI_MELEESTEELCLAW = 60;	// Distance for melee bite
 float MONAI_JUMPSTEELNEAR = 100;	// Jump attack ranges
@@ -1240,7 +1180,6 @@ float MONAI_FLAMELINEJUDGE = 400;	// Flame line has limited range
 float MONAI_JUMPJUDGETIME = 2;		// Time before next jump attack
 float MONAI_JUMPJUDGENEAR = 200;	// Jump attack distance
 float MONAI_JUMPJUDGEFAR = 300;
-
 float MONAI_MELEEJUSTICE = 200;		// Run + slash charge attack
 float MONAI_CLOSEJUSTICE = 100;		// Really close melee
 float MONAI_JUMPJUSTICETIME = 2;	// Time before next jump attack
@@ -1306,7 +1245,6 @@ float MONAI_JUDGERADIUS = 512;		// Radius of foot stomp attack
 float MONAI_JUDGEFORWARD = 250;		// Forward momentum
 float MONAI_JUDGEUP = 500;			// Vertical momentum
 float MONAI_MAXJUDGE = 500;			// Maximum tether range
-
 float MONAI_IMPACTZAXIS = 128;		// Above/below limit on affect
 
 // Boss Mammoth
@@ -1338,18 +1276,15 @@ float MONAI_MELEELFIEND = 128;		// Always attack with melee
 float MONAI_CLOSELFIEND = 384;		// Close distance fireballs
 float MONAI_MAXLFIEND = 350;		// Maximum tether range
 
-//----------------------------------------------------------------------
 // Originally defined in items.qc
 float ITEM_RESPAWN = 16;	// Item will respawn
 float ITEM_FLOATING = 32;	// Spawn floating
 float ITEM_NOEFFECTS = 128;	// Disable particles and effects
-
 float H_ROTTEN = 1;		// Rotten
 float H_MEGA = 2;		// Mega Health
 float H_PHIAL = 1;		// Red phial
 float A_LARGE = 1;		// Used by ammo boxes
 float A_LID = 2;		// Display Lid
-
 float BACKPACK_SHELLS = 1;
 float BACKPACK_NAILS = 2;
 float BACKPACK_ROCKETS = 4;
@@ -1357,7 +1292,6 @@ float BACKPACK_CELLS = 8;
 float BACKPACK_GRNTYPE = 1;
 float BACKPACK_YELTYPE = 2;
 float BACKPACK_REDTYPE = 4;
-
 float AMMO_SHELLS_SML = 20;		// Ammo quantities for small / large boxes 
 float AMMO_SHELLS_LGR = 40;		// and from weapon pickups
 float AMMO_SHELLS_WPN = 25;
@@ -1377,8 +1311,6 @@ float AMMO_PLASMA_WPN = 10;
 float AMMO_BLOOD_WPN = 30;
 float AMMO_VOID_WPN = 30;
 float AMMO_ELEMENTAL_WPN = 30;
-
-//----------------------------------------------------------------------
 float ARMOR_GRN_TYPE = 0.3;		// Armour damage reduction and quantity
 float ARMOR_GRN_VALUE = 100;
 float ARMOR_YEL_TYPE = 0.6;
@@ -1413,7 +1345,6 @@ float ARMOR_NINJA_VALUE = 100;
 // vector  ARMOR_STATS_CHAOS   = '0 200 65536';
 // Note:  Ninja uses the same stats as green armor.
 
-//----------------------------------------------------------------------
 float HEAL_GEM = 5;				// Small
 float HEAL_ROT = 15;			// Health packs
 float HEAL_NORM = 25;
@@ -1422,57 +1353,46 @@ float HEAL_EVILMAX = 50;		// Maximum for Evil NM+ skill level
 float HEAL_PLAYMAX = 100;		// Maximum player health (default)
 float HEAL_MEGAMAX = 250;		// Maximum health (several megahealths)
 
-//----------------------------------------------------------------------
 // Required here because of link to particle emitters
 float MISCBOOK_GREEN = 1;		// Green Cover
 float MISCBOOK_BLUE = 2;		// Blue Cover
 float MISCBOOK_RED = 3;			// Red Cover
 
-//----------------------------------------------------------------------
 string SOUND_EMPTY = "misc/null.wav";			// No sound
 string MODEL_EMPTY = "progs/ad171/misc_empty.mdl";	// Empty Model (1 point)
-string MODEL_BROKEN = "progs/ad171/misc_broken.mdl";	// Model error
+string MODEL_BROKEN = "progs/q15/misc_broken.mdl";	// Model error. Quake 1.5 added lots more skins
 string MODEL_IMPACT = "progs/ad171/misc_impact.mdl";	// Impact Model Marker
 string MODEL_CORNER1 = "progs/ad171/misc_corner1.mdl";// Path corner helper (Forward)
 string MODEL_CORNER2 = "progs/ad171/misc_corner2.mdl";// Path corner helper (Backward)
 string MODEL_BACKPACK = "progs/ad171/w_backpack.mdl";	// HD backpack
-
 string MODEL_PLAYER = "progs/player.mdl";
 string MODEL_PLAYER_HEAD = "progs/h_player.mdl";
 string MODEL_PLAYER_EYES = "progs/eyes.mdl";
 string MODEL_PLAYER_DANCE = "progs/ad181/dance_player.mdl";
 string SOUND_PLAYER_JUMP = "player/plyrjmp8.wav";
-
-string SOUND_MISFIRE = "weapons/nofire.wav";	// Misfire of weapon
-string SOUND_HEAL05 = "items/health0.wav";		// small health pack
+string SOUND_MISFIRE = "ad171/weapons/nofire.wav";	// Misfire of weapon
+string SOUND_HEAL05 = "ad181/items/health0.wav";		// small health pack
 string SOUND_HEAL15 = "items/r_item1.wav";		// pickup sound for rotten health
 string SOUND_HEAL25 = "items/health1.wav";		// large health
 string SOUND_HEAL100 = "items/r_item2.wav";		// mega health
 string SOUND_RESPAWN = "items/itembk2.wav";		// item respawn sound
 string SOUND_TALK = "misc/talk.wav";			// Activate/message sound
-
-string SOUND_MISFIRE = "weapons/nofire.wav";	// Misfire of weapon
 string SOUND_REXP3 = "weapons/r_exp3.wav";		// Original explode sound
 string SOUND_PLASMA_LOAD = "weapons/plasma_load.wav";	// Plasma Load
-string SOUND_PLASMA_FIRE = "weapons/plasma_fire.wav";	// Plasma Fire
-string SOUND_PLASMA_HIT = "weapons/plasma_hit.wav";		// Plasma Impact
+string SOUND_PLASMA_FIRE = "ad171/weapons/plasma_fire.wav";	// Plasma Fire
+string SOUND_PLASMA_HIT = "ad171/weapons/plasma_hit.wav";		// Plasma Impact
 string SOUND_LASER_FIRE = "weapons/laser_fire.wav";		// Enforcer Fire
 string SOUND_LASER_HIT = "weapons/laser_hit.wav";		// Enforcer Impact
 string SOUND_LASER_RIC = "weapons/laser_richotet.wav";	// From Hipnotic MOD
-
-// Resist ammo damage
-string SOUND_RESIST_ROCKET = "weapons/resist_rocket.wav";
-
-//----------------------------------------------------------------------
+string SOUND_RESIST_ROCKET = "ad171/weapons/resist_rocket.wav"; // Resist ammo damage
 string MODEL_HEAL5 = "progs/ad181/health_5.mdl";
-string MODEL_HEAL15 = "progs/ad181/health_15.mdl";
-string MODEL_HEAL15B = "progs/ad181/health_15b.mdl";
-string MODEL_HEAL25 = "progs/ad181/health_25.mdl";
-string MODEL_HEAL25B = "progs/ad181/health_25b.mdl";
-string MODEL_HEAL100 = "progs/ad181/health_100.mdl";
-string MODEL_HEAL100B = "progs/ad181/health_100b.mdl";
+string MODEL_HEAL15 = "progs/ad171/health_15.mdl";
+string MODEL_HEAL15B = "progs/ad171/health_15b.mdl";
+string MODEL_HEAL25 = "progs/ad171/health_25.mdl";
+string MODEL_HEAL25B = "progs/ad171/health_25b.mdl";
+string MODEL_HEAL100 = "progs/ad171/health_100.mdl";
+string MODEL_HEAL100B = "progs/ad171/health_100b.mdl";
 
-//----------------------------------------------------------------------
 // Projectile models
 string MODEL_PROJ_DIAM1 = "progs/ad171/proj_diam1.mdl";		// Not used atm
 string MODEL_PROJ_DIAM2 = "progs/ad171/proj_diam2.mdl";
@@ -1505,11 +1425,9 @@ string MODEL_PROJ_NOUR1 = "progs/ad171/proj_nour1.mdl";
 string MODEL_PROJ_NOUR2B = "progs/ad171/proj_nour2b.mdl";
 string MODEL_PROJ_NOUR2P = "progs/ad171/proj_nour2p.mdl";
 string MODEL_PROJ_NOUR2S = "progs/ad171/proj_nour2s.mdl";
-string MODEL_PROJ_NOUR3 = "progs/ad171/proj_nour3.mdl";
 string MODEL_PROJ_BLORD1B = "progs/ad171/proj_blord1b.mdl";
 string MODEL_PROJ_BLORD1S = "progs/ad171/proj_blord1s.mdl";
 string MODEL_PROJ_BLORDBOLT = "progs/ad171/proj_blord2.mdl";
-string MODEL_PROJ_BLORDBEAM = "progs/ad171/proj_blordbeam.mdl";
 string MODEL_PROJ_BLORDBOLT1 = "progs/ad171/proj_blordbolt1.mdl";
 string MODEL_PROJ_BLORDBEAM1 = "progs/ad171/proj_blordbeam1.mdl";
 string MODEL_PROJ_BLORD2B = "progs/ad171/proj_blord2b.mdl";
@@ -1536,7 +1454,7 @@ string MODEL_PROJ_DROLE = "progs/ad171/proj_drole.mdl";
 string MODEL_PROJ_DROLEGRN = "progs/ad171/proj_drolegrn.mdl";
 string MODEL_PROJ_LASER = "progs/ad171/proj_laz.mdl";
 string MODEL_PROJ_LASERGRN = "progs/ad171/proj_lazgrn.mdl";
-string MODEL_PROJ_LASERBLUE = "progs/ad181/proj_lazblue.mdl";
+string MODEL_PROJ_LASERBLUE = "progs/ad172/proj_lazblue.mdl";
 string MODEL_PROJ_LIGHTNING2 = "progs/ad171/proj_lightning2.mdl";
 string MODEL_PROJ_PLASMA = "progs/ad171/proj_plasma.mdl";
 string MODEL_PROJ_PLASMAGRN = "progs/AD171/proj_plasmagrn.mdl";
@@ -1573,7 +1491,6 @@ string MODEL_PROJ_CHTHON1 = "progs/ad171/proj_chthon1.mdl";
 string MODEL_PROJ_SHUB1 = "progs/ad171/proj_shub1.mdl";
 string MODEL_PROJ_SHUB2 = "progs/ad171/proj_shub2.mdl";
 
-//----------------------------------------------------------------------
 // Sprites
 string SEXP_SMALL = "progs/ad171/s_exp_small.spr";		// Original ID one
 string SEXP_MED = "progs/ad171/s_exp_med.spr";			// From Quoth
@@ -1583,7 +1500,7 @@ string SEXP_PLASMA_BIG = "progs/ad171/s_exp_plasma_big.spr";		// Kinn/Marcher
 string SEXP_POISON_SMALL = "progs/ad171/s_exp_poison_small.spr";	// Kinn/Marcher
 string SEXP_POISON_MED = "progs/ad171/s_exp_poison_med.spr";		// From Quoth
 string SEXP_ELECTRIC = "progs/ad171/s_exp_electric.spr";		// From Quoth
-string SEXP_ICE_BIG = "progs/ad171/s_exp_ice_big.spr";		// From Ne_ruins
+string SEXP_ICE_BIG = "progs/ne_ruins/ice_expl1.spr";			// From necros's ne_ruins ice golem
 string SBURST_FLAME = "progs/ad171/s_burst_flame.spr";		// From Rubicon2
 string SBURST_FLAMEDP = "progs/ad171/s_burst_flamedp.spr";	// DP collision
 string SBURST_POISON = "progs/ad171/s_burst_poison.spr";		// From Rubicon2
@@ -1600,7 +1517,6 @@ string SSLIME_SPLASH = "progs/ad171/s_dripsplgreen.spr";
 string SMARSH_SMALL = "progs/ad172/s_marsh_small.spr";	// From Quoth
 string SMARSH_MED = "progs/ad172/s_marsh_med.spr";		// From Quoth
 
-//----------------------------------------------------------------------
 // Sprite types
 float EXPLODE_SMALL = 1;
 float EXPLODE_MED = 2;
@@ -1619,9 +1535,8 @@ float EXPLODE_BURST_SMOKE = 41;
 float EXPLODE_BURST_FLAME = 42;
 float EXPLODE_BURST_POISON = 43;
 
-//----------------------------------------------------------------------
 // WORLD weapon models (player)
-string MODEL_GWEAP_AXE = "progs/ad171/g_axe.mdl";			// Shadow without glow
+string MODEL_GWEAP_AXE = "progs/rrp/g_axe.mdl";			// Shadow without glow
 string MODEL_GWEAP_UPAXE = "progs/ad171/g_shadaxe.mdl";	// Has all 6 skins
 string MODEL_GWEAP_SG = "progs/ad171/g_shot1.mdl";		// From Rubicon
 string MODEL_GWEAP_SSG = "progs/ad171/g_shot2.mdl";		// New Model update
@@ -1645,15 +1560,14 @@ string MODEL_VWEAP_RL = "progs/ad171/v_rock2.mdl";
 string MODEL_VWEAP_LG = "progs/ad171/v_light.mdl";
 string MODEL_VWEAP_UPLG = "progs/ad171/v_plasma.mdl";		// LG Upgrade
 
-//----------------------------------------------------------------------
 // Standard ID artifact sounds
 string SOUND_ARTSUIT1 = "items/suit.wav";			// Pick up
 string SOUND_ARTSUIT2 = "items/suit2.wav";			// Fading
 string SOUND_ARTSUIT3 = "items/suit3.wav";			// Active - Added and created by Qmaster
-string SOUND_ARTWETS1 = "items/wetsuit.wav";		// Pick up
-string SOUND_ARTWETS2 = "items/wetsuit2.wav";		// Fading
-string SOUND_ARTWETS3 = "items/wetsuit3.wav";		// In Water
-string SOUND_ARTWETS3B = "items/wetsuit3out.wav";	// Out Water
+string SOUND_ARTWETS1 = "hipnotic/items/weton.wav";		// Pick up
+string SOUND_ARTWETS2 = "hipnotic/items/wetoff.wav";		// Fading
+string SOUND_ARTWETS3 = "hipnotic/items/wetsuit.wav"; // In Water
+string SOUND_ARTWETS3B = "ad171/items/wetsuit3out.wav";	// Out Water
 string SOUND_ARTPENT1 = "items/protect.wav";		// Pick up
 string SOUND_ARTPENT2 = "items/protect2.wav";		// Fading
 string SOUND_ARTPENT3 = "items/protect3.wav";		// Active
@@ -1669,7 +1583,6 @@ string SOUND_ARTSHARP3 = "items/sharp3.wav";		// Active
 string SOUND_ARTNAILP1 = "items/nailp.wav";			// Pick up
 string SOUND_ARTNAILP2 = "items/nailp2.wav";		// Fading
 string SOUND_ARTNAILP3 = "items/nailp3.wav";		// Active
-
 string SOUND_ARTLSHIELD1 = "items/lavashield1.wav";	// Pick up
 string SOUND_ARTLSHIELD2 = "items/lavashield2.wav";	// Fading
 string SOUND_ARTLSHIELD3 = "items/lavashield3.wav";	// Active
@@ -1686,53 +1599,45 @@ string SOUND_ARTJUMPBOOTS3A = "items/jumpboots3a.wav";	// First jump
 string SOUND_ARTJUMPBOOTS3B = "items/jumpboots3b.wav";	// Second+ jump
 string SOUND_ARTJUMPBOOTS3C = "items/jumpboots3c.wav";	// No More Jumps
 
-//----------------------------------------------------------------------
 // DeBuff sounds
-string SOUND_HEARTBEAT = "player/heartbeat.wav";	// Fast heartbeat (1s)
+string SOUND_HEARTBEAT = "ad171/player/heartbeat.wav";	// Fast heartbeat (1s)
 
-//----------------------------------------------------------------------
 // Footstep sounds
-string SOUND_FS_SLOW1 = "steps/slow1.wav";
-string SOUND_FS_SLOW2 = "steps/slow2.wav";
-string SOUND_FS_SLOW3 = "steps/slow3.wav";
-string SOUND_FS_SLOW4 = "steps/slow4.wav";
-string SOUND_FS_SLOW5 = "steps/slow5.wav";
-
-string SOUND_FS_DRAG1 = "steps/drag1.wav";
-string SOUND_FS_DRAG2 = "steps/drag2.wav";
-string SOUND_FS_DRAG3 = "steps/drag3.wav";
-string SOUND_FS_DRAG4 = "steps/drag4.wav";
-string SOUND_FS_DRAG5 = "steps/drag5.wav";
-
-string SOUND_FS_LIGHT1 = "steps/light1.wav";
-string SOUND_FS_LIGHT2 = "steps/light2.wav";
-string SOUND_FS_LIGHT3 = "steps/light3.wav";
-string SOUND_FS_LIGHT4 = "steps/light4.wav";
-string SOUND_FS_LIGHT5 = "steps/light5.wav";
-
-string SOUND_FS_MEDIUM1 = "steps/medium1.wav";
-string SOUND_FS_MEDIUM2 = "steps/medium2.wav";
-string SOUND_FS_MEDIUM3 = "steps/medium3.wav";
-string SOUND_FS_MEDIUM4 = "steps/medium4.wav";
-string SOUND_FS_MEDIUM5 = "steps/medium5.wav";
-
-string SOUND_FS_HEAVY1 = "steps/heavy1.wav";
-string SOUND_FS_HEAVY2 = "steps/heavy2.wav";
-string SOUND_FS_HEAVY3 = "steps/heavy3.wav";
-string SOUND_FS_HEAVY4 = "steps/heavy4.wav";
-string SOUND_FS_HEAVY5 = "steps/heavy5.wav";
-
-string SOUND_FS_LARGE1 = "steps/large1.wav";
-string SOUND_FS_LARGE2 = "steps/large2.wav";
-string SOUND_FS_LARGE3 = "steps/large3.wav";
-string SOUND_FS_LARGE4 = "steps/large4.wav";
-string SOUND_FS_LARGE5 = "steps/large5.wav";
-
-string SOUND_FS_GIANT1 = "steps/giant1.wav";
-string SOUND_FS_GIANT2 = "steps/giant2.wav";
-string SOUND_FS_GIANT3 = "steps/giant3.wav";
-string SOUND_FS_GIANT4 = "steps/giant4.wav";
-string SOUND_FS_GIANT5 = "steps/giant5.wav";
+string SOUND_FS_SLOW1 = "ad171/steps/slow1.wav";
+string SOUND_FS_SLOW2 = "ad171/steps/slow2.wav";
+string SOUND_FS_SLOW3 = "ad171/steps/slow3.wav";
+string SOUND_FS_SLOW4 = "ad171/steps/slow4.wav";
+string SOUND_FS_SLOW5 = "ad171/steps/slow5.wav";
+string SOUND_FS_DRAG1 = "ad171/steps/drag1.wav";
+string SOUND_FS_DRAG2 = "ad171/steps/drag2.wav";
+string SOUND_FS_DRAG3 = "ad171/steps/drag3.wav";
+string SOUND_FS_DRAG4 = "ad171/steps/drag4.wav";
+string SOUND_FS_DRAG5 = "ad171/steps/drag5.wav";
+string SOUND_FS_LIGHT1 = "ad171/steps/light1.wav";
+string SOUND_FS_LIGHT2 = "ad171/steps/light2.wav";
+string SOUND_FS_LIGHT3 = "ad171/steps/light3.wav";
+string SOUND_FS_LIGHT4 = "ad171/steps/light4.wav";
+string SOUND_FS_LIGHT5 = "ad171/steps/light5.wav";
+string SOUND_FS_MEDIUM1 = "ad171/steps/medium1.wav";
+string SOUND_FS_MEDIUM2 = "ad171/steps/medium2.wav";
+string SOUND_FS_MEDIUM3 = "ad171/steps/medium3.wav";
+string SOUND_FS_MEDIUM4 = "ad171/steps/medium4.wav";
+string SOUND_FS_MEDIUM5 = "ad171/steps/medium5.wav";
+string SOUND_FS_HEAVY1 = "ad171/steps/heavy1.wav";
+string SOUND_FS_HEAVY2 = "ad171/steps/heavy2.wav";
+string SOUND_FS_HEAVY3 = "ad171/steps/heavy3.wav";
+string SOUND_FS_HEAVY4 = "ad171/steps/heavy4.wav";
+string SOUND_FS_HEAVY5 = "ad171/steps/heavy5.wav";
+string SOUND_FS_LARGE1 = "ad171/steps/large1.wav";
+string SOUND_FS_LARGE2 = "ad171/steps/large2.wav";
+string SOUND_FS_LARGE3 = "ad171/steps/large3.wav";
+string SOUND_FS_LARGE4 = "ad171/steps/large4.wav";
+string SOUND_FS_LARGE5 = "ad171/steps/large5.wav";
+string SOUND_FS_GIANT1 = "ad171/steps/giant1.wav";
+string SOUND_FS_GIANT2 = "ad171/steps/giant2.wav";
+string SOUND_FS_GIANT3 = "ad171/steps/giant3.wav";
+string SOUND_FS_GIANT4 = "ad171/steps/giant4.wav";
+string SOUND_FS_GIANT5 = "ad171/steps/giant5.wav";
 
 .float		minion_baseattack;	// Block base attack within melee range
 .float		minion_count;		// Current active amount of minions
@@ -1754,3 +1659,5 @@ float(entity targ, vector s_offset, vector targang, float nomonsters) visang;
 
 float EIDOLON_PHASE1 = 1;	// Trapped in cage
 float EIDOLON_PHASE2 = 2;	// Fighting
+
+.string headmdl;

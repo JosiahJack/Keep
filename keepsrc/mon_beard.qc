@@ -38,7 +38,7 @@ Void function hknight_rush2();
   #167 hknight_rush3;
   ai_face();
   ai_melee();
-  sound(self, CHAN_DAMAUL, "sets/dml1_4.wav", 1, ATTN_NORM);
+  sound(self, CHAN_DAMAUL, "nehahra/sets/dml1_4.wav", 1, ATTN_NORM);
 }
 
 Void function hknight_rush3();
@@ -62,7 +62,7 @@ Void function hknight_rush4();
   #169 hknight_rush1;
   ai_face();
   ai_melee();
-  sound(self, CHAN_DAMAUL, "sets/dml1_4.wav", 1, ATTN_NORM);
+  sound(self, CHAN_DAMAUL, "nehahra/sets/dml1_4.wav", 1, ATTN_NORM);
 }
 
 Void function ai_knightrush();
@@ -681,7 +681,7 @@ Void function hknight_rushdecide();
   if (self.origin_z == self.enemy.origin_z) {
     if (strategy_move < 2) {
       strategy_move = 1;
-      sound(self, CHAN_BODY, "sets/set2_4.wav", 1, ATTN_NONE);
+      sound(self, CHAN_BODY, "nehahra/sets/set2_4.wav", 1, ATTN_NONE);
       ai_face();
       self.yaw_speed = 5;
       hknight_rush1();
@@ -1168,13 +1168,13 @@ void() monster_beard = {
     }
 
 	precache_model2("progs/beard.mdl");
-	precache_sound("ghoro/balls.wav");
-	precache_sound("ghoro/spawnb.wav");
+	precache_sound("nehahra/ghoro/balls.wav");
+	precache_sound("nehahra/ghoro/spawnb.wav");
 	setmodel(self, "progs/beard.mdl");
-	precache_sound("ghoro/talk1.wav");
-	precache_sound("ghoro/talk2.wav");
-	precache_sound("ghoro/talk3.wav");
-	precache_sound("ghoro/laugh.wav");
+	precache_sound("nehahra/ghoro/talk1.wav");
+	precache_sound("nehahra/ghoro/talk2.wav");
+	precache_sound("nehahra/ghoro/talk3.wav");
+	precache_sound("nehahra/ghoro/laugh.wav");
 	precache_model2("progs/k_spike.mdl");
 	precache_model2("progs/h_hellkn.mdl");
 	precache_sound2("hknight/attack1.wav");
@@ -1187,9 +1187,9 @@ void() monster_beard = {
 	precache_sound2("hknight/grunt.wav");
 	precache_sound("knight/sword1.wav");
 	precache_sound("knight/sword2.wav");
-	precache_sound("sets/set2_4.wav");
-	precache_sound("sets/dml1_4.wav");
-	self.sight_sound = "ghoro/laugh.wav";
+	precache_sound("nehahra/sets/set2_4.wav");
+	precache_sound("nehahra/sets/dml1_4.wav");
+	self.sight_sound = "nehahra/ghoro/laugh.wav";
 	if (!(self.brain & NO_SWIM)) {
 	self.brain = self.brain | NO_SWIM;
 	}
@@ -1281,7 +1281,7 @@ Void function hknight_begin();
 
 void() thinking_balls = {
 	if (self.cnt > 10) {
-		sound(self, CHAN_ENDER, "ghoro/spawnb.wav", 1, ATTN_NORM);
+		sound(self, CHAN_ENDER, "nehahra/ghoro/spawnb.wav", 1, ATTN_NORM);
 		self.solid = SOLID_BBOX;
 		self.touch = Brd_MissileTouch;
 		self.think = fire_a_ball;
@@ -1296,7 +1296,7 @@ void() thinking_balls = {
 		return;
 	}
 	self.pain_finished = time + 1.1;
-	sound(self, CHAN_AUTO, "ghoro/balls.wav", 1, ATTN_NORM);
+	sound(self, CHAN_AUTO, "nehahra/ghoro/balls.wav", 1, ATTN_NORM);
 	self.think = thinking_balls;
 	self.nextthink = time + 0.1;
 };
@@ -1336,7 +1336,7 @@ var
       }
     exit;
     }
-  sound(self, CHAN_BAL, "ghoro/spawnb.wav", 1, ATTN_NORM);
+  sound(self, CHAN_BAL, "nehahra/ghoro/spawnb.wav", 1, ATTN_NORM);
   remove(self);
 }
 
@@ -1344,11 +1344,11 @@ Void function fire_a_ball();
 {
   self.blink = self.blink + 1;
   if (self.blink > 12) {
-    sound(self, CHAN_BAL, "ghoro/spawnb.wav", 1, ATTN_NORM);
+    sound(self, CHAN_BAL, "nehahra/ghoro/spawnb.wav", 1, ATTN_NORM);
     remove(self);
     exit;
     }
-  sound(self, CHAN_AUTO, "ghoro/balls.wav", 1, ATTN_NORM);
+  sound(self, CHAN_AUTO, "nehahra/ghoro/balls.wav", 1, ATTN_NORM);
   self.solid = SOLID_BBOX;
   makevectors(self.owner.angles);
   self.velocity = normalize(self.enemy.origin - self.origin);
@@ -1410,7 +1410,7 @@ var
 void(float num, vector dave) beard_balls = {
 	local entity ball;
 
-	sound(self, CHAN_VOICE, "ghoro/spawnb.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "nehahra/ghoro/spawnb.wav", 1, ATTN_NORM);
 	ball = spawn();
 	ball.movetype = MOVETYPE_FLYMISSILE;
 	ball.solid = SOLID_NOT;
@@ -1556,14 +1556,14 @@ var
 {
   num = random() + random();
   if (num < 0.6) {
-    sound(self, CHAN_VOICE, "ghoro/talk1.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "nehahra/ghoro/talk1.wav", 1, ATTN_NORM);
     exit;
     }
   if (num < 1.2) {
-    sound(self, CHAN_VOICE, "ghoro/talk2.wav", 1, ATTN_NORM);
+    sound(self, CHAN_VOICE, "nehahra/ghoro/talk2.wav", 1, ATTN_NORM);
     exit;
     }
-  sound(self, CHAN_VOICE, "ghoro/talk3.wav", 1, ATTN_NORM);
+  sound(self, CHAN_VOICE, "nehahra/ghoro/talk3.wav", 1, ATTN_NORM);
 }
 
 Void function beard_look();

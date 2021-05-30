@@ -410,7 +410,7 @@ void () gremlin_stand17 = [ 16.000, gremlin_stand1 ] { gremlin_stand (); self.ne
 
 void () gremlin_walk1 = [ 17.000, gremlin_walk2 ] {
    if ( (random () < 0.100) )
-      sound (self,CHAN_VOICE,"grem/idle.wav",TRUE,ATTN_IDLE);
+      sound (self,CHAN_VOICE,"hipnotic/grem/idle.wav",TRUE,ATTN_IDLE);
 
    gremlin_walk (8);
 };
@@ -428,7 +428,7 @@ void () gremlin_walk12 = [ 28.000, gremlin_walk1 ] { gremlin_walk (8); };
 
 void () gremlin_run1 = [ 29.000, gremlin_run2 ] {
    if ( (random () < 0.100) )
-      sound (self,CHAN_VOICE,"grem/idle.wav",TRUE,ATTN_IDLE);
+      sound (self,CHAN_VOICE,"hipnotic/grem/idle.wav",TRUE,ATTN_IDLE);
 
    gremlin_run (2); // Was 0, -Qmaster
 };
@@ -570,7 +570,7 @@ void () GremlinFireLaser = {
 	makevectors (self.v_angle);
 	dir = ((dir + ((crandom () * 0.100) * v_right)) + ((crandom () * 0.100) * v_up));
 	dir = normalize (dir);
-	sound (self,CHAN_WEAPON,"hipweap/laserg.wav",TRUE,ATTN_NORM);
+	sound (self,CHAN_WEAPON,"hipnotic/weapons/laserg.wav",TRUE,ATTN_NORM);
 	self.attack_finished = time + 0.9;
 
 	org = self.origin + '0 0 16';
@@ -698,7 +698,7 @@ void () GremlinFirePlasma = {
 	dir = ((dir + ((crandom () * 0.100) * v_right)) + ((crandom () * 0.100) * v_up));
 	dir = normalize (dir);
 	org = self.origin + '0.000 0.000 16.000';
-	sound (self, CHAN_WEAPON, "weapons/plasma_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/weapons/plasma_fire.wav", 1, ATTN_NORM);
 	self.currentammo = self.currentammo - 1;
 	self.ammo_cells = self.ammo_cells - 1;
 	launch_plasma (org, dir, CT_PROJ_PLASMA, SPEED_PLAYPLASMA);
@@ -718,9 +718,9 @@ void () GremlinFirePlasmaGun = {
 	makevectors (self.v_angle);
 	dir = ((dir + ((crandom () * 0.100) * v_right)) + ((crandom () * 0.100) * v_up));
 	dir = normalize (dir);
-	sound (missile,CHAN_WEAPON,"plasma/flight.wav",TRUE,ATTN_NORM);
+	sound (missile,CHAN_WEAPON,"rogue/plasma/flight.wav",TRUE,ATTN_NORM);
 	self.currentammo = self.currentammo - 1;
-	sound (self,CHAN_WEAPON,"plasma/fire.wav",0.500,ATTN_NORM);
+	sound (self,CHAN_WEAPON,"rogue/plasma/fire.wav",0.500,ATTN_NORM);
 	self.punchangle_x = CONTENT_SOLID;
 	missile = spawn ();
 	missile.classgroup = CG_PROJALL;
@@ -737,7 +737,7 @@ void () GremlinFirePlasmaGun = {
 	setmodel (missile,"progs/plasma.mdl");
 	setsize (missile,VEC_ORIGIN,VEC_ORIGIN);
 	setorigin (missile,((self.origin + (v_forward * FL_CLIENT)) + '0.000 0.000 16.000'));
-	sound (missile,CHAN_WEAPON,"plasma/flight.wav",TRUE,ATTN_NORM);
+	sound (missile,CHAN_WEAPON,"rogue/plasma/flight.wav",TRUE,ATTN_NORM);
 	missile.think = PlasmaGroundOut;
 	missile.nextthink = (time + MOVETYPE_FLY);
 	self.attack_finished = time + 0.8;
@@ -755,7 +755,7 @@ void () GremlinFireCrossbow = {
 	makevectors (self.v_angle);
 	dir = ((dir + ((crandom () * 0.100) * v_right)) + ((crandom () * 0.100) * v_up));
 	dir = normalize (dir);
-	sound (self, CHAN_WEAPON, "weapons/crossbow_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/weapons/crossbow_fire.wav", 1, ATTN_NORM);
 	self.attack_finished = time + 0.9;
 
 	org = self.origin + '0 0 16';
@@ -889,12 +889,12 @@ void (entity inflictor, entity attacker, float damage) gremlin_pain = {
    self.pain_finished = (time + TRUE);
    r = random ();
    if ( (r < 0.330) ) {
-      sound (self,CHAN_VOICE,"grem/pain1.wav",TRUE,ATTN_NORM);
+      sound (self,CHAN_VOICE,"hipnotic/grem/pain1.wav",TRUE,ATTN_NORM);
    } else {
       if ( (r < 0.660) ) {
-         sound (self,CHAN_VOICE,"grem/pain2.wav",TRUE,ATTN_NORM);
+         sound (self,CHAN_VOICE,"hipnotic/grem/pain2.wav",TRUE,ATTN_NORM);
       } else {
-         sound (self,CHAN_VOICE,"grem/pain3.wav",TRUE,ATTN_NORM);
+         sound (self,CHAN_VOICE,"hipnotic/grem/pain3.wav",TRUE,ATTN_NORM);
       }
    }
    if (self.stoleweapon) {
@@ -911,7 +911,7 @@ void () gremlin_spawn4 = [ 87.000, gremlin_spawn5 ] { self.nextthink = (time + 0
 void () gremlin_spawn5 = [ 88.000, gremlin_spawn6 ] { self.nextthink = (time + 0.300); };
 void () gremlin_spawn6 = [ 89.000, gremlin_run1 ] { self.th_pain = gremlin_pain; };
 
-void () gremlin_die1 = [ 104.000, gremlin_die2 ] { sound (self,CHAN_VOICE,"grem/death.wav",TRUE,ATTN_NORM); };
+void () gremlin_die1 = [ 104.000, gremlin_die2 ] { sound (self,CHAN_VOICE,"hipnotic/grem/death.wav",TRUE,ATTN_NORM); };
 void () gremlin_die2 = [ 105.000, gremlin_die3 ] { ai_forward (FL_SWIM); };
 void () gremlin_die3 = [ 106.000, gremlin_die4 ] { ai_forward (TRUE); };
 void () gremlin_die4 = [ 107.000, gremlin_die5 ] { ai_forward (FL_SWIM); };
@@ -932,7 +932,7 @@ void () gremlin_flip1 = [ 116.000, gremlin_flip2 ] {
    if ( (self.flags & FL_ONGROUND) )
       self.flags = (self.flags - FL_ONGROUND);
 
-   sound (self,CHAN_VOICE,"grem/death.wav",TRUE,ATTN_NORM);
+   sound (self,CHAN_VOICE,"hipnotic/grem/death.wav",TRUE,ATTN_NORM);
 };
 void () gremlin_flip2 = [ 117.000, gremlin_flip3 ] { ai_face (); };
 void () gremlin_flip3 = [ 118.000, gremlin_flip4 ] {};
@@ -1200,15 +1200,15 @@ void () monster_gremlin = {
    self.headmdl = "progs/hipnotic/h_grem.mdl";
    precache_model ("progs/hipnotic/grem.mdl");
    precache_model ("progs/hipnotic/h_grem.mdl");
-   precache_sound ("grem/death.wav");
-   precache_sound ("grem/attack.wav");
+   precache_sound ("hipnotic/grem/death.wav");
+   precache_sound ("hipnotic/grem/attack.wav");
    precache_sound ("demon/djump.wav");
    precache_sound ("demon/dhit2.wav");
-   precache_sound ("grem/pain1.wav");
-   precache_sound ("grem/pain2.wav");
-   precache_sound ("grem/pain3.wav");
-   precache_sound ("grem/idle.wav");
-   precache_sound ("grem/sight1.wav");
+   precache_sound ("hipnotic/grem/pain1.wav");
+   precache_sound ("hipnotic/grem/pain2.wav");
+   precache_sound ("hipnotic/grem/pain3.wav");
+   precache_sound ("hipnotic/grem/idle.wav");
+   precache_sound ("hipnotic/grem/sight1.wav");
    precache_sound ("enforcer/enfstop.wav");
 
    gremlin_setup();
@@ -1226,7 +1226,7 @@ void (float side) Gremlin_Melee = {
    if ( !CanDamage (self.enemy,self) )
       return ;
 
-   sound (self,CHAN_WEAPON,"grem/attack.wav",TRUE,ATTN_NORM);
+   sound (self,CHAN_WEAPON,"hipnotic/grem/attack.wav",TRUE,ATTN_NORM);
    ldmg = (MOVETYPE_BOUNCE + (MOVETYPE_FLY * random ()));
    T_Damage (self.enemy,self,self,ldmg,DAMARMOR);
    SpawnMeatSpray (self,self.enemy,side);

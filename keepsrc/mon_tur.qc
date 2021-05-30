@@ -168,7 +168,7 @@ void() tur_launch = {
 	makevectors(v1);
 	v1 = v_forward;
 	if (self.spawnflags & FL_SWIM) {
-		sound(self, CHAN_WEAPON, "drone/enfire.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "drake/drone/enfire.wav", 1, ATTN_NORM);
 		if (self.ammo_cells & 1) {
 			launch_projectile (self.origin + v_right*14, v1, CT_PROJ_LASER, SPEED_LASER);
 		} else {
@@ -249,10 +249,10 @@ void() monster_tur = {
 	precache_model("progs/oum/aagba.mdl");
 	precache_model("progs/oum/aagtb.mdl");
 	precache_model2("progs/laser.mdl");
-	precache_sound2("drone/enfire.wav");
+	precache_sound2("drake/drone/enfire.wav");
 	precache_sound2("enforcer/enfstop.wav");
 	precache_sound("weapons/spike2.wav");
-	precache_sound("tur_arm.wav");
+	precache_sound("drake/tur_arm.wav");
 	
 	if (!deathmatch) AddToTotals(self);
 	

@@ -326,7 +326,7 @@ void() setup_fog_controller =
 		}
 		fog_control.fog_diffcol = '0 0 0';		// Difference
 
-		// Bat shit crazy DP extra fog parameters that no other engine uses
+		// Bat dip crazy DP extra fog parameters that no other engine uses
 		// dpextra = alpha mindist maxdist top fadedepth (def=1 0 8192 1024 32)
 		if (world.fog_dpextra == "") fog_control.fog_dpextra = DEF_FOGEXT;
 		else fog_control.fog_dpextra = world.fog_dpextra;

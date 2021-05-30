@@ -85,9 +85,7 @@ void() ftop_idle29	=[	$walk29, ftop_idle30 ] {ftop_track(TRUE);};
 void() ftop_idle30	=[	$walk30, ftop_idle31 ] {ftop_track(TRUE);};
 void() ftop_idle31	=[	$walk31, ftop_idle1 ] {ftop_track(TRUE);};
 
-//===========================================================================
-void(vector orgofs) ftop_fire =
-{
+void(vector orgofs) ftop_fire = {
 	local vector offang, org, vec, dir, mdest, avel;
 	local float projlen;
 
@@ -95,7 +93,7 @@ void(vector orgofs) ftop_fire =
 	if (!self.enemy) return;
 	if (self.enemy.health < 1) return;
 	
-	sound (self, CHAN_WEAPON, "chthon/attack1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/chthon/attack1.wav", 1, ATTN_NORM);
 	offang = vectoangles (self.enemy.origin - self.origin);	
 	makevectors (offang);
 	org = self.origin + attack_vector(orgofs);
@@ -179,7 +177,7 @@ void(entity inflictor, entity attacker, float damage) ftop_pain = {
 //----------------------------------------------------------------------
 void() ftop_death1 = [$death1, ftop_death2] {
 	ftop_lightning();
-	sound (self, CHAN_VOICE, "chthon/death1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "ad171/chthon/death1.wav", 1, ATTN_NORM);
 	if (self.noise3 != "") trigger_strs(self.noise3, self);
 };
 void() ftop_death2 = [$death2, ftop_death3] {ftop_lightning();};
@@ -190,7 +188,7 @@ void() ftop_death6 = [$death6, ftop_death7] {};
 void() ftop_death7 = [$death7, ftop_death8] {};
 void() ftop_death8 = [$death8, ftop_death9] {};
 void() ftop_death9 = [$death9, ftop_death10] {
-	sound (self, CHAN_BODY, "chthon/lavasplash.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "ad171/chthon/lavasplash.wav", 1, ATTN_NORM);
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
 	WriteCoord (MSG_BROADCAST, self.origin_x);
@@ -242,9 +240,7 @@ void() ftop_shockc9 =[	$shockc9, ftop_shockc10 ] {ftop_lightning();};
 void() ftop_shockc10 =[	$shockc10, ftop_death1 ] {ftop_lightning();
 	if (self.attack_finished > time) self.think = ftop_shockc1;};
 
-//----------------------------------------------------------------------
-void() ftop_deathsequence =
-{
+void() ftop_deathsequence = {
 	self.use = SUB_Null;
 	self.enemy = world;
 	self.takedamage = DAMAGE_NO;
@@ -255,8 +251,8 @@ void() ftop_deathsequence =
 	if (self.noise2 != "") 
 		self.movetarget3 = find(world, targetname, self.noise2);
 	
-	sound (self, CHAN_WEAPON, "misc/power.wav", 1, ATTN_NORM);
-	sound (self, CHAN_VOICE, "chthon/pain1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "misc/power.wav", 1, ATTN_NORM); // vanilla id1 sound
+	sound (self, CHAN_VOICE, "ad171/chthon/pain1.wav", 1, ATTN_NORM);
 
 	self.attack_finished = time + 1.5;
 	self.lip = random();
@@ -265,9 +261,8 @@ void() ftop_deathsequence =
 	else ftop_shockc1();
 };
 
-//===========================================================================
 void() ftop_rise1	=[	$rise1, ftop_rise2 ] {
-	sound (self, CHAN_WEAPON, "chthon/lavasplash.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_WEAPON, "ad171/chthon/lavasplash.wav", 1, ATTN_NORM);};
 void() ftop_rise2	=[	$rise2, ftop_rise3 ] {
 	sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);};
 void() ftop_rise3	=[	$rise3, ftop_rise4 ] {};
@@ -330,18 +325,17 @@ void() monster_firetopboss = {
 	precache_model (self.mdl);
 	precache_model (MODEL_PROJ_LAVA);
 
-	precache_sound ("chthon/attack1.wav");
+	precache_sound ("ad171/chthon/attack1.wav");
 	precache_sound ("weapons/rocket1i.wav");
-	precache_sound ("misc/power.wav");
 
-	self.pain_sound = "chthon/pain1.wav";
-	precache_sound ("chthon/pain1.wav");
-	precache_sound ("chthon/death1.wav");
+	self.pain_sound = "ad171/chthon/pain1.wav";
+	precache_sound ("ad171/chthon/pain1.wav");
+	precache_sound ("ad171/chthon/death1.wav");
 
 	// Rise from lava roar + splash
-	self.sight_sound = "chthon/sight1.wav";
+	self.sight_sound = "ad171/chthon/sight1.wav";
 	precache_sound (self.sight_sound);
-	precache_sound ("chthon/lavasplash.wav");
+	precache_sound ("ad171/chthon/lavasplash.wav");
 
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement

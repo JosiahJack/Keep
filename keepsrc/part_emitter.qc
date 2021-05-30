@@ -1160,11 +1160,8 @@ void() misc_particle_finishsetup =
 	} 
 };
 
-//----------------------------------------------------------------------
-void() misc_particle_delay =
-{
-	// If target setup, find it and store entity
-	if (self.target != "") self.pemit_target = find(world, targetname, self.target);
+void() misc_particle_delay = {
+	if (self.target != "") self.pemit_target = find(world, targetname, self.target); // If target setup, find it and store entity
 	if (!self.pemit_target) self.target = "";
 	
 	if (!self.start_delay) self.start_delay = 1 + (random()*2);
@@ -1172,7 +1169,6 @@ void() misc_particle_delay =
 	self.think = misc_particle_finishsetup;
 };
 
-//----------------------------------------------------------------------
 void() misc_particletemplate = { 
 	self.classtype = CT_PARTICLETEMP; 
 	// make sure any sprite assets used are pre-cached ready
@@ -1181,9 +1177,7 @@ void() misc_particletemplate = {
 	if (self.spr_name3 != "") precache_model(self.spr_name3);
 };
 
-//----------------------------------------------------------------------
-void() misc_particle_copytemplate = 
-{
+void() misc_particle_copytemplate = {
 	local entity fdest;
 
 	// Cycle through list for TARGET2 template

@@ -91,7 +91,7 @@ void(vector orgofs) idchthon_missile =
 		return;
 	}
 	
-	sound (self, CHAN_WEAPON, "chthon/attack1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/chthon/attack1.wav", 1, ATTN_NORM);
 	offang = vectoangles (self.enemy.origin - self.origin);	
 	makevectors (offang);
 	org = self.origin + attack_vector(orgofs);
@@ -203,11 +203,10 @@ void() idchthon_awake =
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, self.origin_z);
 
-	sound (self, CHAN_WEAPON, "chthon/lavasplash.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/chthon/lavasplash.wav", 1, ATTN_NORM);
 	idchthon_rise1 ();
 };
 
-//===========================================================================
 void() idchthon_shocka1 =[	$shocka1, idchthon_shocka2 ] {};
 void() idchthon_shocka2 =[	$shocka2, idchthon_shocka3 ] {};
 void() idchthon_shocka3 =[	$shocka3, idchthon_shocka4 ] {};
@@ -304,7 +303,7 @@ void() lightning_use =
 	le2.nextthink = -1;
 	lightning_end = time + 1;
 
-	sound (self, CHAN_VOICE, "misc/power.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "misc/power.wav", 1, ATTN_NORM);  // vanilla id1 sound
 	lightning_fire ();		
 
 	// advance the boss pain if down
@@ -322,7 +321,7 @@ void() lightning_use =
 
 //===========================================================================
 void() idchthon_death1 = [$death1, idchthon_death2] {
-sound (self, CHAN_VOICE, "chthon/death1.wav", 1, ATTN_NORM);};
+sound (self, CHAN_VOICE, "ad171/chthon/death1.wav", 1, ATTN_NORM);};
 void() idchthon_death2 = [$death2, idchthon_death3] {};
 void() idchthon_death3 = [$death3, idchthon_death4] {};
 void() idchthon_death4 = [$death4, idchthon_death5] {};
@@ -331,7 +330,7 @@ void() idchthon_death6 = [$death6, idchthon_death7] {};
 void() idchthon_death7 = [$death7, idchthon_death8] {};
 void() idchthon_death8 = [$death8, idchthon_death9] {};
 void() idchthon_death9 = [$death9, idchthon_death10] {
-	sound (self, CHAN_BODY, "chthon/lavasplash.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "ad171/chthon/lavasplash.wav", 1, ATTN_NORM);
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
 	WriteCoord (MSG_BROADCAST, self.origin_x);
@@ -345,11 +344,8 @@ void() idchthon_death10 = [$death9, idchthon_death10] {
 	entity_hide(self);
 };
 
-/*======================================================================
- QUAKED monster_boss (1 0 0) (-128 -128 -24) (128 128 256)
-======================================================================*/
-void() monster_boss =
-{
+// QUAKED monster_boss (1 0 0) (-128 -128 -24) (128 128 256)
+void() monster_boss = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
@@ -358,18 +354,17 @@ void() monster_boss =
 	precache_model (MODEL_PROJ_LAVA);
 
 	// Attack/throw/electric sound
-	precache_sound ("chthon/attack1.wav");
+	precache_sound ("ad171/chthon/attack1.wav");
 	precache_sound ("weapons/rocket1i.wav");
-	precache_sound ("misc/power.wav");
 	
-	self.pain_sound = "chthon/pain1.wav";
+	self.pain_sound = "ad171/chthon/pain1.wav";
 	precache_sound (self.pain_sound);
-	precache_sound ("chthon/death1.wav");
+	precache_sound ("ad171/chthon/death1.wav");
 
 	// Rise from lava roar + splash
-	self.sight_sound = "chthon/sight1.wav";
+	self.sight_sound = "ad171/chthon/sight1.wav";
 	precache_sound (self.sight_sound);
-	precache_sound ("chthon/lavasplash.wav");
+	precache_sound ("ad171/chthon/lavasplash.wav");
 
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
@@ -394,55 +389,29 @@ void() monster_boss =
 
 	// Check passive system for exceptions
 	setup_passivestate(self);
-
+	
 	self.th_stand = idchthon_idle1;
 	self.th_walk = idchthon_idle1;
 	self.th_run = idchthon_idle1;
 	self.th_missile = idchthon_missile1;
-	
 	self.classtype = CT_MONIDCHTHON;
 	self.classgroup = CG_BOSS;
-
 	if (self.deathstring == "")  self.deathstring = " was blown apart by Chthon\n";
-
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-	// Does not go through monster spawn functions
-	AddToTotals(self);
+	
+	AddToTotals(self); // Does not go through monster spawn functions YET!!
 	self.use = idchthon_awake;
 };
 
-/*======================================================================
 //QUAKED event_lightning (0 1 1) (-16 -16 -16) (16 16 16) x
-Just for boss level. Used for killing Cthon.
--------- KEYS --------
--------- SPAWNFLAGS --------
--------- NOTES --------
-Just for boss level. Used for killing Cthon.
-======================================================================*/
-void() event_lightning =
-{
-	self.use = lightning_use;
-};
+// Just for boss level. Used for killing Cthon.
+void() event_lightning = { self.use = lightning_use; };
 
-/*======================================================================
-//QUAKED misc_teleporttrain (0 0.5 0.8) (-8 -8 -8) (8 8 8) x
-This is used for the final boss ONLY
-Flying ball needed to teleport kill Shub-Niggurath
--------- KEYS --------
--------- SPAWNFLAGS --------
--------- NOTES --------
-This is used for the final boss ONLY
-Flying ball needed to teleport kill Shub-Niggurath
-Originallu used bmodel train functions, setup to work like
-the shalrath homing missile
-
-======================================================================*/
 void() teleporttrain_next;
-void() teleporttrain_target =
-{
+void() teleporttrain_target = {
 	local vector dir;
 
-	if (self.target != "") {
+	if (self.target != "") { // Path following, not entity I/O
 		// Find next target entity
 		self.enemy = find (world, targetname, self.target);
 		if (self.enemy) {
@@ -463,9 +432,7 @@ void() teleporttrain_target =
 	self.enemy = world;
 };
 
-//----------------------------------------------------------------------
-void() teleporttrain_next =
-{
+void() teleporttrain_next = {
 	if (!self.enemy) return;
 
 	// Work out how close to the next target (self.enemy)		
@@ -478,22 +445,20 @@ void() teleporttrain_next =
 	}		
 };
 
-//----------------------------------------------------------------------
-void() misc_teleporttrain =
-{	
+// QUAKED misc_teleporttrain (0 0.5 0.8) (-8 -8 -8) (8 8 8) x
+// This is used for the final boss ONLY
+// Flying ball needed to teleport kill Shub-Niggurath
+// This is used for the final boss ONLY.  Flying ball needed to teleport kill Shub-Niggurath
+// Originallu used bmodel train functions, setup to work like the shalrath homing missile.
+void() misc_teleporttrain = {
 	self.mdl = "progs/teleport.mdl";
 	precache_model (self.mdl);
-
 	self.solid = SOLID_TRIGGER;
-	// Push movetype cannot rotate, fly can
-	//	self.movetype = MOVETYPE_PUSH;
-	self.movetype = MOVETYPE_FLY;
+	self.movetype = MOVETYPE_FLY; // Push movetype cannot rotate, fly can
 	self.use = teleporttrain_target;
 	self.avelocity = vecrand(50,250,FALSE);
-
 	setmodel (self, self.mdl);
 	setsize (self, VEC_ORIGIN , VEC_ORIGIN);
-
 	if (!self.speed) self.speed = 100;
 	if (self.target == "") {
 		spawn_marker(self.origin, SPNMARK_YELLOW);

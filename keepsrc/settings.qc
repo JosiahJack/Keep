@@ -974,8 +974,10 @@ void() display_randomizer = {
 	if (impulse_playeronly()) return;		// Player only
 
 	self.impulse = 0;
-	// All error checks and messages done in function
-	displaycenter_randomseed();
+	if (check_randflags() == TRUE) { // Is the randomizer active?
+		if (randomorg <= 0) centerprint(self, "Random Seed ( Not Set )");
+		else centerprint3(self, "Random Seed (", ftos(randomorg), ")");
+	} else centerprint(self, "Chaos System not active!\n");
 };
 
 void() display_randflags = {
@@ -983,17 +985,176 @@ void() display_randflags = {
 	if (impulse_playeronly()) return;		// Player only
 
 	self.impulse = 0;
-	// All error checks and messages done in function
-	displaydebug_randflags();
+	// Is the randomizer active?
+	if (check_randflags() == FALSE) { centerprint(self, "Chaos System not active!\n"); return; }
+	sprint(self, "\n[-- \bChaos\b Mode (");
+	sprint(self, ftos(randomflags));
+	sprint(self, ") current settings --]\n");
+	sprint(self,   "------------------------------------------\n");
+	sprint(self, "Origin Seed  (");
+	if (randomorg <= 0) sprint(self, "\bEmpty\b");
+	else sprint(self, ftos(randomorg));
+	sprint(self, ") Saved Seed (");
+	if (cvar("scratch2") <= 0) sprint(self, "\bEmpty\b");
+	else sprint(self, ftos(cvar("scratch2")));
+	sprint(self, ")\n");
+	sprint(self, "Monster Seed (");
+	if (randomseed[RND_SEEDMONSTER] <= 0) sprint(self, "\bEmpty\b");
+	else sprint(self, ftos(randomseed[RND_SEEDMONSTER]));
+	sprint(self, ") Ammo Seed  ("); 
+	if (randomseed[RND_SEEDAMMO] <= 0) sprint(self, "\bEmpty\b");
+	else sprint(self, ftos(randomseed[RND_SEEDAMMO]));
+	sprint(self, ")\nHealth Seed  ("); 
+	if (randomseed[RND_SEEDHEALTH] <= 0) sprint(self, "\bEmpty\b");
+	else sprint(self, ftos(randomseed[RND_SEEDHEALTH]));
+	sprint(self, ") Armor Seed (");
+	if (randomseed[RND_SEEDARMOUR] <= 0) sprint(self, "\bEmpty\b");
+	else sprint(self, ftos(randomseed[RND_SEEDARMOUR]));
+	sprint(self, ")\nArtifct Seed ("); 
+	if (randomseed[RND_SEEDARTIFACT] <= 0) sprint(self, "\bEmpty\b");
+	else sprint(self, ftos(randomseed[RND_SEEDARTIFACT]));
+	sprint(self, ") Priv Keys (");
+	sprint(self, ftos(magicseed_x)); sprint(self, " ");
+	sprint(self, ftos(magicseed_y)); sprint(self, " ");
+	sprint(self, ftos(magicseed_z));
+	sprint(self, ")\n\n");
+	sprint(self, "Monster Spawn type (");
+	if (randomflags & RND_FAMILYSPAWN) sprint(self, "Family Groups");
+	else if (randomflags & RND_BBOXSPAWN) sprint(self, "\bBounding Box\b");
+	else sprint(self, "\bNothing Set!!\b");
+	sprint(self, ")\n");
+	sprint(self, "Random Seed Reset  (");
+	// Level reset overrides change level and death resets
+	if (randomflags & RND_NORESETNEWLVL) sprint(self, "\b-NewLvl -ChLvl -Death\b");
+	else {
+		sprint(self, "+NewLvl");
+		if (randomflags & RND_NORESETCHLVL) sprint(self, " \b-ChLvl\b");
+		else sprint(self, " +ChLvl");
+		if (randomflags & RND_NORESETDEATH) sprint(self, " \b-Death\b");
+		else sprint(self, " +Death");
+	}
+	sprint(self, ")\n");
+	sprint(self, "Monster HP Reset   (");
+	if (randomflags & RND_NORESETHP) sprint(self, "\bDisabled\b");
+	else sprint(self, "Enabled");
+	sprint(self, ")\n");
+	sprint(self, "Monster Health Itm (");
+	if (randomflags & RND_NOHEALTHPACK) sprint(self, "\bDisabled\b");
+	else sprint(self, "Enabled");
+	sprint(self, ")\n");
+	sprint(self, "Skill 4 Quickload  (");
+	if (randomflags & RND_NOQUICKLOAD) sprint(self, "\bDisabled\b");
+	else sprint(self, "Enabled");
+	sprint(self, ")\n");
+	sprint(self, "Poisonous Monsters (");
+	if (randomflags & RND_NOPOISON) sprint(self, "\bDisabled\b");
+	else sprint(self, "Enabled");
+	sprint(self, ")\n");
+	sprint(self,   "------------------------------------------\n");
 };
 
 void() display_randupgrade = {
+	local float wpnupg, shellfound, shellmax, cellfound, cellmax;
+	local entity entlist;
+	
 	if (impulse_activecameras()) return;	// Are cameras active
 	if (impulse_playeronly()) return;		// Player only
 
 	self.impulse = 0;
-	// All error checks and messages done in function
-	displaydebug_weaponupgrades();
+	
+	// Is the randomizer active?
+	if (check_randflags() == FALSE) { centerprint(self, "Chaos System not active!\n"); return; }
+
+	shellfound = shellmax = 0;
+	entlist = find(world, classname, "item_shells");
+	while(entlist) { // Find all Large shells in the map
+		if (entlist.spawnflags & A_LARGE) { // Found large ammo?
+			shellmax = shellmax + 1;
+			if (entlist.estate == ESTATE_OFF) shellfound = shellfound + 1; // Has the ammo been picked up yet?  This will have issues with spawn delay
+		}
+		entlist = find(entlist, classname, "item_shells"); // Keep searching within subset list
+	}
+	cellfound = cellmax = 0; // Find all Large cells in the map
+	entlist = find(world, classname, "item_cells");
+	while(entlist) {
+		if (entlist.spawnflags & A_LARGE) { // Found large ammo?
+			cellmax = cellmax + 1;
+			if (entlist.estate == ESTATE_OFF) cellfound = cellfound + 1; // Has the ammo been picked up yet?  This will have issues with spawn delay
+		}
+		entlist = find(entlist, classname, "item_cells"); // Keep searching within subset list
+	}
+	sprint(self, "\n[-- \bChaos\b Mode (");
+	sprint(self, ftos(randomflags));
+	sprint(self, ") weapon upgrades --]\n");
+	sprint(self, "------------------------------------------\n");
+	sprint(self, "Weapon     Inv  Found Qty   Map Qty\n"); // Shadow Axe  x    xx / xx    -- / --    Widowmaker  x    xx / xx    xx / xx    Plasma Gun  x    xx / xx    xx / xx      
+	sprint(self, "Shadow Axe  ");
+	if (self.moditems & IT_UPGRADE_AXE) sprint(self, "Y");
+	else sprint(self,"N");
+	sprint(self, "    ");
+	lftos(self,self.randomgibs,2,0,BUFFER_SPRINT);
+	sprint(self, " / ");
+	wpnupg = rnd_upgwpnmax_shadowaxe();
+	lftos(self,wpnupg,2,0,BUFFER_SPRINT);
+	sprint(self, "    -- / --\n");
+	sprint(self, "Widowmaker  ");
+	if (self.moditems & IT_UPGRADE_SSG) sprint(self, "Y");
+	else sprint(self,"N");
+	sprint(self, "    ");
+	lftos(self,self.randomshells,2,0,BUFFER_SPRINT);
+	sprint(self, " / ");
+	wpnupg = rnd_upgwpnmax_widowmaker();
+	lftos(self,wpnupg,2,0,BUFFER_SPRINT);
+	sprint(self, "    ");
+	lftos(self,shellfound,2,0,BUFFER_SPRINT);
+	sprint(self, " / ");
+	lftos(self,shellmax,2,0,BUFFER_SPRINT);
+	sprint(self, "\n");
+	sprint(self, "Plasma Gun  ");
+	if (self.moditems & IT_UPGRADE_LG) sprint(self, "Y");
+	else sprint(self,"N");
+	sprint(self, "    ");
+	lftos(self,self.randomcells,2,0,BUFFER_SPRINT);
+	sprint(self, " / ");
+	wpnupg = rnd_upgwpnmax_plasmagun();
+	lftos(self,wpnupg,2,0,BUFFER_SPRINT);
+	sprint(self, "    ");
+	lftos(self,cellfound,2,0,BUFFER_SPRINT);
+	sprint(self, " / ");
+	lftos(self,cellmax,2,0,BUFFER_SPRINT);
+	sprint(self, "\n");
+	sprint(self, "------------------------------------------\n");
+	sprint(self, "Ammo        Qty L E Location\n"); 	//            item_shells  xx x x xxx xxx xxx
+	entlist = find(world, classname, "item_shells");
+	while(entlist) { // Find all shells (small/large) in map
+		sprint(self, "Item_shells  ");
+		lftos(self,entlist.aflag,2,0,BUFFER_SPRINT);
+		sprint(self, " ");
+		if (entlist.spawnflags & A_LARGE) sprint(self,"Y");
+		else sprint(self,"N");
+		sprint(self, " ");
+		if (entlist.estate == ESTATE_OFF) sprint(self,"Y");
+		else sprint(self,"N");
+		sprint(self, " ");
+		sprint(self,vtos(entlist.origin));
+		sprint(self,"\n");
+		entlist = find(entlist, classname, "item_shells"); // Keep searching within subset list
+	}
+	entlist = find(world, classname, "item_cells");
+	while(entlist) { // Find all cells (small/large) in map
+		sprint(self, "Item_cells   ");
+		lftos(self,entlist.aflag,2,0,BUFFER_SPRINT);
+		sprint(self, " ");
+		if (entlist.spawnflags & A_LARGE) sprint(self,"Y");
+		else sprint(self,"N");
+		sprint(self, " ");
+		if (entlist.estate == ESTATE_OFF) sprint(self,"Y");
+		else sprint(self,"N");
+		sprint(self, " ");
+		sprint(self,vtos(entlist.origin));
+		sprint(self,"\n");
+		entlist = find(entlist, classname, "item_cells"); // Keep searching within subset list
+	}
 };
 
 void() reset_randomizer = {
@@ -1162,11 +1323,11 @@ void() TogglePowerShield = {
 	if (self.ammo_cells < 1) { sprint(self, "Not enough cells to activate Power Shield.\n"); return; } // no power shield on player
 	if (self.powershield_active) {
 		self.powershield_active = FALSE;
-		sound (self, CHAN_AUTO, "me/me_soff.wav", 1, ATTN_NORM);
+		sound (self, CHAN_AUTO, "zerstorer/me/me_soff.wav", 1, ATTN_NORM);
 		sprint(self, "Power Shield deactivated.\n");
 	} else {
 		self.powershield_active = TRUE;
-		sound (self, CHAN_AUTO, "me/me_son.wav", 1, ATTN_NORM);
+		sound (self, CHAN_AUTO, "zerstorer/me/me_son.wav", 1, ATTN_NORM);
 		sprint(self, "Power Shield activated.\n");
 	}
 	Safe_stuffcmd (self, "bf\n");

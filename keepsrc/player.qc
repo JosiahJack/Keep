@@ -222,18 +222,13 @@ void()	player_run =[ $rockrun1, player_run ] {
 			// looped back to the first and the saw idle sound was played.
 			// In Drake, the frames are grouped, so play sound periodically.
 			if (self.saw_time <= time)
-				if (self.view_ofs != '0 0 0')
-				{   // Volume used to be 1, but Tronyn et.al. wanted it quieter.
-					// Pity, it was fun loud.
-					sound (self, CHAN_AUTO, "weapons/sawridle.wav", 0.5, ATTN_NORM);
+				if (self.view_ofs != '0 0 0') { // Volume used to be 1, but Tronyn et.al. wanted it quieter.  Pity, it was fun loud.
+					sound (self, CHAN_AUTO, "zerstorer/weapons/sawridle.wav", 0.5, ATTN_NORM);
 					self.saw_time = time + 0.5;
 				}
-
 			if (mindex_saw) {
 				// Animate player model.
-					if (self.walkframe >= 5)
-						self.walkframe = 0;
-						
+				if (self.walkframe >= 5) self.walkframe = 0;	
 				self.walkframe = self.walkframe + 1;
 				return;
 			}
@@ -312,54 +307,6 @@ void(entity targ) remoteplayer_run =
 void()	player_sgreset =	[$shotatt1, player_sg2	] {
 	if (!frame_pause()) self.weaponframe=FIRE_WEAPON_FRAME;
 };
-
-/*
-//============================================================================
-//ZOID--
-void() player_grapple3;
-void() player_grapple4;
-void() player_grapple5;
-
-void()  player_grapple1 =  [$axattd1, player_grapple2 ] 
-	{ self.weaponframe=1; W_FireGrapple(); };
-//	{ self.weaponframe=2; W_FireGrapple(); };
-void()  player_grapple2 =  [$axattd2, player_grapple3 ]
-	{ self.weaponframe=2; };
-//	{ self.weaponframe=3; };
-void()  player_grapple3 =  [$axattd3, player_grapple3 ]
-	{
-//		self.weaponframe=3;
-		self.weaponframe=2;
-		if (!self.hook_out) {
-				player_grapple5();
-				return;
-		}
-		if (vlen(self.hook.origin - self.origin) >= 50) {
-			if (self.on_hook) {
-				player_grapple4();
-				return;
-			}
-		}
-	};
-void() player_grapple4 =  [$deathc4, player_grapple4 ]
-	{
-//		self.weaponframe=4;
-		self.weaponframe=2;
-		if (!self.hook_out) {
-			player_grapple5();
-			return;
-		}
-		if (vlen(self.hook.origin - self.origin) < 50 || !self.on_hook) {
-			player_grapple3();
-			return;
-		}
-	};
-void()  player_grapple5 =  [$axattd4, player_run    ] 
-//	{self.weaponframe=5;};
-	{self.weaponframe=1;};
-//--ZOID
-//============================================================================
-*/
 
 void()	player_sg1 =	[$shotatt1, player_sg1	] { 
 	if (frame_pause()) return;
@@ -690,15 +637,15 @@ void() player_wand3 =[$nailatt2, player_wand4 ] { if (!frame_pause()) self.weapo
 void() player_wand4 =[$nailatt2, player_wand5 ] { if (!frame_pause()) self.weaponframe=4;};
 void() player_wand5 =[$nailatt2, player_run   ] {if (!self.button0) player_run();};
 
-//----------------------------------------------------------------------
-// Only used for the player when they die
-//----------------------------------------------------------------------
 void() misc_bubble_bob;
-void() death_bubble_spawn =
-{
+
+// Only used for the player when they die.  Added check for extras_r4/r5 water volumes.
+void() death_bubble_spawn = {
 	local entity bubble;
+	local vector	tmp_vec_up;
+	local float		tmp_forward;
 	
-	if (self.owner.waterlevel != 3) return;
+	if (self.owner.waterlevel != 3 && !self.owner.infuncwater) return;
 	
 	bubble = spawn();
 	bubble.classtype = CT_BUBBLE;
@@ -707,21 +654,27 @@ void() death_bubble_spawn =
 	bubble.movetype = MOVETYPE_NOCLIP;
 	setmodel (bubble, SBUBBLE_DROWN);
 	bubble.frame = bubble.cnt = 0;
-	setorigin (bubble, self.owner.origin + '0 0 24');
+	if (self.owner.flags & FL_CLIENT) {
+		tmp_vec_up = self.owner.maxs * 0.5;
+		tmp_vec_up_x = tmp_vec_up_y = 0;
+		tmp_vec_up = self.owner.origin + tmp_vec_up;
+		tmp_forward = self.owner.maxs_x * 0.5;
+		makevectors(self.owner.angles);
+		setorigin (bubble, tmp_vec_up + v_forward * tmp_forward);// pOx - moved this infront a bit
+	} else {
+		setorigin (bubble, self.owner.origin + '0 0 24');
+	}
 	setsize (bubble, '-8 -8 -8', '8 8 8');
 	bubble.velocity = '0 0 15';
 	bubble.nextthink = time + 0.5;
 	bubble.think = misc_bubble_bob;
-	
 	self.nextthink = time + 0.1;
 	self.think = death_bubble_spawn;
 	self.air_finished = self.air_finished + 1;
 	if (self.air_finished >= self.bubble_count) remove(self);
 };
 
-//----------------------------------------------------------------------
-void(float num_bubbles) death_bubbles =
-{
+void(float num_bubbles) death_bubbles = {
 	local entity bubble_spawner;
 	
 	bubble_spawner = spawn();
@@ -733,9 +686,7 @@ void(float num_bubbles) death_bubbles =
 	bubble_spawner.think = death_bubble_spawn;
 };
 
-//============================================================================
-void() PainSound =
-{
+void() PainSound = {
 	if (self.health < 0) return;
 	if (self.pain_finished > time) { self.axhitme = 0; return;	}
 

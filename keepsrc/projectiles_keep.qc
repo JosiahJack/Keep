@@ -87,7 +87,7 @@ void () HIP_LaserTouch = {
 			self.velocity = (self.speed * self.velocity);
 			self.old_velocity = self.velocity;
 			if (self.flags & FL_ONGROUND) self.flags = (self.flags - FL_ONGROUND);
-			sound (self,CHAN_WEAPON,"hipweap/laserric.wav",TRUE,ATTN_STATIC);
+			sound (self,CHAN_WEAPON,"hipnotic/weapons/laserric.wav",TRUE,ATTN_STATIC);
 			return;
 		}
 	}
@@ -109,7 +109,7 @@ void (vector org, vector vec, float light) HIP_LaunchLaser = {
 	if (self.perms | IT_BLASTER && self.weapon == IT_SHOTGUN) {
 		sound (self,CHAN_WEAPON,"enforcer/enfire.wav",TRUE,ATTN_NORM);
 	} else {
-		sound (self,CHAN_WEAPON,"hipweap/laserg.wav",TRUE,ATTN_NORM);
+		sound (self,CHAN_WEAPON,"hipnotic/weapons/laserg.wav",TRUE,ATTN_NORM);
 	}
 	vec = normalize (vec);
 	newmis = spawn ();
@@ -306,8 +306,8 @@ void () HIP_SpawnMjolnirBase = {
    light.struck_by_mjolnir = TRUE;
    light.think = SUB_Remove;
    light.nextthink = (time + TRUE);
-   sound (light,CHAN_AUTO,"hipweap/mjolslap.wav",TRUE,ATTN_NORM);
-   sound (light,CHAN_WEAPON,"hipweap/mjolhit.wav",TRUE,ATTN_NORM);
+   sound (light,CHAN_AUTO,"hipnotic/weapons/mjolslap.wav",TRUE,ATTN_NORM);
+   sound (light,CHAN_WEAPON,"hipnotic/weapons/mjolhit.wav",TRUE,ATTN_NORM);
    makevectors (self.v_angle);
    light.movedir = v_forward;
    HIP_SpawnMjolnirLightning (light,light,350.000);
@@ -405,7 +405,7 @@ void () ProximityBomb = {
          blowup = FALSE;
 
       if ( (blowup == TRUE) ) {
-         sound (self,CHAN_WEAPON,"hipweap/proxwarn.wav",TRUE,ATTN_NORM);
+         sound (self,CHAN_WEAPON,"hipnotic/weapons/proxwarn.wav",TRUE,ATTN_NORM);
          ProximityGrenadeExplode ();
          self.nextthink = (time + 0.500);
          return;
@@ -815,7 +815,7 @@ void () PlasmaTouch = {
    damg = (80.000 + (random () * 20.000));
    raddmg = 70;
    if (self.owner.classtype == CT_MONGREMLIN) { damg = damg * 0.5; raddmg = 35;}
-   sound (self,CHAN_WEAPON,"plasma/explode.wav",TRUE,ATTN_NORM);
+   sound (self,CHAN_WEAPON,"rogue/plasma/explode.wav",TRUE,ATTN_NORM);
    if ( other.health ) {
       T_Damage (other,self,self.owner,damg,DAMARMOR);
    }
@@ -1173,7 +1173,7 @@ void(float burstcharge) beam_water_burst=
 
 	current = world;
 
-	sound (self, CHAN_WEAPON, "hipweap/mjolhit.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
 	do
 	{
 		current = nextent(current);
@@ -1426,4 +1426,13 @@ void(float damage) W_FireBFG = {
         newmis.view_ofs = orgo;
         newmis.pos1 = dir; // store old velocity
         newmis.owner = self;
+};
+
+// Too commonly used, so I made a helper function for randomly picking and playing a whoosh.
+void() SwordSwipeSound = {
+	self.lip = random();
+	if (self.lip < 0.25) sound (self, CHAN_WEAPON, "ad171/weapons/sword1a.wav", 1, ATTN_NORM);
+	else if (self.lip < 0.5) sound (self, CHAN_WEAPON, "ad171/weapons/sword2a.wav", 1, ATTN_NORM);
+	else if (self.lip < 0.75) sound (self, CHAN_WEAPON, "ad171/weapons/sword1b.wav", 1, ATTN_NORM);
+	else sound (self, CHAN_WEAPON, "ad171/weapons/sword2b.wav", 1, ATTN_NORM);
 };

@@ -77,9 +77,6 @@ $frame deathb17 deathb18 deathb19 deathb20
 
 // magica and magicb missing
 
-void() dprince_sword_sound;			// Sword swipe sounds
-
-//===========================================================================
 void()	dprince_standA1	=[	$standA1,	dprince_standA2	] {ai_stand();};
 void()	dprince_standA2	=[	$standA2,	dprince_standA3	] {ai_stand();};
 void()	dprince_standA3	=[	$standA3,	dprince_standA4	] {ai_stand();};
@@ -93,7 +90,6 @@ void()	dprince_standA10=[	$standA10,	dprince_standA11] {ai_stand();};
 void()	dprince_standA11=[	$standA11,	dprince_standA12] {ai_stand();};
 void()	dprince_standA12=[	$standA12,	dprince_stand1	] {ai_stand();};
 
-//----------------------------------------------------------------------
 void()	dprince_standB1	=[	$standB1,	dprince_standB2	] {ai_stand();};
 void()	dprince_standB2	=[	$standB2,	dprince_standB3	] {ai_stand();};
 void()	dprince_standB3	=[	$standB3,	dprince_standB4	] {ai_stand();};
@@ -228,13 +224,13 @@ void()	dprince_run6	=[	$run6,	dprince_run1	] {ai_run(13);};
 // Death Knight is faster (-4 frames will cycle damage frames quicker)
 // Damage Frames - Hell Knight (6-11, Total 6) Death Knight (6-10, Total 5)
 
-void()	dprince_char_a1	=[	$char_a1,	dprince_char_a2	] {ai_charge(20); dprince_sword_sound();};
+void()	dprince_char_a1	=[	$char_a1,	dprince_char_a2	] {ai_charge(20); SwordSwipeSound();};
 void()	dprince_char_a2	=[	$char_a2,	dprince_char_a3	] {monster_footstep(FALSE); ai_charge(25);ai_melee(); };
 void()	dprince_char_a3	=[	$char_a3,	dprince_char_a4	] {ai_charge(18);ai_melee(); };
 void()	dprince_char_a4	=[	$char_a4,	dprince_char_a5	] {ai_charge(16);};
 void()	dprince_char_a5	=[	$char_a5,	dprince_char_a6	] {monster_footstep(FALSE); ai_charge(14);};
 void()	dprince_char_a6	=[	$char_a6,	dprince_char_a7	] {ai_charge(20); ai_melee();};
-void()	dprince_char_a7	=[	$char_a7,	dprince_char_a8	] {ai_charge(21); ai_melee(); dprince_sword_sound();};
+void()	dprince_char_a7	=[	$char_a7,	dprince_char_a8	] {ai_charge(21); ai_melee(); SwordSwipeSound();};
 void()	dprince_char_a8	=[	$char_a8,	dprince_char_a9	] {monster_footstep(FALSE); ai_charge(13); ai_melee();};
 void()	dprince_char_a9	=[	$char_a9,	dprince_char_a10] {ai_charge(20); ai_melee();};
 void()	dprince_char_a10=[	$char_a10,	dprince_char_a11] {ai_charge(20); ai_melee();};
@@ -245,7 +241,7 @@ void()	dprince_char_a12=[	$char_a12,	dprince_run1	] {ai_charge(16);};
 // Identical frame set (Hell Knight / Death Knight)
 
 void()	dprince_char_b1	=[	$char_b1,	dprince_char_b2	] {
-	CheckContinueCharge (); ai_charge(23); ai_melee(); dprince_sword_sound();};
+	CheckContinueCharge (); ai_charge(23); ai_melee(); SwordSwipeSound();};
 void()	dprince_char_b2	=[	$char_b2,	dprince_char_b3	] {monster_footstep(FALSE); ai_charge(17); ai_melee();};
 void()	dprince_char_b3	=[	$char_b3,	dprince_char_b4	] {ai_charge(12); ai_melee();};
 void()	dprince_char_b4	=[	$char_b4,	dprince_char_b5	] {ai_charge(22); ai_melee();};
@@ -260,7 +256,7 @@ void()	dprince_char_b6	=[	$char_b6,	dprince_char_b1	] {ai_charge(8); ai_melee();
 void()	dprince_slice1	=[	$slice2,	dprince_slice2	] {ai_charge(9);};
 void()	dprince_slice2	=[	$slice4,	dprince_slice3	] {monster_footstep(FALSE); ai_charge(6);};
 void()	dprince_slice3	=[	$slice5,	dprince_slice4	] {ai_charge(13);};
-void()	dprince_slice4	=[	$slice6,	dprince_slice5	] {ai_charge(4); dprince_sword_sound();};
+void()	dprince_slice4	=[	$slice6,	dprince_slice5	] {ai_charge(4); SwordSwipeSound();};
 void()	dprince_slice5	=[	$slice7,	dprince_slice6	] {monster_footstep(FALSE); ai_charge(7); ai_melee();};
 void()	dprince_slice6	=[	$slice8,	dprince_slice7	] {ai_charge(15); ai_melee();};
 void()	dprince_slice7	=[	$slice9,	dprince_slice8	] {ai_charge(8); ai_melee();};
@@ -277,7 +273,7 @@ void()	dprince_slice11	=[	$slice14,	dprince_run1	] {ai_charge(3);};
 void()	dprince_smash1	=[	$smash2,	dprince_smash2	] {ai_charge(1);};
 void()	dprince_smash2	=[	$smash3,	dprince_smash3	] {ai_charge(13);};
 void()	dprince_smash3	=[	$smash4,	dprince_smash4	] {monster_footstep(FALSE); ai_charge(9);};
-void()	dprince_smash4	=[	$smash5,	dprince_smash5	] {ai_charge(11);dprince_sword_sound();};
+void()	dprince_smash4	=[	$smash5,	dprince_smash5	] {ai_charge(11);SwordSwipeSound();};
 void()	dprince_smash5	=[	$smash6,	dprince_smash6	] {ai_charge(10);};
 void()	dprince_smash6	=[	$smash7,	dprince_smash7	] {ai_charge(7); self.meleecontact = TRUE; ai_meleesmash(40);};
 void()	dprince_smash7	=[	$smash8,	dprince_smash8	] {monster_footstep(FALSE);ai_charge(12);ai_melee();};
@@ -293,7 +289,7 @@ void()	dprince_smash11	=[	$smash13,	dprince_run1	] {ai_charge(0);};
 void()	dprince_watk1	=[	$w_attack1,	dprince_watk2	] {ai_charge(2);};
 void()	dprince_watk2	=[	$w_attack2,	dprince_watk3	] {monster_footstep(FALSE); ai_charge(0);};
 void()	dprince_watk3	=[	$w_attack3,	dprince_watk4	] {ai_charge(0);};
-void()	dprince_watk4	=[	$w_attack4,	dprince_watk5	] {ai_charge(0); dprince_sword_sound();};
+void()	dprince_watk4	=[	$w_attack4,	dprince_watk5	] {ai_charge(0); SwordSwipeSound();};
 void()	dprince_watk5	=[	$w_attack5,	dprince_watk6	] {ai_melee();};
 void()	dprince_watk6	=[	$w_attack6,	dprince_watk7	] {ai_melee();};
 void()	dprince_watk7	=[	$w_attack7,	dprince_watk8	] {monster_footstep(FALSE); ai_charge(1);};
@@ -304,7 +300,7 @@ void()	dprince_watk11	=[	$w_attack11,dprince_watk12	] {ai_charge(2); ai_melee();
 void()	dprince_watk12	=[	$w_attack12,dprince_watk13	] {ai_charge(2); ai_melee();};
 void()	dprince_watk13	=[	$w_attack13,dprince_watk14	] {ai_charge(0);};
 void()	dprince_watk14	=[	$w_attack14,dprince_watk15	] {ai_charge(0);};
-void()	dprince_watk15	=[	$w_attack15,dprince_watk16	] {ai_charge(0); dprince_sword_sound();};
+void()	dprince_watk15	=[	$w_attack15,dprince_watk16	] {ai_charge(0); SwordSwipeSound();};
 void()	dprince_watk16	=[	$w_attack16,dprince_watk17	] {ai_charge(1);};
 void()	dprince_watk17	=[	$w_attack17,dprince_watk18	] {monster_footstep(FALSE); ai_charge(1); ai_melee();};
 void()	dprince_watk18	=[	$w_attack18,dprince_watk19	] {ai_charge(3); ai_melee();};
@@ -313,15 +309,11 @@ void()	dprince_watk20	=[	$w_attack20,dprince_watk21	] {ai_charge(6);};
 void()	dprince_watk21	=[	$w_attack21,dprince_watk22	] {ai_charge(7);};
 void()	dprince_watk22	=[	$w_attack22,dprince_run1	] {ai_charge(3);};
 
-//============================================================================
 // Cycle between 3 melee attacks
 // Attack 1 - Slice (one hand slashing run attack)
 // Attack 2 - Smash (chop overhead to ground)
 // Attack 3 - W_Attack (two handed slashing attack)
-
-//----------------------------------------------------------------------
-void() dprince_melee =
-{
+void() dprince_melee = {
 	// Do heavy overhead attack against other monsters
 	if (self.enemy.flags & FL_MONSTER) dprince_smash1();
 	else {
@@ -338,11 +330,8 @@ void() dprince_melee =
 	}
 };
 
-//======================================================================
 // Magic Attacks - Range Far = Rockets, Range Near = Hazard
-//----------------------------------------------------------------------
-void() dprince_rocket =
-{
+void() dprince_rocket = {
 	local vector org, dir, avel;
 	
 	if (!self.enemy) return;
@@ -365,9 +354,7 @@ void() dprince_rocket =
 	Launch_Missile(org, dir, avel, CT_PROJ_DPRINCE1, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
-void(float offset) dprince_hazard =
-{
+void(float offset) dprince_hazard = {
 	local vector org, torg, dir, ang, avel;
 	local float targetang, haz_loop;
 	
@@ -406,9 +393,7 @@ void(float offset) dprince_hazard =
 	}
 };
 
-//----------------------------------------------------------------------
-void() dprince_magicframe =
-{
+void() dprince_magicframe = {
 	if (self.health < 1) return;
 	if (!self.enemy) return;
 	
@@ -428,8 +413,7 @@ void() dprince_magicframe =
 		if (self.walkframe == 4 && skill >= SKILL_NORMAL) dprince_rocket();
 		else if (self.walkframe == 6) dprince_rocket();
 		else if (self.walkframe == 8 && skill >= SKILL_HARD) dprince_rocket();
-	}
-	else {
+	} else {
 		// Hazard attack uses elevation tracking
 		if (self.walkframe <= 5) ai_face();
 		
@@ -456,14 +440,12 @@ void() dprince_magicframe =
 
 void() dprince_range = { self.walkframe = 0; dprince_magicframe();};
 
-//============================================================================
 void()	dprince_painA1	=[	$painA1, dprince_painA2	] {};
 void()	dprince_painA2	=[	$painA2, dprince_painA3	] {};
 void()	dprince_painA3	=[	$painA3, dprince_painA4	] {};
 void()	dprince_painA4	=[	$painA4, dprince_painA5	] {};
 void()	dprince_painA5	=[	$painA5, dprince_run1	] {};
 
-//----------------------------------------------------------------------
 void()	dprince_painD1	=[	$painD1, dprince_painD2	] {};
 void()	dprince_painD2	=[	$painD2, dprince_painD3	] {};
 void()	dprince_painD3	=[	$painD3, dprince_painD4	] {};
@@ -476,9 +458,7 @@ void()	dprince_painD9	=[	$painD9, dprince_painD10	] {};
 void()	dprince_painD10	=[	$painD10, dprince_painD11	] {};
 void()	dprince_painD11	=[	$painD11, dprince_run1	] {};
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) dprince_pain =
-{
+void(entity inflictor, entity attacker, float damage) dprince_pain = {
 	if (self.spawnflags & MON_GHOST_ONLY) return;
 	
 	// Check all pain conditions and set up what to do next
@@ -504,7 +484,6 @@ void(entity inflictor, entity attacker, float damage) dprince_pain =
 	}
 };
 
-//============================================================================
 void()	dprince_die1	=[	$death1,	dprince_die2	] {ai_forward(10);};
 void()	dprince_die2	=[	$death2,	dprince_die3	] {monster_check_gib();ai_forward(8);};
 void()	dprince_die3	=[	$death3,	dprince_die4	] {monster_check_gib();
@@ -558,21 +537,8 @@ void() dprince_die =
 	}
 };
 
-//============================================================================
-void() dprince_sword_sound =
-{
-	self.lip = random();
-	if (self.lip < 0.25) sound (self, CHAN_WEAPON, "weapons/sword1a.wav", 1, ATTN_NORM);
-	else if (self.lip < 0.5) sound (self, CHAN_WEAPON, "weapons/sword2a.wav", 1, ATTN_NORM);
-	else if (self.lip < 0.75) sound (self, CHAN_WEAPON, "weapons/sword1b.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_WEAPON, "weapons/sword2b.wav", 1, ATTN_NORM);
-};
-
-/*======================================================================
-QUAKED monster_dprince (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
-void() monster_dprince =
-{
+// QUAKED monster_dprince (1 0 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_dprince = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
@@ -599,8 +565,7 @@ void() monster_dprince =
 		self.part_trstyle = PARTICLE_TRAIL_RED;
 		self.attack_proj1 = MODEL_PROJ_DPRINCE1R;	// Steering rocket
 		self.attack_proj2 = MODEL_PROJ_DPRINCE2R;	// Red hazard plasma
-	}
-	else {
+	} else {
 		// blue version (default)
 		self.part_trstyle = PARTICLE_TRAIL_BLUE;
 		self.attack_proj1 = MODEL_PROJ_DPRINCE1B;	// Steering rocket
@@ -619,21 +584,14 @@ void() monster_dprince =
 	// Has got to be in this location because the
 	// filename is hardcoded (engine.exe)
 	precache_sound ("hknight/hit.wav");
-	precache_sound ("dknight/dprince_miss.wav");
+	precache_sound ("ad181/dknight/dprince_miss.wav");
 
 	self.sight_sound = "hknight/sight1.wav";
 	precache_sound (self.sight_sound);
-
 	self.pain_sound = "hknight/pain1.wav";
 	self.death_sound = "hknight/death1.wav";
 	precache_sound (self.pain_sound);
 	precache_sound (self.death_sound);
-
-	// New sword sweep/slash sounds
-	precache_sound ("weapons/sword1a.wav");
-	precache_sound ("weapons/sword1b.wav");
-	precache_sound ("weapons/sword2a.wav");
-	precache_sound ("weapons/sword2b.wav");
 
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement

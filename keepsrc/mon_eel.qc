@@ -11,17 +11,15 @@ void () eel_pitch_change = {
       T_Damage (self,world,world,MOVETYPE_TOSS,DAMARMOR);
       return ;
    }
-   if ( (time < self.delay) )
-      return ;
+   if (time < self.delay) return;
 
    if ( (self.weapon > MOVETYPE_BOUNCE) )
       self.weapon = -10.000;
 
-   if ( (self.weapon < FALSE) ) {
+   if (self.weapon < 0) {
       self.angles_x = (self.angles_x - 1.500);
    } else {
-      if ( (self.weapon > FALSE) )
-         self.angles_x = (self.angles_x + 1.500);
+      if (self.weapon > 0) self.angles_x = (self.angles_x + 1.500);
    }
    self.weapon = (self.weapon + TRUE);
 };
@@ -52,8 +50,7 @@ void () eel_stand6 = [ 5.000, eel_stand1 ] {
 };
 
 void () eel_walk1 = [ 0.000, eel_walk2 ] {
-   if ( (random () < 0.200) )
-      sound (self,CHAN_VOICE,"eel/eactive1.wav",TRUE,ATTN_IDLE);
+   if ( (random () < 0.200) ) sound (self,CHAN_VOICE,"ad171/eel/idle1.wav",TRUE,ATTN_IDLE);
 
    ai_fish_movement("ai_walk",6);
    eel_pitch_change ();
@@ -81,7 +78,7 @@ void () eel_walk6 = [ 5.000, eel_walk1 ] {
 
 void () eel_run1 = [ 0.000, eel_run2 ] {
    if ( (random () < 0.400) )
-      sound (self,CHAN_VOICE,"eel/eactive1.wav",TRUE,ATTN_IDLE);
+      sound (self,CHAN_VOICE,"ad171/eel/idle1.wav",TRUE,ATTN_IDLE);
 
    ai_fish_movement("ai_run",10);
    eel_pitch_change ();
@@ -107,12 +104,8 @@ void () eel_run6 = [ 5.000, eel_run1 ] {
    eel_pitch_change ();
 };
 
-
-//============================================================================
 // RANGE - Plasma from mouth
-//============================================================================
-void() eel_plasma =
-{
+void() eel_plasma = {
 	local vector org, dir;
 
 	// Check if can fire bolt of plasma
@@ -133,15 +126,9 @@ void () eel_melee = {
 
    attackOK = TRUE;
    traceline (self.origin,self.enemy.origin,FALSE,self);
-   if ( (trace_ent != self.enemy) )
-      attackOK = FALSE;
-
-   if ( (trace_inopen && trace_inwater) )
-      attackOK = FALSE;
-
-   if ( attackOK )
-      T_EELZap (self,self,45.000, world, DAMAGEALL);
-
+   if (trace_ent != self.enemy) attackOK = FALSE;
+   if (trace_inopen && trace_inwater) attackOK = FALSE;
+   if (attackOK) T_EELZap (self,self,45.000, world, DAMAGEALL);
    self.skin = FALSE;
    self.effects = FALSE;
 };
@@ -179,7 +166,7 @@ void () eel_attack8 = [ 1.000, eel_attack9 ] {
    self.skin = 1;
    ai_fish_movement("ai_charge",8);
    eel_pitch_change ();
-   sound (self,CHAN_WEAPON,"eel/eatt1.wav",TRUE,ATTN_NORM);
+   sound (self,CHAN_WEAPON,"rogue/eel/eatt1.wav",TRUE,ATTN_NORM);
 };
 void () eel_attack9 = [ 2.000, eel_attack10 ] {
    self.skin = FL_SWIM;
@@ -202,16 +189,12 @@ void () eel_attack12 = [ 5.000, eel_run1 ] {
    eel_melee ();
 };
 
-void() eel_attack2_1 = [ $eswim1, eel_attack2_2 ] {self.skin = 1;ai_face();
-	sound (self, CHAN_VOICE, "eel/attack1.wav", 1, ATTN_NORM);};
-void() eel_attack2_2 = [ $eswim2, eel_attack2_3 ] {self.skin = 2;ai_face();
-	self.effects = self.effects | EF_MUZZLEFLASH;};
+void() eel_attack2_1 = [ $eswim1, eel_attack2_2 ] {self.skin = 1;ai_face();sound (self, CHAN_VOICE, "eel/attack1.wav", 1, ATTN_NORM);};
+void() eel_attack2_2 = [ $eswim2, eel_attack2_3 ] {self.skin = 2;ai_face();self.effects = self.effects | EF_MUZZLEFLASH;};
 void() eel_attack2_3 = [ $eswim3, eel_attack2_4 ] {self.skin = 3;ai_face();};
-void() eel_attack2_4 = [ $eswim4, eel_attack2_5 ] {self.skin = 4;ai_face();
-	self.effects = self.effects | EF_MUZZLEFLASH;};
+void() eel_attack2_4 = [ $eswim4, eel_attack2_5 ] {self.skin = 4;ai_face();self.effects = self.effects | EF_MUZZLEFLASH;};
 void() eel_attack2_5 = [ $eswim5, eel_attack2_6 ] {self.skin = 5;ai_face();};
-void() eel_attack2_6 = [ $eswim6, eel_attack2_7 ] {
-	self.skin = 4; ai_face(); eel_plasma();};
+void() eel_attack2_6 = [ $eswim6, eel_attack2_7 ] {self.skin = 4; ai_face(); eel_plasma();};
 void() eel_attack2_7 = [ $eswim1, eel_attack2_8 ] {self.skin = 5;};
 void() eel_attack2_8 = [ $eswim2, eel_attack2_9 ] {self.skin = 4;};
 void() eel_attack2_9 = [ $eswim3, eel_attack2_10 ] {self.skin = 3;};
@@ -220,9 +203,9 @@ void() eel_attack2_11 = [ $eswim5, eel_attack2_12 ] {self.skin = 1;ai_face();};
 void() eel_attack2_12 = [ $eswim6, eel_run1 ] {self.skin = 0;ai_face();};
 
 void () eel_death1 = [ 6.000, eel_death2 ] {
-   self.skin = FALSE;
-   self.effects = FALSE;
-   sound (self,CHAN_VOICE,"eel/edie3r.wav",TRUE,ATTN_NORM);
+	self.skin = FALSE;
+	self.effects = FALSE;
+	sound (self,CHAN_VOICE,"rogue/eel/edie3r.wav",TRUE,ATTN_NORM);
 };
 
 void () eel_death2 = [ 7.000, eel_death3 ] { monster_check_gib(); };
@@ -251,11 +234,10 @@ void () eel_death = {
 };
 
 void (entity inflictor, entity attacker, float damage) eel_pain1 = [ 6.000, eel_pain2 ] {
-   if ( (self.pain_finished > time) )
-      return ;
+   if (self.pain_finished > time) return;
 
    self.pain_finished = (time + TRUE);
-   sound (self,CHAN_VOICE,"eel/epain3.wav",TRUE,ATTN_NORM);
+   sound (self,CHAN_VOICE,self.pain_sound,TRUE,ATTN_NORM);
    self.skin = FALSE;
 };
 void () eel_pain2 = [ 7.000, eel_pain3 ] {};
@@ -271,19 +253,22 @@ void () monster_eel = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-   self.mdl = "progs/ad171/mon_eel.mdl";
-   self.headmdl = "progs/ad171/h_eel.mdl";
-   precache_model (self.mdl);
-   precache_model (self.headmdl);
-   precache_model ("progs/ad171/eelgib.mdl");
-   precache_model ("progs/ad171/gib1.mdl");
-   precache_model ("progs/ad171/proj_plasma.mdl");
-   precache_sound ("eel/edie3r.wav");
-   precache_sound ("eel/epain3.wav");
-   precache_sound ("eel/eactive1.wav");
-   precache_sound ("eel/eatt1.wav");
-   precache_sound ("eel/eelc5.wav");
-   precache_sound ("eel/attack1.wav");
+	self.mdl = "progs/ad171/mon_eel.mdl";
+	self.headmdl = "progs/ad171/h_eel.mdl";
+	precache_model (self.mdl);
+	precache_model (self.headmdl);
+	precache_model ("progs/ad171/eelgib.mdl");
+	precache_model ("progs/ad171/gib1.mdl");
+	precache_model ("progs/ad171/proj_plasma.mdl");
+	precache_sound ("rogue/eel/edie3r.wav");
+	precache_sound ("rogue/eel/epain3.wav");
+	self.pain_sound = "rogue/eel/epain3.wav";
+	precache_sound ("ad171/eel/idle1.wav");
+	precache_sound ("rogue/eel/eatt1.wav");
+	precache_sound ("rogue/eel/eelc5.wav");
+	self.sight_sound = "rogue/eel/eelc5.wav";
+	precache_sound ("ad171/eel/impact1.wav");
+	precache_sound ("eel/attack1.wav");
 
 	// Check for poisonous entity flag
 	if (self.poisonous) {
@@ -292,39 +277,39 @@ void () monster_eel = {
 		precache_model (MODEL_PROJ_PLASMAGRN);
 	}
 
-   self.solid = SOLID_NOT;
-   self.movetype = MOVETYPE_NONE;
-   if (self.bboxtype < 1) self.bboxtype = BBOX_EEL;
-   if (self.health < 1) self.health = 60;
-   self.gibhealth = -25;
-   self.gibbed = FALSE;
-   self.blockudeath = TRUE;
-   self.pain_flinch = 10;	// Easy response to pain
-   self.steptype = FS_FLYING;		// It has fins!?!
+	self.solid = SOLID_NOT;
+	self.movetype = MOVETYPE_NONE;
+	if (self.bboxtype < 1) self.bboxtype = BBOX_EEL;
+	if (self.health < 1) self.health = 60;
+	self.gibhealth = -25;
+	self.gibbed = FALSE;
+	self.blockudeath = TRUE;
+	self.pain_flinch = 10;	// Easy response to pain
+	self.steptype = FS_FLYING;		// It has fins!?!
 
 	// Check for water sightline wakeup
 	if (self.spawnflags & MON_LIQUIDBLOCK) self.liquidblock = TRUE;
 
-   // Always reset Ammo Resistance to be consistent
-   self.resist_shells = self.resist_nails = 0;
-   self.resist_rockets = self.resist_cells = 0;
+	// Always reset Ammo Resistance to be consistent
+	self.resist_shells = self.resist_nails = 0;
+	self.resist_rockets = self.resist_cells = 0;
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
 
-   self.th_stand = eel_stand1;
-   self.th_walk = eel_walk1;
-   self.th_run = eel_run1;
-   self.th_die = eel_death;
-   self.th_pain = eel_pain1;
-   self.th_melee = eel_attack1;
-   self.th_missile = eel_attack2_1;
+	self.th_stand = eel_stand1;
+	self.th_walk = eel_walk1;
+	self.th_run = eel_run1;
+	self.th_die = eel_death;
+	self.th_pain = eel_pain1;
+	self.th_melee = eel_attack1;
+	self.th_missile = eel_attack2_1;
 
-   self.classtype = CT_MONEEL;
-   self.classgroup = CG_FISH;
-   self.classmove = MON_MOVESWIM;
+	self.classtype = CT_MONEEL;
+	self.classgroup = CG_FISH;
+	self.classmove = MON_MOVESWIM;
 	if (self.deathstring == "")  self.deathstring = " was electrified by an Eel\n";
 
-   monster_start ();
+	monster_start ();
 };

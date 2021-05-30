@@ -81,7 +81,7 @@ float() archer_check_shot = {
     spot1 = self.origin + v_forward*16 + v_right*8 + v_up*24;
     spot2 = targ.origin + targ.view_ofs;
 
-    traceline (spot1, spot2, ARROW_FLY, self);
+    traceline (spot1, spot2, 2, self);
 
     if (trace_ent != targ) {
         // Didn't hit the intended target.  Either something else blocked
@@ -137,7 +137,7 @@ void(vector st, float up) M_FireAkArrow = {
             {   // Check:  Don't upgrade arrow if hitting wrong target is likely.
                 //  Used to stop blue arrows from hitting and moving monsters around
                 //  by hitting them with a weaker arrow instead.
-                traceline (org, org + dir*2048, ARROW_FLY, self);
+                traceline (org, org + dir*2048, 2, self);
 
                 if ((trace_ent == self.enemy) || !(trace_ent.flags & FLx_CREATURE))
                     type = 2;   // Upgrade arrow to the next type.
@@ -151,9 +151,9 @@ void(vector st, float up) M_FireAkArrow = {
 
     // In Hexen2, 0=green, 1=red, 2=gold.
     if (type & 1)
-        sound (self, CHAN_WEAPON, "archer/arrowr.wav", 1, ATTN_NORM);
+        sound (self, CHAN_WEAPON, "drake/archer/arrowr.wav", 1, ATTN_NORM);
     else
-        sound (self, CHAN_WEAPON, "archer/arrowg.wav", 1, ATTN_NORM);
+        sound (self, CHAN_WEAPON, "drake/archer/arrowg.wav", 1, ATTN_NORM);
 
     AkArrow_Launch (org, dir, type);
 };
@@ -179,7 +179,7 @@ void() archer_stand17 =[ $waitA17, archer_stand18 ] {ai_stand();};
 void() archer_stand18 =[ $waitA18, archer_stand1  ] {ai_stand();};
 
 // WALK - - - - - - - - - - - - - - - -
-void() archer_draw = {sound (self, CHAN_WEAPON, "archer/draw.wav", 1, ATTN_NORM);};
+void() archer_draw = {sound (self, CHAN_WEAPON, "drake/archer/draw.wav", 1, ATTN_NORM);};
 
 void() archer_growl =
 {
@@ -188,12 +188,12 @@ void() archer_growl =
         if (archer_lord ())
         {
             if (random() < 0.7)
-                sound (self, CHAN_VOICE, "archer/growl2.wav", 1, ATTN_NORM);
+                sound (self, CHAN_VOICE, "drake/archer/growl2.wav", 1, ATTN_NORM);
             else
-                sound (self, CHAN_VOICE, "archer/growl3.wav", 1, ATTN_NORM);
+                sound (self, CHAN_VOICE, "drake/archer/growl3.wav", 1, ATTN_NORM);
         }
         else
-            sound (self, CHAN_VOICE, "archer/growl.wav", 1, ATTN_NORM);
+            sound (self, CHAN_VOICE, "drake/archer/growl.wav", 1, ATTN_NORM);
     }
 };
 
@@ -326,45 +326,38 @@ void() archer_hold =
         return;     // Thinking set to th_run by call to function.
 
 // Borrowing v_forward from the prior call to makevectors in 'infront'...
-    if (!chance)
-    {   // See if the target is still not infront after elevation is gone.
+    if (!chance) { // See if the target is still not infront after elevation is gone.
         local   vector  spot;
 
         spot = self.enemy.origin;
         spot_z = self.origin_z;
         spot = normalize(spot - self.origin);
-        if (spot * v_forward <= 0.3)
-            return;     // Target is really not infront.
+        if (spot * v_forward <= 0.3) return;     // Target is really not infront.
     }
 
-    if (r)
-    {   // Random hold algorithm from Hexen2.
+    if (r) { // Random hold algorithm from Hexen2.
         chance = (skill * 0.05) + (self.skin * 0.10);
-        if (random() >= chance)
-            return;
+        if (random() >= chance) return;
     }
 
-    if (!archer_check_shot ())
-    {   // Something got in the way.  Abort shot then move.
-        sound (self, CHAN_WEAPON, SOUND_EMPTY, 1, ATTN_NORM);
+    if (!archer_check_shot ()) { // Something got in the way.  Abort shot then move.
+		StopSound(self,CHAN_WEAPON);
         self.think = archer_run1;
         return;
     }
 
-// Hexen2:  40% chance to automatically shoot in melee.
-// In Hexen, this is done before random and shot checks.
-// Here in Quake, do this after checking shot because it is possible for
-// thin monsters to squeeze between the archer and target even in melee range.
+	// Hexen2:  40% chance to automatically shoot in melee.
+	// In Hexen, this is done before random and shot checks.
+	// Here in Quake, do this after checking shot because it is possible for
+	// thin monsters to squeeze between the archer and target even in melee range.
     enemy_range = range(self.enemy);
     if (enemy_range < RANGE_NEAR)
-        if (random() < 0.4)
-        {
+        if (random() < 0.4) {
             archer_fire1 ();
             return;
         }
 
-    if (!archer_lord ())
-    {   // Grunts don't always shoot immediately.
+    if (!archer_lord ()) { // Grunts don't always shoot immediately.
         if (enemy_range == RANGE_MELEE)
             chance = 1;
         else if (enemy_range == RANGE_NEAR)
@@ -374,8 +367,7 @@ void() archer_hold =
         else
             chance = 0.5;
 
-        if (random() >= chance)
-            return;
+        if (random() >= chance) return;
     }
 
     archer_fire1 ();
@@ -509,13 +501,13 @@ void(entity inflictor, entity attacker, float damage) archer_pain = {
 
     self.pain_finished = time + 1;
     if (archer_lord ()) {
-        sound (self, CHAN_VOICE, "archer/pain2.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "drake/archer/pain2.wav", 1, ATTN_NORM);
     // The archer looks like a hell knight, so give him the same no-flinch,
     // but only if he is a lord class.
         if (random()*30 > damage)
             return;        // didn't flinch
     } else
-        sound (self, CHAN_VOICE, "archer/pain.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "drake/archer/pain.wav", 1, ATTN_NORM);
 
     if (SUB_IgnorePain ()) return; // No pain anims in Nightmare.
 
@@ -547,26 +539,25 @@ void() archer_die8  =[ $deathA16, archer_die9  ] {};
 void() archer_die9  =[ $deathA18, archer_die10 ] {};
 void() archer_die10 =[ $deathA20, archer_die11 ] {
 // PM:  Archer death sound split into two files.  Play part 2.
-    if (self.flags & FL_ONGROUND && !(archer_lord())) sound (self, CHAN_AUTO, "archer/crash.wav", 1, ATTN_NORM);
+    if (self.flags & FL_ONGROUND && !(archer_lord())) sound (self, CHAN_AUTO, "drake/archer/crash.wav", 1, ATTN_NORM);
 };
 void() archer_die11 =[ $deathA22, archer_die11  ] {};
 
 void() archer_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
-	sound (self, CHAN_WEAPON, SOUND_EMPTY, 1, ATTN_NORM); // Clear weapon sound
+	StopSound(self,CHAN_WEAPON); // Clear weapon sound
 
 	// regular death
 	if (!self.gibbed) {
 		if (archer_lord ())
-			sound (self, CHAN_VOICE, "archer/death2.wav", 1, ATTN_NORM);
+			sound (self, CHAN_VOICE, "drake/archer/death2.wav", 1, ATTN_NORM);
 		else
-			sound (self, CHAN_VOICE, "archer/death.wav", 1, ATTN_NORM);
+			sound (self, CHAN_VOICE, "drake/archer/death.wav", 1, ATTN_NORM);
 		archer_die1 ();
 	}
 };
 
-// REVIVE - - - - - - - - - - - - - - -
 void() archer_revive1  =[ $deathA20, archer_revive2  ] {};
 void() archer_revive2  =[ $deathA18, archer_revive3  ] {};
 void() archer_revive3  =[ $deathA16, archer_revive4  ] {};
@@ -578,9 +569,7 @@ void() archer_revive8  =[ $deathA6,  archer_revive9  ] {};
 void() archer_revive9  =[ $deathA4,  archer_revive10 ] {};
 void() archer_revive10 =[ $deathA2,  archer_run1     ] {};
 
-//============
-// --> QUAKED monster_archer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-//============
+// QUAKED monster_archer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_archer = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
@@ -593,33 +582,33 @@ void() monster_archer = {
     precache_model ("progs/drake/archer.mdl");
     precache_model ("progs/drake/h_archer.mdl");
 
-    precache_sound ("archer/draw.wav");
-    precache_sound ("archer/arrow1.wav");
-    precache_sound ("archer/arrow2.wav");
-    precache_sound ("archer/arrow3.wav");
-    precache_sound ("archer/arrowbrk.wav");
-    precache_sound ("archer/arrowg.wav");   // Type 0 and 2 arrows.
-    precache_sound ("archer/arrowr.wav");   // Type 1 arrows.
-    precache_sound ("archer/death.wav");
-    precache_sound ("archer/growl.wav");
-    precache_sound ("archer/pain.wav");
-    precache_sound ("archer/sight.wav");
+    precache_sound ("drake/archer/draw.wav");
+    precache_sound ("drake/archer/arrow1.wav");
+    precache_sound ("drake/archer/arrow2.wav");
+    precache_sound ("drake/archer/arrow3.wav");
+    precache_sound ("drake/archer/arrowbrk.wav");
+    precache_sound ("drake/archer/arrowg.wav");   // Type 0 and 2 arrows.
+    precache_sound ("drake/archer/arrowr.wav");   // Type 1 arrows.
+    precache_sound ("drake/archer/death.wav");
+    precache_sound ("drake/archer/growl.wav");
+    precache_sound ("drake/archer/pain.wav");
+    precache_sound ("drake/archer/sight.wav");
 
     if (self.classname == "monster_archer_lord") {
-		self.hello_sound = "archer/growl2.wav";
-		self.sight_sound = "archer/sight2.wav";
+		self.hello_sound = "drake/archer/growl2.wav";
+		self.sight_sound = "drake/archer/sight2.wav";
     } else {
-		self.hello_sound = "archer/growl1.wav";
-		self.sight_sound = "archer/sight.wav";
+		self.hello_sound = "drake/archer/growl.wav";
+		self.sight_sound = "drake/archer/sight.wav";
     }
 
-    precache_sound ("archer/crash.wav");
-    precache_sound ("archer/death2.wav");
-    precache_sound ("archer/growl2.wav");
-    precache_sound ("archer/growl3.wav");
-    precache_sound ("archer/pain2.wav");
-    precache_sound ("archer/sight2.wav");
-    precache_sound ("archer/explode.wav");
+    precache_sound ("drake/archer/crash.wav");
+    precache_sound ("drake/archer/death2.wav");
+    precache_sound ("drake/archer/growl2.wav");
+    precache_sound ("drake/archer/growl3.wav");
+    precache_sound ("drake/archer/pain2.wav");
+    precache_sound ("drake/archer/sight2.wav");
+    precache_sound ("drake/archer/explode.wav");
 
     // Hexen2 archers have 80 health.  (Lords have 325 health.)
     // Note:  Hexen2 archers gibbed at -30 hp.  Since the archers have armor

@@ -1,47 +1,47 @@
 void() precache_mr = {
-	precache_model2("progs/maxwell.mdl");
-	precache_model2("progs/gntspke.mdl");
-	precache_model2("progs/v_spike.mdl");
-	precache_model("progs/rubble1.mdl");
-	precache_model("progs/rubble4.mdl");
-	precache_model("progs/rubble6.mdl");
-	precache_sound2("ambience/thunder2.wav");
-	precache_sound2("sets/set4_2.wav");
-	precache_sound2("quake/inv3.wav");
-	precache_sound2("wall/wall01.wav");
-	precache_sound2("wall/wallbrk.wav");
-	precache_sound2("sets/set4_1.wav");
-	precache_sound2("ambience/secj.wav");
-	precache_sound2("gaunt/gspike.wav");
-	precache_sound2("gaunt/spkhit.wav");
-	precache_sound2("gaunt/elekt.wav");
-	precache_sound2("gaunt/boom.wav");
-	precache_sound2("archg/lift.wav");
-	precache_sound2("archg/lift3.wav");
-	precache_sound2("archg/fire2.wav");
-	precache_sound2("weapons/lhit.wav");
-	precache_sound2("ambience/rych1.wav");
-	precache_sound2("shalrath/attack2.wav");
-	precache_model2("progs/soul.mdl");
-	precache_sound2("shambler/sboom.wav");
-	precache_sound2("max/step2.wav");
-	precache_sound2("max/step3.wav");
-	precache_sound2("max/laugh.wav");
-	precache_sound2("max/laugh2.wav");
-	precache_sound2("max/lava1.wav");
-	precache_sound2("max/lava2.wav");
+	precache_model("progs/nehahra/maxwell.mdl");
+	precache_model("progs/nehahra/gntspke.mdl");
+	precache_model("progs/nehahra/v_spike.mdl");
+	precache_model("progs/nehahra/rubble1.mdl");
+	precache_model("progs/nehahra/rubble4.mdl");
+	precache_model("progs/nehahra/rubble6.mdl");
+	precache_sound("nehahra/ambience/thunder2.wav");
+	precache_sound("nehahra/sets/set4_2.wav");
+	precache_sound("nehahra/quake/inv3.wav");
+	precache_sound("nehahra/wall/wall01.wav");
+	precache_sound("drake/misc/wallbrk.wav");
+	precache_sound("nehahra/sets/set4_1.wav");
+	precache_sound("nehahra/ambience/secj.wav");
+	precache_sound("nehahra/gaunt/gspike.wav");
+	precache_sound("nehahra/gaunt/spkhit.wav");
+	precache_sound("nehahra/gaunt/elekt.wav");
+	precache_sound("nehahra/gaunt/boom.wav");
+	precache_sound("nehahra/archg/lift.wav");
+	precache_sound("nehahra/archg/lift3.wav");
+	precache_sound("nehahra/archg/fire2.wav");
+	precache_sound("nehahra/weapons/lhit.wav");
+	precache_sound("nehahra/ambience/rych1.wav");
+	precache_sound("nehahra/shalrath/attack2.wav");
+	precache_model("progs/nehahra/soul.mdl");
+	precache_sound("nehahra/shambler/sboom.wav");
+	precache_sound("nehahra/max/step2.wav");
+	precache_sound("nehahra/max/step3.wav");
+	precache_sound("nehahra/max/laugh.wav");
+	precache_sound("nehahra/max/laugh2.wav");
+	precache_sound("nehahra/max/lava1.wav");
+	precache_sound("nehahra/max/lava2.wav");
 	precache_sound("shambler/sattck1.wav");
-	precache_sound2("hknight/idle.wav");
-	precache_sound2("ambience/fire1.wav");
-	precache_sound2("weapons/sprfall1.wav");
-	precache_sound2("weapons/sprfall2.wav");
-	precache_sound("boss3/hit.wav");
-	precache_sound("max/pain1.wav");
-	precache_sound("max/pain2.wav");
-	precache_sound("max/pain3.wav");
-	precache_sound("max/mpain1.wav");
-	precache_sound("max/mpain2.wav");
-	precache_sound("max/mpain3.wav");
+	precache_sound("hknight/idle.wav");
+	precache_sound("ad171/ambience/fire1.wav");
+	precache_sound("nehahra/weapons/sprfall1.wav");
+	precache_sound("nehahra/weapons/sprfall2.wav");
+	precache_sound("nehahra/boss3/hit.wav");
+	precache_sound("nehahra/max/pain1.wav");
+	precache_sound("nehahra/max/pain2.wav");
+	precache_sound("nehahra/max/pain3.wav");
+	precache_sound("nehahra/max/mpain1.wav");
+	precache_sound("nehahra/max/mpain2.wav");
+	precache_sound("nehahra/max/mpain3.wav");
 };
 
 void(vector megadeth, vector vec) spawn_maxteleport = {
@@ -440,28 +440,28 @@ var
 
 void() maxstep = {
 	if (random() < 0.4) {
-		sound(self, CHAN_AUTO, "max/step2.wav", 0.7, ATTN_NORM);
+		sound(self, CHAN_AUTO, "nehahra/max/step2.wav", 0.7, ATTN_NORM);
 		return;
 	}
-	sound(self, CHAN_AUTO, "max/step3.wav", 0.7, ATTN_NORM);
+	sound(self, CHAN_AUTO, "nehahra/max/step3.wav", 0.7, ATTN_NORM);
 };
 
 void() max_painsound1 = {
 	local float num;
 
 	num = random();
-	if (num < 0.333) sound(self, CHAN_VOICE, "max/pain1.wav", 1, ATTN_NORM);
-	else if (num < 0.666) { sound(self, CHAN_VOICE, "max/pain2.wav", 1, ATTN_NORM);
-	else sound(self, CHAN_VOICE, "max/pain3.wav", 1, ATTN_NORM);
+	if (num < 0.333) sound(self, CHAN_VOICE, "nehahra/max/pain1.wav", 1, ATTN_NORM);
+	else if (num < 0.666) { sound(self, CHAN_VOICE, "nehahra/max/pain2.wav", 1, ATTN_NORM);
+	else sound(self, CHAN_VOICE, "nehahra/max/pain3.wav", 1, ATTN_NORM);
 };
 
 void() max_painsound2 = {
 	local float num;
 
 	num = random();
-	if (num < 0.333) sound(self, CHAN_VOICE, "max/mpain1.wav", 1, ATTN_NORM);
-	else if (num < 0.666) { sound(self, CHAN_VOICE, "max/mpain2.wav", 1, ATTN_NORM);
-	else sound(self, CHAN_VOICE, "max/mpain3.wav", 1, ATTN_NORM);
+	if (num < 0.333) sound(self, CHAN_VOICE, "nehahra/max/mpain1.wav", 1, ATTN_NORM);
+	else if (num < 0.666) { sound(self, CHAN_VOICE, "nehahra/max/mpain2.wav", 1, ATTN_NORM);
+	else sound(self, CHAN_VOICE, "nehahra/max/mpain3.wav", 1, ATTN_NORM);
 };
 
 void() max_painsound = {
@@ -891,7 +891,7 @@ Void function max_light3();
 {
   #62 max_light4;
   ai_face();
-  sound(self, CHAN_BODY, "gaunt/boom.wav", 1, ATTN_NORM);
+  sound(self, CHAN_BODY, "nehahra/gaunt/boom.wav", 1, ATTN_NORM);
   ai_threats();
 }
 
@@ -901,7 +901,7 @@ Void function max_light4();
   ai_face();
   max_backorcharge();
   if (random() < 0.5) {
-    sound(self, CHAN_BODY, "gaunt/elekt.wav", 1, ATTN_NORM);
+    sound(self, CHAN_BODY, "nehahra/gaunt/elekt.wav", 1, ATTN_NORM);
     }
   MaxRedLightning();
   ai_threats();
@@ -926,7 +926,7 @@ Void function max_light6();
   #63 max_light7;
   ai_face();
   ai_back(10);
-  sound(self, CHAN_VOICE, "gaunt/elekt.wav", 1, ATTN_NORM);
+  sound(self, CHAN_VOICE, "nehahra/gaunt/elekt.wav", 1, ATTN_NORM);
   ai_threats();
 }
 
@@ -980,22 +980,20 @@ Void function max_shalrath3();
   ai_face();
   Handle_threats();
   self.pain_finished = time + 0.6;
-}
+};
 
-Void function max_shalrath4();
-{
+Void function max_shalrath4() = {
   #68 max_shalrath5;
   ai_face();
   self.velocity_z = 300;
   Handle_threats();
-  sound(self, CHAN_VOICE, "shalrath/attack2.wav", 1, ATTN_NORM);
-}
+  sound(self, CHAN_VOICE, "nehahra/shalrath/attack2.wav", 1, ATTN_NORM);
+};
 
-Void function max_shalrath5();
-{
+Void function max_shalrath5() = {
   #69 max_shalrath6;
   ShalMissile();
-}
+};
 
 Void function max_shalrath6();
 {
@@ -1036,10 +1034,10 @@ Void function max_run();
     self.frolic = time + 2;
     if (random() < 0.2 && !visible(self.enemy)) {
       if (random() < 0.3) {
-        sound(self, CHAN_VOICE, "max/laugh2.wav", 1, ATTN_NORM);
+        sound(self, CHAN_VOICE, "nehahra/max/laugh2.wav", 1, ATTN_NORM);
         }
       else {
-        sound(self, CHAN_VOICE, "max/laugh.wav", 1, ATTN_NORM);
+        sound(self, CHAN_VOICE, "nehahra/max/laugh.wav", 1, ATTN_NORM);
         }
       }
     }
@@ -1244,10 +1242,10 @@ Void function max_throw();
   self.walkframe = self.walkframe + 1;
   if (self.walkframe == 6) {
     if (random() < 0.2) {
-      sound(self.enemy, CHAN_BODY, "archg/lift3.wav", 1, ATTN_NORM);
+      sound(self.enemy, CHAN_BODY, "nehahra/archg/lift3.wav", 1, ATTN_NORM);
       }
     else {
-      sound(self.enemy, CHAN_BODY, "archg/lift.wav", 1, ATTN_NORM);
+      sound(self.enemy, CHAN_BODY, "nehahra/archg/lift.wav", 1, ATTN_NORM);
       }
     if (random() < 0.6 && visible(self.enemy)) {
       self.walkframe = self.walkframe - 1;
@@ -1405,53 +1403,39 @@ var
     }
 }
 
-Void function MaxRedLightning();
-var
- org : Vector;
- dir : Vector;
- num : Real;
-{
-  if (self.lives < 3 && self.classname != "monster_gaunt") {
-    GauntLightning();
-    return;
-    }
-  self.effects = self.effects | EF_MUZZLEFLASH;
-  ai_face();
-  org = self.origin + [0 0 20];
-  num = random();
-  if (num < 0.2) {
-    dir = self.enemy.origin + [0 0 16] - org;
-    dir = normalize(dir);
-    }
-  else {
-    if (num < 0.5) {
-      dir = self.enemy.origin - self.enemy.velocity * 0.2;
-      dir = normalize(dir - org);
-      }
-    else {
-      dir = self.enemy.origin - self.enemy.velocity * -0.2;
-      dir = normalize(dir - org);
-      }
-    }
-  traceline(org, self.origin + dir * 600, 1, self);
-  WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-  WriteByte(MSG_BROADCAST, TE_BEAM);
-  WriteEntity(MSG_BROADCAST, self);
-  WriteCoord(MSG_BROADCAST, org_x);
-  WriteCoord(MSG_BROADCAST, org_y);
-  WriteCoord(MSG_BROADCAST, org_z);
-  WriteCoord(MSG_BROADCAST, trace_endpos_x);
-  WriteCoord(MSG_BROADCAST, trace_endpos_y);
-  WriteCoord(MSG_BROADCAST, trace_endpos_z);
-  LightningDamage(org, trace_endpos, self, MOVETYPE_TOSS);
+void() MaxRedLightning() = {
+	local vector org, dir;
+	local float num;
+
+	if (self.lives < 3 && self.classname != "monster_gaunt") {
+		GauntLightning();
+		return;
+	}
+	self.effects = self.effects | EF_MUZZLEFLASH;
+	ai_face();
+	org = self.origin + [0 0 20];
+	num = random();
+	if (num < 0.2) {
+		dir = self.enemy.origin + [0 0 16] - org;
+		dir = normalize(dir);
+	} else {
+		if (num < 0.5) {
+			dir = self.enemy.origin - self.enemy.velocity * 0.2;
+			dir = normalize(dir - org);
+		} else {
+			dir = self.enemy.origin - self.enemy.velocity * -0.2;
+			dir = normalize(dir - org);
+		}
+	}
+	traceline(org, self.origin + dir * 600, 1, self);
+	QC_ParseBeam(0,"progs/nehahra/beam.mdl", self, org, trace_endpos, 32);
+	LightningDamage(org, trace_endpos, self, MOVETYPE_TOSS);
 }
 
-Void function max_s_light1();
-{
-  #60 max_s_light2;
-  ai_face();
-  ai_threats();
-  sound(self, CHAN_WEAPON, "shambler/sattck1.wav", 1, ATTN_NORM);
+void() max_s_light1 = [60, max_s_light2] {
+	ai_face();
+	ai_threats();
+	sound(self, CHAN_WEAPON, "shambler/sattck1.wav", 1, ATTN_NORM);
 }
 
 Void function max_s_light2();
@@ -1466,7 +1450,7 @@ Void function max_s_light3();
   #62 max_s_light4;
   ai_face();
   ai_threats();
-  sound(self, CHAN_ITEM, "shambler/sboom.wav", 1, ATTN_NORM);
+  sound(self, CHAN_ITEM, "nehahra/shambler/sboom.wav", 1, ATTN_NORM);
 }
 
 Void function max_s_light4();
@@ -1476,7 +1460,7 @@ Void function max_s_light4();
   ai_threats();
   max_backorcharge();
   if (random() < 0.5) {
-    sound(self, CHAN_BODY, "gaunt/elekt.wav", 1, ATTN_NORM);
+    sound(self, CHAN_BODY, "nehahra/gaunt/elekt.wav", 1, ATTN_NORM);
     }
   self.effects = self.effects | EF_MUZZLEFLASH;
 }
@@ -1502,7 +1486,7 @@ Void function max_s_light6();
   ai_face();
   ai_back(10);
   ai_threats();
-  sound(self, CHAN_VOICE, "gaunt/elekt.wav", 1, ATTN_NORM);
+  sound(self, CHAN_VOICE, "nehahra/gaunt/elekt.wav", 1, ATTN_NORM);
 }
 
 Void function max_s_light7();
@@ -1608,7 +1592,7 @@ var
 {
   new = spawn();
   new.origin = self.origin;
-  setmodel(new, "progs/sprocket.mdl");
+  setmodel(new, "progs/nehahra/sprocket.mdl");
   setsize(new, [-16 -16 0], [16 16 56]);
   new.velocity = VelocityForDamage(dm);
   new.movetype = MOVETYPE_BOUNCE;
@@ -1630,7 +1614,7 @@ var
  v : Vector;
 {
   if (pointcontents(self.origin) == CONTENT_LAVA) {
-    sound(self, CHAN_AUTO, "weapons/sprocket.wav", 0.5, ATTN_NORM);
+    sound(self, CHAN_AUTO, "nehahra/weapons/sprocket.wav", 0.5, ATTN_NORM);
     self.think = Sub_remove;
     self.nextthink = time + 2;
     return;
@@ -1641,10 +1625,9 @@ var
     else {
       self.pain_finished = time + 0.2;
       if (random() < 0.9) {
-        sound(self, CHAN_ITEM, "weapons/sprfall2.wav", 0.8, ATTN_NORM);
-        }
-      else {
-        sound(self, CHAN_ITEM, "weapons/sprfall1.wav", 0.8, ATTN_NORM);
+        sound(self, CHAN_ITEM, "nehahra/weapons/sprfall2.wav", 0.8, ATTN_NORM);
+        } else {
+        sound(self, CHAN_ITEM, "nehahra/weapons/sprfall1.wav", 0.8, ATTN_NORM);
         }
       }
     }
@@ -1655,10 +1638,9 @@ var
     return;
     }
   if (self.pain_finished > time) {
-    }
-  else {
+    } else {
     self.pain_finished = time + 0.2;
-    sound(other, CHAN_WEAPON, "weapons/sprfall2.wav", 0.8, ATTN_NORM);
+    sound(other, CHAN_WEAPON, "nehahra/weapons/sprfall2.wav", 0.8, ATTN_NORM);
     }
   v_x = other.velocity_x * WEAPON_ROCKET + 20 * random();
   v_y = other.velocity_y * WEAPON_ROCKET + 20 * random();
@@ -1666,7 +1648,7 @@ var
   self.flags = self.flags - (self.flags & FL_ONGROUND);
   self.velocity = v;
   self.avelocity = [100 100 100];
-}
+};
 
 Void function max_is_dead();
 var
@@ -1713,7 +1695,7 @@ var
   vec_z = random() * 500;
   soul = spawn();
   soul.origin = self.origin - [0 0 20];
-  setmodel(soul, "progs/soul.mdl");
+  setmodel(soul, "progs/nehahra/soul.mdl");
   soul.solid = SOLID_NOT;
   soul.movetype = MOVETYPE_NOCLIP;
   soul.effects = soul.effects | EF_DIMLIGHT;
@@ -1914,10 +1896,10 @@ var
 
 Void function throwsomerub();
 {
-  ThrowRubble("progs/rubble4.mdl", -10);
-  ThrowRubble("progs/rubble6.mdl", -20);
-  ThrowRubble("progs/rubble1.mdl", -10);
-  sound(self, CHAN_AUTO, "wall/wall01.wav", 1, ATTN_NONE);
+  ThrowRubble("progs/nehahra/rubble4.mdl", -10);
+  ThrowRubble("progs/nehahra/rubble6.mdl", -20);
+  ThrowRubble("progs/nehahra/rubble1.mdl", -10);
+  sound(self, CHAN_AUTO, "nehahra/wall/wall01.wav", 1, ATTN_NONE);
   self.think = Sub_remove;
   self.nextthink = time + 2;
 }
@@ -1928,14 +1910,14 @@ var
 {
   num = random();
   if (num < 0.2) {
-    sound(self, CHAN_AUTO, "ambience/thunder2.wav", 1, ATTN_NONE);
+    sound(self, CHAN_AUTO, "nehahra/ambience/thunder2.wav", 1, ATTN_NONE);
     }
   else {
     if (num < 0.5) {
-      sound(self, CHAN_AUTO, "sets/set4_2.wav", 1, ATTN_NONE);
+      sound(self, CHAN_AUTO, "nehahra/sets/set4_2.wav", 1, ATTN_NONE);
       }
     else {
-      sound(self, CHAN_AUTO, "sets/set4_1.wav", 1, ATTN_NONE);
+      sound(self, CHAN_AUTO, "nehahra/sets/set4_1.wav", 1, ATTN_NONE);
       }
     }
   self.think = finalesnds;
@@ -2056,12 +2038,12 @@ var
   if (head.health < 1) {
     if (head.watertype == -5) {
       if (random() < 0.4) {
-        sound(head, CHAN_VOICE, "max/lava1.wav", 1, ATTN_NORM);
+        sound(head, CHAN_VOICE, "nehahra/max/lava1.wav", 1, ATTN_NORM);
         self.charmer.talk_finished = time + 3;
         remove(self);
         return;
         }
-      sound(head, CHAN_VOICE, "max/lava2.wav", 1, ATTN_NORM);
+      sound(head, CHAN_VOICE, "nehahra/max/lava2.wav", 1, ATTN_NORM);
       self.charmer.talk_finished = time + 3;
       remove(self);
       return;
@@ -2120,7 +2102,7 @@ var
 void() becomeearthquake = {
 	local entity head;
 
-	sound(self, CHAN_AUTO, "quake/inv3.wav", 1, ATTN_NONE);
+	sound(self, CHAN_AUTO, "nehahra/quake/inv3.wav", 1, ATTN_NONE);
 	self.cnt = self.cnt + 1;
 	if (self.cnt > 8) {
 		head = find(world, classname, "player");
@@ -2139,24 +2121,24 @@ Void function comment_waiting();
 {
   if (!(self.regen & FL_MONSTER)) {
     self.regen = self.regen | FL_MONSTER;
-    self.noise = "max/allday.wav";
+    self.noise = "nehahra/max/allday.wav";
     } else {
     if (!(self.regen & FL_GODMODE)) {
       self.regen = self.regen | FL_GODMODE;
-      self.noise = "max/taketime.wav";
+      self.noise = "nehahra/max/taketime.wav";
       } else {
       if (!(self.regen & FL_NOTARGET)) {
         self.regen = self.regen | FL_NOTARGET;
-        self.noise = "max/suspense.wav";
+        self.noise = "nehahra/max/suspense.wav";
         }
       }
     }
   if (self.noise == "NO") {
     if (random() < 0.5) {
       if (random() < 0.3) {
-        self.noise = "max/laugh.wav";
+        self.noise = "nehahra/max/laugh.wav";
         } else {
-        self.noise = "max/laugh2.wav";
+        self.noise = "nehahra/max/laugh2.wav";
         }
       }
     }
@@ -2169,19 +2151,19 @@ Void function comment_blunder = {
   if (self.enemy.boost == 1) {
     if (!(self.jump_flag & FL_CLIENT)) {
       self.jump_flag = self.jump_flag | FL_CLIENT;
-      self.noise = "max/grenade.wav";
+      self.noise = "nehahra/max/grenade.wav";
       }
     }
   else {
     if (self.enemy.boost == 3) {
       if (!(self.jump_flag & FL_ITEM)) {
         self.jump_flag = self.jump_flag | FL_ITEM;
-        self.noise = "max/gravity.wav";
+        self.noise = "nehahra/max/gravity.wav";
         }
       else {
         if (!(self.jump_flag & FL_ONGROUND)) {
           self.jump_flag = self.jump_flag | FL_ONGROUND;
-          self.noise = "max/bird.wav";
+          self.noise = "nehahra/max/bird.wav";
           }
         }
       }
@@ -2189,22 +2171,22 @@ Void function comment_blunder = {
       if (self.enemy.boost == 2) {
         if (!(self.jump_flag & FL_INWATER)) {
           self.jump_flag = self.jump_flag | FL_INWATER;
-          self.noise = "max/pathetic.wav";
+          self.noise = "nehahra/max/pathetic.wav";
           }
         else {
           if (!(self.jump_flag & FL_MONSTER)) {
             self.jump_flag = self.jump_flag | FL_MONSTER;
-            self.noise = "max/betray.wav";
+            self.noise = "nehahra/max/betray.wav";
             }
           else {
             if (!(self.jump_flag & FL_GODMODE)) {
               self.jump_flag = self.jump_flag | FL_GODMODE;
-              self.noise = "max/cantkill.wav";
+              self.noise = "nehahra/max/cantkill.wav";
               }
             else {
               if (!(self.jump_flag & FL_NOTARGET)) {
                 self.jump_flag = self.jump_flag | FL_NOTARGET;
-                self.noise = "max/hurt.wav";
+                self.noise = "nehahra/max/hurt.wav";
                 }
               }
             }
@@ -2215,10 +2197,10 @@ Void function comment_blunder = {
   if (self.noise == "NO") {
     if (random() < 0.5) {
       if (random() < 0.3) {
-        self.noise = "max/laugh.wav";
+        self.noise = "nehahra/max/laugh.wav";
         }
       else {
-        self.noise = "max/laugh2.wav";
+        self.noise = "nehahra/max/laugh2.wav";
         }
       }
     }
@@ -2237,17 +2219,17 @@ Void function comment_case1();
 {
   if (!(self.regen & FL_ITEM)) {
     self.regen = self.regen | FL_ITEM;
-    self.noise = "max/comeback.wav";
+    self.noise = "nehahra/max/comeback.wav";
     }
   else {
     if (!(self.regen & FL_ONGROUND)) {
       self.regen = self.regen | FL_ONGROUND;
-      self.noise = "max/pathop.wav";
+      self.noise = "nehahra/max/pathop.wav";
       }
     else {
       if (!(self.regen & FL_PARTIALGROUND)) {
         self.regen = self.regen | FL_PARTIALGROUND;
-        self.noise = "max/onelife.wav";
+        self.noise = "nehahra/max/onelife.wav";
         }
       }
     }
@@ -2257,21 +2239,18 @@ Void function comment_case1();
     }
 }
 
-Void function comment_case2();
-{
+void() function comment_case2 = {
   if (!(self.regen & FL_WATERJUMP)) {
     self.regen = self.regen | FL_WATERJUMP;
-    self.noise = "max/worthop.wav";
-    }
-  else {
+    self.noise = "nehahra/max/worthop.wav";
+    } else {
     if (!(self.regen & FL_JUMPRELEASED)) {
       self.regen = self.regen | FL_JUMPRELEASED;
-      self.noise = "max/nerves.wav";
-      }
-    else {
+      self.noise = "nehahra/max/nerves.wav";
+      } else {
       if (!(self.regen & FL_BLOODLESS)) {
         self.regen = self.regen | FL_BLOODLESS;
-        self.noise = "max/eager.wav";
+        self.noise = "nehahra/max/eager.wav";
         }
       }
     }
@@ -2285,22 +2264,22 @@ Void function comment_case3();
 {
   if (!(self.regen & FL_FLY)) {
     self.regen = self.regen | FL_FLY;
-    self.noise = "max/tempor.wav";
+    self.noise = "nehahra/max/tempor.wav";
     }
   else {
     if (!(self.regen & FL_SWIM)) {
       self.regen = self.regen | FL_SWIM;
-      self.noise = "max/humanity.wav";
+      self.noise = "nehahra/max/humanity.wav";
       }
     else {
       if (!(self.regen & FL_CLIENT)) {
         self.regen = self.regen | FL_CLIENT;
-        self.noise = "max/yorick.wav";
+        self.noise = "nehahra/max/yorick.wav";
         }
       else {
         if (!(self.regen & FL_INWATER)) {
           self.regen = self.regen | FL_INWATER;
-          self.noise = "max/fun.wav";
+          self.noise = "nehahra/max/fun.wav";
           }
         }
       }
@@ -2308,10 +2287,10 @@ Void function comment_case3();
   if (self.noise == "NO") {
     if (random() < 0.5) {
       if (random() < 0.3) {
-        self.noise = "max/laugh.wav";
+        self.noise = "nehahra/max/laugh.wav";
         }
       else {
-        self.noise = "max/laugh2.wav";
+        self.noise = "nehahra/max/laugh2.wav";
         }
       }
     }
@@ -2328,28 +2307,28 @@ Void() comment_final = {
 	num = random();
 	if (self.charmer.lives == 1) {
 		if (num < 0.3) {
-			self.noise = "max/handful.wav";
+			self.noise = "nehahra/max/handful.wav";
 			self.cnt = 3;
 			ending1();
 			return;
 		}
-		self.noise = "max/tainted.wav";
+		self.noise = "nehahra/max/tainted.wav";
 		self.cnt = 2;
 		ending1();
 		return;
 	}
 	if (self.charmer.lives > 3) {
 		if (num < 0.2) {
-      self.noise = "max/inconsid.wav";
+      self.noise = "nehahra/max/inconsid.wav";
       self.cnt = 18;
       ending1();
       return;
 		} else {
 			if (num < 0.6) {
-				self.noise = "max/dull.wav";
+				self.noise = "nehahra/max/dull.wav";
 				self.cnt = 2;
 			} else {
-				self.noise = "max/iamgod.wav";
+				self.noise = "nehahra/max/iamgod.wav";
 				self.cnt = 3;
 			}
       ending1();
@@ -2358,31 +2337,30 @@ Void() comment_final = {
     }
   num = num + random();
   if (num < 0.3) {
-    self.noise = "max/death.wav";
+    self.noise = "nehahra/max/death.wav";
     self.cnt = 3.5;
     }
   else {
     if (num < 0.6) {
-      self.noise = "max/towin.wav";
+      self.noise = "nehahra/max/towin.wav";
       self.cnt = 17;
       }
     else {
       if (num < 0.9) {
-        self.noise = "max/witty.wav";
+        self.noise = "nehahra/max/witty.wav";
         self.cnt = 3;
         }
       else {
         if (num < 1.2) {
-          self.noise = "max/nehah.wav";
+          self.noise = "nehahra/max/nehah.wav";
           self.cnt = 7;
           }
         else {
           if (num < 1.6) {
-            self.noise = "max/enjoy.wav";
+            self.noise = "nehahra/max/enjoy.wav";
             self.cnt = 6.5;
-            }
-          else {
-            self.noise = "max/twisted.wav";
+            } else {
+            self.noise = "nehahra/max/twisted.wav";
             self.cnt = 10;
             }
           }
@@ -2435,9 +2413,9 @@ void () spawn_mister = {
 	head = spawn();
 	head.solid = SOLID_SLIDEBOX;
 	head.movetype = MOVETYPE_STEP;
-	head.model = "progs/maxwell.mdl";
+	head.model = "progs/nehahra/maxwell.mdl";
 	head.classname = "the_mister";
-	setmodel(head, "progs/maxwell.mdl");
+	setmodel(head, "progs/nehahra/maxwell.mdl");
 	setorigin(head, [429 -828 988]);
 	setsize(head, VEC_HULL_MIN, VEC_HULL_MAX);
 	head.yaw_speed = 80;

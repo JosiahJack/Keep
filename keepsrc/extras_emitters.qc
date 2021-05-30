@@ -84,28 +84,6 @@ Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	of 1 - 360 as a value of 0 is simply ignored (though this may be desirable in certain situations).
 	
 */
-
-//============================================================================
-
-float ABSOLUTE = 2;
-float TANGENTIAL = 16;
-float NOT_X = 2;
-float NOT_Y = 4;
-float NOT_Z = 8;
-
-float EMITSOLID = 2;
-float REMOVEONTOUCH = 4;
-float DIEAFTERANIM = 8;
-float SPINPARTICLES = 16;
-float STAGGERFRAMES = 32;
-float KILLINFWATER = 64;
-float USEEFFECTORS = 128;
-float STARTSTOPPED = 256;
-
-.float v1, v2, h1, h2;
-.float frate, frate2, nfrms, nfrms2;
-.float lspan, lspan2, ppe, stagcnt;
-
 void() effector_use = {
 	if (self.state)
 		self.state = FALSE;// off
@@ -113,110 +91,82 @@ void() effector_use = {
 		self.state = TRUE;// on
 };
 
-void() effector_destroy =
-{
+void() effector_destroy = {
 	if (!self.state) return;// Disabled
-	//if (other.classname != "particle") return;
+
 	if (AffectedByPhysics(other)) {
-		//if (!(other.owner.spawnflags & USEEFFECTORS)) return;
 		if (other.trigger_field == self) return;// Already affected by this trigger
-		
 		if (random() < self.count) {
 			self = other;
-			//self.think1();// kill it
 			if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
 			if (self.touchedvoid) return;				// Marked for removal
 			if (other == self.owner) return;			// no touching self
-			//if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
 
 			// No more touch/world interaction
 			self.touch = SUB_Null;
 			self.movetype = MOVETYPE_NONE;
 			self.solid = SOLID_NOT;
-		} else
-			other.trigger_field = self;// Can no longer affect this particle
+		} else other.trigger_field = self;// Can no longer affect this particle
 	}
 };
 
-void() effector_push =
-{
-	if (!self.state) return;// Disabled
-	//if (other.classname != "particle") return;
+void() effector_push = {
+	if (!self.state) return; // Disabled
+
 	if (AffectedByPhysics(other)) {
-		//if (!(other.owner.spawnflags & USEEFFECTORS)) return;
 		if (other.trigger_field == self) return;// Already affected by this trigger
 		
 		if (random() < self.count) {// push it
 			other.velocity = (other.velocity - (other.velocity*self.cnt)) + self.mangle;
 			if (other.classname == "hiplaser") other.old_velocity = other.velocity;
-			if (self.spawnflags & TANGENTIAL)
-				other.angles = vectoangles(other.velocity);	
+			if (self.spawnflags & TANGENTIAL) other.angles = vectoangles(other.velocity);	
 		}
-		
 		other.trigger_field = self;// Can no longer affect this particle
 	}
 };
 
-void() effector_gravity =
-{
-	if (!self.state) return;// Disabled
-	//if (other.classname != "particle") return;
+void() effector_gravity = {
+	if (!self.state) return; // Disabled
+
 	if (AffectedByPhysics(other)) {
-		//if (!(other.owner.spawnflags & USEEFFECTORS)) return;
 		if (other.trigger_field == self) return;// Already affected by this trigger
 		
-		if (random() < self.count) {// modify gravity
-			
+		if (random() < self.count) { // Modify gravity
 			if (self.spawnflags & ABSOLUTE)
 				other.gravity = self.gravity;
 			else
 				other.gravity = other.gravity + self.gravity;
 		}
-		
 		other.trigger_field = self;// Can no longer affect this particle
 	}
 };
 
-void() effector_turbulence =
-{
+void() effector_turbulence = {
 	local float r;
 	
 	if (!self.state) return;// Disabled
-	//if (other.classname != "particle") return;
-	if (AffectedByPhysics(other)) {
-		//if (!(other.owner.spawnflags & USEEFFECTORS)) return;
-		if (other.trigger_field == self) return;// Already affected by this trigger
-		
-		if (random() < self.count) {// add turbulence
-			
-			if (random() > 0.5) r = -1; else r = 1;
-			
-			if (!(self.spawnflags & NOT_X))
-				other.velocity_x = (other.velocity_x - (other.velocity_x*self.cnt)) + r*(random()*self.speed);
-			if (!(self.spawnflags & NOT_Y))
-				other.velocity_y = (other.velocity_y - (other.velocity_y*self.cnt)) + r*(random()*self.speed);
-			if (!(self.spawnflags & NOT_Z))
-				other.velocity_z = (other.velocity_z - (other.velocity_z*self.cnt)) + r*(random()*self.speed);
 
+	if (AffectedByPhysics(other)) {
+		if (other.trigger_field == self) return;// Already affected by this trigger
+	
+		if (random() < self.count) { // Add turbulence
+			if (random() > 0.5) r = -1; else r = 1;
+			if (!(self.spawnflags & NOT_X)) other.velocity_x = (other.velocity_x - (other.velocity_x*self.cnt)) + r*(random()*self.speed);
+			if (!(self.spawnflags & NOT_Y)) other.velocity_y = (other.velocity_y - (other.velocity_y*self.cnt)) + r*(random()*self.speed);
+			if (!(self.spawnflags & NOT_Z)) other.velocity_z = (other.velocity_z - (other.velocity_z*self.cnt)) + r*(random()*self.speed);
 			if (other.classname == "hiplaser") other.old_velocity = other.velocity;
-				
-			if (self.spawnflags & TANGENTIAL)
-				other.angles = vectoangles(other.velocity);	
+			if (self.spawnflags & TANGENTIAL) other.angles = vectoangles(other.velocity);	
 		}
-		
 		other.trigger_field = self;// Can no longer affect this particle
 	}
 };
 
-// attrators keep influencing particles that are caught
-void() effector_attract =
-{
+// Attrators keep influencing particles that are caught
+void() effector_attract = {
 	local vector	dir;
 	
 	if (!self.state) return;// Disabled
-	//if (other.classname != "particle") return;
 	if (AffectedByPhysics(other)) {
-		//if (!(other.owner.spawnflags & USEEFFECTORS)) return;
 		if (other.frags) return;// Already failed to catch this one	
 		if (other.teleport_time > time) return;// Timed out
 		
@@ -224,59 +174,43 @@ void() effector_attract =
 			dir = normalize(self.dest - other.origin);
 			other.velocity = (other.velocity - (other.velocity*self.cnt)) + (dir*self.speed);
 			if (other.classname == "hiplaser") other.old_velocity = other.velocity;
-			if (self.spawnflags & TANGENTIAL)
-				other.angles = vectoangles(other.velocity);		
-		} else
-			other.frags = TRUE;// can't touch this one
+			if (self.spawnflags & TANGENTIAL) other.angles = vectoangles(other.velocity);		
+		} else other.frags = TRUE;// can't touch this one
 		
 		other.teleport_time = time + 0.1;// Time out
 		other.trigger_field = self;// clear other triggers, and guarentee re-influence
 	}
 };
 
-// friction triggers keep influencing particles that are caught
-void() effector_friction =
-{
+// Friction triggers keep influencing particles that are caught
+void() effector_friction = {
 	if (!self.state) return;// Disabled
-	//if (other.classname != "particle") return;
+
 	if (AffectedByPhysics(other)) {
-		//if (!(other.owner.spawnflags & USEEFFECTORS)) return;
 		if (other.frags) return;// Already failed to catch this one	
 		if (other.teleport_time > time) return;// Timed out
 		
 		if (random() < self.count || other.trigger_field == self) {
 			other.velocity = other.velocity - (other.velocity*self.speed);
 			if (other.classname == "hiplaser") other.old_velocity = other.velocity;
-		} else {
-			other.frags = TRUE;// can't touch this one
-		}
+		} else other.frags = TRUE;// can't touch this one
 		
 		other.teleport_time = time + 0.1;// Time out
 		other.trigger_field = self;// clear other triggers, and guarentee re-influence
 	}
 };
 
-
-/*QUAKED t_effector_friction (0 .5 .8) ? START_ON
-Applies friction to particles, slowing them down (negative values speed particles up)
-
-"speed"			Amount of Friction (max 100 = dead stop, negative values can go further though -200 etc.)
-"count"			Override the default 100% of particles affected (valid: 1-99 i.e 50 affects roughly 50% of the particles)
-"targetname"	Can be enabled/disabled
-
-Spawnflags
-"START_ON"		Start in enabled state even if targeted
-
-*/
-void() t_effector_friction =
-{
+// QUAKED t_effector_friction (0 .5 .8) ? START_ON
+// Applies friction to particles, slowing them down (negative values speed particles up)
+// "speed"			Amount of Friction (max 100 = dead stop, negative values can go further though -200 etc.)
+// "count"			Override the default 100% of particles affected (valid: 1-99 i.e 50 affects roughly 50% of the particles)
+// "targetname"	Can be enabled/disabled
+// Spawnflags
+// "START_ON"		Start in enabled state even if targeted
+void() t_effector_friction = {
 	InitTrigger ();
-	
-	if (!self.count || self.count<0 || self.count>100)
-		self.count = 100;
-	
+	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
-	
 	self.speed = self.speed/100.0;
 	if (self.speed > 1.0) self.speed = 1.0;
 	
@@ -289,36 +223,24 @@ void() t_effector_friction =
 	self.touch = effector_friction;
 };
 
-/*QUAKED t_effector_attract (0 .5 .8) ? START_ON
-Particles touching this trigger are attracted to it's centre. Can also repel particles with
-negative strength. This works best with particles that have a low gravity setting.
-
-"speed"			Strength of the attraction
-"cnt"			Percentage of original particle velocity to diminish
-"count"			Override the default 100% of particles affected (valid: 1-99 i.e 50 affects roughly 50% of the particles)
-"targetname"	Can be enabled/disabled
-
-Spawnflags
-"START_ON"		Start in enabled state even if targeted
-"TANGENENTAL"	Particles turn to face new direction
-
-*/
-void() t_effector_attract =
-{
+// QUAKED t_effector_attract (0 .5 .8) ? START_ON
+// Particles touching this trigger are attracted to it's centre. Can also repel particles with
+// negative strength. This works best with particles that have a low gravity setting.
+// "speed"			Strength of the attraction
+// "cnt"			Percentage of original particle velocity to diminish
+// "count"			Override the default 100% of particles affected (valid: 1-99 i.e 50 affects roughly 50% of the particles)
+// "targetname"	Can be enabled/disabled
+// Spawnflags
+// "START_ON"		Start in enabled state even if targeted
+// "TANGENENTAL"	Particles turn to face new direction
+void() t_effector_attract = {
 	InitTrigger ();
-	
-	if (!self.count || self.count<0 || self.count>100)
-		self.count = 100;
-	
+	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
-
 	if (self.cnt<0) self.cnt = 0;
 	if (self.cnt>100) self.cnt = 100;
-	
 	self.cnt = self.cnt*0.01;
-	
-	if (!self.speed)
-		self.speed = 280;
+	if (!self.speed) self.speed = 280;
 	
 	// Save out the physical center
 	self.dest_x = (self.mins_x + self.maxs_x)*0.5;
@@ -334,42 +256,27 @@ void() t_effector_attract =
 	self.touch = effector_attract;
 };
 
-
-/*QUAKED t_effector_trubulence (0 .5 .8) ? START_ON
-Pushes particles at random speeds in all directions (can exlude certain axii)
-
-"speed"			Max amount of turbulence
-"cnt"			Percentage of original particle velocity to diminish
-"count"			Override the default 100% of particles affected (valid: 1-99 i.e 50 affects roughly 50% of the particles)
-"targetname"	Can be enabled/disabled
-
-Spawnflags
-"START_ON"		Start in enabled state even if targeted
-"NOT_X"			Don't affect X direction
-"NOT_Y"			Don't affect Y direction
-"NOT_Z"			Don't affect Z direction
-"TANGENENTAL"	Particles turn to face new direction
-
-*/
-void() t_effector_trubulence =
-{
+// QUAKED t_effector_trubulence (0 .5 .8) ? START_ON
+// Pushes particles at random speeds in all directions (can exlude certain axii)
+// "speed"			Max amount of turbulence
+// "cnt"			Percentage of original particle velocity to diminish
+// "count"			Override the default 100% of particles affected (valid: 1-99 i.e 50 affects roughly 50% of the particles)
+// "targetname"	Can be enabled/disabled
+// Spawnflags
+// "START_ON"		Start in enabled state even if targeted
+// "NOT_X"			Don't affect X direction
+// "NOT_Y"			Don't affect Y direction
+// "NOT_Z"			Don't affect Z direction
+// "TANGENENTAL"	Particles turn to face new direction
+void() t_effector_trubulence = {
 	InitTrigger ();
-	
-	if (!self.count || self.count<0 || self.count>100)
-		self.count = 100;
-	
+	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
-	
-	if (!self.speed)
-		objerror("t_effector_trubulence with no velocity");
-
+	if (!self.speed) self.speed = 1;
 	if (self.cnt<0) self.cnt = 0;
 	if (self.cnt>100) self.cnt = 100;
-	
 	self.cnt = self.cnt*0.01;
-	
 	self.speed = fabs(self.speed);
-	
 	if (self.targetname != string_null && !(self.spawnflags & START_ON))
 		self.state = FALSE;// off
 	else
@@ -379,28 +286,19 @@ void() t_effector_trubulence =
 	self.touch = effector_turbulence;
 };
 
-
-/*QUAKED t_effector_gravity (0 .5 .8) ? START_ON ABSOLUTE
-Modifies particle gravity
-
-"gravity"		Add this to current gravity value, or change to this value if  "ABSOLUTE" is set
-"count"			Override the default 100% of particles affected (valid: 1-99 i.e 50 affects roughly 50% of the particles)
-"targetname"	Can be enabled/disabled
-
-Spawnflags
-"START_ON"		Start in enabled state even if targeted
-"ABSOLUTE"		Particles use new gravity outright
-
-*/
-void() t_effector_gravity =
-{
+// QUAKED t_effector_gravity (0 .5 .8) ? START_ON ABSOLUTE
+// Modifies particle gravity
+// "gravity"		Add this to current gravity value, or change to this value if  "ABSOLUTE" is set
+// "count"			Override the default 100% of particles affected (valid: 1-99 i.e 50 affects roughly 50% of the particles)
+// "targetname"	Can be enabled/disabled
+// Spawnflags
+// "START_ON"		Start in enabled state even if targeted
+// "ABSOLUTE"		Particles use new gravity outright
+void() t_effector_gravity = {
 	InitTrigger ();
-	
-	if (!self.count || self.count<0 || self.count>100)
-		self.count = 100;
-	
+	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
-	
+
 	if (self.targetname != string_null && !(self.spawnflags & START_ON))
 		self.state = FALSE;// off
 	else
@@ -410,34 +308,22 @@ void() t_effector_gravity =
 	self.touch = effector_gravity;
 };
 
-/*QUAKED t_effector_push (0 .5 .8) ? START_ON ABSOLUTE
-Pushes particles in a new direction
-
-"mangle"		X Y Z speed
-"cnt"			Percentage of original particle velocity to diminish
-"count"			Override the default 100% of particles affected (valid: 1-99 i.e 50 affects roughly 50% of the particles)
-"targetname"	Can be enabled/disabled
-
-Spawnflags
-"START_ON"		Start in enabled state even if targeted
-"TANGENENTAL"	Particles turn to face new direction
-
-*/
-void() t_effector_push =
-{
+// QUAKED t_effector_push (0 .5 .8) ? START_ON ABSOLUTE
+// Pushes particles in a new direction
+// "mangle"		X Y Z speed NOTE: mangle of '0 0 0' is ok (let gravity take over)
+// "cnt"			Percentage of original particle velocity to diminish
+// "count"			Override the default 100% of particles affected (valid: 1-99 i.e 50 affects roughly 50% of the particles)
+// "targetname"	Can be enabled/disabled
+// Spawnflags
+// "START_ON"		Start in enabled state even if targeted
+// "TANGENENTAL"	Particles turn to face new direction
+void() t_effector_push = {
 	InitTrigger ();
-	
-	if (!self.count || self.count<0 || self.count>100)
-		self.count = 100;
-	
+	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
-	
 	if (self.cnt<0) self.cnt = 0;
 	if (self.cnt>100) self.cnt = 100;
-	
 	self.cnt = self.cnt*0.01;
-	
-	// NOTE: mangle of '0 0 0' is ok (let gravity take over)
 	
 	if (self.targetname != string_null && !(self.spawnflags & START_ON))
 		self.state = FALSE;// off
@@ -448,23 +334,15 @@ void() t_effector_push =
 	self.touch = effector_push;
 };
 
-/*QUAKED t_effector_destroy (0 .5 .8) ? START_ON
-Kills particles that touch it
-
-"count"			Override the default 100% obliteration (valid: 1-99 i.e 50 affects roughly 50% of the particles)
-"targetname"	Can be enabled/disabled
-
-Spawnflags
-"START_ON"		Start in enabled state even if targeted
-
-*/
-void() t_effector_destroy =
-{
+// QUAKED t_effector_destroy (0 .5 .8) ? START_ON
+// Kills particles that touch it
+// "count"			Override the default 100% obliteration (valid: 1-99 i.e 50 affects roughly 50% of the particles)
+// "targetname"	Can be enabled/disabled
+// Spawnflags
+// "START_ON"		Start in enabled state even if targeted
+void() t_effector_destroy = {
 	InitTrigger ();
-	
-	if (!self.count || self.count<0 || self.count>100)
-		self.count = 100;
-	
+	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
 	
 	if (self.targetname != string_null && !(self.spawnflags & START_ON))
@@ -476,33 +354,26 @@ void() t_effector_destroy =
 	self.touch = effector_destroy;
 };
 
-//============================================================================
-
 // Return a particle origin for a brush volume or point entity
-vector() particle_origin = 
-{
+vector() particle_origin = {
 	local vector org;
 
-	// Point
-	if (!self.aflag) {	
+	
+	if (!self.aflag) { // Point	
 		if (self.owner)// Adjust origin relative to the parent train
 			org = self.origin + self.dest;
 		else
 			org = self.dest;
-	
-	// Volume (submodels always have an origin of '0 0 0' so they're always in sync with the parent train)
-	} else {
+	} else { // Volume (submodels always have an origin of '0 0 0' so they're always in sync with the parent train)
 		org_x = self.absmin_x + (random() * self.size_x);
 		org_y = self.absmin_y + (random() * self.size_y);
 		org_z = self.absmin_z + (random() * self.size_z);
 	}
-	
 	return org;
 };
 
 // Play death model sequence
-void() particle_death_anim =
-{	
+void() particle_death_anim = {	
 	if (self.frame+1 == self.owner.nfrms2) {// done
 		remove(self);
 		return;
@@ -513,17 +384,10 @@ void() particle_death_anim =
 };
 
 // Particle is done
-void() particle_die =
-{
+void() particle_die = {
 	self.classname = "p_dying";// So effectors ignore dying particles
-	
-	if (self.owner.noise2)
-		sound (self, CHAN_VOICE, self.owner.noise2, 1, ATTN_NORM);	
-	
-	if (!self.owner.mdl2) {
-		remove(self);
-		return;
-	}
+	if (self.owner.noise2) sound (self, CHAN_VOICE, self.owner.noise2, 1, ATTN_NORM);	
+	if (!self.owner.mdl2) { remove(self); return; }
 	
 	self.solid = SOLID_NOT;// Change this and DIE!
 	self.movetype = MOVETYPE_NONE;
@@ -536,59 +400,41 @@ void() particle_die =
 };
 
 // Animate Particles
-void() particle_think =
-{
-	if (self.ltime < time) {// done
-		particle_die();
-		return;
-	}
+void() particle_think = {
+	if (self.ltime < time) { particle_die(); return; } // done
 	
 	if (self.frame+1 == self.owner.nfrms) {
 		if (self.owner.spawnflags & DIEAFTERANIM) {// done	
 			particle_die();
 			return;
-		} else
-			self.frame = 0;// loop
-	}
-	else
-		self.frame = self.frame + 1;
-	
+		} else self.frame = 0;// loop
+	} else self.frame = self.frame + 1;
+
 	self.nextthink = time + self.owner.frate;
 };
 
 // Do damage and play hit sound
-void() particle_touch =
-{
-	// Don't die on other particles
-	if (AffectedByPhysics(other))
-		return;
-		
-	if (self.cnt == 3)
-		return; // Don't go nuts (especially if caught up)
+void() particle_touch = {
+	local float flip;
+
+	if (AffectedByPhysics(other)) return; // Don't die on other particles
+	if (self.cnt == 3) return; // Don't go nuts (especially if caught up)
 	
-	if (!self.cnt) {// Only play sound on first hit
-		if (self.owner.noise1)
-			sound (self, CHAN_VOICE, self.owner.noise1, 1, ATTN_NORM);	
-	}
-	
-	self.cnt = self.cnt + 1;
-		
-	if (self.owner.dmg != 0)
-	{
-		if (other.takedamage)
-		{
-			if (self.attack_finished < time)
-			{			
-				if (self.owner.dmg > 0 && self.owner.weapon >= TE_SPIKE)// Negative damage heals
-					spawn_touchblood(self,other,self.owner.dmg);
-				
-				T_Damage (other, self, self, self.owner.dmg,DAMARMOR);
+	if (!self.cnt && self.owner.noise1) sound (self, CHAN_VOICE, self.owner.noise1, 1, ATTN_NORM);	
+	self.cnt = self.cnt + 1;	
+	if (self.owner.dmg != 0) {
+		if (other.takedamage) {
+			if (self.attack_finished < time) {			
+				if (self.owner.dmg > 0) {
+					if (self.owner.weapon >= TE_SPIKE) spawn_touchblood(self,other,self.owner.dmg); 
+					T_Damage (other, self, self, self.owner.dmg,DAMARMOR);
+				} else {
+					flip = self.owner.dmg * -1;
+					T_Heal(other,flip,FALSE); // Negative damage heals 
+				}
 				self.attack_finished = time + 1;// Don't go nuts if particle doesn't die on touch
 			}
-		}
-		// Do a temp ent effect
-		else if (self.owner.weapon >= TE_SPIKE)
-		{
+		} else if (self.owner.weapon >= TE_SPIKE) { // Do a temp ent effect
 			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 			WriteByte (MSG_BROADCAST, self.owner.weapon);
 			WriteCoord (MSG_BROADCAST, self.origin_x);
@@ -596,19 +442,13 @@ void() particle_touch =
 			WriteCoord (MSG_BROADCAST, self.origin_z);
 		}
 	}
-	
-	if (self.owner.spawnflags & REMOVEONTOUCH)// done
-		particle_die();
+	if (self.owner.spawnflags & REMOVEONTOUCH) particle_die(); // done 
 };
 
-//============================================================================
-
-.float ang_ofs;
 void() emitter_pause;
 void() emitter_emit;
 
-float(string type) emitter_checkrelay =
-{
+float(string type) emitter_checkrelay = {
 	if (self.old_velocity == '0 0 0') return FALSE;// no spin
 	
 	if (type == "t_changedir") {		
@@ -617,39 +457,33 @@ float(string type) emitter_checkrelay =
 		else
 			self.state = REVERSE;
 		return TRUE;
-	}
-	else if (type == "t_forward") {
+	} else if (type == "t_forward") {
 		self.mangle = self.old_velocity;
 		self.state = FORWARD;
 		return TRUE;
-	}
-	else if (type == "t_reverse") {
+	} else if (type == "t_reverse") {
 		self.mangle = self.old_velocity;
 		self.state = REVERSE;
 		return TRUE;
-	}
-	else if (type == "t_go") {
+	} else if (type == "t_go") {
 		self.mangle = self.old_velocity;
 		return TRUE;	
-	}
-	else if (type == "t_stop") {
+	} else if (type == "t_stop") {
 		self.mangle = '0 0 0';
 		return TRUE;
 	}
-	
+
 	return FALSE;
 };
 
-void() emitter_start =
-{	
+void() emitter_start = {	
 	if (emitter_checkrelay(other.classname)) return;// spin trigger
 	
 	self.use = emitter_pause;// next use stops it
 	self.nextthink = time + 0.01;
 };
 
-void() emitter_pause =
-{
+void() emitter_pause = {
 	if (emitter_checkrelay(other.classname)) return;// spin trigger
 	
 	// Wait around for next use

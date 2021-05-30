@@ -1,4 +1,64 @@
-//DarkPlaces supported extension list, draft version 1.04
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Lord Havoc
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 0
+// Builtin Function count: 190
+//
+// Implements: DarkPlaces engine specific extensions and API functions
+//
+// Description:
+// Definitions for engine-specific features for extra effects and helper
+// utilities.  Originally was only for DarkPlaces, but QSS and FTE have similar
+// cross-support for a lot of these, though not consistently so.
+//
+// version 1.04
+//
+// Qmaster's special note: This was an engine generated file.  I've excluded
+// conflicts with qsextensions and fteextensions in deference to these two
+// newer engines since DarkPlaces is...well...it doesn't have twisty water and
+// therefore is not a proper implementation of Quake in my book.
+//
+// ... that said, I did use DarkPlaces as my engine of choice for about 10yrs,
+// so...yeah.  I did like it's customizability but after so many hiccups with
+// physics and odd floaty feel, and bad water, I eventually switched to QS as a
+// result of Arcane Dimensions...never looked back.  Good memories though.
+//
+// QSS and FTE are the new "standards" if that term can be applied to Quake
+// engines while holding a straight face, so stuff here isn't really cared
+// about.
+//
+// This is where my code cleanup doesn't care.  Don't look boys and girls!!
+//
+// Seriously don't...complete mess ahead.
+//=============================================================================
+
 //things that don't have extensions yet:
 .float disableclientprediction;
 
@@ -1936,17 +1996,9 @@ float Q3SURFACEFLAG_NOIMPACT = 16; // projectiles should remove themselves on im
 float Q3SURFACEFLAG_NOMARKS = 32; // projectiles should not leave marks, such as decals (this is set on sky)
 float Q3SURFACEFLAG_FLESH = 64; // projectiles should do a fleshy effect (blood?) on impact
 float Q3SURFACEFLAG_NODRAW = 128; // compiler hint (not important to qc)
-//float Q3SURFACEFLAG_HINT = 256; // compiler hint (not important to qc)
-//float Q3SURFACEFLAG_SKIP = 512; // compiler hint (not important to qc)
-//float Q3SURFACEFLAG_NOLIGHTMAP = 1024; // compiler hint (not important to qc)
-//float Q3SURFACEFLAG_POINTLIGHT = 2048; // compiler hint (not important to qc)
 float Q3SURFACEFLAG_METALSTEPS = 4096; // walking on this surface should make metal step sounds
 float Q3SURFACEFLAG_NOSTEPS = 8192; // walking on this surface should not make footstep sounds
 float Q3SURFACEFLAG_NONSOLID = 16384; // compiler hint (not important to qc)
-//float Q3SURFACEFLAG_LIGHTFILTER = 32768; // compiler hint (not important to qc)
-//float Q3SURFACEFLAG_ALPHASHADOW = 65536; // compiler hint (not important to qc)
-//float Q3SURFACEFLAG_NODLIGHT = 131072; // compiler hint (not important to qc)
-//float Q3SURFACEFLAG_DUST = 262144; // translucent 'light beam' effect (not important to qc)
 //description:
 //adds additional information after a traceline/tracebox/tracetoss call.
 //also (very important) sets trace_* globals before calling .touch functions,
@@ -1996,7 +2048,7 @@ float FILE_WRITE = 2;
 //pr_zone_min_strings : default 64 (64k), min 64 (64k), max 8192 (8mb)
 //description:
 //provides text file access functions and string manipulation functions, note that you may want to set pr_zone_min_strings in the worldspawn function if 64k is not enough string zone space.
-//
+
 //NOTE: strzone functionality is partially superseded by
 //DP_QC_UNLIMITEDTEMPSTRINGS when longterm storage is not needed
 //NOTE: substring is upgraded by FTE_STRINGS extension with negative start/length handling identical to php 5.2.0
@@ -2042,7 +2094,7 @@ float(float modlindex, float framenum) frameduration = #277; // returns the inte
 //each model contains its own animation data, you can use animations from other model files (for example saving out all character animations as separate model files).
 //if an engine supports loading an animation-only file format such as .md5anim in FTEQW, it can be used to animate any model with a compatible skeleton.
 //proper use of this extension may require understanding matrix transforms (v_forward, v_right, v_up, origin), and you must keep in mind that v_right is negative for this purpose.
-//
+
 //features include:
 //multiple animations blended together.
 //animating a model with animations from another model with a compatible skeleton.
@@ -2122,7 +2174,7 @@ float EF_SELECTABLE = 16384; // allows cursor to highlight entity (brighten)
 .float style; // light style (like normal light entities, flickering torches or switchable, etc)
 .float pflags; // flags (see PFLAGS_ constants)
 .vector angles; // orientation of the light
-.float skin; // cubemap filter number, can be 1-255 (0 is assumed to be none, and tenebrae only allows 16-255), this selects a projective light filter, a value of 1 loads cubemaps/1posx.tga and cubemaps/1negx.tga and posy, negy, posz, and negz, similar to skybox but some sides need to be rotated or flipped
+.float skin; // cubemap filter number, can be 1-255 (0 for none, and tenebrae only allows 16-255), this selects a projective light filter, a value of 1 loads cubemaps/1posx.tga and cubemaps/1negx.tga and posy, negy, posz, and negz, similar to skybox but some sides need to be rotated or flipped
 //constants:
 float PFLAGS_NOSHADOW = 1; // light does not cast shadows
 float PFLAGS_CORONA = 2; // light has a corona flare
@@ -2178,27 +2230,6 @@ float(string s1, string s2) strcasecmp = #229; // compare two strings with case-
 // substring("blah", -10, 3) returns "bla"
 // substring("blah", -10, -3) returns "b"
 
-//DP_CON_BESTWEAPON
-//idea: many
-//darkplaces implementation: divVerent
-//description:
-//allows QC to register weapon properties for use by the bestweapon command, for mods that change required ammo count or type for the weapons
-//it is done using console commands sent via stuffcmd:
-//  register_bestweapon quake
-//  register_bestweapon clear
-//  register_bestweapon <shortname> <impulse> <itemcode> <activeweaponcode> <ammostat> <ammomin>
-//for example, this is what Quake uses:
-//  register_bestweapon 1 1 4096 4096 6 0 // STAT_SHELLS is 6
-//  register_bestweapon 2 2    1    1 6 1
-//  register_bestweapon 3 3    2    2 6 1
-//  register_bestweapon 4 4    4    4 7 1 // STAT_NAILS is 7
-//  register_bestweapon 5 5    8    8 7 1
-//  register_bestweapon 6 6   16   16 8 1 // STAT_ROCKETS is 8
-//  register_bestweapon 7 7   32   32 8 1
-//  register_bestweapon 8 8   64   64 9 1 // STAT_CELLS is 9
-//after each map client initialization, this is reset back to Quake settings. So you should send these data in ClientConnect.
-//also, this extension introduces a new "cycleweapon" command to the user.
-
 //DP_QC_STRINGBUFFERS
 //idea: ??
 //darkplaces implementation: LordHavoc
@@ -2230,7 +2261,7 @@ string(string search, string replace, string subject) strireplace = #485;
 //description:
 //strreplace replaces all occurrences of 'search' with 'replace' in the string 'subject', and returns the result as a tempstring.
 //strireplace does the same but uses case-insensitive matching of the 'search' term
-//
+
 //DP_QC_CRC16
 //idea: divVerent
 //darkplaces implementation: divVerent
@@ -2263,11 +2294,7 @@ void(float pause) setpause = #531;
 //
 //Note: it is worth considering that network-related functions may be called during the pause (including customizeentityforclient for example), and it is also important to consider the continued use of the KRIMZON_SV_PARSECLIENTCOMMAND extension while paused (chatting players, etc), players may also join/leave during the pause.  In other words, the only things that are not called are think and other time-related functions.
 
-
-
-
 // EXPERIMENTAL (not finalized) EXTENSIONS:
-
 //DP_CRYPTO
 //idea: divVerent
 //darkplaces implementation: divVerent
@@ -2280,5 +2307,8 @@ void(float pause) setpause = #531;
 // there is no field crypto_myidfp, as that info contains no additional information the QC may have a use for
 //builtin definitions: (SVQC)
 float(string url, float id, string content_type, string delim, float buf, float keyid) crypto_uri_postbuf = #513;
-//description:
-//use -1 as buffer handle to justs end delim as postdata
+
+// Ok this is actually from qsextensions, but all of qsextensions was cross-compatible with fteextensions except this...didn't feel like having a one line file.
+void(float num, float type, string name) globalstat = #233; /*Specifies what data to use in order to send various stats, in a non-client-specific way. num and type are as in clientstat, name however, is the name of the global to read in the form of a string (pass "foo"). */
+
+// YOU LOOKED! I told you it was a mess.  Ah well, move on for some nicer looking code...

@@ -56,24 +56,17 @@ $frame standb1 standb2 standb3 standb4 standb5 standb6
 //  BANDIT / GOBLIN  (Soldier variant armed with a bow.)
 //============================================================================
 
-// ATTACK - - - - - - - - - - - - - - -
-void() bandit_fire =
-{
-    local   vector  org, dir;
-    local   float   artype;
+void() bandit_fire = {
+    local vector org, dir;
+    local float artype;
 
-    ai_face ();
-
-    makevectors (self.angles);
+    ai_face();
+    makevectors(self.angles);
     dir = (v_forward*9) + (v_right*6) + (v_up*16);
     org = self.origin + dir;
     dir = self.enemy.origin + dir;
-//    if (ARROW_FLY)
-        dir = Maim_Line (org, dir, AKARROW_SPEED_FLY, world, '0 0 0');
-//    else
-//        dir = Maim_Toss (org, dir, AKARROW_SPEED_TOSS, 200, world, '0 0 0');
-
-    sound (self, CHAN_WEAPON, "drake/archer/arrowg.wav", 1, ATTN_NORM);
+    dir = Maim_Line(org, dir, AKARROW_SPEED_FLY, world, '0 0 0');
+    sound(self, CHAN_WEAPON, "drake/archer/arrowg.wav", 1, ATTN_NORM);
     // PM:  Assumes skin is 0 or 1.  If 2+, rewrite!
     if (self.ryuflags & RYU_REBEL)
         artype = 0;     // Rebel arrows are stronger.
@@ -89,11 +82,10 @@ void() bandit_short = {
     if (self.ryuflags & RYU_REBEL) {
         p1 = self.origin + self.view_ofs;
         p2 = self.enemy.origin + self.enemy.view_ofs;
-
-        traceline (p1, p2, ARROW_FLY, self);
+        traceline (p1, p2, 2, self);
         if (trace_ent != self.enemy) {
 			if ((trace_fraction < 1) && (trace_ent.flags & FLx_CREATURE) && (self.enemy.solid <= SOLID_TRIGGER || Align_Match(self,trace_ent) || trace_ent.enemy == self || trace_ent == self.oldenemy)) {
-				StopSound (self, CHAN_WEAPON);
+				StopSound(self, CHAN_WEAPON);
 				self.think = army_run1;
 			}
 		}
@@ -108,32 +100,26 @@ void() bandit_atk4  =[ $shoot4,   bandit_atk5    ] {ai_face();};
 void() bandit_atk5  =[ $shoot5,   bandit_atk6    ] {ai_face();};
 void() bandit_atk6  =[ $shoot5,   bandit_atk7    ] {ai_face();bandit_short();};
 void() bandit_atk7  =[ $shoot6,   bandit_atk8    ] {ai_face();bandit_fire();};
-void() bandit_atk8  =[ $shoot7,   army_run1      ] {ai_face();
-    if (self.ryuflags & RYU_REBEL)
-    {   // Rebels have their own refire check.
-        if (self.enemy.health > 0)
-        {
-            if (random() < 0.4)
-            {   // If shot cannot hit enemy, stop.
-                local   vector  p1, p2;
+void() bandit_atk8  =[ $shoot7,   army_run1      ] {
+	local vector p1, p2;
 
+	ai_face();
+    if (self.ryuflags & RYU_REBEL) { // Rebels have their own refire check.
+        if (self.enemy.health > 0) {
+            if (random() < 0.4) { // If shot cannot hit enemy, stop.
                 p1 = self.origin + self.view_ofs;
                 p2 = self.enemy.origin + self.enemy.view_ofs;
-
-                traceline (p1, p2, ARROW_FLY, self);
+                traceline (p1, p2, 2, self);
 				
 				// Refire.
                 if (trace_ent == self.enemy) {   
-                    if (self.attack_finished)
-                        self.attack_finished = self.attack_finished + 0.5;
+                    if (self.attack_finished) self.attack_finished = self.attack_finished + 0.5;
                     self.think = bandit_atk4;
                     return;
                 }
             }
         }
-    }
-    else
-        SUB_CheckRefire (bandit_atk3);
+    } else SUB_CheckRefire (bandit_atk3);
 };
 //void() bandit_atk8  =[ $shoot8,   bandit_atk9    ] {ai_face();};
 //void() bandit_atk9  =[ $shoot9,   army_run1      ] {ai_face();};

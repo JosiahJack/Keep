@@ -318,7 +318,7 @@ void() GlowTouch =
 	}
 	T_RadiusDamageAOA (self, self.owner, 150, 200, self.owner, DAMAGEALL);
 
-	SpawnExplosion(EXPLODE_SMALL, self.origin, "yakman/expsmall.wav");
+	SpawnExplosion(EXPLODE_SMALL, self.origin, "ad171/minotaur/attack1expl.wav");
 	remove(self);
 };
 
@@ -1320,8 +1320,7 @@ void() FlakExplode =
 	FlakShrapnel(spread('1 1 1'));
 	FlakShrapnel(spread('1 1 1'));
 	FlakShrapnel(spread('1 1 1')); //20 projectiles
-	
-	sound (self, CHAN_VOICE, "drake/weapons/r_exp3a.wav", 1.0, ATTN_NORM);
+	R_Exp3(self.origin);
 	BecomeExplosion();
 };
 
@@ -1530,7 +1529,7 @@ void() MaceLungeTouch =
 	if (other.takedamage && !(self.flags & FL_ONGROUND))
 	{
 		T_Damage(other, self, self, 25, DAMARMOR);
-		sound(self, CHAN_VOICE, "weapons/axe_wood.wav", 1.0, ATTN_NORM);
+		sound(self, CHAN_VOICE, "ad171/weapons/axe_wood.wav", 1.0, ATTN_NORM);
 		SpawnBlood(other, (self.origin - other.origin)/2 + '0 0 20', self.velocity, 20);
 	}
 	self.touch = SUB_Null;
@@ -2130,11 +2129,9 @@ void() GauntletOrbTouch =
 
 void() GreyOrbTouch = //Tome of Power blood orb projectiles
 {
-
-	if (other != self.owner)
-	{
+	if (other != self.owner) {
 		T_RadiusDamageAOA(self, self.owner, 100, 80, self.owner, DAMAGEALL);
-		sound (self, CHAN_VOICE, "weapons/r_exp3.wav", 1, ATTN_NORM);
+		R_Exp3(self.origin);
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 		WriteByte (MSG_BROADCAST, TE_EXPLOSION);
 		WriteCoord (MSG_BROADCAST, self.origin_x);

@@ -131,7 +131,7 @@ void() sentinel_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
-	sound (self, CHAN_VOICE, "jim/explode_major.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "ad171/jim/explode_major.wav", 1, ATTN_NORM);
 	self.solid = SOLID_NOT;
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
@@ -156,7 +156,7 @@ void() monster_sentinel = {
 	precache_model("progs/quoth2pt2full/gib.mdl");
 	precache_model("progs/quoth2pt2full/wreckage.mdl");
 	precache_model("progs/quoth2pt2full/s_vp_pll.spr");
-	precache_sound("jim/explode_major.wav");
+	precache_sound("ad171/jim/explode_major.wav");
 	precache_sound("enforcer/enfire.wav");
 	precache_sound("enforcer/enfstop.wav");
 	precache_sound("sentinel/laser.wav");
@@ -165,11 +165,9 @@ void() monster_sentinel = {
 	precache_sound("sentinel/widle2.wav");
 	precache_sound("sentinel/wpain.wav");
 	precache_sound("sentinel/wsight.wav");
-	precache_sound("misc/null.wav");
 
 	self.gib1mdl = "progs/quoth2pt2full/gib.mdl";
 	self.gib2mdl = "progs/quoth2pt2full/wreckage.mdl";
-
 	self.sight_sound = "sentinel/wsight.wav";
 	self.idle_sound = "sentinel/widle1.wav";
 	self.idle_sound2 = "sentinel/widle2.wav";
@@ -183,9 +181,7 @@ void() monster_sentinel = {
 	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
 	if (self.health < 1) self.health = 150;
 
-	if (self.spawnflags & 4) {
-		self.skin = 1;
-	}
+	if (self.spawnflags & 4) self.skin = 1;
 
 	if (self.deathstring == "") self.deathstring = " was scorched by a Sentinel\n";
 	self.th_run = sentinel_run1;

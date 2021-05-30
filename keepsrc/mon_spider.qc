@@ -177,11 +177,8 @@ void()	spider_spit10 =[	$atkloop9,		spider_spit11 ] {spider_spitacid(0.1);};
 void()	spider_spit11	=[	$atkup7,		spider_spit12] {};
 void()	spider_spit12	=[	$atkup5,		spider_run1	] {};
 
-//======================================================================
 // BITE - Both spider types can bite if within range
-//======================================================================
-void() spider_melee =
-{
+void() spider_melee = {
 	local float ldmg;
 
 	if (!self.enemy) return;
@@ -194,8 +191,8 @@ void() spider_melee =
 	// Can the target bleed?
 	if (!self.enemy.takedamage) return;
 
-	if (random() < 0.5) sound(self, CHAN_WEAPON, "spider/attackmunch.wav", TRUE, TRUE);
-	else sound(self, CHAN_WEAPON, "spider/attacktear.wav", TRUE, TRUE);
+	if (random() < 0.5) sound(self, CHAN_WEAPON, "ad171/spider/attackmunch.wav", TRUE, TRUE);
+	else sound(self, CHAN_WEAPON, "ad171/spider/attacktear.wav", TRUE, TRUE);
 
 	// Spider bite (damage 1-9) is very weak
 	ldmg = (random() + random() + random()) * 3;
@@ -535,7 +532,7 @@ void() spider_die =
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "spider/death1.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "ad171/spider/death1.wav", 1, ATTN_NORM);
 		spider_die1();
 	}
 };
@@ -578,28 +575,28 @@ void() monster_spider =
 	self.gib1frame = 9;
 
 	// IDLE/COMBAT and SIGHT sounds
-	self.idle_sound = "spider/idle1.wav";
-	self.idle_sound2 = "spider/hiss2.wav";
-	self.idle_soundcom = "spider/idle1.wav";
-	self.idle_soundcom2 = "spider/hiss3.wav";
+	self.idle_sound = "ad171/spider/idle1.wav";
+	self.idle_sound2 = "ad171/spider/hiss2.wav";
+	self.idle_soundcom = "ad171/spider/idle1.wav";
+	self.idle_soundcom2 = "ad171/spider/hiss3.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
 	precache_sound (self.idle_soundcom);
 	precache_sound (self.idle_soundcom2);
 
 	// death/pain/attack sounds
-	precache_sound("spider/death1.wav");
-	self.pain_sound = "spider/pain1.wav";
-	self.pain_sound2 = "spider/pain2.wav";
+	precache_sound("ad171/spider/death1.wav");
+	self.pain_sound = "ad171/spider/pain1.wav";
+	self.pain_sound2 = "ad171/spider/pain2.wav";
 	precache_sound(self.pain_sound);
 	precache_sound(self.pain_sound2);
 
-	precache_sound("spider/miss.wav");
-	precache_sound("spider/attackmunch.wav");
-	precache_sound("spider/attacktear.wav");
-	precache_sound("spider/jumpland.wav");
+	precache_sound("ad171/spider/miss.wav");
+	precache_sound("ad171/spider/attackmunch.wav");
+	precache_sound("ad171/spider/attacktear.wav");
+	precache_sound("ad171/spider/jumpland.wav");
 
-	self.sight_sound = "spider/hiss1.wav";
+	self.sight_sound = "ad171/spider/hiss1.wav";
 	precache_sound (self.sight_sound);
 
 	// Cache spider is a special class sed for precache only
@@ -696,11 +693,8 @@ void() setup_spider =
 	monster_start();
 };
 
-//----------------------------------------------------------------------------
 // A code way to spawn spiders (requires monster_spiderspawn entity)
-//----------------------------------------------------------------------------
-void(vector minion_org, entity minion_targ) minion_spider =
-{
+void(vector minion_org, entity minion_targ) minion_spider = {
 	local entity minion;
 	
 	// Check if there is space to spawn entity
@@ -738,13 +732,13 @@ void(vector minion_org, entity minion_targ) minion_spider =
 	}
 
 	minion.gib1frame = 9;
-	minion.idle_sound = "spider/idle1.wav";
-	minion.idle_sound2 = "spider/hiss2.wav";
-	minion.idle_soundcom = "spider/idle1.wav";
-	minion.idle_soundcom2 = "spider/hiss3.wav";
-	minion.sight_sound = "spider/hiss1.wav";
-	minion.pain_sound = "spider/pain1.wav";
-	minion.pain_sound2 = "spider/pain2.wav";
+	minion.idle_sound = "ad171/spider/idle1.wav";
+	minion.idle_sound2 = "ad171/spider/hiss2.wav";
+	minion.idle_soundcom = "ad171/spider/idle1.wav";
+	minion.idle_soundcom2 = "ad171/spider/hiss3.wav";
+	minion.sight_sound = "ad171/spider/hiss1.wav";
+	minion.pain_sound = "ad171/spider/pain1.wav";
+	minion.pain_sound2 = "ad171/spider/pain2.wav";
 	
 	minion.nextthink = time + 0.01;
 	minion.think = setup_spider;

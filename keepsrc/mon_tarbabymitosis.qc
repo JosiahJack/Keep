@@ -47,12 +47,7 @@ void(entity inflictor, entity attacker, float damage) tbaby_mitosis = {
 		newSpawn.classname = self.classname;
 		newSpawn.movetype = MOVETYPE_STEP;
 		setsize (newSpawn, '-16 -16 -24', '16 16 40');
-		newSpawn.health = 80;
-		//if (self.skin == 1)
-			//newSpawn.health = 60;
-		//else if (self.skin == 2)
-			newSpawn.health = 100;
-
+		newSpawn.health = 100;
 		newSpawn.owner = self;
 		self.th_pain = SUB_Null_pain;
 		setmodel (newSpawn, self.owner.mdl);
@@ -61,7 +56,7 @@ void(entity inflictor, entity attacker, float damage) tbaby_mitosis = {
 		setorigin (newSpawn, self.origin);              
 		newSpawn.think = tbaby_checknew;
 		newSpawn.nextthink = time + 0.5;
-        	sound (newSpawn, CHAN_VOICE, "blob/mytosis.wav", 1, ATTN_NORM);
+        sound (newSpawn, CHAN_VOICE, "rogue/blob/mytosis.wav", 1, ATTN_NORM);
 	}
 };
 
@@ -80,7 +75,7 @@ void() monster_tarbaby_mitosis = {
 	precache_sound ("blob/hit1.wav");
 	precache_sound ("blob/land1.wav");
 	precache_sound ("blob/sight1.wav");
-	precache_sound ("blob/mytosis.wav");
+	precache_sound ("rogue/blob/mytosis.wav");
 
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement

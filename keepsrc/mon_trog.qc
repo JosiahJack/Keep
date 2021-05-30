@@ -44,7 +44,7 @@ local   float   delta;
     if (( self.owner.frame >= $pain1 ) || (self.owner.health < 1)) {
         // The spell fizzles!
         super_active = 0;
-        sound (self, CHAN_WEAPON, SOUND_EMPTY, 1, ATTN_NORM);
+        StopSound(self,CHAN_WEAPON);
         if (self.trigger_field)     // Remove the explosion entity.
             remove (self.trigger_field);
         remove (self);
@@ -133,7 +133,7 @@ void() StartTrogMagic =
 //    setmodel (Mcircle, "");
 //    setsize (Mcircle, '0 0 0', '0 0 0');        
     setorigin (Mcircle, spot);
-    sound (Mcircle, CHAN_WEAPON, "nemesant/charge.wav", 1, ATTN_NORM);
+    sound (Mcircle, CHAN_WEAPON, "zerstorer/trog/charge.wav", 1, ATTN_NORM);
 
 // Explosion entity.
     spot = self.enemy.origin + '0 0 24';
@@ -184,87 +184,68 @@ void() ai_repel =
         self.enemy.velocity = self.enemy.velocity + dir;
     }
 // Do the damage.
-    sound (self, CHAN_WEAPON, "skullwiz/push.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "drake/skullwiz/push.wav", 1, ATTN_NORM);
     T_Damage (self.enemy, self, self, 20, DAMARMOR);
 };
 
 // Returns the point of one of its hands.
-vector(float left) Nemesant_Hand =
-{
+vector(float left) Nemesant_Hand = {
     makevectors (self.angles);
     if (left)   // TRUE = use left hand, FALSE = use right hand.
         return (self.origin + (v_forward*16) - (v_right*10) + (v_up*30));
     return (self.origin - (v_forward*16) + (v_right*12) + (v_up*45));
 };
 
-// This sends a bolt of lightning at an enemy, similar to the shamblers'.
-void() Nemesant_Bolt =
-{
-// Assume not in water and don't check for discharge.
+// This sends a bolt of lightning at an enemy, similar to the shamblers'.  Assume not in water and don't check for discharge.
+void() Nemesant_Bolt = {
     local   vector  p1, p2;
 
     p1 = Nemesant_Hand (TRUE);      // This will call makevectors as well.
     p2 = self.enemy.origin + '0 0 16';
     p2 = Maim_Line (p1, p2, 0, self.enemy, '0 0 0');
     p2 = p1 + p2*600;
-
     self.effects = self.effects | EF_MUZZLEFLASH;
-
     sound (self, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM);
     sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
-    LightningBolt2 (p1, p2, self, 10);
+	LightningBolt (p1, p2, self, 10, self, TE_LIGHTNING2, "lightning"); // 10 Damage
 };
 
-//- - - - - - - - -
 // Magic missile sidewinding tracking code.
-void() nemes_track =
-{
-    if (self.delay <= time)
-        {remove (self); return;}
-
+void() nemes_track = {
     local   vector  vec;    // Multi-purpose vector.
-    local   float   up, old;
+    local   float   up, old, delta;
+
+    if (self.delay <= time) {remove (self); return;}
 
     up = (self.cnt & 7) * 45;
     up = mathlib_sin(up) * 5;       // Other sidewinder code uses cosine.
     self.cnt = self.cnt + 1;
-
     vec = self.enemy.origin + self.enemy.view_ofs;
-//    if (1)
-//        Sidewind_Go (vec + ('0 0 4' * up), self.speed);
-//    else
-    {   // Alternate sidewinding code for more controlled spiraling.
-        vec = vectoangles(vec - self.origin);
-    //- - - - - - - - - -
-        old = self.angles_y;
-        self.ideal_yaw = vec_x + up;
-        self.angles_y = self.angles_x;
-        ChangeYaw ();
-        self.angles_x = self.angles_y;
-        self.angles_y = old;
-    //- - - - - - - - - -
-        self.ideal_yaw = vec_y + self.lefty;
-        ChangeYaw ();
-        if (MatchingIdeal ())
-            self.lefty = 0 - self.lefty;
-
-        vec = self.angles;
-        vec_x = 0 - vec_x;
-        makevectors (vec);
-        self.velocity = v_forward * self.speed;
-    }
-
+	vec = vectoangles(vec - self.origin);
+	old = self.angles_y;
+	self.ideal_yaw = vec_x + up;
+	self.angles_y = self.angles_x;
+	ChangeYaw ();
+	self.angles_x = self.angles_y;
+	self.angles_y = old;
+	self.ideal_yaw = vec_y + self.lefty;
+	ChangeYaw ();
+	delta = rint(self.angles_y - self.ideal_yaw);
+	delta = anglemod(delta); 
+	if (!delta) self.lefty = 0 - self.lefty; // TRUE if difference between self's yaw and ideal yaw is one-half of a degree or less.
+	vec = self.angles;
+	vec_x = 0 - vec_x;
+	makevectors (vec);
+	self.velocity = v_forward * self.speed;
     self.nextthink = time + 0.1;
 };
 
 // Spawns each magic missile launched by the nemesant.
-void(float ofs, float up, vector vec) nemes_shot =
-{
+void(float ofs, float up, vector vec) nemes_shot = {
     hknight_shot(ofs);
     setorigin (newmis, vec);
     newmis.velocity  = normalize(newmis.velocity) * 600;
-    if (self.enemy)
-    {   // Setup for homing sidewinders.
+    if (self.enemy) { // Setup for homing sidewinders.
         newmis.enemy     = self.enemy;
         newmis.cnt       = up;
         newmis.lefty     = ofs * 20;
@@ -277,8 +258,7 @@ void(float ofs, float up, vector vec) nemes_shot =
 };
 
 // Shoots a salvo of magic missiles at an enemy.
-void() Nemesant_Missiles =
-{
+void() Nemesant_Missiles = {
     local   vector  p1;
 
     p1 = Nemesant_Hand (TRUE);
@@ -379,9 +359,9 @@ void() nemes_idlesound =
     // Use voice channel instead of auto -- don't want slain magi talking.
         wr = random();
         if (wr > 0.7) 
-            sound (self, CHAN_VOICE, "nemesant/tidle1.wav", 1, ATTN_NORM);
+            sound (self, CHAN_VOICE, "zerstorer/trog/tidle1.wav", 1, ATTN_NORM);
         else if (wr < 0.3)
-            sound (self, CHAN_VOICE, "nemesant/tidle2.wav", 1, ATTN_NORM);
+            sound (self, CHAN_VOICE, "zerstorer/trog/tidle2.wav", 1, ATTN_NORM);
         self.waitmin = time + 10;
     }
 };
@@ -443,7 +423,7 @@ void() nemes_fast5  =[ $attackb5,  nemes_fast6  ] {
     local   float   dist, boss, mask, zot;
 
     ai_face();
-    sound (self, CHAN_VOICE, "nemesant/frblatck.wav", 1, ATTN_NORM);
+    sound (self, CHAN_VOICE, "zerstorer/trog/frblatck.wav", 1, ATTN_NORM);
     if (self.waitmin < time + 1) self.waitmin = time + 1;
 
 	// The mage has more options when not bound by Zerstorer mode.
@@ -545,7 +525,7 @@ void() nemes_inviso4  =[ $attack7,  nemes_inviso5  ] {ai_face(); nemes_sparks2('
 void() nemes_inviso5  =[ $attack9,  nemes_inviso6  ] {ai_face(); nemes_sparks2('-15 31 28');};
 void() nemes_inviso6  =[ $attack10, nemes_inviso7  ] {ai_face(); nemes_sparks2('12 27 30');};
 void() nemes_inviso7  =[ $attack11, nemes_inviso8  ] {ai_face(); nemes_sparks2('22 3 30');
-    sound (self, CHAN_VOICE, "nemesant/frblatck.wav", 1, ATTN_NORM);
+    sound (self, CHAN_VOICE, "zerstorer/trog/frblatck.wav", 1, ATTN_NORM);
     spawn_tfog (self.origin);
     self.invisible_finished = time + 10;
 };
@@ -644,7 +624,7 @@ void(entity inflictor, entity attacker, float damage) nemes_pain = {
     }
 
     self.pain_finished = time + 0.5;
-    sound (self, CHAN_VOICE, "nemesant/tpain.wav", 1, ATTN_NORM);
+    sound (self, CHAN_VOICE, "zerstorer/trog/tpain.wav", 1, ATTN_NORM);
     if (random()*70 > damage) return;         // didn't flinch
     if (SUB_IgnorePain ()) return;         // No pain anims in Nightmare.
     if (self.classname != "monster_nemesant") { // Make boss versions harder to flinch and stunlock.
@@ -680,9 +660,9 @@ void() nemes_die = {
     self.velocity_z = 200 + 100*random();   // PM:  Used to be 300.
     self.flags = self.flags - (self.flags & FL_ONGROUND);
     if (random() < 0.5)
-        sound (self, CHAN_VOICE, "nemesant/tdeath1.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "zerstorer/trog/tdeath1.wav", 1, ATTN_NORM);
     else
-        sound (self, CHAN_VOICE, "nemesant/tdeath2.wav", 1, ATTN_NORM);
+        sound (self, CHAN_VOICE, "zerstorer/trog/tdeath2.wav", 1, ATTN_NORM);
     nemes_death1 ();
 };
 
@@ -722,21 +702,21 @@ void() monster_nemesant = {
     precache_model ("progs/drake/warp2.mdl");     // Big explosion.
     precache_sound ("hknight/attack1.wav");
     precache_sound ("hknight/hit.wav");    // used by C code, so don't sound2
-    precache_sound ("nemesant/frblatck.wav");
-    precache_sound ("nemesant/frblfly.wav");
-    precache_sound ("nemesant/charge.wav");
-    precache_sound ("nemesant/bigboom.wav");
-    precache_sound ("nemesant/tdeath1.wav");
-    precache_sound ("nemesant/tdeath2.wav");
-    precache_sound ("nemesant/tidle1.wav");
-    precache_sound ("nemesant/tidle2.wav");
-    precache_sound ("nemesant/tpain.wav");
-    precache_sound ("nemesant/tsight1.wav");
-    precache_sound ("nemesant/tsight2.wav");
-	self.hello_sound = "nemesant/tpain.wav";
-	self.sight_sound = "nemesant/tsight1.wav";
-	self.sight_sound2 = "nemesant/tsight2.wav";
-    precache_sound ("skullwiz/push.wav");       // Melee attack.
+    precache_sound ("zerstorer/trog/frblatck.wav");
+    precache_sound ("zerstorer/trog/frblfly.wav");
+    precache_sound ("zerstorer/trog/charge.wav");
+    precache_sound ("zerstorer/trog/bigboom.wav");
+    precache_sound ("zerstorer/trog/tdeath1.wav");
+    precache_sound ("zerstorer/trog/tdeath2.wav");
+    precache_sound ("zerstorer/trog/tidle1.wav");
+    precache_sound ("zerstorer/trog/tidle2.wav");
+    precache_sound ("zerstorer/trog/tpain.wav");
+    precache_sound ("zerstorer/trog/tsight1.wav");
+    precache_sound ("zerstorer/trog/tsight2.wav");
+	self.hello_sound = "zerstorer/trog/tpain.wav";
+	self.sight_sound = "zerstorer/trog/tsight1.wav";
+	self.sight_sound2 = "zerstorer/trog/tsight2.wav";
+    precache_sound ("drake/skullwiz/push.wav");       // Melee attack.
 	precache_model ("progs/drake/blood_gr.mdl");
 	precache_model ("progs/drake/gr_gib.mdl");
     precache_model ("progs/drake/gr_gib2.mdl");

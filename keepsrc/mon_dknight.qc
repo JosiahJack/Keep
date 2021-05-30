@@ -218,7 +218,7 @@ void(float dist) dk_walk = {
 		self.enemydist = range_distance(self.goalentity, FALSE);
 		if (self.enemydist < 64) {
 			// Check for any new targets to walk toward
-			if (self.goalentity.target != "") {
+			if (self.goalentity.target != "") { // Path following, not entity I/O
 				self.movetarget = find(world, targetname, self.goalentity.target);
 				if (self.movetarget) {
 					if (self.movetarget.classtype == CT_PATHCORNER) {
@@ -550,7 +550,7 @@ void() dknight_ghost_fade =
     if (self.alpha <= 0) setmodel (self, "");
 	else self.nextthink = time + FADEMODEL_TIME;
 };
-//----------------------------------------------------------------------
+
 void() dknight_ghost_off = {
 	// Block if already off
 	if (self.estate == ESTATE_OFF) return;	
@@ -569,12 +569,11 @@ void() dknight_ghost_off = {
 		setmodel(self.attachment,"");
 		self.attachment.velocity = '0 0 0';
 	}
-	sound (self, CHAN_VOICE, SOUND_EMPTY, 1, ATTN_NORM);
+	StopSound(self,CHAN_VOICE);
 	self.think = dknight_ghost_fade;
 	self.nextthink = time + FADEMODEL_TIME;
 }
 
-//----------------------------------------------------------------------
 void() dknight_ghost_on = {
 	// Block if already ON
 	if (self.estate == ESTATE_ON) return;	
@@ -600,7 +599,7 @@ void() dknight_ghost_on = {
 	setorigin(self.attachment, self.origin);
 
 	// Check for any targets to walk toward
-	if (self.target != "") {
+	if (self.target != "") { // Path finding, not entity I/O
 		self.movetarget = find(world, targetname, self.target);
 		if (self.movetarget) {
 			if (self.movetarget.classtype == CT_PATHCORNER) {
@@ -616,21 +615,8 @@ void() dknight_ghost_on = {
 	self.th_stand();
 }
 
-//============================================================================
-void() dknight_sword_sound =
-{
-	self.lip = random();
-	if (self.lip < 0.25) sound (self, CHAN_WEAPON, "weapons/sword1a.wav", 1, ATTN_NORM);
-	else if (self.lip < 0.5) sound (self, CHAN_WEAPON, "weapons/sword2a.wav", 1, ATTN_NORM);
-	else if (self.lip < 0.75) sound (self, CHAN_WEAPON, "weapons/sword1b.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_WEAPON, "weapons/sword2b.wav", 1, ATTN_NORM);
-};
-
-/*======================================================================
-QUAKED monster_dknight (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
-void() monster_dknight =
-{
+// QUAKED monster_dknight (1 0 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_dknight = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
 	// Check all spawn exceptions (monsters.qc)
@@ -681,12 +667,6 @@ void() monster_dknight =
 	self.death_sound = "hknight/death1.wav";
 	precache_sound (self.pain_sound);
 	precache_sound (self.death_sound);
-
-	// New sword sweep/slash sounds
-	precache_sound ("weapons/sword1a.wav");
-	precache_sound ("weapons/sword1b.wav");
-	precache_sound ("weapons/sword2a.wav");
-	precache_sound ("weapons/sword2b.wav");
 	
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
@@ -721,8 +701,8 @@ void() monster_dknight =
 		self.headmdl = "progs/ad171/mon_dknight_glow.mdl";
 		precache_model (self.headmdl);
 		
-		self.idle_sound = "dknight/ghost_idle1.wav";
-		self.idle_sound2 = "dknight/ghost_idle2.wav";
+		self.idle_sound = "ad171/dknight/ghost_idle1.wav";
+		self.idle_sound2 = "ad171/dknight/ghost_idle2.wav";
 		precache_sound (self.idle_sound);
 		precache_sound (self.idle_sound2);
 		

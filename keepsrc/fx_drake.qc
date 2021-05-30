@@ -9,18 +9,14 @@ void(vector spot) MakeExplosion = {
     self = spawn();
     setsize (self, '0 0 0', '0 0 0');        
     setorigin (self, spot);
-    BecomeExplosion ();
+    BecomeExplosion();
     self = swap;
 };
 
-//==========================================================================
 //  Light Zero
-
 // Custom addition by PM.  Used by storm code, most of it in 'drake_cool.qc'.
-//
 // Since much of the level is lit up using lightstyle 0, changing it
-// will make much of the level brighter or darker.  Useful for lightning
-// storm effects.
+// will make much of the level brighter or darker.  Useful for lightning storm effects.
 
 float   lightzero_finished;
 float   lightzero_level;
@@ -67,9 +63,7 @@ void() LightZero_Update = {
             lightstyle(LIGHT_ZERO, "n");
         else //if (lightzero_level == 14)
             lightstyle(LIGHT_ZERO, "o");
-    }
-    else if (lightzero_level < 20)
-    {
+    } else if (lightzero_level < 20) {
         if (lightzero_level == 15)
             lightstyle(LIGHT_ZERO, "p");
         else if (lightzero_level == 16)
@@ -80,9 +74,7 @@ void() LightZero_Update = {
             lightstyle(LIGHT_ZERO, "s");
         else //if (lightzero_level == 19)
             lightstyle(LIGHT_ZERO, "t");
-    }
-    else
-    {
+    } else {
         if (lightzero_level == 20)
             lightstyle(LIGHT_ZERO, "u");
         else if (lightzero_level == 21)
@@ -98,72 +90,48 @@ void() LightZero_Update = {
     }
 };
 
-void() LightZero_Go =
-{
-    if (!lightzero_finished)
-        return;
+void() LightZero_Go = {
+    if (!lightzero_finished) return;
 
-    if (lightzero_finished > time)
-    {
+    if (lightzero_finished > time) {
         lightzero_level = lightzero_level + lightzero_rate;
         if (lightzero_level < LIGHTZERO_MIN)
             lightzero_level = LIGHTZERO_MIN;
         else if (lightzero_level > LIGHTZERO_MAX)
             lightzero_level = LIGHTZERO_MAX;
-    }
-    else
-    {   // Restore normal lighting.
-        if (lightzero_level > LIGHTZERO_NORMAL)
-        {   // Was brighter.
+    } else { // Restore normal lighting.
+        if (lightzero_level > LIGHTZERO_NORMAL) { // Was brighter.
             lightzero_level = lightzero_level - 4;
-            if (lightzero_level < LIGHTZERO_NORMAL)
-                lightzero_level = LIGHTZERO_NORMAL;
-        }
-        else if (lightzero_level < LIGHTZERO_NORMAL)
-        {   // Was darker.
+            if (lightzero_level < LIGHTZERO_NORMAL) lightzero_level = LIGHTZERO_NORMAL;
+        } else if (lightzero_level < LIGHTZERO_NORMAL) { // Was darker.
             lightzero_level = lightzero_level + 2;
-            if (lightzero_level > LIGHTZERO_NORMAL)
-                lightzero_level = LIGHTZERO_NORMAL;
+            if (lightzero_level > LIGHTZERO_NORMAL) lightzero_level = LIGHTZERO_NORMAL;
         }
-        if (lightzero_level == LIGHTZERO_NORMAL)
-            lightzero_finished = 0;     // End it!
+        if (lightzero_level == LIGHTZERO_NORMAL) lightzero_finished = 0;     // End it!
     }
-
     LightZero_Update ();
 };
 
-void(float lite, float add, float rate) LightZero_Set =
-{
+void(float lite, float add, float rate) LightZero_Set = {
     lightzero_rate = rate;
-    if (lite == -1)
-    {
+    if (lite == -1) {
         if (lightzero_finished)
             lite = lightzero_level;
         else
             lite = LIGHTZERO_NORMAL;
     }
     add = time + add;
-    if (lightzero_finished < add)
-        lightzero_finished = add;
-    if (lightzero_level != lite)
-    {
+    if (lightzero_finished < add) lightzero_finished = add;
+    if (lightzero_level != lite) {
         lightzero_level = lite;
         LightZero_Update ();
     }
 };
 
-//==========================================================================
 //  "Storm" Lightning Strike  (a.k.a. Airstrike)
-
-//------------------------------------------------------------------------//
-//  This creates a blank entity that will zap targets in the water
-//  within a radius for damage.
-//
+//  This creates a blank entity that will zap targets in the water within a radius for damage.
 //  Update:  Added fields 'dflags' and 'dtype' for upgraded storms.
-//------------------------------------------------------------------------//
-void(entity attacker, vector spot, float damage, entity ignore,
-    float dflags, string dtype)  Zapper_Spawn =
-{
+void(entity attacker, vector spot, float damage, entity ignore, float dflags, string dtype)  Zapper_Spawn = {
     local   entity  zap;
 
     zap = spawn();
@@ -180,28 +148,19 @@ void(entity attacker, vector spot, float damage, entity ignore,
     remove (zap);
 };
 
-//------------------------------------------------------------------------//
-//  This creates a lightning bolt that flashes down from the sky and
-//  strikes with explosive impact.
-//------------------------------------------------------------------------//
-void(entity attacker, vector spot, float damage, float dflags, string dtype)
-    Thunderstrike_Ex =
-{
-    local   vector  air, start, end;
-    local   entity  targ, ignore;
+// This creates a lightning bolt that flashes down from the sky and strikes with explosive impact.
+void(entity attacker, vector spot, float damage, float dflags, string dtype) Thunderstrike_Ex = {
+	local float points;
+    local vector air, start, end;
+    local entity targ, ignore, zap;
 
     air = '0 0 2048';   // Max limit of lightning draw length possible.
     traceline (spot, spot + air, TRUE, world);
     start = trace_endpos - '0 0 2';
 
     // WARNING:  Using 'world' as last traceline argument does not work.
-    //   Trying to do so causes the trace to ignore all, even if the
-    //   third argument is FALSE.
-    //
-    // Create dummy entity to serve as ignore for the traceline.
-    // That way, the lightning strike can hit even the attacker.
-    local   entity  zap;
-
+    // Trying to do so causes the trace to ignore all, even if the third argument is FALSE.
+    // Create dummy entity to serve as ignore for the traceline. That way, the lightning strike can hit even the attacker.
     zap = spawn();
     zap.movetype  = MOVETYPE_NONE;
     zap.velocity  = '0 0 0';
@@ -211,44 +170,30 @@ void(entity attacker, vector spot, float damage, float dflags, string dtype)
     setall (zap, "", '0 0 0', '0 0 0', spot);   // invisible
 
     // Execute trace.
-    //GhostTouch_On ();
     traceline (start, spot - air, FALSE, zap);
     targ = trace_ent;
-    //GhostTouch_Off ();
     // Don't remove zap now, we need it later for thunder effects.
 
     // Proceed with traceline results.
-    if (targ.takedamage)
-    {
-        // Direct hit.
+    if (targ.takedamage) { // Direct hit.
         end = Midpoint (targ);
         ignore = targ;
-
-        // Trace up from target center to new point in the sky.
-        traceline (end, end + air, TRUE, world);
+        traceline (end, end + air, TRUE, world); // Trace up from target center to new point in the sky.
         start = trace_endpos - '0 0 2';
-
-        // Damage the target.
-        // NOTE:  Reflection won't save the target from the wrath of god.
-        local   float   points;
-
         points = SUB_RandomDamage (damage);
-        BoltDamage_Ex (targ, attacker, attacker, end, points, dflags, dtype);
-    }
-    else
-    {
+        BoltDamage_Ex (targ, attacker, attacker, end, points, dflags, dtype); // Damage the target.  NOTE:  Reflection won't save the target from the wrath of god.
+    } else {
         end = trace_endpos;
         ignore = world;
     }
 
     // Create lightning and thunder effects.
     setorigin (zap, end);
-    sound (zap, CHAN_AUTO, "hipweap/mjolhit.wav", 1, 0.5);  // It's loud.
-    Tent_Beam (TE_LIGHTNING1, zap, end, start);    // Draw big bolt upward.
+    sound (zap, CHAN_AUTO, "hipnotic/weapons/mjolhit.wav", 1, 0.5);  // It's loud.
+	QC_ParseBeam(TE_LIGHTNING1,string_null, zap, start, end, 32);
     remove (zap);   // Dummy served its purpose, now begone.
 
-    if (pointcontents(end) == CONTENT_SKY)
-        return;     // Don't explode if it hits sky below.
+    if (pointcontents(end) == CONTENT_SKY) return;     // Don't explode if it hits sky below.
 
     // Create explosion on impact.
     Zapper_Spawn (attacker, end, damage, ignore, dflags, dtype);
@@ -280,7 +225,7 @@ void() Ice_Touch = {
     if (chunks)
     {   // Ice chunks.
         spawn_touchblood (self, other, 10);      // Ice chunks.
-        sound (self, CHAN_WEAPON, "dragon/icehit.wav", 1, ATTN_NORM);
+        sound (self, CHAN_WEAPON, "drake/dragon/icehit.wav", 1, ATTN_NORM);
     }
 
 // Become a mini-shockwave if close enough to the wall.
@@ -348,9 +293,8 @@ void(vector start, vector dir, float sped) Ice_Launch =
 //  Iceballs -- Used by white wyrm.
 
 // Iceball explosion effects, called by T_MissileTouch.
-void() Iceball_Explode =
-{
-    sound (self, CHAN_AUTO, "weapons/shatter.wav", 1, ATTN_NORM);
+void() Iceball_Explode = {
+    sound (self, CHAN_AUTO, "drake/weapons/shatter.wav", 1, ATTN_NORM);
     Tent_Explosion2 (self.origin, 32, 16);
     ShockWave (self.origin, RING_ICE, 3, "progs/drake/s_wave.spr");
     BecomeIcyExp ();
@@ -543,64 +487,50 @@ void(vector start) IceMine_Spawn = {
     setall (swap, "", '-16 -16 0', '16 16 32', start);
     ice.trigger_field  = swap;      // Link touch field to the iceball.
     newmis = ice;       // In case we need to modify the mine later.
-    sound (ice, CHAN_AUTO, "weapons/freeze.wav", 1, ATTN_NORM);
+    sound (ice, CHAN_AUTO, "drake/weapons/freeze.wav", 1, ATTN_NORM);
     ShockWave (ice.origin + '0 0 4', RING_ICE, 3, "progs/drake/s_wave.spr"); // Spawning effects.
 };
 
-//==========================================================================
-//  Tornado -- Used by the wind baron.
-
-// Sucks in targets near the cone, and damages those already in it.
-void() Tornado_Attack =
-{
+//  Tornado -- Used by the wind baron.  Sucks in targets near the cone, and damages those already in it.
+void() Tornado_Attack = {
     local   entity  head;
     local   vector  delta, spot, vel;
     local   float   hit;
 
-// Note:  Walls offer no protection against the baron's tornado.
+	// Note:  Walls offer no protection against the baron's tornado.
     head = findradius (self.origin, 256);
-    while (head)
-    {
+    while (head) {
         if (head != self)
         if (head != self.master)
-        if (head.origin_z + head.maxs_z >= self.origin_z)   // Head must be above spawnpoint.
-        {
+        if (head.origin_z + head.maxs_z >= self.origin_z) { // Head must be at or above spawnpoint.
             // Get horizontal distance between target and center.
             spot = head.origin;  spot_z = self.origin_z;
             delta = self.origin - spot;     // delta_z should be 0.
 
             // First, inflict some damage.
             hit = (vlen(delta) < 100);
-            if (hit)
-                T_Damage (head, self, self.master, self.dmg, DAMARMOR);
+            if (hit) T_Damage (head, self, self.master, self.dmg, DAMARMOR);
 
             // Next, suck the target into the vortex if possible.
-            if ( ((head.flags & FLx_CREATURE) && (head.mass && (head.mass <= MASS_HEAVY)))
-            || (head.xfl & XFL_WIND) )
-            {
-                if (hit || (head.flags & FL_MONSTER))
-                {   // Sweep the target off its feet.
+            if (((head.flags & FLx_CREATURE) && head.mass <= MASS_HEAVY) || (head.xfl & XFL_WIND) && head.movetype != MOVETYPE_NONE) {
+                if (hit || (head.flags & FL_MONSTER)) { // Sweep the target off its feet.
                     if (!hit)
                         if (head.flags & FL_ONGROUND)
-                            if (head.velocity_z < 80)
-                                head.velocity_z = 80;
-                    // Walkers lose control of movement.
-                    head.flags = head.flags - (head.flags & FL_ONGROUND);
+                            if (head.velocity_z < 80) head.velocity_z = 80;
+                    
+                    head.flags = head.flags - (head.flags & FL_ONGROUND); // Walkers lose control of movement.
                 }
 
                 vel = head.velocity;
                 vel_x = vel_x * 0.5;
                 vel_y = vel_y * 0.5;
-                if (hit)
-                {
+                if (hit) {
                     vel_z = vel_z * 0.5;
-                    if (vel_z < 150)
-                        vel_z = 150;    // Float up and away.
+                    if (vel_z < 150) vel_z = 150; // Float up and away.
                 }
                 head.velocity = vel + normalize(delta) * 100;
             }
         }
-
         head = head.chain;
     }
 };
@@ -873,13 +803,10 @@ void() misc_glitter = {
     self.think      = make_glitter;
 };
 
-//- - - - - - - - -
 // Creates a glitter spawner.  Called by spawn functions of other entities
 // such as teleporter and changelevel triggers, and used by them to create
 // glittering teleporter pads like in Heretic.
-//- - - - - - - - -
-void() Glitter_Spawner =
-{
+void() Glitter_Spawner = {
     if (deathmatch)
         return;     // Disabled, so don't waste time spawning an entity.
 
@@ -895,21 +822,16 @@ void() Glitter_Spawner =
     SUB_Think (test, misc_glitter);
 };
 
-void(entity ent, float chan) StopSound =
-    {sound (ent, chan, "misc/null.wav", 1, ATTN_NONE);};
-
 // Was "weapons/discharg.wav".
-void() Sfx_Discharge = {sound (self, CHAN_AUTO, "plasma/explode.wav", 1, ATTN_NORM);};
+void() Sfx_Discharge = {sound (self, CHAN_AUTO, "rogue/plasma/explode.wav", 1, ATTN_NORM);};
 
 // Spawns particles within an ent.  Bounds are the entity's hull boundaries.
-void(entity ent, float color1, float color2) Particle_Cube =
-{
+void(entity ent, float color1, float color2) Particle_Cube = {
     local   vector  spot;
     local   float   loop, r;
 
     loop = 11;
-    while (loop > 0)
-    {
+    while (loop > 0) {
         loop = loop - 1;
         spot_x = random();  spot_y = random();  spot_z = loop / 10;
         spot = Anypoint (ent, spot);

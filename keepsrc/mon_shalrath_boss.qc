@@ -375,7 +375,7 @@ void() shal_boss_spawner = {
 	missile.nextthink = time + 2.5;
 	//missile.think = ShalBossSpawnTouch;
 	missile.think = Hatch_Egg;				// Eventually hatch
-	setmodel (missile, "progs/q15/proj_shalshell.mdl");
+	setmodel (missile, "progs/ad171/proj_shalshell.mdl");
 	missile.scale = 3;	
 	setsize (missile, missile.bbmins, missile.bbmaxs);
 	setorigin (missile, self.origin);
@@ -416,7 +416,7 @@ void() monster_shalrath_boss = {
 	self.headmdl = "progs/q15/h_shalboss.mdl";
 	precache_model2 ("progs/q15/h_shalboss.mdl");
 	precache_model2 ("progs/v_spike.mdl");
-	precache_model2 ("progs/q15/proj_shalshell.mdl");
+	precache_model2 ("progs/ad171/proj_shalshell.mdl");
 	precache_model2 ("progs/q15/ring_shockwave.mdl");
 
 	precache_sound2 ("shalrath/bossattack.wav");
@@ -433,7 +433,7 @@ void() monster_shalrath_boss = {
 	precache_sound2 ("shalrath/voregren.wav");
 	precache_sound2 ("shalrath/earthshake.wav");
 	precache_sound2 ("voreling/miss.wav");
-	precache_sound2 ("yakman/expsmall.wav");
+	precache_sound2 ("ad171/minotaur/attack1expl.wav");
 	precache_sound ("misc/summon.wav");
 	precache_sound ("player/udeath2.wav");
 

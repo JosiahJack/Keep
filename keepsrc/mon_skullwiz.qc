@@ -137,7 +137,7 @@ void() skullw_tfin1 =[ $tele9, skullw_tfin2 ] {
 	// Always phase in facing the enemy
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
 	self.angles_y = self.ideal_yaw;
-	sound (self, CHAN_AUTO, "skullwiz/blinkin.wav", 1, ATTN_NORM);
+	sound (self, CHAN_AUTO, "ad171/skullwiz/blinkin.wav", 1, ATTN_NORM);
 };
 void() skullw_tfin2 =[ $tele7, skullw_tfin3 ] {ai_face();};
 void() skullw_tfin3 =[ $tele5, skullw_tfin4 ] {ai_face();};
@@ -278,8 +278,8 @@ void() skullw_checkblinklist = {
 //----------------------------------------------------------------------
 void() skullw_tele1	=[ $spellB3,	skullw_tele2    ] {
 	self.pain_finished = time + 1;				// no pain during teleportation
-	if (random() < 0.5) sound (self, CHAN_VOICE, "skullwiz/blinkspk1.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_VOICE, "skullwiz/blinkspk2.wav", 1, ATTN_NORM);
+	if (random() < 0.5) sound (self, CHAN_VOICE, "ad171/skullwiz/blinkspk1.wav", 1, ATTN_NORM);
+	else sound (self, CHAN_VOICE, "ad171/skullwiz/blinkspk2.wav", 1, ATTN_NORM);
 };
 void() skullw_tele2	=[ $spellB5,	skullw_tele3 ] {};
 void() skullw_tele3	=[ $spellB7,	skullw_tele4 ] {};
@@ -290,7 +290,7 @@ void() skullw_tele8	=[ $tele1,		skullw_tele9 ] {
 	self.solid = SOLID_NOT;
 	self.bodyphased = MONAI_SKULLWINVIS;
 	particle_explode(self.origin, 100, 1, self.part_style, PARTICLE_BURST_SKULLUP);
-	sound (self, CHAN_VOICE, "skullwiz/blinkout.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "ad171/skullwiz/blinkout.wav", 1, ATTN_NORM);
 };
 void() skullw_tele9	=[ $tele3,	skullw_tele10 ] {};
 void() skullw_tele10=[ $tele5,	skullw_tele11 ] {};
@@ -313,8 +313,8 @@ void(vector orgofs) skullw_fire =
 
 	ai_face();
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	if (random() < 0.5) sound (self, CHAN_WEAPON, "skullwiz/skull1.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_WEAPON, "skullwiz/skull2.wav", 1, ATTN_NORM);
+	if (random() < 0.5) sound (self, CHAN_WEAPON, "ad171/skullwiz/skull1.wav", 1, ATTN_NORM);
+	else sound (self, CHAN_WEAPON, "ad171/skullwiz/skull2.wav", 1, ATTN_NORM);
 
 	makevectors (self.angles);
 	org = self.origin + attack_vector(orgofs);
@@ -329,7 +329,7 @@ void(vector orgofs) skullw_fire =
 
 //----------------------------------------------------------------------
 void() skullw_attack1	=[	$spellA3,	skullw_attack2    ] {
-sound (self, CHAN_VOICE, "skullwiz/attack.wav", 1, ATTN_NORM);};
+sound (self, CHAN_VOICE, "ad171/skullwiz/attack.wav", 1, ATTN_NORM);};
 void() skullw_attack2	=[	$spellA5,	skullw_attack3	] {ai_face();};
 void() skullw_attack3	=[	$spellA7,	skullw_attack4	] {ai_face();};
 void() skullw_attack4	=[	$spellA10,	skullw_attack5	] {ai_face();};
@@ -375,7 +375,7 @@ void() skullw_guardian =
 	// Remove projectile
 	entity_remove(self, 1);
 	// Play explosion sound
-	sound (self, CHAN_WEAPON, "skullwiz/poison_hit.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad171/skullwiz/poison_hit.wav", 1, ATTN_NORM);
 	
 	// Apply any direct damage and poison effect
 	if (other.takedamage) {
@@ -494,7 +494,7 @@ void() skullw_summon2 =[ $summon3, skullw_summon3 ] {
 	ai_face();skullw_sumball('22 -2 6',0);};
 void() skullw_summon3 =[ $summon5, skullw_summon4 ] {
 	ai_face(); skullw_sumball('23 -3 7',1);
-	sound (self, CHAN_BODY, "skullwiz/summon.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "ad171/skullwiz/summon.wav", 1, ATTN_NORM);
 	/* The touch trigger is created early (4 frames) so its gets
 	// a chance for a client to touch its bounding box
 	// This is a giant trigger area to catch speedy players
@@ -668,7 +668,7 @@ void(entity inflictor, entity attacker, float damage) skullw_pain =
 //============================================================================
 void() skullw_fadeaway =
 {
-	//	sound (self, CHAN_BODY, "skullwiz/fadeaway.wav", 1, ATTN_NORM);
+	//	sound (self, CHAN_BODY, "ad171/skullwiz/fadeaway.wav", 1, ATTN_NORM);
 	// Particle burst upwards as robes fade away
 	//particle_explode(self.origin, 100, 3, self.part_style, PARTICLE_BURST_SKULLUP);	//ijed: why call attention to a post-post death sequence?
 	self.think = model_fade;
@@ -710,7 +710,7 @@ void()	skullw_death14	=[	$death15,	skullw_death14] {
 void() skullw_die =
 {
 	// Play fade away/death sound
-	sound (self, CHAN_VOICE, "skullwiz/death.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "ad171/skullwiz/death.wav", 1, ATTN_NORM);
 
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
@@ -761,39 +761,39 @@ void() monster_skullwiz = {
 	precache_model (self.gib1mdl);
 	precache_model (self.gib2mdl);
 
-	self.idle_sound = "skullwiz/idle1.wav";
-	self.idle_sound2 = "skullwiz/idle2.wav";
+	self.idle_sound = "ad171/skullwiz/idle1.wav";
+	self.idle_sound2 = "ad171/skullwiz/idle2.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
 
-	precache_sound ("skullwiz/death.wav");
-	self.pain_sound = "skullwiz/pain1.wav";
-	self.pain_sound2 = "skullwiz/pain2.wav";
+	precache_sound ("ad171/skullwiz/death.wav");
+	self.pain_sound = "ad171/skullwiz/pain1.wav";
+	self.pain_sound2 = "ad171/skullwiz/pain2.wav";
 	precache_sound (self.pain_sound);
 	precache_sound (self.pain_sound2);
 
-	precache_sound ("skullwiz/attack.wav");		// fire spell
-	precache_sound ("skullwiz/skull1.wav");		// Screaming skull attack
-	precache_sound ("skullwiz/skull2.wav");
-	precache_sound ("skullwiz/summon.wav");
-	precache_sound ("skullwiz/poison_hit.wav");	// Guardian Explosion
+	precache_sound ("ad171/skullwiz/attack.wav");		// fire spell
+	precache_sound ("ad171/skullwiz/skull1.wav");		// Screaming skull attack
+	precache_sound ("ad171/skullwiz/skull2.wav");
+	precache_sound ("ad171/skullwiz/summon.wav");
+	precache_sound ("ad171/skullwiz/poison_hit.wav");	// Guardian Explosion
 
-	precache_sound ("skullwiz/blinkspk1.wav");	// Talk casting blink spell
-	precache_sound ("skullwiz/blinkspk2.wav");
-	precache_sound ("skullwiz/blinkout.wav");	// Sound of blink animation
-	precache_sound ("skullwiz/blinkin.wav");
+	precache_sound ("ad171/skullwiz/blinkspk1.wav");	// Talk casting blink spell
+	precache_sound ("ad171/skullwiz/blinkspk2.wav");
+	precache_sound ("ad171/skullwiz/blinkout.wav");	// Sound of blink animation
+	precache_sound ("ad171/skullwiz/blinkin.wav");
 
-	self.sight_sound = "skullwiz/sight.wav";
+	self.sight_sound = "ad171/skullwiz/sight.wav";
 	precache_sound (self.sight_sound);
 
 	// Precache minion stuff anyway from monster_skullwizminion
 	precache_model ("progs/ad171/mon_lostsoul.mdl");
-	precache_sound ("lostsoul/idle1.wav");
-	precache_sound ("lostsoul/idle2.wav");
-	precache_sound ("lostsoul/charge.wav");		// charge hiss/scream
-	precache_sound ("lostsoul/bite.wav");		// chomp with teeth
-	precache_sound ("lostsoul/pain1.wav");
-	precache_sound ("lostsoul/death.wav");
+	precache_sound ("ad171/lostsoul/idle1.wav");
+	precache_sound ("ad171/lostsoul/idle2.wav");
+	precache_sound ("ad171/lostsoul/charge.wav");		// charge hiss/scream
+	precache_sound ("ad171/lostsoul/bite.wav");		// chomp with teeth
+	precache_sound ("ad171/lostsoul/pain1.wav");
+	precache_sound ("ad171/lostsoul/death.wav");
 
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement

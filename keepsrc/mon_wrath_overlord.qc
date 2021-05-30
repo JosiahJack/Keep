@@ -214,7 +214,7 @@ void () overlord_smash = {
       return ;
 
    smashDmg = (20.000 + (random () * MOVETYPE_BOUNCE));
-   sound (self,CHAN_WEAPON,"s_wrath/smash.wav",TRUE,ATTN_NORM);
+   sound (self,CHAN_WEAPON,"rogue/s_wrath/smash.wav",TRUE,ATTN_NORM);
    T_Damage (self.enemy,self,self,smashDmg,DAMARMOR);
    delta = normalize (((self.enemy.origin - self.origin) + self.enemy.view_ofs));
    SpawnBlood (self.enemy, (self.enemy.origin - (delta * SVC_INTERMISSION)),(delta * -100.000),smashDmg);
@@ -282,7 +282,7 @@ void (entity inflictor, entity attacker, float damage) overlord_pain = {
       overlord_pn_b01 ();
    }
    self.pain_finished = (time + FL_SWIM);
-   sound (self,CHAN_VOICE,"wrath/wpain.wav",TRUE,ATTN_NORM);
+   sound (self,CHAN_VOICE,"rogue/wrath/wpain.wav",TRUE,ATTN_NORM);
 };
 
 void (string gibName) ol_toss = {
@@ -389,12 +389,12 @@ void () monster_super_wrath = {
    precache_model ("progs/gib2.mdl");
    precache_model ("progs/gib3.mdl");
    precache_model ("progs/drake/w_ball.mdl");
-   precache_sound ("wrath/wsee.wav");
-   precache_sound ("wrath/watt.wav");
-   self.pain_sound = "wrath/wpain.wav";
-   precache_sound ("wrath/wpain.wav");
-   precache_sound ("wrath/wdthc.wav");
-   precache_sound ("s_wrath/smash.wav");
+   precache_sound ("rogue/wrath/wsee.wav");
+   precache_sound ("rogue/wrath/watt.wav");
+   self.pain_sound = "rogue/wrath/wpain.wav";
+   precache_sound ("rogue/wrath/wpain.wav");
+   precache_sound ("rogue/wrath/wdthc.wav");
+   precache_sound ("rogue/s_wrath/smash.wav");
    self.solid = SOLID_NOT;				// No interaction with world
    self.movetype = MOVETYPE_NONE;		// Static item, no movement
    if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;

@@ -1,24 +1,5 @@
 void() nehahra_wreckbsp;
 
-vector() nehahra_lead = {
-	local float num;
-	local vector megadeth, vec;
-	local entity mark;
-
-	if (!self.enemy) return VEC_ORIGIN;
-
-	mark = find(world, classname, "nehahra_head");
-	num = 1;
-	megadeth = self.enemy.origin - mark.origin;
-	num = vlen(megadeth);
-	num = num * 0.001;
-	vec = self.enemy.velocity;
-	vec_z = vec_z * 0.25;
-	vec = self.enemy.origin + (vec * num);
-	vec = normalize(vec - mark.origin);
-	return vec;
-};
-
 void() WeldExplode1 = [0, WeldExplode2] {};
 void() WeldExplode2 = [3, WeldExplode3] {};
 void() WeldExplode3 = [4, SUB_Remove] {};
@@ -77,7 +58,7 @@ void() WeldTouch = {
 	self.nextthink = time + 4;
 	setmodel(self, "progs/s_explod.spr");
 	setorigin(self, self.origin);
-	sound(self, CHAN_BODY, "boss3/hit.wav", 1, ATTN_NORM);
+	sound(self, CHAN_BODY, "nehahra/boss3/hit.wav", 1, ATTN_NORM);
 	WeldExplode1();
 };
 

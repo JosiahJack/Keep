@@ -1,2 +1,0 @@
-void(float num, float type, string name) globalstat = #233; /*
-		Specifies what data to use in order to send various stats, in a non-client-specific way. num and type are as in clientstat, name however, is the name of the global to read in the form of a string (pass "foo"). */
