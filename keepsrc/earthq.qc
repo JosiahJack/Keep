@@ -7,7 +7,7 @@ void () earthquake_rumble = {
    if ( (self.attack_finished < time) ) {
       stop_earthquake ();
    } else {
-      sound (self,CHAN_VOICE,"equake/rumble.wav",TRUE,ATTN_NONE);
+      sound (self,CHAN_VOICE,"rogue/equake/rumble.wav",TRUE,ATTN_NONE);
       self.think = earthquake_rumble;
       self.nextthink = (time + TRUE);
    }
@@ -41,7 +41,7 @@ void () earthquake = {
    if ( !self.delay ) self.delay = 20.000;
    if ( !self.wait ) self.wait = 60.000;
    if ( !self.weapon ) self.weapon = 40;
-   precache_sound ("equake/rumble.wav");
+   precache_sound ("rogue/equake/rumble.wav");
    earthquake_active = FALSE;
    earthquake_intensity = (self.weapon * 0.500);
    setsize (self,VEC_ORIGIN,VEC_ORIGIN);
@@ -54,7 +54,7 @@ void () info_earthquake = { earthquake(); };
 void () earthquake_touch = {
    if ( self.delay ) {
       if ( (self.attack_finished < time) ) {
-         sound (self,CHAN_VOICE,"equake/rumble.wav",TRUE,ATTN_NORM);
+         sound (self,CHAN_VOICE,"rogue/equake/rumble.wav",TRUE,ATTN_NORM);
          self.attack_finished = (time + TRUE);
       }
       if ( (other.classname == "player") ) {
@@ -70,7 +70,7 @@ void () earthquake_touch = {
 void () earthquake_use = { self.delay = !self.delay; };
 
 void () trigger_earthquake = {
-   precache_sound ("equake/rumble.wav");
+   precache_sound ("rogue/equake/rumble.wav");
    if ( !self.weapon ) self.weapon = 40;
    self.weapon = self.weapon * 0.5;
    self.delay = TRUE;

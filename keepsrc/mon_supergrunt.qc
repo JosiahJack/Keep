@@ -164,7 +164,7 @@ void() sgrunt_plasma_touch ={
 	setmodel(self, "progs/kinn/s_plasgx.spr");
 
 	// make sound
-	sound(self, CHAN_VOICE, "weapons/plasexpl.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "drake/weapons/plasma1.wav", 1, ATTN_NORM);
 };
 
 void(vector org, vector dir) sgrunt_spawn_plasma =
@@ -520,7 +520,7 @@ void() monster_super_grunt = {
 	precache_sound ("sgrunt/hovatck1.wav");
 
 	precache_sound ("kinn/gibs/ut2gib1.wav");		
-	precache_sound ("weapons/plasexpl.wav");
+	precache_sound ("drake/weapons/plasma1.wav");
 
 	if (random() < 0.5)	
 		self.sight_sound = "sgrunt/infsght1.wav";

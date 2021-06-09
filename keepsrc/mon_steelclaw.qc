@@ -1,6 +1,4 @@
-/*==============================================================================
-STEELCLAW (Hexen2 spider model by Raven Software)
-==============================================================================*/
+// STEELCLAW (Hexen2 spider model by Raven Software)
 $frame idle1 idle2 idle3 idle4 idle5 idle6 idle7 idle8
 $frame idle9 idle10 idle11 idle12 idle13
 
@@ -38,7 +36,6 @@ $frame death1 death2 death3 death4 death5 death6 death7 death8
 $frame death9 death10 death11 death12 death13 death14 death15 death16
 $frame death17 death18 death19 death20
 
-//======================================================================
 void() steelc_idle1 =[ $idle1, steelc_idle2] {monster_idle_sound();ai_stand();};
 void() steelc_idle2 =[ $idle2, steelc_idle3] {ai_stand();};
 void() steelc_idle3 =[ $idle3, steelc_idle4] {ai_stand();};
@@ -53,7 +50,6 @@ void() steelc_idle11 =[ $idle11, steelc_idle12] {ai_stand();};
 void() steelc_idle12 =[ $idle12, steelc_idle13] {ai_stand();};
 void() steelc_idle13 =[ $idle13, steelc_idle1] {ai_stand();};
 
-//======================================================================
 void() steelc_walk1 =[ $walk1, steelc_walk2] {monster_idle_sound();ai_walk(4);};
 void() steelc_walk2 =[ $walk3, steelc_walk3] {monster_footstep(FALSE); ai_walk(3);};
 void() steelc_walk3 =[ $walk5, steelc_walk4] {ai_walk(4);};
@@ -63,9 +59,7 @@ void() steelc_walk6 =[ $walk11, steelc_walk7] {monster_footstep(FALSE); ai_walk(
 void() steelc_walk7 =[ $walk13, steelc_walk8] {ai_walk(4);};
 void() steelc_walk8 =[ $walk15, steelc_walk1] {ai_walk(5);};
 
-//======================================================================
-void() steelc_runpause =
-{
+void() steelc_runpause = {
 	// Do nothing is not to fight or dead
 	if (!self.enemy) return;
 	if (self.health < 1) return;
@@ -76,7 +70,6 @@ void() steelc_runpause =
 	if (self.enemydist < MONAI_RUNPAUSE) self.th_run();
 };
 
-//----------------------------------------------------------------------
 void()	steelc_runp1	=[	$idle1,	steelc_runp2	] {steelc_runpause();};
 void()	steelc_runp2	=[	$idle2,	steelc_runp3	] {steelc_runpause();};
 void()	steelc_runp3	=[	$idle3,	steelc_runp4	] {steelc_runpause();};
@@ -91,9 +84,7 @@ void()	steelc_runp11	=[	$idle11,steelc_runp12	] {steelc_runpause();};
 void()	steelc_runp12	=[	$idle12,steelc_runp13	] {steelc_runpause();};
 void()	steelc_runp13	=[	$idle13,steelc_runp1	] {steelc_runpause();};
 
-//----------------------------------------------------------------------
-void(float dist) steelc_checkpause =
-{
+void(float dist) steelc_checkpause = {
 	// Do nothing is not to fight or dead
 	if (!self.enemy) return;
 	if (self.health < 1) return;
@@ -112,7 +103,6 @@ void(float dist) steelc_checkpause =
 	}
 };
 
-//----------------------------------------------------------------------
 void()	steelc_run1 =[ $walk1, steelc_run2 ] {self.movespeed = 0; monster_idle_sound();steelc_checkpause(8);};
 void()	steelc_run2 =[ $walk3, steelc_run3 ] {monster_footstep(FALSE); steelc_checkpause(6);};
 void()	steelc_run3 =[ $walk5, steelc_run4 ] {steelc_checkpause(8);};
@@ -122,7 +112,6 @@ void()	steelc_run6 =[ $walk11, steelc_run7 ] {monster_footstep(FALSE); steelc_ch
 void()	steelc_run7 =[ $walk13, steelc_run8 ] {steelc_checkpause(8);};
 void()	steelc_run8 =[ $walk15, steelc_run1 ] {steelc_checkpause(10);};
 
-//======================================================================
 void()	steelc_slide1 =[ $walk1, steelc_slide2 ] {ai_run_slide(6); monster_idle_sound();};
 void()	steelc_slide2 =[ $walk3, steelc_slide3 ] {ai_run_slide(4);};
 void()	steelc_slide3 =[ $walk5, steelc_slide4 ] {ai_run_slide(6);};
@@ -132,11 +121,8 @@ void()	steelc_slide6 =[ $walk11, steelc_slide7 ] {ai_run_slide(4);};
 void()	steelc_slide7 =[ $walk13, steelc_slide8 ] {ai_run_slide(6);};
 void()	steelc_slide8 =[ $walk15, steelc_run1 ] {ai_run(4);};
 
-//======================================================================
 // BITE - bleed attack or simple bite
-//======================================================================
-void() steelc_melee =
-{
+void() steelc_melee = {
 	local float ldmg;
 
 	if (!self.enemy) return;
@@ -149,8 +135,8 @@ void() steelc_melee =
 	// Can the target bleed?
 	if (!self.enemy.takedamage) return;
 
-	if (random() < 0.5) sound(self, CHAN_WEAPON, "steelclaw/attackmunch.wav", TRUE, TRUE);
-	else sound(self, CHAN_WEAPON, "steelclaw/attacktear.wav", TRUE, TRUE);
+	if (random() < 0.5) sound(self, CHAN_WEAPON, "ad171/spider/attackmunch.wav", TRUE, TRUE);
+	else sound(self, CHAN_WEAPON, "ad171/spider/attacktear.wav", TRUE, TRUE);
 
 	// Spider bite (damage 1-9) is very weak
 	ldmg = (random() + random() + random()) * 3;
@@ -161,13 +147,11 @@ void() steelc_melee =
 	spawn_touchblood (self, self.enemy, ldmg*3);
 };
 
-//----------------------------------------------------------------------
 void() steelc_bite9;
 void() steelc_bite1 = [ $atkup1, steelc_bite2 ] {ai_face();};
 void() steelc_bite2 = [ $atkup5, steelc_bite3 ] {ai_face();};
 void() steelc_bite3 = [ $atkup7, steelc_bite4 ] {ai_face();
-	if (!ai_checkmelee(MONAI_MELEESPIDER,FALSE) && self.health > 0) 
-		self.think = steelc_bite9;};
+	if (!ai_checkmelee(MONAI_MELEESPIDER,FALSE) && self.health > 0) self.think = steelc_bite9;};
 void() steelc_bite4 = [ $atkloop1, steelc_bite5 ] {ai_face();};
 void() steelc_bite5 = [ $atkloop3, steelc_bite6 ] {ai_face();};
 void() steelc_bite6 = [ $atkloop5, steelc_bite7 ] {steelc_melee();};
@@ -175,11 +159,8 @@ void() steelc_bite7 = [ $atkloop7, steelc_bite8 ] {};
 void() steelc_bite8 = [ $atkup7, steelc_bite9 ] {};
 void() steelc_bite9 = [ $atkup3, steelc_run1 ] {};
 
-//============================================================================
 // JUMP FUNCTION (range)
-//============================================================================
-void() steelc_JumpTouch =
-{
+void() steelc_JumpTouch = {
 	if (self.health <= 0) return;
 	ai_jumpbreakable(20);			// Damage any breakables
 	self.touch = SUB_Null;			// No more touching
@@ -189,7 +170,7 @@ void() steelc_JumpTouch =
 
 	// Prevents packs from killing themselves
 	if (self.classgroup != other.classgroup && other.takedamage) {
-		sound (self, CHAN_VOICE, "steelclaw/jumphit.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "ad171/scorpion/jumphit.wav", 1, ATTN_NORM);
 		if (Align_DamageModifier(other,self,1, TRUE)) BleedDeBuff(other);
 		spawn_touchblood (self, self.enemy, 100);
 	}
@@ -207,13 +188,12 @@ void() steelc_JumpTouch =
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------------
 void() steelc_leap1 =[ $jump1, steelc_leap2 ] {ai_face();
 	self.jump_flag = time + MONAI_JUMPSTEELTIME; // Stop jumping so much
 	if (random() > 0.5) {
 		self.volume = 0.5 + (random()*0.5);
-		if (self.lefty < 1) sound (self, CHAN_VOICE, "steelclaw/jumpattack1.wav", self.volume, ATTN_NORM);
-		else sound (self, CHAN_VOICE, "steelclaw/jumpattack2.wav", self.volume, ATTN_NORM);
+		if (self.lefty < 1) sound (self, CHAN_VOICE, "ad171/scorpion/jumpattack1.wav", self.volume, ATTN_NORM);
+		else sound (self, CHAN_VOICE, "ad171/scorpion/jumpattack2.wav", self.volume, ATTN_NORM);
 		self.lefty = 1 - self.lefty;
 	}
 };
@@ -246,28 +226,23 @@ void() steelc_leap7 =[ $jump10, steelc_leap8 ] {
 	self.oldorigin = self.origin;
 };
 
-//----------------------------------------------------------------------
 void() steelc_leap8 =[ $jump11, steelc_leap9] {monster_footstep(FALSE);};
 void() steelc_leap9 =[ $jump13, steelc_leap10] {monster_footstep(FALSE);};
 void() steelc_leap10 =[ $jump15, steelc_run1] {ai_resetangles();};
 
-//============================================================================
 void() steelc_paind1 =[$paindown1, steelc_paind2] {};
 void() steelc_paind2 =[$paindown3, steelc_paind3] {};
 void() steelc_paind3 =[$paindown5, steelc_paind4] {};
 void() steelc_paind4 =[$paindown7, steelc_paind5] {};
 void() steelc_paind5 =[$paindown9, steelc_run1] {};
 
-//----------------------------------------------------------------------------
 // Front legs up (in melee or missile attack)
 void() steelc_painu1 =[$painup1, steelc_painu2] {};
 void() steelc_painu2 =[$painup3, steelc_painu3] {};
 void() steelc_painu3 =[$painup5, steelc_painu4] {};
 void() steelc_painu4 =[$painup6, steelc_run1] {};
 
-//----------------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) steelc_pain = 
-{
+void(entity inflictor, entity attacker, float damage) steelc_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -290,11 +265,9 @@ void(entity inflictor, entity attacker, float damage) steelc_pain =
 	}
 };
 
-//============================================================================
 void() steelc_die1 =[$death1, steelc_die2] {};
 void() steelc_die2 =[$death3, steelc_die3] {monster_check_gib();};
-void() steelc_die3 =[$death5, steelc_die4] {monster_check_gib();
-	self.solid = SOLID_NOT;};
+void() steelc_die3 =[$death5, steelc_die4] {monster_check_gib();self.solid = SOLID_NOT;};
 void() steelc_die4 =[$death7, steelc_die5] {};
 void() steelc_die5 =[$death9, steelc_die6] {};
 void() steelc_die6 =[$death11, steelc_die7] {};
@@ -303,9 +276,7 @@ void() steelc_die8 =[$death15, steelc_die9] {};
 void() steelc_die9 =[$death17, steelc_die10] {monster_death_postcheck();};
 void() steelc_die10 =[$death19, steelc_die10] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------------
-void() steelc_die = 
-{
+void() steelc_die = {
 	// Gibs don't bounce far
 	self.max_health = MON_NOGIBVELOCITY;
 	// Pre-check routine to tidy up extra entities
@@ -317,11 +288,8 @@ void() steelc_die =
 	}
 };
 
-//======================================================================
-/*QUAKED monster_steelclaw (1 0 0) (-16 -16 -24) (16 16 24) Ambush
-======================================================================*/
-void() monster_steelclaw =
-{
+// QUAKED monster_steelclaw (1 0 0) (-16 -16 -24) (16 16 24) Ambush
+void() monster_steelclaw = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
@@ -339,27 +307,27 @@ void() monster_steelclaw =
 	self.gib1frame = 9;
 
 	// IDLE/COMBAT and SIGHT sounds
-	self.idle_sound = "steelclaw/idle1.wav";
-	self.idle_sound2 = "steelclaw/idle2.wav";
+	self.idle_sound = "ad171/scorpion/idle1.wav";
+	self.idle_sound2 = "ad171/scorpion/idle2.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
 
 	// death/pain/attack sounds
-	self.pain_sound = "steelclaw/pain1.wav";
-	self.pain_sound2 = "steelclaw/pain2.wav";
+	self.pain_sound = "ad171/scorpion/pain1.wav";
+	self.pain_sound2 = "ad171/scorpion/pain2.wav";
 	precache_sound(self.pain_sound);
 	precache_sound(self.pain_sound2);
-	self.death_sound = "steelclaw/death1.wav";
+	self.death_sound = "drake/spider/death.wav";
 	precache_sound(self.death_sound);
 
-	precache_sound("steelclaw/attackmunch.wav");
-	precache_sound("steelclaw/attacktear.wav");
-	precache_sound("steelclaw/jumpattack1.wav");
-	precache_sound("steelclaw/jumpattack2.wav");
-	precache_sound("steelclaw/jumphit.wav");
-	precache_sound("steelclaw/jumpland.wav");
+	precache_sound("ad171/spider/attackmunch.wav");
+	precache_sound("ad171/spider/attacktear.wav");
+	precache_sound("ad171/scorpion/jumpattack1.wav");
+	precache_sound("ad171/scorpion/jumpattack2.wav");
+	precache_sound("ad171/scorpion/jumphit.wav");
+	precache_sound("ad171/scorpion/jumpland.wav");
 	
-	self.sight_sound = "steelclaw/sight1.wav";
+	self.sight_sound = "ad171/scorpion/sight1.wav";
 	precache_sound (self.sight_sound);
 
 	self.solid = SOLID_NOT;				// No interaction with world

@@ -159,7 +159,7 @@ void(vector org, vector dir) pyroflame_spawn =
 		if (ext_dppart) {
 			// Use special DP flames and empty sprite for collision
 			pointparticles(particleeffectnum(DPP_PYROFLAME3), org, dir, 1);
-			setmodel (newmis, SBURST_POISONDP);
+			setmodel (newmis, SBURST_FLAMEDP);
 		}
 		else setmodel (newmis, SBURST_POISON);
 	}
@@ -289,11 +289,9 @@ void()	pyro_die12	=[	$death12,	pyro_die13	] {ai_forward(5);};
 void()	pyro_die13	=[	$death13,	pyro_die14	] {monster_death_postcheck();};
 void()	pyro_die14	=[	$death14,	pyro_die14	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
 void()	pyro_fdie1	=[	$fdeath1,	pyro_fdie2	] {};
 void()	pyro_fdie2	=[	$fdeath2,	pyro_fdie3	] {monster_check_gib();};
-void()	pyro_fdie3	=[	$fdeath3,	pyro_fdie4	] {monster_check_gib();
-	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
+void()	pyro_fdie3	=[	$fdeath3,	pyro_fdie4	] {monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
 void()	pyro_fdie4	=[	$fdeath4,	pyro_fdie5	] {};
 void()	pyro_fdie5	=[	$fdeath5,	pyro_fdie6	] {};
 void()	pyro_fdie6	=[	$fdeath6,	pyro_fdie7	] {};
@@ -303,9 +301,7 @@ void()	pyro_fdie9	=[	$fdeath9,	pyro_fdie10	] {};
 void()	pyro_fdie10	=[	$fdeath10,	pyro_fdie11	] {monster_death_postcheck();};
 void()	pyro_fdie11	=[	$fdeath11,	pyro_fdie11	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
-void() pyro_die =
-{
+void() pyro_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 	pyro_soundreset();
@@ -318,9 +314,7 @@ void() pyro_die =
 	}
 };
 
-/*======================================================================
- QUAKED monster_pyro (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
+// QUAKED monster_pyro (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_pyro = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
@@ -343,15 +337,12 @@ void() monster_pyro = {
 
 	self.idle_sound = "enforcer/idle1.wav";
 	precache_sound (self.idle_sound);
-	self.sight_sound = "enforcer/sight1.wav";
+	self.sight_sound = "quoth/pyro/sight.wav";
 	precache_sound (self.sight_sound);
-	precache_sound ("enforcer/sight2.wav");
-	precache_sound ("enforcer/sight3.wav");
-	precache_sound ("enforcer/sight4.wav");
 
 	// Extra sound/sprite assets (from Rubicon2 MOD)
-	self.noise3 = "ad171/enforcer/pyro_flameon.wav";
-	self.noise4 = "ad171/enforcer/pyro_flameoff.wav";
+	self.noise3 = "rrp/dread/flameon.wav";
+	self.noise4 = "rrp/dread/flameoff.wav";
 	precache_sound (self.noise3);
 	precache_sound (self.noise4);
 	precache_model (SBURST_FLAME);		// Flame on
@@ -371,7 +362,6 @@ void() monster_pyro = {
 	self.attack_offset = '24 8.5 16';	// End of Gun
 	self.ammo_shells = 4;				// drops armor shards instead
 	if (!self.exactskin) self.randomskin = 4;
-	
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = 0; self.resist_nails = 0.5;
@@ -398,9 +388,7 @@ void() monster_pyro = {
 	monster_start();
 };
 
-/*======================================================================
- QUAKED monster_fumigator (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
+// QUAKED monster_fumigator (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_fumigator = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
@@ -424,20 +412,16 @@ void() monster_fumigator = {
 
 	self.idle_sound = "enforcer/idle1.wav";
 	precache_sound (self.idle_sound);
-	self.sight_sound = "enforcer/sight1.wav";
+	self.sight_sound = "quoth/pyro/sight.wav";
 	precache_sound (self.sight_sound);
-	precache_sound ("enforcer/sight2.wav");
-	precache_sound ("enforcer/sight3.wav");
-	precache_sound ("enforcer/sight4.wav");
 
 	// Extra sound/sprite assets (from Rubicon2 MOD)
-	self.noise3 = "ad171/enforcer/fum_poisonon.wav";
-	self.noise4 = "ad171/enforcer/fum_poisonoff.wav";
+	self.noise3 = "ad171/traps/steam_loop.wav";
+	self.noise4 = "ad171/traps/steam_off.wav";
 	precache_sound (self.noise3);
 	precache_sound (self.noise4);
 	precache_model (SBURST_POISON);		// Poison on
-	precache_model (SBURST_POISONDP);	// DP Collision
-
+	precache_model (SBURST_FLAMEDP);	// DP Collision
 	precache_poisongibs();					// precache gibs
 	
 	self.solid = SOLID_NOT;

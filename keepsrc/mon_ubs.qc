@@ -142,7 +142,7 @@ void () ubs_shot2 = {
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
 	newmis.avelocity = '700 40 40';
 	newmis.velocity = (vec * 300);
-	sound (self, CHAN_WEAPON, "ubs/spawnfr.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "travail/ubs/spawnfr.wav", 1, ATTN_NORM);
 	newmis.enemy = self.owner.enemy;
 	newmis.movetype = MOVETYPE_FLYMISSILE;
 	newmis.think = ubshome2;
@@ -168,7 +168,7 @@ void (float setting) ubs_spread = {
 	setmodel (newmis, "progs/w_spike.mdl");
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
 	newmis.velocity = (vec * 500);
-	sound (self, CHAN_WEAPON, "ubs/attack1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "travail/ubs/attack1.wav", 1, ATTN_NORM);
 	newmis.think = ubshome;
 	newmis.nextthink = (time + 0.4);
 	newmis.enemy = self.enemy;
@@ -348,7 +348,7 @@ void () ubs_FastFire = {
 		makevectors (self.enemy.angles);
 		dst = (self.enemy.origin - (13 * self.movedir));
 		vec = normalize ((dst - self.origin));
-		sound (self, CHAN_WEAPON, "ubs/wattack.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "travail/ubs/wattack.wav", 1, ATTN_NORM);
 		launch_spike (self.origin, vec);
 		newmis.velocity = (vec * 600);
 		newmis.owner = self.owner;
@@ -362,7 +362,7 @@ void () ubs_FastFire = {
 void () ubs_StartFast = {
 	local entity missile;
 
-	sound (self, CHAN_WEAPON, "ubs/wattack.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "travail/ubs/wattack.wav", 1, ATTN_NORM);
 	self.v_angle = self.angles;
 	makevectors (self.angles);
 	missile = spawn ();
@@ -395,11 +395,11 @@ void () ubs_idlesound =
 		self.waitmin = (time + 2);
 		if ((wr > 4.5))
 		{
-			sound (self, CHAN_VOICE, "ubs/widle1.wav", 1, ATTN_NONE);
+			sound (self, CHAN_VOICE, "travail/ubs/widle1.wav", 1, ATTN_NONE);
 		}
 		if ((wr < 1.5))
 		{
-			sound (self, CHAN_VOICE, "ubs/widle2.wav", 1, ATTN_NONE);
+			sound (self, CHAN_VOICE, "travail/ubs/widle2.wav", 1, ATTN_NONE);
 		}
 	}
 	return;
@@ -407,7 +407,7 @@ void () ubs_idlesound =
 
 void () ubs_unfurl1 = [ $unfurl1, ubs_unfurl2 ]
 {
-	sound (self, CHAN_VOICE, "ubs/wsight.wav", 1, ATTN_NONE);
+	sound (self, CHAN_VOICE, "travail/ubs/wsight.wav", 1, ATTN_NONE);
 	self.takedamage = DAMAGE_AIM;
 	self.ideal_yaw = self.angles * '0 1 0';
 	self.view_ofs = '0 0 25';
@@ -539,7 +539,7 @@ void () ubs_sidec8 = [ $flyc8, ubs_run ] {ai_run (24); ubs_zap (500, (1 + skill)
 
 void () ubs_side =
 {
-	sound (self, CHAN_VOICE, "ubs/elec.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "travail/ubs/elec.wav", 1, ATTN_NORM);
 	self.attack_finished = (time + 1);
 
 	if (self.health <= 500)
@@ -684,7 +684,7 @@ void () ubs_makewiza1 = [ $flinga1, ubs_makewiza2 ] {
 	WriteCoord (MSG_BROADCAST, self.origin_x);
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, (self.origin_z - DOOR_TOGGLE));
-	sound (self, CHAN_AUTO, "ubs/spawnst.wav", 1, ATTN_NONE);
+	sound (self, CHAN_AUTO, "travail/ubs/spawnst.wav", 1, ATTN_NONE);
 };
 void () ubs_makewiza2 = [ $flinga2, ubs_makewiza3 ] {};
 void () ubs_makewiza3 = [ $flinga3, ubs_makewiza4 ] {};
@@ -707,7 +707,7 @@ void () ubs_makewizb1 = [ $flingb1, ubs_makewizb2 ]
 	WriteCoord (MSG_BROADCAST, self.origin_x);
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, (self.origin_z - DOOR_TOGGLE));
-	sound (self, CHAN_AUTO, "ubs/spawnst.wav", 1, ATTN_NONE);
+	sound (self, CHAN_AUTO, "travail/ubs/spawnst.wav", 1, ATTN_NONE);
 };
 void () ubs_makewizb2 = [ $flingb2, ubs_makewizb3 ] {};
 void () ubs_makewizb3 = [ $flingb3, ubs_makewizb4 ] {};
@@ -730,7 +730,7 @@ void () ubs_makewizc1 = [ $flingc1, ubs_makewizc2 ]
 	WriteCoord (MSG_BROADCAST, self.origin_x);
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, (self.origin_z - DOOR_TOGGLE));
-	sound (self, CHAN_AUTO, "ubs/spawnst.wav", 1, ATTN_NONE);
+	sound (self, CHAN_AUTO, "travail/ubs/spawnst.wav", 1, ATTN_NONE);
 };
 void () ubs_makewizc2 = [ $flingc2, ubs_makewizc3 ] {};
 void () ubs_makewizc3 = [ $flingc3, ubs_makewizc4 ] {};
@@ -916,7 +916,7 @@ void(string gibname, float dm, vector gibpos) ThrowUBSGib =
 	new.flags = 0;
 };
 
-void () ubs_dieend1 = [ $dieend1, ubs_dieend2 ] {sound (self, CHAN_VOICE, "ubs/wdeath2.wav", 1, ATTN_NONE);};
+void () ubs_dieend1 = [ $dieend1, ubs_dieend2 ] {sound (self, CHAN_VOICE, "travail/ubs/wdeath2.wav", 1, ATTN_NONE);};
 void () ubs_dieend2 = [ $dieend2, ubs_dieend3 ] {};
 void () ubs_dieend3 = [ $dieend3, ubs_dieend4 ] {};
 void () ubs_dieend4 = [ $dieend4, ubs_dieend5 ] {};
@@ -970,7 +970,7 @@ void () ubs_killdie =
 	ubs_dieend1();
 };
 
-void () ubs_death1 = [ $dieloop1, ubs_death2 ] {sound (self, CHAN_VOICE, "ubs/wdeath1.wav", 1, ATTN_NONE);};
+void () ubs_death1 = [ $dieloop1, ubs_death2 ] {sound (self, CHAN_VOICE, "travail/ubs/wdeath1.wav", 1, ATTN_NONE);};
 void () ubs_death2 = [ $dieloop2, ubs_death3 ] {};
 void () ubs_death3 = [ $dieloop3, ubs_death4 ] {};
 void () ubs_death4 = [ $dieloop4, ubs_death5 ] {};
@@ -1057,7 +1057,7 @@ void (entity inflictor, entity attacker, float damage) ubs_Pain = {
 	if (self.health <= 500) {
 		if (self.ubs_deflapped != 1) {
 			Toss_Flap();
-			sound (self, CHAN_VOICE, "ubs/wpain.wav", 1, ATTN_NONE);
+			sound (self, CHAN_VOICE, "travail/ubs/wpain.wav", 1, ATTN_NONE);
 			ubs_painc1 ();
 			self.pain_finished = time + 2;
 		}
@@ -1068,7 +1068,7 @@ void (entity inflictor, entity attacker, float damage) ubs_Pain = {
 
 	self.pain_finished = time + 2;
 
-	sound (self, CHAN_VOICE, "ubs/wpain.wav", 1, ATTN_NONE);
+	sound (self, CHAN_VOICE, "travail/ubs/wpain.wav", 1, ATTN_NONE);
 
 	if (((random () * 70) > damage)) return;
 	if (self.health <= 500)
@@ -1155,17 +1155,17 @@ void () monster_ubs = {
 	precache_model ("progs/travail/uberskinflap.mdl");
 	precache_model ("progs/travail/w_spike.mdl");
 	precache_model ("progs/travail/v_spike.mdl");
-	precache_sound ("ubs/hit.wav");
-	precache_sound ("ubs/attack1.wav");
-	precache_sound ("ubs/wdeath1.wav");
-	precache_sound ("ubs/wdeath2.wav");
-	precache_sound ("ubs/widle1.wav");
-	precache_sound ("ubs/widle2.wav");
-	precache_sound ("ubs/wpain.wav");
-	precache_sound ("ubs/wsight.wav");
-	precache_sound ("ubs/elec.wav");
-	precache_sound ("ubs/spawnfr.wav");
-	precache_sound ("ubs/spawnst.wav");
+	precache_sound ("travail/ubs/hit.wav");
+	precache_sound ("travail/ubs/attack1.wav");
+	precache_sound ("travail/ubs/wdeath1.wav");
+	precache_sound ("travail/ubs/wdeath2.wav");
+	precache_sound ("travail/ubs/widle1.wav");
+	precache_sound ("travail/ubs/widle2.wav");
+	precache_sound ("travail/ubs/wpain.wav");
+	precache_sound ("travail/ubs/wsight.wav");
+	precache_sound ("travail/ubs/elec.wav");
+	precache_sound ("travail/ubs/spawnfr.wav");
+	precache_sound ("travail/ubs/spawnst.wav");
 	precache_model ("progs/ad171/mon_wizard.mdl");
 	precache_model ("progs/ad171/h_wizard.mdl");
 	precache_model ("progs/w_spike.mdl");

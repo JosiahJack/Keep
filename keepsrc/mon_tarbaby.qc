@@ -255,7 +255,7 @@ void() monster_tarbaby = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	self.mdl = "progs/mon_tarbaby.mdl";
+	self.mdl = "progs/qmaster/mon_tarbaby.mdl";
 	self.headmdl = string_null;
 	precache_model (self.mdl);
 

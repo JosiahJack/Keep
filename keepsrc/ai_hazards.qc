@@ -597,7 +597,7 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard = {
 		newmis.part_qctrail = TRUE;
 		newmis.part_trstyle = self.part_trstyle;
 		newmis.frame = rint((random() * 9));
-		newmis.part_soundmiss = "ad181/dknight/dprince_miss.wav";
+		newmis.part_soundmiss = "ad171/wraith/bounce.wav";
 	} else if (proj_type == CT_PROJ_SWEEPER2) {
 		setmodel(newmis, self.attack_proj2);
 		newmis.part_qctrail = TRUE;

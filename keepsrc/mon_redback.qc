@@ -196,8 +196,8 @@ void() monster_redback =
 	precache_model("progs/redback.mdl");
 	precache_model("progs/zom_gib.mdl");
 	precache_model("progs/gib3.mdl");
-	precache_model2("progs/k_spike.mdl");
-	precache_sound2("hknight/attack1.wav");
+	precache_model("progs/k_spike.mdl");
+	precache_sound("hknight/attack1.wav");
 	precache_sound("demon/dhit2.wav");
 	precache_sound("wizard/wsight.wav");
 	precache_sound("shambler/smack.wav");

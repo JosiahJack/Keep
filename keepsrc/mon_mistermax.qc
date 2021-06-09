@@ -32,7 +32,7 @@ void() precache_mr = {
 	precache_sound("nehahra/max/lava2.wav");
 	precache_sound("shambler/sattck1.wav");
 	precache_sound("hknight/idle.wav");
-	precache_sound("ad171/ambience/fire1.wav");
+	precache_sound("ambience/fire1.wav");
 	precache_sound("nehahra/weapons/sprfall1.wav");
 	precache_sound("nehahra/weapons/sprfall2.wav");
 	precache_sound("nehahra/boss3/hit.wav");

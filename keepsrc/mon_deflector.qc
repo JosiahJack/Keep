@@ -70,9 +70,7 @@ void() deflect_shieldon =
 	self.resist_multi_rockets = 0.25;
 };
 
-//----------------------------------------------------------------------
-void() deflect_shieldoff =
-{
+void() deflect_shieldoff = {
 	self.takedamage = DAMAGE_AIM;	// Grenades can make contact
 	self.bouncegrenade = FALSE;		// Reset to default
 	self.reflectnails = FALSE;		// Allow nail projectiles
@@ -83,17 +81,14 @@ void() deflect_shieldoff =
 	self.resist_rockets = 0; self.resist_cells = 0.5;
 };
 
-//----------------------------------------------------------------------
 void() deflect_shieldsound_on = {
-	sound (self, CHAN_ITEM, "deflector/shield_on.wav", 1, ATTN_NORM);
+	sound (self, CHAN_ITEM, "ad181/deflector/shield_on.wav", 1, ATTN_NORM);
 };
 
-//----------------------------------------------------------------------
 void() deflect_shieldsound_off = {
-	sound (self, CHAN_ITEM, "deflector/shield_off.wav", 1, ATTN_NORM);
+	sound (self, CHAN_ITEM, "ad181/deflector/shield_off.wav", 1, ATTN_NORM);
 };
 
-//----------------------------------------------------------------------
 void() deflect_shieldparticle = {
 	self.pos1 = self.origin;
 	// Randomize position from middle to feet (particles float up)
@@ -105,7 +100,6 @@ void() deflect_shieldparticle = {
 		particle_explode(self.pos1, self.cnt, 1, PARTICLE_BURST_YELLOW, PARTICLE_BURST_UPWARD); 
 };
 
-//===========================================================================
 void() deflect_stands7;	// Forward compiler reference
 void() deflect_stand1=[ $stand1, deflect_stand2] {ai_stand();
 
@@ -246,11 +240,8 @@ void()	deflect_fast7=[ $run7, deflect_fast8] {
 };
 void()	deflect_fast8=[ $run8, deflect_fast1] {deflect_run(11);};
 
-//======================================================================
 // MELEE Range (Flames)
-//----------------------------------------------------------------------
-void(float fire_explode) deflect_fireflame =
-{
+void(float fire_explode) deflect_fireflame = {
 	local vector org, eorg, torg, dir, ang;
 	local float expl_type, targetang;
 
@@ -258,7 +249,7 @@ void(float fire_explode) deflect_fireflame =
 	if (self.health < 1) return;
 
 	// Whooshing attack sound
-	sound (self, CHAN_WEAPON, "deflector/flame_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "ad181/justice/flame_fire.wav", 1, ATTN_NORM);
 	
 	// Facing angle
 	ai_face();
@@ -278,7 +269,7 @@ void(float fire_explode) deflect_fireflame =
 		// Randomize explosion type
 		if (random() < 0.5) expl_type = EXPLODE_MED;
 		else expl_type = EXPLODE_SMALL;
-		SpawnExplosion(expl_type, eorg, "deflector/flame_explode.wav");
+		SpawnExplosion(expl_type, eorg, "ad171/wraith/attack1_explode.wav");
 	}
 	// Small particle
 	else {
@@ -304,9 +295,7 @@ void(float fire_explode) deflect_fireflame =
 	self.proj_attarc = self.proj_attarc + 1;
 };
 
-//----------------------------------------------------------------------
-void() deflect_flameframe =
-{
+void() deflect_flameframe = {
 	// Dead Deflectors don't reflect back
 	if (self.health < 1) return;
 
@@ -323,21 +312,17 @@ void() deflect_flameframe =
 		// Back to regular movement
 		self.attack_state = AS_STRAIGHT;
 		self.think = self.th_run;
-	}
-	else if (self.walkframe == 0) { self.frame = $attack1; 
+	} else if (self.walkframe == 0) { self.frame = $attack1; 
 		self.attack_switch = self.attack_timer = 0;
-		sound (self, CHAN_WEAPON, "deflector/melee_attack.wav", 1, ATTN_NORM);
-	}
-	else if (self.walkframe == 1) { self.frame = $attack2;ai_face();
+		sound (self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
+	} else if (self.walkframe == 1) { self.frame = $attack2;ai_face();
 		deflect_shieldoff(); deflect_shieldsound_off();
-	}
-	else if (self.walkframe == 2) { self.frame = $attack3; ai_face();}
+	} else if (self.walkframe == 2) { self.frame = $attack3; ai_face();}
 	// MAIN ATTACK LOOP ---------------------------------------------------
 	else if (self.walkframe == 3) { self.frame = $attack14; ai_face();
 		// Sprite Count = Base (X) * (Skill * Y) Maximum = Z
 		self.attack_count = SpriteCount_Flame(self.proj_attqty);
-	}
-	else if (self.walkframe == 4) { self.frame = $attack15; ai_face();}
+	} else if (self.walkframe == 4) { self.frame = $attack15; ai_face();}
 	else if (self.walkframe == 5) { self.frame = $attack16; deflect_fireflame(TRUE);}
 	else if (self.walkframe >= 6) {
 		// Keep counting down flame attacks (3/5/7 sets)
@@ -346,8 +331,7 @@ void() deflect_flameframe =
 			self.frame = $attack17; 
 			deflect_fireflame(FALSE);
 			self.nextthink = time + 0.05;
-		}
-		else {
+		} else {
 			// End of flame attack checks
 			self.frame = $attack19; 
 			self.walkframe = -10;
@@ -368,16 +352,11 @@ void() deflect_flameframe =
 			}
 		}
 	}
-
-	// Update frame and move forward
-	self.walkframe = self.walkframe + 1;
+	self.walkframe = self.walkframe + 1; // Update frame and move forward
 };
 
-//======================================================================
 // MELEE Range (Plasma)
-//----------------------------------------------------------------------
-void(float sideang) deflect_fireplasma =
-{
+void(float sideang) deflect_fireplasma = {
 	local vector org, targ_org, dir;
 
 	if (!self.enemy) return;
@@ -398,11 +377,8 @@ void(float sideang) deflect_fireplasma =
 	launch_plasma(org, dir, CT_MONDEFLECTOR, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
-void() deflect_plasmaframe =
-{
-	// Dead Deflectors don't reflect back
-	if (self.health < 1) return;
+void() deflect_plasmaframe = {
+	if (self.health < 1) return; // Dead Deflectors don't reflect back
 
 	// Keep looping
 	self.nextthink = time + 0.1;
@@ -411,13 +387,11 @@ void() deflect_plasmaframe =
 	// Do specific stuff on certain animation frames
 	if (self.walkframe == 0) { self.frame = $attack1; ai_face();
 		self.attack_count = self.attack_switch = self.attack_timer = 0;
-		sound (self, CHAN_WEAPON, "deflector/melee_attack.wav", 1, ATTN_NORM);
-	}
-	else if (self.walkframe == 1) { self.frame = $attack2; ai_face();
+		sound (self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
+	} else if (self.walkframe == 1) { self.frame = $attack2; ai_face();
 		self.attack_track = SUB_orgEnemyTarget();
 		deflect_shieldoff(); deflect_shieldsound_off();
-	}
-	else if (self.walkframe == 2) { self.frame = $attack3; ai_trackenemy();}
+	} else if (self.walkframe == 2) { self.frame = $attack3; ai_trackenemy();}
 	// MAIN ATTACK LOOP ---------------------------------------------------
 	else if (self.walkframe == 3) { self.frame = $attack14; ai_trackenemy();}
 	else if (self.walkframe == 4) { self.frame = $attack15; deflect_fireplasma(0);}
@@ -434,8 +408,7 @@ void() deflect_plasmaframe =
 			visxray(self.enemy, self.attack_offset, '0 0 0', FALSE) ) {
 			// Keep looping
 			self.walkframe = 3; self.frame = $attack14; ai_trackenemy();
-		}
-		else {
+		} else {
 			self.frame = $attack20;
 			// last frame needs shield coming on
 			deflect_shieldon(); deflect_shieldsound_on();
@@ -444,13 +417,10 @@ void() deflect_plasmaframe =
 			self.attack_state = AS_STRAIGHT;
 			self.think = self.th_run;
 		}
-	}
-
-	// Update frame and move forward
-	self.walkframe = self.walkframe + 1;
+	}	
+	self.walkframe = self.walkframe + 1; // Update frame and move forward
 };
 
-//----------------------------------------------------------------------
 void() deflect_melee = { 
 	self.walkframe = 0;		// Frame counter
 	self.attack_count = 0;	// Plasma/Flame counter
@@ -460,17 +430,14 @@ void() deflect_melee = {
 	else deflect_flameframe();
 };
 
-//======================================================================
 // LONG Range (Rocket Launcher)
-//----------------------------------------------------------------------
-void(float sideang) deflect_fire_rocket =
-{
+void(float sideang) deflect_fire_rocket = {
 	local vector org, torg, dir;
 	
 	if (!self.enemy) return;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "deflector/rocket_fire.wav", 1, ATTN_NORM);	
+	sound (self, CHAN_WEAPON, "ad181/deflector/rocket_fire.wav", 1, ATTN_NORM);	
 
 	// Maximum speed, initial speed set in Launch_Missile
 	self.attack_speed = SPEED_DEFLECTROCKET + (skill * SPEED_DEFLECTRSKILL);
@@ -487,9 +454,7 @@ void(float sideang) deflect_fire_rocket =
 	Launch_Missile (org, dir, '0 0 0', CT_PROJ_DEFLECT1, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
-void() deflect_rocketframe =
-{
+void() deflect_rocketframe = {
 	// Dead deflectors don't fight anymore
 	if (self.health < 1) return;
 
@@ -502,7 +467,7 @@ void() deflect_rocketframe =
 		self.frame = $attackp1;
 		self.pain_finished = time + 1;
 		self.attack_track = SUB_orgEnemyTarget();
-		sound (self, CHAN_WEAPON, "deflector/rocket_load.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad181/deflector/rocket_load.wav", 1, ATTN_NORM);
 	}
 	else if (self.walkframe == 1) { 
 		ai_trackenemy(); self.frame = $attackp2;
@@ -679,8 +644,7 @@ void() deflect_die =
 /*======================================================================
  QUAKED monster_deflector (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 ======================================================================*/
-void() monster_deflector =
-{
+void() monster_deflector = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 	
@@ -693,7 +657,7 @@ void() monster_deflector =
 	self.gib1sound = GIB_IMPACT_WOOD;	// Gib sound for gun
 
 	// Melee attack (Fire/plasma)
-	precache_sound ("deflector/melee_attack.wav");
+	precache_sound ("ad171/wraith/attack1.wav");
 
 	// Alternative spawnflag, lasers instead of mines
 	if (self.spawnflags & MON_DEFLECTOR_PLASMA) {
@@ -712,29 +676,29 @@ void() monster_deflector =
 		// New YELLOW version (flame/rocket)
 		// Melee attack (Projectile Flames)
 		PreCache_Flame();
-		precache_sound ("deflector/flame_fire.wav");
-		precache_sound ("deflector/flame_explode.wav");
+		precache_sound ("ad181/justice/flame_fire.wav");
+		precache_sound ("ad171/wraith/attack1_explode.wav");
 		// Range attack (rocket model)
 		precache_model (MODEL_PROJ_ROCKET);
 	}
 	
-	self.idle_sound = "deflector/idle1.wav";
+	self.idle_sound = "ad181/deflector/idle1.wav";
 	precache_sound (self.idle_sound);
-	self.sight_sound = "deflector/sight1.wav";
-	self.sight_sound2 = "deflector/sight2.wav";
-	self.sight_sound3 = "deflector/sight3.wav";
+	self.sight_sound = "ad181/deflector/sight1.wav";
+	self.sight_sound2 = "ad181/deflector/sight2.wav";
+	self.sight_sound3 = "ad181/deflector/sight3.wav";
 	precache_sound (self.sight_sound);
 	precache_sound (self.sight_sound2);
 	precache_sound (self.sight_sound3);
 	
 	// Shield off, shield on!
-	precache_sound ("deflector/shield_off.wav");
-	precache_sound ("deflector/shield_on.wav");
+	precache_sound ("ad181/deflector/shield_off.wav");
+	precache_sound ("ad181/deflector/shield_on.wav");
 
 	// Projectile fire and impact (used in projectiles)
-	precache_sound ("deflector/rocket_load.wav");
-	precache_sound ("deflector/rocket_fire.wav");
-	precache_sound ("deflector/rocket_hit.wav");
+	precache_sound ("ad181/deflector/rocket_load.wav");
+	precache_sound ("ad181/deflector/rocket_fire.wav");
+	precache_sound ("ad181/deflector/rocket_hit.wav");
 
 	// Extra load/fire sounds
 	precache_sound (SOUND_PLASMA_LOAD);
@@ -742,12 +706,12 @@ void() monster_deflector =
 	precache_sound (SOUND_PLASMA_HIT);
 
 	// Plenty of death and pain sounds
-	self.pain_sound = "deflector/pain1.wav";
-	self.pain_sound2 = "deflector/pain2.wav";
+	self.pain_sound = "ad181/deflector/pain1.wav";
+	self.pain_sound2 = "ad181/deflector/pain2.wav";
 	precache_sound (self.pain_sound);
 	precache_sound (self.pain_sound2);
-	self.death_sound = "deflector/death1.wav";
-	self.death_sound2 = "deflector/death2.wav";
+	self.death_sound = "ad181/deflector/death1.wav";
+	self.death_sound2 = "ad181/deflector/death2.wav";
 	precache_sound (self.death_sound);
 	precache_sound (self.death_sound2);
 

@@ -206,11 +206,8 @@ void() drole_run =
 	else drole_run1();
 };
 
-//===========================================================================
 // MELEE ATTACK - Double claws
-//===========================================================================
-void(float side) drole_claw =
-{
+void(float side) drole_claw = {
 	local float ldmg;
 	
 	if (!self.enemy) return;
@@ -220,92 +217,75 @@ void(float side) drole_claw =
 
 	if (!ai_checkmelee(MONAI_MELEEDROLE1,MONAI_MELEEZTALL) || !self.enemy.takedamage) {
 		// Melee claw miss sound
-		sound (self, CHAN_WEAPON, "drole/swipe.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "quoth/drole/swipe.wav", 1, ATTN_NORM);
 	}
 	else {
 		// Melee claw hit sound
-		if (random() < 0.5) sound (self, CHAN_WEAPON, "drole/strike1.wav", 1, ATTN_NORM);
-		else sound (self, CHAN_WEAPON, "drole/strike2.wav", 1, ATTN_NORM);
+		if (random() < 0.5) sound (self, CHAN_WEAPON, "quoth/drole/strike1.wav", 1, ATTN_NORM);
+		else sound (self, CHAN_WEAPON, "quoth/drole/strike2.wav", 1, ATTN_NORM);
 		ldmg = 12 + 6*random();
 		T_Damage (self.enemy, self, self, ldmg, DAMARMOR);		
 		SpawnMeatSpray (self, self.enemy, side);
 	}
 };
 
-//----------------------------------------------------------------------
-void(float ragespd) drole_charge =
-{
+void(float ragespd) drole_charge = {
 	if (self.attack_rage) ai_charge(ragespd);
 	else ai_charge(rint(ragespd*0.7));
 }
 
-//----------------------------------------------------------------------
 void() drole_clawL1;
-//----------------------------------------------------------------------
+
 void() drole_clawR1 = [ $clawR1, drole_clawR2 ] {drole_charge(27);};
 void() drole_clawR2 = [ $clawR2, drole_clawR3 ] {drole_charge(26);
-sound (self, CHAN_WEAPON, "drole/swipe.wav", 1, ATTN_NORM);};
+sound (self, CHAN_WEAPON, "quoth/drole/swipe.wav", 1, ATTN_NORM);};
 void() drole_clawR3 = [ $clawR3, drole_clawR4 ] {monster_footstep(FALSE);drole_charge(30);};
 void() drole_clawR4 = [ $clawR4, drole_clawR5 ] {drole_charge(28);};
-void() drole_clawR5 = [ $clawR5, drole_clawR6 ] {drole_charge(27);
-drole_claw(-250);};
+void() drole_clawR5 = [ $clawR5, drole_clawR6 ] {drole_charge(27);drole_claw(-250);};
 void() drole_clawR6 = [ $clawR6, drole_clawR7 ] {drole_charge(26);};
 void() drole_clawR7 = [ $clawR7, drole_clawR8 ] {monster_footstep(FALSE);drole_charge(30);};
 void() drole_clawR8 = [ $clawR8, drole_clawR9 ] {drole_charge(28);};
 void() drole_clawR9 = [ $clawR9, drole_clawR10 ] {drole_charge(27);};
 void() drole_clawR10 = [ $clawR10, drole_clawR11 ] {drole_charge(26);};
-void() drole_clawR11 = [ $clawR11, drole_clawR12 ] {monster_footstep(FALSE);drole_charge(30);
-drole_claw(-250);};
+void() drole_clawR11 = [ $clawR11, drole_clawR12 ] {monster_footstep(FALSE);drole_charge(30);drole_claw(-250);};
 void() drole_clawR12 = [ $clawR12, drole_clawR13 ] {drole_charge(28);};
 void() drole_clawR13 = [ $clawR13, drole_clawR14 ] {drole_charge(27);};
-void() drole_clawR14 = [ $clawR14, drole_clawR15 ] {drole_charge(26);
-sound (self, CHAN_WEAPON, "drole/swipe.wav", 1, ATTN_NORM);};
+void() drole_clawR14 = [ $clawR14, drole_clawR15 ] {drole_charge(26);sound (self, CHAN_WEAPON, "quoth/drole/swipe.wav", 1, ATTN_NORM);};
 void() drole_clawR15 = [ $clawR15, drole_clawR16 ] {monster_footstep(FALSE);drole_charge(30);};
 void() drole_clawR16 = [ $clawR16, drole_run ] {drole_charge(28);
-	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEDROLE2,MONAI_MELEEZTALL) && 
-		self.enemy.health > 0 && visible(self.enemy)) drole_clawL1();
+	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEDROLE2,MONAI_MELEEZTALL) && self.enemy.health > 0 && visible(self.enemy)) drole_clawL1();
 };
 
-//----------------------------------------------------------------------
 void() drole_clawL1 = [ $clawL1, drole_clawL2 ] {drole_charge(27);};
-void() drole_clawL2 = [ $clawL2, drole_clawL3 ] {drole_charge(26);
-sound (self, CHAN_WEAPON, "drole/swipe.wav", 1, ATTN_NORM);};
+void() drole_clawL2 = [ $clawL2, drole_clawL3 ] {drole_charge(26);sound (self, CHAN_WEAPON, "quoth/drole/swipe.wav", 1, ATTN_NORM);};
 void() drole_clawL3 = [ $clawL3, drole_clawL4 ] {monster_footstep(FALSE);drole_charge(30);};
 void() drole_clawL4 = [ $clawL4, drole_clawL5 ] {drole_charge(28);};
-void() drole_clawL5 = [ $clawL5, drole_clawL6 ] {drole_charge(27);
-drole_claw(250);};
+void() drole_clawL5 = [ $clawL5, drole_clawL6 ] {drole_charge(27);drole_claw(250);};
 void() drole_clawL6 = [ $clawL6, drole_clawL7 ] {drole_charge(26);};
 void() drole_clawL7 = [ $clawL7, drole_clawL8 ] {monster_footstep(FALSE);drole_charge(30);};
 void() drole_clawL8 = [ $clawL8, drole_clawL9 ] {drole_charge(28);};
 void() drole_clawL9 = [ $clawL9, drole_clawL10 ] {drole_charge(27);};
 void() drole_clawL10 = [ $clawL10, drole_clawL11 ] {drole_charge(26);};
-void() drole_clawL11 = [ $clawL11, drole_clawL12 ] {monster_footstep(FALSE);drole_charge(30);
-drole_claw(250);};
+void() drole_clawL11 = [ $clawL11, drole_clawL12 ] {monster_footstep(FALSE);drole_charge(30);drole_claw(250);};
 void() drole_clawL12 = [ $clawL12, drole_clawL13 ] {drole_charge(28);};
 void() drole_clawL13 = [ $clawL13, drole_clawL14 ] {drole_charge(27);};
 void() drole_clawL14 = [ $clawL14, drole_clawL15 ] {drole_charge(26);
-sound (self, CHAN_WEAPON, "drole/swipe.wav", 1, ATTN_NORM);};
+sound (self, CHAN_WEAPON, "quoth/drole/swipe.wav", 1, ATTN_NORM);};
 void() drole_clawL15 = [ $clawL15, drole_clawL16 ] {monster_footstep(FALSE);drole_charge(30);};
 void() drole_clawL16 = [ $clawL16, drole_run ] {drole_charge(28);
-	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEDROLE2,MONAI_MELEEZTALL) && 
-		self.enemy.health > 0 && visible(self.enemy)) drole_clawR1();
+	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEDROLE2,MONAI_MELEEZTALL) && self.enemy.health > 0 && visible(self.enemy)) drole_clawR1();
 };
 
-//----------------------------------------------------------------------
-void() drole_melee =
-{
+void() drole_melee = {
 	if (random() < 0.5) drole_clawR1();
 	else drole_clawL1();
 };
 
-//============================================================================
 // RANGE ATTACK - Fireball (rocket)
 // * The trick to drole rockets is that they start really slow
 // * Over time (4 frames) the rocket speeds up (linked to animation)
 // * requires special projectile and new th_updmissile function
 // * Has a different explosion sound (does not play rocket default)
-//
-//============================================================================
 void() drole_rocket1 = [ 1, drole_rocket2 ] {self.nextthink = time + 0.2;};
 void() drole_rocket2 = [ 2, drole_rocket3 ] {self.velocity = self.velocity * 1.5;};
 void() drole_rocket3 = [ 3, drole_rocket4 ] {self.velocity = self.velocity * 1.5;};
@@ -315,27 +295,22 @@ void() drole_rocket4 = [ 3, SUB_Remove ] {
 	else self.velocity = self.velocity * 4.5;
 };
 
-//----------------------------------------------------------------------
-void() drole_fire =
-{
+void() drole_fire = {
 	local vector org, dir, avel;
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 	
 	ai_face();
 	self.attack_speed = 80;
-	
 	makevectors (self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = normalize((self.enemy.origin+'0 0 -8') - org);
 	avel = avel = vecrand(100,200,FALSE);
-	
 	Launch_Missile (org, dir, avel, CT_PROJ_DROLE, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
 void() drole_magic1 = [ $magic1, drole_magic2 ] {ai_face();
-sound(self, CHAN_WEAPON, "drole/fire.wav", 1, ATTN_NORM);};
+sound(self, CHAN_WEAPON, "quoth/drole/fire.wav", 1, ATTN_NORM);};
 void() drole_magic2 = [ $magic2, drole_magic3 ] {ai_face();};
 void() drole_magic3 = [ $magic3, drole_magic4 ] {ai_face();};
 void() drole_magic4 = [ $magic4, drole_magic5 ] {drole_fire();};
@@ -345,7 +320,6 @@ void() drole_magic7 = [ $magic7, drole_magic8 ] {ai_face();};
 void() drole_magic8 = [ $magic8, drole_magic9 ] {ai_face();};
 void() drole_magic9 = [ $magic9, drole_run ] {ai_face();};
 
-//============================================================================
 void() drole_pain1 = [ $pain1, drole_pain2 ] {ai_back(8);};
 void() drole_pain2 = [ $pain2, drole_pain3 ] {ai_back(10);};
 void() drole_pain3 = [ $pain3, drole_pain4 ] {ai_back(10);};
@@ -353,15 +327,13 @@ void() drole_pain4 = [ $pain4, drole_pain5 ] {ai_back(8);};
 void() drole_pain5 = [ $pain5, drole_pain6 ] {ai_back(6);};
 void() drole_pain6 = [ $pain6, drole_run ] {ai_back(4);};
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) drole_pain =
-{
+void(entity inflictor, entity attacker, float damage) drole_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (self.attack_rage) sound (self, CHAN_VOICE, "drole/enrage.wav", 0.5, ATTN_NORM);
+		if (self.attack_rage) sound (self, CHAN_VOICE, "quoth/drole/sight2.wav", 0.5, ATTN_NORM);
 		else sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 
 		if (self.pain_check == 1) drole_pain1 ();
@@ -374,7 +346,6 @@ void(entity inflictor, entity attacker, float damage) drole_pain =
 	}
 };
 
-//============================================================================
 void() drole_death1 = [ $death1, drole_death2 ] {};
 void() drole_death2 = [ $death2, drole_death3 ] {monster_check_gib();};
 void() drole_death3 = [ $death3, drole_death4 ] {monster_check_gib();
@@ -403,29 +374,25 @@ void() drole_death24 = [ $death24, drole_death25 ] {};
 void() drole_death25 = [ $death25, drole_death26 ] {monster_death_postcheck();};
 void() drole_death26 = [ $death26, drole_death26 ] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
-void() drole_die =
-{
+void() drole_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "drole/death.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "quoth/drole/death.wav", 1, ATTN_NORM);
 		drole_death1 ();
 	}
 };
 
-/*======================================================================
-QUAKED monster_drole (1 0 0) (-32 -32 -24) (32 32 64) Ambush
-======================================================================*/
+// QUAKED monster_drole (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 void() monster_drole = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	self.mdl = "progs/ad171/mon_drole.mdl";
+	self.mdl = "progs/quoth/drole.mdl";
 	self.headmdl = "progs/ad171/h_drole.mdl";
 	self.gib1mdl = "progs/ad171/gib_drolearm1.mdl";	// Top arm (pose 1)
 	self.gib2mdl = "progs/ad171/gib_drolearm2.mdl";	// Top arm (pose 2)
@@ -438,21 +405,21 @@ void() monster_drole = {
 	precache_model (self.gib3mdl);
 	precache_model (MODEL_PROJ_DROLE);		// growing fireball
 	
-	self.idle_sound = "drole/idle.wav";
+	self.idle_sound = "quoth/drole/idle.wav";
 	precache_sound (self.idle_sound);
 
-	precache_sound ("drole/enrage.wav");	// sight2.wav
-	precache_sound ("drole/death.wav");
-	self.pain_sound = "drole/pain.wav";
+	precache_sound ("quoth/drole/sight2.wav");
+	precache_sound ("quoth/drole/death.wav");
+	self.pain_sound = "quoth/drole/pain.wav";
 	precache_sound (self.pain_sound);
 	
-	precache_sound ("drole/fire.wav");		// Launch rockets
-	precache_sound ("drole/r_explode.wav");	// unique explosion sound
-	precache_sound ("drole/strike1.wav");	// melee impacts
-	precache_sound ("drole/strike2.wav");
-	precache_sound ("drole/swipe.wav");		// Missed melee
+	precache_sound ("quoth/drole/fire.wav");		// Launch rockets
+	precache_sound ("quoth/drole/explode3.wav");	// unique explosion sound
+	precache_sound ("quoth/drole/strike1.wav");	// melee impacts
+	precache_sound ("quoth/drole/strike2.wav");
+	precache_sound ("quoth/drole/swipe.wav");		// Missed melee
 
-	self.sight_sound = "drole/sight.wav";
+	self.sight_sound = "quoth/drole/sight.wav";
 	precache_sound (self.sight_sound);
 
 	// Check for poisonous entity flag

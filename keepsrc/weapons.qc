@@ -1381,10 +1381,10 @@ void(entity targ) W_SetCurrentAmmo = {
 		} else if (targ.weapon == IT_EXTRA_WEAPON) {
 			if (targ.ammo_poison > 0) {
 				targ.currentammo = targ.ammo_poison;
-				targ.weaponmodel = "progs/v_crossbow2.mdl";
+				targ.weaponmodel = "progs/its/v_crossbow2.mdl";
 			} else {
 				targ.currentammo = targ.ammo_bolts;
-				targ.weaponmodel = "progs/v_crossbow1.mdl";
+				targ.weaponmodel = "progs/its/v_crossbow1.mdl";
 			}
 		} else if (targ.weapon == IT2_MJOLNIR) {
 			targ.currentammo = targ.ammo_cells;
@@ -2846,13 +2846,10 @@ void() CycleWeaponReverseCommand = {
 	}
 };
 
-/*======================================================================
-W_WeaponFrame
-======================================================================*/
 void() W_WeaponFrame = {
 	if (self.lavaGunFired) {
 		if (self.weapon == IT_LAVA_NAILGUN || self.weapon == IT_LAVA_SUPER_NAILGUN) {
-			sound (self, CHAN_BODY, "lavagun/snail.wav", 1, ATTN_NORM);
+			sound (self, CHAN_BODY, "rogue/weapons/snail.wav", 1, ATTN_NORM);
 		}
 		self.lavaGunFired = 0;
 	}

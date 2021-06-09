@@ -15,9 +15,9 @@ void() SentinelFire = {
 	if (self.attack_finished < time) {
 		if (self.enemy == world || !enemy_vis) return;
 		if (self.spawnflags & 4) {
-			sound (self, CHAN_WEAPON, "sentinel/nail.wav", 1, ATTN_NORM);
+			sound (self, CHAN_WEAPON, "quoth/sentinel/nail.wav", 1, ATTN_NORM);
 		} else {
-			sound (self, CHAN_WEAPON, "sentinel/laser.wav", 1, ATTN_NORM);
+			sound (self, CHAN_WEAPON, "quoth/sentinel/laser.wav", 1, ATTN_NORM);
 		}
 		self.attack_finished = time + self.wait;
 		makevectors (self.angles);
@@ -99,8 +99,8 @@ void(entity own) sentinel_death_fx = {
 	vrand_y = (crandom()*16);
 	vrand_z = (crandom()*16);
 	puff.origin = own.origin + vrand;
-	puff.mdl = "progs/quoth2pt2full/s_vp_pll.spr";
-	setmodel(puff,"progs/quoth2pt2full/s_vp_pll.spr");
+	puff.mdl = "progs/quoth/s_vp_pll.spr";
+	setmodel(puff,"progs/quoth/s_vp_pll.spr");
 	puff.think = BDW_SpriteGenericPlayOnce;
 	puff.nextthink = time + 0.05;
 };
@@ -121,8 +121,8 @@ void(entity own) sentinel_death_fx2 = {
 	vrand_y = (crandom()*16);
 	vrand_z = (crandom()*16);
 	puff.origin = own.origin + vrand;
-	puff.mdl = "progs/quoth2pt2full/s_vp_pll.spr";
-	setmodel(puff,"progs/quoth2pt2full/s_vp_pll.spr");
+	puff.mdl = "progs/quoth/s_vp_pll.spr";
+	setmodel(puff,"progs/quoth/s_vp_pll.spr");
 	puff.think = BDW_SpriteGenericPlayOnce;
 	puff.nextthink = time + 0.15;
 };
@@ -131,7 +131,7 @@ void() sentinel_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
-	sound (self, CHAN_VOICE, "ad171/jim/explode_major.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "ad171/seeker/explode_major.wav", 1, ATTN_NORM);
 	self.solid = SOLID_NOT;
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
@@ -150,28 +150,26 @@ void() monster_sentinel = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 		
-	self.mdl = "progs/quoth2pt2full/sentinel.mdl";
-	precache_model("progs/quoth2pt2full/sentinel.mdl");
+	self.mdl = "progs/quoth/sentinel.mdl";
+	precache_model("progs/quoth/sentinel.mdl");
 	precache_model("progs/ad171/proj_laz.mdl");
-	precache_model("progs/quoth2pt2full/gib.mdl");
-	precache_model("progs/quoth2pt2full/wreckage.mdl");
-	precache_model("progs/quoth2pt2full/s_vp_pll.spr");
-	precache_sound("ad171/jim/explode_major.wav");
-	precache_sound("enforcer/enfire.wav");
-	precache_sound("enforcer/enfstop.wav");
-	precache_sound("sentinel/laser.wav");
-	precache_sound("sentinel/nail.wav");
-	precache_sound("sentinel/widle1.wav");
-	precache_sound("sentinel/widle2.wav");
-	precache_sound("sentinel/wpain.wav");
-	precache_sound("sentinel/wsight.wav");
+	precache_model("progs/quoth/gib.mdl");
+	precache_model("progs/quoth/wreckage.mdl");
+	precache_model("progs/quoth/s_vp_pll.spr");
+	precache_sound("ad171/seeker/explode_major.wav");
+	precache_sound(SOUND_LASER_FIRE);
+	precache_sound(SOUND_LASER_HIT);
+	precache_sound("quoth/sentinel/laser.wav");
+	precache_sound("quoth/sentinel/nail.wav");
+	precache_sound("quoth/sentinel/widle1.wav");
+	precache_sound("quoth/sentinel/wpain.wav");
+	precache_sound("quoth/sentinel/wsight.wav");
 
-	self.gib1mdl = "progs/quoth2pt2full/gib.mdl";
-	self.gib2mdl = "progs/quoth2pt2full/wreckage.mdl";
-	self.sight_sound = "sentinel/wsight.wav";
-	self.idle_sound = "sentinel/widle1.wav";
-	self.idle_sound2 = "sentinel/widle2.wav";
-	self.pain_sound = "sentinel/wpain.wav";
+	self.gib1mdl = "progs/quoth/gib.mdl";
+	self.gib2mdl = "progs/quoth/wreckage.mdl";
+	self.sight_sound = "quoth/sentinel/wsight.wav";
+	self.idle_sound = "quoth/sentinel/widle1.wav";
+	self.pain_sound = "quoth/sentinel/wpain.wav";
 	self.pain_flinch = 75;
 	self.gibondeath = TRUE;
 	self.attack_offset = '0 0 16';

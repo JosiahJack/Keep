@@ -11,32 +11,13 @@ $cd id1/models/player_4
 $origin 0 -6 24
 $base base		
 $skin skin
-
-//
-// running
-//
 $frame axrun1 axrun2 axrun3 axrun4 axrun5 axrun6
 $frame rockrun1 rockrun2 rockrun3 rockrun4 rockrun5 rockrun6
-
-//
-// standing
-//
 $frame stand1 stand2 stand3 stand4 stand5
 $frame axstnd1 axstnd2 axstnd3 axstnd4 axstnd5 axstnd6
 $frame axstnd7 axstnd8 axstnd9 axstnd10 axstnd11 axstnd12
-
-
-//
-// pain
-//
 $frame axpain1 axpain2 axpain3 axpain4 axpain5 axpain6
 $frame pain1 pain2 pain3 pain4 pain5 pain6
-
-
-//
-// death
-//
-
 $frame axdeth1 axdeth2 axdeth3 axdeth4 axdeth5 axdeth6
 $frame axdeth7 axdeth8 axdeth9
 $frame deatha1 deatha2 deatha3 deatha4 deatha5 deatha6 deatha7 deatha8
@@ -49,10 +30,6 @@ $frame deathd1 deathd2 deathd3 deathd4 deathd5 deathd6 deathd7
 $frame deathd8 deathd9
 $frame deathe1 deathe2 deathe3 deathe4 deathe5 deathe6 deathe7
 $frame deathe8 deathe9
-
-//
-// attacks
-//
 $frame nailatt1 nailatt2
 $frame light1 light2
 $frame rockatt1 rockatt2 rockatt3 rockatt4 rockatt5 rockatt6
@@ -62,7 +39,6 @@ $frame axattb1 axattb2 axattb3 axattb4 axattb5 axattb6
 $frame axattc1 axattc2 axattc3 axattc4 axattc5 axattc6
 $frame axattd1 axattd2 axattd3 axattd4 axattd5 axattd6
 
-
 void()	axeg_stand1	=[	$axstnd1,	axeg_stand2	] {ai_stand();};
 void()	axeg_stand2	=[	$axstnd2,	axeg_stand3	] {ai_stand();};
 void()	axeg_stand3	=[	$axstnd3,	axeg_stand4	] {ai_stand();};
@@ -71,25 +47,22 @@ void()	axeg_stand5	=[	$axstnd5,	axeg_stand6	] {ai_stand();};
 void()	axeg_stand6	=[	$axstnd6,	axeg_stand7	] {ai_stand();};
 void()	axeg_stand7	=[	$axstnd7,	axeg_stand8	] {ai_stand();};
 void()	axeg_stand8	=[	$axstnd8,	axeg_stand9	] {ai_stand();};
-void()	axeg_stand9	=[	$axstnd9,	axeg_stand10	] {ai_stand();};
-void()	axeg_stand10	=[	$axstnd10,	axeg_stand11	] {ai_stand();};
-void()	axeg_stand11	=[	$axstnd11,	axeg_stand12	] {ai_stand();};
-void()	axeg_stand12	=[	$axstnd12,	axeg_stand1	] {ai_stand();};
+void()	axeg_stand9	=[	$axstnd9,	axeg_stand10] {ai_stand();};
+void()	axeg_stand10=[  $axstnd10,  axeg_stand11] {ai_stand();};
+void()	axeg_stand11=[	$axstnd11,	axeg_stand12] {ai_stand();};
+void()	axeg_stand12=[	$axstnd12,	axeg_stand1	] {ai_stand();};
 
 void()	axeg_run1	=[	$axrun1,		axeg_run2	] {
-if (random() < 0.2)
-	sound (self, CHAN_VOICE, "knight/idle.wav", 1,  ATTN_IDLE);
-ai_run(25);};
+	if (random() < 0.2) sound (self, CHAN_VOICE, "knight/idle.wav", 1,  ATTN_IDLE);
+	ai_run(25);
+};
 void()	axeg_run2	=[	$axrun2,		axeg_run3	] {ai_run(18); monster_footstep(FALSE);};
 void()	axeg_run3	=[	$axrun3,		axeg_run4	] {ai_run(12);};
 void()	axeg_run4	=[	$axrun4,		axeg_run5	] {ai_run(25);};
 void()	axeg_run5	=[	$axrun5,		axeg_run6	] {ai_run(18);monster_footstep(FALSE);};
 void()	axeg_run6	=[	$axrun6,		axeg_run1	] {ai_run(12);};
 
-//===========================================================================
-
-void( vector dir ) axeg_chop =
-{
+void( vector dir ) axeg_chop = {
 	local vector	delta, toss;
 	local float 	ldmg;
 
@@ -109,15 +82,12 @@ void( vector dir ) axeg_chop =
 
 	toss = v_forward * dir_x + v_right * dir_y + v_up * dir_z;
 	self.enemy.velocity = self.enemy.velocity + toss;
-}
-
+};
 
 void()	axe_runatka1	=[	$axatt1,		axe_runatka2	] {
-if (random() > 0.5)
-	sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
-else
-	sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
-ai_charge(30);
+	if (random() > 0.5) sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
+	else sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
+	ai_charge(30);
 };
 void()	axe_runatka2	=[	$axatt2,		axe_runatka3	] {ai_charge(20);};
 void()	axe_runatka3	=[	$axatt3,		axe_runatka4	] {ai_charge(10); axeg_chop('0 0 0');};
@@ -126,11 +96,9 @@ void()	axe_runatka5	=[	$axatt5,		axe_runatka6	] {axeg_chop('100 -40 10');};
 void()	axe_runatka6	=[	$axatt6,		axeg_run1	] {ai_charge_side();};
 
 void()	axe_runatkb1	=[	$axattb1,		axe_runatkb2	] {
-if (random() > 0.5)
-	sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
-else
-	sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
-ai_charge(30);
+	if (random() > 0.5) sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
+	else sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
+	ai_charge(30);
 };
 void()	axe_runatkb2	=[	$axattb2,		axe_runatkb3	] {ai_charge(20);};
 void()	axe_runatkb3	=[	$axattb3,		axe_runatkb4	] {ai_charge(10); axeg_chop('0 0 0');};
@@ -139,11 +107,9 @@ void()	axe_runatkb5	=[	$axattb5,		axe_runatkb6	] {axeg_chop('80 150 20');};
 void()	axe_runatkb6	=[	$axattb6,		axeg_run1	] {ai_charge_side();};
 
 void()	axe_runatkc1	=[	$axattc1,		axe_runatkc2	] {
-if (random() > 0.5)
-	sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
-else
-	sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
-ai_charge(30);
+	if (random() > 0.5) sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
+	else sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
+	ai_charge(30);
 };
 void()	axe_runatkc2	=[	$axattc2,		axe_runatkc3	] {ai_charge(20);};
 void()	axe_runatkc3	=[	$axattc3,		axe_runatkc4	] {ai_charge(10); axeg_chop('0 0 0');};
@@ -152,11 +118,9 @@ void()	axe_runatkc5	=[	$axattc5,		axe_runatkc6	] {axeg_chop('120 0 20');};
 void()	axe_runatkc6	=[	$axattc6,		axeg_run1	] {ai_charge_side();};
 
 void()	axe_runatkd1	=[	$axattd1,		axe_runatkd2	] {
-if (random() > 0.5)
-	sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
-else
-	sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
-ai_charge(30);
+	if (random() > 0.5) sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
+	else sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
+	ai_charge(30);
 };
 void()	axe_runatkd2	=[	$axattd2,		axe_runatkd3	] {ai_charge(20);};
 void()	axe_runatkd3	=[	$axattd3,		axe_runatkd4	] {ai_charge(10); axeg_chop('0 0 0');};
@@ -164,26 +128,21 @@ void()	axe_runatkd4	=[	$axattd4,		axe_runatkd5	] {axeg_chop('30 -75 100');};
 void()	axe_runatkd5	=[	$axattd5,		axe_runatkd6	] {axeg_chop('60 -150 200');};
 void()	axe_runatkd6	=[	$axattd6,		axeg_run1	] {ai_charge_side();};
 
-void()	axeg_atk =
-{
+void()	axeg_atk = {
 	local float r;
-	if (self.pain_finished > time)
-		return;
+
+	if (self.pain_finished > time) return;
+
 	r = random();
-	
 	if (r < 0.25)
 		axe_runatka1();
-	else	if (r < 0.5)
+	else if (r < 0.5)
 		axe_runatkb1();
-	else	if (r < 0.75)
+	else if (r < 0.75)
 		axe_runatkc1();
 	else
 		axe_runatkd1();
 };
-
-
-//===========================================================================
-
 
 void()	axeg_pain1	=[	$axpain1,	axeg_pain2	] {ai_painforward(0);};
 void()	axeg_pain2	=[	$axpain2,	axeg_pain3	] {ai_painforward(-1);};
@@ -203,10 +162,6 @@ void(entity inflictor, entity attacker, float damage)	axeg_pain = {
 		axeg_pain1();	
 	}
 };
-
-//===========================================================================
-
-
 
 void()	axeg_die1	=[	$axdeth1,	axeg_die2	] {};
 void()	axeg_die2	=[	$axdeth2,	axeg_die3	] {monster_check_gib();};
@@ -229,22 +184,9 @@ void() axeg_die = {
 	}
 };
 
-/*QUAKED monster_axegrunt (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-*/
-void() monster_axegrunt = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/axegrunt.mdl";
-	self.headmdl = "progs/drake/h_guard.mdl";
-	self.gib1mdl = "progs/gib1.mdl";
-	self.gib2mdl = "progs/gib2.mdl";
-	self.gib3mdl = "progs/gib3.mdl";
-	precache_model ("progs/axegrunt.mdl");
+void() precache_monster_axegrunt = {
+	precache_model ("progs/lunaran/axegrunt.mdl");
 	precache_model ("progs/drake/h_guard.mdl");
-
 	precache_sound ("knight/kdeath.wav");
 	precache_sound ("knight/khurt.wav");
 	precache_sound ("knight/ksight.wav");
@@ -252,8 +194,23 @@ void() monster_axegrunt = {
 	precache_sound ("knight/sword2.wav");
 	precache_sound ("knight/idle.wav");
 	precache_sound ("player/udeath.wav");	// gib death
-	self.gib1sound = GIB_IMPACT_WOOD;
+};
 
+// Lunaran and in Travail
+// QUAKED monster_axegrunt (1 0 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_axegrunt = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+
+	precache_monster_axegrunt();
+	self.mdl = "progs/lunaran/axegrunt.mdl";
+	self.headmdl = "progs/drake/h_guard.mdl";
+	self.gib1mdl = "progs/gib1.mdl";
+	self.gib2mdl = "progs/gib2.mdl";
+	self.gib3mdl = "progs/gib3.mdl";
+	self.gib1sound = GIB_IMPACT_WOOD;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	self.pain_sound = "knight/khurt.wav";
@@ -275,7 +232,7 @@ void() monster_axegrunt = {
 	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.th_stand = axeg_stand1;
-//	self.th_walk = axe_walk1;
+	self.th_walk = axeg_stand1;
 	self.th_run = axeg_run1;
 	self.th_melee = axeg_atk;
 	self.th_pain = axeg_pain;

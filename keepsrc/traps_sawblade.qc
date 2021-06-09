@@ -188,9 +188,9 @@ void() trap_sawbladey = {
 	// 0 = No sound, 1 = buzzzzz, 5 = custom
 	if (self.sounds > 0) {
 		if (self.sounds == 1) {
-			self.noise = ("traps/sawblade_off.wav");
-			self.noise1 = ("traps/sawblade_on.wav");
-			self.noise2 = ("traps/sawstrike1.wav");	// lunaran
+			self.noise = ("ad171/traps/sawblade_off.wav");
+			self.noise1 = ("ad171/traps/sawblade_on.wav");
+			self.noise2 = ("ad171/traps/sawstrike1.wav");	// lunaran
 		}
 		else if (self.sounds == 5) {
 			if (self.noise == "") self.noise = SOUND_EMPTY;

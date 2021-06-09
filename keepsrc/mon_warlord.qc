@@ -103,7 +103,7 @@ void(float offset) hknight2_shot = {
 	self.attack_speed = 300;
 	
 	launch_projectile (org, vec, CT_PROJ_HKN2, self.attack_speed);
-	sound(self, CHAN_WEAPON, "warlord/attack1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "q15/warlord/attack1.wav", 1, ATTN_NORM);
 };
 
 void() CheckForCharge2 = {
@@ -134,7 +134,7 @@ void()	hknight2_stand1	=[	$stand1,	hknight2_stand2	] {ai_stand();self.nextthink 
 void()	hknight2_stand2	=[	$stand2,	hknight2_stand3	] {ai_stand();self.nextthink = time + 0.06;};
 void()	hknight2_stand3	=[	$stand3,	hknight2_stand4	] {ai_stand();self.nextthink = time + 0.06;};
 void()	hknight2_stand4	=[	$stand4,	hknight2_stand5	] {ai_stand();self.nextthink = time + 0.06;}; // Mitte
-void()	hknight2_stand5	=[	$stand5,	hknight2_stand6	] {ai_stand();self.nextthink = time + 0.06; if (random() < 0.2) sound(self, CHAN_VOICE, "warlord/growl.wav", 1, ATTN_NORM); };
+void()	hknight2_stand5	=[	$stand5,	hknight2_stand6	] {ai_stand();self.nextthink = time + 0.06; if (random() < 0.2) sound(self, CHAN_VOICE, "q15/warlord/growl.wav", 1, ATTN_NORM); };
 void()	hknight2_stand6	=[	$stand6,	hknight2_stand7	] {ai_stand();self.nextthink = time + 0.06;};
 void()	hknight2_stand7	=[	$stand7,	hknight2_stand8	] {ai_stand();self.nextthink = time + 0.06;};
 void()	hknight2_stand8	=[	$stand8,	hknight2_stand9	] {ai_stand();self.nextthink = time + 0.06;};
@@ -173,7 +173,7 @@ void()	hknight2_stand40=[	$stand40,	hknight2_stand41] {ai_stand();self.nextthink
 void()	hknight2_stand41=[	$stand41,	hknight2_stand42] {ai_stand();self.nextthink = time + 0.06;};
 void()	hknight2_stand42=[	$stand42,	hknight2_stand1]  {ai_stand();self.nextthink = time + 0.06;};
 
-void()	hknight2_walk1	=[	$walk1,		hknight2_walk2	] { if (random() < 0.11) sound(self, CHAN_VOICE, "warlord/growl.wav", 1, ATTN_NORM); ai_walk(2);};
+void()	hknight2_walk1	=[	$walk1,		hknight2_walk2	] { if (random() < 0.11) sound(self, CHAN_VOICE, "q15/warlord/growl.wav", 1, ATTN_NORM); ai_walk(2);};
 void()	hknight2_walk2	=[	$walk2,		hknight2_walk3	] {ai_walk(4);};
 void()	hknight2_walk3	=[	$walk3,		hknight2_walk4	] {ai_walk(5);};
 void()	hknight2_walk4	=[	$walk4,		hknight2_walk5	] {ai_walk(4); monster_footstep(FALSE);};
@@ -186,7 +186,7 @@ void()	hknight2_walk10	=[	$walk10,	hknight2_walk11	] {ai_walk(4); monster_footst
 void()	hknight2_walk11	=[	$walk11,	hknight2_walk12	] {ai_walk(5);};
 void()	hknight2_walk12	=[	$walk12,	hknight2_walk1	] {ai_walk(4);};
 
-void()	hknight2_run1	=[	$run1,		hknight2_run2	] { if (random() < 0.1) sound(self, CHAN_VOICE, "warlord/idle.wav", 1, ATTN_NORM); ai_run (20); CheckForCharge2 ();};
+void()	hknight2_run1	=[	$run1,		hknight2_run2	] { if (random() < 0.1) sound(self, CHAN_VOICE, "drake/archer/growl2.wav", 1, ATTN_NORM); ai_run (20); CheckForCharge2 ();};
 void()	hknight2_run2	=[	$run2,		hknight2_run3	] {ai_run(25); monster_footstep(FALSE);};
 void()	hknight2_run3	=[	$run3,		hknight2_run4	] {ai_run(18);};
 void()	hknight2_run4	=[	$run4,		hknight2_run5	] {ai_run(16);};
@@ -195,13 +195,13 @@ void()	hknight2_run6	=[	$run6,		hknight2_run7	] {ai_run(25); monster_footstep(FA
 void()	hknight2_run7	=[	$run7,		hknight2_run8	] {ai_run(18);};
 void()	hknight2_run8	=[	$run8,		hknight2_run1	] {ai_run(13);};
 
-void()	hknight2_pain1	=[	$pain1,		hknight2_pain2	] {sound(self, CHAN_VOICE, "warlord/pain2.wav", 1, ATTN_NORM);};
+void()	hknight2_pain1	=[	$pain1,		hknight2_pain2	] {sound(self, CHAN_VOICE, "q15/warlord/pain2.wav", 1, ATTN_NORM);};
 void()	hknight2_pain2	=[	$pain2,		hknight2_pain3	] {};
 void()	hknight2_pain3	=[	$pain3,		hknight2_pain4	] {};
 void()	hknight2_pain4	=[	$pain4,		hknight2_pain5	] {};
 void()	hknight2_pain5	=[	$pain5,		hknight2_run1	] {};
 
-void()	hknight2_painb1	=[	$painb1,	hknight2_painb2	] {sound(self, CHAN_VOICE, "warlord/pain1.wav", 1, ATTN_NORM);};
+void()	hknight2_painb1	=[	$painb1,	hknight2_painb2	] {sound(self, CHAN_VOICE, "q15/warlord/pain1.wav", 1, ATTN_NORM);};
 void()	hknight2_painb2	=[	$painb2,	hknight2_painb3	] {};
 void()	hknight2_painb3	=[	$painb3,	hknight2_painb4	] {};
 void()	hknight2_painb4	=[	$painb4,	hknight2_run1	] {};
@@ -211,7 +211,7 @@ void()	hknight2_die2	=[	$death2,	hknight2_die3	] {monster_check_gib();self.nextt
 void()	hknight2_die3	=[	$death3,	hknight2_die4	] {monster_check_gib();self.solid = SOLID_NOT; ai_back(3);};
 void()	hknight2_die4	=[	$death4,	hknight2_die5	] {ai_back(4);};
 void()	hknight2_die5	=[	$death5,	hknight2_die6	] {ai_back(5);};
-void()	hknight2_die6	=[	$death6,	hknight2_die7	] {ai_back(1);sound(self, CHAN_AUTO, "warlord/fall.wav", 1, ATTN_IDLE);};
+void()	hknight2_die6	=[	$death6,	hknight2_die7	] {ai_back(1);sound(self, CHAN_AUTO, "q15/warlord/fall.wav", 1, ATTN_IDLE);};
 void()	hknight2_die7	=[	$death7,	hknight2_die8	] {};
 void()	hknight2_die8	=[	$death8,	hknight2_die9	] {};
 void()	hknight2_die9	=[	$death9,	hknight2_die10	] {};
@@ -224,7 +224,7 @@ void()	hknight2_dieb1	=[	$deathb1,	hknight2_dieb2	] {ai_back(5);};
 void()	hknight2_dieb2	=[	$deathb2,	hknight2_dieb3	] {monster_check_gib();ai_back(5);};
 void()	hknight2_dieb3	=[	$deathb3,	hknight2_dieb4	] {monster_check_gib();ai_back(5);self.solid = SOLID_NOT;};
 void()	hknight2_dieb4	=[	$deathb4,	hknight2_dieb5	] {ai_back(3);};
-void()	hknight2_dieb5	=[	$deathb5,	hknight2_dieb6	] {sound(self, CHAN_AUTO, "warlord/fall.wav", 1, ATTN_IDLE);};
+void()	hknight2_dieb5	=[	$deathb5,	hknight2_dieb6	] {sound(self, CHAN_AUTO, "q15/warlord/fall.wav", 1, ATTN_IDLE);};
 void()	hknight2_dieb6	=[	$deathb6,	hknight2_dieb7	] {};
 void()	hknight2_dieb7	=[	$deathb7,	hknight2_dieb8	] {};
 void()	hknight2_dieb8	=[	$deathb8,	hknight2_dieb9	] {};
@@ -237,7 +237,7 @@ void() hknight2_die = {
 	
 	// regular death
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "warlord/death1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "q15/warlord/death1.wav", 1, ATTN_NORM);
 		if (random() > 0.5)
 			hknight2_die1 ();
 		else
@@ -344,7 +344,7 @@ void() hknight2_throw = {
 	local vector distancedelta, nozdistancedelta, org, follow; 
 	local	entity missile;
 	
-	sound(self, CHAN_WEAPON, "warlord/throw.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "q15/warlord/throw.wav", 1, ATTN_NORM);
 
 	missile = spawn ();
 	missile.owner = self;
@@ -465,7 +465,7 @@ void(entity inflictor, entity attacker, float damage) hknight2_homing_pain = {
 	if (self.pain_finished > time) return;
 
 	self.pain_finished = time + 0.5;
-	sound(self, CHAN_VOICE, "warlord/homing_pain.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "q15/warlord/homing_pain.wav", 1, ATTN_NORM);
 	hknight2_homing_teleport ();
 };
 
@@ -481,12 +481,12 @@ void() hknight2_homing_touch = {
 			return;
 		}
 		T_Damage (other, self, self.owner, 15, DAMARMOR);	 // default 15	
-		sound(self, CHAN_WEAPON, "warlord/homing_touch.wav", 1, ATTN_NORM);	 // To abort the homing fly-sound. Use same channel !!!!
+		sound(self, CHAN_WEAPON, "q15/warlord/homing_touch.wav", 1, ATTN_NORM);	 // To abort the homing fly-sound. Use same channel !!!!
 		remove(self);
 	}
 
 	if (!IsProjectile(other)) {
-		sound(self, CHAN_WEAPON, "warlord/homing_touch.wav", 1, ATTN_NORM);	 // To abort the homing fly-sound. Use same channel !!!!
+		sound(self, CHAN_WEAPON, "q15/warlord/homing_touch.wav", 1, ATTN_NORM);	 // To abort the homing fly-sound. Use same channel !!!!
 		remove(self);
 	}
 };
@@ -504,7 +504,7 @@ void() hknight2_homing_think = {
 
 	// when it got stuck
 	if (self.origin == self.oldorigin) {
-		sound(self, CHAN_WEAPON, "warlord/homing_touch.wav", 1, ATTN_NORM);	 // To abort the face fly-sound. Use same channel !!!!
+		sound(self, CHAN_WEAPON, "q15/warlord/homing_touch.wav", 1, ATTN_NORM);	 // To abort the face fly-sound. Use same channel !!!!
 		//T_RadiusDamage (self, self.owner, 33, self.owner);	
 		remove (self);
 	}
@@ -551,7 +551,7 @@ void (vector face_spawn_pos, vector face_spawn_vel) launch_hknight2_homing = {
 	setorigin (newmis, face_spawn_pos);
 	newmis.th_pain = hknight2_homing_pain;
 	newmis.th_die = hknight2_homing_death;
-	sound(newmis, CHAN_WEAPON, "warlord/homing.wav", 1, ATTN_NORM);
+	sound(newmis, CHAN_WEAPON, "q15/warlord/homing.wav", 1, ATTN_NORM);
 };
 
 void() hknight2_homing_shot = {
@@ -591,7 +591,7 @@ void()	hknight2_magicb3 =[	$magicb3,	hknight2_magicb4	] {ai_face();};
 void()	hknight2_magicb4 =[	$magicb4,	hknight2_magicb5	] {ai_face();};
 void()	hknight2_magicb5 =[	$magicb5,	hknight2_magicb6	] {ai_face();};
 void()	hknight2_magicb6 =[	$magicb6,	hknight2_magicb7	] {ai_face(); monster_footstep(FALSE);};
-void()	hknight2_magicb7 =[	$magicb7,	hknight2_magicb8	] {ai_face();sound(self, CHAN_WEAPON, "warlord/homing_shot.wav", 1, ATTN_NORM);};
+void()	hknight2_magicb7 =[	$magicb7,	hknight2_magicb8	] {ai_face();sound(self, CHAN_WEAPON, "q15/warlord/homing_shot.wav", 1, ATTN_NORM);};
 void()	hknight2_magicb8 =[	$magicb8,	hknight2_magicb9	] {ai_face();};
 void()	hknight2_magicb9 =[	$magicb9,	hknight2_magicb10] {hknight2_homing_shot();};
 void()	hknight2_magicb10 =[	$magicb10,	hknight2_magicb11] {};
@@ -607,7 +607,7 @@ void() ram_scan = {
 	spot2 = self.enemy.origin + self.enemy.view_ofs;
 	r = vlen (spot1 - spot2);
 	if (r < 60) {
-		sound(self, CHAN_AUTO, "warlord/fall.wav", 1, ATTN_IDLE);
+		sound(self, CHAN_AUTO, "q15/warlord/fall.wav", 1, ATTN_IDLE);
 
 		// damage can vary between 5 and 10 hitpoints
 		T_Damage (self.enemy, self, self, rint(5 + (5 * random())), DAMARMOR); 
@@ -623,7 +623,7 @@ void()	hknight2_char_a2	=[	$char_a2,	hknight2_char_a3	] {ai_charge(1);};
 void()	hknight2_char_a3	=[	$char_a3,	hknight2_char_a4	] {ai_charge(3);};
 void()	hknight2_char_a4	=[	$char_a4,	hknight2_char_a5	] {ai_charge(15); monster_footstep(FALSE);};
 void()	hknight2_char_a5	=[	$char_a5,	hknight2_char_a6	] {ai_charge(17);};
-void()	hknight2_char_a6	=[	$char_a6,	hknight2_char_a7	] {ai_charge(20);sound(self, CHAN_AUTO, "warlord/ram.wav", 1, ATTN_NORM);};
+void()	hknight2_char_a6	=[	$char_a6,	hknight2_char_a7	] {ai_charge(20);sound(self, CHAN_AUTO, "q15/warlord/ram.wav", 1, ATTN_NORM);};
 void()	hknight2_char_a7	=[	$char_a7,	hknight2_char_a8	] {ai_charge(20); ai_melee(); monster_footstep(FALSE);};
 void()	hknight2_char_a8	=[	$char_a8,	hknight2_char_a9	] {ai_charge(20); ai_melee();};
 void()	hknight2_char_a9	=[	$char_a9,	hknight2_char_a10	] {ai_charge(20); ai_melee();};
@@ -652,7 +652,7 @@ void()	hknight2_slice2	=[	$slice2,	hknight2_slice3	] {ai_charge(2);};
 void()	hknight2_slice3	=[	$slice3,	hknight2_slice4	] {ai_charge(2);};
 void()	hknight2_slice4	=[	$slice4,	hknight2_slice5	] {ai_charge(3);
 if (random()<0.5)
-	sound(self, CHAN_AUTO, "warlord/attack2.wav", 1, ATTN_NORM);};
+	sound(self, CHAN_AUTO, "q15/warlord/attack2.wav", 1, ATTN_NORM);};
 void()	hknight2_slice5	=[	$slice5,	hknight2_slice6	] {ai_charge(7); ai_melee();};
 void()	hknight2_slice6	=[	$slice6,	hknight2_slice7	] {ai_charge(15); ai_melee();};
 void()	hknight2_slice7	=[	$slice7,	hknight2_slice8	] {ai_charge(20); ai_melee(); monster_footstep(FALSE);};
@@ -667,7 +667,7 @@ void()	hknight2_smash2	=[	$smash2,	hknight2_smash3	] {ai_charge(1);};
 void()	hknight2_smash3	=[	$smash3,	hknight2_smash4	] {ai_charge(1);};
 void()	hknight2_smash4	=[	$smash4,	hknight2_smash5	] {ai_charge(2);
 if (random()<0.5)
-	sound(self, CHAN_AUTO, "warlord/attack2.wav", 1, ATTN_NORM);};
+	sound(self, CHAN_AUTO, "q15/warlord/attack2.wav", 1, ATTN_NORM);};
 void()	hknight2_smash5	=[	$smash5,	hknight2_smash6	] {ai_charge(10); ai_melee();};
 void()	hknight2_smash6	=[	$smash6,	hknight2_smash7	] {ai_charge(15); ai_melee();};
 void()	hknight2_smash7	=[	$smash7,	hknight2_smash8	] {ai_charge(15); ai_melee(); monster_footstep(FALSE);};
@@ -681,7 +681,7 @@ void()	hknight2_smash11=[	$smash11,	hknight2_run1	] {ai_charge(0);};
 void()	hknight2_watk1	=[	$w_attack1,	hknight2_watk2	] {ai_charge(1);};
 void()	hknight2_watk2	=[	$w_attack2,	hknight2_watk3	] {ai_charge(1);
 if (random()<0.5)
-	sound(self, CHAN_AUTO, "warlord/attack3.wav", 1, ATTN_NORM);};
+	sound(self, CHAN_AUTO, "q15/warlord/attack3.wav", 1, ATTN_NORM);};
 void()	hknight2_watk3	=[	$w_attack3,	hknight2_watk4	] {ai_charge(10); monster_footstep(FALSE);};
 void()	hknight2_watk4	=[	$w_attack4,	hknight2_watk5	] {ai_charge(5);ai_melee();};
 void()	hknight2_watk5	=[	$w_attack5,	hknight2_watk6	] {ai_melee();};
@@ -772,7 +772,7 @@ void(entity inflictor, entity attacker, float damage)	hknight2_pain = {
 
 void() hknight2_melee = {
 	self.lefty = self.lefty + 1;
-	sound(self, CHAN_WEAPON, "warlord/slash1.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "q15/warlord/slash1.wav", 1, ATTN_NORM);
 	if (self.lefty == 1) {
 		hknight2_slice1 ();
 	} else if (self.lefty == 2) {
@@ -819,38 +819,31 @@ void() monster_hell_knight2 = {
 	if (monster_checkrandomizer() == TRUE) return;
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
-	
-	//precache_model ("progs/q15/gib_warleg1.mdl");
-	//precache_model ("progs/q15/gib_warnail_t.mdl");
-	//precache_model ("progs/q15/warlordblast.mdl");
-	//precache_model ("progs/q15/warlordnail.mdl");
-	//precache_model ("progs/q15/h_warlordblast.mdl");
-	//precache_model ("progs/q15/h_warlordblast1.mdl");
+
 	precache_model ("progs/q15/warlord_supernail.mdl");
-	
 	precache_model ("progs/q15/k_spike2.mdl"); // referenced in projectiles.qc
 	precache_model ("progs/q15/h_grenade2.mdl");	// multi
 	precache_model ("progs/q15/h_grenade1.mdl");	
 	precache_model ("progs/q15/face.mdl");
 	precache_model ("progs/drake/s_explod.spr");
 
-	precache_sound("warlord/attack1.wav");		// all files precached in worldspawn() due to savegame-bug
-	precache_sound("warlord/attack2.wav");	
-	precache_sound("warlord/attack3.wav");	
-	precache_sound("warlord/death1.wav");
-	precache_sound("warlord/pain1.wav");
-	precache_sound("warlord/pain2.wav");
-	precache_sound("warlord/sight1.wav");
-	precache_sound("warlord/slash1.wav");
-	precache_sound("warlord/idle.wav");
-	precache_sound("warlord/growl.wav");
-	precache_sound("warlord/ram.wav");
-	precache_sound("warlord/throw.wav");
-	precache_sound("warlord/fall.wav");
-	precache_sound("warlord/homing.wav");
-	precache_sound("warlord/homing_shot.wav");
-	precache_sound("warlord/homing_pain.wav");
-	precache_sound("warlord/homing_touch.wav");
+	precache_sound("q15/warlord/attack1.wav");		// all files precached in worldspawn() due to savegame-bug
+	precache_sound("q15/warlord/attack2.wav");	
+	precache_sound("q15/warlord/attack3.wav");	
+	precache_sound("q15/warlord/death1.wav");
+	precache_sound("q15/warlord/pain1.wav");
+	precache_sound("q15/warlord/pain2.wav");
+	precache_sound("drake/archer/sight2.wav");
+	precache_sound("q15/warlord/slash1.wav");
+	precache_sound("drake/archer/growl2.wav");
+	precache_sound("q15/warlord/growl.wav");
+	precache_sound("q15/warlord/ram.wav");
+	precache_sound("q15/warlord/throw.wav");
+	precache_sound("q15/warlord/fall.wav");
+	precache_sound("q15/warlord/homing.wav");
+	precache_sound("q15/warlord/homing_shot.wav");
+	precache_sound("q15/warlord/homing_pain.wav");
+	precache_sound("q15/warlord/homing_touch.wav");
 
 	precache_sound("knight/sword1.wav");
 	precache_sound("knight/sword2.wav");
@@ -869,9 +862,9 @@ void() monster_hell_knight2 = {
 	precache_model (self.gib2mdl);
 	precache_model (self.gib3mdl);
 
-	self.sight_sound = "warlord/sight1.wav";
-	self.pain_sound = "warlord/pain1.wav";
-	self.pain_sound2 = "warlord/pain2.wav";
+	self.sight_sound = "drake/archer/sight2.wav";
+	self.pain_sound = "q15/warlord/pain1.wav";
+	self.pain_sound2 = "q15/warlord/pain2.wav";
 	self.death_sound = "hknight/death1.wav";
 
 	//Select chance for 2 available skins.

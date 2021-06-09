@@ -56,14 +56,14 @@ void() ambient_flys = {
 };
 
 void() ambient_grinder = {
-	self.noise = "ambience/grinder.wav";
+	self.noise = "quoth/ambience/grinder.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
 
 void() ambient_highwind = {
-	self.noise = "ambience/highwind.wav";
+	self.noise = "quoth/necros/highwind.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	self.count = 99;
@@ -90,7 +90,7 @@ void() ambient_hum1 = {
 };
 
 void() ambient_lapping = {
-	self.noise = "ambience/wat_amb.wav";
+	self.noise = "quoth/necros/wat_amb.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	self.count = 99;
@@ -120,18 +120,10 @@ void() ambient_nehum = {
 };
 
 void() ambient_rain = {
-	if (self.count == 0)
-		self.noise = "ambience/rain.wav"; // Rain Runoff
-
-	if (self.count == 1)
-		self.noise = "ambience/rain3.wav"; // Steady Rain
-
-	if (self.count == 2)
-		self.noise = "nehahra/ambience/rain.wav"; // Heavy Rain
-
-	if (self.count > 2 || self.count < 0)
-		self.noise = "ambience/rain3.wav";
-
+	if (self.count == 0) self.noise = "rrp/ambient/rain.wav"; // Rain Runoff
+	if (self.count == 1) self.noise = "ambience/rain3.wav"; // Steady Rain
+	if (self.count == 2) self.noise = "zerstorer/ambience/rain.wav"; // Heavy Rain
+	if (self.count > 2 || self.count < 0) self.noise = "ambience/rain3.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
@@ -151,12 +143,7 @@ void() ambient_running_lava = {
 	ambient_sound_setup();
 };
 
-void() ambient_running_water = {
-	self.noise = "drake/ambience/runwater.wav";
-	precache_sound (self.noise);
-	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
-	ambient_sound_setup();
-};
+void() ambient_running_water = { ambient_bublfals(); }; // From custents, also used in travail as bublfals.wav
 
 void() ambient_rushing = {
 	self.noise = "drake/ambience/rushing.wav";
@@ -164,7 +151,7 @@ void() ambient_rushing = {
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
-//----------------------------------------------------------------------
+
 void() ambient_sizzle = {
 	self.noise = "nehahra/ambience/amsizl.wav";
 	precache_sound (self.noise);
@@ -173,7 +160,7 @@ void() ambient_sizzle = {
 };
 
 void() ambient_stargate_hum = {
-	self.noise = "ambience/sgatehum.wav";
+	self.noise = "necros/sgatehum.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	self.count = 99;
@@ -188,26 +175,26 @@ void() ambient_swamp3 = {
 };
 
 void() ambient_teeth = {
-	self.noise = "ambience/teeth.wav";
+	self.noise = "quoth/ambience/teeth.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
-//----------------------------------------------------------------------
+
 void() ambient_teleport = {
 	self.noise = "ambience/hum1.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
-//----------------------------------------------------------------------
+
 void() ambient_thrum = {
-	self.noise = "ambience/thrum.wav";
+	self.noise = "quoth/ambience/thrum.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
-//----------------------------------------------------------------------
+
 void() thunder_go_boom = {
 	if (random() < 0.5) {
 		sound(self, CHAN_AUTO, self.noise, self.volume, ATTN_NONE);
@@ -232,7 +219,7 @@ void() ambient_waterfall = {
 };
 
 void() ambient_water_fall = {
-	self.noise = "ambience/wat_fall.wav";
+	self.noise = "ne_ruins/ambience/wat_fall.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	self.count = 99;

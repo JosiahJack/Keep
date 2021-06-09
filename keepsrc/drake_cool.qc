@@ -531,7 +531,7 @@ void() bane_storm4  =[ 0, bane_storm5  ]
         if (random() < 0.5)
             sound (self, CHAN_AUTO, "ambience/thunder1.wav", zot, ATTN_NONE);
         else
-            sound (self, CHAN_AUTO, "drake/ambience/thunder2.wav", zot, ATTN_NONE);
+            sound (self, CHAN_AUTO, "zerstorer/ambience/thunder2.wav", zot, ATTN_NONE);
         self.pain_finished = time + 5;
     }
     bane_storm_target ();

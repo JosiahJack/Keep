@@ -121,7 +121,7 @@ void(vector weapofs) fred_fireweapon =
 //----------------------------------------------------------------------
 void() fred_sfire1 = [ $sfire1, fred_sfire2 ] {ai_face();
 	self.pain_finished = time + 0.5 + (skill*0.5);
-	sound (self, CHAN_WEAPON, "quoth2pt2full/edie/stfire.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_WEAPON, "quoth/edie/stfire.wav", 1, ATTN_NORM);};
 void() fred_sfire2 = [ $sfire2, fred_sfire3 ] {ai_face();};
 void() fred_sfire3 = [ $sfire3, fred_sfire4 ] {ai_face();};
 void() fred_sfire4 = [ $sfire4, fred_sfire5 ] {ai_face();};
@@ -260,7 +260,7 @@ void(float side) fred_blade =
 	// Can the target bleed? - generate blood
 	if (!CanDamage (self.enemy, self)) return;
 	
-	sound (self, CHAN_WEAPON, "quoth2pt2full/edie/mangle.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "quoth/edie/mangle.wav", 1, ATTN_NORM);
 	ldmg = (random() + random() + random()) * 20;
 	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
 	SpawnMeatSpray (self, self.enemy, side);
@@ -270,7 +270,7 @@ void(float side) fred_blade =
 // Alternative ending of melee attack (chance of extra damage)
 //----------------------------------------------------------------------
 void() fred_bswing1 = [ $bswing1, fred_bswing2 ] {ai_faceforward(20);
-	sound (self, CHAN_WEAPON, "quoth2pt2full/edie/sawstart.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_WEAPON, "quoth/edie/sawstart.wav", 1, ATTN_NORM);};
 void() fred_bswing2 = [ $bswing2, fred_bswing3 ] {ai_faceforward(12);};
 void() fred_bswing3 = [ $bswing3, fred_bswing4 ] {ai_faceforward(4);};
 void() fred_bswing4 = [ $bswing4, fred_bswing5 ] {ai_faceforward(2);monster_footstep(FALSE);};
@@ -288,7 +288,7 @@ void() fred_bswing14 = [ $bswing14, fred_run ] {ai_faceforward(10);};
 // Start of melee attack
 //----------------------------------------------------------------------
 void() fred_fswing1 = [ $fswing1, fred_fswing2 ] {ai_faceforward(8);
-	sound (self, CHAN_WEAPON, "quoth2pt2full/edie/sawstart.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_WEAPON, "quoth/edie/sawstart.wav", 1, ATTN_NORM);};
 void() fred_fswing2 = [ $fswing2, fred_fswing3 ] {ai_faceforward(16); monster_footstep(FALSE);};
 void() fred_fswing3 = [ $fswing3, fred_fswing4 ] {ai_faceforward(10);
 		self.nextthink = time + 0.09;};
@@ -445,7 +445,7 @@ void() fred_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "quoth2pt2full/edie/death.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "quoth/edie/death.wav", 1, ATTN_NORM);
 		fred_death1 ();
 	}
 };
@@ -460,9 +460,9 @@ void() monster_freddie =
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	self.mdl = "progs/ad171/mon_freddie.mdl";			// was edie.mdl
+	self.mdl = "progs/quoth/edie.mdl";
 	self.headmdl = "progs/h_ogre.mdl";			// ID ogre
-	self.gib1mdl = "progs/quoth2pt2full/wreckage.mdl";
+	self.gib1mdl = "progs/quoth/wreckage.mdl";
 	self.gib2mdl = "progs/ad171/gib_metal1.mdl";		// Breakable metal
 	self.gib3mdl = "progs/ad171/gib_metal3.mdl";		// Breakable metal
 
@@ -474,34 +474,34 @@ void() monster_freddie =
 	precache_model (self.gib2mdl);		// Generic metal1_2
 	precache_model (self.gib3mdl);		// Generic metal1_2
 	
-	self.idle_sound = "quoth2pt2full/edie/idle1.wav";
+	self.idle_sound = "quoth/edie/idle1.wav";
 	precache_sound (self.idle_sound);
 
 	// Melee sounds, swing and impact
-	precache_sound("quoth2pt2full/edie/sawstart.wav");
-	precache_sound("quoth2pt2full/edie/mangle.wav");
+	precache_sound("quoth/edie/sawstart.wav");
+	precache_sound("quoth/edie/mangle.wav");
 
 	// Default attack - red glowing nails
 	precache_model (MODEL_PROJ_NGRED);
-	precache_sound("quoth2pt2full/edie/stfire.wav");
+	precache_sound("quoth/edie/stfire.wav");
 
 	// Alternative attack - lasers!?!
 	if (self.spawnflags & MON_FREDDIE_LASER) {
 		precache_model (MODEL_PROJ_LASER);
 		precache_sound("ad171/seeker/range_laser.wav");
-		precache_sound ("enforcer/enfire.wav");
-		precache_sound ("enforcer/enfstop.wav");
+		precache_sound (SOUND_LASER_FIRE);
+		precache_sound (SOUND_LASER_HIT);
 	}
 
-	precache_sound ("quoth2pt2full/edie/death.wav");
+	precache_sound ("quoth/edie/death.wav");
 	self.death_sound = "ad171/seeker/explode_major.wav";
 	precache_sound (self.death_sound);
-	self.pain_sound = "quoth2pt2full/edie/pain.wav";
-	self.pain_sound2 = "quoth2pt2full/edie/painshrt.wav";
+	self.pain_sound = "quoth/edie/pain.wav";
+	self.pain_sound2 = "quoth/edie/painshrt.wav";
 	precache_sound (self.pain_sound);
 	precache_sound (self.pain_sound2);
 	
-	self.sight_sound = "quoth2pt2full/edie/sight.wav";
+	self.sight_sound = "quoth/edie/sight.wav";
 	precache_sound (self.sight_sound);
 
 	self.solid = SOLID_NOT;				// No interaction with world
@@ -542,9 +542,9 @@ void() monster_freddie =
 	}
 	
 	// Custom feet sounds (specific order)
-	self.stepc1 = "quoth2pt2full/edie/step.wav";
+	self.stepc1 = "quoth/edie/step.wav";
 	self.stepc2 = "ad171/freddie/step2.wav";
-	self.stepc3 = "quoth2pt2full/edie/step.wav";
+	self.stepc3 = "quoth/edie/step.wav";
 	self.stepc4 = "ad171/freddie/step2.wav";
 	self.stepc5 = "ad171/freddie/step3.wav";
 	precache_sound (self.stepc1);

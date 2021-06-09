@@ -1,9 +1,9 @@
 void () misc_biobox_l = {
-	self.mdl = "maps/quoth2pt2full/b_bio_l.bsp";
+	self.mdl = "maps/quoth/b_bio_l.bsp";
 	precache_model (self.mdl);
-	precache_model ("progs/quoth2pt2full/polypgib.mdl");
-	precache_sound ("ad171/boglord/slime_explode.wav");
-	self.noise = "ad171/boglord/slime_explode.wav";
+	precache_model ("progs/quoth/polypgib.mdl");
+	precache_sound ("quoth/drole/explode3.wav");
+	self.noise = "quoth/drole/explode3.wav";
 	self.bbmins = '-16 -16 0';
 	self.bbmaxs = '16 16 64';
 	self.dmg = 80;
@@ -12,11 +12,11 @@ void () misc_biobox_l = {
 };
 
 void () misc_biobox_s = {
-	self.mdl = "maps/quoth2pt2full/b_bio_s.bsp";
+	self.mdl = "maps/quoth/b_bio_s.bsp";
 	precache_model (self.mdl);
-	precache_model ("progs/quoth2pt2full/polypgib.mdl");
-	precache_sound ("ad171/boglord/slime_explode.wav");
-	self.noise = "ad171/boglord/slime_explode.wav";
+	precache_model ("progs/quoth/polypgib.mdl");
+	precache_sound ("quoth/drole/explode3.wav");
+	self.noise = "quoth/drole/explode3.wav";
 	self.bbmins = '-16 -16 0';
 	self.bbmaxs = '16 16 32';
 	self.dmg = 80;
@@ -25,10 +25,10 @@ void () misc_biobox_s = {
 };
 
 void () misc_plasmabox_l = {
-	self.mdl = "maps/quoth2pt2full/b_plas_l.bsp";
+	self.mdl = "maps/quoth/b_plas_l.bsp";
 	precache_model (self.mdl);
-	precache_sound ("weapons/lg_explode2.wav");
-	self.noise = "weapons/lg_explode2.wav";
+	precache_sound ("rogue/plasma/explode.wav");
+	self.noise = "rogue/plasma/explode.wav";
 	self.bbmins = '-16 -16 0';
 	self.bbmaxs = '16 16 64';
 	self.dmg = 200;
@@ -37,10 +37,10 @@ void () misc_plasmabox_l = {
 };
 
 void () misc_plasmabox_s = {
-	self.mdl = "maps/quoth2pt2full/b_plas_s.bsp";
+	self.mdl = "maps/quoth/b_plas_s.bsp";
 	precache_model (self.mdl);
-	precache_sound ("weapons/lg_explode2.wav");
-	self.noise = "weapons/lg_explode2.wav";
+	precache_sound ("rogue/plasma/explode.wav");
+	self.noise = "rogue/plasma/explode.wav";
 	self.bbmins = '-16 -16 0';
 	self.bbmaxs = '16 16 32';
 	self.dmg = 200;

@@ -935,7 +935,7 @@ float() Necro_WeaponBroke = {
 
 	// Sickle head.
     if (head) {
-        sound (self, CHAN_AUTO, "drake/misc/metalbrk.wav", 1, ATTN_NORM);
+        sound (self, CHAN_AUTO, "kinn/misc/metalbrk.wav", 1, ATTN_NORM);
         vel = VelocityForDamage (0);
         spin_x = random()*600;
         spin_y = random()*600;
@@ -1092,7 +1092,7 @@ void() necro_boss_cache = {
     precache_sound ("drake/curse/x_muddle.wav");
     precache_sound ("drake/curse/x_slow.wav");
     precache_sound ("drake/curse/x_weaken.wav");
-    precache_sound ("drake/misc/metalbrk.wav");
+    precache_sound ("kinn/misc/metalbrk.wav");
     precache_sound ("drake/misc/woodbrk.wav");
     precache_sound ("drake/necro/curse.wav");
     precache_sound ("drake/necro/pop.wav");

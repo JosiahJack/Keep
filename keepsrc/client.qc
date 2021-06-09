@@ -905,10 +905,6 @@ void() PutClientInServer = {
 	ResetDebuffSystem(self);			// Reset/initialize debuff system
 	self.enemy = world;
 	DecodeLevelParms ();
-	if (globalstate > 0)
-		sprint (self,"Global states are set!\n");
-	else
-		sprint (self,"No global states are set.\n");
 
 	// Evil Mode should always start with the Axe!
 	if (Client_QueryEvilmode()) self.weapon = IT_AXE;
@@ -1366,9 +1362,9 @@ void() PlayerPostThink = {
 
 			// Keep's globalstate system
 			if (globalstate > 0)
-				dprint ("Global states are set!\n");
+				dprint ("CLIENT: Global states are set!\n");
 			else
-				dprint ("No global states are set.\n");
+				dprint ("CLIENT: No global states are set.\n");
 
 			// Warn about chaos mode	
 			if (check_randflags() == TRUE) { // Is the randomizer active?
@@ -1486,7 +1482,7 @@ void() PlayerPostThink = {
 						self.finalangle = normalize(v_forward);
 						self.finalangle_z = 0; // flatten out
 						self.velocity = self.velocity + (self.finalangle * 200);
-						sound(self,CHAN_VOICE,"items/smb_stomp.wav",1,ATTN_NORM);
+						sound(self,CHAN_VOICE,"qmaster/items/smb_stomp.wav",1,ATTN_NORM);
 						self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST + 200; // Big Jump for Big Dude!
 						T_Damage(self.jumptouch,self,self,400,DAMARMOR);
 						break;
@@ -1554,7 +1550,7 @@ void() PlayerJump = {
 
     if (self.wing_finished) { // Levitation
         if (self.wing_sound <= time) {
-            sound (self, CHAN_AUTO, "drake/items/levitate.wav", 1, ATTN_NORM);
+            sound (self, CHAN_AUTO, "nehahra/player/flight.wav", 1, ATTN_NORM);
             self.wing_sound = time + 1;
         }
 		// Gravity reversal was the simplest method to implement.  Using fancy math to get reverse standard gravity can cause problems if the player gets hit with other effects that change gravity field.
@@ -1573,7 +1569,7 @@ void() PlayerJump = {
 			self.flags = self.flags - (self.flags & FL_ONGROUND); // Reset onground and jump boots ground flags, not needed anymore.
 			self.jumpboots_onground = FALSE; // Jumps boots don't really work until in the air.
 			self.jumpboots_airlvl = self.jumpboots_airmax; // Reset maximum amount of air jumps (for level 1-4 item)
-			if (self.shroom_finished > time) sound (self, CHAN_BODY, "player/jumpmario.wav", 1, ATTN_NORM); // Combination sound of original jump + jump boots
+			if (self.shroom_finished > time) sound (self, CHAN_BODY, "qmaster/player/jumpmario.wav", 1, ATTN_NORM); // Combination sound of original jump + jump boots
 			else sound (self, CHAN_BODY, SOUND_ARTJUMPBOOTS3A, 1, ATTN_NORM);
 			self.velocity_z = self.velocity_z + map_jumpheight; // Start with original jump height
 			if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
@@ -1587,7 +1583,7 @@ void() PlayerJump = {
 				if (self.jumpboots_onground) self.jumpboots_airlvl = self.jumpboots_airmax; // If the player is falling, allow for air jumps and reset level
 				self.jumpboots_onground = FALSE;
 				self.jumpboots_airlvl = self.jumpboots_airlvl - 1; // Count down on maximum jump level
-				if (self.shroom_finished > time) sound (self, CHAN_BODY, "player/jumpmario.wav", 1, ATTN_NORM); // Whoosh, more power
+				if (self.shroom_finished > time) sound (self, CHAN_BODY, "qmaster/player/jumpmario.wav", 1, ATTN_NORM); // Whoosh, more power
 				else sound (self, CHAN_BODY, SOUND_ARTJUMPBOOTS3B, 1, ATTN_NORM);
 				self.velocity_z = self.jumpboots_height; // Add jump boot height, different from basic jump
 				if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
@@ -1617,7 +1613,7 @@ void() PlayerJump = {
 		self.flags = self.flags - (self.flags & FL_JUMPRELEASED); // Very precise order for this, Jumprelease and then onground
 		self.flags = self.flags - FL_ONGROUND;	// don't stairwalk
 		self.button2 = 0;
-		if (self.shroom_finished > time) sound (self, CHAN_BODY, "player/jumpmario.wav", 1, ATTN_NORM); 
+		if (self.shroom_finished > time) sound (self, CHAN_BODY, "qmaster/player/jumpmario.wav", 1, ATTN_NORM); 
 		else sound (self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM); // player jumping sound
 		makevectors(self.v_angle); // Jump direction should be v_angle and not just up!
 		self.velocity = v_forward * (map_jumpheight*1);
@@ -1629,7 +1625,7 @@ void() PlayerJump = {
 		self.flags = self.flags - (self.flags & FL_JUMPRELEASED); // Very precise order for this, Jumprelease and then onground
 		self.flags = self.flags - FL_ONGROUND;	// don't stairwalk
 		self.button2 = 0;
-		if (self.shroom_finished > time) sound (self, CHAN_BODY, "player/jumpmario.wav", 1, ATTN_NORM);
+		if (self.shroom_finished > time) sound (self, CHAN_BODY, "qmaster/player/jumpmario.wav", 1, ATTN_NORM);
 		else sound (self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM); // player jumping sound
 		self.velocity_z = self.velocity_z + map_jumpheight;
 		if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!

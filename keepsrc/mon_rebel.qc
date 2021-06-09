@@ -90,10 +90,10 @@ void() monster_rebel = {
 	precache_sound ("enforcer/sight3.wav");
 	precache_sound ("enforcer/sight4.wav");
 	precache_sound ("enforcer/enfire.wav");
-	precache_sound ("enforcer/enfstop.wav");
-	precache_sound2 ("enforcer/pain1.wav");
-	precache_sound2 ("enforcer/pain2.wav");
-	precache_sound2 ("enforcer/death1.wav");
+	precache_sound (SOUND_LASER_HIT);
+	precache_sound ("enforcer/pain1.wav");
+	precache_sound ("enforcer/pain2.wav");
+	precache_sound ("enforcer/death1.wav");
 
     precache_sound ("drake/archer/arrow1.wav");
     precache_sound ("drake/archer/arrow2.wav");

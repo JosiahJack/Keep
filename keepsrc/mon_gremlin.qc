@@ -540,7 +540,7 @@ void () gremlin_lava_nail4 = [ 135.000, gremlin_lava_nail5 ] {GremlinFireLavaSpi
 void () gremlin_lava_nail5 = [ 135.000, gremlin_lava_nail6 ] {GremlinFireLavaSpikes();};
 void () gremlin_lava_nail6 = [ 135.000, gremlin_lava_nail7 ] {GremlinFireLavaSpikes();};
 void () gremlin_lava_nail7 = [ 135.000, gremlin_lava_nail8 ] {GremlinFireLavaSpikes();};
-void () gremlin_lava_nail8 = [ 135.000, gremlin_run1 ] {GremlinFireLavaSpikes(); sound (self, CHAN_WEAPON, "lavagun/snail.wav", 1, ATTN_NORM);};
+void () gremlin_lava_nail8 = [ 135.000, gremlin_run1 ] {GremlinFireLavaSpikes(); sound (self, CHAN_WEAPON, "rogue/weapons/snail.wav", 1, ATTN_NORM);};
 
 void () gremlin_snail1 = [ 135.000, gremlin_snail2 ] {GremlinFireSpikes();};
 void () gremlin_snail2 = [ 135.000, gremlin_snail3 ] {GremlinFireSpikes();};
@@ -558,7 +558,7 @@ void () gremlin_lava_snail4 = [ 135.000, gremlin_lava_snail5 ] {GremlinFireLavaS
 void () gremlin_lava_snail5 = [ 135.000, gremlin_lava_snail6 ] {GremlinFireLavaSpikes();};
 void () gremlin_lava_snail6 = [ 135.000, gremlin_lava_snail7 ] {GremlinFireLavaSpikes();};
 void () gremlin_lava_snail7 = [ 135.000, gremlin_lava_snail8 ] {GremlinFireLavaSpikes();};
-void () gremlin_lava_snail8 = [ 135.000, gremlin_run1 ] {GremlinFireLavaSpikes(); sound (self, CHAN_WEAPON, "lavagun/snail.wav", 1, ATTN_NORM);};
+void () gremlin_lava_snail8 = [ 135.000, gremlin_run1 ] {GremlinFireLavaSpikes(); sound (self, CHAN_WEAPON, "rogue/weapons/snail.wav", 1, ATTN_NORM);};
 
 void () GremlinFireLaser = {
 	local vector org, dir;
@@ -1209,7 +1209,7 @@ void () monster_gremlin = {
    precache_sound ("hipnotic/grem/pain3.wav");
    precache_sound ("hipnotic/grem/idle.wav");
    precache_sound ("hipnotic/grem/sight1.wav");
-   precache_sound ("enforcer/enfstop.wav");
+   precache_sound (SOUND_LASER_HIT);
 
    gremlin_setup();
 };

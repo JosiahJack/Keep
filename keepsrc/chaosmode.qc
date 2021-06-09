@@ -153,7 +153,7 @@ float HP_MONDEMON1 = 300;
 float HP_MONSHALRATH = 400;
 float HP_MONSHAMBLER = 600;
 string RND_SURPRISEPOS = "misc/secret.wav";		// Classic ID secret
-string RND_SURPRISENEG = "ad171/misc/secret3.wav";	// New Mfortress secret
+string RND_SURPRISENEG = "kinn/bdwsound/basss.wav";	// New Mfortress secret
 
 // compiler forward references
 void() monster_fish;

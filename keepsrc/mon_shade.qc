@@ -212,7 +212,7 @@ void() Shade_Meat = {
     dir = Maim_Toss (org, dir, sped, up, world, '0 0 0');
     mx = vlen(dir);
 
-    sound (self, CHAN_WEAPON, "drake/shade/spawn.wav", 1, ATTN_NORM);
+    sound (self, CHAN_WEAPON, "drake/dragon/ice.wav", 1, ATTN_NORM);
 
 	// Fire # of shots equal to max zombies.
     arc = 0.06;
@@ -587,7 +587,7 @@ void() monster_nightshade = {
     precache_sound ("drake/shade/pain2.wav");
     precache_sound ("drake/shade/screech.wav");
     precache_sound ("drake/shade/sing.wav");
-    precache_sound ("drake/shade/spawn.wav");
+    precache_sound ("drake/dragon/ice.wav");
     precache_sound ("drake/shade/taunt.wav");
     precache_sound ("wizard/hit.wav");   // used by C code, so don't sound2
     precache_sound ("nehahra/wraith/soul.wav");

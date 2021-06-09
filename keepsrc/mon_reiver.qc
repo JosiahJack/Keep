@@ -72,7 +72,7 @@ void() ghost_followers_death = {
 	if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin, '0 0 0', 1);		// Fixme  Placeholder
 	if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin - '0 0 2', '0 0 0', 1);	// Fixme  Placeholder
 	if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin - '0 0 4', '0 0 0', 1);	// Fixme  Placeholder
-	sound (self, CHAN_WEAPON, "reiver/ghost_follower_death.wav", 1, ATTN_NORM);	 			// To abort the fly-sound. Use same channel !!!!
+	sound (self, CHAN_WEAPON, "q15/reiver/ghost_follower_death.wav", 1, ATTN_NORM);	 			// To abort the fly-sound. Use same channel !!!!
 	remove (self);
 };
 
@@ -80,13 +80,13 @@ void() ghost_follower_touch = {
 	if (other.takedamage) {
 		if (!(self.enemy.flags & FL_CLIENT)) {
 			T_Damage (other, self, self.owner, 7, NOARMOR);
-			sound (self, CHAN_WEAPON, "reiver/ghost_follower_death.wav", 1, ATTN_NORM);	 // To abort the fly-sound. Use same channel !!!!
+			sound (self, CHAN_WEAPON, "q15/reiver/ghost_follower_death.wav", 1, ATTN_NORM);	 // To abort the fly-sound. Use same channel !!!!
 			remove(self);
 			return;
 		}
 		if (!(other.flags & FL_CLIENT))	return; // flies through other monsters when chasing player
 		T_Damage (other, self, self.owner, 7, NOARMOR); // ghost doesn't touch armor	
-		sound (self, CHAN_WEAPON, "reiver/ghost_follower_death.wav", 1, ATTN_NORM);	 // To abort the fly-sound. Use same channel !!!!
+		sound (self, CHAN_WEAPON, "q15/reiver/ghost_follower_death.wav", 1, ATTN_NORM);	 // To abort the fly-sound. Use same channel !!!!
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 3', '0 0 0', 1);	// Fixme  Placeholder
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin, '0 0 0', 1);		// Fixme  Placeholder
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 -3', '0 0 0', 1);	// Fixme  Placeholder
@@ -101,12 +101,12 @@ void() ghost_follower_think = {
 	local float zuffi;
 
 	if (self.enemy.health < 1) {
-		sound (self, CHAN_WEAPON, "reiver/ghost_follower_death.wav", 1, ATTN_NORM);	// To abort the fly-sound. Use same channel !!!!
+		sound (self, CHAN_WEAPON, "q15/reiver/ghost_follower_death.wav", 1, ATTN_NORM);	// To abort the fly-sound. Use same channel !!!!
 		remove (self);
 	}
 
 	if (self.attack_finished < time) {
-		sound (self, CHAN_WEAPON, "reiver/ghost_follower_death.wav", 1, ATTN_NORM);	 		// To abort the fly-sound. Use same channel !!!!
+		sound (self, CHAN_WEAPON, "q15/reiver/ghost_follower_death.wav", 1, ATTN_NORM);	 		// To abort the fly-sound. Use same channel !!!!
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 4', '0 0 0', 1);	// Fixme  Placeholder
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 2', '0 0 0', 1);	// Fixme  Placeholder
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin, '0 0 0', 1);		// Fixme  Placeholder
@@ -117,7 +117,7 @@ void() ghost_follower_think = {
 
 	if (self.origin == self.oldorigin)				// when it got stuck somewhere. You never know...
 	{
-		sound (self, CHAN_WEAPON, "reiver/ghost_follower_death.wav", 1, ATTN_NORM);	 		// To abort the fly-sound. Use same channel !!!!
+		sound (self, CHAN_WEAPON, "q15/reiver/ghost_follower_death.wav", 1, ATTN_NORM);	 		// To abort the fly-sound. Use same channel !!!!
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 3', '0 0 0', 1);	// Fixme  Placeholder
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin, '0 0 0', 1);		// Fixme  Placeholder
 		if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 -3', '0 0 0', 1);	// Fixme  Placeholder
@@ -138,7 +138,7 @@ void() ghost_follower_think = {
 			self.movetype = MOVETYPE_FLYMISSILE;
 		} else {
 			// player is hiding directly behind a wall. CHEATER :)  Ghost can fly through walls anyway and does the damage !
-			sound (self, CHAN_WEAPON, "reiver/ghost_follower_death.wav", 1, ATTN_NORM);			// To abort the fly-sound. Use same channel !!!!
+			sound (self, CHAN_WEAPON, "q15/reiver/ghost_follower_death.wav", 1, ATTN_NORM);			// To abort the fly-sound. Use same channel !!!!
 			if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 3', '0 0 0', 1);	// Fixme  Placeholder
 			if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin, '0 0 0', 1);		// Fixme  Placeholder
 			if (ext_dppart) pointparticles(particleeffectnum("double_shotgun_muzzleflash"), self.origin + '0 0 -3', '0 0 0', 1);	// Fixme  Placeholder
@@ -201,7 +201,7 @@ void (vector spawn_pos, vector spawn_vel) launch_ghost_follower =
 	newmis.nextthink = time + 0.2;	
 	newmis.attack_finished = time + 7;
 	// setmodel (newmis, "progs/q15/ghost_follower.spr32");
-	setmodel (newmis, "progs/ad181/misc_skull.mdl");
+	setmodel (newmis, "progs/ad171/misc_skull.mdl");
 	setsize (newmis, '-8 -8 -8', '8 8 8');
 	
 	newmis.attack_offset_x = crandom()*10;
@@ -217,7 +217,7 @@ void (vector spawn_pos, vector spawn_vel) launch_ghost_follower =
 	newmis.th_pain = ghost_followers_pain;
 	newmis.th_die = ghost_followers_death;
 	setorigin (newmis, spawn_pos);
-	sound (newmis, CHAN_WEAPON, "reiver/ghost_flying.wav", 0.5, ATTN_NORM);
+	sound (newmis, CHAN_WEAPON, "q15/warlord/homing.wav", 0.5, ATTN_NORM);
 };
 
 void()	ghost_followers = {
@@ -324,7 +324,7 @@ void() reiver_fireball = {
 	local vector dir, org;
 
 	dir = normalize((self.enemy.origin + '0 0 10') - self.origin);
-	sound (self, CHAN_WEAPON, "reiver/reiver_fireball_shoot.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "q15/reiver/reiver_fireball_shoot.wav", 1, ATTN_NORM);
 	missile = spawn ();
 	missile.owner = self;
 	missile.enemy = self.enemy;
@@ -352,7 +352,7 @@ void() reiver_idle1;
 // IDLE
 void()	reiver_look1	=[	$look1,	reiver_look2	] {ai_stand();self.nextthink = time + 0.11;
 	//if (ext_dppart) pointparticles(particleeffectnum("Reiver_idle"), self.origin, self.velocity*10, 1);
-	sound (self, CHAN_VOICE, "reiver/raith3.wav", 1, ATTN_IDLE);
+	sound (self, CHAN_VOICE, "q15/reiver/raith3.wav", 1, ATTN_IDLE);
 };
 void()	reiver_look2	=[	$look2,	reiver_look3	] {ai_stand();self.nextthink = time + 0.11;};
 void()	reiver_look3	=[	$look3,	reiver_look4	] {ai_stand();self.nextthink = time + 0.11;};
@@ -396,7 +396,7 @@ void() reiver_underground3	=[	$raise3,	reiver_underground4	] {ai_stand();self.ne
 void()	reiver_underground4	=[	$raise4,	reiver_underground5	] {ai_stand();self.nextthink = time + 0.08;
 	if (ext_dppart) pointparticles(particleeffectnum("reiver_outbreak"), self.origin, '0 0 0', 1); };
 void()	reiver_underground5	=[	$raise5,	reiver_underground6	] {ai_stand();self.nextthink = time + 0.09;
-	sound (self, CHAN_VOICE, "reiver/sight.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "q15/reiver/sight.wav", 1, ATTN_NORM);
 	if (ext_dppart) pointparticles(particleeffectnum("reiver_outbreak"), self.origin, '0 0 0', 1); };
 void()	reiver_underground6	=[	$raise6,	reiver_underground7	] {ai_stand();self.nextthink = time + 0.09;
 	if (ext_dppart) pointparticles(particleeffectnum("reiver_outbreak"), self.origin, '0 0 0', 1); };
@@ -496,7 +496,7 @@ void()	reiver_fly12	=[	$idle12,reiver_fly13	] {ai_walk(6);self.nextthink = time 
 };
 void()	reiver_fly13	=[	$idle13,reiver_fly1	] {ai_walk(6);self.nextthink = time + 0.07;
 	//if (ext_dppart) pointparticles(particleeffectnum("Reiver_fly"), self.origin, '0 0 0', 1);
-	if (random() < 0.2) sound (self, CHAN_VOICE, "reiver/raith3.wav", 1, ATTN_IDLE);
+	if (random() < 0.2) sound (self, CHAN_VOICE, "q15/reiver/raith3.wav", 1, ATTN_IDLE);
 };
 
 // RUN
@@ -538,7 +538,7 @@ void()	reiver_run12	=[	$idle12,reiver_run13	] {ai_run(12);self.nextthink = time 
 };
 void()	reiver_run13	=[	$idle13,reiver_run1	] {ai_run(12);self.nextthink = time + 0.07;
 	//if (ext_dppart) pointparticles(particleeffectnum("Reiver_fly"), self.origin, '0 0 0', 1);
-	if (random() < 0.25) sound (self, CHAN_VOICE, "reiver/run.wav", 1, ATTN_IDLE);
+	if (random() < 0.25) sound (self, CHAN_VOICE, "q15/reiver/run.wav", 1, ATTN_IDLE);
 };
 
 // MELEE
@@ -649,7 +649,7 @@ void()	life_drain_effect = {
 void()	reiver_vampire1	=[	$scream1,	reiver_vampire2	] {ai_face(); self.nextthink = time + 0.08;
 	reiver_hand1 ('32 23 1', 0.35);
 	reiver_hand2 ('37 -20 2', 0.35);
-	sound (self, CHAN_AUTO, "reiver/vampire.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_AUTO, "q15/reiver/vampire.wav", 1, ATTN_NORM);};
 void()	reiver_vampire2	=[	$scream2,	reiver_vampire3	] {ai_face(); self.nextthink = time + 0.1;
 	reiver_hand1 ('34 23 5', 0.5);
 	reiver_hand2 ('37 -23 5', 0.5);
@@ -663,7 +663,7 @@ void()	reiver_vampire4	=[	$scream4,	reiver_vampire5	] {ai_face(); self.nextthink
 	reiver_hand1 ('47 31 12', 1);
 	reiver_hand2 ('47 -30 11', 1);
 	life_drain_effect ();
-	sound (self, CHAN_AUTO, "reiver/vampire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_AUTO, "q15/reiver/vampire.wav", 1, ATTN_NORM);
 };
 void()	reiver_vampire5	=[	$scream5,	reiver_vampire6	] {ai_face(); self.nextthink = time + 0.12; 
 	if (skill >= 2) life_drain();
@@ -823,10 +823,10 @@ void() reiver_missile =	{
 			setmodel (p, "progs/q15/reiverhands.spr");
 			porg = self.origin + v_forward *36 + v_right *-20 + v_up *1; 
 			setorigin (p, org);
-			sound (self, CHAN_AUTO, "reiver/ranged_attack.wav", 1, ATTN_NORM);
+			sound (self, CHAN_AUTO, "q15/reiver/ranged_attack.wav", 1, ATTN_NORM);
 		} else {
 			self.projectile_type = 1;	// ghost_followers
-			sound (self, CHAN_AUTO, "reiver/ranged_attack2.wav", 1, ATTN_NORM);
+			sound (self, CHAN_AUTO, "q15/reiver/ranged_attack2.wav", 1, ATTN_NORM);
 		}
 		reiver_shoot1();
 	}
@@ -872,20 +872,17 @@ void(entity inflictor, entity attacker, float damage) reiver_pain = {
 
 	if (random() > 0.5) {
 		self.pain_finished = time + 1.7;
-		sound (self, CHAN_VOICE, "reiver/pain2.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "q15/reiver/pain2.wav", 1, ATTN_NORM);
 		reiver_paina1 ();
 	} else {
 		self.pain_finished = time + 1.5;
-		sound (self, CHAN_VOICE, "reiver/pain1.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "q15/reiver/pain1.wav", 1, ATTN_NORM);
 		reiver_painb1 ();
 	}
 };
 
 // DEATH, let him go back to hell with a big BANG
 void() reiver_death_touch = {       
-	// if ((other.model == "progs/spike.mdl") || (other.model == "progs/s_spike.mdl") || (other.model == "progs/grenade.mdl") || (other.model == "progs/missile.mdl"))
-		// return;
-	
 	if (self.flags & FL_ONGROUND) {
 		self.solid = SOLID_NOT;
 		T_RadiusDamage (self, self, 66, world, DAMAGEALL);	// default 66	
@@ -954,7 +951,7 @@ void()	reiver_death15	=[$deatha15, reiver_death15] {self.nextthink = time + 0.07
 
 void() reiver_die = {
 	self.dodge_finished = time - 1;		// just to be sure that the shield is gone
-	sound (self, CHAN_VOICE, "reiver/death.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "q15/reiver/death.wav", 1, ATTN_NORM);
 //	self.th_pain = SUB_Null;
 //	self.th_die = SUB_Null;
 	reiver_death1();
@@ -1028,23 +1025,23 @@ void() monster_reiver = {
 	precache_model ("progs/q15/reiver.mdl");		// all files precached in worldspawn() due to savegame-bug
 	precache_model ("progs/q15/reiver_fireball.mdl");
 	precache_model ("progs/q15/ghost_follower.spr32");
-	precache_model ("progs/ad181/misc_skull.mdl");
+	precache_model ("progs/ad171/misc_skull.mdl");
 	precache_model ("progs/q15/reiver_shield.mdl");
 	precache_model ("progs/q15/reiverhands.spr");
 
 	precache_sound ("demon/dhit2.wav");
-	precache_sound ("reiver/ghost_flying.wav");
-	precache_sound ("reiver/ghost_follower_death.wav");
-	precache_sound ("reiver/reiver_fireball_shoot.wav");
-	precache_sound ("reiver/raith3.wav");
-	precache_sound ("reiver/pain1.wav");
-	precache_sound ("reiver/pain2.wav");
-	precache_sound ("reiver/ranged_attack.wav");
-	precache_sound ("reiver/ranged_attack2.wav");
-	precache_sound ("reiver/run.wav");
-	precache_sound ("reiver/sight.wav");
-	precache_sound ("reiver/death.wav");
-	precache_sound ("reiver/vampire.wav");
+	precache_sound ("q15/warlord/homing.wav");
+	precache_sound ("q15/reiver/ghost_follower_death.wav");
+	precache_sound ("q15/reiver/reiver_fireball_shoot.wav");
+	precache_sound ("q15/reiver/raith3.wav");
+	precache_sound ("q15/reiver/pain1.wav");
+	precache_sound ("q15/reiver/pain2.wav");
+	precache_sound ("q15/reiver/ranged_attack.wav");
+	precache_sound ("q15/reiver/ranged_attack2.wav");
+	precache_sound ("q15/reiver/run.wav");
+	precache_sound ("q15/reiver/sight.wav");
+	precache_sound ("q15/reiver/death.wav");
+	precache_sound ("q15/reiver/vampire.wav");
 	precache_sound("player/inflame.wav");
 	precache_sound("zombie/corpse_fire.wav");
 

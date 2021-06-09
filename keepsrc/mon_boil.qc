@@ -67,7 +67,6 @@ void() boil_walk6 = [ $run6, boil_walk7 ] {ai_walk(16);};
 void() boil_walk7 = [ $run7, boil_walk8 ] {ai_walk(8);};
 void() boil_walk8 = [ $run8, boil_walk1 ] {ai_walk(4);};*/
 
-//============================================================================
 void() boil_run1 = [ $run1, boil_run2 ] {monster_footstep(TRUE);ai_run(4);};
 void() boil_run2 = [ $run2, boil_run3 ] {monster_idle_sound(); ai_run(16);};
 void() boil_run3 = [ $run3, boil_run4 ] {ai_run(8);};
@@ -77,11 +76,9 @@ void() boil_run6 = [ $run6, boil_run7 ] {ai_run(16);};
 void() boil_run7 = [ $run7, boil_run8 ] {ai_run(8);};
 void() boil_run8 = [ $run8, boil_run1 ] {ai_run(4);};
 
-//======================================================================
 // Running Boil Explosive Attack
-//======================================================================
 void() boil_expl1 = [ $explode1, boil_expl2 ] {ai_face();
-	sound (self, CHAN_VOICE, "zombie/boil_windup.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_VOICE, "ad171/zombie/boil_windup.wav", 1, ATTN_NORM);};
 void() boil_expl2 = [ $explode2, boil_expl3 ] {ai_face();};
 void() boil_expl3 = [ $explode3, boil_expl4 ] {ai_face();};
 void() boil_expl4 = [ $explode4, boil_expl5 ] {ai_face();};
@@ -93,20 +90,15 @@ void() boil_expl9 = [ $explode9, boil_expl9 ] {
 	T_Damage (self, self, self, self.health+1, NOARMOR);
 };
 
-//======================================================================
 // Stationary Boil - Nailed to the floor or wall
-//======================================================================
-void() boil_suicide =
-{ 
+void() boil_suicide = {
 	if (self.health < 1) return;
 	self.use = SUB_Null;
 	// Make sure current enemy is the cause of the damage
 	T_Damage (self, self, self.enemy, self.health+1, NOARMOR);
 };
 
-//----------------------------------------------------------------------
-void() boil_checktarget =
-{
+void() boil_checktarget = {
 	local entity client;
 	
 	// Should never have an active enemy
@@ -138,12 +130,10 @@ void() boil_checktarget =
 	if (self.enemydist < self.t_width) self.th_melee();
 };
 
-//----------------------------------------------------------------------
-void() boil_squirtblood =
-{
+void() boil_squirtblood = {
 	if (self.waitmin < time) {
 		self.waitmin = time + self.wait + random() * self.wait;
-		sound (self, CHAN_WEAPON, "zombie/boil_squirt.wav", 1, ATTN_IDLE);
+		sound (self, CHAN_WEAPON, "ad171/wraith/bounce.wav", 1, ATTN_IDLE);
 		
 		SpawnProjectileMeat(self,self.origin,self.brkvelbase_x, self.brkvelbase_y, self.brkvelbase_z);
 		// Randomly spawn an extra gib of flesh
@@ -151,20 +141,15 @@ void() boil_squirtblood =
 	}
 };
 
-//----------------------------------------------------------------------
 void() boil_hoba1 = [ $hobA1, boil_hoba2 ] {
 	self.nextthink = self.nextthink + random()*0.2;
 	monster_idle_sound();boil_squirtblood();boil_checktarget();
 };
 void() boil_hoba2 = [ $hobA2, boil_hoba3 ] {boil_checktarget();};
-void() boil_hoba3 = [ $hobA3, boil_hoba4 ] {
-	self.nextthink = self.nextthink + random()*0.2;
-	boil_checktarget();};
+void() boil_hoba3 = [ $hobA3, boil_hoba4 ] {self.nextthink = self.nextthink + random()*0.2; boil_checktarget();};
 void() boil_hoba4 = [ $hobA2, boil_hoba1 ] {boil_checktarget();};
 
-//----------------------------------------------------------------------
-void() boil_HexpA1 = [ $hobA2, boil_HexpA2 ] {
-	sound (self, CHAN_VOICE, "zombie/boil_windup.wav", 1, ATTN_NORM);};
+void() boil_HexpA1 = [ $hobA2, boil_HexpA2 ] {sound (self, CHAN_VOICE, "ad171/zombie/boil_windup.wav", 1, ATTN_NORM);};
 void() boil_HexpA2 = [ $hobA3, boil_HexpA3 ] {};
 void() boil_HexpA3 = [ $hobA4, boil_HexpA4 ] {};
 void() boil_HexpA4 = [ $hobA5, boil_HexpA5 ] {};
@@ -174,20 +159,12 @@ void() boil_HexpA7 = [ $hobA8, boil_HexpA8 ] {};
 void() boil_HexpA8 = [ $hobA9, boil_HexpA9 ] {};
 void() boil_HexpA9 = [ $hobA10, boil_HexpA9 ] {boil_suicide();};
 
-//----------------------------------------------------------------------
-void() boil_hobb1 = [ $hobB1, boil_hobb2 ] {
-	self.nextthink = self.nextthink + random()*0.2;
-	monster_idle_sound();boil_squirtblood();boil_checktarget();
-};
+void() boil_hobb1 = [ $hobB1, boil_hobb2 ] {self.nextthink = self.nextthink + random()*0.2; monster_idle_sound();boil_squirtblood();boil_checktarget();};
 void() boil_hobb2 = [ $hobB2, boil_hobb3 ] {boil_checktarget();};
-void() boil_hobb3 = [ $hobB3, boil_hobb4 ] {
-	self.nextthink = self.nextthink + random()*0.2;
-	boil_checktarget();};
+void() boil_hobb3 = [ $hobB3, boil_hobb4 ] {self.nextthink = self.nextthink + random()*0.2; boil_checktarget();};
 void() boil_hobb4 = [ $hobB2, boil_hobb1 ] {boil_checktarget();};
 
-//----------------------------------------------------------------------
-void() boil_HexpB1 = [ $hobB2, boil_HexpB2 ] {
-	sound (self, CHAN_VOICE, "zombie/boil_windup.wav", 1, ATTN_NORM);};
+void() boil_HexpB1 = [ $hobB2, boil_HexpB2 ] {sound (self, CHAN_VOICE, "ad171/zombie/boil_windup.wav", 1, ATTN_NORM);};
 void() boil_HexpB2 = [ $hobB3, boil_HexpB3 ] {};
 void() boil_HexpB3 = [ $hobB4, boil_HexpB4 ] {};
 void() boil_HexpB4 = [ $hobB5, boil_HexpB5 ] {};
@@ -197,25 +174,17 @@ void() boil_HexpB7 = [ $hobB8, boil_HexpB8 ] {};
 void() boil_HexpB8 = [ $hobB9, boil_HexpB9 ] {};
 void() boil_HexpB9 = [ $hobB10, boil_HexpB9 ] {boil_suicide();};
 
-//======================================================================
 // NO PAIN
-//======================================================================
-void(entity inflictor, entity attacker, float take) boil_pain =
-{
-	// Spawn some grey particles and chunk of meat
-	SpawnProjectileSmoke(self.origin, self.brkvelbase_x, self.brkvelbase_y, self.brkvelbase_z);
-	SpawnProjectileMeat(self,self.origin, self.brkvelbase_x, self.brkvelbase_y, self.brkvelbase_z);
-	// Random chance of more smokey meat
-	if (random() < 0.5) {
-		SpawnProjectileSmoke(self.origin, self.brkvelbase_x, self.brkvelbase_y, self.brkvelbase_z);
+void(entity inflictor, entity attacker, float take) boil_pain = {
+	SpawnProjectileSmoke(self.origin, self.brkvelbase_x, self.brkvelbase_y, self.brkvelbase_z); // Spawn some grey particles
+	SpawnProjectileMeat(self,self.origin, self.brkvelbase_x, self.brkvelbase_y, self.brkvelbase_z); // and chunk of meat
+	if (random() < 0.5) { 
+		SpawnProjectileSmoke(self.origin, self.brkvelbase_x, self.brkvelbase_y, self.brkvelbase_z); // Random chance of more smokey meat
 		SpawnProjectileMeat(self,self.origin, self.brkvelbase_x, self.brkvelbase_y, self.brkvelbase_z);
 	}
-
-	// No special animation
-	return; 
+	return; // No special animation
 };
 
-//============================================================================
 void() boil_explode = {
 	local entity head;
 	local float cand;
@@ -289,13 +258,12 @@ void() boil_explode = {
 	if (self.healamount > 0) DropHealthpack();
 };
 
-//----------------------------------------------------------------------
 void() boil_die = {
 	// Upward fountain of gibs
 	self.max_health = MON_GIBFOUNTAIN;
 	monster_death_precheck();
 	// New gib + loud explosion sound
-	sound (self, CHAN_AUTO, "zombie/boil_explode.wav", 1, ATTN_NORM);
+	sound (self, CHAN_AUTO, "ad171/zombie/boil_explode.wav", 1, ATTN_NORM);
 	// Delay the t_radius explosion for one frame
 	// Just in case several are standing next to each other
 	// otherwise there will be a runaway crash loop
@@ -304,28 +272,25 @@ void() boil_die = {
 };
 
 
-/*======================================================================
- QUAKED monster_boil (1 0 0) (-16 -16 -24) (16 16 32)
-======================================================================*/
-void() monster_boil =
-{
+// QUAKED monster_boil (1 0 0) (-16 -16 -24) (16 16 32)
+void() monster_boil = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_boil.mdl";
 	precache_model (self.mdl);
 
-	self.idle_sound = "zombie/boil_idle1.wav";
-	self.idle_sound2 = "zombie/boil_idle2.wav";
+	self.idle_sound = "ad171/zombie/boil_idle1.wav";
+	self.idle_sound2 = "ad171/zombie/boil_idle2.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
 	
-	self.sight_sound = "zombie/boil_sight.wav";
+	self.sight_sound = "ad171/zombie/boil_sight.wav";
 	precache_sound (self.sight_sound);
 	self.pain_sound = SOUND_EMPTY;
-	precache_sound ("zombie/boil_squirt.wav");
-	precache_sound ("zombie/boil_windup.wav");
-	precache_sound ("zombie/boil_explode.wav");
+	precache_sound ("ad171/wraith/bounce.wav");
+	precache_sound ("ad171/zombie/boil_windup.wav");
+	precache_sound ("ad171/zombie/boil_explode.wav");
 
 	// Check for poisonous entity flag
 	if (self.poisonous) {

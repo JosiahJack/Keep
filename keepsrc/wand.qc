@@ -184,7 +184,7 @@ void(vector start, vector dir, float shots) FireSparks = {
 			self.effects = fx;
             setall (self, "progs/null.spr", '0 0 0', '0 0 0', end2); //was null_256
             // Play sizzle sounds at reduced volume and attenuation.
-            sound (self, CHAN_AUTO, "enforcer/enfstop.wav", 0.5, ATTN_STATIC);
+            sound (self, CHAN_AUTO, SOUND_LASER_HIT, 0.5, ATTN_STATIC);
             BecomeFancy (fr, 4);
             self = attacker;
         }

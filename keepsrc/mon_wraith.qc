@@ -365,7 +365,6 @@ void() wraith_debuff_trail =
 	tent.think = wraith_debuff_shrink;	// Animate manually
 	tent.nextthink = time + 0.1;
 
-	//----------------------------------------------------------------------
 	// Generate particle explosion (+ sound effect)
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_EXPLOSION);	// hard coded explosion
@@ -373,16 +372,13 @@ void() wraith_debuff_trail =
 	WriteCoord (MSG_BROADCAST, self.finaldest_y);
 	WriteCoord (MSG_BROADCAST, self.finaldest_z);
 	// Play original explosion sound
-	sound(tent, CHAN_WEAPON, "drole/r_explode.wav", 1, ATTN_NORM);
+	sound(tent, CHAN_WEAPON, "quoth/drole/explode3.wav", 1, ATTN_NORM);
 
-	//----------------------------------------------------------------------
 	// Large circular flame explosion
 	wraith_debuff_explode(self.finaldest);
 };
 
-//----------------------------------------------------------------------
-void(entity handent, vector orgofs, vector orgside, float dbframe) wraith_debuffball =
-{
+void(entity handent, vector orgofs, vector orgside, float dbframe) wraith_debuffball = {
 	local vector org;
 	
 	// Frame 0 is start of the sequence (move everything into place)
@@ -818,9 +814,9 @@ void() monster_wraith = {
 
 	self.mdl = "progs/ad171/mon_wraith.mdl";
 	self.weaponglow = "progs/ad171/mon_wraith_glow.mdl";
-	self.gib1mdl = "progs/ad171/gib_wraith1.mdl";	// Forearm
-	self.gib2mdl = "progs/ad171/gib_wraith2.mdl";	// Hand/Claw
-	self.gib3mdl = "progs/ad171/gib_wraith3.mdl";	// stump?
+	self.gib1mdl = "progs/rogue/wrthgib1.mdl"; // Forearm
+	self.gib2mdl = "progs/rogue/wrthgib2.mdl"; // Hand/Claw
+	self.gib3mdl = "progs/rogue/wrthgib3.mdl"; // Stump
 	
 	precache_model (self.mdl);
 	precache_model (self.weaponglow);		// Glowing halo effect
@@ -848,7 +844,7 @@ void() monster_wraith = {
 	precache_sound (self.pain_sound);
 
 	precache_sound ("ad171/wraith/attack1.wav");	// HITSCAN bolt
-	precache_sound ("drole/r_explode.wav");
+	precache_sound ("quoth/drole/explode3.wav");
 	precache_model (SBURST_FLAME);			// Flames
 
 	precache_sound ("ad171/wraith/attack2.wav");	// Nail/Bones
@@ -918,7 +914,6 @@ void() monster_wraith = {
 		precache_sound ("ad171/scorpion/idle2.wav");
 		precache_sound ("ad171/scorpion/sight1.wav");
 		precache_sound ("ad171/scorpion/warning1.wav");
-		precache_sound ("ad171/scorpion/warning2.wav");
 		precache_sound ("ad171/scorpion/hiss.wav");
 		precache_sound("ad171/scorpion/pain1.wav");
 		precache_sound("ad171/scorpion/pain2.wav");
@@ -945,10 +940,10 @@ void() monster_wraith = {
 		precache_sound ("ad171/spider/hiss2.wav");
 		precache_sound ("ad171/spider/idle1.wav");
 		precache_sound ("ad171/spider/hiss3.wav");
-		precache_sound("ad171/spider/death1.wav");
+		precache_sound("drake/spider/death.wav");
 		precache_sound("ad171/spider/pain1.wav");
 		precache_sound("ad171/spider/pain2.wav");
-		precache_sound("ad171/spider/miss.wav");
+		precache_sound("ad171/wraith/bounce.wav");
 		precache_sound("ad171/spider/attackmunch.wav");
 		precache_sound("ad171/spider/attacktear.wav");
 		precache_sound("ad171/spider/jumpland.wav");

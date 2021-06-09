@@ -380,7 +380,7 @@ void(float soundtype) hogremac_sound =
 	if (soundtype == 1) sound (self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);
 	else if (soundtype == 2) sound (self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM);
 	else if (soundtype == 3) sound (self, CHAN_WEAPON, GIB_SOUND_WOOD, 1, ATTN_NORM);
-	else if (soundtype == 4) sound (self, CHAN_VOICE, "ad171/ogre/ham_swipe.wav", 1, ATTN_IDLE);
+	else if (soundtype == 4) sound (self, CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_IDLE);
 };
 
 // Special wakeup animation for attacking/breaking something infront
@@ -441,7 +441,7 @@ void() monster_hogremac = {
 	precache_sound (self.pain_sound);		// Pain
 	
 	precache_sound ("ogre/ogsawatk.wav");	// Attack
-	precache_sound ("ad171/ogre/ham_swipe.wav");	// mace swipe
+	precache_sound ("ad171/weapons/crossbow_swipe.wav");	// mace swipe
 	precache_sound ("ad171/ogre/ham_hit.wav");	// mace hit ground
 	
 	self.meleehitsound = GIB_SOUND_HEAVY;

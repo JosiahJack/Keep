@@ -5,13 +5,13 @@ void () dlord_idle_sound;
 void() dguard_hit = {
 	if (vlen(self.enemy.origin - self.origin) > 100) {
 		if (random() < 0.5) {
-			sound(self, CHAN_WEAPON, "dguard/slmiss1.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "quoth/dguard/slmiss1.wav", 1, ATTN_NORM);
 		} else {
-			sound(self, CHAN_WEAPON, "dguard/slmiss2.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "quoth/dguard/slmiss2.wav", 1, ATTN_NORM);
 		}
 		return;
 	}
-	sound(self, CHAN_WEAPON, "dguard/slhit.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "quoth/dguard/slhit.wav", 1, ATTN_NORM);
 	T_Damage(self.enemy, self, self, 30,DAMARMOR);
 	// Check for poisonous attribute (new poison version)
 	if (self.poisonous) PoisonDeBuff(self.enemy);
@@ -124,7 +124,7 @@ void(float offset) dlord_shot = {
 	vec_z = 0 - vec_z + (random() - 0.5) * 0.2;
 	hknight_shot(offset);
 	newmis.classname = "knightspike";
-	setmodel(newmis, "progs/quoth2pt2full/dspike.mdl");
+	setmodel(newmis, "progs/quoth/dspike.mdl");
 	newmis.enemy = self.enemy;
 	if (visible(self.enemy)) {
 		newmis.think = dlord_shot_think;
@@ -210,7 +210,7 @@ void() dlord_run6 = [34, dlord_run7] { ai_dlord_run(25); };
 void() dlord_run7 = [35, dlord_run8] { ai_dlord_run(21); };
 void() dlord_run8 = [36, dlord_run1] { ai_dlord_run(13); };
 
-void() dlord_pain1 = [37, dlord_pain2] { sound(self, CHAN_VOICE, "dlord/pain.wav", 1, ATTN_NORM); shieldon(); };
+void() dlord_pain1 = [37, dlord_pain2] { sound(self, CHAN_VOICE, "quoth/dlord/pain.wav", 1, ATTN_NORM); shieldon(); };
 void() dlord_pain2 = [38, dlord_pain3] {};
 void() dlord_pain3 = [39, dlord_pain4] {};
 void() dlord_pain4 = [40, dlord_pain5] {};
@@ -245,7 +245,7 @@ void() dlord_die = {
 
 	self.effects = 0;
 	if (!self.gibbed) {
-		sound(self, CHAN_VOICE, "dlord/death.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "quoth/dlord/death.wav", 1, ATTN_NORM);
 		if (random() > 0.5) {dlord_die1();
 		} else { dlord_dieb1();}
 	}
@@ -390,14 +390,14 @@ void() dlord_watk22 = [154, dlord_run1] { ai_charge(3); };
 
 void() dlord_idle_sound = {
 	if (random() < 0.2)
-		sound(self, CHAN_VOICE, "dlord/idle.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "quoth/dlord/idle.wav", 1, ATTN_NORM);
 };
 
 void(entity inflictor, entity attacker, float damage) dlord_pain = {
 	if (self.pain_finished > time)
 		return;
 
-	sound(self, CHAN_VOICE, "dlord/pain.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "quoth/dlord/pain.wav", 1, ATTN_NORM);
 	if (random() * 50 > damage)
 		return;
 
@@ -435,20 +435,20 @@ void() monster_death_lord = {
 	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/ad171/mon_hknight.mdl";
-	precache_model2("progs/ad171/mon_hknight.mdl");
-	precache_model("progs/quoth2pt2full/dspike.mdl");
+	precache_model("progs/ad171/mon_hknight.mdl");
+	precache_model("progs/quoth/dspike.mdl");
 	self.headmdl = "progs/h_hellkn.mdl";
-	precache_model2("progs/h_hellkn.mdl");
+	precache_model("progs/h_hellkn.mdl");
 	precache_sound("hknight/attack1.wav");
-	precache_sound("dlord/death.wav");
-	precache_sound("dlord/pain.wav");
-	precache_sound("dlord/sight.wav");
-	precache_sound("dlord/idle.wav");
+	precache_sound("quoth/dlord/death.wav");
+	precache_sound("quoth/dlord/pain.wav");
+	precache_sound("quoth/dlord/sight.wav");
+	precache_sound("quoth/dlord/idle.wav");
 	precache_sound("knight/sword1.wav");
 	precache_sound("knight/sword2.wav");
-	precache_sound("dguard/slhit.wav");
-	precache_sound("dguard/slmiss1.wav");
-	precache_sound("dguard/slmiss2.wav");
+	precache_sound("quoth/dguard/slhit.wav");
+	precache_sound("quoth/dguard/slmiss1.wav");
+	precache_sound("quoth/dguard/slmiss2.wav");
 	self.th_stand = dlord_stand1;
 	self.th_walk = dlord_walk1;
 	self.th_run = dlord_move1;

@@ -585,8 +585,8 @@ void(vector offset) mammoth_lightning =
 	WriteCoord (MSG_BROADCAST, trace_endpos_z);
 
 	// Play some arching lightning sounds
-	if (random() < 0.5) sound (self, CHAN_BODY, "mammoth/elec_arch1.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_BODY, "mammoth/elec_arch2.wav", 1, ATTN_NORM);
+	if (random() < 0.5) sound (self, CHAN_BODY, "eidolon/elec_arch1.wav", 1, ATTN_NORM);
+	else sound (self, CHAN_BODY, "eidolon/elec_arch2.wav", 1, ATTN_NORM);
 };
 
 //----------------------------------------------------------------------
@@ -1278,7 +1278,7 @@ void() mammoth_frame =
 				sound (self, CHAN_WEAPON, "mammoth/flame_fire.wav", 1, ATTN_NORM);	
 			else 
 				// Giant explosion at the end of the sequence
-				sound (self, CHAN_WEAPON, "mammoth/flame_explode.wav", 1, ATTN_NORM);
+				sound (self, CHAN_WEAPON, "ad171/wraith/attack1_explode.wav", 1, ATTN_NORM);
 			
 			// Keep on dumpin! (14 frames)
 			mammoth_jetdump();
@@ -2016,7 +2016,7 @@ void() monster_mammoth = {
 	PreCache_Flame();
 	precache_sound ("mammoth/flame_attack.wav");
 	precache_sound ("mammoth/flame_fire.wav");
-	precache_sound ("mammoth/flame_explode.wav");
+	precache_sound ("ad171/wraith/attack1_explode.wav");
 	// Core sounds
 	precache_sound ("mammoth/core_attack.wav");
 	// Grenade sounds
@@ -2030,8 +2030,8 @@ void() monster_mammoth = {
 	precache_sound (self.death_sound);
 	precache_sound ("mammoth/explode_minor.wav");
 	precache_sound ("mammoth/explode_major.wav");
-	precache_sound ("mammoth/elec_arch1.wav");
-	precache_sound ("mammoth/elec_arch2.wav");
+	precache_sound ("eidolon/elec_arch1.wav");
+	precache_sound ("eidolon/elec_arch2.wav");
 	// Fired from boss between phases
 	precache_model (MODEL_PROJ_PLASMA);
 	// Mechanic on/off sounds for blue shield

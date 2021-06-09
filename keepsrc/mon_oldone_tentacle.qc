@@ -66,9 +66,7 @@ void(vector org, vector vec) oldone_attack = {
 void() oldone_atta1	=[	$attack1,	oldone_atta2	] {ai_face();};
 void() oldone_atta2	=[	$attack2,	oldone_atta3	] {ai_face();};
 void() oldone_atta3	=[	$attack3,	oldone_atta4	] {ai_face();};
-void() oldone_atta4	=[	$attack4,	oldone_atta5	] {ai_face();
-//sound (self, CHAN_VOICE, "oldone/dattack1.wav", 1, ATTN_NORM);
-};
+void() oldone_atta4	=[	$attack4,	oldone_atta5	] {ai_face();};
 void() oldone_atta5	=[	$attack5,	oldone_atta6	] {ai_face();};
 void() oldone_atta6	=[	$attack6,	oldone_atta7	] {ai_face();};
 void() oldone_atta7	=[	$attack7,	oldone_atta8	] {ai_face();};
@@ -150,7 +148,6 @@ void() oldone_rise4		=[	$death14,	oldone_rise5	] {};
 void() oldone_rise5		=[	$death13,	oldone_rise6	] {};
 void() oldone_rise6		=[	$death12,	oldone_aim1	] {	oldone_start(); };
 
-//===========================================================================
 //QUAKED monster_oldone (1 0 0) (-32 -32 -24) (32 32 40) Ambush
 void() monster_oldone_tentacle = {
 	// Check for any random monster setups
@@ -160,20 +157,15 @@ void() monster_oldone_tentacle = {
 
 	self.mdl = "progs/q15/oldone_tent.mdl";
 	precache_model ("progs/q15/oldone_tent.mdl");
-
-	precache_sound ("oldone/dattack1.wav");
 	precache_sound ("boss1/pain.wav");
 	precache_sound ("boss1/death.wav");
 	precache_sound ("shambler/fall.wav");
-
 	self.pain_sound = "boss1/pain.wav";
 	self.death_sound = "boss1/death.wav";
-
 	setmodel(self, self.mdl);					// Setup model
 	setsize (self, '-12 -12 -24', '12 12 128');
 	self.health = 135;
 	self.scale = 0.5;
-
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_NONE;			// Static item, no movement
 	if (self.health < 1) self.health = 135;
@@ -183,7 +175,6 @@ void() monster_oldone_tentacle = {
 	self.gibhealth = -135;
 	self.gibbed = FALSE;
 	self.pain_flinch = 80;
-	
 	self.th_walk = oldone_stand1;
 	self.th_run = oldone_aim1;
 	self.th_pain = oldone_pain;

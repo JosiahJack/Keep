@@ -70,9 +70,7 @@ void()	cent_run6	=[	$stand6,	cent_run7	] {ai_run(8);};
 void()	cent_run7	=[	$stand7,	cent_run8	] {ai_run(8);};
 void()	cent_run8	=[	$stand8,	cent_run1	] {ai_run(8);};
 
-//============================================================================
-void() cent_fire =
-{
+void() cent_fire = {
 	local vector org, vec;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;

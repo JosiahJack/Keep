@@ -24,7 +24,7 @@ void() spid_run8 = [4, spid_run9] { sound(self, CHAN_VOICE, "spider/tap.wav", 1,
 void() spid_run9 = [6, spid_run10] { ai_run(12); };
 void() spid_run10 = [8, spid_run1] { sound(self, CHAN_VOICE, "spider/tap.wav", 1, ATTN_IDLE);ai_run(12); };
 
-void() spid_attack1 = [0, spid_attack2] { sound(self, CHAN_VOICE, "spider/fire.wav", 1, ATTN_NORM); ai_charge(12); };
+void() spid_attack1 = [0, spid_attack2] { sound(self, CHAN_VOICE, "rogue/wrath/watt.wav", 1, ATTN_NORM); ai_charge(12); };
 void() spid_attack2 = [2, spid_attack3] { ai_charge(12); };
 void() spid_attack3 = [4, spid_attack4] { ai_charge(12); };
 void() spid_attack4 = [6, spid_attack5] { ai_charge(12); };
@@ -157,14 +157,14 @@ void() monster_wspider = {
 	self.gib1mdl = "progs/ad171/gib_spidlegg.mdl";	// Single Leg
 	precache_model ("progs/ad171/gib_spidlegg.mdl");
 	precache_model ("progs/gib2.mdl");
-	precache_model2("progs/spider.mdl");
-	precache_model2("progs/w_spike.mdl"); // ID1 scrag/wizard spit
-	precache_sound2("spider/fire.wav");
-	precache_sound2("shalrath/attack2.wav");
-	precache_sound2("shalrath/death.wav");
-	precache_sound2("spider/tap.wav");
-	precache_sound2("spider/pain.wav");
-	precache_sound2("shalrath/sight.wav");
+	precache_model("progs/spider.mdl");
+	precache_model("progs/w_spike.mdl"); // ID1 scrag/wizard spit
+	precache_sound("rogue/wrath/watt.wav");
+	precache_sound("shalrath/attack2.wav");
+	precache_sound("shalrath/death.wav");
+	precache_sound("spider/tap.wav");
+	precache_sound("spider/pain.wav");
+	precache_sound("shalrath/sight.wav");
 
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;

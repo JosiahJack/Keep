@@ -376,7 +376,7 @@ void() monster_xmas_elf =
 	// Elf 2 - Magic attacks
 	precache_sound ("xmas/elf/magic.wav");
 	precache_sound ("xmas/elf/attack1.wav");
-	precache_sound ("xmas/elf/miss.wav");
+	precache_sound ("ad171/wraith/bounce.wav");
 	
 	// precache sight, pain and death (changes on type)
 	self.pain_sound = "xmas/elf/pain.wav";

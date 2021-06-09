@@ -353,7 +353,9 @@ void() worldspawn = {
 	precache_model (MODEL_PLAYER);
 	precache_model (MODEL_PLAYER_EYES);
 	precache_model (MODEL_PLAYER_HEAD);
-	precache_model ("progs/player_legs.mdl");
+	precache_model ("progs/q15/player_legs1.mdl");
+	precache_model ("progs/q15/player_legs1_suit.mdl");
+	precache_model ("progs/q15/player_legs2.mdl");
 	precache_model (SBUBBLE_DROWN);			// player drowning bubbles
 	precache_model (SEXP_SMALL);			// Fire explosion (ID)
 	precache_model (SEXP_MED);				// Fire explosion (Quoth)

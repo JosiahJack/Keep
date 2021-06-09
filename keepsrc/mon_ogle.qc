@@ -490,7 +490,7 @@ void() monster_ogle =  {
 	precache_sound ("ogle/pickflesh.wav");
 	precache_sound ("ogle/spike1.wav");
 	precache_sound ("ogle/spike2.wav");
-
+	precache_sound ("ogle/hammerflesh.wav");
 	precache_sound ("ogle/wipebrow.wav");
 
 	self.sight_sound = "ogle/enrage1.wav";

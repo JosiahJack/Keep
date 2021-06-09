@@ -298,8 +298,8 @@ void() trap_pendlong =
 	self.view_ofs = '0 0 -108';	// Offset bbox vectors (new model different location)
 	self.oldorigin = '0 0 0';	// Entity is correct location
 
-	self.noise1 = "traps/pend_swing.wav";
-	self.noise2 = "traps/pend_hit.wav";
+	self.noise1 = "ad171/traps/pend_swing.wav";
+	self.noise2 = "ad171/traps/pend_hit.wav";
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 

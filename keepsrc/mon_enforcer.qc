@@ -115,26 +115,20 @@ void() enforcer_attack = {
 	}
 };
 
-//============================================================================
-// - Basic enforcer (laser attack)
-//----------------------------------------------------------------------
-void() enforcer_fire =
-{
+// Basic enforcer laser attack
+void() enforcer_fire = {
 	local vector org, vec;
 
 	if (!self.enemy) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);
-
+	sound (self, CHAN_WEAPON, SOUND_LASER_FIRE, 1, ATTN_NORM);
 	makevectors (self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	vec = normalize(self.enemy.origin - self.origin);
-
 	launch_projectile(org, vec, CT_PROJ_LASER, SPEED_LASER);
 };
 
-//----------------------------------------------------------------------
 void()	enf_atk1	=[	$attack1,	enf_atk2	] {};
 void()	enf_atk2	=[	$attack2,	enf_atk3	] {monster_footstep(FALSE);ai_face();};
 void()	enf_atk3	=[	$attack3,	enf_atk4	] {ai_face();};
@@ -158,7 +152,7 @@ void() defender_ssg = {
 	if (self.health < 1) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "ad171/enforcer/def_ssg_fire.wav", 1, ATTN_NORM);	
+	sound (self, CHAN_WEAPON, "quoth/defender/ssgfire.wav", 1, ATTN_NORM);	
 	
 	// Choose between a projectile or hit-scan system
 	if (query_configflag(SVR_SHOTGPROJ)) 
@@ -169,7 +163,7 @@ void() defender_ssg = {
 	}
 };
 
-void()	def_atkssg1	=[	$attack1,	def_atkssg2	] {sound (self, CHAN_WEAPON, "ad171/enforcer/def_ssg_load.wav", 1, ATTN_NORM);};
+void()	def_atkssg1	=[	$attack1,	def_atkssg2	] {sound (self, CHAN_WEAPON, "quoth/defender/ssgcock.wav", 1, ATTN_NORM);};
 void()	def_atkssg2	=[	$attack2,	def_atkssg3	] {monster_footstep(FALSE);ai_face();};
 void()	def_atkssg3	=[	$attack3,	def_atkssg4	] {ai_face();};
 void()	def_atkssg4	=[	$attack4,	def_atkssg5	] {ai_face();};
@@ -370,12 +364,12 @@ void() monster_base_enforcer = {
 	precache_model (self.gib1mdl);
 	
 	if (self.classtype == CT_MONENF_ULTRA) {
-		self.pain_sound = "enforcer/ue_pain1.wav";
+		self.pain_sound = "lunaran/enforcer/ue_pain1.wav";
 		r = random();
 		if (r < 0.5)
-			self.pain_sound2 = "enforcer/ue_pain2.wav";
+			self.pain_sound2 = "lunaran/enforcer/ue_pain2.wav";
 		else
-			self.pain_sound2 = "enforcer/ue_pain3.wav";
+			self.pain_sound2 = "lunaran/enforcer/ue_pain3.wav";
 	} else {
 		self.pain_sound = "enforcer/pain1.wav";
 		self.pain_sound2 = "enforcer/pain2.wav";
@@ -427,36 +421,36 @@ void() monster_enforcer = {
 	
 	if (!self.classtype) self.classtype = CT_MONENFORCER;
 	precache_model (MODEL_PROJ_LASER);	// Originally - progs/laser.mdl
-	precache_model2 ("progs/enforcer.mdl");
-	precache_model2 ("progs/h_mega.mdl");
-	precache_model2 ("progs/laser.mdl");
-	precache_model2 ("progs/laser2.mdl");
-	precache_model2 ("progs/k_spike.mdl");
-	precache_model2 ("progs/missile.mdl");
-	precache_sound2 ("enforcer/death1.wav");
-	precache_sound2 ("enforcer/enfire.wav");
-	precache_sound2 ("enforcer/enfstop.wav");
-	precache_sound2 ("enforcer/idle1.wav");
-	precache_sound2 ("enforcer/pain1.wav");
-	precache_sound2 ("enforcer/pain2.wav");
-	precache_sound2 ("enforcer/sight1.wav");
-	precache_sound2 ("enforcer/sight2.wav");
-	precache_sound2 ("enforcer/sight3.wav");
-	precache_sound2 ("enforcer/sight4.wav");
-	precache_sound2 ("enforcer/me_fire1.wav");
-	precache_sound2 ("enforcer/ue_fire1.wav");
-	precache_sound2 ("items/protect3.wav");
-	precache_sound2 ("enforcer/ue_die1.wav");
-	precache_sound2 ("enforcer/ue_die2.wav");
-	precache_sound2 ("enforcer/ue_die3.wav");
-	precache_sound2 ("enforcer/ue_site1.wav");
-	precache_sound2 ("enforcer/ue_site2.wav");
-	precache_sound2 ("enforcer/ue_site3.wav");
-	precache_sound2 ("enforcer/ue_site4.wav");
-	precache_sound2 ("enforcer/ue_site5.wav");
-	precache_sound2 ("enforcer/ue_pain1.wav");
-	precache_sound2 ("enforcer/ue_pain2.wav");
-	precache_sound2 ("enforcer/ue_pain3.wav");
+	precache_model ("progs/enforcer.mdl");
+	precache_model ("progs/h_mega.mdl");
+	precache_model ("progs/laser.mdl");
+	precache_model ("progs/travail/laser2.mdl");
+	precache_model ("progs/k_spike.mdl");
+	precache_model ("progs/missile.mdl");
+	precache_sound ("enforcer/death1.wav");
+	precache_sound (SOUND_LASER_FIRE);
+	precache_sound(SOUND_LASER_HIT);
+	precache_sound ("enforcer/idle1.wav");
+	precache_sound ("enforcer/pain1.wav");
+	precache_sound ("enforcer/pain2.wav");
+	precache_sound ("enforcer/sight1.wav");
+	precache_sound ("enforcer/sight2.wav");
+	precache_sound ("enforcer/sight3.wav");
+	precache_sound ("enforcer/sight4.wav");
+	precache_sound ("lunaran/enforcer/me_fire1.wav");
+	precache_sound ("zerstorer/weapons/rocket1i.wav");
+	precache_sound ("items/protect3.wav");
+	precache_sound ("lunaran/enforcer/ue_die1.wav");
+	precache_sound ("lunaran/enforcer/ue_die2.wav");
+	precache_sound ("lunaran/enforcer/ue_die3.wav");
+	precache_sound ("lunaran/enforcer/ue_site1.wav");
+	precache_sound ("lunaran/enforcer/ue_site2.wav");
+	precache_sound ("lunaran/enforcer/ue_site3.wav");
+	precache_sound ("lunaran/enforcer/ue_site4.wav");
+	precache_sound ("lunaran/enforcer/ue_site5.wav");
+	precache_sound ("lunaran/enforcer/ue_pain1.wav");
+	precache_sound ("lunaran/enforcer/ue_pain2.wav");
+	precache_sound ("lunaran/enforcer/ue_pain3.wav");
 
 	if (self.spawnflags & ULTRA_ENF) {
 		if (self.health < 1) self.health = 400;
@@ -492,8 +486,8 @@ void() monster_enforcer = {
 	precache_sound ("enforcer/sight4.wav");
 
 	// Projectile fire and impact (used in projectiles)
-	precache_sound ("enforcer/enfire.wav");
-	precache_sound ("enforcer/enfstop.wav");
+	precache_sound (SOUND_LASER_FIRE);
+	precache_sound (SOUND_LASER_HIT);
 	
 	//self.th_missile = enf_atk1;
 	if (!self.th_missile) self.th_missile = enforcer_attack;
@@ -515,16 +509,22 @@ void() monster_defender = {
 	self.exactskin = 3 + rint((random()*3)-0.5);
 	self.gib1skin = 1;
 
-	self.idle_sound = "ad171/enforcer/def_idle1.wav";
-	self.idle_sound2 = "ad171/enforcer/def_idle2.wav";
+	self.idle_sound = "quoth/defender/breathe.wav";
+	self.idle_sound2 = "quoth/defender/blip.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
-	self.sight_sound = "ad171/enforcer/def_sight1.wav";
+	self.sight_sound = "quoth/defender/sight1.wav";
+	if (!self.sight_sound2) self.sight_sound2 = "quoth/defender/sight2.wav";
+	if (!self.sight_sound3) self.sight_sound3 = "quoth/defender/sight3.wav";
+	if (!self.sight_sound4) self.sight_sound4 = "quoth/defender/sight4.wav";
 	precache_sound (self.sight_sound);
+	precache_sound (self.sight_sound2);
+	precache_sound (self.sight_sound3);
+	precache_sound (self.sight_sound4);
 
 	// Extra load/fire sounds (from Quoth MOD)
-	precache_sound ("ad171/enforcer/def_ssg_load.wav");
-	precache_sound ("ad171/enforcer/def_ssg_fire.wav");
+	precache_sound ("quoth/defender/ssgcock.wav");
+	precache_sound ("quoth/defender/ssgfire.wav");
 	
 	self.th_missile = def_atkgl1;
 	self.th_melee = def_atkssg1;
@@ -550,11 +550,13 @@ void() monster_eliminator = {
 	self.exactskin = 6 + rint((random()*3)-0.5);
 	self.gib1skin = 2;
 
-	self.idle_sound = "ad171/enforcer/elim_idle1.wav";
-	self.idle_sound2 = "ad171/enforcer/elim_idle2.wav";
+	self.idle_sound = "quoth/eliminator/idle1.wav";
+	self.idle_sound2 = "quoth/eliminator/idle2.wav";
+	self.idle_soundcom = "quoth/eliminator/idle3.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
-	self.sight_sound = "ad171/enforcer/elim_sight1.wav";
+	precache_sound (self.idle_soundcom);
+	self.sight_sound = "quoth/eliminator/sight.wav";
 	precache_sound (self.sight_sound);
 
 	// Extra load/fire sounds (from Quoth MOD)
@@ -627,10 +629,10 @@ void() monster_super_enforcer = {
 	if (monster_checkspawn() == TRUE) return;
 
 	self.classtype = CT_MONSUPERENFORCER;
-	precache_model2 ("progs/s_spike.mdl");
+	precache_model ("progs/s_spike.mdl");
 	precache_model (MODEL_GWEAP_SNG);
 	precache_model (MODEL_GWEAP_LSNG);
-	precache_model ("progs/g_nail2.mdl");
+	precache_model ("progs/ad171/g_nail2.mdl");
 	// We drop the super nailgun on death :)
 	if (world.devdata & DEV_AMMO_N_HEALTH && self.spawnflags & ENFORCER_LAVANG) world.deventity.ammo_lava_nails = world.deventity.ammo_lava_nails + AMMO_LAVA_NAILS_WPN;
 	else if (world.devdata & DEV_AMMO_N_HEALTH)  world.deventity.ammo_nails = world.deventity.ammo_nails + AMMO_NAILS_WPN;
@@ -650,17 +652,17 @@ void() monster_super_enforcer = {
 		self.ammo_nails = rint(2 + random()*2);
 	}
 
-	precache_sound2 ("enforcer/pain1.wav");
-	precache_sound2 ("enforcer/pain2.wav");
-	precache_sound2 ("enforcer/sight1.wav");
-	precache_sound2 ("enforcer/sight2.wav");
-	precache_sound2 ("enforcer/sight3.wav");
-	precache_sound2 ("enforcer/sight4.wav");
-	precache_sound2 ("enforcer/death1.wav");
-	precache_model2 ("progs/lieutenant/enforce2.mdl");
+	precache_sound ("enforcer/pain1.wav");
+	precache_sound ("enforcer/pain2.wav");
+	precache_sound ("enforcer/sight1.wav");
+	precache_sound ("enforcer/sight2.wav");
+	precache_sound ("enforcer/sight3.wav");
+	precache_sound ("enforcer/sight4.wav");
+	precache_sound ("enforcer/death1.wav");
+	precache_model ("progs/lieutenant/enforce2.mdl");
 	self.headmdl = "progs/h_mega.mdl";
 	self.mdl = "progs/lieutenant/enforce2.mdl";
-	precache_model2 ("progs/h_mega.mdl");
+	precache_model ("progs/h_mega.mdl");
 
 	self.th_stand 	= enf_stand1;
 	self.th_walk 	= lth_walk1;

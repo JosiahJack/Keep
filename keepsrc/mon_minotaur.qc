@@ -1,6 +1,8 @@
 /*==============================================================================
 MINOTAUR (Hexen2 model by Raven Software) (The Shuffler from Marcher MOD)
 also known as "The Nethergoat: Spawnmaster of the Elder World"
+also known as a Yakman
+also known as a Gauroch
 ==============================================================================*/
 
 // Slap RIGHT - 7, 9, 11, 13, 15, 17
@@ -135,7 +137,7 @@ void() mino_run =
 // Short howl animation to switch to rage mode
 //----------------------------------------------------------------------
 void() mino_howl1 =[ $howl1, mino_howl2 ] {
-	sound (self, CHAN_WEAPON, "ad171/minotaur/attack1long.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_WEAPON, "kinn/shuffler/big1.wav", 1, ATTN_NORM);};
 void() mino_howl2 =[ $howl3, mino_howl3 ] {};
 void() mino_howl3 =[ $howl5, mino_howl4 ] {};
 void() mino_howl4 =[ $howl7, mino_howl5 ] {};
@@ -427,9 +429,7 @@ void(vector orgofs, float angofs) minotaur_fire =
 	}
 };
 
-//----------------------------------------------------------------------
 // Main projectile plasma/poison attack of both types of minotaur
-//----------------------------------------------------------------------
 void() mino_magic1 =[ $magic1, mino_magic2 ] {ai_face();
 	if (random() < 3) sound (self, CHAN_BODY, "ad171/minotaur/attack1start.wav", 1, ATTN_NORM);};
 void() mino_magic2 =[ $magic3, mino_magic3 ] {minotaur_hands('34 0 44','-20 30 20',0);};
@@ -440,7 +440,7 @@ void() mino_magic6 =[ $magic11, mino_magic7 ] {minotaur_hands('16 -36 72','-12 4
 void() mino_magic7 =[ $magic13, mino_magic8 ] {minotaur_hands('36 -20 56','24 32 68',5);};
 
 void() mino_magic8 =[ $magic15, mino_magic9 ] {
-	sound (self, CHAN_WEAPON, "ad171/minotaur/bolt_fire.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "kinn/shuffler/fireblt.wav", 1, ATTN_NORM);
 	minotaur_hands('40 -3 46','40 1 44',6);minotaur_fire('40 0 45',-2);};
 void() mino_magic9 =[ $magic17, mino_magic10 ] {ai_back(8);
 	minotaur_hands('32 -2 44','32 2 44',5);minotaur_fire('32 0 44',-1);};
@@ -508,7 +508,7 @@ void(float dbframe) mino_sumball =
 void() mino_summon1 =[ $howl1, mino_summon2 ] {ai_face();self.pain_finished = time + 2;};
 void() mino_summon2 =[ $howl3, mino_summon3 ] {ai_face();};
 void() mino_summon3 =[ $howl5, mino_summon4 ] {ai_face();mino_sumeffect();
-	sound (self, CHAN_BODY, "ad171/minotaur/attack1long.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_BODY, "kinn/shuffler/big1.wav", 1, ATTN_NORM);};
 void() mino_summon4 =[ $howl7, mino_summon5 ] {mino_sumeffect();};
 void() mino_summon5 =[ $howl9, mino_summon6 ] {mino_sumeffect();};
 void() mino_summon6 =[ $howl11, mino_summon7 ] {mino_sumeffect();};
@@ -686,9 +686,7 @@ void() mino_death12 = [ $death23, mino_death13 ] {ai_forward(4);};
 void() mino_death13 = [ $death25, mino_death14 ] {monster_death_postcheck();};
 void() mino_death14 = [ $death25, mino_death14 ] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
-void() mino_die =
-{
+void() mino_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 	minotaur_remove_attachment();
@@ -696,7 +694,7 @@ void() mino_die =
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "ad171/minotaur/death.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "kinn/shuffler/death.wav", 1, ATTN_NORM);
 		mino_death1 ();
 	}
 };
@@ -748,17 +746,17 @@ void() monster_minotaur = {
 
 	precache_sound ("ad171/minotaur/attack1start.wav");	// Short roar
 	precache_sound ("ad171/minotaur/attack1end.wav");		// Short roar
-	precache_sound ("ad171/minotaur/attack1long.wav");	// Enter rage mode
-	precache_sound ("ad171/minotaur/bolt_fire.wav");		// fire projectile
+	precache_sound ("kinn/shuffler/big1.wav");	// Enter rage mode
+	precache_sound ("kinn/shuffler/fireblt.wav");		// fire projectile
 	precache_sound (SOUND_PLASMA_HIT);				// impact sounds
 
-	precache_sound ("ad171/minotaur/death.wav");
-	self.pain_sound = "ad171/minotaur/pain1.wav";
-	self.pain_sound2 = "ad171/minotaur/pain2.wav";
+	precache_sound ("kinn/shuffler/death.wav");
+	self.pain_sound = "kinn/shuffler/pain.wav";
+	self.pain_sound2 = "kinn/shuffler/big1.wav";
 	precache_sound (self.pain_sound);
 	precache_sound (self.pain_sound2);
 
-	self.sight_sound = "ad171/minotaur/sight1.wav";
+	self.sight_sound = "kinn/shuffler/big3.wav";
 	precache_sound (self.sight_sound);
 
 	self.solid = SOLID_NOT;			// No interaction with world
@@ -809,8 +807,7 @@ void() monster_minotaur = {
 			self.poisonous = FALSE;			// Special version (blood/fire)
 			self.gibtype = GIBTYPE_BLOOD;	// blood trails
 			self.part_style = PARTICLE_BURST_RED;
-		}
-		else {
+		} else {
 			self.poisonous = TRUE;			// Poison version (default)
 			precache_poisongibs();			// precache gibs
 			self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
@@ -820,8 +817,7 @@ void() monster_minotaur = {
 		self.gib1skin = self.gib2skin = self.gib3skin = 1;
 		// Reduce minions down to 3, gargoyles are tougher to kill
 		if (!self.minion_maxcount) self.minion_maxcount = 3;
-	}
-	else {
+	} else {
 		self.poisonous = FALSE;			// Default White version
 		self.gibtype = GIBTYPE_BLOOD;	// blood trails
 		self.part_style = PARTICLE_BURST_BLUE;

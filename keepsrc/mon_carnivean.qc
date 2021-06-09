@@ -23,8 +23,8 @@ Please see cvar descriptions in included smc_config.cfg sample.
 
 void() carniv_idle_sound = {
 	if (random() < 0.2) {
-		if (random() < 0.5) sound(self, CHAN_VOICE, "carnivean/idle1.wav", 1, ATTN_IDLE);
-		else sound(self, CHAN_VOICE, "carnivean/idle2.wav", 1, ATTN_IDLE);
+		if (random() < 0.5) sound(self, CHAN_VOICE, "q15/carnivean/idle1.wav", 1, ATTN_IDLE);
+		else sound(self, CHAN_VOICE, "q15/carnivean/idle2.wav", 1, ATTN_IDLE);
 	}
 };
 
@@ -32,9 +32,9 @@ void(float loudness) carniv_footsteps = {
 	local float select;
 	select = random();
 	if (select <= 0.5)
-		sound(self, CHAN_AUTO, "carnivean/step1.wav", loudness, ATTN_IDLE);
+		sound(self, CHAN_AUTO, "q15/carnivean/step1.wav", loudness, ATTN_IDLE);
 	else 
-		sound(self, CHAN_AUTO, "carnivean/step2.wav", loudness, ATTN_IDLE);
+		sound(self, CHAN_AUTO, "q15/carnivean/step2.wav", loudness, ATTN_IDLE);
 };
 
 void() carniv_projectile_rock_touch = {
@@ -161,7 +161,7 @@ void() carniv_projectile = {
 		setmodel (missile, "progs/q15/carniv_rocks.mdl");		// rock / rubble model
 		missile.scale = 0.4;
 		missile.cnt = 2;
-		sound(self, CHAN_WEAPON, "carnivean/rock_throw.wav", 1, ATTN_NORM);
+		sound(self, CHAN_WEAPON, "q15/carnivean/rock_throw.wav", 1, ATTN_NORM);
 		missile.velocity = normalize ((self.enemy.origin + '0 0 10') - missile.origin);
 		missile.velocity = missile.velocity * 350;
 		missile.angles = vectoangles(missile.velocity);
@@ -269,7 +269,7 @@ void() carniv_run12 = [ 65, carniv_run1 ]{self.nextthink = (time + 0.08); ai_run
 void() carniv_swing1 = [ 74, carniv_swing2 ]{ai_charge(10);};
 void() carniv_swing2 = [ 75, carniv_swing3 ]{ai_charge(5);};
 void() carniv_swing3 = [ 76, carniv_swing4 ]{ai_charge(4);};
-void() carniv_swing4 = [ 77, carniv_swing5 ]{ai_charge(9); sound(self, CHAN_WEAPON, "carnivean/swing.wav", 1, ATTN_NORM); ai_melee_carnivean(0);};
+void() carniv_swing4 = [ 77, carniv_swing5 ]{ai_charge(9); sound(self, CHAN_WEAPON, "q15/carnivean/swing.wav", 1, ATTN_NORM); ai_melee_carnivean(0);};
 void() carniv_swing5 = [ 78, carniv_swing6 ]{ai_charge(12); carniv_footsteps(1.0); ai_melee_carnivean(1);};
 void() carniv_swing6 = [ 79, carniv_swing7 ]{ai_charge(7); ai_melee_carnivean(0);};
 void() carniv_swing7 = [ 80, carniv_swing8 ]{ai_charge(6); ai_melee_carnivean(0);};	
@@ -294,7 +294,7 @@ void() carniv_fire8 = [ 73, carniv_run1 ]{self.nextthink = (time + 0.1); ai_face
 
 void() carniv_missile = {
 	if (random() <= 0.77) {
-		sound(self, CHAN_AUTO, "carnivean/scream.wav", 1, ATTN_NORM);
+		sound(self, CHAN_AUTO, "q15/carnivean/scream.wav", 1, ATTN_NORM);
 		carniv_fire1();
 	}
 };
@@ -334,15 +334,15 @@ void(entity inflictor, entity attacker, float damage) carniv_pain = {
 
 	r = random();
 	if (r < 0.33) {
-		sound(self, CHAN_VOICE, "carnivean/pain2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "q15/carnivean/pain2.wav", 1, ATTN_NORM);
 		carniv_pain1();
 		self.pain_finished = time + 1.2;
 	} else if (r < 0.66) {
-		sound(self, CHAN_VOICE, "carnivean/pain2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "q15/carnivean/pain2.wav", 1, ATTN_NORM);
 		carniv_painb1();
 		self.pain_finished = time + 1.2;
 	} else  {
-		sound(self, CHAN_VOICE, "carnivean/pain1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "q15/carnivean/pain1.wav", 1, ATTN_NORM);
 		carniv_painc1();
 		self.pain_finished = time + 1.7;
 	}
@@ -429,10 +429,10 @@ void() carniv_die = {
 	// regular death
 	if (!self.gibbed) {
 		if (random() < 0.5) {
-			sound(self, CHAN_VOICE, "carnivean/death1.wav", 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, "q15/carnivean/death1.wav", 1, ATTN_NORM);
 			carniv_die1();
 		} else {
-			sound(self, CHAN_VOICE, "carnivean/death2.wav", 1, ATTN_NORM);
+			sound(self, CHAN_VOICE, "q15/carnivean/death2.wav", 1, ATTN_NORM);
 			carniv_bdie1();
 		}
 	}
@@ -453,22 +453,22 @@ void() monster_carnivean = {
 	precache_model("progs/k_spike.mdl");
 	precache_sound("demon/fall_backwards.wav");
 	precache_sound("demon/dhit2.wav");
-	precache_sound("carnivean/rock_throw.wav");
-	precache_sound("carnivean/death1.wav");
-	precache_sound("carnivean/death2.wav");
-	precache_sound("carnivean/idle1.wav");
-	precache_sound("carnivean/idle2.wav");
-	precache_sound("carnivean/swing.wav");
-	precache_sound("carnivean/pain1.wav");
-	precache_sound("carnivean/pain2.wav");
-	precache_sound("carnivean/scream.wav");
-	precache_sound("carnivean/step1.wav");
-	precache_sound("carnivean/step2.wav");
+	precache_sound("q15/carnivean/rock_throw.wav");
+	precache_sound("q15/carnivean/death1.wav");
+	precache_sound("q15/carnivean/death2.wav");
+	precache_sound("q15/carnivean/idle1.wav");
+	precache_sound("q15/carnivean/idle2.wav");
+	precache_sound("q15/carnivean/swing.wav");
+	precache_sound("q15/carnivean/pain1.wav");
+	precache_sound("q15/carnivean/pain2.wav");
+	precache_sound("q15/carnivean/scream.wav");
+	precache_sound("q15/carnivean/step1.wav");
+	precache_sound("q15/carnivean/step2.wav");
 	precache_sound("player/inflame.wav");
 	precache_sound("zombie/corpse_fire.wav");
 	precache_sound("ambience/coaled_monster_explode.wav");
 
-	self.sight_sound = "carnivean/scream.wav";
+	self.sight_sound = "q15/carnivean/scream.wav";
 	self.solid = SOLID_NOT;					// No interaction with world
 	self.movetype = MOVETYPE_NONE;			// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;

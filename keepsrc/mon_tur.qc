@@ -248,9 +248,9 @@ void() monster_tur = {
 
 	precache_model("progs/oum/aagba.mdl");
 	precache_model("progs/oum/aagtb.mdl");
-	precache_model2("progs/laser.mdl");
-	precache_sound2("drake/drone/enfire.wav");
-	precache_sound2("enforcer/enfstop.wav");
+	precache_model("progs/laser.mdl");
+	precache_sound("drake/drone/enfire.wav");
+	precache_sound(SOUND_LASER_HIT);
 	precache_sound("weapons/spike2.wav");
 	precache_sound("drake/tur_arm.wav");
 	

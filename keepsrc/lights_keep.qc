@@ -19,7 +19,7 @@ void () light_lantern2 = {
 	// Allow for custom models
 	if (self.mdl == "") self.mdl = "progs/ad171/misc_lantern.mdl";
 	precache_model(self.mdl);
-	if (self.noise == "") self.noise = "ad171/ambience/fire1.wav";
+	if (self.noise == "") self.noise = "ambience/fire1.wav";
 	precache_sound (self.noise);
 	if (!self.waitmin) self.waitmin = 2.165;
 

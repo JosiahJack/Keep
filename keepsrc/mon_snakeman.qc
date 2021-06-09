@@ -15,7 +15,7 @@ void() snake_stand11 = [11, snake_stand12] { ai_stand(); };
 void() snake_stand12 = [10, snake_stand] { ai_stand(); };
 
 void() snake_walk1 = [0, snake_walk2] {
-	if (random() < 0.2) sound(self, CHAN_VOICE, "snakeman/idle.wav", 1, ATTN_IDLE);
+	if (random() < 0.2) sound(self, CHAN_VOICE, "hipnotic/scourge/idle.wav", 1, ATTN_IDLE);
 	ai_walk(FL_SWIM);
 };
 void() snake_walk2 = [1, snake_walk3] { ai_walk(MOVETYPE_WALK); };
@@ -34,17 +34,15 @@ void() snake_walk14 = [13, snake_walk15] { ai_walk(FL_SWIM); };
 void() snake_walk15 = [14, snake_walk16] { ai_walk(1); };
 void() snake_walk16 = [15, snake_walk1] { ai_walk(1); };
 
-void() snake_run1 = [0, snake_run2]
-{	
+void() snake_run1 = [0, snake_run2] {
 	if (self.health < 0) return;
 	if (self.wait2) {
-		sound(self, CHAN_VOICE, "snakeman/sight.wav", 1, ATTN_IDLE);
+		sound(self, CHAN_VOICE, "hipnotic/scourge/sight.wav", 1, ATTN_IDLE);
 		self.wait2 = FALSE;
 	} else {
-		if (random() < 0.2) sound(self, CHAN_VOICE, "snakeman/idle.wav", 1, ATTN_IDLE);
+		if (random() < 0.2) sound(self, CHAN_VOICE, "hipnotic/scourge/idle.wav", 1, ATTN_IDLE);
 	}
 	self.attack_state = AS_SLIDING;
-
 	ai_run(FL_CLIENT);
 };
 
@@ -85,7 +83,7 @@ void() snake_run8 = [14, snake_run1]
 };
 
 void() snake_attack1 = [16, snake_attack6] {
-	sound(self, CHAN_VOICE, "snakeman/idle.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "hipnotic/scourge/idle.wav", 1, ATTN_NORM);
 	ai_face();
 };
 
@@ -218,7 +216,7 @@ void() snake_die = {
 		self.avelocity_y = -200 + 400 * random();
 		self.avelocity_z = 0;
 		self.flags = self.flags - (self.flags & FL_ONGROUND);
-		sound(self, CHAN_VOICE, "snakeman/pain2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "hipnotic/scourge/pain2.wav", 1, ATTN_NORM);
 		if (random() > 0.5) {
 			snake_death1();
 		} else {
@@ -249,21 +247,19 @@ void() monster_snakeman = {
 
 	self.mdl = "progs/snakeman.mdl";
 	self.headmdl = "progs/uzi.mdl";
-	precache_model2("progs/snakeman.mdl");
-	precache_model2("progs/k_spike.mdl");
-	precache_model2("progs/uzi.mdl");
+	precache_model("progs/snakeman.mdl");
+	precache_model("progs/k_spike.mdl");
+	precache_model("progs/uzi.mdl");
 	self.gib1mdl = "progs/gib1.mdl";
 	precache_model("progs/gib1.mdl");
 	self.gib2mdl = "progs/gib2.mdl";
 	precache_model("progs/gib2.mdl");
 	self.gib3mdl = "progs/gib3.mdl";
 	precache_model("progs/gib3.mdl");
-	precache_sound2("snakeman/idle.wav");
-	precache_sound2("snakeman/sight.wav");
-	precache_sound2("snakeman/pain2.wav");
-	precache_sound2("snakeman/idle.wav");
-	precache_sound2("ogre/ogpain1.wav");
-	precache_sound2("snakeman/pain2.wav");
+	precache_sound("hipnotic/scourge/idle.wav");
+	precache_sound("hipnotic/scourge/sight.wav");
+	precache_sound("hipnotic/scourge/pain2.wav");
+	precache_sound("ogre/ogpain1.wav");
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;

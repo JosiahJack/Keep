@@ -347,14 +347,12 @@ void(vector leftofs, vector rightofs) seek_attack = {
 				if (skill > SKILL_NORMAL) {
 					sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
 					launch_plasma(org, dir, CT_PROJ_PLASMA, self.attack_speed);
-				}
-				else {
+				} else {
 					sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);	
 					launch_projectile(org, dir, CT_PROJ_LASER, self.attack_speed);
 				}
-			}
-			else {
-				sound (self, CHAN_WEAPON, "ad171/seeker/rocket_fire.wav", 1, ATTN_NORM);	
+			} else {
+				sound (self, CHAN_WEAPON, "quoth/soldier/rocket.wav", 1, ATTN_NORM);	
 				Launch_Missile (org, dir, '0 0 0', CT_PROJ_SEEKER, self.attack_speed);
 			}
 		}
@@ -372,23 +370,19 @@ void(vector leftofs, vector rightofs) seek_attack = {
 				if (skill > SKILL_NORMAL) {
 					sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
 					launch_plasma(org, dir, CT_PROJ_PLASMA, self.attack_speed);
-				}
-				else {
+				} else {
 					sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);	
 					launch_projectile(org, dir, CT_PROJ_LASER, self.attack_speed);
 				}
-			}
-			else {
-				sound (self, CHAN_WEAPON, "ad171/seeker/rocket_fire.wav", 1, ATTN_NORM);	
+			} else {
+				sound (self, CHAN_WEAPON, "quoth/soldier/rocket.wav", 1, ATTN_NORM);	
 				Launch_Missile (org, dir, '0 0 0', CT_PROJ_SEEKER, self.attack_speed);
 			}
 		}
 	}
 };
 
-//----------------------------------------------------------------------
-void() seek_fireframe =
-{
+void() seek_fireframe = {
 	// If dead, no more updates
 	if (self.health < 1) return;
 
@@ -411,9 +405,8 @@ void() seek_fireframe =
 			// Lasers at close range ONLY
 			else sound (self, CHAN_VOICE, "ad171/seeker/range_laser.wav", 1, ATTN_NORM);
 			self.weaponstate = TRUE;
-		}
-		else {
-			sound (self, CHAN_VOICE, "ad171/seeker/range_rocket.wav", 1, ATTN_NORM);
+		} else {
+			sound (self, CHAN_VOICE, "quoth/soldier/load.wav", 1, ATTN_NORM);
 			self.weaponstate = FALSE;
 		}
 	}
@@ -429,14 +422,10 @@ void() seek_fireframe =
 	else self.think = seek_fireframe;
 };
 
-//----------------------------------------------------------------------
 void() seek_fire = { self.walkframe = 0; seek_fireframe(); };
 
-//============================================================================
 // This robot does not feel pain, just exploding debris
-//============================================================================
-void() seek_arm_explode =
-{
+void() seek_arm_explode = {
 	particle_dust(self.pos2, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
 	SpawnExplosion(EXPLODE_BIG, self.pos2, "ad171/seeker/explode_major.wav");
 	SpawnProjectileSmoke(self.pos2, 150, 50, 150);
@@ -576,7 +565,7 @@ void() seek_dieframe =
 		SpawnProjectileSmoke(self.pos1, 200, 250, 100);
 		SpawnProjectileSmoke(self.pos1, 200, 250, 100);
 		if (random() < 0.5)
-			SpawnExplosion(EXPLODE_MED, self.pos1, "ad171/seeker/explode_minor.wav");
+			SpawnExplosion(EXPLODE_MED, self.pos1, "quoth/bob/s_explode.wav");
 	}
 };
 
@@ -698,20 +687,20 @@ void() monster_seeker = {
 	precache_sound (self.pain_sound2);
 
 	precache_sound ("ad171/seeker/death1.wav");
-	precache_sound ("ad171/seeker/explode_minor.wav");
+	precache_sound ("quoth/bob/s_explode.wav");
 	precache_sound ("ad171/seeker/explode_major.wav");
 	// Power off sound for shield setup
 	precache_sound ("ad171/ambience/power_off.wav");
 	
 	// Range attack 1 - rockets
-	precache_sound("ad171/seeker/range_rocket.wav");
-	precache_sound("ad171/seeker/rocket_fire.wav");
-	precache_sound("ad171/seeker/rocket_hit.wav");
+	precache_sound("quoth/soldier/load.wav");
+	precache_sound("quoth/soldier/rocket.wav");
+	precache_sound("ad171/soldier/rocket_hit.wav");
 	// Range attack 2 - lasers
 	precache_model (MODEL_PROJ_LASER);
 	precache_sound("ad171/seeker/range_laser.wav");
-	precache_sound ("enforcer/enfire.wav");
-	precache_sound ("enforcer/enfstop.wav");
+	precache_sound (SOUND_LASER_FIRE);
+	precache_sound (SOUND_LASER_HIT);
 	// Range attack 3 - plasma
 	precache_model (MODEL_PROJ_PLASMA);
 	precache_sound ("ad171/seeker/range_plasma.wav");

@@ -3,7 +3,7 @@ void() DLaser_Touch = {
 	if (other == self.owner) return;
 
 	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
-	sound(self, CHAN_WEAPON, "enforcer/enfstop.wav", 1, ATTN_STATIC);
+	sound(self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
 	org = self.origin - FL_CLIENT * normalize(self.velocity);
 	if (other.health) {
 		SpawnBlood(other,org, self.velocity * 0.2, 15);
@@ -334,7 +334,7 @@ void() drn_die1 = [32, drn_die2] {
 
 	// Spawn dust and sprite explosion
 	particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
-	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/jim/explode_minor.wav");
+	SpawnExplosion(EXPLODE_BIG, self.origin, "quoth/bob/s_explode.wav");
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 };
 void() drn_die2 = [28, drn_die3] {};
@@ -349,7 +349,7 @@ void() drn_die7 = [0, drn_die7] {
 	particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
-	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/jim/explode_major.wav");
+	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/seeker/explode_major.wav");
 	T_RadiusDamage(self, self, 80, world, DAMAGEALL);
 
 	monster_check_gib();
@@ -382,24 +382,21 @@ void() monster_drone =  {
 
 	self.idle_sound = "drake/drone/drnidle2.wav";
 	self.idle_sound2 = "drake/drone/drnidle.wav";
-	precache_sound2("drake/drone/drnidle2.wav");
-	precache_sound2("drake/drone/drnidle.wav");
-
+	precache_sound("drake/drone/drnidle2.wav");
+	precache_sound("drake/drone/drnidle.wav");
 	self.sight_sound = "drake/drone/drnwake.wav";
-	precache_sound2("drake/drone/drnwake.wav");
-	precache_sound2("drake/drone/drnhunt.wav");
-	precache_sound2("drake/drone/enfire.wav");
-	precache_sound2("drake/drone/drnpain.wav");
-	precache_sound2("drake/drone/drnpain2.wav");
-	
-	precache_sound2("ad171/jim/explode_minor.wav");
-	precache_sound2("ad171/jim/explode_major.wav");
-	precache_sound2("drake/drone/drngasp.wav");
-	precache_sound2("drake/drone/drngasp2.wav");
-	precache_sound2("drake/drone/drndeth.wav");
+	precache_sound("drake/drone/drnwake.wav");
+	precache_sound("drake/drone/drnhunt.wav");
+	precache_sound("drake/drone/enfire.wav");
+	precache_sound("drake/drone/drnpain.wav");
+	precache_sound("drake/drone/drnpain2.wav");
+	precache_sound("quoth/bob/s_explode.wav");
+	precache_sound("ad171/seeker/explode_major.wav");
+	precache_sound("drake/drone/drngasp.wav");
+	precache_sound("drake/drone/drngasp2.wav");
+	precache_sound("drake/drone/drndeth.wav");
 	self.death_sound = "drake/drone/drndeth.wav";
-
-	precache_sound2("enforcer/enfstop.wav");
+	precache_sound(SOUND_LASER_HIT);
 
 	if (self.health < 1) self.health = 100;
 

@@ -138,9 +138,9 @@ string GIBHIT5_SOUND = "ad171/gibs/gibhit5.wav";
 string GIBHIT1_STONESOUND = "ad171/gibs/gibstone1.wav";
 string GIBHIT3_STONESOUND = "ad171/gibs/gibstone3.wav";
 string GIBHIT5_STONESOUND = "ad171/gibs/gibstone5.wav";
-string GIBHIT1_METALSOUND = "ad171/gibs/gibmetal1.wav";
-string GIBHIT3_METALSOUND = "ad171/gibs/gibmetal3.wav";
-string GIBHIT5_METALSOUND = "ad171/gibs/gibmetal5.wav";
+string GIBHIT1_METALSOUND = "quoth/impact/metal_i1.wav";
+string GIBHIT3_METALSOUND = "quoth/impact/metal_i2.wav";
+string GIBHIT5_METALSOUND = "quoth/impact/metal_i3.wav";
 float GIB_FADETIME = 10;
 
 float(entity e, float heal, float ignore) T_Repair;

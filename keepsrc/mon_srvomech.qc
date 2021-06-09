@@ -165,7 +165,7 @@ void() servo_walk4 =[ 4, servo_walk5]
 void() servo_walk5 =[ 5, servo_walk6]
 {ai_walk(3);self.pos1 = '0 0 8.2'; servo_bodthink();};
 void() servo_walk6 =[ 6, servo_walk7]
-{FootFall("mech/mechstep.wav", 0.3, 1, 0.8);ai_walk(2);self.pos1 = '0 0 5.4'; servo_bodthink();};
+{FootFall("custents/mech/mechstep.wav", 0.3, 1, 0.8);ai_walk(2);self.pos1 = '0 0 5.4'; servo_bodthink();};
 void() servo_walk7 =[ 7, servo_walk8]
 {ai_walk(3);self.pos1 = '0 0 9.6'; servo_bodthink();};
 void() servo_walk8 =[ 8, servo_walk9]
@@ -183,7 +183,7 @@ void() servo_walk13 =[ 13, servo_walk14]
 void() servo_walk14 =[ 14, servo_walk15]
 {ai_walk(3);self.pos1 = '0 0 8.3'; servo_bodthink();};
 void() servo_walk15 =[ 15, servo_walk16]
-{FootFall("mech/mechstep.wav", 0.3, 1, 0.8);ai_walk(2);self.pos1 = '0 0 5.8'; servo_bodthink();};
+{FootFall("custents/mech/mechstep.wav", 0.3, 1, 0.8);ai_walk(2);self.pos1 = '0 0 5.8'; servo_bodthink();};
 void() servo_walk16 =[ 16, servo_walk17]
 {ai_walk(3);self.pos1 = '0 0 9.6'; servo_bodthink();};
 void() servo_walk17 =[ 17, servo_walk18]
@@ -223,7 +223,7 @@ void() servo_run3 =[ 5, servo_run4]
 };
 void() servo_run4 =[ 7, servo_run5]
 {
-	FootFall("mech/mechstep.wav", 0.3, 1, 1);
+	FootFall("custents/mech/mechstep.wav", 0.3, 1, 1);
 	ai_run(5);
 	self.pos1 = '0 0 9.6';
 	servo_bodthink();
@@ -260,7 +260,7 @@ void() servo_run7 =[ 13, servo_run8]
 };
 void() servo_run8 =[ 15, servo_run9]
 {
-	FootFall("mech/mechstep.wav", 0.3, 1, 1);
+	FootFall("custents/mech/mechstep.wav", 0.3, 1, 1);
 	ai_run(5);
 	self.pos1 = '0 0 5.8';
 	servo_bodthink();
@@ -318,18 +318,18 @@ void() servo_die5 =[ 4, servo_die6] {};
 void() servo_die6 =[ 5, servo_die7] {};
 void() servo_die7 =[ 6, servo_die8] {};
 void() servo_die8 =[ 7, servo_die9]
-{sound (self, CHAN_VOICE, "mech/metal.wav", 1, ATTN_NORM);};
+{sound (self, CHAN_VOICE, "custents/mech/metal.wav", 1, ATTN_NORM);};
 void() servo_die9 =[ 8, servo_die10] {};
 void() servo_die10 =[ 9, servo_die11] {};
 void() servo_die11 =[ 10, servo_die12] {};
 void() servo_die12 =[ 11, servo_die13]
-{sound (self, CHAN_VOICE, "mech/metal.wav", 0.75, ATTN_NORM);};
+{sound (self, CHAN_VOICE, "custents/mech/metal.wav", 0.75, ATTN_NORM);};
 void() servo_die13 =[ 12, servo_die14] {};
 void() servo_die14 =[ 13, servo_die15]
-{sound (self, CHAN_VOICE, "mech/metal.wav", 0.5, ATTN_NORM);};
+{sound (self, CHAN_VOICE, "custents/mech/metal.wav", 0.5, ATTN_NORM);};
 void() servo_die15 =[ 14, servo_die16] {};
 void() servo_die16 =[ 15, servo_die17]
-{sound (self, CHAN_VOICE, "mech/metal.wav", 0.25, ATTN_NORM);};
+{sound (self, CHAN_VOICE, "custents/mech/metal.wav", 0.25, ATTN_NORM);};
 void() servo_die17 =[ 15, servo_die17] {};
 
 void() servo_gibbed1 =[ 16, servo_gibbed2] {self.nextthink = time + 1;};
@@ -361,7 +361,7 @@ void() servo_gibbed6 =[ 21, servo_gibbed7]
 void() servo_gibbed7 =[ 22, servo_gibbed8] {};
 void() servo_gibbed8 =[ 23, servo_gibbed9] {};
 void() servo_gibbed9 =[ 24, servo_gibbed10]
-{sound (self, CHAN_VOICE, "mech/metal.wav", 0.75, ATTN_NORM);};
+{sound (self, CHAN_VOICE, "custents/mech/metal.wav", 0.75, ATTN_NORM);};
 void() servo_gibbed10 =[ 25, servo_gibbed11] {};
 void() servo_gibbed11 =[ 26, servo_gibbed12] {};
 void() servo_gibbed12 =[ 27, servo_gibbed13] {};
@@ -372,18 +372,18 @@ void() servo_gibbed16 =[ 31, servo_gibbed17] {};
 void() servo_gibbed17 =[ 32, servo_gibbed18] {};
 void() servo_gibbed18 =[ 33, servo_gibbed19] {};
 void() servo_gibbed19 =[ 34, servo_gibbed20]
-{sound (self, CHAN_VOICE, "mech/metal.wav", 0.5, ATTN_NORM);};
+{sound (self, CHAN_VOICE, "custents/mech/metal.wav", 0.5, ATTN_NORM);};
 void() servo_gibbed20 =[ 35, servo_gibbed21] {};
 void() servo_gibbed21 =[ 36, servo_gibbed22] {};
 void() servo_gibbed22 =[ 37, servo_gibbed23] {};
 void() servo_gibbed23 =[ 38, servo_gibbed24]
-{sound (self, CHAN_VOICE, "mech/metal.wav", 0.25, ATTN_NORM);};
+{sound (self, CHAN_VOICE, "custents/mech/metal.wav", 0.25, ATTN_NORM);};
 void() servo_gibbed24 =[ 38, servo_gibbed24] {};
 
 void() servo_die =
 {
 	self.solid = SOLID_NOT;
-	sound (self, CHAN_VOICE, "mech/pow_dn.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "custents/mech/pow_dn.wav", 1, ATTN_NORM);
 	remove(self.aiment);
 	setmodel(self, "progs/custents/servodie.mdl");
 
@@ -453,10 +453,10 @@ void() monster_servomech =
 	precache_model ("progs/custents/servodie.mdl");
 	precache_model ("progs/custents/h_servo.mdl");
 
-	precache_sound ("mech/mechstep.wav");
-	precache_sound ("mech/pow_up.wav");
-	precache_sound ("mech/pow_dn.wav");
-	precache_sound ("mech/metal.wav");
+	precache_sound ("custents/mech/mechstep.wav");
+	precache_sound ("custents/mech/pow_up.wav");
+	precache_sound ("custents/mech/pow_dn.wav");
+	precache_sound ("custents/mech/metal.wav");
 	precache_sound ("drake/misc/shortexp.wav");
 	precache_sound ("enforcer/enfire.wav");
 
@@ -535,7 +535,7 @@ void(entity targent) cservo_control_on=
 	targent.camofs = '0 160 40';
 	sprint(targent, "Press F7 to Toggle the Apoc Cam\n");
 
-	sound (self, CHAN_VOICE, "mech/pow_up.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "custents/mech/pow_up.wav", 1, ATTN_NORM);
 };
 
 void(entity targent) cservo_control_off= {
@@ -730,7 +730,7 @@ void() cservo_run2 =[ 3, cservo_run3]
 void() cservo_run3 =[ 5, cservo_run4]
 {walkmove(self.ideal_yaw, 6);self.pos1 = '0 0 8.2';cservo_bodthink();cservo_think();};
 void() cservo_run4 =[ 7, cservo_run5]
-{FootFall("mech/mechstep.wav", 0.3, 1, 1);walkmove(self.ideal_yaw, 5);self.pos1 = '0 0 9.6';cservo_bodthink();cservo_think();};
+{FootFall("custents/mech/mechstep.wav", 0.3, 1, 1);walkmove(self.ideal_yaw, 5);self.pos1 = '0 0 9.6';cservo_bodthink();cservo_think();};
 void() cservo_run5 =[ 9, cservo_run6]
 {walkmove(self.ideal_yaw, 11);self.pos1 = '0 0 10.8';cservo_bodthink();cservo_think();};
 void() cservo_run6 =[ 11, cservo_run7]
@@ -738,7 +738,7 @@ void() cservo_run6 =[ 11, cservo_run7]
 void() cservo_run7 =[ 13, cservo_run8]
 {walkmove(self.ideal_yaw, 10);self.pos1 = '0 0 9.6';cservo_bodthink();cservo_think();};
 void() cservo_run8 =[ 15, cservo_run9]
-{FootFall("mech/mechstep.wav", 0.3, 1, 1);walkmove(self.ideal_yaw, 5);self.pos1 = '0 0 5.8';cservo_bodthink();cservo_think();};
+{FootFall("custents/mech/mechstep.wav", 0.3, 1, 1);walkmove(self.ideal_yaw, 5);self.pos1 = '0 0 5.8';cservo_bodthink();cservo_think();};
 void() cservo_run9 =[ 17, cservo_run1]
 {walkmove(self.ideal_yaw, 9);self.pos1 = '0 0 10.7';cservo_bodthink();cservo_think();};
 
@@ -753,7 +753,7 @@ void() cservo_walk4 =[ 4, cservo_walk5]
 void() cservo_walk5 =[ 5, cservo_walk6]
 {walkmove(self.ideal_yaw, 3);self.pos1 = '0 0 8.2'; cservo_bodthink();cservo_think();};
 void() cservo_walk6 =[ 6, cservo_walk7]
-{walkmove(self.ideal_yaw, 3);FootFall("mech/mechstep.wav", 0.3, 1, 0.8);self.pos1 = '0 0 5.4'; cservo_bodthink();cservo_think();};
+{walkmove(self.ideal_yaw, 3);FootFall("custents/mech/mechstep.wav", 0.3, 1, 0.8);self.pos1 = '0 0 5.4'; cservo_bodthink();cservo_think();};
 void() cservo_walk7 =[ 7, cservo_walk8]
 {walkmove(self.ideal_yaw, 6);self.pos1 = '0 0 9.6'; cservo_bodthink();cservo_think();};
 void() cservo_walk8 =[ 8, cservo_walk9]
@@ -771,7 +771,7 @@ void() cservo_walk13 =[ 13, cservo_walk14]
 void() cservo_walk14 =[ 14, cservo_walk15]
 {walkmove(self.ideal_yaw, 3);self.pos1 = '0 0 8.3'; cservo_bodthink();cservo_think();};
 void() cservo_walk15 =[ 15, cservo_walk16]
-{walkmove(self.ideal_yaw, 3);FootFall("mech/mechstep.wav", 0.3, 1, 0.8);self.pos1 = '0 0 5.8'; cservo_bodthink();cservo_think();};
+{walkmove(self.ideal_yaw, 3);FootFall("custents/mech/mechstep.wav", 0.3, 1, 0.8);self.pos1 = '0 0 5.8'; cservo_bodthink();cservo_think();};
 void() cservo_walk16 =[ 16, cservo_walk17]
 {walkmove(self.ideal_yaw, 3);self.pos1 = '0 0 9.6'; cservo_bodthink();cservo_think();};
 void() cservo_walk17 =[ 17, cservo_walk18]
@@ -790,7 +790,7 @@ void() cservo_back4 =[ 15, cservo_back5]
 void() cservo_back5 =[ 14, cservo_back6]
 {walkmove(self.ideal_yaw+180, 3);self.pos1 = '0 0 8.3'; cservo_bodthink();cservo_think();};
 void() cservo_back6 =[ 13, cservo_back7]
-{walkmove(self.ideal_yaw+180, 7);FootFall("mech/mechstep.wav", 0.3, 1, 0.8);self.pos1 = '0 0 9.6'; cservo_bodthink();cservo_think();};
+{walkmove(self.ideal_yaw+180, 7);FootFall("custents/mech/mechstep.wav", 0.3, 1, 0.8);self.pos1 = '0 0 9.6'; cservo_bodthink();cservo_think();};
 void() cservo_back7 =[ 12, cservo_back8]
 {walkmove(self.ideal_yaw+180, 7);self.pos1 = '0 0 11.3'; cservo_bodthink();cservo_think();};
 void() cservo_back8 =[ 11, cservo_back9]
@@ -808,7 +808,7 @@ void() cservo_back13 =[ 6, cservo_back14]
 void() cservo_back14 =[ 5, cservo_back15]
 {walkmove(self.ideal_yaw+180, 3);self.pos1 = '0 0 8.2'; cservo_bodthink();cservo_think();};
 void() cservo_back15 =[ 4, cservo_back16]
-{walkmove(self.ideal_yaw+180, 3);FootFall("mech/mechstep.wav", 0.3, 1, 0.8);self.pos1 = '0 0 9.5'; cservo_bodthink();cservo_think();};
+{walkmove(self.ideal_yaw+180, 3);FootFall("custents/mech/mechstep.wav", 0.3, 1, 0.8);self.pos1 = '0 0 9.5'; cservo_bodthink();cservo_think();};
 void() cservo_back16 =[ 3, cservo_back17]
 {walkmove(self.ideal_yaw+180, 7);self.pos1 = '0 0 11.3'; cservo_bodthink();cservo_think();};
 void() cservo_back17 =[ 2, cservo_back18]
@@ -827,7 +827,7 @@ void() cservo_turn4 =[ 4, cservo_turn5]
 void() cservo_turn5 =[ 5, cservo_turn6]
 {self.pos1 = '0 0 8.2'; cservo_bodthink();cservo_think();};
 void() cservo_turn6 =[ 6, cservo_turn7]
-{FootFall("mech/mechstep.wav", 0.3, 1, 0.8);self.pos1 = '0 0 5.4'; cservo_bodthink();cservo_think();};
+{FootFall("custents/mech/mechstep.wav", 0.3, 1, 0.8);self.pos1 = '0 0 5.4'; cservo_bodthink();cservo_think();};
 void() cservo_turn7 =[ 7, cservo_turn8]
 {self.pos1 = '0 0 9.6'; cservo_bodthink();cservo_think();};
 void() cservo_turn8 =[ 8, cservo_turn9]
@@ -845,7 +845,7 @@ void() cservo_turn13 =[ 13, cservo_turn14]
 void() cservo_turn14 =[ 14, cservo_turn15]
 {self.pos1 = '0 0 8.3'; cservo_bodthink();cservo_think();};
 void() cservo_turn15 =[ 15, cservo_turn16]
-{FootFall("mech/mechstep.wav", 0.3, 1, 0.8);self.pos1 = '0 0 5.8'; cservo_bodthink();cservo_think();};
+{FootFall("custents/mech/mechstep.wav", 0.3, 1, 0.8);self.pos1 = '0 0 5.8'; cservo_bodthink();cservo_think();};
 void() cservo_turn16 =[ 16, cservo_turn17]
 {self.pos1 = '0 0 9.6'; cservo_bodthink();cservo_think();};
 void() cservo_turn17 =[ 17, cservo_turn18]
@@ -1099,10 +1099,10 @@ void() func_servomech=
 	precache_model ("progs/custents/frame.mdl");
 	precache_model ("progs/null.spr"); // formerly s_null.spr
 
-	precache_sound ("mech/mechstep.wav");
-	precache_sound ("mech/pow_up.wav");
-	precache_sound ("mech/pow_dn.wav");
-	precache_sound ("mech/metal.wav");
+	precache_sound ("custents/mech/mechstep.wav");
+	precache_sound ("custents/mech/pow_up.wav");
+	precache_sound ("custents/mech/pow_dn.wav");
+	precache_sound ("custents/mech/metal.wav");
 	precache_sound ("drake/misc/shortexp.wav");
 	precache_sound ("enforcer/enfire.wav");
 

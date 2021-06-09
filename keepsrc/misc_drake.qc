@@ -345,11 +345,11 @@ void() misc_tree = {
         self.th_pain = tree_pain;
         self.th_die  = tree_die;
         self.takedamage = DAMAGE_YES;   // PM:  Don't use damage_aim.
-		self.gib1mdl = "progs/drake/rubble1.mdl";
+		self.gib1mdl = "progs/custents/rubble1.mdl";
         precache_model (self.gib1mdl);
-		self.gib2mdl = "progs/drake/rubble2.mdl";
+		self.gib2mdl = "progs/custents/rubble2.mdl";
         precache_model (self.gib2mdl);
-		self.gib3mdl = "progs/drake/rubble3.mdl";
+		self.gib3mdl = "progs/custents/rubble3.mdl";
         precache_model (self.gib3mdl);
 		self.headmdl = "progs/drake/rubble4.mdl";
         precache_model (self.headmdl);

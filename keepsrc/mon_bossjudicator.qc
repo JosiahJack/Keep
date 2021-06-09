@@ -456,9 +456,7 @@ void() judge_walkframe =
 	else ai_walk(JUSTICESPD_WALK);
 };
 
-//----------------------------------------------------------------------
-void() judge_runframe =
-{
+void() judge_runframe = {
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -488,19 +486,14 @@ void() judge_runframe =
 	if (self.classtype == CT_MONJUSTICE) {
 		if (self.health < (self.max_health*0.5)) ai_run(28);
 		else ai_run(24);
-	}
-	else {
+	} else {
 		// Check the BOSS tether system
 		if (judge_CheckTether()) ai_run(0);
 		else ai_run(24);
 	}
 };
 
-//======================================================================
-// MELEE ATTACKS
-//======================================================================
-void() judge_fistframe =
-{
+void() judge_fistframe = {
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -510,33 +503,21 @@ void() judge_fistframe =
 	// Check for summoning condition?
 	if (judge_WaveCheck() == TRUE) {self.th_summon(); return;}
 
-	// Keep looping
 	self.nextthink = time + 0.1;
-	self.think = judge_fistframe;
-
-	// Keep turning towards enemy
-	if (self.walkframe >= 0  && self.walkframe <= 7) ai_face();
-	// Update frame before so weapon glow can sync
-	self.frame = $fist1 + self.walkframe;
+	self.think = judge_fistframe; // Keep looping
+	if (self.walkframe >= 0  && self.walkframe <= 7) ai_face(); // Keep turning towards enemy
+	self.frame = $fist1 + self.walkframe; // Update frame before so weapon glow can sync
 
 	// Do specific stuff on certain animation frames
 	if (self.walkframe == 0) {
-		// Warn the player of impact
-		sound (self, CHAN_WEAPON, "judge/smash_roar.wav", 1, ATTN_NORM);
-	}
-	// Sneaky distance check before floor smash (must have enemy as well)
-	else if (self.walkframe == 6 && self.enemy) {
-		// Check if player outside of slam attack range
-		self.enemydist = range_distance(self.enemy, FALSE);
-		// Cancel melee attack (fist smash ground)
-		if (self.enemydist > MONAI_MELEEJUDGE) 
-			self.attack_sidestep = TRUE;
-	}
-	// Time for fist meets ground?
-	else if (self.walkframe == 7) {
+		sound (self, CHAN_WEAPON, "ad181/judge/smash_roar.wav", 1, ATTN_NORM); // Warn the player of impact
+	} else if (self.walkframe == 6 && self.enemy) { // Sneaky distance check before floor smash (must have enemy as well)
+		self.enemydist = range_distance(self.enemy, FALSE); // Check if player outside of slam attack range
+		if (self.enemydist > MONAI_MELEEJUDGE) self.attack_sidestep = TRUE; // Cancel melee attack (fist smash ground)
+	} else if (self.walkframe == 7) { // Time for fist meets ground?
 		// Move toward enemy
 		ai_chargenoturn(4); 
-		self.meleehitsound = "judge/smash_ground.wav";
+		self.meleehitsound = "ad181/judge/smash_ground.wav";
 		// Pre-defined variables in defscustom.qc
 		ai_shockwave(MONAI_JUDGEIMPACT, MONAI_JUDGESMASHDMG, MONAI_JUDGERADIUS, MONAI_JUDGEFORWARD, MONAI_JUDGEUP);
 	}
@@ -548,8 +529,7 @@ void() judge_fistframe =
 		self.walkframe = 0;
 		if (random() < 0.7) self.th_jump();
 		else self.th_missile();
-	}
-	else {
+	} else {
 		// Update frame and move forward
 		self.walkframe = self.walkframe + 1;
 		// Finished animation set? (1-12)
@@ -557,9 +537,7 @@ void() judge_fistframe =
 	}
 };
 
-//----------------------------------------------------------------------
-void() judge_chargeframe =
-{
+void() judge_chargeframe = {
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -626,9 +604,7 @@ void() judge_swingframe =
 	if (self.walkframe == 2 || self.walkframe == 7) SwordSwipeSound();
 	// sword meets flesh! or air ...
 	else if (self.walkframe == 3 || self.walkframe == 8) {
-		if (self.classtype == CT_MONJUDGE)
-			self.meleehitsound = "judge/smash_hit.wav";
-		else self.meleehitsound = "justice/smash_hit.wav";
+		self.meleehitsound = "ad171/gibs/gibheavy.wav";
 		self.meleecontact = TRUE;
 		ai_meleesmash(MONAI_JUDGESWINGDMG);
 	}
@@ -640,9 +616,7 @@ void() judge_swingframe =
 	if (self.walkframe > 11) self.th_run();
 };
 
-//----------------------------------------------------------------------
-void() judge_smashframe =
-{
+void() judge_smashframe = {
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -671,9 +645,7 @@ void() judge_smashframe =
 	if (self.walkframe == 3) SwordSwipeSound();
 	// sword meets flesh! or ground ...
 	else if (self.walkframe == 5) {
-		if (self.classtype == CT_MONJUDGE)
-			self.meleehitsound = "judge/smash_hitheavy.wav";
-		else self.meleehitsound = "justice/smash_hitheavy.wav";
+		self.meleehitsound = "ad171/gibs/gibheavy2.wav";
 		self.meleecontact = TRUE;
 		ai_meleesmash(MONAI_JUDGESMASHDMG);
 	}
@@ -696,7 +668,7 @@ void(float offset) judge_firemagicA =
 	if (self.health < 1) return;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "justice/magic_fire.wav", 1, ATTN_NORM);	
+	sound (self, CHAN_WEAPON, "ad181/justice/magic_fire.wav", 1, ATTN_NORM);	
 
 	// check for enemy origin (based on sight test)
 	// if cannot see enemy fire at last known location
@@ -729,7 +701,7 @@ void() judge_magicAframe =
 	// Do specific stuff on certain animation frames
 	if (self.walkframe == 0) {
 		// Warn the player of firing magic spikes
-		sound (self, CHAN_WEAPON, "justice/magic_attack.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad181/justice/magic_attack.wav", 1, ATTN_NORM);
 		self.frame = $magicA1;
 		// Glow ball of magic infront of sword
 		justice_setup_attachment();
@@ -788,12 +760,12 @@ void(float fire_explode) judge_fireflamewall =
 		if (random() < 0.5) expl_type = EXPLODE_MED;
 		else expl_type = EXPLODE_BIG;
 
-		SpawnExplosion(expl_type, eorg, "justice/flame_explode.wav");
+		SpawnExplosion(expl_type, eorg, "ad171/wraith/attack1_explode.wav");
 	}
 	// SMALL EFFECTS
 	else {
 		// Quiet sfx + dust/smoke
-		sound (self, CHAN_WEAPON, "justice/flame_fire.wav", 1, ATTN_NORM);	
+		sound (self, CHAN_WEAPON, "ad181/justice/flame_fire.wav", 1, ATTN_NORM);	
 		if (random() > 0.5) SpawnProjectileSmoke(eorg, 200, 50, 250);
 	}
 
@@ -837,7 +809,7 @@ void() judge_flamewall = {
 	if (self.walkframe == 0) {
 		// Reset rage counter
 		self.attack_rage = 1;
-		sound (self, CHAN_WEAPON, "justice/flame_attack.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
 	}
 	// BUILD up of attack ----------------------------------------
 	// STRIKE into ground ----------------------------------------
@@ -907,7 +879,7 @@ void(float offset) judge_firemagicB =
 	if (self.health < 1) return;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "judge/magic_fire.wav", 1, ATTN_NORM);	
+	sound (self, CHAN_WEAPON, "ad181/justice/magic_fire.wav", 1, ATTN_NORM);	
 
 	// Maximum speed, initial speed set in Launch_Missile
 	self.attack_speed = SPEED_JUDGEMISSILE + (skill * SPEED_JUDGESKILL);
@@ -971,7 +943,7 @@ void() judge_magicBframe =
 	// Do specific stuff on certain animation frames
 	if (self.walkframe == 0) {
 		// Warn the player of firing magic
-		sound (self, CHAN_WEAPON, "judge/magic_attack.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad181/justice/magic_attack.wav", 1, ATTN_NORM);
 		self.attack_track = self.enemy.origin;
 	}
 	// Swinging arm backward
@@ -1033,11 +1005,8 @@ void() judge_flameline =
 	// Do specific stuff on certain animation frames
 	// Check for last frame (exit) first!
 	if (self.walkframe == 0) { 
-
-		sound (self, CHAN_WEAPON, "judge/flame_attack.wav", 1, ATTN_NORM);
-	}
-
-	else if (self.walkframe == 6) {
+		sound (self, CHAN_WEAPON, "ad171/wraith/attack1.wav", 1, ATTN_NORM);
+	} else if (self.walkframe == 6) {
 		judge_fireflameline();
 	}
 	else if (self.walkframe > 11) {
@@ -1100,21 +1069,17 @@ void() judge_JumpTouch =
 	else self.th_jumpexit();
 };
 
-//----------------------------------------------------------------------
 void() judge_jump1 = [ $jump1, judge_jump2 ] {ai_face();};
 void() judge_jump2 = [ $jump2, judge_jump3 ] {
 	ai_face();
 	// Same for Judge and Justice
 	self.touch = judge_JumpTouch;
-
-	if (self.classtype == CT_MONJUDGE) {
+	sound (self, CHAN_WEAPON, "ad181/justice/leap1.wav", 1, ATTN_NORM);
+	if (self.classtype == CT_MONJUDGE)
 		self.jump_flag = time + MONAI_JUMPJUDGETIME;
-		sound (self, CHAN_WEAPON, "judge/leap1.wav", 1, ATTN_NORM);
-	}
-	else {
+	else
 		self.jump_flag = time + MONAI_JUMPJUSTICETIME;
-		sound (self, CHAN_WEAPON, "justice/leap1.wav", 1, ATTN_NORM);
-	}
+
 	makevectors (self.angles);
 	self.velocity = (v_forward*self.jumpdist_x) + ('0 0 1'*self.jumpdist_z);
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
@@ -1132,7 +1097,6 @@ void() judge_jump5 = [ $jump5, judge_jump5 ] {
 	self.oldorigin = self.origin;
 };
 
-//----------------------------------------------------------------------
 // Landed with a thud
 void()	judge_jump6 = [ $jump6, judge_jump7 ] {monster_footstep(FALSE);};
 void()	judge_jump7 = [ $jump7, judge_run ] {
@@ -1317,8 +1281,7 @@ void() judge_finishsword =
 				judge_swingframe();
 			// Fist smash ground (Boss ONLY)
 			else judge_fistframe();
-		}
-		else {
+		} else {
 			// Simple flat (2d) range check
 			self.enemydist = range_distance(self.enemy, TRUE);
 			// Overhead smash or charging (swing + run)
@@ -1348,16 +1311,9 @@ void() judge_movesword = {
 	if (self.walkframe == 2) {
 		// Allow for sound override
 		if (self.blendsfx == JUDGE_SFXDRAW) {
-			if (self.classtype == CT_MONJUDGE)
-				self.customsound = "judge/sword_draw.wav";
-			else self.customsound = "justice/sword_draw.wav";
-			sound (self, CHAN_WEAPON, self.customsound, 1, ATTN_NORM);
-		}
-		else if (self.blendsfx == JUDGE_SFXSHEATH) {
-			if (self.classtype == CT_MONJUDGE)
-				self.customsound = "judge/sword_sheath.wav";
-			else self.customsound = "justice/sword_sheath.wav";
-			sound (self, CHAN_WEAPON, self.customsound, 1, ATTN_NORM);
+			sound (self, CHAN_WEAPON, "ad181/justice/sword_draw.wav", 1, ATTN_NORM);
+		} else if (self.blendsfx == JUDGE_SFXSHEATH) {
+			sound (self, CHAN_WEAPON, "ad181/justice/sword_sheath.wav", 1, ATTN_NORM);
 		}
 		else if (self.blendsfx == JUDGE_SFXSWOOSH) SwordSwipeSound();
 	}
@@ -1370,9 +1326,7 @@ void() judge_movesword = {
 	if (self.walkframe > 4) judge_finishsword();
 };
 
-//----------------------------------------------------------------------
-void(float finalstate, float soundtype) judge_checksword =
-{
+void(float finalstate, float soundtype) judge_checksword = {
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -1562,8 +1516,8 @@ void() Setup_judgeMin =
 		
 		// Play some arching lightning sounds
 		if (random() < 0.5) {
-			if (random() < 0.5) sound (self.bossminchain, CHAN_BODY, "judge/elec_arch1.wav", 1, ATTN_NORM);
-			else sound (self.bossminchain, CHAN_BODY, "judge/elec_arch2.wav", 1, ATTN_NORM);
+			if (random() < 0.5) sound (self.bossminchain, CHAN_BODY, "ad171/eidolon/elec_arch1.wav", 1, ATTN_NORM);
+			else sound (self.bossminchain, CHAN_BODY, "ad171/eidolon/elec_arch2.wav", 1, ATTN_NORM);
 		}
 
 		// Next spawn point
@@ -1572,9 +1526,7 @@ void() Setup_judgeMin =
 	}
 };
 
-//----------------------------------------------------------------------
-void() judge_summonframe =
-{
+void() judge_summonframe = {
 	// Keep looping
 	self.nextthink = time + 0.1;
 	self.think = judge_summonframe;
@@ -1588,8 +1540,7 @@ void() judge_summonframe =
 	if (self.walkframe >= 0 && self.walkframe <= 3) {
 		self.frame = $summon1 + self.walkframe;
 		// Setup animation sound/loop counter
-		if (self.walkframe == 0)
-			sound (self, CHAN_WEAPON, "judge/summon.wav", 1, ATTN_NORM);
+		if (self.walkframe == 0) sound (self, CHAN_WEAPON, "ad181/justice/magic_attack.wav", 1, ATTN_NORM);
 	}
 	// MAIN loop -------------------------------------------
 	else if (self.walkframe >= 4 && self.walkframe <= 9) {
@@ -1955,15 +1906,13 @@ void() monster_judicator = {
 	precache_model (self.gib3mdl);
 	self.gib1sound = GIB_IMPACT_METALA;
 
-	self.idle_sound = "judge/idle1.wav";
+	self.idle_sound = "ad181/justice/idle1.wav";
 	precache_sound (self.idle_sound);
 	
 	// Smash the floor with fist
 	precache_model (MODEL_PROJ_RINGSHOCK);
-	precache_sound ("judge/smash_roar.wav");
-	precache_sound ("judge/smash_ground.wav");
-	precache_sound ("judge/smash_hit.wav");
-	precache_sound ("judge/smash_hitheavy.wav");
+	precache_sound ("ad181/judge/smash_roar.wav");
+	precache_sound ("ad181/judge/smash_ground.wav");
 	
 	// Skin/Projectile/Flanes coloured differences (RED or BLUE)
 	// Ran out of time trying to create good blue flames
@@ -1977,31 +1926,27 @@ void() monster_judicator = {
 	precache_model (MODEL_PROJ_JUDGER);
 
 	// Arrow attack
-	precache_sound ("judge/magic_attack.wav");
-	precache_sound ("judge/magic_fire.wav");
-	precache_sound ("judge/magic_hit.wav");
-	
-	// Flame (LINE) attack
-	precache_sound ("judge/flame_attack.wav");
+	precache_sound ("ad181/justice/magic_attack.wav");
+	precache_sound ("ad181/justice/magic_fire.wav");
+	precache_sound ("ad181/justice/flame_fire.wav");
 	
 	// Crazy leapin! (re-used from player)
-	precache_sound ("judge/leap1.wav");
+	precache_sound ("ad181/justice/leap1.wav");
 	
 	// Strange roar of monks!
-	self.sight_sound = "judge/sight1.wav";
+	self.sight_sound = "ad181/justice/sight1.wav";
 	precache_sound (self.sight_sound);
 
-	self.pain_sound = "judge/pain1.wav";
-	self.death_sound = "judge/death1.wav";
+	self.pain_sound = "ad181/justice/pain1.wav";
+	self.death_sound = "ad181/justice/death1.wav";
 	precache_sound (self.pain_sound);
 	precache_sound (self.death_sound);
-	precache_sound ("judge/elec_arch1.wav");
-	precache_sound ("judge/elec_arch2.wav");
-	precache_sound ("judge/summon.wav");
+	precache_sound ("ad171/eidolon/elec_arch1.wav");
+	precache_sound ("ad171/eidolon/elec_arch2.wav");
 
 	// New sword sweep/slash sounds
-	precache_sound ("judge/sword_draw.wav");
-	precache_sound ("judge/sword_sheath.wav");
+	precache_sound ("ad181/justice/sword_draw.wav");
+	precache_sound ("ad181/justice/sword_sheath.wav");
 
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
@@ -2232,12 +2177,12 @@ void() monster_justice = {
 	precache_model (self.gib3mdl);
 	self.gib1sound = GIB_IMPACT_METALA;
 
-	self.idle_sound = "justice/idle1.wav";
+	self.idle_sound = "ad181/justice/idle1.wav";
 	precache_sound (self.idle_sound);
 	
 	// Swing sword over head at player
-	precache_sound ("justice/smash_hit.wav");
-	precache_sound ("justice/smash_hitheavy.wav");
+	precache_sound ("ad171/gibs/gibheavy.wav");
+	precache_sound ("ad171/gibs/gibheavy2.wav");
 	
 	// Flames + explosions
 	PreCache_Flame();
@@ -2248,30 +2193,30 @@ void() monster_justice = {
 	precache_model (self.weaponglow);
 
 	// Arrow attack
-	precache_sound ("justice/magic_attack.wav");
-	precache_sound ("justice/magic_fire.wav");
-	precache_sound ("justice/magic_hit.wav");
+	precache_sound ("ad181/justice/magic_attack.wav");
+	precache_sound ("ad181/justice/magic_fire.wav");
+	precache_sound ("ad181/justice/flame_fire.wav");
 	
 	// Flame BURST attack
-	precache_sound ("justice/flame_attack.wav");
-	precache_sound ("justice/flame_fire.wav");
-	precache_sound ("justice/flame_explode.wav");
+	precache_sound ("ad171/wraith/attack1.wav");
+	precache_sound ("ad181/justice/flame_fire.wav");
+	precache_sound ("ad171/wraith/attack1_explode.wav");
 	
 	// Crazy leapin! (re-used from player)
-	precache_sound ("justice/leap1.wav");
+	precache_sound ("ad181/justice/leap1.wav");
 	
 	// Strange roar of monks!
-	self.sight_sound = "justice/sight1.wav";
+	self.sight_sound = "ad181/justice/sight1.wav";
 	precache_sound (self.sight_sound);
 
-	self.pain_sound = "justice/pain1.wav";
-	self.death_sound = "justice/death1.wav";
+	self.pain_sound = "ad181/justice/pain1.wav";
+	self.death_sound = "ad181/justice/death1.wav";
 	precache_sound (self.pain_sound);
 	precache_sound (self.death_sound);
 
 	// New sword sweep/slash sounds
-	precache_sound ("justice/sword_draw.wav");
-	precache_sound ("justice/sword_sheath.wav");
+	precache_sound ("ad181/justice/sword_draw.wav");
+	precache_sound ("ad181/justice/sword_sheath.wav");
 
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement

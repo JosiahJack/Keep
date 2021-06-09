@@ -345,9 +345,7 @@ void() pinch_die9		=[	$death17,	pinch_die10] {};
 void() pinch_die10		=[	$death19,	pinch_die11] {monster_death_postcheck();};
 void() pinch_die11		=[	$death21,	pinch_die11] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------------
-void() pinch_die = 
-{
+void() pinch_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -358,12 +356,10 @@ void() pinch_die =
 	}
 };
 
-//======================================================================
-/*QUAKED monster_scorpion (1 0 0) (-16 -16 -24) (16 16 24) Ambush
-======================================================================*/
 void() setup_scorpion;
-void() monster_scorpion =
-{
+
+// QUAKED monster_scorpion (1 0 0) (-16 -16 -24) (16 16 24) Ambush
+void() monster_scorpion = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
@@ -396,11 +392,10 @@ void() monster_scorpion =
 		self.gibhealth = -25;
 		self.idlemoreoften = TRUE;		// More creepy idle sounds
 		self.exactskin = 3;				// Black skin
-	}
-	else {
+	} else {
 		precache_model (MODEL_PROJ_SCORP);		// Large green spike
 		self.idle_sound = "ad171/scorpion/warning1.wav";
-		self.idle_sound2 = "ad171/scorpion/warning2.wav";
+		self.idle_sound2 = "ad171/scorpion/sight1.wav";
 		self.sight_sound = "ad171/scorpion/hiss.wav";
 
 		precache_sound("ad171/scorpion/tailfire1.wav");
@@ -420,7 +415,7 @@ void() monster_scorpion =
 	self.pain_sound2 = "ad171/scorpion/pain2.wav";
 	precache_sound(self.pain_sound);
 	precache_sound(self.pain_sound2);
-	self.death_sound = "ad171/scorpion/death1.wav";
+	self.death_sound = "drake/spider/death.wav";
 	precache_sound(self.death_sound);
 
 	precache_sound("ad171/scorpion/clawattack1.wav");
@@ -430,15 +425,12 @@ void() monster_scorpion =
 	if (self.classtype != CT_CACHESCORPION) setup_scorpion();
 };
 
-//----------------------------------------------------------------------------
 void() monster_wraithminion2 = { 
 	self.classtype = CT_CACHESCORPION; 
 	monster_scorpion();
 };
 	
-//----------------------------------------------------------------------------
-void() setup_scorpion =
-{
+void() setup_scorpion = {
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TINY;
@@ -530,7 +522,7 @@ void(vector minion_org, entity minion_targ) minion_scorpion =
 	minion.health = 80;
 
 	minion.idle_sound = "ad171/scorpion/warning1.wav";
-	minion.idle_sound2 = "ad171/scorpion/warning2.wav";
+	minion.idle_sound2 = "ad171/scorpion/sight1.wav";
 	minion.sight_sound = "ad171/scorpion/hiss.wav";
 
 	minion.pain_sound = "ad171/spider/pain1.wav";

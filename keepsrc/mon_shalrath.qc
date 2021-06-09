@@ -157,8 +157,7 @@ void() shal_attack11	=[ $attack11,	shal_run1    ] {};
 // Creates a ball of green goo and throws it towards the player
 // Once the ball has landed, hatch/explode and create baby voreling
 //======================================================================
-void(vector eggofs, float eggframe) Setup_ShalrathEgg =
-{
+void(vector eggofs, float eggframe) Setup_ShalrathEgg = {
 	local vector org;
 	if (self.health < 1) return;
 	
@@ -172,7 +171,7 @@ void(vector eggofs, float eggframe) Setup_ShalrathEgg =
 		self.attachment.solid = SOLID_NOT;
 
 		self.pain_finished = time + 1;
-		sound (self, CHAN_WEAPON, "ad171/shalrath/attack3.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
 	}
 	// Double check for pain interruption
 	else if (self.attachment.state == STATE_OFF) return;
@@ -327,10 +326,9 @@ void() monster_shalrath = {
 	precache_sound ("shalrath/death.wav");
 	self.pain_sound = "shalrath/pain.wav";
 	precache_sound (self.pain_sound);
-
 	precache_sound ("shalrath/attack.wav");	// Start of attack
 	precache_sound ("shalrath/attack2.wav");	// Firing missile
-	precache_sound ("ad171/shalrath/attack3.wav");	// Minions
+	precache_sound ("ad171/wraith/attack3.wav");	// Minions
 	precache_sound ("ad171/wraith/bounce.wav");		// Egg bounce
 	
 	self.sight_sound = "shalrath/sight.wav";
@@ -342,15 +340,16 @@ void() monster_shalrath = {
 	precache_model (MODEL_PROJ_VORE);			// Spit Projectile
 	precache_model ("progs/ad171/mon_voreling.mdl");
 	precache_model ("progs/q15/gib_voreleg.mdl"); // Has added frame
-	precache_sound ("voreling/idle.wav");
-	precache_sound("voreling/death.wav");
-	precache_sound("voreling/pain.wav");
-	precache_sound("voreling/miss.wav");	// Spit misses
-	precache_sound("voreling/hiss2.wav");	// Spit attack
-	precache_sound("voreling/attackmunch.wav");
-	precache_sound("voreling/attacktear.wav");
-	precache_sound("voreling/jumpland.wav");
-	precache_sound ("voreling/sight.wav");
+	precache_sound ("quoth/voreling/idle.wav");
+	precache_sound("quoth/voreling/death.wav");
+	precache_sound("quoth/voreling/pain.wav");
+	precache_sound("ad171/wraith/bounce.wav");	// Spit misses
+	precache_sound("ad171/spider/hiss2.wav");	// Spit attack
+	precache_sound("quoth/voreling/bitestrt.wav");
+	precache_sound("quoth/voreling/bite.wav");
+	precache_sound("ad171/voreling/attacktear.wav");
+	precache_sound("quoth/voreling/land.wav");
+	precache_sound ("quoth/voreling/sight.wav");
 
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement

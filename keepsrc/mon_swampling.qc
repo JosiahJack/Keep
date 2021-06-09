@@ -137,7 +137,7 @@ void(float sideang) swampling_spitacid =
 		
 	// Flash effect to show where bolt is coming from	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	if (sideang < 0) sound (self, CHAN_WEAPON, "swampling/spit4.wav", 1, ATTN_NORM);
+	if (sideang < 0) sound (self, CHAN_WEAPON, "ad171/swampling/spit4.wav", 1, ATTN_NORM);
 
 	makevectors (self.angles);	
 	org = self.origin + attack_vector(self.attack_offset);
@@ -184,8 +184,11 @@ void() swampling_melee =
 	// Can the target bleed?
 	if (!self.enemy.takedamage) return;
 
-	if (random() < 0.5) sound(self, CHAN_VOICE, "swampling/attackmunch.wav", TRUE, TRUE);
-	else sound(self, CHAN_VOICE, "swampling/attacktear.wav", TRUE, TRUE);
+	if (random() < 0.5) sound(self, CHAN_VOICE, "quoth/voreling/bitestrt.wav", TRUE, TRUE);
+	else {
+		if (random() < 0.5) sound(self, CHAN_VOICE, "quoth/voreling/bite.wav", TRUE, TRUE);
+		else sound(self, CHAN_VOICE, "ad171/voreling/attacktear.wav", TRUE, TRUE);
+	}
 
 	// Check for poisonous attribute (new poison version)
 	if (self.poisonous) PoisonDeBuff(self.enemy);
@@ -487,9 +490,7 @@ void() swampling_dieB5 =[	$deathB5, swampling_dieB6	] {};
 void() swampling_dieB6 =[	$deathB6, swampling_dieB7	] {monster_death_postcheck();};
 void() swampling_dieB7 =[	$deathB7, swampling_dieB7	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------------
-void() swampling_die = 
-{
+void() swampling_die = {
 	// swamplings are small, gibs don't bounce far
 	self.max_health = MON_NOGIBVELOCITY;
 
@@ -502,25 +503,21 @@ void() swampling_die =
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "swampling/death.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "quoth/voreling/death.wav", 1, ATTN_NORM);
 		if (random() < 0.6) swampling_die1();
 		else swampling_dieB1();
 	}
 };
 
-//======================================================================
-/*QUAKED monster_swampling (1 0 0) (-16 -16 -24) (16 16 24) Ambush
-======================================================================*/
-void() monster_swampling =
-{
+// QUAKED monster_swampling (1 0 0) (-16 -16 -24) (16 16 24) Ambush
+void() monster_swampling = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
 	if (self.spawnflags & MON_SWAMPLING_LARGE) {
 		self.mdl = "progs/ad171/mon_swamplingp.mdl";
 		self.gib1mdl = "progs/ad171/gib_swamplegp.mdl";	// Single Leg
-	}
-	else {
+	} else {
 		self.mdl = "progs/ad171/mon_swampling.mdl";
 		self.gib1mdl = "progs/ad171/gib_swampleg.mdl";	// Single Leg
 	}
@@ -530,25 +527,24 @@ void() monster_swampling =
 	precache_model (MODEL_PROJ_SWAMP);			// Spit Projectile
 
 	// IDLE/COMBAT and SIGHT sounds
-	self.idle_sound = "swampling/idle1.wav";
-	self.idle_sound2 = "swampling/idle3.wav";
-	self.idle_soundcom = "swampling/idle2.wav";
+	self.idle_sound = "ad171/swampling/idle1.wav";
+	self.idle_sound2 = "ad171/swampling/idle3.wav";
+	self.idle_soundcom = "ad171/swampling/idle2.wav";
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
 	precache_sound (self.idle_soundcom);
 
 	// death/pain/attack sounds
-	precache_sound("swampling/death.wav");
-	self.pain_sound = "swampling/pain3.wav";
+	precache_sound("quoth/voreling/death.wav");
+	self.pain_sound = "ad171/swampling/pain3.wav";
 	precache_sound(self.pain_sound);
-
-	precache_sound("swampling/miss.wav");	// Spit misses
-	precache_sound("swampling/spit4.wav");	// Spit attack
-	precache_sound("swampling/attackmunch.wav");
-	precache_sound("swampling/attacktear.wav");
-	precache_sound("swampling/jumpland.wav");
-
-	self.sight_sound = "swampling/sight2.wav";
+	precache_sound("ad171/wraith/bounce.wav");	// Spit misses
+	precache_sound("ad171/swampling/spit4.wav");	// Spit attack
+	precache_sound("quoth/voreling/bitestrt.wav");
+	precache_sound("quoth/voreling/bite.wav");
+	precache_sound("ad171/voreling/attacktear.wav");
+	precache_sound("quoth/voreling/land.wav");
+	self.sight_sound = "ad171/swampling/sight2.wav";
 	precache_sound (self.sight_sound);
 
 	self.solid = SOLID_NOT;				// No interaction with world
@@ -582,8 +578,7 @@ void() monster_swampling =
 		if (self.health < 1) self.health = 60;
 		self.gibhealth = -25;
 		self.th_missile = swampling_spit1;
-	}
-	else {
+	} else {
 		if (self.health < 1) self.health = 30;
 		self.gibhealth = -20;
 		self.th_jump = swampling_leap1;
@@ -594,18 +589,14 @@ void() monster_swampling =
 		if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPSWAMPLINGFAR;
 	}
 
-	//----------------------------------------------------------------------
 	// Check for quoth on ceiling entity flag
-	//----------------------------------------------------------------------
 	if (self.dangle) {
 		self.spawnflags = self.spawnflags | MON_SWAMPLING_CEILING;
 	}
 
-	//----------------------------------------------------------------------
 	// Ceiling swamplings have special idle animation
 	// and need to let go of the ceiling before resuming any
 	// normal behaviour (most think functions are intercepted)
-	//----------------------------------------------------------------------
 	if (self.spawnflags & MON_SWAMPLING_CEILING) {
 		self.th_stand = self.th_walk = swampling_idleup1;
 		self.th_run = self.th_slide = swampling_wakeup;

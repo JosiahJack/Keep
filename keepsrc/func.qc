@@ -339,9 +339,9 @@ A func_wall that can be toggled on and off
 Originally from hip_part.qc by Hipnotic (Quake expansion pack 1)
 -------- KEYS --------
 targetname  : trigger entity (works with entity state system)
-noise       : Switched OFF sound (def=ad171/misc/laseroff.wav)
-noise1      : Switched ON sound (def=ad171/misc/laseron.wav)
-noise2      : Touch damage sound (weapons/laser_hit.wav)
+noise       : Switched OFF sound (def=rrp/misc/laseroff.wav)
+noise1      : Switched ON sound (def=rrp/misc/laser_on.wav)
+noise2      : Touch damage sound (enforcer/enfstop.wav)
 wait        : wait between damage (def=0.5)
 dmg         : Contact damage (def=0)
 _dirt       : -1 = will be excluded from dirtmapping
@@ -355,8 +355,7 @@ STARTOFF  : Starts off and waits for trigger
 A func_wall that can be toggled on and off
 
 ======================================================================*/
-void() func_togglewall_touch =
-{
+void() func_togglewall_touch = {
 	// Block USE functionality if state wrong
 	if (self.estate & ESTATE_BLOCK) return;
 	if (self.attack_finished > time) return;
@@ -403,9 +402,9 @@ void() func_togglewall_off = {
 void() func_togglewall = {
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
-	if (self.noise == "") self.noise = "ad171/misc/laseroff.wav";
-	if (self.noise1 == "") self.noise1 = "ad171/misc/laseron.wav";
-	if (self.noise2 == "") self.noise2 = "weapons/laser_hit.wav";
+	if (self.noise == "") self.noise = "rrp/misc/laseroff.wav";
+	if (self.noise1 == "") self.noise1 = "rrp/misc/laser_on.wav";
+	if (self.noise2 == "") self.noise2 = SOUND_LASER_HIT;
 	precache_sound(self.noise);
 	precache_sound(self.noise1);
 	precache_sound(self.noise2);
@@ -751,8 +750,8 @@ void() func_laser =
 	// Pre-cache sounds and setup sound emitter
 	if (self.sounds > 0 && self.sounds < 3) {
 		if (self.sounds == 1) {
-			self.noise1 = "ad171/misc/laseron.wav";
-			self.noise2 = "ad171/misc/laseroff.wav";
+			self.noise1 = "rrp/misc/laser_on.wav";
+			self.noise2 = "rrp/misc/laseroff.wav";
 		}
 		else if (self.sounds == 2) {
 			self.noise1 = "ad171/ambience/power_on.wav";

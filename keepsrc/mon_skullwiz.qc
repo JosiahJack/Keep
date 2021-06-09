@@ -366,16 +366,14 @@ void() skullw_poison_think =
 	else self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
-void() skullw_guardian =
-{
+void() skullw_guardian = {
 	local float poison_loop;
 	local vector poison_angles, org, dir;
 	
 	// Remove projectile
 	entity_remove(self, 1);
 	// Play explosion sound
-	sound (self, CHAN_WEAPON, "ad171/skullwiz/poison_hit.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "quoth/dguard/hit.wav", 1, ATTN_NORM);
 	
 	// Apply any direct damage and poison effect
 	if (other.takedamage) {
@@ -776,7 +774,7 @@ void() monster_skullwiz = {
 	precache_sound ("ad171/skullwiz/skull1.wav");		// Screaming skull attack
 	precache_sound ("ad171/skullwiz/skull2.wav");
 	precache_sound ("ad171/skullwiz/summon.wav");
-	precache_sound ("ad171/skullwiz/poison_hit.wav");	// Guardian Explosion
+	precache_sound ("quoth/dguard/hit.wav");	// Guardian Explosion
 
 	precache_sound ("ad171/skullwiz/blinkspk1.wav");	// Talk casting blink spell
 	precache_sound ("ad171/skullwiz/blinkspk2.wav");

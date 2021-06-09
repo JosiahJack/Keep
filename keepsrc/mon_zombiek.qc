@@ -750,7 +750,7 @@ void() monster_zombiek = {
 	precache_sound ("zombie/z_gib.wav");	// Death sound
 
 	// New sight sound, mixture of knight + zombie
-	self.sight_sound = "zombie/zk_sight.wav";
+	self.sight_sound = "ad171/zombie/zk_sight.wav";
 	precache_sound (self.sight_sound);
 
 	// Check for poisonous entity flag

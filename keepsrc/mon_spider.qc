@@ -517,9 +517,7 @@ void() spider_die8		=[	$death15,	spider_die9	] {};
 void() spider_die9		=[	$death17,	spider_die10] {monster_death_postcheck();};
 void() spider_die10		=[	$death19,	spider_die10] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------------
-void() spider_die = 
-{
+void() spider_die = {
 	// Spiders are small, gibs don't bounce far
 	self.max_health = MON_NOGIBVELOCITY;
 
@@ -532,7 +530,7 @@ void() spider_die =
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "ad171/spider/death1.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "drake/spider/death.wav", 1, ATTN_NORM);
 		spider_die1();
 	}
 };
@@ -585,13 +583,13 @@ void() monster_spider =
 	precache_sound (self.idle_soundcom2);
 
 	// death/pain/attack sounds
-	precache_sound("ad171/spider/death1.wav");
+	precache_sound("drake/spider/death.wav");
 	self.pain_sound = "ad171/spider/pain1.wav";
 	self.pain_sound2 = "ad171/spider/pain2.wav";
 	precache_sound(self.pain_sound);
 	precache_sound(self.pain_sound2);
 
-	precache_sound("ad171/spider/miss.wav");
+	precache_sound("ad171/wraith/bounce.wav");
 	precache_sound("ad171/spider/attackmunch.wav");
 	precache_sound("ad171/spider/attacktear.wav");
 	precache_sound("ad171/spider/jumpland.wav");

@@ -608,7 +608,7 @@ void() monster_archer = {
     precache_sound ("drake/archer/growl3.wav");
     precache_sound ("drake/archer/pain2.wav");
     precache_sound ("drake/archer/sight2.wav");
-    precache_sound ("drake/archer/explode.wav");
+    precache_sound ("hexen2/weapons/explode.wav");
 
     // Hexen2 archers have 80 health.  (Lords have 325 health.)
     // Note:  Hexen2 archers gibbed at -30 hp.  Since the archers have armor

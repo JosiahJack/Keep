@@ -584,7 +584,7 @@ void() monster_dprince = {
 	// Has got to be in this location because the
 	// filename is hardcoded (engine.exe)
 	precache_sound ("hknight/hit.wav");
-	precache_sound ("ad181/dknight/dprince_miss.wav");
+	precache_sound ("ad171/wraith/bounce.wav");
 
 	self.sight_sound = "hknight/sight1.wav";
 	precache_sound (self.sight_sound);

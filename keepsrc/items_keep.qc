@@ -737,10 +737,10 @@ void() item_bolts = {
 	item_debugcustomdl();
 
 	if (self.spawnflags & A_LARGE) {
-		if (self.mdl == "") self.mdl = "progs/ammo_bolts1.mdl";
+		if (self.mdl == "") self.mdl = "progs/qmaster/ammo_bolts1.mdl";
 		if (self.aflag < 1) self.aflag = AMMO_BOLTS_LGR;
 	} else {
-		if (self.mdl == "") self.mdl = "progs/ammo_bolts0.mdl";
+		if (self.mdl == "") self.mdl = "progs/qmaster/ammo_bolts0.mdl";
 		if (self.aflag < 1) self.aflag = AMMO_BOLTS_SML;
 	}
 
@@ -763,10 +763,10 @@ void() item_poison = {
 	item_debugcustomdl();
 
 	if (self.spawnflags & A_LARGE) {
-		if (self.mdl == "") self.mdl = "progs/ammo_poison1.mdl";
+		if (self.mdl == "") self.mdl = "progs/its/item_poison1.mdl";
 		if (self.aflag < 1) self.aflag = AMMO_POISON_LGR;
 	} else {
-		if (self.mdl == "") self.mdl = "progs/ammo_poison0.mdl";
+		if (self.mdl == "") self.mdl = "progs/its/item_poison0.mdl";
 		if (self.aflag < 1) self.aflag = AMMO_POISON_SML;
 	}
 
@@ -781,9 +781,6 @@ void() item_poison = {
 	item_ammo_setup();
 };
 
-/*======================================================================
- ARTIFACTS (suit, pent, invis, quad)
-======================================================================*/
 void() artifact_touch = {
 	entity pl;
 	string amboost;
@@ -795,20 +792,17 @@ void() artifact_touch = {
 		else other.radsuit_finished = time + self.cnt;
 		ResetDebuffBurning(other);
 		ResetDebuffPoisoned(other);
-	}
-	else if (self.classtype == CT_ARTPENT) {
+	} else if (self.classtype == CT_ARTPENT) {
 		other.invincible_time = TRUE;
 		if (self.cnt < 0) other.invincible_finished = POWERUP_VANIA;
 		else other.invincible_finished = time + self.cnt;
 		ResetDebuffSystem(other);
-	}
-	else if (self.classtype == CT_ARTINVS) {
+	} else if (self.classtype == CT_ARTINVS) {
 		other.invisible_time = TRUE;
 		other.notrace = 1;
 		if (self.cnt < 0) other.invisible_finished = POWERUP_VANIA;
 		else other.invisible_finished = time + self.cnt;
-	}
-	else if (self.classtype == CT_ARTQUAD) {
+	} else if (self.classtype == CT_ARTQUAD) {
 		other.super_time = TRUE;
 		if (self.cnt < 0) other.super_damage_finished = POWERUP_VANIA;
 		else other.super_damage_finished = time + self.cnt;
@@ -817,102 +811,82 @@ void() artifact_touch = {
 		other.sharpshoot_time = TRUE;
 		if (self.cnt < 0) other.sharpshoot_finished = POWERUP_VANIA;
 		else other.sharpshoot_finished = time + self.cnt;
-	}
-	else if (self.classtype == CT_ARTPIERCE) {
+	} else if (self.classtype == CT_ARTPIERCE) {
 		other.nailpiercer_time = TRUE;
 		if (self.cnt < 0) other.nailpiercer_finished = POWERUP_VANIA;
 		else other.nailpiercer_finished = time + self.cnt;
-	}
-	else if (self.classtype == CT_ARTPSHIELD) {
+	} else if (self.classtype == CT_ARTPSHIELD) {
 		other.shield_time = TRUE;
 		if (self.cnt < 0) other.shield_finished = POWERUP_VANIA;
 		else other.shield_finished = time + self.cnt;
-	}
-	else if (self.classtype == CT_ARTGRAVBELT) {
+	} else if (self.classtype == CT_ARTGRAVBELT) {
 		other.antigrav_time = TRUE;
 		if (self.cnt < 0) other.antigrav_finished = POWERUP_VANIA;
 		else other.antigrav_finished = time + self.cnt;
 		other.gravity = 0.25; // This is where the magic happens! See client_power.qc for how it goes back to 1.
-	}
-	//----------------------------------------------------------------------
-	else if (self.classtype == CT_ARTLAVASHIELD) {
+	} else if (self.classtype == CT_ARTLAVASHIELD) {
 		other.lavashield_time = TRUE;
 		// Volume range modifier (0-1)
 		other.lavashield_volume = self.volume;
 		if (self.cnt < 0) other.lavashield_finished = POWERUP_VANIA;
 		else other.lavashield_finished = time + self.cnt;
 		ResetDebuffBurning(other);
-	}
-	else if (self.classtype == CT_ARTWETSUIT) {
+	} else if (self.classtype == CT_ARTWETSUIT) {
 		other.wetsuit_time = TRUE;
 		if (self.cnt < 0) other.wetsuit_finished = POWERUP_VANIA;
 		else other.wetsuit_finished = time + self.cnt;
-	}
-	else if (self.classtype == CT_ARTBLASTBELT) {
+	} else if (self.classtype == CT_ARTBLASTBELT) {
 		other.blastbelt_time = TRUE;
 		if (self.cnt < 0) other.blastbelt_finished = POWERUP_VANIA;
 		else other.blastbelt_finished = time + self.cnt;
-	}
-	else if (self.classtype == CT_ARTJUMPBOOTS) {
+	} else if (self.classtype == CT_ARTJUMPBOOTS) {
 		other.jumpboots_time = 1;
 		if (self.cnt < 0) other.jumpboots_finished = POWERUP_VANIA;
 		else other.jumpboots_finished = time + self.cnt;
-		
 		other.jumpboots_airlvl = 0;
 		// Check if jump max is endless, additive or exact
 		if (self.count < 0) other.jumpboots_airmax = -1;
 		else if (self.count > 0) other.jumpboots_airmax = self.count;
 		else other.jumpboots_airmax = other.jumpboots_airmax + 1;
 		// Make sure the max never goes too high
-		if (other.jumpboots_airmax > ART_JUMPBOOTS_AIRMAX)
-			other.jumpboots_airmax = ART_JUMPBOOTS_AIRMAX;
+		if (other.jumpboots_airmax > ART_JUMPBOOTS_AIRMAX) other.jumpboots_airmax = ART_JUMPBOOTS_AIRMAX;
 		if (self.height > 0) other.jumpboots_height = self.height;
 		else other.jumpboots_height = ART_JUMPHEIGHT;
 		if (self.distance > 0) other.jumpboots_forward = self.distance;
 		else other.jumpboots_forward = 0;
-	}
-	else if (self.classtype == CT_ARTEMPATHY) {
+	} else if (self.classtype == CT_ARTEMPATHY) {
 		other.empathy_time = TRUE;
 		if (self.cnt < 0) other.empathy_finished = POWERUP_VANIA;
 		else other.empathy_finished = time + self.cnt;
-	}
-	else if (self.classtype == CT_ARTTHERMSUIT) {
+	} else if (self.classtype == CT_ARTTHERMSUIT) {
 		other.therm_time = TRUE;
 		if (self.cnt < 0) other.therm_finished = POWERUP_VANIA;
 		else other.therm_finished = time + self.cnt;
 		ResetDebuffBurning(other);
-	}
-	else if (self.classtype == CT_ARTTRINITY) {
+	} else if (self.classtype == CT_ARTTRINITY) {
 		other.trinity_time = 1;
 		other.trinity_start = 1;
 		if (self.cnt < 0) other.trinity_finished = POWERUP_VANIA;
 		else other.trinity_finished = time + self.cnt;
-	}
-	else if (self.classtype == CT_ARTCROSS) {
+	} else if (self.classtype == CT_ARTCROSS) {
 		other.cross_time = 1;
 		other.cross_start = 1;
 		if (self.cnt < 0) other.cross_finished = POWERUP_VANIA;
 		else other.cross_finished = time + self.cnt;
 		ResetDebuffSystem(other);
-	}
-	else if (self.classtype == CT_ARTBERSERK) {
+	} else if (self.classtype == CT_ARTBERSERK) {
 		other.perms = other.perms | POW_VAMPIRE;
 		if (other.health < 100) other.health = 100; // full heal
-	}
-	else if (self.classtype == CT_ARTEQUALIZER) {
+	} else if (self.classtype == CT_ARTEQUALIZER) {
 		other.perms = other.perms | POW_DOUBLE;
 		other.ammo_nails = AMMO_MAXNAILS; // max out nails ammo
 		if (other.ammo_lava_nails < (AMMO_MAXLAVANAILS * 0.5)) other.ammo_lava_nails = AMMO_MAXLAVANAILS * 0.5; // fill lava nails up to half
-
-		// if changed current ammo, update it
-		W_SetCurrentAmmo(other);
-	}
-	else if (self.classtype == CT_ARTLEVITATION) {
+		W_SetCurrentAmmo(other); // if changed current ammo, update it
+	} else if (self.classtype == CT_ARTLEVITATION) {
 		other.wing_time = 1;
 		if (self.cnt < 0) other.wing_finished = POWERUP_VANIA;
 		else other.wing_finished = time + 45;
-	}
-	else if (self.classtype == CT_ARTOPTIMIZER) {
+	} else if (self.classtype == CT_ARTOPTIMIZER) {
 		other.maxshells = other.maxshells + self.ammo_shells;
 		other.ammo_shells = other.maxshells; // max out ammo
 		if (self.ammo_shells) amboost = strcat("Max shells increased by ",ftos(self.ammo_shells),"!\n");
@@ -963,59 +937,44 @@ void() artifact_touch = {
 
 		sprint(other,amboost);
 		amboost = string_null;
-	}
-	else if (self.classtype == CT_SIGILBANE) {
+	} else if (self.classtype == CT_SIGILBANE) {
 		// Give all players 250 health
 		pl = find (world, classname, "player");
 		while (pl) {
 			pl.health = pl.max_health;
 			pl = find (pl, classname, "player");
 		}
-	}
-	else if (self.classtype == CT_ARTREGEN) {
+	} else if (self.classtype == CT_ARTREGEN) {
 		other.health = other.max_health;
-	}
-	else if (self.classtype == CT_ARTVITALITY) {
+	} else if (self.classtype == CT_ARTVITALITY) {
 		other.max_health = other.max_health + self.max_health;
 		other.health = other.max_health; 
-	}
-	else return;
+	} else return;
 
-	//----------------------------------------------------------------------
-	// Pickup sound and initial screen flash
-	//----------------------------------------------------------------------
 	sprint (other, "You got the ");
 	sprint (other, self.netname);
 	sprint (other,"\n");
-	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-	Safe_stuffcmd (other, "bf\n");
-
-	// Update player item flags (regular + mod)
-	other.items = other.items | self.items;
+	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM); // Pickup sound
+	Safe_stuffcmd (other, "bf\n"); // Screen flash
+	other.items = other.items | self.items; // Update player items
 	other.items2 = other.items2 | self.items2;
 	other.moditems = other.moditems | self.moditems;
 	other.perms = other.perms | self.perms;
-
-	// hide item and check for respawn
-	item_finished();
-	check_item_respawn();
-	
+	item_finished(); // hide item 
+	check_item_respawn(); // check for respawn
 	activator = other;
 	SUB_UseTargets();
 };
 
 void () item_powerup_shield = {
-	// Check for any random setups
-	if (artifact_checkrandomizer() == TRUE) return;
+	if (artifact_checkrandomizer() == TRUE) return; // Check for any random setups
 
-	// Check for custom model setup?
-	item_debugcustomdl();
-
+	item_debugcustomdl(); // Check for custom model setup?
 	if (self.mdl == "") self.mdl = "progs/rogue/shield.mdl";
 	precache_model (self.mdl);
-	if (self.noise == "") self.noise = "shield/pickup.wav";
-	self.noise1 = "shield/hit.wav";
-	self.noise2 = "shield/fadeout.wav";
+	if (self.noise == "") self.noise = "rogue/shield/pickup.wav";
+	self.noise1 = "rogue/shield/hit.wav";
+	self.noise2 = SOUND_ARTPSHIELD3;
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
@@ -1031,13 +990,10 @@ void () item_powerup_shield = {
 };
 
 void () item_powerup_belt = {
-	// Check for any random setups
-	if (artifact_checkrandomizer() == TRUE) return;
-
-	// Check for custom model setup?
-	item_debugcustomdl();
-
-	if (self.mdl == "") self.mdl = "progs/ad180/artifact_blastbelt.mdl"; // sock originally did an orange skin version of rogue/beltup.mdl.  Changed to new model.  Adding here to have 2nd skin as an option.
+	if (artifact_checkrandomizer() == TRUE) return; // Check for any random setups
+	
+	item_debugcustomdl(); // Check for custom model setup?
+	if (self.mdl == "") self.mdl = "progs/ad172/artifact_blastbelt.mdl"; // sock originally did an orange skin version of rogue/beltup.mdl.  Changed to new model.  Adding here to have 2nd skin as an option.
 	precache_model (self.mdl);
 	if (self.noise == "") self.noise = "rogue/belt/pickup.wav";
 	self.noise1 = "rogue/belt/use.wav";
@@ -1108,11 +1064,11 @@ void() item_artifact_trinity = {
 	// Check for custom model setup?
 	item_debugcustomdl();
 
-	if (self.mdl == "") self.mdl = "progs/quoth2pt2full/trinity.mdl";
+	if (self.mdl == "") self.mdl = "progs/quoth/trinity.mdl";
 	precache_model (self.mdl);
-	if (self.noise == "") self.noise = "items2/trintake.wav";
-	self.noise1 = "items2/trinuse.wav";
-	self.noise2 = "items2/trinend.wav";
+	if (self.noise == "") self.noise = "quoth/items2/trintake.wav";
+	self.noise1 = "quoth/items2/trinuse.wav";
+	self.noise2 = "quoth/items2/trinend.wav";
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
@@ -1133,10 +1089,10 @@ void() item_artifact_cross = {
 	// Check for custom model setup?
 	item_debugcustomdl();
 
-	if (self.mdl == "") self.mdl = "progs/quoth2pt2full/cross.mdl";
+	if (self.mdl == "") self.mdl = "progs/quoth/cross.mdl";
 	precache_model (self.mdl);
-	if (self.noise == "") self.noise = "items2/crostake.wav";
-	self.noise2 = "items2/crosend.wav";
+	if (self.noise == "") self.noise = "quoth/items2/crostake.wav";
+	self.noise2 = "quoth/items2/crosend.wav";
 	precache_sound (self.noise);
 	precache_sound (self.noise2);
 	if (self.netname == "") self.netname = "Cross of Deflection";
@@ -1361,7 +1317,7 @@ void() item_flagred = {
 void() mariomushroom_touch = {
 	if (other.flags & FL_CLIENT && other.health > 1 && other.shroom_finished < time) {
 		other.shroom_finished = time + self.cnt;
-		sound(other,CHAN_VOICE,"items/smb_powerup.wav",1,ATTN_NORM);
+		sound(other,CHAN_VOICE,"qmaster/items/smb_powerup.wav",1,ATTN_NORM);
 		other.velocity_z = other.velocity_z + 360; // pop up
 		other.flags = other.flags - FL_ONGROUND;
 		other.view_ofs = '0 0 72';
@@ -1380,10 +1336,10 @@ void() item_mariomushroom = {
 	if (self.mdl == "") self.mdl = "progs/madfox/mushroom_item.mdl";
 	precache_model (self.mdl);
 	setmodel (self, self.mdl);
-	precache_sound ("items/smb_powerup.wav");
-	precache_sound ("items/smb_bowserfalls.wav");
-	precache_sound ("items/smb_stomp.wav");
-	precache_sound ("player/jumpmario.wav");
+	precache_sound ("qmaster/items/smb_powerup.wav");
+	precache_sound ("qmaster/items/smb_bowserfalls.wav");
+	precache_sound ("qmaster/items/smb_stomp.wav");
+	precache_sound ("qmaster/player/jumpmario.wav");
 	self.netname = "A Strange Shroom";
 	if (self.cnt <=0) self.cnt = 60;
 	self.frame = rint(random()*4);

@@ -24,10 +24,10 @@ void()	inquisitor_walk12	=[217,	inquisitor_walk1	] {ai_walk(6);ai_down(4); };
 void() inquisitor_flightland1;
 
 void() inquisitor_flight_attack = {
-	throwpolypgib("progs/quoth2pt2full/bilefrag.mdl", -40);
-	throwpolypgib("progs/quoth2pt2full/bilefrag.mdl", -50);
-	throwpolypgib("progs/quoth2pt2full/bilefrag.mdl", -60);
-	throwpolypgib("progs/quoth2pt2full/bilefrag.mdl", -75);
+	throwpolypgib("progs/quoth/bilefrag.mdl", -40);
+	throwpolypgib("progs/quoth/bilefrag.mdl", -50);
+	throwpolypgib("progs/quoth/bilefrag.mdl", -60);
+	throwpolypgib("progs/quoth/bilefrag.mdl", -75);
 };
 
 void() inquisitor_ascend1;
@@ -151,9 +151,9 @@ void() inquisitor_stormcloud = {
 	cloud = spawn();
 	setorigin(cloud,self.origin + offs);
 	cloud.spawnflags = cloud.spawnflags | MISC_DRIPSLIME | MISC_DRIPSILENT | 8;
-	// cloud.noise1 = "ad171/misc/drip1.wav";
-	// cloud.noise2 = "ad171/misc/drip2.wav";
-	// cloud.noise3 = "ad171/misc/drip3.wav"; Too many sounds for this!
+	// cloud.noise1 = "rrp/misc/drip1.wav";
+	// cloud.noise2 = "rrp/misc/drip2.wav";
+	// cloud.noise3 = "rrp/misc/drip3.wav"; Too many sounds for this!
 	cloud.path = "progs/s_dripgreen_lg.spr";
 	cloud.headmdl = SSLIME_SPLASH;
 	cloud.aflag = 48;
@@ -233,7 +233,7 @@ void() inquisitor_fireflamewall = {
 	eorg = org + attack_vector('16 0 16'); // Setup explosion origin (infront)
 	
 	// Quiet sfx + dust/smoke
-	sound (self, CHAN_WEAPON, "justice/flame_fire.wav", 1, ATTN_NORM);	
+	sound (self, CHAN_WEAPON, "ad181/justice/flame_fire.wav", 1, ATTN_NORM);	
 	if (random() > 0.5) SpawnProjectileSmoke(eorg, 200, 50, 250);
 
 	// Start with facing angle
@@ -322,7 +322,7 @@ void()	inquisitor_magicc29=[49,inquisitor_magicc30] {ai_face();ai_down(4); };
 void()	inquisitor_magicc30=[50,inquisitor_standrun1]  {ai_face();ai_down(4); };
 
 void() inquisitor_bbomb_die1 = [0,inquisitor_bbomb_die2] {setmodel(self,"progs/ad171/s_burst_poison.spr"); T_RadiusDamage(self, self.owner,9,self.owner,DAMAGEALL); self.nextthink = time + 0.15; };
-void() inquisitor_bbomb_die2 = [1,inquisitor_bbomb_die3] {particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 16);	sound (world, CHAN_AUTO, "quoth2pt2full/gug/bile.wav", 1, ATTN_NONE);  self.nextthink = time + 0.15;};
+void() inquisitor_bbomb_die2 = [1,inquisitor_bbomb_die3] {particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 16);	sound (world, CHAN_AUTO, "quoth/gug/bile.wav", 1, ATTN_NONE);  self.nextthink = time + 0.15;};
 void() inquisitor_bbomb_die3 = [2,inquisitor_bbomb_die4] {particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 14); self.nextthink = time + 0.15; };
 void() inquisitor_bbomb_die4 = [3,inquisitor_bbomb_die5] {particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 12); self.nextthink = time + 0.15;};
 void() inquisitor_bbomb_die5 = [4,inquisitor_bbomb_die6] {particle (self.origin, VEC_ORIGIN, MON_BCOLOR_GREEN + rint(random()*7), 10); self.nextthink = time + 0.15;};
@@ -450,7 +450,7 @@ void() inquisitor_explode = {
 	if (self.death_dmg > 0) T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
 	
 	// Classic sprite/DP explosion
-	SpawnExplosion(EXPLODE_PLASMA_BIG, self.origin, "ad171/nour/explode_death.wav");
+	SpawnExplosion(EXPLODE_PLASMA_BIG, self.origin, "ad171/seeker/explode_major.wav");
 
 	// Gib explosive fountain!?!
 	self.max_health = MON_GIBEXPLOSION;
@@ -509,14 +509,14 @@ void()	inquisitor_hunch_idle17=[184,inquisitor_hunch_idle17] {
 
 		// Play some arching lightning sounds
 		if (random() < 0.5) {
-			if (random() < 0.5) sound (self, CHAN_BODY, "ad171/nour/elec_arch1.wav", 1, ATTN_NORM);
-			else sound (self, CHAN_BODY, "ad171/nour/elec_arch2.wav", 1, ATTN_NORM);
+			if (random() < 0.5) sound (self, CHAN_BODY, "ad171/eidolon/elec_arch1.wav", 1, ATTN_NORM);
+			else sound (self, CHAN_BODY, "ad171/eidolon/elec_arch2.wav", 1, ATTN_NORM);
 		}
 	}
 	
 	// Cycle through end phase
 	self.lip = self.lip + 1;
-	if (self.lip == 26) sound (self, CHAN_AUTO, "ad171/nour/implode_death.wav", 1, ATTN_NONE);
+	if (self.lip == 26) sound (self, CHAN_AUTO, "ad171/eidolon/implode_death.wav", 1, ATTN_NONE);
 	if (self.lip == 40) inquisitor_explode();
 };
 
@@ -587,16 +587,16 @@ void() monster_inquisitor = {
 	precache_model (MODEL_PROJ_WPOISON);	// Poison nails (spider)
 
 	// small bile drop
-	precache_model ("progs/quoth2pt2full/bilefrag.mdl"); // frames 0-5
+	precache_model ("progs/quoth/bilefrag.mdl"); // frames 0-5
 
 	// large bilebomb
-	precache_model ("progs/quoth2pt2full/bilebomb.mdl"); // frames 0-5
+	precache_model ("progs/quoth/bilebomb.mdl"); // frames 0-5
 
 	// blobby burst effect
-	precache_model ("progs/quoth2pt2full/greenexp.spr"); // frames 0-5
+	precache_model ("progs/quoth/greenexp.spr"); // frames 0-5
 
 	// burst effect
-	precache_model ("progs/quoth2pt2full/s_vp_pll.spr"); // frames 53-57
+	precache_model ("progs/quoth/s_vp_pll.spr"); // frames 53-57
 
 	// poison cloud that moves around randomly
 	precache_model ("progs/ad171/s_exp_poison_med.spr"); // grow 0-2, cloud 2-5, dissipate 5-13
@@ -623,24 +623,18 @@ void() monster_inquisitor = {
 	precache_sound (self.idle_sound);
 	self.pain_sound = "ad171/skullwiz/pain2.wav";
 	precache_sound (self.pain_sound);
-	// self.sight_sound = "ad171/skullwiz/idle2.wav";
-	// self.sight_sound = "lord/sight2.wav";
-	precache_sound ("lord/sight2.wav");
+	precache_sound ("drake/archer/sight2.wav");
 	self.death_sound = "ad171/skullwiz/fadeaway.wav";
 	precache_sound (self.death_sound);
-	precache_sound ("justice/flame_fire.wav");
-
-	precache_sound ("ad171/misc/drip1.wav");
-	precache_sound ("ad171/misc/drip2.wav");
-	precache_sound ("ad171/misc/drip3.wav");
-	precache_model ("progs/astorm.spr");
+	precache_sound ("ad181/justice/flame_fire.wav");
+	precache_model ("progs/qmaster/astorm.spr");
 	precache_sound ("drake/bane/thunder.wav");
-	precache_sound ("quoth2pt2full/gug/bile.wav");
+	precache_sound ("quoth/gug/bile.wav");
 	precache_model ("progs/s_dripgreen_lg.spr");
-	precache_sound ("ad171/nour/elec_arch1.wav");
-	precache_sound ("ad171/nour/elec_arch2.wav");
-	precache_sound ("ad171/skullwiz/poison_hit.wav");
-	precache_sound ("ad171/nour/implode_death.wav");
+	precache_sound ("ad171/eidolon/elec_arch1.wav");
+	precache_sound ("ad171/eidolon/elec_arch2.wav");
+	precache_sound ("quoth/dguard/hit.wav");
+	precache_sound ("ad171/eidolon/implode_death.wav");
 	
 	self.solid = SOLID_NOT;				// No interaction with world until spawned
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement until spawned

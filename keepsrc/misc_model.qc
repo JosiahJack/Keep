@@ -555,8 +555,8 @@ void() misc_model = {
 	
 	// TOGGLE sound setup
 	if (self.locksounds == 1) {
-		self.noise1 = "ad171/misc/laseron.wav";
-		self.noise2 = "ad171/misc/laseroff.wav";
+		self.noise1 = "rrp/misc/laser_on.wav";
+		self.noise2 = "rrp/misc/laseroff.wav";
 	} else if (self.locksounds == 2) {
 		self.noise1 = "ad171/ambience/power_on.wav";
 		self.noise2 = "ad171/ambience/power_off.wav";

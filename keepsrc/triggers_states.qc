@@ -28,24 +28,20 @@ float TRIG_MONSTERS = 32;	// Can be touched/triggered by monsters
 float TRIG_NODAMAGE = 16384;	// Block trigger damage functionality
 float TRIG_ALWAYTOUCH = 32768;	// Always allow touch function to exist
 
-//----------------------------------------------------------------------
-void(float defvol) trigger_bmodel_volume =
-{
+void(float defvol) trigger_bmodel_volume = {
 	// Volume has to be within range of 0-1, otherwise engine errors
 	if (self.volume == 0) self.volume = defvol;	// Default
 	else if (self.volume < 0) self.volume = 0;	// Out of range
 	else if (self.volume > 1) self.volume = 1;	// Out of range
 };
 
-//----------------------------------------------------------------------
-void() trigger_bmodel_sounds =
-{
+void() trigger_bmodel_sounds = {
 	// Used by lots of different triggers for standard sounds
 	if (self.sounds == 1) self.noise = "misc/secret.wav";
 	else if (self.sounds == 2) self.noise = SOUND_TALK;
 	else if (self.sounds == 3) self.noise = "misc/trigger1.wav";
 	else if (self.sounds == 4) self.noise = SOUND_EMPTY;
-	else if (self.sounds == 6) self.noise = "ad171/misc/secret3.wav";
+	else if (self.sounds == 6) self.noise = RND_SURPRISENEG;
 	else if (self.sounds == 7) self.noise = "drake/misc/secret2.wav";
 	// precache any sounds that have been defined
 	if (self.noise != "") precache_sound(self.noise);
@@ -53,12 +49,9 @@ void() trigger_bmodel_sounds =
 	trigger_bmodel_volume(1);
 };
 
-//----------------------------------------------------------------------
 // Special sight trigger, Is the player *looking* at this trigger
 // This sight trigger cannot be disabled or turned off atm
-//----------------------------------------------------------------------
-void() trigger_bmodel_inview =
-{
+void() trigger_bmodel_inview = {
 	local entity client, tself;
 	local float play_dist, play_range, play_angle;
 

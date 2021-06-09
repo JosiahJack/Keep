@@ -721,7 +721,7 @@ void() monster_nemesant = {
 	precache_model ("progs/drake/gr_gib.mdl");
     precache_model ("progs/drake/gr_gib2.mdl");
     precache_model ("progs/drake/s_wave.spr");
-    precache_model ("progs/drake/s_expbig.spr");
+    precache_model ("progs/quoth/bigexp.spr");
     precache_model ("progs/drake/wizard.mdl");
     precache_model ("progs/drake/h_drake.mdl");
     precache_model ("progs/h_wizard.mdl");

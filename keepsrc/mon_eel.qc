@@ -189,7 +189,7 @@ void () eel_attack12 = [ 5.000, eel_run1 ] {
    eel_melee ();
 };
 
-void() eel_attack2_1 = [ $eswim1, eel_attack2_2 ] {self.skin = 1;ai_face();sound (self, CHAN_VOICE, "eel/attack1.wav", 1, ATTN_NORM);};
+void() eel_attack2_1 = [ $eswim1, eel_attack2_2 ] {self.skin = 1;ai_face();sound (self, CHAN_VOICE, "rogue/eel/eatt1.wav", 1, ATTN_NORM);};
 void() eel_attack2_2 = [ $eswim2, eel_attack2_3 ] {self.skin = 2;ai_face();self.effects = self.effects | EF_MUZZLEFLASH;};
 void() eel_attack2_3 = [ $eswim3, eel_attack2_4 ] {self.skin = 3;ai_face();};
 void() eel_attack2_4 = [ $eswim4, eel_attack2_5 ] {self.skin = 4;ai_face();self.effects = self.effects | EF_MUZZLEFLASH;};
@@ -268,7 +268,7 @@ void () monster_eel = {
 	precache_sound ("rogue/eel/eelc5.wav");
 	self.sight_sound = "rogue/eel/eelc5.wav";
 	precache_sound ("ad171/eel/impact1.wav");
-	precache_sound ("eel/attack1.wav");
+	precache_sound ("rogue/eel/eatt1.wav");
 
 	// Check for poisonous entity flag
 	if (self.poisonous) {

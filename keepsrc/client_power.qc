@@ -86,7 +86,7 @@ void(entity targ) ResetPowerShroom = {
 	dprint("Shroom reset\n");
 	targ.shroom_finished = 0;
 	setsize(targ,VEC_HULL_MIN,VEC_HULL_MAX);
-	sound(targ,CHAN_VOICE,"items/smb_bowserfalls.wav",1,ATTN_NORM);
+	sound(targ,CHAN_VOICE,"qmaster/items/smb_bowserfalls.wav",1,ATTN_NORM);
 	targ.velocity = '0 0 1'; // FULL STOP! (almost) Hope you weren't in the air
 	targ.flags = targ.flags - FL_ONGROUND;
 	targ.effects = targ.effects - EF_BRIGHTLIGHT;
@@ -100,9 +100,7 @@ void(entity targ) ResetPowerQuadItem = {
 	targ.items = targ.items - (targ.items & IT_QUAD);
 };
 
-//----------------------------------------------------------------------
-void(entity targ, float powtimer) ResetPowerSharp =
-{
+void(entity targ, float powtimer) ResetPowerSharp = {
 	if (powtimer == 0) {
 		targ.moditems = targ.moditems - (targ.moditems & IT_ARTSHARP);
 		targ.sharpshoot_finished = targ.sharpshoot_time = 0;
@@ -549,9 +547,7 @@ void() ClientPowerups =
 		if (self.blastbelt_finished < time) ResetPowerBlastbelt(self,0);
 	}
 
-	//----------------------------------------------------------------------
 	// Jump Boots - Vertical Height Exploration
-	//----------------------------------------------------------------------
 	if (self.jumpboots_finished > 0) {
 		// sound and screen flash when items starts to run out
 		if (self.jumpboots_finished < time + 3) {
@@ -570,10 +566,8 @@ void() ClientPowerups =
 		if (self.jumpboots_finished < time) ResetPowerJumpBoots(self,0);
 	}
 
-	//----------------------------------------------------------------------
 	// SharpShooter
 	// - Flash screen 3s before running out
-	//----------------------------------------------------------------------
 	if (self.sharpshoot_finished > 0) {
 	// sound and screen flash when items starts to run out
 		if (self.sharpshoot_finished < time + 3) {
@@ -592,10 +586,8 @@ void() ClientPowerups =
 		if (self.sharpshoot_finished < time) ResetPowerSharp(self,0);
 	}
 
-	//----------------------------------------------------------------------
 	// Nail Piercer
 	// - Flash screen 3s before running out
-	//----------------------------------------------------------------------
 	if (self.nailpiercer_finished > 0) {
 		// sound and screen flash when items starts to run out
 		if (self.nailpiercer_finished < time + 3) {
@@ -624,7 +616,7 @@ void() ClientPowerups =
 			if (self.wing_time == 1) {
 				sprint (self, "Boots of Levitation are fading\n");
 				Safe_stuffcmd (self, "bf\n");
-				sound (self, CHAN_AUTO, "drake/ambience/wingend.wav", 1, ATTN_NORM);
+				sound (self, CHAN_AUTO, "zerstorer/ambience/wingend.wav", 1, ATTN_NORM);
 				self.wing_time = time + 1;
 			}	  
 			if (self.wing_time < time) {

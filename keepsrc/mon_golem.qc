@@ -170,7 +170,7 @@ void() golem_punch6 = [ $punch6, golem_punch7 ] {golem_mcharge(5);};
 void() golem_punch7 = [ $punch7, golem_punch8 ] {golem_mcharge(5);};
 void() golem_punch8 = [ $punch8, golem_punch9 ] {golem_mcharge(5);};
 void() golem_punch9 = [ $punch9, golem_punch10 ] {golem_mcharge(5);
-	sound (self, CHAN_VOICE, "ad171/golem/melee_swipe.wav", 1, ATTN_IDLE);};
+	sound (self, CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_IDLE);};
 void() golem_punch10 = [ $punch10, golem_punch11 ] {golem_mcharge(4);};
 void() golem_punch11 = [ $punch11, golem_punch12 ] {golem_mcharge(3);monster_footstep(FALSE);};
 void() golem_punch12 = [ $punch12, golem_punch13 ] {golem_mcharge(2);
@@ -200,7 +200,7 @@ void() golem_pound6 = [ $pound6, golem_pound7 ] {golem_mcharge(5);};
 void() golem_pound7 = [ $pound7, golem_pound8 ] {golem_mcharge(5);};
 void() golem_pound8 = [ $pound8, golem_pound9 ] {golem_mcharge(5);};
 void() golem_pound9 = [ $pound9, golem_pound10 ] {golem_mcharge(5);
-	sound (self, CHAN_VOICE, "ad171/golem/melee_swipe.wav", 1, ATTN_IDLE);};
+	sound (self, CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_IDLE);};
 void() golem_pound10 = [ $pound10, golem_pound11 ] {golem_mcharge(4);};
 void() golem_pound11 = [ $pound11, golem_pound12 ] {golem_mcharge(3);monster_footstep(FALSE);};
 void() golem_pound12 = [ $pound12, golem_pound13 ] {golem_mcharge(2);
@@ -234,7 +234,7 @@ void() golem_knock9 = [ $knock9, golem_knock10 ] {golem_mcharge(7);};
 void() golem_knock10 = [ $knock10, golem_knock11 ] {golem_mcharge(6);};
 void() golem_knock11 = [ $knock11, golem_knock12 ] {golem_mcharge(5);monster_footstep(FALSE);};
 void() golem_knock12 = [ $knock12, golem_knock13 ] {golem_mcharge(5);
-	sound (self, CHAN_VOICE, "ad171/golem/melee_swipe.wav", 1, ATTN_IDLE);};
+	sound (self, CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_IDLE);};
 void() golem_knock13 = [ $knock13, golem_knock14 ] {golem_mcharge(4);};
 void() golem_knock14 = [ $knock14, golem_knock15 ] {golem_mcharge(3);};
 void() golem_knock15 = [ $knock15, golem_knock16 ] {golem_mcharge(2);};
@@ -510,7 +510,7 @@ void() golem_wakefinished = {
 	golem_birth();					// more rubble
 };
 
-void() golem_wake1 =[ $birth1, golem_wake2 ] {golem_birth();sound (self, CHAN_BODY, "ad171/golem/wakestatue.wav", 1, ATTN_NORM);};
+void() golem_wake1 =[ $birth1, golem_wake2 ] {golem_birth();sound (self, CHAN_BODY, "ne_ruins/h2golem/brkfree.wav", 1, ATTN_NORM);};
 void() golem_wake2 =[ $birth2, golem_wake3 ] {golem_birth();ai_forward(2);};
 void() golem_wake3 =[ $birth3, golem_wake4 ] {golem_birth();ai_forward(3);};
 void() golem_wake4 =[ $birth4, golem_wake5 ] {golem_birth();ai_forward(4);};
@@ -590,8 +590,8 @@ void() precache_monster_golem = {
 	precache_sound ("ne_ruins/h2golem/foley4.wav");
 	precache_sound ("ne_ruins/h2golem/foley1.wav");
 	precache_sound ("ne_ruins/h2golem/foley2.wav");
-	precache_sound ("ad171/golem/wakestatue.wav"); // Break free of statue pose
-	precache_sound ("ad171/golem/melee_swipe.wav"); // Several melee smack sounds and giant ground slam
+	precache_sound ("ne_ruins/h2golem/brkfree.wav"); // Break free of statue pose
+	precache_sound ("ad171/weapons/crossbow_swipe.wav"); // Several melee smack sounds and giant ground slam
 	precache_sound ("ad171/golem/melee_punch.wav");
 	precache_sound ("ad171/golem/melee_pound.wav");
 	precache_sound ("ad171/golem/groundslam.wav");

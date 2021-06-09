@@ -153,7 +153,7 @@ void() ringprethink = {
 	self.nextthink = time + 0.1;
 	self.think = ringthink;
 	self.avelocity = '0 0 200';
-	setmodel(self, "progs/quoth2pt2full/shockwave.mdl");
+	setmodel(self, "progs/quoth/shockwave.mdl");
 };
 
 void() W_Bomb = {
@@ -229,18 +229,18 @@ void() W_Bomb = {
 	T_RadiusDamage(bomb, self, 512, self,DAMAGEALL);
 	T_Damage(self, self, self, -666,DAMARMOR);
 	self.velocity_z = 700;
-	sound(self, CHAN_AUTO, "weapons/bombfar.wav", 1, ATTN_NONE);
-	sound(self, CHAN_AUTO, "weapons/bomb.wav", 1, 0.7);
+	sound(self, CHAN_AUTO, "quoth/weapons/bombfar.wav", 1, ATTN_NONE);
+	sound(self, CHAN_AUTO, "quoth/weapons/bomb.wav", 1, 0.7);
 };
 
 void() info_bomb = {
-	precache_sound("weapons/bomb.wav");
-	precache_sound("weapons/bombfar.wav");
-	precache_model("progs/v_bomb.mdl");
-	precache_model("progs/smlexp.spr");
-	precache_model("progs/bigexp.spr");
+	precache_sound("quoth/weapons/bomb.wav");
+	precache_sound("quoth/weapons/bombfar.wav");
+	precache_model("progs/quoth/v_bomb.mdl");
+	precache_model("progs/quoth/smlexp.spr");
+	precache_model("progs/quoth/bigexp.spr");
 	precache_model("progs/ne_ruins/boom.mdl");
-	precache_model("progs/quoth2pt2full/shockwave.mdl");
+	precache_model("progs/quoth/shockwave.mdl");
 	self.use = W_Bomb;
 };
 

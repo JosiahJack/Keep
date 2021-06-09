@@ -286,7 +286,7 @@ void () func_door_secret = {
 	else if (self.locksounds == 3) self.noise = "ad171/doors/rattle6.wav";
 	else if (self.locksounds == 13) self.noise = "misc/trigger1.wav";
 	else if (self.locksounds == 14) self.noise = SOUND_EMPTY; 
-	else if (self.locksounds == 16) self.noise = "ad171/misc/secret3.wav";
+	else if (self.locksounds == 16) self.noise = RND_SURPRISENEG;
 	else if (self.locksounds == 21) self.noise = "ad171/doors/rattle_tech1.wav";
 	else if (self.locksounds == 22) self.noise = "ad171/doors/rattle_tech2.wav";
 	else if (self.locksounds == 23) self.noise = "ad171/doors/rattle_tech3.wav";

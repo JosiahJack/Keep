@@ -182,17 +182,15 @@ void() monster_idle_sound =
 	}
 };
 
-/*======================================================================
- monster_sightsound
-  - Switched sound channel to CHAN_BODY so death always stops it
-  - Randomnly get sound file cut off using voice channel
-======================================================================*/
+// monster_sightsound
+// - Switched sound channel to CHAN_BODY so death always stops it
+// - Randomnly get sound file cut off using voice channel
 void() monster_sightsound = {
 	local float	rsnd;
 
 	if ( !(self.flags & FL_MONSTER) ) return; 	// No monsters, dead and timer not reset?
 	if (self.health < 1) return;
-	if (self.classtype == CT_MONINQUISITOR) { sound (self, CHAN_BODY, "lord/sight2.wav", 1, ATTN_NONE); self.sight_timeout = time + MON_SIGHTSOUND; return;}
+	if (self.classtype == CT_MONINQUISITOR) { sound (self, CHAN_BODY, "drake/archer/sight2.wav", 1, ATTN_NONE); self.sight_timeout = time + MON_SIGHTSOUND; return;}
 	if (!(self.sight_sound)) return;
 	self.monster_awake = TRUE;
 	if (self.spawnflags & MON_SPAWN_NOSIGHT) return;

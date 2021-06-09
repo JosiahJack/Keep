@@ -459,20 +459,20 @@ void() monster_zombie_master = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	precache_model2 ("progs/custents/zmaster.mdl");
-	precache_model2 ("progs/custents/k_spike.mdl");
-	precache_model2 ("progs/custents/h_zmastr.mdl");
-	precache_sound2 ("hknight/attack1.wav");
-	precache_sound2 ("zmaster/death.wav");
+	precache_model ("progs/custents/zmaster.mdl");
+	precache_model ("progs/custents/k_spike.mdl");
+	precache_model ("progs/custents/h_zmastr.mdl");
+	precache_sound ("hknight/attack1.wav");
+	precache_sound ("zmaster/death.wav");
 	precache_sound ("hknight/hit.wav");		// used by C code, so don't sound2
-	precache_sound2 ("hknight/slash1.wav");
-	precache_sound2 ("zmaster/idle1.wav");
-	precache_sound2 ("zmaster/idle2.wav");
-	precache_sound2 ("zmaster/sight.wav");
-	precache_sound2 ("zmaster/pain.wav");
-	precache_sound2 ("zmaster/energize.wav");
-	precache_sound2 ("zmaster/toreturn.wav");
-	precache_sound2 ("zmaster/comnback.wav");
+	precache_sound ("hknight/slash1.wav");
+	precache_sound ("zmaster/idle1.wav");
+	precache_sound ("zmaster/idle2.wav");
+	precache_sound ("zmaster/sight.wav");
+	precache_sound ("zmaster/pain.wav");
+	precache_sound ("zmaster/energize.wav");
+	precache_sound ("zmaster/toreturn.wav");
+	precache_sound ("zmaster/comnback.wav");
 	precache_sound ("items/protect.wav");
 	precache_sound ("items/protect2.wav");
 	precache_sound ("items/protect3.wav");

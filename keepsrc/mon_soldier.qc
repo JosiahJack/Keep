@@ -122,31 +122,23 @@ void()	army_atk7	=[	$shoot7,	army_atk8	] {ai_face();SUB_CheckRefire (army_atk1);
 void()	army_atk8	=[	$shoot8,	army_atk9	] {};
 void()	army_atk9	=[	$shoot9,	army_run1	] {ai_face();};
 
-//======================================================================
-void() army_fire_rocket =
-{
+void() army_fire_rocket = {
 	local vector org, dir;
 	
 	if (!self.enemy) return;
 	if (self.health < 1) return;
-	
-	// check for enemy origin (based on sight test)
-	// if cannot see enemy fire at last known location
-	ai_trackenemy();
-	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "ad171/soldier/rocket_fire.wav", 1, ATTN_NORM);	
 
+	ai_trackenemy(); // check for enemy origin (based on sight test) if cannot see enemy fire at last known location
+	self.effects = self.effects | EF_MUZZLEFLASH;
+	sound (self, CHAN_WEAPON, "quoth/soldier/rocket.wav", 1, ATTN_NORM);	
 	self.attack_speed = 250;
 	makevectors (self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = normalize(self.attack_track - org);
-	
 	Launch_Missile (org, dir, '0 0 0', CT_PROJ_ARMY, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
-void() army_rocket_think =
-{
+void() army_rocket_think = {
 	// Only do a limited amount of updates to the missile
 	self.count = self.count + 1;
 	if (self.count < (5+skill)) {
@@ -159,11 +151,8 @@ void() army_rocket_think =
 			self.attack_track = normalize(self.enemy.origin - self.origin);
 			self.velocity = self.attack_track * self.attack_speed;
 			self.angles = vectoangles(self.velocity);
-		}
-		// Fire at original location
-		else self.velocity = self.velocity * 1.15;
-	}
-	else {
+		} else self.velocity = self.velocity * 1.15; // Fire at original location
+	} else {
 		// Remove missile after a while
 		self.nextthink = time + LIFE_ROCKET;
 		self.think = SUB_Remove;
@@ -173,7 +162,7 @@ void() army_rocket_think =
 void()	army_rocket_atk1 =[	$load1,	army_load2	] {ai_face();
 	self.pain_finished = time + 1.3;
 	self.attack_track = self.enemy.origin;
-	sound (self, CHAN_WEAPON, "ad171/soldier/rocket_load.wav", 1, ATTN_NORM);};
+	sound (self, CHAN_WEAPON, "quoth/soldier/load.wav", 1, ATTN_NORM);};
 void()	army_load2	=[	$load2,	army_load3	] {ai_trackenemy();};
 void()	army_load3	=[	$load3,	army_load4	] {ai_trackenemy();};
 void()	army_load4	=[	$load4,	army_load5	] {ai_trackenemy();};
@@ -267,7 +256,7 @@ void() army_nailfire = {
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	if (self.classtype == CT_MONARMYCYBORG || self.classtype == CT_MONSUPERENFORCER) sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_WEAPON, "weapons/rocket1i_q15.wav", 1, ATTN_NORM);
+	else sound (self, CHAN_WEAPON, "q15/weapons/rocket1i.wav", 1, ATTN_NORM);
 
 	launch_projectile(org, dir, type, self.attack_speed);
 };
@@ -534,8 +523,8 @@ void() monster_army_rocket =
 	if (random() < 0.35 && self.ammo_rockets < 1) self.ammo_rockets = 1;
 
 	// Extra load/fire sounds (from Quoth MOD)
-	precache_sound ("ad171/soldier/rocket_load.wav");
-	precache_sound ("ad171/soldier/rocket_fire.wav");
+	precache_sound ("quoth/soldier/load.wav");
+	precache_sound ("quoth/soldier/rocket.wav");
 	precache_sound ("ad171/soldier/rocket_hit.wav");
 
 	if (self.poisonous) precache_model (MODEL_PROJ_ROCKETGRN);
@@ -614,7 +603,7 @@ void() monster_army_spike = {
 
 	// Extra load/fire sounds (from Quoth MOD)
 	precache_sound ("soldier/reload.wav");
-	precache_sound ("weapons/rocket1i_q15.wav");
+	precache_sound ("q15/weapons/rocket1i.wav");
 	
 	self.th_missile = army_nail1;
 	if (self.deathstring == "") self.deathstring = " was spiked by a Nail Grunt\n";

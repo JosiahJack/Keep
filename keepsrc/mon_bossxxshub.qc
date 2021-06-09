@@ -276,7 +276,7 @@ void() xxshub_explode = {
 	WriteByte (MSG_BROADCAST, 8);
 	
 	// Classic sprite/DP explosion
-	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/shub/explode_death.wav");
+	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/seeker/explode_major.wav");
 
 	// Gib explosive fountain!?!
 	ThrowGib(11, 10 + rint(random()*10));	// large blobs
@@ -437,7 +437,7 @@ void() monster_shub = {
 	precache_sound (self.pain_sound);
 	precache_sound (self.pain_sound2);
 	precache_sound ("ad171/shub/death1.wav");
-	precache_sound ("ad171/shub/explode_death.wav");
+	precache_sound ("ad171/seeker/explode_major.wav");
 	
 	self.sight_sound = "ad171/shub/sight1.wav";
 	precache_sound (self.sight_sound);

@@ -393,7 +393,7 @@ void() monster_wolf = {
 
 	self.sight_sound = "redfield/wolf/s_howl.wav";
 	precache_sound (self.sight_sound);
-	precache_sound ("ad171/weapons/plasma_expl.wav");
+	precache_sound ("drake/weapons/plasmal.wav");
 
 	precache_model (SEXP_ICE_BIG);		// Shard impact (ne_ruin)
 

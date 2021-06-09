@@ -550,7 +550,7 @@ void () monster_dragon = {
 
    self.mdl = "progs/drake/dragon.mdl";
    precache_model ("progs/drake/dragon.mdl");
-   precache_model ("progs/quoth2pt2full/fireball.mdl");
+   precache_model ("progs/quoth/fireball.mdl");
    self.gib1mdl = "progs/drake/drggib01.mdl";
    self.gib2mdl = "progs/drake/drggib02.mdl";
    self.gib3mdl = "progs/drake/drggib03.mdl";

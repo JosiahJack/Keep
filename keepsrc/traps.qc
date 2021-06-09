@@ -183,9 +183,7 @@ void() trap_shooter_fire =
 	}
 };
 
-//----------------------------------------------------------------------
-void() trap_shooter_use =
-{
+void() trap_shooter_use = {
 	// Check if disabled/off first
 	if (self.estate & ESTATE_BLOCK) return;
 	
@@ -204,64 +202,55 @@ void() trap_shooter_use =
 	trap_shooter_fire();
 };
 
-//----------------------------------------------------------------------
 void() trap_shooter_reset = {
 	self.estate = ESTATE_ON;
 	self.state = STATE_OFF;
 };
 
-//----------------------------------------------------------------------
 void() trap_spikeshooter = {
 	if (self.spawnflags & TRAP_SNGSPIKE) {
 		self.mdl = MODEL_PROJ_SNG;
 		self.noise = "weapons/spike2.wav";
 		self.classproj = CT_PROJ_SNG;
 		if (!self.speed) self.speed = SPEED_TRAPSPIKE;
-	}
-	else if (self.spawnflags & TRAP_LASER) {
+	} else if (self.spawnflags & TRAP_LASER) {
 		self.mdl = MODEL_PROJ_LASER;
-		self.noise = "enforcer/enfire.wav";
+		self.noise = SOUND_LASER_FIRE;
 		self.classproj = CT_PROJ_LASER;
 		if (!self.speed) self.speed = SPEED_LASER;
 		// Used for impact sound of laser
-		precache_sound ("enforcer/enfstop.wav");
-	}
-	else if (self.spawnflags & TRAP_WIZSPIKE) {
+		precache_sound (SOUND_LASER_HIT);
+	} else if (self.spawnflags & TRAP_WIZSPIKE) {
 		self.mdl = MODEL_PROJ_WIZ;
 		self.noise = "weapons/spike2.wav";
 		self.volume = 0.5;
 		self.classproj = CT_PROJ_WIZ;
 		if (!self.speed) self.speed = SPEED_WIZSPIKE;
-	}
-	else if (self.spawnflags & TRAP_CROSSBOLTS) {
+	} else if (self.spawnflags & TRAP_CROSSBOLTS) {
 		self.mdl = MODEL_PROJ_WIZ;
 		self.noise = "ad171/weapons/crossbow_fire.wav";
 		self.volume = 0.5;
 		self.classproj = CT_PROJ_BOLT1;
 		if (!self.speed) self.speed = SPEED_DCROSS + (skill * SPEED_BOLTSKILL);
-	}
-	else if (self.spawnflags & TRAP_POISONBOLTS) {
+	} else if (self.spawnflags & TRAP_POISONBOLTS) {
 		self.mdl = MODEL_PROJ_WIZ;
 		self.noise = "ad171/weapons/crossbow_fire.wav";
 		self.volume = 0.5;
 		self.classproj = CT_PROJ_BOLT2;
 		if (!self.speed) self.speed = SPEED_DCROSS + (skill * SPEED_BOLTSKILL);
-	}
-	else if (self.spawnflags & TRAP_DARTS) {
+	} else if (self.spawnflags & TRAP_DARTS) {
 		self.mdl = MODEL_PROJ_WIZ;
-		self.noise = "weapons/lncharow.wav";
+		self.noise = "custents/weapons/lncharow.wav";
 		self.volume = 0.5;
 		self.classproj = CT_PROJ_DARTARROW;
 		if (!self.speed) self.speed = SPEED_DCROSS + (skill * SPEED_BOLTSKILL);
-	}
-	else if (self.spawnflags & TRAP_HELLSPIKE) {
+	} else if (self.spawnflags & TRAP_HELLSPIKE) {
 		self.mdl = MODEL_PROJ_HKN;
 		self.noise = "weapons/spike2.wav";
 		self.volume = 0.5;
 		self.classproj = CT_PROJ_HKN;
 		if (!self.speed) self.speed = SPEED_HKSPIKE;
-	}
-	else {
+	} else {
 		self.mdl = MODEL_PROJ_NG;
 		self.noise = "weapons/spike2.wav";
 		self.classproj = CT_PROJ_NG;
@@ -370,8 +359,7 @@ When triggered, fires a ROCKET in the direction determined by angle
 Use TOGGLE spawnflag and trigger to enable continuous mode
 
 ======================================================================*/
-void() trap_rocketshooter =
-{
+void() trap_rocketshooter = {
 	if (self.spawnflags & TRAP_LAVAROCKET) {
 		self.mdl = MODEL_PROJ_LAVA;
 		precache_model (self.mdl);
@@ -380,8 +368,7 @@ void() trap_rocketshooter =
 
 		self.classproj = CT_PROJ_LAVA;
 		if (!self.speed) self.speed = SPEED_LAVABALL;
-	}
-	else if (self.spawnflags & TRAP_FIREROCKET) {
+	} else if (self.spawnflags & TRAP_FIREROCKET) {
 		self.mdl = MODEL_PROJ_GARGOYLE;
 		precache_model (self.mdl);
 		self.noise = "ad171/gargoyle/attack1.wav";
@@ -389,18 +376,16 @@ void() trap_rocketshooter =
 
 		self.classproj = CT_PROJ_GARG;
 		if (!self.speed) self.speed = SPEED_GARGMISSILE;
-	}
-	else if (self.spawnflags & TRAP_JIMROCKET) {
+	} else if (self.spawnflags & TRAP_JIMROCKET) {
 		self.mdl = MODEL_PROJ_ROCKET;
 		precache_model (self.mdl);
 		self.noise = "weapons/sgun1.wav";
 		precache_sound (self.noise);
-		precache_sound ("ad171/jim/rocket_hit.wav");
+		precache_sound ("quoth/dguard/hit.wav");
 
 		self.classproj = CT_PROJ_JIM2;
 		if (!self.speed) self.speed = SPEED_RLPLAYER;
-	}
-	else {
+	} else {
 		self.mdl = MODEL_PROJ_ROCKET;
 		precache_model (self.mdl);
 		self.noise = "weapons/sgun1.wav";
@@ -643,18 +628,18 @@ void() trap_gasshooter_use = {
 void() trap_gasshooter = {
 	if (self.spawnflags & TRAP_GASFIRE) {
 		self.mdl = SBURST_FLAME;
-		self.noise1 = "traps/flame_loop.wav";
-		self.noise2 = "traps/flame_off.wav";
+		self.noise1 = "ad171/traps/flame_loop.wav";
+		self.noise2 = "ad171/traps/flame_off.wav";
 	} else if (self.spawnflags & TRAP_GASPOISON) {
 		self.mdl = SBURST_POISON;
-		self.noise1 = "traps/steam_loop.wav";
-		self.noise2 = "traps/steam_off.wav";
+		self.noise1 = "ad171/traps/steam_loop.wav";
+		self.noise2 = "ad171/traps/steam_off.wav";
 	} else {
 		// Steam particles is the default
 		self.spawnflags = self.spawnflags | TRAP_GASSTEAM;
 		self.mdl = SBURST_STEAM;
-		self.noise1 = "traps/steam_loop.wav";
-		self.noise2 = "traps/steam_off.wav";
+		self.noise1 = "ad171/traps/steam_loop.wav";
+		self.noise2 = "ad171/traps/steam_off.wav";
 	}
 
 	if (self.spawnflags & TRAP_GASSILENT) {

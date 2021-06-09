@@ -511,38 +511,34 @@ void() light_globe =
 	light_customstyle_start();
 };
 
-//======================================================================
-/*QUAKED light_torch_small_walltorch (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF NO_SOUND NO_STATIC x x x x NOPARTICLES
-{ model(":progs/flame.mdl"); }
-Short wall torch
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-light      : sets brightness, 300 is default
-_color     : Light color - R/G/B (def='1 1 1')
-wait       : Fade distance multiplier (def=1)
-delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
-mangle     : Spotlight direction
-angle      : Spotlight cone angle (def=40)
+// QUAKED light_torch_small_walltorch (0 .5 0) (-10 -10 -20) (10 10 20) LIGHTOFF NO_SOUND NO_STATIC x x x x NOPARTICLES
+// { model(":progs/q15/flame.mdl"); }
+// Short wall torch
+// -------- KEYS --------
+// targetname : toggle state (use trigger ent for exact state)
+// light      : sets brightness, 300 is default
+// _color     : Light color - R/G/B (def='1 1 1')
+// wait       : Fade distance multiplier (def=1)
+// delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+// mangle     : Spotlight direction
+// angle      : Spotlight cone angle (def=40)
 
-_dirt      : Dirt map (override)
-_dirtscale : Dirt scale (override)
-_deviance  : Deviance
-_samples   : No. of Deviance lights (def=16)
-_surface   : Surface light texture name
-_surface_offset : Surface light offset (def=2)
-_softangle : Spotlight soft angle (def=0)
-_anglescale: Light angle scale (def=0.5)
--------- SPAWNFLAGS --------
-LIGHTOFF   : Starts off and waits for trigger
-NO_SOUND   : No ambient sound
-NO_STATIC  : Will not turn into static entity
-NOPARTICLES: No particle or effects active
--------- NOTES --------
-Short wall torch
-
-======================================================================*/
-void() light_torch_on =
-{
+// _dirt      : Dirt map (override)
+// _dirtscale : Dirt scale (override)
+// _deviance  : Deviance
+// _samples   : No. of Deviance lights (def=16)
+// _surface   : Surface light texture name
+// _surface_offset : Surface light offset (def=2)
+// _softangle : Spotlight soft angle (def=0)
+// _anglescale: Light angle scale (def=0.5)
+// -------- SPAWNFLAGS --------
+// LIGHTOFF   : Starts off and waits for trigger
+// NO_SOUND   : No ambient sound
+// NO_STATIC  : Will not turn into static entity
+// NOPARTICLES: No particle or effects active
+// -------- NOTES --------
+// Short wall torch
+void() light_torch_on = {
 	self.frame = 0;
 	self.estate = ESTATE_ON;
 	// Light style defined? (use array to get the latest)
@@ -560,10 +556,10 @@ void() light_torch_off = {
 
 void() light_torch_small_walltorch = {
 	// Allow for custom models
-	if (self.mdl == "") self.mdl = "progs/flame.mdl";
+	if (self.mdl == "") self.mdl = "progs/q15/flame.mdl"; // Using the SMC/Q1.5 version as it has on/off frames
 	precache_model (self.mdl);
 	// Allow for custom sounds
-	if (self.noise == "") self.noise = "ad171/ambience/fire1.wav";
+	if (self.noise == "") self.noise = "ambience/fire1.wav";
 	precache_sound (self.noise);
 	// Default for fire1 sound
 	if (!self.waitmin) self.waitmin = 2.165;
@@ -588,43 +584,39 @@ void() light_torch_small_walltorch = {
 	light_customstyle_start();
 };
 
-//======================================================================
-/*QUAKED light_flame_large_yellow (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF NO_SOUND NO_STATIC x x x x NOPARTICLES
-{ model(":progs/flame2.mdl"); }
-Large yellow flame
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-light      : sets brightness, 300 is default
-_color     : Light color - R/G/B (def='1 1 1')
-wait       : Fade distance multiplier (def=1)
-delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
-mangle     : Spotlight direction
-angle      : Spotlight cone angle (def=40)
+// QUAKED light_flame_large_yellow (0 1 0) (-8 -8 -8) (8 8 8) LIGHTOFF NO_SOUND NO_STATIC x x x x NOPARTICLES
+// { model(":progs/flame2.mdl"); }
+// Large yellow flame
+// -------- KEYS --------
+// targetname : toggle state (use trigger ent for exact state)
+// light      : sets brightness, 300 is default
+// _color     : Light color - R/G/B (def='1 1 1')
+// wait       : Fade distance multiplier (def=1)
+// delay      : Attenuation 0=Linear, 1=inverse, 2=Squared, 3=NoFalloff, 4=Minlight, 5=Good Ambient
+// mangle     : Spotlight direction
+// angle      : Spotlight cone angle (def=40)
 
-_dirt      : Dirt map (override)
-_dirtscale : Dirt scale (override)
-_deviance  : Deviance
-_samples   : No. of Deviance lights (def=16)
-_surface   : Surface light texture name
-_surface_offset : Surface light offset (def=2)
-_softangle : Spotlight soft angle (def=0)
-_anglescale: Light angle scale (def=0.5)
--------- SPAWNFLAGS --------
-LIGHTOFF   : Starts off and waits for trigger
-NO_SOUND   : No ambient sound
-NO_STATIC  : Will not turn into static entity
-NOPARTICLES: No particle or effects active
--------- NOTES --------
-Large yellow flame
-
-======================================================================*/
-void() light_flame_large_yellow =
-{
+// _dirt      : Dirt map (override)
+// _dirtscale : Dirt scale (override)
+// _deviance  : Deviance
+// _samples   : No. of Deviance lights (def=16)
+// _surface   : Surface light texture name
+// _surface_offset : Surface light offset (def=2)
+// _softangle : Spotlight soft angle (def=0)
+// _anglescale: Light angle scale (def=0.5)
+// -------- SPAWNFLAGS --------
+// LIGHTOFF   : Starts off and waits for trigger
+// NO_SOUND   : No ambient sound
+// NO_STATIC  : Will not turn into static entity
+// NOPARTICLES: No particle or effects active
+// -------- NOTES --------
+// Large yellow flame
+void() light_flame_large_yellow = {
 	// Allow for custom models
 	if (self.mdl == "") self.mdl = "progs/flame2.mdl";
 	precache_model (self.mdl);
 	// Allow for custom sounds
-	if (self.noise == "") self.noise = "ad171/ambience/fire1.wav";
+	if (self.noise == "") self.noise = "ambience/fire1.wav";
 	precache_sound (self.noise);
 	// The default length of the ambient fire1 sound
 	if (!self.waitmin) self.waitmin = 2.165;
@@ -680,13 +672,12 @@ NOPARTICLES: No particle or effects active
 Small yellow flames.
 
 ======================================================================*/
-void() light_flame_small_yellow =
-{
+void() light_flame_small_yellow = {
 	// Allow for custom models
 	if (self.mdl == "") self.mdl = "progs/flame2.mdl";
 	precache_model (self.mdl);
 	// Allow for custom sounds
-	if (self.noise == "") self.noise = "ad171/ambience/fire1.wav";
+	if (self.noise == "") self.noise = "ambience/fire1.wav";
 	precache_sound (self.noise);
 	// The default length of the ambient fire1 sound
 	if (!self.waitmin) self.waitmin = 2.165;
@@ -716,7 +707,7 @@ void() light_flame_small_white = { light_flame_small_yellow(); };
 
 //======================================================================
 /*QUAKED light_postlight (0 .5 0) (-8 -8 -32) (8 8 16) LIGHTOFF NOTSTATIC x x x x x x
-{ model(":progs/ad171/misc_lightpost.mdl"); }
+{ model(":progs/quoth/lightpost.mdl"); }
 light post (from Quoth)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -744,7 +735,7 @@ light post (from Quoth)
 ======================================================================*/
 void() light_postlight =
 {
-	self.mdl = "progs/ad171/misc_lightpost.mdl";
+	self.mdl = "progs/quoth/lightpost.mdl";
 	precache_model (self.mdl);
 
 	// Default = static entity, check done in static function
@@ -757,7 +748,7 @@ void() light_postlight =
 
 //======================================================================
 /*QUAKED light_tubelight (0 .5 0) (-8 -8 -32) (8 8 16) LIGHTOFF NOTSTATIC x x x x x x
-{ model(":progs/ad171/misc_lighttube.mdl"); }
+{ model(":progs/quoth/lighttube.mdl"); }
 light Tube (from Quoth)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -784,7 +775,7 @@ light Tube (from Quoth)
 ======================================================================*/
 void() light_tubelight =
 {
-	self.mdl = "progs/ad171/misc_lighttube.mdl";
+	self.mdl = "progs/quoth/lighttube.mdl";
 	precache_model (self.mdl);
 
 	// Default = static entity, check done in static function
@@ -824,9 +815,8 @@ NOPARTICLES: No particle or effects active
 Flame Pyre (from Quoth)
 
 ======================================================================*/
-void() light_flame_pyre =
-{
-	self.mdl = "progs/ad181/misc_flame_big.mdl";
+void() light_flame_pyre = {
+	self.mdl = "progs/quoth/flame_pyre.mdl";
 	precache_model (self.mdl);
 
 	// Default = static entity, check done in static function
@@ -842,7 +832,7 @@ void() light_flame_pyre =
 
 //======================================================================
 /*QUAKED light_flame_brazier_short (0 .5 0) (-8 -8 -16) (8 8 8) LIGHTOFF NOTSTATIC x x x x x NOPARTICLES
-{ model(":progs/quoth2pt2full/brazshrt.mdl"); }
+{ model(":progs/quoth/brazshrt.mdl"); }
 Short brazier (from Quoth)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -871,7 +861,7 @@ Short brazier (from Quoth)
 
 ======================================================================*/
 void() light_flame_brazier_short = {
-	self.mdl = "progs/quoth2pt2full/brazshrt.mdl";
+	self.mdl = "progs/quoth/brazshrt.mdl";
 	precache_model (self.mdl);
 
 	// Default = static entity, check done in static function
@@ -887,7 +877,7 @@ void() light_flame_brazier_short = {
 
 //======================================================================
 /*QUAKED light_flame_brazier_tall (0 .5 0) (-8 -8 -64) (8 8 8) LIGHTOFF NOTSTATIC x x x x x NOPARTICLES
-{ model(":progs/quoth2pt2full/braztall.mdl"); }
+{ model(":progs/quoth/braztall.mdl"); }
 Long brazier (from Quoth)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -916,7 +906,7 @@ Long brazier (from Quoth)
 
 ======================================================================*/
 void() light_flame_brazier_tall = {
-	self.mdl = "progs/quoth2pt2full/braztall.mdl";
+	self.mdl = "progs/quoth/braztall.mdl";
 	precache_model (self.mdl);
 	self.classtype = CT_LIGHTSTATIC;
 	setup_quoth_nostatic(); // Default = static entity, check done in static function
@@ -929,7 +919,7 @@ void() light_flame_brazier_tall = {
 
 //======================================================================
 /*QUAKED light_torch_long_walltorch (0 .5 0) (-8 -8 -48) (8 8 80) LIGHTOFF NOTSTATIC x x x x x NOPARTICLES
-{ model(":progs/ad181/misc_longtrch.mdl"); }
+{ model(":progs/quoth/longtrch.mdl"); }
 Long wall torch (from Quoth)
 -------- KEYS --------
 targetname : toggle state (use trigger ent for exact state)
@@ -958,7 +948,7 @@ Long wall torch (from Quoth)
 
 ======================================================================*/
 void() light_torch_long_walltorch = {
-	self.mdl = "progs/ad181/misc_longtrch.mdl";
+	self.mdl = "progs/quoth/longtrch.mdl";
 	precache_model (self.mdl);
 
 	// Default = static entity, check done in static function

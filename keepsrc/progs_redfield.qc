@@ -1265,7 +1265,7 @@ void() misc_vase_setup = {
 // -------- NOTES --------
 // Breakable Vase
 void() misc_vase = {
-	self.mdl = "progs/redfield/vase.mdl";	
+	self.mdl = "progs/ad181/brk_vase1.mdl";	
 	precache_model (self.mdl);
 	
 	if (self.spawnflags == 3 || self.spawnflags == 7 || self.spawnflags == 67 || self.spawnflags == 71) {

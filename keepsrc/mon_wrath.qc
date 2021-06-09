@@ -190,15 +190,15 @@ void () monster_wrath = {
 	if (monster_checkspawn() == TRUE) return;
 
    if (!self.mdl) self.mdl = "progs/rogue/wrath.mdl";
-   if (!self.mdl) self.gib1mdl = "progs/drake/wrthgib1.mdl";
-   if (!self.mdl) self.gib2mdl = "progs/drake/wrthgib2.mdl";
-   if (!self.mdl) self.gib3mdl = "progs/drake/wrthgib3.mdl";
+   if (!self.mdl) self.gib1mdl = "progs/rogue/wrthgib1.mdl";
+   if (!self.mdl) self.gib2mdl = "progs/rogue/wrthgib2.mdl";
+   if (!self.mdl) self.gib3mdl = "progs/rogue/wrthgib3.mdl";
 
    precache_model ("progs/rogue/wrath.mdl");
    precache_model ("progs/drake/w_ball.mdl");
-   precache_model ("progs/drake/wrthgib1.mdl");
-   precache_model ("progs/drake/wrthgib2.mdl");
-   precache_model ("progs/drake/wrthgib3.mdl");
+   precache_model ("progs/rogue/wrthgib1.mdl");
+   precache_model ("progs/rogue/wrthgib2.mdl");
+   precache_model ("progs/rogue/wrthgib3.mdl");
    precache_sound ("rogue/wrath/wsee.wav");
    precache_sound ("rogue/wrath/watt.wav");
 

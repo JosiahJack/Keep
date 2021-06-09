@@ -93,28 +93,28 @@ float BMODTYPE_BRICK7 = 56;		// ID city4_5 (small blue brick)
 float BMODTYPE_CERAMIC1 = 60;	// Blank atm
 
 // Breakable objects explosion/impact sounds
-string SOUND_BRK_ROCK = "ad171/break/rock_impact.wav";
-string SOUND_BRK_WOOD = "ad171/break/wood_impact.wav";
-string SOUND_BRK_GLASS = "ad171/break/glass_impact.wav";
-string SOUND_BRK_METAL = "ad171/break/metal_impact.wav";
-string SOUND_BRK_FLESH = "ad181/break/flesh_impact.wav";
+string SOUND_BRK_ROCK = "quoth/impact/rockbrk.wav";
+string SOUND_BRK_WOOD = "quoth/impact/wood_bk.wav";
+string SOUND_BRK_GLASS = "quoth/impact/glass_bk.wav";
+string SOUND_BRK_METAL = "quoth/impact/metal_bk.wav";
+string SOUND_BRK_FLESH = "ad171/gibs/gib1.wav";
 string SOUND_BRK_CERAMIC = "ad171/break/ceramic_impact.wav";
-string SOUND_IMP_ROCK1 = "ad171/break/rock_i1.wav";
-string SOUND_IMP_ROCK2 = "ad171/break/rock_i2.wav";
-string SOUND_IMP_ROCK3 = "ad171/break/rock_i3.wav";
-string SOUND_IMP_ROCK4 = "ad171/break/rock_i4.wav";
-string SOUND_IMP_WOOD1 = "ad171/break/wood_i1.wav";
-string SOUND_IMP_WOOD2 = "ad171/break/wood_i2.wav";
-string SOUND_IMP_WOOD3 = "ad171/break/wood_i3.wav";
-string SOUND_IMP_WOOD4 = "ad171/break/wood_i4.wav";
-string SOUND_IMP_GLASS1 = "ad171/break/glass_i1.wav";
-string SOUND_IMP_GLASS2 = "ad171/break/glass_i2.wav";
-string SOUND_IMP_GLASS3 = "ad171/break/glass_i3.wav";
-string SOUND_IMP_GLASS4 = "ad171/break/glass_i4.wav";
-string SOUND_IMP_METAL1 = "ad171/break/metal_i1.wav";
-string SOUND_IMP_METAL2 = "ad171/break/metal_i2.wav";
-string SOUND_IMP_METAL3 = "ad171/break/metal_i3.wav";
-string SOUND_IMP_METAL4 = "ad171/break/metal_i4.wav";
+string SOUND_IMP_ROCK1 = "quoth/impact/rock1.wav";
+string SOUND_IMP_ROCK2 = "quoth/impact/rock2.wav";
+string SOUND_IMP_ROCK3 = "quoth/impact/rock3.wav";
+string SOUND_IMP_ROCK4 = "quoth/impact/rock4.wav";
+string SOUND_IMP_WOOD1 = "quoth/impact/wood_i1.wav";
+string SOUND_IMP_WOOD2 = "quoth/impact/wood_i2.wav";
+string SOUND_IMP_WOOD3 = "quoth/impact/wood_i3.wav";
+string SOUND_IMP_WOOD4 = "quoth/impact/wood_i4.wav";
+string SOUND_IMP_GLASS1 = "quoth/impact/glass_i1.wav";
+string SOUND_IMP_GLASS2 = "quoth/impact/glass_i2.wav";
+string SOUND_IMP_GLASS3 = "quoth/impact/glass_i3.wav";
+string SOUND_IMP_GLASS4 = "quoth/impact/glass_i4.wav";
+string SOUND_IMP_METAL1 = "quoth/impact/metal_i1.wav";
+string SOUND_IMP_METAL2 = "quoth/impact/metal_i2.wav";
+string SOUND_IMP_METAL3 = "quoth/impact/metal_i3.wav";
+string SOUND_IMP_METAL4 = "quoth/impact/metal_i4.wav";
 string SOUND_IMP_FLESH1 = "ad171/gibs/gibhit1.wav";
 string SOUND_IMP_FLESH2 = "ad171/gibs/gibhit2.wav";
 string SOUND_IMP_FLESH3 = "ad171/gibs/gibhit3.wav";
@@ -250,7 +250,7 @@ string SOUND_AXE_WOOD = "ad171/weapons/axe_wood.wav";			// wood impact
 string SOUND_AXE_GLASS = "ad171/weapons/axe_glass.wav";		// glass impact
 string SOUND_AXE_METAL = "ad171/weapons/axe_metal.wav";		// metal impact
 string SOUND_AXE_FLESH = "weapons/axe_flesh.wav";		// Squish impact
-string SOUND_AXE_CERAMIC = "ad171/weapons/axe_ceramic.wav";	// ceramic impact
+string SOUND_AXE_CERAMIC = "ne_ruins/physics/sgrenhit2.wav";	// ceramic impact
 string SOUND_AXE_PLAYER = "player/axhit1.wav";			// ax hit meat (another player)
 string SOUND_AXE_STONE = "player/axhit2.wav";			// stone impact
 
@@ -1282,14 +1282,14 @@ void() trigger_monsterbreak = {
 };
 
 // QUAKED func_breakable_vase (1 .5 .25) (-16 -16 -16) (16 16 24) STARTOFF NODAMAGE EXPLOSION SILENT DAMAGE NOMOSTER NOSOUND NOROTATE
-// { model(":progs/brk_vase1.mdl"); }
+// { model(":progs/ad181/brk_vase1.mdl"); }
 // Breakable ceramic vase (model)
 // -------- KEYS --------
-// mdl        : Name of model to display (def = 'progs/brk_vase1.mdl')
-// brkobj1    : Breakable rubble 1 (def = 'progs/brk_vase1part1.mdl')
-// brkobj2    : Breakable rubble 2 (def = 'progs/brk_vase1part2.mdl')
-// brkobj3    : Breakable rubble 3 (def = 'progs/brk_vase1part3.mdl')
-// brkobj4    : Breakable rubble 4 (def = 'progs/brk_vase1part4.mdl')
+// mdl        : Name of model to display (def = 'progs/ad181/brk_vase1.mdl')
+// brkobj1    : Breakable rubble 1 (def = 'progs/ad181/brk_vase1part1.mdl')
+// brkobj2    : Breakable rubble 2 (def = 'progs/ad181/brk_vase1part2.mdl')
+// brkobj3    : Breakable rubble 3 (def = 'progs/ad181/brk_vase1part3.mdl')
+// brkobj4    : Breakable rubble 4 (def = 'progs/ad181/brk_vase1part4.mdl')
 // exactskin  : Skin override of model (def 0, cannot be negative)
 // target     : Additional triggers to fire when model breaks
 // angle      : Yaw rotation of model (-1/0 = random rotation)
@@ -1341,12 +1341,12 @@ void() func_breakable_ceramic_model = {
 };
 
 void() misc_breakable_vase1 = {
-	if (self.mdl == "") self.mdl = "progs/brk_vase1.mdl"; // Default model/skin
+	if (self.mdl == "") self.mdl = "progs/ad181/brk_vase1.mdl"; // Default model/skin
 	precache_model(self.mdl);
-	if (self.brkobj1 == "") self.brkobj1 = "progs/brk_vase1part1.mdl";
-	if (self.brkobj2 == "") self.brkobj2 = "progs/brk_vase1part2.mdl";
-	if (self.brkobj3 == "") self.brkobj3 = "progs/brk_vase1part3.mdl";
-	if (self.brkobj4 == "") self.brkobj4 = "progs/brk_vase1part4.mdl";
+	if (self.brkobj1 == "") self.brkobj1 = "progs/ad181/brk_vase1part1.mdl";
+	if (self.brkobj2 == "") self.brkobj2 = "progs/ad181/brk_vase1part2.mdl";
+	if (self.brkobj3 == "") self.brkobj3 = "progs/ad181/brk_vase1part3.mdl";
+	if (self.brkobj4 == "") self.brkobj4 = "progs/ad181/brk_vase1part4.mdl";
 	if (self.brkmdltype <= 0) self.brkmdltype = 0; // Make sure no out of range errors
 	if (self.brkmdltype == 2 || self.brkmdltype == 3) { // pre-defined large version (2 or 3. 2 = large, 3 = large (animated))
 		self.bbmins = '-16 -16 -16';

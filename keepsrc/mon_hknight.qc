@@ -1102,13 +1102,13 @@ void() monster_hell_knight_enforcer = {
 	self.mdl = ("progs/lieutenant/hknight.mdl");
 	self.headmdl = "progs/h_mega.mdl";
 	precache_model("progs/newhouse/vk_spike.mdl");
-	precache_model2 ("progs/h_mega.mdl");
+	precache_model ("progs/h_mega.mdl");
 	
-	precache_sound2 ("hknight/attack1.wav");
+	precache_sound ("hknight/attack1.wav");
 	precache_sound ("hknight/hit.wav");		// used by C code, so don't sound2
-	precache_sound2 ("hknight/slash1.wav");
-	precache_sound2 ("hknight/idle.wav");
-	precache_sound2 ("hknight/grunt.wav");
+	precache_sound ("hknight/slash1.wav");
+	precache_sound ("hknight/idle.wav");
+	precache_sound ("hknight/grunt.wav");
 	precache_sound ("knight/sword1.wav");
 	precache_sound ("knight/sword2.wav");
 	
@@ -1121,14 +1121,14 @@ void() monster_hell_knight_enforcer = {
 	self.idle_sound = "enforcer/idle1.wav";
 	self.pain_sound = "enforcer/pain1.wav";
 	self.pain_sound2 = "enforcer/pain2.wav";
-	precache_sound2 ("enforcer/death1.wav");
-	precache_sound2 ("enforcer/idle1.wav");
-	precache_sound2 ("enforcer/pain1.wav");
-	precache_sound2 ("enforcer/pain2.wav");
-	precache_sound2 ("enforcer/sight1.wav");
-	precache_sound2 ("enforcer/sight2.wav");
-	precache_sound2 ("enforcer/sight3.wav");
-	precache_sound2 ("enforcer/sight4.wav");
+	precache_sound ("enforcer/death1.wav");
+	precache_sound ("enforcer/idle1.wav");
+	precache_sound ("enforcer/pain1.wav");
+	precache_sound ("enforcer/pain2.wav");
+	precache_sound ("enforcer/sight1.wav");
+	precache_sound ("enforcer/sight2.wav");
+	precache_sound ("enforcer/sight3.wav");
+	precache_sound ("enforcer/sight4.wav");
 	self.exactskin = 0;
 	if (self.health <= 0) self.health = 105;
 	if (self.deathstring == "") self.deathstring = " was cauterized by a Saber Enforcer\n";

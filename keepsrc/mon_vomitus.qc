@@ -96,7 +96,7 @@ void() Vomit_Spawn = {
 	newSpawn.idle_sound = "blob/sight1.wav";
 	newSpawn.sight_sound = self.idle_sound;
 	newSpawn.pain_sound = self.idle_sound;
-	setmodel (newSpawn, "progs/mon_tarbaby.mdl");
+	setmodel (newSpawn, "progs/qmaster/mon_tarbaby.mdl");
 	newSpawn.solid = SOLID_SLIDEBOX;
 	newSpawn.skin = self.skin;
 	setorigin (newSpawn, self.origin);   
@@ -456,7 +456,7 @@ void() monster_vomit = {
 	self.mdl = "progs/drake/vomitus.mdl";
     precache_model ("progs/drake/vomitus.mdl");
     precache_model ("progs/zom_gib.mdl");
-	precache_model ("progs/mon_tarbaby.mdl");
+	precache_model ("progs/qmaster/mon_tarbaby.mdl");
     precache_sound ("blob/death1.wav");
     precache_sound ("fish/bite.wav");
 	self.idle_sound = "zerstorer/gibfnt/gf_plop.wav";

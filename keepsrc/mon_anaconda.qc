@@ -92,9 +92,9 @@ void() monster_coil = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	precache_sound2("blob/death1.wav");
-	precache_sound2("boss1/out1.wav");
-	precache_model2("progs/anaconda/coils.mdl");
+	precache_sound("blob/death1.wav");
+	precache_sound("boss1/out1.wav");
+	precache_model("progs/anaconda/coils.mdl");
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 	setmodel(self, "progs/anaconda/coils.mdl");
@@ -936,20 +936,20 @@ void() monster_anac = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	precache_sound2("blob/death1.wav");
-	precache_sound2("boss1/out1.wav");
-	precache_sound2("boss1/sight1.wav");
-	precache_sound2("hknight/idle.wav");
-	precache_sound2("demon/dhit2.wav");
-	precache_sound2("enforcer/enfstop.wav");
-	precache_sound2("zombie/z_shot1.wav");
-	precache_sound2("items/damage2.wav");
-	precache_sound2("doors/airdoor2.wav");
-	precache_sound2("boss2/pop2.wav");
-	precache_sound2("boss2/death.wav");
-	precache_model2("progs/anaconda/anaconda.mdl");
-	precache_model2("progs/drake/s_explod.spr");
-	precache_model2("progs/spike2.mdl");
+	precache_sound("blob/death1.wav");
+	precache_sound("boss1/out1.wav");
+	precache_sound("boss1/sight1.wav");
+	precache_sound("hknight/idle.wav");
+	precache_sound("demon/dhit2.wav");
+	precache_sound(SOUND_LASER_HIT);
+	precache_sound("zombie/z_shot1.wav");
+	precache_sound("items/damage2.wav");
+	precache_sound("doors/airdoor2.wav");
+	precache_sound("boss2/pop2.wav");
+	precache_sound("boss2/death.wav");
+	precache_model("progs/anaconda/anaconda.mdl");
+	precache_model("progs/drake/s_explod.spr");
+	precache_model("progs/spike2.mdl");
 	precache_model("progs/gib1.mdl");
 	self.gib1mdl = "progs/gib1.mdl";
 	precache_model("progs/gib2.mdl");

@@ -309,7 +309,6 @@ void(float dist) iceg_mcharge = {
 	self.nextthink = time + self.ticktimer;
 };
 
-//----------------------------------------------------------------------
 void() iceg_knock1 = [ $knock1, iceg_knock2 ] {iceg_mcharge(5);};
 void() iceg_knock2 = [ $knock2, iceg_knock3 ] {iceg_mcharge(6);};
 void() iceg_knock3 = [ $knock3, iceg_knock4 ] {iceg_mcharge(7);};
@@ -322,7 +321,7 @@ void() iceg_knock9 = [ $knock9, iceg_knock10 ] {iceg_mcharge(7);};
 void() iceg_knock10 = [ $knock10, iceg_knock11 ] {iceg_mcharge(6);};
 void() iceg_knock11 = [ $knock11, iceg_knock12 ] {iceg_mcharge(5);monster_footstep(FALSE);};
 void() iceg_knock12 = [ $knock12, iceg_knock13 ] {iceg_mcharge(5);
-	sound (self, CHAN_VOICE, "ad171/golem/melee_swipe.wav", 1, ATTN_IDLE);};
+	sound (self, CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_IDLE);};
 void() iceg_knock13 = [ $knock13, iceg_knock14 ] {iceg_mcharge(4);};
 void() iceg_knock14 = [ $knock14, iceg_knock15 ] {iceg_mcharge(3);};
 void() iceg_knock15 = [ $knock15, iceg_knock16 ] {iceg_mcharge(2);};
@@ -870,7 +869,7 @@ void() iceg_wake1 =[ $birth1, iceg_wake2 ] {
 	self.attack_finished = time + 2;	// Reset attack system
 
 	iceg_birth();
-	sound (self, CHAN_BODY, "ad171/golem/wakestatue.wav", 1, ATTN_NORM);
+	sound (self, CHAN_BODY, "ne_ruins/h2golem/brkfree.wav", 1, ATTN_NORM);
 };
 void() iceg_wake2 =[ $birth2, iceg_wake3 ] {iceg_birth();ai_forward(2);};
 void() iceg_wake3 =[ $birth3, iceg_wake4 ] {iceg_birth();ai_forward(3);};
@@ -1032,10 +1031,10 @@ void() monster_icegolem = {
 	precache_sound (self.idle_soundcom2);
 	
 	// Break free of statue pose
-	precache_sound ("ad171/golem/wakestatue.wav");
+	precache_sound ("ne_ruins/h2golem/brkfree.wav");
 	
 	// Several melee smack sounds and giant ground slam
-	precache_sound ("ad171/golem/melee_swipe.wav");
+	precache_sound ("ad171/weapons/crossbow_swipe.wav");
 	precache_sound ("ad171/golem/melee_punch.wav");
 	precache_sound ("ad171/golem/melee_pound.wav");
 	precache_sound ("ad171/golem/groundslam.wav");

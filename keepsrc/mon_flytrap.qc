@@ -251,7 +251,7 @@ void() rilke27      =[  84,        rilke1  ]     {
 	flytrap_findvictim();
 };
 
-void() fault1       =[  85,         fault2  ]     {sound(self,CHAN_VOICE,"ad171/swampling/death.wav",1,ATTN_NORM);};
+void() fault1       =[  85,         fault2  ]     {sound(self,CHAN_VOICE,"quoth/voreling/death.wav",1,ATTN_NORM);};
 void() fault2       =[  86,         fault3  ]     {			ThrowGib(1,2);};
 void() fault3       =[  87,         fault4  ]     {			ThrowGib(2,1);};
 void() fault4       =[  88,         fault5  ]     {			ThrowGib(3,1);};
@@ -307,7 +307,7 @@ void() info_fli = {
     precache_model ("progs/madfox/mon_flytrap.mdl");
 	precache_sound ("ad171/ambience/switch_2.wav");
 	precache_sound ("ad171/lostsoul/bite.wav");
-	precache_sound ("ad171/swampling/death.wav");
+	precache_sound ("quoth/voreling/death.wav");
 	precache_sound ("ad171/swampling/idle2.wav");
 	precache_sound ("ad171/swampling/idle3.wav");
 	precache_sound ("zerstorer/cube/bc_gulp.wav");
@@ -487,7 +487,7 @@ void() flytrap_pain10      =[  105,         flytrap_pain11  ]     {};
 void() flytrap_pain11      =[  106,         flytrap_pain12  ]     {};
 void() flytrap_pain12      =[  107,         flytrap_walk1  ]     {};
 
-void() flytrap_death1      =[  108,        flytrap_death2 ]     {sound(self,CHAN_VOICE,"ad171/swampling/death.wav",1,ATTN_NORM);};
+void() flytrap_death1      =[  108,        flytrap_death2 ]     {sound(self,CHAN_VOICE,"quoth/voreling/death.wav",1,ATTN_NORM);};
 void() flytrap_death2      =[  109,         flytrap_death3  ]     {};
 void() flytrap_death3      =[  110,         flytrap_death4  ]     {};
 void() flytrap_death4      =[  111,         flytrap_death5  ]     {};
@@ -519,7 +519,7 @@ void() monster_flytrap = {
     precache_model ("progs/madfox/mon_flytrap_standing.mdl");
 	precache_sound ("ad171/ambience/switch_2.wav");
 	precache_sound ("ad171/lostsoul/bite.wav");
-	precache_sound ("ad171/swampling/death.wav");
+	precache_sound ("quoth/voreling/death.wav");
 	precache_sound ("ad171/swampling/idle2.wav");
 	precache_sound ("ad171/swampling/idle3.wav");
 	precache_sound ("zerstorer/cube/bc_gulp.wav");

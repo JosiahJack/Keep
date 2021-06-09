@@ -248,7 +248,7 @@ void() GrappleService = {
 
     if (!self.hook.state) { // Hook is flying and not attached to anything yet.
         // just draw a line to the hook
-        if (vlen(self.hook.origin - self.origin) > HOOK_NEAR) QC_ParseBeam(0,"progs/drake/beam.mdl", self.hook, self.hook.origin, self.origin + '0 0 16', 31);
+        if (vlen(self.hook.origin - self.origin) > HOOK_NEAR) QC_ParseBeam(0,"progs/beam.mdl", self.hook, self.hook.origin, self.origin + '0 0 16', 31);
         if (!self.button0 && self.weapon == IT2_GRAPPLE) GrappleSever (self.hook);
         return;
     }
@@ -288,5 +288,5 @@ void() GrappleService = {
         targ.flags = targ.flags - (targ.flags & FL_ONGROUND);
     }
 
-    if (vlen(self.hook.origin - self.origin) > HOOK_NEAR) QC_ParseBeam(0,"progs/drake/beam.mdl", self.hook, self.hook.origin, self.origin + '0 0 16', 31);
+    if (vlen(self.hook.origin - self.origin) > HOOK_NEAR) QC_ParseBeam(0,"progs/beam.mdl", self.hook, self.hook.origin, self.origin + '0 0 16', 31);
 };

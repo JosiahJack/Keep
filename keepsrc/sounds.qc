@@ -71,7 +71,7 @@ void() ambient_drip = {
 };
 
 void() ambient_drone = {
-	self.noise = "ad171/ambience/drone6.wav";
+	self.noise = "ambience/drone6.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
@@ -119,11 +119,8 @@ void() ambient_thunder = {
 	ambient_sound_setup();
 };
 
-//----------------------------------------------------------------------
 // Quoth MOD - Extra ambient sounds
-//----------------------------------------------------------------------
-void() ambient_generalpurpose =
-{
+void() ambient_generalpurpose = {
 	// Check for sound file
 	if (self.noise == "") {
 		dprint("\b[AMBIENT_SOUND]\b Missing sound file at ");
@@ -137,32 +134,28 @@ void() ambient_generalpurpose =
 	ambient_sound_setup();
 };
 
-//----------------------------------------------------------------------
 // Travil MOD - Extra ambient sounds
-//----------------------------------------------------------------------
-void() ambient_lavagurg =
-{
-	self.noise = "ambience/lavagurg.wav";
-	precache_sound (self.noise);
-	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
-	ambient_sound_setup();
-};
-void() ambient_hevifals =
-{
-	self.noise = "ambience/hevifals.wav";
-	precache_sound (self.noise);
-	self.volume = 0.5;
-	ambient_sound_setup();
-};
-void() ambient_bublfals =
-{
-	self.noise = "ambience/bublfals.wav";
+void() ambient_lavagurg = {
+	self.noise = "travail/ambience/lavagurg.wav";
 	precache_sound (self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
 
-//======================================================================
+void() ambient_hevifals = {
+	self.noise = "travail/ambience/hevifals.wav";
+	precache_sound (self.noise);
+	self.volume = 0.5;
+	ambient_sound_setup();
+};
+
+void() ambient_bublfals = {
+	self.noise = "custents/ambient/runwater.wav";
+	precache_sound (self.noise);
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
+	ambient_sound_setup();
+};
+
 /*QUAKED ambient_custom_sound (0.5 0.1 0.8) (-16 -16 -8) (16 16 8) x PLAYONCE x x x x STARTOFF x
 Play a sound on a periodic basis
 -------- KEYS --------
@@ -333,7 +326,6 @@ void() ambient_custom_sound = {
 	}
 };
 
-//----------------------------------------------------------------------
 // Quoth version (not 100% compatible)
 void() play_sound_triggered = { 
 	self.spawnflags = self.spawnflags | ENT_STARTOFF;
@@ -341,7 +333,7 @@ void() play_sound_triggered = {
 };
 
 void() ambient_custom_water = {
-	if (self.noise == "") self.noise = "ambience/water1.wav";
+	if (self.noise == "") self.noise = "ad171/steps/water1.wav";
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.75;
 	ambient_custom_loop();
 };

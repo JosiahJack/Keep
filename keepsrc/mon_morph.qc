@@ -136,12 +136,10 @@ void() morph_run10 =[ $mfrun10, morph_run11 ] { ai_run(15); };
 void() morph_run11 =[ $mfrun11, morph_run1 ] { ai_run(11); };
 
 void() morph_stab2 = {
-	local float dist;
-	local float attackDamage;
+	local float dist, attackDamage;
 	local vector org, dir;
 
-	
-if (!self.enemy) return;
+	if (!self.enemy) return;
 	if (!CanDamage (self.enemy, self)) return;
 
 	ai_face();
@@ -151,7 +149,7 @@ if (!self.enemy) return;
 	makevectors (self.angles);
 
 	if ( dist <= 90 ) {
-		sound (self, CHAN_WEAPON, "enforcer/enfstop.wav", 1, ATTN_STATIC);
+		sound (self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
 	   	attackDamage = (random() * 10) + 20;
 		T_Damage (self.enemy, self, self, attackDamage,DAMARMOR);
 		SpawnBlood (self.enemy, self.enemy.origin, v_forward * 150, 14);

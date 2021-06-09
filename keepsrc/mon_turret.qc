@@ -223,12 +223,10 @@ void() turret_active =	[ $tilt0, turret_active]
 	CheckTurretAttack ();
 };
 
-//=============================================================================
-
 void() turret_bullet1 = [ $tilt0, turret_bullet2] {
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
-	sound (self, CHAN_WEAPON, "turret/plasbult.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "custents/turret/plasbult.wav", 1, ATTN_NORM);
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	dir = self.enemy.origin - self.enemy.velocity*0.3*random();
 	dir = normalize (dir - self.origin);
@@ -239,7 +237,7 @@ void() turret_bullet2 = [ $tilt0, turret_bullet3]
 void() turret_bullet3 = [ $tilt0, turret_bullet4] {
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
-	sound (self, CHAN_WEAPON, "turret/plasbult.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "custents/turret/plasbult.wav", 1, ATTN_NORM);
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	FireBullets (2, '0 0 0');
 };
@@ -247,7 +245,7 @@ void() turret_bullet4 = [ $tilt0, turret_bullet5] {turret_face();self.nextthink 
 void() turret_bullet5 = [ $tilt0, turret_active] {
 	turret_face();
 	self.frame = turret_fireframe(self.rotate_type);
-	sound (self, CHAN_WEAPON, "turret/plasbult.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "custents/turret/plasbult.wav", 1, ATTN_NORM);
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	FireBullets (2, '0 0 0');
 };
@@ -294,18 +292,18 @@ void() turret_rocket1 =[ $tilt0, turret_active]
 void() turret_beam1 = [ $tilt0, turret_beam2]
 {
 	turret_face();
-	sound (self, CHAN_WEAPON, "turret/beamchrg.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "custents/turret/beamchrg.wav", 1, ATTN_NORM);
 	self.nextthink = time + 0.2;
 };
 void() turret_beam2 = [ $tilt0, turret_beam3]
 {
-	sound (self, CHAN_WEAPON, "turret/beamchrg.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "custents/turret/beamchrg.wav", 1, ATTN_NORM);
 	turret_face();
 	self.nextthink = time + 0.2;
 };
 void() turret_beam3 = [ $tilt0, turret_beam4]
 {
-	sound (self, CHAN_WEAPON, "turret/beamchrg.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "custents/turret/beamchrg.wav", 1, ATTN_NORM);
 	turret_face();
 	self.nextthink = time + 0.2;
 };
@@ -370,7 +368,7 @@ void() turret_fire4 =	[ $tilt0, turret_fire4]
 void(entity inflictor, entity attacker, float take)	turret_pain = {
 	if (self.pain_finished > time) return;
 	self.pain_finished = time + 1;
-	sound (self, CHAN_VOICE, "turret/beamchrg.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "custents/turret/beamchrg.wav", 1, ATTN_NORM);
 	ThrowGib(11,1);
 };
 
@@ -461,21 +459,21 @@ void() monster_turret= {
 
 	self.gib1mdl = "progs/custents/turetgib.mdl";
 
-	precache_sound ("turret/beamchrg.wav");
-	precache_sound ("turret/beammode.wav");
+	precache_sound ("custents/turret/beamchrg.wav");
+	precache_sound ("custents/turret/beammode.wav");
 
 	if(self.spawnflags & TUR_LASERS) {
 		precache_model ("progs/laser.mdl");
-		precache_sound ("enforcer/enfire.wav");
-		precache_sound ("enforcer/enfstop.wav");
+		precache_sound (SOUND_LASER_FIRE);
+		precache_sound (SOUND_LASER_HIT);
 	} else if(self.spawnflags & TUR_LASERS) {
 		precache_model ("progs/missile.mdl");
 	} else if(self.spawnflags & TUR_PPC) {
 		precache_model ("progs/custents/beam.mdl");
-		precache_sound ("turret/beamhit.wav");
+		precache_sound ("custents/turret/beamhit.wav");
 		precache_sound ("hipnotic/weapons/mjolhit.wav");
 	} else }
-		precache_sound ("turret/plasbult.wav");
+		precache_sound ("custents/turret/plasbult.wav");
 	}
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;

@@ -289,7 +289,7 @@ void() tjump_touch = {
 // Up, up, and away!
     if (!(self.spawnflags & PUSH_CURRENT))
     {   // First sound overrides jump sound.  Second sound is standard push sound.
-        sound (other, CHAN_BODY, "drake/items/reflect.wav", 1, ATTN_NORM);
+        sound (other, CHAN_BODY, "rogue/runes/end1.wav", 1, ATTN_NORM);
         sound (other, CHAN_AUTO, "ambience/windfly.wav", 1, ATTN_NORM);
     }
     if (self.speed)
@@ -315,7 +315,7 @@ void() tjump_touch = {
 // Pushes the player up
 void() trigger_jump_spawn = {
     precache_sound ("ambience/windfly.wav");
-    precache_sound ("drake/items/reflect.wav");       // Bounce sound.
+    precache_sound ("rogue/runes/end1.wav");       // Bounce sound.
 
     // 'InitTrigger' already done elsewhere.
     self.touch = tjump_touch;

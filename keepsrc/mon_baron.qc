@@ -1192,9 +1192,9 @@ void() monster_baron = {
 	// Elemental boss barons, for Rapture maps.
     precache_model ("progs/drake/ice.mdl");
     precache_model ("progs/drake/plasma.mdl");
-    precache_model ("progs/drake/rubble1.mdl");
-    precache_model ("progs/drake/rubble2.mdl");
-    precache_model ("progs/drake/rubble3.mdl");
+    precache_model ("progs/custents/rubble1.mdl");
+    precache_model ("progs/custents/rubble2.mdl");
+    precache_model ("progs/custents/rubble3.mdl");
     precache_model ("progs/drake/s_wave2.spr");
     precache_model ("progs/drake/smoke.mdl");
     precache_model ("progs/drake/flame2.mdl");
@@ -1230,7 +1230,7 @@ void() monster_baron = {
     precache_sound ("shambler/smack.wav");
     precache_sound ("drake/weapons/mirv1.wav");   // In case MIRV is forbidden.
     precache_model ("progs/drake/s_wave.spr");
-    precache_model ("progs/drake/s_expbig.spr");
+    precache_model ("progs/quoth/bigexp.spr");
     precache_model ("progs/drake/s_fancy.spr");
 	precache_monster_golem();
     self.sight_sound = "nehahra/baron/sight.wav";

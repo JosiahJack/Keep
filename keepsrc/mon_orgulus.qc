@@ -42,10 +42,7 @@ $frame stand11 stand12 stand13 stand14 stand15 stand16 stand17
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9 walk10
 $frame walk11 walk12 walk13 walk14 walk15 walk16 walk17
 
-//==============================================================================
-
-void() Laser_Touch =
-{
+void() Laser_Touch = {
 	local vector org;
 	
 	if (other == self.owner)
@@ -57,16 +54,13 @@ void() Laser_Touch =
 		return;
 	}
 	
-	sound (self, CHAN_WEAPON, "enforcer/enfstop.wav", 1, ATTN_STATIC);
+	sound (self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
 	org = self.origin - 8*normalize(self.velocity);
 
-	if (other.health)
-	{
+	if (other.health) {
 		SpawnBlood (org, self.velocity*0.2, 15);
 		T_Damage (other, self, self.owner, 15);
-	}
-	else
-	{
+	} else {
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 		WriteByte (MSG_BROADCAST, TE_GUNSHOT);
 		WriteCoord (MSG_BROADCAST, org_x);
@@ -335,20 +329,20 @@ void() monster_ogre_mhorbo =
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 	
-	precache_model2 ("progs/enforcer.mdl");
-	precache_model2 ("progs/h_mega.mdl");
-	precache_model2 ("progs/laser.mdl");
+	precache_model ("progs/enforcer.mdl");
+	precache_model ("progs/h_mega.mdl");
+	precache_model ("progs/laser.mdl");
 
-	precache_sound2 ("enforcer/death1.wav");
-	precache_sound2 ("enforcer/enfire.wav");
-	precache_sound2 ("enforcer/enfstop.wav");
-	precache_sound2 ("enforcer/idle1.wav");
-	precache_sound2 ("enforcer/pain1.wav");
-	precache_sound2 ("enforcer/pain2.wav");
-	precache_sound2 ("enforcer/sight1.wav");
-	precache_sound2 ("enforcer/sight2.wav");
-	precache_sound2 ("enforcer/sight3.wav");
-	precache_sound2 ("enforcer/sight4.wav");
+	precache_sound ("enforcer/death1.wav");
+	precache_sound ("enforcer/enfire.wav");
+	precache_sound ("enforcer/enfstop.wav");
+	precache_sound ("enforcer/idle1.wav");
+	precache_sound ("enforcer/pain1.wav");
+	precache_sound ("enforcer/pain2.wav");
+	precache_sound ("enforcer/sight1.wav");
+	precache_sound ("enforcer/sight2.wav");
+	precache_sound ("enforcer/sight3.wav");
+	precache_sound ("enforcer/sight4.wav");
 	
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;

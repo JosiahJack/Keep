@@ -466,7 +466,7 @@ void(vector spot) R_Exp3 = {
     e = spawn();
     setorigin (e, spot);
     sound (e, CHAN_AUTO, "weapons/r_exp3.wav", 1, ATTN_NORM);
-    remove (e);
+	entity_remove(self,3); // Kind of the point to delay removal before playing the sound
 };
 
 void(vector spot) Rocket_Explosion1 = {
@@ -506,23 +506,18 @@ void(vector spot, float r) Colored_Explosion = {
         {base = 240; add = 4;}
     else if (r == 1)
         {base = 247; add = 5;}
-    else
-    {
+    else {
         r = random() * 3;
-        if (r < 1)
-            {base = 224; add = 16;}
-        else if (r < 2)
-            {base = 230; add = 8;}
-        else
-            {base = 232; add = 8;}
+        if (r < 1) {base = 224; add = 16;}
+        else if (r < 2) {base = 230; add = 8;}
+        else {base = 232; add = 8;}
     }
     Rocket_Explosion2 (spot, base, add);
 };
 
 // As 'BecomeAnyExplosion', with adjustable frames per second.
 // Used by some custom explosions.
-void(float base, float add, float fps, string text) BecomeFpsExplosion =
-{
+void(float base, float add, float fps, string text) BecomeFpsExplosion = {
     if (!add)
         add = 6;    // Assume standard duration of six frames.
     if (!fps)
@@ -598,14 +593,12 @@ void(vector spot) MakeIcyExp = {
     iced.velocity   = '0 0 0';
     iced.touch      = SUB_Null;
     iced.solid      = SOLID_NOT;
-    //- - - -
     iced.alpha      = ALPHA_ICE;
     iced.frame      = 3;
     iced.cnt        = iced.frame + 4;    // 5 - 1
     iced.wait       = 0.1;
     iced.nextthink  = time + 0.1;
     iced.think      = s_explode_think;
-    //- - - -
     setall (iced, "progs/drake/iceball.mdl", '0 0 0', '0 0 0', spot);
 };
 
@@ -687,9 +680,9 @@ void(string fx, void() thinkst) Explosion_Start =
 void() BecomeTheBigFire =
 {
     if (deathmatch || coop)
-        Explosion_Start ("progs/drake/s_expbig.spr", s_fiery1);
+        Explosion_Start ("progs/quoth/bigexp.spr", s_fiery1);
     else
-        BecomeFpsExplosion (0, 17, 20, "progs/drake/s_expbig.spr");
+        BecomeFpsExplosion (0, 17, 20, "progs/quoth/bigexp.spr");
 };
 
 void() BecomeExplosion2 =
@@ -1309,7 +1302,7 @@ void () raincloud_use = {
 
 void () spawn_raincloud = {
 	//dprint("Raincloud spawning");
-	self.mdl = "progs/astorm.spr";
+	self.mdl = "progs/qmaster/astorm.spr";
 	if (self.alpha <= 0) self.alpha = 1;
 	setmodel(self, self.mdl);
     setsize (self, '0 0 0', '0 0 0');
@@ -1371,14 +1364,14 @@ void () misc_raincloud = {
 	precache_model (self.path);
 	precache_model (self.headmdl);
 	
-	if (!self.noise1) self.noise1 = "ad171/misc/drip1.wav";
-	if (!self.noise2) self.noise2 = "ad171/misc/drip2.wav";
-	if (!self.noise3) self.noise3 = "ad171/misc/drip3.wav";
+	if (!self.noise1) self.noise1 = "rrp/misc/drip1.wav";
+	if (!self.noise2) self.noise2 = "rrp/misc/drip2.wav";
+	if (!self.noise3) self.noise3 = "rrp/misc/drip3.wav";
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
 
-	precache_model("progs/astorm.spr");
+	precache_model("progs/qmaster/astorm.spr");
 	if (!self.delay && (self.targetname == "")) self.delay = (random() * 5); // random spawn time to not all storm the same
 	spawn_raincloud();
 };

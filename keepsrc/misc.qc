@@ -33,15 +33,15 @@ void() misc_explod_delay = {
 	self.origin = self.origin + '0 0 32';
 	if (self.classname == "misc_biobox_l" || self.classname == "misc_biobox_s") {
 		SpawnExplosion(EXPLODE_POISON_MED, self.origin, self.noise);
-		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -40);
-		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -40);
-		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -40);
-		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -50);
-		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -50);
-		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -60);
-		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -60);
-		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -75);
-		throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -75);
+		throwpolypgib("progs/quoth/polypgib.mdl", -40);
+		throwpolypgib("progs/quoth/polypgib.mdl", -40);
+		throwpolypgib("progs/quoth/polypgib.mdl", -40);
+		throwpolypgib("progs/quoth/polypgib.mdl", -50);
+		throwpolypgib("progs/quoth/polypgib.mdl", -50);
+		throwpolypgib("progs/quoth/polypgib.mdl", -60);
+		throwpolypgib("progs/quoth/polypgib.mdl", -60);
+		throwpolypgib("progs/quoth/polypgib.mdl", -75);
+		throwpolypgib("progs/quoth/polypgib.mdl", -75);
 	} else {
 		if (self.classname == "misc_plasmabox_l" || self.classname == "misc_plasmabox_s") {
 			particle_explode(self.origin, 50+random()*50, 2, PARTICLE_BURST_BLUE, PARTICLE_BURST_UPWARD);
@@ -545,11 +545,9 @@ void() misc_gibfountain = {
 	if (self.sounds < 1) self.sounds = 1;
 	// Original Zerstorer toilet sounds
 	if (self.sounds == 1) {
-		self.noise = "misc/gibf_fire1.wav";
-		self.noise1 = "misc/gibf_fire2.wav";
-	}
-	// Empty sound files
-	else if (self.sounds == 4) {
+		self.noise = "zerstorer/gibfnt/gf_sprt1.wav";
+		self.noise1 = "zerstorer/gibfnt/gf_sprt2.wav";
+	} else if (self.sounds == 4) { // Empty sound files
 		self.noise = self.noise1 = SOUND_EMPTY;
 	}
 	
@@ -885,9 +883,9 @@ void() misc_drip =
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
 	
-	self.noise1 = "ad171/misc/drip1.wav";
-	self.noise2 = "ad171/misc/drip2.wav";
-	self.noise3 = "ad171/misc/drip3.wav";
+	self.noise1 = "rrp/misc/drip1.wav";
+	self.noise2 = "rrp/misc/drip2.wav";
+	self.noise3 = "rrp/misc/drip3.wav";
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
@@ -1069,9 +1067,9 @@ void() func_drips = {
 	precache_model (self.path);
 	precache_model (self.headmdl);
 	
-	if (!self.noise1) self.noise1 = "ad171/misc/drip1.wav";
-	if (!self.noise2) self.noise2 = "ad171/misc/drip2.wav";
-	if (!self.noise3) self.noise3 = "ad171/misc/drip3.wav";
+	if (!self.noise1) self.noise1 = "rrp/misc/drip1.wav";
+	if (!self.noise2) self.noise2 = "rrp/misc/drip2.wav";
+	if (!self.noise3) self.noise3 = "rrp/misc/drip3.wav";
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);

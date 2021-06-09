@@ -1,39 +1,67 @@
-/* VERSUS.QC
-===================================================================================================================
-by Qmaster
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Qmaster
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 
+// Function count: 
+//
+// Implements: Multiplayer game mode pitting survivors against gamemasters
+//
+// Description:
+// Survival team must battle monsters and collect coins to pay for unlocking
+// the next area, weapons, powerups, etc. until they can pay for and access the
+// exit.  Coins are shared among all survival players.  Players start with 3
+// lives per player to the total survivor life pool, up to 12 (4 X 3) at start.
+//
+// Gamemaster team must spawn monsters of their choice and collect bones to pay
+// for more monsters until the survival team are out of lives.  Bones are
+// shared among all gamemaster players.  Gamemasters are on noclip, notarget,
+// and god mode and cannot switch off from this.
+//
+// Cannot be a gamemaster if no other players are present.
 
-Multiplayer game mode where there are two teams
+// Possible to play as survivor(s) versus randomized computer gamemaster
+// similar to LF4D2 director or Call of Duty zombies mode.
+//=============================================================================
 
-Survival team must battle monsters and collect coins to pay for unlocking the next area, 
-weapons, powerups, etc. until they can pay for and access the exit.
-
-Gamemaster team must spawn monsters of their choice and collect bones to pay for more monsters
-until the survival team are out of lives.
-
-FOR AD MOD OR AD DERIVATIVES ONLY
-===================================================================================================================
-*/
-/*  ADD TO setttings.qc -> ImpulseCommands() FUNCTION
-===================================================================================================================
-void(entity targ) print_coins;
-void(entity targ) print_bones;
-
-	else if (self.impulse == 143) print_coins();		// Display versus currency for survival player(s)
-	else if (self.impulse == 144) print_bones();		// Display versus currency for gamemaster player(s)
-
-===================================================================================================================
-*/
-
+// For pressing a use keybind to use something.  Used by purchase triggers.
 void () usecommand = {
 	self.usingfinished = time + 0.8; // show that we pressed using for a bit, to give time for touches to register
 };
 
+// Sets up the base game states for versus mode
 void () versus_setup = {
-	precache_model("progs/coinitem.mdl");
-   coins = 0;
-   bones = 0;
-   numsurvivors = 0;
-   numgamemasters = 0;
+	precache_model("progs/qmaster/coinitem.mdl"); // Spawned by all monsters on death
+	precache_model("progs/qmaster/boneitem.mdl"); // Spawned by all monsters on death, if gamemasters are present
+	coins = 0;
+	bones = 0;
+	numsurvivors = 0;
+	numgamemasters = 0;
 	wavenumber = 0;
 };
 
@@ -113,7 +141,7 @@ void () item_coin_setskin = {
 };
 
 void () item_coin = {
-	if (self.mdl == "") self.mdl = "progs/coinitem.mdl";
+	if (self.mdl == "") self.mdl = "progs/qmaster/coinitem.mdl"; // Made the drake coin.mdl spin
 	precache_model (self.mdl);
 	item_coin_setskin();
 	item_coin_setup();
@@ -143,9 +171,9 @@ void () item_bone_touch = {
 };
 
 void () item_bone = {
-	if (self.mdl == "") self.mdl = "progs/boneitem.mdl";
+	if (self.mdl == "") self.mdl = "progs/qmaster/boneitem.mdl"; // Added rotate flag to ad171/proj_wraithbone.mdl
 	precache_model (self.mdl);
-	if (self.noise == "") self.noise = "polyp/gibsplt1.wav";
+	if (self.noise == "") self.noise = "quoth/polyp/gibsplt1.wav";
 	if (!self.count) self.count = 1;
 	precache_sound (self.noise);
 	self.touch = item_touch;
@@ -159,7 +187,6 @@ void(float c) DropCoin = {
 	local entity item;
 
 	if (c < 1 || c > 99) return;
-
 	if (coop != 3) return; // not in versus mode
 
 	item = spawn();
@@ -174,7 +201,7 @@ void(float c) DropCoin = {
 	item.solid = SOLID_TRIGGER;
 	item.movetype = MOVETYPE_TOSS;
 	self.noise = "drake/items/money.wav";
-	setmodel (item, "progs/coinitem.mdl");
+	setmodel (item, "progs/qmaster/coinitem.mdl");
 	setsize (item, '-16 -16 -24', '16 16 32');
 	item.touch = item_touch;
 	item.touch2 = item_coin_touch;
@@ -183,25 +210,6 @@ void(float c) DropCoin = {
 	item.think = item_thinkloop;		// Check floor
 	item.nextthink = time + 0.3;		// Let coin drop first
 };
-
-/* Purchasing code
-	// Check for and allow for purchases in versus survivor mode
-	if (coop > 2 && other.versustype == VT_SURVIVOR && self.cost > 0) {
-		if (other.usingfinished > time) {
-			if (coins >= self.cost) {
-				// continue on
-				coins = coins - self.cost;
-				other.usingfinished = 0;
-			} else {
-				centerprint(other,"You do not have enough for this");
-				return;
-			}
-		} else {
-			centerprint3(other,"Press \b'e'\b to purchase for ",ftos(self.cost)," coins.");
-			return;
-		}
-	}
-*/
 
 void () trigger_coinpurchase_touch = {
 	if ( !(other.flags & FL_CLIENT) ) return;

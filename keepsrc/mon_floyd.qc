@@ -120,9 +120,7 @@ void()	floyd_run5 =[ $run5, floyd_run5 ] {
 	self.walkframe = 4; floyd_runframe();
 };
 
-//======================================================================
-void(float muzzle) floyd_fire =
-{
+void(float muzzle) floyd_fire = {
 	local vector org, targ_org, dir, muzoff;
 
 	if (!self.enemy) return;
@@ -130,23 +128,16 @@ void(float muzzle) floyd_fire =
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	self.attack_speed = SPEED_FLOYDBOLT + (skill * SPEED_FLOYDSKILL);
-	sound (self, CHAN_WEAPON, "floyd/fire.wav", 1, ATTN_NORM);
-
-	// Create left/right laser vector
-	muzoff = '0 0 0'; muzoff_y = muzzle;
-
+	sound (self, CHAN_WEAPON, "rrp/floyd/fire.wav", 1, ATTN_NORM);
+	muzoff = '0 0 0'; muzoff_y = muzzle; // Create left/right laser vector
 	makevectors (self.angles);
 	org = self.origin + attack_vector(self.attack_offset + muzoff);
-	
-	// Aim plasma bolt towards the enemy feet (using view_ofs)
-	if (self.enemy.flags & FL_CLIENT) targ_org = self.enemy.origin - '0 0 20';
+	if (self.enemy.flags & FL_CLIENT) targ_org = self.enemy.origin - '0 0 20'; // Aim plasma bolt towards the enemy feet (using view_ofs)
 	else targ_org = self.enemy.origin - self.enemy.view_ofs;
 	dir = normalize(targ_org - self.origin);
-
 	launch_plasma(org, dir, CT_MONFLOYD, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
 void()	floyd_ready1 =[$run1, floyd_ready2] {ai_face();};
 void()	floyd_ready2 =[$run2, floyd_ready3] {ai_face();};
 void()	floyd_ready3 =[$run3, floyd_ready4] {ai_face();};
@@ -421,9 +412,7 @@ vector (entity floyd) get_floyd_mins =
 	return floyd_mins;
 };
 
-//----------------------------------------------------------------------
-vector (entity floyd) get_floyd_maxs =
-{
+vector (entity floyd) get_floyd_maxs = {
 	local float feetyaw;
 	local vector floyd_maxs;
 	
@@ -440,9 +429,7 @@ vector (entity floyd) get_floyd_maxs =
 	return floyd_maxs;
 };
 
-/*======================================================================
-QUAKED monster_floyd (1 0 0) (-24 -24 -24) (24 24 64) Ambush
-======================================================================*/
+// QUAKED monster_floyd (1 0 0) (-24 -24 -24) (24 24 64) Ambush
 void() monster_floyd = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
@@ -451,9 +438,9 @@ void() monster_floyd = {
 
 	// Let the mapper override the mdl keys so that they can
 	// create different skin versions, a rusty floyd anyone?
-	if (self.mdl == "") self.mdl = "progs/ad172/mon_floyd.mdl";			// Dusty the bin
-	if (self.headmdl == "") self.headmdl = "progs/ad172/h_floyd.mdl";		// Top part
-	if (self.gib1mdl == "") self.gib1mdl = "progs/ad172/gib_floyd1.mdl";	// wreckage.mdl
+	if (self.mdl == "") self.mdl = "progs/ad181/mon_floyd.mdl";			// Dusty the bin
+	if (self.headmdl == "") self.headmdl = "progs/ad181/h_floyd.mdl";		// Top part
+	if (self.gib1mdl == "") self.gib1mdl = "progs/ad181/gib_floyd1.mdl";	// wreckage.mdl
 	if (self.gib2mdl == "") self.gib2mdl = "progs/ad171/gib_metal1.mdl";	// Breakable metal
 	if (self.gib3mdl == "") self.gib3mdl = "progs/ad171/gib_metal3.mdl";	// Breakable metal
 
@@ -463,23 +450,23 @@ void() monster_floyd = {
 	precache_model (self.gib2mdl);		// Generic metal1_2
 	precache_model (self.gib3mdl);		// Generic metal1_2
 	
-	self.idle_sound = "floyd/idle.wav";
+	self.idle_sound = "rrp/floyd/idle.wav";
 	precache_sound (self.idle_sound);
 
 	// Extra load/fire sounds
 	precache_model (MODEL_PROJ_LASERBLUE);
-	precache_sound("floyd/fire.wav");
+	precache_sound("rrp/floyd/fire.wav");
 	precache_sound (SOUND_PLASMA_FIRE);
 	precache_sound (SOUND_PLASMA_HIT);
 
-	self.death_sound = "floyd/death.wav";
+	self.death_sound = "rrp/floyd/death.wav";
 	self.death_sound2 = "ad171/seeker/explode_major.wav";
 	precache_sound (self.death_sound);
 	precache_sound (self.death_sound2);
-	self.pain_sound = "floyd/pain.wav";
+	self.pain_sound = "rrp/floyd/pain.wav";
 	precache_sound (self.pain_sound);
 	
-	self.sight_sound = "floyd/sight.wav";
+	self.sight_sound = "rrp/floyd/sight.wav";
 	precache_sound (self.sight_sound);
 
 	self.solid = SOLID_NOT;				// No interaction with world

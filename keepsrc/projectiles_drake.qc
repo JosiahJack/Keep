@@ -1,13 +1,11 @@
 void() Axe_Watch;
-//==========================================================================
+
 //  Archer Knight Arrows
-
 // Update 11/24/09:  Constants moved to defs.
-
 // Magic arrow explosion code.
 void() AkArrow_Explode = {
     self.count = self.count & 3;
-    sound (self, CHAN_AUTO, "drake/archer/explode.wav", 1, ATTN_NORM);
+    sound (self, CHAN_AUTO, "hexen2/weapons/explode.wav", 1, ATTN_NORM);
     Colored_Explosion (self.origin, self.count);
     BecomeFancy (X80_SPARK_ORANGE + (self.count * 6), 6);
 };

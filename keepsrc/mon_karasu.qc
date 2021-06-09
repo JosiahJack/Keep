@@ -694,7 +694,7 @@ void()	karasu_die12	=[	$death12,	karasu_die13	] {ai_forward(5);};
 void()	karasu_die13	=[	$death13,	karasu_die14	] {};
 void()	karasu_die14	=[	$death14,	karasu_die15	] {};
 void()	karasu_die15	=[	$death15,	karasu_die16	] {
-	sound (self, CHAN_FEET, "redfield/gibs/gibmetal1.wav", 1, ATTN_FEETL);};
+	sound (self, CHAN_FEET, GIBHIT1_METALSOUND, 1, ATTN_FEETL);};
 void()	karasu_die16	=[	$death16,	karasu_die17	] {
 	particle_explode(self.origin + '0 0 -16', 64, 1+random()*0.5, PARTICLE_BURST_RED, PARTICLE_BURST_UPWARD);
 };

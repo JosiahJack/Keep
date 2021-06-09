@@ -238,7 +238,7 @@ void() monster_octa = {
 	if (monster_checkspawn() == TRUE) return;
 	
     precache_model ("progs/madfox/wink.spr");
-    precache_model ("progs/madfox/beamhit.spr");
+    precache_model ("progs/custents/beamhit.spr");
 	self.mdl = "progs/madfox/mon_octa.mdl";
 	precache_model (self.mdl);
 	//self.headmdl = "progs/h_octa.mdl";

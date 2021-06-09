@@ -337,9 +337,9 @@ void () overlord_die17 = [ 106.000, overlord_die18 ] {
    WriteByte (MSG_BROADCAST,MOVETYPE_STEP);
    ol_toss ("progs/drake/s_wrtgb2.mdl");
    ol_toss ("progs/drake/s_wrtgb3.mdl");
-   ol_toss ("progs/drake/wrthgib1.mdl");
-   ol_toss ("progs/drake/wrthgib2.mdl");
-   ol_toss ("progs/drake/wrthgib3.mdl");
+   ol_toss ("progs/rogue/wrthgib1.mdl");
+   ol_toss ("progs/rogue/wrthgib2.mdl");
+   ol_toss ("progs/rogue/wrthgib3.mdl");
    self.nextthink = (time + 0.100);
 };
 
@@ -377,14 +377,14 @@ void () monster_super_wrath = {
 
    self.mdl = "progs/rogue/s_wrath.mdl";
    precache_model (self.mdl);
-   self.gib1mdl = "progs/drake/wrthgib1.mdl";
-   self.gib2mdl = "progs/drake/wrthgib2.mdl";
-   self.gib3mdl = "progs/drake/wrthgib3.mdl";
+   self.gib1mdl = "progs/rogue/wrthgib1.mdl";
+   self.gib2mdl = "progs/rogue/wrthgib2.mdl";
+   self.gib3mdl = "progs/rogue/wrthgib3.mdl";
    precache_model ("progs/drake/s_wrtgb2.mdl");
    precache_model ("progs/drake/s_wrtgb3.mdl");
-   precache_model ("progs/drake/wrthgib1.mdl");
-   precache_model ("progs/drake/wrthgib2.mdl");
-   precache_model ("progs/drake/wrthgib3.mdl");
+   precache_model ("progs/rogue/wrthgib1.mdl");
+   precache_model ("progs/rogue/wrthgib2.mdl");
+   precache_model ("progs/rogue/wrthgib3.mdl");
    precache_model ("progs/gib1.mdl");
    precache_model ("progs/gib2.mdl");
    precache_model ("progs/gib3.mdl");

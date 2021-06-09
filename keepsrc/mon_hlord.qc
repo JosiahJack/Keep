@@ -869,7 +869,7 @@ void() monster_bane = {
 	precache_model ("progs/drake/s_wave.spr");
 
     precache_sound ("ambience/thunder1.wav");
-    precache_sound ("drake/ambience/thunder2.wav");
+    precache_sound ("zerstorer/ambience/thunder2.wav");
     precache_sound ("drake/bane/death.wav");
     precache_sound ("drake/bane/growl.wav");
     precache_sound ("drake/bane/hit.wav");
@@ -1225,7 +1225,7 @@ void() monster_dark_lord = {
 	precache_model ("progs/drake/s_wave.spr");
 
     precache_sound ("ambience/thunder1.wav");
-    precache_sound ("drake/ambience/thunder2.wav");
+    precache_sound ("zerstorer/ambience/thunder2.wav");
     precache_sound ("drake/bane/death.wav");
     precache_sound ("drake/bane/growl.wav");
     precache_sound ("drake/bane/laugh.wav");

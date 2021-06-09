@@ -132,7 +132,7 @@ void() frag_jump11 =[      $jump11,       frag_jump12       ] {};
 void() frag_jump12 =[      $jump12,       frag_jump13       ] {};
 void() frag_jump13 =[      $jump13,       frag_jump14       ] {};
 void() frag_jump14 =[      $jump14,       frag_jump15       ] {};
-void() frag_jump15 =[      $jump15,       frag_run1         ] {sound (self, CHAN_VOICE, "ad171/voreling/jumpland.wav", 1, ATTN_NORM);};
+void() frag_jump15 =[      $jump15,       frag_run1         ] {sound (self, CHAN_VOICE, "quoth/voreling/land.wav", 1, ATTN_NORM);};
 
 void()	frag_pain1	=[	$pain1, 	frag_pain2	] {};
 void()	frag_pain2	=[	$pain2, 	frag_pain3	] {};
@@ -172,7 +172,7 @@ void() frag_grounddie3 =[       $death4,        frag_grounddie4] {};
 void() frag_grounddie4 =[       $death6,        frag_grounddie5] {};
 void() frag_grounddie5 =[       $death8,        frag_grounddie6] {};
 void() frag_grounddie6 =[      $death10,       frag_grounddie7 ] {};
-void() frag_grounddie7 =[      $death12,       frag_grounddie8 ] {monster_death_postcheck();sound (self, CHAN_VOICE, "ad171/voreling/jumpland.wav", 1, ATTN_NORM);};
+void() frag_grounddie7 =[      $death12,       frag_grounddie8 ] {monster_death_postcheck();sound (self, CHAN_VOICE, "quoth/voreling/land.wav", 1, ATTN_NORM);};
 void() frag_grounddie8 =[      $death13,       frag_grounddie8 ] {monster_deadbody_check();};
 
 void() frag_die = {
@@ -182,7 +182,7 @@ void() frag_die = {
 	// regular death
 	if (!self.gibbed) {
 		if (pointcontents(self.origin) <= CONTENT_WATER) sound (self, CHAN_VOICE, "fish/death.wav", 1, ATTN_NORM);
-		else sound (self, CHAN_VOICE, "ad171/voreling/death.wav", 1, ATTN_NORM);
+		else sound (self, CHAN_VOICE, "quoth/voreling/death.wav", 1, ATTN_NORM);
 		frag_die1 ();
 	}
 };
@@ -216,8 +216,8 @@ void() monster_fragy = {
 	precache_sound ("fish/death.wav");
 	precache_sound ("fish/bite.wav");
 	precache_sound ("fish/idle.wav");
-	precache_sound ("ad171/voreling/death.wav");
-	precache_sound ("ad171/voreling/jumpland.wav");
+	precache_sound ("quoth/voreling/death.wav");
+	precache_sound ("quoth/voreling/land.wav");
 	precache_sound ("ad171/gibs/gibhit1.wav");
 
 	self.idle_sound = "fish/idle.wav";

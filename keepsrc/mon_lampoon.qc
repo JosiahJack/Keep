@@ -276,11 +276,11 @@ void() monster_lampoon =
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	precache_model2 ("progs/lampoon.mdl");
+	precache_model ("progs/lampoon.mdl");
 
-	precache_sound2 ("fish/death.wav");
-	precache_sound2 ("fish/bite.wav");
-	precache_sound2 ("fish/idle.wav");
+	precache_sound ("fish/death.wav");
+	precache_sound ("fish/bite.wav");
+	precache_sound ("fish/idle.wav");
 
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;

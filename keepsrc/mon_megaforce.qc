@@ -76,7 +76,6 @@ void() megaf_shieldon =
 	// Magical AoA weapons still go through
 };
 
-//----------------------------------------------------------------------
 void() megaf_shieldoff = {
 	self.takedamage = DAMAGE_AIM;	// Grenades make contact
 	self.bouncegrenade = FALSE;		// Reset to default
@@ -92,17 +91,14 @@ void() megaf_shieldoff = {
 	self.resist_poison = 0;
 };
 
-//----------------------------------------------------------------------
 void() megaf_shieldsound_on = {
-	sound (self, CHAN_ITEM, "megaforce/shield_on.wav", 1, ATTN_NORM);
+	sound (self, CHAN_ITEM, "ad181/deflector/shield_on.wav", 1, ATTN_NORM);
 };
 
-//----------------------------------------------------------------------
 void() megaf_shieldsound_off = {
-	sound (self, CHAN_ITEM, "megaforce/shield_off.wav", 1, ATTN_NORM);
+	sound (self, CHAN_ITEM, "ad181/deflector/shield_off.wav", 1, ATTN_NORM);
 };
 
-//----------------------------------------------------------------------
 void() megaf_shieldparticle = {
 	self.pos1 = self.origin;
 	// Randomize position from middle to feet (particles float up)
@@ -111,7 +107,6 @@ void() megaf_shieldparticle = {
 	particle_explode(self.pos1, self.cnt, 1, PARTICLE_BURST_YELLOW, PARTICLE_BURST_UPWARD); 
 };
 
-//===========================================================================
 void() megaf_stands7;	// Forward compiler reference
 void() megaf_stand1=[ $stand1, megaf_stand2] {ai_stand();
 
@@ -129,7 +124,6 @@ void() megaf_stands7=[ $fieldon7, megaf_stands6] {ai_stand();
 void() megaf_stands6=[ $fieldon6, megaf_stands5] {ai_stand();};
 void() megaf_stands5=[ $fieldon5, megaf_stand2] {ai_stand();};
 
-//----------------------------------------------------------------------
 void() megaf_stand2=[ $stand2, megaf_stand3] {ai_stand();};
 void() megaf_stand3=[ $stand3, megaf_stand4] {ai_stand();};
 void() megaf_stand4=[ $stand4, megaf_stand5] {ai_stand();};
@@ -137,7 +131,6 @@ void() megaf_stand5=[ $stand5, megaf_stand6] {ai_stand();};
 void() megaf_stand6=[ $stand6, megaf_stand7] {ai_stand();};
 void() megaf_stand7=[ $stand7, megaf_stand1] {ai_stand();};
 
-//===========================================================================
 void() megaf_walks5;	// Forward compiler reference
 void() megaf_walk1=[ $walk1, megaf_walk2] {ai_walk(2);
 	// Work out if shield was on before this state
@@ -154,9 +147,7 @@ void() megaf_walks5=[ $fieldon5, megaf_walks6] {ai_walk(0);
 void() megaf_walks6=[ $fieldon6, megaf_walks7] {ai_walk(0);};
 void() megaf_walks7=[ $fieldon7, megaf_walk2] {ai_walk(0);};
 
-//----------------------------------------------------------------------
-void() megaf_walk2=[ $walk2, megaf_walk3] {
-	megaf_shieldparticle(); monster_footstep(FALSE);ai_walk(4);};
+void() megaf_walk2=[ $walk2, megaf_walk3] {megaf_shieldparticle(); monster_footstep(FALSE);ai_walk(4);};
 void() megaf_walk3=[ $walk3, megaf_walk4] {ai_walk(4);};
 void() megaf_walk4=[ $walk4, megaf_walk5] {ai_walk(3);};
 void() megaf_walk5=[ $walk5, megaf_walk6] {ai_walk(1);};
@@ -164,8 +155,7 @@ void() megaf_walk6=[ $walk6, megaf_walk7] {ai_walk(2);};
 void() megaf_walk7=[ $walk7, megaf_walk8] {ai_walk(2);};
 void() megaf_walk8=[ $walk8, megaf_walk9] {ai_walk(1);};
 void() megaf_walk9=[ $walk9, megaf_walk10] {ai_walk(2);};
-void() megaf_walk10=[ $walk10, megaf_walk11] {
-	megaf_shieldparticle(); monster_footstep(FALSE); ai_walk(4);};
+void() megaf_walk10=[ $walk10, megaf_walk11] {megaf_shieldparticle(); monster_footstep(FALSE); ai_walk(4);};
 void() megaf_walk11=[ $walk11, megaf_walk12] {ai_walk(4);};
 void() megaf_walk12=[ $walk12, megaf_walk13] {ai_walk(1);};
 void() megaf_walk13=[ $walk13, megaf_walk14] {ai_walk(2);};
@@ -173,15 +163,12 @@ void() megaf_walk14=[ $walk14, megaf_walk15] {ai_walk(3);};
 void() megaf_walk15=[ $walk15, megaf_walk16] {ai_walk(4);};
 void() megaf_walk16=[ $walk16, megaf_walk1] {ai_walk(2);};
 
-//===========================================================================
 // Two speed run animation based on enemy visibility
-//===========================================================================
 void()	megaf_slow1;
 void()	megaf_fast1;
 
 // run state has two animation speeds (single function required)
-void(float movespd) megaf_run =
-{
+void(float movespd) megaf_run = {
 	// Block all checks if dead
 	if (self.health < 1) return;
 	// idle functions work for both animation sets
@@ -216,7 +203,6 @@ void(float movespd) megaf_run =
 
 
 // Walk animation with 150% movement speed
-//----------------------------------------------------------------------
 void()	megaf_slow1	=[ $walk1,	megaf_slow2	] {self.walkframe=0;megaf_run(3);};
 void()	megaf_slow2	=[ $walk2,	megaf_slow3	] {
 	megaf_shieldparticle(); monster_footstep(FALSE);megaf_run(6);};
@@ -237,7 +223,6 @@ void()	megaf_slow15=[ $walk15, megaf_slow16] {megaf_run(6);};
 void()	megaf_slow16=[ $walk16, megaf_slow1] {megaf_run(3);};
 
 // Typical run animation (used when enemy out of sight)
-//----------------------------------------------------------------------
 void()	megaf_fast1=[ $run1, megaf_fast2] {self.walkframe=0;megaf_run(18);};
 void()	megaf_fast2=[ $run2, megaf_fast3] {megaf_run(14);};
 void()	megaf_fast3=[ $run3, megaf_fast4] {
@@ -249,11 +234,8 @@ void()	megaf_fast7=[ $run7, megaf_fast8] {
 	megaf_shieldparticle(); monster_footstep(FALSE); megaf_run(7);};
 void()	megaf_fast8=[ $run8, megaf_fast1] {megaf_run(11);};
 
-//============================================================================
 // Melee/Close attack (Plasma Canon)
-//----------------------------------------------------------------------
-void() megaf_fire_plasma =
-{
+void() megaf_fire_plasma = {
 	local vector org, targ_org, dir;
 
 	if (!self.enemy) return;
@@ -277,17 +259,13 @@ void() megaf_fire_plasma =
 	launch_plasma(org, dir, CT_MONDEFLECTOR, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
 void() megaf_plasma1 = [ $attack1, megaf_plasma2] {};
-void() megaf_plasma2 = [ $attack2, megaf_plasma3] {
-	self.attack_chance = self.attack_timer = 0;
-	megaf_shieldoff(); megaf_shieldsound_off();};
+void() megaf_plasma2 = [ $attack2, megaf_plasma3] {self.attack_chance = self.attack_timer = 0;megaf_shieldoff(); megaf_shieldsound_off();};
 void() megaf_plasma3 = [ $attack3, megaf_plasma14] {ai_face();};
 // Skipping frames 4-13 - terrible loop material
 
 // Plasma Burn Loop
-void() megaf_plasma14 = [ $attack14, megaf_plasma15] {ai_face();
-	sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM);};
+void() megaf_plasma14 = [ $attack14, megaf_plasma15] {ai_face();sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM);};
 void() megaf_plasma15 = [ $attack15, megaf_plasma16] {ai_face();};
 void() megaf_plasma16 = [ $attack16, megaf_plasma17] {megaf_fire_plasma();};
 void() megaf_plasma17 = [ $attack17, megaf_plasma18] {};
@@ -308,22 +286,17 @@ void() megaf_plasma19 = [ $attack19, megaf_plasma20] {ai_face();
 };
 
 // Plasma Burn Exit
-void() megaf_plasma20 = [ $attack20, megaf_slow1] {ai_face();
-	// last frame has shield coming on
-	megaf_shieldon();megaf_shieldsound_on();};
+void() megaf_plasma20 = [ $attack20, megaf_slow1] {ai_face();megaf_shieldon();megaf_shieldsound_on();}; // last frame has shield coming on
 
-//============================================================================
 // RANGE attack (Rocket Launcher)
-//----------------------------------------------------------------------
-void(vector orgofs) megaf_fire_rocket =
-{
+void(vector orgofs) megaf_fire_rocket = {
 	local vector org, dir;
 	
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "megaforce/rocket_fire.wav", 1, ATTN_NORM);	
+	sound (self, CHAN_WEAPON, "ad181/deflector/rocket_fire.wav", 1, ATTN_NORM);	
 
 	ai_face();
 	makevectors (self.angles);
@@ -334,14 +307,9 @@ void(vector orgofs) megaf_fire_rocket =
 	Launch_Missile (org, dir, '0 0 0', CT_PROJ_DEFLECT1, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
 void() megaf_rock4b;	// Forward compiler reference
-void() megaf_rock1 = [ $attackp1, megaf_rock2] {
-	self.pain_finished = time + 1.5;
-	sound (self, CHAN_WEAPON, "megaforce/rocket_load.wav", 1, ATTN_NORM);
-};
-void() megaf_rock2 = [ $attackp2, megaf_rock3] {ai_face();
-	megaf_shieldoff(); megaf_shieldsound_off();};
+void() megaf_rock1 = [ $attackp1, megaf_rock2] {self.pain_finished = time + 1.5;sound (self, CHAN_WEAPON, "ad181/deflector/rocket_load.wav", 1, ATTN_NORM);};
+void() megaf_rock2 = [ $attackp2, megaf_rock3] {ai_face();megaf_shieldoff(); megaf_shieldsound_off();};
 void() megaf_rock3 = [ $attackp3, megaf_rock4] {ai_face();};
 void() megaf_rock4 = [ $attackp4, megaf_rock5] {ai_face();};
 void() megaf_rock5 = [ $attackp5, megaf_rock6] {megaf_fire_rocket('8 8 28');};
@@ -349,38 +317,27 @@ void() megaf_rock6 = [ $attackp6, megaf_rock7] {
 	// Fire second rocket for hard/nightmare skill
 	if (self.health > 0 && skill > SKILL_NORMAL) {
 		ai_face();
-		sound (self, CHAN_WEAPON, "megaforce/rocket_load.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad181/deflector/rocket_load.wav", 1, ATTN_NORM);
 		self.think = megaf_rock4b;
 	}
 };
 void() megaf_rock4b = [ $attackp4, megaf_rock5b] {ai_face();};
 void() megaf_rock5b = [ $attackp5, megaf_rock6b] {megaf_fire_rocket('8 8 28');};
 void() megaf_rock6b = [ $attackp6, megaf_rock7] {};
-//----------------------------------------------------------------------
-void() megaf_rock7 = [ $attackp7, megaf_slow1] {
-	// last frame has shield coming on
-	megaf_shieldon();megaf_shieldsound_on();};
+void() megaf_rock7 = [ $attackp7, megaf_slow1] {megaf_shieldon();megaf_shieldsound_on();}; // last frame has shield coming on
 
-//============================================================================
 // Classic enforcer 4 pain animation sets
-//============================================================================
 void() megaf_paina1=[ $paina1, megaf_paina2] {};
 void() megaf_paina2=[ $paina2, megaf_paina3] {};
 void() megaf_paina3=[ $paina3, megaf_paina4] {};
-void() megaf_paina4=[ $paina4, megaf_slow1] {
-	// Last pain frame has shield coming on
-	megaf_shieldon();megaf_shieldsound_on();};
+void() megaf_paina4=[ $paina4, megaf_slow1] {megaf_shieldon();megaf_shieldsound_on();}; // Last pain frame has shield coming on
 
-//----------------------------------------------------------------------
 void() megaf_painb1=[ $painb1, megaf_painb2] {};
 void() megaf_painb2=[ $painb2, megaf_painb3] {};
 void() megaf_painb3=[ $painb3, megaf_painb4] {};
 void() megaf_painb4=[ $painb4, megaf_painb5] {};
-void() megaf_painb5=[ $painb5, megaf_slow1] {
-	// Last pain frame has shield coming on
-	megaf_shieldon();megaf_shieldsound_on();};
+void() megaf_painb5=[ $painb5, megaf_slow1] {megaf_shieldon();megaf_shieldsound_on();}; // Last pain frame has shield coming on
 
-//----------------------------------------------------------------------
 void() megaf_painc1=[ $painc1, megaf_painc2] {};
 void() megaf_painc2=[ $painc2, megaf_painc3] {monster_footstep(FALSE);};
 void() megaf_painc3=[ $painc3, megaf_painc4] {};
@@ -388,11 +345,8 @@ void() megaf_painc4=[ $painc4, megaf_painc5] {};
 void() megaf_painc5=[ $painc5, megaf_painc6] {};
 void() megaf_painc6=[ $painc6, megaf_painc7] {};
 void() megaf_painc7=[ $painc7, megaf_painc8] {};
-void() megaf_painc8=[ $painc8, megaf_slow1] {
-	// Last pain frame has shield coming on
-	megaf_shieldon();megaf_shieldsound_on();};
+void() megaf_painc8=[ $painc8, megaf_slow1] {megaf_shieldon();megaf_shieldsound_on();}; // Last pain frame has shield coming on
 
-//----------------------------------------------------------------------
 void() megaf_paind1=[ $paind1, megaf_paind2] {};
 void() megaf_paind2=[ $paind2, megaf_paind3] {};
 void() megaf_paind3=[ $paind3, megaf_paind4] {monster_footstep(FALSE);};
@@ -411,13 +365,9 @@ void() megaf_paind15=[ $paind15, megaf_paind16] {};
 void() megaf_paind16=[ $paind16, megaf_paind17] {ai_pain(1);};
 void() megaf_paind17=[ $paind17, megaf_paind18] {ai_pain(1);};
 void() megaf_paind18=[ $paind18, megaf_paind19] {};
-void() megaf_paind19=[ $paind19, megaf_slow1] {
-	// Last pain frame has shield coming on
-	megaf_shieldon();megaf_shieldsound_on();};
+void() megaf_paind19=[ $paind19, megaf_slow1] {megaf_shieldon();megaf_shieldsound_on();}; // Last pain frame has shield coming on
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) megaf_pain =
-{
+void(entity inflictor, entity attacker, float damage) megaf_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -427,8 +377,7 @@ void(entity inflictor, entity attacker, float damage) megaf_pain =
 		if (self.lip < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 
-		// Turn off shield
-		megaf_shieldoff();
+		megaf_shieldoff(); // Turn off shield
 		megaf_shieldsound_off();
 		
 		if (self.pain_check == 1) {
@@ -440,9 +389,7 @@ void(entity inflictor, entity attacker, float damage) megaf_pain =
 				self.pain_finished = time + 2;
 				megaf_paind1 ();
 			}
-		}
-		// The new axe forces monsters into long pain animations
-		else if (self.pain_check == 2) {
+		} else if (self.pain_check == 2) { // The new axe forces monsters into long pain animations
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 1.9;
 			self.axhitme = 0;
@@ -451,11 +398,9 @@ void(entity inflictor, entity attacker, float damage) megaf_pain =
 	}
 };
 
-//============================================================================
 void() megaf_die1=[ $death1, megaf_die2] {};
 void() megaf_die2=[ $death2, megaf_die3] {monster_check_gib();};
-void() megaf_die3=[ $death3, megaf_die4] {monster_check_gib();
-	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
+void() megaf_die3=[ $death3, megaf_die4] {monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
 void() megaf_die4=[ $death4, megaf_die5] {ai_forward(14);};
 void() megaf_die5=[ $death5, megaf_die6] {ai_forward(2);};
 void() megaf_die6=[ $death6, megaf_die7] {};
@@ -468,11 +413,9 @@ void() megaf_die12=[ $death12, megaf_die13] {ai_forward(5);};
 void() megaf_die13=[ $death13, megaf_die14] {monster_death_postcheck();};
 void() megaf_die14=[ $death14, megaf_die14] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
 void() megaf_fdie1=[ $fdeath1, megaf_fdie2] {};
 void() megaf_fdie2=[ $fdeath2, megaf_fdie3] {monster_check_gib();};
-void() megaf_fdie3=[ $fdeath3, megaf_fdie4] {monster_check_gib();
-	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
+void() megaf_fdie3=[ $fdeath3, megaf_fdie4] {monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
 void() megaf_fdie4=[ $fdeath4, megaf_fdie5] {};
 void() megaf_fdie5=[ $fdeath5, megaf_fdie6] {};
 void() megaf_fdie6=[ $fdeath6, megaf_fdie7] {};
@@ -482,9 +425,7 @@ void() megaf_fdie9=[ $fdeath9, megaf_fdie10] {};
 void() megaf_fdie10=[ $fdeath10, megaf_fdie11] {monster_death_postcheck();};
 void() megaf_fdie11=[ $fdeath11, megaf_fdie11] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
-void() megaf_die =
-{
+void() megaf_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -497,25 +438,22 @@ void() megaf_die =
 		if (random() > 0.5) {
 			megaf_die1 ();
 			sound (self, CHAN_VOICE, self.death_sound2, 1, ATTN_NORM);
-		}
-		else {
+		} else {
 			megaf_fdie1 ();
 			sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
 		}
 	}
 };
 
-/*======================================================================
- QUAKED monster_megaforce (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
+// QUAKED monster_megaforce (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_megaforce = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 	
-	self.mdl = "progs/ad172/mon_megaforce.mdl";
-	self.headmdl = "progs/ad172/h_megaforce.mdl";
+	self.mdl = "progs/ad181/mon_deflector.mdl";
+	self.headmdl = "progs/ad181/h_deflector.mdl";
 	self.gib1mdl = "progs/ad171/w_enforcergun.mdl";	// Unique weapon
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
@@ -534,23 +472,23 @@ void() monster_megaforce = {
 		precache_model (MODEL_PROJ_ROCKETGRN);
 	}
 	
-	self.idle_sound = "megaforce/idle1.wav";
+	self.idle_sound = "ad181/deflector/idle1.wav";
 	precache_sound (self.idle_sound);
-	self.sight_sound = "megaforce/sight1.wav";
-	self.sight_sound2 = "megaforce/sight2.wav";
-	self.sight_sound3 = "megaforce/sight3.wav";
+	self.sight_sound = "ad181/deflector/sight1.wav";
+	self.sight_sound2 = "ad181/deflector/sight2.wav";
+	self.sight_sound3 = "ad181/deflector/sight3.wav";
 	precache_sound (self.sight_sound);
 	precache_sound (self.sight_sound2);
 	precache_sound (self.sight_sound3);
 	
 	// Shield off, shield on!
-	precache_sound ("megaforce/shield_off.wav");
-	precache_sound ("megaforce/shield_on.wav");
+	precache_sound ("ad181/deflector/shield_off.wav");
+	precache_sound ("ad181/deflector/shield_on.wav");
 
 	// Projectile fire and impact (used in projectiles)
-	precache_sound ("megaforce/rocket_load.wav");
-	precache_sound ("megaforce/rocket_fire.wav");
-	precache_sound ("megaforce/rocket_hit.wav");
+	precache_sound ("ad181/deflector/rocket_load.wav");
+	precache_sound ("ad181/deflector/rocket_fire.wav");
+	precache_sound ("ad181/deflector/rocket_hit.wav");
 
 	// Extra load/fire sounds
 	precache_sound ("ad171/enforcer/elim_pg_load.wav");
@@ -558,12 +496,12 @@ void() monster_megaforce = {
 	precache_sound (SOUND_PLASMA_HIT);
 
 	// Plenty of death and pain sounds
-	self.pain_sound = "megaforce/pain1.wav";
-	self.pain_sound2 = "megaforce/pain2.wav";
+	self.pain_sound = "ad181/deflector/pain1.wav";
+	self.pain_sound2 = "ad181/deflector/pain2.wav";
 	precache_sound (self.pain_sound);
 	precache_sound (self.pain_sound2);
-	self.death_sound = "megaforce/death1.wav";
-	self.death_sound2 = "megaforce/death2.wav";
+	self.death_sound = "ad181/deflector/death1.wav";
+	self.death_sound2 = "ad181/deflector/death2.wav";
 	precache_sound (self.death_sound);
 	precache_sound (self.death_sound2);
 
@@ -580,11 +518,9 @@ void() monster_megaforce = {
 	self.steptype = FS_TYPEHEAVY;		// heavy player
 	self.attack_offset = '28 8.5 16';	// End of Gun
 	self.weaponstate = MEGAF_IDLE;		// No Shield active
-	if (self.deathstring == "")
-		self.deathstring = " was vaporized by a Mega-Enforcer\n";
+	if (self.deathstring == "") self.deathstring = " was vaporized by a Mega-Enforcer\n";
 
-	// Reset Ammo Resistance/Shield parameters
-	megaf_shieldoff();
+	megaf_shieldoff(); // Reset Ammo Resistance/Shield parameters
 	
 	self.th_checkattack = MegaforceCheckAttack;
 	self.th_stand = megaf_stand1;

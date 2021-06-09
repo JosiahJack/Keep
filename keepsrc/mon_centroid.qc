@@ -385,7 +385,7 @@ void () monster_scourge = {
 	self.headmdl = "progs/hipnotic/h_scourg.mdl";
 	precache_model("progs/hipnotic/h_scourg.mdl");
 	precache_model("progs/hipnotic/laser.mdl");
-	precache_model("progs/ad171/s_light.mdl");
+	precache_model("progs/s_light.mdl");
 	precache_model("progs/spike.mdl");
 	precache_sound("hipnotic/scourge/idle.wav");
 	precache_sound("hipnotic/scourge/pain.wav");

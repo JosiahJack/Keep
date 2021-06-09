@@ -244,8 +244,7 @@ void() wrath_melee12 =[ $attackc3,   wrath_melee13 ] {ai_charge(self.speed);};
 void() wrath_melee13 =[ $attackc2,   wrath_melee14 ] {ai_charge(self.speed);};
 void() wrath_melee14 =[ $attackc1,   wrath_run1    ] {ai_charge(self.speed);};
 
-void(float ofs) wrath_shot =
-{
+void(float ofs) wrath_shot = {
     local   vector  dir, org;
 
     dir = hknight_shot_dir (ofs);       // Calls 'makevectors'.
@@ -255,10 +254,9 @@ void(float ofs) wrath_shot =
     launch_spike (org, dir);
     newmis.worldtype = TE_KNIGHTSPIKE;
     newmis.classname = "knightspike";
-    if (self.skin)
-    {   // Wraith
+    if (self.skin) { // Wraith
         sound (self, CHAN_WEAPON, "nehahra/baron/throb.wav", 1, ATTN_NORM);
-        setmodel (newmis, "progs/wr_spike.mdl");
+        setmodel (newmis, "progs/nehahra/wr_spike.mdl");
         setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
         if (self.classname == "monster_wraith_lord")
             newmis.velocity = normalize(newmis.velocity)*600;
@@ -266,9 +264,7 @@ void(float ofs) wrath_shot =
             newmis.velocity = normalize(newmis.velocity)*450;
         else    // Assume shots were sweated out passively.
             newmis.velocity = normalize(newmis.velocity)*300;
-    }
-    else
-    {
+    } else {
         sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
         setmodel (newmis, "progs/k_spike.mdl");
         setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
@@ -279,9 +275,7 @@ void(float ofs) wrath_shot =
     }
 };
 
-//- - - - - - - - -
-void() ai_wraith_charge =
-{
+void() ai_wraith_charge = {
     if (self.attack_state == AS_FLEEING)
         ai_face ();
     else
@@ -636,9 +630,9 @@ void() monster_wraith_nehahra = {
 	if (monster_checkspawn() == TRUE) return;
 
 	if (!self.mdl) self.mdl = "progs/nehahra/wraith.mdl";
-	if (!self.mdl) self.gib1mdl = "progs/drake/wrthgib1.mdl";
-	if (!self.mdl) self.gib2mdl = "progs/drake/wrthgib2.mdl";
-	if (!self.mdl) self.gib3mdl = "progs/drake/wrthgib3.mdl";
+	if (!self.mdl) self.gib1mdl = "progs/rogue/wrthgib1.mdl";
+	if (!self.mdl) self.gib2mdl = "progs/rogue/wrthgib2.mdl";
+	if (!self.mdl) self.gib3mdl = "progs/rogue/wrthgib3.mdl";
 	precache_model("progs/nehahra/wraith.mdl");
 	precache_model("progs/s_null.spr");
 	precache_model("progs/nehahra/wr_spike.mdl");

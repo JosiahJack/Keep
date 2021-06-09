@@ -165,14 +165,14 @@ void() monster_spellmaster = {
 	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/madfox/mon_spellmas.mdl";
-	precache_model2("progs/madfox/mon_spellmas.mdl");
+	precache_model("progs/madfox/mon_spellmas.mdl");
 	precache_model("progs/lavaball.mdl");
 	precache_sound("wizard/wdeath.wav");
 	precache_sound("wizard/wsight.wav");
-	precache_sound2("blob/death1.wav");
-	precache_sound2("boss2/idle.wav");
-	precache_sound2("shalrath/attack2.wav");
-	precache_sound2("shalrath/sight.wav");
+	precache_sound("blob/death1.wav");
+	precache_sound("boss2/idle.wav");
+	precache_sound("shalrath/attack2.wav");
+	precache_sound("shalrath/sight.wav");
 
 	self.th_stand = spell_stand;
 	self.th_walk = spell_walk;

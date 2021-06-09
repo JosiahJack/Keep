@@ -54,7 +54,7 @@ void () item_artifact_berserker = {
 void () item_artifact_equalizer = {
 	self.mdl = "progs/drake/gemini.mdl";
 	precache_model (self.mdl);
-	self.noise = "drake/items/equalize.wav";
+	self.noise = "rogue/runes/end2.wav";
 	precache_sound (self.noise);
     self.netname = "Twin Shot";
 	self.items = 0;
@@ -73,9 +73,9 @@ void () item_artifact_equalizer = {
 void () item_artifact_levitation = {
 	self.mdl = "progs/drake/levitate.mdl";
 	precache_model (self.mdl);
-	self.noise = "drake/items/levitate.wav";
-	self.noise1 = "drake/ambience/wingget.wav";
-	self.noise2 = "drake/ambience/wingend.wav";
+	self.noise = "nehahra/player/flight.wav";
+	self.noise1 = "zerstorer/ambience/wingget.wav";
+	self.noise2 = "zerstorer/ambience/wingend.wav";
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
@@ -102,7 +102,7 @@ void () item_artifact_levitation = {
 void() item_artifact_optimizer = {
 	self.mdl = "progs/drake/shotty.mdl";
 	precache_model (self.mdl);
-	self.noise = "drake/items/optimize.wav";
+	self.noise = "rogue/runes/end3.wav";
 	precache_sound (self.noise);
     self.netname = "Optimizer";
 	self.perms = POW_SHOTTYMAN;

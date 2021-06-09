@@ -1167,7 +1167,7 @@ void() monster_beard = {
     exit;
     }
 
-	precache_model2("progs/beard.mdl");
+	precache_model("progs/beard.mdl");
 	precache_sound("nehahra/ghoro/balls.wav");
 	precache_sound("nehahra/ghoro/spawnb.wav");
 	setmodel(self, "progs/beard.mdl");
@@ -1175,16 +1175,16 @@ void() monster_beard = {
 	precache_sound("nehahra/ghoro/talk2.wav");
 	precache_sound("nehahra/ghoro/talk3.wav");
 	precache_sound("nehahra/ghoro/laugh.wav");
-	precache_model2("progs/k_spike.mdl");
-	precache_model2("progs/h_hellkn.mdl");
-	precache_sound2("hknight/attack1.wav");
-	precache_sound2("hknight/death1.wav");
-	precache_sound2("hknight/pain1.wav");
-	precache_sound2("hknight/sight1.wav");
+	precache_model("progs/k_spike.mdl");
+	precache_model("progs/h_hellkn.mdl");
+	precache_sound("hknight/attack1.wav");
+	precache_sound("hknight/death1.wav");
+	precache_sound("hknight/pain1.wav");
+	precache_sound("hknight/sight1.wav");
 	precache_sound("hknight/hit.wav");
-	precache_sound2("hknight/slash1.wav");
-	precache_sound2("hknight/idle.wav");
-	precache_sound2("hknight/grunt.wav");
+	precache_sound("hknight/slash1.wav");
+	precache_sound("hknight/idle.wav");
+	precache_sound("hknight/grunt.wav");
 	precache_sound("knight/sword1.wav");
 	precache_sound("knight/sword2.wav");
 	precache_sound("nehahra/sets/set2_4.wav");

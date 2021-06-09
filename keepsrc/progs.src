@@ -3,7 +3,7 @@
 // |__/ |__  |__  |__)     |\/| /  \ |  \
 // |  \ |___ |___ |        |  | \__/ |__/                                                    
 //
-// Compiled by Qmaster
+// Compiled W. Josiah Jack, aka Qmaster
 //
 // Attributions: All, see credits folder
 //
@@ -230,7 +230,7 @@ traps_turret.qc
 sounds.qc
 soundskeep.qc
 misc_rubicon2.qc
-versus.qc
+versus.qc					// REFINED Versus Game Mode
 
 soul.qc
 

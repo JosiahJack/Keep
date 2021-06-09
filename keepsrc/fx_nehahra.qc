@@ -151,7 +151,7 @@ void big_bang() = {
 };
 
 void misc_boom() = {
-  precache_sound2("boss2/pop2.wav");
+  precache_sound("boss2/pop2.wav");
   self.use = big_bang;
   self.wait = 1;
 };

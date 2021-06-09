@@ -1,20 +1,20 @@
 void() deathguard_hit = {
 	if (vlen(self.enemy.origin - self.origin) > 100) {
 		if (random() < 0.5) {
-			sound(self, CHAN_WEAPON, "dguard/slmiss1.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "quoth/dguard/slmiss1.wav", 1, ATTN_NORM);
 		} else {
-			sound(self, CHAN_WEAPON, "dguard/slmiss2.wav", 1, ATTN_NORM);
+			sound(self, CHAN_WEAPON, "quoth/dguard/slmiss2.wav", 1, ATTN_NORM);
 		}
 		return;
 	}
-	sound(self, CHAN_WEAPON, "dguard/slhit.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "quoth/dguard/slhit.wav", 1, ATTN_NORM);
 	T_Damage(self.enemy, self, self, 30,DAMARMOR);
 
 	// Check for poisonous blades!
 	if (self.poisonous) PoisonDeBuff(self.enemy);
 };
 
-void() deathguard_slash1 = [79, deathguard_slash2] { sound(self, CHAN_VOICE, "dguard/slash.wav", 1, ATTN_NORM); ai_face(); ai_forward(1); };
+void() deathguard_slash1 = [79, deathguard_slash2] { sound(self, CHAN_VOICE, "quoth/dguard/slash.wav", 1, ATTN_NORM); ai_face(); ai_forward(1); };
 void() deathguard_slash2 = [80, deathguard_slash3] { ai_face(); ai_forward(1); };
 void() deathguard_slash3 = [81, deathguard_slash4] { ai_face(); ai_forward(1); monster_footstep(FALSE); };
 void() deathguard_slash4 = [82, deathguard_slash5] { ai_face(); ai_forward(1); };
@@ -87,7 +87,7 @@ void() dg_fireball_touch = {
 	WriteCoord(MSG_BROADCAST, org_x);
 	WriteCoord(MSG_BROADCAST, org_y);
 	WriteCoord(MSG_BROADCAST, org_z);
-	sound(self, CHAN_VOICE, "dguard/hit.wav", 1, ATTN_NORM);
+	sound(self, CHAN_VOICE, "quoth/dguard/hit.wav", 1, ATTN_NORM);
 	T_RadiusDamage(self, self.owner, 40, other,DAMAGEALL);
 	T_Damage(other, self, self.owner, 27 + 2 * random(),DAMARMOR);
 	if (other.classname != "player") {
@@ -113,9 +113,9 @@ void() deathguard_shot = {
 		return;
 	}
 	hknight_shot(0);
-	newmis.mdl = "progs/quoth2pt2full/fireball.mdl";
+	newmis.mdl = "progs/quoth/fireball.mdl";
 	org = self.origin + '0 0 24';
-	setmodel(newmis, "progs/quoth2pt2full/fireball.mdl");
+	setmodel(newmis, "progs/quoth/fireball.mdl");
 	setsize(newmis, VEC_ORIGIN, VEC_ORIGIN);
 	setorigin(newmis, org);
 	if (visible(self.enemy)) {
@@ -186,13 +186,13 @@ void() deathguard_run5 = [33, deathguard_run6] { ai_run(18); monster_footstep(FA
 void() deathguard_run6 = [34, deathguard_run7] { ai_run(29); };
 void() deathguard_run7 = [35, deathguard_run8] { ai_run(25); };
 void() deathguard_run8 = [36, deathguard_run1] { ai_run(17); };
-void() deathguard_pain1 = [37, deathguard_pain2] { sound(self, CHAN_VOICE, "dguard/pain1.wav", 1, ATTN_NORM); };
+void() deathguard_pain1 = [37, deathguard_pain2] { sound(self, CHAN_VOICE, "quoth/dguard/pain1.wav", 1, ATTN_NORM); };
 void() deathguard_pain2 = [38, deathguard_pain3]{monster_footstep(FALSE);};
 void() deathguard_pain3 = [39, deathguard_pain4]{};
 void() deathguard_pain4 = [40, deathguard_pain5]{};
 void() deathguard_pain5 = [41, deathguard_run1] {};
 
-void() deathguard_die1 = [42, deathguard_die2] { ai_forward(10); sound(self, CHAN_VOICE, "dguard/death2.wav", 1, ATTN_NORM); };
+void() deathguard_die1 = [42, deathguard_die2] { ai_forward(10); sound(self, CHAN_VOICE, "quoth/dguard/death2.wav", 1, ATTN_NORM); };
 void() deathguard_die2 = [43, deathguard_die3] { monster_check_gib(); ai_forward(8); };
 void() deathguard_die3 = [44, deathguard_die4] { monster_check_gib(); ai_forward(7); };
 void() deathguard_die4 = [45, deathguard_die5] { self.solid = SOLID_NOT; };
@@ -205,7 +205,7 @@ void() deathguard_die10 = [51, deathguard_die11] {};
 void() deathguard_die11 = [52, deathguard_die12] {monster_death_postcheck();};
 void() deathguard_die12 = [53, deathguard_die12] { self.nextthink = time + 0.1; };
 
-void() deathguard_dieb1 = [54, deathguard_dieb2] { sound(self, CHAN_VOICE, "dguard/death1.wav", 1, ATTN_NORM); };
+void() deathguard_dieb1 = [54, deathguard_dieb2] { sound(self, CHAN_VOICE, "quoth/dguard/death1.wav", 1, ATTN_NORM); };
 void() deathguard_dieb2 = [55, deathguard_dieb3] { monster_check_gib(); };
 void() deathguard_dieb3 = [56, deathguard_dieb4] { monster_check_gib(); };
 void() deathguard_dieb4 = [57, deathguard_dieb5] { self.solid = SOLID_NOT;};
@@ -233,9 +233,9 @@ void(entity inflictor, entity attacker, float damage) deathguard_pain = {
 		return;
 
 	if (random() > 0.5) {
-		sound(self, CHAN_VOICE, "dguard/pain1.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "quoth/dguard/pain1.wav", 1, ATTN_NORM);
 	} else {
-		sound(self, CHAN_VOICE, "dguard/pain2.wav", 1, ATTN_NORM);
+		sound(self, CHAN_VOICE, "quoth/dguard/pain2.wav", 1, ATTN_NORM);
 	}
 	if (random() * 30 > damage)
 		return;
@@ -252,31 +252,31 @@ void() monster_deathguard = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	self.mdl = "progs/quoth2pt2full/dguard.mdl";
+	self.mdl = "progs/quoth/dguard.mdl";
 	precache_model(self.mdl);
-	self.headmdl = "progs/quoth2pt2full/h_dguard.mdl";
+	self.headmdl = "progs/quoth/h_dguard.mdl";
 	precache_model(self.headmdl);
-	precache_model("progs/quoth2pt2full/fireball.mdl");
+	precache_model("progs/quoth/fireball.mdl");
 	self.gib1sound = GIB_IMPACT_METALA;
-	self.idle_sound = "dguard/idle.wav";
+	self.idle_sound = "quoth/dguard/idle.wav";
 	precache_sound(self.idle_sound);
-	precache_sound("dguard/fire.wav");
+	precache_sound("quoth/dguard/fire.wav");
 	precache_sound("ad171/dknight/dserg_magic.wav");
-	precache_sound("dguard/death1.wav");
-	precache_sound("dguard/death2.wav");
-	precache_sound("dguard/pain1.wav");
-	precache_sound("dguard/pain2.wav");
-	precache_sound("dguard/sight1.wav");
-	precache_sound("dguard/sight2.wav");
-	precache_sound("dguard/sight3.wav");
-	precache_sound("dguard/sight4.wav");
-	precache_sound("dguard/hit.wav");
-	precache_sound("dguard/slash.wav");
+	precache_sound("quoth/dguard/death1.wav");
+	precache_sound("quoth/dguard/death2.wav");
+	precache_sound("quoth/dguard/pain1.wav");
+	precache_sound("quoth/dguard/pain2.wav");
+	precache_sound("quoth/dguard/sight1.wav");
+	precache_sound("quoth/dguard/sight2.wav");
+	precache_sound("quoth/dguard/sight3.wav");
+	precache_sound("quoth/dguard/sight4.wav");
+	precache_sound("quoth/dguard/hit.wav");
+	precache_sound("quoth/dguard/slash.wav");
 	precache_sound("knight/sword1.wav");
 	precache_sound("knight/sword2.wav");
-	precache_sound("dguard/slhit.wav");
-	precache_sound("dguard/slmiss1.wav");
-	precache_sound("dguard/slmiss2.wav");
+	precache_sound("quoth/dguard/slhit.wav");
+	precache_sound("quoth/dguard/slmiss1.wav");
+	precache_sound("quoth/dguard/slmiss2.wav");
 
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement

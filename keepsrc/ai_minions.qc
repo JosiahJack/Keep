@@ -205,7 +205,7 @@ void() Hatch_Egg = {
 		else minion_spider(self.oldorigin, self.enemy);
 	} else if (self.owner.classtype == CT_MONSHAL || self.owner.classtype == CT_MONSHALBOSS) {
 		if (self.owner.classtype == CT_MONSHALBOSS) {
-			sound (self, CHAN_WEAPON, "misc/summon.wav", 1, ATTN_NORM);
+			sound (self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
 			minion_voreling(self.oldorigin+'0 0 4', self.enemy);
 		} else {
 			minion_voreling(self.oldorigin, self.enemy);

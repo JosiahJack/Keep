@@ -130,10 +130,10 @@ void() precache_monster_ax = {
 	precache_sound ("drake/axeman/adeath1.wav");
 	precache_sound ("drake/axeman/axe1.wav");
 	precache_sound ("drake/axeman/axe2.wav");
-	precache_sound ("dguard/idle.wav");
-	precache_sound ("dguard/pain1.wav");
+	precache_sound ("quoth/dguard/idle.wav");
+	precache_sound ("quoth/dguard/pain1.wav");
 	precache_sound ("ad171/dknight/dfury_grunt4.wav");
-	precache_sound ("dguard/death2.wav");
+	precache_sound ("quoth/dguard/death2.wav");
 };
 
 // monster_axeman (1 0 0) (-16 -16 -24) (16 16 40) Ambush, Ferocious axe-wielding maniac :)
@@ -147,10 +147,10 @@ void() monster_ax = {
 	self.mdl = "progs/mon_axeman.mdl";
 	self.headmdl = "progs/h_knight.mdl";
 	self.gib1sound = GIB_IMPACT_METALA;
-	self.idle_sound = "dguard/idle.wav";
-	self.pain_sound = "dguard/pain1.wav";
+	self.idle_sound = "quoth/dguard/idle.wav";
+	self.pain_sound = "quoth/dguard/pain1.wav";
 	self.sight_sound = "ad171/dknight/dfury_grunt4.wav";  // I didn't like his original sound, too harsh. -Qmaster
-	self.death_sound = "dguard/death2.wav"; // I didn't like his original sound, too harsh. -Qmaster
+	self.death_sound = "quoth/dguard/death2.wav"; // I didn't like his original sound, too harsh. -Qmaster
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;

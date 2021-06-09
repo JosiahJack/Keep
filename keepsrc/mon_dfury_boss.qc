@@ -66,7 +66,7 @@ void() dfury_boss_run1;
 void() dfury_boss_random_magic;		// adds random magic attack animation
 void()	dfury_boss_JumpTouch; // in original ID1, only "dfury_magiccxx" is used
 
-void() df_idle_sound = { if (random() < 0.2) sound (self, CHAN_VOICE, "dfury/idle.wav", 1, ATTN_NORM); };
+void() df_idle_sound = { if (random() < 0.2) sound (self, CHAN_VOICE, "q15/dfury/idle.wav", 1, ATTN_NORM); };
 
 // Long reach!
 void() ai_melee_dfury_boss = {
@@ -118,7 +118,7 @@ void(float AttackNumber) dfury_boss_shot2 = {
 	missile.touch = FuryBossMissileTouch;
 	missile.nextthink = time + 0.1;
 	missile.think = FuryBossHome;
-	sound (self, CHAN_WEAPON, "dfury/attack1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "q15/dfury/attack1.wav", 1, ATTN_NORM);
 	self.attack_finished = time + 2;
 };
 
@@ -132,7 +132,7 @@ void(float offset) dfury_boss_shot = {
 	vec = normalize (v_forward);
 	vec_z = 0 - vec_z + (random() - 0.5)*0.1; // set missile speed
 	launch_projectile (org, vec, CT_PROJ_HKN, 700);
-	sound (self, CHAN_WEAPON, "dfury/proj.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "q15/dfury/proj.wav", 1, ATTN_NORM);
 };
 
 void() dfury_boss_spawner = {
@@ -180,7 +180,7 @@ void() FuryBossSpawnTouch = {
 	// If the spawn location all clear, spawn something!
 	if (self.aflag == TRUE) {
 		minion_gargoyle(self.origin, self.owner.enemy);
-		sound (self, CHAN_WEAPON, "misc/summon.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
 		// self.pos2 = self.origin - '0 0 16';	// Origin of gargoyle
 	}
 
@@ -249,16 +249,9 @@ void() CheckContinueCharge_boss = {
 };
 
 void(float loudness) dfury_boss_footsteps = {
-	local float select;
-
 	if (random() < 0.5) return; // minimize footstep frequency
-	select = random();
-	if (select <= 0.33)
-		sound(self, CHAN_AUTO, "walk/dfuryboss1.wav", loudness, ATTN_IDLE);
-	else if (select <= 0.66)
-		sound(self, CHAN_AUTO, "walk/dfuryboss2.wav", loudness, ATTN_IDLE);
-	else 
-		sound(self, CHAN_AUTO, "walk/dfuryboss3.wav", loudness, ATTN_IDLE);
+
+	sound(self, CHAN_AUTO, "q15/dfury/dfuryboss_walk.wav", loudness, ATTN_IDLE);
 };
 
 void()	dfury_boss_stand1	=[	$stand1,	dfury_boss_stand2	] {ai_stand();self.colormod = '1 1 1';};
@@ -293,7 +286,7 @@ void()	dfury_boss_run4	=[	$run4,		dfury_boss_run5	] {ai_run(61);};
 void()	dfury_boss_run5	=[	$run5,		dfury_boss_run6	] {shambler_walking_quake ();dfury_boss_footsteps (1);ai_run(39);};
 void()	dfury_boss_run6	=[	$run6,		dfury_boss_run1	] {ai_run(58);};
 
-void()	dfury_boss_pain1	=[	$pain1,		dfury_boss_pain2	] {sound (self, CHAN_VOICE, "dfury/pain1.wav", 1, ATTN_NORM);self.colormod = '1 1 1';};
+void()	dfury_boss_pain1	=[	$pain1,		dfury_boss_pain2	] {sound (self, CHAN_VOICE, "q15/dfury/pain1.wav", 1, ATTN_NORM);self.colormod = '1 1 1';};
 void()	dfury_boss_pain2	=[	$pain2,		dfury_boss_pain3	] {};
 void()	dfury_boss_pain3	=[	$pain3,		dfury_boss_pain4	] {};
 void()	dfury_boss_pain4	=[	$pain4,		dfury_boss_pain5	] {};
@@ -347,7 +340,7 @@ void() bossdeath_2 = {
 	shake.attack_finished = time + 1;
 	shake.nextthink = time + 0.1;
 	sound(self.owner, CHAN_AUTO, "ambience/coaled_monster_explode.wav", .8, ATTN_NONE);
-	sound(self.owner, CHAN_AUTO, "dfury/boss_explode.wav", 1, ATTN_NONE);
+	sound(self.owner, CHAN_AUTO, "q15/dfury/boss_explode.wav", 1, ATTN_NONE);
 	self.gib1mdl = "progs/q15/gib_sboss.mdl";
 	ThrowGib(11, 16);
 	remove(self.owner);
@@ -385,7 +378,7 @@ void() bossdeath_ef = {
 	deatheffect.traileffectnum = particleeffectnum("BOSS_DEATH"); 
 	deatheffect.alpha = 0.0001;
 	deatheffect.owner = self;
-	sound (self, CHAN_AUTO, "dfury/boss_death1.wav", 1, ATTN_NONE);
+	sound (self, CHAN_AUTO, "q15/dfury/boss_death1.wav", 1, ATTN_NONE);
 	deatheffect.think = bossdeath_2;
 	deatheffect.nextthink = time + 7;
 	
@@ -414,7 +407,7 @@ void()	dfury_boss_die10	=[	$death10,	dfury_boss_die11] {};
 void()	dfury_boss_die11	=[	$death11,	dfury_boss_die12] {};
 void()	dfury_boss_die12	=[	$death12,	dfury_boss_die13] {};
 void()	dfury_boss_die13	=[	$death13,	dfury_boss_die14] {};
-void()	dfury_boss_die14	=[	$death14,	dfury_boss_die15] {sound (self, CHAN_AUTO, "dfury/fall.wav", 1, ATTN_IDLE);};
+void()	dfury_boss_die14	=[	$death14,	dfury_boss_die15] {sound (self, CHAN_AUTO, "q15/dfury/fall.wav", 1, ATTN_IDLE);};
 void()	dfury_boss_die15	=[	$death15,	dfury_boss_die16] {};
 void()	dfury_boss_die16	=[	$death16,	dfury_boss_die17] {};
 void()	dfury_boss_die17	=[	$death17,	dfury_boss_die17] {};
@@ -424,7 +417,7 @@ void()	dfury_boss_die17	=[	$death17,	dfury_boss_die17] {};
 // void()	dfury_boss_dieb3	=[	$deathb3,	dfury_boss_dieb4	] {self.solid = SOLID_NOT;};
 // void()	dfury_boss_dieb4	=[	$deathb4,	dfury_boss_dieb5	] {};
 // void()	dfury_boss_dieb5	=[	$deathb5,	dfury_boss_dieb6	] {};
-// void()	dfury_boss_dieb6	=[	$deathb6,	dfury_boss_dieb7	] {sound (self, CHAN_AUTO, "dfury/fall.wav", 1, ATTN_IDLE);};
+// void()	dfury_boss_dieb6	=[	$deathb6,	dfury_boss_dieb7	] {sound (self, CHAN_AUTO, "q15/dfury/fall.wav", 1, ATTN_IDLE);};
 // void()	dfury_boss_dieb7	=[	$deathb7,	dfury_boss_dieb8	] {};
 // void()	dfury_boss_dieb8	=[	$deathb8,	dfury_boss_dieb9	] {Monster_Animation_EarthQuake (20, 377);};
 // void()	dfury_boss_dieb9	=[	$deathb9,	dfury_boss_dieb10	] {};
@@ -444,7 +437,7 @@ void(float maxgibs, float gibscounter) producegibs_dfury_boss =	{
 		ThrowGib(1, 1);
 		self.gib1mdl = "progs/ad171/gib_4.mdl";
 		ThrowGib(11, 1);
-		self.gib1mdl = "progs/q15/gib_5.mdl";
+		self.gib1mdl = GIB5_BLOOD;
 		ThrowGib(11, 1);
 		self.gibtype = GIBTYPE_METAL;
 		self.gib1mdl = "progs/ad171/gib_knfoot_l.mdl"; 	
@@ -460,7 +453,7 @@ void(float maxgibs, float gibscounter) producegibs_dfury_boss =	{
 
 void() dfury_boss_die = {
 	// regular death only
-	sound (self, CHAN_VOICE, "dfury/death1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "q15/dfury/death1.wav", 1, ATTN_NORM);
 	dfury_boss_die1 ();
 };
 
@@ -592,13 +585,13 @@ void()	dfury_boss_watk15	=[	$w_attack15,	dfury_boss_watk16	] {ai_charge(0);ai_me
 void()	dfury_boss_watk16	=[	$w_attack16,	dfury_boss_run1	] 	  {ai_charge(13); dfury_boss_footsteps (0.8);};
 
 void() dfury_boss_idle_sound = {
-	if (random() < 0.2) sound (self, CHAN_VOICE, "dfury/idle.wav", 1, ATTN_NORM);
+	if (random() < 0.2) sound (self, CHAN_VOICE, "q15/dfury/idle.wav", 1, ATTN_NORM);
 };
 
 void(entity inflictor, entity attacker, float damage)	dfury_boss_pain = {
 	if (self.pain_finished > time) return;
 
-	sound (self, CHAN_VOICE, "dfury/pain1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "q15/dfury/pain1.wav", 1, ATTN_NORM);
 	if (time - self.pain_finished > 5) {	// allways go into pain frame if it has been a while
 		dfury_boss_pain1 ();
 		self.pain_finished = time + 1;
@@ -614,7 +607,7 @@ void(entity inflictor, entity attacker, float damage)	dfury_boss_pain = {
 void() dfury_boss_melee = {
 	self.style = self.style + 1;
 
-	sound (self, CHAN_WEAPON, "dfury/slash1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "q15/dfury/slash1.wav", 1, ATTN_NORM);
 	if (self.style == 1)
 		dfury_boss_slice1 ();
 	else if (self.style == 2)
@@ -708,30 +701,27 @@ void() monster_dfury_boss = {
 	precache_model ("progs/q15/gib_sboss.mdl");
 	precache_model ("progs/gib1.mdl");
 	precache_model ("progs/ad171/gib_4.mdl");
-	precache_model ("progs/q15/gib_5.mdl");
+	precache_model (GIB5_BLOOD);
 	precache_model ("progs/ad171/gib_knfoot_l.mdl");
 	precache_model ("progs/ad171/gib_knfoot_r.mdl");
 	precache_model ("progs/ad171/w_dknightsword.mdl");
 	precache_model ("progs/drake/s_explod.spr");
-	precache_sound ("dfury/boss_explode.wav");
-	precache_sound ("dfury/boss_death1.wav");
-	precache_sound ("dfury/attack1.wav");
-	precache_sound ("dfury/death1.wav");
-	precache_sound ("dfury/pain1.wav");
-	precache_sound ("dfury/death2.wav");
-	precache_sound ("dfury/pain2.wav");
-	precache_sound ("dfury/sight1.wav");
-	precache_sound ("dfury/hit.wav");
-	precache_sound ("dfury/slash1.wav");
-	precache_sound ("dfury/idle.wav");
-	precache_sound ("dfury/grunt.wav");
-	precache_sound ("dfury/proj.wav");
-	precache_sound ("dfury/fall.wav");
-	precache_sound ("walk/dfuryboss1.wav");
-	precache_sound ("walk/dfuryboss2.wav");
-	precache_sound ("walk/dfuryboss3.wav");
-	precache_sound ("misc/summon.wav");
-	precache_sound ("knight/dropsword.wav");
+	precache_sound ("q15/dfury/boss_explode.wav");
+	precache_sound ("q15/dfury/boss_death1.wav");
+	precache_sound ("q15/dfury/attack1.wav");
+	precache_sound ("q15/dfury/death1.wav");
+	precache_sound ("q15/dfury/pain1.wav");
+	precache_sound ("q15/dfury/death2.wav");
+	precache_sound ("q15/dfury/pain2.wav");
+	precache_sound ("q15/dfury/sight1.wav");
+	precache_sound ("quoth/dguard/hit.wav");
+	precache_sound ("q15/dfury/slash1.wav");
+	precache_sound ("q15/dfury/idle.wav");
+	precache_sound ("q15/dfury/proj.wav");
+	precache_sound ("q15/dfury/fall.wav");
+	precache_sound ("q15/dfury/dfuryboss_walk.wav");
+	precache_sound ("ad171/wraith/attack3.wav");
+	precache_sound ("ad171/gibs/gibmetalb.wav");
 	precache_sound ("drake/misc/wallbrk.wav");
 	precache_sound ("knight/sword1.wav");
 	precache_sound ("knight/sword2.wav");

@@ -703,29 +703,29 @@ void  ()init_fangel =  {
 	if (monster_checkspawn() == TRUE) return;
 
 	self.monster_stage = FANGEL_STAGE_WAIT;
-	precache_model2 ( "progs/hexen2/fangel.mdl");
-	precache_model2 ( "progs/hexen2/faspell.mdl");
-	precache_model2 ( "progs/hexen2/fablade.mdl");
-	precache_model2 ( "progs/hexen2/h_fangel.mdl");
-	precache_sound2 ( "hexen2/fangel/fly.wav");
-	precache_sound2 ( "hexen2/fangel/deflect.wav");
-	precache_sound2 ( "hexen2/fangel/hand.wav");
-	precache_sound2 ( "hexen2/fangel/wing.wav");
-	precache_sound2 ( "hexen2/weapons/expsmall.wav");
-	precache_sound2 ( "hexen2/weapons/explode.wav");
+	precache_model ( "progs/hexen2/fangel.mdl");
+	precache_model ( "progs/hexen2/faspell.mdl");
+	precache_model ( "progs/hexen2/fablade.mdl");
+	precache_model ( "progs/hexen2/h_fangel.mdl");
+	precache_sound ( "hexen2/fangel/fly.wav");
+	precache_sound ( "hexen2/fangel/deflect.wav");
+	precache_sound ( "hexen2/fangel/hand.wav");
+	precache_sound ( "hexen2/fangel/wing.wav");
+	precache_sound ( "hexen2/weapons/expsmall.wav");
+	precache_sound ( "hexen2/weapons/explode.wav");
 
 	self.mdl = "progs/hexen2/fangel.mdl";
 	self.headmdl = "progs/hexen2/h_fangel.mdl";		// Large head
 	self.pain_sound = "hexen2/fangel/pain.wav";
 	self.gibhealth = -40;
 	if ((self.classname == "monster_fallen_angel") ) {
-		precache_sound2 ( "hexen2/fangel/ambi1.wav");
+		precache_sound ( "hexen2/fangel/ambi1.wav");
 		self.idle_sound = "hexen2/fangel/ambi1.wav";
 		if (self.health < 1) self.health = 300; // was 250 in Hexen2
 		if(!self.classtype) self.classtype = CT_MONFANGEL;
 		if (self.deathstring == "")  self.deathstring = " was felled by the Fallen Angel\n";
    } else {
-		precache_sound2 ( "hexen2/fangel/ambi2.wav");
+		precache_sound ( "hexen2/fangel/ambi2.wav");
 		self.idle_sound = "hexen2/fangel/ambi2.wav";
 		self.skin = 1;
 		if (self.health < 1) self.health = 500;
@@ -766,14 +766,14 @@ void  ()init_fangel =  {
 
 
 void() monster_fallen_angel =  {
-   precache_sound2 ( "hexen2/fangel/death.wav");
-   precache_sound2 ( "hexen2/fangel/pain.wav");
+   precache_sound ( "hexen2/fangel/death.wav");
+   precache_sound ( "hexen2/fangel/pain.wav");
    init_fangel ( );
 };
 
 
 void() monster_fallen_angel_lord =  {
-   precache_sound2 ( "hexen2/fangel/death2.wav");
-   precache_sound2 ( "hexen2/fangel/pain2.wav");
+   precache_sound ( "hexen2/fangel/death2.wav");
+   precache_sound ( "hexen2/fangel/pain2.wav");
    init_fangel ( );
 };

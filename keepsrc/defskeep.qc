@@ -3,7 +3,7 @@
 // |__/ |__  |__  |__)     |\/| /  \ |  \
 // |  \ |___ |___ |        |  | \__/ |__/                                                    
 //
-// Compiled by Qmaster
+// Compiled by W. Josiah Jack, aka Qmaster
 //
 // Attributions: All, see credits folder
 //
@@ -47,9 +47,9 @@
 // One mod to Keep them all
 // and in Quake bind them
 // -ijed
-//======================================================================
+//=============================================================================
 
-string MOD_VERSION		= "\b[INFO]\b Keep Mod, version 0.91\n";
+string MOD_VERSION		= "\b[INFO]\b Keep Mod, version 0.92\n";
 .float mapversion;
 .string target3, target4;
 float total_denizens; // Used to track total harmless denizens
@@ -310,10 +310,10 @@ string MODEL_VWEAP_PROX = "progs/hipnotic/v_prox.mdl";			// Proximity Gun
 string MODEL_VWEAP_MJOL = "progs/hipnotic/v_hammer.mdl";			// Mjolnir
 string MODEL_VWEAP_LCAN = "progs/hipnotic/v_laserg.mdl";			// Laser Cannon
 string MODEL_PROJ_GRENADEMULTI = "progs/rogue/mervup.mdl";			// Multi-Grenade for Monsters
-string SOUND_ARTPSHIELD1 = "shield/pickup.wav";			// Pickup
-string SOUND_ARTPSHIELD2 = "shield/hit.wav";			// Active
-string SOUND_ARTPSHIELD3 = "shield/fadeout.wav";		// Fading
-string SOUND_ARTCROSS2 = "items2/crosuse.wav";			// Active
+string SOUND_ARTPSHIELD1 = "rogue/shield/pickup.wav";			// Pickup
+string SOUND_ARTPSHIELD2 = "rogue/shield/hit.wav";			// Active
+string SOUND_ARTPSHIELD3 = "rogue/shield/fadeout.wav";		// Fading
+string SOUND_ARTCROSS2 = "quoth/items2/crosuse.wav";			// Active
 string SOUND_ARTEMPATH2 = "hipnotic/items/empathy2.wav";		// Active
 
 .float slimealpha;

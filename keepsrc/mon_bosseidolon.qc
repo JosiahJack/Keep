@@ -616,7 +616,7 @@ void() eidolon_explode = {
 	WriteCoord (MSG_BROADCAST, self.origin_z);
 	WriteByte (MSG_BROADCAST, 35);
 	WriteByte (MSG_BROADCAST, 8);
-	SpawnExplosion(EXPLODE_PLASMA_BIG, self.origin, "ad171/eidolon/explode_death.wav"); // Classic sprite/DP explosion
+	SpawnExplosion(EXPLODE_PLASMA_BIG, self.origin, "ad171/seeker/explode_major.wav"); // Classic sprite/DP explosion
 	self.max_health = MON_GIBEXPLOSION; // Gib explosive fountain!?!
 	ThrowGib(11, 10 + rint(random()*10));	// Small Golem rock
 	ThrowGib(12, 10 + rint(random()*10));	// Large Golem rock
@@ -827,7 +827,7 @@ void() monster_eidolon = {
 
 	// Final death sequence
 	precache_sound ("ne_ruins/eidolon/death.wav");
-	precache_sound ("ad171/eidolon/explode_death.wav");
+	precache_sound ("ad171/seeker/explode_major.wav");
 	precache_sound ("ad171/eidolon/implode_death.wav");
 	precache_sound ("ad171/eidolon/elec_arch1.wav");
 	precache_sound ("ad171/eidolon/elec_arch2.wav");

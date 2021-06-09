@@ -102,9 +102,8 @@ void () lightning_orb_death = {
 	light.think = orb_sprite_loop;
 	light.use = SUB_Remove;
 	light.nextthink = time + 0.1;
-	sound (light,CHAN_AUTO,"bfg/bfg.wav",TRUE,ATTN_NORM); // death burst
+	sound (light,CHAN_AUTO,"doom/bfg.wav",TRUE,ATTN_NORM); // death burst
 	T_RadiusDamage(self, self.owner, 40,world,DAMAGEALL); // minor damage from exploding
-	
 	SpawnOrbLightning(self.origin,250,0.4);
 	self.think = SUB_Remove;
 	self.nextthink = time + 0.1;
@@ -156,7 +155,7 @@ void () SpawnLightningOrb = {
 	light.attack_finished = time + 1.9;
 	light.think1 = lightning_orb_death;
 	light.nextthink = (time + 0.5);
-	sound (light,CHAN_AUTO,"nehahra/ambience/thunder3.wav",TRUE,ATTN_NORM);
+	sound (light,CHAN_AUTO,"zerstorer/ambience/thunder2.wav",TRUE,ATTN_NORM);
 	//SpawnOrbLightning(light.origin,250,1.9);  // find and create lightning traces
 };
 

@@ -44,17 +44,12 @@ void() precache_aoa =
 	precache_sound ("aoa/axhit3.wav");
 	precache_sound ("aoa/acidhit.wav");
 	precache_sound ("aoa/radius.wav");
-	precache_sound ("aoa/sword1a.wav");
-	precache_sound ("aoa/sword2a.wav");
-	precache_sound ("aoa/sword1b.wav");
-	precache_sound ("aoa/sword2b.wav");
 	precache_sound ("aoa/rapier_meat.wav");
 	precache_sound ("aoa/rapier_meat2.wav");
 	precache_sound ("aoa/rapier_meat3.wav");
 	precache_sound ("aoa/staffhit.wav");
-	precache_sound ("aoa/staffexplode.wav");
+	precache_sound ("ad171/seeker/explode_major.wav");
 	precache_sound ("aoa/staffshot.wav");
-	precache_sound ("aoa/staffexplode.wav");
 	precache_sound ("aoa/melee_meat.wav");
 	precache_sound ("aoa/swing2.wav");
 	precache_sound ("aoa/gauntlet_att.wav");
@@ -62,7 +57,7 @@ void() precache_aoa =
 	precache_sound ("aoa/gauntlet_att3.wav");
 	precache_sound ("aoa/gauntlet_att4.wav");
 	precache_sound ("aoa/heartbeat.wav");
-	precache_sound ("aoa/gibacid.wav");
+	precache_sound ("ad171/gibs/gibacid.wav");
 	precache_sound ("aoa/heal.wav");
 	precache_sound ("aoa/drainhealth.wav");
 	precache_sound ("aoa/corruption.wav");
@@ -105,7 +100,7 @@ void() precache_aoa =
 	precache_model ("progs/aoa/spark.mdl");
 	precache_model ("progs/aoa/bloodorb_small.mdl");
 	precache_model ("progs/aoa/bloodorb1.mdl");
-	precache_model ("progs/aoa/boneshard.mdl");
+	precache_model ("progs/aoa/boneshard.mdl"); // Added gray particle trail to ad171/proj_wraithbone.mdl
 	precache_model ("progs/aoa/bloodembers.mdl");
 	precache_model ("progs/aoa/player_rapier.mdl");
 	precache_model ("progs/aoa/player_scimitar.mdl");
@@ -136,9 +131,6 @@ void() precache_aoa =
 	precache_model ("progs/aoa/glow.mdl");
 	precache_model ("progs/aoa/tessla.mdl");
 	precache_model ("progs/aoa/bloodsphere.mdl");
-
-
-
 	//precache_model ("progs/aoa/tessla.mdl");
 };
 

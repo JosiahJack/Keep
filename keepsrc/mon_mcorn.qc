@@ -60,43 +60,31 @@ local float 	ldmg;
 	T_Damage (self.enemy, self, self, ldmg);
 };
 
-void() McLaser_Touch =
-{
+void() McLaser_Touch = {
 	local vector org;
 	
-	if (other == self.owner)
-		return;		// don't explode on owner
-
-	if (pointcontents(self.origin) == CONTENT_SKY)
-	{
-		remove(self);
-		return;
-	}
+	if (other == self.owner) return; // don't explode on owner
+	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
 	
-	sound (self, CHAN_WEAPON, "mcorn/enfstop.wav", 1, ATTN_STATIC);
+	sound (self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
 	org = self.origin - 8*normalize(self.velocity);
 
-	if (other.health)
-	{
+	if (other.health) {
 		SpawnBlood (org, self.velocity*0.2, 15);
 		T_Damage (other, self, self.owner, 15);
-	}
-	else
-	{
+	} else {
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 		WriteByte (MSG_BROADCAST, TE_GUNSHOT);
 		WriteCoord (MSG_BROADCAST, org_x);
 		WriteCoord (MSG_BROADCAST, org_y);
 		WriteCoord (MSG_BROADCAST, org_z);
 	}
-	
 	remove(self);	
 };
 
-void(vector org, vector vec) McLaunchLaser =
-{		
+void(vector org, vector vec) McLaunchLaser = {		
 	if (self.classname == "monster_mcorn")
-		sound (self, CHAN_WEAPON, "mcorn/enfire.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, SOUND_LASER_FIRE, 1, ATTN_NORM);
 
 	vec = normalize(vec);
 	

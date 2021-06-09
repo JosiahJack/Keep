@@ -58,16 +58,6 @@ void() RyanscissorhandsChecks = //called to ensure that the proper player model 
 	}
 };
 
-void() MeleeSound =
-{
-	local float randy;
-	randy = random();
-	if (randy < 0.25) sound (self, CHAN_WEAPON, "aoa/sword1a.wav", 1, ATTN_NORM);
-	else if (randy < 0.5) sound (self, CHAN_WEAPON, "aoa/sword2a.wav", 1, ATTN_NORM);
-	else if (randy < 0.75) sound (self, CHAN_WEAPON, "aoa/sword1b.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_WEAPON, "aoa/sword2b.wav", 1, ATTN_NORM);
-};
-
 void(float projectileNumber) SwordMagic;
 void(float attackNumber) SwordSwing;
 
@@ -318,7 +308,7 @@ void() GlowTouch =
 	}
 	T_RadiusDamageAOA (self, self.owner, 150, 200, self.owner, DAMAGEALL);
 
-	SpawnExplosion(EXPLODE_SMALL, self.origin, "ad171/minotaur/attack1expl.wav");
+	SpawnExplosion(EXPLODE_SMALL, self.origin, "kinn/shuffler/expsmall.wav");
 	remove(self);
 };
 
@@ -363,12 +353,12 @@ void(float damage) GhostRapierAttack;
 void(vector org, float radius) FindEnemy;
 void() rapierParticle;
 
-void() GhostRapierAnimation1 = [1, GhostRapierAnimation2] {MeleeSound();FindEnemy(self.origin, 75);}; //this is the Projectile rapier's animation sequence
+void() GhostRapierAnimation1 = [1, GhostRapierAnimation2] {SwordSwipeSound();FindEnemy(self.origin, 75);}; //this is the Projectile rapier's animation sequence
 void() GhostRapierAnimation2 = [2, GhostRapierAnimation3] {GhostRapierAttack(20);};
-void() GhostRapierAnimation3 = [3, GhostRapierAnimation4] {MeleeSound();FindEnemy(self.origin, 75);};
+void() GhostRapierAnimation3 = [3, GhostRapierAnimation4] {SwordSwipeSound();FindEnemy(self.origin, 75);};
 void() GhostRapierAnimation4 = [4, GhostRapierAnimation5] {GhostRapierAttack(25);};
 void() GhostRapierAnimation5 = [5, GhostRapierAnimation6] {FindEnemy(self.origin, 75);};
-void() GhostRapierAnimation6 = [6, GhostRapierAnimation7] {MeleeSound();FindEnemy(self.origin, 75);};
+void() GhostRapierAnimation6 = [6, GhostRapierAnimation7] {SwordSwipeSound();FindEnemy(self.origin, 75);};
 void() GhostRapierAnimation7 = [7, GhostRapierAnimation8] {GhostRapierAttack(30);};
 void() GhostRapierAnimation8 = [8, GhostRapierAnimation9]
 {
@@ -386,12 +376,12 @@ void() GhostRapierAnimation13 = [13, GhostRapierAnimation14] {};
 void() GhostRapierAnimation14 = [14, GhostRapierAnimation14] {remove(self);};
 
 
-void() RapierAnimation1 = [33, RapierAnimation2] {self.weaponframe = 1;MeleeSound();}; //this is the player's attack sequence
+void() RapierAnimation1 = [33, RapierAnimation2] {self.weaponframe = 1;SwordSwipeSound();}; //this is the player's attack sequence
 void() RapierAnimation2 = [34, RapierAnimation3] {self.weaponframe = 2;RapierAttack();};
-void() RapierAnimation3 = [33, RapierAnimation4] {self.weaponframe = 3;MeleeSound();};
+void() RapierAnimation3 = [33, RapierAnimation4] {self.weaponframe = 3;SwordSwipeSound();};
 void() RapierAnimation4 = [34, RapierAnimation5] {self.weaponframe = 4;RapierAttack();};
 void() RapierAnimation5 = [36, RapierAnimation6] {self.weaponframe = 5;};
-void() RapierAnimation6 = [32, RapierAnimation7] {self.weaponframe = 6;MeleeSound();};
+void() RapierAnimation6 = [32, RapierAnimation7] {self.weaponframe = 6;SwordSwipeSound();};
 void() RapierAnimation7 = [34, RapierAnimation8] {self.weaponframe = 7;RapierAttack();};
 void() RapierAnimation8 = [0, RapierAnimation9] {self.weaponframe = 8;};
 void() RapierAnimation9 = [1, RapierAnimation10]
@@ -1011,7 +1001,7 @@ void() StaffDetonate4 = [112, player_run] {self.weaponframe =12;};
 void () VoidExplosion = 
 {
 
-	sound (self, CHAN_VOICE, "aoa/staffexplode.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "ad171/seeker/explode_major.wav", 1, ATTN_NORM);
 	local entity GreenEmbers, GreenEmbers2, GreenEmbers3;
 	
 	makevectors(self.velocity);
@@ -1105,7 +1095,7 @@ void () DetonateVoidShards =
 	if (FoundATarget == TRUE)
 	{
 		self.currentammo = self.ammo_voidshards = self.ammo_voidshards - 4;
-		sound (self, CHAN_WEAPON, "aoa/staffexplode.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/seeker/explode_major.wav", 1, ATTN_NORM);
 	}
 };
 
@@ -1544,7 +1534,7 @@ void() W_FireMace =
 	{
 		return;		
 	}
-	sound (self, CHAN_VOICE, "player/jump.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "qmaster/player/jump.wav", 1, ATTN_NORM);
 
 	self.flags = self.flags - FL_ONGROUND;
 	makevectors(self.v_angle);

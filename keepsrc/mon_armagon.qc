@@ -502,7 +502,7 @@ void () armagon_die14 = [ 97.000, armagon_die14 ] {
    body.think = armagon_body_explode1;
    body.nextthink = (time + 0.100);
    body.gorging = TRUE;
-DropCoin(1);
+	DropCoin(1);
 };
 
 void () armagon_body_explode2 = {

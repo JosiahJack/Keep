@@ -230,11 +230,8 @@ void() bogl_smash10 =[ $smash10, bogl_smash11] {ai_charge(0);};
 void() bogl_smash11 =[ $smash11, bogl_smash12] {ai_charge(5);};
 void() bogl_smash12 =[ $smash12, bogl_run1	 ] {ai_charge(4);};
 
-//======================================================================
 // RANGE ATTACK 2 - Projectile Lightning attack
-//======================================================================
-void() bogl_lightning = 
-{
+void() bogl_lightning = {
 	local vector org, dir, vec;
 	if (self.health < 1) return;
 	
@@ -243,7 +240,7 @@ void() bogl_lightning =
 
 	// Setup skill based attack speed
 	self.attack_speed = SPEED_BLORDBOLT + (skill * SPEED_BLORDSKILL);
-	sound (self, CHAN_WEAPON, "ad171/boglord/bolt_fire.wav", 1, ATTN_NORM);	
+	sound (self, CHAN_WEAPON, "ad171/gaunt/plasma_fire.wav", 1, ATTN_NORM);	
 
 	// Aim around player
 	makevectors (self.angles);
@@ -258,9 +255,7 @@ void() bogl_lightning =
 	launch_projectile(org, dir, CT_PROJ_BLBOLT, self.attack_speed);	
 };
 
-//----------------------------------------------------------------------
-void(vector leftofs, vector rightofs, float sbframe) bogl_casting =
-{
+void(vector leftofs, vector rightofs, float sbframe) bogl_casting = {
 	local vector dir, tang;
 	local float midpoint;
 	if (self.health < 1) return;
@@ -339,7 +334,7 @@ void() bogl_magic5 =[ $magic5, bogl_magic6 ] {
 void() bogl_magic6 =[ $magic6, bogl_magic9 ] {bogl_lightning();
 	// Finished with growing ball of energy
 	bogl_finish_attachment();
-	SpawnExplosion(self.part_life, self.pos3, "ad171/boglord/slime_explode.wav");
+	SpawnExplosion(self.part_life, self.pos3, "quoth/drole/explode3.wav");
 };
 void() bogl_magic9 =[ $magic9, bogl_magic10 ] {bogl_lightning();};
 void() bogl_magic10 =[ $magic10, bogl_magic11 ] {bogl_lightning();monster_footstep(FALSE);};
@@ -512,12 +507,12 @@ void() monster_boglord = {
 	precache_sound ("ad171/boglord/melee1.wav");
 	precache_sound ("ad171/boglord/melee2.wav");
 	precache_sound ("ad171/boglord/melee3.wav");
-	precache_sound ("ad171/boglord/bolt_fire.wav");
+	precache_sound ("ad171/gaunt/plasma_fire.wav");
 	
 	// Slime arc attack (not used anymore)
 	precache_sound ("ad171/boglord/attack2.wav");
-	precache_sound ("ad171/boglord/slime_explode.wav");
-	precache_sound ("ad171/boglord/slime_miss.wav");
+	precache_sound ("quoth/drole/explode3.wav");
+	precache_sound ("ad171/wraith/bounce.wav");
 
 	self.sight_sound = "ad171/boglord/sight.wav";
 	precache_sound (self.sight_sound);

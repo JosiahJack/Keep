@@ -95,7 +95,7 @@ void() OgreFireADNails = {
 	loopvar = 0;
 	self.effects = self.effects | EF_MUZZLEFLASH; // Light up face, setup projectile speed and play fire sound
 	self.attack_speed = SPEED_NAILOGREPROJ + (skill * SPEED_NAILOGRESKILL);
-	sound(self, CHAN_WEAPON, "ad171/ogre/nail_fire.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "xmas/snowman/nail_fire.wav", 1, ATTN_NORM);
 
 	// turn and face your enemy!
 	makevectors (self.angles);
@@ -577,7 +577,7 @@ void() monster_ogre_precache = {
 	if (self.spawnflags & MON_OGRE_NAIL) {
 		// Default attack - red glowing lava nails
 		precache_model (MODEL_PROJ_NGRED);
-		precache_sound("ad171/ogre/nail_fire.wav");
+		precache_sound("xmas/snowman/nail_fire.wav");
 		// Default amount of nails to burst fire (5x9=45dmg)
 		if (self.attack_count < 1) self.attack_count = 5;
 	}

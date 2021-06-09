@@ -44,12 +44,8 @@ float JS_DYING = 10;	// Final animation
 // Size of each animation block
 float JS_ANIMBLOCK = 6;
 
-//======================================================================
-// Update Jim every frame with skin/sound updates
-// fstate (see above for animation block details)
-//======================================================================
-void(float fstate) jim_update = 
-{
+// Update Jim every frame with skin/sound updates fstate (see above for animation block details)
+void(float fstate) jim_update = {
 	// If jim is dead, no more updates
 	if (self.health < 1) return;
 
@@ -57,7 +53,7 @@ void(float fstate) jim_update =
 	if (self.t_width < time) {
 		self.t_width = time + 0.9;
 		// Play on auto channel so it overlaps with existing sound
-		sound (self, CHAN_AUTO, "ad171/jim/gunidle2.wav", 0.3, ATTN_WEAPON);
+		sound (self, CHAN_AUTO, "quoth/bob/hover.wav", 0.3, ATTN_WEAPON);
 	}
 
 	// Time for an idle sound?
@@ -78,8 +74,7 @@ void(float fstate) jim_update =
 			if (self.origin_z > self.oldorigin_z) fstate = JS_UP;
 			else if (self.origin_z < self.oldorigin_z) fstate = JS_DOWN;
 		}
-	}
-	else {
+	} else {
 		// At beginning of frame block and reversing?
 		if (self.count == 0 && self.idlereverse) {
 			if (self.idlebusy == JS_TURNLEFT || self.idlebusy == JS_TURNRIGHT) {
@@ -207,11 +202,8 @@ void() jim_laser =
 	launch_projectile(org, vec, CT_PROJ_LASER, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
 // Straight aim rocket, no pre-calculation or steering (skill based speed)
-//----------------------------------------------------------------------
-void() jim_rocket =
-{
+void() jim_rocket = {
 	local vector org, dir, vec;
 	
 	if (!self.enemy) return;
@@ -220,8 +212,7 @@ void() jim_rocket =
 	if ( visxray(self.enemy, self.attack_offset, '0 0 -12', FALSE) ) return;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "ad171/jim/rocket_fire.wav", 1, ATTN_NORM);	
-
+	sound (self, CHAN_WEAPON, "quoth/soldier/rocket.wav", 1, ATTN_NORM);	
 	makevectors (self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 
@@ -234,17 +225,13 @@ void() jim_rocket =
 	Launch_Missile (org, vec, '0 0 0', CT_PROJ_JIM2, self.attack_speed);
 };
 
-//----------------------------------------------------------------------------
 void(float vspeed) jim_vel = { 
 	// Turn and face enemy and update attack velocity
 	ai_face(); self.velocity = self.attack_track * vspeed;
 };
 
-//----------------------------------------------------------------------------
 // Calculate new attack vector for firing lasers at the player
-//----------------------------------------------------------------------------
-void() jim_attack =
-{
+void() jim_attack = {
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_FLY;
 	makevectors(self.angles);
@@ -264,7 +251,7 @@ void() jim_attack =
 //----------------------------------------------------------------------------
 void() jim_fire1 =[ $idle1, jim_fire2 ] {jim_update(JS_IDLE);
 	if (self.classtype == CT_MONJIM) 
-		sound (self, CHAN_WEAPON, "ad171/jim/laser_load.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "quoth/bob/fire.wav", 1, ATTN_NORM);
 	else sound (self, CHAN_WEAPON, "ad171/jim/rocket_load.wav", 1, ATTN_NORM);
 };
 void() jim_fire2 =[ $idle1, jim_fire3 ] {jim_update(JS_IDLE);jim_attack();
@@ -392,16 +379,14 @@ void() jim_dying1 =
 	}
 };
 
-//----------------------------------------------------------------------------
-void() jim_dying2 = 
-{
+void() jim_dying2 = {
 	// Setup correct death frame
 	self.frame = JS_DYING + self.cnt;
 	self.cnt = self.cnt + 1;
 	if (self.cnt > 5) self.cnt = 0;
 
 	// Medium explosion + sound OR smoke projectile trail
-	if (random() > 0.7) SpawnExplosion(EXPLODE_MED, self.origin, "ad171/jim/explode_minor.wav");
+	if (random() > 0.7) SpawnExplosion(EXPLODE_MED, self.origin, "quoth/bob/s_explode.wav");
 	else if (random() < 0.3) SpawnProjectileSmoke(self.origin, 150, 50, 150);
 
 	// Turn down towards the ground
@@ -421,16 +406,15 @@ void() jim_dying2 =
 	else self.think = jim_dying2;
 };
 
-//----------------------------------------------------------------------------
-void() jim_is_dead = 
-{
+// He's dead Jim! Star Trek references.
+void() jim_is_dead = {
 	self.think = self.touch = SUB_Null;
 	
 	// Final fireworks!
 	particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
-	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/jim/explode_major.wav");
+	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/seeker/explode_major.wav");
 
 	// Goto final resting place
 	entity_hide(self);
@@ -453,7 +437,7 @@ void() jim_die = {
 	// Second function accents the spiral (1s forward movement)
 	// Third final impact (touch function goes here as well)
 	//
-	sound (self, CHAN_VOICE, "ad171/jim/death1.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "quoth/bob/death.wav", 1, ATTN_NORM);
 	self.solid = SOLID_NOT;			// No world colision
 	self.movetype = MOVETYPE_FLY;	// Free velocity movement
 	self.touch = jim_is_dead;		// still can touch stuff
@@ -469,7 +453,7 @@ void() jim_die = {
 
 	// Spawn dust and sprite explosion
 	particle_dust(self.origin, 10+random()*10, 16, PARTICLE_BURST_YELLOW);
-	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/jim/explode_minor.wav");
+	SpawnExplosion(EXPLODE_BIG, self.origin, "quoth/bob/s_explode.wav");
 	SpawnProjectileSmoke(self.origin, 150, 50, 150);
 
 	jim_dying1();
@@ -489,17 +473,17 @@ void() monster_jim = {
 	precache_model (self.mdl);
 	
 	// death/pain/attack sounds
-	precache_sound("ad171/jim/death1.wav");
+	precache_sound("quoth/bob/death.wav");
 	self.pain_sound = "ad171/jim/pain1.wav";
 	self.pain_sound2 = "ad171/jim/pain2.wav";
 	precache_sound(self.pain_sound);
 	precache_sound(self.pain_sound2);
 	
-	precache_sound("ad171/jim/explode_minor.wav");
-	precache_sound("ad171/jim/explode_major.wav");
-	precache_sound("ad171/jim/gunidle2.wav");		// Long buzzing sound
+	precache_sound("quoth/bob/s_explode.wav");
+	precache_sound("ad171/seeker/explode_major.wav");
+	precache_sound("quoth/bob/hover.wav");		// Long buzzing sound
 
-	self.sight_sound = "ad171/jim/sight1.wav";
+	self.sight_sound = "quoth/bob/sight.wav";
 	precache_sound (self.sight_sound);
 	
 	self.solid = SOLID_NOT;				// No interaction with world
@@ -544,17 +528,16 @@ void() monster_jim = {
 
 		// Classic idle sound + new variant
 		self.idle_sound = "ad171/jim/idle1.wav";
-		self.idle_sound2 = "ad171/jim/idle3.wav";
+		self.idle_sound2 = "quoth/defender/blip.wav";
 		precache_sound (self.idle_sound);
 		precache_sound (self.idle_sound2);
 
 		// Projectile fire and impact (used in projectiles)
 		precache_sound("ad171/jim/rocket_load.wav");		// Wind up
-		precache_sound("ad171/jim/rocket_fire.wav");		// Fire
-		precache_sound("ad171/jim/rocket_hit.wav");		// Impact	
+		precache_sound("quoth/soldier/rocket.wav");		// Fire
+		precache_sound("quoth/dguard/hit.wav");		// Impact	
 		if (self.deathstring == "")  self.deathstring = " was blown away by Jim\n";
-	}
-	else {
+	} else {
 		self.classtype = CT_MONJIM;
 		if (self.health < 1) self.health = 100;
 		
@@ -566,9 +549,9 @@ void() monster_jim = {
 
 		// Projectile fire and impact (used in projectiles)
 		precache_model (MODEL_PROJ_LASER);		// Enforcer laser model
-		precache_sound("ad171/jim/laser_load.wav");		// Wind up
-		precache_sound ("enforcer/enfire.wav");		// Fire
-		precache_sound ("enforcer/enfstop.wav");	// Impact
+		precache_sound("quoth/bob/fire.wav");		// Wind up
+		precache_sound (SOUND_LASER_FIRE);		// Fire
+		precache_sound (SOUND_LASER_HIT);	// Impact
 		if (self.deathstring == "")  self.deathstring = " was cauterized by Jim\n";
 	}
 	

@@ -2,8 +2,7 @@ void (vector loc, float rad, float damage, float dur, float pause, float vol) mu
 
 void() big_explosion_think = {
 	self.frame = self.frame + 1;
-	if (self.frame > 16)
-		SUB_Remove();
+	if (self.frame > 16) SUB_Remove();
 
 	self.nextthink = time + 0.05;
 	self.think = big_explosion_think;
@@ -15,11 +14,9 @@ void(vector org, float snd) spawn_big_explosion = {
 	e = spawn();
 	e.movetype = MOVETYPE_NONE;
 	e.solid = SOLID_NOT;
-	setmodel(e, "progs/bigexp.spr");
+	setmodel(e, "progs/quoth/bigexp.spr");
 	setorigin(e, org);
-	if (snd == 1)
-		sound(e, CHAN_AUTO, "weapons/expl1.wav", 0.2, ATTN_NORM);
-
+	if (snd == 1) R_Exp3(org);
 	e.alpha = 0.6;
 	e.effects = 32;
 	e.nextthink = time + 0.05;
@@ -28,8 +25,7 @@ void(vector org, float snd) spawn_big_explosion = {
 
 void() small_explosion_think = {
 	self.frame = self.frame + 1;
-	if (self.frame > 13)
-		SUB_Remove();
+	if (self.frame > 13) SUB_Remove();
 
 	self.nextthink = time + 0.05;
 	self.think = small_explosion_think;
@@ -41,11 +37,9 @@ void(vector org, float snd) spawn_small_explosion = {
 	e = spawn();
 	e.movetype = MOVETYPE_NONE;
 	e.solid = SOLID_NOT;
-	setmodel(e, "progs/smlexp.spr");
+	setmodel(e, "progs/quoth/smlexp.spr");
 	setorigin(e, org);
-	if (snd == 1)
-		sound(e, CHAN_AUTO, "weapons/expl1.wav", 0.2, ATTN_NORM);
-
+	if (snd == 1) R_Exp3(org);
 	e.alpha = 0.6;
 	e.effects = 32;
 	e.nextthink = time + 0.05;
@@ -91,7 +85,7 @@ void () HIP_LaserTouch = {
 			return;
 		}
 	}
-	sound (self,CHAN_WEAPON,"enforcer/enfstop.wav",TRUE,ATTN_STATIC);
+	sound (self,CHAN_WEAPON,SOUND_LASER_HIT,TRUE,ATTN_STATIC);
 	remove (self);
 };
 
@@ -861,16 +855,16 @@ void () s_firespurtexplode13 = [ 13.000, SUB_Remove ] {};
 void () BecomeFireSpurt = {
    T_RadiusDamage (self,self.owner,40,world,DAMAGEALL);
    self.touch = SUB_Null;
-   setmodel (self,"progs/medexp.spr");
-   sound (self,CHAN_WEAPON,"pyro/fstop.wav",TRUE,ATTN_NORM);
+   setmodel (self,"progs/quoth/medexp.spr");
+   sound (self,CHAN_WEAPON,"quoth/pyro/fstop.wav",TRUE,ATTN_NORM);
    s_firespurtexplode1();
 };
 
 void () BecomeFireBall = {
    T_RadiusDamage (self,self.owner,40,world,DAMAGEALL);
    self.touch = SUB_Null;
-   setmodel (self,"progs/smlexp.spr");
-   sound (self,CHAN_WEAPON,"pyro/fstop.wav",TRUE,ATTN_NORM);
+   setmodel (self,"progs/quoth/smlexp.spr");
+   sound (self,CHAN_WEAPON,"quoth/pyro/fstop.wav",TRUE,ATTN_NORM);
    s_firballexplode5();
 };
 
@@ -898,7 +892,7 @@ void () FireBallVerticalLaunch = {
    missile.angles = vectoangles (missile.velocity);
    missile.touch = BecomeFireBall;
    missile.frame = 6;
-   setmodel (missile,"progs/smlexp.spr");
+   setmodel (missile,"progs/quoth/smlexp.spr");
    setsize (missile,VEC_ORIGIN,VEC_ORIGIN);
    setorigin (missile,self.origin);
    missile.nextthink = ((time + TRUE) + (crandom () * 0.500));
@@ -929,7 +923,7 @@ void (float offsetAngle) FireBallSpurtLaunch = {
    missile.angles = vectoangles (missile.velocity);
    missile.touch = BecomeFireSpurt;
    missile.frame = 6;
-   setmodel (missile,"progs/medexp.spr");
+   setmodel (missile,"progs/quoth/medexp.spr");
    setsize (missile,VEC_ORIGIN,VEC_ORIGIN);
    setorigin (missile,self.origin);
    missile.nextthink = ((time + TRUE) + (crandom () * 0.500));
@@ -960,7 +954,7 @@ void (float offsetAngle) MiniFireBallLaunch = {
    missile.angles = vectoangles (missile.velocity);
    missile.touch = BecomeFireBall;
    missile.frame = 6;
-   setmodel (missile,"progs/smlexp.spr");
+   setmodel (missile,"progs/quoth/smlexp.spr");
    setsize (missile,VEC_ORIGIN,VEC_ORIGIN);
    setorigin (missile,self.origin);
    missile.nextthink = ((time + TRUE) + (crandom () * 0.500));
@@ -1016,14 +1010,14 @@ void () DragonFireExplode = {
 void () Fire_DragonFire = {
    self.ammo_rockets = (self.ammo_rockets - TRUE);  // REMOVE
    self.currentammo = (self.currentammo - TRUE);	// REMOVE					// REMOVE
-   sound (self,CHAN_WEAPON,"pyro/flame.wav",TRUE,ATTN_NORM);
+   sound (self,CHAN_WEAPON,"quoth/pyro/flame.wav",TRUE,ATTN_NORM);
    newmis = spawn();
    newmis.owner = self;
 	newmis.classgroup = CG_PROJALL;
    newmis.movetype = MOVETYPE_FLYMISSILE;
    newmis.classname = "Dragonfire";
    newmis.solid = SOLID_NOT;
-   setmodel (newmis,"progs/smlexp.spr");
+   setmodel (newmis,"progs/quoth/smlexp.spr");
    setsize (newmis,VEC_ORIGIN,VEC_ORIGIN);
    setorigin (newmis,self.origin);
    newmis.frame = 5;
@@ -1057,12 +1051,11 @@ void()	beamhit3	=	[2,		beamhit4] {};
 void()	beamhit4	=	[3,		beamhit5] {};
 void()	beamhit5	=	[4,		SUB_Remove] {};
 
-void() BecomeBeamHit =
-{
+void() BecomeBeamHit = {
 	self.movetype = MOVETYPE_NONE;
 	self.velocity = '0 0 0';
 	self.touch = SUB_Null;
-	setmodel (self, "progs/beamhit.spr");
+	setmodel (self, "progs/custents/beamhit.spr");
 	self.solid = SOLID_NOT;
 	beamhit1 ();
 };
@@ -1083,8 +1076,7 @@ void() d_beamring3 =	[8,		d_beamring4] {};
 void() d_beamring4 =	[12,	d_beamring5] {};
 void() d_beamring5 =	[16,	SUB_Remove] {};
 
-void(vector ringorg) MakeBeamRing =
-{
+void(vector ringorg) MakeBeamRing = {
 	local entity ringent;
 	
 	ringent = spawn();
@@ -1096,8 +1088,7 @@ void(vector ringorg) MakeBeamRing =
 	ringent.frame = 0;
 	if(deathmatch)
 		ringent.think = d_beamring1;
-	else
-	{
+	else {
 		ringent.nextthink = time + 0.05;
 		ringent.think = beamring1;
 	}
@@ -1111,62 +1102,42 @@ void(vector ringorg) MakeBeamRing =
 	ringent.frame = 0;
 	if(deathmatch)
 		ringent.think = d_beamring1;
-	else
-	{
+	else {
 		ringent.nextthink = time + 0.05;
 		ringent.think = beamring1;
 	}
 };
 
-void() beam_touch =
-{
+void() beam_touch = {
 	local float totaldmg;
 
-	if (other == self.owner)
-		return;
+	if (other == self.owner) return;
+	if (other.solid == SOLID_TRIGGER) return; // trigger field, do nothing
+	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
 
-	if (other.solid == SOLID_TRIGGER)
-		return;   // trigger field, do nothing
-
-	if (pointcontents(self.origin) == CONTENT_SKY)
-	{
-		remove(self);
-		return;
-	}
-
-// hit something that bleeds
-	if (other.takedamage)
-	{
+	if (other.takedamage) { // hit something that bleeds
 		totaldmg = self.currentammo * 1.25;
 		totaldmg = ceil(totaldmg);
 		// totally decimate the dude if doesn't have enough health
-		if(other.health <= totaldmg)
-		{
+		if(other.health <= totaldmg) {
 			T_Damage (other, self, self.owner, 99999,DAMARMOR);
-			if(other.health <= 0)
-			{
+			if(other.health <= 0) {
 				MakeBeamRing(other.origin);
-
 				WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 				WriteByte (MSG_BROADCAST, TE_TAREXPLOSION);
 				WriteCoord (MSG_BROADCAST, other.origin_x);
 				WriteCoord (MSG_BROADCAST, other.origin_y);
 				WriteCoord (MSG_BROADCAST, other.origin_z);
-
 				remove(self);
 				return;
 			}
-		}
-		else
-			T_Damage (other, self, self.owner, totaldmg,DAMARMOR);
+		} else T_Damage (other, self, self.owner, totaldmg,DAMARMOR);
 	}
-
-	sound (self, CHAN_ITEM, "turret/beamhit.wav", 1, ATTN_NORM);
+	sound (self, CHAN_ITEM, "custents/turret/beamhit.wav", 1, ATTN_NORM);
 	BecomeBeamHit();
 };
 
-void(float burstcharge) beam_water_burst=
-{
+void(float burstcharge) beam_water_burst = {
 	local entity current;
 	local float totaldmg;
 	local vector destvec;
@@ -1174,36 +1145,26 @@ void(float burstcharge) beam_water_burst=
 	current = world;
 
 	sound (self, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
-	do
-	{
+	do {
 		current = nextent(current);
-
-		if (current.takedamage)
-		{
-//			destvec = current.origin + (current.mins + current.maxs)*0.5;
+		if (current.takedamage) {
 			destvec = current.origin;
 			traceline(self.origin, destvec, TRUE, self);
-			if(trace_fraction == 1 && current.waterlevel > 0)
-			{
+			if(trace_fraction == 1 && current.waterlevel > 0) {
 				totaldmg = vlen(self.origin - destvec) * 0.3;
 				totaldmg = burstcharge * burstcharge / totaldmg;
 				// check to see if the thing gets killed
-				if(current.health <= totaldmg)
-				{
+				if(current.health <= totaldmg) {
 					T_Damage (current, self, self, 99999,DAMARMOR);
-					if(other.health <= 0)
-					{
+					if(other.health <= 0) {
 						MakeBeamRing(other.origin);
-
 						WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 						WriteByte (MSG_BROADCAST, TE_TAREXPLOSION);
 						WriteCoord (MSG_BROADCAST, other.origin_x);
 						WriteCoord (MSG_BROADCAST, other.origin_y);
 						WriteCoord (MSG_BROADCAST, other.origin_z);
 					}
-				}
-				else
-					T_Damage (current, self, self, totaldmg,DAMARMOR);
+				} else T_Damage (current, self, self, totaldmg,DAMARMOR);
 			}
 		}
 	} while(current);
@@ -1222,18 +1183,13 @@ void() beam_generate = {
 		self.owner.attack_finished = time + 0.5;
 		setorigin (beamseg, self.owner.origin + v_forward*12 + self.owner.dest2);
 		beamseg.velocity = aim(self.owner, 800) * 800;
-	}
-	else if(self.owner.flags & FL_MONSTER)
-	{
+	} else if(self.owner.flags & FL_MONSTER) {
 		setorigin (beamseg, self.owner.origin);
 		beamseg.velocity = normalize(self.owner.enemy.origin - self.owner.origin) * 800;
-	}
-	else
-	{
+	} else {
 		setorigin (beamseg, self.owner.origin);
 		beamseg.velocity = self.owner.movedir * 800;
 	}
-
 	beamseg.angles = vectoangles(beamseg.velocity);
 	beamseg.speed = 800;
 	beamseg.classname = "beam";
@@ -1242,17 +1198,14 @@ void() beam_generate = {
 	beamseg.touch = beam_touch;
 	beamseg.think = SUB_Remove;
 	beamseg.nextthink = time + 6;
-
 	sound (self.owner, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM);
 	self.currentammo = self.currentammo / 2;
-
 	if((self.owner.flags & FL_CLIENT) && self.deadflag == DEAD_NO) {
 		self.owner.punchangle_x = -6;
 		self.owner.velocity = self.velocity - v_forward * self.currentammo * 2;
 	}
 
-	if(self.currentammo < 1)
-		remove(self);
+	if(self.currentammo < 1) remove(self);
 
 	self.nextthink = time + 0.05;
 };
@@ -1279,45 +1232,19 @@ void() W_FireBeam = {
 	self.currentammo = self.ammo_cells = floor(self.ammo_cells * 0.75);
 };
 
-void() Laser2_Touch =
- {
-
+void() Laser2_Touch = {
 	local vector org;
 
-
+	if (other == self.owner) return;		// don't explode on owner
+	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
 	
-if (other == self.owner)
-
-		return;		// don't explode on owner
-
-
-
-	if (pointcontents(self.origin) == CONTENT_SKY)
-	{
-
-		remove(self);
-
-		return;
-
-	}
-
-	
-sound (self, CHAN_WEAPON, "enforcer/enfstop.wav", 1, ATTN_STATIC);
-
+	sound (self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
 	org = self.origin - 8*normalize(self.velocity);
-
-
-	if (other.health) 
-{
-
+	if (other.health) {
 		SpawnBlood (self.enemy, org,v_forward, 9);
-
 		T_Damage (other, self, self.owner, 9, DAMARMOR);
-
 	}
-
 	remove(self);
-
 };
 
 void() BFGBoomThink = {
@@ -1334,8 +1261,7 @@ void() BFGBoomThink = {
 
 // SpawnBFGBoom - Spawns an explosion sprite atorg.
 
-void(vector org, vector dir, string emdl, float beginf, float endfrm,float
-anitm, float skn, vector vel) SpawnBFGBoom = {
+void(vector org, vector dir, string emdl, float beginf, float endfrm,float anitm, float skn, vector vel) SpawnBFGBoom = {
         newmis = spawn();
         newmis.solid = SOLID_NOT;
         newmis.movetype = MOVETYPE_FLY; // DRS: todo - change so it can move

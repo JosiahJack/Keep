@@ -88,7 +88,7 @@ void() shal_boss_jump15    =[      $jump1,       shal_boss_jump16   ] {ai_face()
 void() shal_boss_jump16    =[      $jump2,       shal_boss_run1     ] {ai_face();self.enemy.punchangle_y = -8;};
 
 void() shal_boss_attack1     =[      $attack1,       shal_boss_attack2    ] { if (self.health < 1200 && crandom() < 0.2 && enemy_range == RANGE_MELEE) shal_boss_jump1();
-sound (self, CHAN_VOICE, "shalrath/bossattack.wav", 1, ATTN_NORM);
+sound (self, CHAN_VOICE, "q15/shalrath/bossattack.wav", 1, ATTN_NORM);
 ai_face();
 };
 void() shal_boss_attack2     =[      $attack2,       shal_boss_attack3    ] {ai_face();};
@@ -192,7 +192,7 @@ void() ShalBossMissile = {
 	flytime = dist * 0.002;
 	if (flytime < 0.1) flytime = 0.1;
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	sound (self, CHAN_WEAPON, "shalrath/bossattack2.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "q15/shalrath/bossattack2.wav", 1, ATTN_NORM);
 	missile = spawn ();
 	missile.owner = self;
 	missile.solid = SOLID_BBOX;
@@ -225,8 +225,8 @@ void() ShalBossGrenade = {
 	missile.movetype = MOVETYPE_BOUNCE;
 	missile.solid = SOLID_BBOX;	
 	makevectors (self.angles);
-	sound (self, CHAN_WEAPON, "shalrath/voregren.wav", 1, ATTN_NORM);
-	sound (self, CHAN_ITEM, "shalrath/voretick.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "q15/shalrath/voregren.wav", 1, ATTN_NORM);
+	sound (self, CHAN_ITEM, "q15/shalrath/voretick.wav", 1, ATTN_NORM);
 	distancedelta = self.enemy.origin - self.origin; //work out distance vector  
 	nozdistancedelta = distancedelta;  //copy to no height distance vector 
 	nozdistancedelta_z = 0;  //remove height 
@@ -273,11 +273,11 @@ void() ShalBossMissileTouch = {
 
 	if (other.classname == "monster_zombie") T_Damage (other, self, self, 110, DAMARMOR);
 	if (other.classname == "monster_voreling") {
-		sound (self, CHAN_WEAPON, "voreling/miss.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/wraith/bounce.wav", 1, ATTN_NORM);
 	} else {
 		//T_RadiusDamage (self, self.owner, 40, world);
 		T_Damage (other, self, self, 25,DAMARMOR);
-		sound (self, CHAN_WEAPON, "shalrath/voreball.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "q15/shalrath/voreball.wav", 1, ATTN_NORM);
 		if (ext_dppart) pointparticles(particleeffectnum("voreball_explosion"), self.origin, '0 0 0', 1);
 	}
 	self.velocity = '0 0 0';
@@ -293,7 +293,7 @@ void() ShalBossGrenadeTouch = {
 	self.velocity = self.velocity * 1.4;
 	if (other.classname == "monster_zombie") T_Damage (other, self, self, 110,DAMARMOR);
 	if (other.classname == "monster_voreling") {
-		sound (self, CHAN_WEAPON, "voreling/miss.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/wraith/bounce.wav", 1, ATTN_NORM);
 	} else if (other.takedamage == DAMAGE_AIM) {
 		ShalBossGrenadeExplode();
 		return;
@@ -301,7 +301,7 @@ void() ShalBossGrenadeTouch = {
 };
 
 void() ShalBossGrenadeExplode = {
-	sound (self, CHAN_WEAPON, "shalrath/voreexp.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "q15/shalrath/voreexp.wav", 1, ATTN_NORM);
 	if (ext_dppart) pointparticles(particleeffectnum("voreball_explosion"), self.origin, '0 0 0', 1);
 	T_RadiusDamage (self, self.owner, 90, world, DAMAGEALL);
 	self.touch = SUB_Null;
@@ -333,10 +333,9 @@ void() ShalBossNovaTouch = {
 		}
 		shockwavefind = shockwavefind.chain; // go to next enemy
 	}
-	sound (self, CHAN_AUTO, "shalrath/earthshake.wav", 1, ATTN_NONE);
+	sound (self, CHAN_AUTO, "q15/shalrath/earthshake.wav", 1, ATTN_NONE);
 	if (ext_dppart) pointparticles(particleeffectnum("vore_shockwave"), self.origin, '0 0 0', 1);
-	if(shockwavefind.classname == "player")
-		self.owner.enemy.punchangle_x = -10;
+	if(shockwavefind.classname == "player") self.owner.enemy.punchangle_x = -10;
 	self.velocity = '0 0 0';
 	self.touch = SUB_Null;
 	setmodel (self, "progs/q15/ring_shockwave.mdl");
@@ -358,7 +357,7 @@ void() shal_boss_spawner = {
 	missile.movetype = MOVETYPE_BOUNCE;
 	missile.solid = SOLID_BBOX;
 	makevectors (self.angles);	
-	sound (self, CHAN_WEAPON, "shalrath/firesum.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "q15/shalrath/firesum.wav", 1, ATTN_NORM);
 	distancedelta = self.enemy.origin - self.origin; //work out distance vector  
 	nozdistancedelta = distancedelta;  //copy to no height distance vector 
 	nozdistancedelta_z = 0;  //remove height 
@@ -373,7 +372,6 @@ void() shal_boss_spawner = {
 	missile.bbmaxs = VEC_HULLE_MAX;
 	// set missile duration
 	missile.nextthink = time + 2.5;
-	//missile.think = ShalBossSpawnTouch;
 	missile.think = Hatch_Egg;				// Eventually hatch
 	setmodel (missile, "progs/ad171/proj_shalshell.mdl");
 	missile.scale = 3;	
@@ -393,13 +391,6 @@ void() ShalSpawnerExplode = {
 	s_explode1 ();
 };
 
-// void() ShalBossSpawnTouch = {
-	// ShalSpawnerExplode();
-	// sound (self, CHAN_WEAPON, "misc/summon.wav", 1, ATTN_NORM);
-	//monster_voreling();
-	// minion_voreling(self.origin, self.owner.enemy);
-// };
-
 //QUAKED monster_shalrath_boss (1 0 0) (-32 -32 -24) (32 32 48) Ambush
 void() monster_shalrath_boss = {
 	// Check for any random monster setups
@@ -408,42 +399,34 @@ void() monster_shalrath_boss = {
 	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/q15/shalrath_boss.mdl";	// Extra skin
-
-	precache_model2 ("progs/q15/shalrath_boss.mdl");
-	precache_model2 ("progs/q15/shalrath_death.mdl");
-
-
+	precache_model("progs/q15/shalrath_boss.mdl");
+	precache_model("progs/q15/shalrath_death.mdl");
 	self.headmdl = "progs/q15/h_shalboss.mdl";
-	precache_model2 ("progs/q15/h_shalboss.mdl");
-	precache_model2 ("progs/v_spike.mdl");
-	precache_model2 ("progs/ad171/proj_shalshell.mdl");
-	precache_model2 ("progs/q15/ring_shockwave.mdl");
-
-	precache_sound2 ("shalrath/bossattack.wav");
-	precache_sound2 ("shalrath/bossattack2.wav");
-	precache_sound2 ("shalrath/death.wav");
-	precache_sound2 ("shalrath/idle.wav");
-	precache_sound2 ("shalrath/pain.wav");
-	precache_sound2 ("shalrath/bosssight.wav");
-	precache_sound2 ("shalrath/firesum.wav");
-	precache_sound2 ("misc/summon.wav");
-	precache_sound2 ("shalrath/voreexp.wav");
-	precache_sound2 ("shalrath/voretick.wav");
-	precache_sound2 ("shalrath/voreball.wav");
-	precache_sound2 ("shalrath/voregren.wav");
-	precache_sound2 ("shalrath/earthshake.wav");
-	precache_sound2 ("voreling/miss.wav");
-	precache_sound2 ("ad171/minotaur/attack1expl.wav");
-	precache_sound ("misc/summon.wav");
-	precache_sound ("player/udeath2.wav");
-
-	self.sight_sound = "shalrath/bosssight.wav";
-
+	precache_model("progs/q15/h_shalboss.mdl");
+	precache_model("progs/v_spike.mdl");
+	precache_model("progs/ad171/proj_shalshell.mdl");
+	precache_model("progs/q15/ring_shockwave.mdl");
+	precache_sound("q15/shalrath/bossattack.wav");
+	precache_sound("q15/shalrath/bossattack2.wav");
+	precache_sound("shalrath/death.wav");
+	precache_sound("shalrath/idle.wav");
+	precache_sound("shalrath/pain.wav");
+	precache_sound("q15/shalrath/bosssight.wav");
+	precache_sound("q15/shalrath/firesum.wav");
+	precache_sound("ad171/wraith/attack3.wav");
+	precache_sound("q15/shalrath/voreexp.wav");
+	precache_sound("q15/shalrath/voretick.wav");
+	precache_sound("q15/shalrath/voreball.wav");
+	precache_sound("q15/shalrath/voregren.wav");
+	precache_sound("q15/shalrath/earthshake.wav");
+	precache_sound("ad171/wraith/bounce.wav");
+	precache_sound("kinn/shuffler/expsmall.wav");
+	precache_sound("player/udeath2.wav");
+	self.sight_sound = "q15/shalrath/bosssight.wav";
 	self.gib1mdl = "progs/q15/gib_shalclawb.mdl";
 	self.gib2mdl = "progs/q15/gib_shalleg_b.mdl";
-	precache_model2 ("progs/q15/gib_shalclawb.mdl");
-	precache_model2 ("progs/q15/gib_shalleg_b.mdl");
-
+	precache_model("progs/q15/gib_shalclawb.mdl");
+	precache_model("progs/q15/gib_shalleg_b.mdl");
 
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement

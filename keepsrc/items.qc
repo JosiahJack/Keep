@@ -1443,6 +1443,8 @@ void() item_ammo_setup = {
 	// Setup the skin parameter for ammo boxes
 	self.skin = item_skintype(self);
 
+	if (self.classtype == CT_AMMOPOISON) self.skin = 0;
+
 	// An old worldspawn key (not used anymore)
 	// This is backward compatibility with this key
 	// Will force all items to have an angle

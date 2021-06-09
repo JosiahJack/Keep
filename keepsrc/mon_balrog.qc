@@ -36,43 +36,31 @@ BALROG LAVABALL CODE
 ==============================================================================
 */
 
-void() RogLaser_Touch =
-{
+void() RogLaser_Touch = {
 	local vector org;
 	
-	if (other == self.owner)
-		return;		// don't explode on owner
-
-	if (pointcontents(self.origin) == CONTENT_SKY)
-	{
-		remove(self);
-		return;
-	}
+	if (other == self.owner) return; // don't explode on owner
+	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
 	
-	sound (self, CHAN_WEAPON, "enforcer/enfstop.wav", 1, ATTN_STATIC);
+	sound (self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
 	org = self.origin - 8*normalize(self.velocity);
 
-	if (other.health)
-	{
+	if (other.health) {
 		SpawnBlood (org, self.velocity*0.2, 15);
 		T_Damage (other, self, self.owner, 15);
-	}
-	else
-	{
+	} else {
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 		WriteByte (MSG_BROADCAST, TE_GUNSHOT);
 		WriteCoord (MSG_BROADCAST, org_x);
 		WriteCoord (MSG_BROADCAST, org_y);
 		WriteCoord (MSG_BROADCAST, org_z);
 	}
-	
 	remove(self);	
 };
 
-void(vector org, vector vec) RogLaunchLaser =
-{		
+void(vector org, vector vec) RogLaunchLaser = {	
 	if (self.classname == "monster_enforcer")
-		sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, SOUND_LASER_FIRE, 1, ATTN_NORM);
 
 	vec = normalize(vec);
 	
@@ -321,9 +309,8 @@ void() monster_balrog = {
         }
 
 	precache_sound ("player/udeath.wav");		// gib death
-	precache_sound ("enforcer/enfstop.wav");
-	precache_sound ("enforcer/enfire.wav");
-	precache_sound ("enforcer/enfstop.wav");
+	precache_sound (SOUND_LASER_HIT);
+	precache_sound (SOUND_LASER_FIRE);
 
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;

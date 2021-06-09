@@ -63,7 +63,7 @@ void() polypcheckdist = {
 };
 
 void() polyp_stand0 = [10, polyp_stand1] {
-	setmodel(self, "progs/quoth2pt2full/polyp.mdl");
+	setmodel(self, "progs/quoth/polyp.mdl");
 	setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
 	self.view_ofs = '0 0 -8';
 	self.th_stand = polyp_float1;
@@ -106,12 +106,12 @@ void() polyp_wake14 = [146, polyp_hover1] {
 };
 
 void() polyp_float1 = [153, polyp_float2] {
-	setmodel(self, "progs/quoth2pt2full/polyp.mdl");
+	setmodel(self, "progs/quoth/polyp.mdl");
 	setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
 	self.count = time + 2 + 1 * random();
 	ai_stand();
 	if (random() < 0.05)
-		sound(self, CHAN_VOICE, "polyp/idle.wav", 1, AS_MELEE);
+		sound(self, CHAN_VOICE, "quoth/polyp/idle.wav", 1, AS_MELEE);
 };
 void() polyp_float2 = [154, polyp_float3] {self.count = time + 2 + 1 * random();ai_stand();};
 void() polyp_float3 = [155, polyp_float4] {self.count = time + 2 + 1 * random();ai_stand();};
@@ -121,7 +121,7 @@ void() polyp_walk1 = [11, polyp_walk2] {
 	self.velocity = VEC_ORIGIN;
 	ai_turn();
 	self.flags = self.flags - (self.flags & FL_FLY);
-	setmodel(self, "progs/quoth2pt2full/polyp.mdl");
+	setmodel(self, "progs/quoth/polyp.mdl");
 	setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
 	self.velocity = VEC_ORIGIN;
 };
@@ -152,7 +152,7 @@ void() polyp_walk25 = [35, polyp_walk1] { ai_chargenoturn(2); };
 
 void() polyp_walkfly1 = [153, polyp_walkfly2] {
 	ai_walkfly(6);
-	setmodel(self, "progs/quoth2pt2full/polyp.mdl");
+	setmodel(self, "progs/quoth/polyp.mdl");
 	setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
 	self.velocity = VEC_ORIGIN;
 };
@@ -162,14 +162,14 @@ void() polyp_walkfly4 = [156, polyp_walkfly1] { ai_walkfly(6); };
 
 void() polyp_invisible_sound = {
 	if (self.ltime < time) {
-		sound(self, CHAN_VOICE, "polyp/idle2.wav", 1, 1.5);
+		sound(self, CHAN_VOICE, "quoth/polyp/idle2.wav", 1, 1.5);
 		self.ltime = time + 1;
 	}
 	return;
 };
 
 void() polyp_ihover0 = [0, polyp_ihover1] {
-	setmodel(self, "progs/null.spr");  //formerly progs/quoth2pt2full/s_null.spr
+	setmodel(self, "progs/null.spr");  //formerly progs/quoth/s_null.spr
 	setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
 	polypcheckdist();
 };
@@ -188,34 +188,34 @@ void() polyp_visible1 = [0, polyp_visible2] {
 
 	self.statevis = 0;
 	org = self.origin;
-	sound(self, CHAN_AUTO, "polyp/decloak.wav", 1, ATTN_NORM);
+	sound(self, CHAN_AUTO, "quoth/polyp/decloak.wav", 1, ATTN_NORM);
 	self.frame = 0;
-	setmodel(self, "progs/quoth2pt2full/polyp_t3.mdl");
+	setmodel(self, "progs/quoth/polyp_t3.mdl");
 	setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
 	self.count = time + 2 + 2 * random();
 	self.th_missile = polyp_missile;
 	self.th_die = polyp_die1;
 	self.th_run = polyp_hover1;
 };
-void() polyp_visible2 = [0, polyp_visible3] {	self.frame = 0; setmodel(self, "progs/quoth2pt2full/polyp_t2.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
-void() polyp_visible3 = [0, polyp_hover0a]{	self.frame = 0; setmodel(self, "progs/quoth2pt2full/polyp_t1.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
+void() polyp_visible2 = [0, polyp_visible3] {	self.frame = 0; setmodel(self, "progs/quoth/polyp_t2.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
+void() polyp_visible3 = [0, polyp_hover0a]{	self.frame = 0; setmodel(self, "progs/quoth/polyp_t1.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
 
 void() polyp_invisible = [0, polyp_invisible2] {
 	local vector org;
 
 	self.statevis = 1;
 	org = self.origin;
-	sound(self, CHAN_AUTO, "polyp/cloak.wav", 1, ATTN_NORM);
+	sound(self, CHAN_AUTO, "quoth/polyp/cloak.wav", 1, ATTN_NORM);
 	self.frame = 0;
-	setmodel(self, "progs/quoth2pt2full/polyp_t1.mdl");
+	setmodel(self, "progs/quoth/polyp_t1.mdl");
 	setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
 	self.th_missile = SUB_Null;
 	self.th_run = SUB_Null;
 	self.th_die = polyp_idie1;
 	self.count = time + 2 + 2 * random();
 };
-void() polyp_invisible2 = [0, polyp_invisible3]{	self.frame = 0; setmodel(self, "progs/quoth2pt2full/polyp_t2.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
-void() polyp_invisible3 = [0, polyp_ihover0]{	self.frame = 0; setmodel(self, "progs/quoth2pt2full/polyp_t3.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
+void() polyp_invisible2 = [0, polyp_invisible3]{	self.frame = 0; setmodel(self, "progs/quoth/polyp_t2.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
+void() polyp_invisible3 = [0, polyp_ihover0]{	self.frame = 0; setmodel(self, "progs/quoth/polyp_t3.mdl");setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);};
 
 void() polyp_hover0 = [156, polyp_hover1] {
 	local vector dist;
@@ -230,7 +230,7 @@ void() polyp_hover0 = [156, polyp_hover1] {
 };
 
 void() polyp_hover0a = [0, polyp_hover2] {
-	setmodel(self, "progs/quoth2pt2full/polyp.mdl");
+	setmodel(self, "progs/quoth/polyp.mdl");
 	setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
 	polypcheckdist();
 	if (self.count < time) self.think = polyp_invisible;
@@ -293,7 +293,7 @@ void() polyp_air = {
 	missile.touch = airtouch;
 	missile.nextthink = time + 0.1;
 	missile.think = airthink;
-	setmodel(missile, "progs/quoth2pt2full/air.mdl");
+	setmodel(missile, "progs/quoth/air.mdl");
 	setsize(missile, VEC_ORIGIN, VEC_ORIGIN);
 	setorigin(missile, self.origin + v_forward * SECRET_NO_SHOOT + '0 0 16');
 };
@@ -302,7 +302,7 @@ void() polyp_air1 = [153, polyp_air2] {
 	if (self.count < time) self.think = polyp_invisible;
 	ai_face();
 	polyp_air();
-	sound(self, CHAN_WEAPON, "polyp/blast.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "quoth/polyp/blast.wav", 1, ATTN_NORM);
 };
 void() polyp_air2 = [154, polyp_air3] {ai_face();polyp_air();};
 void() polyp_air3 = [155, polyp_air4] {ai_face();polyp_air();};
@@ -375,16 +375,16 @@ void() polyp_die1 = [157, polyp_die2] {
 	self.velocity = VEC_ORIGIN;
 };
 void() polyp_die2 = [157, polyp_hover1] {
-	sound(self, CHAN_VOICE, "polyp/gibsplt1.wav", 1, ATTN_NORM);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -40);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -40);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -40);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -50);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -50);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -60);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -60);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -75);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -75);
+	sound(self, CHAN_VOICE, "quoth/polyp/gibsplt1.wav", 1, ATTN_NORM);
+	throwpolypgib("progs/quoth/polypgib.mdl", -40);
+	throwpolypgib("progs/quoth/polypgib.mdl", -40);
+	throwpolypgib("progs/quoth/polypgib.mdl", -40);
+	throwpolypgib("progs/quoth/polypgib.mdl", -50);
+	throwpolypgib("progs/quoth/polypgib.mdl", -50);
+	throwpolypgib("progs/quoth/polypgib.mdl", -60);
+	throwpolypgib("progs/quoth/polypgib.mdl", -60);
+	throwpolypgib("progs/quoth/polypgib.mdl", -75);
+	throwpolypgib("progs/quoth/polypgib.mdl", -75);
 	SUB_Remove();
 };
 
@@ -394,16 +394,16 @@ void() polyp_idie1 = [0, polyp_idie2] {
 	self.velocity = VEC_ORIGIN;
 };
 void() polyp_idie2 = [0, polyp_hover1] {
-	sound(self, CHAN_VOICE, "polyp/gibsplt1.wav", 1, ATTN_NORM);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -40);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -40);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -40);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -50);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -50);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -60);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -60);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -75);
-	throwpolypgib("progs/quoth2pt2full/polypgib.mdl", -75);
+	sound(self, CHAN_VOICE, "quoth/polyp/gibsplt1.wav", 1, ATTN_NORM);
+	throwpolypgib("progs/quoth/polypgib.mdl", -40);
+	throwpolypgib("progs/quoth/polypgib.mdl", -40);
+	throwpolypgib("progs/quoth/polypgib.mdl", -40);
+	throwpolypgib("progs/quoth/polypgib.mdl", -50);
+	throwpolypgib("progs/quoth/polypgib.mdl", -50);
+	throwpolypgib("progs/quoth/polypgib.mdl", -60);
+	throwpolypgib("progs/quoth/polypgib.mdl", -60);
+	throwpolypgib("progs/quoth/polypgib.mdl", -75);
+	throwpolypgib("progs/quoth/polypgib.mdl", -75);
 	SUB_Remove();
 };
 
@@ -440,22 +440,22 @@ void() monster_polyp = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	self.mdl = "progs/quoth2pt2full/polyp.mdl";
-	precache_model("progs/quoth2pt2full/polyp.mdl");
-	precache_model("progs/quoth2pt2full/polyp_t1.mdl");
-	precache_model("progs/quoth2pt2full/polyp_t2.mdl");
-	precache_model("progs/quoth2pt2full/polyp_t3.mdl");
-	precache_model("progs/null.spr");  //formerly progs/quoth2pt2full/s_null.spr
-	precache_model("progs/quoth2pt2full/polypgib.mdl");
-	precache_model("progs/quoth2pt2full/air.mdl");
-	precache_sound("polyp/idle2.wav");
+	self.mdl = "progs/quoth/polyp.mdl";
+	precache_model("progs/quoth/polyp.mdl");
+	precache_model("progs/quoth/polyp_t1.mdl");
+	precache_model("progs/quoth/polyp_t2.mdl");
+	precache_model("progs/quoth/polyp_t3.mdl");
+	precache_model("progs/null.spr");  //formerly progs/quoth/s_null.spr
+	precache_model("progs/quoth/polypgib.mdl");
+	precache_model("progs/quoth/air.mdl");
+	precache_sound("quoth/polyp/idle2.wav");
 	precache_sound("zombie/z_hit.wav");
-	precache_sound("polyp/cloak.wav");
-	precache_sound("polyp/decloak.wav");
-	precache_sound("polyp/gibsplt1.wav");
-	precache_sound("polyp/blast.wav");
-	precache_sound("polyp/sight.wav");
-	precache_sound("polyp/idle.wav");
+	precache_sound("quoth/polyp/cloak.wav");
+	precache_sound("quoth/polyp/decloak.wav");
+	precache_sound("quoth/polyp/gibsplt1.wav");
+	precache_sound("quoth/polyp/blast.wav");
+	precache_sound("quoth/polyp/sight.wav");
+	precache_sound("quoth/polyp/idle.wav");
 
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement

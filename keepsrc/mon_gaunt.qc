@@ -275,7 +275,7 @@ void(float offset) gaunt_lightning = {
 };
 
 void() gauntwings =
-{ sound(self, CHAN_ITEM, "ad171/gaunt/wings1.wav", 1, ATTN_IDLE); };
+{ sound(self, CHAN_ITEM, "ad171/gargoyle/wings1.wav", 1, ATTN_IDLE); };
 void() 	gaunt_finish_attachment;
 
 //============================================================================
@@ -391,7 +391,7 @@ void() gaunt_fast1 = [44, gaunt_fast2] {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	self.owner = spawn();
 	o = self.owner;
-	setmodel(o, "progs/quoth2pt2full/g_fx.mdl");
+	setmodel(o, "progs/quoth/g_fx.mdl");
 	setorigin(o, self.origin - VEC_ORIGIN);
 	o.angles = self.angles;
 	o.nextthink = time + 1;
@@ -663,7 +663,7 @@ void() gaunt_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "quoth2pt2full/gaunt/death.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "quoth/gaunt/death.wav", 1, ATTN_NORM);
 		self.velocity_x = -200 + 400*random();
 		self.velocity_y = -200 + 400*random();
 		self.velocity_z = 100 + 100*random();
@@ -794,34 +794,34 @@ void() monster_gaunt =
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	self.mdl = "progs/ad171/mon_gaunt.mdl";
+	self.mdl = "progs/quoth/gaunt.mdl";
 	self.headmdl = "progs/ad171/h_gaunt.mdl";
 	self.weaponglow = "progs/ad171/mon_gaunt_elec.mdl";
 
 	precache_model (self.mdl);
 	precache_model (self.headmdl);
 	precache_model (self.weaponglow);		// Lightning effect
-	precache_model ("progs/quoth2pt2full/g_fx.mdl");		// Lightning effect
+	precache_model ("progs/quoth/g_fx.mdl");		// Lightning effect
 	precache_model (MODEL_PROJ_GAPLASMA);	// Plasma spike/bolt
 
-	self.idle_sound = "quoth2pt2full/gaunt/idle1.wav";
-	self.idle_sound2 = "quoth2pt2full/gaunt/idle3.wav";
-	self.idle_soundcom = "quoth2pt2full/gaunt/idle2.wav";
+	self.idle_sound = "quoth/gaunt/idle1.wav";
+	self.idle_sound2 = "quoth/gaunt/idle3.wav";
+	self.idle_soundcom = "quoth/gaunt/idle2.wav";
 	self.idle_soundcom2 = "ad171/gaunt/idle2.wav"; // Different than quoth's, different tempo and no reverb
 	precache_sound (self.idle_sound);
 	precache_sound (self.idle_sound2);
 	precache_sound (self.idle_soundcom);
 	precache_sound (self.idle_soundcom2);
 
-	precache_sound ("ad171/gaunt/wings1.wav");
+	precache_sound ("ad171/gargoyle/wings1.wav");
 	precache_sound ("ad171/gaunt/plasma_start.wav");
 	precache_sound ("ad171/gaunt/plasma_fire.wav");
 	
-	self.pain_sound = "quoth2pt2full/gaunt/pain.wav";
+	self.pain_sound = "quoth/gaunt/pain.wav";
 	precache_sound (self.pain_sound);
-	precache_sound ("quoth2pt2full/gaunt/death.wav");
+	precache_sound ("quoth/gaunt/death.wav");
 
-	self.sight_sound = "quoth2pt2full/gaunt/sight.wav";
+	self.sight_sound = "quoth/gaunt/sight.wav";
 	precache_sound (self.sight_sound);
 
 	// Check for poisonous entity flag
@@ -988,16 +988,16 @@ void(vector minion_org, entity minion_targ, float minion_sflag) minion_gaunt =
 		minion.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
 	}
 
-	minion.mdl = "progs/ad171/mon_gaunt.mdl";
+	minion.mdl = "progs/quoth/gaunt.mdl";
 	minion.headmdl = "progs/ad171/h_gaunt.mdl";
 	minion.weaponglow = "progs/ad171/mon_gaunt_elec.mdl";
-	minion.idle_sound = "quoth2pt2full/gaunt/idle1.wav";
-	minion.idle_sound2 = "quoth2pt2full/gaunt/idle2.wav";
-	minion.idle_soundcom = "quoth2pt2full/gaunt/idle2.wav";
+	minion.idle_sound = "quoth/gaunt/idle1.wav";
+	minion.idle_sound2 = "quoth/gaunt/idle2.wav";
+	minion.idle_soundcom = "quoth/gaunt/idle2.wav";
 	minion.idle_soundcom2 = "ad171/gaunt/idle2.wav";
-	minion.sight_sound = "quoth2pt2full/gaunt/sight.wav";
-	minion.pain_sound = "quoth2pt2full/gaunt/pain.wav";
-	minion.death_sound = "quoth2pt2full/gaunt/death.wav";
+	minion.sight_sound = "quoth/gaunt/sight.wav";
+	minion.pain_sound = "quoth/gaunt/pain.wav";
+	minion.death_sound = "quoth/gaunt/death.wav";
 	minion.nextthink = time + 0.01;
 	minion.think = setup_gaunt;
 };

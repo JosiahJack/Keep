@@ -207,11 +207,11 @@ void() monster_cyberdemon = {
 	precache_model ("progs/drake/h_cyber.mdl");
 	precache_model ("progs/drake/leg_gib.mdl");
 	precache_model ("progs/missile.mdl");
-	precache_model ("progs/drake/s_expbig.spr");
+	precache_model ("progs/quoth/bigexp.spr");
 	precache_model ("progs/drake/s_wave.spr");
 	precache_model ("progs/gib1.mdl");
 	precache_model ("progs/gib3.mdl");
-	precache_sound ("ad171/soldier/rocket_hit.wav");
+	precache_sound ("quoth/dguard/hit.wav");
 	precache_sound ("drake/cyber/cybsee.wav");
 	precache_sound ("drake/cyber/cybdie.wav");
 	precache_sound ("drake/cyber/cybhoof.wav");
