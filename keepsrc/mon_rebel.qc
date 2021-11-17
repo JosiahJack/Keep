@@ -68,24 +68,13 @@ void() rebel_atk14 =[ $attack10, enf_run1    ] {ai_face();
         SUB_CheckRefire (rebel_atk1);
 };
 
-void() monster_rebel = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-    self.mdl = "progs/drake/rebel.mdl";
-    self.headmdl   = "progs/drake/h_rebel.mdl";
-    precache_model (self.mdl);
-	precache_model (self.headmdl);
+void() monster_rebel_precache = {
+    precache_model ("progs/drake/rebel.mdl");
+	precache_model ("progs/drake/h_rebel.mdl");
     precache_model ("progs/drake/arrow.mdl");     // Replaced 'akarrow.mdl'.
-	self.gib1mdl = "progs/gib1.mdl";
-    precache_model (self.gib1mdl);
-
-	self.idle_sound = "enforcer/idle1.wav";
-	precache_sound (self.idle_sound);
-	self.sight_sound = "enforcer/sight1.wav";
-	precache_sound (self.sight_sound);
+    precache_model ("progs/gib1.mdl");
+	precache_sound ("enforcer/idle1.wav");
+	precache_sound ("enforcer/sight1.wav");
 	precache_sound ("enforcer/sight2.wav");
 	precache_sound ("enforcer/sight3.wav");
 	precache_sound ("enforcer/sight4.wav");
@@ -94,33 +83,34 @@ void() monster_rebel = {
 	precache_sound ("enforcer/pain1.wav");
 	precache_sound ("enforcer/pain2.wav");
 	precache_sound ("enforcer/death1.wav");
-
     precache_sound ("drake/archer/arrow1.wav");
     precache_sound ("drake/archer/arrow2.wav");
     precache_sound ("drake/archer/arrow3.wav");
     precache_sound ("drake/archer/arrowbrk.wav");
     precache_sound ("drake/archer/arrowr.wav");
+};
 
+void() monster_rebel = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+    self.mdl = "progs/drake/rebel.mdl";
+    self.headmdl   = "progs/drake/h_rebel.mdl";
+	self.gib1mdl = "progs/gib1.mdl";
+	self.idle_sound = "enforcer/idle1.wav";
+	self.sight_sound = "enforcer/sight1.wav";
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
-
     if (self.health < 1) self.health = 200;
     self.gibhealth = -40;
-	// self.ryuflags = RYU_ALERT | RYU_REBEL;
-
-    if (soul_evil) {
-        // monster_guns (0, 0, 20, 0, 0);
-        monster_purse (2, 0.5, 0);
-    }
-    
+	self.ryuflags = RYU_ALERT | RYU_REBEL;   
     self.gibbed = FALSE;
     self.pain_flinch = 20;
     self.pain_longanim = TRUE;
     self.steptype = FS_TYPEMEDIUM;
     self.mass       = MASS_MEDIUM;
 	self.attack_offset = '28 8.5 16';	// End of Gun
-
     self.th_stand = enf_stand1;
     self.th_walk = enf_walk1;
 	self.th_run = enf_run1;
@@ -128,10 +118,7 @@ void() monster_rebel = {
 	self.th_die = enf_die;
     self.th_missile = rebel_atk1;
     self.th_checkattack = SoldierCheckAttack;   // For Rebel AI.
-    // self.th_revive = enf_revive;
-    // self.th_spawn = monster_rebel;
 	self.gib1skin = 0;
-
 	if (self.deathstring == "")  self.deathstring = " was skewered by an Archer\n";
 
 	// Always reset Ammo Resistance to be consistent

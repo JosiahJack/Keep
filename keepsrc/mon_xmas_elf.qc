@@ -331,68 +331,53 @@ void() elf_die =
 	}
 };
 
-/*======================================================================
-QUAKED monster_xmas_elf (1 0 0) (-16 -16 -24) (16 16 16) Ambush
-======================================================================*/
-void() monster_xmas_elf =
-{
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/xmas/mon_elf.mdl";		// Crazy Grinning Fool
-	self.headmdl = "progs/xmas/h_elf.mdl";		// Shrunken Head
-	self.gib1mdl = "progs/xmas/gib_elfcane.mdl";// Candy Cane
-	self.gib1sound = GIB_IMPACT_METALA;
-	
-	precache_model (self.mdl);
-	precache_model (self.headmdl);				// Grinning Pointy Hat
-	precache_model (self.gib1mdl);				// Sugar Cane
-	precache_model (MODEL_PROJ_ELF);			// Magic ice
-	
-	// Idle calm/angry
-	self.idle_sound = "xmas/elf/idle.wav";		// Lots of giggling
-	precache_sound (self.idle_sound);
-
-	// Many different sight sounds (2 is very annoying)
-	self.sight_sound = "xmas/elf/sight1.wav";	// Snarling sound
-	self.sight_sound2 = "xmas/elf/sight2.wav";	// DIE HUMAN!?!
-	self.sight_sound3 = "xmas/elf/sight3.wav";	// Screams
-	self.sight_sound4 = "xmas/elf/sight4.wav";	// Screams
-	precache_sound (self.sight_sound);
-	precache_sound (self.sight_sound2);
-	precache_sound (self.sight_sound3);
-	precache_sound (self.sight_sound4);
-
-	// Elf 1 - Melee/Jump attacks - cane impacts
-	precache_sound ("xmas/elf/cane_swipe1.wav");
+void() monster_xmas_elf_precache = {
+	precache_model ("progs/xmas/mon_elf.mdl");
+	precache_model ("progs/xmas/h_elf.mdl"); // Grinning Pointy Hat
+	precache_model ("progs/xmas/gib_elfcane.mdl"); // Sugar Cane
+	precache_model (MODEL_PROJ_ELF); // Magic ice
+	precache_sound ("xmas/elf/idle.wav");
+	precache_sound ("xmas/elf/sight1.wav");
+	precache_sound ("xmas/elf/sight2.wav");
+	precache_sound ("xmas/elf/sight3.wav");
+	precache_sound ("xmas/elf/sight4.wav");
+	precache_sound ("xmas/elf/cane_swipe1.wav"); // Elf 1 - Melee/Jump attacks - cane impacts
 	precache_sound ("xmas/elf/cane_swipe2.wav");
 	precache_sound ("xmas/elf/cane_hit1.wav");
 	precache_sound ("xmas/elf/cane_hit2.wav");
 	precache_sound ("xmas/elf/jump1.wav");
 	precache_sound ("xmas/elf/jump2.wav");
-	
-	// Elf 2 - Magic attacks
-	precache_sound ("xmas/elf/magic.wav");
+	precache_sound ("xmas/elf/magic.wav"); // Elf 2 - Magic attacks
 	precache_sound ("xmas/elf/attack1.wav");
 	precache_sound ("ad171/wraith/bounce.wav");
-	
-	// precache sight, pain and death (changes on type)
-	self.pain_sound = "xmas/elf/pain.wav";
+	precache_sound ("xmas/elf/pain.wav");
+	precache_sound ("xmas/elf/death1.wav");
+	precache_sound ("xmas/elf/death2.wav");
+};
+
+// QUAKED monster_xmas_elf (1 0 0) (-16 -16 -24) (16 16 16) Ambush
+void() monster_xmas_elf = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/xmas/mon_elf.mdl"; // Crazy Grinning Fool
+	self.headmdl = "progs/xmas/h_elf.mdl"; // Shrunken Head
+	self.gib1mdl = "progs/xmas/gib_elfcane.mdl"; // Candy Cane
+	self.gib1sound = GIB_IMPACT_METALA;
+	self.idle_sound = "xmas/elf/idle.wav"; // Idle calm/angry.  Lots of giggling.
+	self.sight_sound = "xmas/elf/sight1.wav"; // Many different sight sounds (2 is very annoying). Snarling sound
+	self.sight_sound2 = "xmas/elf/sight2.wav"; // DIE HUMAN!?!
+	self.sight_sound3 = "xmas/elf/sight3.wav"; // Screams
+	self.sight_sound4 = "xmas/elf/sight4.wav"; // Screams
+	self.pain_sound = "xmas/elf/pain.wav"; // precache sight, pain and death (changes on type)
 	self.death_sound = "xmas/elf/death1.wav";
 	self.death_sound2 = "xmas/elf/death2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.death_sound);
-	precache_sound (self.death_sound2);
-	
 	if (self.spawnflags & MON_ELF_MAGIC) {
 		if (self.health < 1) self.health = 75;
 		self.gibhealth = -25;
 		self.th_missile = elf_magic1;
 		self.exactskin = 2;
-	}
-	else {
+	} else {
 		if (self.health < 1) self.health = 30;
 		self.gibhealth = -20;
 		self.th_jump = elf_leap1;
@@ -435,10 +420,8 @@ void() monster_xmas_elf =
 	self.th_slide = elf_slide1;
 	self.th_pain = elf_pain;
 	self.th_die = elf_die;
-
 	self.classtype = CT_MONELF;
 	self.classgroup = CG_XMAS;
 	self.classmove = MON_MOVEWALK;
-
 	monster_start();
 };

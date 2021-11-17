@@ -228,49 +228,39 @@ void() cent_die = {
 	}
 };
 
-// QUAKED monster_centurion (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-void() monster_centurion = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-	
-	self.mdl = "progs/ad171/mon_centurion.mdl";
-	self.headmdl = "progs/ad171/h_centurion.mdl";
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
+void() monster_centurion_precache = {
+	precache_model ("progs/ad171/mon_centurion.mdl");
+	precache_model ("progs/ad171/h_centurion.mdl");
 	precache_model (MODEL_PROJ_PLASMA);
-
 	precache_sound ("enforcer/death1.wav");
-	self.pain_sound = "enforcer/pain1.wav";
-	self.pain_sound2 = "enforcer/pain2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-
-	self.idle_sound = "enforcer/idle1.wav";
-	precache_sound (self.idle_sound);
-	self.sight_sound = "enforcer/sight1.wav";
-	precache_sound (self.sight_sound);
+	precache_sound ("enforcer/pain1.wav");
+	precache_sound ("enforcer/pain2.wav");
+	precache_sound ("enforcer/idle1.wav");
+	precache_sound ("enforcer/sight1.wav");
 	precache_sound ("enforcer/sight2.wav");
 	precache_sound ("enforcer/sight3.wav");
 	precache_sound ("enforcer/sight4.wav");
-
-	// Extra load/fire sounds (from Quoth MOD)
-	precache_sound ("ad171/enforcer/elim_pg_load.wav");
+	precache_sound ("ad171/enforcer/elim_pg_load.wav"); // Extra load/fire sounds (from Quoth MOD)
 	precache_sound (SOUND_PLASMA_FIRE);
 	precache_sound (SOUND_PLASMA_HIT);
-	
-	// Originally from rubicon2 (re-processed)
-	precache_sound ("ad171/enforcer/cent_hover.wav");
+	precache_sound ("ad171/enforcer/cent_hover.wav"); // Originally from rubicon2 (re-processed)
 	precache_sound (GIB_SOUND_WOOD);
+	precache_poisongibs();			// precache gibs
+	precache_model (MODEL_PROJ_PLASMAGRN);
+};
 
-	// Check for poisonous entity flag
-	if (self.poisonous) {
-		precache_poisongibs();			// precache gibs
-		self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
-		precache_model (MODEL_PROJ_PLASMAGRN);
-	}
-
+// QUAKED monster_centurion (1 0 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_centurion = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+	
+	self.mdl = "progs/ad171/mon_centurion.mdl";
+	self.headmdl = "progs/ad171/h_centurion.mdl";
+	self.pain_sound = "enforcer/pain1.wav";
+	self.pain_sound2 = "enforcer/pain2.wav";
+	self.idle_sound = "enforcer/idle1.wav";
+	self.sight_sound = "enforcer/sight1.wav";
+	if (self.poisonous) self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;

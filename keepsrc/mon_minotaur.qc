@@ -699,14 +699,39 @@ void() mino_die = {
 	}
 };
 
-/*======================================================================
-QUAKED monster_minotaur (1 0 0) (-32 -32 -24) (32 32 64) Ambush
-======================================================================*/
+void() monster_minotaur_precache = {
+	precache_model ("progs/ad171/mon_minotaur.mdl");
+	precache_model ("progs/ad171/h_minotaur.mdl");
+	precache_model (MODEL_PROJ_MBALL); // Creating attachment
+	precache_model (MODEL_PROJ_MPLASMA); // Plasma bolt
+	precache_model (MODEL_PROJ_MPOISON); // Poison bolt
+	precache_model ("progs/ad171/gib_minoclaw1.mdl");
+	precache_model ("progs/ad171/gib_minoclaw2.mdl");
+	precache_model ("progs/ad171/gib_minoleg1.mdl");
+	precache_model ("progs/ad171/gib_minoleg2.mdl");
+	precache_poisongibs(); // precache gibs
+	precache_sound ("ad171/minotaur/idle1.wav");
+	precache_sound ("ad171/minotaur/idle2.wav");
+	precache_sound ("ad171/minotaur/idle1com.wav");
+	precache_sound ("ad171/minotaur/idle2com.wav");
+	precache_sound ("ad171/minotaur/swipe.wav"); // claw misses
+	precache_sound ("ad171/minotaur/strike1.wav"); // claw hit1
+	precache_sound ("ad171/minotaur/strike2.wav"); // claw hit2
+	precache_sound ("ad171/minotaur/attack1start.wav");	// Short roar
+	precache_sound ("ad171/minotaur/attack1end.wav"); // Short roar
+	precache_sound ("kinn/shuffler/big1.wav"); // Enter rage mode
+	precache_sound ("kinn/shuffler/fireblt.wav"); // fire projectile
+	precache_sound (SOUND_PLASMA_HIT); // impact sounds
+	precache_sound ("kinn/shuffler/death.wav");
+	precache_sound ("kinn/shuffler/pain.wav");
+	precache_sound ("kinn/shuffler/big1.wav");
+	precache_sound ("kinn/shuffler/big3.wav");
+};
+
+// QUAKED monster_minotaur (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 void() monster_minotaur = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_minotaur.mdl";
 	self.headmdl = "progs/ad171/h_minotaur.mdl";		// Large head
@@ -714,51 +739,17 @@ void() monster_minotaur = {
 	self.gib2mdl = "progs/ad171/gib_minoclaw2.mdl";	// Right claw
 	self.gib3mdl = "progs/ad171/gib_minoleg1.mdl";	// foot
 	self.gib4mdl = "progs/ad171/gib_minoleg2.mdl";	// foot
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (MODEL_PROJ_MBALL);		// Creating attachment
-	precache_model (MODEL_PROJ_MPLASMA);	// Plasma bolt
-	precache_model (MODEL_PROJ_MPOISON);	// Poison bolt
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	precache_model (self.gib4mdl);
-
-	// Randomly swap claws and legs around
-	self.lip = random();
+	self.lip = random(); // Randomly swap claws and legs around
 	if (self.lip < 0.25) self.gib1mdl = self.gib4mdl;
 	else if (self.lip < 0.5) self.gib2mdl = self.gib4mdl;
 	else if (self.lip < 0.75) self.gib3mdl = self.gib4mdl;
-
 	self.idle_sound = "ad171/minotaur/idle1.wav";
 	self.idle_sound2 = "ad171/minotaur/idle2.wav";
 	self.idle_soundcom = "ad171/minotaur/idle1com.wav";
 	self.idle_soundcom2 = "ad171/minotaur/idle2com.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-	precache_sound (self.idle_soundcom);
-	precache_sound (self.idle_soundcom2);
-
-	precache_sound ("ad171/minotaur/swipe.wav");		// claw misses
-	precache_sound ("ad171/minotaur/strike1.wav");	// claw hit1
-	precache_sound ("ad171/minotaur/strike2.wav");	// claw hit2
-
-	precache_sound ("ad171/minotaur/attack1start.wav");	// Short roar
-	precache_sound ("ad171/minotaur/attack1end.wav");		// Short roar
-	precache_sound ("kinn/shuffler/big1.wav");	// Enter rage mode
-	precache_sound ("kinn/shuffler/fireblt.wav");		// fire projectile
-	precache_sound (SOUND_PLASMA_HIT);				// impact sounds
-
-	precache_sound ("kinn/shuffler/death.wav");
 	self.pain_sound = "kinn/shuffler/pain.wav";
 	self.pain_sound2 = "kinn/shuffler/big1.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-
 	self.sight_sound = "kinn/shuffler/big3.wav";
-	precache_sound (self.sight_sound);
-
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_GIANT;
@@ -796,10 +787,10 @@ void() monster_minotaur = {
 	self.th_jump = mino_jump1;
 	self.th_jumpexit = mino_jump10;
 	self.th_charge = mino_howl1;
-	
 	self.classtype = CT_MONMINOTAUR;
 	self.classgroup = CG_DEMON;
 	self.classmove = MON_MOVEWALK;
+	if (self.minion_name == string_null) self.minion_name = "monster_gargoyle";
 	
 	// Update Minotaur based on minions spawnflag
 	if (self.spawnflags & MON_MINOTAUR_MINIONS) {
@@ -809,7 +800,6 @@ void() monster_minotaur = {
 			self.part_style = PARTICLE_BURST_RED;
 		} else {
 			self.poisonous = TRUE;			// Poison version (default)
-			precache_poisongibs();			// precache gibs
 			self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
 			self.part_style = PARTICLE_BURST_GREEN;
 		}
@@ -822,7 +812,7 @@ void() monster_minotaur = {
 		self.gibtype = GIBTYPE_BLOOD;	// blood trails
 		self.part_style = PARTICLE_BURST_BLUE;
 	}
-			
+
 	monster_start();
 };
 
@@ -833,7 +823,7 @@ void() monster_shuffler = {
 };
 
 void() monster_yakman = {
-	if (self.deathstring == "")  self.deathstring = " was crushed by a Yakman\n"; // from Quake 1.5
+	if (self.deathstring == "")  self.deathstring = " was crushed by a Yakman\n"; // from Hexen II / Quake 1.5
 	self.classname = "monster_minotaur";
 	monster_minotaur();
 };

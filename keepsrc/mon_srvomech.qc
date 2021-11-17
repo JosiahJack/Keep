@@ -1,14 +1,7 @@
-/*
-==============================================================================
-
-SERVOMECH, MONSTER
-by Carl Glave (General WarT)
-==============================================================================
-*/
+// SERVOMECH, MONSTER by Carl Glave (General WarT)
 
 // the servomech lasers
-void(vector src, vector dir, float lsrdamage) FireLaser =
-{
+void(vector src, vector dir, float lsrdamage) FireLaser = {
 	local vector vel, org;
 	local vector src;
 
@@ -289,14 +282,10 @@ void() servo_stillrun =[ 0, servo_stillrun]
 		self.think = servo_run1;
 };
 
-//=======================================================================
-
-void(entity attacker, float damage) servo_pain=
-{
+void(entity attacker, float damage) servo_pain = {
 	local float tmpflt;
 
-	if(self.pain_finished < time)
-	{
+	if(self.pain_finished < time) {
 		self.aiment.rotate_type = self.aiment.rotate_type + crandom() * damage * 0.3;
 		if(self.aiment.rotate_type < -80)
 			self.aiment.rotate_type = -80;
@@ -308,8 +297,6 @@ void(entity attacker, float damage) servo_pain=
 	}
 };
 
-//=======================================================================
-
 void() servo_die1 =[ 0, servo_die2] {self.nextthink = time + 1;};
 void() servo_die2 =[ 1, servo_die3] {};
 void() servo_die3 =[ 2, servo_die4] {};
@@ -317,19 +304,15 @@ void() servo_die4 =[ 3, servo_die5] {};
 void() servo_die5 =[ 4, servo_die6] {};
 void() servo_die6 =[ 5, servo_die7] {};
 void() servo_die7 =[ 6, servo_die8] {};
-void() servo_die8 =[ 7, servo_die9]
-{sound (self, CHAN_VOICE, "custents/mech/metal.wav", 1, ATTN_NORM);};
+void() servo_die8 =[ 7, servo_die9] {sound (self, CHAN_VOICE, "custents/mech/metal.wav", 1, ATTN_NORM);};
 void() servo_die9 =[ 8, servo_die10] {};
 void() servo_die10 =[ 9, servo_die11] {};
 void() servo_die11 =[ 10, servo_die12] {};
-void() servo_die12 =[ 11, servo_die13]
-{sound (self, CHAN_VOICE, "custents/mech/metal.wav", 0.75, ATTN_NORM);};
+void() servo_die12 =[ 11, servo_die13] {sound (self, CHAN_VOICE, "custents/mech/metal.wav", 0.75, ATTN_NORM);};
 void() servo_die13 =[ 12, servo_die14] {};
-void() servo_die14 =[ 13, servo_die15]
-{sound (self, CHAN_VOICE, "custents/mech/metal.wav", 0.5, ATTN_NORM);};
+void() servo_die14 =[ 13, servo_die15] {sound (self, CHAN_VOICE, "custents/mech/metal.wav", 0.5, ATTN_NORM);};
 void() servo_die15 =[ 14, servo_die16] {};
-void() servo_die16 =[ 15, servo_die17]
-{sound (self, CHAN_VOICE, "custents/mech/metal.wav", 0.25, ATTN_NORM);};
+void() servo_die16 =[ 15, servo_die17] {sound (self, CHAN_VOICE, "custents/mech/metal.wav", 0.25, ATTN_NORM);};
 void() servo_die17 =[ 15, servo_die17] {};
 
 void() servo_gibbed1 =[ 16, servo_gibbed2] {self.nextthink = time + 1;};
@@ -337,8 +320,7 @@ void() servo_gibbed2 =[ 17, servo_gibbed3] {};
 void() servo_gibbed3 =[ 18, servo_gibbed4] {};
 void() servo_gibbed4 =[ 19, servo_gibbed5] {};
 void() servo_gibbed5 =[ 20, servo_gibbed6] {};
-void() servo_gibbed6 =[ 21, servo_gibbed7]
-{
+void() servo_gibbed6 =[ 21, servo_gibbed7] {
 	local vector tmpvec;
 	local entity tmpself;
 
@@ -349,7 +331,6 @@ void() servo_gibbed6 =[ 21, servo_gibbed7]
 	self = spawn();
 	setorigin(self, tmpvec);
 	BecomeBigExplosion();
-
 	self = spawn();
 	setorigin(self, tmpvec);
 	self.angles = tmpself.angles;
@@ -376,20 +357,17 @@ void() servo_gibbed19 =[ 34, servo_gibbed20]
 void() servo_gibbed20 =[ 35, servo_gibbed21] {};
 void() servo_gibbed21 =[ 36, servo_gibbed22] {};
 void() servo_gibbed22 =[ 37, servo_gibbed23] {};
-void() servo_gibbed23 =[ 38, servo_gibbed24]
-{sound (self, CHAN_VOICE, "custents/mech/metal.wav", 0.25, ATTN_NORM);};
+void() servo_gibbed23 =[ 38, servo_gibbed24] {sound (self, CHAN_VOICE, "custents/mech/metal.wav", 0.25, ATTN_NORM);};
 void() servo_gibbed24 =[ 38, servo_gibbed24] {};
 
-void() servo_die =
-{
+void() servo_die = {
 	self.solid = SOLID_NOT;
 	sound (self, CHAN_VOICE, "custents/mech/pow_dn.wav", 1, ATTN_NORM);
 	remove(self.aiment);
 	setmodel(self, "progs/custents/servodie.mdl");
 
-// check for gib
-	if (self.health < -40 || random() < 0.1)
-	{
+	// check for gib
+	if (self.health < -40 || random() < 0.1) {
 		servo_gibbed1();
 		return;
 	}
@@ -397,10 +375,7 @@ void() servo_die =
 	servo_die1();	
 };
 
-//=======================================================================
-
-void() servo_attack=
-{
+void() servo_attack = {
 	local vector dir, org;
 
 	dir = self.enemy.origin - (self.enemy.velocity*0.2 + self.enemy.velocity*0.3*random());
@@ -429,49 +404,39 @@ void() servo_attack=
 	FireLaser(org, dir, 2);
 };
 
-void() servo_vollyattack=
-{
+void() servo_vollyattack= {
 	servo_attack();
 	servo_attack();
 	self.aiment.attack_state = SERVOBOD_BOTH;
 };
 
-//=======================================================================
-
-void() monster_servomech =
-{
-	local entity bodent;
-
-	if (deathmatch)
-	{
-		remove(self);
-		return;
-	}
-
+void() monster_servomech_precache = {
 	precache_model ("progs/custents/servobod.mdl");
 	precache_model ("progs/custents/servoleg.mdl");
 	precache_model ("progs/custents/servodie.mdl");
 	precache_model ("progs/custents/h_servo.mdl");
-
 	precache_sound ("custents/mech/mechstep.wav");
 	precache_sound ("custents/mech/pow_up.wav");
 	precache_sound ("custents/mech/pow_dn.wav");
 	precache_sound ("custents/mech/metal.wav");
 	precache_sound ("drake/misc/shortexp.wav");
 	precache_sound ("enforcer/enfire.wav");
+};
+
+void() monster_servomech = {
+	local entity bodent;
+
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
-
 	setmodel (self, "progs/custents/servoleg.mdl");
-
 	setsize (self, '-32 -32 -48', '32 32 28');
 	self.health = 500;
 	self.pos1 = '0 0 0';
 	self.yaw_speed = 30;
 	self.view_ofs = '0 0 12';
 	if(!self.skin) self.skin = 1;
-
 	self.fov = 0.7;
 	self.th_stand = servo_stand;
 	self.th_walk = servo_walk1;
@@ -480,17 +445,8 @@ void() monster_servomech =
 	self.th_melee = servo_vollyattack;
 	self.th_missile = servo_attack;
 	self.th_pain = servo_pain;
-	
-	
-// ### Added for Custents all affecting gravity
-	if(!self.gravity)
-		self.gravity = 1;
-	else
-	      self.gravity = ((self.gravity - 1) / 100);
-// ###
 
-	// setup upper body entity
-	bodent = spawn();
+	bodent = spawn(); // setup upper body entity
 	bodent.solid = SOLID_NOT;
 	bodent.movetype = MOVETYPE_NONE;
 	setmodel (bodent, "progs/custents/servobod.mdl");
@@ -500,31 +456,18 @@ void() monster_servomech =
 	bodent.rotate_type = 0;
 	bodent.skin = self.skin;
 	self.aiment = bodent;
-
-	walkmonster_start();
+	monster_start();
 };
 
-
-/*
-==============================================================================
-
-SERVOMECH, CONTROLLABLE
-
-==============================================================================
-*/
-
-void(entity targent) cservo_control_on=
-{
+// SERVOMECH, CONTROLLABLE
+void(entity targent) cservo_control_on = {
 	local entity targcam;
 
 	targcam = self.movetarget;
-
 	targent.rcam = targcam;
 	targcam.owner = targent;
 	targent.weaponmodel = "progs/custents/frame.mdl";
-
 	dummy_setup(targent,self.walkframe, self.invincible_finished);
-
 	msg_entity = targent;
 	WriteByte (MSG_ONE, SVC_SETVIEWANGLES);
 	WriteAngle( MSG_ONE, self.aiment.angles_x); 
@@ -534,7 +477,6 @@ void(entity targent) cservo_control_on=
 	Safe_stuffcmd(targent, "wait\n");
 	targent.camofs = '0 160 40';
 	sprint(targent, "Press F7 to Toggle the Apoc Cam\n");
-
 	sound (self, CHAN_VOICE, "custents/mech/pow_up.wav", 1, ATTN_NORM);
 };
 
@@ -566,28 +508,22 @@ void(entity targent) cservo_control_off= {
 
 void() cservo_attack;
 void() cservo_stand;
-void() cservo_think=
-{
+void() cservo_think = {
 	local entity contplyr, temp;
 
 	contplyr = self.movetarget.owner;
-	if(contplyr)
-	{
+	if (contplyr) {
 		if(contplyr.deadflag != DEAD_NO)
 			cservo_control_off(contplyr);
-		else if(contplyr.rcam != self.movetarget)
-		{
+		else if(contplyr.rcam != self.movetarget) {
 			self.movetarget.owner = world;
 			self.style = 0;
 			cservo_stand();
-		}
-		// this is done to make Quake use the proper VIS information for the view
-		else
-		{
+		} else {
+			// this is done to make Quake use the proper VIS information for the view
 			setorigin(contplyr, self.movetarget.origin);
 			// check is external camera adjustment is needed
-			if(contplyr.cament)
-			{
+			if(contplyr.cament) {
 				temp = self;
 				self = contplyr;
 				Cam_position();
@@ -596,22 +532,15 @@ void() cservo_think=
 		}
 	}
 
-	if (self.flags & FL_GODMODE)
-	{
-		if (!(contplyr.flags & FL_GODMODE))
-			self.flags = self.flags - FL_GODMODE;
-	}
-	else if (contplyr.flags & FL_GODMODE)
-		self.flags = self.flags | FL_GODMODE;
+	if (self.flags & FL_GODMODE) {
+		if (!(contplyr.flags & FL_GODMODE)) self.flags = self.flags - FL_GODMODE;
+	} else if (contplyr.flags & FL_GODMODE) self.flags = self.flags | FL_GODMODE;
 
-	if(self.attack_state)
-	{
+	if(self.attack_state) {
 		cservo_attack();
 		self.attack_state = 0;
 	}
 };
-
-//=======================================================================
 
 void() cservo_attack=
 {

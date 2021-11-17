@@ -1,11 +1,11 @@
-void() precache_mr = {
+void() monster_mistermax_precache = {
 	precache_model("progs/nehahra/maxwell.mdl");
 	precache_model("progs/nehahra/gntspke.mdl");
-	precache_model("progs/nehahra/v_spike.mdl");
+	precache_model("progs/drake/v_spike.mdl");
 	precache_model("progs/nehahra/rubble1.mdl");
 	precache_model("progs/nehahra/rubble4.mdl");
 	precache_model("progs/nehahra/rubble6.mdl");
-	precache_sound("nehahra/ambience/thunder2.wav");
+	precache_sound("zerstorer/ambience/thunder2.wav");
 	precache_sound("nehahra/sets/set4_2.wav");
 	precache_sound("nehahra/quake/inv3.wav");
 	precache_sound("nehahra/wall/wall01.wav");
@@ -14,16 +14,15 @@ void() precache_mr = {
 	precache_sound("nehahra/ambience/secj.wav");
 	precache_sound("nehahra/gaunt/gspike.wav");
 	precache_sound("nehahra/gaunt/spkhit.wav");
-	precache_sound("nehahra/gaunt/elekt.wav");
+	precache_sound("weapons/lhit.wav");
 	precache_sound("nehahra/gaunt/boom.wav");
 	precache_sound("nehahra/archg/lift.wav");
 	precache_sound("nehahra/archg/lift3.wav");
 	precache_sound("nehahra/archg/fire2.wav");
-	precache_sound("nehahra/weapons/lhit.wav");
 	precache_sound("nehahra/ambience/rych1.wav");
-	precache_sound("nehahra/shalrath/attack2.wav");
+	precache_sound("shalrath/attack2.wav");
 	precache_model("progs/nehahra/soul.mdl");
-	precache_sound("nehahra/shambler/sboom.wav");
+	precache_sound("shambler/sboom.wav");
 	precache_sound("nehahra/max/step2.wav");
 	precache_sound("nehahra/max/step3.wav");
 	precache_sound("nehahra/max/laugh.wav");
@@ -156,7 +155,7 @@ void() new_teleport = {
 	self.nextthink = time + 0.3;
 };
 
-Void function spawn_moderator();
+void() spawn_moderator = {
 var
  mark : Object;
 {
@@ -167,7 +166,7 @@ var
   mark.nextthink = time + 0.5;
 }
 
-Void function nehend_cllvl();
+void() nehend_cllvl = {
 var
  num : Real;
  t : Real;
@@ -232,7 +231,7 @@ var
   self.nextthink = time + 0.1;
 }
 
-Void function nehend_clearlevel(mark : Object);
+void() nehend_clearlevel(mark : Object);
 {
   if (mark.brain & FL_FLY) {
     mark.brain = mark.brain - FL_FLY;
@@ -242,7 +241,7 @@ Void function nehend_clearlevel(mark : Object);
     }
 }
 
-Void function nehend_uplevel(mark : Object);
+void() nehend_uplevel(mark : Object);
 {
   if (!(mark.brain & FL_FLY)) {
     mark.brain = mark.brain | FL_FLY;
@@ -252,7 +251,7 @@ Void function nehend_uplevel(mark : Object);
     }
 }
 
-Void function nehend_downlevel(mark : Object);
+void() nehend_downlevel(mark : Object);
 {
   if (!(mark.brain & FL_SWIM)) {
     mark.brain = mark.brain | FL_SWIM;
@@ -271,7 +270,7 @@ void(entity mark) nehend_checklevel = {
 	return 4;
 };
 
-Void function spawn_movepoint(vec : Vector; num : Real; megadeth : Vector; dave : Vector; spot : Vector);
+void() spawn_movepoint(vec : Vector; num : Real; megadeth : Vector; dave : Vector; spot : Vector);
 var
  mark : Object;
 {
@@ -332,7 +331,7 @@ void() movepoint_touch = {
     }
 };
 
-Real function situation(megadeth : Vector; dave : Vector; head : Object);
+Real() situation(megadeth : Vector; dave : Vector; head : Object);
 var
  spot1 : Vector;
  spot2 : Vector;
@@ -346,7 +345,7 @@ var
   return 0;
 }
 
-Void function spawn_downpoint(vec : Vector; num : Real);
+void() spawn_downpoint(vec : Vector; num : Real);
 var
  mark : Object;
 {
@@ -358,7 +357,7 @@ var
   setorigin(mark, vec);
 }
 
-Void function spawn_platpoint();
+void() spawn_platpoint = {
 var
  mark : Object;
 {
@@ -370,7 +369,7 @@ var
   self.nextthink = time + 0.1;
 }
 
-Void function platpoint_plat();
+void() platpoint_plat = {
 var
  head : Object;
  selected : Object;
@@ -392,7 +391,7 @@ var
     }
 }
 
-Void function switchmethod(head: Object);
+void() switchmethod(head: Object);
 {
   if (head.method == 0) {
     head.method = 1;
@@ -402,7 +401,7 @@ Void function switchmethod(head: Object);
     }
 }
 
-Void function maxnewteles();
+void() maxnewteles = {
 var
  t : Real;
  num : Real;
@@ -471,7 +470,7 @@ void() max_painsound = {
   max_painsound2();
 };
 
-Void function ai_maxrun();
+void() ai_maxrun = {
 var
  num : Real;
  putz : Object;
@@ -575,7 +574,7 @@ var
     }
 }
 
-Void function findjumppath();
+void() findjumppath = {
 var
  dist : Real;
  selected : Object;
@@ -624,7 +623,7 @@ void() max_begin() = {
   self.th_run();
 };
 
-Void function max_stand();
+void() max_stand = {
 var
   head : Object;
   selected : Object;
@@ -665,7 +664,7 @@ var
   FindTarget();
 }
 
-Void function max_squint();
+void() max_squint = {
 var
   head : Object;
 {
@@ -691,7 +690,7 @@ var
   FindTarget();
 }
 
-Void function max_look();
+void() max_look = {
 var
  head : Object;
 {
@@ -710,7 +709,7 @@ var
     }
 }
 
-Void function max_look2();
+void() max_look2 = {
 {
   if (self.walkframe >= 10) {
     self.walkframe = 0;
@@ -722,7 +721,7 @@ Void function max_look2();
   self.walkframe = self.walkframe + 1;
 }
 
-Void function max_look3();
+void() max_look3 = {
 {
   if (self.walkframe >= 10) {
     self.walkframe = 0;
@@ -734,7 +733,7 @@ Void function max_look3();
   self.walkframe = self.walkframe + 1;
 }
 
-Void function max_look4();
+void() max_look4 = {
 {
   if (self.walkframe >= 10) {
     self.walkframe = 0;
@@ -746,7 +745,7 @@ Void function max_look4();
   self.walkframe = self.walkframe + 1;
 }
 
-Void function max_stroll();
+void() max_stroll = {
 {
   if (self.walkframe >= 14) {
     self.walkframe = 0;
@@ -756,7 +755,7 @@ Void function max_stroll();
   self.walkframe = self.walkframe + 1;
 }
 
-Void function max_attack();
+void() max_attack = {
 var
  megadeth : Vector;
 {
@@ -787,28 +786,28 @@ var
     }
 }
 
-Void function max_gauntrang1();
+void() max_gauntrang1 = {
 {
   #73 max_gauntrang2;
   ai_threats();
   self.pain_finished = time + 0.5;
 }
 
-Void function max_gauntrang2();
+void() max_gauntrang2 = {
 {
   #74 max_gauntrang3;
   ai_threats();
   ai_face();
 }
 
-Void function max_gauntrang3();
+void() max_gauntrang3 = {
 {
   #75 max_gauntrang4;
   ai_threats();
   ai_face();
 }
 
-Void function max_gauntrang4();
+void() max_gauntrang4 = {
 {
   #76 max_gauntrang5;
   self.cnt = 0;
@@ -816,7 +815,7 @@ Void function max_gauntrang4();
   ai_threats();
 }
 
-Void function max_gauntrang5();
+void() max_gauntrang5 = {
 {
   if (!visible(self.enemy)) {
     self.th_run();
@@ -834,7 +833,7 @@ Void function max_gauntrang5();
   max_backorcharge();
 }
 
-Void function max_gauntrang6();
+void() max_gauntrang6 = {
 {
   ai_threats();
   if (self.cnt > 8 || vlen(self.origin - self.enemy.origin) > 330) {
@@ -850,19 +849,19 @@ Void function max_gauntrang6();
     }
 }
 
-Void function max_gauntrang7();
+void() max_gauntrang7 = {
 {
   #75 max_gauntrang8;
   ai_threats();
 }
 
-Void function max_gauntrang8();
+void() max_gauntrang8 = {
 {
   #74 max_run;
   ai_threats();
 }
 
-Void function max_backorcharge();
+void() max_backorcharge = {
 {
   if (self.brain & FL_CLIENT) {
     ai_back(5);
@@ -873,21 +872,21 @@ Void function max_backorcharge();
     }
 }
 
-Void function max_light1();
+void() max_light1 = {
 {
   #60 max_light2;
   ai_face();
   ai_threats();
 }
 
-Void function max_light2();
+void() max_light2 = {
 {
   #61 max_light3;
   ai_face();
   ai_threats();
 }
 
-Void function max_light3();
+void() max_light3 = {
 {
   #62 max_light4;
   ai_face();
@@ -895,19 +894,19 @@ Void function max_light3();
   ai_threats();
 }
 
-Void function max_light4();
+void() max_light4 = {
 {
   #63 max_light5;
   ai_face();
   max_backorcharge();
   if (random() < 0.5) {
-    sound(self, CHAN_BODY, "nehahra/gaunt/elekt.wav", 1, ATTN_NORM);
+    sound(self, CHAN_BODY, "weapons/lhit.wav", 1, ATTN_NORM);
     }
   MaxRedLightning();
   ai_threats();
 }
 
-Void function max_light5();
+void() max_light5 = {
 {
   if (visible(self.enemy) && self.enemy.health > 1) {
     #64 max_light4;
@@ -921,16 +920,16 @@ Void function max_light5();
   ai_threats();
 }
 
-Void function max_light6();
+void() max_light6 = {
 {
   #63 max_light7;
   ai_face();
   ai_back(10);
-  sound(self, CHAN_VOICE, "nehahra/gaunt/elekt.wav", 1, ATTN_NORM);
+  sound(self, CHAN_VOICE, "weapons/lhit.wav", 1, ATTN_NORM);
   ai_threats();
 }
 
-Void function max_light7();
+void() max_light7 = {
 {
   #62 max_light8;
   ai_face();
@@ -938,26 +937,26 @@ Void function max_light7();
   ai_threats();
 }
 
-Void function max_light8();
+void() max_light8 = {
 {
   #61 max_light9;
   ai_face();
   ai_back(10);
 }
 
-Void function max_light9();
+void() max_light9 = {
 {
   #60 max_run;
   movetogoal(25);
 }
 
-Void function max_shalrath1();
+void() max_shalrath1 = {
 {
   #65 max_shalrath2;
   ai_face();
 }
 
-Void function max_shalrath2();
+void() max_shalrath2 = {
 {
   #66 max_shalrath3;
   if (self.flags & FL_ONGROUND) {
@@ -974,7 +973,7 @@ Void function max_shalrath2();
     }
 }
 
-Void function max_shalrath3();
+void() max_shalrath3 = {
 {
   #67 max_shalrath4;
   ai_face();
@@ -982,38 +981,38 @@ Void function max_shalrath3();
   self.pain_finished = time + 0.6;
 };
 
-Void function max_shalrath4() = {
+void() max_shalrath4() = {
   #68 max_shalrath5;
   ai_face();
   self.velocity_z = 300;
   Handle_threats();
-  sound(self, CHAN_VOICE, "nehahra/shalrath/attack2.wav", 1, ATTN_NORM);
+  sound(self, CHAN_VOICE, "shalrath/attack2.wav", 1, ATTN_NORM);
 };
 
-Void function max_shalrath5() = {
+void() max_shalrath5() = {
   #69 max_shalrath6;
   ShalMissile();
 };
 
-Void function max_shalrath6();
+void() max_shalrath6 = {
 {
   #70 max_shalrath7;
   ai_face();
 }
 
-Void function max_shalrath7();
+void() max_shalrath7 = {
 {
   #71 max_shalrath8;
   ai_face();
 }
 
-Void function max_shalrath8();
+void() max_shalrath8 = {
 {
   #72 max_run;
   ai_face();
 }
 
-Void function max_run();
+void() max_run = {
 {
   if (self.walkframe >= 6) {
     self.walkframe = 0;
@@ -1043,7 +1042,7 @@ Void function max_run();
     }
 }
 
-Void function max_die();
+void() max_die = {
 var
  num : Real;
  t : Real;
@@ -1063,7 +1062,7 @@ var
     }
 }
 
-Void function max_pain();
+void() max_pain = {
 {
   switchmethod(self);
   if (self.pain_finished > time) {
@@ -1074,17 +1073,17 @@ Void function max_pain();
   max_painsound();
 }
 
-Void function max_pain2();
+void() max_pain2 = {
 {
   #111 max_pain3;
 }
 
-Void function max_pain3();
+void() max_pain3 = {
 {
   #112 max_pain4;
 }
 
-Void function max_pain4();
+void() max_pain4 = {
 {
   if (random() < 0.5) {
     #113 max_throw;
@@ -1094,7 +1093,7 @@ Void function max_pain4();
     }
 }
 
-Void function max_diea1();
+void() max_diea1 = {
 {
   if (self.walkframe >= 8) {
     self.walkframe = 0;
@@ -1110,7 +1109,7 @@ Void function max_diea1();
     }
 }
 
-Void function max_diea2();
+void() max_diea2 = {
 {
   if (self.cnt > self.aflag) {
     self.solid = SOLID_SLIDEBOX;
@@ -1144,29 +1143,29 @@ Void function max_diea2();
     }
 }
 
-Void function max_getup();
+void() max_getup = {
 {
   #96 max_getup2;
 }
 
-Void function max_getup2();
+void() max_getup2 = {
 {
   #97 max_getup3;
 }
 
-Void function max_getup3();
+void() max_getup3 = {
 {
   #98 max_getup4;
   self.pain_finished = time + 1;
   Max_teleportsys();
 }
 
-Void function max_getup4();
+void() max_getup4 = {
 {
   #99 max_run;
 }
 
-Void function max_diec1();
+void() max_diec1 = {
 {
   if (self.walkframe >= 5) {
     self.walkframe = 0;
@@ -1182,7 +1181,7 @@ Void function max_diec1();
     }
 }
 
-Void function max_diec2();
+void() max_diec2 = {
 {
   if (self.cnt > self.aflag) {
     self.solid = SOLID_SLIDEBOX;
@@ -1213,24 +1212,24 @@ Void function max_diec2();
     }
 }
 
-Void function max_recover();
+void() max_recover = {
 {
   #107 max_recover2;
 }
 
-Void function max_recover2();
+void() max_recover2 = {
 {
   #108 max_recover3;
   self.pain_finished = time + 1;
   Max_teleportsys();
 }
 
-Void function max_recover3();
+void() max_recover3 = {
 {
   #109 max_run;
 }
 
-Void function max_throw();
+void() max_throw = {
 {
   if (self.walkframe >= 8) {
     self.walkframe = 0;
@@ -1260,7 +1259,7 @@ Void function max_throw();
   Handle_Threats();
 }
 
-Void function Max_teleportsys();
+void() Max_teleportsys = {
 var
  num : Real;
  t : Real;
@@ -1359,7 +1358,7 @@ var
   ai_teleport(self, [297 -580 1205]);
 }; 
 
-Void function max_survival();
+void() max_survival = {
 var
  megadeth : Vector;
  head : Object;
@@ -1407,10 +1406,8 @@ void() MaxRedLightning() = {
 	local vector org, dir;
 	local float num;
 
-	if (self.lives < 3 && self.classname != "monster_gaunt") {
-		GauntLightning();
-		return;
-	}
+	if (self.lives < 3) { GauntLightning(); return; }
+
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	ai_face();
 	org = self.origin + [0 0 20];
@@ -1438,35 +1435,31 @@ void() max_s_light1 = [60, max_s_light2] {
 	sound(self, CHAN_WEAPON, "shambler/sattck1.wav", 1, ATTN_NORM);
 }
 
-Void function max_s_light2();
-{
+void() max_s_light2 = {
   #61 max_s_light3;
   ai_threats();
   ai_face();
-}
+};
 
-Void function max_s_light3();
-{
+void() max_s_light3 = {
   #62 max_s_light4;
   ai_face();
   ai_threats();
-  sound(self, CHAN_ITEM, "nehahra/shambler/sboom.wav", 1, ATTN_NORM);
-}
+  sound(self, CHAN_ITEM, "shambler/sboom.wav", 1, ATTN_NORM);
+};
 
-Void function max_s_light4();
-{
+void() max_s_light4 = {
   #63 max_s_light5;
   ai_face();
   ai_threats();
   max_backorcharge();
   if (random() < 0.5) {
-    sound(self, CHAN_BODY, "nehahra/gaunt/elekt.wav", 1, ATTN_NORM);
+    sound(self, CHAN_BODY, "weapons/lhit.wav", 1, ATTN_NORM);
     }
   self.effects = self.effects | EF_MUZZLEFLASH;
-}
+};
 
-Void function max_s_light5();
-{
+void() max_s_light5 = {
   if (visible(self.enemy) && self.enemy.health > 1) {
     #64 max_s_light4;
     CastLightning();
@@ -1478,59 +1471,54 @@ Void function max_s_light5();
   #64 max_s_light6;
   ai_face();
   ai_threats();
-}
+};
 
-Void function max_s_light6();
-{
+void() max_s_light6 = {
   #63 max_s_light7;
   ai_face();
   ai_back(10);
   ai_threats();
-  sound(self, CHAN_VOICE, "nehahra/gaunt/elekt.wav", 1, ATTN_NORM);
-}
+  sound(self, CHAN_VOICE, "weapons/lhit.wav", 1, ATTN_NORM);
+};
 
-Void function max_s_light7();
-{
+void() max_s_light7 = {
   #62 max_s_light8;
   ai_face();
   ai_back(10);
-}
+};
 
-Void function max_s_light8();
-{
+void() max_s_light8 = {
   #61 max_s_light9;
   ai_face();
   ai_back(10);
-}
+};
 
-Void function max_s_light9();
-{
+void() max_s_light9 = {
   #60 max_run;
   movetogoal(25);
-}
+};
 
-Void function max_rapidfire1();
-{
+void() max_rapidfire1 = {
   #73 max_rapidfire2;
   self.pain_finished = time + 0.5;
   ai_threats();
 }
 
-Void function max_rapidfire2();
+void() max_rapidfire2 = {
 {
   #74 max_rapidfire3;
   ai_face();
   ai_threats();
 }
 
-Void function max_rapidfire3();
+void() max_rapidfire3 = {
 {
   #75 max_rapidfire4;
   ai_face();
   ai_threats();
 }
 
-Void function max_rapidfire4();
+void() max_rapidfire4 = {
 {
   #76 max_rapidfire5;
   self.cnt = 0;
@@ -1538,7 +1526,7 @@ Void function max_rapidfire4();
   ai_threats();
 }
 
-Void function max_rapidfire5();
+void() max_rapidfire5 = {
 {
   if (!visible(self.enemy)) {
     self.th_run();
@@ -1556,7 +1544,7 @@ Void function max_rapidfire5();
   ai_threats();
 }
 
-Void function max_rapidfire6();
+void() max_rapidfire6 = {
 {
   if (self.cnt > 8 || vlen(self.origin - self.enemy.origin) > 330) {
     self.cnt = 0;
@@ -1574,19 +1562,19 @@ Void function max_rapidfire6();
     }
 }
 
-Void function max_rapidfire7();
+void() max_rapidfire7 = {
 {
   #75 max_rapidfire8;
   ai_threats();
 }
 
-Void function max_rapidfire8();
+void() max_rapidfire8 = {
 {
   #74 max_run;
   ai_threats();
 }
 
-Void function ThrowSprocket(dm : Real);
+void() ThrowSprocket(dm : Real);
 var
  new : Object;
 {
@@ -1609,7 +1597,7 @@ var
   new.flags = 0;
 }
 
-Void function spftouch();
+void() spftouch();
 var
  v : Vector;
 {
@@ -1650,70 +1638,67 @@ var
   self.avelocity = [100 100 100];
 };
 
-Void function max_is_dead();
-var
- head : Object;
- mark : Object;
-{
-  hknight_type = 666;
-  mark = spawn();
-  mark.think = play_secj;
-  mark.nextthink = time + 0.5;
-  head = find(world, targetname, "deadmax");
-  if (head == world) {
-    dprint("No maxdead targetname|");
-    return;
-    }
-  remove(head);
-  spawn_opens_hit();
-  spawn_finalerubble();
-  head = find(world, sky, "end");
-  while(head) {
-    if (random() < 0.5) {
-      head.health = -100;
-      head.think = Throwgibs;
-      head.nextthink = time + (20 * random());
-      }
-    head = find(head, sky, "end");
-    }
-}
+void() max_is_dead = {
+	local entity head, mark;
 
-Void function free_a_soul();
-var
- soul : Object;
- vec : Vector;
- num : Real;
-{
-  vec_x = random() * 300;
-  if (random() < 0.4) {
-    vec_x = vec_x * -1;
-    }
-  vec_y = random() * 300;
-  if (random() > 0.5) {
-    vec_x = vec_x * -1;
-    }
-  vec_z = random() * 500;
-  soul = spawn();
-  soul.origin = self.origin - [0 0 20];
-  setmodel(soul, "progs/nehahra/soul.mdl");
-  soul.solid = SOLID_NOT;
-  soul.movetype = MOVETYPE_NOCLIP;
-  soul.effects = soul.effects | EF_DIMLIGHT;
-  setsize(soul, VEC_HULL_MIN, [16 16 16]);
-  soul.velocity = vec;
-  num = 5 - self.relations;
-  soul.nextthink = time + (5 * num);
-  soul.think = Sub_remove;
-}
+	self.meleeattack = 666;
+	mark = spawn();
+	mark.think = play_secj;
+	mark.nextthink = time + 0.5;
+	head = find(world, targetname, "deadmax");
+	if (head == world) {
+		dprint("No maxdead targetname|");
+		return;
+	}
+	remove(head);
+	spawn_opens_hit();
+	spawn_finalerubble();
+	head = find(world, sky, "end");
+	while(head) {
+		if (random() < 0.5) {
+			head.health = -100;
+			head.think = Throwgibs;
+			head.nextthink = time + (20 * random());
+		}
+		head = find(head, sky, "end");
+	}
+};
 
-Void function maxcorpse();
+void() free_a_soul = {
+	local entity soul;
+	local vector vec;
+	local float num;
+
+	vec_x = random() * 300;
+	if (random() < 0.4) {
+	vec_x = vec_x * -1;
+	}
+	vec_y = random() * 300;
+	if (random() > 0.5) {
+	vec_x = vec_x * -1;
+	}
+	vec_z = random() * 500;
+	soul = spawn();
+	soul.origin = self.origin - [0 0 20];
+	setmodel(soul, "progs/nehahra/soul.mdl");
+	soul.solid = SOLID_NOT;
+	soul.movetype = MOVETYPE_NOCLIP;
+	soul.effects = soul.effects | EF_DIMLIGHT;
+	setsize(soul, VEC_HULL_MIN, [16 16 16]);
+	soul.velocity = vec;
+	num = 5 - self.relations;
+	soul.nextthink = time + (5 * num);
+	soul.think = Sub_remove;
+};
+
+void() maxcorpse = {
 {
   free_a_soul();
   self.think = maxcorpse;
   self.nextthink = time + random() + random();
 }
 
-Void function max_quadfudge();
+void() max_quadfudge = {
 var
  vec : Vector;
  num : Real;
@@ -1796,7 +1781,7 @@ var
     }
 }
 
-Void function max_qwait();
+void() max_qwait = {
 {
   if (!(self.enemy.items & IT_QUAD)) {
     self.th_run();
@@ -1815,7 +1800,7 @@ Void function max_qwait();
   ai_face();
 }
 
-Void function spawn_finalerubble();
+void() spawn_finalerubble = {
 var
  mark : Object;
 {
@@ -1825,7 +1810,7 @@ var
   mark.nextthink = time + 1;
 }
 
-Void function setup_finalerubble();
+void() setup_finalerubble = {
 {
   spawn_rubblefall([-21 -242 962]);
   spawn_rubblefall([-6 -630 970]);
@@ -1881,7 +1866,7 @@ Void function setup_finalerubble();
   self.nextthink = time + 10;
 }
 
-Void function spawn_rubblefall(vec : Vector);
+void() spawn_rubblefall(vec : Vector);
 var
   head : Object;
 {
@@ -1894,7 +1879,7 @@ var
   head.nextthink = time + (random() * 20);
 }
 
-Void function throwsomerub();
+void() throwsomerub = {
 {
   ThrowRubble("progs/nehahra/rubble4.mdl", -10);
   ThrowRubble("progs/nehahra/rubble6.mdl", -20);
@@ -1904,27 +1889,23 @@ Void function throwsomerub();
   self.nextthink = time + 2;
 }
 
-Void function finalesnds();
-var
- num : Real;
-{
-  num = random();
-  if (num < 0.2) {
-    sound(self, CHAN_AUTO, "nehahra/ambience/thunder2.wav", 1, ATTN_NONE);
-    }
-  else {
-    if (num < 0.5) {
-      sound(self, CHAN_AUTO, "nehahra/sets/set4_2.wav", 1, ATTN_NONE);
-      }
-    else {
-      sound(self, CHAN_AUTO, "nehahra/sets/set4_1.wav", 1, ATTN_NONE);
-      }
-    }
-  self.think = finalesnds;
-  self.nextthink = time + 3;
-}
+void() finalesnds = {
+	local float num;
 
-Void function spawn_lightshow();
+	num = random();
+	if (num < 0.2) {
+		sound(self, CHAN_AUTO, "zerstorer/ambience/thunder2.wav", 1, ATTN_NONE);
+	} else {
+		if (num < 0.5)
+			sound(self, CHAN_AUTO, "nehahra/sets/set4_2.wav", 1, ATTN_NONE);
+		else
+			sound(self, CHAN_AUTO, "nehahra/sets/set4_1.wav", 1, ATTN_NONE);
+	}
+	self.think = finalesnds;
+	self.nextthink = time + 3;
+};
+
+void() spawn_lightshow = {
 var
  mark : Object;
 {
@@ -1937,7 +1918,7 @@ var
   mark.nextthink = time + random();
 }
 
-Void function fogflash();
+void() fogflash = {
 var
   head : Object;
   num : Real;
@@ -1977,7 +1958,7 @@ var
     }
 }
 
-Void function spawn_maxcontrol();
+void() spawn_maxcontrol = {
 var
  mark : Object;
 {
@@ -1995,7 +1976,7 @@ var
   mark.nextthink = time + 0.2;
 }
 
-Void function comment_think();
+void() comment_think = {
 var
  head : Object;
  megadeth : Vector;
@@ -2117,7 +2098,7 @@ void() becomeearthquake = {
 	self.nextthink = time + 2;
 };
 
-Void function comment_waiting();
+void() comment_waiting = {
 {
   if (!(self.regen & FL_MONSTER)) {
     self.regen = self.regen | FL_MONSTER;
@@ -2147,7 +2128,7 @@ Void function comment_waiting();
     }
 };
 
-Void function comment_blunder = {
+void() comment_blunder = {
   if (self.enemy.boost == 1) {
     if (!(self.jump_flag & FL_CLIENT)) {
       self.jump_flag = self.jump_flag | FL_CLIENT;
@@ -2215,7 +2196,7 @@ Void function comment_blunder = {
     }
 }
 
-Void function comment_case1();
+void() comment_case1 = {
 {
   if (!(self.regen & FL_ITEM)) {
     self.regen = self.regen | FL_ITEM;
@@ -2239,7 +2220,7 @@ Void function comment_case1();
     }
 }
 
-void() function comment_case2 = {
+void()() comment_case2 = {
   if (!(self.regen & FL_WATERJUMP)) {
     self.regen = self.regen | FL_WATERJUMP;
     self.noise = "nehahra/max/worthop.wav";
@@ -2260,7 +2241,7 @@ void() function comment_case2 = {
     }
 }
 
-Void function comment_case3();
+void() comment_case3 = {
 {
   if (!(self.regen & FL_FLY)) {
     self.regen = self.regen | FL_FLY;
@@ -2300,7 +2281,7 @@ Void function comment_case3();
     }
 }
 
-Void() comment_final = {
+void() comment_final = {
 	local float num;
 
 	self.charmer.talk_finished = time + 3;
@@ -2439,10 +2420,8 @@ void () spawn_mister = {
 	head.soul = "undead";
 	head.pausetime = 100000000;
 	head.think = head.th_stand;
+	head.classtype = CT_MONMISTERMAX;
 	head.nextthink = head.nextthink + random() * 0.5;
 };
 
-void() monster_mistermax = {
-    precache_mr();
-    spawn_mister();
-};
+void() monster_mistermax = { spawn_mister(); };

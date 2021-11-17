@@ -8,18 +8,12 @@ void() DLaser_Touch = {
 	if (other.health) {
 		SpawnBlood(other,org, self.velocity * 0.2, 15);
 		T_Damage(other, self, self.owner, MOVETYPE_BOUNCE, DAMARMOR);
-	} else {
-		WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte(MSG_BROADCAST, TE_GUNSHOT);
-		WriteCoord(MSG_BROADCAST, org_x);
-		WriteCoord(MSG_BROADCAST, org_y);
-		WriteCoord(MSG_BROADCAST, org_z);
-	}
+	} else Tent_Point(TE_GUNSHOT,org);
 	remove(self);
 };
 
 void(vector org, vector vec) LaunchDLaser = {
-	if (self.classname == "monster_drone") sound(self, CHAN_WEAPON, "drake/drone/enfire.wav", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "drake/drone/enfire.wav", 1, ATTN_NORM);
 	vec = normalize(vec);
 	newmis = spawn();
 	newmis.classgroup = CG_PROJALL;
@@ -358,33 +352,15 @@ void() drn_die7 = [0, drn_die7] {
 
 void() DroneTouch = { if (other.takedamage) drn_die7(); };
 
-void() monster_drone =  {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/drake/drone1.mdl";
+void() monster_drone_precache =  {
 	precache_model("progs/drake/drone1.mdl");
-
-	self.headmdl = "progs/drake/drngib1.mdl";
-	self.gib1mdl = "progs/drake/drngib2.mdl";
-	self.gib2mdl = "progs/drake/drngib3.mdl";
-	self.gib3mdl = "progs/drake/spike.mdl";
 	precache_model("progs/drake/drngib1.mdl");
 	precache_model("progs/drake/drngib2.mdl");
 	precache_model("progs/drake/drngib3.mdl");
 	precache_model("progs/drake/spike.mdl");
-	if (random() < 0.5) self.gib2mdl = string_null;
-	self.gib1sound = GIB_IMPACT_METALA;
-
 	precache_model("progs/drake/laser.mdl");
-
-	self.idle_sound = "drake/drone/drnidle2.wav";
-	self.idle_sound2 = "drake/drone/drnidle.wav";
 	precache_sound("drake/drone/drnidle2.wav");
 	precache_sound("drake/drone/drnidle.wav");
-	self.sight_sound = "drake/drone/drnwake.wav";
 	precache_sound("drake/drone/drnwake.wav");
 	precache_sound("drake/drone/drnhunt.wav");
 	precache_sound("drake/drone/enfire.wav");
@@ -395,11 +371,25 @@ void() monster_drone =  {
 	precache_sound("drake/drone/drngasp.wav");
 	precache_sound("drake/drone/drngasp2.wav");
 	precache_sound("drake/drone/drndeth.wav");
-	self.death_sound = "drake/drone/drndeth.wav";
 	precache_sound(SOUND_LASER_HIT);
+};
 
+void() monster_drone =  {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/drake/drone1.mdl";
+	self.headmdl = "progs/drake/drngib1.mdl";
+	self.gib1mdl = "progs/drake/drngib2.mdl";
+	self.gib2mdl = "progs/drake/drngib3.mdl";
+	self.gib3mdl = "progs/drake/spike.mdl";
+	if (random() < 0.5) self.gib2mdl = string_null;
+	self.gib1sound = GIB_IMPACT_METALA;
+	self.idle_sound = "drake/drone/drnidle2.wav";
+	self.idle_sound2 = "drake/drone/drnidle.wav";
+	self.sight_sound = "drake/drone/drnwake.wav";
+	self.death_sound = "drake/drone/drndeth.wav";
 	if (self.health < 1) self.health = 100;
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
@@ -435,17 +425,14 @@ void() monster_drone =  {
 	self.th_pain = drn_pain;
 	self.th_die = drn_die1;
 	self.ammo_shells = 0;
-
 	self.gibtype = GIBTYPE_METAL;
 	self.classtype = CT_MONDRONE;
 	self.classgroup = CG_ROBOT;
 	self.classmove = MON_MOVEFLY;
-	if ( (random () < 0.500) ) {
+	if (random () < 0.5) 
 		if (self.deathstring == "") self.deathstring = " was drilled by a Drone\n";
-	} else {
+	else
 		if (self.deathstring == "") self.deathstring = " was lazed by a Drone\n";
-	}
 
 	monster_start();
 };
-

@@ -27,9 +27,7 @@ $frame shockc9 shockc10
 entity	le1, le2;
 float	lightning_end;
 
-//===========================================================================
-void() idchthon_tracking =
-{
+void() idchthon_tracking = {
 	// Find a player
 	if (!self.enemy) {
 		self.enemy = find(world, classname, "player");
@@ -40,12 +38,11 @@ void() idchthon_tracking =
 	if (self.enemy.flags & FL_NOTARGET) self.enemy = world;
 	else if (self.enemy.items & IT_INVISIBILITY) self.enemy = world;
 	else if (intermission_running > 0) self.enemy = world;
-	else if (cinematic_running > 0) self.enemy = world;
+	else if (cinematic_running > 0 || cutscene > 0) self.enemy = world;
 	else if (self.enemy.health < 1) self.enemy = world;
 	if (self.enemy) self.th_missile();
 };
 
-//----------------------------------------------------------------------
 void() idchthon_idle1	=[	$walk1, idchthon_idle2 ] {idchthon_tracking();};
 void() idchthon_idle2	=[	$walk2, idchthon_idle3 ] {};
 void() idchthon_idle3	=[	$walk3, idchthon_idle4 ] {};
@@ -78,15 +75,13 @@ void() idchthon_idle29	=[	$walk29, idchthon_idle30 ] {};
 void() idchthon_idle30	=[	$walk30, idchthon_idle31 ] {};
 void() idchthon_idle31	=[	$walk31, idchthon_idle1 ] {idchthon_tracking();};
 
-//===========================================================================
-void(vector orgofs) idchthon_missile =
-{
+void(vector orgofs) idchthon_missile = {
 	local vector offang, org, vec, dir, mdest, avel;
 	local float projlen;
 
 	// No enemy, player dead or intermission/cinematic?
 	if (!self.enemy || self.enemy.health < 1 || 
-		intermission_running > 0 || cinematic_running > 0) {
+		intermission_running > 0 || cinematic_running > 0 || cutscene > 0) {
 		self.th_stand();
 		return;
 	}
@@ -115,9 +110,7 @@ void(vector orgofs) idchthon_missile =
 	Launch_Missile (org, dir, avel, CT_PROJ_LAVA, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
-void() idchthon_face =
-{
+void() idchthon_face = {
 	// Find a player
 	if (!self.enemy) {
 		self.enemy = find(world, classname, "player");
@@ -128,12 +121,11 @@ void() idchthon_face =
 	if (self.enemy.flags & FL_NOTARGET) self.enemy = world;
 	else if (self.enemy.items & IT_INVISIBILITY) self.enemy = world;
 	else if (intermission_running > 0) self.enemy = world;
-	else if (cinematic_running > 0) self.enemy = world;
+	else if (cinematic_running > 0 || cutscene > 0) self.enemy = world;
 	else if (self.enemy.health < 1) self.enemy = world;
 	if (self.enemy) ai_face();
 };
 
-//----------------------------------------------------------------------
 void() idchthon_missile1	=[	$attack1, idchthon_missile2 ] {idchthon_face();};
 void() idchthon_missile2	=[	$attack2, idchthon_missile3 ] {idchthon_face();};
 void() idchthon_missile3	=[	$attack3, idchthon_missile4 ] {idchthon_face();};
@@ -158,10 +150,8 @@ void() idchthon_missile21	=[	$attack21, idchthon_missile22 ] {idchthon_face();};
 void() idchthon_missile22	=[	$attack22, idchthon_missile23 ] {idchthon_face();};
 void() idchthon_missile23	=[	$attack23, idchthon_missile1 ] {idchthon_face();};
 
-//----------------------------------------------------------------------
 void() idchthon_rise1	=[	$rise1, idchthon_rise2 ] {};
-void() idchthon_rise2	=[	$rise2, idchthon_rise3 ] {
-	sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);};
+void() idchthon_rise2	=[	$rise2, idchthon_rise3 ] {sound (self, CHAN_VOICE, self.sight_sound, 1, ATTN_NORM);};
 void() idchthon_rise3	=[	$rise3, idchthon_rise4 ] {};
 void() idchthon_rise4	=[	$rise4, idchthon_rise5 ] {ai_face();};
 void() idchthon_rise5	=[	$rise5, idchthon_rise6 ] {};
@@ -178,9 +168,7 @@ void() idchthon_rise15	=[	$rise15, idchthon_rise16 ] {};
 void() idchthon_rise16	=[	$rise16, idchthon_rise17 ] {ai_face();};
 void() idchthon_rise17	=[	$rise17, idchthon_missile1 ] {};
 
-//----------------------------------------------------------------------
-void() idchthon_awake =
-{
+void() idchthon_awake = {
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 	self.takedamage = DAMAGE_NO;
@@ -279,9 +267,7 @@ void() lightning_fire =
 	WriteCoord (MSG_ALL, p2_z);
 };
 
-//----------------------------------------------------------------------
-void() lightning_use =
-{
+void() lightning_use = {
 	if (lightning_end >= time + 1) return;
 
 	le1 = find( world, target, "lightning");
@@ -292,34 +278,29 @@ void() lightning_use =
 	}
 	
 	// Check for lightning block alignment
-	if (
-	 (le1.state != STATE_TOP && le1.state != STATE_BOTTOM)
-	|| (le2.state != STATE_TOP && le2.state != STATE_BOTTOM)
-	|| (le1.state != le2.state) )
-	{ return; }
+	if ((le1.state != STATE_TOP && le1.state != STATE_BOTTOM) || (le2.state != STATE_TOP && le2.state != STATE_BOTTOM) || (le1.state != le2.state) ) { return; }
 
 	// don't let the electrodes go back up until the bolt is done
 	le1.nextthink = -1;
 	le2.nextthink = -1;
 	lightning_end = time + 1;
-
 	sound (self, CHAN_VOICE, "misc/power.wav", 1, ATTN_NORM);  // vanilla id1 sound
 	lightning_fire ();		
 
-	// advance the boss pain if down
+	
 	self = find (world, classname, "monster_boss");
 	if (!self) return;
+
 	self.enemy = activator;
 	if (le1.state == STATE_TOP && self.health > 0) {
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		self.health = self.health - 1;
+		self.health = self.health - 1; // advance the boss pain if down
 		if (self.health >= 2) idchthon_shocka1();
 		else if (self.health == 1) idchthon_shockb1();
 		else if (self.health == 0) idchthon_shockc1();
 	}	
 };
 
-//===========================================================================
 void() idchthon_death1 = [$death1, idchthon_death2] {
 sound (self, CHAN_VOICE, "ad171/chthon/death1.wav", 1, ATTN_NORM);};
 void() idchthon_death2 = [$death2, idchthon_death3] {};
@@ -328,8 +309,8 @@ void() idchthon_death4 = [$death4, idchthon_death5] {};
 void() idchthon_death5 = [$death5, idchthon_death6] {};
 void() idchthon_death6 = [$death6, idchthon_death7] {};
 void() idchthon_death7 = [$death7, idchthon_death8] {};
-void() idchthon_death8 = [$death8, idchthon_death9] {};
-void() idchthon_death9 = [$death9, idchthon_death10] {
+void() idchthon_death8 = [$death8, boss_death9] {};
+void() boss_death9 = [$death9, boss_death10] {
 	sound (self, CHAN_BODY, "ad171/chthon/lavasplash.wav", 1, ATTN_NORM);
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
@@ -337,44 +318,27 @@ void() idchthon_death9 = [$death9, idchthon_death10] {
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, self.origin_z);
 };
-// No plans to support map hacks anymore, function name changed
-void() idchthon_death10 = [$death9, idchthon_death10] {
+
+void() boss_death10 = [$death9, SUB_Null] { // No plans to support map hacks anymore, function name changed.  Aaahh, nope.  Let the hacks live. -Qmaster
 	AddToKills(self,self.enemy);
-	SUB_UseTargets ();
+	SUB_UseTargets();
 	entity_hide(self);
 };
 
 // QUAKED monster_boss (1 0 0) (-128 -128 -24) (128 128 256)
 void() monster_boss = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_bosschthon.mdl";
-	precache_model (self.mdl);
-	precache_model (MODEL_PROJ_LAVA);
-
-	// Attack/throw/electric sound
-	precache_sound ("ad171/chthon/attack1.wav");
-	precache_sound ("weapons/rocket1i.wav");
-	
 	self.pain_sound = "ad171/chthon/pain1.wav";
-	precache_sound (self.pain_sound);
-	precache_sound ("ad171/chthon/death1.wav");
-
-	// Rise from lava roar + splash
-	self.sight_sound = "ad171/chthon/sight1.wav";
-	precache_sound (self.sight_sound);
-	precache_sound ("ad171/chthon/lavasplash.wav");
-
+	self.sight_sound = "ad171/chthon/sight1.wav"; // Rise from lava roar + splash
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
-	// Use to be 128 square, reduced size to help with
-	// radius/splash damage being more effective
-	self.bbmins = '-80 -80 -24';	// has own entity setup
+	self.bbmins = '-80 -80 -24';	// Use to be 128 square, reduced size to help with radius/splash damage being more effective
 	self.bbmaxs = '80 80 256';
 	self.bboxtype = BBOX_CUSTOM;
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
-
 	self.health = 3;
 	self.takedamage = DAMAGE_NO;	// Cannot be damaged
 	self.bouncegrenade = TRUE;		// Grenades bounce off!
@@ -384,23 +348,31 @@ void() monster_boss = {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 1;
 	self.resist_rockets = self.resist_cells = 1;
+	self.resist_fire = 1;
+
 	self.reflectnails = TRUE;		// Reflect nail projectiles
 	self.reflectaxe = TRUE;			// Prevent axe damage
-
-	// Check passive system for exceptions
-	setup_passivestate(self);
-	
+	setup_passivestate(self); 		// Check passive system for exceptions
 	self.th_stand = idchthon_idle1;
 	self.th_walk = idchthon_idle1;
 	self.th_run = idchthon_idle1;
 	self.th_missile = idchthon_missile1;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
+
+	if (self.deathstring == "")  self.deathstring = " was blown apart by Chthon\n";
 	self.classtype = CT_MONIDCHTHON;
 	self.classgroup = CG_BOSS;
-	if (self.deathstring == "")  self.deathstring = " was blown apart by Chthon\n";
-	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-	
-	AddToTotals(self); // Does not go through monster spawn functions YET!!
-	self.use = idchthon_awake;
+
+	self.th_stand = self.th_walk = self.th_run = SUB_Null;
+	self.th_missile = self.th_die = SUB_Null;
+	self.th_pain = SUB_Null_pain;
+	monster_start();
+
+	if (self.targetname) self.use = idchthon_awake;
+	else idchthon_awake();
 };
 
 //QUAKED event_lightning (0 1 1) (-16 -16 -16) (16 16 16) x
@@ -460,8 +432,5 @@ void() misc_teleporttrain = {
 	setmodel (self, self.mdl);
 	setsize (self, VEC_ORIGIN , VEC_ORIGIN);
 	if (!self.speed) self.speed = 100;
-	if (self.target == "") {
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		remove(self);
-	}
+	if (SUB_HideIfNoTarget()) return;
 };

@@ -21,7 +21,7 @@ void() tbaby_checknew = {
 	self.idle_sound = "blob/sight1.wav";
 	self.sight_sound = self.idle_sound;
 	self.pain_sound = self.idle_sound;
-	self.origin_z = self.origin_z + 1;      // raise off floor a bit
+	self.origin_z = self.origin_z + 1; // raise off floor a bit
 	droptofloor();
 
 	if (!walkmove(0,0)) { self.owner.th_pain = tbaby_mitosis; remove(self); return; }
@@ -40,7 +40,7 @@ void() tbaby_checknew = {
 };
 
 void(entity inflictor, entity attacker, float damage) tbaby_mitosis = {
-	local entity    newSpawn;
+	local entity newSpawn;
 	
 	if ( random() < 0.35 ) {
 		newSpawn = spawn();
@@ -61,22 +61,13 @@ void(entity inflictor, entity attacker, float damage) tbaby_mitosis = {
 };
 
 void() monster_tarbaby_mitosis = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/qmaster/mon_tarbaby.mdl";
 	self.headmdl = string_null;
-	precache_model (self.mdl);
 	self.idle_sound = "blob/sight1.wav";
-	precache_sound (self.idle_sound);
 	self.sight_sound = self.idle_sound;
 	self.pain_sound = self.idle_sound;
-	precache_sound ("blob/death1.wav");
-	precache_sound ("blob/hit1.wav");
-	precache_sound ("blob/land1.wav");
-	precache_sound ("blob/sight1.wav");
-	precache_sound ("rogue/blob/mytosis.wav");
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -92,6 +83,8 @@ void() monster_tarbaby_mitosis = {
 
 	if (self.deathstring == "") self.deathstring = " was slimed by a Mitosis Spawn\n";
 
+	if (self.minion_name == string_null) self.minion_name = "monster_tarbaby";
+
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
@@ -104,10 +97,8 @@ void() monster_tarbaby_mitosis = {
 	self.th_melee = tbaby_jump1;
 	self.th_pain = tbaby_mitosis;
 	self.th_die = tbaby_die;
-	
 	self.classtype = CT_MONSPAWN;
 	self.classgroup = CG_SPAWN;
 	self.classmove = MON_MOVEWALK;
-	
 	monster_start();
 };

@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 68
+// Function count: 69
 //
 // Implements: Check routines for monsters to decide when and which attacks
 //
@@ -43,7 +43,7 @@ float() archer_check_shot;
 void() baron_cast1;
 void() baron_slam1;
 float() BaronGolem_Check;
-float(entity ent) Grounded;
+float(entity ent) QuakeHurts;
 float(vector org) UpIsSky;
 float() eidolon_WaveCheck;
 float() mammoth_WaveCheck;
@@ -59,6 +59,7 @@ void() inquisitor_magica1;
 void() inquisitor_magicb1;
 void() inquisitor_magicc1;
 void() inquisitor_magicd1;
+void() mcorn_atkb1;
 
 // Mammoth style phases
 float MM_PHASE0 = 0;		// Phase 0 - Locked
@@ -185,10 +186,11 @@ void() ShamCheckAttack = {
 	// Range attack (lightning)
 	if (!enemy_vis) return;
 	if (time < self.attack_finished) return;
-	if (self.enemydist > MONAI_SHAMRANGE && !self.attack_sniper) return;
+	if (self.enemydist > MONAI_SHAMRANGE && !self.attack_sniper && self.classtype != CT_MONSHAMVILE) return;
 	if (visblocked(self.enemy)) return; // Does the monster have a clear shot to the player? sightline can be blocked by other monsters
+	if (enemy_range == RANGE_FAR && self.classtype == CT_MONSHAMVILE) return;
 
-	SUB_AttackFinished (2 + (2*random()));
+	SUB_AttackFinished(2 + (2*random()));
 	self.attack_state = AS_MISSILE;							
 };
 
@@ -290,7 +292,7 @@ void() SantaCheckAttack = {
 
 	// Let sightsound play out before machine gun attack
 	if (self.attack_rage) {
-		self.attack_finished = time + 3;
+		SUB_AttackFinished (3);
 		self.attack_rage = FALSE;
 	}	
 
@@ -2301,7 +2303,7 @@ void() BaronBossCheckAttack = {
         if (self.level == BARON_FIRE) {
             baron_cast1 ();
         } else if (self.level == BARON_EARTH) {
-            if ((r < 0.5) && !super_active && Grounded (self.enemy)) baron_slam1();
+            if ((r < 0.5) && !super_active && QuakeHurts(self.enemy)) baron_slam1();
             else if (BaronGolem_Check ()) baron_cast1();
             else return;
         } else if (self.level == BARON_AIR) {
@@ -2355,13 +2357,13 @@ void() EidolonCheckAttack = {
 		if (self.enemydist < MONAI_MEDIUMEIDO && random() < 0.75) {
 			// Skill 0=3s, 1=2.25s, 2=1.5s, 3=0.75s
 			self.attack_speed = (4 - skill) * 0.75;
-			self.attack_finished = time + self.attack_speed + random();
+			SUB_AttackFinished(self.attack_speed + random());
 			self.attack_state = AS_MELEE;
 			return;
 		} else {
 			// Large boulder attack.  Skill 0=4s, 1=3s, 2=2s, 3=1s
 			self.attack_speed = (4 - skill) * 1;
-			self.attack_finished = time + self.attack_speed + random();
+			SUB_AttackFinished(self.attack_speed + random());
 			self.attack_state = AS_MISSILE;
 			return;
 		}
@@ -2380,7 +2382,7 @@ void() IcegCheckAttack = {
 
 	// Floor stomp attack
 	if (self.enemydist < MONAI_STOMPICEG && random() < 0.5) {
-		self.attack_finished = time + ((4-skill)*0.5) + random() + random();
+		SUB_AttackFinished(((4-skill)*0.5) + random() + random());
 		self.th_slide ();
 		return;
 	}
@@ -2389,7 +2391,7 @@ void() IcegCheckAttack = {
 	
 	// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
 	if (!visblocked_wide(self.enemy, self.attack_offset, self.enemy.view_ofs)) {
-		self.attack_finished = time + ((4-skill)*0.6) + random() + random();
+		SUB_AttackFinished(((4-skill)*0.6) + random() + random());
 		self.attack_state = AS_MISSILE;
 	}
 };
@@ -2440,14 +2442,14 @@ void() LfiendCheckAttack = {
 		if (self.enemydist < MONAI_CLOSELFIEND && random() < 0.75) {
 			// Skill 0=3s, 1=2.25s, 2=1.5s, 3=0.75s
 			self.attack_speed = (4 - skill) * 0.75;
-			self.attack_finished = time + self.attack_speed + random();
+			SUB_AttackFinished(self.attack_speed + random());
 			self.attack_state = AS_MISSILE;
 			return;
 		} else {
 			// Summon giant sphere of Doom!
 			// Skill 0=4s, 1=3s, 2=2s, 3=1s
 			self.attack_speed = (4 - skill) * 1;
-			self.attack_finished = time + self.attack_speed + random();
+			SUB_AttackFinished(self.attack_speed + random());
 			self.attack_state = AS_JUMP;
 			return;
 		}
@@ -2540,13 +2542,13 @@ void() NourCheckAttack = {
 		if (self.enemydist < MONAI_CLOSENOUR || self.attack_chance > random()) {
 			// Skill 0=3s, 1=2.25s, 2=1.5s, 3=0.75s
 			self.attack_speed = (4 - skill) * 0.75;
-			self.attack_finished = time + self.attack_speed + random();
+			SUB_AttackFinished(self.attack_speed + random());
 			self.attack_state = AS_MELEE;
 			return;
 		} else {
 			// Large rocket bomb attack with floor damage.  Skill 0=4s, 1=3s, 2=2s, 3=1s
 			self.attack_speed = (4 - skill) * 1;
-			self.attack_finished = time + self.attack_speed + random();
+			SUB_AttackFinished(self.attack_speed + random());
 			self.attack_state = AS_MISSILE;
 			return;
 		}
@@ -2751,4 +2753,89 @@ void() SpiritCheckAttack = {
 		self.attack_state = AS_MELEE;
 		return;
 	}
+};
+
+void() ManticoreCheckAttack = {
+	// Melee attack (tail swipe).  Check that within range.
+	if (ai_checkmelee(MONAI_MELEEDEMON,FALSE)) {
+		self.attack_state = AS_MELEE;
+		return;
+	}
+
+	// If setup to be a turret, check range attack only
+	if (self.movespeed < 0 && self.skin != 1) {
+		self.attack_state = AS_MISSILE;
+		if (visblocked(self.enemy)) {
+			SUB_AttackFinished (2 + (2*random()));
+			mcorn_atkb1();
+		}
+		return;
+	} else if (self.skin == 1) {
+		self.attack_state = AS_MELEE;
+		if (visblocked(self.enemy)) {
+			SUB_AttackFinished (2 + (2*random()));
+			mcorn_atkb1();
+		}
+		return;
+	}
+
+	// Mid Range attack (JUMP).  Jumped recently, facing right direction and not blocked?
+	if ( self.jump_flag < time && infront(self.enemy) && !visblocked(self.enemy) ) {
+		// Check for enemy above? (z axis)
+		if (self.enemy.origin_z <= self.origin_z) {
+			// Is the manticore within the right range?
+			if (self.enemydist > MONAI_JUMPELENANEAR && self.enemydist < MONAI_JUMPELENAFAR && self.height < (MONAI_JUMPDEMONCHECK/2)) { // Use half of fiend height since manticore jumps less up and more forward
+				SUB_AttackFinished (random());
+				self.jumptouch = world;			// Reset last object touched
+				self.count = 0;				// Number of times jumped
+				if (self.skin != 1) {
+					if (random() < 0.7) self.th_jump ();
+					else 				self.th_missile ();
+				} else self.th_jump (); // only jump if Lich Fiend
+				return;
+			}
+		}
+	}
+
+	if (!enemy_vis) return;
+	if (time < self.attack_finished) return;
+	if (visblocked(self.enemy)) {
+		SUB_AttackFinished (2 + (2*random()));
+		self.attack_state = AS_MISSILE; // Range attack
+		mcorn_atkb1();
+		return;
+	}
+
+	SUB_AttackFinished (2 + (2*random()));
+	self.attack_state = AS_MISSILE; // Range attack
+};
+
+// Check to see if the turret will fire
+float() CheckTurretAttack = { // [FUNCTION]
+	local vector spot1, spot2;	
+	local entity targ;
+	local float chance;
+
+	targ = self.enemy;
+	spot1 = self.origin + self.view_ofs;// see if any entities are in the way of the shot
+	spot2 = targ.origin + targ.view_ofs;
+	traceline (spot1, spot2, FALSE, self);
+	if (trace_ent != targ) return FALSE;		// don't have a clear shot	
+	if (trace_inopen && trace_inwater) return FALSE;			// sight line crossed contents
+	if (time < self.attack_finished) return FALSE;
+		
+	if (enemy_range == RANGE_MELEE) chance = 0.9;
+	else if (enemy_range == RANGE_NEAR) chance = 0.5;
+	else if (enemy_range == RANGE_MID) chance = 0.2;
+	else chance = 0.05;
+
+	if (random () < chance) {
+		self.th_missile();
+		if (self.spawnflags & TUR_LASERS) SUB_AttackFinished(1.5 + 2*random());
+		else if (self.spawnflags & TUR_ROCKETS) SUB_AttackFinished(1.5 + 3*random());
+		else if (self.spawnflags & TUR_PPC) SUB_AttackFinished(2 + 2*random());
+		else SUB_AttackFinished (1 + 1.5*random());
+		return TRUE;
+	}
+	return FALSE;
 };

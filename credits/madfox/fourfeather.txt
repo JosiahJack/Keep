@@ -1,0 +1,61 @@
+=================================================================================
+Title                  : feath40
+Filename               : fourfeath.zip
+Author                 : Madfox
+Email Adress           : catweazel@kpnmail.nl
+Description            : New Quake 1 map
+
+Additional Credits to  : ID Software
+
+=================================================================================
+
+* Play Inormation *
+
+Level Name              : fourfeather
+Single Player           : yes
+Cooperative 2-4 Player  : yes
+Deathmatch 1-4 Player   : yes
+Difficult Settings      : yes
+New Monsters            : yes
+New Sounds              : yes
+qC                      : no
+
+=================================================================================
+
+* Construction *
+
+Base              : quake1 level as reaction on inspitration & reference on func
+>                 : msgboard. Started as a Russian Castle, added an arabian border
+>                 : and locked it with a front base metal front with squad-pit.
+Build Time        : too long, 06-06-2013 ~ 09-12-2015.
+Editor(s) Used    : GTkRadiant1.4  Quark6.3/4.07 Wally PSP AM2005 QMLE CorelDraw5  
+Known Bugs        : loozing
+>                 : Heavy map with framerate turtle, too wide ranged.
+Specific          : !!!ADD "-heapsize 160000" OTHERWISE MAP WILL STUTTER & FAIL!!!
+>                 : Added a few new monsters, a heavy  MrBig guy I converted from 
+>                 : a Q2 model and gave a turning sweapgun, a demo version of the
+>                 : Elden Ogre I made I hope to code in defend option once.                      
+>                 : Zomby friend in escort, as long as you don't shoot it.
+>                 : Some statics like a new waterfahl, turning rad and some turb
+>                 : Wingskull a DrD creature, Bender the Futuramic robot.
+>                 : Serpent an improved version from the QuakeTest version.
+>                 : Swarm of beez, after reading the endless funcMsg toppic.
+>                 : coils with boiling flood, DarkYoung an OldOne breach.   
+>                 : Fishing Ogre, you can't shoot him because he went fishing.
+Thanks            : Neg!ke ericw for testing, preach necros metlslime for advice
+>                 : poison for the skybox - DemonCliffs - Q3MrBig convertion.
+>                 : rebb, tyran for editor advice and compilers, metslime for
+>                 : fitzquake and func_msgb, my houreglass for saving the wine.
+>                 : Spy for giving map advice, Q3 modellers of the Orb model. 
+>                 : Spirit, for keeping up the good work on Quakaddicted. 
+GameOption        : Place in a subdirectory Quake -game fourfeather +map fourfeather 
+                
+
+
+Live long and propsper! Make the Quake1 Universe get bigger and bigger!
+
+================================================================================= 
+
+Madfox 23 jan 2016
+
+=================================================================================

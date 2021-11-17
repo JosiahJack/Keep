@@ -86,7 +86,7 @@ float	GYRO_TURBULENCEMOD_SLIME = 1.2;
 float	GYRO_TURBULENCEMOD_LAVA = 1.4;
 
 //----- Core Non-Constant Settings --------------------
-float	GYRO_TICKRATE = 0.007; // Crank it!  Was 0.03, increased so that players with 144hz monitors have smooth buttery experience in QSS/FTE -Qmaster
+float	GYRO_TICKRATE = 0.03; // Crank it!  Was 0.03, increased so that players with 144hz monitors have smooth buttery experience in QSS/FTE -Qmaster
 float	GYRO_POWERCONSTANT = 800;
 
 //----- Force Channels --------------------

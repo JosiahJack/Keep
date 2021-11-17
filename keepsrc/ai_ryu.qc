@@ -67,7 +67,7 @@ float() Ryu_UseFreeMove = {
     local float diff, pc;
 
     if (!self.enemy) return TRUE; // Movement is automatically flat.
-    if (self.h2olevel) return TRUE; // Get out of the water ASAP.
+    if (self.waterlevel) return TRUE; // Get out of the water ASAP.
 
     spot = self.origin;
     diff = spot_z - self.enemy.origin_z;
@@ -92,7 +92,7 @@ float() Ryu_UseFreeMove = {
 };
 
 float(float yaw, float dist) Ryu_WalkMove = {
-    if (Ryu_UseFreeMove ()) return walkmove(yaw, dist);
+    if (Ryu_UseFreeMove()) return walkmove(yaw, dist);
     return flat_move(yaw, dist);
 };
 
@@ -153,7 +153,7 @@ float() Ryu_HatesWater = {
             if (self.air_finished < time + 5) return TRUE;    // Running out of air, so leave the water now!
 
         // If frying in the hot sauce, get out!  Even the new dragon move AI won't stop it from entering such liquid via teleportation.
-        if (self.h2otype <= CONTENT_SLIME) return TRUE;    // Burning in slime or lava!
+        if (self.liquidbase <= CONTENT_SLIME) return TRUE;    // Burning in slime or lava!
     }
 
     if (self.burner) return FALSE;   // Any dragon on fire won't mind taking a dip.
@@ -164,7 +164,9 @@ float() Ryu_HatesWater = {
 float(float dist) Ryu_LeaveWater = {
     // Check if air is above the water (like above a pool or river) from an underwater point.
     traceline (self.origin, self.origin + '0 0 2048', FALSE, self);
-    if (trace_inopen && trace_inwater && ai_up(dist)) return TRUE;
+    if (trace_inopen && trace_inwater) {
+		if (ai_up(dist)) return TRUE;
+	}
 
     // Removed:  Don't bother checking for air below water.  No air is detected, continue on present course.
     return FALSE;
@@ -176,7 +178,7 @@ void(float dist, entity ent) Ryu_VerticalSlide = {
 
 	// If in the unlikely event a water-fearing dragon is in the water, find some air and go in the direction it is found.
 	if (self.classtype != CT_MONSHADE) {
-		if (Ryu_HatesWater() && self.h2olevel && Ryu_LeaveWater(dist)) return; // If a dragon is in the water, this makes the dragon rise out of it.
+		if (Ryu_HatesWater() && self.waterlevel && Ryu_LeaveWater(dist)) return; // If a dragon is in the water, this makes the dragon rise out of it.
 	} else {
 		// Fly away from goal.
 		// Note:  Don't bother with the extra checks dragons go through.
@@ -214,7 +216,7 @@ void(float newyaw, float dist, entity threat) Ryu_Dodge = {
 
 	// Strafe away from the detected danger.  If path is blocked,
 	// flag it with a time so that future checks use a different path.
-    if (!walkmove (newyaw, dist)) {
+    if (!walkmove(newyaw, dist)) {
         if (self.dodge_back > time)
             self.dodge_back = 0;
         else
@@ -299,7 +301,7 @@ float(entity ent) Ryu_KeepAway = {
 				if ((self.enemy == ent) || (ent.enemy == self)) {
 					if (ent.classgroup == CG_SHAM) return TRUE;
 					if (ent.classgroup == CG_DCAPTAIN) return TRUE;
-					if (ent.classgroup == CG_BOSS || ent.bossflag || ent.xfl & XFL_BOSS) return TRUE;
+					if (ent.classgroup == CG_BOSS || ent.bossflag) return TRUE;
 					if (ent.classtype == CT_MONSPAWN) return TRUE; // These guys are bouncing bombs -- bad news!
 					if (ent.health > self.health) return TRUE; // Looks big and scary!
 
@@ -368,11 +370,11 @@ float(float dist) Ryu_DetectDanger = {
 float(entity ent) Ryu_NoShot = {
     local float element;
 
-    if (ent.h2olevel > 1) {
+    if (ent.waterlevel > 1) {
         element = ent.ryuflags & RYU_ELEMENTS;
         if (element == RYU_USE_LITE) return TRUE;    // Lightning is useless underwater.
         else if (element == RYU_USE_ICE) { 
-            if (ent.h2otype == CONTENT_LAVA) return TRUE;    // Melts in lava!
+            if (ent.liquidbase == CONTENT_LAVA) return TRUE;    // Melts in lava!
         }
     }
 
@@ -430,7 +432,7 @@ float(float melee) ryu_step = {
                 if (Ryu_DetectDanger (self.speed)) return FALSE;
             } else {
                 if (self.attack_state != AS_SLIDING)
-                    if (Ryu_DetectDanger (SPEED_RYU_MIN)) return FALSE;
+                    if (Ryu_DetectDanger(SPEED_RYU_MIN)) return FALSE;
             }
         }
     }
@@ -439,12 +441,12 @@ float(float melee) ryu_step = {
         ryu_tilt (self.lefty, self.speed);
         dist = ryu_slide_speed (self.speed);
         // Call 'ai_face' before (done above)...
-        ai_run_bank (dist); // PM replaced 'ai_run_circle (self.speed);' with new bank code.
-        ai_face (); // ...AND after the move function to circlestrafe.
+        ai_run_bank(dist); // PM replaced 'ai_run_circle (self.speed);' with new bank code.
+        ai_face(); // ...AND after the move function to circlestrafe.
         return FALSE;
     }
 
-    ryu_untilt (); // Undo any angle changes due to evasion.
+    ryu_untilt(); // Undo any angle changes due to evasion.
     return TRUE; // Proceed forward.
 };
 
@@ -497,13 +499,11 @@ float(float yaw, float dist) Wyrm_WalkMove = {
     move_box.owner      = self;         // So box can pass through owner.
 	// Splash sound control.  Synchronize builtin water values with the dragon's.  Otherwise, any time the dragon is underwater, Quake will think the
 	// hull box enters water when it moves, resulting in repeating splash sounds each frame.
-    move_box.h2olevel = self.h2olevel;
+    move_box.waterlevel = self.waterlevel;
     move_box.watertype  = self.watertype;
     swap = self;
     self = move_box;
-
-	// Check if the dragon could move at all.  Use the move box to test the move.  This checks the SW corner.
-    if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;}
+    if (!Ryu_WalkMove (yaw, dist)) {self = swap; return FALSE;} // Check if the dragon could move at all.  Use the move box to test the move.  This checks the SW corner.
 
     flat = FALSE;
     up = self.origin_z; // Remember this!  All movement must have the same elevation.

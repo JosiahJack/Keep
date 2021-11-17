@@ -288,48 +288,40 @@ void() steelc_die = {
 	}
 };
 
-// QUAKED monster_steelclaw (1 0 0) (-16 -16 -24) (16 16 24) Ambush
-void() monster_steelclaw = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/mon_steelclaw.mdl";
-	self.headmdl = "progs/h_steelclaw.mdl";		// Front Jaws
-	self.gib1mdl = "progs/gib_steelleg.mdl";	// Single Leg
-	self.gib2mdl = "progs/gib_steelbody.mdl";	// Back Body
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-
-	// Head/Body and Special GIB models
-	self.gib1frame = 9;
-
-	// IDLE/COMBAT and SIGHT sounds
-	self.idle_sound = "ad171/scorpion/idle1.wav";
-	self.idle_sound2 = "ad171/scorpion/idle2.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-
-	// death/pain/attack sounds
-	self.pain_sound = "ad171/scorpion/pain1.wav";
-	self.pain_sound2 = "ad171/scorpion/pain2.wav";
-	precache_sound(self.pain_sound);
-	precache_sound(self.pain_sound2);
-	self.death_sound = "drake/spider/death.wav";
-	precache_sound(self.death_sound);
-
+void() monster_steelclaw_precache = {
+	precache_model ("progs/ad181/mon_steelclaw.mdl");
+	precache_model ("progs/ad181/h_steelclaw.mdl");
+	precache_model ("progs/ad181/gib_steelleg.mdl");
+	precache_model ("progs/ad181/gib_steelbody.mdl");
+	precache_sound ("ad171/scorpion/idle1.wav");
+	precache_sound ("ad171/scorpion/idle2.wav");
+	precache_sound("ad171/scorpion/pain1.wav");
+	precache_sound("ad171/scorpion/pain2.wav");
+	precache_sound("drake/spider/death.wav");
 	precache_sound("ad171/spider/attackmunch.wav");
 	precache_sound("ad171/spider/attacktear.wav");
 	precache_sound("ad171/scorpion/jumpattack1.wav");
 	precache_sound("ad171/scorpion/jumpattack2.wav");
 	precache_sound("ad171/scorpion/jumphit.wav");
 	precache_sound("ad171/scorpion/jumpland.wav");
-	
-	self.sight_sound = "ad171/scorpion/sight1.wav";
-	precache_sound (self.sight_sound);
+	precache_sound ("ad171/scorpion/sight1.wav");
+};
 
+// QUAKED monster_steelclaw (1 0 0) (-16 -16 -24) (16 16 24) Ambush
+void() monster_steelclaw = {
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/ad181/mon_steelclaw.mdl";
+	self.headmdl = "progs/ad181/h_steelclaw.mdl";		// Front Jaws
+	self.gib1mdl = "progs/ad181/gib_steelleg.mdl";	// Single Leg
+	self.gib2mdl = "progs/ad181/gib_steelbody.mdl";	// Back Body
+	self.gib1frame = 9; // Head/Body and Special GIB models
+	self.idle_sound = "ad171/scorpion/idle1.wav"; // IDLE/COMBAT and SIGHT sounds
+	self.idle_sound2 = "ad171/scorpion/idle2.wav";
+	self.pain_sound = "ad171/scorpion/pain1.wav"; // death/pain/attack sounds
+	self.pain_sound2 = "ad171/scorpion/pain2.wav";
+	self.death_sound = "drake/spider/death.wav";
+	self.sight_sound = "ad171/scorpion/sight1.wav";
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TINY;
@@ -365,10 +357,8 @@ void() monster_steelclaw = {
 	self.th_jumpexit = steelc_leap9;
 	self.th_pain = steelc_pain;
 	self.th_die = steelc_die;
-	
 	self.classtype = CT_MONSTEELCLAW;
 	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEWALK;
-
 	monster_start();
 };

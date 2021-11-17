@@ -369,34 +369,31 @@ void() wolf_die = {
 	}
 };
 
-// QUAKED monster_wolf (1 0 0) (-128 -128 -24) (128 128 128) Ambush
-void() monster_wolf = {
-	if (deathmatch) { remove(self); return; }
-
-	self.mdl = "progs/redfield/mon_wolf.mdl";
-	precache_model (self.mdl);
-
+void() monster_wolf_precache = {
+	precache_model ("progs/redfield/mon_wolf.mdl");
 	precache_model (MODEL_PROJ_MOONSWORD);
 	precache_model (MODEL_BLUR_WOLF);
-
-	self.idle_sound = "redfield/wolf/snarl.wav";
-	precache_sound (self.idle_sound);
-
+	precache_model (SEXP_ICE_BIG);		// Shard impact (ne_ruin)
+	precache_sound ("redfield/wolf/snarl.wav");
 	precache_sound ("redfield/wolf/moonsword.wav");
 	precache_sound ("redfield/wolf/sword_spin.wav");
 	precache_sound ("redfield/wolf/sword_slash.wav");
+	precache_sound ("redfield/wolf/w_pain.wav");
+	precache_sound ("redfield/wolf/d_howl.wav");
+	precache_sound ("redfield/wolf/s_howl.wav");
+	precache_sound ("drake/weapons/plasma1.wav");
+};
 
+// QUAKED monster_wolf (1 0 0) (-128 -128 -24) (128 128 128) Ambush
+void() monster_wolf = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/redfield/mon_wolf.mdl";
+	self.idle_sound = "redfield/wolf/snarl.wav";
 	self.pain_sound = "redfield/wolf/w_pain.wav";
-	precache_sound (self.pain_sound);
 	self.death_sound = "redfield/wolf/d_howl.wav";
-	precache_sound (self.death_sound);
-
 	self.sight_sound = "redfield/wolf/s_howl.wav";
-	precache_sound (self.sight_sound);
-	precache_sound ("drake/weapons/plasmal.wav");
-
-	precache_model (SEXP_ICE_BIG);		// Shard impact (ne_ruin)
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_MASSIVE;
@@ -434,6 +431,5 @@ void() monster_wolf = {
 	self.classgroup = CG_BOSS;
 	self.classtype = CT_MONWOLF;
 	self.classmove = MON_MOVEWALK;
-	
 	monster_start();
 };

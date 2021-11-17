@@ -275,6 +275,8 @@ void(entity inflictor, entity attacker, float damage) enf_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
+
+
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		self.lip = random ();
@@ -334,12 +336,24 @@ void()	enf_fdie11	=[	$fdeath11,	enf_fdie11	] {monster_deadbody_check();};
 void()	lth_fdie1;
 
 void() enf_die = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	local float r;
+	
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// regular death
 	if (!self.gibbed) {
-		sound (self, CHAN_VOICE, "enforcer/death1.wav", 1, ATTN_NORM);
+		if (self.classtype == CT_MONENF_ULTRA) {
+			r = random();
+			if (r < 0.333)		sound (self, CHAN_VOICE, "lunaran/enforcer/ue_die1.wav", 1, ATTN_NORM);
+			else if (r < 0.666)	sound (self, CHAN_VOICE, "lunaran/enforcer/ue_die2.wav", 1, ATTN_NORM);
+			else 				sound (self, CHAN_VOICE, "lunaran/enforcer/ue_die3.wav", 1, ATTN_NORM);
+		} else if (self.classtype == CT_MONENF_GUNNER) {
+			if (random() < 0.5)	sound (self, CHAN_VOICE, "drake/gunner/death1.wav", 1, ATTN_NORM);
+			else				sound (self, CHAN_VOICE, "drake/gunner/death2.wav", 1, ATTN_NORM);
+		} else {
+			sound (self, CHAN_VOICE, "enforcer/death1.wav", 1, ATTN_NORM);
+		}
+
 		if (self.classtype == CT_MONSUPERENFORCER) {
 			if (self.spawnflags & ENFORCER_LAVANG) DropWeapon(MODEL_GWEAP_LSNG,IT_LAVA_SUPER_NAILGUN,CT_LAVASNG);
 			else DropWeapon(MODEL_GWEAP_SNG,IT_SUPER_NAILGUN,CT_SUPER_NAILGUN);
@@ -352,17 +366,93 @@ void() enf_die = {
 	}
 };
 
+void() monster_enforcer_precache = {
+	precache_model(MODEL_PROJ_LASER);	// Originally - progs/laser.mdl
+	precache_model("progs/enforcer.mdl");
+	precache_model("progs/h_mega.mdl");
+	precache_model("progs/laser.mdl");
+	precache_model("progs/travail/laser2.mdl");
+	precache_model("progs/k_spike.mdl");
+	precache_model("progs/missile.mdl");
+	precache_model("progs/qmaster/mon_enforcer.mdl"); // Merged all the skins together
+	precache_model("progs/qmaster/h_enforcer.mdl");  // Merged all the skins together
+	precache_model("progs/ad171/w_enforcergun.mdl");
+	precache_model(MODEL_PROJ_GRENADE);
+	precache_model(MODEL_PROJ_PLASMA);
+	precache_model("progs/s_spike.mdl");
+	precache_model(MODEL_GWEAP_SNG);
+	precache_model(MODEL_GWEAP_LSNG);
+	precache_model("progs/ad171/g_nail2.mdl");
+	precache_model("progs/lieutenant/enforce2.mdl");
+	precache_model("progs/h_mega.mdl");
+	precache_sound("enforcer/death1.wav");
+	precache_sound(SOUND_LASER_FIRE);
+	precache_sound(SOUND_LASER_HIT);
+	precache_sound("enforcer/idle1.wav");
+	precache_sound("enforcer/pain1.wav");
+	precache_sound("enforcer/pain2.wav");
+	precache_sound("enforcer/sight1.wav");
+	precache_sound("enforcer/sight2.wav");
+	precache_sound("enforcer/sight3.wav");
+	precache_sound("enforcer/sight4.wav");
+	precache_sound("lunaran/enforcer/me_fire1.wav");
+	precache_sound("zerstorer/weapons/rocket1i.wav");
+	precache_sound("items/protect3.wav");
+	precache_sound("lunaran/enforcer/ue_die1.wav");
+	precache_sound("lunaran/enforcer/ue_die2.wav");
+	precache_sound("lunaran/enforcer/ue_die3.wav");
+	precache_sound("lunaran/enforcer/ue_site1.wav");
+	precache_sound("lunaran/enforcer/ue_site2.wav");
+	precache_sound("lunaran/enforcer/ue_site3.wav");
+	precache_sound("lunaran/enforcer/ue_site4.wav");
+	precache_sound("lunaran/enforcer/ue_site5.wav");
+	precache_sound("lunaran/enforcer/ue_pain1.wav");
+	precache_sound("lunaran/enforcer/ue_pain2.wav");
+	precache_sound("lunaran/enforcer/ue_pain3.wav");
+	precache_sound("enforcer/sight1.wav");
+	precache_sound("enforcer/sight2.wav");
+	precache_sound("enforcer/sight3.wav");
+	precache_sound("enforcer/sight4.wav");
+	precache_sound(SOUND_LASER_FIRE); // Projectile fire and impact (used in projectiles)
+	precache_sound(SOUND_LASER_HIT);
+	precache_sound("quoth/defender/breathe.wav");
+	precache_sound("quoth/defender/blip.wav");
+	precache_sound("quoth/defender/sight1.wav");
+	precache_sound("quoth/defender/sight2.wav");
+	precache_sound("quoth/defender/sight3.wav");
+	precache_sound("quoth/defender/sight4.wav");
+	precache_sound("quoth/defender/ssgcock.wav"); // Extra load/fire sounds (from Quoth MOD)
+	precache_sound("quoth/defender/ssgfire.wav");
+	precache_sound("quoth/eliminator/idle1.wav");
+	precache_sound("quoth/eliminator/idle2.wav");
+	precache_sound("quoth/eliminator/idle3.wav");
+	precache_sound("quoth/eliminator/sight.wav");
+	precache_sound("ad171/enforcer/elim_pg_load.wav"); // Extra load/fire sounds (from Quoth MOD)
+	precache_sound(SOUND_PLASMA_FIRE);
+	precache_sound(SOUND_PLASMA_HIT);
+	precache_sound("enforcer/pain1.wav");
+	precache_sound("enforcer/pain2.wav");
+	precache_sound("enforcer/sight1.wav");
+	precache_sound("enforcer/sight2.wav");
+	precache_sound("enforcer/sight3.wav");
+	precache_sound("enforcer/sight4.wav");
+	precache_sound("enforcer/death1.wav");
+    precache_sound ("drake/gunner/death1.wav");
+    precache_sound ("drake/gunner/death2.wav");
+    precache_sound ("drake/gunner/idle.wav");
+    precache_sound ("drake/gunner/pain1.wav");
+    precache_sound ("drake/gunner/pain2.wav");
+    precache_sound ("drake/gunner/sight.wav");
+    precache_sound ("drake/weapons/dsshotgn.wav");    // Doom shotgun sound.
+};
+
 // QUAKED monster_enforcer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_base_enforcer = {
 	local float r;
 	
-	if (!self.mdl) self.mdl = "progs/mon_enforcer.mdl";
-	if (!self.headmdl) self.headmdl = "progs/h_enforcer.mdl";
+	if (!self.mdl) self.mdl = "progs/qmaster/mon_enforcer.mdl";
+	if (!self.headmdl) self.headmdl = "progs/qmaster/h_enforcer.mdl";
 	if (!self.gib1mdl) self.gib1mdl = "progs/ad171/w_enforcergun.mdl";	// Unique weapon
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
-	
 	if (self.classtype == CT_MONENF_ULTRA) {
 		self.pain_sound = "lunaran/enforcer/ue_pain1.wav";
 		r = random();
@@ -371,8 +461,8 @@ void() monster_base_enforcer = {
 		else
 			self.pain_sound2 = "lunaran/enforcer/ue_pain3.wav";
 	} else {
-		self.pain_sound = "enforcer/pain1.wav";
-		self.pain_sound2 = "enforcer/pain2.wav";
+		if (self.pain_sound == "") self.pain_sound = "enforcer/pain1.wav";
+		if (self.pain_sound2 == "") self.pain_sound2 = "enforcer/pain2.wav";
 	}
 	if (!self.gib1sound) self.gib1sound = GIB_IMPACT_WOOD;
 	self.solid = SOLID_NOT;
@@ -414,44 +504,10 @@ void() monster_base_enforcer = {
 void enforcer_spawnshieldfx();
 
 void() monster_enforcer = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	if (!self.classtype) self.classtype = CT_MONENFORCER;
-	precache_model (MODEL_PROJ_LASER);	// Originally - progs/laser.mdl
-	precache_model ("progs/enforcer.mdl");
-	precache_model ("progs/h_mega.mdl");
-	precache_model ("progs/laser.mdl");
-	precache_model ("progs/travail/laser2.mdl");
-	precache_model ("progs/k_spike.mdl");
-	precache_model ("progs/missile.mdl");
-	precache_sound ("enforcer/death1.wav");
-	precache_sound (SOUND_LASER_FIRE);
-	precache_sound(SOUND_LASER_HIT);
-	precache_sound ("enforcer/idle1.wav");
-	precache_sound ("enforcer/pain1.wav");
-	precache_sound ("enforcer/pain2.wav");
-	precache_sound ("enforcer/sight1.wav");
-	precache_sound ("enforcer/sight2.wav");
-	precache_sound ("enforcer/sight3.wav");
-	precache_sound ("enforcer/sight4.wav");
-	precache_sound ("lunaran/enforcer/me_fire1.wav");
-	precache_sound ("zerstorer/weapons/rocket1i.wav");
-	precache_sound ("items/protect3.wav");
-	precache_sound ("lunaran/enforcer/ue_die1.wav");
-	precache_sound ("lunaran/enforcer/ue_die2.wav");
-	precache_sound ("lunaran/enforcer/ue_die3.wav");
-	precache_sound ("lunaran/enforcer/ue_site1.wav");
-	precache_sound ("lunaran/enforcer/ue_site2.wav");
-	precache_sound ("lunaran/enforcer/ue_site3.wav");
-	precache_sound ("lunaran/enforcer/ue_site4.wav");
-	precache_sound ("lunaran/enforcer/ue_site5.wav");
-	precache_sound ("lunaran/enforcer/ue_pain1.wav");
-	precache_sound ("lunaran/enforcer/ue_pain2.wav");
-	precache_sound ("lunaran/enforcer/ue_pain3.wav");
-
 	if (self.spawnflags & ULTRA_ENF) {
 		if (self.health < 1) self.health = 400;
 		self.skin = 12;
@@ -480,95 +536,101 @@ void() monster_enforcer = {
 	if (!self.sight_sound2) self.sight_sound2 = "enforcer/sight2.wav";
 	if (!self.sight_sound3) self.sight_sound3 = "enforcer/sight3.wav";
 	if (!self.sight_sound4) self.sight_sound4 = "enforcer/sight4.wav";
-	precache_sound ("enforcer/sight1.wav");
-	precache_sound ("enforcer/sight2.wav");
-	precache_sound ("enforcer/sight3.wav");
-	precache_sound ("enforcer/sight4.wav");
-
-	// Projectile fire and impact (used in projectiles)
-	precache_sound (SOUND_LASER_FIRE);
-	precache_sound (SOUND_LASER_HIT);
-	
-	//self.th_missile = enf_atk1;
 	if (!self.th_missile) self.th_missile = enforcer_attack;
-
 	monster_base_enforcer();
 };
 
 void() monster_defender = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.classtype = CT_MONDEFENDER;
-	precache_model (MODEL_PROJ_GRENADE);
-
 	if (self.health < 1) self.health = 100;
 	self.ammo_shells = rint(4 + random()*4);
 	self.exactskin = 3 + rint((random()*3)-0.5);
 	self.gib1skin = 1;
-
 	self.idle_sound = "quoth/defender/breathe.wav";
 	self.idle_sound2 = "quoth/defender/blip.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
 	self.sight_sound = "quoth/defender/sight1.wav";
-	if (!self.sight_sound2) self.sight_sound2 = "quoth/defender/sight2.wav";
-	if (!self.sight_sound3) self.sight_sound3 = "quoth/defender/sight3.wav";
-	if (!self.sight_sound4) self.sight_sound4 = "quoth/defender/sight4.wav";
-	precache_sound (self.sight_sound);
-	precache_sound (self.sight_sound2);
-	precache_sound (self.sight_sound3);
-	precache_sound (self.sight_sound4);
-
-	// Extra load/fire sounds (from Quoth MOD)
-	precache_sound ("quoth/defender/ssgcock.wav");
-	precache_sound ("quoth/defender/ssgfire.wav");
-	
+	self.sight_sound2 = "quoth/defender/sight2.wav";
+	self.sight_sound3 = "quoth/defender/sight3.wav";
+	self.sight_sound4 = "quoth/defender/sight4.wav";
 	self.th_missile = def_atkgl1;
 	self.th_melee = def_atkssg1;
 	self.th_checkattack = DefenderCheckAttack;
 	// Grenade bounce off body
 	self.bouncegrenade = TRUE;
 	if (self.deathstring == "")  self.deathstring = " was destroyed by a Defender\n";
-
 	monster_base_enforcer();
 };
 
-void() monster_eliminator = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-	
-	self.classtype = CT_MONELIMATOR;
-	precache_model (MODEL_PROJ_PLASMA);
+void() gunner_chaingun = {
+    local vector p1, p2;
 
+    makevectors(self.angles);
+    p1 = self.origin + (v_forward*12) + (v_right*8.5) + (v_up*16);
+    p2 = Midpoint(self.enemy);
+    M_FireChaingun(p1, p2, self.enemy, '0 0 0');
+};
+
+// Chaingun, Doom2 style
+void() gunner_gun1  =[ $attack6,  gunner_gun2  ] {ai_face(); gunner_chaingun();};
+void() gunner_gun2  =[ $attack4,  gunner_gun1  ] {ai_face(); gunner_chaingun(); M_Break(enf_run1);};
+
+// QUAKED monster_gunner (1 0 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_gunner = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.classtype = CT_MONENF_GUNNER;
+	if (self.health < 1) self.health = 70; // PM:  Chaingunners had 70 health in Doom2.
+	self.pain_flinch = 30; // Gunners shrug off pain more easily than standard enforcers.
+    self.mass       = MASS_MEDIUM;
+    self.exactskin  = 13; // Bare face and arms, bloodied
+	self.gib1skin = 13;
+	self.idle_sound = "drake/gunner/idle.wav";
+    self.sight_sound = "drake/gunner/sight.wav";
+    self.hello_sound = "drake/gunner/idle.wav";
+    self.pain_sound = "drake/gunner/pain1.wav";
+    self.pain_sound2= "drake/gunner/pain2.wav";
+    self.th_missile = gunner_gun1;
+	if (self.deathstring == "") {
+		if (random() < 0.5)	self.deathstring = " was perforated by a Chaingunner\n";
+		else				self.deathstring = " was outgunned by a Gunner\n";
+	}
+    monster_base_enforcer();
+};
+
+// The Quoth Eliminator
+void() monster_eliminator = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+	 
+	self.classtype = CT_MONELIMATOR;
 	if (self.health < 1) self.health = 120;
 	self.ammo_cells = rint(2 + random()*2);
 	self.exactskin = 6 + rint((random()*3)-0.5);
 	self.gib1skin = 2;
-
 	self.idle_sound = "quoth/eliminator/idle1.wav";
 	self.idle_sound2 = "quoth/eliminator/idle2.wav";
 	self.idle_soundcom = "quoth/eliminator/idle3.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-	precache_sound (self.idle_soundcom);
 	self.sight_sound = "quoth/eliminator/sight.wav";
-	precache_sound (self.sight_sound);
-
-	// Extra load/fire sounds (from Quoth MOD)
-	precache_sound ("ad171/enforcer/elim_pg_load.wav");
-	precache_sound (SOUND_PLASMA_FIRE);
-	precache_sound (SOUND_PLASMA_HIT);
-	
 	self.th_missile = elim_atk1;
 	self.th_checkattack = EliminatorCheckAttack;
-	if (self.deathstring == "")  self.deathstring = " was assasinated by a Eliminator\n";
-
+	if (self.deathstring == "")  self.deathstring = " was eliminated by an Eliminator\n";
 	monster_base_enforcer();
+};
+
+// Drake's implementation of the Quoth Eliminator
+void() monster_commando = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	if (self.health < 1) self.health = 160; // More health yikes!
+	self.exactskin = 15;
+	if (self.deathstring == "")  self.deathstring = " was eliminated by an Commando\n";
+	self.classname = "monster_eliminator";
+	monster_eliminator();
 };
 
 void() army_nailfire;
@@ -623,16 +685,10 @@ void()	lth_fdie11	=[	49,	lth_fdie11	] {monster_deadbody_check();};
 
 // Lieutant Enforcer from back2forwards by the Lieutenant
 void() monster_super_enforcer = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.classtype = CT_MONSUPERENFORCER;
-	precache_model ("progs/s_spike.mdl");
-	precache_model (MODEL_GWEAP_SNG);
-	precache_model (MODEL_GWEAP_LSNG);
-	precache_model ("progs/ad171/g_nail2.mdl");
 	// We drop the super nailgun on death :)
 	if (world.devdata & DEV_AMMO_N_HEALTH && self.spawnflags & ENFORCER_LAVANG) world.deventity.ammo_lava_nails = world.deventity.ammo_lava_nails + AMMO_LAVA_NAILS_WPN;
 	else if (world.devdata & DEV_AMMO_N_HEALTH)  world.deventity.ammo_nails = world.deventity.ammo_nails + AMMO_NAILS_WPN;
@@ -652,25 +708,15 @@ void() monster_super_enforcer = {
 		self.ammo_nails = rint(2 + random()*2);
 	}
 
-	precache_sound ("enforcer/pain1.wav");
-	precache_sound ("enforcer/pain2.wav");
-	precache_sound ("enforcer/sight1.wav");
-	precache_sound ("enforcer/sight2.wav");
-	precache_sound ("enforcer/sight3.wav");
-	precache_sound ("enforcer/sight4.wav");
-	precache_sound ("enforcer/death1.wav");
-	precache_model ("progs/lieutenant/enforce2.mdl");
 	self.headmdl = "progs/h_mega.mdl";
 	self.mdl = "progs/lieutenant/enforce2.mdl";
-	precache_model ("progs/h_mega.mdl");
-
 	self.th_stand 	= enf_stand1;
 	self.th_walk 	= lth_walk1;
 	self.th_run 	= lth_run1;
 	self.gibhealth = MON_NEVERGIB;
 	self.th_missile = lth_atk1;
-
 	if (self.deathstring == "")  self.deathstring = " was nailed by a Lieutenant Enforcer\n";
-
 	monster_base_enforcer();
 };
+
+void() monster_ultra = { self.spawnflags = self.spawnflags | ULTRA_ENF; monster_enforcer(); }; // Drake's commented out implementation of the Lieutenant's Ultra Enforcer.

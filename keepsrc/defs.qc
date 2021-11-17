@@ -222,10 +222,12 @@ vector	VEC_HULLE_MIN = '-2 -2 -2'; // Minion Eggs = Scorpions, Spiders and Vorel
 vector	VEC_HULLE_MAX = '2 2 2';
 vector	VEC_HULLT_MIN = '-24 -24 0';
 vector	VEC_HULLT_MAX = '24 24 40';
-vector	VEC_HULLSHORT_MIN = '-16 -16 -24'; // Player
-vector	VEC_HULLSHORT_MAX = '16 16 32';
+vector	VEC_HULL_MIN = '-16 -16 -24';
+vector	VEC_HULL_MAX = '16 16 32';
 vector	VEC_HULL2_MIN = '-32 -32 -24'; // Original ID Ogre, Shalrath, Demon, Shambler
 vector	VEC_HULL2_MAX = '32 32 64';
+vector	VEC_ITEM_MIN = '-16 -16 0';
+vector	VEC_ITEM_MAX = '16 16 56';
 float	SVC_DISCONNECT		= 2;	// Mainly used in client.qc
 float	SVC_UPDATESTAT		= 3;	// Force update of stats
 float	SVC_SETVIEW			= 5;	// Set camera viewpoint entity
@@ -530,7 +532,7 @@ void() SUB_UseTargets;
 void() SUB_Remove;
 float(float regbitflag) query_configflag;
 float(float regbitflag) query_temp1flag;
-void(float defvol) trigger_bmodel_volume;
+void(float defvol) SUB_BoundVolume;
 void() trigger_bmodel_sounds;
 void() trigger_bmodel_setup;
 float() check_bmodel_keys;

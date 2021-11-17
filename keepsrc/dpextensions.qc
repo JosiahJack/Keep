@@ -1849,7 +1849,7 @@ void(vector mincorner, vector maxcorner, vector vel, float howmany, float color,
 //vector velocity
 //short count
 //byte color (palette color)
-//byte gravity (TRUE or FALSE, FIXME should this be a scaler instead?)
+//byte gravity (TRUE or FALSE)
 //coord randomvel (how much to jitter the velocity)
 //description:
 //creates a cloud of particles, useful for forcefields but quite customizable.
@@ -2131,8 +2131,8 @@ string(float n) argv = #442;
 //idea: Nexuiz
 //darkplaces implementation: Black
 //console commands:
-//playermodel <name> - FIXME: EXAMPLE NEEDED
-//playerskin <name> - FIXME: EXAMPLE NEEDED
+//playermodel <name>
+//playerskin <name>
 //field definitions:
 .string playermodel; // name of player model sent by client
 .string playerskin; // name of player skin sent by client

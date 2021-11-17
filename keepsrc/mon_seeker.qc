@@ -649,80 +649,68 @@ void() seek_wakeup = {
 	monster_targets();					// Check for targets
 };
 
+void() monster_seeker_precache = {
+	precache_model ("progs/ad171/mon_seeker.mdl");
+	precache_model ("progs/ad171/h_seeker.mdl");
+	precache_model ("progs/ad171/mon_seeker_glow.mdl");	// Glowing blue shield
+	precache_model ("progs/ad171/gib_seekchunk.mdl");		// gib chunks
+	precache_model ("progs/ad171/gib_seekarm.mdl");		// Arms
+	precache_model ("progs/ad171/gib_metal1.mdl");		// Generic metal1_2
+	precache_model ("progs/ad171/gib_metal3.mdl");		// Generic metal1_2
+	precache_model (MODEL_PROJ_LASER); // Range attack 2 - lasers
+	precache_model (MODEL_PROJ_PLASMA); // Range attack 3 - plasma
+	precache_model ("progs/ad171/misc_spark.mdl");
+	precache_sound ("ad171/seeker/idle1.wav");
+	precache_sound ("ad171/seeker/idle2.wav");
+	precache_sound ("ad171/seeker/pain1.wav");
+	precache_sound ("ad171/seeker/pain2.wav");
+	precache_sound ("ad171/seeker/death1.wav");
+	precache_sound ("quoth/bob/s_explode.wav");
+	precache_sound ("ad171/seeker/explode_major.wav");
+	precache_sound ("ad171/ambience/power_off.wav"); // Power off sound for shield setup
+	precache_sound("quoth/soldier/load.wav"); // Range attack 1 - rockets
+	precache_sound("quoth/soldier/rocket.wav");
+	precache_sound("ad171/soldier/rocket_hit.wav");
+	precache_sound("ad171/seeker/range_laser.wav");
+	precache_sound (SOUND_LASER_FIRE);
+	precache_sound (SOUND_LASER_HIT);
+	precache_sound ("ad171/seeker/range_plasma.wav");
+	precache_sound (SOUND_PLASMA_FIRE);
+	precache_sound (SOUND_PLASMA_HIT);
+	precache_sound ("ad171/seeker/melee1.wav"); // Melee attack - giant punch
+	precache_sound ("ad171/seeker/punch1.wav");
+	precache_sound ("ad171/misc/spark.wav");
+	precache_sound ("ad171/seeker/sight1.wav");
+	precache_sound ("ad171/seeker/footstep1.wav");
+	precache_sound ("ad171/seeker/footstep2.wav");
+	precache_sound ("ad171/seeker/footstep3.wav");
+};
 
 // QUAKED monster_seeker (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 void() monster_seeker = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_seeker.mdl";
 	self.headmdl = "progs/ad171/h_seeker.mdl";
 	self.weaponglow = "progs/ad171/mon_seeker_glow.mdl";
-	// 4 poses 0=generic blob, 1=generic square, 2=generic blob2, 3=arm
-	self.gib1mdl = "progs/ad171/gib_seekchunk.mdl";	// types 0-2
-	self.gib2mdl = "progs/ad171/gib_seekarm.mdl";		// arm only
-	self.gib3mdl = "progs/ad171/gib_metal1.mdl";		// Breakable metal
-	self.gib4mdl = "progs/ad171/gib_metal3.mdl";		// Breakable metal
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.weaponglow);	// Glowing blue shield
-	precache_model (self.gib1mdl);		// gib chunks
-	precache_model (self.gib2mdl);		// Arms
-	precache_model (self.gib3mdl);		// Generic metal1_2
-	precache_model (self.gib4mdl);		// Generic metal1_2
-	self.gib1frame = 2;					// 3 frames choose from
-	self.gibtype = GIBTYPE_METAL;		// Metal impact sounds
-	
+	// 
+	self.gib1mdl = "progs/ad171/gib_seekchunk.mdl";	// 4 poses 0=generic blob, 1=generic square, 2=generic blob2, 3=arm: types 0-2
+	self.gib2mdl = "progs/ad171/gib_seekarm.mdl";	// arm only
+	self.gib3mdl = "progs/ad171/gib_metal1.mdl";	// Breakable metal
+	self.gib4mdl = "progs/ad171/gib_metal3.mdl";	// Breakable metal
+	self.gib1frame = 2;								// 3 frames choose from
+	self.gibtype = GIBTYPE_METAL;					// Metal impact sounds
 	self.idle_sound = "ad171/seeker/idle1.wav";
 	self.idle_sound2 = "ad171/seeker/idle2.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-
 	self.pain_sound = "ad171/seeker/pain1.wav";
 	self.pain_sound2 = "ad171/seeker/pain2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-
-	precache_sound ("ad171/seeker/death1.wav");
-	precache_sound ("quoth/bob/s_explode.wav");
-	precache_sound ("ad171/seeker/explode_major.wav");
-	// Power off sound for shield setup
-	precache_sound ("ad171/ambience/power_off.wav");
-	
-	// Range attack 1 - rockets
-	precache_sound("quoth/soldier/load.wav");
-	precache_sound("quoth/soldier/rocket.wav");
-	precache_sound("ad171/soldier/rocket_hit.wav");
-	// Range attack 2 - lasers
-	precache_model (MODEL_PROJ_LASER);
-	precache_sound("ad171/seeker/range_laser.wav");
-	precache_sound (SOUND_LASER_FIRE);
-	precache_sound (SOUND_LASER_HIT);
-	// Range attack 3 - plasma
-	precache_model (MODEL_PROJ_PLASMA);
-	precache_sound ("ad171/seeker/range_plasma.wav");
-	precache_sound (SOUND_PLASMA_FIRE);
-	precache_sound (SOUND_PLASMA_HIT);
-
-	// Melee attack - giant punch
-	precache_sound ("ad171/seeker/melee1.wav");
-	precache_sound ("ad171/seeker/punch1.wav");
-	
-	// Sparking from broken arm
-	self.noise2 = "progs/ad171/misc_spark.mdl";
+	self.noise2 = "progs/ad171/misc_spark.mdl"; 	// Sparking from broken arm
 	self.noise3 = "ad171/misc/spark.wav";
-	precache_model (self.noise2);
-	precache_sound (self.noise3);
-	
 	self.sight_sound = "ad171/seeker/sight1.wav";
-	precache_sound (self.sight_sound);
 
 	// Check for any custom arm setups
-	if (self.state < SEEKER_ARMS_LEFT || self.state > SEEKER_ARMS_RIGHT)
-		self.state = SEEKER_ARMS_BOTH;	// Both arms are active
+	if (self.state < SEEKER_ARMS_LEFT || self.state > SEEKER_ARMS_RIGHT) self.state = SEEKER_ARMS_BOTH;	// Both arms are active
 
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
@@ -755,19 +743,13 @@ void() monster_seeker = {
 	self.stepc3 = "ad171/seeker/footstep1.wav";
 	self.stepc4 = "ad171/seeker/footstep2.wav";
 	self.stepc5 = "ad171/seeker/footstep3.wav";
-	precache_sound (self.stepc1);
-	precache_sound (self.stepc2);
-	precache_sound (self.stepc3);
-	precache_sound (self.stepc4);
-	precache_sound (self.stepc5);
 	self.steptype = FS_TYPECUSTOM;
     self.hittype    = HIT_METAL;
 
 	if (self.spawnflags & MON_SEEK_SHIELD) {
 		self.th_stand = seek_shield;	// Setup Shield
 		self.think1 = seek_wakeup;		// Wakeup function when triggered
-	}
-	else {
+	} else {
 		self.th_stand = seek_stand;
 		self.th_walk = seek_walk;
 		self.th_run = seek_run;
@@ -785,6 +767,5 @@ void() monster_seeker = {
 	self.classtype = CT_MONSEEKER;
 	self.classgroup = CG_ROBOT;
 	self.classmove = MON_MOVEWALK;
-	
 	monster_start();
 };

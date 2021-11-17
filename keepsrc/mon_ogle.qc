@@ -463,8 +463,7 @@ void() ogle_death13 = [253, ogle_death14	] {monster_death_postcheck();};
 void() ogle_death14 = [254, ogle_death14	] {monster_deadbody_check();};
 
 void() ogle_die = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	if (!self.gibbed) { 
 		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
@@ -472,14 +471,8 @@ void() ogle_die = {
 	}
 };
 
-void() monster_ogle =  {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/heretic2/mon_ogle.mdl";
-	precache_model (self.mdl);
+void() monster_ogle_precache =  {
+	precache_model ("progs/heretic2/mon_ogle.mdl");
 	precache_sound ("ogle/cheer1.wav");
 	precache_sound ("ogle/cheer2.wav");
 	precache_sound ("ogle/cheer3.wav");
@@ -492,24 +485,27 @@ void() monster_ogle =  {
 	precache_sound ("ogle/spike2.wav");
 	precache_sound ("ogle/hammerflesh.wav");
 	precache_sound ("ogle/wipebrow.wav");
+	precache_sound ("ogle/enrage1.wav");
+	precache_sound ("ogle/enrage2.wav");
+	precache_sound ("ogle/death.wav");
+	precache_sound ("ogle/oglemoan1.wav");
+	precache_sound ("ogle/oglemoan2.wav");
+	precache_sound ("knight/sword1.wav");
+};
 
+void() monster_ogle =  {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
+
+	self.mdl = "progs/heretic2/mon_ogle.mdl";
 	self.sight_sound = "ogle/enrage1.wav";
 	self.sight_sound2 = "ogle/enrage2.wav";
-	precache_sound (self.sight_sound);
-	precache_sound (self.sight_sound2);
-
 	self.death_sound = "ogle/death.wav";
-	precache_sound (self.death_sound);
-
 	self.pain_sound = "ogle/oglemoan1.wav";
 	self.pain_sound2 = "ogle/oglemoan2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-
 	self.meleehitsound = "ogle/pickflesh.wav";
-
-	precache_sound ("knight/sword1.wav");
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_FISH;

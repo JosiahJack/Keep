@@ -66,68 +66,6 @@ float() ai_face_last =
 	ChangeYaw ();
 	return FALSE;
 };
-/*
-void() SpawnSGruntMuzzleFlash =
-{
-	local entity new;
-
-	new = spawn();
-
-	new.owner = self;
-
-	new.cnt = 0;	// used to keep track of positioning
-
-	new.solid = SOLID_NOT;
-	new.movetype = MOVETYPE_NONE;
-	new.angles = self.angles;
-
-	new.think = SUB_Remove;		// just in case it gets left behind
-	new.nextthink = time + 0.2;
-
-	setmodel(new, "progs/kinn/sgrflash.mdl");
-	setsize(new, '0 0 0', '0 0 0');
-	setorigin(new, self.origin);
-
-	self.trigger_field = new;	// for want of a better variable
-};
-
-void() SGruntMuzzleFlash =
-{
-	local float f, f1;
-	local vector ofs;
-	local entity t;
-
-	t = self.trigger_field;
-	f = t.cnt;
-
-	makevectors(self.angles);
-
-	ofs = v_forward*36;	
-
-	if (f == 0)
-		ofs = ofs + v_right*9 + '0 0 24';
-	else if (f == 1)
-		ofs = ofs + v_right*6 + '0 0 22';
-	else if (f == 2)
-		ofs = ofs + v_right*6 + '0 0 19';
-	else if (f == 3)
-		ofs = ofs + v_right*9 + '0 0 17';
-	else if (f == 4)
-		ofs = ofs + v_right*12 + '0 0 19';
-	else
-		ofs = ofs + v_right*12 + '0 0 22';
-	
-	t.angles = self.angles;
-	setorigin(t, self.origin + ofs);
-
-	f1 = f + 1;
-	if (f1 > 5)
-		f1 = 0;
-
-	t.cnt = f1;
-	t.nextthink = time + 0.2;	// don't want to remove it yet
-};
-*/
 
 void() sgrunt_plasma_touch ={
 	if (other == self.owner) return;
@@ -493,21 +431,11 @@ void() sgrunt_die =  {
 	}
 };
 
-void() monster_super_grunt = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-	
-	self.mdl = "progs/kinn/sgrunt.mdl";
-	self.headmdl = "progs/kinn/head2.mdl";
+void() monster_super_grunt_precache = {
 	precache_model("progs/kinn/sgrunt.mdl");
 	precache_model("progs/kinn/head2.mdl");
 	precache_model("progs/kinn/s_plasgr.spr");	// super grunt commander plasma shot
 	precache_model("progs/kinn/s_plasgx.spr");	// super grunt commander plasma explosion
-
-	//precache_sound ("sgrunt/infdeth1.wav");	
-	//precache_sound ("sgrunt/infdeth2.wav");	
 	precache_sound ("sgrunt/infidle1.wav");	
 	precache_sound ("sgrunt/infpain1.wav");	
 	precache_sound ("sgrunt/infpain2.wav");	
@@ -518,10 +446,17 @@ void() monster_super_grunt = {
 	precache_sound ("sgrunt/infatck3.wav");
 	precache_sound ("sgrunt/melee2.wav");
 	precache_sound ("sgrunt/hovatck1.wav");
-
 	precache_sound ("kinn/gibs/ut2gib1.wav");		
 	precache_sound ("drake/weapons/plasma1.wav");
+};
 
+void() monster_super_grunt = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+	
+	self.mdl = "progs/kinn/sgrunt.mdl";
+	self.headmdl = "progs/kinn/head2.mdl";
+	
 	if (random() < 0.5)	
 		self.sight_sound = "sgrunt/infsght1.wav";
 	else
@@ -529,9 +464,7 @@ void() monster_super_grunt = {
 
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
-
 	setmodel (self, "progs/kinn/sgrunt.mdl");
-
 	setsize (self, '-16 -16 -24', '16 16 40');
 	if (self.health < 1) self.health = 350;
 	self.gibhealth = -60;
@@ -544,7 +477,6 @@ void() monster_super_grunt = {
 	self.th_die = sgrunt_die;
 	if (self.ammo_cells < 1) self.ammo_cells = 10;
 	self.th_checkattack = SGruntCheckAttack;
-
 	self.monsterflags = self.monsterflags | MF_COMMANDER;
 
 	// Always reset Ammo Resistance to be consistent
@@ -559,6 +491,5 @@ void() monster_super_grunt = {
 	self.classtype = CT_MONSUPERGRUNT;
 	self.classgroup = CG_ARMY;
 	self.classmove = MON_MOVEWALK;
-	
 	monster_start();
 };

@@ -215,22 +215,16 @@ void() raind_explode =
 	ThrowGib(12, rint(random()*2));
 };
 
-//----------------------------------------------------------------------
-void() raind_die =
-{
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+void() raind_die = {
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// There is no death animation
 	sound (self, CHAN_BODY, self.death_sound, 1, ATTN_NORM);
 	raind_explode();
 };
 
-//----------------------------------------------------------------------
-void() raind_deadbody =
-{
-	// Setup bounding box based on presets
-	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
+void() raind_deadbody = {
+	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL; // Setup bounding box based on presets
 	monster_bbox();
 
 	// Sacrifice pose + skin
@@ -242,45 +236,35 @@ void() raind_deadbody =
 	misc_deadbody_setup();
 };
 
-//=============================================================================
-//QUAKED monster_xmas_raindeer (0.5 0.75 0) (-16 -16 -24) (16 16 40) Ambush
-//=============================================================================
-void() monster_xmas_raindeer =
-{
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/xmas/mon_raindeer.mdl";		// Brown meat
-	self.headmdl = "progs/xmas/h_raindeer.mdl";		// Bloody meat
-	self.gib1mdl = "progs/xmas/gib_rdleg1.mdl";		// Bloody stump
-	self.gib2mdl = "progs/xmas/gib_rdrockpack.mdl";	// Rocket backpack
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (MODEL_PROJ_RAIND);	// Snowy Rockets
-	precache_model (self.gib1mdl);		// Legs
-	precache_model (self.gib2mdl);		// Rocket Packs
-
-	self.idle_sound = "xmas/raindeer/idle.wav";
-	precache_sound (self.idle_sound);
-	self.sight_sound = "xmas/raindeer/sight.wav";
-	precache_sound (self.sight_sound);
-
-	// Alternating rocket firing sound
-	precache_sound ("xmas/raindeer/attack1.wav");
+void() monster_xmas_raindeer_precache = {
+	precache_model ("progs/xmas/mon_raindeer.mdl");
+	precache_model ("progs/xmas/h_raindeer.mdl");
+	precache_model (MODEL_PROJ_RAIND); // Snowy Rockets
+	precache_model ("progs/xmas/gib_rdleg1.mdl"); // Legs
+	precache_model ("progs/xmas/gib_rdrockpack.mdl"); // Rocket Packs
+	precache_sound ("xmas/raindeer/idle.wav");
+	precache_sound ("xmas/raindeer/sight.wav");
+	precache_sound ("xmas/raindeer/attack1.wav"); // Alternating rocket firing sound
 	precache_sound ("xmas/raindeer/attack2.wav");
-	
-	self.pain_sound = "xmas/raindeer/hit.wav";
-	precache_sound (self.pain_sound);
-	self.death_sound = "xmas/raindeer/death.wav";
-	precache_sound (self.death_sound);
+	precache_sound ("xmas/raindeer/hit.wav");
+	precache_sound ("xmas/raindeer/death.wav");
+};
 
-	// Dead body version is setup different
-	if (self.spawnflags & MON_RAINDEER_DEAD) {
-		raind_deadbody(); return;
-	}
+// QUAKED monster_xmas_raindeer (0.5 0.75 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_xmas_raindeer = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/xmas/mon_raindeer.mdl"; // Brown meat
+	self.headmdl = "progs/xmas/h_raindeer.mdl"; // Bloody meat
+	self.gib1mdl = "progs/xmas/gib_rdleg1.mdl"; // Bloody stump
+	self.gib2mdl = "progs/xmas/gib_rdrockpack.mdl";	// Rocket backpack
+	self.idle_sound = "xmas/raindeer/idle.wav";
+	self.sight_sound = "xmas/raindeer/sight.wav";
+	self.pain_sound = "xmas/raindeer/hit.wav";
+	self.death_sound = "xmas/raindeer/death.wav";
+
+	if (self.spawnflags & MON_RAINDEER_DEAD) { raind_deadbody(); return; } // Dead body version is setup different
 	
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
@@ -314,11 +298,8 @@ void() monster_xmas_raindeer =
 	self.th_missile = raind_shoot1;
 	self.th_pain = raind_pain;
 	self.th_die = raind_die;
-	
 	self.classtype = CT_MONRAINDEER;
 	self.classgroup = CG_XMAS;
 	self.classmove = MON_MOVEWALK;
-	
 	monster_start();
 };
-

@@ -1,39 +1,67 @@
-/*
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by the
-Free Software Foundation; either version 2 of the License, or (at your
-option) any later version.
-
-This program is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software Foundation,
-Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
-
-// Written by Frank Condello <pox@planetquake.com>
-
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Frank Condello (aka pOx), Khreathor for the extras_r5 update
+//
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 2
+// Function count: 13
+//
+// Implements: Disableable Buttons and Parentable Switches
+//
+// Description:
+// Disableable buttons.  Included for posterity and legacy support, but normal
+// func_button supports this now.  Also has special switch that can be attached
+// to func_train_ext entities as children.
+//
 // func_button_ext
 // Simlilar to func_button, but can be disabled/enabled via triggers
 // and allows for both touch and weapon hits to activate if specified.
-
+//
 // func_switch
-// A two-state toggle that can use an alternate set of brushes as it's
-// toggled state. You can "attach" a func_switch to a func_train_ext (switch goes
-// where the train goes) but due to this, these don't move like buttons and are
-// always passthrough to avoid blocking issues (therefore, they can not be shot to
-// activate).
+// A two-state toggle that can use an alternate set of brushes as it's toggled
+// state. You can "attach" a func_switch to a func_train_ext (switch goes where
+// the train goes) but due to this, these don't move like buttons and are 
+// always passthrough to avoid blocking issues (therefore, they can not be shot
+// to activate).
+//=============================================================================
 
 float START_OFF = 1;
 float ALWAYSTOUCH = 2;
+float NOTONRETURN = 1;
+float NOTOUCHRETURN = 2;
+
 void() button_ext_wait;
 void() button_ext_return;
+void() switch_init;
+void() switch_toggle;
+void() switch_touch;
 
-void() button_ext_wait = {
+void() button_ext_wait = { // [FUNCTION]
 	self.state = STATE_TOP;
 	self.nextthink = self.ltime + self.wait;
 	self.think = button_ext_return;
@@ -41,36 +69,30 @@ void() button_ext_wait = {
 	SUB_UseTargets();
 };
 	
-void() button_ext_done = {
+void() button_ext_done = { // [FUNCTION]
 	self.state = STATE_BOTTOM;
 	if (self.health) self.takedamage = DAMAGE_YES;// can be shot again
-		
-	if (self.cnt)// Since it can be disabled before returning
-		self.frame = 1;
-	else
-		self.frame = 0;// use normal textures
+	if (self.cnt) self.frame = 1; // Since it can be disabled before returning
+	else self.frame = 0;// use normal textures
 };
 
-void() button_ext_return = {
+void() button_ext_return = { // [FUNCTION]
 	self.state = STATE_DOWN;
 	SUB_CalcMove (self.pos1, self.speed, button_ext_done);
 	if (self.noise1) sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 };
 
-void() button_ext_firedisabled = {
+void() button_ext_firedisabled = { // [FUNCTION]
 	if (self.state != STATE_BOTTOM) return; // Don't fire unless it's totally reset
 	
 	if (self.noise2)sound (self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
-	
 	if (self.event != string_null && activator.classname == "player") centerprint (activator, self.event);
-		
-	// Time out for a bit
-	self.state = STATE_UP;
+	self.state = STATE_UP; // Time out for a bit
 	self.think = button_ext_done;
 	self.nextthink = self.ltime + 1.0;
 };
 
-void() button_ext_fire = {
+void() button_ext_fire = { // [FUNCTION]
 	if (self.state != STATE_BOTTOM) return; // Don't fire unless it's totally reset
 	
 	self.frame = 1;// use alternate textures
@@ -79,7 +101,7 @@ void() button_ext_fire = {
 	SUB_CalcMove (self.pos2, self.speed, button_ext_wait);
 };
 
-void() button_ext_use = {
+void() button_ext_use = { // [FUNCTION]
 	self.enemy = activator;
 	if (self.cnt) { // enable it
 		self.cnt = FALSE;
@@ -90,28 +112,23 @@ void() button_ext_use = {
 	}
 };
 
-void() button_ext_touch = {
+void() button_ext_touch = { // [FUNCTION]
 	if (other.classname != "player") return;
 	if (self.state != STATE_BOTTOM) return; // Don't fire unless it's totally reset
 	
 	self.takedamage = DAMAGE_NO;// don't allow shots before reset
 	self.enemy = other;
-		 
-	if (self.cnt)// Disabled
-		button_ext_firedisabled ();
-	else
-		button_ext_fire ();
+	if (self.cnt) button_ext_firedisabled ();
+	else button_ext_fire ();
 };
 
-void() button_ext_killed = {
+void() button_ext_killed = { // [FUNCTION]
 	self.enemy = damage_attacker;
 	self.health = self.max_health;
 	self.takedamage = DAMAGE_NO;
 	
-	if (self.cnt)// Disabled
-		button_ext_firedisabled ();
-	else
-		button_ext_fire ();
+	if (self.cnt) button_ext_firedisabled ();
+	else button_ext_fire ();
 };
 
 // QUAKED func_button_ext (0 .5 .8) ? START_OFF ALWAYSTOUCH
@@ -140,31 +157,27 @@ void() button_ext_killed = {
 // and enabled to be fired. The "active" texture frame (if it has texture frames)
 // will only be displayed when the button is enabled, and fully in the "up"
 // position (i.e. ready to be used).
-void() func_button_ext = {
+void() func_button_ext = { // [ENTITY]
 	if (self.noise) precache_sound(self.noise);
 	if (self.noise1) precache_sound(self.noise1);
 	if (self.noise2) precache_sound(self.noise2);
-
 	SetMovedir ();
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
 	setmodel (self, self.model);
 	self.blocked = SUB_Null;
 	self.use = button_ext_use;
-
 	if (self.health) {
 		self.max_health = self.health;
 		self.th_die = button_ext_killed;
 		self.takedamage = DAMAGE_YES;
 		self.nobleed = TRUE;
-		if (self.spawnflags & ALWAYSTOUCH)
-			self.touch = button_ext_touch;
+		if (self.spawnflags & ALWAYSTOUCH) self.touch = button_ext_touch;
 	} else self.touch = button_ext_touch;
 
 	if (!self.speed) self.speed = 40;
 	if (!self.wait) self.wait = 1;
 	if (!self.lip) self.lip = 4;
-
 	if (self.spawnflags & START_OFF) {
 		self.cnt = TRUE;
 		self.frame = 1;
@@ -181,27 +194,18 @@ void() func_button_ext = {
 	self.pos2 = self.pos1 + self.movedir*(fabs(self.movedir*self.size) - self.lip);
 };
 
-float NOTONRETURN = 1;
-float NOTOUCHRETURN = 2;
-void() switch_init;
-void() switch_toggle;
-void() switch_touch;
-
-void() switch_wait = {
+void() switch_wait = { // [FUNCTION]
 	self.touch = switch_touch;
 	switch_toggle();
 };
 
-void() switch_toggle = {
-	// Don't toggle again until player moves off
-	if (self.attack_finished > time)
-		self.cnt = TRUE;
-	else
-		self.cnt = FALSE;
+void() switch_toggle = { // [FUNCTION]
+	if (self.attack_finished > time) self.cnt = TRUE; // Don't toggle again until player moves off
+	else self.cnt = FALSE;
 
 	self.attack_finished = time + 0.1;
 	if (self.cnt) return;
-	
+
 	if (self.state == STATE_UP) {
 		if (self.noise) sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 		self.state = STATE_DOWN;
@@ -229,25 +233,24 @@ void() switch_toggle = {
 	}
 };
 
-void() switch_use = {
+void() switch_use = { // [FUNCTION]
 	self.enemy = activator;
 	switch_toggle();
 };
 
-void() switch_touch = {
+void() switch_touch = { // [FUNCTION]
 	if (other.classname != "player") return;
 	
 	if (self.movedir != '0 0 0') {
 		makevectors (other.angles);
-		if (v_forward * self.movedir < 0)
-			self.attack_finished = time + 0.1;// not facing the right way
+		if (v_forward * self.movedir < 0) self.attack_finished = time + 0.1;// not facing the right way
 	}
 	
 	self.enemy = other;
 	switch_toggle();
 };
 
-void() switch_init = {
+void() switch_init = { // [FUNCTION]
 	local string temp;
 		
 	temp = self.target;
@@ -280,24 +283,19 @@ void() switch_init = {
 // train of course)
 // Although an alternate model can be used, the texture frame is also switched when toggled
 // so simple animated switches can be made without the need for a func_bspframe.
-void() func_switch = {
+void() func_switch = { // [ENTITY]
 	if (self.noise) precache_sound(self.noise);
 	if (!self.noise1) self.noise1 = self.noise;	
 	if (self.noise1) precache_sound(self.noise1);
 
-	if (self.angles != '0 0 0')
-		SetMovedir ();
+	if (self.angles != '0 0 0') SetMovedir ();
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_NONE;
-	
 	setmodel (self, self.model);
 	setsize (self, self.mins , self.maxs);
 	setorigin (self, self.origin);
-	
 	self.weaponmodel = self.model;
-	
 	if (!self.wait) self.wait = -1;// Default is true toggle
-	
 	self.state = STATE_UP;
 	
 	// Attach to it's parent

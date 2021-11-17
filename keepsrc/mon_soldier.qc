@@ -1,33 +1,21 @@
-/*==============================================================================
-SOLDIER / PLAYER
-==============================================================================*/
-$cd id1/models/soldier3
+$cd ad171/soldier
 $origin 0 -6 24
 $base base		
 $skin skin
 
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8
-
 $frame death1 death2 death3 death4 death5 death6 death7 death8
 $frame death9 death10
-
 $frame deathc1 deathc2 deathc3 deathc4 deathc5 deathc6 deathc7 deathc8
 $frame deathc9 deathc10 deathc11
-
 $frame load1 load2 load3 load4 load5 load6 load7 load8 load9 load10 load11
-
 $frame pain1 pain2 pain3 pain4 pain5 pain6
-
 $frame painb1 painb2 painb3 painb4 painb5 painb6 painb7 painb8 painb9 painb10
 $frame painb11 painb12 painb13 painb14
-
 $frame painc1 painc2 painc3 painc4 painc5 painc6 painc7 painc8 painc9 painc10
 $frame painc11 painc12 painc13
-
 $frame run1 run2 run3 run4 run5 run6 run7 run8
-
 $frame shoot1 shoot2 shoot3 shoot4 shoot5 shoot6 shoot7 shoot8 shoot9
-
 $frame walk_1 walk_2 walk_3 walk_4 walk_5 walk_6 walk_7 walk_8
 $frame walk_9 walk_10 walk_11 walk_12 walk_13 walk_14 walk_15 walk_16
 $frame walk_17 walk_18 walk_19 walk_20 walk_21 walk_22 walk_23 walk_24
@@ -36,7 +24,6 @@ void() army_fire;
 
 float ARMY_LAVANG = 8192;
 
-//======================================================================
 void()	army_stand1	=[	$stand1,	army_stand2	] {monster_idle_sound(); ai_stand();};
 void()	army_stand2	=[	$stand2,	army_stand3	] {ai_stand();};
 void()	army_stand3	=[	$stand3,	army_stand4	] {ai_stand();};
@@ -46,7 +33,6 @@ void()	army_stand6	=[	$stand6,	army_stand7	] {ai_stand();};
 void()	army_stand7	=[	$stand7,	army_stand8	] {ai_stand();};
 void()	army_stand8	=[	$stand8,	army_stand1	] {ai_stand();};
 
-//======================================================================
 void()	army_walk1	=[	$walk_1,	army_walk2	] {monster_footstep(FALSE);ai_walk(1);};
 void()	army_walk2	=[	$walk_2,	army_walk3	] {monster_idle_sound();ai_walk(1);};
 void()	army_walk3	=[	$walk_3,	army_walk4	] {ai_walk(1);};
@@ -72,7 +58,6 @@ void()	army_walk22	=[	$walk_22,	army_walk23	] {ai_walk(1);};
 void()	army_walk23	=[	$walk_23,	army_walk24	] {ai_walk(1);};
 void()	army_walk24	=[	$walk_24,	army_walk1	] {ai_walk(1);};
 
-//======================================================================
 void()	army_run1	=[	$run1,		army_run2	] {monster_idle_sound();ai_run(11);};
 void()	army_run2	=[	$run2,		army_run3	] {monster_footstep(FALSE);ai_run(15);};
 void()	army_run3	=[	$run3,		army_run4	] {ai_run(10);};
@@ -92,9 +77,7 @@ void()	army_runback6	=[	$run3,	army_runback7	] {ai_backface(10);};
 void()	army_runback7	=[	$run2,	army_runback8	] {monster_footstep(FALSE);ai_backface(15);};
 void()	army_runback8	=[	$run1,	army_run1	] {ai_backface(11);};
 
-//======================================================================
-void() army_fire =
-{
+void() army_fire = {
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 
@@ -111,7 +94,6 @@ void() army_fire =
 	}
 };
 
-//----------------------------------------------------------------------
 void()	army_atk1	=[	$shoot1,	army_atk2	] {ai_face();};
 void()	army_atk2	=[	$shoot2,	army_atk3	] {ai_face();};
 void()	army_atk3	=[	$shoot3,	army_atk4	] {ai_face();};
@@ -122,13 +104,40 @@ void()	army_atk7	=[	$shoot7,	army_atk8	] {ai_face();SUB_CheckRefire (army_atk1);
 void()	army_atk8	=[	$shoot8,	army_atk9	] {};
 void()	army_atk9	=[	$shoot9,	army_run1	] {ai_face();};
 
+void() army_dbs_fire = {
+	if (!self.enemy) return;
+	if (self.health < 1) return;
+
+	ai_face();
+	self.effects = self.effects | EF_MUZZLEFLASH;
+	sound (self, CHAN_WEAPON, "drake/weapons/ssg.wav", 1, ATTN_NORM);	
+	
+	// Choose between a projectile or hit-scan system
+	if (query_configflag(SVR_SHOTGPROJ))
+		FireBullets (QUANTITY_SSG, SPREAD_SSG);
+	else {
+		Launch_Shells(QUANTITY_SSG, SPREAD_SSG, CT_PROJ_SSG);
+		Launch_ShellCasing(1);
+	}
+};
+
+void()	army_dbshotgun1	=[	$shoot1,	army_dbshotgun2	] {ai_face();};
+void()	army_dbshotgun2	=[	$shoot2,	army_dbshotgun3	] {ai_face();};
+void()	army_dbshotgun3	=[	$shoot3,	army_dbshotgun4	] {ai_face();};
+void()	army_dbshotgun4	=[	$shoot4,	army_dbshotgun5	] {ai_face();};
+void()	army_dbshotgun5	=[	$shoot5,	army_dbshotgun6	] {ai_face();army_dbs_fire();};
+void()	army_dbshotgun6	=[	$shoot6,	army_dbshotgun7	] {};
+void()	army_dbshotgun7	=[	$shoot7,	army_dbshotgun8	] {ai_face();SUB_CheckRefire (army_atk1);};
+void()	army_dbshotgun8	=[	$shoot8,	army_dbshotgun9	] {};
+void()	army_dbshotgun9	=[	$shoot9,	army_run1	] {ai_face();};
+
 void() army_fire_rocket = {
 	local vector org, dir;
 	
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 
-	ai_trackenemy(); // check for enemy origin (based on sight test) if cannot see enemy fire at last known location
+	ai_trackenemy(); // Check for enemy origin (based on sight test) if cannot see enemy fire at last known location
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "quoth/soldier/rocket.wav", 1, ATTN_NORM);	
 	self.attack_speed = 250;
@@ -179,15 +188,15 @@ void()	army_atkr7	=[	$shoot7,army_atkr8	] {SUB_CheckRefire (army_rocket_atk1);};
 void()	army_atkr8	=[	$shoot8,army_atkr9	] {};
 void()	army_atkr9	=[	$shoot9,army_run1	] {ai_face();};
 
-//======================================================================
 void()	army_grenade_atk1 =[	$shoot1, army_grenade_atk2	] {ai_face();};
 void()	army_grenade_atk2 =[	$shoot2, army_grenade_atk3	] {ai_face();
 	MonsterGrenadeSound(); self.attack_speed = MonsterGrenadeSpeed();
 	self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
-void()	army_grenade_atk3 =[	$shoot3, army_grenade_atk4	] {ai_face();
-	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed);};
-void()	army_grenade_atk4 =[	$shoot4, army_grenade_atk5	] {ai_face();
-	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed);};
+void()	army_grenade_atk3 =[	$shoot3, army_grenade_atk4	] {
+	ai_face();
+	self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed);
+};
+void()	army_grenade_atk4 =[	$shoot4, army_grenade_atk5	] {ai_face();self.attack_elev = SUB_Elevation(self.attack_elev, self.origin, self.enemy.origin, self.attack_speed);};
 void()	army_grenade_atk5 =[	$shoot5, army_grenade_atk6	] {ai_face();
 	makevectors(self.angles);
 	self.pos1 = self.origin + attack_vector(self.attack_offset);
@@ -212,9 +221,7 @@ void() army_plasma_fire = {
 	launch_plasma(org, vec, CT_PROJ_PLASMA, SPEED_PLASMA);
 };
 
-void()	army_plasma_atk1 =[	$shoot1, army_plasma_atk2	] {
-	self.pain_finished = time + 1.3;
-	sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM);};
+void()	army_plasma_atk1 =[	$shoot1, army_plasma_atk2	] {self.pain_finished = time + 1.3; sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM);};
 void()	army_plasma_atk2 =[	$shoot2, army_plasma_atk3	] {ai_face();};
 void()	army_plasma_atk3 =[	$shoot3, army_plasma_atk4	] {ai_face();};
 void()	army_plasma_atk4 =[	$shoot4, army_plasma_atk5	] {ai_face();};
@@ -222,7 +229,7 @@ void()	army_plasma_atk5 =[	$shoot5, army_plasma_atk6	] {ai_face();army_plasma_fi
 void()	army_plasma_atk6 =[	$shoot6, army_plasma_atk7	] {};
 void()	army_plasma_atk7 =[	$shoot7, army_plasma_atk8	] {ai_face();SUB_CheckRefire (army_plasma_atk1);};
 void()	army_plasma_atk8 =[	$shoot8, army_plasma_atk9	] {};
-void()	army_plasma_atk9 =[	$shoot9, army_run1	] {ai_face();};
+void()	army_plasma_atk9 =[	$shoot9, army_run1			] {ai_face();};
 
 void() army_nailfire = {
 	local	vector	dir, org;
@@ -237,12 +244,10 @@ void() army_nailfire = {
 	makevectors(self.angles);
 	
 	self.attack_speed = SPEED_FREDDIEPROJ + (skill * SPEED_FREDDIESKILL);
-	// if (autocvar_skill_adjusted_soldier_aiming) {
-		if (skill == 0) dir = en.origin - en.velocity*0.2; 
-		else if (skill == 1) dir = en.origin - en.velocity*0.15; 
-		else if (skill == 2) dir = en.origin - en.velocity*0.1; 
-		else dir = en.origin - en.velocity*0.05; 
-	//} else { dir = en.origin - en.velocity*0.2; }
+	if (skill == 0) dir = en.origin - en.velocity*0.2; 
+	else if (skill == 1) dir = en.origin - en.velocity*0.15; 
+	else if (skill == 2) dir = en.origin - en.velocity*0.1; 
+	else dir = en.origin - en.velocity*0.05; 
 	org = self.origin + v_up*12 - v_right*-12 + v_forward*19;
 	dir = normalize (dir - org);
 
@@ -261,7 +266,6 @@ void() army_nailfire = {
 	launch_projectile(org, dir, type, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
 void()	army_nail1 =[	$shoot1, army_nail2	] { self.pain_finished = time + 1.3; sound (self, CHAN_WEAPON, "soldier/reload.wav", 1, ATTN_NORM);};
 void()	army_nail2 =[	$shoot2, army_nail3	] {ai_face();};
 void()	army_nail3 =[	$shoot3, army_nail4	] {ai_face();};
@@ -285,8 +289,8 @@ void() army_supernailload6 =[$load6, army_supernailload7	] {ai_face();ai_forward
 void() army_supernailload7 =[$load7, army_supernailload8	] {ai_face();ai_forward(1);};
 void() army_supernailload8 =[$load8, army_supernailload9	] {ai_face();};
 void() army_supernailload9 =[$load9, army_supernailload10	] {ai_face();};
-void() army_supernailload10 =[$load10, army_supernailload11	] {ai_face();};
-void() army_supernailload11 =[$load11, army_supernail1	] {ai_face();};
+void() army_supernailload10=[$load10, army_supernailload11	] {ai_face();};
+void() army_supernailload11=[$load11, army_supernail1		] {ai_face();};
 
 void()	army_supernail1 =[	$shoot1, army_supernail2	] {ai_face();if (self.classtype == CT_MONARMYCYBORG) ai_run_strafe(16);};
 void()	army_supernail2 =[	$shoot2, army_supernail3	] {ai_face();if (self.classtype == CT_MONARMYCYBORG) ai_run_strafe(16);};
@@ -294,7 +298,7 @@ void()	army_supernail3 =[	$shoot3, army_supernail4	] {ai_face();if (self.classty
 void()	army_supernail4 =[	$shoot4, army_supernail5	] {ai_face();if (self.classtype == CT_MONARMYCYBORG) ai_run_strafe(16);army_nailfire();};
 void()	army_supernail5 =[	$shoot5, army_supernail6	] {ai_face();if (self.classtype == CT_MONARMYCYBORG) ai_run_strafe(16);army_nailfire();};
 void()	army_supernail6 =[	$shoot6, army_supernail7	] {ai_face();if (self.classtype == CT_MONARMYCYBORG) ai_run_strafe(16);army_nailfire();};
-void()	army_supernail7 =[	$shoot7, army_run1	] {
+void()	army_supernail7 =[	$shoot7, army_run1			] {
 	ai_face();
 	if (self.classtype == CT_MONARMYCYBORG) {
 		ai_run_strafe(16);
@@ -303,7 +307,6 @@ void()	army_supernail7 =[	$shoot7, army_run1	] {
 	SUB_CheckRefire (army_supernail2);
 };
 
-//======================================================================
 void()	army_pain1	=[	$pain1,		army_pain2	] {};
 void()	army_pain2	=[	$pain2,		army_pain3	] {};
 void()	army_pain3	=[	$pain3,		army_pain4	] {};
@@ -311,7 +314,6 @@ void()	army_pain4	=[	$pain4,		army_pain5	] {};
 void()	army_pain5	=[	$pain5,		army_pain6	] {};
 void()	army_pain6	=[	$pain6,		army_run1	] {ai_pain(1);};
 
-//----------------------------------------------------------------------
 void()	army_painb1	=[	$painb1,	army_painb2	] {};
 void()	army_painb2	=[	$painb2,	army_painb3	] {ai_painforward(13);};
 void()	army_painb3	=[	$painb3,	army_painb4	] {ai_painforward(9);};
@@ -327,7 +329,6 @@ void()	army_painb12=[	$painb12,	army_painb13] {ai_pain(2);};
 void()	army_painb13=[	$painb13,	army_painb14] {};
 void()	army_painb14=[	$painb14,	army_run1	] {};
 
-//----------------------------------------------------------------------
 void()	army_painc1	=[	$painc1,	army_painc2	] {};
 void()	army_painc2	=[	$painc2,	army_painc3	] {ai_pain(1);};
 void()	army_painc3	=[	$painc3,	army_painc4	] {};
@@ -342,40 +343,35 @@ void()	army_painc11=[	$painc11,	army_painc12] {ai_painforward(6);};
 void()	army_painc12=[	$painc12,	army_painc13] {ai_painforward(8);};
 void()	army_painc13=[	$painc13,	army_run1] {};
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) army_pain =
-{
-	// Check all pain conditions and set up what to do next
-	monster_pain_check(attacker, damage);
+void(entity inflictor, entity attacker, float damage) army_pain = {
+	monster_pain_check(attacker, damage); // Check all pain conditions and set up what to do next
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		if (self.pain_check == 1) {
-			// Randomly pick which pain animation to play
+		if (self.pain_check == 1) { // Randomly pick which pain animation to play
 			self.lip = random();
 			if (self.lip < 0.2) {
 				self.pain_finished = time + 0.6;
 				sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 				army_pain1();
-			}
-			else if (self.lip < 0.6) {
+			} else if (self.lip < 0.6) {
 				self.pain_finished = time + 1.1;
 				sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 				army_painb1();
-			}
-			else {
+			} else {
 				self.pain_finished = time + 1.1;
 				sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 				army_painc1();
 			}
-		}
-		else if (self.pain_check == 2) {
+		} else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 1.3;
 			self.axhitme = 0;
+
 			// Pick a random pain sound
 			if (random() < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 			else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
+
 			// Pick a random long pain animation
 			if (random() < 0.5) army_painb1();
 			else army_painc1();
@@ -383,11 +379,9 @@ void(entity inflictor, entity attacker, float damage) army_pain =
 	}
 };
 
-//======================================================================
-void()	army_die1	=[	$death1,	army_die2	] {};
+void()	army_die1	=[	$death1,	army_die2	] {	self.reviveframestart = 17; self.reviveframeend = 8; };
 void()	army_die2	=[	$death2,	army_die3	] {monster_check_gib();};
-void()	army_die3	=[	$death3,	army_die4	] {monster_check_gib();
-	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
+void()	army_die3	=[	$death3,	army_die4	] {monster_check_gib(); self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
 void()	army_die4	=[	$death4,	army_die5	] {};
 void()	army_die5	=[	$death5,	army_die6	] {};
 void()	army_die6	=[	$death6,	army_die7	] {};
@@ -396,11 +390,9 @@ void()	army_die8	=[	$death8,	army_die9	] {};
 void()	army_die9	=[	$death9,	army_die10	] {monster_death_postcheck();};
 void()	army_die10	=[	$death10,	army_die10	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
-void()	army_cdie1	=[	$deathc1,	army_cdie2	] {};
+void()	army_cdie1	=[	$deathc1,	army_cdie2	] {	self.reviveframestart = 28; self.reviveframeend = 18; };
 void()	army_cdie2	=[	$deathc2,	army_cdie3	] {monster_check_gib();ai_back(5);};
-void()	army_cdie3	=[	$deathc3,	army_cdie4	] {monster_check_gib();
-	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); ai_back(4);};
+void()	army_cdie3	=[	$deathc3,	army_cdie4	] {monster_check_gib();self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack(); ai_back(4);};
 void()	army_cdie4	=[	$deathc4,	army_cdie5	] {ai_back(13);};
 void()	army_cdie5	=[	$deathc5,	army_cdie6	] {ai_back(3);};
 void()	army_cdie6	=[	$deathc6,	army_cdie7	] {ai_back(4);};
@@ -410,61 +402,66 @@ void()	army_cdie9	=[	$deathc9,	army_cdie10	] {};
 void()	army_cdie10	=[	$deathc10,	army_cdie11	] {monster_death_postcheck();};
 void()	army_cdie11	=[	$deathc11,	army_cdie11	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
 void() army_die = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "soldier/death1.wav", 1, ATTN_NORM);
-		if (random() < 0.5) army_die1 ();		// Forward
-		else army_cdie1 ();									// Backward/side
+		if (random() < 0.5) army_die1 (); // Forward
+		else army_cdie1 ();				  // Backward/side
 	}
 };
 
-/*======================================================================
-//QUAKED monster_army (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
-void() monster_army =
-{	
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+void() monster_army_precache = {
+	precache_model("progs/ad171/mon_soldier.mdl");
+	precache_model("progs/drake/soldier.mdl");
+	precache_model("progs/ad171/h_soldier.mdl");
+	precache_model("progs/ad171/w_soldiergun.mdl");
+	precache_model("progs/ad171/gib_soldfoot1.mdl");
+	precache_model("progs/ad171/gib_soldfoot2.mdl");
+	precache_model(MODEL_PROJ_PLASMA);
+	precache_model(MODEL_PROJ_GRENADE);
+	precache_model (MODEL_PROJ_ROCKETGRN);
+	precache_sound("soldier/idle.wav");
+	precache_sound("soldier/death1.wav");
+	precache_sound("soldier/pain1.wav");
+	precache_sound("soldier/pain2.wav");
+	precache_sound("player/udeath.wav");	// gib death
+	precache_sound("soldier/sight1.wav");
+	precache_sound("soldier/reload.wav"); // Extra load/fire sounds (from Quoth MOD)
+	precache_sound("q15/weapons/rocket1i.wav");
+	precache_sound("soldier/sattck1.wav");
+	precache_sound("quoth/soldier/load.wav"); // Extra load/fire sounds (from Quoth MOD)
+	precache_sound("quoth/soldier/rocket.wav");
+	precache_sound("ad171/soldier/rocket_hit.wav");
+	precache_sound("ad171/enforcer/elim_pg_load.wav"); // Extra load/fire sounds (from Quoth MOD)
+	precache_sound(SOUND_PLASMA_FIRE);
+	precache_sound(SOUND_PLASMA_HIT);
+	precache_sound("soldier/reload.wav"); // Extra load/fire sounds (from Quoth MOD)
+	precache_sound("weapons/spike2.wav");
+	precache_sound("drake/weapons/ssg.wav"); // Elite soldier double-barreled shotgun fire
+};
 
-	if (!self.mdl) self.mdl = "progs/ad171/mon_soldier.mdl";
-	//if (self.classname == "monster_army_spike") self.mdl = "progs/q15/soldier1.mdl";
-	if (!self.headmdl) self.headmdl = "progs/ad171/h_soldier.mdl";
+// QUAKED monster_army (1 0 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_army = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	if (self.classtype == CT_MONARMYCYBORG) self.mdl = "progs/drake/soldier.mdl";
+	else self.mdl = "progs/ad171/mon_soldier.mdl";
+	self.headmdl = "progs/ad171/h_soldier.mdl";
 	self.gib1mdl = "progs/ad171/w_soldiergun.mdl";	// Unique weapon
 	self.gib2mdl = "progs/ad171/gib_soldfoot1.mdl";	// Upright foot
 	self.gib3mdl = "progs/ad171/gib_soldfoot2.mdl";	// Fallen down foot
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-
 	self.gib1sound = GIB_IMPACT_WOOD;
 	if (random() < 0.5) self.gib1skin = 1;		// Bloody weapon
 	if (random() < 0.5) self.gib2mdl = string_null;
 	if (random() < 0.5) self.gib3mdl = string_null;
-
 	self.idle_sound = "soldier/idle.wav";
-	precache_sound (self.idle_sound);
-
-	precache_sound ("soldier/death1.wav");
 	self.pain_sound = "soldier/pain1.wav";
 	self.pain_sound2 = "soldier/pain2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-
-	precache_sound ("player/udeath.wav");	// gib death
-
 	self.sight_sound = "soldier/sight1.wav";
-	precache_sound (self.sight_sound);
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
@@ -475,6 +472,7 @@ void() monster_army =
 	self.pain_longanim = TRUE;			// can be chopped with shadow axe
 	self.steptype = FS_TYPEMEDIUM;		// Average feet
 	self.attack_offset = '12 8 12';		// End of Gun
+	self.mass = MASS_MEDIUM;
 	if (self.deathstring == "") self.deathstring = " was shot by a Grunt\n";	
 
 	// Always reset Ammo Resistance to be consistent
@@ -485,8 +483,7 @@ void() monster_army =
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
 
-    if (self.classtype != CT_MONARMYCYBORG)
-		self.th_checkattack = SoldierCheckAttack;
+    if (self.classtype != CT_MONARMYCYBORG) self.th_checkattack = SoldierCheckAttack;
 	self.th_stand = army_stand1;
 	self.th_walk = army_walk1;
 	self.th_run = army_run1;
@@ -497,9 +494,7 @@ void() monster_army =
 	if (!self.classtype) {
 		self.classtype = CT_MONARMY;
 		if (self.ammo_shells < 1) self.ammo_shells = rint(2 + random()*4);
-		precache_sound ("soldier/sattck1.wav");
-		// If no skin override is defined, pick a random one instead
-		if (!self.exactskin) self.randomskin = 4;
+		if (!self.exactskin) self.randomskin = 4; // If no skin override is defined, pick a random one instead
 	}
 	self.classgroup = CG_ARMY;
 	self.classmove = MON_MOVEWALK;
@@ -507,131 +502,98 @@ void() monster_army =
 	monster_start();
 };
 
-//----------------------------------------------------------------------
-void() monster_army_rocket =
-{	
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+void() monster_army_rocket = {	
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.classtype = CT_MONARMYROCKET;
 	if (self.health < 1) self.health = 45;
-	// There are two red jacket skins to pick from
-	if (random() < 0.5) self.exactskin = 4;
+	if (random() < 0.5) self.exactskin = 4; // There are two red jacket skins to pick from
 	else self.exactskin = 5;
 	if (random() < 0.35 && self.ammo_rockets < 1) self.ammo_rockets = 1;
-
-	// Extra load/fire sounds (from Quoth MOD)
-	precache_sound ("quoth/soldier/load.wav");
-	precache_sound ("quoth/soldier/rocket.wav");
-	precache_sound ("ad171/soldier/rocket_hit.wav");
-
-	if (self.poisonous) precache_model (MODEL_PROJ_ROCKETGRN);
-	
 	self.th_missile = army_rocket_atk1;
 	self.th_updmissile = army_rocket_think;	// Update flying rocket
 	self.th_melee = army_runback1;
 	if (self.deathstring == "") self.deathstring = " was blown up by a Rocketeer\n";
-	
 	monster_army();
 };
 
 void() monster_army_grenade = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.classtype = CT_MONARMYGRENADE;
-	precache_model (MODEL_PROJ_GRENADE);
-	
 	if (self.health < 1) self.health = 60;
-	// There are two green jacket skins to pick from
-	if (random() < 0.5) self.exactskin = 6;
+	if (random() < 0.5) self.exactskin = 6; // There are two green jacket skins to pick from
 	else self.exactskin = 7;
 	if (random() < 0.35 && self.ammo_rockets < 1) self.ammo_rockets = 1;
-
 	self.th_missile = army_grenade_atk1;
 	self.th_melee = army_runback1;
-	// Grenade bounce off body
-	self.bouncegrenade = TRUE;
+	self.bouncegrenade = TRUE; // Grenade bounce off body
 	if (self.deathstring == "") self.deathstring = " was pineappled by a Grenadier\n";
-	
 	monster_army();
 };
 
-//----------------------------------------------------------------------
-void() monster_army_plasma =
-{	
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+void() monster_army_plasma = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.classtype = CT_MONARMYPLASMA;
-	precache_model (MODEL_PROJ_PLASMA);
-	
 	if (self.health < 1) self.health = 75;
-	// There are two blue jacket skins to pick from
-	if (random() < 0.5) self.exactskin = 8;
+	if (random() < 0.5) self.exactskin = 8; // There are two blue jacket skins to pick from
 	else self.exactskin = 9;
 	if (random() < 0.35 && self.ammo_cells < 1) self.ammo_cells = 1;
-
-	// Extra load/fire sounds (from Quoth MOD)
-	precache_sound ("ad171/enforcer/elim_pg_load.wav");
-	precache_sound (SOUND_PLASMA_FIRE);
-	precache_sound (SOUND_PLASMA_HIT);
-	
 	self.th_missile = army_plasma_atk1;
 	if (self.deathstring == "") self.deathstring = " was fried by an Electrocutioner\n";
-	
 	monster_army();
 };
 
 void() monster_army_spike = {	
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.classtype = CT_MONARMYSPIKE;
 	if (self.health < 1) self.health = 50;
-	// Gray pads
-	self.exactskin = 10;
+	self.exactskin = 10; // Gray pads
 	if (random() < 0.35 && self.ammo_nails < 1) self.ammo_nails = 5;
-
-	// Extra load/fire sounds (from Quoth MOD)
-	precache_sound ("soldier/reload.wav");
-	precache_sound ("q15/weapons/rocket1i.wav");
-	
 	self.th_missile = army_nail1;
 	if (self.deathstring == "") self.deathstring = " was spiked by a Nail Grunt\n";
+	monster_army();
+};
+
+// Variant cleaner soldier from Drake.
+void() monster_soldier = {
+	self.classname = "monster_army_spike";
+	if (self.health < 1) self.health = 90;
+	if (self.deathstring == "") self.deathstring = " was shot by a Soldier\n";
+	monster_army_spike();
+};
+
+// Made up a classname for this monster that wasn't fully implemented from Drake. -Qmaster
+void() monster_soldier_elite = {	
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
+	self.classtype = CT_MONARMYDBSHOTGUN;
+	if (self.health < 1) self.health = 100;
+	if (random() < 0.5) self.exactskin = 6; // There are two green jacket skins to pick from
+	else self.exactskin = 7;
+	if (random() < 0.35 && self.ammo_shells < 1) self.ammo_shells = 6;
+	self.th_missile = army_dbshotgun1;
+	if (self.deathstring == "") self.deathstring = " was blasted by an Elite Soldier\n";
 	monster_army();
 };
 
 void() monster_army_cyborg = {	
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/drake/soldier.mdl";
-
 	self.classtype = CT_MONARMYCYBORG;
 	if (self.health < 1) self.health = 200;
-	// Gray pads
-	self.exactskin = 4;
+	self.exactskin = 4; // All blue
 	if (random() < 0.35 && self.ammo_nails < 1) self.ammo_nails = 10;
-
-	// Extra load/fire sounds (from Quoth MOD)
-	precache_sound ("soldier/reload.wav");
-	precache_sound ("weapons/spike2.wav");
-	
 	self.th_missile = army_supernail1;
-
-	if (self.deathstring == "") self.deathstring = " was spiked by a Cyborg Grunt\n";
-	
+	if (self.deathstring == "") self.deathstring = " was spiked by a Cyborg Grunt\n";	
 	monster_army();
 };

@@ -1,30 +1,20 @@
-/*==============================================================================
-Red Queen (Prop monster by Redfield)
-==============================================================================*/
-
+// Red Queen (Prop monster by Redfield)
 $frame bow1 bow2 bow3 bow4 bow5 bow6 bow7 bow8 bow9 bow10
 $frame bow11 bow12 bow13 bow14 bow15 bow16 bow17 bow18 bow19 bow20
 $frame bow21 bow22 bow23 bow24 bow25 bow26 bow27 bow28 bow29 bow30 bow31
-
 $frame spell1 spell2 spell3 spell4 spell5 spell6 spell7 spell8 spell9
 $frame spell10 spell11 spell12 spell13 spell14 spell15 spell16 spell17
 $frame spell18 spell19 spell20 spell21 spell22 spell23 spell24 spell25
 $frame spell26 spell27 spell28 
-
 $frame idle1 idle2 idle3 idle4 idle5 idle6 idle7 idle8 idle9
 $frame idle10 idle11
-
 $frame idleb1 idleb2 idleb3 idleb4 idleb5 idleb6 idleb7 idleb8 idleb9
 $frame idleb10 idleb11 idleb12 idleb13 idleb14 idleb15 idleb16 idleb17 idleb18
 $frame idleb19 idleb20 idleb21 idleb22 idleb23 idleb24 idleb25 idleb26 idleb27
 $frame idleb28 idleb29 idleb30
 
-//===========================================================================
-void() queen_stand = {
-	self.movetype = MOVETYPE_NONE;
-};
+void() queen_stand = { self.movetype = MOVETYPE_NONE; };
 
-//===========================================================================
 void(float dist) ghost_walk = {
 		if (self.movetype != MOVETYPE_STEP) self.movetype = MOVETYPE_STEP;
 		movetogoal (dist);
@@ -48,34 +38,18 @@ void(float dist) ghost_walk = {
 			// It seems its time to stand around!
 			self.th_stand();
 			// Check for any path corner event triggers
-			if (self.goalentity.corner_event) 
-				trigger_strs(self.goalentity.corner_event, self);
+			if (self.goalentity.corner_event) trigger_strs(self.goalentity.corner_event, self);
 		}
 };
 
 //Unfinished and unused walking animation
-//----------------------------------------------------------------------
 void()	queen_walk1	=[	$spell1,		queen_walk1	] {ghost_walk(5);};
 
-
-//----------------------------------------------------------------------
-void()	ghost_pain =
-{
-	 return;
-};
-
-
-//============================================================================
 // The Ghost Queen system (this is not a monster)
-//============================================================================
 void() queen_ghostnull = {};
 
-
-//============================================================================
 // Attachment management (create, finish and delete)
-//============================================================================
-void() redqueen_create_attachment =
-{
+void() redqueen_create_attachment = {
 	// Are the attachments setup yet?
 	if (!self.attachment) {
 		self.attachment = spawn();
@@ -85,9 +59,7 @@ void() redqueen_create_attachment =
 	}
 };
 
-//----------------------------------------------------------------------
-void() redqueen_reset_attachment =
-{
+void() redqueen_reset_attachment = {
 	if (self.attachment) {
 		if (self.attachment.state) {
 			// Move attachment into place ready for use
@@ -105,21 +77,17 @@ void() redqueen_reset_attachment =
 	}
 };
 
-//----------------------------------------------------------------------
-void() redqueen_setup_attachment =
-{
+void() redqueen_setup_attachment = {
 	if (self.attachment) {
 		self.attachment.movetype = MOVETYPE_NONE;
 		self.attachment.solid = SOLID_NOT;
-		setmodel(self.attachment, "progs/proj_rqspell.mdl");
+		setmodel(self.attachment, "progs/redfield/proj_rqspell.mdl");
 		setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
 		self.attachment.state = TRUE;
 	}
 };
 
-//----------------------------------------------------------------------
-void() redqueen_remove_attachment =
-{
+void() redqueen_remove_attachment = {
 	if (self.attachment) {
 		self.attachment.state = FALSE;
 		self.attachment.think = SUB_Remove;
@@ -127,8 +95,7 @@ void() redqueen_remove_attachment =
 	}
 };
 
-void(float rqframe, float rqskin, float rqalpha) redqueen_drawq =
-{
+void(float rqframe, float rqskin, float rqalpha) redqueen_drawq = {
 	local vector org, dir;
 	
 	// Check if attachment has been setup yet
@@ -147,7 +114,6 @@ void(float rqframe, float rqskin, float rqalpha) redqueen_drawq =
 
 float idleswitch;
 
-//----------------------------------------------------------------------
 void() redqueen_idleb1 = [	$idleb1,	redqueen_idleb2	 ] {self.skin = 0; idleswitch = 0;}
 void() redqueen_idleb2 = [	$idleb2,	redqueen_idleb3	 ] {}
 void() redqueen_idleb3 = [	$idleb3,	redqueen_idleb4	 ] {}
@@ -179,7 +145,6 @@ void() redqueen_idleb28 = [	$idleb28,	redqueen_idleb29 ] {}
 void() redqueen_idleb29 = [	$idleb29,	redqueen_idleb30 ] {}
 void() redqueen_idleb30 = [	$idleb30,	redqueen_idle1 ] {self.skin = 1;}
 
-//----------------------------------------------------------------------
 void() 	redqueen_idle1 = [	$idle1,		redqueen_idle2	] {self.skin = 0; redqueen_reset_attachment();
 idleswitch = idleswitch + 1;};
 void() 	redqueen_idle2 = [	$idle2,		redqueen_idle3	] {};
@@ -192,15 +157,12 @@ void() 	redqueen_idle8 = [	$idle8,		redqueen_idle9	] {};
 void() 	redqueen_idle9 = [	$idle9,		redqueen_idle10 ] {};
 void() 	redqueen_idle10 = [	$idle10,	redqueen_idle11 ] {};
 void() 	redqueen_idle11 = [	$idle11,	redqueen_idle1 ] {
-if (idleswitch > 5) {
-	if (random() < 0.3) redqueen_idleb1();
+	if (idleswitch > 5) {
+		if (random() < 0.3) redqueen_idleb1();
 	}
 };
 
-
-//----------------------------------------------------------------------
-void() 	redqueen_bow1 = [	$bow1,		redqueen_bow2	] {self.alpha = 0.5;
-	sound (self, CHAN_VOICE, "misc/queen_hum.wav", 1, ATTN_NORM);};
+void() 	redqueen_bow1 = [	$bow1,		redqueen_bow2	] {self.alpha = 0.5;sound (self, CHAN_VOICE, "redfield/misc/queen_hum.wav", 1, ATTN_NORM);};
 void() 	redqueen_bow2 = [	$bow2,		redqueen_bow3	] {self.alpha = 0.75;};
 void() 	redqueen_bow3 = [	$bow3,		redqueen_bow4	] {self.alpha = 1;};
 void() 	redqueen_bow4 = [	$bow4,		redqueen_bow5	] {};
@@ -232,7 +194,6 @@ void()	redqueen_bow29 = [	$bow29,		redqueen_bow30 ] {self.skin = 1;};
 void()	redqueen_bow30 = [	$bow30,		redqueen_bow31 ] {self.skin = 0;};
 void()	redqueen_bow31 = [	$bow31,		redqueen_spell1 ] {};
 
-//----------------------------------------------------------------------
 void() 	redqueen_spell1 = [	$spell1,	redqueen_spell2	] {};
 void() 	redqueen_spell2 = [	$spell2,	redqueen_spell3	] {};
 void() 	redqueen_spell3 = [	$spell3,	redqueen_spell4	] {self.skin = 1;};
@@ -255,8 +216,7 @@ void() 	redqueen_spell19 = [	$spell19,	redqueen_spell20 ] {redqueen_drawq(11,8,1
 void() 	redqueen_spell20 = [	$spell20,	redqueen_spell21 ] {redqueen_drawq(12,9,1);};
 void() 	redqueen_spell21 = [	$spell21,	redqueen_spell22 ] {redqueen_drawq(13,9,1);};
 void() 	redqueen_spell22 = [	$spell22,	redqueen_spell23 ] {redqueen_drawq(14,0,1);};
-void() 	redqueen_spell23 = [	$spell23,	redqueen_spell24 ] {redqueen_drawq(15,0,1);
-	sound (self, CHAN_WEAPON, "karasu/spell.wav", 0.5, ATTN_IDLE);};
+void() 	redqueen_spell23 = [	$spell23,	redqueen_spell24 ] {redqueen_drawq(15,0,1);sound (self, CHAN_WEAPON, "redfield/karasu/spell.wav", 0.5, ATTN_IDLE);};
 void() 	redqueen_spell24 = [	$spell24,	redqueen_spell25 ] {redqueen_drawq(16,0,1);};
 void() 	redqueen_spell25 = [	$spell25,	redqueen_spell26 ] {redqueen_drawq(17,0,1);};
 void() 	redqueen_spell26 = [	$spell26,	redqueen_spell27 ] {redqueen_drawq(18,0,1);};
@@ -264,7 +224,6 @@ void() 	redqueen_spell27 = [	$spell27,	redqueen_spell28 ] {redqueen_drawq(19,0,0
 void()	redqueen_spell28 = [	$spell28,	redqueen_spell29 ] {redqueen_drawq(20,0,0.25);self.skin = 1;};
 void()	redqueen_spell29 = [	$spell28,	redqueen_idle1 	 ] {redqueen_reset_attachment();self.skin = 0;};
 
-//----------------------------------------------------------------------
 // The use function is for triggering the ghost to move
 void() queen_ghost_use = { 
 	// Check for a delay target route (using target2)
@@ -277,12 +236,10 @@ void() queen_ghost_use = {
 	self.estate_on();
 };
 
-//----------------------------------------------------------------------
 
 float ghost_timer; 
 
-void() queen_ghost_fade =
-{
+void() queen_ghost_fade = {
 	if (self.estate == ESTATE_ON) return;	
     ghost_timer = ghost_timer - FADEMODEL_TIME;
 
@@ -348,32 +305,26 @@ void() queen_ghost_on = {
 	// No valid target, just stand around
 	self.movetarget = self.goalentity = world;
 	self.th_stand();
-}
+};
 
-/*======================================================================
-QUAKED monster_queen (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
-void() monster_queen =
-{
+void() monster_queen_precache = {
+	precache_model ("progs/redfield/red_queen.mdl");
+	precache_model ("progs/redfield/proj_rqspell.mdl");
+	precache_sound ("redfield/misc/queen_hum.wav");
+	precache_sound ("redfield/karasu/spell.wav");
+};
+
+// QUAKED monster_queen (1 0 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_queen = {
 	if (deathmatch) { remove(self); return; }
 
-	self.mdl = "progs/red_queen.mdl";			// Ghost Queen
-
-	precache_model (self.mdl);
-	
-	precache_sound ("misc/queen_hum.wav");
-	precache_sound ("karasu/spell.wav");
-
+	self.mdl = "progs/redfield/red_queen.mdl";			// Ghost Queen
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;	
-
-	precache_model ("progs/proj_rqspell.mdl");
-		
 	self.steptype = FS_FLYING;
 	self.nomonstercount = TRUE;
 	self.gibhealth = MON_NEVERGIB;
 	self.health = LARGE_TIMER;
 	self.yaw_speed = 20;
-		
 	self.th_stand = redqueen_bow1;
 	self.th_walk = queen_walk1;
 	self.th_run = queen_walk1;
@@ -390,5 +341,4 @@ void() monster_queen =
 	self.movetype = MOVETYPE_NONE;			// Stationary
 	self.solid = SOLID_NOT;				// no world interaction
 	setmodel (self, "");				// invisible
-
 };

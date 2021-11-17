@@ -459,33 +459,39 @@ void() jim_die = {
 	jim_dying1();
 };
 
-/*======================================================================
-//QUAKED monster_jim (1 0 0) (-16 -16 -24) (16 16 24) Ambush
-======================================================================*/
+void() monster_jim_precache = {
+	precache_model("progs/ad171/mon_jim.mdl");
+	precache_model("progs/ad171/mon_jimrock.mdl");
+	precache_model(MODEL_PROJ_LASER);		// Projectile fire and impact (used in projectiles): Enforcer laser model
+	precache_sound("quoth/bob/death.wav");
+	precache_sound("ad171/jim/pain1.wav");
+	precache_sound("ad171/jim/pain2.wav");
+	precache_sound("quoth/bob/s_explode.wav");
+	precache_sound("ad171/seeker/explode_major.wav");
+	precache_sound("quoth/bob/hover.wav"); // Long buzzing sound
+	precache_sound("quoth/bob/sight.wav");
+	precache_sound("ad171/jim/idle1.wav");
+	precache_sound("ad171/jim/idle2.wav");
+	precache_sound("quoth/defender/blip.wav");
+	precache_sound("ad171/jim/rocket_load.wav"); // Projectile fire and impact (used in projectiles): Wind up...
+	precache_sound("quoth/soldier/rocket.wav"); // ...Fire
+	precache_sound("quoth/dguard/hit.wav"); // ...Impact
+	precache_sound("quoth/bob/fire.wav");		// Wind up
+	precache_sound(SOUND_LASER_FIRE); // Fire
+	precache_sound(SOUND_LASER_HIT); // Impact
+};
+
+// QUAKED monster_jim (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 void() monster_jim = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (self.spawnflags & MON_JIM_ROCKET) self.mdl = "progs/ad171/mon_jimrock.mdl";
 	else self.mdl = "progs/ad171/mon_jim.mdl";
-	precache_model (self.mdl);
-	
-	// death/pain/attack sounds
-	precache_sound("quoth/bob/death.wav");
-	self.pain_sound = "ad171/jim/pain1.wav";
-	self.pain_sound2 = "ad171/jim/pain2.wav";
-	precache_sound(self.pain_sound);
-	precache_sound(self.pain_sound2);
-	
-	precache_sound("quoth/bob/s_explode.wav");
-	precache_sound("ad171/seeker/explode_major.wav");
-	precache_sound("quoth/bob/hover.wav");		// Long buzzing sound
 
+	self.pain_sound = "ad171/jim/pain1.wav"; // death/pain/attack sounds
+	self.pain_sound2 = "ad171/jim/pain2.wav";
 	self.sight_sound = "quoth/bob/sight.wav";
-	precache_sound (self.sight_sound);
-	
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
@@ -512,7 +518,7 @@ void() monster_jim = {
 	self.th_pain = jim_pain;
 	self.th_die = jim_die;
 	self.th_missile = jim_fire1;
-
+    self.hittype    = HIT_METAL;
 	self.classgroup = CG_ROBOT;
 	self.classmove = MON_MOVEFLY;
 
@@ -520,41 +526,20 @@ void() monster_jim = {
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
 
-    self.hittype    = HIT_METAL;
-	
 	if (self.spawnflags & MON_JIM_ROCKET) {
 		self.classtype = CT_MONJIMROCKET;
 		if (self.health < 1) self.health = 50;
-
-		// Classic idle sound + new variant
-		self.idle_sound = "ad171/jim/idle1.wav";
+		self.idle_sound = "ad171/jim/idle1.wav"; // Classic idle sound + new variant
 		self.idle_sound2 = "quoth/defender/blip.wav";
-		precache_sound (self.idle_sound);
-		precache_sound (self.idle_sound2);
-
-		// Projectile fire and impact (used in projectiles)
-		precache_sound("ad171/jim/rocket_load.wav");		// Wind up
-		precache_sound("quoth/soldier/rocket.wav");		// Fire
-		precache_sound("quoth/dguard/hit.wav");		// Impact	
 		if (self.deathstring == "")  self.deathstring = " was blown away by Jim\n";
 	} else {
 		self.classtype = CT_MONJIM;
 		if (self.health < 1) self.health = 100;
-		
-		// Classic idle sound + new variant
-		self.idle_sound = "ad171/jim/idle1.wav";
+		self.idle_sound = "ad171/jim/idle1.wav"; // Classic idle sound + new variant
 		self.idle_sound2 = "ad171/jim/idle2.wav";
-		precache_sound (self.idle_sound);
-		precache_sound (self.idle_sound2);
-
-		// Projectile fire and impact (used in projectiles)
-		precache_model (MODEL_PROJ_LASER);		// Enforcer laser model
-		precache_sound("quoth/bob/fire.wav");		// Wind up
-		precache_sound (SOUND_LASER_FIRE);		// Fire
-		precache_sound (SOUND_LASER_HIT);	// Impact
 		if (self.deathstring == "")  self.deathstring = " was cauterized by Jim\n";
 	}
-	
+
 	monster_start();
 };
 

@@ -1,6 +1,44 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Drake by Patrick Martin, Hexen2
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 6
+// Function count: 12
+//
+// Implements: Miscellaneous Effects
+//
+// Description:
+// Various decorative static objects or effects.
+//=============================================================================
+
 // This spawns a gib from the blood fountain.  Taken from Zerstorer and adapted to Drake.
-void() gibs_fly = {
-    local   float   rnum; 
+void() gibs_fly = { // [FUNCTION]
+    local float rnum; 
 
     rnum = random();
     if (rnum < 0.15) {
@@ -10,38 +48,27 @@ void() gibs_fly = {
 		ThrowGib(4,1);
 		ThrowGib(25,1);
         sound (self, CHAN_AUTO, "zerstorer/gibfnt/gf_sbig.wav", 1, ATTN_NORM);
-    }
-    else if (rnum < 0.45)
-        ThrowGib(1,1);
-    else if (rnum < 0.85)
-		ThrowGib(2,1);   //Zer uses gib4.mdl.
-    else
-        ThrowGib(3,1);
+    } else if (rnum < 0.45) ThrowGib(1,1);
+    else if (rnum < 0.85) ThrowGib(2,1);   //Zer uses gib4.mdl.
+    else ThrowGib(3,1);
 
-    if (random() < 0.5)
-        sound (self, CHAN_VOICE, "zerstorer/gibfnt/gf_sprt1.wav", 1, ATTN_NORM);
-    else
-        sound (self, CHAN_VOICE, "zerstorer/gibfnt/gf_sprt2.wav", 1, ATTN_NORM);
+    if (random() < 0.5) sound (self, CHAN_VOICE, "zerstorer/gibfnt/gf_sprt1.wav", 1, ATTN_NORM);
+    else sound (self, CHAN_VOICE, "zerstorer/gibfnt/gf_sprt2.wav", 1, ATTN_NORM);
 
     self.nextthink = time + (random() * 5) + 3;
     self.think = gibs_fly;
 };
 
-void() gibft_use = {
+void() gibft_use = { // [FUNCTION]
     if (self.nextthink == 0) {
         self.nextthink = time + self.delay;
-	self.think = gibs_fly;
-    } else if (self.lefty)
-        self.nextthink = 0;
-    else
-        remove (self);
+		self.think = gibs_fly;
+    } else if (self.lefty) self.nextthink = 0;
+    else remove (self);
 };
 
-//============
-// --> QUAKED misc_gibft (0 .5 .8) (-8 -8 -8) (8 8 8)
 // Gib Fountain -- Zerstorer style.
-//============
-void() misc_gibft = {
+void() misc_gibft = { // [ENTITY]
     precache_model ("progs/gib1.mdl");
     precache_model ("progs/gib2.mdl");
     precache_model ("progs/gib3.mdl");
@@ -51,11 +78,9 @@ void() misc_gibft = {
     precache_sound ("zerstorer/gibfnt/gf_sprt2.wav");
     precache_sound ("zerstorer/gibfnt/gf_plop.wav");
     precache_sound ("zerstorer/gibfnt/gf_sbig.wav");
-    //self.classname  = "blood";
     if (!self.wait) self.wait = 2;
     self.nextthink  = time + (random() * self.wait);
-    self.think      = gibs_fly;
-
+    self.think = gibs_fly;
     if (!self.speed) self.speed = 1000;
     if (!self.dmg) self.dmg = 5;
     if (!self.delay) self.delay = 0.5;
@@ -64,97 +89,72 @@ void() misc_gibft = {
         self.lefty = self.spawnflags & 4;
         if (self.spawnflags & ENT_STARTOFF) {
             self.nextthink = 0;     // Start off.
-	    self.think = SUB_Null;
-	}
+			self.think = SUB_Null;
+		}
         self.use = gibft_use;
     }
 };
 
-//==========================================================================
 //  Big Bell
 
-// Note to self:  ATTN_NORM, which equals 1, has a maximum range of 1000.
-// ATTN_NONE, which equals 0, is heard at full volume anywhere.  The bell
-// should be heard much further away than a distance of 1000, yet shouldn't
-// be heard at full volume everywhere.  Armagon uses attenuation of 0.5,
-// which lets him be heard up to a distance of 2000.  Since the bell should
-// be heard up to at least 4000, use 0.25.  For up to 8000, use 0.125.
-
-// This animates the bell.
-// Hexen2 bell frames:  <ringA: 0-30>, <ringB: 31-51>
-void() bell_ring =[ 0, bell_ring ]
-{
+// ATTN_NORM, which equals 1, has a maximum range of 1000.  ATTN_NONE, which equals 0, is heard at full volume anywhere.  The bell
+// should be heard much further away than a distance of 1000, yet shouldn't be heard at full volume everywhere.  Armagon uses attenuation of 0.5,
+// which lets him be heard up to a distance of 2000.  Since the bell should be heard up to at least 4000, use 0.25.  For up to 8000, use 0.125.
+// This animates the bell.  Hexen2 bell frames:  <ringA: 0-30>, <ringB: 31-51>.
+void() bell_ring =[ 0, bell_ring ] { // [FUNCTION]
     self.walkframe = self.walkframe + 1;
-    if (self.walkframe >= self.waitmax)
-    {   // Done ringing and animating.
+    if (self.walkframe >= self.waitmax) { // Done ringing and animating.
         self.frame = self.walkframe = 0;
         self.think = SUB_Null;
         return;
     }
-    self.frame = self.waitmin + self.walkframe;
 
-// Big bell should be heard from long distance, see attenuation note above.
-    if (!self.waitmin)  // Using ringing anim if TRUE.
-        if ((self.frame == 2) || (self.frame == 7) || (self.frame == 11))
-            sound (self, CHAN_AUTO, "drake/misc/bellring.wav", 1, 0.2);
+    self.frame = self.waitmin + self.walkframe;
+    if (self.waitmin) return; // Not using ringing anim if TRUE.
+
+    if ((self.frame == 2) || (self.frame == 7) || (self.frame == 11)) sound (self, CHAN_AUTO, "drake/misc/bellring.wav", 1, 0.2); // Big bell should be heard from long distance, see attenuation note above.
 };
 
 // Self-explanatory -- called when bell gets used.
-void() bell_use =
-{
-    if (self.frame)
-        if (self.frame <= 12)
-            return;     // Already ringing.
+void() bell_use = { // [FUNCTION]
+    if (self.frame && self.frame <= 12) return; // Already ringing.
+
     self.walkframe = 0;
-    self.waitmin = 0;  self.waitmax = 30;
+    self.waitmin = 0;
+	self.waitmax = 30;
     bell_ring ();
 };
 
 // Called when bell takes a big hit.
-void() bell_bighit =
-{
+void() bell_bighit = { // [FUNCTION]
     self.takedamage = DAMAGE_YES;
     self.health = self.max_health;      // Reset for the next hit.
     bell_use();
 };
 
 // Called when bell takes a small hit.
-void(entity inflictor, entity attacker, float damage) bell_hit = {
+void(entity inflictor, entity attacker, float damage) bell_hit = { // [FUNCTION]
     self.health = self.max_health;      // Reset for the next hit.
-    if (damage < 20) {
-		// Small hit.
-        if (self.frame)
-            if (self.frame < 47)
-                return;     // Too much momemtum to overcome.
+    if (damage < 20) { // Small hit.
+        if (self.frame && self.frame < 47) return; // Too much momemtum to overcome.
+
         self.walkframe = 10;
-    } else {
-		// Medium hit.
-        if (self.frame) {
-            if (self.frame < 18)
-                return;     // Bell still ringing from use.
-            if (self.frame >= 31)
-                if (self.frame < 41)
-                    return;     // Bell still has extra momemtum.
-        }
+    } else { // Medium hit.
+        if (self.frame && self.frame < 18) return; // Bell still ringing from use.
+        if (self.frame >= 31 && self.frame < 41) return; // Bell still has extra momemtum.
+
         self.walkframe = 0;
     }
     self.waitmin = 31;  self.waitmax = 21;
     bell_ring ();
-
-    attacker = attacker;    // Appease FrikQcc.
 };
 
-//============
 // --> QUAKED misc_bell (0 .5 .8) (-64 -64 -80) (64 64 88)
 // Huge bell.  Use in belltowers.
-//
-// Note:  This is a modified Hexen2 bell.  The model was shifted upward
+// This is a modified Hexen2 bell.  The model was shifted upward
 // by 112 pixels.
-//
 // In Hexen2, bell has a hull from '-100 -100 -210' to '100 100 8'.
-//============
-void() misc_bell =
-{
+void() misc_bell = { // [ENTITY]
     precache_model("progs/drake/bellring.mdl");
 	setmodel(self,"progs/drake/bellring.mdl");
     precache_sound ("drake/misc/bellring.wav");
@@ -171,12 +171,8 @@ void() misc_bell =
     self.takedamage = DAMAGE_YES;
 };
 
-//============
-// PlaceDecor
-//
-// plants the object on the floor
-//============
-void() PlaceDecor = {
+// Plants the object on the floor.  I had removed this at one point but it breaks too many maps, restored. -Qmaster
+void() PlaceDecor = { // [FUNCTION]
     self.solid      = SOLID_BBOX;
     self.movetype   = MOVETYPE_TOSS;    
     self.velocity   = '0 0 0';
@@ -191,65 +187,50 @@ void() PlaceDecor = {
     }
 };
 
-//============
-// --> QUAKED misc_decor (0 .5 .8) ?
 // Miscellaneous solid object that just sits there.
-//============
-void() misc_decor =
-{
-    if (!self.mdl)
-    {   // Default to Zerstorer tree.
+void() misc_decor = { // [ENTITY]
+    if (!self.mdl) { // Default to Zerstorer tree.
         self.mdl = "progs/drake/tree_zer.mdl";
-        self.pos1 = '-16 -16 0';
+        self.pos1 = VEC_ITEM_MIN;
         self.pos2 = '16 16 86';
     }
 	precache_model(self.mdl);
 	setmodel(self, self.mdl);
     setsize (self, self.pos1, self.pos2);
-
     self.nextthink  = time + 0.2;   // items start after other solids
-    self.think      = PlaceDecor;
+    self.think = PlaceDecor;
 };
 
-//- - - - - - - - -
-void(float loop, float dm) statue_pieces =
-{
+void(float loop, float dm) statue_pieces = { // [FUNCTION]
     local   float   hp;
 
 // PM:  Use Drake gib functions so that carnivores can't eat tree splinters.
     hp = self.health;
     self.health = dm;   // So the rocks have some velocity.
     sound (self, CHAN_AUTO, "drake/misc/wallbrk.wav", 1, ATTN_NORM);
-    do
-    {
+    do {
         if (random() < 0.5)
-			ThrowGib(11, 1); // gib1mdl  ThrowTreeChunks ("progs/imp_rock.mdl");
+			ThrowGib(11, 1); // gib1mdl  ThrowTreeChunks ("progs/drake/imp_rock.mdl");
         else
-			ThrowGib(12, 1); // gib2mdl ThrowTreeChunks ("progs/st_gib3.mdl");
+			ThrowGib(12, 1); // gib2mdl ThrowTreeChunks ("progs/drake/st_gib3.mdl");
         loop = loop - 1;
     } while (loop > 0);
     self.health = hp;
 };
 
-void() statue_crumble =
-{
+void() statue_crumble = { // [FUNCTION]
     monster_death_use ();
-
     statue_pieces (8, self.health);
-
-// PM:  Don't remove self now because we may be in the middle of a
-// damage chain, such as one made by T_RadiusDamage.
 	setmodel(self, "progs/null.spr");
-    self.nextthink = time + 0.1;
-    self.think = SUB_Remove;
-
+    self.nextthink = time + 0.1; // PM:  Don't remove self now because we may be in the middle of a damage chain, such as one made by T_RadiusDamage.
+    self.think = SUB_Remove; 
     self.solid = SOLID_NOT;
     self.takedamage = DAMAGE_NO;
 };
 
 // If a client stands on a statue, smash it.  Stops client from using
 // the statue as a platform to reach places he shouldn't yet.
-void() crumble_check = {
+void() crumble_check = { // [FUNCTION]
     if (other.flags & FLx_CREATURE)
         if (other.movetype == MOVETYPE_WALK)
             if (other.health > 0)
@@ -261,9 +242,8 @@ void() crumble_check = {
                 }
 };
 
-// --> QUAKED misc_statue (.8 .5 .5) (-32 -32 -24) (32 32 80)
 // A statue of the player.  Used in soeexit.bsp.
-void() misc_statue = {
+void() misc_statue = { // [ENTITY]
 	local vector trig;
 	local float vx, vy;
 
@@ -275,8 +255,7 @@ void() misc_statue = {
         self.pos2   = '32 32 80';
         //self.touch  = barrel_touch;     // Walk on statue.
     } else { // Default to angel statue.  Since the model is rectangular, calculate the bbox dimensions.
-        trig_x = mathlib_cos(self.angles_y);
-		trig_y = mathlib_sin(self.angles_y);
+        trig = CoSine (self.angles_y);
         vx = fabs(16 * trig_x) & 31 + 32;
         vy = fabs(16 * trig_y) & 31 + 32;
         self.mdl    = "progs/drake/anglstat.mdl";
@@ -300,16 +279,16 @@ void() misc_statue = {
 };
 
 // A statue of Hexen2's praying angel.  For Arcanum.
-void() misc_statue_angel = {misc_statue ();};
+void() misc_statue_angel = {misc_statue ();}; // [ENTITY]
 
-void(entity inflictor, entity attacker, float damage) tree_pain = {
+void(entity inflictor, entity attacker, float damage) tree_pain = { // [FUNCTION]
     if (self.pain_finished > time) return;
 
     sound (self, CHAN_VOICE, "drake/misc/met2wd.wav", 1, ATTN_NORM);
     self.pain_finished = time + 0.1;    //2;
 };
 
-void() tree_die = {
+void() tree_die = { // [FUNCTION]
     monster_death_use ();
     sound (self, CHAN_VOICE, "drake/misc/woodbrk.wav", 1, ATTN_NORM);
     if (self.health > -50) self.health = -50;  // So gibs have some velocity.
@@ -324,7 +303,7 @@ void() tree_die = {
     self.takedamage = DAMAGE_NO;
 };
 
-void() misc_tree = {
+void() misc_tree = { // [ENTITY]
     self.cnt = floor(self.cnt);
     if ((self.cnt < 0) || (self.cnt > 3)) self.cnt = 0;
 

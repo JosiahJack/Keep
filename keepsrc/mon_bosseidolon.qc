@@ -1,45 +1,35 @@
-/*==============================================================================
-Eidolon Demon from Hexen2 / Altar of Storms MOD
-==============================================================================*/
+// Eidolon Demon from Hexen2 / Altar of Storms MOD
+
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8
 $frame stand9 stand10 stand11 stand12 stand13 stand14 stand15
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8
 $frame walk9 walk10 walk11 walk12 walk13 walk14 walk15 walk16
 $frame walk17 walk18 walk19 walk20 walk21 walk22 walk23 walk24
-
 $frame spell1 spell2 spell3 spell4 spell5 spell6 spell7 spell8
 $frame spell9 spell10 spell11 spell12 spell13 spell14 spell15 spell16
 $frame spell17 spell18 spell19 spell20
-
 $frame howl1 howl2 howl3 howl4 howl5 howl6 howl7 howl8
 $frame howl9 howl10 howl11 howl12 howl13 howl14 howl15 howl16
 $frame howl17 howl18 howl19 howl20 howl21 howl22 howl23 howl24
 $frame howl25 howl26 howl27 howl28
-
 $frame crouch1 crouch2 crouch3 crouch4 crouch5 crouch6 crouch7 crouch8
 $frame crouch9 crouch10 crouch11 crouch12 crouch13 crouch14 crouch15 crouch16
 $frame crouch17 crouch18 crouch19 crouch20 crouch21 crouch22 crouch23 crouch24
 $frame crouch25 crouch26 crouch27 crouch28 crouch29 crouch30
-
 $frame crWait1 crWait2 crWait3 crWait4 crWait5 crWait6 crWait7 crWait8
 $frame crWait9 crWait10 crWait11 crWait12 crWait13 crWait14 crWait15
-
 $frame grow1 grow2 grow3 grow4 grow5 grow6 grow7 grow8
 $frame grow9 grow10 grow11 grow12 grow13 grow14 grow15 grow16
 $frame grow17 grow18 grow19 grow20 grow21 grow22 grow23 grow24
-
 $frame breath1 breath2 breath3 breath4 breath5 breath6 breath7 breath8
 $frame breath9 breath10 breath11 breath12 breath13 breath14 breath15 breath16
 $frame breath17 breath18 breath19 breath20 breath21 breath22 breath23 breath24
 $frame breath25 breath26 breath27 breath28 breath29 breath30 breath31 breath32
 $frame breath33 breath34 breath35 breath36 breath37 breath38 breath39 breath40
 $frame breath41 breath42 breath43
-
 $frame power1 power2 power3 power4 power5 power6 power7 power8
 $frame power9 power10 power11 power12 power13 power14 power15 power16
 $frame power17 power18 power19 power20
-
 $frame painA1 painA2 painA3 painA4 painA5 painA6 painA7 painA8 painA9
 $frame painB1 painB2 painB3 painB4 painB5 painB6 painB7 painB8
 $frame painB9 painB10 painB11 painB12 painB13 painB14 painB15 painB16
@@ -76,9 +66,7 @@ void() eidolon_WaveSetupHP = {
 	dprint(")\n");
 };
 
-//----------------------------------------------------------------------
 // Check if HP reached next wave, walk to center and fire targets
-//----------------------------------------------------------------------
 float() eidolon_WaveCheck = {
 	// Check for boss wave boundary event
 	if (self.health > 1 && self.health < self.bosswavetrig) {
@@ -107,66 +95,47 @@ float() eidolon_WaveCheck = {
 	return FALSE;
 };
 
-//======================================================================
-// MONSTER STATES (stand, walk run, attack, pain and death!
-//======================================================================
 void() eidolon_idle = {
-	// Do nothing if dead
-	if (self.health < 1) return;
+	if (self.health < 1) return; // Do nothing if dead
+
 	if (self.walkframe == 1) monster_idle_sound();
 	self.nextthink = time + 0.05;
-
-	// Keep moving the animation frame forward
-	self.walkframe = self.walkframe + 1;
+	self.walkframe = self.walkframe + 1; // Keep moving the animation frame forward
 	if (self.walkframe > 14) self.walkframe = 0;
 	self.frame = $stand1 + self.walkframe;
-	ai_stand(); // use global function instead
+	ai_stand();
 };
 
 void() eidolon_stand1 = [ $stand1, eidolon_idle ] {self.walkframe = 0;};
 
-//======================================================================
 // There is only one set of animations for walk and run and
 // the only different is the final AI state (walk/run) 
 // This is a hexen2 model so it should run at 20fps not 10fps
-//----------------------------------------------------------------------
+
 float EIDOLON_WALK = 2;
 float EIDOLON_RUN = 4;
 
-//----------------------------------------------------------------------
-void(float fstate) eidolon_move =
-{
-	// Do nothing if dead
-	if (self.health < 1) return;
+void(float fstate) eidolon_move = {
+	if (self.health < 1) return; // Do nothing if dead
+
 	self.nextthink = time + 0.05;
-	
-	// Keep moveing the animation frame forward
-	self.walkframe = self.walkframe + 1;
+	self.walkframe = self.walkframe + 1; // Keep moveing the animation frame forward
 	if (self.walkframe > 23) self.walkframe = 0;
 	self.frame = $walk1 + self.walkframe;
-	
-	// Check for any special frame events
-	if (self.frame == $walk1) monster_idle_sound();
-	if (self.frame == $walk2 || self.frame == $walk14)
-		monster_footstep(FALSE);
+	if (self.frame == $walk1) monster_idle_sound(); // Check for any special frame events
+	if (self.frame == $walk2 || self.frame == $walk14) monster_footstep(FALSE);
 	
 	// Phase 1 (caged) uses walk to turn around
 	if (self.style == EIDOLON_PHASE1) {
 		// Wrong angle difference? keep turning
 		if (eidolon_angcheck(self.enemy.origin, 10)) ChangeYaw();
-		else {
-			// Close the beginning or the end of the animation?
-			if (self.walkframe < 4 || self.walkframe > 20) 
-				self.think = self.th_stand;
+		else { // Close the beginning or the end of the animation?
+			if (self.walkframe < 4 || self.walkframe > 20) self.think = self.th_stand;
 		}
-	}
-	// Phase 2 (free) walking back to center
-	else if (self.style == EIDOLON_PHASE2 && fstate == EIDOLON_WALK) {
-		// Check for player
-		if (FindTarget ()) return;
+	} else if (self.style == EIDOLON_PHASE2 && fstate == EIDOLON_WALK) { // Phase 2 (free) walking back to center
+		if (FindTarget ()) return; // Check for player
 
-		// Calculate distance to origin location (notouch function)
-		self.enemydist = vlen(self.movelast.origin - self.origin);
+		self.enemydist = vlen(self.movelast.origin - self.origin); // Calculate distance to origin location (notouch function)
 		// Reached origin point yet?
 		if (self.enemydist < MONAI_SPAWNEIDO) {
 			// Still remember the old player?
@@ -192,8 +161,7 @@ void() eidolon_run1 = [ $walk1, eidolon_run1 ] {eidolon_move(EIDOLON_RUN);};
 //============================================================================
 // Attachment management (create, finish and delete)
 //============================================================================
-void() eidolon_create_attachment =
-{
+void() eidolon_create_attachment = {
 	// Are the attachments setup yet?
 	if (!self.attachment) {
 		self.attachment = spawn();
@@ -203,56 +171,24 @@ void() eidolon_create_attachment =
 	}
 };
 
-//----------------------------------------------------------------------
-void() eidolon_setup_attachment = 
-{
-	// Is monster dead or dying?
-	if (self.health < 1) return;
+void() eidolon_setup_attachment = {
+	if (self.health < 1) return; // Is monster dead or dying?
 
-	// Check if attachment has been setup yet
-	if (!self.attachment) eidolon_create_attachment();
-
-	// Move attachment into place ready for use
-	self.attachment.movetype = MOVETYPE_NONE;
-	self.attachment.solid = SOLID_NOT;
-	setmodel(self.attachment, MODEL_EMPTY);
+	if (!self.attachment) eidolon_create_attachment(); // Check if attachment has been setup yet
+	SUB_FinishAttachment();
 	setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
-	setorigin(self.attachment, self.origin);
-	// Using empty model, so reset angle, frame and skin.
+	setorigin(self.attachment, self.origin); // Move attachment into place ready for use
 	self.attachment.angles = self.angles;
-	self.attachment.frame = self.attachment.skin = 0;
+	self.attachment.frame = self.attachment.skin = 0; // Using empty model, so reset angle, frame and skin.
 };
 
-//----------------------------------------------------------------------
-void() eidolon_finish_attachment =
-{
-	if (self.attachment) {
-		setmodel(self.attachment, "");
-		self.attachment.state = STATE_OFF;
-	}
-};
-
-//----------------------------------------------------------------------
-void() eidolon_remove_attachment =
-{
-	if (self.attachment) {
-		self.attachment.think = SUB_Remove;
-		self.attachment.nextthink = time + 0.1;
-	}
-}
-
-//======================================================================
 // ATTACK A  - Fire large explosive rock (grenade)
 // Animation - Spell, put right hand up and infront
-//======================================================================
-void(vector rockofs) Fire_attackA =
-{
+void(vector rockofs) Fire_attackA = {
 	local float foffset, offset, shotcount;
 	local vector org, sorg, dir, offang, avel;
 
-	// Finished with growing rock
-	eidolon_finish_attachment();
-
+	SUB_FinishAttachment(); // Finished with growing rock
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 
@@ -264,16 +200,12 @@ void(vector rockofs) Fire_attackA =
 	foffset = 8;
 	offset = -foffset; shotcount = 3;
 	while (shotcount > 0) {
-	// based angle of projectiles on straight line between source and target
+		// based angle of projectiles on straight line between source and target
 		offang = vectoangles ((self.enemy.origin-'0 0 24') - org);
 		offang_y = offang_y + offset;
 		makevectors (offang);
-	
-		// Randomly spawn projectiles around central point
-		sorg = org + v_up * (5 + random() * 10);
-		
-		// Straight line velocity from source to target
-		dir = normalize (v_forward);
+		sorg = org + v_up * (5 + random() * 10); // Randomly spawn projectiles around central point
+		dir = normalize (v_forward); // Straight line velocity from source to target
 		dir_z = 0 - dir_z + (random() - 0.5)*0.1;	// Slight wiggle up/down
 		avel = vecrand(100,200,FALSE);
 		
@@ -285,56 +217,39 @@ void(vector rockofs) Fire_attackA =
 	}
 };
 
-//----------------------------------------------------------------------
-void(vector rockofs, float rockframe) Setup_attackA =
-{
+void(vector rockofs, float rockframe) Setup_attackA = {
 	local vector org;
 
-	// Check if attachment has been setup yet
-	if (!self.attachment) eidolon_create_attachment();
+	if (!self.attachment) eidolon_create_attachment(); // Check if attachment has been setup yet
 	
 	// Frame 0 is start of the sequence (move everything into place)
 	if (rockframe == 0) {
 		self.attachment.state = STATE_ON;
 		self.attachment.movetype = MOVETYPE_NONE;
 		self.attachment.solid = SOLID_NOT;
-
 		setmodel(self.attachment, self.attachment.mdl);
 		setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
-
-		// Start throwing rock sound
-		sound (self, CHAN_WEAPON, "ad171/eidolon/attacka.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "ad171/eidolon/attacka.wav", 1, ATTN_NORM); // Start throwing rock sound
 	}
 
-	// Turn towards enemy and update model attachment
-	// The offset is based on the Eidolon facing forward
-	makevectors(self.angles);
-	org = self.origin + attack_vector(rockofs);
+	makevectors(self.angles); // Turn towards enemy and update model attachment
+	org = self.origin + attack_vector(rockofs); // The offset is based on the Eidolon facing forward
 	setorigin(self.attachment, org);
 	self.attachment.angles = self.angles;
 	self.attachment.angles_x = random()*360;
 	self.attachment.frame = rockframe;
-	// Random explosion like particles from ball as it grows
-	particle_explode(self.attachment.origin, 10+random()*10, 0.5+random(), PARTICLE_BURST_WHITE, 0);
+	particle_explode(self.attachment.origin, 10+random()*10, 0.5+random(), PARTICLE_BURST_WHITE, 0); // Random explosion like particles from ball as it grows
 };
 
-//----------------------------------------------------------------------
 void() eidolon_attackA2 = {
-	// Do nothing if dead
-	if (self.health < 0) return;
+	if (self.health < 0) return; // Do nothing if dead
 
 	self.nextthink = time + 0.05;
-	
-	// Keep moveing the animation frame forward
-	self.walkframe = self.walkframe + 1;
+	self.walkframe = self.walkframe + 1; // Keep moveing the animation frame forward
 	if (self.walkframe > 19) self.think = self.th_run;
 	self.frame = $spell1 + self.walkframe;
-	
-	// Keep turning towards the player
-	if (self.frame < $spell14) ai_face();
-	
-	// Check the state of the projectile (grow/fire)
-	if (self.frame == $spell3) eidolon_setup_attachment();
+	if (self.frame < $spell14) ai_face(); // Keep turning towards the player
+	if (self.frame == $spell3) eidolon_setup_attachment(); // Check the state of the projectile (grow/fire)
 	else if (self.frame == $spell4) Setup_attackA('60 18 64',0);
 	else if (self.frame == $spell5) Setup_attackA('62 18 68',1);
 	else if (self.frame == $spell6) Setup_attackA('64 18 72',2);
@@ -441,12 +356,11 @@ void(vector rockofs, float rockframe) Setup_attackE = {
 	
 	if (rockframe == 7) {
 		// Goodbye little rock!
-		eidolon_finish_attachment();
+		SUB_FinishAttachment();
 		// Wakeup crystal and golems
 		if (self.attachment2.target2 != "") 
 					trigger_strs(self.attachment2.target2, self);
-	}
-	else {
+	} else {
 		// Turn towards enemy and update model attachment
 		// The offset is based on the Eidolon facing forward
 		makevectors(self.angles);
@@ -581,8 +495,7 @@ void() eidolon_painB1 = [ $painB1, eidolon_painB2 ] {self.walkframe = 0;};
 
 //----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) eidolon_pain = {
-	// Finish with all attachments
-	eidolon_finish_attachment();
+	SUB_FinishAttachment(); // Finish with all attachments
 
 	// Check for boss wave trigger events
 	if (eidolon_WaveCheck() == TRUE) return;
@@ -684,8 +597,8 @@ void() eidolon_die1 = [ $crouch1, eidolon_die2 ] { self.walkframe = self.lip = 0
 void() eidolon_die = {
 	self.deadflag = DEAD_DEAD;		// the rock finally crashed
 	self.effects = 0;				// Remove effects on death
-	eidolon_finish_attachment();	// Remove any attachments
-	eidolon_remove_attachment();
+	SUB_FinishAttachment();	// Remove any attachments
+	SUB_RemoveAttachments();
 	monster_death_precheck();
 	sound (self, CHAN_VOICE, "ne_ruins/eidolon/death.wav", 1, ATTN_NORM);
 	self.think = eidolon_die1; // Explosions should wait a bit
@@ -800,53 +713,48 @@ void() eidolon_start = {
 	}
 };
 
+void() monster_eidolon_precache = {
+	precache_model("progs/ad171/mon_bosseidolon.mdl");
+	precache_model(MODEL_PROJ_EIDO1);
+	precache_model(MODEL_PROJ_GROCK1);
+	precache_model(MODEL_PROJ_GROCK2);
+	precache_sound("ad171/eidolon/idle1.wav");
+	precache_sound("ad171/eidolon/idle2.wav");
+	precache_sound("ad171/eidolon/pain.wav");
+	precache_sound("ne_ruins/eidolon/sight.wav");
+	precache_sound("ne_ruins/eidolon/death.wav"); // Final death sequence
+	precache_sound("ad171/seeker/explode_major.wav");
+	precache_sound("ad171/eidolon/implode_death.wav");
+	precache_sound("ad171/eidolon/elec_arch1.wav");
+	precache_sound("ad171/eidolon/elec_arch2.wav");
+	precache_sound("ad171/eidolon/attacka.wav"); // Attack A - Throw Boulder - range attack
+	precache_sound("ad171/eidolon/rock_hit1.wav");
+	precache_sound("ad171/eidolon/rock_hit2.wav");
+	precache_sound("ad171/eidolon/attackc.wav"); // Attack C - Rockstorm - range attack
+	precache_sound(SOUND_IMP_ROCK1);
+	precache_sound(SOUND_IMP_ROCK2);
+	precache_sound(SOUND_IMP_ROCK3);
+	precache_sound(SOUND_IMP_ROCK4);
+	precache_sound("ad171/eidolon/attacke.wav"); // Attack E - Lightning at summoning crystal - range attack
+	precache_sound("ne_ruins/eidolon/step1.wav");
+	precache_sound("ne_ruins/eidolon/step2.wav");
+	precache_sound("ne_ruins/eidolon/step3.wav");
+	precache_sound("ne_ruins/eidolon/step4.wav");
+};
+
 // QUAKED monster_eidolon (1 0 0) (-32 -32 -24) (32 32 128)
 void() monster_eidolon = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups	
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.mdl = "progs/ad171/mon_bosseidolon.mdl";
-	precache_model (self.mdl);
-	precache_model (MODEL_PROJ_EIDO1);
-	precache_model (MODEL_PROJ_GROCK1);
-	precache_model (MODEL_PROJ_GROCK2);
-
 	self.gib1mdl = MODEL_PROJ_GROCK1;	// small golem rock
 	self.gib2mdl = MODEL_PROJ_GROCK2;	// medium golem rock
 	self.gib1frame = self.gib2frame = 9;
-
-	// sight/pain/death sounds
-	self.idle_sound = "ad171/eidolon/idle1.wav";
+	self.idle_sound = "ad171/eidolon/idle1.wav"; // sight/pain/death sounds
 	self.idle_sound2 = "ad171/eidolon/idle2.wav";
 	self.pain_sound = "ad171/eidolon/pain.wav";
 	self.sight_sound = "ne_ruins/eidolon/sight.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-	precache_sound (self.pain_sound);
-	precache_sound (self.sight_sound);
-
-	// Final death sequence
-	precache_sound ("ne_ruins/eidolon/death.wav");
-	precache_sound ("ad171/seeker/explode_major.wav");
-	precache_sound ("ad171/eidolon/implode_death.wav");
-	precache_sound ("ad171/eidolon/elec_arch1.wav");
-	precache_sound ("ad171/eidolon/elec_arch2.wav");
-	
-	// Attack A - Throw Boulder - range attack
-	precache_sound ("ad171/eidolon/attacka.wav");
-	precache_sound ("ad171/eidolon/rock_hit1.wav");
-	precache_sound ("ad171/eidolon/rock_hit2.wav");
-
-	// Attack C - Rockstorm - range attack
-	precache_sound ("ad171/eidolon/attackc.wav");
-	precache_sound (SOUND_IMP_ROCK1);
-	precache_sound (SOUND_IMP_ROCK2);
-	precache_sound (SOUND_IMP_ROCK3);
-	precache_sound (SOUND_IMP_ROCK4);
-
-	// Attack E - Lightning at summoning crystal - range attack
-	precache_sound ("ad171/eidolon/attacke.wav");
-	
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	self.bbmins = '-32 -32 -24';	// Special Size
@@ -854,13 +762,10 @@ void() monster_eidolon = {
 	self.bboxtype = BBOX_CUSTOM;
 	if (self.bossflag >= 0) self.bossflag = TRUE; // Boss flag
 	if (self.poisonous >= 0) self.poisonous = FALSE;
-	if (self.deathstring == string_null) self.deathstring = " was pulverized by the Sculptor\n";
+	if (self.deathstring == "") self.deathstring = " was pulverized by the Sculptor\n";
 	self.lastorigin = self.origin;	// Origin for camera interpolation
 	self.ticktimer = 0.05;			// Model animations at 20fps
-	
-	// Check passive system for exceptions
-	setup_passivestate(self);
-	
+	setup_passivestate(self); // Check passive system for exceptions
 	if (self.health < 1) self.health = self.max_health = MEGADEATH;
 	self.pain_finished = time + LARGE_TIMER;
 	self.takedamage = DAMAGE_NO;	// Immune to damage
@@ -871,33 +776,25 @@ void() monster_eidolon = {
 	if (self.skin >=0) self.skin = 1;	// New rocky skin
 	else self.skin = self.skin + 1; // -1 becomes 0 to force 0.
 	if (!self.exactskin) self.exactskin = self.skin; // Since we are now passing this to monster_start
-
-	// Custom feet sounds
-	self.stepc1 = "ne_ruins/eidolon/step1.wav";
+	self.stepc1 = "ne_ruins/eidolon/step1.wav"; // Custom feet sounds
 	self.stepc2 = "ne_ruins/eidolon/step2.wav";
 	self.stepc3 = "ne_ruins/eidolon/step3.wav";
 	self.stepc4 = "ne_ruins/eidolon/step4.wav";
-	self.stepc5 = "ne_ruins/eidolon/step1.wav"; //why?
-	precache_sound (self.stepc1);
-	precache_sound (self.stepc2);
-	precache_sound (self.stepc3);
-	precache_sound (self.stepc4);
+	self.stepc5 = "ne_ruins/eidolon/step1.wav";
 	self.steptype = FS_TYPECUSTOM;
 	self.style = 0; // Current wave
-	
-	// No targetname = no trigger!
-	if (self.targetname == "") {
-		dprint("\b[EIDO_BOSS]\b Missing trigger name!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		return;
-	}
 
 	self.think1 = eidolon_start;
-
 	self.classtype = CT_MONEIDOLON;
 	self.classgroup = CG_STONE;
 	self.classmove = MON_MOVEWALK;
 	monster_start();
+
+	// No targetname = no trigger!
+	if (self.targetname == "") {
+		dprint("\b[EIDO_BOSS]\b Missing trigger name!\n");
+		eidolon_start();
+	}
 };
 
 //======================================================================

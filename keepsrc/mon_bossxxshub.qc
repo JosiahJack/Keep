@@ -346,9 +346,7 @@ void() xxshub_wakeup =
 	if (activator.flags & FL_CLIENT) self.enemy = activator;
 };	
 
-//----------------------------------------------------------------------
 // Setup Shub after trigger event
-//----------------------------------------------------------------------
 void() xxshub_start = {
 	self.use = SUB_Null;			// Suppress trigger events
 	self.style = SHUB_PHASE1;		// Waiting for combat trigger
@@ -360,7 +358,6 @@ void() xxshub_start = {
 	self.movetype = MOVETYPE_STEP;
 	setmodel(self, self.mdl);					// Setup model
 	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
-	
 	self.yaw_speed = 0;				// No turning speed
 	self.velocity = '0 0 0';		// Make sure stationary
 	self.deadflag = DEAD_NO;		// used to stop death re-triggering
@@ -369,28 +366,23 @@ void() xxshub_start = {
 	self.pain_longanim = FALSE;		// No axe advantage
 	self.takedamage = DAMAGE_AIM;	// Can receive damage
 	self.pain_flinch = 1;			// Pain is a start trigger
-	
 	self.movespeed = 1;				// Shub does not move!
 	self.noinfighting = TRUE;		// No infighting
 	self.gibhealth = -1000;			// Special death sequence
 	self.pain_finished = self.attack_finished = 0;
-
 	Resist_CheckRange(self);		// Double check values
 	Resist_Save(self);				// Save for Later
 	// Allow for a damage trigger (spawnflag option only)
-	if (!(self.spawnflags & MON_SHUB_DMGTRIG))
-		Resist_ChangeType(self, TRUE);
+	if (!(self.spawnflags & MON_SHUB_DMGTRIG)) Resist_ChangeType(self, TRUE);
 
 	// Setup boss waves and overall health
 	if (self.bosswave < 1) self.bosswavetotal = 5;
 	else self.bosswavetotal = self.bosswave;
-	
-	// Always start bosswave at 1
-	self.bosswave = 1;
+
+	self.bosswave = 1; // Always start bosswave at 1
 	if (self.bosswaveqty < 1) self.bosswaveqty = 500;
 	self.max_health = self.bosswavetotal * self.bosswaveqty;
-	// Setup boss wave HP + trigger event
-	xxshub_WaveSetupHP();
+	xxshub_WaveSetupHP(); // Setup boss wave HP + trigger event
 
 	// Restore all think functions
 	self.th_stand = xxshub_idle;
@@ -400,53 +392,51 @@ void() xxshub_start = {
 	self.th_missile = xxshub_attack2;
 	self.th_pain = xxshub_pain;
 	self.th_die = xxshub_die;
-	
-	// Wait for trigger to start attacking
-	self.use = xxshub_wakeup;
-	self.th_stand();
+	self.use = xxshub_wakeup; // Wait for trigger to start attacking
+	if (self.targetname == "") {
+		self.use();
+		dprint("\b[SHUB]\b Missing trigger name! Spawning anyways.\n");
+	} else self.th_stand();
 };
 
-/*============================================================================
- QUAKED monster_shub (1 0 0) (-128 -128 -24) (128 128 512)
-============================================================================*/
+void() monster_shub_precache = {
+	dprint("Precaching shub / oldone on frame ");
+	dprint(ftos(framecount));
+	dprint("!\n");
+	precache_model ("progs/oldone.mdl");
+	precache_model (MODEL_PROJ_SHUB1);		// Large Homing Missile
+	precache_model (MODEL_PROJ_SHUB2);		// Large blob of blood
+	precache_sound ("ad171/shub/idle1.wav");
+	precache_sound ("ad171/shub/idle2.wav");
+	precache_sound ("ad171/shub/attack1.wav"); // Att1 : Homing missile
+	precache_sound ("ad171/shub/attack2.wav"); // Att2 : Grenade spam
+	precache_sound ("ad171/wraith/bounce.wav");
+	precache_sound ("ad171/shub/pain1.wav");
+	precache_sound ("ad171/shub/pain2.wav");
+	precache_sound ("ad171/shub/death1.wav");
+	precache_sound ("ad171/seeker/explode_major.wav");
+	precache_sound ("ad171/shub/sight1.wav");
+	precache_sound ("boss2/idle.wav"); // idle/sight not used
+	precache_sound ("boss2/sight.wav");
+	precache_sound ("boss2/death.wav"); // finale_3/finale_4 stages
+	precache_sound ("boss2/pop2.wav");
+};
+
+// QUAKED monster_shub (1 0 0) (-128 -128 -24) (128 128 512)
 void() monster_shub = {
 	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/oldone.mdl";
-	precache_model (self.mdl);
-	precache_model (MODEL_PROJ_SHUB1);		// Large Homing Missile
-	precache_model (MODEL_PROJ_SHUB2);		// Large blob of blood
-	
-	// Final explosionm and grenades for attack 2
-	self.gib1mdl = MODEL_PROJ_SHUB2;
+	self.gib1mdl = MODEL_PROJ_SHUB2; // Final explosionm and grenades for attack 2
 	self.gib1frame = 9;
-	
 	self.idle_sound = "ad171/shub/idle1.wav";
 	self.idle_sound2 = "ad171/shub/idle2.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-
-	// Att1 : Homing missile
-	// Att2 : Grenade spam
-	precache_sound ("ad171/shub/attack1.wav");
-	precache_sound ("ad171/shub/attack2.wav");
-	precache_sound ("ad171/wraith/bounce.wav");
-	
 	self.pain_sound = "ad171/shub/pain1.wav";
-	self.pain_sound2 = "ad171/shub/pain2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-	precache_sound ("ad171/shub/death1.wav");
-	precache_sound ("ad171/seeker/explode_major.wav");
-	
+	self.pain_sound2 = "ad171/shub/pain2.wav";	
 	self.sight_sound = "ad171/shub/sight1.wav";
-	precache_sound (self.sight_sound);
-	
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
-	// Use to be 128 square, reduced size to help with
-	// radius/splash damage being more effective
-	self.bbmins = '-96 -96 -24';	// has own entity setup
+	self.bbmins = '-96 -96 -24';	// Use to be 128 square, reduced size to help with radius/splash damage being more effective.
 	self.bbmaxs = '96 96 192';
 	self.bboxtype = BBOX_CUSTOM;	// Custom BBox size
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
@@ -455,65 +445,48 @@ void() monster_shub = {
 	self.no_liquiddmg = TRUE;		// no slime/lava damage
 	self.idlemoreoften = TRUE;		// More frequent idle sounds
 	self.gibbed = FALSE;			// Still in one piece
-
 	self.deadflag = DEAD_NO;					// used to stop death re-triggering
 	self.liquidbase = self.liquidcheck = 0;		// Used for liquid content damage
 	self.dmgcombined = self.dmgtimeframe = 0;	// combined damage over 0.1s
 	self.takedamage = DAMAGE_NO;				// Immune to damage
 
-	// Attack 1 - Setup projectile speed (200 + 20*skill)
-	if (CheckZeroVector(self.pos1)) self.pos1 = '200 20 0';
-	// Attack 1 - Setup projectile damage (Base + Random, Splash)
-	if (CheckZeroVector(self.pos2)) self.pos2 = '0 0 40';
-	// Attack 2 - Setup projectile speed, splash damage
-	if (CheckZeroVector(self.pos3)) self.pos3 = '300 500 40';
-
-	// Attack 1 - Spawn location (offset from origin)
-	if (CheckZeroVector(self.dest1)) self.dest1 = '0 0 128';
-	// Attack 2 - Spawn location (offset from origin)
-	if (CheckZeroVector(self.dest2)) self.dest2 = '0 0 128';
+	if (CheckZeroVector(self.pos1)) self.pos1 = '200 20 0'; // Attack 1 - Setup projectile speed (200 + 20*skill)
+	if (CheckZeroVector(self.pos2)) self.pos2 = '0 0 40'; // Attack 1 - Setup projectile damage (Base + Random, Splash)
+	if (CheckZeroVector(self.dest1)) self.dest1 = '0 0 128'; // Attack 1 - Spawn location (offset from origin)
+	if (CheckZeroVector(self.pos3)) self.pos3 = '300 500 40'; // Attack 2 - Setup projectile speed, splash damage
+	if (CheckZeroVector(self.dest2)) self.dest2 = '0 0 128'; // Attack 2 - Spawn location (offset from origin)
 
 	if (self.spawnflags & MON_SHUB_UPSIDE) {
 		self.bbmins = '-96 -96 -192';	// up side down version
 		self.bbmaxs = '96 96 24';
-	}	
+	}
 	
 	self.classtype = CT_MONXXSHUB;
 	self.classgroup = CG_BOSS;
 	self.style = 0;
 	if (self.deathstring == "")  self.deathstring = " became one with Shub-Niggurath\n";
-	// No targetname = no trigger!
-	if (self.targetname == "") {
-		dprint("\b[SHUB]\b Missing trigger name!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		return;
-	}
+	setup_passivestate(self); // Check passive system for exceptions
 
-	// Check passive system for exceptions
-	setup_passivestate(self);
-	
-	// Does not go through monster spawn functions
-	AddToTotals(self);
+	self.th_stand = self.th_walk = self.th_run = SUB_Null;
+	self.th_missile = self.th_die = SUB_Null;
+	self.th_pain = SUB_Null_pain;
+	monster_start();
 	
 	// Default is no spawn delay, wait for trigger
 	if (!(self.spawnflags & MON_SPAWN_DELAY)) {
 		self.nextthink = time + 0.1 + random()*0.4;
 		self.think = xxshub_start;
+	} else {
+		self.use = xxshub_start;
+		if (self.targetname == string_null) self.use();
 	}
-	else self.use = xxshub_start;
 };
 
-/*============================================================================
- QUAKED monster_shubupsd (1 0 0) (-128 -128 -24) (128 128 512)
-============================================================================*/
-void() monster_shubupsd = 
-{
-	if (deathmatch) { remove(self); return; }
-
-	// Attack 2 - Setup projectile speed, splash damage
-	if (CheckZeroVector(self.pos3)) self.pos3 = '600 0 40';
-	self.angles_x = 180;
-	self.angles_y = anglemod(self.angles_y + 180);
+// QUAKED monster_shubupsd (1 0 0) (-128 -128 -24) (128 128 512)
+void() monster_shubupsd = {
+	if (CheckZeroVector(self.pos3)) self.pos3 = '600 0 40'; // Attack 2 - Setup projectile speed, splash damage
+	self.angles_x = 180; // Can I hear you say HACK?
+	self.angles_y = anglemod(self.angles_y + 180); // HACK!!!!
 	self.spawnflags = self.spawnflags | MON_SHUB_UPSIDE;
 	if (self.deathstring == "")  self.deathstring = " became one with Shub-Niggurath in the Upside-Down\n";
 	monster_shub();

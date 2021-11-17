@@ -549,24 +549,32 @@ void()	elena_spin3	=[	$spin3,		elena_spin4	] {ai_face(); rakuyo_run();
 	sound (self, CHAN_WEAPON, "redfield/huntress/spin.wav", 1, ATTN_NORM);
 };
 void()	elena_spin4	=[	$spin4,		elena_spin5	] {ai_face(); rakuyo_run();};
-void()	elena_spin5	=[	$spin5,		elena_spin6	] {ai_face(); 
+void()	elena_spin5	=[	$spin5,		elena_spin6	] {
+	local entity sb;
+
+	ai_face(); 
 	self.jump_flag = time + MONAI_JUMPELENATIME;
 	self.touch = elena_SpinTouch;
 	makevectors (self.angles);
 	self.velocity = v_forward * 500 + '0 0 250';
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.oldorigin = self.origin;
-setmodel (self.attachment, "");
-local entity sb;
-self.owner = spawn();
-sb = self.owner;
-setmodel (sb, MODEL_ELENASPIN);
-setorigin (sb, self.origin);
-sb.angles = self.angles;
-if (phase_Counter < 2) {sb.skin = 0; sb.alpha = 0.2;}
-else {sb.skin = 1; sb.alpha = 0.8;}
-sb.nextthink = time + 0.6;
-sb.think = SUB_Remove;
+	setmodel(self.attachment,"");
+	self.owner = spawn();
+	sb = self.owner;
+	setmodel (sb, MODEL_ELENASPIN);
+	setorigin (sb, self.origin);
+	sb.angles = self.angles;
+	if (phase_Counter < 2) {
+		sb.skin = 0;
+		sb.alpha = 0.2;
+	} else {
+		sb.skin = 1;
+		sb.alpha = 0.8;
+	}
+
+	sb.nextthink = time + 0.6;
+	sb.think = SUB_Remove;
 };
 void()	elena_spin6	=[	$spin6,		elena_spin7	] {self.owner.frame = 1; self.owner.origin = self.origin;
 self.owner.angles = self.angles;
@@ -1031,15 +1039,8 @@ void() elena_die = {
 	}
 };
 
-// QUAKED monster_huntress (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-void() monster_huntress = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/redfield/mon_huntress.mdl";			// Elena the Blood Huntress with multiple skins
-	precache_model (self.mdl);
+void() monster_huntress_precache = {
+	precache_model ("progs/redfield/mon_huntress.mdl");
 	precache_model ("progs/redfield/huntress/rakuyo.mdl");
 	precache_model (MODEL_PROJ_KSPELL);
 	precache_model (MODEL_PROJ_EVEBULLET);
@@ -1053,10 +1054,8 @@ void() monster_huntress = {
 	precache_model (MODEL_ELENADUST);
 	precache_model (MODEL_ELENASMOKE);
 	precache_model (SBURST_FLAME);
-
-	self.gib1mdl = "progs/redfield/huntress/empty_blood.mdl";	// Empty model for blood toss on spin attack
-	precache_model (self.gib1mdl);
-	
+	precache_model ("progs/redfield/huntress/empty_blood.mdl");
+	PreCache_Flame(); // Flame Attack
 	precache_sound ("redfield/huntress/pistol.wav");
 	precache_sound ("redfield/huntress/pistol_cock.wav");
 	precache_sound ("redfield/huntress/fireball.wav");
@@ -1067,24 +1066,29 @@ void() monster_huntress = {
 	precache_sound ("redfield/huntress/spears.wav");
 	precache_sound ("redfield/huntress/ching.wav");
 	precache_sound ("redfield/huntress/chingb.wav");
-
-	// Flame Attack
-	PreCache_Flame();
-	
-	self.idle_sound = "redfield/huntress/idlea.wav";
-	precache_sound (self.idle_sound);
-	self.sight_sound = "redfield/huntress/sight.wav";
-	precache_sound (self.sight_sound);
-	self.pain_sound = "redfield/huntress/pain.wav";
-	precache_sound (self.pain_sound);	
-	self.death_sound = "redfield/huntress/death1.wav";
-	precache_sound (self.death_sound);
-
-	// TE_KNIGHTSPIKE = Sound for blood spears hitting the wall
-	// Has got to be in this location because the 
-	// filename is hardcoded (engine.exe)
+	precache_sound ("redfield/huntress/idlea.wav");
+	precache_sound ("redfield/huntress/sight.wav");
+	precache_sound ("redfield/huntress/pain.wav");
+	precache_sound ("redfield/huntress/death1.wav");
 	precache_sound ("hknight/hit.wav");
+	precache_sound ("redfield/huntress/step1.wav");
+	precache_sound ("redfield/huntress/step2.wav");
+	precache_sound ("redfield/huntress/step3.wav");
+	precache_sound ("redfield/huntress/step4.wav");
+	precache_sound ("redfield/huntress/step5.wav");
+};
 
+// QUAKED monster_huntress (1 0 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_huntress = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/redfield/mon_huntress.mdl";			// Elena the Blood Huntress with multiple skins
+	self.gib1mdl = "progs/redfield/huntress/empty_blood.mdl";	// Empty model for blood toss on spin attack
+	self.idle_sound = "redfield/huntress/idlea.wav";
+	self.sight_sound = "redfield/huntress/sight.wav";
+	self.pain_sound = "redfield/huntress/pain.wav";
+	self.death_sound = "redfield/huntress/death1.wav";
 	self.solid = SOLID_NOT;					// No interaction with world
 	self.movetype = MOVETYPE_NONE;			// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -1100,9 +1104,7 @@ void() monster_huntress = {
 	self.meleerange = MONAI_MELEEHUNTRESS;	// Melee Smash
 	self.meleecontact = FALSE;	
 	self.deathstring = " fell victim to the Blood Huntress\n";
-	
-	//Rakuyo attachment setup
-	self.attachment = spawn();
+	self.attachment = spawn(); //Rakuyo attachment setup
 	self.attachment.movetype = MOVETYPE_NOCLIP;		// No movement
 	self.attachment.solid = SOLID_NOT;			// no world interaction
 	setmodel(self.attachment, "");
@@ -1115,11 +1117,6 @@ void() monster_huntress = {
 	self.stepc3 = "redfield/huntress/step3.wav";
 	self.stepc4 = "redfield/huntress/step4.wav";
 	self.stepc5 = "redfield/huntress/step5.wav";
-	precache_sound (self.stepc1);
-	precache_sound (self.stepc2);
-	precache_sound (self.stepc3);
-	precache_sound (self.stepc4);
-	precache_sound (self.stepc5);
 	self.steptype = FS_TYPECUSTOM;
 
 	// Always reset Ammo Resistance to be consistent.  Resistant to all ranged attacks - using a sword is wise

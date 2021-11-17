@@ -385,33 +385,29 @@ void() dog_missile = {
         dog_fire1 ();
 };
 
-/*======================================================================
-//QUAKED monster_dog (1 0 0) (-32 -32 -24) (32 32 40) Ambush
-======================================================================*/
+void() monster_dog_precache = {
+	precache_model ("progs/mon_dog.mdl");
+	precache_model ("progs/h_dog.mdl");
+	precache_sound ("dog/idle.wav");
+	precache_sound ("dog/dattack1.wav");
+	precache_sound ("dog/ddeath.wav");
+	precache_sound ("dog/dpain1.wav");
+	precache_sound ("drake/dragon/fire.wav");
+	precache_sound ("drake/dragon/firehit.wav");
+	precache_sound ("dog/dsight.wav");
+	precache_model ("progs/q15/gib_dogleg.mdl");
+};
+
+// QUAKED monster_dog (1 0 0) (-32 -32 -24) (32 32 40) Ambush
 void() monster_dog = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/mon_dog.mdl";
 	self.headmdl = "progs/h_dog.mdl";
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-
 	self.idle_sound = "dog/idle.wav";
-	precache_sound (self.idle_sound);
-
-	precache_sound ("dog/dattack1.wav");
-	precache_sound ("dog/ddeath.wav");
 	self.pain_sound = "dog/dpain1.wav";
-	precache_sound (self.pain_sound);
-	precache_sound ("drake/dragon/fire.wav");
-	precache_sound ("drake/dragon/firehit.wav");
-
 	self.sight_sound = "dog/dsight.wav";
-	precache_sound (self.sight_sound);
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	self.idmins = '-32 -32 -24';		// Original mega large bbox
@@ -426,7 +422,6 @@ void() monster_dog = {
 		if (self.deathstring == "") self.deathstring = " was scorched by a Hell Hound\n";
 	} else {
 		self.gib1mdl = "progs/q15/gib_dogleg.mdl";
-		precache_model (self.gib1mdl);
 		self.pain_flinch = 10;				// Easy response to pain
 		self.classtype = CT_MONDOG;
 	}
@@ -460,10 +455,8 @@ void() monster_dog = {
 	self.th_melee = dog_atta1;
 	self.th_jump = dog_leap1;
 	self.th_jumpexit = dog_leap8;
-
 	self.classgroup = CG_DOG;
 	self.classmove = MON_MOVEWALK;
-	
 	monster_start();
 };
 

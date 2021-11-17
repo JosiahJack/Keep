@@ -813,20 +813,19 @@ void() hknight2_random_ranged_attack = {
 	}	
 };
 
-//QUAKED monster_hell_knight2 (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-void() monster_hell_knight2 = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	precache_model ("progs/q15/warlord_supernail.mdl");
-	precache_model ("progs/q15/k_spike2.mdl"); // referenced in projectiles.qc
-	precache_model ("progs/q15/h_grenade2.mdl");	// multi
-	precache_model ("progs/q15/h_grenade1.mdl");	
-	precache_model ("progs/q15/face.mdl");
-	precache_model ("progs/drake/s_explod.spr");
-
+void() monster_hell_knight2_precache = {
+	precache_model("progs/q15/warlord_supernail.mdl");
+	precache_model("progs/q15/k_spike.mdl"); // referenced in projectiles.qc
+	precache_model("progs/q15/h_grenade2.mdl");	// multi
+	precache_model("progs/q15/h_grenade1.mdl");	
+	precache_model("progs/q15/face.mdl");
+	precache_model("progs/drake/s_explod.spr");
+	precache_model("progs/q15/warlord.mdl");
+	precache_model("progs/q15/h_warlord.mdl");
+	precache_model(MODEL_PROJ_HKN);
+	precache_model("progs/q15/w_wshield.mdl");
+	precache_model("progs/q15/gib_warleg.mdl");
+	precache_model("progs/q15/gib_wararm.mdl");
 	precache_sound("q15/warlord/attack1.wav");		// all files precached in worldspawn() due to savegame-bug
 	precache_sound("q15/warlord/attack2.wav");	
 	precache_sound("q15/warlord/attack3.wav");	
@@ -844,24 +843,20 @@ void() monster_hell_knight2 = {
 	precache_sound("q15/warlord/homing_shot.wav");
 	precache_sound("q15/warlord/homing_pain.wav");
 	precache_sound("q15/warlord/homing_touch.wav");
-
 	precache_sound("knight/sword1.wav");
 	precache_sound("knight/sword2.wav");
+};
+
+//QUAKED monster_hell_knight2 (1 0 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_hell_knight2 = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/q15/warlord.mdl";			// New Hell Knight
 	self.headmdl = "progs/q15/h_warlord.mdl";
-
 	self.gib1mdl = "progs/q15/w_wshield.mdl";
 	self.gib2mdl = "progs/q15/gib_warleg.mdl";
 	self.gib3mdl = "progs/q15/gib_wararm.mdl";
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (MODEL_PROJ_HKN);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-
 	self.sight_sound = "drake/archer/sight2.wav";
 	self.pain_sound = "q15/warlord/pain1.wav";
 	self.pain_sound2 = "q15/warlord/pain2.wav";

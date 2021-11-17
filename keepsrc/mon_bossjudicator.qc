@@ -244,20 +244,6 @@ void() justice_create_attachment = {
 	}
 };
 
-void() justice_finish_attachment = {
-	if (self.attachment) {
-		setmodel(self.attachment, "");
-		self.attachment.state = STATE_OFF;
-	}
-};
-
-void() justice_remove_attachment = {
-	if (self.attachment) {
-		self.attachment.think = SUB_Remove;
-		self.attachment.nextthink = time + 0.1;
-	}
-};
-
 void(float att_frame) justice_update_attachment = {
 	makevectors(self.angles);
 	self.attachment.origin = self.origin + attack_vector(self.meleeoffset);
@@ -285,7 +271,7 @@ void() judge_standframe = {
 	self.nextthink = time + 0.1;
 	self.think = judge_standframe;
 	// Hide any glowing/sprite attachments
-	if (self.classtype == CT_MONJUSTICE) justice_finish_attachment();
+	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 	
 	// Beginning of animation block
 	if (self.walkframe == 0) monster_idle_sound();
@@ -438,7 +424,7 @@ void() judge_walkframe =
 	// Avoid idleD (its too long for walk patrols)
 	self.attack_switch = TRUE;
 	// Hide any glowing/sprite attachments
-	if (self.classtype == CT_MONJUSTICE) justice_finish_attachment();
+	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 
 	// Beginning of animation block
 	if (self.walkframe == 0 || self.walkframe == 7) monster_footstep(FALSE);
@@ -470,7 +456,7 @@ void() judge_runframe = {
 	self.nextthink = time + 0.1;
 	self.think = judge_runframe;
 	// Hide any glowing/sprite attachments
-	if (self.classtype == CT_MONJUSTICE) justice_finish_attachment();
+	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 
 	// Beginning of animation block
 	if (self.walkframe == 0 || self.walkframe == 4) monster_footstep(FALSE);
@@ -548,7 +534,7 @@ void() judge_chargeframe = {
 	self.nextthink = time + 0.1;
 	self.think = judge_chargeframe;
 	// Hide any glowing/sprite attachments
-	if (self.classtype == CT_MONJUSTICE) justice_finish_attachment();
+	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 
 	// Beginning of animation block
 	// Sword swoosh/whoosh noises
@@ -589,7 +575,7 @@ void() judge_swingframe =
 	self.nextthink = time + 0.1;
 	self.think = judge_swingframe;
 	// Hide any glowing/sprite attachments
-	if (self.classtype == CT_MONJUSTICE) justice_finish_attachment();
+	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 
 	// Keep turning towards enemy
 	ai_face();
@@ -630,7 +616,7 @@ void() judge_smashframe = {
 	self.nextthink = time + 0.1;
 	self.think = judge_smashframe;
 	// Hide any glowing/sprite attachments
-	if (self.classtype == CT_MONJUSTICE) justice_finish_attachment();
+	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 
 	// Face enemy
 	ai_face();
@@ -721,7 +707,7 @@ void() judge_magicAframe =
 	else if (self.walkframe == 8) {
 		self.frame = $magicA7;
 		SpawnExplosion(EXPLODE_BURST_SMOKE, self.attachment.origin, SOUND_RESIST_ROCKET);
-		justice_finish_attachment();
+		SUB_FinishAttachment();
 	}
 	else self.th_run();
 
@@ -1033,7 +1019,7 @@ void() judge_JumpTouch =
 	if (self.state == JUDGE_DEAD) return;
 
 	// Hide any glowing/sprite attachments
-	if (self.classtype == CT_MONJUSTICE) justice_finish_attachment();
+	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 
 	ai_jumpbreakable(30);			// Damage any breakables
 	self.touch = SUB_Null;			// No more touching
@@ -1108,7 +1094,7 @@ void() judge_jump = {
 	// Entered combat once
 	self.attack_active = TRUE;
 	// Hide any glowing/sprite attachments
-	if (self.classtype == CT_MONJUSTICE) justice_finish_attachment();
+	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 	
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
@@ -1127,7 +1113,7 @@ void() judge_jump = {
 //----------------------------------------------------------------------
 void() judge_stand = { 
 	// Hide any glowing/sprite attachments
-	if (self.classtype == CT_MONJUSTICE) justice_finish_attachment();
+	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 
 	// Let blend animation happen before any walking
 	if (self.pausetime > 0 && self.weaponstate != JUDGE_SWSHOULDER) 
@@ -1142,7 +1128,7 @@ void() judge_walk =  {
 	// Start walking
 	self.state = JUDGE_WALK;
 	// Hide any glowing/sprite attachments
-	if (self.classtype == CT_MONJUSTICE) justice_finish_attachment();
+	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 
 	// Which walk animation to use?
 	if (self.move_altwalk > 0) judge_checksword(JUDGE_SWHAND, JUDGE_SFXDEF);
@@ -1157,7 +1143,7 @@ void() judge_run =
 	// Entered combat once
 	self.attack_active = TRUE;
 	// Hide any glowing/sprite attachments
-	if (self.classtype == CT_MONJUSTICE) justice_finish_attachment();
+	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
@@ -1176,7 +1162,7 @@ void() judge_melee =
 	// Reset jump attack decision branch
 	self.attack_sidestep = FALSE;
 	// Hide any glowing/sprite attachments
-	if (self.classtype == CT_MONJUSTICE) justice_finish_attachment();
+	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
@@ -1195,7 +1181,7 @@ void() judge_range =
 	// Entered combat once
 	self.attack_active = TRUE;
 	// Hide any glowing/sprite attachments
-	if (self.classtype == CT_MONJUSTICE) justice_finish_attachment();
+	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 
 	// Check for boss wave trigger events
 	if (self.classtype == CT_MONJUDGE) {
@@ -1332,7 +1318,7 @@ void(float finalstate, float soundtype) judge_checksword = {
 	if (self.state == JUDGE_DEAD) return;
 
 	// Hide any glowing/sprite attachments
-	if (self.classtype == CT_MONJUSTICE) justice_finish_attachment();
+	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 
 	self.walkframe = 0;
 	// Is sword in right position? - Move on to next animation
@@ -1628,7 +1614,7 @@ void()	judge_painA4 =[ $painA4, judge_run ] {};
 //----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) judge_pain = {
 	// Hide any glowing/sprite attachments
-	if (self.classtype == CT_MONJUSTICE) justice_finish_attachment();
+	if (self.classtype == CT_MONJUSTICE) SUB_FinishAttachment();
 
 	if (self.classtype == CT_MONJUDGE) {
 		// Check for boss wave trigger events
@@ -1686,8 +1672,8 @@ void() judge_die =
 	self.effects = 0;			// Remove effects on death
 	// Hide any glowing/sprite attachments
 	if (self.classtype == CT_MONJUSTICE) {
-		justice_finish_attachment();
-		justice_remove_attachment();
+		SUB_FinishAttachment();
+		SUB_RemoveAttachment();
 	}
 	
 	// Check for any final trigger events
@@ -1703,13 +1689,10 @@ void() judge_die =
 	}
 };
 
-//======================================================================
 // Create gaunt minion entity chain
 // Entities are created so that the spawning space can be tested
 // before spawning the minions for possible collisions
-//======================================================================
-float() judge_minionsetup =
-{
+float() judge_minionsetup = {
 	local entity min_prev, min_first;
 	
 	self.lip = self.attack_summon;
@@ -1742,7 +1725,6 @@ float() judge_minionsetup =
 	else return TRUE;
 };
 
-//----------------------------------------------------------------------
 void() judge_spawntether =
 {
 	// temporary tether point
@@ -1775,8 +1757,7 @@ void() judge_readyframe =
 //======================================================================
 // Setup BOSS Judicator after trigger event
 //======================================================================
-void() judge_awake =
-{
+void() judge_awake = {
 	// make sure boss mode selected
 	if (self.classtype == CT_MONJUSTICE) return;
 
@@ -1839,12 +1820,12 @@ void() judge_awake =
 	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
 
 	// Check for delay spawn monster count
-	if (self.delaymonstercount) {
+	// if (self.delaymonstercount) {
 		// Reset both monster count conditions
-		self.nomonstercount = self.delaymonstercount = 0;
-		AddToTotals(self);
-		update_hud_totals(HUD_MONSTERS);
-	}
+		// self.nomonstercount = self.delaymonstercount = 0;
+		// AddToTotals(self);
+		// update_hud_totals(HUD_MONSTERS);
+	// }
 
 	//Resist_CheckRange(self);		// Double check values
 	Resist_Save(self);				// Save for Later
@@ -1886,72 +1867,55 @@ void() judge_awake =
 	judge_readyframe();
 };
 
-//======================================================================
-/*QUAKED monster_judicator (1 0 0) (-32 -32 -24) (32 32 80) Ambush
-======================================================================*/
+void() monster_judicator_precache = {
+	precache_model("progs/ad181/mon_judge.mdl");
+	precache_model("progs/ad181/h_judge.mdl");
+	precache_model("progs/ad181/w_judgesword.mdl");
+	precache_model("progs/ad181/gib_judgeboot.mdl");
+	precache_model("progs/ad181/gib_judgeshould.mdl");
+	precache_model(MODEL_PROJ_RINGSHOCK); // Smash the floor with fist
+	PreCache_Flame(); // Flames + explosions
+	precache_model(MODEL_PROJ_JUDGER); // Projectile model
+	precache_sound("ad181/justice/idle1.wav");
+	precache_sound("ad181/judge/smash_roar.wav");
+	precache_sound("ad181/judge/smash_ground.wav");
+	precache_sound("ad181/justice/magic_attack.wav"); // Arrow attack
+	precache_sound("ad181/justice/magic_fire.wav");
+	precache_sound("ad181/justice/flame_fire.wav");
+	precache_sound("ad181/justice/leap1.wav"); // Crazy leapin! (re-used from player)
+	precache_sound("ad181/justice/sight1.wav");
+	precache_sound("ad181/justice/pain1.wav");
+	precache_sound("ad181/justice/death1.wav");
+	precache_sound("ad171/eidolon/elec_arch1.wav");
+	precache_sound("ad171/eidolon/elec_arch2.wav");
+	precache_sound("ad181/justice/sword_draw.wav"); // New sword sweep/slash sounds
+	precache_sound("ad181/justice/sword_sheath.wav");
+};
+
+// QUAKED monster_judicator (1 0 0) (-32 -32 -24) (32 32 80) Ambush
 void() monster_judicator = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.mdl = "progs/ad181/mon_judge.mdl";			// Judicator Knight
 	self.headmdl = "progs/ad181/h_judge.mdl";			// Bloody head
 	self.gib1mdl = "progs/ad181/w_judgesword.mdl";	// Broken sword
 	self.gib2mdl = "progs/ad181/gib_judgeboot.mdl";	// Boot lying down
 	self.gib3mdl = "progs/ad181/gib_judgeshould.mdl";	// Shoulder pad
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
 	self.gib1sound = GIB_IMPACT_METALA;
-
 	self.idle_sound = "ad181/justice/idle1.wav";
-	precache_sound (self.idle_sound);
-	
-	// Smash the floor with fist
-	precache_model (MODEL_PROJ_RINGSHOCK);
-	precache_sound ("ad181/judge/smash_roar.wav");
-	precache_sound ("ad181/judge/smash_ground.wav");
-	
+
 	// Skin/Projectile/Flanes coloured differences (RED or BLUE)
 	// Ran out of time trying to create good blue flames
 	// Might add later in a patch, atm its just a skin change
 	if (self.spawnflags & MON_JUDGE_BLUE) self.skin = 1;
 	else self.skin = 0;
 	
-	// Flames + explosions
-	PreCache_Flame();
-	// Projectile model
-	precache_model (MODEL_PROJ_JUDGER);
-
-	// Arrow attack
-	precache_sound ("ad181/justice/magic_attack.wav");
-	precache_sound ("ad181/justice/magic_fire.wav");
-	precache_sound ("ad181/justice/flame_fire.wav");
-	
-	// Crazy leapin! (re-used from player)
-	precache_sound ("ad181/justice/leap1.wav");
-	
-	// Strange roar of monks!
-	self.sight_sound = "ad181/justice/sight1.wav";
-	precache_sound (self.sight_sound);
-
+	self.sight_sound = "ad181/justice/sight1.wav"; // Strange roar of monks!
 	self.pain_sound = "ad181/justice/pain1.wav";
 	self.death_sound = "ad181/justice/death1.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.death_sound);
-	precache_sound ("ad171/eidolon/elec_arch1.wav");
-	precache_sound ("ad171/eidolon/elec_arch2.wav");
-
-	// New sword sweep/slash sounds
-	precache_sound ("ad181/justice/sword_draw.wav");
-	precache_sound ("ad181/justice/sword_sheath.wav");
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_XMASSIVE;
-
 	self.gibhealth = -60;
 	self.gibbed = FALSE;				// Starts complete
 	self.pain_flinch = 400;				// Really low chance of pain
@@ -1961,14 +1925,12 @@ void() monster_judicator = {
 	self.steptype = FS_TYPELARGE;		// Giant feet
 	self.poisonous = FALSE;				// No Poison version
 	self.no_liquiddmg = TRUE;			// Immune to slime/lava
-	
 	self.style = JUDGE_PHASE0;			// No waves setup
 	self.state = JUDGE_STAND;			// Default state
 	self.weaponstate = JUDGE_SWSHOULDER;// Default sword position
 	self.attack_switch = FALSE;			// Avoid idleD if patrolling
 	self.move_altwalk = FALSE;			// No alternative walk
 	self.attack_active = FALSE;			// Not started combat yet
-	
 	self.meleerange = MONAI_CLOSEJUDGE;	// swing/smash range
 	self.meleecontact = FALSE;			// Smash contact sound
 	self.meleeoffset = '24 0 32';		// Arrow spawn height
@@ -1976,22 +1938,15 @@ void() monster_judicator = {
 	self.attack_offset2 = '48 0 0';		// Fireline starting point
 	self.attack_offset3 = '24 8 112';	// Hilt of summon sword
 	self.attack_offset4 = '-16 -12 32';	// Movement vector along sword
-	
-	self.deathstring = " was judged unworthy by The Judicator\n";
-	// Setup default timer/counters for flame attacks
-	self.attack_count = self.attack_timer = 0;
+	if (self.deathstring == string_null) self.deathstring = " was judged unworthy by The Judicator\n";
+	self.attack_count = self.attack_timer = 0; // Setup default timer/counters for flame attacks
 	self.part_exitpuff = self.part_exitsound = TRUE;
 	self.part_exitfade = self.part_exitbusy = FALSE;
 	if (self.proj_trqty <= 1) self.proj_trqty = 32;
 	if (self.proj_trdist <= 1) self.proj_trdist = 32;
-	// Default skill speed = 0=0.10, 1=0.08, 2=0.06, 3=0.04
-	if (self.proj_limit > PROJ_MAXLIMIT) self.proj_limit = PROJ_MAXLIMIT;
-	
-	// Setup default Proj Count = Base (X) * (Skill * Y) Maximum = Z
-	if (CheckZeroVector(self.proj_attqty)) self.proj_attqty = '3 2 7';
-	
-	// Default jump forward/up distance
-	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '450 0 225';
+	if (self.proj_limit > PROJ_MAXLIMIT) self.proj_limit = PROJ_MAXLIMIT; // Default skill speed = 0=0.10, 1=0.08, 2=0.06, 3=0.04
+	if (CheckZeroVector(self.proj_attqty)) self.proj_attqty = '3 2 7'; // Setup default Proj Count = Base (X) * (Skill * Y) Maximum = Z
+	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '450 0 225'; // Default jump forward/up distance
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPJUDGENEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPJUDGEFAR;
 
@@ -2015,43 +1970,24 @@ void() monster_judicator = {
 	self.th_summon = judge_summon;
 	self.th_pain = judge_pain;
 	self.th_die = judge_die;
-
 	self.classtype = CT_MONJUDGE;
 	self.classgroup = CG_DCAPTAIN;
 	self.classmove = MON_MOVEWALK;
-
 	self.health = self.max_health = MEGADEATH;
 	self.pain_finished = LARGE_TIMER;		
 	self.takedamage = DAMAGE_NO;	// Immune to damage
 	self.flags = FL_MONSTER;		// Reset flag (no user settings)
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)		
 	self.reflectaxe = TRUE;			// Prevent axe damage
+	setup_passivestate(self); // Check passive system for exceptions
 
-	// Check passive system for exceptions
-	setup_passivestate(self);
+	self.frame = 0;
+	self.exactskin = self.skin; // Devmarker function changes skins, save for later
+	if (self.minion_name == string_null) self.minion_name = "monster_gaunt";
 
-	// No targetname = no trigger!
-	// if (self.targetname == "") {
-		// dprint("\b[JUDGE]\b Missing targetname name!\n");
-		// spawn_marker(self.origin, SPNMARK_YELLOW);
-		// return;
-	// }
+	monster_start();
 
-	// Monster count exceptions
-	if (self.nomonstercount > 0 || self.delaymonstercount > 0) {
-		// Some maps have way too many no monster counts
-		// if (world.no_moncountdevmsg <= 0) {
-			// dprint("\b[JUDGE]\b ("); dprint(self.targetname);
-			// dprint(") - no monster count\n");
-		// }
-	} else AddToTotals(self); // Update count before client spawn
-	
-	// Devmarker function changes skins, save for later
-	self.frame = 0; self.exactskin = self.skin;
-	// Display debug diamonds
-	// monster_devmarker(self);
 	// Wait for trigger event
-
 	if (self.targetname != "") {
 		self.use = judge_awake;
 	} else {
@@ -2066,6 +2002,7 @@ void() monster_judicator = {
 
 			// skill modifier : Easy = 1, Normal = 2, Hard/NM = 3
 		if (self.attack_summon > 3) self.attack_summon = 3;
+
 		// Setup minion chain entity system
 		if (judge_minionsetup()) {
 			dprint("\b[JUDGE]\b Cannot create minion chain!\n");
@@ -2077,9 +2014,7 @@ void() monster_judicator = {
 		// Check for tether system (special target field)
 		if (self.tethertarget == "") {
 			judge_spawntether();
-		}
-		// Find the defined tether marker
-		else self.movelast = find(world,targetname,self.tethertarget);
+		} else self.movelast = find(world,targetname,self.tethertarget); // Find the defined tether marker
 		
 		// Does the tether entity exist?
 		if (!self.movelast) {
@@ -2088,39 +2023,6 @@ void() monster_judicator = {
 			entity_hide(self);
 			return;
 		}
-
-		// Show BOSS tetherpoint
-		// spawn_marker(self.movelast.origin+'0 0 8', SPNMARK_RED);
-		
-		// Zap (50K damage) anything in its place!
-		// if (self.nospawndamage == 0) 
-			// spawn_tdeath(self.origin, self);
-		// Don't show spawning effect if nogfx
-		// if (!(self.spawnflags & MON_SPAWN_NOGFX)) 
-			// spawn_tfog(self.origin);
-
-		// Start spawning BOSS
-		// self.solid = SOLID_SLIDEBOX;
-		// self.movetype = MOVETYPE_STEP;
-		// setmodel(self, self.mdl);					// Setup model
-		// setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
-
-		// Check for delay spawn monster count
-		// if (self.delaymonstercount) {
-			// Reset both monster count conditions
-			// self.nomonstercount = self.delaymonstercount = 0;
-			// AddToTotals(self);
-			// update_hud_totals(HUD_MONSTERS);
-		// }
-
-		//Resist_CheckRange(self);		// Double check values
-		// Resist_Save(self);				// Save for Later
-		// Resist_ChangeType(self,TRUE);	// resist everything
-
-		// Reset all combat flags and counters
-		// self.deadflag = DEAD_NO;
-		// self.liquidbase = self.liquidcheck = 0;
-		// self.dmgcombined = self.dmgtimeframe = 0;
 
 		// Setup boss waves and overall health
 		if (self.bosswave < 1) self.bosswavetotal = 4;
@@ -2149,81 +2051,56 @@ void() monster_judicator = {
 		self.message2 = self.target;
 		self.target = self.target2 = self.deathtarget = "";
 
-		monster_start();
+		// monster_start();
 		self.max_health = self.bosswavetotal * self.bosswaveqty;
-
-		// Time for an intro?
-		// judge_readyframe();
 	}
 };
 
-//======================================================================
-/*QUAKED monster_justice (1 0 0) (-16 -16 -24) (16 16 56) Ambush
-======================================================================*/
+void() monster_justice_precache = {
+	precache_model ("progs/ad181/mon_justice.mdl");
+	precache_model ("progs/ad181/h_justice.mdl");
+	precache_model ("progs/ad181/w_justicesword.mdl");
+	precache_model ("progs/ad181/gib_justiceboot.mdl");
+	precache_model ("progs/ad181/gib_justiceshould.mdl");
+	PreCache_Flame(); // Flames + explosions
+	precache_model (MODEL_PROJ_JUDGER); // Projectile model
+	precache_model ("progs/ad181/s_judgemagic.spr");
+	precache_sound ("ad181/justice/idle1.wav");
+	precache_sound ("ad171/gibs/gibheavy.wav"); // Swing sword over head at player
+	precache_sound ("ad171/gibs/gibheavy2.wav");
+	precache_sound ("ad181/justice/magic_attack.wav"); // Arrow attack
+	precache_sound ("ad181/justice/magic_fire.wav");
+	precache_sound ("ad181/justice/flame_fire.wav");
+	precache_sound ("ad171/wraith/attack1.wav"); // Flame BURST attack
+	precache_sound ("ad181/justice/flame_fire.wav");
+	precache_sound ("ad171/wraith/attack1_explode.wav");
+	precache_sound ("ad181/justice/leap1.wav"); // Crazy leapin! (re-used from player)
+	precache_sound ("ad181/justice/sight1.wav");	
+	precache_sound ("ad181/justice/pain1.wav");
+	precache_sound ("ad181/justice/death1.wav");
+	precache_sound ("ad181/justice/sword_draw.wav"); // New sword sweep/slash sounds
+	precache_sound ("ad181/justice/sword_sheath.wav");
+};
+
+// QUAKED monster_justice (1 0 0) (-16 -16 -24) (16 16 56) Ambush
 void() monster_justice = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad181/mon_justice.mdl";				// Justice Knight
 	self.headmdl = "progs/ad181/h_justice.mdl";			// Bloody head
 	self.gib1mdl = "progs/ad181/w_justicesword.mdl";		// Broken sword
 	self.gib2mdl = "progs/ad181/gib_justiceboot.mdl";		// Boot lying down
 	self.gib3mdl = "progs/ad181/gib_justiceshould.mdl";	// Shoulder pad
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
 	self.gib1sound = GIB_IMPACT_METALA;
-
 	self.idle_sound = "ad181/justice/idle1.wav";
-	precache_sound (self.idle_sound);
-	
-	// Swing sword over head at player
-	precache_sound ("ad171/gibs/gibheavy.wav");
-	precache_sound ("ad171/gibs/gibheavy2.wav");
-	
-	// Flames + explosions
-	PreCache_Flame();
-	// Projectile model
-	precache_model (MODEL_PROJ_JUDGER);
-	// Spawning projectile attack
-	self.weaponglow = "progs/ad181/s_judgemagic.spr";
-	precache_model (self.weaponglow);
-
-	// Arrow attack
-	precache_sound ("ad181/justice/magic_attack.wav");
-	precache_sound ("ad181/justice/magic_fire.wav");
-	precache_sound ("ad181/justice/flame_fire.wav");
-	
-	// Flame BURST attack
-	precache_sound ("ad171/wraith/attack1.wav");
-	precache_sound ("ad181/justice/flame_fire.wav");
-	precache_sound ("ad171/wraith/attack1_explode.wav");
-	
-	// Crazy leapin! (re-used from player)
-	precache_sound ("ad181/justice/leap1.wav");
-	
-	// Strange roar of monks!
-	self.sight_sound = "ad181/justice/sight1.wav";
-	precache_sound (self.sight_sound);
-
+	self.weaponglow = "progs/ad181/s_judgemagic.spr"; // Spawning projectile attack
+	self.sight_sound = "ad181/justice/sight1.wav"; // Strange roar of monks!
 	self.pain_sound = "ad181/justice/pain1.wav";
 	self.death_sound = "ad181/justice/death1.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.death_sound);
-
-	// New sword sweep/slash sounds
-	precache_sound ("ad181/justice/sword_draw.wav");
-	precache_sound ("ad181/justice/sword_sheath.wav");
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
-	// -16 -16 -24, 16 16 56	Vol 32 x 32 x 80
-	if (self.bboxtype < 1) self.bboxtype = BBOX_JUSTICE;
-	// Regular monster with large HP
-	if (self.health < 1) self.health = 600;
+	if (self.bboxtype < 1) self.bboxtype = BBOX_JUSTICE; // -16 -16 -24, 16 16 56	Vol 32 x 32 x 80
+	if (self.health < 1) self.health = 600; // Regular monster with large HP
 	self.gibhealth = -60;
 	self.gibbed = FALSE;				// Starts complete
 	self.pain_flinch = 400;				// Really low chance of pain
@@ -2232,31 +2109,22 @@ void() monster_justice = {
 	if (self.infightextra <= 0) self.infightextra = 2; // High infighting damage
 	self.steptype = FS_TYPELARGE;		// Giant feet
 	self.poisonous = FALSE;				// No Poison version
-	
 	self.state = JUDGE_STAND;				// Default state
 	self.weaponstate = JUDGE_SWSHOULDER;	// Default sword position
 	self.attack_switch = FALSE;				// Avoid idleD if patrolling
 	//self.move_altwalk = FALSE;			// No alternative walk
 	self.attack_active = FALSE;			// Not started combat yet
-	
 	self.meleerange = MONAI_CLOSEJUDGE;	// swing/smash range
 	self.meleecontact = FALSE;			// Smash contact sound
 	self.meleeoffset = '24 0 32';		// Arrow spawn height
 	self.attack_offset = '32 0 -16';	// Firewall ground explosion
-	
 	self.deathstring = " was cut down by The Sword of Justice\n";
-	// Setup default timer/counters for flame attacks
-	self.attack_count = self.attack_timer = 0;
+	self.attack_count = self.attack_timer = 0; // Setup default timer/counters for flame attacks
 	self.part_exitpuff = self.part_exitsound = TRUE;
 	self.part_exitfade = self.part_exitbusy = FALSE;
-	// Default skill speed = 0=0.10, 1=0.08, 2=0.06, 3=0.04
-	if (self.proj_limit > PROJ_MAXLIMIT) self.proj_limit = PROJ_MAXLIMIT;
-	
-	// Setup default Proj Count = Base (X) * (Skill * Y) Maximum = Z
-	if (CheckZeroVector(self.proj_attqty)) self.proj_attqty = '3 2 7';
-	
-	// Default jump forward/up distance
-	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '500 0 250';
+	if (self.proj_limit > PROJ_MAXLIMIT) self.proj_limit = PROJ_MAXLIMIT; // Default skill speed = 0=0.10, 1=0.08, 2=0.06, 3=0.04
+	if (CheckZeroVector(self.proj_attqty)) self.proj_attqty = '3 2 7'; // Setup default Proj Count = Base (X) * (Skill * Y) Maximum = Z
+	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '500 0 250'; // Default jump forward/up distance
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPJUSTICENEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPJUSTICEFAR;
 	
@@ -2275,11 +2143,8 @@ void() monster_justice = {
 	self.th_jumpexit = judge_jump6;
 	self.th_pain = judge_pain;
 	self.th_die = judge_die;
-
 	self.classtype = CT_MONJUSTICE;
 	self.classgroup = CG_DCAPTAIN;
 	self.classmove = MON_MOVEWALK;
-
-	// Start of monster
 	monster_start();
-}
+};

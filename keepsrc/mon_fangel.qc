@@ -5,7 +5,7 @@ void() fangel_fly1;
 
 float() fangel_check_incoming =  {
 	local entity item;
-	local vector vec, realVec;
+	local vector vec, realvec;
 	local float dot;
 
    if ((range(self.enemy) <= RANGE_MELEE))  return(FALSE);
@@ -21,8 +21,8 @@ float() fangel_check_incoming =  {
    while ( item ) {
       if ( ((item.owner.classname == "player") && (((item.movetype == MOVETYPE_FLYMISSILE) || (item.movetype == MOVETYPE_BOUNCEMISSILE)) || (item.movetype == MOVETYPE_BOUNCE))) ) {
          vec = normalize ( ((self.origin - item.origin) + self.view_ofs));
-         realVec = normalize ( item.velocity);
-         dot = (vec * realVec);
+         realvec = normalize ( item.velocity);
+         dot = (vec * realvec);
          if ( (dot >= 0.40000) ) {
             self.camera_time = 0.00000;
             self.think = fangel_block1;
@@ -187,48 +187,34 @@ local float chance = 0.00000;
 
 
 void  (float thrust)fangel_fly =  {
-	local float retval = 0.00000;
-	local float dist = 0.00000;
-	local float Length = 0.00000;
-	//ai_run(thrust);
-	//return;
-   Length = vlen (self.origin - self.enemy.origin);
-   self.ideal_yaw = vectoyaw ( (self.enemy.origin - self.origin));
-   ChangeYaw ( );
-   dist = (2.00000 + (thrust * 4.00000));
-   if ( (Length < 20.00000) ) {
+	local float dist;
 
-      if ( (random() < 0.10000) ) {
+	self.ideal_yaw = vectoyaw ( (self.enemy.origin - self.origin));
+	ChangeYaw();
+	dist = (2 + (thrust * 4));
+	if (vlen(self.origin - self.enemy.origin) < 20) {
+		if (random() < 0.1) fangel_find_spot ();
+		else {
+			self.monster_stage = FANGEL_STAGE_FLOAT;
+			self.monster_duration = 10 + (random() * 20);
+		}
+		return;
+	}
 
-         fangel_find_spot ( );
-      } else {
+	if (!walkmove(self.angles_y,dist)) {fangel_find_spot(); return; }
 
-         self.monster_stage = FANGEL_STAGE_FLOAT;
-         self.monster_duration = 10 + (random() * 20);
+	dist = (self.origin_z - self.enemy.origin_z);
+	if ( (dist < -20.00000) ) {
+		self.ring_regen_time = 2 + (random() * 2);
+		self.ring_flight_time = (time + (HX_FRAME_TIME * (15 + (random() * 10))));
+	} else {
+			if ( (dist > 20.00000) ) {
+				self.ring_regen_time = -2 + (random() * -2);
+				self.ring_flight_time = (time + (HX_FRAME_TIME * (15 + (random() * 10))));
+			}
+	}
 
-      }
-      return ;
-
-   }
-   retval = walkmove(self.angles_y, dist);
-   if ( !retval ) {
-      fangel_find_spot ( );
-      return ;
-   }
-   dist = (self.origin_z - self.enemy.origin_z);
-   if ( (dist < -20.00000) ) {
-      self.ring_regen_time = 2 + (random() * 2);
-      self.ring_flight_time = (time + (HX_FRAME_TIME * (15 + (random() * 10))));
-   } else {
-
-      if ( (dist > 20.00000) ) {
-         self.ring_regen_time = -2 + (random() * -2);
-         self.ring_flight_time = (time + (HX_FRAME_TIME * (15 + (random() * 10))));
-      }
-
-   }
-
-   if ( (self.ring_flight_time > time) ) walkmove(self.angles_y, self.ring_regen_time);
+	if ( (self.ring_flight_time > time) ) walkmove(self.angles_y, self.ring_regen_time);
 };
 
 void ()fangel_float =  {
@@ -238,9 +224,7 @@ void ()fangel_float =  {
    if ( ((enemy_range <= RANGE_NEAR) && (random() < 0.25000)) ) {
       self.monster_duration = 0.00000;
    } else {
-      if ( ((enemy_range <= RANGE_MELEE) && (random() < 0.90000)) ) {
-         self.monster_duration = 0.00000;
-      }
+      if (enemy_range <= RANGE_MELEE && random() < 0.90000) self.monster_duration = 0;
    }
    if ( (self.monster_duration <= 0.00000) ) {
       self.monster_stage = FANGEL_STAGE_FLY;
@@ -248,19 +232,16 @@ void ()fangel_float =  {
    }
 };
 
-float  (float maxdist) check_z_move =  {
-	local float goaldist = 0.00000;
+float(float maxdist) check_z_move =  {
+	local float goaldist;
 	local entity targ;
 
-   if (self.enemy && visible(self.enemy)) {
-      targ = self.enemy;
-   } else {
-      if (self.goalentity) {
-         targ = self.goalentity;
-      } else {
-         return FALSE;
-      }
+   if (self.enemy && visible(self.enemy)) targ = self.enemy;
+   else {
+      if (self.goalentity) targ = self.goalentity;
+      else return FALSE;
    }
+
    if (targ.origin_z != self.absmin_z) {
       goaldist = (((targ.absmin_z + targ.absmax_z) * 0.5) - ((self.absmax_z + self.absmin_z) * 0.5));
       maxdist = fabs(maxdist);
@@ -276,38 +257,19 @@ float  (float maxdist) check_z_move =  {
    return TRUE;
 };
 
-
-void  (float thrust)fangel_move =  {
-   check_z_move((thrust/2));
-   if ( (self.monster_stage == FANGEL_STAGE_WAIT) ) {
-      fangel_wait();
-      return ;
-   } else {
-
-      if ( (self.monster_stage == FANGEL_STAGE_FLY) ) {
-         fangel_fly ( thrust);
-         return ;
-      } else {
-         if ( (self.monster_stage == FANGEL_STAGE_SIDESTEP) ) {
-            fangel_sidestep ( );
-            return ;
-         } else {
-            if ( (self.monster_stage == FANGEL_STAGE_FLOAT) ) {
-               fangel_float ( );
-               return ;
-            }
-         }
-      }
-   }
+void(float thrust) fangel_move = {
+	check_z_move((thrust/2));
+	if (self.monster_stage == FANGEL_STAGE_WAIT) { fangel_wait(); return; }
+	if (self.monster_stage == FANGEL_STAGE_FLY) { fangel_fly(thrust); return; }
+	if (self.monster_stage == FANGEL_STAGE_SIDESTEP) { fangel_sidestep(); return; } 
+	if (self.monster_stage == FANGEL_STAGE_FLOAT) { fangel_float(); return; }
 };
 
-void  ()fangel_hand_fire =  {
+void() fangel_hand_fire = {
    ai_face();
    sound ( self, CHAN_WEAPON, "hexen2/fangel/hand.wav", 1.00000, ATTN_NORM);
-   do_faSpell ( '10.00000 -4.00000 8.00000', 400.00000);
-   do_faSpell ( '10.00000 -4.00000 8.00000', 300.00000);
-	//Launch_Missile (self.origin + self.attack_offset,(((self.enemy.origin - self.origin) + self.enemy.attack_offset)), VEC_ORIGIN, CT_PROJ_FASPELL, 400);
-	//Launch_Missile (self.origin + self.attack_offset,(((self.enemy.origin - self.origin) + self.enemy.attack_offset)), VEC_ORIGIN, CT_PROJ_FASPELL, 300);
+   do_faSpell('10 -4 8',400);
+   do_faSpell('10 -4 8',300);
 };
 
 
@@ -317,26 +279,15 @@ void  ()fangel_wing_fire =  {
    makevectors ( self.angles);
    do_faBlade ( '8.00000 6.00000 4.00000', 360.00000, (v_right * 2.00000));
    do_faBlade ( '-8.00000 6.00000 4.00000', 360.00000, (v_right * -2.00000));
-	//Launch_Missile (self.origin + self.attack_offset,(((self.enemy.origin - self.origin) + self.enemy.attack_offset) + (v_right * 2.00000)), VEC_ORIGIN, CT_PROJ_FABLADE, 360);
-	//Launch_Missile (self.origin + self.attack_offset,(((self.enemy.origin - self.origin) + self.enemy.attack_offset) + (v_right * -2.00000)), VEC_ORIGIN, CT_PROJ_FABLADE, 360);
-};
 
-/*float fangel_fly_offsets [20]   = { 0.00000,
-    0.10000,    0.20000,    0.30000,    0.40000,
-    0.50000,    0.60000,    0.70000,    0.80000,
-    0.90000,    1.00000,    0.90000,    0.80000,
-    0.70000,    0.60000,    0.50000,    0.40000,
-    0.30000,    0.20000,    0.10000};*/
+};
 
 void() fangel_blockthink = {
    ai_face();
-
    if (!CheckZeroVector(self.velocity)) self.velocity = self.velocity * 0.7; // Woah nelly, slow er on down there
-
    check_z_move(3);
-   if (self.camera_time) {
-      self.camera_time -= 1; // hang on until 
-   } else {
+   if (self.camera_time) self.camera_time -= 1; // hang on until 
+   else {
       if (infront(self.enemy) && ((self.enemy.attack_finished + 0.75000) > time)) self.camera_time += 1;
    }
 };
@@ -372,6 +323,7 @@ void() fangel_block19 = [18, fangel_block20] {fangel_blockthink();};
 void() fangel_block20 = [19, fangel_block21] {fangel_blockthink();};
 void() fangel_block21 = [20, fangel_flyframes_check] {
 	local float chance;
+
 	self.takedamage = DAMAGE_YES; // Let's get hurt again
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
@@ -380,15 +332,9 @@ void() fangel_block21 = [20, fangel_flyframes_check] {
 	self.reflectnails = FALSE;		// Reflect nail projectiles
 	self.reflectaxe = FALSE;			// Prevent axe damage
 	chance = random();
-	if (chance < 0.10000) {
-		self.think = fangel_flyframes_check;
-	} else {
-		if (chance < 0.60000) {
-			self.think = fangel_hand1;
-		} else {
-			self.think = fangel_fly1;
-		}
-	}
+	if (chance < 0.10000) self.think = fangel_flyframes_check;
+	else if (chance < 0.60000) self.think = fangel_hand1;
+	else self.think = fangel_fly1;
 };
 
 void() fangel_death6;
@@ -454,21 +400,11 @@ void() fangel_death38 = [58, fangel_death39] {fangel_death_effects();};
 void() fangel_death39 = [59, fangel_death40] {fangel_death_effects();monster_death_postcheck();};
 void() fangel_death40 = [60, fangel_death40] {monster_deadbody_check();};
 
-void  ()fangel_death = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
-
+void() fangel_death = {
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	self.th_run = SUB_Null;
 	self.idle_sound = SOUND_EMPTY;
-
-	// regular death
-	if (!self.gibbed) {
-		//self.velocity_x = -200 + 400*random();
-		//self.velocity_y = -200 + 400*random();
-		//self.velocity_z = 100 + 100*random();
-		//self.flags = self.flags - (self.flags & FL_ONGROUND);
-		fangel_death1();
-	}
+	if (!self.gibbed) fangel_death1(); // regular death
 };
 
 void() fangel_flyforward1 = [113, fangel_flyforward2] {fangel_move(3 * 0);monster_idle_sound();};
@@ -524,24 +460,15 @@ void() fangel_flyother29 = [89, fangel_flyother30] {fangel_move(3 * 0.1);monster
 void() fangel_flyother30 = [90, fangel_flyframes_check] {fangel_move(3 * 0.1);monster_idle_sound();};
 
 void() fangel_flyframes_check = {
-   fangel_check_incoming();
-   //if ((self.velocity != '0.00000 0.00000 0.00000')) self.velocity = (self.velocity * 0.70000);
-
-	if (self.enemy) {
-		self.idle_sound = "hexen2/fangel/fly.wav";
-	} else {
-		if ((self.classname == "monster_fallen_angel") ) {
-			self.idle_sound = "hexen2/fangel/ambi1.wav";
-		} else {
-			self.idle_sound = "hexen2/fangel/ambi2.wav";
-		}
+	fangel_check_incoming();
+	if (self.enemy) self.idle_sound = "hexen2/fangel/fly.wav";
+	else {
+		if (self.classname == "monster_fallen_angel") self.idle_sound = "hexen2/fangel/ambi1.wav";
+		else self.idle_sound = "hexen2/fangel/ambi2.wav";
 	}
 
-   if ( (self.monster_stage == FANGEL_STAGE_FLY) ) {
-      fangel_flyforward1();
-   } else {
-      fangel_flyother1();
-   }
+	if (self.monster_stage == FANGEL_STAGE_FLY) fangel_flyforward1();
+	else fangel_flyother1();
 };
 
 void() fangel_hand1 = [91, fangel_hand2] {fangel_check_incoming(); ai_face();};
@@ -577,18 +504,14 @@ void() fangel_hand22 = [112, fangel_flyframes_check] {
 };
 
 void() fangel_paincheck = {
-	local float chance = 0.00000;
+	local float chance;
+
 	fangel_check_incoming();
 	chance = random();
-	if ( (chance < 0.33000) ) {
-		self.think = fangel_flyframes_check;
-	} else {
-		if ( (chance < 0.66000) ) {
-			self.think = fangel_hand1;
-		} else {
-			self.think = fangel_fly1;
-		}
-	}
+	if (chance < 0.33) self.think = fangel_flyframes_check;
+	else if (chance < 0.66) self.think = fangel_hand1;
+	else self.think = fangel_fly1;
+
 	self.frame = self.splash_time;
 };
 
@@ -626,28 +549,21 @@ void() fangel_fly18 = [202, fangel_fly19] {ai_face();};
 void() fangel_fly19 = [203, fangel_fly20] {ai_face();};
 void() fangel_fly20 = [204, fangel_fly21] {
 	ai_face();
-	if (self.classname == "monster_fallen_angel") {
-		fangel_wing_fire();
-	} else {
+	if (self.classname == "monster_fallen_angel") fangel_wing_fire();
+	else {
 		sound(self, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM);
 		gaunt_lightning(0);
 	}
 };
 void() fangel_fly21 = [205, fangel_fly22] {
 	ai_face();
-	if (self.classname == "monster_fallen_angel") {
-		fangel_wing_fire();
-	} else {
-		gaunt_lightning(1);
-	}
+	if (self.classname == "monster_fallen_angel") fangel_wing_fire();
+	else gaunt_lightning(1);
 };
 void() fangel_fly22 = [206, fangel_fly23] {ai_face();
 	ai_face();
-	if (self.classname == "monster_fallen_angel") {
-		fangel_wing_fire();
-	} else {
-		gaunt_lightning(0);
-	}
+	if (self.classname == "monster_fallen_angel") fangel_wing_fire();
+	else gaunt_lightning(0);
 };
 void() fangel_fly23 = [207, fangel_fly24] {ai_face(); if (self.classname == "monster_fallen_angel_lord") {gaunt_lightning(1);}};
 void() fangel_fly24 = [208, fangel_fly25] {ai_face(); if (self.classname == "monster_fallen_angel_lord") {gaunt_lightning(0);}};
@@ -688,44 +604,44 @@ void  (entity inflictor, entity attacker, float damage)fangel_pain =  {
 };
 
 void() fangel_attack = {
-	if (random() < 0.5) {
-		fangel_hand1();
-	} else {
-		fangel_fly1();
-	}
+	if (random() < 0.5)	fangel_hand1();
+	else				fangel_fly1();
 };
 
+void() monster_fallen_angel_precache = {
+	precache_model("progs/hexen2/fangel.mdl");
+	precache_model("progs/hexen2/faspell.mdl");
+	precache_model("progs/hexen2/fablade.mdl");
+	precache_model("progs/hexen2/h_fangel.mdl");
+	precache_sound("hexen2/fangel/fly.wav");
+	precache_sound("hexen2/fangel/deflect.wav");
+	precache_sound("hexen2/fangel/hand.wav");
+	precache_sound("hexen2/fangel/wing.wav");
+	precache_sound("hexen2/weapons/expsmall.wav");
+	precache_sound("hexen2/weapons/explode.wav");
+	precache_sound("hexen2/fangel/ambi1.wav");
+	precache_sound("hexen2/fangel/ambi2.wav");
+	precache_sound("hexen2/fangel/death.wav");
+	precache_sound("hexen2/fangel/pain.wav");
+	precache_sound("hexen2/fangel/death2.wav");
+	precache_sound("hexen2/fangel/pain2.wav");
+};
 
-void  ()init_fangel =  {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+void() monster_fallen_angel =  {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.monster_stage = FANGEL_STAGE_WAIT;
-	precache_model ( "progs/hexen2/fangel.mdl");
-	precache_model ( "progs/hexen2/faspell.mdl");
-	precache_model ( "progs/hexen2/fablade.mdl");
-	precache_model ( "progs/hexen2/h_fangel.mdl");
-	precache_sound ( "hexen2/fangel/fly.wav");
-	precache_sound ( "hexen2/fangel/deflect.wav");
-	precache_sound ( "hexen2/fangel/hand.wav");
-	precache_sound ( "hexen2/fangel/wing.wav");
-	precache_sound ( "hexen2/weapons/expsmall.wav");
-	precache_sound ( "hexen2/weapons/explode.wav");
-
 	self.mdl = "progs/hexen2/fangel.mdl";
 	self.headmdl = "progs/hexen2/h_fangel.mdl";		// Large head
 	self.pain_sound = "hexen2/fangel/pain.wav";
 	self.gibhealth = -40;
 	if ((self.classname == "monster_fallen_angel") ) {
-		precache_sound ( "hexen2/fangel/ambi1.wav");
 		self.idle_sound = "hexen2/fangel/ambi1.wav";
 		if (self.health < 1) self.health = 300; // was 250 in Hexen2
 		if(!self.classtype) self.classtype = CT_MONFANGEL;
 		if (self.deathstring == "")  self.deathstring = " was felled by the Fallen Angel\n";
    } else {
-		precache_sound ( "hexen2/fangel/ambi2.wav");
 		self.idle_sound = "hexen2/fangel/ambi2.wav";
 		self.skin = 1;
 		if (self.health < 1) self.health = 500;
@@ -764,16 +680,4 @@ void  ()init_fangel =  {
 	monster_start();
 };
 
-
-void() monster_fallen_angel =  {
-   precache_sound ( "hexen2/fangel/death.wav");
-   precache_sound ( "hexen2/fangel/pain.wav");
-   init_fangel ( );
-};
-
-
-void() monster_fallen_angel_lord =  {
-   precache_sound ( "hexen2/fangel/death2.wav");
-   precache_sound ( "hexen2/fangel/pain2.wav");
-   init_fangel ( );
-};
+void() monster_fallen_angel_lord = { monster_fallen_angel(); };

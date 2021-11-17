@@ -393,22 +393,17 @@ vector (vector testmoos, float testang, float testradius, float minmax) test_moo
 	return floyd_moos;
 };
 
-//----------------------------------------------------------------------
-vector (entity floyd) get_floyd_mins =
-{
+vector (entity floyd) get_floyd_mins = {
 	local float feetyaw;
 	local vector floyd_mins;
 	
 	floyd_mins = '0 0 -24';
 	feetyaw = anglemod(floyd.angles_y);
-
-	// Foot / Shoulder / Head / Shoulder / Foot
 	floyd_mins = test_moos_angle(floyd_mins, feetyaw + 17.4, 38, 0);		//foot
 	floyd_mins = test_moos_angle(floyd_mins, feetyaw + 180 - 17.4, 38, 0);	//shoulder
 	floyd_mins = test_moos_angle(floyd_mins, feetyaw + 180, 40, 0);			//head
 	floyd_mins = test_moos_angle(floyd_mins, feetyaw + 180 + 17.4, 38, 0);	//shoulder
 	floyd_mins = test_moos_angle(floyd_mins, feetyaw + 360 - 17.4, 38, 0);	//foot
-
 	return floyd_mins;
 };
 
@@ -418,60 +413,50 @@ vector (entity floyd) get_floyd_maxs = {
 	
 	floyd_maxs = '0 0 12';
 	feetyaw = anglemod(floyd.angles_y);
-
-	// Foot / Shoulder / Head / Shoulder / Foot
 	floyd_maxs = test_moos_angle(floyd_maxs, feetyaw + 17.4, 38, 1); 		//foot
 	floyd_maxs = test_moos_angle(floyd_maxs, feetyaw + 180 - 17.4, 38, 1);	//shoulder
 	floyd_maxs = test_moos_angle(floyd_maxs, feetyaw + 180, 40, 1); 		//head
 	floyd_maxs = test_moos_angle(floyd_maxs, feetyaw + 180 + 17.4, 38, 1);	//shoulder
 	floyd_maxs = test_moos_angle(floyd_maxs, feetyaw + 360 - 17.4, 38, 1);	//foot
-	
 	return floyd_maxs;
+};
+
+void() monster_floyd_precache = {
+	precache_model("progs/ad181/mon_floyd.mdl");
+	precache_model("progs/ad181/h_floyd.mdl");
+	precache_model("progs/ad181/gib_floyd1.mdl"); // Large chunk of floyd metal
+	precache_model("progs/ad171/gib_metal1.mdl"); // Generic metal1_2
+	precache_model("progs/ad171/gib_metal3.mdl"); // Generic metal1_2
+	precache_model(MODEL_PROJ_LASERBLUE); // Extra load/fire sounds
+	precache_sound("rrp/floyd/idle.wav");
+	precache_sound("rrp/floyd/fire.wav");
+	precache_sound(SOUND_PLASMA_FIRE);
+	precache_sound(SOUND_PLASMA_HIT);
+	precache_sound("rrp/floyd/death.wav");
+	precache_sound("ad171/seeker/explode_major.wav");
+	precache_sound("rrp/floyd/pain.wav");
+	precache_sound("rrp/floyd/sight.wav");
 };
 
 // QUAKED monster_floyd (1 0 0) (-24 -24 -24) (24 24 64) Ambush
 void() monster_floyd = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	// Let the mapper override the mdl keys so that they can
-	// create different skin versions, a rusty floyd anyone?
-	if (self.mdl == "") self.mdl = "progs/ad181/mon_floyd.mdl";			// Dusty the bin
-	if (self.headmdl == "") self.headmdl = "progs/ad181/h_floyd.mdl";		// Top part
-	if (self.gib1mdl == "") self.gib1mdl = "progs/ad181/gib_floyd1.mdl";	// wreckage.mdl
-	if (self.gib2mdl == "") self.gib2mdl = "progs/ad171/gib_metal1.mdl";	// Breakable metal
-	if (self.gib3mdl == "") self.gib3mdl = "progs/ad171/gib_metal3.mdl";	// Breakable metal
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);		// Large chunk of floyd metal
-	precache_model (self.gib2mdl);		// Generic metal1_2
-	precache_model (self.gib3mdl);		// Generic metal1_2
-	
+	self.mdl = "progs/ad181/mon_floyd.mdl";			// Dusty the bin
+	self.headmdl = "progs/ad181/h_floyd.mdl";		// Top part
+	self.gib1mdl = "progs/ad181/gib_floyd1.mdl";	// wreckage.mdl
+	self.gib2mdl = "progs/ad171/gib_metal1.mdl";	// Breakable metal
+	self.gib3mdl = "progs/ad171/gib_metal3.mdl";	// Breakable metal
 	self.idle_sound = "rrp/floyd/idle.wav";
-	precache_sound (self.idle_sound);
-
-	// Extra load/fire sounds
-	precache_model (MODEL_PROJ_LASERBLUE);
-	precache_sound("rrp/floyd/fire.wav");
-	precache_sound (SOUND_PLASMA_FIRE);
-	precache_sound (SOUND_PLASMA_HIT);
-
 	self.death_sound = "rrp/floyd/death.wav";
 	self.death_sound2 = "ad171/seeker/explode_major.wav";
-	precache_sound (self.death_sound);
-	precache_sound (self.death_sound2);
 	self.pain_sound = "rrp/floyd/pain.wav";
-	precache_sound (self.pain_sound);
-	
 	self.sight_sound = "rrp/floyd/sight.wav";
-	precache_sound (self.sight_sound);
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_XTALL;
+
 	// Half health for rolling floyd
 	if (self.health < 1) {
 		if (self.spawnflags & MON_FLOYDROLL) self.health = 75;
@@ -500,7 +485,6 @@ void() monster_floyd = {
 	
 	self.th_checkattack = FloydCheckAttack;
 	self.th_die = floyd_die;
-
 	self.classtype = CT_MONFLOYD;
 	self.classgroup = CG_ROBOT;
 	self.classmove = MON_MOVEWALK;
@@ -521,9 +505,7 @@ void() monster_floyd = {
 		self.th_run = floyd_roll;
 		self.th_pain = floyd_pain;
 		self.think1 = floyd_roll;
-	}
-	// Standby/Sleep mode (light off) waiting for trigger/pain
-	else if (self.spawnflags & MON_FLOYDASLEEP) {
+	} else if (self.spawnflags & MON_FLOYDASLEEP) { // Standby/Sleep mode (light off) waiting for trigger/pain
 		self.th_stand = floyd_sleep;
 		self.th_walk = floyd_sleep;
 		self.th_run = floyd_sleep;
@@ -534,8 +516,7 @@ void() monster_floyd = {
 		self.pain_timeout = -1;		// Pain finished is never set
 		self.pain_flinch = -100;	// Projectile shotguns are tricky
 		self.exactskin = 1;			// Lights off Skin
-	}
-	else floyd_default_state();
-	
+	} else floyd_default_state();
+
 	monster_start();
 };

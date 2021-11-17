@@ -385,50 +385,41 @@ void() drole_die = {
 	}
 };
 
+void() monster_drole_precache = {
+	precache_model("progs/quoth/drole.mdl");
+	precache_model("progs/ad171/h_drole.mdl");
+	precache_model("progs/ad171/gib_drolearm1.mdl");
+	precache_model("progs/ad171/gib_drolearm2.mdl");
+	precache_model("progs/ad171/gib_droleleg1.mdl");
+	precache_model(MODEL_PROJ_DROLE); // growing fireball
+	precache_poisongibs(); // precache gibs
+	precache_model(MODEL_PROJ_DROLEGRN); // growing poisonball
+	precache_sound("quoth/drole/idle.wav");
+	precache_sound("quoth/drole/sight2.wav");
+	precache_sound("quoth/drole/death.wav");
+	precache_sound("quoth/drole/pain.wav");
+	precache_sound("quoth/drole/fire.wav"); // Launch rockets
+	precache_sound("quoth/drole/explode3.wav"); // unique explosion sound
+	precache_sound("quoth/drole/strike1.wav"); // melee impacts
+	precache_sound("quoth/drole/strike2.wav");
+	precache_sound("quoth/drole/swipe.wav"); // Missed melee
+	precache_sound("quoth/drole/sight.wav");
+};
+
 // QUAKED monster_drole (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 void() monster_drole = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/quoth/drole.mdl";
 	self.headmdl = "progs/ad171/h_drole.mdl";
 	self.gib1mdl = "progs/ad171/gib_drolearm1.mdl";	// Top arm (pose 1)
 	self.gib2mdl = "progs/ad171/gib_drolearm2.mdl";	// Top arm (pose 2)
 	self.gib3mdl = "progs/ad171/gib_droleleg1.mdl";	// stretched out leg
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	precache_model (MODEL_PROJ_DROLE);		// growing fireball
-	
 	self.idle_sound = "quoth/drole/idle.wav";
-	precache_sound (self.idle_sound);
-
-	precache_sound ("quoth/drole/sight2.wav");
-	precache_sound ("quoth/drole/death.wav");
 	self.pain_sound = "quoth/drole/pain.wav";
-	precache_sound (self.pain_sound);
-	
-	precache_sound ("quoth/drole/fire.wav");		// Launch rockets
-	precache_sound ("quoth/drole/explode3.wav");	// unique explosion sound
-	precache_sound ("quoth/drole/strike1.wav");	// melee impacts
-	precache_sound ("quoth/drole/strike2.wav");
-	precache_sound ("quoth/drole/swipe.wav");		// Missed melee
-
 	self.sight_sound = "quoth/drole/sight.wav";
-	precache_sound (self.sight_sound);
-
-	// Check for poisonous entity flag
-	if (self.poisonous) {
-		precache_poisongibs();			// precache gibs
-		self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
-		precache_model (MODEL_PROJ_DROLEGRN);	// growing poisonball
-	}
-
+	if (self.poisonous) self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_GIANT;
@@ -460,10 +451,8 @@ void() monster_drole = {
 	self.th_updmissile = drole_rocket1;	// Update flying rocket
 	self.th_pain = drole_pain;
 	self.th_die = drole_die;
-
 	self.classtype = CT_MONDROLE;
 	self.classgroup = CG_DEMON;
 	self.classmove = MON_MOVEWALK;
-	
 	monster_start();
 };

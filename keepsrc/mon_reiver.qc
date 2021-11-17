@@ -329,7 +329,7 @@ void() reiver_fireball = {
 	missile.owner = self;
 	missile.enemy = self.enemy;
 	missile.scale = 0.9;	
-	setmodel (missile, "progs/q15/reiver_fireball.mdl");
+	setmodel (missile, "progs/quoth/fireball.mdl");
 	missile.solid = SOLID_BBOX;	
 	missile.classname = "Reiver_fireball";
 	setsize (missile, '-7 -7 -7', '7 7 7');
@@ -965,6 +965,12 @@ void () animate_shield = {
 };
 
 void () reiver_shield_think = {
+	if (self.lefty) {
+		self.lefty = 0;
+		setmodel (self,"progs/q15/reiver_shield.mdl"); 
+		setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
+		setorigin (self, '0 0 -9');
+	}
 	if (self.shield_finished < time) animate_shield ();
 	
 	self.scale = 0.9;	// 1;
@@ -982,7 +988,7 @@ void () reiver_shield_think = {
 		// Lava nails pierce armor remember :)
 		self.resist_plasma = 0.75;
 		self.resist_bolts = 0.75;
-		self.resist_poison = 0.75;
+		self.resist_poison = self.resist_acid = 0.75;
 		self.reflectnails = TRUE;		// Reflect nail projectiles
 	} else {
 		self.alpha = 0.0001;				// hide multi_shield
@@ -996,7 +1002,7 @@ void () reiver_shield_think = {
 		self.resist_multi_rockets = 0;
 		self.resist_plasma = 0;
 		self.resist_bolts = 0;
-		self.resist_poison = 0;
+		self.resist_poison = self.resist_acid = 0;
 	}
 
 	// spawn multi_shield randomly when hunting an enemy (even when not got shot)
@@ -1011,47 +1017,45 @@ void () reiver_shield_think = {
 	self.nextthink = time + 0.01;
 };
 
+void() monster_reiver_precache = {
+	precache_model("progs/q15/reiver.mdl");
+	precache_model("progs/quoth/fireball.mdl");
+	precache_model("progs/q15/ghost_follower.spr32");
+	precache_model("progs/ad171/misc_skull.mdl");
+	precache_model("progs/q15/reiver_shield.mdl");
+	precache_model("progs/q15/reiverhands.spr");
+	precache_model("progs/q15/reiver_shield.mdl");
+	precache_sound("demon/dhit2.wav");
+	precache_sound("q15/warlord/homing.wav");
+	precache_sound("q15/reiver/ghost_follower_death.wav");
+	precache_sound("q15/reiver/reiver_fireball_shoot.wav");
+	precache_sound("q15/reiver/raith3.wav");
+	precache_sound("q15/reiver/pain1.wav");
+	precache_sound("q15/reiver/pain2.wav");
+	precache_sound("q15/reiver/ranged_attack.wav");
+	precache_sound("q15/reiver/ranged_attack2.wav");
+	precache_sound("q15/reiver/run.wav");
+	precache_sound("q15/reiver/sight.wav");
+	precache_sound("q15/reiver/death.wav");
+	precache_sound("q15/reiver/vampire.wav");
+	precache_sound("player/inflame.wav");
+	precache_sound("zombie/corpse_fire.wav");
+};
+
 //QUAKED monster_reiver (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 void() monster_reiver = {
 	local entity reiver_shield;
-
-	self.classname = "monster_reiver";
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/q15/reiver.mdl";
-	precache_model ("progs/q15/reiver.mdl");		// all files precached in worldspawn() due to savegame-bug
-	precache_model ("progs/q15/reiver_fireball.mdl");
-	precache_model ("progs/q15/ghost_follower.spr32");
-	precache_model ("progs/ad171/misc_skull.mdl");
-	precache_model ("progs/q15/reiver_shield.mdl");
-	precache_model ("progs/q15/reiverhands.spr");
-
-	precache_sound ("demon/dhit2.wav");
-	precache_sound ("q15/warlord/homing.wav");
-	precache_sound ("q15/reiver/ghost_follower_death.wav");
-	precache_sound ("q15/reiver/reiver_fireball_shoot.wav");
-	precache_sound ("q15/reiver/raith3.wav");
-	precache_sound ("q15/reiver/pain1.wav");
-	precache_sound ("q15/reiver/pain2.wav");
-	precache_sound ("q15/reiver/ranged_attack.wav");
-	precache_sound ("q15/reiver/ranged_attack2.wav");
-	precache_sound ("q15/reiver/run.wav");
-	precache_sound ("q15/reiver/sight.wav");
-	precache_sound ("q15/reiver/death.wav");
-	precache_sound ("q15/reiver/vampire.wav");
-	precache_sound("player/inflame.wav");
-	precache_sound("zombie/corpse_fire.wav");
-
 	self.solid = SOLID_NOT;					// No interaction with world
 	self.movetype = MOVETYPE_NONE;			// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_FISH;
 	if (self.health < 1) self.health = 200;
 	self.gibhealth = -40;
 	self.gibbed = FALSE;
-	
 	self.th_stand = reiver_idle1;
 	self.th_walk = reiver_fly1;
 	self.th_run = reiver_run1;
@@ -1059,16 +1063,13 @@ void() monster_reiver = {
 	self.th_melee = reiver_melee;		
 	self.th_pain = reiver_pain;
 	self.th_die = reiver_die;
-
 	reiver_shield = spawn();
 	reiver_shield.solid = SOLID_NOT;
 	reiver_shield.movetype = MOVETYPE_NOCLIP;	
-	setmodel (reiver_shield,"progs/q15/reiver_shield.mdl"); 
-	setsize (reiver_shield, VEC_HULL_MIN, VEC_HULL_MAX);
-	setorigin (reiver_shield, '0 0 -9');
 	reiver_shield.owner = self;
 	reiver_shield.avelocity = '0 77 0';
 	reiver_shield.frame = 0;
+	reiver_shield.lefty = 1;
 	reiver_shield.think = reiver_shield_think;
 	reiver_shield.nextthink = time;
 	// setattachment(reiver_shield, self, "test");
@@ -1082,7 +1083,6 @@ void() monster_reiver = {
 	self.resist_rockets = self.resist_cells = 0;
 
 	if (self.deathstring == "")  self.deathstring = " was terrified by a Reiver\n\n";
-
 	self.classtype = CT_MONREIVER;
 	self.classgroup = CG_KNIGHT;
 	self.classmove = MON_MOVEFLY;

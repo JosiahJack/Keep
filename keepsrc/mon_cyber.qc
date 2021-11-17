@@ -176,9 +176,9 @@ void() cyber_die18 =[ $shoot3, cyber_die18    ] {
     newmis = spawn();
     setsize (newmis, '0 0 0', '0 0 0');        
     setorigin (newmis, self.origin + '0 0 24');
-    SUB_Think (newmis, BecomeTheBigFire);
-    SUB_Think (newmis, FlameWave);
-    Quake_Self (300, 0, self.origin, 0, 0.5);
+    SUB_ThinkImmediate (newmis, BecomeTheBigFire);
+    SUB_ThinkImmediate (newmis, FlameWave);
+	Quake_Spawn(self,300,0,self.origin,FALSE,0.5,VEC_QUAKE);
 	SpawnExplosion(EXPLODE_MED,self.origin + '-10 0 40',SOUND_REXP3);
 	SpawnExplosion(EXPLODE_MED,self.origin + '10 0 40',"");
 	SpawnExplosion(EXPLODE_MED,self.origin + '0 -10 40',"");
@@ -194,15 +194,7 @@ void() cyber_die18 =[ $shoot3, cyber_die18    ] {
 	entity_hide(self);
 };
 
-//============
-// --> QUAKED monster_cyberdemon (1 0 0) (-32 -32 -24) (32 32 64) Ambush
-//============
-void() monster_cyberdemon = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
+void() monster_cyberdemon_precache = {
 	precache_model ("progs/drake/cyber.mdl");
 	precache_model ("progs/drake/h_cyber.mdl");
 	precache_model ("progs/drake/leg_gib.mdl");
@@ -221,17 +213,21 @@ void() monster_cyberdemon = {
 	precache_sound ("drake/cyber/cybidle.wav");
 	precache_sound ("drake/cyber/boom.wav");
 	precache_sound ("drake/cyber/servo.wav");
+};
+
+// QUAKED monster_cyberdemon (1 0 0) (-32 -32 -24) (32 32 64) Ambush
+void() monster_cyberdemon = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 	
+	self.mdl = "progs/drake/cyber.mdl";
 	self.headmdl = "progs/drake/h_cyber.mdl";
 	self.gib1mdl = "progs/gib1.mdl";
 	self.gib2mdl = "progs/gib3.mdl";
 	self.gib3mdl = "progs/drake/leg_gib.mdl";
-   
-	// Note:  In Doom, cyberdemon had width 40 and height 110.
-	// Shambler hullbox is width 32 and height 88.
-
-	self.mdl = "progs/drake/cyber.mdl";
-	if (self.bboxtype < 1) self.bboxtype = BBOX_CYBER;
+	if (self.bboxtype < 1) self.bboxtype = BBOX_CYBER; // Note:  In Doom, cyberdemon had width 40 and height 110.  Shambler hullbox is width 32 and height 88.
 	if (self.health < 1) self.health = 4000; // Health in classic Doom (and Doom3 for that matter) is 4000.
 	self.gibhealth = MON_NEVERGIB;		// Cannot be gibbed by weapons
     self.mass       = 0;    // Was MASS_SUPER.  Now set to immovable.
@@ -251,7 +247,8 @@ void() monster_cyberdemon = {
 	// Immune to all splash damage as in Doom.
 	// Also, immune to burning because his model is too big (i.e., looks bad).
 	// Has boss flag because its Heretic counterpart, the Maulotaur, has it.
-    self.xfl = XFL_FIREANGEL | XFL_NO_BURN | XFL_BOSS;
+    self.noradiusdmg = TRUE;
+	self.bossflag = TRUE;
 	self.resist_fire = 1;
 
 	// PM:  I don't think Doom has yaw speeds, and monsters can turn 180 degrees at any given moment.
@@ -275,9 +272,5 @@ void() monster_cyberdemon = {
 	} else {
 		if (self.deathstring == "")  self.deathstring = " was splattered by a Cyberdemon\n";
 	}
-	
     monster_start ();
 };
-
-
-//===========================/  END OF FILE  /===========================//

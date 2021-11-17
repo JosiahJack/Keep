@@ -79,11 +79,11 @@ void() ai_stand = {
 	//  The dragon glides along its path.  Like ryu_stand(), a water-fearing dragon will try to escape from any body of water if it is placed in one.
 	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
 		if (Ryu_HatesWater ()) {
-			if (self.h2olevel) {
+			if (self.waterlevel) {
 				if (Ryu_LeaveWater(self.speed)) return;
 			}
 		}
-		ryu_untilt ();  // Undo any angle changes due to evasion.
+		ryu_untilt();  // Undo any angle changes due to evasion.
 	}
 
 	// Double check there is a goalentity, no pause and no turret
@@ -128,7 +128,7 @@ void(float dist) ai_walk = {
 	//  The dragon glides along its path.  Like ryu_stand(), a water-fearing dragon will try to escape from any body of water if it is placed in one.
 	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
 		if (Ryu_HatesWater ()) {
-			if (self.h2olevel) {
+			if (self.waterlevel) {
 				if (Ryu_LeaveWater(self.speed)) return;
 				// Dragon could not rise toward air.  If in walk mode, increase speed in the hope of finding another way toward air faster.
 				dist = self.speed; // In walk mode.
@@ -152,6 +152,7 @@ void(float dist) ai_run = {
 
 	if (self.health < 1) return;	// Health < 0, no more running
 	MonsterDeBuff();			// Check and apply poison
+	if (self.slow_finished > time) dist = dist * 0.5;
 	movedist = dist;
 	winner = FALSE;
     if (self.enemy) {
@@ -276,8 +277,7 @@ void(float dist) ai_run = {
 	// Dragonz are special :|
 	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM || self.classtype == CT_MONSHADE) {
 		if (self.attack_state == AS_MELEE) {
-			//  The dragon rotates in place until it faces its opponent.
-			self.ideal_yaw = enemy_yaw;
+			self.ideal_yaw = enemy_yaw; //  The dragon rotates in place until it faces its opponent.
 			ChangeYaw();
 
 			// Check if dragon is facing opponent.  If so, attack!
@@ -292,23 +292,18 @@ void(float dist) ai_run = {
 					}
 
 				if (self.classtype == CT_MONSHADE) {
-				    // Break off the attack if too close to another nightshade.
 					if (Shade_AvoidGhost (self.speed)) self.attack_state = AS_STRAIGHT;
-					return;
-				}
+					return; // Break off the attack if too close to another nightshade.
+				} 
 
 				// Not close enough for melee, so shoot instead if possible.
-				if (self.th_missile)
-					if (!Ryu_NoShot (self)) {
-						//if (!IsGhost (self.enemy))
-						//{
-							self.th_missile ();
-							return;
-					   // }
-					}
+				if (self.th_missile && !Ryu_NoShot(self)) {
+					self.th_missile ();
+					return;
+				}
 			}
-			// Break off the attack if a projectile or some other danger is nearby.
-			if (Ryu_DetectDanger (self.speed)) self.attack_state = AS_STRAIGHT;
+			
+			if (Ryu_DetectDanger (self.speed)) self.attack_state = AS_STRAIGHT; // Break off the attack if a projectile or some other danger is nearby.
 			return;
 		}
 
@@ -320,7 +315,7 @@ void(float dist) ai_run = {
 				if (Ryu_DetectDanger (self.speed)) return; // Avoid projectiles or other threats.
 
 			ryu_untilt (); // Undo any angle changes due to evasion.
-			if (Ryu_HatesWater() && self.h2olevel && Ryu_LeaveWater(self.speed)) return; // If a dragon hates and is in water, this makes dragon rise out of it.
+			if (Ryu_HatesWater() && self.waterlevel && Ryu_LeaveWater(self.speed)) return; // If a dragon hates and is in water, this makes dragon rise out of it.
 		}
 	}
 

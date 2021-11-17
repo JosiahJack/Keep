@@ -345,75 +345,75 @@ void (entity inflictor, entity attacker, float damage) mummy_wake_pain = { mummy
 
 float MUMMY_STRONG = 4.000;
 
+void () monster_mummy_precache = {
+	precache_model ("progs/rogue/mon_mummy.mdl");
+	precache_model ("progs/ad181/h_zombie.mdl");
+	precache_model ("progs/zom_gib.mdl");
+	precache_sound ("zombie/z_idle.wav");
+	precache_sound ("zombie/z_idle1.wav");
+	precache_sound ("zombie/z_shot1.wav");
+	precache_sound ("zombie/z_gib.wav");
+	precache_sound ("zombie/z_pain.wav");
+	precache_sound ("zombie/z_pain1.wav");
+	precache_sound ("zombie/z_fall.wav");
+	precache_sound ("zombie/z_miss.wav");
+	precache_sound ("zombie/z_hit.wav");
+	precache_sound ("zombie/idle_w2.wav");
+};
+
 void () monster_mummy = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-   self.mdl = "progs/rogue/mon_mummy.mdl";
-   precache_model (self.mdl);
-   self.headmdl = "progs/ad181/h_zombie.mdl";
-   precache_model (self.headmdl);
-   precache_model ("progs/zom_gib.mdl");
-   precache_sound ("zombie/z_idle.wav");
-   precache_sound ("zombie/z_idle1.wav");
-   precache_sound ("zombie/z_shot1.wav");
-   precache_sound ("zombie/z_gib.wav");
-   precache_sound ("zombie/z_pain.wav");
-   precache_sound ("zombie/z_pain1.wav");
-   precache_sound ("zombie/z_fall.wav");
-   precache_sound ("zombie/z_miss.wav");
-   precache_sound ("zombie/z_hit.wav");
-   precache_sound ("zombie/idle_w2.wav");
+	self.mdl = "progs/rogue/mon_mummy.mdl";
+	self.headmdl = "progs/ad181/h_zombie.mdl";
+	self.pain_sound = "zombie/z_pain.wav";
+	self.pain_sound2 = "zombie/z_pain1.wav";
+	self.sight_sound = "zombie/z_idle.wav";
+	self.solid = SOLID_NOT;
+	self.movetype = MOVETYPE_NONE;
+	self.bboxtype = BBOX_SHORT;
+	if ( (self.spawnflags & MUMMY_STRONG) ) {
+		if (self.health < 1) self.health = 1000.000;
+	} else {
+		if (self.health < 1) self.health = 500.000;
+	}
+	self.gibhealth = -60;
+	self.gibbed = FALSE;
+	self.pain_flinch = MONAI_ZOMBIEHGH_DAM;
+	self.steptype = FS_TYPEDRAG;
+	self.altsteptype = FS_TYPEDRAG;
+	self.pain_timeout = -5;
+	self.inpain = 0;
+	self.count = 0;
 
-   self.pain_sound = "zombie/z_pain.wav";
-   self.pain_sound2 = "zombie/z_pain1.wav";
-   self.sight_sound = "zombie/z_idle.wav";
-   self.solid = SOLID_NOT;
-   self.movetype = MOVETYPE_NONE;
-   self.bboxtype = BBOX_SHORT;
-   if ( (self.spawnflags & MUMMY_STRONG) ) {
-      if (self.health < 1) self.health = 1000.000;
-   } else {
-      if (self.health < 1) self.health = 500.000;
-   }
-   self.gibhealth = -60;
-   self.gibbed = FALSE;
-   self.pain_flinch = MONAI_ZOMBIEHGH_DAM;
-   self.steptype = FS_TYPEDRAG;
-   self.altsteptype = FS_TYPEDRAG;
-   self.pain_timeout = -5;
-   self.inpain = 0;
-   self.count = 0;
-
-   // Always reset Ammo Resistance to be consistent
-   self.resist_shells = self.resist_nails = 0;
-   self.resist_rockets = self.resist_cells = 0;
+	// Always reset Ammo Resistance to be consistent
+	self.resist_shells = self.resist_nails = 0;
+	self.resist_rockets = self.resist_cells = 0;
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
 
-   self.th_stand = mummy_stand1;
-   self.th_walk = mummy_walk1;
-   self.th_run = mummy_run1;
-   self.th_pain = mummy_pain;
-   self.th_die = mummy_die;
-   self.th_missile = mummy_missile;
-   self.classtype = CT_MONMUMMY;
-   self.classgroup = CG_ZOMBIE;
-   self.classmove = MON_MOVEWALK;
-   if ( (self.spawnflags & 4) ) {
-      setsize (self,VEC_HULL_MIN,'16.000 16.000 -16.000');
-      self.solid = SOLID_NOT;
-      self.th_stand = mummy_sleep;
-      self.th_run = mummy_wake;
-      self.th_walk = mummy_wake;
-      self.th_pain = mummy_wake_pain;
-      self.th_missile = mummy_wake;
-   }
+	self.th_stand = mummy_stand1;
+	self.th_walk = mummy_walk1;
+	self.th_run = mummy_run1;
+	self.th_pain = mummy_pain;
+	self.th_die = mummy_die;
+	self.th_missile = mummy_missile;
+	self.classtype = CT_MONMUMMY;
+	self.classgroup = CG_ZOMBIE;
+	self.classmove = MON_MOVEWALK;
+	if ( (self.spawnflags & 4) ) {
+		setsize (self,VEC_HULL_MIN,'16.000 16.000 -16.000');
+		self.solid = SOLID_NOT;
+		self.th_stand = mummy_sleep;
+		self.th_run = mummy_wake;
+		self.th_walk = mummy_wake;
+		self.th_pain = mummy_wake_pain;
+		self.th_missile = mummy_wake;
+	}
 
 	if (self.deathstring == "")  self.deathstring = " was mummified by a Mummy\n";
-   monster_start();
+	monster_start();
 };

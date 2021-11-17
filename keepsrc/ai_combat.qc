@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 1
-// Function count: 10
+// Function count: 11
 //
 // Implements: Damage application and calculations, direct and radius
 //
@@ -38,6 +38,7 @@
 //=============================================================================
 
 void(entity targ, entity attacker) ClientObituary;
+void(entity victim, entity attacker, float burn) Burn_Add;
 
 float(entity targ, entity inflictor) CanDamage = {
 	if (targ.takedamage == DAMAGE_NO) return FALSE; // Any entity marked with no damage is automatically excluded
@@ -71,7 +72,7 @@ float(entity targ, entity inflictor) CanDamage = {
 void() trigger_victory = {};
 
 void(entity targ) AddToTotals = {
-	if (self.classtype == CT_MONANACONDACOIL) return; // The coils are part of monster_anaconda
+	if (targ.classtype == CT_MONANACONDACOIL) return; // The coils are part of monster_anaconda
 
 	if (targ.classgroup == CG_HARMLESS) {
 		total_denizens = total_denizens + 1;
@@ -89,7 +90,7 @@ void(entity thekilled, entity attacker) AddToKills = {
     local entity victory, swap;
 
     if (thekilled.xfl & XFL_ADD_TO_KILL && self.classtype != CT_MONANACONDACOIL) { // Marked as a countable enemy
-        // thekilled.xfl = thekilled.xfl - XFL_ADD_TO_KILL;  // Count only once.  -Qmaster: Nope.  Well, we might have been revived alright. th_revive should add to the count by 1
+        // thekilled.xfl = thekilled.xfl - XFL_ADD_TO_KILL;  // Count only once.  -Qmaster: Nope.  Well, we might have been revived alright, monster_revive should add to the count by 1.
         killed_monsters = killed_monsters + 1;
 		if (killed_monsters > total_monsters) total_monsters = killed_monsters; // Just in case!
         WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
@@ -110,10 +111,10 @@ void(entity thekilled, entity attacker) AddToKills = {
             victory = find (world, classname, "trigger_victory");
 			swap = self;
 			self = thekilled;
-            while (victory) {
+            while(victory) {
                 activator = attacker;
-				SUB_UseTargets ();
-				victory = find (victory, classname, "trigger_victory");
+				SUB_UseTargets();
+				victory = find(victory, classname, "trigger_victory");
             }
 			self = swap;
         }
@@ -134,6 +135,8 @@ void(entity thekilled, entity attacker) AddToKills = {
 	}
 };
 
+void(entity targ, entity attacker) T_Freeze;
+
 void(entity targ, entity attacker) Killed = {
 	local entity oself;
 
@@ -152,14 +155,16 @@ void(entity targ, entity attacker) Killed = {
 			ClientObituary(self, attacker);
 			self.touch = SUB_Null;
 			if (self.flags & FL_MONSTER) monster_death_use();
-			self.th_die ();
+			if (self.frozen) T_Freeze(self, attacker);
+			else self.th_die ();
 		} else if (!self.deadflag && self.classtype == CT_MONIDSHUB) {
 			// Completely messed up setup for the oldone boss with a weird target field and mess of triggers around it! This elseif is just an exception so it works, anyway no one fights the oldone!
 			self.deadflag = DEAD_DEAD;
-			AddToKills(self,attacker);
-			self.th_die ();
+			if ((self.flags & FL_MONSTER) && !self.nomonstercount) AddToKills(self,attacker);
+			if (self.frozen) { T_Freeze(self, attacker); monster_death_use(); }
+			else self.th_die ();
 		}
-	}		
+	}
 	self = oself; // Restore self
 };
 
@@ -248,7 +253,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	}
 
 	if (inflictor.classgroup == CG_PROJICE) {
-		if (targ.resist_elemental > 0) damage = Resist_Damage(targ, AM_COLD, damage);
+		if (targ.resist_cold > 0) damage = Resist_Damage(targ, AM_COLD, damage);
 	}
 
 	// Is the monster dying and going through death animation?
@@ -270,7 +275,10 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 
 	damage_attacker = attacker; // used by buttons and triggers to set activator for target firing
 
-	if (attacker.super_damage_finished > 0 && targ.classtype != CT_MONINQUISITOR) damage = ceil(damage * 4); // check for quad damage powerup on the attacker
+	if (attacker.super_damage_finished > 0 && targ.classtype != CT_MONINQUISITOR) {
+		damage = ceil(damage * 4); // check for quad damage powerup on the attacker
+		if (self.dmg == 18 && self.buddy) {self.buddy.dmg = 0; dprint("Nerfed a buddy nail\n");} // Nerf double copper super nails, last one there is a rotten egg! Allows for both to start at 18 and get quadded up to gib a zombie.
+	}
 	if (attacker.curse_type == CURSE_WEAKEN) damage = damage * 0.5;
 	if (targ.spirit_blessed) damage = damage * 0.25; // 25% Protection of the Watchers from Spirit Shrine desecration
 	if (attacker.shroom_finished > time) damage = damage * 1.5; // 50% damage boost when shroomed up!
@@ -285,7 +293,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		}
 	}
 
-	if (targ.classname == "monster_death_lord" && targ.shield == 1) damage = damage * 0.5;
+	if (targ.classtype == CT_MONDLORD && targ.shield == 1) damage = damage * 0.5; // Death Lord from Quoth puts up his shield.
 
 	// co-op team play damage avoidance
 	if ( (teamplay == 1) && (targ.team > 0) && (targ.team == attacker.team) ) return;
@@ -413,20 +421,19 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 
 	// figure momentum add
 	// This is what gives Rocket Jumps its Velocity!
-	if (inflictor != world && targ != world && (targ.movetype == MOVETYPE_WALK || (targ.flags & FL_CLIENT))) {
+	if (inflictor && targ && (targ.movetype == MOVETYPE_WALK || (targ.flags & FL_CLIENT))) {
 		dir = targ.origin - (inflictor.absmin + inflictor.absmax) * 0.5;
 		dir = normalize(dir);
 		dir = dir*damage*8;
 		if (targ.mass == MASS_SUPER) dir = dir*0.5; // Harder to shove.
 		damage_velocity = dir;
 		targ.velocity = targ.velocity + dir;
-	}
-	
-	// Wand knockback
-	if (attacker.weapon == IT2_CROSS) {
-		float z_add = 150;
-		if (inflictor.classtype == CT_WANDBIGSPARK) z_add = z_add * 2;
-		if (targ.flags & FL_MONSTER) {
+
+		// Wand knockback
+		if (attacker.weapon == IT2_CROSS && !attacker.selfweaponismoditems || attacker.tome_finished) {
+			float z_add = 150;
+			if (attacker.tome_finished) z_add = z_add * 2;
+			if (targ.mass == MASS_SUPER) z_add = z_add * 0.5;
 			targ.flags = targ.flags - FL_ONGROUND;
 			targ.velocity = targ.velocity + dir;
 			if (targ.velocity_z < z_add) targ.velocity_z = z_add;	
@@ -460,7 +467,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	//------------//
 	//---//
 	//
-	targ.health = targ.health - take; // DO THE DAMAGE
+	targ.health = targ.health - take; // DO THE DAMAGE  --------- DO IT!!!
 	//
 	//---//
 	//------------//
@@ -472,17 +479,18 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 			if (attacker.weapon == IT_MACE) {
 				misc = ceil(take * 0.1); //10% of the damage done gets leeched.  Damage was already done so doesn't affect damage amount
 				if (misc < 1) misc = 1; // minimum of 1 leech
-				attacker.health = attacker.health + misc;
+				if (misc > 0) T_Heal (attacker, misc, FALSE);
 				if (attacker.health > HEAL_MEGAMAX) attacker.health = HEAL_MEGAMAX;
 			}
 		} else {
 			if (attacker.weapon == IT_AXE || attacker.weapon == IT2_MJOLNIR || attacker.weapon == IT_SCIMITAR || attacker.weapon == IT_RAPIER) {
 				misc = ceil(take * 0.1); //10% of the damage done gets leeched.  Damage was already done so doesn't affect damage amount
 				if (misc < 1) misc = 1; // minimum of 1 leech
-				attacker.health = attacker.health + misc;
+				if (misc > 0) T_Heal (attacker, misc, FALSE);
 				if (attacker.health > HEAL_MEGAMAX) attacker.health = HEAL_MEGAMAX;
 			}
 		}
+
 	}
 
 	// Changed the turret code to allow for monster % HP triggers
@@ -541,7 +549,11 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		}
 	}
 	
-	if (targ.health < 1) { Killed (targ, attacker); return; } // Has the target died?
+	if (targ.health < 1) {
+		if ((inflictor.classgroup == CG_PROJICE || inflictor.classtype == CT_FROSTSHARD) && targ.resist_cold < 1) targ.frozen = TRUE;
+		Killed (targ, attacker);
+		return;
+	} // Has the target died?
 	
 	// Switch self (foundtarget and pain function need self correct)
 	// self restored before end of function
@@ -559,7 +571,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 					// but let them react to the player
 				} else {
 					// If previous switch target dead, focus on new target
-					if (self.switchattacker.health < 1) self.switchtimer = 0;
+					if (self.switchattacker.health < 1 || self.classtype == CT_MONSHAMVILE) self.switchtimer = 0;
 					// Is the attacker a different classgroup and switching target available?
 					if (self.switchtimer < time) {
 						if (self.classgroup != attacker.classgroup || IsInsane(self)) {
@@ -646,7 +658,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 void(entity inflictor, entity attacker, float damage, entity ignore, float checkclass) T_RadiusDamage = {
 	local	float 	points;
 	local	entity	head;
-	local	vector	org, imporg;
+	local	vector	org, imporg, dir;
 
 	// Cannot hurt the world or enemy targets (fake flying markers)
 	if (attacker.noradiusdmg) return;
@@ -657,6 +669,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 	if (inflictor.bsporigin) imporg = bmodel_origin(inflictor);
 	else imporg = inflictor.origin;
 	head = findradius(imporg, damage+40);
+	points = damage;
 	while (head) {
 		if (head != ignore) {
 			// This is used mostly for wraiths so when they die they don't kill each other, can't get the code logic to work so its setup as a dead exception path
@@ -678,10 +691,26 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 						if (points > 0 && head.health > 0) {
 							// Need CanDamage to check for anything blocking LoS.  It will do several traces (source->target) to check for any blocking entities (lifts, doors, walls etc)
 							if (CanDamage (head, inflictor)) {
-								if (points > 0) T_Damage (head, inflictor, attacker, points, DAMARMOR); // Any damage left? Check for poison as well
+								if (points > 0) {
+									if ((inflictor.classgroup == CG_PROJFIRE || attacker.classgroup == CG_PROJFIRE) && (random() < (damage+1)*0.01)) Burn_Add(head, attacker, MAX_BURN_DAMAGE); // Chance to burn equals (damage + 1)%.  E.g., 9 damage = 10%. Yes, use 'damage' and not 'take'.
+									T_Damage (head, inflictor, attacker, points, DAMARMOR); // Any damage left? Check for poison as well
+								}
 								if (attacker.poisonous) PoisonDeBuff(head);
 							}
 						}
+					}
+
+					// From bsqmsafe
+					if (head.classtype == CT_TEMPGIB || head.frozen) {
+						if (head.flags & FL_ONGROUND) head.flags = head.flags - FL_ONGROUND;
+						dir = head.origin - ((inflictor.absmin + inflictor.absmax) * 0.5);
+						dir = normalize(dir);
+						if (head.frozen) {
+							head.velocity = head.velocity + dir*damage*2; // Half as much for frozen enemies
+							head.health = head.health - points;
+						} else head.velocity = head.velocity + dir*damage*4;
+						if (head.velocity_z < 10) head.velocity_z = 10;
+						head.velocity_z = vlen(head.velocity) * 0.5;
 					}
 				}
 			}

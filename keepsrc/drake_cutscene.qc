@@ -1,17 +1,59 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Zerstorer
+//               Drake by Patrick Martin
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 6
+// Function count: 18
+//
+// Implements: Drake Cutscene System
+//
+// Description:
+// Legacy system built on some of the most ancient cutscene mods; use the AD
+// cutscene system instead.  This is still useful if you want a player actor
+// though.
+//
 // Heavily modified for Drake by Patrick Martin
+//=============================================================================
 
-// player_run prototype is in proto.qc.
 void() DHM_CalcMoveDone;
 void() move_camera;
 void() player_run;
 
-// ============================================ //
-// |        Movie camera trigger  - dhm       | //
-// ============================================ //
+void() dummy_setup = {
+	setorigin(self,self.oldorigin);
+};
 
-// 'o' should be other, who in turn is the player who touched camera trigger.
-void(entity o) spawn_dummy = {
-	local   entity  s;
+// Movie camera trigger  - dhm.  'o' should be other = the player who touched camera trigger.
+void(entity o) spawn_dummy = { // [FUNCTION]
+	local entity s;
+
+	if (!o) return;
 
     s = spawn ();
     s.velocity      = o.velocity;
@@ -25,49 +67,39 @@ void(entity o) spawn_dummy = {
     s.flags         = o.flags;
     s.effects       = o.effects;
     s.items         = o.items;
-    s.enemy         = o.enemy;      // PM:  o.enemy changed to camera later.
+    s.enemy         = o.enemy; // PM:  o.enemy changed to camera later.
 
 	// Save powerups
 	// Pentagram
     if (o.invincible_finished) {
 		s.invincible_finished = o.invincible_finished - time;
         if (o.invincible_time) s.invincible_time = o.invincible_time - time;
-    } else {
-        s.invincible_finished = s.invincible_time = 0;
-	}
+    } else s.invincible_finished = s.invincible_time = 0;
 
 	// Ring of Shadows
-    if (o.invisible_finished)
-    {   s.invisible_finished = o.invisible_finished - time;
-        if (o.invisible_time)
-            s.invisible_time = o.invisible_time - time;
+    if (o.invisible_finished) {
+		s.invisible_finished = o.invisible_finished - time;
+        if (o.invisible_time) s.invisible_time = o.invisible_time - time;
+    } else s.invisible_finished = s.invisible_time = 0;
+
+	// Quad Damage
+    if (o.super_damage_finished) {
+		s.super_damage_finished = o.super_damage_finished - time;
+        if (o.super_time) s.super_time = o.super_time - time;
+    } else s.super_damage_finished = s.super_time = 0;
+
+	// Biosuit
+    if (o.radsuit_finished) {
+		s.radsuit_finished = o.radsuit_finished - time;
+        if (o.rad_time) s.rad_time = o.rad_time - time;
+    } else s.radsuit_finished = s.rad_time = 0;
+
+	// Empathy Shields
+    if (o.empathy_finished) {
+		s.empathy_finished = o.empathy_finished - time;
+        if (o.empathy_time) s.empathy_time = o.empathy_time - time;
     }
-    else
-        s.invisible_finished = s.invisible_time = 0;
-// Quad Damage
-    if (o.super_damage_finished)
-    {   s.super_damage_finished = o.super_damage_finished - time;
-        if (o.super_time)
-            s.super_time = o.super_time - time;
-    }
-    else
-        s.super_damage_finished = s.super_time = 0;
-// Biosuit
-    if (o.radsuit_finished)
-    {   s.radsuit_finished = o.radsuit_finished - time;
-        if (o.rad_time)
-            s.rad_time = o.rad_time - time;
-    }
-    else
-        s.radsuit_finished = s.rad_time = 0;
-// Empathy Shields
-    if (o.empathy_finished)
-    {   s.empathy_finished = o.empathy_finished - time;
-        if (o.empathy_time)
-            s.empathy_time = o.empathy_time - time;
-    }
-    else
-        s.empathy_finished = s.empathy_time = 0;
+    else s.empathy_finished = s.empathy_time = 0;
 
 	// Cross of Deflection
     if (o.cross_finished) {
@@ -89,31 +121,25 @@ void(entity o) spawn_dummy = {
     if (o.tome_finished) s.tome_finished = o.tome_finished - time;
     else s.tome_finished = 0;
 
-	// FIXME:  Called during touch func, don't set directly?
-    setorigin (s, o.origin);
-
-	// PM:  Link player to dummy, for now.
-    if (o)  //.classname == "player")
-        if (!o.trigger_field) o.trigger_field  = s;
+	s.oldorigin = o.origin;
+	s.nextthink = time + 0.1;
+	s.think = dummy_setup; // Delay setorigin because we are in a touch.
+    if (!o.trigger_field) o.trigger_field  = s; // PM:  Link player to dummy, for now.
 };
 
-// PM:  Removed 'name_player'; no longer needed.
-void() go_back = {
-	local   entity  t, c, cvars, old;
-	local   string  val;
+void() go_back = { // [FUNCTION]
+	local entity t, c, cvars, old;
+	local string val;
 
     t = find (world, classname, "dummy");
     if (!t) objerror ("couldn't find dummy");
     t.solid = SOLID_NOT;    // So player won't bounce back.
-
     c = find (world, classname, "camera");
     if (!c) objerror ("couldn't find camera");
     c.oldorigin     = t.origin;     // So player won't bounce back to cam.
-
-	// FIXME:  Check the new vars.
     setorigin (c, t.origin);
     c.velocity      = t.velocity;
-    c.view_ofs      = '0 0 22';     // PM:  Morph should take care of itself.
+    c.view_ofs      = '0 0 22'; // PM:  Morph should take care of itself.
     c.angles_x      = t.angles_x;
     c.angles_y      = t.angles_y;
     c.angles_z      = 0;
@@ -124,50 +150,24 @@ void() go_back = {
     c.flags         = t.flags;
     c.effects       = t.effects;
     c.items         = t.items;
-    c.enemy         = t.enemy;      // PM:  Restore client's original enemy.
-
-	// Restore powerups
-    if (t.invincible_finished)
-    {   c.invincible_finished = time + t.invincible_finished;
-        if (t.invincible_time)
-            c.invincible_time = time + t.invincible_time;
-    }
-    if (t.invisible_finished)
-    {   c.invisible_finished = time + t.invisible_finished;
-        if (t.invisible_time)
-            c.invisible_time = time + t.invisible_time;
-    }
-    if (t.super_damage_finished)
-    {   c.super_damage_finished = time + t.super_damage_finished;
-        if (t.super_time)
-            c.super_time = time + t.super_time;
-    }
-    if (t.radsuit_finished)
-    {   c.radsuit_finished = time + t.radsuit_finished;
-        if (t.rad_time)
-            c.rad_time = time + t.rad_time;
-    }
-    if (t.empathy_finished) {
-		c.empathy_finished = time + t.empathy_finished;
-        if (t.empathy_time) c.empathy_time = time + t.empathy_time;
-    }
-    if (t.cross_finished)
-    {   c.cross_finished = time + t.cross_finished;
-        if (t.cross_time)
-            c.cross_time = time + t.cross_time;
-    }
-    if (t.wing_finished)
-    {   c.wing_finished = time + t.wing_finished;
-        if (t.wing_time)
-            c.wing_time = time + t.wing_time;
-    }
-    if (t.mirror_finished)
-    {   c.mirror_finished = time + t.mirror_finished;
-        if (t.mirror_time)
-            c.mirror_time = time + t.mirror_time;
-    }
-    if (t.tome_finished) c.tome_finished = time + t.tome_finished;
-
+    c.enemy         = t.enemy; // PM:  Restore client's original enemy.
+    c.invincible_finished = time + t.invincible_finished;
+    c.invincible_time = time + t.invincible_time;
+    c.invisible_finished = time + t.invisible_finished;
+    c.invisible_time = time + t.invisible_time;
+    c.super_damage_finished = time + t.super_damage_finished;
+    c.super_time = time + t.super_time;
+    c.radsuit_finished = time + t.radsuit_finished;
+    c.rad_time = time + t.rad_time;
+    c.empathy_finished = time + t.empathy_finished;
+    c.empathy_time = time + t.empathy_time;
+    c.cross_finished = time + t.cross_finished;
+    c.cross_time = time + t.cross_time;
+    c.wing_finished = time + t.wing_finished;
+    c.wing_time = time + t.wing_time;
+    c.mirror_finished = time + t.mirror_finished;
+    c.mirror_time = time + t.mirror_time;
+    c.tome_finished = time + t.tome_finished;
     c.fixangle      = 1;        // turn this way immediately
     c.takedamage    = DAMAGE_AIM;
     c.solid         = SOLID_SLIDEBOX;
@@ -176,21 +176,18 @@ void() go_back = {
     c.think         = player_run;   // PM:  Reset player anim frames.
     c.air_finished = time + WATER_AIR; // No gasping from you!
     c.dmg = 2;        // initial water damage
-    c.xfl           = c.xfl | XFL_ITEMS;     // Restore pickup again.
 
-	// Yes, you CAN change the classname here since the 'find' command already
-	// found the camera.  It is best to change the classname back to player now.
+	// Yes, you CAN change the classname here since the 'find' command already found the camera.  It is best to change the classname back to player now.
     c.classname     = "player";
-    cutscene = 0;       // Cutscene OFF
+    cutscene = 0; // Cutscene OFF
     Safe_stuffcmd (c, "-forward\n");
 
-	// Look for any CVARSET entities to restore old cvars that
-	// were changed for the cut-scene
+	// Look for any CVARSET entities to restore old cvars that were changed for the cut-scene
     if (c.ideal_yaw == -1) {
         cvars = find(world, classname, "cvar_done");
         while (cvars) { // != world)
             if (!cvars.message) cvars.message = cvars.model;
-            cvar_set (cvars.netname, cvars.script);
+            cvar_set(cvars.netname, cvars.script);
             old = cvars;
             cvars = find (cvars, classname, "cvar_done");
             remove (old);
@@ -199,41 +196,25 @@ void() go_back = {
     }
 
     val = ftos (c.cnt);
-    cvar_set ("viewsize", val);      //restore old viewsize
-//    Safe_stuffcmd (c, "sizedown\nsizeup\n");   //hack-fix for GLquake
-
+    cvar_set ("viewsize", val); // Restore old viewsize
     t.nextthink = time + 0.1;
     t.think = SUB_Remove;
     remove (self);
 };
 
-//===============
 // This routine short-circuits player turning and movement while in camera
 // mode.  self.oldorigin is used as self.angles, and self.mangle is used as
 // self.velocity.  This allows me to compute these figures in code, and
 // overwrite what the game thinks they should be.  Called from 'client.qc'.
-//===============
-void() look_ahead = 
-{
-// PM:  Vision style cam sets angles to mangle and velocity to zeroes.
-// The camera in vision mode cutscenes cannot move.
-//    if (vision)
-//    {
-//        self.angles = self.enemy.mangle;
-//        self.fixangle = 1;
-//        // self.nextthink removed since it's done in PlayerPreThink.
-//        return;
-//    }
-
 // PM:  Using Zerstorer style cutscene code...
+void() look_ahead = { // [FUNCTION]
+	local vector looky;
+
     self.angles = self.oldorigin;
     self.velocity = self.mangle;
     self.fixangle = 1;
     cvar_set ("viewsize", "120");        //keep screen maximized
-    if (self.delay == 0)
-    {
-        local   vector  looky;
-
+    if (self.delay == 0) {
         looky_x = self.movedir_x - self.origin_x;
         looky_y = self.movedir_y - self.origin_y;
         looky_z = self.origin_z - self.movedir_z;
@@ -242,97 +223,62 @@ void() look_ahead =
 };
 
 // This is a modified SUB_CalcMove routine.
-void(vector tdest, float tspeed, entity cam) DHM_CalcMove =
-{
-local   vector  vdestdelta;
-local   float   len, traveltime;
+void(vector tdest, float tspeed, entity cam) DHM_CalcMove = { // [FUNCTION]
+	local vector vdestdelta;
+	local float len, traveltime;
 
     self.finaldest = tdest;
     self.think = DHM_CalcMoveDone;
+    if (tdest == cam.origin) { cam.velocity = cam.mangle = '0 0 0'; self.nextthink = time + 0.01; return; }
 
-    if (tdest == cam.origin)
-    {
-        cam.velocity = cam.mangle = '0 0 0';
-        self.nextthink = time + 0.01;
-        return;
-    }
-        
-// set destdelta to the vector needed to move
-    vdestdelta = tdest - cam.origin;
-    
-// calculate length of vector
-    len = vlen (vdestdelta);
-    
-// divide by speed to get time to reach dest
-    traveltime = len / tspeed;
+    vdestdelta = tdest - cam.origin; // Set vdestdelta to the vector needed to move.
+    len = vlen (vdestdelta); // Calculate length of vector.
+    traveltime = len / tspeed; // Divide by speed to get time to reach dest
+    if (traveltime < 0.1) { cam.velocity = cam.mangle = '0 0 0'; self.nextthink = time + 0.01; return; }
 
-    if (traveltime < 0.1)
-    {
-        cam.velocity = cam.mangle = '0 0 0';
-        self.nextthink = time + 0.01;
-        return;
-    }
-    
-// set nextthink to trigger a think when dest is reached
-    self.nextthink = time + traveltime;
-
-// scale the destdelta vector by the time spent traveling to get velocity
-    cam.velocity = cam.mangle = vdestdelta * (1/traveltime);
+    self.nextthink = time + traveltime; // Set nextthink to trigger a think when dest is reached.
+    cam.velocity = cam.mangle = vdestdelta * (1/traveltime); // Scale the destdelta vector by the time spent traveling to get velocity.
 };
 
-//- - - - - - - - -
 // Zerstorer-only cutscene code.
-void() wait_camera =
-{
-    if (!self.wait)
-        {move_camera (); return;}
+void() wait_camera = { // [FUNCTION]
+    if (!self.wait) {move_camera (); return;}
     
     self.nextthink = time + self.wait;
     self.think = move_camera;
 };
 
-//============
-// After moving, set origin to exact final destination
-//============
-void() DHM_CalcMoveDone =
-{
-    if (!cutscene)      // Old check:  if (self.enemy.classname != "camera")
-        {remove (self); return;}
+// After moving, set origin to exact final destination.
+void() DHM_CalcMoveDone = { // [FUNCTION]
+    if (!cutscene) {remove(self); return;}
 
     setorigin(self.enemy, self.finaldest);
     self.enemy.velocity = self.enemy.mangle = '0 0 0';
-
-    if (self.cnt == -1) 
-        {remove (self); return;}
+    if (self.cnt == -1) {remove (self); return;}
 
     self.nextthink = time + 0.01;
     self.think = wait_camera;
 };
 
-void() move_camera =
-{
-local   entity  cpt, fpt;
-local   vector  looky;
+void() move_camera = { // [FUNCTION]
+	local entity cpt, fpt;
+	local vector looky;
 
-    if (!cutscene)      // Old check:  if (self.enemy.classname != "camera")
-        {remove (self); return;}
+    if (!cutscene) {remove (self); return;}
 
     cpt = find (world, targetname, self.target);
-    if (!cpt.target)     //if this is the end of the line, stop camera
-    {
+    if (!cpt.target) { // If this is the end of the line, stop camera.
         self.think = SUB_Null;
         self.enemy.velocity = '0 0 0';
         self.enemy.mangle = '0 0 0';     //mangle == velocity in cut-scene
         DHM_CalcMoveDone();
-        self.cnt = -1;    // remove control entity in DHM_CalcMoveDone
-        //return;
+        self.cnt = -1;    // Remove control entity in DHM_CalcMoveDone
     }
-    if (cpt.focal_point)    //is there a new focal point?
-    {
+
+    if (cpt.focal_point) { // Is there a new focal point?
         fpt = find (world, targetname, cpt.focal_point);
-        if (!fpt)
-            objerror("Couldn't find new focal point!");
-        
+        if (!fpt) { dprint("Couldn't find new focal point!\n"); cpt.focal_point = ""; return; }
+
         self.enemy.movedir = fpt.origin;
         looky_x = self.enemy.movedir_x - self.enemy.origin_x;
         looky_y = self.enemy.movedir_y - self.enemy.origin_y;
@@ -340,33 +286,27 @@ local   vector  looky;
         self.enemy.oldorigin = vectoangles (looky);
         self.enemy.angles = self.enemy.oldorigin;    //oldorigin == angles in CS
     }
-// Check for auto-focus or still camera angle
-    if (cpt.delay)
-        self.enemy.delay = cpt.delay;
-    else
-        self.enemy.delay = 0;
+
+	// Check for auto-focus or still camera angle
+    if (cpt.delay) self.enemy.delay = cpt.delay;
+    else self.enemy.delay = 0;
 
     self.target = cpt.target;
     self.wait = cpt.wait;
-    if(cpt.speed)
-        self.speed = cpt.speed;
+    if (cpt.speed) self.speed = cpt.speed;
     DHM_CalcMove (cpt.origin, self.speed, self.enemy);    
 };
-//- - - - - - - - -
 
-void() go_camera = {
+// Change the player into a camera
+// PM:  Ok, you win!  Too much stuff checks for 'player', so use 'camera'
+// to be safe.  Just make sure alignment stuff doesn't break, namely
+// friendly monsters getting mad at a player when they shouldn't.
+void() go_camera = { // [FUNCTION]
 	local vector looky;
 	local entity control;
 
     cutscene = 1;   // Cutscene ON.
 
-	// Don't let player-turned-camera pick up items.
-    self.xfl        = self.xfl - (self.xfl & XFL_ITEMS);
-
-	// Change the player into a camera
-	// PM:  Ok, you win!  Too much stuff checks for 'player', so use 'camera'
-	// to be safe.  Just make sure alignment stuff doesn't break, namely
-	// friendly monsters getting mad at a player when they shouldn't.
     self.classname  = "camera";
     self.velocity   = '0 0 0';
     self.view_ofs   = '0 0 0';
@@ -375,11 +315,9 @@ void() go_camera = {
     //  because of reflective textures or builtin chasecam (chase_active 1).
     //  Requires my custom invisible model (which is a sprite).
     self.modelindex  = modelindex_eyes;
-    // Turn off glowing effects.
-    self.effects     = 0;
+    self.effects     = 0; // Turn off glowing effects.
     self.items       = 0;
     self.weaponmodel = "";      // Remove weapon from the screen.
-
 	looky_x = self.movedir_x - self.enemy.origin_x;
 	looky_y = self.movedir_y - self.enemy.origin_y;
 	looky_z = self.enemy.origin_z - self.movedir_z;
@@ -387,13 +325,10 @@ void() go_camera = {
 	self.angles = self.oldorigin;        //oldorigin == angles in CS
 
     // Check if camera is auto-focus or not
-	if (self.enemy.delay)
-		self.delay = self.enemy.delay;
-	else
-		self.delay = 0;
+	if (self.enemy.delay) self.delay = self.enemy.delay;
+	else self.delay = 0;
 
 	self.velocity = self.mangle = '0 0 0';
-
 	self.dmg         = 0;   // PM:  Do we need this?
 	self.fixangle    = 1;        // turn this way immediately
 	self.movetype    = MOVETYPE_NOCLIP;
@@ -418,11 +353,9 @@ void() go_camera = {
 
     self.cnt = cvar("viewsize");
     cvar_set ("viewsize", "120");     //Full screen
-    // PM:  Vision sets 'v_idlescale' for swaying screen.  Not in Drake!
     Safe_stuffcmd (self, "sizedown\nsizeup\n");   //hack-fix for GLquake
     setorigin (self, self.enemy.origin);
 
-	//- - - - - - - - -
 	// PM:  Space invasion prevention.
 	// Make the dummy solid to prevent monsters or other junk from occupying
 	// the space where the player stood before the cutscene started.
@@ -434,18 +367,9 @@ void() go_camera = {
 	// player could get stuck inside the dummy (instead of moving) between
 	// trigger activation and transformation to camera.
 	//
-	// In Vision code, player becomes camera a frame or so after trigger
-	// activation.  In Zer code, player becomes camera at the same time
+	// In Zer code, player becomes camera at the same time
 	// the trigger activates.
-	//
-	// Note:  If you still have trouble getting a Vision cutscene to work in a
-	// certain level, move the following code to the top of 'look_ahead'.
-	// Doing so would be less than ideal since the check would get called every
-	// frame during the cutscene, instead of just once here.
-	// The only level that still has problems with dummy made solid now
-	// is 'vision.bsp', which has its own pak.  Tronyn's maps, the levels
-	// that really matter, have no problems.
-	//- - - - - - - - -
+
 	// 'self' is the player-turned-camera entity.
     // '!self.trigger_field' is the world, and its classname is worldspawn.
     if (self.trigger_field.classname == "dummy") {
@@ -455,86 +379,50 @@ void() go_camera = {
     }
 };
 
-// PM:  Called from either touch or use.
-void(entity who) camera_activate = {
-    local   entity  t;
-
-	// only activate for player, 1st time touched
-    if (who.health <= 0) return;
-    if (who.deadflag) return; // In case of Alien Quake facehugger kill.
-    if (who.classname != "player") return;
-
-	// You can't touch/use this again.
-    self.touch  = self.use  = SUB_Null;
-
-	// If player is on ground, take him off ground so no one gets confused
-    who.flags = who.flags - (who.flags & FL_ONGROUND);
-
-	// put a dummy where the player was
-    spawn_dummy (who);
-    t = find (world, targetname, self.target);
-//    if (vision)
-//    {
-//        if (!t)
-//            objerror ("couldn't find target");
-//    }
-//    else
-    {
-        local   entity  fpt;
-
-        while ((t != world) && (t.classname != "info_movie_camera"))
-            t = find (t, targetname, self.target);
-        if (!t)
-            objerror ("couldn't find target");
-
-    // find focal point
-        fpt = find (world, targetname, self.focal_point);
-        if (!fpt)
-            objerror ("You must have a focal point!\n");
-        else
-            who.movedir = fpt.origin;    //movedir used to calc focal dir
-    }
-            
-// Go to the camera - not in this function, because touch functions are
-// called while looping through c code, and you don't want to move the 
-// player, or something like that?
-    who.enemy = t;        //save camera position, etc.
-    who.script = self.script;    //save script number
-    who.script_delay = self.script_delay;  //save delay for page 1
-
-//    if (vision)
-//    {   // PM:  Don't try instant start because that breaks soeexit.bsp.
-//        who.nextthink = time + 0.05;
-//        who.think = go_camera;
-//    }
-//    else
-        SUB_Think (who, go_camera);
-
+void() camera_remove = { // [FUNCTION]
     activator = self;
     SUB_UseTargets ();
-
-//Remove the trigger_camera from level
     self.nextthink = time + 0.1;
     self.think = SUB_Remove;
 };
 
-void() camera_touch =
-{
-    if (self.targetname)
-        if (self.nextthink < time)
-            return;
-    if (self.cnt == -1)
-        return;
-    camera_activate (other);
-};
-void() camera_point_touch = {camera_activate (other);};
+// PM:  Called from either touch or use.
+void(entity who) camera_activate = { // [FUNCTION]
+    local entity t, fpt;
 
-//============
-// --> QUAKED info_movie_camera (.5 .5 .5) (-8 -8 -8) (8 8 32)
-// This is the destination marker for a camera.  It should have a "targetname"
-// field with the same value as a camera-trigger's "target" field.
-//============
-void() imc_touch = {
+	if (!who) return;
+    if (who.health <= 0) return;
+    if (who.deadflag) return; // In case of Alien Quake facehugger kill.
+    if (!(who.flags & FL_CLIENT)) return; // only activate for player, 1st time touched.
+
+    self.touch = self.use = SUB_Null; // You can't touch/use this again, once only.
+    who.flags = who.flags - (who.flags & FL_ONGROUND); // If player is on ground, take him off ground so no one gets confused
+    spawn_dummy(who); // Put a dummy where the player was
+    t = find (world, targetname, self.target);
+	while ((t != world) && (t.classname != "info_movie_camera")) t = find (t, targetname, self.target);
+	if (!t) { dprint("Couldn't find target for cutscene camera_activate! Removed camera trigger.\n"); camera_remove(); return; }
+
+    // Find focal point.
+	fpt = find (world, targetname, self.focal_point);
+	if (!fpt) { dprint ("You must have a focal point!  Removed camera trigger.\n"); camera_remove(); return; }
+	else who.movedir = fpt.origin;    //movedir used to calc focal dir
+
+    who.enemy = t; // Save camera position, etc.
+    who.script = self.script; // Save script number
+    who.script_delay = self.script_delay;  // Save delay for page 1. Go to the camera later because touch functions are called while looping through c code links.
+	SUB_ThinkImmediate(who, go_camera);
+	camera_remove(); //Remove the trigger_camera from level
+};
+
+void() camera_touch = { // [FUNCTION]
+    if (self.targetname && self.nextthink < time) return;
+    if (self.cnt == -1) return;
+
+    camera_activate(other);
+};
+void() camera_point_touch = {camera_activate(other);}; // [FUNCTION]
+
+void() imc_touch = { // [FUNCTION]
 	local string temps;
 
     if (other.classname != "camera") return;
@@ -550,128 +438,91 @@ void() imc_touch = {
     self.solid = SOLID_NOT;
 };
 
-void() info_movie_camera = {
+// This is the destination marker for a camera.  It should have a "targetname" field with the same value as a camera-trigger's "target" field.
+void() info_movie_camera = { // [ENTITY]
     self.solid = SOLID_TRIGGER;
     setorigin(self, self.origin);
     setsize(self, '-8 -8 -8', '8 8 8');
     self.touch = imc_touch;
 };
 
-void() camera_use = {
-    local   entity  pl;
-
-    pl = find(world, classname, "player");    // Only one in single-player.
-    camera_activate (pl);
+void() camera_use = { // [FUNCTION]
+	camera_activate(find(world, classname, "player")); // Only one in single-player.
 };
 
-//- - - - - - - - -
 // Zerstorer-only cutscene code.
-void() gocam_use = {
-local   entity  control, temp;
+void() gocam_use = { // [FUNCTION]
+	local entity control, temp;
 
     control = find(world, classname, "camcontrol");
-    if (control == world)
-        dprint ("Can't find camcontrol!\n");
-
-    temp = self;
-    self = control;
-    DHM_CalcMoveDone ();
-    self = temp;
+	if (control) {
+		temp = self;
+		self = control;
+		DHM_CalcMoveDone ();
+		self = temp;
+	} else dprint ("Can't find control for gocam_use!\n");
     self.nextthink = time + 0.1;
     self.think = SUB_Remove;
 };
 
-void() trigger_gocamera = {self.use = gocam_use;};
-//- - - - - - - - -
+void() trigger_gocamera = {self.use = gocam_use;}; // [ENTITY]
 
-//============
-// --> QUAKED info_focal_point (.5 .5 .5) (-8 -8 -8) (8 8 32)
-// This is the point that the camera will face.  It should have a "targetname"
-// field with the same value as a camera-trigger's "focal_point" field.
-//
-// PM:  This entity is kept only for map compatibility reasons.
-// Otherwise, this entity is redundant.  Use 'info_notnull' instead.
-//============
-void() info_focal_point = {};   // just holds a spot for the focal point.
+// This is the point that the camera will face.  It should have a "targetname" field with the same value as a camera-trigger's "focal_point" field.
+// PM:  This entity is kept only for map compatibility reasons, otherwise, this entity is redundant.  Use 'info_notnull' instead.
+void() info_focal_point = {}; // Just holds a spot for the focal point, [ENTITY]
 
-//============
-// --> QUAKED trigger_camera (.5 .5 .5) ?
+void(float pt) trigger_camera_spawn = { // [FUNCTION]
+	// Update:  Don't let dm or coop muck up cutscenes and vice versa.
+    if (deathmatch || coop) {remove (self);  return;}   // PM:  Fix -- abort if removed.
+
+    if (pt) { // PM:  The new way, this is for you Tronyn.
+        InitPointTrigger ();
+        if (!self.targetname)
+            self.touch = camera_point_touch;
+    } else { // The old way...
+        InitTrigger ();
+        self.touch = camera_touch; // PM:  Must always allow touch because some old maps need it.
+    }
+    // find the destination
+    if (!self.target) { dprint("Camera trigger with no target!\n"); self.touch = SUB_Null; return; }
+    self.use = camera_use;
+};
+
 // A player touching this will be transported to the corresponding
 // info_movie_camera entity.  You must set the "target" field, and put a
 // info_movie_camera with a "targetname" field that matches.  The "script"
 // key gives a starting script number, and the "script_delay" key is the
 // amount of time(seconds) to stay on the first script page.
-//
-// If the trigger_camera has a targetname, it will only enter camera mode
-// after it has been fired.
-//============
-void(float pt) trigger_camera_spawn = {
-	// Update:  Don't let dm or coop muck up cutscenes and vice versa.
-    if (deathmatch || coop) {remove (self);  return;}   // PM:  Fix -- abort if removed.
+// If the trigger_camera has a targetname, it will only enter camera mode after it has been fired.
+void() trigger_camera = {trigger_camera_spawn(FALSE);}; // [ENTITY]
 
-    if (pt) { // The new way, this is for you Tronyn.
-        InitPointTrigger ();
-        if (!self.targetname)
-            self.touch = camera_point_touch;
-    }
-    else
-    {   // The old way...
-        InitTrigger ();
-        // PM:  Must always allow touch because some old maps need it.
-        self.touch = camera_touch;
-    }
-    // find the destination
-    if (!self.target)
-        objerror ("Camera trigger with no target");
-    self.use = camera_use;
-};
+void() trigger_camera_point = {trigger_camera_spawn(TRUE);}; // [ENTITY]
 
-void() trigger_camera = {trigger_camera_spawn (FALSE);};
-void() trigger_camera_point = {trigger_camera_spawn (TRUE);};
-
-
-//----------------------------------
-//       Scripting function - dhm
-//----------------------------------
-// The original timing idea for scripts was inspired by Zoid.  Study the
-// code for Zoid's CTF, it is an excellent example of good Quake-C coding.
-// Also look at all of Quake Command's stuff.  Wedge rules.
-//----------------------------------
-// Script_play is called from PlayerPreThink()
-// 'self' is the player (camera)
-//----------------------------------
-void() Script_play = {
-local   entity  scrpt;
+// Scripting function - dhm
+// The original timing idea for scripts was inspired by Zoid.  Study the code for Zoid's CTF, it is an excellent example of good Quake-C coding.
+// Also look at all of Quake Command's stuff.  Wedge rules.  Script_play is called from PlayerPreThink() indirectly through Cutscene_Think.
+// 'self' is the player (aka "camera")
+void() Script_play = { // [FUNCTION]
+	local entity scrpt, temp;
     
     scrpt = find (world, script_num, self.script);  
-    if (!scrpt)
-       dprint ("Error: script not found!");
+	if (!scrpt) { dprint ("Error: script not found!"); return; }
 
-    // If script has a target, trigger it once.
-//    if (!vision)
-        if (scrpt.target)
-        {
-            local   entity  temp;
-
-            temp = self;
-            self = scrpt;
-            SUB_UseTargets ();
-            self.target = string_null;
-            self = temp;
-        }
-
+	if (scrpt.target) {
+		temp = self;
+		self = scrpt;
+		SUB_UseTargets (); // If script has a target...
+		self.target = string_null; // ...trigger it once.
+		self = temp;
+	} 
     self.script_delay = scrpt.script_delay;
     self.script_time = time + 1;
     self.script_count = self.script_count + 1;
     centerprint (self, scrpt.message);
-
-    if (self.script_count == self.script_delay)
-    {
+    if (self.script_count == self.script_delay) {
         self.script = scrpt.next_script;
-        if (self.script != "0")
-            self.script_count = 0;
-        else
-        {
+        if (self.script != "0") self.script_count = 0;
+        else {
             scrpt.nextthink = time + 3;
             scrpt.classname = "going_back";
             scrpt.think = go_back;
@@ -679,46 +530,28 @@ local   entity  scrpt;
     }
 };
 
-// PM:  Player thinking during a cutscene.  Called by 'PlayerPreThink'.
-void() Cutscene_Think = {
-  /* --------------------------------------------
-    If we are in camera mode, play the script.
-     -------------------------------------------- */
-        // PM:  Allow player to stop cutscene on any map.
-        if (self.impulse)
-            if (self.script_count != 1000000) {
-                local   entity  goback;     // PM:  dhm's cutscene code.
+// PM:  Player thinking during a cutscene.  Called by 'PlayerPreThink'.  If we are in camera mode, play the script.
+void() Cutscene_Think = { // [FUNCTION]
+    local entity goback; // PM:  dhm's cutscene code.
 
-                self.script_count = 1000000;
+	// PM:  Allow player to stop cutscene on any map. Qmaster: Oh heaven yes!
+	if (self.impulse && self.script_count != 1000000) {
+		self.script_count = 1000000;
+		goback = find(world, classname, "going_back");
+		if (!goback) { // If cut-scene has ended, and user tries to exit, don't spawn a second go_back control entity.
+		   sprint(self, "...\n");
+		   goback = spawn(); 
+		   goback.nextthink = time + 1.5;
+		   goback.think = go_back;
+		   self.impulse = 0; // PM:  New -- just kill cutscene.
+		}
+	}
 
-                // If cut-scene has ended, and user tries to exit, don't
-                // spawn a second go_back control entity.
-                goback = find(world, classname, "going_back");
-                if (!goback) {
-                   sprint(self, "...\n");
-                   goback = spawn();
-                   goback.nextthink = time + 1.5;
-                   goback.think = go_back;
-                   self.impulse = 0;    // PM:  New -- just kill cutscene.
-                }
-            }
-        
-        if (cutscene)       // PM:  Vision didn't look_ahead here, but do it
-            look_ahead ();  //  anyway instead of thinking about it.
-        if (self.script_count < self.script_delay)
-            if (self.script_time < time)
-                Script_play ();
+	if (cutscene) look_ahead ();
+	if (self.script_count < self.script_delay && self.script_time < time) Script_play();
 };
-//- - - - - - - - -
 
-
-//============
-// --> QUAKED info_script (.5 .5 .5) (-8 -8 -8) (8 8 32)
-// This is the destination marker for a script.  
-// It should have a "script_num" field that signifies the script number, and
-// a "next_script" to signal the next script ("0" if this is the last page of
-// the script), a "script_delay" to signify how many seconds to display this
-// page, and of course a "message" field with the text to display.
-//
-// PM:  Use 'info_notnull' instead.
-void() info_script = {};
+// This is the destination marker for a script.  It should have a "script_num" field that signifies the script number,
+// and a "next_script" to signal the next script ("0" if this is the last page of the script), a "script_delay" to
+// signify how many seconds to display this page, and of course a "message" field with the text to display.
+void() info_script = {}; // [ENTITY], PM:  Use 'info_notnull' instead.

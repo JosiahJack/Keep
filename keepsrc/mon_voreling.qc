@@ -439,37 +439,25 @@ void(entity inflictor, entity attacker, float damage) voreling_pain =
 	}
 };
 
-//============================================================================
 void() voreling_die1 =[	$death1, voreling_die2	] {};
 void() voreling_die2 =[	$death2, voreling_die3	] {monster_check_gib();};
-void() voreling_die3 =[	$death3, voreling_die4	] {monster_check_gib();
-	self.solid = SOLID_NOT;};
+void() voreling_die3 =[	$death3, voreling_die4	] {monster_check_gib();self.solid = SOLID_NOT;};
 void() voreling_die4 =[	$death4, voreling_die5	] {};
 void() voreling_die5 =[	$death5, voreling_die6	] {monster_death_postcheck();};
 void() voreling_die6 =[	$death6, voreling_die6	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------------
 void() voreling_dieB1 =[	$deathB1, voreling_dieB2	] {};
 void() voreling_dieB2 =[	$deathB2, voreling_dieB3	] {monster_check_gib();};
-void() voreling_dieB3 =[	$deathB3, voreling_dieB4	] {monster_check_gib();
-	self.solid = SOLID_NOT;};
+void() voreling_dieB3 =[	$deathB3, voreling_dieB4	] {monster_check_gib();self.solid = SOLID_NOT;};
 void() voreling_dieB4 =[	$deathB4, voreling_dieB5	] {};
 void() voreling_dieB5 =[	$deathB5, voreling_dieB6	] {};
 void() voreling_dieB6 =[	$deathB6, voreling_dieB7	] {monster_death_postcheck();};
 void() voreling_dieB7 =[	$deathB7, voreling_dieB7	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------------
-void() voreling_die = 
-{
-	// Vorelings are small, gibs don't bounce far
-	self.max_health = MON_NOGIBVELOCITY;
-
-	// Has the voreling died while on the ceiling?
-	if (self.spawnflags & MON_VORELING_CEILING)
-		self.gibondeath = TRUE;
-
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+void() voreling_die = {
+	self.max_health = MON_NOGIBVELOCITY; // Vorelings are small, gibs don't bounce far
+	if (self.spawnflags & MON_VORELING_CEILING) self.gibondeath = TRUE; // Has the voreling died while on the ceiling?
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// regular death
 	if (!self.gibbed) {
@@ -479,50 +467,45 @@ void() voreling_die =
 	}
 };
 
-// QUAKED monster_voreling (1 0 0) (-16 -16 -24) (16 16 24) Ambush
-void() setup_voreling;
-void() monster_voreling = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	if (self.spawnflags & MON_VORELING_LARGE) {
-		self.mdl = "progs/ad171/mon_vorelingp.mdl";
-		self.gib1mdl = "progs/ad171/gib_vorelegp.mdl";	// Single Leg
-
-		precache_model (self.mdl);
-		precache_model (self.gib1mdl);
-		precache_model (MODEL_PROJ_VORE);			// Spit Projectile
-	}
-	if (!(self.spawnflags & MON_VORELING_LARGE) || 
-		self.classtype == CT_CACHEVORELING) {
-		self.mdl = "progs/ad171/mon_voreling.mdl";
-		self.gib1mdl = "progs/q15/gib_voreleg.mdl";		// Single Leg, q15 has added frame
-
-		precache_model (self.mdl);
-		precache_model (self.gib1mdl);
-	}
-
-	// IDLE/COMBAT and SIGHT sounds
-	self.idle_sound = "quoth/voreling/idle.wav";
-	precache_sound (self.idle_sound);
-
-	// death/pain/attack sounds
-	precache_sound("quoth/voreling/death.wav");
-	self.pain_sound = "quoth/voreling/pain.wav";
-	precache_sound(self.pain_sound);
-
+void() monster_voreling_precache = {
+	precache_model("progs/ad171/mon_vorelingp.mdl");
+	precache_model("progs/ad171/gib_vorelegp.mdl");
+	precache_model(MODEL_PROJ_VORE);			// Spit Projectile
+	precache_model("progs/ad171/mon_voreling.mdl");
+	precache_model("progs/q15/gib_voreleg.mdl");
+	precache_sound("quoth/voreling/idle.wav");
+	precache_sound("quoth/voreling/death.wav"); // death/pain/attack sounds
+	precache_sound("quoth/voreling/pain.wav");
 	precache_sound("ad171/wraith/bounce.wav");	// Spit misses
 	precache_sound("ad171/spider/hiss2.wav");	// Spit attack
 	precache_sound("quoth/voreling/bitestrt.wav");
 	precache_sound("quoth/voreling/bite.wav");
 	precache_sound("ad171/voreling/attacktear.wav");
 	precache_sound("quoth/voreling/land.wav");
+	precache_sound ("quoth/voreling/sight.wav");
+};
 
+void() setup_voreling;
+
+// QUAKED monster_voreling (1 0 0) (-16 -16 -24) (16 16 24) Ambush
+void() monster_voreling = {
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	if (self.spawnflags & MON_VORELING_LARGE) {
+		self.mdl = "progs/ad171/mon_vorelingp.mdl";
+		self.gib1mdl = "progs/ad171/gib_vorelegp.mdl";	// Single Leg
+	}
+	if (!(self.spawnflags & MON_VORELING_LARGE) || 
+		self.classtype == CT_CACHEVORELING) {
+		self.mdl = "progs/ad171/mon_voreling.mdl";
+		self.gib1mdl = "progs/q15/gib_voreleg.mdl";		// Single Leg, q15 has added frame
+	}
+	
+	self.idle_sound = "quoth/voreling/idle.wav"; // IDLE/COMBAT and SIGHT sounds
+	self.pain_sound = "quoth/voreling/pain.wav";
 	self.sight_sound = "quoth/voreling/sight.wav";
-	precache_sound (self.sight_sound);
 
-	// Cache voreling is a special class used for precache only
-	if (self.classtype != CT_CACHEVORELING) setup_voreling();
+	if (self.classtype != CT_CACHEVORELING) setup_voreling(); // Cache voreling is a special class used for precache only
 };
 
 void() monster_shalrathminion = { 
@@ -614,7 +597,6 @@ void(vector minion_org, entity minion_targ) minion_voreling = {
 	setorigin(minion, minion_org);			// Move to new location
 	minion.owner = self.owner;				// Spawner Parent Link
 	self.owner = minion;					// Stop gibs interacting with minion
-	
 	minion.effects = minion.flags = 0;		// make sure are blank
 	minion.gibondeath = 1;					// Always gib on death
 	minion.classtype = CT_MINIONVORELING;	// Special minion class
@@ -637,7 +619,6 @@ void(vector minion_org, entity minion_targ) minion_voreling = {
 	minion.idle_sound = "quoth/voreling/idle.wav";
 	minion.sight_sound = "quoth/voreling/sight.wav";
 	minion.pain_sound = "quoth/voreling/pain.wav";
-	
 	minion.nextthink = time + 0.01;
 	minion.think = setup_voreling;
 };

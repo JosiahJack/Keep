@@ -146,17 +146,9 @@ void() SpidMissile = {
 	launch_projectile (org, dir, CT_PROJ_WILLY, 300);
 };
 
-void() monster_wspider = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/spider.mdl";
-	self.headmdl = "progs/gib2.mdl";
-	self.gib1mdl = "progs/ad171/gib_spidlegg.mdl";	// Single Leg
-	precache_model ("progs/ad171/gib_spidlegg.mdl");
-	precache_model ("progs/gib2.mdl");
+void() monster_wspider_precache = {
+	precache_model("progs/ad171/gib_spidlegg.mdl");
+	precache_model("progs/gib2.mdl");
 	precache_model("progs/spider.mdl");
 	precache_model("progs/w_spike.mdl"); // ID1 scrag/wizard spit
 	precache_sound("rogue/wrath/watt.wav");
@@ -165,14 +157,21 @@ void() monster_wspider = {
 	precache_sound("spider/tap.wav");
 	precache_sound("spider/pain.wav");
 	precache_sound("shalrath/sight.wav");
+};
 
+void() monster_wspider = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/spider.mdl";
+	self.headmdl = "progs/gib2.mdl";
+	self.gib1mdl = "progs/ad171/gib_spidlegg.mdl";	// Single Leg
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	self.model = "progs/spider.mdl";
 	self.bboxtype = BBOX_WILLY;
 	self.sight_sound = "spider/tap.wav";
 	self.pain_sound = "spider/pain.wav";
-
 	if (self.health < 1) self.health = 200;
 	self.gibhealth = -90;
 	self.pain_flinch = 40;
@@ -197,10 +196,8 @@ void() monster_wspider = {
 	if (self.angles_y > 360) self.angles_y = 360;
 
 	if (self.deathstring == "") self.deathstring = " was entangled by Willie the Spider\n";
-
 	self.classtype = CT_MONWILLYSPIDER;
 	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEWALK;
-	
 	monster_start();
 };

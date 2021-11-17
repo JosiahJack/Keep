@@ -1,8 +1,45 @@
-//======================================================================
-// Particle EMITTER functions
-//======================================================================
-float(entity pe_ent) misc_particle_style =
-{
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 5
+// Function count: 20
+//
+// Implements: Particle System Entities
+//
+// Description:
+// The Particle System entities and their use, think, and setup functions for
+// emitting particles.
+//=============================================================================
+
+void(entity targ) HazardProjectile_Finished;
+
+float(entity pe_ent) misc_particle_style = { // [FUNCTION]
 	pe_ent.start_delay = 1 + (random()*2);	// Particle emitter start delay (default)
 	pe_ent.spr_frame = 1;					// Use all sprite frames (Light/Dark)
 	pe_ent.dpp_name = "";					// DP particle effect name
@@ -11,9 +48,7 @@ float(entity pe_ent) misc_particle_style =
 	pe_ent.dpp_vel = '0 0 0';				// Velocity direction of particles
 	pe_ent.part_movetype = MOVETYPE_NOCLIP;
 
-	//----------------------------------------------------------------------
 	// Portal Gate
-	//----------------------------------------------------------------------
 	if (pe_ent.part_style == PARTICLE_STYLE_PORTAL) {
 		pe_ent.spr_name1 = PART_DOTMED_GREY;
 		pe_ent.spr_name2 = PART_DOTSML_WHITE;
@@ -28,24 +63,20 @@ float(entity pe_ent) misc_particle_style =
 		if (pe_ent.angles_y == -1) {
 			pe_ent.part_vel = '0 0 20';			// UP direction
 			pe_ent.dpp_name = DPP_PORTALUP;		// particles flying up
-		}
-		else if (pe_ent.angles_y == -2) {
+		} else if (pe_ent.angles_y == -2) {
 			pe_ent.part_vel = '0 0 -20';		// DOWN direction
 			pe_ent.dpp_name = DPP_PORTALDOWN;	// smoke falling down
-		}
-		else {
+		} else {
 			// Setup DP portal effects volume size based on initial emitter angle
 			if (pe_ent.angles_y == 90 || pe_ent.angles_y == 270) {
-				if (!pe_ent.part_vol) pe_ent.part_vol = '32 0 48';	// Volume (X/Y/Z)
+				if (!pe_ent.part_vol) pe_ent.part_vol = '32 0 48'; // Volume (X/Y/Z)
 				pe_ent.dpp_name = DPP_PORTALSIDE;
-			}
-			else {
-				if (!pe_ent.part_vol) pe_ent.part_vol = '0 32 48';	// Volume (X/Y/Z)
-				pe_ent.dpp_name = DPP_PORTALFRONT;		// default direction
+			} else {
+				if (!pe_ent.part_vol) pe_ent.part_vol = '0 32 48'; // Volume (X/Y/Z)
+				pe_ent.dpp_name = DPP_PORTALFRONT; // default direction
 			}
 
-			// The angle of the particle entity is using the ANGLE key
-			makevectors(pe_ent.angles);
+			makevectors(pe_ent.angles); // The angle of the particle entity is using the ANGLE key
 			pe_ent.part_vel = v_forward * 20;			// Slow speed away from portal
 		}
 
@@ -55,11 +86,8 @@ float(entity pe_ent) misc_particle_style =
 		if (!pe_ent.spawn_base) pe_ent.spawn_base = 0.1;	// Fast Spawn rate
 		if (!pe_ent.spawn_rand) pe_ent.spawn_rand = 0.1;	// Spawn rate randomness
 		pe_ent.dpp_vel = normalize(pe_ent.part_vel);		// Particle direction
-	}
-	//----------------------------------------------------------------------
-	// Spiral Jumppad pattern
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_JUMPPAD) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_JUMPPAD) {
+		// Spiral Jumppad pattern
 		pe_ent.spr_name1 = PART_DOTMED_GREY;
 		pe_ent.spr_name2 = PART_DOTSML_WHITE;
 		pe_ent.spr_name3 = PART_DOTSML_GOLD;
@@ -76,19 +104,15 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_base = 0.05;			// Average Spawn rate
 		pe_ent.spawn_rand = 0.05;			// Spawn rate randomness
 		pe_ent.dpp_name = DPP_JUMPPAD;		// streaming up
-	}
-	//----------------------------------------------------------------------
-	// Circular floor pattern (triggered)
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_FCIRCLE) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_FCIRCLE) {
+		// Circular floor pattern (triggered)
 		if (pe_ent.pemit_source.spr_color == 2) {
 			// Blue colour
 			pe_ent.spr_name1 = PART_DOTMED_BLUE;
 			pe_ent.spr_name2 = PART_DOTSML_WHITE;
 			pe_ent.spr_name3 = PART_DOTSML_BLUE;
 			pe_ent.dpp_name = DPP_BFCIRCLE;		// Circular floor pattern
-		}
-		else {
+		} else {
 			// Default red/yellow colour
 			pe_ent.spr_name1 = PART_TORCH1;
 			pe_ent.spr_name2 = PART_TORCH2;
@@ -100,79 +124,69 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.part_ofs = '0 0 1';			// Slightly off floor
 		pe_ent.part_vel = '0 0 12';			// Slowly move upwards
 		pe_ent.part_velrand = '4 4 0';		// Slight wobble
-		// Circle radius/rotation degrees
-		if (CheckZeroVector(pe_ent.pemit_source.part_vol)) pe_ent.part_vol = '56 17 0';
-		pe_ent.part_veltype = PARTICLE_ORIGIN_RANDCIRCLE;
+		if (CheckZeroVector(pe_ent.pemit_source.part_vol)) pe_ent.part_vol = '56 17 0'; // Circle radius/rotation degrees
+		pe_ent.part_veltype = PARTICLE_ORIGIN_RANDCIRCLE; 
 		pe_ent.wakeup_dist = 768;			// Mid range distance
 		pe_ent.wakeup_timer = 0.5;			// 4x timer
-		// Fast spawn rate and randomness
 		if (!pe_ent.pemit_source.spawn_base) pe_ent.spawn_base = 0.1;			// Fast Spawn rate
 		if (!pe_ent.pemit_source.spawn_rand) pe_ent.spawn_rand = 0.2;			// Spawn rate randomness
 		pe_ent.dpp_rnd = 0.2;				// Random time multiplier
-	}
-	//----------------------------------------------------------------------
-	// Forcefield
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_FFIELD) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_FFIELD) {
+		// Forcefield
 		if (pe_ent.pemit_source.spr_frame == PARTICLE_BURST_YELLOW) {
 			pe_ent.spr_name1 = PART_DOTSML_GOLD;
 			pe_ent.spr_name2 = PART_DOTSML_YELLOW;
 			pe_ent.spr_name3 = PART_DOTMED_YELLOW;
 			pe_ent.dpp_name = DPP_FFIELDPARTY;
-		}
-		else if (pe_ent.pemit_source.spr_frame == PARTICLE_BURST_GREEN) {
+		} else if (pe_ent.pemit_source.spr_frame == PARTICLE_BURST_GREEN) {
 			pe_ent.spr_name1 = PART_DOTSML_LGREEN;
 			pe_ent.spr_name2 = PART_DOTSML_GREEN;
 			pe_ent.spr_name3 = PART_DOTMED_GREEN;
 			pe_ent.dpp_name = DPP_FFIELDPARTG;
-		}
-		else if (pe_ent.pemit_source.spr_frame == PARTICLE_BURST_RED) {
+		} else if (pe_ent.pemit_source.spr_frame == PARTICLE_BURST_RED) {
 			pe_ent.spr_name1 = PART_DOTSML_GREY;
 			pe_ent.spr_name2 = PART_DOTSML_RED;
 			pe_ent.spr_name3 = PART_DOTMED_RED;
 			pe_ent.dpp_name = DPP_FFIELDPARTR;
-		}
-		else if (pe_ent.pemit_source.spr_frame == PARTICLE_BURST_BLUE) {
+		} else if (pe_ent.pemit_source.spr_frame == PARTICLE_BURST_BLUE) {
 			pe_ent.spr_name1 = PART_DOTSML_BLUE;
 			pe_ent.spr_name2 = PART_DOTSML_GREY;
 			pe_ent.spr_name3 = PART_DOTMED_BLUE;
 			pe_ent.dpp_name = DPP_FFIELDPARTB;
-		}
-		else if (pe_ent.pemit_source.spr_frame == PARTICLE_BURST_PURPLE) {
+		} else if (pe_ent.pemit_source.spr_frame == PARTICLE_BURST_PURPLE) {
 			pe_ent.spr_name1 = PART_DOTSML_PURP;
 			pe_ent.spr_name2 = PART_DOTSML_GREY;
 			pe_ent.spr_name3 = PART_DOTMED_PURP;
 			pe_ent.dpp_name = DPP_FFIELDPARTP;
-		}
-		else if (pe_ent.pemit_source.spr_frame == PARTICLE_BURST_FIRE) {
+		} else if (pe_ent.pemit_source.spr_frame == PARTICLE_BURST_FIRE) {
 			pe_ent.spr_name1 = PART_TORCH1;
 			pe_ent.spr_name2 = PART_DOTSML_GOLD;
 			pe_ent.spr_name3 = PART_DOTMED_GREY;
 			pe_ent.dpp_name = DPP_FFIELDPARTY;
-		}
-		else {
+		} else {
 			pe_ent.spr_name1 = PART_DOTSML_WHITE;
 			pe_ent.spr_name2 = PART_DOTSML_GREY;
 			pe_ent.spr_name3 = PART_DOTMED_GREY;
 			pe_ent.dpp_name = DPP_FFIELDPARTW;
 		}
 
-		// reset particle sprite frame range to all
-		pe_ent.spr_frame = 0;
+		pe_ent.spr_frame = 0; // reset particle sprite frame range to all
 		
 		// Particle quantity should be low, allow customization for volume size
 		if (!pe_ent.pemit_source.part_limit) pe_ent.part_limit = 25;
 		else pe_ent.part_limit = pe_ent.pemit_source.part_limit;
+		
 		if (!pe_ent.pemit_source.part_life) pe_ent.part_life = 2;
 		else pe_ent.part_life = pe_ent.pemit_source.part_life;
+		
 		if (!pe_ent.pemit_source.part_ofs) pe_ent.part_ofs = '0 0 0';
 		else pe_ent.part_ofs = pe_ent.pemit_source.part_ofs;
+		
 		pe_ent.part_veltype = PARTICLE_ORIGIN_VOL;
 		if (!pe_ent.part_velrand) pe_ent.part_velrand = '4 4 4';
-		// The volume and direction really need to be set before the
-		// emitter is setup because the volume maybe switched off
-		if (CheckZeroVector(pe_ent.pemit_source.part_vol)) pe_ent.part_vol = '8 8 8';
+		if (CheckZeroVector(pe_ent.pemit_source.part_vol)) pe_ent.part_vol = '8 8 8'; // The volume and direction really need to be set before the emitter is setup because the volume maybe switched off.
 		else pe_ent.part_vol = pe_ent.pemit_source.part_vol;
+		
 		if (CheckZeroVector(pe_ent.pemit_source.part_vel)) pe_ent.part_vel = '0 0 4';
 		else pe_ent.part_vel = pe_ent.pemit_source.part_vel;
 
@@ -184,16 +198,13 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.dpp_vel = pe_ent.part_vel;
 		pe_ent.dpp_wait = 0.01;
 		pe_ent.dpp_rnd = 0.1;
-	}
-
-	//======================================================================
-	// Book Phase 1 - closed
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_BOOK) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_BOOK) {
+		// Book Phase 1 - closed
 		pe_ent.spr_name1 = PART_BOOKRUNE1;
 		pe_ent.spr_name2 = PART_BOOKRUNE2;
 		if (random()<0.5) pe_ent.spr_name3 = PART_BOOKRUNE1;
 		else pe_ent.spr_name3 = PART_BOOKRUNE2;
+		
 		pe_ent.part_limit = 3;				// Very Low
 		pe_ent.part_life = 7;				// Long Life
 		pe_ent.part_ofs = '0 0 10';			// Top of Book
@@ -209,13 +220,11 @@ float(entity pe_ent) misc_particle_style =
 		if (pe_ent.pemit_source.style == MISCBOOK_BLUE) pe_ent.dpp_name = DPP_BOOKBLUE;
 		else if (pe_ent.pemit_source.style == MISCBOOK_RED) pe_ent.dpp_name = DPP_BOOKRED;
 		else pe_ent.dpp_name = DPP_BOOKGOLD;
+		
 		pe_ent.dpp_wait = 1;				// Slow timer
 		pe_ent.dpp_rnd = 2;					// Long pause
-	}
-	//----------------------------------------------------------------------
-	// Book Phase 2 - open
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_OPENBOOK) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_OPENBOOK) {
+		// Book Phase 2 - open
 		if (random()<0.5) pe_ent.spr_name1 = PART_BOOKRUNE1;
 		else pe_ent.spr_name1 = PART_BOOKRUNE2;
 
@@ -223,18 +232,19 @@ float(entity pe_ent) misc_particle_style =
 		if (pe_ent.pemit_source.style == MISCBOOK_BLUE) {
 			if (random() < 0.5) pe_ent.spr_name2 = PART_DOTMED_BLUE;
 			else pe_ent.spr_name2 = PART_DOTSML_BLUE;
+			
 			pe_ent.spr_name3 = PART_DOTSML_WHITE;
 			pe_ent.dpp_name = DPP_OPENBOOKBLUE;
-		}
-		else if (pe_ent.pemit_source.style == MISCBOOK_RED) {
+		} else if (pe_ent.pemit_source.style == MISCBOOK_RED) {
 			if (random() < 0.5) pe_ent.spr_name2 = PART_DOTMED_RED;
 			else pe_ent.spr_name2 = PART_DOTSML_RED;
+			
 			pe_ent.spr_name3 = PART_DOTSML_GOLD;
 			pe_ent.dpp_name = DPP_OPENBOOKRED;
-		}
-		else {
+		} else {
 			if (random() < 0.5) pe_ent.spr_name2 = PART_DOTMED_YELLOW;
 			else pe_ent.spr_name2 = PART_DOTSML_YELLOW;
+			
 			pe_ent.spr_name3 = PART_DOTSML_GOLD;
 			pe_ent.dpp_name = DPP_OPENBOOKGOLD;
 		}
@@ -252,11 +262,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_rand = 0.3;			// Spawn rate randomness
 		pe_ent.dpp_wait = 0.5;				// Fast timer
 		pe_ent.dpp_rnd = 2;					// Long pause
-	}
-	//======================================================================
-	// Electric Beam Particle Stream (code triggered)
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_ELECTRIC) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_ELECTRIC) {
+		// Electric Beam Particle Stream (code triggered)
 		pe_ent.spr_name1 = PART_DOTMED_BLUE;
 		pe_ent.spr_name2 = PART_DOTSML_GOLD;
 		pe_ent.spr_name3 = PART_DOTSML_BLUE;
@@ -273,11 +280,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_ELECTRIC;		// directional particle stream
 		pe_ent.dpp_rnd = 0;					// NO Random time multiplier
-	}
-	//----------------------------------------------------------------------
-	// Torches Flames (slow start)
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_FLAMET) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_FLAMET) {
+		// Torches Flames (slow start)
 		pe_ent.start_delay = 3 + (random()*8);
 		pe_ent.spr_name1 = PART_TORCH1;		// Embers - Red/Yellow
 		pe_ent.spr_name2 = PART_DOTSML_GOLD;
@@ -291,17 +295,16 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.part_veltype = PARTICLE_ORIGIN_VOL;	// Inside volume
 		if (pe_ent.pemit_source.wakeup_dist < 1) pe_ent.wakeup_dist = 384;
 		else pe_ent.wakeup_dist = pe_ent.pemit_source.wakeup_dist;
+		
 		if (pe_ent.pemit_source.wakeup_timer < 1) pe_ent.wakeup_timer = 8;
 		else pe_ent.wakeup_timer = pe_ent.pemit_source.wakeup_timer;
+		
 		pe_ent.spawn_base = 0.25;			// Spawn rate base (runs all the time)
 		pe_ent.spawn_rand = 0.25;			// Spawn rate randomness
 		pe_ent.dpp_name = DPP_FLAMET;		// smoke and particles floating up
 		pe_ent.dpp_wait = 1;				// Slow timer
-	}
-	//----------------------------------------------------------------------
-	// Small Flames (slow start)
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_FLAMES) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_FLAMES) {
+		// Small Flames (slow start)
 		pe_ent.start_delay = 3 + (random()*8);
 		pe_ent.spr_name1 = PART_TORCH1;		// Embers - Red/Yellow
 		pe_ent.spr_name2 = PART_DOTSML_GOLD;
@@ -315,23 +318,23 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.part_veltype = PARTICLE_ORIGIN_VOL;	// Inside volume
 		if (pe_ent.pemit_source.wakeup_dist < 1) pe_ent.wakeup_dist = 384;
 		else pe_ent.wakeup_dist = pe_ent.pemit_source.wakeup_dist;
+		
 		if (pe_ent.pemit_source.wakeup_timer < 1) pe_ent.wakeup_timer = 6;
 		else pe_ent.wakeup_timer = pe_ent.pemit_source.wakeup_timer;
+		
 		pe_ent.spawn_base = 0.25;			// Spawn rate base (runs all the time)
 		pe_ent.spawn_rand = 0.25;			// Spawn rate randomness
 		pe_ent.dpp_name = DPP_FLAMES;		// smoke and particles floating up
 		pe_ent.dpp_wait = 1;				// Slow timer
-	}
-	//----------------------------------------------------------------------
-	// Large Flames (high particle count)
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_FLAMEL) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_FLAMEL) {
+		// Large Flames (high particle count)
 		pe_ent.spr_name1 = PART_TORCH1;
 		pe_ent.spr_name2 = PART_DOTSML_GOLD;
 		pe_ent.spr_name3 = PART_DOTSML_GREY;
 		pe_ent.part_limit = 100;			// Large amount of active particles
 		if (pe_ent.pemit_source.part_life < 1) pe_ent.part_life = 8;
 		else pe_ent.part_life = pe_ent.pemit_source.part_life;
+		
 		pe_ent.part_ofs = '0 0 0';			// Bottom of flame
 		pe_ent.part_vel = '0 0 12';			// Fly up
 		pe_ent.part_velrand = '4 4 0';		// Slight wobble
@@ -339,24 +342,22 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.part_veltype = PARTICLE_ORIGIN_VOL;	// Inside volume
 		if (pe_ent.pemit_source.wakeup_dist < 1) pe_ent.wakeup_dist = 768;
 		else pe_ent.wakeup_dist = pe_ent.pemit_source.wakeup_dist;
+		
 		if (pe_ent.pemit_source.wakeup_timer < 1) pe_ent.wakeup_timer = 1;
 		else pe_ent.wakeup_timer = pe_ent.pemit_source.wakeup_timer;
+		
 		pe_ent.spawn_base = 0.05;			// Frequent (runs all the time)
 		pe_ent.spawn_rand = 0.1;			// Spawn rate randomness
 		pe_ent.dpp_name = DPP_FLAMEL;		// smoke and particles floating up
-	}
-	//----------------------------------------------------------------------
-	// Skill Particle Stream (Designed for 4 sides of pillar)
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_SKILL) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_SKILL) {
+		// Skill Particle Stream (Designed for 4 sides of pillar)
 		pe_ent.spr_name1 = PART_DOTMED_RED;
 		pe_ent.spr_name2 = PART_DOTSML_GOLD;
 		pe_ent.spr_name3 = PART_DOTSML_RED;
 		pe_ent.part_limit = 35;				// Maximum particles
 		pe_ent.part_life = 2;				// Long life
 		pe_ent.part_ofs = '0 0 0';			// center of target object
-		// The angle of the particle entity is using the ANGLE key
-		makevectors(pe_ent.pemit_source.angles);
+		makevectors(pe_ent.pemit_source.angles); // The angle of the particle entity is using the ANGLE key
 		pe_ent.part_vel = v_forward * 10;	// Slow speed away from skill column
 		pe_ent.part_vol = '4 4 4';			// Volume (X/Y/Z)
 		pe_ent.part_velrand = '4 4 8';		// Volume wobble
@@ -368,19 +369,15 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.dpp_name = DPP_SKILLPILLAR;	// Directional particle stream
 		pe_ent.dpp_rnd = 0;					// NO Random time multiplier
 		pe_ent.dpp_vel = normalize(v_forward);	// Particle direction
-	}
-	//----------------------------------------------------------------------
-	// Skill Particle Stream (Designed for Silver Key Doors)
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_BSKILL) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_BSKILL) {
+		// Skill Particle Stream (Designed for Silver Key Doors)
 		pe_ent.spr_name1 = PART_DOTMED_BLUE;
 		pe_ent.spr_name2 = PART_DOTSML_GREY;
 		pe_ent.spr_name3 = PART_DOTSML_BLUE;
 		pe_ent.part_limit = 35;				// Maximum particles
 		pe_ent.part_life = 2;				// Long life
 		pe_ent.part_ofs = '0 0 0';			// center of target object
-		// The angle of the particle entity is using the ANGLE key
-		makevectors(pe_ent.pemit_source.angles);
+		makevectors(pe_ent.pemit_source.angles); // The angle of the particle entity is using the ANGLE key
 		pe_ent.part_vel = v_forward * 10;	// Slow speed away from skill column
 		pe_ent.part_vol = '4 4 4';			// Volume (X/Y/Z)
 		pe_ent.part_velrand = '4 4 8';		// Volume wobble
@@ -392,19 +389,15 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.dpp_name = DPP_BSKILLPILLAR;	// Directional particle stream
 		pe_ent.dpp_rnd = 0;					// NO Random time multiplier
 		pe_ent.dpp_vel = normalize(v_forward);	// Particle direction
-	}
-	//----------------------------------------------------------------------
-	// Skill Particle Stream (Designed for Green Key Doors)
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_GSKILL) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_GSKILL) {
+		// Skill Particle Stream (Designed for Green Key Doors)
 		pe_ent.spr_name1 = PART_DOTSML_GREEN;
 		pe_ent.spr_name2 = PART_DOTMED_GREEN;
 		pe_ent.spr_name3 = PART_DOTSML_YELLOW;
 		pe_ent.part_limit = 35;				// Maximum particles
 		pe_ent.part_life = 2;				// Long life
 		pe_ent.part_ofs = '0 0 0';			// center of target object
-		// The angle of the particle entity is using the ANGLE key
-		makevectors(pe_ent.pemit_source.angles);
+		makevectors(pe_ent.pemit_source.angles); // The angle of the particle entity is using the ANGLE key
 		pe_ent.part_vel = v_forward * 10;	// Slow speed away from skill column
 		pe_ent.part_vol = '4 4 4';			// Volume (X/Y/Z)
 		pe_ent.part_velrand = '4 4 8';		// Volume wobble
@@ -416,19 +409,15 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.dpp_name = DPP_GSKILLPILLAR;	// Directional particle stream
 		pe_ent.dpp_rnd = 0;					// NO Random time multiplier
 		pe_ent.dpp_vel = normalize(v_forward);	// Particle direction
-	}
-	//----------------------------------------------------------------------
-	// Skill Particle Stream (Designed for Purple Key Doors)
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_PSKILL) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_PSKILL) {
+		// Skill Particle Stream (Designed for Purple Key Doors)
 		pe_ent.spr_name1 = PART_DOTSML_PURP;
 		pe_ent.spr_name2 = PART_DOTMED_PURP;
 		pe_ent.spr_name3 = PART_DOTSML_PURP;
 		pe_ent.part_limit = 35;				// Maximum particles
 		pe_ent.part_life = 2;				// Long life
 		pe_ent.part_ofs = '0 0 0';			// center of target object
-		// The angle of the particle entity is using the ANGLE key
-		makevectors(pe_ent.pemit_source.angles);
+		makevectors(pe_ent.pemit_source.angles); // The angle of the particle entity is using the ANGLE key
 		pe_ent.part_vel = v_forward * 10;	// Slow speed away from skill column
 		pe_ent.part_vol = '4 4 4';			// Volume (X/Y/Z)
 		pe_ent.part_velrand = '4 4 8';		// Volume wobble
@@ -440,18 +429,14 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.dpp_name = DPP_PSKILLPILLAR;	// Directional particle stream
 		pe_ent.dpp_rnd = 0;					// NO Random time multiplier
 		pe_ent.dpp_vel = normalize(v_forward);	// Particle direction
-	}
-	//----------------------------------------------------------------------
-	// Particles raising up around an altar
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_ALTAR) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_ALTAR) {
+		// Particles raising up around an altar
 		if (pe_ent.pemit_source.cnt == 1) {
 			pe_ent.spr_name1 = PART_DOTMED_GREY;
 			pe_ent.spr_name2 = PART_DOTSML_WHITE;
 			pe_ent.spr_name3 = PART_DOTSML_GOLD;
 			pe_ent.dpp_name = DPP_ALTARGREY;	// floating upwards
-		}
-		else {
+		} else {
 			pe_ent.spr_name1 = PART_DOTMED_RED;
 			pe_ent.spr_name2 = PART_DOTSML_GOLD;
 			pe_ent.spr_name3 = PART_DOTSML_RED;
@@ -463,20 +448,15 @@ float(entity pe_ent) misc_particle_style =
 		if (CheckZeroVector(pe_ent.pemit_source.part_vel)) pe_ent.part_vel = '0 0 12';
 		pe_ent.part_velrand = '4 4 12';		// Slight wobble
 		pe_ent.part_vol = '64 64 0';		// Volume (X/Y/Z)
-		if (pe_ent.pemit_source.t_length > 0) 
-			pe_ent.part_vol_x = pe_ent.pemit_source.t_length;
-		if (pe_ent.pemit_source.t_width > 0) 
-			pe_ent.part_vol_y = pe_ent.pemit_source.t_width;
+		if (pe_ent.pemit_source.t_length > 0) pe_ent.part_vol_x = pe_ent.pemit_source.t_length;
+		if (pe_ent.pemit_source.t_width > 0) pe_ent.part_vol_y = pe_ent.pemit_source.t_width;
 		pe_ent.part_veltype = PARTICLE_ORIGIN_VOL;	// Inside volume
 		pe_ent.wakeup_dist = 768;			// Close range distance
 		pe_ent.wakeup_timer = 4;			// High timer
 		pe_ent.spawn_base = 0.1;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0.1;			// Spawn rate randomness
-	}
-	//----------------------------------------------------------------------
-	// DP ONLY - velocity directional smoke
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_SMOKE) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_SMOKE) {
+		// DP ONLY - velocity directional smoke
 		pe_ent.dpp_only = TRUE;
 		if (pe_ent.pemit_source.exactskin == 0) pe_ent.dpp_name = DPP_VELSMOKEGREY1;
 		else if (pe_ent.pemit_source.exactskin == 1) pe_ent.dpp_name = DPP_VELSMOKEGREY2;
@@ -489,11 +469,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.dpp_rnd = pe_ent.pemit_source.delay;
 		pe_ent.dpp_wait = pe_ent.pemit_source.wait;
 		pe_ent.dpp_vel = pe_ent.pemit_source.movedir * pe_ent.pemit_source.height;
-	}
-	//======================================================================
-	// Items
-	//======================================================================
-	else if (pe_ent.part_style == PARTICLE_STYLE_RESPAWN) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_RESPAWN) {
+		// Items
 		pe_ent.start_delay = 0.1;			// Particle emitter start delay
 		pe_ent.spr_name1 = PART_DOTSML_YELLOW;
 		pe_ent.spr_name2 = PART_DOTSML_GREY;
@@ -503,8 +480,7 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.part_ofs = '0 0 1';			// Custom for each item
 		pe_ent.part_vel = '0 0 10';			// Slowly move upwards
 		pe_ent.part_vol = '16 16 0';		// Flat base of model
-		// Change the respawn size based on bbmaxs of source item
-		if (pe_ent.pemit_source.bbmaxs_x > 0) pe_ent.part_vol_x = pe_ent.pemit_source.bbmaxs_x;
+		if (pe_ent.pemit_source.bbmaxs_x > 0) pe_ent.part_vol_x = pe_ent.pemit_source.bbmaxs_x; // Change the respawn size based on bbmaxs of source item
 		if (pe_ent.pemit_source.bbmaxs_y > 0) pe_ent.part_vol_y = pe_ent.pemit_source.bbmaxs_y;
 		pe_ent.part_velrand = '4 4 6';		// Slight wobble
 		pe_ent.part_veltype = PARTICLE_ORIGIN_VOL;	// Inside volume
@@ -514,11 +490,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_RESPAWN;		// Particles floating up, starts slow
 		pe_ent.dpp_rnd = 0;					// NO Random time multiplier
-	}
-	//----------------------------------------------------------------------
-	// Items - Mega Health
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_MEGAH) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_MEGAH) {
+		// Items - Mega Health
 		pe_ent.spr_name1 = PART_DOTSML_WHITE;
 		pe_ent.spr_name2 = PART_DOTMED_RED;
 		pe_ent.spr_name3 = PART_DOTSML_GOLD;
@@ -533,32 +506,26 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_base = 0.05;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0.1;			// Spawn rate randomness
 		pe_ent.dpp_name = DPP_MEGAH;		// Particles drifting out from center
-	}
-	//----------------------------------------------------------------------
-	// Item - Armor (Green/Yellow/Red)
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_ARMOR) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_ARMOR) {
+		// Item - Armor (Green/Yellow/Red)
 		if (pe_ent.pemit_source.items2 & IT2_ARMOR1) {
 			pe_ent.spr_name1 = PART_DOTSML_LGREEN;
 			pe_ent.spr_name2 = PART_DOTMED_LGREEN;
 			pe_ent.spr_name3 = PART_DOTSML_GREY;
 			pe_ent.dpp_name = DPP_ARMOR1;	// Green particles + smoke
-		}
-		else if (pe_ent.pemit_source.items2 & IT2_ARMOR2) {
+		} else if (pe_ent.pemit_source.items2 & IT2_ARMOR2) {
 			if (pe_ent.pemit_source.spawnflags & ARMOR_BLUE) {
 				pe_ent.spr_name1 = PART_DOTSML_BLUE;
 				pe_ent.spr_name2 = PART_DOTMED_BLUE;
 				pe_ent.spr_name3 = PART_DOTSML_GREY;
 				pe_ent.dpp_name = DPP_ARMOR2BLUE;// Blue particles + smoke
-			}
-			else {
+			} else {
 				pe_ent.spr_name1 = PART_DOTSML_YELLOW;
 				pe_ent.spr_name2 = PART_DOTMED_YELLOW;
 				pe_ent.spr_name3 = PART_DOTSML_GOLD;
 				pe_ent.dpp_name = DPP_ARMOR2;	// Yellow particles + smoke
 			}
-		}
-		else {
+		} else {
 			pe_ent.spr_name1 = PART_DOTSML_RED;
 			pe_ent.spr_name2 = PART_DOTSML_GOLD;
 			pe_ent.spr_name3 = PART_DOTMED_RED;
@@ -574,11 +541,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.wakeup_timer = 1;			// Medium timer (runs all the time)
 		pe_ent.spawn_base = 0.1;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0.2;			// Spawn rate randomness
-	}
-	//----------------------------------------------------------------------
-	// Item - Silver Key
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_KEYSILVER) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_KEYSILVER) {
+		// Item - Silver Key
 		pe_ent.spr_name1 = PART_DOTSML_BLUE;
 		pe_ent.spr_name2 = PART_DOTSML_BLUE;
 		pe_ent.spr_name3 = PART_DOTSML_GREY;
@@ -592,11 +556,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_base = 0.1;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_KEYSILVER;	// Blue particles from top of key
-	}
-	//----------------------------------------------------------------------
-	// Item - Gold Key
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_KEYGOLD) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_KEYGOLD) {
+		// Item - Gold Key
 		pe_ent.spr_name1 = PART_DOTSML_GOLD;
 		pe_ent.spr_name2 = PART_DOTSML_GOLD;
 		pe_ent.spr_name3 = PART_DOTSML_YELLOW;
@@ -610,11 +571,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_base = 0.1;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_KEYGOLD;		// Yellow particles from top of key
-	}
-	//----------------------------------------------------------------------
-	// Item - Generic Red Key
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_KEYRED) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_KEYRED) {
+		// Item - Generic Red Key
 		pe_ent.spr_name1 = PART_DOTSML_RED;
 		pe_ent.spr_name2 = PART_DOTMED_RED;
 		pe_ent.spr_name3 = PART_DOTSML_GOLD;
@@ -628,11 +586,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_base = 0.1;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_KEYRED;		// Red particles from top of key
-	}
-	//----------------------------------------------------------------------
-	// Item - Generic Green Key
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_KEYGREEN) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_KEYGREEN) {
+		// Item - Generic Green Key
 		pe_ent.spr_name1 = PART_DOTSML_GREEN;
 		pe_ent.spr_name2 = PART_DOTMED_GREEN;
 		pe_ent.spr_name3 = PART_DOTSML_YELLOW;
@@ -646,11 +601,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_base = 0.1;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_KEYGREEN;		// Green particles from top of key
-	}
-	//----------------------------------------------------------------------
-	// Item - Generic Purple Key
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_KEYPURPLE) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_KEYPURPLE) {
+		// Item - Generic Purple Key
 		pe_ent.spr_name1 = PART_DOTSML_PURP;
 		pe_ent.spr_name2 = PART_DOTMED_PURP;
 		pe_ent.spr_name3 = PART_DOTSML_PURP;
@@ -664,11 +616,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_base = 0.1;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_KEYPURPLE;	// Purple particles from top of key
-	}
-	//----------------------------------------------------------------------
-	// Item - Generic White Key
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_KEYWHITE) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_KEYWHITE) {
+		// Item - Generic White Key
 		pe_ent.spr_name1 = PART_DOTSML_GREY;
 		pe_ent.spr_name2 = PART_DOTMED_GREY;
 		pe_ent.spr_name3 = PART_DOTSML_WHITE;
@@ -682,11 +631,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_base = 0.1;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_KEYWHITE;		// White particles from top of key
-	}
-	//----------------------------------------------------------------------
-	// Item - Sigil / Rune
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_SIGIL) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_SIGIL) {
+		// Item - Sigil / Rune
 		pe_ent.spr_name1 = PART_DOTMED_PURP;
 		pe_ent.spr_name2 = PART_DOTSML_PURP;
 		pe_ent.spr_name3 = PART_DOTSML_PURP;
@@ -700,42 +646,34 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_base = 0.1;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_SIGIL;		// Purple particles from center
-	}
-	//----------------------------------------------------------------------
-	// Item - Custom Backpack
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_BACKPACK) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_BACKPACK) {
+		// Item - Custom Backpack
 		if (pe_ent.pemit_source.exactskin == 1) {
 			pe_ent.spr_name1 = PART_DOTSML_GREEN;
 			pe_ent.spr_name2 = PART_DOTMED_GREEN;
 			pe_ent.spr_name3 = PART_DOTSML_GREEN;
 			pe_ent.dpp_name = DPP_BACKPACKG;	// Green
-		}
-		else if (pe_ent.pemit_source.exactskin == 2) {
+		} else if (pe_ent.pemit_source.exactskin == 2) {
 			pe_ent.spr_name1 = PART_DOTSML_BLUE;
 			pe_ent.spr_name2 = PART_DOTMED_BLUE;
 			pe_ent.spr_name3 = PART_DOTSML_GREY;
 			pe_ent.dpp_name = DPP_BACKPACKB;	// Blue
-		}
-		else if (pe_ent.pemit_source.exactskin == 3) {
+		} else if (pe_ent.pemit_source.exactskin == 3) {
 			pe_ent.spr_name1 = PART_DOTSML_RED;
 			pe_ent.spr_name2 = PART_DOTMED_RED;
 			pe_ent.spr_name3 = PART_DOTSML_GOLD;
 			pe_ent.dpp_name = DPP_BACKPACKR;	// Red
-		}
-		else if (pe_ent.pemit_source.exactskin == 4) {
+		} else if (pe_ent.pemit_source.exactskin == 4) {
 			pe_ent.spr_name1 = PART_DOTSML_GOLD;
 			pe_ent.spr_name2 = PART_DOTSML_GOLD;
 			pe_ent.spr_name3 = PART_DOTSML_YELLOW;
 			pe_ent.dpp_name = DPP_BACKPACKY;	// Yellow
-		}
-		else if (pe_ent.pemit_source.exactskin == 5) {
+		} else if (pe_ent.pemit_source.exactskin == 5) {
 			pe_ent.spr_name1 = PART_DOTSML_GREEN;
 			pe_ent.spr_name2 = PART_DOTMED_GREEN;
 			pe_ent.spr_name3 = PART_DOTSML_YELLOW;
 			pe_ent.dpp_name = DPP_BACKPACKG;	// Green
-		}
-		else {
+		} else {
 			pe_ent.spr_name1 = PART_DOTMED_GREY;
 			pe_ent.spr_name2 = PART_DOTSML_WHITE;
 			pe_ent.spr_name3 = PART_DOTSML_GREY;
@@ -750,14 +688,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.wakeup_timer = 1;			// Medium timer (runs all the time)
 		pe_ent.spawn_base = 0.1;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
-	}
-	//======================================================================
-	// Artifacts
-	//======================================================================
-	//----------------------------------------------------------------------
-	// Artifact - Environmental Suit
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_SUIT) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_SUIT) {
+		// Artifact - Environmental Suit
 		pe_ent.spr_name1 = PART_DOTSML_GREEN;
 		pe_ent.spr_name2 = PART_DOTMED_GREEN;
 		pe_ent.spr_name3 = PART_DOTSML_YELLOW;
@@ -773,11 +705,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_SUIT;			// Green/Yellow particles from center
 		pe_ent.dpp_wait = 0.5;				// Slow timer
-	}
-	//----------------------------------------------------------------------
-	// Artifact - Pentagram
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_PENT) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_PENT) {
+		// Artifact - Pentagram
 		pe_ent.spr_name1 = PART_DOTSML_RED;
 		pe_ent.spr_name2 = PART_DOTMED_RED;
 		pe_ent.spr_name3 = PART_DOTSML_GOLD;
@@ -792,11 +721,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_PENT;			// Red/Gold particles from center
 		pe_ent.dpp_wait = 1;				// Slow timer
-	}
-	//----------------------------------------------------------------------
-	// Artifact - Shadow Ring
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_SRING) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_SRING) {
+		// Artifact - Shadow Ring
 		pe_ent.spr_name1 = PART_DOTSML_YELLOW;
 		pe_ent.spr_name2 = PART_DOTSML_WHITE;
 		pe_ent.spr_name3 = PART_DOTSML_GOLD;
@@ -811,11 +737,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_base = 0.1;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0.1;			// Spawn rate randomness
 		pe_ent.dpp_name = DPP_SRING;		// White/Gold particles from center
-	}
-	//----------------------------------------------------------------------
-	// Artifact - Quad Damage
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_QUAD) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_QUAD) {
+		// Artifact - Quad Damage
 		pe_ent.spr_name1 = PART_DOTMED_BLUE;
 		pe_ent.spr_name2 = PART_DOTSML_WHITE;
 		pe_ent.spr_name3 = PART_DOTSML_BLUE;
@@ -829,11 +752,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_base = 0.1;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_QUAD;			// Blue/White particles from center
-	}
-	//----------------------------------------------------------------------
-	// Artifact - Tome of Power
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_TOMEOFP) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_TOMEOFP) {
+		// Artifact - Tome of Power
 		pe_ent.spr_name1 = PART_DOTSML_GOLD;
 		pe_ent.spr_name2 = PART_DOTSML_YELLOW;
 		pe_ent.spr_name3 = PART_DOTSML_GREY;
@@ -849,18 +769,14 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_rand = 0.05;			// Spawn rate randomness
 		pe_ent.dpp_name = DPP_TOMEOFP;		// Yellow particles
 		pe_ent.dpp_wait = 0.5;				// Slow timer
-	}
-	//----------------------------------------------------------------------
-	// Artifact - Sharp Shooter
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_SHARP) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_SHARP) {
+		// Artifact - Sharp Shooter
 		if (pe_ent.pemit_source.exactskin == 1) {
 			pe_ent.spr_name1 = PART_DOTSML_GREEN;
 			pe_ent.spr_name2 = PART_DOTMED_GREEN;
 			pe_ent.spr_name3 = PART_DOTSML_YELLOW;
 			pe_ent.dpp_name = DPP_SHARPG;	// Green particles from center
-		}
-		else {
+		} else {
 			pe_ent.spr_name1 = PART_DOTMED_PURP;
 			pe_ent.spr_name2 = PART_DOTSML_PURP;
 			pe_ent.spr_name3 = PART_DOTSML_GREY;
@@ -875,11 +791,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.wakeup_timer = 1;			// Medium timer (runs all the time)
 		pe_ent.spawn_base = 0.1;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
-	}
-	//----------------------------------------------------------------------
-	// Artifact - Nail Piercer
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_PIERCE) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_PIERCE) {
+		// Artifact - Nail Piercer
 		pe_ent.spr_name1 = PART_DOTMED_PURP;
 		pe_ent.spr_name2 = PART_DOTSML_PURP;
 		pe_ent.spr_name3 = PART_DOTSML_GREY;
@@ -894,11 +807,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_base = 0.1;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_PIERCE;		// Purple particles from center
-	}
-	//----------------------------------------------------------------------
-	// Artifact - Lava Shield
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_LAVASHIELD) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_LAVASHIELD) {
+		// Artifact - Lava Shield
 		pe_ent.spr_name1 = PART_DOTSML_GREY;
 		pe_ent.spr_name2 = PART_DOTMED_RED;
 		pe_ent.spr_name3 = PART_DOTSML_RED;
@@ -914,11 +824,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_base = 0.05;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0.1;			// Spawn rate randomness
 		pe_ent.dpp_name = DPP_LAVASHIELD;	// Particles drifting out from center
-	}
-	//----------------------------------------------------------------------
-	// Artifact - Wet Suit
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_WETSUIT) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_WETSUIT) {
+		// Artifact - Wet Suit
 		pe_ent.spr_name1 = PART_DOTSML_BLUE;
 		pe_ent.spr_name2 = PART_DOTMED_BLUE;
 		pe_ent.spr_name3 = PART_DOTSML_WHITE;
@@ -934,11 +841,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_WETSUIT;		// Blue/White particles raising up
 		pe_ent.dpp_wait = 0.5;				// Slow timer
-	}
-	//----------------------------------------------------------------------
-	// Artifact - Wet Suit
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_AIRTANK) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_AIRTANK) {
+		// Artifact - Wet Suit
 		pe_ent.spr_name1 = PART_DOTSML_BLUE;
 		pe_ent.spr_name2 = PART_DOTMED_BLUE;
 		pe_ent.spr_name3 = PART_DOTSML_WHITE;
@@ -954,11 +858,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_AIRTANK;		// Blue/White particles raising up
 		pe_ent.dpp_wait = 0.5;				// Slow timer
-	}
-	//----------------------------------------------------------------------
-	// Artifact - Blast Belt
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_BLASTBELT) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_BLASTBELT) {
+		// Artifact - Blast Belt
 		pe_ent.spr_name1 = PART_DOTSML_GREY;
 		pe_ent.spr_name2 = PART_DOTMED_BLUE;
 		pe_ent.spr_name3 = PART_DOTSML_GOLD;
@@ -973,8 +874,7 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_BLASTBELT;	// Blue/Silver particles from center
 		pe_ent.dpp_wait = 1;				// Slow timer
-	}
-	else if (pe_ent.part_style == PARTICLE_STYLE_BLASTBELT2) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_BLASTBELT2) {
 		pe_ent.spr_name1 = PART_DOTSML_GREY;
 		pe_ent.spr_name2 = PART_DOTMED_RED;
 		pe_ent.spr_name3 = PART_DOTSML_GOLD;
@@ -989,11 +889,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_rand = 0;				// Spawn rate randomness
 		pe_ent.dpp_name = DPP_BLASTBELT2;	// Red/Yellow particles from center
 		pe_ent.dpp_wait = 1;				// Slow timer
-	}
-	//----------------------------------------------------------------------
-	// Artifact - Jump Boots
-	//----------------------------------------------------------------------
-	else if (pe_ent.part_style == PARTICLE_STYLE_JUMPBOOTS) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_JUMPBOOTS) {
+		// Artifact - Jump Boots
 		pe_ent.spr_name1 = PART_DOTSML_YELLOW;
 		pe_ent.spr_name2 = PART_DOTSML_WHITE;
 		pe_ent.spr_name3 = PART_DOTSML_GOLD;
@@ -1008,11 +905,8 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.spawn_base = 0.1;			// Fast Spawn rate
 		pe_ent.spawn_rand = 0.1;			// Spawn rate randomness
 		pe_ent.dpp_name = DPP_JBOOTS;		// White/Gold particles from center
-	}
-	//======================================================================
-	// Weather System
-	//======================================================================
-	else if (pe_ent.part_style == PARTICLE_STYLE_WEATHER) {
+	} else if (pe_ent.part_style == PARTICLE_STYLE_WEATHER) {
+		// Weather System
 		pe_ent.part_limit = pe_ent.pemit_source.count;
 		pe_ent.part_vel = '0 0 0';
 		pe_ent.part_vel_z = pe_ent.pemit_source.speed;
@@ -1021,32 +915,20 @@ float(entity pe_ent) misc_particle_style =
 		pe_ent.wakeup_timer = pe_ent.pemit_source.wakeup_timer;
 		pe_ent.spawn_base = 0.1;			// Default timer
 		pe_ent.spawn_rand = 0;				// No spawn rate randomness
-	}
-	//----------------------------------------------------------------------
-	// No style defined - ERROR!!!!!
-	//----------------------------------------------------------------------
-	else {
+	} else {
+		// No style defined - ERROR!!!!!
 		dprint("\b[PEMITTER]\b Style no ("); dprint(ftos(pe_ent.part_style));
 		dprint(") not valid!\n");
 		pe_ent.part_style = PARTICLE_STYLE_EMPTY;	// empty definition
 		spawn_marker(pe_ent.origin, SPNMARK_YELLOW);// Visual problem
 	}
-	
-	// return any error conditions; 0=ERROR
-	return pe_ent.part_style;
+	return pe_ent.part_style; // return any error conditions; 0=ERROR
 };
 
-//----------------------------------------------------------------------
-void(entity pe_ent) misc_particle_off =
-{	
-	// Double check dealing with a particle emitter?
-	if (pe_ent.classtype != CT_PARTICLEEMIT) return;
+void(entity pe_ent) misc_particle_off = { // [FUNCTION]
+	if (pe_ent.classtype != CT_PARTICLEEMIT) return; // Double check dealing with a particle emitter?
 	if (pe_ent.state == STATE_OFF) return;
-	// The particle emitter is still being setup, remember state for later
-	if (pe_ent.state == STATE_SETUP) {
-		pe_ent.spawnflags = PARTICLE_START_OFF;
-		return;
-	}
+	if (pe_ent.state == STATE_SETUP) { pe_ent.spawnflags = PARTICLE_START_OFF; return; } // The particle emitter is still being setup, remember state for later
 
 	pe_ent.state = STATE_OFF;
 	pe_ent.estate = ESTATE_OFF;
@@ -1057,20 +939,10 @@ void(entity pe_ent) misc_particle_off =
 	}		
 };
 
-//----------------------------------------------------------------------
-void() misc_particle_use =
-{	
-	// Have particles been enabled via serverflags?
-	if (query_configflag(SVR_PARTICLES) != SVR_PARTICLES) return;
-	// If particle still not setup toggle spawnflags instead
-	if (self.state == STATE_SETUP) {
-		if (self.spawnflags & PARTICLE_START_ON) self.spawnflags = PARTICLE_START_OFF;
-		else self.spawnflags = PARTICLE_START_ON;
-		return;
-	}
-	
-	// Double check for particle style setup correctly
-	if (self.part_style == PARTICLE_STYLE_EMPTY) return;
+void() misc_particle_use = { // [FUNCTION]	
+	if (query_configflag(SVR_PARTICLES) != SVR_PARTICLES) return; // Have particles been enabled via serverflags?
+	if (self.state == STATE_SETUP) { if (self.spawnflags & PARTICLE_START_ON) self.spawnflags = PARTICLE_START_OFF; else self.spawnflags = PARTICLE_START_ON; return; } // If particle still not setup toggle spawnflags instead
+	if (self.part_style == PARTICLE_STYLE_EMPTY) return; // Double check for particle style setup correctly
 
 	// Toggle shooter on/off
 	if (self.state == STATE_OFF) {
@@ -1078,89 +950,65 @@ void() misc_particle_use =
 		self.estate = ESTATE_ON;
 
 		// Is DP particles active?
-		if ((ext_dppart || self.dpp_only) && query_configflag(SVR_SPRPARTON) == FALSE
-			&& world.sprite_particles == FALSE) {
-			// decide between particle types
-			if (self.part_style == PARTICLE_STYLE_FCIRCLE) emitdpp_fcircle();
+		if ((ext_dppart || self.dpp_only) && query_configflag(SVR_SPRPARTON) == FALSE && world.sprite_particles == FALSE) {
+			if (self.part_style == PARTICLE_STYLE_FCIRCLE) emitdpp_fcircle(); // decide between particle types
 			else if (self.part_style == PARTICLE_STYLE_WEATHER) {
-				// Check if particle effects are available from the engine
-				if (!ext_dpsnow || !ext_dprain) return;
+				if (!ext_dpsnow || !ext_dprain) return; // Check if particle effects are available from the engine
+				
 				emitepp_weather();
-			}
-			else emitdpp_particle();
-		}
-		// Pixel goodness particles
-		else {
+			} else emitdpp_particle();
+		} else {
+			// Pixel goodness particles
 			// Weather effects not supported on Fitz/QS engines
 			if (self.part_style == PARTICLE_STYLE_WEATHER) return;
 			else emit_particle();
 		}
-	}
-	else {
+	} else {
 		spawn_arrow(self.origin,'-90 0 0',0);
 		misc_particle_off(self);
 	}
 };
 
-//----------------------------------------------------------------------
-void(entity pe_ent) misc_particle_on =
-{	
-	// Double check dealing with a particle emitter?
-	if (pe_ent.classtype != CT_PARTICLEEMIT) return;
+void(entity pe_ent) misc_particle_on = { // [FUNCTION]
+	if (pe_ent.classtype != CT_PARTICLEEMIT) return; // Double check dealing with a particle emitter?
 	if (pe_ent.state == STATE_ON) return;
-	// The particle emitter is still being setup, remember state for later
-	if (pe_ent.state == STATE_SETUP) {
-		pe_ent.spawnflags = PARTICLE_START_ON;
-		return;
-	}
+	if (pe_ent.state == STATE_SETUP) { pe_ent.spawnflags = PARTICLE_START_ON; return; } // The particle emitter is still being setup, remember state for later
 
 	pe_ent.state = STATE_OFF;
 	pe_ent.think = misc_particle_use;
 	pe_ent.nextthink = time + TIME_MINTICK;
 };
 
-//----------------------------------------------------------------------
-void(entity pe_ent, float partemit_style) misc_particle_update =
-{
-	// Double check dealing with a particle emitter?
-	if (pe_ent.classtype != CT_PARTICLEEMIT) return;
+void(entity pe_ent, float partemit_style) misc_particle_update = { // [FUNCTION]
+	if (pe_ent.classtype != CT_PARTICLEEMIT) return; // Double check dealing with a particle emitter?
 	if (pe_ent.state == STATE_SETUP) return;
 	if (pe_ent.part_style == PARTICLE_STYLE_EMPTY) return;
 
 	pe_ent.part_style = partemit_style;
-	if (misc_particle_style(pe_ent) == FALSE) 
-		dprint("\b[MISC_PARTICLE]\b Error updating emitter!");
+	if (misc_particle_style(pe_ent) == FALSE) dprint("\b[MISC_PARTICLE]\b Error updating emitter!");
 };
 
-//----------------------------------------------------------------------
-void() misc_particle_switch_on = { misc_particle_on(self); };
-void() misc_particle_switch_off = { misc_particle_off(self); };
-void() misc_particle_switch_disable = { self.state = STATE_OFF; };
+void() misc_particle_switch_on = { misc_particle_on(self); }; // [FUNCTION]
+void() misc_particle_switch_off = { misc_particle_off(self); }; // [FUNCTION]
+void() misc_particle_switch_disable = { self.state = STATE_OFF; }; // [FUNCTION]
 
-//----------------------------------------------------------------------
-void() misc_particle_finishsetup =
-{
-	// Was the particle emitter setup correctly?
-	if (self.part_style != PARTICLE_STYLE_EMPTY) {
+void() misc_particle_finishsetup = { // [FUNCTION]
+	if (self.part_style != PARTICLE_STYLE_EMPTY) { // Was the particle emitter setup correctly?
 		self.circular_angle = 0;		// Starting circular angle
 		self.state = STATE_OFF;			// Initial state
 		self.estate = ESTATE_OFF;
-		
-		// Setup entity state wrapper if targetname exists
-		if (self.targetname != "") self.use = entity_state_use;
+		if (self.targetname != "") self.use = entity_state_use; // Setup entity state wrapper if targetname exists
 		else self.use = misc_particle_use;
+		
 		self.estate_on = misc_particle_switch_on;
 		self.estate_off = misc_particle_switch_off;
 		self.estate_disable = misc_particle_switch_disable;
 		self.estate_use = misc_particle_use;
-		
-		// Delay start of particle emitter so if it needs to be switched off
-		// other functions can catch it and save switching states quickly
-		if (self.spawnflags & PARTICLE_START_ON) misc_particle_use();
+		if (self.spawnflags & PARTICLE_START_ON) misc_particle_use(); // Delay start of particle emitter so if it needs to be switched off other functions can catch it and save switching states quickly.
 	} 
 };
 
-void() misc_particle_delay = {
+void() misc_particle_delay = { // [FUNCTION]
 	if (self.target != "") self.pemit_target = find(world, targetname, self.target); // If target setup, find it and store entity
 	if (!self.pemit_target) self.target = "";
 	
@@ -1169,15 +1017,42 @@ void() misc_particle_delay = {
 	self.think = misc_particle_finishsetup;
 };
 
-void() misc_particletemplate = { 
+// QUAKED misc_particletemplate (0 0.5 0.75) (-8 -8 -8) (8 8 8) x
+// -------- KEYS --------
+// targetname   : target name reference for misc_particle entities
+// start_delay  : Particle emitter start delay
+// spr_name1    : sprite name (progs\s_bubble_blue1.spr)
+// spr_name2    : sprite name (progs\s_bubble_wht.spr)
+// spr_name3    : sprite name (progs\s_dotmed_grey.spr)
+// part_movetype: Movetype of particle (def.qc for movetypes)
+// part_limit   : Maximum amount of particles to emit at once
+// part_life    : Life time particle is active (seconds)
+// part_ofs     : Offset from emitter (XYZ)
+// part_veltype : Velocity type 1=random, 2=circular
+// part_vel     : Velocity direction (XYZ)
+// part_velrand : Extra random velocity (need vel type 1)
+// part_velrot  : Velocity rotation (Y axis only)
+// part_vol     : Spawning volume around emitter (XYZ)
+// cirular_angle: Circular rotation angle
+// wakeup_dist  : Wake up distance for particle emitter
+// wakeup_timer : How often to check distance check
+// spawn_base   : Spawn rate - base value (seconds)
+// spawn_rand   : Spawn rate - random adjustment (seconds)
+// dpp_name     : DP particle effect name in effectinfo.txt file
+// dpp_wait     : DP particle re-trigger timer
+// dpp_rnd      : DP particle random multiplier for time
+// dpp_vel      : Direction of DP particles to move towards (XYZ)
+// -------- SPAWNFLAGS --------
+// -------- NOTES --------
+// A particle emitter template
+void() misc_particletemplate = { // [ENTITY]
 	self.classtype = CT_PARTICLETEMP; 
-	// make sure any sprite assets used are pre-cached ready
-	if (self.spr_name1 != "") precache_model(self.spr_name1);
+	if (self.spr_name1 != "") precache_model(self.spr_name1); // Make sure any sprite assets used are pre-cached ready
 	if (self.spr_name2 != "") precache_model(self.spr_name2);
 	if (self.spr_name3 != "") precache_model(self.spr_name3);
 };
 
-void() misc_particle_copytemplate = {
+void() misc_particle_copytemplate = { // [FUNCTION]
 	local entity fdest;
 
 	// Cycle through list for TARGET2 template
@@ -1196,30 +1071,36 @@ void() misc_particle_copytemplate = {
 		spawn_marker(self.origin, SPNMARK_YELLOW);
 		return;
 	}
-	
-	// Custom particle setup defined in map
-	self.part_style = PARTICLE_STYLE_CUSTOM;
+
+	self.part_style = PARTICLE_STYLE_CUSTOM; // Custom particle setup defined in map
 	
 	// Copy over all the DEFINED data from the template
 	// Fill in any gaps with default data (based on quad)
 	if (self.owner.spr_name1) self.spr_name1 = self.owner.spr_name1;
 	else self.spr_name1 = PART_DOTMED_BLUE;
+	
 	if (self.owner.spr_name2) self.spr_name2 = self.owner.spr_name2;
 	else self.spr_name2 = PART_DOTSML_WHITE;
+	
 	if (self.owner.spr_name3) self.spr_name3 = self.owner.spr_name3;
 	else self.spr_name3 = PART_DOTSML_BLUE;
 
 	// Particle quantity, life, direction, rotation and volume
 	if (self.owner.part_movetype) self.part_movetype = self.owner.part_movetype;
 	else self.part_movetype = MOVETYPE_NOCLIP;
+	
 	if (self.owner.part_limit) self.part_limit = self.owner.part_limit;
 	else self.part_limit = 25;
+	
 	if (self.owner.part_life) self.part_life = self.owner.part_life;
 	else self.part_life = 1;
+	
 	if (self.owner.part_ofs) self.part_ofs = self.owner.part_ofs;
 	else self.part_ofs = '0 0 0';
+	
 	if (self.owner.part_veltype) self.part_veltype = self.owner.part_veltype;
 	else self.part_veltype = PARTICLE_ORIGIN_CENTER;
+	
 	if (self.owner.part_vel) self.part_vel = self.owner.part_vel;
 	if (self.owner.part_velbase) self.part_velbase = self.owner.part_velbase;
 	if (self.owner.part_velrand) self.part_velrand = self.owner.part_velrand;
@@ -1229,11 +1110,14 @@ void() misc_particle_copytemplate = {
 	// Particle spawn timing and wakeup distance
 	if (self.owner.wakeup_dist) self.wakeup_dist = self.owner.wakeup_dist;
 	else self.wakeup_dist = 1024;
+	
 	if (self.owner.wakeup_timer) self.wakeup_timer = self.owner.wakeup_timer;
 	else self.wakeup_timer = 1;
+	
 	if (self.wakeup_timer < TIME_MINTICK) self.wakeup_timer = TIME_MINTICK;
 	if (self.owner.spawn_base) self.spawn_base = self.owner.spawn_base;
 	else self.spawn_base = 0.1;
+	
 	if (self.spawn_base < TIME_MINTICK) self.spawn_base = TIME_MINTICK;
 	if (self.owner.spawn_rand) self.spawn_rand = self.owner.spawn_rand;
 	else self.spawn_rand = 0;
@@ -1241,49 +1125,39 @@ void() misc_particle_copytemplate = {
 	// Particle setup for DarkPlaces
 	if (self.owner.dpp_name) self.dpp_name = self.owner.dpp_name;
 	else self.dpp_name = "";
+	
 	if (self.owner.dpp_wait) self.dpp_wait = self.owner.dpp_wait;
 	else self.dpp_wait = 0.1;
+	
 	if (self.dpp_wait < TIME_MINTICK) self.dpp_wait = TIME_MINTICK;
 	if (self.owner.dpp_rnd) self.dpp_rnd = self.owner.dpp_rnd;
 	else self.dpp_rnd = 0;
+	
 	if (self.owner.dpp_vel) self.dpp_vel = self.owner.dpp_vel;
 	else self.dpp_vel = '0 0 0';
 
-	// Setup particle states
-	misc_particle_delay();
+	misc_particle_delay(); // Setup particle states
 };
 
-//----------------------------------------------------------------------
-void() misc_particle_setup =
-{
-	// Setup Particle styles (pre-defined)
-	if (misc_particle_style(self) != PARTICLE_STYLE_EMPTY) 
-		misc_particle_delay();
+void() misc_particle_setup = { // [FUNCTION]
+	if (misc_particle_style(self) != PARTICLE_STYLE_EMPTY) misc_particle_delay(); // Setup Particle styles (pre-defined)
 };
 
-//----------------------------------------------------------------------
 // Entry point for code to spawn particle emitter
 // source - starting point for particles
 // target - destination (can be self/world to spawn at origin)
 // style - type of particle to create (check styles above)
 // spawnf - spawnflag values (startoff)
-//----------------------------------------------------------------------
-entity(entity pe_source, entity pe_target, float pe_style, float pe_spawnf) spawn_pemitter =
-{
+entity(entity pe_source, entity pe_target, float pe_style, float pe_spawnf) spawn_pemitter = { // [FUNCTION]
 	local entity new_pe;
 	
 	new_pe = spawn();
 	new_pe.classtype = CT_PARTICLEEMIT;
 	new_pe.state = STATE_SETUP;
 	new_pe.pemit_source = pe_source;
-	
-	// source <> target, then take source target
-	if (pe_source != pe_target) new_pe.pemit_target = pe_target;
-	
-	// Setup a random number on source entity for linking
-	// If the source entity is deleted this number will change
-	gen_unique_no(pe_source);
-	new_pe.entno_unique = pe_source.entno_unique;
+	if (pe_source != pe_target) new_pe.pemit_target = pe_target; // source <> target, then take source target
+	gen_unique_no(pe_source); // Setup a random number on source entity for linking
+	new_pe.entno_unique = pe_source.entno_unique; // If the source entity is deleted this number will change
 
 	// Check for bmodel origin first
 	if (pe_source.bsporigin) new_pe.origin = bmodel_origin(pe_source);
@@ -1295,52 +1169,51 @@ entity(entity pe_source, entity pe_target, float pe_style, float pe_spawnf) spaw
 		new_pe.pemit_source = new_pe;
 		new_pe.pemit_target = world;
 	}
-	
-	// Move Particle emitter to source origin
-	setorigin(new_pe, new_pe.origin);
+
+	setorigin(new_pe, new_pe.origin);	// Move Particle emitter to source origin
 	new_pe.part_style = pe_style;		// must use global defs
 	new_pe.spawnflags = pe_spawnf;		// spawnflags are parameters
 	new_pe.angles = pe_source.angles;	// Copy over any angle params
-	
-	// Back through emitter function
-	new_pe.think = misc_particle_setup;
+	new_pe.think = misc_particle_setup; // Back through emitter function
 	new_pe.nextthink = time + 0.1 + random();
-	
 	return new_pe;
 };
 
-//----------------------------------------------------------------------
-void() misc_particle =
-{
+// QUAKED misc_particle (0 0.5 0.75) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x
+// -------- KEYS --------
+// targetname   : toggle state (use trigger ent for exact state)
+// target       : destination of effect (self -> target)
+// target2      : name of a particle template
+// message      : Particle style string (upper case) leave blank for custom
+               // ALTAR, ARMOR1, ARMOR2, ARMOR3, BOOK, ELECTRIC,
+			   // FCIRCLE, FLAMES, FLAMEL, JUMPPAD, 
+			   // KEYGOLD, KEYSILVER, KEYRED, KEYGREEN, KEYPURPLE, KEYWHITE,
+			   // MEGAH, PENT, PORTAL, QUAD, SIGIL, SRING, SUIT,
+			   // SKILL, BSKILL, GSKILL, PSKILL
+// -------- SPAWNFLAGS --------
+// STARTOFF : Always Starts off and waits for trigger
+// -------- NOTES --------
+// A particle emitter which can be turned on/off (use function)
+void() misc_particle = { // [ENTITY]
 	if (self.spawnflags & ENT_STARTOFF) self.spawnflags = PARTICLE_START_OFF;
 	else self.spawnflags = PARTICLE_START_ON;
-	
-	// Default setup for any particle emitter
+
 	self.classtype = CT_PARTICLEEMIT;
 	self.pemit_source = self;
 	gen_unique_no(self);
 	self.state = STATE_SETUP;
-	// Let state of particle emitter change before finishing setup
-	if (self.targetname != "") self.use = misc_particle_use;
-	
-	// Custom particle setup using template?
-	if (self.target2 != "") { 
-		self.nextthink = time + 0.1 + random();
-		self.think = misc_particle_copytemplate;
-		return; 
-	}
+	if (self.targetname != "") self.use = misc_particle_use; // Let state of particle emitter change before finishing setup
+	if (self.target2 != "") { self.nextthink = time + 0.1 + random(); self.think = misc_particle_copytemplate; return; } // Custom particle setup using template?
 
 	// Setup any pre-defined particle types
 	if (self.message == "ARMOR1") { self.part_style = PARTICLE_STYLE_ARMOR; self.items2 = IT2_ARMOR1; }
 	else if (self.message == "ARMOR2") { self.part_style = PARTICLE_STYLE_ARMOR; self.items2 = IT2_ARMOR2; }
 	else if (self.message == "ARMOR3") { self.part_style = PARTICLE_STYLE_ARMOR; self.items2 = IT2_ARMOR3; }
-
 	else if (self.message == "BOOK") self.part_style = PARTICLE_STYLE_BOOK;
 	else if (self.message == "ELECTRIC") self.part_style = PARTICLE_STYLE_ELECTRIC;
 	else if (self.message == "FCIRCLE") self.part_style = PARTICLE_STYLE_FCIRCLE;
 	else if (self.message == "FLAMES") self.part_style = PARTICLE_STYLE_FLAMES;
 	else if (self.message == "FLAMEL") self.part_style = PARTICLE_STYLE_FLAMEL;
-	
 	else if (self.message == "KEYGOLD") self.part_style = PARTICLE_STYLE_KEYGOLD;
 	else if (self.message == "KEYSILVER") self.part_style = PARTICLE_STYLE_KEYSILVER;
 	else if (self.message == "KEYRED") self.part_style = PARTICLE_STYLE_KEYRED;
@@ -1350,10 +1223,8 @@ void() misc_particle =
 	else if (self.message == "MEGAH") self.part_style = PARTICLE_STYLE_MEGAH;
 	else if (self.message == "PENT") self.part_style = PARTICLE_STYLE_PENT;
 	else if (self.message == "PORTAL") self.part_style = PARTICLE_STYLE_PORTAL;
-
 	else if (self.message == "JUMPPAD") self.part_style = PARTICLE_STYLE_JUMPPAD;
 	else if (self.message == "QUAD") self.part_style = PARTICLE_STYLE_QUAD;
-	
 	else if (self.message == "SIGIL") self.part_style = PARTICLE_STYLE_SIGIL;
 	else if (self.message == "ALTAR") self.part_style = PARTICLE_STYLE_ALTAR;
 	else if (self.message == "SKILL") self.part_style = PARTICLE_STYLE_SKILL;
@@ -1362,47 +1233,31 @@ void() misc_particle =
 	else if (self.message == "PSKILL") self.part_style = PARTICLE_STYLE_PSKILL;
 	else if (self.message == "SRING") self.part_style = PARTICLE_STYLE_SRING;
 	else if (self.message == "SUIT") self.part_style = PARTICLE_STYLE_SUIT;
-	else {
-		dprint("\b[MISC_PARTICLE]\b Missing particle style!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		return;
-	}
-	
-	// Back through emitter function
-	self.nextthink = time + 0.1 + random();
+	else { dprint("\b[MISC_PARTICLE]\b Missing particle style!\n"); spawn_marker(self.origin, SPNMARK_YELLOW); return; }
+
+	self.nextthink = time + 0.1 + random(); // Back through emitter function
 	self.think = misc_particle_setup;
 };
 
-//----------------------------------------------------------------------
-void() misc_particle_burst_use =
-{
+void() misc_particle_burst_use = { // [FUNCTION]
 	particle_explode(self.origin+self.part_ofs, self.count, self.part_life, self.part_style, self.part_movetype);
-	// Check for temporary continuous mode
-	if (self.waitmin > 0) {
-		if (self.pausetime == 0) {
-			if (!self.waitmin2) self.waitmin2 = 0.1;
-			self.pausetime = time + self.waitmin;
-		}
-		if (self.pausetime > time) {
-			self.think = misc_particle_burst_use;
-			self.nextthink = time + self.waitmin2;
-		}
-		else self.pausetime = 0;
+	if (self.waitmin <= 0) return; // Check for temporary continuous mode
+
+	if (self.pausetime == 0) {
+		if (!self.waitmin2) self.waitmin2 = 0.1;
+		self.pausetime = time + self.waitmin;
 	}
+	if (self.pausetime > time) {
+		self.think = misc_particle_burst_use;
+		self.nextthink = time + self.waitmin2;
+	} else self.pausetime = 0;
 };
 
-//----------------------------------------------------------------------
 // This is also used by item_custom in items.qc
-//----------------------------------------------------------------------
-void() misc_particle_burst_setup =
-{
-	// Read tcount from entity, but it cannot be used for constant emitters
-	// The finish particle system will decrease the tcount directly!
-	if (!self.pemit_tcount) self.count = 20;
-	
+void() misc_particle_burst_setup = { // [FUNCTION]
+	if (!self.pemit_tcount) self.count = 20; // Read tcount from entity, but it cannot be used for constant emitters.  The finish particle system will decrease the tcount directly!
 	if (!self.part_life) self.part_life = 2;
 	if (CheckZeroVector(self.part_ofs)) self.part_ofs = '0 0 0';
-
 	if (self.part_style == 1) self.part_style = PARTICLE_BURST_YELLOW;
 	else if (self.part_style == 2) self.part_style = PARTICLE_BURST_GREEN;
 	else if (self.part_style == 3) self.part_style = PARTICLE_BURST_RED;
@@ -1419,59 +1274,75 @@ void() misc_particle_burst_setup =
 	else self.part_movetype = PARTICLE_BURST_CENTER;
 };
 
-//----------------------------------------------------------------------
-void() misc_particle_burst =
-{
-	// Default setup for any particle emitter
+// QUAKED misc_particle_burst (0 0.5 0.75) (-8 -8 -8) (8 8 8) x
+// -------- KEYS --------
+// targetname    : Trigger Particle Emitter
+// part_ofs      : Particle Origin Offset (def='0 0 0')
+// part_tcount   : Particle Quantity (def=20)
+// part_life     : Particle Life Time (def=2s)
+// part_style    : 1=yellow, 2=green, 3=red, 4=blue, 5=purple, 6=fire, 7=white
+// part_movetype : 2=center, 3=up, 4=shockwave, 5=skull, 6=lost, 7=minotaur
+// -------- SPAWNFLAGS --------
+// -------- NOTES --------
+// A particle emitter that fires a burst
+
+// QUAKED misc_particle_trail (0 0.5 0.75) (-8 -8 -8) (8 8 8) x
+// -------- KEYS --------
+// targetname    : Trigger Particle Emitter
+// target        : Name of entity (only one) to add trail effect
+// part_style    : 1=yellow, 2=green, 3=red, 4=blue, 5=purple, 6=fire, 7=white
+// -------- SPAWNFLAGS --------
+// -------- NOTES --------
+// A particle emitter that adds a trail effect to another entity
+void() misc_particle_burst = { // [ENTITY]
 	self.classtype = CT_PARTICLEEMIT;
 	self.pemit_source = self;
-	self.health = LARGE_TIMER;
-	
+	self.health = LARGE_TIMER;	
 	misc_particle_burst_setup();
 	self.use = misc_particle_burst_use;
 };
 
-//----------------------------------------------------------------------
-void() misc_weather =
-{
+// QUAKED misc_weather (0 0.5 0.75) ? x x SILENT SNOW BLOOD SLIME STARTOFF x
+// -------- KEYS --------
+// targetname : toggle state (use trigger ent for exact state)
+// count      : Quantity of particles for volume
+// speed      : Downward velocity (def=300)
+// v_angle    : Random velocity adjustment (def=8 8 150)
+// wakeup_dist  : how close the player needs to be for the weather to work
+// wakeup_timer : time to keep checking when in standby mode
+// -------- SPAWNFLAGS --------
+// SILENT   : Don't make any drip sound (good for multiple drips)
+// SNOW     : White wispy flakes falling
+// BLOOD    : Blood red rain
+// SLIME    : Slime green rain
+// STARTOFF : Always Starts off and waits for trigger
+// -------- NOTES --------
+// A particle emitter which produces weather effects
+void() misc_weather = { // [ENTITY]
 	// Setup particle emitter to start on/off
-	if (self.spawnflags & ENT_STARTOFF) 
-		self.spawnflags = self.spawnflags | PARTICLE_START_OFF;
+	if (self.spawnflags & ENT_STARTOFF) self.spawnflags = self.spawnflags | PARTICLE_START_OFF;
 	else self.spawnflags = self.spawnflags | PARTICLE_START_ON;
-	
-	// Default setup for any particle emitter
+
 	self.classtype = CT_PARTICLEEMIT;
 	self.part_style = PARTICLE_STYLE_WEATHER;
 	self.pemit_source = self;
 	gen_unique_no(self);
 	self.state = STATE_SETUP;
-	
-	// Find out size of volume brush
-	InitTrigger();
-	// Save the brush bounding box for later
-	self.bbmins = self.mins;
+	InitTrigger(); // Find out size of volume brush
+	self.bbmins = self.mins; // Save the brush bounding box for later
 	self.bbmaxs = self.maxs;
 	self.oldorigin = bmodel_origin(self);
 	spawn_marker(self.oldorigin,0);
-	
-	// hide volume, no longer needed
-	self.solid = SOLID_NOT;
-		
-	// Setup default particle count based on volume
-	// - 10% of the volume size as particle count
-	if (!self.count) 
-		self.count = rint((vlen(self.bbmaxs - self.bbmins)*0.1));
-	
-	// Change for variable wind change
-	if (!self.speed) self.speed = 30;
+	self.solid = SOLID_NOT; // hide volume, no longer needed
+	if (!self.count) self.count = rint((vlen(self.bbmaxs - self.bbmins)*0.1)); // Setup default particle count based on volume - 10% of the volume size as particle count
+	if (!self.speed) self.speed = 30; // Change for variable wind change
 	self.attack_speed = time + self.speed + (random()*self.speed);
 	
 	// Setup default wind (X/Y) and vertical velocity
 	if (self.spawnflags & PARTICLE_WEATHER_SNOW) {
 		if (CheckZeroVector(self.pos1)) self.pos1 = '8 15 0'; // Mostly white
 		if (CheckZeroVector(self.pos2)) self.pos2 = '100 100 -100';
-	}
-	else {
+	} else {
 		if (CheckZeroVector(self.pos1)) self.pos1 = '1 15 0'; // grey->white
 		if (CheckZeroVector(self.pos2)) self.pos2 = '100 100 -500';
 	}
@@ -1482,35 +1353,23 @@ void() misc_weather =
 		self.pos1_x = self.pos1_y;
 		self.pos1_y = self.pos1_z;
 	}
-	// Work out range of colour
 	self.pos1_z = rint(self.pos1_y - self.pos1_x);
-	if (self.pos1_z < 1) self.pos1_z = 1;
-	
-	// Create initial wind direction
+	if (self.pos1_z < 1) self.pos1_z = 1; // Work out range of colour
 	self.pos3_x = crandom() * self.pos2_x;
 	self.pos3_y = crandom() * self.pos2_y;
-	self.pos3_z = self.pos2_z;
-	
-	// Back through emitter function
+	self.pos3_z = self.pos2_z; // Create initial wind direction
 	self.nextthink = time + 0.1 + random();
-	self.think = misc_particle_setup;
+	self.think = misc_particle_setup; // Back through emitter function
 };
 
-/*======================================================================
- Quake only supports a fixed amount of projectile particle trails
- The Model flag is usually how to set blood/fire/slime/magic colours.
- This function was originally designed for blue plasma effects,
- but like all things, its outgrown that and become general purpose.
- Can have custom colours, timings and secondary functionality
- All the variables for this function are defined in part_manage.qc
-======================================================================*/
-void(entity targ) HazardProjectile_Finished;
-
-//----------------------------------------------------------------------
-void(entity targ) Default_ParticleTrail =
-{
-	// Setup particle emitter defaults
-	if (targ.part_chance <= 0) targ.part_chance = 0.2;
+// Quake only supports a fixed amount of projectile particle trails
+// The Model flag is usually how to set blood/fire/slime/magic colours.
+// This function was originally designed for blue plasma effects,
+// but like all things, its outgrown that and become general purpose.
+// Can have custom colours, timings, and secondary functionality.
+// All the variables for this function are defined in part_manage.qc
+void(entity targ) Default_ParticleTrail = { // [FUNCTION]
+	if (targ.part_chance <= 0) targ.part_chance = 0.2; // Setup particle emitter defaults
 	if (CheckZeroVector(targ.part_ofs)) targ.part_ofs = '0 0 2';
 	if (targ.part_base <= 0) targ.part_base = 1;
 	if (targ.part_rand <= 0) targ.part_rand = 1;
@@ -1525,51 +1384,42 @@ void(entity targ) Default_ParticleTrail =
 		targ.dpp_name = DPP_TRAILPARTY;
 		targ.part_qccol1 = 104;	// Skin/Yellow (96+8)
 		targ.part_qccol2 = 198; // Bright Yellow (192+6)
-	}
-	else if (targ.part_trstyle == PARTICLE_TRAIL_GREEN) {
+	} else if (targ.part_trstyle == PARTICLE_TRAIL_GREEN) {
 		targ.part_style = PARTICLE_BURST_GREEN;
 		targ.dpp_name = DPP_TRAILPARTG;
 		targ.part_qccol1 = 56; // Swampy green (48+8)
 		targ.part_qccol2 = 182; // Light green (176+6)
-	}
-	else if (targ.part_trstyle == PARTICLE_TRAIL_RED) {
+	} else if (targ.part_trstyle == PARTICLE_TRAIL_RED) {
 		targ.part_style = PARTICLE_BURST_RED;
 		targ.dpp_name = DPP_TRAILPARTR;
 		targ.part_qccol1 = 72; // Dark red (64+8)
 		targ.part_qccol2 = 230; // Light red (224+6)
-	}
-	else if (targ.part_trstyle == PARTICLE_TRAIL_BLUE) {
+	} else if (targ.part_trstyle == PARTICLE_TRAIL_BLUE) {
 		targ.part_style = PARTICLE_BURST_BLUE;
 		targ.dpp_name = DPP_TRAILPARTB;
 		targ.part_qccol1 = 40; // Silver (32+8)
 		targ.part_qccol2 = 214;	// Dark blue (208+6)
-	}
-	else if (targ.part_trstyle == PARTICLE_TRAIL_PURPLE) {
+	} else if (targ.part_trstyle == PARTICLE_TRAIL_PURPLE) {
 		targ.part_style = PARTICLE_BURST_PURPLE;
 		targ.dpp_name = DPP_TRAILPARTP;
 		targ.part_qccol1 = 136; // Mauve (128+8)
 		targ.part_qccol2 = 150; // Purple (144+6)
-	}
-	else if (targ.part_trstyle == PARTICLE_TRAIL_FIRE) {
-		// Fire trail is not really supported
-		targ.part_style = PARTICLE_BURST_RED;
+	} else if (targ.part_trstyle == PARTICLE_TRAIL_FIRE) {
+		targ.part_style = PARTICLE_BURST_RED; // Fire trail is not really supported
 		targ.dpp_name = "TR_ROCKET";
 		targ.part_qccol1 = 70; // Light red (64+6)
 		targ.part_qccol2 = 104;	// Skin/Yellow (96+8)
-	}
-	else if (targ.part_trstyle == PARTICLE_TRAIL_WHITE) {
+	} else if (targ.part_trstyle == PARTICLE_TRAIL_WHITE) {
 		targ.part_style = PARTICLE_BURST_WHITE;
 		targ.dpp_name = DPP_TRAILPARTW;
 		targ.part_qccol1 = 2; // Dark Grey (0+2)
 		targ.part_qccol2 = 6; // Light Grey (0+6)
-	}
-	else if (targ.part_trstyle == PARTICLE_TRAIL_PLASMA) {
+	} else if (targ.part_trstyle == PARTICLE_TRAIL_PLASMA) {
 		targ.part_style = PARTICLE_BURST_BLUE;
 		targ.dpp_name = DPP_TRPLASMA;
 		targ.part_qccol1 = 40; // Silver (32+8)
 		targ.part_qccol2 = 198; // Bright Yellow (192+6)
-	}
-	else if (targ.part_trstyle == PARTICLE_TRAIL_POISON) {
+	} else if (targ.part_trstyle == PARTICLE_TRAIL_POISON) {
 		targ.part_style = PARTICLE_BURST_GREEN;
 		targ.dpp_name = DPP_TRPOISON;
 		targ.part_qccol1 = 56; // Swampy green (48+8)
@@ -1577,16 +1427,11 @@ void(entity targ) Default_ParticleTrail =
 	}
 };
 
-//----------------------------------------------------------------------
-void() Custom_ParticleTrail =
-{
+void() Custom_ParticleTrail = { // [FUNCTION]
 	local float part_col;
 	
-	// Projectile trail been turned off/disabled
-	if (self.estate & ESTATE_BLOCK) return;
-	
-	// Projectile Trail has finished/deleted (cope with hazard counters)
-	if (self.attack_finished < time) { HazardProjectile_Finished(self);	return;	}
+	if (self.estate & ESTATE_BLOCK) return; // Projectile trail been turned off/disabled
+	if (self.attack_finished < time) { HazardProjectile_Finished(self);	return;	} // Projectile Trail has finished/deleted (cope with hazard counters)
 
 	// Custom Particle Trail Active?
 	if (self.part_qctrail == TRUE) {
@@ -1596,18 +1441,13 @@ void() Custom_ParticleTrail =
 
 		// Generate dot/engine particles? DP/FTE/QSS has trail effect instead
 		if (!ext_dppart && random() < 0.5) {
-			// Is this the target for the particle trail?
-			if (!self.part_qctarget) self.part_qcorigin = self.origin;
+			if (!self.part_qctarget) self.part_qcorigin = self.origin; // Is this the target for the particle trail?
 			else self.part_qcorigin = self.part_qctarget.origin;
-			// Has the particle target moved since last tick frame?
-			// No particle trail if the target entity is stationary
-			if (self.part_qcorigin != self.oldorigin) {
-				// Create random particle direction
-				self.part_qcdir = crandom() * '1 1 1';
-				// Primary colour has greater palette variety
-				part_col = self.part_qccol1 + rint(random()*8);
-				// Use builtin quake particle system
-				particle (self.part_qcorigin, self.part_qcdir, part_col, 4 + rint(random()*4) );
+
+			if (self.part_qcorigin != self.oldorigin) { // Has the particle target moved since last tick frame?  No particle trail if the target entity is stationary.
+				self.part_qcdir = crandom() * '1 1 1'; // Create random particle direction
+				part_col = self.part_qccol1 + rint(random()*8); // Primary colour has greater palette variety
+				particle (self.part_qcorigin, self.part_qcdir, part_col, 4 + rint(random()*4) ); // Use builtin quake particle system
 				part_col = self.part_qccol2 + rint(random()*4);
 				particle (self.part_qcorigin, self.part_qcdir, part_col, 2 + rint(random()*2) );
 			}
@@ -1625,98 +1465,66 @@ void() Custom_ParticleTrail =
 			self.part_sectimer = time + 0.2;
 			if (self.part_secfunc) self.part_secfunc();
 		}
-		// Save origin to check if projectile (self) has moved
-		self.oldorigin = self.part_qcorigin;
-		// Default - Keep creating particles
-		self.think = Custom_ParticleTrail;
-		self.nextthink = time + 0.02;
-	}
-	else {
-		// Switch over to different particle setup for the ground
-		// This expects the particle variables have been setup
-		if (random() < self.part_chance)
-			particle_explode(self.origin+self.part_ofs, self.part_base+random()*self.part_rand, self.part_life+random(), self.part_style, 0);
 
+		self.oldorigin = self.part_qcorigin; // Save origin to check if projectile (self) has moved
+		self.think = Custom_ParticleTrail; // Default - Keep creating particles
+		self.nextthink = time + 0.02;
+	} else {
+		// Switch over to different particle setup for the ground.  This expects the particle variables have been setup
+		if (random() < self.part_chance) particle_explode(self.origin+self.part_ofs, self.part_base+random()*self.part_rand, self.part_life+random(), self.part_style, 0);
 		self.think = Custom_ParticleTrail;
 		self.nextthink = time + 0.1;
 	}
 };
 
-//----------------------------------------------------------------------
-void() misc_particle_trail_on =
-{
-	// Stop re-triggering ON state
-	if (self.estate == ESTATE_ON) return;
+void() misc_particle_trail_on = { // [FUNCTION]
+	if (self.estate == ESTATE_ON) return; // Stop re-triggering ON state
 
-	// Setup particle defaults
-	if (self.part_style == 0) Default_ParticleTrail(self);
+	if (self.part_style == 0) Default_ParticleTrail(self); // Setup particle defaults
 
 	// Has the trail entity been defined?
 	if (!self.part_qctarget) {
-		// Is there a target entity defined? - results in error
-		// Can't have a trail effect if the source does not move
-		if (self.target == "") {
-			dprint("\b[PART_TRAIL]\b target entity is missing!\n");
+		// Is there a target entity defined? - results in error.  Can't have a trail effect if the source does not move.
+		if (SUB_HideIfNoTarget()) return;
+
+		// Try to find target?
+		self.movetarget = find(world, targetname, self.target);
+		if (self.movetarget) self.part_qctarget = self.movetarget;
+		else {
+			// Target entity not valid - results in error.  Need a (moving) target for trails to be active
+			dprint("\b[PART_TRAIL]\b target entity not valid!\n");
 			spawn_marker(self.origin, SPNMARK_YELLOW);
 			entity_hide(self);
 			return;		
 		}
-		else {
-			// Try to find target?
-			self.movetarget = find(world, targetname, self.target);
-			if (self.movetarget) self.part_qctarget = self.movetarget;
-			else {
-				// Target entity not valid - results in error
-				// Need a (moving) target for trails to be active
-				dprint("\b[PART_TRAIL]\b target entity not valid!\n");
-				spawn_marker(self.origin, SPNMARK_YELLOW);
-				entity_hide(self);
-				return;		
-			}
-		}
 	}
+
+	self.estate = ESTATE_ON; // Trail effect is active
 	
-	// Trail effect is active
-	self.estate = ESTATE_ON;
-	
-	// Enable trail effect for DP/FTE/QSS engines
 	if (ext_dppart && self.dpp_name != "") {
+		// Enable trail effect for DP/FTE/QSS engines
 		self.part_qctarget.traileffectnum = particleeffectnum(self.dpp_name);
 		self.part_qctarget.effects = 0;
-	}
-	// Default = sprite based QC version
-	else {
+	} else {
+		// Default = sprite based QC version
 		self.think = Custom_ParticleTrail;	
 		self.nextthink = time + 0.02;
 	}
 };
 
-//----------------------------------------------------------------------
-void() misc_particle_trail_reset =
-{
-	// Turn off (reset) engine trail effects
+void() misc_particle_trail_off = { // [FUNCTION]
+	self.estate = ESTATE_OFF;
 	if (self.part_qctarget) self.part_qctarget.traileffectnum = 0;
 	else self.traileffectnum = 0;
 };
 
-//----------------------------------------------------------------------
-void() misc_particle_trail_off =
-{
-	self.estate = ESTATE_OFF;
-	misc_particle_trail_reset();
-};
-
-//----------------------------------------------------------------------
-void() misc_particle_trail_disable =
-{
+void() misc_particle_trail_disable = { // [FUNCTION]
 	self.estate = ESTATE_DISABLE;
-	misc_particle_trail_reset();
+	if (self.part_qctarget) self.part_qctarget.traileffectnum = 0;
+	else self.traileffectnum = 0;
 };
 
-//----------------------------------------------------------------------
-void() misc_particle_trail =
-{
-	// Default setup for any particle emitter
+void() misc_particle_trail = { // [ENTITY]
 	self.classtype = CT_PARTICLEEMIT;
 	self.pemit_source = self;
 	
@@ -1729,129 +1537,22 @@ void() misc_particle_trail =
 		return;		
 	}
 
-	// Only use the trail part of Custom_ParticleTrail
-	self.part_qctrail = TRUE;
-	// Move style to trail key ready for setup
-	self.part_trstyle = self.part_style;
+	self.part_qctrail = TRUE; // Only use the trail part of Custom_ParticleTrail
+	self.part_trstyle = self.part_style; // Move style to trail key ready for setup
 	self.part_style = 0;
-	// Block any poisonous setups
-	self.poisonous = FALSE;
-	// No secondary functions allowed
-	self.part_sectimer = LARGE_TIMER;
-	// There is no defined finish point, up to mapper
-	self.attack_finished = LARGE_TIMER;
-	
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
+	self.poisonous = FALSE; // Block any poisonous setups
+	self.part_sectimer = LARGE_TIMER; // No secondary functions allowed
+	self.attack_finished = LARGE_TIMER; // There is no defined finish point, up to mapper
+	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_on = misc_particle_trail_on;
 	self.estate_off = misc_particle_trail_off;
 	self.estate_disable = misc_particle_trail_disable;
 	self.estate_use = misc_particle_trail_on;
-	
-	// Check for starting off or default=on
-	if (self.spawnflags & ENT_STARTOFF) entity_state_off();
+
+	if (self.spawnflags & ENT_STARTOFF) entity_state_off(); // Check for starting off or default=on
 	else {
-		// Need target to be active first
-		self.nextthink = time + 0.2;
+		
+		self.nextthink = time + 0.2; // Need target to be active first
 		self.think = self.estate_on;
 	}
 };
-
-//======================================================================
-/*QUAKED misc_particle (0 0.5 0.75) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x
-A particle emitter which can be turned on/off (use function)
--------- KEYS --------
-targetname   : toggle state (use trigger ent for exact state)
-target       : destination of effect (self -> target)
-target2      : name of a particle template
-message      : Particle style string (upper case) leave blank for custom
-               ALTAR, ARMOR1, ARMOR2, ARMOR3, BOOK, ELECTRIC,
-			   FCIRCLE, FLAMES, FLAMEL, JUMPPAD, 
-			   KEYGOLD, KEYSILVER, KEYRED, KEYGREEN, KEYPURPLE, KEYWHITE,
-			   MEGAH, PENT, PORTAL, QUAD, SIGIL, SRING, SUIT,
-			   SKILL, BSKILL, GSKILL, PSKILL
--------- SPAWNFLAGS --------
-STARTOFF : Always Starts off and waits for trigger
--------- NOTES --------
-A particle emitter which can be turned on/off (use function)
-*/
-
-//-----------------------------------------------------------------------------
-/*QUAKED misc_particletemplate (0 0.5 0.75) (-8 -8 -8) (8 8 8) x
-A particle emitter template
--------- KEYS --------
-targetname   : target name reference for misc_particle entities
-start_delay  : Particle emitter start delay
-spr_name1    : sprite name (progs\s_bubble_blue1.spr)
-spr_name2    : sprite name (progs\s_bubble_wht.spr)
-spr_name3    : sprite name (progs\s_dotmed_grey.spr)
-part_movetype: Movetype of particle (def.qc for movetypes)
-part_limit   : Maximum amount of particles to emit at once
-part_life    : Life time particle is active (seconds)
-part_ofs     : Offset from emitter (XYZ)
-part_veltype : Velocity type 1=random, 2=circular
-part_vel     : Velocity direction (XYZ)
-part_velrand : Extra random velocity (need vel type 1)
-part_velrot  : Velocity rotation (Y axis only)
-part_vol     : Spawning volume around emitter (XYZ)
-cirular_angle: Circular rotation angle
-wakeup_dist  : Wake up distance for particle emitter
-wakeup_timer : How often to check distance check
-spawn_base   : Spawn rate - base value (seconds)
-spawn_rand   : Spawn rate - random adjustment (seconds)
-dpp_name     : DP particle effect name in effectinfo.txt file
-dpp_wait     : DP particle re-trigger timer
-dpp_rnd      : DP particle random multiplier for time
-dpp_vel      : Direction of DP particles to move towards (XYZ)
--------- SPAWNFLAGS --------
--------- NOTES --------
-A particle emitter template
-*/
-
-//-----------------------------------------------------------------------------
-/*QUAKED misc_particle_burst (0 0.5 0.75) (-8 -8 -8) (8 8 8) x
-A particle emitter that fires a burst
--------- KEYS --------
-targetname    : Trigger Particle Emitter
-part_ofs      : Particle Origin Offset (def='0 0 0')
-part_tcount   : Particle Quantity (def=20)
-part_life     : Particle Life Time (def=2s)
-part_style    : 1=yellow, 2=green, 3=red, 4=blue, 5=purple, 6=fire, 7=white
-part_movetype : 2=center, 3=up, 4=shockwave, 5=skull, 6=lost, 7=minotaur
--------- SPAWNFLAGS --------
--------- NOTES --------
-A particle emitter that fires a burst
-*/
-
-//-----------------------------------------------------------------------------
-/*QUAKED misc_particle_trail (0 0.5 0.75) (-8 -8 -8) (8 8 8) x
-A particle emitter that adds a trail effect to another entity
--------- KEYS --------
-targetname    : Trigger Particle Emitter
-target        : Name of entity (only one) to add trail effect
-part_style    : 1=yellow, 2=green, 3=red, 4=blue, 5=purple, 6=fire, 7=white
--------- SPAWNFLAGS --------
--------- NOTES --------
-A particle emitter that adds a trail effect to another entity
-*/
-
-//-----------------------------------------------------------------------------
-/*QUAKED misc_weather (0 0.5 0.75) ? x x SILENT SNOW BLOOD SLIME STARTOFF x
-A particle emitter which produces weather effects
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-count      : Quantity of particles for volume
-speed      : Downward velocity (def=300)
-v_angle    : Random velocity adjustment (def=8 8 150)
-wakeup_dist  : how close the player needs to be for the weather to work
-wakeup_timer : time to keep checking when in standby mode
--------- SPAWNFLAGS --------
-SILENT   : Don't make any drip sound (good for multiple drips)
-SNOW     : White wispy flakes falling
-BLOOD    : Blood red rain
-SLIME    : Slime green rain
-STARTOFF : Always Starts off and waits for trigger
--------- NOTES --------
-A particle emitter which produces weather effects
-*/
-

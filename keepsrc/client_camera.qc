@@ -188,18 +188,8 @@ void() NextIntermissionCamera = {
 	}
 
 	// CHANGE fog for intermission camera
-	if (fog_active && self.goalentity.fog_density > 0) {
-		// Double check for quake.rc parameter
-		// AD 1.8 removed SVR_NOFOGCMDS (winquake idea)
-		fade_fog(self.goalentity.fog_density, self.goalentity.fog_colour, self.goalentity.speed);
-	}
-	
-	// CHANGE sky_fog for intermission camera
-	if (fog_active && self.goalentity.skyfog_density > 0) {
-		// Double check for quake.rc parameter
-		// AD 1.8 removed SVR_NOFOGCMDS (winquake idea)
-		fade_skyfog(self.goalentity.skyfog_density, self.goalentity.speed);
-	}
+	if (fog_active && self.goalentity.fog_density > 0) fade_fog(self.goalentity.fog_density, self.goalentity.fog_colour, self.goalentity.speed); // Double check for quake.rc parameter
+	if (fog_active && self.goalentity.skyfog_density > 0) fade_skyfog(self.goalentity.skyfog_density, self.goalentity.speed); // Double check for quake.rc parameter
 	
 	// CHANGE skybox for intermission camera
 	if (self.goalentity.skybox != "") {

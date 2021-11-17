@@ -396,16 +396,31 @@ void() hogremac_wakeup7a	=[	$smash12,		hogremac_wakeup8a ] {};
 void() hogremac_wakeup8a	=[	$smash13,		hogremac_wakeup9a ] {};
 void() hogremac_wakeup9a	=[	$smash14,		hogremac_run1	] {};
 
-/*======================================================================
-//QUAKED monster_hogremac (0.5 0.75 0) (-32 -32 -24) (32 32 64) AMBUSH x METAL NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
-{ model(":progs/ad171/mon_hogremac.mdl"); }
-Ogre, 200 health points.
--------- KEYS --------
--------- SPAWNFLAGS --------
-METAL : Chain mail metal armour and +100HP
--------- NOTES --------
+void() monster_hogremac_precache = {
+	precache_model("progs/ad171/mon_hogremac.mdl");
+	precache_model("progs/ad171/h_hogre.mdl");
+	precache_model(MODEL_PROJ_GRENADE);
+	precache_model("progs/ad171/w_ogremac.mdl");
+	precache_model("progs/ad171/gib_ogfoot1.mdl");
+	precache_model("progs/ad171/gib_ogfoot2.mdl");
+	precache_model("progs/ad171/w_ogregl.mdl");
+	precache_sound("ogre/ogidle.wav");
+	precache_sound("ogre/ogidle2.wav");
+	precache_sound("ogre/ogdrag.wav"); // Chainsaw scrap on floor sound
+	precache_sound("ogre/ogdth.wav"); // Death sound
+	precache_sound("ogre/ogpain1.wav"); // Pain
+	precache_sound("ogre/ogsawatk.wav");	// Attack
+	precache_sound("ad171/weapons/crossbow_swipe.wav");	// mace swipe
+	precache_sound("ad171/ogre/ham_hit.wav");	// mace hit ground
+	precache_sound(GIB_SOUND_HEAVY);	// mace hit
+	precache_sound("ogre/ogwake.wav");
+};
 
-======================================================================*/
+// QUAKED monster_hogremac (0.5 0.75 0) (-32 -32 -24) (32 32 64) AMBUSH x METAL NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
+// { model(":progs/ad171/mon_hogremac.mdl"); }
+// Ogre, 200 health points.
+// -------- SPAWNFLAGS --------
+// METAL : Chain mail metal armour and +100HP
 void() monster_hogremac = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
@@ -418,38 +433,13 @@ void() monster_hogremac = {
 	self.gib2mdl = "progs/ad171/gib_ogfoot1.mdl";		// Left foot
 	self.gib3mdl = "progs/ad171/gib_ogfoot2.mdl";		// Right foot
 	self.gib4mdl = "progs/ad171/w_ogregl.mdl";		// Grenade Launcher
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (MODEL_PROJ_GRENADE);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	precache_model (self.gib4mdl);
-
 	self.gib1sound = GIB_IMPACT_WOOD;
 	if (random() < 0.5) self.gib1mdl = self.gib4mdl;
-
 	self.idle_sound = "ogre/ogidle.wav";
-	precache_sound (self.idle_sound);
 	self.idle_soundcom = "ogre/ogidle2.wav";
-	precache_sound (self.idle_soundcom);
-
-	precache_sound ("ogre/ogdrag.wav");		// Chainsaw scrap on floor sound
-	precache_sound ("ogre/ogdth.wav");		// Death sound
 	self.pain_sound = "ogre/ogpain1.wav";
-	precache_sound (self.pain_sound);		// Pain
-	
-	precache_sound ("ogre/ogsawatk.wav");	// Attack
-	precache_sound ("ad171/weapons/crossbow_swipe.wav");	// mace swipe
-	precache_sound ("ad171/ogre/ham_hit.wav");	// mace hit ground
-	
 	self.meleehitsound = GIB_SOUND_HEAVY;
-	precache_sound (self.meleehitsound);	// mace hit
-
 	self.sight_sound = "ogre/ogwake.wav";
-	precache_sound (self.sight_sound);
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;
@@ -487,14 +477,11 @@ void() monster_hogremac = {
 	self.th_die = hogremac_die;
 	self.th_melee = hogremac_melee;
 	self.th_missile = hogremac_shoot1;
-//	self.th_jump = hogre_leap1;
 	self.th_pain = hogremac_pain;
 	self.th_wakeup = hogremac_wakeup1a;
-	
 	self.ammo_rockets = 2;
 	self.classtype = CT_MONHOGREMAC;	// new style hunter ogre
 	self.classgroup = CG_OGRE;			// One big happy ogre family!
 	self.classmove = MON_MOVEWALK;
-
 	monster_start();
 };

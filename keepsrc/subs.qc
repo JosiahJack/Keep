@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 28
+// Function count: 30
 //
 // Implements: Subroutines and Entity I/O System
 //
@@ -38,23 +38,26 @@
 // target2, target3, target4, statetarget1 - statetarget32, killtarget, etc.
 //=============================================================================
 
-void() SUB_Null = {};
-void() SUB_Remove = {remove(self);};
-void(entity inflictor, entity attacker, float damage) SUB_Null_pain = {};
 void() SUB_CalcMoveDone;
 void() SUB_CalcAngleMoveDone;
 void(vector marker_org, float marker_type) spawn_marker;
 void(entity thekilled, entity attacker) AddToKills;
 void(entity targ) AddToTotals;
+void(string text) Mass_Centerprint;
+void(entity targ, float hpminimum, float had_regen) Client_CheckMaxHP;
+
+void() SUB_Null = {}; // [FUNCTION]
+void() SUB_Remove = {remove(self);}; // [FUNCTION]
+void(entity inflictor, entity attacker, float damage) SUB_Null_pain = {}; // [FUNCTION]
 
 // To determine if an entity is still active this function generates an unique number that can be checked/shared between linked entities.
-void(entity targ) gen_unique_no = {
+void(entity targ) gen_unique_no = { // [FUNCTION]
 	if (targ.entno_unique == 0) targ.entno_unique = rint(random()*1000) * rint(random()*1000); // Check if target entity has an unique number already
 };
 
 // Most of the monsters have an attack_offset setup to spawn their proejctiles in the right location relative to their gun model.
 // This function expects the makevectors has been done already.  makevectors (self.angles); <--- if missing, vector will be rubbish!
-vector(vector attack_dir) attack_vector = {
+vector(vector attack_dir) attack_vector = { // [FUNCTION]
 	local vector retvec;
 
 	retvec = v_forward * attack_dir_x;
@@ -63,13 +66,13 @@ vector(vector attack_dir) attack_vector = {
 	return retvec;
 };
 
-float(vector checkpos, vector abmax, vector abmin) SUB_CheckPointInBounds = {
+float(vector checkpos, vector abmax, vector abmin) SUB_CheckPointInBounds = { // [FUNCTION]
 	if ((checkpos_x < abmax_x) && (checkpos_y < abmax_y) && (checkpos_z < abmax_z) && (checkpos_x > abmin_x) && (checkpos_y > abmin_y) && (checkpos_z > abmin_z)) return TRUE;
 	return FALSE;
 };
 
 // Bmodels have a 0,0,0 origin key, need to calculate from mins/maxs.  This function will return the true origin using mins/max vectors
-vector(entity bmodel_ent) bmodel_origin = {
+vector(entity bmodel_ent) bmodel_origin = { // [FUNCTION]
 	local vector vdiff, vorigin;
 
 	// Calculate the middle point of the mins/maxs size vectors
@@ -85,7 +88,7 @@ vector(entity bmodel_ent) bmodel_origin = {
 };
 
 // This is version is using the bbmin/bbmax entity keys instead.  Useful if the entity is hidden and want to know origin
-vector(entity bmodel_ent) bmodel_bborigin = {
+vector(entity bmodel_ent) bmodel_bborigin = { // [FUNCTION]
 	local vector vdiff, vorigin;
 	vdiff_x = (bmodel_ent.bbmaxs_x - bmodel_ent.bbmins_x) * 0.5;
 	vdiff_y = (bmodel_ent.bbmaxs_y - bmodel_ent.bbmins_y) * 0.5;
@@ -95,7 +98,7 @@ vector(entity bmodel_ent) bmodel_bborigin = {
 };
 
 // Check for bmodel errors, model key empty (can crash engine)
-float() check_bmodel_keys = {
+float() check_bmodel_keys = { // [FUNCTION]
 	if (self.model == "") {
 		// this error can be fatal for most engines, show warning
 		dprint ("\b[BMODEL]\b "); dprint (self.classname);
@@ -120,12 +123,11 @@ float() check_bmodel_keys = {
 		
 		// Do nothing with this entity
 		return TRUE;
-	}
-	else return FALSE;
+	} else return FALSE;
 };
 	
 // QuakeEd only writes a single float for angles (bad idea), so up and down are just constant angles.
-void() SetMovedir = {
+void() SetMovedir = { // [FUNCTION]
 	if (self.angles == '0 -1 0') self.movedir = '0 0 1';
 	else if (self.angles == '0 -2 0') self.movedir = '0 0 -1';
 	else {
@@ -135,14 +137,14 @@ void() SetMovedir = {
 	self.angles = '0 0 0'; // Bmodels need angles key reset otherwise twisted on spawn
 };
 
-float(vector check_vec) CheckZeroVector = {
+float(vector check_vec) CheckZeroVector = { // [FUNCTION]
 	if (check_vec_x == 0 && check_vec_y == 0 && check_vec_z == 0) return TRUE;
 	else return FALSE;
 };
 
 // Some entities have directional parameters (angles -> movedir).  This function searches for an angletarget entity (useful for tracking).
 // Always finds the first target key (will fail if multiple targets).
-void(entity targ, float return_target) TargetMovedir = {
+void(entity targ, float return_target) TargetMovedir = { // [FUNCTION]
 	local entity angle_dest;
 	local vector targ_origin, angle_dest_origin;
 
@@ -165,10 +167,10 @@ void(entity targ, float return_target) TargetMovedir = {
 };
 
 // Used by thinks to automatically set default arguments
-void() TargetMovedirReturn = { TargetMovedir(self, TRUE); };
+void() TargetMovedirReturn = { TargetMovedir(self, TRUE); }; // [FUNCTION]
 
 // Setup triggers.  Angles are used for one-way touches.  An angle of 0 is assumed to mean no restrictions, so use a yaw of 360 instead.
-void() InitTrigger = {
+void() InitTrigger = { // [FUNCTION]
 	if (CheckZeroVector(self.angles) == FALSE) SetMovedir();
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_NONE;
@@ -182,7 +184,7 @@ void() InitTrigger = {
 };
 
 // PM:  The point trigger version of InitTrigger.
-void() InitPointTrigger = {
+void() InitPointTrigger = { // [FUNCTION]
     local   vector  v1, v2;
 
     v1 = self.origin;
@@ -194,7 +196,7 @@ void() InitPointTrigger = {
 };
 
 // Calculate self.velocity and self.nextthink to reach dest from self.origin traveling at speed.
-void() SUB_FacingAngle_Tick = {
+void() SUB_FacingAngle_Tick = { // [FUNCTION]
 	self.faceangle_time = self.faceangle_time - self.faceangle_div; // Decrease move/face time
 	
 	if (self.faceangle_time <= 0) SUB_CalcMoveDone(); // Is the movetime over? on to tidy up function
@@ -209,7 +211,7 @@ void() SUB_FacingAngle_Tick = {
 	}
 };
 
-void(float movetime) SUB_FacingAngle_Setup = {
+void(float movetime) SUB_FacingAngle_Setup = { // [FUNCTION]
 	local vector facediff;
 	local float divtime;
 
@@ -226,7 +228,7 @@ void(float movetime) SUB_FacingAngle_Setup = {
 	self.think = SUB_FacingAngle_Tick;
 };
 
-void(vector tdest, float tspeed, void() func) SUB_CalcMove = {
+void(vector tdest, float tspeed, void() func) SUB_CalcMove = { // [FUNCTION]
 	local vector vdestdelta;
 	local float len, traveltime;
 
@@ -259,7 +261,7 @@ void(vector tdest, float tspeed, void() func) SUB_CalcMove = {
 };
 
 // After moving, set origin to exact final destination rather than last value that is very very close but not quite.
-void()  SUB_CalcMoveDone = {
+void()  SUB_CalcMoveDone = { // [FUNCTION]
 	if (self.classname == "fliquid") self.fmover = string_null; // Update for moving liquids - from extras_r4/r5
 	self.velocity = '0 0 0';
 	setorigin(self, self.finaldest);
@@ -267,15 +269,16 @@ void()  SUB_CalcMoveDone = {
 	if (self.think1) self.think1();
 };
 
-void() DelayThink = {
+void() DelayThink = { // [FUNCTION]
 	activator = self.enemy;
 	SUB_UseTargets ();
 	remove(self);
 };
 
 // Checks if an entity has any target variables defined and returns TRUE if so.  Useful to know if a monster should not be removed before runing targets.
-float(entity t) HasTargets = {
+float(entity t) HasTargets = { // [FUNCTION]
 	if (t.killtarget ||
+		t.killtarget2 ||
 		t.target ||
 		t.target2 ||
 		t.target3 ||
@@ -308,8 +311,9 @@ float(entity t) HasTargets = {
 };
 
 // Clear all target strings
-void (entity t) clear_trigstrs = {
+void (entity t) clear_trigstrs = { // [FUNCTION]
 	t.killtarget = string_null;
+	t.killtarget2 = string_null;
 	t.target = string_null;
 	t.target2 = string_null;
 	t.target3 = string_null;
@@ -337,16 +341,61 @@ void (entity t) clear_trigstrs = {
 	t.statetarget21 = string_null;
 	t.statetarget22 = string_null;
 	t.statetarget23 = string_null;
-	t.statetarget24 = string_null;
+	t.statetarget24 = string_null; // Yep!
 };
 
-void(string text) Mass_Centerprint;
+void(string ktarg) SUB_KillTarget = { // [FUNCTION]
+	local entity t;
+
+	if (ktarg == "") return;
+
+	t = find (world, targetname, ktarg);
+	while(t) {
+		if (t.flags & FL_MONSTER && t.health > 0) { // Check for activate mosnters? Tidy up kill counter
+			if (t.nomonstercount) AddToTotals(t); // If a monster marked with no monster count dies update HUD totals to reflect death properly
+			AddToKills(t,activator);
+		}
+		if (!(t.flags & FL_CLIENT)) { // Added extra check to prevent player client removal!?!
+			// Try to minimize the entity chain damage, check for entity attachments and delete them as well!
+			if (t.attachment) remove(t.attachment);
+			if (t.attachment2) remove(t.attachment2);
+			if (t.attachment3) remove(t.attachment3);
+			if (t.entno_unique > 0) t.entno_unique = 0; // Make sure any unique ent number is reset
+			remove(t); // Remove entity from chain list.  BOOM! She gone.
+		}
+		t = find(t, targetname, ktarg); // Find the next killtarget
+	}
+};
+
+void(string targname) SUB_Target = { // [FUNCTION]
+	local entity t,act,stemp,otemp;
+
+	if (targname == "") return;
+
+	act = activator; // ID Code - Never switch around, not sure why it is here?
+	t = find (world,targetname,targname);
+	stemp = self;
+	otemp = other; // Store self/other
+	while(t) {
+		if (t.use != SUB_Null) {
+			if (t.use) {
+				self = t; other = stemp; // Switch self/other
+				self.activate = stemp; // used by the breakable system
+				self.use(); // fire trigger
+				self = stemp;
+				other = otemp; // restore self/other
+				activator = act; // ID code - Never changed, why restore it?
+			}
+		}
+		t = find (t,targetname,targname); // Are there anymore targets left in the list?
+	}
+};
 
 // Runs all targets for entity I/O.  The global "activator" should be set to the entity that initiated the firing.
 // If self.delay is set, a DelayedUse entity will be created that will actually do the SUB_UseTargets after that many seconds have passed.  Centerprints any self.message to the activator.
 // Removes all entities with a targetname that match self.killtarget, and removes them, so some events can remove other triggers.
 // Search for (string)targetname in all entities that match (string)self.target and call their .use function
-void() SUB_UseTargets = {
+void() SUB_UseTargets = { // [FUNCTION]
 	local entity t, stemp, otemp, act;
 
 	if (self.delay) { // check for a delay
@@ -359,6 +408,7 @@ void() SUB_UseTargets = {
 		t.enemy = activator;
 		t.message = self.message;
 		t.killtarget = self.killtarget;
+		t.killtarget2 = self.killtarget2;
 		t.target = self.target;
 		t.target2 = self.target2;
 		t.target3 = self.target3;
@@ -403,506 +453,40 @@ void() SUB_UseTargets = {
 	}
 
 	// sock: I really do hate this function because there is hardly any checks on entities being removed; added a player check for sanity!
-	if (self.killtarget != "") {
-		t = find (world, targetname, self.killtarget);
-		while(t) {
-			if (t.flags & FL_MONSTER && t.health > 0) { // Check for activate mosnters? Tidy up kill counter
-				if (t.nomonstercount) AddToTotals(self); // If a monster marked with no monster count dies update HUD totals to reflect death properly
-				AddToKills(self,activator);
-			}
-			if (!(t.flags & FL_CLIENT)) { // Added extra check to prevent player client removal!?!
-				// Try to minimize the entity chain damage, check for entity attachments and delete them as well!
-				if (t.attachment) remove(t.attachment);
-				if (t.attachment2) remove(t.attachment2);
-				if (t.attachment3) remove(t.attachment3);
-				// Make sure any unique ent number is reset
-				if (t.entno_unique > 0) t.entno_unique = 0;
-				remove (t); // Remove entity from chain list.  BOOM! She gone
-			}
-			t = find (t, targetname, self.killtarget); // Find the next killtarget
-		} 
-	}
-	if (self.target != "") {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.target);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;		// Switch self/other
-					self.activate = stemp;			// used by the breakable system
-					self.use ();					// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			// Are there anymore targets left in the list?
-			t = find (t, targetname, self.target);
-		} 
-	}
-	if (self.target2 != "") {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.target2);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.target2);
-		} 
-	}
-	if (self.target3 != "") {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.target3);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.target3);
-		} 
-	}
-	if (self.target4 != "") {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.target4);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.target4);
-		} 
-	}
-	if (self.statetarget1 != "" && (globalstate & GLOBALSTATE_1)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget1);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget1);
-		} 
-	}
-	if (self.statetarget2 != "" && (globalstate & GLOBALSTATE_2)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget2);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget2);
-		} 
-	}
-	if (self.statetarget3 != "" && (globalstate & GLOBALSTATE_3)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget3);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget3);
-		} 
-	}
-	if (self.statetarget4 != "" && (globalstate & GLOBALSTATE_4)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget4);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget4);
-		} 
-	}
-	if (self.statetarget5 != "" && (globalstate & GLOBALSTATE_5)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget5);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget5);
-		} 
-	}
-	if (self.statetarget6 != "" && (globalstate & GLOBALSTATE_6)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget6);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget6);
-		} 
-	}
-	if (self.statetarget7 != "" && (globalstate & GLOBALSTATE_7)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget7);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget7);
-		} 
-	}
-	if (self.statetarget8 != "" && (globalstate & GLOBALSTATE_8)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget8);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget8);
-		} 
-	}
-	if (self.statetarget9 != "" && (globalstate & GLOBALSTATE_9)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget9);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget9);
-		} 
-	}
-	if (self.statetarget10 != "" && (globalstate & GLOBALSTATE_10)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget10);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget10);
-		} 
-	}
-	if (self.statetarget11 != "" && (globalstate & GLOBALSTATE_11)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget11);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget11);
-		} 
-	}
-	if (self.statetarget12 != "" && (globalstate & GLOBALSTATE_12)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget12);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget12);
-		} 
-	}
-	if (self.statetarget13 != "" && (globalstate & GLOBALSTATE_13)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget13);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget13);
-		} 
-	}
-	if (self.statetarget14 != "" && (globalstate & GLOBALSTATE_14)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget14);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget14);
-		} 
-	}
-	if (self.statetarget15 != "" && (globalstate & GLOBALSTATE_15)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget15);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget15);
-		} 
-	}
-	if (self.statetarget16 != "" && (globalstate & GLOBALSTATE_16)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget16);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget16);
-		} 
-	}
-	if (self.statetarget17 != "" && (globalstate & GLOBALSTATE_17)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget17);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget17);
-		} 
-	}
-	if (self.statetarget18 != "" && (globalstate & GLOBALSTATE_18)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget18);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget18);
-		} 
-	}
-	if (self.statetarget19 != "" && (globalstate & GLOBALSTATE_19)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget19);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget19);
-		} 
-	}
-	if (self.statetarget20 != "" && (globalstate & GLOBALSTATE_20)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget20);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget20);
-		} 
-	}
-	if (self.statetarget21 != "" && (globalstate & GLOBALSTATE_21)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget21);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget21);
-		} 
-	}
-	if (self.statetarget22 != "" && (globalstate & GLOBALSTATE_22)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget22);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget22);
-		} 
-	}
-	if (self.statetarget23 != "" && (globalstate & GLOBALSTATE_23)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget23);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget23);
-		} 
-	}
-	if (self.statetarget24 != "" && (globalstate & GLOBALSTATE_24)) {
-		act = activator;	// ID Code - Never switch around, not sure why it is here?
-		t = find (world, targetname, self.statetarget24);
-		stemp = self; otemp = other;		// Store self/other
-		while(t) {
-			if (t.use != SUB_Null) {
-				if (t.use) {
-					self = t; other = stemp;// Switch self/other
-					self.activate = stemp;	// used mostly by the breakable system
-					self.use ();			// fire trigger
-					self = stemp; other = otemp;	// restore self/other
-					activator = act;		// ID code - Never changed, why restore it?
-				}
-			}
-			t = find (t, targetname, self.statetarget24);
-		} 
-	}
+	if (self.killtarget != "") SUB_KillTarget(self.killtarget);
+	if (self.killtarget2 != "") SUB_KillTarget(self.killtarget2);
+	if (self.target != "") SUB_Target(self.target);
+	if (self.target2 != "") SUB_Target(self.target2);
+	if (self.target3 != "") SUB_Target(self.target3);
+	if (self.target4 != "") SUB_Target(self.target4);
+	if (self.statetarget1 != "" && (globalstate & GLOBALSTATE_1)) SUB_Target(self.statetarget1);
+	if (self.statetarget2 != "" && (globalstate & GLOBALSTATE_2)) SUB_Target(self.statetarget2);
+	if (self.statetarget3 != "" && (globalstate & GLOBALSTATE_3)) SUB_Target(self.statetarget3);
+	if (self.statetarget4 != "" && (globalstate & GLOBALSTATE_4)) SUB_Target(self.statetarget4);
+	if (self.statetarget5 != "" && (globalstate & GLOBALSTATE_5)) SUB_Target(self.statetarget5);
+	if (self.statetarget6 != "" && (globalstate & GLOBALSTATE_6)) SUB_Target(self.statetarget6);
+	if (self.statetarget7 != "" && (globalstate & GLOBALSTATE_7)) SUB_Target(self.statetarget7);
+	if (self.statetarget8 != "" && (globalstate & GLOBALSTATE_8)) SUB_Target(self.statetarget8);
+	if (self.statetarget9 != "" && (globalstate & GLOBALSTATE_9)) SUB_Target(self.statetarget9);
+	if (self.statetarget10 != "" && (globalstate & GLOBALSTATE_10)) SUB_Target(self.statetarget10);
+	if (self.statetarget11 != "" && (globalstate & GLOBALSTATE_11)) SUB_Target(self.statetarget11);
+	if (self.statetarget12 != "" && (globalstate & GLOBALSTATE_12)) SUB_Target(self.statetarget12);
+	if (self.statetarget13 != "" && (globalstate & GLOBALSTATE_13)) SUB_Target(self.statetarget13);
+	if (self.statetarget14 != "" && (globalstate & GLOBALSTATE_14)) SUB_Target(self.statetarget14);
+	if (self.statetarget15 != "" && (globalstate & GLOBALSTATE_15)) SUB_Target(self.statetarget15);
+	if (self.statetarget16 != "" && (globalstate & GLOBALSTATE_16)) SUB_Target(self.statetarget16);
+	if (self.statetarget17 != "" && (globalstate & GLOBALSTATE_17)) SUB_Target(self.statetarget17);
+	if (self.statetarget18 != "" && (globalstate & GLOBALSTATE_18)) SUB_Target(self.statetarget18);
+	if (self.statetarget19 != "" && (globalstate & GLOBALSTATE_19)) SUB_Target(self.statetarget19);
+	if (self.statetarget20 != "" && (globalstate & GLOBALSTATE_20)) SUB_Target(self.statetarget20);
+	if (self.statetarget21 != "" && (globalstate & GLOBALSTATE_21)) SUB_Target(self.statetarget21);
+	if (self.statetarget22 != "" && (globalstate & GLOBALSTATE_22)) SUB_Target(self.statetarget22);
+	if (self.statetarget23 != "" && (globalstate & GLOBALSTATE_23)) SUB_Target(self.statetarget23);
+	if (self.statetarget24 != "" && (globalstate & GLOBALSTATE_24)) SUB_Target(self.statetarget24);
 };
 
 // Safe wrapper function to use instead of trigger_strs so all targets get ran and not just one
-void(entity t) SUB_UseTargetsOnEnt = {
+void(entity t) SUB_UseTargetsOnEnt = { // [FUNCTION]
 	local entity stemp;
 	
 	if (!HasTargets(t)) return; // No targets to run
@@ -914,8 +498,10 @@ void(entity t) SUB_UseTargetsOnEnt = {
 
 // Increases attack finished by specified value.  In nightmare mode, all attack_finished times become 0.
 // Some monsters refire twice automatically (using .cnt variable).  Change nightmare to be less range spam and better time scaling.
-void(float normal) SUB_AttackFinished = {
+void(float normal) SUB_AttackFinished = { // [FUNCTION]
 	local float nightadj; // Easier to work out percentage
+
+	if (self.slow_finished > time) normal = normal * 2;
 
 	self.cnt = 0; // reset checkfire counter
 	if (skill == SKILL_NIGHTMARE) {
@@ -931,8 +517,8 @@ void(float normal) SUB_AttackFinished = {
 	} else self.attack_finished = time + normal; // Easy, Nornal and Hard skill all pass through, no change
 };
 
-// Used by soliders and enforcers (special double fire mode)
-void (void() thinkst) SUB_CheckRefire = {
+// Used by soldiers and enforcers (special double fire mode)
+void (void() thinkst) SUB_CheckRefire = { // [FUNCTION]
 	if (skill != SKILL_NIGHTMARE) return;
 	if (self.cnt == 1) return;
 	if (!visible (self.enemy)) return;
@@ -940,7 +526,7 @@ void (void() thinkst) SUB_CheckRefire = {
 	self.think = thinkst;
 };
 
-void() play_teleport = {
+void() play_teleport = { // [FUNCTION]
 	self.lip = random() * 5;
 	if (self.lip < 1) self.noise = "misc/r_tele1.wav";
 	else if (self.lip < 2) self.noise = "misc/r_tele2.wav";
@@ -952,7 +538,7 @@ void() play_teleport = {
 	self.think = SUB_Remove;	// tidy up function
 };
 
-void(vector org) spawn_tfog = {
+void(vector org) spawn_tfog = { // [FUNCTION]
 	local entity spawneffect;
 	
 	spawneffect = spawn ();
@@ -966,9 +552,7 @@ void(vector org) spawn_tfog = {
 	WriteCoord (MSG_BROADCAST, org_z);
 };
 
-void(entity targ, float hpminimum, float had_regen) Client_CheckMaxHP;
-
-void() tdeath_touch = {
+void() tdeath_touch = { // [FUNCTION]
 	if (other == self.owner) return; // Cannot telefrag yourself!?!
 	if (ai_foundbreakable(self, other, FALSE)) return; // Check if found a breakable than cannot be broken
 	
@@ -1001,7 +585,7 @@ void() tdeath_touch = {
 	}
 };
 
-void(vector org, entity death_owner) spawn_tdeath = {
+void(vector org, entity death_owner) spawn_tdeath = { // [FUNCTION]
 	local entity death;
 
 	death = spawn();

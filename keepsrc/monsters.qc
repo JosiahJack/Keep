@@ -1,8 +1,3 @@
-/*======================================================================
- MONSTER FUNCTIONS
-======================================================================*/
-void(entity e) sendmonsterdevdata;
-
 float MONAI_ZOMBIEFLR = 1;		// start on floor
 float MONAI_ZOMBIEUPB = 2;		// zombie painb - 28 frames (9 = on ground)
 float MONAI_ZOMBIEUPD = 4;		// knight paind - 35 frames (12 = on ground)
@@ -12,128 +7,85 @@ float MONAI_ZOMBGRDBLOCK = 300;	// 0.1 * 300 = 30s
 float MONAI_ZOMBIELOW_DAM = 9;	// Pain threshold for animations	
 float MONAI_ZOMBIEHGH_DAM = 24;
 
+void(entity e) sendmonsterdevdata;
 void(float frameno) zombie_onground;
 void(float frameno) zombiek_onground;
 void(float c) DropCoin;
+void() eidolon_start;
+void() revive_frames;
 
-//----------------------------------------------------------------------
-// Pre-defined bounding boxes for monsters
-// Use 'bboxtype' to specify one of these
-//----------------------------------------------------------------------
-float BBOX_TINY = 1;		// -16 -16 -24, 16 16 16
-float BBOX_SQUARE = 2;		// -20 -20 -20, 20 20 20
-float BBOX_FLAT = 3;		// -24 -24 -24, 24 24 22
-float BBOX_SHORT = 4;		// -16 -16 -24, 16 16 32
-float BBOX_TALL = 5;		// -16 -16 -24, 16 16 40
-float BBOX_XTALL = 6;		// -16 -16 -24, 16 16 64
-float BBOX_WIDE = 7;		// -24 -24 -24, 24 24 40
-float BBOX_GIANT = 8;		// -24 -24 -24, 24 24 64
-float BBOX_WIDEFLAT = 9;	// -32 -32 -24, 32 32 24
-float BBOX_MASSIVE = 10;	// -32 -32 -24, 32 32 64
-float BBOX_GOLEM = 11;		// -24 -24 -24, 24 24 72
-float BBOX_DOG = 12;		// -20 -20 -24, 20 20 16
-float BBOX_SHADE = 13;		// -64 -64 -24, 64 64 64
-float BBOX_FISH = 14;		// -16 -16 -24, 16 16 24
-float BBOX_FISHS = 15;		// -12 -12 -16, 12 12 16
-float BBOX_EEL = 16;		// -16 -16 -16, 16 16 16
-float BBOX_WYRM = 17;		// -112 -112 -24, 112 112 112
-float BBOX_RYU = 18;		// -56 -56 -24, 56 56 56
-float BBOX_HYDRA = 19;		// -20 -20 -16, 20 20 16
-float BBOX_WILLY = 20;		// -32 -32 -24, 32 32 5
-float BBOX_CYBER = 21;		// -20 -20 -36, 20 20 74
-float BBOX_ANACONDA = 22;	// -32 -32 -16, 32 32 174
-float BBOX_JUSTICE = 23;	// -16 -16 -24, 16 16 56	Vol 32 x 32 x 80
-float BBOX_PSYDER = 24;		// -32 -32 -24, 32 32 160	Vol 64 x 64 x 184
-float BBOX_XMASSIVE = 25;	// -32 -32 -24, 32 32 80	Vol 64 x 64 x 104
-float BBOX_BRKTINY = 26;	// -12 -12 -24, 12 12 16	Vol 24 x 24 x 40
-float BBOX_SHALBOSS = 27;	// -46 -40 -24, 46 40 100   Vol 92 x 80 x 124
-
-float BBOX_CUSTOM = 99;		// Custom size set already
-
-/*======================================================================
- monster_use - trigger/make angry
-======================================================================*/
+ // Trigger to make angry and/or spawn.
 void() monster_use = {
 	if (self.enemy && !(IsInsane(self))) return; // Busy with another enemy or dead?  And not crazy
 	if (self.health < 1) return;
 	
-	// Spiders/Vorelings can be setup on the ceilings
-	// need to trigger/drop instead them before anything else
-	if (self.classtype == CT_MONSPIDER && self.spawnflags & MON_SPIDER_CEILING ||
-		self.classtype == CT_MONSWAMPLING && self.spawnflags & MON_SWAMPLING_CEILING ||
-		self.classtype == CT_MONVORELING && self.spawnflags & MON_VORELING_CEILING) {
-		// Start with activator as enemy
-		self.enemy = activator;
-		// Work through exceptions
-		if (activator.classtype != CT_PLAYER) self.enemy = world;
-		if (activator.items & IT_INVISIBILITY) self.enemy = world;
-		if (activator.flags & FL_NOTARGET) self.enemy = world;
-		// Drop from ceiling
-		self.th_run();
+	// Spiders/Vorelings can be setup on the ceilings need to trigger/drop instead them before anything else.
+	if ((self.classtype == CT_MONSPIDER || self.classtype == CT_MONSWAMPLING || self.classtype == CT_MONVORELING) && (self.spawnflags & MON_VORELING_CEILING)) { // All 3 use spawnflag 4 for ceiling.
+		if (!(activator.flags & FL_CLIENT) || activator.items & IT_INVISIBILITY || activator.flags & FL_NOTARGET) self.enemy = world; // Work through exceptions
+		else self.enemy = activator;
+		self.th_run(); // Drop from ceiling
 		return;
 	}
-	
-	// Player exceptions
-	if (activator.classtype != CT_PLAYER) return;
+
+	if (!(activator.flags & FL_CLIENT)) return; // Player exceptions
 	if (activator.items & IT_INVISIBILITY) return;
 	if (activator.flags & FL_NOTARGET) return;
 	if (!(IsInsane(self)) && Align_Match(self,activator)) return;
 
-	// Monster angry! Hunt enemy!?!
-	self.enemy = activator;
-
-	// If wakeup trigger setup do not wait, special animation
-	// This is really designed to go with a breakable trigger
+	self.enemy = activator; // Monster angry! Hunt enemy!?!
 	if (self.wakeuptrigger && self.th_wakeup) {
 		self.wakeuptrigger = FALSE;	// Trigger no longer needed, reset
 		FoundHuntTarget(TRUE);		// Setup goals and warn other monsters
-		self.th_wakeup();
+		self.th_wakeup(); // If wakeup trigger setup, do not wait to do special sequence. This is really designed to go with a breakable trigger.
 	} else {
-		// delay reaction (wait one frame) so if the monster
-		// has been teleported the sound is heard correctly
-		self.switchtimer = time + 0.1 + random();
+		self.switchtimer = time + 0.1 + random(); // Delay reaction so if the monster has been teleported the sound is heard correctly.
 		self.nextthink = time + 0.1;
 		self.think = FoundTarget;
 	}
 };
 
-/*======================================================================
- liquid_check
-  for some reason monsters never take damage from liquids
-	This functions checks for liquid content and applies a
-	modifier damage (they die too slow otherwise)
-	* If a monster is in liquid there is often no way out!
-	* Moves the content check to the monsters feet (shallow liquid)
-======================================================================*/
+// For some reason monsters never took damage from liquids.  This functions checks for liquid content and applies a modifier damage (they die too slow otherwise).
+// * If a monster is in liquid there is often no way out!
+// * Moves the content check to the monsters feet (shallow liquid)
 void() monster_liquid_check = {
 	local float monster_dmg;
 	local vector monster_feet;
 
-	// This function is for monsters only (high damage)
 	if (self.no_liquiddmg) return;
 	if (query_configflag(SVR_LIQDAM)) return;
-	if ( !(self.flags & FL_MONSTER)) return;
+	if (!(self.flags & FL_MONSTER)) return;
 	if (self.health < 1) return;
 	if (self.liquidcheck > time) return;
-		
-	// Reset liquid damage timer
-	self.liquidcheck = time + LIQUID_TIMER;
-	
-	// Check for liquid at monsters feet (bottom of bounding box)
-	monster_feet = self.origin; 
+
+	self.liquidcheck = time + LIQUID_TIMER; // Reset liquid damage timer
+	monster_feet = self.origin; // Check for liquid at monsters feet (bottom of bounding box)
 	monster_feet_z = monster_feet_z + self.mins_z;
+	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) monster_feet_z = monster_feet_z + 1; // Drake added 1 more for Water_Set().
 	self.liquidbase = pointcontents(monster_feet);
 
 	// Handle water train check
-	if (self.liquidbase < -2) {
+	if (self.liquidbase < CONTENT_SOLID) { // -2
 		if(!self.inBSPwater) self.inBSPwater = TRUE; // We are inside a normal liquid
-	} else if(self.inBSPwater) {
-		self.inBSPwater = FALSE;
+	} else if (self.inBSPwater) self.inBSPwater = FALSE;
+
+	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
+		if (self.liquidbase <= CONTENT_WATER) { // -3
+			self.waterlevel = 1;
+			monster_feet_z = self.origin_z + (self.mins_z + self.maxs_z) * 0.5;
+			if (pointcontents(monster_feet) <= CONTENT_WATER) {
+				self.waterlevel = 2;
+				monster_feet_z = self.origin_z + self.view_ofs_z;
+				if (pointcontents(monster_feet) <= CONTENT_WATER) self.waterlevel = 3;
+			}
+		} else {
+			self.waterlevel = 0;
+			if (self.inBSPwater) self.waterlevel = 1;
+		}
 	}
 
 	// Setup standard damage for liquid types
-	if (self.liquidbase == CONTENT_SLIME) monster_dmg = SLIME_DAMAGE * MON_MULTIPLIER * (1-self.resist_acid);
-	else if (self.liquidbase == CONTENT_LAVA) monster_dmg = LAVA_DAMAGE * MON_MULTIPLIER * (1-self.resist_fire);
+	if (self.liquidbase == CONTENT_SLIME) monster_dmg = SLIME_DAMAGE * MON_MULTIPLIER * (1-self.resist_acid); //-4
+	else if (self.liquidbase == CONTENT_LAVA) monster_dmg = LAVA_DAMAGE * MON_MULTIPLIER * (1-self.resist_fire); //-5
 	else return;
 
 	// Gib monster if about to die
@@ -142,9 +94,8 @@ void() monster_liquid_check = {
 		self.gibondeath = 1;
 	}
 
-	// Liquid damage
-	self.pain_finished = 0;		// Always pain
-	T_Damage (self, world, world, monster_dmg, DAMARMOR);
+	self.pain_finished = 0; // Always pain for liquids, looks better.
+	T_Damage (self, world, world, monster_dmg, DAMARMOR); // Liquid damage
 };
 
 /*======================================================================
@@ -195,7 +146,7 @@ void() monster_sightsound = {
 	self.monster_awake = TRUE;
 	if (self.spawnflags & MON_SPAWN_NOSIGHT) return;
 	if (intermission_running > 0) return;
-	if (cinematic_running > 0 && !coop) return;
+	if ((cinematic_running > 0 || cutscene > 0) && !coop) return;
 
 	// Only do a sight sound when necessary, otherwise it overlaps and gets messy	
 	if (self.sight_timeout < time) {
@@ -368,9 +319,7 @@ void(float altfoot) monster_footstep = {
 	else sound (self, CHAN_FEET, footstepwav, footvol, ATTN_FEET);
 };
 
-//======================================================================
 // PRE/POST CHECK conditions for monster death
-//======================================================================
 void() monster_death_precheck = {
 	local float loop;
 
@@ -392,49 +341,22 @@ void() monster_death_precheck = {
 			}
 		}
 		monster_check_gib();		// Check for gib state
+		if (!self.gibbed && self.classmove == MON_MOVEFLY) self.movetype = MOVETYPE_TOSS; // Affected by gravity
 	}
 };
 
-//----------------------------------------------------------------------
-void() monster_fade =
-{
-	self.think = model_fade;
-	self.nextthink = time + 0.1;
-	self.ltime = self.nextthink;
-};
-
-//----------------------------------------------------------------------
-void() monster_death_postcheck =
-{
+void() monster_death_postcheck = {
 	local float bodytimer;
 	
 	self.blockudeath = TRUE;	// Body is dead, no human death noise
 	if (!self.gibbed) self.bodyonflr = MON_ONFLR;
-
-	// Allow for the dead body/head to touch triggers (void/hurt)
-	self.solid = SOLID_TRIGGER;
+	self.solid = SOLID_TRIGGER; // Allow for the dead body/head to touch triggers (void/hurt)
 	setorigin(self, self.origin);
-
-
 	self.touch = SUB_Null;
-	
-	// Check for global or individual body fading mechanic
-	if (self.bodyfadeaway > 0 || map_bodyfadeaway > 0) {
-		if (map_bodyfadeaway > 0) bodytimer = map_bodyfadeaway;
-		else bodytimer = self.bodyfadeaway;
-		self.pain_finished = time + 10 + random() * bodytimer;
-	}
-	// Body sticks around
-	else self.pain_finished = time + LARGE_TIMER;
 };
 
-//----------------------------------------------------------------------
-void() monster_deadbody_check =
-{
-	// Remove/Fade out body if timer is finished
-	if (self.pain_finished < time) { monster_fade(); return; }
-	// Exit condition, body no longer has any interaction
-	if (self.deadflag == DEAD_FINISHED) return;
+void() monster_deadbody_check = {
+	if (self.deadflag == DEAD_FINISHED) return; // Exit condition, body no longer has any interaction
 	
 	// Check for deadflag first, if touched something this will be changed
 	if (self.deadflag == DEAD_REMOVE || self.deadflag == DEAD_EXPLODE
@@ -451,8 +373,7 @@ void() monster_deadbody_check =
 		self.nextthink = time + 0.1;
 		// Prevent this function from running again
 		self.deadflag = DEAD_FINISHED;
-	}
-	else {
+	} else {
 		// Check global map variable first (default = off)
 		// Check floor below dead body (global function)
 		if (map_bodyflrcheck == TRUE)
@@ -477,7 +398,7 @@ void() monster_death_use = {
 		if (self.movelast) self.target = self.deathtarget;
 	}
 	activator = self.enemy;
-	SUB_UseTargets ();
+	SUB_UseTargets();
 };
 
 // A clean way to kill/remove a monster from a map.  deathfunc to go through existing death function.  gibdeath for explosion of blood and guts
@@ -485,8 +406,7 @@ void(entity targ, float deathfunc, float gibdeath) monster_remove_kill = {
 	dprint("\b[MON_KILL]\b ");
 	dprint(targ.classname);
 	dprint(" dropped dead!\n");
-	// There are always exceptions to the use of the monster flag.  Point Hell knights don't use monster flag to prevent damage!
-	if (targ.spawnflags & MON_POINT_KNIGHT && targ.health > 0) targ.flags = targ.flags | FL_MONSTER;
+	if (targ.spawnflags & MON_POINT_KNIGHT && targ.health > 0) targ.flags = targ.flags | FL_MONSTER; // There are always exceptions to the use of the monster flag.  Point Hell knights don't use monster flag to prevent damage!
 	
 	// Only work with monsters, can't be dead, dying or negative health!
 	if (targ.flags & FL_MONSTER && targ.health > 0 && !targ.deadflag) {
@@ -523,8 +443,7 @@ void(entity targ, float deathfunc, float gibdeath) monster_remove_kill = {
   * 2 = Sound + Long Animation
   * 3 = Sound ONLY
 ======================================================================*/
-void(entity attacker, float damage) monster_pain_check =
-{
+void(entity attacker, float damage) monster_pain_check = {
 	self.pain_check = 0;	// Reset pain check
 	
 	// already dying, don't go into pain frame
@@ -542,6 +461,14 @@ void(entity attacker, float damage) monster_pain_check =
 	else if (random()* self.pain_flinch > damage ) self.pain_check = 3;
 	// DEFAULT  : pain animation + sound (last condition)
 	else self.pain_check = 1;
+};
+
+void(entity targ, entity charmmaster) ApplyHornCharm = {
+	targ.charmer = charmmaster;
+	targ.charmed = TRUE;
+	targ.horn_active = TRUE;
+	targ.alignment = charmmaster.alignment;
+	targ.effects = (targ.effects | EF_DIMLIGHT);
 };
 
 // Second part of setup function).  Checks for any targets to get angry at or stand/walk around
@@ -608,68 +535,57 @@ void() monster_targets = {
 			}
 		}
 	}
-
-	// Always follow a player who charmed us rather than our "event" target
-	if (activator.flags & FL_CLIENT && activator.horn_active == TRUE) {
-		self.charmer = activator;
-		self.charmed = TRUE;
-		self.horn_active = TRUE;
-		self.alignment = self.charmer.alignment;
-		self.effects = (self.effects | EF_DIMLIGHT);
-	} 
-
-	// no angrytarget, enemy or path corner, stand around waiting
+	
+	if (activator.flags & FL_CLIENT && activator.horn_active == TRUE) ApplyHornCharm(self,activator); // Always follow a player who charmed us rather than our "event" target
 	self.nextthink = time + 0.1 + random()*0.5;
-	self.think = self.th_stand;					// Stand around
+	self.think = self.th_stand;	// No angrytarget, enemy or path corner, stand around waiting.
 };
 
-void() eidolon_start;
+void() monster_reset_movement_type = {
+	if (self.classmove == MON_MOVESTATIC) self.movetype = MOVETYPE_NONE; // Not all monsters are step movement, some are stationary
+	else self.movetype = MOVETYPE_STEP;
 
-/*======================================================================
- monster_setup
-  - Setup monster ready for action
-======================================================================*/
+	if (self.classmove == MON_MOVEFLY ) { // Flying Monsters
+		if (!self.yaw_speed) self.yaw_speed = 15;
+		self.flags = self.flags | FL_FLY;
+	} else if (self.classmove == MON_MOVESWIM ) { // Swimming Monsters	
+		if (!self.yaw_speed) self.yaw_speed = 10;
+		self.flags = self.flags | FL_SWIM;
+	} else {
+		if (!self.yaw_speed) self.yaw_speed = 20; // Default walking/static monsters
+	}
+};
+
+void() monster_reset_runtime_attributes = {
+	self.liquidbase = self.liquidcheck = 0;		// Used for liquid content damage
+	self.dmgcombined = self.dmgtimeframe = 0;	// combined damage over 0.1s
+
+	// Long time before first idle sound (except scorpions!)
+	if (self.idletimer < 1) {
+		if (self.classtype == CT_MONSCORPION) self.idletimer = time + 0.1 + random();
+		else self.idletimer = time + 4 + (random() * 4);
+	}
+};
+
+// Setup monster ready for action
 void() monster_spawn = {
 	local float pconts;
 
 	// Check if the monster can spawn without telefragging something
 	if (self.spawnnotelefrag > 0) {
-		// Switch on world interaction
-		self.solid = SOLID_SLIDEBOX;
-		// Not all monsters are step movement, some are stationary
-		if (self.classmove == MON_MOVESTATIC) self.movetype = MOVETYPE_NONE;
-		else self.movetype = MOVETYPE_STEP;
-		// restore model/bbox to get world collision
-		setmodel(self, self.mdl);
+		self.solid = SOLID_SLIDEBOX; // Switch on world interaction
+		setmodel(self, self.mdl); // restore model/bbox to get world collision
 		setsize (self, self.bbmins, self.bbmaxs);
-		// reset origin, just in case been moved since last
-		setorigin(self, self.oldorigin);
-		// Save origin for cinematic camera angle interpolation
-		self.lastorigin = self.origin;
-		
-		// Make sure movement flag types are correct
-		if (self.classmove == MON_MOVEFLY ) 
-			self.flags = self.flags | FL_FLY;
-		else if (self.classmove == MON_MOVESWIM ) 
-			self.flags = self.flags | FL_SWIM;
-
-		// Can the monster walk without collision?
-		if (!walkmove (0, 0)) {
-			// Switch off monster and wait again
+		setorigin(self, self.oldorigin); // reset origin, just in case been moved since last
+		self.lastorigin = self.origin; // Save origin for cinematic camera angle interpolation
+		monster_reset_movement_type(); // Make sure movement flag types are correct
+		if (!walkmove (0, 0)) {  // If we collide, switch off monster and wait again.
 			self.solid = SOLID_NOT;
 			setmodel(self,"");
 			setsize(self, VEC_ORIGIN, VEC_ORIGIN);
 			self.think = monster_spawn;
 			self.nextthink = time + 0.1 + random()*0.5;
-			// dprint(self.classname); dprint(" is Blocked, waiting (");
-			// dprint(ftos(self.nextthink - time)); dprint(") secs\n");
 			return;
-		} else {
-			// make sure monster is not displayed yet
-			// might have a nosight check to do
-			self.solid = SOLID_NOT;
-			setmodel(self,"");
-			setsize(self, VEC_ORIGIN, VEC_ORIGIN);
 		}
 	}
 
@@ -685,26 +601,16 @@ void() monster_spawn = {
 		// Reset sight condition first and find client in PVS
 		self.lefty = FALSE;
 		self.oldenemy = checkclient();
-		// Did the client PVS check return an entity?
-		if (self.oldenemy) {
-			// is the client a player?
-			if (self.oldenemy.flags & FL_CLIENT) {
-				// Check if the player can be seen?
-				enemy_vis = visible(self.oldenemy);
+		if (self.oldenemy) { // Did the client PVS check return an entity?
+			if (self.oldenemy.flags & FL_CLIENT) { // Is the oldenemy a player?
+				enemy_vis = visible(self.oldenemy); // Check if the player can be seen?
 				if (enemy_vis) self.lefty = TRUE;
 				// Check for an insight spawn distance
 				if (self.spawnnosight > 1) {
-					// Find distance (3d vector distance)
-					self.enemydist = range_distance(self.oldenemy, FALSE);
-					// check for player being too close for spawn
-					if (self.enemydist > self.spawnnosight)
-						self.lefty = FALSE;
+					self.enemydist = range_distance(self.oldenemy, FALSE); // Find distance (3d vector distance)
+					if (self.enemydist > self.spawnnosight) self.lefty = FALSE; // check for player being too close for spawn
 				}
 			}
-			// Checks for notarget/inv player conditions
-			// disabled - not really necessary as a spawn condition
-			//if (self.oldenemy.flags & FL_NOTARGET) self.lefty = FALSE;
-			//if (self.oldenemy.items & IT_INVISIBILITY) self.lefty = FALSE;
 		}
 		
 		// Can the player see the spawn location? wait instead
@@ -714,54 +620,44 @@ void() monster_spawn = {
 			return;
 		}
 	}
-
 	// Time to finally spawn the monster!?! All conditions met!
 
 	// Check for Axe / Shotgun / LG upgrade monster spawn exceptions?
-	if (self.upgrade_axe || self.upgrade_ssg || self.upgrade_lg) {
-		// Has ANY player (server test not individual) 
-		// picked up the relevant upgrade weapons?
+	if (self.upgrade_axe || self.upgrade_ssg || self.upgrade_lg) { // Has ANY player (server test not individual) picked up the relevant upgrade weapons?
 		if (self.upgrade_axe && !query_configflag(SVR_UPDAXE) ) return;
 		if (self.upgrade_ssg && !query_configflag(SVR_UPDSSG) ) return;
 		if (self.upgrade_lg && !query_configflag(SVR_UPDLG) ) return;
 	}
 
+	if (self.minion_maxcount > 0 && self.minion_name != "") monster_checkminion(self.minion_name); // Precache any minion monster if we have a counter and if we have a minion name
 	if (self.think1) self.use = self.think1;	// different use function?
 	else self.use = monster_use;				// default trigger event
 	self.solid = SOLID_SLIDEBOX;				// Standard monster movement
-	self.movetype = MOVETYPE_STEP;				// Standard monster movement
+	monster_reset_movement_type();				// Standard monster movement
 	setmodel(self, self.mdl);					// Setup model
 	self.mindex2 = self.modelindex;
 	self.skin = self.skin_override;				// Restore any skins
 	self.frame = self.frame_override;			// Restore any frames
-	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
+	setsize(self,self.bbmins,self.bbmaxs);		// Restore BB size
 
 	// Check for delay spawn monster count
 	if (self.delaymonstercount) {
-		// Reset both monster count conditions
-		self.nomonstercount = self.delaymonstercount = 0;
+		self.nomonstercount = self.delaymonstercount = 0; // Reset both monster count conditions
 		AddToTotals(self);
 	}
 	
-	// Restore any effect flags settings (various dlight glows)
-	if (self.savedeffects > 0) self.effects = self.savedeffects;
-	
-	// Should grenades bounce off the body?
-	if (self.bouncegrenade) self.takedamage = DAMAGE_YES;
+	if (self.savedeffects > 0) self.effects = self.savedeffects; // Restore any effect flags settings (various dlight glows)
+	if (self.bouncegrenade) self.takedamage = DAMAGE_YES; // Should grenades bounce off the body?
 	else self.takedamage = DAMAGE_AIM;			// Can receive damage
 
 	self.velocity = '0 0 0';					// Make sure stationary
 	self.deadflag = DEAD_NO;					// used to stop death re-triggering
-	self.liquidbase = self.liquidcheck = 0;		// Used for liquid content damage
-	self.dmgcombined = self.dmgtimeframe = 0;	// combined damage over 0.1s
+	monster_reset_runtime_attributes();
 	if (!self.pain_flinch) self.pain_flinch = self.health;
 	if (!self.switchoverride) self.switchoverride = 1;
-
-	// Double check that all ammo resistance are within range
-	Resist_CheckRange(self);
-
-	// Check for tether system (special target field)
-	setup_tethersystem();
+	Resist_CheckRange(self); // Double check that all ammo resistance are within range
+	setup_tethersystem(); // Check for tether system (special target field)
+	if (!self.th_revive) self.th_revive = revive_frames; // May as well pop into existance rather than crash. -Qmaster
 
 	// Nehahra AI compatability
 	if (self.relations == -1) {
@@ -781,70 +677,35 @@ void() monster_spawn = {
 	}
 
 	if (self.alignment == NEUTRAL) self.passive_state = 1;
-
-	// Check for passive mode and add (defaults) extra variables
-	setup_passivestate(self);
-	
-	// Long time before first idle sound (except scorpions!)
-	if (self.idletimer < 1) {
-		if (self.classtype == CT_MONSCORPION) self.idletimer = time + 0.1 + random();
-		else self.idletimer = time + 4 + (random() * 4);
-	}
-	
-	// Reset all enemy tracking entities
-	if (!self.enemy) self.enemy = self.movetarget = self.goalentity = world;
+	setup_passivestate(self); // Check for passive mode and add (defaults) extra variables
+	if (!self.enemy) self.enemy = self.movetarget = self.goalentity = world; // Reset all enemy tracking entities
 	self.pausetime = LARGE_TIMER;
-
-	// Setup pain tolerence level based on current skill level
 	if (!self.pain_timeout) self.pain_timeout = 1;	// Default
 	if (skill == SKILL_HARD) self.pain_timeout = self.pain_timeout + 1;
-	if (skill == SKILL_NIGHTMARE) self.pain_timeout = self.pain_timeout + 3;
-
-	//----------------------------------------------------------------------
-	// Setup different skin options
-	//----------------------------------------------------------------------
-	if (self.exactskin > 0) self.skin = self.exactskin;
+	if (skill == SKILL_NIGHTMARE) self.pain_timeout = self.pain_timeout + 3; // Setup pain tolerence level based on current skill level
+	if (self.exactskin > 0) self.skin = self.exactskin; // Setup different skin options
 	else if (self.randomskin > 1) self.skin = rint(random()*(self.randomskin-1));
 	if (self.skin < 0) self.skin = 0;	// Double check no negatives
-
-	//----------------------------------------------------------------------
 	self.ideal_yaw = self.angles * '0 1 0';
-	if (self.classmove == MON_MOVEFLY ) {	// Flying Monsters
-		if (!self.yaw_speed) self.yaw_speed = 15;
-		self.flags = self.flags | FL_FLY;
-	}
-	else if (self.classmove == MON_MOVESWIM ) {	// Swimming Monsters	
-		if (!self.yaw_speed) self.yaw_speed = 10;
-		self.flags = self.flags | FL_SWIM;
-	}
-	else {
-		// Default walking/static monsters
-		if (!self.yaw_speed) self.yaw_speed = 20;
-	}
 
-	// Not all bounding boxes extend up very high, make sure the view_ofs
-	// is relevant to where the top of the bounding box is
+	// Not all bounding boxes extend up very high, make sure the view_ofs is relevant to where the top of the bounding box is.
 	if (self.view_ofs_z == 0) {
 		if (self.maxs_z <= MON_VIEWOFS) self.view_ofs_z = self.maxs_z*0.5;
 		else self.view_ofs_z = MON_VIEWOFS;
 	}
-	
-	//----------------------------------------------------------------------
+
 	// Is the monster a zombie (type) lying on the floor? (starting pose)
 	// Angles key used for specific facing direction, 0 = random setup
 	// This function check is before any droptofloor or content checks
 	// It will allow onfloor monsters to exist in tight spaces, shallow graves
-	//----------------------------------------------------------------------
 	if (self.spawnflags & MON_ONFLOOR && self.classgroup == CG_ZOMBIE) {
 		if (self.classtype == CT_MONZOMBIEK) zombiek_onground(MONAI_ZOMBIEFLR);
 		else zombie_onground(MONAI_ZOMBIEFLR);
 		return;
 	}
 
-	//----------------------------------------------------------------------
 	// Special minions (start small and grow fast)
 	// CT_MINIONSPIDER, CT_MINIONVORELING, CT_MINIONGARGOYLE
-	//----------------------------------------------------------------------
 	if (self.minion_active) {
 		self.angles = vectoangles(self.enemy.origin - self.origin);
 		self.angles_x = self.angles_z = 0;
@@ -852,13 +713,11 @@ void() monster_spawn = {
 		self.pain_finished = time + 1.2;
 		self.th_stand();
 		return;
-	}	
+	}
 	
-	//----------------------------------------------------------------------
 	// Perched Gargoyles have special idle animation (sitting)
 	// and need to fly up before resuming any normal behaviour 
 	// (most think functions are intercepted)
-	//----------------------------------------------------------------------
 	if (self.classtype == CT_MONGARGOYLE && self.spawnflags & MON_GARGOYLE_PERCH ||
 		self.classtype == CT_MONGAUNT && self.spawnflags & MON_GAUNT_PERCH ) {
 		self.flags = self.flags | FL_FLY;	// Stop any ground checks
@@ -867,11 +726,9 @@ void() monster_spawn = {
 		return;
 	}
 
-	//----------------------------------------------------------------------
 	// Ceiling critters have special idle animation (rotated)
 	// and need to let go of the ceiling before resuming any
 	// normal behaviour (most think functions are intercepted)
-	//----------------------------------------------------------------------
 	if (self.classtype == CT_MONSPIDER && self.spawnflags & MON_SPIDER_CEILING ||
 		self.classtype == CT_MONSWAMPLING && self.spawnflags & MON_SWAMPLING_CEILING ||
 		self.classtype == CT_MONVORELING && self.spawnflags & MON_VORELING_CEILING) {
@@ -889,8 +746,7 @@ void() monster_spawn = {
 			self.view_ofs = '0 0 -24';
 			self.yaw_speed = 20;		// Ground yaw speed
 			setsize(self, '-16 -16 -24', '16 16 0');
-		}
-		else {
+		} else {
 			dprint("\b[MONSTER]\b Trying to place on ceiling, no space!\n");
 			spawn_marker(self.origin, SPNMARK_YELLOW);
 			remove(self);
@@ -957,12 +813,10 @@ void() monster_spawn = {
 		// This is to prevent excessive damage to breakables
 		// Monsters can spawn in very wierd situations (inside things)
 		// if spawning damage is disabled (spawn_tdeath)
-		if (self.nospawndamage == 0) 
-			spawn_tdeath(self.origin, self);	// 50K damage!
+		if (self.nospawndamage == 0) spawn_tdeath(self.origin, self);	// 50K damage!
 		
 		// Don't show spawning effect if delay spawn + nogfx
-		if (self.spawnflags & MON_SPAWN_DELAY && !(self.spawnflags & MON_SPAWN_NOGFX)) 
-			spawn_tfog(self.origin);
+		if (self.spawnflags & MON_SPAWN_DELAY && !(self.spawnflags & MON_SPAWN_NOGFX)) spawn_tfog(self.origin);
 	}
 
 	// Hell Knights can be setup to point at a target and fire lightning.  This uses the magicB attack by ID software that was never used
@@ -974,13 +828,11 @@ void() monster_spawn = {
 		return;
 	}
 
-	//----------------------------------------------------------------------
 	// Knights, Hell Knights, Golems and Gargoyles can start as statues
 	// They are frozen in an selected pose and wake up on trigger
 	// Have different skin, high pain resistance and stone gibs!
 	// Added double check for statue spawnflag, just in case
 	// ** Has unique use/think function
-	//----------------------------------------------------------------------
 	if (self.spawnstatue && self.spawnflags & MON_STATUE) {
 		self.takedamage = DAMAGE_NO;		// No damage till wakeup
 		self.nextthink = time + 0.1 + random()*0.5;
@@ -1120,10 +972,19 @@ void() monster_bbox =  {
 	else { self.bbmins = '-16 -16 -24'; self.bbmaxs = '16 16 40'; }
 };
 
+float(string mname) monster_checkminion = {
+	if (mname == string_null || mname == "") return FALSE;
+	precache_monster(mname);
+	if (!self.minion_spawn_time || !(self.minion_spawn_time & MONANIM_SPECIFIC)) self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIFIC;
+	if (!self.minion_spawn_chance) self.minion_spawn_chance = 1; // Default to 100% spawn chance for custom minions
+	return TRUE;
+};
+
 // Check all spawn conditions.  return TRUE = do NOT spawn, got a problem
 float() monster_checkspawn = {
 	if (deathmatch) { entity_hide(self); return TRUE; } // Classic exception - Multiplayer (modes 1 & 2)
 	if (cvar("nomonsters") != 0) { remove(self); return TRUE; } // This will break progression if monster is used with a counter
+
 	// Check for spawning (entity keys) conditions (nightmare, coop).  Uses entity_hide instead of remove(self) - done in check
 	if (check_nightmare() == TRUE){
 		if (HasTargets(self)) {
@@ -1131,31 +992,35 @@ float() monster_checkspawn = {
 			dprint(vtos(self.origin));
 			dprint("\n");
 		}
+		entity_hide(self);
 		return TRUE;
 	}
+
 	if (check_coop() == TRUE) {
 		if (HasTargets(self)) {
 			dprint("WARNING: Hiding monster on coop but monster has targe(s)! ");
 			dprint(vtos(self.origin));
 			dprint("\n");
 		}
+		entity_hide(self);
 		return TRUE;
 	}
-	
-	// No more execeptions; let's do some more fun special global checks, whaddya say?
-	if (self.brain & 32) self.spawnflags = self.spawnflags | MON_SPAWN_DELAY; // Nehahra support
-	return FALSE;
+
+	return FALSE; // No more execeptions, spawn!
 };
 
 // Main entry point for ALL monster routines
 void() monster_start = {
+	precache_monster(self.classname);   // Always precache it even if it fails to spawn. This to preserve the save files.
+	SUB_CheckRandomizedAngles();		// Handle randomized rotation, if set.  Bound angles to range of 0 to 360.
 	self.flags = FL_MONSTER;			// Always reset this flag
 	self.ticktimer = 0.1;				// Model animations at 10fps
 	self.skin_override = self.skin;		// Save for later
 	self.frame_override = self.frame;
-	
+	if (!self.bloodtype) self.bloodtype = self.bleedcolour = BLOOD_RED;
 	if (monster_checkspawn()) return; // Check for spawning conditions (nightmare, coop)
-		
+	
+	if (self.brain & 32) self.spawnflags = self.spawnflags | MON_SPAWN_DELAY; // Nehahra support	
 	if (coop > 2 && self.purse_x < 1) self.purse_x = 1; // Give at least 1 coin on death
 	if (self.effects) self.savedeffects = self.effects;
 	self.effects = 0; // Reset effects flag because some engines will show effects.  This is especially obvious for delay spawned monsters.
@@ -1167,12 +1032,13 @@ void() monster_start = {
 	if (self.jump_flag < 0) self.jump_flag = LARGE_TIMER; // Check if jump function has been disabled?
 	if (!self.th_checkattack) self.th_checkattack = CheckAttack; // Default attack function and class group
 	if (!self.classgroup) self.classgroup = CG_MONSTERS;
-	if (self.no_zaware && developer > 0 && !query_configflag(SVR_DEVHELPER)) spawn_marker(self.origin+'0 0 32', SPNMARK_WHITE); // Highlight monsters with forced no_zaware entity key
+	// if (self.no_zaware && developer > 0 && !query_configflag(SVR_DEVHELPER)) spawn_marker(self.origin+'0 0 32', SPNMARK_WHITE); // Highlight monsters with forced no_zaware entity key
 	monster_bbox(); // Setup bounding box based on presets
 
 	if (self.spawnflags & MON_SPAWN_DELAY && self.targetname == "") { // Cannot delay spawn a monster if nothing can trigger it!?!
 		dprint("\b[MONSTER]\b Cannot delay spawn without targetname! Spawning immediately\n");
 		self.spawnflags = self.spawnflags - MON_SPAWN_DELAY;
+		self.brain = self.brain - 32;
 	}
 	
 	// Allow mappers to spawn monsters that don't affect monster count.  I know this can be a dangerous if used incorrectly, but good for statues.
@@ -1201,7 +1067,7 @@ void() monster_start = {
 	
     self.mindex2 = self.modelindex;      // Remember original modelindex.
 
-	if (self.spawnflags & MON_SPAWN_DELAY) {
+	if (self.spawnflags & MON_SPAWN_DELAY || self.brain & 32) {
 		setmodel(self, string_null);
 		self.solid = SOLID_NOT;				// No world interaction
 		// Check for triggered spawndelay
@@ -1281,7 +1147,6 @@ ANGRY : Trigger Spawn angry at the player
 -------- NOTES --------
 XXX, x health points.
 ======================================================================*/
-
 
 // if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 void(entity e) sendmonsterdevdata {

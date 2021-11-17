@@ -582,53 +582,45 @@ void() dcrossbow_die = {
 
 void() dcrossbow_crossbow_sound = { sound (self, CHAN_WEAPON, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_NORM); };
 
+void() monster_dcrossbow_precache = {
+	precache_model ("progs/ad171/mon_dcrossbow.mdl");
+	precache_model ("progs/ad171/h_dcrossbow.mdl");
+	precache_model (MODEL_PROJ_BOLT1);
+	precache_model ("progs/ad171/w_dcrossbow.mdl");
+	precache_model ("progs/ad171/gib_knfoot_l.mdl");
+	precache_model ("progs/ad171/gib_knfoot_r.mdl");
+	precache_sound ("ad171/dknight/dcross_idle.wav");
+	precache_sound ("ad171/dknight/dcross_idlecom.wav");
+	precache_sound ("knight/khurt.wav");
+	precache_sound ("knight/kdeath.wav");
+	precache_sound ("ad171/weapons/bolt_hit1.wav"); // Crossbow and bolt sounds
+	precache_sound ("ad171/weapons/bolt_hit2.wav");
+	precache_sound ("ad171/weapons/bolt_hit3.wav");
+	precache_sound ("ad171/weapons/bolt_hit4.wav");
+	precache_sound ("ad171/weapons/crossbow_fire.wav");
+	precache_sound ("ad171/weapons/crossbow_swipe.wav");
+	precache_sound ("ad171/weapons/crossbow_hit1.wav");
+	precache_sound ("ad171/weapons/crossbow_rdy.wav");
+};
+
 // QUAKED monster_dcrossbow (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_dcrossbow = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_dcrossbow.mdl";			// crossbow guy
 	self.headmdl = "progs/ad171/h_dcrossbow.mdl";
 	self.gib1mdl = "progs/ad171/w_dcrossbow.mdl";			// Unique weapon
 	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";		// left foot
 	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";		// right foot
-	
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (MODEL_PROJ_BOLT1);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	
 	self.gib1sound = GIB_IMPACT_WOOD;
 	if (random() < 0.5) self.gib2mdl = string_null;
 	if (random() < 0.5) self.gib3mdl = string_null;
-
 	self.idle_sound = "ad171/dknight/dcross_idle.wav";
-	precache_sound (self.idle_sound);
 	self.idle_soundcom = "ad171/dknight/dcross_idlecom.wav";
-	precache_sound (self.idle_soundcom);
-
 	self.pain_sound = "knight/khurt.wav";
-	precache_sound (self.pain_sound);
-	precache_sound ("knight/kdeath.wav");
-
-	// Crossbow and bolt sounds
-	precache_sound ("ad171/weapons/bolt_hit1.wav");
-	precache_sound ("ad171/weapons/bolt_hit2.wav");
-	precache_sound ("ad171/weapons/bolt_hit3.wav");
-	precache_sound ("ad171/weapons/bolt_hit4.wav");
-	precache_sound ("ad171/weapons/crossbow_fire.wav");
-	precache_sound ("ad171/weapons/crossbow_swipe.wav");
-
-	// Heavy wood sound
-	self.meleehitsound = "ad171/weapons/crossbow_hit1.wav";
-	precache_sound (self.meleehitsound);
-
+	self.meleehitsound = "ad171/weapons/crossbow_hit1.wav"; // Heavy wood sound
 	self.sight_sound = "ad171/weapons/crossbow_rdy.wav";
-	precache_sound (self.sight_sound);
 
 	// Check for poisonous entity flag
 	if (self.poisonous) {
@@ -675,12 +667,9 @@ void() monster_dcrossbow = {
 	self.th_slide = dcrossbow_checkslide;
 	self.th_pain = dcrossbow_pain;
 	self.th_die = dcrossbow_die;
-
 	self.hittype = HIT_METAL;
-
 	self.classtype = CT_MONDCROSS;
 	self.classgroup = CG_KNIGHT;
 	self.classmove = MON_MOVEWALK;
-	
 	monster_start();
 };

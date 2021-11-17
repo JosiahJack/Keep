@@ -1,6 +1,3 @@
-***THIS IS THE ORIGINAL SPIDER DOCUMENTATION***
-
-
 Title    : Willy the Spider
 Filename : spider.zip
 Version  : 0.7

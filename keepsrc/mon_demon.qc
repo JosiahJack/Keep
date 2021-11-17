@@ -24,7 +24,6 @@ $frame death1 death2 death3 death4 death5 death6 death7 death8 death9
 $frame attacka1 attacka2 attacka3 attacka4 attacka5 attacka6 attacka7 attacka8
 $frame attacka9 attacka10 attacka11 attacka12 attacka13 attacka14 attacka15
 
-//============================================================================
 void()	demon1_stand1	=[	$stand1,	demon1_stand2	] {monster_idle_sound(); ai_stand();};
 void()	demon1_stand2	=[	$stand2,	demon1_stand3	] {ai_stand();};
 void()	demon1_stand3	=[	$stand3,	demon1_stand4	] {ai_stand();};
@@ -39,9 +38,7 @@ void()	demon1_stand11	=[	$stand11,	demon1_stand12	] {ai_stand();};
 void()	demon1_stand12	=[	$stand12,	demon1_stand13	] {ai_stand();};
 void()	demon1_stand13	=[	$stand13,	demon1_stand1	] {ai_stand();};
 
-//============================================================================
-void()	demon1_walk1	=[	$walk1,		demon1_walk2	] {
-	monster_footstep(FALSE); monster_idle_sound(); ai_walk(8);};
+void()	demon1_walk1	=[	$walk1,		demon1_walk2	] {monster_footstep(FALSE); monster_idle_sound(); ai_walk(8);};
 void()	demon1_walk2	=[	$walk2,		demon1_walk3	] {ai_walk(6);};
 void()	demon1_walk3	=[	$walk3,		demon1_walk4	] {ai_walk(6);};
 void()	demon1_walk4	=[	$walk4,		demon1_walk5	] {ai_walk(7);};
@@ -50,7 +47,6 @@ void()	demon1_walk6	=[	$walk6,		demon1_walk7	] {ai_walk(6);};
 void()	demon1_walk7	=[	$walk7,		demon1_walk8	] {ai_walk(10);};
 void()	demon1_walk8	=[	$walk8,		demon1_walk1	] {ai_walk(10);};
 
-//============================================================================
 void()	demon1_run1	=[	$run1,		demon1_run2	] {monster_idle_sound(); ai_run(20);};
 void()	demon1_run2	=[	$run2,		demon1_run3	] {monster_footstep(FALSE); ai_run(15);};
 void()	demon1_run3	=[	$run3,		demon1_run4	] {ai_run(36);};
@@ -58,20 +54,18 @@ void()	demon1_run4	=[	$run4,		demon1_run5	] {ai_run(20);};
 void()	demon1_run5	=[	$run5,		demon1_run6	] {monster_footstep(FALSE); ai_run(15);};
 void()	demon1_run6	=[	$run6,		demon1_run1	] {ai_run(36);};
 
-//===========================================================================
 // Melee damage function, called from animation frame set
 // Standardized layout (matching ai_melee (ai.qc)
 // Added each claw attack checks enemy distance (before no check)
 // Added z depth check on attacks +/- 64 units
 // Added claw miss sound (borrowed HK slash sound)
 // Changed some explicit values to constant variables
-//===========================================================================
-void(float side) Demon_Claw =
-{
-	local float 	ldmg;
+void(float side) Demon_Claw = {
+	local float ldmg;
 	
 	if (!self.enemy) return;
 	if (self.health < 1) return;
+
 	ai_face ();						// Turn towards enemy target
 	walkmove (self.ideal_yaw, 12);	// Get extra close to enemy target
 	ai_damagebreakable(20);			// Damage any breakables
@@ -84,18 +78,14 @@ void(float side) Demon_Claw =
 		if (random() < 0.5) sound (self, CHAN_WEAPON, "ad171/weapons/sword1a.wav", 1, ATTN_NORM);
 		else sound (self, CHAN_WEAPON, "ad171/weapons/sword1b.wav", 1, ATTN_NORM);
 	} else {
-		// Check for poisonous attribute (new poison version)
-		if (self.poisonous) PoisonDeBuff(self.enemy);
-
-		// Melee claw hit sound
-		sound (self, CHAN_WEAPON, "demon/dhit2.wav", 1, ATTN_NORM);
+		if (self.poisonous) PoisonDeBuff(self.enemy); // Check for poisonous attribute (new poison version)
+		sound (self, CHAN_WEAPON, "demon/dhit2.wav", 1, ATTN_NORM); // Melee claw hit sound
 		ldmg = 10 + 5*random();
 		T_Damage (self.enemy, self, self, ldmg, DAMARMOR);		
 		SpawnMeatSpray (self, self.enemy, side);
 	}
 };
 
-//----------------------------------------------------------------------
 void()	demon1_atta1	=[	$attacka1,		demon1_atta2	] {ai_charge(4);};
 void()	demon1_atta2	=[	$attacka2,		demon1_atta3	] {monster_footstep(FALSE); ai_charge(0);};
 void()	demon1_atta3	=[	$attacka3,		demon1_atta4	] {ai_charge(0);};
@@ -158,8 +148,8 @@ void() Demon_JumpTouch =
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
-void()	demon1_jump1	=[	$leap1,		demon1_jump2	] {ai_face();
+void()	demon1_jump1	=[	$leap1,		demon1_jump2	] {
+	ai_face();
 	self.jump_flag = time;	// No jump time limits
 	sound (self, CHAN_VOICE, "demon/djump.wav", 1, ATTN_NORM);
 };
@@ -175,7 +165,7 @@ void()	demon1_jump4	=[	$leap4,		demon1_jump5	] {
 	self.oldorigin = self.origin;
 };
 
-// Flying through the air waiting to touch something!
+// Flying through the air waiting to touch something! Soaring through the midnight sky!!
 void()	demon1_jump5	=[	$leap5,		demon1_jump6	] {};
 void()	demon1_jump6	=[	$leap6,		demon1_jump7	] {};
 void()	demon1_jump7	=[	$leap7,		demon1_jump8	] {};
@@ -189,23 +179,17 @@ void()	demon1_jump10	=[ 	$leap10,	demon1_jump1	] {
 	}
 	self.oldorigin = self.origin;
 };
-//----------------------------------------------------------------------
-void()	demon1_jump11	=[ 	$leap11,	demon1_jump12] {monster_footstep(FALSE); };
-void()	demon1_jump12	=[ 	$leap12,	demon1_run1	] {ai_resetangles();};
+void()	demon1_jump11	=[ $leap11, demon1_jump12] {monster_footstep(FALSE); };
+void()	demon1_jump12	=[ $leap12, demon1_run1	] {ai_resetangles();};
 
-/*======================================================================
-  PAIN
-========================================================================*/
-void()	demon1_pain1	=[	$pain1,		demon1_pain2	] {};
-void()	demon1_pain2	=[	$pain2,		demon1_pain3	] {};
-void()	demon1_pain3	=[	$pain3,		demon1_pain4	] {};
-void()	demon1_pain4	=[	$pain4,		demon1_pain5	] {};
-void()	demon1_pain5	=[	$pain5,		demon1_pain6	] {};
-void()	demon1_pain6	=[	$pain6,		demon1_run1	] {};
+void()	demon1_pain1	=[$pain1,	demon1_pain2] {};
+void()	demon1_pain2	=[$pain2,	demon1_pain3] {};
+void()	demon1_pain3	=[$pain3,	demon1_pain4] {};
+void()	demon1_pain4	=[$pain4,	demon1_pain5] {};
+void()	demon1_pain5	=[$pain5,	demon1_pain6] {};
+void()	demon1_pain6	=[$pain6,	demon1_run1	] {};
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) demon1_pain =
-{
+void(entity inflictor, entity attacker, float damage) demon1_pain = {
 	if (self.touch == Demon_JumpTouch) return;
 
 	// Check all pain conditions and set up what to do next
@@ -224,7 +208,6 @@ void(entity inflictor, entity attacker, float damage) demon1_pain =
 	}
 };
 
-//============================================================================
 void()	demon1_death1	=[	$death1, demon1_death2 ] {};
 void()	demon1_death2	=[	$death2, demon1_death3 ] {monster_check_gib();};
 void()	demon1_death3	=[	$death3, demon1_death4 ] {monster_check_gib();
@@ -236,9 +219,7 @@ void()	demon1_death7	=[	$death7, demon1_death8 ] {};
 void()	demon1_death8	=[	$death8, demon1_death9 ] {monster_death_postcheck();};
 void()	demon1_death9	=[	$death9, demon1_death9 ] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
-void() demon1_die =
-{
+void() demon1_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -249,16 +230,32 @@ void() demon1_die =
 	}
 };
 
+void() monster_demon1_precache = {
+	precache_model ("progs/mon_demon.mdl");
+	precache_model ("progs/h_demon.mdl");
+	precache_model ("progs/ad171/gib_dmleg1.mdl");
+	precache_model ("progs/ad171/gib_dmleg2.mdl");
+	precache_model ("progs/ad171/gib_dmtail.mdl");
+	precache_model ("progs/ad171/gib_dmclaw1.mdl");		// Always precache extra models
+	precache_model ("progs/ad171/gib_dmclaw2.mdl");		// regardless if picked or not
+	precache_sound ("demon/idle1.wav");
+	precache_sound ("demon/dpain1.wav");
+	precache_sound ("demon/ddeath.wav");
+	precache_sound ("demon/dhit2.wav");
+	precache_sound ("demon/djump.wav");
+	precache_sound ("demon/sight2.wav");
+};
+
 /*======================================================================
 QUAKED monster_demon1 (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 ======================================================================*/
-void() monster_demon1 =
-{
+void() monster_demon1 = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
+	monster_demon1_precache();
 	self.mdl = "progs/mon_demon.mdl";
 	self.headmdl = "progs/h_demon.mdl";
 	self.gib1mdl = "progs/ad171/gib_dmleg1.mdl";		// Left leg
@@ -266,31 +263,13 @@ void() monster_demon1 =
 	self.gib3mdl = "progs/ad171/gib_dmtail.mdl";		// Tail
 	self.gib4mdl = "progs/ad171/gib_dmclaw1.mdl";		// Claw 1
 	self.gib5mdl = "progs/ad171/gib_dmclaw2.mdl";		// Claw 2
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	precache_model (self.gib4mdl);		// Always precache extra models
-	precache_model (self.gib5mdl);		// regardless if picked or not
-	
-	// Randomly swap in demon claws instead of legs
-	if (random() < 0.5) self.gib1mdl = self.gib4mdl;
+	if (random() < 0.5) self.gib1mdl = self.gib4mdl; // Randomly swap in demon claws instead of legs
 	if (random() < 0.5) self.gib2mdl = self.gib5mdl;
-
 	self.idle_sound = "demon/idle1.wav";
-	precache_sound (self.idle_sound);
 	self.pain_sound = "demon/dpain1.wav";
-	precache_sound (self.pain_sound);
-	precache_sound ("demon/ddeath.wav");
-	precache_sound ("demon/dhit2.wav");
-	precache_sound ("demon/djump.wav");
 	self.sight_sound = "demon/sight2.wav";
-	precache_sound (self.sight_sound);
 
-	// Precache extra green small gibs
-	if (self.poisonous) {
+	if (self.poisonous) { // Precache extra green small gibs
 		precache_poisongibs();
 		self.gibtype = GIBTYPE_POISON;
 		self.exactskin = 3;
@@ -308,17 +287,16 @@ void() monster_demon1 =
 	if (self.health < 1) self.health = 300;
 	self.gibhealth = -80;
 	self.gibbed = FALSE;
-	self.pain_flinch = 200;				// takes alot to pain
-	self.pain_longanim = TRUE;			// can be chopped with shadow axe
+	self.pain_flinch = 200;				// Takes alot to pain
+	self.pain_longanim = TRUE;			// Can be chopped with shadow axe
 	self.pain_timeout = 2;				// High pain threshold
 	self.steptype = FS_TYPESLOW;		// Tiny feet/nails
-	self.blockudeath = TRUE;			// no humanoid death sound
+	self.blockudeath = TRUE;			// No humanoid death sound
 	self.meleeoffset = '32 0 10';		// Claw attack offset
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
-
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
@@ -333,11 +311,9 @@ void() monster_demon1 =
 	self.th_jumpexit = demon1_jump11;
 	self.th_pain = demon1_pain;
 	self.th_die = demon1_die;
-
 	self.classtype = CT_MONDEMON;
 	self.classgroup = CG_DEMON;
 	self.classmove = MON_MOVEWALK;
-	
 	monster_start();
 };
 

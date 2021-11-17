@@ -138,7 +138,7 @@ void () ubs_shot2 = {
 	vec = normalize (v_forward);
 	launch_spike (org, vec);
 	newmis.classname = "spawnspike";
-	setmodel (newmis, "progs/utele.mdl");
+	setmodel (newmis, "progs/travail/utele.mdl");
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
 	newmis.avelocity = '700 40 40';
 	newmis.velocity = (vec * 300);
@@ -348,7 +348,7 @@ void () ubs_FastFire = {
 		makevectors (self.enemy.angles);
 		dst = (self.enemy.origin - (13 * self.movedir));
 		vec = normalize ((dst - self.origin));
-		sound (self, CHAN_WEAPON, "travail/ubs/wattack.wav", 1, ATTN_NORM);
+		sound (self, CHAN_WEAPON, "wizard/wattack.wav", 1, ATTN_NORM);
 		launch_spike (self.origin, vec);
 		newmis.velocity = (vec * 600);
 		newmis.owner = self.owner;
@@ -362,7 +362,7 @@ void () ubs_FastFire = {
 void () ubs_StartFast = {
 	local entity missile;
 
-	sound (self, CHAN_WEAPON, "travail/ubs/wattack.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "wizard/wattack.wav", 1, ATTN_NORM);
 	self.v_angle = self.angles;
 	makevectors (self.angles);
 	missile = spawn ();
@@ -1040,7 +1040,7 @@ void() Toss_Flap = {
 	self.ubs_deflapped = 1;
 	new = spawn();
 	new.origin = self.origin + v_forward*32;
-	setmodel (new, "progs/uberskinflap.mdl");
+	setmodel (new, "progs/travail/uberskinflap.mdl");
 	setsize (new, '0 0 0', '0 0 0');
 	new.velocity_x = -200 + 400*random();
 	new.velocity_y = -200 + 400*random();
@@ -1131,7 +1131,7 @@ void () ubs_Missile = {
 void() ubs_awake = {
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
-	setmodel (self, "progs/uberscrag.mdl");
+	setmodel (self, "progs/travail/uberscrag.mdl");
 	setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX);
 	self.health = 2500 + skill*500;
 	self.th_stand = ubs_stand;
@@ -1146,15 +1146,15 @@ void() ubs_awake = {
 	ubs_unfurl1 ();
 };
 
-void () monster_ubs = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = ("progs/travail/uberscrag.mdl");
+void () monster_ubs_precache = {
 	precache_model ("progs/travail/uberscrag.mdl");
 	precache_model ("progs/travail/uberskinflap.mdl");
-	precache_model ("progs/travail/w_spike.mdl");
-	precache_model ("progs/travail/v_spike.mdl");
+	precache_model ("progs/w_spike.mdl");
+	precache_model ("progs/v_spike.mdl");
+	precache_model ("progs/ad171/mon_wizard.mdl");
+	precache_model ("progs/h_wizard.mdl");
+	precache_model ("progs/w_spike.mdl");
+	precache_model ("progs/travail/utele.mdl");
 	precache_sound ("travail/ubs/hit.wav");
 	precache_sound ("travail/ubs/attack1.wav");
 	precache_sound ("travail/ubs/wdeath1.wav");
@@ -1166,10 +1166,6 @@ void () monster_ubs = {
 	precache_sound ("travail/ubs/elec.wav");
 	precache_sound ("travail/ubs/spawnfr.wav");
 	precache_sound ("travail/ubs/spawnst.wav");
-	precache_model ("progs/ad171/mon_wizard.mdl");
-	precache_model ("progs/ad171/h_wizard.mdl");
-	precache_model ("progs/w_spike.mdl");
-	precache_model ("progs/travail/utele.mdl");
 	precache_sound ("wizard/hit.wav");
 	precache_sound ("wizard/wattack.wav");
 	precache_sound ("wizard/wdeath.wav");
@@ -1178,17 +1174,21 @@ void () monster_ubs = {
 	precache_sound ("wizard/wsight.wav");
 	precache_sound ("wizard/wpain.wav");
 	precache_sound ("shalrath/attack2.wav");
+};
 
+void () monster_ubs = {
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = ("progs/travail/uberscrag.mdl");
 	if (self.deathstring == "") self.deathstring = " was splayed by the Uber Scrag\n";
-
-	// Check passive system for exceptions
-	setup_passivestate(self);
-
+	setup_passivestate(self); // Check passive system for exceptions
 	self.touch = monster_touch;	// 1998-09-16 Sliding/not-jumping on monsters/boxes/players fix by Maddes/Kryten
-	AddToTotals(self);
-
-	self.use = ubs_awake;
-	if (coop > 0) self.use ();
+	self.th_stand = self.th_walk = self.th_run = SUB_Null;
+	self.th_missile = self.th_die = SUB_Null;
+	self.th_pain = SUB_Null_pain;
+	monster_start();
+	if (self.targetname == "") ubs_awake();
+	else self.use = ubs_awake;
 };
 
 void () spawnwiz = {
@@ -1204,34 +1204,6 @@ void () spawnwiz = {
 			return;
 		}
 		self.owner.ident = (self.owner.ident + 1);
-		newwiz = spawn ();
-		newwiz.classname = "monster_wizard";
-		newwiz.origin = (self.origin + '0 0 10');
-		newwiz.solid = SOLID_SLIDEBOX;
-		newwiz.movetype = MOVETYPE_STEP;
-		setmodel (newwiz, "progs/wizard.mdl");
-		setsize (newwiz, VEC_HULL_MIN, '16 16 40');
-		newwiz.health = 80;
-		newwiz.th_stand = wiz_stand1;
-		newwiz.th_walk = wiz_walk1;
-		newwiz.th_run = wiz_run1;
-		newwiz.th_missile = Wiz_Missile;
-		newwiz.th_pain = Wiz_Pain;
-		newwiz.th_die = wiz_die;
-		tempvec = self.velocity;
-        tempvec_z = 0; // Damage? Huh?
-		newwiz.angles = vectoangles (tempvec);
-		newwiz.enemy = self.owner.enemy;
-		newwiz.yaw_speed = 20;
-		newwiz.takedamage = DAMAGE_AIM;
-		newwiz.temp6 = 1;
-		newwiz.nextthink = (time + 0.1);
-		newwiz.think = wiz_run1;
-		spawn_tfog (newwiz.origin);
-		newwiz.flags = newwiz.flags | FL_FLY;
-		newwiz.flags = newwiz.flags | FL_MONSTER;
-		AddToTotals(self);
-		update_monster ();
+		BeMonsterFromString("monster_wizard");
 	}
-	SUB_Remove ();
 };

@@ -188,13 +188,10 @@ void() info_teleport_destination = {
 	self.view_ofs = '0 0 27';	// Z axis modifier for editor placement
 	self.origin = self.origin + self.view_ofs;
 	info_teleport_convert_updown();
+	if (SUB_HideIfNoTargetname()) return;
 
-	if (self.targetname == "") { // Cannot use info entity if targetname missing
-		dprint("\b[INFO_TELE]\b targetname is missing!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		entity_hide(self);
-	} else if (self.teledest < 0) { // Check for destination number errors
-		dprint("\b[INFO_TELE]\b Dest value cannot be negative\n");
+	if (self.teledest < 0) { // Check for destination number errors
+		dprint("\b[INFO_TELE]\b Dest value cannot be negative, set to 0.\n");
 		spawn_marker(self.origin, SPNMARK_YELLOW);
 		self.teledest = 0;
 	}
@@ -239,29 +236,19 @@ void() info_teleportinstant_dest = {
 	self.angles = '0 0 0';		// Zero'd to prevent bmodel twisting
 	self.view_ofs = '0 0 0';	// Z axis modifier for editor placement
 	info_teleport_convert_updown();
-	
-	// Stuff from InitTrigger
-	self.solid = SOLID_NOT;
+	self.solid = SOLID_NOT; // Stuff from InitTrigger
 	self.movetype = MOVETYPE_NONE;
 	self.mdl = self.model;		// Save model for later
 	setmodel (self, self.mdl);	// set size and link into world
 	self.bbmins = self.mins;	// Save bmodel bounds for later
 	self.bbmaxs = self.maxs;
-
-	// Work out true volume origin
 	self.bsporigin = TRUE;
-	self.oldorigin = bmodel_origin(self);
-	
-	// Don't need volume brush anymore
-	setmodel(self, "");
-	setsize(self, VEC_ORIGIN, VEC_ORIGIN);
+	self.oldorigin = bmodel_origin(self); // Work out true volume origin
+	setmodel(self, ""); // Don't need volume brush anymore
+	setsize(self, VEC_ORIGIN, VEC_ORIGIN); 
+	if (SUB_HideIfNoTargetname()) return;
 
-	// Cannot use info entity if targetname missing
-	if (self.targetname == "") {
-		dprint("\b[INFO_TELE]\b targetname is missing!\n");
-		spawn_marker(self.oldorigin, SPNMARK_YELLOW);
-		entity_hide(self);
-	} else if (self.teledest < 0) { // Check for destination number errors
+	if (self.teledest < 0) { // Check for destination number errors
 		dprint("\b[INFO_TELE]\b Dest value cannot be negative\n");
 		spawn_marker(self.oldorigin, SPNMARK_YELLOW);
 		self.teledest = 0;

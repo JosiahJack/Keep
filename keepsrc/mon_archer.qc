@@ -1,56 +1,33 @@
-/*
-==============================================================================
-
-ARCHER
-
-==============================================================================
-*/
-
 $cd id1/models/archer
 $origin 0 0 24
 $base base        
 $skin skin
-
 $frame backup1 backup2 backup3 backup4 backup5 backup6 backup7 backup8
-
 $frame deathA1 deathA2 deathA3 deathA4 deathA5 deathA6 deathA7 deathA8
 $frame deathA9 deathA10 deathA11 deathA12 deathA13 deathA14 deathA15
 $frame deathA16 deathA17 deathA18 deathA19 deathA20 deathA21 deathA22
-
 $frame draw1 draw2 draw3 draw4 draw5 draw6 draw7 draw8 draw9 draw10
 $frame draw11 draw12 draw13
-
 //$frame duck1 duck2 duck3 duck4 duck5 duck6 duck7 duck8 duck9 duck10
 //$frame duck11 duck12 duck13 duck14
-
 $frame fire1 fire2 fire3 fire4
-
 $frame pain1 pain2 pain3 pain4 pain5 pain6 pain7 pain8 pain9 pain10
 $frame pain11 pain12 pain13 pain14 pain15 pain16
-
 $frame patrol1 patrol2 patrol3 patrol4 patrol5 patrol6 patrol7 patrol8
 $frame patrol9 patrol10 patrol11 patrol12 patrol13 patrol14 patrol15
 $frame patrol16 patrol17 patrol18 patrol19 patrol20 patrol21 patrol22
-
 $frame redraw1 redraw2 redraw3 redraw4 redraw5 redraw6 redraw7 redraw8
 $frame redraw9 redraw10 redraw11 redraw12
-
 $frame tranA1 tranA2 tranA3 tranA4 tranA5 tranA6 tranA7 tranA8 tranA9
 $frame tranA10 tranA11 tranA12 tranA13
-
 $frame tranB1 tranB2 tranB3 tranB4 tranB5 tranB6 tranB7 tranB8 tranB9
 $frame tranB10 tranB11 tranB12 tranB13 tranB14 tranB15 tranB16
-
 //$frame tranC1 tranC2 tranC3 tranC4 tranC5 tranC6 tranC7 tranC8 tranC9 tranC10
-
 //$frame tranD1 tranD2 tranD3 tranD4 tranD5 tranD6 tranD7 tranD8 tranD9
-
 $frame waitA1 waitA2 waitA3 waitA4 waitA5 waitA6 waitA7 waitA8 waitA9 waitA10
 $frame waitA11 waitA12 waitA13 waitA14 waitA15 waitA16 waitA17 waitA18
-
 $frame waitB1 waitB2 waitB3 waitB4 waitB5 waitB6 waitB7 waitB8 waitB9
 $frame waitB10 waitB11 waitB12
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9 walk10
 $frame walk11 walk12 walk13 walk14 walk15 walk16
 
@@ -58,34 +35,22 @@ $frame walk11 walk12 walk13 walk14 walk15 walk16
 $frame decap1 decap2 decap3 decap4 decap5 decap6 decap7 decap8 decap9 decap10
 $frame decap11 decap12 decap13 decap14 decap15 decap16 decap17
 
-//=============================================================================
-
-//- - - - - - - - -
 //  Model is based on the archer from Hexen2.  AI used is mostly Quake's
 //  with bit of Hexen2's.  Fancy moves such as ducking and sidestepping
 //  are NOT used, since it is so un-Quake (and I simply want a medieval
 //  style grunt/enforcer).  Holding his shot after drawing the bow,
-//  along with much of the shooting AI, was ported over.
-//
-//                                              -- Patrick Martin
-//- - - - - - - - -
+//  along with much of the shooting AI, was ported over.  -- Patrick Martin
 
 // Check if the archer has a clear shot to his target.
 float() archer_check_shot = {
-    local   vector  spot1, spot2;
-    local   entity  targ;
-
-    targ = self.enemy;
+    local vector spot1, spot2;
 
     makevectors (self.angles);
     spot1 = self.origin + v_forward*16 + v_right*8 + v_up*24;
-    spot2 = targ.origin + targ.view_ofs;
-
+    spot2 = self.enemy.origin + self.enemy.view_ofs;
     traceline (spot1, spot2, 2, self);
-
-    if (trace_ent != targ) {
-        // Didn't hit the intended target.  Either something else blocked
-        // the scan, or the scan was complete and could not hit the target.
+    if (trace_ent != self.enemy) {
+        // Didn't hit the intended target.  Either something else blocked the scan, or the scan was complete and could not hit the target.
         // Standard 1.06 progs would just return FALSE.
         if (trace_fraction < 1) {   // don't have a clear shot
 			if (!(trace_ent.flags & FLx_CREATURE) || self.enemy.solid <= SOLID_TRIGGER || Align_Match(self,trace_ent) || trace_ent.enemy == self || trace_ent == self.oldenemy) return FALSE; // Don't shoot whoever is in line of fire.
@@ -94,71 +59,49 @@ float() archer_check_shot = {
             // attacks is still useful.
         } else {
 			// Target is non-solid.  It could be a wraith, downed zombie, or something in spectator mode.  Attack only if target is a ghost.
-            if (targ.takedamage != DAMAGE_AIM) return FALSE;
-            //if (!IsGhost (targ)) return FALSE;
+            if (self.enemy.takedamage != DAMAGE_AIM) return FALSE;
+            if (self.solid != SOLID_TRIGGER || self.movetype != MOVETYPE_NOCLIP) return FALSE;
         }
     }
-
-    // PM:  Added alert support so that some monsters can see and attack
-    //      through water like players can.
-    // FIXME:  Is the 'fish check' necessary here?
-    if (trace_inopen)
-        if (trace_inwater)
-            if (!(self.ryuflags & RYU_ALERT)) return FALSE;            // sight line crossed contents
-
+    if (trace_inopen && trace_inwater && !(self.ryuflags & RYU_ALERT)) return FALSE; // Sight line crossed contents.  PM:  Added alert support so that some monsters can see and attack through water like players can.
     return TRUE;
 };
 
-float() archer_lord = {return (self.classname == "monster_archer_lord");};
-
 void(vector st, float up) M_FireAkArrow = {
-    local   vector  org, dir;
-    local   entity  targ;
-    local   float   type;
+    local vector org, dir;
+    local entity targ;
+    local float type;
 
-    if (archer_lord ())
-        targ = self.enemy;
-    else
-        targ = world;
+    if (self.classtype == CT_MONARCHERLORD) targ = self.enemy;
+    else targ = world;
 
     makevectors (self.angles);
     org = self.origin + v_forward*st_x + v_right*st_y + v_up*st_z;
     dir = Aimpoint (self.enemy);
     dir = Maim_Line (org, dir, AKARROW_SPEED_FLY, targ, '0 0 0');
-
-    // Note:  Magic arrows can hit ghosts, but normal arrows cannot.
-    if (archer_lord ()) {   
-        //if (IsGhost (self.enemy))
-        //    {type = 2;  up = 0;}    // Auto upgrade to hit ghosts.
-        //else
-        //{
+    if (self.classtype == CT_MONARCHERLORD) {   
+        if (IsGhost(self.enemy)) { // Magic arrows can hit ghosts, but normal arrows cannot.
+           type = 2;
+			up = 0; // Auto upgrade to hit ghosts.
+		} else {
             type = 1;
-            if (up)     // Upgrade check.
-            {   // Check:  Don't upgrade arrow if hitting wrong target is likely.
-                //  Used to stop blue arrows from hitting and moving monsters around
-                //  by hitting them with a weaker arrow instead.
+            if (up) {   // Check:  Don't upgrade arrow if hitting wrong target is likely.
+                //  Used to stop blue arrows from hitting and moving monsters around by hitting them with a weaker arrow instead.
                 traceline (org, org + dir*2048, 2, self);
-
-                if ((trace_ent == self.enemy) || !(trace_ent.flags & FLx_CREATURE))
-                    type = 2;   // Upgrade arrow to the next type.
+                if ((trace_ent == self.enemy) || !(trace_ent.flags & FLx_CREATURE)) type = 2; // Upgrade arrow to the next type.
             }
-        //}
+        }
     } else {
-        // In Hexen2, grunt arrow damage is the same regardless of type.
-        // Therefore, do not upgrade arrows for them in Drake.
-        type = self.skin & 1;
+        type = self.skin & 1; // In Hexen2, grunt arrow damage is the same regardless of type.  Therefore, do not upgrade arrows for them in Drake.
     }
 
     // In Hexen2, 0=green, 1=red, 2=gold.
-    if (type & 1)
-        sound (self, CHAN_WEAPON, "drake/archer/arrowr.wav", 1, ATTN_NORM);
-    else
-        sound (self, CHAN_WEAPON, "drake/archer/arrowg.wav", 1, ATTN_NORM);
+    if (type & 1) sound (self, CHAN_WEAPON, "drake/archer/arrowr.wav", 1, ATTN_NORM);
+    else sound (self, CHAN_WEAPON, "drake/archer/arrowg.wav", 1, ATTN_NORM);
 
     AkArrow_Launch (org, dir, type);
 };
 
-// STAND - - - - - - - - - - - - - - - -
 void() archer_stand1  =[ $waitA1,  archer_stand2  ] {ai_stand();};
 void() archer_stand2  =[ $waitA2,  archer_stand3  ] {ai_stand();};
 void() archer_stand3  =[ $waitA3,  archer_stand4  ] {ai_stand();};
@@ -178,22 +121,17 @@ void() archer_stand16 =[ $waitA16, archer_stand17 ] {ai_stand();};
 void() archer_stand17 =[ $waitA17, archer_stand18 ] {ai_stand();};
 void() archer_stand18 =[ $waitA18, archer_stand1  ] {ai_stand();};
 
-// WALK - - - - - - - - - - - - - - - -
+// WALK
 void() archer_draw = {sound (self, CHAN_WEAPON, "drake/archer/draw.wav", 1, ATTN_NORM);};
 
-void() archer_growl =
-{
-    if (random() < 0.1)
-    {
-        if (archer_lord ())
-        {
+void() archer_growl = {
+    if (random() < 0.1) {
+        if (self.classtype == CT_MONARCHERLORD) {
             if (random() < 0.7)
                 sound (self, CHAN_VOICE, "drake/archer/growl2.wav", 1, ATTN_NORM);
             else
                 sound (self, CHAN_VOICE, "drake/archer/growl3.wav", 1, ATTN_NORM);
-        }
-        else
-            sound (self, CHAN_VOICE, "drake/archer/growl.wav", 1, ATTN_NORM);
+        } else sound (self, CHAN_VOICE, "drake/archer/growl.wav", 1, ATTN_NORM);
     }
 };
 
@@ -209,7 +147,6 @@ void() archer_walk9  =[ $patrol18, archer_walk10 ] {ai_walk(4);};
 void() archer_walk10 =[ $patrol20, archer_walk11 ] {ai_walk(4);};
 void() archer_walk11 =[ $patrol22, archer_walk1  ] {monster_footstep(FALSE); ai_walk(2);};
 
-// RUN - - - - - - - - - - - - - - - - -
 void() archer_run1  =[ $walk2,  archer_run2  ] {archer_growl(); ai_run(4);};
 void() archer_run2  =[ $walk4,  archer_run3  ] {ai_run(8);};
 void() archer_run3  =[ $walk6,  archer_run4  ] {ai_run(10);};
@@ -219,55 +156,27 @@ void() archer_run6  =[ $walk12, archer_run7  ] {ai_run(8);};
 void() archer_run7  =[ $walk14, archer_run8  ] {ai_run(10);};
 void() archer_run8  =[ $walk16, archer_run1  ] {monster_footstep(FALSE); ai_run(9);};
 
-// ATTACK - - - - - - - - - - - - - - -
+// ATTACK
 float   ARCHER_CLOSE    = 200;
 float   ARCHER_FAR      = 500;
 
 void() archer_fire1;
 
-float() archer_face =
-{
-// SoE:  Normal archers use stupid old enforcer AI.
-    if (soul_evil)
-    {
-        if (archer_lord ())
-            if (!visible (self.enemy))
-                {self.think = archer_run1;  return FALSE;}
-        ai_face();
-        return TRUE;
-    }
-
 // Emulate Hexen2 behavior.
-    if (visible (self.enemy))
-        {ai_face();  return TRUE;}
-    else
-        {self.think = archer_run1;  return FALSE;}
+float() archer_face = {
+    if (visible (self.enemy)) {ai_face();  return TRUE;}
+    else {self.think = archer_run1;  return FALSE;}
 };
 
-void() archer_hold =
-{
-// SoE:  Make archer grunts emulate Quake enforcers better.
-    if (soul_evil)
-    {
-        if (!archer_lord ())
-        {
-            self.shots_left = !self.shots_left;
-            archer_fire1 ();
-            return;
-        }
-    }
-
-//- - - - - - - - - - - - - - - - - - -
-// Animate the archer.
-    local   float   chance, dist, r;
+// Animate the archer bowstring pull and hold.
+void() archer_hold = {
+    local float chance, dist, r;
 
     r = 1;
     dist = vlen (self.enemy.origin - self.origin);
     chance = infront (self.enemy);
-    if ( chance && ((dist <= ARCHER_CLOSE) || (dist > ARCHER_FAR)) )
-    {
-        if (dist <= ARCHER_CLOSE)
-        {   // Enemy too close -- backup.
+    if ( chance && ((dist <= ARCHER_CLOSE) || (dist > ARCHER_FAR)) ) {
+        if (dist <= ARCHER_CLOSE) { // Enemy too close -- backup.
             if ( self.frame == $backup1 )
                 {self.frame = $backup2; ai_back(1);}
             else if ( self.frame == $backup2 )
@@ -284,9 +193,7 @@ void() archer_hold =
                 {self.frame = $backup8; ai_back(4); r = 0;}
             else
                 {self.frame = $backup1; ai_back(2);}
-        }
-        else
-        {   // Enemy should be closer -- advance.
+        } else { // Enemy should be closer -- advance.
             if ( self.frame == $backup8 )
                 {self.frame = $backup7; ai_forward(4);}
             else if ( self.frame == $backup7 )
@@ -304,9 +211,7 @@ void() archer_hold =
             else
                 {self.frame = $backup8; ai_forward(2);}
         }
-    }
-    else
-    {   // Enemy is either within ideal distance or behind archer -- stay.
+    } else { // Enemy is either within ideal distance or behind archer -- stay.
         if ( ( self.frame >= $waitB2 ) && ( self.frame <= $waitB10 ) )
             self.frame = self.frame + 2;
         else
@@ -314,18 +219,12 @@ void() archer_hold =
     }
     self.nextthink = time + 0.1;
     self.think = archer_hold;
-//- - - - - - - - - - - - - - - - - - -
 
-// Don't shoot blindly if enemy is confirmed to be dead.
-// Doing so might hit other monsters (behind target) we'd rather not anger.
-    if (self.enemy.health <= 0)
-        if (self.enemy.deadflag >= DEAD_DEAD)
-            {self.think = archer_run1;  return;}
+	// Don't shoot blindly if enemy is confirmed to be dead.  Doing so might hit other monsters (behind target) we'd rather not anger.
+    if ((self.enemy.health <= 0) && (self.enemy.deadflag >= DEAD_DEAD)) {self.think = archer_run1;  return;}
+    if (!archer_face ()) return; // Thinking set to th_run by call to function.
 
-    if (!archer_face ())
-        return;     // Thinking set to th_run by call to function.
-
-// Borrowing v_forward from the prior call to makevectors in 'infront'...
+	// Borrowing v_forward from the prior call to makevectors in 'infront'...
     if (!chance) { // See if the target is still not infront after elevation is gone.
         local   vector  spot;
 
@@ -357,7 +256,7 @@ void() archer_hold =
             return;
         }
 
-    if (!archer_lord ()) { // Grunts don't always shoot immediately.
+    if (self.classtype != CT_MONARCHERLORD) { // Grunts don't always shoot immediately.
         if (enemy_range == RANGE_MELEE)
             chance = 1;
         else if (enemy_range == RANGE_NEAR)
@@ -425,18 +324,8 @@ void() archer_fire1    =[ $fire2,  archer_fire2    ] {ai_face();
         chance = 0;     // Enemy is dead.
     else {
         chance = chance + (skill * 0.1);
-        if (!archer_lord ()) chance = chance - 0.3;
+        if (self.classtype != CT_MONARCHERLORD) chance = chance - 0.3;
     }
-// SoE:  Grunts emulate enforcer ai.
-    if (soul_evil) {
-        if (!archer_lord ()) {
-            if (self.shots_left)
-                chance = 2;
-            else
-                chance = 0;
-        }
-    }
-//- - - - - - - - -
 
     if (random() < chance)
         self.think = archer_redraw5;
@@ -496,11 +385,10 @@ void() archer_painc2  =[ $redraw4,  archer_redraw3 ] {};
 void(entity inflictor, entity attacker, float damage) archer_pain = {
     // don't make multiple pain sounds right after each other
     // Note:  Archers redraw bow during this time in Hexen2.  Don't do it here.
-    if (self.pain_finished > time)
-        return;
+    if (self.pain_finished > time) return;
 
     self.pain_finished = time + 1;
-    if (archer_lord ()) {
+    if (self.classtype == CT_MONARCHERLORD) {
         sound (self, CHAN_VOICE, "drake/archer/pain2.wav", 1, ATTN_NORM);
     // The archer looks like a hell knight, so give him the same no-flinch,
     // but only if he is a lord class.
@@ -527,7 +415,6 @@ void(entity inflictor, entity attacker, float damage) archer_pain = {
     attacker = attacker;    // FrikQcc warning squelch!
 };
 
-// DEATH - - - - - - - - - - - - - - - -
 void() archer_die1  =[ $deathA2,  archer_die2  ] {ai_back(3);};
 void() archer_die2  =[ $deathA4,  archer_die3  ] {ai_back(2);};
 void() archer_die3  =[ $deathA6,  archer_die4  ] {ai_back(2); self.solid = SOLID_NOT; DropBackpack(); };
@@ -539,18 +426,17 @@ void() archer_die8  =[ $deathA16, archer_die9  ] {};
 void() archer_die9  =[ $deathA18, archer_die10 ] {};
 void() archer_die10 =[ $deathA20, archer_die11 ] {
 // PM:  Archer death sound split into two files.  Play part 2.
-    if (self.flags & FL_ONGROUND && !(archer_lord())) sound (self, CHAN_AUTO, "drake/archer/crash.wav", 1, ATTN_NORM);
+    if ((self.flags & FL_ONGROUND) && (self.classtype != CT_MONARCHERLORD)) sound (self, CHAN_AUTO, "drake/archer/crash.wav", 1, ATTN_NORM);
 };
 void() archer_die11 =[ $deathA22, archer_die11  ] {};
 
 void() archer_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
-
 	StopSound(self,CHAN_WEAPON); // Clear weapon sound
 
 	// regular death
 	if (!self.gibbed) {
-		if (archer_lord ())
+		if (self.classtype == CT_MONARCHERLORD)
 			sound (self, CHAN_VOICE, "drake/archer/death2.wav", 1, ATTN_NORM);
 		else
 			sound (self, CHAN_VOICE, "drake/archer/death.wav", 1, ATTN_NORM);
@@ -558,30 +444,10 @@ void() archer_die = {
 	}
 };
 
-void() archer_revive1  =[ $deathA20, archer_revive2  ] {};
-void() archer_revive2  =[ $deathA18, archer_revive3  ] {};
-void() archer_revive3  =[ $deathA16, archer_revive4  ] {};
-void() archer_revive4  =[ $deathA14, archer_revive5  ] {};
-void() archer_revive5  =[ $deathA12, archer_revive6  ] {};
-void() archer_revive6  =[ $deathA10, archer_revive7  ] {};
-void() archer_revive7  =[ $deathA8,  archer_revive8  ] {};
-void() archer_revive8  =[ $deathA6,  archer_revive9  ] {};
-void() archer_revive9  =[ $deathA4,  archer_revive10 ] {};
-void() archer_revive10 =[ $deathA2,  archer_run1     ] {};
-
-// QUAKED monster_archer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-void() monster_archer = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-    self.mdl = "progs/drake/archer.mdl";
-    self.headmdl   = "progs/drake/h_archer.mdl";
+void() monster_archer_precache = {
     precache_model ("progs/drake/arrow.mdl");     // Replaced 'akarrow.mdl'.
     precache_model ("progs/drake/archer.mdl");
     precache_model ("progs/drake/h_archer.mdl");
-
     precache_sound ("drake/archer/draw.wav");
     precache_sound ("drake/archer/arrow1.wav");
     precache_sound ("drake/archer/arrow2.wav");
@@ -593,15 +459,6 @@ void() monster_archer = {
     precache_sound ("drake/archer/growl.wav");
     precache_sound ("drake/archer/pain.wav");
     precache_sound ("drake/archer/sight.wav");
-
-    if (self.classname == "monster_archer_lord") {
-		self.hello_sound = "drake/archer/growl2.wav";
-		self.sight_sound = "drake/archer/sight2.wav";
-    } else {
-		self.hello_sound = "drake/archer/growl.wav";
-		self.sight_sound = "drake/archer/sight.wav";
-    }
-
     precache_sound ("drake/archer/crash.wav");
     precache_sound ("drake/archer/death2.wav");
     precache_sound ("drake/archer/growl2.wav");
@@ -609,35 +466,45 @@ void() monster_archer = {
     precache_sound ("drake/archer/pain2.wav");
     precache_sound ("drake/archer/sight2.wav");
     precache_sound ("hexen2/weapons/explode.wav");
+};
+
+// QUAKED monster_archer (1 0 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_archer = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	monster_archer_precache();
+    self.mdl = "progs/drake/archer.mdl";
+    self.headmdl   = "progs/drake/h_archer.mdl";
 
     // Hexen2 archers have 80 health.  (Lords have 325 health.)
     // Note:  Hexen2 archers gibbed at -30 hp.  Since the archers have armor
     // similar to Quake knights, use -40 hp instead.
-    if (self.classname == "monster_archer_lord") {
-        // Archer Lord.
+    if (self.classtype == CT_MONARCHERLORD) {
+		self.hello_sound = "drake/archer/growl2.wav";
+		self.sight_sound = "drake/archer/sight2.wav";
         self.skin = 1;
         self.ryuflags = self.ryuflags | RYU_ALERT;    // From Dragons.
-        if (soul_evil)
-            monster_purse (3, 0.75, 0.25);
-
 		if (self.health < 1) self.health = 325;
         self.gibhealth = -40;
+		self.ammo_nails = rint(random()*20);
+		if (random() < 0.1) self.ammo_bolts = rint(random()*2);
 		if (self.deathstring == "")  self.deathstring = " was stealthily skewered by an Assassin\n";
     } else {
-        // Grunt class.
+		// Grunt class.
+		self.hello_sound = "drake/archer/growl.wav";
+		self.sight_sound = "drake/archer/sight.wav";
         self.skin = 0;
-        if (soul_evil)
-            monster_purse (2, 0.5, 0);
-
         if (self.health < 1) self.health = 80;
         self.gibhealth = -40;
+		self.ammo_nails = rint(random()*2);
+		if (random() < 0.1) self.ammo_bolts = 1;
 		if (self.deathstring == "")  self.deathstring = " was skewered by an Archer\n";
     }
 
     self.solid = SOLID_NOT;				// No interaction with world
     self.movetype = MOVETYPE_NONE;		// Static item, no movement
     if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
-    
     self.gibbed = FALSE;
     self.pain_flinch = 40;
     self.pain_longanim = TRUE;
@@ -650,36 +517,16 @@ void() monster_archer = {
     self.th_pain = archer_pain;
     self.th_die = archer_die;
     self.th_checkattack = ArcherCheckAttack;
-    self.th_revive  = archer_revive1;
     self.th_spawn   = monster_archer;
     self.attack_state   = AS_FLANKING;
-    //if (!soul_evil || (self.skin == 1))
-    //{   // Archer/Assassin of Bane.
-    //    self.family     = FAM_BANE;
-    //    self.xfl        = XFL_ARMORED;  //| XFL_METALHEAD;
-    //}
-
-	// As SoE enforcer replacements, give them ammo to drop.
-    if (soul_evil) self.ammo_bolts = 2;
-    //monster_guns (0, 0, 20, 0, 0);
-    //self.family = self.family | FAM_ARCHER;
-
-    // Always reset Ammo Resistance to be consistent
-    self.resist_shells = self.resist_nails = 0;
-    self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
-    self.classtype = CT_MONARCHER;
+	self.reviveframestart = 29;
+	self.reviveframeend = 8;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
+    if (!self.classtype) self.classtype = CT_MONARCHER;
     self.classgroup = CG_KNIGHT;
     self.classmove = MON_MOVEWALK;
-
-    monster_start ();
+    monster_start();
 };
 
-//============
 // --> QUAKED monster_archer_lord (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-//============
-void() monster_archer_lord = { monster_archer (); };
+void() monster_archer_lord = { self.classtype = CT_MONARCHERLORD; monster_archer (); };

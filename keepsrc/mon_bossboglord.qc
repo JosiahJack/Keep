@@ -95,41 +95,11 @@ void() bogl_create_attachment =
 	}
 };
 
-//----------------------------------------------------------------------
-void() bogl_finish_attachment =
-{
-	if (self.attachment) setmodel(self.attachment, "");
-	if (self.attachment2) setmodel(self.attachment2, "");
-	if (self.attachment3) setmodel(self.attachment3, "");
-};
-
-//----------------------------------------------------------------------
-void() bogl_remove_attachment =
-{
-	if (self.attachment) {
-		self.attachment.think = SUB_Remove;
-		self.attachment.nextthink = time + 0.1;
-	}
-	if (self.attachment2) {
-		self.attachment2.think = SUB_Remove;
-		self.attachment2.nextthink = time + 0.1;
-	}
-	if (self.attachment3) {
-		self.attachment3.think = SUB_Remove;
-		self.attachment3.nextthink = time + 0.1;
-	}
-};
-
-//======================================================================
 // RANGE ATTACK 1 - overhead SMASH/slime
-//======================================================================
-void(vector leftofs, vector rightofs) bogl_throwslime =
-{
+void(vector leftofs, vector rightofs) bogl_throwslime = {
 	local vector org, btarg, dir, avel;
 	
-	// Finished with growing balls of slime
-	bogl_finish_attachment();
-
+	SUB_FinishAttachments(); // Finished with growing balls of slime
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 
@@ -333,7 +303,7 @@ void() bogl_magic5 =[ $magic5, bogl_magic6 ] {
 	bogl_casting('-3 34 119','19 -15 110',3);};
 void() bogl_magic6 =[ $magic6, bogl_magic9 ] {bogl_lightning();
 	// Finished with growing ball of energy
-	bogl_finish_attachment();
+	SUB_FinishAttachments();
 	SpawnExplosion(self.part_life, self.pos3, "quoth/drole/explode3.wav");
 };
 void() bogl_magic9 =[ $magic9, bogl_magic10 ] {bogl_lightning();};
@@ -362,7 +332,7 @@ void() bogl_pain6 =[ $pain6, bogl_run1  ] {};
 void(entity inflictor, entity attacker, float damage) bogl_pain =
 {
 	// Finish with all attachments
-	bogl_finish_attachment();
+	SUB_FinishAttachments();
 
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
@@ -375,13 +345,10 @@ void(entity inflictor, entity attacker, float damage) bogl_pain =
 	}
 };
 
-//============================================================================
 // Classic death pose! Dead Boggy!
-//============================================================================
 void() bogl_death1  =[ $death1,  bogl_death2  ] {};
 void() bogl_death2  =[ $death2,  bogl_death3  ] {monster_check_gib();};
-void() bogl_death3  =[ $death3,  bogl_death4  ] {monster_check_gib();
-	self.solid = SOLID_NOT;};
+void() bogl_death3  =[ $death3,  bogl_death4  ] {monster_check_gib(); self.solid = SOLID_NOT;};
 void() bogl_death4  =[ $death4,  bogl_death5  ] {};
 void() bogl_death5  =[ $death5,  bogl_death6  ] {};
 void() bogl_death6  =[ $death6,  bogl_death7  ] {};
@@ -391,58 +358,81 @@ void() bogl_death9  =[ $death9,  bogl_death10 ] {};
 void() bogl_death10 =[ $death10, bogl_death11 ] {monster_death_postcheck();};
 void() bogl_death11 =[ $death11, bogl_death11 ] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
-void() bogl_die =
-{
-	// Finish and remove all attachments
-	bogl_finish_attachment();
-	bogl_remove_attachment();
-
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
-
-	// regular death
-	if (!self.gibbed) {
+void() bogl_die = {
+	SUB_FinishAttachments(); // Finish and remove all attachments
+	SUB_RemoveAttachments();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
+	if (!self.gibbed) { // Regular death
 		sound (self, CHAN_VOICE, "ad171/boglord/death1.wav", 1, ATTN_NORM);
 		bogl_death1 ();
-	}
-	else {
-		//Explosion for gib death!
+	} else { // Explosion for gib death!
 		T_RadiusDamage (self, self, self.dmg, world, DAMAGEALL);
-		// Sprite/Particle based explosion
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_EXPLOSION);
+		WriteByte (MSG_BROADCAST, TE_EXPLOSION); // Sprite/Particle based explosion
 		WriteCoord (MSG_BROADCAST, self.origin_x);
 		WriteCoord (MSG_BROADCAST, self.origin_y);
 		WriteCoord (MSG_BROADCAST, self.origin_z);
-		// Play original explosion sound or replacement
-		SpawnExplosion(EXPLODE_SMALL, self.origin, SOUND_REXP3);
+		SpawnExplosion(EXPLODE_SMALL, self.origin, SOUND_REXP3); // Play original explosion sound or replacement
 	}
 };
 
-//----------------------------------------------------------------------
 // Special wakeup animation for attacking/breaking something infront
 // The monster should be setup facing the right direction before call
 // Starts in large overhead swing downwards (no damage checks)
-//----------------------------------------------------------------------
 void() bogl_wakeup1 =[ $smash7,		bogl_wakeup2 ] {};
-void() bogl_wakeup2 =[ $smash8,		bogl_wakeup3 ] {
-	sound (self, CHAN_VOICE, "ad171/boglord/melee3.wav", 1, ATTN_NORM);};
+void() bogl_wakeup2 =[ $smash8,		bogl_wakeup3 ] { sound (self, CHAN_VOICE, "ad171/boglord/melee3.wav", 1, ATTN_NORM);};
 void() bogl_wakeup3 =[ $smash9,		bogl_wakeup4 ] {};
 void() bogl_wakeup4 =[ $smash10,	bogl_wakeup5 ] {};
 void() bogl_wakeup5 =[ $smash11,	bogl_wakeup6 ] {};
 void() bogl_wakeup6 =[ $smash12,	bogl_run1 ] {};
 
-/*======================================================================
-QUAKED monster_boglord (1 0 0) (-32 -32 -24) (32 32 64) Ambush
-======================================================================*/
+void() monster_boglord_precache = {
+	precache_poisongibs(); // precache gibs
+	precache_model ("progs/ad171/mon_bossboglord.mdl");
+	precache_model ("progs/ad171/h_boglordb.mdl");
+	precache_model ("progs/ad171/gib_blclaw1b.mdl");
+	precache_model ("progs/ad171/gib_blclaw2b.mdl");
+	precache_model ("progs/ad171/gib_blfoot1b.mdl");
+	precache_model ("progs/ad171/gib_blfoot2b.mdl");
+	precache_model ("progs/ad171/h_boglord.mdl");
+	precache_model ("progs/ad171/gib_blclaw1.mdl");
+	precache_model ("progs/ad171/gib_blclaw2.mdl");
+	precache_model ("progs/ad171/gib_blfoot1.mdl");
+	precache_model ("progs/ad171/gib_blfoot2.mdl");
+	precache_model (MODEL_PROJ_BLORD1B);	// Slime ball
+	precache_model (MODEL_PROJ_BLORD2B);	// Fire ball
+	precache_model (MODEL_PROJ_BLORD1S);	// Floor blobs
+	precache_model (MODEL_PROJ_BLORDBEAM1);	// Lightning between hands
+	precache_model (MODEL_PROJ_BLORDBEAM2);
+	precache_model (MODEL_PROJ_BLORDBOLT1);	// Large Bolt Projectile
+	precache_model (MODEL_PROJ_BLORDBOLT2);
+	precache_sound ("ad171/boglord/idle1.wav");
+	precache_sound ("ad171/boglord/idle2.wav");
+	precache_sound ("ad171/boglord/death1.wav");
+	precache_sound ("ad171/boglord/pain1.wav");
+	precache_sound ("ad171/boglord/pain2.wav");
+	precache_sound ("ad171/boglord/melee1.wav");
+	precache_sound ("ad171/boglord/melee2.wav");
+	precache_sound ("ad171/boglord/melee3.wav");
+	precache_sound ("ad171/gaunt/plasma_fire.wav");
+	precache_sound ("ad171/boglord/attack2.wav");
+	precache_sound ("quoth/drole/explode3.wav");
+	precache_sound ("ad171/wraith/bounce.wav");
+	precache_sound ("ad171/boglord/sight.wav");
+	precache_sound ("ad171/boglord/thud.wav");
+	precache_sound ("ad171/boglord/bangdoor1.wav");
+	precache_sound ("ad171/boglord/bangdoor2.wav");
+};
+
+// QUAKED monster_boglord (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 void() monster_boglord = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
+	monster_boglord_precache();
+
 	// One model, two different skins
 	self.mdl = "progs/ad171/mon_bossboglord.mdl";
-
 	// Detect version types
 	if (self.spawnflags & MON_BOGL_STRONG) {
 		// Unique models for blood trail on model flag
@@ -457,8 +447,7 @@ void() monster_boglord = {
 		self.exactskin = 1;			// Dark red/purple
 		self.poisonous = FALSE;		// Cannot be poisonous
 		self.deathstring = " was toasted by a Fire Shambler\n";
-	}
-	else {
+	} else {
 		// Unique models for wizard trail on model flags
 		self.headmdl = "progs/ad171/h_boglord.mdl";		// +2 skins
 		self.gib1mdl = "progs/ad171/gib_blclaw1.mdl";		// Left claw
@@ -469,57 +458,16 @@ void() monster_boglord = {
 		self.part_life = EXPLODE_POISON_MED;
 		if (self.health < 1) self.health = 1200;
 		self.exactskin = 0;				// Swampy green
-		
-		precache_poisongibs();			// precache gibs
 		self.poisonous = TRUE;			// Green vulcan blood!
 		self.gibtype = GIBTYPE_POISON;	// Liquid Poison
 		self.deathstring = " was obliterated by The Bog Lord\n";
-	}
-
-	// Precache model + unique particle trail
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	precache_model (self.gib4mdl);
-	
-	// All extra/projectiles (both types)
-	precache_model (MODEL_PROJ_BLORD1B);	// Slime ball
-	precache_model (MODEL_PROJ_BLORD2B);	// Fire ball
-	precache_model (MODEL_PROJ_BLORD1S);	// Floor blobs
-	precache_model (MODEL_PROJ_BLORDBEAM1);	// Lightning between hands
-	precache_model (MODEL_PROJ_BLORDBEAM2);
-	precache_model (MODEL_PROJ_BLORDBOLT1);	// Large Bolt Projectile
-	precache_model (MODEL_PROJ_BLORDBOLT2);
+	}	
 	
 	self.idle_sound = "ad171/boglord/idle1.wav";
 	self.idle_sound2 = "ad171/boglord/idle2.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-
-	precache_sound ("ad171/boglord/death1.wav");
 	self.pain_sound = "ad171/boglord/pain1.wav";
 	self.pain_sound2 = "ad171/boglord/pain2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-
-	precache_sound ("ad171/boglord/melee1.wav");
-	precache_sound ("ad171/boglord/melee2.wav");
-	precache_sound ("ad171/boglord/melee3.wav");
-	precache_sound ("ad171/gaunt/plasma_fire.wav");
-	
-	// Slime arc attack (not used anymore)
-	precache_sound ("ad171/boglord/attack2.wav");
-	precache_sound ("quoth/drole/explode3.wav");
-	precache_sound ("ad171/wraith/bounce.wav");
-
 	self.sight_sound = "ad171/boglord/sight.wav";
-	precache_sound (self.sight_sound);
-	precache_sound ("ad171/boglord/thud.wav");
-	precache_sound ("ad171/boglord/bangdoor1.wav");
-	precache_sound ("ad171/boglord/bangdoor2.wav");
-
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	self.bbmins = '-32 -32 -24';	// Special Size

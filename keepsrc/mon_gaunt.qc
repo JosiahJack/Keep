@@ -425,12 +425,10 @@ void() gaunt_plasma = {
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "ad171/gaunt/plasma_fire.wav", 1, ATTN_NORM);
-
 	makevectors (self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = normalize(SUB_orgEnemyTarget() - self.origin);
 	self.attack_speed = SPEED_GAUNTBOLT + (skill * SPEED_GAUNTSKILL);
-
 	launch_plasma(org, dir, CT_PROJ_PLASMA, self.attack_speed);
 };
 
@@ -762,17 +760,14 @@ void() gaunt_Missile = {
 	return;
 };
 
-//============================================================================
 // Minion Wakeup
-//============================================================================
 void()	gaunt_minwake =[ $hover1, gaunt_run1 ] {
 	// Is the gaunt stuck? cannot move?
 	if (pointcontents(self.origin) == CONTENT_SOLID) {
 		// Time to die!
 		self.health = self.gibhealth;
 		Killed(self, self);
-	}
-	else {
+	} else {
 		monster_sightsound();
 		// Setup goals and warn other monsters
 		FoundHuntTarget(TRUE);
@@ -784,55 +779,44 @@ void()	gaunt_minwake =[ $hover1, gaunt_run1 ] {
 	}
 };
 
-/*======================================================================
-QUAKED monster_gaunt (1 0.2 0) (-16 -16 -24) (16 16 24)
-======================================================================*/
-void() monster_gaunt =
-{
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+void() monster_gaunt_precache = {
+	precache_model("progs/quoth/gaunt.mdl");
+	precache_model("progs/ad171/h_gaunt.mdl");
+	precache_model("progs/ad171/mon_gaunt_elec.mdl"); // Lightning effect
+	precache_model("progs/quoth/g_fx.mdl"); // Lightning effect
+	precache_model(MODEL_PROJ_GAPLASMA); // Plasma spike/bolt
+	precache_poisongibs(); // precache gibs
+	precache_model(MODEL_PROJ_GAPLASMAGRN);
+	precache_sound("quoth/gaunt/idle1.wav");
+	precache_sound("quoth/gaunt/idle3.wav");
+	precache_sound("quoth/gaunt/idle2.wav");
+	precache_sound("ad171/gaunt/idle2.wav");
+	precache_sound("ad171/gargoyle/wings1.wav");
+	precache_sound("ad171/gaunt/plasma_start.wav");
+	precache_sound("ad171/gaunt/plasma_fire.wav");
+	precache_sound("quoth/gaunt/pain.wav");
+	precache_sound("quoth/gaunt/death.wav");
+	precache_sound("quoth/gaunt/sight.wav");
+	precache_sound("quoth/gaunt/sight.wav");
+};
+
+// QUAKED monster_gaunt (1 0.2 0) (-16 -16 -24) (16 16 24)
+void() monster_gaunt = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/quoth/gaunt.mdl";
 	self.headmdl = "progs/ad171/h_gaunt.mdl";
 	self.weaponglow = "progs/ad171/mon_gaunt_elec.mdl";
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.weaponglow);		// Lightning effect
-	precache_model ("progs/quoth/g_fx.mdl");		// Lightning effect
-	precache_model (MODEL_PROJ_GAPLASMA);	// Plasma spike/bolt
-
 	self.idle_sound = "quoth/gaunt/idle1.wav";
 	self.idle_sound2 = "quoth/gaunt/idle3.wav";
 	self.idle_soundcom = "quoth/gaunt/idle2.wav";
 	self.idle_soundcom2 = "ad171/gaunt/idle2.wav"; // Different than quoth's, different tempo and no reverb
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-	precache_sound (self.idle_soundcom);
-	precache_sound (self.idle_soundcom2);
-
-	precache_sound ("ad171/gargoyle/wings1.wav");
-	precache_sound ("ad171/gaunt/plasma_start.wav");
-	precache_sound ("ad171/gaunt/plasma_fire.wav");
-	
 	self.pain_sound = "quoth/gaunt/pain.wav";
-	precache_sound (self.pain_sound);
-	precache_sound ("quoth/gaunt/death.wav");
-
 	self.sight_sound = "quoth/gaunt/sight.wav";
-	precache_sound (self.sight_sound);
-
-	// Check for poisonous entity flag
-	if (self.poisonous) {
-		precache_poisongibs();			// precache gibs
-		self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
-		precache_model (MODEL_PROJ_GAPLASMAGRN);
-	}
-
-	// Cache gaunt is a special class used for precache only
-	if (self.classtype == CT_CACHEGAUNT) return;
+	if (self.poisonous) self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
+	
+	if (self.classtype == CT_CACHEGAUNT) return; // Cache gaunt is a special class used for precache only
 
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
@@ -849,6 +833,7 @@ void() monster_gaunt =
 	} else {
 		self.th_checkattack = GauntCheckAttack;
 	}
+
 	self.th_pain = gaunt_pain; 
 	self.th_die = gaunt_die;
 	if ( (random () < 0.500) ) {
@@ -857,24 +842,21 @@ void() monster_gaunt =
 		if (self.deathstring == "")  self.deathstring = " was charred by a Gaunt\n";
 	}
 
-	//----------------------------------------------------------------------
-	// Perched Gaunt have special idle animation + idle sounds
 	if (self.spawnflags & MON_GAUNT_PERCH) {
+		// Perched Gaunt have special idle animation + idle sounds
 		self.th_stand = self.th_walk = gaunt_perch1;
 		self.th_run = self.th_missile = gaunt_wakeup;
-	}
-	//----------------------------------------------------------------------
-	// Default gaunt setup
-	else {
+	} else {
+		// Default gaunt setup
 		self.th_stand = gaunt_idle1;
 		self.th_walk = gaunt_walk1;
 		self.th_run = gaunt_run1;
+
 		// Check for and use Quoth lightning attack
-		if (self.spawnflags & 2) {
+		if (self.spawnflags & 2)
 			self.th_missile = gaunt_Missile;
-		} else {
+		else
 			self.th_missile = gaunt_fire1;
-		}
 	}
 
 	if(!self.classtype) self.classtype = CT_MONGAUNT;
@@ -894,16 +876,13 @@ void() monster_gaunt =
 	monster_start();
 };
 
-//----------------------------------------------------------------------------
 void() monster_judgeminion = { 
 	self.classtype = CT_CACHEGAUNT; 
 	self.poisonous = TRUE;	// Cache poison stuff (just in case)
 	monster_gaunt();
 };
 
-//----------------------------------------------------------------------------
-void() setup_gaunt =
-{
+void() setup_gaunt = {
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -928,20 +907,15 @@ void() setup_gaunt =
 	self.th_checkattack = GauntCheckAttack;
 	self.th_pain = gaunt_pain; 
 	self.th_die = gaunt_die;
-	
-	//----------------------------------------------------------------------
-	// Perched Gaunt have special idle animation + idle sounds
+
 	if (self.spawnflags & MON_GAUNT_PERCH) {
+		// Perched Gaunt have special idle animation + idle sounds
 		self.th_stand = self.th_walk = gaunt_perch1;
 		self.th_run = self.th_missile = gaunt_wakeup;
-	}
-	//----------------------------------------------------------------------
-	else if (self.classtype == CT_MINIONGAUNT) {
+	} else if (self.classtype == CT_MINIONGAUNT) {
 		self.th_stand = self.th_walk = gaunt_minwake;
 		self.th_run = self.th_missile = gaunt_minwake;
-	}
-	//----------------------------------------------------------------------
-	else {
+	} else {
 		// Default gaunt setup
 		self.th_stand = gaunt_idle1;
 		self.th_walk = gaunt_walk1;
@@ -952,15 +926,11 @@ void() setup_gaunt =
 	if(!self.classtype) self.classtype = CT_MONGAUNT;
 	if (!self.classgroup) self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
-
 	monster_start();
 };
 
-//----------------------------------------------------------------------------
 // A code way to spawn gaunts (requires monster_judgeminion entity)
-//----------------------------------------------------------------------------
-void(vector minion_org, entity minion_targ, float minion_sflag) minion_gaunt =
-{
+void(vector minion_org, entity minion_targ, float minion_sflag) minion_gaunt = {
 	local entity minion;
 
 	// Check if there is space to spawn entity

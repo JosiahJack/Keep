@@ -376,6 +376,7 @@ void(entity mon, entity obj) give_monster_object = {
 	mon.entattachment = obj;
 	setorigin(obj,org); // ok we got it.
 	mon.hasobject = "true"; // signal that we are holding something
+	if (self.classtype == CT_MONOGLE) ogle_pushcart1();
 	self = tself; // restore previous self
 };
 
@@ -465,9 +466,10 @@ void() path_corner = {
 	if (developer > 0) {
 		self.headmdl = MODEL_CORNER1;	// Top of Arrow (forward)
 		self.mdl = MODEL_CORNER2;		// Bottom of Arrow (backward)
-		precache_model(self.headmdl);
-		precache_model(self.mdl);
 	}
+
+	precache_model(MODEL_CORNER1); // Always precache so saves aren't broken by toggling developer 1 midgame
+	precache_model(MODEL_CORNER2);
 	
 	// Setup time delay at corner ( wait + delay*random() )
 	if (self.wait == 0) self.wait = 0;

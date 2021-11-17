@@ -394,12 +394,11 @@ void() dlord_idle_sound = {
 };
 
 void(entity inflictor, entity attacker, float damage) dlord_pain = {
-	if (self.pain_finished > time)
-		return;
+	if (self.pain_finished > time) return;
 
 	sound(self, CHAN_VOICE, "quoth/dlord/pain.wav", 1, ATTN_NORM);
-	if (random() * 50 > damage)
-		return;
+
+	if (random() * 50 > damage) return;
 
 	self.pain_finished = time + TE_EXPLOSION2;
 	dlord_pain1();
@@ -428,16 +427,9 @@ void() magic_choice = {
 	}
 };
 
-void() monster_death_lord = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/ad171/mon_hknight.mdl";
-	precache_model("progs/ad171/mon_hknight.mdl");
+void() monster_death_lord_precache = {
+	precache_model("progs/qmaster/mon_hknight.mdl");
 	precache_model("progs/quoth/dspike.mdl");
-	self.headmdl = "progs/h_hellkn.mdl";
 	precache_model("progs/h_hellkn.mdl");
 	precache_sound("hknight/attack1.wav");
 	precache_sound("quoth/dlord/death.wav");
@@ -449,6 +441,14 @@ void() monster_death_lord = {
 	precache_sound("quoth/dguard/slhit.wav");
 	precache_sound("quoth/dguard/slmiss1.wav");
 	precache_sound("quoth/dguard/slmiss2.wav");
+};
+
+void() monster_death_lord = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/qmaster/mon_hknight.mdl";
+	self.headmdl = "progs/h_hellkn.mdl";
 	self.th_stand = dlord_stand1;
 	self.th_walk = dlord_walk1;
 	self.th_run = dlord_move1;
@@ -478,7 +478,7 @@ void() monster_death_lord = {
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
 
-	self.classtype = CT_MONHELLK;
+	self.classtype = CT_MONDLORD;
 	self.classgroup = CG_DCAPTAIN;
 	self.classmove = MON_MOVEWALK;
 	monster_start();

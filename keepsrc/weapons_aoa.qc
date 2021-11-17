@@ -44,11 +44,11 @@ Scimitar of Fire by ryanscissorhands	#scimitar #ryanscissorhands #sword
 */
 void() RyanscissorhandsChecks = //called to ensure that the proper player model is being used while wielding weapons.
 {
-	if (self.weapon == IT_SCIMITAR) //set player model for scimitar
+	if (self.weapon == IT_SCIMITAR && !self.selfweaponismoditems) //set player model for scimitar
 	{
 		setPlayerModel("progs/aoa/player_scimitar.mdl");
 	}
-	else if (self.weapon == IT_RAPIER) //set player model for rapier
+	else if (self.weapon == IT_RAPIER && self.selfweaponismoditems) //set player model for rapier
 	{
 		setPlayerModel("progs/aoa/player_rapier.mdl");
 	}
@@ -82,7 +82,7 @@ void() sword1Attack5 = [36, sword2Attack1]
 		player_run();
 		return;
 	}
-	self.attack_finished = time + 0.6;
+	W_Reload(0.6);
 };
 
 void() sword2Attack1 = [37, sword2Attack2] {self.weaponframe = 7;sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);};
@@ -107,7 +107,7 @@ void() sword2Attack6 = [42, sword3Attack1]
 		player_run();
 		return;
 	}
-	self.attack_finished = time + 0.8;
+	W_Reload(0.8);
 };
 
 void() sword3Attack1 = [43, sword3Attack3]
@@ -216,7 +216,7 @@ void (entity inflictor, entity attacker, float damage, float radius, entity igno
 void() W_FireScimitar = //the first attack in the scimitar's combo
 {
 	local vector lungeDirection;
-	self.attack_finished = time + 0.6;
+	W_Reload(0.6);
 	
 	if (random() < 0.5) sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE1, 1, ATTN_NORM);
 		else sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
@@ -291,11 +291,7 @@ void(float attackNumber) SwordSwing =
 	}
 	else if (trace_fraction != 1)
 	{	// hit wall
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_GUNSHOT);
-		WriteCoord (MSG_BROADCAST, org_x);
-		WriteCoord (MSG_BROADCAST, org_y);
-		WriteCoord (MSG_BROADCAST, org_z);
+		Tent_Point(TE_GUNSHOT,trace_endpos);
 		sound (self, CHAN_WEAPON, "aoa/axhit3.wav", 1, ATTN_NORM);
 	}
 };
@@ -390,11 +386,11 @@ void() RapierAnimation9 = [1, RapierAnimation10]
 	if (!self.tome_finished) //if tome of power isn't up, end sequence, else, carry on, self.attack_finished + time + 0.8
 	{
 		player_run();
-		self.attack_finished = time + 0.2;
+		W_Reload(0.2);
 	}
 	else
 	{
-		self.attack_finished = time + 0.8;
+		W_Reload(0.8);
 	}
 };
 void() RapierAnimation10 = [2, RapierAnimation11] {self.weaponframe = 10;};
@@ -444,11 +440,7 @@ void() RapierAttack = //this is the player's melee attack, called three times as
 	}
 	else if (trace_fraction != 1)
 	{	// hit wall
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_GUNSHOT);
-		WriteCoord (MSG_BROADCAST, org_x);
-		WriteCoord (MSG_BROADCAST, org_y);
-		WriteCoord (MSG_BROADCAST, org_z);
+		Tent_Point(TE_GUNSHOT,org);
 		sound (self, CHAN_VOICE, "aoa/axhit3.wav", 0.5, ATTN_NORM);
 	}
 };
@@ -479,16 +471,12 @@ void(float damage) GhostRapierAttack = //the projected sword does this attack th
 		SpawnBlood(trace_ent, dir, '0 0 0', 20);
 		if (trace_ent.classname == "monster_shambler")
 			damage = damage * 1.5;
-		T_Damage (trace_ent, self, self, damage, DAMARMOR);
+		T_Damage(trace_ent, self, self, damage, DAMARMOR);
 		sound (self, CHAN_WEAPON, "aoa/acidhit.wav", 1, ATTN_NORM);
 	}
 	else if (trace_fraction != 1)
 	{	// hit wall
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_GUNSHOT);
-		WriteCoord (MSG_BROADCAST, trace_endpos_x);
-		WriteCoord (MSG_BROADCAST, trace_endpos_y);
-		WriteCoord (MSG_BROADCAST, trace_endpos_z);
+		Tent_Point(TE_GUNSHOT,trace_endpos);
 		sound (self, CHAN_VOICE, "aoa/axhit3.wav", 0.5, ATTN_NORM);
 	}
 };
@@ -550,7 +538,7 @@ void() ghostRapierTouch =
 };
 void() W_FireRapier =
 {
-	self.attack_finished = time + 1;
+	W_Reload(1);
 	RapierAnimation1();
 	
 	if (self.ammo_bloodcrystals <1 && !self.tome_finished) //don't spawn Ghost rapier if you have no ammo and no Tome of Power
@@ -605,7 +593,7 @@ void() ChainLightningAnimation11 = [0, ChainLightningAnimation12] {self.frame = 
 void() ChainLightningAnimation12 = [0, ChainLightningAnimation13] {self.frame = 12;};
 void() ChainLightningAnimation13 = [0, player_run] {self.frame = 13;};
 
-void() IceAttack1 =	[107, IceAttack2] {if (time < self.attack_finished) return;self.weaponframe = 1;IceProjectiles();self.attack_finished = time + 0.8;};
+void() IceAttack1 =	[107, IceAttack2] {if (time < self.attack_finished) return;self.weaponframe = 1;IceProjectiles();W_Reload(0.8);};
 void() IceAttack2 =	[108, IceAttack3] {self.weaponframe = 2;};
 void() IceAttack3 =	[109, IceAttack4] {self.weaponframe = 3;};
 void() IceAttack4 =	[110, IceAttack5] {self.weaponframe = 4;};
@@ -618,7 +606,7 @@ void() IceAttack6 =	[112, IceAttack7]
 		player_run();
 		return;
 	}
-	self.attack_finished = time + 0.8;	
+	W_Reload(0.8);
 };
 
 void() IceAttack7 =	[113, IceAttack8] {self.weaponframe = 7;};
@@ -633,7 +621,7 @@ void() IceAttack11 =	[117, IceAttack12]
 		player_run();
 		return;
 	}
-	self.attack_finished = time + 1;
+	W_Reload(1);
 };
 
 void() IceAttack12 = [113, IceAttack13] {self.weaponframe = 36;};
@@ -774,7 +762,7 @@ void() W_FireChainLightning = //direct hitscan damage, then lightning chains fro
 	local vector org, terminus, stormOrigin;
 	local entity storm;
 
-	self.attack_finished = time + 0.7;
+	W_Reload(0.7);
 		
 	makevectors (self.v_angle);
 	org = self.origin + '0 0 8' + v_forward*12 + v_right*10;
@@ -865,7 +853,7 @@ void () W_FireIce =
 
 void() IceProjectiles =
 {
-	self.attack_finished = time + 0.9;
+	W_Reload(0.9);
 	
 	sound (self, CHAN_WEAPON, "aoa/iceattack.wav", 1, ATTN_NORM);
 
@@ -907,7 +895,7 @@ void()	embers15	=[	14,	embers16	] {};
 void()	embers16	=[	15,	embers16	] {remove(self);};
 
 
-void() StaffShot1 = [113, StaffShot2] {self.weaponframe =1;VoidStaffProjectile();self.attack_finished = time + 0.9;};
+void() StaffShot1 = [113, StaffShot2] {self.weaponframe =1;VoidStaffProjectile();W_Reload(0.9);};
 void() StaffShot2 = [114, StaffShot3] {self.weaponframe =2;};
 void() StaffShot3 = [115, StaffShot4] {self.weaponframe =3;};
 void() StaffShot4 = [116, StaffShot5] {self.weaponframe =4;};
@@ -921,7 +909,7 @@ void() StaffShot6 = [118, StaffShot7]
 		return;
 	}
 };
-void() StaffShot7 = [113, StaffShot8] {self.weaponframe =1;VoidStaffProjectile();self.attack_finished = time + 0.9;};
+void() StaffShot7 = [113, StaffShot8] {self.weaponframe =1;VoidStaffProjectile();W_Reload(0.9);};
 void() StaffShot8 = [114, StaffShot9] {self.weaponframe =2;};
 void() StaffShot9 = [115, StaffShot10] {self.weaponframe =3;};
 void() StaffShot10 = [116, StaffShot11] {self.weaponframe =4;};
@@ -934,7 +922,7 @@ void() StaffWait1 = [7, StaffWait2]
 	{
 		DetonateVoidShards();
 		StaffDetonate1();
-		self.attack_finished = time + 0.7;
+		W_Reload(0.7);
 	}
 	
 };
@@ -945,7 +933,7 @@ void() StaffWait2 = [8, StaffWait3]
 	{
 		DetonateVoidShards();
 		StaffDetonate1();
-		self.attack_finished = time + 0.6;
+		W_Reload(0.6);
 	}
 	
 };
@@ -956,7 +944,7 @@ void() StaffWait3 = [9, StaffWait4]
 	{
 		DetonateVoidShards();
 		StaffDetonate1();
-		self.attack_finished = time + 0.5;
+		W_Reload(0.5);
 	}
 	
 };
@@ -967,7 +955,7 @@ void() StaffWait4 = [10, StaffWait5]
 	{
 		DetonateVoidShards();
 		StaffDetonate1();
-		self.attack_finished = time + 0.4;
+		W_Reload(0.4);
 	}
 };
 void() StaffWait5 = [11, StaffWait6] 
@@ -977,7 +965,7 @@ void() StaffWait5 = [11, StaffWait6]
 	{
 		DetonateVoidShards();
 		StaffDetonate1();
-		self.attack_finished = time + 0.4;
+		W_Reload(0.4);
 	}
 	
 };
@@ -988,7 +976,7 @@ void() StaffWait6 = [12, player_run]
 	{
 		DetonateVoidShards();
 		StaffDetonate1();
-		self.attack_finished = time + 0.4;
+		W_Reload(0.4);
 	}
 	
 };
@@ -1350,7 +1338,7 @@ void() W_FireFlak =
 	self.currentammo = CountFlakAmmo(self);
 
 	
-	self.attack_finished = time + 1;
+	W_Reload(1);
 	
 	ShrapnelShot1();
 };
@@ -1395,7 +1383,7 @@ void() MaceSwing;
 
 void() CastDrainHealth;
 
-void() MaceSwing1 =	[	119,	MaceSwing2	] {self.weaponframe=1;sound (self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);self.attack_finished = time + 0.6; }; //th
+void() MaceSwing1 =	[	119,	MaceSwing2	] {self.weaponframe=1;sound (self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);W_Reload(0.6);}; //th
 void() MaceSwing2 =	[	120,	MaceSwing3	] {self.weaponframe=2;};
 void() MaceSwing3 =	[	121,	MaceSwing4	] {self.weaponframe=3; MaceSwing(); };
 void() MaceSwing4 =	[	122,	MaceSwing5	] {self.weaponframe=4;};
@@ -1409,7 +1397,7 @@ void() MaceSwing5 =	[	123,	MaceBackhand1	]
 	}
 };
 
-void() MaceBackhand1 =	[	125,	MaceBackhand2	] {self.weaponframe=6;sound (self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);self.attack_finished = time + 0.7;};
+void() MaceBackhand1 =	[	125,	MaceBackhand2	] {self.weaponframe=6;sound (self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM);W_Reload(0.7);};
 void() MaceBackhand2 =	[	126,	MaceBackhand3	] {self.weaponframe=7;MaceSwing();};
 void() MaceBackhand3 =	[	127,	MaceBackhand4	] {self.weaponframe=8;};
 void() MaceBackhand4 =	[	128,	MaceBackhand5	] {self.weaponframe=9;};
@@ -1424,7 +1412,7 @@ void() MaceBackhand6 =	[	0,	DrainHealth1	]
 	}
 };
 
-void() DrainHealth1 =	[112, DrainHealth2]	{self.weaponframe = 10;self.attack_finished = time + 1.2;};  
+void() DrainHealth1 =	[112, DrainHealth2]	{self.weaponframe = 10;W_Reload(1.2);};  
 void() DrainHealth2 =	[115, DrainHealth3]	{self.weaponframe = 11;}; 
 void() DrainHealth3 =	[118, DrainHealth4]	{self.weaponframe = 12;}; 
 void() DrainHealth4 =	[118, player_run]	{self.weaponframe = 13;CastDrainHealth();}; 
@@ -1606,12 +1594,7 @@ void() MaceSwing = //executes the attack part. Melee changed from traceline to f
 	
 	if (trace_fraction != 1 && hitSomething == FALSE)
 	{	// hit wall
-		
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_GUNSHOT);
-		WriteCoord (MSG_BROADCAST, trace_endpos_x);
-		WriteCoord (MSG_BROADCAST, trace_endpos_y);
-		WriteCoord (MSG_BROADCAST, trace_endpos_z);
+		Tent_Point(TE_GUNSHOT,trace_endpos);
 		sound (self, CHAN_WEAPON, "player/axhit2.wav", 1, ATTN_NORM);
 	}
 };	
@@ -1637,7 +1620,7 @@ void()	GungnirAttack1 = 	[144, GungnirAttack2		]
 	//setPlayerModel ("progs/player.mdl");
 	self.weaponframe = 1;
 	sound (self, CHAN_AUTO, "aoa/swing2.wav", 1, ATTN_NORM);
-	self.attack_finished = time + 0.9;
+	W_Reload(0.9);
 };
 void()	GungnirAttack2 = 	[145, GungnirAttack3		]	{self.weaponframe = 2;GungnirPrimary();};
 void()	GungnirAttack3 = 	[146, GungnirAttack4		]	{self.weaponframe = 3;};
@@ -1652,7 +1635,7 @@ void()	GungnirAttack7 = 	[9, GungnirJump1]
 		player_run();
 		return;
 	}
-	self.attack_finished = time + 0.8;
+	W_Reload(0.8);
 
 };
 
@@ -1710,7 +1693,7 @@ void() SpawnDiveTarget = //spawns the reticle which shows the player where they 
 void()	GungnirJump1 = 	[143, GungnirJump2		]
 {
 	self.weaponframe = 4;
-	self.attack_finished = time + 0.8;
+	W_Reload(0.8);
 	if (self.flags & FL_ONGROUND && self.ammo_voidshards > 1)
 	{
 		self.velocity = '0 0 550';
@@ -1837,7 +1820,7 @@ void() GungnirDive =
 	org = self.origin + '0 0 32' + v_forward*8;
 	dest = org + ignoreVertical(v_forward)*150 + v_forward*150 + '0 0 -200';
 	traceline(org, dest, TRUE, self);
-	self.attack_finished = time + 0.8;
+	W_Reload(0.8);
 	
 	if ( (trace_endpos_z - self.origin_z <= -80) && (trace_fraction > 0.2) )
 	{
@@ -1962,7 +1945,7 @@ void() W_FireGungnir =
 	{
 		return;
 	}
-	self.attack_finished = time + 0.8;	//adjust self.attack_finished time
+	W_Reload(0.8); //adjust self.attack_finished time
 	GungnirAttack1();	//trigger animation, delegate attack method and sound triggers
 };
 
@@ -2067,7 +2050,7 @@ void()	RGaunt1 =[		115,		RGaunt2	]
 	self.weaponframe=1;
 	GauntletBeam(15); //right beam
 	AttackWithGreyOrbs(); //any orbs generated with tome are now projectiles.
-	self.attack_finished = time + 0.4;
+	W_Reload(0.4);
 };
 void()	RGaunt2 =[		117,		RGaunt3	] { self.weaponframe=2;};
 
@@ -2086,7 +2069,7 @@ void()	LGaunt1 =[		115,		LGaunt2	]
 	self.weaponframe=3;
 	GauntletBeam(-15); //left beam
 	AttackWithGreyOrbs();
-	self.attack_finished = time + 0.4;
+	W_Reload(0.4);
 };
 
 void() LGaunt2 = [117, LGaunt3]{self.weaponframe=4;};
@@ -2450,7 +2433,7 @@ void (float RightOffset) GauntletBeam = //triggers attack and visual effect, alt
 
 void() W_FireSanguinators = //triggers animations, which alternate left/right like the nailgun
 {
-	self.attack_finished = time + 0.3;
+	W_Reload(0.3);
 	RGaunt1();//trigger animations, delegating attack triggers and sounds
 };
 //=========================================END OF SANGUINATORS================================

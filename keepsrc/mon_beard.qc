@@ -419,7 +419,7 @@ Void function hknight_dieb8();
 
 Void function hknight_dieb9();
 {
-  if (self.classname == "monster_beard" && self.lives > 0) {
+  if (self.classtype == CT_MONBEARD && self.lives > 0) {
     self.aflag = 9 + random() + random() + random();
     #62 beard_returndelay;
     }
@@ -462,39 +462,34 @@ Void function beard_kippup();
   self.walkframe = self.walkframe + 1;
 }
 
-Void function hknight_die();
-var
- num : Real;
-{
-  num = 0;
-  strategy_move = 0;
-  if (self.classname == "monster_beard") {
-    self.lives = self.lives - 1;
-    }
-  if (self.health < -40) {
-    sound(self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
-    if (self.classname == "monster_beard") {
-      ThrowHead("progs/gib3.mdl", self.health);
-      }
-    else {
-      ThrowHead("progs/h_hellkn.mdl", self.health);
-      }
-    ThrowGib("progs/gib1.mdl", self.health);
-    ThrowGib("progs/gib2.mdl", self.health);
-    ThrowGib("progs/gib3.mdl", self.health);
-    exit;
-    }
-  sound(self, CHAN_VOICE, "hknight/death1.wav", 1, ATTN_NORM);
-  if (self.classname == "monster_beard") {
-    hknight_dieb1();
-    exit;
-    }
-  if (random() > 0.5) {
-    hknight_die1();
-    }
-  else {
-    hknight_dieb1();
-    }
+void() hknight_die = {
+	local float num;
+
+	num = 0;
+	strategy_move = 0;
+	if (self.classtype == CT_MONBEARD) self.lives = self.lives - 1;
+
+	if (self.health < -40) {
+		sound(self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
+		if (self.classtype == CT_MONBEARD) {
+			ThrowHead("progs/gib3.mdl", self.health);
+		}
+		else {
+			ThrowHead("progs/h_hellkn.mdl", self.health);
+		}
+		ThrowGib("progs/gib1.mdl", self.health);
+		ThrowGib("progs/gib2.mdl", self.health);
+		ThrowGib("progs/gib3.mdl", self.health);
+		return;
+	}
+	sound(self, CHAN_VOICE, "hknight/death1.wav", 1, ATTN_NORM);
+	if (self.classtype == CT_MONBEARD) { hknight_dieb1(); return; }
+
+	if (random() > 0.5) {
+		hknight_die1();
+	} else {
+		hknight_dieb1();
+	}
 }
 
 Void function hknight_magica1();
@@ -675,7 +670,7 @@ Void function hknight_magicb13();
 
 Void function hknight_rushdecide();
 {
-  if (self.classname == "monster_beard") {
+  if (self.classname == self.classtype == CT_MONBEARD) {
     return 0;
     }
   if (self.origin_z == self.enemy.origin_z) {
@@ -694,7 +689,7 @@ Void function hknight_rushdecide();
 
 Void function hknight_magicc1();
 {
-  if (self.classname == "monster_beard") {
+  if (self.classname == self.classtype == CT_MONBEARD) {
     beard_attack1();
     exit;
     }
@@ -1138,39 +1133,33 @@ Void function hknight_pain(attacker : Object; damage : Real);
 Void function hknight_melee();
 {
   if (random() < 0.4) {
-    if (self.classname == "monster_beard") {
+    if (self.classtype == CT_MONBEARD) {
       beard_attack1();
       exit;
       }
     }
-  hknight_type = hknight_type + 1;
+  self.meleeattack = self.meleeattack + 1;
   sound(self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM);
-  if (hknight_type == 1) {
+  if (self.meleeattack == 1) {
     hknight_slice1();
     }
   else {
-    if (hknight_type == FL_SWIM) {
+    if (self.meleeattack == FL_SWIM) {
       hknight_smash1();
       }
     else {
-      if (hknight_type == MOVETYPE_WALK) {
+      if (self.meleeattack == MOVETYPE_WALK) {
         hknight_watk1();
-        hknight_type = 0;
+        self.meleeattack = 0;
         }
       }
     }
-}
+};
 
-void() monster_beard = {
-  if (deathmatch) {
-    remove(self);
-    exit;
-    }
-
-	precache_model("progs/beard.mdl");
+void() monster_beard_precache = {
+	precache_model("progs/nehahra/beard.mdl");
 	precache_sound("nehahra/ghoro/balls.wav");
 	precache_sound("nehahra/ghoro/spawnb.wav");
-	setmodel(self, "progs/beard.mdl");
 	precache_sound("nehahra/ghoro/talk1.wav");
 	precache_sound("nehahra/ghoro/talk2.wav");
 	precache_sound("nehahra/ghoro/talk3.wav");
@@ -1189,58 +1178,59 @@ void() monster_beard = {
 	precache_sound("knight/sword2.wav");
 	precache_sound("nehahra/sets/set2_4.wav");
 	precache_sound("nehahra/sets/dml1_4.wav");
+};
+
+void() monster_beard = {
+	if (deathmatch) { remove(self); return; }
+
+	setmodel(self, "progs/nehahra/beard.mdl");
 	self.sight_sound = "nehahra/ghoro/laugh.wav";
-	if (!(self.brain & NO_SWIM)) {
-	self.brain = self.brain | NO_SWIM;
-	}
+	if (!(self.brain & NO_SWIM)) self.brain = self.brain | NO_SWIM;
+
 	if (self.classname == "monster_beard") {
-	self.lives = 8;
-	self.th_wins = beard_wins;
-	if (!(self.health)) {
-	self.health = 650;
+		self.classtype = CT_MONBEARD;
+		self.lives = 8;
+		self.th_wins = beard_wins;
+		if (!(self.health)) self.health = 650;
+		if (!(self.brain & BLINK)) self.brain = self.brain | BLINK;
+
+		if (world.model == "maps/neh2m1.bsp") {
+			self.th_stand = hknight_wait;
+			self.th_walk = hknight_wait;
+		}
+	} else {
+		self.health = 250;
 	}
-	if (!(self.brain & BLINK)) {
-	self.brain = self.brain | BLINK;
-	}
-	}
-	else {
-	self.health = 250;
-	}
-	if (!(self.brain & NAVLOGIC)) {
-	self.brain = self.brain | NAVLOGIC;
-	}
+
+	if (!(self.brain & NAVLOGIC)) self.brain = self.brain | NAVLOGIC;
+
 	if (self.targetname == "actor19" || self.targetname == "actor20") {
-	self.th_stand = hknight_wait;
-	self.th_walk = hknight_wait;
+		self.th_stand = hknight_wait;
+		self.th_walk = hknight_wait;
+	} else {
+		self.th_stand = hknight_stand1;
+		self.th_walk = hknight_walk1;
 	}
-	else {
-	self.th_stand = hknight_stand1;
-	self.th_walk = hknight_walk1;
-	}
-	if (self.classname == "monster_beard" && world.model == "maps/neh2m1.bsp") {
-	self.th_stand = hknight_wait;
-	self.th_walk = hknight_wait;
-	}
+
+
 	self.th_run = hknight_run1;
 	self.th_melee = hknight_melee;
 	self.th_missile = hknight_magicc1;
 	self.th_pain = hknight_pain;
 	self.th_die = hknight_die;
 	if (self.brain & TRIGGER_SPAWN) {
-	self.use = hknight_start;
-	exit;
+		self.use = hknight_start;
+		return;
 	}
-
 
 	setsize(self, VEC_HULL_MIN, [16 16 40]);
 	monster_start();
 };
 
-Void function hknight_start();
-{
-  trigger_spawnmonster();
-  carnify_hknight();
-}
+void() hknight_start = {
+	trigger_spawnmonster();
+	carnify_hknight();
+};
 
 Void function carnify_hknight();
 {
@@ -1251,7 +1241,7 @@ Void function carnify_hknight();
   if (!(self.health)) {
     self.health = 250;
     }
-  walkmonster_start();
+  monster_start();
 }
 
 Void function hknight_wait();

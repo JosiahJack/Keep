@@ -1,6 +1,53 @@
-entity	lastspawn; // client.qc (SelectSpawnPoint)
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: All
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 12
+// Function count: 7
+//
+// Implements: Worldspawn and Main qc entry and StartFrame
+//
+// Description:
+// Worldspawn is the entity for the world and displays the level geometry. Many
+// level-specific settings are assigned to worldspawn that affect the rest of
+// the level's entities.
+//
+// Main is the starting point for the qc code.
+//
+// StartFrame is called at the beginning of every frame before looping through
+// all the entities' thinks and touches.
+//=============================================================================
+
+entity lastspawn; // client.qc (SelectSpawnPoint)
+entity bodyque_head; // Keeps track of dead player models
+
 void() versus_setup;
-entity () ammohealthsum;
+entity() ammohealthsum;
 void() InitBodyQue;
 void() light_style_boundary;
 void() light_style_setuparray;
@@ -9,129 +56,119 @@ void() mapvar_setuparray;
 void() player_fallspeed_reset;
 void() player_fallspeed_setup;
 void() Client_SyncEvilmode;
+void() InitMusic;
 
-void() main = {
-	dprint ("\b[MAIN]\bfunction started ...\n");
-	
-	// these are just commands to the prog compiler to copy these files
-	precache_file ("progs.dat");
-	precache_file ("gfx.wad");
-	precache_file ("quake.rc");
-	precache_file ("default.cfg");
-	precache_file ("end1.bin");
-	precache_file2 ("end2.bin");
-	precache_file ("demo1.dem");
-	precache_file ("demo2.dem");
-	precache_file ("demo3.dem");
-
-	// these are all of the lumps from the cached.ls files
-	precache_file ("gfx/palette.lmp");
-	precache_file ("gfx/colormap.lmp");
-	precache_file2 ("gfx/pop.lmp");
-	precache_file ("gfx/complete.lmp");
-	precache_file ("gfx/inter.lmp");
-	precache_file ("gfx/ranking.lmp");
-	precache_file ("gfx/vidmodes.lmp");
-	precache_file ("gfx/finale.lmp");
-	precache_file ("gfx/conback.lmp");
-	precache_file ("gfx/qplaque.lmp");
-	precache_file ("gfx/menudot1.lmp");
-	precache_file ("gfx/menudot2.lmp");
-	precache_file ("gfx/menudot3.lmp");
-	precache_file ("gfx/menudot4.lmp");
-	precache_file ("gfx/menudot5.lmp");
-	precache_file ("gfx/menudot6.lmp");
-	precache_file ("gfx/menuplyr.lmp");
-	precache_file ("gfx/bigbox.lmp");
-	precache_file ("gfx/dim_modm.lmp");
-	precache_file ("gfx/dim_drct.lmp");
-	precache_file ("gfx/dim_ipx.lmp");
-	precache_file ("gfx/dim_tcp.lmp");
-	precache_file ("gfx/dim_mult.lmp");
-	precache_file ("gfx/mainmenu.lmp");
-	precache_file ("gfx/box_tl.lmp");
-	precache_file ("gfx/box_tm.lmp");
-	precache_file ("gfx/box_tr.lmp");
-	precache_file ("gfx/box_ml.lmp");
-	precache_file ("gfx/box_mm.lmp");
-	precache_file ("gfx/box_mm2.lmp");
-	precache_file ("gfx/box_mr.lmp");
-	precache_file ("gfx/box_bl.lmp");
-	precache_file ("gfx/box_bm.lmp");
-	precache_file ("gfx/box_br.lmp");
-	precache_file ("gfx/sp_menu.lmp");
-	precache_file ("gfx/ttl_sgl.lmp");
-	precache_file ("gfx/ttl_main.lmp");
-	precache_file ("gfx/ttl_cstm.lmp");
-	precache_file ("gfx/mp_menu.lmp");
-	precache_file ("gfx/netmen1.lmp");
-	precache_file ("gfx/netmen2.lmp");
-	precache_file ("gfx/netmen3.lmp");
-	precache_file ("gfx/netmen4.lmp");
-	precache_file ("gfx/netmen5.lmp");
-	precache_file ("gfx/sell.lmp");
-	precache_file ("gfx/help0.lmp");
-	precache_file ("gfx/help1.lmp");
-	precache_file ("gfx/help2.lmp");
-	precache_file ("gfx/help3.lmp");
-	precache_file ("gfx/help4.lmp");
-	precache_file ("gfx/help5.lmp");
-	precache_file ("gfx/pause.lmp");
-	precache_file ("gfx/loading.lmp");
-	precache_file ("gfx/p_option.lmp");
-	precache_file ("gfx/p_load.lmp");
-	precache_file ("gfx/p_save.lmp");
-	precache_file ("gfx/p_multi.lmp");
-
-	// sounds loaded by C code
-	precache_sound ("misc/menu1.wav");
-	precache_sound ("misc/menu2.wav");
-	precache_sound ("misc/menu3.wav");
-	precache_sound ("ambience/water1.wav");
-	precache_sound ("ambience/wind2.wav");
-
-	// shareware
-	precache_file ("maps/start.bsp");
-	precache_file ("maps/e1m1.bsp");
-	precache_file ("maps/e1m2.bsp");
-	precache_file ("maps/e1m3.bsp");
-	precache_file ("maps/e1m4.bsp");
-	precache_file ("maps/e1m5.bsp");
-	precache_file ("maps/e1m6.bsp");
-	precache_file ("maps/e1m7.bsp");
-	precache_file ("maps/e1m8.bsp");
-
-	// registered.  Full version of Quake is required to play this mod.
-	precache_file2 ("gfx/pop.lmp");
-	precache_file2 ("maps/e2m1.bsp");
-	precache_file2 ("maps/e2m2.bsp");
-	precache_file2 ("maps/e2m3.bsp");
-	precache_file2 ("maps/e2m4.bsp");
-	precache_file2 ("maps/e2m5.bsp");
-	precache_file2 ("maps/e2m6.bsp");
-	precache_file2 ("maps/e2m7.bsp");
-	precache_file2 ("maps/e3m1.bsp");
-	precache_file2 ("maps/e3m2.bsp");
-	precache_file2 ("maps/e3m3.bsp");
-	precache_file2 ("maps/e3m4.bsp");
-	precache_file2 ("maps/e3m5.bsp");
-	precache_file2 ("maps/e3m6.bsp");
-	precache_file2 ("maps/e3m7.bsp");
-	precache_file2 ("maps/e4m1.bsp");
-	precache_file2 ("maps/e4m2.bsp");
-	precache_file2 ("maps/e4m3.bsp");
-	precache_file2 ("maps/e4m4.bsp");
-	precache_file2 ("maps/e4m5.bsp");
-	precache_file2 ("maps/e4m6.bsp");
-	precache_file2 ("maps/e4m7.bsp");
-	precache_file2 ("maps/e4m8.bsp");
-	precache_file2 ("maps/end.bsp");
-	precache_file2 ("maps/dm1.bsp");
-	precache_file2 ("maps/dm2.bsp");
-	precache_file2 ("maps/dm3.bsp");
-	precache_file2 ("maps/dm4.bsp");
-	precache_file2 ("maps/dm5.bsp");
-	precache_file2 ("maps/dm6.bsp");
+void() main = { // [FUNCTION]
+	precache_file("progs.dat"); // these are just commands to the prog compiler to copy these files
+	precache_file("gfx.wad");
+	precache_file("quake.rc");
+	precache_file("default.cfg");
+	precache_file("end1.bin");
+	precache_file2("end2.bin");
+	precache_file("demo1.dem");
+	precache_file("demo2.dem");
+	precache_file("demo3.dem");
+	precache_file("gfx/palette.lmp"); // these are all of the lumps from the cached.ls files
+	precache_file("gfx/colormap.lmp");
+	precache_file2("gfx/pop.lmp");
+	precache_file("gfx/complete.lmp");
+	precache_file("gfx/inter.lmp");
+	precache_file("gfx/ranking.lmp");
+	precache_file("gfx/vidmodes.lmp");
+	precache_file("gfx/finale.lmp");
+	precache_file("gfx/conback.lmp");
+	precache_file("gfx/qplaque.lmp");
+	precache_file("gfx/menudot1.lmp");
+	precache_file("gfx/menudot2.lmp");
+	precache_file("gfx/menudot3.lmp");
+	precache_file("gfx/menudot4.lmp");
+	precache_file("gfx/menudot5.lmp");
+	precache_file("gfx/menudot6.lmp");
+	precache_file("gfx/menuplyr.lmp");
+	precache_file("gfx/bigbox.lmp");
+	precache_file("gfx/dim_modm.lmp");
+	precache_file("gfx/dim_drct.lmp");
+	precache_file("gfx/dim_ipx.lmp");
+	precache_file("gfx/dim_tcp.lmp");
+	precache_file("gfx/dim_mult.lmp");
+	precache_file("gfx/mainmenu.lmp");
+	precache_file("gfx/box_tl.lmp");
+	precache_file("gfx/box_tm.lmp");
+	precache_file("gfx/box_tr.lmp");
+	precache_file("gfx/box_ml.lmp");
+	precache_file("gfx/box_mm.lmp");
+	precache_file("gfx/box_mm2.lmp");
+	precache_file("gfx/box_mr.lmp");
+	precache_file("gfx/box_bl.lmp");
+	precache_file("gfx/box_bm.lmp");
+	precache_file("gfx/box_br.lmp");
+	precache_file("gfx/sp_menu.lmp");
+	precache_file("gfx/ttl_sgl.lmp");
+	precache_file("gfx/ttl_main.lmp");
+	precache_file("gfx/ttl_cstm.lmp");
+	precache_file("gfx/mp_menu.lmp");
+	precache_file("gfx/netmen1.lmp");
+	precache_file("gfx/netmen2.lmp");
+	precache_file("gfx/netmen3.lmp");
+	precache_file("gfx/netmen4.lmp");
+	precache_file("gfx/netmen5.lmp");
+	precache_file("gfx/sell.lmp");
+	precache_file("gfx/help0.lmp");
+	precache_file("gfx/help1.lmp");
+	precache_file("gfx/help2.lmp");
+	precache_file("gfx/help3.lmp");
+	precache_file("gfx/help4.lmp");
+	precache_file("gfx/help5.lmp");
+	precache_file("gfx/pause.lmp");
+	precache_file("gfx/loading.lmp");
+	precache_file("gfx/p_option.lmp");
+	precache_file("gfx/p_load.lmp");
+	precache_file("gfx/p_save.lmp");
+	precache_file("gfx/p_multi.lmp");
+	precache_sound("misc/menu1.wav"); // sounds loaded by C code
+	precache_sound("misc/menu2.wav");
+	precache_sound("misc/menu3.wav");
+	precache_sound("ambience/water1.wav");
+	precache_sound("ambience/wind2.wav");
+	precache_file("maps/start.bsp"); // shareware
+	precache_file("maps/e1m1.bsp");
+	precache_file("maps/e1m2.bsp");
+	precache_file("maps/e1m3.bsp");
+	precache_file("maps/e1m4.bsp");
+	precache_file("maps/e1m5.bsp");
+	precache_file("maps/e1m6.bsp");
+	precache_file("maps/e1m7.bsp");
+	precache_file("maps/e1m8.bsp");
+	precache_file2("gfx/pop.lmp"); // Registered.  Full version of Quake is required to play this mod.  Note that we only need files with these names to exist...latteedah, nothing to think about here.
+	precache_file2("maps/e2m1.bsp");
+	precache_file2("maps/e2m2.bsp");
+	precache_file2("maps/e2m3.bsp");
+	precache_file2("maps/e2m4.bsp");
+	precache_file2("maps/e2m5.bsp");
+	precache_file2("maps/e2m6.bsp");
+	precache_file2("maps/e2m7.bsp");
+	precache_file2("maps/e3m1.bsp");
+	precache_file2("maps/e3m2.bsp");
+	precache_file2("maps/e3m3.bsp");
+	precache_file2("maps/e3m4.bsp");
+	precache_file2("maps/e3m5.bsp");
+	precache_file2("maps/e3m6.bsp");
+	precache_file2("maps/e3m7.bsp");
+	precache_file2("maps/e4m1.bsp");
+	precache_file2("maps/e4m2.bsp");
+	precache_file2("maps/e4m3.bsp");
+	precache_file2("maps/e4m4.bsp");
+	precache_file2("maps/e4m5.bsp");
+	precache_file2("maps/e4m6.bsp");
+	precache_file2("maps/e4m7.bsp");
+	precache_file2("maps/e4m8.bsp");
+	precache_file2("maps/end.bsp");
+	precache_file2("maps/dm1.bsp");
+	precache_file2("maps/dm2.bsp");
+	precache_file2("maps/dm3.bsp");
+	precache_file2("maps/dm4.bsp");
+	precache_file2("maps/dm5.bsp");
+	precache_file2("maps/dm6.bsp");
 };
 
 // QUAKED worldspawn (0 0 0) ? x
@@ -153,13 +190,10 @@ void() main = {
 // _sun_mangle        : Duplicate version of sunlight_mangle
 // _sunlight_penumbra : Penumbra width, in degrees, of sunlight
 // _sunlight_dirt     : 1 = enables dirt mapping on sun
-
-// Ambient bounce light (multiple suns in a dome)
-// _sunlight2       : Second SUN (eg 100)
+// _sunlight2       : Second SUN (eg 100) // Ambient bounce light (multiple suns in a dome)
 // _sunlight2_color : Red/Green/Blue (0.78 0.86 1.00)
 // _sunlight2_dirt  : 1 = enables dirt mapping on sun 2
 // _sunlight3       : Third SUN! (ask MFX)
-
 // _dirt          : 1 = enables dirtmapping (ambient occlusion) on all lights
 // _dirtmode      : Choose between ordered (def=0) and randomized (1)
 // _dirtscale     : Scale factor used in dirt calculations, def=1
@@ -231,7 +265,7 @@ void() main = {
 // gh_jumpchain    : Jump movement to jumping off the chain
 // gh_boostchain   : Boost movement during swing/pull chain
 // gh_movemonster  : Monster movement when impacted by chain
-void() worldspawn = {
+void() worldspawn = { // [ENTITY]...well it IS.
 	dprint ("\b[WORLDSPAWN]\b function started ...\n");
 	lastspawn = world;
 	InitBodyQue ();
@@ -240,96 +274,80 @@ void() worldspawn = {
     InitLightning ();
 	developer = cvar("developer");
 	self.classtype = CT_WORLD;
+	if (self.angles_y != 0) self.angles = '0 0 0'; // ID map E3M3 has worldspawn angles set, WUT!?!
+	Client_SyncEvilmode(); // Engine resets skill 0-3, change it back
 
-	// ID map E3M3 has worldspawn angles set, WUT!?!
-	if (self.angles_y != 0) self.angles = '0 0 0';
-
-	// Engine resets skill 0-3, change it back
-	Client_SyncEvilmode();
-
-	// these sounds MUST be the first precache_sounds
-	precache_sound ("weapons/r_exp3.wav");		// Hardcoded Explosion (null)
-	precache_sound ("weapons/rocket1i.wav");	// spike gun
-	precache_sound ("weapons/sgun1.wav");		// Rocket launcher!?!
-	precache_sound ("weapons/guncock.wav");		// Original SG
-	precache_sound ("ad171/weapons/sg2.wav");			// New SG (with shell casing)
-	precache_sound ("weapons/ric1.wav");		// ricochet (used in c code)
-	precache_sound ("weapons/ric2.wav");		// ricochet (used in c code)
-	precache_sound ("weapons/ric3.wav");		// ricochet (used in c code)
-	precache_sound ("weapons/spike2.wav");		// super spikes
-	precache_sound ("weapons/tink1.wav");		// spikes tink (used in c code)
-	precache_sound ("weapons/grenade.wav");		// grenade launcher
-	precache_sound ("ad171/weapons/gl_loadshort.wav");// MONSTER grenade launcher
-	precache_sound ("weapons/bounce.wav");		// grenade bounce
-	precache_sound ("weapons/shotgn2.wav");		// Original SSG
-	precache_sound ("ad171/weapons/ssg2.wav");		// Projectile shells or Shotgun upgrade
-	precache_sound (SOUND_PLASMA_FIRE);			// Player PG (eliminator)
-	precache_sound (SOUND_PLASMA_HIT);			// New fire/impact sounds
-	precache_sound (SOUND_MISFIRE);		// Weapon jams/noammo/broken
-	precache_sound (SOUND_REXP3);				// Original explosion
-	precache_sound (SOUND_RESIST_ROCKET);		// Resist Rockets
+	// These sounds MUST be the first precache_sounds
+	precache_sound("weapons/r_exp3.wav");		// Hardcoded Explosion (null)
+	precache_sound("weapons/rocket1i.wav");	// spike gun
+	precache_sound("weapons/sgun1.wav");		// Rocket launcher!?!
+	precache_sound("weapons/guncock.wav");		// Original SG
+	precache_sound("ad171/weapons/sg2.wav");	// New SG (with shell casing)
+	precache_sound("weapons/ric1.wav");		// ricochet (used in c code)
+	precache_sound("weapons/ric2.wav");		// ricochet (used in c code)
+	precache_sound("weapons/ric3.wav");		// ricochet (used in c code)
+	precache_sound("weapons/spike2.wav");		// super spikes
+	precache_sound("weapons/tink1.wav");		// spikes tink (used in c code)
+	precache_sound("weapons/grenade.wav");		// grenade launcher
+	precache_sound("ad171/weapons/gl_loadshort.wav");// MONSTER grenade launcher
+	precache_sound("weapons/bounce.wav");		// grenade bounce
+	precache_sound("weapons/shotgn2.wav");		// Original SSG
+	precache_sound("ad171/weapons/ssg2.wav");		// Projectile shells or Shotgun upgrade
+	precache_sound(SOUND_PLASMA_FIRE);			// Player PG (eliminator)
+	precache_sound(SOUND_PLASMA_HIT);			// New fire/impact sounds
+	precache_sound(SOUND_MISFIRE);		// Weapon jams/noammo/broken
+	precache_sound(SOUND_REXP3);				// Original explosion
+	precache_sound(SOUND_RESIST_ROCKET);		// Resist Rockets
 	
-	// sounds used from C physics code
-	precache_sound ("demon/dland2.wav");		// landing thud
-	precache_sound ("misc/h2ohit1.wav");		// landing splash
+	// Sounds used from C physics code, must be present!
+	precache_sound("demon/dland2.wav");		// landing thud
+	precache_sound("misc/h2ohit1.wav");		// landing splash
 
 	// Always precaches player sounds
-	precache_sound (SOUND_RESPAWN);				// item respawn sound
-	precache_sound ("player/plyrjmp8.wav");		// player jump
-	precache_sound ("player/land.wav");			// player landing
-	precache_sound ("player/land2.wav");		// player hurt landing
-	precache_sound ("player/drown1.wav");		// drowning pain
-	precache_sound ("player/drown2.wav");		// drowning pain
-	precache_sound ("player/gasp1.wav");		// gasping for air
-	precache_sound ("player/gasp2.wav");		// taking breath
-	precache_sound ("player/h2odeath.wav");		// drowning death
-
-	precache_sound (SOUND_EMPTY);				// Empty sound
-	precache_sound (SOUND_TALK);				// talk message/trigger
-	precache_sound ("player/teledth1.wav");		// telefrag
-	precache_sound ("misc/r_tele1.wav");		// teleport sounds
-	precache_sound ("misc/r_tele2.wav");
-	precache_sound ("misc/r_tele3.wav");
-	precache_sound ("misc/r_tele4.wav");
-	precache_sound ("misc/r_tele5.wav");
-	precache_sound ("weapons/lock4.wav");		// ammo pick up
-	precache_sound ("weapons/pkup.wav");		// weapon up
-	precache_sound ("items/armor1.wav");		// armor up
-	precache_sound ("weapons/lhit.wav");		// lightning
-	precache_sound ("weapons/lstart.wav");		// lightning start
-	precache_sound ("ad171/weapons/shellc.wav");		// Shotgun shell falling to floor
-	precache_sound (SOUND_ARTQUAD3);			// Quad firing
-	precache_sound (SOUND_ARTNAILP3);			// Nail Piercer firing
-	precache_sound (SOUND_ARTPENT3);			// God mode on, taking damage
-	precache_sound (SOUND_ARTBLASTBELT3);		// Blast belt active
-	precache_sound (SOUND_ARTLSHIELD3);			// Lava shield active
-	precache_sound (SOUND_ARTSUIT3);		// Blast belt active
-	precache_sound ("misc/power.wav");			//lightning for boss, vanilla id1 sound
-
-	// player gib sounds
-	precache_sound ("player/gib.wav");			// Used for players only
-	precache_sound (GIB_SOUND_UDEATH);			// Used for monsters and players (sounds player)
-	precache_sound ("player/tornoff2.wav");		// Exit sound for client disconnect
-
-	// player pain sounds
-	precache_sound ("player/pain1.wav");
-	precache_sound ("player/pain2.wav");
-	precache_sound ("player/pain3.wav");
-	precache_sound ("player/pain4.wav");
-	precache_sound ("player/pain5.wav");
-	precache_sound ("player/pain6.wav");
-
-	// player death sounds
-	precache_sound ("player/death1.wav");
-	precache_sound ("player/death2.wav");
-	precache_sound ("player/death3.wav");
-	precache_sound ("player/death4.wav");
-	precache_sound ("player/death5.wav");
-
-	// more weapon sounds
-	//	precache_sound ("kurok/weapons/ax1.wav");			// ax swoosh
-	//	precache_sound ("player/axhit1.wav");		// ax hit meat
-	//	precache_sound ("player/axhit2.wav");		// ax hit world
+	precache_sound(SOUND_RESPAWN);				// item respawn sound
+	precache_sound("player/plyrjmp8.wav");		// player jump
+	precache_sound("player/land.wav");			// player landing
+	precache_sound("player/land2.wav");		// player hurt landing
+	precache_sound("player/drown1.wav");		// drowning pain
+	precache_sound("player/drown2.wav");		// drowning pain
+	precache_sound("player/gasp1.wav");		// gasping for air
+	precache_sound("player/gasp2.wav");		// taking breath
+	precache_sound("player/h2odeath.wav");		// drowning death
+	precache_sound(SOUND_EMPTY);				// Empty sound
+	precache_sound(SOUND_TALK);				// talk message/trigger
+	precache_sound("player/teledth1.wav");		// telefrag
+	precache_sound("misc/r_tele1.wav");		// teleport sounds
+	precache_sound("misc/r_tele2.wav");
+	precache_sound("misc/r_tele3.wav");
+	precache_sound("misc/r_tele4.wav");
+	precache_sound("misc/r_tele5.wav");
+	precache_sound("weapons/lock4.wav");		// ammo pick up
+	precache_sound("weapons/pkup.wav");		// weapon up
+	precache_sound("items/armor1.wav");		// armor up
+	precache_sound("weapons/lhit.wav");		// lightning
+	precache_sound("weapons/lstart.wav");		// lightning start
+	precache_sound("ad171/weapons/shellc.wav");		// Shotgun shell falling to floor
+	precache_sound(SOUND_ARTQUAD3);			// Quad firing
+	precache_sound(SOUND_ARTNAILP3);			// Nail Piercer firing
+	precache_sound(SOUND_ARTPENT3);			// God mode on, taking damage
+	precache_sound(SOUND_ARTBLASTBELT3);		// Blast belt active
+	precache_sound(SOUND_ARTLSHIELD3);			// Lava shield active
+	precache_sound(SOUND_ARTSUIT3);		// Blast belt active
+	precache_sound("misc/power.wav");			//lightning for boss, vanilla id1 sound
+	precache_sound("player/gib.wav");			// Used for players only
+	precache_sound(GIB_SOUND_UDEATH);			// Used for monsters and players (sounds player)
+	precache_sound("player/tornoff2.wav");		// Exit sound for client disconnect
+	precache_sound("player/pain1.wav");
+	precache_sound("player/pain2.wav");
+	precache_sound("player/pain3.wav");
+	precache_sound("player/pain4.wav");
+	precache_sound("player/pain5.wav");
+	precache_sound("player/pain6.wav");
+	precache_sound("player/death1.wav");
+	precache_sound("player/death2.wav");
+	precache_sound("player/death3.wav");
+	precache_sound("player/death4.wav");
+	precache_sound("player/death5.wav");
 	precache_sound(SOUND_AXE_SWIPE1);			// Axe swipe 1
 	precache_sound(SOUND_AXE_SWIPE2);			// Axe swipe 2
 	precache_sound(SOUND_AXE_PLAYER);			// axe hit player
@@ -340,172 +358,154 @@ void() worldspawn = {
 	precache_sound(SOUND_AXE_CERAMIC);			// Ceramic impact
 	precache_sound(GIB_SOUND_HEAVY);			// fleshy
 	precache_sound(GIB_SOUND_HEAVY2);			// harder flesh!
-	precache_sound ("player/h2ojump.wav");		// player jumping into water
-	precache_sound ("player/slimbrn2.wav");		// player enter slime
-	precache_sound ("player/inh2o.wav");		// player enter water
-	precache_sound ("player/inlava.wav");		// player enter lava
-	precache_sound ("misc/outwater.wav");		// leaving water sound
-	precache_sound ("player/lburn1.wav");		// lava burn
-	precache_sound ("player/lburn2.wav");		// lava burn
-	precache_sound ("misc/water1.wav");			// swimming
-	precache_sound ("misc/water2.wav");			// swimming
-	precache_sound (SOUND_HEARTBEAT);			// Heartbeat (fast 1s)
-	precache_model (MODEL_PLAYER);
-	precache_model (MODEL_PLAYER_EYES);
-	precache_model (MODEL_PLAYER_HEAD);
-	precache_model ("progs/q15/player_legs1.mdl");
-	precache_model ("progs/q15/player_legs1_suit.mdl");
-	precache_model ("progs/q15/player_legs2.mdl");
-	precache_model (SBUBBLE_DROWN);			// player drowning bubbles
-	precache_model (SEXP_SMALL);			// Fire explosion (ID)
-	precache_model (SEXP_MED);				// Fire explosion (Quoth)
-	precache_model (SEXP_BIG);				// Fire explosion (Quoth)
-	precache_model (SEXP_PLASMA_SMALL);		// Plasma explosion (Marcher)
-	precache_model (SEXP_PLASMA_BIG);		// Plasma explosion (Marcher)
-	precache_model (SEXP_POISON_SMALL);		// Poison explosion (Marcher)
-	precache_model (SEXP_POISON_MED);		// Poison explosion (Quoth)
-	precache_model (SEXP_ELECTRIC);			// Impact explosion (Quoth)
-	precache_model (SBURST_SMOKE);			// Small puff of smoke (Rubicon2)
-	precache_model (MODEL_PROJ_SMOKE);		// Empty model + smoke trail
-	precache_model (MODEL_PROJ_FLESH);		// SpawnMeatSpray - projectiles.qc
-	precache_model (MODEL_PROJ_FLESHP);		// Poisonous version of meat
-	precache_model ("progs/rrp/g_axe.mdl");
-	precache_model ("progs/ad171/g_shadaxeplain.mdl");
-	precache_model ("progs/v_axe.mdl");
-	precache_model ("progs/ad171/v_shadaxe0.mdl");
-	precache_model (MODEL_VWEAP_UPAXE);		// Upgrade - Shadow
-	precache_model (MODEL_VWEAP_SG);
-	precache_model (MODEL_VWEAP_SSG);
-	precache_model (MODEL_VWEAP_UPSSG);		// Upgrade - Widowmaker
-	precache_model (MODEL_VWEAP_NG);
-	precache_model (MODEL_VWEAP_SNG);
-	precache_model (MODEL_VWEAP_GL);
-	precache_model (MODEL_VWEAP_RL);
-	precache_model (MODEL_VWEAP_LG);
-	precache_model (MODEL_VWEAP_UPLG);		// Upgrade - Plasma Gun
-	precache_model ("progs/drake/memissil.mdl"); // Sidewinder missle
-	precache_model ("progs/bolt.mdl");		// for lightning gun
-	precache_model ("progs/bolt2.mdl");		// for lightning gun
-	precache_model ("progs/bolt3.mdl");		// for boss shock
-	precache_model (MODEL_PROJ_PGPLASMA);	// Plasma bolt for PG
-	precache_model (MODEL_PROJ_SHELLC);		// Launch_ShellCasing - projectiles.qc
-	precache_model (MODEL_PROJ_DIAM2);		// Projectile bullets
-	precache_model (MODEL_PROJ_NG);
-	precache_model (MODEL_PROJ_SNG);
-	precache_model (MODEL_PROJ_GRENADE);
-	precache_model (MODEL_PROJ_ROCKET);
-	precache_model (MODEL_BACKPACK);		// DropBackpack - items.qc
-	
-	// Pre-cache for MOD stuff
-	precache_model (MODEL_BROKEN);			// Broken model error
-	precache_model (MODEL_EMPTY);			// Used for info_intermission cameras
-	precache_model (MODEL_CORNER1);			// Dev spawn angle marker
-
+	precache_sound("player/h2ojump.wav");		// player jumping into water
+	precache_sound("player/slimbrn2.wav");		// player enter slime
+	precache_sound("player/inh2o.wav");		// player enter water
+	precache_sound("player/inlava.wav");		// player enter lava
+	precache_sound("misc/outwater.wav");		// leaving water sound
+	precache_sound("player/lburn1.wav");		// lava burn
+	precache_sound("player/lburn2.wav");		// lava burn
+	precache_sound("misc/water1.wav");			// swimming
+	precache_sound("misc/water2.wav");			// swimming
+	precache_sound(SOUND_HEARTBEAT);			// Heartbeat (fast 1s)
+	precache_model(MODEL_PLAYER);
+	precache_model(MODEL_PLAYER_EYES);
+	precache_model(MODEL_PLAYER_HEAD);
+	precache_model("progs/q15/player_legs1.mdl");
+	precache_model("progs/q15/player_legs1_suit.mdl");
+	precache_model("progs/q15/player_legs2.mdl");
+	precache_model(SBUBBLE_DROWN);			// player drowning bubbles
+	precache_model(SEXP_SMALL);			// Fire explosion (ID)
+	precache_model(SEXP_MED);				// Fire explosion (Quoth)
+	precache_model(SEXP_BIG);				// Fire explosion (Quoth)
+	precache_model(SEXP_PLASMA_SMALL);		// Plasma explosion (Marcher)
+	precache_model(SEXP_PLASMA_BIG);		// Plasma explosion (Marcher)
+	precache_model(SEXP_POISON_SMALL);		// Poison explosion (Marcher)
+	precache_model(SEXP_POISON_MED);		// Poison explosion (Quoth)
+	precache_model(SEXP_ELECTRIC);			// Impact explosion (Quoth)
+	precache_model(SBURST_SMOKE);			// Small puff of smoke (Rubicon2)
+	precache_model(MODEL_PROJ_SMOKE);		// Empty model + smoke trail
+	precache_model(MODEL_PROJ_FLESH);		// SpawnMeatSpray - projectiles.qc
+	precache_model(MODEL_PROJ_FLESHP);		// Poisonous version of meat
+	precache_model("progs/rrp/g_axe.mdl");
+	precache_model("progs/ad171/g_shadaxeplain.mdl");
+	precache_model("progs/v_axe.mdl");
+	precache_model("progs/airfist/v_airgun.mdl");
+	precache_model("progs/ad171/v_shadaxe0.mdl");
+	precache_model(MODEL_VWEAP_UPAXE);		// Upgrade - Shadow
+	precache_model(MODEL_VWEAP_SG);
+	precache_model(MODEL_VWEAP_SSG);
+	precache_model(MODEL_VWEAP_UPSSG);		// Upgrade - Widowmaker
+	precache_model(MODEL_VWEAP_NG);
+	precache_model(MODEL_VWEAP_SNG);
+	precache_model(MODEL_VWEAP_GL);
+	precache_model(MODEL_VWEAP_RL);
+	precache_model(MODEL_VWEAP_LG);
+	precache_model(MODEL_VWEAP_UPLG);		// Upgrade - Plasma Gun
+	precache_model("progs/drake/memissil.mdl"); // Sidewinder missle
+	precache_model("progs/bolt.mdl");		// for lightning gun
+	precache_model("progs/bolt2.mdl");		// for lightning gun
+	precache_model("progs/bolt3.mdl");		// for boss shock
+	precache_model(MODEL_PROJ_PGPLASMA);	// Plasma bolt for PG
+	precache_model(MODEL_PROJ_SHELLC);		// Launch_ShellCasing - projectiles.qc
+	precache_model(MODEL_PROJ_DIAM2);		// Projectile bullets
+	precache_model(MODEL_PROJ_NG);
+	precache_model(MODEL_PROJ_SNG);
+	precache_model(MODEL_PROJ_GRENADE);
+	precache_model(MODEL_PROJ_ROCKET);
+	precache_model(MODEL_BACKPACK);		// DropBackpack - items.qc
+	precache_model(MODEL_BROKEN);			// Broken model error
+	precache_model(MODEL_EMPTY);			// Used for info_intermission cameras
+	precache_model(MODEL_CORNER1);			// Dev spawn angle marker
+	precache_model("progs/airfist/s_ablast.spr");
 	precache_bloodgibs();
-	precache_sound (GIB1_SOUND);			// Monster Gib 1
-	precache_sound (GIB3_SOUND);			// Monster Gib 3
-	precache_sound (GIB5_SOUND);			// Monster Gib 5
-	precache_sound (GIBHIT1_SOUND);			// Gib Impact sound 1
-	precache_sound (GIBHIT2_SOUND);			// Gib Impact sound 2
-	precache_sound (GIBHIT3_SOUND);			// Gib Impact sound 3
-	precache_sound (GIBHIT4_SOUND);			// Gib Impact sound 4
-	precache_sound (GIBHIT5_SOUND);			// Gib Impact sound 5
-	precache_sound (GIBHIT1_STONESOUND);	// long roll
-	precache_sound (GIBHIT3_STONESOUND);	// quick roll
-	precache_sound (GIBHIT5_STONESOUND);	// slow roll
-	precache_sound (GIBHIT1_METALSOUND);	// small clink
-	precache_sound (GIBHIT3_METALSOUND);	// large clank
-	precache_sound (GIBHIT5_METALSOUND);	// gigantic clonk
-	precache_sound (GIB_SOUND_HEAVY);		// Large gib
-	precache_sound (GIB_SOUND_METALA);		// Sword impact
-	precache_sound (GIB_SOUND_METALB);		// Sword impact
-	precache_sound (GIB_SOUND_CHAIN);		// Chain impact
-	precache_sound (GIB_SOUND_WOOD);		// Wooden impact
-	precache_sound (GIB_SOUND_ACID);		// Acid burning
-	precache_sound (GIB_SOUND_SDEATH);		// Stone death
-
-	// Footstep sounds (slow, light, medium, heavy, large & giant)
-	precache_sound (SOUND_FS_SLOW1);
-	precache_sound (SOUND_FS_SLOW2);
-	precache_sound (SOUND_FS_SLOW3);
-	precache_sound (SOUND_FS_SLOW4);
-	precache_sound (SOUND_FS_SLOW5);
-	precache_sound (SOUND_FS_DRAG1);
-	precache_sound (SOUND_FS_DRAG2);
-	precache_sound (SOUND_FS_DRAG3);
-	precache_sound (SOUND_FS_DRAG4);
-	precache_sound (SOUND_FS_DRAG5);
-	precache_sound (SOUND_FS_LIGHT1);
-	precache_sound (SOUND_FS_LIGHT2);
-	precache_sound (SOUND_FS_LIGHT3);
-	precache_sound (SOUND_FS_LIGHT4);
-	precache_sound (SOUND_FS_LIGHT5);
-	precache_sound (SOUND_FS_MEDIUM1);
-	precache_sound (SOUND_FS_MEDIUM2);
-	precache_sound (SOUND_FS_MEDIUM3);
-	precache_sound (SOUND_FS_MEDIUM4);
-	precache_sound (SOUND_FS_MEDIUM5);
-	precache_sound (SOUND_FS_HEAVY1);
-	precache_sound (SOUND_FS_HEAVY2);
-	precache_sound (SOUND_FS_HEAVY3);
-	precache_sound (SOUND_FS_HEAVY4);
-	precache_sound (SOUND_FS_HEAVY5);
-	precache_sound (SOUND_FS_LARGE1);
-	precache_sound (SOUND_FS_LARGE2);
-	precache_sound (SOUND_FS_LARGE3);
-	precache_sound (SOUND_FS_LARGE4);
-	precache_sound (SOUND_FS_LARGE5);
-	precache_sound (SOUND_FS_GIANT1);
-	precache_sound (SOUND_FS_GIANT2);
-	precache_sound (SOUND_FS_GIANT3);
-	precache_sound (SOUND_FS_GIANT4);
-	precache_sound (SOUND_FS_GIANT5);
-
-	PrecacheAll(); // :D
-
-	// Check for engine type and extensions (different features)
+	precache_sound(GIB1_SOUND);			// Monster Gib 1
+	precache_sound(GIB3_SOUND);			// Monster Gib 3
+	precache_sound(GIB5_SOUND);			// Monster Gib 5
+	precache_sound(GIBHIT1_SOUND);			// Gib Impact sound 1
+	precache_sound(GIBHIT2_SOUND);			// Gib Impact sound 2
+	precache_sound(GIBHIT3_SOUND);			// Gib Impact sound 3
+	precache_sound(GIBHIT4_SOUND);			// Gib Impact sound 4
+	precache_sound(GIBHIT5_SOUND);			// Gib Impact sound 5
+	precache_sound(GIBHIT1_STONESOUND);	// long roll
+	precache_sound(GIBHIT3_STONESOUND);	// quick roll
+	precache_sound(GIBHIT5_STONESOUND);	// slow roll
+	precache_sound(GIBHIT1_METALSOUND);	// small clink
+	precache_sound(GIBHIT3_METALSOUND);	// large clank
+	precache_sound(GIBHIT5_METALSOUND);	// gigantic clonk
+	precache_sound(GIB_SOUND_HEAVY);		// Large gib
+	precache_sound(GIB_SOUND_METALA);		// Sword impact
+	precache_sound(GIB_SOUND_METALB);		// Sword impact
+	precache_sound(GIB_SOUND_CHAIN);		// Chain impact
+	precache_sound(GIB_SOUND_WOOD);		// Wooden impact
+	precache_sound(GIB_SOUND_ACID);		// Acid burning
+	precache_sound(GIB_SOUND_SDEATH);		// Stone death
+	precache_sound(SOUND_FS_SLOW1); // Footstep sounds (slow, light, medium, heavy, large & giant)
+	precache_sound(SOUND_FS_SLOW2);
+	precache_sound(SOUND_FS_SLOW3);
+	precache_sound(SOUND_FS_SLOW4);
+	precache_sound(SOUND_FS_SLOW5);
+	precache_sound(SOUND_FS_DRAG1);
+	precache_sound(SOUND_FS_DRAG2);
+	precache_sound(SOUND_FS_DRAG3);
+	precache_sound(SOUND_FS_DRAG4);
+	precache_sound(SOUND_FS_DRAG5);
+	precache_sound(SOUND_FS_LIGHT1);
+	precache_sound(SOUND_FS_LIGHT2);
+	precache_sound(SOUND_FS_LIGHT3);
+	precache_sound(SOUND_FS_LIGHT4);
+	precache_sound(SOUND_FS_LIGHT5);
+	precache_sound(SOUND_FS_MEDIUM1);
+	precache_sound(SOUND_FS_MEDIUM2);
+	precache_sound(SOUND_FS_MEDIUM3);
+	precache_sound(SOUND_FS_MEDIUM4);
+	precache_sound(SOUND_FS_MEDIUM5);
+	precache_sound(SOUND_FS_HEAVY1);
+	precache_sound(SOUND_FS_HEAVY2);
+	precache_sound(SOUND_FS_HEAVY3);
+	precache_sound(SOUND_FS_HEAVY4);
+	precache_sound(SOUND_FS_HEAVY5);
+	precache_sound(SOUND_FS_LARGE1);
+	precache_sound(SOUND_FS_LARGE2);
+	precache_sound(SOUND_FS_LARGE3);
+	precache_sound(SOUND_FS_LARGE4);
+	precache_sound(SOUND_FS_LARGE5);
+	precache_sound(SOUND_FS_GIANT1);
+	precache_sound(SOUND_FS_GIANT2);
+	precache_sound(SOUND_FS_GIANT3);
+	precache_sound(SOUND_FS_GIANT4);
+	precache_sound(SOUND_FS_GIANT5);
+	precache_sound("weapons/agfire.wav"); // Airfist fire
+	precache_sound("weapons/agfail.wav"); // Airfist fail fire
+	precache_sound("weapons/agwater.wav"); // Airfist underwater shot
+	precache_sound("weapons/agwfail.wav"); // Airfist fail underwater shot
+	PrecacheAll(); // :D Qmaster is so evil sometimes.  OK OK, it's not really ALL per se.  Just a whole lot.
 	engine = ENG_FITZ;						// Default engine type (no extensions)
-	ext_active = cvar("pr_checkextension");	// Check for extra extensions
+	ext_active = cvar("pr_checkextension");	// Check for engine type and extensions (different features)
 	if (ext_active) {
-		// This could be DP, QSS, DQ, RMQ, Qbism etc
-		engine = ENG_DPEXT;
-
-		// Check for DP/FTE point particle extensions
-		ext_dppart = checkextension("DP_SV_POINTPARTICLES");
+		engine = ENG_DPEXT; // This could be DP, QSS, DQ, RMQ, Qbism etc
+		ext_dppart = checkextension("DP_SV_POINTPARTICLES"); // Check for DP/FTE point particle extensions
 		ext_ftepart = checkextension("FTE_SV_POINTPARTICLES");
-		// DP extra fog params
-		ext_dpfog = checkextension("DP_GFX_FOG");
-		// surface content
-		ext_dpsurf = checkextension("DP_QC_GETSURFACE");
-		// particle rain/snow system
-		// QSS supports weather extensions in v7+
-		ext_dprain = checkextension("DP_TE_PARTICLERAIN");
-		ext_dpsnow = checkextension("DP_TE_PARTICLESNOW");
-		// If weather extensions active, assume default = ON
-		if (ext_dprain || ext_dpsnow) weathersys = TRUE;
-
-		// Engine support for proper rotating/colliding bmodels
-		ext_dprot = checkextension("DP_SV_ROTATINGBMODEL");
-		// Check for FTE skin/ladder system
-		ext_fteskin = checkextension("FTE_ENT_SKIN_CONTENTS");
-		// Frik file system, advanced strings and C code sprintf
-		ext_frikfile = checkextension("FRIK_FILE");
+		ext_dpfog = checkextension("DP_GFX_FOG"); // DP extra fog params
+		ext_dpsurf = checkextension("DP_QC_GETSURFACE"); // surface content
+		ext_dprain = checkextension("DP_TE_PARTICLERAIN"); // particle rain/snow system
+		ext_dpsnow = checkextension("DP_TE_PARTICLESNOW"); // QSS supports weather extensions in v7+
+		if (ext_dprain || ext_dpsnow) weathersys = TRUE; // If weather extensions active, assume default = ON
+		ext_dprot = checkextension("DP_SV_ROTATINGBMODEL"); // Engine support for proper rotating/colliding bmodels
+		ext_fteskin = checkextension("FTE_ENT_SKIN_CONTENTS"); // Check for FTE skin/ladder system
+		ext_frikfile = checkextension("FRIK_FILE"); // Frik file system, advanced strings and C code sprintf
 		ext_ftestrings = checkextension("FTE_STRINGS");
 		ext_sprintf = checkextension("DP_QC_SPRINTF");
 		
-		// There is no way to detect CSQC, no checkextension exists!
-		// If DP detect the CSQC functions it will just use them.
-		// QSS/FTE has a console variable to toggle CSQC on/off,
-		// but requires the map to be reload for changes to take affect.
-		// Setup a temp variable if none is found (def=0 CSQC is on)
-		autocvar(cl_nocsqc, "0");
-		// Read scratch1 in quake.rc (-1=off, 0=on, 1+=diff layouts)
-		if (cvar("scratch1") < 0) cvar_set("cl_nocsqc", "1");
+		// There is no way to detect CSQC, no checkextension exists!  If DP detects the CSQC functions it will just use them.
+		// QSS/FTE has a console variable to toggle CSQC on/off, but requires the map to be reloaded for changes to take affect.
+		autocvar(cl_nocsqc, "0"); // Setup a temp variable if none is found (def=0 CSQC is on)
+		if (cvar("scratch1") < 0) cvar_set("cl_nocsqc", "1"); // Read scratch1 in quake.rc (-1=off, 0=on, 1+=diff layouts)
 		
 		// Setup variables for CSQC HUD (cannot directly query variables)
 		// FTE/QSS use clientstat, DP use addstat (same function)
 		// The addstat is defined in dpextensions.qc
-		// void(float index, float type, ...) addstat = #232;
+		// Example: void(float index, float type, ...) addstat = #232;
 		addstat(CLIENT_MODITEMS, EV_FLOAT, moditems); 
 		addstat(CLIENT_ITEMS2, EV_FLOAT, items2); 
 		addstat(CLIENT_PERMS, EV_FLOAT, perms); 
@@ -523,29 +523,18 @@ void() worldspawn = {
 		globalstat(CLIENT_DENIZENS, EV_FLOAT, "total_denizens");
 		globalstat(CLIENT_DENIZENSKILLED, EV_FLOAT, "killed_denizens");
 	}
-
 	dprint("\n\b[ENGINE]\b ");
-	if (engine == ENG_FITZ) dprint("Fitz Compatible\n");
-	else if (engine == ENG_DPEXT) dprint("Advanced Engine\n"); // FTE, no longer lame old broken Darkplaces aka DP
+	if (engine == ENG_FITZ) dprint("Fitz Compatible (old, weak). NOT RECOMMENDED!\n");
+	else if (engine == ENG_DPEXT) dprint("Advanced Engine\n"); // FTE, no longer lame old broken Darkplaces aka DP, aka flatwater.
 	else dprint("Unknown\n");
 
-	// Large maps cannot use this function, check for disable
-	if (self.no_surfacecheck == TRUE) ext_dpsurf = 0;
-
-	// Check for any custom water alpha defined on the worldspawn
-	// This is not very precise because FTOS is only ONE decimal place
-	// Once the client has started, the water alpha is fine tuned
-	if (self.water_alpha) {
+	if (self.no_surfacecheck == TRUE) ext_dpsurf = 0; // Large maps cannot use this function, check for disable
+	if (self.water_alpha) { // Check for any custom water alpha defined on the worldspawn
 		liquid_alpha = self.water_alpha;
-		cvar_set ("r_wateralpha", ftos(liquid_alpha));
-	}
-
-	// Default is auto aim OFF
-	autoaim_cvar = 1;
-	
-	// Check for any override on player projectiles
-	playerprojsize = world.no_bigprojectiles;
-
+		cvar_set ("r_wateralpha", ftos(liquid_alpha)); // This is not very precise because FTOS is only ONE decimal place :(
+	} // Once the client has started, the water alpha is fine tuned using the long version of ftos.
+	autoaim_cvar = 1; // Default is auto aim OFF
+	playerprojsize = world.no_bigprojectiles; // Check for any override on player projectiles
 	if (!self.useold_axe) {
 		g_axemodel = "progs/rrp/g_axe.mdl";
 		v_axemodel = "progs/v_axe.mdl";
@@ -553,9 +542,7 @@ void() worldspawn = {
 		g_axemodel = "progs/ad171/g_shadaxeplain.mdl";
 		v_axemodel = "progs/ad171/v_shadaxe0.mdl";
 	}
-
-	// Check for changes to monster homing missiles on death behaviour
-	if (self.no_trackondeath == TRUE) map_notrackondeath = TRUE;
+	if (self.no_trackondeath == TRUE) map_notrackondeath = TRUE; // Check for changes to monster homing missiles on death behaviour.
 	else map_notrackondeath = FALSE;
 	
 	// Check for hazard damage override (water=2/sline=4/lava=10)
@@ -584,6 +571,7 @@ void() worldspawn = {
 	// Check for Bleeding damage override (Percentage, HoT, Pause)
 	if (!CheckZeroVector(world.bleeding_dmg)) map_bleedingdmg = world.bleeding_dmg;
 	else map_bleedingdmg = DAMAGE_BLEEDING;
+
 	// Make sure all parameters are within certain ranges
 	// Perc = 0.05-0.75, HoT = 1-10, Pause = 0.1-10
 	if (map_bleedingdmg_x <= 0.05) map_bleedingdmg_x = 0.05;
@@ -604,12 +592,9 @@ void() worldspawn = {
 	if (self.passive_state == 1) map_passivestate = TRUE;
 	else map_passivestate = FALSE;
 
-	// The values of configflag is never saved, its always generated!
-	// merge any changes from worldspawn into console variable
-	configflag = cvar("temp1");
+	configflag = cvar("temp1"); // The values of configflag is never saved, its always generated!  Merge any changes from worldspawn into console variable
 	sycn_worldspawn();
 	temp1flag = configflag;
-
 	dprint("\b[WORLD]\b TEMP1 + Worldspawn ("); 
 	dprint(ftos(temp1flag)); dprint(")\n");
 
@@ -617,10 +602,9 @@ void() worldspawn = {
 	if (query_configflag(SVR_PARTICLES) == SVR_PARTICLES) {
 		if (self.particlemax > PARTICLE_MAXENTS) part_max = self.particlemax;
 		else part_max = PARTICLE_MAXENTS;
+
 		// DP/FTE setup requires less entities for sprite particles
-		if (engine == ENG_DPEXT && query_configflag(SVR_SPRPARTON) == FALSE
-			&& self.sprite_particles == FALSE)
-			part_multiplier = 0.5;
+		if (engine == ENG_DPEXT && query_configflag(SVR_SPRPARTON) == FALSE && self.sprite_particles == FALSE) part_multiplier = 0.5;
 		else part_multiplier = 1;
 		
 		part_max = part_max * part_multiplier;
@@ -633,61 +617,47 @@ void() worldspawn = {
 	// This has got to happen after 'sycn_worldspawn' function
 	// Allow for 'saved1' variable in quake.rc to be read
 	if (ext_ftepart == TRUE) {
-		// Switch to vanilla particle effects (no smoke, sparks etc)
-		// Don't bother with sprite settings for DP, the default is worse!
+		// Switch to vanilla particle effects (no smoke, sparks etc).  Don't bother with sprite settings for DP, the default is worse!
 		if (query_configflag(SVR_SPRPARTON) == SVR_SPRPARTON) {
-			// Load particle effects (mostly empty defs)
-			particleeffectnum("effectvanilla.txt");
-			// Make sure all extra particle effects are off
-			ext_dppart = ext_ftepart = FALSE;
+			particleeffectnum("effectvanilla.txt"); // Load particle effects (mostly empty defs)
+			ext_dppart = ext_ftepart = FALSE; // Make sure all extra particle effects are off
 			weathersys = FALSE;
 		} else {
-			// Set both active, used through out code
-			ext_dppart = ext_ftepart = TRUE;
-			// Check for FTE/QS-S point particle extensions
-			// Engine wants config files in different locations
+			ext_dppart = ext_ftepart = TRUE; // Set both active, used through out code
+
+			// Check for FTE/QS-S point particle extensions.  Engine wants config files in different locations.
 			if (checkextension("FTE_PART_NAMESPACE_EFFECTINFO")) {
-				// Load particle effects file (DP default=mod root)
-				particleeffectnum("effectinfo.txt");
-				// Load up default weather effects
-				particleeffectnum("fte_weather.cfg");
+				particleeffectnum("effectinfo.txt"); // Load particle effects file (DP default=mod root)
+				particleeffectnum("fte_weather.cfg"); // Load up default weather effects
 			}
 		}
 	}
 	
 	// Setup target light starting point.  Got to do this early before any light entities
-	dprint("\b[WORLD]\b Setup Light style array\n");
-	light_style_setuparray();
-	dprint("\b[WORLD]\b Setup Pendulum vector array\n");
-	pendulum_setuparray();
-	dprint("\b[WORLD]\b Setup Map Var bitflag array\n");	
-	mapvar_setuparray();
-	dprint("\b[WORLD]\b Setup Shadow lightstyle array\n");	
-	switch_shadow_setuparray();
+	light_style_setuparray(); dprint("\b[WORLD]\b Setup Light style array\n");
+	pendulum_setuparray(); dprint("\b[WORLD]\b Setup Pendulum vector array\n");
+	mapvar_setuparray(); dprint("\b[WORLD]\b Setup Map Var bitflag array\n");	
+	switch_shadow_setuparray(); dprint("\b[WORLD]\b Setup Shadow lightstyle array\n");	
 	if (self.devdata & DEV_AMMO_N_HEALTH) self.deventity = ammohealthsum();
 	if (coop > 2) versus_setup();
-	Gyro_InitialiseVariables();
+	Gyro_InitialiseVariables(); // Setup the physics system.
+	if (query_configflag(SVR_DRAKEMUSIC) == SVR_DRAKEMUSIC) InitMusic(); // Setup Drake secondary music system that plays music from two speaker entities in the map corners.
+	// Kitchen sink?
 };
 
-void() StartFrame = {
+void() StartFrame = { // [FUNCTION]
 	teamplay = cvar("teamplay");
 	developer = cvar("developer");
 	skill = cvar("skill");
 	coop = cvar("coop");
-
 	framecount = framecount + 1;
-	WorldScan(); // Sets h2olevel and h2otype for ryu and wyrm dragons (Drake)
-	Gyro_Run();
+	LightZero_Go(); // Flashes lightstyle of whole level to simulate lightning for Drake effects.
+	Gyro_Run(); // Process the physics.
 };
+ 
+void() bodyque={}; // [ENTITY] Just here so spawn functions don't complain after the world creates bodyques
 
-// Keeps track of dead player models
-entity	bodyque_head;
-
-// just here so spawn functions don't complain after the world creates bodyques
-void() bodyque = {};
-
-// New Code from Inside3d forums (old system was terrible)
-void() InitBodyQue = {
+void() InitBodyQue = { // [FUNCTION], New Code from Inside3d forums (old system was terrible).  Oh hey, now called InsideQc.  Interesting.
 	local entity e, prev;
 	local float numBodies, num;
 	
@@ -698,24 +668,16 @@ void() InitBodyQue = {
 	while(num < numBodies) {
 		e = spawn(); // Spawn another body			
 		e.classname = "bodyque";
-
-		// If this is the first, set the bodyque_head pointer 
-		// (start of the list)
-		if(bodyque_head == world) bodyque_head = e;
-	
-		// Link up to previous item to form the linked list
-		if(prev != world) e.owner = prev;
-		
-		// Point prev to the new item
-		prev = e;				
+		if(bodyque_head == world) bodyque_head = e; // If this is the first, set the bodyque_head pointer (start of the list)
+		if(prev != world) e.owner = prev; // Link up to previous item to form the linked list
+		prev = e; // Point prev to the new item			
 		num = num + 1;
 	}
-	// turn the linked list into a linked loop
-	bodyque_head.owner = prev;	
+	bodyque_head.owner = prev; // Turn the linked list into a linked loop
 };
 
-// make a body que entry for the given ent so the ent can be respawned elsewhere
-void(entity ent) CopyToBodyQue = {
+// Make a body que entry for the given ent so the ent can be respawned elsewhere.
+void(entity ent) CopyToBodyQue = { // [FUNCTION]
 	bodyque_head.angles = ent.angles;
 	bodyque_head.model = ent.model;
 	bodyque_head.modelindex = ent.modelindex;
@@ -730,21 +692,17 @@ void(entity ent) CopyToBodyQue = {
 };
 
 // Stuff removed
-void() item_weapon = { remove(self); };
-void() misc_noisemaker = { remove(self); };
-void() noclass = { remove(self); };
+void() item_weapon = { remove(self); }; // [ENTITY]
+void() misc_noisemaker = { remove(self); }; // [ENTITY]
+void() noclass = { remove(self); }; // [ENTITY]
+void() test_fodder = { if (developer < 1) remove(self); }; // [ENTITY]
+void() test_goaway = { remove(self); }; // [ENTITY]
+void() test_spawn = { if (developer < 1)  remove(self); }; // [ENTITY]
+void() test_teleport = { if (developer < 1)  remove(self); }; // [ENTITY]
+void() testplayerstart = { if (developer < 1)  remove(self); }; // [ENTITY]
+void() viewthing = { if (developer < 1) remove(self); }; // [ENTITY]
 
-void() test_fodder = { remove(self); };
-void() test_goaway = { remove(self); };
-void() test_spawn = { remove(self); };
-void() test_teleport = { remove(self); };
-
-void() testplayerstart = { remove(self); };
-void() viewthing = { if (developer < 1) remove(self); };
-
-//QUAKED trigger_onlyregistered (.5 .5 .5) ?
-// Checks for registered version of game, no one uses this anymore
-void() trigger_onlyregistered_touch = {
+void() trigger_onlyregistered_touch = { // [FUNCTION]
 	if ( !(other.flags & FL_CLIENT) ) return;
 	if (self.attack_finished > time) return;
 
@@ -761,28 +719,15 @@ void() trigger_onlyregistered_touch = {
 	}
 };
 
-void() trigger_onlyregistered = {
+// Checks for registered version of game, no one uses this anymore
+void() trigger_onlyregistered = { // [ENTITY]
 	InitTrigger ();
 	self.touch = trigger_onlyregistered_touch;
 };
 
-// A function that supresses compiler errors
-void() dpcompiler_errors = {
-	worldstatus = "";
-	gettaginfo_parent = 0;
-	gettaginfo_name = "";
-	gettaginfo_offset = '0 0 0';
-	gettaginfo_forward = '0 0 0';
-	gettaginfo_right = '0 0 0';
-	gettaginfo_up = '0 0 0';
-	trace_dpstartcontents = 0;
-	trace_dphitcontents = 0;
-	trace_dphitq3surfaceflags = 0;
-	trace_dphittexturename = "";
-};
-
-void() amsumthink = {
+void() amsumthink = { // [FUNCTION]
 	float dmg = 0;
+	vector plasmad = DAMAGE_PGPLAYER;
 
 	dprint("\b[DEV]\b Developer Level Data:\n");
 	dprint("World Ammo Sum:: Shells: ");
@@ -812,7 +757,6 @@ void() amsumthink = {
 	dprint(", Elemental Mana: ");
 	dprint(ftos(self.ammo_elemental));
 	dprint("\n");
-	vector plasmad = DAMAGE_PGPLAYER;
 	dmg = dmg + (self.ammo_shells * DAMAGE_SHELL);
 	dmg = dmg + (self.ammo_nails * DAMAGE_NGSPIKE);
 	dmg = dmg + (self.ammo_lava_nails * DAMAGE_LAVANGSPIKE);
@@ -838,11 +782,11 @@ void() amsumthink = {
 	self.nextthink = time + 0.1;
 };
 
-entity () ammohealthsum {
+entity () ammohealthsum { // [FUNCTION]
 	entity e;
 	e = spawn();
 	e.classname = "info_devdata";
 	e.think = amsumthink;
-	e.nextthink = time + 5; // give plenty of time to add all the sums up
+	e.nextthink = time + 5; // give plenty of time to add all the sums up after everything spawned in.
 	return e;
 };

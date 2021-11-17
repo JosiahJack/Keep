@@ -46,32 +46,21 @@ float ALL_WEAPONSMODITEMS = IT_UPGRADE_SSG + IT_UPGRADE_LG + IT_SANGUINATORS + I
 float ALL_WEAPONSMODITEMS_HACKBANK = IT_ICE + IT_MACE + IT_VOID_STAFF + IT_FLAK + IT_GUNGNIR;
 float ALL_WEAPONSPERMS = IT_BLASTER + IT_CHAINSAW;
 
-// client_camera.qc
 void() SetupIntermissionCamera;
 void() CycleIntermissionCamera;
-
-// client_debuff.qc AND client_power.qc
 void() ClientDeBuff;
 void() ClientPowerups;
 void(entity targ, float powtimer, float novania) ResetPowerSystem;
 void() GrappleService;
-
-// client_advinfo.qc
 void() CheckSecretCamera;
-
-// player.qc
 void(entity inflictor, entity attacker, float damage) player_pain;
 void() player_death;
 void() player_stand1;
-
-// triggers.qc
 void() trigger_changelevel_finish;
 void() trigger_changelevel_finish;
 void() trigger_cdtrack_change;
 void(entity targ) trigger_skybox_change;
 void(entity targ) set_teamsurvivor;
-
-// misc_camera.qc
 float(float cam_angle1, float cam_angle2) camera_check_anglezero;
 float(float baxis_start, float baxis_control, float baxis_end, float baxis_time) bezier_axis;
 vector(vector bez_start, vector bez_control, vector bez_end, float bez_timemax, float bez_timeleft) bezier_curve;
@@ -83,19 +72,14 @@ void() misc_camera_filewrite;
 void() SetNewParms = {
 	local float sethealth;
 	dprint("\b[CLIENT]\b SetNewParms\n");
-
-	// Brand new game/map, reset start position settings
-	update_configflag(SVR_SPAWN_BIT1, FALSE);
+	update_configflag(SVR_SPAWN_BIT1, FALSE); // Brand new game/map, reset start position settings
 	update_configflag(SVR_SPAWN_BIT2, FALSE);
 	update_configflag(SVR_SPAWN_BIT3, FALSE);
 	fog_active = FALSE;
 	skyfog_active = FALSE;
-	
 	parm1 = IT_SHOTGUN | IT_AXE;	// Default self.items, give shotgun and axe to start
-
 	sethealth = 100;
-	// Check for Evil NM+ skill level (Lower HP max)
-	if (Client_QueryEvilmode()) sethealth = HEAL_EVILMAX;
+	if (Client_QueryEvilmode()) sethealth = HEAL_EVILMAX; // Check for Evil NM+ skill level (Lower HP max)
 	parm2 = encode(sethealth, 0, 0);		// Default Health, Armortype, Armorvalue in that order
 	parm3 = encode(25,0,0);			// Default shells, nails, rockets in that order
 	parm4 = 0;						// Ammo qty cells, bolts, poison in that order
@@ -105,26 +89,19 @@ void() SetNewParms = {
 	parm11 = 0;						// self.items2
 	parm12 = 0;						// globalstate
 	parm13 = 0;						// permanent powerups (perms) from Drake, can be reset this level using world.take_perms > 0
-
-	// Update new player inventory based on config flag
-	if (query_configflag(SVR_UPDAXE)) parm10 = parm10 | IT_UPGRADE_AXE;
+	if (query_configflag(SVR_UPDAXE)) parm10 = parm10 | IT_UPGRADE_AXE; // Update new player inventory based on config flag
 	if (query_configflag(SVR_UPDSSG)) parm10 = parm10 | IT_UPGRADE_SSG;
 	if (query_configflag(SVR_UPDLG)) parm10 = parm10 | IT_UPGRADE_LG;
 
-	// Skill 4 always starts with Shadow Axe!
-	if (Client_QueryEvilmode()) { 
+	if (Client_QueryEvilmode()) { // Skill 4 always starts with Shadow Axe!
 		parm1 = parm1 | IT_AXE;
 		parm10 = parm10 | IT_UPGRADE_AXE;
 		parm8 = IT_AXE; // Start with shadow axe in Evil Mode
-	} else if (world.no_axestart == TRUE) {
-		// If a map wants NO axe start, then its likely been designed for it!
-		// World entity is readable at this point. The No Axe start is also a
-		// NO WEAPONS at all !?! (including any from previous map)		
-		parm1 = parm8 = parm11 = parm10 = 0;
+	} else if (world.no_axestart == TRUE) { // If a map wants NO axe start, then its likely been designed for it!  World entity is readable at this point.
+		parm1 = parm8 = parm11 = parm10 = 0; // The No Axe start is also NO WEAPONS at all (including any from previous map).
 	}
 
-	// Are map variables live?
-	if (mapvar_cvar) dprint("\b[CLIENT]\b LIVE Map Variables Detected\n");
+	if (mapvar_cvar) dprint("\b[CLIENT]\b LIVE Map Variables Detected\n"); // Are map variables live?
 	else {
 		dprint("\b[CLIENT]\b RESETTING Map Variables\n");
 		parm6 = parm7 = parm9 = parm14 = parm15 = parm16 = 0; // Reset map variables ready for use
@@ -136,24 +113,23 @@ void() SetNewParms = {
 void() SetChangeParms = {
 	local float had_regen;
 
-	// ----------Drake Special exotic armor stuff----------------------------------------------
-    if ((self.perms & POW_ARMORBERSERKER) || (self.perms & POW_REGEN))
-        had_regen = TRUE;
-    else
-        had_regen = FALSE;
+    if ((self.perms & POW_ARMORBERSERKER) || (self.perms & POW_REGEN)) had_regen = TRUE; // Drake Special exotic armor stuff
+    else had_regen = FALSE;
 
-	// Reset spirit armor.
-    if (self.perms & POW_ARMORSPIRIT && (self.items2 & IT2_ARMOR1 || self.items2 & IT2_ARMOR2 || self.items2 & IT2_ARMOR3)) self.armorvalue = 100;
-	// ----------End Drake exotic armor stuff--------------------------------------------------
-
+    if (self.perms & POW_ARMORSPIRIT && (self.items2 & IT2_ARMOR1 || self.items2 & IT2_ARMOR2 || self.items2 & IT2_ARMOR3)) self.armorvalue = 100; // Reset Drake exotic spirit armor.
 	dprint("\n\b[CLIENT]\b SetChangeParms\n");
-	if (self.health < 1) { SetNewParms (); return;	}
+	if (self.health < 1) { SetNewParms(); return; }
 
-	// remove temporary items (keys and powerups)
-	self.items = self.items - (self.items & IT_ITEMRESET);
+	self.items = self.items - (self.items & IT_ITEMRESET); // remove temporary items (keys and powerups)
 	parm1 = self.items;
-	self.moditems = self.moditems - (self.moditems & IT_MODRESET);
+
+	self.moditems = self.moditems - (self.moditems & IT_MODRESET); // Special mod items handling and bitstuffing
+	if (self.selfweaponismoditems) self.moditems = self.moditems | WEAPON_HACKBANK1; // remember hack for secondary set of 24 weapons!  For AoA and any further weapon additions!
+	else {
+		if (self.moditems & WEAPON_HACKBANK1) self.moditems = self.moditems -  WEAPON_HACKBANK1;
+	}
 	parm10 = self.moditems;
+
 	dprint("\b[CLIENT]\b MOD weapons ("); dprint(ftos(parm10)); dprint(")\n");
 	self.items2 = self.items2 - (self.items2 & IT2_ITEMRESET);
 	parm11 = self.items2; // save the good stuff!  multi-weapons and such
@@ -168,7 +144,7 @@ void() SetChangeParms = {
 	parm9 = mapvar[2];
 	//parm10 is self.moditems above
 	//parm11 is self.items2 above
-	parm12 = globalstate;
+	parm12 = self.serverflagstemp; // remember runes? .....  no, what runes?
 	parm13 = self.perms; // Store permanent powerups and Drake stuff
 	parm14 = mapvar[3];
 	parm15 = mapvar[4];
@@ -176,8 +152,7 @@ void() SetChangeParms = {
 
 	// Ok, locking us in as of NOW!  QSS or FTE ENGINES ONLY FROM THIS POINT FORWARD!!!
 	parm17 = encode(self.ammo_bloodcrystals,self.ammo_voidshards,self.ammo_elemental);
-	parm18 = self.selfweaponismoditems; // remember hack for secondary set of 24 weapons!  For AoA and any further weapon additions!
-	parm19 = self.serverflagstemp; // remember runes.  no, what runes?
+	parm18 = globalstate;
 };
 
 // Used during load new map such as trigger_changelevel.  Not used when loading a saved file or quickload
@@ -185,54 +160,36 @@ void() DecodeWorldParms = {
 	local float parm_items, tlow8, tmid8, thi8;
 	
 	parm_items = parm1;
-	dprint("\b[CLIENT]\b Decode Worldspawn Inv Parms\n");
-	// Show developer feedback on player inventory update
-	if (world.give_weapons) {
-		dprint("\b[CLIENT]\b Weapon Give ( ");
-		if (world.give_weapons & IT_SHOTGUN) dprint("SG ");
-		if (world.give_weapons & IT_SUPER_SHOTGUN) dprint("SSG ");
-		if (world.give_weapons & IT_NAILGUN) dprint("NG ");
-		if (world.give_weapons & IT_SUPER_NAILGUN) dprint("SNG ");
-		if (world.give_weapons & IT_GRENADE_LAUNCHER) dprint("GL ");
-		if (world.give_weapons & IT_ROCKET_LAUNCHER) dprint("RL ");
-		if (world.give_weapons & IT_LIGHTNING) dprint("LG ");
-		dprint(")\n");
-	}
-	if (world.take_weapons && (world.take_weapons < 9999999)) {
-		dprint("\b[CLIENT]\b Weapon Take ( ");
-		if (world.take_weapons & IT_SHOTGUN) dprint("SG ");
-		if (world.take_weapons & IT_SUPER_SHOTGUN) dprint("SSG ");
-		if (world.take_weapons & IT_NAILGUN) dprint("NG ");
-		if (world.take_weapons & IT_SUPER_NAILGUN) dprint("SNG ");
-		if (world.take_weapons & IT_GRENADE_LAUNCHER) dprint("GL ");
-		if (world.take_weapons & IT_ROCKET_LAUNCHER) dprint("RL ");
-		if (world.take_weapons & IT_LIGHTNING) dprint("LG ");
-		dprint(")\n");
-	}
-	
-	// Adding weapons to existing inventory
-	if (world.give_weapons)	parm_items = parm_items | (world.give_weapons & ALL_WEAPONS);
+	dprint("\b[CLIENT]\b Decode Worldspawn Inv Parms:\n");
 
+	// Take first, then give.  That way mappers can give clean slate + gives.
 	if (world.take_weapons > 0 || world.no_axestart) {
 		if (world.take_weapons >= 9999999) {
-			parm_items = parm_items - (parm_items & ALL_WEAPONS);   //take all
+			parm_items = parm_items - (parm_items & ALL_WEAPONS); // Take all, clean slate.
 			parm13 = parm13 - (parm13 & ALL_WEAPONSPERMS);
 			parm10 = parm10 - (parm10 & ALL_WEAPONSMODITEMS) - (parm10 & ALL_WEAPONSMODITEMS_HACKBANK);
 			parm8 = 0;
 			parm11 = parm11 - (parm11 & ALL_WEAPONS2);
-			if (Client_QueryEvilmode() == FALSE) {
-				dprint("\b[CLIENT]\b Weapon Take ( ");
-				dprint("ALL WEAPONS! ");
-				dprint(")\n");
-			} else {
-				dprint("\b[CLIENT]\b Weapon Take ( ");
-				dprint("Evil Mode detected: ALL WEAPONS EXCEPT SHADOW AXE! ");
-				dprint(")\n");
+			dprint("ALL WEAPONS REMOVED");
+			if (Client_QueryEvilmode()) {
+				dprint(", Evil Mode detected: Shadowaxe given");
 				parm1 = parm1 | IT_AXE;
 				parm10 = parm10 | IT_UPGRADE_AXE;
 				parm8 = IT_AXE;
 			}
+
+			if (world.give_weapons) dprint(", and new weapons given...\n");
+			else dprint("!\n");
 		} else {
+			dprint("Specific World Weapon Take ( ");
+			if (world.take_weapons & IT_SHOTGUN) dprint("SG ");
+			if (world.take_weapons & IT_SUPER_SHOTGUN) dprint("SSG ");
+			if (world.take_weapons & IT_NAILGUN) dprint("NG ");
+			if (world.take_weapons & IT_SUPER_NAILGUN) dprint("SNG ");
+			if (world.take_weapons & IT_GRENADE_LAUNCHER) dprint("GL ");
+			if (world.take_weapons & IT_ROCKET_LAUNCHER) dprint("RL ");
+			if (world.take_weapons & IT_LIGHTNING) dprint("LG ");
+			dprint(")\n");
 			if (world.take_weapons & IT_SHOTGUN && parm_items & IT_SHOTGUN) {
 				parm_items = parm_items - IT_SHOTGUN;
 				parm13 = parm13 - (parm13 & IT_BLASTER);
@@ -250,6 +207,20 @@ void() DecodeWorldParms = {
 				parm10 = parm10 - (parm10 & IT_UPGRADE_LG); // Player cannot have upgrades without base item
 			}
 		}
+	}
+
+	// Take first, then give.  That way mappers can give clean slate + gives.
+	if (world.give_weapons) {
+		dprint("Specific World Weapon Give ( "); 
+		if (world.give_weapons & IT_SHOTGUN) dprint("SG ");
+		if (world.give_weapons & IT_SUPER_SHOTGUN) dprint("SSG ");
+		if (world.give_weapons & IT_NAILGUN) dprint("NG ");
+		if (world.give_weapons & IT_SUPER_NAILGUN) dprint("SNG ");
+		if (world.give_weapons & IT_GRENADE_LAUNCHER) dprint("GL ");
+		if (world.give_weapons & IT_ROCKET_LAUNCHER) dprint("RL ");
+		if (world.give_weapons & IT_LIGHTNING) dprint("LG ");
+		dprint(")\n");
+		parm_items = parm_items | (world.give_weapons & ALL_WEAPONS); // Adding weapons to existing inventory so we don't overwrite shadowaxe if evil gave it.
 	}
 	parm1 = parm_items; // Store result back to global variable
 	
@@ -500,7 +471,7 @@ void() DecodeWorldParms = {
 		}
 	}
 
-	if (world.take_perms > 0) parm13 = 0; // take away all permanent powerups
+	if (world.take_perms > 0) { dprint("All permanent powerups removed by world!\n"); parm13 = 0; } // take away all permanent powerups
 };
 
 // USED : Load NEW MAP or trigger CHANGE LEVEL
@@ -569,9 +540,8 @@ void() DecodeLevelParms = {
 
 	dprint("\b[CLIENT]\b Decode (Level) Parms\n");
 	mapvar_cvar = TRUE; // Map Variables are active (do not reset)
-	// Found any runes? going back to start map? reset inventory
 	if (serverflags & SVR_RUNE_ALL) {
-		if (world.model == "maps/start.bsp") SetNewParms (); // take away all stuff on starting new episode
+		if (world.model == "maps/start.bsp") SetNewParms (); // If we have all 4, take away all runes when returning to info_player_start2 in start map
 	}
 
 	Client_SyncPrevEvilmode(); // Most Quake Engines resets the skill level to 0-3 only.  Make sure skill level/console variable are updated on load
@@ -597,20 +567,15 @@ void() DecodeLevelParms = {
 	self.weapon = parm8;
 	self.moditems = parm10;
 	self.items2 = parm11;
-	globalstate = parm12;
+	self.serverflagstemp = parm12;
 	self.perms = parm13;
 
 	// ----------Drake Special exotic armor stuff----------------------------------------------
-    if ((self.perms & POW_ARMORBERSERKER) || (self.perms & POW_REGEN))
-        had_regen = TRUE;
-    else
-        had_regen = FALSE;
+    if ((self.perms & POW_ARMORBERSERKER) || (self.perms & POW_REGEN))	had_regen = TRUE;
+    else																had_regen = FALSE;
 
-	// Always make sure the HP read from parm2 is within range!  Parm2 is re-used when map restart command is issued
-	Client_CheckMaxHP(self, FALSE, had_regen);
-
-	// The AD inventory is reset with parm10 (could lose Shadow axe).  Check for evil skill and add shadow axe + make current weapon!
-	Client_CheckEvilInv(self);
+	Client_CheckMaxHP(self, FALSE, had_regen); // Always make sure the HP read from parm is within range!  Parm is re-used when map restart command is issued
+	Client_CheckEvilInv(self); // The AD inventory is reset with parm10 (could lose Shadow axe).  Check for evil skill and add shadow axe + make current weapon!
 	dprint("\b[CLIENT]\b self.weapon == ");
 	dprint(ftos(self.weapon));
 	dprint("\n");
@@ -618,19 +583,15 @@ void() DecodeLevelParms = {
 	dprint(ftos(self.items));
 	dprint("\n");
 	dprint("\b[CLIENT]\b Reading Map Variables\n");
-	
-	// Read/Setup map variables (22 bits per parm, 132 total)
-	mapvar[0] = parm6;
+	mapvar[0] = parm6; // Read/Setup map variables (22 bits per parm * 6 = 132 total)
 	mapvar[1] = parm7;
 	mapvar[2] = parm9;
 	mapvar[3] = parm14;
 	mapvar[4] = parm15;
 	mapvar[5] = parm16;
-
-	// Check for any worldspawn map variable settings
-	if (CheckZeroVector(world.mapvar_update) == FALSE) mapvar_range(world.mapvar_update);
-	self.selfweaponismoditems = parm18;
-	self.serverflagstemp = parm19;
+	if (CheckZeroVector(world.mapvar_update) == FALSE) mapvar_range(world.mapvar_update); // Check for any worldspawn map variable settings
+	// parm17 handled above next to the other ammos
+	globalstate = parm18;
 };
 
 void() GotoNextMap = {
@@ -839,12 +800,12 @@ void() PutClientInServer = {
 	dprint("\b[CLIENT]\b PutClientInServer\n");
 	client_ent = self;
 	self.classname = "player";
-	self.classtype = CT_PLAYER;
-	self.classgroup = CG_PLAYERS;
 	self.flags = FL_CLIENT;
 	self.estate = ESTATE_ON;
 	self.estate_off = SUB_Null;
-	intermission_running = cinematic_running = 0; // Reset intermission/cinematic stuff
+	intermission_running = cinematic_running = cutscene = 0; // Reset intermission/cinematic stuff
+	self.in_a_vehicle = FALSE; // Always start off not in a vehicle. Can force it later if wanted.
+	localcmd("chase_active 0\n"); // Default to first person. No sense beating around the bush.
 	
 	if (Client_QueryEvilmode()) Client_SetupEvilmode(); // Check for Evil NM+ skill level (Lower HP max)
 	else Client_ResetEvilmode(-1); // Update health/mega max and leave weapons alone
@@ -945,29 +906,30 @@ void() PutClientInServer = {
 	else self.maxvoid = AMMO_MAXVOID;
 	if (world.maxmana > 0) self.maxmana = world.maxmana;
 	else self.maxmana = AMMO_MAXMANA;
-	
-	//	spot = SelectSpawnPoint ();
+
 	self.origin = spot.origin + '0 0 1';
 	if (spot.mangle) self.angles = spot.mangle;
 	else self.angles = spot.angles;
 	self.v_angle = self.angles;
-	self.fixangle = TRUE;				// turn this way immediately
-
-	// oh, this is a hack!
-	setmodel (self, MODEL_PLAYER_EYES);
+	self.fixangle = TRUE;				// Turn this way immediately
+	setmodel (self, MODEL_PLAYER_EYES); // Oh, this is a hack!
 	modelindex_eyes = self.modelindex;
    	setmodel (self,"progs/hipnotic/playham.mdl");
   	modelindex_hammer = self.modelindex;
-	setmodel (self, MODEL_PLAYER);
-	modelindex_player = self.modelindex;
 	setmodel (self, "progs/drake/playham0.mdl");
 	modelindex_hamout = self.modelindex;
+   	setmodel (self,"progs/drake/playsaw.mdl");
+  	modelindex_saw = self.modelindex;
 	setmodel (self, "");
-	modelindex_null = self.modelindex;
+	modelindex_null = self.modelindex; // For vehicles to fully hide player more so than just eyes.
 	setmodel (self, MODEL_PLAYER);
 	modelindex_player = self.modelindex;
-	self.bbmins = VEC_HULLSHORT_MIN;	// -16 -16 -24, 16 16 32
-	self.bbmaxs = VEC_HULLSHORT_MAX;
+	if (!modelindex_eyes) modelindex_eyes = modelindex_player;
+	if (!modelindex_hammer) modelindex_hammer = modelindex_player;
+	if (!modelindex_hamout) modelindex_hamout = modelindex_player;
+	if (!modelindex_saw) modelindex_saw = modelindex_player;
+	self.bbmins = VEC_HULL_MIN;
+	self.bbmaxs = VEC_HULL_MAX;
 	setsize (self, self.bbmins, self.bbmaxs);
 	self.view_ofs = '0 0 22'; // Where the feet are! 22 units below!
 	player_stand1 ();
@@ -1104,12 +1066,10 @@ void() PlayerPreThink = {
 	if (intermission_running > 0) { impulse_notvalid(); CycleIntermissionCamera(); return; } // If Intermission system active check for button0-2 keys
 	if (secloc_running > 0) { impulse_notvalid(); CheckSecretCamera(); return; } // If secret location camera active check for button0-2 keys
 	if (self.entactive && self.entattachment) setorigin(self.entattachment, self.origin); // Update particle emitter origin attached to the player.  Cinematic camera uses player and this should be before it
-	if (cinematic_running > 0) { impulse_notvalid(); return; } // If cinematic camera system active
+	if (cinematic_running > 0 || cutscene > 0) { impulse_notvalid(); return; } // If cinematic camera system active
+    if (cutscene > 0) { Cutscene_Think (); return; } // Check for Drake cutscene stuff.
 
-    if (self.view_ofs == '0 0 0') {
-        Cutscene_Think ();      // Check for Drake cutscene stuff.
-        return;        // intermission or finale
-    }
+	// Allowing weapon switch in a vehicle
 
 	// Skill 4 - Detect ANY skill changes (player console)
 	if (skill != oskill) {
@@ -1138,23 +1098,19 @@ void() PlayerPreThink = {
 		self.fwatershift = FALSE;
 	}
 
-	// Both func_water and func_ladder require zero G to work properly.
-	// Lucky for us, the Mission Pack build of Quake has a gravity modifier we can exploit.
-	if (self.zerogtime < time)
-		self.gravity = self.oldgravity;// reset normal gravity
-	else
-		self.gravity = 0.0001;// zero G (0 OR 1 is normal)
-	// pOx - END  - func_water & func_ladder support
+	// Both func_water and func_ladder require zero G to work properly.  Lucky for us, the Mission Pack build of Quake has a gravity modifier we can exploit.
+	if (self.zerogtime < time) self.gravity = self.oldgravity;// reset normal gravity
+	else self.gravity = 0.0001;// zero G (0 OR 1 is normal), pOx - END  - func_water & func_ladder support
 
-	CheckRules ();
-	WaterMove ();
-
+	CheckRules();
+	Divine_Check(); // Lightning strike.
+	WaterMove();
 	if (self.movetype == MOVETYPE_FLY) {
 		self.oldorigin = self.origin;
 		if (vlen(self.velocity) >= 70) {
 			self.waterlevel = 3;    // Swim mode gives player full 3D control.
 			self.flags = self.flags - (self.flags & FL_ONGROUND); // If onground, moving will cause the pitch to center automatically if mouselook is off, so remove the flag while the player swims in mid-air.
-			if (self.h2olevel < 2) self.velocity = self.velocity * 1.429;    // This negates the underwater speed penalty.  Don't forget to undo the changes made here in PlayerPostThink.  Inspired by Hip's wetsuit code. But only in the air. 10/7 or 1.428571...
+			if (self.waterlevel < 2) self.velocity = self.velocity * 1.429;    // This negates the engine's underwater speed penalty.  Don't forget to undo the changes made here in PlayerPostThink.  Inspired by Hip's wetsuit code. But only in the air. 10/7 or 1.428571...
 		} else {
 			self.waterlevel = 0;    // So player doesn't sink while not moving.
 			self.flags = self.flags | FL_ONGROUND; // While not in swim mode, the onground flag gives the player full control in the air, so make sure the flag is on.
@@ -1171,108 +1127,75 @@ void() PlayerPreThink = {
 
 		// The jump button works a bit differently while in flymode.
 		if (self.button2) {
-			// Rise if in water.  Otherwise, slam on the brakes.
-			if (self.h2olevel) {
-				// WaterRise
-				if (self.h2otype == CONTENT_WATER) self.velocity_z = 100;
-				else if (self.h2otype == CONTENT_SLIME) self.velocity_z = 80;
-				else self.velocity_z = 50;
+			if (self.waterlevel) { // Rise if in water.  Otherwise, slam on the brakes.
+				if (self.liquidbase == CONTENT_WATER) self.velocity_z = 100; // Water rise
+				else if (self.liquidbase == CONTENT_SLIME) self.velocity_z = 80; // Slime rise
+				else self.velocity_z = 50; // Lava rise
 
-				// Play swimming sound
 				if (self.swim_flag < time) {
 					self.swim_flag = time + 1;
-					if (random() < 0.5) sound (self, CHAN_BODY, "misc/water1.wav", 1, ATTN_NORM);
+					if (random() < 0.5) sound (self, CHAN_BODY, "misc/water1.wav", 1, ATTN_NORM); // Play swimming sound
 					else sound (self, CHAN_BODY, "misc/water2.wav", 1, ATTN_NORM);
-				} // End WaterRise
-				if (self.h2olevel < 2) self.velocity_z = self.velocity_z * 1.429;  // 10/7 or 1.428571...
+				}
+				if (self.waterlevel < 2) self.velocity_z = self.velocity_z * 1.429; // This negates the engine's underwater speed penalty. 10/7 or 1.428571...
 			} else { self.velocity_z = 0; }
 		}
 	} else {
-		// Not movetype_fly...normal movement
-		if (self.waterlevel == 2) CheckWaterJump ();
-		if (self.deadflag >= DEAD_DEAD) {
-			ClientDeath ();
-			return;
-		}
-	}
-		
-	//if (self.deadflag == DEAD_DYING) return;	// dying, so do nothing
-	if (self.deadflag == DEAD_DYING) {
-		CheckFuncWaterDeath();// pOx - check cshift for dead players in func_water
-		return;	// dying, so do nothing
+		if (self.waterlevel == 2) CheckWaterJump (); // Not movetype_fly...normal movement and holding space to get out of the water.
+		if (self.deadflag >= DEAD_DEAD) { ClientDeath (); return; }
 	}
 
-	// The jump boots can be setup to work a limited amount of uses before
-	// having to be reset by landing on the ground.
-	// The starting (1st jump) sequence for the boots is always with a jump,
-	// but the player can fall off ledges without jumping.
-	// Unfortunately Quake does not let the player jump if falling, but
-	// the jump boots should override this behaviour.
-	// The engine will reset the fl_onground flag when the player falls
-	// off a ledge and this flag is used to determine the starting sequence
-	// for the jump boots.
-	// This check is outside of the jump function so that the jump
-	// boots can always be reset regardless if jump starts the sequence.
+	if (self.deadflag == DEAD_DYING) { CheckFuncWaterDeath(); return; } // pOx - check cshift for dead players in func_water.  Dying, so do nothing after.
+
+	// The jump boots can be setup to work a limited amount of uses before having to be reset by landing on the ground.
+	// The starting (1st jump) sequence for the boots is always with a jump, but the player can fall off ledges without jumping.
+	// Unfortunately Quake does not let the player jump if falling, but the jump boots should override this behaviour.
+	// The engine will reset the fl_onground flag when the player falls off a ledge and this flag is used to determine the starting sequence
+	// for the jump boots. This check is outside of the jump function so that the jump boots can always be reset regardless if jump starts the sequence.
 	if (self.moditems & IT_ARTJUMPBOOTS && self.flags & FL_ONGROUND) self.jumpboots_onground = TRUE;
-	
-	// Check Grapple Hook (release/beam/jump)
-	//GrappleHook_Client();  Keep mod handles this the old Rogue way and let's you hang around if you switch to other weapons
 
 	// Rubicon Ladder Code - johnfitz
-	// Modified by me to support diff climb sounds and on/off/toggle states
+	// Modified by me to support diff climb sounds and on/off/toggle states. -sock
 	if (self.onladder == LADDER_JUMP) {
-		// Reset ladder touch function
-		self.onladder = LADDER_NONE;
+		self.onladder = LADDER_NONE; // Reset ladder touch function
 		if (ext_fteskin && self.entladder.skin == -16) {
-			// Only do the ladder sound if the player is moving (X/Y)
-			if (self.timeladder < time && self.velocity_x != 0 && self.velocity_y != 0) {
-				// Reset timer for next sound to play
-				self.timeladder = time + self.entladder.waitmin;
-				// Check for any sounds and query if footsteps are active
-				Client_LadderSounds(self);
+			if (self.timeladder < time && self.velocity_x != 0 && self.velocity_y != 0) { // Only do the ladder sound if the player is moving (X/Y)
+				self.timeladder = time + self.entladder.waitmin; // Reset timer for next sound to play
+				Client_LadderSounds(self); // Check for any sounds and query if footsteps are active
 			}
 		} else if (self.button2) { // Is jump key being pressed?
-			// Reset velocity upwards and all sideways movement so that the player stays on the ladder and climbs straight up with very little sidways movement.
-			self.velocity = '0 0 0';
+			self.velocity = '0 0 0'; // Reset velocity upwards and all sideways movement so that the player stays on the ladder and climbs straight up with very little sidways movement.
 			self.velocity_z = self.entladder.speed;
 			self.gravity = 0.0000001;
-
 			if (self.timeladder < time) {
 				self.timeladder = time + self.entladder.waitmin; // Reset timer for next sound to play
 				Client_LadderSounds(self); // Check for any sounds and query if footsteps are active
 			}
 		} else {
-			// Jump key released, stay floating on the ladder
-			self.flags = self.flags | FL_JUMPRELEASED;
+			self.flags = self.flags | FL_JUMPRELEASED; // Jump key released, stay floating on the ladder
 			self.velocity = 0.9 * self.velocity;
 			self.velocity_z = 0;
 		}
 	} else if (self.onladder == LADDER_VEL) {
-		// Is jump key being pressed?
-		if (self.button2) {
+		if (self.button2) { // Is jump key being pressed?
 			self.blockladder = time + 0.1;
 			self.flags = self.flags - FL_ONGROUND;
 			PlayerJump ();
-		}
-		else self.flags = self.flags | FL_JUMPRELEASED;
+		} else self.flags = self.flags | FL_JUMPRELEASED;
 		
 		self.onladder = LADDER_NONE; // Reset ladder touch function
 	} else {
-		// Reset any ladder gravity settings
-		if (self.oldgravity > 0) self.gravity = self.oldgravity;
+		if (self.oldgravity > 0) self.gravity = self.oldgravity; // Reset any ladder gravity settings
 		else self.gravity = 1;
 
-		// Original jump conditions
-		if (self.button2) PlayerJump ();
+		if (self.button2) PlayerJump (); // Original jump conditions.  Huh!
 		else self.flags = self.flags | FL_JUMPRELEASED;
 	}
 
-	// Monster Hydra slowdown effect
-	if (self.slowdowntime > time) {
+	if (self.slowdowntime > time) { // Monster Hydra slowdown effect
 		self.velocity_x = self.velocity_x * 0.5;
 		self.velocity_y = self.velocity_y * 0.5;
-		//if (self.flags & FL_INWATER)
-		if (self.waterlevel == 3) {
+		if (self.waterlevel >= 3) {
 			self.velocity_z = self.velocity_z * 0.5;
 		} else {
 			if (self.velocity_z > 0) self.velocity_z = self.velocity_x * 0.5;
@@ -1287,11 +1210,8 @@ void() PlayerPreThink = {
 			self.legsattachment = player_legs (self);
 		}
 	}
-
-	// Set up vehicle model attachment
-	if (!self.vehicleattachment) {
-		self.vehicleattachment = player_vehicle(self);
-	}
+	
+	if (!self.vehicleattachment) self.vehicleattachment = player_vehicle(self); // Set up vehicle model attachment. Only done once ever.
 };
 
 enumflags {
@@ -1348,23 +1268,18 @@ void() PlayerPostThink = {
 			} else liquid_alpha = cvar("r_wateralpha");	
 
 			autoaim_cvar = cvar("sv_aim"); // Check engine for actual autoaim setting.  Always reset with newgame and quickload.
-
-			// AD 1.8 removed SVR_NOFOGCMDS (winquake idea).  Create fog controller and/or update engine fog.
-			if (fog_active) change_fog(self);
+			if (fog_active) change_fog(self); // Create fog controller and/or update engine fog.
 			else setup_fog_controller();
 
-			// Sky fog is a different system (only density)
-			if (skyfog_active) change_skyfog(self);
+			if (skyfog_active) change_skyfog(self); // Sky fog is a different system (only density)
 			else setup_skyfog_controller();
 
 			display_configflag(); // Update console with MOD settings
 			display_version();
 
 			// Keep's globalstate system
-			if (globalstate > 0)
-				dprint ("CLIENT: Global states are set!\n");
-			else
-				dprint ("CLIENT: No global states are set.\n");
+			if (globalstate > 0) dprint ("CLIENT: Global states are set!\n");
+			else dprint ("CLIENT: No global states are set.\n");
 
 			// Warn about chaos mode	
 			if (check_randflags() == TRUE) { // Is the randomizer active?
@@ -1382,7 +1297,7 @@ void() PlayerPostThink = {
 	// Special systems that pause the QC/Game
 	if (intermission_running > 0) return;	// intermission or finale
 	if (secloc_running > 0) return;
-	if (cinematic_running > 0) {
+	if (cinematic_running > 0) { // separate from `cutscene` and its implementation
 		// The focalpoint system is about tracking an entity while the camera is stationary or moving and updating the player viewing angle.
 		// The current (2019) community client engines default protocol's are 15 or 666, which unfortunately do not support smooth angle updates.
 		// The ideal solution is protocol 999 with higher FP resolution, but this has to be set before the map is loaded and manually via the console which is not user friendly.
@@ -1448,7 +1363,7 @@ void() PlayerPostThink = {
 
 	if (self.deadflag) return; // Dead
 	if (self.target2 != "") trigger_strs(self.target2, self); self.target2 = ""; // Any spawn targets to update?
-	if (self.movetype == MOVETYPE_FLY && self.waterlevel && self.h2olevel < 2) self.velocity = self.velocity * 0.7; // flight adjustment we have boots of levitation
+	if (self.movetype == MOVETYPE_FLY && self.waterlevel && self.waterlevel < 2) self.velocity = self.velocity * 0.7; // flight adjustment we have boots of levitation
 	W_WeaponFrame (); // Impulse commands and Quad updates
 
 	if (map_fallspeeddebug == TRUE && developer > 1 && self.jump_flag != 0){ dprint(ftos(self.jump_flag)); dprint(" "); }// Show the player fall speed/velocity to the console.  Useful for showing what map unit heights affect damage values
@@ -1529,10 +1444,15 @@ void() PlayerPostThink = {
 	if (!(self.flags & FL_ONGROUND)) self.jump_flag = self.velocity_z; // If flying through the air, store player Z velocity in jump flag
 	ClientPowerups ();
 	ClientDeBuff ();
+    CheckMjolnir ();            // SoE:  Modified throwing hammer.
     if (self.hook) GrappleService (); // Update PM 7/24/09:  Added grappler weapon from DoE.
 };
 
+void() item_rallycar_touch;
+
 void() PlayerJump = {
+	local entity vehicle;
+
 	if (self.flags & FL_WATERJUMP) return;
 	
 	if (self.waterlevel >= 2) {
@@ -1557,6 +1477,34 @@ void() PlayerJump = {
         self.gravity = 0 - fabs(self.gravity);
         return;
     }
+
+	if (self.in_a_vehicle == TRUE) { // Jump out of the vehicle
+		self.in_a_vehicle = FALSE;
+		self.modelindex = modelindex_player;
+		localcmd("chase_active 0\n");
+
+		vehicle = spawn();
+		setorigin(vehicle,self.origin); // do before jumping
+		vehicle.skin = self.vehicle_skindex;
+		vehicle.solid = SOLID_TRIGGER;
+		vehicle.touch = item_rallycar_touch;
+		vehicle.scale = 2;
+		setmodel(vehicle,self.vehicle_model);
+		setsize(vehicle,VEC_HULL2_MIN,VEC_HULL2_MAX);
+		vehicle.pain_finished = time + 5; // prevent re-entry for a bit
+		vehicle.angles_y = self.angles_y;
+
+		self.flags = self.flags - (self.flags & FL_JUMPRELEASED); // Very precise order for this, Jumprelease and then onground
+		self.flags = self.flags - FL_ONGROUND;	// don't stairwalk
+		self.button2 = 0;
+		if (self.shroom_finished > time) sound (self, CHAN_BODY, "qmaster/player/jumpmario.wav", 1, ATTN_NORM);
+		else sound (self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM); // player jumping sound
+		self.velocity_z = self.velocity_z + map_jumpheight;
+		makevectors (self.v_angle);
+		self.velocity = self.velocity + (v_right * -80);
+		if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
+		return;
+	}
 
 	// sock: The jump boots idea by Jose Carlos Rodriguez (JCR) from modjam1.  This code was originally by JCR and modified by me to fit AD layout.  Switched over all the variables to constants and entity options. 
 	if (self.moditems & IT_ARTJUMPBOOTS) { // Does the player have the jump boot powerup?

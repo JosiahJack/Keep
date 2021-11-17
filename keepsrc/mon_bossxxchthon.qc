@@ -41,7 +41,7 @@ float() xxchthon_FindTarget =
 	// Get the obvious exception(s) done first
 	if (self.health < 1) return FALSE;
 	if (intermission_running) return FALSE;
-	if (cinematic_running > 0) return FALSE;
+	if (cinematic_running > 0 || cutscene > 0) return FALSE;
 	if (self.passive_state) return FALSE;
 
 	// Find a client in current PVS
@@ -210,7 +210,7 @@ void() xxchthon_attackframe =
 		// Check for any no combat conditions
 		if (self.enemy.health < 1) self.enemy = world;
 		else if (intermission_running > 0) self.enemy = world;
-		else if (cinematic_running > 0) self.enemy = world;
+		else if (cinematic_running > 0 || cutscene > 0) self.enemy = world;
 		else if (self.enemy.flags & FL_NOTARGET) self.enemy = world;
 		else if (self.enemy.items & IT_INVISIBILITY) self.enemy = world;
 		
@@ -458,23 +458,33 @@ void() xxchthon_awake =
 	xxchthon_rise1 ();
 };
 
+void() monster_chthon_precache = {
+	precache_model("progs/ad171/mon_bosschthon.mdl");
+	precache_model(MODEL_PROJ_LAVA);
+	precache_model(MODEL_PROJ_CHTHON1);
+	precache_model(MODEL_PROJ_SLIME);
+	precache_sound("weapons/rocket1i.wav");
+	precache_sound("ad171/chthon/pain1.wav");
+	precache_sound("ad171/chthon/death1.wav");
+	precache_sound("ad171/chthon/sight1.wav");
+	precache_sound("ad171/chthon/lavasplash.wav");
+	precache_sound ("ad171/chthon/idle1.wav");
+	precache_sound ("ad171/chthon/attack1.wav"); // Attack/throw/electric sound
+	precache_sound ("ad171/wraith/bounce.wav");
+};
+
 // QUAKED monster_chthon (1 0 0) (-128 -128 -24) (128 128 256)
 void() monster_chthon = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_bosschthon.mdl";
-	precache_model (self.mdl);
-	precache_model(MODEL_PROJ_CHTHON1);
-	
-	// Final explosion (10 distorted balls of lava/slime)
-	self.gib1mdl = MODEL_PROJ_CHTHON1;
+	self.gib1mdl = MODEL_PROJ_CHTHON1; // Final explosion (10 distorted balls of lava/slime)
 	self.gib1frame = 9;
 	
 	// Load up slime version and switch gibs
 	if (self.spawnflags & MON_CHTHON_GREEN) {
 		self.skin = self.gib1skin = 2;
-		precache_model (MODEL_PROJ_SLIME);
 		self.dpp_name = "TR_BOSSCHTHONGRN";
 		self.gibtype = GIBTYPE_POISON;
 		self.poisonous = TRUE;
@@ -487,44 +497,24 @@ void() monster_chthon = {
 		} else {
 			if (self.deathstring == "") self.deathstring = " was blown apart by Chthon\n";
 		}
-		precache_model (MODEL_PROJ_LAVA);
+		
 		self.dpp_name = "TR_BOSSCHTHON";
 	}
-
 	self.idle_sound = "ad171/chthon/idle1.wav";
-	precache_sound (self.idle_sound);
-
-	// Attack/throw/electric sound
-	precache_sound ("ad171/chthon/attack1.wav");
-	precache_sound ("weapons/rocket1i.wav");
-	precache_sound ("ad171/wraith/bounce.wav");
-	
 	self.pain_sound = "ad171/chthon/pain1.wav";
-	precache_sound (self.pain_sound);
-	precache_sound ("ad171/chthon/death1.wav");
-
-	// Rise from lava roar + splash
-	self.sight_sound = "ad171/chthon/sight1.wav";
-	precache_sound (self.sight_sound);
-	precache_sound ("ad171/chthon/lavasplash.wav");
-
+	self.sight_sound = "ad171/chthon/sight1.wav"; // Rise from lava roar + splash
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
-	// Use to be 128 square, reduced size to help with
-	// radius/splash damage being more effective
-	self.bbmins = '-80 -80 -24';	// has own entity setup
+	self.bbmins = '-80 -80 -24';	// Use to be 128 square, reduced size to help with radius/splash damage being more effective
 	self.bbmaxs = '80 80 256';
 	self.bboxtype = BBOX_CUSTOM;
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
-	
 	self.health = self.max_health = MEGADEATH;
 	self.pain_finished = LARGE_TIMER;
 	self.no_liquiddmg = TRUE;		// no slime/lava damage
 	self.gibbed = FALSE;			// Still in one piece
-
 	self.pain_flinch = 400;			// Shambler level
 	self.pain_timeout = 2;			// Stop constant pain
-
 	self.deadflag = DEAD_NO;					// used to stop death re-triggering
 	self.liquidbase = self.liquidcheck = 0;		// Used for liquid content damage
 	self.dmgcombined = self.dmgtimeframe = 0;	// combined damage over 0.1s
@@ -544,6 +534,11 @@ void() monster_chthon = {
 	self.classgroup = CG_BOSS;
 	self.style = 0;
 
+	// Always reset Ammo Resistance to be consistent
+	self.resist_shells = self.resist_nails = 0;
+	self.resist_rockets = self.resist_cells = 0;
+	self.resist_fire = 1;
+
 	// Check passive system for exceptions
 	setup_passivestate(self);
 	
@@ -554,7 +549,15 @@ void() monster_chthon = {
 		return;
 	}
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-	// Does not go through monster spawn functions
-	AddToTotals(self);
-	self.use = xxchthon_awake;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
+
+	self.th_stand = self.th_walk = self.th_run = SUB_Null;
+	self.th_missile = self.th_die = SUB_Null;
+	self.th_pain = SUB_Null_pain;
+	monster_start();
+	if (self.targetname == "") xxchthon_awake();
+	else self.use = xxchthon_awake;
 };

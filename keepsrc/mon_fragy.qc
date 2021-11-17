@@ -204,24 +204,23 @@ float()	CheckFragJump = {
 	return TRUE;
 };
 
-//QUAKED monster_fragy (1 0 0) (-16 -16 -24) (16 16 24) Ambush
-void() monster_fragy = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/madfox/mon_fragy.mdl";
-	precache_model (self.mdl);
+void() monster_fragy_precache = {
+	precache_model ("progs/madfox/mon_fragy.mdl");
 	precache_sound ("fish/death.wav");
 	precache_sound ("fish/bite.wav");
 	precache_sound ("fish/idle.wav");
 	precache_sound ("quoth/voreling/death.wav");
 	precache_sound ("quoth/voreling/land.wav");
 	precache_sound ("ad171/gibs/gibhit1.wav");
+};
 
+//QUAKED monster_fragy (1 0 0) (-16 -16 -24) (16 16 24) Ambush
+void() monster_fragy = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/madfox/mon_fragy.mdl";
 	self.idle_sound = "fish/idle.wav";
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TINY;
@@ -231,7 +230,6 @@ void() monster_fragy = {
 	self.blockudeath = TRUE;			// no humanoid death sound
 	self.deathstring = " was slimed by a harmless Frog\n";
 	self.no_liquiddmg = TRUE;			// Immune to slime/lava
-	
 	self.th_stand = frag_stand1;
 	self.th_walk = frag_walk1;
 	self.th_run = frag_run1;
@@ -258,7 +256,6 @@ void() monster_fragy = {
 	self.classtype = CT_MONFROG;
 	self.classgroup = CG_HARMLESS;
 	self.classmove = MON_MOVEWALK;
-
 	monster_start ();
 };
 

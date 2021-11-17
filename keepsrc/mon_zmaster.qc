@@ -61,7 +61,7 @@ void()	zmaster_walk1	=[	$walk1,		zmaster_walk2	] {
 		self.effects = 0;
 	}
 	if(random() < 0.2) zm_idle_sound();
-	FootFall("zmaster/echo.wav", 0.2, 1, 0.8);
+	FootFall("custents/zmaster/echo.wav", 0.2, 1, 0.8);
 	ai_walk(2);
 };
 void()	zmaster_walk2	=[	$walk2,		zmaster_walk3	] {ai_walk(5);};
@@ -73,7 +73,7 @@ void()	zmaster_walk7	=[	$walk7,		zmaster_walk8	] {ai_walk(2);};
 void()	zmaster_walk8	=[	$walk8,		zmaster_walk9	] {ai_walk(3);};
 void()	zmaster_walk9	=[	$walk9,		zmaster_walk10	] {ai_walk(3);};
 void()	zmaster_walk10	=[	$walk10,	zmaster_walk11	] {ai_walk(4);};
-void()	zmaster_walk11	=[	$walk11,	zmaster_walk12	] {FootFall("zmaster/echo.wav", 0.2, 1, 0.8);ai_walk(3);};
+void()	zmaster_walk11	=[	$walk11,	zmaster_walk12	] {FootFall("custents/zmaster/echo.wav", 0.2, 1, 0.8);ai_walk(3);};
 void()	zmaster_walk12	=[	$walk12,	zmaster_walk13	] {ai_walk(4);};
 void()	zmaster_walk13	=[	$walk13,	zmaster_walk14	] {ai_walk(6);};
 void()	zmaster_walk14	=[	$walk14,	zmaster_walk15	] {ai_walk(2);};
@@ -84,7 +84,7 @@ void()	zmaster_walk18	=[	$walk18,	zmaster_walk19	] {ai_walk(3);};
 void()	zmaster_walk19	=[	$walk19,	zmaster_walk20	] {ai_walk(3);};
 void()	zmaster_walk20	=[	$walk20,	zmaster_walk1	] {ai_walk(2);};
 
-void()	zmaster_pain1	=[	$pain1,		zmaster_pain2	] { sound (self, CHAN_VOICE, "zmaster/pain.wav", 1, ATTN_NORM); };
+void()	zmaster_pain1	=[	$pain1,		zmaster_pain2	] { sound (self, CHAN_VOICE, "custents/zmaster/pain.wav", 1, ATTN_NORM); };
 void()	zmaster_pain2	=[	$pain2,		zmaster_pain3	] {};
 void()	zmaster_pain3	=[	$pain3,		zmaster_pain4	] {};
 void()	zmaster_pain4	=[	$pain4,		zmaster_pain5	] {};
@@ -129,7 +129,7 @@ void() zmaster_die = {
 	}
 
 	// play death sound when not hit by arrow
-	sound (self, CHAN_VOICE, "zmaster/death.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "custents/zmaster/death.wav", 1, ATTN_NORM);
 
 	// regular death
 	if (random() > 0.5)
@@ -211,14 +211,14 @@ float() zmaster_find_easy_victim = {
 			self.effects = EF_BRIGHTFIELD;
 		}
 		self.oldenemy = enemyold;
-		sound (self, CHAN_VOICE, "zmaster/toreturn.wav", 1, ATTN_NORM);
+		sound (self, CHAN_VOICE, "custents/zmaster/toreturn.wav", 1, ATTN_NORM);
 		self.currentammo = time + 4;
 	}
 	return found_one;
 };
 
 void()	zmaster_run1	=[	$walk1,		zmaster_run2	]
-{zm_idle_sound();FootFall("zmaster/echo.wav", 0.5, 1, 0.8);zmaster_run(2);};
+{zm_idle_sound();FootFall("custents/zmaster/echo.wav", 0.5, 1, 0.8);zmaster_run(2);};
 void()	zmaster_run2	=[	$walk2,	zmaster_run3	] {zmaster_run(5);};
 void()	zmaster_run3	=[	$walk3,	zmaster_run4	] {zmaster_run(5);};
 void()	zmaster_run4	=[	$walk4,	zmaster_run5	] {zmaster_run(4);};
@@ -228,7 +228,7 @@ void()	zmaster_run7	=[	$walk7,	zmaster_run8	] {zmaster_run(2);};
 void()	zmaster_run8	=[	$walk8,	zmaster_run9	] {zmaster_run(3);};
 void()	zmaster_run9	=[	$walk9,	zmaster_run10	] {zmaster_run(3);};
 void()	zmaster_run10	=[	$walk10,	zmaster_run11	] {zmaster_run(4);};
-void()	zmaster_run11	=[	$walk11,	zmaster_run12	] {FootFall("zmaster/echo.wav", 0.5, 1, 0.8);zmaster_run(3);};
+void()	zmaster_run11	=[	$walk11,	zmaster_run12	] {FootFall("custents/zmaster/echo.wav", 0.5, 1, 0.8);zmaster_run(3);};
 void()	zmaster_run12	=[	$walk12,	zmaster_run13	] {zmaster_run(4);};
 void()	zmaster_run13	=[	$walk13,	zmaster_run14	] {zmaster_run(6);};
 void()	zmaster_run14	=[	$walk14,	zmaster_run15	] {zmaster_run(2);};
@@ -251,7 +251,7 @@ void() zmaster_zombify = {
 		self.ammo_shells = 0; // death counter
 		self.solid = SOLID_SLIDEBOX;
 		self.movetype = MOVETYPE_STEP;
-		setmodel (self, "progs/axzombie.mdl");
+		setmodel (self, "progs/custents/axzombie.mdl");
 		setsize (self, '-16 -16 -24', '16 16 40');
 		self.takedamage = DAMAGE_AIM;
 		self.th_stand = zombie_stand1;
@@ -279,7 +279,7 @@ void() zmaster_zombify = {
 		self.solid = SOLID_SLIDEBOX;
 		self.movetype = MOVETYPE_STEP;
 
-		setmodel (self, "progs/axzombie.mdl");
+		setmodel (self, "progs/custents/axzombie.mdl");
 		setsize (self, '-16 -16 -24', '16 16 40');
 
 		self.takedamage = DAMAGE_AIM;
@@ -320,7 +320,7 @@ void()	zmaster_magica4 =[	$magica2,	zmaster_magica5	] {self.nextthink = time + 0
 void()	zmaster_magica5 =[	$magica3,	zmaster_magica6	] {self.nextthink = time + 0.15;ai_face();};
 void()	zmaster_magica6 =[	$magica4,	zmaster_magica7	] {self.nextthink = time + 0.15;ai_face();};
 void()	zmaster_magica7 =[	$magica5,	zmaster_magica8	] {
-	sound (self, CHAN_VOICE, "zmaster/energize.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "custents/zmaster/energize.wav", 1, ATTN_NORM);
 	self.nextthink = time + 0.15;
 	ai_face();
 	self.effects = self.effects | EF_DIMLIGHT;
@@ -403,10 +403,10 @@ void()	zmaster_magicb13 =[	$magicb13,	zmaster_run1] {ai_face();};
 void() zm_idle_sound = {
 	if (random() < 0.2 && self.currentammo < time) {
 		if(random() < 0.5) {
-			sound (self, CHAN_VOICE, "zmaster/idle1.wav", 1, ATTN_NORM);
+			sound (self, CHAN_VOICE, "custents/zmaster/idle1.wav", 1, ATTN_NORM);
 			self.currentammo = time + 2.5;
 		} else {
-			sound (self, CHAN_VOICE, "zmaster/idle2.wav", 1, ATTN_NORM);
+			sound (self, CHAN_VOICE, "custents/zmaster/idle2.wav", 1, ATTN_NORM);
 			self.currentammo = time + 1.5;
 		}
 	}
@@ -440,7 +440,7 @@ void() zmaster_melee = {
 void(entity inflictor, entity attacker, float damage) zmaster_pain = {
 	if (self.pain_finished > time) return;
 
-	sound (self, CHAN_VOICE, "zmaster/pain.wav", 1, ATTN_NORM);
+	sound (self, CHAN_VOICE, "custents/zmaster/pain.wav", 1, ATTN_NORM);
 	if (time - self.pain_finished > 5) {	// always go into pain frame if it has been a while
 		zmaster_pain1 ();
 		self.pain_finished = time + 1;
@@ -453,38 +453,28 @@ void(entity inflictor, entity attacker, float damage) zmaster_pain = {
 	zmaster_pain1 ();
 };
 
-void() monster_zombie_master = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
+void() monster_zombie_master_precache = {
 	precache_model ("progs/custents/zmaster.mdl");
-	precache_model ("progs/custents/k_spike.mdl");
+	precache_model ("progs/k_spike.mdl");
 	precache_model ("progs/custents/h_zmastr.mdl");
 	precache_sound ("hknight/attack1.wav");
-	precache_sound ("zmaster/death.wav");
+	precache_sound ("custents/zmaster/death.wav");
 	precache_sound ("hknight/hit.wav");		// used by C code, so don't sound2
 	precache_sound ("hknight/slash1.wav");
-	precache_sound ("zmaster/idle1.wav");
-	precache_sound ("zmaster/idle2.wav");
-	precache_sound ("zmaster/sight.wav");
-	precache_sound ("zmaster/pain.wav");
-	precache_sound ("zmaster/energize.wav");
-	precache_sound ("zmaster/toreturn.wav");
-	precache_sound ("zmaster/comnback.wav");
+	precache_sound ("custents/zmaster/idle1.wav");
+	precache_sound ("custents/zmaster/idle2.wav");
+	precache_sound ("custents/zmaster/sight.wav");
+	precache_sound ("custents/zmaster/pain.wav");
+	precache_sound ("custents/zmaster/energize.wav");
+	precache_sound ("custents/zmaster/toreturn.wav");
+	precache_sound ("custents/zmaster/comnback.wav");
 	precache_sound ("items/protect.wav");
 	precache_sound ("items/protect2.wav");
 	precache_sound ("items/protect3.wav");
-
-	// sound prechache for foot steps
-	precache_sound ("zmaster/echo.wav");
-
-	// precaches for the controlled zombies
-	precache_model ("progs/custents/axzombie.mdl");
+	precache_sound ("custents/zmaster/echo.wav"); // sound prechache for foot steps
+	precache_model ("progs/custents/axzombie.mdl"); // precaches for the controlled zombies
 	precache_model ("progs/custents/h_axzomb.mdl");
-	precache_model ("progs/custents/zom_gib.mdl");
-
+	precache_model ("progs/zom_gib.mdl");
 	precache_sound ("zombie/z_idle.wav");
 	precache_sound ("zombie/z_idle1.wav");
 	precache_sound ("zombie/z_shot1.wav");
@@ -495,12 +485,14 @@ void() monster_zombie_master = {
 	precache_sound ("zombie/z_miss.wav");
 	precache_sound ("zombie/z_hit.wav");
 	precache_sound ("zombie/idle_w2.wav");
+	precache_sound ("custents/zombie/trick.wav"); // a clue on how to kill the modified axzombies
+};
 
-	// a clue on how to kill the modified axzombies
-	precache_sound ("zombie/trick.wav");
+void() monster_zombie_master = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (self.deathstring == "") self.deathstring = " joins a Zombie Master's zombie hoard\n";
-	
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 	setmodel (self, "progs/custents/zmaster.mdl");
@@ -514,14 +506,6 @@ void() monster_zombie_master = {
 	self.th_missile = zmaster_missile;
 	self.th_pain = zmaster_pain;
 	self.th_die = zmaster_die;
-	
-	
-// ### Added for Custents all affecting gravity
-	if(!self.gravity)
-		self.gravity = 1;
-	else
-	      self.gravity = ((self.gravity - 1) / 100);
-// ###
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
@@ -571,7 +555,7 @@ void(float dist) zmaster_run = {
 			self.enemy = self.oldenemy;
 			self.oldenemy = world;
 			HuntTarget ();
-			sound (self, CHAN_VOICE, "zmaster/comnback.wav", 1, ATTN_NORM);
+			sound (self, CHAN_VOICE, "custents/zmaster/comnback.wav", 1, ATTN_NORM);
 			self.currentammo = time + 2.5;
 		} else {
 			if (self.movetarget)

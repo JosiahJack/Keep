@@ -1,97 +1,112 @@
-/*
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by the
-Free Software Foundation; either version 2 of the License, or (at your
-option) any later version.
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Frank Condello (aka pOx), Khreathor for the extras_r5 update
+//
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 8
+// Function count: 18
+//
+// Implements: Specialty Particle Emitters and Effector Triggers
+//
+// Description:
+// Specialty particles and emitters that react to physics, and their affectors.
+//
+//
+// Particle systems with QuakeC - packet overflows made easy!
+// These were modeled after particle systems in high-end 3D apps, they are not
+// the most user friendly entities around...
+//
+// EMITER ENTITIES: func_emitter, func_emitter_volume
+// EFFECTOR TRIGGERS: t_effector_destroy, t_effector_push, t_effector_gravity,
+// t_effector_trubulence, t_effector_attract, t_effector_friction
+//
+// Emitters generate a "particle" (either a .spr, .mdl or .bsp) and toss it in
+// a direction between the set angle limits. They can use an optional "death"
+// model to simulate anything from rain, falling rubble, blasts of flames,
+// forcefields, whatever...
+//
+// Effectors change the behaviour of particles that touch them (the emitter 
+// must have the "USEEFFECTORS" spawnflag set).  Emitters can be attached to a 
+// func_train_ext, for some really neat crap :)
+//
+// Don't go too nuts with these, stay away from the built-in sounds for high
+// frequency emitters (use fx_sound instead) and just use common sense (you 
+// don't need a gib fountain around every corner!).
+//
+// There are a LOT of options - these are really generic and need to be
+// tailored to specifc purposes.
+//
+// The lifespan of animated particles may not be exact - it will always fall on
+// a multiple of the framerate (this usually isn't a problem, since framerates
+// are typically much smaller than lifespans) but you should be aware of this
+// limitation.
+//
+// Particles won't "die" when they hit another particle - this is on purpose.
+//
+// Particles don't register a touch on water, but a t_effector_destroy trigger 
+// can be used to simulate this. Set KILLINFWATER to have them die in 
+// func_water volumes.
 
-This program is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// ANGLES EXPLAINED:
+// The angle limits may take a while to get used to, but it's a really powerful
+// way to control the direction and spread. Start by setting just v1 and h1 to
+// get a tight stream in the general direction, then adjust v1/v2 and h1/h2 to
+// within a few degrees (plus and minus) of the original value to increase the
+// spread for a cone-shaped fountain. Ommit either h2 or v2 for a fan shaped
+// emission, or set v1=1 v2=360 h1=1 h2=360 for a fire-works style spherical
+// burst.
+//
+// The "emitter_angles.png" image included with the extras_r4 (and r5) mod is a
+// diagram that visualizes the horizontal and vertical angle relationship.
+//
+// When viewing a map from the top, an H angle value of 270 points up, and
+// moves clockwise, making right 360 (or 0), down 90 and left 180. Same goes
+// for the V angle when viewed from the front.
+//
+// The particle spread is always contained from the first angle (h1/v1) to the
+// second angle (h2/v2), going clockwise. So h1=10 h2=350 is NOT the same as 
+// h1=350 h2=10. (the first is a near circular spread, while the second is a
+// tight 20¼ fan shaped spread).
+//
+// Also note that although 0 would normally be a valid replacement for 360, you
+// should use a range of 1 - 360 as a value of 0 is simply ignored (though this
+// may be desirable in certain situations).
+//=============================================================================
 
-See the GNU General Public License for more details.
+void() emitter_pause;
+void() emitter_emit;
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software Foundation,
-Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
-
-/* 
-	Written by Frank Condello <pox@planetquake.com>
-	
-	Particle systems with QuakeC - packet overflows made easy!
-	
-	These were modeled after particle systems in high-end 3D apps, they are
-	not the most user friendly entities around...
-	
-	EMITER ENTITIES:
-	func_emitter, func_emitter_volume
-	
-	EFFECTOR TRIGGERS:
-	t_effector_destroy, t_effector_push, t_effector_gravity,
-	t_effector_trubulence, t_effector_attract, t_effector_friction
-	
-	Emitters generate a "particle" (either a .spr, .mdl or .bsp) and toss it in a direction
-	between the set angle limits. They can use an optional "death" model to simulate
-	anything from rain, falling rubble, blasts of flames, forcefields, whatever...
-	
-	Effectors change the behaviour of particles that touch them (the emitter must have
-	the "USEEFFECTORS" spawnflag set).
-	
-	Emitters can be attached to a func_train_ext, for some really neat crap :)
-	
-	----------------------------------------------------------------------------------------
-	NOTES:
-	
-	Don't go too nuts with these, stay away from the built-in sounds for high
-	frequency emitters (use fx_sound instead) and just use common sense (you don't
-	need a gib fountain around every corner!).
-	
-	There are a LOT of options - these are really generic and need to be
-	tailored to specifc purposes.
-	
-	The lifespan of animated particles may not be exact - it will always fall on
-	a multiple of the framerate (this usually isn't a problem, since framerates
-	are typically much smaller than lifespans) but you should be aware of this
-	limitation.
-	
-	Particles won't "die" when they hit another particle - this is on purpose.
-	
-	Particles don't register a touch on water, but a t_effector_destroy trigger can be
-	used to simulate this. Set KILLINFWATER to have them die in func_water volumes.
-	
-	----------------------------------------------------------------------------------------
-	ANGLES EXPLAINED:
-	
-	The angle limits may take a while to get used to, but it's a really powerful way to
-	control the direction and spread. Start by setting just v1 and h1 to get a tight stream
-	in the general direction, then adjust v1/v2 and h1/h2 to within a few degrees (plus and minus)
-	of the original value to increase the spread for a cone-shaped fountain. Ommit either
-	h2 or v2 for a fan shaped emission, or set v1=1 v2=360 h1=1 h2=360 for a fire-works style
-	spherical burst.
-	
-	The "emitter_angles.png" image included with this mod is a diagram that visualizes the
-	horizontal and vertical angle relationship (described below):
-	
-	When viewing a map from the top, an H angle value of 270 points up, and moves
-	clockwise, making right 360 (or 0), down 90 and left 180. Same goes for the V angle
-	when viewed from the front.
-	
-	The particle spread is always contained from the first angle (h1/v1) to the second angle (h2/v2),
-	going clockwise. So h1=10 h2=350 is NOT the same as h1=350 h2=10. (the first is a near circular spread,
-	while the second is a tight 20¼ fan shaped spread).
-	
-	Also note that although 0 would normally be a valid replacement for 360, you should use a range
-	of 1 - 360 as a value of 0 is simply ignored (though this may be desirable in certain situations).
-	
-*/
-void() effector_use = {
-	if (self.state)
-		self.state = FALSE;// off
-	else
-		self.state = TRUE;// on
+void() effector_use = { // [FUNCTION]
+	if (self.state) self.state = FALSE;// off
+	else self.state = TRUE;// on
 };
 
-void() effector_destroy = {
+void() effector_destroy = { // [FUNCTION]
 	if (!self.state) return;// Disabled
 
 	if (AffectedByPhysics(other)) {
@@ -110,7 +125,7 @@ void() effector_destroy = {
 	}
 };
 
-void() effector_push = {
+void() effector_push = { // [FUNCTION]
 	if (!self.state) return; // Disabled
 
 	if (AffectedByPhysics(other)) {
@@ -125,7 +140,7 @@ void() effector_push = {
 	}
 };
 
-void() effector_gravity = {
+void() effector_gravity = { // [FUNCTION]
 	if (!self.state) return; // Disabled
 
 	if (AffectedByPhysics(other)) {
@@ -141,7 +156,7 @@ void() effector_gravity = {
 	}
 };
 
-void() effector_turbulence = {
+void() effector_turbulence = { // [FUNCTION]
 	local float r;
 	
 	if (!self.state) return;// Disabled
@@ -162,7 +177,7 @@ void() effector_turbulence = {
 };
 
 // Attrators keep influencing particles that are caught
-void() effector_attract = {
+void() effector_attract = { // [FUNCTION]
 	local vector	dir;
 	
 	if (!self.state) return;// Disabled
@@ -183,7 +198,7 @@ void() effector_attract = {
 };
 
 // Friction triggers keep influencing particles that are caught
-void() effector_friction = {
+void() effector_friction = { // [FUNCTION]
 	if (!self.state) return;// Disabled
 
 	if (AffectedByPhysics(other)) {
@@ -207,17 +222,14 @@ void() effector_friction = {
 // "targetname"	Can be enabled/disabled
 // Spawnflags
 // "START_ON"		Start in enabled state even if targeted
-void() t_effector_friction = {
+void() t_effector_friction = { // [ENTITY]
 	InitTrigger ();
 	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
 	self.speed = self.speed/100.0;
 	if (self.speed > 1.0) self.speed = 1.0;
-	
-	if (self.targetname != string_null && !(self.spawnflags & START_ON))
-		self.state = FALSE;// off
-	else
-		self.state = TRUE;// on
+	if (self.targetname != string_null && !(self.spawnflags & START_ON)) self.state = FALSE;// off
+	else self.state = TRUE;// on
 		
 	self.use = effector_use;
 	self.touch = effector_friction;
@@ -233,7 +245,7 @@ void() t_effector_friction = {
 // Spawnflags
 // "START_ON"		Start in enabled state even if targeted
 // "TANGENENTAL"	Particles turn to face new direction
-void() t_effector_attract = {
+void() t_effector_attract = { // [ENTITY]
 	InitTrigger ();
 	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
@@ -246,11 +258,9 @@ void() t_effector_attract = {
 	self.dest_x = (self.mins_x + self.maxs_x)*0.5;
 	self.dest_y = (self.mins_y + self.maxs_y)*0.5;
 	self.dest_z = (self.mins_z + self.maxs_z)*0.5;
-	
-	if (self.targetname != string_null && !(self.spawnflags & START_ON))
-		self.state = FALSE;// off
-	else
-		self.state = TRUE;// on
+
+	if (self.targetname != string_null && !(self.spawnflags & START_ON)) self.state = FALSE;// off
+	else self.state = TRUE;// on
 		
 	self.use = effector_use;
 	self.touch = effector_attract;
@@ -268,7 +278,7 @@ void() t_effector_attract = {
 // "NOT_Y"			Don't affect Y direction
 // "NOT_Z"			Don't affect Z direction
 // "TANGENENTAL"	Particles turn to face new direction
-void() t_effector_trubulence = {
+void() t_effector_trubulence = { // [ENTITY]
 	InitTrigger ();
 	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
@@ -277,10 +287,8 @@ void() t_effector_trubulence = {
 	if (self.cnt>100) self.cnt = 100;
 	self.cnt = self.cnt*0.01;
 	self.speed = fabs(self.speed);
-	if (self.targetname != string_null && !(self.spawnflags & START_ON))
-		self.state = FALSE;// off
-	else
-		self.state = TRUE;// on
+	if (self.targetname != string_null && !(self.spawnflags & START_ON)) self.state = FALSE;// off
+	else self.state = TRUE;// on
 		
 	self.use = effector_use;
 	self.touch = effector_turbulence;
@@ -294,15 +302,12 @@ void() t_effector_trubulence = {
 // Spawnflags
 // "START_ON"		Start in enabled state even if targeted
 // "ABSOLUTE"		Particles use new gravity outright
-void() t_effector_gravity = {
+void() t_effector_gravity = { // [ENTITY]
 	InitTrigger ();
 	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
-
-	if (self.targetname != string_null && !(self.spawnflags & START_ON))
-		self.state = FALSE;// off
-	else
-		self.state = TRUE;// on
+	if (self.targetname != string_null && !(self.spawnflags & START_ON)) self.state = FALSE;// off
+	else self.state = TRUE;// on
 		
 	self.use = effector_use;
 	self.touch = effector_gravity;
@@ -317,18 +322,15 @@ void() t_effector_gravity = {
 // Spawnflags
 // "START_ON"		Start in enabled state even if targeted
 // "TANGENENTAL"	Particles turn to face new direction
-void() t_effector_push = {
+void() t_effector_push = { // [ENTITY]
 	InitTrigger ();
 	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
 	if (self.cnt<0) self.cnt = 0;
 	if (self.cnt>100) self.cnt = 100;
 	self.cnt = self.cnt*0.01;
-	
-	if (self.targetname != string_null && !(self.spawnflags & START_ON))
-		self.state = FALSE;// off
-	else
-		self.state = TRUE;// on
+	if (self.targetname != string_null && !(self.spawnflags & START_ON)) self.state = FALSE;// off
+	else self.state = TRUE;// on
 		
 	self.use = effector_use;
 	self.touch = effector_push;
@@ -340,30 +342,24 @@ void() t_effector_push = {
 // "targetname"	Can be enabled/disabled
 // Spawnflags
 // "START_ON"		Start in enabled state even if targeted
-void() t_effector_destroy = {
+void() t_effector_destroy = { // [ENTITY]
 	InitTrigger ();
 	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
-	
-	if (self.targetname != string_null && !(self.spawnflags & START_ON))
-		self.state = FALSE;// off
-	else
-		self.state = TRUE;// on
+	if (self.targetname != string_null && !(self.spawnflags & START_ON)) self.state = FALSE;// off
+	else self.state = TRUE;// on
 		
 	self.use = effector_use;
 	self.touch = effector_destroy;
 };
 
-// Return a particle origin for a brush volume or point entity
-vector() particle_origin = {
+// Return a particle origin for a brush volume or point entity.  This is different than bmodel_origin.
+vector() particle_origin = { // [FUNCTION]
 	local vector org;
 
-	
 	if (!self.aflag) { // Point	
-		if (self.owner)// Adjust origin relative to the parent train
-			org = self.origin + self.dest;
-		else
-			org = self.dest;
+		if (self.owner) org = self.origin + self.dest; // Adjust origin relative to the parent train
+		else org = self.dest;
 	} else { // Volume (submodels always have an origin of '0 0 0' so they're always in sync with the parent train)
 		org_x = self.absmin_x + (random() * self.size_x);
 		org_y = self.absmin_y + (random() * self.size_y);
@@ -373,18 +369,15 @@ vector() particle_origin = {
 };
 
 // Play death model sequence
-void() particle_death_anim = {	
-	if (self.frame+1 == self.owner.nfrms2) {// done
-		remove(self);
-		return;
-	}
+void() particle_death_anim = { // [FUNCTION]
+	if (self.frame+1 == self.owner.nfrms2) { remove(self); return; } // done
 	
 	self.frame = self.frame + 1;
 	self.nextthink = time + self.owner.frate2;
 };
 
 // Particle is done
-void() particle_die = {
+void() particle_die = { // [FUNCTION]
 	self.classname = "p_dying";// So effectors ignore dying particles
 	if (self.owner.noise2) sound (self, CHAN_VOICE, self.owner.noise2, 1, ATTN_NORM);	
 	if (!self.owner.mdl2) { remove(self); return; }
@@ -400,7 +393,7 @@ void() particle_die = {
 };
 
 // Animate Particles
-void() particle_think = {
+void() particle_think = { // [FUNCTION]
 	if (self.ltime < time) { particle_die(); return; } // done
 	
 	if (self.frame+1 == self.owner.nfrms) {
@@ -414,7 +407,7 @@ void() particle_think = {
 };
 
 // Do damage and play hit sound
-void() particle_touch = {
+void() particle_touch = { // [FUNCTION]
 	local float flip;
 
 	if (AffectedByPhysics(other)) return; // Don't die on other particles
@@ -434,28 +427,16 @@ void() particle_touch = {
 				}
 				self.attack_finished = time + 1;// Don't go nuts if particle doesn't die on touch
 			}
-		} else if (self.owner.weapon >= TE_SPIKE) { // Do a temp ent effect
-			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-			WriteByte (MSG_BROADCAST, self.owner.weapon);
-			WriteCoord (MSG_BROADCAST, self.origin_x);
-			WriteCoord (MSG_BROADCAST, self.origin_y);
-			WriteCoord (MSG_BROADCAST, self.origin_z);
-		}
+		} else if (self.owner.weapon >= TE_SPIKE) Tent_Point(self.owner.weapon,self.origin); // Do a temp ent effect
 	}
 	if (self.owner.spawnflags & REMOVEONTOUCH) particle_die(); // done 
 };
 
-void() emitter_pause;
-void() emitter_emit;
-
-float(string type) emitter_checkrelay = {
+float(string type) emitter_checkrelay = { // [FUNCTION]
 	if (self.old_velocity == '0 0 0') return FALSE;// no spin
-	
 	if (type == "t_changedir") {		
-		if (self.state == REVERSE)
-			self.state = FORWARD;
-		else
-			self.state = REVERSE;
+		if (self.state == REVERSE) self.state = FORWARD;
+		else self.state = REVERSE;
 		return TRUE;
 	} else if (type == "t_forward") {
 		self.mangle = self.old_velocity;
@@ -472,18 +453,17 @@ float(string type) emitter_checkrelay = {
 		self.mangle = '0 0 0';
 		return TRUE;
 	}
-
 	return FALSE;
 };
 
-void() emitter_start = {	
+void() emitter_start = { // [FUNCTION]
 	if (emitter_checkrelay(other.classname)) return;// spin trigger
 	
 	self.use = emitter_pause;// next use stops it
 	self.nextthink = time + 0.01;
 };
 
-void() emitter_pause = {
+void() emitter_pause = { // [FUNCTION]
 	if (emitter_checkrelay(other.classname)) return;// spin trigger
 	
 	// Wait around for next use
@@ -491,13 +471,11 @@ void() emitter_pause = {
 	self.use = emitter_start;
 };
 
-void() emitter_emit =
-{
+void() emitter_emit = { // [FUNCTION]
 	local entity p;
 	local vector dir;
 	
-	if (self.noise != string_null && self.count == 1)// Play emitter noise
-		sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
+	if (self.noise != string_null && self.count == 1) sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // Play emitter noise
 		
 	// Emit a particle
 	p = spawn ();
@@ -506,7 +484,6 @@ void() emitter_emit =
 	setorigin (p, p.origin);
 	setmodel (p, self.mdl);
 	setsize (p, VEC_ORIGIN, VEC_ORIGIN);
-	
 	p.solid = self.cnt;
 	p.movetype = self.style;
 	p.gravity = self.gravity;
@@ -515,56 +492,40 @@ void() emitter_emit =
 	p.classname = "particle";
 	p.classgroup = CG_PROJALL;
 	p.think1 = particle_die;// So other triggers can kill'em
-	
-	// Get the direction for this particle	
-	dir_x = SUB_RandomRange(self.v1, self.v2);	
+	dir_x = SUB_RandomRange(self.v1, self.v2); // Get the direction for this particle	
 	dir_y = SUB_RandomRange(self.h1, self.h2);
 	dir_z = 0;
 
-//	if (dir_x >= 180) dir_x = dir_x - 360;
-//	if (dir_y >= 180) dir_y = dir_y - 360;
-
 	// Add emitter rotation
 	if (self.mangle != '0 0 0') {	
-	
-		if (self.state == FORWARD)
-			self.ang_ofs = self.ang_ofs + 0.01;
-		else
-			self.ang_ofs = self.ang_ofs - 0.01;
+		if (self.state == FORWARD) self.ang_ofs = self.ang_ofs + 0.01;
+		else self.ang_ofs = self.ang_ofs - 0.01;
 
 		if (self.ang_ofs == 360) self.ang_ofs = 0;
 		if (self.ang_ofs == -360) self.ang_ofs = 0;
-		
 		dir = dir + (self.mangle*self.ang_ofs);
 	}	
-	
-	// Fling it...
-	makevectors(dir);
-	p.velocity = v_forward * SUB_RandomRange(self.speed, self.speed2);
-	
-	// Face the move direction (doesn't affect parallel sprites)
-	p.angles = vectoangles(p.velocity);
+
+	makevectors(dir); 
+	p.velocity = v_forward * SUB_RandomRange(self.speed, self.speed2); // Fling it...
+	p.angles = vectoangles(p.velocity); // Face the move direction (doesn't affect parallel sprites)
 	
 	// Put a spin on the particle (doesn't affect parallel sprites)
 	if (self.spawnflags & SPINPARTICLES) {
 		p.avelocity = dir;
 		p.avelocity_z = random()*280;
 	}
-	
-	// Life span
-	p.ltime = time + SUB_RandomRange(self.lspan, self.lspan2);
+
+	p.ltime = time + SUB_RandomRange(self.lspan, self.lspan2); // Life span
 	
 	// Think
-	if (!self.nfrms) {// Not animated	
+	if (!self.nfrms) { // Not animated	
 		p.frame = self.frame;
 		p.think = particle_die;	
 		p.nextthink = p.ltime;
-	}
-	else {// Animated
-
-		if (self.spawnflags & STAGGERFRAMES) {// Stagger start frames
-			if (self.stagcnt >= self.nfrms)
-				self.stagcnt = 0;
+	} else { // Animated
+		if (self.spawnflags & STAGGERFRAMES) { // Stagger start frames
+			if (self.stagcnt >= self.nfrms) self.stagcnt = 0;
 			else {
 				p.frame = self.stagcnt;
 				self.stagcnt = self.stagcnt + 1;
@@ -577,55 +538,40 @@ void() emitter_emit =
 	
 	// keep emitting till ppe is met
 	if (self.ppe > 1) {	
-		if (self.count == self.ppe)// done
-			self.count = 1;
+		if (self.count == self.ppe) self.count = 1; // done
 		else {
 			self.count = self.count + 1;
 			self.frags = self.frags + 1;
-			
 			if (self.frags > 12) {// Avoid stack overflows
 				self.nextthink = time+0.01;
 				self.frags = 0;
 				return;
-			} else
-				emitter_emit();// This may not be a good idea...
+			} else emitter_emit();// This may not be a good idea...
 
 			return;
 		}
 	}
-	
-	// Done for now
-	if (self.wait == -1) {
-		emitter_pause();
-		return;
-	}
-	
-	// Fire off another burst when ready
-	self.nextthink = time + SUB_RandomRange(self.wait, self.wait2);
+
+	if (self.wait == -1) { emitter_pause(); return; } // Done for now.
+
+	self.nextthink = time + SUB_RandomRange(self.wait, self.wait2); // Fire off another burst when ready
 };
 
-void() emitter_find =
-{
-	// Check for a paret train
-	if (self.target) train_ext_linkchild();
-	
-	// Start it up
-	self.think = emitter_emit;
-	if (self.targetname != string_null && !(self.spawnflags & START_ON))
-		emitter_pause();
-	else
-		emitter_start();
+void() emitter_find = { // [FUNCTION]
+	if (self.target) train_ext_linkchild(); // Check for a parent train
+
+	self.think = emitter_emit; // Start it up
+	if (self.targetname != string_null && !(self.spawnflags & START_ON)) emitter_pause();
+	else emitter_start();
 };
 
 // Clean up the mess of vars into something we can use
-void() emitter_init =
-{
+void() emitter_init = { // [FUNCTION]
 	local float t;
 	
-	if (!self.mdl)
-		objerror("func_emitter: No model specified");
-	else
-		precache_model(self.mdl);
+	self.classname = "emitter";
+	if (!self.mdl) objerror("func_emitter: No model specified");
+	else precache_model(self.mdl);
 	
 	if (self.mdl2) precache_model(self.mdl2);
 	
@@ -637,7 +583,6 @@ void() emitter_init =
 	}
 	
 	self.state = FORWARD;// spin this way
-	
 	if ((!self.wait || self.wait < 0) && self.wait != -1) self.wait = 0.1;
 	if (self.wait2 < 0) self.wait2 = 0;
 	
@@ -666,9 +611,7 @@ void() emitter_init =
 	}
 
 	// h2 has to be greater than h1 if defined
-	if (self.h2 && (self.h2 < self.h1)) {
-		self.h1 = self.h1 - 360;// So it spans the right way
-	}
+	if (self.h2 && (self.h2 < self.h1)) self.h1 = self.h1 - 360;// So it spans the right way
 	
 	// cap the vertical angle
 	if (self.v1 > 360) self.v1 = 360;
@@ -676,21 +619,14 @@ void() emitter_init =
 	if (self.v2 < 0) self.v2 = 0;// ignored
 	if (self.v2 > 360) self.v2 = 360;
 	// v2 has to be greater than v1 if defined
-	if (self.v2 && (self.v2 < self.v1)) {
-		self.v1 = self.v1 - 360;// So it spans the right way
-	}
-	
-//	if (self.h1 == 0) self.h1 = 360;
-//	if (self.v1 == 0) self.v1 = 360;
-	
+	if (self.v2 && (self.v2 < self.v1)) self.v1 = self.v1 - 360;// So it spans the right way
 	if (self.noise) precache_sound(self.noise);
 	if (self.noise1) precache_sound(self.noise1);
 	if (self.noise2) precache_sound(self.noise2);
 	
 	// keep the movetype in check
 	if (self.style) {// MOVETYPE_NONE is ok, but not very exciting
-		if (self.style != MOVETYPE_TOSS && self.style != MOVETYPE_BOUNCE && self.style != MOVETYPE_FLY)
-			self.style = MOVETYPE_TOSS;
+		if (self.style != MOVETYPE_TOSS && self.style != MOVETYPE_BOUNCE && self.style != MOVETYPE_FLY) self.style = MOVETYPE_TOSS;
 	}
 	
 	// check for EF_ flags (should really only allow one at a time here)
@@ -723,114 +659,87 @@ void() emitter_init =
 	if (self.nfrms2 < 0) self.nfrms2 = 0;
 	if (!self.frate || self.frate < 0) self.frate = 0.1;
 	if (!self.frate2 || self.frate2 < 0) self.frate2 = 0.1;
-	
 	self.stagcnt = self.frame;// start frame may not be 0
-	
 	self.count = 1;// ppe is not zero based
 	
 	// save off solid type to be copied off to particles
-	if (self.spawnflags & EMITSOLID)
-		self.cnt = SOLID_BBOX;// Blocking
-	else if (self.dmg || self.spawnflags & REMOVEONTOUCH || self.spawnflags & USEEFFECTORS)
-		self.cnt = SOLID_TRIGGER;// Passthrough, but still touch
-	else
-		self.cnt = SOLID_NOT;// Passthrough, no touch
+	if (self.spawnflags & EMITSOLID) self.cnt = SOLID_BBOX;// Blocking
+	else if (self.dmg || self.spawnflags & REMOVEONTOUCH || self.spawnflags & USEEFFECTORS) self.cnt = SOLID_TRIGGER;// Passthrough, but still touch
+	else self.cnt = SOLID_NOT;// Passthrough, no touch
 	
-	if (self.weapon > TE_TELEPORT)
-		self.weapon = -1;
-	
-	// wait for targets to spawn
-	self.nextthink = time + 0.2;// start after first frame to allow train to move to it's startpoint
+	if (self.weapon > TE_TELEPORT) self.weapon = -1;
+	self.nextthink = time + 0.2; // Start after first frame to allow train to move to it's startpoint and wait for targets to spawn.
 	self.think = emitter_find;
 };
 
-/*QUAKED func_emitter_volume (0 .5 .8) ? START_ON EMITSOLID REMOVEONTOUCH DIEAFTERANIM STAGGERFRAMES KILLINFWATER USEEFFECTORS STARTSTOPPED
-Emit particles from a random spot within a brush volume.
-
-*/
-void() func_emitter_volume =
-{
+// The following apply to both func_emitter and func_emitter_volume
+// -EMITTER OPTIONS-
+// "wait"			Delay between particle emissions (-1 is a single burst, then pause)
+// "wait2"			If set, delay is a random number between "wait" and "wait2" (unless "wait" is -1)
+// "ppe"			Particles per emission (default is 1)
+// "h1"			Toss particles along this horizontal (yaw) angle (1¼ - 360¼)
+// "h2"			If set, tossess particles along a random horizontal angle between "h1" and "h2"
+// "v1"			Toss particles along this vertical (pitch) angle (1¼ - 360¼) 270 is up, 90 is down.
+// "v2"			If set, tossess particles along a random vertical angle between "v1" and "v2"
+// "avelocity"		X Y Z emitter angle velocity (IMPORTANT: rotates after each emittion, this is NOT time based!)
+// "noise"			Noise the emitter makes when spawning a new particle (USE WITH CAUTION WITH HIGH FREQUENCY EMITTERS!)
+// "target"		Attach the emitter to a func_train_ext
+// "targetname" 	Can be triggered on/off
+// -PARTICLE OPTIONS-
+// "style"			Particle movetype (MOVETYPE_BOUNCE, MOVETYPE_TOSS, MOVETYPE_FLY or MOVETYPE_NONE)
+// "speed"			Speed of the particles
+// "speed2"		If set, speed is a random number between "speed" and "speed2"
+// "lspan"			Life span of particles in seconds
+// "lspan2"		If set, life span is a random number between "lspan" and "lspan2"
+// "mdl"			Path to the sprite or model file to use as particles
+// "frame"			Start frame (model/sprite frame)
+// "nfrms"			Number of animation frames
+// "frate"			Override the default 10fps (0.1) animation rate
+// "gravity"		Alter gravity G = sv_gravity*self.gravity (NOTE: 0 or 1 is unaltered - use 0.001 for "zero G")
+// "dmg"			Damage particles do when they hit something
+// "effects"		EF_MUZZLEFLASH, EF_DIMLIGHT, EF_BRIGHTLIGHT or EF_BRIGHTFIELD
+// "noise1"		Noise particles make when they hit something (USE WITH CAUTION WITH HIGH FREQUENCY EMITTERS!)
+// "noise2"		Noise particles make when they die (USE WITH CAUTION WITH HIGH FREQUENCY EMITTERS!)
+// "message"		Death message if player is killed by a particle
+// -DEATH MODEL OPTIONS-
+// "weapon"		If "dmg" is set (and positive) a particle acts like a projectile and spawns blood/sparks when doing damage or
+				// this TE_ effect when hitting the world. (from 0 - 11) TE_SPIKE, TE_SUPERSPIKE, TE_GUNSHOT, TE_EXPLOSION,
+				// TE_TAREXPLOSION, TE_LIGHTNING1, TE_LIGHTNING2, TE_WIZSPIKE, TE_KNIGHTSPIKE, TE_LIGHTNING3, TE_LAVASPLASH, TE_TELEPORT
+				// (use -1 for no effect, default is TE_SPIKE)
+// "mdl2"			Path to the sprite or model to become when life span expires
+// "nfrms2"		Number of animation frames for "death" animations
+// "frate2"		Override the default 10fps (0.1) animation rate for the "death" model
+// -SPAWNFLAGS-
+// "START_ON"		Emitters with targetnames will wait for a trigger event unless this is set
+// "EMITSOLID"		Particles are solid, block players, and collide with each other
+// "REMOVEONTOUCH" Remove particles (or do death animation) on touch
+// "DIEAFTERANIM"	Remove particles (or do death animation) after reaching the last animation frame (loop animation otherwise)
+// "SPINPARTICLES" Gives particles semi-random angle velocity (doesn't affect parallel sprites)
+// "STAGGERFRAMES" Each new particle begins with the next sequential animation frame (NOTE: DIEAFTERANIM will still kill it after the absolute "last" frame)
+// "KILLINFWATER"	Remove particles (or do death animation) when in contact with func_water
+// "USEEFFECTORS"	Partciles generated by this emitter are affected by effector triggers
+// "STARTSTOPPED"	Emitter won't spin until it's used by a trigger_go/reverse/forward (only affects emitters with avelocity)
+//
+// QUAKED func_emitter_volume (0 .5 .8) ? START_ON EMITSOLID REMOVEONTOUCH DIEAFTERANIM STAGGERFRAMES KILLINFWATER USEEFFECTORS STARTSTOPPED
+// Emit particles from a random spot within a brush volume.
+void() func_emitter_volume = { // [ENTITY]
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
-	setmodel (self, self.model);
-	setsize (self, self.mins , self.maxs);
+	setmodel(self,self.model);
+	setsize(self,self.mins,self.maxs);
 	setorigin (self, self.origin);
 	self.modelindex = 0;
 	self.model = "";
-	self.classname = "emitter";
-	
 	self.aflag = TRUE;// volume origin
 	emitter_init();
 };
 
-/*QUAKED func_emitter (0 .5 .8) (-8 -8 -8) (8 8 8) ? START_ON EMITSOLID REMOVEONTOUCH DIEAFTERANIM STAGGERFRAMES KILLINFWATER USEEFFECTORS STARTSTOPPED
-Emit particles from a fixed point.
-
-*/
-void() func_emitter =
-{
+// QUAKED func_emitter (0 .5 .8) (-8 -8 -8) (8 8 8) ? START_ON EMITSOLID REMOVEONTOUCH DIEAFTERANIM STAGGERFRAMES KILLINFWATER USEEFFECTORS STARTSTOPPED
+// Emit particles from a fixed point.
+void() func_emitter = { // [ENTITY]
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	self.dest = self.origin;// in case it's linked
-	self.classname = "emitter";
-	
 	self.aflag = FALSE;// point origin
 	emitter_init();
 };
-
-/* The following apply to both func_emitter and func_emitter_volume
-
--EMITTER OPTIONS-
-"wait"			Delay between particle emissions (-1 is a single burst, then pause)
-"wait2"			If set, delay is a random number between "wait" and "wait2" (unless "wait" is -1)
-"ppe"			Particles per emission (default is 1)
-"h1"			Toss particles along this horizontal (yaw) angle (1¼ - 360¼)
-"h2"			If set, tossess particles along a random horizontal angle between "h1" and "h2"
-"v1"			Toss particles along this vertical (pitch) angle (1¼ - 360¼) 270 is up, 90 is down.
-"v2"			If set, tossess particles along a random vertical angle between "v1" and "v2"
-"avelocity"		X Y Z emitter angle velocity (IMPORTANT: rotates after each emittion, this is NOT time based!)
-"noise"			Noise the emitter makes when spawning a new particle (USE WITH CAUTION WITH HIGH FREQUENCY EMITTERS!)
-"target"		Attach the emitter to a func_train_ext
-"targetname" 	Can be triggered on/off
-
--PARTICLE OPTIONS-
-"style"			Particle movetype (MOVETYPE_BOUNCE, MOVETYPE_TOSS, MOVETYPE_FLY or MOVETYPE_NONE)
-"speed"			Speed of the particles
-"speed2"		If set, speed is a random number between "speed" and "speed2"
-"lspan"			Life span of particles in seconds
-"lspan2"		If set, life span is a random number between "lspan" and "lspan2"
-"mdl"			Path to the sprite or model file to use as particles
-"frame"			Start frame (model/sprite frame)
-"nfrms"			Number of animation frames
-"frate"			Override the default 10fps (0.1) animation rate
-"gravity"		Alter gravity G = sv_gravity*self.gravity (NOTE: 0 or 1 is unaltered - use 0.001 for "zero G")
-"dmg"			Damage particles do when they hit something
-"effects"		EF_MUZZLEFLASH, EF_DIMLIGHT, EF_BRIGHTLIGHT or EF_BRIGHTFIELD
-"noise1"		Noise particles make when they hit something (USE WITH CAUTION WITH HIGH FREQUENCY EMITTERS!)
-"noise2"		Noise particles make when they die (USE WITH CAUTION WITH HIGH FREQUENCY EMITTERS!)
-"message"		Death message if player is killed by a particle
-
--DEATH MODEL OPTIONS-
-"weapon"		If "dmg" is set (and positive) a particle acts like a projectile and spawns blood/sparks when doing damage or
-				this TE_ effect when hitting the world. (from 0 - 11) TE_SPIKE, TE_SUPERSPIKE, TE_GUNSHOT, TE_EXPLOSION,
-				TE_TAREXPLOSION, TE_LIGHTNING1, TE_LIGHTNING2, TE_WIZSPIKE, TE_KNIGHTSPIKE, TE_LIGHTNING3, TE_LAVASPLASH, TE_TELEPORT
-				(use -1 for no effect, default is TE_SPIKE)
-"mdl2"			Path to the sprite or model to become when life span expires
-"nfrms2"		Number of animation frames for "death" animations
-"frate2"		Override the default 10fps (0.1) animation rate for the "death" model
-
--SPAWNFLAGS-
-"START_ON"		Emitters with targetnames will wait for a trigger event unless this is set
-"EMITSOLID"		Particles are solid, block players, and collide with each other
-"REMOVEONTOUCH" Remove particles (or do death animation) on touch
-"DIEAFTERANIM"	Remove particles (or do death animation) after reaching the last animation frame (loop animation otherwise)
-"SPINPARTICLES" Gives particles semi-random angle velocity (doesn't affect parallel sprites)
-"STAGGERFRAMES" Each new particle begins with the next sequential animation frame
-				(NOTE: DIEAFTERANIM will still kill it after the absolute "last" frame)
-"KILLINFWATER"	Remove particles (or do death animation) when in contact with func_water
-"USEEFFECTORS"	Partciles generated by this emitter are affected by effector triggers
-"STARTSTOPPED"	Emitter won't spin until it's used by a trigger_go/reverse/forward (only affects emitters with avelocity)
-
-*/
-
-//============================================================================

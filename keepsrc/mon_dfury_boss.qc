@@ -689,12 +689,7 @@ void() dfury_boss_pause1 = {
     self.skin = 0;
 };
 
-//QUAKED monster_dfury (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-void() monster_dfury_boss = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/q15/dfury_boss.mdl";
+void() monster_dfury_boss_precache = {
 	precache_model ("progs/q15/dfury_boss.mdl");
 	precache_model ("progs/k_spike.mdl");
 	precache_model ("progs/q15/proj_summon.mdl");
@@ -706,6 +701,14 @@ void() monster_dfury_boss = {
 	precache_model ("progs/ad171/gib_knfoot_r.mdl");
 	precache_model ("progs/ad171/w_dknightsword.mdl");
 	precache_model ("progs/drake/s_explod.spr");
+	precache_model ("progs/ad171/mon_gargoyle.mdl"); // Precache minion stuff since we use it regardless of the presence of a monster_minotaurminion
+	precache_model ("progs/ad171/h_gargoyle.mdl");
+	precache_model (MODEL_PROJ_GARGBALL);		// FB growing 8 frames
+	precache_model (MODEL_PROJ_GARGOYLE);		// red/smoke wiz projectile
+	precache_model (MODEL_PROJ_GARGOYLEGRN);	// acid/smoke wiz projectile
+	precache_model ("progs/ad171/gib_gargwing1.mdl");
+	precache_model ("progs/ad171/gib_gargwing2.mdl");
+	precache_model ("progs/ad171/proj_fury1.mdl");
 	precache_sound ("q15/dfury/boss_explode.wav");
 	precache_sound ("q15/dfury/boss_death1.wav");
 	precache_sound ("q15/dfury/attack1.wav");
@@ -725,15 +728,6 @@ void() monster_dfury_boss = {
 	precache_sound ("drake/misc/wallbrk.wav");
 	precache_sound ("knight/sword1.wav");
 	precache_sound ("knight/sword2.wav");
-
-	// Precache minion stuff since we use it regardless of the presence of a monster_minotaurminion
-	precache_model ("progs/ad171/mon_gargoyle.mdl");
-	precache_model ("progs/ad171/h_gargoyle.mdl");
-	precache_model (MODEL_PROJ_GARGBALL);		// FB growing 8 frames
-	precache_model (MODEL_PROJ_GARGOYLE);		// red/smoke wiz projectile
-	precache_model (MODEL_PROJ_GARGOYLEGRN);	// acid/smoke wiz projectile
-	precache_model ("progs/ad171/gib_gargwing1.mdl");
-	precache_model ("progs/ad171/gib_gargwing2.mdl");
 	precache_sound ("ad171/gargoyle/idle1.wav");
 	precache_sound ("ad171/gargoyle/perch1.wav");
 	precache_sound ("ad171/gargoyle/perch2.wav");
@@ -746,22 +740,27 @@ void() monster_dfury_boss = {
 	precache_sound ("ad171/gargoyle/pain100.wav");
 	precache_sound ("ad171/gargoyle/death1.wav");
 	precache_sound ("ad171/gargoyle/sight1.wav");
-	precache_model ("progs/ad171/proj_fury1.mdl");
+};
+
+//QUAKED monster_dfury (1 0 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_dfury_boss = {
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/q15/dfury_boss.mdl";
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 	setmodel (self, "progs/q15/dfury_boss.mdl");
 	self.skin = 0;
 	self.scale = 1;
 	setsize (self, '-26 -30 -24', '26 30 100');
-
 	if (skill == 3 || coop) self.health = 4700;
 	else if (skill == 2) self.health = 4300;
 	else self.health = 3500;			// dfury_boss_health
 	self.max_health = self.health;
-
 	self.classtype = CT_MONDFURYBOSS;
 	self.classmove = MON_MOVEWALK;	
 	self.classgroup = CG_DEMON;	// Don't fight my minions!  Sorry knights
+	if (self.minion_name == string_null) self.minion_name = "monster_gargoyle";
 
 	// statue
 	if (self.spawnflags & 2) {

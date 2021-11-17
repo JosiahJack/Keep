@@ -186,31 +186,53 @@ void() tur_launch = {
 	}
 };
 
-void() tur_use = 
-{
-	if (self.state == 0)
-	{
+void() tur_use =  {
+	if (self.state == 0) {
 		self.state = 1;
-	}
-	else
-	{
+	} else {
 		self.state = 0;
 	}
 	self.think = tur_stand;
 	self.nextthink = time + 0.1;
 };
 
-void() start_monster_tur = {
-	local entity stemp;
-	
-	if (deathmatch > 0)
-	{
-		if (self.team == 0 || teamplay == 0)
-		{
-			remove(self);
-			return;
-		}
-	}
+void() monster_tur_precache = {
+	precache_model("progs/oum/aagba.mdl");
+	precache_model("progs/oum/aagtb.mdl");
+	precache_model("progs/laser.mdl");
+	precache_model("progs/gib1.mdl");
+	precache_model("progs/gib2.mdl");
+	precache_model("progs/gib3.mdl");
+	precache_sound("drake/drone/enfire.wav");
+	precache_sound(SOUND_LASER_HIT);
+	precache_sound("weapons/spike2.wav");
+	precache_sound("drake/tur_arm.wav");
+};
+
+// montur is a monster...lame puns are great! haha!
+void() monster_tur = {
+	local entity trigent;
+	local vector v1;
+
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	if (!deathmatch) AddToTotals(self);	
+	if (self.deathstring == "") self.deathstring = " was blasted by a Turret\n";
+	self.gib1mdl = "progs/gib1.mdl";
+	self.gib2mdl = "progs/gib2.mdl";
+	self.gib3mdl = "progs/gib3.mdl";
+	self.oldorigin = self.origin;
+	if (!(self.health)) self.health = 200;
+	self.max_health = self.health;
+	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
+	v1 = self.angles_y * '0 1 0' + '-20 0 0';
+	makevectors(v1);
+	self.movedir = v_forward;
+	if (!(self.ammo_cells)) self.ammo_cells = 5000;
+	self.aflag = self.ammo_cells;
+	if (!(self.wait)) self.wait = SVC_INTERMISSION;
+	if (!(self.state)) self.state = 1;
+	if (self.targetname) self.use = tur_use;
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_TOSS;
 	self.health = self.max_health;
@@ -227,54 +249,15 @@ void() start_monster_tur = {
 	self.ideal_yaw = self.angles * '0 1 0';
 	self.view_ofs = '0 0 1';
 	self.flags = self.flags | FL_MONSTER;
-	stemp = spawn();
-	stemp.owner = self;
+	trigent = spawn();
+	trigent.owner = self;
 	self.hittype    = HIT_METAL;
-	stemp.takedamage = DAMAGE_NO;
-	setmodel(stemp, "progs/oum/aagtb.mdl");
-	self.trigger_field = stemp;
-	stemp.angles = self.angles;
-	setorigin(stemp, self.origin);
+	trigent.takedamage = DAMAGE_NO;
+	setmodel(trigent, "progs/oum/aagtb.mdl");
+	self.trigger_field = trigent;
+	trigent.angles = self.angles;
+	setorigin(trigent, self.origin);
 	self.ammo_cells = self.aflag;
 	self.th_stand();
+	monster_start();
 };
-
-// montur is a monster...lame puns are great! haha!
-void() monster_tur = {
-	local vector v1;
-
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	precache_model("progs/oum/aagba.mdl");
-	precache_model("progs/oum/aagtb.mdl");
-	precache_model("progs/laser.mdl");
-	precache_sound("drake/drone/enfire.wav");
-	precache_sound(SOUND_LASER_HIT);
-	precache_sound("weapons/spike2.wav");
-	precache_sound("drake/tur_arm.wav");
-	
-	if (!deathmatch) AddToTotals(self);
-	
-	if (self.deathstring == "") self.deathstring = " was blasted by a Turret\n";
-	self.gib1mdl = "progs/gib1.mdl";
-	self.gib2mdl = "progs/gib2.mdl";
-	self.gib3mdl = "progs/gib3.mdl";
-	self.oldorigin = self.origin;
-	if (!(self.health)) self.health = 200;
-	self.max_health = self.health;
-	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-
-	v1 = self.angles_y * '0 1 0' + '-20 0 0';
-	makevectors(v1);
-	self.movedir = v_forward;
-	if (!(self.ammo_cells)) self.ammo_cells = 5000;
-	self.aflag = self.ammo_cells;
-	if (!(self.wait)) self.wait = SVC_INTERMISSION;
-	if (!(self.state)) self.state = 1;
-	if (self.targetname) self.use = tur_use;
-
-	self.think = start_monster_tur;
-	self.nextthink = time + 0.1 + random() * 0.3;
-};
-

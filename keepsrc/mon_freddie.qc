@@ -450,61 +450,48 @@ void() fred_die = {
 	}
 };
 
-/*======================================================================
-QUAKED monster_freddie (1 0 0) (-32 -32 -24) (32 32 64) Ambush
-======================================================================*/
-void() monster_freddie =
-{
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+void() monster_freddie_precache = {
+	precache_model ("progs/quoth/edie.mdl");
+	precache_model ("progs/h_ogre.mdl"); // ID Ogre head
+	precache_model ("progs/quoth/wreckage.mdl"); // Multiple chunks of junk
+	precache_model ("progs/ad171/gib_metal1.mdl"); // Generic metal1_2
+	precache_model ("progs/ad171/gib_metal3.mdl"); // Generic metal1_2
+	precache_model (MODEL_PROJ_NGRED); // Default attack - red glowing nails
+	precache_model (MODEL_PROJ_LASER);
+	precache_sound ("quoth/edie/idle1.wav");
+	precache_sound("quoth/edie/sawstart.wav"); // Melee sounds, swing and impact
+	precache_sound("quoth/edie/mangle.wav");
+	precache_sound("quoth/edie/stfire.wav");
+	precache_sound("ad171/seeker/range_laser.wav");
+	precache_sound (SOUND_LASER_FIRE);
+	precache_sound (SOUND_LASER_HIT);
+	precache_sound ("quoth/edie/death.wav");
+	precache_sound ("ad171/seeker/explode_major.wav");
+	precache_sound ("quoth/edie/pain.wav");
+	precache_sound ("quoth/edie/painshrt.wav");
+	precache_sound ("quoth/edie/sight.wav");
+	precache_sound ("quoth/edie/step.wav");
+	precache_sound ("ad171/freddie/step2.wav");
+	precache_sound ("ad171/freddie/step3.wav");
+};
+
+// QUAKED monster_freddie (1 0 0) (-32 -32 -24) (32 32 64) Ambush
+void() monster_freddie = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/quoth/edie.mdl";
-	self.headmdl = "progs/h_ogre.mdl";			// ID ogre
-	self.gib1mdl = "progs/quoth/wreckage.mdl";
-	self.gib2mdl = "progs/ad171/gib_metal1.mdl";		// Breakable metal
-	self.gib3mdl = "progs/ad171/gib_metal3.mdl";		// Breakable metal
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);		// ID Ogre head	
-	// Gib Junk - 0=Axle, 1=bolt, 2=chip, 3=wing
-	precache_model (self.gib1mdl);		// Multiple chunks of junk
-	self.gib1frame = 3;					// 4 frames choose from
-	precache_model (self.gib2mdl);		// Generic metal1_2
-	precache_model (self.gib3mdl);		// Generic metal1_2
-	
+	self.headmdl = "progs/h_ogre.mdl"; // ID ogre
+	self.gib1mdl = "progs/quoth/wreckage.mdl"; // Gib Junk - 0=Axle, 1=bolt, 2=chip, 3=wing
+	self.gib2mdl = "progs/ad171/gib_metal1.mdl"; // Breakable metal
+	self.gib3mdl = "progs/ad171/gib_metal3.mdl"; // Breakable metal
+	self.gib1frame = 3; // 4 frames choose from
 	self.idle_sound = "quoth/edie/idle1.wav";
-	precache_sound (self.idle_sound);
-
-	// Melee sounds, swing and impact
-	precache_sound("quoth/edie/sawstart.wav");
-	precache_sound("quoth/edie/mangle.wav");
-
-	// Default attack - red glowing nails
-	precache_model (MODEL_PROJ_NGRED);
-	precache_sound("quoth/edie/stfire.wav");
-
-	// Alternative attack - lasers!?!
-	if (self.spawnflags & MON_FREDDIE_LASER) {
-		precache_model (MODEL_PROJ_LASER);
-		precache_sound("ad171/seeker/range_laser.wav");
-		precache_sound (SOUND_LASER_FIRE);
-		precache_sound (SOUND_LASER_HIT);
-	}
-
-	precache_sound ("quoth/edie/death.wav");
 	self.death_sound = "ad171/seeker/explode_major.wav";
-	precache_sound (self.death_sound);
 	self.pain_sound = "quoth/edie/pain.wav";
 	self.pain_sound2 = "quoth/edie/painshrt.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-	
 	self.sight_sound = "quoth/edie/sight.wav";
-	precache_sound (self.sight_sound);
-
-	self.solid = SOLID_NOT;				// No interaction with world
+	self.solid = SOLID_NOT; // No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_GIANT;
 	if (self.health < 1) self.health = 500;
@@ -541,17 +528,12 @@ void() monster_freddie =
 		}
 	}
 	
-	// Custom feet sounds (specific order)
-	self.stepc1 = "quoth/edie/step.wav";
+	self.stepc1 = "quoth/edie/step.wav"; // Custom feet sounds (specific order)
 	self.stepc2 = "ad171/freddie/step2.wav";
 	self.stepc3 = "quoth/edie/step.wav";
 	self.stepc4 = "ad171/freddie/step2.wav";
 	self.stepc5 = "ad171/freddie/step3.wav";
-	precache_sound (self.stepc1);
-	precache_sound (self.stepc2);
-	precache_sound (self.stepc5);
 	self.steptype = FS_TYPECUSTOM;
-
 	self.th_checkattack = FreddieCheckAttack;
 	self.th_stand = fred_stand1;
 	self.th_walk = fred_walk1;
@@ -562,13 +544,10 @@ void() monster_freddie =
 	self.th_pain = fred_pain;
 	self.th_die = fred_die;
 	self.th_gibdie = fred_explode;
-
 	self.hittype = HIT_METAL;
-
 	self.classtype = CT_MONFREDDIE;
 	self.classgroup = CG_OGRE;
 	self.classmove = MON_MOVEWALK;
-	
 	monster_start();
 };
 

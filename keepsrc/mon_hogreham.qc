@@ -349,11 +349,9 @@ void(float soundtype) hogreham_sound = {
 	else if (soundtype == 4) sound (self, CHAN_VOICE, "ad171/weapons/crossbow_swipe.wav", 1, ATTN_IDLE);
 };
 
-//----------------------------------------------------------------------
 // Special wakeup animation for attacking/breaking something infront
 // The monster should be setup facing the right direction before call
 // Starts in large overhead swing downwards (no damage checks)
-//----------------------------------------------------------------------
 void() hogreham_wakeup1a	=[	$smash7,		hogreham_wakeup2a ] {monster_sightsound();};
 void() hogreham_wakeup2a	=[	$smash6,		hogreham_wakeup3a ] {};
 void() hogreham_wakeup3a	=[	$smash8,		hogreham_wakeup4a ] {};
@@ -364,62 +362,51 @@ void() hogreham_wakeup7a	=[	$smash12,		hogreham_wakeup8a ] {};
 void() hogreham_wakeup8a	=[	$smash13,		hogreham_wakeup9a ] {};
 void() hogreham_wakeup9a	=[	$smash14,		hogreham_run1	] {};
 
-/*======================================================================
-//QUAKED monster_hogreham (0.5 0.75 0) (-32 -32 -24) (32 32 64) AMBUSH x METAL NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
-{ model(":progs/ad171/mon_hogreham.mdl"); }
-Ogre, 300 health points.
--------- KEYS --------
--------- SPAWNFLAGS --------
-METAL : Full plate metal armour and +100HP
--------- NOTES --------
-
-======================================================================*/
-void() monster_hogreham = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/ad171/mon_hogreham.mdl";		// New Ogre Model
-	self.headmdl = "progs/ad171/h_hogreham.mdl";		// Large head
-	self.gib1mdl = "progs/ad171/w_ogreham.mdl";		// Ogre Hammer (3 skins)
-	self.gib2mdl = "progs/ad171/gib_ogfoot1.mdl";		// Left foot
-	self.gib3mdl = "progs/ad171/gib_ogfoot2.mdl";		// Right foot
-	self.gib4mdl = "progs/ad171/w_ogregl.mdl";		// Grenade Launcher
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
+void() monster_hogreham_precache = {
+	precache_model ("progs/ad171/mon_hogreham.mdl");
+	precache_model ("progs/ad171/h_hogreham.mdl");
 	precache_model (MODEL_PROJ_GRENADE);
 	precache_model (MODEL_PROJ_RINGSHOCK);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	precache_model (self.gib4mdl);
-	self.gib1sound = GIB_IMPACT_WOOD;
-
-	self.idle_sound = "ogre/ogidle.wav";
-	precache_sound (self.idle_sound);
-	self.idle_soundcom = "ogre/ogidle2.wav";
-	precache_sound (self.idle_soundcom);
-
+	precache_model ("progs/ad171/w_ogreham.mdl");
+	precache_model ("progs/ad171/gib_ogfoot1.mdl");
+	precache_model ("progs/ad171/gib_ogfoot2.mdl");
+	precache_model ("progs/ad171/w_ogregl.mdl");
+	precache_sound ("ogre/ogidle.wav");
+	precache_sound ("ogre/ogidle2.wav");
 	precache_sound ("ogre/ogdrag.wav");		// Chainsaw scrap on floor sound
 	precache_sound ("ogre/ogdth.wav");		// Death sound
-	self.pain_sound = "ogre/ogpain1.wav";
-	precache_sound (self.pain_sound);		// Pain
-	
+	precache_sound ("ogre/ogpain1.wav");		// Pain
 	precache_sound ("ogre/ogsawatk.wav");	// Attack
 	precache_sound ("ad171/weapons/crossbow_swipe.wav");	// hammer swipe
 	precache_sound ("ad171/ogre/ham_hit.wav");	// hammer hit ground
 	precache_sound ("ad171/ogre/ham_wave.wav");	// hammer shockwave
-	
+	precache_sound (GIB_SOUND_HEAVY);	// hammer hit
+	precache_sound ("ogre/ogwake.wav");
+};
+
+// QUAKED monster_hogreham (0.5 0.75 0) (-32 -32 -24) (32 32 64) AMBUSH x METAL NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
+// { model(":progs/ad171/mon_hogreham.mdl"); }
+// Ogre, 300 health points.
+// -------- SPAWNFLAGS --------
+// METAL : Full plate metal armour and +100HP
+void() monster_hogreham = {
+	if (monster_checkrandomizer() == TRUE) return; 	// Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return;		// Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/ad171/mon_hogreham.mdl";		// New Ogre Model
+	self.headmdl = "progs/ad171/h_hogreham.mdl";	// Large head
+	self.gib1mdl = "progs/ad171/w_ogreham.mdl";		// Ogre Hammer (3 skins)
+	self.gib2mdl = "progs/ad171/gib_ogfoot1.mdl";	// Left foot
+	self.gib3mdl = "progs/ad171/gib_ogfoot2.mdl";	// Right foot
+	self.gib4mdl = "progs/ad171/w_ogregl.mdl";		// Grenade Launcher
+	self.gib1sound = GIB_IMPACT_WOOD;
+	self.idle_sound = "ogre/ogidle.wav";
+	self.idle_soundcom = "ogre/ogidle2.wav";
+	self.pain_sound = "ogre/ogpain1.wav";
 	self.meleehitsound = GIB_SOUND_HEAVY;
-	precache_sound (self.meleehitsound);	// hammer hit
-
 	self.sight_sound = "ogre/ogwake.wav";
-	precache_sound (self.sight_sound);
-
-	self.solid = SOLID_NOT;				// No interaction with world
-	self.movetype = MOVETYPE_NONE;		// Static item, no movement
+	self.solid = SOLID_NOT;							// No interaction with world
+	self.movetype = MOVETYPE_NONE;					// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;
 	
 	// Upgraded ogre health 300 with metal+ option
@@ -427,13 +414,11 @@ void() monster_hogreham = {
 	if (self.spawnflags & MON_HOGRE_METAL) {
 		self.health = self.health + MON_HOGRE_METUPG;
 		if (self.deathstring == "")  self.deathstring = " was pulverized by an armored Hammer Ogre\n";
-		// Always drop hammer, make sure correct skin
-		self.gib1skin = 1;
-		self.skin = 1;
+		self.gib1skin = 1; // Always drop hammer, make sure correct skin
+		self.skin = 1; 
 	} else {
 		if (self.deathstring == "")  self.deathstring = " was pulverized by a Hammer Ogre\n";
-		// Random chance to switch GL for hammer
-		if (random() < 0.5) self.gib1mdl = self.gib4mdl;
+		if (random() < 0.5) self.gib1mdl = self.gib4mdl; // Random chance to switch GL for hammer
 	}
 		
 	self.gibhealth = -80;
@@ -463,11 +448,9 @@ void() monster_hogreham = {
 	self.th_missile = hogreham_shoot1;
 	self.th_pain = hogreham_pain;
 	self.th_wakeup = hogreham_wakeup1a;
-	
 	self.ammo_rockets = 4;
 	self.classtype = CT_MONHOGREHAM;	// new style hunter ogre
 	self.classgroup = CG_OGRE;			// One big happy ogre family!
 	self.classmove = MON_MOVEWALK;
-
 	monster_start();
 };

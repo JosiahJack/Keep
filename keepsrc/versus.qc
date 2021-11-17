@@ -114,10 +114,10 @@ void () item_coin_touch = {
    Safe_stuffcmd (other, "bf\n");
    coins = coins + self.count;
    sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-   item_finished();
-   check_item_respawn();
    activator = other;
    SUB_UseTargets();
+   item_finished();
+   if (!self.respawn_trig) start_item_respawn();
 };
 
 void () item_coin_setup = {
@@ -126,8 +126,8 @@ void () item_coin_setup = {
    precache_sound (self.noise);
    self.touch = item_touch;
    self.touch2 = item_coin_touch;
-   self.bbmins = VEC_KEYS_MIN;
-   self.bbmaxs = VEC_KEYS_MAX;
+   self.bbmins = VEC_HULL_MIN;
+   self.bbmaxs = VEC_HULL_MAX;
    item_start();
 };
 
@@ -155,19 +155,19 @@ float() can_eat_bones = {
 };
 
 void () item_bone_touch = {
-	if (can_eat_bones()) {
-		sprint (other, "You got ");
-		sprint (other, ftos(self.count));
-		if (self.count == 1) sprint (other, " bone!\n");
-		else sprint (other, " bones!\n");
-		Safe_stuffcmd (other, "bf\n");
-		bones = bones + self.count;
-		sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-		item_finished();
-		check_item_respawn();
-		activator = other;
-		SUB_UseTargets();
-	}
+	if (!can_eat_bones()) return;
+	
+	sprint (other, "You got ");
+	sprint (other, ftos(self.count));
+	if (self.count == 1) sprint (other, " bone!\n");
+	else sprint (other, " bones!\n");
+	Safe_stuffcmd (other, "bf\n");
+	bones = bones + self.count;
+	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+	activator = other;
+	SUB_UseTargets();
+	item_finished();
+	if (!self.respawn_trig) start_item_respawn();
 };
 
 void () item_bone = {
@@ -178,8 +178,8 @@ void () item_bone = {
 	precache_sound (self.noise);
 	self.touch = item_touch;
 	self.touch2 = item_bone_touch;
-	self.bbmins = VEC_KEYS_MIN;
-	self.bbmaxs = VEC_KEYS_MAX;
+	self.bbmins = VEC_HULL_MIN;
+	self.bbmaxs = VEC_HULL_MAX;
 	item_start();
 };
 
@@ -202,7 +202,7 @@ void(float c) DropCoin = {
 	item.movetype = MOVETYPE_TOSS;
 	self.noise = "drake/items/money.wav";
 	setmodel (item, "progs/qmaster/coinitem.mdl");
-	setsize (item, '-16 -16 -24', '16 16 32');
+	setsize (item, VEC_HULL_MIN, VEC_HULL_MAX);
 	item.touch = item_touch;
 	item.touch2 = item_coin_touch;
 	item.item_expired = 0; //coins never expire

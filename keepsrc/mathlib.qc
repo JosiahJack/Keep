@@ -46,6 +46,7 @@ float COS30   = 0.866; // Handy performance helpers
 float COS45   = 0.7071; // to save time
 float COS60   = 0.5; // and money!
 float() crandom = { return 2*(random() - 0.5); };
+void(entity ent, string text) Safe_stuffcmd;
 
 // You can set the accuracy of mathlib by changing this value.
 // If unset, it defaults to 0.001
@@ -598,14 +599,99 @@ vector(vector dir, vector norm, float ob, float stop) Vec_Reflect = {
     return dir;
 };
 
+// Direction Vector Change
+// Originally in 'mirv.qc'.  Placed here now that other rocket attacks
+// use them.  Specifically, rocketters' rockets and players' hydra missile. -PM
+// This returns a unit vector whose direction points toward end if it is within theta degrees of dir.  If not, the vector returned will a direction somewhere between dir and the ideal vector.
+// Similar to 'ai_turn', but for three dimensions.  NOTE:  Assumes (0 <= theta <= 180).
+vector(vector dir, vector start, vector end, float theta) Dir_GotoIdeal = {
+    local   vector  v1, v2;
+    local   float   dist, dot, qccos, qcsin, rncos, rnsin;
+
+    v1 = dir;
+    v2 = end - start;
+    dist = vlen(v2);
+    v2 = normalize(v2);
+
+    dot = v1 * v2;
+    qccos = mathlib_cos(theta);
+    qcsin = mathlib_sin(theta);
+    if (dot < qccos) { // Endpoint not in the cone.  Calculate a new vector toward the endpoint that is within the cone.
+        local   vector  vx, vy, vz;
+        local   float   side, up;
+
+        // Get the three vectors that make up dir.
+        dir = vectoangles (dir);
+        dir_x = 0 - dir_x;
+        makevectors (dir);
+        vx = v_forward; vy = v_right; vz = v_up;
+
+        // Project, from start, to the point where the endpoint is neither ahead nor behind it.
+        dist = dist * dot;
+        start = start + v1*dist;
+        dir = normalize(end - start);
+        side = dir * vy; // Get the dot products of the horizontal and vertical vectors.
+        up = dir * vz;
+        dir = vy*side + vz*up;
+        dist = vlen(dir);
+        if (dist == 0) { // Can't use zero vector, so create a random unit vector.
+            theta = random() * 360;
+			rncos = mathlib_cos(theta);
+			rnsin = mathlib_sin(theta);
+            dir = vy*rncos + vz*rnsin;
+        } else { // Make sure we have a unit vector.
+            dir = normalize(dir);
+        }
+
+        // Calculate the final vector.  The result is already normalized.
+        dir = vx*qccos + dir*qcsin;
+    } else { // Endpoint is within the cone, so simply take its vector.
+        dir = v2;
+    }
+
+    return dir;
+};
+
+// Fixed version of 'vectoangles'. From Drake.
+// Note 8/4/2010:  Fixed by what standard?  Some need it, some don't.
+vector(vector dir) Vangles = {
+    dir   = vectoangles(dir);
+    dir_x = anglemod(0 - dir_x);  // 'vectoangles' reverses pitch -- fix it!
+    return dir;
+};
+
+//  This changes a directional vector. Useful for things that need drunken or spiraling paths.
+// 'ang1' affects forward vector.
+// 'ang2' affects side (right and up) vectors.
+vector(vector dir, float ang1, float ang2) Dir_Change = {
+	local float qccos, qcsin;
+
+    dir = Vangles(dir);
+    makevectors (dir);
+    qccos = mathlib_cos(ang2);
+    qcsin = mathlib_sin(ang2);
+    dir = v_right*qccos + v_up*qcsin; // Get a vector perpendicular to its direction vector.
+    qccos = mathlib_cos(ang1);
+    qcsin = mathlib_sin(ang1);
+    dir = v_forward*qccos + dir*qcsin; // Calculate new direction.
+    return dir;
+};
+
+//  This randomly changes a vector's path.  Used by drunken missiles.
+//
+//  NOTE:  Assumes (0 <= theta <= 180).
+vector(vector dir, float ang) Dir_Randomize = {
+    local float a1, a2;
+
+    a1 = random()*ang;
+    a2 = random()*360;  // Random angle for perpendicular vector.
+    return Dir_Change (dir, a1, a2);
+};
+
 // Emulate 'P_Random' from Doom/Heretic source.  Returns an integer from 0 to 255.
 float() prandom = {return (random() * 256) & 255;};
 
-//==========================================================================
-//  Damage
-
-// Damage when hit by a rocket directly.  Emulates 100-120 when d = 120.
-// Does 83.333% to 100% damage
+// Damage when hit by a rocket directly.  Emulates 100-120 when d = 120.  Does 83.333% to 100% damage
 float(float d) SUB_RandomDamage = {return d / 6 * (5 + random());};
 
 // Damage when hit by melee attack.  Typical amount is the sum of three
@@ -617,4 +703,124 @@ float(float mx) SUB_MeleeDamage = {
     d = d + random();
     d = d + random();
     return d * mx;
+};
+
+vector() safe_client_forward = {
+	local vector vf,vu,vr,retval;
+	
+	vf = v_forward; // Cache to preserve
+	vu = v_up;
+	vr = v_right;
+	makevectors(self.v_angle);
+	retval = v_forward; // Capture the forward vector.
+	v_forward = vf; // Return to previous values.  This is what makes this safe as opposed to makevectors willy nilly.
+	v_up = vu;
+	v_right = vr;
+	return retval; // Take me home!
+};
+
+// (Long Float To String) Format and print a number to the console
+// - str_player : needs to be a client for various buffer commands
+// - buffer : BUFFER_STUFFCMD, BUFFER_SPRINT, BUFFER_DPRINT
+void(entity str_player, float str_num, float topbit, float botbit, float buffer) lftos = {
+	local float str_counter, str_pow, str_result, str_remain, str_first;
+	
+	str_counter = topbit;		// Upper number length
+	str_pow = mathlib_powbit(topbit,10);// Setup initial base 10 power for checking
+	str_remain = FALSE;			// Decimal point been done yet
+	str_first = FALSE;			// First non-zero digit printed
+
+	// Deal with negative state first
+	if (str_num < 0) {
+		if (buffer & BUFFER_STUFFCMD) Safe_stuffcmd(str_player, "-");
+		else if (buffer & BUFFER_SPRINT) sprint(str_player, "-");
+		else if (buffer & BUFFER_DPRINT) dprint("-");
+	}
+	// Get rid of negative state
+	str_num = fabs(str_num);
+	
+	// If number larger than fixed length?
+	if (str_num > str_pow) str_num = str_num - (floor(str_num / str_pow) * str_pow);
+	// New system, not used for this function
+	// str_num = mathlib_truncate(str_num, topbit, botbit);
+
+	// Loop through upper part of number
+	while(str_counter > 0) {
+		// Move down one pow digit
+		str_pow = str_pow / 10;
+
+		// Divide number by pow to get divider
+		// Floor can produce rounding errors (fix it with 0.01)
+		str_result = floor((str_num / str_pow)+0.01);
+		if (str_result > 9) str_result = 9; // Result must be 0-9 digits
+		if (str_result < 1) str_result = 0;
+		
+		// Fill front of number with spaces
+		if (str_counter > 1 && str_result == 0 && str_first == FALSE) {
+			// Print space to buffer type
+			if (buffer & BUFFER_STUFFCMD) Safe_stuffcmd(str_player, " ");
+			else if (buffer & BUFFER_SPRINT) sprint(str_player, " ");
+			else if (buffer & BUFFER_DPRINT) dprint(" ");
+		} else if (str_result > 0 || str_first) { // Display a number
+			str_first = TRUE;
+			// Print digit to buffer type
+			if (buffer & BUFFER_STUFFCMD) Safe_stuffcmd(str_player, ftos(str_result));
+			else if (buffer & BUFFER_SPRINT) sprint(str_player, ftos(str_result));
+			else if (buffer & BUFFER_DPRINT) dprint(ftos(str_result));
+		}
+		
+		str_num = str_num - (str_result * str_pow); // remove top part of number, decrease str length counter
+		str_counter = str_counter - 1;
+	}
+	
+	// Any decimal place?
+	if (botbit <= 0) {
+		// Check for zero value
+		if (!str_first) {
+			if (buffer & BUFFER_STUFFCMD) Safe_stuffcmd(str_player, "0");
+			else if (buffer & BUFFER_SPRINT) sprint(str_player, "0");
+			else if (buffer & BUFFER_DPRINT) dprint("0");
+		}
+		return;
+	}
+	
+	// Is there any remainder?
+	if (str_counter < 1) {
+		// Print decimal point to buffer type
+		if (!str_first) {
+			str_first = TRUE;
+			if (buffer & BUFFER_STUFFCMD) Safe_stuffcmd(str_player, "0.");
+			else if (buffer & BUFFER_SPRINT) sprint(str_player, "0.");
+			else if (buffer & BUFFER_DPRINT) dprint("0.");
+		} else {
+			if (buffer & BUFFER_STUFFCMD) Safe_stuffcmd(str_player, ".");
+			else if (buffer & BUFFER_SPRINT) sprint(str_player, ".");
+			else if (buffer & BUFFER_DPRINT) dprint(".");
+		}
+		if (botbit <1) botbit=1;
+		str_counter = botbit;
+		while (botbit > 0) { 
+			str_num = str_num * 10; 
+			botbit = botbit -1;
+		}
+		str_pow = mathlib_powbit(str_counter,10);
+	}
+
+	// Loop through lower part of number
+	while(str_counter > 0) {
+		str_pow = str_pow / 10; // Move down one pow digit
+		str_result = floor((str_num / str_pow)+0.01); // Divide number by pow to get divider.  Floor can produce rounding errors (fix it with 0.01)
+		if (str_result > 9) str_result = 9; // Result must be 0-9 digits
+		if (str_result < 1) str_result = 0;
+
+		if (str_result > 0 || str_first) {
+			str_first = TRUE;
+			if (buffer & BUFFER_STUFFCMD) Safe_stuffcmd(str_player, ftos(str_result)); // Print digit to buffer type
+			else if (buffer & BUFFER_SPRINT) sprint(str_player, ftos(str_result));
+			else if (buffer & BUFFER_DPRINT) dprint(ftos(str_result));
+		}
+
+		str_num = str_num - (str_result * str_pow); // remove top part of number, decrease str length counter
+		str_counter = str_counter - 1;
+	}
 };

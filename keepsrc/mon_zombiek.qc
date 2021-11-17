@@ -717,45 +717,40 @@ void(float type) zombiek_sound = {
 	}
 };
 
-//============================================================================
-void() zombiek_die =
-{
+void() zombiek_die = {
 	self.health = self.gibhealth; // Force gib
 	monster_death_precheck();
 };
 
-/*======================================================================
- QUAKED monster_zombiek (1 0 0) (-16 -16 -24) (16 16 32) Ambush x FLOOR
-======================================================================*/
+void() monster_zombiek_precache = {
+	precache_model("progs/ad171/mon_zombiek.mdl");
+	precache_model("progs/ad171/h_zombiek.mdl");
+	precache_model("progs/ad171/w_zombiesword.mdl");
+	precache_poisongibs(); // precache gibs
+	precache_sound("zombie/z_idle.wav"); // Idle A
+	precache_sound("zombie/z_idle1.wav"); // Idle B
+	precache_sound("zombie/z_pain.wav");
+	precache_sound("zombie/z_pain1.wav");
+	precache_sound("zombie/z_fall.wav"); // Impact - floor
+	precache_sound("zombie/z_gib.wav"); // Death sound
+	precache_sound("ad171/zombie/zk_sight.wav");
+};
+
+// QUAKED monster_zombiek (1 0 0) (-16 -16 -24) (16 16 32) Ambush x FLOOR
 void() monster_zombiek = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_zombiek.mdl";		// Zombie Knight
 	self.headmdl = "progs/ad171/h_zombiek.mdl";
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
 	self.gib1mdl = "progs/ad171/w_zombiesword.mdl";	// Unique sword
 	self.gib1sound = GIB_IMPACT_METALA;
-	precache_model (self.gib1mdl);
-	precache_sound ("zombie/z_idle.wav");	// Idle A
-	precache_sound ("zombie/z_idle1.wav");	// Idle B
 	self.pain_sound = "zombie/z_pain.wav";
 	self.pain_sound2 = "zombie/z_pain1.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-	precache_sound ("zombie/z_fall.wav");	// Impact - floor
-	precache_sound ("zombie/z_gib.wav");	// Death sound
-
-	// New sight sound, mixture of knight + zombie
-	self.sight_sound = "ad171/zombie/zk_sight.wav";
-	precache_sound (self.sight_sound);
+	self.sight_sound = "ad171/zombie/zk_sight.wav"; // New sight sound, mixture of knight + zombie
 
 	// Check for poisonous entity flag
 	if (self.poisonous) {
-		precache_poisongibs();			// precache gibs
 		self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
 		self.skin = self.exactskin = self.gib1skin = 1;
 		if (self.deathstring == "") self.deathstring = " was cornered by a Poisonous Zombie Knight\n";
@@ -796,10 +791,8 @@ void() monster_zombiek = {
 	self.th_pain = zombiek_pain;
 	self.th_die = zombiek_die;
 	self.th_wakeup = zombiek_wakeup;	// Get off floor
-	
 	self.classtype = CT_MONZOMBIEK;
 	self.classgroup = CG_ZOMBIE;		// One big happy zombie family!
 	self.classmove = MON_MOVEWALK;
-
 	monster_start();
 };

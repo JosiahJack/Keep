@@ -1,43 +1,33 @@
-/*==============================================================================
-Chthon (Firetop Mountain Version)
-==============================================================================*/
+// Chthon (Firetop Mountain Version)
+
 $frame rise1 rise2 rise3 rise4 rise5 rise6 rise7 rise8 rise9 rise10
 $frame rise11 rise12 rise13 rise14 rise15 rise16 rise17 
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8
 $frame walk9 walk10 walk11 walk12 walk13 walk14 walk15
 $frame walk16 walk17 walk18 walk19 walk20 walk21 walk22
 $frame walk23 walk24 walk25 walk26 walk27 walk28 walk29 walk30 walk31
-
 $frame death1 death2 death3 death4 death5 death6 death7 death8 death9
-
 $frame attack1 attack2 attack3 attack4 attack5 attack6 attack7 attack8
 $frame attack9 attack10 attack11 attack12 attack13 attack14 attack15
 $frame attack16 attack17 attack18 attack19 attack20 attack21 attack22
 $frame attack23
-
 $frame shocka1 shocka2 shocka3 shocka4 shocka5 shocka6 shocka7 shocka8
 $frame shocka9 shocka10 
-
 $frame shockb1 shockb2 shockb3 shockb4 shockb5 shockb6
-
 $frame shockc1 shockc2 shockc3 shockc4 shockc5 shockc6 shockc7 shockc8 
 $frame shockc9 shockc10
 
-//===========================================================================
-void(float ftop_mode) ftop_track =
-{
+void(float ftop_mode) ftop_track = {
 	// Find a player
 	if (self.enemy == world) {
 		self.enemy = find(world, classname, "player");
-		// reset enemy if no player found!
-		if (!self.enemy) self.enemy = world;
+		if (!self.enemy) self.enemy = world; // reset enemy if no player found!
 	}
 	
 	// Check for any no combat conditions
 	if (self.enemy.flags & FL_NOTARGET) self.enemy = world;
 	else if (intermission_running > 0) self.enemy = world;
-	else if (cinematic_running > 0) self.enemy = world;
+	else if (cinematic_running > 0 || cutscene > 0) self.enemy = world;
 	else if (self.enemy.health < 1) self.enemy = world;
 		
 	// Got an enemy?
@@ -47,12 +37,10 @@ void(float ftop_mode) ftop_track =
 		else ai_face();
 	}
 	
-	// Update particle effect around base of Chthon
 	makevectors(self.angles);
-	particle_debuff(self.origin+v_forward*32, 96, rint(10+random()*40), PARTICLE_BURST_FIRE);
+	particle_debuff(self.origin+v_forward*32, 96, rint(10+random()*40), PARTICLE_BURST_FIRE); // Update particle effect around base of Chthon
 };
 
-//----------------------------------------------------------------------
 void() ftop_idle1	=[	$walk1, ftop_idle2 ] {ftop_track(TRUE);};
 void() ftop_idle2	=[	$walk2, ftop_idle3 ] {ftop_track(TRUE);};
 void() ftop_idle3	=[	$walk3, ftop_idle4 ] {ftop_track(TRUE);};
@@ -117,7 +105,6 @@ void(vector orgofs) ftop_fire = {
 	Launch_Missile (org, dir, avel, CT_PROJ_FIRETOP, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
 void() ftop_attack1	=[	$attack1, ftop_attack2 ] {ftop_track(FALSE);};
 void() ftop_attack2	=[	$attack2, ftop_attack3 ] {ftop_track(FALSE);};
 void() ftop_attack3	=[	$attack3, ftop_attack4 ] {ftop_track(FALSE);};
@@ -140,14 +127,12 @@ void() ftop_attack19=[	$attack19, ftop_attack20 ] {ftop_fire('100 -50 250');};
 void() ftop_attack20=[	$attack20, ftop_attack21 ] {ftop_track(FALSE);};
 void() ftop_attack21=[	$attack21, ftop_attack22 ] {ftop_track(FALSE);};
 void() ftop_attack22=[	$attack22, ftop_attack23 ] {ftop_track(FALSE);};
-void() ftop_attack23=[	$attack23, ftop_attack1 ] {ftop_track(FALSE);
-	// If no enemy go back to idling in a pool of lava!
-	if (self.enemy == world) self.think = self.th_stand;
+void() ftop_attack23=[	$attack23, ftop_attack1 ] {
+	ftop_track(FALSE);
+	if (self.enemy == world) self.think = self.th_stand; // If no enemy go back to idling in a pool of lava!
 };
 
-//----------------------------------------------------------------------
-void() ftop_lightning =
-{
+void() ftop_lightning = {
 	if (!self.movetarget2) return;
 	if (!self.movetarget3) return;
 
@@ -169,12 +154,10 @@ void() ftop_lightning =
 	WriteCoord (MSG_BROADCAST, self.pos2_z);
 };
 
-//----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) ftop_pain = {
 	self.health = self.max_health;
 };
 
-//----------------------------------------------------------------------
 void() ftop_death1 = [$death1, ftop_death2] {
 	ftop_lightning();
 	sound (self, CHAN_VOICE, "ad171/chthon/death1.wav", 1, ATTN_NORM);
@@ -201,7 +184,6 @@ void() ftop_death10 = [$death9, ftop_death11] {
 };
 void() ftop_death11 = { remove(self); };
 
-//----------------------------------------------------------------------
 void() ftop_shocka1 =[	$shocka1, ftop_shocka2 ] {ftop_lightning();};
 void() ftop_shocka2 =[	$shocka2, ftop_shocka3 ] {ftop_lightning();};
 void() ftop_shocka3 =[	$shocka3, ftop_shocka4 ] {ftop_lightning();};
@@ -211,10 +193,11 @@ void() ftop_shocka6 =[	$shocka6, ftop_shocka7 ] {ftop_lightning();};
 void() ftop_shocka7 =[	$shocka7, ftop_shocka8 ] {ftop_lightning();};
 void() ftop_shocka8 =[	$shocka8, ftop_shocka9 ] {ftop_lightning();};
 void() ftop_shocka9 =[	$shocka9, ftop_shocka10 ] {ftop_lightning();};
-void() ftop_shocka10 =[	$shocka10, ftop_death1 ] {ftop_lightning();
-	if (self.attack_finished > time) self.think = ftop_shocka1;};
+void() ftop_shocka10 =[	$shocka10, ftop_death1 ] {
+	ftop_lightning();
+	if (self.attack_finished > time) self.think = ftop_shocka1;
+};
 
-//----------------------------------------------------------------------
 void() ftop_shockb1 =[	$shockb1, ftop_shockb2 ] {ftop_lightning();};
 void() ftop_shockb2 =[	$shockb2, ftop_shockb3 ] {ftop_lightning();};
 void() ftop_shockb3 =[	$shockb3, ftop_shockb4 ] {ftop_lightning();};
@@ -224,10 +207,11 @@ void() ftop_shockb6 =[	$shockb6, ftop_shockb7 ] {ftop_lightning();};
 void() ftop_shockb7 =[	$shockb1, ftop_shockb8 ] {ftop_lightning();};
 void() ftop_shockb8 =[	$shockb2, ftop_shockb9 ] {ftop_lightning();};
 void() ftop_shockb9 =[	$shockb3, ftop_shockb10 ] {ftop_lightning();};
-void() ftop_shockb10 =[	$shockb4, ftop_death1 ] {ftop_lightning();
-	if (self.attack_finished > time) self.think = ftop_shockb1;};
+void() ftop_shockb10 =[	$shockb4, ftop_death1 ] {
+	ftop_lightning();
+	if (self.attack_finished > time) self.think = ftop_shockb1;
+};
 
-//----------------------------------------------------------------------
 void() ftop_shockc1 =[	$shockc1, ftop_shockc2 ] {ftop_lightning();};
 void() ftop_shockc2 =[	$shockc2, ftop_shockc3 ] {ftop_lightning();};
 void() ftop_shockc3 =[	$shockc3, ftop_shockc4 ] {ftop_lightning();};
@@ -288,9 +272,7 @@ void() ftop_rise17	=[	$rise17, ftop_attack1 ] {
 	self.th_die = ftop_deathsequence;
 };
 
-//----------------------------------------------------------------------
-void() ftop_wakeup =
-{
+void() ftop_wakeup = {
 	self.skin = 1;		// Dark lava skin
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
@@ -298,45 +280,26 @@ void() ftop_wakeup =
 	self.flags = FL_MONSTER;
 	setmodel(self, self.mdl);					// Setup model
 	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
-
-	self.enemy = activator;			// Setup trigger enemy
+	if (activator) self.enemy = activator;			// Setup trigger enemy
 	self.use = ftop_deathsequence;	// Final death trigger event
-	
-	// DP particle spark and smoke effect to Chthon, originally done by Seven
-	if (ext_dppart) self.traileffectnum = particleeffectnum("TR_BOSSCHTHON");
-	
+	if (ext_dppart) self.traileffectnum = particleeffectnum("TR_BOSSCHTHON"); // DP particle spark and smoke effect to Chthon, originally done by Seven
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_LAVASPLASH);
 	WriteCoord (MSG_BROADCAST, self.origin_x);
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, self.origin_z);
-
 	ftop_rise1 ();
 };
 
-/*======================================================================
- QUAKED monster_firetopboss (1 0.25 0.25) (-128 -128 -24) (128 128 256)
-======================================================================*/
+// Uses Chthon precache
+
+// QUAKED monster_firetopboss (1 0.25 0.25) (-128 -128 -24) (128 128 256)
 void() monster_firetopboss = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_bosschthon.mdl";
-	precache_model (self.mdl);
-	precache_model (MODEL_PROJ_LAVA);
-
-	precache_sound ("ad171/chthon/attack1.wav");
-	precache_sound ("weapons/rocket1i.wav");
-
 	self.pain_sound = "ad171/chthon/pain1.wav";
-	precache_sound ("ad171/chthon/pain1.wav");
-	precache_sound ("ad171/chthon/death1.wav");
-
-	// Rise from lava roar + splash
-	self.sight_sound = "ad171/chthon/sight1.wav";
-	precache_sound (self.sight_sound);
-	precache_sound ("ad171/chthon/lavasplash.wav");
-
+	self.sight_sound = "ad171/chthon/sight1.wav"; // Rise from lava roar + splash
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	self.bbmins = '-128 -128 -24';		// has own entity setup
@@ -352,10 +315,7 @@ void() monster_firetopboss = {
 	self.pain_ignore = 1;
 	self.yaw_speed = 20;
 	self.deadflag = DEAD_NO;
-
-	// Check passive system for exceptions
-	setup_passivestate(self);
-
+	setup_passivestate(self); // Check passive system for exceptions
 	if (self.deathstring == "")  self.deathstring = " was destroyed by the Firetop Guardian\n";
 	self.lastorigin = self.origin;	// Origin for camera interpolation
 
@@ -368,8 +328,14 @@ void() monster_firetopboss = {
 	self.resist_rockets = self.resist_cells = 0.9;
 	self.resist_multi_rockets = 0.9;
 	self.resist_plasma = 0.9;
-	
-	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-	AddToTotals(self);
-	self.use = ftop_wakeup;
+	self.resist_fire = 1;
+
+	self.th_stand = self.th_walk = self.th_run = SUB_Null;
+	self.th_missile = self.th_die = SUB_Null;
+	self.th_pain = SUB_Null_pain;
+	monster_start();
+	// if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
+	// AddToTotals(self);
+	if (self.targetname == "") {ftop_wakeup(); dprint("monster_firetopboss with no targetname! Spawning anyways but it cannot be killed without a targetname!\n");
+	} else self.use = ftop_wakeup;
 };

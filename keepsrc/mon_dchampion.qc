@@ -1,6 +1,3 @@
-/*==============================================================================
-KNIGHT
-==============================================================================*/
 $cd id1/models/knight2
 $origin 0 0 24
 $base base
@@ -60,7 +57,6 @@ $frame w_attack21 w_attack22
 $frame magicc1 magicc2 magicc3 magicc4 magicc5 magicc6 magicc7 magicc8
 $frame magicc9 magicc10 magicc11
 
-//----------------------------------------------------------------------
 // ben - 08/04/03 - a champion knight  always strides into battle - never runs.
 void()	hknight_stride1	=[	$walk1,	hknight_stride2	] {monster_idle_sound();ai_run(2);};
 void()	hknight_stride2	=[	$walk2,	hknight_stride3	] {ai_run(5);};
@@ -83,22 +79,13 @@ void()	hknight_stride18	=[	$walk18,	hknight_stride19	] {ai_run(3);};
 void()	hknight_stride19	=[	$walk19,	hknight_stride20	] {ai_run(3);};
 void()	hknight_stride20	=[	$walk20,	hknight_stride1	] {ai_run(2);};
 
+// A champion has a choice of two missile attacks - a faster version of the standard attack, and a vore-style homing missile. eventually he will be able to teleport.
 void() hknight_champion_magic = {
-// a champion has a choice of two missile attacks - a faster version of the standard attack,
-// and a vore-style homing missile. eventually he will be able to teleport.
-
-	local float chance;
-
-	chance = random();
-
-	if (chance < 0.6)
-		hknight_magicc1();
-
-	else
-		hknight_magicb1();
+	if (random() < 0.6) hknight_magicc1();
+	else hknight_magicb1();
 };
 
 void() monster_hell_knight_champion { 
-if (self.deathstring == "")  self.deathstring = " was conquered by a Champion Death Knight\n";
-monster_hell_knight();
+	if (self.deathstring == "")  self.deathstring = " was conquered by a Champion Death Knight\n";
+	monster_hell_knight();
 }

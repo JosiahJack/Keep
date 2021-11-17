@@ -1,19 +1,55 @@
-//----------------------------------------------------------------------
-// Called when a player dies, deals with all death messages
-//----------------------------------------------------------------------
-void(entity targ, entity attacker) ClientObituary =
-{
-	local	float rnum;
-	local	string clientstring, clientstring2;
-	rnum = random();
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: All
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 1
+//
+// Implements: Death Messages for when the player is killed
+//
+// Description:
+// Prints a message to the top left corner of the screen to let the player know
+// what killed them.  Incredibly useful for seeing the name of something by
+// dying on purpose from it.
+//=============================================================================
 
+// Called when a player dies, deals with all death messages
+void(entity targ, entity attacker) ClientObituary = { // [FUNCTION]
+	local float rnum;
+	local string clientstring, clientstring2;
+
+	rnum = random();
 	if (targ.flags & FL_CLIENT) {
 		if (attacker.classname == "teledeath") {
 			bprint (targ.netname);
 			bprint (" was telefragged by ");
 			bprint (attacker.owner.netname);
 			bprint ("\n");
-
 			attacker.owner.frags = attacker.owner.frags + 1;
 			return;
 		}
@@ -22,38 +58,32 @@ void(entity targ, entity attacker) ClientObituary =
 			bprint ("Satan's power deflects ");
 			bprint (targ.netname);
 			bprint ("'s telefrag\n");
-
 			targ.frags = targ.frags - 1;
 			return;
 		}
 
-		if (attacker.flags & FL_CLIENT) {
-			if (targ == attacker) {
-				// killed self
+		if (attacker.flags & FL_CLIENT) { // Player was killed by a player.
+			if (targ == attacker) { // Suicide.
 				attacker.frags = attacker.frags - 1;
 				bprint (targ.netname);
 				
-				if (targ.weapon == 64 && targ.waterlevel > 1) {
-					bprint (" discharges into the water.\n");
-					return;
-				}
-				if (targ.weapon == IT_GRENADE_LAUNCHER) 
-					bprint (" tries to put the pin back in\n");
-				else
-					bprint (" becomes bored with life\n");
+				if (targ.weapon == 64 && targ.waterlevel > 1) { bprint (" discharges into the water.\n"); return; }
+
+				if (targ.weapon == IT_GRENADE_LAUNCHER) bprint (" tries to put the pin back in\n");
+				else bprint (" becomes bored with life\n");
+
 				return;
-			}
-			else if ( (teamplay == 2) && (targ.team > 0)&&(targ.team == attacker.team) ) {
+			} else if ( (teamplay == 2) && (targ.team > 0)&&(targ.team == attacker.team) ) {
 				if (rnum < 0.25) clientstring = " mows down a teammate\n";
 				else if (rnum < 0.50) clientstring = " checks his glasses\n";
 				else if (rnum < 0.75) clientstring = " gets a frag for the other team\n";
 				else clientstring = " loses another friend\n";
+
 				bprint (attacker.netname);
 				bprint (clientstring);
 				attacker.frags = attacker.frags - 1;
 				return;
-			}
-			else {
+			} else {
 				attacker.frags = attacker.frags + 1;
 				rnum = attacker.weapon;
 				if (rnum == IT_SHOTGUN) {
@@ -219,11 +249,20 @@ void(entity targ, entity attacker) ClientObituary =
 					}
 				}
 				if (rnum == IT_EXTRA_WEAPON) {
-					clientstring = " was skewered by ";
-					clientstring2 = "\n";
-					if (targ.health < -40) {
-						clientstring = " was splintered to bits by ";
-						clientstring2 = "'s bolt\n";
+					if (attacker.perms & IT_FROSTBOW) {
+						clientstring = " was frozen by ";
+						clientstring2 = "'s frost bolt\n";
+						if (targ.health < -40) {
+							clientstring = " was shattered into bits of ice by ";
+							clientstring2 = "'s frost bolt\n";
+						}
+					} else {
+						clientstring = " was skewered by ";
+						clientstring2 = "\n";
+						if (targ.health < -40) {
+							clientstring = " was splintered to bits by ";
+							clientstring2 = "'s bolt\n";
+						}
 					}
 				}
 				if (rnum == IT2_CHAINLIGHTNING) {
@@ -291,21 +330,13 @@ void(entity targ, entity attacker) ClientObituary =
 				bprint (clientstring2);
 			}
 			return;
-		}
-		else {
+		} else { // Killed by not a player, something else then...
 			targ.frags = targ.frags - 1;
 			bprint (targ.netname);
-
-			//-----------------------------------------------------------------
-			// All the monster death messages are now defined in the monster QC
-			// It is much easier to remember to add these with creating the
-			// QC for each new monster than find/edit them here!
-			//-----------------------------------------------------------------
-				
-			// Check for boss or monster flags
-			if (attacker.bossflag > 0 || attacker.flags & FL_MONSTER) {
+			// All the monster death messages are now defined in the monster QC.  It is much easier to add for each new monster than find/edit them here!
+			if (attacker.flags & FL_MONSTER) {
 				if (attacker.deathstring != "") bprint (attacker.deathstring);
-				else bprint(" was killed by Quake!\n");
+				else bprint(" was killed by Quake's unnamed minion!\n");
 				return;
 			}
 
@@ -321,45 +352,35 @@ void(entity targ, entity attacker) ClientObituary =
 			else if (attacker.classtype == CT_SAWBLADE) bprint (" was sliced to pieces\n");
 			else if (attacker.classtype == CT_FIREBALL) bprint (" ate a lavaball\n");
 			else if (attacker.classtype == CT_TRIGLEVEL) bprint (" tried to leave\n");
-
-			// in-water deaths
-			else if (targ.watertype == -3) {
+			else if (targ.watertype == -3) { // in-water deaths
 				if (random() < 0.5) bprint (" sleeps with the fishes\n");
 				else bprint (" sucks it down\n");
-			}
-			else if (targ.watertype == -4) {
+			} else if (targ.watertype == -4) {
 				if (random() < 0.5) bprint (" gulped a load of slime\n");
 				else bprint (" can't exist on slime alone\n");
-			}
-			else if (targ.watertype == -5) {
+			} else if (targ.watertype == -5) {
 				if (targ.health < -15) bprint (" burst into flames\n");
 				else if (random() < 0.5) bprint (" turned into hot slag\n");
 				else bprint (" visits the Volcano God\n");
-			}
-
-			// Debuff deaths
-			else if (targ.burning) bprint (" was burnt to a crisp\n");
+			} else if (targ.burning) bprint (" was burnt to a crisp\n"); // Debuff deaths
 			else if (targ.poisoned) bprint (" was poisoned\n");
 			else if (targ.bleeding) bprint (" bled to death\n");
-
-			// Special blocking of evil skill savegames
-			else if(targ.deathtype == "loadingevil") {
+			else if(targ.deathtype == "loadingevil") { // Special blocking of evil skill savegames
 				targ.deathtype = string_null;
 				bprint (" is too EVIL to live again!\n");
-			}
-
-			// fell to their death?
-			else if (targ.deathtype == "falling") {
+			} else if (targ.deathtype == "falling") { // fell to their death?
 				targ.deathtype = string_null;
 				bprint (" fell to his death\n");
-			}
-			else if (targ.touchedvoid) {
+			} else if (targ.deathtype == "fire") {
+				targ.deathtype = string_null;
+				bprint (" was scorched by fire\n");
+			} else if (targ.deathtype == "lightning") {
+				targ.deathtype = string_null;
+				bprint (" was struck by lightning!\n");
+			} else if (targ.touchedvoid) {
 				targ.deathtype = string_null;
 				bprint (" touched the void\n");
-			}
-			else 
-				// hell if I know; he's just dead!!!
-				bprint (" is dead Jim!\n");
+			} else bprint (" is dead Jim!\n"); // heck if I know; he's just dead!!!
 		}
 	}
 };

@@ -358,22 +358,43 @@ void() pinch_die = {
 
 void() setup_scorpion;
 
+void() monster_scorpion_precache = {
+	precache_model("progs/ad171/mon_scorpion.mdl");
+	precache_model("progs/ad171/h_scorpion.mdl");
+	precache_model("progs/ad171/gib_scorpleg.mdl");
+	precache_model("progs/ad171/gib_scorptail.mdl");		
+	precache_model("progs/ad171/gib_scorpclaw.mdl");
+	precache_model(MODEL_PROJ_SCORP); // Large green spike
+	precache_sound("ad171/scorpion/jumpattack1.wav");
+	precache_sound("ad171/scorpion/jumpattack2.wav");
+	precache_sound("ad171/scorpion/jumphit.wav");
+	precache_sound("ad171/scorpion/tailfire1.wav");
+	precache_sound("ad171/scorpion/tailfire2.wav");
+	precache_sound("ad171/scorpion/tailattack1.wav");
+	precache_sound("ad171/scorpion/tailattack2.wav");
+	precache_sound("ad171/scorpion/idle1.wav");
+	precache_sound("ad171/scorpion/idle2.wav");
+	precache_sound("ad171/scorpion/sight1.wav");
+	precache_sound("ad171/scorpion/warning1.wav");
+	precache_sound("ad171/scorpion/sight1.wav");
+	precache_sound("ad171/scorpion/hiss.wav");
+	precache_sound("ad171/scorpion/pain1.wav");
+	precache_sound("ad171/scorpion/pain2.wav");
+	precache_sound("drake/spider/death.wav");
+	precache_sound("ad171/scorpion/clawattack1.wav");
+	precache_sound("ad171/scorpion/clawattack2.wav");
+};
+
 // QUAKED monster_scorpion (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 void() monster_scorpion = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_scorpion.mdl";
 	self.headmdl = "progs/ad171/h_scorpion.mdl";		// Front Jaws
 	self.gib1mdl = "progs/ad171/gib_scorpleg.mdl";	// Single Leg
 	self.gib2mdl = "progs/ad171/gib_scorptail.mdl";	// Tail + Sting
 	self.gib3mdl = "progs/ad171/gib_scorpclaw.mdl";	// Claw
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);		
-	precache_model (self.gib3mdl);	
 
 	// Random chance of 2 claws, or 2 legs
 	if (random() < 0.5) self.gib2mdl = self.gib3mdl;
@@ -384,42 +405,23 @@ void() monster_scorpion = {
 		self.idle_sound = "ad171/scorpion/idle1.wav";
 		self.idle_sound2 = "ad171/scorpion/idle2.wav";
 		self.sight_sound = "ad171/scorpion/sight1.wav";
-
-		precache_sound("ad171/scorpion/jumpattack1.wav");
-		precache_sound("ad171/scorpion/jumpattack2.wav");
-		precache_sound("ad171/scorpion/jumphit.wav");
 		if (self.health < 1) self.health = 120;
 		self.gibhealth = -25;
 		self.idlemoreoften = TRUE;		// More creepy idle sounds
 		self.exactskin = 3;				// Black skin
 	} else {
-		precache_model (MODEL_PROJ_SCORP);		// Large green spike
 		self.idle_sound = "ad171/scorpion/warning1.wav";
 		self.idle_sound2 = "ad171/scorpion/sight1.wav";
 		self.sight_sound = "ad171/scorpion/hiss.wav";
-
-		precache_sound("ad171/scorpion/tailfire1.wav");
-		precache_sound("ad171/scorpion/tailfire2.wav");
-		precache_sound("ad171/scorpion/tailattack1.wav");
-		precache_sound("ad171/scorpion/tailattack2.wav");
 		if (self.health < 1) self.health = 80;
 		self.gibhealth = -20;
 		if (!self.exactskin) self.exactskin = rint((random()*3)-0.5);
 	}
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-	precache_sound (self.sight_sound);
 
 	// death/pain/attack sounds
 	self.pain_sound = "ad171/scorpion/pain1.wav";
 	self.pain_sound2 = "ad171/scorpion/pain2.wav";
-	precache_sound(self.pain_sound);
-	precache_sound(self.pain_sound2);
 	self.death_sound = "drake/spider/death.wav";
-	precache_sound(self.death_sound);
-
-	precache_sound("ad171/scorpion/clawattack1.wav");
-	precache_sound("ad171/scorpion/clawattack2.wav");
 
 	// Cache scorpion is a special class used for precache only
 	if (self.classtype != CT_CACHESCORPION) setup_scorpion();
@@ -462,8 +464,7 @@ void() setup_scorpion = {
 	if (self.classtype == CT_MINIONSCORPION) {
 		self.th_stand = self.th_walk = self.th_run = pinch_grow;
 		self.th_melee = self.th_missile = SUB_Null;
-	}
-	else {
+	} else {
 		self.th_stand = pinch_idle1;
 		self.th_walk = pinch_walk1;
 		self.th_run = pinch_run1;
@@ -481,15 +482,11 @@ void() setup_scorpion = {
 	if(!self.classtype) self.classtype = CT_MONSCORPION;
 	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEWALK;
-	
 	monster_start();
 };
 
-//----------------------------------------------------------------------------
 // A code way to spawn scorpion (requires monster_scorpionspawn entity)
-//----------------------------------------------------------------------------
-void(vector minion_org, entity minion_targ) minion_scorpion =
-{
+void(vector minion_org, entity minion_targ) minion_scorpion = {
 	local entity minion;
 	
 	// Check if there is space to spawn entity

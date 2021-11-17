@@ -289,38 +289,33 @@ void() raven_die = {
 	}
 };
 
+void() monster_raven_precache = {
+	precache_model("progs/redfield/mon_raven.mdl");
+	precache_model("progs/redfield/h_raven.mdl");
+	precache_model("progs/redfield/gib_ravenwing.mdl");
+	precache_model("progs/redfield/gib_ravenfoot.mdl");
+	precache_sound("redfield/raven/ravencall.wav");
+	precache_sound("redfield/raven/wings.wav");
+	precache_sound("redfield/raven/rdeath.wav");
+	precache_sound("redfield/raven/rdeathb.wav");
+	precache_sound("redfield/raven/rpain.wav");
+	precache_sound("redfield/raven/rclaw.wav");
+	precache_sound("redfield/raven/rsnap.wav");
+	precache_sound("redfield/raven/rsight.wav");
+};
+
 // QUAKED monster_raven (1 0 0) (-16 -16 -24) (16 16 16) Ambush
 void() monster_raven = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/redfield/mon_raven.mdl";
 	self.headmdl = "progs/redfield/h_raven.mdl";
 	self.gib1mdl = "progs/redfield/gib_ravenwing.mdl";	// Right wing
 	self.gib2mdl = "progs/redfield/gib_ravenfoot.mdl";	// Left foot
-	
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-
 	self.idle_sound = "redfield/raven/ravencall.wav";
-	precache_sound (self.idle_sound);
-
-	precache_sound ("redfield/raven/wings.wav");
-	precache_sound ("redfield/raven/rdeath.wav");
-	precache_sound ("redfield/raven/rdeathb.wav");
 	self.pain_sound = "redfield/raven/rpain.wav";
-	precache_sound (self.pain_sound);
-
-	precache_sound ("redfield/raven/rclaw.wav");
-	precache_sound ("redfield/raven/rsnap.wav");
-
 	self.sight_sound = "redfield/raven/rsight.wav";
-	precache_sound (self.sight_sound);
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TINY;
@@ -331,7 +326,6 @@ void() monster_raven = {
 	self.blockudeath = TRUE;			// no humanoid death sound
 	self.deathstring = " was a meal for the Ravens\n";
 	self.attack_offset = '16 0 -8';		// Melee attack offset
-
 	self.th_checkattack = RavenCheckAttack;
 	self.th_pain = raven_pain;
 	self.th_die = raven_die;

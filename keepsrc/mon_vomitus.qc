@@ -37,22 +37,23 @@ void(float no) Vomit_Meat = {
 
     err = '0 0 0';
     if (no) {
-        if (random() < no)
-            return;
+        if (random() < no) return;
         err_x = 10;
     }
     side = crandom() * 3;
     up = random() * 300;
     makevectors (self.angles);
     org = self.origin + v_forward*20 + v_right*side - v_up*6;
-    dir = Maim_Toss (org, self.enemy.origin, 800, up, world, err);
+    // dir = Maim_Toss (org, self.enemy.origin, 800, up, world, err);
+	dir = (self.enemy.origin - org);
+	dir = normalize(dir);
+	dir = dir + err;
 
     up = random();
     Meat_Launch (org, dir);
     if (up < 0.2)
         setmodel (newmis, "progs/gib1.mdl");
-    else
-    {   // Bigger gibs...
+    else { // Bigger gibs...
         newmis.dmg = random() * 15 + 15;
         if (up < 0.4)
             setmodel (newmis, "progs/ad181/h_zombie.mdl");
@@ -66,23 +67,26 @@ void(float no) Vomit_Meat = {
 
 // Spews forth a tarbaby.
 void() Vomit_Spawn = {
-	// local entity oself;
+	local entity oself;
 	local entity newSpawn;
 
-	self.minion_count = self.minion_count + 1;
-	if (self.minion_count > self.minion_maxcount) {
-		Vomit_Meat(1);
+	dprint("Vomiting with minioncount of: ");
+	dprint(ftos(self.minion_count));
+	dprint(", and minion_maxcount of: ");
+	dprint(ftos(self.minion_maxcount));
+	dprint("\n");
+	if (self.minion_count >= self.minion_maxcount) {
+		Vomit_Meat(0);
 		return;
 	}
+	self.minion_count = self.minion_count + 1;
 	newSpawn = spawn();
+	sound (newSpawn, CHAN_VOICE, "rogue/blob/mytosis.wav", 1, ATTN_NORM);
 	newSpawn.classname = "monster_tarbaby";
 	newSpawn.classtype = CT_MONSPAWN;
 	newSpawn.classgroup = CG_SPAWN;
 	newSpawn.movetype = MOVETYPE_STEP;
 	newSpawn.classmove = MON_MOVEWALK;
-	newSpawn.takedamage = DAMAGE_AIM;
-	monster_bbox();
-	setsize (newSpawn, newSpawn.bbmins, newSpawn.bbmaxs);
 	newSpawn.resist_shells = newSpawn.resist_nails = 0;
 	newSpawn.resist_rockets = newSpawn.resist_cells = 0;
 	newSpawn.gibhealth = MON_NEVERGIB;		// Cannot be gibbed by weapons
@@ -91,17 +95,15 @@ void() Vomit_Spawn = {
 	newSpawn.pain_flinch = 20;
 	newSpawn.death_dmg = DAMAGE_TARBABY;
 	newSpawn.health = 80;
-	newSpawn.owner = self;
+	newSpawn.owner = newSpawn.master = self;
 	newSpawn.death_sound = "blob/death1.wav";
 	newSpawn.idle_sound = "blob/sight1.wav";
 	newSpawn.sight_sound = self.idle_sound;
 	newSpawn.pain_sound = self.idle_sound;
-	setmodel (newSpawn, "progs/qmaster/mon_tarbaby.mdl");
 	newSpawn.solid = SOLID_SLIDEBOX;
+	newSpawn.takedamage = DAMAGE_AIM;
 	newSpawn.skin = self.skin;
-	setorigin (newSpawn, self.origin);   
 	newSpawn.lastorigin = newSpawn.origin;           
-	sound (newSpawn, CHAN_VOICE, "rogue/blob/mytosis.wav", 1, ATTN_NORM);
     newSpawn.angles_x   = 0;
     newSpawn.angles_y   = self.angles_y;
     newSpawn.angles_z   = 0;
@@ -113,10 +115,14 @@ void() Vomit_Spawn = {
 	newSpawn.th_jumpexit = tbaby_jump5;
 	newSpawn.th_missile = tbaby_jump1;
 	newSpawn.th_melee = tbaby_jump1;
-	newSpawn.th_die = tbaby_die1;      
+	newSpawn.th_die = tbaby_die1;
 	newSpawn.th_pain = tbaby_pain;
 	// Override normal ai with flying ai, since it is launched out of vomitus.
     newSpawn.enemy      = self.enemy;
+	monster_bbox();
+	setmodel (newSpawn, "progs/qmaster/mon_tarbaby.mdl");
+	setorigin (newSpawn, self.origin);
+	setsize (newSpawn, '-16 -16 -24', '16 16 40');
 	newSpawn.think = tbaby_jump5;
 	newSpawn.nextthink = time + 0.05;
 	AddToTotals(self);
@@ -282,13 +288,16 @@ void() vom_run1  =[ $run1,  vom_run2  ] {
         vom_idle_sfx();
     ai_vomit_run(4);
 };
+
+void vom_die();
+
 void() vom_run2  =[ $run2,  vom_run3  ] {ai_vomit_run(4);};
 void() vom_run3  =[ $run3,  vom_run4  ] {ai_vomit_run(4);};
 void() vom_run4  =[ $run4,  vom_run5  ] {vom_melee(); ai_vomit_run(4);};
 void() vom_run5  =[ $run5,  vom_run6  ] {ai_vomit_run(4);};
 void() vom_run6  =[ $run6,  vom_run7  ] {ai_vomit_run(4);};
 void() vom_run7  =[ $run7,  vom_run8  ] {ai_vomit_run(4);};
-void() vom_run8  =[ $run8,  vom_run1  ] {ai_vomit_run(4);};
+void() vom_run8  =[ $run8,  vom_run1  ] {ai_vomit_run(4); if (self.health < 1) vom_die();};
 
 void() vom_end1 =[ $attack11, vom_end2     ] {ai_face();};
 void() vom_end2 =[ $attack12, vom_end3     ] {ai_face();};
@@ -312,43 +321,14 @@ void() vom_attack10 =[ $attack10, vom_attack11 ] {ai_face();
         sound (self, CHAN_WEAPON, "drake/vomitus/flesh1.wav", 1, ATTN_NORM);
     else
         sound (self, CHAN_WEAPON, "drake/vomitus/flesh2.wav", 1, ATTN_NORM);
-    if (self.skin)
-        Vomit_Meat(0);
-    else {
-        Vomit_Spawn();
-        self.think = vom_end1;
-    }
+
+	Vomit_Spawn();
+	self.think = vom_end1;
 };
 void() vom_attack11 =[ $attack11, vom_attack12 ] {ai_face(); Vomit_Meat(0.5);};
 void() vom_attack12 =[ $attack12, vom_attack13 ] {ai_face(); Vomit_Meat(0.5);};
 void() vom_attack13 =[ $attack13, vom_run1     ] {ai_face(); Vomit_Meat(0.5);};
-void() vom_attack =
-{
-    local   float   stop;
 
-    stop = FALSE;
-    if (enemy_range == RANGE_MELEE)
-        if (random() < 0.5)     // Don't auto-vomit all the time.
-            stop = TRUE;
-    if (skill < 1)
-    {   // Only one child in Easy.
-        if (self.minion_count)
-            stop = TRUE;
-    }
-    else
-    {   // Up to three.
-        if (self.minion_count >= self.minion_maxcount)
-            stop = TRUE;
-    }
-
-// FIXME:  Let blue vomitus spit vermis-like spores.  Low priority though.
-    if (stop)
-        ai_charge (4);      // Cannot vomit anymore for now.
-    else
-        vom_attack1 ();     // Cough up a tarbaby.
-};
-
-// PAIN - - - - - - - - - - - - - - - -
 void() vom_pain1  =[ $pain1,  vom_pain2  ] {};
 void() vom_pain2  =[ $pain2,  vom_pain3  ] {};
 void() vom_pain3  =[ $pain3,  vom_pain4  ] {};
@@ -356,21 +336,17 @@ void() vom_pain4  =[ $pain2,  vom_pain5  ] {};
 void() vom_pain5  =[ $pain1,  vom_run1   ] {};
 
 void(entity inflictor, entity attacker, float damage) vom_pain = {
-// don't make multiple pain sounds right after each other
-    if (self.pain_finished > time)
-        return;
+    if (self.pain_finished > time) return; // don't make multiple pain sounds right after each other
 
     self.pain_finished = time + 2;
     sound (self, CHAN_VOICE, "nehahra/vomit/groan.wav", 1, ATTN_NORM);        
 
-    if (SUB_IgnorePain ())
-        return;         // No pain anims in Nightmare.
+    if (SUB_IgnorePain ()) return; // No pain anims in Nightmare.
 
     vom_pain1 ();
-    attacker = attacker;  damage = damage;      // Appease FrikQcc.
 };
 
-// DEATH - - - - - - - - - - - - - - - -
+// Death
 void(float dm) vom_gib = {
 	// PM:  Don't even think about calling T_RadiusDamage here!
 	// This is because gib functions may be called by T_Damage,
@@ -393,7 +369,7 @@ void(float dm) vom_gib = {
 
 void() vom_die1  =[ $death1,  vom_die2    ] {};
 void() vom_die2  =[ $death2,  vom_die3    ] {};
-void() vom_die3  =[ $death3,  vom_die4    ] {};
+void() vom_die3  =[ $death3,  vom_die4    ] {self.solid = SOLID_NOT;};
 void() vom_die4  =[ $death4,  vom_die5    ] { DropCoin(2);};
 void() vom_die5  =[ $death5,  vom_die6    ] {};
 void() vom_die6  =[ $death6,  vom_die7    ] { DropCoin(3);};
@@ -434,37 +410,20 @@ void() vom_revive12 =[ $death3,   vom_revive13 ] {};
 void() vom_revive13 =[ $death2,   vom_revive14 ] {};
 void() vom_revive14 =[ $death1,   vom_run1     ] {};
 
-//============
-// --> QUAKED monster_vomit (1 0 0) (-32 -32 -24) (32 32 24) Ambush
-//
-// Bbox should be '-40 40 -24' to '40 40 24', but then it would need
-// multiple bboxs.  Since Nehahra used standard shambler size, and
-// the shambler is nearly as fat, use that size.
-//
-// Note to self:  Quoth's gug is even fatter, yet it uses shambler bbox.
-//============
-void() monster_vomit = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-    precache_sound ("zerstorer/cube/bc_attck.wav");
-    precache_sound ("zerstorer/cube/bc_gulp.wav");
+void() monster_vomit_precache = {
     precache_model ("progs/drake/h_vomit.mdl");
     precache_model ("progs/ad181/h_zombie.mdl");
-	self.gib1mdl = "progs/drake/tar_gib.mdl";
     precache_model ("progs/drake/tar_gib.mdl");
-	self.mdl = "progs/drake/vomitus.mdl";
     precache_model ("progs/drake/vomitus.mdl");
     precache_model ("progs/zom_gib.mdl");
+    precache_model ("progs/gib1.mdl");
+    precache_model ("progs/gib2.mdl");
+    precache_model ("progs/gib3.mdl");
 	precache_model ("progs/qmaster/mon_tarbaby.mdl");
+    precache_sound ("zerstorer/cube/bc_attck.wav");
+    precache_sound ("zerstorer/cube/bc_gulp.wav");
     precache_sound ("blob/death1.wav");
     precache_sound ("fish/bite.wav");
-	self.idle_sound = "zerstorer/gibfnt/gf_plop.wav";
-    precache_sound ("zerstorer/gibfnt/gf_plop.wav");
-	self.sight_sound = "zerstorer/gibfnt/gf_sbig.wav";
-    precache_sound ("zerstorer/gibfnt/gf_sbig.wav");
-    precache_sound ("zerstorer/gibfnt/gf_sprt1.wav");
-	self.pain_sound = "nehahra/vomit/groan.wav";
     precache_sound ("nehahra/vomit/groan.wav");
     precache_sound ("drake/vomitus/death.wav");
     precache_sound ("drake/vomitus/flesh1.wav");
@@ -476,7 +435,25 @@ void() monster_vomit = {
 	precache_sound ("blob/land1.wav");
 	precache_sound ("blob/sight1.wav");
 	precache_sound ("rogue/blob/mytosis.wav");
+    precache_sound ("zerstorer/gibfnt/gf_plop.wav");
+    precache_sound ("zerstorer/gibfnt/gf_sbig.wav");
+    precache_sound ("zerstorer/gibfnt/gf_sprt1.wav");
+};
 
+// QUAKED monster_vomit (1 0 0) (-32 -32 -24) (32 32 24) Ambush
+// Bbox should be '-40 40 -24' to '40 40 24', but then it would need
+// multiple bboxs.  Since Nehahra used standard shambler size, and
+// the shambler is nearly as fat, use that size.
+// Note to self:  Quoth's gug is even fatter, yet it uses shambler bbox.
+void() monster_vomit = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.gib1mdl = "progs/drake/tar_gib.mdl";
+	self.mdl = "progs/drake/vomitus.mdl";
+	self.idle_sound = "zerstorer/gibfnt/gf_plop.wav";
+	self.sight_sound = "zerstorer/gibfnt/gf_sbig.wav";
+	self.pain_sound = "nehahra/vomit/groan.wav";
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDEFLAT;
@@ -484,30 +461,32 @@ void() monster_vomit = {
 	self.gibhealth = MON_NEVERGIB;
 	self.gibbed = FALSE;
 	self.pain_flinch = 20;
-
-	// Allow for extra functionality (death damage and poison)
-	if (self.death_dmg < 1) self.death_dmg = DAMAGE_TARBABY;
-
+	if (self.death_dmg < 1) self.death_dmg = DAMAGE_TARBABY; // Allow for extra functionality (death damage and poison)
     self.mass   = MASS_HEAVY;
     self.th_stand   = vom_stand1;
     self.th_walk    = vom_walk1;
     self.th_run     = vom_run1;
-    self.th_missile = vom_attack;
+    self.th_missile = vom_attack1;
     self.th_pain    = vom_pain;
     self.th_die     = vom_die;
 	if (self.deathstring == "") self.deathstring = " was vomited on by a Vomitus\n";
-
 	if (!self.yaw_speed) self.yaw_speed = 15;    // Slower than normal.
-
 	self.headmdl   = "progs/drake/h_vomit.mdl";
-	if (!self.skin) {
+
+	if (self.minion_maxcount == 0) {
+		if (skill == 1) self.minion_maxcount = 1;
+		else self.minion_maxcount = 3;
+	}
+
+	if (self.minion_name == string_null) self.minion_name = "monster_tarbaby";
+
+	if (self.exactskin == 0) {
 		self.headmdl   = "progs/drake/tar_gib.mdl";
 		self.bloodtype  = BLOOD_PURPLE;
 	} else {
 		if (self.deathstring == "") self.deathstring = " was meatpummeled by a Vomitus Meatwad\n";
+		self.minion_maxcount = 0;
 	}
-
-	if (self.minion_maxcount < 1) { self.minion_maxcount = 3; }
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
@@ -520,16 +499,14 @@ void() monster_vomit = {
 	self.classtype = CT_MONVOMITUS;
 	self.classgroup = CG_SPAWN;
 	self.classmove = MON_MOVEWALK;
-
 	monster_start ();
 };
 
 void() monster_vomitus = {self.classname = "monster_vomit"; monster_vomit();};
 
-// Vomitus with meat skin.  Looks a bit like Meatwad.
-// Now where's Master Shake and Frylock?
+// Vomitus with meat skin.  Looks a bit like Meatwad.  Now where's Master Shake and Frylock?
 void() monster_meatwad = {
-    self.skin = 1;
+    self.exactskin = self.skin = 1;
     self.classname = "monster_vomit";
     monster_vomit();
 };

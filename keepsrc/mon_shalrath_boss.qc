@@ -391,21 +391,15 @@ void() ShalSpawnerExplode = {
 	s_explode1 ();
 };
 
-//QUAKED monster_shalrath_boss (1 0 0) (-32 -32 -24) (32 32 48) Ambush
-void() monster_shalrath_boss = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/q15/shalrath_boss.mdl";	// Extra skin
+void() monster_shalrath_boss_precache = {
 	precache_model("progs/q15/shalrath_boss.mdl");
 	precache_model("progs/q15/shalrath_death.mdl");
-	self.headmdl = "progs/q15/h_shalboss.mdl";
 	precache_model("progs/q15/h_shalboss.mdl");
 	precache_model("progs/v_spike.mdl");
 	precache_model("progs/ad171/proj_shalshell.mdl");
 	precache_model("progs/q15/ring_shockwave.mdl");
+	precache_model("progs/q15/gib_shalclawb.mdl");
+	precache_model("progs/q15/gib_shalleg_b.mdl");
 	precache_sound("q15/shalrath/bossattack.wav");
 	precache_sound("q15/shalrath/bossattack2.wav");
 	precache_sound("shalrath/death.wav");
@@ -422,12 +416,18 @@ void() monster_shalrath_boss = {
 	precache_sound("ad171/wraith/bounce.wav");
 	precache_sound("kinn/shuffler/expsmall.wav");
 	precache_sound("player/udeath2.wav");
+};
+
+//QUAKED monster_shalrath_boss (1 0 0) (-32 -32 -24) (32 32 48) Ambush
+void() monster_shalrath_boss = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check for any random monster setups
+
+	self.mdl = "progs/q15/shalrath_boss.mdl";	// Extra skin
+	self.headmdl = "progs/q15/h_shalboss.mdl";
 	self.sight_sound = "q15/shalrath/bosssight.wav";
 	self.gib1mdl = "progs/q15/gib_shalclawb.mdl";
 	self.gib2mdl = "progs/q15/gib_shalleg_b.mdl";
-	precache_model("progs/q15/gib_shalclawb.mdl");
-	precache_model("progs/q15/gib_shalleg_b.mdl");
-
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;
@@ -446,7 +446,6 @@ void() monster_shalrath_boss = {
 	self.pain_timeout = 3;			// Really high pain tolerance
 	self.steptype = FS_TYPELIGHT;	// Light tap feet
 	self.blockudeath = TRUE;		// no humanoid death sound
-
 	self.th_stand = shal_boss_stand;
 	self.th_walk = shal_boss_walk1;
 	self.th_run = shal_boss_run1;
@@ -455,7 +454,6 @@ void() monster_shalrath_boss = {
 	self.th_missile = shal_boss_attack1;
 	self.th_melee = shal_boss_jump1;
 	setsize (self, '-46 -40 -24', '46 40 100');
-
 	if (self.deathstring == "") self.deathstring = "is a permanent addition to the Vore Queen's hive\n";
 
 	// Always reset Ammo Resistance to be consistent
@@ -465,6 +463,5 @@ void() monster_shalrath_boss = {
 	self.classtype = CT_MONSHALBOSS;
 	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEWALK;
-
 	monster_start();
 };

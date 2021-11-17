@@ -68,7 +68,7 @@ void () spikemine_Touch = {
 	s_explode1 ();
 };
 
-void () spike_mine_first_think = {
+void() spike_mine_first_think = {
 	self.think = spikemine_Home;
 	self.nextthink = (time + 0.100);
 	self.search_time = FALSE;
@@ -76,12 +76,14 @@ void () spike_mine_first_think = {
 	self.use = monster_use;
 };
 
-void () monster_spikemine = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
+void() monster_spikemine_precache = {
 	precache_model ("progs/hipnotic/mon_spikmine.mdl");
 	precache_sound ("hipnotic/items/spikmine.wav");
+};
+
+void() monster_spikemine = {
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
 	setmodel (self,"progs/hipnotic/mon_spikmine.mdl");
 	setsize (self,'-16 -16 -24', '16 16 16'); //MonTiny
 	self.classname = "trap_spike_mine";
@@ -103,9 +105,10 @@ void () monster_spikemine = {
 	if (self.deathstring == "") self.deathstring = " was obliterated by a Spikemine\n";
 	AddToTotals(self);
 	self.flags = (self.flags | FL_MONSTER);
+	precache_monster(self.classname);
 };
 
-void () trap_spike_mine = {
+void() trap_spike_mine = {
 	if (self.deathstring == "") self.deathstring = " was obliterated by a Spikemine\n";
 	monster_spikemine(); 
 };

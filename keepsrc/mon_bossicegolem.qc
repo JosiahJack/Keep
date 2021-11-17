@@ -62,19 +62,14 @@ float ICEG_PHASE2 = 2;	// Fighting
 float ICEG_PHASE3 = 3;	// Busting Columns
 float ICEG_PHASE4 = 4;	// Death
 
-//======================================================================
-// Global functions
-//======================================================================
 // Special streamlined player find function
-//----------------------------------------------------------------------
-float() iceg_FindTarget =
-{
+float() iceg_FindTarget = {
 	local entity client;
 	
 	// Get the obvious exception(s) done first
 	if (self.health < 1) return FALSE;
 	if (intermission_running) return FALSE;
-	if (cinematic_running > 0) return FALSE;
+	if (cinematic_running > 0 || cutscene > 0) return FALSE;
 
 	// Find a client in current PVS
 	client = checkclient ();
@@ -101,18 +96,14 @@ float() iceg_FindTarget =
 	return TRUE;	
 };
 
-//----------------------------------------------------------------------
 // Setup wave HP and trigger boundaries
-//----------------------------------------------------------------------
-void() iceg_WaveSetupHP =
-{
+void() iceg_WaveSetupHP = {
 	// Is there anymore boss waves left?
 	if (self.bosswave >= self.bosswavetotal) {
 		// Only one wave left (death is final trigger)
 		self.health = self.bosswaveqty;
 		self.bosswavetrig = -1000;
-	}
-	else {
+	} else {
 		// Multiple waves are still left (reset hp+trigger)
 		// Always reset HP to stop high DPS weapons trashing waves boundaries
 		self.health = ((self.bosswavetotal - self.bosswave) + 1) * self.bosswaveqty;
@@ -127,11 +118,8 @@ void() iceg_WaveSetupHP =
 	dprint(")\n");
 };
 
-//----------------------------------------------------------------------
 // Check if HP reached next wave, turn and fire at targets
-//----------------------------------------------------------------------
-float() iceg_WaveCheck =
-{
+float() iceg_WaveCheck = {
 	// Check for boss wave boundary event
 	if (self.health > 1 && self.health < self.bosswavetrig) {
 		// Check for wave boundary triggers
@@ -915,17 +903,14 @@ void() iceg_tranB13 = [ $tranB13, iceg_tranB13 ] {
 //======================================================================
 // Setup Ice Golem after trigger event
 //======================================================================
-void() iceg_setup =
-{
+void() iceg_setup = {
 	self.use = SUB_Null;		// No more triggers
 	self.style = ICEG_PHASE1;	// Bursting intro sequence
 	self.flags = FL_MONSTER;	// Reset flag
-
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 	setmodel(self, self.mdl);					// Setup model
 	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
-
 	self.velocity = '0 0 0';		// Make sure stationary
 	self.deadflag = DEAD_NO;		// used to stop death re-triggering
 	self.no_liquiddmg = TRUE;		// no slime/lava damage
@@ -935,12 +920,10 @@ void() iceg_setup =
 	self.takedamage = DAMAGE_NO;	// No damage, statue time
 	self.noinfighting = TRUE;		// No infighting
 	self.skin = 1;					// Frozen skin
-
 	self.blockudeath = TRUE;		// No humanoid death
 	self.bloodtype = self.bleedcolour = MON_BCOLOR_BROWN;			// Brown dust/dirt
 	self.meleerange = MONAI_MELEEGOLEM;
 	self.attack_offset = '10 0 112';	// Ice storm
-
 	self.gibhealth = -1000;			// Special death sequence
 	self.gibbed = FALSE;			// Still in one piece
 	self.pain_finished = self.attack_finished = LARGE_TIMER;
@@ -984,13 +967,14 @@ void() iceg_setup =
 	if (self.tethertarget != "") {
 		self.movelast = find(world,targetname,self.tethertarget);
 		if (self.movelast.classtype != CT_PATHCORNER) {
-			dprint("\b[ICEG]\b Tether marker not path_corner!\n");
-			spawn_marker(self.movelast.origin, SPNMARK_YELLOW);
+			dprint("\b[ICEG]\b Tether marker with targetname: ");
+			dprint(self.tethertarget);
+			dprint(", not path_corner!\n");
+			// spawn_marker(self.movelast.origin, SPNMARK_YELLOW);
 			self.movelast = world;
-		}
-		else spawn_marker(self.movelast.origin, SPNMARK_GREEN);
-		// Setup default tetherrange
-		if (!self.tetherrange) self.tetherrange = MONAI_MAXICEG;
+		} else spawn_marker(self.movelast.origin, SPNMARK_GREEN);
+
+		if (!self.tetherrange) self.tetherrange = MONAI_MAXICEG; // Setup default tetherrange
 	}
 	// Make sure tethertarget is blank
 	self.tethertarget = "";
@@ -999,127 +983,102 @@ void() iceg_setup =
 	self.message2 = self.target;
 	self.target = self.target2 = self.deathtarget = "";
 
-	// Wait for trigger event to be wakeup
-	self.use = iceg_wake1;
+	if (self.targetname == "") {
+		iceg_wake1();
+	} else self.use = iceg_wake1; // Wait for trigger event to be wakeup
+};
+
+void() monster_icegolem_precache = {
+	precache_model("progs/ad171/mon_bossicegolem.mdl");
+	precache_model(MODEL_PROJ_RINGSHOCK);	// Ground shockwave
+	precache_model(MODEL_PROJ_RINGBLAST);	// Ice ring shockwave
+	precache_model(MODEL_PROJ_GROCK1);		// Golem rocks
+	precache_model(MODEL_PROJ_GROCK2);
+	precache_model(MODEL_PROJ_GSHARD);		// Ice shards
+	precache_model(MODEL_BRK_ROCK1A);
+	precache_model(MODEL_BRK_ROCK1B);
+	precache_model(SEXP_ICE_BIG); // Shard impact (ne_ruin)
+	precache_sound("ne_ruins/h2golem/foley3.wav");
+	precache_sound("ne_ruins/h2golem/foley4.wav");
+	precache_sound("ne_ruins/h2golem/foley1.wav");
+	precache_sound("ne_ruins/h2golem/foley2.wav");
+	precache_sound("ne_ruins/h2golem/brkfree.wav"); // Break free of statue pose
+	precache_sound("ad171/weapons/crossbow_swipe.wav"); // Several melee smack sounds and giant ground slam
+	precache_sound("ad171/golem/melee_punch.wav");
+	precache_sound("ad171/golem/melee_pound.wav");
+	precache_sound("ad171/golem/groundslam.wav");
+	precache_sound(SOUND_BRK_ROCK); // Used for ceiling rubble breakables
+	precache_sound(SOUND_IMP_ROCK1);
+	precache_sound(SOUND_IMP_ROCK2);
+	precache_sound("ad171/golem/icestorm.wav"); // Ice Storm - range attack
+	precache_sound("ne_ruins/h2golem/iceshard1.wav");
+	precache_sound("ne_ruins/h2golem/iceshard2.wav");
+	precache_sound("ne_ruins/h2golem/iceshard3.wav");
+	precache_sound("ne_ruins/h2golem/frosthit.wav");
+	precache_sound("ne_ruins/h2golem/pain1.wav");
+	precache_sound("ne_ruins/h2golem/pain2.wav");
+	precache_sound("ne_ruins/h2golem/death.wav");
+	precache_sound ("ad171/golem/sight.wav");
 };
 
 // QUAKED monster_icegolem (1 0.2 0) (-32 -32 -24) (32 32 128)
 void() monster_icegolem = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_bossicegolem.mdl";
-	precache_model (self.mdl);
-	precache_model (MODEL_PROJ_RINGSHOCK);	// Ground shockwave
-	precache_model (MODEL_PROJ_RINGBLAST);	// Ice ring shockwave
-	precache_model (MODEL_PROJ_GROCK1);		// Golem rocks
-	precache_model (MODEL_PROJ_GROCK2);
-	precache_model (MODEL_PROJ_GSHARD);		// Ice shards
-	
 	self.gib1mdl = MODEL_PROJ_GROCK1;	// small golem rock
 	self.gib2mdl = MODEL_PROJ_GROCK2;	// medium golem rock
 	self.gib1frame = self.gib2frame = 9;
-
-	// Idle1a-1b (long sound) idle2a-2b (short sound)
-	self.idle_sound = "ne_ruins/h2golem/foley3.wav";
+	self.idle_sound = "ne_ruins/h2golem/foley3.wav"; // Idle1a-1b (long sound) idle2a-2b (short sound)
 	self.idle_sound2 = "ne_ruins/h2golem/foley4.wav";
 	self.idle_soundcom = "ne_ruins/h2golem/foley1.wav";
 	self.idle_soundcom2 = "ne_ruins/h2golem/foley2.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-	precache_sound (self.idle_soundcom);
-	precache_sound (self.idle_soundcom2);
-	
-	// Break free of statue pose
-	precache_sound ("ne_ruins/h2golem/brkfree.wav");
-	
-	// Several melee smack sounds and giant ground slam
-	precache_sound ("ad171/weapons/crossbow_swipe.wav");
-	precache_sound ("ad171/golem/melee_punch.wav");
-	precache_sound ("ad171/golem/melee_pound.wav");
-	precache_sound ("ad171/golem/groundslam.wav");
-
-	// Used for ceiling rubble breakables
-	precache_sound (SOUND_BRK_ROCK);
-	precache_sound (SOUND_IMP_ROCK1);
-	precache_sound (SOUND_IMP_ROCK2);
 	if (self.brkobj1 == "") self.brkobj1 = MODEL_BRK_ROCK1A;
-	precache_model (self.brkobj1);
 	if (self.brkobj2 == "") self.brkobj2 = MODEL_BRK_ROCK1B;
-	precache_model (self.brkobj2);
-	
-	// Additional rubble emitter parameters
-	if (CheckZeroVector(self.dest1)) self.dest1 = '80 8 1';
+	if (CheckZeroVector(self.dest1)) self.dest1 = '80 8 1'; // Additional rubble emitter parameters
 	if (CheckZeroVector(self.dest2)) self.dest2 = '0 0 16';
 	if (CheckZeroVector(self.brkvol)) self.brkvol = '160 160 8';
 	if (CheckZeroVector(self.brkvelbase)) self.brkvelbase = '0 0 50';
 	if (CheckZeroVector(self.brkveladd)) self.brkveladd = '100 100 100';
 	if (self.brkfade <= 0) self.brkfade = 4;
-	
-	// Ice Storm - range attack
-	precache_sound ("ad171/golem/icestorm.wav");
-	precache_sound ("ne_ruins/h2golem/iceshard1.wav");
-	precache_sound ("ne_ruins/h2golem/iceshard2.wav");
-	precache_sound ("ne_ruins/h2golem/iceshard3.wav");
-	precache_sound ("ne_ruins/h2golem/frosthit.wav");
-	precache_model (SEXP_ICE_BIG);		// Shard impact (ne_ruin)
-	
 	self.pain_sound = "ne_ruins/h2golem/pain1.wav";
 	self.pain_sound2 = "ne_ruins/h2golem/pain2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-	precache_sound ("ne_ruins/h2golem/death.wav");
-
-	// Roar!
-	self.sight_sound = "ad171/golem/sight.wav";
-	precache_sound (self.sight_sound);
-
+	self.sight_sound = "ad171/golem/sight.wav"; // Roar!
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	self.bbmins = '-32 -32 -24';	// Special Size
 	self.bbmaxs = '32 32 128';
 	self.bboxtype = BBOX_CUSTOM;
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
-
 	self.steptype = FS_TYPEGIANT;	// Giant sound
 	self.health = self.max_health = MEGADEATH;
-	
 	self.classtype = CT_MONICEGOLEM;
 	self.classgroup = CG_STONE;
 	self.classmove = MON_MOVEWALK;
 	self.style = 0;
-
 	if (self.deathstring == "")  self.deathstring = " was shattered by the Ice Golem\n";
-	
-	// No targetname = no trigger!
-	if (self.targetname == "") {
-		dprint("\b[ICEGOLEM]\b Missing targetname name!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		return;
-	}
-
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
+	setup_passivestate(self); // Check passive system for exceptions
 
-	// Check passive system for exceptions
-	setup_passivestate(self);
-
-	AddToTotals(self);
-	self.use = iceg_setup;
+	self.th_stand = self.th_walk = self.th_run = SUB_Null;
+	self.th_missile = self.th_die = SUB_Null;
+	self.th_pain = SUB_Null_pain;
+	monster_start();
+	if (self.targetname == "") {
+		dprint("\b[ICEGOLEM]\b Missing targetname name! Going ahead and spawning anyways.\n");
+		iceg_setup();
+	} else self.use = iceg_setup;
 };
 
-/*======================================================================
-//QUAKED monster_icegolem_wavetrig (0.75 0.25 1) (-32 -32 -8) (32 32 8) x
-Target for boss column smash wave event
--------- KEYS --------
-targetname : name of wave event (links to noise key on boss)
-target     : trigger name of adds to spawn
-noise1     : trigger name of column 1
-noise2     : trigger name of column 2
--------- SPAWNFLAGS --------
--------- NOTES --------
-Target for boss column smash wave event
-
-======================================================================*/
+// QUAKED monster_icegolem_wavetrig (0.75 0.25 1) (-32 -32 -8) (32 32 8) x
+// Target for boss column smash wave event
+// -------- KEYS --------
+// targetname : name of wave event (links to noise key on boss)
+// target     : trigger name of adds to spawn
+// noise1     : trigger name of column 1
+// noise2     : trigger name of column 2
+// -------- NOTES --------
+// Target for boss column smash wave event
 void() monster_icegolem_wavetrig = {
 	self.classtype = CT_MONICEGOLEMWAVE;
 	self.solid = SOLID_NOT;

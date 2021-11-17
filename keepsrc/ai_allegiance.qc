@@ -88,7 +88,7 @@ float VULN_UNDEAD = 3;
 .float calm_memory_finished;
 
 float(entity decider, entity targ) Align_Match = {
-	if (!decider || !targ) return FALSE;
+	if (!decider || !targ) return FALSE; // Can't match world.
     if (decider == targ) return TRUE; // we are ourself
 	return (decider.alignment == targ.alignment);
 };
@@ -97,22 +97,21 @@ float(entity targ) IsInsane = {
 	return (targ.temperament == TEMPRA_PSYCHOTIC || targ.ryuflags & RYU_INSANE);
 };
 
-float(entity tag) IsLoyal = {
-	return (self.temperament == TEMPRA_COWARDLY || self.temperament == TEMPRA_CALM || self.relations >= 3);
+float(entity targ) IsLoyal = {
+	return (targ.temperament == TEMPRA_COWARDLY || targ.temperament == TEMPRA_CALM || targ.relations >= 3);
 };
 
 float(entity decider, entity targ) Align_Opposing = {
-	if (!decider || !targ) return FALSE;
+	if (!decider || !targ) return FALSE; // Can't oppose world.
     if (decider == targ) return TRUE; // we are ourself
 	if (decider.alignment == NEUTRAL || targ.alignment == NEUTRAL) return FALSE;
-	if (IsInsane(decider)) return TRUE; // we crazy, attack anyone, except neutral to give players a chance at saving denizens
 	if (decider.alignment == GOOD && targ.alignment == EVIL) return TRUE;
 	if (decider.alignment == EVIL && targ.alignment == GOOD) return TRUE;
 	return FALSE;
 };
 
 float(entity decider, entity targ) Classgroup_Match = {
-	if (!decider || !targ) return FALSE;
+	if (!decider || !targ) return FALSE; // Can't match world.
     if (decider == targ) return TRUE; // we are ourself
 	return (decider.classgroup == targ.classgroup);
 };
@@ -152,7 +151,6 @@ float(entity targ) IsLeader = {
 	if (targ.flags & FL_CLIENT) return TRUE;
 	if (targ.classgroup == CG_DRAGON || targ.classgroup == CG_HARMLESS) return FALSE; // Can't follow dragons or denizens
 	if (targ.bossflag) return TRUE;
-	if (targ.xfl & XFL_BOSS) return TRUE;
 	if (targ.classgroup == CG_DCAPTAIN || targ.classgroup == CG_BOSS) return TRUE;
 	return FALSE;
 };

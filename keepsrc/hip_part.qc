@@ -1,11 +1,51 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Mission Pack 1 (Hipnotic)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 4
+//
+// Implements: Particle Forcefield
+//
+// Description:
+// An invisible wall that spawns particles within it when triggered.  Used in
+// conjunction with a func_oncount to trigger multiple "stripes" of separate
+// brushes so that the particles can appear to move across in a wave pattern.
+// Also useful for dust effects.
+//=============================================================================
+
 float USE_COUNT    = 1.000;
 
-void () particlefield_XZ = {
-   local vector pos;
-   local vector start;
-   local vector end;
+void () particlefield_XZ = { // [FUNCTION]
+   local vector pos, start, end;
 
-   if ( ((self.spawnflags & USE_COUNT) && (counter_GetCount (other) != self.cnt)) ) return ;
+   if ( ((self.spawnflags & USE_COUNT) && (counter_GetCount (other) != self.cnt)) ) return;
+
    self.ltime = (time + 0.250);
    if ( self.noise ) sound (self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
    if ( !checkclient () ) return ;
@@ -23,12 +63,11 @@ void () particlefield_XZ = {
    }
 };
 
-void () particlefield_YZ = {
-   local vector pos;
-   local vector start;
-   local vector end;
+void () particlefield_YZ = { // [FUNCTION]
+   local vector pos, start, end;
 
    if ( ((self.spawnflags & USE_COUNT) && (counter_GetCount (other) != self.cnt)) ) return;
+
    self.ltime = (time + 0.250);
    if ( self.noise ) sound (self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
    if ( !checkclient () ) return;
@@ -46,12 +85,13 @@ void () particlefield_YZ = {
    }
 };
 
-void () particlefield_XY = {
+void () particlefield_XY = { // [FUNCTION]
    local vector pos;
    local vector start;
    local vector end;
 
-   if ( ((self.spawnflags & USE_COUNT) && (counter_GetCount (other) != self.cnt)) ) return ;
+   if ( ((self.spawnflags & USE_COUNT) && (counter_GetCount (other) != self.cnt)) ) return;
+
    self.ltime = (time + 0.250);
    if ( self.noise ) sound (self,CHAN_VOICE,self.noise,TRUE,ATTN_NORM);
    if ( !checkclient () ) return ;
@@ -69,15 +109,16 @@ void () particlefield_XY = {
    }
 };
 
-void () particlefield_touch = {
+void () particlefield_touch = { // [FUNCTION]
    if ( !self.dmg ) return;
    if ( (time > self.ltime) ) return;
    if ( (time < self.attack_finished) ) return;
+
    self.attack_finished = (time + 0.500);
    T_Damage (other,self,self,self.dmg,DAMARMOR);
 };
 
-void () func_particlefield = {
+void () func_particlefield = { // [ENTITY]
    if ( !self.col ) self.col = 192.000;
    if ( (self.count == FALSE) ) self.count = FL_SWIM;
    self.classname = "particlefield";

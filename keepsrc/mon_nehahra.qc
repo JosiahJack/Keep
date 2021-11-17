@@ -464,35 +464,35 @@ void() nehahra_die = [76, n_die2] {
 };
 
 void() n_die2 = [81, n_die3] { nehjet(); nehjet(); };
-void() n_die3 = [80, n_die4] { lavasplash(self.origin); nehjet(); nehjet(); };
+void() n_die3 = [80, n_die4] { Tent_Point(TE_LAVASPLASH,self.origin); nehjet(); nehjet(); };
 void() n_die4 = [79, n_die5] { nehjet(); nehjet(); };
-void() n_die5 = [78, n_die6] { lavasplash(self.origin + '0 0 100'); nehjet(); nehjet(); };
+void() n_die5 = [78, n_die6] { Tent_Point(TE_LAVASPLASH,self.origin + '0 0 100'); nehjet(); nehjet(); };
 void() n_die6 = [77, n_die7] { ThrowGib(2,1); nehjet(); nehjet(); };
-void() n_die7 = [78, n_die8] { lavasplash(self.origin); nehjet(); nehjet(); };
+void() n_die7 = [78, n_die8] { Tent_Point(TE_LAVASPLASH,self.origin); nehjet(); nehjet(); };
 void() n_die8 = [79, n_die9] { nehjet(); nehjet(); };
 void() n_die9 = [80, n_die10] {
-	lavasplash(self.origin + '0 0 100');
+	Tent_Point(TE_LAVASPLASH,self.origin + '0 0 100');
 	ThrowGib(3,1);
 	nehjet();
 	nehjet();
 };
 void() n_die10 = [81, n_die11] { nehjet(); nehjet(); };
 void() n_die11 = [82, n_die12] { nehjet(); nehjet(); };
-void() n_die12 = [83, n_die13] { lavasplash(self.origin); nehjet(); nehjet(); };
+void() n_die12 = [83, n_die13] { Tent_Point(TE_LAVASPLASH,self.origin); nehjet(); nehjet(); };
 void() n_die13 = [84, n_die14] { nehjet(); nehjet(); };
-void() n_die14 = [85, n_die15] { lavasplash(self.origin + '0 0 140'); nehjet(); nehjet(); };
+void() n_die14 = [85, n_die15] { Tent_Point(TE_LAVASPLASH,self.origin + '0 0 140'); nehjet(); nehjet(); };
 void() n_die15 = [86, n_die16] { nehjet(); nehjet(); };
 void() n_die16 = [87, n_die17] { nehjet(); };
-void() n_die17 = [83, n_die18] { lavasplash(self.origin); nehjet(); nehjet(); };
+void() n_die17 = [83, n_die18] { Tent_Point(TE_LAVASPLASH,self.origin); nehjet(); nehjet(); };
 void() n_die18 = [84, n_die19] { nehjet(); nehjet(); };
-void() n_die19 = [85, n_die20] { lavasplash(self.origin); nehjet(); nehjet(); };
-void() n_die20 = [86, n_die21] { lavasplash(self.origin); nehjet(); nehjet(); };
-void() n_die21 = [87, n_die22] { lavasplash(self.origin + '0 0 150'); nehjet(); nehjet(); };
+void() n_die19 = [85, n_die20] { Tent_Point(TE_LAVASPLASH,self.origin); nehjet(); nehjet(); };
+void() n_die20 = [86, n_die21] { Tent_Point(TE_LAVASPLASH,self.origin); nehjet(); nehjet(); };
+void() n_die21 = [87, n_die22] { Tent_Point(TE_LAVASPLASH,self.origin + '0 0 150'); nehjet(); nehjet(); };
 void() n_die22 = [88, n_die23] { nehjet(); nehjet(); };
-void() n_die23 = [89, n_die24] { lavasplash(self.origin + '0 0 50'); nehjet(); nehjet(); };
+void() n_die23 = [89, n_die24] { Tent_Point(TE_LAVASPLASH,self.origin + '0 0 50'); nehjet(); nehjet(); };
 void() n_die24 = [88, n_die25] { nehjet(); nehjet(); };
-void() n_die25 = [87, n_die26] { lavasplash(self.origin + '0 0 50'); nehjet(); nehjet(); };
-void() n_die26 = [86, n_die27] { lavasplash(self.origin + '0 0 150'); nehjet(); nehjet(); };
+void() n_die25 = [87, n_die26] { Tent_Point(TE_LAVASPLASH,self.origin + '0 0 50'); nehjet(); nehjet(); };
+void() n_die26 = [86, n_die27] { Tent_Point(TE_LAVASPLASH,self.origin + '0 0 150'); nehjet(); nehjet(); };
 void() n_die27 = [85, n_die28] {
 	self.cnt = self.cnt + 1;
 	if (self.cnt < 5) {
@@ -513,12 +513,8 @@ void() n_die27 = [85, n_die28] {
 	}
 };
 void() n_die28 = [90, n_die29] {
-	// if (world.model == "maps/nehahra.bsp") {
-		// nehahra_setupfinale();
-		// drop_nehahra_finale_sensor();
-	// }
-	lavasplash(self.origin + '0 0 150');
-	lavasplash(self.origin);
+	Tent_Point(TE_LAVASPLASH,self.origin + '0 0 150');
+	Tent_Point(TE_LAVASPLASH,self.origin);
 	ThrowGibstorm("progs/nehahra/gstorm.mdl", self.health);
 	ThrowGibstorm("progs/nehahra/gstorm.mdl", self.health);
 	ThrowGibstorm("progs/nehahra/gstorm.mdl", self.health);
@@ -527,9 +523,9 @@ void() n_die28 = [90, n_die29] {
 	ThrowGibstorm("progs/nehahra/gstorm.mdl", self.health);
 };
 void() n_die29 = [91, n_die30] {
-	lavasplash(self.origin + '0 0 150');
+	Tent_Point(TE_LAVASPLASH,self.origin + '0 0 150');
 	sound(self, CHAN_AUTO, "nehahra/boss3/nehdie4.wav", 1, ATTN_NONE);
-	lavasplash(self.origin);
+	Tent_Point(TE_LAVASPLASH,self.origin);
 	ThrowGibstorm("progs/nehahra/gstorm.mdl", self.health);
 	ThrowGibstorm("progs/nehahra/gstorm.mdl", self.health);
 	ThrowGibstorm("progs/nehahra/gstorm.mdl", self.health);
@@ -541,17 +537,17 @@ void() n_die30 = [92, n_die31] {
 	ThrowGibstorm("progs/nehahra/gstorm.mdl", self.health);
 	ThrowGibstorm("progs/nehahra/gstorm.mdl", self.health);
 	ThrowGibstorm("progs/nehahra/gstorm.mdl", self.health);
-	lavasplash(self.origin + '0 0 150');
-	lavasplash(self.origin);
+	Tent_Point(TE_LAVASPLASH,self.origin + '0 0 150');
+	Tent_Point(TE_LAVASPLASH,self.origin);
 };
 void() n_die31 = [93, BecomeExplosion] {};
 
-void() monster_nehahra = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
+void() monster_nehahra_precache = {
 	precache_model("progs/nehahra/nehah.mdl");
 	precache_model("progs/nehahra/nehjet.mdl");
+	precache_model("progs/nehahra/gstorm.mdl");
+	precache_model("progs/flame2.mdl");
+	precache_model("progs/s_explod.spr");
 	precache_sound("nehahra/boss3/hit.wav");
 	precache_sound("nehahra/ambience/sphum.wav");
 	precache_sound("hknight/idle.wav");
@@ -567,23 +563,41 @@ void() monster_nehahra = {
 	precache_sound("nehahra/boss3/nehdie2.wav");
 	precache_sound("nehahra/boss3/nehdie3.wav");
 	precache_sound("nehahra/boss3/nehdie4.wav");
-	precache_model("progs/nehahra/gstorm.mdl");
-	precache_model("progs/flame2.mdl");
-	precache_model("progs/s_explod.spr");
 	precache_sound("nehahra/sets/set2_3.wav");
 	precache_sound("nehahra/sets/set2_5.wav");
 	precache_sound("nehahra/cuts1/flf1.wav");
 	precache_sound("nehahra/cuts1/flf2.wav");
 	precache_sound("nehahra/vondur/fan1.wav");
 	precache_sound("nehahra/ambience/class2.wav");
+};
+
+void() monster_nehahra = {
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/nehahra/nehah.mdl";
 	self.sight_sound = "nehahra/boss3/neh3.wav";
-	self.solid = SOLID_SLIDEBOX;
-	self.movetype = MOVETYPE_STEP;
-	setmodel(self, "progs/nehahra/nehah.mdl");
-	setsize(self, VEC_HULL2_MIN, '60 60 300');
+	self.idle_sound = "nehahra/boss3/neh1.wav";
+	self.pain_sound = "nehahra/boss3/neh2.wav";
+	self.death_sound = "nehahra/boss3/nehdie1.wav";
+	self.death_sound2 = "nehahra/boss3/nehdie2.wav";
+	self.stepc1 = "nehahra/boss3/step1.wav";
+	self.stepc1 = "nehahra/boss3/step2.wav";
+	self.stepc1 = "nehahra/boss3/step1.wav";
+	self.stepc1 = "nehahra/boss3/step2.wav";
+	self.stepc1 = "nehahra/boss3/step1.wav";
+	self.steptype = FS_TYPECUSTOM;
+	self.solid = SOLID_NOT;			// No interaction with world
+	self.movetype = MOVETYPE_NONE;	// Static item, no movement
+	if (self.bboxtype < 1) {
+		self.bbmins = '-60 -60 -24';
+		self.bbmaxs = '60 60 300';
+		self.bboxtype = BBOX_CUSTOM;// Custom BBox size
+	}
 	self.yaw_speed = 30;
-	self.brain = 0;
-	self.health = 2000;
+	if (self.health < 1) self.health = 2000;
+	self.pain_flinch = 200;
+	self.pain_longanim = FALSE;		// Resistant to axe slowing
+	self.pain_timeout = 2;			// HK pain threshold
 	self.event = "nehahra_frame";
 	self.th_stand = nehahra_stand;
 	self.th_walk = nehahra_goal;
@@ -591,30 +605,24 @@ void() monster_nehahra = {
 	self.th_run = nehahra_goal;
 	self.th_pain = SUB_Null_pain;
 	self.th_die = nehahra_die;
-	AddToTotals(self);
 	self.origin_z = self.origin_z + 1;
 	self.button1 = 90;
-	droptofloor();
 	self.takedamage = DAMAGE_AIM;
-	// self.ideal_yaw = self.angles * '0 1 0';
 	self.view_ofs = '0 0 265';
-	self.use = monster_use;
-	self.flags = self.flags | FL_MONSTER;
-	self.bossflag = TRUE;
-	if (self.target) {
-		self.goalentity = self.movetarget = find(world, targetname, self.target);
-		self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
-		if (self.movetarget.classname == "path_corner") {
-			self.th_walk();
-		} else {
-			self.pausetime = 100000000;
-			self.goalentity = world;
-			self.movetarget = world;
-		}
-		self.th_stand();
-	} else {
-		self.pausetime = 100000000;
-		self.th_stand();
-	}
-	self.nextthink = self.nextthink + random() * 0.5;
+	if (self.bossflag >= 0) self.bossflag = TRUE;
+
+	// Always reset Ammo Resistance to be consistent
+	self.resist_shells = self.resist_nails = 0;
+	self.resist_rockets = self.resist_cells = 0;
+
+	// Check for random rotation setup and angle limits
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 360;
+
+	if (self.deathstring == "")  self.deathstring = " was felled by the mighty Nehahra\n";
+
+	self.classtype = CT_MONNEHAHRA;
+	self.classgroup = CG_STONE;
+	self.classmove = MON_MOVEWALK;
+	monster_start();
 };

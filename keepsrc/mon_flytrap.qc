@@ -298,12 +298,7 @@ void() standcatch      =[  123,        standcatch  ]     {
 	rilke27();
 };
 
-
-void() info_fli = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/madfox/mon_flytrap.mdl";
+void() monster_flytrap_ground_precache = {
     precache_model ("progs/madfox/mon_flytrap.mdl");
 	precache_sound ("ad171/ambience/switch_2.wav");
 	precache_sound ("ad171/lostsoul/bite.wav");
@@ -311,16 +306,19 @@ void() info_fli = {
 	precache_sound ("ad171/swampling/idle2.wav");
 	precache_sound ("ad171/swampling/idle3.wav");
 	precache_sound ("zerstorer/cube/bc_gulp.wav");
+};
+
+void() monster_flytrap_ground = {
+	self.mdl = "progs/madfox/mon_flytrap.mdl";
 	self.idle_sound = "ad171/swampling/idle3.wav";
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_NONE;
 	self.classname = "monster_flytrap_ground";
 	self.classtype = CT_MONFLYTRAPGROUND;
 	self.th_melee = hack1;
-	self.th_stand = standcatch;  
+	self.th_stand =  self.th_run = standcatch;  
 	self.th_die = fault1;
 	self.th_pain = catch1;
-
 	if (self.health < 1) self.health = 150;
 	self.gibhealth = -40;
 	self.bbmins = '16 16 16';	// Special Size
@@ -329,14 +327,15 @@ void() info_fli = {
 	self.alignment = GOOD;
 	self.vulnerability = VULN_NORMAL;
 	self.use = test1;
-
   	if (self.deathstring == "") self.deathstring = " was ingested by a Mechanized Venus Fly Trap\n";
 	self.classmove = MON_MOVENONE;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
 	monster_start();
 };
 
-void() monster_flytrap_ground = {
-	info_fli();
+void() info_fli = {
+	self.classname = "monster_flytrap_ground";
+	monster_flytrap_ground();
 };
 
 void() flytrap_stand1      =[  64,         flytrap_stand2  ]     {flytrap_findvictim();};
@@ -511,28 +510,26 @@ void() flytrap_death21      =[  128,        flytrap_death22 ]     {ThrowGib(3,1)
 void() flytrap_death22      =[  129,        flytrap_death23 ]     {ThrowGib(1,1);monster_death_postcheck();};
 void() flytrap_death23      =[  130,        flytrap_death23 ]      {monster_deadbody_check();};
 
-void() monster_flytrap = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+void() monster_flytrap_precache = {
+    precache_model("progs/madfox/mon_flytrap_standing.mdl");
+	precache_sound("ad171/ambience/switch_2.wav");
+	precache_sound("ad171/lostsoul/bite.wav");
+	precache_sound("quoth/voreling/death.wav");
+	precache_sound("ad171/swampling/idle2.wav");
+	precache_sound("ad171/swampling/idle3.wav");
+	precache_sound("zerstorer/cube/bc_gulp.wav");
+};
 
+void() monster_flytrap = {
 	self.mdl = "progs/madfox/mon_flytrap_standing.mdl";
-    precache_model ("progs/madfox/mon_flytrap_standing.mdl");
-	precache_sound ("ad171/ambience/switch_2.wav");
-	precache_sound ("ad171/lostsoul/bite.wav");
-	precache_sound ("quoth/voreling/death.wav");
-	precache_sound ("ad171/swampling/idle2.wav");
-	precache_sound ("ad171/swampling/idle3.wav");
-	precache_sound ("zerstorer/cube/bc_gulp.wav");
 	self.idle_sound = "ad171/swampling/idle3.wav";
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_NONE;
-	self.classname = "monster_flytrap_ground";
 	self.classtype = CT_MONFLYTRAP;
 	self.th_melee = flytrap_walk1;
-	self.th_stand = flytrap_walk1;
+	self.th_stand = self.th_run = flytrap_walk1;
 	self.th_die = flytrap_death1;
 	self.th_pain = flytrap_pain1;
-
 	if (self.health < 1) self.health = 150;
 	self.gibhealth = -40;
 	self.bbmins = '16 16 16';	// Special Size
@@ -540,8 +537,8 @@ void() monster_flytrap = {
 	self.bboxtype = BBOX_CUSTOM;
 	self.alignment = GOOD;
 	self.vulnerability = VULN_NORMAL;
-
 	if (self.deathstring == "") self.deathstring = " was ingested by a Venus Fly Trap\n";
-	self.classmove = MON_MOVENONE;
+	self.classmove = MON_MOVESTATIC;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
 	monster_start();
 };

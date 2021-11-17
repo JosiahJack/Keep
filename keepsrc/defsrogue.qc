@@ -38,7 +38,6 @@
 
 float earthquake_active;
 float earthquake_intensity;
-float elv_button_dir;
 
 .vector dragonLastVelocity;
 .vector elevatorDestination;

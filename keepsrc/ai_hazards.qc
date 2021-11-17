@@ -84,17 +84,17 @@ float FLAME_TRSPEED = 0.02;			// Trail flame standard speed
 string MODEL_PROJ_FLAMETINY = "progs/ad181/s_flametiny.spr";
 string MODEL_PROJ_FLAMESML = "progs/ad181/s_flamesml.spr";
 string MODEL_PROJ_FLAMEMED = "progs/ad181/s_flamemed.spr";
-// string MODEL_PROJ_FLAMEVLRG = "progs/ad181/s_flamevlrg.spr"; // does not exist yet, Qmaster pre Bal
+// string MODEL_PROJ_FLAMEVLRG = "progs/ad181/s_flamevlrg. spr"; // does not exist yet, Qmaster pre Bal
 string MODEL_PROJ_FLAMEVLRG = "progs/ad181/s_flamemed.spr";
 string MODEL_PROJ_BFLAMETINY = "progs/s_blflametiny.spr"; // Blue fire! (aka Void Knight fire)
 string MODEL_PROJ_BFLAMESML = "progs/s_blflamesml.spr";
 string MODEL_PROJ_BFLAMEMED = "progs/s_blflamemed.spr";
-//string MODEL_PROJ_BFLAMEVLRG = "progs/s_blflamevlrg.spr"; // does not exist yet, Qmaster pre Bal
+//string MODEL_PROJ_BFLAMEVLRG = "progs/s_blflamevlrg. spr"; // does not exist yet, Qmaster pre Bal
 string MODEL_PROJ_BFLAMEVLRG = "progs/s_blflamemed.spr";
 string MODEL_PROJ_GRFLAMETINY = "progs/s_grflametiny.spr"; // Green fire!
 string MODEL_PROJ_GRFLAMESML = "progs/s_grflamesml.spr";
 string MODEL_PROJ_GRFLAMEMED = "progs/s_grflamemed.spr";
-// string MODEL_PROJ_GRFLAMEVLRG = "progs/s_grflamevlrg.spr"; // does not exist yet, Qmaster pre Bal
+// string MODEL_PROJ_GRFLAMEVLRG = "progs/s_grflamevlrg. spr"; // does not exist yet, Qmaster pre Bal
 string MODEL_PROJ_GRFLAMEVLRG = "progs/s_grflamemed.spr";
 
 void() PreCache_Flame = {
@@ -231,13 +231,10 @@ void() Animate_HazardProjectile = {
 					pointparticles(particleeffectnum(DPP_FLAMES), self.origin, '0 0 0', 1);
 			}
 		}
-	} else {
-		// Random particle spark
-		if (random() < 0.05) SpawnProjectileSmoke(self.origin, 200, 50, 250);
-		// Random particle burst, expects defaults have been setup
-		if (random() < self.part_chance)
-			particle_explode(self.origin+self.part_ofs, self.part_base+random()*self.part_rand, self.part_life+random(), self.part_style, 0);
-	}
+	}// else {
+	if (random() < 0.05) SpawnProjectileSmoke(self.origin, 200, 50, 250); // Random particle spark
+	if (random() < self.part_chance) particle_explode(self.origin+self.part_ofs, self.part_base+random()*self.part_rand, self.part_life+random(), self.part_style, 0); // Random particle burst, expects defaults have been setup
+	//}
 	
 	// Keep looping
 	self.think = Animate_HazardProjectile;
@@ -284,6 +281,9 @@ void() Touch_HazardProjectile = {
 		if (other.flags & FL_CLIENT && other.moditems & IT_ARTLAVASHIELD) {
 			PlayLavaShieldSound(other);
 			if (other.resist_fire > 0) self.dmg = self.dmg * (1-other.resist_fire);
+			else {
+				if (random() < (self.dmg+1)*0.01) Burn_Add (other, self, self.dmg); // Chance to burn equals (damage + 1)%.  E.g., 9 damage = 10%. Yes, use 'damage' and not 'take'.
+			}
 			if (self.dmg > 0) self.dmg = floor(self.dmg * 0.5);
 		}
 	
@@ -603,7 +603,7 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard = {
 		newmis.part_qctrail = TRUE;
 		newmis.part_trstyle = self.part_trstyle;
 		newmis.frame = rint((random() * 9));
-		newmis.part_soundmiss = "ad181/sweeper/hazard_miss.wav";
+		newmis.part_soundmiss = "ad171/wraith/bounce.wav";
 	}
 	
 	// Standard projectile setup (origin, size and velocity)

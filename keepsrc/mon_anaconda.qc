@@ -88,13 +88,16 @@ void() coil_explode = {
 	remove(self);
 };
 
-void() monster_coil = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
+void() monster_coil_precache = {
 	precache_sound("blob/death1.wav");
 	precache_sound("boss1/out1.wav");
 	precache_model("progs/anaconda/coils.mdl");
+};
+
+void() monster_coil = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+
+	monster_coil_precache();
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 	setmodel(self, "progs/anaconda/coils.mdl");
@@ -107,15 +110,9 @@ void() monster_coil = {
 	self.th_pain = coil_pain01;
 	self.th_missile = coil_run;
 	self.nomonstercount = 1;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
 	if (self.deathstring == "")  self.deathstring = " was killed by a giant anaconda\n";
-
-	// Check passive system for exceptions
-	setup_passivestate(self);
-
+	setup_passivestate(self); // Check passive system for exceptions
 	if(!self.classtype) self.classtype = CT_MONANACONDACOIL;
 	if (!self.classgroup) self.classgroup = CG_BOSS;
 	self.classmove = MON_MOVEWALK;	
@@ -683,92 +680,66 @@ void() anac_eat16 = [106, anac_eat17]
 	ai_face();
 };
 
-void() anac_eat17 = [107, anac_run]
-{
+void() anac_eat17 = [107, anac_run] {
 	ai_charge(MOVETYPE_BOUNCE);
 	ai_face();
 };
 
 void(entity inflictor, entity attacker, float damage) anac_pain01 = { return; }; // no response to pain
 
-void() anac_die = [10, anac_die]
-{
-	anacdoom_1();
-};
-
-void() anac_doom = [4, anac_doom02]
-{
+void() anac_die = [10, anac_die] { anacdoom_1(); };
+void() anac_doom = [4, anac_doom02] {
 	ai_pain(ATTN_NORM);
 	lightstyle(ATTN_NONE, "m");
 	DropCoin(1);
 	DropCoin(1);
 };
-
-void() anac_doom02 = [5, anac_doom03]
-{
+void() anac_doom02 = [5, anac_doom03] {
 	ai_pain(ATTN_NORM);
 	lightstyle(ATTN_NONE, "k");
 	DropCoin(1);
 };
-
-void() anac_doom03 = [6, anac_doom04]
-{
+void() anac_doom03 = [6, anac_doom04] {
 	ai_pain(ATTN_NORM);
 	lightstyle(ATTN_NONE, "k");
 	DropCoin(1);
 };
-
-void() anac_doom04 = [5, anac_doom05]
-{
+void() anac_doom04 = [5, anac_doom05] {
 	ai_pain(ATTN_NORM);
 	lightstyle(ATTN_NONE, "i");
 	DropCoin(1);
 };
-
-void() anac_doom05 = [6, anac_doom06]
-{
+void() anac_doom05 = [6, anac_doom06] {
 	ai_pain(ATTN_NORM);
 	lightstyle(ATTN_NONE, "g");
 	DropCoin(1);
 };
-
-void() anac_doom06 = [4, anac_doom07]
-{
+void() anac_doom06 = [4, anac_doom07] {
 	ai_pain(ATTN_NORM);
 	lightstyle(ATTN_NONE, "e");
 	DropCoin(1);
 };
-
-void() anac_doom07 = [5, anac_doom08]
-{
+void() anac_doom07 = [5, anac_doom08] {
 	ai_pain(ATTN_NORM);
 	lightstyle(ATTN_NONE, "a");
 	DropCoin(1);
 };
-
-void() anac_doom08 = [6, anac_doom09]
-{
+void() anac_doom08 = [6, anac_doom09] {
 	ai_pain(ATTN_NORM);
 	lightstyle(ATTN_NONE, "c");
 	DropCoin(1);
 };
-
-void() anac_doom09 = [5, anac_doom10]
-{
+void() anac_doom09 = [5, anac_doom10] {
 	ai_pain(ATTN_NORM);
 	lightstyle(ATTN_NONE, "e");
 	DropCoin(1);
 };
-
-void() anac_doom10 = [4, anac_doom11]
-{
+void() anac_doom10 = [4, anac_doom11] {
 	ai_pain(ATTN_NORM);
 	lightstyle(ATTN_NONE, "i");
 	DropCoin(1);
 };
-
-void() anac_doom11 = [5, anac_doom12]
-{
+void() anac_doom11 = [5, anac_doom12] {
 	ai_pain(ATTN_NORM);
 	lightstyle(ATTN_NONE, "m");
 	DropCoin(1);
@@ -878,7 +849,6 @@ void() anacdoom_4 = {
 		z = z + 96;
 	}
 	if (self.spawnflags & ANAC_INTERMISSION) {
-		// WriteByte(MSG_ALL, SVC_CDTRACK);
 		WriteByte(MSG_ALL, TE_EXPLOSION);
 		WriteByte(MSG_ALL, TE_EXPLOSION);
 	}
@@ -897,6 +867,7 @@ void() anac_explode2 = [6, anac_explode2] {
 	WriteCoord(MSG_BROADCAST, self.origin_x);
 	WriteCoord(MSG_BROADCAST, self.origin_y);
 	WriteCoord(MSG_BROADCAST, self.origin_z);
+	self.gibbed = TRUE;
 	BecomeExplosion();
 };
 
@@ -932,10 +903,7 @@ void() check_anac = {
 	}
 };
 
-void() monster_anac = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
+void() monster_anac_precache = {
 	precache_sound("blob/death1.wav");
 	precache_sound("boss1/out1.wav");
 	precache_sound("boss1/sight1.wav");
@@ -951,6 +919,12 @@ void() monster_anac = {
 	precache_model("progs/drake/s_explod.spr");
 	precache_model("progs/spike2.mdl");
 	precache_model("progs/gib1.mdl");
+};
+
+void() monster_anac = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+
+	monster_anac_precache();
 	self.gib1mdl = "progs/gib1.mdl";
 	precache_model("progs/gib2.mdl");
 	self.gib2mdl = "progs/gib2.mdl";
@@ -970,18 +944,11 @@ void() monster_anac = {
 	self.th_melee = check_anac;
 	self.th_die = anac_die;
 	//self.bossflag = TRUE;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
 	if (self.deathstring == "")  self.deathstring = " was killed by a giant anaconda\n";
-
-	// Check passive system for exceptions
-	setup_passivestate(self);
-
+	setup_passivestate(self); // Check passive system for exceptions
 	if(!self.classtype) self.classtype = CT_MONANACONDA;
 	if (!self.classgroup) self.classgroup = CG_BOSS;
 	self.classmove = MON_MOVEWALK;	
-
 	monster_start();
 };

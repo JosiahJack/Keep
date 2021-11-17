@@ -278,12 +278,7 @@ void (entity inflictor,entity attacker, float damage) swordredfield_pain = {
    self.th_pain = SUB_Null_pain;
 };
 
-void () monster_sword = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
+void () monster_sword_precache = {
 	precache_model ("progs/rogue/mon_sword.mdl");
 	precache_model ("progs/redfield/mon_sword.mdl");
 	precache_model (MODEL_SWORDEYES);
@@ -291,6 +286,11 @@ void () monster_sword = {
 	precache_sound ("knight/ksight.wav");
 	precache_sound ("player/axhit2.wav");
 	precache_sound ("redfield/sword/die.wav");
+};
+
+void () monster_sword = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.sight_sound = "knight/ksight.wav";
 	self.solid = SOLID_NOT;
@@ -335,7 +335,6 @@ void () monster_sword = {
 		self.th_die = sword_die;
 		self.th_pain = sword_pain;
 	}
-
 
 	self.classmove = MON_MOVEWALK;
 	if (self.deathstring == "")  self.deathstring = " was slit open by a Phantom Swordsman\n";

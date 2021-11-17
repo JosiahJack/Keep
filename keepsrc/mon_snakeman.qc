@@ -239,27 +239,28 @@ void(float offset) SnakeMissile = {
 	sound(self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
 };
 
-void() monster_snakeman = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/snakeman.mdl";
-	self.headmdl = "progs/uzi.mdl";
+void() monster_snakeman_precache = {
 	precache_model("progs/snakeman.mdl");
 	precache_model("progs/k_spike.mdl");
 	precache_model("progs/uzi.mdl");
-	self.gib1mdl = "progs/gib1.mdl";
 	precache_model("progs/gib1.mdl");
-	self.gib2mdl = "progs/gib2.mdl";
 	precache_model("progs/gib2.mdl");
-	self.gib3mdl = "progs/gib3.mdl";
 	precache_model("progs/gib3.mdl");
 	precache_sound("hipnotic/scourge/idle.wav");
 	precache_sound("hipnotic/scourge/sight.wav");
 	precache_sound("hipnotic/scourge/pain2.wav");
 	precache_sound("ogre/ogpain1.wav");
+};
+
+void() monster_snakeman = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/snakeman.mdl";
+	self.headmdl = "progs/uzi.mdl";
+	self.gib1mdl = "progs/gib1.mdl";
+	self.gib2mdl = "progs/gib2.mdl";
+	self.gib3mdl = "progs/gib3.mdl";
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;
@@ -274,6 +275,7 @@ void() monster_snakeman = {
 	self.th_missile = snake_attack1;
 	self.blockudeath = TRUE;			// No humanoid death sound
 	self.wait2 = TRUE; // have not played sight sound yet
+	self.ammo_nails = 4 + rint(random()*4);
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
@@ -282,11 +284,9 @@ void() monster_snakeman = {
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
+
 	if (self.deathstring == "") self.deathstring = " was hosed by a Snakeman\n";
-	
 	if(!self.classtype) self.classtype = CT_MONSNAKEMAN;
 	self.classmove = MON_MOVEWALK;	
-	
 	monster_start();
 };
-

@@ -371,68 +371,69 @@ void () overlord_die19 = [ 107.000, overlord_die19 ] {
    remove (self);
 };
 
+void () monster_super_wrath_precache = {
+	precache_model("progs/rogue/s_wrath.mdl");
+	precache_model("progs/drake/s_wrtgb2.mdl");
+	precache_model("progs/drake/s_wrtgb3.mdl");
+	precache_model("progs/rogue/wrthgib1.mdl");
+	precache_model("progs/rogue/wrthgib2.mdl");
+	precache_model("progs/rogue/wrthgib3.mdl");
+	precache_model("progs/gib1.mdl");
+	precache_model("progs/gib2.mdl");
+	precache_model("progs/gib3.mdl");
+	precache_model("progs/drake/w_ball.mdl");
+	precache_sound("rogue/wrath/wsee.wav");
+	precache_sound("rogue/wrath/watt.wav");
+	precache_sound("rogue/wrath/wpain.wav");
+	precache_sound("rogue/wrath/wdthc.wav");
+	precache_sound("rogue/s_wrath/smash.wav");
+};
+
 void () monster_super_wrath = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-   self.mdl = "progs/rogue/s_wrath.mdl";
-   precache_model (self.mdl);
-   self.gib1mdl = "progs/rogue/wrthgib1.mdl";
-   self.gib2mdl = "progs/rogue/wrthgib2.mdl";
-   self.gib3mdl = "progs/rogue/wrthgib3.mdl";
-   precache_model ("progs/drake/s_wrtgb2.mdl");
-   precache_model ("progs/drake/s_wrtgb3.mdl");
-   precache_model ("progs/rogue/wrthgib1.mdl");
-   precache_model ("progs/rogue/wrthgib2.mdl");
-   precache_model ("progs/rogue/wrthgib3.mdl");
-   precache_model ("progs/gib1.mdl");
-   precache_model ("progs/gib2.mdl");
-   precache_model ("progs/gib3.mdl");
-   precache_model ("progs/drake/w_ball.mdl");
-   precache_sound ("rogue/wrath/wsee.wav");
-   precache_sound ("rogue/wrath/watt.wav");
-   self.pain_sound = "rogue/wrath/wpain.wav";
-   precache_sound ("rogue/wrath/wpain.wav");
-   precache_sound ("rogue/wrath/wdthc.wav");
-   precache_sound ("rogue/s_wrath/smash.wav");
-   self.solid = SOLID_NOT;				// No interaction with world
-   self.movetype = MOVETYPE_NONE;		// Static item, no movement
-   if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;
-   if (self.health < 1) self.health = 1000.000;
-   self.gibhealth = MON_NEVERGIB;		// Cannot be gibbed by weapons
-   self.gibbed = FALSE;				// not falling apart
-   self.pain_flinch = 70;				// High pain threshold
-   self.blockudeath = TRUE;			// no humanoid death sound
-   self.height = MONAI_ABOVEDIST;		// Enemytarget distance above
-   self.pain_finished = FALSE;
+	self.mdl = "progs/rogue/s_wrath.mdl";
+	self.gib1mdl = "progs/rogue/wrthgib1.mdl";
+	self.gib2mdl = "progs/rogue/wrthgib2.mdl";
+	self.gib3mdl = "progs/rogue/wrthgib3.mdl";
+	self.pain_sound = "rogue/wrath/wpain.wav";
+	self.solid = SOLID_NOT;				// No interaction with world
+	self.movetype = MOVETYPE_NONE;		// Static item, no movement
+	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;
+	if (self.health < 1) self.health = 1000.000;
+	self.gibhealth = MON_NEVERGIB;		// Cannot be gibbed by weapons
+	self.gibbed = FALSE;				// not falling apart
+	self.pain_flinch = 70;				// High pain threshold
+	self.blockudeath = TRUE;			// no humanoid death sound
+	self.height = MONAI_ABOVEDIST;		// Enemytarget distance above
+	self.pain_finished = FALSE;
 
-   // Always reset Ammo Resistance to be consistent
-   self.resist_shells = self.resist_nails = 0;
-   self.resist_rockets = self.resist_cells = 0;
+	// Always reset Ammo Resistance to be consistent
+	self.resist_shells = self.resist_nails = 0;
+	self.resist_rockets = self.resist_cells = 0;
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
 
-   self.th_stand = overlord_stand1;
-   self.th_walk = overlord_walk01;
-   self.th_run = overlord_run01;
-   self.th_missile = overlord_missile;
-   self.th_melee = overlord_melee;
-   self.th_pain = overlord_pain;
-   self.th_die = overlord_die02;
-
-   self.classtype = CT_MONWRAITH;
-   self.classgroup = CG_SPIDER;
-   self.classmove = MON_MOVEFLY;
+	self.th_stand = overlord_stand1;
+	self.th_walk = overlord_walk01;
+	self.th_run = overlord_run01;
+	self.th_missile = overlord_missile;
+	self.th_melee = overlord_melee;
+	self.th_pain = overlord_pain;
+	self.th_die = overlord_die02;
+	self.classtype = CT_MONWRATHOVERLORD;
+	self.classgroup = CG_SPIDER;
+	self.classmove = MON_MOVEFLY;
 	if (self.deathstring == "")  self.deathstring = " was obliterated by a Wrath Overlord\n";
-
-   monster_start ();
+	monster_start ();
 };
 
 void () info_overlord_destination = {
-   self.mangle = self.angles;
-   self.angles = VEC_ORIGIN;
-   self.model = "";
-   self.origin = (self.origin + '0.000 0.000 27.000');
+	self.mangle = self.angles;
+	self.angles = VEC_ORIGIN;
+	self.model = "";
+	self.origin = (self.origin + '0.000 0.000 27.000');
 };

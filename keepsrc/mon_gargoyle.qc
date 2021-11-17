@@ -272,9 +272,8 @@ void() gargoyle_grow10= [ $grow10, garg_run1 ] {
 		self.th_missile = garg_fire1;
 	}
 };
-//----------------------------------------------------------------------------
-void() gargoyle_grow =
-{
+
+void() gargoyle_grow = {
 	// Only call wakeup function once
 	self.th_stand = self.th_walk = self.th_run  = SUB_Null;
 	if (random() < 0.5) self.lefty = 36;
@@ -347,12 +346,10 @@ void() garg_die = {
 			self.oldorigin = self.origin + v_forward*8;
 			SpawnExplosion(EXPLODE_BIG, self.oldorigin, SOUND_REXP3);
 		}
-		// make sure any fireball is hidden
-		garg_fbfinish();
+		garg_fbfinish(); // make sure any fireball is hidden
 	}
 
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	
 	// If not gibbed, then drop to ground
 	if (!self.gibbed) { 
@@ -366,63 +363,59 @@ void() garg_die = {
 	}
 };
 
-/*======================================================================
-QUAKED monster_gargoyle (0.8 0 0.2) (-16 -16 -24) (16 16 40) AMBUSH STATUE PERCH NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
-{ model(":progs/ad171/mon_gargoyle.mdl"); }
-Gargoyle, 120 health points.
--------- KEYS --------
--------- SPAWNFLAGS --------
-STATUE : Stone statue until triggered (always starts in a perched position)
-PERCH : Start in a sitting down, place 44 units out from perching edge, 4 units higher
 
-======================================================================*/
+
 void() setup_gargoyle;
-void() monster_gargoyle = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
 
-	self.mdl = "progs/ad171/mon_gargoyle.mdl";
-	if (self.classtype == CT_MONGARGOYLE_MINI)
-		self.mdl = "progs/mon_impling.mdl";
-
-	self.headmdl = "progs/ad171/h_gargoyle.mdl";
-	self.gib1mdl = "progs/ad171/gib_gargwing1.mdl";	// Left wing
-	self.gib2mdl = "progs/ad171/gib_gargwing2.mdl";	// Right wing
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
+void() monster_gargoyle_precache = {
+	precache_model ("progs/ad171/mon_gargoyle.mdl");
+	precache_model ("progs/mon_impling.mdl");
+	precache_model ("progs/ad171/h_gargoyle.mdl");
 	precache_model (MODEL_PROJ_GARGBALL);		// FB growing 8 frames
 	precache_model (MODEL_PROJ_GARGOYLE);		// red/smoke wiz projectile
 	precache_model (MODEL_PROJ_GARGOYLEGRN);	// acid/smoke wiz projectile
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-
-	self.idle_sound = "ad171/gargoyle/idle1.wav";
-	self.idle_soundcom = "ad171/gargoyle/perch1.wav";
-	self.idle_soundcom2 = "ad171/gargoyle/perch2.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_soundcom);
-	precache_sound (self.idle_soundcom2);
-
+	precache_model ("progs/ad171/gib_gargwing1.mdl");
+	precache_model ("progs/ad171/gib_gargwing2.mdl");
+	precache_sound ("ad171/gargoyle/idle1.wav");
+	precache_sound ("ad171/gargoyle/perch1.wav");
+	precache_sound ("ad171/gargoyle/perch2.wav");
 	precache_sound ("ad171/gargoyle/attack1.wav");	// Doom imp fireball!
 	precache_sound ("ad171/gargoyle/swoop1.wav");
 	precache_sound ("ad171/gargoyle/swoop2.wav");
 	precache_sound ("ad171/gargoyle/swoop1hit.wav");
 	precache_sound ("ad171/gargoyle/wings1.wav");
-	
+	precache_sound ("ad171/gargoyle/pain75.wav");
+	precache_sound ("ad171/gargoyle/pain100.wav");
+	precache_sound ("ad171/gargoyle/death1.wav");
+	precache_sound ("ad171/gargoyle/sight1.wav");
+	precache_sound ("ad171/statue/idle1.wav");
+	precache_sound ("ad171/statue/idle2.wav");
+};
+
+// QUAKED monster_gargoyle (0.8 0 0.2) (-16 -16 -24) (16 16 40) AMBUSH STATUE PERCH NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
+// { model(":progs/ad171/mon_gargoyle.mdl"); }
+// Gargoyle, 120 health points.
+// -------- KEYS --------
+// -------- SPAWNFLAGS --------
+// STATUE : Stone statue until triggered (always starts in a perched position)
+// PERCH : Start in a sitting down, place 44 units out from perching edge, 4 units higher
+
+void() monster_gargoyle = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/ad171/mon_gargoyle.mdl";
+	if (self.classtype == CT_MONGARGOYLE_MINI) self.mdl = "progs/mon_impling.mdl";
+	self.headmdl = "progs/ad171/h_gargoyle.mdl";
+	self.gib1mdl = "progs/ad171/gib_gargwing1.mdl";	// Left wing
+	self.gib2mdl = "progs/ad171/gib_gargwing2.mdl";	// Right wing
+	self.idle_sound = "ad171/gargoyle/idle1.wav";
+	self.idle_soundcom = "ad171/gargoyle/perch1.wav";
+	self.idle_soundcom2 = "ad171/gargoyle/perch2.wav";
 	self.pain_sound = "ad171/gargoyle/pain75.wav";
 	self.pain_sound2 = "ad171/gargoyle/pain100.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-	precache_sound ("ad171/gargoyle/death1.wav");
-
 	self.sight_sound = "ad171/gargoyle/sight1.wav";
-	precache_sound (self.sight_sound);
-
-	// Cache gargoyle is a special class used for precache only
-	if (self.classtype != CT_CACHEGARGOYLE) setup_gargoyle();
+	if (self.classtype != CT_CACHEGARGOYLE) setup_gargoyle(); // Cache gargoyle is a special class used for precache only
 };
 
 void() monster_minotaurminion = { 
@@ -452,8 +445,7 @@ void() monster_afrit = {
 
 
 void() setup_gargoyle = {
-	// Randomize gib parts
-	if (random() < 0.5) self.gib1mdl = string_null;
+	if (random() < 0.5) self.gib1mdl = string_null; // Randomize gib parts by removing some
 	else if (random() < 0.5) self.gib2mdl = string_null;
 
 	self.solid = SOLID_NOT;				// No interaction with world
@@ -485,7 +477,6 @@ void() setup_gargoyle = {
 	self.th_checkattack = GargoyleCheckAttack;
 	self.th_pain = garg_pain; 
 	self.th_die = garg_die;
-		
 	if(!self.classtype) self.classtype = CT_MONGARGOYLE;
 	if (!self.classgroup) self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
@@ -496,23 +487,15 @@ void() setup_gargoyle = {
 		self.spawnflags = self.spawnflags - MON_GARGOYLE_PERCH;
 	}	
 
-	// Perched Gargoyles have special idle animation + idle sounds
-	// The AI needs to be setup 40 units forward and 24 units up
-	// to be positioned feet flat on perch surface
 	if (self.spawnflags & MON_GARGOYLE_PERCH) {
+		// Perched Gargoyles have special idle animation + idle sounds
+		// The AI needs to be setup 40 units forward and 24 units up to be positioned feet flat on perch surface.
 		self.th_stand = self.th_walk = garg_perch1;
 		self.th_run = self.th_missile = gargoyle_wakeup;
-	}
-	//----------------------------------------------------------------------
-	// Statue Gargoyles setup in perch position with statue idle sounds
-	// Randomly picks a frame position from perch animation set
-	else if (self.spawnflags & MON_STATUE) {
-		// Setup stone idle sounds
-		self.idle_sound = "ad171/statue/idle1.wav";
-		self.idle_sound2 = "ad171/statue/idle2.wav";
-		precache_sound (self.idle_sound);
-		precache_sound (self.idle_sound2);
-		
+	} else if (self.spawnflags & MON_STATUE) {
+		// Statue Gargoyles setup in perch position with statue idle sounds.  Randomly picks a frame position from perch animation set
+		self.idle_sound = "ad171/statue/idle1.wav"; // Setup stone idle sounds
+		self.idle_sound2 = "ad171/statue/idle2.wav";	
 		self.spawnstatue = TRUE;			// Start as a statue
 		self.th_stand = gargoyle_statue;	// Stone idle pose
 		self.think1 = gargoyle_wakeup;		// Wakeup statue angry at player
@@ -524,43 +507,31 @@ void() setup_gargoyle = {
 		self.pos1_y = $perch24;
 		self.pos1_z = fabs(self.pos1_y - self.pos1_x);
 		self.frame = rint(self.pos1_x + random() * self.pos1_z);
-	}
-	//----------------------------------------------------------------------
-	// Special spawning minion need to start spinning
-	else if (self.classtype == CT_MINIONGARGOYLE) {
+	} else if (self.classtype == CT_MINIONGARGOYLE) {
+		// Special spawning minion need to start spinning
 		self.th_stand = self.th_walk = self.th_run = gargoyle_grow;
 		self.th_missile = SUB_Null;
-	}
-	//----------------------------------------------------------------------
-	// Default gargoyle setup
-	else {
+	} else {
+		// Default gargoyle setup
 		self.th_stand = garg_idle1;
 		self.th_walk = garg_walk1;
 		self.th_run = garg_run1;
 		self.th_missile = garg_fire1;
 	}
-	
 	monster_start();
 };
 
-//----------------------------------------------------------------------------
 // A code way to spawn gargoyles (requires monster_minotaurminion entity)
-//----------------------------------------------------------------------------
-void(vector minion_org, entity minion_targ) minion_gargoyle =
-{
+void(vector minion_org, entity minion_targ) minion_gargoyle = {
 	local entity minion;
 
-	// Check if there is space to spawn entity
-	if (entity_pcontent(minion_org)) return;
+	if (entity_pcontent(minion_org)) return; // Check if there is space to spawn entity
 	
-	// Self = minotaur, there is no egg 
-	update_minioncount(self, 1);			// Update spawn counters
-	
+	update_minioncount(self, 1);			// Update spawn counters.  Self = minotaur, there is no egg 	
 	minion = spawn();
 	minion.classname = "monster_gargoyle";	// For function searching
 	setorigin(minion, minion_org);			// Move to new location
 	minion.owner = self;					// Spawner Parent Link
-	
 	minion.effects = minion.flags = 0;		// make sure are blank
 	minion.gibondeath = 1;					// Always gib on death
 	minion.classtype = CT_MINIONGARGOYLE;	// Special minion class
@@ -569,22 +540,17 @@ void(vector minion_org, entity minion_targ) minion_gargoyle =
 	minion.classgroup = CG_DEMON;			// Don't turn on master
 	minion.minion_active = TRUE;			// Minion flag
 	minion.bodyfadeaway = TRUE;				// Get rid of body
-	
-	// Adopt parameters from host spawner
-	minion.infightextra = self.infightextra;
-	
+	minion.infightextra = self.infightextra; // Adopt parameters from host spawner
 	minion.mdl = "progs/ad171/mon_gargoyle.mdl";
 	minion.headmdl = "progs/ad171/h_gargoyle.mdl";
 	minion.gib1mdl = "progs/ad171/gib_gargwing1.mdl";	// Left wing
 	minion.gib2mdl = "progs/ad171/gib_gargwing2.mdl";	// Right wing
-
 	minion.pain_sound = "ad171/gargoyle/pain75.wav";
 	minion.pain_sound2 = "ad171/gargoyle/pain100.wav";
 	minion.idle_sound = "ad171/gargoyle/idle1.wav";
 	minion.idle_soundcom = "ad171/gargoyle/perch1.wav";
 	minion.idle_soundcom2 = "ad171/gargoyle/perch2.wav";
 	minion.sight_sound = "ad171/gargoyle/sight1.wav";
-	
 	minion.nextthink = time + 0.01;
 	minion.think = setup_gargoyle;
 };

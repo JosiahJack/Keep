@@ -6,10 +6,10 @@ float IT_SUPER_NAILGUN    	= 8.000;		//Correct for standard HUD & HIP & DOE			W
 float IT_GRENADE_LAUNCHER   = 16.000;		//Correct for standard HUD & HIP & DOE			W
 float IT_ROCKET_LAUNCHER    = 32.000;		//Correct for standard HUD & HIP & DOE			W
 float IT_LIGHTNING    		= 64.000;		//Correct for standard HUD & HIP & DOE			W
-float IT_SHELLS    			= 128.000;		//Correct for DOE HUD					I
-float IT_NAILS    			= 256.000;		//Correct for DOE HUD					I
-float IT_ROCKETS    		= 512.000;		//Correct for DOE HUD					I
-float IT_CELLS    			= 1024.000;		//Correct for DOE HUD					I
+// float IT_SHELLS    			= 128.000;		//Correct for DOE HUD					I
+// float IT_NAILS    			= 256.000;		//Correct for DOE HUD					I
+// float IT_ROCKETS    		= 512.000;		//Correct for DOE HUD					I
+// float IT_CELLS    			= 1024.000;		//Correct for DOE HUD					I
 float IT_AXE    			= 2048.000;		//Correct for DOE HUD					W
 float IT_LAVA_NAILGUN    	= 4096.000;		//Correct for DOE HUD (okay for standard and HIP)	W
 float IT_LAVA_SUPER_NAILGUN = 8192.000;		//Correct for DOE HUD (okay for standard and HIP)	W
@@ -27,16 +27,16 @@ float IT_EXTRA_WEAPON  		= 8388608.000;		//Correct for DOE HUD					W
 float IT2_ARMOR1    		= 1.000;		//Correct for DOE HUD					I
 float IT2_ARMOR2    		= 2.000;		//Correct for DOE HUD					I
 float IT2_ARMOR3    		= 4.000;		//Correct for DOE HUD					I
-float IT2_LAVA_NAILS    	= 8.000;		//Correct for DOE HUD					I
-float IT2_PLASMA_AMMO   	= 16.000;		//Correct for DOE HUD					I
-float IT2_MULTI_ROCKETS    	= 32.000;		//Correct for DOE HUD					I
+// float IT2_LAVA_NAILS    	= 8.000;		//Correct for DOE HUD					I
+// float IT2_PLASMA_AMMO   	= 16.000;		//Correct for DOE HUD					I
+// float IT2_MULTI_ROCKETS    	= 32.000;		//Correct for DOE HUD					I
 float IT2_SHIELD    		= 64.000;		//Correct for DOE HUD					I
 float IT2_CHAINLIGHTNING	= 128.000;		//Zerstorer chain lightning				W	(I Antigrav for DOE HUD)
 float IT2_SUPERHEALTH    	= 256.000;		//Correct for DOE HUD					I(available for a new weapon)
 float IT2_EARTHQUAKE    	= 512.000;		//Correct for DOE HUD					I(available for a new weapon)
 float IT2_V_SPHERE    		= 1024.000;		//Correct for DOE HUD					I(available for a new weapon)
-float IT2_BOLTS		    	= 2048.000;		//Keep specific						I
-float IT2_POISON    		= 4096.000;		//EMTPY SLOT						I
+// float IT2_BOLTS		    	= 2048.000;		//Keep specific						I
+// float IT2_POISON    		= 4096.000;		//EMTPY SLOT						I
 float HIP_IT2_WETSUIT    	= 8192.000;		//Keep specific (modified from HIP)			I
 float HIP_IT2_EMPATHY_SHIELDS= 16384.000;		//Keep specific (modified from HIP)			I
 float HIP_IT2_HORN_OF_CONJURING= 32768.000;		//Keep specific (modified from HIP)			I
@@ -74,33 +74,35 @@ float IT_ARTPIERCE			= 4194304;		//22 NG/SNG Nails travel through enemy bodies
 float IT_ARTTOME			= 8388608;		//23 Tome of Power (event trigger)
 //=======================================SERVERFLAGS======================================================
 float SVR_RUNE_ALL		= 15;		// Runes 1-4 (together)
-float SVR_RUNEFLAG		= 255;		// Bits  1- 8 - Runes and Keys
-float SVR_LOWFLAG		= 65535;		// Bits  1-16 - rune keys and spawn settings
-float SVR_WORLDFLAG 	= 65280;	// Bits  9-16 - default/worldspawn options
-float SVR_HIGHFLAG		= 8323072;	// Bits 17-23 - these options carry over
+float SVR_RUNEFLAG		= 255;		// Bits  1- 7 - Runes and Keys
+float SVR_LOWFLAG		= 131071;	// Bits  1-16 - rune keys and spawn settings
+float SVR_WORLDFLAG 	= 130816;	// Bits  8-17 - default/worldspawn options
+float SVR_HIGHFLAG		= 8257536;	// Bits 18-23 - these options carry over
 
-float SVR_RUNE_KEY1 	= 1;		// Rune 1
-float SVR_RUNE_KEY2		= 2;		// Rune 2
-float SVR_RUNE_KEY3		= 4;		// Rune 3
-float SVR_RUNE_KEY4		= 8;		// Rune 4
-float SVR_SPAWN_BIT1	= 16;		// 3 bit spawn location
-float SVR_SPAWN_BIT2	= 32;		// Supports 7 locations 001-111
-float SVR_SPAWN_BIT3	= 64;		// Set via trigger_change_level
-float SVR_LIVE 			= 128;			// Bit      8 - Serverflag has active data
-float SVR_ITEMOFFSET 	= 256;		// Toggle item offset (corner/center)
-float SVR_SPRPARTON 	= 512;		// Always use sprite particles (default OFF)
-float SVR_PARTICLES 	= 1024;		// Turn ON particle system (default OFF)
-float SVR_DEVHELPER 	= 2048;		// Turn OFF Dev helpers (marks+arrows)
-float SVR_UPDAXE 		= 4096;		// Upgrade Axe, +75% dmg, gib zombies
-float SVR_UPDSSG		= 8192;		// Upgrade Super Shotgun, +50% dmg, uses 3 shells
-float SVR_UPDLG 		= 16384;		// Upgrade Lightning Gun, Direct+Splashdamage
-float SVR_ITEMROTATE 	= 32768;		// Always randomly rotate ammo items
-float SVR_SHOTGPROJ		= 131072;	// Turn OFF Shotgun projectiles
-float SVR_SHOTGCASE		= 262144;	// Turn OFF Shotgun casings
-float SVR_ZAWARE		= 524288;		// Turn OFF Z aware monsters
-float SVR_FOOTSTEP		= 1048576;	// Turn OFF Enemy/player footsteps
-float SVR_AIPATH		= 2097152;		// Turn OFF AI path corner extra info
-float SVR_LIQDAM		= 4194304;		// Turn OFF Liquid damage checks for monsters
+float SVR_RUNE_KEY1 	= 1;		//0 Rune 1
+float SVR_RUNE_KEY2		= 2;		//1 Rune 2
+float SVR_RUNE_KEY3		= 4;		//2 Rune 3
+float SVR_RUNE_KEY4		= 8;		//3 Rune 4
+float SVR_SPAWN_BIT1	= 16;		//4 3 bit spawn location
+float SVR_SPAWN_BIT2	= 32;		//5 Supports 7 locations 001-111
+float SVR_SPAWN_BIT3	= 64;		//6 Set via trigger_change_level
+float SVR_LIVE 			= 128;		//7 Bit      8 - Serverflag has active data
+float SVR_ITEMOFFSET 	= 256;		//8 Toggle item offset (corner/center)
+float SVR_SPRPARTON 	= 512;		//9 Always use sprite particles (default OFF)
+float SVR_PARTICLES 	= 1024;		//10 Turn ON particle system (default OFF)
+float SVR_DEVHELPER 	= 2048;		//11 Turn OFF Dev helpers (marks+arrows)
+float SVR_UPDAXE 		= 4096;		//12 Upgrade Axe, +75% dmg, gib zombies
+float SVR_UPDSSG		= 8192;		//13 Upgrade Super Shotgun, +50% dmg, uses 3 shells
+float SVR_UPDLG 		= 16384;	//14 Upgrade Lightning Gun, Direct+Splashdamage
+float SVR_ITEMROTATE 	= 32768;	//15 Always randomly rotate ammo items
+float SVR_DRAKEMUSIC	= 65536;	//16 Enable secondary music system (Drake Feature)
+float SVR_SHOTGPROJ		= 131072;	//17 Turn OFF Shotgun projectiles
+float SVR_SHOTGCASE		= 262144;	//18 Turn OFF Shotgun casings
+float SVR_ZAWARE		= 524288;	//19 Turn OFF Z aware monsters
+float SVR_FOOTSTEP		= 1048576;	//20 Turn OFF Enemy/player footsteps
+float SVR_AIPATH		= 2097152;	//21 Turn OFF AI path corner extra info
+float SVR_LIQDAM		= 4194304;	//22 Turn OFF Liquid damage checks for monsters
+// float UNUSED			= 8388608;	//23
 
 //wad image names in array form, for easier access.
 static string number[10] = {
@@ -395,11 +397,6 @@ static void Hud_DrawSBar(vector pos, vector virtsize) {
 		}
 
 		pos = virtsize - [24,24];
-		// if (sitems & IT_SHELLS) 			Hud_PicOrModel(pos, "gfx/sb_shells", "maps/b_shell1.bsp", 0, 80);
-		// else if (sitems & IT_NAILS)			Hud_PicOrModel(pos, "gfx/sb_nails", "maps/b_nail1.bsp", 0, 80);
-		// else if (sitems & IT_ROCKETS)		Hud_PicOrModel(pos, "gfx/sb_rocket", "maps/b_rock1.bsp", 0, 80);
-		// else if (sitems & IT_CELLS)			Hud_PicOrModel(pos, "gfx/sb_cells", "maps/b_batt1.bsp", 0, 80);
-
 		if (shackbank) {
 			if (sweapon == IT_ICE) drawpic(pos, "gfx/r_ammoelemental", '24 24 0', '1 1 1', 1, 0);
 			// else if (sweapon == IT_MACE)

@@ -641,88 +641,69 @@ void() deflect_die =
 	}
 };
 
-/*======================================================================
- QUAKED monster_deflector (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
+void() monster_deflector_precache = {
+	precache_model ("progs/ad181/mon_deflector.mdl");
+	precache_model ("progs/ad181/h_deflector.mdl");
+	precache_model ("progs/ad171/w_enforcergun.mdl");
+	precache_model (MODEL_PROJ_LASERBLUE); // Range attack (Blue laser model)
+	precache_sound (SOUND_LASER_FIRE);
+	precache_sound (SOUND_LASER_HIT);
+	precache_sound (SOUND_LASER_RIC);	
+	PreCache_Flame();
+	precache_model (MODEL_PROJ_ROCKET); // Range attack (rocket model)
+	precache_sound ("ad171/wraith/attack1.wav"); // Melee attack (Fire/plasma)
+	precache_sound ("ad181/justice/flame_fire.wav"); // New YELLOW version (flame/rocket)
+	precache_sound ("ad171/wraith/attack1_explode.wav"); // Melee attack (Projectile Flames)
+	precache_sound ("ad181/deflector/idle1.wav");
+	precache_sound ("ad181/deflector/sight1.wav");
+	precache_sound ("ad181/deflector/sight2.wav");
+	precache_sound ("ad181/deflector/sight3.wav");
+	precache_sound ("ad181/deflector/shield_off.wav"); // Shield off, shield on!
+	precache_sound ("ad181/deflector/shield_on.wav");
+	precache_sound ("ad181/deflector/rocket_load.wav"); // Projectile fire and impact (used in projectiles)
+	precache_sound ("ad181/deflector/rocket_fire.wav");
+	precache_sound ("ad181/deflector/rocket_hit.wav");
+	precache_sound (SOUND_PLASMA_LOAD); // Extra load/fire sounds
+	precache_sound (SOUND_PLASMA_FIRE);
+	precache_sound (SOUND_PLASMA_HIT);
+	precache_sound ("ad181/deflector/pain1.wav");
+	precache_sound ("ad181/deflector/pain2.wav");
+	precache_sound ("ad181/deflector/death1.wav");
+	precache_sound ("ad181/deflector/death2.wav");
+};
+
+// QUAKED monster_deflector (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_deflector = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.mdl = "progs/ad181/mon_deflector.mdl";
 	self.headmdl = "progs/ad181/h_deflector.mdl";
 	self.gib1mdl = "progs/ad171/w_enforcergun.mdl";	// Unique weapon
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
 	self.gib1sound = GIB_IMPACT_WOOD;	// Gib sound for gun
-
-	// Melee attack (Fire/plasma)
-	precache_sound ("ad171/wraith/attack1.wav");
 
 	// Alternative spawnflag, lasers instead of mines
 	if (self.spawnflags & MON_DEFLECTOR_PLASMA) {
 		// Original BLUE version (plasma/rocket)
-		self.exactskin = 1;		// Blue armour
-		self.gib1skin = 3;		// Blue weapon
+		self.exactskin = 1;	// Blue armour
+		self.gib1skin = 3;// Blue weapon
 		self.part_trstyle = PARTICLE_TRAIL_BLUE;
-		self.dpp_name = DPP_TRAILPARTB;			// Projectile particles
-		// Range attack (Blue laser model)
-		precache_model (MODEL_PROJ_LASERBLUE);
-		precache_sound (SOUND_LASER_FIRE);
-		precache_sound (SOUND_LASER_HIT);
-		precache_sound (SOUND_LASER_RIC);
-	}
-	else {
-		// New YELLOW version (flame/rocket)
-		// Melee attack (Projectile Flames)
-		PreCache_Flame();
-		precache_sound ("ad181/justice/flame_fire.wav");
-		precache_sound ("ad171/wraith/attack1_explode.wav");
-		// Range attack (rocket model)
-		precache_model (MODEL_PROJ_ROCKET);
-	}
-	
+		self.dpp_name = DPP_TRAILPARTB; // Projectile particles
+		self.ammo_cells = rint(random()*3);
+	} else self.ammo_rockets = rint(random()*3);
+
 	self.idle_sound = "ad181/deflector/idle1.wav";
-	precache_sound (self.idle_sound);
 	self.sight_sound = "ad181/deflector/sight1.wav";
 	self.sight_sound2 = "ad181/deflector/sight2.wav";
 	self.sight_sound3 = "ad181/deflector/sight3.wav";
-	precache_sound (self.sight_sound);
-	precache_sound (self.sight_sound2);
-	precache_sound (self.sight_sound3);
-	
-	// Shield off, shield on!
-	precache_sound ("ad181/deflector/shield_off.wav");
-	precache_sound ("ad181/deflector/shield_on.wav");
-
-	// Projectile fire and impact (used in projectiles)
-	precache_sound ("ad181/deflector/rocket_load.wav");
-	precache_sound ("ad181/deflector/rocket_fire.wav");
-	precache_sound ("ad181/deflector/rocket_hit.wav");
-
-	// Extra load/fire sounds
-	precache_sound (SOUND_PLASMA_LOAD);
-	precache_sound (SOUND_PLASMA_FIRE);
-	precache_sound (SOUND_PLASMA_HIT);
-
-	// Plenty of death and pain sounds
-	self.pain_sound = "ad181/deflector/pain1.wav";
+	self.pain_sound = "ad181/deflector/pain1.wav"; // Plenty of death and pain sounds
 	self.pain_sound2 = "ad181/deflector/pain2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
 	self.death_sound = "ad181/deflector/death1.wav";
 	self.death_sound2 = "ad181/deflector/death2.wav";
-	precache_sound (self.death_sound);
-	precache_sound (self.death_sound2);
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
 	if (self.health < 1) self.health = 250;
-	// The Deflector is really just a monster with lots of attacks and HP++
-	// It don't need bossflag protection, the combat is standard stuff
-	//self.bossflag = TRUE;				// Boss flag (like FL_MONSTER)
-
 	self.gibhealth = -50;
 	self.gibbed = FALSE;				// Starts complete
 	self.pain_flinch = 400;				// High pain threshold
@@ -736,26 +717,24 @@ void() monster_deflector = {
 	self.meleeoffset = '8 8 28';		// Shoulder gun
 	self.attack_offset = '28 8.5 16';	// End of Gun
 	self.deathstring = " was crushed by the Deflector\n";
-	// Setup default timer/counters
-	self.attack_count = self.attack_timer = 0;
+	self.attack_count = self.attack_timer = 0; // Setup default timer/counters
 	self.part_exitpuff = self.part_exitsound = TRUE;
 	
 	// Setup default burst mode (=-1 to disable, def=TRUE)
 	if (self.attack_rage < 0) self.attack_rage = FALSE;
 	else if (self.attack_rage >= 0) self.attack_rage = TRUE;
-	// Default is half flame limit for burst mode
-	if (self.attack_rage == TRUE && self.proj_limit == 0)
-		self.proj_limit = PROJ_MAXLIMIT * 0.5;
+
+	if (self.attack_rage == TRUE && self.proj_limit == 0) self.proj_limit = PROJ_MAXLIMIT * 0.5; // Default is half flame limit for burst mode
 	
 	// Plasma and flame have different projectile limits
 	if (self.spawnflags & MON_DEFLECTOR_PLASMA) {
-		if (self.proj_attqty_z <= 0) self.proj_attqty_z = MONAI_DEFLECTMAX; }
-	else {
+		if (self.proj_attqty_z <= 0) self.proj_attqty_z = MONAI_DEFLECTMAX;
+	} else {
 		// Setup default Proj Count = Base (X) * (Skill * Y) Maximum = Z
-		if (CheckZeroVector(self.proj_attqty)) self.proj_attqty = '3 2 7'; }
+		if (CheckZeroVector(self.proj_attqty)) self.proj_attqty = '3 2 7';
+	}
 
-	// ALL ammo resistances done in shield functions
-	deflect_shieldoff();
+	deflect_shieldoff(); // ALL ammo resistances done in shield functions
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
@@ -769,11 +748,8 @@ void() monster_deflector = {
 	self.th_missile = deflector_range;
 	self.th_pain = deflect_pain;
 	self.th_die = deflect_die;
-
 	self.classtype = CT_MONDEFLECTOR;
 	self.classgroup = CG_DCAPTAIN;
 	self.classmove = MON_MOVEWALK;
-
-	// Start monster (default)
 	monster_start();
 };

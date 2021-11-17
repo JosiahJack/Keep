@@ -25,7 +25,7 @@ void() huntress_create_attachment =
 	if (!self.attachment2) {
 		self.attachment2 = spawn();
 		self.attachment2.classtype = CT_ATTACHMENT;
-		setmodel(self.attachment2, "progs/huntress/cutscene_chalice.mdl");
+		setmodel(self.attachment2, "progs/redfield/huntress/cutscene_chalice.mdl");
 		setsize(self.attachment2,VEC_ORIGIN, VEC_ORIGIN);
 		setorigin(self.attachment2, self.origin);
 		self.attachment2.movetype = MOVETYPE_NOCLIP;
@@ -44,7 +44,7 @@ void() huntress_update_attachment =
 
 void() create_rakuyo = {
 	if (self.attachment.model == "") {
-		setmodel(self.attachment, "progs/huntress/cutscene_rakuyo.mdl");
+		setmodel(self.attachment, "progs/redfield/huntress/cutscene_rakuyo.mdl");
 	}
 };
 
@@ -127,7 +127,7 @@ void() idle_checktime =
 //----------------------------------------------------------------------
 void()	huntressmodel_idle1 = [ $drink37,	huntressmodel_idle2 	] {huntress_create_attachment(); huntress_update_attachment(); huntressmodel_stand(); 
 self.skin = 0; huntressmodel_rakuyo(); particle_explode(self.origin + '-12 4 8', 8, 0.3+random()*0.5, PARTICLE_BURST_WHITE, PARTICLE_BURST_CENTER);
-	sound(self, CHAN_VOICE, "huntress/dialogue2.wav", 1, ATTN_NORM); };
+	sound(self, CHAN_VOICE, "redfield/huntress/dialogue2.wav", 1, ATTN_NORM); };
 void()	huntressmodel_idle2 = [ $drink36,	huntressmodel_idle3 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
 void()	huntressmodel_idle3 = [ $drink35,	huntressmodel_idle4 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
 void()	huntressmodel_idle4 = [ $drink34,	huntressmodel_idle5 	] {huntress_update_attachment(); huntressmodel_stand(); huntressmodel_rakuyo();};
@@ -268,20 +268,19 @@ void() huntressmodel_on = {
 /*======================================================================
 QUAKED monster_huntressmodel (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 ======================================================================*/
-void() monster_huntressmodel =
-{
+void() monster_huntressmodel = {
 	if (deathmatch) { remove(self); return; }
 
-	self.mdl = "progs/huntress/cutscene_huntress.mdl";			// Animated Huntress cutscene model
+	self.mdl = "progs/redfield/huntress/cutscene_huntress.mdl";			// Animated Huntress cutscene model
 
 	precache_model (self.mdl);
 	
-	precache_sound ("huntress/dialogue2.wav");
+	precache_sound ("redfield/huntress/dialogue2.wav");
 
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;	
 
-	precache_model ("progs/huntress/cutscene_rakuyo.mdl");
-	precache_model ("progs/huntress/cutscene_chalice.mdl");
+	precache_model ("progs/redfield/huntress/cutscene_rakuyo.mdl");
+	precache_model ("progs/redfield/huntress/cutscene_chalice.mdl");
 		
 	self.nomonstercount = TRUE;
 	self.gibhealth = MON_NEVERGIB;
@@ -289,11 +288,11 @@ void() monster_huntressmodel =
 	self.yaw_speed = 20;
 
 	// Custom feet sounds
-	self.stepc1 = "huntress/step1.wav";
-	self.stepc2 = "huntress/step2.wav";
-	self.stepc3 = "huntress/step3.wav";
-	self.stepc4 = "huntress/step4.wav";
-	self.stepc5 = "huntress/step5.wav";
+	self.stepc1 = "redfield/huntress/step1.wav";
+	self.stepc2 = "redfield/huntress/step2.wav";
+	self.stepc3 = "redfield/huntress/step3.wav";
+	self.stepc4 = "redfield/huntress/step4.wav";
+	self.stepc5 = "redfield/huntress/step5.wav";
 	precache_sound (self.stepc1);
 	precache_sound (self.stepc2);
 	precache_sound (self.stepc3);
@@ -324,5 +323,4 @@ void() monster_huntressmodel =
 	self.movetype = MOVETYPE_NONE;			// Stationary
 	self.solid = SOLID_NOT;				// no world interaction
 	setmodel (self, "");				// invisible
-
 };

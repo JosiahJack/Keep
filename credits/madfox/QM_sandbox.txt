@@ -1,0 +1,43 @@
+==============================================================
+Title                  : QMastersandbox
+Filename               : Q1M_sandbox.zip
+Map                    : /
+Author                 : Madfox
+Email Adress           : catweazel@kpnmail.nl
+Description            : Static entity
+
+Additional Credits to  : ID Software
+
+==============================================================
+
+* Play Inormation *
+
+New  Q1 Model  : sandbox.mdl & starbox.mdl 
+qC             : no
+
+==============================================================
+
+* Construction *
+
+Base                  : new quake1.mdl of a sandbox.Corrected.
+Build Time            : april's fool.
+Editor(s) Used        : Qmle Wally AM2016.
+Use                   : for use in a mapfile call info_null and 
+.                     : change into sandbox.  
+Known Bugs            : 240 frames, large subject.second version.
+.                     : changed skinfile from 163x308 >200x378.
+Thanks                : iD Software. 
+GameOption            : Place in a subdirectory Quake with progs.dat 
+                      : or compile your own with the sandbox.md
+                  
+
+You may distribute and modiy this level, as long as you give
+me credit, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 21 may 2021.
+
+==============================================================
+
+          

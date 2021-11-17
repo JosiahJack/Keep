@@ -144,13 +144,7 @@ void() sentinel_die = {
 	self.nextthink = time + 0.100;
 };
 
-void() monster_sentinel = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-		
-	self.mdl = "progs/quoth/sentinel.mdl";
+void() monster_sentinel_precache = {
 	precache_model("progs/quoth/sentinel.mdl");
 	precache_model("progs/ad171/proj_laz.mdl");
 	precache_model("progs/quoth/gib.mdl");
@@ -164,7 +158,13 @@ void() monster_sentinel = {
 	precache_sound("quoth/sentinel/widle1.wav");
 	precache_sound("quoth/sentinel/wpain.wav");
 	precache_sound("quoth/sentinel/wsight.wav");
+};
 
+void() monster_sentinel = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+		
+	self.mdl = "progs/quoth/sentinel.mdl";
 	self.gib1mdl = "progs/quoth/gib.mdl";
 	self.gib2mdl = "progs/quoth/wreckage.mdl";
 	self.sight_sound = "quoth/sentinel/wsight.wav";
@@ -178,9 +178,7 @@ void() monster_sentinel = {
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
 	if (self.health < 1) self.health = 150;
-
 	if (self.spawnflags & 4) self.skin = 1;
-
 	if (self.deathstring == "") self.deathstring = " was scorched by a Sentinel\n";
 	self.th_run = sentinel_run1;
 	self.th_walk = sentinel_writhe1;
@@ -190,7 +188,6 @@ void() monster_sentinel = {
 	self.th_pain = sentinel_pain;
 	self.th_die = sentinel_die;
 	self.height = -16;
-
     self.hittype    = HIT_METAL;
 
 	// Check for random rotation setup and angle limits
@@ -204,8 +201,7 @@ void() monster_sentinel = {
 
 	self.gibtype = GIBTYPE_METAL;
 	self.classtype = CT_MONSENTINEL;
-	self.classgroup = CG_ROBOT;			// One big happy ogre family!
+	self.classgroup = CG_ROBOT;			// One big happy robot family!
 	self.classmove = MON_MOVEFLY;
-
 	monster_start();
 };

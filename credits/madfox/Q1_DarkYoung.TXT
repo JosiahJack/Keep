@@ -1,0 +1,42 @@
+==============================================================
+Filename               : Q1_DarkYoung.zip
+File                   : DarkYoung.mdl / Q1_DarkYoung.txt /
+                       : DarkYoung_ext.mdl.
+Author                 : Madfox
+Email Adress           : catweazel@kpnhome.nl
+Description            : Quake 1 monster
+
+Additional Credits to  : ID Software
+
+==============================================================
+
+* Play Inormation *
+
+Level Name              : /
+Single Player           : /
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Monsters            : yes
+New Sounds              : /
+qC                      : /
+
+==============================================================
+
+* Construction *
+
+Base              : original made for the RMQ mod.Take care:
+                  : two mdl files. 
+                  : DarkYoung.mdl ~ original version
+                  : Dark_Young_ext ~ other version (Larger).
+Build Time        : good times 2009.
+Editor(s) Used    : Qmle Wally Quark4.07 AM2005
+Known Bugs        : no
+GameOption        : Not yet qc moted.
+
+You may distribute  but keep file intact,  give me some credit
+when distributing, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 4 februari 2021  

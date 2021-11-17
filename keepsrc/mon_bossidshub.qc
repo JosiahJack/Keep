@@ -170,10 +170,8 @@ void() finale_3 =
 //----------------------------------------------------------------------
 // Called after thrash animation (last frame)
 //----------------------------------------------------------------------
-void() finale_4 =
-{
-	// Play exploding sound
-	sound (self, CHAN_VOICE, "boss2/pop2.wav", 1, ATTN_NORM);
+void() finale_4 = {
+	sound (self, CHAN_VOICE, "boss2/pop2.wav", 1, ATTN_NORM); // Play exploding sound
 	self.oldorigin = self.origin;
 
 	// Setup temp entity for directional force for gibs
@@ -210,39 +208,22 @@ void() finale_4 =
 	self.movelast.angles = '0 290 0';
 	self.movelast.frame = 1;
 
-	remove(self);
-
 	// switch cd track
 	WriteByte (MSG_ALL, SVC_CDTRACK);
 	WriteByte (MSG_ALL, 3);
 	WriteByte (MSG_ALL, 3);
-	lightstyle(0, "m");	
+	lightstyle(0, "m");
+
+	remove(self);	
 };
 
-//============================================================================
-void (entity inflictor, entity attacker, float damage) idshub_nopain =
-{
-	self.health = self.max_health;
-};
+void (entity inflictor, entity attacker, float damage) idshub_nopain = { self.health = self.max_health; };
 
-/*============================================================================
- QUAKED monster_oldone (1 0 0) (-16 -16 -24) (16 16 32)
-============================================================================*/
+// QUAKED monster_oldone (1 0 0) (-16 -16 -24) (16 16 32)
 void() monster_oldone = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/oldone.mdl";
-	precache_model (self.mdl);
-
-	// idle/sight not used
-	precache_sound ("boss2/idle.wav");
-	precache_sound ("boss2/sight.wav");
-	
-	// finale_3/finale_4 stages
-	precache_sound ("boss2/death.wav");
-	precache_sound ("boss2/pop2.wav");
-
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	// Use to be 128 square, reduced size to help with
@@ -251,10 +232,8 @@ void() monster_oldone = {
 	self.bbmaxs = '96 96 192';
 	self.bboxtype = BBOX_CUSTOM;	// Custom BBox size
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
-
 	setmodel(self, self.mdl);					// Setup model
 	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
-
 	self.no_liquiddmg = TRUE;		// no slime/lava damage
 	self.gibbed = FALSE;			// Still in one piece
 	
@@ -264,11 +243,9 @@ void() monster_oldone = {
 	self.reflectnails = TRUE;		// Reflect nail projectiles
 	self.reflectaxe = TRUE;			// Prevent axe damage
 
-	// Check passive system for exceptions
-	setup_passivestate(self);
-
+	
+	setup_passivestate(self); // Check passive system for exceptions
 	if (self.deathstring == "")  self.deathstring = " became one with Shub-Niggurath\n";
-
 	self.classtype = CT_MONIDSHUB;
 	self.classgroup = CG_BOSS;
 	self.health = self.max_health = 40000;		// kill by telefrag
@@ -278,6 +255,8 @@ void() monster_oldone = {
 	self.th_pain = idshub_nopain;
 	self.th_die = finale_1;
 	shub = self;
-	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-	AddToTotals(self);
+
+	self.th_stand = self.th_walk = self.th_run = SUB_Null;
+	self.th_missile = SUB_Null;
+	monster_start();
 };

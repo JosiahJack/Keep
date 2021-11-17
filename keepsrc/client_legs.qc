@@ -43,8 +43,8 @@ var float autocvar_player_legs_model = 2;		// set cvar 'player_legs_model' defau
 
 // Update the legs
 void() player_legs_animation = {
-	if ((cvar("chase_active")) || (self.owner.invisible_finished) || self.owner.in_a_vehicle) {	// if switched into 3rd person mode while playing
-		self.alpha = 0.00001; dprint("Hiding legs\n");
+	if ((cvar("chase_active")) || (self.owner.invisible_finished) || self.owner.in_a_vehicle || frame_pause()) {	// if switched into 3rd person mode while playing
+		self.alpha = 0.00001;
 	} else
 		self.alpha = 1;
 

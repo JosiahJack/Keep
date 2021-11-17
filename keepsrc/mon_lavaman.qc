@@ -258,49 +258,52 @@ void () lavaman_awake = {
    lavaman_rise1 ();
 };
 
+void () monster_lava_man_precache = {
+	precache_model ("progs/rogue/mon_lavaman.mdl");
+	precache_model (MODEL_PROJ_LAVA);
+	precache_sound ("boss1/out1.wav");
+	precache_sound ("boss1/sight1.wav");
+	precache_sound ("boss1/throw.wav");
+	precache_sound ("boss1/pain.wav");
+	precache_sound ("boss1/death.wav");
+};
+
 void () monster_lava_man = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 
-   self.mdl = "progs/rogue/mon_lavaman.mdl";
-   precache_model (self.mdl);
-   precache_model (MODEL_PROJ_LAVA);
-   precache_sound ("boss1/out1.wav");
-   precache_sound ("boss1/sight1.wav");
-   precache_sound ("boss1/throw.wav");
-   precache_sound ("boss1/pain.wav");
-   precache_sound ("boss1/death.wav");
-
-   self.sight_sound = "boss1/sight1.wav";
-   self.solid = SOLID_NOT;
-   self.movetype = MOVETYPE_NONE;
-   if (self.bboxtype < 1) self.bboxtype = BBOX_GIANT;
-   if (self.health < 1) self.health = 1500;
-   if (self.yaw_speed < 1) self.yaw_speed = 20.000;  // Lumbering turn
-   self.gibhealth = MON_NEVERGIB;
-   self.gibbed = FALSE;
-   self.pain_flinch = 80;
-   self.blockudeath = TRUE;
-
-   // Always reset Ammo Resistance to be consistent
-   self.resist_shells = self.resist_nails = 0;
-   self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
-   self.th_stand = lavaman_awake;
-   self.th_walk = lavaman_awake;
-   self.th_run = lavaman_awake;
-
-   self.classtype = CT_MONLAVAMAN;
-   self.classgroup = CG_DEMON;
-   self.classmove = MON_MOVEWALK;
-   droptofloor();
-   self.origin = self.origin + '0 0 32';
-	if (self.deathstring == "")  self.deathstring = " fries in Hephaestus' fury\n";
-   monster_start ();
+	self.mdl = "progs/rogue/mon_lavaman.mdl";
+	self.sight_sound = "boss1/sight1.wav";
+	self.solid = SOLID_NOT;
+	self.movetype = MOVETYPE_NONE;
+	if (self.bboxtype < 1) self.bboxtype = BBOX_GIANT;
+	if (self.health < 1) self.health = 1500;
+	if (self.yaw_speed < 1) self.yaw_speed = 20.000;  // Lumbering turn
+	self.gibhealth = MON_NEVERGIB;
+	self.gibbed = FALSE;
+	self.pain_flinch = 80;
+	self.blockudeath = TRUE;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
+	self.resist_fire = self.resist_lava_nails = 1;
+	if (self.targetname != "") {
+		self.th_stand = lavaman_awake;
+		self.th_walk = lavaman_awake;
+		self.th_run = lavaman_awake;
+	} else {
+		self.th_stand = lavaman_idle1;
+		self.th_walk = lavaman_walk1;
+		self.th_run = lavaman_run1;
+	}
+	self.ideal_yaw = (self.angles * '0.000 1.000 0.000');
+	self.view_ofs = '0.000 0.000 48.000';
+	self.th_missile = lavaman_fire1;
+	self.th_pain = lavaman_pain;
+	self.th_die = lavaman_death1;
+	self.th_melee = lavaman_fire1;
+	self.attack_offset = (self.origin + '0.000 0.000 96.000');
+	self.th_checkattack = LavaManCheckAttack;
+	self.classtype = CT_MONLAVAMAN;
+	self.classgroup = CG_BOSS;
+	self.classmove = MON_MOVEWALK;
+	if (self.deathstring == "") self.deathstring = " fries in Hephaestus' fury\n";
+	monster_start();
 };

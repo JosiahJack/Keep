@@ -1,0 +1,41 @@
+==============================================================
+Title                  : FoxRune
+Filename               : Q1_foxrune.zip
+Author                 : Madfox
+Email Adress           : catweazel@kpnmail.nl
+Description            : New Rune for QUake1
+
+Additional Credits to  : ID Software
+
+==============================================================
+
+* Play Inormation *
+
+Level Name              : /
+Single Player           : /
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Model               : yes
+New Sounds              : /
+New Weapon              : /
+qC                      : /
+
+==============================================================
+
+* Construction *
+
+Base              : based on a free iditic idea 
+Build Time        : other toppic
+Editor(s) Used    : Quark Qmle Wally Quark6.3 AM2005
+Known Bugs        : /
+Thanks            : curiosity
+Install           : Modify a qc and make it glide.
+                
+
+You may distribute and modify this file, as long as you give
+me credit, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 9 februari 2021  

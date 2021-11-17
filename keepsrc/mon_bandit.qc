@@ -1,38 +1,20 @@
-/*
-==============================================================================
-
-SOLDIER / PLAYER
-
-==============================================================================
-*/
-
 $cd id1/models/soldier3
 $origin 0 -6 24
 $base base        
 $skin skin
-
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8
-
 $frame death1 death2 death3 death4 death5 death6 death7 death8
 $frame death9 death10
-
 $frame deathc1 deathc2 deathc3 deathc4 deathc5 deathc6 deathc7 deathc8
 $frame deathc9 deathc10 deathc11
-
 $frame load1 load2 load3 load4 load5 load6 load7 load8 load9 load10 load11
-
 $frame pain1 pain2 pain3 pain4 pain5 pain6
-
 $frame painb1 painb2 painb3 painb4 painb5 painb6 painb7 painb8 painb9 painb10
 $frame painb11 painb12 painb13 painb14
-
 $frame painc1 painc2 painc3 painc4 painc5 painc6 painc7 painc8 painc9 painc10
 $frame painc11 painc12 painc13
-
 $frame run1 run2 run3 run4 run5 run6 run7 run8
-
 $frame shoot1 shoot2 shoot3 shoot4 shoot5 shoot6 shoot7 shoot8 shoot9
-
 $frame prowl_1 prowl_2 prowl_3 prowl_4 prowl_5 prowl_6 prowl_7 prowl_8
 $frame prowl_9 prowl_10 prowl_11 prowl_12 prowl_13 prowl_14 prowl_15 prowl_16
 $frame prowl_17 prowl_18 prowl_19 prowl_20 prowl_21 prowl_22 prowl_23 prowl_24
@@ -40,21 +22,13 @@ $frame prowl_17 prowl_18 prowl_19 prowl_20 prowl_21 prowl_22 prowl_23 prowl_24
 // Extended scenes - - - - - - - - - - -
 $frame deathb1 deathb2 deathb3 deathb4 deathb5 deathb6 deathb7 deathb8
 $frame deathb9
-
 $frame decapb1 decapb2 decapb3 decapb4 decapb5 decapb6 decapb7 decapb8
 $frame decapb9 decapb10 decapb11
-
 $frame runb1 runb2 runb3 runb4 runb5 runb6
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9 walk10 walk11
-
 $frame standb1 standb2 standb3 standb4 standb5 standb6
 
-//=============================================================================
-
-//============================================================================
 //  BANDIT / GOBLIN  (Soldier variant armed with a bow.)
-//============================================================================
 
 void() bandit_fire = {
     local vector org, dir;
@@ -131,7 +105,7 @@ void(entity inflictor, entity attacker, float damage) bandit_pain = {
 
     if (SUB_IgnorePain ()) {
         self.pain_finished = time + 0.6;
-        if (self.classname == "monster_bandit")
+        if (self.classtype == CT_MONBANDIT)
             sound (self, CHAN_VOICE, "soldier/pain1.wav", 1, ATTN_NORM);
         else
             sound (self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
@@ -147,29 +121,24 @@ void(entity inflictor, entity attacker, float damage) bandit_pain = {
     else
         {p1 = 0.2;  p2 = 0.6;}
 
-    if ((r < p1) || (skill >= 3))
-    {
+    if ((r < p1) || (skill >= 3)) {
         self.pain_finished = time + 0.6;
         army_pain1 ();
-        if (self.classname == "monster_bandit")
+        if (self.classtype == CT_MONBANDIT)
             sound (self, CHAN_VOICE, "soldier/pain1.wav", 1, ATTN_NORM);
         else
             sound (self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
-    }
-    else if (r < p2)
-    {
+    } else if (r < p2) {
         self.pain_finished = time + 1.1;
         army_painb1 ();
-        if (self.classname == "monster_bandit")
+        if (self.classtype == CT_MONBANDIT)
             sound (self, CHAN_VOICE, "soldier/pain2.wav", 1, ATTN_NORM);
         else
             sound (self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
-    }
-    else
-    {
+    } else {
         self.pain_finished = time + 1.1;
         army_painc1 ();
-        if (self.classname == "monster_bandit")
+        if (self.classtype == CT_MONBANDIT)
             sound (self, CHAN_VOICE, "soldier/pain2.wav", 1, ATTN_NORM);
         else
             sound (self, CHAN_VOICE, "drake/goblin/pain2.wav", 1, ATTN_NORM);
@@ -178,27 +147,14 @@ void(entity inflictor, entity attacker, float damage) bandit_pain = {
 };
 
 void() bandit_die = {
-    // if (Shattered ())
-        // return;
-    // if (Decapitated ())
-    // {
-        // if (random() < 0.5)
-            // monster_decap ('-8 0 24', army_decap1);
-        // else
-            // monster_decap ('-11 0 23', army_decapb1);
-        // return;
-    // }
-
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
-
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	DropCoin(1);
 	DropCoin(1); // 2 coins because they are annoying
 
 	// regular death
 	if (!self.gibbed) {
 		// regular death
-		if (self.classname == "monster_bandit") {
+		if (self.classtype == CT_MONBANDIT) {
 			sound (self, CHAN_VOICE, "soldier/death1.wav", 1, ATTN_NORM);
 		} else {
 			if (random() < 0.5) {
@@ -213,20 +169,10 @@ void() bandit_die = {
 
 };
 
-//============
-// QUAKED monster_bandit (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-//============
-void() monster_bandit = {    
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/drake/bandit.mdl";
-	self.headmdl = "progs/drake/h_bandit.mdl";
+void() monster_bandit_precache = {
     precache_model ("progs/drake/arrow.mdl");
-    precache_model (self.mdl);
-    precache_model (self.headmdl);
+    precache_model ("progs/drake/bandit.mdl");
+    precache_model ("progs/drake/h_bandit.mdl");
     precache_sound ("drake/archer/arrow1.wav");
     precache_sound ("drake/archer/arrow2.wav");
     precache_sound ("drake/archer/arrow3.wav");
@@ -245,31 +191,35 @@ void() monster_bandit = {
     precache_sound ("drake/goblin/pain1.wav");
     precache_sound ("drake/goblin/pain2.wav");
     precache_sound ("drake/goblin/sight1.wav");
+};
 
-    if (self.classname == "monster_bandit") {
-		self.hello_sound = "soldier/idle.wav";
-		self.sight_sound = "soldier/sight1.wav";
-    } else {
-		self.hello_sound = "drake/goblin/idle1.wav";
-		self.sight_sound = "drake/goblin/sight1.wav";
-    }
+// QUAKED monster_bandit (1 0 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_bandit = {    
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 
+	monster_bandit_precache();
+	self.mdl = "progs/drake/bandit.mdl";
+	self.headmdl = "progs/drake/h_bandit.mdl";
 	if (self.deathstring == "")  self.deathstring = " was shot by a Bandit\n";
-
 	if (self.classname == "monster_goblin") {
+		self.classtype = CT_MONDRAKEGOBLIN;
 		if (self.deathstring == "")  self.deathstring = " was shot by a Goblin\n";
-		self.sight_sound = "drake/goblin/sight1.wav";
 		self.idle_sound = "drake/goblin/idle1.wav";
 		self.idle_sound2 = "drake/goblin/idle2.wav";
 		self.pain_sound = "drake/goblin/pain1.wav";
 		self.pain_sound2 = "drake/goblin/pain2.wav";
+		self.hello_sound = "drake/goblin/idle1.wav";
+		self.sight_sound = "drake/goblin/sight1.wav";
 	} else {
-		self.sight_sound = "soldier/sight1.wav";
+		self.classtype = CT_MONBANDIT;
 		self.idle_sound = "soldier/idle.wav";
 		self.pain_sound = "soldier/pain1.wav";
 		self.pain_sound2 = "soldier/pain2.wav";
+		self.hello_sound = "soldier/idle.wav";
+		self.sight_sound = "soldier/sight1.wav";
 	}
 
+	self.ammo_nails = rint(random()*3);
     self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
@@ -280,16 +230,8 @@ void() monster_bandit = {
 	self.pain_longanim = TRUE;			// can be chopped with shadow axe
 	self.steptype = FS_TYPEMEDIUM;		// Average feet
 	self.attack_offset = '12 8 12';		// End of Gun
-    self.mass       = MASS_MEDIUM;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+    self.mass = MASS_MEDIUM;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
     self.th_stand   = army_stand1;      // Same frames as base grunt.
     self.th_walk    = army_walk1;
     self.th_run     = army_run1;
@@ -297,30 +239,24 @@ void() monster_bandit = {
     self.th_pain    = bandit_pain;
     self.th_die     = bandit_die;
     self.th_checkattack = SoldierCheckAttack;
-    //self.th_revive  = army_revive;
     self.th_spawn   = monster_bandit;
-
     self.height     = 2;
     self.ryuflags   = RYU_INSANE;
-    //if (soul_evil)
-    //    monster_guns (0, 0, 10, 0, 0);
-    monster_purse (2, 0.2, 0);      // Bandits may drop some coins.
+    monster_purse (2, 0.2, 0); // Bandits may drop some coins.
+
 	// SoE:  Modified stats for nsoe2 rebel fighters.
+    if (!self.skin && self.alignment > EVIL && !self.spawned) { // HACK!
+        if (self.health < 100) {self.health = self.max_health = 100; }
+        self.ryuflags = RYU_ALERT | RYU_REBEL;
+		if (self.deathstring == "") {
+			self.deathstring = " was shot by a Rebel\n";
+			if (self.skin == 1) self.deathstring = " was hoodwinked by a Bandit\n";
+		}
+    }
 
-    // if (!self.skin && (self.spawnflags & SPAWN_WHITE) && !self.spawned)
-    // {
-        // if (self.health < 100)
-            // {self.health = self.max_health = 100;}
-        // self.ryuflags = RYU_ALERT | RYU_REBEL;
-		// if (self.deathstring == "")  self.deathstring = " was shot by friendly fire\n";
-    // }
-
-	self.classtype = CT_MONBANDIT;
-	if (self.classname == "monster_goblin") self.classtype = CT_MONRAKEGOBLIN;
 	self.classgroup = CG_KNIGHT;
 	self.classmove = MON_MOVEWALK;
-
     monster_start ();
 };
 
-void() monster_goblin = {self.skin = 1;  monster_bandit ();};
+void() monster_goblin = {self.skin = self.exactskin = 1;  monster_bandit ();};

@@ -128,15 +128,12 @@ void() dark_missile = {
 //  2.  Pawns -- Zombies                                                  //
 ////////////////////////////////////////////////////////////////////////////
 
-//==========================================================================
-//  Nightshade Projectile Attack
-
 float   MAX_ZOMBIES = 5;
 
 //  This tries to create a zombie.  If successful, it then sends it off.
 void() Shade_MeatSummon = {
     //if (self.owner)
-      //if (!IsDead (self.owner))
+      //if (!((self.owner.health <= 0) || self.owner.deadflag))
         //if (self.owner.pets < MAX_ZOMBIES)
           //if (self.owner.enemy)
             //if (self.flags & FL_ONGROUND)
@@ -144,11 +141,9 @@ void() Shade_MeatSummon = {
     remove (self);
 };
 
-//------------------------------------------------------------------------//
 //  This checks if a missed shot is on the ground.  If not, the shot
 //  is removed.  Otherwise, it remains for a few seconds before it is
 //  removed permanently or it becomes a zombie.
-//------------------------------------------------------------------------//
 void() Shade_MeatMiss = {
     if (!(self.flags & FL_ONGROUND)) {remove (self); return;}    // Didn't touch ground, remove it.
 
@@ -161,10 +156,8 @@ void() Shade_MeatMiss = {
         self.think = SUB_Remove;
 };
 
-//------------------------------------------------------------------------//
 //  A gib inflicts damage on contact.  If the gib misses, it may
 //  form into a zombie later.
-//------------------------------------------------------------------------//
 void() Shade_MeatTouch = {
     if (pointcontents(self.origin) == CONTENT_SKY) {remove (self); return;}
     if (Reflected ()) return;
@@ -283,34 +276,23 @@ void() shade_sfx_idle = {
     }
 };
 
-//------------------------------------------------------------------------//
-//  This changes the nightshade model.  Size must be reset after the
-//  model change each time.
-//------------------------------------------------------------------------//
-void(float in) shadow_phase =
-{
-    if (in)
-    {   // Phase in.
+// This changes the nightshade to its invisible form.  The nightshade phases out and remains in place, totally silent.
+void(float in) shadow_phase = {
+    if (in) { // Phase in.
         shade_alpha(0.7);
-	//self.modelindex = self.mindex2;
         self.takedamage = DAMAGE_AIM;
-    }
-    else {
+    } else {
         // Phase out.
         shade_alpha (0.01);
-        //self.modelindex = 0;
         self.takedamage = DAMAGE_NO;
     }
 };
 
-//------------------------------------------------------------------------//
-//  The nightshade phases out and remains in place, totally silent.
-//------------------------------------------------------------------------//
-// STAND - - - - - - - - - - - - - - - -
 void() shade_stand = {
-    if (self.spawnflags & SPAWN_SOUL)
-        if (Wraith_FindSoul ())
-            {self.th_run();  return;}
+    if (self.spawnflags & SPAWN_SOUL) {
+        if (Wraith_FindSoul()) {self.th_run();  return;}
+	}
+
     ai_stand();
 };
 void()  shadow_stand1 =[ $form7,  shadow_stand2  ] {shade_alpha (0.7); shade_stand();};
@@ -324,17 +306,15 @@ void()  shadow_stand8 =[ $form1,  shadow_stand9  ] {/*shadow_phase (FALSE);*/ sh
 void()  shadow_stand9 =[ $form1,  shadow_stand9  ] {shade_stand();};
 
 void()  shadow_stand = {
-    if (self.takedamage)
-        shadow_stand1();
-    else
-        shadow_stand8();
+    if (self.takedamage) shadow_stand1();
+    else shadow_stand8();
 };
 
 //  The nightshade phases out and moves along its path.
 void(float d) shade_walk = {
-    if (self.spawnflags & SPAWN_SOUL)
-        if (Wraith_FindSoul ())
-             {self.th_run();  return;}
+    if (self.spawnflags & SPAWN_SOUL) {
+        if (Wraith_FindSoul ()) {self.th_run();  return;}
+	}
     ai_walk(d);
 };
 void()  shadow_walk1  =[ $form7,  shadow_walk2  ] {shade_alpha (0.7); shade_walk(8);};
@@ -348,19 +328,15 @@ void()  shadow_walk8  =[ $form1,  shadow_walk9  ] {/*shadow_phase (FALSE);*/ sha
 void()  shadow_walk9  =[ $form1,  shadow_walk9  ] {shade_walk(8); shade_sfx_idle ();};
 
 void()  shadow_walk = {
-    if (self.takedamage)
-        shadow_walk1();
-    else
-        shadow_walk8();
+    if (self.takedamage) shadow_walk1();
+    else shadow_walk8();
 };
 
 //  Run animation.  The nightshade flies quickly to find and close in on its target.
 void() shade_sfx_fly = {
     if (self.super_sound < time) { // Not while Quad is sounding.
-        if (self.h2olevel <= 1) // Not while in the water.
-            sound (self, CHAN_BODY, "drake/shade/fly.wav", 1, ATTN_NORM);
-        else if ((self.h2otype == CONTENT_WATER) || (self.h2otype == CONTENT_SLIME))
-            sound (self, CHAN_BODY, "drake/dragon/flywater.wav", 1, ATTN_NORM);
+        if (self.waterlevel <= 1) sound (self, CHAN_BODY, "drake/shade/fly.wav", 1, ATTN_NORM); // Not while in the water.
+        else if ((self.liquidbase == CONTENT_WATER) || (self.liquidbase == CONTENT_SLIME)) sound (self, CHAN_BODY, "drake/dragon/flywater.wav", 1, ATTN_NORM);
     }
 }; 
 
@@ -387,10 +363,8 @@ void()  shadow_run13  =[ $fly3,  shadow_run14  ] {ai_run(self.speed);};
 void()  shadow_run14  =[ $fly2,  shadow_run1   ] {ai_run(self.speed);};
 
 void()  shadow_form = {
-    if (self.takedamage)
-        shadow_run1();      // Already phased in.
-    else
-        shadow_form1(); // Materialize.
+    if (self.takedamage) shadow_run1();      // Already phased in.
+    else shadow_form1(); // Materialize.
 };
 
 //  Melee attacks!
@@ -563,19 +537,10 @@ void() shadow_die = {
     //}
 };
 
-//============
-// --> QUAKED monster_nightshade (1 0 0) (-32 -32 -24) (32 32 32) Ambush x Souls
-//============
-void() monster_nightshade = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
+void() monster_nightshade_precache = {
     precache_model ("progs/drake/shade.mdl");
     precache_model ("progs/drake/soul.mdl");
     precache_model ("progs/drake/dr1_head.mdl");  // Gib (head)
-
     precache_sound ("demon/dhit2.wav");
     precache_sound ("drake/dragon/flywater.wav");
     precache_sound ("drake/shade/death.wav");
@@ -591,13 +556,17 @@ void() monster_nightshade = {
     precache_sound ("drake/shade/taunt.wav");
     precache_sound ("wizard/hit.wav");   // used by C code, so don't sound2
     precache_sound ("nehahra/wraith/soul.wav");
+};
+
+// --> QUAKED monster_nightshade (1 0 0) (-32 -32 -24) (32 32 32) Ambush x Souls
+void() monster_nightshade = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
     self.sight_sound = "drake/shade/sing.wav";
-
     self.mdl = "progs/drake/shade.mdl";
     self.headmdl = "progs/drake/dr1_head.mdl";
     self.skin       = 0;    // Fix legacy code from early versions of Dragons.
-    //self.pets       = 0;    // Starts with no minions, so set to zero.
     self.ryuflags   = 0;    // Make sure it's zero so it doesn't use water AI.
     self.waitmin    = 0;    // Pain sound timestamp.
     self.solid = SOLID_NOT;		// No interaction with world
@@ -621,16 +590,15 @@ void() monster_nightshade = {
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
 
-    shadow_speed ();
-    //shadow_phase(TRUE);
+    shadow_speed();
 
     // Always reset Ammo Resistance to be consistent
     self.resist_shells = self.resist_nails = 0;
     self.resist_rockets = self.resist_cells = 0;
+	self.resist_fire = 1; // Don't want to change this with size.
 
     if(!self.classtype) self.classtype = CT_MONSHADE;
     if (!self.classgroup) self.classgroup = CG_DRAGON;
     self.classmove = MON_MOVEFLY;
-
     monster_start ();
 };

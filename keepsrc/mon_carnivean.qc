@@ -438,16 +438,8 @@ void() carniv_die = {
 	}
 };
 
-void() monster_carnivean = {
-	self.classname = "monster_carnivean";
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/q15/carnivean.mdl";
-	self.headmdl = "progs/q15/h_carnivean.mdl";
- 	precache_model("progs/q15/carnivean.mdl");		// all files precached in worldspawn() due to savegame-bug
+void() monster_carnivean_precache = {
+ 	precache_model("progs/q15/carnivean.mdl");
 	precache_model("progs/q15/h_carnivean.mdl");
 	precache_model("progs/q15/carniv_rocks.mdl");
 	precache_model("progs/k_spike.mdl");
@@ -467,7 +459,14 @@ void() monster_carnivean = {
 	precache_sound("player/inflame.wav");
 	precache_sound("zombie/corpse_fire.wav");
 	precache_sound("ambience/coaled_monster_explode.wav");
+};
 
+void() monster_carnivean = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/q15/carnivean.mdl";
+	self.headmdl = "progs/q15/h_carnivean.mdl";
 	self.sight_sound = "q15/carnivean/scream.wav";
 	self.solid = SOLID_NOT;					// No interaction with world
 	self.movetype = MOVETYPE_NONE;			// Static item, no movement

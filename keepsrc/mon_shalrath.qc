@@ -284,14 +284,9 @@ void() shal_death5 =[ $death5, shal_death6 ] {};
 void() shal_death6 =[ $death6, shal_death7 ] {monster_death_postcheck();};
 void() shal_death7 =[ $death7, shal_death7 ] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
-void() shal_die =
-{
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
-
-	// Make sure any attachments are removed
-	shalrath_remove_attachment();
+void() shal_die = {
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
+	shalrath_remove_attachment(); // Make sure any attachments are removed
 
 	// Normal death
 	if (!self.gibbed) {
@@ -300,46 +295,27 @@ void() shal_die =
 	}
 };
 
-/*======================================================================
- QUAKED monster_shalrath (1 0 0) (-32 -32 -24) (32 32 48) Ambush
-======================================================================*/
-void() monster_shalrath = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/ad171/mon_shalrath.mdl";	// Extra skin
-	self.headmdl = "progs/ad171/h_shalrath.mdl";	// Matching new skin
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
+void() monster_shalrath_precache = {
+	precache_model ("progs/ad171/mon_shalrath.mdl");
+	precache_model ("progs/ad171/h_shalrath.mdl");
 	precache_model (MODEL_PROJ_SHAL);		// Original - progs/v_spike.mdl
 	precache_model (MODEL_PROJ_SHOME);		// Homing missile growing 8 frames
 	precache_model (MODEL_PROJ_SBALL);		// ball growing 8 frames
 	precache_model (MODEL_PROJ_SEGG);		// ball turned into egg
 	precache_model (MODEL_PROJ_SSHELL);		// Gibs from Egg
-
-	self.idle_sound = "shalrath/idle.wav";
-	precache_sound (self.idle_sound);
-
-	precache_sound ("shalrath/death.wav");
-	self.pain_sound = "shalrath/pain.wav";
-	precache_sound (self.pain_sound);
-	precache_sound ("shalrath/attack.wav");	// Start of attack
-	precache_sound ("shalrath/attack2.wav");	// Firing missile
-	precache_sound ("ad171/wraith/attack3.wav");	// Minions
-	precache_sound ("ad171/wraith/bounce.wav");		// Egg bounce
-	
-	self.sight_sound = "shalrath/sight.wav";
-	precache_sound (self.sight_sound);
-
-	// Precache minion stuff anwyays from monster_shalrathminion
-	precache_model ("progs/ad171/mon_vorelingp.mdl");
+	precache_model ("progs/ad171/mon_vorelingp.mdl"); // Precache minion stuff anwyays from monster_shalrathminion
 	precache_model ("progs/ad171/gib_vorelegp.mdl");
 	precache_model (MODEL_PROJ_VORE);			// Spit Projectile
 	precache_model ("progs/ad171/mon_voreling.mdl");
 	precache_model ("progs/q15/gib_voreleg.mdl"); // Has added frame
+	precache_sound ("shalrath/idle.wav");
+	precache_sound ("shalrath/death.wav");
+	precache_sound ("shalrath/pain.wav");
+	precache_sound ("shalrath/attack.wav");	// Start of attack
+	precache_sound ("shalrath/attack2.wav");	// Firing missile
+	precache_sound ("ad171/wraith/attack3.wav");	// Minions
+	precache_sound ("ad171/wraith/bounce.wav");		// Egg bounce
+	precache_sound ("shalrath/sight.wav");
 	precache_sound ("quoth/voreling/idle.wav");
 	precache_sound("quoth/voreling/death.wav");
 	precache_sound("quoth/voreling/pain.wav");
@@ -350,7 +326,19 @@ void() monster_shalrath = {
 	precache_sound("ad171/voreling/attacktear.wav");
 	precache_sound("quoth/voreling/land.wav");
 	precache_sound ("quoth/voreling/sight.wav");
+};
 
+// QUAKED monster_shalrath (1 0 0) (-32 -32 -24) (32 32 48) Ambush
+void() monster_shalrath = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	if (self.minion_name == string_null) self.minion_name = "monster_voreling";
+	self.mdl = "progs/ad171/mon_shalrath.mdl";	// Extra skin
+	self.headmdl = "progs/ad171/h_shalrath.mdl";	// Matching new skin
+	self.idle_sound = "shalrath/idle.wav";
+	self.pain_sound = "shalrath/pain.wav";
+	self.sight_sound = "shalrath/sight.wav";
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	self.idmins = VEC_HULL2_MIN;	// -32 -32 -24, 32 32 64
@@ -369,8 +357,6 @@ void() monster_shalrath = {
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
 
-	if (self.deathstring == "") self.deathstring = " was exploded by a Vore\n";
-
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
@@ -382,13 +368,10 @@ void() monster_shalrath = {
 	self.th_missile = shal_magic;
 	self.th_pain = shal_pain;
 	self.th_die = shal_die;
-
-	// Special green skin for spider wraiths
-	if (self.spawnflags & MON_SHALRATH_MINIONS) self.exactskin = 2;
-		
+	if (self.spawnflags & MON_SHALRATH_MINIONS) self.exactskin = 2; // Special green skin for spider wraiths
+	if (self.deathstring == "") self.deathstring = " was exploded by a Vore\n";
 	self.classtype = CT_MONSHAL;
 	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEWALK;
-	
 	monster_start();
 };

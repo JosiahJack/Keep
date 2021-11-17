@@ -49,7 +49,7 @@
 // -ijed
 //=============================================================================
 
-string MOD_VERSION		= "\b[INFO]\b Keep Mod, version 0.92\n";
+string MOD_VERSION		= "\b[INFO]\b Keep Mod, version 0.93\n";
 .float mapversion;
 .string target3, target4;
 float total_denizens; // Used to track total harmless denizens
@@ -64,10 +64,10 @@ float IT_SUPER_NAILGUN    	= 8.000;		//3  Correct for standard HUD & HIP & DOE		
 float IT_GRENADE_LAUNCHER   = 16.000;		//4  Correct for standard HUD & HIP & DOE			W
 float IT_ROCKET_LAUNCHER    = 32.000;		//5  Correct for standard HUD & HIP & DOE			W
 float IT_LIGHTNING    		= 64.000;		//6  Correct for standard HUD & HIP & DOE			W
-float IT_SHELLS    			= 128.000;		//7  Correct for DOE HUD					I
-float IT_NAILS    			= 256.000;		//8  Correct for DOE HUD					I
-float IT_ROCKETS    		= 512.000;		//9 Correct for DOE HUD					I
-float IT_CELLS    			= 1024.000;		//10 Correct for DOE HUD					I
+// float IT_SHELLS    			= 128.000;		//7  Correct for DOE HUD					I
+// float IT_NAILS    			= 256.000;		//8  Correct for DOE HUD					I
+// float IT_ROCKETS    		= 512.000;		//9 Correct for DOE HUD					I
+// float IT_CELLS    			= 1024.000;		//10 Correct for DOE HUD					I
 float IT_AXE    			= 2048.000;		//11 Correct for DOE HUD					W
 float IT_LAVA_NAILGUN    	= 4096.000;		//12 Correct for DOE HUD (okay for standard and HIP)	W
 float IT_LAVA_SUPER_NAILGUN = 8192.000;		//13 Correct for DOE HUD (okay for standard and HIP)	W
@@ -89,20 +89,20 @@ float ALL_ITEMSARTIFACTS = 7864320; // All items that affect screen overlay cshi
 float IT2_ARMOR1    		= 1.000;		//0  Correct for DOE HUD					I
 float IT2_ARMOR2    		= 2.000;		//1  Correct for DOE HUD					I
 float IT2_ARMOR3    		= 4.000;		//2  Correct for DOE HUD					I
-float IT2_LAVA_NAILS    	= 8.000;		//3  Correct for DOE HUD					I
-float IT2_PLASMA_AMMO   	= 16.000;		//4  Correct for DOE HUD					I
-float IT2_MULTI_ROCKETS    	= 32.000;		//5  Correct for DOE HUD					I
+// float IT2_LAVA_NAILS    	= 8.000;		//3  Correct for DOE HUD					I
+// float IT2_PLASMA_AMMO   	= 16.000;		//4  Correct for DOE HUD					I
+// float IT2_MULTI_ROCKETS    	= 32.000;		//5  Correct for DOE HUD					I
 float IT2_SHIELD    		= 64.000;		//6  Correct for DOE HUD					I
 float IT2_CHAINLIGHTNING	= 128.000;		//7  Zerstorer chain lightning				W	(I Antigrav for DOE HUD)
 float IT2_SUPERHEALTH    	= 256.000;		//8  Correct for DOE HUD					I
 float IT2_EARTHQUAKE    	= 512.000;		//9  Correct for DOE HUD					I
 float IT2_V_SPHERE    		= 1024.000;		//10 Correct for DOE HUD					I
-float IT2_BOLTS		    	= 2048.000;		//11 Keep specific						I
-float IT2_POISON    		= 4096.000;		//12 Keep specific						I
+// float IT2_BOLTS		    	= 2048.000;		//11 Keep specific						I
+// float IT2_POISON    		= 4096.000;		//12 Keep specific						I
 float HIP_IT2_WETSUIT    	= 8192.000;		//13 Keep specific (modified from HIP)			I
 float HIP_IT2_EMPATHY_SHIELDS= 16384.000;	//14 Keep specific (modified from HIP)			I
 float HIP_IT2_HORN_OF_CONJURING= 32768.000;	//15 Keep specific (modified from HIP)			I
-//float UNUSED				= 65536.000;	//16 Unused item slot
+float IT2_KEY_SKELETON		= 65536.000;	//16 Keep's Skeleton Key
 float IT2_PROXIMITY_GUN    	= 131072.000;	//17 Keep specific.Unique number for self.weapon calls 	W
 float IT2_MJOLNIR 			= 262144.000;	//18 Keep specific	""					W
 float IT2_LASER_CANNON    	= 524288.000;	//19 Keep specific	""					W
@@ -114,19 +114,19 @@ float IT2_WAND				= 8388608.000; 	//22 Drake magic wand					W2 (special check to
 float IT2_ALLARMOR			= 7.000;// Test for player grn/yel/red armour. Helper combo bit of 1 + 2 + 4
 float ALL_ITEMS2ARTIFACTS = 6291456; // All items that affect screen overlay cshift
 //=======================================SELF.MODITEMS======================================================
-//float UNUSED   			= 1;			//0  I
+float WEAPON_HACKBANK1		= 1;			//0  Used to store self.selfweaponismoditems during level transitions/saves
 float IT_UPGRADE_SSG		= 2;			//1  AoA		W\
-	float IT_ICE    		= 4;			//2  AoA		W2  HACKBANK!
-	float IT_MACE   		= 8;			//3  AoA		W2  HACKBANK!
-	float IT_VOID_STAFF		= 16;			//4  AoA		W2  HACKBANK!
-	float IT_FLAK   		= 32;			//5  AoA		W2  HACKBANK!
+	float IT_ICE    			= 4;			//2  AoA		W3  HACKBANK!
+	float IT_MACE   			= 8;			//3  AoA		W3  HACKBANK!
+	float IT_VOID_STAFF			= 16;			//4  AoA		W3  HACKBANK!
+	float IT_FLAK   			= 32;			//5  AoA		W3  HACKBANK!
 float IT_UPGRADE_LG			= 64;			//6  Plasma Gun, direct + splashdamage
-	float IT_GUNGNIR   		= 128;			//7  AoA		W2  HACKBANK!
+	float IT_GUNGNIR   			= 128;			//7  AoA		W3  HACKBANK!
 float IT_SANGUINATORS		= 256;			//8  AoA		W
 float IT_SCIMITAR			= 512;			//9  AoA		W
 float IT_RAPIER 			= 1024;			//10 AoA		W
 float IT_UPGRADE_AXE   		= 2048;			//11 Shadow Axe, +75% dmg, +gib bodies
-//float UNUSED				= 4096;			//12
+float IT3_MIRV				= 4096;			//12	W\
 float IT_CKEY1				= 8192;			//13 Custom Key 1
 float IT_CKEY2				= 16384;		//14 Custom Key 2
 float IT_CKEY3				= 32768;		//15 Custom Key 3
@@ -148,7 +148,7 @@ float IT_CKEYALL			= 122880;	//17 All Custom keys
 // Bits 08-11 (values 256-2048) are reserved for armor.
 // float   POW_ARMOR1      	= 256;      	// Divide this into perms for suit value.
 // float   POW_POWER_ARMOR 	= 4096;     	// Power shield toggle.
-//=======================================SELF.PERMS======================================================
+//==========================================SELF.PERMS======================================================
 float 	POW_ARMORCOURAGE	= 1;			//0
 float 	POW_ARMORDRAGON		= 2;			//1
 float	POW_ARMORONYX		= 4;			//2
@@ -159,12 +159,12 @@ float 	POW_ARMORCHAOS		= 64;			//6
 float 	POW_ARMORNINJA		= 128;			//7
 float 	POW_REGEN			= 256;			//8
 float	POW_REGENLESSER		= 512;			//9
-//float UNUSED				= 1024;			//10
-//float UNUSED				= 2048;			//11
-//float UNUSED				= 4096;			//12
+	float IT_AIRGUN				= 1024;			//10 			W3 HACKBANK!
+float	POW_HASTE			= 2048;			//11	I Twice as fast firing
+float	IT_FROSTBOW			= 4096;			//12	W\
 float   POW_RESIST      	= 8192;     	//13 Half damage.
 float   POW_VITALITY       	= 16384;    	//14 Regeneration.
-//float UNUSED				= 32768;		//15
+float 	IT_SIDEWINDER		= 32768;		//15	W\
 float   POW_DOUBLE      	= 65536;    	//16 Twin shot -- nailgun buff.
 float   POW_SHOTTYMAN		= 131072;   	//17 Shotgun buff.
 float   POW_VAMPIRE     	= 262144;   	//18 Melee buff.
@@ -198,29 +198,30 @@ UniqueID Wepname												HACKBANK e.g. (indented)
 3  Mace															IT_MACE
 4  Shotgun/Blaster											IT_SHOTGUN
 5  Ice Tome														IT_ICE
-6  Doublebarrel Shotgun/Widowmaker/Shotcycler/QuadShotgun	IT_SUPER_SHOTGUN
-7  Scimitar													IT_SCIMITAR
-8  Nailgun													IT_NAILGUN
-9  Lava Nailgun												IT_LAVA_NAILGUN
-10 Rapier													IT_RAPIER
-11 Perforator												IT_SUPER_NAILGUN
-12 Lava Super Nailgun										IT_LAVA_SUPER_NAILGUN
-13 Void Staff													IT_VOID_STAFF
-14 Grenade Launcher											IT_GRENADE_LAUNCHER
-15 Proximity Grenade Launcher								IT2_PROXIMITY_GUN
-16 Multi-Grenade Launcher									IT_MULTI_GRENADE
-17 Rocket Launcher											IT_ROCKET_LAUNCHER
-18 Multi-Rocket Launcher									IT_MULTI_ROCKET
-19 Sanguinators												IT_SANGUINATORS
-20 Thunderbolt/Plasmagun									IT_LIGHTNING
-21 Plasma Gun(rogue)										IT_PLASMA_GUN
-22 Flak Cannon													IT_FLAK
-23 Crossbow													IT_EXTRA_WEAPON
-24 Laser Cannon												IT2_LASER_CANNON
-25 Chain Lightning Gun										IT2_CHAINLIGHTNING
-26 Wand														IT2_CROSS
-27 Mjolnir													IT2_MJOLNIR
-28 Gungir														IT_GUNGNIR
+6  Airfist														IT_AIRGUN
+7  DB Shotgun/Riot Controller/Widowmaker/QuadShotgun		IT_SUPER_SHOTGUN
+8  Scimitar													IT_SCIMITAR
+9  Nailgun													IT_NAILGUN
+10 Lava Nailgun												IT_LAVA_NAILGUN
+11 Rapier													IT_RAPIER
+12 Perforator												IT_SUPER_NAILGUN
+13 Lava Super Nailgun										IT_LAVA_SUPER_NAILGUN
+14 Void Staff													IT_VOID_STAFF
+15 Grenade Launcher											IT_GRENADE_LAUNCHER
+16 Proximity Grenade Launcher/Sidewinder					IT2_PROXIMITY_GUN
+17 Multi-Grenade Launcher									IT_MULTI_GRENADE
+18 Rocket Launcher/MIRV										IT_ROCKET_LAUNCHER
+19 Multi-Rocket Launcher									IT_MULTI_ROCKET
+20 Sanguinators												IT_SANGUINATORS
+21 Thunderbolt/Plasmagun									IT_LIGHTNING
+22 Plasma Gun(rogue)										IT_PLASMA_GUN
+23 Flak Cannon													IT_FLAK
+24 Crossbow/Frostbow										IT_EXTRA_WEAPON
+25 Laser Cannon												IT2_LASER_CANNON
+26 Chain Lightning Gun										IT2_CHAINLIGHTNING
+27 Wand														IT2_CROSS
+28 Mjolnir													IT2_MJOLNIR
+29 Gungir														IT_GUNGNIR
 */
 // Unique ID's for weapon cycling list.
 float ID_GRAPPLE = 1;
@@ -251,6 +252,7 @@ float ID_CHAINLIGHTNING = 25;
 float ID_WANDCROSS2 = 26;
 float ID_MJOLNIR = 27;
 float ID_GUNGNIR = 28;
+float ID_AIRGUN = 29;
 
 float BBOX_ARMAGON = 23;	// -48 -48 -24, 48 48 84
 float BBOX_VERMIS = 24;		// -64 -64 -512, 64 64 256
@@ -431,7 +433,7 @@ float AM_COLD = 14;
 .float resist_multi_rockets;
 .float resist_plasma;
 .float resist_bolts;
-.float resist_poison;
+.float resist_poison; // Not to be confused with resist_acid.  Poison is for poison ammo only.  Acid is for resistance to slime and poisonous enemy attacks (e.g. poison debuff).
 .float resist_bloodcrystals;
 .float resist_voidshards;
 .float resist_elemental;
@@ -468,7 +470,7 @@ float AM_COLD = 14;
 
 // Mass values for gyro physics
 float MASS_GRENADE = 1;
-float BOUY_GRENADE = 1.2;
+float BOUY_GRENADE = 0.6;
 float RESIST_GRENADE = 0.4;
 float TURB_GRENADE = 0.24;
 float AERO_GRENADE = 0.8;
@@ -476,8 +478,10 @@ float MASS_MINIGRENADE = 0.2;
 float BOUY_MINIGRENADE = 0.3;
 float RESIST_MINIGRENADE = 3;
 float MASS_GIB = 1.5;
-float BOUY_GIB = 2.2;
+float BOUY_GIB = 1.1;
 float RESIST_GIB = 1.8;
+
+float BOUY_FROZEN = 1.1;
 
 .float ubs_deflapped;
 
@@ -495,25 +499,31 @@ float PHYS_GYRO_ANGTURBULENCE= 64;
 .float m_iRadius;
 .float fov;
 
-// Copper has a lot of nice changes.  Some people don't like them.  Sometimes you don't want all of them.  Well, take your pick.  Enable however many of them you want.
+// Copper has a lot of nice changes.  Some people don't like them.  Sometimes you don't want all of them.  Well, take your pick.  Enable however many of them you want just like you would spawnflags.
 .float copperoptions;
-float COPPER_SHOTGUN_PIERCE 		= 1;
-float COPPER_IMPRECISE_VOREBALLS 	= 2;
-float COPPER_SEMI_Z_AWARE_OGRES 	= 4;
-float COPPER_ONE_HIT_AXE_ZOMBIES 	= 8;
-float COPPER_DOWNED_ZOMBIE_GIB 		= 16;
-float COPPER_TURRET_ENFORCERS		= 32;
-float COPPER_TARBABY_JUMP_CALMING	= 64;
-float COPPER_CHTHON_SPD_PROGRESSION = 128;
-float COPPER_FORGETFUL_INFIGHTERS	= 256;
-float COPPER_COOP_PARTY_ITEMSHARE	= 512;
-float COPPER_COOP_BACKPACK_PROTECT	= 1024;
-float COPPER_COOP_MEGAH_PARTY_HEAL	= 2048;
-float COPPER_FAST_NAILGUN_NAILS		= 4096;
-float COPPER_TWOSHOT_PERFORATOR		= 8192;
+float COPPER_SHOTGUN_PIERCE 		= 1;		// Shotgun projectiles pierce through multiple targets in a row.  Uses same implementation as the Doom option, idea from Doom.
+float COPPER_IMPRECISE_VOREBALLS 	= 2;		// Voreballs homing tracking is imprecise and lags more, allowing quick players to strafe and run past them.
+float COPPER_SEMI_Z_AWARE_OGRES 	= 4;		// Ogres lob grenades using the angle half-way between standard ID1 fixed angle (18°) and fully Z-aware high precision aiming.
+float COPPER_ONE_HIT_AXE_ZOMBIES 	= 8;		// Melee weapons are guaranteed to knock a zombie to the floor rather than randomly picking one of the other shorter pain animations.
+float COPPER_DOWNED_ZOMBIE_GIB 		= 16;		// Zombies who are laying down on the floor will be gibbed by nearby explosions.
+float COPPER_TURRET_ENFORCERS		= 32;		// Enforcers will continue to fire non-stop at their enemy for as long as the enemy is in sight.  Enforcers will only move if their enemy is out of sight.
+float COPPER_TARBABY_JUMP_CALMING	= 64;		// Spawns stop jumping if their enemy is out of sight for more than 15 seconds.  They will still chase their enemy, but by using their slower walk until in view again.
+float COPPER_CHTHON_SPD_PROGRESSION = 128;		// As chthon is hurt with each lightning shock, his projectiles get flung faster and faster.
+float COPPER_FORGETFUL_INFIGHTERS	= 256;		// Infighting monsters will forget their enemy when out of sight for more than 5 seconds.  If they were previously angry with another enemy, they will switch to it, but if an enemy is in sight, switch to it first.
+float COPPER_COOP_PARTY_ITEMSHARE	= 512;		// All keys and weapons are given to all other coop players of same alignment whenever one is picked up.  Only changes the weapon for the player who picked it up.
+float COPPER_COOP_BACKPACK_PROTECT	= 1024;		// Coop players can only pick up their own backpack and not other players'.
+float COPPER_COOP_MEGAH_PARTY_HEAL	= 2048;		// Picking up a megahealth applies 100 health to every player of the same alignment as though each player just picked up a megahealth.  
+float COPPER_FAST_NAILGUN_NAILS		= 4096;		// Nailgun's projectiles are faster.  Also applies to lava nailgun.  Does not affect perforator or lava super nailgun.
+float COPPER_TWOSHOT_PERFORATOR		= 8192;		// When firing the perforator, instead of using 1 higher damage spike (18 vs 9), two spikes are shot instead.
+
 .float doomoptions;
-float DOOM_SHOTGUNS_KNOCKBACK		= 1;
-float DOOM_PLASMAGUN				= 2;
+float DOOM_SHOTGUN_KNOCKBACK		= 1;		// All shotguns apply knockback to enemies all the time.
+float DOOM_SHOTGUN_PIERCE			= 2;		// Shotgun projectiles pierce through multiple targets in a row.  Uses same implementation as the Copper option, idea from Doom.
+float DOOM_MONSTERS_NM_RESPAWN		= 4;		// When skill is Nightmare (>=3), this enables monster respawning.  When respawning, corpse dissappears with teleglitter, monsters respawn with teleglitter, and the monster's previous enemy is remembered if a player and still alive.  Respawn is 8 to 300 seconds.
+
+.float hipnoticoptions;
+float HIPNOTIC_OLDMJOLNIR			= 1;
+
 .float spirit_blessed;
 .float air_blessed;
 float SPAWNFLAG_LASER = 2;
@@ -552,5 +562,27 @@ float AF_END   =  2.00000;
 .entity owner2;
 .float projectile_type;
 float num_beams;
-
 float MAX_BEAMS = 128; // Engine side is only 24!!!! What the heck???
+float frame_pause();
+.entity buddy;
+.vector r_wall;
+.float r_wall_x_spin;
+.float r_wall_y_spin;
+.float r_wall_z_spin;
+float FLAG_REDORANGE = 1;
+float FLAG_YELLOW    = 2;
+float FLAG_BLUE      = 4;
+float FLAG_WHITE     = 8;
+float FLAG_DARKRED   = 16;
+float TUR_STARTOFF	= 1;
+float TUR_RETRACT	= 2;
+float TUR_OFFRET	= 4;
+float TUR_LASERS	= 8;
+float TUR_ROCKETS	= 16;
+float TUR_PPC		= 32;
+float TURRET_STATE_INACTIVE = 0;
+float TURRET_STATE_ACTIVATING = 1;
+float TURRET_STATE_ACTIVE = 2;
+float TURRET_STATE_DEACTIVATING = 3;
+float TURRET_MAX_PITCH = 6;
+float TURRET_MIN_PITCH = -6;

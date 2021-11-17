@@ -1305,16 +1305,17 @@ void() CheatCommand = {
 	self.ammo_elemental = 100;	
 	self.moditems = self.moditems | IT_UPGRADE_AXE | IT_UPGRADE_SSG | IT_ICE | 
 									IT_MACE | IT_VOID_STAFF | IT_FLAK | IT_SANGUINATORS | 
-									IT_SCIMITAR | IT_RAPIER; // Left out IT_UPGRADE_LG since I like the LG better -Qmaster
+									IT_SCIMITAR | IT_RAPIER | IT_GUNGNIR; // Left out IT_UPGRADE_LG since I like the LG better -Qmaster
 	self.items = self.items | IT_AXE | IT_SHOTGUN | IT_SUPER_SHOTGUN | IT_NAILGUN |
 				IT_SUPER_NAILGUN | IT_GRENADE_LAUNCHER | IT_ROCKET_LAUNCHER | IT_LIGHTNING | 
 				IT_LAVA_NAILGUN | IT_LAVA_SUPER_NAILGUN | IT_MULTI_GRENADE | IT_MULTI_ROCKET | 
 				IT_PLASMA_GUN | IT_EXTRA_WEAPON;
 	self.items2 = self.items2 | IT2_ARMOR3 | IT2_PROXIMITY_GUN | IT2_MJOLNIR | IT2_LASER_CANNON | 
-								IT2_GRAPPLE | IT2_CROSS | IT2_CHAINLIGHTNING;// | IT2_WAND;
-	// self.perms = self.perms | IT_CHAINSAW | IT_BLASTER; // Left these out since they aren't always applicable to every map -Qmaster
+								IT2_GRAPPLE | IT2_CROSS | IT2_CHAINLIGHTNING;// | IT2_WAND; // IT2_CROSS is the wand!
+	self.perms = self.perms | IT_AIRGUN; // | IT_CHAINSAW | IT_BLASTER; // Left these out since they aren't always applicable to every map -Qmaster
 	self.weapon = IT2_LASER_CANNON;
 	self.armorvalue = 150;
+	sound (self, CHAN_AUTO, "rogue/misc/flagcap.wav", 1, ATTN_NORM);
 	W_SetCurrentAmmo (self);
 };
 
@@ -1381,6 +1382,7 @@ void() LavaShieldCheat = {
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
+	sound (self, CHAN_ITEM, SOUND_ARTLSHIELD1, 1, ATTN_NORM);
 	self.impulse = 0;
 	dprint("\b[Impulse 246]\b Lava Shield Cheat\n");
 	self.lavashield_time = 1;
@@ -1394,6 +1396,7 @@ void() BlastBeltCheat = {
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
+	sound (self, CHAN_ITEM, SOUND_ARTBLASTBELT1, 1, ATTN_NORM);
 	self.impulse = 0;
 	dprint("\b[Impulse 248]\b Blast Belt Cheat\n");
 	self.blastbelt_time = 1;
@@ -1407,6 +1410,7 @@ void() JumpBootsCheat = {
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
+	sound (self, CHAN_ITEM, SOUND_ARTJUMPBOOTS1, 1, ATTN_NORM);
 	self.impulse = 0;
 	dprint("\b[Impulse 249]\b Endless Jump Boots Cheat\n");
 	self.jumpboots_time = 1;
@@ -1423,6 +1427,7 @@ void() SharpshooterCheat = {
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
+	sound (self, CHAN_ITEM, SOUND_ARTSHARP1, 1, ATTN_NORM);
 	self.impulse = 0;
 	dprint("\b[Impulse 250]\b Sharp Shooter Cheat\n");
 	self.sharpshoot_time = 1;
@@ -1437,6 +1442,7 @@ void() NailPiercerCheat = {
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
+	sound (self, CHAN_ITEM, SOUND_ARTNAILP1, 1, ATTN_NORM);
 	self.impulse = 0;
 	dprint("\b[Impulse 251]\b Nail Piercer Cheat\n");
 	self.nailpiercer_time = 1;
@@ -1451,6 +1457,7 @@ void() EnvSuitCheat = {
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
+	sound (self, CHAN_ITEM, SOUND_ARTSUIT1, 1, ATTN_NORM);
 	self.impulse = 0;
 	dprint("\b[Impulse 252]\b Environmental Suit Cheat\n");
 	self.rad_time = 1;
@@ -1464,6 +1471,7 @@ void() PentagramCheat = {
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
+	sound (self, CHAN_ITEM, SOUND_ARTPENT1, 1, ATTN_NORM);
 	self.impulse = 0;
 	dprint("\b[Impulse 253]\b Pentagram of Protection Cheat\n");
 	self.invincible_time = 1;
@@ -1477,6 +1485,7 @@ void() InvisibleCheat = {
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
+	sound (self, CHAN_ITEM, SOUND_ARTINV1, 1, ATTN_NORM);
 	self.impulse = 0;
 	dprint("\b[Impulse 254]\b Ring of Shadows Cheat\n");
 	self.invisible_time = 1;
@@ -1490,6 +1499,7 @@ void() QuadDamageCheat = {
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 	
+	sound (self, CHAN_ITEM, SOUND_ARTQUAD1, 1, ATTN_NORM);
 	self.impulse = 0;
 	dprint("\b[Impulse 255]\b Quad Damage Cheat\n");
 	self.super_time = 1;
@@ -1503,6 +1513,7 @@ void() TomeOfPowerCheat = {
 	if (impulse_dmcoopmode()) return;		// No Dm/Coop mode
 	if (impulse_skill03only()) return;		// skill 0-3 only
 
+	sound (self, CHAN_ITEM, "drake/items/tomepow.wav", 1, ATTN_NORM);
 	self.impulse = 0;
 	dprint("\b[Impulse 248]\b Tome of Power Cheat!\n");
 	self.tome_finished = time + POWERUP_TIMER;

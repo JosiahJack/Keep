@@ -1,34 +1,65 @@
-/*======================================================================
- ITEM PROGRESSION SYSTEM
- 
- * All spawn markers have the same item to pickup
- * The list determines the order the players gets items
- * Can only work with ITEM class types (no monsters etc)
- * The entity state system does not work with this system
- * Can have multiple progression lists in the same map
- * Extensive error and info checking reported to console
- * Works very closely with item touch2 functions
- 
-======================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Arcane Dimensions (AD)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 8
+//
+// Implements: Item Progression System
+//
+// Description:
+// Allows for a set of different items to be picked up in sequence from any one
+// of multiple item_progspawn's in different locations.  No matter which is
+// picked up first, the order is preserved for which item is presnet and picked
+// up.  Useful to ensure that the player always gets weapons in the same order.
+//
+// * All spawn markers have the same item to pickup
+// * The list determines the order the players gets items
+// * Can only work with ITEM class types (no monsters etc)
+// * The entity state system does not work with this system
+// * Can have multiple progression lists in the same map
+// * Extensive error and info checking reported to console
+// * Works very closely with item touch2 functions
+//=============================================================================
  
 float PROG_NOTELEFX = 32;	// No teleport FX at spawn marker
  
-//======================================================================
-/*QUAKED item_progspawn (1 .8 .2) (-16 -16 0) (16 16 56) x x x x x NOTELEFX x x NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
-Spawn location for progression list
--------- KEYS --------
-targetname : Must exist and be the same for all markers in same list
-target  : Must point to the first item in the progresion list
-target2 : targets to fire when the spawn marker is used
-message : message to display when triggered
--------- SPAWNFLAGS --------
-NOTELEFX    : No tele FX effect when changing item at spawn marker
--------- NOTES --------
-Spawn location for progression list
-
-======================================================================*/
-void(entity targ) item_proglist_setup =
-{
+// QUAKED item_progspawn (1 .8 .2) (-16 -16 0) (16 16 56) x x x x x NOTELEFX x x NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
+// -------- KEYS --------
+// targetname : Must exist and be the same for all markers in same list
+// target  : Must point to the first item in the progresion list
+// target2 : targets to fire when the spawn marker is used
+// message : message to display when triggered
+// -------- SPAWNFLAGS --------
+// NOTELEFX    : No tele FX effect when changing item at spawn marker
+// -------- NOTES --------
+// Spawn location for progression list
+void(entity targ) item_proglist_setup = { // [FUNCTION]
 	if (!(targ.flags & FL_ITEM)) return;// Only works with items
 
 	targ.touch = targ.think = SUB_Null;	// No more thinking/animation
@@ -44,62 +75,32 @@ void(entity targ) item_proglist_setup =
 	targ.velocity = targ.avelocity = '0 0 0';	// Frozen inplace
 };
 
-//----------------------------------------------------------------------
-void() item_progspawn_animateskin = 
-{
-	// Spawn marker turned off?
-	if (self.state == STATE_OFF) return;
-	// Skin animation disabled
-	if (self.item_skinanim == FALSE) return;
+void() item_progspawn_animateskin = { // [FUNCTION]
+	if (self.state == STATE_OFF) return; // Spawn marker turned off?
+	if (self.item_skinanim == FALSE) return; // Skin animation disabled
 	
-	// Increase animation skin number, check range
 	self.item_skinanim_no = self.item_skinanim_no + 1;
-	if (self.item_skinanim_no > MODEL_ANIM_RANGE) {
-		self.item_skinanim_no = 0;
-	}
-	// Update skin
-	self.skin = self.item_skinanim_no;
-
-	// Keep looping (slower than usual think timer)
-	self.think = item_progspawn_animateskin;
-	self.nextthink = time + (MODEL_ANIM_SPEED * 0.1);
+	if (self.item_skinanim_no > 3) self.item_skinanim_no = 0; // Increase animation skin number, check range
+	self.skin = self.item_skinanim_no; // Update skin
+	self.think = item_progspawn_animateskin; // Keep looping (slower than usual think timer)
+	self.nextthink = time + 0.3;
 };
 
-//----------------------------------------------------------------------
-void(vector org) item_progspawn_fx =
-{
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_TELEPORT);
-	WriteCoord (MSG_BROADCAST, org_x);
-	WriteCoord (MSG_BROADCAST, org_y);
-	WriteCoord (MSG_BROADCAST, org_z);
-};
-
-//----------------------------------------------------------------------
-void(entity targ) item_progspawn_off =
-{
+void(entity targ) item_progspawn_off = { // [FUNCTION]
 	targ.movetype = MOVETYPE_NONE;
 	targ.solid = SOLID_NOT;
 	setmodel (targ, "");
 	setsize (targ, VEC_ORIGIN, VEC_ORIGIN);
-	// Turn off any ammo lids
-	if (targ.attachment) {
+	if (targ.attachment) { // Turn off any ammo lids
 		setmodel(targ.attachment,"");
 		setsize(targ.attachment, VEC_ORIGIN, VEC_ORIGIN);
 	}
-	// Turn off spawn marker and skin animation
-	targ.state = STATE_OFF;
+	targ.state = STATE_OFF; // Turn off spawn marker and skin animation
 	targ.item_skinanim = FALSE;
-	
-	// Are particles enabled?
-	if (query_configflag(SVR_PARTICLES) && targ.part_emitter)
-		// Always switch particle emitter off
-		misc_particle_off(targ.part_emitter);
+	if (query_configflag(SVR_PARTICLES) && targ.part_emitter) misc_particle_off(targ.part_emitter); // Always switch particle emitter off
 };
 
-//----------------------------------------------------------------------
-void(entity targ, entity spnlist) item_progspawn_on =
-{
+void(entity targ, entity spnlist) item_progspawn_on = { // [FUNCTION]
 	targ.movetype = MOVETYPE_NONE;
 	targ.solid = SOLID_TRIGGER;
 	targ.skin = targ.frame = 0;
@@ -110,33 +111,19 @@ void(entity targ, entity spnlist) item_progspawn_on =
 	targ.angles = '0 0 0';
 	targ.state = STATE_ON;
 	targ.estate = ESTATE_ON;
-
-	// Keys, Runes and Artifacts are setup -24 map units lower
-	// Shift the models back up by adding a double negative
-	if (spnlist.bbmins_z < 0) targ.origin_z = targ.oldorigin_z - spnlist.bbmins_z;
-	
-	// Update particle emitter style
-	targ.part_active = spnlist.part_active;
+	if (spnlist.bbmins_z < 0) targ.origin_z = targ.oldorigin_z - spnlist.bbmins_z; // Keys, Runes and Artifacts are setup -24 map units lower.  Shift the models back up by adding a double negative
+	targ.part_active = spnlist.part_active; // Update particle emitter style
 	targ.respawn_style = spnlist.respawn_style;
 	targ.respawn_ofs = spnlist.respawn_ofs;
-
-	// Some particle styles read item inventory
-	targ.items = spnlist.items;
+	targ.items = spnlist.items; // Some particle styles read item inventory
 	targ.moditems = spnlist.moditems;
 	
 	// Are particles enabled? (quake.rc option)
 	if (query_configflag(SVR_PARTICLES) == SVR_PARTICLES) {
-		// Is item particle effects blocked?
-		if (spnlist.spawnflags & ITEM_NOEFFECTS && targ.part_emitter)
-			misc_particle_off(targ.part_emitter);
-		// Is the particle style defined?
-		else if (targ.part_active < 1 && targ.part_emitter)
-			misc_particle_off(targ.part_emitter);
-		// Can't do anything if no particle style
-		else if (targ.part_active > 0) {
-			// Has the particle emitter been created?
-			if (!targ.part_emitter)
-				targ.part_emitter = spawn_pemitter(targ, targ, targ.part_active, PARTICLE_START_ON);
+		if (spnlist.spawnflags & ITEM_NOEFFECTS && targ.part_emitter) misc_particle_off(targ.part_emitter); // Is item particle effects blocked?
+		else if (targ.part_active < 1 && targ.part_emitter) misc_particle_off(targ.part_emitter); // Is the particle style defined?
+		else if (targ.part_active > 0) { // Can't do anything if no particle style
+			if (!targ.part_emitter) targ.part_emitter = spawn_pemitter(targ, targ, targ.part_active, PARTICLE_START_ON); // Has the particle emitter been created?
 			else {
 				// Make sure the particle style is updated
 				targ.part_emitter.part_style = targ.part_active;
@@ -148,46 +135,38 @@ void(entity targ, entity spnlist) item_progspawn_on =
 	
 	// Setup special lid and frame poses for ammo boxes only
 	if (spnlist.classgroup == CG_AMMOITEM) {
-		// Setup random rotation or fixed angle (defined on item)
-		if (spnlist.angles_y < 1) targ.angles_y = rint(random()*359);
+		if (spnlist.angles_y < 1) targ.angles_y = rint(random()*359); // Setup random rotation or fixed angle (defined on item)
 		else targ.angles = spnlist.angles;
 		
 		// Setup extra frames for rockets/plasma
 		if (spnlist.frame_override) {
-			// frame options -1=random 0=nothing, 1-7=exact
-			// Always generate a new frame number for respawning items
-			if (spnlist.frame_box == -1) targ.frame = rint(1 + random()*6);
+			if (spnlist.frame_box == -1) targ.frame = rint(1 + random()*6); // frame options -1=random 0=nothing, 1-7=exact.  Always generate a new frame number for respawning items
 			else if (spnlist.frame_box > 7) spnlist.frame_box = 1;
+
 			if (spnlist.frame_box > 0) targ.frame = spnlist.frame_box;
+
 			// Turn off any ammo lids
 			if (targ.attachment) {
 				setmodel(targ.attachment,"");
 				setsize(targ.attachment, VEC_ORIGIN, VEC_ORIGIN);
 			}
-		}
-		// Setup lid attachment
-		else if (spnlist.spawnflags & A_LID && spnlist.headmdl != "") {
+		} else if (spnlist.spawnflags & A_LID && spnlist.headmdl != "") { // Setup lid attachment
 			if (!targ.attachment) {
 				targ.attachment = spawn();
 				targ.attachment.owner = targ;
 			}
+
 			// Setup LID attachment entity (match angles/origin)
 			targ.attachment.solid = SOLID_NOT;
 			targ.attachment.movetype = targ.movetype;
 			setmodel(targ.attachment, spnlist.headmdl);
-			// Give the lid the same bbox setup so it can move
-			setsize (targ.attachment, targ.mins, targ.maxs);
-			// Start lid off the ground and remove ground flag
-			// This will let the lid naturally settle on the surface
-			setorigin(targ.attachment, targ.origin + '0 0 1');
+			setsize (targ.attachment, targ.mins, targ.maxs); // Give the lid the same bbox setup so it can move
+			setorigin(targ.attachment, targ.origin + '0 0 1'); // Start lid off the ground and remove ground flag.  This will let the lid naturally settle on the surface
 			targ.attachment.flags = targ.attachment.flags - (targ.attachment.flags & FL_ONGROUND);
-			// Match angle and stored frame setup from ammo box
-			targ.attachment.angles = targ.angles;
-			
-			// lid frame options 0=random, 1-7=exact
-			// Always generate a new lid position for respawning items
-			if (spnlist.frame_box == 0) targ.attachment.frame = rint(1 + random()*6);
+			targ.attachment.angles = targ.angles; // Match angle and stored frame setup from ammo box
+			if (spnlist.frame_box == 0) targ.attachment.frame = rint(1 + random()*6); // lid frame options 0=random, 1-7=exact.  Always generate a new lid position for respawning items
 			else if (spnlist.frame_box > 7) spnlist.frame_box = 1;
+
 			if (spnlist.frame_box > 0) targ.attachment.frame = spnlist.frame_box;
 			
 			// LID has different skins for shells and spikes
@@ -208,12 +187,9 @@ void(entity targ, entity spnlist) item_progspawn_on =
 	}
 };
 
-//----------------------------------------------------------------------
-void() item_progspawn_touch =
-{
+void() item_progspawn_touch = { // [FUNCTION]
 	local entity oself;
-	
-	// ----------------------------------------------------------------
+
 	// SELF  = spawn marker (only works once)
 	// OTHER = always player (lots of checks at beginning)
 	// SELF.OWNER = List Controller
@@ -221,48 +197,31 @@ void() item_progspawn_touch =
 	// SELF.OWNER.TARGET = Targetname of NEXT item in list
 	// SELF.OWNER.MOVETARGET = Entity of NEXT item
 	// SELF.OWNER.TARGET2 = Targetname of all spawn marker(s)	
-	// ----------------------------------------------------------------
-	
-	// Duplicate of item_touch functionality
-	if (self.touchedvoid) {entity_hide(self); return;}
-	// Various player checks
+
+	if (self.touchedvoid) {entity_hide(self); return;} // Duplicate of item_touch functionality
 	if ( !(other.flags & FL_CLIENT) ) return;
 	if ( other.health < 1 ) return;
 	if ( other.flags & FL_NOTARGET ) return;
-	
-	// Has been used ONCE already or disabled?
-	if (self.state == STATE_OFF) return;
-	// Is the progression list controller active?
-	if (self.owner.state == STATE_OFF) return;
+	if (self.state == STATE_OFF) return; // Has been used ONCE already or disabled?
+	if (self.owner.state == STATE_OFF) return; // Is the progression list controller active?
 
 	// PICKUP CONDITIONS
-	// ----------------------------------------------------------------
 	if (self.owner.movetarget.classgroup == CG_HEALTH) {
 		if (health_pickupcondition(other, self.owner.movetarget)) return;		
-	}
-	else if (self.owner.movetarget.classgroup == CG_ARMOR) {
+	} else if (self.owner.movetarget.classgroup == CG_ARMOR) {
 		if (armor_pickupcondition(other, self.owner.movetarget)) return;		
-	}
-	// else if (self.owner.movetarget.classgroup == CG_AMMOITEM) {
-		// if (ammo_pickupcondition(other, self.owner.movetarget)) return;
-	// }
-	else if (self.owner.movetarget.classgroup == CG_KEY) {
+	} else if (self.owner.movetarget.classgroup == CG_KEY) {
 		if (key_pickupcondition(other, self.owner.movetarget)) return;
-	}
-	else if (self.owner.movetarget.classgroup == CG_RUNE) {
-		if (sigil_pickupcondition(self.owner.movetarget)) return;
+	} else if (self.owner.movetarget.classgroup == CG_RUNE) {
+		if (query_configflag(self.owner.movetarget.customkey)) return;
 	}
 	
-	// Spawn markers only work ONCE, switch it off
-	item_progspawn_off(self);
-	// Fire any targets/messages on the spawn marker
-	if (self.target2 != "") trigger_strs(self.target2, other);
+	item_progspawn_off(self); // Spawn markers only work ONCE, switch it off
+	if (self.target2 != "") trigger_strs(self.target2, other); // Fire any targets/messages on the spawn marker
 	if (self.message != "") centerprint (other, self.message);
 	
 	// ITEM FUNCTIONALITY
-	// ----------------------------------------------------------------
-	// Need to switch around self (item) otherwise the item touch
-	// functions won't work. The .other should still be a player
+	// Need to switch around self (item) otherwise the item touch functions won't work. The .other should still be a player
 	if (self.owner.movetarget.touch2) {
 		oself = self; self = self.owner.movetarget;
 		self.touch2();
@@ -270,40 +229,27 @@ void() item_progspawn_touch =
 	}
 
 	// PROGRESSION LIST (All error checking done in controller setup)
-	// ----------------------------------------------------------------
-	// Reached the end of the list?
-	if (self.owner.movetarget.target == "") self.owner.state = STATE_OFF;
+	if (self.owner.movetarget.target == "") self.owner.state = STATE_OFF; // Reached the end of the list.
 	else {
-		// Find next entity in progression list
-		self.goalentity = find(world, targetname, self.owner.movetarget.target);
-		// Entity not found? -> end of list condition
-		if (!self.goalentity) self.owner.state = STATE_OFF;
+		self.goalentity = find(world, targetname, self.owner.movetarget.target); // Find next entity in progression list
+		if (!self.goalentity) self.owner.state = STATE_OFF; // Entity not found. End of list condition.
 		else self.owner.movetarget = self.goalentity;
 	}
 
 	// SPAWN MARKERS
-	// ----------------------------------------------------------------
 	self.goalentity = find(world, targetname, self.owner.target2);
 	while (self.goalentity) {
-		// End of list? reset all markers to off
-		if (self.owner.state == STATE_OFF) item_progspawn_off(self.goalentity);
-		// List is active, check which spawn markers are active
-		else if (self.goalentity.state == STATE_ON) {
-			// Show teleporter particle effect?
-			if (!(self.goalentity.spawnflags & PROG_NOTELEFX)) 
-				item_progspawn_fx(self.goalentity.origin);
-			// Switch marker to new item
-			item_progspawn_on(self.goalentity, self.owner.movetarget);
-		}
-		// default = Spawn marked off/disabled
-		else item_progspawn_off(self.goalentity);
-			
-		// Find next spawn marker in list
-		self.goalentity = find(self.goalentity, targetname, self.owner.target2);
+		if (self.owner.state == STATE_OFF) item_progspawn_off(self.goalentity); // End of list, reset all markers to off
+		else if (self.goalentity.state == STATE_ON) { // List is active, check which spawn markers are active
+			if (!(self.goalentity.spawnflags & PROG_NOTELEFX)) Tent_Point(TE_TELEPORT,self.goalentity.origin); // Show teleporter particle effect.
+			item_progspawn_on(self.goalentity, self.owner.movetarget); // Switch marker to new item
+		} else item_progspawn_off(self.goalentity); // default = Spawn marked off/disabled
+
+		self.goalentity = find(self.goalentity, targetname, self.owner.target2); // Find next spawn marker in list
 	}
 };
 
-void() item_proglist_controller_setup = {
+void() item_proglist_controller_setup = { // [FUNCTION]
 	local float error_ekey, error_flag, error_targ, error_spawn, exit_targ, respawn_spnflag, float_spnflag, coop_warning;
 	
 	self.waitmin = self.waitmin2 = 0; // Setup counters for total list items and spawn markers
@@ -421,91 +367,49 @@ void() item_proglist_controller_setup = {
 	}
 };
 
-void() item_proglist_controller = {
-	// The first item in the progression list is unique, this
-	// would be the perfect location for the controller.
-	// Has it been setup yet?
-	if (!self.movetarget.progspawncont) {
-		self.movetarget.progspawncont = spawn();
-		self.movetarget.progspawncont.classtype = CT_CONTROL;
-		self.movetarget.progspawncont.classgroup = CG_PROGRESSION;
-		self.movetarget.progspawncont.solid = SOLID_NOT;
-		self.movetarget.progspawncont.movetype = MOVETYPE_NONE;
-		setorigin(self.movetarget.progspawncont, self.movetarget.origin+'0 0 32');
-		setsize(self.movetarget.progspawncont, VEC_ORIGIN, VEC_ORIGIN);
-		// Always have a link to first item, as it can change
-		self.movetarget.progspawncont.owner = self.movetarget;
-		
-		// TARGET (string)  = targetname of first item in list
-		// MOVETARGET (ent) = entity pointer to start of list
-		// TARGET2 (string) = spawn markers (never changes)
-		
-		// Start of the progression list
-		self.movetarget.progspawncont.target = self.target;
-		self.movetarget.progspawncont.movetarget = self.movetarget;
-		// All Spawn marker(s) should be same name
-		self.movetarget.progspawncont.target2 = self.targetname;
-		
-		// Start controller in ON state (errors switch it off)
-		self.movetarget.progspawncont.state = STATE_ON;
+// The first item in the progression list is unique, this would be the perfect location for the controller.  Has it been setup yet?
+void() item_proglist_controller = { // [FUNCTION]
+	if (self.movetarget.progspawncont) return;
 
-		// Allow for all entities to spawn and link
-		self.movetarget.progspawncont.nextthink = time + 0.5;
-		self.movetarget.progspawncont.think = item_proglist_controller_setup;	
-	}
+	self.movetarget.progspawncont = spawn();
+	self.movetarget.progspawncont.classtype = CT_CONTROL;
+	self.movetarget.progspawncont.classgroup = CG_PROGRESSION;
+	self.movetarget.progspawncont.solid = SOLID_NOT;
+	self.movetarget.progspawncont.movetype = MOVETYPE_NONE;
+	setorigin(self.movetarget.progspawncont, self.movetarget.origin+'0 0 32');
+	setsize(self.movetarget.progspawncont, VEC_ORIGIN, VEC_ORIGIN);
+	self.movetarget.progspawncont.owner = self.movetarget; // Always have a link to first item, as it can change
+	self.movetarget.progspawncont.target = self.target; // targetname of first item in list.  Start of the progression list
+	self.movetarget.progspawncont.movetarget = self.movetarget; // entity pointer to start of list
+	self.movetarget.progspawncont.target2 = self.targetname; // spawn markers (never changes).  All Spawn marker(s) should be same name
+	self.movetarget.progspawncont.state = STATE_ON; // Start controller in ON state (errors switch it off)
+	self.movetarget.progspawncont.nextthink = time + 0.5; // Allow for all entities to spawn and link
+	self.movetarget.progspawncont.think = item_proglist_controller_setup;
 };
 
-//----------------------------------------------------------------------
-void() item_progspawn_setup =
-{
-	// Cannot use this spawn if targetname missing
-	if (self.targetname == "") {
-		dprint("\b[PROG_SPN]\b targetname is missing!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		entity_hide(self);
-		return;
-	}
-	// Target has to point to first item in list!
-	if (self.target == "") {
-		dprint("\b[PROG_SPN]\b target is missing!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		entity_hide(self);
-		return;
-	}	
-	// Find target entity (Does entity actually exist!)
-	self.movetarget = find(world, targetname, self.target);
-	if (!self.movetarget) {
-		dprint("\b[PROG_SPN]\b missing target entity!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		entity_hide(self);
-		return;
-	}
-	// Spawn location ready for items
-	self.state = STATE_ON;
-	// Setup and enable controller entity
-	item_proglist_controller();
+void() item_progspawn_setup = { // [FUNCTION]
+	if (SUB_HideIfNoTargetname()) return; // Cannot use this spawn if targetname missing.
+	if (SUB_HideIfNoTarget()) return; // Target has to point to first item in list!
+
+	self.movetarget = find(world, targetname, self.target); // Find target entity (Does entity actually exist!)
+	if (!self.movetarget) { dprint("\b[PROG_SPN]\b missing target entity!\n"); spawn_marker(self.origin, SPNMARK_YELLOW); entity_hide(self); return; }
+
+	self.state = STATE_ON; // Spawn location ready for items
+	item_proglist_controller(); // Setup and enable controller entity
 };
 
-//----------------------------------------------------------------------
-void() item_progspawn =
-{
+void() item_progspawn = { // [ENTITY]
 	self.classtype = CT_PROGSPAWN;
 	self.classgroup = CG_PROGRESSION;
-
-	// No world interaction or movement
-	self.solid = SOLID_NOT;
+	self.solid = SOLID_NOT; // No world interaction or movement
 	self.movetype = MOVETYPE_NONE;
 	self.bbmins = self.bbmaxs = VEC_ORIGIN;
 	setsize(self, self.bbmins, self.bbmaxs);
 	self.oldorigin = self.origin;
-	
-	// reset all values to zero (used later)
-	self.angles = '0 0 0';
+	self.angles = '0 0 0'; // reset all values to zero (used later)
 	self.skin = self.frame = 0;
 	self.velocity = self.avelocity = '0 0 0';
 	self.state = STATE_OFF;
-	
-	// Allow time for everything to spawn
-	self.nextthink = time + 0.1 + (random()*0.4);
+	self.nextthink = time + 0.1 + (random()*0.4); // Allow time for everything to spawn
 	self.think = item_progspawn_setup;	
 };

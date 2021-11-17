@@ -600,17 +600,29 @@ void() zombie_cruc_setup = {
 	}
 };
 
+void() monster_zombie_precache = {
+	precache_model ("progs/ad171/mon_zombie.mdl");
+	precache_model ("progs/ad181/h_zombie.mdl");
+	precache_sound ("zombie/z_idle.wav");	// Idle A
+	precache_sound ("zombie/z_idle1.wav");	// Idle B
+	precache_sound ("zombie/idle_w2.wav");	// Crucified
+	precache_sound ("zombie/z_pain.wav");
+	precache_sound ("zombie/z_pain1.wav");
+	precache_sound ("zombie/z_shot1.wav");	// Swipe sound
+	precache_sound ("zombie/z_fall.wav");	// Impact - floor
+	precache_sound ("zombie/z_miss.wav");	// Impact - miss
+	precache_sound ("zombie/z_hit.wav");	// Impact - hit
+	precache_sound ("zombie/z_gib.wav");	// Death sound
+	precache_sound ("zombie/z_idle.wav");
+};
+
 void() monster_zombiep;
 
-/*======================================================================
- QUAKED monster_zombie (1 0 0) (-16 -16 -24) (16 16 32) Crucified ambush FLOOR
-If crucified, stick the bounding box 12 pixels back into a wall to look right.
-======================================================================*/
+// QUAKED monster_zombie (1 0 0) (-16 -16 -24) (16 16 32) Crucified ambush FLOOR
+// If crucified, stick the bounding box 12 pixels back into a wall to look right.
 void() monster_zombie = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	// Check for poisonous entity flag
 	if (self.poisonous) {
@@ -621,8 +633,6 @@ void() monster_zombie = {
 
 	self.mdl = "progs/ad171/mon_zombie.mdl";
 	self.headmdl = "progs/ad181/h_zombie.mdl";
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
 
 	// Stupid ID getting the crucified and ambush back to front on zombies
 	// Lets fix the problem and reverse the flags to match everything else
@@ -636,24 +646,9 @@ void() monster_zombie = {
 		self.spawnflags = self.spawnflags + self.health;
 	}
 
-	precache_sound ("zombie/z_idle.wav");	// Idle A
-	precache_sound ("zombie/z_idle1.wav");	// Idle B
-	precache_sound ("zombie/idle_w2.wav");	// Crucified
-
 	self.pain_sound = "zombie/z_pain.wav";
 	self.pain_sound2 = "zombie/z_pain1.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-
-	precache_sound ("zombie/z_shot1.wav");	// Swipe sound
-	precache_sound ("zombie/z_fall.wav");	// Impact - floor
-	precache_sound ("zombie/z_miss.wav");	// Impact - miss
-	precache_sound ("zombie/z_hit.wav");	// Impact - hit
-	precache_sound ("zombie/z_gib.wav");	// Death sound
-
 	self.sight_sound = "zombie/z_idle.wav";
-	precache_sound (self.sight_sound);
-
 	self.solid = SOLID_NOT;					// No interaction with world
 	self.movetype = MOVETYPE_NONE;			// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
@@ -668,8 +663,9 @@ void() monster_zombie = {
 	self.resist_rockets = self.resist_cells = 0;
 
 	// Setup crucified zombies
-	if (self.spawnflags & MON_CRUCIFIED) zombie_cruc_setup();
-	else {
+	if (self.spawnflags & MON_CRUCIFIED) {
+		zombie_cruc_setup();
+	} else {
 		// Setup zombie ready for placement
 		self.health = HP_MONZOMBIE;				// Basic health (cannot override)
 		self.gibhealth = -60;					// Gib value, not used
@@ -693,53 +689,44 @@ void() monster_zombie = {
 		self.th_die = zombie_die;
 		self.th_missile = zombie_missile;
 		self.th_wakeup = zombie_wakeup;			// Get off floor
-		
 		monster_start();
 	}
 };
 
-/*======================================================================
- QUAKED monster_mummy (1 0 0) (-16 -16 -24) (16 16 32) ambush x FLOOR
-Poisonous Zombie that explodes poisonous gibs on death
-======================================================================*/
-void() monster_zombiep = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/ad171/mon_zombie.mdl";
-	self.headmdl = "progs/ad181/h_zombie.mdl";
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
+void() monster_zombiep_precache = {
+	precache_model ("progs/ad171/mon_zombie.mdl");
+	precache_model ("progs/ad181/h_zombie.mdl");
 	precache_model (MODEL_PROJ_FLESHP);
-
 	precache_sound ("zombie/z_idle.wav");	// Idle A
 	precache_sound ("zombie/z_idle1.wav");	// Idle B
 	precache_sound ("zombie/idle_w2.wav");	// Crucified
-
-	self.pain_sound = "zombie/z_pain.wav";
-	self.pain_sound2 = "zombie/z_pain1.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-
+	precache_sound ("zombie/z_pain.wav");
+	precache_sound ("zombie/z_pain1.wav");
 	precache_sound ("zombie/z_shot1.wav");	// Swipe sound
 	precache_sound ("zombie/z_fall.wav");	// Impact - floor
 	precache_sound ("zombie/z_miss.wav");	// Impact - miss
 	precache_sound ("zombie/z_hit.wav");	// Impact - hit
 	precache_sound ("zombie/z_gib.wav");	// Death sound
-
-	self.sight_sound = "zombie/z_idle.wav";
-	precache_sound (self.sight_sound);
-
+	precache_sound ("zombie/z_idle.wav");
 	precache_poisongibs();					// precache gibs
-	self.gibtype = GIBTYPE_POISON;		// Poisonous blood trails
 	precache_model (MODEL_PROJ_FLESHP);	// Green flesh!?!
+};
 
+// QUAKED monster_zombiep (1 0 0) (-16 -16 -24) (16 16 32) ambush x FLOOR
+// Poisonous Zombie that has poisonous gibs on death
+void() monster_zombiep = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/ad171/mon_zombie.mdl";
+	self.headmdl = "progs/ad181/h_zombie.mdl";
+	self.pain_sound = "zombie/z_pain.wav";
+	self.pain_sound2 = "zombie/z_pain1.wav";
+	self.sight_sound = "zombie/z_idle.wav";
+	self.gibtype = GIBTYPE_POISON;		// Poisonous blood trails
 	self.solid = SOLID_NOT;					// No interaction with world
 	self.movetype = MOVETYPE_NONE;			// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
-
 	self.exactskin = rint(2 + random());						// Mouldly bandages
 	self.gibtype = GIBTYPE_POISON;			// Poison gibs!
 	self.no_liquiddmg = TRUE;				// Immune to slime/lava
@@ -781,7 +768,6 @@ void() monster_zombiep = {
 		self.th_die = zombie_die;
 		self.th_missile = zombie_missile;
 		self.th_wakeup = zombie_wakeup;			// Get off floor
-		
 		monster_start();
 	}
 };

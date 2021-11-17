@@ -74,8 +74,7 @@ void() deathguard_slowcharge10 = [121, deathguard_run1] { ai_charge(2); };
 void() dg_fireball_touch = {
 	local vector org;
 
-	if (other == self.owner)
-		return;
+	if (other == self.owner) return;
 
 	if (pointcontents(self.origin) == CONTENT_SKY) {
 		remove(self);
@@ -89,11 +88,8 @@ void() dg_fireball_touch = {
 	WriteCoord(MSG_BROADCAST, org_z);
 	sound(self, CHAN_VOICE, "quoth/dguard/hit.wav", 1, ATTN_NORM);
 	T_RadiusDamage(self, self.owner, 40, other,DAMAGEALL);
-	T_Damage(other, self, self.owner, 27 + 2 * random(),DAMARMOR);
-	if (other.classname != "player") {
-		if (other.classname == "monster_zombie" || other.classname == "monster_zombiek" || other.classname == "monster_zombiep")
-			T_Damage(other, self, self.owner, 120,DAMARMOR); // gib zombies!
-	}
+	if (other.classgroup == CG_ZOMBIE) T_Damage(other, self, self.owner, 120,DAMARMOR); // gib zombies!
+	else T_Damage(other, self, self.owner, 27 + 2 * random(),DAMARMOR);
 	remove(self);
 };
 
@@ -216,8 +212,7 @@ void() deathguard_dieb8 = [61, deathguard_dieb9] {monster_death_postcheck(); };
 void() deathguard_dieb9 = [62, deathguard_dieb9] { self.nextthink = time + 0.1; };
 
 void() deathguard_die = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	if (!self.gibbed) {
 		if (random() > 0.5) {
@@ -229,37 +224,25 @@ void() deathguard_die = {
 };
 
 void(entity inflictor, entity attacker, float damage) deathguard_pain = {
-	if (self.pain_finished > time)
-		return;
+	if (self.pain_finished > time) return;
 
 	if (random() > 0.5) {
 		sound(self, CHAN_VOICE, "quoth/dguard/pain1.wav", 1, ATTN_NORM);
 	} else {
 		sound(self, CHAN_VOICE, "quoth/dguard/pain2.wav", 1, ATTN_NORM);
 	}
-	if (random() * 30 > damage)
-		return;
+
+	if (random() * 30 > damage) return;
 
 	self.pain_finished = time + 5;
 	deathguard_pain1();
 };
 
-void() deathguard_melee = { deathguard_slash1(); };
-
-void() monster_deathguard = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/quoth/dguard.mdl";
-	precache_model(self.mdl);
-	self.headmdl = "progs/quoth/h_dguard.mdl";
-	precache_model(self.headmdl);
+void() monster_deathguard_precache = {
+	precache_model("progs/quoth/dguard.mdl");
+	precache_model("progs/quoth/h_dguard.mdl");
 	precache_model("progs/quoth/fireball.mdl");
-	self.gib1sound = GIB_IMPACT_METALA;
-	self.idle_sound = "quoth/dguard/idle.wav";
-	precache_sound(self.idle_sound);
+	precache_sound("quoth/dguard/idle.wav");
 	precache_sound("quoth/dguard/fire.wav");
 	precache_sound("ad171/dknight/dserg_magic.wav");
 	precache_sound("quoth/dguard/death1.wav");
@@ -277,7 +260,16 @@ void() monster_deathguard = {
 	precache_sound("quoth/dguard/slhit.wav");
 	precache_sound("quoth/dguard/slmiss1.wav");
 	precache_sound("quoth/dguard/slmiss2.wav");
+};
 
+void() monster_deathguard = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/quoth/dguard.mdl";
+	self.headmdl = "progs/quoth/h_dguard.mdl";
+	self.gib1sound = GIB_IMPACT_METALA;
+	self.idle_sound = "quoth/dguard/idle.wav";
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -309,7 +301,6 @@ void() monster_deathguard = {
 	self.classgroup = CG_KNIGHT;
 	self.classmove = MON_MOVEWALK;
 	if (self.deathstring == "")  self.deathstring =  "was slaughtered by a Death Brigade Death Guard\n";
-
 	monster_start();
 };
 

@@ -65,21 +65,14 @@ $frame w_attack21 w_attack22
 $frame magicc1 magicc2 magicc3 magicc4 magicc5 magicc6 magicc7 magicc8
 $frame magicc9 magicc10 magicc11
 
-float       hknight_type;
-
 // Makes the Bane gray and ghostly.  Called by 'painc' and 'magice' series.
 void() bane_gray = {
-    if (self.health <= self.waitmin)
-    {   // Set up clone magic.
+    if (self.health <= self.waitmin) { // Set up clone magic.
         self.health     = self.waitmin; // Yes, reset health.
         self.waitmax    =           // If lower than min, then max too.
         self.waitmin    = 0;        // Cannot use clone trick again.
         self.cnt        = skill;    // Number of clones to spawn.
-        if (cranked)
-            self.cnt        = self.cnt + 1;
-    }
-    else
-        self.cnt        = 0;
+    } else self.cnt = 0;
     // Now the Bane becomes a phantom as he shadow walks.
     self.touch      = SUB_Null;     // In case of jump attack.
     self.takedamage = DAMAGE_NO;
@@ -96,10 +89,42 @@ void() bane_pain4 =[ $pain5, hknight_run1 ] {ai_forward(2);};
 
 void() bane_painb1=[ $pain1, bane_pain3   ] {};
 
+// Shadows
+// Trailing shadowy copies of bane, like Johnny Cage shadow kick, or Akuma teleport...or mouse cursor trails in 1998.
+void() bane_shadow_think = { // [FUNCTION]
+    self.alpha = self.alpha - 0.2;   //0.25
+    if (self.alpha <= 0.001)	remove (self);
+    else						self.nextthink = time + 0.1;
+};
+
+// Spawn a ghost copy.
+void() bane_shadow = { // [FUNCTION]
+    local entity ent;
+
+    if (!self.modelindex) return; // Don't leave shadow afterimages if invisible.
+
+    ent = spawn();
+    ent.movetype = MOVETYPE_NONE;
+    ent.velocity = '0 0 0';
+    ent.touch    = SUB_Null;
+    setmodel (ent, self.model);
+    setorigin (ent, self.origin);
+    ent.solid    = SOLID_NOT;
+    ent.angles   = self.angles;
+    ent.frame    = self.frame;
+    if (self.classtype == CT_MONBANE) ent.skin = self.skin + 1;   // Greyscale version of Bane.
+    else ent.skin = self.skin;
+
+    if (self.alpha) ent.alpha    = self.alpha;
+    else ent.alpha    = 1;
+
+    ent.think    = bane_shadow_think;
+    SUB_ThinkImmediate (ent, ent.think);
+};
+
 // This pain makes the Bane pull the log trick from Naruto,
 // only leave behind a fading image of the Bane instead of a log.
-void() bane_painc1=[ $pain1, bane_magice9 ]
-{
+void() bane_painc1=[ $pain1, bane_magice9 ] {
     bane_gray();
     bane_shadow();
     self.nextthink  = time + 0.5;
@@ -164,43 +189,28 @@ void() hknight_reviveb6  =[ $deathb3,   hknight_reviveb7  ] {};
 void() hknight_reviveb7  =[ $deathb2,   hknight_reviveb8  ] {};
 void() hknight_reviveb8  =[ $deathb1,   hknight_revive12  ] {};
 
-void() hknight_revive =
-{
+void() hknight_revive = {
     if ( self.frame == $deathb9 )
         hknight_reviveb1 ();
     else //if ( self.frame == $death10 )
         hknight_revive1 ();
 };
 
-
-//============================================================================
 // BANE JUMP
 
 void() Bane_JumpTouch;
 void(float d) hk_charge;
 
-// We need these first three jump frame functions in case the Bane
-// needs to jump again without selecting other random attacks.
-void() bane_jump1   =[ $char_a1,  bane_jump2 ] {hk_charge(20);
-    sound (self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM);
-};
+// We need these first three jump frame functions in case the Bane needs to jump again without selecting other random attacks.
+void() bane_jump1   =[ $char_a1,  bane_jump2 ] {hk_charge(20); sound (self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM); };
 void() bane_jump2   =[ $char_a2,  bane_jump3 ] {hk_charge(18);};
 void() bane_jump3   =[ $char_a3,  bane_jump4 ] {hk_charge(16);};
-void() bane_jump4   =[ $char_a4,  bane_jump5 ]
-{
-    if (self.health <= 0)
-        {self.touch = SUB_Null;  self.think = hknight_die1;  return;}
-
-    local   float   g;
-
-    g = cvar("sv_gravity") / 800;
-
+void() bane_jump4   =[ $char_a4,  bane_jump5 ] {
+    if (self.health <= 0) {self.touch = SUB_Null;  self.think = hknight_die1;  return;}
     ai_face();
-    // Bane is a bbeg, so don't bother with invisibility shenanigans.
-    // Ditto for the dark lord.
-    self.touch = Bane_JumpTouch;
+    self.touch = Bane_JumpTouch; // Bane is a bbeg, so don't bother with invisibility shenanigans.  Ditto for the dark lord.
     makevectors (self.angles);
-    self.velocity = (v_forward * 600) + ('0 0 250' * g);
+    self.velocity = (v_forward * 600) + ('0 0 250' * (cvar("sv_gravity") / 800));
     self.flags = self.flags - (self.flags & FL_ONGROUND);
 };
 // Standard demon jumps reach level ground in about 0.5 sec in normal g.
@@ -244,55 +254,30 @@ void() Bane_JumpTouch = {
 };
 
 float() CheckBaneJump = {
-    local   vector  dist;
-    local   float   d;
-
-// FIXME:  Check if jump will land on solid ground.
-
-// Elevation check done in CheckForCharge.
-//    d = self.enemy.origin_z + self.enemy.mins_z;
-//    if (self.origin_z + self.mins_z > d + 0.75 * self.enemy.size_z)
-//        return FALSE;       // Target is too low.
-//    if (self.origin_z + self.maxs_z < d + 0.25 * self.enemy.size_z)
-//        return FALSE;       // Target is too high.
+    local vector dist;
+    local float d;
 
     dist = self.enemy.origin - self.origin;
     dist_z = 0;
     d = vlen(dist);
-    if (d < 100)
-        return FALSE;       // Target is too close.
-//    if (d > 200)
-//        if (random() < 0.9)
-//            return FALSE;
-    if (d > 1000)
-        return FALSE;       // Target is too far away.
+    if (d < 100) return FALSE; // Target is too close.
+    if (d > 1000) return FALSE; // Target is too far away.
     return TRUE;
 };
 
-// BANE AI
-//============================================================================
-void(float dist) ai_run_strafe;
-
 void() bane_strafe = {
-    if (self.classname == "monster_bane") {
-        // Strafing distance was defined by movedist, which could be
-        // anything.  Drake has removed movedist, and since this progs
-        // is based on Drake, set distance here.
+	if (self.classtype != CT_MONBANE) return;
 
-        self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
-        ChangeYaw ();
-        bane_shadow ();     // Shadow trails, like shadow kick.
-        ai_run_strafe (20);     // Player walk speed.
-    }
+	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
+	ChangeYaw ();
+	bane_shadow ();     // Shadow trails, like shadow kick.
+	ai_run_strafe (20);     // Player walk speed.
 };
 
 void() hk_face = {ai_face();  bane_strafe();};
 
-//============================================================================
 // ATTACK #1 (Modified for Lightning Airstrike)
-
-// Here for incidental damage in case enemy runs up to melee range while
-// the sword is coming down during the magica animation.
+// Here for incidental damage in case enemy runs up to melee range while the sword is coming down during the magica animation.
 void() magica_sword_chop = {
     local   float   ldmg;
     local   vector  delta;
@@ -307,6 +292,120 @@ void() magica_sword_chop = {
     ldmg = 20 + 10*random();    // Player normally does 20 damage with axe.
     T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
     SpawnMeatSpray (self, self.enemy, (crandom() * 50) + 50);
+};
+
+// Updates thunderstorm's targeting data, cycling through known enemies.
+void() bane_storm_target = { // [FUNCTION]
+	if (self.enemy == self.owner.enemy) {
+		if (self.owner.oldenemy) self.enemy = self.owner.oldenemy;
+	} else self.enemy = self.owner.enemy;
+    self.dest = self.enemy.origin;
+};
+
+void() bane_storm_end = { // [FUNCTION]
+    if (self.owner && self.owner.owner == self) self.owner.owner = world;
+    self.owner = world;
+    SUB_Remove ();
+};
+
+void() bane_storm1  =[ 0, bane_storm2  ] {self.nextthink = time + 0.3;}; // [FUNCTION]
+void() bane_storm2  =[ 0, bane_storm3  ] {self.nextthink = time + 0.4; self.dest = self.enemy.origin;}; // [FUNCTION]
+void() bane_storm3  =[ 0, bane_storm4  ] { // [FUNCTION]
+    if (self.owner.frame <= self.waitmin || self.owner.frame >= self.waitmax) { self.think = bane_storm_end; return; } // Abort if spellcasting was interrupted.
+};
+void() bane_storm4  =[ 0, bane_storm5  ] { // [FUNCTION]
+    local float zot, loop;
+    local vector p1, p2;
+
+	// First, check if we should even call an airstrike.
+    zot = FALSE;
+    if (self.enemy) {
+        if (UpIsSky(self.dest)) zot = TRUE;
+        else {
+			// Under shelter, so try to find another point nearby that isn't.
+            loop = 5;
+            p1 = self.dest;
+            while (loop > 0) {
+                loop = loop - 1;
+                p1_x = crandom() * 256 + self.dest_x;
+                p1_y = crandom() * 256 + self.dest_y;
+                traceline (self.dest, p1, TRUE, self);
+                if (trace_fraction >= 1.0 && UpIsSky (p1)) {
+					self.dest = p1;
+					zot = TRUE;
+					loop = 0; // End the loop.
+				}
+            }
+        }
+
+        // Bane can't hurt himself with Tstorm.
+        if (self.owner) {
+            if (self.owner.classtype != CT_MONBANE) {
+                p1 = self.owner.origin;
+                p2 = self.dest;
+                p2_z = p1_z;
+                if (vlen(p2 - p1) < (self.dmg + 60)) zot = FALSE;    // Too close.  Was 150.
+            }
+		}
+    }
+
+	// Now start for real.
+    self.cnt = self.cnt - 1;
+    if (zot) {
+        LightZero_Set(16,self.delay,0);
+		Thunderstrike_Ex(self.owner,self.dest,self.dmg);
+        self.pain_finished = time + 3;
+    } else {
+        zot = random(); // Reusing zot for random thunder sound volume.
+        if (zot < 0.5) zot = 0.5;
+        else LightZero_Set (13, self.delay, 0); // No bolt -- just flash and thunder.
+			
+        if (random() < 0.5) sound (self, CHAN_AUTO, "ambience/thunder1.wav", zot, ATTN_NONE);
+        else sound (self, CHAN_AUTO, "zerstorer/ambience/thunder2.wav", zot, ATTN_NONE);
+			
+        self.pain_finished = time + 5;
+    }
+    bane_storm_target ();
+    self.attack_finished = time + self.delay;
+};
+void() bane_storm5 =[ 0, bane_storm6    ] {LightZero_Set (12, self.delay, -4); self.nextthink = self.attack_finished;}; // [FUNCTION]
+void() bane_storm6 =[ 0, bane_storm_end ] { // [FUNCTION]
+    if (self.owner.deadflag >= DEAD_DEAD) return; // Spell is broken.
+
+    if (self.cnt > 0) {
+        if ((random() < self.volume) || (!self.enemy && self.pain_finished > time)) {
+            LightZero_Set (-1, self.delay, -4);
+            self.cnt        = self.cnt - 1;
+            self.think      = bane_storm6;
+            self.nextthink  = time + self.delay;
+            bane_storm_target();
+        } else {
+            bane_storm4();
+		}
+    }
+};
+
+void(float frmin, float frmax) bane_storm = { // [FUNCTION]
+    local entity magic;
+
+    magic = spawn();
+    setorigin (magic, self.origin);     // Sound comes from here.
+    magic.nextthink = self.nextthink;   // Synch with sword chop anim.
+    magic.think = bane_storm1;
+    magic.owner = self;
+    magic.enemy = self.enemy;
+    magic.delay = 0.5;      // Delay between strikes.
+    magic.cnt   = 6;        // Max number of zaps.  Each is 0.5 sec apart.
+    magic.dmg   = 80;       // Used to be 90.
+    magic.classname = "lightning";
+    magic.waitmin = frmin;
+    magic.waitmax = frmax;
+    magic.volume  = 0.5;    // 50% chance of no bolt after the first.
+    sound (magic, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE);
+    magic.pain_finished = time + 3;
+    magic.attack_finished = 0;
+    if (self) self.owner = magic;
+    LightZero_Set (-1, 1, -1);
 };
 
 // Bane summons a thunderstorm.
@@ -346,15 +445,12 @@ void() darklord_magica10 =[ $magica10, hknight_magica11  ] {hk_face();
 };
 
 // Hell Lords rain meteors down.
-void() lord_meteor = {boss_meteor('50 0 100', 300, FALSE, FALSE);};
-void() lord_magica7  =[ $magica7,  lord_magica8     ] {hk_face(); lord_meteor();};
-void() lord_magica8  =[ $magica8,  lord_magica9     ] {hk_face(); if (skill >= 3) lord_meteor();};
+void() lord_magica7  =[ $magica7,  lord_magica8     ] {hk_face(); boss_meteor('50 0 100',300);};
+void() lord_magica8  =[ $magica8,  lord_magica9     ] {hk_face(); if (skill >= 3) boss_meteor('50 0 100',300);};
 void() lord_magica9  =[ $magica9,  lord_magica10    ] {hk_face(); magica_sword_chop();};
 void() lord_magica10 =[ $magica10, hknight_magica11 ] {hk_face();};
 
-//============================================================================
 // ATTACK #2 (Modified for Fireball)
-
 // Hell Lords launches more magic missiles.  Bane launches more fireballs.
 void() lord_magicb6  =[ $magicb6,  lord_magicb7     ] {hknight_shot(0); bane_strafe();};
 void() lord_magicb7  =[ $magicb7,  lord_magicb8     ] {hknight_shot(-1); bane_strafe();};
@@ -522,19 +618,12 @@ void() bane_magice13 =[ $magicb11, bane_magice14 ] {self.alpha = 0; hk_face();
 void() bane_magice14 =[ $magicb12, bane_magice15 ] {hk_face();};
 void() bane_magice15 =[ $magicb13, hknight_run1  ] {hk_face();};
 
-void() hknight_magic = {
-//    if (cranked && (random() < 0.25))
-//        hknight_magica1 ();
-//    else
-        hknight_magicc1 ();
-};
-
 void() lord_magic = {
     local float r, add, opt;
 
     add = 1;
     opt = 2;
-    if (M_FirewallCheck ()) opt = opt + 1;
+    if (M_FirewallCheck()) opt = opt + 1;
     if (M_MeteorCheck ('50 0 112')) {add = 0;  opt = opt + 1;} // Using 50 and 100 as sides of a right triangle, hypotenuse is 111.8.
     r = random() * opt + add;
     if (r <= 1)
@@ -548,32 +637,26 @@ void() lord_magic = {
 };
 
 // FIXME:  Is this done aside from missing corpse scan/use?
-void() darklord_magic = {
 // Todo:
-// If close, use slam, charge, or melee.
-// else, shoot or summon.
-    local   float   dist;
+// If close, use slam, charge, or melee; else, shoot or summon.
+void() darklord_magic = {
+    local float dist;
 
-// FIXME:  Check for corpses to make wraths from.
-//    if (self.minion_count < skill)
-//        if (random() < 0.1)
-//    if (random() < (skill - self.minion_count) * 0.1)
-    if (self.spawnflags & 2)
-        if (self.minion_count < 1)
-            if (self.waitmax < time)
-                {darklord_magicd1 ();  return;}
+	// FIXME:  Check for corpses to make wraths from.
+	//    if (self.minion_count < skill)
+	//        if (random() < 0.1)
+	//    if (random() < (skill - self.minion_count) * 0.1)
+    if ((self.spawnflags & 2) && (self.minion_count < 1) && (self.waitmax < time)) {darklord_magicd1 ();  return;}
 
-// Attacking...
+	// Attacking...
     dist = vlen(self.enemy.origin - self.origin);
-    if (dist <= DARKLORD_NEAR)
-    {
-        if (self.waitmin < time)
-            {darklord_magica1();  return;}  // Thor's hand.
+    if (dist <= DARKLORD_NEAR) {
+        if (self.waitmin < time) {darklord_magica1();  return;} // Thor's hand.
+
         CheckForCharge ();
-        if (( self.frame == $char_a1 ) || ( self.frame == $char_b1 ))
-            return;
+        if (self.frame == $char_a1 || self.frame == $char_b1) return;
     }
-    hknight_magicb1 ();     // Magic missile straight
+    hknight_magicb1 (); // Magic missile straight
 };
 
 void() hkboss_magic = {
@@ -594,24 +677,14 @@ void() hkboss_magic = {
 };
 
 void() bane_magic = {
-	// PM:  Jumping done at charge anim.  However...
-	// If enemy is low enough that CheckForCharge would abort, then we can
-	// check for jumping.  We want the Bane to occasionally jump down toward
-	// the enemy, much like old SoE.
-	// Update:  If enemy is above, try to teleport to higher ground occasionally.
     if (random() < 0.25) {
-        if (CheckBaneJump ()) {
-            if (self.origin_z - self.enemy.origin_z > 20) {bane_jump1 ();  return;}
-            if (!self.waitmax && ((self.enemy.origin_z - self.origin_z) > 20)) {bane_magice1 ();  return;} // Only if using new AI.
+        if (CheckBaneJump ()) { // PM:  Jumping done at charge anim.  However, if enemy is low enough that CheckForCharge would abort, then we can check for jumping.
+            if (self.origin_z - self.enemy.origin_z > 20) {bane_jump1 ();  return;} // We want the Bane to occasionally jump down toward the enemy, much like old SoE.
+            if (!self.waitmax && ((self.enemy.origin_z - self.origin_z) > 20)) {bane_magice1 ();  return;} // If enemy is above and using new AI, try to teleport to higher ground occasionally.
         }
 	}
 
-	// Check for thunderstorm.
-    if (!self.waitmax)
-        if (skill >= 1)
-            if (!bane_has_storm ())
-                if (random() < 0.5)
-                    if (UpIsSky (self.enemy.origin)) {bane_magica1 ();  return;}   // Start a thunderstorm!
+    if (!self.waitmax && skill >= 1 && !(self.owner && self.owner.owner == self) && random() < 0.5 && UpIsSky(self.enemy.origin)) {bane_magica1(); return;} // Start a thunderstorm!
 
 	// Spray some fireballs.
     if (random() <= 0.5)
@@ -622,17 +695,15 @@ void() bane_magic = {
 
 void(float side) bane_melee = {
     local   float   ldmg;
-    local   vector  delta;
 
-    if ((self.classname != "monster_bane") && (self.classname != "monster_dark_lord")) return;
+    if ((self.classtype != CT_MONBANE) && (self.classtype != CT_MONDARKLORD)) return;
     
-    ai_face (); // movement done elsewhere.
-    delta = self.enemy.origin - self.origin;
+    ai_face(); // Movement done elsewhere.
+
     if (!InMeleeRange (80)) return; // 100 is too long.
     if (!CanDamage (self.enemy, self)) return;
-    // Let the Bane hit ghosts.  He's just that badass.
-    // Update:  Dark Lord is Bane-Lite, at least in human form...
-    sound (self, CHAN_WEAPON, "drake/bane/hit.wav", 1, ATTN_NORM);
+
+    sound (self, CHAN_WEAPON, "drake/bane/hit.wav", 1, ATTN_NORM); // Cloning will take a while, so no need to add to pain_finished.
     makevectors (self.angles);
     ldmg = 10 + 5*random();
     T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
@@ -642,7 +713,7 @@ void(float side) bane_melee = {
 void(float d) hk_charge = {
     local float dist;
 
-    if ((self.classname == "monster_bane") || (self.classname == "monster_dark_lord")) {
+    if ((self.classtype == CT_MONBANE) || (self.classtype == CT_MONDARKLORD)) {
         dist = d * 2;
         if (!QC_CloseEnough (dist)) d = dist;   // Move double speed.
     }
@@ -675,40 +746,23 @@ void() bane_watk6  =[ $w_attack10, bane_watk7  ] {hk_charge(3); ai_melee();};
 void() bane_watk7  =[ $w_attack11, bane_watk8  ] {monster_footstep(FALSE); hk_charge(2); ai_melee();};
 void() bane_watk8  =[ $w_attack13, bane_watk9  ] {hk_charge(2); ai_melee();};
 void() bane_watk9  =[ $w_attack14, bane_watk10 ] {hk_charge(0);};
-void() bane_watk10 =[ $w_attack16, bane_watk11 ] {hk_charge(1);
-    sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
-};
+void() bane_watk10 =[ $w_attack16, bane_watk11 ] {hk_charge(1);sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);};
 void() bane_watk11 =[ $w_attack18, bane_watk12 ] {hk_charge(4); bane_melee(200); ai_melee();};
 void() bane_watk12 =[ $w_attack19, bane_watk13 ] {hk_charge(4); ai_melee();};
 void() bane_watk13 =[ $w_attack20, bane_watk14 ] {hk_charge(6);};
 void() bane_watk14 =[ $w_attack22, hknight_run1] {hk_charge(10);};
 
-void(entity inflictor, entity attacker, float damage) bane_pain =
-{
-// Shadow clone magic check.
-    if (!self.waitmax)
-    {
-        if (self.health <= self.waitmin)  // Does Bane have the ace in the hole?
-        if ((self.enemy == attacker) || (self.oldenemy == attacker))    // Is Bane fighting his enemy?
-        if (self.touch != Bane_JumpTouch)   // Is Bane not locked in motion?
-        if (self.classname != self.master.classname)    // Is Bane real?
-        if (walkmove (0, 0))            // Can the Bane move?
-        {   //"Bushin no Kage!\n"
-            if (self.height)
-                self.height = self.height | BANE_CLONE;
+void(entity inflictor, entity attacker, float damage) bane_pain = {
+	// Shadow clone magic check.
+    if (!self.waitmax) {
+        if ((self.health <= self.waitmin) && ((self.enemy == attacker) || (self.oldenemy == attacker)) && (self.touch != Bane_JumpTouch) && (self.classname != self.master.classname) && (walkmove (0, 0))) { // Does Bane have the ace in the hole?  Is Bane fighting his enemy?  Is Bane not locked in motion?  Is Bane real?  Can the Bane move? "Bushin no Kage!\n"
+            if (self.height) self.height = self.height | BANE_CLONE;
             sound (self, CHAN_VOICE, "drake/bane/pain.wav", 1, ATTN_NORM);
-            // Cloning will take a while, so no need to add to pain_finished.
-            bane_painc1();
+            bane_painc1(); // Cloning will take a while, so no need to add to pain_finished.
             return;
         }
-    }
-    else
-    {
-        if (self.health <= self.waitmax)
-        if (self.touch != Bane_JumpTouch)   // Is Bane not locked in motion?
-        if (self.classname != self.master.classname)    // Is Bane real?
-        if (walkmove (0, 0))            // Can the Bane move?
-        {   // The kid gloves come off.
+    } else {
+        if ((self.health <= self.waitmax) && (self.touch != Bane_JumpTouch) && (self.classname != self.master.classname) && (walkmove (0, 0))) { // Is Bane not locked in motion?  Is Bane real?  Can the Bane move?  The kid gloves come off.
             self.health = self.waitmax;
             self.waitmax = 0;
             if (self.height)
@@ -719,34 +773,26 @@ void(entity inflictor, entity attacker, float damage) bane_pain =
         }
     }
 
-// Normal pain code.
-    if (self.pain_finished > time)
-        return;
+	// Normal pain code.
+    if (self.pain_finished > time) return;
 
     sound (self, CHAN_VOICE, "drake/bane/pain.wav", 1, ATTN_NORM);
     self.pain_finished = time + 1;
 
-    if (self.touch == Bane_JumpTouch)
-        return;         // Don't interrupt attack anim.
-//- - - - - - - - -
-// Teleport check.
-    if (!self.waitmax)
-    if (self.enemy)
-    if (walkmove (0, 0))
-    {
-    // If caught in deadly environment, warp out!
-        if (self.h2otype <= CONTENT_SLIME)
-            if (!attacker)  // Attacker is world when damaged by slime/lava.
-                {bane_painc1 ();  return;}
-    // Warp occasionally.
-        if (random() < 0.1)
-            {bane_painc1 ();  return;}
-    }
-//- - - - - - - - -
-    if (random()*30 > damage)
-        return;        // didn't flinch
-    if (SUB_IgnorePain ())
-        return;         // No pain anims in Nightmare.
+    if (self.touch == Bane_JumpTouch) return; // Don't interrupt attack anim.
+
+	// Teleport check.
+    if ((!self.waitmax) && (self.enemy)) {
+		if (walkmove (0, 0)) {
+			if (self.liquidbase <= CONTENT_SLIME) { // If caught in deadly environment, warp out!
+				if (!attacker) {bane_painc1(); return;} // Attacker is world when damaged by slime/lava.
+			}
+			if (random() < 0.1) {bane_painc1();  return;} // Warp occasionally.
+		}
+	}
+
+    if (random()*30 > damage) return; // didn't flinch
+    if (SUB_IgnorePain()) return; // No pain anims in Nightmare.
 
     if (random() < 0.5)
         bane_pain1 ();
@@ -754,37 +800,33 @@ void(entity inflictor, entity attacker, float damage) bane_pain =
         bane_painb1 ();
 };
 
-// Update 1/7/10:  Moved hknight_type to globals.qc.
+void() baneknight_melee = {
+    local float fast;
 
-void() baneknight_melee =
-{
-    local   float   fast;
-
-    hknight_type = hknight_type + 1;
-
+    self.meleeattack = self.meleeattack + 1;
     sound (self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM);
     fast = 1;
     if (!SUB_QuickAttack ())
         if (self.classname == "monster_hell_knight") fast = 0;
     if (fast) {
-        if (hknight_type == 1)
+        if (self.meleeattack == 1)
             bane_slice1 ();
-        else if (hknight_type == 2)
+        else if (self.meleeattack == 2)
             bane_smash1 ();
-        else if (hknight_type == 3) {
+        else if (self.meleeattack == 3) {
             bane_watk1 ();
-            hknight_type = 0;
+            self.meleeattack = 0;
         }
         return;
     }
 
-    if (hknight_type == 1)
+    if (self.meleeattack == 1)
         hknight_slice1 ();
-    else if (hknight_type == 2)
+    else if (self.meleeattack == 2)
         hknight_smash1 ();
-    else if (hknight_type == 3) {
+    else if (self.meleeattack == 3) {
         hknight_watk1 ();
-        hknight_type = 0;
+        self.meleeattack = 0;
     }
 };
 
@@ -796,9 +838,9 @@ void() bane_win = {
         self.th_stand ();
 };
 
-// Files common to all of the hell knight variants.
-void() hk_cache = {
-    precache_model ("progs/ad171/mon_hknight.mdl");
+// Tougher and meaner red version with fire magic.
+void() monster_hell_lord_precache = {
+    precache_model ("progs/qmaster/mon_hknight.mdl");
     precache_model ("progs/k_spike.mdl");
     precache_model ("progs/h_hellkn.mdl");
     precache_sound ("hknight/attack1.wav");
@@ -807,19 +849,6 @@ void() hk_cache = {
     precache_sound ("hknight/idle.wav");
     precache_sound ("knight/sword1.wav");
     precache_sound ("knight/sword2.wav");
-};
-
-// Classic, standard hell knight.
-void() hknight_cache = {
-    hk_cache ();
-    precache_sound ("hknight/death1.wav");
-    precache_sound ("hknight/pain1.wav");
-    precache_sound ("hknight/sight1.wav");
-};
-
-// Tougher and meaner red version with fire magic.
-void() hklord_cache = {
-    hk_cache ();
     precache_model ("progs/drake/lavarock.mdl");
     precache_sound ("drake/archer/death2.wav");
     precache_sound ("drake/archer/pain2.wav");
@@ -830,9 +859,23 @@ void() hklord_cache = {
     precache_sound ("drake/weapons/fwalltap.wav");
 };
 
+void() monster_hell_lord = {monster_hell_knight ();};
+void() monster_lord = {self.classname = "monster_hell_lord";  monster_hell_knight ();};
+
 // For Rapture's hkboss.
-void() hkboss_cache = {
-    hknight_cache ();
+void() monster_hkboss_precache = {
+    precache_model ("progs/qmaster/mon_hknight.mdl");
+    precache_model ("progs/k_spike.mdl");
+    precache_model ("progs/h_hellkn.mdl");
+    precache_sound ("hknight/attack1.wav");
+    precache_sound ("hknight/hit.wav");    // used by C code, so don't sound2
+    precache_sound ("hknight/slash1.wav");
+    precache_sound ("hknight/idle.wav");
+    precache_sound ("knight/sword1.wav");
+    precache_sound ("knight/sword2.wav");
+    precache_sound ("hknight/death1.wav");
+    precache_sound ("hknight/pain1.wav");
+    precache_sound ("hknight/sight1.wav");
     precache_sound ("drake/hknight/death1.wav");
     precache_sound ("drake/hknight/sboom.wav");
     precache_sound ("drake/hknight/sboom2.wav");
@@ -840,15 +883,7 @@ void() hkboss_cache = {
     precache_sound ("drake/hkboss/iceball.wav");      // Used by hkboss.
 };
 
-void() monster_hell_lord = {monster_hell_knight ();};
-void() monster_lord = {self.classname = "monster_hell_lord";  monster_hell_knight ();};
-
-// For Rapture.
-void() monster_hkboss = {monster_hell_knight ();};
-
-//==========================================================================
-//  The Bane  (SoE Big Bad Evil Guy, Hell Knight boss variant)
-//==========================================================================
+void() monster_hkboss = {monster_hell_knight ();}; // For Rapture.
 
 // In case Bane gets aggravated during teleportation...
 void() bane_run = {
@@ -858,63 +893,58 @@ void() bane_run = {
         hknight_run1 ();
 };
 
+void() monster_bane_precache = {
+	precache_model("progs/qmaster/mon_hknight.mdl");
+	precache_model("progs/h_hellkn.mdl");
+	precache_model(MODEL_PROJ_HKN);
+	precache_model("progs/ad171/w_hknightsword.mdl");
+	precache_model("progs/ad171/gib_knfoot_l.mdl");
+	precache_model("progs/ad171/gib_knfoot_r.mdl");
+    precache_model("progs/qmaster/mon_hknight.mdl");
+    precache_model("progs/drake/k_ball.mdl");    // Bane fireball.
+    precache_model("progs/h_hellkn.mdl");
+	precache_model("progs/drake/s_wave.spr");
+    precache_sound("ambience/thunder1.wav");
+    precache_sound("zerstorer/ambience/thunder2.wav");
+    precache_sound("drake/bane/death.wav");
+    precache_sound("drake/bane/growl.wav");
+    precache_sound("drake/bane/hit.wav");
+    precache_sound("drake/bane/laugh.wav");
+    precache_sound("drake/bane/pain.wav");
+    precache_sound("drake/bane/sight.wav");
+    precache_sound("drake/bane/thunder.wav");
+    precache_sound("hknight/slash1.wav");
+    precache_sound("knight/sword1.wav");
+    precache_sound("knight/sword2.wav");
+    precache_sound("hipnotic/weapons/mjolhit.wav");
+    precache_sound("drake/misc/dsslop.wav");
+    precache_sound("drake/weapons/axhit.wav");
+	precache_sound("hknight/attack1.wav");
+	precache_sound("knight/sword2.wav");
+	precache_sound("hknight/hit.wav");
+	precache_sound("hknight/idle.wav");
+	precache_sound("drake/bane/pain.wav");
+	precache_sound("drake/bane/death.wav");
+	precache_sound("drake/bane/sight.wav");
+};
+
+// The Bane  (SoE Big Bad Evil Guy, Hell Knight boss variant)
 void() monster_bane = {
-	if (deathmatch) { remove(self); return; }
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	self.mdl = "progs/ad171/mon_hknight.mdl";			// Original ID Knight + extra skins
+	self.mdl = "progs/qmaster/mon_hknight.mdl";			// Original ID Knight + extra skins
 	self.headmdl = "progs/h_hellkn.mdl";
-    precache_model ("progs/ad171/mon_hknight.mdl");
-    precache_model ("progs/drake/k_ball.mdl");    // Bane fireball.
-    precache_model ("progs/h_hellkn.mdl");
-	precache_model ("progs/drake/s_wave.spr");
-
-    precache_sound ("ambience/thunder1.wav");
-    precache_sound ("zerstorer/ambience/thunder2.wav");
-    precache_sound ("drake/bane/death.wav");
-    precache_sound ("drake/bane/growl.wav");
-    precache_sound ("drake/bane/hit.wav");
-    precache_sound ("drake/bane/laugh.wav");
-    precache_sound ("drake/bane/pain.wav");
-    precache_sound ("drake/bane/sight.wav");
-    precache_sound ("drake/bane/thunder.wav");
-    precache_sound ("hknight/slash1.wav");
-    precache_sound ("knight/sword1.wav");
-    precache_sound ("knight/sword2.wav");
-    precache_sound ("hipnotic/weapons/mjolhit.wav");
-    precache_sound ("drake/misc/dsslop.wav");
-    precache_sound ("drake/weapons/axhit.wav");
-
 	self.gib1mdl = "progs/ad171/w_hknightsword.mdl";	// Unique sword
 	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
 	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot
-	
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (MODEL_PROJ_HKN);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-
 	self.gib1sound = GIB_IMPACT_METALA;
 	if (random() < 0.5) self.gib2mdl = string_null;
 	if (random() < 0.5) self.gib3mdl = string_null;
-
-	precache_sound ("hknight/attack1.wav");
-	precache_sound ("knight/sword2.wav");
-	precache_sound ("hknight/hit.wav");	
-			
 	self.idle_sound = "hknight/idle.wav";
-	precache_sound (self.idle_sound);
-
 	self.pain_sound = "drake/bane/pain.wav";
 	self.death_sound = "drake/bane/death.wav";
 	self.sight_sound = "drake/bane/sight.wav";
 	self.hello_sound = string_null; 
-
-	precache_sound (self.pain_sound);
-	precache_sound (self.death_sound);
-	precache_sound (self.sight_sound);
-	
     self.mass = MASS_MEDIUM;
     self.skin = SKIN_BANE;
 	self.solid = SOLID_NOT;				// No interaction with world
@@ -941,10 +971,9 @@ void() monster_bane = {
     }
 
 	self.hittype = HIT_METAL;
-    self.xfl        = XFL_ARMORED | XFL_BOSS;   // Don't dare hit the king!
+    self.bossflag = TRUE;   // Don't dare hit the king!
     self.ryuflags   = RYU_ALERT | RYU_INSANE;
 	self.pain_longanim = FALSE;
-
 	self.th_stand = hknight_stand1;		// Idling on feet
 	self.th_walk = hknight_walk1;		// Walking
 	self.th_run = bane_run;			// Running
@@ -954,7 +983,6 @@ void() monster_bane = {
 	self.th_pain = bane_pain;		// Stumble and pain
 	self.th_die = hknight_die;			// Face meets floor
     self.th_win     = bane_win;
-    self.th_spawn   = monster_bane;
 	if (self.deathstring == "") self.deathstring = " provided sport for Bane\n";
 
 	// Always reset Ammo Resistance to be consistent
@@ -964,18 +992,8 @@ void() monster_bane = {
 	self.classtype = CT_MONBANE;
 	self.classgroup = CG_DCAPTAIN;	// Rule over seargent and fury knights but lesser knights are disloyal
 	self.classmove = MON_MOVEWALK;
-
-    if (soul_evil) monster_purse (20, 1, 0.5);
-
 	monster_start();
 };
-
-//==========================================================================
-//  The Dark Lord  (Wraith in Black Armor, a bit like Tolkien's Nazgul)
-//
-//  Update 5/??/2011:  Now includes a two-stage version similar to
-//  Dracula in (early) Castlevania, the human form and beast form.
-//==========================================================================
 
 void(float d) dk_slow;
 void(float d) dk_fast;
@@ -1000,8 +1018,6 @@ void() darklord_run17 =[ $walk17, darklord_run18 ] {dk_slow(3);};
 void() darklord_run18 =[ $walk18, darklord_run19 ] {dk_slow(3);};
 void() darklord_run19 =[ $walk19, darklord_run20 ] {dk_slow(3);};
 void() darklord_run20 =[ $walk20, darklord_run1  ] {dk_slow(2);};
-//void() darklord_run20 =[ $walk20, darklord_run21 ] {dk_slow(2);};
-//void() darklord_run21 =[ $walk20, darklord_run2  ] {dk_slow(2);};
 
 void() darklord_fast1 =[ $run1, darklord_fast2 ] {monster_idle_sound(); dk_fast(20);};
 void() darklord_fast2 =[ $run2, darklord_fast3 ] {monster_footstep(FALSE); dk_fast(25);};
@@ -1015,16 +1031,14 @@ void() darklord_fast8 =[ $run8, darklord_fast1 ] {dk_fast(13);};
 void() dk_shield = {
     if (self.minion_count < 1)  // FIXME:  Check for wraths.
     {
-        if (self.flags & FL_GODMODE)
-        {
+        if (self.flags & FL_GODMODE) {
             self.flags = self.flags - FL_GODMODE;   //(self.flags & FL_GODMODE);
             self.waitmax = time + 10;   // Give player time to attack.
         }
         if (!self.mirror_finished)
             self.effects = self.effects - (self.effects & EF_BRIGHTFIELD);
     } else {
-        if (!(self.flags & FL_GODMODE))
-        {
+        if (!(self.flags & FL_GODMODE)) {
             self.flags = self.flags | FL_GODMODE;
             ReflectorShield (self);
             sound(self, 6, "items/protect.wav", 1, ATTN_NORM);
@@ -1083,26 +1097,21 @@ void() darklord_watk12 =[ $w_attack19, darklord_watk13 ] {dk_charge(4); ai_melee
 void() darklord_watk13 =[ $w_attack20, darklord_watk14 ] {dk_charge(6);};
 void() darklord_watk14 =[ $w_attack22, hknight_run1] {dk_charge(10);};
 
-void() darklord_melee =
-{
-    if (self.waitmin < time)
-        {darklord_magica1(); return;}
+void() darklord_melee = {
+    if (self.waitmin < time) {darklord_magica1(); return;}
 
-    hknight_type = hknight_type + 1;
+    self.meleeattack = self.meleeattack + 1;
 
     sound (self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM);
-    if (hknight_type == 1)
+    if (self.meleeattack == 1)
         darklord_slice1 ();
-    else if (hknight_type == 2)
+    else if (self.meleeattack == 2)
         darklord_smash1 ();
-    else if (hknight_type == 3)
-    {
+    else if (self.meleeattack == 3) {
         darklord_watk1 ();
-        hknight_type = 0;
+        self.meleeattack = 0;
     }
 };
-
-//============================================================================
 
 void() darklord_thebeast;   // Look in 'dragon.qc'.
 
@@ -1117,10 +1126,7 @@ void() darklord_fall8  =[ $stand8,  darklord_fall9  ] {ai_forward(10);};
 void() darklord_fall9  =[ $stand9,  darklord_fall10 ] {ai_forward(11);};
 void() darklord_fall10 =[ $stand1, darklord_fall11 ] {};
 void() darklord_fall11 =[ $stand2, darklord_fall12 ] {};
-void() darklord_fall12 =[ $stand3, darklord_thebeast ] {
-    Quake_Level (0, self.origin, 5);
-    self.nextthink = time + 3;
-};
+void() darklord_fall12 =[ $stand3, darklord_thebeast ] { Quake_Spawn(self,0,0,self.origin,FALSE,5,VEC_QUAKE); self.nextthink = time + 3; }; // Shake entire level.
 
 void(entity inflictor, entity attacker, float damage) darklord_pain = {
     if (self.max_health - self.health >= 1000) {
@@ -1151,8 +1157,6 @@ void(entity inflictor, entity attacker, float damage) darklord_pain = {
     }
     hknight_pain (inflictor, attacker, damage); // Proceed as usual.
 };
-
-//============================================================================
 
 // Note:  The dark lord's helmet explodes when destroyed.
 void() darklord_die1  =[ $death1,  darklord_die2  ] {ai_forward(10);};
@@ -1197,33 +1201,21 @@ void() darklord_die = {
     Rocket_Explosion2 (st, 32, 5);
 };
 
-//============
-// --> QUAKED monster_dark_lord (1 0 0) (-16 -16 -24) (16 16 40) Ambush Guardian Beast
-// Guardian version can raise a shield and summon wraths.
-// Beast version has 4000+ hp and morphs into a dragon when damaged enough.
-// The boss flags can stack!
-//============
-void() monster_dark_lord = {
-    local   float   hp;
-
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-    if (self.spawnflags & 4) {
-        hp = 4000 + (500 * cvar("skill"));
-		if (self.deathstring == "")  self.deathstring = " fell before a Beastly Dark Lord\n";
-    } else {
-		if (self.deathstring == "")  self.deathstring = " fell before a Dark Lord\n";
-        hp = 1000;
-	}
-
-	self.mdl = "progs/ad171/mon_hknight.mdl";			// Original ID Knight + extra skins
-	self.headmdl = "progs/h_hellkn.mdl";
-    precache_model ("progs/ad171/mon_hknight.mdl");
+void() monster_dark_lord_precache = {
+    precache_model ("progs/qmaster/mon_hknight.mdl");
     precache_model ("progs/drake/k_ball.mdl");    // Bane fireball.
     precache_model ("progs/h_hellkn.mdl");
 	precache_model ("progs/drake/s_wave.spr");
-
+	precache_model ("progs/drake/r_bolt.mdl");  // The dark lord's head explodes when killed, so no head gib needed.
+	precache_model (MODEL_PROJ_HKN);
+	precache_model ("progs/ad171/w_hknightsword.mdl");
+	precache_model ("progs/ad171/gib_knfoot_l.mdl");
+	precache_model ("progs/ad171/gib_knfoot_r.mdl");
+    precache_model ("progs/drake/dragon.mdl");
+    precache_model ("progs/drake/drggib01.mdl");
+    precache_model ("progs/drake/drggib02.mdl");
+    precache_model ("progs/drake/drggib03.mdl");
+    precache_model ("progs/drake/plasma.mdl");
     precache_sound ("ambience/thunder1.wav");
     precache_sound ("zerstorer/ambience/thunder2.wav");
     precache_sound ("drake/bane/death.wav");
@@ -1239,52 +1231,18 @@ void() monster_dark_lord = {
     precache_sound ("drake/misc/dsslop.wav");
     precache_sound ("drake/weapons/axhit.wav");
 	precache_sound ("drake/archer/sight2.wav");
-
-    precache_model ("progs/drake/r_bolt.mdl");
-    // The dark lord's head explodes when killed, so no head gib needed.
     precache_sound ("drake/bane/hit.wav");
     precache_sound ("drake/darklord/death.wav");
     precache_sound ("drake/darklord/idle1.wav");
     precache_sound ("drake/darklord/pain.wav");
     precache_sound ("drake/darklord/sight.wav");
-	self.sight_sound = "drake/darklord/sight.wav";
-	self.hello_sound = "drake/darklord/idle1.wav"; 
-    precache_sound ("drake/darklord/death.wav");
     precache_sound ("items/protect.wav");   // Powerup sound
     precache_sound ("rogue/plasma/explode.wav");
     precache_sound ("rogue/plasma/fire.wav");
     precache_sound ("drake/skullwiz/gate.wav");   // For wrath summoning.
-
-	self.gib1mdl = "progs/ad171/w_hknightsword.mdl";	// Unique sword
-	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
-	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot
-	
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (MODEL_PROJ_HKN);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-
-	self.gib1sound = GIB_IMPACT_METALA;
-	if (random() < 0.5) self.gib2mdl = string_null;
-	if (random() < 0.5) self.gib3mdl = string_null;
-
 	precache_sound ("hknight/attack1.wav");
 	precache_sound ("knight/sword2.wav");
-	precache_sound ("hknight/hit.wav");			
-	self.idle_sound = "drake/darklord/idle1.wav";
-	precache_sound (self.idle_sound);
-	self.pain_sound = "drake/darklord/pain.wav";
-	self.death_sound = "drake/darklord/death.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.death_sound);
-	precache_sound (self.sight_sound);
-    precache_model ("progs/drake/dragon.mdl");
-    precache_model ("progs/drake/drggib01.mdl");
-    precache_model ("progs/drake/drggib02.mdl");
-    precache_model ("progs/drake/drggib03.mdl");
-    precache_model ("progs/drake/plasma.mdl");
+	precache_sound ("hknight/hit.wav");		
     precache_sound ("rogue/dragon/see.wav");
     precache_sound ("rogue/dragon/active.wav");
     precache_sound ("rogue/dragon/attack.wav");
@@ -1294,6 +1252,42 @@ void() monster_dark_lord = {
     precache_sound ("rogue/dragon/death.wav");
 	precache_sound ("drake/dragon/fire.wav");
     precache_sound ("shambler/smack.wav");
+};
+
+// The Dark Lord  (Wraith in Black Armor, a bit like Tolkien's Nazgul)
+// Update 5/??/2011:  Now includes a two-stage version similar to
+// Dracula in (early) Castlevania, the human form and beast form.
+// Guardian version can raise a shield and summon wraths.
+// Beast version has 4000+ hp and morphs into a dragon when damaged enough.
+// The boss flags can stack!
+// QUAKED monster_dark_lord (1 0 0) (-16 -16 -24) (16 16 40) Ambush Guardian Beast
+void() monster_dark_lord = {
+    local float hp;
+
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+    if (self.spawnflags & 4) {
+        hp = 4000 + (500 * cvar("skill"));
+		if (self.deathstring == "")  self.deathstring = " fell before a Beastly Dark Lord\n";
+    } else {
+		if (self.deathstring == "")  self.deathstring = " fell before a Dark Lord\n";
+        hp = 1000;
+	}
+
+	self.mdl = "progs/qmaster/mon_hknight.mdl";			// Original ID Knight + extra skins
+	self.headmdl = "progs/h_hellkn.mdl";
+	self.sight_sound = "drake/darklord/sight.wav";
+	self.hello_sound = "drake/darklord/idle1.wav"; 
+	self.gib1mdl = "progs/ad171/w_hknightsword.mdl";	// Unique sword
+	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
+	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot
+	self.gib1sound = GIB_IMPACT_METALA;
+	if (random() < 0.5) self.gib2mdl = string_null;
+	if (random() < 0.5) self.gib3mdl = string_null;
+	self.idle_sound = "drake/darklord/idle1.wav";
+	self.pain_sound = "drake/darklord/pain.wav";
+	self.death_sound = "drake/darklord/death.wav";
     self.mass = MASS_MEDIUM;
     self.skin = SKIN_DARK_LORD;
 	self.solid = SOLID_NOT;				// No interaction with world
@@ -1307,6 +1301,7 @@ void() monster_dark_lord = {
 	self.steptype = FS_TYPEHEAVY;
 	self.meleeattack = rint(random()*3);	// randomize last melee attack
 	self.th_die = hknight_die;				// Face meets floor
+	if (self.minion_name == string_null) self.minion_name = "monster_wrath";
 
     if (cvar("skill") < 1) {
         self.waitmin = self.waitmax = -1;   // No clones or rage on Easy.
@@ -1320,10 +1315,9 @@ void() monster_dark_lord = {
     }
 
 	self.hittype = HIT_METAL;
-    self.xfl        = XFL_ARMORED;
     if (self.spawnflags & 6) {
 		self.deathstring = " fell before a Guardian Dark Lord\n";
-        self.xfl        = XFL_BOSS;
+       self.bossflag = TRUE;
 	}
     self.ryuflags   = RYU_ALERT | RYU_INSANE;
 	self.pain_longanim = FALSE;
@@ -1340,20 +1334,14 @@ void() monster_dark_lord = {
         self.th_pain    = hknight_pain;
 	self.th_die = darklord_die;			// Face meets floor
     self.th_win     = bane_win;
-    self.th_spawn   = monster_bane;
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
 
-	// Check passive system for exceptions
-	setup_passivestate(self);
-
+	setup_passivestate(self); // Check passive system for exceptions
 	self.classtype = CT_MONDARKLORD;
 	self.classgroup = CG_DCAPTAIN;	// Rule over seargent and fury knights but lesser knights are disloyal
 	self.classmove = MON_MOVEWALK;
-
-    if (soul_evil) monster_purse (20, 1, 0.5);
-
 	monster_start();
 };

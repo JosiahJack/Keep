@@ -1,8 +1,67 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Qmaster
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 10
+//
+// Implements: Shrine System
+//
+// Description:
+// The inhabitants of the world of Quake are not altogether unreligious.  There
+// is a plenary collection of deities and household teraphim.  Travelers may
+// choose to pay their respects by lighting a candle and thus receive a
+// blessing.  It is important to distinguish between teraphim, who serve as
+// physical representatives of deities and idols, who are treated as deities of
+// themselves.  However, one may alternatively disregard such lesser deities
+// and distinctions entirely and pay respects to a higher deity by counting
+// these shrines as unholy, desecrating them by smashing them to receive an
+// alternative blessing from an elder god.  What one does must be considered
+// carefully, even atheistically ignoring shrines may have consequences.
+//
+// **Respects** are paid simply by walking up to a shrine's table structure.
+// The candle(s) will be lit by trigger.
+//
+// **Desecration** is performed by destroying the shrine table.  Desecration
+// after Respects will remove the respect blessing and may possibly be met with
+// even stronger consequences.  Desecration affects all players in coop.
+//
+// Blessings are only granted for that level.
+//
+// Small particles are shot out towards those affected to indicate that it's
+// working.  This affects both players and player allies.
+//=============================================================================
+
 void(entity targ) ResetDebuffPoisoned;
 void(entity targ) ResetDebuffBleeding;
 void(entity targ) bound_other_ammo;
 
-void(entity targ) ResetAuraEffects = {
+void(entity targ) ResetAuraEffects = { // [FUNCTION]
 	if (targ.flags & FL_MONSTER) { targ.aura_type = -1; return; }
 
 	if (targ.aura_type == 0) { // Earth
@@ -33,7 +92,7 @@ void(entity targ) ResetAuraEffects = {
 	targ.aura_type = -1;
 };
 
-void(entity targ,float type) DesecrateEffects = {
+void(entity targ,float type) DesecrateEffects = { // [FUNCTION]
 	if (targ.flags & FL_CLIENT == 0) return;
 
 	if (type == 0) {
@@ -88,7 +147,7 @@ void(entity targ,float type) DesecrateEffects = {
 	}
 };
 
-void() shrine_desecrate_think = {
+void() shrine_desecrate_think = { // [FUNCTION]
     local entity pc;
 
 	if (self.pain_finished > time) {
@@ -102,7 +161,7 @@ void() shrine_desecrate_think = {
 	self.nextthink = time + 0.1;
 };
 
-void() shrine_desecrate = {
+void() shrine_desecrate = { // [FUNCTION]
     local entity pc;
 
     pc = find (world, classname, "player");
@@ -117,7 +176,7 @@ void() shrine_desecrate = {
 	self.nextthink = time + 0.1;
 };
 
-void() shrine_desecrate_angry = {
+void() shrine_desecrate_angry = { // [FUNCTION]
 	if (HasTargets(self)) {
 		SUB_UseTargets();
 		clear_trigstrs(self); // Only fire targets once, remove any further triggering
@@ -127,7 +186,7 @@ void() shrine_desecrate_angry = {
 	shrine_desecrate();
 };
 
-void() shrine_magic_think = {
+void() shrine_magic_think = { // [FUNCTION]
 	local vector dir, spot;
 
 	spot = self.enemy.origin;
@@ -141,7 +200,7 @@ void() shrine_magic_think = {
 	self.nextthink = time + 0.05;
 };
 
-void(vector spot,entity targ, float sprtype) shrine_magic_beam = {
+void(vector spot,entity targ, float sprtype) shrine_magic_beam = { // [FUNCTION]
 	local entity partic;
 	local string s;
 
@@ -167,25 +226,21 @@ void(vector spot,entity targ, float sprtype) shrine_magic_beam = {
 	partic.pain_finished = time + (self.proj_limit/80);
 };
 
-void() shrine_aura_think = {
-	local entity e;// pc1, pc2, pc3, pc4;
-	// local float c;
-
-	// pc1 = pc2 = pc3 = pc4 = world; // Reset
+void() shrine_aura_think = { // [FUNCTION]
+	local entity e;
 
 	if (self.attack_finished < time) {
-		// dprint("Shrine thinking!\n");
 		e = findradius(self.origin,self.proj_limit);
 		while (e) {
-			if (e.flags & FLx_CREATURE && e.health > 0) {
+			if (e.flags & FLx_CREATURE && e.health > 0 && e.alignment != EVIL) {
 				shrine_magic_beam(self.origin,e,self.style);
 				shrine_magic_beam(self.origin,e,self.style);
 				shrine_magic_beam(self.origin,e,self.style);
 				e.aura_finished = time + 1 + self.delay; // Lasts slightly when out of range
 				e.aura_type = self.style;
 
-				// Benefits to good monsters
-				if (e.flags & FL_MONSTER && e.alignment != EVIL) {
+				// Benefits to monsters
+				if (e.flags & FL_MONSTER) {
 					e.aura_type = 1;
 					e.health = e.health + self.cnt;
 					if (e.health > e.max_health) e.health = e.max_health;
@@ -195,13 +250,6 @@ void() shrine_aura_think = {
 				// Benefits to players
 				if (e.flags & FL_CLIENT) {
 					if (time < self.pain_finished) centerprint_msg3(e, self.message, self.message2, self.ckeyname1);
-
-					// if (c == 0 && !pc1) pc1 = e;
-					// if (c == 1 && !pc2) pc2 = e;
-					// if (c == 2 && !pc3) pc3 = e;
-					// if (c == 3 && !pc4) pc4 = e;
-					// c = c + 1;
-
 					if (self.style == 0) {
 						// Earth
 						e.curse_finished = e.curse_ping = e.curse_type = 0; // Curses begone!  Remove before other benefits
@@ -264,49 +312,11 @@ void() shrine_aura_think = {
 		}
 		self.attack_finished = time + self.delay;
 	}
-
-	// Remember up to 4 players so we can properly remove and reset aura effects when they are out of range
-	// if (pc1) {
-		// self.oldenemy = pc1;
-	// } else {
-		// if (self.oldenemy) {
-			// c = vlen(self.origin - self.oldenemy.origin);
-			// if (c > self.proj_limit) ResetAuraEffects(self.oldenemy);
-			// self.oldenemy = world;
-		// }
-	// }
-	// if (pc2) {
-		// self.lastvictim = pc2;
-	// } else {
-		// if (self.lastvictim) {
-			// c = vlen(self.origin - self.oldenemy.origin);
-			// if (c > self.proj_limit) ResetAuraEffects(self.lastvictim);
-			// self.lastvictim = world;
-		// }
-	// }
-	// if (pc3) {
-		// self.charmer = pc3;
-	// } else {
-		// if (self.charmer) {
-			// c = vlen(self.origin - self.oldenemy.origin);
-			// if (c > self.proj_limit) ResetAuraEffects(self.charmer);
-			// self.charmer = world;
-		// }
-	// }
-	// if (pc4) {
-		// self.aiment = pc4;
-	// } else {
-		// if (self.aiment) {
-			// c = vlen(self.origin - self.oldenemy.origin);
-			// if (c > self.proj_limit) ResetAuraEffects(self.aiment);
-			// self.aiment = world;
-		// }
-	// }
 	self.think = shrine_aura_think;
 	self.nextthink = time + 0.05;
 };
 
-void(entity o) shrine_respect = {
+void(entity o) shrine_respect = { // [FUNCTION]
 	self.state = STATE_ON;
 	self.think = shrine_aura_think;
 	self.nextthink = time + 0.1;
@@ -334,7 +344,7 @@ void(entity o) shrine_respect = {
 	}
 };
 
-void() shrine_use = {
+void() shrine_use = { // [FUNCTION]
 	if (activator.flags & FL_CLIENT) {
 		shrine_respect(activator);
 		centerprint_msg3(activator, self.message, self.message2, self.ckeyname1);
@@ -349,7 +359,8 @@ void() shrine_use = {
 	}
 };
 
-void() info_shrine = {
+// Marks the spiritual location of the deity.  This is where particles will emanate so place with that in mind.  Center of radius for applied blessings.
+void() info_shrine = { // [ENTITY]
 	local string s, magik, magikb;
 
 	precache_model("progs/ad171/s_dotmed_grn.spr");

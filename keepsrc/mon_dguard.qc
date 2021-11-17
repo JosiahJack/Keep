@@ -434,45 +434,36 @@ void() dguard_die = {
 	}
 };
 
+void() monster_dguard_precache = {
+	precache_model("progs/ad171/mon_dguard.mdl");
+	precache_model("progs/ad171/h_dguard.mdl");
+	precache_model("progs/ad171/w_dguardsword.mdl");
+	precache_model("progs/ad171/gib_knfoot_l.mdl");
+	precache_model("progs/ad171/gib_knfoot_r.mdl");
+	precache_sound("knight/idle.wav");
+	precache_sound("knight/kdeath.wav");
+	precache_sound("knight/khurt.wav");
+	precache_sound("knight/ksight.wav");
+	precache_poisongibs(); // precache gibs
+};
+
 // QUAKED monster_dguard (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_dguard = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_dguard.mdl";
 	self.headmdl = "progs/ad171/h_dguard.mdl";				// Large head
 	self.gib1mdl = "progs/ad171/w_dguardsword.mdl";		// Unique sword
 	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";		// left foot
 	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";		// right foot
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	
 	self.gib1sound = GIB_IMPACT_METALA;
 	if (random() < 0.5) self.gib2mdl = string_null;
 	if (random() < 0.5) self.gib3mdl = string_null;
-
 	self.idle_sound = "knight/idle.wav";
-	precache_sound (self.idle_sound);
-
-	precache_sound ("knight/kdeath.wav");
 	self.pain_sound = "knight/khurt.wav";
-	precache_sound (self.pain_sound);
-	
 	self.sight_sound = "knight/ksight.wav";
-	precache_sound (self.sight_sound);
-
-	// Check for poisonous entity flag
-	if (self.poisonous) {
-		precache_poisongibs();			// precache gibs
-		self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
-	}
-	
+	if (self.poisonous) self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
@@ -498,10 +489,8 @@ void() monster_dguard = {
 	self.th_die = dguard_die;
 	self.hittype = HIT_METAL;
 	if (self.deathstring == "")  self.deathstring =  "was chopped up by a Death Guard\n";
-	
 	self.classtype = CT_MONDGUARD;
 	self.classgroup = CG_KNIGHT;
 	self.classmove = MON_MOVEWALK;
-	
 	monster_start();
 };

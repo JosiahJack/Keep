@@ -151,7 +151,7 @@ alias upglg "impulse 210"
 // 16384   Upgrade LG weapon pickups, Direct + Splashdamage
 //
 //
-// 65536
+// 65536   Turn ON Drake secondary music system.
 // 131072  Turn OFF Shotgun projectiles
 // 262144  Turn OFF Shotgun casings
 // 524288  Turn OFF Z aware monsters
@@ -165,7 +165,14 @@ alias upglg "impulse 210"
 //  263168 = particles ON & Shotgun casings OFF (1024 + 262144)
 // 1049600 = particles ON & Enemy/player footsteps OFF (1024 + 1048576)
 //-----------------------------------------------------------
-temp1 131072
+temp1 196608
+
+// Default to 1st person so vehicle system 3rd person use is correct.
+chase_active 0
+
+// Support very large maps
+gl_farclip 256000
+gl_maxdist 168000
 
 //-----------------------------------------------------------
 // run a user script file if present (user settings)

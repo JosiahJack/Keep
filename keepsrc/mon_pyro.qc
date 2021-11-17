@@ -314,41 +314,37 @@ void() pyro_die = {
 	}
 };
 
+void() monster_pyro_precache = {
+	precache_model ("progs/ad171/mon_pyro.mdl");
+	precache_model ("progs/ad171/h_pyro.mdl");
+	precache_model ("progs/ad171/w_enforcergun.mdl");
+	precache_sound ("enforcer/death1.wav");
+	precache_sound ("enforcer/pain1.wav");
+	precache_sound ("enforcer/pain2.wav");
+	precache_sound ("enforcer/idle1.wav");
+	precache_sound ("quoth/pyro/sight.wav");
+	precache_sound ("rrp/dread/flameon.wav");
+	precache_sound ("rrp/dread/flameoff.wav");
+	precache_model (SBURST_FLAME);		// Flame on
+	precache_model (SBURST_SMOKE);		// Underwater
+	precache_model (SBURST_FLAMEDP);	// DP Collision
+};
+
 // QUAKED monster_pyro (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_pyro = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.mdl = "progs/ad171/mon_pyro.mdl";
 	self.headmdl = "progs/ad171/h_pyro.mdl";
 	self.gib1mdl = "progs/ad171/w_enforcergun.mdl";	// Unique weapon
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
 	self.gib1skin = 3;
-
-	precache_sound ("enforcer/death1.wav");
 	self.pain_sound = "enforcer/pain1.wav";
 	self.pain_sound2 = "enforcer/pain2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-
 	self.idle_sound = "enforcer/idle1.wav";
-	precache_sound (self.idle_sound);
 	self.sight_sound = "quoth/pyro/sight.wav";
-	precache_sound (self.sight_sound);
-
-	// Extra sound/sprite assets (from Rubicon2 MOD)
-	self.noise3 = "rrp/dread/flameon.wav";
-	self.noise4 = "rrp/dread/flameoff.wav";
-	precache_sound (self.noise3);
-	precache_sound (self.noise4);
-	precache_model (SBURST_FLAME);		// Flame on
-	precache_model (SBURST_SMOKE);		// Underwater
-	precache_model (SBURST_FLAMEDP);	// DP Collision
-	
+	self.noise3 = "rrp/dread/flameon.wav"; // Extra sound/sprite assets (from Rubicon2 MOD)
+	self.noise4 = "rrp/dread/flameoff.wav";	
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -380,7 +376,6 @@ void() monster_pyro = {
 	self.th_die = pyro_die;
 	self.th_melee = pyro_atk1;
 	self.th_missile = pyro_atk1;		// For monster_turret function
-
 	self.classtype = CT_MONPYRO;
 	self.classgroup = CG_ENFORCER;
 	self.classmove = MON_MOVEWALK;
@@ -388,42 +383,38 @@ void() monster_pyro = {
 	monster_start();
 };
 
+void() monster_fumigator_precache = {
+	precache_model("progs/ad171/mon_fumigator.mdl");
+	precache_model("progs/ad171/h_pyro.mdl");
+	precache_model("progs/ad171/w_enforcergun.mdl");
+	precache_poisongibs(); // Precache gibs
+	precache_sound("enforcer/death1.wav");
+	precache_sound("enforcer/pain1.wav");
+	precache_sound("enforcer/pain2.wav");
+	precache_sound("enforcer/idle1.wav");
+	precache_sound("quoth/pyro/sight.wav");
+	precache_sound("ad171/traps/steam_loop.wav");
+	precache_sound("ad171/traps/steam_off.wav");
+	precache_model(SBURST_POISON); // Poison on
+	precache_model(SBURST_FLAMEDP); // DP Collision
+};
+
 // QUAKED monster_fumigator (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_fumigator = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.mdl = "progs/ad171/mon_fumigator.mdl";
 	self.headmdl = "progs/ad171/h_pyro.mdl";
 	self.gib1mdl = "progs/ad171/w_enforcergun.mdl";	// Unique weapon
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
 	self.gib1sound = GIB_IMPACT_WOOD;
 	self.gib1skin = 4;
-
-	precache_sound ("enforcer/death1.wav");
 	self.pain_sound = "enforcer/pain1.wav";
 	self.pain_sound2 = "enforcer/pain2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-
 	self.idle_sound = "enforcer/idle1.wav";
-	precache_sound (self.idle_sound);
 	self.sight_sound = "quoth/pyro/sight.wav";
-	precache_sound (self.sight_sound);
-
-	// Extra sound/sprite assets (from Rubicon2 MOD)
-	self.noise3 = "ad171/traps/steam_loop.wav";
+	self.noise3 = "ad171/traps/steam_loop.wav"; // Extra sound/sprite assets (from Rubicon2 MOD)
 	self.noise4 = "ad171/traps/steam_off.wav";
-	precache_sound (self.noise3);
-	precache_sound (self.noise4);
-	precache_model (SBURST_POISON);		// Poison on
-	precache_model (SBURST_FLAMEDP);	// DP Collision
-	precache_poisongibs();					// precache gibs
-	
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -453,7 +444,7 @@ void() monster_fumigator = {
 	self.th_pain = pyro_pain;
 	self.th_die = pyro_die;
 	self.th_melee = pyro_atk1;
-	self.th_missile = pyro_atk1;		// For monster_turret function
+	self.th_missile = pyro_atk1; // For monster_turret function
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
@@ -468,5 +459,6 @@ void() monster_fumigator = {
 
 void() monster_dreadnaught = {
 	if (self.deathstring == "")  self.deathstring = " was incinerated by a Dreadnaught\n";
+	self.classname = "monster_pyro";
 	monster_pyro();
 };

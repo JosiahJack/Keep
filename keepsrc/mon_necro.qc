@@ -1,50 +1,34 @@
-/*==========================================================================================
-NECROMANCER (From Drake mod.  Used for Acolyte, Sorcerer, Warlock, and the boss Necromancer)
-============================================================================================*/
+// NECROMANCER (From Drake mod.  Used for Acolyte, Sorcerer, Warlock, and the boss Necromancer)
 $cd progs/drake/necro
 $origin 0 0 24
 $base base        
 $skin skin
-
 $frame deathA1 deathA2 deathA3 deathA4 deathA5 deathA6 deathA7 deathA8
 $frame deathA9 deathA10 deathA11 deathA12 deathA13 deathA14 deathA15
 $frame deathA16 deathA17 deathA18 deathA19 deathA20
-
 $frame decap1 decap2 decap3 decap4 decap5 decap6 decap7 decap8 decap9 decap10
 $frame decap11 decap12 decap13 decap14 decap15 decap16 decap17 decap18
 $frame decap19 decap20
-
 $frame Hatak1 Hatak2 Hatak3 Hatak4 Hatak5 Hatak6 Hatak7 Hatak8
-
 $frame Hpain1 Hpain2 Hpain3 Hpain4 Hpain5 Hpain6 Hpain7 Hpain8
-
 $frame Hrun1 Hrun2 Hrun3 Hrun4 Hrun5 Hrun6 Hrun7 Hrun8 Hrun9 Hrun10
 $frame Hrun11 Hrun12
-
 $frame Hwait1 Hwait2 Hwait3 Hwait4 Hwait5 Hwait6 Hwait7 Hwait8 Hwait9 Hwait10
 $frame Hwait11 Hwait12
-
 $frame Siatak1 Siatak2 Siatak3 Siatak4 Siatak5 Siatak6 Siatak7 Siatak8
 $frame Siatak9 Siatak10 Siatak11 Siatak12
-
 $frame Sipain1 Sipain2 Sipain3 Sipain4 Sipain5 Sipain6 Sipain7 Sipain8
-
 $frame Sirun1 Sirun2 Sirun3 Sirun4 Sirun5 Sirun6 Sirun7 Sirun8 Sirun9 Sirun10
 $frame Sirun11 Sirun12
-
 $frame Siwait1 Siwait2 Siwait3 Siwait4 Siwait5 Siwait6 Siwait7 Siwait8
 $frame Siwait9 Siwait10 Siwait11 Siwait12
-
 $frame Statak1 Statak2 Statak3 Statak4 Statak5 Statak6 Statak7 Statak8
-
 $frame Stpain1 Stpain2 Stpain3 Stpain4 Stpain5 Stpain6 Stpain7 Stpain8
-
 $frame Strun1 Strun2 Strun3 Strun4 Strun5 Strun6 Strun7 Strun8 Strun9 Strun10
 $frame Strun11 Strun12
-
 $frame Stwait1 Stwait2 Stwait3 Stwait4 Stwait5 Stwait6 Stwait7 Stwait8
 $frame Stwait9 Stwait10 Stwait11 Stwait12
-//=============================================================================
+
 float   NECRO_ACOLYTE   = 1;  // Used by self.height.
 float   NECRO_SORCERER  = 2;
 float   NECRO_WARLOCK   = 3;
@@ -60,15 +44,7 @@ void() NecroBolt_Summon = {
 		if (self.master.flags & FLx_CREATURE)
 		if (self.enemy) {
 			if (visible (self.enemy)) {
-				// if (count_petclass(self.master, "monster_imp") < NECRO_MAX_IMPS)
-				// {
-					// if (SpawnMonster_Point (self.master, self.origin, ID_IMP_KINN))
-					// {
-						// remove (self);
-						// return;
-					// }
-				// }
-				if (query_minionactive(self) == TRUE) {
+				if (query_minionactive(self) == TRUE && self.minion_count < self.minion_maxcount) {
 					// Findradius version
 					makevectors(self.angles);
 					self.pos1 = self.origin + self.view_ofs + v_forward*64 + v_up*32;
@@ -133,7 +109,7 @@ void(vector st) warlock_fire =
     dir = Maim_Line (org, vec, 600, targ, '0 0 0');
     NecroBolt_Launch (org, dir);
 // Update:  Secondary bolts from necro boss can spawn monsters.
-    if (self.classname == "monster_necromancer")
+    if (self.classtype == CT_MONNECRO)
         if ( self.frame == $Hatak8 )
             newmis.think = NecroBolt_Summon;
 };
@@ -391,8 +367,8 @@ void() necro_run = {
 				// 1) Enemy is too close.
 				// 2) Necro is in a deadly environment (e.g., in lava).
 				if (vlen(self.enemy.origin - self.origin) > (RANGE_NECROSHIELD + self.enemy.maxs_x)) {
-					if (self.h2otype >= CONTENT_WATER) {
-						if ((self.h2otype != CONTENT_WATER) || (self.h2olevel < 3)) {
+					if (self.liquidbase >= CONTENT_WATER) {
+						if ((self.liquidbase != CONTENT_WATER) || (self.waterlevel < 3)) {
 							self.fallen = world;
 							self.worldtype = 0;
 							shieldon();
@@ -403,7 +379,7 @@ void() necro_run = {
 				}
 
 				// Necro boss may teleport instead if shield cannot be raised.
-				if (self.classname == "monster_necromancer")
+				if (self.classtype == CT_MONNECRO)
 					if (necro_teledef ()) return;
 
 				shieldoff();
@@ -417,7 +393,7 @@ void() necro_run = {
     local   float   d;
 
     d = 16;
-    if (self.classname == "monster_necromancer") {
+    if (self.classtype == CT_MONNECRO) {
         // Boss may teleport to enemy.
         if (self.search_time + 5 < time) {
             local   entity  targ;
@@ -465,14 +441,11 @@ void() necro3_run6  =[ $Hrun11, necro3_run1  ] {necro_run();};
 void() ai_repel;    // In 'nemesant.qc'.
 
 float() necro_encore = {
-    if (self.classname == "monster_necromancer")
-        return TRUE;
-
-    if (cranked || (skill >= 3))
-        return TRUE;
+    if (self.classtype == CT_MONNECRO) return TRUE;
+    if (skill >= 3) return TRUE;
     if (skill >= 2)
-        if (random() < 0.25)
-            return TRUE;
+        if (random() < 0.25) return TRUE;
+
     return FALSE;
 };
 
@@ -487,7 +460,7 @@ void() necro_run_check = {
 // PM:  Sped up acolyte's swings due to frame rate differences between
 // Quake and Hexen2.
 void() necro1_melee1 =[ $Siatak2,  necro1_melee2 ] {ai_charge(3);
-    if (self.classname == "monster_necromancer")
+    if (self.classtype == CT_MONNECRO)
         self.cnt = 2;   // Extra swings.
     else
         self.cnt = 0;
@@ -516,7 +489,7 @@ void() necro1_melee =
         necro1_melee1 ();
     else
     {
-        if (self.classname == "monster_necromancer")
+        if (self.classtype == CT_MONNECRO)
             if (random() < 0.2)
             {   // In case the boss gets stuck, let him make some potshots.
                 if (self.th_missile)
@@ -532,7 +505,7 @@ void() necro1_attack2  =[ $Siatak5,  necro1_attack3  ] {ai_face(); self.cnt = 0;
 void() necro1_attack3  =[ $Siatak6,  necro1_attack4  ] {ai_face();
     if (!self.cnt)
     {   // Set refire count.
-        if (self.classname == "monster_necromancer")
+        if (self.classtype == CT_MONNECRO)
             self.cnt = random() * 3 & 3 + 1;
         else if (necro_encore ())
             self.cnt = 1;
@@ -602,13 +575,10 @@ void() necro3_attack1  =[ $Hatak1,  necro3_attack2  ] {ai_face();};
 void() necro3_attack2  =[ $Hatak2,  necro3_attack3  ] {ai_face();};
 void() necro3_attack3  =[ $Hatak4,  necro3_attack4  ] {ai_face();
     if (InMeleeRange (80))
-        if (!(self.enemy.flags & (FL_FLY | FL_SWIM)))
-        {
-            if (self.classname == "monster_necromancer")
-            {   // Boss escapes instead if ganged-up by more enemies.
+        if (!(self.enemy.flags & (FL_FLY | FL_SWIM))) {
+            if (self.classtype == CT_MONNECRO) { // Boss escapes instead if ganged-up by more enemies.
                 if (necro4_gangup ())
-                    if (sorcerer_tele ())
-                        return;
+                    if (sorcerer_tele ()) return;
             }
             ai_repel ();
             return;
@@ -649,7 +619,7 @@ void() necro_activate_special = {
 		/*
         if (self.enemy.flags & FL_MONSTER) {
 			// Special cases for some monsters.
-            if (self.enemy.classgroup == CG_ZOMBIE && !(targ.classname == "monster_mummy")) {
+            if (self.enemy.classgroup == CG_ZOMBIE && targ.classtype != CT_MONMUMMY)) {
 				// Supress zombie immortality so any damage can kill zombies.
                 T_Curse (self.enemy, self, CURSE_ARMOR, 10);
                 return;
@@ -813,7 +783,7 @@ void() necro4_attack = {
                         if (head.deadflag < DEAD_DEAD) {
                             yes = 0;   // Already have a golem out.
                             if (self.enemy)
-                            if (!IsDead (head))
+                            if (!((head.health <= 0) || head.deadflag))
                             if (!visible (head))
                             if (!visible2 (self.enemy, head)) {
 								// Unsummon current, and summon new one.
@@ -858,18 +828,14 @@ void() necro4_attack = {
         necro3_attack1 ();
 };
 
-// PAIN - - - - - - - - - - - - - - - -
+// PAIN
 void(void() skip) necro_skip = {if (random() < 0.5) skip();};
 
 // Check for an escape during pain.
-void() necro_telepain =
-{
-    if (self.classname == "monster_necromancer")
-    {
-        if (self.enemy)
-        {
-            if ((random() < 0.25) || (self.h2otype <= CONTENT_SLIME))
-                necro_teleport (self.enemy, self.origin, TRUE);
+void() necro_telepain = {
+    if (self.classtype == CT_MONNECRO) {
+        if (self.enemy) {
+            if ((random() < 0.25) || (self.liquidbase <= CONTENT_SLIME)) necro_teleport (self.enemy, self.origin, TRUE);
         }
     }
 };
@@ -986,7 +952,7 @@ float() Necro_WeaponBroke = {
 
 void(entity inflictor, entity attacker, float damage) necro_pain = {
 	// Update:  Check for evolution/weapon breakage for boss necro.
-    if (self.classname == "monster_necromancer")
+    if (self.classtype == CT_MONNECRO)
     if (Necro_WeaponBroke ()) {
 		// Must go into pain for weapon breaking effects to look right.
         self.pain_finished = time + 1;
@@ -1055,14 +1021,25 @@ void() necro_revive10 =[ $deathA2,  necro_revive11 ] {};
 void() necro_revive11 = {self.th_run();};
 
 void() necro_cache = {
-	self.mdl = "progs/drake/necro.mdl";
     precache_model ("progs/drake/necro.mdl");
-	self.headmdl = "progs/drake/h_necro.mdl";
     precache_model ("progs/drake/h_necro.mdl");
     precache_model ("progs/drake/r_bolt.mdl");
     precache_model ("progs/drake/smartbal.mdl");
     precache_model ("progs/w_spike.mdl");
     precache_model ("progs/drake/nec_rune.mdl");
+    precache_model ("progs/drake/nec_rod1.mdl");
+    precache_model ("progs/drake/nec_rod2.mdl");
+    precache_model ("progs/drake/nec_rod3.mdl");
+    precache_model ("progs/drake/s_spark.spr");
+    precache_model ("progs/drake/ice.mdl");
+    precache_model ("progs/drake/k_ball.mdl");
+    precache_model ("progs/drake/s_wave2.spr");
+    precache_model ("progs/drake/akarrow.mdl");
+    precache_model ("progs/drake/hk_golem.mdl");
+    precache_model ("progs/drake/h_hkolem.mdl");
+    precache_model ("progs/drake/st_gib1.mdl");
+    precache_model ("progs/drake/st_gib2.mdl");
+    precache_model ("progs/drake/st_gib3.mdl");
     precache_sound ("drake/curse/x_armor.wav");
     precache_sound ("drake/necro/att_a.wav");
     precache_sound ("drake/necro/att_a2.wav");
@@ -1071,22 +1048,10 @@ void() necro_cache = {
     precache_sound ("drake/necro/death2.wav");
     precache_sound ("drake/necro/idle1.wav");
     precache_sound ("drake/necro/idle2.wav");
-	self.idle_sound = "drake/necro/idle1.wav";
-	self.idle_soundcom = "drake/necro/idle2.wav";
     precache_sound ("drake/necro/pain1.wav");
-	self.pain_sound = "drake/necro/pain1.wav";
     precache_sound ("drake/necro/sight1.wav");
-	self.sight_sound = "drake/necro/sight1.wav";
-	self.hello_sound = "drake/necro/idle1.wav";
     precache_sound ("zerstorer/trog/frblfly.wav");
     precache_sound ("drake/skullwiz/push.wav");
-};
-
-void() necro_boss_cache = {
-    precache_model ("progs/drake/nec_rod1.mdl");
-    precache_model ("progs/drake/nec_rod2.mdl");
-    precache_model ("progs/drake/nec_rod3.mdl");
-    precache_model ("progs/drake/s_spark.spr");
     precache_sound ("drake/curse/x_armor.wav");
     precache_sound ("drake/curse/x_damage.wav");
     precache_sound ("drake/curse/x_muddle.wav");
@@ -1101,9 +1066,6 @@ void() necro_boss_cache = {
     precache_sound ("drake/necro/pop3.wav");
     precache_sound ("drake/necro/pop4.wav");
     precache_sound ("drake/necro/summon.wav");
-
-    precache_model ("progs/drake/ice.mdl");
-    precache_model ("progs/drake/k_ball.mdl");
     precache_sound ("drake/dragon/icehit.wav");
     precache_sound ("hipnotic/grem/attack.wav");     // Replaces Hexen2 imp slash sfx.
     precache_sound ("drake/imp/die.wav");
@@ -1115,14 +1077,6 @@ void() necro_boss_cache = {
     precache_sound ("drake/imp/up.wav");
     precache_sound ("drake/misc/pushston.wav");
     precache_sound ("drake/misc/wallbrk.wav");
-    precache_model ("progs/drake/s_wave2.spr");
-
-    precache_model ("progs/drake/akarrow.mdl");
-    precache_model ("progs/drake/hk_golem.mdl");
-    precache_model ("progs/drake/h_hkolem.mdl");
-    precache_model ("progs/drake/st_gib1.mdl");
-    precache_model ("progs/drake/st_gib2.mdl");
-    precache_model ("progs/drake/st_gib3.mdl");
     precache_sound ("ne_ruins/h2golem/death.wav");
     precache_sound ("drake/golem/sight.wav");
     precache_sound ("drake/golem/step.wav");
@@ -1139,10 +1093,8 @@ void() setup_necro;
 void() monster_necromancer = {
     local float nec;
 
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
     if (self.classname == "monster_acolyte") {
 		nec = NECRO_ACOLYTE;
@@ -1163,17 +1115,22 @@ void() monster_necromancer = {
 		if (self.health < 1) self.health = 1800;
 	}
 
+	if (self.minion_name == string_null) self.minion_name = "monster_gargoyle";
+	self.mdl = "progs/drake/necro.mdl";
+	self.headmdl = "progs/drake/h_necro.mdl";
     self.height = nec;
+	self.idle_sound = "drake/necro/idle1.wav";
+	self.idle_soundcom = "drake/necro/idle2.wav";
+	self.sight_sound = "drake/necro/sight1.wav";
+	self.hello_sound = "drake/necro/idle1.wav";
+	self.pain_sound = "drake/necro/pain1.wav";
 
-    necro_cache ();
-	if (!nec) necro_boss_cache ();
-
-	// Cache gargoyle is a special class used for precache only
+	// Special class used for precache only
 	if (self.classtype != CT_CACHENECRO) setup_necro();
 };
 
 void() monster_necrominion = { 
-	self.classtype = CT_CACHENECRO; 
+	self.classtype = CT_CACHENECRO;
 	monster_necromancer();
 };
 
@@ -1219,7 +1176,7 @@ void() setup_necro = {
         self.height     = NECRO_ACOLYTE;    // Start in acolyte mode.
         self.ryuflags   = RYU_ALERT;
         self.purse      = '20 1 0.5';
-        self.xfl        = XFL_BOSS;
+        self.bossflag = TRUE;
         self.th_stand   = necro1_stand1;
         self.th_walk    = necro1_walk1;
         self.th_run     = necro1_run1;
@@ -1251,11 +1208,6 @@ void() setup_necro = {
 	if (self.worldtype) {
 		if (!self.minion_maxcount) self.minion_maxcount = 3;
 	}
-
-    if (soul_evil)
-        monster_purse (self.purse_x, self.purse_y, self.purse_z);
-    else
-        self.purse      = '0 0 0';
 
     monster_start ();
 };

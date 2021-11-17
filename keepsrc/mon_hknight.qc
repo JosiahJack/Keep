@@ -70,7 +70,6 @@ float   SKIN_HKBOSS         = 3;
 float   SKIN_BANE           = 4;
 float   SKIN_BANE_GRAY      = 5;
 float   SKIN_DARK_LORD      = 6;
-
 float   DARKLORD_NEAR       = 250;
 
 void(float side) bane_melee;
@@ -79,7 +78,6 @@ void() lord_magic;
 void() hkboss_cache;
 void() hklord_cache;
 
-//===========================================================================
 void()	hknight_stand1	=[	$stand1,	hknight_stand2	] {monster_idle_sound(); ai_stand();};
 void()	hknight_stand2	=[	$stand2,	hknight_stand3	] {ai_stand();};
 void()	hknight_stand3	=[	$stand3,	hknight_stand4	] {ai_stand();};
@@ -90,7 +88,6 @@ void()	hknight_stand7	=[	$stand7,	hknight_stand8	] {ai_stand();};
 void()	hknight_stand8	=[	$stand8,	hknight_stand9	] {ai_stand();};
 void()	hknight_stand9	=[	$stand9,	hknight_stand1	] {ai_stand();};
 
-//===========================================================================
 void()	hknight_walk1	=[	$walk1,		hknight_walk2	] {monster_idle_sound(); ai_walk(2);};
 void()	hknight_walk2	=[	$walk2,		hknight_walk3	] {monster_footstep(FALSE);ai_walk(5);};
 void()	hknight_walk3	=[	$walk3,		hknight_walk4	] {ai_walk(5);};
@@ -114,7 +111,6 @@ void()	hknight_walk20	=[	$walk20,	hknight_walk1	] {ai_walk(2);};
 
 void()	hknight_char_b1;
 
-//===========================================================================
 void() CheckForCharge = {
 	// There are 4 conditions to keep charging
 	// Can see player, no attack timer, similar Z axis and outside melee range
@@ -137,16 +133,13 @@ void() CheckForCharge = {
 
 	SUB_AttackFinished (2);
 	
-	// Used a pre-defined charge routine (th_charge) so that
-	// hell and death knights can share the same function
+	// Used a pre-defined charge routine (th_charge) so that hell and death knights can share the same function
 	if (self.th_charge) self.th_charge();
 	else self.th_run();
 };
 
 float(float d) ai_medic;
-
-// Checks if the Bane can use a nearby dead body.
-void() bane_magicd1;
+void() bane_magicd1; // Checks if the Bane can use a nearby dead body.
 void() bane_magice1;
 void() bane_strafe;
 void() magica_sword_chop;
@@ -155,24 +148,17 @@ void() M_Lightwall;
 void(float d) hk_run = {
     if (self.classname == "monster_bane") {
         d = d * 2;
-
         if (!self.waitmax) {
-            if (ai_medic (d)) {
-                // Hack:  Set attack_finished higher than time so
-                //  that CheckForCharge fails, which would otherwise
-                //  bypass ritual anim.
-				//if ( self.frame == $run1 )
-                    self.attack_finished = time + 0.2;
+            if (ai_medic(d)) { // Hack:  Set attack_finished higher than time so that CheckForCharge fails, which would otherwise bypass ritual anim.
+                self.attack_finished = time + 0.2;
                 bane_magicd1 ();
                 return;
             }
 
             if (self.search_time + 5 < time)
             if (self.enemy)
-            if (!visible (self.enemy)) {
-				// Teleport to the enemy.
-				//if ( self.frame == $run1 )
-                    self.attack_finished = time + 0.2;
+            if (!visible (self.enemy)) { // Teleport to the enemy.
+                self.attack_finished = time + 0.2;
                 self.search_time = time;    //+ 5;
                 bane_magice1 ();
                 return;
@@ -182,7 +168,6 @@ void(float d) hk_run = {
     ai_run (d);
 };
 
-//----------------------------------------------------------------------
 void()	hknight_run1	=[	$run1,		hknight_run2	] {
 	if (self.classname == "monster_dark_lord") {
 		self.th_run();
@@ -200,7 +185,6 @@ void()	hknight_run6	=[	$run6,		hknight_run7	] {monster_footstep(FALSE); hk_run(2
 void()	hknight_run7	=[	$run7,		hknight_run8	] {hk_run(21);};
 void()	hknight_run8	=[	$run8,		hknight_run1	] {hk_run(13);};
 
-//----------------------------------------------------------------------
 void()	hknight_char_a1	=[	$char_a1,	hknight_char_a2	] {ai_charge(20);};
 void()	hknight_char_a2	=[	$char_a2,	hknight_char_a3	] {monster_footstep(FALSE); ai_charge(25);};
 void()	hknight_char_a3	=[	$char_a3,	hknight_char_a4	] {ai_charge(18);};
@@ -209,36 +193,31 @@ void()	hknight_char_a5	=[	$char_a5,	hknight_char_a6	] {ai_charge(14);};
 void()	hknight_char_a6	=[	$char_a6,	hknight_char_a7	] {monster_footstep(FALSE); ai_charge(20); ai_melee();};
 void()	hknight_char_a7	=[	$char_a7,	hknight_char_a8	] {ai_charge(21); ai_melee();};
 void()	hknight_char_a8	=[	$char_a8,	hknight_char_a9	] {ai_charge(13); ai_melee();};
-void()	hknight_char_a9	=[	$char_a9,	hknight_char_a10	] {ai_charge(20); ai_melee();};
-void()	hknight_char_a10=[	$char_a10,	hknight_char_a11	] {monster_footstep(FALSE); ai_charge(20); ai_melee();};
-void()	hknight_char_a11=[	$char_a11,	hknight_char_a12	] {ai_charge(18); ai_melee();};
-void()	hknight_char_a12=[	$char_a12,	hknight_char_a13	] {ai_charge(16);};
-void()	hknight_char_a13=[	$char_a13,	hknight_char_a14	] {ai_charge(14);};
-void()	hknight_char_a14=[	$char_a14,	hknight_char_a15	] {monster_footstep(FALSE);ai_charge(25);};
-void()	hknight_char_a15=[	$char_a15,	hknight_char_a16	] {ai_charge(21);};
+void()	hknight_char_a9	=[	$char_a9,	hknight_char_a10] {ai_charge(20); ai_melee();};
+void()	hknight_char_a10=[	$char_a10,	hknight_char_a11] {monster_footstep(FALSE); ai_charge(20); ai_melee();};
+void()	hknight_char_a11=[	$char_a11,	hknight_char_a12] {ai_charge(18); ai_melee();};
+void()	hknight_char_a12=[	$char_a12,	hknight_char_a13] {ai_charge(16);};
+void()	hknight_char_a13=[	$char_a13,	hknight_char_a14] {ai_charge(14);};
+void()	hknight_char_a14=[	$char_a14,	hknight_char_a15] {monster_footstep(FALSE);ai_charge(25);};
+void()	hknight_char_a15=[	$char_a15,	hknight_char_a16] {ai_charge(21);};
 void()	hknight_char_a16=[	$char_a16,	hknight_run1	] {ai_charge(13);};
 
-//----------------------------------------------------------------------
-// Never used, only called from hknight_char_b
-//----------------------------------------------------------------------
-void() CheckContinueCharge =
-{
+// Only called from hknight_char_b
+void() CheckContinueCharge = {
 	if (time > self.attack_finished) {
 		SUB_AttackFinished (3);
 		self.th_run();
-		return;		// done charging
+		return;	// done charging
 	}
 };
 
-void()	hknight_char_b1	=[	$char_b1,	hknight_char_b2	]
-{CheckContinueCharge (); ai_charge(23); ai_melee();};
+void()	hknight_char_b1	=[	$char_b1,	hknight_char_b2	] {CheckContinueCharge (); ai_charge(23); ai_melee();};
 void()	hknight_char_b2	=[	$char_b2,	hknight_char_b3	] {SwordSwipeSound(); ai_charge(17); ai_melee();};
 void()	hknight_char_b3	=[	$char_b3,	hknight_char_b4	] {ai_charge(12); ai_melee();};
 void()	hknight_char_b4	=[	$char_b4,	hknight_char_b5	] {monster_footstep(FALSE); ai_charge(22); ai_melee();};
 void()	hknight_char_b5	=[	$char_b5,	hknight_char_b6	] {ai_charge(18); ai_melee();};
 void()	hknight_char_b6	=[	$char_b6,	hknight_char_b1	] {ai_charge(8); ai_melee();};
 
-//===========================================================================
 void()	hknight_slice1	=[	$slice1,	hknight_slice2	] {ai_charge(9);};
 void()	hknight_slice2	=[	$slice2,	hknight_slice3	] {ai_charge(6);};
 void()	hknight_slice3	=[	$slice3,	hknight_slice4	] {monster_footstep(FALSE); ai_charge(13);};
@@ -250,7 +229,6 @@ void()	hknight_slice8	=[	$slice8,	hknight_slice9	] {ai_charge(2); ai_melee();};
 void()	hknight_slice9	=[	$slice9,	hknight_slice10	] {ai_melee();};
 void()	hknight_slice10	=[	$slice10,	hknight_run1	] {ai_charge(3);};
 
-//----------------------------------------------------------------------
 void()	hknight_smash1	=[	$smash1,	hknight_smash2	] {ai_charge(1);};
 void()	hknight_smash2	=[	$smash2,	hknight_smash3	] {ai_charge(13);};
 void()	hknight_smash3	=[	$smash3,	hknight_smash4	] {SwordSwipeSound(); ai_charge(9);};
@@ -269,7 +247,6 @@ void()	hknight_smash9	=[	$smash9,	hknight_smash10	] {monster_footstep(FALSE); ai
 void()	hknight_smash10	=[	$smash10,	hknight_smash11	] {ai_charge(0);};
 void()	hknight_smash11	=[	$smash11,	hknight_run1	] {ai_charge(0);};
 
-//----------------------------------------------------------------------
 void()	hknight_watk1	=[	$w_attack1,	hknight_watk2	] {ai_charge(2);};
 void()	hknight_watk2	=[	$w_attack2,	hknight_watk3	] {ai_charge(0);};
 void()	hknight_watk3	=[	$w_attack3,	hknight_watk4	] {ai_charge(0);};
@@ -279,9 +256,7 @@ void()	hknight_watk6	=[	$w_attack6,	hknight_watk7	] {ai_melee();};
 void()	hknight_watk7	=[	$w_attack7,	hknight_watk8	] {ai_charge(1);};
 void()	hknight_watk8	=[	$w_attack8,	hknight_watk9	] {ai_charge(4);};
 void()	hknight_watk9	=[	$w_attack9,	hknight_watk10	] {
-	if ((self.classname == "monster_bane") || (self.classname == "monster_dark_lord")) {
-		bane_melee(0); 
-	}
+	if ((self.classname == "monster_bane") || (self.classname == "monster_dark_lord")) bane_melee(0); 
 	ai_charge(5);
 };
 void()	hknight_watk10	=[	$w_attack10,	hknight_watk11	] {ai_charge(3); ai_melee();};
@@ -291,9 +266,7 @@ void()	hknight_watk13	=[	$w_attack13,	hknight_watk14	] {ai_charge(0);};
 void()	hknight_watk14	=[	$w_attack14,	hknight_watk15	] {SwordSwipeSound(); ai_charge(0);};
 void()	hknight_watk15	=[	$w_attack15,	hknight_watk16	] {ai_charge(0);};
 void()	hknight_watk16	=[	$w_attack16,	hknight_watk17	] {ai_charge(1);
-	if ((self.classname == "monster_bane") || (self.classname == "monster_dark_lord")) {
-		sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
-	}
+	if ((self.classname == "monster_bane") || (self.classname == "monster_dark_lord")) sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
 };
 void()	hknight_watk17	=[	$w_attack17,	hknight_watk18	] {ai_charge(1); ai_melee();};
 void()	hknight_watk18	=[	$w_attack18,	hknight_watk19	] {ai_charge(3); ai_melee();};
@@ -302,13 +275,10 @@ void()	hknight_watk20	=[	$w_attack20,	hknight_watk21	] {ai_charge(6);};
 void()	hknight_watk21	=[	$w_attack21,	hknight_watk22	] {ai_charge(7);};
 void()	hknight_watk22	=[	$w_attack22,	hknight_run1	] {monster_footstep(FALSE); ai_charge(3);};
 
-//============================================================================
 // Cycle between 3 melee attacks
 // Attack 1 - Slice (one hand slashing run attack)
 // Attack 2 - Smash (chop overhead to ground)
 // Attack 3 - W_Attack (two handed slashing attack)
-
-//----------------------------------------------------------------------
 void() hknight_melee = {
 	self.meleeattack = self.meleeattack + 1;
 
@@ -320,7 +290,6 @@ void() hknight_melee = {
 	}
 };
 
-//============================================================================
 void(float offset) hknight_shot = {
 	local	vector	offang;
 	local	vector	org, dir;
@@ -340,16 +309,15 @@ void(float offset) hknight_shot = {
 	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
 	
     if (self.classname == "monster_bane") {
-        KnightBall_Launch (org, dir);
+        KnightBall_Launch(org, dir);
         newmis.dmg = 60;
-        newmis.style = newmis.style | DF_SAFE;
         newmis.velocity = dir*600;
         if (( self.frame == $magicb6 ) || ( self.frame == $magicc6 )) sound (self, CHAN_WEAPON, "drake/weapons/mirv1.wav", 1, ATTN_NORM);
     } else if (self.classname == "monster_dark_lord") {
-        NecroBolt_Launch (org, dir);
+        NecroBolt_Launch(org,dir);
     } else {
 		if (self.classtype == self.classtype == CT_MONSABERENFORCER) launch_projectile (org, dir, CT_PROJ_HKN_BLUE, self.attack_speed);
-		else launch_projectile (org, dir, CT_PROJ_HKN, self.attack_speed);
+		else launch_projectile(org,dir,CT_PROJ_HKN,self.attack_speed);
 	}
 };
 
@@ -575,10 +543,9 @@ void() hknight_pointfire =
 	
 };
 
-//----------------------------------------------------------------------
 void() hknight_pointsetup = {
 	local entity newpoint;
-	// Start pointing lightning sword?
+
 	if (self.target == "") {
 		newpoint = spawn();
 		setorigin(newpoint,self.origin + '0 0 64');
@@ -678,11 +645,9 @@ void()	hknight_die10	=[	$death10,	hknight_die11	] {};
 void()	hknight_die11	=[	$death11,	hknight_die12	] {monster_death_postcheck();};
 void()	hknight_die12	=[	$death12,	hknight_die12	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
 void()	hknight_dieb1	=[	$deathb1,	hknight_dieb2	] {};
 void()	hknight_dieb2	=[	$deathb2,	hknight_dieb3	] {monster_check_gib();};
-void()	hknight_dieb3	=[	$deathb3,	hknight_dieb4	] {monster_check_gib();
-	self.solid = SOLID_NOT;};
+void()	hknight_dieb3	=[	$deathb3,	hknight_dieb4	] {monster_check_gib();self.solid = SOLID_NOT;};
 void()	hknight_dieb4	=[	$deathb4,	hknight_dieb5	] {};
 void()	hknight_dieb5	=[	$deathb5,	hknight_dieb6	] {};
 void()	hknight_dieb6	=[	$deathb6,	hknight_dieb7	] {};
@@ -691,14 +656,11 @@ void()	hknight_dieb8	=[	$deathb8,	hknight_dieb9	] {monster_death_postcheck();};
 void()	hknight_dieb9	=[	$deathb9,	hknight_dieb9	] {monster_deadbody_check();};
 
 void() hknight_die = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
-	// Make sure attachments are removed
-	hknight_remove_attachment();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
+	hknight_remove_attachment(); // Make sure attachments are removed
 
-    if (self.classname == "monster_hell_lord") {
-        self.death_sound = "drake/archer/death2.wav";
-    } else if (self.classname == "monster_bane") {
+    if (self.classname == "monster_hell_lord") self.death_sound = "drake/archer/death2.wav";
+    else if (self.classname == "monster_bane") {
         if (self.skin == SKIN_BANE_GRAY) self.skin = SKIN_BANE;
 		self.modelindex = self.mindex2;
         self.death_sound = "drake/bane/death.wav";
@@ -720,17 +682,12 @@ void() hknight_aistates = {
 	self.th_walk = hknight_walk1;		// Walking
 	self.th_run = hknight_run1;			// Running
 	self.th_melee = hknight_melee;		// Sword attack
-	if (self.classname == "monster_hell_knight_champion") {
-		self.th_missile = hknight_champion_magic;
-	} else {
-		if (self.classname == "monster_hkboss") {
-			self.th_missile = hkboss_magic; // Either knight spikes or vore balls
-		} else {
-			if (self.classname == "monster_hell_lord") {
-				self.th_missile = lord_magic;
-			} else {
-				self.th_missile = hknight_magicc1;	// Fire spikes
-			}
+	if (self.classname == "monster_hell_knight_champion") self.th_missile = hknight_champion_magic;
+	else {
+		if (self.classname == "monster_hkboss") self.th_missile = hkboss_magic; // Either knight spikes or vore balls
+		else {
+			if (self.classname == "monster_hell_lord") self.th_missile = lord_magic;
+			else self.th_missile = hknight_magicc1;	// Fire spikes
 		}
 	}
 	self.th_charge = hknight_char_a1;	// Run + melee
@@ -738,48 +695,38 @@ void() hknight_aistates = {
 	self.th_die = hknight_die;			// Face meets floor
 };
 
-//----------------------------------------------------------------------
-void() hknight_wakeup =
-{
+void() hknight_wakeup = {
 	if (self.health < 0) return;		// Check for sudden death!
 	
 	self.use = SUB_Null;				// no re-trigger
 	self.takedamage = DAMAGE_AIM;		// Can receive damage
 	self.spawnstatue = FALSE;			// No longer stationary
-
 	hknight_aistates();					// Restore AI state functions
 	monster_targets();					// Check for targets
 };
 
-//----------------------------------------------------------------------
 // Restore pointy lightning knights to normal hell knights
-//----------------------------------------------------------------------
-void() hknight_pointwakeup =
-{
-	// Check for sudden death!
-	if (self.health < 0) return;
-	// Always reset health+max back to default
-	self.health = self.max_health = self.reset_health;
-	// Fire any trigger event when breaking pointy pose
-	if (self.target2 != "") {
+void() hknight_pointwakeup = {
+	if (self.health < 0) return; // Check for sudden death!
+
+	self.health = self.max_health = self.reset_health; // Always reset health+max back to default
+	if (self.target2 != "") { // Fire any trigger event when breaking pointy pose
 		trigger_strs(self.target2, self.enemy);
 		self.target2 = "";		// Trigger once
 	}
 
-	// Restore pain threshold and timeout
-	self.pain_flinch = self.finaldest_x;
+	self.pain_flinch = self.finaldest_x; // Restore pain threshold and timeout
 	self.pain_timeout = self.finaldest_y;
 	self.pain_finished = time + 2;
-	self.flags = self.flags | FL_MONSTER;
-
-	// Restore the nail resistance if setup to be a statue skin
-	if (self.spawnflags & MON_STATUE) {
+	self.flags = self.flags | FL_MONSTER; // Recognized by the things that need to recognize it as a monster now, previously was just a statue.
+	if (self.spawnflags & MON_STATUE) { // Restore the nail resistance if setup to be a statue skin
 		self.resist_nails = 0.2;
-		self.reflectnails = TRUE;		// Reflect nail projectiles
+		self.reflectnails = TRUE; // Reflect nail projectiles
 	}
 	
 	hknight_remove_attachment();		// Remove glowing sword
 	hknight_aistates();					// Restore AI state functions
+
 	// Check for any enemy target?
 	if (self.enemy) {
 		monster_sightsound();			// Sword sounds!
@@ -790,76 +737,95 @@ void() hknight_pointwakeup =
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 // Special pain function for pointy lightning knights
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) hknight_pointpain =
-{
+void(entity inflictor, entity attacker, float damage) hknight_pointpain = {
 	self.pain_finished = 0;
 	if (!(attacker.flags & FL_CLIENT)) return;
 	self.enemy = attacker;
 	hknight_pointwakeup();
 };
 
-//----------------------------------------------------------------------
 // Special use/trigger function for pointy lightning knights
-//----------------------------------------------------------------------
-void() hknight_pointuse = 
-{
+void() hknight_pointuse = {
 	// Check for enemy/health/player exceptions
 	if (self.enemy) return;
 	if (self.health < 1) return;
 	if (activator.items & IT_INVISIBILITY) return;
 	if (activator.flags & FL_NOTARGET) return;
-
-	// Trigger once
-	self.use = SUB_Null;
-	// Is the trigger the player?
-	if (activator.flags & FL_CLIENT) self.enemy = activator;
+	
+	self.use = SUB_Null; // Trigger once
+	if (activator.flags & FL_CLIENT) self.enemy = activator; // Is the trigger the player?
 	else self.enemy = world;
 	hknight_pointwakeup();
 };
 
-/*======================================================================
- QUAKED monster_hell_knight (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
-void() monster_hell_knight = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+void() monster_hell_knight_precache = {
+	precache_model("progs/qmaster/mon_hknight.mdl");
+	precache_model("progs/h_hellkn.mdl");
+	precache_model(MODEL_PROJ_HKN);
+	precache_model("progs/ad171/w_hknightsword.mdl");
+	precache_model("progs/ad171/gib_knfoot_l.mdl");
+	precache_model("progs/ad171/gib_knfoot_r.mdl");
+	precache_stonegibs(); // Always precache these stone gib models
+	precache_model ("progs/ad171/mon_hknight_glow.mdl");
+	precache_model("progs/newhouse/vk_spike.mdl");
+	precache_model ("progs/lieutenant/hknight.mdl");
+	precache_model ("progs/h_mega.mdl");
+	precache_sound("hknight/hit.wav");		
+	precache_sound("hknight/attack1.wav"); // Firing of magic spikes (first 0.1s must loop)
+	precache_sound("knight/sword2.wav");
+	precache_sound("knight/sword2.wav");
+	precache_sound("ad171/statue/idle1.wav");
+	precache_sound("ad171/statue/idle2.wav");
+	precache_sound("rogue/statue/idle.wav");
+	precache_sound("rogue/statue/pain.wav");
+	precache_sound("rogue/statue/death.wav");
+	precache_sound("ad171/statue/sight.wav");
+	precache_sound("rogue/statue/see.wav");
+	precache_sound("hknight/idle.wav");
+	precache_sound("hknight/pain1.wav");
+	precache_sound("hknight/death1.wav");
+	precache_sound("hknight/sight1.wav");
+	precache_sound ("hknight/attack1.wav");
+	precache_sound ("hknight/hit.wav");		// used by C code, so don't sound2
+	precache_sound ("hknight/slash1.wav");
+	precache_sound ("hknight/idle.wav");
+	precache_sound ("hknight/grunt.wav");
+	precache_sound ("knight/sword1.wav");
+	precache_sound ("knight/sword2.wav");
+	precache_sound ("enforcer/death1.wav");
+	precache_sound ("enforcer/idle1.wav");
+	precache_sound ("enforcer/pain1.wav");
+	precache_sound ("enforcer/pain2.wav");
+	precache_sound ("enforcer/sight1.wav");
+	precache_sound ("enforcer/sight2.wav");
+	precache_sound ("enforcer/sight3.wav");
+	precache_sound ("enforcer/sight4.wav");
+};
 
-	if (!self.mdl) self.mdl = "progs/ad171/mon_hknight.mdl";			// Original ID Knight + extra skins
+// QUAKED monster_hell_knight (1 0 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_hell_knight = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	if (!self.mdl) self.mdl = "progs/qmaster/mon_hknight.mdl";			// Original ID Knight + extra skins
 	if (!self.headmdl) self.headmdl = "progs/h_hellkn.mdl";
 	if (!self.gib1mdl) self.gib1mdl = "progs/ad171/w_hknightsword.mdl";	// Unique sword
 	if (!self.gib2mdl) self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
 	if (!self.gib3mdl) self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (MODEL_PROJ_HKN);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-
 	if (self.classtype != CT_MONSABERENFORCER) self.gib1sound = GIB_IMPACT_METALA;
 	if (random() < 0.5) self.gib2mdl = string_null;
 	if (random() < 0.5) self.gib3mdl = string_null;
-
-	// Firing of magic spikes (first 0.1s must loop)
-	precache_sound ("hknight/attack1.wav");
-	precache_sound ("knight/sword2.wav");
-	precache_sound ("knight/sword2.wav");
-	if (self.classtype != CT_MONSABERENFORCER) self.hello_sound = "hknight/idle.wav"; 
-	else self.hello_sound = "enforcer/idle1.wav"; 
-
-	// TE_KNIGHTSPIKE = Magic spike hitting the wall
-	// Has got to be in this location because the 
-	// filename is hardcoded (engine.exe)
-	precache_sound ("hknight/hit.wav");				
-
-	// Always precache these stone gib models
-	precache_stonegibs();
+	if (self.classtype != CT_MONSABERENFORCER) {
+		self.hello_sound = "hknight/idle.wav"; 
+		self.hittype = HIT_METAL;
+	} else {
+		self.hello_sound = "enforcer/idle1.wav";
+		if (!self.sight_sound) self.sight_sound = "enforcer/sight1.wav";
+		if (!self.sight_sound2) self.sight_sound2 = "enforcer/sight2.wav";
+		if (!self.sight_sound3) self.sight_sound3 = "enforcer/sight3.wav";
+		if (!self.sight_sound4) self.sight_sound4 = "enforcer/sight4.wav";
+	}
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
@@ -869,9 +835,6 @@ void() monster_hell_knight = {
 		if (!self.idle_sound) self.idle_sound = "ad171/statue/idle1.wav";
 		if (!self.idle_sound2) self.idle_sound2 = "ad171/statue/idle2.wav";
 		if (!self.idle_soundcom) self.idle_soundcom = "rogue/statue/idle.wav";
-		precache_sound (self.idle_sound);
-		precache_sound (self.idle_sound2);
-		precache_sound (self.idle_soundcom);
 		self.hello_sound = "ad171/statue/idle1.wav"; 
 		self.pain_sound = "rogue/statue/pain.wav";
 		self.death_sound = "rogue/statue/death.wav";
@@ -879,42 +842,32 @@ void() monster_hell_knight = {
 			self.sight_sound = "ad171/statue/sight.wav";
 		else
 			self.sight_sound = "rogue/statue/see.wav";
-		self.gib1skin = 1;					// Stoney sword
-		self.gibtype = GIBTYPE_STONE;		// Stoney gibs!
+		self.gib1skin = 1;			  // Stoney sword
+		self.gibtype = GIBTYPE_STONE; // Stoney gibs!
 		self.gib2mdl = self.gib3mdl = string_null;
 		self.resist_nails = 0.2;
-		self.reflectnails = TRUE;		// Reflect nail projectiles
+		self.reflectnails = TRUE;	  // Reflect nail projectiles
 	} else {
 		if (!self.idle_sound) self.idle_sound = "hknight/idle.wav";
-		precache_sound (self.idle_sound);
-
 		if (!self.pain_sound) self.pain_sound = "hknight/pain1.wav";
 		if (!self.death_sound) self.death_sound = "hknight/death1.wav";
 		if (!self.sight_sound) self.sight_sound = "hknight/sight1.wav";
 	}
-	// Cannot have if precache statements, precache duplicates as well
-	precache_sound (self.pain_sound);
-	precache_sound (self.death_sound);
-	precache_sound (self.sight_sound);
 
-	if (self.classname == "monster_hkboss") hkboss_cache();
-	if (self.classname == "monster_hell_lord") hklord_cache();
-	
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
-
 	self.gibhealth = -40;
 	self.gibbed = FALSE;
 	if (self.classname == "monster_hell_knight_champion") {
 		if (self.health < 1) self.health = 350;
-		if (self.skin == 0) self.skin = 3; // Red trimmings and eyes, looking menacing
+		if (self.skin == 0) self.exactskin = self.skin = 3; // Red trimmings and eyes, looking menacing
 		if (self.deathstring == "") self.deathstring = " was fell before a Champion\n";
 	} else {
 		if (self.classname == "monster_hkboss") {
 			if (self.health < 1) self.health = 900;
 			self.gibhealth = MON_NEVERGIB;
-			if (!self.skin) self.skin = 13; // Green trimmings, looking snazzy
+			if (!self.skin) self.exactskin = self.skin = 13; // Green trimmings, looking snazzy
 			if (self.deathstring == "") self.deathstring = " was slaughtered by a Warlord\n";
 		} else {
 			if (self.classname == "monster_hell_lord") {
@@ -929,8 +882,6 @@ void() monster_hell_knight = {
 			}
 		}
 	}
-	precache_sound (self.sight_sound);
-	precache_sound (self.hello_sound);
 	self.pain_flinch = 40;					// Medium pain threshold
 	self.pain_timeout = 1.5;				// Higher than a knight
 	self.steptype = FS_TYPEHEAVY;			// Heavy player
@@ -941,14 +892,9 @@ void() monster_hell_knight = {
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
 
-	self.hittype = HIT_METAL;
-
-	//----------------------------------------------------------------------
 	// Special lightning point knight (metal/stone skins)
-	//----------------------------------------------------------------------
 	if (self.spawnflags & MON_POINT_KNIGHT) {
-		self.weaponglow = "progs/ad171/mon_hknight_glow.mdl";
-		precache_model (self.weaponglow);	// Glowing magical swords
+		self.weaponglow = "progs/ad171/mon_hknight_glow.mdl"; // Glowing magical swords	
 		if (self.spawnflags & MON_STATUE) {
 			self.classgroup = CG_STONE;		// Stone hates metal!
 			self.skin = 1;					// Stone skin
@@ -967,18 +913,11 @@ void() monster_hell_knight = {
 		self.health = MEGADEATH;			// Should be impossible to kill
 		if (self.t_length < 0) self.t_length = 5;	// Random target factor
 		if (self.dmg < 0) self.dmg = 5;				// Contact damage
-		
-		// Setup default pose start pos + random modifier
-		if (CheckZeroVector(self.pos1)) self.pos1 = '20 0 24';
+		if (CheckZeroVector(self.pos1)) self.pos1 = '20 0 24'; // Setup default pose start pos + random modifier
 		if (CheckZeroVector(self.pos2)) self.pos2 = '30 0 2';
-		// Setup default animation pose (magicB6 - magicB11)
-		if (CheckZeroVector(self.pos3)) self.pos3 = '98 103 1';
-	}
-	//----------------------------------------------------------------------
-	// Detect statues and setup different parameters
-	// Tougher skin, less pain, heavy feet etc	
-	//----------------------------------------------------------------------
-	else if (self.spawnflags & MON_STATUE) {
+		if (CheckZeroVector(self.pos3)) self.pos3 = '98 103 1'; // Setup default animation pose (magicB6 - magicB11)
+	} else if (self.spawnflags & MON_STATUE) {
+		// Detect statues and setup different parameters.  Tougher skin, less pain, heavy feet etc
 		self.resist_nails = 0.2;
 		self.reflectnails = TRUE;		// Reflect nail projectiles
 		if (self.classname == "monster_hell_knight_champion") {
@@ -1003,28 +942,24 @@ void() monster_hell_knight = {
 		if (self.spawnflags & MON_NOTFROZEN) {
 			self.spawnflags = self.spawnflags - MON_STATUE;
 			hknight_aistates();			// setup AI state functions
-		}
-		else {
+		} else {
 			self.spawnstatue = TRUE;		// Start as a statue
 			self.th_stand = knight_statue;	// Stone idle sound
 			self.think1 = hknight_wakeup;	// Wakeup function when triggered
 			
-			// statues can change position when the player is not looking
-			// Specify a start/finish frame using pos1 or use frame
+			// Statues can change position when the player is not looking.  Specify a start/finish frame using pos1 or use frame.
 			if (!self.pos1_x) {
 				self.pos1_x = $w_attack1;		// Default pose (attacking)
 				self.pos1_y = $w_attack15;
 			}
-			// A frame has been specified, create a small range from that
-			if (self.frame > 0) {
-				self.pos1_x = self.pos1_y = self.frame;
-			}
+			
+			if (self.frame > 0) self.pos1_x = self.pos1_y = self.frame; // A frame has been specified, create a small range from that
+
 			// Work out range, make sure no negative values
 			self.pos1_z = fabs(self.pos1_y - self.pos1_x);
 			self.frame = self.pos1_x;		// Setup frame / pose
 		}
-	}
-	else {
+	} else {
 		self.pain_longanim = TRUE;		// can be chopped with shadow axe
 		self.classgroup = CG_DKNIGHT;	// Classic tincan!
 		hknight_aistates();				// setup AI state functions
@@ -1035,62 +970,53 @@ void() monster_hell_knight = {
 	monster_start();
 };
 
-//======================================================================
-/*QUAKED monster_hell_pointknight (0.75 0.5 0) (-16 -16 -24) (16 16 40) AMBUSH STATUE x NOSIGHT NOIDLE NOGFX STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
-{ model(":progs/ad171/mon_hknight.mdl"); }
-Special Electricity Pointing Hell Knight
--------- KEYS --------
-targetname : monster/trigger name
-target : target for electricity
-target2 : trigger to fire when electricity stopped
-pos1 : XYZ offset to start lightning (uses v_forward/v_right/v_up)
-pos2 : XYZ random offset to start lightning (uses v_forward/v_right/v_up)
-pos3 : Animation lightning frame set (Start/Finish/Direction)
-t_length : random wobble to electricity target origin (0=def 5)
-dmg : amount of contact damage with electricity (0=def 5)
-health : Override default health settings
-deathtarget : entity to trigger upon death (useful if target field already in use)
-health : Override default health settings
-upgrade_ssg : 1 = will only spawn if shotgun upgrade active on server
-upgrade_axe : 1 = will only spawn if axe upgrade active on server
-upgrade_lg : 1 = will only spawn if lightning gun upgrade active on server
-nomonstercount : will not be included in any monster count functionality
-no_zaware : All Z Aware projectiles will be disabled
-bboxtype : Change bbox 1=Tiny,4=Short,5=Tall,7=Wide,8=Giant,10=Massive
-gibondeath : 1 = always explode in a shower of gibs on death
-bodyfadeaway : Time (secs) before body/head will fade away (default=0)
--------- SPAWNFLAGS --------
-AMBUSH : the monster will only wake up on seeing the player, not by another monster
-STATUE : Stone statue skin
-NOSIGHT : No sight sound
-NOIDLE : No idle sound
-NOGFX : No spawn effect or sound when triggered
-STARTOFF : Trigger Spawn
--------- NOTES --------
-Special Electricity Pointing Hell Knight*/
-//======================================================================
+// QUAKED monster_hell_pointknight (0.75 0.5 0) (-16 -16 -24) (16 16 40) AMBUSH STATUE x NOSIGHT NOIDLE NOGFX STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+// { model(":progs/qmaster/mon_hknight.mdl"); }
+// Special Electricity Pointing Hell Knight
+// -------- KEYS --------
+// targetname : monster/trigger name
+// target : target for electricity
+// target2 : trigger to fire when electricity stopped
+// pos1 : XYZ offset to start lightning (uses v_forward/v_right/v_up)
+// pos2 : XYZ random offset to start lightning (uses v_forward/v_right/v_up)
+// pos3 : Animation lightning frame set (Start/Finish/Direction)
+// t_length : random wobble to electricity target origin (0=def 5)
+// dmg : amount of contact damage with electricity (0=def 5)
+// health : Override default health settings
+// deathtarget : entity to trigger upon death (useful if target field already in use)
+// health : Override default health settings
+// upgrade_ssg : 1 = will only spawn if shotgun upgrade active on server
+// upgrade_axe : 1 = will only spawn if axe upgrade active on server
+// upgrade_lg : 1 = will only spawn if lightning gun upgrade active on server
+// nomonstercount : will not be included in any monster count functionality
+// no_zaware : All Z Aware projectiles will be disabled
+// bboxtype : Change bbox 1=Tiny,4=Short,5=Tall,7=Wide,8=Giant,10=Massive
+// gibondeath : 1 = always explode in a shower of gibs on death
+// bodyfadeaway : Time (secs) before body/head will fade away (default=0)
+// -------- SPAWNFLAGS --------
+// AMBUSH : the monster will only wake up on seeing the player, not by another monster
+// STATUE : Stone statue skin
+// NOSIGHT : No sight sound
+// NOIDLE : No idle sound
+// NOGFX : No spawn effect or sound when triggered
+// STARTOFF : Trigger Spawn
+// -------- NOTES --------
+// Special Electricity Pointing Hell Knight
 void() monster_hell_pointknight = {
 	local entity newpoint;
-	// Setup with new special spawnflag (not mapper controlled)
-	self.spawnflags = self.spawnflags | MON_POINT_KNIGHT;
-	// remove notfrozen and angry, always start/spawn firing lightning
-	self.spawnflags = self.spawnflags - (self.spawnflags & MON_NOTFROZEN);
+
+	self.spawnflags = self.spawnflags | MON_POINT_KNIGHT; // Setup with new special spawnflag (not mapper controlled)
+	self.spawnflags = self.spawnflags - (self.spawnflags & MON_NOTFROZEN); // remove notfrozen and angry, always start/spawn firing lightning
 	self.spawnflags = self.spawnflags - (self.spawnflags & MON_SPAWN_ANGRY);
-	
 	if (self.deathstring == "") self.deathstring = " was cleaved by an Electrical Death Knight\n";
-	// If not target setup then stop!
 	if (self.target == "") {
 		// Create one!
 		newpoint = spawn();
 		setorigin(newpoint,self.origin + '0 0 64');
 		self.movetarget = newpoint;
-		// dprint("\b[HKNIGHT]\b Pointing knight needs target!\n");
-		// spawn_marker(self.origin, SPNMARK_YELLOW);
-		// remove(self);
-		// return;
+		dprint("\b[HKNIGHT]\b Pointing knight needs target! Made one anyway 64 units above its head.\n");
 	}
-	// Loop back through existing hell knight function
-	monster_hell_knight();
+	monster_hell_knight(); // Loop back through existing hell knight function
 };
 
 // Light Saber Enforcer from back2forwards by The Lieutenant
@@ -1101,17 +1027,6 @@ void() monster_hell_knight_enforcer = {
 	self.classtype = CT_MONSABERENFORCER;
 	self.mdl = ("progs/lieutenant/hknight.mdl");
 	self.headmdl = "progs/h_mega.mdl";
-	precache_model("progs/newhouse/vk_spike.mdl");
-	precache_model ("progs/h_mega.mdl");
-	
-	precache_sound ("hknight/attack1.wav");
-	precache_sound ("hknight/hit.wav");		// used by C code, so don't sound2
-	precache_sound ("hknight/slash1.wav");
-	precache_sound ("hknight/idle.wav");
-	precache_sound ("hknight/grunt.wav");
-	precache_sound ("knight/sword1.wav");
-	precache_sound ("knight/sword2.wav");
-	
 	self.death_sound = "enforcer/death1.wav";
 	if (!self.idle_sound) self.idle_sound = "enforcer/idle1.wav";
 	if (!self.sight_sound) self.sight_sound = "enforcer/sight1.wav";
@@ -1121,14 +1036,6 @@ void() monster_hell_knight_enforcer = {
 	self.idle_sound = "enforcer/idle1.wav";
 	self.pain_sound = "enforcer/pain1.wav";
 	self.pain_sound2 = "enforcer/pain2.wav";
-	precache_sound ("enforcer/death1.wav");
-	precache_sound ("enforcer/idle1.wav");
-	precache_sound ("enforcer/pain1.wav");
-	precache_sound ("enforcer/pain2.wav");
-	precache_sound ("enforcer/sight1.wav");
-	precache_sound ("enforcer/sight2.wav");
-	precache_sound ("enforcer/sight3.wav");
-	precache_sound ("enforcer/sight4.wav");
 	self.exactskin = 0;
 	if (self.health <= 0) self.health = 105;
 	if (self.deathstring == "") self.deathstring = " was cauterized by a Saber Enforcer\n";

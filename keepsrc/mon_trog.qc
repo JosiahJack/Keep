@@ -81,29 +81,25 @@ local   float   delta;
 };
 
 void() TrogWarpMagic = {
-// Moved all explosion effects into a separate function so other code
-// can use it.
-    WarpExplosion ();
+    WarpExplosion (); // Moved all explosion effects into a separate function so other code can use it.
 
-// Damage stuff from the circle magic.
+	// Damage stuff from the circle magic.
     if (self.enemy) {
         T_RadiusDamage (self, self.owner, 120, self.owner, DAMAGEALL);
         if (vlen(self.enemy.origin - self.origin) <= 120) {
-        //- - - - - - - - -
+
         // For those immune to splash damage, inflict minor damage.
         // This is not unlike a Doom2 arch-vile vs. cyberdemon matchup.
-            if (self.enemy.xfl & XFL_FIREANGEL)
+            if (self.enemy.noradiusdmg)
                 if (self.enemy != self.owner)
                     T_Damage (self.enemy, self, self.owner, 20, DAMARMOR);
-        //- - - - - - - - -
-            if (self.enemy.mass && (self.enemy.mass <= MASS_SUPER))
-            {
+
+            if (self.enemy.mass && (self.enemy.mass <= MASS_SUPER)) {
                 self.enemy.flags = self.enemy.flags - (self.enemy.flags & FL_ONGROUND);
                 self.enemy.velocity_x = (random() * 400) - 200;
                 self.enemy.velocity_y = (random() * 400) - 200;
                 self.enemy.velocity_z = (random() * 300) + 400;
-                if (self.enemy.mass == MASS_SUPER)
-                    self.enemy.velocity = self.enemy.velocity * 0.5;
+                if (self.enemy.mass == MASS_SUPER) self.enemy.velocity = self.enemy.velocity * 0.5;
             }
         }
     }
@@ -178,12 +174,11 @@ void() ai_repel =
     dir = dir * 1000;
     dir_z = 120;    // Add a little up to overcome normal gravity.
 // Send the enemy flying.
-    if (self.enemy.mass && (self.enemy.mass <= MASS_SUPER))
-    {
+    if (self.enemy.mass && (self.enemy.mass <= MASS_SUPER)) {
         self.enemy.flags = self.enemy.flags - (self.enemy.flags & FL_ONGROUND);
         self.enemy.velocity = self.enemy.velocity + dir;
     }
-// Do the damage.
+
     sound (self, CHAN_WEAPON, "drake/skullwiz/push.wav", 1, ATTN_NORM);
     T_Damage (self.enemy, self, self, 20, DAMARMOR);
 };
@@ -191,34 +186,33 @@ void() ai_repel =
 // Returns the point of one of its hands.
 vector(float left) Nemesant_Hand = {
     makevectors (self.angles);
-    if (left)   // TRUE = use left hand, FALSE = use right hand.
-        return (self.origin + (v_forward*16) - (v_right*10) + (v_up*30));
+    if (left) return (self.origin + (v_forward*16) - (v_right*10) + (v_up*30)); // TRUE = use left hand, FALSE = use right hand.
     return (self.origin - (v_forward*16) + (v_right*12) + (v_up*45));
 };
 
 // This sends a bolt of lightning at an enemy, similar to the shamblers'.  Assume not in water and don't check for discharge.
 void() Nemesant_Bolt = {
-    local   vector  p1, p2;
+    local vector p1, p2;
 
     p1 = Nemesant_Hand (TRUE);      // This will call makevectors as well.
     p2 = self.enemy.origin + '0 0 16';
     p2 = Maim_Line (p1, p2, 0, self.enemy, '0 0 0');
     p2 = p1 + p2*600;
     self.effects = self.effects | EF_MUZZLEFLASH;
-    sound (self, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM);
-    sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
-	LightningBolt (p1, p2, self, 10, self, TE_LIGHTNING2, "lightning"); // 10 Damage
+    sound(self,CHAN_WEAPON,"weapons/lhit.wav",1,ATTN_NORM);
+    sound(self,CHAN_AUTO,"weapons/lstart.wav",1,ATTN_NORM);
+	LightningBolt(p1,p2,self,10,self,TE_LIGHTNING2); // 10 Damage
 };
 
 // Magic missile sidewinding tracking code.
 void() nemes_track = {
-    local   vector  vec;    // Multi-purpose vector.
-    local   float   up, old, delta;
+    local vector vec;
+    local float up, old, delta;
 
     if (self.delay <= time) {remove (self); return;}
 
     up = (self.cnt & 7) * 45;
-    up = mathlib_sin(up) * 5;       // Other sidewinder code uses cosine.
+    up = SUB_sin(up) * 5;       // Other sidewinder code uses cosine.
     self.cnt = self.cnt + 1;
     vec = self.enemy.origin + self.enemy.view_ofs;
 	vec = vectoangles(vec - self.origin);
@@ -435,7 +429,7 @@ void() nemes_fast5  =[ $attackb5,  nemes_fast6  ] {
 	if (self.classname != "monster_nemesant") boss = TRUE;
 
 	if (boss && self.enemy.movetype == MOVETYPE_NOCLIP && self.enemy.solid == SOLID_TRIGGER) {
-           if ( !((dist > 600) || (self.h2olevel == 3)) ) zot = TRUE; // close enough and out of water
+           if ( !((dist > 600) || (self.waterlevel == 3)) ) zot = TRUE; // close enough and out of water
 	}
 
 	// If TRUE, Only lightning is effective, at least in Drake.
@@ -536,10 +530,8 @@ void() nemes_inviso10 =[ $attack15, nemes_run1     ] {ai_face(); TrogAttackFinis
 void() nemes_sboom1  =[ $attack1,  nemes_sboom2  ] {ai_face();};
 void() nemes_sboom2  =[ $attack2,  nemes_sboom3  ] {ai_face();};
 void() nemes_sboom3  =[ $attack3,  nemes_sboom4  ] {ai_face();};
-void() nemes_sboom4  =[ $attack4,  nemes_sboom5  ]
-{   ai_face();
-    if (super_active)  // Someone else started it first -- use alt. instead.
-        {self.think = nemes_fast1;  return;}
+void() nemes_sboom4  =[ $attack4,  nemes_sboom5  ] {ai_face();
+    if (super_active) {self.think = nemes_fast1;  return;} // Someone else started it first -- use alt. instead.
     StartTrogMagic();
 };
 void() nemes_sboom5  =[ $attack5,  nemes_sboom6  ] {ai_face();};
@@ -554,62 +546,40 @@ void() nemes_sboom13 =[ $attack13, nemes_sboom14 ] {ai_face();};
 void() nemes_sboom14 =[ $attack14, nemes_sboom15 ] {ai_face();};
 void() nemes_sboom15 =[ $attack15, nemes_run1    ] {ai_face(); TrogAttackFinished();};
 
-void() Nemesant_Attack =
-{
-// Boss version has other tricks it can use.
-    if (self.xfl & XFL_BOSS)
-    if (random() < 0.5)
-    {
-        // If hurt badly enough, cast invisibility sometimes.
-        if (!self.invisible_finished)
-            if (self.health <= self.max_health / 2)
-                if (random() < 0.5)
-                    {nemes_inviso1 ();  return;}
-        // Summon monsters to fight.
-        if (self.count <= 1)
-            {nemes_summon1 ();  return;}
-    }
-//- - - - - - - - -
-// Use quick attack instead of super attack if...
-// 1) Someone is using super attack now (only one at a time, please).
-// 2) Enemy is off the ground (player gets sucked in unfairly).
-// 3) Enemy is invisible (mage cannot pinpoint enemy).
-//  NOTE:  Zerstorer didn't check for invisibility.
-//
-// If super attack is available, always use it if nothing else can hurt
-// the enemy, which includes ghosts and zombies.
-//
-// Assuming no special conditions, chances of attack paths are as follows.
-//  70% chance of A -- fast magic
-//  30% chance of B -- super magic
-//- - - - - - - - -
-    local   float   fast;
+void() Nemesant_Attack = {
+	local float fast;
 
-    if ((random() < 0.7) || !(self.enemy.flags & FL_ONGROUND)
-    || self.enemy.form_active || super_active
-    || (self.enemy.items & IT_INVISIBILITY) || self.enemy.invisible_finished)
-    {
+    if (self.bossflag && random() < 0.5) { // Boss version has other tricks it can use half the time.
+        if (!self.invisible_finished && (self.health <= (self.max_health / 2)) && random() < 0.5) { nemes_inviso1(); return; } // If hurt badly enough, cast invisibility sometimes.
+        if (self.count <= 1) {nemes_summon1 ();  return;} // Summon monsters to fight.
+    }
+
+	// Use quick attack instead of super attack if...
+	// 1) Someone is using super attack now (only one at a time, please).
+	// 2) Enemy is off the ground (player gets sucked in unfairly).
+	// 3) Enemy is invisible (mage cannot pinpoint enemy).
+	//  NOTE:  Zerstorer didn't check for invisibility.
+	//
+	// If super attack is available, always use it if nothing else can hurt
+	// the enemy, which includes ghosts and zombies.
+	//
+	// Assuming no special conditions, chances of attack paths are as follows.
+	//  70% chance of A -- fast magic
+	//  30% chance of B -- super magic
+    if ((random() < 0.7) || !(self.enemy.flags & FL_ONGROUND) || super_active || (self.enemy.items & IT_INVISIBILITY) || self.enemy.invisible_finished) {
         fast = 1;
         // Allow exceptions if nothing else is effective.
-        if (!super_active)
-        {
-            if (self.enemy.classname == "monster_zombie")
-                fast = 0;
-            //else if (IsGhost (self.enemy))
-            //    fast = 0;
-            // FIXME:  Should we add reflection too?
+        if (!super_active) {
+            if (self.enemy.classgroup == CG_ZOMBIE) fast = 0;
+            // else if (IsGhost (self.enemy)) fast = 0;
         }
-    }
-    else
-        fast = 0;
+    } else fast = 0;
 
-    if (fast)
-        nemes_fast1 ();
-    else
-        nemes_sboom1 ();
+    if (fast) nemes_fast1();
+    else nemes_sboom1();
 };
 
-// PAIN - - - - - - - - - - - - - - - -
+// PAIN
 void() nemes_pain1  =[ $pain1,  nemes_pain2  ] {};
 void() nemes_pain2  =[ $pain2,  nemes_pain3  ] {};
 void() nemes_pain3  =[ $pain3,  nemes_pain4  ] {};
@@ -684,22 +654,21 @@ void() nemes_revive14 =[ $death3,  nemes_revive15 ] {};
 void() nemes_revive15 =[ $death2,  nemes_revive16 ] {};
 void() nemes_revive16 =[ $death1,  nemes_run1     ] {};
 
-// --> QUAKED monster_nemesant (1 0 0) (-16 -16 -24) (16 16 40) Ambush Boss
-void() monster_nemesant = {
-	// Check for any random monster setups
-	if (self.classname != "monster_trogboss") {
-		if (monster_checkrandomizer() == TRUE) return;
-	}
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-  
-    self.mdl = "progs/drake/nemesant.mdl";
-    self.headmdl = "progs/drake/h_nemes.mdl";
+void() monster_nemesant_precache = {
     precache_model ("progs/drake/nemesant.mdl");
     precache_model ("progs/drake/h_nemes.mdl");
     precache_model ("progs/k_spike.mdl");   // For sidewinder missiles.
     precache_model ("progs/drake/smartbal.mdl");  // Homing bouncing fireball.
     precache_model ("progs/drake/warp2.mdl");     // Big explosion.
+	precache_model ("progs/drake/blood_gr.mdl");
+	precache_model ("progs/drake/gr_gib.mdl");
+    precache_model ("progs/drake/gr_gib2.mdl");
+    precache_model ("progs/drake/s_wave.spr");
+    precache_model ("progs/quoth/bigexp.spr");
+    precache_model ("progs/drake/wizard.mdl");
+    precache_model ("progs/drake/h_drake.mdl");
+    precache_model ("progs/h_wizard.mdl");
+    precache_model ("progs/w_spike.mdl");
     precache_sound ("hknight/attack1.wav");
     precache_sound ("hknight/hit.wav");    // used by C code, so don't sound2
     precache_sound ("zerstorer/trog/frblatck.wav");
@@ -713,19 +682,7 @@ void() monster_nemesant = {
     precache_sound ("zerstorer/trog/tpain.wav");
     precache_sound ("zerstorer/trog/tsight1.wav");
     precache_sound ("zerstorer/trog/tsight2.wav");
-	self.hello_sound = "zerstorer/trog/tpain.wav";
-	self.sight_sound = "zerstorer/trog/tsight1.wav";
-	self.sight_sound2 = "zerstorer/trog/tsight2.wav";
     precache_sound ("drake/skullwiz/push.wav");       // Melee attack.
-	precache_model ("progs/drake/blood_gr.mdl");
-	precache_model ("progs/drake/gr_gib.mdl");
-    precache_model ("progs/drake/gr_gib2.mdl");
-    precache_model ("progs/drake/s_wave.spr");
-    precache_model ("progs/quoth/bigexp.spr");
-    precache_model ("progs/drake/wizard.mdl");
-    precache_model ("progs/drake/h_drake.mdl");
-    precache_model ("progs/h_wizard.mdl");
-    precache_model ("progs/w_spike.mdl");
     precache_sound ("wizard/hit.wav");        // used by c code
     precache_sound ("wizard/wattack.wav");
     precache_sound ("wizard/wdeath.wav");
@@ -733,6 +690,18 @@ void() monster_nemesant = {
     precache_sound ("wizard/widle2.wav");
     precache_sound ("wizard/wpain.wav");
     precache_sound ("wizard/wsight.wav");
+};
+
+// --> QUAKED monster_nemesant (1 0 0) (-16 -16 -24) (16 16 40) Ambush Boss
+void() monster_nemesant = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+  
+    self.mdl = "progs/drake/nemesant.mdl";
+    self.headmdl = "progs/drake/h_nemes.mdl";
+	self.hello_sound = "zerstorer/trog/tpain.wav";
+	self.sight_sound = "zerstorer/trog/tsight1.wav";
+	self.sight_sound2 = "zerstorer/trog/tsight2.wav";
     self.solid = SOLID_NOT;		// No interaction with world
     self.movetype = MOVETYPE_NONE;	// Static item, no movement
     if (self.health < 1) self.health = 280;
@@ -745,15 +714,9 @@ void() monster_nemesant = {
     self.th_pain    = nemes_pain;
     self.th_die     = nemes_die;
     self.th_spawn   = monster_nemesant;
-    if (self.classname == "monster_nemesant") {
-        //self.th_gib     = nemes_gib;
-        self.th_revive  = nemes_revive1;
-        if (soul_evil) monster_purse (3, 0.5, 0.5);
-    }
-
+    if (self.classname == "monster_nemesant") self.th_revive  = nemes_revive1;
 	setup_passivestate(self);  // Check passive system for exceptions
-	
-    self.waitmin    = time + 5;     // Wait for idle sounds
+    self.waitmin = time + 5;     // Wait for idle sounds
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
@@ -779,15 +742,15 @@ void() monster_nemesant = {
 void() monster_trogboss = {
     self.lip = 0;
     if (self.skin != 2) self.skin = 1;
-    self.xfl  = XFL_BOSS;
     if (!self.health) self.health = 1600;
+	self.bossflag = TRUE;
 	if (self.deathstring == "") self.deathstring = " failed to impress the Master Nemesant\n";
     monster_nemesant ();
 };
 
 // Original classname from Zerstorer.
 void() monster_troglodyte = {
-    if (world.model == "maps/coe4.bsp") {
+    if (world.model == "maps/coe4.bsp") { // Ugh
 		self.classname = "monster_trogboss";  monster_trogboss();
 	} else {
 		self.classname = "monster_nemesant";  monster_nemesant();

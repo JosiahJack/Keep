@@ -183,19 +183,7 @@ float(vector targ_origin) check_skycontent = {
 
 	// projectile owner exeception (bad FPS for large maps)
 	if (self.owner.proj_noskycheck == TRUE) return FALSE;
-	else if (ext_dpsurf) {
-		// Does the engine supports extended surface checks?
-		// This functionality can be bad for FPS with large maps
-		// 2 ways to disabled this, worldspawn key or individually
-		surfnum = getsurfacenearpoint(world, targ_origin);
-		if (surfnum >= 0) {
-			texturename = getsurfacetexture(world, surfnum);
-			if (strncasecmp(texturename, "SKY", 3) == 0) return TRUE;
-		}
-	} else {
-		// Original method for checking sky content (Fitz engines)
-		if (pointcontents(targ_origin) == CONTENT_SKY) return TRUE;
-	}
+	else if (pointcontents(targ_origin) == CONTENT_SKY) return TRUE;
 	return FALSE;
 };
 
@@ -353,19 +341,13 @@ void(entity targ) monster_devmarker = {
 
 // Check for SKILL spawning conditions (frame 0 check ONLY).  Returns FALSE = do nothing  TRUE = inhibit spawning
 float() check_nightmare = {
-	// Check for nightmare skill only spawning
-	if (self.nightmare == TRUE) {
-		// Double check the coop console variable, not setup till frame 1+
-		// Use a nosave variable to prevent constant cvar command checking
-		if (skill_cvar != TRUE) { skill = cvar("skill"); skill_cvar = TRUE; }
+	if (self.nightmare == TRUE) { // Check for nightmare skill only
+		if (skill_cvar != TRUE) { skill = cvar("skill"); skill_cvar = TRUE; } // Double check the coop console variable, not setup till frame 1+.  Use a nosave variable to prevent constant cvar command checking.
 		if (skill >= SKILL_NIGHTMARE) return FALSE;
 		else {
-			// Check for BSP entities has origin is different
-			if (self.bsporigin) spawn_marker(bmodel_origin(self), SPNMARK_RED);
-			else spawn_marker(self.origin, SPNMARK_RED);
-			// Hide entity instead of removing it
-			// Because of possible active touch functions
-			entity_hide(self);
+			if (self.bsporigin) spawn_marker(bmodel_origin(self), SPNMARK_RED); // Check for BSP entities has origin is different
+			else spawn_marker(self.origin, SPNMARK_RED);	
+			entity_hide(self); // Hide instead of remove because of possible active touches.
 			return TRUE;
 		}
 	}
@@ -374,11 +356,8 @@ float() check_nightmare = {
 
 // Check for COOP spawning conditions (frame 0 check ONLY).  Returns FALSE = do nothing  TRUE = inhibit spawning
 float() check_coop = {
-	// Check for coop only spawning conditions
-	if (self.cooponly == TRUE || self.cooponly == NEGATIVE) {
-		// Double check the coop console variable, not setup till frame 1+
-		// Use a nosave variable to prevent constant cvar command checking
-		if (coop_cvar != TRUE) { coop = cvar("coop"); coop_cvar = TRUE; }
+	if (self.cooponly == TRUE || self.cooponly == NEGATIVE) { // Check for coop only
+		if (coop_cvar != TRUE) { coop = cvar("coop"); coop_cvar = TRUE; } // Double check the coop console variable, not setup till frame 1+.  Use a nosave variable to prevent constant cvar command checking.
 		
 		// Only one condition will let a cooponly item spawn
 		// cooponly =  1 coop  = 0 inhibit = TRUE
@@ -387,12 +366,9 @@ float() check_coop = {
 		// cooponly = -1 coop >= 1 inhibit = TRUE
 		if (self.cooponly == TRUE && coop > 0) return FALSE;
 		else {
-			// Check for BSP entities has origin is different
-			if (self.bsporigin) spawn_marker(bmodel_origin(self), SPNMARK_PURPLE);
+			if (self.bsporigin) spawn_marker(bmodel_origin(self), SPNMARK_PURPLE); // Check for BSP entities has origin is different
 			else spawn_marker(self.origin, SPNMARK_PURPLE);
-			// Hide entity instead of removing it
-			// Because of possible active touch functions
-			entity_hide(self);
+			entity_hide(self); // Hide entity instead of removing it because of possible active touch functions.
 			return TRUE;
 		}
 	}

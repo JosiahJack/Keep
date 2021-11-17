@@ -22,7 +22,6 @@ void () gremlin_steal_shells = {
       float amount = gremlin_ammo_steal(self.enemy.ammo_shells);
       self.enemy.ammo_shells = (self.enemy.ammo_shells - amount);
       self.ammo_shells = (self.ammo_shells + amount);
-      self.items = (self.items | IT_SHELLS);
       self.currentammo = self.ammo_shells;
 };
 
@@ -30,7 +29,6 @@ void () gremlin_steal_nails = {
       float amount = gremlin_ammo_steal(self.enemy.ammo_nails);
       self.enemy.ammo_nails = (self.enemy.ammo_nails - amount);
       self.ammo_nails = (self.ammo_nails + amount);
-      self.items = (self.items | IT_NAILS);
       self.currentammo = self.ammo_nails;
 };
 
@@ -38,7 +36,6 @@ void () gremlin_steal_rockets = {
       float amount = gremlin_ammo_steal(self.enemy.ammo_rockets);
       self.enemy.ammo_rockets = (self.enemy.ammo_rockets - amount);
       self.ammo_rockets = (self.ammo_rockets + amount);
-      self.items = (self.items | IT_ROCKETS);
       self.currentammo = self.ammo_rockets;
 };
 
@@ -46,7 +43,6 @@ void () gremlin_steal_cells = {
       float amount = gremlin_ammo_steal(self.enemy.ammo_cells);
       self.enemy.ammo_cells = (self.enemy.ammo_cells - amount);
       self.ammo_cells = (self.ammo_cells + amount);
-      self.items = (self.items | IT_CELLS);
       self.currentammo = self.ammo_cells;
 };
 
@@ -54,7 +50,6 @@ void () gremlin_steal_bolts = {
       float amount = gremlin_ammo_steal(self.enemy.ammo_bolts);
       self.enemy.ammo_bolts = (self.enemy.ammo_bolts - amount);
       self.ammo_bolts = (self.ammo_bolts + amount);
-      self.items2 = (self.items2 | IT2_BOLTS);
       self.currentammo = self.ammo_bolts;
 };
 
@@ -62,7 +57,6 @@ void () gremlin_steal_poison = {
       float amount = gremlin_ammo_steal(self.enemy.ammo_poison);
       self.enemy.ammo_poison = (self.enemy.ammo_poison - amount);
       self.ammo_poison = (self.ammo_poison + amount);
-      self.items2 = (self.items2 | IT2_POISON);
       self.currentammo = self.ammo_poison;
 };
 
@@ -70,7 +64,6 @@ void () gremlin_steal_multi_rockets = {
       float amount = gremlin_ammo_steal(self.enemy.ammo_multi_rockets);
       self.enemy.ammo_multi_rockets = (self.enemy.ammo_multi_rockets - amount);
       self.ammo_multi_rockets = (self.ammo_multi_rockets + amount);
-      self.items2 = (self.items2 | IT2_MULTI_ROCKETS);
       self.currentammo = self.ammo_multi_rockets;
 };
 
@@ -78,7 +71,6 @@ void () gremlin_steal_lava_nails = {
       float amount = gremlin_ammo_steal(self.enemy.ammo_lava_nails);
       self.enemy.ammo_lava_nails = (self.enemy.ammo_lava_nails - amount);
       self.ammo_lava_nails = (self.ammo_lava_nails + amount);
-      self.items2 = (self.items2 | IT2_LAVA_NAILS);
       self.currentammo = self.ammo_lava_nails;
 };
 
@@ -86,7 +78,6 @@ void () gremlin_steal_plasma = {
       float amount = gremlin_ammo_steal(self.enemy.ammo_plasma);
       self.enemy.ammo_plasma = (self.enemy.ammo_plasma - amount);
       self.ammo_plasma = (self.ammo_plasma + amount);
-      self.items2 = (self.items2 | IT2_PLASMA_AMMO);
       self.currentammo = self.ammo_plasma;
 };
 
@@ -959,6 +950,7 @@ void () gremlin_die = {
 	ThrowGib (1,1);
 	ThrowGib (1,1);
 	ThrowGib (1,1);
+	remove(self);
       return ;
    } else {
       if ( (((dot > 0.700) && (random () < 0.500)) && (self.flags & FL_ONGROUND)) ) {
@@ -1144,6 +1136,23 @@ void () Gremlin_MissileAttack = {
    if ( (self.flags & FL_ONGROUND) ) gremlin_jump1 (); // jumpy little buggers
 };
 
+
+
+void () monster_gremlin_precache = {
+   precache_model ("progs/hipnotic/grem.mdl");
+   precache_model ("progs/hipnotic/h_grem.mdl");
+   precache_sound ("hipnotic/grem/death.wav");
+   precache_sound ("hipnotic/grem/attack.wav");
+   precache_sound ("demon/djump.wav");
+   precache_sound ("demon/dhit2.wav");
+   precache_sound ("hipnotic/grem/pain1.wav");
+   precache_sound ("hipnotic/grem/pain2.wav");
+   precache_sound ("hipnotic/grem/pain3.wav");
+   precache_sound ("hipnotic/grem/idle.wav");
+   precache_sound ("hipnotic/grem/sight1.wav");
+   precache_sound (SOUND_LASER_HIT);
+};
+
 void() GremlinCheckAttack;
 
 void () gremlin_setup = {
@@ -1191,26 +1200,11 @@ void () gremlin_setup = {
 };
 
 void () monster_gremlin = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
    self.mdl = "progs/hipnotic/grem.mdl";
    self.headmdl = "progs/hipnotic/h_grem.mdl";
-   precache_model ("progs/hipnotic/grem.mdl");
-   precache_model ("progs/hipnotic/h_grem.mdl");
-   precache_sound ("hipnotic/grem/death.wav");
-   precache_sound ("hipnotic/grem/attack.wav");
-   precache_sound ("demon/djump.wav");
-   precache_sound ("demon/dhit2.wav");
-   precache_sound ("hipnotic/grem/pain1.wav");
-   precache_sound ("hipnotic/grem/pain2.wav");
-   precache_sound ("hipnotic/grem/pain3.wav");
-   precache_sound ("hipnotic/grem/idle.wav");
-   precache_sound ("hipnotic/grem/sight1.wav");
-   precache_sound (SOUND_LASER_HIT);
-
    gremlin_setup();
 };
 

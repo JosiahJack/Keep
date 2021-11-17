@@ -72,11 +72,9 @@ float(vector org_source, vector org_targ) check_liquidblock = {
 	
 	// Is r_wateralpha set or monsters forced to check liquid surfaces?
 	if (liquid_alpha == 1 || self.liquidblock) {
-		// Check point contents first
-		pc_source = pointcontents(org_source);
+		pc_source = pointcontents(org_source); // Check point contents first
 		pc_targ = pointcontents(org_targ);
 		if (pc_source != pc_targ) return TRUE; // Are point content different? (like water/air)
-		
 		if (trace_inopen && trace_inwater) {
 			if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
 				if (Ryu_BlockCrossfire ()){
@@ -157,9 +155,7 @@ float(entity targ, vector s_offset, vector targang, float nomonsters) visang = {
 	makevectors(targang);
 	spot2 = spot1 + (v_forward * 4096); // Use supplied ang + v_forward for direction
 	traceline (spot1, spot2, nomonsters, self); // Trace a line using angle vector instead of enemy origin
-	
 	if (check_liquidblock(spot1, spot2) == TRUE) return FALSE; // Check for liquid surface block condition
-
 	visible_distance = vlen ((trace_endpos - spot1));
 	if (nomonsters) { // monster blocking changes which test to use
 		// Has the traceline gone from source>target without anything blocking?
@@ -179,15 +175,11 @@ float(entity targ) visblocked = {
 	
 	if (!targ) return FALSE; // Can't check against the world
 	if (targ == self) return FALSE; // Can't block ourself
-
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
 	traceline (spot1, spot2, FALSE, self);	// blocked by monsters
-
 	if (check_liquidblock(spot1, spot2) == TRUE) return FALSE; // Check for liquid surface block condition
-
 	visible_distance = vlen ((trace_endpos - spot1));
-	
 	if (trace_ent == targ) return FALSE; // Original ID behaviour for this type of function.  Traceline entity hit = enemy?
 	return TRUE;
 };
@@ -272,6 +264,8 @@ float (entity targ, vector s_ofset, vector t_ofset) visblocked_wide = {
 	return tr_result;
 };
 
+// float(entity targ) range;
+
 /*======================================================================
  infront (target entity)
  - relies on self being set correctly before entering this function
@@ -298,8 +292,15 @@ float(entity targ) infront = {
 		self.fov = 0.3; // Not very elegant is it?
 		f = self.fov;
 	}
-	if ( dot > f) return TRUE; // Custom field of view...because monster_wyrm needed it
-	else return FALSE;
+	if ( dot > f) {
+		// dprint("Infront was true for sight check on ");
+		// dprint(self.classname);
+		// dprint(", and range = ");
+		// local float r = range(targ);
+		// dprint(ftos(r));
+		// dprint(" (FAR = 3, out of sight)\n");
+		return TRUE; // Custom field of view...because monster_wyrm needed it
+	} else return FALSE;
 };
 
 /*======================================================================
@@ -511,9 +512,7 @@ void() FoundTarget = {
 void(float wakeupothers) FoundHuntTarget = {
 	if (self.health < 1) return;	// Dead monsters don't hunt!
 	if (!self.enemy) return;
-
-	// Passive mode active and about to switch state?
-	if (check_passivestate_switch(self)) return;
+	if (check_passivestate_switch(self)) return; // Passive mode active and about to switch state?
 
 	// Check for Liquid surface block entity key
 	// if the monster has range attack, can NOW see through liquid surface
@@ -544,59 +543,69 @@ void(float wakeupothers) FoundHuntTarget = {
 
 entity() SeeOpposing = {
 	local float dist;
-	local entity selected, head;
+	local entity head;
 
 	if (self.alignment == NEUTRAL && !(IsInsane(self))) return FALSE; // I don't care
 
-	selected = world;
 	if (self.horn_active) dist = CHARMED_RADIUS; // Shorter sight to keep closer to player who summoned us, maybe
 	else dist = MON_MAX_RANGE; // NORMAL SIGHT
 
-	if (self.enemymaxdist == TRUE || self.attack_sniper) dist = 8192; // yikes
+	if (self.enemymaxdist == TRUE || self.attack_sniper) {
+		dist = 8192; // yikes
+		// dprint("Enemy using sight distance of: ");
+		// dprint(ftos(dist));
+		// dprint("\n");
+	}
+	head = world;
 	head = findradius (self.origin,dist);
 	while (head) {
 		if ((!(head.flags & FL_NOTARGET) && (head.flags & FLx_CREATURE) && head.invisible_finished < time)) {
-			if ( ((visible (head)) && (head.health > FALSE)) ) {
-				if (!Align_Match(self,head) || IsInsane(self)){
-					if (head.alignment != NEUTRAL) selected = head; 
+			if ( ((visible (head)) && (head.health > FALSE))) {
+				if (!Align_Match(self,head)){
+					if (head.alignment != NEUTRAL) {
+						return head;
+					}
 				}
 			}
 		}
 		head = head.chain;
 	}
-	return selected;
+	return head;
 };
 
 entity() SeeFriendly = {
 	local float dist;
-	local entity selected, head;
+	local entity head;
 
 	if (self.alignment == NEUTRAL && !(IsInsane(self))) return FALSE; // I careth not
 
-	selected = world;
 	if (self.horn_active && self.charmer) return world; // Already have a leader to follow
 	dist = MON_MAX_RANGE; // NORMAL SIGHT
 
-	if (self.enemymaxdist == TRUE || self.attack_sniper) dist = 8192; // yikes
+	if (self.enemymaxdist == TRUE || self.attack_sniper) {
+		dist = 8192; // yikes
+		// dprint("Enemy using sight distance of: ");
+		// dprint(ftos(dist));
+		// dprint("\n");
+	}
+	head = world;
 	head = findradius (self.origin,dist);
 	while (head) {
 		if ((!(head.flags & FL_NOTARGET) && (head.flags & FLx_CREATURE) && head.invisible_finished < time)) {
-			if ( ((visible (head)) && (head.health > FALSE)) ) {
-				if (Align_Match(self,head) || IsInsane(self)) {
-					if (head.alignment != NEUTRAL) selected = head;
+			if ( ((visible (head)) && (head.health > FALSE))) {
+				if (Align_Match(self,head)) {
+					if (head.alignment != NEUTRAL) {
+						return head;
+					}
 				}
 			}
 		}
 		head = head.chain;
 	}
-	return selected;
+	return head;
 };
 
-/*======================================================================
- FindTarget
- - Main routine for finding a target
- - Returns TRUE if an enemy was sighted
-======================================================================*/
+// Main sight routine for finding a target.  Returns TRUE if an enemy was sighted.
 float() FindTarget = {
 	local entity client, selected, head;
 	local float r, dist, charmdist,charmmaxdist, charmrand;

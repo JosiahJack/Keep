@@ -420,26 +420,14 @@ void() spider_grow7 = [ $grow7, spider_grow8 ] {spider_growangle();};
 void() spider_grow8 = [ $grow8, spider_grow9 ] {spider_growangle();};
 void() spider_grow9 = [ $grow9, spider_grow10] {spider_growangle();};
 void() spider_grow10= [ $grow10, spider_run1 ] {
-	// Is the spider stuck? cannot move?
-	if (pointcontents(self.origin) == CONTENT_SOLID) {
-		// Time to die!
-		self.health = self.gibhealth;
-		Killed(self, self);
-	}
-	else {
-		// Finally spin back to original position
-		self.angles_y = self.angles_y + self.lefty;
-		// Setup goals and warn other monsters
-		FoundHuntTarget(TRUE);
-
-		// Restore all think state functions
-		self.th_stand = spider_idle1;
+	if (monster_revive_finish()) { // Die if stuck, else restore damagability, setup goals, and warn other monsters.  Then do this stuff:
+		self.angles_y = self.angles_y + self.lefty; // Finally spin back to original position
+		self.th_stand = spider_idle1; // Restore all think state functions
 		self.th_walk = spider_walk1;
 		self.th_run = spider_run1; 
 		self.th_slide = spider_slide1;
 		self.th_melee = spider_bite1;
-		// Spider 1 and 2 have different range attacks
-		if (self.spawnflags & MON_SPIDER_LARGE) self.th_missile = spider_spit1;
+		if (self.spawnflags & MON_SPIDER_LARGE) self.th_missile = spider_spit1; // Spider 1 and 2 have different range attacks
 		else {
 			self.th_jump = spider_leap1;
 			self.th_jumpexit = spider_leap9;
@@ -447,9 +435,7 @@ void() spider_grow10= [ $grow10, spider_run1 ] {
 	}
 };
 
-//----------------------------------------------------------------------------
-void() spider_grow =
-{
+void() spider_grow = {
 	// Only call wakeup function once
 	self.th_stand = self.th_walk = self.th_run  = SUB_Null;
 	if (random() < 0.5) self.lefty = 36;
@@ -458,23 +444,19 @@ void() spider_grow =
 	spider_grow1();
 };
 
-//============================================================================
 void() spider_paind1	=[	$paindown1,	spider_paind2	] {};
 void() spider_paind2	=[	$paindown3,	spider_paind3	] {};
 void() spider_paind3	=[	$paindown5,	spider_paind4	] {};
 void() spider_paind4	=[	$paindown7,	spider_paind5	] {};
 void() spider_paind5	=[	$paindown9,	spider_run1	] {};
 
-//----------------------------------------------------------------------------
 // Front legs up (in melee or missile attack)
 void() spider_painu1	=[	$painup1,	spider_painu2	] {};
 void() spider_painu2	=[	$painup3,	spider_painu3	] {};
 void() spider_painu3	=[	$painup5,	spider_painu4	] {};
 void() spider_painu4	=[	$painup6,	spider_run1	] {};
 
-//----------------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) spider_pain = 
-{
+void(entity inflictor, entity attacker, float damage) spider_pain = {
 	// Has the spider been hit while on the ceiling?
 	if (self.spawnflags & MON_SPIDER_CEILING) {
 		self.pain_finished = time + 1;
@@ -535,73 +517,63 @@ void() spider_die = {
 	}
 };
 
-//======================================================================
-/*QUAKED monster_spider (1 0 0) (-16 -16 -24) (16 16 24) Ambush
-======================================================================*/
+void() monster_spider_precache = {
+	precache_model ("progs/ad171/mon_spiderg.mdl");
+	precache_model ("progs/ad171/h_spiderg.mdl");
+	precache_model ("progs/ad171/gib_spidlegg.mdl");
+	precache_model ("progs/ad171/gib_spidbodyg.mdl");		
+	precache_model (MODEL_PROJ_SPID); // Spit Projectile
+	precache_model ("progs/ad171/mon_spiderb.mdl");
+	precache_model ("progs/ad171/h_spiderb.mdl");
+	precache_model ("progs/ad171/gib_spidlegb.mdl");
+	precache_model ("progs/ad171/gib_spidbodyb.mdl");
+	precache_sound ("ad171/spider/idle1.wav");
+	precache_sound ("ad171/spider/hiss2.wav");
+	precache_sound ("ad171/spider/idle1.wav");
+	precache_sound ("ad171/spider/hiss3.wav");
+	precache_sound("drake/spider/death.wav"); // death/pain/attack sounds
+	precache_sound("ad171/spider/pain1.wav");
+	precache_sound("ad171/spider/pain2.wav");
+	precache_sound("ad171/wraith/bounce.wav");
+	precache_sound("ad171/spider/attackmunch.wav");
+	precache_sound("ad171/spider/attacktear.wav");
+	precache_sound("ad171/spider/jumpland.wav");
+	precache_sound ("ad171/spider/hiss1.wav");
+};
+
 void() setup_spider;
-void() monster_spider =
-{
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+
+// QUAKED monster_spider (1 0 0) (-16 -16 -24) (16 16 24) Ambush
+void() monster_spider = {
+
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (self.spawnflags & MON_SPIDER_LARGE) {
 		self.mdl = "progs/ad171/mon_spiderg.mdl";
 		self.headmdl = "progs/ad171/h_spiderg.mdl";		// Front Jaws
 		self.gib1mdl = "progs/ad171/gib_spidlegg.mdl";	// Single Leg
 		self.gib2mdl = "progs/ad171/gib_spidbodyg.mdl";	// Back Body
-
-		precache_model (self.mdl);
-		precache_model (self.headmdl);
-		precache_model (self.gib1mdl);
-		precache_model (self.gib2mdl);		
-		precache_model (MODEL_PROJ_SPID);			// Spit Projectile
 	}
-	if (!(self.spawnflags & MON_SPIDER_LARGE) || 
-		self.classtype == CT_CACHESPIDER) {
+	if (!(self.spawnflags & MON_SPIDER_LARGE) || self.classtype == CT_CACHESPIDER) {
 		self.mdl = "progs/ad171/mon_spiderb.mdl";
 		self.headmdl = "progs/ad171/h_spiderb.mdl";		// Front Jaws
 		self.gib1mdl = "progs/ad171/gib_spidlegb.mdl";	// Single Leg
 		self.gib2mdl = "progs/ad171/gib_spidbodyb.mdl";	// Back Body
-
-		precache_model (self.mdl);
-		precache_model (self.headmdl);
-		precache_model (self.gib1mdl);
-		precache_model (self.gib2mdl);
 	}
-
-	// Head/Body and Special GIB models
-	self.gib1frame = 9;
-
-	// IDLE/COMBAT and SIGHT sounds
-	self.idle_sound = "ad171/spider/idle1.wav";
+	
+	self.gib1frame = 9; // Head/Body and Special GIB models
+	self.idle_sound = "ad171/spider/idle1.wav"; // IDLE/COMBAT and SIGHT sounds
 	self.idle_sound2 = "ad171/spider/hiss2.wav";
 	self.idle_soundcom = "ad171/spider/idle1.wav";
 	self.idle_soundcom2 = "ad171/spider/hiss3.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-	precache_sound (self.idle_soundcom);
-	precache_sound (self.idle_soundcom2);
-
-	// death/pain/attack sounds
-	precache_sound("drake/spider/death.wav");
 	self.pain_sound = "ad171/spider/pain1.wav";
 	self.pain_sound2 = "ad171/spider/pain2.wav";
-	precache_sound(self.pain_sound);
-	precache_sound(self.pain_sound2);
-
-	precache_sound("ad171/wraith/bounce.wav");
-	precache_sound("ad171/spider/attackmunch.wav");
-	precache_sound("ad171/spider/attacktear.wav");
-	precache_sound("ad171/spider/jumpland.wav");
-
 	self.sight_sound = "ad171/spider/hiss1.wav";
-	precache_sound (self.sight_sound);
 
 	// Cache spider is a special class sed for precache only
 	if (self.classtype != CT_CACHESPIDER) setup_spider();
 };
 
-//----------------------------------------------------------------------------
 void() monster_wraithminion = { 
 	self.classtype = CT_CACHESPIDER; 
 	self.spawnflags = MON_SPIDER_LARGE;	// Precache both spiders

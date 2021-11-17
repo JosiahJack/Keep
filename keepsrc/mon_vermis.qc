@@ -114,7 +114,6 @@ void() vermis_start = {
 	} else {
 		vermis_start_go();
 	}
-	AddToTotals(self);
 };
 
 void() ai_vermis_face =  {
@@ -1667,70 +1666,32 @@ void() vermis_death38 = [199, vermis_death39]
 	self.velocity = '0 0 -160';
 };
 
-void() vermis_death39 = [200, vermis_death40]
-{
-	self.velocity = '0 0 -320';
-};
-
-void() vermis_death40 = [201, vermis_death41]
-{
-	self.velocity = '0 0 -400';
-};
-
-void() vermis_death41 = [202, vermis_death42]
-{
-	self.velocity = '0 0 -450';
-};
-
-void() vermis_death42 = [203, vermis_death43]
-{
-};
-
-void() vermis_death43 = [204, vermis_death44]
-{
-};
-
-void() vermis_death44 = [205, vermis_death45]
-{
-};
-
-void() vermis_death45 = [206, vermis_death46]
-{
-};
-
-void() vermis_death46 = [207, vermis_death47]
-{
-};
-
-void() vermis_death47 = [208, vermis_death48]
-{
-};
-
+void() vermis_death39 = [200, vermis_death40] { self.velocity = '0 0 -320'; };
+void() vermis_death40 = [201, vermis_death41] { self.velocity = '0 0 -400'; };
+void() vermis_death41 = [202, vermis_death42] { self.velocity = '0 0 -450'; };
+void() vermis_death42 = [203, vermis_death43] {};
+void() vermis_death43 = [204, vermis_death44] {};
+void() vermis_death44 = [205, vermis_death45] {};
+void() vermis_death45 = [206, vermis_death46] {};
+void() vermis_death46 = [207, vermis_death47] {};
+void() vermis_death47 = [208, vermis_death48] {};
 void() vermis_death48 = [209, vermis_death49] {};
 void() vermis_death49 = [210, vermis_death50] {};
 void() vermis_death50 = [211, vermis_death51] {};
 void() vermis_death51 = [210, vermis_death52] {};
 void() vermis_death52 = [209, vermis_death47] {
-	if (self.inv == 1)
-		self.think = SUB_Remove;
-
+	if (self.inv == 1) self.think = SUB_Remove;
 	self.inv = 1;
 };
 
 void() vermis_die = {
 	sound(self, CHAN_WEAPON, "quoth/vermis/death.wav", 1, 0);
 	self.solid = SOLID_NOT;
-	if (self.enemy)
-		self.enemy.vermis_grabbed = 0;
-
+	if (self.enemy) self.enemy.vermis_grabbed = 0;
 	vermis_death1();
 };
 
-void() monster_vermis = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/quoth/vermis.mdl";
+void() monster_vermis_precache = {
 	precache_model("progs/quoth/vermis.mdl");
 	precache_model("progs/quoth/spore.mdl");
 	precache_sound("quoth/vermis/grab.wav");
@@ -1742,38 +1703,41 @@ void() monster_vermis = {
 	precache_sound("quoth/vermis/splash1.wav");
 	precache_sound("quoth/vermis/splash2.wav");
 	precache_sound("quoth/vermis/splash3.wav");
+	precache_sound("quoth/vermis/sight.wav");
+	precache_sound("quoth/vermis/sight2.wav");
+};
+
+void() monster_vermis = {
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/quoth/vermis.mdl";
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_NOCLIP;
 	setmodel(self,self.mdl);
 	self.health = 3000;
 	if (self.coiled != 0) {
-		precache_sound("quoth/vermis/sight.wav");
-		precache_sound("quoth/vermis/sight2.wav");
 		self.th_stand = vermis_coil1;
 		setsize(self, '-64 -64 -512', '64 64 -64');
 	} else {
-		precache_sound("quoth/vermis/sight2.wav");
 		self.th_stand = vermis_idle1;
 		setsize(self, '-64 -64 -512', '64 64 256');
 	}
+
 	self.th_run = vermis_run1;
 	self.th_missile = vermis_shoot1;
 	self.th_melee = vermis_melee;
 	self.th_pain = vermis_pain;
 	self.th_die = vermis_die;
-
-	// Check passive system for exceptions
-	setup_passivestate(self);
+	setup_passivestate(self); // Check passive system for exceptions
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
 
 	if (self.deathstring == "") self.deathstring = " was eradicated by a Vermis\n";
-
 	self.classtype = CT_MONVERMIS;
 	self.classgroup = CG_BOSS;
 	self.classmove = FALSE;
-	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
+	monster_start();
 	vermis_start();
 };

@@ -704,18 +704,12 @@ void()	skullw_death14	=[	$death15,	skullw_death14] {
 	self.nextthink = time + 8 + random() * 8;
 };
 
-//----------------------------------------------------------------------
-void() skullw_die =
-{
-	// Play fade away/death sound
-	sound (self, CHAN_VOICE, "ad171/skullwiz/death.wav", 1, ATTN_NORM);
-
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+void() skullw_die = {
+	sound (self, CHAN_VOICE, "ad171/skullwiz/death.wav", 1, ATTN_NORM); // Play fade away/death sound
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	skullw_remove_attachment();
 
-	// Special death, Instantly vaporize cloak
-	// This is really a gib death without the gibs!
+	// Special death, Instantly vaporize cloak.  This is really a gib death without the gibs!
 	if (self.health < -40) {
 		// Typical Grenade explosion
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
@@ -729,70 +723,59 @@ void() skullw_die =
 		self.gib2skin = self.exactskin;		// Update book skin
 		ThrowGib(11,1); ThrowGib(12,1);		// Throw head and book
 		entity_hide(self);
-	}
-	// Regular death, collapse and fade away
-	else {
-		// Large particle explosion upwards
-		particle_explode(self.origin, 100, 3, self.part_style, PARTICLE_BURST_SKULLUP);  //ijed: These were confusing, making it look like it had teleported when dead.  Kept and tweaked colors below -Qmaster
+	} else {
+		// Regular death, collapse and fade away
+		particle_explode(self.origin, 100, 3, self.part_style, PARTICLE_BURST_SKULLUP);  //ijed: These were confusing, making it look like it had teleported when dead. / Agreed.  Kept and tweaked colors below -Qmaster
 		skullw_death1();
 	}
 };
 
-/*======================================================================
-QUAKED monster_skullwiz (0.5 0 1) (-16 -16 -24) (16 16 40)
-======================================================================*/
-void() monster_skullwiz = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/ad171/mon_skullwiz.mdl";
-	precache_model (self.mdl);
+void() monster_skullwiz_precache = {
+	precache_model ("progs/ad171/mon_skullwiz.mdl");
 	precache_model (MODEL_PROJ_SWSKULL);		// explosive flaming skull
 	precache_model (MODEL_PROJ_SWSKULLP);		// explosive poison skull
 	precache_model (MODEL_PROJ_SWBALL);			// Purple minion ball
 	precache_model (SBURST_POISON);				// Poison explosion
-
-	self.gib1mdl = "progs/ad171/h_skullwiz.mdl";		// Skull head
-	self.gib2mdl = "progs/ad171/w_skullbook.mdl";		// Unique book item
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-
-	self.idle_sound = "ad171/skullwiz/idle1.wav";
-	self.idle_sound2 = "ad171/skullwiz/idle2.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-
+	precache_model ("progs/ad171/h_skullwiz.mdl");
+	precache_model ("progs/ad171/w_skullbook.mdl");
+	precache_model ("progs/ad171/mon_lostsoul.mdl"); // Precache minion stuff anyway from monster_skullwizminion
+	precache_sound ("ad171/skullwiz/idle1.wav");
+	precache_sound ("ad171/skullwiz/idle2.wav");
 	precache_sound ("ad171/skullwiz/death.wav");
-	self.pain_sound = "ad171/skullwiz/pain1.wav";
-	self.pain_sound2 = "ad171/skullwiz/pain2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-
+	precache_sound ("ad171/skullwiz/pain1.wav");
+	precache_sound ("ad171/skullwiz/pain2.wav");
 	precache_sound ("ad171/skullwiz/attack.wav");		// fire spell
 	precache_sound ("ad171/skullwiz/skull1.wav");		// Screaming skull attack
 	precache_sound ("ad171/skullwiz/skull2.wav");
 	precache_sound ("ad171/skullwiz/summon.wav");
 	precache_sound ("quoth/dguard/hit.wav");	// Guardian Explosion
-
 	precache_sound ("ad171/skullwiz/blinkspk1.wav");	// Talk casting blink spell
 	precache_sound ("ad171/skullwiz/blinkspk2.wav");
 	precache_sound ("ad171/skullwiz/blinkout.wav");	// Sound of blink animation
 	precache_sound ("ad171/skullwiz/blinkin.wav");
-
-	self.sight_sound = "ad171/skullwiz/sight.wav";
-	precache_sound (self.sight_sound);
-
-	// Precache minion stuff anyway from monster_skullwizminion
-	precache_model ("progs/ad171/mon_lostsoul.mdl");
+	precache_sound ("ad171/skullwiz/sight.wav");
 	precache_sound ("ad171/lostsoul/idle1.wav");
 	precache_sound ("ad171/lostsoul/idle2.wav");
 	precache_sound ("ad171/lostsoul/charge.wav");		// charge hiss/scream
 	precache_sound ("ad171/lostsoul/bite.wav");		// chomp with teeth
 	precache_sound ("ad171/lostsoul/pain1.wav");
 	precache_sound ("ad171/lostsoul/death.wav");
+};
 
+// QUAKED monster_skullwiz (0.5 0 1) (-16 -16 -24) (16 16 40)
+void() monster_skullwiz = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	if (self.minion_name == string_null) self.minion_name = "monster_lostsoul";
+	self.mdl = "progs/ad171/mon_skullwiz.mdl";
+	self.gib1mdl = "progs/ad171/h_skullwiz.mdl";		// Skull head
+	self.gib2mdl = "progs/ad171/w_skullbook.mdl";		// Unique book item
+	self.idle_sound = "ad171/skullwiz/idle1.wav";
+	self.idle_sound2 = "ad171/skullwiz/idle2.wav";
+	self.pain_sound = "ad171/skullwiz/pain1.wav";
+	self.pain_sound2 = "ad171/skullwiz/pain2.wav";
+	self.sight_sound = "ad171/skullwiz/sight.wav";
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -803,9 +786,7 @@ void() monster_skullwiz = {
 	self.steptype = FS_TYPEMEDIUM;	// Humanoid footsteps
 	self.pain_longanim = FALSE;		// No long pain animation
 
-	// Skull wizards have special animation movement sets
-	// Need extra parameters for their teleporting ability
-	// Can be setup to start phased out and surprise the player
+	// Skull wizards have special animation movement sets.  Need extra parameters for their teleporting ability.  Can be setup to start phased out and surprise the player
 	self.idlebusy = SKULLW_STAND;
 	if (self.height == 0) self.height = SKULLW_HEIGHT;
 	if (self.distmin == 0) self.distmin = SKULLW_DISTMIN;
@@ -829,8 +810,7 @@ void() monster_skullwiz = {
 		self.th_run = skullw_wakeup;
 		self.th_missile = skullw_wakeup;
 		self.th_melee = skullw_wakeup;
-	}
-	else {
+	} else {
 		self.th_stand = skullw_stand;
 		self.th_walk = skullw_walk;
 		self.th_run = skullw_run1;
@@ -843,13 +823,13 @@ void() monster_skullwiz = {
 	self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEWALK;
 
-	// Special black robes for skull spawner
+	
 	if (self.spawnflags & MON_SKULLWIZ_MINIONS) {
+		// Special black robes for skull spawner
 		self.health = self.health * 1.5;	// 150% HP
 		if (!self.exactskin) self.exactskin = 2;	// Black robes
-	}
-	// Special green robes for rune guardians
-	else if (self.spawnflags & MON_SKULLWIZ_GUARDIAN) {
+	} else if (self.spawnflags & MON_SKULLWIZ_GUARDIAN) {
+		// Special green robes for rune guardians
 		self.health = self.health * 2;		// 200% HP
 		if (!self.exactskin) self.exactskin = 3;	// Green rboes
 		self.poisonous = TRUE;						// Explosive Poison
@@ -859,74 +839,54 @@ void() monster_skullwiz = {
 	
 	// Make sure the particles match the skin
 	if (self.exactskin == 1) self.part_style = PARTICLE_BURST_GREEN;
-	else if (self.exactskin == 2) self.part_style = PARTICLE_BURST_RED; // Was purple, changed for ijed to make more readable and not confuse with teleport
+	else if (self.exactskin == 2) self.part_style = PARTICLE_BURST_RED; // Was purple, changed per ijed suggestion to make more readable and not confuse with teleport
 	else if (self.exactskin == 3) self.part_style = PARTICLE_BURST_GREEN;
-	else if (self.exactskin == 4) self.part_style = PARTICLE_BURST_RED; // Was white, changed for ijed to make more readable and not confuse with teleport
+	else if (self.exactskin == 4) self.part_style = PARTICLE_BURST_RED; // Was white, changed per ijed suggestion to make more readable and not confuse with teleport
 	else self.part_style = PARTICLE_BURST_RED;
-			
+
 	monster_start();
 };
 
 // Guardian variant redirect for drake
 void() monster_skull_wizard_lord = { self.classname = "monster_skullwiz"; self.spawnflags = self.spawnflags | MON_SKULLWIZ_GUARDIAN; monster_skullwiz(); };
 
-/*======================================================================
-//QUAKED info_skullwiz_destination (0.6 0 0.8) (-16 -16 -24) (16 16 40) x
-Teleport destination for skull wizard ONLY
--------- KEYS --------
-targetname : part of a chain group (required)
-target   : next destination in the chain
-distance : Minimum distance enemy needs to be before spawning
--------- SPAWNFLAGS --------
--------- NOTES --------
-Teleport destination for skull wizard ONLY
-
-======================================================================*/
-void() info_skullwiz_link =
-{
+// QUAKED info_skullwiz_destination (0.6 0 0.8) (-16 -16 -24) (16 16 40) x
+// Teleport destination for skull wizard ONLY
+// -------- KEYS --------
+// targetname : part of a chain group (required)
+// target   : next destination in the chain
+// distance : Minimum distance enemy needs to be before spawning
+// -------- NOTES --------
+// Teleport destination for skull wizard ONLY
+void() info_skullwiz_link = {
 	local entity currlink, master;
 	local float loopcondition;
-	
-	// Teleport destination already been linked
-	if (self.enemy) return;
+
+	if (self.enemy) return; // Teleport destination already been linked
+
 	if (self.target == self.targetname) {
 		self.enemy = self;
 		return;
 	}
 	
-	// The master entity is the start of the chain
-	// the currlink is a link in the chain
-	master = self;
+	master = self; // The master entity is the start of the chain the currlink is a link in the chain
 	loopcondition = TRUE;
-	
-	while (loopcondition) 
-	{
-		// Setup next link to master and find next link
-		self.enemy = master;
+	while (loopcondition) {
+		self.enemy = master; // Setup next link to master and find next link
 		currlink = find(world, targetname, self.target);
-		// reached end of list?
-		if (!currlink || currlink == master) 
+		if (!currlink || currlink == master) // reached end of list?
 			loopcondition = FALSE;
 		else {
-			// Move forward in the chain
-			self.enemy = currlink;
+			self.enemy = currlink; // Move forward in the chain
 			self = currlink;
 		}
 	}
 };
 
-//----------------------------------------------------------------------
-void() info_skullwiz_destination =
-{
-	// All teleportation points need to be part of a chain
-	// Otherwise the skull Wizard would have to use findradius
-	// which is expensive if lots of entities are around
-	if (self.targetname == "" || self.target == "") {
-		dprint("\b[SKULLWIZ_DEST]\b missing target or targetname\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		remove(self);
-		return;
-	}
+void() info_skullwiz_destination = {
+	// All teleportation points need to be part of a chain otherwise the skull Wizard would have to use findradius which is expensive if lots of entities are around
+	if (SUB_HideIfNoTargetname()) return;
+	if (SUB_HideIfNoTarget()) return;
 	
 	self.classtype = CT_SKULLTELEPORT;
 	self.mangle = self.angles;

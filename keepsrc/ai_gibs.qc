@@ -76,7 +76,6 @@
 .float		gibpartchance;		// The % percentage chance of particles
 .float		gibpartstyle;		// Particle style
 .vector		gibpartoffset;		// Offset to origin (center of particles)
-
 float GIB_IMPACT_LIGHT = 0;		// Light fleshy impact (default)
 float GIB_IMPACT_HEAVY = 1;		// Heavy fleshy impact
 float GIB_IMPACT_ACID = 5;		// Fleshy acid burning sound (dangerous)
@@ -96,7 +95,6 @@ float GIBTYPE_METAL = 4;		// Metal scraps
 float GIBTYPE_CERAMIC = 5;		// Ceramic pot shards
 float GIBTYPE_POISON = 10;		// Poisoned flesh
 float GIBTYPE_ICE = 16;
-
 float MON_BCOLOR_BROWN = 16;	// Brown dust/dirt
 float MON_BCOLOR_RED = 68;		// Red index colour
 float MON_BCOLOR_GREEN = 52;	// Green index
@@ -148,14 +146,11 @@ void Rocket_Explosion2 (vector org, float x, float y);
 float() can_eat_bones;
 void MakeIcyExp (vector org);
 
-/*======================================================================
- precache_stonegibs, precache_poisongibs
-  Only load extra gibs when there is a monster requiring them
-  There are separate gib models because of particle trail colours
-  These functions have to be called from monster spawn functions
-  The gib system tests for the global variables defined below
-  If the extra gibs are not active then default blood vers are used
-======================================================================*/
+// Only load extra gibs when there is a monster requiring them
+// There are separate gib models because of particle trail colours
+// These functions have to be called from monster spawn functions
+// The gib system tests for the global variables defined below
+// If the extra gibs are not active then default blood vers are used
 void() precache_stonegibs = {
 	gibstone = TRUE;
 	precache_model (GIB1_STONE);			// New gib - arm/leg
@@ -298,7 +293,7 @@ void() CheckFloorGib = {
 		if (self.gibAnimfinal > 0 && self.gibAnimTimer < time) {
 			if (self.walkframe > self.gibAnimfinal) {
 				self.gibAnimfinal = 0;
-				RemoveGib(); // Go ahead and fade now
+				//RemoveGib(); // Go ahead and fade now
 				return;
 			} else {
 				self.frame = self.gibAnimstart + self.walkframe;
@@ -307,15 +302,18 @@ void() CheckFloorGib = {
 		}
 		self.think = CheckFloorGib; // Keep checking
 		self.nextthink = time + 0.1;
-	} else RemoveGib(); // Is it time for the gib to fade away?
+	}// else RemoveGib(); // Is it time for the gib to fade away?
 };
 
 float() Gib_Eaten;
 
 void() TouchGib = {
+	local vector dir;
+
 	if (check_skycontent(self.origin)) { entity_remove(self, 0.1); return; } // Always check for sky and void functions first
 	if (self.touchedvoid) return; // Marked for removal
     if (Gib_Eaten()) return; // This will remove self if TRUE.
+
 
 	// Check if the gib can damage on touch
 	if (self.gib1dmg > 0 && other.flags & FLx_CREATURE && other.takedamage) {
@@ -329,7 +327,8 @@ void() TouchGib = {
 	// Check rest of touch restrictions
 	if (self.waitmin > time) return;			// Touch function disabled
 	if (other == self.owner) return;			// Ignore original monster
-	if (other.classgroup == CG_TEMPENT) return;	// Ignore other temp entities
+	if (other.classgroup == CG_TEMPENT || IsProjectile(other)) return;	// Ignore other temp entities
+	if (other.health < 0) return;
 
 	self.waitmin = time + 2 + random() * 2; // Block multiple touch of impact sound
 	if (self.pain_finished > time + 0.1) { // Is there any time left to setup floor checks
@@ -382,6 +381,13 @@ void() TouchGib = {
 		}
 	}
 	if (self.noise != "") sound(self, CHAN_VOICE, self.noise, 1, self.volume); // Has any impact sounds been defined?
+	if (other.flags & FLx_CREATURE) {
+		self.flags = self.flags - (self.flags & FL_ONGROUND);
+		self.velocity_x = self.velocity_x + other.velocity_x*2;
+		self.velocity_y = self.velocity_y + other.velocity_y*2;
+		self.velocity_z = vlen(self.velocity) * 0.5;
+		self.avelocity = crandom() * '0 600 0';
+	}
 };
 
 // Was originally in player.qc; moved here instead.  Spawns a gib model and throws it up into the air to bounce around.
@@ -402,8 +408,7 @@ void(float gib_no, float gib_qty) ThrowGib = {
 		if (self.gib1dmg > 0) gibitem.gib1dmg = self.gib1dmg;
 		if (self.gib1exp > 0) gibitem.gib1exp = self.gib1exp;
 		if (self.gibtype) gibitem.gibtype = self.gibtype; // Setup gib type (particle trail)
-		if (ext_dppart) DPP_blood_trail(gibitem); // Create extra blood particles for DP engine
-		
+		if (ext_dppart && self.gibtype == GIBTYPE_BLOOD) DPP_blood_trail(gibitem); // Create extra blood particles for DP engine
 		
 		if (gib_no == 1) {
 			// Arm/leg joint (small)
@@ -453,8 +458,11 @@ void(float gib_no, float gib_qty) ThrowGib = {
 			if (!(CheckZeroVector(self.gib3origin))) gibitem.oldorigin = self.gib3origin;
 		} else if (gib_no == 14) gibitem.mdl = self.gib4mdl; // Extra Custom Gib (just models, no paramters)
 		else if (gib_no == 15) gibitem.mdl = self.gib4mdl; // Extra Custom Gib (just models, no paramters)
-		else if (gib_no == GIBTYPE_ICE) gibitem.mdl = "progs/drake/ice_cube.mdl";
-		else if (gib_no == 25) {
+		else if (gib_no == GIBTYPE_ICE) {
+			gibitem.mdl = "progs/drake/ice_cube.mdl";
+			gibitem.skin = 0;
+			gibitem.alpha = 0.9;
+		} else if (gib_no == 25) {
 			// Special head gib (based on headmdl and skin no)
 			gibitem.mdl = self.headmdl;
 			gibitem.skin = self.skin;
@@ -538,7 +546,10 @@ void(float gib_no, float gib_qty) ThrowGib = {
 		gibitem.touch = TouchGib;
 		gibitem.nextthink = time + GIB_FADETIME + random() * GIB_FADETIME;
 		gibitem.pain_finished = gibitem.nextthink;
-		gibitem.think = RemoveGib;
+		//gibitem.think = RemoveGib;
+		gibitem.think = SUB_Null;
+		gibitem.th_die = SUB_Null;
+		gibitem.th_pain = SUB_Null_pain;
 
 		if (gibitem.physicsflags) {
 			Gyro_Object_Activate(gibitem,MASS_GIB);
@@ -555,8 +566,11 @@ void() monster_ThrowGib = {
 
 	// New gib sounds.  Zombies have special gib sound because they always go that way!  Stone enemies are just a pile of rubble and dust!
 	if (self.classgroup == CG_ZOMBIE)
-		sound (self, CHAN_VOICE, "zombie/z_gib.wav", 1, ATTN_NORM);
-	else if (self.gibtype == GIBTYPE_STONE)
+		sound(self, CHAN_VOICE, "zombie/z_gib.wav", 1, ATTN_NORM);
+	else if (self.classtype == CT_MONMANTICORE || self.classtype == CT_MONLICHFIEND) {
+		if (random() < 0.5) sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_death1.wav", 1, ATTN_NORM);
+		else				sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_gib.wav", 1, ATTN_NORM);
+	} else if (self.gibtype == GIBTYPE_STONE)
 		sound(self, CHAN_VOICE, GIB_SOUND_SDEATH, 1, ATTN_NORM);
 	else {
 		self.lip = random() * 4;
@@ -588,6 +602,23 @@ void() monster_ThrowGib = {
 	} else if (self.classtype == CT_MONDROLE) { 
 		ThrowGib(4, 2 + rint(random()*2));
 		ThrowGib(5, 4 + rint(random()*2));
+	} else if (self.classtype == CT_MONMANTICORE || self.classtype == CT_MONLICHFIEND) { 
+		ThrowGib(4, 3 + rint(random()*2));
+		ThrowGib(5, 5 + rint(random()*2));
+		if (self.enemy) {
+			SpawnMeatSpray (self, self.enemy, -150);
+			SpawnMeatSpray (self, self.enemy, -100);
+			SpawnMeatSpray (self, self.enemy, 150);
+			SpawnMeatSpray (self, self.enemy, 100);
+			if (self.skin == 1) { // Extra gibby
+				SpawnMeatSpray (self, self.enemy, -200);
+				SpawnMeatSpray (self, self.enemy, -50);
+				SpawnMeatSpray (self, self.enemy, 200);
+				SpawnMeatSpray (self, self.enemy, 50);
+				ThrowGib(4, 1 + rint(random()*2));
+				ThrowGib(5, 3 + rint(random()*2));
+			}
+		}
 	} else if (self.classtype == 	CT_MONDOG) {
 		ThrowGib(4, 1 + rint(random()*3));
 		ThrowGib(5, 1 + rint(random()*2));
@@ -739,7 +770,7 @@ void(entity onflr, float impactdmg) monster_flrbody_gib = {
 	onflr.bodyonflr = string_null;	// no more body gibbing
 	tself = self; tother = other;	// save self/other
 	self = onflr; other = tself;	// switch around
-	if (onflr.classgroup == CG_ZOMBIE && !(onflr.classname == "monster_mummy")) {
+	if (onflr.classgroup == CG_ZOMBIE && (onflr.classtype != CT_MONMUMMY || self.tome_finished)) { // Mummy's are too powerful for this without tome.
 		self.health = 0;
 		Killed(onflr, tself);
 	} else {

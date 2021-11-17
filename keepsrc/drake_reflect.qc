@@ -75,7 +75,7 @@ float(entity ent, vector spot, float damage) HasReflection = {
 			if ( !((ent.flags & FL_GODMODE) || ent.invincible_finished) ) { // Degrade armor only if vulnerable to damage.
 				if (ent.armorvalue > damage) ent.armorvalue = ent.armorvalue - damage;
 			}
-			return 2;   // In case we need a non-zero value other than TRUE.
+			return 2; // In case we need a non-zero value other than TRUE.
 		}
 	}
     return FALSE; // No reflection.
@@ -145,7 +145,7 @@ float(float damage) Reflected_Damage = {
     local float yes;
 
     if (self) {
-        yes = HasReflection (other, self.origin, damage);
+        yes = HasReflection(other, self.origin, damage);
         if (yes) {
 			// It is possible for missile to get sandwiched between multiple targets with reflection, before the missile redirects from the first contact.  If that happens, pass until the missile can move.  That way, the missile will not get stuck.
             if (self.think != ReflectThink) {
@@ -162,7 +162,7 @@ float(float damage) Reflected_Damage = {
     return FALSE; // Missile was not reflected, so proceed as normal.
 };
 
-float() Reflected = {return Reflected_Damage (self.dmg);};
+float() Reflected = {return Reflected_Damage(self.dmg);};
 
 // Turns on a particle field for 'ent' then repels missiles within the field.  Note: EF_BRIGHTFIELD has a radius of 80, centered on entity's origin.
 void(entity ent) ReflectorShield = {
@@ -183,4 +183,35 @@ void(entity ent) ReflectorShield = {
         }
         shot = shot.chain;
     }
+};
+
+//  Parrying (Used by Mjolnir)
+// Block_Missile -- Variation of 'ReflectMissile'.
+// Redirects a missile away from a point.
+// Unlike ReflectMissile, does NOT interfere with MIRVs or homing missiles.
+// Entity who is reflecting the shot is assumed to be 'self'.
+// shot:  Missile to be redirected.
+// org:  Reflector source point.
+//- - - - - - - - -
+void(entity shot, vector org) Block_Missile = {
+    local   entity  ent;
+
+    ent = self;
+
+    if (shot.movetype == MOVETYPE_NONE) return;     // Can't move.
+
+	// Reset fields that may affect its movement.
+    if (!shot.speed) shot.speed = vlen(shot.velocity);
+    shot.movedir = normalize (shot.origin - org);
+    shot.velocity = shot.movedir * shot.speed;
+    shot.dest = shot.velocity; // For lasers and spikes.
+    shot.angles = vectoangles(shot.movedir);
+    if (shot.pos1_x) shot.angles_x = shot.angles_x + shot.pos1_x; // For fireballs.
+    shot.oldorigin = shot.origin; // For particle trails.
+    shot.flags = shot.flags - (shot.flags & FL_ONGROUND); // Unstick missile if engine thinks it is on the ground.
+    shot.groundentity = world;
+
+	// Set owner to reflector so missile may pass through reflector.
+    if (shot.owner == shot.master) shot.owner = ent;
+    if (shot.enemy == ent) shot.owner = world; // Let homing missile hit target.  Reflection sound will be played later.
 };

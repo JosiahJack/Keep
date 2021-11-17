@@ -24,10 +24,10 @@ float() Ryu_BlockCrossfire = {
         elements = self.ryuflags & RYU_ELEMENTS;
         if (elements == RYU_USE_LITE) return FALSE;   // Shoot lightning into water to fry targets.
         else if (elements == RYU_USE_ICE) {   // Don't shoot ice if either endpoint is in lava.
-            if (self.h2otype == CONTENT_LAVA) {
-                if (self.h2olevel > 1) return TRUE;    // Mouth in lava.
+            if (self.liquidbase == CONTENT_LAVA) {
+                if (self.waterlevel > 1) return TRUE;    // Mouth in lava.
 			}
-            if (self.enemy.h2otype == CONTENT_LAVA) return TRUE;    // Target covered under lava.
+            if (self.enemy.liquidbase == CONTENT_LAVA) return TRUE;    // Target covered under lava.
         }
         if (self.ryuflags & RYU_ALERT) return FALSE;   // Check alert AFTER element check. Smart enough to aim through water.
     }
@@ -42,8 +42,8 @@ float() Draco_CanAttackTarget = {
     // that are underwater to death -- it is useless.
     if (Ryu_HatesWater ())
         if (self.enemy.xfl & XFL_ZOMBIE)    // Anyone harmed only by scar.
-            if (!self.h2olevel)
-                if (self.enemy.h2olevel > 2) return FALSE;
+            if (!self.waterlevel)
+                if (self.enemy.waterlevel > 2) return FALSE;
 
     return TRUE;
 };
@@ -171,7 +171,7 @@ vector() Ryu_Offset = {
     local   float   fr;
 
     // HACK:  If nightshade, convert its frames to dragon frames.
-    if (self.classname == "monster_nightshade")
+    if (self.classtype == CT_MONSHADE)
         fr = self.frame - 7;    // Nightshade appears only as medium-sized.
     else
         fr = self.frame;
@@ -202,10 +202,9 @@ void() Ryu_Bite = {
     // Inflict the damage.  Scar damage hurts and kills zombies.
     // Like many of Quake2 monsters' melee attacks, damage ranges from
     // x to x+5, while x is a multiple of 5, and damage has a minimum of 5.
-    // Note:  x = ((maxs_x / 16) - 1 + random + cranked) * 5.
+    // Note:  x = ((maxs_x / 16) - 1 + random) * 5.
     // Update 4/23/2009:  Do 15-20 damage for standard.  Wyrms multiply damage.
     damage = 15 + random()*5;
-    if (cranked) damage = damage + 5;
     if (self.spawnflags & SPAWN_WYRM) damage = damage * 4; // Moot since wyrms can't bite.
     sound (self, CHAN_WEAPON, "demon/dhit2.wav", 1, ATTN_NORM);
     T_Damage (self.enemy, self, self, damage,DAMARMOR);
@@ -221,8 +220,8 @@ vector() Ryu_TargetPoint = {
         end = Midpoint (self.enemy);
 
         // If target is in water and not the dragon, aim at the head.
-        if (self.enemy.h2olevel >= 2)
-            if (self.h2olevel < 2)
+        if (self.enemy.waterlevel >= 2)
+            if (self.waterlevel < 2)
                 end_z = end_z + (self.enemy.maxs_z * 0.5);
 
         return end;
@@ -235,81 +234,64 @@ vector() Ryu_TargetPoint = {
 //  This creates a fireball shot by a dragon.  Used by both PCs and NPCs.
 void(vector start, vector dir, float sped, float up, float damage) Ryu_Fire = {
     if (damage) {
-        // Big super fireball.
-        Meteor_Launch (self, start, dir, sped, damage);
-        newmis.delay      = time + 2.5;     // Same fuse as a grenade.
-        newmis.movetype   = MOVETYPE_TOSS;
+        Meteor_Launch(self,start, dir,sped,damage); // Big super fireball.
+        newmis.delay = time + 2.5; // Same fuse as a standard player grenade.
+        newmis.movetype = MOVETYPE_TOSS;
     } else {
-        // Normal fireball.
-        // Fuse is (10 * reach / speed) + 1.  If speed is double the reach, duration is 6 frames.  Fade anim is 3 frames, so the pre-fade duration is 3 frames.
-        // NOTE:  Don't use self.height for damage here because of PC use.
-        Fireball_Launch (self, start, dir, sped, 9);
-        newmis.delay      = time + 0.3;
-        newmis.noise      = "drake/dragon/firehit.wav";
-        if (Fireball_InWater (newmis)) return;
+        // Normal fireball.  Fuse is (10 * reach / speed) + 1.  If speed is double the reach, duration is 6 frames.  Fade anim is 3 frames, so the pre-fade duration is 3 frames.
+        Fireball_Launch(self, start, dir, sped, 9); // Don't use self.height for damage here because of transformed player use.
+        newmis.delay = time + 0.3;
+        newmis.noise = "drake/dragon/firehit.wav";
+        if (Fireball_InWater(newmis)) return;
     }
-    // Note:  Make sure the damage flags field is same one used in 'fire.qc'.
-    newmis.style      = newmis.style | DF_SAFE;   // Harmless to attacker.
+
     if (newmis.movetype == MOVETYPE_TOSS) {
         newmis.velocity_z = newmis.velocity_z + up;
-        dir = normalize (newmis.velocity);
-        newmis.angles     = vectoangles(dir) + '90 0 0';
+        dir = normalize(newmis.velocity);
+        newmis.angles = vectoangles(dir) + '90 0 0';
     }
-    if (self.flags & FL_CLIENT)
-        SUB_Flash ();   // Don't light up custom muzzle flashes in Qrack.
-    else
-        self.effects = self.effects | EF_MUZZLEFLASH;
+
+    self.effects = self.effects | EF_MUZZLEFLASH;
 };
 
-//  Ryu_Multishot (formerly Ryu_Ice)
-//
-//  This creates a shotgun burst of ice (or whatever).
-//
-//  The family of the Ps explained:
+//  This creates a shotgun burst of ice (or whatever).  The family of the Ps explained:
 //  p1 = Origin of attack, generally out of one of the attacker's orifices.
 //  p2 = Endpoint 1, generally where the target is when attack is launched.
 //  p3 = Endpoint 2, where the target is predicted to be after some time.
 //  p4 = Endpoint 3, a point chosen somewhere between p2 and p3.  Aim here!
 void(vector p1, vector p2, float sped, float damage, entity targ, float shots, float atype)  Ryu_Multishot = {
-    local   float   bomb;
-    local   float   sped2;      // New speed for hellball.
-    local   float   frac, loop;
-    local   vector  dir, err, p3, p4;
+    local float bomb, sped2, frac, loop;
+    local vector dir, err, p3, p4;
 
-    // Extra stuff for more multishot types.
-    bomb = atype & RYU_BOMB;
+    bomb = atype & RYU_BOMB; // Extra stuff for more multishot types.
     atype = atype & RYU_ELEMENTS;
 	newmis.classgroup = CG_PROJALL;
-    // Begin old multishot stuff.
-    err = '6 4.5 0';    // For ice dragon, 5x the spread as fire spray.
-    p3 = Aim_Lead (p1, p2, sped, targ);
 
+    // Begin old multishot stuff.
+    err = '6 4.5 0'; // For ice dragon, 5x the spread as fire spray.
+    p3 = Aim_Lead (p1, p2, sped, targ);
     loop = floor(shots);
     while (loop > 0) {
-        loop = loop - 1;    // Do first because we use 'loop - 1' in calcs.
+        loop = loop - 1; // Do first because we use 'loop - 1' in calcs.
         if (loop) {
             frac = 1 - (loop / shots);
             if (self.spawnflags & SPAWN_SLOW)
-                frac = frac * 0.5;      // Can't fully track if slow.
+                frac = frac * 0.5; // Can't fully track if slow.
             p4 = p2 + ((p3 - p2) * frac);
             sped2 = sped * (random() / 3 + 1);  // Boost speed by up to 33%.
         } else {
-            // Aim final shot on target.
-            err = '0 0 0';
-            p4 = p3;
+            err = '0 0 0'; 
+            p4 = p3; // Aim final shot on target.
             sped2 = sped;
         }
         traceline (p1, p4, TRUE, self);
-        if (trace_fraction < 1)
-            p4 = p2;    // Point is blocked, so don't lead.
+        if (trace_fraction < 1) p4 = p2; // Point is blocked, so don't lead.
 
         // Calculate aim vector.
-        if ( bomb && (atype != RYU_USE_LITE) )
-            dir = Aim_Toss (p1, p4, sped2, 200, world);
-        else
-            dir = normalize (p4 - p1);
-        dir = Maim_Scatter (dir, err);
+        if (bomb && (atype != RYU_USE_LITE)) dir = Aim_Toss (p1, p4, sped2, 200, world);
+        else dir = normalize (p4 - p1);
 
+        dir = Maim_Scatter (dir, err);
         if (atype & RYU_ELEMENTS == RYU_USE_ICE) {
             // Ice spray.
             if (bomb) { // Explosive iceballs.
@@ -322,13 +304,10 @@ void(vector p1, vector p2, float sped, float damage, entity targ, float shots, f
             if (newmis.dmg < damage)
                 newmis.dmg = damage;
         } else if (bomb) {
-            if (atype == RYU_USE_FIRE)
-                Ryu_Fire (p1, dir, sped2, 200, self.height);
-            else if (atype == RYU_USE_LITE)
-                RyuPlasma_Launch (p1, dir, sped2, self.height);
-            else if (atype == RYU_USE_ACID)
-            {
-                Acidball_Launch (p1, dir, sped2, self.height);
+            if (atype == RYU_USE_FIRE) Ryu_Fire(p1,dir,sped2,200,self.height);
+            else if (atype == RYU_USE_LITE) RyuPlasma_Launch(p1,dir,sped2,self.height);
+            else if (atype == RYU_USE_ACID) {
+                Acidball_Launch(p1,dir,sped2,self.height);
                 newmis.velocity_z = newmis.velocity_z + 200;
             }
         }
@@ -388,7 +367,7 @@ void() Ryu_Shot_Fire = {
     } else if (self.worldtype == RYU_USE_LITE) {
         // Check for discharge, just like Thunderbolt-wielding player.
         self.effects = self.effects | EF_MUZZLEFLASH;
-        if (self.h2olevel > 1) {
+        if (self.waterlevel > 1) {
             // Dragon is deep enough in water so discharge.
             // Note:  Discharge is weak, so just fizzle harmlessly.
             sound (self, CHAN_WEAPON, "misc/power.wav", 1, ATTN_NORM); // vanilla id1 sound
@@ -403,26 +382,21 @@ void() Ryu_Shot_Fire = {
         // the water, in which case, the aim becomes perfect (or rather
         // the error calcuation is skipped) to simulate water conductivity.
         if (self.enemy) {
-            if (self.enemy.h2olevel < 2) end = end - (self.enemy.velocity * ((1 - frac) * 0.2));
+            if (self.enemy.waterlevel < 2) end = end - (self.enemy.velocity * ((1 - frac) * 0.2));
 		}
 
         dir = Maim_Line (start, end, 0, world, '0 0 0');    // Insta-hit.
         end = start + (dir * sped);
 
-		LightningBolt (start, end, self, self.height, self, TE_LIGHTNING2, "lightning"); // Create the bolt of lightning.
+		LightningBolt (start, end, self, self.height, self, TE_LIGHTNING2); // Create the bolt of lightning.
     } else {
-	// Multiple shot attacks.
-        if (self.worldtype & RYU_BOMB)
-        {   // Super shots
-            if (!(self.ryuflags & RYU_ALERT))     // Leading is unfairly hard,
-                targ = world;                   // so don't unless cranked.
-            if (self.worldtype & RYU_ELEMENTS == RYU_USE_LITE)
-                sped = sped - 200;      // Treat as one size less.
-        }
-        else if (self.worldtype & RYU_ELEMENTS == RYU_USE_ICE)
-            sped = sped * 1.25;
-        else
-            return;     // Invalid attack type.
+		// Multiple shot attacks.
+        if (self.worldtype & RYU_BOMB) { // Super shots
+            if (!(self.ryuflags & RYU_ALERT)) targ = world;
+            if (self.worldtype & RYU_ELEMENTS == RYU_USE_LITE) sped = sped - 200;      // Treat as one size less.
+        } else if (self.worldtype & RYU_ELEMENTS == RYU_USE_ICE) sped = sped * 1.25;
+        else return;     // Invalid attack type.
+
         self.shots_left = 0;   // Launch all shots in one burst.
         Ryu_Multishot (start, end, sped, self.height, targ, self.shots_max, self.worldtype);
     }
@@ -430,7 +404,7 @@ void() Ryu_Shot_Fire = {
 
 // Used for delayed calls to Ryu_Shot_Fire by Ryu_Shot.
 void() Ryu_Shot_Think = {
-    if (self.owner.health > 0) SUB_Think (self.owner, Ryu_Shot_Fire);
+    if (self.owner.health > 0) SUB_ThinkImmediate (self.owner, Ryu_Shot_Fire);
     remove (self);
 };
 
@@ -451,9 +425,9 @@ void(float pause) Ryu_Shot = {
 void() ryu_sfx_fly = {
     // Not while Quad is sounding.
     if (self.super_sound < time) {
-        if (self.h2olevel <= 1)     // Not while in the water.
+        if (self.waterlevel <= 1)     // Not while in the water.
             sound (self, CHAN_BODY, "drake/dragon/fly.wav", 1, ATTN_NORM);
-        else if ((self.h2otype == CONTENT_WATER) || (self.h2otype == CONTENT_SLIME))
+        else if ((self.liquidbase == CONTENT_WATER) || (self.liquidbase == CONTENT_SLIME))
             sound (self, CHAN_BODY, "drake/dragon/flywater.wav", 1, ATTN_NORM);
     }
 };
@@ -555,14 +529,8 @@ float(float chance) Ryu_CanBite = {
     if (!self.th_missile) return TRUE; // Can't shoot.
     if (Ryu_NoShot (self)) return TRUE; // Not allowed to fire.
     if (self.enemy.solid <= SOLID_TRIGGER) return TRUE; // Missile attacks pass through non-solid enemies.
-
-	// Check for liquid surface block condition
-	if (check_liquidblock(self.origin, self.enemy.origin)) return FALSE;
-
-    // Now check if the dragon really wants to bite.
-    if (random() < chance)
-        if (InMeleeRange (RYU_RANGE_MELEE)) return TRUE;
-
+	if (check_liquidblock(self.origin, self.enemy.origin)) return FALSE; // Check for liquid surface block condition
+    if (random() < chance && InMeleeRange(RYU_RANGE_MELEE)) return TRUE; // Now check if the dragon really wants to bite.
     return FALSE; // Don't bite -- fire away instead.
 };
 
@@ -608,9 +576,9 @@ float() Ryu_UseSpecial = {
     atype = self.worldtype & RYU_ELEMENTS;
     if (atype == RYU_USE_FIRE) {
 		// If water is in the way, shoot meteors to penetrate it.
-        if (self.h2olevel >= 2) return TRUE; // Underwater.  Only meteors are effective.
+        if (self.waterlevel >= 2) return TRUE; // Underwater.  Only meteors are effective.
         if (self.enemy)
-            if (self.enemy.h2olevel >= 3) return TRUE;    // Target is underwater.
+            if (self.enemy.waterlevel >= 3) return TRUE;    // Target is underwater.
     }
     if (self.enemy) {
 		// If enemy is a zombie or too far away, lob big shots.
@@ -640,26 +608,17 @@ void() Ryu_SetAttack = {
 	// .wait        = time to add between shots in a salvo.
 	// .delay       = time between an attack function call and the attack itself.
     if (self.worldtype & RYU_BOMB) {
-        if (self.spawnflags & SPAWN_WYRM)
-            shots = 4;
-        else
-            shots = 1;
-        if (element == RYU_USE_LITE) 
-            self.height = 40;
-        else
-            self.height = 80;
-        if (cranked) self.height = self.height * 3 / 2; // Increase damage by 50% if true.
+        if (self.spawnflags & SPAWN_WYRM) shots = 4;
+        else shots = 1;
+
+        if (element == RYU_USE_LITE) self.height = 40;
+        else self.height = 80;
 
         self.shots_max = self.shots_left = shots;
         self.wait = 0.6 / shots;
         self.delay = 0.3;
     } else {
-		// Generic projectile attacks
-        if (cranked)
-            shots = 12;
-        else
-            shots = 8;
-
+		shots = 8; // Generic projectile attacks
         fts = 6;
         multi = FALSE;
         if (self.worldtype == RYU_USE_LITE) {
@@ -717,7 +676,7 @@ void() dragon_ranged = {
     if (self.classtype == CT_MONWYRM) {
         wyrm_move (self.enemy);
     } else {
-        if (ryu_step(FALSE)) walkmove (self.angles_y, SPEED_RYU_MIN);
+        if (ryu_step(FALSE)) walkmove(self.angles_y, SPEED_RYU_MIN);
 	}
 };
 void() dragon_missile1  =[ $attack1,  dragon_missile2  ] {
@@ -910,7 +869,7 @@ void() wyrm_countdown = {
 
 void() wyrm_die1  =[ $death1,  wyrm_die2  ] {};
 void() wyrm_die2  =[ $death2,  wyrm_die3  ] {};
-void() wyrm_die3  =[ $death3,  wyrm_die4  ] {};
+void() wyrm_die3  =[ $death3,  wyrm_die4  ] {self.solid      = SOLID_NOT;};
 void() wyrm_die4  =[ $death4,  wyrm_die5  ] {};
 void() wyrm_die5  =[ $death5,  wyrm_die6  ] {DropCoin(4);};
 void() wyrm_die6  =[ $death6,  wyrm_die7  ] {death_puff();};
@@ -1001,23 +960,13 @@ float   RYUSKIN_BLUE       = 2;
 float   RYUSKIN_WHITE      = 3;
 float   RYUSKIN_GOLD       = 4; // Kept only for Soul of Evil.
 
-// --> QUAKED monster_ryu (1 0 0) (-56 -56 -24) (56 56 56) Ambush Boss Fast Slow
-void() monster_ryu = {
-    local float powlevel, element, evade;
-
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
+void() monster_ryu_precache = {
     precache_model ("progs/drake/dr1_head.mdl");  // Gib (head)
     precache_model ("progs/drake/dr1_lw.mdl");    // Gib (left wing)
     precache_model ("progs/drake/dr1_rw.mdl");    // Gib (right wing)
     precache_model ("progs/drake/dr1_tail.mdl");  // Gib (tail)
     precache_model ("progs/drake/dragon1.mdl");   // Qtest dragon (various sizes)
     precache_model ("progs/drake/acidbal1.mdl");  // Bile bomb
-    precache_model ("progs/drake/flame2.mdl");    // Flames
-    precache_model ("progs/drake/flame2a.mdl");   // Flames
     precache_model ("progs/drake/ice.mdl");       // Ice Shard
     precache_model ("progs/drake/iceball.mdl");   // Ice Ball
     precache_model ("progs/drake/plasma.mdl");    // Plasma ball
@@ -1049,11 +998,18 @@ void() monster_ryu = {
     precache_sound ("boss1/out1.wav");
     precache_sound ("hknight/hit.wav");     // used by C code, so don't sound2
     precache_sound ("zerstorer/trog/bigboom.wav");
+};
+
+// --> QUAKED monster_ryu (1 0 0) (-56 -56 -24) (56 56 56) Ambush Boss Fast Slow
+void() monster_ryu = {
+    local float powlevel, element, evade;
+
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
     self.gib1mdl = "progs/drake/dr1_lw.mdl";
     self.gib2mdl = "progs/drake/dr1_rw.mdl";
     self.gib3mdl = "progs/drake/dr1_tail.mdl";
-
     if (self.skin == RYUSKIN_GREEN)        self.ryuflags = RYU_USE_ACID;
     else if (self.skin == RYUSKIN_BLUE)    self.ryuflags = RYU_USE_LITE;
     else if (self.skin == RYUSKIN_WHITE)   self.ryuflags = RYU_USE_ICE;
@@ -1063,8 +1019,7 @@ void() monster_ryu = {
     evade = TRUE;
     element = self.ryuflags & RYU_ELEMENTS;
     if (element == RYU_USE_ACID) {
-		self.resist_acid = 0.5;
-		self.resist_poison = 0.5;
+		self.resist_poison = self.resist_acid = 0.5; // Both slime/poisonous and poison crossbow bolt resistance.
 		evade = FALSE;
 		precache_model ("progs/drake/s_fancy.spr");	// careful!!! 176 frames!!!!!
 		if (self.deathstring == "")  self.deathstring = " was melted by a Dragon\n";
@@ -1087,23 +1042,18 @@ void() monster_ryu = {
 	}
 
     // Set water evasion flag.
-    if (evade) { self.ryuflags = self.ryuflags | RYU_NO_WATER; } else { self.ryuflags = self.ryuflags - (self.ryuflags & RYU_NO_WATER); }
+    if (evade) { self.ryuflags = self.ryuflags | RYU_NO_WATER; }
+	else { self.ryuflags = self.ryuflags - (self.ryuflags & RYU_NO_WATER); }
 
     self.ryuflags = self.ryuflags - (self.ryuflags & RYU_ELEMENTS); // Set breath attack flags.
     self.ryuflags = self.ryuflags | element;
 
     // Fast = more alert -- better dodging and aiming.
     // Slow = slower speed, poor tracking.
-    if (self.spawnflags & SPAWNx_SKILL == SPAWNx_SKILL)
-        powlevel = cvar("skill");      // Conflict -- let skill decide.
-    else if (self.spawnflags & SPAWN_FAST)
-        powlevel = 2;
-    else if (self.spawnflags & SPAWN_SLOW)
-        powlevel = 0;
-    else
-        powlevel = 1;
-
-    if (cranked) powlevel = powlevel + 1;      // Just increase awareness.
+    if (self.spawnflags & SPAWNx_SKILL == SPAWNx_SKILL) powlevel = cvar("skill"); // Conflict -- let skill decide.
+    else if (self.spawnflags & SPAWN_FAST) powlevel = 2;
+    else if (self.spawnflags & SPAWN_SLOW) powlevel = 0;
+    else powlevel = 1;
 
     // Set speed.
     if (powlevel) {
@@ -1122,7 +1072,8 @@ void() monster_ryu = {
 		self.mdl = "progs/drake/dragon2.mdl";
         self.th_stand = self.th_walk = self.th_run = wyrm_start;
         self.ryuflags = self.ryuflags | RYU_PATH;
-		self.xfl = self.xfl | XFL_IMMUNITY | XFL_BOSS;
+		self.resist_poison = self.resist_acid = 1;
+		self.bossflag = TRUE;
 		if (self.bboxtype < 1) self.bboxtype = BBOX_WYRM;
 		if (self.health < 1) self.health = 3000;
 		self.gibhealth = MON_NEVERGIB;
@@ -1150,7 +1101,6 @@ void() monster_ryu = {
     self.th_pain    = wyrm_pain;
     self.th_checkattack   = DragonCheckAttack;
     self.th_win     = dragon_win;
-    self.xfl        = self.xfl | XFL_IMMUNITY | XFL_GHOST_BANE;
 
     // Always reset Ammo Resistance to be consistent
     self.resist_shells = self.resist_nails = 0;
@@ -1166,6 +1116,9 @@ void() monster_ryu = {
 void() monster_ryu_wyrm = {
     self.spawnflags = self.spawnflags | SPAWN_WYRM;
     self.classname = "monster_ryu";
+	self.classtype = CT_MONWYRM;
 	if (self.deathstring == "")  self.deathstring = " was obliterated by a Wyrm Dragon\n";
     monster_ryu();
 };
+
+void() monster_dragon_wyrm = { monster_ryu_wyrm(); }; // Drake re-direct.

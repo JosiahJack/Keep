@@ -1,10 +1,10 @@
 ==============================================================
 Title                  : manticorn
-Filename               : q1_manticorn.zip
+Filename               : q1_mcornx00.zip
 Author                 : Madfox
 Email Adress           : catweazel@kpn.mail.nl.ml
 Description            : manticorn for Quake1.
-State                  : fine
+State                  : second state.Blue skin added.
 
 Additional Credits to  : ID Software
 
@@ -17,10 +17,10 @@ Single Player           : /
 Cooperative 2-4 Player  : /
 Deathmatch 1-4 Player   : /
 Difficult Settings      : /
-New Monsters            : yes
+New Monsters            : unicorn00.mdl
 New Sounds              : yes
 New Weapon              : /
-qC                      : yes
+qC                      : mcorn.qc
 
 ==============================================================
 
@@ -41,4 +41,4 @@ me credit, but most of all ID Software'Quake!
 
 ==============================================================  
 
-Madfox 2 februari 2021  
+Madfox 11 may 2021  

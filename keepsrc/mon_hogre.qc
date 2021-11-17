@@ -371,6 +371,26 @@ void() hogre_wakeup1 = {
 	else hogre_wakeup1b();
 };
 
+void() monster_hogre_precache = {
+	precache_model ("progs/ogre.mdl"); // Precache for upgrade
+	precache_model ("progs/h_ogre.mdl"); // Load/Quickload need this
+	precache_model ("progs/ad171/mon_hogre.mdl");
+	precache_model ("progs/ad171/h_hogre.mdl");
+	precache_model (MODEL_PROJ_GRENADE);
+	precache_model ("progs/ad171/w_chainsaw.mdl");
+	precache_model ("progs/ad171/gib_ogfoot1.mdl");
+	precache_model ("progs/ad171/gib_ogfoot2.mdl");
+	precache_model ("progs/ad171/w_ogregl.mdl");
+	precache_sound ("ogre/ogidle.wav");
+	precache_sound ("ogre/ogidle2.wav");
+	precache_sound ("ogre/ogdrag.wav"); // Chainsaw scrap on floor sound
+	precache_sound ("ogre/ogdth.wav"); // Death sound
+	precache_sound ("ogre/ogpain1.wav"); // Pain
+	precache_sound ("ogre/ogsawatk.wav"); // Attack
+	precache_sound ("ad171/ogre/ogleap.wav"); // Leap Attack
+	precache_sound ("ogre/ogwake.wav");
+};
+
 //QUAKED monster_hogre (0.5 0.75 0) (-32 -32 -24) (32 32 64) AMBUSH x METAL NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
 // { model(":progs/ad171/mon_hogre.mdl"); }
 // Ogre, 200 health points.
@@ -383,39 +403,18 @@ void() monster_hogre = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
-	self.mdl = "progs/ad171/mon_hogre.mdl";			// New Ogre Model
+	self.mdl = "progs/ad171/mon_hogre.mdl"; // New Ogre Model
 	self.headmdl = "progs/ad171/h_hogre.mdl";
-	self.gib1mdl = "progs/ad171/w_chainsaw.mdl";		// Chainsaw
-	self.gib2mdl = "progs/ad171/gib_ogfoot1.mdl";		// Left foot
-	self.gib3mdl = "progs/ad171/gib_ogfoot2.mdl";		// Right foot
-	self.gib4mdl = "progs/ad171/w_ogregl.mdl";		// Grenade Launcher
-
-	precache_model ("progs/ogre.mdl");			// Precache for upgrade
-	precache_model ("progs/h_ogre.mdl");		// Load/Quickload need this
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (MODEL_PROJ_GRENADE);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	precache_model (self.gib4mdl);
-
+	self.gib1mdl = "progs/ad171/w_chainsaw.mdl"; // Chainsaw
+	self.gib2mdl = "progs/ad171/gib_ogfoot1.mdl"; // Left foot
+	self.gib3mdl = "progs/ad171/gib_ogfoot2.mdl"; // Right foot
+	self.gib4mdl = "progs/ad171/w_ogregl.mdl"; // Grenade Launcher
 	self.gib1sound = GIB_IMPACT_WOOD;
 	if (random() < 0.5) self.gib1mdl = self.gib4mdl;
-
 	self.idle_sound = "ogre/ogidle.wav";
-	precache_sound (self.idle_sound);
 	self.idle_soundcom = "ogre/ogidle2.wav";
-	precache_sound (self.idle_soundcom);
-	precache_sound ("ogre/ogdrag.wav");		// Chainsaw scrap on floor sound
-	precache_sound ("ogre/ogdth.wav");		// Death sound
 	self.pain_sound = "ogre/ogpain1.wav";
-	precache_sound (self.pain_sound);		// Pain
-	precache_sound ("ogre/ogsawatk.wav");	// Attack
-	precache_sound ("ad171/ogre/ogleap.wav");		// Leap Attack
 	self.sight_sound = "ogre/ogwake.wav";
-	precache_sound (self.sight_sound);
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;
@@ -453,11 +452,9 @@ void() monster_hogre = {
 	self.th_missile = hogre_shoot1;
 	self.th_pain = hogre_pain;
 	self.th_wakeup = hogre_wakeup1;
-
 	self.ammo_rockets = 2;
 	self.classtype = CT_MONHOGRE;		// new style hunter ogre
 	self.classgroup = CG_OGRE;			// One big happy ogre family!
 	self.classmove = MON_MOVEWALK;
-
 	monster_start();
 };

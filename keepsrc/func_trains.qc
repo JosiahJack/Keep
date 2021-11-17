@@ -1,4 +1,41 @@
-// Train FUNCTIONS
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Arcane Dimensions (AD) and ID1
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 19 
+//
+// Implements: Trains, Moving Platforms That Follow a Path
+//
+// Description:
+// A brush model entity that follows a set path specified by path_corner
+// waypoints.
+//=============================================================================
 
 float TRAIN_STARTON = 1;
 float TRAIN_NONSOLID = 2;
@@ -6,8 +43,306 @@ float TRAIN_MODEL = 4;
 float TRAIN_TOUCH = 8;
 float TRAIN_REVERSE = 32;
 
+void() func_train_stop = { // [FUNCTION]
+	if ( self.sounds > 0 && self.noise != "" ) sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play stop sound and switch state OFF
+	self.velocity = self.avelocity = '0 0 0';
+	self.state = STATE_OFF;
+};
+
+vector(entity targ) func_train_origin = { // [FUNCTION]
+	local vector org;
+
+	if (self.bsporigin) org = targ.origin - self.mins;
+	else org = targ.origin;
+	return org;
+};
+
+void() func_train_pause = { // [FUNCTION]
+	if (self.estate == ESTATE_OFF) return; // Block entity state OFF, DISABLE reqs stop sound and trigger event
+	
+	self.velocity = '0 0 0'; // Reset velocity and rotation (stationary object)
+	if (self.faceangle > 0) self.angles = self.finalangle; // Make sure model starts with correct angle for corner
+	self.wait = self.movetarget.wait; // Copy CURRENT path corner wait/delay setup
+	self.delay = self.movetarget.delay;	
+	if (self.movetarget.corner_event) trigger_strs(self.movetarget.corner_event, self); // Fire any event targets on path_corner
+	if (self.movetarget.spawnflags & PATHC_DEADEND || self.movetarget.spawnflags & PATHC_REVERSE) self.direction = 1 - self.direction;  // Deadend logic, setup ready for backwards route.  Check for any path corner instant switch direction logic.
+	if (!self.bsporigin) self.ltime = time; // func_trains that are nonsolid need to reset ltime otherwise they will never pause at path_corner
+	if (self.state == STATE_OFF || self.wait < 0) func_train_stop(); // If the train has been disabled, stop and make sound.  Need to check wait logic at arriving path_corner and not before.  Some ID maps used wait = -1 and some did path corner stacking.
+	else if (self.movetarget.spawnflags & PATHC_NOPAUSE) self.estate_fire(); // nopause spawnflag ALWAYS overrides any wait state
+	else {
+		if (self.wait > 0 ) { // Is wait setup to pause the train?
+			self.nextthink = self.ltime + self.wait + (self.delay * random());
+			if ( self.sounds > 0 ) sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play stop sound if setup
+			self.velocity = self.avelocity = '0 0 0'; // Stop any movement or rotation
+		} else self.nextthink = self.ltime + 0.1; // ID logic - 1 frame pause at each path_corner.  This is a default in the ID (plats.qc, line 242) code!  Hence why there is a NOPAUSE option on path corners.
+
+		self.think = self.estate_fire; // Keep going to next path corner
+	}
+};
+
+void() train_wait = { func_train_pause(); }; // [FUNCTION], Re-direction for map hacks (not used normally)
+
+void() func_train_next = { // [FUNCTION]
+	if (self.estate & ESTATE_DISABLE) func_train_stop(); // Block entity state OFF, DISABLE needs to stop properly
+	else if (self.estate & ESTATE_OFF) return;
+	else if (self.state == STATE_OFF) return;
+
+	// I suppose this is where the train logic goes off the rails!  Two types of routing logic exists, random or exact path choices.
+	if ( self.movetarget.spawnflags & PATHC_TARGET2) { // Only do extra logic routing if alternative route exists
+		// Exact logic paths ALWAYS overriding any choice or defaults.  This will even send a train back the way it came if selected.  This route logic mode will always change direction flow.
+		if (self.movetarget.spawnflags & PATHC_EXACT) {
+			if (self.movetarget.state == STATE_ROUTE2) { // Alternative forward route
+				self.goalentity = self.movetarget.movetarget2;
+				self.direction = 0;
+			} else if (self.movetarget.state == STATE_ROUTE3) { // Backward route
+				self.goalentity = self.movetarget.movetarget3;
+				self.direction = 1;
+			} else { // Default forward route
+				self.goalentity = self.movetarget.movetarget;
+				self.direction = 0;
+			}
+		} else {
+			// Random logic paths behave differently based on current direction
+			// FORWARD  : randomly pick between two forward routes, ignore back route
+			// BACKWARD : ignore last travelled route and randomly pick from two remaining
+			// direction : forward = 0, backward = 1
+			if (self.direction) {
+				self.goalentity = self.movetarget.movetarget3; // Setup default route following backward flow
+				if (random() < 0.5) { // random chance to pick another route?
+					self.direction = 0; // Switch direction to forward and pick fresh route
+					if (self.movelast == self.movetarget.movetarget) self.goalentity = self.movetarget.movetarget2;
+					else if (self.movelast == self.movetarget.movetarget2) self.goalentity = self.movetarget.movetarget;
+				}
+			} else {
+				self.goalentity = self.movetarget.movetarget; // Randomly pick from two forward routes, easy logic
+				if (random() < 0.5) self.goalentity = self.movetarget.movetarget2;
+			}
+		}	
+	} else {
+		// Standard path corner, one forward, one backward route.  Checks if the route entities exist first.  Path corners can take a while to be fully setup.
+		if (self.direction) { // Backward route
+			if (self.movetarget.spawnflags & PATHC_BACKLINK) self.goalentity = self.movetarget.movetarget3; // Spawnflag setup when path_corner has found a link
+			else {
+				self.oldenemy = find (world, target, self.movetarget.targetname);
+				while(self.oldenemy) { // Slowly search world entity list for backlink target
+					if (self.oldenemy.classtype == CT_PATHCORNER) {
+						self.goalentity = self.oldenemy;
+						self.oldenemy = world;
+					} else self.oldenemy = find(self.oldenemy, target, self.movetarget.targetname);
+				}
+			}
+		} else { // Forward route
+			if (self.movetarget.spawnflags & PATHC_TARGET1) self.goalentity = self.movetarget.movetarget; // Spawnflag setup when path_corner has found a link
+			else {
+				self.oldenemy = find (world, targetname, self.movetarget.target); // Slowly search world entity list for forward target
+				while(self.oldenemy) {
+					if (self.oldenemy.classtype == CT_PATHCORNER) {
+						self.goalentity = self.oldenemy;
+						self.oldenemy = world;
+					} else self.oldenemy = find(self.oldenemy, targetname, self.movetarget.target);
+				}
+			}
+		}
+	}
+
+	if (!self.goalentity) func_train_stop(); // If no route entity found, then stop.
+	else { // Route found so setup final details and move towards next corner.
+		if ( self.sounds > 0 && self.noise1 != "") sound (self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Play moving sound if active (sounds = 1 or 5)
+		self.finaldest = func_train_origin(self.goalentity); // Work out NEXT path_corner origin
+		if (self.movetarget.speed > 0) self.distance = self.movetarget.speed; // Check if CURRENT path_corner for a different speed
+		else self.distance = self.speed;
+
+		self.movelast = self.movetarget; // Move forward to next target
+		self.movetarget = self.goalentity;
+		if (self.classtype == CT_SAWBLADE) { // Horrible hack for sawblades to make sure avelocity matches direction of path_corners 
+			self.movedir = normalize(self.movetarget.origin - self.movelast.origin); // Workout movement direction between path corners
+			self.movedir_x = rint(self.movedir_x); // Only interested in 1/0/-1 values
+			self.movedir_y = rint(self.movedir_y);
+			self.movedir_z = rint(self.movedir_z);
+			if (self.movedir_x > 0 || self.movedir_y > 0 || self.movedir_z > 0) self.avelocity = -self.v_angle; // Check for any positive values?
+			else self.avelocity = self.v_angle;
+		}
+
+		if (!self.bsporigin) self.ltime = time; // func_trains that are nonsolid need to reset ltime otherwise they will instantly teleport to next corner.
+		if (self.faceangle > 0) { // Work out the final facing angle for next corner.  Need to go +2 into the path corner chain.
+			self.facetarget = world; // Reset face target first
+			// This only copes with forward/backward routes and does nothing if using alternative routing (target2).
+
+			if (self.direction) { // Backward route
+				if (self.movetarget.spawnflags & PATHC_BACKLINK) self.facetarget = self.movetarget.movetarget3; // Spawnflag setup when path_corner has found a link
+				else {
+					self.oldenemy = find (world, target, self.movetarget.targetname);
+					while(self.oldenemy) { // Slowly search world entity list for backlink target
+						if (self.oldenemy.classtype == CT_PATHCORNER) {
+							self.facetarget = self.oldenemy;
+							self.oldenemy = world;
+						} else self.oldenemy = find(self.oldenemy, target, self.movetarget.targetname); // Keep searching in list for path corner
+					}
+				}
+			} else { // Forward route
+				if (self.movetarget.spawnflags & PATHC_TARGET1) self.facetarget = self.movetarget.movetarget; // Spawnflag setup when path_corner has found a link
+				else {
+					self.oldenemy = find (world, targetname, self.movetarget.target);
+					while(self.oldenemy) { // Slowly search world entity list for forward target
+						if (self.oldenemy.classtype == CT_PATHCORNER) {
+							self.facetarget = self.oldenemy;
+							self.oldenemy = world;
+						} else self.oldenemy = find(self.oldenemy, targetname, self.movetarget.target); // Keep searching in list for path corner
+					}
+				}
+			}
+			
+			// Found +2 path corner?
+			if (self.facetarget) {
+				self.facevector = self.facetarget.origin - self.movetarget.origin; // Find facing angle between next and nextnext :P
+				self.finalangle = vectoangles(self.facevector);
+			} else {
+				self.facevector = self.movetarget.origin - self.origin; // This is not a good situation and will probably end up with a weird angle because there is no end point.
+				self.finalangle = vectoangles(self.facevector);
+			}
+		}
+
+		if (self.movetarget.spawnflags & PATHC_INSTANT) { // Is the next path_corner an instant move?
+			setorigin (self, self.finaldest); // Train entity has stopped moving
+			func_train_pause();
+		} else SUB_CalcMove (self.finaldest, self.distance, func_train_pause); // Finally workout movement (finaldest) and speed (distance)
+	}
+};
+
+void() func_train_resume = { // [FUNCTION]
+	local float pc_dist;
+	
+	if (self.goalentity.classtype != CT_PATHCORNER) self.estate_fire(); // Final destionation not setup correctly, move on
+	pc_dist = fabs(vlen(self.finaldest - self.origin));
+	if (pc_dist > 0) {
+		if ( self.sounds > 0) sound (self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM); // Play moving sound if active (sounds = 1 or 5)
+		if (self.classtype == CT_SAWBLADE) { // Setup sawblades to keep spinning
+			if (self.movedir_x > 0 || self.movedir_y > 0 || self.movedir_z > 0) self.avelocity = -self.v_angle;
+			else self.avelocity = self.v_angle;
+		}
+		
+		if (self.distance < 1) self.distance = self.speed; // Double check distance is setup correctly
+		if (!self.bsporigin) self.ltime = time;
+		SUB_CalcMove (self.finaldest, self.distance, func_train_pause);
+	} else self.estate_fire(); // Too close to final destination, just move on
+};
+
+void() func_train_use = { // [FUNCTION]
+	if (self.estate & ESTATE_BLOCK) return; // Block entity state OFF + DISABLE
+	if (!self.movestart) return; // Can't go anywhere without first path corner
+	if (self.state == STATE_OFF) { // Original ID logic - No toggle, a triggered train stays ON
+		self.state = STATE_ON; // Stop any re-trigger events from reset movement
+		self.estate_fire();
+	}
+};
+
+void() func_train_touch = { // [FUNCTION]
+	if (self.estate & ESTATE_OFF) return; // Train can still hurt if touched, except when OFF = not visible
+	if (other.health < 1 || other.takedamage == DAMAGE_NO) return;
+	if (time < self.attack_finished) return;
+
+	self.attack_finished = time + 0.5;
+	
+	if (other.flags & FL_MONSTER && other.alignment != GOOD) T_Damage (other, self, self, other.max_health + 100, DAMARMOR); // Instant death for monsters, unless good
+	else T_Damage (other, self, self, self.dmg, DAMARMOR); // Small damage but can be lethal because of how often touch runs
+
+	SpawnMeatSpray ( other, other, 250); // Blood and gore at object location not train
+};
+
+void() func_train_startcorner = { // [FUNCTION]
+	if (!self.movestart) self.movestart = find(world, targetname, self.target); // Find first corner (after spawning)
+	if (self.movestart) { // Has the first path corner been found?
+		self.finaldest = func_train_origin(self.movestart); // Move to first path corner (instantly)
+		setorigin (self, self.finaldest);
+		self.movetarget = self.movestart;
+		if (self.direction) self.movelast = self.movestart.movetarget; // Setup last path corner location based on direction
+		else self.movelast = self.movestart.movetarget3;
+		
+		if (!self.movelast) self.movelast = self.movestart; // Double check movelast is valid, if not reset
+		if (self.movetarget.corner_event) trigger_strs(self.movetarget.corner_event, self); // Fire any event targets on path_corner
+	} else {
+		setorigin (self, self.dest0); // Cannot find first corner (bad situation).  Go back to spawn location!
+		self.movetarget = self.movelast = self;
+	}
+};
+
+void() func_train_bmodel_on = { // [FUNCTION]
+	if (self.estate == ESTATE_ON) return; // Stop re-triggering ON state
+
+	// Setup train in different collision/visual states
+	if (self.spawnflags & TRAIN_NONSOLID) {
+		self.movetype = MOVETYPE_PUSH;			// Bmodel interaction
+		self.solid = SOLID_TRIGGER;				// No blocking collision
+	} else if (self.spawnflags & TRAIN_MODEL) { // Useful for targetting systems
+		self.movetype = MOVETYPE_NOCLIP;		// Free movement
+		if (self.spawnflags & TRAIN_TOUCH) self.solid = SOLID_TRIGGER; // Check for touch damage
+		else self.solid = SOLID_NOT;			// No world interaction
+	} else { // Default state - pushing hard collisions.
+		self.movetype = MOVETYPE_PUSH;			// Bmodel interaction
+		self.solid = SOLID_BSP;					// blocking collision
+	}	
+		
+	self.estate = ESTATE_ON;					// Switch on entity
+	self.state = STATE_ON;						// Start train functions
+	setmodel (self, self.mdl);					// Show bmodel/model
+	setsize (self, self.mins , self.maxs);		// Use defined size above
+	StopSound(self,CHAN_VOICE); 				// Stop any sound
+	self.velocity = self.avelocity = '0 0 0';	// reset velocity/rotation
+};
+
+void() func_train_on = { func_train_bmodel_on(); self.estate_fire(); };  // [FUNCTION]
+	
+void() func_train_off = { // [FUNCTION]
+	if (self.estate == ESTATE_OFF) return; // Stop re-triggering OFF state
+
+	self.estate = ESTATE_OFF;			// Switch off entity
+	self.state = STATE_OFF;				// Stop train functions
+	self.movetype = MOVETYPE_NONE;		// Switch off movement
+	self.solid = SOLID_NOT;				// No world interaction
+	setmodel (self, "");				// Remove any bmodel/model
+	StopSound(self,CHAN_VOICE); // Stop any sound
+	setorigin(self, self.finaldest);	// Instantly move to final destionation
+	self.velocity = self.avelocity = '0 0 0';	// reset velocity/rotation
+	self.think = SUB_Null;				// Stop any future thinking
+};
+
+void() func_train_disable = { self.state = STATE_OFF; };  // [FUNCTION], Wait for entity to finish what it was doing
+
+void() func_train_reset = { // [FUNCTION]
+	if (self.spawnflags & ENT_STARTOFF) return; // If the train is still STARTING OFF? then leave it
+	
+	func_train_startcorner();	// Reset train back to first corner
+	self.estate = ESTATE_OFF;	// Switch off entity (make sure on func works)
+	self.state = STATE_OFF;		// Stop train functions
+	self.estate_on();			// Switch train back on (reset location)
+	self.think = SUB_Null;		// Stop any future thinking
+};
+
+void() func_train_blocked = { // [FUNCTION]
+	if (time < self.attack_finished) return; // This is constant crushing or instant death collision
+
+	self.attack_finished = time + 0.5;
+	T_Damage (other, self, self, self.dmg, DAMARMOR);
+};
+
+void() func_train_setup = { // [FUNCTION]
+	if (self.spawnflags & ENT_STARTOFF) func_train_bmodel_on(); // Deal with START OFF functionality first
+	self.spawnflags = self.spawnflags - (self.spawnflags & ENT_STARTOFF); // No longer need this spawnflag, remove it
+	self.estate_on = func_train_on;		// Reset train on function
+	self.estate_use = func_train_use;	// Switch ON train only, no toggle
+	self.estate_fire = func_train_next;	// Move train to next path corner
+	self.state = STATE_OFF;				// Train is OFF, waiting
+	if (self.solid == SOLID_TRIGGER && self.spawnflags & TRAIN_TOUCH) self.touch = func_train_touch; // Check for any touch damage trigger (nonsolid + model only).
+	func_train_startcorner(); // Find the first train corner (target).
+	if (self.movestart) { // Does the first path corner exist?
+		if (self.targetname == "" || self.spawnflags & TRAIN_STARTON) { // No trigger name? = start immediately.  Extra spawnflag to bypass original ID train logic.
+			self.nextthink = self.ltime + 0.1;
+			self.think = self.estate_use;
+		}
+	}
+};
+
 // QUAKED func_train (0 .5 .8) ? STARTON NONSOLID MODEL TOUCH x REVERSE STARTOFF x
-// Bmodel platform moving around entity chain
 // -------- KEYS --------
 // targetname : = "" start moving straight away != "" wait for trigger
 // target : Name of first path_corner to start at (instant move)
@@ -31,485 +366,21 @@ float TRAIN_REVERSE = 32;
 // REVERSE  : Start going backward through path_corner chain
 // STARTOFF : Starts off and waits for trigger
 // -------- NOTES --------
+// Bmodel platform moving around entity chain
 // The target's origin specifies the min point of the train at each corner. 
 // The train spawns at the first target it is pointing at. 
 // Use a chain of path_corners to specify which direction to travel
-
-void() func_train_stop = {
-	// Play stop sound and switch state OFF
-	if ( self.sounds > 0 && self.noise != "" ) 
-		sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
-	self.velocity = self.avelocity = '0 0 0';
-	self.state = STATE_OFF;
-};
-
-vector(entity targ) func_train_origin = {
-	local vector org;
-	if (self.bsporigin) org = targ.origin - self.mins;
-	else org = targ.origin;
-	return org;
-};
-
-void() func_train_pause = {
-	// Block entity state OFF, DISABLE reqs stop sound and trigger event
-	if (self.estate == ESTATE_OFF) return;
-	
-	// Reset velocity and rotation (stationary object)
-	self.velocity = '0 0 0';
-	// Make sure model starts with correct angle for corner
-	if (self.faceangle > 0) self.angles = self.finalangle;
-	
-	// Copy CURRENT path corner wait/delay setup
-	self.wait = self.movetarget.wait;
-	self.delay = self.movetarget.delay;	
-	
-	// Fire any event targets on path_corner
-	if (self.movetarget.corner_event) 
-		trigger_strs(self.movetarget.corner_event, self);
-
-	// Deadend logic, setup ready for backwards route
-	// Check for any path corner instant switch direction logic
-	if (self.movetarget.spawnflags & PATHC_DEADEND || 
-		self.movetarget.spawnflags & PATHC_REVERSE) {
-			self.direction = 1 - self.direction;
-	}
-
-	// func_trains that are nonsolid need to reset ltime
-	// otherwise they will never pause at path_corner
-	if (!self.bsporigin) self.ltime = time;
-
-	// If the train has been disabled, stop and make sound
-	// Need to check wait logic at arriving path_corner and not before
-	// Some ID maps used wait = -1 and some did path corner stacking
-	if (self.state == STATE_OFF || self.wait < 0) func_train_stop();
-	
-	// nopause spawnflag ALWAYS overrides any wait state
-	else if (self.movetarget.spawnflags & PATHC_NOPAUSE) self.estate_fire();
-	else {
-		// Is wait setup to pause the train?
-		if (self.wait > 0 ) {
-			self.nextthink = self.ltime + self.wait + (self.delay * random());
-			// Play stop sound if setup
-			if ( self.sounds > 0 ) sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM);
-			// Stop any movement or rotation
-			self.velocity = self.avelocity = '0 0 0';
-		}
-		// ID logic - 1 frame pause at each path_corner
-		// This is a default in the ID (plats.qc, line 242) code!
-		// Hence why there is a NOPAUSE option on path corners
-		else self.nextthink = self.ltime + 0.1;
-
-		// Keep going to next path corner
-		self.think = self.estate_fire;
-	}
-};
-
-void() func_train_next = {
-	// Block entity state OFF, DISABLE needs to stop properly
-	if (self.estate & ESTATE_DISABLE) func_train_stop();
-	else if (self.estate & ESTATE_OFF) return;
-	else if (self.state == STATE_OFF) return;
-
-	// I suppose this is where the train logic goes off the rails!
-	// Two types of routing logic exists, random or exact path choices
-	//
-	// Only do extra logic routing if alternative route exists
-	if ( self.movetarget.spawnflags & PATHC_TARGET2) {
-		// Exact logic paths ALWAYS overriding any choice or defaults
-		// This will even send a train back the way it came if selected
-		// This route logic mode will always change direction flow
-		if (self.movetarget.spawnflags & PATHC_EXACT) {
-			if (self.movetarget.state == STATE_ROUTE2) {
-				// Alternative forward route
-				self.goalentity = self.movetarget.movetarget2;
-				self.direction = 0;
-			}
-			else if (self.movetarget.state == STATE_ROUTE3) {
-				// Backward route
-				self.goalentity = self.movetarget.movetarget3;
-				self.direction = 1;
-			}
-			else {
-				// Default forward route
-				self.goalentity = self.movetarget.movetarget;
-				self.direction = 0;
-			}
-		}
-
-		// Random logic paths behave differently based on current direction
-		// FORWARD  : randomly pick between two forward routes, ignore back route
-		// BACKWARD : ignore last travelled route and randomly pick from two remaining
-		else {
-			// direction : forward = 0, backward = 1
-			if (self.direction) {
-				// Setup default route following backward flow
-				self.goalentity = self.movetarget.movetarget3;
-				// random chance to pick another route?
-				if (random() < 0.5) {
-					// Switch direction to forward and pick fresh route
-					self.direction = 0;
-					if (self.movelast == self.movetarget.movetarget)
-						self.goalentity = self.movetarget.movetarget2;
-					else if (self.movelast == self.movetarget.movetarget2)
-						self.goalentity = self.movetarget.movetarget;
-				}
-			}
-			else {
-				// Randomly pick from two forward routes, easy logic
-				self.goalentity = self.movetarget.movetarget;
-				if (random() < 0.5) self.goalentity = self.movetarget.movetarget2;
-			}
-		}	
-	}
-
-	// Standard path corner, one forward, one backward route
-	// Check if the route entities exist first
-	// path corners can take a while to be fully setup
-	else {
-		// Backward route
-		if (self.direction) {
-			// Spawnflag setup when path_corner has found a link
-			if (self.movetarget.spawnflags & PATHC_BACKLINK) 
-				self.goalentity = self.movetarget.movetarget3;
-			else {
-				// Slowly search world entity list for backlink target
-				self.oldenemy = find (world, target, self.movetarget.targetname);
-				while(self.oldenemy) {
-					if (self.oldenemy.classtype == CT_PATHCORNER) {
-						self.goalentity = self.oldenemy;
-						self.oldenemy = world;
-					}
-					else self.oldenemy = find(self.oldenemy, target, self.movetarget.targetname);
-				}
-			}
-		}
-		// Forward route
-		else {
-			// Spawnflag setup when path_corner has found a link
-			if (self.movetarget.spawnflags & PATHC_TARGET1) 
-				self.goalentity = self.movetarget.movetarget;
-			else {
-				// Slowly search world entity list for forward target
-				self.oldenemy = find (world, targetname, self.movetarget.target);
-				while(self.oldenemy) {
-					if (self.oldenemy.classtype == CT_PATHCORNER) {
-						self.goalentity = self.oldenemy;
-						self.oldenemy = world;
-					}
-					else self.oldenemy = find(self.oldenemy, targetname, self.movetarget.target);
-				}
-			}
-		}
-	}
-	
-	// This is the last check before moving towards the next corner
-	// If no route entity has been found then stop and do nothing
-	// If route found, setup final details and move towards next corner
-	if (!self.goalentity) func_train_stop();
-	else {
-		// Play moving sound if active (sounds = 1 or 5)
-		if ( self.sounds > 0 && self.noise1 != "") sound (self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
-		// Work out NEXT path_corner origin
-		self.finaldest = func_train_origin(self.goalentity);
-		// Check if CURRENT path_corner for a different speed
-		if (self.movetarget.speed > 0) self.distance = self.movetarget.speed;
-		else self.distance = self.speed;
-
-		// Move forward to next target
-		self.movelast = self.movetarget;
-		self.movetarget = self.goalentity;
-		
-		// Horrible hack for sawblades to make sure avelocity
-		// matches direction of path_corners 
-		if (self.classtype == CT_SAWBLADE) {
-			// Workout movement direction between path corners
-			self.movedir = normalize(self.movetarget.origin - self.movelast.origin);
-			// Only interested in 1/0/-1 values
-			self.movedir_x = rint(self.movedir_x);
-			self.movedir_y = rint(self.movedir_y);
-			self.movedir_z = rint(self.movedir_z);
-			// Check for any positive values?
-			if (self.movedir_x > 0 || self.movedir_y > 0 || self.movedir_z > 0)
-				self.avelocity = -self.v_angle;
-			else self.avelocity = self.v_angle;
-		}
-		
-		// func_trains that are nonsolid need to reset ltime
-		// otherwise they will instantly warp to next corner
-		if (!self.bsporigin) self.ltime = time;
-		
-		// Work out the final facing angle for next corner
-		// Need to go +2 into the path corner chain
-		if (self.faceangle > 0) {
-			// Reset face target first
-			self.facetarget = world;
-			// This only copes with forward/backward routes and
-			// does nothing if using alternative routing (target2)
-			// Check for backward routing first
-			if (self.direction) {
-				// Spawnflag setup when path_corner has found a link
-				if (self.movetarget.spawnflags & PATHC_BACKLINK) 
-					self.facetarget = self.movetarget.movetarget3;
-				else {
-					// Slowly search world entity list for backlink target
-					self.oldenemy = find (world, target, self.movetarget.targetname);
-					while(self.oldenemy) {
-						if (self.oldenemy.classtype == CT_PATHCORNER) {
-							self.facetarget = self.oldenemy;
-							self.oldenemy = world;
-						}
-						// Keep searching in list for path corner
-						else self.oldenemy = find(self.oldenemy, target, self.movetarget.targetname);
-					}
-				}
-			}
-			// Forward route
-			else {
-				// Spawnflag setup when path_corner has found a link
-				if (self.movetarget.spawnflags & PATHC_TARGET1) 
-					self.facetarget = self.movetarget.movetarget;
-				else {
-					// Slowly search world entity list for forward target
-					self.oldenemy = find (world, targetname, self.movetarget.target);
-					while(self.oldenemy) {
-						if (self.oldenemy.classtype == CT_PATHCORNER) {
-							self.facetarget = self.oldenemy;
-							self.oldenemy = world;
-						}
-						// Keep searching in list for path corner
-						else self.oldenemy = find(self.oldenemy, targetname, self.movetarget.target);
-					}
-				}
-			}
-			
-			// Found +2 path corner?
-			if (self.facetarget) {
-				// Find facing angle between next and nextnext :P
-				self.facevector = self.facetarget.origin - self.movetarget.origin;
-				self.finalangle = vectoangles(self.facevector);
-			}
-			else {
-				// This is not a good situation and will probably end up
-				// with a weird angle because there is no end point
-				self.facevector = self.movetarget.origin - self.origin;
-				self.finalangle = vectoangles(self.facevector);
-			}
-		}
-			
-		// Is the next path_corner an instant move?
-		if (self.movetarget.spawnflags & PATHC_INSTANT) {
-			// Train entity has stopped moving
-			setorigin (self, self.finaldest);
-			func_train_pause();
-		}
-		else {
-			// Finally workout movement (finaldest) and speed (distance)
-			SUB_CalcMove (self.finaldest, self.distance, func_train_pause);
-		}
-	}
-};
-
-void() func_train_resume = {
-	local float pc_dist;
-	
-	// Final destionation not setup correctly, move on
-	if (self.goalentity.classtype != CT_PATHCORNER) self.estate_fire();
-	
-	pc_dist = fabs(vlen(self.finaldest - self.origin));
-	if (pc_dist > 0) {
-		// Play moving sound if active (sounds = 1 or 5)
-		if ( self.sounds > 0) sound (self, CHAN_VOICE, self.noise1, self.volume, ATTN_NORM);
-		// Setup sawblades to keep spinning
-		if (self.classtype == CT_SAWBLADE) {
-			if (self.movedir_x > 0 || self.movedir_y > 0 || self.movedir_z > 0)
-				self.avelocity = -self.v_angle;
-			else self.avelocity = self.v_angle;
-		}
-		// Double check distance is setup correctly
-		if (self.distance < 1) self.distance = self.speed;
-		if (!self.bsporigin) self.ltime = time;
-		SUB_CalcMove (self.finaldest, self.distance, func_train_pause);
-	}
-	// Too close to final destination, just move on
-	else self.estate_fire();
-};
-
-void() func_train_use = {
-	// Block entity state OFF + DISABLE
-	if (self.estate & ESTATE_BLOCK) return;
-	// Can't go anywhere without first path corner
-	if (!self.movestart) return;
-
-	// Original ID logic - No toggle, a triggered train stays ON
-	// Stop any re-trigger events from reset movement
-	if (self.state == STATE_OFF) {
-		self.state = STATE_ON;
-		self.estate_fire();
-	}
-};
-
-void() func_train_touch = {
-	// Train can still hurt if touched, except when OFF = not visible
-	if (self.estate & ESTATE_OFF) return;
-	if (other.health < 1 || other.takedamage == DAMAGE_NO) return;
-	if (time < self.attack_finished) return;
-
-	self.attack_finished = time + 0.5;
-	// Instant death for monsters
-	if (other.flags & FL_MONSTER) 
-		T_Damage (other, self, self, other.max_health + 100, DAMARMOR);
-	else 
-		// Small damage but can be lethal because of how often touch runs
-		T_Damage (other, self, self, self.dmg, DAMARMOR);
-
-	// Blood and gore at object location not train
-	SpawnMeatSpray ( other, other, 250);
-};
-
-void() func_train_startcorner = {
-	// Find first corner (after spawning)
-	if (!self.movestart) self.movestart = find(world, targetname, self.target);
-	
-	// Has the first path corner been found?
-	if (self.movestart) {
-		// Move to first path corner (instantly)
-		self.finaldest = func_train_origin(self.movestart);
-		setorigin (self, self.finaldest);
-		self.movetarget = self.movestart;
-		
-		// Setup last path corner location based on direction
-		if (self.direction) self.movelast = self.movestart.movetarget;
-		else self.movelast = self.movestart.movetarget3;
-		// Double check movelast is valid, if not reset
-		if (!self.movelast) self.movelast = self.movestart;
-
-		// Fire any event targets on path_corner
-		if (self.movetarget.corner_event) 
-			trigger_strs(self.movetarget.corner_event, self);
-	}
-	// Cannot find first corner (bad situation)
-	// Go back to spawn location!
-	else {
-		setorigin (self, self.dest0);
-		self.movetarget = self.movelast = self;
-	}
-};
-
-void() func_train_bmodel_on = {
-	// Stop re-triggering ON state
-	if (self.estate == ESTATE_ON) return;
-
-	// Setup train in different collision/visual states
-	if (self.spawnflags & TRAIN_NONSOLID) {
-		self.movetype = MOVETYPE_PUSH;			// Bmodel interaction
-		self.solid = SOLID_TRIGGER;				// No blocking collision
-	}
-	// Useful for targetting systems
-	else if (self.spawnflags & TRAIN_MODEL) {
-		self.movetype = MOVETYPE_NOCLIP;		// Free movement
-		if (self.spawnflags & TRAIN_TOUCH)		// Check for touch damage
-			self.solid = SOLID_TRIGGER;
-		else self.solid = SOLID_NOT;			// No world interaction
-	} else {
-		// default state - push/collision
-		self.movetype = MOVETYPE_PUSH;			// Bmodel interaction
-		self.solid = SOLID_BSP;					// blocking collision
-	}	
-		
-	self.estate = ESTATE_ON;					// Switch on entity
-	self.state = STATE_ON;						// Start train functions
-	setmodel (self, self.mdl);					// Show bmodel/model
-	setsize (self, self.mins , self.maxs);		// Use defined size above
-	StopSound(self,CHAN_VOICE); 				// Stop any sound
-	self.velocity = self.avelocity = '0 0 0';	// reset velocity/rotation
-};
-
-void() func_train_on = {
-	func_train_bmodel_on();
-	self.estate_fire();
-}
-	
-void() func_train_off = {
-	// Stop re-triggering OFF state
-	if (self.estate == ESTATE_OFF) return;
-
-	self.estate = ESTATE_OFF;			// Switch off entity
-	self.state = STATE_OFF;				// Stop train functions
-	self.movetype = MOVETYPE_NONE;		// Switch off movement
-	self.solid = SOLID_NOT;				// No world interaction
-	setmodel (self, "");				// Remove any bmodel/model
-	StopSound(self,CHAN_VOICE); // Stop any sound
-	setorigin(self, self.finaldest);	// Instantly move to final destionation
-	self.velocity = self.avelocity = '0 0 0';	// reset velocity/rotation
-	self.think = SUB_Null;				// Stop any future thinking
-};
-
-void() func_train_disable = {
-	// Wait for entity to finish what it was doing
-	self.state = STATE_OFF;
-};
-
-void() func_train_reset = {
-	// If the train is still STARTING OFF? then leave it
-	if (self.spawnflags & ENT_STARTOFF) return;
-	
-	func_train_startcorner();	// Reset train back to first corner
-	self.estate = ESTATE_OFF;	// Switch off entity (make sure on func works)
-	self.state = STATE_OFF;		// Stop train functions
-	self.estate_on();			// Switch train back on (reset location)
-	self.think = SUB_Null;		// Stop any future thinking
-};
-
-void() func_train_blocked = {
-	// This is constant crushing or instant death collision
-	if (time < self.attack_finished) return;
-	self.attack_finished = time + 0.5;
-	T_Damage (other, self, self, self.dmg, DAMARMOR);
-};
-
-void() func_train_setup = {
-	// Deal with START OFF functionality first
-	if (self.spawnflags & ENT_STARTOFF) func_train_bmodel_on();
-	// No longer need this spawnflag, remove it
-	self.spawnflags = self.spawnflags - (self.spawnflags & ENT_STARTOFF);
-	self.estate_on = func_train_on;		// Reset train on function
-	self.estate_use = func_train_use;	// Switch ON train only, no toggle
-	self.estate_fire = func_train_next;	// Move train to next path corner
-	self.state = STATE_OFF;				// Train is OFF, waiting
-
-	// Check for any touch damage trigger (nonsolid + model only)
-	if (self.solid == SOLID_TRIGGER && self.spawnflags & TRAIN_TOUCH) 
-		self.touch = func_train_touch;
-	
-	// Find the first train corner (target)
-	func_train_startcorner();
-	// Does the first path corner exist?
-	if (self.movestart) {
-		// no trigger name? = start immediately
-		// Extra spawnflag to bypass original ID train logic
-		if (self.targetname == "" || self.spawnflags & TRAIN_STARTON) {
-			self.nextthink = self.ltime + 0.1;
-			self.think = self.estate_use;
-		}
-	}
-};
-
-void() func_train = {
-	// 0 = No sound, 1 = train, 5 = custom
-	if (self.sounds == 0) {
+void() func_train = { // [ENTITY]
+	if (self.sounds == 0) { // 0 = No sound, 1 = train, 5 = custom
 		self.noise = SOUND_EMPTY;
 		self.noise1 = SOUND_EMPTY;
 	} else if (self.sounds == 1) {
 		self.noise = ("plats/train2.wav");
 		self.noise1 = ("plats/train1.wav");
-	}
-	// Sounds from func_plat (base sounds)
-	else if (self.sounds == 11) {
+	} else if (self.sounds == 11) { // Sounds from func_plat (base sounds)
 		self.noise = "plats/plat2.wav";
 		self.noise1 = "plats/plat1.wav";
-	}
-	// Sounds from func_plat (base sounds)
-	else if (self.sounds == 12) {
+	} else if (self.sounds == 12) { // Sounds from func_plat (base sounds)
 		self.noise = "plats/medplat2.wav";
 		self.noise1 = "plats/medplat1.wav";
 	} else {
@@ -518,23 +389,19 @@ void() func_train = {
 	}
 	precache_sound (self.noise);
 	precache_sound (self.noise1);
-	trigger_bmodel_volume(1);
+	SUB_BoundVolume(1);
 	self.classtype = CT_FUNCTRAIN;
 	self.classgroup = CG_FUNCMOVER;
 	self.state = STATE_OFF;
 	self.angles = '0 0 0';
 	if (self.speed < 1) self.speed = 100;
 	if (!self.dmg) self.dmg = 2;
-
-	// Cannot have nonsolid and nodraw together, they are different entity types
-	// nonsolid = bmodel with no collision, nodraw = point entity with empty model
-	if (self.spawnflags & TRAIN_NONSOLID && self.spawnflags & TRAIN_MODEL) {
+	if (self.spawnflags & TRAIN_NONSOLID && self.spawnflags & TRAIN_MODEL) { // Cannot have nonsolid and nodraw together, they are different entity types nonsolid = bmodel with no collision, nodraw = point entity with empty model
 		dprint("\b[FUNC_TRAIN]\b Cannot be bmodel AND model!\n");
 		self.spawnflags = self.spawnflags - TRAIN_MODEL;
 	}
 	
-	// There are two types of func_trains (bmodel or point entities)
-	// Setup train collision / block damage
+	// There are two types of func_trains (bmodel or point entities).  Setup train collision / block damage.
 	if ( self.spawnflags & TRAIN_MODEL ) {
 		setmodel (self, self.model);			// Setup bmodel for origin
 		self.dest0 = bmodel_origin(self);		// Calculate reset location
@@ -574,32 +441,19 @@ void() func_train = {
 	//   with the delay spawn (off) function for extra functionality
 	// * Added developer warning if both spawnflag values are set
 	// * This was changed to fix problems with delay spawning functionality
-	//
-	if (self.spawnflags & TRAIN_STARTON && self.spawnflags & ENT_STARTOFF) {
-		dprint("\b[FUNC_TRAIN]\b Start on + off both active!\n");
-		//self.spawnflags = self.spawnflags - ENT_STARTOFF;
-	}
+	if (self.spawnflags & TRAIN_STARTON && self.spawnflags & ENT_STARTOFF) dprint("\b[FUNC_TRAIN]\b Start on + off both active!\n");
 
-	// Setup train direction (switchable via path corners)
-	if (self.spawnflags & TRAIN_REVERSE) self.direction = 1;
+	if (self.spawnflags & TRAIN_REVERSE) self.direction = 1; // Setup train direction (switchable via path corners)
 	else self.direction = 0;
-	
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
+
+	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_on = func_train_bmodel_on;
 	self.estate_off = func_train_off;
 	self.estate_reset = func_train_reset;
 	self.estate_disable = func_train_disable;
 	
-	// Check for a target field, to teleport/move towards?
-	// This really should be an error and removed instead
-	// But someone might use a func_train as a world object
-	// Best to give a developer warning as well
-	if (self.target == "") {
-		dprint("\b[FUNC_TRAIN]\b going nowhere without target!\n");
-		self.estate_on();
-		return;
-	}
+	// Check for a target field, to teleport/move towards? This really should be an error and removed instead, but someone might use a func_train as a world object.
+	if (self.target == "") { dprint("\b[FUNC_TRAIN]\b going nowhere without target!\n"); self.estate_on(); return; } // Best to give a developer warning as well
 	
 	if (self.spawnflags & ENT_STARTOFF) {
 		// A func_train needs to be setup first before any being useable
@@ -608,23 +462,15 @@ void() func_train = {
 		// Once setup is complete, the use/on functions will be reset
 		self.estate_use = func_train_setup;
 		self.estate_on = func_train_setup;
-		// Switch train OFF and wait for trigger/estate
-		self.estate_off();
+		self.estate_off(); // Switch train OFF and wait for trigger/estate
 	} else {
 		// A func_train needs to be setup first before any being useable
 		// The use/on estate redirects should point at setup until complete
 		self.estate_use = func_train_setup;
 		self.estate_on = func_train_setup;
-		// Switch train ON to catch anything (droptofloor)
-		func_train_bmodel_on();
-		
-		// The setup function has to run on the second frame (think delay)
-		// to allow for all the targets (path_corners) to be setup correctly
+		func_train_bmodel_on(); // Switch train ON to catch anything (droptofloor)
 		self.ltime = time;
-		self.nextthink = self.ltime + 0.1;
+		self.nextthink = self.ltime + 0.1; // The setup function has to run on the second frame (think delay) to allow for all the targets (path_corners) to be setup correctly.
 		self.think = func_train_setup;
 	}
 };
-
-// Re-direction for map hacks (not used normally)
-void() train_wait = { func_train_pause(); };

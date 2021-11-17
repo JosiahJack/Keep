@@ -291,9 +291,19 @@ void() ClientDeBuff = {
 			if (self.armorvalue < 100) T_Repair(self,1,FALSE); // recharge armor
 		}
 	}
+
+	// Holy Freeze
+    if (self.slow_finished) {
+        self.velocity = self.velocity * 0.8; // Less damping for players
+        if (self.slow_ping < time)
+            if (self.invisible_finished < time && !(self.flags & FL_NOTARGET)) Particle_Cube (self, 1, 41); // Gray and blue for slow mist.
+        if (self.slow_finished < time) { // just stopped
+            self.slow_finished = self.slow_time = self.slow_ping = 0;
+        }
+    }
 	
 	// Don't need sound or visual updates for cinematic stuff
-	if (cinematic_running) return;
+	if (cinematic_running || cutscene) return;
 	
 	// Check for any debuff screen updates?
 	if (self.cshift_upd) {
@@ -362,7 +372,7 @@ void(entity targ) BleedDeBuff = {
 	if (!(targ.flags & FL_CLIENT)) return; // Sanity check!
 	if (targ.health <= DEBUFF_BLEED_MIN) return; // Check for bleeding and minimum amount of health for debuff
 	if (targ.bleeding == TRUE) { T_Damage (targ, self, self, DEBUFF_BLEED_MIN, DAMARMOR); return; } // Do minimum damage, checked min does not kill before
-	if (targ.items & (IT_INVULNERABILITY | IT_SUIT)) { T_Damage (targ, self, self, DEBUFF_BLEED_DMG, DAMARMOR); return; } // Immune to debuff if using Pent of Protection or BioSuit
+	if (targ.items & (IT_INVULNERABILITY | IT_SUIT) || targ.flags & FL_GODMODE) { T_Damage (targ, self, self, DEBUFF_BLEED_DMG, DAMARMOR); return; } // Immune to debuff if using Pent of Protection or BioSuit
 
 	targ.bleeding = TRUE; // Starting bleeding!
 	targ.bleeding_time = time + map_bleedingdmg_z; // Pause before bleeding Healing starts (def=1s)

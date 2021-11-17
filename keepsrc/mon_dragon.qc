@@ -544,48 +544,50 @@ void () dragon_activate = {
       dragon_use ();
 };
 
+void () monster_dragon_precache = {
+	precache_model ("progs/drake/dragon.mdl");
+	precache_model ("progs/quoth/fireball.mdl");
+	precache_model ("progs/drake/drggib01.mdl");
+	precache_model ("progs/drake/drggib02.mdl");
+	precache_model ("progs/drake/drggib03.mdl");
+	precache_sound ("rogue/dragon/see.wav");
+	precache_sound ("rogue/dragon/active.wav");
+	precache_sound ("rogue/dragon/attack.wav");
+	precache_sound ("hipnotic/misc/quakeend.wav");
+	precache_sound ("rogue/dragon/pain.wav");
+	precache_sound ("rogue/dragon/death.wav");
+};
+
 void () monster_dragon = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-   self.mdl = "progs/drake/dragon.mdl";
-   precache_model ("progs/drake/dragon.mdl");
-   precache_model ("progs/quoth/fireball.mdl");
-   self.gib1mdl = "progs/drake/drggib01.mdl";
-   self.gib2mdl = "progs/drake/drggib02.mdl";
-   self.gib3mdl = "progs/drake/drggib03.mdl";
-   precache_model ("progs/drake/drggib01.mdl");
-   precache_model ("progs/drake/drggib02.mdl");
-   precache_model ("progs/drake/drggib03.mdl");
-   precache_sound ("rogue/dragon/see.wav");
-   precache_sound ("rogue/dragon/active.wav");
-   precache_sound ("rogue/dragon/attack.wav");
-   precache_sound ("hipnotic/misc/quakeend.wav");
-   precache_sound ("rogue/dragon/pain.wav");
-   precache_sound ("rogue/dragon/death.wav");
-   self.dragonInRoom = DT_ROOM_A;
-   self.dragonInTransit = FALSE;
-   self.dragonAttacking = FALSE;
-   self.playerInRoom = DT_ROOM_A;
-   self.playerInTransit = FALSE;
-   self.solid = SOLID_SLIDEBOX;
-   self.movetype = MOVETYPE_STEP;
-   setmodel (self,"progs/drake/dragon.mdl");
-   setsize (self,VEC_HULL2_MIN,VEC_HULL2_MAX);
-   if (self.health < 1) self.health = 4000;
-   //if (self.target == "") self.target = "dragondoor"; //Quell unnecessary warnings
-   self.th_run = dragon_walk1;
-   self.th_pain = dragon_pain;
-   self.th_die = dragon_death1;
-   self.dragonPainSequence = TRUE;
+	self.mdl = "progs/drake/dragon.mdl";
+	self.gib1mdl = "progs/drake/drggib01.mdl";
+	self.gib2mdl = "progs/drake/drggib02.mdl";
+	self.gib3mdl = "progs/drake/drggib03.mdl";
+	self.dragonInRoom = DT_ROOM_A;
+	self.dragonInTransit = FALSE;
+	self.dragonAttacking = FALSE;
+	self.playerInRoom = DT_ROOM_A;
+	self.playerInTransit = FALSE;
+	self.solid = SOLID_SLIDEBOX;
+	self.movetype = MOVETYPE_STEP;
+	setmodel (self,"progs/drake/dragon.mdl");
+	setsize (self,VEC_HULL2_MIN,VEC_HULL2_MAX);
+	if (self.health < 1) self.health = 4000;
+	self.th_run = dragon_walk1;
+	self.th_pain = dragon_pain;
+	self.th_die = dragon_death1;
+	self.dragonPainSequence = TRUE;
+	setup_passivestate(self); // Check passive system for exceptions
 
-	// Check passive system for exceptions
-	setup_passivestate(self);
+	self.th_stand = self.th_walk = SUB_Null;
+	self.th_missile = SUB_Null;
+	monster_start();
 
-   AddToTotals(self);
-   self.nextthink = (self.nextthink + 0.100);
+	self.nextthink = (self.nextthink + 0.100);
 	if (self.deathstring == "")  self.deathstring = " was annihilated by the Dragon\n";
-   self.think = dragon_activate;
+	self.think = dragon_activate;
 };
 
 void () dragon_corner = {

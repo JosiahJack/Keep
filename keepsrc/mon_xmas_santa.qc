@@ -320,13 +320,32 @@ void() santa_die =
 	}
 };
 
-/*======================================================================
-QUAKED monster_santa (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
-void() monster_xmas_santa =
-{
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+void() monster_xmas_santa_precache = {
+	precache_model ("progs/xmas/mon_santa.mdl");
+	precache_model ("progs/xmas/h_santa.mdl");
+	precache_model ("progs/xmas/gib_santagun.mdl");
+	precache_model ("progs/xmas/gib_santasack.mdl");
+	precache_model ("progs/xmas/gib_snowball.mdl");
+	precache_model (MODEL_PROJ_SNOWBALL);
+	precache_sound ("xmas/santa/good_hohoho.wav");
+	precache_sound ("xmas/santa/good_hohoho.wav");
+	precache_sound ("xmas/santa/good_saved.wav");
+	precache_sound ("xmas/santa/hohoho.wav");
+	precache_sound ("xmas/santa/laugh1.wav");
+	precache_sound ("xmas/santa/laugh3_com.wav");
+	precache_sound ("xmas/santa/hohoho.wav");
+	precache_sound ("xmas/santa/sight.wav");
+	precache_sound ("xmas/santa/sack_swing.wav"); // Attack melee/range
+	precache_sound ("xmas/santa/sack_hit.wav");
+	precache_sound ("xmas/santa/fire.wav");
+	precache_sound ("xmas/santa/pain1.wav");
+	precache_sound ("xmas/santa/pain2.wav");
+	precache_sound ("xmas/santa/death2.wav");
+};
+
+// QUAKED monster_santa (1 0 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_xmas_santa = {
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.mdl = "progs/xmas/mon_santa.mdl";		// Big Sack Man!
 	self.headmdl = "progs/xmas/h_santa.mdl";	// Pointy Face
@@ -336,58 +355,27 @@ void() monster_xmas_santa =
 	self.gib1sound = GIB_IMPACT_WOOD;
 	self.gib2sound = GIB_IMPACT_WOOD;
 
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	precache_model (MODEL_PROJ_SNOWBALL);
-
 	// Idle/Sight sounds for GOOD/EVIL santa
 	if (self.spawnflags & MON_SANTA_GOOD) {
 		self.idle_sound = "xmas/santa/good_hohoho.wav";
-		precache_sound (self.idle_sound);
 		self.sight_sound = "xmas/santa/good_hohoho.wav";
-		precache_sound (self.sight_sound);	
-		// Touch trigger - "My dear boy, you saved me!"
-		self.noise2 = "xmas/santa/good_saved.wav";
-		precache_sound (self.noise2);
-	}
-	else {
-		// Evil santa has combat idle sounds
-		self.idle_sound = "xmas/santa/hohoho.wav";	// Slow ho-ho-ho
+		self.noise2 = "xmas/santa/good_saved.wav"; // Touch trigger - "My dear boy, you saved me!"
+	} else {
+		self.idle_sound = "xmas/santa/hohoho.wav";	// Evil santa has combat idle sounds.  Slow ho-ho-ho
 		self.idle_sound2 = "xmas/santa/laugh1.wav";	// long laugh
-		precache_sound (self.idle_sound);
-		precache_sound (self.idle_sound2);
 		self.idle_soundcom = "xmas/santa/laugh3_com.wav";
 		self.idle_soundcom2 = "xmas/santa/hohoho.wav";
-		precache_sound (self.idle_soundcom);
-		precache_sound (self.idle_soundcom2);
-		// Sight sounds - "Come sit on santa's lap little human!"
-		self.sight_sound = "xmas/santa/sight.wav";
-		precache_sound (self.sight_sound);
+		self.sight_sound = "xmas/santa/sight.wav"; // Sight sound - "Come sit on santa's lap little human!"
 	}
-	
-	// Attack melee/range
-	precache_sound ("xmas/santa/sack_swing.wav");
-	precache_sound ("xmas/santa/sack_hit.wav");
-	precache_sound ("xmas/santa/fire.wav");
-	
-	// precache sight, pain and death (changes on type)
+
 	self.pain_sound = "xmas/santa/pain1.wav";
 	self.pain_sound2 = "xmas/santa/pain2.wav";
-	// Fading out slow ho-ho-ho death sound
-	self.death_sound = "xmas/santa/death2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-	precache_sound (self.death_sound);
-
+	self.death_sound = "xmas/santa/death2.wav"; // Fading out slow ho-ho-ho death sound
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
 	self.flags = FL_MONSTER;		// Reset flag (no user settings)
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)		
-
 	if (self.health < 1) self.health = 1200;
 	self.gibhealth = -60;			// Difficult to gib
 	self.blockudeath = TRUE;		// no humanoid death sound
@@ -409,8 +397,7 @@ void() monster_xmas_santa =
 	self.reflectlightning = TRUE;	// Reflect lightning strikes
 	self.reflectplasma = TRUE;		// Reflect plasma projectiles
 
-	// Pain/Death functions
-	self.th_pain = santa_pain;
+	self.th_pain = santa_pain; // Pain/Death functions
 	self.th_die = santa_die;
 
 	// Check for random rotation setup and angle limits
@@ -446,8 +433,7 @@ void() monster_xmas_santa =
 		self.th_walk = santa_seated;
 		self.th_run = santa_seated;
 		self.waitmin = 0;
-	}
-	else {
+	} else {
 		// Default EVIL Santa!
 		self.th_checkattack = SantaCheckAttack;
 		self.th_stand = santa_stand1;
@@ -460,6 +446,5 @@ void() monster_xmas_santa =
 	self.classtype = CT_MONSANTA;
 	self.classgroup = CG_XMAS;
 	self.classmove = MON_MOVEWALK;
-
 	monster_start();	
 };

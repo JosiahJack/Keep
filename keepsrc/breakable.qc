@@ -256,6 +256,7 @@ string SOUND_AXE_STONE = "player/axhit2.wav";			// stone impact
 
 void() make_breakable_debris;
 void() BecomeExplosion;
+void(float fx,vector spot) Tent_Point;
 
 /*QUAKED func_breakable (0 .5 .8) ? STARTOFF NODAMAGE EXPLOSION SILENT DAMAGE NOMOSTER NOSOUND NOROTATE Not_Easy Not_Normal Not_Hard Not_DM
 Spawn breakable objects from a bmodel
@@ -556,11 +557,7 @@ void() funcbreakable_use = {
 		setsize(self, VEC_ORIGIN, VEC_ORIGIN);
 		// Produce explosion sprite/particle effect using attachment entity
 		if (self.spawnflags & BREAK_EXPLOSION) {
-			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-			WriteByte (MSG_BROADCAST, TE_EXPLOSION);
-			WriteCoord (MSG_BROADCAST, self.attachment.origin_x);
-			WriteCoord (MSG_BROADCAST, self.attachment.origin_y);
-			WriteCoord (MSG_BROADCAST, self.attachment.origin_z);
+			Tent_Point(TE_EXPLOSION,self.attachment.origin);
 			SpawnExplosion(EXPLODE_SMALL, self.attachment.origin, SOUND_REXP3);
 			entity_hide(self); // Do no remove breakable, the rumble is still using the noise keys for impact sounds
 		}
@@ -1372,16 +1369,16 @@ void() misc_breakable_pot_setup = {
 	else if (self.brkmdltype > 15 && self.brkmdltype < 21) self.brkmdltype = 15;
 
 	// Pick model
-	if (self.brkmdltype == 11) self.mdl = "progs/brk_pot1a.mdl";
-	else if (self.brkmdltype == 12) self.mdl = "progs/brk_pot1b.mdl";
-	else if (self.brkmdltype == 13) self.mdl = "progs/brk_pot1c.mdl";
-	else if (self.brkmdltype == 14) self.mdl = "progs/brk_pot1d.mdl";
-	else if (self.brkmdltype == 15) self.mdl = "progs/brk_pot1aflr.mdl";
-	else if (self.brkmdltype == 21) self.mdl = "progs/brk_pot2a.mdl";
-	else if (self.brkmdltype == 22) self.mdl = "progs/brk_pot2b.mdl";
-	else if (self.brkmdltype == 23) self.mdl = "progs/brk_pot2c.mdl";
-	else if (self.brkmdltype == 24) self.mdl = "progs/brk_pot2d.mdl";
-	else if (self.brkmdltype == 25) self.mdl = "progs/brk_pot2aflr.mdl";
+	if (self.brkmdltype == 11) self.mdl = "progs/ad181/brk_pot1a.mdl";
+	else if (self.brkmdltype == 12) self.mdl = "progs/ad181/brk_pot1b.mdl";
+	else if (self.brkmdltype == 13) self.mdl = "progs/ad181/brk_pot1c.mdl";
+	else if (self.brkmdltype == 14) self.mdl = "progs/ad181/brk_pot1d.mdl";
+	else if (self.brkmdltype == 15) self.mdl = "progs/ad181/brk_pot1aflr.mdl";
+	else if (self.brkmdltype == 21) self.mdl = "progs/ad181/brk_pot2a.mdl";
+	else if (self.brkmdltype == 22) self.mdl = "progs/ad181/brk_pot2b.mdl";
+	else if (self.brkmdltype == 23) self.mdl = "progs/ad181/brk_pot2c.mdl";
+	else if (self.brkmdltype == 24) self.mdl = "progs/ad181/brk_pot2d.mdl";
+	else if (self.brkmdltype == 25) self.mdl = "progs/ad181/brk_pot2aflr.mdl";
 	precache_model(self.mdl);
 
 	if (self.brkmdltype == 11 || self.brkmdltype == 21) { // Pot 1a and 2a
@@ -1414,15 +1411,15 @@ void() misc_breakable_pot_setup = {
 	
 	// Setup breakable parts for each model type
 	if (self.brkmdltype >= 11 && self.brkmdltype <= 15) {
-		self.brkobj1 = "progs/brk_pot1part1.mdl";
-		self.brkobj2 = "progs/brk_pot1part2.mdl";
-		self.brkobj3 = "progs/brk_pot1part3.mdl";
-		self.brkobj4 = "progs/brk_pot1part4.mdl";
+		self.brkobj1 = "progs/ad181/brk_pot1part1.mdl";
+		self.brkobj2 = "progs/ad181/brk_pot1part2.mdl";
+		self.brkobj3 = "progs/ad181/brk_pot1part3.mdl";
+		self.brkobj4 = "progs/ad181/brk_pot1part4.mdl";
 	} else if (self.brkmdltype >= 21 && self.brkmdltype <= 25) {
-		self.brkobj1 = "progs/brk_pot2part1.mdl";
-		self.brkobj2 = "progs/brk_pot2part2.mdl";
-		self.brkobj3 = "progs/brk_pot2part3.mdl";
-		self.brkobj4 = "progs/brk_pot2part4.mdl";
+		self.brkobj1 = "progs/ad181/brk_pot2part1.mdl";
+		self.brkobj2 = "progs/ad181/brk_pot2part2.mdl";
+		self.brkobj3 = "progs/ad181/brk_pot2part3.mdl";
+		self.brkobj4 = "progs/ad181/brk_pot2part4.mdl";
 	}
 	func_breakable_ceramic_model();
 };

@@ -523,11 +523,8 @@ void()	dprince_dieb18	=[	$deathb18,	dprince_dieb19	] {};
 void()	dprince_dieb19	=[	$deathb19,	dprince_dieb20	] {monster_death_postcheck();};
 void()	dprince_dieb20	=[	$deathb20,	dprince_dieb20	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
-void() dprince_die =
-{
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+void() dprince_die = {
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// regular death
 	if (!self.gibbed) {
@@ -537,23 +534,34 @@ void() dprince_die =
 	}
 };
 
+void() monster_dprince_precache = {
+	precache_model ("progs/ad181/mon_dprince.mdl");
+	precache_model ("progs/ad181/h_dprince.mdl");
+	precache_model ("progs/ad181/w_dprincesword.mdl");
+	precache_model ("progs/ad171/gib_knfoot_l.mdl");
+	precache_model ("progs/ad171/gib_knfoot_r.mdl");
+	precache_model (MODEL_PROJ_DPRINCE1R);
+	precache_model (MODEL_PROJ_DPRINCE2R);
+	precache_model (MODEL_PROJ_DPRINCE1B);	
+	precache_model (MODEL_PROJ_DPRINCE2B);
+	precache_sound ("hknight/idle.wav");
+	precache_sound ("hknight/attack1.wav"); // Firing of magic spikes (first 0.1s must loop)
+	precache_sound ("hknight/hit.wav");
+	precache_sound ("ad171/wraith/bounce.wav");
+	precache_sound ("hknight/sight1.wav");
+	precache_sound ("hknight/pain1.wav");
+	precache_sound ("hknight/death1.wav");
+};
+
 // QUAKED monster_dprince (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_dprince = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad181/mon_dprince.mdl";			// New Hell Knight
 	self.headmdl = "progs/ad181/h_dprince.mdl";
 	self.gib1mdl = "progs/ad181/w_dprincesword.mdl";	// Unique sword
 	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
 	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	precache_model (self.gib1mdl);
-
 	self.gib1sound = GIB_IMPACT_METALA;
 	if (random() < 0.5) self.gib2mdl = "";
 	if (random() < 0.5) self.gib3mdl = "";
@@ -571,33 +579,15 @@ void() monster_dprince = {
 		self.attack_proj1 = MODEL_PROJ_DPRINCE1B;	// Steering rocket
 		self.attack_proj2 = MODEL_PROJ_DPRINCE2B;	// Blue hazard plasma
 	}
-	precache_model (self.attack_proj1);	
-	precache_model (self.attack_proj2);	
 	
 	self.idle_sound = "hknight/idle.wav";
-	precache_sound (self.idle_sound);
-
-	// Firing of magic spikes (first 0.1s must loop)
-	precache_sound ("hknight/attack1.wav");
-
-	// TE_KNIGHTSPIKE = Magic spike hitting the wall
-	// Has got to be in this location because the
-	// filename is hardcoded (engine.exe)
-	precache_sound ("hknight/hit.wav");
-	precache_sound ("ad171/wraith/bounce.wav");
-
 	self.sight_sound = "hknight/sight1.wav";
-	precache_sound (self.sight_sound);
 	self.pain_sound = "hknight/pain1.wav";
 	self.death_sound = "hknight/death1.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.death_sound);
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
 	if (self.health < 1) self.health = 400;
-
 	self.gibhealth = -50;
 	self.gibbed = FALSE;				// Starts complete
 	self.pain_flinch = 400;				// Really low chance of pain
@@ -633,14 +623,9 @@ void() monster_dprince = {
 	self.th_missile = dprince_range;
 	self.th_pain = dprince_pain;
 	self.th_die = dprince_die;
-
-	// randomize last melee attack
-	self.meleeattack = rint(random()*3);
-
+	self.meleeattack = rint(random()*3); // randomize last melee attack
 	self.classtype = CT_MONDPRINCE;
 	self.classgroup = CG_DCAPTAIN;
 	self.classmove = MON_MOVEWALK;
-	
-	// Start monster (default)
 	monster_start();
 };

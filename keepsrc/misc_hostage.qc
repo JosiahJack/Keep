@@ -1,88 +1,97 @@
-// PM:  Use this only for cutscene actors.  If you want Quake guys as
-//  adversaries, use 'monster_ranger' instead.  Ideally, I should merge
-//  the hostage and ranger into a single entity, but I can't be bothered
-//  with that right now.
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
 //
-//  I ought to rewrite this, but changed only what was necessary.
-//  There is a lot of legacy code here.
+// Compiled by Qmaster
+//
+// Attributions: Drake by Patrick Martin
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 2
+// Function count: 26
+//
+// Implements: Scripted Player Model for Cutscenes
+//
+// Description:
+// PM: Use this only for cutscene actors.  If you want Quake guys as 
+// adversaries, use 'monster_ranger' instead.  Ideally, I should merge the
+// hostage and ranger into a single entity, but I can't be bothered with that
+// right now.
+//
+// I ought to rewrite this, but changed only what was necessary.  There is a
+// lot of legacy code here.
+//=============================================================================
 
 $frame axrun1 axrun2 axrun3 axrun4 axrun5 axrun6
-
 $frame rockrun1 rockrun2 rockrun3 rockrun4 rockrun5 rockrun6
-
-//$frame sawrun1 sawrun2 sawrun3 sawrun4 sawrun5 sawrun6
-
 $frame stand1 stand2 stand3 stand4 stand5
-
-//$frame swstnd1 swstnd2 swstnd3 swstnd4 swstnd5
-
 $frame axstnd1 axstnd2 axstnd3 axstnd4 axstnd5 axstnd6
 $frame axstnd7 axstnd8 axstnd9 axstnd10 axstnd11 axstnd12
-
 $frame axpain1 axpain2 axpain3 axpain4 axpain5 axpain6
-
 $frame pain1 pain2 pain3 pain4 pain5 pain6
-
-//$frame swpain1 swpain2 swpain3 swpain4 swpain5 swpain6
-
 $frame axdeth1 axdeth2 axdeth3 axdeth4 axdeth5 axdeth6
 $frame axdeth7 axdeth8 axdeth9
-
-//$frame swdeth1 swdeth2 swdeth3 swdeth4 swdeth5 swdeth6
-//$frame swdeth7 swdeth8 swdeth9
-
 $frame deatha1 deatha2 deatha3 deatha4 deatha5 deatha6 deatha7 deatha8
 $frame deatha9 deatha10 deatha11
-
 $frame deathb1 deathb2 deathb3 deathb4 deathb5 deathb6 deathb7 deathb8
 $frame deathb9
-
 $frame deathc1 deathc2 deathc3 deathc4 deathc5 deathc6 deathc7 deathc8
 $frame deathc9 deathc10 deathc11 deathc12 deathc13 deathc14 deathc15
-
 $frame deathd1 deathd2 deathd3 deathd4 deathd5 deathd6 deathd7
 $frame deathd8 deathd9
-
 $frame deathe1 deathe2 deathe3 deathe4 deathe5 deathe6 deathe7
 $frame deathe8 deathe9
-
 $frame nailatt1 nailatt2
-
-//$frame sawatt1 sawatt2
-
 $frame light1 light2
-
 $frame rockatt1 rockatt2 rockatt3 rockatt4 rockatt5 rockatt6
-
 $frame shotatt1 shotatt2 shotatt3 shotatt4 shotatt5 shotatt6
-
 $frame axatt1 axatt2 axatt3 axatt4 axatt5 axatt6
-
 $frame axattb1 axattb2 axattb3 axattb4 axattb5 axattb6
-
 $frame axattc1 axattc2 axattc3 axattc4 axattc5 axattc6
-
 $frame axattd1 axattd2 axattd3 axattd4 axattd5 axattd6
+
+float HOSTAGE_DEAD = 1;
+float ZEREND_ROCKETS = 2;
+float ACTOR_JUMP = 1;
+float ACTOR_SHOOT = 2;
+float ACTOR_ATTACK = 4;
 
 void() misc_hostage;
 void() ActorDie;
 void() actor_run;
-void() sf64_teledeath = {spawn_tdeath (self.origin, self.owner); remove(self);};
 
-float HOSTAGE_DEAD = 1;
-float ZEREND_ROCKETS = 2;
+void() sf64_teledeath = { spawn_tdeath(self.origin,self.owner); remove(self); }; // [FUNCTION]
 
-void() actor_pain1 =[ $pain1,  actor_pain2  ] {PainSound();};
-void() actor_pain2 =[ $pain2,  actor_pain3  ] {};
-void() actor_pain3 =[ $pain3,  actor_pain4  ] {};
-void() actor_pain4 =[ $pain4,  actor_pain5  ] {};
-void() actor_pain5 =[ $pain5,  actor_pain6  ] {};
-void() actor_pain6 =[ $pain6,  actor_run    ] {
-    if (self.count == 1)
-        if (self.enemy != world) ai_run(10);
+void() actor_pain1 =[ $pain1,  actor_pain2  ] {PainSound();}; // [FUNCTION]
+void() actor_pain2 =[ $pain2,  actor_pain3  ] {}; // [FUNCTION]
+void() actor_pain3 =[ $pain3,  actor_pain4  ] {}; // [FUNCTION]
+void() actor_pain4 =[ $pain4,  actor_pain5  ] {}; // [FUNCTION]
+void() actor_pain5 =[ $pain5,  actor_pain6  ] {}; // [FUNCTION]
+void() actor_pain6 =[ $pain6,  actor_run    ] { // [FUNCTION]
+    if (self.count == 1 && self.enemy != world) ai_run(10);
 };
 
-void(entity inflictor, entity attacker, float take) actor_pain = {
+void(entity inflictor, entity attacker, float take) actor_pain = { // [FUNCTION]
     if (self.pain_finished > time) return;
 
     ai_back (5);
@@ -90,14 +99,14 @@ void(entity inflictor, entity attacker, float take) actor_pain = {
     actor_pain1 ();
 };
 
-void() actor_shot1 =[ $shotatt1,  actor_shot2  ] {self.effects = self.effects | EF_MUZZLEFLASH;};
-void() actor_shot2 =[ $shotatt2,  actor_shot3  ] {};
-void() actor_shot3 =[ $shotatt3,  actor_shot4  ] {};
-void() actor_shot4 =[ $shotatt4,  actor_shot5  ] {};
-void() actor_shot5 =[ $shotatt5,  actor_shot6  ] {};
-void() actor_shot6 =[ $shotatt6,  actor_run    ] {};
+void() actor_shot1 =[ $shotatt1,  actor_shot2  ] {self.effects = self.effects | EF_MUZZLEFLASH;}; // [FUNCTION]
+void() actor_shot2 =[ $shotatt2,  actor_shot3  ] {}; // [FUNCTION]
+void() actor_shot3 =[ $shotatt3,  actor_shot4  ] {}; // [FUNCTION]
+void() actor_shot4 =[ $shotatt4,  actor_shot5  ] {}; // [FUNCTION]
+void() actor_shot5 =[ $shotatt5,  actor_shot6  ] {}; // [FUNCTION]
+void() actor_shot6 =[ $shotatt6,  actor_run    ] {}; // [FUNCTION]
 
-void() Actor_use = {
+void() Actor_use = { // [FUNCTION]
     if (self.spawnflags & HOSTAGE_DEAD) {
         self.takedamage = DAMAGE_AIM;
         self.enemy = checkclient();
@@ -108,7 +117,7 @@ void() Actor_use = {
 	}
 };
 
-void() ActorDie = {
+void() ActorDie = { // [FUNCTION]
     local float i;
 
     self.deadflag   = DEAD_DYING;
@@ -116,7 +125,6 @@ void() ActorDie = {
     self.flags      = self.flags - (self.flags & FL_ONGROUND);
     self.movetype   = MOVETYPE_TOSS;
     if (self.velocity_z < 10) self.velocity_z = self.velocity_z + random()*300;
-
     if (self.health < -20) {
 		self.frame = 0;
 		monster_ThrowGib();
@@ -130,21 +138,15 @@ void() ActorDie = {
     player_death_sound();
     self.angles_x = 0;
     self.angles_z = 0;
-
     i = 1 + floor(random()*5);
-    if (i == 1)
-        player_diea1();
-    else if (i == 2)
-        player_dieb1();
-    else if (i == 3)
-        player_diec1();
-    else if (i == 4)
-        player_died1();
-    else
-        player_diee1();
+    if (i == 1) player_diea1();
+    else if (i == 2) player_dieb1();
+    else if (i == 3) player_diec1();
+    else if (i == 4) player_died1();
+    else player_diee1();
 };
 
-void() actor_stand1 =[ $stand1, actor_stand1 ] {
+void() actor_stand1 =[ $stand1, actor_stand1 ] { // [FUNCTION]
     if (self.pausetime < time) {actor_run(); return;}
 
     if (self.walkframe >= 5) self.walkframe = 0;
@@ -152,7 +154,7 @@ void() actor_stand1 =[ $stand1, actor_stand1 ] {
     self.walkframe = self.walkframe + 1;    
 };
 
-void() actor_run =[ $rockrun1, actor_run ] {
+void() actor_run =[ $rockrun1, actor_run ] { // [FUNCTION]
 	// hack for zer1m2 scene
     if (self.dmg == 69) { // Freeze the actor shortly after falling into the (meat) trap.
         if (time > 55) {
@@ -193,7 +195,7 @@ void() actor_run =[ $rockrun1, actor_run ] {
 
 
 // Update 8/1/09:  Remove redundancy.
-void() Actor_fire = {
+void() Actor_fire = { // [FUNCTION]
 	local vector dir, org;
 	local entity en;
 
@@ -209,33 +211,33 @@ void() Actor_fire = {
         makevectors (self.v_angle);
         org = self.origin + v_forward*8 + '0 0 16';
         sound (self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NONE);
-        Rocket_Launch (org, dir);
+		self.finalangle = vecrand(100,200,FALSE);
+		Launch_Missile (self.origin, self.movedir, self.finalangle, CT_PROJ_ROCKET, self.speed);
         newmis.velocity = dir * 800;
         newmis.touch = SUB_Remove;      // The Zerstorer cannot be harmed.
     } else {
         sound (self, CHAN_WEAPON, "weapons/guncock.wav", 1, ATTN_NORM);    
         FireBullets (8, '0.1 0.1 0');
     }
-    self.attack_finished = time + 1;
+	W_Reload(1);
 };
 
-void() Actor_attack = {
-    if (self.attack_finished <= time)
+void() Actor_attack = { // [FUNCTION]
+    if (self.attack_finished <= time) {
         if (random() < 0.85) {
-            actor_shot1 ();
-            Actor_fire ();
+            actor_shot1();
+            Actor_fire();
         }
+	}
 };
 
-void() actor_start = {
+void() actor_start = { // [FUNCTION]
     if (self.spawnflags & HOSTAGE_DEAD) {
         self.origin_z = self.origin_z + 1;    // raise off floor a bit
         droptofloor();
-    
         if (!walkmove(0,0)) {
             dprint ("actor (misc_hostage) in wall at: ");
-            dprint (vtos(self.origin));
-            dprint ("\n");
+            dprint (vtos(self.origin)); dprint ("\n");
         }
 
         if (self.target) {
@@ -243,8 +245,7 @@ void() actor_start = {
             self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
             if (!self.movetarget) {
                 dprint ("actor (misc_hostage) can't find target at ");
-                dprint (vtos(self.origin));
-                dprint ("\n");
+                dprint (vtos(self.origin)); dprint ("\n");
             }
         } else {
             self.pausetime = 9999999;
@@ -261,61 +262,47 @@ void() actor_start = {
                 dprint (vtos(self.origin));
                 dprint ("\n");
             }
-        } else {
-            self.pausetime = 9999999;
-		}
-        droptofloor ();
-        actor_stand1 ();
+        } else self.pausetime = 9999999;
+
+        droptofloor();
+        actor_stand1();
     }
 };
 
-// sf64 start code
-void() actor_sf64start = {
-    if (self.style) {
-        local   vector  org;
-        local   entity  teldeath;
+void() actor_sf64start = { // [FUNCTION]
+	local vector org;
+	local entity teldeath;
 
+    if (self.style) {
         makevectors (self.angles);
         org = self.origin + 16 * v_forward;
         spawn_tfog (org);
         teldeath = spawn();
         teldeath.origin = org;
         teldeath.owner = self;
-
         teldeath.think = sf64_teledeath;
         teldeath.nextthink = time + 0.2;
     }
 
     self.use = Actor_use;
-
     self.solid = SOLID_SLIDEBOX;        
     self.movetype = MOVETYPE_STEP;    // They just stand on the ground
-
-    setmodel (self, "progs/player.mdl");
-    setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
-    setorigin (self, self.origin);
-
-    if (self.wait)
-        self.pausetime = time + self.wait;
-
+    setmodel(self,MODEL_PLAYER);
+    setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
+    setorigin(self, self.origin);
+    if (self.wait) self.pausetime = time + self.wait;
     self.nextthink = time + 0.1;
     self.think = actor_start;    
 };
 
-/*QUAKED misc_hostage (.5 .5 .5) (-8 -8 -8) (8 8 32)  ACTOR_DEAD x x x x x TRIGGER_SPAWN
-This is an actor-robot whose behavior is fully scriptable.
-
-"target"  Point it at the first 'actor_target' in the path.
-"wait"  Specify how-long the actor will stand still before heading for 1st actor_target.
-"speed"  How fast the actor runs.  Default == 10.
-
-ACTOR_DEAD(1) makes the actor a non-living entity until triggered.  It will affect monster-count,
-and will attack the player after it has been triggered.  (specially made for 'da*ned')
-
-TRIGGER_SPAWN(64) causes the actor to not spawn until it is triggered.  If "style" is set
-for the actor it will cause a teleport-splash when it spawns.
-*/
-void() misc_hostage = {
+// QUAKED misc_hostage (.5 .5 .5) (-8 -8 -8) (8 8 32)  ACTOR_DEAD x x x x x TRIGGER_SPAWN
+// This is an actor-robot whose behavior is fully scriptable.
+// "target"  Point it at the first 'actor_target' in the path.
+// "wait"  Specify how-long the actor will stand still before heading for 1st actor_target.
+// "speed"  How fast the actor runs.  Default == 10.
+// ACTOR_DEAD(1) makes the actor a non-living entity until triggered.  It will affect monster-count, and will attack the player after it has been triggered.  (specially made for 'da*ned')
+// TRIGGER_SPAWN(64) causes the actor to not spawn until it is triggered.  If "style" is set for the actor it will cause a teleport-splash when it spawns.
+void() misc_hostage = { // [ENTITY]
     if (deathmatch || coop) {remove (self); return;}
 
     self.origin             = self.origin + '0 0 56';
@@ -333,7 +320,6 @@ void() misc_hostage = {
 	self.gib1mdl = "progs/gib1.mdl";
 	self.gib2mdl = "progs/gib2.mdl";
 	self.gib3mdl = "progs/gib3.mdl";
-
     if (self.wait)	self.pausetime = time + self.wait;
     else			self.pausetime = 9999999;
 
@@ -348,22 +334,20 @@ void() misc_hostage = {
     self.th_pain    = actor_pain;
     self.th_die     = ActorDie;
     if (self.spawnflags & HOSTAGE_DEAD) AddToTotals(self);
-
-	//TRIGGER_SPAWN - Qmaster: Whoa...talk about legacy.  Is this the first usage of 64 for delay spawn???
-    if (self.spawnflags & 64) { self.use = actor_sf64start; return; }
+    if (self.spawnflags & 64) { self.use = actor_sf64start; return; } //TRIGGER_SPAWN - Qmaster: Whoa...talk about legacy.  Is this the first usage of 64 for delay spawn???
 
     self.use = Actor_use;
     self.solid = SOLID_SLIDEBOX;        
     self.movetype = MOVETYPE_STEP;    // They just stand on the ground
-    setmodel (self, "progs/player.mdl");
-    setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
+    setmodel(self,MODEL_PLAYER);
+    setsize(self, VEC_HULL_MIN, VEC_HULL_MAX);
     setorigin (self, self.origin);
     self.nextthink = time + 0.1;
     self.think = actor_start;
 };
 
 // Sequencing routines
-void() ActorJump = {
+void() ActorJump = { // [FUNCTION]
 	local vector vel;
 
     vel = self.origin - self.oldorigin;
@@ -373,8 +357,7 @@ void() ActorJump = {
         else if (self.watertype == CONTENT_SLIME) self.velocity_z = 80;
         else self.velocity_z = 50;
 
-	// play swiming sound
-        if (self.swim_flag < time) {
+        if (self.swim_flag < time) { // play swiming sound
             self.swim_flag = time + 1;
             if (random() < 0.5) sound (self, CHAN_BODY, "misc/water1.wav", 1, ATTN_NORM);
             else				sound (self, CHAN_BODY, "misc/water2.wav", 1, ATTN_NORM);
@@ -389,15 +372,12 @@ void() ActorJump = {
 };
 
 // Update 8/1/09:  Removed 'void(vector dir) actor_rocket'.
-void() Actor_shoot = {
-    Actor_fire ();
+void() Actor_shoot = { // [FUNCTION]
+    Actor_fire();
     self.enemy = world;
 };
 
-void() t_actortarget = {
-	local float    ACTOR_JUMP = 1;
-	local float ACTOR_SHOOT = 2;
-	local float ACTOR_ATTACK = 4;
+void() t_actortarget = { // [FUNCTION]
 	local entity temp;
 
     if (self.volume > time) return; // Replaced 'rad_time' with 'volume'.
@@ -411,7 +391,6 @@ void() t_actortarget = {
     if (self.speed) other.speed = self.speed;
 
     if (self.message) {
-        //dprint("Using target!\n");
         self.target = self.message;
         SUB_UseTargets ();
     }
@@ -422,7 +401,6 @@ void() t_actortarget = {
     }
 
     if (self.spawnflags & ACTOR_JUMP) {
-        //dprint("Actor jump!\n");
         temp = self;
         self = other;
         ActorJump();
@@ -431,7 +409,6 @@ void() t_actortarget = {
     }
 
     if (self.spawnflags & ACTOR_SHOOT) {
-       //dprint("Actor shoot!\n");
        other.enemy = find(world, targetname, self.noise);
        temp = self;
        self = other;
@@ -448,17 +425,14 @@ void() t_actortarget = {
     }
 
     if (self.spawnflags & ACTOR_ATTACK) {
-        //dprint("ACTOR_ATTACK\n");
         other.enemy = find(world, targetname, self.noise);
-        while (!(other.enemy.flags & FL_MONSTER))
-            other.enemy = find(other.enemy, targetname, self.noise);
+        while (!(other.enemy.flags & FL_MONSTER)) other.enemy = find(other.enemy, targetname, self.noise);
         other.count = 2;
         other.oldenemy = other.goalentity;
         return;
     }
 
     if (self.wait) {
-        //dprint("hostage waiting\n");
         self.volume = self.volume + self.wait;
         temp = self;
         self = other;
@@ -474,32 +448,28 @@ void() t_actortarget = {
         self.pausetime = time + 999999;
         self.th_stand ();
         self = temp;
-        return;
     }
 };
 
-void() s_at = {
+void() s_at = { // [FUNCTION]
     self.solid = SOLID_TRIGGER;
     self.touch = t_actortarget;
     setsize (self, '-8 -8 -12', '8 8 24');
 };
 
-/*QUAKED actor_target (.5 .5 .5) (-8 -8 -8) (8 8 8)  ACTOR_JUMP ACTOR_SHOOT ACTOR_ATTACK
-Link an actor to these targets to control its behavior.
+// QUAKED actor_target (.5 .5 .5) (-8 -8 -8) (8 8 8)  ACTOR_JUMP ACTOR_SHOOT ACTOR_ATTACK
+// Link an actor to these targets to control its behavior.
+// "target"  Point to the next one.
+// "wait"  Specify how-long the actor will stand still before heading for next actor_target.
+// "speed"  How fast the actor runs.  Default == 10.
+// ACTOR_JUMP(1)  The actor will jump when hitting this target, and continue to the next.
+// ACTOR_SHOOT(2)  The actor will aim at the entity targeted using the "noise" field, and
+// fire the shotgun at it once, then continue to the next target.
+// ACTOR_ATTACK(4)  The actor will get mad at this entity targeted using the "noise" and try 
+// and kill it.
+void() actor_target = { // [ENTITY]
+    if (!self.targetname) { dprint("actor_target: no targetname, removed"); remove(self); return; }
 
-"target"  Point to the next one.
-"wait"  Specify how-long the actor will stand still before heading for next actor_target.
-"speed"  How fast the actor runs.  Default == 10.
-
-ACTOR_JUMP(1)  The actor will jump when hitting this target, and continue to the next.
-ACTOR_SHOOT(2)  The actor will aim at the entity targeted using the "noise" field, and
-fire the shotgun at it once, then continue to the next target.
-ACTOR_ATTACK(4)  The actor will get mad at this entity targeted using the "noise" and try 
-and kill it.
-*/
-void() actor_target = {
-    if (!self.targetname)
-        objerror ("actor_target: no targetname");
     self.nextthink = time + 0.1;
     self.think = s_at;
 };

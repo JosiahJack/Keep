@@ -361,10 +361,7 @@ void() newboss_awake = {
 	WriteCoord(MSG_BROADCAST, z);
 };
 
-void() monster_newboss = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
+void() monster_virtus_precache = {
 	precache_model("progs/virtus/newboss.mdl");
 	precache_model("progs/lavaball.mdl");
 	precache_sound("weapons/rocket1i.wav");
@@ -373,15 +370,16 @@ void() monster_newboss = {
 	precache_sound("boss1/throw.wav");
 	precache_sound("boss1/pain.wav");
 	precache_sound("boss1/death.wav");
+};
+
+void() monster_newboss = {
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/virtus/newboss.mdl";
 	if (self.health < 1) self.health = 1800;
 	self.th_run = SUB_Null;
 	self.max_health = self.health;
-
-	// Check passive system for exceptions
-	setup_passivestate(self);
-
+	setup_passivestate(self); // Check passive system for exceptions
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 	if (self.deathstring == "") self.deathstring = " was destroyed by a Virtus Worm\n";
 	self.th_die = newboss_death1;
@@ -393,12 +391,13 @@ void() monster_newboss = {
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
 
-	AddToTotals(self);
+	self.th_stand = self.th_walk = self.th_run = SUB_Null;
+	self.th_missile = SUB_Null;
+	monster_start();
 
 	// No targetname = no trigger!
 	if (self.targetname == "") {
-		dprint("\b[VIRTUS]\b Missing targetname\n");
-		// spawn_marker(self.origin, SPNMARK_YELLOW);
+		dprint("\b[VIRTUS]\b Missing targetname! Spawning right away then.\n");
 		newboss_awake();
 		return;
 	}

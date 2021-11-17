@@ -547,8 +547,7 @@ void()	sheep_dieb25	=[298,	sheep_dieb26	] {monster_death_postcheck();};
 void()	sheep_dieb26	=[299,	sheep_dieb26	] {monster_deadbody_check();};
 
 void() sheep_die = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// regular death
 	if (!self.gibbed) {
@@ -559,23 +558,22 @@ void() sheep_die = {
 	}
 };
 
-void() monster_sheep =  {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/hexen2/mon_sheep.mdl";
-	precache_model (self.mdl);
+void() monster_sheep_precache =  {
+	precache_model ("progs/hexen2/mon_sheep.mdl");
 	precache_sound ("sheep/sheep1.wav");
 	precache_sound ("sheep/sheep2.wav");
 	precache_sound ("sheep/sheep3.wav");
 	precache_sound ("sheep/sheepfly.wav");
 	precache_sound ("sheep/bite.wav");
+};
 
+void() monster_sheep =  {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/hexen2/mon_sheep.mdl";
 	self.sight_sound = "sheep/sheep1.wav";
 	self.death_sound = "sheep/sheepfly.wav";
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_DOG;
@@ -591,7 +589,6 @@ void() monster_sheep =  {
 	self.th_stand = sheep_wait1;
 	self.th_walk = sheep_trot1; // sleep walking?
 	self.th_run = sheep_run1;
-
 	if (self.deathstring == "")  self.deathstring = " fed himself to a sheep\n";
 
 	// Always reset Ammo Resistance to be consistent

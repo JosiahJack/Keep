@@ -409,88 +409,43 @@ void() turret_use= {
 	}
 };
 
-void() turret_setup = {
-	local vector endorg;
-
-	traceline(self.origin, self.origin + '0 0 2000', TRUE, self);
-
-	endorg = trace_endpos;
-	endorg_z = endorg_z - 12;
-	setorigin(self, endorg);
-
-	// decide how to start according to the spawnflags
-	if(self.spawnflags & TUR_STARTOFF)
-	{
-		if((self.spawnflags & TUR_RETRACT) || (self.spawnflags & TUR_OFFRET))
-		{
-			self.frame = $retract7;
-			self.solid = SOLID_NOT;
-		}
-		else
-			self.frame = turret_frame(self.rotate_type);
-
-		self.currentammo = FALSE;
-		self.think = SUB_Null;
-	}
-	else
-	{
-		if(self.spawnflags & TUR_RETRACT)
-		{
-			self.solid = SOLID_NOT;
-			turret_retracted();
-		}
-		else
-			turret_still();
-
-		self.nextthink = self.nextthink + random()*0.5;
-	}
-};
-
-void() monster_turret= {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/custents/turret.mdl";
+void() monster_turret_precache = {
 	precache_model ("progs/custents/turret.mdl");
-	self.headmdl = "progs/custents/h_turret.mdl";
 	precache_model ("progs/custents/h_turret.mdl");
 	precache_model ("progs/custents/dedturet.mdl");
 	precache_model ("progs/custents/turetgib.mdl");
-
-	self.gib1mdl = "progs/custents/turetgib.mdl";
-
 	precache_sound ("custents/turret/beamchrg.wav");
 	precache_sound ("custents/turret/beammode.wav");
+	precache_model ("progs/laser.mdl");
+	precache_sound (SOUND_LASER_FIRE);
+	precache_sound (SOUND_LASER_HIT);
+	precache_model ("progs/missile.mdl");
+	precache_model ("progs/custents/beam.mdl");
+	precache_sound ("custents/turret/beamhit.wav");
+	precache_sound ("hipnotic/weapons/mjolhit.wav");
+	precache_sound ("custents/turret/plasbult.wav");
+};
 
-	if(self.spawnflags & TUR_LASERS) {
-		precache_model ("progs/laser.mdl");
-		precache_sound (SOUND_LASER_FIRE);
-		precache_sound (SOUND_LASER_HIT);
-	} else if(self.spawnflags & TUR_LASERS) {
-		precache_model ("progs/missile.mdl");
-	} else if(self.spawnflags & TUR_PPC) {
-		precache_model ("progs/custents/beam.mdl");
-		precache_sound ("custents/turret/beamhit.wav");
-		precache_sound ("hipnotic/weapons/mjolhit.wav");
-	} else }
-		precache_sound ("custents/turret/plasbult.wav");
-	}
+void() monster_turret = {
+	local vector endorg;
+
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/custents/turret.mdl";
+	self.headmdl = "progs/custents/h_turret.mdl";
+	self.gib1mdl = "progs/custents/turetgib.mdl";
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
-
 	setmodel (self, self.mdl);
 	if (self.deathstring == "") self.deathstring = " was blasted by a Turret\n";
-
 	setsize (self, '-12 -12 -6', '12 12 12');
-	if(self.health < 1)
-		self.health = 100;
+	if(self.health < 1) self.health = 100;
 	self.max_health = self.health;
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-	if(self.rotate_type < 0 || self.rotate_type > 90)
-		self.rotate_type = 0;
+	if(self.rotate_type < 0 || self.rotate_type > 90) self.rotate_type = 0;
 	self.currentammo = TRUE;
 
-	if(self.spawnflags & TUR_RETRACT) {
+	if (self.spawnflags & TUR_RETRACT) {
 		self.th_stand = turret_ret1;
 		self.th_walk = turret_ret1;
 	} else {
@@ -501,9 +456,7 @@ void() monster_turret= {
 	self.th_pain = turret_pain;
 	self.th_die = turret_die;
 	self.th_missile = turret_fire1;
-
 	AddToTotals(self);
-
 	self.takedamage = DAMAGE_AIM;
     self.hittype    = HIT_METAL;
 	self.ideal_yaw = self.angles * '0 1 0';
@@ -513,7 +466,28 @@ void() monster_turret= {
 	self.flags = self.flags | FL_FLY;
 	self.flags = self.flags | FL_MONSTER;
 	self.pausetime = 99999999;
+	traceline(self.origin, self.origin + '0 0 2000', TRUE, self);
+	endorg = trace_endpos;
+	endorg_z = endorg_z - 12;
+	setorigin(self, endorg);
 
-	self.nextthink = self.nextthink + random()*0.5;
-    self.think = turret_setup;
+	// decide how to start according to the spawnflags
+	if(self.spawnflags & TUR_STARTOFF) {
+		if((self.spawnflags & TUR_RETRACT) || (self.spawnflags & TUR_OFFRET)) {
+			self.frame = $retract7;
+			self.solid = SOLID_NOT;
+		} else self.frame = turret_frame(self.rotate_type);
+
+		self.currentammo = FALSE;
+		self.think = SUB_Null;
+	} else {
+		if(self.spawnflags & TUR_RETRACT) {
+			self.solid = SOLID_NOT;
+			turret_retracted();
+		} else turret_still();
+
+		self.nextthink = self.nextthink + random()*0.5;
+	}
+
+	monster_start();
 };

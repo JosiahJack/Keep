@@ -580,8 +580,10 @@ void() golem_statue =
  	self.nextthink = time + 5 + random()*5;
 };
 
+void() setup_golem;
+
 // Precaches all the golem related models and sounds
-void() precache_monster_golem = {
+void() monster_golem_precache = {
 	precache_model ("progs/ad171/mon_golem.mdl");
 	precache_model (MODEL_PROJ_RINGSHOCK);
 	precache_model (MODEL_PROJ_GROCK1);
@@ -606,12 +608,11 @@ void() precache_monster_golem = {
 	precache_sound ("ad171/golem/sight.wav");
 };
 
-void() setup_golem;
-
 // QUAKED monster_golem (1 0.2 0) (-16 -16 -24) (16 16 24)
 void() monster_golem = {
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
+	monster_golem_precache();
 	self.mdl = "progs/ad171/mon_golem.mdl";
 	self.gibtype = GIBTYPE_STONE;				// Stoney gibs!
 	self.gib1mdl = MODEL_PROJ_GROCK1;			// small golem rock
@@ -624,7 +625,7 @@ void() monster_golem = {
 	self.pain_sound = "ne_ruins/h2golem/pain1.wav";
 	self.pain_sound2 = "ne_ruins/h2golem/pain2.wav";
 	self.sight_sound = "ad171/golem/sight.wav";		// Roar!
-	precache_monster_golem();
+
 	if (self.classtype != CT_CACHEGOLEM) setup_golem();
 };
 

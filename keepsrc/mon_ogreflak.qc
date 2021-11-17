@@ -158,9 +158,7 @@ void() BDW_OgreFireFlak = {
 	}
 };	
 
-/*======================================================================
- Range - Flak (uses nails)
-======================================================================*/
+// Range - Flak (uses nails)
 void() ogre_nail1	=[	$shoot1,		ogre_nail2	] {ai_face();};
 void() ogre_nail2	=[	$shoot2,		ogre_nail3	] {ai_face();};
 void() ogre_nail3	=[	$shoot2,		ogre_nail4	] {ai_face();};
@@ -169,11 +167,31 @@ void() ogre_nail5	=[	$shoot4,		ogre_nail6	] {ai_face();};
 void() ogre_nail6	=[	$shoot5,		ogre_nail7	] {ai_face();};
 void() ogre_nail7	=[	$shoot6,		ogre_run1	] {ai_face();};
 
+void() monster_ogre_spikeshooter_precache = {
+	precache_model ("progs/ad171/mon_ogre.mdl");
+	precache_model ("progs/h_ogre.mdl");
+	precache_model (MODEL_PROJ_GRENADE);
+	precache_model ("progs/ad171/w_chainsaw.mdl");
+	precache_model ("progs/ad171/gib_ogfoot1.mdl");
+	precache_model ("progs/ad171/gib_ogfoot2.mdl");
+	precache_model ("progs/ad171/w_ogregl.mdl");
+	precache_sound ("ogre/ogidle.wav");
+	precache_sound ("ogre/ogidle2.wav");
+	precache_sound ("ogre/ogdth.wav");
+	precache_sound ("ogre/ogpain1.wav");
+	precache_sound ("ogre/ogdrag.wav");
+	precache_sound ("ogre/ogsawatk.wav");
+	precache_sound ("ogre/ogwake.wav");
+	precache_model("progs/kinn/flak.mdl");
+	precache_model("progs/spike.mdl");
+	precache_sound("kinn/ogre/wnalfire.wav");
+	precache_sound("qmaster/ogre/wnalfire_lava.wav"); // Qmaster merged in the hiss from lava nailgun
+	precache_sound("weapons/skotch.wav");
+};
+
 void() monster_ogre_spikeshooter = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 		
 	self.mdl = "progs/ad171/mon_ogre.mdl";		// Rogue Ogre
 	self.headmdl = "progs/h_ogre.mdl";
@@ -181,35 +199,12 @@ void() monster_ogre_spikeshooter = {
 	self.gib2mdl = "progs/ad171/gib_ogfoot1.mdl";	// Left foot
 	self.gib3mdl = "progs/ad171/gib_ogfoot2.mdl";	// Right foot
 	self.gib4mdl = "progs/ad171/w_ogregl.mdl";	// Grenade Launcher
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (MODEL_PROJ_GRENADE);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	precache_model (self.gib4mdl);
-
 	self.gib1sound = GIB_IMPACT_WOOD;
 	if (random() < 0.5) self.gib1mdl = self.gib4mdl;
-
 	self.idle_sound = "ogre/ogidle.wav";
-	precache_sound (self.idle_sound);
 	self.idle_soundcom = "ogre/ogidle2.wav";
-	precache_sound (self.idle_soundcom);
-	precache_sound ("ogre/ogdth.wav");
 	self.pain_sound = "ogre/ogpain1.wav";
-	precache_sound (self.pain_sound);
-	precache_sound ("ogre/ogdrag.wav");
-	precache_sound ("ogre/ogsawatk.wav");
 	self.sight_sound = "ogre/ogwake.wav";
-	precache_sound (self.sight_sound);
-	precache_model("progs/kinn/flak.mdl");
-	precache_model("progs/spike.mdl");
-	precache_sound("kinn/ogre/wnalfire.wav");
-	precache_sound("qmaster/ogre/wnalfire_lava.wav"); // Qmaster merged in the hiss from lava nailgun
-	precache_sound("weapons/skotch.wav");
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	self.idmins = VEC_HULL2_MIN;		// -32 -32 -24, 32 32 64
@@ -253,7 +248,6 @@ void() monster_ogre_spikeshooter = {
 	self.classtype = CT_MONOGRE;		// Old style ogres
 	self.classgroup = CG_OGRE;		// One big happy ogre family!
 	self.classmove = MON_MOVEWALK;
-
 	monster_start();
 };
 

@@ -201,96 +201,60 @@ vector(vector p1, vector p2, float sped, entity targ) Aim_Lead = {
     return lead; // Our work here is done.
 };
 
-//------------------------------------------------------------------------//
-//  This is similar to traceline, except gravity affects this.
-//
-//  The value returned is the closest distance the path was to a point,
-//  which is necessary when comparing the better of two different traces.
-//
-//  (Originally, the value returned is the time of flight before impact.)
-//
-//  Note:  If mtype == MOVETYPE_BOUNCE, trace grenade path.
-//------------------------------------------------------------------------//
-float(vector p1, vector vel, float nomon, entity ignore, float fuse, vector spot, float mtype)  TraceBallistic = {
-    local   float   fps, tpf;   // Frame Per Second, Time Per Frame.
-    local   float   g, minv, maxv;
-    local   float   t, dist, best;
+// This is similar to traceline, except gravity affects this. Drake's QC implementation of engine builtin tracetoss.
+// The value returned is the closest distance the path was to a point,
+// which is necessary when comparing the better of two different traces.
+// (Originally, the value returned is the time of flight before impact.)
+// If mtype == MOVETYPE_BOUNCE, trace grenade path.
+float(vector p1, vector vel, float nomon, entity ignore, float fuse, vector spot, float mtype) TraceBallistic = {
+    local float fps, timeperframe, g, minv, maxv, t, dist, best;
 
-// The closer time per frame is to hosttime, the more accurate the trace is.
-// However, try to keep the number of traceline calls to a minimum.  Thus,
-// 20 fps is a good compromise between accuracy and efficiency.
-    fps = 20;       // Don't use zero or negative number.
-    tpf = 1 / fps;
-// Note:  If you really want to work more for more accuracy, use the
-// following two lines instead.  Warning:  frametimes on a fast computer
-// can approach a frametime of 0.01, meaning about 100 calls.  That's
-// A LOT of traceline calling!
-//    tpf = frametime;
-//    fps = 1 / tpf;
-
-    best = 20000;   // More than 8000 * 2.
+	// The closer time per frame is to hosttime, the more accurate the trace is.
+	// However, try to keep the number of traceline calls to a minimum.
+	// Thus, 20 fps is a good compromise between accuracy and efficiency.
+    fps = 20; // Don't use zero or negative number.
+    timeperframe = 1 / fps;
+    best = 20000; // More than 8000 * 2.
     t = 0;
     fuse = floor(fuse * fps);
-    g = cvar("sv_gravity") * tpf;
+    g = cvar("sv_gravity") * timeperframe;
     maxv = cvar("sv_maxvelocity");
     minv = 0 - maxv;
-//- - - - - - - - -
-    // Velocity check
-    if (vel_x > maxv)       vel_x = maxv;
+    if (vel_x > maxv)       vel_x = maxv; // Velocity check
     else if (vel_x < minv)  vel_x = minv;
+
     if (vel_y > maxv)       vel_y = maxv;
     else if (vel_y < minv)  vel_y = minv;
-    if (vel_z > maxv)       vel_z = maxv;
-    // Lower bound for z done in loop.
-//- - - - - - - - -
-    while (t < fuse)
-    {
-        if (vel_z < minv)   // Velocity check.
-            vel_z = minv;   // Note:  Don't bother with reverse gravity.
+
+    if (vel_z > maxv) vel_z = maxv; // Lower bound for z done in loop.
+    while (t < fuse) {
+        if (vel_z < minv) vel_z = minv; // Velocity check.  Don't bother with reverse gravity.
         vel_z = vel_z - g;
-        traceline (p1, p1 + (vel * tpf), nomon, ignore);
+        traceline (p1, p1 + (vel * timeperframe), nomon, ignore);
         p1 = trace_endpos;
-    //- - - - - - - - -
         dist = vlen(p1 - spot);
-        if (dist < best)
-            best = dist;
-    //- - - - - - - - -
-        if (trace_fraction < 1)
-        {
-            if ((mtype != MOVETYPE_BOUNCE) || (trace_ent.takedamage == DAMAGE_AIM))
-                fuse = 0;   // Got a hit -- break the loop!
-            else
-            {   // Rebound.  Emulate C physics code.
-                // overbounce = 1.5, stop_epsilon = 0.1, as per C code.
-                vel = Vec_Reflect (vel, trace_plane_normal, 1.5, 0.1);
-                if (vel == '0 0 0')
-                    fuse = 0;   // Stopped.
-                else
-                {
-                    trace_ent = world;      // Bounced off the guy.
+        if (dist < best) best = dist;
+        if (trace_fraction < 1) {
+            if ((mtype != MOVETYPE_BOUNCE) || (trace_ent.takedamage == DAMAGE_AIM)) fuse = 0;   // Got a hit -- break the loop!
+            else { // Rebound.  Emulate C physics code.
+                vel = Vec_Reflect (vel, trace_plane_normal, 1.5, 0.1); // overbounce = 1.5, stop_epsilon = 0.1, as per C code.
+                if (vel == '0 0 0') fuse = 0; // Stopped.
+                else {
+                    trace_ent = world; // Bounced off the guy.
                     trace_fraction = 1;
                 }
             }
         }
         t = t + 1;
     }
-    return best;        //return t * tpf;
+    return best;
 };
 
-// FIXME:  DarkPlaces has a builtin function for this.
-void(vector p1, vector vel, float nomon, entity ignore, float fuse) TraceToss = {
-    TraceBallistic (p1, vel, nomon, ignore, fuse, p1, MOVETYPE_TOSS);
-};
-
-//------------------------------------------------------------------------//
-//  This returns how much speed to add up for a toss projectile to
-//  hit the target point.
-//
-//  NOTE:  The resulting speed can be much higher than the original.
-//------------------------------------------------------------------------//
+// This returns how much speed to add up for a toss projectile to hit the target point.
+// The resulting speed can be much higher than the original.
 float(vector p1, vector p2, float sped) Aim_TossUp = {
-    local   float   gforce;     // Target gravity.
-    local   float   up;         // Add to z.
+    local float gforce;     // Target gravity.
+    local float up;         // Add to z.
 
     if (sped <= 0) return 0;   // Avoid division by zero.
 
@@ -308,8 +272,7 @@ vector(vector dir, vector vtan) Aim_Tangent = {
     // Combine the tangent side vector to the old directional vector.
     mx = vlen (dir);
     dir = normalize (dir);
-    dir   = vectoangles(dir);
-    dir_x = anglemod(0 - dir_x);  // 'vectoangles' reverses pitch -- fix it!
+    vang = Vangles (dir);
     makevectors (vang);
     dir = dir + (vtan_x * v_right) + (vtan_y * v_up);
     dir = normalize (dir);
@@ -321,14 +284,12 @@ vector(vector dir, vector vtan) Aim_Tangent = {
 vector(vector dir, vector spread) Aim_Scatter = {
     // Randomize the angles before converting them into tangents.
     if (!spread_z) {
-		spread_x = crandom() * spread_x;  
+		spread_x = crandom() * spread_x;
 		spread_y = crandom() * spread_y;
 	}
-    spread_x = mathlib_tan(spread_x);
-	spread_y = mathlib_tan(spread_y);
-
-    // Combine the tangent side vector to the old directional vector.
-    return Aim_Tangent (dir, spread);
+    spread_x = SUB_tan (spread_x); // This is NOT the same as mathlib_tangent.  DON'T REMOVE AGAIN!
+	spread_y = SUB_tan (spread_y); // This is NOT the same as mathlib_tangent.  DON'T REMOVE AGAIN!
+    return Aim_Tangent (dir, spread); // Combine the tangent side vector to the old directional vector.
 };
 
 vector(vector dir, vector spread) Maim_Scatter = {
@@ -343,7 +304,7 @@ vector(vector dir, vector spread) Maim_Scatter = {
     // Randomize the angles before converting them into tangents.
     if (!spread_z)
         {spread_x = crandom() * spread_x;  spread_y = crandom() * spread_y;}
-    spread_x = mathlib_tan(spread_x + r);  spread_y = mathlib_tan(spread_y);
+    spread_x = SUB_tan(spread_x + r);  spread_y = SUB_tan(spread_y);
 
     // Combine the tangent side vector to the old directional vector.
     return Aim_Tangent (dir, spread);
@@ -534,4 +495,160 @@ float() Frac_ShotDown = {
         if (d > 1) return fabs((d - self.shots_left) / d);
     }
     return 1;
+};
+
+//- - - - - - - - -
+// Point missile toward a point in space.
+//
+// Note:  Missile will seek the same elevation as its target point.
+// This means if missile is at the same altitude as its target, missile
+// will not climb or dive to loop toward the target even if such three
+// dimensional manuvering would let it loop back faster.  Instead,
+// it will loop to the side.  This does not mean the missile cannot
+// climb or dive toward the target; in fact, it will do so if there
+// is a elevation difference between the missile and its target.
+//
+// This two dimensional movement is good for sidewinding missiles
+// and the Mjolnir.  For other missiles, not so much.
+//- - - - - - - - -
+void(vector spot) Missile_Face = {
+    local   vector  ang;
+    local   float   diff;
+
+    ang = normalize (spot - self.origin);
+    ang = vectoangles (ang);
+    self.angles_y = anglemod(self.angles_y);
+// Change pitch - - - - - - -
+    // Copy pitch into yaw to fool Quake into changing the pitch for us.
+    self.ideal_yaw = anglemod(ang_x);
+    diff = self.angles_y;   // Remember this so we can restore yaw later.
+    self.angles_y = self.angles_x;
+    ChangeYaw ();
+    self.angles_x = self.angles_y;
+    self.angles_y = diff;   // Restore yaw now that pitch has changed.
+// Change yaw - - - - - - - -
+    self.ideal_yaw = anglemod(ang_y);
+    ChangeYaw ();
+};
+
+// Points missile toward its target.  Used by Mjolnir.
+// Note:  Missile_Face favors two dimension movement.  See above.
+void(entity targ) Missile_Seek = {
+    local vector vec;
+
+    if (targ) {
+        if (targ.invisible_finished || (targ.items & IT_INVISIBILITY)) {
+            if (!((self.classname == "Mjolnir") && self.master == targ)) return;
+		}
+
+        vec = Aimpoint (targ);
+        if (self.state) vec = Aim_Lead (self.origin, vec, self.speed, targ); // Check for intercept course.
+        Missile_Face (vec);
+        vec = self.angles;
+        vec_x = 0 - vec_x;
+        makevectors (vec);
+        self.velocity = v_forward * self.speed;
+        self.movedir = v_forward;
+    }
+};
+
+// Points missile toward its target.
+// Function runs more code, but missiles can climb or dive more.
+// Used by homing missiles in this file.
+void(entity targ) Missile_Seek_3D = {
+    if (targ) {
+        if (targ.invisible_finished || (targ.items & IT_INVISIBILITY)) return;
+
+        local   vector  vec, dir;
+
+        vec = Aimpoint (targ);
+		// Check for intercept course.
+        if (self.state) vec = Aim_Lead (self.origin, vec, self.speed, targ);
+        dir = normalize (self.velocity);
+        dir = self.movedir = Dir_GotoIdeal (dir, self.origin, vec, self.yaw_speed);
+        self.angles = vectoangles (dir);
+        self.velocity = dir * self.speed;
+    }
+};
+
+// Used fore tome of power rocket launcher rockets.  Checks if the missile can see its target.
+float() Missile_Vis = {
+    if (self.enemy)
+    if (self.enemy.health > 0)
+    if (!self.enemy.invisible_finished)
+    if (!(self.enemy.items & IT_INVISIBILITY))
+    if (!(self.enemy.flags & FL_NOTARGET))
+    if (visible (self.enemy)) return TRUE;
+
+    return FALSE;
+};
+
+// This traces for the vector normal to a surface.  It also resets the
+// missile's origin.
+void() BounceShot_TraceNormal = {
+    local   vector  spot1, spot2;
+
+    self.movedir = normalize (self.dest);
+    spot1 = self.origin - (16*self.movedir);
+    spot2 = self.origin + (16*self.movedir);
+    traceline (spot1, spot2, FALSE, self);  // see through other monsters
+    setorigin (self, trace_endpos);     //self.origin = trace_endpos;
+};
+
+// The moves a missile after an impact.
+void() BounceShot_Move = {
+    self.velocity   = Vec_Reflect (self.movedir, trace_plane_normal, 2, 0);
+    self.velocity   = normalize(self.velocity);
+    self.velocity   = self.dest         = self.speed * self.velocity;
+    self.flags      = self.flags - (self.flags & FL_ONGROUND);
+    self.angles     = vectoangles(self.velocity);
+};
+
+// This updates the velocity and angles of a missile.  Needed for
+// rebounding shots.  Used by pulse rifle and Hip's laser cannon.
+void() BounceShot_Think = {
+    if (time > self.delay) {remove (self); return;}
+
+    self.flags      = self.flags - (self.flags & FL_ONGROUND);
+    self.velocity   = self.dest;    //old_velocity;
+    self.angles     = vectoangles(self.velocity);
+    self.nextthink  = time + 0.05;
+};
+
+float(entity targ, entity attacker) Ally_Check;
+
+// This redirects a missile to an enemy.  Must call BounceShot_Move first.
+void() BounceShot_Seek = {
+    local   entity  head, best;
+    local   vector  dir, spot;
+    local   float   bdot, dot;
+
+    best = world;
+    dir = trace_plane_normal;   //self.dest
+    bdot = 0;
+    head = findradius (self.origin, 2000);
+    while (head) {
+        if (head.takedamage == DAMAGE_AIM)
+        if (!head.invisible_finished)
+        if (!(head.flags & FL_NOTARGET))
+        if (head != self)
+        if (head != self.master)
+        if (!Ally_Check (head, self.master))
+        if (CanDamage (head, self)) {
+            spot = Midpoint (head);
+            dot = normalize(spot - self.origin) * dir;
+            if (dot > bdot) {
+                best = head;
+                bdot = dot;
+            }
+        }
+        head = head.chain;
+    }
+
+    if (best) {
+        self.velocity   = Midpoint (best);
+        self.velocity   = normalize (self.velocity - self.origin);
+        self.velocity   = self.dest = self.speed * self.velocity;
+        self.angles     = vectoangles(self.velocity);
+    }
 };

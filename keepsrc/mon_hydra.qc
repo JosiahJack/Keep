@@ -284,20 +284,12 @@ void() hydra_death= {
 		sound (self, CHAN_VOICE, "extras_r5/hydra/hydra_death.wav", 1, ATTN_NORM);
 		hydra_death1();
 	}
-}
+};
 
-/*QUAKED monster_hydra (1 0 0) (-16 -16 -24) (16 16 24) Ambush
-*/
-void() monster_hydra = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
+void() monster_hydra_precache = {
 	precache_model ("progs/extras_r5/hydra.mdl");
 	precache_model ("progs/extras_r5/hydragib.mdl");
 	precache_model ("progs/w_spike.mdl");
-
 	precache_sound ("extras_r5/hydra/hydra_death.wav");
 	precache_sound ("extras_r5/hydra/spit_impact_player.wav");
 	precache_sound ("extras_r5/hydra/hydra_pain.wav");
@@ -306,15 +298,21 @@ void() monster_hydra = {
 	precache_sound ("extras_r5/hydra/hydra_idle2.wav");
 	precache_sound ("extras_r5/hydra/hydra_tent.wav");
 	precache_sound ("player/tornoff2.wav");
+};
+
+// QUAKED monster_hydra (1 0 0) (-16 -16 -24) (16 16 24) Ambush
+void() monster_hydra = {
+	// Check for any random monster setups
+	if (monster_checkrandomizer() == TRUE) return;
+	// Check all spawn exceptions (monsters.qc)
+	if (monster_checkspawn() == TRUE) return;
 
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
-
 	self.idle_sound = "extras_r5/hydra/hydra_idle.wav";
 	self.idle_sound2 = "extras_r5/hydra/hydra_idle2.wav";
 	self.sight_sound = self.idle_sound;
 	self.gib1mdl = "progs/extras_r5/hydragib.mdl";
-	
 	self.mdl = "progs/extras_r5/hydra.mdl";
 	self.headmdl = "progs/extras_r5/hydragib.mdl";
 	self.solid = SOLID_NOT;				// No interaction with world
@@ -349,6 +347,5 @@ void() monster_hydra = {
 	self.classtype = CT_MONHYDRA;
 	self.classgroup = CG_FISH;
 	self.classmove = MON_MOVESWIM;
-	
 	monster_start();
 };

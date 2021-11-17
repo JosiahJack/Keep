@@ -1,108 +1,83 @@
-/*======================================================================
- Tarbaby, spawn, blue blob! (mostly annoying ... troll monster)
-========================================================================*/
-
+// Tarbaby, spawn, blue blob! (mostly annoying ... troll monster)
 $frame walk1 walk2 walk3 walk4  walk5 walk6 walk7 walk8 walk9 walk10
 $frame walk11 walk12 walk13 walk14 walk15 walk16 walk17 walk18 walk19
 $frame walk20 walk21 walk22 walk23 walk24 walk25
-
 $frame run1 run2 run3 run4 run5 run6  run7 run8 run9 run10 run11 run12 run13
 $frame run14 run15 run16 run17 run18 run19 run20 run21 run22 run23
 $frame run24 run25
-
 $frame jump1 jump2 jump3 jump4 jump5 jump6
-
 $frame fly1 fly2 fly3 fly4
-
 $frame exp
 
-// Return to death explosion
-void() tbaby_finaldeath;
+void() tbaby_finaldeath; // Return to death explosion
 
-//======================================================================
 // A small looped idle animation using walk
-//======================================================================
-void() tbaby_standframe =
-{
-	// Return to explosive death
-	if (self.deadflag > DEAD_NO) { tbaby_finaldeath(); return; }
+void() tbaby_standframe = {
+	if (self.deadflag > DEAD_NO) { tbaby_finaldeath(); return; } // Return to explosive death
 	
 	// Keep looping
-	if (self.walkframe == 4 || self.walkframe == 7)
-		self.nextthink = 0.1 + random()*0.3;
+	if (self.walkframe == 4 || self.walkframe == 7) self.nextthink = 0.1 + random()*0.3;
 	else self.nextthink = time + 0.1;
+
 	self.think = tbaby_standframe;
 	
-	// Reverse the stand idle frames (0,1,2,3,4,3,2,1)
-	if (self.walkframe < 5) self.frame = $walk1 + self.walkframe;
+	if (self.walkframe < 5) self.frame = $walk1 + self.walkframe; // Reverse the stand idle frames (0,1,2,3,4,3,2,1)
 	else self.frame = $walk1 + (7-self.walkframe);
 	self.walkframe = self.walkframe + 1;
-	
-	// Keep looping
-	if (self.walkframe >= 8) self.walkframe = 0;
+	if (self.walkframe >= 8) self.walkframe = 0; // Keep looping
 	ai_stand();
 }
-//----------------------------------------------------------------------
+
 void() tbaby_stand1 = { self.walkframe = 0; tbaby_standframe(); }
 // Can't find where this is being used, probably an old idea in id code
 void() tbaby_hang1 =[$walk1, tbaby_hang1] {ai_stand();};
 
-//======================================================================
 // The classic slow turning/walk animation
-//======================================================================
-void() tbaby_walkframe =
-{
-	// Return to explosive death
-	if (self.deadflag > DEAD_NO) { tbaby_finaldeath(); return; }
-	
-	// Keep looping
-	self.nextthink = time + 0.1;
+void() tbaby_walkframe = {
+	if (self.deadflag > DEAD_NO) { tbaby_finaldeath(); return; } // Return to explosive death
+
+	self.nextthink = time + 0.1; // Keep looping
 	self.think = tbaby_walkframe;
-	// The famous tarbaby wakeup sound!
-	if (self.walkframe == 0) monster_idle_sound();
-	// Keep moving forward in animation
-	self.frame = $walk1 + self.walkframe;
+	if (self.walkframe == 0) monster_idle_sound(); // The famous tarbaby wakeup sound!
+	self.frame = $walk1 + self.walkframe; // Keep moving forward in animation
 	self.walkframe = self.walkframe + 1;
-	// Odd way to do walking
-	if (self.walkframe < 11) ai_turn();
+	if (self.walkframe < 11) ai_turn(); // Odd way to do walking
 	else ai_walk(2);
-	// Keep looking
-	if (self.walkframe >= 25) self.walkframe = 0;
+	
+	if (self.walkframe >= 25) self.walkframe = 0; // Keep looking
 };
-//----------------------------------------------------------------------
+
 void() tbaby_walk1 = { self.walkframe = 0; tbaby_walkframe(); }
 
-//======================================================================
 // Running like a snail!
-//======================================================================
-void() tbaby_runframe = 
-{
-	// Return to explosive death
-	if (self.deadflag > DEAD_NO) { tbaby_finaldeath(); return; }
+void() tbaby_runframe = {
 	
-	// Keep looping
-	self.nextthink = time + 0.1;
+	if (self.deadflag > DEAD_NO) { tbaby_finaldeath(); return; } // Return to explosive death
+
+	self.nextthink = time + 0.1; // Keep looping
 	self.think = tbaby_runframe;
-	// Keep moving forward in animation
-	self.frame = $run1 + self.walkframe;
+	self.frame = $run1 + self.walkframe; // Keep moving forward in animation
 	self.walkframe = self.walkframe + 1;
-	// Turns as much as moving forward!
-	if (self.walkframe < 11) ai_face();
+	if (self.walkframe < 11) ai_face(); // Turns as much as moving forward!
 	else ai_run(2);
-	// Keep looping
-	if (self.walkframe >= 25) self.walkframe = 0;
+	
+	if (self.walkframe >= 25) self.walkframe = 0; // Keep looping
 };
-//----------------------------------------------------------------------
+
 void() tbaby_run1 = { self.walkframe = 0; tbaby_runframe(); }
 
-//======================================================================
 // The crazy jump functionality of spawns!
-//======================================================================
-void()	Tar_JumpTouch =
-{
+void()	Tar_JumpTouch = {
 	local float ldmg;
-	// Return to explosive death
-	if (self.deadflag > DEAD_NO) { tbaby_finaldeath(); return; }
+
+	if (self.frozen) {
+		Frozen_Touch();
+		self.touch = Frozen_Touch;
+		return;
+	}
+	
+	if (self.deadflag > DEAD_NO) { tbaby_finaldeath(); return; } // Return to explosive death
+
 	ai_jumpbreakable(20);			// Damage any breakables
 
 	if (other.takedamage && other.classname != self.classname && other != self.owner) {
@@ -120,8 +95,7 @@ void()	Tar_JumpTouch =
 			}
 			sound (self, CHAN_WEAPON, "blob/hit1.wav", 1, ATTN_NORM);
 		}
-	}
-	else sound (self, CHAN_WEAPON, "blob/land1.wav", 1, ATTN_NORM);
+	} else sound (self, CHAN_WEAPON, "blob/land1.wav", 1, ATTN_NORM);
 
 	// Is the tarbaby floating in the air?
 	if (!checkbottom(self)) {
@@ -137,17 +111,13 @@ void()	Tar_JumpTouch =
 
 	self.touch = SUB_Null;
 	if (self.spawnflags & MON_TARBYLESSJUMP) {
-		// RRP - Ijed (reduce constant jumping around like id version)
-		// Skill percentage Easy 0% = never jump, Nightmare 60% = good chance
+		// RRP - Ijed (reduce constant jumping around like id version).  Skill percentage Easy 0% = never jump, Nightmare 60% = good chance
 		if (random() > skill / 5) self.think =  self.th_run;
 		else self.think = self.th_jump;
-	}
-	// Original ID behaviour, constantly jump around like crazy
-	else self.think = self.th_jump;
+	} else self.think = self.th_jump; // Original ID behaviour, constantly jump around like crazy
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 void() tbaby_fly1 =[$fly1, tbaby_fly2] {};
 void() tbaby_fly2 =[$fly2, tbaby_fly3] {};
 void() tbaby_fly3 =[$fly3, tbaby_fly4] {};
@@ -156,7 +126,6 @@ void() tbaby_fly4 =[$fly4, tbaby_fly1] {
 	if (self.cnt == 4) self.th_jumpexit();
 };
 
-//----------------------------------------------------------------------
 void() tbaby_jump1 =[$jump1, tbaby_jump2] {ai_face();};
 void() tbaby_jump2 =[$jump2, tbaby_jump3] {ai_face();};
 void() tbaby_jump3 =[$jump3, tbaby_jump4] {ai_face();};
@@ -173,11 +142,8 @@ void() tbaby_jump5 =[$jump5, tbaby_jump6] {
 };
 void() tbaby_jump6 =[$jump6, tbaby_fly1] {};
 
-//======================================================================
 // There is no pain animation, just the chance of pain sounds
-//======================================================================
-void(entity inflictor, entity attacker, float damage) tbaby_pain =
-{
+void(entity inflictor, entity attacker, float damage) tbaby_pain = {
 	// Return to explosive death
 	if (self.deadflag > DEAD_NO) { tbaby_finaldeath(); return; }
 	// Check all pain conditions and set up what to do next
@@ -248,30 +214,29 @@ void() tbaby_die = {
 	tbaby_finaldeath();
 };
 
+void() monster_tarbaby_precache = {
+	precache_model ("progs/qmaster/mon_tarbaby.mdl");
+	precache_sound ("blob/sight1.wav");
+	precache_sound ("blob/death1.wav");
+	precache_sound ("blob/hit1.wav");
+	precache_sound ("blob/land1.wav");
+	precache_sound ("rogue/blob/mytosis.wav");
+};
+
 //QUAKED monster_tarbaby (1 0 0) (-16 -16 -24) (16 16 24) Ambush x Lessjump
 void() monster_tarbaby = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/qmaster/mon_tarbaby.mdl";
 	self.headmdl = string_null;
-	precache_model (self.mdl);
-
 	self.idle_sound = "blob/sight1.wav";
-	precache_sound (self.idle_sound);
 	self.sight_sound = self.idle_sound;
 	self.pain_sound = self.idle_sound;
-
 	self.death_sound = "blob/death1.wav";
-	precache_sound (self.death_sound);
-	
-	precache_sound ("blob/hit1.wav");
-	precache_sound ("blob/land1.wav");
-	
+
 	// The randomizer drops health packs on death
-	if (self.healamount > 0) CacheHealthpacks();
+	if (self.healamount > 0) world.deventity.health = world.deventity.health + self.healamount;
 	
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement

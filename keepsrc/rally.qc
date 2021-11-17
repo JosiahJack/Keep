@@ -276,12 +276,12 @@ void() CreateVehicleEntities = {
 	if (!cvar("deathmatch")) {
 		if ((w = SpawnPart(VEH_WHEEL_MIN, VEH_WHEEL_MAX)) != world) {
 			w.classname = "veh_wheel";
-			setmodel(w, "models/fwhl.mdl");
+			setmodel(w, "progs/qrally/fwhl.mdl");
 			self.fwhl = w;
 		}
 		if ((w = SpawnPart(VEH_WHEEL_MIN, VEH_WHEEL_MAX)) != world) {
 			w.classname = "veh_wheel";
-			setmodel(w, "models/fwhl.mdl");
+			setmodel(w, "progs/qrally/fwhl.mdl");
 			self.rwhl = w;
 			if (self.car_index == 4) w.frame = 7;
 		}
@@ -292,7 +292,7 @@ void() CreateVehicleEntities = {
 			hl.classname = "veh_headlight";
 			hl.owner = self;
 			setsize(hl, '0 0 0', '0 0 0');
-			setmodel(hl, "models/null.mdl");
+			setmodel(hl, "progs/null.mdl");
 			if (challenge == 2) hl.effects = EF_DIMLIGHT;
 			self.hl_r = hl;
 		}
@@ -300,7 +300,7 @@ void() CreateVehicleEntities = {
 			hl.classname = "veh_headlight";
 			hl.owner = self;
 			setsize(hl, '0 0 0', '0 0 0');
-			setmodel(hl, "models/null.mdl");
+			setmodel(hl, "progs/null.mdl");
 			if (challenge == 2) hl.effects = EF_DIMLIGHT;
 			self.hl_l = hl;
 		}
@@ -308,7 +308,7 @@ void() CreateVehicleEntities = {
 			hl.classname = "veh_headlight";
 			hl.owner = self;
 			setsize(hl, '0 0 0', '0 0 0');
-			setmodel(hl, "models/null.mdl");
+			setmodel(hl, "progs/null.mdl");
 			if (challenge == 2) hl.effects = EF_DIMLIGHT;
 			self.hl_m = hl;
 		}
@@ -343,7 +343,7 @@ void() CreateVehicleEntities = {
 	self.tracking_speed = DEFAULT_TRACKING_SPEED;
 	MoveVehicle();
 	if (self.classname == "player") {
-		self.weaponmodel = "models/wheel.mdl";
+		self.weaponmodel = "progs/qrally/wheel.mdl";
 		self.weaponframe = 5;
 		self.veh_tail.veh_dir = self.veh_dir;
 		cam_angles = self.veh_body.angles;
@@ -480,7 +480,7 @@ void(float right, float forward) SpawnDeathWheel =
 	part.movetype = MOVETYPE_BOUNCE;
 	part.solid = SOLID_NOT;
 	part.angles = self.owner.veh_body.angles;
-	setmodel(part, "models/whl.mdl");
+	setmodel(part, "progs/qrally/whl.mdl");
 	setsize(part, VEC_HULL_MIN + '0 0 12', VEC_HULL_MAX - '0 0 16');
 	setorigin(part, self.owner.veh_body.origin + v_right * right * (VEH_WIDTH / 2) + v_forward * forward * (VEH_LENGTH / 2));
 	part.velocity = random() * '128 0 0' + random() * '0 128 0' + random() * '0 0 200' + '0 0 150' - '64 64 0';
@@ -491,40 +491,26 @@ void(float right, float forward) SpawnDeathWheel =
 	part.nextthink = time + 3;
 };
 
-void() DeathThink = 
-{
-	local entity exp;
-	local entity part;
+void() DeathThink = {
+	local entity exp, part;
 	local float rnd;
-	if (!(self.speed) && (self.owner.health < 40 || self.last_idle < time - 2))
-	{
+
+	if (!(self.speed) && (self.owner.health < 40 || self.last_idle < time - 2)) {
 		part = spawn();
 		part.movetype = MOVETYPE_BOUNCE;
 		part.solid = SOLID_NOT;
 		part.angles = self.veh_body.angles;
 		part.colormap = self.veh_body.colormap;
-		if (self.owner.car_index == 2)
-		{
-			setmodel(part, "models/sumacar.mdl");
-		}
-		else
-		{
-			if (self.owner.car_index == 3)
-			{
-				setmodel(part, "models/zumacar.mdl");
-			}
-			else
-			{
-				if (self.owner.car_index == 4)
-				{
-					setmodel(part, "models/mycar.mdl");
-				}
-				else
-				{
-					if (self.owner.car_index == 5)
-					{
-						setmodel(part, "models/triton.mdl");
-					}
+		if (self.owner.car_index == 2) {
+			setmodel(part, "progs/qrally/sumacar.mdl");
+		} else {
+			if (self.owner.car_index == 3) {
+				setmodel(part, "progs/qrally/zumacar.mdl");
+			} else {
+				if (self.owner.car_index == 4) {
+					setmodel(part, "progs/qrally/mycar.mdl");
+				} else {
+					if (self.owner.car_index == 5) setmodel(part, "progs/qrally/triton.mdl");
 				}
 			}
 		}
@@ -540,42 +526,27 @@ void() DeathThink =
 		SpawnDeathWheel(-1, 1);
 		SpawnDeathWheel(1, -1);
 		SpawnDeathWheel(-1, -1);
-		if (self.owner.health <= 0)
-		{
+		if (self.owner.health <= 0) {
 			setorigin(self.owner.veh_body, '0 0 -3900');
-			if (self.owner.fwhl != world)
-			{
-				setorigin(self.owner.fwhl, '0 0 -3900');
-			}
-			if (self.owner.rwhl != world)
-			{
-				setorigin(self.owner.rwhl, '0 0 -3900');
-			}
-			if (self.owner.gun != world)
-			{
-				setorigin(self.owner.gun, '0 0 -3900');
-			}
+			if (self.owner.fwhl != world) setorigin(self.owner.fwhl, '0 0 -3900');
+			if (self.owner.rwhl != world) setorigin(self.owner.rwhl, '0 0 -3900');
+			if (self.owner.gun != world) setorigin(self.owner.gun, '0 0 -3900');
 		}
 		self.veh_body = part;
 		self.speed = 1;
 	}
+
 	if (self.last_idle > time - 2.5)
-	{
 		self.nextthink = time + 0.5;
-	}
 	else
-	{
 		self.nextthink = -1;
-	}
 };
 
-void() DestroyVehicle = 
-{
+void() DestroyVehicle = {
 	local float ftemp;
-	if (self.spawn_time > time - 1)
-	{
-		return;
-	}
+
+	if (self.spawn_time > time - 1) return;
+
 	self.veh_body.roll_velocity = '0 0 0';
 	self.veh_body.avelocity = '0 0 0';
 	setsize(self.veh_body, VEC_HULL_MIN, VEC_HULL_MAX);
@@ -779,7 +750,7 @@ void(entity own, vector org, vector vel, vector ang) SpawnDirt =
 	local vector vunit;
 	dirt = spawn();
 	setorigin(dirt, org);
-	setmodel(dirt, "models/dirt.mdl");
+	setmodel(dirt, "progs/qrally/dirt.mdl");
 	dirt.velocity = vel;
 	vunit = normalize(own.velocity);
 	vang = vectoangles(vunit);
@@ -837,7 +808,7 @@ float() MoveTail =
 			traceline(self.origin, self.origin - '0 0 256', 1, self);
 			if (trace_fraction > 0.5)
 			{
-				commentary(self, "voice/yeah.wav");
+				commentary(self, "qrally/voice/yeah.wav");
 			}
 		}
 		self.flags = self.flags - FL_ONGROUND;
@@ -1581,7 +1552,7 @@ void(vector pos, vector vel) CarGib =
 	gib = spawn();
 	gib.solid = SOLID_BBOX;
 	gib.movetype = MOVETYPE_BOUNCE;
-	setmodel(gib, "models/gibs.mdl");
+	setmodel(gib, "progs/qrally/gibs.mdl");
 	setorigin(gib, pos);
 	setsize(gib, '0 0 0', '0 0 0');
 	f = random() * 4;
@@ -2510,63 +2481,40 @@ void(float vel_speed) DoEngineNoises =
 			if (hold_flag && vel_speed > self.last_speed && (self.racing_flags & QR_START_READY) && self.last_rev < time - SNDLEN_REV)
 			{
 				self.last_rev = time;
-				if (self.car_index == 4)
-				{
+				if (self.car_index == 4) {
 					sound(self, CHAN_WEAPON, "qrally/rev3.wav", 1, ATTN_STATIC);
 					self.last_rev = time - 0.5;
-				}
-				else
-				{
-					if (self.car_index == 3)
-					{
+				} else {
+					if (self.car_index == 3) {
 						sound(self, CHAN_WEAPON, "qrally/rev4.wav", 1, ATTN_STATIC);
-					}
-					else
-					{
+					} else {
 						sound(self, CHAN_WEAPON, "qrally/rev2.wav", 1, ATTN_STATIC);
 					}
 				}
 			}
-			if (self.last_idle < time - SNDLEN_IDLE && (self.racing_flags & QR_START_READY) && self.ignition_time < time - SNDLEN_IGNITION)
-			{
-				if (self.car_index == 1)
-				{
-					sound(self, CHAN_VOICE, "qrally/engine/co01.wav", 0.4, ATTN_STATIC);
-					sound(self, CHAN_BODY, "qrally/engine/co01.wav", 0, ATTN_STATIC);
-				}
-				else
-				{
-					if (self.car_index == 2)
-					{
+			if (self.last_idle < time - SNDLEN_IDLE && (self.racing_flags & QR_START_READY) && self.ignition_time < time - SNDLEN_IGNITION) {
+				if (self.car_index == 1) {
+					sound(self, CHAN_VOICE, "qrally/engine/aa01.wav", 0.4, ATTN_STATIC);
+					sound(self, CHAN_BODY, "qrally/engine/aa01.wav", 0, ATTN_STATIC);
+				} else {
+					if (self.car_index == 2) {
 						sound(self, CHAN_VOICE, "qrally/engine/suidle.wav", 0.4, ATTN_STATIC);
 						sound(self, CHAN_BODY, "qrally/engine/suidle.wav", 0, ATTN_STATIC);
-					}
-					else
-					{
-						if (self.car_index == 3)
-						{
+					} else {
+						if (self.car_index == 3) {
 							sound(self, CHAN_VOICE, "qrally/engine/aa01.wav", 0.4, ATTN_STATIC);
 							sound(self, CHAN_BODY, "qrally/engine/aa01.wav", 0, ATTN_STATIC);
-						}
-						else
-						{
-							if (self.car_index == 4)
-							{
-								if (self.veh_body.skin == 0)
-								{
+						} else {
+							if (self.car_index == 4) {
+								if (self.veh_body.skin == 0) {
 									sound(self, CHAN_VOICE, "qrally/engine/test01.wav", 0.4, ATTN_STATIC);
 									sound(self, CHAN_BODY, "qrally/engine/test01.wav", 0, ATTN_STATIC);
-								}
-								else
-								{
+								} else {
 									sound(self, CHAN_VOICE, "qrally/engine/ma01.wav", 0.4, ATTN_STATIC);
 									sound(self, CHAN_BODY, "qrally/engine/ma01.wav", 0, ATTN_STATIC);
 								}
-							}
-							else
-							{
-								if (self.car_index == 5)
-								{
+							} else {
+								if (self.car_index == 5) {
 									sound(self, CHAN_VOICE, "qrally/engine/tri01.wav", 0.4, ATTN_STATIC);
 									sound(self, CHAN_BODY, "qrally/engine/tri01.wav", 0, ATTN_STATIC);
 								}
@@ -2581,56 +2529,39 @@ void(float vel_speed) DoEngineNoises =
 	}
 };
 
-void(float max_dist) body_close_to_ground = 
-{
-	local entity e;
-	local entity etemp;
+void(float max_dist) body_close_to_ground = {
+	local entity e, etemp;
 	local vector org;
+
 	org = self.origin;
 	traceline(org, org - '0 0 1' * max_dist, 0, self);
-	if (trace_fraction < 1)
-	{
-		if (trace_ent == world)
-		{
-			return 1;
-		}
+	if (trace_fraction < 1) {
+		if (trace_ent == world) return TRUE;
 	}
 };
 
-entity(entity old_next) FindNextMarker = 
-{
+entity(entity old_next) FindNextMarker = {
 	local entity trav;
-	local float marker_count;
-	local float next_index;
+	local float marker_count, next_index;
+
 	trav = find(world, classname, "rally_startfinish");
-	if (trav != world)
-	{
+	if (trav) {
 		marker_count = trav.ammo_shells;
 		next_index = old_next.ammo_shells + 1;
-		if (next_index > marker_count)
-		{
-			next_index = 1;
-		}
-	}
-	else
-	{
-		bprint("Unable to find Start/Finish entity\n");
+		if (next_index > marker_count) next_index = 1;
+	} else {
+		dprint("Unable to find Start/Finish entity\n");
 		return world;
 	}
 	trav = world;
-	while ((trav = find(trav, classname, "rally_marker")) != world)
-	{
-		if (trav.ammo_shells == next_index)
-		{
-			return trav;
-		}
+	while ((trav = find(trav, classname, "rally_marker")) != world) {
+		if (trav.ammo_shells == next_index) return trav;
 	}
-	bprint("Unable to find next marker entity\n");
+	dprint("Unable to find next marker entity\n");
 	return world;
 };
 
-void() MoveVehicle = 
-{
+void() MoveVehicle = {
 	local vector vel_angles;
 	local vector veh_dir_angles;
 	local vector veh_angles;
@@ -2688,7 +2619,7 @@ void() MoveVehicle =
 			if (challenge && new_dist > old_dist && old_dist < 312 && self.last_turnaround < time - 1)
 			{
 				centerprint(self, "Marker missed!");
-				commentary(self, "voice/wrongway.wav");
+				commentary(self, "qrally/voice/wrongway.wav");
 				self.last_turnaround = time;
 			}
 		}
@@ -2912,7 +2843,7 @@ void() MoveVehicle =
 			{
 				if (self.time_remaining < 5 && self.time_remaining != self.last_time_remaining)
 				{
-					commentary(self, "voice/tone05.wav");
+					commentary(self, "qrally/voice/tone05.wav");
 				}
 			}
 			self.last_time_remaining = self.time_remaining;
@@ -3511,7 +3442,7 @@ void() PreRaceMsg = {
 			while (plyr != world) {
 				centerprint(plyr, "GO!");
 				sound(plyr, CHAN_ITEM, "qrally/voice/gotst01.wav", 1, ATTN_STATIC);
-				commentary(plyr, "voice/gotst01.wav");
+				commentary(plyr, "qrally/voice/gotst01.wav");
 				plyr.last_lap_time = time;
 				plyr.time_remaining = TIMETRIAL_STARTTIME;
 				if (cvar("skill") >= 3) plyr.time_remaining = floor(plyr.time_remaining * 0.65);
@@ -3533,7 +3464,7 @@ void() PreRaceMsg = {
 		while (plyr != world)
 		{
 			centerprint(plyr, secs);
-			commentary(plyr, "voice/tone05.wav");
+			commentary(plyr, "qrally/voice/tone05.wav");
 			plyr = find(plyr, classname, "player");
 		}
 		if ((startent = find(world, classname, "rally_starter")) != world)
@@ -3600,7 +3531,7 @@ void() spawn_finish_model =
 	flag.classname = "rally_flag";
 	flag.view_ofs = '0 0 7';
 	setsize(flag, VEC_HULL_MIN, VEC_HULL_MAX);
-	setmodel(flag, "models/finish.mdl");
+	setmodel(flag, "progs/qrally/finish.mdl");
 	makevectors(self.angles);
 	setorigin(flag, self.origin);
 	traceline(flag.origin, flag.origin - '0 0 64', 1, flag);
@@ -3769,7 +3700,7 @@ void() CheckLaps =
 				other.gun = SpawnPart('0 0 0', '0 0 0');
 				other.gun.classname = "veh_gun";
 			}
-			setmodel(other.gun, "models/trophy.mdl");
+			setmodel(other.gun, "progs/qrally/trophy.mdl");
 			other.gun.skin = num_finished - 1;
 		}
 		other.racing_flags = other.racing_flags | QR_FINISHED_RACE;
@@ -3792,7 +3723,7 @@ void() CheckLaps =
 		{
 			if (other.classname == "player")
 			{
-				commentary(other, "voice/finallap.wav");
+				commentary(other, "qrally/voice/finallap.wav");
 				centerprint(other, "Final Lap!");
 			}
 		}
@@ -3821,7 +3752,7 @@ void() CheckFastestLap =
 		if (other.fastest_lap < all_fastest_lap)
 		{
 			all_fastest_lap = other.fastest_lap;
-			commentary(other, "voice/fastest.wav");
+			commentary(other, "qrally/voice/fastest.wav");
 			bprint("New Lap Record by ");
 			bprint(other.netname);
 			bprint(": ");
@@ -3900,7 +3831,7 @@ void() spawn_marker_flag = {
 	flag.classname = "rally_flag";
 	flag.view_ofs = '0 0 7';
 	setsize(flag, VEC_HULL_MIN, VEC_HULL_MAX);
-	setmodel(flag, "models/marker.mdl");
+	setmodel(flag, "progs/qrally/marker.mdl");
 	makevectors(self.angles);
 	setorigin(flag, self.origin + v_forward * 8);
 	traceline(flag.origin, flag.origin - '0 0 64', 1, flag);
@@ -3947,7 +3878,7 @@ void() marker_touch = {
 			}
 			other.racing_flags = other.racing_flags - (other.racing_flags & QR_OUT_OF_TIME);
 		}
-		commentary(other, "voice/checkpnt.wav");
+		commentary(other, "qrally/voice/checkpnt.wav");
 		if (racing_type == RT_TIME_TRIAL) {
 			self.movetarget.frame = 0;
 			self.movetarget.angles_y = other.veh_body.angles_y;
@@ -4396,7 +4327,7 @@ void() stopsign_touch = {
 		self.solid = SOLID_NOT;
 		return;
 	}
-	sound(self, CHAN_AUTO, "rally/process/htcone01.wav", 1, ATTN_STATIC);
+	sound(self, CHAN_AUTO, "qrally/process/htcone01.wav", 1, ATTN_STATIC);
 	oldself = self;
 	setorigin(self, oldself.origin + '0 0 32');
 	setmodel(self, "progs/qrally/stoptop.mdl");

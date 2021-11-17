@@ -170,10 +170,8 @@ void () wrath_die15 = [ 86.000, wrath_die15 ] {
 };
 
 void () wrath_die01 = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	self.solid = SOLID_NOT;
-
 	sound (self,CHAN_VOICE,"rogue/wrath/wdthc.wav",TRUE,ATTN_NORM);
 
 	// Make sure body stays floating up where it finally dies
@@ -183,73 +181,67 @@ void () wrath_die01 = {
 	wrath_die02();
 };
 
+void () monster_wrath_precache = {
+	precache_model("progs/rogue/wrath.mdl");
+	precache_model("progs/drake/w_ball.mdl");
+	precache_model("progs/rogue/wrthgib1.mdl");
+	precache_model("progs/rogue/wrthgib2.mdl");
+	precache_model("progs/rogue/wrthgib3.mdl");
+	precache_sound("rogue/wrath/wsee.wav");
+	precache_sound("rogue/wrath/watt.wav");
+	precache_sound("rogue/wrath/wpain.wav");
+	precache_sound("rogue/wrath/wdthc.wav");
+	precache_sound("ad171/wraith/idle1.wav");
+	precache_sound("ad171/wraith/idle2.wav");
+	precache_sound("ad171/wraith/idle3.wav");
+};
+
 void () monster_wrath = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-   if (!self.mdl) self.mdl = "progs/rogue/wrath.mdl";
-   if (!self.mdl) self.gib1mdl = "progs/rogue/wrthgib1.mdl";
-   if (!self.mdl) self.gib2mdl = "progs/rogue/wrthgib2.mdl";
-   if (!self.mdl) self.gib3mdl = "progs/rogue/wrthgib3.mdl";
+	if (!self.mdl) self.mdl = "progs/rogue/wrath.mdl";
+	if (!self.mdl) self.gib1mdl = "progs/rogue/wrthgib1.mdl";
+	if (!self.mdl) self.gib2mdl = "progs/rogue/wrthgib2.mdl";
+	if (!self.mdl) self.gib3mdl = "progs/rogue/wrthgib3.mdl";
+	self.pain_sound = "rogue/wrath/wpain.wav";
+	self.idle_sound = "ad171/wraith/idle1.wav";
+	self.idle_sound2 = "ad171/wraith/idle2.wav";
+	self.idle_soundcom = "ad171/wraith/idle3.wav";
+	self.sight_sound = "rogue/wrath/wsee.wav";
+	precache_sound (self.sight_sound);
+	self.solid = SOLID_NOT;				// No interaction with world
+	self.movetype = MOVETYPE_NONE;		// Static item, no movement
+	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;
+	if (self.health < 1) self.health = 400;
+	self.yaw_speed = 35.000; // Can turn really fast
+	self.gibhealth = MON_NEVERGIB;		// Cannot be gibbed by weapons
+	self.gibbed = FALSE;				// not falling apart
+	self.pain_flinch = 70;				// High pain threshold
+	self.blockudeath = TRUE;			// no humanoid death sound
+	self.height = MONAI_ABOVEDIST;		// Enemytarget distance above
 
-   precache_model ("progs/rogue/wrath.mdl");
-   precache_model ("progs/drake/w_ball.mdl");
-   precache_model ("progs/rogue/wrthgib1.mdl");
-   precache_model ("progs/rogue/wrthgib2.mdl");
-   precache_model ("progs/rogue/wrthgib3.mdl");
-   precache_sound ("rogue/wrath/wsee.wav");
-   precache_sound ("rogue/wrath/watt.wav");
-
-   self.pain_sound = "rogue/wrath/wpain.wav";
-   precache_sound ("rogue/wrath/wpain.wav");
-
-   precache_sound ("rogue/wrath/wdthc.wav");
-
-   self.idle_sound = "ad171/wraith/idle1.wav";
-   self.idle_sound2 = "ad171/wraith/idle2.wav";
-   self.idle_soundcom = "ad171/wraith/idle3.wav";
-   precache_sound (self.idle_sound);
-   precache_sound (self.idle_sound2);
-   precache_sound (self.idle_soundcom);
-
-   self.sight_sound = "rogue/wrath/wsee.wav";
-   precache_sound (self.sight_sound);
-
-   self.solid = SOLID_NOT;				// No interaction with world
-   self.movetype = MOVETYPE_NONE;		// Static item, no movement
-   if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;
-   if (self.health < 1) self.health = 400;
-
-   self.yaw_speed = 35.000; // Can turn really fast
-   self.gibhealth = MON_NEVERGIB;		// Cannot be gibbed by weapons
-   self.gibbed = FALSE;				// not falling apart
-   self.pain_flinch = 70;				// High pain threshold
-   self.blockudeath = TRUE;			// no humanoid death sound
-   self.height = MONAI_ABOVEDIST;		// Enemytarget distance above
-
-   // Always reset Ammo Resistance to be consistent
-   self.resist_shells = self.resist_nails = 0;
-   self.resist_rockets = self.resist_cells = 0;
+	// Always reset Ammo Resistance to be consistent
+	self.resist_shells = self.resist_nails = 0;
+	self.resist_rockets = self.resist_cells = 0;
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
 
-   self.th_stand = wrath_stand1;
-   self.th_walk = wrath_walk01;
-   self.th_run = wrath_run01;
-   self.th_missile = wrath_attack;
-   self.th_pain = wrath_pain;
-   self.th_die = wrath_die01;
+	self.th_stand = wrath_stand1;
+	self.th_walk = wrath_walk01;
+	self.th_run = wrath_run01;
+	self.th_missile = wrath_attack;
+	self.th_pain = wrath_pain;
+	self.th_die = wrath_die01;
 
-   if (!self.classtype) self.classtype = CT_MONWRAITH;
-   self.classgroup = CG_SPIDER;
-   self.classmove = MON_MOVEFLY;
+	if (!self.classtype) self.classtype = CT_MONWRATH;
+	self.classgroup = CG_SPIDER;
+	self.classmove = MON_MOVEFLY;
 	if (self.deathstring == "")  self.deathstring = " was disintegrated by a Wrath\n";
 
-   monster_start ();
+	monster_start ();
 };
 
 void (float AttackNumber) WrathMissile = {

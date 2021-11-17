@@ -57,48 +57,11 @@ float   CURSE_CONFUSE       = 5;
 
 vector  VEC_360     = '360 360 0';
 vector  VEC_QUAKE   = '5 4 4';      // Standard earthquake angle tilts.
-
-// Damage Flags ------------------------------------------------------------
-// acid = 1, cold = 2, fire = 3, lightning = 4, nether = 5.
-float   DF_NONE         = 0;    // No flags -- just for readability.
-float   DF_TIMED        = 1;    // Damage done slowly over time... usually.
-float   DF_NO_ARMOR     = 2;    // Armor cannot absorb this damage.
-float   DF_NO_KNOCK     = 4;    // Don't add to velocity.
-float   DF_GIB          = 8;    // Attack will gib if it kills the target.
-float   DF_LEECH        = 16;   // Attacker heals from target damage.
-float   DF_PROXY        = 32;   // Indirect attack, no quad, no thorns.  Used by doors and the bloodcube.
-float   DF_SCAR         = 64;   // Can kill zombies if applied continuously.
-float   DF_ACID         = 128;
-float   DF_COLD         = 256;
-float   DF_FIRE         = 512;
-float   DF_LIGHTNING    = 1024;
-float   DF_ROCKET       = 2048; // Damage caused by rockets and equivalent.
-float   DF_BURN         = 4096; // Target may ignite when damaged.
-float   DF_MELEE        = 8192; // Melee attack, used to check a powerup.
-float   DF_PERCENT      = 16384;// Remove current hp% instead of hp.
-
-// Radius only
-float   DF_SAFE         = 32768;// Attacker is immune to his attack.
-float   DF_WATER_ONLY   = 65536;// Takes damage only if in water.
-
-// Special
-float   DF_NO_GIB       = 131072;   // Attack cannot gib.
-float   DF_ZKILL        = 262144;   // One-hit kill zombies on direct hit.
-float   DF_CROSS_BLOCK  = 524288;   // Cross blocks all damage.
-float   DF_PUSH_NPC     = 1048576;  // Apply knockback to npcs.
-float   DF_NO_SHIELDS   = 2097152;  // Mega-enforcer shields can't stop this.
-float   DF_NO_REACT     = 4194304;  // Don't get mad at attacker.
-float   DF_BLESSED      = 8388608;  // Don't hit allies.
-
-// Combo values
-float   DFx_BURNING     = 69;  // Timed + No Knock + Scar
-float   DFx_FIREBALL    = 576;  // Fire + Scar
-float   DFx_RESISTS     = 3969; // Acid + Cold + Fire + Lightning + Rocket
-
 float   HIT_NORMAL  = 0;    // Default.
 float   HIT_METAL   = 1;    // Knights, centroids, and other armored guys.
 float   HIT_STONE   = 2;    // Statues, golems.
 float   COURAGE_DAMAGE  = 10;   // Damage to armor if it reflects a rocket.
+float COST_MJOLNIR = 25;
 
 // Frames for 's_fancy.spr'.
 float   X32_PUFF_ORANGE     = 0;
@@ -158,7 +121,7 @@ float   BLOOD_PURPLE    = 145;      // For tarbaby.
 float   BLOOD_BLUE      = 209;      // For cacodemons.
 float   BLOOD_SHAFT     = 225;      // Alternate blood red color.
 float   BLOOD_FIRE      = 233;      // For lava monsters like Chthon.
-float   CHUNKS_ICE      = -41;      // For ice chunks.
+float   CHUNKS_ICE      = 41;      // For ice chunks.
 float   FLx_CREATURE        =   40;     // Client + Monster
 float   FLx_NOT_FALLING     =  515;     // Fly + Swim + Onground
 float   GIB_EAT         = 2;    // Gib can be eaten for health.
@@ -186,12 +149,6 @@ float   MASS_HEAVY      = 3;  // From 1.5x to 5x player mass. Grappler gets pull
 float   MASS_SUPER      = 4;  // Over 5x player mass.  As heavy, but target is immune to quakes and resists pushing.
 // Note:  Zero mass is treated as beyond superheavy.  As super, plus immune to forced movement of any kind.
 
-// Rocket damage types
-float   MDAM_RANDOM     = 0;    // damage = damage * (5+random()) / 6
-float   MDAM_GRENADE    = 1;    // Use radius damage, with minimum of 10% max.
-float   MDAM_FULL       = 2;    // Full damage on contact.
-float   MDAM_TWENTY     = 3;    // Damage ranges from dmg-20 to dmg.
-
 // Dragon flags (NOTE:  Also used for other monsters...)
 float   RYU_ELEMENTS    = 3;
 float   RYU_USE_FIRE    = 0;
@@ -200,7 +157,7 @@ float   RYU_USE_LITE    = 2;
 float   RYU_USE_ICE     = 3;
 float   RYU_BOMB        = 4;
 float   RYU_ALERT       = 64;       // Has better awareness and reflexes.
-float   RYU_CRANKED     = 128;      // Stronger, and may use special attacks.
+// float   RYU_CRANKED     = 128;      // Stronger, and may use special attacks.
 float   RYU_NO_WATER    = 256;      // Hates and avoids water.
 float   RYU_STAY        = 512;      // Stay if on, move if off.
 float   RYU_CALM        = 1024;     // Ignore targets if on.
@@ -215,64 +172,30 @@ float   RYU_DOOM        = 2097152;  // Use Doom AI.
 float   RYU_REBEL       = 4194304;  // SoE:  For rebel archers in nsoe2.
 float   RYU_REAPER      = 8388608;  // Soul collector.
 
-float   DJG_STRIP       = 1;    // Strips all items.
-float   DJG_BSP_SHIFT   = 2;    // Move ammo/health boxes by '-16 -16 z'.
-float   DJG_SNOW        = 4;    // unf2: Use snow skins on select monsters.
-float   DJG_MEDIEVAL    = 8;    // Replace base soldiers with medieval.
-float   DJG_SOUL_EVIL   = 16;   // Soul of Evil, extra cash and variant obits.
-float   DJG_OUM         = 32;   // OUM mode.  For Tronyn's toum map.
-float   DJG_GROUND64    = 64;   // Force delayed spawn walkmonsters onground.
-float   DJG_NO_DROWN    = 128;  // Monsters cannot drown in this level.
-float   DJG_VOID        = 256;  // Convert trigger_hurt to trigger_void.
-float   DJG_WIND        = 512;  // Adds wind hack to nsoe4.
-float   DJG_ARENA       = 1024; // automatic dmsp in single-player.
-
 // Speed for various missiles.
 float   SPEED_HOOK      = 500;      // Was 500 in Roman, 1000 in original.
 float   SPEED_BURIZA    = 2000;     // Was 1000.
 
-// --> Spawnflags <--
-// Note:  sf32, 64, and 128 are the same as in Quoth.
-// Note#2:  Zerstorer used sf64 for delay spawn, Quake2 used sf2.
-float   SPAWN_AMBUSH    = 1;        // Standard.  Wake up on sight or pain.
-float   SPAWN_STATUE    = 4;        // Statue mode for select monsters.
-float   SPAWN_WHITE     = 16;       // Monster teams up and helps client.
-float   SPAWN_SILENT    = 32;       // Slient sf64.
-float   SPAWN_NORMAL    = 64;       // Spawns when triggered; classic sf64.
-float   SPAWN_AWARE     = 128;      // Monsters:  Spawn mad at activator.
-float   SPAWN_RESPAWN   = 128;      // Items:  Always respawn.
-
 float   XFL_HUNGRY      = 1;    // Eats items.  (Was Draco before removal.)
-float   XFL_ITEMS       = 2;    // Can pickup items.
 float   XFL_GHOUL       = 4;    // Allowed to eat gibs.  "Brains!"
-float   XFL_IMMUNITY    = 8;    // Entity is immune to poison.
-float   XFL_WIND        = 32;     // Wind tunnels can push this entity.
 float   XFL_USE_AMMO    = 64;     // Monster needs ammo to shoot guns.
 float   XFL_NO_AIR      = 128;    // Doesn't need to breathe.
-float   XFL_BOSS        = 512;    // Boss -- Don't infight if coaligned.
 float   XFL_INEDIBLE    = 1024;   // Gremlin can't eat this corpse.
 float   XFL_ZOMBIE      = 2048;   // Hurt only by 1-hit kill or scar damage.
 float   XFL_NO_SCAN     = 4096;   // Ignore this monster during a worldscan.
-float   XFL_ARMORED     = 16384;  // Magic-resistant/immune to knightspike.
-float   XFL_GHOST_BANE  = 32768;  // Able to hurt ghosts.
 float   XFL_ADD_TO_KILL = 65536;    // Add one to kills when killed.
-float   XFL_FIREANGEL   = 131072;   // Immune to splash damage (cyberdemon).
 float   XFL_PET         = 524288;   // Use to decrement pet counter.
-float   XFL_NO_BURN     = 1048576;  // Cannot ignite.
 float   XFL_IGNORE      = 2097152;  // Don't infight this entity.
 float   XFL_SLIMER      = 4194304;  // Not harmed by slime.
 float   XFL_FLUX        = 8388608;  // Made solid by ghost touch code.
-float cranked;    			// TRUE = Stronger monsters and brutal falling rules.
 float cutscene;       		// Set to TRUE during a cutscene.
 float doomed;				// TRUE = Monsters respawn after death.
 float respawning; 			// Toggle used when respawning monsters.
-float soul_evil;  			// TRUE = Soul of Evil mode.  Merger code.
 float super_active;
 .float powershield_active;
 .float      hittype;
 vector      damage_velocity;// Set by 'T_Damage' for gib velocity.
 .float      bloodtype;      // For blood other than red, like in Alien Quake.
-.float      form_active;    // Non-zero if player is in monster form.
 .float      ryuflags;   	// AI flags for monsters.
 .float      mass;
 .float      perms;  		// Permanent powerups.
@@ -285,7 +208,6 @@ vector      damage_velocity;// Set by 'T_Damage' for gib velocity.
 .float      waitmin, waitmax;
 .float      xfl, xf2;   	// Extra flags without C code connections.
 .float      xsf;        	// Extra spawnflags used by func_spawn and sf64.
-.float      saw_time;       // Time to play chainsaw idle sound.
 .float      tracer_time;    // Used by rapid-fire energy weapons.
 .float      zapper_time;    // Time to recharge flare gun/wand.
 .float      arsenal;        // Up to 24 weapons can be stored here.
@@ -303,20 +225,19 @@ vector      damage_velocity;// Set by 'T_Damage' for gib velocity.
 .entity     mirv1;          // Link to most recently launched MIRV.
 .entity     hook;           // Link to most recently launched grappling hook.
 
-// persistent attacks -------------------------------------------------------
+// persistent attacks
 .entity     burner;         // Flame that is burning on the entity.
 .vector     burn_ofs;       // Where flame burns relative to target origin.  x = v_forward, y = v_right, z = v_up.
 
-// More powerups -----------------------------------------------------------
+// More powerups
 .float      wing_finished, wing_time, wing_sound;       // Dark-Angel Wings *
 .float      mirror_finished, mirror_time, mirror_sound, mirror_ping;  // Reflection
 .float      slow_finished, slow_time, slow_ping;    // For those hit by ice arrow.
 .float      tome_finished;  // Tome of Power.
+.float		tome_time; // Used for wearing off sound
 .float      fighting;   	// Checks if monster is really fighting while running.  Monsters can run to follow friends.
 .void()     th_win;     	// Monsters:  sound when killing a player.  Missiles:  code prior to origin shift.  Items:  additional code after spawning
 .float		mindex2;		// used for storing modelindex when phasing in/out
-.float      h2olevel;       // 'waterlevel' without the C code baggage.
-.float      h2otype;       	// Ditto, except for 'watertype'.
 .float		level; 			// Used for monster_baron to set it as a boss of different types
 .entity     divine_attacker;// Who gets credit when lightning strikes.
 .float      divine_finished;// If non-zero, when an entity gets zapped.
@@ -334,9 +255,13 @@ float   WAND_RANGE      = 600;		// Can only shoot as far as vanilla lightning gu
 .float      baha_ammo;          // Renewable energy for dragon form.
 .float      baha_time;          // Time it takes for ammo to recharge.
 .float      baha_click;         // Helps check for double-clicking.
-float       mindex_saw;     // Player with chainsaw.
-float		mindex_hammer;
-float		modelindex_hamout;
+.float      b0_click;       // Button0 (attack) press counter.
+.float      b2_click;       // Button2 (jump) press counter.
+.float      b2_time;        // Time to wait for jump double press.
+.float      b2_done;        // Ignore jump if > time.  Stops spam grief.
+
+float modelindex_saw;     // Player with chainsaw.
+float modelindex_hamout;
 float PUSH_ONCE = 1;
 float PUSH_CURRENT = 2;     // Zerstorer -- "Silent" PUSH for water currents.
 float PUSH_JUMP_ONLY = 4;   // Drake -- Push only when jump is pressed.
@@ -347,6 +272,7 @@ float PUSH_JUMP_ONLY = 4;   // Drake -- Push only when jump is pressed.
 .vector spawnmins;
 .void() spawnfunction;
 .float repairtime;
+.float hammer_finished; // When Mjolnir returns to player.
 
 // Cutscenes -- Borrowed from Zerstorer.
 .string     script;         //dhm - denotes which script to read.
@@ -362,3 +288,29 @@ float   BARON_FIRE  = 1;
 float   BARON_EARTH = 2;
 float   BARON_AIR   = 3;
 float   BARON_WATER = 4;
+
+float   COST_MIRV = 5;
+void() Mirv_Use;
+.float rate2; // mirv.qc (Update: ...and hydra.qc)
+entity shot_head; // Used for explosive shell chain list.
+entity lightning; // This is an edict set aside for the sole purpose of referencing reflected lightning bolts.
+.float frozen; // Whether this has been frozen into ice, used by enemies hit by the buriza / Asgard Arbalest
+
+float   lightzero_finished;
+float   lightzero_level;
+float   lightzero_rate;
+
+float   LIGHT_ZERO          = 0;    // Lightstyle 0.
+float   LIGHTZERO_NORMAL    = 12;   // Use for light "m".
+float   LIGHTZERO_MIN       = 4;    // Minimum light when storming.
+float   LIGHTZERO_MAX       = 25;   // Maximum light allowed.
+
+.float  dmg_stack;
+
+// New constants for Stinger / MIRV.
+float   LOCK_DOT_PITCH  = 0.9848; // cos(10).
+float   LOCK_DOT_YAW    = 0.9397; // cos(20).
+float   LOCK_RANGE      = 16384; // 1000 is about 30 metres.
+                                 // 4096 isn't long enough for Masque.   The fact that I'm updating this file for Masque of the Red Death here in 2021 when this was written ~2011 is kind of insane. -Qmaster
+						         // 8192 wasn't long enough for Quake: Mjolnir -Qmaster
+float   AREABLASTER_DAMAGE  = 15; // Was 18, but that was too much.

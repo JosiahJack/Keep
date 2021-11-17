@@ -36,12 +36,11 @@
 // Shows your vehicle.  Changes model according to which vehicle we entered.
 //=============================================================================
 
-// Update the legs
+// Update the vehicle
 void() player_vehicle_animation = {
 	if ((cvar("chase_active")) && self.owner.in_a_vehicle) { // if switched into 3rd person mode while driving
 		makevectors (self.owner.angles);
 		self.angles = self.owner.angles;
-		self.angles_x = 15;		// legs must not change x-angles together with player´s view
 		if (!self.owner.vehicle_model) self.owner.vehicle_model = "progs/qrally/sumabase.mdl";
 		setmodel(self,self.owner.vehicle_model);
 		self.skin = self.owner.vehicle_skindex;
@@ -52,12 +51,14 @@ void() player_vehicle_animation = {
 	} else {
 		setmodel(self,"");
 	}
-	setorigin (self,self.owner.origin);
+	if (!(cinematic_running || cutscene || intermission_running)) setorigin (self,self.owner.origin);
+	else setorigin (self,self.oldorigin); // stay put
+	self.oldorigin = self.origin;
 	self.think = player_vehicle_animation;
 	self.nextthink = time;
 };
 
-// Create the legs.  Done only once at level start.
+// Create the blank vehicle holder entity.  Done only once at level start.
 entity(entity e) player_vehicle = {
 	local entity shaderrr;
 

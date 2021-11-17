@@ -1,4 +1,40 @@
-void() misc_model;
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Arcane Dimensions (AD), Rubicon, and Qmaster
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 13
+// Function count: 53
+//
+// Implements: Miscellaneous Decorative Effects Emitters
+//
+// Description:
+// Various entities for emitting effects such as sparks, smoke, sprites, etc.
+//=============================================================================
 
 float MISC_STARTOFF = 1;		// Start OFF (use DELAY instead!)
 float MISC_FBALLSLIME = 32;		// Slime green fire ball
@@ -13,267 +49,16 @@ float MISC_SPARKRED = 8;		// misc_spark produces Red sparks
 float MISC_COLLISION = 2;		// misc_model has collision enabled
 float MISC_MOVEMENT = 4;		// misc_model can be moved around
 float MISC_SHAKEVIEWONLY = 2;	// No velocity movement
-float MISC_EXPLBOX_MAX = 5;		// Maximum amount of skins available
 
-// Animate model skin slowly = 0.3s
-void()	misc_ebox_0 = [0, misc_ebox_0] {
-	if (self.attack_finished < time) {
-		self.lefty = 1 - self.lefty;
-		self.skin = self.lefty + (self.skin_override * 2); 
-		self.nextthink = time + MODEL_ANIM_SPEED;
-	}
-};
-void(string gibname, float dm) throwpolypgib;
-
-void() misc_explod_delay = {
-	T_RadiusDamage (self, self, self.dmg, world, DAMAGEALL); // Explosive damage and sound+fx
-	particle_explode(self.origin, 50+random()*50, 1, self.part_style, PARTICLE_BURST_UPWARD); // Particle explosion drifting upward
-	particle (self.origin, '0 0 0', 0, 255); // Special type (hard-coded) of particle explosion that only works if particle count=255 :)
-	if (HasTargets(self)) SUB_UseTargets(); // Check for any explosion triggers
-	self.origin = self.origin + '0 0 32';
-	if (self.classname == "misc_biobox_l" || self.classname == "misc_biobox_s") {
-		SpawnExplosion(EXPLODE_POISON_MED, self.origin, self.noise);
-		throwpolypgib("progs/quoth/polypgib.mdl", -40);
-		throwpolypgib("progs/quoth/polypgib.mdl", -40);
-		throwpolypgib("progs/quoth/polypgib.mdl", -40);
-		throwpolypgib("progs/quoth/polypgib.mdl", -50);
-		throwpolypgib("progs/quoth/polypgib.mdl", -50);
-		throwpolypgib("progs/quoth/polypgib.mdl", -60);
-		throwpolypgib("progs/quoth/polypgib.mdl", -60);
-		throwpolypgib("progs/quoth/polypgib.mdl", -75);
-		throwpolypgib("progs/quoth/polypgib.mdl", -75);
-	} else {
-		if (self.classname == "misc_plasmabox_l" || self.classname == "misc_plasmabox_s") {
-			particle_explode(self.origin, 50+random()*50, 2, PARTICLE_BURST_BLUE, PARTICLE_BURST_UPWARD);
-			SpawnExplosion(EXPLODE_PLASMA_BIG, self.origin, self.noise);
-		} else {
-			SpawnExplosion(EXPLODE_SMALL, self.origin, self.noise);
-		}
-	}
-	entity_hide(self);
-};
-
-// Blow up the box
-void() misc_explod_fire = {
-	local entity ent_explode;
-	
-	if (self.attack_finished > time) return;
-	
-	self.attack_finished = time + LARGE_TIMER;
-	if (self.bsporigin) self.oldorigin = bmodel_origin(self); // Save origin for later
-	else self.oldorigin = self.origin;
-	
-	self.estate_off(); // Switch off everything
-	
-	// Stop recursive loops with T_RadiusDamage so delay each explosion so its not all at once.  Spawn the explosion/dmg/fx as a new entity func_explode does not want to set correct origin
-	ent_explode = spawn();
-	setorigin(ent_explode, self.oldorigin);
-	ent_explode.noise = self.noise;
-	ent_explode.classname = self.classname; // inherit classname for special type checks
-	ent_explode.dmg = self.dmg;
-	ent_explode.think = misc_explod_delay;
-	ent_explode.nextthink = 0.01 + random()*0.1;
-};
-
-void() misc_explobox_use = {
-	// If box is setup off, switch on first
-	if (self.spawnflags & ENT_STARTOFF) {
-		self.spawnflags = self.spawnflags - ENT_STARTOFF;
-		self.estate_on();
-	}
-	else misc_explod_fire(); // No toggle function, just blow it up!
-};
-
-void() misc_explobox_on = {
-	if (self.attack_finished > time) return; // If the box has exploded, do nothing
-	if (self.estate == ESTATE_ON) return; // Stop re-triggering ON state
-
-	self.estate = ESTATE_ON;
-	if (self.bsporigin) {
-		self.solid = SOLID_BSP;
-		self.movetype = MOVETYPE_PUSH;
-	} else {
-		self.solid = SOLID_BBOX;
-		self.movetype = MOVETYPE_NONE;
-	}
-	setmodel (self, self.mdl);
-	
-	// Set skin unless using special misc_biobox or plasmabox from Quoth
-	if (self.classname != "misc_biobox_l" || self.classname != "misc_biobox_s" || self.classname != "misc_plasmabox_l" || self.classname != "misc_plasmabox_s") self.skin = self.skin_override*2;
-	setsize(self, self.bbmins, self.bbmaxs);
-	self.th_die = misc_explod_fire;
-	self.takedamage = DAMAGE_AIM;
-	self.nextthink = time + 0.1;
-	self.think = misc_ebox_0;
-};
-
-void() misc_explobox_off =  {
-	self.estate = ESTATE_OFF;
-	self.solid = SOLID_NOT;
-	self.model = "";
-	self.takedamage = DAMAGE_NO;
-	self.th_die = SUB_Null;
-	self.think = SUB_Null;
-};
-
-void() misc_explobox_setup = {
-	if (self.noise == "") self.noise = SOUND_REXP3;
-	precache_sound (self.noise);
-	self.classtype = CT_EXPLO_BOX;
-	self.classgroup = CG_MISCENT;
-	if (self.health < 1) self.health = 15;		// ID def = 20
-	if (!self.dmg) self.dmg = 160;
-	
-	// Check and setup default box skin.  0=Original, 1=rubicon2, 2=plasma, 3=toxic, 4=Light wood, 5=dark wood
-	if (self.skin_override < 1 || self.skin_override > MISC_EXPLBOX_MAX) self.skin_override = 0;
-	
-	// Setup particle explosion colour
-	if (self.skin_override == 2) self.part_style = PARTICLE_BURST_BLUE;
-	else if (self.skin_override == 3) self.part_style = PARTICLE_BURST_GREEN;
-	else self.part_style = PARTICLE_BURST_WHITE;
-
-	// Setup exploding model
-	if (self.bsporigin) {
-		self.mdl = self.model;		// Save model for later
-		setmodel (self, self.mdl);	// set size and link into world
-		self.bbmins = self.mins;	// Save bmodel bounds for later
-		self.bbmaxs = self.maxs;
-	} else {
-		// Query console variable 'temp1' for model upgrade option.
-		// Cannot use global vars because they don't exist at this point
-		// Move the new centered exploding models to match old box origin
-		// The default is to move all boxes to suit original id maps
-		if (!query_configflag(SVR_ITEMOFFSET) && self.classname != "misc_biobox_l" && self.classname != "misc_biobox_s" && self.classname != "misc_plasmabox_l" && self.classname != "misc_plasmabox_s") {
-			self.oldorigin = self.origin + '16 16 0';
-			setorigin(self, self.oldorigin);
-		}
-
-		// Setting the angle key in the editor to UP/DOWN = random rotation	
-		if (self.angles_y < 0 || (self.angles_y == 0 && !query_configflag(SVR_ITEMROTATE)) ) { 
-			if (self.classname != "misc_biobox_l" && self.classname != "misc_biobox_s" && self.classname != "misc_plasmabox_l" && self.classname != "misc_plasmabox_s") {
-				self.angles_y = rint(random()*359);
-			}
-		}
-
-		// Temporarily enable model/bbox for collision test.  Finalize box location (check drop to floor)
-		if( !(self.spawnflags & ITEM_FLOATING) ) {
-			setmodel (self, self.mdl);
-			setsize(self, self.bbmins, self.bbmaxs);
-			self.solid = SOLID_BBOX;
-			self.movetype = MOVETYPE_TOSS;	
-			self.origin_z = self.origin_z + 6;
-			droptofloor();
-			if (pointcontents(self.origin) == CONTENT_SOLID) {
-				dprint ("\n\b[ExplBox]\b "); dprint (self.classname);
-				dprint (" stuck at ("); dprint (vtos(self.origin)); dprint (")\n");
-				spawn_marker(self.origin, SPNMARK_YELLOW);
-				remove(self);
-				return;
-			}
-		}
-	}
-
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
-	self.estate_on = misc_explobox_on;
-	self.estate_off = misc_explobox_off;
-	self.estate_use = misc_explobox_use;
-	if (self.spawnflags & ENT_STARTOFF) self.estate_off();
-	else self.estate_on();
-};
-
-//QUAKED misc_explobox (0 0.5 0.8) (-16 -16 0) (16 16 64) x x x x x FLOAT STARTOFF
-// { model(":progs/ad171/explode_box1.mdl"); }
-// Large exploding box
-// -------- KEYS --------
-// target        : trigger events when box explodes
-// skin_override : 0=original, 1=rubicon2, 3=plasma, 4=toxic, 5-6=wood
-// noise         : Explosion sound (def=weapons/r_exp3.wav)
-// health        : Amount of health before exploding (def=15)
-// dmg           : Override radius damage (def=160)
-// -------- SPAWNFLAGS --------
-// FLOAT    : No drop to floor test
-// STARTOFF : Starts off and waits for trigger
-// -------- NOTES --------
-// Large exploding box
-void() misc_explobox = {
-	self.mdl = "progs/ad171/explode_box1.mdl";	// maps/b_explob.bsp
-	precache_model (self.mdl);
-	self.bbmins = '-16 -16 0';
-	self.bbmaxs = '16 16 64';
-	misc_explobox_setup();
-};
-
-// QUAKED misc_explobox2 (0 0.5 0.8) (-16 -16 0) (16 16 32) x x x x x FLOAT STARTOFF
-// { model(":progs/ad171/explode_box2.mdl"); }
-// Small exploding box
-// -------- KEYS --------
-// target        : trigger events when box explodes
-// skin_override : 0=original, 1=rubicon2, 3=plasma, 4=toxic, 5-6=wood
-// noise         : Explosion sound (def=weapons/r_exp3.wav)
-// health        : Amount of health before exploding (def=15)
-// dmg           : Override radius damage (def=160)
-// -------- SPAWNFLAGS --------
-// FLOAT    : No drop to floor test
-// STARTOFF : Starts off and waits for trigger
-// -------- NOTES --------
-// Small exploding box
-void() misc_explobox2 = {
-	self.mdl = "progs/ad171/explode_box2.mdl";
-	precache_model (self.mdl);
-	self.bbmins = '-16 -16 0';
-	self.bbmaxs = '16 16 32';
-	misc_explobox_setup();
-};
-
-void() misc_barrel = {
-	self.mdl = "maps/nsoe2/b_barrel.bsp";
-	precache_model (self.mdl);
-	self.bbmins = '-32 -32 0';
-	self.bbmaxs = '32 32 64';
-	misc_explobox_setup();
-};
-
-// QUAKED func_explobox (0 0.5 0.8) ? x x x x x x STARTOFF x
-// Exploding box (bmodel)
-// -------- KEYS --------
-// target      : trigger events when box explodes
-// noise       : Explosion sound (def=weapons/r_exp3.wav)
-// health      : Amount of health before exploding (def=15)
-// dmg         : Override radius damage (def=160)
-// _dirt       : -1 = will be excluded from dirtmapping
-// _minlight   : Minimum light level for any surface of the brush model
-// _mincolor   : Minimum light color for any surface (def='1 1 1' RGB)
-// _shadow     : Will cast shadows on other models and itself
-// _shadowself : Will cast shadows on itself
-// -------- SPAWNFLAGS --------
-// STARTOFF : Starts off and waits for trigger
-// -------- NOTES --------
-// Exploding box (bmodel)
-void () func_explobox = {
-	if (check_bmodel_keys()) return;	// Check for bmodel errors
-	
-	self.mdl = self.model;					// Brushwork version
-	self.bsporigin = TRUE;					// bmodel object
-	self.angles = '0 0 0';					// Make sure no angle twist
-	self.skin_override = 0;				// Only bsp skins
-	self.spawnflags = self.spawnflags - (self.spawnflags & ITEM_FLOATING); // Cannot be setup floating (always remove flag)
-	misc_explobox_setup();
-};
-
-// Vanilla ID map hack (not used directly anymore)
-void() barrel_explode = {
-	self.enemy = spawn();
-	setorigin(self.enemy, self.origin+'0 0 32');
-	self.enemy.noise = SOUND_REXP3;
-	self.enemy.dmg = 160;
-	self.enemy.think = misc_explod_delay;
-	self.enemy.nextthink = 0.01 + random()*0.1;
-};
-
+void() misc_model;
+void() monster_bbox;
 void() misc_lavaball_fly;
+void() misc_bubble_bob;
+void() misc_drip_spawn;
+void() misc_drip_touch;
+void() misc_spark_spawn;
 
-void() misc_lavaball_reset = {
+void() misc_lavaball_reset = { // [FUNCTION]
 	self.touch = SUB_Null;
 	self.flags = 0;
 	self.modelindex = 0;			// Make sure no model
@@ -286,34 +71,31 @@ void() misc_lavaball_reset = {
 	self.think = misc_lavaball_fly;
 };
 
-void() misc_lavaball_touch = {
+void() misc_lavaball_touch = { // [FUNCTION]
+	local float touchdmg; // Put in a local so that lavaball can touch a few things before it dies and still preserve original self.dmg value.
+
+	touchdmg = self.dmg;
 	self.touch = SUB_Null;
-	if (other.takedamage) {
-		// Check for lava shield?
+	if (other.takedamage) { // Check for lava proections?
 		if (self.spawnflags & MISC_FBALLSLIME) {
-			if (other.flags & FL_CLIENT && other.items & IT_SUIT)
-				sound (other, CHAN_ITEM, SOUND_ARTSUIT3, 0.5, ATTN_NORM); // Play envirosuit protection sound
-			else T_Damage (other, self, self, self.dmg, DAMARMOR); // Default = pain!
+			if (other.resist_acid > 0) touchdmg = self.dmg * (1-other.resist_acid);
+			if (other.flags & FL_CLIENT && other.items & IT_SUIT) sound (other, CHAN_ITEM, SOUND_ARTSUIT3, 0.5, ATTN_NORM); // Play envirosuit protection sound
+			else T_Damage (other, self, self, touchdmg, DAMARMOR); // Default = pain!
 		} else {
-			if (other.flags & FL_CLIENT && ((other.moditems & IT_ARTLAVASHIELD) || other.resist_fire >= 1) || other.therm_finished > time) {
-				sound (other, CHAN_ITEM, SOUND_ARTLSHIELD3, 0.5, ATTN_NORM); // Play lava shield protection sound
-			} else {
-				if (other.resist_fire > 0) self.dmg = self.dmg * (1-other.resist_fire); // Default = pain!
-				T_Damage (other, self, self, self.dmg, DAMARMOR);
-			}
+			if (other.resist_fire > 0) touchdmg = self.dmg * (1-other.resist_fire); // Default = pain!
+			if (other.flags & FL_CLIENT && ((other.moditems & IT_ARTLAVASHIELD) || other.resist_fire >= 1) || other.therm_finished > time) sound (other, CHAN_ITEM, SOUND_ARTLSHIELD3, 0.5, ATTN_NORM); // Play lava shield protection sound
+			else T_Damage (other, self, self, touchdmg, DAMARMOR); // Default = pain!
 		}
 	}
 	misc_lavaball_reset();
 };
 
-void() misc_lavaball_fly = {
+void() misc_lavaball_fly = { // [FUNCTION]
 	if (self.estate & ESTATE_BLOCK) return;
 	
 	setmodel (self, self.mdl);
 	setorigin (self, self.oldorigin);
-	// Remove all fly/onground flags
-	self.flags = 0;
-
+	self.flags = 0; // Remove all fly/onground flags
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_TOSS;
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
@@ -325,11 +107,9 @@ void() misc_lavaball_fly = {
 		self.velocity_y = (random() * 100) - 50;
 		self.velocity_z = self.speed + (random() * 200);
 	} else {
-		// Setup tracking vector (using movedir) = traps.qc
-		TargetMovedir(self, FALSE);
+		TargetMovedir(self, FALSE); // Setup tracking vector (using movedir) = traps.qc
 		self.velocity = self.movedir * (self.speed + (random() * 200));
-		// Add original XY (right) vector offset
-		self.velocity = self.velocity + (v_right * ((random() * 100) - 50));
+		self.velocity = self.velocity + (v_right * ((random() * 100) - 50)); // Add original XY (right) vector offset
 	}
 
 	self.nextthink = time + self.wait;	// Random time start
@@ -337,7 +117,7 @@ void() misc_lavaball_fly = {
 	self.touch = misc_lavaball_touch;
 };
 
-void() misc_lavaball_on = {
+void() misc_lavaball_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.nextthink = time + self.delay + (random() * self.wait);
 	self.think = misc_lavaball_fly;
@@ -356,7 +136,7 @@ void() misc_lavaball_on = {
 // STARTOFF : Always Starts off and waits for trigger
 // -------- NOTES --------
 // Lava Balls, with damage on impact
-void() misc_fireball = {
+void() misc_fireball = { // [ENTITY]
 	if (self.spawnflags & MISC_FBALLSLIME) self.mdl = MODEL_PROJ_SLIME;
 	else self.mdl = MODEL_PROJ_LAVA;
 	precache_model (self.mdl);
@@ -387,85 +167,27 @@ void() misc_fireball = {
 	else entity_state_on();
 };
 
-void() misc_slimeball = {
+void() misc_slimeball = { // [ENTITY]
 	self.spawnflags = self.spawnflags | MISC_FBALLSLIME;
 	self.classname = "misc_fireball";
 	misc_fireball();
 };
 
-//======================================================================
-/*QUAKED misc_gibfountain (0 .5 .8) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x
-Spew Gibs in target direction (Originally from Zerstorer MOD)
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-gibtype    : 0=Blood (def) 1=Stone 10=Poison
-style      : 0=Random (def) 1=Arm/Leg 2=Torso 3=Slice 4=Small 5=Large
-count      : Quantity of gibs to throw at once (def=1)
-cnt        : Extra random quanity of gibs to throw (def=0)
-gib1mdl    : Custom Gib 1 model
-gib2mdl    : Custom Gib 2 model
-gib3mdl    : Custom Gib 3 model
-gib1skin   : Custom Gib 1 skin number (def=0)
-gib2skin   : Custom Gib 2 skin number (def=0)
-gib3skin   : Custom Gib 3 skin number (def=0)
-gib1frame  : Custom Gib 1 range to randomly pick from
-gib2frame  : Custom Gib 2 range to randomly pick from
-gib3frame  : Custom Gib 3 range to randomly pick from
-gib1sound  : Custom Gib 1 Impact sound (0=Light flesh, 1=Heavy flesh, 5=Acid,
-gib2sound  : Custom Gib 2 Impact sound 10-12=Pebbles, 20=Wood, 40=Metal1, 
-gib3sound  : Custom Gib 3 Impact sound 41=Metal2, 42=Chain, 50=Custom)
-gib1soundx : Custom Gib 1 Impact WAV file (must set gib1sound=50)
-gib1soundx : Custom Gib 2 Impact WAV file (must set gib2sound=50)
-gib1soundx : Custom Gib 3 Impact WAV file (must set gib3sound=50)
-sounds     : 1=Zerstorer(def) 4=Silent 5=Custom
-noise      : Custom sound 1 for launching gibs
-noise1     : Custom sound 2 for launching gibs (random selection)
-target     : targeting entity used for custom direction
-angle      : determines the firing direction (def=-1 UP)
-gibmins    : Bounding box override for gib model (def='0 0 0')
-gibmaxs    : Bounding box override for gib model (def='0 0 0')
-speed      : forward speed (def=600)
-gibvel     : Random Velocity X=Forward, Y=L/R, Z=U/D (def=200 100 0)
-gib1dmg    : Amount of damage (>1) to inflict on player when touching gibs
-gib1exp    : Sprite Explosion (1=small 2=medium 3=large 10+=plasma 20+=poison 30+=electric 40+=smoke)
-gibpartstyle  : Particle Colour (1=Yellow 2=Green 4=Red 8=Blue 16=Purple 32=Fire 64=White)
-gibpartoffset : Offset to particle origin (center of effect)
-gibpartbase   : Particle quantity, Base (minimum) value
-gibpartrnd    : Particle quantity, Random amount to add
-gibpartlife   : Time (seconds) which particles are active
-gibpartchance : % chance of particle effect being active while on floor
-gibAnimfinal  : Final animation frame (>0) to enable sequence
-gibAnimstart  : Starting animation frame for sequence
-gibAnimTimer  : Time (seconds) spent in final impact animation
-delay      : base time between spawning gibs (default 3)
-wait       : random time default 5 (= time + self.delay + (random() x self.wait) ) 
--------- SPAWNFLAGS --------
-STARTOFF : Always Starts off and waits for trigger
--------- NOTES --------
-Spew Gibs in target direction (Originally from Zerstorer MOD)
-*/
-//======================================================================
-
-//----------------------------------------------------------------------
-void() misc_gibfountain_fly =
-{
+void() misc_gibfountain_fly = { // [FUNCTION]
 	if (self.estate & ESTATE_BLOCK) return;
 
-	// Loop through gibs, better chance of different types
 	self.lefty = rint(self.count + random()*self.cnt);
-	while (self.lefty > 0) {		
+	while (self.lefty > 0) { // Loop through gibs, better chance of different types	
 		// Check for custom gib models
 		if (self.pos1_z) {
 			self.lip = random();
 			if (self.lip < 0.3) self.aflag = 13;
 			else if (self.lip < 0.6) self.aflag = 12;
 			else self.aflag = 11;
-		}
-		else if (self.pos1_y) {
+		} else if (self.pos1_y) {
 			if (random() < 0.5) self.aflag = 12;
 			else self.aflag = 11;
-		}
-		else if (self.pos1_x) self.aflag = 11;
+		} else if (self.pos1_x) self.aflag = 11;
 		else {
 			if (self.style == 0) self.aflag = rint(1 + random()*4);
 			else self.aflag = self.style;
@@ -474,38 +196,77 @@ void() misc_gibfountain_fly =
 		ThrowGib(self.aflag, 1);
 		self.lefty = self.lefty -1;
 	}
-	
-	// Only need to play throw/fire sound once per timer cycle
-	if (self.noise1 != "" && random() < 0.5) 
-		sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+
+	if (self.noise1 != "" && random() < 0.5) sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM); // Only need to play throw/fire sound once per timer cycle
 	else sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM);
 
 	self.nextthink = time + self.delay + (random() * self.wait);
 	self.think = misc_gibfountain_fly;
 };
 
-//----------------------------------------------------------------------
-void() misc_gibfountain_on =
-{
+void() misc_gibfountain_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
-	// Spawn delay is no longer required, remove it
-	self.spawnflags = self.spawnflags - (self.spawnflags & ENT_STARTOFF);
-
-	// Display spawn direction with angle model
-	if (self.lip) {
-		self.lip = FALSE;	// Once only
+	self.spawnflags = self.spawnflags - (self.spawnflags & ENT_STARTOFF); // Spawn delay is no longer required, remove it
+	if (self.lip) { // Display spawn direction with angle model
+		self.lip = FALSE; // Once only
 		if (self.target != "") TargetMovedir(self, FALSE); // Movement target only, no need to check other targets
 		spawn_arrow(self.origin, vectoangles(self.movedir), 0);
 	}
-	// Start spewing (no delay so it can be triggered properly)
-	misc_gibfountain_fly();
+
+	misc_gibfountain_fly(); // Start spewing (no delay so it can be triggered properly)
 };
 
-void() misc_gibfountain = {
-	// Setup/load extra gib types (Check for previous precache)
-	if (self.gibtype == GIBTYPE_STONE) {
-		// Only bother to precache if NOT done already
-		if (!gibstone) precache_stonegibs(); }
+// QUAKED misc_gibfountain (0 .5 .8) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x
+// -------- KEYS --------
+// targetname : toggle state (use trigger ent for exact state)
+// gibtype    : 0=Blood (def) 1=Stone 10=Poison
+// style      : 0=Random (def) 1=Arm/Leg 2=Torso 3=Slice 4=Small 5=Large
+// count      : Quantity of gibs to throw at once (def=1)
+// cnt        : Extra random quanity of gibs to throw (def=0)
+// gib1mdl    : Custom Gib 1 model
+// gib2mdl    : Custom Gib 2 model
+// gib3mdl    : Custom Gib 3 model
+// gib1skin   : Custom Gib 1 skin number (def=0)
+// gib2skin   : Custom Gib 2 skin number (def=0)
+// gib3skin   : Custom Gib 3 skin number (def=0)
+// gib1frame  : Custom Gib 1 range to randomly pick from
+// gib2frame  : Custom Gib 2 range to randomly pick from
+// gib3frame  : Custom Gib 3 range to randomly pick from
+// gib1sound  : Custom Gib 1 Impact sound (0=Light flesh, 1=Heavy flesh, 5=Acid,
+// gib2sound  : Custom Gib 2 Impact sound 10-12=Pebbles, 20=Wood, 40=Metal1, 
+// gib3sound  : Custom Gib 3 Impact sound 41=Metal2, 42=Chain, 50=Custom)
+// gib1soundx : Custom Gib 1 Impact WAV file (must set gib1sound=50)
+// gib1soundx : Custom Gib 2 Impact WAV file (must set gib2sound=50)
+// gib1soundx : Custom Gib 3 Impact WAV file (must set gib3sound=50)
+// sounds     : 1=Zerstorer(def) 4=Silent 5=Custom
+// noise      : Custom sound 1 for launching gibs
+// noise1     : Custom sound 2 for launching gibs (random selection)
+// target     : targeting entity used for custom direction
+// angle      : determines the firing direction (def=-1 UP)
+// gibmins    : Bounding box override for gib model (def='0 0 0')
+// gibmaxs    : Bounding box override for gib model (def='0 0 0')
+// speed      : forward speed (def=600)
+// gibvel     : Random Velocity X=Forward, Y=L/R, Z=U/D (def=200 100 0)
+// gib1dmg    : Amount of damage (>1) to inflict on player when touching gibs
+// gib1exp    : Sprite Explosion (1=small 2=medium 3=large 10+=plasma 20+=poison 30+=electric 40+=smoke)
+// gibpartstyle  : Particle Colour (1=Yellow 2=Green 4=Red 8=Blue 16=Purple 32=Fire 64=White)
+// gibpartoffset : Offset to particle origin (center of effect)
+// gibpartbase   : Particle quantity, Base (minimum) value
+// gibpartrnd    : Particle quantity, Random amount to add
+// gibpartlife   : Time (seconds) which particles are active
+// gibpartchance : % chance of particle effect being active while on floor
+// gibAnimfinal  : Final animation frame (>0) to enable sequence
+// gibAnimstart  : Starting animation frame for sequence
+// gibAnimTimer  : Time (seconds) spent in final impact animation
+// delay      : base time between spawning gibs (default 3)
+// wait       : random time default 5 (= time + self.delay + (random() x self.wait) ) 
+// -------- SPAWNFLAGS --------
+// STARTOFF : Always Starts off and waits for trigger
+// -------- NOTES --------
+// Spew Gibs in target direction (Originally from Zerstorer MOD)
+void() misc_gibfountain = { // [ENTITY]
+	if (self.gibtype == GIBTYPE_STONE) { // Setup/load extra gib types (Check for previous precache)
+		if (!gibstone) precache_stonegibs(); } // Only bother to precache if NOT done already
 	else if (self.gibtype == GIBTYPE_POISON) {
 		if (!gibpoison) precache_poisongibs(); }
 	else self.gibtype = GIBTYPE_BLOOD; // Default=Blood
@@ -516,113 +277,70 @@ void() misc_gibfountain = {
 		precache_model(self.gib1mdl);
 		if (self.gib1skin < 1) self.gib1skin = 0;
 		if (self.gib1frame < 1) self.gib1frame = 0;
-		// Verify custom gib impact sound is valid
-		if (!(check_gibsound(self.gib1sound))) self.gib1sound = 0;
+		if (!(check_gibsound(self.gib1sound))) self.gib1sound = 0; // Verify custom gib impact sound is valid
 		self.pos1_x = TRUE;
-
-		// Custom Model 2 - Model 1 must exist first
-		if (self.gib2mdl != "") {
+		if (self.gib2mdl != "") { // Custom Model 2 - Model 1 must exist first
 			precache_model(self.gib2mdl);
 			if (self.gib2skin < 1) self.gib2skin = 0;
 			if (self.gib2frame < 1) self.gib2frame = 0;
-			// Verify custom gib impact sound is valid
-			if (!(check_gibsound(self.gib2sound))) self.gib2sound = 0;
+			if (!(check_gibsound(self.gib2sound))) self.gib2sound = 0; // Verify custom gib impact sound is valid
 			self.pos1_y = TRUE;
-
-			// Custom Model 3 - Model 1/2 must exist first
-			if (self.gib3mdl != "") {
+			if (self.gib3mdl != "") { // Custom Model 3 - Model 1/2 must exist first
 				precache_model(self.gib3mdl);
 				if (self.gib3skin < 1) self.gib3skin = 0;
 				if (self.gib3frame < 1) self.gib3frame = 0;
-				// Verify custom gib impact sound is valid
-				if (!(check_gibsound(self.gib3sound))) self.gib3sound = 0;
+				if (!(check_gibsound(self.gib3sound))) self.gib3sound = 0; // Verify custom gib impact sound is valid
 				self.pos1_z = TRUE;
 			}
 		}
 	}
-	
-	// Setup default sounds (Zerstorer)
-	if (self.sounds < 1) self.sounds = 1;
-	// Original Zerstorer toilet sounds
-	if (self.sounds == 1) {
+
+	if (self.sounds < 1) self.sounds = 1; // Setup default sounds (Zerstorer)
+	if (self.sounds == 1) { // Original Zerstorer toilet sounds
 		self.noise = "zerstorer/gibfnt/gf_sprt1.wav";
 		self.noise1 = "zerstorer/gibfnt/gf_sprt2.wav";
-	} else if (self.sounds == 4) { // Empty sound files
-		self.noise = self.noise1 = SOUND_EMPTY;
-	}
+	} else if (self.sounds == 4) self.noise = self.noise1 = SOUND_EMPTY;  // Empty sound files
 	
-	// Check if ANY custom sounds have been defined
-	if (self.noise != "") precache_sound (self.noise);
+	if (self.noise != "") precache_sound (self.noise); // Check if any custom sounds have been defined
 	if (self.noise1 != "") precache_sound (self.noise1);
 	if (self.gib1soundx != "") precache_sound (self.gib1soundx);
 	if (self.gib2soundx != "") precache_sound (self.gib2soundx);
 	if (self.gib3soundx != "") precache_sound (self.gib3soundx);
-	
-	// Entity defaults
-	self.classtype = CT_MISCGIBF;
+	self.classtype = CT_MISCGIBF; // Entity defaults
 	self.classgroup = CG_MISCENT;
-	// Special target system gibs
-	self.max_health = MON_GIBTARGET;
-	
+	self.max_health = MON_GIBTARGET; // Special target system gibs
 	if (self.wait <= 0) self.wait = 5;
 	if (self.delay <= 0) self.delay = 3;
 	if (self.waitmin <= 0) self.waitmin = 0.5;
 	if (self.style < 1 || self.style > 9) self.style = 0;
 	if (self.count < 1) self.count = 1;
 	if (self.cnt < 1) self.cnt = 0;
-	// Default velocity (like misc_fireball)
-	if (self.speed <= 0) self.speed = 600;
-	// Extra randomness to speed/velocity of gib (forward/right/up)
-	if (CheckZeroVector(self.gibvel)) self.gibvel = '200 100 0';
-
-	// Direction system priority = ANGLES > TARGET > ANGLETARGET.  Check for empty angles setup?
-	if (CheckZeroVector(self.angles)) {
-		// No angles defined, create default direction.  Target/Angletarget are checked when gib is thrown/spawned
-		self.angles = '0 -1 0';
-		// priority = TARGET > ANGLETARGET
-		// Target has to be defined for gib to be thrown properly
-		if (self.target == "") self.target = self.angletarget;
+	if (self.speed <= 0) self.speed = 600; // Default velocity (like misc_fireball)
+	if (CheckZeroVector(self.gibvel)) self.gibvel = '200 100 0'; // Extra randomness to speed/velocity of gib (forward/right/up)
+	if (CheckZeroVector(self.angles)) { // Direction system priority = ANGLES > TARGET > ANGLETARGET.  Check for empty angles setup?
+		self.angles = '0 -1 0'; // No angles defined, create default direction.  Target/Angletarget are checked when gib is thrown/spawned
+		if (self.target == "") self.target = self.angletarget; // priority = TARGET > ANGLETARGET.  Target has to be defined for gib to be thrown properly.
 		else self.angletarget = self.target;
 	}
-	// Find movedir vector
-	SetMovedir();
-	// lefty = random quantity, lip = display debug arrow
-	self.lefty = self.lip = TRUE;
 	
-	// Setup Entity State functionality
-	//------------------------------------------------------------------
-	if (self.targetname != "") self.use = entity_state_use;
+	SetMovedir(); // Find movedir vector
+	self.lefty = self.lip = TRUE; // lefty = random quantity, lip = display debug arrow
+	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_on = misc_gibfountain_on;
 	if (self.spawnflags & ENT_STARTOFF) entity_state_off();
-	else { 
-		// Random start timer (def=0.5 + random()*0.5)
+	else { // Random start timer (def=0.5 + random()*0.5)
 		self.nextthink = time + self.waitmin + (self.waitmin * random());
 		self.think = self.estate_on; 
 	}
 };
 
-/*======================================================================
-//QUAKED air_bubbles (0 .5 .8) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x
-sprite based bubble that floats upward
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
--------- SPAWNFLAGS --------
-STARTOFF : Always Starts off and waits for trigger
--------- NOTES --------
-sprite based bubble that floats upward
-
-======================================================================*/
-void() misc_bubble_bob;
-void() misc_bubble_remove =
-{
+void() misc_bubble_remove = { // [FUNCTION]
 	if (other.classtype == self.classtype) return;
 	remove(self);
 };
 
-//----------------------------------------------------------------------
-void() misc_bubble_split =
-{
-	local entity	bubble;
+void() misc_bubble_split = { // [FUNCTION]
+	local entity bubble;
 	
 	bubble = spawn();
 	bubble.classname = self.classname;
@@ -644,7 +362,7 @@ void() misc_bubble_split =
 	if (self.waterlevel != 3) remove (self);
 };
 
-void() misc_bubble_bob = {
+void() misc_bubble_bob = { // [FUNCTION]
 	local float rnd1, rnd2, rnd3;
 
 	self.cnt = self.cnt + 1;
@@ -667,7 +385,7 @@ void() misc_bubble_bob = {
 	self.think = misc_bubble_bob;
 };
 
-void() misc_bubble_spawn = {
+void() misc_bubble_spawn = { // [FUNCTION]
 	local entity bubble;
 	if (self.estate & ESTATE_BLOCK) return;
 	
@@ -684,7 +402,6 @@ void() misc_bubble_spawn = {
 	bubble.nextthink = time + 0.5;
 	bubble.think = misc_bubble_bob;
 	bubble.touch = misc_bubble_remove;
-
 	bubble.frame = bubble.cnt = 0;
 	setsize (bubble, '-8 -8 -8', '8 8 8');
 	self.nextthink = time + random() + 0.5;
@@ -692,56 +409,36 @@ void() misc_bubble_spawn = {
 };
 
 // Map hack entry point
-void() make_bubbles = { 
+void() make_bubbles = { // [FUNCTION]
 	self.mdl = SBUBBLE_DROWN;
 	misc_bubble_spawn(); 
 };
 
-//----------------------------------------------------------------------
-void() misc_bubble_on =
-{
+void() misc_bubble_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.nextthink = time + 1 + random();
 	self.think = misc_bubble_spawn;
 };
 
-//----------------------------------------------------------------------
-void() air_bubbles =
-{
+// QUAKED air_bubbles (0 .5 .8) (-8 -8 -8) (8 8 8) x x x x x x STARTOFF x
+// -------- KEYS --------
+// targetname : toggle state (use trigger ent for exact state)
+// -------- SPAWNFLAGS --------
+// STARTOFF : Always Starts off and waits for trigger
+// -------- NOTES --------
+// sprite based bubble that floats upward
+void() air_bubbles = { // [ENTITY]
 	if (deathmatch) { remove(self); return; }
 	
 	self.mdl = SBUBBLE_DROWN;
 	precache_model (self.mdl);
-
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
+	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_on = misc_bubble_on;
 	if (self.spawnflags & (MISC_STARTOFF | ENT_STARTOFF)) entity_state_off();
 	else entity_state_on();
 };
 
-/*=============================================================================
- FX drips (based on code from RRP by ijed)
- - Rewritten to not keep spawning endless entities
- - Modified to have on/off/toggle state
-
-//QUAKED misc_drip (0 .5 .8) (-8 -8 -8) (8 8 8) x SILENT x x BLOOD SLIME STARTOFF x
-Falling water drip with splash and sound
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-wait       : random time between drips (=random() + self.wait)
--------- SPAWNFLAGS --------
-BLOOD    : Blood red drips
-SLIME    : Slime green drips
-SILENT   : Don't make any drip sound (good for multiple drips)
-STARTOFF : Always Starts off and waits for trigger
--------- NOTES --------
-Falling water drip with splash and sound
-
-=============================================================================*/
-void() misc_drip_spawn;
-void() misc_drip_touch;
-void() misc_drip_reset ={
+void() misc_drip_reset ={ // [FUNCTION]
 	self.touch = SUB_Null;
 	self.frame = self.flags = 0;
 	setmodel (self, "");
@@ -753,253 +450,185 @@ void() misc_drip_reset ={
 	self.think = misc_drip_spawn;
 };
 
-//----------------------------------------------------------------------
 // splash animation (runs at 20fps)
-void() s_splash1 = [0, s_splash2] {self.nextthink = time+0.05;};
-void() s_splash2 = [1, s_splash3] {self.nextthink = time+0.05;};
-void() s_splash3 = [2, s_splash4] {self.nextthink = time+0.05;};
-void() s_splash4 = [3, s_splash5] {self.nextthink = time+0.05;};
-void() s_splash5 = [4, s_splash6] {self.nextthink = time+0.05;};
-void() s_splash6 = [5, misc_drip_reset] {self.nextthink = time+0.05;};
+void() s_splash1 = [0, s_splash2] {self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splash2 = [1, s_splash3] {self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splash3 = [2, s_splash4] {self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splash4 = [3, s_splash5] {self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splash5 = [4, s_splash6] {self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splash6 = [5, misc_drip_reset] {self.nextthink = time+0.05;}; // [FUNCTION]
 
 // splash animation (runs at 20fps)
-void() s_splashremoves1 = [0, s_splashremoves2] {self.nextthink = time+0.05;};
-void() s_splashremoves2 = [1, s_splashremoves3] {self.nextthink = time+0.05;};
-void() s_splashremoves3 = [2, s_splashremoves4] {self.nextthink = time+0.05;};
-void() s_splashremoves4 = [3, s_splashremoves5] {self.nextthink = time+0.05;};
-void() s_splashremoves5 = [4, s_splashremoves6] {self.nextthink = time+0.05;};
-void() s_splashremoves6 = [5, SUB_Remove] {self.nextthink = time+0.05;};
+void() s_splashremoves1 = [0, s_splashremoves2] {self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splashremoves2 = [1, s_splashremoves3] {self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splashremoves3 = [2, s_splashremoves4] {self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splashremoves4 = [3, s_splashremoves5] {self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splashremoves5 = [4, s_splashremoves6] {self.nextthink = time+0.05;}; // [FUNCTION]
+void() s_splashremoves6 = [5, SUB_Remove] {self.nextthink = time+0.05;}; // [FUNCTION]
 
-//----------------------------------------------------------------------
-void() misc_drip_touch =
-{
+// Effects common to both drips that remove themselves and drips that move back to the start point.
+void() misc_drip_touch_common = { // [FUNCTION]
 	self.touch = SUB_Null;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
-	// If water below, shift origin to water surface
-	if (self.cnt) self.origin = self.pos1;
-	setorigin(self, self.origin + '0 0 12');
-	
-	// play a random drip sound
-	if (!(self.spawnflags & MISC_DRIPSILENT)) {
+	if (self.owner.bubble_count > 0) self.owner.bubble_count = self.owner.bubble_count - 1;
+	if (self.cnt) self.origin = self.pos1; // If water below, shift origin to water surface
+	setorigin(self,self.origin + '0 0 8'); // Was 12
+	if (!(self.spawnflags & MISC_DRIPSILENT)) { // play a random drip sound
 		self.lip = random() * 3;
 		if (self.lip < 1) sound (self, CHAN_AUTO, self.noise1, 1, ATTN_STATIC);
 		else if (self.lip < 2) sound (self, CHAN_AUTO, self.noise2, 1, ATTN_STATIC);
 		else sound (self, CHAN_AUTO, self.noise3, 1, ATTN_STATIC);
-	}	
-	
-	// small particle effect when hitting something
-	particle (self.origin+'0 0 1', '0 0 0.5', self.aflag+random()*4, 5+random()*5);
-	// Switch to splash sprite and animate for 5 frames
-	if (!self.headmdl || (self.headmdl != SBLOOD_SPLASH) && (self.headmdl != SSLIME_SPLASH) && (self.headmdl != SWATER_SPLASH)) self.headmdl = SWATER_SPLASH;
-	setmodel (self, self.headmdl);
+	}
+
+	if (other != self.owner && self.owner.dmg && other.takedamage) { // Damage if our owner has dmg set
+		spawn_touchblood (self,other,self.owner.dmg);
+		T_Damage (other, self, self.owner, self.owner.dmg, DAMARMOR);
+	}
+	particle (self.origin+'0 0 1', '0 0 0.5', self.aflag+random()*4, 5+random()*5); // small particle effect when hitting something
+	if (!self.headmdl || (self.headmdl != SBLOOD_SPLASH) && (self.headmdl != SSLIME_SPLASH) && (self.headmdl != SWATER_SPLASH)) self.headmdl = SWATER_SPLASH; // Switch to splash sprite and animate for 5 frames
+	setmodel(self,self.headmdl);
+};
+
+void() misc_drip_touch = { // [FUNCTION]
+	if (other.solid == SOLID_TRIGGER) return; // Trigger field, do nothing.
+
+	misc_drip_touch_common();
 	s_splash1();
 };
 
-//----------------------------------------------------------------------
 // Keep checking while falling for liquid impact
-//----------------------------------------------------------------------
-void() misc_drip_water =
-{
+void() misc_drip_water = { // [FUNCTION]
 	if (self.attack_finished < time) misc_drip_reset();
 	// Extremely simplified water surface check (pre-calculated)
 	if (self.origin_z < self.pos1_z) misc_drip_touch();
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 // Setup new drip and wait for touch/death/water
-//----------------------------------------------------------------------
-void() misc_drip_spawn =
-{
-	// Is the entity OFF or BLOCKED?
-	if (self.estate & ESTATE_BLOCK) return;
+void() misc_drip_spawn = { // [FUNCTION]
+	if (self.estate & ESTATE_BLOCK) return; // Is the entity OFF or BLOCKED?
 
-	// Move drip to start position and setup sprite	
-	setorigin (self, self.oldorigin);
+	setorigin (self, self.oldorigin); // Move drip to start position and setup sprite	
 	setmodel (self, self.mdl);
 	self.solid = SOLID_TRIGGER;
 	if (self.cnt) self.movetype = MOVETYPE_NOCLIP;
 	else self.movetype = MOVETYPE_FLY;
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	self.velocity_z = -map_gravity;
-
-	// Drip only lasts 3s, don't want to travel forever
 	self.think = misc_drip_reset;
-	self.nextthink = time + 3;
+	self.nextthink = time + 3; // Drip only lasts 3s, don't want to travel forever
 	self.touch = misc_drip_touch;
-
-	// Is there any water underneath drip?
-	if (self.cnt) {
+	if (self.cnt) { // Is there any water underneath drip?
 		self.attack_finished = self.nextthink;
 		self.nextthink = time + 0.1;
 		self.think = misc_drip_water;
 	}
 };
 
-//----------------------------------------------------------------------
-void() misc_drip_on =
-{
+void() misc_drip_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.nextthink = time + random() + self.wait;
 	self.think = misc_drip_spawn;
 };
 
-//----------------------------------------------------------------------
-void() misc_drip =
-{	
-	// Pick type of drip sprite based on spawnflags
-	if (self.spawnflags & MISC_DRIPBLOOD) {
-		if (self.spawnflags & 8) {
-			self.path = "progs/s_dripred_lg.spr";
-		} else {
-			self.mdl = SBLOOD_DRIP;
-		}
+// QUAKED misc_drip (0 .5 .8) (-8 -8 -8) (8 8 8) x SILENT x x BLOOD SLIME STARTOFF x
+// -------- KEYS --------
+// targetname : toggle state (use trigger ent for exact state)
+// wait       : random time between drips (=random() + self.wait)
+// -------- SPAWNFLAGS --------
+// BLOOD    : Blood red drips
+// SLIME    : Slime green drips
+// SILENT   : Don't make any drip sound (good for multiple drips)
+// STARTOFF : Always Starts off and waits for trigger
+// -------- NOTES --------
+// Falling water drip with splash and sound. (Based on code from RRP by ijed)
+// - Rewritten to not keep spawning endless entities
+// - Modified to have on/off/toggle state
+void() misc_drip = { // [ENTITY]
+	if (self.spawnflags & MISC_DRIPBLOOD) { // Pick type of drip sprite based on spawnflags
+		if (self.spawnflags & 8) self.path = "progs/s_dripred_lg.spr";
+		else self.mdl = SBLOOD_DRIP;
 
 		self.headmdl = SBLOOD_SPLASH;
 		self.aflag = 64;
-	}
-	else if (self.spawnflags & MISC_DRIPSLIME) {
-		if (self.spawnflags & 8) {
-			self.path = "progs/s_dripgreen_lg.spr";
-		} else {
-			self.mdl = SSLIME_DRIP;
-		}
+	} else if (self.spawnflags & MISC_DRIPSLIME) {
+		if (self.spawnflags & 8) self.path = "progs/s_dripgreen_lg.spr";
+		else self.mdl = SSLIME_DRIP;
 
 		self.headmdl = SSLIME_SPLASH;
 		self.aflag = 48;
-	}
-	else {
-		if (self.spawnflags & 8) {
-			self.path = "progs/s_dripblue_lg.spr";
-		} else {
-			self.mdl = SWATER_DRIP;
-		}
+	} else {
+		if (self.spawnflags & 8) self.path = "progs/s_dripblue_lg.spr";
+		else self.mdl = SWATER_DRIP;
 
 		self.headmdl = SWATER_SPLASH;
 		self.aflag = 0;
 	}
-	// Default cache - water
-	precache_model (self.mdl);
+
+	precache_model (self.mdl); // Default cache - water
 	precache_model (self.headmdl);
-	
 	self.noise1 = "rrp/misc/drip1.wav";
 	self.noise2 = "rrp/misc/drip2.wav";
 	self.noise3 = "rrp/misc/drip3.wav";
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
-
-	// default frequency to 3 seconds
-	if (self.wait <= 0) self.wait = 3;
-
+	if (self.wait <= 0) self.wait = 3; // default frequency to 3 seconds
 	self.classtype = CT_MISCDRIP;
 	self.classgroup = CG_MISCENT;
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	setsize(self, VEC_ORIGIN, VEC_ORIGIN);
-
-	// Check point content for wierd setups (inside liquids/solids)
-	self.height = pointcontents(self.origin);
+	self.height = pointcontents(self.origin); // Check point content for wierd setups (inside liquids/solids)
 	if (self.height < CONTENT_SOLID) {
 		dprint ("\b[MISCDRIP]\b Spawned inside liquid!\n");
 		spawn_marker(self.origin, SPNMARK_YELLOW);
 		remove(self);
 		return;
-	}
-	// If flush against a ceiling, move slightly down
-	else if (self.height == CONTENT_SOLID) {
-		self.origin_z = self.origin_z - 2;
-	}
-	
-	// Setup drip particle in the correct start location
-	self.oldorigin = self.origin;
-	setorigin(self, self.origin);
+	} else if (self.height == CONTENT_SOLID) self.origin_z = self.origin_z - 2; // If flush against a ceiling, move slightly down
 
-	// Find out bottom (world) position first
-	self.pos1 = self.origin;
+	self.oldorigin = self.origin; // Setup drip particle in the correct start location
+	setorigin(self, self.origin);
+	self.pos1 = self.origin; // Find out bottom (world) position first
 	traceline (self.pos1, self.pos1 + '0 0 -4096', TRUE, self);
 	self.pos2 = trace_endpos;
-
-	// Only do loop test if water exists below
-	self.count = 8;
+	self.count = 8; // Only do loop test if water exists below
 	if (trace_inwater) self.cnt = TRUE;
 	else self.count = 0;
 
-	// Binary divide the distance to find water surface
-	while (self.count > 0) {
-		// Break out early from loop if <8 from water surface
-		if (fabs(self.pos2_z-self.pos1_z) < 8) self.count = 0;
-		// Calculate midway point between origin and endtrace
-		self.pos3 = self.pos1;
+	while (self.count > 0) { // Binary divide the distance to find water surface
+		if (fabs(self.pos2_z-self.pos1_z) < 8) self.count = 0; // Break out early from loop if <8 from water surface
+		self.pos3 = self.pos1; // Calculate midway point between origin and endtrace
 		self.pos3_z = self.pos1_z + ((self.pos2_z - self.pos1_z)*0.5);
-
-		// Test which half has water and shift top/bottom positions
-		traceline (self.pos1, self.pos3, TRUE, self);
+		traceline (self.pos1, self.pos3, TRUE, self); // Test which half has water and shift top/bottom positions
 		if (trace_inwater) self.pos2 = self.pos3;
 		else self.pos1 = self.pos3;
-		// Only loop a limited amount of times
-		self.count = self.count - 1;
+		
+		self.count = self.count - 1; // Only loop a limited amount of times
 	}
-	
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
+
+	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_on = misc_drip_on;
 	if (self.spawnflags & (MISC_STARTOFF | ENT_STARTOFF)) entity_state_off();
 	else entity_state_on();
 };
 
-// Re-direct to correct entity name
-void() fx_drip = { misc_drip(); };
+void() fx_drip = { misc_drip(); };  // [ENTITY], Re-direct to correct entity name.
 
-void() misc_drip_removetouch = {
-	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
+void() misc_drip_removetouch = { // [FUNCTION]
+	if (other.solid == SOLID_TRIGGER) return; // Trigger field, do nothing.
 
-	self.touch = SUB_Null;
-	if (self.owner.bubble_count > 0) 
-		self.owner.bubble_count = self.owner.bubble_count - 1;
-
-	// play a random drip sound
-	if (!(self.owner.spawnflags & MISC_DRIPSILENT)) {
-		self.lip = random() * 3;
-		if (self.lip < 1) {
-			if (self.owner.noise1 != "") sound (self, CHAN_AUTO, self.owner.noise1, 1, ATTN_STATIC);
-		} else if (self.lip < 2) {
-			if (self.owner.noise2 != "") sound (self, CHAN_AUTO, self.owner.noise2, 1, ATTN_STATIC);
-		} else {
-			if (self.owner.noise3 != "") sound (self, CHAN_AUTO, self.owner.noise3, 1, ATTN_STATIC);
-		}
-	}
-
-	if (other != self.owner) {
-		// Damage if our owner has dmg set
-		if (self.owner.dmg) {
-			if (other.flags & FL_MONSTER || other.flags & FL_CLIENT && other.takedamage) {
-				spawn_touchblood (self,other,self.owner.dmg);
-				T_Damage (other, self, self.owner, self.owner.dmg, DAMARMOR);
-			}
-		}
-	}
-
-	// small particle effect when hitting something
-	particle (self.origin+'0 0 1', '0 0 0.5', self.aflag+random()*4, 5+random()*5);
-	// Switch to splash sprite and animate for 5 frames
-	if (!self.headmdl || (self.headmdl != SBLOOD_SPLASH) && (self.headmdl != SSLIME_SPLASH) && (self.headmdl != SWATER_SPLASH)) self.headmdl = SWATER_SPLASH;
-	setmodel (self, self.headmdl);
-	self.origin_z += 7;
-	setorigin(self, self.origin);
+	misc_drip_touch_common();
 	s_splashremoves1();
 };
 
-void() misc_dripremovable_think = {
-	// Extremely simplified water surface check (pre-calculated)
-	//if (self.origin_z < self.pos1_z) misc_drip_removetouch();
+void() misc_dripremovable_think = { // [FUNCTION]
 	if (pointcontents(self.origin) < CONTENT_EMPTY) misc_drip_removetouch();
 	self.nextthink = time + 0.1;
 }
 
-//----------------------------------------------------------------------
-void() trigger_spawn_drips = {
+void() trigger_spawn_drips = { // [FUNCTION]
 	local entity drip;
 
 	if (self.bubble_count < self.count) {
@@ -1018,133 +647,99 @@ void() trigger_spawn_drips = {
 		drip.origin_y = self.oldorigin_y + crandom()*self.t_length;
 		drip.origin_z = self.oldorigin_z;
 		setorigin(drip, drip.origin);
-		//drip.velocity = vecrand(0,5,TRUE);
 		drip.velocity_z = -map_gravity;
-
 		drip.nextthink = time + 0.5 + random()*0.5;
 		drip.think = misc_dripremovable_think;
 		drip.touch = misc_drip_removetouch;
 	}
 
-	// Keep spawning bubbles until told not too!
-	self.think = trigger_spawn_drips;
+	self.think = trigger_spawn_drips; // Keep spawning until told not too!
 	self.nextthink = time + self.yaw_speed + random()*self.yaw_speed;
 };
 
-void() func_drips = {
-	// Pick type of drip sprite based on spawnflags
-	if (self.spawnflags & MISC_DRIPBLOOD) {
-		if (self.spawnflags & 8) {
-			self.path = "progs/s_dripred_lg.spr";
-		} else {
-			self.path = SBLOOD_DRIP;
-		}
+void() func_drips = { // [ENTITY]
+	if (self.spawnflags & MISC_DRIPBLOOD) { // Pick type of drip sprite based on spawnflags
+		if (self.spawnflags & 8) self.path = "progs/s_dripred_lg.spr";
+		else self.path = SBLOOD_DRIP;
 
 		self.headmdl = SBLOOD_SPLASH;
 		self.aflag = 64;
-	}
-	else if (self.spawnflags & MISC_DRIPSLIME) {
-		if (self.spawnflags & 8) {
-			self.path = "progs/s_dripgreen_lg.spr";
-		} else {
-			self.path = SSLIME_DRIP;
-		}
+	} else if (self.spawnflags & MISC_DRIPSLIME) {
+		if (self.spawnflags & 8) self.path = "progs/s_dripgreen_lg.spr";
+		else self.path = SSLIME_DRIP;
 
 		self.headmdl = SSLIME_SPLASH;
 		self.aflag = 48;
 	} else {
-		if (self.spawnflags & 8) {
-			self.path = "progs/s_dripblue_lg.spr";
-		} else {
-			self.path = SWATER_DRIP;
-		}
+		if (self.spawnflags & 8) self.path = "progs/s_dripblue_lg.spr";
+		else self.path = SWATER_DRIP;
 
 		self.headmdl = SWATER_SPLASH;
 		self.aflag = 0;
 	}
 
-	// Default cache - water
-	precache_model (self.path);
-	precache_model (self.headmdl);
-	
+	precache_model(self.path); // Default cache - water
+	precache_model(self.headmdl);
 	if (!self.noise1) self.noise1 = "rrp/misc/drip1.wav";
 	if (!self.noise2) self.noise2 = "rrp/misc/drip2.wav";
 	if (!self.noise3) self.noise3 = "rrp/misc/drip3.wav";
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
-	precache_sound (self.noise3);
-
-	if (check_bmodel_keys()) return;	// Check for bmodel errors
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
+	precache_sound(self.noise3);
+	if (check_bmodel_keys()) return; // Check for bmodel errors
 
 	InitTrigger();
-
-	self.bubble_count = 0;		// Reset counters
-	if (!self.count) self.count = 5;			// max active drips
+	self.bubble_count = 0; // Reset counters
+	if (!self.count) self.count = 5; // Max active drips
 	self.oldorigin = bmodel_origin(self);
 	self.oldorigin_z = self.maxs_z;
 	self.t_width = (self.size_x/2);
 	self.t_length = (self.size_y/2);
-	// Default spawn rate for drips
-	if (self.yaw_speed <= 0) self.yaw_speed = 0.5;
-
-	// default frequency to 0.2 seconds
-	if (self.wait <= 0) self.wait = 0.2;
+	if (self.yaw_speed <= 0) self.yaw_speed = 0.5; // Default spawn rate for drips
+	if (self.wait <= 0) self.wait = 0.2; // Frequency
 	self.nextthink = time + self.wait;
 	self.think = trigger_spawn_drips;
 };
 
-//----------------------------------------------------------------------
-void() func_bubbles_reset = {
+void() func_bubbles_reset = { // [FUNCTION]
 	if (self.noise1 != "") self.target = self.noise1;
 	if (self.noise2 != "") self.target2 = self.noise2;
 	self.estate_on();
 };
 
-//----------------------------------------------------------------------
-void() func_bubbles_on = {
+void() func_bubbles_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.solid = SOLID_TRIGGER;
-	// Restore bounding box (dev testing visual thing)
-	setsize (self, self.bbmins, self.bbmaxs);
-	// Spawn bubbles inside volume brush
-	trigger_spawn_bubbles();
+	setsize (self, self.bbmins, self.bbmaxs); // Restore bounding box (dev testing visual thing)
+	trigger_spawn_bubbles(); // Spawn bubbles inside volume brush
 };
 
 // brush based bubble source
-void() func_bubbles = {
+void() func_bubbles = { // [ENTITY]
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	InitTrigger();
 	self.spawnflags = self.spawnflags | TRIG_SPAWNBUBBLES;
-	// Setup bubble model/counter/volume
-	trigger_setup_bubbles();
-
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
+	trigger_setup_bubbles(); // Setup bubble model/counter/volume
+	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_on = func_bubbles_on;
 	self.estate_off = trigger_bmodel_off;
 	self.estate_disable = trigger_bmodel_disable;
 	self.estate_reset = func_bubbles_reset;
 	self.touch = SUB_Null; // do nothing, we are just here to blow bubbles
-
-	// Switch on OR off?
-	if (self.spawnflags & ENT_STARTOFF) self.estate_off();
+	if (self.spawnflags & ENT_STARTOFF) self.estate_off(); // Switch on OR off?
 	else self.estate_on();
 };
 
-// brush based sprite source
-void() func_sprite_emitter = {
+// Brush based sprite source.
+void() func_sprite_emitter = { // [ENTITY]
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	InitTrigger();
 	self.spawnflags = self.spawnflags | TRIG_SPAWNBUBBLES;
-	// Setup bubble model/counter/volume
-	//trigger_setup_bubbles();
-
 	if (self.path) self.mdl = self.path;
 	else self.mdl = PART_BUBBLE_BLUE;
 	precache_model(self.mdl);
-	// Setup defaults for healing bubbles
 	self.waitmin = self.bubble_count = 0;		// Reset counters
 	if (!self.count) self.count = 5;			// max active bubbles
 	if (!self.height) self.height = self.size_z;
@@ -1153,49 +748,21 @@ void() func_sprite_emitter = {
 	self.oldorigin_z = self.mins_z;
 	self.t_width = (self.size_x/2);
 	self.t_length = (self.size_y/2);
-	// Default spawn rate for bubbles
-	if (self.yaw_speed <= 0) self.yaw_speed = 0.5;
-	// Default float speed for bubbles
-	if (self.old_velocity_x <= 0) self.old_velocity_x = 5;
+	if (self.yaw_speed <= 0) self.yaw_speed = 0.5; // Default spawn rate
+	if (self.old_velocity_x <= 0) self.old_velocity_x = 5; // Default float speed
 	if (self.old_velocity_y <= 0) self.old_velocity_y = 10;
 	if (self.old_velocity_z <= 0) self.old_velocity_z = 15;
-
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
+	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_on = func_bubbles_on;
 	self.estate_off = trigger_bmodel_off;
 	self.estate_disable = trigger_bmodel_disable;
 	self.estate_reset = func_bubbles_reset;
 	self.touch = SUB_Null; // do nothing, we are just here to blow bubbles
-
-	// Switch on OR off?
-	if (self.spawnflags & ENT_STARTOFF) self.estate_off();
+	if (self.spawnflags & ENT_STARTOFF) self.estate_off(); // Switch on OR off?
 	else self.estate_on();
 };
 
-//======================================================================
-/*QUAKED misc_smoke (.5 .5 .75) (-8 -8 -8) (8 8 192) x NODPMDL NODPFX x x x STARTOFF x
-Smoke model (+DP only smoke effect)
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-target     : targeting entity used for custom direction
-angles     : 'pitch roll yaw' up/down, angle, tilt left/right 
-exactskin  : 0=Gunsmoke, 1=Soot, 2=Steam, 3=Toxin, 4=Plague, 5=Incense, 6=Lithium, 7=Flames
-alpha      : alpha value for model (def=0.65)
-wait       : time between generation of smoke particles (def=0.1, min=0.01)
-delay      : random amount of time delay ( time = wait + delay x random() )
-height     : Percentage of velocity distance travelled (def=1, range=0-1+)
--------- SPAWNFLAGS --------
-NODPMDL    : Do not draw smoke model in DP engine
-NODPFX     : Do not draw DP smoke particle effect
-STARTOFF   : Always Starts off and waits for trigger
--------- NOTES --------
-Smoke model, +DP only smoke effect (wait/delay/height DP only)
-angles = 'pitch roll yaw' up/down, angle, tilt left/right 
-up/left = negative value, down/right = positive value
-
-======================================================================*/
-void() misc_smoke_model = {
+void() misc_smoke_model = { // [FUNCTION]
 	self.count = self.count + 1;
 	if (self.count > 59) self.count = 0;
 	self.frame = self.count;
@@ -1203,14 +770,10 @@ void() misc_smoke_model = {
 	self.nextthink = time + 0.1;
 };
 
-void() misc_smoke_on = {
+void() misc_smoke_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
-
-	// Switch on particle emitter if was setup
-	if (self.part_emitter) misc_particle_on(self.part_emitter);
-
-	// Restore model/size/skin
-	if (self.mdl != "") {
+	if (self.part_emitter) misc_particle_on(self.part_emitter); // Switch on particle emitter if was setup
+	if (self.mdl != "") { // Restore model/size/skin
 		setmodel (self, self.mdl);
 		setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 		self.skin = self.exactskin;
@@ -1219,42 +782,53 @@ void() misc_smoke_on = {
 	}
 };
 
-void() misc_smoke_off = {
+void() misc_smoke_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF;
-	// Turn off model if setup
-	if (self.mdl != "") self.model = "";
+	if (self.mdl != "") self.model = ""; // Turn off model if setup
 };
 
-void() misc_smoke_setup = {
-	// If target is setup, calculate new facing angle
-	if (self.target != "") { // Used for angles only
+void() misc_smoke_setup = { // [FUNCTION]
+	if (self.target != "") { // If target is setup, calculate new facing angle.  Used for angles only.
 		if (!self.movetarget) self.movetarget = find(world, targetname, self.target);
-		
 		if (self.movetarget) {
-			// Check for a Bmodel object (special origin)
-			if (self.movetarget.bsporigin) self.dest1 = bmodel_origin(self.movetarget);
+			if (self.movetarget.bsporigin) self.dest1 = bmodel_origin(self.movetarget); // Check for a Bmodel object (special origin)
 			else self.dest1 = self.movetarget.origin;
-			// Calculate facing angle towards target
-			self.movedir = normalize(self.dest1 - self.origin);
+			
+			self.movedir = normalize(self.dest1 - self.origin); // Calculate facing angle towards target
 			self.angles = vectoangles(self.movedir);
 			self.angles_y = self.angles_y + 180;
-			// Update velocity direction for DP effect
-			if (self.part_emitter) self.part_emitter.dpp_vel = self.movedir*self.height;
+			if (self.part_emitter) self.part_emitter.dpp_vel = self.movedir*self.height; // Update velocity direction for DP effect
 		}
 	}
 
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
+	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_on = misc_smoke_on;
 	self.estate_off = misc_smoke_off;
 	if (self.spawnflags & (MISC_STARTOFF | ENT_STARTOFF)) entity_state_off();
 	else entity_state_on();
 };
 
-void() misc_smoke = {
+// QUAKED misc_smoke (.5 .5 .75) (-8 -8 -8) (8 8 192) x NODPMDL NODPFX x x x STARTOFF x
+// -------- KEYS --------
+// targetname : toggle state (use trigger ent for exact state)
+// target     : targeting entity used for custom direction
+// angles     : 'pitch roll yaw' up/down, angle, tilt left/right 
+// exactskin  : 0=Gunsmoke, 1=Soot, 2=Steam, 3=Toxin, 4=Plague, 5=Incense, 6=Lithium, 7=Flames
+// alpha      : alpha value for model (def=0.65)
+// wait       : time between generation of smoke particles (def=0.1, min=0.01)
+// delay      : random amount of time delay ( time = wait + delay x random() )
+// height     : Percentage of velocity distance travelled (def=1, range=0-1+)
+// -------- SPAWNFLAGS --------
+// NODPMDL    : Do not draw smoke model in DP engine
+// NODPFX     : Do not draw DP smoke particle effect
+// STARTOFF   : Always Starts off and waits for trigger
+// -------- NOTES --------
+// Smoke model, +DP only smoke effect (wait/delay/height DP only)
+// angles = 'pitch roll yaw' up/down, angle, tilt left/right 
+// up/left = negative value, down/right = positive value
+void() misc_smoke = { // [ENTITY]
 	self.mdl = "progs/ad181/misc_smoke.mdl";
 	precache_model (self.mdl);
-
 	self.classtype = CT_MISCSMOKE;
 	self.classgroup = CG_MISCENT;
 	self.solid = SOLID_NOT;				// No world interaction
@@ -1263,179 +837,152 @@ void() misc_smoke = {
 	if (self.wait < 0.1) self.wait = 0.1;
 	if (self.delay <= 0) self.delay = 0.1;
 	if (self.height <= 0) self.height = 0.5 + random()*0.5;
-	// If DP engine active remove particle shadow
-	if (engine == ENG_DPEXT) {
-		// Originally had ef_additive but produced sorting errors
-		self.effects = self.effects + EF_NOSHADOW;
-	}
-	else {
-		// Setup alpha for non DP engines
-		if (!self.alpha) self.alpha = 0.5+random()*0.25;
+	if (engine == ENG_DPEXT) { // If DP engine active remove particle shadow
+		self.effects = self.effects + EF_NOSHADOW; // Originally had ef_additive but produced sorting errors
+	} else {
+		if (!self.alpha) self.alpha = 0.5+random()*0.25; // Setup alpha for non DP engines
 	}
 
-	// Calculate smoke particle movedir from angles
-	makevectors(self.angles);
+	makevectors(self.angles); // Calculate smoke particle movedir from angles
 	self.movedir = v_up;
-	
-	// Setup some random Y axis rotation if nothing set
-	if (CheckZeroVector(self.angles)) self.angles_y = rint(random()*360);
-
-	// DP particle effects active?
-	if (ext_dppart) {
-		// Remove the model if spawnflag set
-		if (self.spawnflags & MISC_SMOKENODPMDL) self.mdl = "";
-		
-		// Spawn particle emitter if particles active and not blocked
-		if (query_configflag(SVR_PARTICLES) && !(self.spawnflags & MISC_SMOKENODPFX) ) {
+	if (CheckZeroVector(self.angles)) self.angles_y = rint(random()*360); // Setup some random Y axis rotation if nothing set
+	if (ext_dppart) { // DP particle effects active?
+		if (self.spawnflags & MISC_SMOKENODPMDL) self.mdl = ""; // Remove the model if spawnflag set
+		if (query_configflag(SVR_PARTICLES) && !(self.spawnflags & MISC_SMOKENODPFX) ) { // Spawn particle emitter if particles active and not blocked
 			self.part_active = PARTICLE_STYLE_SMOKE;
-			if (self.spawnflags & (MISC_STARTOFF | ENT_STARTOFF)) 
-				self.part_emitter = spawn_pemitter(self, self, self.part_active, PARTICLE_START_OFF);
+			if (self.spawnflags & (MISC_STARTOFF | ENT_STARTOFF)) self.part_emitter = spawn_pemitter(self, self, self.part_active, PARTICLE_START_OFF);
 			else self.part_emitter = spawn_pemitter(self, self, self.part_active, PARTICLE_START_ON);
 		}
 	}
-	
-	// Setup target and delay starting model animation
-	self.nextthink = time + 0.1 + (rint(random()*10) * 0.1);
+
+	self.nextthink = time + 0.1 + (rint(random()*10) * 0.1); // Setup target and delay starting model animation
 	self.think = misc_smoke_setup;
 };
 
-/*======================================================================
- spark effect (based on code from Rubicon2 by JohnFitz)
- - Modified to have on/off/toggle state via triggers
- - extended parameters for angle/speed/custom sounds
+void() misc_sparks_fade1 = [0, misc_sparks_fade2] {self.alpha = 0.8; self.nextthink = time + 0.05;}; // [FUNCTION]
+void() misc_sparks_fade2 = [0, misc_sparks_fade3] {self.alpha = 0.6; self.nextthink = time + 0.05;}; // [FUNCTION]
+void() misc_sparks_fade3 = [0, misc_sparks_fade4] {self.alpha = 0.4; self.nextthink = time + 0.05;}; // [FUNCTION]
+void() misc_sparks_fade4 = [0, SUB_Remove       ] {self.alpha = 0.2; self.nextthink = time + 0.05;}; // [FUNCTION]
 
-//QUAKED misc_spark (.5 .75 .5) (-8 -8 -8) (8 8 8) x BLUE PALE RED x x STARTOFF x
-Produces a burst of sparks at random intervals
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-target : If target is a light, will be switched on/off in sync
-wait   : time delay between bursts Def=2, spark once=-1
-cnt    : number of sparks in burst (0.5 + random() x 0.5) Def=16
-angle  : direction of sparks to follow, use "360" for 0
-fixangle: 1 = Random Y axis direction of sparks
-speed  : velocity speed of sparks (def=40)
-height : random velocity modifier (def=+/-20)
-sounds : 1=sparks, 4=silent, 5=custom
-noise  : custom sound for sparks
--------- SPAWNFLAGS --------
-BLUE   : sparks are blue in colour (def=yellow)
-PALE   : sparks are pale yellow in colour (def=yellow)
-RED    : sparks are red in colour (def=yellow)
-STARTOFF : Always Starts off and waits for trigger
--------- NOTES --------
-Produces a burst of sparks at random intervals
-If targeting a light, it must start switched off (lights spawnflag=1)
+void() misc_spark_switchoff = { // [FUNCTION]
+	SUB_UseTargets(); // Always switch off trigger (lights)
+	if (self.estate & ESTATE_BLOCK) return; // Is the entity OFF or BLOCKED?
 
-======================================================================*/
-
-void()	misc_sparks_fade1 = [0, misc_sparks_fade2] {self.alpha = 0.8; self.nextthink = time + 0.05;};
-void()	misc_sparks_fade2 = [0, misc_sparks_fade3] {self.alpha = 0.6; self.nextthink = time + 0.05;};
-void()	misc_sparks_fade3 = [0, misc_sparks_fade4] {self.alpha = 0.4; self.nextthink = time + 0.05;};
-void()	misc_sparks_fade4 = [0, SUB_Remove] {self.alpha = 0.2; self.nextthink = time + 0.05;};
-
-//----------------------------------------------------------------------
-void() misc_spark_spawn;
-void() misc_spark_switchoff = 
-{
-	// Always switch off trigger (lights)
-	SUB_UseTargets();
-
-	// Is the entity OFF or BLOCKED?
-	if (self.estate & ESTATE_BLOCK) return;
-	// Only spark once (wait for trigger)
-	if (self.wait > 0) {
+	if (self.wait > 0) { // Only spark once (wait for trigger)
 		self.think = misc_spark_spawn;
 		self.nextthink = time + self.wait + (random()*self.wait);
 	}
-}
+};
 
-//----------------------------------------------------------------------
-void() misc_spark_spawn =
-{
+void(vector pos, vector dir, float rubicon) make_spark = { // [FUNCTION]
+	local entity spark;
+
+	spark = spawn();
+	spark.owner = self;
+	spark.classtype = CT_TEMPSPARK;
+	spark.classgroup = CG_TEMPENT;
+	spark.movetype = MOVETYPE_BOUNCE;
+	spark.solid = SOLID_TRIGGER;
+	spark.gravity = 0.3;
+	if (rubicon) {
+		setmodel (spark, "progs/rrp/spark.mdl"); // Precached by world. Just in case.
+		spark.velocity_x = -40 + random() * 80; // Use purely random direction for Rubicon.
+		spark.velocity_y = -40 + random() * 80;
+		spark.velocity_z = -40 + random() * 80;
+		spark.avelocity = '3000 3000 3000';
+	} else {
+		// AD uses different velocity and direction; supports movedir for pointing.
+		setmodel (spark, "progs/ad171/misc_spark.mdl"); // Precached by world. Used by lightning tome effects.
+		spark.velocity = vecrand(0,self.height,TRUE); // height defaults to 20
+		spark.velocity = spark.velocity + (dir * self.speed); // speed defaults to 40
+		spark.avelocity = '300 300 300';
+	}
+
+	setorigin (spark, pos); // Weapons specify certain locations so pass value rather than use self.origin.
+	setsize (spark, VEC_ORIGIN, VEC_ORIGIN);
+	spark.classname = "spark";
+	spark.nextthink = time + 0.5 + 1.5*random();
+	spark.think = misc_sparks_fade1;
+	if (random() < 0.33)	spark.skin = 0; // Some brightness variety
+	else if (random() < 0.5)spark.skin = 1;
+	else					spark.skin = 2;	
+
+	if (self.exactskin > 0) spark.skin = self.exactskin; // Exact override
+	if (engine == ENG_DPEXT) spark.effects = spark.effects + EF_NOSHADOW; // If DP engine active remove particle shadow
+	if (self.spawnflags & MISC_SPARKBLUE) spark.skin = spark.skin + 3; // Alternative colours (blue, pale yellow & red)
+	else if (self.spawnflags & MISC_SPARKPALE) spark.skin = spark.skin + 6;
+	else if (self.spawnflags & MISC_SPARKRED) spark.skin = spark.skin + 9;
+
+	newmis = spark;
+};
+
+void() misc_spark_spawn = { // [FUNCTION]
 	local float loopvar;
 	local entity spark;
 
-	// Is the entity OFF or BLOCKED?
-	if (self.estate & ESTATE_BLOCK) return;
+	if (self.estate & ESTATE_BLOCK) return; // Is the entity OFF or BLOCKED?
 
-	// Check for random rotation, most be set for whole batch
-	// otherwise the sparks will all go in different directions
-	if (self.fixangle > 0) {
+	if (self.fixangle > 0) { // Check for random rotation, most be set for whole batch otherwise the sparks will all go in different directions
 		self.angles = '0 0 0';
 		self.angles_y = rint(random()*360);
 		makevectors (self.angles);
 		self.movedir = v_forward;
 	}
-	
-	// Work out how many sparks to spawn
-	loopvar = (0.5 + random()*0.5)*self.cnt;
+
+	loopvar = (0.5 + random()*0.5)*self.cnt; // Work out how many sparks to spawn.  Different than Rubicon.
 	while (loopvar > 0) {
-		spark = spawn();
-		spark.classtype = CT_TEMPSPARK;
-		spark.classgroup = CG_TEMPENT;
-		spark.owner = self;
-		spark.movetype = MOVETYPE_BOUNCE;
-		spark.solid = SOLID_TRIGGER;
-		setmodel (spark, self.mdl);
-		setorigin (spark, self.origin);
-		setsize (spark, VEC_ORIGIN, VEC_ORIGIN);
-		spark.gravity = 0.3;
-		spark.velocity = vecrand(0,self.height,TRUE);
-		spark.velocity = spark.velocity + (self.movedir * self.speed);
-		spark.avelocity = '300 300 300';
-		spark.nextthink = time + 0.5 + 1.5*random();
-		spark.think = misc_sparks_fade1;
-		
-		// If DP engine active remove particle shadow
-		if (engine == ENG_DPEXT) spark.effects = spark.effects + EF_NOSHADOW;
-
-		// Some brightness variety
-		if (random() < 0.33) spark.skin = 0;
-		else if (random() < 0.5) spark.skin = 1;
-		else spark.skin = 2;
-
-		// Alternative colours (blue, pale yellow & red)
-		if (self.spawnflags & MISC_SPARKBLUE) spark.skin = spark.skin + 3;
-		else if (self.spawnflags & MISC_SPARKPALE) spark.skin = spark.skin + 6;
-		else if (self.spawnflags & MISC_SPARKRED) spark.skin = spark.skin + 9;
-			
+		make_spark(self.origin, self.movedir, FALSE); // Pass value of FALSE since we are making AD variant sparks.  Velocity is different than Rubicon.
 		loopvar = loopvar - 1;
 	}
-	// Play any spark sound and switch ON any target lights
-	if (self.noise != "") sound (self, CHAN_VOICE, self.noise, 1, ATTN_STATIC);
 	
-	// Is there any target(s) to switch on
-	if (self.target) {
+	if (self.noise != "") sound (self, CHAN_VOICE, self.noise, 1, ATTN_STATIC); // Play any spark sound and switch ON any target lights
+	if (self.target) { // Is there any target(s) to switch on, such as a light source to light up with spark emission.
 		SUB_UseTargets();
-		// Setup timer to switch off
-		self.nextthink = time + 0.1 + random() * 0.2;
+		self.nextthink = time + 0.1 + random() * 0.2; // Setup timer to switch off
 		self.think = misc_spark_switchoff;
-	}
-	else {
-		// Only spark once (wait for trigger)
-		if (self.wait > 0) {
+	} else {
+		if (self.wait > 0) { // Only spark once (wait for trigger)
 			self.nextthink = time + 0.2 + self.wait + (random()*self.wait);
 			self.think = misc_spark_spawn;
 		}
 	}
 };
 
-//----------------------------------------------------------------------
-void() misc_spark_on =
-{
+void() misc_spark_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.nextthink = time + 0.1 + random();
 	self.think = misc_spark_spawn;
 };
 
-//----------------------------------------------------------------------
-void() misc_spark =
-{
+// QUAKED misc_spark (.5 .75 .5) (-8 -8 -8) (8 8 8) x BLUE PALE RED x x STARTOFF x
+// Produces a burst of sparks at random intervals
+// -------- KEYS --------
+// targetname : toggle state (use trigger ent for exact state)
+// target : If target is a light, will be switched on/off in sync
+// wait   : time delay between bursts Def=2, spark once=-1
+// cnt    : number of sparks in burst (0.5 + random() x 0.5) Def=16
+// angle  : direction of sparks to follow, use "360" for 0
+// fixangle: 1 = Random Y axis direction of sparks
+// speed  : velocity speed of sparks (def=40)
+// height : random velocity modifier (def=+/-20)
+// sounds : 1=sparks, 4=silent, 5=custom
+// noise  : custom sound for sparks
+// -------- SPAWNFLAGS --------
+// BLUE   : sparks are blue in colour (def=yellow)
+// PALE   : sparks are pale yellow in colour (def=yellow)
+// RED    : sparks are red in colour (def=yellow)
+// STARTOFF : Always Starts off and waits for trigger
+// -------- NOTES --------
+// spark effect (based on code from Rubicon2 by JohnFitz)
+// - Modified to have on/off/toggle state via triggers
+// - extended parameters for angle/speed/custom sounds
+// Produces a burst of sparks at random intervals
+// If targeting a light, it must start switched off (lights spawnflag=1)
+void() misc_spark = { // [ENTITY]
 	self.mdl = "progs/ad171/misc_spark.mdl";
 	precache_model (self.mdl);
 	if (self.sounds == 1) self.noise = "ad171/misc/spark.wav";
 	if (self.noise != "") precache_sound (self.noise);
-	
 	self.classtype = CT_MISCSPARK;
 	self.classgroup = CG_MISCENT;
 	self.solid = SOLID_NOT;				// No world interaction
@@ -1445,69 +992,33 @@ void() misc_spark =
 	if (!self.speed) self.speed = 40;
 	if (!self.height) self.height = 20;
 	self.estate = ESTATE_OFF;
-
-	// Always convert 0 angle to 360 for setmovedir function
-	if (CheckZeroVector(self.angles)) self.angles = '0 360 0';
+	if (CheckZeroVector(self.angles)) self.angles = '0 360 0'; // Always convert 0 angle to 360 for setmovedir function
 	self.mangle = self.angles;
 	SetMovedir();
-
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
+	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_on = misc_spark_on;
 	if (self.spawnflags & (MISC_STARTOFF | ENT_STARTOFF)) entity_state_off();
 	else entity_state_on();
 };
 
-/*======================================================================
-Screen Shake (based on code from RRP by ijed/supa)
- - Modified to have on/off/toggle state
- - added extra sound options
-
-//QUAKED misc_shake (.5 .5 .9) (-16 -16 -8) (16 16 8) x VIEWONLY x x x x x x
-Shake players view and/or velocity around center of entity
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-count  : radius of shake (def = 200)
-wait   : duration of shake (def = 2s)
-dmg    : strength at center (def = 200)
-sounds : 1=loud rumble (no default)
-noise1 : noise to play when starting to shake
-noise2 : noise to play when stopping
--------- SPAWNFLAGS --------
-VIEWONLY : Shakes the view, but player movement is not affected
--------- NOTES --------
-Shake players view and/or velocity around center of entity.
-Always starts off, requires triggers to activate
-
-======================================================================*/
-void() misc_shake_think =
-{
+void() misc_shake_think = { // [FUNCTION]
 	local entity plyr;
 	local float	d;
 
-	// Is the shaking over?
-	if (self.attack_finished < time || self.estate & ESTATE_BLOCK) {
+	if (self.attack_finished < time || self.estate & ESTATE_BLOCK) { // Is the shaking over?
 		if (self.noise2) sound (self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
-		// Check state before changing it, entity may be disabled
-		if (self.estate == ESTATE_ON) self.estate = ESTATE_OFF;
+		if (self.estate == ESTATE_ON) self.estate = ESTATE_OFF; // Check state before changing it, entity may be disabled
 		return;
 	}
 	
-	// Create a list of entities to check for players
-	plyr = findradius(self.origin, self.count);
+	plyr = findradius(self.origin, self.count); // Create a list of entities to check for players
 	while(plyr) {
-		// Only shake players (clients)
-		if (plyr.flags & FL_CLIENT) {	
-			// Scale effect by distance
-			d = vlen(self.origin - plyr.origin);
+		if (plyr.flags & FL_CLIENT) { // Only shake players (clients)	
+			d = vlen(self.origin - plyr.origin); // Scale effect by distance
 			d = (self.count - d)/self.count;
-			
 			if (d > 0) {
-				// shake up the view
-				plyr.punchangle_x = -1 * (random() + (0.025*self.dmg*d));
-				
-				// push the player around
-				if (plyr.flags & FL_ONGROUND && !(self.spawnflags & MISC_SHAKEVIEWONLY)) {
+				plyr.punchangle_x = -1 * (random() + (0.025*self.dmg*d)); // shake up the view
+				if (plyr.flags & FL_ONGROUND && !(self.spawnflags & MISC_SHAKEVIEWONLY)) { // push the player around
 					d = self.dmg*d;
 					plyr.velocity_x = plyr.velocity_x + (random()*d*2 - d);
 					plyr.velocity_y = plyr.velocity_y + (random()*d*2 - d);
@@ -1515,28 +1026,39 @@ void() misc_shake_think =
 				}	
 			}
 		}
-		// Find next entity in chain
-		plyr = plyr.chain;
+		plyr = plyr.chain; // Find next entity in chain
 	}
-	
-	// keep shaking!
-	self.nextthink = time + 0.1;
+
+	self.nextthink = time + 0.1; // Keep on shaking!
 	self.think = misc_shake_think;
 };
 
-void() misc_shake_on = {
+void() misc_shake_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
-
-	// Play earthquake LOOP sound
-	if (self.noise1) sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
+	if (self.noise1) sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM); // Play earthquake LOOP sound
 	self.attack_finished = time + self.wait;
-
-	// keep checking for players to shake!
-	self.nextthink = time + 0.1;
+	self.nextthink = time + 0.1; // keep checking for players to shake!
 	self.think = misc_shake_think;
 };
 
-void() misc_shake = {
+// QUAKED misc_shake (.5 .5 .9) (-16 -16 -8) (16 16 8) x VIEWONLY x x x x x x
+// -------- KEYS --------
+// targetname : toggle state (use trigger ent for exact state)
+// count  : radius of shake (def = 200)
+// wait   : duration of shake (def = 2s)
+// dmg    : strength at center (def = 200)
+// sounds : 1=loud rumble (no default)
+// noise1 : noise to play when starting to shake
+// noise2 : noise to play when stopping
+// -------- SPAWNFLAGS --------
+// VIEWONLY : Shakes the view, but player movement is not affected
+// -------- NOTES --------
+// Shake players view and/or velocity around center of entity.
+// Always starts off, requires triggers to activate
+// Screen Shake (based on code from RRP by ijed/supa)
+// - Modified to have on/off/toggle state
+// - added extra sound options
+void() misc_shake = { // [ENTITY]
 	if (self.sounds == 1) {
 		self.noise1 = "ad171/misc/rumbleloop.wav";
 		self.noise2 = "ad171/misc/rumbleoff.wav";
@@ -1546,269 +1068,44 @@ void() misc_shake = {
 	}
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
-	
 	self.classtype = CT_MISCSHAKE;
 	self.classgroup = CG_MISCENT;
 	if (!self.dmg) self.dmg = 120;
 	if (self.count <= 0) self.count = 200;
 	if (self.wait <= 0) self.wait = 2;
 	self.attack_finished = 0;
-
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
+	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_on = misc_shake_on;
 	self.estate = ESTATE_OFF;
 };
 
-// All dead bodies use the same on/off states
-void() misc_deadbody_on = {
-	if (self.gibbed == TRUE) return;
-
-	self.estate = ESTATE_ON;			// Show entity
-	self.solid = SOLID_NOT;				// No world interaction
-	self.movetype = MOVETYPE_NONE;		// Static item, no movement
-	setmodel(self,self.mdl);			// Show model
-	setsize (self, self.bbmins, self.bbmaxs);
-	self.bodyonflr = MON_ONFLR;			// Let Shadow Axe interact
-};
-
-//----------------------------------------------------------------------
-void() misc_deadbody_off =
-{
-	if (self.gibbed == TRUE) return;
-
-	self.estate = ESTATE_OFF;		// Hide entity
-	self.solid = SOLID_NOT;			// No world interaction
-	self.movetype = MOVETYPE_NONE;	// Static item, no movement
-	setmodel(self,"");				// Show model
-	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
-	self.bodyonflr = "";			// No Shadows Axe interaction
-};
-
-//----------------------------------------------------------------------
-void() misc_deadbody_setup =
-{
-	self.classtype = CT_MISCMODEL;
-	self.classgroup = CG_MISCENT;
-	self.oldorigin = self.origin;		// Store for later
-
-	self.takedamage = DAMAGE_NO;		// No projectile interaction
-	self.deadflag = DEAD_DEAD;			// Body is really dead!
-	self.health = self.max_health = -1;
-	self.blockudeath = TRUE;			// Body is dead, no human death noise
-	self.gibbed = FALSE;				// Still in one piece!
-	
-	// Check for random rotation
-	if (self.angles_y < 0) self.angles_y = rint(random()*360);
-	
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
-	self.estate_on = misc_deadbody_on;
-	self.estate_off = misc_deadbody_off;
-	if (self.spawnflags & ENT_STARTOFF) entity_state_off();
-	else entity_state_on();
-};
-
-/*======================================================================
-//QUAKED misc_player (1 .5 .25) (-16 -16 -24) (16 16 32) x x x x x x STARTOFF x
-Dead Player MDL for poses
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-angle  : facing angle (-1 = random position)
-frame  : body pose (49=on back, 67-69=against wall, 60/84/93=face down, 102=on side)
-exactskin : -1= Random, 0-1 Original, 2-3 Green, 4-5 Yellow, 6-7 Red
--------- SPAWNFLAGS --------
-STARTOFF : Always Starts off and waits for trigger
--------- NOTES --------
-Dead Player MDL for poses
-*/
-/*======================================================================
-//QUAKED misc_demon (1 .5 .25) (-32 -32 -24) (32 32 64) x x x x x x STARTOFF x
-Dead demon/fiend for poses
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-angle  : facing angle (-1 = random position)
-frame : body pose (53=on back - def)
-exactskin : -1= Random, 0= Original, 1= Green
--------- SPAWNFLAGS --------
-STARTOFF : Always Starts off and waits for trigger
--------- NOTES --------
-Dead demon/fiend for poses
-*/
-/*======================================================================
-//QUAKED misc_dknight (0.75 0.25 0) (-16 -16 -24) (16 16 40) x x x x x x STARTOFF x
-Dead Death Knight for poses
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-angle  : facing angle (-1 = random position)
-frame : body pose (223=on front, 237-243=on back - def)
--------- SPAWNFLAGS --------
-STARTOFF : Always Starts off and waits for trigger
--------- NOTES --------
-Dead Death Knight for poses
-*/
-
-//----------------------------------------------------------------------
-void() misc_player =
-{
-	self.mdl = "progs/ad171/misc_player.mdl";		// Standard player model
-	self.gib1mdl = "progs/ad171/w_soldiergun.mdl";	// Unique weapon
-	self.gib2mdl = "progs/ad171/gib_soldfoot1.mdl";	// Upright foot
-	self.gib3mdl = "progs/ad171/gib_soldfoot2.mdl";	// Fallen down foot
-	precache_model (self.mdl);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	self.gib1sound = GIB_IMPACT_WOOD;
-	
-	// uses short red knight bounding box
-	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
-	monster_bbox();
-
-	// Setup random/exact skin choices
-	if (self.exactskin < 0) self.exactskin = rint(0.5 + random()*7);
-	if (self.exactskin > 7) self.exactskin = 7;
-	self.skin = self.exactskin;
-
-	misc_deadbody_setup();
-};
-
-//----------------------------------------------------------------------
-void() misc_demon =
-{
-	self.mdl = "progs/mon_demon.mdl";
-	self.headmdl = "progs/h_demon.mdl";
-	self.gib1mdl = "progs/ad171/gib_dmleg1.mdl";		// Left leg
-	self.gib2mdl = "progs/ad171/gib_dmleg2.mdl";		// Right leg
-	self.gib3mdl = "progs/ad171/gib_dmtail.mdl";		// Tail
-	self.gib4mdl = "progs/ad171/gib_dmclaw1.mdl";		// Claw 1
-	self.gib5mdl = "progs/ad171/gib_dmclaw2.mdl";		// Claw 2
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	precache_model (self.gib4mdl);		// Always precache extra models
-	precache_model (self.gib5mdl);		// regardless if picked or not
-	
-	// Randomly swap in demon claws instead of legs
-	if (random() < 0.5) self.gib1mdl = self.gib4mdl;
-	if (random() < 0.5) self.gib2mdl = self.gib5mdl;
-
-	// Setup bounding box based on presets
-	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;
-	monster_bbox();
-	
-	// Default pose for dead demons
-	if (self.frame < 0) self.frame = 0;
-	if (self.frame == 0) self.frame = 53;
-	
-	// Setup random/exact skin choices
-	if (self.exactskin < 0) {
-		if (random() < 0.5) self.exactskin = 0;
-		else self.exactskin = 1;
-	}
-	if (self.exactskin > 1) self.exactskin = 1;
-	self.skin = self.exactskin;
-	// Sync gib model skin to demon skin
-	self.gib1skin = self.gib2skin = self.gib3skin = self.skin;
-
-	misc_deadbody_setup();	
-};
-
-//----------------------------------------------------------------------
-void() misc_dknight =
-{
-	self.mdl = "progs/ad171/mon_dknight.mdl";			// New Hell Knight
-	self.headmdl = "progs/ad171/h_dknight.mdl";
-	self.gib1mdl = "progs/ad171/w_dknightsword.mdl";	// Unique sword
-	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
-	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	precache_model (self.gib1mdl);
-	
-	self.gib1sound = GIB_IMPACT_METALA;
-	if (random() < 0.5) self.gib2mdl = string_null;
-	if (random() < 0.5) self.gib3mdl = string_null;
-
-	// Setup bounding box based on presets
-	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
-	monster_bbox();
-	
-	// Default pose for dead death knights
-	if (self.frame < 0) self.frame = 0;
-	if (self.frame == 0) self.frame = 243;
-
-	misc_deadbody_setup();	
-};
-
-/*======================================================================
-//QUAKED misc_builtineffect (0 .5 .8) (-8 -8 -8) (8 8 8) x
-Spawns a builtin particle effect, will toggle if active
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-target  : destination of effect (self -> target)
-wait    : time between firing of effect (def=0)
-delay   : random time between firing of effect (def=0s)
-count   : type of effect to fire
-          0=TE_SPIKE (def), 1=TE_SUPERSPIKE, 2=TE_GUNSHOT, 
-		  3=TE_EXPLOSION (sprites), 4=TE_TAREXPLOSION (purple ver)
-		  5=TE_LIGHTNING1 (Shambler ver), 6=TE_LIGHTNING2 (Player ver)
-		  7=TE_WIZSPIKE, 8=TE_KNIGHTSPIKE, 9=TE_LIGHTNING3 (boss ver)
-		  10=TE_LAVASPLASH (boss wakeup), 11=TE_TELEPORT (sparkles)
--------- SPAWNFLAGS --------
--------- NOTES --------
-Spawns a builtin particle effect, will toggle if active
-Always starts off, requires triggers to activate
-
-======================================================================*/
-void() misc_builtineffects_fire = {
-	// Check if disabled/off first
-	if (self.estate & ESTATE_BLOCK) self.state = STATE_OFF;
+void() misc_builtineffects_fire = { // [FUNCTION]
+	if (self.estate & ESTATE_BLOCK) self.state = STATE_OFF; // Check if disabled/off first
 	if (self.state == STATE_OFF) return;
 
-	// Play builtin effects at target/self location
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY); // Play builtin effects at target/self location
 	WriteByte (MSG_BROADCAST, self.count);
-	
 	self.pos2 = self.origin;
-
-	// If lightning effect (self -> target)
-	if (self.count == TE_LIGHTNING1 || self.count == TE_LIGHTNING2 || 
-		self.count == TE_LIGHTNING3) {
-
-		// Check if target is a Bmodel? (different origin location)
-		if (self.movetarget.bsporigin) self.pos1 = bmodel_origin(self.movetarget);
+	if (self.count == TE_LIGHTNING1 || self.count == TE_LIGHTNING2 || self.count == TE_LIGHTNING3) { // If lightning effect (self -> target)
+		if (self.movetarget.bsporigin) self.pos1 = bmodel_origin(self.movetarget); // Check if target is a Bmodel? (different origin location)
 		else self.pos1 = self.movetarget.origin;
-		
-		// The lightning model is made from 30 unit sections stitched together
-		// reduce the vector length down to 30 unit chunks so it does not
-		// poke through the destination object
+
 		self.pos2 = self.pos1 - self.origin;
 		self.t_width = vlen(self.pos2);
-		if (self.t_width > 30) self.t_length = floor(self.t_width / 30) * 30;
+		if (self.t_width > 30) self.t_length = floor(self.t_width / 30) * 30; // The lightning model is made from 32 unit sections stitched together reduce the vector length down to 32 unit chunks so it does not poke through the destination object.
 		else self.t_length = self.t_width;
 		self.pos2 = normalize(self.pos2);
 		self.pos2 = self.origin + (self.pos2 * self.t_length);
-	
 		WriteEntity (MSG_BROADCAST, self);
 		WriteCoord (MSG_BROADCAST, self.origin_x);
 		WriteCoord (MSG_BROADCAST, self.origin_y);
 		WriteCoord (MSG_BROADCAST, self.origin_z);
 	}
-
 	WriteCoord (MSG_BROADCAST, self.pos2_x);
 	WriteCoord (MSG_BROADCAST, self.pos2_y);
 	WriteCoord (MSG_BROADCAST, self.pos2_z);
 
-	// The effect sounds have to come after the write commands
-	// otherwise the engine will get confused and think the protocol
-	// has changed, there is an exact format for effects
+	// The effect sounds have to come after the write commands otherwise the engine will get confused and think the protocol has changed, there is an exact format for effects.
 	if (self.count == TE_TELEPORT) {
 		self.lip = rint(random()*5);
 		if (self.lip == 0) sound (self.movetarget, CHAN_VOICE, "misc/r_tele1.wav", 1, ATTN_NORM);
@@ -1818,72 +1115,69 @@ void() misc_builtineffects_fire = {
 		else sound (self.movetarget, CHAN_VOICE, "misc/r_tele5.wav", 1, ATTN_NORM);
 	} else if (self.count == TE_LIGHTNING1 || self.count == TE_LIGHTNING2 || 
 		self.count == TE_LIGHTNING3) {
-		// Play lightning sound (LG weapon hit)
-		// Stop the sound constantly playing
-		if (self.waitmin < time) {
-			sound (self.movetarget, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM);
+		if (self.waitmin < time) { // Stop the sound constantly playing
+			sound (self.movetarget, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM); // Play lightning sound (LG weapon hit)
 			self.waitmin = time + 0.6;
 		}
-	}
-	else if (self.count == TE_LAVASPLASH) 
-		sound (self.movetarget, CHAN_BODY, "boss1/out1.wav", 1, ATTN_NORM);
-	else if (self.count == TE_EXPLOSION || self.count == TE_TAREXPLOSION)
-		// Play original explosion sound
-		sound(self.movetarget, CHAN_WEAPON, SOUND_REXP3, 1, ATTN_NORM);
+	} else if (self.count == TE_LAVASPLASH) sound (self.movetarget, CHAN_BODY, "boss1/out1.wav", 1, ATTN_NORM);
+	else if (self.count == TE_EXPLOSION || self.count == TE_TAREXPLOSION) sound(self.movetarget, CHAN_WEAPON, SOUND_REXP3, 1, ATTN_NORM); // Play original explosion sound
 
-	// Continuous mode?
-	if (self.wait > 0) {
+	if (self.wait > 0) { // Continuous mode?
 		self.think = misc_builtineffects_fire;
 		self.nextthink = time + self.wait + random()*self.delay;
-	}
-	// Fire once and switch off
-	else self.state = STATE_OFF;
+	} else self.state = STATE_OFF; // Fire once and switch off
 };
 
-void() misc_builtineffects_use = {
-	// Check if disabled/off first
-	if (self.estate & ESTATE_BLOCK) return;
-	
-	// Toggle shooter on/off
-	if (self.state == STATE_OFF) self.state = STATE_ON;
+void() misc_builtineffects_use = { // [FUNCTION]
+	if (self.estate & ESTATE_BLOCK) return; // Check if disabled/off first
+
+	if (self.state == STATE_OFF) self.state = STATE_ON; // Toggle shooter on/off
 	else self.state = STATE_OFF;
 	
 	misc_builtineffects_fire();
 };
 
-void() misc_builtineffects_reset = { self.state = STATE_OFF; };
+void() misc_builtineffects_reset = { self.state = STATE_OFF; }; // [FUNCTION]
 
-void() misc_builtineffects_setup = {
-	// Find any target destinations
-	if (self.target != "") self.movetarget = find(world, targetname, self.target);
+void() misc_builtineffects_setup = { // [FUNCTION]
+	if (self.target != "") self.movetarget = find(world, targetname, self.target); // Find any target destinations
 	else self.movetarget = self;
 	
-	// Lightning effects need source and target to work
-	// Check target is valid before trying to setup this effect
-	if (self.count == TE_LIGHTNING1 || self.count == TE_LIGHTNING2 || 
-		self.count == TE_LIGHTNING3 && !self.movetarget) {
+	if (self.count == TE_LIGHTNING1 || self.count == TE_LIGHTNING2 || self.count == TE_LIGHTNING3 && !self.movetarget) { // Lightning effects need source and target to work.  Check target is valid before trying to setup this effect.
 			dprint("\b[MISC_EFFECTS]\b Missing target for lightning\n");
 			spawn_marker(self.origin, SPNMARK_YELLOW);
 			remove(self);
 	}
 
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
+	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_use = misc_builtineffects_use;
 	self.estate_reset = misc_builtineffects_reset;
 	self.estate = ESTATE_ON;
 	self.state = STATE_OFF;
 };
 
-void() misc_builtineffects = {
-	// Precache sounds for effects
-	if (self.count == TE_LAVASPLASH) precache_sound ("boss1/out1.wav");
-
+// QUAKED misc_builtineffect (0 .5 .8) (-8 -8 -8) (8 8 8) x
+// -------- KEYS --------
+// targetname : toggle state (use trigger ent for exact state)
+// target  : destination of effect (self -> target)
+// wait    : time between firing of effect (def=0)
+// delay   : random time between firing of effect (def=0s)
+// count   : type of effect to fire
+          // 0=TE_SPIKE (def), 1=TE_SUPERSPIKE, 2=TE_GUNSHOT, 
+		  // 3=TE_EXPLOSION (sprites), 4=TE_TAREXPLOSION (purple ver)
+		  // 5=TE_LIGHTNING1 (Shambler ver), 6=TE_LIGHTNING2 (Player ver)
+		  // 7=TE_WIZSPIKE, 8=TE_KNIGHTSPIKE, 9=TE_LIGHTNING3 (boss ver)
+		  // 10=TE_LAVASPLASH (boss wakeup), 11=TE_TELEPORT (sparkles)
+// -------- SPAWNFLAGS --------
+// -------- NOTES --------
+// Spawns a builtin particle effect, will toggle if active
+// Always starts off, requires triggers to activate
+void() misc_builtineffects = { // [ENTITY]
+	if (self.count == TE_LAVASPLASH) precache_sound ("boss1/out1.wav"); // Precache sounds for effects
 	self.classtype = CT_PARTICLEEMIT;
 	if (self.wait < 0) self.wait = 0;
 	if (self.delay < 0) self.delay = 0;
 	if (!self.count) self.count = 0;	// def=TE_SPIKE
-
 	self.think = misc_builtineffects_setup;
 	self.nextthink = time + 0.1 + random();
 };

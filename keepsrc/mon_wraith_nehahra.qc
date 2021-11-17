@@ -1,12 +1,6 @@
 // NEHAHRA WRAITH
 
-void() wraith_flash = {
-    if (!self.modelindex)
-        if (random() < 0.2) SUB_Flash ();
-};
-
-void() wraith_idle_sfx =
-{
+void() wraith_idle_sfx = {
 // Note:  skin 0 is the normal wrath skin.  skin 1 is a grayscale version
 // with red eyes.  The latter is used for the ghostly wraith.  From here on,
 // any conditional with 'self.skin' will assume wraith and not wrath.
@@ -22,7 +16,7 @@ void() wraith_idle_sfx =
 };
 
 void() wraith_stand_fx = {
-    if (random() < 0.3) SUB_Flash ();
+    if (random() < 0.3) self.effects = self.effects | EF_MUZZLEFLASH; 
     if (random() < 0.05) sound (self, CHAN_VOICE, "nehahra/wraith/idle.wav", 1, ATTN_IDLE);
 };
 
@@ -84,10 +78,8 @@ void() wraith_souls1  =[ $attack1,  wraith_souls2  ] {ai_face();
 void() wraith_souls2  =[ $attack10, wraith_souls3  ] {ai_face();};
 void() wraith_souls3  =[ $attack11, wraith_souls4  ] {ai_face();};
 void() wraith_souls4  =[ $attack12, wraith_souls3  ] {ai_face();
-    if (self.enemy.classname != "soul")
-        self.think = wrath_run1;
-    else
-        self.nextthink = random() * 0.2 + 0.1 + time;
+    if (self.enemy.classtype != CT_SOUL) self.think = wrath_run1;
+    else self.nextthink = random() * 0.2 + 0.1 + time;
 };
 
 // TRUE = Scene change.
@@ -115,14 +107,10 @@ void() ai_wraith_stand = {
 };
 void() wrath_stand1 =[ $walk1,  wrath_stand1 ] {ai_wraith_stand();};
 
-// WALK - - - - - - - - - - - - - - - -
-void(float d) ai_wraith_walk =
-{
-    if (self.skin)
-    {
-        if (ai_wraith1 (0, FALSE))
-            return;
-        wraith_flash ();
+void(float d) ai_wraith_walk = {
+    if (self.skin) {
+        if (ai_wraith1 (0, FALSE)) return;
+        if (random() < 0.2) self.effects = self.effects | EF_MUZZLEFLASH;
         if ( self.frame == $walk1 )
             wraith_idle_sfx ();
     }
@@ -141,14 +129,11 @@ void() wrath_walk10 =[ $walk10, wrath_walk11 ] {ai_wraith_walk(8);};
 void() wrath_walk11 =[ $walk11, wrath_walk12 ] {ai_wraith_walk(8);};
 void() wrath_walk12 =[ $walk12, wrath_walk1  ] {ai_wraith_walk(8);};
 
-// RUN - - - - - - - - - - - - - - - - -
-void(float d) ai_wraith_run =
-{
-    if (self.skin)
-    {
-        if (ai_wraith1 (d, TRUE))
-            return;
-        wraith_flash ();
+void(float d) ai_wraith_run = {
+    if (self.skin) {
+        if (ai_wraith1 (d, TRUE)) return;
+
+        if (random() < 0.2) self.effects = self.effects | EF_MUZZLEFLASH;
         if ( self.frame == $walk1 )
             wraith_idle_sfx ();
     }
@@ -174,43 +159,26 @@ void() wrath_grow3  =[ $form13, wrath_grow4  ] {ai_face();};
 void() wrath_grow4  =[ $form15, wrath_grow5  ] {ai_face();};
 void() wrath_grow5  =[ $form17, wrath_run1   ] {ai_face();};
 
-// ATTACK - - - - - - - - - - - - - - -
-// Like ai_melee, but heals wrath as it causes damage.  Built for wraths.
-void() ai_drain =
-{
-    local   float   damage, dflags, rgb, den;
-    local   vector  vec;
+// ATTACK.  Like ai_melee, but heals wrath as it causes damage.  Built for wraths.
+void() ai_drain = {
+    local float damage, rgb, den;
+    local vector vec;
 
-    if (!self.enemy)
-        return;
-    if (!InMeleeRange (80))     // Wrath has long arms.
-        return;
-    if (!IsGhost (self))    // In case non-ghost uses this.
-        if (!CanDamage (self.enemy, self))
-            return;
+    if (!self.enemy) return;
+    if (!InMeleeRange (80)) return; // Wrath has long arms.
+    if ((self.solid != SOLID_TRIGGER || self.movetype != MOVETYPE_NOCLIP) && !CanDamage(self.enemy,self)) return; // In case non-ghost uses this.
+    if (self.skin) rgb = 145; // Purple for wraith.
+    else rgb = 233;           // Orange for wrath.
 
-    if (self.skin)
-        rgb = 145;      // Purple for wraith.
-    else
-        rgb = 233;      // Orange for wrath.
-
-// No armor, because armor cannot block incorporal attacks.
-// Leech, because the wraith will suck and drain your life force.
-    dflags = DF_NO_ARMOR | DF_LEECH;
     damage = SUB_MeleeDamage (3);
     den = ceil(damage * 4);
-
-	// Play effects.
     self.effects = self.effects | EF_MUZZLEFLASH;
-    if (!self.t_width)
-        sound (self, CHAN_WEAPON, "nehahra/wraith/drain.wav", 1, ATTN_NORM);
+    if (!self.t_width) sound(self, CHAN_WEAPON,"drake/wraith/drain.wav",1,ATTN_NORM); // Play effects.
     self.t_width = self.t_width + 1;
-
     makevectors (self.angles);
     vec = self.origin + (v_forward*47) + (v_right*6) + (v_up*10);
     particle (vec, '0 0 1', rgb, den);
-	// Do the damage.
-    T_Damage (self.enemy, self, self, damage, NOARMOR);
+    T_Damage (self.enemy, self, self, damage, NOARMOR); // No armor, because armor cannot block incorporal attacks.  Leech, because the wraith will suck and drain your life force.
 };
 
 void() wrath_fail1   =[ $attackc13,  wrath_fail2   ] {ai_charge(self.speed);};
@@ -223,22 +191,18 @@ void() wrath_melee3  =[ $attackc13,  wrath_melee4  ] {ai_charge(self.speed);};
 void() wrath_melee4  =[ $attackc9,   wrath_melee5  ] {ai_charge(self.speed); self.t_width = 0; ai_drain();};
 void() wrath_melee5  =[ $attackc9,   wrath_melee6  ] {ai_charge(self.speed); ai_drain();};
 void() wrath_melee6  =[ $attackc9,   wrath_melee7  ] {ai_charge(self.speed); ai_drain();
-    if (self.t_width)
-    {   // Wraith touched its target.
+    if (self.t_width) { // Wraith touched its target.
         if (self.t_width < 5)
             if (self.enemy.health > 0)
-                if (InMeleeRange (80))
-                    self.think = wrath_melee6;     // Suck some more life.
+                if (InMeleeRange (80)) self.think = wrath_melee6;     // Suck some more life.
         return;
     }
     self.think = wrath_fail1;
 };
 void() wrath_melee7  =[ $attackc8,   wrath_melee8  ] {ai_charge(self.speed);};
 void() wrath_melee8  =[ $attackc7,   wrath_melee9  ] {ai_charge(self.speed);};
-// Todo:  Skip next two frames if cranked.
 void() wrath_melee9  =[ $attackc6,   wrath_melee10 ] {ai_charge(self.speed);};
 void() wrath_melee10 =[ $attackc5,   wrath_melee11 ] {ai_charge(self.speed);};
-//
 void() wrath_melee11 =[ $attackc4,   wrath_melee12 ] {ai_charge(self.speed);};
 void() wrath_melee12 =[ $attackc3,   wrath_melee13 ] {ai_charge(self.speed);};
 void() wrath_melee13 =[ $attackc2,   wrath_melee14 ] {ai_charge(self.speed);};
@@ -268,7 +232,7 @@ void(float ofs) wrath_shot = {
         sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
         setmodel (newmis, "progs/k_spike.mdl");
         setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
-        if (self.classname == "monster_super_wrath")
+        if (self.classtype == CT_MONWRATHOVERLORD)
             newmis.velocity = normalize(newmis.velocity)*450;
         else
             newmis.velocity = normalize(newmis.velocity)*300;
@@ -317,19 +281,18 @@ void() wrath_orb11 =[ $attackb11, wrath_orb12 ] {ai_wraith_charge();};
 void() wrath_orb12 =[ $attackb12, wrath_orb13 ] {ai_wraith_charge();};
 void() wrath_orb13 =[ $attackb13, wrath_run1  ] {ai_wraith_charge();};
 
-void() wrath_attack = 
-{
+void() wrath_attack = {
     local   float   r;
 
     sound (self, CHAN_VOICE, "rogue/wrath/watt.wav", 1, ATTN_NORM);
     r = random();
-    if (self.enemy.classname == "monster_zombie")
-    {   // Blast zombies out of existance.
+    if (self.enemy.classname == "monster_zombie") { // Blast zombies out of existance.
         wrath_orb1 ();
         return;
     }
-    if (r < 0.25)
-    {   if (self.enemy.xfl & XFL_ARMORED)
+
+    if (r < 0.25) {
+		if (self.enemy.armortype == ARMOR_RED_TYPE)
             wrath_orb1 ();  // Missile spray is ineffective, so orb enemy!
         else
             wrath_spray1 ();
@@ -340,7 +303,6 @@ void() wrath_attack =
         wrath_orb1 ();
 };
 
-// PAIN - - - - - - - - - - - - - - - -
 void() wrath_pain1   =[ $pain1,   wrath_pain2   ] {};
 void() wrath_pain2   =[ $pain2,   wrath_pain3   ] {};
 void() wrath_pain3   =[ $pain3,   wrath_pain4   ] {};
@@ -399,11 +361,8 @@ void() wrath_die9 =[ $death15, SUB_Null    ] {
 	entity_hide (self);
 };
 
-// OTHER - - - - - - - - - - - - - - - -
-void(float hello) wrath_sight =
-{
-    if (!hello)
-        sound (self, CHAN_VOICE, "rogue/wrath/wsee.wav", 1, ATTN_NORM);
+void(float hello) wrath_sight ={
+    if (!hello) sound (self, CHAN_VOICE, "rogue/wrath/wsee.wav", 1, ATTN_NORM);
 };
 
 void() wraith_walk1  =[ $form17, wraith_walk2  ] {ai_wraith_walk(8);};
@@ -416,14 +375,11 @@ void() wraith_walk7  =[ $form5,  wraith_walk8  ] {ai_wraith_walk(8);};
 void() wraith_walk8  =[ $form3,  wraith_walk9  ] {ai_wraith_walk(8);};
 void() wraith_walk9  =[ $form1,  wraith_walk10 ] {self.modelindex = 0;  ai_wraith_walk(8);};
 void() wraith_walk10 =[ $form1,  wraith_walk10 ] {ai_wraith_walk(8);
-//    wraith_stand_fx();
-    wraith_flash ();
-    if (random() < 1/12)    //if ( self.frame == $walk1 )
-        wraith_idle_sfx ();
+	if (random() < 0.2) self.effects = self.effects | EF_MUZZLEFLASH;
+    if (random() < 1/12) wraith_idle_sfx ();
 };
 void() wraith_walk = {wraith_start (wraith_walk1, wraith_walk9);};
 
-// RUN - - - - - - - - - - - - - - - - -
 // Call reload func to prevent wraith from shooting while it phases.
 void() wraith_form1  =[ $form1,  wraith_form2  ] {M_Reload (1); self.modelindex = self.mindex2; ai_wraith_run(self.speed);};
 void() wraith_form2  =[ $form3,  wraith_form3  ] {ai_wraith_run(self.speed);};
@@ -436,24 +392,17 @@ void() wraith_form8  =[ $form15, wraith_form9  ] {ai_wraith_run(self.speed);};
 void() wraith_form9  =[ $form17, wrath_run1    ] {ai_wraith_run(self.speed);};
 void() wraith_form = {wraith_start (wrath_run1, wraith_form1);};
 
-// ATTACK - - - - - - - - - - - - - - -
-void() wraith_attack =
-{
-    local   float   r;
+void() wraith_attack = {
+    local float r;
 
-//- - - - - - - - -
-// If skipping phasing anim to attack, make sure wraith can take damage.
+	// If skipping phasing anim to attack, make sure wraith can take damage.
     if (!self.takedamage)
-        if (( self.frame >= $form1 ) && ( self.frame <= $form19 ))
-            self.takedamage = DAMAGE_AIM;
-//- - - - - - - - -
+        if (( self.frame >= $form1 ) && ( self.frame <= $form19 )) self.takedamage = DAMAGE_AIM;
+
     r = random();
-    if ((r < 0.25) && !(self.spawnflags & 2))   // No orbs in Nehahra mode.
-        wrath_orb1 ();
-    else if (r < 0.5)
-        wrath_spray1 ();
-    else
-    {   // Nehahra wraith spontaneously sweated out bullets some of the time.
+    if ((r < 0.25) && !(self.spawnflags & 2)) wrath_orb1 (); // No orbs in Nehahra mode.
+    else if (r < 0.5) wrath_spray1 ();
+    else { // Nehahra wraith spontaneously sweated out bullets some of the time.
         r = crandom() * 1;  //3;
         wrath_shot (r);
     }
@@ -625,18 +574,12 @@ void() wraith_wait = {
 	nehwraith_stand1();
 };
 
-void() monster_wraith_nehahra = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	if (!self.mdl) self.mdl = "progs/nehahra/wraith.mdl";
-	if (!self.mdl) self.gib1mdl = "progs/rogue/wrthgib1.mdl";
-	if (!self.mdl) self.gib2mdl = "progs/rogue/wrthgib2.mdl";
-	if (!self.mdl) self.gib3mdl = "progs/rogue/wrthgib3.mdl";
+void() monster_voidwraith = {
 	precache_model("progs/nehahra/wraith.mdl");
-	precache_model("progs/s_null.spr");
+	precache_model("progs/null.spr"); // formerly s_null.spr
 	precache_model("progs/nehahra/wr_spike.mdl");
 	precache_model("progs/nehahra/soul.mdl");
+    precache_model ("progs/drake/v_spike.mdl");
 	precache_sound("nehahra/wraith/soul.wav");
 	precache_sound("nehahra/wraith/idle.wav");
 	precache_sound("nehahra/wraith/idle2.wav");
@@ -652,23 +595,28 @@ void() monster_wraith_nehahra = {
 	precache_sound("nehahra/wraith/select.wav");
     precache_sound ("drake/hkboss/iceball.wav");
     precache_sound ("hknight/attack1.wav");
-    precache_sound ("nehahra/wraith/drain.wav");
-    precache_model ("progs/drake/v_spike.mdl");
+    precache_sound ("drake/wraith/drain.wav");
+};
 
+void() monster_voidwraith = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	if (!self.mdl) self.mdl = "progs/nehahra/wraith.mdl";
+	if (!self.mdl) self.gib1mdl = "progs/rogue/wrthgib1.mdl";
+	if (!self.mdl) self.gib2mdl = "progs/rogue/wrthgib2.mdl";
+	if (!self.mdl) self.gib3mdl = "progs/rogue/wrthgib3.mdl";
 	self.sight_sound = "nehahra/wraith/talk1.wav";
 	self.idle_sound = "nehahra/wraith/idle.wav";
 	self.idle_sound2 = "nehahra/wraith/idle2.wav";
 	self.pain_sound = "nehahra/wraith/growl2.wav";
 	self.pain_sound2 = "nehahra/wraith/idle2.wav";
-
 	if (self.health < 1) self.health = 600;
 	self.exactskin = 1; // Drake:  Wraith is now a wrath variant.
 	self.alpha      = 0.7;
 	self.fullbright = 1;
 	self.bloodtype  = BLOOD_DARK;   // It's like the Nazgul/ringwraith.
-	self.family     = FAM_UNDEAD | FAM_WRATH;
 	self.ryuflags   = RYU_REAPER | RYU_CALM;
-	self.xfl        = XFL_ARMORED;      // Absorb magic missiles.
 	self.speed        = 8;
 	self.spawnflags   = self.spawnflags | SPAWN_SOUL;
 	self.yaw_speed = 10;
@@ -677,6 +625,6 @@ void() monster_wraith_nehahra = {
 	self.th_stand = wraith_wait;
 	self.th_walk = wraith_wait;
 	self.classtype = CT_MONWRAITHNEHAHRA;
-	if (self.deathstring == "")  self.deathstring = " was disintegrated by a Wrath\n";
+	if (self.deathstring == "")  self.deathstring = " was dispelled by a Void Wraith\n";
 	monster_wrath();
 };

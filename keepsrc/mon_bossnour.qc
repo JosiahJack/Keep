@@ -47,19 +47,14 @@ float NOUR_PHASE2 = 2;	// Fighting
 float NOUR_PHASE3 = 3;	// Summon mode
 float NOUR_PHASE4 = 4;	// Death
 
-//======================================================================
-// Global functions
-//======================================================================
 // Special streamlined player find function
-//----------------------------------------------------------------------
-float() nour_FindTarget =
-{
+float() nour_FindTarget = {
 	local entity client;
 	
 	// Get the obvious exception(s) done first
 	if (self.health < 1) return FALSE;
 	if (intermission_running > 0) return FALSE;
-	if (cinematic_running > 0) return FALSE;
+	if (cinematic_running > 0 || cutscene > 0) return FALSE;
 
 	// Find a client in current PVS
 	client = checkclient ();
@@ -86,11 +81,8 @@ float() nour_FindTarget =
 	return TRUE;	
 };
 
-//----------------------------------------------------------------------
 // Setup wave HP and trigger boundaries
-//----------------------------------------------------------------------
-void() nour_WaveSetupHP =
-{
+void() nour_WaveSetupHP = {
 	// Is there anymore boss waves left?
 	if (self.bosswave >= self.bosswavetotal) {
 		// Only one wave left (death is final trigger)
@@ -252,14 +244,10 @@ void() nour_runframe =
 	else ai_run(16);
 };
 
-//----------------------------------------------------------------------
 void() nour_run1 = {self.walkframe = 0; nour_runframe();};
 
-//============================================================================
 // Attachment management (create, finish and delete)
-//============================================================================
-void() nour_create_attachment =
-{
+void() nour_create_attachment = {
 	// Are the attachments setup yet?
 	if (!self.attachment) {
 		self.attachment = spawn();
@@ -270,30 +258,11 @@ void() nour_create_attachment =
 	}
 };
 
-//----------------------------------------------------------------------
-void() nour_finish_attachment =
-{
-	if (self.attachment) {
-		setmodel(self.attachment, "");
-		self.attachment.state = STATE_OFF;
-	}
-};
-
-//----------------------------------------------------------------------
-void() nour_remove_attachment =
-{
-	if (self.attachment) {
-		self.attachment.think = SUB_Remove;
-		self.attachment.nextthink = time + 0.1;
-	}
-}
-
 //======================================================================
 // ATTACK A - Fire multiple spit/spikes
 // Block pain function from interrupting magic attack
 //======================================================================
-void(vector offset) nour_spike = 
-{
+void(vector offset) nour_spike = {
 	local vector dtarget, starget, ftarget, sorg, forg, dir;
 	
 	if (!self.enemy) return;
@@ -344,7 +313,7 @@ void(vector bombofs) Fire_NourBomb = {
 	local vector org, torg, ang, dir, avel;
 
 	// Finished with bomb effect
-	nour_finish_attachment();
+	SUB_FinishAttachment();
 	
 	if (!self.enemy) return;
 	if (self.health < 1) return;
@@ -457,7 +426,7 @@ void(vector minofs) Fire_NourPlasma =
 void(vector minofs) Spawn_NourMin =
 {
 	// Finished with bomb effect
-	nour_finish_attachment();
+	SUB_FinishAttachment();
 	Fire_NourPlasma(minofs);
 	
 	// Cycle through spawn targets and spawn Tfog + Wizard
@@ -635,7 +604,7 @@ void() nour_painb9 = [ $painb9, nour_run1 ] {};
 void(entity inflictor, entity attacker, float damage) nour_pain =
 {
 	// Finish with all attachments
-	nour_finish_attachment();
+	SUB_FinishAttachment();
 
 	if (self.spawnflags & MON_NOUR_BOSS) {
 		// Check for boss wave trigger events
@@ -753,8 +722,8 @@ void() nour_die = {
 	dprint(")\n");
 	self.deadflag = DEAD_DEAD;	// Nour bites the dust
 	self.effects = 0;			// Remove effects on death
-	nour_finish_attachment();	// Remove any attachments
-	nour_remove_attachment();
+	SUB_FinishAttachment();	// Remove any attachments
+	SUB_RemoveAttachment();
 
 	sound (self, CHAN_VOICE, "ad171/nour/death.wav", 1, ATTN_NORM);
 	self.velocity_x = -200 + 400*random();
@@ -938,8 +907,7 @@ void() nour_awake = {
 		// Don't show spawning effect if nogfx
 		if (!(self.spawnflags & MON_SPAWN_NOGFX)) 
 			spawn_tfog(self.origin);
-	}
-	else {
+	} else {
 		// Find spawning (move) destination
 		self.movetarget2 = find(world,targetname,self.message2);
 		if (!self.movetarget2) {
@@ -963,12 +931,12 @@ void() nour_awake = {
 	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
 	
 	// Check for delay spawn monster count
-	if (self.delaymonstercount) {
+	// if (self.delaymonstercount) {
 		// Reset both monster count conditions
-		self.nomonstercount = self.delaymonstercount = 0;
-		AddToTotals(self);
-		update_hud_totals(HUD_MONSTERS);
-	}
+		// self.nomonstercount = self.delaymonstercount = 0;
+		// AddToTotals(self);
+		// update_hud_totals(HUD_MONSTERS);
+	// }
 
 	//Resist_CheckRange(self);		// Double check values
 	Resist_Save(self);				// Save for Later
@@ -1009,60 +977,51 @@ void() nour_awake = {
 	nour_revealframe();
 };
 
-/*======================================================================
- QUAKED monster_nouronihar (1 0 0) (-16 -16 -24) (16 16 40)
-======================================================================*/
-void() monster_nour = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-	
-	self.mdl = "progs/ad171/mon_bossnour.mdl";
-	self.headmdl = "progs/h_wizard.mdl";
-	self.gib1mdl = "progs/ad171/gib_wzarm1.mdl";	// Left arm/stump
-	self.gib2mdl = "progs/ad171/gib_wzarm2.mdl";	// Right arm/stump
-	self.gib3mdl = "progs/ad171/gib_wztail.mdl";	// Tail section
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
+void() monster_nour_precache = {
+	precache_model ("progs/ad171/mon_bossnour.mdl");
+	precache_model ("progs/h_wizard.mdl");
 	precache_model (MODEL_PROJ_WIZ);	// Originally progs/w_spike.mdl
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
+	precache_model ("progs/ad171/gib_wzarm1.mdl");
+	precache_model ("progs/ad171/gib_wzarm2.mdl");
+	precache_model ("progs/ad171/gib_wztail.mdl");
 	precache_model (MODEL_PROJ_NOUR1);	// Spit
 	precache_model (MODEL_PROJ_NOUR2B);	// Growing ball
 	precache_model (MODEL_PROJ_NOUR2P);	// Warping projectile
 	precache_model (MODEL_PROJ_NOUR2S);	// Explosive pieces
 	precache_model (MODEL_PROJ_LIGHTNING2);
 	precache_model (SBURST_POISON);		// Poison Burst
-
-	// sight/pain/death sounds
-	self.idle_sound = "ad171/nour/idle1.wav";
-	self.pain_sound = "ad171/nour/pain.wav";
-	self.sight_sound = "ad171/nour/sight.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.pain_sound);
-	precache_sound (self.sight_sound);
+	precache_sound ("ad171/nour/idle1.wav");
+	precache_sound ("ad171/nour/pain.wav");
+	precache_sound ("ad171/nour/sight.wav");
 	precache_sound ("ad171/nour/reveal.wav");
-
-	// Final death sequence
-	precache_sound ("ad171/nour/death.wav");
+	precache_sound ("ad171/nour/death.wav"); // Final death sequence
 	precache_sound ("ad171/seeker/explode_major.wav");
 	precache_sound ("ad171/eidolon/elec_arch1.wav");
 	precache_sound ("ad171/eidolon/elec_arch2.wav");
 	precache_sound ("ad171/eidolon/implode_death.wav");
-
-	// Attack A - Wizard style spit
-	// Attack B - Large explosive ball
-	precache_sound ("ad171/nour/attack1.wav");
-	precache_sound ("ad171/wraith/attack3.wav");
+	precache_sound ("ad171/nour/attack1.wav"); // Attack A - Wizard style spit
+	precache_sound ("ad171/wraith/attack3.wav"); // Attack B - Large explosive ball
 	precache_sound ("ad171/nour/explode2.wav");
 	precache_sound ("ad171/wraith/bounce.wav");
+};
+
+// QUAKED monster_nouronihar (1 0 0) (-16 -16 -24) (16 16 40)
+void() monster_nour = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
+	self.mdl = "progs/ad171/mon_bossnour.mdl";
+	self.headmdl = "progs/h_wizard.mdl";
+	self.gib1mdl = "progs/ad171/gib_wzarm1.mdl";	// Left arm/stump
+	self.gib2mdl = "progs/ad171/gib_wzarm2.mdl";	// Right arm/stump
+	self.gib3mdl = "progs/ad171/gib_wztail.mdl";	// Tail section
+	self.idle_sound = "ad171/nour/idle1.wav"; // sight/pain/death sounds
+	self.pain_sound = "ad171/nour/pain.wav";
+	self.sight_sound = "ad171/nour/sight.wav";
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	self.bboxtype = BBOX_WIDE;		// Wraith Body
-	// Regular monster with large HP
-	if (self.health < 1) self.health = 1200;
-
+	if (self.health < 1) self.health = 1200; // Regular monster with large HP
 	self.gibhealth = MON_NEVERGIB;	// Cannot be gibbed by weapons
 	self.gibbed = FALSE;			// Starts complete
 	self.pain_flinch = 200;			// Strong Wizard level
@@ -1106,12 +1065,16 @@ void() monster_nour = {
 	self.th_missile = nour_attb1;
 	self.th_summon = nour_attc1;
 	self.th_pain = nour_pain;
-	self.th_die = nour_die;
-		
+	self.th_die = nour_die;	
 	self.classtype = CT_MONNOUR;
 	self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
+	if (self.minion_name == string_null) self.minion_name = "monster_wizard";
+	setup_passivestate(self); // Check passive system for exceptions
+	self.frame = 0; self.exactskin = self.skin; // Devmarker function changes skins, save for later
 	
+	monster_start();
+
 	// Check for boss version of Nouronihar?
 	if (self.spawnflags & MON_NOUR_BOSS) {
 		// Reset spawnflag, other values not required
@@ -1121,41 +1084,11 @@ void() monster_nour = {
 		self.flags = FL_MONSTER;		// Reset flag (no user settings)
 		self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)		
 		self.reflectaxe = TRUE;			// Prevent axe damage
-	
-		// Check passive system for exceptions
-		setup_passivestate(self);
-	
-		// No targetname = no trigger!
-		if (self.targetname == "") {
-			// dprint("\b[NOUR]\b Missing targetname name!\n");
-			// spawn_marker(self.origin, SPNMARK_YELLOW);
-			// return;
-		}
-		// No tether target defined!
-		// if (self.tethertarget == "") {
-			// dprint("\b[NOUR]\b Missing tether target!\n");
-		// }
-		// Monster count exceptions
-		if (self.nomonstercount > 0 || self.delaymonstercount > 0) {
-			// Some maps have way too many no monster counts
-			if (world.no_moncountdevmsg <= 0) {
-				dprint("\b[NOUR]\b ("); dprint(self.targetname);
-				dprint(") - no monster count\n");
-			}
-		}
-		// Update count before client spawn
-		else AddToTotals(self);
-		
-		// Devmarker function changes skins, save for later
-		self.frame = 0; self.exactskin = self.skin;
-		// Display debug diamonds
-		// monster_devmarker(self);
-		// Wait for trigger event
+
+		// Wait for trigger event...
 		if (self.targetname != "")
 			self.use = nour_awake;
 		else
-			nour_awake(); // or not, mapper didn't set us up right!
+			nour_awake(); // ...or not, mapper didn't set us up right!
 	}
-	// Regular start of monster
-	else monster_start();
 };

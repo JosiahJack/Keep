@@ -1,28 +1,57 @@
-/*======================================================================
- TRAP PENDULUM
-======================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Arcane Dimensions (AD), Mission Pack 2 (Rogue)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 4
+// Function count: 36
+//
+// Implements: Rogue Swinging Pendulums with AD Updates
+//
+// Description:
+// A giant swinging double-sided axe trap with classic whoosh sound.
+//=============================================================================
+
 float PEND_MAXFRAME = 12;	// Frames 0-12
 float PEND_ANIMGROUP = 13;	// Size of animation group
 float PEND_MIDFRAME = 7;	// Fastest think frame
-
 float PEND_REVERSE = 1;		// Start at frame 12 instead of 0
 float PEND_ONESWING = 2;	// Do one swing cycle and stop (back+forth)
 float PEND_SHORT = 16;		// Short pole version (128 instead of 192)
 float PEND_XSWING = 32;		// Swing X axis (def=Y)
 
-//----------------------------------------------------------------------
 // The array is setup from world.qc before anything loads
-//----------------------------------------------------------------------
 vector pend_X[26], pend_Y[26], pend_short[26];
 
-//----------------------------------------------------------------------
 // As the pendulum swings the bounding box is adjusted around the blade
 // Some swings have the bbox ahead of the blade to catch impacts better
 // bbox values taken from the original pendulum from Rogue mission pack
 // Using view_ofs because the model has been rebuilt/reskinned
-//----------------------------------------------------------------------
-void() pendulum_setuparray =
-{
+void() pendulum_setuparray = { // [FUNCTION]
 	local float loopc, loopd, tempx;
 	local vector tbuffer;
 	
@@ -50,7 +79,6 @@ void() pendulum_setuparray =
 	pend_short[12] = '0 -64 -108';
 	
 	loopc = loopd = 0;
-	
 	while (loopc < PEND_ANIMGROUP) {
 		// Generate X axis vector offset from Y axis data (short pendulum)
 		tbuffer = pend_short[loopc];		// Read vector offset
@@ -70,18 +98,16 @@ void() pendulum_setuparray =
 		tbuffer_x = tbuffer_y;
 		tbuffer_y = tempx;
 		pend_X[loopd+1] = tbuffer;	
-		
+	
 		loopc = loopc + 1;
 		loopd = loopd + 2;
 	}
 };
 
-//----------------------------------------------------------------------
 // The original rogue pendulum adjusted the bbox every animation frame
 // FTEQCC supports arrays and the previous method can now be done easier
 // Also sets the nextthink time to adjust for swing momentum
-//----------------------------------------------------------------------
-void(float frame_seq) trap_pendsize = {
+void(float frame_seq) trap_pendsize = { // [FUNCTION]
 	self.cnt = frame_seq * 2;
 	
 	// Short pendulum needs a different offset each frame
@@ -94,8 +120,7 @@ void(float frame_seq) trap_pendsize = {
 	if (self.spawnflags & PEND_XSWING) {
 		self.pos1 = pend_X[self.cnt] + self.view_ofs;
 		self.pos2 = pend_X[self.cnt + 1] + self.view_ofs;
-	}
-	else {
+	} else {
 		self.pos1 = pend_Y[self.cnt] + self.view_ofs;
 		self.pos2 = pend_Y[self.cnt + 1] + self.view_ofs;
 	}
@@ -108,20 +133,16 @@ void(float frame_seq) trap_pendsize = {
 	}
 };
 
-//----------------------------------------------------------------------
 // Pendulum animation frames
-//----------------------------------------------------------------------
 $frame pend_frame1 pend_frame2 pend_frame3 pend_frame4 pend_frame5 pend_frame6 pend_frame7
 $frame pend_frame8 pend_frame9 pend_frame10 pend_frame11 pend_frame12 pend_frame13
 
 // Stationary idle for beginning and ending
-void() pend_idle1 =[ $pend_frame1, pend_idle1 ] {};
-void() pend_idle21 =[ $pend_frame13, pend_idle21 ] {};
+void() pend_idle1 =[ $pend_frame1, pend_idle1 ] {}; // [FUNCTION]
+void() pend_idle21 =[ $pend_frame13, pend_idle21 ] {}; // [FUNCTION]
 
-//----------------------------------------------------------------------
 // Pendulum Swing (one cycle is 26 frames)
-//----------------------------------------------------------------------
-void() pend_swing1 =[ $pend_frame1, pend_swing2 ] {
+void() pend_swing1 =[ $pend_frame1, pend_swing2 ] { // [FUNCTION]
 	// Stop the pendulum if state is OFF / DISABLED
 	if (self.estate & ESTATE_BLOCK) self.think = pend_idle1;
 	else if (self.state == STATE_OFF) self.think = pend_idle1;
@@ -137,23 +158,20 @@ void() pend_swing1 =[ $pend_frame1, pend_swing2 ] {
 		}
 	}
 };
-void() pend_swing2 =[ $pend_frame2, pend_swing3 ] { trap_pendsize(1);self.aflag = 0.1;	};
-void() pend_swing3 =[ $pend_frame3, pend_swing4 ] { trap_pendsize(2);self.aflag = 0.2;	}; 
-void() pend_swing4 =[ $pend_frame4, pend_swing5 ] { trap_pendsize(3); self.aflag = 0.3;	
-sound ( self, CHAN_VOICE, self.noise1, 0.5, ATTN_NORM);};
-void() pend_swing5 =[ $pend_frame5,		pend_swing6 ] {trap_pendsize(4);self.aflag = 0.4;	};
-void() pend_swing6 =[ $pend_frame6,		pend_swing7 ] {trap_pendsize(5);self.aflag = 0.5;	};
-void() pend_swing7 =[ $pend_frame7,		pend_swing8 ] {trap_pendsize(6); self.aflag = 0.6;}; //straight up and down
-void() pend_swing8 =[ $pend_frame8,		pend_swing9 ] {trap_pendsize(7);self.aflag = 0.7;	};
-void() pend_swing9 =[ $pend_frame9,		pend_swing10 ] {trap_pendsize(8);self.aflag = 0.8;	};
-void() pend_swing10 =[ $pend_frame10,	pend_swing11 ] {trap_pendsize(9);self.aflag = 1.0;	};
-void() pend_swing11 =[ $pend_frame11,	pend_swing12 ] {trap_pendsize(10);self.aflag = 0.8;	};
-void() pend_swing12 =[ $pend_frame12,	pend_swing13 ] {trap_pendsize(11);self.aflag = 0;	};
-// One extra frame pause at end of sequence
-void() pend_swing13 =[ $pend_frame13,	pend_swing21 ] {trap_pendsize(12);self.aflag = 0;};
+void() pend_swing2 =[ $pend_frame2, pend_swing3 ] { trap_pendsize(1);self.aflag = 0.1;	}; // [FUNCTION]
+void() pend_swing3 =[ $pend_frame3, pend_swing4 ] { trap_pendsize(2);self.aflag = 0.2;	};  // [FUNCTION]
+void() pend_swing4 =[ $pend_frame4, pend_swing5 ] {trap_pendsize(3); self.aflag = 0.3; sound ( self, CHAN_VOICE, self.noise1, 0.5, ATTN_NORM);}; // [FUNCTION]
+void() pend_swing5 =[ $pend_frame5,		pend_swing6 ] {trap_pendsize(4);self.aflag = 0.4;	}; // [FUNCTION]
+void() pend_swing6 =[ $pend_frame6,		pend_swing7 ] {trap_pendsize(5);self.aflag = 0.5;	}; // [FUNCTION]
+void() pend_swing7 =[ $pend_frame7,		pend_swing8 ] {trap_pendsize(6); self.aflag = 0.6;}; // [FUNCTION], straight up and down
+void() pend_swing8 =[ $pend_frame8,		pend_swing9 ] {trap_pendsize(7);self.aflag = 0.7;	}; // [FUNCTION]
+void() pend_swing9 =[ $pend_frame9,		pend_swing10 ] {trap_pendsize(8);self.aflag = 0.8;	}; // [FUNCTION]
+void() pend_swing10 =[ $pend_frame10,	pend_swing11 ] {trap_pendsize(9);self.aflag = 1.0;	}; // [FUNCTION]
+void() pend_swing11 =[ $pend_frame11,	pend_swing12 ] {trap_pendsize(10);self.aflag = 0.8;	}; // [FUNCTION]
+void() pend_swing12 =[ $pend_frame12,	pend_swing13 ] {trap_pendsize(11);self.aflag = 0;	}; // [FUNCTION]
+void() pend_swing13 =[ $pend_frame13,	pend_swing21 ] {trap_pendsize(12);self.aflag = 0;}; // [FUNCTION], One extra frame pause at end of sequence
 
-//----------------------------------------------------------------------
-void() pend_swing21 =[ $pend_frame13,	pend_swing22 ] {
+void() pend_swing21 =[ $pend_frame13,	pend_swing22 ] { // [FUNCTION]
 	// Stop the pendulum if state is OFF / DISABLED
 	if (self.estate & ESTATE_BLOCK) self.think = pend_idle21;
 	else if (self.state == STATE_OFF) self.think = pend_idle21;
@@ -169,85 +187,66 @@ void() pend_swing21 =[ $pend_frame13,	pend_swing22 ] {
 		}
 	}
 };
-void() pend_swing22 =[ $pend_frame12,	pend_swing23 ] {trap_pendsize(11);self.aflag = -0.1;	};
-void() pend_swing23 =[ $pend_frame11,	pend_swing24 ] {trap_pendsize(10);self.aflag = -0.2;	};
-void() pend_swing24 =[ $pend_frame10,	pend_swing25 ] {trap_pendsize(9); self.aflag = -0.3;	
-sound ( self, CHAN_VOICE, self.noise1, 0.5, ATTN_NORM);};
-void() pend_swing25 =[ $pend_frame9,	pend_swing26 ] {trap_pendsize(8);self.aflag = -0.4;	};
-void() pend_swing26 =[ $pend_frame8,	pend_swing27 ] {trap_pendsize(7);self.aflag = -0.5;	};
-void() pend_swing27 =[ $pend_frame7,	pend_swing28 ] {trap_pendsize(6);self.aflag = -0.6;	}; //straight up and down
-void() pend_swing28 =[ $pend_frame6,	pend_swing29 ] {trap_pendsize(5);self.aflag = -0.7;	};
-void() pend_swing29 =[ $pend_frame5,	pend_swing30 ] {trap_pendsize(4);self.aflag = -0.8;	};
-void() pend_swing30 =[ $pend_frame4,	pend_swing31 ] {trap_pendsize(3);self.aflag = -1;	};
-void() pend_swing31 =[ $pend_frame3,	pend_swing32 ] {trap_pendsize(2);self.aflag = -0.8;	};
-void() pend_swing32 =[ $pend_frame2,	pend_swing33 ] {trap_pendsize(1);self.aflag = 0;	};
-// One extra frame pause at end of sequence
-void() pend_swing33 =[ $pend_frame1,	pend_swing1 ] {trap_pendsize(0);self.aflag = 0;};
+void() pend_swing22 =[ $pend_frame12,	pend_swing23 ] {trap_pendsize(11);self.aflag = -0.1;	}; // [FUNCTION]
+void() pend_swing23 =[ $pend_frame11,	pend_swing24 ] {trap_pendsize(10);self.aflag = -0.2;	}; // [FUNCTION]
+void() pend_swing24 =[ $pend_frame10,	pend_swing25 ] {trap_pendsize(9); self.aflag = -0.3; sound ( self, CHAN_VOICE, self.noise1, 0.5, ATTN_NORM);}; // [FUNCTION], I heard a whoosh!
+void() pend_swing25 =[ $pend_frame9,	pend_swing26 ] {trap_pendsize(8);self.aflag = -0.4;	}; // [FUNCTION]
+void() pend_swing26 =[ $pend_frame8,	pend_swing27 ] {trap_pendsize(7);self.aflag = -0.5;	}; // [FUNCTION]
+void() pend_swing27 =[ $pend_frame7,	pend_swing28 ] {trap_pendsize(6);self.aflag = -0.6;	};  // [FUNCTION], straight up and down
+void() pend_swing28 =[ $pend_frame6,	pend_swing29 ] {trap_pendsize(5);self.aflag = -0.7;	}; // [FUNCTION]
+void() pend_swing29 =[ $pend_frame5,	pend_swing30 ] {trap_pendsize(4);self.aflag = -0.8;	}; // [FUNCTION]
+void() pend_swing30 =[ $pend_frame4,	pend_swing31 ] {trap_pendsize(3);self.aflag = -1;	}; // [FUNCTION]
+void() pend_swing31 =[ $pend_frame3,	pend_swing32 ] {trap_pendsize(2);self.aflag = -0.8;	}; // [FUNCTION]
+void() pend_swing32 =[ $pend_frame2,	pend_swing33 ] {trap_pendsize(1);self.aflag = 0;	}; // [FUNCTION]
+void() pend_swing33 =[ $pend_frame1,	pend_swing1 ] {trap_pendsize(0);self.aflag = 0;}; // [FUNCTION], One extra frame pause at end of sequence
 
-//----------------------------------------------------------------------
-// if something has touched the pendulum, damage and bounce away
-//----------------------------------------------------------------------
-void() trap_pendulum_touch =
-{
-	// Blade can still hurt if touched, except when OFF = not visible
-	if (self.estate & ESTATE_OFF) return;
-	// Double check if dead monster body!
-	if (trigger_check_body(other,DEAD_EXPLODE)) return;
+// If something has touched the pendulum, damage and bounce away.  Very useful ;) -Qmaster
+void() trap_pendulum_touch = { // [FUNCTION]
+	local float force;
+
+	if (self.estate & ESTATE_OFF) return; // Blade can still hurt if touched, except when OFF = not visible
+	if (trigger_check_body(other,DEAD_EXPLODE)) return; // Double check if dead monster body!
 	if (other.health < 1 || other.takedamage == DAMAGE_NO) return;
 	if (self.attack_finished > time) return;
-	if (self.waitmin > 0) self.attack_finished = time + self.waitmin;
 
-	// only play hit sound once per second
-	if (self.pain_finished < time) {
+	if (self.waitmin > 0) self.attack_finished = time + self.waitmin;
+	if (self.pain_finished < time) { // only play hit sound once per second
 		sound ( self, CHAN_VOICE, self.noise2, 1, ATTN_NORM);
 		self.pain_finished = time + 1;
 	}
 	
-	// Instant death for monsters, they can get knocked into wierd locations
-	if (other.flags & FL_MONSTER) 
-		T_Damage (other, self, self, other.max_health + 100, DAMARMOR);
-	else 
-		// Small damage but can be lethal because of how often touch runs
-		T_Damage (other, self, self, self.dmg, DAMARMOR);
+	if (other.flags & FL_MONSTER && other.health < 100) T_Damage (other, self, self, other.max_health + 100, DAMARMOR); // Instant death for weak monsters, they can get knocked into wierd locations
+	else T_Damage (other, self, self, self.dmg, DAMARMOR); // Small damage but can be lethal because of how often touch runs
 
-	// Fling the player/object away from blade
+	if (other.flags & FL_MONSTER) force = 100; // Less for monsters who survived.
+	else force = 250;
+
+	// Fling hit entity away from blade
 	// Setting aflag in animation frame to specify direction
-	if (self.spawnflags & PEND_XSWING) other.velocity_x = self.aflag * 250;
-	else other.velocity_y = self.aflag * 250;
-	other.velocity_z = 200;		// Little upward lift
-	
-	// Blood and gore at object location not pendulum
-	SpawnMeatSpray (other, other, crandom() * 200);
+	if (self.spawnflags & PEND_XSWING) other.velocity_x = self.aflag * force;
+	else other.velocity_y = self.aflag * force;
+
+	other.velocity_z = 200;	// Little upward lift
+	SpawnMeatSpray (other, other, crandom() * 200); // Blood and gore at object location not pendulum
 };
 
-//----------------------------------------------------------------------
-void() trap_pendulum_fire =
-{
-	// Swing counter
-	self.count = 0;
-	// Make sure starting frame is start or finish
-	if (self.frame != 0 && self.frame != PEND_MAXFRAME)
-		self.frame = self.frame_override;
-	
-	// Setup next frame to update swing
-	if (self.frame == 0) self.think = pend_swing1;
+void() trap_pendulum_fire = { // [FUNCTION]
+	self.count = 0; // Swing counter
+	if (self.frame != 0 && self.frame != PEND_MAXFRAME) self.frame = self.frame_override; // Make sure starting frame is start or finish
+	if (self.frame == 0) self.think = pend_swing1; // Setup next frame to update swing
 	else self.think = pend_swing13;
+
 	self.nextthink = time + 0.01 + self.wait;
 };
 
-//----------------------------------------------------------------------
-void() trap_pendulum_use =
-{
-	// Deal with STARTOFF functionality first
-	if (self.spawnflags & ENT_STARTOFF) {
-		// Remove spawnflag and switch ON entity
-		self.spawnflags = self.spawnflags - ENT_STARTOFF;
+void() trap_pendulum_use = { // [FUNCTION]
+	if (self.spawnflags & ENT_STARTOFF) { // Deal with STARTOFF functionality first
+		self.spawnflags = self.spawnflags - ENT_STARTOFF; // Remove spawnflag and switch ON entity
 		self.state = STATE_OFF;	// use toggle function
 		self.estate_on();		// switch on
 	}
 
-	// Block USE functionality if state wrong
-	if (self.estate & ESTATE_BLOCK) return;
+	if (self.estate & ESTATE_BLOCK) return; // Block USE functionality if state wrong
 
 	// Toggle state of pendulum to start/stop
 	if (self.state == STATE_OFF) {
@@ -257,10 +256,8 @@ void() trap_pendulum_use =
 	else self.state = STATE_OFF;
 };
 
-//----------------------------------------------------------------------
-void() trap_pendulum_on =
-{
-	// Turn on model/world interaction
+// Turn on model/world interaction
+void() trap_pendulum_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;	
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_NONE;
@@ -269,9 +266,7 @@ void() trap_pendulum_on =
 	trap_pendsize(self.frame);
 };
 
-//----------------------------------------------------------------------
-void() trap_pendulum_off =
-{
+void() trap_pendulum_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF;
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
@@ -281,28 +276,32 @@ void() trap_pendulum_off =
 	self.think = SUB_Null;
 };
 
-//----------------------------------------------------------------------
-void() trap_pendulum_disable =
-{
+void() trap_pendulum_disable = { // [FUNCTION]
 	self.state = STATE_OFF;
 };
 
-//----------------------------------------------------------------------
-void() trap_pendlong =
-{
-	// Short/long version of the model
-	if (self.spawnflags & PEND_SHORT) self.mdl = "progs/ad171/trap_pendshort.mdl";
+// QUAKED trap_pendlong (0.5 0.75 0) (-8 -192 -24) (8 0 24) REVERSE ONESWING x x x x STARTOFF x
+// -------- KEYS --------
+// targetname : toggle state (use trigger ent for exact state)
+// dmg      : Damage to do for each contact, def=5
+// waitmin  : Damage throttle to touch function, def=0.5s
+// wait     : amount of time (seconds) before starting swinging. def=0
+// -------- SPAWNFLAGS --------
+// REVERSE  : Starts at frame 12 instead 0
+// ONESWING : Will do a single swing (back + forth) when triggered
+// STARTOFF : Starts off and waits for trigger
+// -------- NOTES --------
+// Long (192 units) Pendulum (From Rogue mission pack)
+void() trap_pendlong = { // [ENTITY]
+	if (self.spawnflags & PEND_SHORT) self.mdl = "progs/ad171/trap_pendshort.mdl"; // Short/long version of the model
 	else self.mdl = "progs/ad171/trap_pendlong.mdl";
 	precache_model (self.mdl);
-	
 	self.view_ofs = '0 0 -108';	// Offset bbox vectors (new model different location)
 	self.oldorigin = '0 0 0';	// Entity is correct location
-
 	self.noise1 = "ad171/traps/pend_swing.wav";
 	self.noise2 = "ad171/traps/pend_hit.wav";
 	precache_sound (self.noise1);
 	precache_sound (self.noise2);
-
 	self.classtype = CT_PENDULUM;
 	if (self.dmg == 0) self.dmg = 5;	// Default touch damage
 	if (self.dmg < 0) self.dmg = 0;		// Use -1 for no damage option
@@ -311,22 +310,21 @@ void() trap_pendlong =
 	self.state = STATE_OFF;
 
 	// Error - Check for targetname for trigger event
-	if (self.targetname == "") {
-		dprint("\b[PENDULUM]\b missing targetname, cannot be triggered!\n");
+	if (self.targetname == "" && (self.spawnflags & ENT_STARTOFF)) {
+		dprint(self.classname);
+		dprint(" missing targetname on startoff pendulum, cannot be triggered that way! Turned it on.\n");
+		if (self.spawnflags & ENT_STARTOFF) self.spawnflags = self.spawnflags - ENT_STARTOFF;
+		self.state = STATE_ON;
 	}
-	
-	// Rotate model and swing on X axis instead
-	if (self.spawnflags & PEND_XSWING) self.angles = '0 270 0';
+
+	if (self.spawnflags & PEND_XSWING) self.angles = '0 270 0'; // Rotate model and swing on X axis instead
 	else self.angles = '0 0 0';
 
-	// Start the opposite way around (frame 13 instead of 1)
-	// This also affects one swing parameter
-	if (self.spawnflags & PEND_REVERSE) self.frame_override = PEND_MAXFRAME;
+	if (self.spawnflags & PEND_REVERSE) self.frame_override = PEND_MAXFRAME; // Start the opposite way around (frame 13 instead of 1).  This also affects one swing parameter.
 	else self.frame_override = 0;
 	self.frame = self.frame_override;
 
-	// Setup Entity State functionality
-	if (self.targetname != "") self.use = entity_state_use;
+	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_on = trap_pendulum_on;
 	self.estate_off = trap_pendulum_off;
 	self.estate_use = trap_pendulum_use;
@@ -336,88 +334,54 @@ void() trap_pendlong =
 	else self.estate_on();
 };
 
-//----------------------------------------------------------------------
-void() trap_pendlongx =
-{
+// QUAKED trap_pendlongx (0.5 0.75 0) (-192 -8 -24) (0 8 24) REVERSE ONESWING x x x x STARTOFF x
+// -------- KEYS --------
+// targetname : toggle state (use trigger ent for exact state)
+// dmg      : Damage to do for each contact, def=5
+// waitmin  : Damage throttle to touch function, def=0.5s
+// wait     : amount of time (seconds) before starting swinging. def=0
+// -------- SPAWNFLAGS --------
+// REVERSE  : Starts at frame 12 instead 0
+// ONESWING : Will do a single swing (back + forth) when triggered
+// STARTOFF : Starts off and waits for trigger
+// -------- NOTES --------
+// Long (192 units) Pendulum working on X axis only
+void() trap_pendlongx = { // [ENTITY]
 	self.spawnflags = self.spawnflags | PEND_XSWING;
 	trap_pendlong();
-}
+};
 
-//----------------------------------------------------------------------
-void() trap_pendshort =
-{
+// QUAKED trap_pendshort (0.5 0.75 0) (-8 -192 -24) (8 0 24) REVERSE ONESWING x x x x STARTOFF x
+// -------- KEYS --------
+// targetname : toggle state (use trigger ent for exact state)
+// dmg      : Damage to do for each contact, def=5
+// waitmin  : Damage throttle to touch function, def=0.5s
+// wait     : amount of time (seconds) before starting swinging. def=0
+// -------- SPAWNFLAGS --------
+// REVERSE  : Starts at frame 12 instead 0
+// ONESWING : Will do a single swing (back + forth) when triggered
+// STARTOFF : Starts off and waits for trigger
+// -------- NOTES --------
+// Short (128 units) Pendulum
+void() trap_pendshort = { // [ENTITY]
 	self.spawnflags = self.spawnflags | PEND_SHORT;
 	trap_pendlong();
-}
+};
 
-//----------------------------------------------------------------------
-void() trap_pendshortx =
-{
+// QUAKED trap_pendshortx (0.5 0.75 0) (-192 -8 -24) (0 8 24) REVERSE ONESWING x x x x STARTOFF x
+// -------- KEYS --------
+// targetname : toggle state (use trigger ent for exact state)
+// dmg      : Damage to do for each contact, def=5
+// waitmin  : Damage throttle to touch function, def=0.5s
+// wait     : amount of time (seconds) before starting swinging. def=0
+// -------- SPAWNFLAGS --------
+// REVERSE  : Starts at frame 12 instead 0
+// ONESWING : Will do a single swing (back + forth) when triggered
+// STARTOFF : Starts off and waits for trigger
+// -------- NOTES --------
+// Short (128 units) Pendulum working on X axis only
+void() trap_pendshortx = { // [ENTITY]
 	self.spawnflags = self.spawnflags | PEND_SHORT;
 	self.spawnflags = self.spawnflags | PEND_XSWING;
 	trap_pendlong();
-}
-
-//-----------------------------------------------------------------------------
-/*QUAKED trap_pendlong (0.5 0.75 0) (-8 -192 -24) (8 0 24) REVERSE ONESWING x x x x STARTOFF x
-Long (192 units) Pendulum (From Rogue mission pack)
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-dmg      : Damage to do for each contact, def=5
-waitmin  : Damage throttle to touch function, def=0.5s
-wait     : amount of time (seconds) before starting swinging. def=0
--------- SPAWNFLAGS --------
-REVERSE  : Starts at frame 12 instead 0
-ONESWING : Will do a single swing (back + forth) when triggered
-STARTOFF : Starts off and waits for trigger
--------- NOTES --------
-Long (192 units) Pendulum (From Rogue mission pack)
-*/
-
-//-----------------------------------------------------------------------------
-/*QUAKED trap_pendlongx (0.5 0.75 0) (-192 -8 -24) (0 8 24) REVERSE ONESWING x x x x STARTOFF x
-Long (192 units) Pendulum working on X axis only
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-dmg      : Damage to do for each contact, def=5
-waitmin  : Damage throttle to touch function, def=0.5s
-wait     : amount of time (seconds) before starting swinging. def=0
--------- SPAWNFLAGS --------
-REVERSE  : Starts at frame 12 instead 0
-ONESWING : Will do a single swing (back + forth) when triggered
-STARTOFF : Starts off and waits for trigger
--------- NOTES --------
-Long (192 units) Pendulum working on X axis only
-*/
-
-//-----------------------------------------------------------------------------
-/*QUAKED trap_pendshort (0.5 0.75 0) (-8 -192 -24) (8 0 24) REVERSE ONESWING x x x x STARTOFF x
-Short (128 units) Pendulum
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-dmg      : Damage to do for each contact, def=5
-waitmin  : Damage throttle to touch function, def=0.5s
-wait     : amount of time (seconds) before starting swinging. def=0
--------- SPAWNFLAGS --------
-REVERSE  : Starts at frame 12 instead 0
-ONESWING : Will do a single swing (back + forth) when triggered
-STARTOFF : Starts off and waits for trigger
--------- NOTES --------
-Short (128 units) Pendulum
-*/
-
-//-----------------------------------------------------------------------------
-/*QUAKED trap_pendshortx (0.5 0.75 0) (-192 -8 -24) (0 8 24) REVERSE ONESWING x x x x STARTOFF x
-Short (128 units) Pendulum working on X axis only
--------- KEYS --------
-targetname : toggle state (use trigger ent for exact state)
-dmg      : Damage to do for each contact, def=5
-waitmin  : Damage throttle to touch function, def=0.5s
-wait     : amount of time (seconds) before starting swinging. def=0
--------- SPAWNFLAGS --------
-REVERSE  : Starts at frame 12 instead 0
-ONESWING : Will do a single swing (back + forth) when triggered
-STARTOFF : Starts off and waits for trigger
--------- NOTES --------
-Short (128 units) Pendulum working on X axis only
-*/
+};

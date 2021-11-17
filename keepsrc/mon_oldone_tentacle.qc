@@ -148,18 +148,18 @@ void() oldone_rise4		=[	$death14,	oldone_rise5	] {};
 void() oldone_rise5		=[	$death13,	oldone_rise6	] {};
 void() oldone_rise6		=[	$death12,	oldone_aim1	] {	oldone_start(); };
 
-//QUAKED monster_oldone (1 0 0) (-32 -32 -24) (32 32 40) Ambush
-void() monster_oldone_tentacle = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/q15/oldone_tent.mdl";
+void() monster_oldone_tentacle_precache = {
 	precache_model ("progs/q15/oldone_tent.mdl");
 	precache_sound ("boss1/pain.wav");
 	precache_sound ("boss1/death.wav");
 	precache_sound ("shambler/fall.wav");
+};
+
+void() monster_oldone_tentacle = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/q15/oldone_tent.mdl";
 	self.pain_sound = "boss1/pain.wav";
 	self.death_sound = "boss1/death.wav";
 	setmodel(self, self.mdl);					// Setup model
@@ -187,7 +187,7 @@ void() monster_oldone_tentacle = {
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;	
 
-	self.classtype = CT_MONIDSHUB;
+	self.classtype = CT_MONXXSHUB;
 	self.classgroup = CG_BOSS;
 
 	// Always reset Ammo Resistance to be consistent
@@ -197,8 +197,9 @@ void() monster_oldone_tentacle = {
 	// Check passive system for exceptions
 	setup_passivestate(self);
 
-	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-	AddToTotals(self);
+	self.th_stand = SUB_Null;
+	self.th_missile = SUB_Null;
+	monster_start();
 
 	if (!self.targetname) {
 		self.th_stand = oldone_stand1;

@@ -1,4 +1,42 @@
-void () effect_teleport_use = {
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Qmaster and Anders Persson
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 9
+// Function count: 19
+//
+// Implements: Various Miscellaneous Effects and Decorations.
+//
+// Description:
+//
+//=============================================================================
+
+void () effect_teleport_use = { // [FUNCTION]
    WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
    WriteByte (MSG_BROADCAST,TE_TELEPORT);
    WriteCoord (MSG_BROADCAST,self.origin_x);
@@ -7,12 +45,12 @@ void () effect_teleport_use = {
    sound (self,CHAN_VOICE,"misc/r_tele1.wav",TRUE,ATTN_NORM);
 };
 
-void () effect_teleport = {
+void () effect_teleport = { // [ENTITY]
    precache_sound ("misc/r_tele1.wav");
    self.use = effect_teleport_use;
 };
 
-void() effect_pulse_launch = {
+void() effect_pulse_launch = { // [FUNCTION]
 	local entity missile;
 	missile = spawn();
 	missile.owner = self;
@@ -29,22 +67,19 @@ void() effect_pulse_launch = {
 	setorigin(missile, self.origin);
 };
 
-void() effect_pulse_loop = {
+void() effect_pulse_loop = { // [FUNCTION]
 	if (self.wait > 0) self.nextthink = time + self.wait;
 	self.think = effect_pulse_loop;
 	effect_pulse_launch();
-	if (self.wait == CONTENT_EMPTY) {
-		SUB_Remove();
-		return;
-	}
+	if (self.wait == CONTENT_EMPTY) { SUB_Remove(); return; }
 };
 
-void() effect_pulse_start = {
+void() effect_pulse_start = { // [FUNCTION]
 	self.nextthink = time + self.delay;
 	self.think = effect_pulse_loop;
 };
 
-void() effect_pulse = {
+void() effect_pulse = { // [ENTITY]
 	precache_model("progs/null.spr"); //formerly s_null.spr
 	SetMovedir();
 	if (!(self.speed)) self.speed = 400;
@@ -59,17 +94,13 @@ void() effect_pulse = {
 	self.think = effect_pulse_loop;
 };
 
-void() info_effect_pulse = {
-	effect_pulse();
-};
+void() info_effect_pulse = { effect_pulse(); }; // [ENTITY], Main entity, don't use effect_pulse normally.
 
-void() shaker_think = {
+void() shaker_think = { // [FUNCTION]
 	local float d;
 
-	// Scale effect by distance
-	d = vlen(self.origin - self.spawnmaster.origin);
+	d = vlen(self.origin - self.spawnmaster.origin); // Scale effect by distance
 	d = (self.count - d)/self.count;
-
 	self.nextthink = time + self.lip;
 	self.think = shaker_think;
 	if (self.ltime > time) {
@@ -77,20 +108,22 @@ void() shaker_think = {
 		self.spawnmaster.punchangle_y = (time - self.ltime) * random() * self.multiplier;
 		self.spawnmaster.punchangle_z = (time - self.ltime) * random() * self.multiplier;
 	}
+
 	if (d > 0) {
-		// push the player around
-		if (self.spawnmaster.flags & FL_ONGROUND && self.spawnflags & 2) {
+		if (self.spawnmaster.flags & FL_ONGROUND && self.spawnflags & 2) { // push the grounded players around
 			d = self.dmg*d;
 			self.spawnmaster.velocity_x = self.spawnmaster.velocity_x + (random()*d*2 - d);
 			self.spawnmaster.velocity_y = self.spawnmaster.velocity_y + (random()*d*2 - d);
 			self.spawnmaster.velocity_z = self.spawnmaster.velocity_z + (random()*d);// always push up
 		}	
 	}
+
 	if (self.ltime < time) SUB_Remove();
 };
 
-void() shake_use = {
+void() shake_use = { // [FUNCTION]
 	local entity qent;
+
 	qent = spawn();
 	qent.owner = self;
 	qent.movetype = MOVETYPE_NONE;
@@ -106,7 +139,7 @@ void() shake_use = {
 	setorigin(qent, self.origin);
 };
 
-void() info_screenshake = {
+void() info_screenshake = { // [ENTITY]
 	if (!(self.ltime)) self.ltime = 1;
 	if (!(self.lip)) self.lip = 0.010000;
 	if (!(self.multiplier)) self.multiplier = 0.000500;
@@ -114,8 +147,9 @@ void() info_screenshake = {
 	self.use = shake_use;
 };
 
-void(entity e, float magnitude, float interval, float mult) shake_player = {
+void(entity e, float magnitude, float interval, float mult) shake_player = { // [FUNCTION]
 	local entity qent;
+
 	qent = spawn();
 	qent.owner = self;
 	qent.movetype = MOVETYPE_NONE;
@@ -130,37 +164,34 @@ void(entity e, float magnitude, float interval, float mult) shake_player = {
 	setorigin(qent, e.origin);
 };
 
-void() bombthink = {
+void() bombthink = { // [FUNCTION]
 	T_RadiusDamage(self, self.owner, 512, world,DAMAGEALL);
 	self.frame = self.frame + 1;
 	if (self.frame == 24) spawn_big_explosion(self.origin, 0);
-	if (self.frame > 25) {
-		SUB_Remove();
-		return;
-	}
+	if (self.frame > 25) { SUB_Remove(); return; }
+
 	self.think = bombthink;
 	self.nextthink = time + 0.1;
 };
 
-void() ringthink = {
+void() ringthink = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 	self.think = ringthink;
 	self.frame = self.frame + 1;
 	if (self.frame > 20) SUB_Remove();
 };
 
-void() ringprethink = {
+void() ringprethink = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 	self.think = ringthink;
 	self.avelocity = '0 0 200';
 	setmodel(self, "progs/quoth/shockwave.mdl");
 };
 
-void() W_Bomb = {
-	local entity bomb;
-	local entity t;
+void() W_Bomb = { // [FUNCTION]
+	local entity bomb, t, ring;
 	local float dist;
-	local entity ring;
+
 	if (coop > 0 && self.gotbomb != -1) self.gotbomb = 1;
 	bomb = spawn();
 	bomb.solid = SOLID_NOT;
@@ -179,23 +210,21 @@ void() W_Bomb = {
 			bomb.effects = 32;
 		}
 	}
+
 	spawn_big_explosion(self.origin,1);
 	t = findradius(self.origin, 10000);
 	while (t) {
 		if (t.classname == "player") {
 			dist = vlen(self.origin - t.origin);
-			if (dist < 700) {
-				shake_player(t, 2.5, 0.010000, 8);
-			} else {
-				if (dist < 1200) {
-					shake_player(t, 1, 0.010000, 7);
-				} else {
-					shake_player(t, 0.5, 0.010000, 10);
-				}
+			if (dist < 700) shake_player(t, 2.5, 0.010000, 8);
+			else {
+				if (dist < 1200) shake_player(t, 1, 0.010000, 7);
+				else shake_player(t, 0.5, 0.010000, 10);
 			}
 		}
 		t = t.chain;
 	}
+
 	ring = spawn();
 	setorigin(ring, self.origin);
 	ring.think = ringprethink;
@@ -219,6 +248,7 @@ void() W_Bomb = {
 		self.invincible_time = 0;
 		self.invincible_finished = 0;
 	}
+
 	if (self.cross_finished) {
 		//self.items2 = self.items2 - IT2_CROSS;
 		self.cross_finished = 0;
@@ -226,6 +256,7 @@ void() W_Bomb = {
 		self.cross_start = 2;
 		Safe_stuffcmd(self, "v_cshift 0 0 0 0\n");
 	}
+
 	T_RadiusDamage(bomb, self, 512, self,DAMAGEALL);
 	T_Damage(self, self, self, -666,DAMARMOR);
 	self.velocity_z = 700;
@@ -233,7 +264,7 @@ void() W_Bomb = {
 	sound(self, CHAN_AUTO, "quoth/weapons/bomb.wav", 1, 0.7);
 };
 
-void() info_bomb = {
+void() info_bomb = { // [ENTITY]
 	precache_sound("quoth/weapons/bomb.wav");
 	precache_sound("quoth/weapons/bombfar.wav");
 	precache_model("progs/quoth/v_bomb.mdl");
@@ -244,7 +275,7 @@ void() info_bomb = {
 	self.use = W_Bomb;
 };
 
-void() splash_think = {
+void() splash_think = { // [FUNCTION]
 	local vector vec;
 	local float variance;
 	variance = vlen(self.movedir) / 2;
@@ -255,15 +286,13 @@ void() splash_think = {
 	self.nextthink = time + self.wait;
 }
 
-
-/*QUAKED misc_splash (0 .5 .8) (-8 -8 -8) (8 8 8)
-Produces a continuous particle splash for waterfalls
-"color" color of particles.  0 through 15, corresponds to a row of the quake palette. (default 0)
-"movedir" average movement vector of particles (default 0 0 4)
-"wait" time between particle generation cycles.  (default 0.1)
-"volume" density of particles. (default 10)
-*/
-void() misc_splash = {
+// QUAKED misc_splash (0 .5 .8) (-8 -8 -8) (8 8 8)
+// Produces a continuous particle splash for waterfalls
+// "color" color of particles.  0 through 15, corresponds to a row of the quake palette. (default 0)
+// "movedir" average movement vector of particles (default 0 0 4)
+// "wait" time between particle generation cycles.  (default 0.1)
+// "volume" density of particles. (default 10)
+void() misc_splash = { // [ENTITY]
 	if (!self.wait) self.wait = 0.1;
 	if (self.mangle != '0 0 0' && !self.movedir) self.movedir = self.mangle;
 	if (!self.movedir) self.movedir = '0 0 4';
@@ -273,61 +302,40 @@ void() misc_splash = {
 	self.think = splash_think;
 };
 
-float FLAG_REDORANGE = 1;
-float FLAG_YELLOW    = 2;
-float FLAG_BLUE      = 4;
-float FLAG_WHITE     = 8;
-float FLAG_DARKRED   = 16;
-
-void () light_globecolor = {
-
+void () light_globecolor = { // [ENTITY]
    if ( (self.spawnflags & FLAG_REDORANGE) ) {
-
       precache_model ("progs/s_light2.spr");
       setmodel (self,"progs/s_light2.spr");
       makestatic (self);
-
    }
    if ( (self.spawnflags & FLAG_YELLOW) ) {
-
       precache_model ("progs/s_light3.spr");
       setmodel (self,"progs/s_light3.spr");
       makestatic (self);
-
    }
    if ( (self.spawnflags & FLAG_BLUE) ) {
-
       precache_model ("progs/s_light4.spr");
       setmodel (self,"progs/s_light4.spr");
       makestatic (self);
-
    }
    if ( (self.spawnflags & FLAG_WHITE) ) {
-
       precache_model ("progs/s_light5.spr");
       setmodel (self,"progs/s_light5.spr");
       makestatic (self);
-
    }
    if ( (self.spawnflags & FLAG_DARKRED) ) {
-
       precache_model ("progs/s_light6.spr");
       setmodel (self,"progs/s_light6.spr");
       makestatic (self);
-
    }
    if ( (self.spawnflags & FALSE) ) {
-
       precache_model ("progs/s_light.spr");
       setmodel (self,"progs/s_light.spr");
       makestatic (self);
-
    }
-
 };
 
-// Madfox destroyable fast fan model.  0-14 run.  15 broke
-void() misc_fan_break = {
+void() misc_fan_break = { // [FUNCTION]
 	self.frame = 15;
 	self.think = SUB_Null;
 	self.nextthink = time;
@@ -335,7 +343,7 @@ void() misc_fan_break = {
 	SUB_UseTargets();
 };
 
-void() misc_fan_run = {
+void() misc_fan_run = { // [FUNCTION]
 	self.walkframe = self.walkframe + 1;
 	if (self.walkframe > 14) self.walkframe = 0;
 	self.frame = self.walkframe;
@@ -343,25 +351,25 @@ void() misc_fan_run = {
 	self.nextthink = time + self.speed;
 };
 
-void() misc_fan_enable = {
+void() misc_fan_enable = { // [FUNCTION]
 	self.estate = ESTATE_ON;				// Switch running/spinning
 	self.think = misc_fan_run;
 	self.nextthink = time + self.speed;
 };
 
-void() misc_fan_idle = {
+void() misc_fan_idle = { // [FUNCTION]
 	self.frame = 0;
 	self.think = misc_fan_idle;
 	self.nextthink = time + 0.1;
 };
 
-void() misc_fan_disable = {
+void() misc_fan_disable = { // [FUNCTION]
 	self.estate = ESTATE_DISABLE; // Switch to stationary
 	self.think = misc_fan_idle;
 	self.nextthink = time + 0.1;
 };
 
-void() misc_fan_reset = {
+void() misc_fan_reset = { // [FUNCTION]
 	setmodel (self,self.mdl);
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	self.velocity = '0 0 0';
@@ -369,14 +377,15 @@ void() misc_fan_reset = {
 	misc_fan_enable();
 };
 
-void() misc_fan_off = {
+void() misc_fan_off = { // [FUNCTION]
 	self.estate = ESTATE_OFF; // Completely invisible
 	self.model = string_null;				// hide bmodel surface
 	self.think = misc_fan_idle;
 	self.nextthink = 0;
 };
 
-void() misc_fan = {
+// Madfox destroyable fast fan model.  0-14 run.  15 broke
+void() misc_fan = { // [ENTITY]
 	self.mdl = "progs/madfox/fanhouse.mdl";
 	precache_model (self.mdl);
 	setmodel (self,self.mdl);
@@ -386,21 +395,12 @@ void() misc_fan = {
 	self.movetype = MOVETYPE_NONE;
 	self.use = misc_fan_break;
 	self.oldorigin = self.origin;
-
-	// Override angles with mangle
-	if (!self.mangle) {	
-		self.mangle = self.angles;			// Save for later
-	}
+	if (!self.mangle) self.mangle = self.angles; // Override angles with mangle.  Save for later.
 	self.angles = self.mangle;
-
 	if (self.speed <=0 ) self.speed = 0.1;
-	if (self.spawnflags & 1) {
-		misc_fan_disable();
-		return;
-	} else if (self.spawnflags & 2) {
-		misc_fan_break();
-		return;
-	}
+	if (self.spawnflags & 1) { misc_fan_disable(); return; }
+	else if (self.spawnflags & 2) { misc_fan_break(); return; }
+
 	self.estate_disable = misc_fan_disable;
 	self.estate_reset = misc_fan_reset;
 	self.estate_on = misc_fan_enable;
@@ -409,14 +409,8 @@ void() misc_fan = {
 	misc_fan_run();
 };
 
-
 // Rotating fan hack from tfl4 by Anders Persson
-.vector r_wall;
-.float r_wall_x_spin;
-.float r_wall_y_spin;
-.float r_wall_z_spin;
-
-void() rotating_wall = {
+void() rotating_wall = { // [ENTITY]
 	setmodel(self, self.model);
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_FLY;

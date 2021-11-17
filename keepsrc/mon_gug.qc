@@ -883,13 +883,7 @@ void(entity inflictor, entity attacker, float damage) gug_pain = {
 	gug_pain1();
 };
 
-void() monster_gug = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/quoth/gug.mdl";
+void() monster_gug_precache = {
 	precache_model("progs/quoth/gug.mdl");
 	precache_model("progs/quoth/bilebomb.mdl");
 	precache_model("progs/quoth/bilefrag.mdl");
@@ -901,7 +895,6 @@ void() monster_gug = {
 	precache_sound("quoth/gug/pain.wav");
 	precache_sound("quoth/gug/sight.wav");
 	precache_sound("quoth/gug/death.wav");
-	self.idle_sound = "quoth/gug/idle.wav";
 	precache_sound("quoth/gug/idle.wav");
 	precache_sound("quoth/gug/bileatk.wav");
 	precache_sound("quoth/gug/swipe.wav");
@@ -910,7 +903,14 @@ void() monster_gug = {
 	precache_sound("quoth/gug/gquake.wav");
 	precache_sound("quoth/gug/throw.wav");
 	precache_sound("shambler/smack.wav");
+};
 
+void() monster_gug = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/quoth/gug.mdl";
+	self.idle_sound = "quoth/gug/idle.wav";
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_GOLEM;
@@ -945,6 +945,5 @@ void() monster_gug = {
 	self.classtype = CT_MONGUG;
 	self.classgroup = CG_BOSS;
 	self.classmove = MON_MOVEWALK;
-
 	monster_start();
 };

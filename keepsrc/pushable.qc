@@ -27,8 +27,8 @@
 // NO CHARGE to the recipient.
 //
 // Stats:
-// Entity count: 0 - Utility functions only.
-// Function count: 6
+// Entity count: 1
+// Function count: 12
 //
 // Implements: Pushables Brush Models (bmodels)
 //
@@ -84,53 +84,20 @@ string SOUND_PUSH_BRICK3 = "ad171/pushable/brick_m3.wav";
 float STATE_PUSH = 1;
 float STATE_SOLID = 2;
 
-//======================================================================
-/*QUAKED func_pushable (0 .5 .8) ? x DAMAGE x NOFLRCHECK FLOATING NOMONSTER STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
-Moveable brushwork (pushable)
--------- KEYS --------
-targetname : trigger entity (works with entity state system)
-style      : sound move/impact types - 1=rock, 2=wood, 3=glass, 4=metal, 5=brick, 10=custom
-noise1     : Custom move sound 1 (style=10)
-noise2     : Custom move sound 2
-noise3     : Custom move sound 3
-bleedcolour: Impact particle colour (starting point on palette)
-bloodtype: Impact particle colour (starting point on palette)
-target     : target(s) to fire when pushable is dead (once only)
-deathtarget: target(s) to fire when pushable is dead (once only)
-target2    : points to a func_breakable_spawner to trigger on death
-message    : Message to display when killed by player
-message2   : Message to display when touched by player
-wait       : Time for showing touch/death message (=-1 once, def=2)
-health     : damage taken before death
-death_dmg  : will explode on death (reqs health)
-speed      : pushing speed (def = 1)
-waitmin    : length of pushable sounds (def=0.5s)
-waitmin2   : Alpha value to fade block down to when pushing
--------- SPAWNFLAGS --------
-DAMAGE    : Pushable can be damaged or destroyed
-NOFLRCHECK: No floor below check for extra velocity
-FLOATING  : Pushable starts off floating (until touched)
-NOMONSTER : Cannot be damaged by monsters
-STARTOFF  : Starts off and waits for trigger
--------- NOTES --------
-Moveable brushwork (pushable)
-*/
-//======================================================================
-
-void() func_pushable_push = {
+void() func_pushable_push = { // [FUNCTION]
 	self.movetype = MOVETYPE_STEP;	// Default monster move type
 	self.solid = SOLID_SLIDEBOX;	// Discrete movement stepping
 	self.state = STATE_PUSH;		// Can be moved by player
 };
 
-void() func_pushable_solid = {
+void() func_pushable_solid = { // [FUNCTION]
 	self.movetype = MOVETYPE_PUSH;	// Blocks projectiles
 	self.solid = SOLID_BSP;			// Square bounding box
 	self.state = STATE_SOLID;		// No world interaction
 	self.inpain = FALSE;			// Reset touch flag
 };
 
-void() func_pushable_movement = {
+void() func_pushable_movement = { // [FUNCTION]
 	if (self.estate & ESTATE_BLOCK) return; // Block entity state exceptions
 	if (self.oldorigin == self.origin && !self.inpain) return; // Block movement if nothing has changed
 
@@ -193,7 +160,7 @@ void() func_pushable_movement = {
 	}
 };
 
-void() func_pushable_touch = {
+void() func_pushable_touch = { // [FUNCTION]
 	// Block entity state exceptions
 	if (self.estate & ESTATE_BLOCK) return;
 
@@ -252,7 +219,7 @@ void() func_pushable_touch = {
 	}
 };
 
-void(entity inflictor, entity attacker, float damage) func_pushable_pain = {
+void(entity inflictor, entity attacker, float damage) func_pushable_pain = { // [FUNCTION]
 	local float loop_count;
 	local vector vel;
 
@@ -269,7 +236,7 @@ void(entity inflictor, entity attacker, float damage) func_pushable_pain = {
 	}
 };
 
-void() func_pushable_death = {
+void() func_pushable_death = { // [FUNCTION]
 	if (!(self.spawnflags & PUSH_DAMAGE)) {self.health = MEGADEATH; return;} // default = Pushables cannot die
 	if (self.estate & ESTATE_BLOCK) return; // Block entity state exceptions
 
@@ -309,7 +276,7 @@ void() func_pushable_death = {
 
 // The pushable needs a controller to reach to the touch function
 // and to reset the alpha fade if the pushable is not being touched
-void() pushable_controller_think = {
+void() pushable_controller_think = { // [FUNCTION]
 	// Keep the controller alive
 	self.think = pushable_controller_think;
 	self.nextthink = time + 0.1;
@@ -325,8 +292,7 @@ void() pushable_controller_think = {
 			self.owner.alpha = self.owner.alpha - 0.01;
 			self.nextthink = time + FADEMODEL_TIME;
 		}
-	}
-	else {
+	} else {
 		if (self.owner.alpha < 1.00) {
 			self.owner.alpha = self.owner.alpha + 0.01;
 			self.nextthink = time + FADEMODEL_TIME;
@@ -334,7 +300,7 @@ void() pushable_controller_think = {
 	}
 };
 
-void() func_pushable_controller_setup = {
+void() func_pushable_controller_setup = { // [FUNCTION]
 	// Check if controller entity been setup
 	if (!self.attachment) self.attachment = spawn();
 
@@ -353,7 +319,7 @@ void() func_pushable_controller_setup = {
 	self.attachment.nextthink = time + 0.1;
 };
 
-void() func_pushable_use = {
+void() func_pushable_use = { // [FUNCTION]
 	// Switch on pushable first
 	if (self.estate == ESTATE_OFF) entity_state_on();
 	else {
@@ -365,7 +331,7 @@ void() func_pushable_use = {
 	}
 };
 
-void() func_pushable_reset = {	
+void() func_pushable_reset = {	 // [FUNCTION]
 	// If the block starts off(disabled) then do nothing
 	if (self.spawnflags & ENT_STARTOFF) return;
 
@@ -376,7 +342,7 @@ void() func_pushable_reset = {
 	self.estate_on();	
 };
 
-void() func_pushable_off = {
+void() func_pushable_off = { // [FUNCTION]
 	// Do nothing if pushable is already off
 	if (self.estate == ESTATE_OFF) return;
 	
@@ -388,7 +354,7 @@ void() func_pushable_off = {
 	self.takedamage = DAMAGE_NO;
 };
 
-void() func_pushable_on = {
+void() func_pushable_on = { // [FUNCTION]
 	// Do nothing if pushable is already on
 	if (self.estate == ESTATE_ON) return;
 	
@@ -411,11 +377,38 @@ void() func_pushable_on = {
 		// Make sure it drops to ground on spawn
 		self.origin_z = self.origin_z + 4;
 		self.flags = self.flags - (self.flags & FL_ONGROUND);
-	}
-	else func_pushable_solid();
+	} else func_pushable_solid();
 };
 
-void() func_pushable = {
+// QUAKED func_pushable (0 .5 .8) ? x DAMAGE x NOFLRCHECK FLOATING NOMONSTER STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+// -------- KEYS --------
+// targetname : trigger entity (works with entity state system)
+// style      : sound move/impact types - 1=rock, 2=wood, 3=glass, 4=metal, 5=brick, 10=custom
+// noise1     : Custom move sound 1 (style=10)
+// noise2     : Custom move sound 2
+// noise3     : Custom move sound 3
+// bleedcolour: Impact particle colour (starting point on palette)
+// bloodtype: Impact particle colour (starting point on palette)
+// target     : target(s) to fire when pushable is dead (once only)
+// deathtarget: target(s) to fire when pushable is dead (once only)
+// target2    : points to a func_breakable_spawner to trigger on death
+// message    : Message to display when killed by player
+// message2   : Message to display when touched by player
+// wait       : Time for showing touch/death message (=-1 once, def=2)
+// health     : damage taken before death
+// death_dmg  : will explode on death (reqs health)
+// speed      : pushing speed (def = 1)
+// waitmin    : length of pushable sounds (def=0.5s)
+// waitmin2   : Alpha value to fade block down to when pushing
+// -------- SPAWNFLAGS --------
+// DAMAGE    : Pushable can be damaged or destroyed
+// NOFLRCHECK: No floor below check for extra velocity
+// FLOATING  : Pushable starts off floating (until touched)
+// NOMONSTER : Cannot be damaged by monsters
+// STARTOFF  : Starts off and waits for trigger
+// -------- NOTES --------
+// Moveable brushwork (pushable)
+void() func_pushable = { // [ENTITY]
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	// make sure initial break sound is within range types (def=rock)

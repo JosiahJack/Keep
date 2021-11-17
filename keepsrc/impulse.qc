@@ -41,7 +41,7 @@ void() print_bones;
 void() usecommand;
 
 void() ImpulseCommands = {
-	if ((self.impulse >= 1 && self.impulse <= 8) || (self.impulse >= 60 && self.impulse <= 64) || (self.impulse >= 75 && self.impulse <= 90)) W_ChangeWeapon (self);
+	if ((self.impulse >= 1 && self.impulse <= 8) || (self.impulse >= 60 && self.impulse <= 64) || (self.impulse >= 75 && self.impulse <= 90) || self.impulse == 47) W_ChangeWeapon (self);
 	else if (self.impulse == 10) CycleWeaponCommand();
 	else if (self.impulse == 12) CycleWeaponReverseCommand();
 	else if (self.impulse == 56) ToggleDragonArmor();

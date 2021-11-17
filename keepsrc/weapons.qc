@@ -1,44 +1,71 @@
-/*======================================================================
- PLAYER ONLY WEAPON FUNCTIONS
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: All and Qmaster
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 54
+//
+// Implements: Weapons System for the Player
+//
+// Description:
+// W_SetCurrentAmmo   - Update HUD icons based on self.weapon value
+// W_BestWeapon       - returns best weapon LG > SNG > SSG > NG > SG > Axe
+//                      interesting that the function does not return GL/RL
+// W_CheckNoAmmo      - Ammo check for attack function
+// W_Attack           - Main function that fire weapons (player animations).
+//                      Typically wakes up nearby monsters
+// W_ChangeWeapon     - Change weapon based on availabilty and ammo
+// CycleWeaponCommand - Move forward or backward through active weapons
+// CycleWeaponReverseCommand
+// W_WeaponFrame      - Called every frame, catches impulse event
+// SuperDamageSound   - Plays quad damage sound
+//=============================================================================
 
-void() W_Precache; - moved to world.qc
-float() crandom; - moved to subs.qc
-vector() wall_velocity - merged into spawn_touchblood (only used once)
-void(vector org, vector vel) SpawnChunk - Not used anywhere, removed
+entity multi_ent;
+float multi_damage;
 
- W_SetCurrentAmmo   - Update HUD icons based on self.weapon value
- W_BestWeapon       - returns best weapon LG > SNG > SSG > NG > SG > Axe
-                      interesting that the function does not return GL/RL
- W_CheckNoAmmo      - Ammo check for attack function
- W_Attack           - Main function that fire weapons (player animations)
-                      Will automatically wakeup any nearby monsters
- W_ChangeWeapon     - Change weapon based on availabilty and ammo
- CycleWeaponCommand - Move forward or backward through active weapons
- CycleWeaponReverseCommand
- W_WeaponFrame      - Called every frame, catches impulse event
- SuperDamageSound   - Plays quad damage sound
-
-======================================================================*/
+// Well, we can either do these 55 someodd declarations for player stuff here, or alternatively declare weapon stuff in player.qc and move it up in the progs.src ordering.
 void(entity targ) remoteplayer_run;
 void() player_axe1;				// Different Axe animations
 void() player_axeb1;
 void() player_axec1;
 void() player_axed1;
 void() player_axee1;
-
-void() player_axeold1;				// Different Axe animations for original axe
-void() player_axeoldb1;
-void() player_axeoldc1;
+void() player_axeoldc1;			// Different Axe animations for original axe
 void() player_axeoldd1;
-
 void() player_sg1;				// Shotgun
 void() player_supersg1;			// Super Shotgun
 void() player_nail1;			// Nailgun
 void() player_snail1;			// Super Nailgun
 void() player_rocket1;			// Rocket Launcher
 void() player_grenade1;			// Grenade Launcher
-void() player_multi_rocket1;		// Multi-Rocket Launcher
-void() player_multi_grenade1;		// Multi-Grenade Launcher
+void() player_multi_rocket1;	// Multi-Rocket Launcher
+void() player_multi_grenade1;	// Multi-Grenade Launcher
 void() player_light1;			// Thunderbolt
 void() player_plasma1;			// Plasma Gun
 void() player_plasmalight1;		// Rogue Plasma Gun
@@ -62,108 +89,103 @@ void() player_grapple3;
 void() player_chainlight1;
 void() player_blast1;
 void() player_saw1;
-
+void() player_bfg1;
+void() player_airgun1;
+void() player_failedairgun1;
+void() player_xbow1;
 void() W_FireSparks;
 void(entity ent) ReflectSound;
+void(float pause, void() thinkst) Echo_Shot;
+float Hip_ThrewMjolnir();
+void(vector lstart, entity lsource, float ldamage) LightningReflection;
+void() player_lava_nail1;
+void() player_lava_snail1;
 
-/*======================================================================
- Weapon ammo run out and switching to next best weapon
-======================================================================*/
-void(float wait_time) forceweaponswitch = {
+// Weapon ammo run out and switching to next best weapon
+void(float wait_time) forceweaponswitch = { // [FUNCTION]
 	local float nextweap;
 
 	if (self.flags & FL_MONSTER) return;
-	
-	// has the player run out of ammo? work out next best weapon
-	nextweap = W_BestWeapon (self);
-	// Does the player need to switch weapons?
-	if (self.weapon != nextweap) {
+
+	nextweap = W_BestWeapon(self); // has the player run out of ammo? work out next best weapon
+	if (self.weapon != nextweap) { // Does the player need to switch weapons?
 		self.weapon = nextweap;
-		W_SetCurrentAmmo (self);
+		W_SetCurrentAmmo(self);
 	}
 };
 
-/*======================================================================
- Hipnotic weapon functions
-======================================================================*/
-void (float stat) HIP_FireLaser = {
-   local vector org;
-   local vector dir;
-   local vector out;
-   local float ofs;
-   local float aofs;
-	local   float   glow;
+// Hipnotic Laser Cannon
+void (float stat) HIP_FireLaser = { // [FUNCTION]
+	local vector org, dir, out;
+	local float ofs, aofs, glow;
 
-   if ( !self.button0 ) {
-      player_run ();
-      return ;
-   }
-   if ((self.weapon == IT2_LASER_CANNON) && (self.ammo_cells < TRUE) ) {
-      self.weapon = W_BestWeapon (self);
-      W_SetCurrentAmmo (self);
-      return ;
-   }
+	if (!self.button0) { player_run(); return; }
 
-   if ((self.weapon == IT_SHOTGUN) && (self.ammo_shells < TRUE) ) {
-      self.weapon = W_BestWeapon (self);
-      W_SetCurrentAmmo (self);
-      return ;
-   }
+	if ((self.weapon == IT2_LASER_CANNON && !self.selfweaponismoditems) && (self.ammo_cells < TRUE) ) {
+		self.weapon = W_BestWeapon(self);
+		W_SetCurrentAmmo(self);
+		return ;
+	}
 
-   self.effects = (self.effects | EF_MUZZLEFLASH);
-   makevectors (self.v_angle);
-   ofs = MOVETYPE_TOSS;
-   out = v_forward;
-   out_z = FALSE;
-   out = normalize (out);
-   org = ((self.origin + ((STAT_TOTALMONSTERS - ofs) * v_up)) + (STAT_TOTALMONSTERS * out));
-   dir = aim (self,1000.000);
-   aofs = (ofs * 0.707);
-   if ( (stat == FALSE) ) {
-      self.ammo_cells = (self.ammo_cells - TRUE);
-      self.currentammo = (self.currentammo - TRUE);
-      org = (org + (aofs * v_right));
-      org = (org - (aofs * v_up));
-      HIP_LaunchLaser (org,dir,FALSE);
-      org = (org - ((FL_SWIM * aofs) * v_right));
-      HIP_LaunchLaser (org,dir,FALSE);
-   } else {
-      if ( (stat == TRUE) ) {
-			 self.ammo_cells = (self.ammo_cells - TRUE);
-			 self.currentammo = (self.currentammo - TRUE);
-			 org = (org + (ofs * v_up));
-			 if ( (random () < 0.100) ) {
-				HIP_LaunchLaser (org,dir,TRUE);
-				newmis.dmg = 25.000;
-			 } else {
-				HIP_LaunchLaser (org,dir,FALSE);
-			 }
+	if ((self.weapon == IT_SHOTGUN && !self.selfweaponismoditems) && (self.ammo_shells < TRUE) ) { // Blaster uses this
+		self.weapon = W_BestWeapon (self);
+		W_SetCurrentAmmo (self);
+		return ;
+	}
+
+	self.effects = (self.effects | EF_MUZZLEFLASH);
+	makevectors (self.v_angle);
+	ofs = MOVETYPE_TOSS;
+	out = v_forward;
+	out_z = FALSE;
+	out = normalize (out);
+	org = ((self.origin + ((STAT_TOTALMONSTERS - ofs) * v_up)) + (STAT_TOTALMONSTERS * out));
+	dir = aim (self,1000.000);
+	aofs = (ofs * 0.707);
+	if (stat == FALSE) {
+		self.ammo_cells = (self.ammo_cells - TRUE);
+		self.currentammo = (self.currentammo - TRUE);
+		org = (org + (aofs * v_right));
+		org = (org - (aofs * v_up));
+		HIP_LaunchLaser (org,dir,FALSE);
+		org = (org - ((FL_SWIM * aofs) * v_right));
+		HIP_LaunchLaser (org,dir,FALSE);
+	} else if (stat == TRUE) {
+		self.ammo_cells = (self.ammo_cells - TRUE);
+		self.currentammo = (self.currentammo - TRUE);
+		org = (org + (ofs * v_up));
+		if ( (random () < 0.100) ) {
+			HIP_LaunchLaser (org,dir,TRUE);
+			newmis.dmg = 25.000;
 		} else {
-			// Using the modified shotgun-turned-blaster model...
-			org = self.origin + '0 0 12';
-			if (stat == 2)
-				if (self.tracer_time <= time)
-					{glow = TRUE; self.tracer_time = time + 0.5;}
-
-			self.ammo_shells = (self.ammo_shells - TRUE);  // blaster uses shells??  well, I guess that's fine whatevs
-			self.currentammo = (self.currentammo - TRUE);
-			HIP_LaunchLaser (org, dir, glow);
-			newmis.volume = 0;      // No random chance of removal on impact.
-			// Note to self:  Spread gun looks bad unless v_model is wide.
+			HIP_LaunchLaser (org,dir,FALSE);
 		}
-    }
-   self.punchangle_x = CONTENT_EMPTY;
+	} else { // Using the modified shotgun-turned-blaster model...
+		org = self.origin + '0 0 12';
+		if (stat == 2 && self.tracer_time <= time) {
+			glow = TRUE;
+			self.tracer_time = time + 0.5;
+		}
+		self.ammo_shells = (self.ammo_shells - TRUE);  // blaster uses shells??  well, I guess that's fine whatevs
+		self.currentammo = (self.currentammo - TRUE);
+		HIP_LaunchLaser (org, dir, glow);
+		newmis.volume = 0; // No random chance of removal on impact.  Spread gun looks bad unless v_model is wider.
+	}
+	self.punchangle_x = CONTENT_EMPTY;
 };
 
-void (float stat) W_FireLaser = { HIP_FireLaser(stat); }
-void HIP_FireMjolnir2();
-
-void () HIP_FireMjolnir = {
-	local vector org;
+void () HIP_FireMjolnir = { // [FUNCTION]
+	local vector org, source, tvec;
 	local float damage;
-	local vector source;
+	local entity tester;
 
-	self.attack_finished = (time + 0.400);
+	// Since throwing the hammer on frame three can be almost impossible with
+	// lag, allow throwing on frame four, even if animation would make the
+	// throw appear a bit late.  Better to have forgiving controls and happy
+	// players than "fake difficulty" for animation's sake.
+    if (Hip_ThrewMjolnir ()) return;
+
+	W_Reload(0.4);
 	source = (self.origin + '0.000 0.000 16.000');
 	makevectors (self.v_angle);
 	traceline (source,(source + (v_forward * RANGE_PLAYAXE)),FALSE,self);
@@ -172,32 +194,26 @@ void () HIP_FireMjolnir = {
 		traceline (source,(source - (v_up * 50.000)),FALSE,self);
 		if ( ((trace_fraction > 0.300) && (trace_fraction < TRUE)) ) {
 			HIP_FireMjolnirLightning ();
-			self.attack_finished = (time + 1.000);
+			W_Reload(1);
 			return;
 		}
 	}
 	org = (trace_endpos - (v_forward * 4));
 
-	//----------------------------------------------------------------------
 	// REFLECTION stuff like blue shields
 	if (trace_ent.reflectaxe) Resist_Effects(trace_ent,org,VEC_ORIGIN,0,AM_NONE,SOUND_AXE_STONE,"");
-	//----------------------------------------------------------------------
-	// BLEEDING/DAMAGE stuff with unique impact sounds
-	else if ( trace_ent.takedamage ) {
-		damage = 50.000;
-		if ((trace_ent.classgroup == CG_ZOMBIE) && !(trace_ent.classname == "monster_mummy"))
-			damage = 70.000;
 
+	// BLEEDING/DAMAGE stuff with unique impact sounds
+	else if (trace_ent.takedamage) {
+		damage = 50;
+		if ((trace_ent.classgroup == CG_ZOMBIE) && trace_ent.classname != "monster_mummy") damage = trace_ent.max_health * 2;
 		trace_ent.axhitme = TRUE;
 		SpawnBlood (trace_ent, org,v_forward,damage);
 		HIP_FireMjolnirLightning ();
 		T_Damage (trace_ent,self,self,damage, DAMARMOR);
 	} else {
-		if ( (trace_fraction != TRUE) ) {
+		if (trace_fraction != TRUE) {
 			sound (self,CHAN_WEAPON,"hipnotic/weapons/mjoltink.wav",TRUE,ATTN_NORM);
-			local entity tester;
-			local vector tvec;
-
 			tester = spawn();
 			setorigin(tester,org);
 			setsize(tester,'-4 -4 0', '4 4 16');
@@ -206,71 +222,194 @@ void () HIP_FireMjolnir = {
 			tracebox(org,'-4 -4 0', '4 4 16',tvec, TRUE, tester);
 			if (trace_fraction == TRUE) HIP_FireMjolnirLightning ();
 			remove(tester);
-			WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-			WriteByte (MSG_BROADCAST,TE_GUNSHOT);
-			WriteCoord (MSG_BROADCAST,org_x);
-			WriteCoord (MSG_BROADCAST,org_y);
-			WriteCoord (MSG_BROADCAST,org_z);
+			Tent_Point(TE_GUNSHOT,org);
 		} else {
 			sound (self,CHAN_WEAPON,"knight/sword1.wav",TRUE,ATTN_NORM);
 		}
    }
-   self.attack_finished = (time + 0.400);
+   W_Reload(0.4);
 };
 
-void () W_FireMjolnir = {
-	if (self.tome_finished > 0) {
-		HIP_FireMjolnir2(); //adaya bfg lightning ball spawn!
-	} else { 
-		HIP_FireMjolnir();
+// Initially written by Qmaster and tested in the Keep mod
+
+void (entity current, float life) SpawnLightningTrace = { // [FUNCTION]
+	float dmg;
+	WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST,TE_LIGHTNING2);
+	WriteEntity (MSG_BROADCAST,current);
+	WriteCoord (MSG_BROADCAST,current.origin_x);
+	WriteCoord (MSG_BROADCAST,current.origin_y);
+	WriteCoord (MSG_BROADCAST,current.origin_z);
+	WriteCoord (MSG_BROADCAST,self.origin_x);
+	WriteCoord (MSG_BROADCAST,self.origin_y);
+	WriteCoord (MSG_BROADCAST,self.origin_z);
+	sound (self,CHAN_VOICE,"weapons/lhit.wav",TRUE,ATTN_NORM);
+	if (current.classgroup == CG_ZOMBIE) dmg = current.max_health; // poor zombies die in so many ways
+	else dmg = 30;
+
+	LightningDamage(self.origin,current.origin,self,dmg);
+};
+
+void (vector startpos, float radius, float life) SpawnOrbLightning = { // [FUNCTION]
+	local entity head;
+	local vector org;
+
+	head = findradius(startpos,radius); // find EVERYTHING within 250 unit radius
+	while (head) {
+		// Can be damaged and NOT immune to radius (splash) damage
+		if ((head.takedamage > 0) && (head.flags & FLx_CREATURE)) {
+			org = head.origin + (head.mins + head.maxs)*0.5;
+			if (head.health > 0) SpawnLightningTrace(head,life); // create initial lightning for any monsters found
+		}
+		head = head.chain;
 	}
 };
 
-void () W_FireProximityGrenade = {
-   local entity missile;
+void () lightning_orb_death = { // [FUNCTION]
+	local entity light;
 
-   if (self.attack_finished > time) return;
-   if (self.ammo_rockets < 1) { forceweaponswitch(0.2); return;}
-   NumProximityGrenades = (NumProximityGrenades + TRUE);
-   self.ammo_rockets = (self.ammo_rockets - TRUE);
-   self.currentammo = (self.currentammo - TRUE);
-   sound (self,CHAN_WEAPON,"hipnotic/weapons/proxbomb.wav",TRUE,ATTN_NORM);
-   self.punchangle_x = CONTENT_SOLID;
-   missile = spawn ();
-	missile.classgroup = CG_PROJGRENADES;
-   missile.owner = self;
-   missile.lastvictim = self;
-   missile.movetype = MOVETYPE_TOSS;
-   missile.solid = SOLID_BBOX;
-   missile.classname = "proximity_grenade";
-   missile.takedamage = DAMAGE_NO;
-   missile.health = MOVETYPE_FLY;
-   missile.state = FALSE;
-   makevectors (self.v_angle);
-   if ( self.v_angle_x ) {
-      missile.velocity = ((((v_forward * 600.000) + (v_up * 200)) + ((crandom () * v_right) * MOVETYPE_BOUNCE)) + ((crandom () * v_up) * MOVETYPE_BOUNCE));
-   } else {
-      missile.velocity = aim (self,10000.000);
-      missile.velocity = (missile.velocity * 600.000);
-      missile.velocity_z = 200;
-   }
-   missile.avelocity = '100.000 600.000 100.000';
-   missile.angles = vectoangles (missile.velocity);
-   missile.touch = ProximityGrenadeTouch;
-   missile.nextthink = (time + FL_SWIM);
-   missile.delay = ((time + 15.000) + (MOVETYPE_BOUNCE * random ()));
-   missile.think = ProximityBomb;
-   missile.th_die = ProximityGrenadeExplode;
-   setmodel (missile,"progs/hipnotic/proxbomb.mdl");
-   setorigin (missile,self.origin);
-   setsize (missile,'-1.000 -1.000 -1.000','1.000 1.000 1.000');
-   self.attack_finished = (time + 0.600);
+	light = spawn ();
+	light.origin = self.origin;
+	light.model = "progs/drake/s_fancy.spr";
+	setmodel(light,light.model);
+	setsize(light,VEC_ORIGIN,VEC_ORIGIN);
+	light.solid = SOLID_NOT;
+	light.spritestarted = FALSE;
+	light.pos1 = '5 1 0'; //start frame, alpha, null
+	light.idleweaponframe = 9; // endframe
+	light.think = env_sprite_loop;
+	light.spawnflags = light.spawnflags | SPRITE_PLAYONCE; // So it only plays sprite once.
+	light.impulse = 0.05; // Fast think for sprite animation.
+	light.use = SUB_Remove;
+	light.nextthink = self.nextthink = time + 0.1;
+	sound (light,CHAN_AUTO,"doom/bfg.wav",TRUE,ATTN_NORM); // death burst
+	T_RadiusDamage(self, self.owner, 40,world,DAMAGEALL); // minor damage from exploding
+	SpawnOrbLightning(self.origin,250,0.4);
+	self.think = SUB_Remove;
 };
 
-/*======================================================================
- W_FireAxe
-======================================================================*/
-void() W_FireAxe = {
+
+
+void () lightning_orb_think = { // [FUNCTION]
+	if (self.attack_finished < time) { self.think = lightning_orb_death; self.nextthink = time + 0.1; return; }
+
+	SpawnOrbLightning(self.origin,250,1.9);
+	self.think = lightning_orb_think;
+	self.nextthink = time + 0.1;
+};
+
+void () SpawnLightningOrb = { // [FUNCTION]
+	local entity light;
+
+	light = spawn ();
+	light.origin = trace_endpos;
+	light.origin_z = light.origin_z + 32; //move it up a tad from the hit point
+	light.flags = FALSE;
+	light.owner = self;
+	light.struck_by_mjolnir = TRUE;
+	light.model = "progs/s_light4.spr";
+	setmodel(light,light.model);
+	setsize(light,VEC_ORIGIN,VEC_ORIGIN);
+	light.solid = SOLID_NOT;
+	light.think = lightning_orb_think;
+	light.attack_finished = time + 1.9;
+	light.nextthink = (time + 0.5);
+	sound (light,CHAN_AUTO,"zerstorer/ambience/thunder2.wav",TRUE,ATTN_NORM);
+};
+
+void () HIP_FireMjolnir2 = { // [FUNCTION]
+	local vector org, source;
+	local float damage;
+
+	W_Reload(0.4);
+	source = (self.origin + '0.000 0.000 16.000');
+	makevectors (self.v_angle);
+	traceline (source,(source + (v_forward * RANGE_PLAYAXE)),FALSE,self);
+	if ( ((trace_fraction == TRUE) && (self.ammo_cells >= 15.000)) ) {
+		source = (source + (v_forward * RANGE_PLAYAXE));
+		traceline (source,(source - (v_up * 50.000)),FALSE,self);
+		self.ammo_cells = (self.ammo_cells - 15.000);
+		self.currentammo = (self.currentammo - 15.000);
+		SpawnLightningOrb();
+		W_Reload(0.8);
+		return;
+	}
+	org = (trace_endpos - (v_forward * 4));
+	if ( trace_ent.takedamage ) {
+		if (self.ammo_cells >= 15) damage = 300.000;
+		else damage = 80;
+
+		trace_ent.axhitme = TRUE;
+		SpawnBlood(trace_ent, org,v_forward,damage);
+		T_Damage (trace_ent,self,self,damage, DAMARMOR);
+		if (self.ammo_cells >= 15) {
+		SpawnLightningOrb();
+		self.ammo_cells = (self.ammo_cells - 15.000);
+		self.currentammo = (self.currentammo - 15.000);
+	}
+	} else {
+		if ( (trace_fraction != TRUE) ) {
+			sound (self,CHAN_WEAPON,"hipnotic/weapons/mjoltink.wav",TRUE,ATTN_NORM); //tink, nothin
+			Tent_Point(TE_GUNSHOT,org);
+		} else sound (self,CHAN_WEAPON,"knight/sword1.wav",TRUE,ATTN_NORM); //swoosh
+	}
+	W_Reload(0.4);
+};
+
+void () W_FireMjolnir = { // [FUNCTION]
+	if (world.hipnoticoptions & HIPNOTIC_OLDMJOLNIR) {
+		HIP_FireMjolnir();
+	} else {
+		if (self.tome_finished > 0) {
+			HIP_FireMjolnir2(); //adaya bfg lightning ball spawn!
+		} else { 
+			HIP_FireMjolnir(); // Standard Drake Mjolinr throwing
+		}
+	}
+};
+
+void () W_FireProximityGrenade = { // [FUNCTION]
+	local entity missile;
+
+	if (self.attack_finished > time) return;
+	if (self.ammo_rockets < 1) { forceweaponswitch(0.2); return;}
+	NumProximityGrenades = (NumProximityGrenades + TRUE);
+	self.ammo_rockets = (self.ammo_rockets - TRUE);
+	self.currentammo = (self.currentammo - TRUE);
+	sound (self,CHAN_WEAPON,"hipnotic/weapons/proxbomb.wav",TRUE,ATTN_NORM);
+	self.punchangle_x = CONTENT_SOLID;
+	missile = spawn ();
+	missile.classgroup = CG_PROJGRENADES;
+	missile.owner = self;
+	missile.lastvictim = self;
+	missile.movetype = MOVETYPE_TOSS;
+	missile.solid = SOLID_BBOX;
+	missile.classname = "proximity_grenade";
+	missile.takedamage = DAMAGE_NO;
+	missile.health = MOVETYPE_FLY;
+	missile.state = FALSE;
+	makevectors (self.v_angle);
+	if ( self.v_angle_x ) {
+		missile.velocity = ((((v_forward * 600.000) + (v_up * 200)) + ((crandom () * v_right) * MOVETYPE_BOUNCE)) + ((crandom () * v_up) * MOVETYPE_BOUNCE));
+	} else {
+		missile.velocity = aim (self,10000.000);
+		missile.velocity = (missile.velocity * 600.000);
+		missile.velocity_z = 200;
+	}
+	missile.avelocity = '100.000 600.000 100.000';
+	missile.angles = vectoangles (missile.velocity);
+	missile.touch = ProximityGrenadeTouch;
+	missile.nextthink = (time + FL_SWIM);
+	missile.delay = ((time + 15.000) + (MOVETYPE_BOUNCE * random ()));
+	missile.think = ProximityBomb;
+	missile.th_die = ProximityGrenadeExplode;
+	setmodel (missile,"progs/hipnotic/proxbomb.mdl");
+	setorigin (missile,self.origin);
+	setsize (missile,'-1.000 -1.000 -1.000','1.000 1.000 1.000');
+	W_Reload(0.6);
+};
+
+void() W_FireAxe = { // [FUNCTION]
 	local vector source, org, vec;
 	local float src_dist, dotprod, axedmg;
 	local entity onflr;
@@ -289,7 +428,7 @@ void() W_FireAxe = {
 		return;
 	}		 
 
-	if (self.moditems & IT_UPGRADE_AXE) {
+	if (self.moditems & IT_UPGRADE_AXE || self.tome_finished) {
 		// See if there are any bodies lying around
 		onflr = find(world, bodyonflr, MON_ONFLR);
 		while (onflr) {
@@ -301,47 +440,45 @@ void() W_FireAxe = {
 				dotprod = vec * v_forward;
 				if (dotprod > 0.6) {				// Is the body infront of the player
 					onflr.origin = org;				// Move gib closer to floor
-					// Now a function in ai_gibs, used by boil explosion as well
-					monster_flrbody_gib(onflr, axedmg*4);
+					monster_flrbody_gib(onflr, axedmg*4); // Now a function in ai_gibs since it's used by boil explosion as well
 					self.show_hostile = time + 1;	// wake monsters up, we hit stuff
 					return;														// Finished
 				}
 			}
-			// See if there are anymore bodies close by
-			onflr = find(onflr,bodyonflr, MON_ONFLR);
+			onflr = find(onflr,bodyonflr, MON_ONFLR); // See if there are anymore bodies close by
 		}
 	}
 
-	// Trace forward and see if the axe has hit anything?	
-	traceline (source, source + (v_forward* RANGE_PLAYAXE), FALSE, self);
+	traceline (source, source + (v_forward* RANGE_PLAYAXE), FALSE, self); // Trace forward and see if the axe has hit anything?
 	if (trace_fraction == 1.0) return;	// No contact, no hit
-	
+
 	self.show_hostile = time + 1;	// wake monsters up, we hit stuff
 	org = trace_endpos - v_forward*4;	// Back 4 units to spawn blood
-
-	//----------------------------------------------------------------------
-	// REFLECTION stuff like blue shields
-	if (trace_ent.reflectaxe) Resist_Effects(trace_ent,org,VEC_ORIGIN,0,AM_NONE,SOUND_AXE_STONE,"");
-	//----------------------------------------------------------------------
-	// BLEEDING/DAMAGE stuff with unique impact sounds
-	else if (trace_ent.takedamage) {
+	if (trace_ent.reflectaxe) Resist_Effects(trace_ent,org,VEC_ORIGIN,0,AM_NONE,SOUND_AXE_STONE,""); // REFLECTION stuff like blue shields
+	else if (trace_ent.takedamage) { // BLEEDING/DAMAGE stuff with unique impact sounds
 		// Mark the monster with type of axe used and change damage
 		if (self.moditems & IT_UPGRADE_AXE) {
-			axedmg = DAMAGE_PLAYAXE2; trace_ent.axhitme = 2; }
-		else {
-			axedmg = DAMAGE_PLAYAXE1; trace_ent.axhitme = 1; }
-		
-		// Spamn blood always up so player can see it
-		SpawnBlood (trace_ent, org, '0 0 1', axedmg);
+			axedmg = DAMAGE_PLAYAXE2; trace_ent.axhitme = 2;
+		} else {
+			axedmg = DAMAGE_PLAYAXE1; trace_ent.axhitme = 1;
+		}
+		if (self.tome_finished) {
+			axedmg = axedmg * 2;
+			if (trace_ent.classgroup == CG_ZOMBIE) axedmg = 120;
+			SpawnMeatSpray(self,trace_ent,(crandom() * 300));
+			SpawnMeatSpray(self,trace_ent,(crandom() * 300));
+			if (self.moditems & IT_UPGRADE_AXE) {
+				SpawnMeatSpray(self,trace_ent,(crandom() * 300));
+				SpawnMeatSpray(self,trace_ent,(crandom() * 300));
+			}
+		}
+
+		SpawnBlood (trace_ent, org, '0 0 1', axedmg); // Spamn blood always up so player can see it
 		T_Damage (trace_ent, self, self, axedmg, DAMARMOR);
-		
-		// Monster impact sounds (fleshy stuff)
-		if (trace_ent.flags & FL_MONSTER) {
+		if (trace_ent.flags & FL_MONSTER) { // Monster impact sounds (fleshy stuff)
 			if (random() < 0.5) sound (self, CHAN_WEAPON, GIB_SOUND_HEAVY, 1, ATTN_NORM);
 			else sound (self, CHAN_WEAPON, GIB_SOUND_HEAVY2, 1, ATTN_NORM);
-		}
-		// Breakable impact sounds (def=stone/brick)
-		else if (trace_ent.classtype == CT_FUNCBREAK) {
+		} else if (trace_ent.classtype == CT_FUNCBREAK) { // Breakable impact sounds (def=stone/brick)
 			if (trace_ent.style == BTYPE_WOOD) 
 				sound (self, CHAN_WEAPON, SOUND_AXE_WOOD, 1, ATTN_NORM);
 			else if (trace_ent.style == BTYPE_GLASS) 
@@ -352,9 +489,7 @@ void() W_FireAxe = {
 				sound (self, CHAN_WEAPON, SOUND_AXE_FLESH, 1, ATTN_NORM);
 			else
 				sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
-		}
-		// Pushable impact sounds (def=stone/brick)
-		else if (trace_ent.classtype == CT_FUNCPUSHABLE) {
+		} else if (trace_ent.classtype == CT_FUNCPUSHABLE) { // Pushable impact sounds (def=stone/brick)
 			if (trace_ent.style == PTYPE_WOOD) 
 				sound (self, CHAN_WEAPON, SOUND_AXE_WOOD, 1, ATTN_NORM);
 			else if (trace_ent.style == PTYPE_GLASS) 
@@ -365,36 +500,24 @@ void() W_FireAxe = {
 				sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
 		}
 	} else {
-		//----------------------------------------------------------------------
 		// WORLD OBJECT : Target does not bleed, play stone hitting sound
-		//----------------------------------------------------------------------
 		sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_GUNSHOT);
-		WriteCoord (MSG_BROADCAST, org_x);
-		WriteCoord (MSG_BROADCAST, org_y);
-		WriteCoord (MSG_BROADCAST, org_z);
+		Tent_Point(TE_GUNSHOT,org);
 	}
 };
 
-/*======================================================================
- OLD STYLE BULLET SYSTEM (HITSCAN)
-======================================================================*/
-
-entity    multi_ent;
-float    multi_damage;
-
-void() ClearMultiDamage = {
+// OLD STYLE BULLET SYSTEM (HITSCAN)
+void() ClearMultiDamage = { // [FUNCTION]
     multi_ent = world;
     multi_damage = 0;
 };
 
-void() ApplyMultiDamage = {
+void() ApplyMultiDamage = { // [FUNCTION]
     if (!multi_ent) return;
     T_Damage (multi_ent, self, self, multi_damage,DAMARMOR);
 };
 
-void(entity hit, float damage) AddMultiDamage = {
+void(entity hit, float damage) AddMultiDamage = { // [FUNCTION]
     if (!hit) return;
     
     if (hit != multi_ent) {
@@ -406,7 +529,7 @@ void(entity hit, float damage) AddMultiDamage = {
 	}
 };
 
-void(vector org, float marker_time) MarkAttack = {
+void(vector org, float marker_time) MarkAttack = { // [FUNCTION]
 	newmis = spawn();
 	newmis.classtype = CT_DEVMARKER;
 	newmis.movetype = MOVETYPE_NONE;
@@ -419,49 +542,31 @@ void(vector org, float marker_time) MarkAttack = {
 	newmis.nextthink = time + marker_time;
 };
 
-//----------------------------------------------------------------------
-void(float damage, vector dir) TraceAttack = {
+void(float damage, vector dir) TraceAttack = { // [FUNCTION]
 	local vector vel, org;
 	
 	vel = normalize(dir + v_up*crandom() + v_right*crandom());
 	vel = vel + 2*trace_plane_normal;
 	vel = vel * 200;
-
 	org = trace_endpos - dir*4;
-
-	// Check for sky content? skies don't impact or bleed
-	if (!check_skycontent(org)) {
+	if (!check_skycontent(org)) { // Check for sky content? skies don't impact or bleed
 		if (trace_ent.takedamage) {
-			// Show bullet resistance as small blood+gunshot+smoke
-			if (trace_ent.resist_shells > 0) Resist_Effects(trace_ent,org,vel,damage,AM_SHELLS,trace_ent.pain_sound,"");
+			if (trace_ent.resist_shells > 0) Resist_Effects(trace_ent,org,vel,damage,AM_SHELLS,trace_ent.pain_sound,""); // Show bullet resistance as small blood+gunshot+smoke
 			else {
-				// Hitting monsters does twice the amount of blood effects
-				if (trace_ent.flags & FL_MONSTER) SpawnBlood (trace_ent, org, vel*0.2, damage*2);
+				if (trace_ent.flags & FL_MONSTER) SpawnBlood (trace_ent, org, vel*0.2, damage*2); // Hitting monsters does twice the amount of blood effects
 				else SpawnBlood (trace_ent, org, vel*0.2, damage);
 			}
-			// Keep adding up the damage
-			AddMultiDamage (trace_ent, damage);
-			
-			// Check for target dummy (manually create marker)
-			if (trace_ent.classtype == CT_TARGETDUMMY) 
-				MarkAttack(org, trace_ent.wait);
-		} else {
-			// Hit something that does not bleed (often world)
-			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-			WriteByte (MSG_BROADCAST, TE_GUNSHOT);
-			WriteCoord (MSG_BROADCAST, org_x);
-			WriteCoord (MSG_BROADCAST, org_y);
-			WriteCoord (MSG_BROADCAST, org_z);
-		}
+			AddMultiDamage (trace_ent, damage); // Keep adding up the damage
+			if (trace_ent.classtype == CT_TARGETDUMMY) MarkAttack(org, trace_ent.wait); // Check for target dummy (manually create marker)
+		} else Tent_Point(TE_GUNSHOT,org); // Hit something that does not bleed (often world)
 	}
 };
 
-//----------------------------------------------------------------------
-void(float shotcount, vector spread) FireBullets = {
-	local	vector direction, src, dir;
+void(float shotcount, vector spread) FireBullets = { // [FUNCTION]
+	local vector direction, src, dir;
+	local float addedtime;
 	
 	makevectors(self.v_angle);
-
 	if (self.flags & FL_CLIENT) {
 		// Auto aim assist (builtin function 44)
 		if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self, SPEED_PLAYAIM);
@@ -469,13 +574,12 @@ void(float shotcount, vector spread) FireBullets = {
 		else dir = normalize(v_forward * SPEED_PLAYAIM);
 	} else {
 		// A monster attacking a monster will not dodge
-		if (self.enemy.flags & FL_MONSTER)
-			dir = normalize(self.enemy.origin - self.origin);
+		if (self.enemy.flags & FL_MONSTER) dir = normalize(self.enemy.origin - self.origin);
 		else {
 			// fire somewhat behind the player
 			// so a dodging player is harder to hit
 			dir = self.enemy.origin - self.enemy.velocity*0.2;
-			dir = normalize (dir - self.origin);
+			dir = normalize(dir - self.origin);
 		}
 	}
 
@@ -486,58 +590,54 @@ void(float shotcount, vector spread) FireBullets = {
 	while (shotcount > 0) {
 		direction = dir + crandom()*spread_x*v_right + crandom()*spread_y*v_up;
 		traceline (src, src + direction*2048, FALSE, self);
-		if (trace_fraction != 1.0) TraceAttack (DAMAGE_SHELL, direction);
+		if (trace_fraction != 1.0) {
+			if (self.tome_finished) {
+				if (shotcount == 1) addedtime = 0;
+				else addedtime = shotcount * 0.05;
+				TraceExploAttack(EXSHELL_DAMAGE, direction, addedtime);
+			} else {
+				if (self.classtype == CT_MONENF_GUNNER) TraceAttack(9, direction); // More damage
+				else TraceAttack(DAMAGE_SHELL, direction);
+			}
+		}
 		shotcount = shotcount - 1;
 	}
 	ApplyMultiDamage ();
 };
 
-/*======================================================================
-W_FireShotgun
-======================================================================*/
-void() W_FireShotgun = {
+void() W_FireShotgun = { // [FUNCTION]
 	local vector spread_pat;
-	
-	// Ran out of ammo, switch to next best weapon
+	local float shotcnt;
+
 	if (self.attack_finished > time) return;
-	if (self.ammo_shells < 1) { forceweaponswitch(0.2); return;}
+	if (self.ammo_shells < 1) { forceweaponswitch(0.2); return;} // Ran out of ammo, switch to next best weapon
 	
-	// Change weapon sound if using Projectile Pellets
-	// IMPORTANT - default for Projectile Pellets is ON = 0
-	if (!query_configflag(SVR_SHOTGPROJ))
-		sound (self ,CHAN_WEAPON, "ad171/weapons/sg2.wav", 1, ATTN_NORM); // ever so subtle sound of a shell ejecting added to normal
-	else
-		sound (self ,CHAN_WEAPON, "weapons/guncock.wav", 1, ATTN_NORM); // vanilla single barrel shotgun
+	// Change weapon sound if using Projectile Pellets.
+	if (!query_configflag(SVR_SHOTGPROJ)) sound (self ,CHAN_WEAPON, "ad171/weapons/sg2.wav", 1, ATTN_NORM); // ever so subtle sound of a shell ejecting added to normal
+	else sound (self ,CHAN_WEAPON, "weapons/guncock.wav", 1, ATTN_NORM); // vanilla single barrel shotgun
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
+	if (self.perms & POW_SHOTTYMAN) W_Reload(0.3);
+	else W_Reload(0.5);
 
-	if (self.perms & POW_SHOTTYMAN) {
-		self.attack_finished = time + 0.3;
-	} else {
-		self.attack_finished = time + 0.5;
-	}
 	self.punchangle_x = -2;
-	if (self.classtype != CT_MONGREMLIN)
-		player_sgreset();			// reset weaponframe
+	if (self.classtype != CT_MONGREMLIN) player_sgreset(); // reset weaponframe
 	
 	self.currentammo = self.ammo_shells = self.ammo_shells - 1;
-
 	if (self.moditems & IT_ARTSHARP) spread_pat = SPREAD_SG2;
 	else spread_pat = SPREAD_SG;
-	
-	// Choose between a projectile or hitscan system
-	if (query_configflag(SVR_SHOTGPROJ))
-		FireBullets (QUANTITY_SG, spread_pat);
+
+	shotcnt = QUANTITY_SG;
+	if (self.tome_finished) shotcnt = 3; // Extra for tome.
+	if (query_configflag(SVR_SHOTGPROJ)) // Choose between a projectile or hitscan system
+		FireBullets (shotcnt, spread_pat);
 	else {
-		Launch_Shells(QUANTITY_SG, spread_pat, CT_PROJ_SG);
+		Launch_Shells(shotcnt, spread_pat, CT_PROJ_SG);
 		Launch_ShellCasing(1);	// Shell casings
 	}
 };
 
-/*======================================================================
-W_FireSuperShotgun
-======================================================================*/
-void() W_FireSuperShotgun = {
+void() W_FireSuperShotgun = { // [FUNCTION]
 	local float ssg_qty, shell_qty;
 	local vector spread_pat;
 	
@@ -548,23 +648,17 @@ void() W_FireSuperShotgun = {
 	makevectors (self.v_angle);		// Special view angle for the player
 
 	// if shot in the air - do Newton's 3rd law. (from zerstorer)
-	if (!(self.flags & FL_ONGROUND))
-		self.velocity = self.velocity - (v_forward * 35);
+	if (!(self.flags & FL_ONGROUND)) self.velocity = self.velocity - (v_forward * 35);
 	
 	// Change weapon sound if using Shotgun Upgrade or Projectile Pellets
 	// IMPORTANT - default for Projectile Pellets is ON = 0
-	if (self.moditems & IT_UPGRADE_SSG || !query_configflag(SVR_SHOTGPROJ)) {
-		sound (self ,CHAN_WEAPON, "ad171/weapons/ssg2.wav", 1, ATTN_NORM);
-	} else{ 
-		sound (self ,CHAN_WEAPON, "weapons/shotgn2.wav", 1, ATTN_NORM);
-	}
+	if (self.moditems & IT_UPGRADE_SSG || !query_configflag(SVR_SHOTGPROJ)) sound (self ,CHAN_WEAPON, "ad171/weapons/ssg2.wav", 1, ATTN_NORM);
+	else sound (self ,CHAN_WEAPON, "weapons/shotgn2.wav", 1, ATTN_NORM);
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	if (self.perms & POW_SHOTTYMAN) {
-		self.attack_finished = time + 0.5;
-	} else {
-		self.attack_finished = time + 0.7;
-	}
+	if (self.perms & POW_SHOTTYMAN) W_Reload(0.5);
+	else W_Reload(0.7);
+
 	self.punchangle_x = -4;
 	if (self.classtype != CT_MONGREMLIN)
 		player_ssgreset();			// reset weaponframe
@@ -592,45 +686,39 @@ void() W_FireSuperShotgun = {
 	if (self.moditems & IT_ARTSHARP) spread_pat = SPREAD_SSG2;
 	else spread_pat = SPREAD_SSG;
 
+	if (self.tome_finished) {
+		if (self.moditems & IT_UPGRADE_SSG) ssg_qty = 11; // Widowmaker (Triple-barreled)
+		else ssg_qty = 7; // Double-barreled Shotgun
+	}
+
 	// Choose between a projectile or hit-scan system
-	if (query_configflag(SVR_SHOTGPROJ))
+	if (query_configflag(SVR_SHOTGPROJ)) {
 		FireBullets (ssg_qty, spread_pat);	// Hit-scan
-	else {
+	} else {
 		Launch_Shells(ssg_qty, spread_pat, CT_PROJ_SSG);
 		Launch_ShellCasing(shell_qty);
 	}
 };
 
-/*======================================================================
-W_FireSpikes
-======================================================================*/
-void(float oz, float ox) W_FireSpikes = {
+void(float oz, float ox) W_FireSpikes = { // [FUNCTION]
 	local vector org, dir;
-	
-	// If run out of ammo, switch weapons to next best
-	if (self.ammo_nails < 1) { forceweaponswitch(0.2); return; }
+	local entity spike1, spike2;
+
+	if (self.ammo_nails < 1) { forceweaponswitch(0.2); return; } // If run out of ammo, switch weapons to next best
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	self.attack_finished = time + 0.2;
+	W_Reload(0.2);
 	self.punchangle_x = -2;
 	makevectors (self.v_angle);
-
-	// Check for auto aim state
-	// Auto aim assist (builtin function 44)
-	if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self, SPEED_PLAYSPIKE);
-	// Straight line forward where crosshair is pointing
-	else dir = normalize(v_forward * SPEED_PLAYSPIKE);
+	if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self, SPEED_PLAYSPIKE); // Check for auto aim state.  Auto aim assist (builtin function 44)
+	else dir = normalize(v_forward * SPEED_PLAYSPIKE); // Straight line forward where crosshair is pointing
 
 	// SNG setup, sound and ammo change
 	if (self.ammo_nails > 1 && self.weapon == IT_SUPER_NAILGUN) {
 		sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
-		if (self.perms & POW_DOUBLE) {
-			self.currentammo = self.ammo_nails = self.ammo_nails - 1;
-		} else {
-			self.currentammo = self.ammo_nails = self.ammo_nails - 2;
-		}
+		if (self.perms & POW_DOUBLE) self.currentammo = self.ammo_nails = self.ammo_nails - 1;
+		else self.currentammo = self.ammo_nails = self.ammo_nails - 2;
 
-		//-------------------------------------------------------------
 		// Original setup - org = self.origin + '0 0 16';
 		// - SNG projectile offset idea by Kinn
 		// org = self.origin + dir*14 + v_right*ox;
@@ -638,51 +726,68 @@ void(float oz, float ox) W_FireSpikes = {
 		// The SNG offset idea was hiting far below the crosshair
 		// which was causing impact problems.
 		// Kept the barrel offset, removed the Z adjustment instead!
-		//-------------------------------------------------------------
 		org = self.origin + '0 0 16' + v_right*ox;
-		launch_projectile (org, dir, CT_PROJ_SNG, SPEED_PLAYSPIKE);
-	}
-	// NG setup, sound and ammo change
-	else {
+		if (self.tome_finished) {
+			// Update 2/14/10:  Minigun mode -- fire three shots per 0.1 sec.
+			org = self.origin + '0 0 16' + v_up*fabs(ox);
+			Piercer_Trace (org, org + dir, self, SPIKEY_DAMAGE, self, TE_GUNSHOT);
+			Echo_Shot(1/30, W_EchoSpike_Down);
+			Echo_Shot(2/30, W_EchoSpike_Up);
+			StackDamage_Clear();
+		} else { // Normal Super Nailgun Fire
+			if (world.copperoptions & COPPER_TWOSHOT_PERFORATOR) { // Copper variant fires more nails instead of one super one
+				launch_projectile (org + vecrand(0,1.25,1), dir, CT_PROJ_NG, (940 + random()*30));
+				if (self.super_damage_finished > time) {
+					newmis.dmg = DAMAGE_SNGSPIKE; // So zombies still gib at 72 with quad.  Yes Copper did this.
+					spike1 = newmis;
+				}
+				launch_projectile (org + vecrand(0,1.25,1), dir, CT_PROJ_NG, (1020 + random()*30));
+				if (self.super_damage_finished > time) {
+					newmis.dmg = DAMAGE_SNGSPIKE; 
+					spike2 = newmis;
+					spike1.buddy = spike2; // First one to hit nerfs its buddy
+					spike2.buddy = spike1; // Race ya!
+					dprint("Buddy nails setup!\n");
+				}
+			} else launch_projectile (org, dir, CT_PROJ_SNG, SPEED_PLAYSPIKE); // Normal Normal Super Nailgun Fire
+		}
+	} else { // NG setup, sound and ammo change
 		sound (self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM);
 		if (self.perms & POW_DOUBLE) {
 			if (self.nailcosthalf) {
 				self.currentammo = self.ammo_nails = self.ammo_nails - 1;
 				self.nailcosthalf = 0;
-			} else {
-				self.nailcosthalf = 1;
-			}
-		} else {
-			self.currentammo = self.ammo_nails = self.ammo_nails - 1;
-		}
+			} else self.nailcosthalf = 1;
+		} else self.currentammo = self.ammo_nails = self.ammo_nails - 1;
+
 		
 		// Original setup - org = self.origin + '0 0 16' + v_right*ox;
 		// - NG projectile offset idea by Kinn
 		// org = self.origin + '0 0 8' + dir*14 + v_right*ox;
 		org = self.origin + '0 0 16' + v_right*ox;
-		launch_projectile (org, dir, CT_PROJ_NG, SPEED_PLAYSPIKE);
+		if (self.tome_finished) { // ToP makes nailguns fire armor-piercing, hitscan bullets.
+			ox = ox * 2;    // Hitscan with no bonus, so extend offset.
+			dir = aim (self, 100000) * SPIKEY_RANGE;
+			Piercer_Trace (org, org + dir, self, SPIKEY_DAMAGE, self, TE_GUNSHOT); // ToP also doubles nailgun's rate of fire.
+			if (ox < 0) Echo_Shot(0.05,W_EchoSpike_Down); // Fire a second nail from the same barrel a moment later.
+			else Echo_Shot(0.05,W_EchoSpike_Up);
+
+			StackDamage_Clear();
+		} else launch_projectile(org,dir,CT_PROJ_NG,SPEED_PLAYSPIKE); // Normal Nailgun Fire
 	}
 };
 
-/*======================================================================
-W_FireLavaSpikes
-======================================================================*/
-void(float oz, float ox) W_FireLavaSpikes = {
+void(float oz, float ox) W_FireLavaSpikes = { // [FUNCTION]
 	local vector org, dir;
 	
-	// If run out of ammo, switch weapons to next best
-	if (self.ammo_lava_nails < 1) { forceweaponswitch(0.2); return; }
+	if (self.ammo_lava_nails < 1) { forceweaponswitch(0.2); return; } // If run out of ammo, switch weapons to next best
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	self.attack_finished = time + 0.2;
+	W_Reload(0.2);
 	self.punchangle_x = -2;
 	makevectors (self.v_angle);
-
-	// Check for auto aim state
-	// Auto aim assist (builtin function 44)
-	if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN)  dir = aim(self, SPEED_PLAYSPIKE);
-	// Straight line forward where crosshair is pointing
-	else dir = normalize(v_forward * SPEED_PLAYSPIKE);
+	if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN)  dir = aim(self, SPEED_PLAYSPIKE); // Auto aim assist (builtin function 44)
+	else dir = normalize(v_forward * SPEED_PLAYSPIKE); // Straight line forward where crosshair is pointing
 
 	// Lava SNG setup, sound and ammo change
 	if (self.ammo_lava_nails > 1 && self.weapon == IT_LAVA_SUPER_NAILGUN) {
@@ -692,8 +797,6 @@ void(float oz, float ox) W_FireLavaSpikes = {
 		} else {
 			self.currentammo = self.ammo_lava_nails = self.ammo_lava_nails - 2;
 		}
-
-		//-------------------------------------------------------------
 		// Original setup - org = self.origin + '0 0 16';
 		// - SNG projectile offset idea by Kinn
 		// org = self.origin + dir*14 + v_right*ox;
@@ -701,71 +804,82 @@ void(float oz, float ox) W_FireLavaSpikes = {
 		// The SNG offset idea was hiting far below the crosshair
 		// which was causing impact problems.
 		// Kept the barrel offset, removed the Z adjustment instead!
-		//-------------------------------------------------------------
 		org = self.origin + '0 0 16' + v_right*ox;
-		launch_projectile (org, dir, CT_PROJ_LAVASNG, SPEED_PLAYSPIKE);
-	}
-	// Lava NG setup, sound and ammo change
-	else {
+		if (self.tome_finished) {
+			org = self.origin + '0 0 16' + v_up*fabs(ox); // Update 2/14/10:  Minigun mode -- fire three shots per 0.1 sec.
+			Piercer_Trace (org, org + dir, self, SPIKEY_DAMAGE, self, TE_GUNSHOT);
+			Echo_Shot(1/30, W_EchoLavaSpike_Down);
+			Echo_Shot(2/30, W_EchoLavaSpike_Up);
+			StackDamage_Clear();
+		} else launch_projectile (org, dir, CT_PROJ_LAVASNG, SPEED_PLAYSPIKE); // Normal Super Nailgun Fire
+	} else { // Lava NG setup, sound and ammo change
 		sound (self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM);
 		if (self.perms & POW_DOUBLE) {
 			if (self.nailcosthalf) {
 				self.currentammo = self.ammo_lava_nails = self.ammo_lava_nails - 1;
 				self.nailcosthalf = 0;
-			} else {
-				self.nailcosthalf = 1;
-			}
-		} else {
-			self.currentammo = self.ammo_lava_nails = self.ammo_lava_nails - 1;
-		}
+			} else self.nailcosthalf = 1;
+		} else self.currentammo = self.ammo_lava_nails = self.ammo_lava_nails - 1;
 		
 		// Original setup - org = self.origin + '0 0 16' + v_right*ox;
 		// - NG projectile offset idea by Kinn
 		// org = self.origin + '0 0 8' + dir*14 + v_right*ox;
 		org = self.origin + '0 0 16' + v_right*ox;
-		launch_projectile (org, dir, CT_PROJ_LAVANG, SPEED_PLAYSPIKE);
+		if (self.tome_finished) { // ToP makes nailguns fire armor-piercing, hitscan bullets.
+			ox = ox * 2;  // Hitscan with no bonus, so extend offset.
+			dir = aim (self, 100000) * SPIKEY_RANGE;
+			Piercer_Trace(org,org + dir,self,SPIKEY_DAMAGE,self,TE_GUNSHOT); // ToP also doubles nailgun's rate of fire.
+			
+			if (ox < 0) Echo_Shot(0.05,W_EchoLavaSpike_Down); // Fire a second nail from the same barrel a moment later.
+			else Echo_Shot(0.05,W_EchoLavaSpike_Up);
+
+			StackDamage_Clear();
+		} else launch_projectile (org, dir, CT_PROJ_LAVANG, SPEED_PLAYSPIKE); // Normal Nailgun Fire
 	}
 };
 
-/*======================================================================
-GRENADES
-======================================================================*/
-void() W_FireGrenade = {
+void() W_FireGrenade = { // [FUNCTION]
 	local vector dir, avel;
-	
-	// Ran out of ammo, switch to next best weapon
+
 	if (self.attack_finished > time) return;
-	if (self.ammo_rockets < 1) { forceweaponswitch(0.2); return;}
+	if (self.ammo_rockets < 1) { forceweaponswitch(0.2); return;} // Ran out of ammo, switch to next best weapon
 
 	self.currentammo = self.ammo_rockets = self.ammo_rockets - 1;
 	sound (self, CHAN_WEAPON, "weapons/grenade.wav", 1, ATTN_NORM);
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	self.attack_finished = time + 0.6;
+	W_Reload(0.6);
 	self.punchangle_x = -2;
-	player_grenreset();			// reset weaponframe
-
+	player_grenreset();	// reset weaponframe
 	makevectors (self.v_angle);
-	// Has the player aimed left/right? then no auto aim assist
-	if (self.v_angle_x) {
-		dir = v_forward*SPEED_PLAYGRENADE + v_up * ELEV_ZAXIS + crandom()*v_right*10 + crandom()*v_up*10;
+
+	if (self.tome_finished) {
+		if (self.v_angle_x) { // Has the player aimed left/right? then no auto aim assist
+			dir = v_forward*800 + v_up * ELEV_ZAXIS + crandom()*v_right*10 + crandom()*v_up*10; // Faster
+		} else {
+			if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN)  dir = aim(self, SPEED_PLAYAIM); // Check for auto aim state
+			else dir = normalize(v_forward * 800); // Faster
+
+			dir = dir * 800; // Faster
+			dir_z = ELEV_ZAXIS; // Work out default speed and elevation
+		}
+		avel = vecrand(100,200,FALSE);
+        Launch_Grenade(self.origin, dir, avel, CT_PROJ_GLSUPER);
+    } else {
+		if (self.v_angle_x) { // Has the player aimed left/right? then no auto aim assist
+			dir = v_forward*SPEED_PLAYGRENADE + v_up * ELEV_ZAXIS + crandom()*v_right*10 + crandom()*v_up*10;
+		} else {
+			if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN)  dir = aim(self, SPEED_PLAYAIM); // Check for auto aim state
+			else dir = normalize(v_forward * SPEED_PLAYGRENADE);
+
+			dir = dir * SPEED_PLAYGRENADE;
+			dir_z = ELEV_ZAXIS; // Work out default speed and elevation
+		}
+		avel = vecrand(100,200,FALSE);
+		Launch_Grenade(self.origin, dir, avel, CT_PROJ_GL);
 	}
-	else {
-		// Check for auto aim state
-		if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN)  dir = aim(self, SPEED_PLAYAIM);
-		else dir = normalize(v_forward * SPEED_PLAYGRENADE);
-		// Work out default speed and elevation
-		dir = dir * SPEED_PLAYGRENADE;
-		dir_z = ELEV_ZAXIS;
-	}
-	avel = vecrand(100,200,FALSE);
-	Launch_Grenade(self.origin, dir, avel, CT_PROJ_GL);
 };
 
-/*======================================================================
- ROCKETS
-======================================================================*/
-void() W_FireRocket =
-{
+void() W_FireRocket = { // [FUNCTION]
 	local vector org, dir;
 	
 	// Ran out of ammo, switch to next best weapon
@@ -775,10 +889,9 @@ void() W_FireRocket =
 	self.currentammo = self.ammo_rockets = self.ammo_rockets - 1;
 	sound (self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	self.attack_finished = time + 0.8;
+	W_Reload(0.8);
 	self.punchangle_x = -2;
-	player_rockreset();			// reset weaponframe
-
+	player_rockreset();	// reset weaponframe
 	makevectors (self.v_angle);
 	org = self.origin + v_forward * 8 + '0 0 16';
 
@@ -787,52 +900,65 @@ void() W_FireRocket =
 	// Straight line forward where crosshair is pointing
 	else dir = normalize(v_forward * SPEED_RLPLAYER);
 	
-	Launch_Missile (org, dir, '0 0 0', CT_PROJ_ROCKET, SPEED_RLPLAYER);
+    if (self.tome_finished) Launch_Missile (org, dir, '0 0 0', CT_PROJ_ROCKETSUPER, 500); //SuperRocket_Launch (org, dir);
+    else Launch_Missile (org, dir, '0 0 0', CT_PROJ_ROCKET, SPEED_RLPLAYER);
 };
 
-void () W_Fire_Crossbow = {
+void () W_Fire_Crossbow = { // [FUNCTION]
 	local vector org, dir;
 
 	if (self.attack_finished > time) return;
 	if (self.ammo_bolts < 1) { forceweaponswitch(0.2); return;}
 	self.currentammo = self.ammo_bolts = self.ammo_bolts - 1;
-
 	makevectors (self.v_angle);
 	sound (self, CHAN_WEAPON, "ad171/weapons/crossbow_fire.wav", 1, ATTN_NORM);
-
 	if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self, SPEED_PLAYSPIKE);
-	// Straight line forward where crosshair is pointing
-	else dir = normalize(v_forward * SPEED_DCROSS);
+	else dir = normalize(v_forward * SPEED_DCROSS); // Straight line forward where crosshair is pointing
 
-	self.attack_finished = time + 0.9;
+	if (self.tome_finished) W_Reload(0.13);
+	else W_Reload(0.9);
 	org = self.origin + '0 0 16';
 	launch_projectile (org, dir, CT_PROJ_BOLT1, 1100);
 };
 
-void () W_Fire_Crossbow_Poison = {
+void () W_Fire_Crossbow_Poison = { // [FUNCTION]
 	local vector org, dir;
 
 	if (self.attack_finished > time) return;
 	if (self.ammo_poison < 1) { forceweaponswitch(0.2); return;}
 	self.currentammo = self.ammo_poison = self.ammo_poison - 1;
-
 	makevectors (self.v_angle);
 	sound (self, CHAN_WEAPON, "ad171/weapons/crossbow_fire.wav", 1, ATTN_NORM);
-
 	if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN)  dir = aim(self, SPEED_PLAYSPIKE);
-	// Straight line forward where crosshair is pointing
-	else dir = normalize(v_forward * SPEED_DCROSS);
+	else dir = normalize(v_forward * SPEED_DCROSS); // Straight line forward where crosshair is pointing
 
-	self.attack_finished = time + 0.9;
+	if (self.tome_finished) W_Reload(0.13);
+	else W_Reload(0.9);
 	org = self.origin + '0 0 16';
 	self.poisonous = 1;
 	launch_projectile (org, dir, CT_PROJ_BOLT2, 1100);
 };
 
-/*======================================================================
-PLASMA
-======================================================================*/
-void() W_FirePlasma = {
+void() W_FireIceCrossbow = { // [FUNCTION]
+    local vector start, dir, vx, vy;
+
+    if (self.ammo_bolts < 1) return;
+
+    self.currentammo = self.ammo_bolts = self.ammo_bolts - 1;
+    self.punchangle_x = -2;
+    makevectors (self.v_angle);
+    start = self.origin + v_forward*8 + '0 0 16';
+    dir = v_forward;    // No auto-aim please.
+    vx = v_forward * 0.9848;    // cos(10)
+    vy = v_right * 0.1736;      // sin(10)
+    Buriza_Launch (start, dir);
+    if (self.tome_finished) { // ToP: Shoot two more to the sides for free.
+        Buriza_Launch (start, vx + vy);
+        Buriza_Launch (start, vx - vy);
+    }
+};
+
+void() W_FirePlasma = { // [FUNCTION]
 	local vector org, dir;
 	local float cells;
 	
@@ -855,36 +981,30 @@ void() W_FirePlasma = {
 			T_RadiusDamage (self, self, 35*cells, self, IGNORECLASS);
 			// Reduce player HP down to 50%, no armour saves!
 			T_Damage(self, world, world, self.health*0.5, NOARMOR);
-		}
-		else {
-			self.attack_finished = time + 0.2;
+		} else {
+			W_Reload(0.2);
 			sound (self, CHAN_WEAPON, SOUND_MISFIRE, 1, ATTN_NORM);
 		}
 		return;
 	}
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	self.attack_finished = time + 0.2;
+	W_Reload(0.2);
 	self.punchangle_x = -2;
-
 	makevectors (self.v_angle);
 
 	// Check for auto aim state
 	// Auto aim assist (builtin function 44)
 	if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN)  dir = aim(self, SPEED_PLAYPLASMA);
-	// Straight line forward where crosshair is pointing
-	else dir = normalize(v_forward * SPEED_PLAYPLASMA);
+	else dir = normalize(v_forward * SPEED_PLAYPLASMA); // Straight line forward where crosshair is pointing
 
 	sound (self, CHAN_WEAPON, "ad171/weapons/plasma_fire.wav", 1, ATTN_NORM);
 	self.currentammo = self.ammo_cells = self.ammo_cells - 1;
-	
 	org = self.origin + v_forward*8 + '0 0 16';
 	launch_plasma (org, dir, CT_PROJ_PLASMA, SPEED_PLAYPLASMA);
 };
 
-void(vector lstart, entity lsource, float ldamage) LightningReflection;
-
-void(vector p1, vector p2, entity from, float damage) LightningDamage = {
+void(vector p1, vector p2, entity from, float damage) LightningDamage = { // [FUNCTION]
 	local entity e1, e2;
 	local vector f;
 	local float lighthit, temp_classgroup;
@@ -895,95 +1015,57 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage = {
 	f_y = f_x;
 	f_z = 0;
 	f = f*16;
-
-	// Need to fool T_Damage that damage is coming from LG
-	temp_classgroup = from.classgroup;
+	temp_classgroup = from.classgroup; // Need to fool T_Damage that damage is coming from LG
 	if (from) from.classgroup = CG_PROJCELLS;
-
 	e1 = e2 = world;
 	lighthit = FALSE;
-	//	LightningDamage (org, trace_endpos, self, 10);
-	//	dprint("Light ("); dprint(trace_ent.classname); dprint(")\n");
 	traceline (p1, p2, FALSE, self);
 	if (trace_ent.takedamage) {
 		lighthit = TRUE;
-		// Some weird MP velocity hack!
-		if (self.classtype == CT_PLAYER) {
-			if (other.classtype == CT_PLAYER)
-				trace_ent.velocity_z = trace_ent.velocity_z + 400;
-		}
-	}
-	else {
+		if ((self.flags & FL_CLIENT) && (other.flags & FL_CLIENT)) trace_ent.velocity_z = trace_ent.velocity_z + 400; // Some weird MP velocity hack! KEEP IT!!
+	} else {
 		e1 = trace_ent;
-
 		traceline (p1 + f, p2 + f, FALSE, self);
 		if (trace_ent != e1 && trace_ent.takedamage) lighthit = TRUE;
 		else {
 			e2 = trace_ent;
-
 			traceline (p1 - f, p2 - f, FALSE, self);
-			if (trace_ent != e1 && trace_ent != e2 && trace_ent.takedamage)
-				lighthit = TRUE;
+			if (trace_ent != e1 && trace_ent != e2 && trace_ent.takedamage) lighthit = TRUE;
 		}
 	}
 
 	// Found a target to hit?
 	if (lighthit) {
-		//----------------------------------------------------------------------
 		// Check for breakable/pushable monster immunity
 		if (ai_immunebreakable(self, trace_ent)) {
-			// This is resist lightning function without pain sound
-			// Don't spawn smoke constantly (let the sprite finish)
-			if (self.lightning_timer < time) {
+			if (self.lightning_timer < time) { // This is resist lightning function without pain sound.  Don't spawn smoke constantly (let the sprite finish)
 				self.lightning_timer = time + 0.3;
 				SpawnExplosion(EXPLODE_BURST_SMOKE, trace_endpos, "");
 			}
 			SpawnProjectileSmoke(trace_endpos, 200, 50, 150);
-		}
-
-		// Check for any cell/lightning resistance
-		else if (trace_ent.resist_cells > 0) {
-			// damage = damage * trace_ent.resist_cells;
-			Resist_Effects(trace_ent,trace_endpos,VEC_ORIGIN,0,AM_CELLS,trace_ent.pain_sound,"");
-			if (damage > 0) {
-				T_Damage (trace_ent, from, from, damage, DAMARMOR);
-			}
-		}
-		else {
-			// Originally used 225 blood colour
-			SpawnBlood(trace_ent, trace_endpos, '0 0 100', damage*4);
+		} else if (trace_ent.resist_cells > 0) { // Check for any cell/lightning resistance
+			Resist_Effects(trace_ent,trace_endpos,VEC_ORIGIN,0,AM_CELLS,trace_ent.pain_sound,""); // damage = damage * trace_ent.resist_cells;
+			if (damage > 0) T_Damage (trace_ent, from, from, damage, DAMARMOR);
+		} else {
+			SpawnBlood(trace_ent, trace_endpos, '0 0 100', damage*4); // Originally used 225 blood colour
 			T_Damage (trace_ent, from, from, damage, DAMARMOR);
 		}
-		// Check for any lightning reflection abilitites
-		if (trace_ent.reflectlightning) {
-			// Source = Lightning originally came from player
-			LightningReflection(trace_endpos, trace_ent, damage*0.5);
-		}
+		if (trace_ent.reflectlightning) LightningReflection(trace_endpos, trace_ent, damage*0.5); // Check for any lightning reflection abilitites.  Source = Lightning originally came from player
 	}
 	if (from) from.classgroup = temp_classgroup;
 };
 
-//----------------------------------------------------------------------
 // New ability to spawn lighting strikes in random directions
-//----------------------------------------------------------------------
-void(vector lstart, entity lsource, float ldamage) LightningReflection =
-{
+void(vector lstart, entity lsource, float ldamage) LightningReflection = { // [FUNCTION]
 	local vector lfinish, dir;
 
-	// Setup a random XYZ direction (+/-)
-	lfinish = lstart + vecrand(0,1000,1);
-	
-	// Trace line in random direction
-	traceline(lstart, lfinish, FALSE, lsource);
-	
-	// Random chance of a plasma/lightning bolt!
-	if (random() < 0.5) {
+	lfinish = lstart + vecrand(0,1000,1); // Setup a random XYZ direction (+/-)
+	traceline(lstart, lfinish, FALSE, lsource); // Trace line in random direction
+	if (random() < 0.5) { // Random chance of a plasma/lightning bolt!
 		dir = normalize(trace_endpos - lstart);
 		launch_plasma(lstart, dir, CT_REFLECTLIGHT, SPEED_REFLECTION);
-	}
-	else {
-		// Draw lighting beam (32 model unit chunks)
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	} else {
+		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY); // Draw lighting beam (32 model unit chunks)
 		WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
 		WriteEntity (MSG_BROADCAST, lsource);
 		WriteCoord (MSG_BROADCAST, lstart_x);
@@ -992,20 +1074,16 @@ void(vector lstart, entity lsource, float ldamage) LightningReflection =
 		WriteCoord (MSG_BROADCAST, trace_endpos_x);
 		WriteCoord (MSG_BROADCAST, trace_endpos_y);
 		WriteCoord (MSG_BROADCAST, trace_endpos_z);
-		// Check for damage with new lightning beam
-		LightningDamage(lstart, trace_endpos, world, ldamage);
+		LightningDamage(lstart, trace_endpos, world, ldamage); // Check for damage with new lightning beam
 	}
 };
 
-//----------------------------------------------------------------------
-// This lightning damage check is designed for the lightning gun
-// with many modifiers designed for the player and MP combat
+// This lightning damage check is designed for the lightning gun with many modifiers designed for the player and MP combat.
 // This function should not be used for general lightning damage
-//----------------------------------------------------------------------
-void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage = {
+void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage = { // [FUNCTION]
 	local entity e1, e2;
-	local vector f;
-	local float lighthit, temp_classgroup;
+	local vector f, dir;
+	local float lighthit, temp_classgroup, iter, dmg;
 	
 	f = p2 - p1;
 	normalize (f);
@@ -1013,11 +1091,9 @@ void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage = {
 	f_y = f_x;
 	f_z = 0;
 	f = f*16;
-
+	dmg = damage;
 	e1 = e2 = world;
 	lighthit = FALSE;
-	//	LightningDamage (org, trace_endpos, self, 10);
-	//	dprint("Light ("); dprint(trace_ent.classname); dprint(")\n");
 	traceline (p1, p2, FALSE, self);
 	if (trace_ent.takedamage) {
 		lighthit = TRUE;
@@ -1042,77 +1118,132 @@ void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage = {
 		// won't normally see it in NQ mods. But it is there in the
 		// progs.dat in pak0.pak; and it will work in QuakeWorld engines
 		// supporting progs.dat (currently FTE and ZQuake).
-		//
-		if (self.classtype == CT_PLAYER) {
-			if (other.classtype == CT_PLAYER)
-				trace_ent.velocity_z = trace_ent.velocity_z + 400;
-		}
+		if ((self.flags & FL_CLIENT) && (other.flags & FL_CLIENT)) trace_ent.velocity_z = trace_ent.velocity_z + 400;
 	} else {
 		e1 = trace_ent;
-
 		traceline (p1 + f, p2 + f, FALSE, self);
 		if (trace_ent != e1 && trace_ent.takedamage) lighthit = TRUE;
 		else {
 			e2 = trace_ent;
-
 			traceline (p1 - f, p2 - f, FALSE, self);
-			if (trace_ent != e1 && trace_ent != e2 && trace_ent.takedamage)
-				lighthit = TRUE;
+			if (trace_ent != e1 && trace_ent != e2 && trace_ent.takedamage) lighthit = TRUE;
 		}
 	}
 
 	// Found a target to hit?
 	if (lighthit) {
+		if (self.tome_finished && trace_ent) {
+			// Make some extra tome of power spark effects
+			iter = 0;
+			while (iter < 6) {
+				dir = safe_client_forward();
+				make_spark(trace_ent.origin, dir, FALSE); // False to use direction.
+				newmis.velocity_z = 200 + crandom() * 300;
+				newmis.velocity_y = crandom() * 300;
+				newmis.velocity_x = crandom() * 300;
+				newmis.solid = SOLID_NOT;
+				newmis.touch = SUB_Null;
+				newmis.skin = 8;
+				iter = iter + 1;
+			}
+			dmg = dmg * 2; // Double damage
+			if (trace_ent.health < dmg) { // Monster go pop!
+				iter = 0;
+				sound (self, CHAN_AUTO, "rrp/misc/spark.wav", 1, ATTN_STATIC);
+				while (iter < 30) {
+					dir = safe_client_forward();
+					make_spark(trace_ent.origin, dir, FALSE); // False to use direction.
+					if (iter < 15) newmis.velocity_z = 200;
+					else newmis.velocity_z = -200;
+					newmis.velocity_y = crandom() * 100;
+					newmis.velocity_x = crandom() * 100;
+					newmis.solid = SOLID_NOT;
+					newmis.touch = SUB_Null;
+					newmis.skin = 8;
+					iter = iter + 1;
+				}
+			}
+		}
+
 		// Check for any cell/lightning resistance
 		if (trace_ent.resist_cells > 0) {
 			Resist_Effects(trace_ent,trace_endpos,VEC_ORIGIN,0,AM_CELLS,trace_ent.pain_sound,"");
-			if (damage > 0) {
+			if (dmg > 0) {
 				// Need to fool T_Damage that damage is coming from LG
 				temp_classgroup = from.classgroup;
 				from.classgroup = CG_PROJCELLS;
-				T_Damage (trace_ent, from, from, damage, DAMARMOR);
+				T_Damage (trace_ent, from, from, dmg, DAMARMOR);
 				from.classgroup = temp_classgroup;
 			}
 		} else {
 			// Originally used 225 blood colour
-			SpawnBlood(trace_ent, trace_endpos, '0 0 100', damage*4);
-			T_Damage (trace_ent, from, from, damage, DAMARMOR);
+			SpawnBlood(trace_ent, trace_endpos, '0 0 100', dmg*4);
+			T_Damage (trace_ent, from, from, dmg, DAMARMOR);
 		}
+
 		// Check for any lightning reflection abilitites
 		if (trace_ent.reflectlightning) {
-			// Source = Lightning originally came from player
-			LightningReflection(trace_endpos, trace_ent, damage*0.5);
+			dmg = dmg * 0.5; // Lightning splits when reflected...I guess.
+			LightningReflection(trace_endpos, trace_ent, dmg); // Source = Lightning originally came from player
 		}
-	}	
+	} else {
+		if (self.tome_finished) {
+			// Make some extra tome of power spark effects
+			iter = 0;
+			while (iter < 6) {
+				dir = safe_client_forward();	
+				make_spark(trace_endpos, dir * 300, FALSE); // False to use direction.
+				newmis.velocity_z = crandom() * 300;
+				newmis.velocity_y = crandom() * 300;
+				newmis.velocity_x = crandom() * 300;
+				newmis.solid = SOLID_NOT;
+				newmis.touch = SUB_Null;
+				newmis.skin = 8;
+				iter = iter + 1;
+			}
+		}
+	}
 };
 
-
-//----------------------------------------------------------------------
-void() W_FireLightning = {
+void() W_FireLightning = { // [FUNCTION]
 	local vector dir;
-	local float cells;
+	local float cells, ct, iter;
 
-	// Ran out of ammo, switch to next best weapon
-	if (self.ammo_cells < 1) { forceweaponswitch(0.2); return; }
+	if (self.ammo_cells < 1) { forceweaponswitch(0.2); return; } // Ran out of ammo, switch to next best weapon
 
 	// explode if under water
 	if (self.waterlevel > 1) {
-		// Use all cells
-		cells = self.ammo_cells;
-		// Update inventory
-		self.ammo_cells = 0;
-		W_SetCurrentAmmo (self);
-		// Air tank vania item saves player from death
-		if (self.moditems & IT_ARTWETSUIT) {
-			// Impact avoidance sound
-			PlayBlastBeltSound(self);
-			// Death to everything around, except players!
-			T_RadiusDamage (self, self, 35*cells, self, IGNORECLASS);
-			// Reduce player HP down to 50%, no armour saves!
-			T_Damage(self, world, world, self.health*0.5, NOARMOR);
+		cells = self.ammo_cells; 
+		self.currentammo = self.ammo_cells = 0; // Use all cells
+		W_SetCurrentAmmo (self); // Update inventory
+
+		if (self.tome_finished) {
+			// Make some extra tome of power spark effects off the player
+			iter = 0;
+			while (iter < 30) {
+				make_spark(self.origin, VEC_ORIGIN, TRUE); // TRUE for random using Rubicon method.
+				newmis.velocity_z = crandom() * 300;
+				newmis.velocity_y = crandom() * 300;
+				newmis.velocity_x = crandom() * 300;
+				newmis.solid = SOLID_NOT;
+				newmis.touch = SUB_Null;
+				newmis.skin = 8;
+				iter = iter + 1;
+			}
+
+			cells = cells * 2; // Double discharge damage
+			if (cells < 50) cells = 50; // Less than 25 cells is same as 25 cells.
 		}
-		// Default behaviour, death to everything!
-		else T_RadiusDamage (self, self, 35*cells, world, DAMAGEALL);
+
+		if (self.moditems & IT_ARTWETSUIT) {
+			// Air tank vania item saves player from death
+			PlayBlastBeltSound(self); // Impact avoidance sound
+			T_RadiusDamage (self, self, 35*cells, self, IGNORECLASS); // Death to everything around, except players!
+			T_Damage(self, world, world, self.health*0.5, NOARMOR); // Reduce player HP down to 50%, no armour saves!
+		} else {
+			// Default behaviour, death to everything!
+			T_RadiusDamage (self, self, 35*cells, world, DAMAGEALL); 
+		}
 		return;
 	}
 
@@ -1124,12 +1255,10 @@ void() W_FireLightning = {
 	
 	self.currentammo = self.ammo_cells = self.ammo_cells - 1;
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	self.attack_finished = time + 0.2;
+	W_Reload(0.2);
 	self.punchangle_x = -2;
-
 	dir = self.origin + '0 0 16';
 	traceline (dir, dir + v_forward*6000, TRUE, self);
-
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
 	WriteEntity (MSG_BROADCAST, self);
@@ -1139,13 +1268,11 @@ void() W_FireLightning = {
 	WriteCoord (MSG_BROADCAST, trace_endpos_x);
 	WriteCoord (MSG_BROADCAST, trace_endpos_y);
 	WriteCoord (MSG_BROADCAST, trace_endpos_z);
-
-	PlayerLightningDamage (self.origin, trace_endpos + v_forward*4, self, DAMAGE_LGPLAYER);
+	PlayerLightningDamage(self.origin, trace_endpos + v_forward*4, self, DAMAGE_LGPLAYER);
 };
 
-// Fires chain lightning.
-// Replaces 'W_FireLightning' and custom 'W_FireBurstLight'.
-void(float cl) W_FireThunderbolt = {
+// Fires chain lightning.  Replaces 'W_FireLightning' and custom 'W_FireBurstLight'.
+void(float cl) W_FireThunderbolt = { // [FUNCTION]
     local   vector  org;
     local   float   cells, damage;     // Used as ammo cost first, then as damage.
 
@@ -1161,15 +1288,11 @@ void(float cl) W_FireThunderbolt = {
 			// Update inventory
 			self.ammo_cells = 0;
 			W_SetCurrentAmmo (self);
-			// Impact avoidance sound
-			PlayBlastBeltSound(self);
-			// Death to everything around, except players!
-			T_RadiusDamage (self, self, 35*cells, self, IGNORECLASS);
-			// Reduce player HP down to 50%, no armour saves!
-			T_Damage(self, world, world, self.health*0.5, NOARMOR);
-		}
-		else {
-			self.attack_finished = time + 0.2;
+			PlayBlastBeltSound(self); // Impact avoidance sound
+			T_RadiusDamage (self, self, 35*cells, self, IGNORECLASS); // Death to everything around, except players!
+			T_Damage(self, world, world, self.health*0.5, NOARMOR); // Reduce player HP down to 50%, no armour saves!
+		} else {
+			W_Reload(0.2);
 			sound (self, CHAN_WEAPON, SOUND_MISFIRE, 1, ATTN_NORM);
 		}
 		return;
@@ -1197,12 +1320,12 @@ void(float cl) W_FireThunderbolt = {
     org = self.origin + '0 0 16';
 	// Note:  Changing 1st parm won't make lightning start elsewhere from client.
     if (cl)
-        BurstLit_Bolt (self.origin, org + v_forward*600, self, damage, 350);
+        BurstLit_Bolt(self.origin,org + v_forward*6000,self,damage,350); // Always chain
     else
-        LightningBolt (self.origin, org + v_forward*600, self, damage, self, TE_LIGHTNING2, "thunderbolt");
+        LightningBolt(self.origin,org + v_forward*6000,self,damage,self,TE_LIGHTNING2);
 };
 
-void () W_FireMultiGrenade = {
+void () W_FireMultiGrenade = { // [FUNCTION]
 	local vector dir, avel;
 
 	if (self.attack_finished > time) return;
@@ -1212,7 +1335,7 @@ void () W_FireMultiGrenade = {
 	self.currentammo = (self.currentammo - TRUE);
 	sound (self,CHAN_WEAPON,"weapons/grenade.wav",TRUE,ATTN_NORM);
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	self.attack_finished = time + 0.6;
+	W_Reload(0.6);
 	self.punchangle_x = -2;
 	makevectors (self.v_angle);
 	if ( self.v_angle_x ) {
@@ -1226,91 +1349,69 @@ void () W_FireMultiGrenade = {
 	Launch_Grenade(self.origin, dir, avel, CT_PROJ_GLMULTI);
 };
 
-void () W_FireMultiRocket = {
+void () W_FireMultiRocket = { // [FUNCTION]
 	if (self.attack_finished > time) return;
-   self.ammo_multi_rockets = (self.ammo_multi_rockets - TRUE);
-   self.currentammo = (self.currentammo - TRUE);
-   sound (self,CHAN_WEAPON,"weapons/sgun1.wav",TRUE,ATTN_NORM);
-   self.punchangle_x = CONTENT_SOLID;
-   MultiRocketLaunch (-10.000,FL_SWIM);
-   MultiRocketLaunch (CONTENT_LAVA,MOVETYPE_WALK);
-   MultiRocketLaunch (MOVETYPE_FLY,FALSE);
-   MultiRocketLaunch (MOVETYPE_BOUNCE,TRUE);
-	self.attack_finished = time + 0.9;
+	self.ammo_multi_rockets = (self.ammo_multi_rockets - TRUE);
+	self.currentammo = (self.currentammo - TRUE);
+	sound (self,CHAN_WEAPON,"weapons/sgun1.wav",TRUE,ATTN_NORM);
+	self.punchangle_x = CONTENT_SOLID;
+	MultiRocketLaunch (-10.000,FL_SWIM);
+	MultiRocketLaunch (CONTENT_LAVA,MOVETYPE_WALK);
+	MultiRocketLaunch (MOVETYPE_FLY,FALSE);
+	MultiRocketLaunch (MOVETYPE_BOUNCE,TRUE);
+	W_Reload(0.9);
 };
 
-void () W_FirePlasmaGun = {
+void () W_FirePlasmaGun = { // [FUNCTION]
    local entity missile;
 	local float cells;
 
-	if (self.attack_finished > time) return;
-	// Do nothing if weapon is under water
+	if (self.attack_finished > time) return; // Do nothing if weapon is under water
+	
 	if (self.waterlevel > 1) {
-		// Air tank vania item wil explode weapon instead
-		if (self.moditems & IT_ARTWETSUIT) {
-			// Use all cells
-			cells = self.ammo_cells;
-			// Update inventory
-			self.ammo_cells = 0;
+		if (self.moditems & IT_ARTWETSUIT) { // Air tank vania item wil explode weapon instead
+			cells = self.ammo_cells; // Use all cells
+			self.ammo_cells = 0; // Update inventory
 			W_SetCurrentAmmo (self);
-			// Impact avoidance sound
-			PlayBlastBeltSound(self);
-			// Death to everything around, except players!
-			T_RadiusDamage (self, self, 35*cells, self, IGNORECLASS);
-			// Reduce player HP down to 50%, no armour saves!
-			T_Damage(self, world, world, self.health*0.5, NOARMOR);
-		}
-		else {
-			self.attack_finished = time + 0.2;
+			PlayBlastBeltSound(self); // Impact avoidance sound
+			T_RadiusDamage (self, self, 35*cells, self, IGNORECLASS); // Death to everything around, except players!
+			T_Damage(self, world, world, self.health*0.5, NOARMOR); // Reduce player HP down to 50%, no armour saves!
+		} else {
+			W_Reload(0.2);
 			sound (self, CHAN_WEAPON, SOUND_MISFIRE, 1, ATTN_NORM);
 		}
 		return;
 	}
 
-   self.ammo_plasma = (self.ammo_plasma - TRUE);
-   self.currentammo = (self.currentammo - TRUE);
-   sound (self,CHAN_WEAPON,"rogue/plasma/fire.wav",0.500,ATTN_NORM);
-   self.punchangle_x = CONTENT_SOLID;
-   missile = spawn ();
+	self.ammo_plasma = (self.ammo_plasma - TRUE);
+	self.currentammo = (self.currentammo - TRUE);
+	sound (self,CHAN_WEAPON,"rogue/plasma/fire.wav",0.500,ATTN_NORM);
+	self.punchangle_x = CONTENT_SOLID;
+	missile = spawn ();
 	missile.classgroup = CG_PROJCELLS;
-   missile.owner = self;
-   missile.movetype = MOVETYPE_FLYMISSILE;
-   missile.solid = SOLID_BBOX;
-   missile.classname = "plasma";
-   makevectors (self.v_angle);
-   missile.velocity = aim (self,1250);
-   missile.velocity = (missile.velocity * 1250);
-   missile.avelocity = '300.000 300.000 300.000';
-   missile.angles = vectoangles (missile.velocity);
-   missile.touch = PlasmaTouch;
-   setmodel (missile,"progs/plasma.mdl");
-   setsize (missile,VEC_ORIGIN,VEC_ORIGIN);
-   setorigin (missile,((self.origin + (v_forward * FL_CLIENT)) + '0.000 0.000 16.000'));
-   sound (missile,CHAN_WEAPON,"rogue/plasma/flight.wav",TRUE,ATTN_NORM);
-   missile.think = PlasmaGroundOut;
-   missile.nextthink = (time + MOVETYPE_FLY);
-   self.attack_finished = time + 0.8;
+	missile.owner = self;
+	missile.movetype = MOVETYPE_FLYMISSILE;
+	missile.solid = SOLID_BBOX;
+	missile.classname = "plasma";
+	makevectors (self.v_angle);
+	missile.velocity = aim (self,1250);
+	missile.velocity = (missile.velocity * 1250);
+	missile.avelocity = '300.000 300.000 300.000';
+	missile.angles = vectoangles (missile.velocity);
+	missile.touch = PlasmaTouch;
+	setmodel (missile,"progs/plasma.mdl");
+	setsize (missile,VEC_ORIGIN,VEC_ORIGIN);
+	setorigin (missile,((self.origin + (v_forward * FL_CLIENT)) + '0.000 0.000 16.000'));
+	sound (missile,CHAN_WEAPON,"rogue/plasma/flight.wav",TRUE,ATTN_NORM);
+	missile.think = PlasmaGroundOut;
+	missile.nextthink = (time + MOVETYPE_FLY);
+	W_Reload(0.8);
 };
 
-// PLAYER WEAPON UPDATES AND AMMO CHECKS
-// W_SetCurrentAmmo   - Update HUD icons based on self.weapon value
-// W_BestWeapon       - returns best weapon LG > SNG > SSG > NG > SG > Axe, interesting that the function does not return GL/RL
-// W_CheckNoAmmo      - Ammo check for attack function
-// W_Attack           - Main function that fire weapons (player animations).  Will automatically wakeup any nearby monsters
-// W_ChangeWeapon     - Change weapon based on availabilty and ammo
-// CycleWeaponCommand - Move forward or backward through active weapons
-// CycleWeaponReverseCommand
-// W_WeaponFrame      - Called every frame, catches impulse event
-// SuperDamageSound   - Plays quad damage sound
+void(entity targ) W_SetCurrentAmmo = { // [FUNCTION]
+	if (frame_pause()) return; // intermission, cinematic, or finale
 
-void(entity targ) W_SetCurrentAmmo = {
-	if (intermission_running > 0) return;	// intermission or finale
-	if (cinematic_running > 0) return;		// Remote camera active
-	remoteplayer_run (targ);			// get out of any weapon firing states
-
-	// dprint("\b[self.weapon\b = ");
-	// dprint(ftos(self.weapon));
-	// dprint("\n");
+	remoteplayer_run(targ);	// Get out of any weapon firing states.
 	if (!targ.selfweaponismoditems) {
 		if (targ.weapon == IT_AXE) {
 			targ.currentammo = 0;
@@ -1328,8 +1429,7 @@ void(entity targ) W_SetCurrentAmmo = {
 				if (targ.items & IT_SHOTGUN) {
 					targ.weaponmodel = MODEL_VWEAP_SG;
 				} else {
-					// This is also called no axe startup option
-					// Cinematic mode, no viewmodel
+					// This is also called no axe startup option.  Cinematic mode, no viewmodel
 					targ.weaponmodel = "";
 					targ.currentammo = 0;
 				}
@@ -1364,7 +1464,11 @@ void(entity targ) W_SetCurrentAmmo = {
 			targ.weaponmodel = MODEL_VWEAP_MULTR;
 		} else if (targ.weapon == IT_ROCKET_LAUNCHER) {
 			targ.currentammo = targ.ammo_rockets;
-			targ.weaponmodel = MODEL_VWEAP_RL;
+			if (targ.moditems & IT3_MIRV) {
+				targ.weaponmodel = "progs/drake/v_mirv.mdl";
+			} else {
+				targ.weaponmodel = MODEL_VWEAP_RL;
+			}
 		} else if (targ.weapon == IT_LIGHTNING) {
 			targ.currentammo = targ.ammo_cells;
 			if (targ.moditems & IT_UPGRADE_LG) targ.weaponmodel = MODEL_VWEAP_UPLG;
@@ -1379,12 +1483,17 @@ void(entity targ) W_SetCurrentAmmo = {
 			targ.currentammo = targ.ammo_cells;
 			targ.weaponmodel = "progs/hipnotic/v_laserg.mdl";
 		} else if (targ.weapon == IT_EXTRA_WEAPON) {
-			if (targ.ammo_poison > 0) {
-				targ.currentammo = targ.ammo_poison;
-				targ.weaponmodel = "progs/its/v_crossbow2.mdl";
-			} else {
+			if (targ.perms & IT_FROSTBOW) {
 				targ.currentammo = targ.ammo_bolts;
-				targ.weaponmodel = "progs/its/v_crossbow1.mdl";
+				targ.weaponmodel = "progs/drake/v_xbow.mdl";
+			} else {
+				if (targ.ammo_poison > 0) {
+					targ.currentammo = targ.ammo_poison;
+					targ.weaponmodel = "progs/its/v_crossbow2.mdl";
+				} else {
+					targ.currentammo = targ.ammo_bolts;
+					targ.weaponmodel = "progs/its/v_crossbow1.mdl";
+				}
 			}
 		} else if (targ.weapon == IT2_MJOLNIR) {
 			targ.currentammo = targ.ammo_cells;
@@ -1409,8 +1518,7 @@ void(entity targ) W_SetCurrentAmmo = {
 			targ.currentammo = targ.ammo_bloodcrystals;
 			targ.weaponmodel = "progs/aoa/v_rapier.mdl";
 		} else {
-			// This is also called no axe startup option
-			// Cinematic mode, no viewmodel
+			// This is also called no axe startup option.  Cinematic mode, no viewmodel.
 			targ.currentammo = 0;
 			targ.weaponmodel = "";
 		}
@@ -1430,66 +1538,43 @@ void(entity targ) W_SetCurrentAmmo = {
 		} else if (targ.weapon == IT_GUNGNIR) {
 			targ.currentammo = targ.ammo_voidshards;
 			targ.weaponmodel = "progs/aoa/v_gungnir.mdl";
+		} else if (targ.weapon == IT_AIRGUN) {
+			targ.currentammo = 0;
+			targ.weaponmodel = "progs/airfist/v_airgun.mdl";
 		} else {
-			// This is also called no axe startup option
-			// Cinematic mode, no viewmodel
+			// This is also called no axe startup option.  Cinematic mode, no viewmodel.
 			targ.currentammo = 0;
 			targ.weaponmodel = "";
 		}
 	}
-	// if (targ.weapon != IT_MACE && targ.weapon != IT_ICE && targ.weapon != IT_SCIMITAR && targ.weapon != IT_GUNGNIR && targ.weapon != IT_RAPIER && targ.weapon != IT_SANGUINATORS && targ.weapon != IT_VOID_STAFF)
-		// targ.weaponframe = 0;		// reset weapon frame, but not for Arms of Asgard weapons
 };
 
-/*======================================================================
- Return best weapon based on current ammo quantities, excludes rockets and multi-rockets for obvious heat of the moment self inflicted damage avoidance
-======================================================================*/
-float(entity targ) W_BestWeapon =
-{
-
-	if (targ.waterlevel < 1 && targ.ammo_cells > 0 && (targ.items & IT2_LASER_CANNON) )
-			return IT2_LASER_CANNON;
-	if (targ.waterlevel < 1 && targ.ammo_cells > 0 && (targ.items2 & IT2_CHAINLIGHTNING) )
-			return IT2_CHAINLIGHTNING;
-	if (targ.waterlevel < 1 && targ.ammo_cells > 0 && (targ.items & IT_LIGHTNING) )
-			return IT_LIGHTNING;
-	if (targ.waterlevel < 1 && targ.ammo_cells > 0 && (targ.items & IT2_MJOLNIR) )
-			return IT2_MJOLNIR;
-	if (targ.ammo_bloodcrystals > 0 && (targ.items & IT_SANGUINATORS) )
-			return IT_SANGUINATORS;
-	if(targ.ammo_lava_nails > 1 && (targ.items & IT_LAVA_SUPER_NAILGUN) )
-		return IT_LAVA_SUPER_NAILGUN;
-	if(targ.ammo_nails > 1 && (targ.items & IT_SUPER_NAILGUN) )
-		return IT_SUPER_NAILGUN;
-	if(targ.ammo_lava_nails > 1 && (targ.items & IT_LAVA_NAILGUN) )
-		return IT_LAVA_NAILGUN;
-	if (targ.ammo_elemental > 0 && (targ.items & IT_SCIMITAR) )
-			return IT_SCIMITAR;
-	if(targ.ammo_bolts > 1 && (targ.items & IT_EXTRA_WEAPON) )
-		return IT_EXTRA_WEAPON;
-	if (targ.ammo_bloodcrystals > 0 && (targ.items & IT_SANGUINATORS) )
-			return IT_SANGUINATORS;
-	if(targ.ammo_shells > 2 && (targ.items & IT_SUPER_SHOTGUN) )
-		return IT_SUPER_SHOTGUN; // greater than 2 in case of upgrade triple shotgun Widowmaker
-	if(targ.ammo_nails > 0 && (targ.items & IT_NAILGUN) )
-		return IT_NAILGUN;
-	if(targ.ammo_shells > 0 && (targ.items & IT_SHOTGUN || targ.perms | IT_BLASTER) )
-		return IT_SHOTGUN;
-	if (targ.waterlevel > 0 && targ.ammo_cells < 1 && (targ.items & IT2_MJOLNIR) )
-			return IT2_MJOLNIR;
-	if (targ.items & IT_AXE)
-		return IT_AXE;
-	if (targ.items2 & IT2_CROSS)
-		return IT2_CROSS; // WAND
-
+// Return best weapon based on current ammo quantities, excludes rockets and multi-rockets for obvious heat of the moment self inflicted damage avoidance
+float(entity targ) W_BestWeapon = { // [FUNCTION]
+	if (targ.waterlevel < 1 && targ.ammo_cells > 0 && (targ.items & IT2_LASER_CANNON) ) return IT2_LASER_CANNON;
+	if (targ.waterlevel < 1 && targ.ammo_cells > 0 && (targ.items2 & IT2_CHAINLIGHTNING) ) return IT2_CHAINLIGHTNING;
+	if (targ.waterlevel < 1 && targ.ammo_cells > 0 && (targ.items & IT_LIGHTNING) ) return IT_LIGHTNING;
+	if (targ.waterlevel < 1 && targ.ammo_cells > 0 && (targ.items & IT2_MJOLNIR) ) return IT2_MJOLNIR;
+	if (targ.ammo_bloodcrystals > 0 && (targ.items & IT_SANGUINATORS) ) return IT_SANGUINATORS;
+	if(targ.ammo_lava_nails > 1 && (targ.items & IT_LAVA_SUPER_NAILGUN) ) return IT_LAVA_SUPER_NAILGUN;
+	if(targ.ammo_nails > 1 && (targ.items & IT_SUPER_NAILGUN) ) return IT_SUPER_NAILGUN;
+	if(targ.ammo_lava_nails > 1 && (targ.items & IT_LAVA_NAILGUN) ) return IT_LAVA_NAILGUN;
+	if (targ.ammo_elemental > 0 && (targ.items & IT_SCIMITAR) ) return IT_SCIMITAR;
+	if(targ.ammo_bolts > 1 && (targ.items & IT_EXTRA_WEAPON) ) return IT_EXTRA_WEAPON;
+	if (targ.ammo_bloodcrystals > 0 && (targ.items & IT_SANGUINATORS) ) return IT_SANGUINATORS;
+	if(targ.ammo_shells > 2 && (targ.items & IT_SUPER_SHOTGUN) ) return IT_SUPER_SHOTGUN; // greater than 2 in case of upgraded triple shotgun Widowmaker
+	if(targ.ammo_nails > 0 && (targ.items & IT_NAILGUN) ) return IT_NAILGUN;
+	if(targ.ammo_shells > 0 && (targ.items & IT_SHOTGUN || targ.perms | IT_BLASTER) ) return IT_SHOTGUN;
+	if (targ.waterlevel > 0 && targ.ammo_cells < 1 && (targ.items & IT2_MJOLNIR) ) return IT2_MJOLNIR;
+	if (targ.items & IT_AXE) return IT_AXE;
+	if (targ.items2 & IT2_CROSS) return IT2_CROSS; // WAND
 	return FALSE;
 };
 
-//----------------------------------------------------------------------
-float(entity targ) W_CheckNoAmmo = {
+float(entity targ) W_CheckNoAmmo = { // [FUNCTION]
 	if (targ.selfweaponismoditems) {
 		if (targ.weapon == IT_FLAK) targ.currentammo = CountFlakAmmo(targ);
-		if (targ.weapon == IT_GUNGNIR || targ.weapon == IT_MACE) return TRUE;
+		if (targ.weapon == IT_GUNGNIR || targ.weapon == IT_MACE || targ.weapon == IT_AIRGUN) return TRUE;
 	} else {
 		if (targ.weapon == IT_AXE || targ.weapon == IT2_MJOLNIR || targ.weapon == IT2_CROSS || targ.weapon == IT2_GRAPPLE || targ.weapon == IT_RAPIER || targ.weapon == IT_SCIMITAR) return TRUE;
 	}
@@ -1498,51 +1583,38 @@ float(entity targ) W_CheckNoAmmo = {
 
 	targ.weapon = W_BestWeapon (targ);
 	W_SetCurrentAmmo (targ);
-	
-	// drop the weapon down
-	return FALSE;
+	return FALSE; // drop the weapon down
 };
 
-void() player_lava_nail1;
-void() player_lava_snail1;
+void(float reload) W_Reload = { // [FUNCTION]
+	if ((self.flags & FL_CLIENT) && self.perms & POW_HASTE) reload = reload / 2;
+	if (reload < 0.05) reload = 0.05; // Minimum value, to prevent near zero from Haste, Shotty, and Tome of Power stacking up.
+	if (reload > 10) reload = 10; // Just in case, this is a rather ridiculous value anyway.
+	if (self.slow_finished > time) reload = reload * 1.5; //Such a slog, we are cold
+    self.attack_finished = time + reload;
+};
 
-/*======================================================================
-W_Attack
-======================================================================*/
-void() W_Attack = {
-	// dprint("\bself.weapon\b = ");
-	// dprint(ftos(self.weapon));
-	// dprint(", \bself.currentammo\b =");
-	// dprint(ftos(self.currentammo));
-	// dprint(", \bself.selfweaponismoditems\b =");
-	// dprint(ftos(self.selfweaponismoditems));
-	// dprint("\n");
-
+void() W_Attack = { // [FUNCTION]
 	if (intermission_running > 0) return;	// intermission or finale
 	if (cinematic_running > 0) return;		// Remote camera active
 	if ( !W_CheckNoAmmo(self) ) return;		// Out of ammo?
 
 	makevectors	(self.v_angle);		// calculate forward angle for velocity
-
-	// dprint("We have ammo\n");
-
-	if (self.weapon != IT_EXTRA_WEAPON && self.weapon != IT_AXE)
-		self.show_hostile = time + 1;	// wake monsters up
-
+	if (((self.weapon != IT_EXTRA_WEAPON && !self.selfweaponismoditems) || (self.perms & IT_FROSTBOW && self.weapon == IT_EXTRA_WEAPON && !self.selfweaponismoditems)) && self.weapon != IT_AXE && !self.selfweaponismoditems) self.show_hostile = time + 1;	// wake monsters up
+    self.b0_click = 0;
 	if (!self.selfweaponismoditems) {
 		if (self.weapon == IT_AXE) {
-			if (self.perms & IT_CHAINSAW) {
-				// Chainsaw (overrides axes once acquired)
-				player_saw1 ();
-				self.attack_finished = time + 0.55;
+			if (self.perms & IT_CHAINSAW) { // Chainsaw overrides axes once acquired.
+				player_saw1(); 
+				W_Reload(0.55);
 				sound (self, CHAN_AUTO, "zerstorer/weapons/sawatck.wav", 1, ATTN_NORM);
 				self.show_hostile = time + 1; // wake monsters up, we hit stuff
 			} else {
 				// Axe and Shadowaxe
 				if (random() < 0.5) sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE1, 1, ATTN_NORM);
 				else sound (self, CHAN_WEAPON, SOUND_AXE_SWIPE2, 1, ATTN_NORM);
-				// Work out which axe swing to play (never play swing twice in a row)
-				self.lip = self.meleeattack;
+				
+				self.lip = self.meleeattack; // Work out which axe swing to play (never play swing twice in a row)
 				while (self.meleeattack == self.lip) {
 					self.lip = rint(random()*4.4);
 				}
@@ -1554,23 +1626,20 @@ void() W_Attack = {
 					else if (self.meleeattack == 3) player_axed1();
 					else player_axee1();
 				} else {
-					if (self.meleeattack == 0) player_axeold1();
-					else if (self.meleeattack == 1) player_axeoldb1();
+					if (self.meleeattack == 0) player_axe1();
+					else if (self.meleeattack == 1) player_axeb1();
 					else if (self.meleeattack == 2) player_axeoldc1();
 					else player_axeoldd1();
 				}	
-				self.attack_finished = time + 0.5;
+				W_Reload(0.5);
 			}
-		}
-		//----------------------------------------------------------------------
-		else if (self.weapon == IT_SHOTGUN) {
+		} else if (self.weapon == IT_SHOTGUN) {
 			if (self.perms & IT_BLASTER) {
 				player_blast1(); // use laser blaster only once we have it, still uses shells
 			} else {
 				player_sg1(); // use standard single barrel shotgun
 			}
-		}
-		else if (self.weapon == IT_SUPER_SHOTGUN) { player_supersg1(); }
+		} else if (self.weapon == IT_SUPER_SHOTGUN) { player_supersg1(); }
 		else if (self.weapon == IT_NAILGUN) { player_nail1(); }
 		else if (self.weapon == IT_LAVA_NAILGUN) { player_lava_nail1(); self.lavaGunFired = TRUE; }
 		else if (self.weapon == IT_SUPER_NAILGUN) { player_snail1(); }
@@ -1578,27 +1647,40 @@ void() W_Attack = {
 		else if (self.weapon == IT_MULTI_GRENADE) { player_multi_grenade1(); }
 		else if (self.weapon == IT_GRENADE_LAUNCHER) { player_grenade1(); }
 		else if (self.weapon == IT_MULTI_ROCKET) { player_multi_rocket1(); }
-		else if (self.weapon == IT_ROCKET_LAUNCHER) { player_rocket1();}
-		else if (self.weapon == IT_PLASMA_GUN) { player_plasmalight1(); }
+		else if (self.weapon == IT_ROCKET_LAUNCHER) {
+			if (self.moditems & IT3_MIRV) {
+				player_bfg1();
+				if (self.ammo_rockets >= COST_MIRV) {
+					W_FireStinger();
+					W_Reload(1.5);
+				} else W_FireRocket();
+			} else {
+				player_rocket1();
+			}
+		} else if (self.weapon == IT_PLASMA_GUN) { player_plasmalight1(); }
 		else if (self.weapon == IT_LIGHTNING) {
 			if (self.moditems & IT_UPGRADE_LG) player_plasma1();
 			else {
 				player_light1(); 
 				sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM); 
 			}
-		}
-		else if (self.weapon == IT_EXTRA_WEAPON) player_crossbow1();
-		else if (self.weapon == IT2_LASER_CANNON) player_laser1();
+		} else if (self.weapon == IT_EXTRA_WEAPON) {
+			if (self.perms & IT_FROSTBOW) {
+				player_xbow1();
+				W_Reload(0.8);
+			} else {
+				player_crossbow1();
+			}
+		} else if (self.weapon == IT2_LASER_CANNON) player_laser1();
 		else if (self.weapon == IT2_MJOLNIR) {
-			if (self.ammo_cells < 30) {
-				self.attack_finished = time + 0.4;
+			if (self.ammo_cells < COST_MJOLNIR) {
+				W_Reload(0.4);
 				player_hammer1();
 			} else {
-				self.attack_finished = time + 0.4;
+				W_Reload(0.4);
 				player_mjolnir1();
 			}
-		}
-		else if (self.weapon == IT2_GRAPPLE) {
+		} else if (self.weapon == IT2_GRAPPLE) {
 				if (self.hook) {
 					// Assume hook was improperly removed, so reset links.
 					if (!self.hook.modelindex) {   
@@ -1606,88 +1688,58 @@ void() W_Attack = {
 						player_grapple1 ();
 						return;
 					}
-					if (self.hook.count)
-						return;
+					if (self.hook.count) return;
 					player_grapple3 ();
-				}
-				else
-					player_grapple1 ();
-				// Modified animation takes three frames to complete.
-				self.attack_finished = time + 0.3;
-		}
-		else if (self.weapon == IT2_PROXIMITY_GUN) {
-			player_prox_grenade1();
-			/*           player_rocket1();
-				if (self.tome_finished)
-				{   W_FireHydra();
-					W_Reload (1.5);
-				}
-				else
-				{   W_FireSidewinder();
-					W_Reload (1);
-				}
-			*/
-		}
-		else if (self.weapon == IT2_CHAINLIGHTNING) {
-			// Quake cannot draw very many bolts, so rapid-fire like
-			// normal Thunderbolt is a bad idea.
-			// Update 11/20/09:  Use DoE plasma code with fewer bolts.
-			//  We may be able to stay under limits (24 bolts).
-			//if (self.tome_finished) { TODO: Uncomment this if statement once I figure out if tome_finished is a viable powerup from Drake?
-			//	player_snake1 ();
-			//	W_FireDeathRay ();
-			//	W_Reload (0.4);
-			//} else {
-				player_chainlight1();
-				self.attack_finished = time + 0.1;
-				sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
-			//}
+				} else player_grapple1 ();
+
+				// Modified animation takes three frames to complete, hence 0.3 for 0.1 * 3.
+				W_Reload(0.3);
+		} else if (self.weapon == IT2_PROXIMITY_GUN) {
+			if (self.tome_finished) {
+				W_FireHydra();
+				W_Reload(1.5);
+			} else {
+				if (self.perms & IT_SIDEWINDER) { W_FireSidewinder(); W_Reload(1); }
+				else player_prox_grenade1();
+			}
+		} else if (self.weapon == IT2_CHAINLIGHTNING) {
+			player_chainlight1();
+			W_Reload(0.1);
+			sound (self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM);
 		} else if (self.weapon == IT2_CROSS) {
 			player_wand1();
 			W_FireSparks();
-		} else if (self.weapon == IT_SANGUINATORS) {
-			W_FireSanguinators();
-		}
-		else if (self.weapon == IT_SCIMITAR) {
-			W_FireScimitar(); 
-		} else if (self.weapon == IT_RAPIER) {
-			W_FireRapier();
-		}
+		} else if (self.weapon == IT_SANGUINATORS) W_FireSanguinators();
+		else if (self.weapon == IT_SCIMITAR) W_FireScimitar(); 
+		else if (self.weapon == IT_RAPIER) W_FireRapier();
 	} else {
 		if (self.weapon == IT_ICE) { W_FireIce(); }
 		else if (self.weapon == IT_MACE) { W_FireMace(); }
 		else if (self.weapon == IT_VOID_STAFF) { W_FireVoidStaff(); }
 		else if (self.weapon == IT_FLAK) { W_FireFlak(); }
 		else if (self.weapon == IT_GUNGNIR) { W_FireGungnir(); }
+		else if (self.weapon == IT_AIRGUN) { W_FireAirFist(); } // Fire the Airfist weapon
 	}
 };
 
-float (entity targ, float testValue) InItems = {
-   if ( (targ.items & testValue) )
-      return ( TRUE );
-
-   return ( FALSE );
+float (entity targ, float testValue) InItems = { // [FUNCTION]
+   if (targ.items & testValue) return TRUE;
+   return FALSE;
 };
 
-float (entity targ, float testValue) InItems2 = {
-   if ( (targ.items2 & testValue) )
-      return ( TRUE );
-
-   return ( FALSE );
+float (entity targ, float testValue) InItems2 = { // [FUNCTION]
+   if (targ.items2 & testValue) return TRUE;
+   return FALSE;
 };
 
-float (entity targ, float testValue) InModItems = {
-   if ( (targ.moditems & testValue) )
-      return ( TRUE );
-
-   return ( FALSE );
+float (entity targ, float testValue) InModItems = { // [FUNCTION]
+   if (targ.moditems & testValue) return TRUE;
+   return FALSE;
 };
 
-float (entity targ, float testValue) InPerms = {
-   if ( (targ.perms & testValue) )
-      return ( TRUE );
-
-   return ( FALSE );
+float (entity targ, float testValue) InPerms = { // [FUNCTION]
+   if (targ.perms & testValue) return TRUE;
+   return FALSE;
 };
 
 float IN_ITEMS1 = 1;
@@ -1699,7 +1751,7 @@ float IN_ITEMS2_HACKBANK = 32;
 float IN_MODITEMS_HACKBANK = 64;
 float IN_PERMS_HACKBANK = 128;
 
-float (float mask, entity targ, float testValue) InAnyItems = {
+float (float mask, entity targ, float testValue) InAnyItems = { // [FUNCTION]
 	if (mask == IN_ITEMS1) return InItems(targ,testValue);
 	if (mask == IN_ITEMS2) return InItems2(targ,testValue);
 	if (mask == IN_MODITEMS) return InModItems(targ,testValue);
@@ -1719,7 +1771,7 @@ float (float mask, entity targ, float testValue) InAnyItems = {
 // wep2 = 2nd weapon in this keybind's slot
 // wep3 = 3rd weapon in this keybind's slot
 // wep1initems = bitmask to specify whether to use self.items, self.items2, self.moditems, or self.perms
-vector (entity targ, float wep1, float wep2, float wep3, float wep1initems, float wep2initems, float wep3initems) WeaponSlotPickOneOfThree = {
+vector (entity targ, float wep1, float wep2, float wep3, float wep1initems, float wep2initems, float wep3initems) WeaponSlotPickOneOfThree = { // [FUNCTION]
 	local vector retvec;
 	local float fl, gotgun, gotgun1, gotgun2, gotgun3, am;
 	local float inhackbank;
@@ -1794,8 +1846,8 @@ vector (entity targ, float wep1, float wep2, float wep3, float wep1initems, floa
 	return retvec;
 };
 
-// FOUR WEAPONS ON THE SAME KEYBOARD KEY!!!
-vector (entity targ, float wep1, float wep2, float wep3, float wep4, float wep1initems, float wep2initems, float wep3initems, float wep4initems) WeaponSlotPickOneOfFour = {
+// FOUR WEAPONS ON THE SAME KEYBOARD KEY!!!  Good lawdy we need a bigger keyboard!
+vector (entity targ, float wep1, float wep2, float wep3, float wep4, float wep1initems, float wep2initems, float wep3initems, float wep4initems) WeaponSlotPickOneOfFour = { // [FUNCTION]
 	local vector retvec;
 	local float fl, gotgun, gotgun1, gotgun2, gotgun3, gotgun4, am;
 	local float inhackbank;
@@ -1889,30 +1941,17 @@ vector (entity targ, float wep1, float wep2, float wep3, float wep4, float wep1i
 	return retvec;
 };
 
-/*======================================================================
- W_ChangeWeapon
- Check if got weapon and ammo and switch to relevant weapon
-======================================================================*/
-void(entity targ) W_ChangeWeapon = {
-	// local float it, it2, am, fl;
-	local float am, fl;
-	local float gotgun;
-	// local float gotprox;
-	// local float gotgren;
-	// local float gotmultgren;
-	local float inhackbank;
+// Check if got weapon and ammo and switch to relevant weapon
+void(entity targ) W_ChangeWeapon = { // [FUNCTION]
+	local float am, fl, gotgun, inhackbank;
 	local vector checkvec;
 	
 	if (intermission_running > 0) return;	// intermission or finale
 	if (cinematic_running > 0) return;		// Remote camera active
-	// it = targ.items;
-	// it2 = targ.items2;
+
 	am = FALSE;
 	checkvec = VEC_ORIGIN;
 	inhackbank = FALSE; // Assume we aren't looking into the hack bank of 2nd set of 24 weapons
-	// gotprox = InItems2(targ, IT2_PROXIMITY_GUN);
-	// gotgren = InItems(targ, IT_GRENADE_LAUNCHER);
-	// gotmultgren = InItems(targ, IT_MULTI_GRENADE);
 	gotgun = FALSE;
 	if (targ.impulse == 1) {
 		checkvec = WeaponSlotPickOneOfThree(targ, IT_AXE, IT2_GRAPPLE, IT_MACE, IN_ITEMS1, IN_ITEMS2, IN_MODITEMS_HACKBANK);
@@ -1926,28 +1965,8 @@ void(entity targ) W_ChangeWeapon = {
 		if (fl == IT_MACE) {
 			if (targ.ammo_bloodcrystals < 1) am = TRUE; // no ammo
 		}
-
-		// if (fl == IT_NOWEAPON) {
-			// if (0 < 1) am = TRUE; // no ammo
-		// }
-
-		// if ((targ.items2 & IT2_GRAPPLE) && (targ.weapon == IT_AXE)) {
-			// fl = IT2_GRAPPLE;
-			// gotgun = InItems2(targ, fl);
-		// } else {
-			// fl = IT_AXE;
-			// gotgun = InItems(targ, IT_AXE);
-			// if (InModItems(targ, IT_UPGRADE_AXE)) gotgun = TRUE;
-			// if (self.perms & IT_CHAINSAW) gotgun = TRUE;
-		// }
-
-		// if ( !(targ.items & IT_AXE)) {
-			// fl = IT2_GRAPPLE;
-			// gotgun = InItems2(targ, fl);
-		// }
-	}
-	else if (targ.impulse == 2) {
-		checkvec = WeaponSlotPickOneOfThree(targ, IT_SHOTGUN, IT_ICE, 0, IN_ITEMS1, IN_MODITEMS_HACKBANK, 0);
+	} else if (targ.impulse == 2) {
+		checkvec = WeaponSlotPickOneOfThree(targ, IT_SHOTGUN, IT_ICE, IT_AIRGUN, IN_ITEMS1, IN_MODITEMS_HACKBANK, IN_PERMS_HACKBANK);
 		fl = checkvec_x;
 		gotgun = checkvec_y;
 		inhackbank = checkvec_z;
@@ -1957,26 +1976,7 @@ void(entity targ) W_ChangeWeapon = {
 		if (fl == IT_ICE) {
 			if (targ.ammo_elemental < 1) am = TRUE; // no ammo
 		}
-		// if (fl == IT_NOWEAPON) {
-			// if (0 < 1) am = TRUE; // no ammo
-		// }
-
-
-		// if (targ.weapon == IT_SHOTGUN || (InItems(targ,IT_ICE) && targ.weapon != IT_ICE)) {
-			// fl = IT_ICE;
-			// if (targ.ammo_elemental < 1) am = TRUE;
-			// gotgun = InItems(targ, fl);
-		// } else {
-			// fl = IT_SHOTGUN;
-			// if (targ.ammo_shells < 1) am = TRUE;
-			// gotgun = InItems(targ, fl);
-		// }
-
-		// fl = IT_SHOTGUN;
-		// if (targ.ammo_shells < 1) am = TRUE;
-		// gotgun = InItems(targ, IT_SHOTGUN);
-	}
-	else if (targ.impulse == 3) {
+	} else if (targ.impulse == 3) {
 		checkvec = WeaponSlotPickOneOfThree(targ, IT_SUPER_SHOTGUN, IT_SCIMITAR, 0, IN_ITEMS1, IN_MODITEMS, 0);
 		fl = checkvec_x;
 		gotgun = checkvec_y;
@@ -1987,18 +1987,8 @@ void(entity targ) W_ChangeWeapon = {
 		if (fl == IT_SCIMITAR) {
 			if (targ.ammo_elemental < 1) am = TRUE; // no ammo
 		}
-
-		// if (fl == IT_NOWEAPON) {
-			// if (0 < 1) am = TRUE; // no ammo
-		// }
-
-		// fl = IT_SUPER_SHOTGUN;
-		// if (targ.ammo_shells < 2) am = TRUE;
-		// gotgun = InItems(targ, IT_SUPER_SHOTGUN);
-		// if (InModItems(targ, IT_UPGRADE_SSG)) gotgun = TRUE;
-	}		
-	else if (targ.impulse == 4) {
-		checkvec = WeaponSlotPickOneOfThree(targ, IT_NAILGUN, IT_LAVA_NAILGUN, IT_RAPIER, IN_ITEMS1, IN_ITEMS1, IN_MODITEMS);
+	} else if (targ.impulse == 4) {
+		checkvec = WeaponSlotPickOneOfThree(targ, IT_NAILGUN, IT_RAPIER, IT_LAVA_NAILGUN , IN_ITEMS1, IN_MODITEMS, IN_ITEMS1);
 		fl = checkvec_x;
 		gotgun = checkvec_y;
 		inhackbank = checkvec_z;
@@ -2010,32 +2000,8 @@ void(entity targ) W_ChangeWeapon = {
 		}
 		if (fl == IT_RAPIER) {
 			am = FALSE; // not using ammo right now
-			// if (targ.ammo_ SOMETHING? < 1) am = TRUE; // no ammo
 		}
-
-
-		// if (targ.weapon == IT_NAILGUN || (InItems(targ,IT_LAVA_NAILGUN) && targ.weapon != IT_LAVA_NAILGUN)) {
-			// fl = IT_LAVA_NAILGUN;
-			// if (targ.ammo_lava_nails < 1) am = TRUE;
-			// gotgun = InItems(targ, fl);
-		// } else {
-			// fl = IT_NAILGUN;
-			// if (targ.ammo_nails < 1) am = TRUE;
-			// gotgun = InItems(targ, fl);
-		// }
-		
-		/*
-		if ((targ.items & IT_LAVA_NAILGUN) &&(targ.weapon == IT_NAILGUN) || (targ.ammo_nails < 1)) {
-			fl = IT_LAVA_NAILGUN;
-			if (targ.ammo_lava_nails < 1) am = TRUE;
-			gotgun = InItems(targ, fl);
-		} else {
-			fl = IT_NAILGUN;
-			if (targ.ammo_nails < 1) am = TRUE;
-			gotgun = InItems(targ, fl);
-		}*/
-	}
-	else if (targ.impulse == 5) {
+	} else if (targ.impulse == 5) {
 		checkvec = WeaponSlotPickOneOfThree(targ, IT_SUPER_NAILGUN, IT_LAVA_SUPER_NAILGUN, IT_VOID_STAFF, IN_ITEMS1, IN_ITEMS1, IN_MODITEMS_HACKBANK);
 		fl = checkvec_x;
 		gotgun = checkvec_y;
@@ -2049,116 +2015,21 @@ void(entity targ) W_ChangeWeapon = {
 		if (fl == IT_VOID_STAFF) {
 			if (targ.ammo_voidshards < 1) am = TRUE; // no ammo
 		}
-
-		// if (targ.weapon == IT_SUPER_NAILGUN || (InItems(targ,IT_LAVA_SUPER_NAILGUN) && targ.weapon != IT_LAVA_SUPER_NAILGUN)) {
-			// fl = IT_LAVA_SUPER_NAILGUN;
-			// if (targ.ammo_lava_nails < 2) am = TRUE;
-			// gotgun = InItems(targ, fl);
-		// } else {
-			// fl = IT_SUPER_NAILGUN;
-			// if (targ.ammo_nails < 2) am = TRUE;
-			// gotgun = InItems(targ, fl);
-		// }
-
-		/*
-		if ((targ.items & IT_LAVA_SUPER_NAILGUN) && (targ.weapon == IT_SUPER_NAILGUN) || (targ.ammo_nails < 2)) {
-			fl = IT_LAVA_SUPER_NAILGUN;
-			if (targ.ammo_lava_nails < 2) am = TRUE;
-			gotgun = InItems(targ, fl);
-		} else {
-			fl = IT_SUPER_NAILGUN;
-			if (targ.ammo_nails < 2) am = TRUE;
-			gotgun = InItems(targ, fl);
+	} else if (targ.impulse == 6) {
+		checkvec = WeaponSlotPickOneOfThree(targ, IT_GRENADE_LAUNCHER, IT2_PROXIMITY_GUN, IT_MULTI_GRENADE, IN_ITEMS1, IN_ITEMS2, IN_ITEMS1);
+		fl = checkvec_x;
+		gotgun = checkvec_y;
+		inhackbank = checkvec_z;
+		if (fl == IT_GRENADE_LAUNCHER) {
+			if (targ.ammo_rockets < 1) am = TRUE; // no ammo
 		}
-		*/
-	}
-	else if (targ.impulse == 6) {
-		// if (targ.selfweaponismoditems && targ.weapon == IT_GUNGNIR) {
-			checkvec = WeaponSlotPickOneOfThree(targ, IT_GRENADE_LAUNCHER, IT2_PROXIMITY_GUN, IT_MULTI_GRENADE, IN_ITEMS1, IN_ITEMS2, IN_ITEMS1);
-			fl = checkvec_x;
-			gotgun = checkvec_y;
-			inhackbank = checkvec_z;
-			if (fl == IT_GRENADE_LAUNCHER) {
-				if (targ.ammo_rockets < 1) am = TRUE; // no ammo
-			}
-			if (fl == IT2_PROXIMITY_GUN) {
-				if (targ.ammo_rockets < 1) am = TRUE; // no ammo
-			}
-			if (fl == IT_MULTI_GRENADE) {
-				if (targ.ammo_multi_rockets < 1) am = TRUE; // no ammo
-			}
-
-			// checkvec = WeaponSlotPickOneOfThree(targ, IT_GRENADE_LAUNCHER, IT2_PROXIMITY_GUN, IT_MULTI_GRENADE, IN_ITEMS1, IN_ITEMS2, IN_ITEMS1);
-			// fl = checkvec_x;
-			// gotgun = checkvec_y;
-			// inhackbank = checkvec_z;
-			// if (fl == IT_GRENADE_LAUNCHER) {
-				// if (targ.ammo_rockets < 1) am = TRUE; // no ammo
-			// }
-			// if (fl == IT2_PROXIMITY_GUN) {
-				// if (targ.ammo_rockets < 1) am = TRUE; // no ammo
-			// }
-			// if (fl == IT_MULTI_GRENADE) {
-				// if (targ.ammo_multi_rockets < 1) am = TRUE; // no ammo
-			// }
-
-			/*
-			if (targ.weapon == IT_GRENADE_LAUNCHER) {
-				if (gotmultgren) {
-					fl = IT_MULTI_GRENADE;
-					gotgun = TRUE;
-				} else {
-					fl = IT2_PROXIMITY_GUN;
-					gotgun = InItems2(targ, fl);
-				}
-			} else {
-				if (targ.weapon == IT_MULTI_GRENADE) {
-					if (gotprox) {
-						fl = IT2_PROXIMITY_GUN;
-						gotgun = TRUE;
-					} else {
-						fl = IT_GRENADE_LAUNCHER;
-						gotgun = InItems(targ, fl);
-					}
-				}  else {
-					if (targ.weapon == IT2_PROXIMITY_GUN) {
-						if (gotgren) {
-							fl = IT_GRENADE_LAUNCHER;
-							gotgun = TRUE;
-						} else {
-							fl = IT_MULTI_GRENADE;
-							gotgun = InItems(targ, fl);
-						}
-					} else {
-						if (gotgren) {
-							fl = IT_GRENADE_LAUNCHER;
-							gotgun = TRUE;
-						} else {
-							if (gotmultgren) {
-								fl = IT_MULTI_GRENADE;
-								gotgun = TRUE;
-							} else {
-								if (gotprox) {
-									fl = IT2_PROXIMITY_GUN;
-									gotgun = TRUE;
-								}
-							}
-						}
-					}
-				}
-			}
-			if (fl == IT_MULTI_GRENADE) {
-				if (targ.ammo_multi_rockets < 1) am = TRUE;
-			} else {
-				if (targ.ammo_rockets < 1) am = TRUE;
-			}*/
-		// } else {
-			// fl = IT_GUNGNIR;
-			// inhackbank = TRUE;
-			// gotgun = InAnyItems(IN_MODITEMS_HACKBANK,targ,fl);
-		// }
-	}
-	else if (targ.impulse == 7) {
+		if (fl == IT2_PROXIMITY_GUN) {
+			if (targ.ammo_rockets < 1) am = TRUE; // no ammo
+		}
+		if (fl == IT_MULTI_GRENADE) {
+			if (targ.ammo_multi_rockets < 1) am = TRUE; // no ammo
+		}
+	} else if (targ.impulse == 7) {
 		checkvec = WeaponSlotPickOneOfThree(targ, IT_ROCKET_LAUNCHER, IT_MULTI_ROCKET, IT_SANGUINATORS, IN_ITEMS1, IN_ITEMS1, IN_MODITEMS);
 		fl = checkvec_x;
 		gotgun = checkvec_y;
@@ -2172,18 +2043,7 @@ void(entity targ) W_ChangeWeapon = {
 		if (fl == IT_SANGUINATORS) {
 			if (targ.ammo_bloodcrystals < 1) am = TRUE; // no ammo
 		}
-
-		// if ((targ.items & IT_MULTI_ROCKET) && (targ.weapon == IT_ROCKET_LAUNCHER) || (targ.ammo_rockets < 1)) {
-			// fl = IT_MULTI_ROCKET;
-			// if (targ.ammo_multi_rockets < 1) am = TRUE;
-			// gotgun = InItems(targ, fl);
-		// } else {
-			// fl = IT_ROCKET_LAUNCHER;
-			// if (targ.ammo_rockets < 1) am = TRUE;
-			// gotgun = InItems(targ, fl);
-		// }
-	}
-	else if (targ.impulse == 8) {
+	} else if (targ.impulse == 8) {
 		checkvec = WeaponSlotPickOneOfThree(targ, IT_LIGHTNING, IT_PLASMA_GUN, IT_FLAK, IN_ITEMS1, IN_ITEMS1, IN_MODITEMS_HACKBANK);
 		fl = checkvec_x;
 		gotgun = checkvec_y;
@@ -2197,19 +2057,7 @@ void(entity targ) W_ChangeWeapon = {
 		if (fl == IT_FLAK) {
 			if (targ.ammo_nails < 1) am = TRUE; // no ammo
 		}
-
-		// if ((targ.items & IT_PLASMA_GUN) && (targ.weapon == IT_LIGHTNING) || (targ.ammo_cells < 1)) {
-			// fl = IT_PLASMA_GUN;
-			// if (targ.ammo_plasma < 1) am = TRUE;
-			// gotgun = InItems(targ, fl);
-		// } else {
-			// fl = IT_LIGHTNING;
-			// if (targ.ammo_cells < 1) am = TRUE;
-			// gotgun = InItems(targ, fl);
-			// if (InModItems(targ, IT_UPGRADE_LG)) gotgun = TRUE;
-		// }
-	}
-	else if (targ.impulse == 90) {
+	} else if (targ.impulse == 90) {
 		checkvec = WeaponSlotPickOneOfThree(targ, IT_EXTRA_WEAPON, IT2_LASER_CANNON, IT2_CHAINLIGHTNING, IN_ITEMS1, IN_ITEMS2, IN_ITEMS2);
 		fl = checkvec_x;
 		gotgun = checkvec_y;
@@ -2223,52 +2071,34 @@ void(entity targ) W_ChangeWeapon = {
 		if (fl == IT2_CHAINLIGHTNING) {
 			if (targ.ammo_cells < 1) am = TRUE; // no ammo
 		}
-
-		// if ((targ.items & IT_EXTRA_WEAPON) && (targ.weapon == IT2_LASER_CANNON) || (targ.ammo_cells < 1)) {
-			// fl = IT_EXTRA_WEAPON;
-			// if (targ.ammo_bolts < 1) am = TRUE;
-			// gotgun = InItems(targ, fl);
-		// } else {
-			// fl = IT2_LASER_CANNON;
-			// if (targ.ammo_cells < 1) am = TRUE;
-			// gotgun = InItems2(targ, fl);
-		// }
-	}
-	else if (targ.impulse == 60) {
+	} else if (targ.impulse == 60) {
 		fl = IT_LAVA_NAILGUN;
 		if (targ.ammo_lava_nails < 1) am = TRUE;
 		gotgun = InItems(targ, fl);
-	}
-	else if (targ.impulse == 61) {
+	} else if (targ.impulse == 61) {
 		fl = IT_LAVA_SUPER_NAILGUN;
 		if (targ.ammo_lava_nails < 2) am = TRUE;
 		gotgun = InItems(targ, fl);
-	}
-	else if (targ.impulse == 62) {
+	} else if (targ.impulse == 62) {
 		fl = IT_MULTI_GRENADE;
 		if (targ.ammo_multi_rockets < 1) am = TRUE;
 		gotgun = InItems(targ, fl);
-	}
-	else if (targ.impulse == 63) {
+	} else if (targ.impulse == 63) {
 		fl = IT_MULTI_ROCKET;
 		if (targ.ammo_multi_rockets < 1) am = TRUE;
 		gotgun = InItems(targ, fl);
-	}
-	else if (targ.impulse == 64) {
+	} else if (targ.impulse == 64) {
 		fl = IT_PLASMA_GUN;
 		if (targ.ammo_plasma < 1) am = TRUE;
 		gotgun = InItems(targ, fl);
-	}
-	else if (targ.impulse == 75) {
+	} else if (targ.impulse == 75) {
 		fl = IT2_LASER_CANNON;
 		if (targ.ammo_cells < 1) am = TRUE;
 		gotgun = InItems2(targ, fl);
-	}
-	else if (targ.impulse == 76) {
+	} else if (targ.impulse == 76) {
 		fl = IT2_PROXIMITY_GUN;
 		gotgun = InItems2(targ, fl);
-	}
-	else if (targ.impulse == 77) {
+	} else if (targ.impulse == 77) {
 		checkvec = WeaponSlotPickOneOfThree(targ, IT2_MJOLNIR, IT2_CROSS, IT_GUNGNIR, IN_ITEMS2, IN_ITEMS2, IN_MODITEMS_HACKBANK);
 		fl = checkvec_x;
 		gotgun = checkvec_y;
@@ -2276,115 +2106,79 @@ void(entity targ) W_ChangeWeapon = {
 		if (fl == IT_GUNGNIR) {
 			if (targ.ammo_voidshards < 1) am = TRUE; // no ammo
 		}
-
-		// if ((targ.items & IT2_CROSS) && (targ.weapon == IT2_MJOLNIR)) {
-			// fl = IT2_CROSS;
-			// gotgun = InItems2(targ, fl);
-		// } else {
-			// fl = IT2_MJOLNIR;
-			// gotgun = InItems2(targ, fl);
-		// }
-
-		// if ((targ.items2 & IT2_CROSS) && ((targ.weapon == IT2_MJOLNIR) || !InItems(targ,IT2_MJOLNIR))) {
-			// fl = IT2_CROSS;
-			// gotgun = InItems2(targ, fl);
-		// } else {
-			// fl = IT2_MJOLNIR;
-			// gotgun = InItems2(targ, fl);
-		// }
-	}
-	else if (targ.impulse == 78) {
+	} else if (targ.impulse == 78) {
 		fl = IT_EXTRA_WEAPON;
 		gotgun = InItems(targ, fl);
-	}
-	else if (targ.impulse == 79) {
+	} else if (targ.impulse == 79) {
 		fl = IT2_CROSS;
 		gotgun = InItems2(targ, fl);
-	}
-	else if (targ.impulse == 80) {
+	} else if (targ.impulse == 80) {
 		fl = IT2_GRAPPLE;
 		gotgun = InItems2(targ, fl);
-	}
-	else if (targ.impulse == 81) {
+	} else if (targ.impulse == 81) {
 		fl = IT2_CHAINLIGHTNING;
 		gotgun = InItems2(targ, fl);
-	}
-	else if (targ.impulse == 82) {
+	} else if (targ.impulse == 82) {
 		fl = IT_ICE;
 		inhackbank = TRUE; // Ok we are hacking now, switch to 2nd set of 24 weapons in bank 2
 		gotgun = InModItems(targ, fl);
-	}
-	else if (targ.impulse == 83) {
+	} else if (targ.impulse == 83) {
 		fl = IT_MACE;
 		inhackbank = TRUE; // Ok we are hacking now, switch to 2nd set of 24 weapons in bank 2
 		gotgun = InModItems(targ, fl);
-	}
-	else if (targ.impulse == 84) {
+	} else if (targ.impulse == 84) {
 		fl = IT_VOID_STAFF;
 		inhackbank = TRUE; // Ok we are hacking now, switch to 2nd set of 24 weapons in bank 2
 		gotgun = InModItems(targ, fl);
-	}
-	else if (targ.impulse == 85) {
+	} else if (targ.impulse == 85) {
 		fl = IT_FLAK;
 		inhackbank = TRUE; // Ok we are hacking now, switch to 2nd set of 24 weapons in bank 2
 		gotgun = InModItems(targ, fl);
-	}
-	else if (targ.impulse == 186) {
+	} else if (targ.impulse == 86) {
 		fl = IT_GUNGNIR;
 		inhackbank = TRUE; // Ok we are hacking now, switch to 2nd set of 24 weapons in bank 2
 		gotgun = InModItems(targ, fl);
-	}
-	else if (targ.impulse == 87) {
+	} else if (targ.impulse == 87) {
 		fl = IT_SANGUINATORS;
 		gotgun = InModItems(targ, fl);
-	}
-	else if (targ.impulse == 88) {
+	} else if (targ.impulse == 88) {
 		fl = IT_SCIMITAR;
 		gotgun = InModItems(targ, fl);
-	}
-	else if (targ.impulse == 89) {
+	} else if (targ.impulse == 89) {
 		fl = IT_RAPIER;
 		gotgun = InModItems(targ, fl);
+	} else if (targ.impulse == 47) {
+		fl = IT_AIRGUN;
+		inhackbank = TRUE; // Ok we are hacking now, switch to 2nd set of 24 weapons in bank 2
+		gotgun = InPerms(targ, fl);
 	}
-	targ.impulse = 0;		// Clear impulse
-	
-	//----------------------------------------------------------------------
-	// FL = don't have the weapon
-	// AM = out of ammo
-	//----------------------------------------------------------------------
-	//Do we have this weapon?
-	if ( !(gotgun) ) {
-		sprint (targ,"no weapon.\n");
-		return ;
-	}
-
-	//Do we have ammo?
-	if ( am ) {
-		sprint (targ,"not enough ammo.\n");
-		return ;
-	}
+	targ.impulse = 0; // Clear impulse
+	if (!(gotgun)) { sprint(targ,"no weapon.\n"); return; } //Do we have this weapon?
+	if (am) { sprint(targ,"not enough ammo.\n"); return; } //Do we have ammo?
 
 	if (inhackbank) {
 		targ.selfweaponismoditems = TRUE;
-		//if ( (targ.weapon != fl) ) {
-			if (fl == IT_ICE) {
-				sprint (targ,"Elemental Tome!\n");
+		if (fl == IT_ICE) {
+			sprint (targ,"Elemental Tome!\n");
+		} else {
+			if (fl== IT_MACE) {
+				sprint (targ,"Vampiric Mace!\n");
 			} else {
-				if (fl== IT_MACE) {
-					sprint (targ,"Vampiric Mace!\n");
+				if (fl== IT_VOID_STAFF) {
+					sprint (targ,"Void Staff!\n");
 				} else {
-					if (fl== IT_VOID_STAFF) {
-						sprint (targ,"Void Staff!\n");
+					if (fl == IT_FLAK) {
+						sprint (targ,"Flak Cannon!\n");
 					} else {
-						if (fl == IT_FLAK) {
-							sprint (targ,"Flak Cannon!\n");
+						if (fl == IT_AIRGUN) {
+							sprint (targ,"Air Fist!\n");
 						} else {
 							if (fl == IT_GUNGNIR) sprint (targ,"Gungnir!\n");
 						}
 					}
 				}
 			}
-		//}
+		}
 	} else {
 		targ.selfweaponismoditems = FALSE;
 		if ( (targ.weapon != fl) ) {
@@ -2399,9 +2193,7 @@ void(entity targ) W_ChangeWeapon = {
 				}
 			 } else {
 				if ( (targ.weapon == IT_MULTI_ROCKET) ) {
-				   if ( (fl == IT_ROCKET_LAUNCHER) ) {
-					  sprint (targ,"Normal Rockets\n");
-				   }
+				   if (fl == IT_ROCKET_LAUNCHER) sprint (targ,"Normal Rockets\n");
 				} else {
 				   if ( (targ.weapon == IT_PLASMA_GUN) ) {
 					  if ( (fl == IT_LIGHTNING) ) {
@@ -2442,7 +2234,7 @@ void(entity targ) W_ChangeWeapon = {
 													if ( (fl == IT_SCIMITAR) ) {
 														sprint (targ,"Fire Scimitar!\n");
 													} else {
-														if ( (fl == IT_RAPIER) ) sprint (targ,"Ghost Rapier!\n");
+														if ( (fl == IT_RAPIER) ) sprint (targ,"Ghost Rapier!\n"); // Sharp if nest there, don't prick your eyes.
 													}
 												}
 											}
@@ -2464,7 +2256,7 @@ void(entity targ) W_ChangeWeapon = {
 };
 
 // Returns unique ID in list of weapon cycling order.  Refer to defskeep.qc for the list and ID's
-float GetWepIDIndex (float wep, float inhackbank) = {
+float GetWepIDIndex (float wep, float inhackbank) = { // [FUNCTION]
 	float retval;
 	retval = 0;
 	if (inhackbank) {
@@ -2473,6 +2265,7 @@ float GetWepIDIndex (float wep, float inhackbank) = {
 		if (wep == IT_VOID_STAFF)	retval = ID_VOIDSTAFF;
 		if (wep == IT_FLAK) 		retval = ID_FLAK;
 		if (wep == IT_GUNGNIR) 		retval = ID_GUNGNIR;
+		if (wep == IT_AIRGUN) 		retval = ID_AIRGUN;
 	} else {
 		if (wep == IT2_GRAPPLE) 			retval = ID_GRAPPLE;
 		if (wep == IT_AXE)					retval = ID_AXE_SHADAXE_CHAINSAW;
@@ -2501,15 +2294,16 @@ float GetWepIDIndex (float wep, float inhackbank) = {
 	return retval;
 };
 
-vector GetWepIT_FromID(float id) = {
-	vector retval;
+vector GetWepIT_FromID(float id) = { // [FUNCTION]
+	local vector retval;
+
 	retval = VEC_ORIGIN;
 	if (id == ID_MACE ) 		{ retval_x = IT_MACE;			retval_y = TRUE; } // in hack bank
 	if (id == ID_ICE )			{ retval_x = IT_ICE;			retval_y = TRUE; }
-	if (id == ID_VOIDSTAFF )	{ retval_x = IT_VOID_STAFF;	retval_y = TRUE; }
+	if (id == ID_VOIDSTAFF )	{ retval_x = IT_VOID_STAFF;		retval_y = TRUE; }
 	if (id == ID_FLAK ) 		{ retval_x = IT_FLAK;			retval_y = TRUE; }
 	if (id == ID_GUNGNIR ) 		{ retval_x = IT_GUNGNIR;		retval_y = TRUE; }
-
+	if (id == ID_AIRGUN ) 		{ retval_x = IT_AIRGUN;			retval_y = TRUE; }
 	if (id == ID_GRAPPLE ) 				{ retval_x = IT2_GRAPPLE; retval_y = FALSE; }
 	if (id == ID_AXE_SHADAXE_CHAINSAW )	{ retval_x = IT_AXE; retval_y = FALSE; }
 	if (id == ID_SHOTGUN_BLASTER )		{ retval_x = IT_SHOTGUN; retval_y = FALSE; }
@@ -2536,10 +2330,7 @@ vector GetWepIT_FromID(float id) = {
 	return retval;
 };
 
-/*======================================================================
-CycleWeaponCommand
-======================================================================*/
-void() CycleWeaponCommand = {
+void() CycleWeaponCommand = { // [FUNCTION]
 	local float	am, inhackbank, wepID, cyclecheck;
 	local vector idconversion;
 	
@@ -2551,15 +2342,12 @@ void() CycleWeaponCommand = {
 	cyclecheck = 0; // counter to see how many times we go through the loop
 	if (self.weapon == 0 && self.items == 0 && self.items2 == 0 && self.moditems == 0 && self.perms == 0) return;
 	wepID = GetWepIDIndex(self.weapon, inhackbank);
-	// dprint("wepID at start of CycleWeaponCommand: ");
-	// dprint(ftos(wepID));
-	// dprint("\n");
 
 	// Keep cycling around weapon list until found a weapon with ammo
 	while (1) {
 		am = 0;
 		cyclecheck = cyclecheck + 1;
-		// if (cyclecheck > 100) return; // exit gracefully, no runaway loop error
+		if (cyclecheck > 100) return; // exit gracefully, no runaway loop error
 		if (wepID == ID_GRAPPLE) {
 			wepID = ID_AXE_SHADAXE_CHAINSAW;
 		} else if (wepID == ID_AXE_SHADAXE_CHAINSAW) {
@@ -2568,6 +2356,8 @@ void() CycleWeaponCommand = {
 			wepID = ID_SHOTGUN_BLASTER;
 			if (self.ammo_shells < 1) am = 1;
 		} else if (wepID == ID_SHOTGUN_BLASTER) {
+			wepID = ID_AIRGUN;
+		} else if (wepID == ID_AIRGUN) {
 			wepID = ID_ICE;
 			if (self.ammo_elemental < 1) am = 1;
 		} else if (wepID == ID_ICE) {
@@ -2575,7 +2365,6 @@ void() CycleWeaponCommand = {
 			if (self.ammo_shells < 1) am = 1; // only checking for 1 shell since autoshotgun/shotcycler might only use 1
 		} else if (wepID == ID_SUPER_SHOTGUN_WIDOWMAKER_SHOTCYCLER_QUADSHOTTY) {
 			wepID = ID_SCIMITAR;
-			// if (self.ammo_elemental < 2) am = 1; // Doesn't always need ammo to swing, it is a sword after all
 		} else if (wepID == ID_SCIMITAR) {
 			wepID = ID_NAILGUN;
 			if (self.ammo_nails < 1) am = 1;
@@ -2666,7 +2455,17 @@ void() CycleWeaponCommand = {
 				}
 			}
 		} else {
-			if (wepID == ID_LASER_CANNON || wepID == ID_MJOLNIR || wepID == ID_PROXIMITY_GRENADE || wepID == ID_WANDCROSS2 || wepID == ID_GRAPPLE || wepID == ID_CHAINLIGHTNING) {
+			if (wepID == ID_RAPIER) {
+				if ((self.moditems & self.weapon) && !am) {
+					W_SetCurrentAmmo (self);
+					dprint("idconversion: ");
+					dprint(ftos(idconversion_x));
+					dprint(" ");
+					dprint(ftos(idconversion_y));
+					dprint("\n");
+					return;
+				}
+			} else if (wepID == ID_LASER_CANNON || wepID == ID_MJOLNIR || wepID == ID_PROXIMITY_GRENADE || wepID == ID_WANDCROSS2 || wepID == ID_GRAPPLE || wepID == ID_CHAINLIGHTNING) {
 				if ((self.items2 & self.weapon) && !am) {
 					W_SetCurrentAmmo (self);
 					dprint("idconversion: ");
@@ -2691,10 +2490,7 @@ void() CycleWeaponCommand = {
 	}
 };
 
-/*======================================================================
-CycleWeaponReverseCommand
-======================================================================*/
-void() CycleWeaponReverseCommand = {
+void() CycleWeaponReverseCommand = { // [FUNCTION]
 	local float	am, inhackbank, wepID, cyclecheck;
 	local vector idconversion;
 	
@@ -2706,15 +2502,12 @@ void() CycleWeaponReverseCommand = {
 	cyclecheck = 0; // counter to see how many times we go through the loop
 	if (self.weapon == 0 && self.items == 0 && self.items2 == 0 && self.moditems == 0 && self.perms == 0) return;
 	wepID = GetWepIDIndex(self.weapon, inhackbank);
-	dprint("wepID at start of CycleWeaponReverseCommand: ");
-	dprint(ftos(wepID));
-	dprint("\n");
 
 	// Keep cycling around weapon list until found a weapon with ammo
 	while (1) {
 		am = 0;
 		cyclecheck = cyclecheck + 1;
-		// if (cyclecheck > 100) return; // exit gracefully, no runaway loop error
+		if (cyclecheck > 100) return; // exit gracefully, no runaway loop error
 		if (wepID == ID_GUNGNIR) {
 			wepID = ID_MJOLNIR;
 		} else if (wepID == ID_MJOLNIR) {
@@ -2775,7 +2568,6 @@ void() CycleWeaponReverseCommand = {
 			if (self.ammo_nails < 1) am = 1;
 		} else if (wepID == ID_NAILGUN) {
 			wepID = ID_SCIMITAR;
-			// if (self.ammo_elemental < 2) am = 1; // Doesn't always need ammo to swing, it is a sword after all
 		} else if (wepID == ID_SCIMITAR) {
 			wepID = ID_SUPER_SHOTGUN_WIDOWMAKER_SHOTCYCLER_QUADSHOTTY;
 			if (self.ammo_shells < 1) am = 1; // only checking for 1 shell since autoshotgun/shotcycler might only use 1
@@ -2783,6 +2575,8 @@ void() CycleWeaponReverseCommand = {
 			wepID = ID_ICE;
 			if (self.ammo_elemental < 1) am = 1;
 		} else if (wepID == ID_ICE) {
+			wepID = ID_AIRGUN;
+		} else if (wepID == ID_AIRGUN) {
 			wepID = ID_SHOTGUN_BLASTER;
 			if (self.ammo_shells < 1) am = 1;
 		} else if (wepID == ID_SHOTGUN_BLASTER) {
@@ -2796,20 +2590,18 @@ void() CycleWeaponReverseCommand = {
 			if (self.ammo_voidshards < 1) am = 1;
 		}
 
-		if (wepID == FALSE) {
-			return; // prevent crash in "cinematic mode"
-		}
+		if (wepID == FALSE) return; // prevent crash in "cinematic mode"
 
 		// ok we found the weapon from the full list, turn it back into a normal IT_ number
 		idconversion = GetWepIT_FromID(wepID);
-		self.weapon =  idconversion_x;
+		self.weapon = idconversion_x;
 		self.selfweaponismoditems = idconversion_y;
 		if (self.selfweaponismoditems) inhackbank = TRUE; // just in case I need to add a check below
 		else inhackbank = FALSE;
 
 		// Has the player got the weapons and ammo to switch?
 		if (inhackbank) {
-			if (wepID == ID_MACE || wepID == ID_ICE || wepID == ID_VOIDSTAFF || wepID == ID_FLAK || wepID == ID_GUNGNIR) {
+			if (wepID == ID_MACE || wepID == ID_ICE || wepID == ID_VOIDSTAFF || wepID == ID_FLAK || wepID == ID_GUNGNIR || wepID == ID_AIRGUN) {
 				if ((self.moditems & self.weapon) && !am) {
 					W_SetCurrentAmmo (self);
 					dprint("idconversion: ");
@@ -2821,7 +2613,17 @@ void() CycleWeaponReverseCommand = {
 				}
 			}
 		} else {
-			if (wepID == ID_LASER_CANNON || wepID == ID_MJOLNIR || wepID == ID_PROXIMITY_GRENADE || wepID == ID_WANDCROSS2 || wepID == ID_GRAPPLE || wepID == ID_CHAINLIGHTNING) {
+			if (wepID == ID_RAPIER) {
+				if ((self.moditems & self.weapon) && !am) {
+					W_SetCurrentAmmo (self);
+					dprint("idconversion: ");
+					dprint(ftos(idconversion_x));
+					dprint(" ");
+					dprint(ftos(idconversion_y));
+					dprint("\n");
+					return;
+				}
+			} else if (wepID == ID_LASER_CANNON || wepID == ID_MJOLNIR || wepID == ID_PROXIMITY_GRENADE || wepID == ID_WANDCROSS2 || wepID == ID_GRAPPLE || wepID == ID_CHAINLIGHTNING) {
 				if ((self.items2 & self.weapon) && !am) {
 					W_SetCurrentAmmo (self);
 					dprint("idconversion: ");
@@ -2846,7 +2648,7 @@ void() CycleWeaponReverseCommand = {
 	}
 };
 
-void() W_WeaponFrame = {
+void() W_WeaponFrame = { // [FUNCTION]
 	if (self.lavaGunFired) {
 		if (self.weapon == IT_LAVA_NAILGUN || self.weapon == IT_LAVA_SUPER_NAILGUN) {
 			sound (self, CHAN_BODY, "rogue/weapons/snail.wav", 1, ATTN_NORM);
@@ -2854,17 +2656,25 @@ void() W_WeaponFrame = {
 		self.lavaGunFired = 0;
 	}
 
+	if (time < self.attack_finished) {
+		if (!self.button0) {
+			if (!self.b0_click) self.b0_click = 1; // Released button.
+
+			// Check for loose MIRVs.
+			if (self.weapon == IT3_MIRV && self.selfweaponismoditems != 1) Mirv_Use ();
+		}
+		return;
+	}
+
 	ImpulseCommands ();
-	// Allow for impulse commands before weapon lockout
-	if (time < self.attack_finished) return;
 
 	// Change crossbow skin if bolts are poisoned
-	if (self.ammo_poison > 0) {
-		W_SetCurrentAmmo (self);
-	}
+	if (self.ammo_poison > 0) W_SetCurrentAmmo (self);
 
 	// check for attack
 	if (self.button0) {
+		if (self.b0_click) self.b0_click = 2; // Just double-clicked.
+
 		// originally - SuperDamageSound
 		// Only play one powerup sound at once
 		if (self.super_damage_finished > 0 && self.powerup_sound < time) {
@@ -2899,5 +2709,9 @@ void() W_WeaponFrame = {
 		}
 		// Check for weapon updates
 		W_Attack ();
+	} else {
+		if (self.weapon == IT3_MIRV && self.selfweaponismoditems != 1) {
+			if (self.mirv1) Mirv_Use();
+		}
 	}
 };

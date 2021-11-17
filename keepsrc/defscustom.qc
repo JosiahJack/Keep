@@ -513,6 +513,8 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .vector		jumpdist;			// Monster jump forward + up distance
 .vector		jumprange;			// Monster jump minimum/maximum range checks
 .float		dangle;				// Spawn on ceiling flag for certain entities
+.float      reviveframestart;	// Initial frame for revive animation. (Showy death anim in reverse)
+.float      reviveframeend;		// End frame for revive animation.  Must be a lower number than reviveframestart.
 
 // Misc model animation (frame, skin and rotation loops)
 .float		framestart;			// FRAME Starting number for misc_model animations
@@ -587,37 +589,35 @@ float FLOOR_TRACE_BREAK = 16;	// Distance for breakable checks
 
 // Server flags (only way to carry items over between maps)
 // bits 1-4 Runes, 5-8 Additional keys/items
-float SVR_RUNE_KEY1 = 1;		// Rune 1
-float SVR_RUNE_KEY2 = 2;		// Rune 2
-float SVR_RUNE_KEY3 = 4;		// Rune 3
-float SVR_RUNE_KEY4 = 8;		// Rune 4
-float SVR_RUNE_ALL = 15;		// Runes 1-4 (together)
-float SVR_SPAWN_BIT1 = 16;		// 3 bit spawn location
-float SVR_SPAWN_BIT2 = 32;		// Supports 7 locations 001-111
-float SVR_SPAWN_BIT3 = 64;		// Set via trigger_change_level
-float SVR_LIVE = 128;			// Bit      8 - Serverflag has active data
-float SVR_RUNEFLAG = 255;		// Bits  1- 8 - Runes and Keys
-float SVR_LOWFLAG = 65535;		// Bits  1-16 - rune keys and spawn settings
-float SVR_WORLDFLAG = 65280;	// Bits  9-16 - default/worldspawn options
-float SVR_HIGHFLAG = 8323072;	// Bits 17-23 - these options carry over
+float SVR_RUNE_ALL		= 15;		// Runes 1-4 (together)
+float SVR_RUNEFLAG		= 255;		// Bits  1- 7 - Runes and Keys
+float SVR_LOWFLAG		= 131071;	// Bits  1-16 - rune keys and spawn settings
+float SVR_WORLDFLAG 	= 130816;	// Bits  8-17 - default/worldspawn options
+float SVR_HIGHFLAG		= 8257536;	// Bits 18-23 - these options carry over
 
-// MOD Options that can only be changed via temp1 console variable.  These affect the spawning functions of monster / items
-float SVR_ITEMOFFSET = 256;		// Toggle item offset (corner/center)
-float SVR_SPRPARTON = 512;		// Always use sprite particles (default OFF)
-float SVR_PARTICLES = 1024;		// Turn ON particle system (default OFF)
-float SVR_DEVHELPER = 2048;		// Turn OFF Dev helpers (marks+arrows)
-float SVR_UPDAXE = 4096;		// Upgrade Axe, +75% dmg, gib zombies
-float SVR_UPDSSG = 8192;		// Upgrade Super Shotgun, +50% dmg, uses 3 shells
-float SVR_UPDLG = 16384;		// Upgrade Lightning Gun, Direct+Splashdamage
-float SVR_ITEMROTATE = 32768;		// Always randomly rotate ammo items
-
-// MOD Options that can be changed via impulse commands (need a map loaded).  These options will override the temp1 console variable
-float SVR_SHOTGPROJ = 131072;	// Turn OFF Shotgun projectiles
-float SVR_SHOTGCASE = 262144;	// Turn OFF Shotgun casings
-float SVR_ZAWARE = 524288;		// Turn OFF Z aware monsters
-float SVR_FOOTSTEP = 1048576;	// Turn OFF Enemy/player footsteps
-float SVR_AIPATH = 2097152;		// Turn OFF AI path corner extra info
-float SVR_LIQDAM = 4194304;		// Turn OFF Liquid damage checks for monsters
+float SVR_RUNE_KEY1 	= 1;		//0 Rune 1
+float SVR_RUNE_KEY2		= 2;		//1 Rune 2
+float SVR_RUNE_KEY3		= 4;		//2 Rune 3
+float SVR_RUNE_KEY4		= 8;		//3 Rune 4
+float SVR_SPAWN_BIT1	= 16;		//4 3 bit spawn location
+float SVR_SPAWN_BIT2	= 32;		//5 Supports 7 locations 001-111
+float SVR_SPAWN_BIT3	= 64;		//6 Set via trigger_change_level
+float SVR_LIVE 			= 128;		//7 Bit      8 - Serverflag has active data
+float SVR_ITEMOFFSET 	= 256;		//8 Toggle item offset (corner/center)
+float SVR_SPRPARTON 	= 512;		//9 Always use sprite particles (default OFF)
+float SVR_PARTICLES 	= 1024;		//10 Turn ON particle system (default OFF)
+float SVR_DEVHELPER 	= 2048;		//11 Turn OFF Dev helpers (marks+arrows)
+float SVR_UPDAXE 		= 4096;		//12 Upgrade Axe, +75% dmg, gib zombies
+float SVR_UPDSSG		= 8192;		//13 Upgrade Super Shotgun, +50% dmg, uses 3 shells
+float SVR_UPDLG 		= 16384;	//14 Upgrade Lightning Gun, Direct+Splashdamage
+float SVR_ITEMROTATE 	= 32768;	//15 Always randomly rotate ammo items
+float SVR_DRAKEMUSIC	= 65536;	//16 Enable secondary music system (Drake Feature)
+float SVR_SHOTGPROJ		= 131072;	//17 Turn OFF Shotgun projectiles
+float SVR_SHOTGCASE		= 262144;	//18 Turn OFF Shotgun casings
+float SVR_ZAWARE		= 524288;	//19 Turn OFF Z aware monsters
+float SVR_FOOTSTEP		= 1048576;	//20 Turn OFF Enemy/player footsteps
+float SVR_AIPATH		= 2097152;	//21 Turn OFF AI path corner extra info
+float SVR_LIQDAM		= 4194304;	//22 Turn OFF Liquid damage checks for monsters
 
 // Jump boots idea by JCR from mod jam pack 1
 .float jumpboots_finished, jumpboots_time, jumpboots_sound;
@@ -698,6 +698,36 @@ float FS_TYPELARGE = 6;		// Minotaur, Shambler
 float FS_TYPEGIANT = 7;		// Golem
 float FS_TYPECUSTOM = 9;	// Defined/precached by monster
 float FS_FLYING = 10;		// Exclusion, no happy feet!
+
+// Pre-defined bounding boxes for monsters.  Use 'bboxtype' to specify one of these.
+float BBOX_TINY = 1;		// -16 -16 -24, 16 16 16
+float BBOX_SQUARE = 2;		// -20 -20 -20, 20 20 20
+float BBOX_FLAT = 3;		// -24 -24 -24, 24 24 22
+float BBOX_SHORT = 4;		// -16 -16 -24, 16 16 32
+float BBOX_TALL = 5;		// -16 -16 -24, 16 16 40
+float BBOX_XTALL = 6;		// -16 -16 -24, 16 16 64
+float BBOX_WIDE = 7;		// -24 -24 -24, 24 24 40
+float BBOX_GIANT = 8;		// -24 -24 -24, 24 24 64
+float BBOX_WIDEFLAT = 9;	// -32 -32 -24, 32 32 24
+float BBOX_MASSIVE = 10;	// -32 -32 -24, 32 32 64
+float BBOX_GOLEM = 11;		// -24 -24 -24, 24 24 72
+float BBOX_DOG = 12;		// -20 -20 -24, 20 20 16
+float BBOX_SHADE = 13;		// -64 -64 -24, 64 64 64
+float BBOX_FISH = 14;		// -16 -16 -24, 16 16 24
+float BBOX_FISHS = 15;		// -12 -12 -16, 12 12 16
+float BBOX_EEL = 16;		// -16 -16 -16, 16 16 16
+float BBOX_WYRM = 17;		// -112 -112 -24, 112 112 112
+float BBOX_RYU = 18;		// -56 -56 -24, 56 56 56
+float BBOX_HYDRA = 19;		// -20 -20 -16, 20 20 16
+float BBOX_WILLY = 20;		// -32 -32 -24, 32 32 5
+float BBOX_CYBER = 21;		// -20 -20 -36, 20 20 74
+float BBOX_ANACONDA = 22;	// -32 -32 -16, 32 32 174
+float BBOX_JUSTICE = 23;	// -16 -16 -24, 16 16 56	Vol 32 x 32 x 80
+float BBOX_PSYDER = 24;		// -32 -32 -24, 32 32 160	Vol 64 x 64 x 184
+float BBOX_XMASSIVE = 25;	// -32 -32 -24, 32 32 80	Vol 64 x 64 x 104
+float BBOX_BRKTINY = 26;	// -12 -12 -24, 12 12 16	Vol 24 x 24 x 40
+float BBOX_SHALBOSS = 27;	// -46 -40 -24, 46 40 100   Vol 92 x 80 x 124
+float BBOX_CUSTOM = 99;		// Custom size set already
 
 // Monster constant values
 float MON_MOVENONE = 0;
@@ -970,8 +1000,10 @@ float DAMAGE_LNGREFSPIKE = 8;		// Reflected Lava Spike for LNG/LSNG
 float DAMAGE_NGSPIKE = 9;			// Single Spike for NG
 float DAMAGE_SNGSPIKE = 18;			// Single Spike for SNG
 float DAMAGE_RTSPIKE = 2;			// Re-touch spike damage (lying on floor)
-float DAMAGE_LAVANGSPIKE = 15;			// Single Spike for NG
-float DAMAGE_LAVASNGSPIKE = 30;			// Single Spike for SNG
+float DAMAGE_MANTICORESPIKE = 15;	// Large manticore spike
+float DAMAGE_MANTICORETHRON = 2;	// Small manticore spike from barrage
+float DAMAGE_LAVANGSPIKE = 15;		// Single Spike for NG
+float DAMAGE_LAVASNGSPIKE = 30;		// Single Spike for SNG
 float DAMAGE_PLAYGRENADE = 120;		// Direct damage from player grenade
 float DAMAGE_MONGRENADE = 40;		// Toned down grenade damage
 float DAMAGE_MONROCKET = 40;		// Toned down rocket damage
@@ -1041,8 +1073,9 @@ float SPEED_DCROSS = 500;			// Base speed of projectile bolts
 float SPEED_BOLTSKILL = 200;		// 500=easy, 700=normal, 900=hard, 1100=nm
 float DAMAGE_BOLT0 = 5;				// Bolt damge against crossbow knights only
 float DAMAGE_BOLT1 = 15;			// Hot red bolts!
-float DAMAGE_BOLTPLAYER = 100;			// Powerful player bolt
-float DAMAGE_BOLTPLAYERP = 110;			// Powerful player poison bolt
+float DAMAGE_BOLT2 = 25;			// Poisonous bolts!
+float DAMAGE_BOLTPLAYER = 100;		// Powerful player bolt
+float DAMAGE_BOLTPLAYERP = 110;		// Powerful player poison bolt
 
 float DAMAGE_TARBABY = 120;			// Explosive damage from tarbies
 float DAMAGE_BOIL = 60;				// Explosive damage from boil
@@ -1367,7 +1400,7 @@ string MODEL_CORNER2 = "progs/ad171/misc_corner2.mdl";// Path corner helper (Bac
 string MODEL_BACKPACK = "progs/ad171/w_backpack.mdl";	// HD backpack
 string MODEL_PLAYER = "progs/player.mdl";
 string MODEL_PLAYER_HEAD = "progs/h_player.mdl";
-string MODEL_PLAYER_EYES = "progs/eyes.mdl";
+string MODEL_PLAYER_EYES = "progs/qmaster/eyes.mdl";	// Added extra frames due to how vehicles work, simpler this way
 string MODEL_PLAYER_DANCE = "progs/ad181/dance_player.mdl";
 string SOUND_PLAYER_JUMP = "player/plyrjmp8.wav";
 string SOUND_MISFIRE = "ad171/weapons/nofire.wav";	// Misfire of weapon
@@ -1398,7 +1431,7 @@ string MODEL_PROJ_DIAM1 = "progs/ad171/proj_diam1.mdl";		// Not used atm
 string MODEL_PROJ_DIAM2 = "progs/ad171/proj_diam2.mdl";
 string MODEL_PROJ_SMOKE = "progs/ad171/proj_smoke.mdl";
 string MODEL_PROJ_SHELLC = "progs/ad171/proj_shellcase.mdl";
-string MODEL_PROJ_NG = "progs/ad171/proj_ng.mdl";
+string MODEL_PROJ_NG = "progs/spike.mdl";
 string MODEL_PROJ_NGRED = "progs/ad171/proj_ngred.mdl";
 string MODEL_PROJ_SNG = "progs/ad171/proj_sng.mdl";
 string MODEL_PROJ_GRENADE = "progs/ad171/proj_grenade.mdl";
@@ -1435,9 +1468,9 @@ string MODEL_PROJ_BLORD2S = "progs/ad171/proj_blord2s.mdl";
 string MODEL_PROJ_BLORDBOLT2 = "progs/ad171/proj_blordbolt2.mdl";
 string MODEL_PROJ_BLORDBEAM2 = "progs/ad171/proj_blordbeam2.mdl";
 string MODEL_PROJ_SHAMLIT = "progs/ad171/proj_shamlit.mdl";
-string MODEL_PROJ_SWEEPER1 = "progs/ad181/proj_sweeper1.mdl";
-string MODEL_PROJ_SWEEPER2B = "progs/ad181/proj_sweeper2b.mdl";
-string MODEL_PROJ_SWEEPER2R = "progs/ad181/proj_sweeper2r.mdl";
+// string MODEL_PROJ_SWEEPER1 = "progs/ad181/proj_sweeper1.mdl";
+// string MODEL_PROJ_SWEEPER2B = "progs/ad181/proj_sweeper2b.mdl";
+// string MODEL_PROJ_SWEEPER2R = "progs/ad181/proj_sweeper2r.mdl";
 string MODEL_PROJ_WIZ = "progs/ad171/proj_wiz.mdl";
 string MODEL_PROJ_SPID = "progs/ad171/proj_spider.mdl";
 string MODEL_PROJ_VORE = "progs/ad171/proj_voreling.mdl";
@@ -1457,7 +1490,7 @@ string MODEL_PROJ_LASERGRN = "progs/ad171/proj_lazgrn.mdl";
 string MODEL_PROJ_LASERBLUE = "progs/ad181/proj_lazblue.mdl";
 string MODEL_PROJ_LIGHTNING2 = "progs/ad171/proj_lightning2.mdl";
 string MODEL_PROJ_PLASMA = "progs/ad171/proj_plasma.mdl";
-string MODEL_PROJ_PLASMAGRN = "progs/AD171/proj_plasmagrn.mdl";
+string MODEL_PROJ_PLASMAGRN = "progs/ad171/proj_plasmagrn.mdl";
 string MODEL_PROJ_PGPLASMA = "progs/ad171/proj_pgplasma.mdl";
 string MODEL_PROJ_GAPLASMA = "progs/ad171/proj_gaplasma.mdl";
 string MODEL_PROJ_GAPLASMAGRN = "progs/ad171/proj_gaplasmagrn.mdl";
@@ -1645,6 +1678,14 @@ string SOUND_FS_GIANT5 = "ad171/steps/giant5.wav";
 .float		minion_throwextra;	// Extra random forward speed of ball
 .float		minion_throwside;	// Extra sideways momentum (+/-)
 .entity		minion_test;		// Test entity for minion collision
+.string		minion_name;		// Name for custom specified minion
+.float		minion_spawn_time;	// Bitmask for which monster behavior times to spawn minions at
+.float		minion_spawn_chance;// Percent chance of spawning a minion at specified spawn time(s).  1 = 100%.
+float MONANIM_SPECIFIC 	= 1;	// 1 If minions are specified, spawn at the mod specific typical spawn time such as during special animations. e.g. gremlin gorging a corpse, etc.
+float MONANIM_PAIN		= 2;	// 2 Spawn minions whenever self.th_pain is called.
+float MONANIM_MISSILE	= 4;	// 3 Spawn minions whenever self.th_missile is called.
+float MONANIM_MELEE		= 8;	// 4 Spawn minions whenever self.th_melee is called.
+
 float MIN_MAXACTIVE = 5;		// Maximum amount active at once
 float MIN_MAXTRIGGER = 5;		// How many spawns before triggering
 float MIN_THROWSPD = 200;		// Monster jump speed

@@ -140,7 +140,23 @@ void(entity targ, float artype) Resist_ChangeType = {
 		targ.resist_voidshards = 1;
 		targ.resist_elemental = 1;
 		targ.pain_finished = LARGE_TIMER;
+	} else if (artype < 0) {
+		// No resistance to anything!
+		targ.resist_shells = 0;
+		targ.resist_nails = 0;
+		targ.resist_rockets = 0;
+		targ.resist_cells = 0;
+		targ.resist_lava_nails = 0;
+		targ.resist_multi_rockets = 0;
+		targ.resist_plasma = 0;
+		targ.resist_bolts = 0;
+		targ.resist_poison = 0;
+		targ.resist_bloodcrystals = 0;
+		targ.resist_voidshards = 0;
+		targ.resist_elemental = 0;
 	} else {
+		if (!targ) return;
+
 		// Default ammo resist, rocket/cell immunnity
 		targ.resist_shells = targ.save_shells;
 		targ.resist_nails = targ.save_nails;
@@ -179,12 +195,9 @@ void(entity targ, string hitsound) Resist_Sound = {
 void(entity targ, vector org, vector vel, float damage, float type, string hitsound, string burstsound) Resist_Effects = {
 	if (type == AM_NONE) {
 		Resist_Sound(targ,hitsound); // Always play stone smack sound
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		if (random() < 0.5) WriteByte (MSG_BROADCAST, TE_SPIKE); 
-		else WriteByte (MSG_BROADCAST, TE_GUNSHOT); // Particle impact
-		WriteCoord (MSG_BROADCAST, org_x);
-		WriteCoord (MSG_BROADCAST, org_y);
-		WriteCoord (MSG_BROADCAST, org_z);
+		if (random() < 0.5) Tent_Point(TE_SPIKE,org); // Particle impact
+		else Tent_Point(TE_GUNSHOT,org); 
+
 		if (random() < 0.5) SpawnProjectileSmoke(org, 200, 50, 150); // Random chance of smoke/dust projectile
 	}
 
@@ -194,24 +207,18 @@ void(entity targ, vector org, vector vel, float damage, float type, string hitso
 			SpawnBlood (targ, org, vel*0.2, rint(damage*targ.resist_shells)); // Drastically reduced blood particles
 		}
 		if (random() < 0.3) {
-			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-			if (random() < 0.5) WriteByte (MSG_BROADCAST, TE_SPIKE);
-			else WriteByte (MSG_BROADCAST, TE_GUNSHOT);
-			WriteCoord (MSG_BROADCAST, org_x);
-			WriteCoord (MSG_BROADCAST, org_y);
-			WriteCoord (MSG_BROADCAST, org_z);
+			if (random() < 0.5) Tent_Point(TE_SPIKE,org);
+			else Tent_Point(TE_GUNSHOT,org);
+
 			SpawnProjectileSmoke(org, 200, 50, 150);
 		}
 	}
 
 	if (type == AM_NAILS) {
 		if (targ.resist_nails < 1) Resist_Sound(targ,hitsound); // Only play pain sound if we can still get hurt slightly
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		if (random() < 0.5) WriteByte (MSG_BROADCAST, TE_SPIKE);
-		else WriteByte (MSG_BROADCAST, TE_GUNSHOT);
-		WriteCoord (MSG_BROADCAST, org_x);
-		WriteCoord (MSG_BROADCAST, org_y);
-		WriteCoord (MSG_BROADCAST, org_z);
+		if (random() < 0.5) Tent_Point(TE_SPIKE,org);
+		else Tent_Point(TE_GUNSHOT,org);
+
 		if (random() < 0.5) SpawnProjectileSmoke(org, 200, 50, 150);
 	}
 
@@ -249,12 +256,9 @@ void(entity targ, vector org, vector vel, float damage, float type, string hitso
 
 	if (type == AM_LAVANAILS || type == AM_FIRE) {
 		if (targ.resist_lava_nails < 1) Resist_Sound(targ,hitsound); // Only play pain sound if we can still get hurt slightly
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		if (random() < 0.5) WriteByte (MSG_BROADCAST, TE_SPIKE);
-		else WriteByte (MSG_BROADCAST, TE_GUNSHOT);
-		WriteCoord (MSG_BROADCAST, org_x);
-		WriteCoord (MSG_BROADCAST, org_y);
-		WriteCoord (MSG_BROADCAST, org_z);
+		if (random() < 0.5) Tent_Point(TE_SPIKE,org);
+		else Tent_Point(TE_GUNSHOT,org);
+
 		if (random() < 0.7) SpawnProjectileSmoke(org, 200, 50, 150);
 		if (random() < 0.5) SpawnProjectileSmoke(org, 200, 50, 250);
 	}

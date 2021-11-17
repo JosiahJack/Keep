@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 11
+// Function count: 24
 //
 // Implements: Subroutines
 //
@@ -37,7 +37,7 @@
 // functionality.
 //=============================================================================
 
-float (entity o) IsProjectile = {
+float (entity o) IsProjectile = { // [FUNCTION]
 	return (o.classgroup == CG_PROJALL || o.classgroup == CG_PROJSHELLS
 		 || o.classgroup == CG_PROJNAILS  || o.classgroup == CG_PROJLAVANAILS
 		 || o.classgroup == CG_PROJROCKETS  || o.classgroup == CG_PROJGRENADES
@@ -48,7 +48,7 @@ float (entity o) IsProjectile = {
 		 || o.classgroup == CG_PROJMAGIC || o.classgroup == CG_PROJICE);
 };
 
-float(entity o) AffectedByPhysics = {
+float(entity o) AffectedByPhysics = { // [FUNCTION]
 	if (IsProjectile(o)) return TRUE;
 	if (o.classtype == CT_FUNCBREAKOBJ) return TRUE;
 	if (o.classtype == CT_TEMPGIB) return TRUE;
@@ -61,7 +61,7 @@ float(entity o) AffectedByPhysics = {
 };
 
 // From Quoth for calculating gib velocity for polyp
-vector (float dm) VelocityForDamage = {
+vector (float dm) VelocityForDamage = { // [FUNCTION]
 	local vector v;
 
 	v_x = 100 * crandom();
@@ -79,20 +79,20 @@ vector (float dm) VelocityForDamage = {
 	return v;
 };
 
-float(vector spot) InAir = { return (pointcontents(spot) == CONTENT_EMPTY); };
-float(vector spot) InSolid = { return (pointcontents(spot) == CONTENT_SOLID); };
-float(vector spot) InWater = { return (pointcontents(spot) == CONTENT_WATER); };
-float(vector spot) InSlime = { return (pointcontents(spot) == CONTENT_SLIME); };
-float(vector spot) InLava = { return (pointcontents(spot) == CONTENT_LAVA); };
+float(vector spot) InAir = { return (pointcontents(spot) == CONTENT_EMPTY); }; // [FUNCTION]
+float(vector spot) InSolid = { return (pointcontents(spot) == CONTENT_SOLID); }; // [FUNCTION]
+float(vector spot) InWater = { return (pointcontents(spot) == CONTENT_WATER); }; // [FUNCTION]
+float(vector spot) InSlime = { return (pointcontents(spot) == CONTENT_SLIME); }; // [FUNCTION]
+float(vector spot) InLava = { return (pointcontents(spot) == CONTENT_LAVA); }; // [FUNCTION]
 // InSky not made since AD's check_skycontent is more robust and uses different advanced engine features.
-float(vector spot) InLiquid = {
+float(vector spot) InLiquid = { // [FUNCTION]
 	local float conts;
 
 	conts = pointcontents(spot);
 	return ((conts <= CONTENT_WATER) && (conts != CONTENT_SKY));
 };
 
-float(entity ent, vector p2, float dist, float nomonsters) pointvisible = {
+float(entity ent, vector p2, float dist, float nomonsters) pointvisible = { // [FUNCTION]
     local vector p1;
 
     p1 = ent.origin;
@@ -103,7 +103,7 @@ float(entity ent, vector p2, float dist, float nomonsters) pointvisible = {
 };
 
 // Creates a new vector.  From copper, renamed for clarity and avoid case insensitive errors.
-vector(float x, float y, float z) NewVector = {
+vector(float x, float y, float z) NewVector = { // [FUNCTION]
 	local vector swiz;
 
 	swiz_x = x;
@@ -113,6 +113,108 @@ vector(float x, float y, float z) NewVector = {
 };
 
 // From copper, renamed for clarity
-vector(vector a, vector b) vec_multiply_elementwise = {
+vector(vector a, vector b) vec_multiply_elementwise = { // [FUNCTION]
 	return NewVector(a_x * b_x, a_y * b_y, a_z * b_z);
+};
+
+// Too commonly used, so I made a helper function for randomly picking and playing a whoosh.
+void() SwordSwipeSound = { // [FUNCTION]
+	self.lip = random();
+	if (self.lip < 0.25) sound (self, CHAN_WEAPON, "ad171/weapons/sword1a.wav", 1, ATTN_NORM);
+	else if (self.lip < 0.5) sound (self, CHAN_WEAPON, "ad171/weapons/sword2a.wav", 1, ATTN_NORM);
+	else if (self.lip < 0.75) sound (self, CHAN_WEAPON, "ad171/weapons/sword1b.wav", 1, ATTN_NORM);
+	else sound (self, CHAN_WEAPON, "ad171/weapons/sword2b.wav", 1, ATTN_NORM);
+};
+ 
+float() SUB_HideIfNoTargetname = { // [FUNCTION]
+	if (self.targetname == "") {
+		dprint("\b");
+		dprint(self.classname);
+		dprint("\b targetname missing\n");
+		spawn_marker(self.origin, SPNMARK_YELLOW);
+		entity_hide(self);
+		return TRUE;
+	}
+	return FALSE;
+};
+
+float() SUB_HideIfNoTarget = { // [FUNCTION]
+	if (self.target == "") {
+		dprint("\b");
+		dprint(self.classname);
+		dprint("\b target missing\n");
+		spawn_marker(self.origin, SPNMARK_YELLOW);
+		entity_hide(self);
+		return TRUE;
+	}
+	return FALSE;
+};
+
+// Check for random rotation setup and angle limits
+void() SUB_CheckRandomizedAngles = { // [FUNCTION]
+	if (self.angles_y < 0) self.angles_y = rint(random()*359);
+	if (self.angles_y > 360) self.angles_y = 0;
+};
+
+void() SUB_FinishAttachment = { // [FUNCTION]
+	if (self.attachment) {
+		self.attachment.movetype = MOVETYPE_NONE;	// Stationary
+		self.attachment.solid = SOLID_NOT;		// no world interaction
+		setmodel(self.attachment,"");			// Hide model
+		self.attachment.velocity = '0 0 0';
+		self.attachment.state = STATE_OFF;
+	}
+};
+
+void() SUB_FinishAttachment2 = { // [FUNCTION]
+	if (self.attachment2) {
+		self.attachment2.movetype = MOVETYPE_NONE;	// Stationary
+		self.attachment2.solid = SOLID_NOT;			// no world interaction
+		setmodel(self.attachment2,"");
+		self.attachment2.velocity = '0 0 0';
+		self.attachment2.state = STATE_OFF;
+	}
+};
+
+void() SUB_FinishAttachment3 = { // [FUNCTION]
+	if (self.attachment3) {
+		self.attachment3.movetype = MOVETYPE_NONE;	// Stationary
+		self.attachment3.solid = SOLID_NOT;			// no world interaction
+		setmodel(self.attachment3,"");
+		self.attachment3.velocity = '0 0 0';
+		self.attachment3.state = STATE_OFF;
+	}
+};
+
+void() SUB_FinishAttachments = { // [FUNCTION]
+	SUB_FinishAttachment();
+	SUB_FinishAttachment2();
+	SUB_FinishAttachment3();
+};
+
+void() SUB_RemoveAttachment = { // [FUNCTION]
+	if (self.attachment) {
+		self.attachment.think = SUB_Remove;
+		self.attachment.nextthink = time + 0.1;
+	}
+};
+
+void() SUB_RemoveAttachment2 = { // [FUNCTION]
+	if (self.attachment2) {
+		self.attachment2.think = SUB_Remove;
+		self.attachment2.nextthink = time + 0.1;
+	}
+};
+
+void() SUB_RemoveAttachment3 = { // [FUNCTION]
+	if (self.attachment3) {
+		self.attachment3.think = SUB_Remove;
+		self.attachment3.nextthink = time + 0.1;
+	}
+};
+
+void() SUB_RemoveAttachments = { // [FUNCTION]
+	SUB_RemoveAttachment();
+	SUB_RemoveAttachment2();
+	SUB_RemoveAttachment3();
 };

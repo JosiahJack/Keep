@@ -304,9 +304,9 @@ void() hlorddragon_walk7 =[ $drgfly07, hlorddragon_walk8 ] {
 };
 void() hlorddragon_walk8 =[ $drgfly08, hlorddragon_walk9 ] {self.th_missile=SUB_Null; hlorddragon_move(17);};
 void() hlorddragon_walk9 =[ $drgfly09, hlorddragon_walk10 ] {
-    if (self.h2olevel <= 1)     // Not while in the water.
+    if (self.waterlevel <= 1) // Not while in water.
         sound (self, CHAN_BODY, "drake/dragon/fly1.wav", 1, ATTN_NORM);
-    else if ((self.h2otype == CONTENT_WATER) || (self.h2otype == CONTENT_SLIME))
+    else if ((self.liquidbase == CONTENT_WATER) || (self.liquidbase == CONTENT_SLIME))
         sound (self, CHAN_BODY, "drake/dragon/flywater.wav", 1, ATTN_NORM);
     self.th_missile=dragon_atk_e1; dragon_move(17);
     self.dragonPainSequence=5;
@@ -488,26 +488,22 @@ void() hlorddragon_boom = {
 };
 
 void() hlorddragon_nuke = {
-	// Lavasplash particles form a box with a size of 270x270x64.
-	// 135 * 1.4142 = 190.9188.  So use 160 damage for explosion radius of 200.
-	// Damage first, then effects.
-    local   entity  swap;
+    local entity swap;
 
-    T_RadiusDamage (self, self, 160, self, DAMAGEALL);
+	// Lavasplash particles form a box with a size of 270x270x64. 135 * 1.4142 = 190.9188.  So use 160 damage for explosion "radius" of 200.
+    T_RadiusDamage (self, self, 160, self, DAMAGEALL); // Damage first, then effects. 
     sound (self, CHAN_BODY, "boss1/out1.wav", 1, ATTN_NORM);
     Tent_Point (TE_LAVASPLASH, self.origin - '0 0 32');
-
-// The big fireball at the center.
     swap = self;
     self = spawn();
     setorigin (self, swap.origin + '0 0 24');
-    WarpExplosion ();
+    WarpExplosion(); // The big fireball at the center.
     self = swap;
 };
 
 void() hlorddragon_parts = {
 	monster_ThrowGib();
-    sound (self, CHAN_BODY, "player/teledth1.wav", 1, ATTN_NONE); // Was "player/tornoff2.wav".
+    sound (self, CHAN_BODY, "player/teledth1.wav", 1, ATTN_NONE);
 };
 
 void() hlorddragon_explode =  {
@@ -518,9 +514,9 @@ void() hlorddragon_explode =  {
 		self.deadflag = self.deadflag & DEAD_DYING;
         hlorddragon_parts ();
         hlorddragon_nuke (); // Explode for massive damage!
-        Quake_Self (800, 0, self.origin, 0, 1);     // Distance was 600.
-        self.think = hlorddragon_boom;         // We can't remove dragon now, because this may be called during a touch function, in which case the C code is looping through area links.  Delay removal for a frame.
-        self.nextthink = time + 0.100;
+		Quake_Spawn(self,800,0,self.origin,FALSE,1,VEC_QUAKE);
+        self.think = hlorddragon_boom; // We can't remove dragon now, because this may be called during a touch function, ... 
+        self.nextthink = time + 0.100; // ...in which case the C code is looping through area links.  Delay removal for at least a frame.
     } else {
         makevectors (self.angles);
         self.velocity = self.velocity - 40 * v_up;
@@ -571,7 +567,7 @@ void() hlorddragon_death20 =[ $drgdth20, hlorddragon_death21 ] {hlorddragon_expl
 void() hlorddragon_death21 =[ $drgdth21, SUB_Null       ] {
     hlorddragon_parts (); // PM: Added explosion and other gibs.
     hlorddragon_nuke ();
-    Quake_Self (600, 0, self.origin, 0, 1);
+	Quake_Spawn(self,600,0,self.origin,FALSE,1,VEC_QUAKE);
     ThrowGib(1,13);
     ThrowGib(2,13);
     ThrowGib(3,13);
@@ -632,6 +628,6 @@ void() darklord_thebeast = {
     self.mass = 0;          // Now it's a huge massive dragon!
     self.bloodtype = BLOOD_RED;     // It's flesh and blood now.
     self.ryuflags = self.ryuflags | RYU_NO_WATER;
-    self.xfl      = self.xfl | XFL_IMMUNITY;
+	self.resist_poison = self.resist_acid = 1;
     hlorddragon_walk1 ();
 };

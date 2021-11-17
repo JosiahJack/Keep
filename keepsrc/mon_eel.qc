@@ -247,36 +247,32 @@ void () eel_pain5 = [ 8.000, eel_pain6 ] {};
 void () eel_pain6 = [ 7.000, eel_pain7 ] {};
 void () eel_pain7 = [ 6.000, eel_run1 ] {};
 
+void () monster_eel_precache = {
+	precache_model("progs/ad171/mon_eel.mdl");
+	precache_model("progs/ad171/h_eel.mdl");
+	precache_model("progs/ad171/eelgib.mdl");
+	precache_model("progs/ad171/gib1.mdl");
+	precache_model("progs/ad171/proj_plasma.mdl");
+	precache_model(MODEL_PROJ_PLASMAGRN);
+	precache_poisongibs(); // precache gibs
+	precache_sound("rogue/eel/edie3r.wav");
+	precache_sound("rogue/eel/epain3.wav");
+	precache_sound("ad171/eel/idle1.wav");
+	precache_sound("rogue/eel/eatt1.wav");
+	precache_sound("rogue/eel/eelc5.wav");
+	precache_sound("ad171/eel/impact1.wav");
+	precache_sound("rogue/eel/eatt1.wav");
+};
+
 void () monster_eel = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_eel.mdl";
 	self.headmdl = "progs/ad171/h_eel.mdl";
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model ("progs/ad171/eelgib.mdl");
-	precache_model ("progs/ad171/gib1.mdl");
-	precache_model ("progs/ad171/proj_plasma.mdl");
-	precache_sound ("rogue/eel/edie3r.wav");
-	precache_sound ("rogue/eel/epain3.wav");
 	self.pain_sound = "rogue/eel/epain3.wav";
-	precache_sound ("ad171/eel/idle1.wav");
-	precache_sound ("rogue/eel/eatt1.wav");
-	precache_sound ("rogue/eel/eelc5.wav");
 	self.sight_sound = "rogue/eel/eelc5.wav";
-	precache_sound ("ad171/eel/impact1.wav");
-	precache_sound ("rogue/eel/eatt1.wav");
-
-	// Check for poisonous entity flag
-	if (self.poisonous) {
-		precache_poisongibs();			// precache gibs
-		self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
-		precache_model (MODEL_PROJ_PLASMAGRN);
-	}
-
+	if (self.poisonous) self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_EEL;
@@ -305,11 +301,9 @@ void () monster_eel = {
 	self.th_pain = eel_pain1;
 	self.th_melee = eel_attack1;
 	self.th_missile = eel_attack2_1;
-
 	self.classtype = CT_MONEEL;
 	self.classgroup = CG_FISH;
 	self.classmove = MON_MOVESWIM;
 	if (self.deathstring == "")  self.deathstring = " was electrified by an Eel\n";
-
 	monster_start ();
 };

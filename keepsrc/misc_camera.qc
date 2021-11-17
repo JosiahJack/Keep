@@ -1,24 +1,60 @@
-//======================================================================
-// Cinematic Camera System
-//======================================================================
-// Camera spawnflags
-float CINECAM_FUNC_PLAYER = 1;	// Setup fake player model
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Arcane Dimensions (AD)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 18
+//
+// Implements: Cinematic Camera System
+//
+// Description:
+// Cinematic camera control functions.
+// camera_controller_cshift	- Updates console with new cshift parameters
+// camera_tracking_finish		- Finish camera tracking movement 
+// camera_controller_think		- Main cinematic controller loop
+// camera_controller_setup		- Setup controller, movement and fakeplay ents
+// misc_camera_use				- Trigger function for camera's
+// misc_camera_colcheck			- Way to validate RGB background colours
+// misc_camera					- Spawning function for camera system
+//=============================================================================
+
+float CINECAM_FUNC_PLAYER = 1;	// Camera spawnflags.  Setup fake player model
 float CINECAM_FUNC_SKIPABLE = 2;// Allow cinematic to be skipable
 float CINECAM_FUNC_FADEOUT = 4;	// Fade OUT pevious camera
 float CINECAM_FUNC_FADEIN = 8;	// Fade IN next camera
 float CINECAM_FUNC_FIXEDANGLE = 16;	// First camera defines fixed angle
 float CINECAM_FUNC_ENDCAMERA = 32;	// Fade in/out only, no org/ang
-
-// v_cshift min/max values
-float CINECAM_MINSHIFT = 0;		// Minimun value for density
+float CINECAM_MINSHIFT = 0;		// v_cshift min/max values.  Minimun value for density
 float CINECAM_MAXSHIFT = 255;	// Maximm value for density 
 float CINECAM_FADEUP = 1;		// Fading directions
 float CINECAM_FADEDOWN = 2;
-
 float CINECAM_CONTIME = 0.05;	// Camera Controller loop tick rate (speed)
-
-// Camera System states
-float CINECAM_OFF = 0;			// Waiting for a camera
+float CINECAM_OFF = 0;			// Camera System states.  Waiting for a camera
 float CINECAM_STARTUP = 4;		// Save client info and start sequence
 float CINECAM_FADEOUT = 6;		// Start fading out current view
 float CINECAM_NEXTCAM = 8;		// Switch camera and focus
@@ -27,31 +63,17 @@ float CINECAM_MESSAGE = 14;		// Show messages and setup timers
 float CINECAM_WAIT = 16;		// Waiting player input
 float CINECAM_EXIT = 20;		// Back to player position
 float CINECAM_FADE = 25;		// Fade in or out camera
-
-// Camera Sequence number
-float CINECAM_SEQ_FIRST = 1;	// Starting with the player camera
+float CINECAM_SEQ_FIRST = 1;	// Camera Sequence number.  Starting with the player camera
 float CINECAM_SEQ_ACTIVE = 2;	// Camera sequence now active
 float CINECAM_SEQ_LAST = 4;		// Going back to player camera
-
-// Camera Skip conditions
-float CINECAM_SKIP_OFF = 0;		// No skip function available
+float CINECAM_SKIP_OFF = 0;		// Camera Skip conditions.  No skip function available
 float CINECAM_SKIP_ACTIVE = 1;	// Waiting for buttons (fire/jump)
 float CINECAM_SKIP_DONE = 2;	// Cinematic finished, exit Asasp
-
 float CINECAM_FIXANGLE_OFF = 0;		// Always reset camera angle
 float CINECAM_FIXANGLE_ACTIVE = 1;	// Read first angle only
 float CINECAM_FIXANGLE_DONE = 2;	// First angle read and done
 
-// Cinematic camera control functions
-// camera_controller_cshift	- Updates console with new cshift parameters
-// camera_tracking_finish		- Finish camera tracking movement 
-// camera_controller_think		- Main cinematic controller loop
-// camera_controller_setup		- Setup controller, movement and fakeplay ents
-// misc_camera_use				- Trigger function for camera's
-// misc_camera_colcheck		- Way to validate RGB background colours
-// misc_camera					- Spawning function for camera system
-
-void(entity targ, vector cs_col, float cs_den) camera_controller_cshift = {
+void(entity targ, vector cs_col, float cs_den) camera_controller_cshift = { // [FUNCTION]
 	Safe_stuffcmd(targ, "v_cshift ");
 	Safe_stuffcmd(targ, ftos(rint(cs_col_x))); Safe_stuffcmd(targ, " ");
 	Safe_stuffcmd(targ, ftos(rint(cs_col_y))); Safe_stuffcmd(targ, " ");
@@ -59,20 +81,14 @@ void(entity targ, vector cs_col, float cs_den) camera_controller_cshift = {
 	Safe_stuffcmd(targ, ftos(rint(cs_den))); Safe_stuffcmd(targ, "\n");	
 };
 
-void() camera_tracking_finish = {
+void() camera_tracking_finish = { // [FUNCTION]
 	self.attack_finished = 0;
 	self.velocity = '0 0 0';
 };
 
-// Check client + buttons, true if player and any button is pressed.
-float(entity targ) camera_check_buttons = {
-	if (targ.flags & FL_CLIENT) {
-		if (targ.button0 || targ.button1 || targ.button2) return TRUE;
-	}
-	return FALSE;
-};
+float(entity targ) camera_check_buttons = { return ((targ.flags & FL_CLIENT) && (targ.button0 || targ.button1 || targ.button2)); }; // [FUNCTION], Check client + buttons, true if player and any button is pressed.
 
-void(entity targ) camera_check_skip = {
+void(entity targ) camera_check_skip = { // [FUNCTION]
 	if (cam_exit == CINECAM_SKIP_ACTIVE) { // Is cinematic skip function enabled?
 		if (camera_check_buttons(targ)) { // Check for exit condition buttons (fire/jump)
 			if (targ.flags & FL_CLIENT) targ.button0 = targ.button1 = targ.button2 = 0; // Don't need buttons anymore
@@ -81,77 +97,59 @@ void(entity targ) camera_check_skip = {
 	}
 };
 
-float(float cam_angle1, float cam_angle2) camera_check_anglezero = {
-	local float cam_anglesmall, cam_anglelarge; // Smallest / Largest camera angle
-	local float cam_angledist, cam_anglewrap; // Camera small/large angle distance and wrap distance
+float(float cam_angle1, float cam_angle2) camera_check_anglezero = { // [FUNCTION]
+	local float cam_anglesmall, cam_anglelarge, cam_angledist, cam_anglewrap; // Smallest / Largest camera angle, Camera small/large angle distance and wrap distance
 	
-	// Guard against interpolating across the 360<->0 discontinuity
-	cam_anglelarge = mathlib_max(cam_angle1, cam_angle2);
+	cam_anglelarge = mathlib_max(cam_angle1, cam_angle2); // Guard against interpolating across the 360<->0 discontinuity
 	cam_anglesmall = mathlib_min(cam_angle1, cam_angle2);
-
 	cam_angledist = cam_anglelarge - cam_anglesmall; // This is the distance between the yaws if we don't cross 360.
 	cam_anglewrap = (360 - cam_anglelarge) + cam_anglesmall; // This is the distance if we do cross 360. i.e. "359" and "1" would have an angle_wrap of "2" and direct_dist of "358".
-
 	if (cam_anglewrap < cam_angledist) return TRUE; // Is it shorter to cross the 360<->0 boundary?
 	else return FALSE;
 };
 
-float(float baxis_start, float baxis_control, float baxis_end, float baxis_time) bezier_axis = {
+float(float baxis_start, float baxis_control, float baxis_end, float baxis_time) bezier_axis = { // [FUNCTION]
 	local float baxis_1, baxis_2, baxis_3, baxis_return;
-	
-	// Work out bezier curve position 
-	baxis_1 = ((1 - baxis_time) * (1 - baxis_time)) * baxis_start;
+
+	baxis_1 = ((1 - baxis_time) * (1 - baxis_time)) * baxis_start; // Work out bezier curve position 
 	baxis_2 = ((2 * baxis_time) * (1 - baxis_time)) * baxis_control;
 	baxis_3 = (baxis_time * baxis_time) * baxis_end;
-	// Add up parts and return result
-	baxis_return = baxis_1 + baxis_2 + baxis_3;
+	baxis_return = baxis_1 + baxis_2 + baxis_3; // Add up parts and return result
 	return baxis_return;
 };
 
-vector(vector bez_start, vector bez_control, vector bez_end, float bez_timemax, float bez_timeleft) bezier_curve = {
+vector(vector bez_start, vector bez_control, vector bez_end, float bez_timemax, float bez_timeleft) bezier_curve = { // [FUNCTION]
 	local vector bez_result;
 	local float bez_time;
-	
-	// Normalize (0-1) the time value 
-	bez_time = bez_timeleft / bez_timemax;
-	// Make sure time is within normalized range (0-1)
-	if (bez_time <= 0) bez_time = 0;
-	if (bez_time >= 1) bez_time = 1;
 
-	// Work out each vector (XYZ) axis
-	bez_result_x = bezier_axis(bez_start_x, bez_control_x, bez_end_x, bez_time);
+	bez_time = bez_timeleft / bez_timemax; // Normalize (0-1) the time value
+	if (bez_time <= 0) bez_time = 0; // Make sure time is within normalized range (0-1)
+	if (bez_time >= 1) bez_time = 1;
+	bez_result_x = bezier_axis(bez_start_x, bez_control_x, bez_end_x, bez_time); // Work out each vector (XYZ) axis
 	bez_result_y = bezier_axis(bez_start_y, bez_control_y, bez_end_y, bez_time);
 	bez_result_z = bezier_axis(bez_start_z, bez_control_z, bez_end_z, bez_time);
-	
 	return bez_result;
 };
 
-// Bezier curve debug system (developer = 1 only)
-// Display the curve with yellow diamonds
-void() misc_camera_bezier_debug = {
+// Bezier curve debug system (developer = 1 only).  Display the curve with yellow diamonds.
+void() misc_camera_bezier_debug = { // [FUNCTION]
 	if (self.nodebuginfo == TRUE) return; // Block debug info regardless (help reduce ents)
 
 	self.attachment2 = find(world, targetname, self.controltarget); // Find the bezier curve CONTROL point
 	self.attachment3 = find(world, targetname, self.target); // Find the bezier curve END point
-
-	// Display debug markers for start/control/end locations
-	spawn_marker(self.origin, SPNMARK_RED);
+	spawn_marker(self.origin, SPNMARK_RED); // Display debug markers for start/control/end locations
 	spawn_marker(self.attachment2.origin, SPNMARK_GREEN);
 	spawn_marker(self.attachment3.origin, SPNMARK_RED);
-	
-	// Loop through 10 points on each bezier curve
 	self.cnt = 0.1;
-	while (self.cnt < 1) {
-		// Work out bezier curve vector position
-		self.finalangle = bezier_curve(self.origin, self.attachment2.origin, self.attachment3.origin, 1, self.cnt);
-		// Spawn debug marker (yellow is wrong colour!)
-		spawn_marker(self.finalangle, SPNMARK_YELLOW);
+	while (self.cnt < 1) { // Loop through 10 points on each bezier curve
+		self.finalangle = bezier_curve(self.origin, self.attachment2.origin, self.attachment3.origin, 1, self.cnt); // Work out bezier curve vector position
+		spawn_marker(self.finalangle, SPNMARK_YELLOW); // Spawn debug marker (yellow is wrong colour!)
 		self.cnt = self.cnt + 0.1;
 	}
 };
 
 // Main loop for cinematic controller (all states)
-void() camera_controller_think = {
+void() camera_controller_think = { // [FUNCTION]
 	self.think = camera_controller_think;
 	self.nextthink = time + CINECAM_CONTIME;
 
@@ -250,8 +248,7 @@ void() camera_controller_think = {
 			// Center print message to display?
 			if (cam_focus.message) {
 				centerprint(cam_client, cam_focus.message);
-				// Default talk sound (using sounds entity key)
-				sound (cam_client, CHAN_VOICE, cam_focus.noise, 1, ATTN_NORM);
+				sound (cam_client, CHAN_VOICE, cam_focus.noise, 1, ATTN_NORM); // Default talk sound (using sounds entity key)
 			}
 		}
 		// Wait for player input or timer
@@ -304,10 +301,8 @@ void() camera_controller_think = {
 	// Fade OUT camera (player if first camera)
 	if (cam_active == CINECAM_FADEOUT) {
 		// Check if fade out is active (spawnflags)
-		if (cam_focus.spawnflags & CINECAM_FUNC_FADEOUT) {
-			// Start fading player view out to solid colour
-			// Work out cshift density steps
-			self.lip = CINECAM_MAXSHIFT / (cam_focus.waitmin / CINECAM_CONTIME);
+		if (cam_focus.spawnflags & CINECAM_FUNC_FADEOUT) { // Start fading player view out to solid colour
+			self.lip = CINECAM_MAXSHIFT / (cam_focus.waitmin / CINECAM_CONTIME); // Work out cshift density steps
 			cam_colour = cam_focus.pos1;		// Fade In background
 			self.count = CINECAM_MINSHIFT;		// Initial density
 			self.cnt = CINECAM_FADEUP;			// Fade direction
@@ -319,13 +314,8 @@ void() camera_controller_think = {
 	
 	// Switch to next camera (player if last camera)
 	if (cam_active == CINECAM_NEXTCAM) {
-		// If fading IN active, update background colour before switch
-		if (cam_focus.spawnflags & CINECAM_FUNC_FADEIN)
-			camera_controller_cshift(cam_client, cam_focus.pos1, CINECAM_MAXSHIFT);
-
-		// Check for end of camera chain functionality
-		if (cam_focus.spawnflags & CINECAM_FUNC_ENDCAMERA)
-			cam_sequence = CINECAM_SEQ_LAST;
+		if (cam_focus.spawnflags & CINECAM_FUNC_FADEIN) camera_controller_cshift(cam_client, cam_focus.pos1, CINECAM_MAXSHIFT); // If fading IN active, update background colour before switch
+		if (cam_focus.spawnflags & CINECAM_FUNC_ENDCAMERA) cam_sequence = CINECAM_SEQ_LAST; // Check for end of camera chain functionality
 		
 		// Check for last camera (back to player)
 		if (cam_sequence == CINECAM_SEQ_LAST) {
@@ -382,96 +372,65 @@ void() camera_controller_think = {
 			cam_locked = FALSE;
 			cam_movement = FALSE;
 			cam_bezier = FALSE;
-		} else {
-			// Switch to Next cinematic camera
+		} else { // Switch to Next cinematic camera
 			setorigin(cam_client, cam_focus.origin);
 			cam_client.view_ofs = cam_focus.view_ofs;
-
-			// Setup Camera angle blend fraction
-			if (cam_focus.angleblend <= 0 || cam_focus.angleblend >= 1) 
-				cam_focus.angleblend = CINECAM_ANGLEBLEND;
-			
-			// Lock player viewing angle (done via PlayerPreThink)
-			// Stops the player moving the cursor/head around
-			cam_locked = TRUE;
+			if (cam_focus.angleblend <= 0 || cam_focus.angleblend >= 1) cam_focus.angleblend = CINECAM_ANGLEBLEND; // Setup Camera angle blend fraction
+			cam_locked = TRUE; // Lock player viewing angle (done via PlayerPreThink).  Stops the player moving the cursor/head around.
 			
 			// Movement of Camera (Bezier)
 			if (cam_focus.controltarget != "") {
-				// search for Control Point entity (info_target)
-				self.enemy = find(world, targetname, cam_focus.controltarget);
-				// Need to know next camera location for bezier maths
-				self.oldenemy = find(world, targetname, cam_focus.target);
+				self.enemy = find(world, targetname, cam_focus.controltarget); // search for Control Point entity (info_target)
+				self.oldenemy = find(world, targetname, cam_focus.target); // Need to know next camera location for bezier maths
 				
-				// Found a control AND next camera entity?
-				// Must find both of these because of the math formula
+				// Found a control AND next camera entity?  Must find both of these because of the math formula.
 				if (self.enemy && self.oldenemy) {
-					// Show movement tracking entity
-					if (developer > 0) {
-						// Use the yellow diamond model
-						setmodel(cam_track, MODEL_BROKEN);
+					if (developer > 0) { // Show movement tracking entity
+						setmodel(cam_track, MODEL_BROKEN); // Use the yellow diamond model
 						setsize(cam_track, VEC_ORIGIN, VEC_ORIGIN);
 					}
 
-					// Reset movement origin to starting position
-					cam_track.origin = cam_focus.origin;
+					cam_track.origin = cam_focus.origin; // Reset movement origin to starting position
 					
 					// Is the time or movement is too small?
-					if (cam_focus.waitmin3 <= 0.1 || self.enemy.origin == cam_focus.origin) {
-						// Move directly to movement location
+					if (cam_focus.waitmin3 <= 0.1 || self.enemy.origin == cam_focus.origin) { // Move directly to movement location
 						setorigin(cam_client, cam_focus.origin);
 						cam_movement = FALSE;
-					} else {
-						// Setup camera tracking entity to start at client
+					} else {  // Setup camera tracking entity to start at client
 						setorigin(cam_track, cam_focus.origin);
 						cam_track.angles = cam_focus.angles;
-						// Keep track of bezier curve start/control/end
-						cam_track.pos4 = cam_focus.origin;
+						cam_track.pos4 = cam_focus.origin; // Keep track of bezier curve start/control/end
 						cam_track.pos5 = self.enemy.origin;
 						cam_track.pos6 = self.oldenemy.origin;
 						cam_track.wait = cam_focus.waitmin3;
 						cam_track.velocity = '0 0 0';
 						
-						// The exact position of where the camera should be on
-						// the bezier curve can be calculated. Just need to move
-						// the origin instead of relying on velocity movement
+						// The exact position of where the camera should be on the bezier curve can be calculated. Just need to move the origin instead of relying on velocity movement.
 						cam_track.attack_finished = time + cam_track.wait;
 						cam_track.think = camera_tracking_finish;
 						cam_track.nextthink = time + cam_track.wait;
-						
-						// Allow for updates (done via PlayerPreThink)
-						cam_movement = TRUE;
-						cam_bezier = TRUE;
+						cam_movement = TRUE; // Allow for updates (done via PlayerPreThink)
+						cam_bezier = TRUE; 
 					}
 				}
 			} else if (cam_focus.sighttarget != "") { // Movement of Camera (Linear)
-				// search for target entity (info_target)
-				self.enemy = find(world, targetname, cam_focus.sighttarget);
-				
-				// Found a target?
-				if (self.enemy) {
-					// Show movement tracking entity
-					if (developer > 0) {
-						// Use the yellow diamond model
-						setmodel(cam_track, MODEL_BROKEN);
+				self.enemy = find(world, targetname, cam_focus.sighttarget); // search for target entity (info_target)
+				if (self.enemy) { // Found a target?
+					if (developer > 0) { // Show movement tracking entity
+						setmodel(cam_track, MODEL_BROKEN); // Use the yellow diamond model
 						setsize(cam_track, VEC_ORIGIN, VEC_ORIGIN);
 					}
 
 					// Is the time or movement is too small?
 					if (cam_focus.waitmin3 <= 0.1 || self.enemy.origin == cam_focus.origin) {
-						// Move directly to movement location
-						setorigin(cam_client, cam_focus.origin);
+						setorigin(cam_client, cam_focus.origin); // Move directly to movement location
 						cam_movement = FALSE;
 					} else {
-						// Setup camera tracking entity to start at client
-						setorigin(cam_track, cam_focus.origin);
+						setorigin(cam_track, cam_focus.origin); // Setup camera tracking entity to start at client
 						cam_track.angles = cam_focus.angles;
-						// Keep track of direction target entity
-						cam_track.enemy = self.enemy;
-						
-						// Find out vector difference between two points
-						cam_track.pos1 = cam_track.enemy.origin - cam_focus.origin;
-						// velocity = vector difference * traveltime (waitmin3)
-						cam_track.velocity = cam_track.pos1 * (1 / cam_focus.waitmin3);
+						cam_track.enemy = self.enemy; // Keep track of direction target entity
+						cam_track.pos1 = cam_track.enemy.origin - cam_focus.origin; // Find out vector difference between two points
+						cam_track.velocity = cam_track.pos1 * (1 / cam_focus.waitmin3); // velocity = vector difference * traveltime (waitmin3)
 						
 						// Setup switch off functionality
 						// The camera tracking entity is set to noclip movetype
@@ -480,9 +439,7 @@ void() camera_controller_think = {
 						cam_track.attack_finished = time + cam_focus.waitmin3;
 						cam_track.think = camera_tracking_finish;
 						cam_track.nextthink = time + cam_focus.waitmin3;
-						
-						// Allow for updates (done via PlayerPreThink)
-						cam_movement = TRUE;
+						cam_movement = TRUE; // Allow for updates (done via PlayerPreThink)
 						cam_bezier = FALSE;
 					}
 				}
@@ -490,29 +447,17 @@ void() camera_controller_think = {
 			
 			// Has the camera angletarget been setup?
 			if (cam_fixangle != CINECAM_FIXANGLE_DONE) {
-				// Only update angles once per camera chain
-				if (cam_fixangle == CINECAM_FIXANGLE_ACTIVE)
-					cam_fixangle = CINECAM_FIXANGLE_DONE;
-				
-				// Check for any special angle target setup?
-				if (cam_focus.angletarget != "") {
-					// Find angle target of camera and return results
-					// movetarget = angletarget entity
-					// dest1 = angletarget.origin
-					// movedir = vector movement direction
-					TargetMovedir(cam_focus, TRUE);
-					// Angle target found?
-					if (self.movetarget) {
-						// Convert direction vector to angles
-						cam_focus.angles = vectoangles(self.movedir);
-						// Spawn a debug arrow if devmode (only once)
-						if (!cam_focus.cam_debugarrow && !self.nodebuginfo) {
+				if (cam_fixangle == CINECAM_FIXANGLE_ACTIVE) cam_fixangle = CINECAM_FIXANGLE_DONE; // Only update angles once per camera chain
+				if (cam_focus.angletarget != "") { // Check for any special angle target setup?
+					TargetMovedir(cam_focus, TRUE); // Find angle target of camera and return results: movetarget = angletarget entity, dest1 = angletarget.origin, movedir = vector movement direction
+					if (self.movetarget) { // Angle target found?
+						cam_focus.angles = vectoangles(self.movedir); // Convert direction vector to angles
+						if (!cam_focus.cam_debugarrow && !self.nodebuginfo) { // Spawn a debug arrow if devmode (only once)
 							spawn_arrow(cam_focus.origin, cam_focus.angles, 3);
 							cam_focus.cam_debugarrow = TRUE;
 						}
-						// Got to reverse the pitch angle because 
-						// v_angle is upside down (special carmack code)
-						cam_focus.angles_x = -cam_focus.angles_x;
+
+						cam_focus.angles_x = -cam_focus.angles_x; // Got to reverse the pitch angle because v_angle is upside down (special carmack code).
 					} else cam_focus.focalpoint = 0; // Cannot have a focalpoint if no angletarget
 				}
 				cam_angle = cam_focus.angles; // Update camera from existing angles key
@@ -534,12 +479,10 @@ void() camera_controller_think = {
 				// Create fake player model for cinematics
 				if (cam_fakeplay) {
 					// Check for fake player location
-					if (self.attachment) {
-						// Read target entity (often has angle key)
+					if (self.attachment) { // Read target entity (often has angle key).
 						self.dest2 = self.attachment.origin;
 						self.dest3 = self.attachment.angles;
-					} else {
-						// read origin/angles from player
+					} else {// Read origin/angles from player.
 						self.dest2 = self.pos4;
 						self.dest3 = self.finalangle;
 					}
@@ -551,8 +494,7 @@ void() camera_controller_think = {
 					setsize(cam_player, VEC_ORIGIN, VEC_ORIGIN);
 					cam_player.angles = self.dest3;
 					cam_player.fixangle = TRUE;
-					// Setup animation loop
-					cam_player.state = TRUE;
+					cam_player.state = TRUE; // Setup animation loop
 					cam_player.walkframe = cam_player.frame = 12;
 					cam_player.think = cam_player.th_altstand;
 					cam_player.nextthink = time + 0.1;
@@ -570,23 +512,18 @@ void() camera_controller_think = {
 		
 	// Fade IN camera (player if last camera)
 	if (cam_active == CINECAM_FADEIN) {
-		// Check if fade IN is active (spawnflags)
-		if (cam_focus.spawnflags & CINECAM_FUNC_FADEIN) {
-			// Start fading player view out to solid colour
-			// Work out cshift density steps
-			self.lip = CINECAM_MAXSHIFT / (cam_focus.waitmin2 / CINECAM_CONTIME);
+		if (cam_focus.spawnflags & CINECAM_FUNC_FADEIN) { // Check if fade IN is active (spawnflags).  Start fading player view out to solid colour.
+			self.lip = CINECAM_MAXSHIFT / (cam_focus.waitmin2 / CINECAM_CONTIME); // Work out cshift density steps.
 			cam_colour = cam_focus.pos2;	// Fade In background
 			self.count = CINECAM_MAXSHIFT;	// Initial density
 			self.cnt = CINECAM_FADEDOWN;	// Fade direction
-			// Check for exit condition from cinematic system
-			if (cam_sequence == CINECAM_SEQ_LAST) self.state = CINECAM_EXIT;
-			else self.state = CINECAM_MESSAGE;	// Next function
+			if (cam_sequence == CINECAM_SEQ_LAST) self.state = CINECAM_EXIT; // Check for exit condition from cinematic system
+			else self.state = CINECAM_MESSAGE;	// Next function1
+
 			cam_active = CINECAM_FADE;		// Start fade process
 		} else { // Skip over fade IN
 			camera_controller_cshift(cam_client, cam_focus.pos2, CINECAM_MINSHIFT); // Reset cshift, otherwise screen could be background colour
-			
-			// Last camera in sequence?
-			if (cam_sequence == CINECAM_SEQ_LAST) cam_active = CINECAM_EXIT; 
+			if (cam_sequence == CINECAM_SEQ_LAST) cam_active = CINECAM_EXIT; // Last camera in sequence?
 			else cam_active = CINECAM_MESSAGE;
 		}
 	}
@@ -608,15 +545,12 @@ void() camera_controller_think = {
 	// Main fade in/out loop for active camera
 	if (cam_active == CINECAM_FADE) {
 		camera_check_skip(cam_client); // Check for skip function
-		
-		// Is cinematic skip done?
-		if (cam_exit == CINECAM_SKIP_DONE) {
-			// Setup max/min values to trigger end of fade
-			if (self.cnt == CINECAM_FADEUP) self.count = CINECAM_MAXSHIFT;
+		if (cam_exit == CINECAM_SKIP_DONE) { // Is cinematic skip done?
+			if (self.cnt == CINECAM_FADEUP) self.count = CINECAM_MAXSHIFT; // Setup max/min values to trigger end of fade
 			else self.count = CINECAM_MINSHIFT;
 		}
-		// Increase/Decrease the screen density
-		if (self.cnt == CINECAM_FADEUP) self.count = self.count + self.lip;
+		
+		if (self.cnt == CINECAM_FADEUP) self.count = self.count + self.lip; // Increase/Decrease the screen density
 		else self.count = self.count - self.lip;
 		
 		// Check for min/max values (exit condition)
@@ -633,7 +567,7 @@ void() camera_controller_think = {
 };
 
 // When the fake player is displayed via the camera system.  This function keeps the model animated like the real player.
-void() camera_player_animate = {
+void() camera_player_animate = { // [FUNCTION]
 	if (!self.state) return; // Stop animating if disabled
 
 	self.walkframe = self.walkframe + 1;
@@ -643,12 +577,10 @@ void() camera_player_animate = {
 	self.nextthink = time + 0.1;
 };
 
-// Check if the camera controller entity is setup and running
-void() camera_controller_setup = {
+// Check if the camera controller entity is setup and running and spawn the Controller.
+void() camera_controller_setup = { // [FUNCTION]
 	if (!cam_control) { // Does controller exist?
 		cam_active = CINECAM_OFF; // Default state is off
-		
-		// The Controller
 		cam_control = spawn();					// Create an entity
 		cam_control.owner = self;				// Link back to client
 		cam_control.classtype = CT_CONTROL;
@@ -658,9 +590,7 @@ void() camera_controller_setup = {
 		setmodel(cam_control, MODEL_EMPTY);
 		setsize(cam_control, VEC_ORIGIN, VEC_ORIGIN);
 
-		// Setup Fake Player Model
-		// The player entity is moved around between cameras.  For cinematics that require the player this placeholder entity will create the illusion of the player
-		cam_player = spawn();
+		cam_player = spawn(); // Setup Fake Player Model.  The player entity is moved around between cameras.  For cinematics that require the player this placeholder entity will create the illusion of the player.
 		cam_player.state = FALSE;
 		cam_player.solid = SOLID_NOT;
 		cam_player.movetype = MOVETYPE_NONE;
@@ -671,9 +601,7 @@ void() camera_controller_setup = {
 		cam_player.view_ofs = '0 0 0';
 		cam_player.th_altstand = camera_player_animate;
 
-		// Setup Camera Tracking entity
-		// To prevent the player moving the camera while the cinematic is active, a simple entity does the camera movement and the player entity mirrors this origin instead
-		cam_track = spawn();
+		cam_track = spawn(); // Setup Camera Tracking entity.  To prevent the player moving the camera while the cinematic is active, a simple entity does the camera movement and the player entity mirrors this origin instead
 		cam_track.owner = cam_control;
 		cam_track.classtype = CT_CONTROL;
 		cam_track.solid = SOLID_NOT;
@@ -683,59 +611,49 @@ void() camera_controller_setup = {
 		setsize(cam_track, VEC_ORIGIN, VEC_ORIGIN);
 		cam_track.velocity = '0 0 0';
 
-		// Setup controller into loop
-		cam_control.think = camera_controller_think;
+		cam_control.think = camera_controller_think; // Setup controller into loop
 		cam_control.nextthink = time + CINECAM_CONTIME;
 	}
 };
 
-void() misc_camera_use = {
-	// Cannot use camera's during intermission
-	if (intermission_running > 0) return;
-	// Stop if cinematic running already
-	if (cinematic_running > 0) return;
-	
-	// Find client first
-	self.enemy = world;
+void() misc_camera_use = { // [FUNCTION]
+	if (intermission_running > 0) return; // Cannot use camera's during intermission
+	if (cinematic_running > 0 || cutscene > 0) return; // Stop if cinematic running already
+
+	self.enemy = world; // Find client first
 	if (other.flags & FL_CLIENT) self.enemy = other;
 	else if (activator.flags & FL_CLIENT) self.enemy = activator;
-	
-	// No player available or is dead?
-	if (!self.enemy) return;
-	if (self.enemy.health < 1) return;
 
-	// Cinematics don't work with COOP, let the players know
-	// There is a default message, but really this is something
-	// the mapper should (override) setup on the first camera
-	if (coop > 0) {
-		centerprint(self.enemy, self.message2);
-		// Default talk sound (using sounds entity key)
-		sound (self.enemy, CHAN_VOICE, self.noise, 1, ATTN_NORM);
-		return;
+	if (!self.enemy) return; // No player available
+	if (self.enemy.health < 1) return; // or is dead
+	if (self.enemy.in_a_vehicle) return; // or in a vehicle
+
+	if (coop > 0) { // Cinematics don't work with COOP?
+		centerprint(self.enemy, self.message2); // There is a default message, but really this is something the mapper should (override) setup on the first camera.
+		sound (self.enemy, CHAN_VOICE, self.noise, 1, ATTN_NORM); // Default talk sound (using sounds entity key) // return; // Let's just see what happens shall we? -Qmaster
 	}
 
-	// Start camera controller
 	cam_focus = self;
 	cam_client = self.enemy;
-	cam_active = CINECAM_SETUP;
+	cam_active = CINECAM_SETUP; // Start camera controller
 };
 
 // Make sure cshift colours are in range (0-255)
-float(float cc_value) misc_camera_colrange = {
+float(float cc_value) misc_camera_colrange = { // [FUNCTION]
 	if (cc_value < 0) return 0;
 	else if (cc_value > CINECAM_MAXSHIFT) return CINECAM_MAXSHIFT;
 	else return cc_value;
 };
 
 // Make sure RBG colour ranges are correct
-void(vector cc_check) misc_camera_colcheck = {
+void(vector cc_check) misc_camera_colcheck = { // [FUNCTION]
 	cc_check_x = misc_camera_colrange(cc_check_x);
 	cc_check_y = misc_camera_colrange(cc_check_y);
 	cc_check_z = misc_camera_colrange(cc_check_z);
 };
 
 // QUAKED misc_camera (1 0.5 0.5) (-16 -16 -16) (16 16 16) PLAYER SKIPABLE FADEOUT FADEIN FIXEDANGLE ENDCAMERA x x Not_Easy Not_Normal Not_Hard Not_DM
-// In game cinematic camera (Does not work in coop/dm mode)
+// In game cinematic camera (Does not work in deathmatch)
 // -------- KEYS --------
 // targetname   : Camera name for linking into target chains
 // target       : Points to the next camera in a chain/sequence
@@ -779,47 +697,34 @@ void(vector cc_check) misc_camera_colcheck = {
 // angles = up/down, angle, tilt left/right 'pitch roll yaw'
 // up/left = negative value, down/right = positive value
 // deathtarget, modeltarget & returntarget have to be defined on first camera
-// Be aware that coop is not supported, so be careful of trigger events
-// and decide on a coop "not working" message2.
-void() misc_camera = {
-	// Cinematics will not work in DM mode
-	if (deathmatch) { remove(self); return; }
-	
-	// Setup up class and movetypes
-	self.classtype = CT_MISCCAM;
+// Be aware that coop is not properly supported, so be careful of trigger events
+// and decide on a coop message2 if need be.
+void() misc_camera = { // [ENTITY]
+	if (deathmatch) { remove(self); return; } // Cinematics will not work in DM mode
+
+	self.classtype = CT_MISCCAM; // Setup up class and movetypes
 	self.estate = ESTATE_ON;
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
 	setmodel(self, MODEL_EMPTY);
 	self.owner = self;
-
-	// Precache any sounds for centerprint
-	if (self.sounds < 1) self.sounds = 2;	// DEF=talktalk
+	if (self.sounds < 1) self.sounds = 2; // Precache any sounds for centerprint.  DEF=talktalk
 	trigger_bmodel_sounds();
-	
-	// Cannot have a fade IN/OUT timer less than 0.1s
-	// The fade IN/OUT function is done via spawnflags
-	if (self.waitmin < 0.1) self.waitmin = 1;
+	if (self.waitmin < 0.1) self.waitmin = 1; // Cannot have a fade IN/OUT timer less than 0.1s.  The fade IN/OUT function is done via spawnflags.
 	if (self.waitmin2 < 0.1) self.waitmin2 = 1;
-	// Check colour fade parameters are in range
-	misc_camera_colcheck(self.pos1);
+	misc_camera_colcheck(self.pos1); // Check colour fade parameters are in range
 	misc_camera_colcheck(self.pos2);
-	// Time to move (linear) towards sighttarget, no angle change
-	if (self.waitmin3 < 0.1) self.waitmin3 = 2;
-	// Default warning for cinematics and COOP mode
-	if (self.message2 == "") self.message2 = "Cinematics don't work in COOP!\n";
-
-	// Found bezier curve setup
-	if (self.controltarget != "") {
+	if (self.waitmin3 < 0.1) self.waitmin3 = 2; // Time to move (linear) towards sighttarget, no angle change
+	if (self.message2 == "") self.message2 = "Cinematic sequence in COOP,\nstarting, but might not work properly.\n"; // Default warning for cinematics and COOP mode
+	if (self.controltarget != "") { // Found bezier curve setup
 		if (self.angletarget == "") { // If no angle target setup, use next camera
 			self.angletarget = self.target;
 			self.focalpoint = TRUE; // Focus on next camera instead
 		}
 	}
-	
-	// Cannot have a focalpoint if no angletarget is defined
-	if (self.angletarget == "" && self.focalpoint) {
+
+	if (self.angletarget == "" && self.focalpoint) { // Cannot have a focalpoint if no angletarget is defined
 		dprint("\b[MISC_CAM]\b No focalpoint entity defined!\n");
 		self.focalpoint = 0; 
 	}
@@ -827,30 +732,32 @@ void() misc_camera = {
 	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.use = misc_camera_use;
 	camera_controller_setup(); // Create camera controller
-	
-	// Check for bezier debug mode (display curves)
-	// Can block debug info (start/control/end/arrows)
-	if (self.controltarget != "" && !self.nodebuginfo) {
+	if (self.controltarget != "" && !self.nodebuginfo) { // Check for bezier debug mode (display curves).  Can block debug info (start/control/end/arrows).
 		self.think = misc_camera_bezier_debug;
 		self.nextthink = time + 0.2;
 	}
 };
 
-void(float filehandle, string entkey, string entval) misc_camera_str = {
+void(float filehandle, string entkey, string entval) misc_camera_str = { // [FUNCTION]
 	local string expstr;
+
 	if (entval == "") return;
+
 	expstr = strcat("\"", entkey, "\" \"", entval, "\"\n");
 	fputs(filehandle, expstr);
 };
 
-void(float filehandle, string entkey, float entval) misc_camera_float = {
+void(float filehandle, string entkey, float entval) misc_camera_float = { // [FUNCTION]
 	if (entval == 0) return;
+
 	misc_camera_str(filehandle, entkey, ftos(entval));
 };
 
-void(float filehandle, string entkey, vector entval) misc_camera_vec = {
+void(float filehandle, string entkey, vector entval) misc_camera_vec = { // [FUNCTION]
 	local string expstr;
+
 	if (CheckZeroVector(entval) == TRUE) return;
+
 	expstr = strcat(ftos(entval_x), " ", ftos(entval_y), " ", ftos(entval_z));
 	misc_camera_str(filehandle, entkey, expstr);
 };
@@ -863,12 +770,11 @@ void(float filehandle, string entkey, vector entval) misc_camera_vec = {
 //
 // Example use of sprintf
 // string = sprintf("\"%s\" \"%s\"\n", entityfieldname(entno), getentityfieldstring(entno, self));
-void() misc_camera_filewrite = {
+void() misc_camera_filewrite = { // [FUNCTION]
 	local string camfile;
 	local entity cament;
 	local float camfilelen, charpos, camfh;
 
-	// Check for advanced engine support
 	if (!ext_active) return;		// Check for advanced engines
 	if (!ext_frikfile) return;		// Check for Frik file system
 	if (!ext_ftestrings) return;	// Check for advanced string functions
@@ -878,21 +784,15 @@ void() misc_camera_filewrite = {
 	camfilelen = strlen(camfile);
 	charpos = strstrofs(camfile, "/", 0); // Search at beginning for directory prefix
 	if (charpos > 0) camfile = substring(camfile, charpos+1, camfilelen); // Any prefix detected? (Cut directory)
-
-	// Search for .bsp extension
-	camfilelen = strlen(camfile);
+	camfilelen = strlen(camfile); // Search for .bsp extension
 	charpos = strstrofs(camfile, ".", 0);
 	if (charpos > 0) camfile = substring(camfile, 0, charpos); // Any model (.bsp) extensions? (Cut it!)
 	camfile = strcat(camfile, "_cam.txt"); // Add new file extension and file type
 	camfh = fopen(camfile, FILE_WRITE); // Open new (overwrite) file ready for export
-
-	// Search for any misc_camera entities
-	cament = find(world, classname, "misc_camera");
+	cament = find(world, classname, "misc_camera"); // Search for any misc_camera entities
 	while(cament) {
-		// Open entity definition
-		fputs(camfh, "{\n");
-		// Write all relevant fields to file
-		misc_camera_str(camfh, "classname", cament.classname);
+		fputs(camfh, "{\n"); // Open entity definition
+		misc_camera_str(camfh, "classname", cament.classname); // Write all relevant fields to file
 		misc_camera_vec(camfh, "origin", cament.origin);
 		misc_camera_float(camfh, "spawnflags", cament.spawnflags);
 		misc_camera_str(camfh, "targetname", cament.targetname);
@@ -918,9 +818,7 @@ void() misc_camera_filewrite = {
 		misc_camera_float(camfh, "sounds", cament.sounds);
 		misc_camera_str(camfh, "noise", cament.noise);
 		misc_camera_float(camfh, "nodebuginfo", cament.nodebuginfo);
-		
-		// Extra fields that could be generated
-		misc_camera_float(camfh, "classtype", cament.classtype);
+		misc_camera_float(camfh, "classtype", cament.classtype); // Extra fields that could be generated
 		misc_camera_float(camfh, "estate", cament.estate);
 		misc_camera_str(camfh, "model", cament.model);
 		misc_camera_vec(camfh, "absmin", cament.absmin);
@@ -930,13 +828,9 @@ void() misc_camera_filewrite = {
 		misc_camera_vec(camfh, "size", cament.size);
 		misc_camera_str(camfh, "noise", cament.noise);
 		misc_camera_float(camfh, "volume", cament.volume);
-		// This is a void() not a string
-		//misc_camera_str(camfh, "use", cament.use);
-		
-		// Close entity definition
-		fputs(camfh, "}\n");
-		// Next camera entity
-		cament = find(cament, classname, "misc_camera");
+		//misc_camera_str(camfh, "use", cament.use); // This is a void() not a string
+		fputs(camfh, "}\n"); // Close entity definition
+		cament = find(cament, classname, "misc_camera"); // Next camera entity
 	}
 	fclose(camfh); // Close file
 };

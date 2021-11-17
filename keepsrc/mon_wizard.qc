@@ -198,20 +198,16 @@ void(entity inflictor, entity attacker, float damage) wiz_pain =
 	}
 };
 
-//============================================================================
 void()	wiz_death1	=[	$death1,		wiz_death2	] {};
 void()	wiz_death2	=[	$death2,		wiz_death3	] {monster_check_gib();};
-void()	wiz_death3	=[	$death3,		wiz_death4	] {monster_check_gib();
-	self.solid = SOLID_NOT;};
+void()	wiz_death3	=[	$death3,		wiz_death4	] {monster_check_gib();self.solid = SOLID_NOT;};
 void()	wiz_death4	=[	$death4,		wiz_death5	] {};
 void()	wiz_death5	=[	$death5,		wiz_death6	] {};
 void()	wiz_death6	=[	$death6,		wiz_death7	] {};
 void()	wiz_death7	=[	$death7,		wiz_death8	] {monster_death_postcheck();};
 void()	wiz_death8	=[	$death8,		wiz_death8	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
-void() wiz_die =
-{
+void() wiz_die = {
 	// Pre-check routine to tidy up extra entities
 	monster_death_precheck();
 
@@ -221,61 +217,52 @@ void() wiz_die =
 		self.velocity_y = -200 + 400*random();
 		self.velocity_z = 100 + 100*random();
 		self.flags = self.flags - (self.flags & FL_ONGROUND);
+		self.movetype = MOVETYPE_TOSS;			// Affected by gravity
 		wiz_death1 ();
 	}
 };
 
-/*======================================================================
-QUAKED monster_wizard (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
+void() monster_wizard_precache = {
+	precache_model ("progs/ad171/mon_wizard.mdl");
+	precache_model ("progs/h_wizard.mdl");
+	precache_model (MODEL_PROJ_WIZ);		// Originally progs/w_spike.mdl
+	precache_model ("progs/ad171/gib_wzarm1.mdl");
+	precache_model ("progs/ad171/gib_wzarm2.mdl");
+	precache_model ("progs/ad171/gib_wztail.mdl");
+	precache_sound ("wizard/widle1.wav");
+	precache_sound ("wizard/widle2.wav");
+	precache_sound ("wizard/wdeath.wav");
+	precache_sound ("wizard/wpain.wav");
+	precache_sound ("wizard/hit.wav");		// used by c code
+	precache_sound ("wizard/wattack.wav");
+	precache_sound ("wizard/wsight.wav");
+};
+
 void() setup_wizard;
+
+// QUAKED monster_wizard (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_wizard = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_wizard.mdl";
 	self.headmdl = "progs/h_wizard.mdl";
 	self.gib1mdl = "progs/ad171/gib_wzarm1.mdl";	// Left arm/stump
 	self.gib2mdl = "progs/ad171/gib_wzarm2.mdl";	// Right arm/stump
 	self.gib3mdl = "progs/ad171/gib_wztail.mdl";	// Tail section
-	
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (MODEL_PROJ_WIZ);		// Originally progs/w_spike.mdl
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-
 	self.idle_sound = "wizard/widle1.wav";
 	self.idle_sound2 = "wizard/widle2.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-
-	precache_sound ("wizard/wdeath.wav");
 	self.pain_sound = "wizard/wpain.wav";
-	precache_sound (self.pain_sound);
-
-	precache_sound ("wizard/hit.wav");		// used by c code
-	precache_sound ("wizard/wattack.wav");
-
 	self.sight_sound = "wizard/wsight.wav";
-	precache_sound (self.sight_sound);
-
-	// Cache gargoyle is a special class used for precache only
-	if (self.classtype != CT_CACHEWIZARD) setup_wizard();
+	if (self.classtype != CT_CACHEWIZARD) setup_wizard(); // Cache gargoyle is a special class used for precache only
 };
 
-//----------------------------------------------------------------------------
 void() monster_nourminion = { 
 	self.classtype = CT_CACHEWIZARD; 
 	monster_wizard();
 };
 
-//----------------------------------------------------------------------------
-void() setup_wizard =
-{
+void() setup_wizard = {
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -292,11 +279,9 @@ void() setup_wizard =
 	// Allow wizards to keep a certain distance above the enemy
 	if (self.spawnflags & MON_WIZARD_ABOVE) {
 		self.th_checkattack = GargoyleCheckAttack;
-	}
-	else {
+	} else {
 		// Default behaviour, really high distance checks
 		self.th_checkattack = WizardCheckAttack;
-		self.enemymaxdist = TRUE;
 	}
 	self.th_pain = wiz_pain;
 	self.th_die = wiz_die;

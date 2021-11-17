@@ -1,21 +1,13 @@
-/*==============================================================================
-KNIGHT
-==============================================================================*/
 $cd id1/models/knight
 $origin 0 0 24
 $base base
 $skin badass3
-
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
-
 $frame runb1 runb2 runb3 runb4 runb5 runb6 runb7 runb8
-
 $frame runattack1 runattack2 runattack3 runattack4 runattack5
 $frame runattack6 runattack7 runattack8 runattack9 runattack10
 $frame runattack11
-
 $frame pain1 pain2 pain3
-
 $frame painb1 painb2 painb3 painb4 painb5 painb6 painb7 painb8 painb9
 $frame painb10 painb11
 
@@ -25,10 +17,8 @@ $frame attackb6 attackb7 attackb8 attackb9 attackb10
 
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9
 $frame walk10 walk11 walk12 walk13 walk14
-
 $frame death1 death2 death3 death4 death5 death6 death7 death8
 $frame death9 death10
-
 $frame deathb1 deathb2 deathb3 deathb4 deathb5 deathb6 deathb7 deathb8
 $frame deathb9 deathb10 deathb11
 
@@ -64,11 +54,9 @@ $frame kneelup7 kneelup8 kneelup9 kneelup10 kneelup11
 $frame kneelrun1 kneelrun2 kneelrun3 kneelrun4 kneelrun5
 $frame kneelrun6 kneelrun7 kneelrun8
 
-void() knight_sword_sound;
 void() knight_walk1;
 void() knight_run1;
 
-//===========================================================================
 void()	knight_idlea1	=[	$idlea1,	knight_idlea2	] {ai_stand();};
 void()	knight_idlea2	=[	$idlea2,	knight_idlea3	] {ai_stand();};
 void()	knight_idlea3	=[	$idlea3,	knight_idlea4	] {ai_stand();};
@@ -86,7 +74,6 @@ void()	knight_idlea14	=[	$idlea14,	knight_idlea15	] {ai_stand();};
 void()	knight_idlea15	=[	$idlea15,	knight_idlea16	] {ai_stand();};
 void()	knight_idlea16	=[	$idlea16,	knight_stand1	] {ai_stand();};
 
-//----------------------------------------------------------------------
 void()	knight_idleb1	=[	$idleb1,	knight_idleb2	] {ai_stand();};
 void()	knight_idleb2	=[	$idleb2,	knight_idleb3	] {ai_stand();};
 void()	knight_idleb3	=[	$idleb3,	knight_idleb4	] {ai_stand();};
@@ -102,7 +89,6 @@ void()	knight_idleb12	=[	$idleb12,	knight_idleb13	] {ai_stand();};
 void()	knight_idleb13	=[	$idleb13,	knight_idleb14	] {ai_stand();};
 void()	knight_idleb14	=[	$idleb14,	knight_stand1	] {ai_stand();};
 
-//----------------------------------------------------------------------
 void()	knight_kneelup1	=[	$kneelup1,	knight_kneelup2	] {ai_stand();};
 void()	knight_kneelup2	=[	$kneelup2,	knight_kneelup3	] {ai_stand();};
 void()	knight_kneelup3	=[	$kneelup3,	knight_kneelup4	] {ai_stand();};
@@ -115,7 +101,6 @@ void()	knight_kneelup9	=[	$kneelup9,	knight_kneelup10] {ai_stand();};
 void()	knight_kneelup10=[	$kneelup10,	knight_kneelup11] {ai_stand();};
 void()	knight_kneelup11=[	$kneelup11,	knight_stand1	] {ai_stand();};
 
-//----------------------------------------------------------------------
 void()	knight_kneel1	=[	$kneel1,	knight_kneel2	] {ai_stand();monster_idle_sound();};
 void()	knight_kneel2	=[	$kneel2,	knight_kneel3	] {ai_stand();};
 void()	knight_kneel3	=[	$kneel3,	knight_kneel4	] {ai_stand();};
@@ -126,7 +111,6 @@ void()	knight_kneel6	=[	$kneel6,	knight_kneel1	] {ai_stand();
 		self.think = knight_kneelup1;	// Start standing up
 };
 
-//----------------------------------------------------------------------
 void()	knight_kneeldn1	=[	$kneeldn1,	knight_kneeldn2	] {ai_stand();};
 void()	knight_kneeldn2	=[	$kneeldn2,	knight_kneeldn3	] {ai_stand();};
 void()	knight_kneeldn3	=[	$kneeldn3,	knight_kneeldn4	] {ai_stand();};
@@ -137,13 +121,11 @@ void()	knight_kneeldn7	=[	$kneeldn7,	knight_kneeldn8	] {ai_stand();};
 void()	knight_kneeldn8	=[	$kneeldn8,	knight_kneeldn9	] {ai_stand();};
 void()	knight_kneeldn9	=[	$kneeldn9,	knight_kneel1	] {ai_stand();};
 
-//----------------------------------------------------------------------
 void()	knight_attn1	=[	$attn1,		knight_attn2	] {ai_stand();monster_idle_sound();};
 void()	knight_attn2	=[	$attn2,		knight_attn3	] {ai_stand();};
 void()	knight_attn3	=[	$attn3,		knight_attn4	] {ai_stand();};
 void()	knight_attn4	=[	$attn4,		knight_attn1	] {ai_stand();};
 
-//----------------------------------------------------------------------
 void()	knight_stand1	=[	$stand1,	knight_stand2	] {ai_stand();monster_idle_sound();};
 void()	knight_stand2	=[	$stand2,	knight_stand3	] {ai_stand();};
 void()	knight_stand3	=[	$stand3,	knight_stand4	] {ai_stand();};
@@ -165,9 +147,7 @@ void()	knight_stand9	=[	$stand9,	knight_stand1	] {
 	}
 };
 
-//===========================================================================
-void()	knight_walk1	=[	$walk1,		knight_walk2	] {
-	monster_footstep(FALSE); monster_idle_sound(); ai_walk(3);};
+void()	knight_walk1	=[	$walk1,		knight_walk2	] {monster_footstep(FALSE); monster_idle_sound(); ai_walk(3);};
 void()	knight_walk2	=[	$walk2,		knight_walk3	] {ai_walk(2);};
 void()	knight_walk3	=[	$walk3,		knight_walk4	] {ai_walk(3);};
 void()	knight_walk4	=[	$walk4,		knight_walk5	] {ai_walk(4);};
@@ -182,7 +162,6 @@ void()	knight_walk12	=[	$walk12,	knight_walk13	] {ai_walk(3);};
 void()	knight_walk13	=[	$walk13,	knight_walk14	] {ai_walk(4);};
 void()	knight_walk14	=[	$walk14,	knight_walk1	] {ai_walk(3);};
 
-//===========================================================================
 void()	knight_run1	=[	$runb1,		knight_run2	] {monster_idle_sound(); ai_run(16);};
 void()	knight_run2	=[	$runb2,		knight_run3	] {monster_footstep(FALSE); ai_run(20);};
 void()	knight_run3	=[	$runb3,		knight_run4	] {ai_run(13);};
@@ -192,11 +171,10 @@ void()	knight_run6	=[	$runb6,		knight_run7	] {monster_footstep(FALSE); ai_run(20
 void()	knight_run7	=[	$runb7,		knight_run8	] {ai_run(14);};
 void()	knight_run8	=[	$runb8,		knight_run1	] {ai_run(6);};
 
-//============================================================================
 void()	knight_runatk1	=[	$runattack1,		knight_runatk2	] { ai_charge(20); };
 void()	knight_runatk2	=[	$runattack2,	knight_runatk3	] {ai_charge_side();};
 void()	knight_runatk3	=[	$runattack3,	knight_runatk4	] {ai_charge_side();};
-void()	knight_runatk4	=[	$runattack4,	knight_runatk5	] {knight_sword_sound(); ai_charge_side();};
+void()	knight_runatk4	=[	$runattack4,	knight_runatk5	] {SwordSwipeSound(); ai_charge_side();};
 void()	knight_runatk5	=[	$runattack5,	knight_runatk6	] {ai_melee_side();};
 void()	knight_runatk6	=[	$runattack6,	knight_runatk7	] {monster_footstep(FALSE); ai_melee_side();};
 void()	knight_runatk7	=[	$runattack7,	knight_runatk8	] {ai_melee_side();};
@@ -205,11 +183,10 @@ void()	knight_runatk9	=[	$runattack9,	knight_runatk10	] {ai_melee_side();};
 void()	knight_runatk10	=[	$runattack10,	knight_runatk11	] {monster_footstep(FALSE); ai_charge_side();};
 void()	knight_runatk11	=[	$runattack11,	knight_run1	] {ai_charge(10);};
 
-//----------------------------------------------------------------------
 void()	knight_atk1	=[	$attackb1,		knight_atk2	] {ai_charge(0);};
 void()	knight_atk2	=[	$attackb2,		knight_atk3	] {ai_charge(7);};
 void()	knight_atk3	=[	$attackb3,		knight_atk4	] {ai_charge(4);};
-void()	knight_atk4	=[	$attackb4,		knight_atk5	] {knight_sword_sound(); ai_charge(0);};
+void()	knight_atk4	=[	$attackb4,		knight_atk5	] {SwordSwipeSound(); ai_charge(0);};
 void()	knight_atk5	=[	$attackb5,		knight_atk6	] {monster_footstep(FALSE); ai_charge(3);};
 void()	knight_atk6	=[	$attackb6,		knight_atk7	] {ai_charge(4); ai_melee();};
 void()	knight_atk7	=[	$attackb7,		knight_atk8	] {ai_charge(1); ai_melee();};
@@ -217,14 +194,22 @@ void()	knight_atk8	=[	$attackb8,		knight_atk9	] {ai_charge(3); ai_melee();};
 void()	knight_atk9	=[	$attackb9,		knight_atk10] {ai_charge(1);};
 void()	knight_atk10=[	$attackb10,		knight_run1	] {ai_charge(5);};
 
-//=============================================================================
-void() knight_melee =
-{
-	if (ai_checkmelee(MONAI_MELEEKNIGHT,FALSE)) knight_atk1 ();
-	else knight_runatk1 ();
+// Quickened attack for cranked knights.
+void() knight_fast1  =[ $attackb1,  knight_fast2  ] {SwordSwipeSound(); ai_charge(0);};
+void() knight_fast2  =[ $attackb2,  knight_fast3  ] {monster_footstep(FALSE); ai_charge(7);};
+void() knight_fast3  =[ $attackb5,  knight_fast4  ] {ai_charge(7);};
+void() knight_fast4  =[ $attackb6,  knight_fast5  ] {ai_charge(1); ai_melee();};
+void() knight_fast5  =[ $attackb7,  knight_fast6  ] {ai_charge(3); ai_melee();};
+void() knight_fast6  =[ $attackb9,  knight_fast7  ] {ai_charge(1); ai_melee();};
+void() knight_fast7  =[ $attackb10, knight_run1   ] {monster_footstep(FALSE); ai_charge(5);};
+
+void() knight_melee = {
+	if (ai_checkmelee(MONAI_MELEEKNIGHT,FALSE)) {
+		if (self.exactskin == 2 && self.max_health > 75) knight_fast1(); // Drake's cranked monster_warrior
+		else knight_atk1 ();
+	} else knight_runatk1 ();
 };
 
-//===========================================================================
 void()	knight_pain1	=[	$pain1,		knight_pain2	] {};
 void()	knight_pain2	=[	$pain2,		knight_pain3	] {};
 void()	knight_pain3	=[	$pain3,		knight_run1	] {};
@@ -241,11 +226,8 @@ void()	knight_painb9	=[	$painb9,	knight_painb10	] {ai_painforward(5);};
 void()	knight_painb10	=[	$painb10,	knight_painb11	] {ai_painforward(0);};
 void()	knight_painb11	=[	$painb11,	knight_run1	] {};
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage)	knight_pain =
-{
-	// Check all pain conditions and set up what to do next
-	monster_pain_check(attacker, damage);
+void(entity inflictor, entity attacker, float damage)	knight_pain = {
+	monster_pain_check(attacker, damage); // Check all pain conditions and set up what to do next
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
@@ -257,8 +239,7 @@ void(entity inflictor, entity attacker, float damage)	knight_pain =
 				self.pain_finished = time + 2;		// long animation
 				knight_painb1 ();					// Cool stumble, hand over mouth
 			}
-		}
-		else if (self.pain_check == 2) {
+		} else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
 			self.axhitme = 0;
 			self.pain_finished = time + 1.1;
@@ -267,11 +248,9 @@ void(entity inflictor, entity attacker, float damage)	knight_pain =
 	}
 };
 
-//============================================================================
 void()	knight_die1	=[	$death1,	knight_die2	] {};
 void()	knight_die2	=[	$death2,	knight_die3	] {monster_check_gib();};
-void()	knight_die3	=[	$death3,	knight_die4	] {monster_check_gib();
-	self.solid = SOLID_NOT;};
+void()	knight_die3	=[	$death3,	knight_die4	] {monster_check_gib(); self.solid = SOLID_NOT;};
 void()	knight_die4	=[	$death4,	knight_die5	] {};
 void()	knight_die5	=[	$death5,	knight_die6	] {};
 void()	knight_die6	=[	$death6,	knight_die7	] {};
@@ -280,11 +259,9 @@ void()	knight_die8	=[	$death8,	knight_die9	] {};
 void()	knight_die9	=[	$death9,	knight_die10] {monster_death_postcheck();};
 void()	knight_die10=[	$death10,	knight_die10] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
 void()	knight_dieb1	=[	$deathb1,	knight_dieb2	] {};
 void()	knight_dieb2	=[	$deathb2,	knight_dieb3	] {monster_check_gib();};
-void()	knight_dieb3	=[	$deathb3,	knight_dieb4	] {monster_check_gib();
-	self.solid = SOLID_NOT;};
+void()	knight_dieb3	=[	$deathb3,	knight_dieb4	] {monster_check_gib();self.solid = SOLID_NOT;};
 void()	knight_dieb4	=[	$deathb4,	knight_dieb5	] {};
 void()	knight_dieb5	=[	$deathb5,	knight_dieb6	] {};
 void()	knight_dieb6	=[	$deathb6,	knight_dieb7	] {};
@@ -295,8 +272,7 @@ void()	knight_dieb10 = [	$deathb10,	knight_dieb11] {monster_death_postcheck();};
 void()	knight_dieb11 = [	$deathb11,	knight_dieb11] {monster_deadbody_check();};
 
 void() knight_die = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// regular death
 	if (!self.gibbed) {
@@ -305,13 +281,6 @@ void() knight_die = {
 		else knight_dieb1 ();									// Backward - standard
 	}
 };
-
-
-void() knight_sword_sound = {
-	if (random() > 0.5) sound (self, CHAN_WEAPON, "knight/sword2.wav", 1, ATTN_NORM);
-	else sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
-};
-
 
 void() knight_aistates = {
 	self.th_stand = knight_stand1;		// Idling on feet
@@ -334,13 +303,10 @@ void() knight_wakeup = {
 	monster_targets();					// Check for targets
 };
 
-//----------------------------------------------------------------------
-void() knight_statue =
-{
+void() knight_statue = {
 	local float targ_angle, new_frame;
 
-	// Check for sudden death!
-	if (self.health < 0) return;
+	if (self.health < 0) return; // Check for sudden death!
 	
 	if (random() < MON_IDLE_SOUND && self.pos1_z > 1) {
 		new_frame = TRUE;
@@ -360,41 +326,49 @@ void() knight_statue =
  	self.nextthink = time + 5 + random()*5;
 };
 
-/*======================================================================
- QUAKED monster_knight (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
+void() monster_knight_precache = {
+	precache_model ("progs/ad171/mon_knight.mdl");
+	precache_model ("progs/h_knight.mdl");
+	precache_model ("progs/ad171/w_knightsword.mdl");
+	precache_model ("progs/ad171/gib_knfoot_l.mdl");
+	precache_model ("progs/ad171/gib_knfoot_r.mdl");
+	precache_stonegibs(); // Always precache these stone gib models
+	precache_sound ("ad171/statue/idle1.wav");
+	precache_sound ("ad171/statue/idle2.wav");
+	precache_sound ("rogue/statue/idle.wav");
+	precache_sound ("knight/idle.wav");
+	precache_sound ("rogue/statue/see.wav");
+	precache_sound ("rogue/statue/pain.wav");
+	precache_sound ("rogue/statue/death.wav");
+	precache_sound ("ad171/statue/sight.wav");
+	precache_sound ("knight/ksight.wav");
+	precache_sound ("knight/khurt.wav");
+	precache_sound ("knight/kdeath.wav");
+	precache_sound ("knight/sword1.wav");
+	precache_sound ("knight/sword2.wav");
+};
+
+// QUAKED monster_knight (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_knight = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_knight.mdl";
-	self.headmdl = "progs/h_knight.mdl";		// Large head
+	self.headmdl = "progs/h_knight.mdl"; // Large head
 	self.gib1mdl = "progs/ad171/w_knightsword.mdl";	// Unique sword
-	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
-	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-
+	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl"; // left foot
+	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl"; // right foot
 	self.purse_x = 5; //Give a coin
 	self.gib1sound = GIB_IMPACT_METALA;
 	if (random() < 0.5) self.gib2mdl = "";
 	if (random() < 0.5) self.gib3mdl = "";
-
 	if (self.deathstring == "")  self.deathstring = " was slashed by a Knight\n";
 
 	if (self.spawnflags & MON_STATUE) {
 		self.idle_sound = "ad171/statue/idle1.wav";
 		self.idle_sound2 = "ad171/statue/idle2.wav";
 		self.idle_soundcom = "rogue/statue/idle.wav";
-		precache_sound (self.idle_sound);
-		precache_sound (self.idle_sound2);
-		precache_sound (self.idle_soundcom);
+
 		if (random() < 0.5)
 			self.sight_sound = "ad171/statue/sight.wav";
 		else
@@ -406,23 +380,10 @@ void() monster_knight = {
 		self.gib2mdl = self.gib3mdl = string_null;
 	} else {
 		self.idle_sound = "knight/idle.wav";
-		precache_sound (self.idle_sound);
-		
 		self.sight_sound = "knight/ksight.wav";
 		self.pain_sound = "knight/khurt.wav";
 		self.death_sound = "knight/kdeath.wav";
 	}
-
-	// Cannot have if precache statements, precache duplicates as well
-	precache_sound (self.sight_sound);
-	precache_sound (self.pain_sound);
-	precache_sound (self.death_sound);
-	
-	precache_sound ("knight/sword1.wav");
-	precache_sound ("knight/sword2.wav");
-
-	// Always precache these stone gib models
-	precache_stonegibs();
 	
 	self.solid = SOLID_NOT;					// No interaction with world
 	self.movetype = MOVETYPE_NONE;			// Static item, no movement
@@ -442,10 +403,8 @@ void() monster_knight = {
 
     self.hittype    = HIT_METAL;
 	
-	//----------------------------------------------------------------------
 	// Detect statues and setup different parameters
 	// Tougher skin, less pain, heavy feet etc	
-	//----------------------------------------------------------------------
 	if (self.spawnflags & MON_STATUE) {
 		self.classgroup = CG_STONE;		// Stone hates metal!
 		self.resist_nails = 0.5;		// Tough skin for nails
@@ -508,4 +467,12 @@ void() monster_knight = {
 	self.classtype = CT_MONKNIGHT;
 	self.classmove = MON_MOVEWALK;
 	monster_start();	
+};
+
+void() monster_warrior = {
+	self.skin = self.exactskin = 2;
+	if (self.health < 1) self.health = 150;
+	self.classname = "monster_knight";
+	if (self.deathstring == "") self.deathstring = " was slashed by a Warrior\n";
+	monster_knight();
 };

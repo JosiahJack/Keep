@@ -1,43 +1,25 @@
-/*
-===========================
-LITTLE CUTY
-===========================
-*/
+// LITTLE CUTY
 
 $origin 0 0 24
 $base wizbase	
 $skin wizbase
-
-//==============================================================================
-
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9 stand10 
 $frame stand11 stand12 stand13 stand14 stand15 stand16 stand17 stand18 stand19 
 $frame stand20 
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9 walk10 walk11
 $frame walk12 walk13 walk14 walk15 walk16 walk17 walk18 walk19 walk20
 $frame walk21 walk22 walk23 walk24
-
 $frame run1 run2 run3 run4 run5 run6 run7 run8 run9
-
 $frame atk1 atk2 atk3 atk4 atk5 atk6 atk7 atk8 atk9 atk10
-
 $frame rush1 rush2 rush3 rush4 rush5 rush6 rush7 rush8 rush9 rush10 
 $frame rush11 rush12 rush13
-
 $frame pain1 pain2 pain3 pain4 pain5 pain6 pain7 pain8 pain9 
-
 $frame paina1 paina2 paina3 paina4 paina5 paina6
-
 $frame painc1 painc2 painc3 painc4 painc5 painc6 painc7 painc8
-
 $frame die1 die2 die3 die4 die5 die6 die7 die8 die9 die10 
 $frame die11 die12 die13 die14 die15 die16
-
 $frame dieb1 dieb2 dieb3 dieb4 dieb5 dieb6 dieb7 dieb8 dieb9 dieb10 
 $frame dieb11 dieb12 dieb13 dieb14 dieb15 dieb16
-
-//=============================================================================
 
 void()   ink_stand1      =[ 0,     ink_stand2  ] {};
 void()   ink_stand2      =[ 1,     ink_stand3  ] {};  
@@ -124,8 +106,6 @@ void()	octa_run7	=[	$run7  ,	octa_run8	] {ai_run(7);};
 void()	octa_run8	=[	$run8  ,	octa_run9	] {ai_run(11);};
 void()	octa_run9	=[	$run9  ,	octa_run1	] {ai_run(12);};
 
-//===============================================================================
-
 void()	octa_atk1	=[	$atk1,  	octa_atk2	] {ai_face();};
 void()	octa_atk2	=[	$atk2,  	octa_atk3	] {ai_face();};
 void()	octa_atk3	=[	$atk3,  	octa_atk4	] {ai_face();};
@@ -150,8 +130,6 @@ void()	octa_atka10	=[	$rush10,  	octa_atka11	] {ai_face();};
 void()	octa_atka11	=[	$rush11,  	octa_atka12	] {ai_face();};
 void()	octa_atka12	=[	$rush12,  	octa_atka13	] {ai_face();};
 void()	octa_atka13	=[	$rush13,  	octa_run1	] {ai_face();};
-
-//===============================================================================
 
 void(entity inflictor, entity attacker, float damage) octa_pain1	=[	$pain1, 	octa_pain2	] {};
 void()	octa_pain2	=[	$pain2, 	octa_pain3	] {};
@@ -178,8 +156,6 @@ void()	octa_painc5	=[	$painc5, 	octa_painc6	] {};
 void()	octa_painc6	=[	$painc6, 	octa_painc7	] {};
 void()	octa_painc7	=[	$painc7, 	octa_painc8	] {};
 void()	octa_painc8	=[	$painc8, 	octa_run1	] {};
-
-//===========================================================================
 
 void()	octa_die1	=[	$die1,  	octa_die2	] {};
 void()	octa_die2	=[	$die2,  	octa_die3	] {monster_check_gib();};
@@ -218,49 +194,36 @@ void()	octa_dieb16	=[	$dieb16,  	octa_dieb16	] {monster_deadbody_check();};
 void() octa_die = {
 	monster_death_precheck();
 	if (!self.gibbed) {
-		//sound (self, CHAN_VOICE, "octa/wdeath.wav", 1, ATTN_NORM);
+		//sound (self, CHAN_VOICE, ???, 1, ATTN_NORM);
 		self.lip = random();
 		if (self.lip < 0.5) octa_die1();
 		else octa_dieb1();
 	}
-}
+};
 
-//================================================================================
+void() monster_octa_precache = {
+	precache_model("progs/madfox/mon_octa.mdl");
+	precache_model("progs/madfox/wink.spr");
+    precache_model("progs/custents/beamhit.spr");
+	precache_model("progs/w_spike.mdl");
+};
 
-/*
-	QUAKED monster_octa (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-*/
-
+// QUAKED monster_octa (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_octa = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
-	
-    precache_model ("progs/madfox/wink.spr");
-    precache_model ("progs/custents/beamhit.spr");
+
 	self.mdl = "progs/madfox/mon_octa.mdl";
-	precache_model (self.mdl);
-	//self.headmdl = "progs/h_octa.mdl";
-	//precache_model (self.headmdl);
-	precache_model ("progs/w_spike.mdl");
 	//self.gib1mdl = 
 	//self.gib2mdl = 
 	//self.gib3mdl = 
 	//self.gib4mdl = 
-
-	//precache_sound ("octa/hit.wav");		// used by c code
-	//precache_sound ("octa/wattack.wav");
-	//precache_sound ("octa/wdeath.wav");
-	//precache_sound ("octa/widle1.wav");
-	//precache_sound ("octa/widle2.wav");
-	//precache_sound ("octa/wpain.wav");
-	//precache_sound ("octa/wsight.wav");
-
-	//self.idle_sound = "octa/widle1.wav";
-	//self.idle_soundcom = "octa/widle2.wav";
-	//self.sight_sound = "octa/wsight.wav";	//gnounc
-	//self.pain_sound = "octa/wpain.wav";
+	//self.idle_sound = 
+	//self.idle_soundcom = 
+	//self.sight_sound = 
+	//self.pain_sound = 
 
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
@@ -276,9 +239,7 @@ void() monster_octa = {
 		if (self.deathstring == "") self.deathstring = " was drowned by an Octopus\n";
 	}
 	self.move_state = '0 8 12';
-
-	// Check for water sightline wakeup
-	if (self.spawnflags & MON_LIQUIDBLOCK) self.liquidblock = TRUE;
+	if (self.spawnflags & MON_LIQUIDBLOCK) self.liquidblock = TRUE; // Check for water sightline wakeup
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
@@ -296,11 +257,8 @@ void() monster_octa = {
 	//self.th_missile = Wiz_Missile;
 	self.th_pain = octa_pain1;
 	self.th_die = octa_die1;
-		
 	self.classtype = CT_MONOCTOPUS;
 	self.classgroup = CG_FISH;
 	self.classmove = MON_MOVESWIM;
-
 	monster_start();
 };
-

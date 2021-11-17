@@ -27,8 +27,8 @@
 // NO CHARGE to the recipient.
 //
 // Stats:
-// Entity count: 
-// Function count: 
+// Entity count: 0
+// Function count: 0
 //
 // Implements: Classgroup and Classtype System
 //
@@ -42,10 +42,8 @@
 .float		classtype;			// Class type - used for quick reference
 .float		classgroup;			// Class group - used for quick reference
 .float		classmove;			// 1=Walk, 2=Fly, 4=Swim
-.float		classproj;			// Projectile used by entity class
 
 // Unique Class Groups for quicker searches (mostly items).  Previous system used classname (slow string search).  Monster classgroups are useful for infighting grouping checks
-float CG_PLAYERS = 50;			// All player/clients
 float CG_LIGHTS = 70;			// All light type entities
 float CG_HEALTH = 100;			// All health pack types (15/25/+100)
 float CG_AMMOITEM = 200;		// All ammo items/packs
@@ -66,6 +64,7 @@ float CG_PROJHAZARD = 242;		// Hazard projectiles (flame/plasma)
 float CG_PROJMAGIC = 243;		// Elemental Mana attacks and other magic projectiles
 float CG_PROJICE = 244;			// Cold stuff like Elemental Tome, Snowman snowballs, Ice Golem rocks
 float CG_MINIONEGG = 245;		// Special minion eggs
+float CG_PROJFIRE = 246;			// Anything that can catch other things on fire.
 float CG_WEAPON = 250;			// All weapon items
 float CG_PROGRESSION = 260;		// All progression items
 float CG_ARMOR = 275;			// All armor types
@@ -104,7 +103,6 @@ float CG_HARMLESS = 777;		// (1) Sheep, Frogs, Ogles, Bees, Ravens
 
 // Unique Class Types for quicker entity searches.  Previous system used classname (slow string search)
 float CT_WORLD = 1;				// World entity
-float CT_PLAYER = 7;			// Player (007)
 float CT_SPAWNSP = 10;			// Spawn location - Single Player
 float CT_SPAWNCOOP = 11;		// Spawn location - Coop
 float CT_SPAWNDM = 12;			// Spawn location - Deathmatch
@@ -167,7 +165,7 @@ float CT_MONWARLOCK = 118;		// Warlock from Drake
 float CT_MONSORCERER = 119;		// Sorcerer from Drake
 float CT_MONDOG = 120;			// 4 legged friend
 float CT_MONBANDIT = 121;		// Drake bandit
-float CT_MONRAKEGOBLIN = 122;	// Drake goblin
+float CT_MONDRAKEGOBLIN = 122;	// Drake goblin
 float CT_MONFANGEL = 123;		// Hexen2 Fallen Angel
 float CT_MONFANGELLORD = 124;	// Hexen2 Fallen Angel Lord
 float CT_MONFISH = 125;			// Fish fish fishy
@@ -189,14 +187,19 @@ float CT_MONKNIGHT = 140;		// Small metal Knights
 float CT_MONCARNIVEAN = 141;	// Carnivean Serpentine Knight
 float CT_MONREIVER = 142;		// Reiver from Quake 1.5 mod
 float CT_MONHUNTRESS = 143;		// Elena the Blood Huntress! by Redfield
-
-
+float CT_MONMANTICORE = 144;	// Manticore / Lich Fiend
+float CT_MONDLORD = 145;		// Death Lord from Quoth
+float CT_MONARCHERLORD = 146;	// Hexen2 Archer Lord from Drake
+float CT_MONBEARD = 147;		// Beard from Nehahra
+float CT_MONMISTERMAX = 148;	// Mister Maxwell, aka the mister, boss from Nehahra
+float CT_MONNEHAHRA = 149;		// Nehahra, boss from Nehahra
 float CT_MONOGRE = 150;			// Chainsaw wielding manics
 float CT_MONOGREFISH = 155;		// Madfox fishing ogre
 float CT_MONSHAL = 160;			// Shalrath / Vore
 float CT_MONSHALBOSS = 161;		// Shalrath Mother
 float CT_MONSHAM = 165;			// Shambler
 float CT_MONBOGLORD = 166;		// Lord of the Bog! (Big shammy)
+float CT_MONSHAMVILE = 167;		// Sha'Vile, Drake's shamvile black shambler with archvile powers.
 float CT_MONSPAWN = 170;		// Bouncing annoying crudblossom!
 float CT_MONWIZARD = 180;		// Wizard / Scrags
 float CT_CACHEWIZARD = 181;		// Special entity for precache of assets
@@ -241,7 +244,8 @@ float CT_MONHOGRE = 250;		// HD Ogre (Chainsaw)
 float CT_MONHOGREMAC = 255;		// HD Ogre (Mace)
 float CT_MONHOGREHAM = 260;		// HD Ogre (Hammer)
 
-
+float CT_MONENF_GUNNER = 268;	// Chaingunner Enforcer
+float CT_MONARMYDBSHOTGUN = 269;// Army Soldier Elite Red fires double barrel shotgun, from Drake.
 float CT_MONARMYROCKET = 270;	// Army Soldier (Rocket) // New base monster series (Inspired by lunaran/Quoth)
 float CT_MONARMYGRENADE = 272;	// Army Soldier (Grenade)
 float CT_MONARMYPLASMA = 275;	// Army Soldier (Plasma)
@@ -276,6 +280,7 @@ float CT_MONSCORPION = 310;		// Deadly Scorpion (HL Black Crab!)
 float CT_CACHESCORPION = 312;	// Special entity for precache of assets
 float CT_MINIONSCORPION = 314;	// Minion Spawning version from wraith
 float CT_MONLOSTSOUL = 315;		// The Original Doom flying lost soul
+float CT_SOUL = 316;			// Floating Soul collectable for Nehahra wraiths.
 float CT_CACHELOSTSOUL = 317;	// Special entity for precache of assets
 float CT_MINIONLOSTSOUL = 319;	// Minion Spawning version from skullwizard
 float CT_MONSKULLW = 320;		// Creepy Skull Wizard (Teleport)
@@ -289,69 +294,73 @@ float CT_MINIONGOLEM = 331;		// Minion Spawning version for golem
 float CT_MONICEGOLEM = 335;		// Giant Ice Golem (shards+ground slam)
 float CT_MONICEGOLEMWAVE = 337;	// Wave targets for boss Ice Golem
 float CT_MONMINOTAUR = 340;		// Large tank like bull (magic/charge)
+float CT_MONWRATH = 341;		// Rogue Wrath
+float CT_MONWRATHOVERLORD = 342;// Rogue Overlord
+float CT_MONDREADWRAITH = 343;	// Drake Dread Lord
+
+
 float CT_MONEIDOLON = 345;		// Large demon boss Eidolon
 float CT_MONFLYTRAPGROUND = 346;// Flytrap on the ground with button and tech base -madfox
 float CT_MONEIDOLONWAVE = 347;	// Wave targets for boss Eidolon
 float CT_MONFLYTRAP = 348;		// Flytrap standing up, just normal plant -madfox
 float CT_MONWRAITHNEHAHRA = 349;
 float CT_MONWRAITH = 350;		// Undead wraith (Burning debuff)
-// Twisted Xmas MOD (Twisted Matrix)
-float CT_MONELF = 351;			// Little melee (knight)
-float CT_MONRAINDEER = 352;		// Rocket wielding stag (ogre)
-float CT_MONSNOWMAN = 353;		// Quick firing turret
-float CT_MONSANTA = 354;		// Good/bad santa (boss)
+float CT_MONELF = 351;			// Little melee (knight) from Twisted Xmas MOD (Twisted Matrix)
+float CT_MONRAINDEER = 352;		// Rocket wielding stag (ogre) from Twisted Xmas MOD (Twisted Matrix)
+float CT_MONSNOWMAN = 353;		// Quick firing turret from Twisted Xmas MOD (Twisted Matrix)
+float CT_MONSANTA = 354;		// Good/bad santa (boss) from Twisted Xmas MOD (Twisted Matrix)
 float CT_MONMUMMY = 355;		// Undead mummy (Poison debuff)
 float CT_MONMORPH = 356;		// Guardian
 float CT_MONBOIL = 360;			// Slow moving zombie bomb
 float CT_MONLAVAMAN = 361;		// Hephaestus from Rogue
-float CT_MONLICHFIEND = 362;		// Headless fiend spawning boss
+float CT_MONLICHFIEND = 362;	// Headless fiend spawning boss
 float CT_MONSEEKER = 364;		// Robot replacement for Shambler
 float CT_MONEEL = 365;			// Sparky eel (electric projectile) from Rogue plus AD plasma shot
-float CT_MONINVISSWORD = 366;		// Invisible swordsman from Rogue
+float CT_MONINVISSWORD = 366;	// Invisible swordsman from Rogue
 float CT_MONGREMLIN = 367;		// Gremlin from Hipnotic
 
-// Quoth MOD (Kell/Necros/Preach)
-float CT_MONVORELING = 370;		// Little baby vorelings! ahh so cute!
-float CT_CACHEVORELING = 372;		// Special entity for precache of assets
-float CT_MINIONVORELING = 374;		// Minion Spawning version from shalrath
-float CT_MONSWAMPLING = 375;		// Tiny swamplings! ahh so cute!
-float CT_MONDROLE = 380;		// Fast moving tentacle tank with rockets
-float CT_MONFREDDIE = 381;		// Slow moving mechanical ogre mutant
-float CT_MONGAUNT = 382;		// Flying harpy thing with plasma bolts!
+
+float CT_MONVORELING = 370;		// Little baby vorelings! ahh so cute! from Quoth MOD (Kell/Necros/Preach)
+float CT_CACHEVORELING = 372;	// Special entity for precache of assets
+float CT_MINIONVORELING = 374;	// Minion Spawning version from shalrath
+float CT_MONSWAMPLING = 375;	// Tiny swamplings! ahh so cute!
+float CT_MONDROLE = 380;		// Fast moving tentacle tank with rockets from Quoth MOD (Kell/Necros/Preach)
+float CT_MONFREDDIE = 381;		// Slow moving mechanical ogre mutant from Quoth MOD (Kell/Necros/Preach)
+float CT_MONGAUNT = 382;		// Flying harpy thing with plasma bolts! from Quoth MOD (Kell/Necros/Preach)
 float CT_CACHEGAUNT = 383;		// Cache for minion gaunts
 float CT_MINIONGAUNT = 384;		// Minion gaunts
-float CT_MONJIM = 385;			// Jim the flying robot of doom!
-float CT_MONJIMROCKET = 386;		// Jim has a rocket launcher!
-float CT_MONGUG = 387;				// Gug!
-float CT_MONPOLYP = 388;			// Flying Polyp
-float CT_MONVERMIS = 389;			// Vermis
-float CT_MONPYRO = 390;			// Enforcer Flame (Pyro)
-float CT_MONENF_ULTRA = 391;			// Ultra Enforcer
-float CT_MONFUMIGATOR = 392;		// Poison version of the Pyro
-float CT_MONENF_MEGA = 393;			// Mega Enforcer
-float CT_MONDRONE = 394;			// Drone robot from Drake
-float CT_MONCENTURION = 395;		// Enforcer hoverboard (Plasma)
-
-float CT_PROJ_FABLADE = 396;		// Fallen Angel ninja blade attack
-float CT_PROJ_FASPELL = 397;		// Fallen Angel green shard attack
-float CT_ELENABLAST = 398;	// Targets for Elena fireblast trigger
-float CT_PROJ_FIREWORK = 399;		// Fireworks
+float CT_MONJIM = 385;			// Jim the flying robot of doom! from Quoth MOD (Kell/Necros/Preach)
+float CT_MONJIMROCKET = 386;	// Jim has a rocket launcher!
+float CT_MONGUG = 387;			// Gug! from Quoth MOD (Kell/Necros/Preach)
+float CT_MONPOLYP = 388;		// Flying Polyp from Quoth MOD (Kell/Necros/Preach)
+float CT_MONVERMIS = 389;		// Vermis from Quoth MOD (Kell/Necros/Preach)
+float CT_MONPYRO = 390;			// Enforcer Flame (Pyro) from Quoth MOD (Kell/Necros/Preach)
+float CT_MONENF_ULTRA = 391;	// Ultra Enforcer
+float CT_MONFUMIGATOR = 392;	// Poison version of the Pyro
+float CT_MONENF_MEGA = 393;		// Mega Enforcer
+float CT_MONDRONE = 394;		// Drone robot from Drake
+float CT_MONCENTURION = 395;	// Enforcer hoverboard (Plasma)
+float CT_PROJ_FABLADE = 396;	// Fallen Angel ninja blade attack
+float CT_PROJ_FASPELL = 397;	// Fallen Angel green shard attack
+float CT_ELENABLAST = 398;		// Targets for Elena fireblast trigger
+float CT_PROJ_FIREWORK = 399;	// Fireworks
 
 // Class Types for all projectiles in game (there is a lot!)
 float CT_PROJ_TRACE = 400;		// Tracer shot (true aim)
-float CT_PROJ_SMARTBALL = 401;		// Nemesant bouncing fire ball
+float CT_PROJ_SMARTBALL = 401;	// Nemesant bouncing fire ball
 float CT_PROJ_TRACEPART = 402;	// Tracer shot (extra particles)
 float CT_PROJ_ZRING = 403;		// Zena ring
-float CT_FIREWORKSHOOTER = 404;		// Fireworks
+float CT_FIREWORKSHOOTER = 404;	// Fireworks
 float CT_PROJ_SHELLC = 405;		// Shellcase projectile
 float CT_PROJ_WILLY = 406;		// Willy the Spider projectile
 float CT_PROJ_CYBER = 407;		// Cyber Demon rocket
 float CT_MISCBELL = 408;		// Misc Bell
 float CT_HEALGEM = 409;			// New Lifegem for Ravenkeep
 float CT_PROJ_SG = 410;			// SG projectile
+float CT_PROJ_MCOR1 = 411;		// Manticore yellow large spit spike
 float CT_PROJ_SSG = 412;		// SSG projectile
 float CT_HEALBEER = 413;		// New Q Brew for Ravenkeep
-float CT_SPIRITTELEPORT = 414;		// info_skullwiz_destination
+float CT_SPIRITTELEPORT = 414;	// info_skullwiz_destination
 float CT_PROJ_NG = 415;			// NG projectile
 float CT_PROJ_SNG = 416;		// SNG projectile
 float CT_PROJ_MONNG = 417;		// Lava nailgun monster projectile (glowing red)
@@ -374,7 +383,7 @@ float CT_PROJ_GLMULTI = 433;	// Rogue Multi-Grenade projectile
 float CT_PROJ_DARTARROW = 434;	// Trap_spikeshooter dart
 float CT_PROJ_BOLT1 = 435;		// Crossbow Knight Bolt +hknight trail
 float CT_PROJ_BOLT2 = 436;		// Poison
-
+float CT_PROJ_MCOR2 = 437;		// Manticore small barrage spike
 float CT_PROJ_ENFHKN = 438;		// Ultra Enforcer knight spike
 float CT_PROJ_LAVANG = 439;		// Lava nailgun
 float CT_PROJ_LASER = 440;		// Enforcer/Traps/Bob Laser
@@ -435,7 +444,7 @@ float CT_PROJ_SHAL = 495;		// Shalrath spike ball +purple trail
 float CT_PROJ_SERG = 496;		// Death Sergeant spike ball +hknight trail
 float CT_PROJ_SHUB1 = 497;		// Custom Shub homing spike attack
 float CT_PROJ_RAINDEER = 498;	// Raindeer rocket
-float CT_PROJ_KSPHERE = 499;		// Lord Karasu energy sphere
+float CT_PROJ_KSPHERE = 499;	// Lord Karasu energy sphere
 float CT_UPGRADE_AXE = 500;		// Shadow Axe
 float CT_AXE = 501;				// Axe
 float CT_RAPIER = 502;			// Ghost Rapier
@@ -450,15 +459,17 @@ float CT_SUPER_SHOTGUN = 510;	// Super Shotgun
 float CT_FLAK = 511;			// Flak Cannon
 float CT_PROJ_KLIGHT = 512;		// Lord Karasu lightning
 float CT_PROJ_KSPELL = 513;		// Lord Karasu spell runes
-float CT_PROJ_MOONSWORD = 514;		// Moonlight Guardian sword
+float CT_PROJ_MOONSWORD = 514;	// Moonlight Guardian sword
 float CT_UPGRADE_SSG = 515;		// The Widowmaker Shotgun
-float CT_PROJ_EVEBULLET = 516;		// Evelyn pistol bullet
-float CT_PROJ_BLDSPEAR = 517;		// Huntress blood spears
-float CT_PROJ_ELENAFIRE = 518;		// Huntress fireball
-
-
+float CT_PROJ_EVEBULLET = 516;	// Evelyn pistol bullet
+float CT_PROJ_BLDSPEAR = 517;	// Huntress blood spears
+float CT_PROJ_ELENAFIRE = 518;	// Huntress fireball
+float CT_MIRV = 519;			// MIRV Launcher
 float CT_NAILGUN = 520;			// Nailgun
 float CT_LAVANG = 521;			// Lava nailgun
+float CT_AIRGUN = 522;			// Airfist
+float CT_PROJ_GLSUPER = 523;	// Tome powered Super Grenade projectile
+float CT_PROJ_ROCKETSUPER = 524;// Tome powered Rocket projectile
 float CT_SUPER_NAILGUN = 525;	// Super Nailgun
 float CT_LAVASNG = 526;			// Lava nailgun
 float CT_WAND = 527;			// Magic Wand (Drake)
@@ -470,6 +481,10 @@ float CT_MULTI_GRENADE = 532;	// Multi Grenade Launcher
 float CT_MULTI_ROCKET = 533;	// Multi Rocket Launcher
 float CT_BLASTERWEP = 534;		// Drake Laser Blaster
 float CT_ROCKET_LAUNCHER = 535;	// Rocket Launcher
+float CT_PROJ_SIDEWINDER = 536;	// Sidewinder Rocket
+float CT_SIDEWINDER = 537;		// Sidewinder weapon pickup
+float CT_FROSTBOW = 538;		// Asgard Arbalest (ice crossbow) from Drake (Formerly called the Buriza-Do Kyanon in Drake)
+float CT_FROSTSHARD = 539;		// Asgard Arbalest frostshard projectile
 float CT_LIGHTNING = 540;		// Lightning Gun
 float CT_UPGRADE_LG = 545;		// Plasma Gun
 float CT_PLASMAGUN = 546;		// Rogue Plasma Gun
@@ -504,7 +519,9 @@ float CT_ARTTRINITY = 597;		// Trinity
 float CT_ARTCROSS = 598;		// Cross of Deflection
 float CT_ARTHORN = 599;			// Horn of Conjuring
 float CT_SILVERKEY = 600;		// Silver key
+float CT_ARTHASTE = 601;		// Haste
 float CT_GOLDKEY = 605;			// Gold key
+float CT_SKELETONKEY = 606;		// Skeleton key by Qmaster, can open any door with a key requirement.  Used once.
 float CT_CUSTOMKEY = 610;		// Custom key
 float CT_CUSTOMITEM = 615;		// Custom pickup item
 float CT_RUNEKEY = 620;			// End of Level rune keys 1-4

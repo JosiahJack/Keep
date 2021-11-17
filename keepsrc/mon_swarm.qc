@@ -161,18 +161,18 @@ void() beez_touch = {
 	}
 };
 
-void() monster_beez = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/madfox/mon_swarm.mdl";
+void() monster_beez_precache = {
     precache_model ("progs/madfox/mon_swarm.mdl");
 	precache_sound ("madfox/bees/bee.wav");
 	precache_sound ("madfox/bees/bee1.wav");
 	precache_sound ("madfox/bees/bee2.wav");
-	
+};
+
+void() monster_beez = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/madfox/mon_swarm.mdl";
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_FISHS;

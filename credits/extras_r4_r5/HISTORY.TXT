@@ -1,0 +1,106 @@
+-----------------------------------------
+08/31/2019
+- Swimming monsters can swim in func_water;
+- Swimming monsters won't stuck on water surface;
+- Monsters can drown in regular water too;
+- Hydra is nerfed a little (~20% less health and speed);
+- Code cleanup;
+
+-----------------------------------------
+08/31/2018
+- Better monster and item spawning (ported from Episode Jam code);
+- Hydra and Eel added;
+- Corpse behaviour adjustments;
+- Monsters can drown in func_water;
+- Splash sound is not spammed anymore;
+- Underwater effects fixes;
+- Footsteps sound disabled;
+
+-----------------------------------------
+07/08/2002
+- emitter particle movetype now allows MOVETYPE_FLY
+- emitter particles with positive damage spawn blood/sparks when doing damage, and can also spawn TE_ effects if hitting the world
+- emitter additions above mean they can be used for custom traps (like spinning spike shooters)
+- emitter angles work as per the documentation - REALLY THIS TIME! (H angle was incorrect under certain circumstances)
+- attract, push, and trubulence t_effectors can have a "tangential" spawnflag (face new direction)
+- added trigger_chat, trigger_chat_relay, trigger_shake and trigger_enemy (/src/extras/extras_triggers.qc)
+- added func_breakaway and func_model (/src/extras/extras_misc.qc)
+- func_explobsp can now be set to "heal" like func_breakaway
+- tweaked ladder jumps slightly (easier to jump-climb)
+- added Hipnotic rotating entities (already had the Quiver defs so figured what the hell...)
+- several more URQP <http://www.inside3d.com/qip/> fixes:
+	1998-12-23 Movetarget correction in monster start functions fix by Maddes
+	1998-08-14 Monsters sometimes do not move fix by Perged
+	1997-12-23 Fish fix by Maddes (totalmonsters fix)
+	1998-07-24 Wrong obituary messages fix by Zoid
+	1998-08-12 Option: Drowning doesn't hurt armor by Maddes/Athos
+	2001-08-30 Negative damage ("healing") fix by Maddes
+	1999-09-24 Firing during intermission fix by Athos
+	1999-09-04 Walkframe leak fix by FrikaC
+	1998-09-16 CanDamage fix by Maddes/Kryten
+	1998-08-14 Constantly checking all impulses fix by Perged/Kryten
+- fixed all FrikQCC warnings (including some genuine bug fixes to the original Id source)
+- added HTML documentation - basically ripped right from source comments, with updates & corrections.
+- added a new "emitters" example map.
+- moved trigger_relay2 to the new extras_triggers.qc file
+- fixed some pixels in "fireball1.spr" that were 100% black (mapped as white with the retail software rendered MacQuake)
+- added "smoke1.spr" and "sparkle1.spr" and a "break"sound originally from my Paroxysm mod (use'm if ya like'm)
+- Quiver defs updated with new & updated entities, grouping in sync with new docs.
+
+-----------------------------------------
+6/29/02
+- emitter angle limit system was flawed - it has been re-designed to work as intended. Please read the new documentaion! (whoops! #1)
+- t_effector_* triggers can actually be enabled/disabled now (whoops! #2)
+- documentation for particle effectors was incorrect; "cnt" should be: Percentage of original velocity to *diminish* not *maintain*
+- t_effector_turbulence no longer diminishes velocity for excluded axii (as one would expect)
+- added "message" key to emitters (custom death message if killed by a particle)
+- added "avelocity" key to emitters (spin emitter angles)
+- can now use trigger_changedir, trigger_forward, trigger_reverse, trigger_stop, and trigger_go on emitters to control spin.
+- added t_effector_friction - slow down or speed up particles (/src/extras/extras_emitters.qc)
+- added trigger_relay2 (/src/extras/extras_misc.qc)
+- internal re-working of func_train_ext child objects (not dependant on child.watertype & child links delayed an extra frame to be safe)
+- func_water tricks the C code into playing the "splash" sound like it does for real water
+- number of SNG shell ejects cut in half when button is held down
+- much less likely to get hung up on a corpse (compare absmin_z as well as checkbottom)
+- added a couple of new 20fps explosion/fire sprites (use'm if ya like'em - please give me credit)
+- "switches" map updated with new emitter effects (last version was kinda rushed)
+- Quiver defs updated with new & updated entities, plus some re-wording and corrections
+
+-----------------------------------------
+06/24/02
+- added func_emitter, func_emitter_volume, and several t_effector* entities (/src/extras/extras_emitters.qc)
+- added func_button_ext and func_switch entities (/src/extras/extras_buttons.qc)
+- added func_bspframe entity (/src/extras/extras_misc.qc)
+- added bspframe, and usetarget support to func_explobsp
+- func_explobsp now broadcasts a "real" explosion (uses dynamic lighting effect)
+- added alternate start point for non-looped paths and start-in-reverse options to func_train_ext & func_watertrain
+- added trigger_forward, trigger_reverse, trigger_stop and trigger_go relays for func_train_ext (/src/extras/extras_train.qc)
+- changed all the fx_ entities with "start_off" flags to work like others (with "start_on")
+- re-worked train child linking, and fx_* death-on-trigger-touch handling
+- shell ejects don't make noise when bouncing (can easily become too much for Quake to handle)
+- updated comments/documentation for several entities (scattered throughout the source files)
+- added new "switches" example map
+- original "testmap" renamed "water", contains a fix to display the slime correctly in the software renderer, and the train buttons are now func_button_ext
+- Quiver defs updated with new entities, and re-organized
+
+-----------------------------------------
+06/14/02 - Initial release
+Below is a list of changes from the base 1.0.6 QuakeC source:
+- Removed "test" files, and model/sprite macros
+- Added Frikbot (FBX) - for the hell of it, since it's so dang easy.
+- Added footstep sounds (modified version of the Hipnotic routine)
+- Extended footstep routine to recognize water (splash sounds)
+- Changed how swimming, enter/leave water sounds work, and added underwater "muffle" sound (hack)
+- Added URQP <http://www.inside3d.com/qip/> fixes for Fish (gibbable, immediately SOLID_NOT when dead)
+- Added gibbable corpses (courtesy of kryten@inside3d.com - modified to reduce likelihood of getting stuck on a corpse)
+- Bubbles created by players dissipate quicker, player spawns random bubbles when submerged
+- Non-"flesh" entities make sparks instead of blood when hurt
+- Added shell ejects for shotguns and SNG and spark effect for the nailgun
+- New entities:
+	func_train_ext (train_ext_waypoint, trigger_changedir)
+	func_water, func_watertrain
+	func_ladder
+	func_explobsp
+	func_nodraw
+	fx_spark, fx_drip
+	fx_sound, fx_ambientsound

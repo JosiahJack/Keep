@@ -263,11 +263,7 @@ void() airthink = {
 };
 
 void() airtouch = {
-	WriteByte(0, SVC_TEMPENTITY);
-	WriteByte(0, TE_GUNSHOT);
-	WriteCoord(0, self.origin_x);
-	WriteCoord(0, self.origin_y);
-	WriteCoord(0, self.origin_z);
+	Tent_Point(TE_GUNSHOT,self.origin);
 	if (other.takedamage == DAMAGE_AIM) {
 		other.velocity = other.velocity + self.velocity * 0.4 + '0 0 70';
 		if (random() < 0.4) T_Damage(other, self, self.owner, 1,DAMARMOR);
@@ -427,20 +423,13 @@ void() polyp_missile = {
 };
 
 void(entity inflictor, entity attacker, float damage) polyp_pain = {
-	if (self.statevis == 1) {
+	if (self.statevis == 1)
 		polyp_visible1();
-	} else {
+	else
 		return;
-	}
 };
 
-void() monster_polyp = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/quoth/polyp.mdl";
+void() monster_polyp_precache = {
 	precache_model("progs/quoth/polyp.mdl");
 	precache_model("progs/quoth/polyp_t1.mdl");
 	precache_model("progs/quoth/polyp_t2.mdl");
@@ -456,7 +445,13 @@ void() monster_polyp = {
 	precache_sound("quoth/polyp/blast.wav");
 	precache_sound("quoth/polyp/sight.wav");
 	precache_sound("quoth/polyp/idle.wav");
+};
 
+void() monster_polyp = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/quoth/polyp.mdl";
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TINY;
@@ -491,6 +486,5 @@ void() monster_polyp = {
 	self.classtype = CT_MONPOLYP;
 	self.classgroup = CG_SPAWN;
 	self.classmove = MON_MOVEFLY;
-
 	monster_start();
 };

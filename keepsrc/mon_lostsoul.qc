@@ -498,11 +498,8 @@ void() lost_die2 = [ $pain2, lost_die2 ] {
 	entity_remove(self, 0.1);
 };
 
-//----------------------------------------------------------------------
-void() lost_die =
-{
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+void() lost_die = {
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// Make sure body does not drop to the ground
 	self.flags = self.flags | FL_FLY;
@@ -510,45 +507,36 @@ void() lost_die =
 	lost_die1();
 };
 
-/*======================================================================
-QUAKED monster_lostsoul (1 0.2 0) (-16 -16 -24) (16 16 24)
-======================================================================*/
-void() setup_lostsoul;
-void() monster_lostsoul =
-{
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/ad171/mon_lostsoul.mdl";
-	precache_model (self.mdl);
-
-	self.idle_sound = "ad171/lostsoul/idle1.wav";
-	self.idle_sound2 = "ad171/lostsoul/idle2.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-	
-	precache_sound ("ad171/lostsoul/charge.wav");		// charge hiss/scream
-	precache_sound ("ad171/lostsoul/bite.wav");		// chomp with teeth
-
-	self.pain_sound = "ad171/lostsoul/pain1.wav";
-	precache_sound (self.pain_sound);
+void() monster_lostsoul_precache = {
+	precache_model ("progs/ad171/mon_lostsoul.mdl");
+	precache_sound ("ad171/lostsoul/idle1.wav");
+	precache_sound ("ad171/lostsoul/idle2.wav");
+	precache_sound ("ad171/lostsoul/charge.wav"); // Charge hiss/scream
+	precache_sound ("ad171/lostsoul/bite.wav"); // Chomp with teeth
+	precache_sound ("ad171/lostsoul/pain1.wav");
 	precache_sound ("ad171/lostsoul/death.wav");
-	
-	// Cache lost soul is a special class used for precache only
-	if (self.classtype != CT_CACHELOSTSOUL) setup_lostsoul();
 };
 
-//----------------------------------------------------------------------------
+void() setup_lostsoul;
+
+// QUAKED monster_lostsoul (1 0.2 0) (-16 -16 -24) (16 16 24)
+void() monster_lostsoul = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/ad171/mon_lostsoul.mdl";
+	self.idle_sound = "ad171/lostsoul/idle1.wav";
+	self.idle_sound2 = "ad171/lostsoul/idle2.wav";
+	self.pain_sound = "ad171/lostsoul/pain1.wav";
+	if (self.classtype != CT_CACHELOSTSOUL) setup_lostsoul(); // Cache lost soul is a special class used for precache only
+};
+
 void() monster_skullwizminion = { 
 	self.classtype = CT_CACHELOSTSOUL; 
 	monster_lostsoul();
 };
 
-//----------------------------------------------------------------------------
-void() setup_lostsoul =
-{
+void() setup_lostsoul = {
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TINY;
@@ -583,15 +571,12 @@ void() setup_lostsoul =
 	self.th_die = lost_die;
 	if (self.deathstring == "")  self.deathstring = " was found by a Lost Soul\n";
 	
-	//----------------------------------------------------------------------
-	// Special spawning minion need to start spinning
 	if (self.classtype == CT_MINIONLOSTSOUL) {
+		// Special spawning minion need to start spinning
 		self.th_stand = self.th_walk = self.th_run = lost_grow;
 		self.th_missile = SUB_Null;
-	}
-	//----------------------------------------------------------------------
-	// Default lost soul setup
-	else {
+	} else {
+		// Default lost soul setup
 		self.th_stand = lost_stand1;
 		self.th_altstand = lost_guard1;
 		self.th_walk = lost_walk1;
@@ -604,28 +589,20 @@ void() setup_lostsoul =
 	self.classtype = CT_MONLOSTSOUL;
 	self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
-
 	monster_start();
 };
 
-//----------------------------------------------------------------------------
 // A code way to spawn lost souls (requires monster_skullwizminion entity)
-//----------------------------------------------------------------------------
-void(vector minion_org, entity minion_targ) minion_lostsoul =
-{
+void(vector minion_org, entity minion_targ) minion_lostsoul = {
 	local entity minion;
 
-	// Check if there is space to spawn entity
-	if (entity_pcontent(minion_org)) return;
+	if (entity_pcontent(minion_org)) return; // Check if there is space to spawn entity
 	
-	// Self = skull wizard, there is no egg 
-	update_minioncount(self, 1);			// Update spawn counters
-	
+	update_minioncount(self, 1);			// Self = skull wizard, there is no egg.  Update spawn counters.
 	minion = spawn();
 	minion.classname = "monster_lostsoul";	// For function searching
 	setorigin(minion, minion_org);			// Move to new location
 	minion.owner = self;					// Spawner Parent Link
-	
 	minion.effects = minion.flags = 0;		// make sure are blank
 	minion.classtype = CT_MINIONLOSTSOUL;	// Special minion class
 	minion.enemy = minion_targ;				// Target to attack
@@ -633,13 +610,10 @@ void(vector minion_org, entity minion_targ) minion_lostsoul =
 	minion.classgroup = CG_WIZARD;			// Don't turn on master
 	minion.minion_active = TRUE;			// Minion flag
 	minion.bodyfadeaway = TRUE;				// Get rid of body
-	
 	minion.mdl = "progs/ad171/mon_lostsoul.mdl";
-
 	minion.pain_sound = "ad171/lostsoul/pain1.wav";
 	minion.idle_sound = "ad171/lostsoul/idle1.wav";
 	minion.idle_sound2 = "ad171/lostsoul/idle2.wav";
-	
 	minion.nextthink = time + 0.01;
 	minion.think = setup_lostsoul;
 };

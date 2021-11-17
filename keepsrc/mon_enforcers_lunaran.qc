@@ -117,8 +117,7 @@ void() enforcer_missiletouch = {
 
 	damg = 50 + random()*20;
 	if (other.health) {
-		if (other.classname == "monster_enforcer")
-			damg = damg * 0.5;	// not so rough on compatriots
+		if (other.classgroup == CG_ENFORCER) damg = damg * 0.5; // not so rough on compatriots
 		T_Damage (other, self, self.owner, damg , DAMARMOR);
 	}
 	T_RadiusDamage (self, self.owner, damg, other, IGNORECLASS);

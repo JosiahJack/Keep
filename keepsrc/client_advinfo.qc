@@ -1149,52 +1149,45 @@ void() display_secrets = {
 };
 
 void() FinishSecretCamera = {
-	// Restore player core parameters (NO save)
-	setmodel (self, MODEL_PLAYER);
+	setmodel (self, MODEL_PLAYER); // Restore player core parameters (NO save)
 	modelindex_player = self.modelindex;
 	setsize (self, self.bbmins, self.bbmaxs);
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_WALK;
 	self.takedamage = DAMAGE_AIM;
 	self.velocity = self.avelocity = '0 0 0'; // Don't restore any velocity, wierd stuff will happen
-
-	// Restore STORED player parameters
-	self.flags = secloc_cam.flags;
+	self.flags = secloc_cam.flags; // Restore STORED player parameters
+	self.effects = secloc_cam.effects;
 	setorigin(self, secloc_cam.origin);
 	self.view_ofs = secloc_cam.view_ofs;
 	self.angles = secloc_cam.angles;
 	self.v_angle = secloc_cam.v_angle;
 	self.fixangle = TRUE;
-	// Block player movement after camera exit
-	self.teleport_time = time + 0.2;
-
-	// Restore STORED weapon/ammo
-	self.weapon = secloc_cam.weapon;
+	self.teleport_time = time + 0.2; // Block player movement after camera exit
+	self.weapon = secloc_cam.weapon; // Restore STORED weapon/ammo
+	self.selfweaponismoditems = secloc_cam.selfweaponismoditems;
 	self.currentammo = secloc_cam.currentammo;
 	self.weaponmodel = secloc_cam.weaponmodel;
 	self.weaponframe = secloc_cam.weaponframe;
-	
-	// Clear secret camera settings
-	secloc_cam.flags = 0;
+	secloc_cam.flags = 0; // Clear secret camera settings
 	secloc_cam.view_ofs = '0 0 0';
 	secloc_cam.angles = secloc_cam.v_angle = '0 0 0';
 	secloc_cam.weaponmodel = string_null;
 	secloc_cam.weaponframe = 0;
 	secloc_running = FALSE;	// Restore pre/post player functions
-
 	self.impulse = self.button0 = self.button1 = self.button2 = 0; // flush keyboard buffers
 };
 
 void() SaveSecretCamera = {
 	secloc_running = TRUE; // Block pre/post player functions
-
-	// SAVE player parameters
-	secloc_cam.flags = self.flags;
+	secloc_cam.flags = self.flags; // SAVE player parameters
+	secloc_cam.effects = self.effects;
 	secloc_cam.origin = self.origin;
 	secloc_cam.view_ofs = self.view_ofs;
 	secloc_cam.angles = self.angles;
 	secloc_cam.v_angle = self.v_angle;
 	secloc_cam.weapon = self.weapon;
+	secloc_cam.selfweaponismoditems = self.selfweaponismoditems;
 	secloc_cam.currentammo = self.currentammo;
 	secloc_cam.weaponmodel = self.weaponmodel;
 	secloc_cam.weaponframe = self.weaponframe;	

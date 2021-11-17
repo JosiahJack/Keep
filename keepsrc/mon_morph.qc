@@ -460,26 +460,16 @@ self.solid = SOLID_SLIDEBOX;
 
 
 void() morph_setup = {
-
 	self.classname = "monster_morph";
 	if (self.spawnflags & MORPH_AZTEC) {
 		self.mdl = "progs/rogue/mon_morph_az.mdl";	// Aztec
-
-	}
- else if (self.spawnflags & MORPH_EGYPT)	{
+	} else if (self.spawnflags & MORPH_EGYPT) {
 		self.mdl = "progs/rogue/mon_morph_eg.mdl";	// Egyptian
-	}
- else if (self.spawnflags & MORPH_GREEK)
-	{
+	} else if (self.spawnflags & MORPH_GREEK) {
 		self.mdl = "progs/rogue/mon_morph_gr.mdl";	// greek
-
-	}
- else
- self.mdl = "progs/rogue/mon_morph_eg.mdl";
+	} else self.mdl = "progs/rogue/mon_morph_eg.mdl";
 	// Default to Egyptian
-
-	if (self.owner)
-		self.mdl = self.owner.mdl;
+	if (self.owner) self.mdl = self.owner.mdl;
 
 	self.pain_sound = "rogue/guard/pain1.wav";
 	self.sight_sound = "rogue/guard/see1.wav";
@@ -565,28 +555,20 @@ void() morph_use = {
 	}
 };
 
-
 void() morph_minionspawn = {
-
-	local entity    theDest;
-	local entity	theChild;
-
+	local entity theDest, theChild;
 
 	if (self.owner) return;
-
 	if (self.childrenSpawned > self.minion_maxcount) return;
 
-	
-theDest = morph_find_dest();
+	theDest = morph_find_dest();
 	if (theDest == world) return;
-
 
 	theChild = spawn();
 	theChild.model = self.model;
 	theChild.angles = theDest.mangle;
 	theChild.mangle = theDest.mangle;
 	theChild.owner = self;
-
 	theChild.enemy = self.enemy;
 	theChild.movetarget = self.movetarget;
 	theChild.goalentity = self.goalentity;
@@ -601,12 +583,7 @@ void() morph_phased = {
 	ai_stand(); 			// Keep looking
 };
 
-// monster_morph (1 0 0) (-16 -16 -24) (16 16 32) Ambush Aztec Egyptian Greek  The morphing monster.
-// Select the look of the monster (Aztec,Greek,Egyptian).
-void() monster_morph = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
+void() monster_morph_precache = {
 	precache_model ("progs/rogue/mon_morph_gr.mdl");
 	precache_model ("progs/rogue/mon_morph_az.mdl");
 	precache_model ("progs/rogue/mon_morph_eg.mdl");
@@ -615,7 +592,13 @@ void() monster_morph = {
 	precache_sound ("rogue/guard/death.wav");
 	precache_sound ("rogue/guard/pain1.wav");
 	precache_sound ("rogue/guard/see1.wav");
+};
 
+// monster_morph (1 0 0) (-16 -16 -24) (16 16 32) Ambush Aztec Egyptian Greek  The morphing monster.
+// Select the look of the monster (Aztec,Greek,Egyptian).
+void() monster_morph = {
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+	if (self.minion_name == string_null) self.minion_name = "monster_morph";
 	morph_setup();
 };
 

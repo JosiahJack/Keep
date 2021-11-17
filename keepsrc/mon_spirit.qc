@@ -631,44 +631,39 @@ void() spirit_sword_sound ={
 	else sound (self, CHAN_WEAPON, "redfield/spirit/slash3.wav", 1, ATTN_NORM);
 };
 
-// QUAKED monster_spirit (0.5 0 1) (-16 -16 -24) (16 16 40)
-void() monster_spirit = {
-	if (deathmatch) { remove(self); return; }
-
-	self.mdl = "progs/redfield/mon_spirit.mdl";			// Vengeful spirit model with multiple skins
-	precache_model (self.mdl);
-	precache_model ("progs/redfield/mon_spirit_glow.mdl");		// Glowing aura attachment	
-
-	self.gib1mdl = "progs/redfield/sword_spirit.mdl";		// Sword for gib death
-	precache_model (self.gib1mdl);
-	self.gib1sound = GIB_IMPACT_METALA;	
-
+void() monster_spirit_precache = {
+	precache_model ("progs/redfield/mon_spirit.mdl");
+	precache_model ("progs/redfield/mon_spirit_glow.mdl"); // Glowing aura attachment
+	precache_model ("progs/redfield/sword_spirit.mdl");
 	precache_model (MODEL_SCREAM);			// Scream blast
-
-	self.idle_sound = "redfield/spirit/idle1.wav";
-	precache_sound (self.idle_sound);
-	self.idle_soundcom = "redfield/spirit/idlecom1.wav";
-	self.idle_soundcom2 = "redfield/spirit/idlecom2.wav";
-	precache_sound (self.idle_soundcom);
-	precache_sound (self.idle_soundcom2);
-
+	precache_sound ("redfield/spirit/idle1.wav");
+	precache_sound ("redfield/spirit/idlecom1.wav");
+	precache_sound ("redfield/spirit/idlecom2.wav");
 	precache_sound ("redfield/spirit/slash1.wav");
 	precache_sound ("redfield/spirit/slash2.wav");
 	precache_sound ("redfield/spirit/slash3.wav");
 	precache_sound ("redfield/spirit/scream.wav");			// Screaming explosion
 	precache_sound ("redfield/spirit/pain.wav");			// Long pain		
-
 	precache_sound ("redfield/spirit/death.wav");
 	precache_sound ("redfield/spirit/deathb.wav");
-	self.pain_sound = SOUND_EMPTY;
-
 	precache_sound ("redfield/spirit/fadeout.wav");			// Fade away
 	precache_sound ("redfield/spirit/idle_laugh.wav");		// laughing animation
 	precache_sound ("redfield/spirit/spin_laugh.wav");		// laughing from spin
+	precache_sound ("redfield/spirit/sight.wav");
+};
 
+// QUAKED monster_spirit (0.5 0 1) (-16 -16 -24) (16 16 40)
+void() monster_spirit = {
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/redfield/mon_spirit.mdl";			// Vengeful spirit model with multiple skins
+	self.gib1mdl = "progs/redfield/sword_spirit.mdl";		// Sword for gib death
+	self.gib1sound = GIB_IMPACT_METALA;	
+	self.idle_sound = "redfield/spirit/idle1.wav";
+	self.idle_soundcom = "redfield/spirit/idlecom1.wav";
+	self.idle_soundcom2 = "redfield/spirit/idlecom2.wav";
+	self.pain_sound = SOUND_EMPTY;
 	self.sight_sound = "redfield/spirit/sight.wav";
-	precache_sound (self.sight_sound);
-
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -769,15 +764,9 @@ void() info_spirit_link = {
 };
 
 void() info_spirit_destination = {
-	// All teleportation points need to be part of a chain
-	// Otherwise the Spirit would have to use findradius
-	// which is expensive if lots of entities are around
-	if (self.targetname == "" || self.target == "") {
-		dprint("\b[SPIRIT_DEST]\b missing target or targetname\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		remove(self);
-		return;
-	}
+	// All teleportation points need to be part of a chain otherwise the Spirit would have to use findradius which is expensive if lots of entities are around.
+	if (SUB_HideIfNoTargetname()) return;
+	if (SUB_HideIfNoTarget()) return;
 	
 	self.classtype = CT_SPIRITTELEPORT;
 	self.mangle = self.angles;

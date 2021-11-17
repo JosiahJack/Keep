@@ -722,28 +722,12 @@ void() karasu_die = {
 	if (!self.gibbed) karasu_die1 ();
 };
 
-// QUAKED monster_karasu (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-void() monster_karasu = {
-	if (deathmatch) { remove(self); return; }
-
-	self.mdl = "progs/redfield/mon_karasu.mdl";			// Lord Karasu with skins for each attack
-	//self.headmdl = "progs/redfield/h_karasu.mdl";
-	//self.gib1mdl = "progs/redfield/gib_scrapmetal.mdl";		// Breakable metal
-	//self.gib2mdl = "progs/redfield/gib_karasu1.mdl";		// right gauntlet
-	//self.gib3mdl = "progs/redfield/gib_karasu2.mdl";		// left sabaton
-	
-	//self.gib1sound = GIB_IMPACT_METALA;	
-
-	precache_model (self.mdl);
-	//precache_model (self.headmdl);
-	//precache_model (self.gib1mdl);
-	//precache_model (self.gib2mdl);
-	//precache_model (self.gib3mdl);
+void() monster_karasu_precache = {
+	precache_model ("progs/redfield/mon_karasu.mdl");
 	precache_model (MODEL_PROJ_KSPHERE);
 	precache_model (MODEL_PROJ_KLIGHT);
 	precache_model (MODEL_PROJ_ZRING);
 	precache_model (MODEL_PROJ_KSPELL);
-
 	precache_sound ("redfield/karasu/beam_charge.wav");
 	precache_sound ("redfield/karasu/beam.wav");
 	precache_sound ("redfield/karasu/light_charge.wav");
@@ -753,24 +737,28 @@ void() monster_karasu = {
 	precache_sound ("redfield/karasu/chant.wav");
 	precache_sound ("redfield/karasu/taunt.wav");
 	precache_sound ("redfield/karasu/pain.wav");
-
-	// Rings - range attack
-	precache_sound ("redfield/karasu/hotrings.wav");
-
-	// TE_KNIGHTSPIKE = Sound for rings hitting the wall
-	// Has got to be in this location because the 
-	// filename is hardcoded (engine.exe)
+	precache_sound ("redfield/karasu/hotrings.wav"); // Rings - range attack
 	precache_sound ("hknight/hit.wav");
-	
+	precache_sound ("redfield/karasu/idle.wav");
+	precache_sound ("redfield/karasu/sight.wav");
+	precache_sound (SOUND_EMPTY);
+	precache_sound ("redfield/karasu/death.wav");
+	precache_sound ("redfield/karasu/armor1.wav");
+	precache_sound ("redfield/karasu/armor2.wav");
+	precache_sound ("redfield/karasu/armor3.wav");
+	precache_sound ("redfield/karasu/armor4.wav");
+	precache_sound ("redfield/karasu/armor5.wav");
+};
+
+// QUAKED monster_karasu (1 0 0) (-16 -16 -24) (16 16 40) Ambush
+void() monster_karasu = {
+	if (deathmatch) { remove(self); return; }
+
+	self.mdl = "progs/redfield/mon_karasu.mdl";			// Lord Karasu with skins for each attack
 	self.idle_sound = "redfield/karasu/idle.wav";
-	precache_sound (self.idle_sound);
 	self.sight_sound = "redfield/karasu/sight.wav";
-	precache_sound (self.sight_sound);
-	self.pain_sound = SOUND_EMPTY;
-	precache_sound (self.pain_sound);	
+	self.pain_sound = SOUND_EMPTY;	
 	self.death_sound = "redfield/karasu/death.wav";
-	precache_sound (self.death_sound);
-	
 	self.solid = SOLID_NOT;					// No interaction with world
 	self.movetype = MOVETYPE_NONE;			// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -784,18 +772,11 @@ void() monster_karasu = {
 	self.blockudeath = TRUE;		// No player gib sound
 	self.attack_offset = '21 0 25';		// Between hands			
 	self.deathstring = " was taught a lesson by Lord Karasu\n";
-	
-	// Custom feet sounds
-	self.stepc1 = "redfield/karasu/armor1.wav";
+	self.stepc1 = "redfield/karasu/armor1.wav"; // Custom feet sounds
 	self.stepc2 = "redfield/karasu/armor2.wav";
 	self.stepc3 = "redfield/karasu/armor3.wav";
 	self.stepc4 = "redfield/karasu/armor4.wav";
 	self.stepc5 = "redfield/karasu/armor5.wav";
-	precache_sound (self.stepc1);
-	precache_sound (self.stepc2);
-	precache_sound (self.stepc3);
-	precache_sound (self.stepc4);
-	precache_sound (self.stepc5);
 	self.steptype = FS_TYPECUSTOM;
 
 	// Always reset Ammo Resistance to be consistent
@@ -811,7 +792,6 @@ void() monster_karasu = {
 	self.th_missile = karasu_choose_atk;
 	self.th_pain = karasu_pain;
 	self.th_die = karasu_die;
-	
 	self.classgroup = CG_BOSS;	
 	self.classtype = CT_MONKARASU;
 	self.classmove = MON_MOVEWALK;

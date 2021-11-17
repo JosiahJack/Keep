@@ -107,7 +107,7 @@ void() boil_checktarget = {
 	// Get the obvious exception(s) done first
 	if (self.health < 1) return;
 	if (intermission_running > 0) return;
-	if (cinematic_running > 0) return;
+	if (cinematic_running > 0 || cutscene > 0) return;
 
 	// Find a client in current PVS
 	client = checkclient ();
@@ -271,36 +271,30 @@ void() boil_die = {
 	self.nextthink = time + 0.1;
 };
 
-
-// QUAKED monster_boil (1 0 0) (-16 -16 -24) (16 16 32)
-void() monster_boil = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/ad171/mon_boil.mdl";
-	precache_model (self.mdl);
-
-	self.idle_sound = "ad171/zombie/boil_idle1.wav";
-	self.idle_sound2 = "ad171/zombie/boil_idle2.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-	
-	self.sight_sound = "ad171/zombie/boil_sight.wav";
-	precache_sound (self.sight_sound);
-	self.pain_sound = SOUND_EMPTY;
+void() monster_boil_precache = {
+	precache_model ("progs/ad171/mon_boil.mdl");
+	precache_sound ("ad171/zombie/boil_idle1.wav");
+	precache_sound ("ad171/zombie/boil_idle2.wav");
+	precache_sound ("ad171/zombie/boil_sight.wav");
 	precache_sound ("ad171/wraith/bounce.wav");
 	precache_sound ("ad171/zombie/boil_windup.wav");
 	precache_sound ("ad171/zombie/boil_explode.wav");
+	precache_poisongibs();			// precache gibs
+};
 
-	// Check for poisonous entity flag
-	if (self.poisonous) {
-		precache_poisongibs();			// precache gibs
-		self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
-	}
-	
-	// The randomizer drops health packs on death
-	if (self.healamount > 0) CacheHealthpacks();
-	
+// QUAKED monster_boil (1 0 0) (-16 -16 -24) (16 16 32)
+void() monster_boil = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	monster_boil_precache();
+	self.mdl = "progs/ad171/mon_boil.mdl";
+	self.idle_sound = "ad171/zombie/boil_idle1.wav";
+	self.idle_sound2 = "ad171/zombie/boil_idle2.wav";
+	self.sight_sound = "ad171/zombie/boil_sight.wav";
+	self.pain_sound = SOUND_EMPTY;
+	if (self.poisonous) self.gibtype = GIBTYPE_POISON;	// Check for poisonous entity flag and give poisonous blood trails
+	if (self.healamount > 0) world.deventity.health = world.deventity.health + self.healamount; // The randomizer drops health packs on death.
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
@@ -343,8 +337,7 @@ void() monster_boil = {
 		if (random() < 0.5) {		
 			self.th_stand = self.th_walk = self.th_run = boil_hoba1;
 			self.th_melee = boil_HexpA1;
-		}
-		else {
+		} else {
 			self.th_stand = self.th_walk = self.th_run = boil_hobb1;
 			self.th_melee = boil_HexpB1;
 		}
@@ -378,29 +371,22 @@ void() monster_boil = {
 		self.flags = self.flags | FL_FLY;
 		// Setup squirt distance for blood
 		self.brkvelbase = '100 50 150';
-	}
-	// Hobbled legs with spikes (ground pose)
-	else if (self.spawnflags & MON_BOIL_HOBBLED) {
+	} else if (self.spawnflags & MON_BOIL_HOBBLED) { // Hobbled legs with spikes (ground pose)
 		// Check for random floor rotation and setup no movment
 		if (self.angles_y < 0) self.angles_y = rint(random()*360);
 		// Setup squirt distance for blood
 		self.brkvelbase = '100 300 100';
-	}
-	else {
-		// Allow for override on exploding trigger radius
-		if (self.t_width < 1) self.t_width = MONAI_MELEEBOIL;
-		// Default stand, walk & run
+	} else { // Default stand, walk & run
+		if (self.t_width < 1) self.t_width = MONAI_MELEEBOIL;  // Allow for override on exploding trigger radius
 		self.th_stand = boil_stand1;
 		self.th_walk = boil_walk1;
 		self.th_run = boil_run1;
 		self.th_melee = boil_expl1;
 	}
 	
-	// Delay spawn randomized boils a couple of frame
-	// To avoid telefrags issues of bad placement of HP packs
+	// Delay spawn randomized boils a couple of frame to avoid telefrags issues of bad placement of HP packs
 	if (self.randomized > 0) {
 		self.nextthink = time + 0.1 + (random()*0.2);
 		self.think = monster_start;
-	}
-	else monster_start();
+	} else monster_start();
 };

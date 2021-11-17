@@ -194,27 +194,37 @@ void() snowm_explode =
 	ThrowGib(13, 8 + rint(random()*8)); */
 };
 
-//----------------------------------------------------------------------
-void() snowm_die =
-{
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+void() snowm_die = {
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// There is no death animation
-	if (random() < 0.5)
-		sound (self, CHAN_BODY, self.death_sound, 1, ATTN_NORM);
+	if (random() < 0.5) sound (self, CHAN_BODY, self.death_sound, 1, ATTN_NORM);
 	else sound (self, CHAN_BODY, self.death_sound2, 1, ATTN_NORM);
 	snowm_explode();
 };
 
-/*======================================================================
-QUAKED monster_snowman (1 0 0) (-16 -16 -24) (16 16 32) Ambush
-======================================================================*/
+void() monster_xmas_snowman_precache = {
+	precache_model ("progs/xmas/mon_snowman.mdl");
+	precache_model ("progs/xmas/h_snowman.mdl"); // Top Hat
+	precache_model ("progs/xmas/gib_snowclaw.mdl"); // Claw
+	precache_model ("progs/xmas/gib_snowgun.mdl"); // Gun
+	precache_model ("progs/xmas/gib_snowball.mdl"); // Snow-BALLS!
+	precache_model (MODEL_PROJ_NG); // Nails
+	precache_sound ("xmas/snowman/idle.wav");
+	precache_sound ("xmas/snowman/sight1.wav");
+	precache_sound ("xmas/snowman/sight2.wav");
+	precache_sound ("xmas/snowman/claw.wav"); // Melee/Range Attacks.  Original version used ice, switched to red nails.  Ice nails are really difficult to see.
+	precache_sound ("xmas/snowman/nail_fire.wav");
+	precache_sound ("xmas/snowman/pain1.wav");
+	precache_sound ("xmas/snowman/pain2.wav");
+	precache_sound ("xmas/snowman/death1.wav");
+	precache_sound ("xmas/snowman/death2.wav");
+};
+
+// QUAKED monster_snowman (1 0 0) (-16 -16 -24) (16 16 32) Ambush
 void() monster_xmas_snowman = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/xmas/mon_snowman.mdl";		// Top Hat Snow
 	self.headmdl = "progs/xmas/h_snowman.mdl";		// Top Hat
@@ -223,40 +233,13 @@ void() monster_xmas_snowman = {
 	self.gib3mdl = "progs/xmas/gib_snowball.mdl";	// Snowballs
 	self.gib1sound = GIB_IMPACT_WOOD;
 	self.gib2sound = GIB_IMPACT_METALA;
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);				// Top Hat
-	precache_model (self.gib1mdl);				// Claw
-	precache_model (self.gib2mdl);				// Gun
-	precache_model (self.gib3mdl);				// Snow-BALLS!
-	precache_model (MODEL_PROJ_NG);				// Nails
-
-	// Idle calm/angry
-	self.idle_sound = "xmas/snowman/idle.wav";	// Rustling sound
-	precache_sound (self.idle_sound);
-
-	// Many different sight sounds
+	self.idle_sound = "xmas/snowman/idle.wav";	// Rustling sound.  Idle for calm or angry
 	self.sight_sound = "xmas/snowman/sight1.wav";	// Deep voice
 	self.sight_sound2 = "xmas/snowman/sight2.wav";	// Growling
-	precache_sound (self.sight_sound);
-	precache_sound (self.sight_sound2);
-
-	// Melee/Range Attacks
-	// Original version used ice, switched to red nails
-	// Ice nails are really difficult to see
-	precache_sound ("xmas/snowman/claw.wav");
-	precache_sound ("xmas/snowman/nail_fire.wav");
-	
-	// precache sight, pain and death (changes on type)
-	self.pain_sound = "xmas/snowman/pain1.wav";
+	self.pain_sound = "xmas/snowman/pain1.wav"; // precache sight, pain and death (changes on type)
 	self.pain_sound2 = "xmas/snowman/pain2.wav";
 	self.death_sound = "xmas/snowman/death1.wav";
 	self.death_sound2 = "xmas/snowman/death2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
-	precache_sound (self.death_sound);
-	precache_sound (self.death_sound2);
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_SHORT;
@@ -273,9 +256,7 @@ void() monster_xmas_snowman = {
 	self.attack_offset = '24 0 20';		// Run + Gun vector
 	self.bloodtype = self.bleedcolour = MON_BCOLOR_SILVER;// Red is odd for snow
 	if (self.deathstring == "") self.deathstring = " was smashed on a Snowman\n";
-
-	// Default amount of nails to burst fire (5x9=45dmg)
-	if (self.attack_count < 1) self.attack_count = 5;
+	if (self.attack_count < 1) self.attack_count = 5; // Default amount of nails to burst fire (5x9=45dmg)
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
@@ -293,10 +274,8 @@ void() monster_xmas_snowman = {
 	self.th_missile = snowm_nail1;
 	self.th_pain = snowm_pain;
 	self.th_die = snowm_die;
-
 	self.classtype = CT_MONSNOWMAN;
 	self.classgroup = CG_XMAS;
 	self.classmove = MON_MOVEWALK;
-
 	monster_start();	
 };

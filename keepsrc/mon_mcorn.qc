@@ -1,401 +1,433 @@
-/*==============================================================================
+// MANTICORE - by MadFox.
 
-MANTICORN - by MadFox.
+void() mcorn_stand1	=[	0,	mcorn_stand2	] {ai_stand();monster_idle_sound();};
+void() mcorn_stand2	=[	1,	mcorn_stand3	] {ai_stand();};
+void() mcorn_stand3	=[	2,	mcorn_stand4	] {ai_stand();};
+void() mcorn_stand4	=[	3,	mcorn_stand5	] {ai_stand();};
+void() mcorn_stand5	=[	4,	mcorn_stand6	] {ai_stand();};
+void() mcorn_stand6	=[	5,	mcorn_stand7	] {ai_stand();};
+void() mcorn_stand7	=[	6,	mcorn_stand8	] {ai_stand();};
+void() mcorn_stand8	=[	7,	mcorn_stand9	] {ai_stand();};
+void() mcorn_stand9	=[	8,	mcorn_stand10	] {ai_stand();};
+void() mcorn_stand10=[	9,	mcorn_stand11	] {ai_stand();};
+void() mcorn_stand11=[ 10,	mcorn_stand12	] {ai_stand();};
+void() mcorn_stand12=[ 11,	mcorn_stand13	] {ai_stand();};
+void() mcorn_stand13=[ 12,	mcorn_stand14	] {ai_stand();};
+void() mcorn_stand14=[ 13,	mcorn_stand15	] {ai_stand();};
+void() mcorn_stand15=[ 14,	mcorn_stand16	] {ai_stand();};
+void() mcorn_stand16=[ 15,	mcorn_stand17	] {ai_stand();};
+void() mcorn_stand17=[ 16,	mcorn_stand1	] {ai_stand();};
 
-==============================================================================*/
-$cd /raid/quake/id1/models/mcorn
-$origin 0 0 24
-$base base
-$skin skin
+void() mcorn_walk1	=[	17, mcorn_walk2	] {ai_walk(8);};
+void() mcorn_walk2	=[	18, mcorn_walk3	] {ai_walk(8);};
+void() mcorn_walk3	=[	19, mcorn_walk4	] {ai_walk(8);};
+void() mcorn_walk4	=[	20, mcorn_walk5	] {ai_walk(8);};
+void() mcorn_walk5	=[	21, mcorn_walk6	] {ai_walk(8);monster_footstep(FALSE);monster_idle_sound();};
+void() mcorn_walk6	=[	22, mcorn_walk7	] {ai_walk(8);};
+void() mcorn_walk7	=[	23, mcorn_walk8	] {ai_walk(8);};
+void() mcorn_walk8	=[	24, mcorn_walk9	] {ai_walk(8);};
+void() mcorn_walk9	=[	25, mcorn_walk10] {ai_walk(8);};
+void() mcorn_walk10	=[	26,	mcorn_walk11] {ai_walk(8);};
+void() mcorn_walk11	=[	27,	mcorn_walk12] {ai_walk(8);};
+void() mcorn_walk12	=[	28,	mcorn_walk13] {ai_walk(8);};
+void() mcorn_walk13	=[	29,	mcorn_walk14] {ai_walk(8);monster_footstep(FALSE);};
+void() mcorn_walk14	=[	30,	mcorn_walk15] {ai_walk(8);};
+void() mcorn_walk15	=[	31,	mcorn_walk16] {ai_walk(8);};
+void() mcorn_walk16	=[	32,	mcorn_walk1 ] {ai_walk(8);};
 
-$frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9 stand10
-$frame stand11 stand12 stand13 stand14 stand15 stand16 stand17
+void() mcorn_run1		=[	34  ,	mcorn_run2	] {ai_run(16);monster_idle_sound();};
+void() mcorn_run2		=[	35  ,	mcorn_run3	] {ai_run(32);};
+void() mcorn_run3		=[	36  ,	mcorn_run4	] {ai_run(32);monster_footstep(FALSE);};
+void() mcorn_run4		=[	37  ,	mcorn_run5	] {ai_run(20);};
+void() mcorn_run5		=[	38  ,	mcorn_run6	] {ai_run(64);};
+void() mcorn_run6		=[	39  ,	mcorn_run7	] {ai_run(32);};
+void() mcorn_run7		=[	40  ,	mcorn_run8	] {ai_run(16);};
+void() mcorn_run8		=[	41  ,	mcorn_run1	] {ai_run(32);};
 
-$frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9 walk10
-$frame walk11 walk12 walk13 walk14 walk15 walk16 walk17
-
-$frame run1 run2 run3 run4 run5 run6 run7 run8
-
-$frame pain1 pain2 pain3 pain4 pain5 pain6 pain7 pain8
-
-$frame paina1 paina2 paina3 paina4 paina5 paina6
-
-$frame atk1 atk2 atk3 atk4 atk5 atk6 atk7 atk8 atk9 atk10 atk11
-
-$frame atka1 atka2 atka3 atka4 atka5 atka6 atka7 atka8 atka9 atka10 atka11
-$frame atka12 atka13
-
-$frame atkb1 atkb2 atkb3 atkb4 atkb5 atkb6 atkb7
-
-$frame die1 die2 die3 die4 die5 die6 die7 die8 die9 die10 die11 die12
-$frame die13 die14 die15 die16 die17 die18 die19 die20 die21 die22 die23 die24
-
-$frame dieb1 dieb2 dieb3 dieb4 dieb5 dieb6 dieb7 dieb8 dieb9 dieb10 dieb11 dieb12
-$frame dieb13 dieb14 dieb15 dieb16 dieb17 dieb18 dieb19 dieb20 dieb21 dieb22 dieb23 
-$frame dieb24 dieb25
-
-/*================
-mcorn_bite
-
-================*/
-void() mcorn_bite =
-{
-local vector	delta;
-local float 	ldmg;
-
-	if (!self.enemy)
-		return;
-
-	ai_charge(10);
-
-	if (!CanDamage (self.enemy, self))
-		return;
-
-	delta = self.enemy.origin - self.origin;
-
-	if (vlen(delta) > 100)
-		return;
-		
-	ldmg = (random() + random() + random()) * 8;
-	T_Damage (self.enemy, self, self, ldmg);
-};
-
-void() McLaser_Touch = {
-	local vector org;
+// Melee tail swipe
+void() mcorn_tailswipe = {
+	local float ldmg;
 	
-	if (other == self.owner) return; // don't explode on owner
-	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
-	
-	sound (self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
-	org = self.origin - 8*normalize(self.velocity);
+	if (!self.enemy) return;
+	if (self.health < 1) return;
+	ai_face ();						// Turn towards enemy target
+	walkmove (self.ideal_yaw, 12);	// Get extra close to enemy target
+	ai_damagebreakable(20);			// Damage any breakables
+	ldmg = 10 + 5*random();
 
-	if (other.health) {
-		SpawnBlood (org, self.velocity*0.2, 15);
-		T_Damage (other, self, self.owner, 15);
+	// Moved the check for melee distance to here with takedamage
+	// If the demon is outside of melee range then need miss swipe sound
+	// same goes for enemies that cannot be damaged (world geo mostly)
+	if (!ai_checkmelee(MONAI_MELEEDEMON,FALSE) || !self.enemy.takedamage) {
+		SwordSwipeSound(); // Melee claw miss sound
 	} else {
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_GUNSHOT);
-		WriteCoord (MSG_BROADCAST, org_x);
-		WriteCoord (MSG_BROADCAST, org_y);
-		WriteCoord (MSG_BROADCAST, org_z);
+		if (self.poisonous) {
+			PoisonDeBuff(self.enemy); // Check for poisonous attribute, you know, just in case a mapper is being clever
+			T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+		} else {
+			if (self.enemy.flags & FL_CLIENT) BleedDeBuff(self.enemy); // Don't apply T_Damage here or it will kill the player unfairly every time
+			else T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+		}
+
+		sound (self, CHAN_WEAPON, "demon/dhit2.wav", 1, ATTN_NORM); // Melee claw hit sound
+		SpawnMeatSpray (self, self.enemy, -150);
+		SpawnMeatSpray (self, self.enemy, -175);
 	}
-	remove(self);	
 };
 
-void(vector org, vector vec) McLaunchLaser = {		
-	if (self.classname == "monster_mcorn")
-		sound (self, CHAN_WEAPON, SOUND_LASER_FIRE, 1, ATTN_NORM);
+// Projectile spit launch
+void() mcorn_fire = {
+	local vector org, vec;
 
-	vec = normalize(vec);
+	if (!self.enemy) return;
+
+	makevectors (self.angles);
+	org = self.origin + attack_vector(self.attack_offset);
+	vec = normalize(self.enemy.origin - self.origin);
+	launch_projectile(org, vec, CT_PROJ_MCOR1, SPEED_LASER);
+};
+
+// Barrage of ricocheting spikes in a fan spray shape
+void() mcorn_barrage = {
+	local	vector	offang;
+	local	vector	org, dir;
 	
-	newmis = spawn();
-	newmis.classname = "mcorn_laser";	//gnounc
-	newmis.owner = self;
-	newmis.movetype = MOVETYPE_FLY;
-	newmis.solid = SOLID_BBOX;
-	newmis.effects = EF_DIMLIGHT;
+	if (!self.enemy) return;
+	if (self.health < 1) return;
 
-	setmodel (newmis, "progs/ucorn.mdl");
-	setsize (newmis, '0 0 0', '0 0 0');		
+	offang = vectoangles (self.enemy.origin - self.origin);
+	offang_y = offang_y - 18;
+	makevectors (offang);
+	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
+	dir = normalize (v_forward);
+	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
+	//dir_z = 0.8; 
+    launch_projectile (org, dir, CT_PROJ_MCOR2,(SPEED_HKSPIKE + ( skill * SPEED_HKSKILL)));
 
-	setorigin (newmis, org);
+	offang = vectoangles (self.enemy.origin - self.origin);
+	offang_y = offang_y - 12;
+	makevectors (offang);
+	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
+	dir = normalize (v_forward);
+	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
+	//dir_z = 0.8;
+    launch_projectile (org, dir, CT_PROJ_MCOR2,(SPEED_HKSPIKE + ( skill * SPEED_HKSKILL)));
 
-	newmis.velocity = vec * 600;
-	newmis.angles = vectoangles(newmis.velocity);
+	offang = vectoangles (self.enemy.origin - self.origin);
+	offang_y = offang_y - 6;
+	makevectors (offang);
+	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
+	dir = normalize (v_forward);
+	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
+	//dir_z = 0.8;
+    launch_projectile (org, dir, CT_PROJ_MCOR2,(SPEED_HKSPIKE + ( skill * SPEED_HKSKILL)));
 
-	newmis.nextthink = time + 5;
-	newmis.think = SUB_Remove;
-	newmis.touch = McLaser_Touch;
+	offang = vectoangles (self.enemy.origin - self.origin);
+	makevectors (offang);
+	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
+	dir = normalize (v_forward);
+	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
+	//dir_z = 0.8;
+    launch_projectile (org, dir, CT_PROJ_MCOR2,(SPEED_HKSPIKE + ( skill * SPEED_HKSKILL)));
+
+	offang = vectoangles (self.enemy.origin - self.origin);
+	offang_y = offang_y + 6;
+	makevectors (offang);
+	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
+	dir = normalize (v_forward);
+	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
+	//dir_z = 0.8;
+    launch_projectile (org, dir, CT_PROJ_MCOR2,(SPEED_HKSPIKE + ( skill * SPEED_HKSKILL)));
+
+	offang = vectoangles (self.enemy.origin - self.origin);
+	offang_y = offang_y + 12;
+	makevectors (offang);
+	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
+	dir = normalize (v_forward);
+	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
+	//dir_z = 0.8;
+    launch_projectile (org, dir, CT_PROJ_NG,(SPEED_HKSPIKE + ( skill * SPEED_HKSKILL)));
+
+	offang = vectoangles (self.enemy.origin - self.origin);
+	offang_y = offang_y + 18;
+	makevectors (offang);
+	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
+	dir = normalize (v_forward);
+	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
+	//dir_z = 0.8;
+    launch_projectile (org, dir, CT_PROJ_MCOR2,(SPEED_HKSPIKE + ( skill * SPEED_HKSKILL)));
 };
 
-
-
-void() mcorn_fire =
-{
-	local vector org;
-
-	self.effects = self.effects | EF_MUZZLEFLASH;
-	makevectors2 (self.angles);
-	
-	org = self.origin + v_forward * 30 + v_right * 8.5 + '0 0 16';
-
-	McLaunchLaser(org, self.enemy.origin - self.origin);
+void() mcorn_projectiles = {
+	if (random() < 0.1) mcorn_barrage();
+	else mcorn_fire();
 };
 
-//=================================================================================
+// Projectile spit attack
+void() mcorn_atk1	=[	56,	mcorn_atk2	] {ai_face();};
+void() mcorn_atk2	=[	57,	mcorn_atk3	] {ai_face();};
+void() mcorn_atk3	=[	58,	mcorn_atk4	] {ai_face();sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack1.wav", 1, ATTN_NORM);};
+void() mcorn_atk4	=[	59,	mcorn_atk5	] {ai_face();};
+void() mcorn_atk5	=[	60,	mcorn_atk6	] {};
+void() mcorn_atk6	=[	61,	mcorn_atk7	] {mcorn_fire();};
+void() mcorn_atk7	=[	65,	mcorn_atk8	] {}; // Skipped a few frames to keep it snappy and prevent overlap of actual projectile with manticore model's projectile.
+void() mcorn_atk8	=[	66,	mcorn_run1	] {};
 
-void() mcorn_stand1	=[	$stand1,	mcorn_stand2	] {ai_stand();};
-void() mcorn_stand2	=[	$stand2,	mcorn_stand3	] {ai_stand();};
-void() mcorn_stand3	=[	$stand3,	mcorn_stand4	] {ai_stand();};
-void() mcorn_stand4	=[	$stand4,	mcorn_stand5	] {ai_stand();};
-void() mcorn_stand5	=[	$stand5,	mcorn_stand6	] {ai_stand();};
-void() mcorn_stand6	=[	$stand6,	mcorn_stand7	] {ai_stand();};
-void() mcorn_stand7	=[	$stand7,	mcorn_stand8	] {ai_stand();};
-void() mcorn_stand8	=[	$stand8,	mcorn_stand9	] {ai_stand();};
-void() mcorn_stand9	=[	$stand9,	mcorn_stand10	] {ai_stand();};
-void() mcorn_stand10	=[	$stand10,	mcorn_stand11	] {ai_stand();};
-void() mcorn_stand11	=[	$stand11,	mcorn_stand12	] {ai_stand();};
-void() mcorn_stand12	=[	$stand12,	mcorn_stand13	] {ai_stand();};
-void() mcorn_stand13	=[	$stand13,	mcorn_stand14	] {ai_stand();};
-void() mcorn_stand14	=[	$stand14,	mcorn_stand15	] {ai_stand();};
-void() mcorn_stand15	=[	$stand15,	mcorn_stand16	] {ai_stand();};
-void() mcorn_stand16	=[	$stand16,	mcorn_stand17	] {ai_stand();};
-void() mcorn_stand17	=[	$stand17,	mcorn_stand1	] {ai_stand();};
-
-void() mcorn_walk1	=[	$walk1, 	mcorn_walk2	] {ai_walk(8);};
-void() mcorn_walk2	=[	$walk2, 	mcorn_walk3	] {ai_walk(8);};
-void() mcorn_walk3	=[	$walk3, 	mcorn_walk4	] {ai_walk(8);};
-void() mcorn_walk4	=[	$walk4, 	mcorn_walk5	] {ai_walk(8);};
-void() mcorn_walk5	=[	$walk5, 	mcorn_walk6	] {ai_walk(8);};
-void() mcorn_walk6	=[	$walk6, 	mcorn_walk7	] {ai_walk(8);};
-void() mcorn_walk7	=[	$walk7, 	mcorn_walk8	] {ai_walk(8);};
-void() mcorn_walk8	=[	$walk8, 	mcorn_walk9	] {ai_walk(8);};
-void() mcorn_walk9	=[	$walk9, 	mcorn_walk10	] {ai_walk(8);};
-void() mcorn_walk10	=[	$walk10,	mcorn_walk11	] {ai_walk(8);};
-void() mcorn_walk11	=[	$walk11,	mcorn_walk12	] {ai_walk(8);};
-void() mcorn_walk12	=[	$walk12,	mcorn_walk13	] {ai_walk(8);};
-void() mcorn_walk13	=[	$walk13,	mcorn_walk14	] {ai_walk(8);};
-void() mcorn_walk14	=[	$walk14,	mcorn_walk15	] {ai_walk(8);};
-void() mcorn_walk15	=[	$walk15,	mcorn_walk16	] {ai_walk(8);};
-void() mcorn_walk16	=[	$walk16,	mcorn_walk17	] {ai_walk(8);};
-void() mcorn_walk17	=[	$walk17,	mcorn_walk1	] {ai_walk(8);};
-
-void() mcorn_run1		=[	$run1  ,	mcorn_run2	] 
-{
-	if (random() < 0.2)
-		sound (self, CHAN_VOICE, "mcorn/idle.wav", 1, ATTN_IDLE);
-	ai_run(16);
+// Tail swipe!
+void() mcorn_atka1	=[	67,	mcorn_atka2	] {ai_face();};
+void() mcorn_atka2	=[	68,	mcorn_atka3	] {ai_face();};
+void() mcorn_atka3	=[	69,	mcorn_atka4	] {ai_charge(2);};
+void() mcorn_atka4	=[	70,	mcorn_atka5	] {
+	ai_charge(4);
+	if (random() < 0.5) sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack2.wav", 1, ATTN_NORM);
+	else sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack3.wav", 1, ATTN_NORM);
 };
+void() mcorn_atka5	=[	71,	mcorn_atka6	] {mcorn_tailswipe();ai_charge(2);};
+void() mcorn_atka6	=[	72,	mcorn_atka7	] {ai_face();};
+void() mcorn_atka7	=[	73,	mcorn_atka8	] {ai_face();};
+void() mcorn_atka8	=[	74,	mcorn_atka9	] {ai_face();};
+void() mcorn_atka9	=[	75,	mcorn_atka10] {ai_face();};
+void() mcorn_atka10	=[	76,	mcorn_atka11] {ai_face();};
+void() mcorn_atka11	=[	77,	mcorn_atka12] {ai_face();};
+void() mcorn_atka12	=[	78,	mcorn_atka13] {ai_face();};
+void() mcorn_atka13	=[	79,	mcorn_run1	] {ai_face();};
 
-void() mcorn_run2		=[	$run2  ,	mcorn_run3	] {ai_run(32);};
-void() mcorn_run3		=[	$run3  ,	mcorn_run4	] {ai_run(32);};
-void() mcorn_run4		=[	$run4  ,	mcorn_run5	] {ai_run(20);};
-void() mcorn_run5		=[	$run5  ,	mcorn_run6	] {ai_run(64);};
-void() mcorn_run6		=[	$run6  ,	mcorn_run7	] {ai_run(32);};
-void() mcorn_run7		=[	$run7  ,	mcorn_run8	] {ai_run(16);};
-void() mcorn_run8		=[	$run8  ,	mcorn_run1	] {ai_run(32);};
+// Spike barrage - either when player is unseen or behind
+void() mcorn_atkb1	=[	80,	mcorn_atkb2	] {};
+void() mcorn_atkb2	=[	81,	mcorn_atkb3	] {};
+void() mcorn_atkb3	=[	82,	mcorn_atkb4	] {};
+void() mcorn_atkb4	=[	83,	mcorn_atkb5	] {sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack4.wav", 1, ATTN_NORM);};
+void() mcorn_atkb5	=[	84,	mcorn_atkb6	] {mcorn_barrage();};
+void() mcorn_atkb6	=[	85,	mcorn_atkb7	] {};
+void() mcorn_atkb7	=[	86,	mcorn_run1	] {ai_face();};
 
-//=================================================================================
-
-void() mcorn_atk1	=[	$atk1,	mcorn_atk2	] {ai_charge(10);};
-void() mcorn_atk2	=[	$atk2,	mcorn_atk3	] {ai_charge(10);};
-void() mcorn_atk3	=[	$atk3,	mcorn_atk4	] {ai_charge(10);};
-void() mcorn_atk4	=[	$atk4,	mcorn_atk5	] 
-{
-	sound (self, CHAN_VOICE, "mcorn/atk1.wav", 1, ATTN_NORM);
-	mcorn_bite();
+void() mcorn_leap1	=[  80, mcorn_leap2	] {
+	ai_face();
+	self.jump_flag = time;	// No jump time limits
+	if (self.skin == 1) sound (self, CHAN_VOICE, "demon/djump.wav", 1, ATTN_NORM);
+	else {
+		if (random() < 0.5) sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack2.wav", 1, ATTN_NORM);
+		else				sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_attack3.wav", 1, ATTN_NORM);
+	}
 };
-
-void() mcorn_atk5	=[	$atk5,	mcorn_atk6	] {ai_charge(10);};
-void() mcorn_atk6	=[	$atk6,	mcorn_atk7	] {ai_charge(10);};
-void() mcorn_atk7	=[	$atk7,	mcorn_atk8	] {ai_charge(10);};
-void() mcorn_atk8	=[	$atk8,	mcorn_run1	] {ai_charge(10);};
-void() mcorn_atk9	=[	$atk9,	mcorn_atk6	] {ai_charge(10);};
-void() mcorn_atk10	=[	$atk6,	mcorn_atk7	] {ai_charge(10);};
-void() mcorn_atk11	=[	$atk7,	mcorn_atk8	] {ai_charge(10); mcorn_fire();};
-
-void() mcorn_atka1	=[	$atka1,	mcorn_atka2	] {ai_charge(10);};
-void() mcorn_atka2	=[	$atka2,	mcorn_atka3	] {ai_charge(10);};
-void() mcorn_atka3	=[	$atka3,	mcorn_atka4	] {ai_charge(10);};
-void() mcorn_atka4	=[	$atka4,	mcorn_atka5	] 
-{
-	sound (self, CHAN_VOICE, "mcorn/atka1.wav", 1, ATTN_NORM);
-	mcorn_bite();
+void() mcorn_leap2	=[  81, mcorn_leap3	] {ai_face();monster_footstep(FALSE);};
+void() mcorn_leap3	=[  82, mcorn_leap4	] {ai_face();};
+void() mcorn_leap4	=[  83, mcorn_leap5	] {ai_face();};
+void() mcorn_leap5	=[  84, mcorn_leap6	] {ai_face();};
+void() mcorn_leap6	=[  85, mcorn_leap7	] {
+	ai_face();
+	self.jump_flag = time;	// No jump time limits
+	self.attack_finished = time + 0.6; // similar to fiend but we don't have extra jump frames for the flight
+	self.touch = Demon_JumpTouch;
+	makevectors (self.angles);
+	self.velocity = v_forward * 1100 + '0 0 120';
+	self.flags = self.flags - (self.flags & FL_ONGROUND);
+	self.oldorigin = self.origin;
 };
-
-void() mcorn_atka5	=[	$atka5,	mcorn_atka6	] {ai_charge(10);};
-void() mcorn_atka6	=[	$atka6,	mcorn_atka7	] {ai_charge(10);};
-void() mcorn_atka7	=[	$atka7,	mcorn_atka8	] {ai_charge(10);};
-void() mcorn_atka8	=[	$atka8,	mcorn_atka9	] {ai_charge(10);};
-void() mcorn_atka9	=[	$atka9,	mcorn_atka10	] {ai_charge(10);};
-void() mcorn_atka10	=[	$atka11,	mcorn_atka11	] {ai_charge(10);};
-void() mcorn_atka11	=[	$atka12,	mcorn_atka12	] {ai_charge(10);};
-void() mcorn_atka12	=[	$atka13,	mcorn_atka1	] {ai_charge(10);};
-
-void() mcorn_atkb1	=[	$atkb1,	mcorn_atkb2	] {ai_charge(10);};
-void() mcorn_atkb2	=[	$atkb2,	mcorn_atkb3	] {ai_charge(10);};
-void() mcorn_atkb3	=[	$atkb3,	mcorn_atkb4	] {ai_charge(10);};
-void() mcorn_atkb4	=[	$atkb4,	mcorn_atkb5	] 
-{
-	sound (self, CHAN_VOICE, "mcorn/atkb1.wav", 1, ATTN_NORM);
-	mcorn_bite();
+void() mcorn_leap7	=[  85, mcorn_leap7	] {
+	// Double check monster is still falling?
+	if (CheckZeroVector(self.velocity) || self.oldorigin == self.origin) {
+		self.ideal_yaw = random() * 360; //random jump angle
+		self.think = mcorn_leap5;
+	}
+	self.oldorigin = self.origin;
 };
+void() mcorn_leap8	=[  86, mcorn_leap9	] {monster_footstep(FALSE);};
+void() mcorn_leap9	=[  80, mcorn_run1	] {ai_resetangles();};
 
-void() mcorn_atkb5	=[	$atkb5,	mcorn_atkb6	] {ai_charge(10);};
-void() mcorn_atkb6	=[	$atkb6,	mcorn_atkb1	] {ai_charge(10);};
+void() mcorn_pain1	=[	42 ,	mcorn_pain2	] {};
+void() mcorn_pain2	=[	43 ,	mcorn_pain3	] {};
+void() mcorn_pain3	=[	44 ,	mcorn_pain4	] {};
+void() mcorn_pain4	=[	45 ,	mcorn_pain5	] {};
+void() mcorn_pain5	=[	46 ,	mcorn_pain6	] {};
+void() mcorn_pain6	=[	47 ,	mcorn_pain7	] {};
+void() mcorn_pain7	=[	48 ,	mcorn_pain8	] {};
+void() mcorn_pain8	=[	49 ,	mcorn_run1	] {};
 
-//=================================================================================
+void() mcorn_paina1	=[	50 ,	mcorn_paina2] {};
+void() mcorn_paina2	=[	51 ,	mcorn_paina3] {};
+void() mcorn_paina3	=[	52 ,	mcorn_paina4] {};
+void() mcorn_paina4	=[	53 ,	mcorn_paina5] {};
+void() mcorn_paina5	=[	54 ,	mcorn_paina6] {};
+void() mcorn_paina6	=[	55 ,	mcorn_run1	] {};
 
-void() mcorn_pain1	=[	$pain1 ,	mcorn_pain2	] {};
-void() mcorn_pain2	=[	$pain2 ,	mcorn_pain3	] {};
-void() mcorn_pain3	=[	$pain3 ,	mcorn_pain4	] {};
-void() mcorn_pain4	=[	$pain4 ,	mcorn_pain5	] {};
-void() mcorn_pain5	=[	$pain5 ,	mcorn_pain6	] {};
-void() mcorn_pain6	=[	$pain6 ,	mcorn_run1	] {};
-
-void() mcorn_paina1	=[	$paina1 ,	mcorn_paina2	] {};
-void() mcorn_paina2	=[	$paina2 ,	mcorn_paina3	] {};
-void() mcorn_paina3	=[	$paina3 ,	mcorn_paina4	] {ai_pain(4);};
-void() mcorn_paina4	=[	$paina4 ,	mcorn_paina5	] {ai_pain(12);};
-void() mcorn_paina5	=[	$paina5 ,	mcorn_paina6	] {ai_pain(12);};
-void() mcorn_paina6	=[	$paina6 ,	mcorn_run1	] {ai_pain(2);};
-
-void(entity attacker, float damage) mcorn_pain =
-{
+void(entity inflictor, entity attacker, float damage) mcorn_pain = {
 	local float r;
 
-	r = random ();
-	if (self.pain_finished > time)
-		return;
+	r = random();
+	if (r < 0.333) {
+		sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_pain3.wav", 1, ATTN_NORM);
+	} else if (r < 0.666) {
+		sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_pain2.wav", 1, ATTN_NORM);
+	} else {
+		sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_pain1.wav", 1, ATTN_NORM);
+	}
 
-	sound (self, CHAN_VOICE, "mcorn/dpain1.wav", 1, ATTN_NORM);
-
-	if (random() > 0.5)
-		mcorn_pain1 ();
-
-	else
-		mcorn_paina1 ();
+	if (random() < 0.5) mcorn_paina1 ();
+	else mcorn_pain1 ();
 };
 
-//=================================================================================
+void() mcorn_die1	=[	87,	mcorn_die2	] {};
+void() mcorn_die2	=[	88,	mcorn_die3	] {monster_check_gib();};
+void() mcorn_die3	=[	89,	mcorn_die4	] {monster_check_gib();};
+void() mcorn_die4	=[	90,	mcorn_die5	] {};
+void() mcorn_die5	=[	91,	mcorn_die6	] {};
+void() mcorn_die6	=[	92,	mcorn_die7	] {};
+void() mcorn_die7	=[	93,	mcorn_die8	] {};
+void() mcorn_die8	=[	94,	mcorn_die9	] {};
+void() mcorn_die9	=[	95,	mcorn_die10 ] {};
+void() mcorn_die10	=[	96,	mcorn_die11	] {};
+void() mcorn_die11	=[	97,	mcorn_die12	] {};
+void() mcorn_die12	=[	98,	mcorn_die13	] {};
+void() mcorn_die13	=[	99,	mcorn_die14	] {};
+void() mcorn_die14	=[	100,mcorn_die15	] {};
+void() mcorn_die15	=[	101,mcorn_die16	] {};
+void() mcorn_die16	=[	102,mcorn_die17	] {self.solid = SOLID_NOT;};
+void() mcorn_die17	=[	103,mcorn_die18	] {};
+void() mcorn_die18	=[	104,mcorn_die19	] {};
+void() mcorn_die19	=[	105,mcorn_die20 ] {};
+void() mcorn_die20	=[	106,mcorn_die21	] {};
+void() mcorn_die21	=[	107,mcorn_die22	] {};
+void() mcorn_die22	=[	108,mcorn_die23	] {};
+void() mcorn_die23	=[	109,mcorn_die24	] {monster_death_postcheck();};
+void() mcorn_die24	=[	110,mcorn_die24	] {monster_deadbody_check();sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_ghostcall1.wav", 1, ATTN_NORM);};
 
-void() mcorn_die1		=[	$die1,	mcorn_die2	] {};
-void() mcorn_die2		=[	$die2,	mcorn_die3	] {};
-void() mcorn_die3		=[	$die3,	mcorn_die4	] {};
-void() mcorn_die4		=[	$die4,	mcorn_die5	] {};
-void() mcorn_die5		=[	$die5,	mcorn_die6	] {};
-void() mcorn_die6		=[	$die6,	mcorn_die7	] {};
-void() mcorn_die7		=[	$die7,	mcorn_die8	] {};
-void() mcorn_die8		=[	$die8,	mcorn_die9	] {};
-void() mcorn_die9		=[	$die9,	mcorn_die10 	] {};
-void() mcorn_die10		=[	$die10,	mcorn_die11	] {};
-void() mcorn_die11		=[	$die11,	mcorn_die12	] {};
-void() mcorn_die12		=[	$die12,	mcorn_die13	] {};
-void() mcorn_die13		=[	$die13,	mcorn_die14	] {};
-void() mcorn_die14		=[	$die14,	mcorn_die15	] {};
-void() mcorn_die15		=[	$die15,	mcorn_die16	] {};
-void() mcorn_die16		=[	$die16,	mcorn_die17	] {};
-void() mcorn_die17		=[	$die17,	mcorn_die18	] {};
-void() mcorn_die18		=[	$die18,	mcorn_die19	] {};
-void() mcorn_die19		=[	$die19,	mcorn_die20 	] {};
-void() mcorn_die20		=[	$die20,	mcorn_die21	] {};
-void() mcorn_die21		=[	$die21,	mcorn_die22	] {};
-void() mcorn_die22		=[	$die22,	mcorn_die23	] {};
-void() mcorn_die23		=[	$die23,	mcorn_die24	] {};
-void() mcorn_die24		=[	$die24,	mcorn_die24	] {};
+// Invisible ghost that makes noises after death.  Is it dead?  IS IT???
+void() mcorn_ghostthink = {
+	local float r;
 
-void() mcorn_dieb1		=[	$dieb1,	mcorn_dieb2	] {};
-void() mcorn_dieb2		=[	$dieb2,	mcorn_dieb3	] {};
-void() mcorn_dieb3		=[	$dieb3,	mcorn_dieb4	] {};
-void() mcorn_dieb4		=[	$dieb4,	mcorn_dieb5	] {};
-void() mcorn_dieb5		=[	$dieb5,	mcorn_dieb6	] {};
-void() mcorn_dieb6		=[	$dieb6,	mcorn_dieb7	] {};
-void() mcorn_dieb7		=[	$dieb7,	mcorn_dieb8	] {};
-void() mcorn_dieb8		=[	$dieb8,	mcorn_dieb9	] {};
-void() mcorn_dieb9		=[	$dieb9,	mcorn_dieb10 	] {};
-void() mcorn_dieb10		=[	$dieb10,	mcorn_dieb11	] {};
-void() mcorn_dieb11		=[	$dieb11,	mcorn_dieb12	] {};
-void() mcorn_dieb12		=[	$dieb12,	mcorn_dieb13	] {};
-void() mcorn_dieb13		=[	$dieb13,	mcorn_dieb14	] {};
-void() mcorn_dieb14		=[	$dieb14,	mcorn_dieb15	] {};
-void() mcorn_dieb15		=[	$dieb15,	mcorn_dieb16	] {};
-void() mcorn_dieb16		=[	$dieb16,	mcorn_dieb17	] {};
-void() mcorn_dieb17		=[	$dieb17,	mcorn_dieb18	] {};
-void() mcorn_dieb18		=[	$dieb18,	mcorn_dieb19	] {};
-void() mcorn_dieb19		=[	$dieb19,	mcorn_dieb20 	] {};
-void() mcorn_dieb20		=[	$dieb20,	mcorn_dieb21	] {};
-void() mcorn_dieb21		=[	$dieb21,	mcorn_dieb22	] {};
-void() mcorn_dieb22		=[	$dieb22,	mcorn_dieb23	] {};
-void() mcorn_dieb23		=[	$dieb23,	mcorn_dieb24	] {};
-void() mcorn_dieb24		=[	$dieb24,	mcorn_dieb25	] {};
-void() mcorn_dieb25		=[	$dieb25,	mcorn_dieb25	] {};
+	r = random();
+	if (r < 0.25) 		sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_ghostcall1.wav", 0.5 + (random() * 0.5), ATTN_NORM);
+	else if (r < 0.5)	sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_ghostcall2.wav", 0.5 + (random() * 0.5), ATTN_NORM);
+	else if (r < 0.75)	sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_idle1.wav", 0.25 + (random() * 0.5), ATTN_NORM);
+	else 				sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_idle2.wav", 0.25 + (random() * 0.5), ATTN_NORM);
+	self.think = mcorn_ghostthink;
+	self.nextthink = time + (random() * 15);
+};
 
+void() mcorn_die = {
+	local entity ghoster;
 
-void() mcorn_die =
-{
-	// check for gib
-	if (self.health < -35)
-	{
-		sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
-		ThrowGib ("progs/gib3.mdl", self.health);
-		ThrowGib ("progs/gib3.mdl", self.health);
-		ThrowGib ("progs/gib3.mdl", self.health);
-		ThrowHead ("progs/h_mcorn.mdl", self.health);
-		return;
-	}
+	// Pre-check routine to tidy up extra entities
+	monster_death_precheck();
+
+	ghoster = spawn();
+	ghoster.solid = SOLID_NOT;
+	ghoster.think = mcorn_ghostthink;
+	ghoster.nextthink = time + 10 + (random() * 10);
+	setorigin (ghoster,self.origin);
 
 	// regular death
-	sound (self, CHAN_VOICE, "mcorn/ddeath.wav", 1, ATTN_NORM);
-	self.solid = SOLID_NOT;
-
-	if (random() > 0.5)
+	if (!self.gibbed) {
+		sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_death2.wav", 1, ATTN_NORM);
 		mcorn_die1 ();
-	
-	else
-		mcorn_dieb1 ();
+	}
 };
 
-void() mcorn_melee =
-{
-	local float r;
-
-	r = random ();
-	if (self.pain_finished > time)
-		return;
-
-	sound (self, CHAN_VOICE, "mcorn/dpain1.wav", 1, ATTN_NORM);
-
-	if (random() > 0.5)
-		mcorn_atka1 ();
-
-	else
-		mcorn_atkb1 ();
+void() monster_mcorn_precache = {
+	precache_model ("progs/h_mcorn.mdl");
+	precache_model ("progs/madfox/mon_manticore.mdl");
+	precache_model ("progs/madfox/proj_mcornflame.mdl");
+	precache_model ("progs/q15/s_spike.mdl");
+	precache_model ("progs/madfox/h_manticore.mdl");
+	precache_sound ("qmaster/manticore/mon_manticore_attack1.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_attack2.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_attack3.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_attack4.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_death1.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_death2.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_ghostcall1.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_ghostcall2.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_gib.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_idle1.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_idle2.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_idle3.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_idle4.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_pain1.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_pain2.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_pain3.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_sight1.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_sight2.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_sight3.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_sight4.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_step1.wav");
+	precache_sound ("qmaster/manticore/mon_manticore_step2.wav");
+	precache_sound ("demon/dhit2.wav");
 };
-
-//===========================================================================
 
 /*QUAKED monster_mcorn (1 0 0) (-32 -32 -24) (32 32 40) Ambush*/
-void() monster_mcorn =
-{
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+void() monster_manticore = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	precache_model ("progs/ucorn.mdl");
-	precache_model ("progs/mcorn.mdl");
+	if (self.exactskin == 1) self.skin = 1;
+	self.mdl = "progs/madfox/mon_manticore.mdl";
+	self.headmdl = "progs/madfox/h_manticore.mdl";
+	self.stepc1 = "qmaster/manticore/mon_manticore_step1.wav";
+	self.stepc2 = "qmaster/manticore/mon_manticore_step2.wav";
+	self.stepc3 = "qmaster/manticore/mon_manticore_step1.wav";
+	self.stepc4 = "qmaster/manticore/mon_manticore_step2.wav";
+	self.stepc5 = "qmaster/manticore/mon_manticore_step2.wav";
+	if (!self.idle_sound) self.idle_sound = "qmaster/manticore/mon_manticore_idle1.wav";
+	if (!self.idle_sound) self.idle_sound2 = "qmaster/manticore/mon_manticore_idle2.wav";
+	if (!self.idle_sound) self.idle_soundcom = "qmaster/manticore/mon_manticore_idle3.wav";
+	if (!self.idle_sound) self.idle_soundcom2 = "qmaster/manticore/mon_manticore_idle4.wav";
+	if (!self.sight_sound) self.sight_sound = "qmaster/manticore/mon_manticore_sight1.wav";
+	if (!self.sight_sound2) self.sight_sound2 = "qmaster/manticore/mon_manticore_sight2.wav";
+	if (!self.sight_sound3) self.sight_sound3 = "qmaster/manticore/mon_manticore_sight3.wav";
+	if (!self.sight_sound4) self.sight_sound4 = "qmaster/manticore/mon_manticore_sight4.wav";
+	self.steptype = FS_TYPECUSTOM;
+	self.solid = SOLID_NOT;				// No interaction with world
+	self.movetype = MOVETYPE_NONE;		// Static item, no movement
+	self.bbmins = '-48 -48 -24';	// Special Size
+	self.bbmaxs = '48 48 24';
+	self.bboxtype = BBOX_CUSTOM;	// Custom size
+	if (self.health < 1) {
+		self.health = 2400;
+		if (skill > 1) self.health = self.health + 600; // 3000 on hard/nightmare
+		if (self.skin == 1) self.health = self.health + 1000; // 3400 to 4000 for a Lich fiend
+	}
+	self.gibhealth = -120; 				// Hard to gib
+	self.gibbed = FALSE;
+	self.pain_flinch = 400;				// Really low chance of pain
+	self.pain_timeout = 2;				// High pain threshold
+	self.blockudeath = TRUE;			// No humanoid death sound
+	self.attack_offset = '0 0 20';
 
-	precache_sound ("mcorn/dattack1.wav");
-	precache_sound ("mcorn/ddeath.wav");
-	precache_sound ("mcorn/dpain1.wav");
-	precache_sound ("mcorn/dsight.wav");
-	precache_sound ("mcorn/idle.wav");
-
-	self.solid = SOLID_SLIDEBOX;
-	self.movetype = MOVETYPE_STEP;
-
-	setmodel (self, "progs/mcorn.mdl");
-
-	//gnounc
-	self.noise = "mcorn/dsight.wav";	
-	self.netname = "Manticorn";
-	if (self.deathstring == "") self.deathstring = " was mauled by a Manticorn\n";
-
-	setsize (self, '-32 -32 -24', '32 32 40');
-	self.health = 200;
-	self.max_health = 200;
+	// Always reset resistances to be consistent
+	self.resist_shells = self.resist_cells = 0;
+	self.resist_rockets = self.resist_nails = 0.5;
+	if (self.skin == 1) self.resist_fire = 1; // Can't burn a Lich Fiend
+	if (self.skin != 1) self.resist_cold = 1; // Can't freeze a Manticore
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
 
+	if (self.deathstring == "") {
+		if (self.skin == 1) self.deathstring = " was mercilessly devoured by a Lich Fiend\n";
+		else				self.deathstring = " was mauled by a Manticore\n";
+	}
+
+	self.th_checkattack = ManticoreCheckAttack;
+	if (self.skin == 1) self.th_checkattack = DemonCheckAttack;
 	self.th_stand = mcorn_stand1;
 	self.th_walk = mcorn_walk1;
 	self.th_run = mcorn_run1;
 	self.th_pain = mcorn_pain;
 	self.th_die = mcorn_die;
-	self.th_melee = mcorn_melee;
+	self.th_melee = mcorn_atka1;
+	self.th_jump = mcorn_leap1;		// jump attack
+	self.th_jumpexit = mcorn_leap8;
 	self.th_missile = mcorn_atk1;
+	if (self.skin == 1) self.th_missile = self.th_jump; // just in case, Lich Fiend doesn't spit
 
+	self.classtype = CT_MONMANTICORE;
+	if (self.skin == 1) self.classtype = CT_MONLICHFIEND;
+	self.classgroup = CG_DEMON;
+	self.classmove = MON_MOVEWALK;
 	monster_start();
 };
+
+void() monster_mcorn = {self.classname = "monster_manticore"; monster_manticore();};
+void() monster_lichfiend = {self.exactskin = 1; self.skin = 1; monster_manticore();};

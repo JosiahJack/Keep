@@ -509,10 +509,31 @@ void() swampling_die = {
 	}
 };
 
+void() monster_swampling_precache = {
+	precache_model("progs/ad171/mon_swamplingp.mdl");
+	precache_model("progs/ad171/gib_swamplegp.mdl");
+	precache_model("progs/ad171/mon_swampling.mdl");
+	precache_model("progs/ad171/gib_swampleg.mdl");
+	precache_model(MODEL_PROJ_SWAMP);			// Spit Projectile
+	precache_poisongibs();
+	precache_sound("ad171/swampling/idle1.wav");
+	precache_sound("ad171/swampling/idle3.wav");
+	precache_sound("ad171/swampling/idle2.wav");
+	precache_sound("ad171/swampling/pain3.wav");
+	precache_sound("ad171/wraith/bounce.wav");	// Spit misses
+	precache_sound("ad171/swampling/spit4.wav");	// Spit attack
+	precache_sound("quoth/voreling/bitestrt.wav");
+	precache_sound("quoth/voreling/bite.wav");
+	precache_sound("ad171/voreling/attacktear.wav");
+	precache_sound("quoth/voreling/land.wav");
+	precache_sound("quoth/voreling/death.wav"); // death/pain/attack sounds
+	precache_sound("ad171/swampling/sight2.wav");
+};
+
 // QUAKED monster_swampling (1 0 0) (-16 -16 -24) (16 16 24) Ambush
 void() monster_swampling = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (self.spawnflags & MON_SWAMPLING_LARGE) {
 		self.mdl = "progs/ad171/mon_swamplingp.mdl";
@@ -521,32 +542,12 @@ void() monster_swampling = {
 		self.mdl = "progs/ad171/mon_swampling.mdl";
 		self.gib1mdl = "progs/ad171/gib_swampleg.mdl";	// Single Leg
 	}
-
-	precache_model (self.mdl);
-	precache_model (self.gib1mdl);
-	precache_model (MODEL_PROJ_SWAMP);			// Spit Projectile
-
-	// IDLE/COMBAT and SIGHT sounds
-	self.idle_sound = "ad171/swampling/idle1.wav";
+	
+	self.idle_sound = "ad171/swampling/idle1.wav"; // IDLE/COMBAT and SIGHT sounds
 	self.idle_sound2 = "ad171/swampling/idle3.wav";
 	self.idle_soundcom = "ad171/swampling/idle2.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-	precache_sound (self.idle_soundcom);
-
-	// death/pain/attack sounds
-	precache_sound("quoth/voreling/death.wav");
 	self.pain_sound = "ad171/swampling/pain3.wav";
-	precache_sound(self.pain_sound);
-	precache_sound("ad171/wraith/bounce.wav");	// Spit misses
-	precache_sound("ad171/swampling/spit4.wav");	// Spit attack
-	precache_sound("quoth/voreling/bitestrt.wav");
-	precache_sound("quoth/voreling/bite.wav");
-	precache_sound("ad171/voreling/attacktear.wav");
-	precache_sound("quoth/voreling/land.wav");
 	self.sight_sound = "ad171/swampling/sight2.wav";
-	precache_sound (self.sight_sound);
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TINY;
@@ -602,9 +603,8 @@ void() monster_swampling = {
 		self.th_run = self.th_slide = swampling_wakeup;
 		self.th_melee = self.th_missile = self.th_jump = swampling_wakeup;
 		// th_pain and th_die functions understand ceiling swamplings
-	}
-	// Default swampling behaviour functions
-	else {
+	} else {
+		// Default swampling behaviour functions
 		self.th_stand = swampling_idle1;
 		self.th_walk = swampling_walk1;
 		self.th_run = swampling_run1;

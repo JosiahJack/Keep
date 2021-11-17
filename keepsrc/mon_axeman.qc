@@ -124,7 +124,7 @@ void() axe_die = {
 	}
 };
 
-void() precache_monster_ax = {
+void() monster_ax_precache = {
 	precache_model ("progs/mon_axeman.mdl");
 	precache_model ("progs/h_knight.mdl");
 	precache_sound ("drake/axeman/adeath1.wav");
@@ -137,13 +137,10 @@ void() precache_monster_ax = {
 };
 
 // monster_axeman (1 0 0) (-16 -16 -24) (16 16 40) Ambush, Ferocious axe-wielding maniac :)
-void() monster_ax = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+void() monster_ax = { // [ENTITY]
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 
-	precache_monster_ax();
+	monster_ax_precache();
 	self.mdl = "progs/mon_axeman.mdl";
 	self.headmdl = "progs/h_knight.mdl";
 	self.gib1sound = GIB_IMPACT_METALA;
@@ -161,15 +158,9 @@ void() monster_ax = {
 	self.pain_timeout = 1.5;			// Higher than a knight
 	self.weapon = IT_AXE;
 	self.steptype = FS_TYPEHEAVY;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	self.reviveframestart = 32;
+	self.reviveframeend = 24;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
 	self.th_stand = axe_stand1;
 	self.th_walk = axe_walk1;
 	self.th_run = axe_run1;
@@ -180,14 +171,18 @@ void() monster_ax = {
 	self.classgroup = CG_DKNIGHT;
 	self.classmove = MON_MOVEWALK;
 	if (self.deathstring == "")  {
-		if ( (random () < 0.500) ) {
-			if (self.deathstring == "")  self.deathstring = " was felled by an Axeman\n";
-		} else {
-			if (self.deathstring == "")  self.deathstring = " was scalped by an Axe Knight\n";
-			if (self.skin) {if (self.deathstring == "")  self.deathstring = " was bushwhacked by a Forest Thug\n"; }
-		}
+		if (random () < 0.500) self.deathstring = " was felled by an Axeman\n";
+		else self.deathstring = " was scalped by an Axe Knight\n";
+
+		if (self.skin) self.deathstring = " was bushwhacked by a Forest Thug\n";
 	}
 	monster_start ();
 };
 
-void() monster_axeman = { monster_ax(); };
+void() monster_axeman = { monster_ax(); }; // [ENTITY], Re-direct.
+
+void() monster_thug = { // [ENTITY], Re-skin only.
+    self.skin = self.exactskin = 1;
+    self.classname = "monster_axeman";
+    monster_axeman();
+};

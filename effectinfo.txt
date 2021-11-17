@@ -26,7 +26,7 @@ size 1.5 1.5
 rotate 0 0 0 0
 time 0.15 0.45
 alpha 256 256 0
-originjitter 8 8 8
+// originjitter 8 8 8
 
 effect TE_GUNSHOT
 count 12
@@ -35,7 +35,7 @@ color 0x404040 0x646464			// dark/light grey
 size 1.5 1.5
 rotate 0 0 0 0
 time 0.15 0.45
-originjitter 8 8 8
+// originjitter 8 8 8
 alpha 256 256 0
 
 //----------------------------------------------------------------------
@@ -99,7 +99,7 @@ size 1.5 1.5
 rotate 0 0 0 0
 time 0.15 0.45
 alpha 256 256 0
-originjitter 8 8 8
+// originjitter 8 8 8
 
 effect TE_SPIKE
 count 8
@@ -108,7 +108,7 @@ color 0x404040 0x646464			// dark/light grey
 size 1.5 1.5
 rotate 0 0 0 0
 time 0.15 0.45
-originjitter 8 8 8
+// originjitter 8 8 8
 alpha 256 256 0
 
 //======================================================================
@@ -131,7 +131,7 @@ size 1.5 1.5
 rotate 0 0 0 0
 time 0.15 0.45
 alpha 256 256 0
-originjitter 8 8 8
+// originjitter 8 8 8
 
 effect TE_SUPERSPIKE
 count 10
@@ -140,7 +140,7 @@ color 0x404040 0x646464			// dark/light grey
 size 1.5 1.5
 rotate 0 0 0 0
 time 0.15 0.45
-originjitter 8 8 8
+// originjitter 8 8 8
 alpha 256 256 0
 
 //======================================================================
@@ -158,7 +158,7 @@ size 1.5 1.5
 rotate 0 0 0 0
 time 0.15 0.45
 alpha 256 256 0
-originjitter 2 2 2
+// originjitter 2 2 2
 velocityjitter 16 16 16	
 //velocityoffset 50 50 50
 gravity -0.05
@@ -171,7 +171,7 @@ size 1.5 1.5
 rotate 0 0 0 0
 time 0.15 0.45
 alpha 256 256 0
-originjitter 2 2 2
+// originjitter 2 2 2
 velocityjitter 16 16 16
 //velocityoffset 50 50 50
 gravity -0.05
@@ -233,7 +233,7 @@ size 1.5 1.5
 rotate 0 0 0 0
 time 0.15 0.45
 alpha 256 256 0
-originjitter 2 2 2
+// originjitter 2 2 2
 velocityjitter 16 16 16	
 //velocityoffset 50 50 50
 gravity -0.05
@@ -246,7 +246,7 @@ size 1.5 1.5
 rotate 0 0 0 0
 time 0.8 1.5
 alpha 256 256 0
-originjitter 2 2 2
+// originjitter 2 2 2
 velocityjitter 4 4 4
 //velocityoffset 50 50 50
 gravity -0.01
@@ -307,7 +307,7 @@ type decal
 tex 112 119						// Large smokey impact
 size 32 48						// Stretch up very large
 alpha 64 128 0
-originjitter 48 48 48
+// originjitter 48 48 48
 
 // Ball of light
 effect TE_EXPLOSION
@@ -342,7 +342,7 @@ size 16 24						// Very Large range
 sizeincrease 4					// Expanding smoke
 alpha 16 96 32					// Medium fade
 airfriction 0.2					// Slowly fall down
-originjitter 16 16 32			// Lift smoke off the ground
+// originjitter 16 16 32			// Lift smoke off the ground
 velocityjitter 32 32 16			// Wide spread pattern
 rotate 0 360 15 30				// Keep rotating
 notunderwater
@@ -357,7 +357,7 @@ size 16 24						// Very Large range
 sizeincrease 2					// Double size
 alpha 16 128 32
 airfriction 0.2
-originjitter 8 8 16				// Lift smoke off the ground
+// originjitter 8 8 16				// Lift smoke off the ground
 velocityjitter 16 16 8			// Very little movement
 rotate 0 360 -15 -30			// Reverse direction to red/yellow smoke
 notunderwater
@@ -460,7 +460,7 @@ sizeincrease 4
 stretchfactor 8					// and stretch
 alpha 16 96 48					// Slow fade
 velocityjitter 32 32 32			// Large spread cube
-originjitter 4 4 8
+// originjitter 4 4 8
 gravity -0.05					// Force upwards
 rotate 0 360 5 20				// Slow rotate
 notunderwater
@@ -475,7 +475,7 @@ size 1 2
 sizeincrease 2
 alpha 96 192 64
 liquidfriction 1
-originjitter 2 2 2
+// originjitter 2 2 2
 velocityjitter 8 8 8
 underwater
 
@@ -492,7 +492,7 @@ type decal
 tex 112 119						// Large smokey impact
 size 32 48						// Stretch up very large
 alpha 64 128 0
-originjitter 48 48 48
+// originjitter 48 48 48
 
 // Ball of light
 effect TE_PLASMA
@@ -525,7 +525,7 @@ tex 62 64						// Old style Quake Dots
 size 1 4
 alpha 64 128 24					// Slow Fade
 airfriction 0.25
-originjitter 8 8 8				// small cube of smoke
+// originjitter 8 8 8				// small cube of smoke
 velocityjitter 32 32 32			// Small focused pattern
 rotate 0 360 15 30				// Keep rotating
 notunderwater
@@ -540,7 +540,7 @@ size 16 24						// Very Large range
 sizeincrease 2					// Double size
 alpha 16 128 48
 airfriction 0.2
-originjitter 8 8 16				// Lift smoke off the ground
+// originjitter 8 8 16				// Lift smoke off the ground
 velocityjitter 16 16 8			// Very little movement
 rotate 0 360 -15 -30			// Reverse direction to red/yellow smoke
 notunderwater
@@ -595,7 +595,7 @@ gravity 0.2						// quick fall
 bounce -1						// Expensive bounce
 airfriction 0.35
 originoffset 8 8 4  			// Small flat cube
-originjitter 128 128 64			// Large initial volume
+// originjitter 128 128 64			// Large initial volume
 velocityjitter 192 192 284		// Giant spread pattern
 
 effect TE_LAVASPLASH
@@ -609,7 +609,7 @@ alpha 16 96 24					// Medium fade
 airfriction 0.2					// Slowly fall down
 gravity 0.2
 originoffset 8 8 8  			// Small cube start
-originjitter 128 128 64			// Large initial volume
+// originjitter 128 128 64			// Large initial volume
 velocityoffset 0 0 64			// Push upwards
 velocityjitter 128 128 128		// Giant spread pattern
 rotate 0 360 15 60				// Keep rotating
@@ -628,7 +628,7 @@ size 1 4
 sizeincrease 2					// Expand
 stretchfactor 4					// and stretch
 alpha 128 192 64
-originjitter 64 64 32			// Large volume area
+// originjitter 64 64 32			// Large volume area
 originoffset 0 0 40 			// Start inside middle area
 velocityoffset 16 16 48 		// Float upward
 airfriction 1					// Fall down naturally
@@ -645,7 +645,7 @@ alpha 16 96 24					// Medium fade
 airfriction 0.2					// Slowly fall down
 gravity 0.2
 originoffset 8 8 8  			// Small cube start
-originjitter 128 128 64			// Large initial volume
+// originjitter 128 128 64			// Large initial volume
 velocityoffset 0 0 64			// Push upwards
 velocityjitter 128 128 64		// Giant spread pattern
 rotate 0 360 15 60				// Keep rotating
@@ -660,7 +660,7 @@ sizeincrease 8					// Expanding ring
 alpha 96 320 80					// Slow Fade
 orientation oriented 			// Always draw on the floor
 originoffset 0 0 16				// Move forward
-originjitter 2 2 2
+// originjitter 2 2 2
 velocityoffset 0 0 4
 rotate 0 360 30 45
 
@@ -740,7 +740,7 @@ sizeincrease 2
 time 0.8 1.5
 alpha 256 256 0	
 rotate 0 0 0 0			
-originjitter 2 2 2
+// originjitter 2 2 2
 velocityjitter 8 8 8
 
 //----------------------------------------------------------------------
@@ -768,7 +768,7 @@ size 1 3
 sizeincrease 3
 alpha 16 128 128				// Quick fade
 velocityjitter 16 16 16
-originjitter 4 4 4
+// originjitter 4 4 4
 gravity -0.05					// Gently lift upwards
 rotate 0 360 0 30
 
@@ -801,7 +801,7 @@ size 1.5 1.5
 sizeincrease 4
 time 0.15 0.45
 alpha 256 256 0					// gently dissipate
-originjitter 4 4 4				// evenly spread
+// originjitter 4 4 4				// evenly spread
 velocityjitter 4 4 4			// cube movement
 rotate 0 0 0 0
 
@@ -843,7 +843,7 @@ size 1.5 1.5						// Wide variety of size
 //sizeincrease 4
 alpha 256 256 0
 time 0.4 0.8					// Bright + Slow fade
-originjitter 4 4 4
+// originjitter 4 4 4
 velocityjitter 16 16 16			// Small cube
 gravity -0.05					// Gently lift upwards
 rotate 0 0 0 0
@@ -875,7 +875,7 @@ size 1.5 1.5
 rotate 0 0 0 0
 time 1.0 1.2
 alpha 256 256 0
-originjitter 2 2 2
+// originjitter 2 2 2
 velocityoffset 0 0 80			// fly up
 velocityjitter 900 900 900
 

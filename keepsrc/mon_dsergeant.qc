@@ -503,60 +503,45 @@ void(float soundtype) dsergeant_grunt_sound = {
 	}
 };
 
+void() monster_dsergeant_precache = {
+	precache_model("progs/ad171/mon_dsergeant.mdl");
+	precache_model("progs/ad171/h_dknight.mdl");
+	precache_model(MODEL_PROJ_SERG);
+	precache_model("progs/ad171/w_blueflail.mdl");
+	precache_model("progs/ad171/gib_knfoot_l.mdl");
+	precache_model("progs/ad171/gib_knfoot_r.mdl");
+	precache_model(MODEL_PROJ_SHALGRN); // Green voreball
+	precache_poisongibs(); // precache gibs
+	precache_sound("hknight/idle.wav");
+	precache_sound("ad171/dknight/dserg_hbreath.wav");	// Special long sigh (idle animation)
+	precache_sound("ad171/dknight/dserg_magic.wav");		// New Spike ball launch sound
+	precache_sound("hknight/death1.wav");
+	precache_sound("hknight/pain1.wav");
+	precache_sound("ad171/dknight/dserg_sight.wav");
+	precache_sound(GIB_SOUND_HEAVY2);
+	precache_sound("ad171/dknight/dfury_grunt2.wav"); // New grunt sounds during combat
+	precache_sound("ad171/dknight/dfury_grunt3.wav");
+	precache_sound("ad171/dknight/dfury_grunt4.wav");
+	precache_sound("ad171/dknight/dfury_leap.wav");
+};
+
 // QUAKED monster_dsergeant (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_dsergeant = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_dsergeant.mdl";			// Blue badass!
 	self.headmdl = "progs/ad171/h_dknight.mdl";
 	self.gib1mdl = "progs/ad171/w_blueflail.mdl";			// Unique weapon
 	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";		// left foot
 	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";		// right foot
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (MODEL_PROJ_SERG);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-
 	self.gib2skin = self.gib3skin = 3;				// Sergeant skin
 	self.gib1sound = GIB_IMPACT_CHAIN;
-
 	self.idle_sound = "hknight/idle.wav";
-	precache_sound (self.idle_sound);
-
-	// Special extra sounds
-	precache_sound ("ad171/dknight/dserg_hbreath.wav");	// Special long sigh (idle animation)
-	precache_sound ("ad171/dknight/dserg_magic.wav");		// New Spike ball launch sound
-	precache_sound ("hknight/death1.wav");
 	self.pain_sound = "hknight/pain1.wav";
-	precache_sound (self.pain_sound);
-
-	// Jingle, Jangle of the flail chain
-	self.sight_sound = "ad171/dknight/dserg_sight.wav";
-	precache_sound (self.sight_sound);
-	
-	// Heavy thud sound	
-	self.meleehitsound = GIB_SOUND_HEAVY2;
-	precache_sound (self.meleehitsound);
-
-	// New grunt sounds during combat
-	precache_sound ("ad171/dknight/dfury_grunt2.wav");
-	precache_sound ("ad171/dknight/dfury_grunt3.wav");
-	precache_sound ("ad171/dknight/dfury_grunt4.wav");
-	precache_sound ("ad171/dknight/dfury_leap.wav");
-
-	// Check for poisonous entity flag
-	if (self.poisonous) {
-		precache_poisongibs();			// precache gibs
-		self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
-		precache_model (MODEL_PROJ_SHALGRN);	// Green voreball
-	}
-
+	self.sight_sound = "ad171/dknight/dserg_sight.wav"; // Jingle, Jangle of the flail chain
+	self.meleehitsound = GIB_SOUND_HEAVY2; // Heavy thud sound	
+	if (self.poisonous) self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -590,12 +575,10 @@ void() monster_dsergeant = {
 	self.th_pain = dsergeant_pain;
 	self.th_die = dsergeant_die;
 	self.th_charge = dsergeant_charging;
-	
 	self.meleeattack = rint(random()*3);	// randomize last melee attack
 	self.hittype = HIT_METAL;
 	self.classtype = CT_MONDSERG;
 	self.classgroup = CG_DCAPTAIN;
 	self.classmove = MON_MOVEWALK;
-	
 	monster_start();
 };

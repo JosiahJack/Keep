@@ -1,0 +1,50 @@
+==============================================================
+Title                  : Bones
+Filename               : Q1_skeleton.zip
+Author                 : Madfox
+Email Adress           : catweazel@kpn.home.nl
+Description            : New Quake1 monster
+
+Additional Credits to  : ID Software
+
+==============================================================
+
+* Play Inormation *
+
+Level Name              : /
+Single Player           : /
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Monsters            : yes
+New Sounds              : /
+New Weapon              : /
+qC                      : bones.qc / misc.qc
+
+==============================================================
+
+* Construction *
+
+Base              : Let there be a Q3 Skeleton model in Quake1.
+                  
+Build Time        : other toppic
+Editor(s) Used    : Quark Qmle Wally Quark6.3 AM2016 MeshLab
+Known Bugs        : no skinfile, yet.
+ 
+Thanks            : Animation Master's model.
+                  : Q3Skeleton model from Quake3 
+                  : Used in the VeniVidiFuzi map 
+                
+                    ID software's Quake1 sounds and game.
+Install           : compile the qc and play in a test map with 
+                  : q1_skeleton.mdl in a progs file. 
+                  : It has the transparant pal, use quakespasm0.92
+
+You may distribute and modify this file, as long as you give
+me credit, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 2 april 2021
+
+============================================================== 

@@ -2,30 +2,21 @@ float ATTN_ARMAGON    = 0.500;
 float SERVO_VOLUME    = 0.500;
 
 void () T_ArmaMissileTouch = {
-   local float damg;
+	local float damg;
 
-   if ( (other == self.owner) )
-      return ;
+	if (other == self.owner) return;
+	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
 
-   if ( (pointcontents (self.origin) == CONTENT_SKY) ) {
-      remove (self);
-      return ;
-   }
-   damg = (50.000 + (random () * 20.000));
-   if ( other.health ) {
-      if ( (other.classname == "monster_shambler") )
-         damg = (damg * 0.500);
-
-      T_Damage (other,self,self.owner,damg,DAMARMOR);
-   }
-   T_RadiusDamage (self,self.owner,40.000,other,DAMAGEALL);
-   self.origin = (self.origin - (FL_CLIENT * normalize (self.velocity)));
-   WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-   WriteByte (MSG_BROADCAST,TE_EXPLOSION);
-   WriteCoord (MSG_BROADCAST,self.origin_x);
-   WriteCoord (MSG_BROADCAST,self.origin_y);
-   WriteCoord (MSG_BROADCAST,self.origin_z);
-   BecomeExplosion ();
+	damg = (50.000 + (random () * 20.000));
+	if (other.health) T_Damage (other,self,self.owner,damg,DAMARMOR);
+	T_RadiusDamage (self,self.owner,40.000,other,DAMAGEALL);
+	self.origin = (self.origin - (FL_CLIENT * normalize (self.velocity)));
+	WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST,TE_EXPLOSION);
+	WriteCoord (MSG_BROADCAST,self.origin_x);
+	WriteCoord (MSG_BROADCAST,self.origin_y);
+	WriteCoord (MSG_BROADCAST,self.origin_z);
+	BecomeExplosion ();
 };
 
 void (float ofs, float turn) armagon_launch_missile = {
@@ -482,26 +473,25 @@ void () armagon_die11 = [ 94.000, armagon_die12 ] { armagon_think (); self.nextt
 void () armagon_die12 = [ 95.000, armagon_die13 ] { armagon_think ();DropCoin(1); self.nextthink = (time + 0.200); };
 void () armagon_die13 = [ 96.000, armagon_die14 ] { armagon_think ();DropCoin(1); DropCoin(1); DropCoin(1); self.nextthink = (time + 0.200); };
 void () armagon_die14 = [ 97.000, armagon_die14 ] {
-   local entity body;
-
-   armagon_think ();
-   multi_explosion ((self.origin + '0.000 0.000 80.000'),20.000,MOVETYPE_BOUNCE,MOVETYPE_WALK,0.100,0.500);
-   self.nextthink = CONTENT_EMPTY;
-   self.movetype = MOVETYPE_NONE;
-   self.takedamage = DAMAGE_NO;
-   self.solid = SOLID_NOT;
-   setsize (self,VEC_HULL2_MIN,'32.000 32.000 32.000');
-   self.flags = FALSE;
-   self.gorging = TRUE;
-   self.wait = (time + MOVETYPE_FLY);
-   body = self.trigger_field;
-   body.nextthink = CONTENT_EMPTY;
-   self.movetype = MOVETYPE_NONE;
-   body.takedamage = DAMAGE_NO;
-   body.solid = SOLID_NOT;
-   body.think = armagon_body_explode1;
-   body.nextthink = (time + 0.100);
-   body.gorging = TRUE;
+	armagon_think();
+	multi_explosion ((self.origin + '0.000 0.000 80.000'),20.000,MOVETYPE_BOUNCE,MOVETYPE_WALK,0.100,0.500);
+	self.nextthink = CONTENT_EMPTY;
+	self.movetype = MOVETYPE_NONE;
+	self.takedamage = DAMAGE_NO;
+	self.gibbed = TRUE;
+	self.solid = SOLID_NOT;
+	setsize (self,VEC_HULL2_MIN,'32.000 32.000 32.000');
+	self.flags = FALSE;
+	self.gorging = TRUE;
+	self.wait = (time + MOVETYPE_FLY);
+	self.trigger_field.nextthink = CONTENT_EMPTY;
+	self.movetype = MOVETYPE_NONE;
+	self.trigger_field.takedamage = DAMAGE_NO;
+	self.trigger_field.gibbed = TRUE;
+	self.trigger_field.solid = SOLID_NOT;
+	self.trigger_field.think = armagon_body_explode1;
+	self.trigger_field.nextthink = (time + 0.100);
+	self.trigger_field.gorging = TRUE;
 	DropCoin(1);
 };
 
@@ -523,7 +513,7 @@ void () armagon_body_explode1 = {
 
    if ( (self.cnt < 25.000) ) {
       if ( (self.cnt > self.count) ) {
-         ThrowGib (1,1);
+         ThrowGib(1,1);
          self.count = (self.cnt + TRUE);
       }
       self.cnt = (self.cnt + TRUE);
@@ -598,13 +588,7 @@ void () armagon_stand_attack = {
    if ( (self.cnt == TRUE) ) { armagon_run1 (); return; }
 };
 
-void () monster_armagon = {
-   local entity body;
-
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-   self.lefty = FALSE;
+void () monster_armagon_precache = {
    precache_model ("progs/hipnotic/armabody.mdl");
    precache_model ("progs/hipnotic/armalegs.mdl");
    precache_model ("progs/missile.mdl");
@@ -623,49 +607,53 @@ void () monster_armagon = {
    precache_sound ("hipnotic/weapons/laserric.wav");
    precache_sound ("drake/misc/longexpl.wav");
    precache_sound ("drake/misc/shortexp.wav");
-   body = spawn ();
-   body.origin = self.origin;
-   body.origin = (body.origin - '0.000 0.000 64.000');
-   self.solid = SOLID_SLIDEBOX;
-   self.fixangle = FALSE;
-   self.movetype = MOVETYPE_STEP;
-   body.solid = SOLID_NOT;
-   body.movetype = MOVETYPE_STEP;
-   self.trigger_field = body;
-   body.trigger_field = self;
-   setmodel (body,"progs/hipnotic/armabody.mdl");
-   self.mdl = "progs/hipnotic/armalegs.mdl";
-   setmodel (self,self.mdl);
-   setsize (self,'-48.000 -48.000 -24.000','48.000 48.000 84.000');
-   self.bboxtype = BBOX_ARMAGON;
-   setorigin (self,self.origin);
-   setorigin (body,body.origin);
-   self.yaw_speed = 9;
-   self.health = 3000.000;
-   self.worldtype = 0.850;
+};
 
-   // Always reset Ammo Resistance to be consistent
-   self.resist_shells = self.resist_nails = 0;
-   self.resist_rockets = 0; self.resist_cells = 0.5;
+void () monster_armagon = {
+	local entity body;
+
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+
+	monster_armagon_precache();
+	self.lefty = FALSE;
+	body = spawn();
+	body.origin = self.origin;
+	body.origin = (body.origin - '0.000 0.000 64.000');
+	self.solid = SOLID_SLIDEBOX;
+	self.fixangle = FALSE;
+	self.movetype = MOVETYPE_STEP;
+	body.solid = SOLID_NOT;
+	body.movetype = MOVETYPE_STEP;
+	self.trigger_field = body;
+	body.trigger_field = self;
+	setmodel (body,"progs/hipnotic/armabody.mdl");
+	self.mdl = "progs/hipnotic/armalegs.mdl";
+	setmodel (self,self.mdl);
+	setsize (self,'-48.000 -48.000 -24.000','48.000 48.000 84.000');
+	self.bboxtype = BBOX_ARMAGON;
+	setorigin (self,self.origin);
+	setorigin (body,body.origin);
+	self.yaw_speed = 9;
+	self.health = 3000.000;
+	self.worldtype = 0.850;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
+	self.resist_cells = 0.5;
 	self.resist_plasma = 0.5;
-
-	// Check passive system for exceptions
-	setup_passivestate(self);
-
-   self.gibhealth = -1000000;
-   self.gibbed = FALSE;
-   self.state = FALSE;
-   self.super_time = FALSE;
-   self.endtime = FALSE;
-   self.th_stand = armagon_stand1;
-   self.th_walk = armagon_walk1;
-   self.th_run = armagon_run1;
-   self.th_die = armagon_die1;
-   self.th_missile = armagon_missile_attack;
-   self.th_melee = armagon_stop1;
-   self.th_pain = armagon_pain;
-   self.classmove = MON_MOVEWALK;
+	setup_passivestate(self); // Check passive system for exceptions
+	self.gibhealth = -1000000;
+	self.gibbed = FALSE;
+	self.gibondeath = FALSE; // Special death, that in fact does gib him in the end.
+	self.state = FALSE;
+	self.super_time = FALSE;
+	self.endtime = FALSE;
+	self.th_stand = armagon_stand1;
+	self.th_walk = armagon_walk1;
+	self.th_run = armagon_run1;
+	self.th_die = armagon_die1;
+	self.th_missile = armagon_missile_attack;
+	self.th_melee = armagon_stop1;
+	self.th_pain = armagon_pain;
+	self.classmove = MON_MOVEWALK;
 	if (self.deathstring == "")  self.deathstring = " was outgunned by Armagon\n";
-
-   monster_start ();
+	monster_start();
 };

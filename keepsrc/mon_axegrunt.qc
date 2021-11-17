@@ -1,11 +1,5 @@
-/*
-==============================================================================
-
-AXE GRUNT
-Suitable replacement for knight in base maps.  Grunts a lot.
-
-==============================================================================
-*/
+// AXE GRUNT
+// Suitable replacement for knight in base maps.  Grunts a lot.
 
 $cd id1/models/player_4
 $origin 0 -6 24
@@ -174,17 +168,14 @@ void()	axeg_die8	=[	$axdeth8,	axeg_die9	] {monster_death_postcheck();};
 void()	axeg_die9	=[	$axdeth9,	axeg_die9	] {monster_deadbody_check();};
 
 void() axeg_die = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
-
-	// regular death
-	if (!self.gibbed) {
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
+	if (!self.gibbed) { // regular death
 		sound (self, CHAN_VOICE, "knight/kdeath.wav", 1, ATTN_NORM);
 		axeg_die1();									// Backward/side
 	}
 };
 
-void() precache_monster_axegrunt = {
+void() monster_axegrunt_precache = {
 	precache_model ("progs/lunaran/axegrunt.mdl");
 	precache_model ("progs/drake/h_guard.mdl");
 	precache_sound ("knight/kdeath.wav");
@@ -199,12 +190,9 @@ void() precache_monster_axegrunt = {
 // Lunaran and in Travail
 // QUAKED monster_axegrunt (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_axegrunt = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 
-	precache_monster_axegrunt();
+	monster_axegrunt_precache();
 	self.mdl = "progs/lunaran/axegrunt.mdl";
 	self.headmdl = "progs/drake/h_guard.mdl";
 	self.gib1mdl = "progs/gib1.mdl";
@@ -222,27 +210,18 @@ void() monster_axegrunt = {
 	self.pain_flinch = 20;				// Easy to pain
 	self.pain_longanim = TRUE;			// can be chopped with shadow axe
 	self.steptype = FS_TYPEMEDIUM;		// Average feet
-	
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	self.reviveframestart = 49;
+	self.reviveframeend = 41;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
 	self.th_stand = axeg_stand1;
 	self.th_walk = axeg_stand1;
 	self.th_run = axeg_run1;
 	self.th_melee = axeg_atk;
 	self.th_pain = axeg_pain;
 	self.th_die = axeg_die;
-	
 	self.classtype = CT_MONARMYAXE;
 	self.classgroup = CG_ARMY;
 	self.classmove = MON_MOVEWALK;
-
 	if (self.deathstring == "")  self.deathstring = " was axed by an Axe Grunt\n";
-	
 	monster_start ();
 };

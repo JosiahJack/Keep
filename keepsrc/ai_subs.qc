@@ -79,7 +79,7 @@ void() ai_face = {
 
 void(float dist) ai_forward = {
 	MonsterDeBuff();
-	walkmove (self.angles_y, dist);
+	walkmove(self.angles_y, dist);
 };
 
 // ai_forward + ai_face
@@ -90,7 +90,7 @@ void(float dist) ai_faceforward = {
 
 void(float dist) ai_back = {
 	MonsterDeBuff();
-	walkmove ( (self.angles_y+180), dist);
+	walkmove((self.angles_y+180), dist);
 };
 
 void(float dist) ai_backface = { ai_face(); ai_back(dist); }; // faces then moves back.  Should be ai_faceback??
@@ -823,7 +823,7 @@ void() ai_floatmove_start = {
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 };
 
-// wrap movement code in this hot shtuff for making scrags do sick drifts
+// Wrap movement code in this hot shtuff for making scrags do sick drifts
 float(vector mask) ai_floatmove_ceiltrace = {
 	local vector start, end;
 
@@ -849,7 +849,7 @@ float() ai_fishmovecheck = {
 	opc = pointcontents(self.oldorigin);
 
 	// fish noclipping through ceilings
-	if ( pointcontents(self.origin) != opc || pointcontents(self.origin + '0 0 16') != opc || !ai_floatmove_ceilcheck()) return FALSE;
+	if (pointcontents(self.origin) != opc || pointcontents(self.origin + '0 0 16') != opc || !ai_floatmove_ceilcheck()) return FALSE;
 	return TRUE;
 };
 

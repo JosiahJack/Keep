@@ -490,9 +490,7 @@ void() dfury_magicb_shot =
 	}
 };
 
-//----------------------------------------------------------------------
-void() dfury_attachment_finish =
-{
+void() dfury_attachment_finish = {
 	if (self.state) {
 		self.state = FALSE;
 		self.alpha = 0.1;
@@ -500,9 +498,7 @@ void() dfury_attachment_finish =
 	}
 };
 
-//----------------------------------------------------------------------
-void(float skincolor) dfury_attachment_setup =
-{
+void(float skincolor) dfury_attachment_setup = {
 	if (self.attachment && !self.attachment.state) {
 		self.attachment.state = TRUE;
 		setmodel(self.attachment, self.weaponglow);
@@ -515,9 +511,7 @@ void(float skincolor) dfury_attachment_setup =
 	}
 };
 
-//----------------------------------------------------------------------
-void() dfury_attachment_update =
-{		
+void() dfury_attachment_update = {		
 	if (self.attachment && self.attachment.state) {
 		setorigin(self.attachment, self.origin);
 		self.attachment.angles = self.angles;
@@ -696,9 +690,32 @@ void(float soundtype) dfury_grunt_sound = {
 	}
 };
 
-/*======================================================================
-QUAKED monster_dfury (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
+void() monster_dfury_precache = {
+	precache_model ("progs/ad171/mon_dfury.mdl");
+	precache_model ("progs/ad171/h_dfury.mdl");
+	precache_model ("progs/ad171/mon_dfury_glow.mdl");		// Glowing magical swords
+	precache_model (MODEL_PROJ_FURY1);	// Vore spike ball with smoke trail
+	precache_model (MODEL_PROJ_FURY2);	// Wizard spit with smoke trail
+	precache_model ("progs/ad171/w_dfurysword1.mdl");
+	precache_model ("progs/ad171/w_dfurysword2.mdl");
+	precache_model ("progs/ad171/gib_knfoot_r.mdl");
+	precache_model (MODEL_PROJ_SHALGRN); // Green voreball
+	precache_sound ("hknight/idle.wav");
+	precache_sound ("hknight/attack1.wav"); // Firing of magic spikes (first 0.1s must loop)
+	precache_sound ("hknight/death1.wav");
+	precache_sound ("hknight/pain1.wav");
+	precache_sound ("hknight/hit.wav");
+	precache_sound ("ad171/dknight/dfury_sight.wav");
+	precache_sound (GIB_SOUND_HEAVY2);
+	precache_sound ("ad171/dknight/dfury_grunt1.wav"); // New grunt sounds during combat
+	precache_sound ("ad171/dknight/dfury_grunt2.wav");
+	precache_sound ("ad171/dknight/dfury_grunt3.wav");
+	precache_sound ("ad171/dknight/dfury_grunt4.wav");
+	precache_sound ("ad171/dknight/dfury_leap.wav");
+	precache_poisongibs(); // precache gibs
+};
+
+// QUAKED monster_dfury (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_dfury = {
 	// Check for any random monster setups
 	if (monster_checkrandomizer() == TRUE) return;
@@ -711,54 +728,13 @@ void() monster_dfury = {
 	self.gib1mdl = "progs/ad171/w_dfurysword1.mdl";		// Unique sword L
 	self.gib2mdl = "progs/ad171/w_dfurysword2.mdl";		// Unique sword R
 	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";		// right foot
-	
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.weaponglow);		// Glowing magical swords
-	precache_model (MODEL_PROJ_FURY1);	// Vore spike ball with smoke trail
-	precache_model (MODEL_PROJ_FURY2);	// Wizard spit with smoke trail
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-
 	self.gib3skin = 2;
 	self.gib1sound = self.gib2sound = GIB_IMPACT_METALA;
-
 	self.idle_sound = "hknight/idle.wav";
-	precache_sound (self.idle_sound);
-
-	// Firing of magic spikes (first 0.1s must loop)
-	precache_sound ("hknight/attack1.wav");
-	precache_sound ("hknight/death1.wav");
 	self.pain_sound = "hknight/pain1.wav";
-	precache_sound (self.pain_sound);
-
-	// TE_KNIGHTSPIKE = Magic spike hitting the wall
-	// Has got to be in this location because the filename is hardcoded (engine.exe)
-	precache_sound ("hknight/hit.wav");				
-
-	// Double sword swipe (like death knight++)
-	self.sight_sound = "ad171/dknight/dfury_sight.wav";
-	precache_sound (self.sight_sound);
-	
-	// Heavy thud sound	
-	self.meleehitsound = GIB_SOUND_HEAVY2;
-	precache_sound (self.meleehitsound);
-
-	// New grunt sounds during combat
-	precache_sound ("ad171/dknight/dfury_grunt1.wav");
-	precache_sound ("ad171/dknight/dfury_grunt2.wav");
-	precache_sound ("ad171/dknight/dfury_grunt3.wav");
-	precache_sound ("ad171/dknight/dfury_grunt4.wav");
-	precache_sound ("ad171/dknight/dfury_leap.wav");
-
-	// Check for poisonous entity flag
-	if (self.poisonous) {
-		precache_poisongibs();			// precache gibs
-		self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
-		precache_model (MODEL_PROJ_SHALGRN);	// Green voreball
-	}
-
+	self.sight_sound = "ad171/dknight/dfury_sight.wav"; // Double sword swipe (like death knight++)
+	self.meleehitsound = GIB_SOUND_HEAVY2; // Heavy thud sound	
+	if (self.poisonous) self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -797,22 +773,17 @@ void() monster_dfury = {
 	self.th_charge = dfury_watk1;
 	self.th_slide = dfury_slice1;
 	self.hittype = HIT_METAL;
-	
 	self.meleeattack = rint(random()*5);
 	self.weaponswitch = time + 5;
-	
 	self.classtype = CT_MONDFURY;
 	self.classgroup = CG_DCAPTAIN;
 	self.classmove = MON_MOVEWALK;
-	
-	// Setup magic glowing sword effect
-	self.attachment = spawn();
+	self.attachment = spawn(); // Setup magic glowing sword effect
 	self.attachment.owner = self;
 	self.attachment.classtype = CT_ATTACHMENT;
 	setsize (self.attachment, VEC_ORIGIN, VEC_ORIGIN);
 	self.attachment.movetype = MOVETYPE_NONE;
 	self.attachment.solid = SOLID_NOT;
 	setorigin(self.attachment, self.origin);
-	
 	monster_start();
 };

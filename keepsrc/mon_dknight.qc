@@ -75,21 +75,17 @@ $frame deathb17 deathb18 deathb19 deathb20
 
 // magica and magicb missing
 
-void() dknight_sword_sound;			// Sword swipe sounds
 void() dknight_ghost_particle;		// Ghost particles
 void() dknight_ghost_glow;			// Secondary ghost glow
 
-//===========================================================================
 void() dk_stand = {
 	if (self.spawnflags & MON_GHOST_ONLY) {
 		if (self.movetype != MOVETYPE_NONE) self.movetype = MOVETYPE_NONE;
 		dknight_ghost_particle();
 		dknight_ghost_glow();
-	}
-	else ai_stand();
+	} else ai_stand();
 };
 
-//----------------------------------------------------------------------
 void()	dknight_standA1	=[	$standA1,	dknight_standA2	] {dk_stand();};
 void()	dknight_standA2	=[	$standA2,	dknight_standA3	] {dk_stand();};
 void()	dknight_standA3	=[	$standA3,	dknight_standA4	] {dk_stand();};
@@ -103,7 +99,6 @@ void()	dknight_standA10=[	$standA10,	dknight_standA11] {dk_stand();};
 void()	dknight_standA11=[	$standA11,	dknight_standA12] {dk_stand();};
 void()	dknight_standA12=[	$standA12,	dknight_stand1	] {dk_stand();};
 
-//----------------------------------------------------------------------
 void()	dknight_standB1	=[	$standB1,	dknight_standB2	] {dk_stand();};
 void()	dknight_standB2	=[	$standB2,	dknight_standB3	] {dk_stand();};
 void()	dknight_standB3	=[	$standB3,	dknight_standB4	] {dk_stand();};
@@ -271,13 +266,13 @@ void()	dknight_run6	=[	$run6,	dknight_run1	] {ai_run(13);};
 // Death Knight is faster (-4 frames will cycle damage frames quicker)
 // Damage Frames - Hell Knight (6-11, Total 6) Death Knight (6-10, Total 5)
 
-void()	dknight_char_a1	=[	$char_a1,	dknight_char_a2	] {ai_charge(20); dknight_sword_sound();};
+void()	dknight_char_a1	=[	$char_a1,	dknight_char_a2	] {ai_charge(20); SwordSwipeSound();};
 void()	dknight_char_a2	=[	$char_a2,	dknight_char_a3	] {monster_footstep(FALSE); ai_charge(25);ai_melee(); };
 void()	dknight_char_a3	=[	$char_a3,	dknight_char_a4	] {ai_charge(18);ai_melee(); };
 void()	dknight_char_a4	=[	$char_a4,	dknight_char_a5	] {ai_charge(16);};
 void()	dknight_char_a5	=[	$char_a5,	dknight_char_a6	] {monster_footstep(FALSE); ai_charge(14);};
 void()	dknight_char_a6	=[	$char_a6,	dknight_char_a7	] {ai_charge(20); ai_melee();};
-void()	dknight_char_a7	=[	$char_a7,	dknight_char_a8	] {ai_charge(21); ai_melee(); dknight_sword_sound();};
+void()	dknight_char_a7	=[	$char_a7,	dknight_char_a8	] {ai_charge(21); ai_melee(); SwordSwipeSound();};
 void()	dknight_char_a8	=[	$char_a8,	dknight_char_a9	] {monster_footstep(FALSE); ai_charge(13); ai_melee();};
 void()	dknight_char_a9	=[	$char_a9,	dknight_char_a10	] {ai_charge(20); ai_melee();};
 void()	dknight_char_a10=[	$char_a10,	dknight_char_a11	] {ai_charge(20); ai_melee();};
@@ -288,7 +283,7 @@ void()	dknight_char_a12=[	$char_a12,	dknight_run1	] {ai_charge(16);};
 // Identical frame set (Hell Knight / Death Knight)
 
 void()	dknight_char_b1	=[	$char_b1,	dknight_char_b2	] {
-	CheckContinueCharge (); ai_charge(23); ai_melee(); dknight_sword_sound();};
+	CheckContinueCharge (); ai_charge(23); ai_melee(); SwordSwipeSound();};
 void()	dknight_char_b2	=[	$char_b2,	dknight_char_b3	] {monster_footstep(FALSE); ai_charge(17); ai_melee();};
 void()	dknight_char_b3	=[	$char_b3,	dknight_char_b4	] {ai_charge(12); ai_melee();};
 void()	dknight_char_b4	=[	$char_b4,	dknight_char_b5	] {ai_charge(22); ai_melee();};
@@ -303,7 +298,7 @@ void()	dknight_char_b6	=[	$char_b6,	dknight_char_b1	] {ai_charge(8); ai_melee();
 void()	dknight_slice1	=[	$slice2,	dknight_slice2	] {ai_charge(9);};
 void()	dknight_slice2	=[	$slice4,	dknight_slice3	] {monster_footstep(FALSE); ai_charge(6);};
 void()	dknight_slice3	=[	$slice5,	dknight_slice4	] {ai_charge(13);};
-void()	dknight_slice4	=[	$slice6,	dknight_slice5	] {ai_charge(4); dknight_sword_sound();};
+void()	dknight_slice4	=[	$slice6,	dknight_slice5	] {ai_charge(4); SwordSwipeSound();};
 void()	dknight_slice5	=[	$slice7,	dknight_slice6	] {monster_footstep(FALSE); ai_charge(7); ai_melee();};
 void()	dknight_slice6	=[	$slice8,	dknight_slice7	] {ai_charge(15); ai_melee();};
 void()	dknight_slice7	=[	$slice9,	dknight_slice8	] {ai_charge(8); ai_melee();};
@@ -320,7 +315,7 @@ void()	dknight_slice11	=[	$slice14,	dknight_run1	] {ai_charge(3);};
 void()	dknight_smash1	=[	$smash2,	dknight_smash2	] {ai_charge(1);};
 void()	dknight_smash2	=[	$smash3,	dknight_smash3	] {ai_charge(13);};
 void()	dknight_smash3	=[	$smash4,	dknight_smash4	] {monster_footstep(FALSE); ai_charge(9);};
-void()	dknight_smash4	=[	$smash5,	dknight_smash5	] {ai_charge(11);dknight_sword_sound();};
+void()	dknight_smash4	=[	$smash5,	dknight_smash5	] {ai_charge(11);SwordSwipeSound();};
 void()	dknight_smash5	=[	$smash6,	dknight_smash6	] {ai_charge(10);};
 void()	dknight_smash6	=[	$smash7,	dknight_smash7	] {ai_charge(7); ai_melee();};
 void()	dknight_smash7	=[	$smash8,	dknight_smash8	] {monster_footstep(FALSE); ai_charge(12); ai_melee();};
@@ -336,7 +331,7 @@ void()	dknight_smash11	=[	$smash13,	dknight_run1	] {ai_charge(0);};
 void()	dknight_watk1	=[	$w_attack1,	dknight_watk2	] {ai_charge(2);};
 void()	dknight_watk2	=[	$w_attack2,	dknight_watk3	] {monster_footstep(FALSE); ai_charge(0);};
 void()	dknight_watk3	=[	$w_attack3,	dknight_watk4	] {ai_charge(0);};
-void()	dknight_watk4	=[	$w_attack4,	dknight_watk5	] {ai_charge(0); dknight_sword_sound();};
+void()	dknight_watk4	=[	$w_attack4,	dknight_watk5	] {ai_charge(0); SwordSwipeSound();};
 void()	dknight_watk5	=[	$w_attack5,	dknight_watk6	] {ai_melee();};
 void()	dknight_watk6	=[	$w_attack6,	dknight_watk7	] {ai_melee();};
 void()	dknight_watk7	=[	$w_attack7,	dknight_watk8	] {monster_footstep(FALSE); ai_charge(1);};
@@ -347,7 +342,7 @@ void()	dknight_watk11	=[	$w_attack11,	dknight_watk12	] {ai_charge(2); ai_melee()
 void()	dknight_watk12	=[	$w_attack12,	dknight_watk13	] {ai_charge(2); ai_melee();};
 void()	dknight_watk13	=[	$w_attack13,	dknight_watk14	] {ai_charge(0);};
 void()	dknight_watk14	=[	$w_attack14,	dknight_watk15	] {ai_charge(0);};
-void()	dknight_watk15	=[	$w_attack15,	dknight_watk16	] {ai_charge(0); dknight_sword_sound();};
+void()	dknight_watk15	=[	$w_attack15,	dknight_watk16	] {ai_charge(0); SwordSwipeSound();};
 void()	dknight_watk16	=[	$w_attack16,	dknight_watk17	] {ai_charge(1);};
 void()	dknight_watk17	=[	$w_attack17,	dknight_watk18	] {monster_footstep(FALSE); ai_charge(1); ai_melee();};
 void()	dknight_watk18	=[	$w_attack18,	dknight_watk19	] {ai_charge(3); ai_melee();};
@@ -613,61 +608,47 @@ void() dknight_ghost_on = {
 	// No valid target, just stand around
 	self.movetarget = self.goalentity = world;
 	self.th_stand();
-}
+};
+
+void() monster_dknight_precache = {
+	precache_model("progs/ad171/mon_dknight.mdl");
+	precache_model("progs/ad171/h_dknight.mdl");
+	precache_model(MODEL_PROJ_HKN);
+	precache_model("progs/ad171/gib_knfoot_l.mdl");
+	precache_model("progs/ad171/gib_knfoot_r.mdl");
+	precache_model("progs/ad171/w_dknightsword.mdl");
+	precache_poisongibs(); // precache gibs
+	precache_stonegibs(); // Always precache these stone gib models
+	precache_model(MODEL_PROJ_HKNGRN);
+	precache_model ("progs/ad171/mon_dknight_glow.mdl");
+	precache_sound("hknight/idle.wav");
+	precache_sound("hknight/attack1.wav"); // Firing of magic spikes (first 0.1s must loop)
+	precache_sound("hknight/hit.wav");
+	precache_sound("hknight/sight1.wav");
+	precache_sound("hknight/pain1.wav");
+	precache_sound("hknight/death1.wav");
+	precache_sound ("ad171/dknight/ghost_idle1.wav");
+	precache_sound ("ad171/dknight/ghost_idle2.wav");
+};
 
 // QUAKED monster_dknight (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_dknight = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_dknight.mdl";			// New Hell Knight
 	self.headmdl = "progs/ad171/h_dknight.mdl";
 	self.gib1mdl = "progs/ad171/w_dknightsword.mdl";	// Unique sword
 	self.gib2mdl = "progs/ad171/gib_knfoot_l.mdl";	// left foot
 	self.gib3mdl = "progs/ad171/gib_knfoot_r.mdl";	// right foot
-
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (MODEL_PROJ_HKN);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	precache_model (self.gib1mdl);
-
-	// Check for poisonous entity flag
-	if (self.poisonous) {
-		precache_poisongibs();			// precache gibs
-		self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
-		precache_model (MODEL_PROJ_HKNGRN);
-	}
-
+	if (self.poisonous) self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
 	self.gib1sound = GIB_IMPACT_METALA;
 	if (random() < 0.5) self.gib2mdl = string_null;
 	if (random() < 0.5) self.gib3mdl = string_null;
-
 	self.idle_sound = "hknight/idle.wav";
-	precache_sound (self.idle_sound);
-	
-	// Firing of magic spikes (first 0.1s must loop)
-	precache_sound ("hknight/attack1.wav");
-	
-	// TE_KNIGHTSPIKE = Magic spike hitting the wall
-	// Has got to be in this location because the 
-	// filename is hardcoded (engine.exe)
-	precache_sound ("hknight/hit.wav");				
-
-	// Always precache these stone gib models
-	precache_stonegibs();
-	
 	self.sight_sound = "hknight/sight1.wav";
-	precache_sound (self.sight_sound);
-
 	self.pain_sound = "hknight/pain1.wav";
 	self.death_sound = "hknight/death1.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.death_sound);
-	
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -686,26 +667,18 @@ void() monster_dknight = {
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
-	
-	// randomize last melee attack
-	self.meleeattack = rint(random()*3);	
 
+	self.meleeattack = rint(random()*3); // randomize last melee attack
 	self.classtype = CT_MONDKNIGHT;
 	self.classgroup = CG_DKNIGHT;
 	self.classmove = MON_MOVEWALK;
-
 	self.hittype = HIT_METAL;
 	
 	// Special ghost prop, stands around or walks
 	if (self.spawnflags & MON_GHOST_ONLY) {
 		self.headmdl = "progs/ad171/mon_dknight_glow.mdl";
-		precache_model (self.headmdl);
-		
 		self.idle_sound = "ad171/dknight/ghost_idle1.wav";
-		self.idle_sound2 = "ad171/dknight/ghost_idle2.wav";
-		precache_sound (self.idle_sound);
-		precache_sound (self.idle_sound2);
-		
+		self.idle_sound2 = "ad171/dknight/ghost_idle2.wav";	
 		self.steptype = FS_FLYING;
 		self.exactskin = 2;
 		self.alpha = 0.1;
@@ -713,7 +686,6 @@ void() monster_dknight = {
 		self.gibhealth = MON_NEVERGIB;
 		self.health = LARGE_TIMER;
 		self.yaw_speed = 20;
-		
 		self.th_stand = dknight_stand1;
 		self.th_walk = dknight_walk1;
 		self.th_run = dknight_walk1;
@@ -740,14 +712,11 @@ void() monster_dknight = {
 		self.th_pain = dknight_pain;
 		self.th_die = dknight_die;
 		if (self.deathstring == "") self.deathstring = " was cleaved by a Death Knight\n";
-		// Start monster (default)
-		monster_start();
+		monster_start(); // Start monster (default)
 	}
 };
 
-//----------------------------------------------------------------------
-void() monster_dknightghost =
-{
+void() monster_dknightghost = {
 	self.spawnflags = MON_GHOST_ONLY;
 	monster_dknight();
 };

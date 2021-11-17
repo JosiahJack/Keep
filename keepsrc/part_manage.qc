@@ -1,10 +1,51 @@
-//======================================================================
-// Particle System
-//======================================================================
-// Particle management
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 6
+//
+// Implements: Particle System Manager
+//
+// Description:
+// Manages the various particles that have been created.  There are 1024
+// particles maximum in the particle bank.  When particles are created, they
+// get added to the bank, then removed when finished.  This can still cause
+// packet overflow on some engines but helps limit the madness to a reasonable
+// level.
+//=============================================================================
+
 float PARTICLE_MAXENTS = 1024;	// Maximum amount of particles active (default)
 float PARTICLE_BANK = 64;		// How many particle in each setup bank
 float PARTICLE_BUFFER = 128;	// How many particle to create before unlock
+float PARTICLE_START_OFF = 1;	// Particle emitter starts OFF
+float PARTICLE_START_ON = 2;	// Particle emitter starts ON
+float PARTICLE_WEATHER_SNOW = 8;	// Weather snow - White
 float		part_message;		// Timer for particle message (every 3s)
 entity		part_control;		// Particle setup entity (drives nextthink)
 entity		part_start;			// Pointers to start/end particle chain
@@ -14,13 +55,6 @@ float		part_total;			// Currently active particles
 float		part_max;			// Maximum active particles
 float		part_multiplier;	// Advanced / Standard engine multiplier
 entity		part;				// Spawning particle emitters and particles
-
-//----------------------------------------------------------------------
-// Particle emitter parameters
-float PARTICLE_START_OFF = 1;	// Particle emitter starts OFF
-float PARTICLE_START_ON = 2;	// Particle emitter starts ON
-float PARTICLE_WEATHER_SNOW = 8;	// Weather snow - White
-
 .float		particlemax;		// Maximum about of ACTIVE particles per map
 .entity		entchain;			// Entity pointer to next entity in chain
 .entity		part_emitter;		// Particle emitter link on any entity
@@ -38,10 +72,7 @@ float PARTICLE_WEATHER_SNOW = 8;	// Weather snow - White
 .float		dpp_rnd;			// DP particle random multiplier for time
 .vector		dpp_vel;			// Direction of DP particles to move towards
 .float		dpp_flame;			// % chance to generate FX for flames -1=disabled
-
-//----------------------------------------------------------------------
-// QC generated particle trail
-.float		part_qctrail;		// Custom trail active?
+.float		part_qctrail;		// QC generated particle trail. Indicates if a custom trail is active.
 .float		part_trstyle;		// Pre-defined particle styles
 .float		part_qcspeed;		// Tick timer for generated particles
 .vector		part_qcdir;			// Velocity direction of particles
@@ -60,9 +91,6 @@ float PARTICLE_WEATHER_SNOW = 8;	// Weather snow - White
 .float		part_exitfade;		// On death, fade out model gradually
 .float		part_exitsound;		// On death, kill all sound channels
 .float		part_exitbusy;		// Stop particle if owner is busy
-
-//----------------------------------------------------------------------
-// Particle style parameters
 .string		spr_name1;			// Sprite string name 1 (uses defs)
 .string		spr_name2;			// Sprite string name 2
 .string		spr_name3;			// Sprite string name 3
@@ -83,250 +111,14 @@ float PARTICLE_WEATHER_SNOW = 8;	// Weather snow - White
 .float		wakeup_timer;		// How often to check distance check
 .float		spawn_base;			// Spawn rate - base value
 .float		spawn_rand;			// Spawn rate - random adjustment
-
-//----------------------------------------------------------------------
-// Extra parameters for hazard particle emitter
-.float		part_chance;		// Chance of spawning particles
+.float		part_chance;		// Extra parameters for hazard particle emitter.  Chance of spawning particles
 .float		part_base;			// Particle quantity base
 .float		part_rand;			// Particle quantity random
-
-// Compiler forward links
-void() setup_particleprecache;
-
-//----------------------------------------------------------------------
-// The particle is finished with, update emitter particle counter
-//----------------------------------------------------------------------
-void() finish_particle =
-{
-	if (self.classtype != CT_PARTICLE) {
-		dprint("\b[PARTICLE_RETURN]\b This is not a particle!?!\n");
-	}
-	else {
-		if (self.owner.pemit_tcount > 0)
-			self.owner.pemit_tcount = self.owner.pemit_tcount - 1;
-		
-		self.velocity = VEC_ORIGIN;		// no more movement
-		self.avelocity = VEC_ORIGIN;
-		self.origin = VEC_ORIGIN;
-		self.part_active = FALSE;		// Finished with particle
-		setmodel(self, "");				// Remove from world
-		self.owner = world;				// No owner anymore
-		self.skin = self.frame = self.flags = FALSE;
-		self.gravity = 1;
-		
-		// Update active particle total
-		if (part_total > 1) part_total = part_total - 1;
-
-		if (part_free.classtype != CT_PARTICLE) {
-			dprint("\b[PARTICLE_RETURN]\b Current free particle is wrong classtype!!\n");
-		}
-		else {
-			// Add particle back into central particle list
-			self.entchain = part_free.entchain;		// link new particle forward in chain
-			part_free.entchain = self;				// link free particle to new particle
-	
-			if (part_debug == 2) {
-				dprint("Return Free ("); dprint(ftos(part_free.cnt));
-				dprint(") Next ("); dprint(ftos(part_free.entchain.cnt));
-				dprint(")\n");			
-			}
-		}
-	}
-};
-
-//----------------------------------------------------------------------
-// All requests for particles must go through one function
-//----------------------------------------------------------------------
-entity() fetch_particle =
-{
-	local entity tpart_ret;
-	tpart_ret = world;		// Default - no particle returned
-
-	// Make sure the system has 2 banks of particles setup first!
-	if (part_control.count < PARTICLE_BUFFER) return tpart_ret;
-
-	// Display particle limits if skill set to a debug number
-	if (part_debug == 1) {
-		sprint(client_ent, "CREATE Particle ("); sprint(client_ent, ftos(part_total));
-		sprint(client_ent, "/"); sprint(client_ent, ftos(part_max));
-		sprint(client_ent, ")\n");
-	}
-	
-	// Are there any free particles?
-	if (part_total >= part_max - 1) {
-		if (part_message < time) {
-			dprint("\b[PARTICLE]\b current limit ("); dprint(ftos(part_max));
-			dprint(") too low!\n");
-			part_message = time + 5;	// interval console spam
-		}
-	}
-	else {
-		if (part_free.classtype != CT_PARTICLE) {
-			dprint("\b[PARTICLE_FETCH]\b Current free particle is wrong classtype!!\n");
-		}
-		else if (part_free.entchain.classtype != CT_PARTICLE) {
-			dprint("\b[PARTICLE_FETCH]\b Next free particle is wrong classtype!!\n");
-			dprint("Free ("); dprint(ftos(part_free.cnt));
-			dprint(") Ctype ("); dprint(ftos(part_free.classtype));
-			dprint(") Next ("); dprint(ftos(part_free.entchain.cnt));
-			dprint(") Ctype ("); dprint(ftos(part_free.entchain.classtype));
-			dprint(")\n");
-		}
-		else {
-			tpart_ret = part_free.entchain;				// return next free particle
-			part_free.entchain = tpart_ret.entchain;	// Skip forward in the chain
-			
-			// Update currently active particle total
-			part_total = part_total + 1;
-			tpart_ret.part_active = TRUE;
-
-			if (part_debug == 2) {
-				dprint("Fetch Free ("); dprint(ftos(part_free.cnt));
-				dprint(") return ("); dprint(ftos(tpart_ret.cnt));
-				dprint(")\n");
-			}
-		}
-	}
-
-	return (tpart_ret);
-};
-
-//----------------------------------------------------------------------
-// Generate a chain of entities (one block at a time)
-//----------------------------------------------------------------------
-void() generate_particlechain =
-{
-	local entity part_prev, part_first;
-	local float pcount;
-
-	// Reset all variables
-	part_first = part_prev = part = world;
-	pcount = 0;
-	
-	// Is there anymore particles need to be created?
-	if (self.count + 1 < part_max) {
-		dprint("\b[PCHAIN]\b Part bank (");
-		dprint(ftos(self.count)); dprint(" / ");
-		dprint(ftos(part_max)); dprint(")\n");
-		
-		while (pcount < PARTICLE_BANK) {
-			// Create a new particle entity
-			part = spawn();
-			part.solid = SOLID_NOT;
-			part.owner = world;
-			part.part_active = FALSE;
-			part.classname = "particle";
-			part.classtype = CT_PARTICLE;
-			// If DP engine active remove particle shadow
-			if (engine == ENG_DPEXT) part.effects = part.effects + EF_NOSHADOW;
-			part.cnt = self.count + pcount;
-			
-			pcount = pcount + 1;		// Increase loop
-
-			//----------------------------------------------------------------------
-			// Link particle chains together
-			if (part_prev.classtype != CT_PARTICLE)
-				part_first = part;			// NEW CHAIN - setup all entity pointers
-			else part_prev.entchain = part;	// EXISTING CHAIN - Link particles together
-
-			part_prev = part;				// Setup previous particle in chain
-			//----------------------------------------------------------------------
-		}
-		
-		// Update total particles generated
-		self.count = self.count + PARTICLE_BANK;
-
-		//----------------------------------------------------------------------
-		// Are there any previous banks of particles?
-		if (part_start.classtype != CT_PARTICLE) {
-			// NEW BANK - Setup start/end particle and close chain
-			part_start = part.entchain = part_first;
-			part_free = part_first.entchain;		// Move forward 1
-			part_end = part;
-		}
-		else {
-			// EXISTING BANK - Link new bank to existing banks
-			part_end.entchain = part_first;			// Link end and first of new bank together
-			part.entchain = part_start;				// Link current and start together
-			part_end = part;						// Move end of bank forward
-		}
-		//----------------------------------------------------------------------
-	}
-	
-	//----------------------------------------------------------------------
-	// Is there anymore particles need to be created?
-	if (self.count + 1 < part_max) {
-		self.think = generate_particlechain;
-		self.nextthink = time + 0.2;
-	}
-	// Finished generating particle banks
-	else self.waitmin = FALSE;
-};
-
-//----------------------------------------------------------------------
-//  Setup particle chain in small banks
-//----------------------------------------------------------------------
-void() setup_particlechain =
-{
-	// Pre-cache all sprites
-	setup_particleprecache();
-	
-	if (part_control.classtype != CT_PARTICLECONT) {
-		part_control = spawn();
-		part_control.solid = SOLID_NOT;
-		part_control.classtype = CT_PARTICLECONT;
-		
-		dprint("\b[PCHAIN]\b Creating controller\n");
-		part_free = part_end = part_start = world;
-		part_total = part_control.count = 0;
-		part_control.waitmin = TRUE;
-	}
-	// Setup next think
-	part_control.think = generate_particlechain;
-	part_control.nextthink = time + 0.3;
-};
-
-//----------------------------------------------------------------------
-//  Extend particle chain (used by quickload issues)
-//----------------------------------------------------------------------
-void() extend_particlechain =
-{
-	local float new_part_max;
-	
-	// Check for particle chain controller FIRST!
-	if (part_control.classtype != CT_PARTICLECONT) return;
-	// Check if particle bank setup is running already
-	if (part_control.waitmin) return;
-	
-	// Make sure particle banks are reset to default if low
-	if (part_max < PARTICLE_MAXENTS) new_part_max = PARTICLE_MAXENTS;
-	
-	// Check for any worldspawn override value
-	if (world.particlemax > 0) {
-		if (new_part_max < world.particlemax) 
-			new_part_max = world.particlemax;
-	}
-
-	// Does the particle bank max need to change?
-	if (part_max > new_part_max) return;
-	else part_max = new_part_max;
-	
-	dprint("\b[WORLD]\b New max particles (");
-	dprint(ftos(part_max)); dprint(")\n");
-
-	// Setup next think
-	part_control.think = generate_particlechain;
-	part_control.nextthink = time + 0.3;
-	part_control.waitmin = TRUE;
-};
-
 float PARTICLE_ORIGIN_VOL = 0;			// Pick random point inside volume
 float PARTICLE_ORIGIN_CIRCLE = 1;		// Move around circumference of circle
 float PARTICLE_ORIGIN_RANDCIRCLE = 2;	// Randomly point on circumference
 float PARTICLE_ORIGIN_SPIRAL = 3;		// Spiral outwards to circumference
 float PARTICLE_ORIGIN_CENTER = 5;		// Explosion style from center
-
-// particle BURST explosions
 float PARTICLE_BURST_YELLOW = 1;		// gold, yellow, yellow
 float PARTICLE_BURST_GREEN = 2;			// light green, green, green
 float PARTICLE_BURST_RED = 4;			// grey, red, red
@@ -335,7 +127,6 @@ float PARTICLE_BURST_PURPLE = 16;		// purple, grey, purple
 float PARTICLE_BURST_FIRE = 32;			// gold, red, grey (used by ogre)
 float PARTICLE_BURST_WHITE = 64;		// white, grey, grey
 float PARTICLE_BURST_DBLUE = 128;			// blue, grey, blue
-// Particle BURST styles
 float PARTICLE_BURST_RING = 256;		// Circular particle burst
 float PARTICLE_BURST_CENTER = 512;		// Central particle burst
 float PARTICLE_BURST_UPWARD = 1024;		// Drifting upward burst
@@ -343,7 +134,6 @@ float PARTICLE_BURST_SHOCKWAVE = 4096;	// Floor impact shockwave
 float PARTICLE_BURST_SKULLUP = 8192;	// Skull wizard teleport
 float PARTICLE_BURST_LOSTUP = 16384;	// Lost souls particle burn
 float PARTICLE_BURST_MINOTAUR = 32768;	// Minotaur magic attack over
-
 float PARTICLE_TRAIL_YELLOW = 1;		// gold, yellow, yellow
 float PARTICLE_TRAIL_GREEN = 2;			// light green, green, green
 float PARTICLE_TRAIL_RED = 3;			// grey, red, red
@@ -353,16 +143,12 @@ float PARTICLE_TRAIL_FIRE = 6;			// gold, red, grey
 float PARTICLE_TRAIL_WHITE = 7;			// white, grey, grey
 float PARTICLE_TRAIL_PLASMA = 10;		// Plasma weapons
 float PARTICLE_TRAIL_POISON = 11;		// Poisonous weapons
-
-// Map referenced particles
 float PARTICLE_STYLE_CUSTOM = 1;		// Custom particle defined in map
 float PARTICLE_STYLE_WEATHER = 5;		// Various weather type effects
 float PARTICLE_STYLE_PORTAL = 10;		// White dot/bubbles floating outwards (volume)
 float PARTICLE_STYLE_JUMPPAD = 15;		// Spiral pattern floating upward
 float PARTICLE_STYLE_FCIRCLE = 20;		// Yellow dots floating upwards from circle on floor
 float PARTICLE_STYLE_FFIELD = 25;		// Volume Forcefield custom direction
-
-// Code referenced particles
 float PARTICLE_STYLE_EMPTY = 0;			// Particle emitter is dead/broken
 float PARTICLE_STYLE_BOOK = 50;			// Rotating white runes floating upwards (CLOSED)
 float PARTICLE_STYLE_OPENBOOK = 55;		// Particle dots based on book colour (OPEN)
@@ -371,7 +157,6 @@ float PARTICLE_STYLE_FLAMES = 70;		// Small Flame Yellow/red embers
 float PARTICLE_STYLE_FLAMET = 72;		// Small Torch Yellow/red embers
 float PARTICLE_STYLE_FLAMEL = 75;		// Large Flame and lots of particles
 float PARTICLE_STYLE_SMOKE = 80;		// DP only effect, velocity driven smoke
-
 float PARTICLE_STYLE_RESPAWN = 100;		// Red/yellow dots spawning from single point
 float PARTICLE_STYLE_MEGAH = 105;		// Red dot/heal particles from center
 float PARTICLE_STYLE_ARMOR = 110;		// Green/Yellow/Red dots floating up
@@ -388,7 +173,6 @@ float PARTICLE_STYLE_BSKILL = 152;		// Burst of blue particles
 float PARTICLE_STYLE_GSKILL = 154;		// Burst of green particles
 float PARTICLE_STYLE_PSKILL = 156;		// Burst of purple particles
 float PARTICLE_STYLE_BACKPACK = 175;	// Grey/White dots from center
-
 float PARTICLE_STYLE_SUIT = 200;		// Green dots rising up
 float PARTICLE_STYLE_PENT = 210;		// Red/Black dots from center
 float PARTICLE_STYLE_SRING = 220;		// Yellow dots falling down
@@ -403,33 +187,22 @@ float PARTICLE_STYLE_BLASTBELT2 = 285;	// Red dots from center
 float PARTICLE_STYLE_JUMPBOOTS = 290;	// Yellow dots falling down
 float PARTICLE_STYLE_TOMEOFP = 300;		// Yellow explosion from skull
 
-//----------------------------------------------------------------------
-// Darkplaces custom particles defined in effectinfo.txt
-//void(entity gibent, float gibpoison) DPP_blood_trail;
-
-// DarkPlaces Particles definition block names
-// defined in effectinfo.txt (location - root of mod directory)
+// DarkPlaces Particles definition block names defined in effectinfo.txt (location - root of mod directory)
 string DPP_TRBLOOD = "TR_BLOOD";		// Blood TRail for model flag
 string DPP_ITSBLOOD = "TR_ITSBLOOD";	// Blood TRail (extra blood)
 string DPP_TRSBLOOD = "TR_SBLOOD";		// Stone Blood TRail for model flag
 string DPP_TRPBLOOD = "TR_PBLOOD";		// Poison Blood TRail for model flag
-
 string DPP_TRLASER = "TR_LASER";		// Laser particle TRail
-
 string DPP_TEEXPLODE = "TE_EXPLOSION";	// Default particle explosion
-
 string DPP_TRPLASMA = "TR_PLASMA";		// Plasma particle TRail
 string DPP_TEPLASMA = "TE_PLASMA";		// Plasma particle explosion
 string DPP_TEPLASMABIG = "TE_PLASMABIG";// Plasma Big explosion
-
 string DPP_TRPOISON = "TR_POISON";		// Poison particle TRail
 string DPP_TEPOISON = "TE_POISON";		// Poison particle explosion
 string DPP_TEPOISONMED = "TE_POISONBIG";// Poison Medium explosion
-
 string DPP_TEBSMOKE = "TE_BSMOKE";		// A burst of Smoke/Steam
 string DPP_TEBFLAME = "TE_BFLAME";		// A burst of red flame (smoke)
 string DPP_TEBPOISON = "TE_BPOISON";	// A burst of green poison (smoke)
-
 string DPP_PORTALFRONT = "DPP_ITSPORTALFRONT";	// 0,180 angle
 string DPP_PORTALSIDE = "DPP_ITSPORTALSIDE";	// 90,270 angle
 string DPP_PORTALDOWN = "DPP_ITSPORTALDOWN";	// -2 angle
@@ -486,9 +259,7 @@ string DPP_BLASTBELT = "DPP_ITSBLASTBELT";
 string DPP_BLASTBELT2 = "DPP_ITSBLASTBELT2";
 string DPP_JBOOTS = "DPP_ITSJBOOTS";
 string DPP_TOMEOFP = "DPP_ITSTOMEOFP";
-
-// Special trigger effects
-string DPP_TEVORESPIKE = "TE_VORESPIKE";
+string DPP_TEVORESPIKE = "TE_VORESPIKE"; // Special trigger effects
 string DPP_WRAITHEXPLODE = "DPP_ITSWRAITHEXPLODE";
 string DPP_INTERACTIVE = "DPP_ITSINTERACTIVE";
 string DPP_BURSTFLAME = "DPP_ITSFLAME_BURST";
@@ -500,9 +271,7 @@ string DPP_BURSTSHOCKWAVE2 = "DPP_ITSBURSTSHOCKWAVE2";
 string DPP_PYROFLAME1 = "DPP_ITSPYROFLAME1";
 string DPP_PYROFLAME2 = "DPP_ITSPYROFLAME2";
 string DPP_PYROFLAME3 = "DPP_ITSPYROFLAME3";
-
-// Velocity driven smoke
-string DPP_VELSMOKEGREY1 = "DPP_ITSVELSMOKEGREY1";
+string DPP_VELSMOKEGREY1 = "DPP_ITSVELSMOKEGREY1"; // Velocity driven smoke
 string DPP_VELSMOKEGREY2 = "DPP_ITSVELSMOKEGREY2";
 string DPP_VELSMOKEWHITE = "DPP_ITSVELSMOKEWHITE";
 string DPP_VELSMOKETOXIC = "DPP_ITSVELSMOKETOXIC";
@@ -510,43 +279,32 @@ string DPP_VELSMOKEGREEN = "DPP_ITSVELSMOKEGREEN";
 string DPP_VELSMOKEPURPLE = "DPP_ITSVELSMOKEPURPLE";
 string DPP_VELSMOKERED = "DPP_ITSVELSMOKERED";
 string DPP_VELSMOKEFIRE = "DPP_ITSVELSMOKEFIRE";
-
-// Generic particle ring colours
-string DPP_RINGPARTY = "DPP_ITSPART_RINGY";
+string DPP_RINGPARTY = "DPP_ITSPART_RINGY"; // Generic particle ring colours
 string DPP_RINGPARTG = "DPP_ITSPART_RINGG";
 string DPP_RINGPARTR = "DPP_ITSPART_RINGR";
 string DPP_RINGPARTB = "DPP_ITSPART_RINGB";
 string DPP_RINGPARTDB = "DPP_ITSPART_RINGDB";
 string DPP_RINGPARTP = "DPP_ITSPART_RINGP";
 string DPP_RINGPARTW = "DPP_ITSPART_RINGW";
-
-// Generic particle burst colours
-string DPP_BURSTPARTY = "DPP_ITSPART_BURSTY";
+string DPP_BURSTPARTY = "DPP_ITSPART_BURSTY"; // Generic particle burst colours
 string DPP_BURSTPARTG = "DPP_ITSPART_BURSTG";
 string DPP_BURSTPARTR = "DPP_ITSPART_BURSTR";
 string DPP_BURSTPARTB = "DPP_ITSPART_BURSTB";
 string DPP_BURSTPARTDB = "DPP_ITSPART_BURSTDB";
 string DPP_BURSTPARTP = "DPP_ITSPART_BURSTP";
 string DPP_BURSTPARTW = "DPP_ITSPART_BURSTW";
-
-// Generic particle trail colours
-string DPP_TRAILPARTY = "DPP_ITSPART_TRAILY";
+string DPP_TRAILPARTY = "DPP_ITSPART_TRAILY"; // Generic particle trail colours
 string DPP_TRAILPARTG = "DPP_ITSPART_TRAILG";
 string DPP_TRAILPARTR = "DPP_ITSPART_TRAILR";
 string DPP_TRAILPARTB = "DPP_ITSPART_TRAILB";
 string DPP_TRAILPARTP = "DPP_ITSPART_TRAILP";
 string DPP_TRAILPARTW = "DPP_ITSPART_TRAILW";
-
-// Generic forcefield volume colours
-string DPP_FFIELDPARTY = "DPP_ITSPART_FFIELDY";
+string DPP_FFIELDPARTY = "DPP_ITSPART_FFIELDY"; // Generic forcefield volume colours
 string DPP_FFIELDPARTG = "DPP_ITSPART_FFIELDG";
 string DPP_FFIELDPARTR = "DPP_ITSPART_FFIELDR";
 string DPP_FFIELDPARTB = "DPP_ITSPART_FFIELDB";
 string DPP_FFIELDPARTP = "DPP_ITSPART_FFIELDP";
 string DPP_FFIELDPARTW = "DPP_ITSPART_FFIELDW";
-
-//----------------------------------------------------------------------
-// GENERIC particle filename strings
 string PART_BUBBLE_BLUE = "progs/ad171/s_bubble_blue1.spr";
 string PART_DOTMED_BLUE = "progs/ad171/s_dotmed_blue.spr";
 string PART_DOTSML_BLUE = "progs/ad171/s_dotsml_blue.spr";
@@ -569,23 +327,16 @@ string PART_BUBBLE_WHITE = "progs/ad171/s_bubble_wht.spr";
 string PART_DOTSML_WHITE = "progs/ad171/s_dotsml_wht.spr";
 string PART_DOTMED_GREY = "progs/ad171/s_dotmed_grey.spr";
 string PART_DOTSML_GREY = "progs/ad171/s_dotsml_grey.spr";
-
-// SPECIFIC particle filename strings
 string PART_TORCH1 = "progs/ad171/s_dotmed_tor1.spr";
 string PART_TORCH2 = "progs/ad171/s_dotmed_tor2.spr";
 string PART_BOOKRUNE1 = "progs/ad171/s_bookrune1.spr";
 string PART_BOOKRUNE2 = "progs/ad171/s_bookrune2.spr";
 
-//----------------------------------------------------------------------
-// Particle sprites
-//----------------------------------------------------------------------
-void() setup_particleprecache =
-{
+void() setup_particleprecache = { // [FUNCTION]
 	precache_model (PART_TORCH1);			// Embers - Red/Yellow
 	precache_model (PART_TORCH2);			// Embers - Red/Yellow
 	precache_model (PART_BOOKRUNE1);		// Celtic Book Runes
 	precache_model (PART_BOOKRUNE2);		// Celtic Book Runes
-	
 	precache_model (PART_BUBBLE_BLUE);		// Bubbles - Blue
 	precache_model (PART_DOTMED_BLUE);		// Dots - Medium Blue
 	precache_model (PART_DOTSML_BLUE);		// Dots - Small Blue
@@ -608,4 +359,165 @@ void() setup_particleprecache =
 	precache_model (PART_DOTSML_WHITE);		// Dots - Small White
 	precache_model (PART_DOTMED_GREY);		// Dots - Medium Grey
 	precache_model (PART_DOTSML_GREY);		// Dots - Small Grey
+};
+
+// The particle is finished with, update emitter particle counter
+void() finish_particle = { // [FUNCTION]
+	if (self.classtype != CT_PARTICLE) { dprint("\b[PARTICLE_RETURN]\b This is not a particle!?!\n"); return; }
+
+	if (self.owner.pemit_tcount > 0) self.owner.pemit_tcount = self.owner.pemit_tcount - 1;
+	self.velocity = VEC_ORIGIN;		// no more movement
+	self.avelocity = VEC_ORIGIN;
+	self.origin = VEC_ORIGIN;
+	self.part_active = FALSE;		// Finished with particle
+	setmodel(self, "");				// Remove from world
+	self.owner = world;				// No owner anymore
+	self.skin = self.frame = self.flags = FALSE;
+	self.gravity = 1;
+	if (part_total > 1) part_total = part_total - 1; // Update active particle total
+	if (part_free.classtype != CT_PARTICLE) dprint("\b[PARTICLE_RETURN]\b Current free particle is wrong classtype!!\n");
+	else {
+		// Add particle back into central particle list
+		self.entchain = part_free.entchain;		// link new particle forward in chain
+		part_free.entchain = self;				// link free particle to new particle
+
+		if (part_debug == 2) {
+			dprint("Return Free ("); dprint(ftos(part_free.cnt));
+			dprint(") Next ("); dprint(ftos(part_free.entchain.cnt));
+			dprint(")\n");			
+		}
+	}
+};
+
+// All requests for particles must go through one function
+entity() fetch_particle = { // [FUNCTION]
+	local entity tpart_ret;
+
+	if (part_control.count < PARTICLE_BUFFER) return world; // Make sure the system has 2 banks of particles setup first!
+
+	// Display particle limits if skill set to a debug number
+	if (part_debug == 1) { sprint(client_ent, "CREATE Particle ("); sprint(client_ent, ftos(part_total)); sprint(client_ent, "/"); sprint(client_ent, ftos(part_max)); sprint(client_ent, ")\n"); }
+	
+	tpart_ret = world; // Default - no particle returned
+	// Are there any free particles?
+	if (part_total >= part_max - 1) {
+		if (part_message < time) {
+			dprint("\b[PARTICLE]\b current limit ("); dprint(ftos(part_max)); dprint(") too low!\n");
+			part_message = time + 5;	// interval console spam
+		}
+	} else {
+		if (part_free.classtype != CT_PARTICLE) {
+			dprint("\b[PARTICLE_FETCH]\b Current free particle is wrong classtype!!\n");
+		} else if (part_free.entchain.classtype != CT_PARTICLE) {
+			dprint("\b[PARTICLE_FETCH]\b Next free particle is wrong classtype!!\n");
+			dprint("Free ("); dprint(ftos(part_free.cnt));
+			dprint(") Ctype ("); dprint(ftos(part_free.classtype));
+			dprint(") Next ("); dprint(ftos(part_free.entchain.cnt));
+			dprint(") Ctype ("); dprint(ftos(part_free.entchain.classtype));
+			dprint(")\n");
+		} else {
+			tpart_ret = part_free.entchain;				// return next free particle
+			part_free.entchain = tpart_ret.entchain;	// Skip forward in the chain
+			
+			// Update currently active particle total
+			part_total = part_total + 1;
+			tpart_ret.part_active = TRUE;
+
+			if (part_debug == 2) {
+				dprint("Fetch Free ("); dprint(ftos(part_free.cnt));
+				dprint(") return ("); dprint(ftos(tpart_ret.cnt));
+				dprint(")\n");
+			}
+		}
+	}
+	return (tpart_ret);
+};
+
+// Generate a chain of entities (one block at a time)
+void() generate_particlechain = { // [FUNCTION]
+	local entity part_prev, part_first;
+	local float pcount;
+
+	part_first = part_prev = part = world;
+	pcount = 0;
+	
+	// Is there anymore particles need to be created?
+	if (self.count + 1 < part_max) {
+		dprint("\b[PCHAIN]\b Part bank (");
+		dprint(ftos(self.count)); dprint(" / ");
+		dprint(ftos(part_max)); dprint(")\n");
+		while (pcount < PARTICLE_BANK) {
+			part = spawn(); // Create a new particle entity
+			part.solid = SOLID_NOT;
+			part.owner = world;
+			part.part_active = FALSE;
+			part.classname = "particle";
+			part.classtype = CT_PARTICLE;
+			if (engine == ENG_DPEXT) part.effects = part.effects + EF_NOSHADOW; // If DP engine, ensure no particle shadow
+			part.cnt = self.count + pcount;
+			pcount = pcount + 1; // Increase loop
+
+			// Link particle chains together
+			if (part_prev.classtype != CT_PARTICLE) part_first = part; // NEW CHAIN - setup all entity pointers
+			else part_prev.entchain = part;	// EXISTING CHAIN - Link particles together
+
+			part_prev = part; // Setup previous particle in chain
+		}
+
+		self.count = self.count + PARTICLE_BANK; // Update total particles generated
+
+		// Are there any previous banks of particles?
+		if (part_start.classtype != CT_PARTICLE) {
+			// NEW BANK - Setup start/end particle and close chain
+			part_start = part.entchain = part_first;
+			part_free = part_first.entchain;		// Move forward 1
+			part_end = part;
+		} else {
+			// EXISTING BANK - Link new bank to existing banks
+			part_end.entchain = part_first;			// Link end and first of new bank together
+			part.entchain = part_start;				// Link current and start together
+			part_end = part;						// Move end of bank forward
+		}
+	}
+
+	// Is there anymore particles need to be created?
+	if (self.count + 1 < part_max) {
+		self.think = generate_particlechain;
+		self.nextthink = time + 0.2;
+	} else self.waitmin = FALSE; // Finished generating particle banks
+};
+
+// Setup particle chain in small banks
+void() setup_particlechain = { // [FUNCTION]
+	setup_particleprecache(); // Pre-cache all sprites
+	if (part_control.classtype != CT_PARTICLECONT) {
+		part_control = spawn();
+		part_control.solid = SOLID_NOT;
+		part_control.classtype = CT_PARTICLECONT;
+		dprint("\b[PCHAIN]\b Creating controller\n");
+		part_free = part_end = part_start = world;
+		part_total = part_control.count = 0;
+		part_control.waitmin = TRUE;
+	}
+	part_control.think = generate_particlechain; // Setup next think
+	part_control.nextthink = time + 0.3;
+};
+
+// Used by quickload issues
+void() extend_particlechain = { // [FUNCTION]
+	local float new_part_max;
+
+	if (part_control.classtype != CT_PARTICLECONT) return; // Check for particle chain controller FIRST!
+	if (part_control.waitmin) return; // Check if particle bank setup is running already
+	
+	if (part_max < PARTICLE_MAXENTS) new_part_max = PARTICLE_MAXENTS; // Make sure particle banks are reset to default if low
+	if ((world.particlemax > 0) && (new_part_max < world.particlemax)) new_part_max = world.particlemax; // Check for any worldspawn override value
+	if (part_max > new_part_max) return; // Does the particle bank max need to change?
+	
+	part_max = new_part_max;
+	dprint("\b[WORLD]\b New max particles (");
+	dprint(ftos(part_max)); dprint(")\n");
+	part_control.think = generate_particlechain; // Setup next think
+	part_control.nextthink = time + 0.3;
+	part_control.waitmin = TRUE;
 };

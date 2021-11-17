@@ -49,16 +49,12 @@ $frame attackp1 attackp2 attackp3 attackp4 attackp5 attackp6 attackp7
 // 119-125 (Shield turns on/off)
 $frame fieldon1 fieldon2 fieldon3 fieldon4 fieldon5 fieldon6 fieldon7
 
-//----------------------------------------------------------------------
 // Shield status (IDLE=OFF, WALK=ON, RUN=ON)
-//----------------------------------------------------------------------
 float MEGAF_IDLE = 0;
 float MEGAF_WALK = 1;
 float MEGAF_RUN = 2;
 
-//===========================================================================
-void() megaf_shieldon =
-{
+void() megaf_shieldon = {
 	self.takedamage = DAMAGE_YES;	// Grenades bounce off
 	self.bouncegrenade = TRUE;		// Warning to other monsters
 	self.reflectlightning = TRUE;	// Reflect lightning strikes
@@ -69,10 +65,10 @@ void() megaf_shieldon =
 	self.resist_rockets = self.resist_cells = 0.5;
 	self.resist_plasma = 0.5;
 	self.resist_multi_rockets = 0.5;
-	// Lava nails pierce armor remember :)
+	// Lava nails pierce armor remember :), not changing that one.
 	self.resist_plasma = 0.5;
 	self.resist_bolts = 0.5;
-	self.resist_poison = 0.5;
+	self.resist_poison = self.resist_acid = 0.5;
 	// Magical AoA weapons still go through
 };
 
@@ -88,7 +84,7 @@ void() megaf_shieldoff = {
 	self.resist_multi_rockets = 0;
 	self.resist_plasma = 0;
 	self.resist_bolts = 0;
-	self.resist_poison = 0;
+	self.resist_poison = self.resist_acid = 0;
 };
 
 void() megaf_shieldsound_on = {
@@ -445,66 +441,51 @@ void() megaf_die = {
 	}
 };
 
+void() monster_megaforce_precache = {
+	precache_model ("progs/ad181/mon_deflector.mdl");
+	precache_model ("progs/ad181/h_deflector.mdl");
+	precache_model ("progs/ad171/w_enforcergun.mdl");
+	precache_model (MODEL_PROJ_PLASMA); // Standard plasma/rocket models
+	precache_model (MODEL_PROJ_ROCKET);
+	precache_poisongibs();
+	precache_model (MODEL_PROJ_PLASMAGRN);
+	precache_model (MODEL_PROJ_ROCKETGRN);
+	precache_sound ("ad181/deflector/idle1.wav");
+	precache_sound ("ad181/deflector/sight1.wav");
+	precache_sound ("ad181/deflector/sight2.wav");
+	precache_sound ("ad181/deflector/sight3.wav");
+	precache_sound ("ad181/deflector/shield_off.wav"); // Shield off, shield on!
+	precache_sound ("ad181/deflector/shield_on.wav");
+	precache_sound ("ad181/deflector/rocket_load.wav"); // Projectile fire and impact (used in projectiles)
+	precache_sound ("ad181/deflector/rocket_fire.wav");
+	precache_sound ("ad181/deflector/rocket_hit.wav");
+	precache_sound ("ad171/enforcer/elim_pg_load.wav"); // Extra load/fire sounds
+	precache_sound (SOUND_PLASMA_FIRE);
+	precache_sound (SOUND_PLASMA_HIT);
+	precache_sound ("ad181/deflector/pain1.wav");
+	precache_sound ("ad181/deflector/pain2.wav");
+	precache_sound ("ad181/deflector/death1.wav");
+	precache_sound ("ad181/deflector/death2.wav");
+};
+
 // QUAKED monster_megaforce (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_megaforce = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.mdl = "progs/ad181/mon_deflector.mdl";
 	self.headmdl = "progs/ad181/h_deflector.mdl";
 	self.gib1mdl = "progs/ad171/w_enforcergun.mdl";	// Unique weapon
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (self.gib1mdl);
 	self.gib1sound = GIB_IMPACT_WOOD;	// Gib sound for gun
-
-	// Standard plasma/rocket models
-	precache_model (MODEL_PROJ_PLASMA);
-	precache_model (MODEL_PROJ_ROCKET);
-
-	// Check for poisonous entity flag
-	if (self.poisonous) {
-		precache_poisongibs();			// precache gibs
-		self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
-		precache_model (MODEL_PROJ_PLASMAGRN);
-		precache_model (MODEL_PROJ_ROCKETGRN);
-	}
-	
+	if (self.poisonous) self.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
 	self.idle_sound = "ad181/deflector/idle1.wav";
-	precache_sound (self.idle_sound);
 	self.sight_sound = "ad181/deflector/sight1.wav";
 	self.sight_sound2 = "ad181/deflector/sight2.wav";
 	self.sight_sound3 = "ad181/deflector/sight3.wav";
-	precache_sound (self.sight_sound);
-	precache_sound (self.sight_sound2);
-	precache_sound (self.sight_sound3);
-	
-	// Shield off, shield on!
-	precache_sound ("ad181/deflector/shield_off.wav");
-	precache_sound ("ad181/deflector/shield_on.wav");
-
-	// Projectile fire and impact (used in projectiles)
-	precache_sound ("ad181/deflector/rocket_load.wav");
-	precache_sound ("ad181/deflector/rocket_fire.wav");
-	precache_sound ("ad181/deflector/rocket_hit.wav");
-
-	// Extra load/fire sounds
-	precache_sound ("ad171/enforcer/elim_pg_load.wav");
-	precache_sound (SOUND_PLASMA_FIRE);
-	precache_sound (SOUND_PLASMA_HIT);
-
-	// Plenty of death and pain sounds
-	self.pain_sound = "ad181/deflector/pain1.wav";
+	self.pain_sound = "ad181/deflector/pain1.wav"; // Plenty of death and pain sounds
 	self.pain_sound2 = "ad181/deflector/pain2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound (self.pain_sound2);
 	self.death_sound = "ad181/deflector/death1.wav";
 	self.death_sound2 = "ad181/deflector/death2.wav";
-	precache_sound (self.death_sound);
-	precache_sound (self.death_sound2);
-
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
@@ -519,9 +500,7 @@ void() monster_megaforce = {
 	self.attack_offset = '28 8.5 16';	// End of Gun
 	self.weaponstate = MEGAF_IDLE;		// No Shield active
 	if (self.deathstring == "") self.deathstring = " was vaporized by a Mega-Enforcer\n";
-
 	megaf_shieldoff(); // Reset Ammo Resistance/Shield parameters
-	
 	self.th_checkattack = MegaforceCheckAttack;
 	self.th_stand = megaf_stand1;
 	self.th_walk = megaf_walk1;
@@ -539,7 +518,6 @@ void() monster_megaforce = {
 	self.classgroup = CG_DCAPTAIN;	// Make sure to infight
 	self.classmove = MON_MOVEWALK;
 	self.ammo_cells = rint(3 + random()*2);
-
 	monster_start();
 };
 

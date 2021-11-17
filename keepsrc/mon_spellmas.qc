@@ -160,11 +160,7 @@ void() spell_die = {
 	}
 };
 
-void() monster_spellmaster = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	self.mdl = "progs/madfox/mon_spellmas.mdl";
+void() monster_spellmaster_precache = {
 	precache_model("progs/madfox/mon_spellmas.mdl");
 	precache_model("progs/lavaball.mdl");
 	precache_sound("wizard/wdeath.wav");
@@ -173,7 +169,12 @@ void() monster_spellmaster = {
 	precache_sound("boss2/idle.wav");
 	precache_sound("shalrath/attack2.wav");
 	precache_sound("shalrath/sight.wav");
+};
 
+void() monster_spellmaster = {
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/madfox/mon_spellmas.mdl";
 	self.th_stand = spell_stand;
 	self.th_walk = spell_walk;
 	self.th_run = spell_run;
@@ -193,17 +194,13 @@ void() monster_spellmaster = {
 	if (self.health < 1) self.health = 2400;
 	self.gibhealth = -40;
 	self.gibbed = FALSE;
-
-	// Check passive system for exceptions
-	setup_passivestate(self);
+	setup_passivestate(self); // Check passive system for exceptions
 
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
 
-	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 	if (self.deathstring == "") self.deathstring = " was remapped by a Baseboss\n";
-
 	self.classtype = CT_MONSPELLMAS;
 	self.classgroup = CG_BOSS;
 	self.classmove = MON_MOVEWALK;

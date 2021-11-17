@@ -41,6 +41,59 @@ void(float dist) noclip_goal;
 void SuperDamageSound ();
 float(entity ent, vector spot, float damage) HasReflection;
 
+//----------------------------------WAND MATHS---------------------------------
+// This is NOT the same as mathlib functions.  DON'T REMOVE AGAIN!
+
+// FIXME:  If DarkPlaces, use builtin.
+// Returns a vector where x = cosine and y = sine of 'theta'.
+vector(float theta) CoSine = {
+    local   vector  tx, ty, tz, vec;
+
+    tx = v_forward;  ty = v_right;  tz = v_up;  // Save old makevectors.
+    vec = '0 1 0' * theta;
+    makevectors (vec);
+    vec_x = v_forward_x;    // cos
+    vec_y = v_forward_y;    // sin
+    vec_z = 0;
+    v_forward = tx;  v_right = ty;  v_up = tz;  // Restore old makevectors.
+    return vec;
+};
+
+// Returns a vector where x = cosine, y = sine, and z = tangent of 'theta'.
+vector(float theta) CoST = {
+    local   vector  vec;
+    local   float   inf, qcsin, qccos;
+
+    vec = CoSine (theta);
+
+// 'inf' represents infinity.  Since a finite number is needed, set 'inf'
+// to the highest possible value allowed to be returned.  The value chosen
+// is one million.  I could go for broke by using ten million or even
+// 16777215, the latter is all 24 bits on, instead.  However doing so
+// causes rollover problems if a result of 'inf' that high gets added
+// or multiplied by other numbers higher than one.  One million is
+// sufficiently high and allows for some wiggle room.
+    inf = 1000000;
+    qccos = vec_x * inf;
+    qcsin = vec_y * inf;
+    if (fabs(qccos) < 1)
+    {   // Avoid division by zero.
+        if (qccos < 0)
+            qccos = -1;
+        else
+            qccos = 1;
+    }
+    vec_z = qcsin / qccos;    // tan
+
+    return vec;
+};
+
+// Trigonometric functions. Note:  Should use builtin when available.
+float(float t) SUB_cos = {local vector v;  v = CoSine(t);  return v_x;};
+float(float t) SUB_sin = {local vector v;  v = CoSine(t);  return v_y;};
+float(float t) SUB_tan = {local vector v;  v = CoST(t);  return v_z;};
+//--------------------------------END WAND MATHS-------------------------------
+
 // Stops the current sound that is playing on the specified channel by playing an empty sound.
 void(entity ent, float chan) StopSound = {sound (ent, chan,SOUND_EMPTY, 1, ATTN_NONE);};
 
@@ -193,16 +246,16 @@ float(entity e) IsMissile = {
 	if (!e.touch) return FALSE;
 	if (e.touch == SUB_Remove) return FALSE;
 	if (!AffectedByPhysics(e)) return FALSE;
-    return FALSE;
+    return TRUE;
 };
 
 //  This makes an entity do a think function right now.
-void(entity ent, void() thinkst) SUB_Think = {
+void(entity ent, void() thinkst) SUB_ThinkImmediate = {
     local   entity  swap;
 
     swap = self;
     self = ent;
-    thinkst ();
+    thinkst();
     self = swap;
 };
 
@@ -226,9 +279,9 @@ void(string text) Mass_Centerprint = {
 
 // Convenience function -- set model, size, and origin. Called by various missile functions.
 void(entity e, string s, vector v1, vector v2, vector org) setall = {
-    setmodel (e, s);        // May resize hullbox after this is called.
-    setsize (e, v1, v2);    // Must do *after* setmodel.
-    setorigin (e, org);     // Updates links immediately, so do last.
+    setmodel(e,s);        // May resize hullbox after this is called.
+    setsize(e,v1,v2);    // Must do *after* setmodel.
+    setorigin(e,org);     // Updates links immediately, so do last.
 };
 
 //  Miscellaneous Junk
@@ -253,7 +306,7 @@ float() SUB_QuickAttack = {
     if (skill >= 2)
         if (self.health <= (self.max_health * 0.25))
             if (random() < 0.5) return TRUE; //0.25
-    return cranked; // Always fast in Cranked mode.  Otherwise, normal speed.
+    return FALSE; // Normal speed.
 };
 
 // Checks if enemy is within melee range.  def_range is defined melee range.
@@ -407,24 +460,6 @@ void(float dist) noclip_goal = {
         noclip_step (self.ideal_yaw, dist);
 };
 
-// Spawns a muzzleflash.  Used by phased out monsters with a modelindex
-// of zero, who cannot display effects while modelindex is zero.
-// Update 9/5/09:  Also by players for some weapons to get around Qrack's custom client muzzleflashes.
-void() SUB_Flash = {
-    local   entity  e;
-
-    e = spawn();
-    e.movetype  = MOVETYPE_NONE;    //MOVETYPE_NOCLIP;
-    e.velocity  = '0 0 0';          //self.velocity;
-    e.touch     = SUB_Null;
-    e.solid     = SOLID_NOT;
-    e.effects   = EF_MUZZLEFLASH;       // The point of this function.
-    e.nextthink = time + 0.1;
-    e.think     = SUB_Remove;
-    // Non-zero invisible model.
-    setall (e, "progs/null.spr", '0 0 0', '0 0 0', self.origin); //was null_256  // formerly s_null.spr after that
-};
-
 // Like findradius, except the chain includes entities with solid_not.  Useful when you want explosions and the like to gib non-solid corpses.
 entity(vector org, float radius) QC_FindRadius = {
     local   entity  e, head;
@@ -455,67 +490,18 @@ float(entity targ, entity src) visible2 = {
     return found;
 };
 
-void(float hp) SUB_FullHealth = {
-    // Health can range from -32768 to 65535.
-    if (self.health) hp = self.health;
-    hp = floor (hp);
-
-    if (hp > 50000)
-        hp = 50000;
-    else if (hp < 1)
-        hp = 1;
-
-    self.health = self.max_health = hp;
-};
-
-// DRAGONS - This sets an entity's waterlevel and watertype in a way similar to the C code.
-void(entity ent) Water_Set = {
-    local   vector  spot;
-
-    spot = ent.origin;
-    spot_z = spot_z + ent.mins_z + 1;
-    ent.h2otype = pointcontents (spot);
-    if (ent.h2otype <= CONTENT_WATER) {
-        ent.h2olevel = 1;
-        spot_z = ent.origin_z + (ent.mins_z + ent.maxs_z) * 0.5;
-        if (pointcontents (spot) <= CONTENT_WATER) {
-            ent.h2olevel = 2;
-            spot_z = ent.origin_z + ent.view_ofs_z;
-            if (pointcontents (spot) <= CONTENT_WATER) ent.h2olevel = 3;
-        }
-    }
-    else ent.h2olevel = 0;
-};
-
-// Searches all entities to do pre-thinking stuff for monsters.
-void() WorldScan = {
-    local   entity  e;
-
-    e = nextent (world);
-    while (e) {
-        // For now, just check for water stats for dragons.
-        // Used by dragons to check movement.
-        if (e.flags & FL_MONSTER)
-            if (e.classtype == CT_MONRYU || e.classtype == CT_MONWYRM) Water_Set (e);
-
-        e = nextent (e);
-    }
-};
-
-float(entity e) IsDead = {return ((e.health <= 0) || e.deadflag);};
-
 // Spawns a beam of particles.
-void(vector start, vector end, float color1, float color2, float density, float full)  Particle_Beam = {
+void(vector start, vector end, float color1, float color2, float density, float full) Particle_Beam = {
     local   vector  delta, next;
     local   float   points, dist;
 
     delta = end - start;
     dist = vlen(delta);
-    if (full) {   // Unbroken, continuous trail.  Used by meteor.
+    if (full) { // Unbroken, continuous trail.  Used by meteor.
         points = dist / 24;
         points = ceil(points);
         dist = -24;
-    } else {   // Sparse, broken trail.  Useful for frost trails.
+    } else { // Sparse, broken trail.  Useful for frost trails.
         if (deathmatch || coop)
             points = 2;
         else
@@ -540,7 +526,7 @@ void(vector start, vector end, float color1, float color2, float density, float 
 void(entity ent) ReflectSound;
 
 // Used by wand.  Note: 'damage' is used only to check reflection against courage armor. 'sparks' x=color1, y=color2, z=density (0=none).
-void(vector org, vector dir, float dist, float damage, entity attacker, vector sparks)  Lead_Hitscan = {
+void(vector org, vector dir, float dist, float damage, entity attacker, vector sparks) Lead_Hitscan = {
     local   entity  ignore;
     local   vector  end;
     local   float   loop;
@@ -549,16 +535,16 @@ void(vector org, vector dir, float dist, float damage, entity attacker, vector s
     loop = 3;
     while (loop > 0) {
         end = org + dir*dist;
-        traceline (org, end, FALSE, ignore);
+        traceline(org, end, FALSE, ignore);
         if (sparks_z >= 1)
-            Particle_Beam (org, trace_endpos, sparks_x, sparks_y, sparks_z, TRUE);
-        if (trace_fraction != 1.0) {
-            if (HasReflection (trace_ent, trace_endpos, damage)) {
+            Particle_Beam(org, trace_endpos, sparks_x, sparks_y, sparks_z, TRUE);
+        if (trace_fraction != 1) {
+            if (HasReflection(trace_ent, trace_endpos, damage)) {
                 ignore = trace_ent;
                 org = trace_endpos;
                 dir = normalize (org - ignore.origin);
                 dist = dist * (1 - trace_fraction);
-                ReflectSound (trace_ent);
+                ReflectSound(trace_ent);
             } else return;
         } else return;
 
@@ -568,24 +554,17 @@ void(vector org, vector dir, float dist, float damage, entity attacker, vector s
     trace_ent = world;
 };
 
-// Sound to be played when an attack is reflected.
+// Sound to be played when an attack is reflected.  Play sound only if entity carries an artifact that provides reflection.  That is, don't play sound for warlocks who cast a reflection spell.
 void(entity ent) ReflectSound = {
-	// Play sound only if entity carries an artifact that provides reflection.
-	// That is, don't play sound for warlocks who cast a reflection spell.
-    if (ent.mirror_finished) {
-        if (ent.flags & FL_CLIENT)
-            if (ent.mirror_sound < time) {
-                ent.mirror_sound = time + 2;    // t+1 boings too much.
-                sound (ent, CHAN_ITEM, "drake/items/reflect3.wav", 1, ATTN_NORM);
-            }
-    }
+	if (!(ent.flags & FL_CLIENT)) return;
+	if (!ent.mirror_finished) return;
+	if (ent.mirror_sound >= time) return;
+
+	ent.mirror_sound = time + 2;    // t+1 boings too much.
+	sound (ent, CHAN_ITEM, "drake/items/reflect3.wav", 1, ATTN_NORM);
 };
 
-float(entity e) ImmuneToDamage = {
-    if (!e.takedamage) return TRUE;
-    if (e.flags & FL_GODMODE) return TRUE;
-    return (e.invincible_finished);
-};
+float(entity e) ImmuneToDamage = { return (e.invincible_finished || !e.takedamage || (e.flags & FL_GODMODE)); };
 
 // Checks if entity 'e' can grunt in pain.
 float(entity e) FeelsPain = {
@@ -1025,3 +1004,25 @@ void(float loop, float drop_chance, float gem_chance) monster_purse = {
         loop = loop - 1;
     }
 };
+
+void(void() thinkst) M_Break = {
+    if (self.enemy.health > 0)
+        if (self.enemy.solid > SOLID_TRIGGER)
+            if (visible (self.enemy))
+                if (enemy_range < RANGE_FAR) return;
+
+    if (!((self.health <= 0) || self.deadflag)) self.think = thinkst; // Break attack sequence.
+};
+
+// Checks if the sky is above a given point.
+float(vector org) UpIsSky = { // [FUNCTION]
+    local float pc;
+
+    traceline(org, org + '0 0 8192', TRUE, world); // Sees through monsters.
+    pc = pointcontents(trace_endpos);
+	if (trace_ent.classtype == CT_TRIGVOID) return TRUE; // True if we hit a trigger_void as well.
+    if (trace_fraction < 1) return (pc == CONTENT_SKY);
+    return ((pc == CONTENT_EMPTY) || (pc == CONTENT_SKY));
+};
+
+float(entity e) IsGhost = {return ((e.solid==SOLID_TRIGGER) && (e.movetype==MOVETYPE_NOCLIP));};

@@ -524,8 +524,7 @@ void(entity inf, entity att, float dam) ogre_fishpain = {ogre_fishwakeup();};
 void() ogre_fishdie = {};
 
 void() ogre_fishsetup = {
-	// Take direct damage only and grenades bounce!
-	self.takedamage = DAMAGE_YES;
+	self.takedamage = DAMAGE_YES; // Take direct damage only and grenades bounce!
 	self.noradiusdmg = TRUE;
 	self.health = MEGADEATH;
 	self.use = ogre_fishwakeup;
@@ -543,21 +542,43 @@ void() ogre_fishsetup = {
 	
 	setmodel(self, self.weaponglow);	// Setup fishing model pose
 	self.pos1 = self.origin;			// Save current origin for later
-	
-	// Move ogre into fishing animation position
-	makevectors(self.angles);
+	makevectors(self.angles); // Move ogre into fishing animation position
 	self.pos2 = self.origin + attack_vector('36 0 -24');
 	setorigin(self, self.pos2);
-	// Got to reset bounding box after model change
-	setsize (self, self.bbmins, self.bbmaxs);
+	setsize (self, self.bbmins, self.bbmaxs); // Got to reset bounding box after model change
 	self.walkframe = 0;
 	ogre_fishing();
 };
 
-/*======================================================================
- QUAKED monster_ogre (1 0 0) (-32 -32 -24) (32 32 64) Ambush
-======================================================================*/
 void() monster_ogre_precache = {
+	precache_model ("progs/ad171/mon_ogre.mdl");
+	precache_model ("progs/h_ogre.mdl");
+	precache_model (MODEL_PROJ_GRENADE);
+	precache_model ("progs/ad171/w_chainsaw.mdl");
+	precache_model ("progs/ad171/gib_ogfoot1.mdl");
+	precache_model ("progs/ad171/gib_ogfoot2.mdl");
+	precache_model ("progs/ad171/w_ogregl.mdl");
+	precache_model (MODEL_PROJ_NGRED); // Default attack - red glowing lava nails
+	precache_model ("progs/ad171/mon_ogrefish.mdl");
+	precache_sound ("ogre/ogidle.wav");
+	precache_sound ("ogre/ogidle2.wav");
+	precache_sound ("ogre/ogdth.wav");
+	precache_sound ("ogre/ogpain1.wav");
+	precache_sound ("ogre/ogdrag.wav");
+	precache_sound ("ogre/ogsawatk.wav");
+	precache_sound ("ogre/ogwake.wav");
+	precache_sound("xmas/snowman/nail_fire.wav");
+	precache_sound ("ad171/ogre/ogrefish_out.wav");
+	precache_sound ("ad171/ogre/ogrefish_in.wav");
+	precache_sound ("ad171/ogre/ogrefish_idle.wav");
+	precache_sound ("ad171/ogre/ogrefish_flappy.wav");
+};
+
+// QUAKED monster_ogre (1 0 0) (-32 -32 -24) (32 32 64) Ambush
+void() monster_ogre = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
 	self.mdl = "progs/ad171/mon_ogre.mdl";		// Rogue Ogre
 	self.headmdl = "progs/h_ogre.mdl";
 	self.gib1mdl = "progs/ad171/w_chainsaw.mdl";	// Chainsaw
@@ -565,51 +586,17 @@ void() monster_ogre_precache = {
 	self.gib3mdl = "progs/ad171/gib_ogfoot2.mdl";	// Right foot
 	self.gib4mdl = "progs/ad171/w_ogregl.mdl";	// Grenade Launcher
 
-	precache_model (self.mdl);
-	precache_model (self.headmdl);
-	precache_model (MODEL_PROJ_GRENADE);
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	precache_model (self.gib4mdl);
-
 	// Load additional models/sounds for nail ogre
 	if (self.spawnflags & MON_OGRE_NAIL) {
-		// Default attack - red glowing lava nails
-		precache_model (MODEL_PROJ_NGRED);
-		precache_sound("xmas/snowman/nail_fire.wav");
-		// Default amount of nails to burst fire (5x9=45dmg)
-		if (self.attack_count < 1) self.attack_count = 5;
+		if (self.attack_count < 1) self.attack_count = 5; // Default amount of nails to burst fire (5x9=45dmg)
 	}
 
 	self.gib1sound = GIB_IMPACT_WOOD;
 	if (random() < 0.5) self.gib1mdl = self.gib4mdl;
-
 	self.idle_sound = "ogre/ogidle.wav";
-	precache_sound (self.idle_sound);
 	self.idle_soundcom = "ogre/ogidle2.wav";
-	precache_sound (self.idle_soundcom);
-
-	precache_sound ("ogre/ogdth.wav");
 	self.pain_sound = "ogre/ogpain1.wav";
-	precache_sound (self.pain_sound);
-	
-	precache_sound ("ogre/ogdrag.wav");
-	precache_sound ("ogre/ogsawatk.wav");
-
 	self.sight_sound = "ogre/ogwake.wav";
-	precache_sound (self.sight_sound);
-};
-
-void() monster_ogre = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-
-	// Precache basic ogre models and sounds
-	monster_ogre_precache();
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	self.idmins = VEC_HULL2_MIN;		// -32 -32 -24, 32 32 64
@@ -659,15 +646,12 @@ void() monster_ogre = {
 	self.th_walk = ogre_walk1;
 	self.th_run = ogre_run1;
 	self.th_melee = ogre_melee;
-	
 	self.th_pain = ogre_pain;
 	self.th_die = ogre_die;
-	self.th_wakeup = ogre_wakeup1;
-		
+	self.th_wakeup = ogre_wakeup1;	
 	self.classtype = CT_MONOGRE;		// Old style ogre
-	self.classgroup = CG_OGRE;			// One big happy ogre family!
+	if (self.classname != "monster_ogre_marksman") self.classgroup = CG_OGRE; // One big happy ogre family! Except for those pesky marksmen (preserve original ID1 infight ability)
 	self.classmove = MON_MOVEWALK;
-
 	monster_start();
 };
 
@@ -677,20 +661,9 @@ void() monster_ogre_marksman = {
 };
 
 void() monster_ogre_fishing = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
-		
-	// Precache basic ogre models and sounds
-	monster_ogre_precache();
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	// Extra fishing ogre precache stuff
-	self.weaponglow = "progs/ad171/mon_ogrefish.mdl";
-	precache_model (self.weaponglow);
-	precache_sound ("ad171/ogre/ogrefish_out.wav");
-	precache_sound ("ad171/ogre/ogrefish_in.wav");
-	precache_sound ("ad171/ogre/ogrefish_idle.wav");
-	precache_sound ("ad171/ogre/ogrefish_flappy.wav");
-
+	self.weaponglow = "progs/ad171/mon_ogrefish.mdl"; // Extra fishing ogre precache stuff
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;	// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;
@@ -735,21 +708,16 @@ void() monster_ogre_fishing = {
 	self.th_altstand = ogre_fishing;
 	self.th_pain = ogre_fishpain;
 	self.th_die = ogre_fishdie;
-
 	self.classtype = CT_MONOGREFISH;
 	self.classgroup = CG_OGRE;			// One big happy ogre family!
 	self.classmove = MON_MOVEWALK;
-
 	monster_start();
 };
 
 void() monster_ogre_fishing_ghost = {
-	// Special spawnflag (code only)
-	self.spawnflags = self.spawnflags | MON_GHOST_ONLY;
-	// Always no monster count
-	self.nomonstercount = TRUE;
-	// Start model invisible (to prevent snapping)
-	self.alpha = 0.01;
+	self.spawnflags = self.spawnflags | MON_GHOST_ONLY; // Special spawnflag (code only)
+	self.nomonstercount = TRUE; // Always no monster count
+	self.alpha = 0.01; // Start model invisible (to prevent snapping)
 	monster_ogre_fishing();
 };
 

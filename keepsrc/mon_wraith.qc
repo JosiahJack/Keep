@@ -621,9 +621,7 @@ void() wraith_magicB11 =[ $magicB11, wraith_magicB12 ] {};
 void() wraith_magicB12 =[ $magicB12, wraith_magicB13 ] {ai_face();};
 void() wraith_magicB13 =[ $magicB13, wraith_run1 ] {ai_face();};
 
-//----------------------------------------------------------------------
-void() wraith_magic =
-{
+void() wraith_magic = {
 	local entity truetarg, miniondef;
 	
 	// Make sure the attachments are setup ready
@@ -805,9 +803,35 @@ void() wraith_die = {
 	wraith_death2();
 };
 
-/*======================================================================
-//QUAKED monster_wraith (1 0 0) (-16 -16 -24) (16 16 32) Ambush
-======================================================================*/
+void() monster_wraith_precache = {
+	precache_model ("progs/ad171/mon_wraith.mdl");
+	precache_model ("progs/ad171/mon_wraith_glow.mdl");		// Glowing halo effect
+	precache_model (MODEL_PROJ_WTRAIL);		// Hitscan blood bolt
+	precache_model (MODEL_PROJ_WBALL);		// ball growing 8 frames
+	precache_model (MODEL_PROJ_WEGG);		// ball turned into egg
+	precache_model (MODEL_PROJ_WSHELL);		// Gibs from Egg
+	precache_model (MODEL_PROJ_WBONE);		// Bone nails (fire/scorpion)
+	precache_model (MODEL_PROJ_WPOISON);	// Poison nails (spider)
+	precache_model ("progs/rogue/wrthgib1.mdl");
+	precache_model ("progs/rogue/wrthgib2.mdl");
+	precache_model ("progs/rogue/wrthgib3.mdl");
+	precache_sound ("ad171/wraith/idle1.wav");
+	precache_sound ("ad171/wraith/idle2.wav");
+	precache_sound ("ad171/wraith/idle3.wav");
+	precache_sound ("ad171/wraith/death1.wav");
+	precache_sound ("ad171/wraith/pain1.wav");
+	precache_sound ("ad171/wraith/attack1.wav"); // HITSCAN bolt
+	precache_sound ("quoth/drole/explode3.wav");
+	precache_model (SBURST_FLAME); // Flames
+	precache_sound ("ad171/wraith/attack2.wav"); // Nail/Bones
+	precache_sound ("ad171/wraith/attack3.wav"); // Minions
+	precache_sound ("ad171/wraith/bounce.wav"); // Egg bounce
+	precache_sound ("ad171/wraith/sight1.wav");
+	monster_scorpion_precache();
+	monster_spider_precache();
+};
+
+// QUAKED monster_wraith (1 0 0) (-16 -16 -24) (16 16 32) Ambush
 void() monster_wraith = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
@@ -817,43 +841,11 @@ void() monster_wraith = {
 	self.gib1mdl = "progs/rogue/wrthgib1.mdl"; // Forearm
 	self.gib2mdl = "progs/rogue/wrthgib2.mdl"; // Hand/Claw
 	self.gib3mdl = "progs/rogue/wrthgib3.mdl"; // Stump
-	
-	precache_model (self.mdl);
-	precache_model (self.weaponglow);		// Glowing halo effect
-	precache_model (MODEL_PROJ_WTRAIL);		// Hitscan blood bolt
-	precache_model (MODEL_PROJ_WBALL);		// ball growing 8 frames
-	precache_model (MODEL_PROJ_WEGG);		// ball turned into egg
-	precache_model (MODEL_PROJ_WSHELL);		// Gibs from Egg
-	
-	precache_model (MODEL_PROJ_WBONE);		// Bone nails (fire/scorpion)
-	precache_model (MODEL_PROJ_WPOISON);	// Poison nails (spider)
-	
-	precache_model (self.gib1mdl);
-	precache_model (self.gib2mdl);
-	precache_model (self.gib3mdl);
-	
 	if (!self.idle_sound) self.idle_sound = "ad171/wraith/idle1.wav";
 	if (!self.idle_sound2) self.idle_sound2 = "ad171/wraith/idle2.wav";
 	if (!self.idle_soundcom) self.idle_soundcom = "ad171/wraith/idle3.wav";
-	precache_sound (self.idle_sound);
-	precache_sound (self.idle_sound2);
-	precache_sound (self.idle_soundcom);
-	
-	precache_sound ("ad171/wraith/death1.wav");
 	if (!self.pain_sound) self.pain_sound = "ad171/wraith/pain1.wav";
-	precache_sound (self.pain_sound);
-
-	precache_sound ("ad171/wraith/attack1.wav");	// HITSCAN bolt
-	precache_sound ("quoth/drole/explode3.wav");
-	precache_model (SBURST_FLAME);			// Flames
-
-	precache_sound ("ad171/wraith/attack2.wav");	// Nail/Bones
-	precache_sound ("ad171/wraith/attack3.wav");	// Minions
-	precache_sound ("ad171/wraith/bounce.wav");	// Egg bounce
-
 	self.sight_sound = "ad171/wraith/sight1.wav";
-	precache_sound (self.sight_sound);
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;
@@ -867,9 +859,7 @@ void() monster_wraith = {
 	self.steptype = FS_FLYING;			// Floating around!
 	if (self.height == 0) self.height = MONAI_ABOVEDIST; // Custom height
 	self.frame = 1;						// First frame is never used!
-	
-	// Hitscan = 52 4 6; Nails = 60 4 14; Egg = 20 2 12;
-	self.attack_offset = '30 2 8';		// Half way point 
+	self.attack_offset = '30 2 8';		// Half way point.  Hitscan = 52 4 6; Nails = 60 4 14; Egg = 20 2 12.
 
 	// Always reset Ammo Resistance to be consistent
 	self.resist_shells = self.resist_nails = 0;
@@ -891,63 +881,17 @@ void() monster_wraith = {
 	
 	// Setup each wraith type with different skins/particles
 	if (self.spawnflags & MON_WRAITH_SCORPIONS) {
+		if (self.minion_name == string_null) self.minion_name = "monster_scorpion";
 		if (!self.minion_maxcount) self.minion_maxcount = 3;	// default is usually 5!
 		self.exactskin = WRAITH_SKINPURPLE;			// Purple/Blood skin
 		self.poisonous = FALSE;						// Must be off for scorpion wraith
 		self.part_style = PARTICLE_BURST_PURPLE;	// Purple cloud
-
-		// Precache scorpion stuff for monster_wraithminion2
-		precache_model ("progs/ad171/mon_scorpion.mdl");
-		precache_model ("progs/ad171/h_scorpion.mdl");
-		precache_model ("progs/ad171/gib_scorpleg.mdl");
-		precache_model ("progs/ad171/gib_scorptail.mdl");		
-		precache_model ("progs/ad171/gib_scorpclaw.mdl");
-		precache_sound("ad171/scorpion/jumpattack1.wav");
-		precache_sound("ad171/scorpion/jumpattack2.wav");
-		precache_sound("ad171/scorpion/jumphit.wav");
-		precache_sound("ad171/scorpion/tailfire1.wav");
-		precache_sound("ad171/scorpion/tailfire2.wav");
-		precache_sound("ad171/scorpion/tailattack1.wav");
-		precache_sound("ad171/scorpion/tailattack2.wav");
-		precache_model (MODEL_PROJ_SCORP);		// Large green spike
-		precache_sound ("ad171/scorpion/idle1.wav");
-		precache_sound ("ad171/scorpion/idle2.wav");
-		precache_sound ("ad171/scorpion/sight1.wav");
-		precache_sound ("ad171/scorpion/warning1.wav");
-		precache_sound ("ad171/scorpion/hiss.wav");
-		precache_sound("ad171/scorpion/pain1.wav");
-		precache_sound("ad171/scorpion/pain2.wav");
-		precache_sound("ad171/scorpion/death1.wav");
-		precache_sound("ad171/scorpion/clawattack1.wav");
-		precache_sound("ad171/scorpion/clawattack2.wav");
 	} else if (self.spawnflags & MON_WRAITH_SPIDERS) {
+		if (self.minion_name == string_null) self.minion_name = "monster_spider";
 		self.exactskin = WRAITH_SKINGREEN;				// Poison/Green skin
 		if (self.poisonous < 0) self.poisonous = FALSE;	// Poison debuff
 		else self.poisonous = TRUE;
 		self.part_style = PARTICLE_BURST_GREEN;			// Poison cloud
-
-		// Precache spider stuff for monster_wraithminion
-		precache_model ("progs/ad171/mon_spiderg.mdl");
-		precache_model ("progs/ad171/h_spiderg.mdl");
-		precache_model ("progs/ad171/gib_spidlegg.mdl");
-		precache_model ("progs/ad171/gib_spidbodyg.mdl");		
-		precache_model (MODEL_PROJ_SPID);			// Spit Projectile
-		precache_model ("progs/ad171/mon_spiderb.mdl");
-		precache_model ("progs/ad171/h_spiderb.mdl");
-		precache_model ("progs/ad171/gib_spidlegb.mdl");
-		precache_model ("progs/ad171/gib_spidbodyb.mdl");
-		precache_sound ("ad171/spider/idle1.wav");
-		precache_sound ("ad171/spider/hiss2.wav");
-		precache_sound ("ad171/spider/idle1.wav");
-		precache_sound ("ad171/spider/hiss3.wav");
-		precache_sound("drake/spider/death.wav");
-		precache_sound("ad171/spider/pain1.wav");
-		precache_sound("ad171/spider/pain2.wav");
-		precache_sound("ad171/wraith/bounce.wav");
-		precache_sound("ad171/spider/attackmunch.wav");
-		precache_sound("ad171/spider/attacktear.wav");
-		precache_sound("ad171/spider/jumpland.wav");
-		precache_sound ("ad171/spider/hiss1.wav");
 	} else {
 		self.exactskin = WRAITH_SKINBLUE;	// Blue/Red skin
 		self.poisonous = FALSE;				// Must be off for fire wraith
@@ -957,6 +901,5 @@ void() monster_wraith = {
 	self.classtype = CT_MONWRAITH;
 	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEFLY;
-	
 	monster_start();
 };

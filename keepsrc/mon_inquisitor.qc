@@ -571,71 +571,47 @@ void(entity inflictor, entity attacker, float damage) inquisitor_pain = {
 	if (self.health <= 3000 && self.bosswave == 2) { self.bosswave = self.bosswave + 1; 	inquisitor_wavetargets(); } // stage 3
 	if (self.bosswave == 3) inquisitor_hunch_idle1();
 	else inquisitor_pain1();
-}
+};
 
-/*======================================================================
- QUAKED monster_inquisitor (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-======================================================================*/
+void() monster_inquisitor_precache = {
+	precache_model("progs/inquisitor.mdl");
+	PreCache_GreenFlame();
+	precache_model(MODEL_PROJ_WPOISON);	// Poison nails (spider)
+	precache_model ("progs/quoth/bilefrag.mdl"); // Small bile drop:  frames 0-5
+	precache_model ("progs/quoth/bilebomb.mdl"); // Large bilebomb:  frames 0-5
+	precache_model ("progs/quoth/greenexp.spr"); // Blobby burst effect:  frames 0-5
+	precache_model ("progs/quoth/s_vp_pll.spr"); // Burst effect:  frames 53-57
+	precache_model ("progs/ad171/s_exp_poison_med.spr"); // Poison cloud that moves around randomly:  grow 0-2, cloud 2-5, dissipate 5-13
+	precache_model ("progs/drake/s_fancy.spr"); // Poison burst:  small puff 15-20, poison burst 115-119, puff 147-149
+	precache_model ("progs/ad171/s_dripgreen.spr"); // Poison drip:  frame 0
+	precache_model ("progs/ad171/s_dripsplgreen.spr"); // Poison drip splash:  frames 0-5
+	precache_model ("progs/ad171/s_burst_poison.spr"); // Poison burst good:  frames 0-6
+	precache_model ("progs/ad171/s_exp_poison_small.spr"); // Poison burst good small yellowish:  frames 0-12
+	precache_model ("progs/drake/s_spark.spr"); // Sparkle:  frames 8-5 reverse
+	precache_model ("progs/qmaster/astorm.spr"); // Rain storm
+	precache_model ("progs/s_dripgreen_lg.spr"); // Large green drip
+	precache_sound ("ad171/skullwiz/idle1.wav");
+	precache_sound ("ad171/skullwiz/pain2.wav");
+	precache_sound ("drake/archer/sight2.wav");
+	precache_sound ("ad171/skullwiz/fadeaway.wav");
+	precache_sound ("ad181/justice/flame_fire.wav");
+	precache_sound ("drake/bane/thunder.wav");
+	precache_sound ("quoth/gug/bile.wav");
+	precache_sound ("ad171/eidolon/elec_arch1.wav");
+	precache_sound ("ad171/eidolon/elec_arch2.wav");
+	precache_sound ("quoth/dguard/hit.wav");
+	precache_sound ("ad171/eidolon/implode_death.wav");
+};
+
+// QUAKED monster_inquisitor (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_inquisitor = {
 	// Check all spawn exceptions (monsters.qc)
 	if (monster_checkspawn() == TRUE) return;
 
 	self.mdl = "progs/inquisitor.mdl";
-	precache_model (self.mdl);
-
-	PreCache_GreenFlame();
-	precache_model (MODEL_PROJ_WPOISON);	// Poison nails (spider)
-
-	// small bile drop
-	precache_model ("progs/quoth/bilefrag.mdl"); // frames 0-5
-
-	// large bilebomb
-	precache_model ("progs/quoth/bilebomb.mdl"); // frames 0-5
-
-	// blobby burst effect
-	precache_model ("progs/quoth/greenexp.spr"); // frames 0-5
-
-	// burst effect
-	precache_model ("progs/quoth/s_vp_pll.spr"); // frames 53-57
-
-	// poison cloud that moves around randomly
-	precache_model ("progs/ad171/s_exp_poison_med.spr"); // grow 0-2, cloud 2-5, dissipate 5-13
-
-	// poison burst
-	precache_model ("progs/drake/s_fancy.spr"); // small puff 15-20, poison burst 115-119, puff 147-149
-
-	// poison drip
-	precache_model ("progs/ad171/s_dripgreen.spr"); // frame 0
-
-	// poison drip splash
-	precache_model ("progs/ad171/s_dripsplgreen.spr"); // frames 0-5
-
-	// poison burst good
-	precache_model ("progs/ad171/s_burst_poison.spr"); // frames 0-6
-
-	// poison burst good small yellowish
-	precache_model ("progs/ad171/s_exp_poison_small.spr"); // frames 0-12
-
-	// sparkle
-	precache_model ("progs/drake/s_spark.spr"); // frames 8-5 reverse
-	
 	self.idle_sound = "ad171/skullwiz/idle1.wav";
-	precache_sound (self.idle_sound);
 	self.pain_sound = "ad171/skullwiz/pain2.wav";
-	precache_sound (self.pain_sound);
-	precache_sound ("drake/archer/sight2.wav");
 	self.death_sound = "ad171/skullwiz/fadeaway.wav";
-	precache_sound (self.death_sound);
-	precache_sound ("ad181/justice/flame_fire.wav");
-	precache_model ("progs/qmaster/astorm.spr");
-	precache_sound ("drake/bane/thunder.wav");
-	precache_sound ("quoth/gug/bile.wav");
-	precache_model ("progs/s_dripgreen_lg.spr");
-	precache_sound ("ad171/eidolon/elec_arch1.wav");
-	precache_sound ("ad171/eidolon/elec_arch2.wav");
-	precache_sound ("quoth/dguard/hit.wav");
-	precache_sound ("ad171/eidolon/implode_death.wav");
-	
 	self.solid = SOLID_NOT;				// No interaction with world until spawned
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement until spawned
 	if (self.bboxtype < 1) {
@@ -647,9 +623,8 @@ void() monster_inquisitor = {
 	self.pain_flinch = 100;					// Medium pain threshold
 	self.pain_timeout = 5;				// High
 	self.no_liquiddmg = TRUE;
-	self.bosswave = 0; //reset pain states
-	self.steptype = FS_FLYING; // we change from walking to flying sometimes
-	//self.death_dmg = 0; // make sure we don't punish players too hard when rewarding them
+	self.bosswave = 0; // Reset pain states
+	self.steptype = FS_FLYING; // We change from walking to flying sometimes
 	self.poisonous = TRUE; // Oh yeah, definitely!
 	self.minion_maxcount = 8 + skill; // More clouds on hard! (Spawn faster too, 3 at once per staf slame)
 	if (CheckZeroVector(self.proj_attqty)) self.proj_attqty = '7 3 16';
@@ -658,23 +633,19 @@ void() monster_inquisitor = {
 	self.resist_shells = self.resist_nails = 0;
 	self.resist_rockets = self.resist_cells = 0;
 
-	// Check passive system for exceptions
-	setup_passivestate(self);
-
 	// Check for random rotation setup and angle limits
 	if (self.angles_y < 0) self.angles_y = rint(random()*359);
 	if (self.angles_y > 360) self.angles_y = 360;
 
+	setup_passivestate(self); // Check passive system for exceptions
 	self.pain_longanim = FALSE;		// can't be chopped with shadow axe
 	self.classgroup = CG_WIZARD;	// Creepy dudes
-
 	self.th_stand = inquisitor_idle1;		// Idling on feet
 	self.th_walk = inquisitor_walk1;		// Walking
 	self.th_run = inquisitor_standrun1;			// Running
 	self.th_missile = InquisitorCheckAttack;	// Fire
 	self.th_pain = inquisitor_pain;		// Stumble and pain
 	self.th_die = inquisitor_die;			// Face meets floor
-
 	if (self.deathstring == "") self.deathstring = " was poisoned to death by the Inquisitor\n";
 	self.classtype = CT_MONINQUISITOR;
 	self.classmove = MON_MOVEFLY;
