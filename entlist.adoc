@@ -1,0 +1,192 @@
+Keep Mod Entity List
+--------------------
+This is a list of all entities.
+
+Example
+~~~~~~~
+[cols="100 a,38 a,88 a,30 a,200 a"]
+|===
+5s|name_here
+5+|Point, Solid, or Point or Solid
+5+|source mod 1, source mod 2,... source mod n
+5+|Description of what it does.
+|variable1|datatype|[min,max] or [choice 1, choice 2,...choice n] if numeric|default|Description
+|variable2|datatype|[min,max] or [choice 1, choice 2,...choice n] if numeric|default|Description
+|variablen|datatype|[min,max] or [choice 1, choice 2,...choice n] if numeric|default|Description
+|===
+
+{blank} + 
+
+List
+~~~~
+[cols="100 a,38 a,88 a,30 a,200 a"]
+|===
+5+s|trigger_victory
+5+|Point
+5+|Drake
+5+|Automatically fires its targets when the last enemy has been killed in a map.  Does not require targetname.
+|target `REQUIRED`|string 3+|The name of the object(s) to have run the `use` function on.
+5+|same for target2, target3, target4, statetarget1, statetarget2,...statetarget24
+|killtarget|string 3+|The name of the object(s) to delete from the world.
+5+|same for killtarget2.
+|===
+
+[cols="100 a,38 a,88 a,30 a,200 a"]
+|===
+5+s|trigger_monsterpassivestate
+5+|Point
+5+|Arcane Dimensions
+5+|Toggle passive state on targetted monster(s).
+|targetname `REQUIRED`|string 3+|The name of this entity for use by an activator.
+|target `REQUIRED`|trilean 3+|The name of the object(s) to change the 
+                 `passive_state` on.  Must be alive, a monster, not be marked
+				 with spawnflag to spawn angry, not have `passive_state` of -1
+				 (NEVER), not be insane `temperament`, not be marked with 
+				 `ryuflags` 4096 for forced to shoot, and not have `alignment`
+				 of 1 (Good).  Will run targets on `passive_eventon` or
+				 `passive_eventoff` if set on any monsters that this affects;
+				 this is used to run these targets when passive is activated or
+				 deactivated for that individual monster.  Useful to use
+				 the monster as its own trigger_relay to reset stuff on change.
+|state|int|[-1,0,1,2]|0|The value to set `passive_state` on targeted enemy.
+                          All of the following have the potential to put target
+						  into Reset state if they already have an enemy and
+						  were passive previously; this will cause the monster
+						  to transition to passive once they are done fighting
+						  but otherwise has no affect if they weren't passive.
+						  
+						  * -1 = No change to state.
+						  * 0 = Set to Angry, normal reaction on sight.
+						  * 1 = Set to Passive, won't attack unless provoked.
+						  * 2 = Toggle to opposite of current state.
+|wait|int|[-8388608,8388608]|0|Ignored unless -1 for activate only once.
+|===
+
+### trigger_monsterpassivestate ###
+Point
+Arcane Dimensions
+Toggle passive state on targetted monster(s).
+targetname - string, REQUIRED: The name of this entity for use by an activator.
+target - string, REQUIRED: The name of the object(s) to change the 
+                 passive_state` on.  Must be alive, a monster, not be marked
+				 with spawnflag to spawn angry, not have `passive_state` of -1
+				 (NEVER), not be insane `temperament`, not be marked with 
+				 `ryuflags` 4096 for forced to shoot, and not have `alignment`
+				 of 1 (Good).  Will run targets on `passive_eventon` or
+				 `passive_eventoff` if set on any monsters that this affects;
+				 this is used to run these targets when passive is activated or
+				 deactivated for that individual monster.  Useful to use
+				 the monster as its own trigger_relay to reset stuff on change.
+state - int [-1,0,1,2] 0: The value to set `passive_state` on targeted enemy.
+                          All of the following have the potential to put target
+						  into Reset state if they already have an enemy and
+						  were passive previously; this will cause the monster
+						  to transition to passive once they are done fighting
+						  but otherwise has no affect if they weren't passive.
+						  
+						  * -1 = No change to state.
+						  * 0 = Set to Angry, normal reaction on sight.
+						  * 1 = Set to Passive, won't attack unless provoked.
+						  * 2 = Toggle to opposite of current state.
+wait - int [-8388608,8388608] 0: Ignored unless -1 for activate only once.
+
+path_corner
+Point
+ID1
+Waypoint for entities to use for following.  Typically used for func_train and
+monsters.  Capable of stopping indefinitely, restarting after stopping at the
+corner, waiting at the corner a specific amount of time, splitting the path to
+an alternative corner, and triggering targets when this corner is reached.
+targetname - string, REQUIRED: Name of current path corner
+corner_event - string: Name of target(s) to trigger when used or touched.
+corner_route - int [0,1,2,3,4,5] 0: Change path_corner route
+                                    1 = Forward
+								    2 = Alternative forward
+								    3 = Backward
+								    4 = Exact using `state`
+								    5 = Random
+corner_switch - int [-1,0,1,2] 0: Change spawnflags REVERSE
+                                  -1 = No
+								  0 = Do nothing
+								  1 = Yes
+								  2 = Toggle
+corner_pause - int [-1,0,1,2] 0: Change spawnflags NOPAUSE
+                                  -1 = No
+								  0 = Do nothing
+								  1 = Yes
+								  2 = Toggle
+corner_pstate - int [-1,0,1,2] 0: Change passive state, on monsters only.
+                                  -1 = Off
+								  0 = Do nothing
+								  1 = On
+								  2 = Toggle
+state - int [1,2,3,4,5]: Starting route. This changes when passed based on 
+                         `spawnflags`.
+                         1 = Forward, uses `target`
+						 2 = Alternative forward, uses `target2`
+						 3 = Backward, uses `targetback`
+target - string: Targetname of FORWARD route
+target2 - string: Alternative FORWARD route
+targetback - string: Override default BACKWARD route
+wait - float [-8388608,8388608] 0.00: Time to pause at corner. -1 = stop.
+delay - float [-8388608,8388608] 0.00: Random amount of time to pause here.
+alpha - float [0,1.00] 0.35: Override for visual arrows with developer > 0.
+speed - float [0,8388608] 0: Change speed of func_train here.  0 does nothing.
+spawnflags:
+            1 EXACT : Exact route logic (unchecked=random route choices).
+            2 INSTANT : Move instantly to this corner if next destination.
+            4 REVERSE : Train direction is reversed for next corner.
+            8 NOPAUSE : Train does not pause on this path corner.
+Compatability support but not intended for normal usage:
+corner_speed - float [0,8388608] 0: Duplicate of `speed`.
+
+func_breakable
+Solid
+Arcane Dimensions
+Spawn breakable objects from a bmodel
+target - string: targets to fire when breakable is dead/used (only used once)
+target2 - string: Additional trigger function (need target to be defined as well)
+style - int [1,2,3,4,5,6,10] 1: Pre-defined sound/model types
+                                1 = Rock
+								2=wood
+								3=glass
+								4=metal
+								5=brick
+								6=ceramic
+								10=custom
+brksound   : Initial breaking sound type (override style default)
+brkimpsound : Impact sound type (override style default)
+brkobjects : Breakable object model type (10-15=rocks, 20-22=woods, 30-32=glass, 40-42=metals, 50-54=brick, 60=ceramic)
+noise     : Initial breaking sound (unique sound file)
+noise1    : Custom Rubble Impact sounds (unique sound files, must have 1 defined)
+noise2    : Custom Rubble Impact sound 2
+noise3    : Custom Rubble Impact sound 3
+noise4    : Custom Rubble Impact sound 4
+brkobj1   : Custom Rubble bmodel objects (unique models, must have 1 defined)
+brkobj2   : Custom Rubble bmodel objects 2
+brkobj3   : Custom Rubble bmodel objects 3
+brkobj4   : Custom Rubble bmodel objects 4
+health    : amount of damage to take before breaking (def 1)
+count     : minimum quantity to spawn (def 4)
+cnt       : random quantity to spawn (def 4) =-1 no random qty
+dmg       : explosive radius damage (emits from center of func object)
+pos1      : x=start particle colour, y=random range, z=quantity
+brkvelbase : Base amount for velocity of broken parts (def "50 50 100")
+brkveladd : Random additions for velocity of broken parts (def "100 100 150")
+brkavel   : Amount of breaking object angle velocity (def 200)
+brkfade   : Fade time before rubble fades away (def 4+random()x4)
+brkmondmg : Damage multiplier for monster damage against breakable
+angles    : direction to throw rubble (override default = impact direction)
+brktrigjump    : Trigger if damaged by jumping monster attack
+brktrigmissile : Trigger if damaged by rocket/grenade/shalball/radiusdmg
+brktrignoplayer: No player/clients can damage this breakable
+brkgravity     : Change the gravity for rubble, useful for underwater (Value = 0-1)
+-------- SPAWNFLAGS --------
+STARTOFF  : Will wait for trigger to spawn
+NODAMAGE  : Cannot be damaged or shot, trigger only
+EXPLOSION : trigger sprite/particle explosion
+SILENT    : No initial breakage sound
+DAMAGE    : Spawning rubble can damage (def = 2, use dmg key for touch damage)
+NOMONSTER : monsters cannot damage this breakable and/or spawning rubble will not damage monsters
+NOSOUND   : Spawning rubble has no impact sounds
+NOROTATE  : Spawning rubble has No Y rotation
