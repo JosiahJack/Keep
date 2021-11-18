@@ -6,7 +6,7 @@ This is a list of all entities.
 
 List
 ~~~~
-[cols="100 v,1 v,1 v,1 v,400 a"]
+[cols="1 v,1 v,1 v,1 v,50 a",width="50%"]
 |===
 5+s|trigger_victory
 5+|Point
@@ -18,7 +18,7 @@ List
 5+|same for killtarget2.
 |===
 
-[cols="100 v,1 v,1 v,1 v,400 a"]
+[cols="1 v,1 v,1 v,1 v,50 a",width="50%"]
 |===
 5+s|trigger_monsterpassivestate
 5+|Point
