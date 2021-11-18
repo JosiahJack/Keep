@@ -6,7 +6,7 @@ This is a list of all entities.
 
 List
 ~~~~
-[cols="100 a,38 a,88 a,30 a,400 a"]
+[cols="100 v,1 v,1 v,1 v,400 a"]
 |===
 5+s|trigger_victory
 5+|Point
@@ -18,7 +18,7 @@ List
 5+|same for killtarget2.
 |===
 
-[cols="100 a,38 a,88 a,30 a,400 a"]
+[cols="100 v,1 v,1 v,1 v,400 a"]
 |===
 5+s|trigger_monsterpassivestate
 5+|Point
@@ -26,15 +26,15 @@ List
 5+|Toggle passive state on targetted monster(s).
 |targetname `REQUIRED`|string 3+|The name of this entity for use by an activator.
 |target `REQUIRED`|trilean 3+|The name of the object(s) to change the 
-                 `passive_state` on.  Must be alive, a monster, not be marked
-				 with spawnflag to spawn angry, not have `passive_state` of -1
-				 (NEVER), not be insane `temperament`, not be marked with 
-				 `ryuflags` 4096 for forced to shoot, and not have `alignment`
-				 of 1 (Good).  Will run targets on `passive_eventon` or
-				 `passive_eventoff` if set on any monsters that this affects;
-				 this is used to run these targets when passive is activated or
-				 deactivated for that individual monster.  Useful to use
-				 the monster as its own trigger_relay to reset stuff on change.
+`passive_state` on.  Must be alive, a monster, not be marked
+with spawnflag to spawn angry, not have `passive_state` of -1
+(NEVER), not be insane `temperament`, not be marked with 
+`ryuflags` 4096 for forced to shoot, and not have `alignment`
+of 1 (Good).  Will run targets on `passive_eventon` or
+`passive_eventoff` if set on any monsters that this affects;
+this is used to run these targets when passive is activated or
+deactivated for that individual monster.  Useful to use
+the monster as its own trigger_relay to reset stuff on change.
 |state|int|[-1,0,1,2]|0|The value to set `passive_state` on targeted enemy.
                           All of the following have the potential to put target
 						  into Reset state if they already have an enemy and
