@@ -2,24 +2,11 @@ Keep Mod Entity List
 --------------------
 This is a list of all entities.
 
-Example
-~~~~~~~
-[cols="100 a,38 a,88 a,30 a,200 a"]
-|===
-5s|name_here
-5+|Point, Solid, or Point or Solid
-5+|source mod 1, source mod 2,... source mod n
-5+|Description of what it does.
-|variable1|datatype|[min,max] or [choice 1, choice 2,...choice n] if numeric|default|Description
-|variable2|datatype|[min,max] or [choice 1, choice 2,...choice n] if numeric|default|Description
-|variablen|datatype|[min,max] or [choice 1, choice 2,...choice n] if numeric|default|Description
-|===
-
 {blank} + 
 
 List
 ~~~~
-[cols="100 a,38 a,88 a,30 a,200 a"]
+[cols="100 a,38 a,88 a,30 a,400 a"]
 |===
 5+s|trigger_victory
 5+|Point
@@ -31,7 +18,7 @@ List
 5+|same for killtarget2.
 |===
 
-[cols="100 a,38 a,88 a,30 a,200 a"]
+[cols="100 a,38 a,88 a,30 a,400 a"]
 |===
 5+s|trigger_monsterpassivestate
 5+|Point
