@@ -18,7 +18,7 @@ List
 5+|same for killtarget2.
 |===
 
-[cols="1 v,1 v,1 v,1 v,50 a",width="50%"]
+[cols="1 v,1 v,1 v,1 v,1 v",width="50%"]
 |===
 5+s|trigger_monsterpassivestate
 5+|Point
@@ -36,96 +36,68 @@ this is used to run these targets when passive is activated or
 deactivated for that individual monster.  Useful to use
 the monster as its own trigger_relay to reset stuff on change.
 |state|int|[-1,0,1,2]|0|The value to set `passive_state` on targeted enemy.
-                          All of the following have the potential to put target
-						  into Reset state if they already have an enemy and
-						  were passive previously; this will cause the monster
-						  to transition to passive once they are done fighting
-						  but otherwise has no affect if they weren't passive.
-						  
-						  * -1 = No change to state.
-						  * 0 = Set to Angry, normal reaction on sight.
-						  * 1 = Set to Passive, won't attack unless provoked.
-						  * 2 = Toggle to opposite of current state.
+All of the following have the potential to put target
+into Reset state if they already have an enemy and
+were passive previously; this will cause the monster
+to transition to passive once they are done fighting
+but otherwise has no affect if they weren't passive.
+-1 = No change to state.
+0 = Set to Angry, normal reaction on sight.
+1 = Set to Passive, won't attack unless provoked.
+2 = Toggle to opposite of current state.
 |wait|int|[-8388608,8388608]|0|Ignored unless -1 for activate only once.
 |===
 
-### trigger_monsterpassivestate ###
-Point
-Arcane Dimensions
-Toggle passive state on targetted monster(s).
-targetname - string, REQUIRED: The name of this entity for use by an activator.
-target - string, REQUIRED: The name of the object(s) to change the 
-                 passive_state` on.  Must be alive, a monster, not be marked
-				 with spawnflag to spawn angry, not have `passive_state` of -1
-				 (NEVER), not be insane `temperament`, not be marked with 
-				 `ryuflags` 4096 for forced to shoot, and not have `alignment`
-				 of 1 (Good).  Will run targets on `passive_eventon` or
-				 `passive_eventoff` if set on any monsters that this affects;
-				 this is used to run these targets when passive is activated or
-				 deactivated for that individual monster.  Useful to use
-				 the monster as its own trigger_relay to reset stuff on change.
-state - int [-1,0,1,2] 0: The value to set `passive_state` on targeted enemy.
-                          All of the following have the potential to put target
-						  into Reset state if they already have an enemy and
-						  were passive previously; this will cause the monster
-						  to transition to passive once they are done fighting
-						  but otherwise has no affect if they weren't passive.
-						  
-						  * -1 = No change to state.
-						  * 0 = Set to Angry, normal reaction on sight.
-						  * 1 = Set to Passive, won't attack unless provoked.
-						  * 2 = Toggle to opposite of current state.
-wait - int [-8388608,8388608] 0: Ignored unless -1 for activate only once.
-
-path_corner
-Point
-ID1
-Waypoint for entities to use for following.  Typically used for func_train and
+[cols="1 v,1 v,1 v,1 v,1 v",width="50%"]
+|===
+5+s|path_corner
+5+|Point
+5+|ID1
+5+|Waypoint for entities to use for following.  Typically used for func_train and
 monsters.  Capable of stopping indefinitely, restarting after stopping at the
 corner, waiting at the corner a specific amount of time, splitting the path to
 an alternative corner, and triggering targets when this corner is reached.
-targetname - string, REQUIRED: Name of current path corner
-corner_event - string: Name of target(s) to trigger when used or touched.
-corner_route - int [0,1,2,3,4,5] 0: Change path_corner route
-                                    1 = Forward
-								    2 = Alternative forward
-								    3 = Backward
-								    4 = Exact using `state`
-								    5 = Random
-corner_switch - int [-1,0,1,2] 0: Change spawnflags REVERSE
-                                  -1 = No
-								  0 = Do nothing
-								  1 = Yes
-								  2 = Toggle
-corner_pause - int [-1,0,1,2] 0: Change spawnflags NOPAUSE
-                                  -1 = No
-								  0 = Do nothing
-								  1 = Yes
-								  2 = Toggle
-corner_pstate - int [-1,0,1,2] 0: Change passive state, on monsters only.
-                                  -1 = Off
-								  0 = Do nothing
-								  1 = On
-								  2 = Toggle
-state - int [1,2,3,4,5]: Starting route. This changes when passed based on 
-                         `spawnflags`.
-                         1 = Forward, uses `target`
-						 2 = Alternative forward, uses `target2`
-						 3 = Backward, uses `targetback`
-target - string: Targetname of FORWARD route
-target2 - string: Alternative FORWARD route
-targetback - string: Override default BACKWARD route
-wait - float [-8388608,8388608] 0.00: Time to pause at corner. -1 = stop.
-delay - float [-8388608,8388608] 0.00: Random amount of time to pause here.
-alpha - float [0,1.00] 0.35: Override for visual arrows with developer > 0.
-speed - float [0,8388608] 0: Change speed of func_train here.  0 does nothing.
-spawnflags:
-            1 EXACT : Exact route logic (unchecked=random route choices).
-            2 INSTANT : Move instantly to this corner if next destination.
-            4 REVERSE : Train direction is reversed for next corner.
-            8 NOPAUSE : Train does not pause on this path corner.
-Compatability support but not intended for normal usage:
-corner_speed - float [0,8388608] 0: Duplicate of `speed`.
+|targetname `REQUIRED`|string 3+|Name of current path corner
+|corner_event|string 3+|Name of target(s) to trigger when used or touched.
+|corner_route|int|[0,1,2,3,4,5]|0|Change path_corner route.
+1 = Forward
+2 = Alternative forward
+3 = Backward
+4 = Exact using `state`
+5 = Random
+|corner_switch|int|[-1,0,1,2]|0|Change spawnflags REVERSE.
+-1 = No
+0 = Do nothing
+1 = Yes
+2 = Toggle
+|corner_pause|int|[-1,0,1,2]|0|Change spawnflags NOPAUSE.
+-1 = No
+0 = Do nothing
+1 = Yes
+2 = Toggle
+|corner_pstate|int|[-1,0,1,2]|0|Change passive state, on monsters only.
+-1 = Off
+0 = Do nothing
+1 = On
+2 = Toggle
+|state|int|[1,2,3,4,5]|1|Starting route. This changes when passed based on `spawnflags`.
+1 = Forward, uses `target`
+2 = Alternative forward, uses `target2`
+3 = Backward, uses `targetback`
+|target|string 3+|Targetname of FORWARD route
+|target2|string 3+|Alternative FORWARD route
+|targetback|string 3+|Override default BACKWARD route
+|delay|float|[-8388608,8388608]|0.00|Random amount of time to pause here.
+|alpha|float|[0,1.00]|0.35|Override for visual arrows with developer > 0.
+|speed|float|[0,8388608]|0|Change speed of func_train here.  0 does nothing.
+5+|spawnflags:
+1 EXACT : Exact route logic (unchecked=random route choices).
+2 INSTANT : Move instantly to this corner if next destination.
+4 REVERSE : Train direction is reversed for next corner.
+8 NOPAUSE : Train does not pause on this path corner.
+5+|Compatability support but not intended for normal usage
+|corner_speed|float|[0,8388608]|0|Duplicate of `speed`.
+|===
 
 func_breakable
 Solid
