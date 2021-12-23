@@ -429,6 +429,7 @@ void() Think_Projectile = { // [FUNCTION]
 	self.flags = self.flags - (self.flags & FL_ONGROUND); // Make sure onground flag is never set
 	self.velocity = self.finalangle * self.attack_speed; // Keep updating velocity/angle, to prevent from stopping
 	self.angles = vectoangles(self.finalangle);
+	if (self.tracer_time) BDW_TracerEffect();
 	self.nextthink = time + 0.1;
 	self.think = Think_Projectile;
 };
@@ -791,7 +792,7 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 		if (ext_dppart) {
 			if (newmis.poisonous) newmis.traileffectnum = particleeffectnum(DPP_TRPOISON);
 			else newmis.traileffectnum = particleeffectnum(DPP_TRLASER);
-			newmis.effects = 0;	// Remove extra glow
+			//newmis.effects = 0;	// Remove extra glow
 		}
 	} else if (proj_type == CT_PROJ_GROCK) {
 		if (random() < 0.5) setmodel (newmis, MODEL_PROJ_GROCK1);
@@ -1905,6 +1906,7 @@ void () HIP_SpawnMjolnirBase = { // [FUNCTION]
    HIP_SpawnMjolnirLightning (light,light,350.000);
    HIP_SpawnMjolnirLightning (light,light,350.000);
    HIP_SpawnMjolnirLightning (light,light,350.000);
+	ShockWave(trace_endpos + '0 0 4',RING_BLUE,6,"progs/drake/s_wave.spr",FALSE);
 };
 
 void () HIP_FireMjolnirLightning = { // [FUNCTION]
@@ -1921,7 +1923,7 @@ void () HIP_FireMjolnirLightning = { // [FUNCTION]
    }
    self.ammo_cells = (self.ammo_cells - 15.000);
    self.currentammo = (self.currentammo - 15.000);
-   HIP_SpawnMjolnirBase ();
+   HIP_SpawnMjolnirBase();
 };
 
 void () ProximityExplode = { // [FUNCTION]

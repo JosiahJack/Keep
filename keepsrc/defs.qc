@@ -461,7 +461,7 @@ void(float step) movetogoal = {
 	if (self.attack_state == AS_TURRET) return;
 	if (self.movespeed < 0) return;
 	if (self.tetherlock == TRUE) return;
-	if (self.movetype == MOVETYPE_NOCLIP) noclip_goal (step); // Nehahra wraith or custom
+	if (self.movetype == MOVETYPE_NOCLIP) noclip_goal(step); // Nehahra wraith or custom
 	movetogoal_builtin(step);
 };
 string(string s) precache_file			= #68;		// // Only in world.qc.  no effect except for -copy

@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 44
+// Function count: 45
 //
 // Implements: AI Core Movement Subroutines
 //
@@ -74,7 +74,7 @@ void() MonsterDeBuff;
 void() ai_face = {
 	if (self.health < 1) return;// Unusual check, caught elsewhere
 	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
-	ChangeYaw (); 				// Done in code
+	ChangeYaw(); 				// Done in code
 };
 
 void(float dist) ai_forward = {
@@ -506,7 +506,6 @@ void() ai_shockwave_think = {
 	}
 };
 
-//----------------------------------------------------------------------
 void(vector imp_vec, float imp_damage, float imp_radius, float imp_forward, float imp_up) ai_shockwave = {
 	local entity swave, sjump;
 	local vector impact, fvel;
@@ -728,6 +727,50 @@ void(float dist) ai_run_strafe = {
     self.ideal_yaw = enemy_yaw;
     ChangeYaw ();
     ai_run_side (dist);
+};
+
+void (entity destEnt, float radius, vector offset) ai_orbit = {
+   local vector dir;
+   local float dist;
+
+   if (self.orbitPosition > 3) self.orbitPosition = 0;
+   else if (self.orbitPosition < 0) self.orbitPosition = 0;
+
+   traceline(self.origin,(destEnt.origin + offset),TRUE,world);
+   if (trace_fraction < 1) {
+      setorigin(self,(destEnt.origin + offset));
+      self.orbitPosition = (self.orbitPosition + TRUE);
+      return;
+   }
+
+   if ( (self.orbitPosition == FALSE) ) {
+      dir = ((destEnt.origin + offset) - self.origin);
+      dir_x = (dir_x + radius);
+   } else {
+      if ( (self.orbitPosition == TRUE) ) {
+         dir = ((destEnt.origin + offset) - self.origin);
+         dir_y = (dir_y + radius);
+      } else {
+         if ( (self.orbitPosition == FL_SWIM) ) {
+            dir = ((destEnt.origin + offset) - self.origin);
+            dir_x = (dir_x - radius);
+         } else {
+            dir = ((destEnt.origin + offset) - self.origin);
+            dir_y = (dir_y - radius);
+         }
+      }
+   }
+   dist = vlen (dir);
+   if (dist < 8) self.orbitPosition = (self.orbitPosition + TRUE);
+   else {
+      if ( (dist < 50.000) ) {
+         self.velocity = normalize (dir);
+         self.velocity = (self.velocity * 150.000);
+      } else {
+         self.velocity = normalize (dir);
+         self.velocity = (self.velocity * 500.000);
+      }
+   }
 };
 
 // From Quake 1.5 to move enemy towards destEnt

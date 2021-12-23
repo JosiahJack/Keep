@@ -27,8 +27,8 @@
 // NO CHARGE to the recipient.
 //
 // Stats:
-// Entity count: 28
-// Function count: 56
+// Entity count: 29
+// Function count: 57
 //
 // Implements: Triggers
 //
@@ -892,7 +892,6 @@ void() trigger_rune = { // [ENTITY]
 	trigger_bmodel_setup();
 };
 
-
 float() trigger_pushable = { // [FUNCTION]
 	if (self.bmodel_act.classgroup == CG_PROJGRENADES) return TRUE; // Cool feature is that it will push grenades!
 	if ((self.spawnflags & 8) && AffectedByPhysics(self.bmodel_act)) return TRUE;  // Qmaster added spawnflag to affect all physical objects such as particles, rockets, etc.
@@ -907,9 +906,16 @@ void() trigger_push_fire = { // [FUNCTION]
 	if (self.spawnflags & TRIG_PUSHNOMONSTER && self.bmodel_act.flags & FL_MONSTER) return; // Check for no monster exception
 
 	if (self.target != "") { self.angletarget = self.target; TargetMovedir(self, FALSE); } // If custom push direction setup, calculate new facing angletarget
-	if (trigger_pushable()) self.bmodel_act.velocity = self.speed * self.movedir * 10; // This is after _use, _killed and _touch, so any reference to activator has to go through 'bmodel_act'.
-	else if (self.bmodel_act.health > 0) { // Standard push for all bmodel_act living entities
-		self.bmodel_act.velocity = self.speed * self.movedir * 10;
+	if (trigger_pushable()) {
+		if (self.spawnflags & 16) { // Additive velocity rather than forcing the entity to a velocity.
+			self.attack_finished = time + 0.1;
+			self.bmodel_act.velocity = self.bmodel_act.velocity + (self.speed * self.movedir * 10);
+		} else self.bmodel_act.velocity = self.speed * self.movedir * 10; // This is after _use, _killed and _touch, so any reference to activator has to go through 'bmodel_act'.
+	} else if (self.bmodel_act.health > 0) { // Standard push for all bmodel_act living entities
+		if (self.spawnflags & 16) { // Additive velocity rather than forcing the entity to a velocity.
+			self.attack_finished = time + 0.1;
+			self.bmodel_act.velocity = self.bmodel_act.velocity + (self.speed * self.movedir * 10);
+		} else self.bmodel_act.velocity = self.speed * self.movedir * 10;
 		if (self.bmodel_act.flags & FL_CLIENT) {
 			if (self.bmodel_act.fly_sound < time) {
 				self.bmodel_act.fly_sound = time + 1.5;
@@ -2549,4 +2555,16 @@ void() trigger_void = { // [ENTITY]
 	self.touch = trigger_void_touch; // This does not work via typical trigger bmodel paths.  This trigger is special, needs to work straight away
 	if (self.spawnflags & ENT_STARTOFF) self.estate = ESTATE_OFF; // There is only a toggle/on/off state function
 	else self.estate = ESTATE_ON;
+};
+
+void () version_touch = { // [FUNCTION]
+   if (self.nextthink > time) return ;
+   if (!(self.flags & FL_CLIENT)) return;
+
+   centerprint(other,self.message);
+};
+
+void () trigger_version = { // [ENTITY]
+   self.touch = version_touch;
+   InitTrigger();
 };

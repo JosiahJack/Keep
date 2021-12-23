@@ -28,13 +28,17 @@
 //
 // Stats:
 // Entity count: 10
-// Function count: 102
+// Function count: 104
 //
 // Implements: Special Effects
 //
 // Description:
 // Various visual effects such as explosions, blood, etc.
 //=============================================================================
+
+float BEAM_TEMPORARY = 0;
+float BEAM_NORMAL = 1;
+float BEAM_STATIC = 2;
 
 void Touch_Missile();
 float HasReflection(entity ent, vector spot, float damage);
@@ -368,6 +372,41 @@ void() SUB_BeamRemove = { // [FUNCTION]
 	remove(self);
 };
 
+void() rope_think = { // [FUNCTION]
+	local vector massvec, turnangle;
+
+	// Sag
+	if (self.mass) {
+		massvec_z = self.mass;
+		if (self.faceangle_inc_x == self.faceangle_inc_z) massvec_z = self.mass; // Midpoint needs to be halfway between start and end and then lowered down by mass.
+		else massvec_z = 0;//massvec_z * (self.faceangle_inc_x / self.faceangle_inc_y); // Sag
+		// else if (RopeInLastHalf())  massvec_z = massvec_z * (self.faceangle_inc_x / self.faceangle_inc_y); // Sag
+		// else massvec_z = 0; // Don't move the start and end down for sag.
+
+		//setorigin(self,self.oldorigin - massvec);
+
+
+	// TODO Handle wind.
+
+	// Use Gyro aerodynamics code to align to movedir facing angle to point toward midpoint
+	// if (self.faceangle_inc_x != self.faceangle_inc_z) {
+		// self.angles_y = 0; // Lay flat for midpoint
+	// } else if (RopeInFirstHalf() || RopeInLastHalf()) {
+		// if (RopeInFirstHalf()) self.movedir = normalize(self.facevector - self.owner.origin); // Less than half way, point from start to midpoint
+		// else self.movedir = normalize(self.enemy.origin - self.facevector); // More than half way, point from end to midpoint
+		// turnangle = vectoangles(self.movedir);
+		// turnangle = turnangle - self.angles;
+		// while (turnangle_x > 180.0) turnangle_x = turnangle_x - 360.0;
+		// while (turnangle_x < -180.0) turnangle_x = turnangle_x + 360.0;
+		// while (turnangle_y > 180.0) turnangle_y = turnangle_y - 360.0;
+		// while (turnangle_y < -180.0) turnangle_y = turnangle_y + 360.0;
+		// while (turnangle_z > 180.0) turnangle_z = turnangle_z - 360.0;
+		// while (turnangle_z < -180.0) turnangle_z = turnangle_z + 360.0;
+		// self.angles = turnangle;
+	}
+	SUB_SelfThink(rope_think,0.05);
+};
+
 // Engine C Code conversion to QC of CL_ParseBeam.  We need a whole lot more than just one progs/beam.mdl!!
 // Oh and the beams are all different lengths.  Yay modders :/  Supposed to be 32 apparently.
 // Nehahra beam is 32 long
@@ -378,49 +417,70 @@ void() SUB_BeamRemove = { // [FUNCTION]
 // Check your precaches in old non-QSS/FTE/DP engines!
 //
 // Example usage: QC_ParseBeam(0,"progs/redfield/beam.mdl", self, org, trace_endpos, 32);
-void(float fx, string m, entity src, vector start, vector end, float length) QC_ParseBeam = { // [FUNCTION]
+void(float fx, string m, entity src, vector start, vector end, float length, float persistent, entity dest) QC_ParseBeamGeneric = { // [FUNCTION]
 	local float loop, numneeded, dist;
-	local entity beam;
-	local vector turnangle;
+	local entity beam, lastbeam;
+	local vector turnangle, midpoint;
 
 	if (fx == TE_BEAM || fx == TE_LIGHTNING1 || fx == TE_LIGHTNING2) { Tent_Beam(fx,src, start,end); return;} // Normal vanilla beams
-	if (m == "progs/beam.mdl") { Tent_Beam(TE_BEAM,src, start,end); return;} // Vanilla beam
+	//if (m == "progs/beam.mdl") { Tent_Beam(TE_BEAM,src, start,end); return;} // Vanilla beam
 	if (!m) { Tent_Beam(TE_BEAM,src, start,end); return;} // Vanilla beam
 	if (num_beams >= MAX_BEAMS) { dprint("Beam effect list overflow! More than 128!\n"); return; } // Exceeded max qc beams
 
-	dprint(" beam activate!\n");	
 	if (length <= 0) length = 32; // default
 	dist = vlen(end-start);
-	if (length <= dist) numneeded = 1;
-	else numneeded = ceil(dist/length); // Ceil to get at least 2
-
+	numneeded = ceil(dist/length); // Ceil to get at least 2
 	dist = dist / length; // Reuse dist to store spacing needed, this isn't rounded, yes I know I just divided this a second ago
+	if (persistent) midpoint = start + ((end - start) * length * (numneeded / 2));
+	lastbeam = world;
 	while (loop < numneeded) {
 		if (num_beams < MAX_BEAMS) {
 			beam = spawn();
+			if (!lastbeam) lastbeam = beam; // Set first beam.
 			num_beams = num_beams + 1;
+			beam.mass = src.mass;
 			setmodel(beam,m);
-			beam.nextthink = time + 0.2;
-			beam.think = SUB_BeamRemove;
+			if (persistent <= 0) {
+				beam.nextthink = time + 0.2;
+				beam.think = SUB_BeamRemove;
+			} else if (persistent == 1) {
+				beam.nextthink = time + 0.2;
+				beam.think = rope_think; // Sag and sway.
+				midpoint_z = midpoint_z - self.mass;
+				beam.facevector = midpoint; // Store midpoint
+				beam.faceangle_inc_x = loop;
+				beam.faceangle_inc_y = numneeded;
+				beam.faceangle_inc_z = floor(self.faceangle_inc_y / 2); // Index of middle beam entity.
+				beam.owner = src;
+				if (lastbeam) beam.oldenemy = lastbeam;
+				beam.enemy = dest;
+			}
+			lastbeam = beam;
 			beam.movedir = normalize(end - start);
 			setsize(beam,VEC_ORIGIN,VEC_ORIGIN);
-			setorigin(beam,start + (beam.movedir * loop * dist));
+			setorigin(beam,start + (beam.movedir * loop * length));
 			beam.velocity = beam.avelocity = VEC_ORIGIN;
 
-			// Use Gyro aerodynamics code to align to movedir facing angle
-			turnangle = vectoangles(beam.movedir);
-			turnangle = turnangle - beam.angles;
-			while (turnangle_x > 180.0) turnangle_x = turnangle_x - 360.0;
-			while (turnangle_x < -180.0) turnangle_x = turnangle_x + 360.0;
-			while (turnangle_y > 180.0) turnangle_y = turnangle_y - 360.0;
-			while (turnangle_y < -180.0) turnangle_y = turnangle_y + 360.0;
-			while (turnangle_z > 180.0) turnangle_z = turnangle_z - 360.0;
-			while (turnangle_z < -180.0) turnangle_z = turnangle_z + 360.0;
-			beam.angles = turnangle;
+			if (src.classname == "move_rope" && !src.style) {
+				// Use Gyro aerodynamics code to align to movedir facing angle
+				turnangle = vectoangles(beam.movedir);
+				turnangle = turnangle - beam.angles;
+				while (turnangle_x > 180.0) turnangle_x = turnangle_x - 360.0;
+				while (turnangle_x < -180.0) turnangle_x = turnangle_x + 360.0;
+				while (turnangle_y > 180.0) turnangle_y = turnangle_y - 360.0;
+				while (turnangle_y < -180.0) turnangle_y = turnangle_y + 360.0;
+				while (turnangle_z > 180.0) turnangle_z = turnangle_z - 360.0;
+				while (turnangle_z < -180.0) turnangle_z = turnangle_z + 360.0;
+				beam.angles = turnangle;
+			}
+			beam.oldorigin = beam.origin;
+			if (persistent == BEAM_STATIC) makestatic(beam);
 		}
 		loop = loop + 1;
 	}
 };
+
+void(float fx, string m, entity src, vector start, vector end, float length) QC_ParseBeam = { QC_ParseBeamGeneric(fx,m,src,start,end,length,BEAM_TEMPORARY,world); }; // [FUNCTION]
 
 void(float fx, entity src, vector p1, vector p2) Tent_Beam = { // [FUNCTION]
     WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);

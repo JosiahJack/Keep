@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 11 
+// Function count: 9
 //
 // Implements: Nehahra Souls, Using Drake's updates
 //
@@ -48,64 +48,62 @@ float   SOUL_TIME   = 15;
 float   WRAITH_HP_AETHER    = 50;   // Must be lower than critical.
 float   WRAITH_HP_CRITICAL  = 60;   // Flee when health falls below this.
 
+float() FollowSetup;
+
 // Call this to remove souls.
 void() Soul_Remove = { // [FUNCTION]
-    if (self.oldenemy)
-        if (self.oldenemy.solid)
-            if (!self.oldenemy.deadflag)
-                if (self.oldenemy.soul == "in") self.oldenemy.soul = "yes";     // Safe in body again.
+	local entity stemp;
+
     if (self.owner) {
         if (self.owner.enemy == self) self.owner.enemy = world;   // Target is gone, find another.
         if (self.owner.oldenemy == self) self.owner.oldenemy = world;    // Ditto
-        if (!self.owner.deadflag) self.owner.gorging = FALSE; // Get out of reaper mode.
+        self.owner.gorging = FALSE; // Get out of reaper mode.
+		stemp = self;
+		self = self.owner;
+		self.enemy = self.oldenemy = self.goalentity = world;
+		self.attack_finished = time + 0.5;
+		if (!FollowSetup()) self.think = self.th_stand; // Return to walking path or standing.
+		else self.think = self.th_walk;
+		self.nextthink = time + 0.1;
+		self = stemp;
     }
     remove(self);
 };
 
 // 'self' is the soul getting sucked in.
 void() Soul_Think = [ 0, Soul_Think ] { // [FUNCTION]
-    local entity reaper, src;
+    local entity reaper;
     local vector org;
 
     self.nextthink = time + 0.05;
-    if (self.wait < time) {
+    if (self.wait <= time) {
         sound (self, CHAN_BODY, "nehahra/wraith/soul.wav", 1, ATTN_IDLE);
         self.wait = random() * 60 + time;
     }
 
+	self.alpha = self.alpha + 0.05;
+	if (self.alpha > 1) self.alpha = 1;
     reaper = self.owner;
-    if (self.delay <= time) { Soul_Remove(); return; } // Lost for too long.
+    if (self.owner) {
+		if (!self.owner.gorging || (self.owner.health <= 0) || (self.owner.enemy != self)) { // Not sucking souls now.
 
-    if (!reaper.gorging || (reaper.health <= 0) || (reaper.enemy != self)) { // Not sucking souls now.
-        self.velocity = '0 0 0';
-        if (reaper) {
-            if (reaper.health <= 0) self.owner = world; // Reaper is dead.
+			self.velocity = '0 0 0';
+			if (self.owner.health <= 0) self.owner = world; // Reaper is dead.
+			if (self.cnt > 0) { // Still inside corpse.
+				// Stick to corpse.
+				if (self.owner) {
+					self.origin     = self.oldenemy.origin;
+					self.origin_z   = self.oldenemy.absmin_z + 4;
+					setorigin (self, self.origin);
+				}
+			}
+			return;
 		}
-        if (self.cnt) { // Still inside corpse.
-            self.delay = time + SOUL_TIME;
-            src = self.oldenemy;
-            if (!src.modelindex || !src.deadflag) Soul_Remove (); // Corpse is gone!
-            else { // Stick to corpse.
-                if (self.owner) {
-                    self.origin     = src.origin;
-                    self.origin_z   = src.absmin_z + 4;
-                    setorigin (self, self.origin);
-                } else { // No one stealing its soul now, so put it back.
-                    Soul_Remove ();
-                    src.soul = "yes";
-                }
-            }
-        }
-        return;
-    }
-    self.delay = time + SOUL_TIME;
-    if (self.cnt) { // Rip the soul out of the body.
-        self.soul = string_null;
-        self.alpha = 0.3;
-        self.cnt = FALSE;
+	}
+
+    if (self.cnt > 0 || self.oldenemy.gibbed || self.oldenemy == world) { // Rip the soul out of the body.
+        self.cnt = 0;
         self.effects = EF_DIMLIGHT;
-        setmodel (self, "progs/nehahra/soul.mdl");
-        setsize (self, '0 0 0', '0 0 0');
     }
     if (self.mangle_x || self.mangle_y) {
 		makevectors (reaper.angles);
@@ -114,104 +112,48 @@ void() Soul_Think = [ 0, Soul_Think ] { // [FUNCTION]
 
     org = org - self.origin;
     self.velocity = normalize(org) * 40;
-    if (vlen(org) < 20) { // Close enough for soul to be devoured by wraith.
+    if (vlen(org) < 20 && self.cnt >= 0) { // Close enough for soul to be devoured by wraith.
         StopSound(self,CHAN_BODY);
-        T_Heal(reaper,50,TRUE);
+		self.cnt = -1;
+        T_Heal(reaper,50,TRUE); dprint("Healed reaper, reaper now has "); dprint(ftos(reaper.health)); dprint(" health\n");
         if (reaper.classtype == CT_MONSHADE) sound (reaper, CHAN_VOICE, "drake/shade/taunt.wav", 1, ATTN_NORM);
         else sound (reaper, CHAN_VOICE, "nehahra/wraith/rych1.wav", 1, ATTN_IDLE);
 
-        Soul_Remove ();
+        Soul_Remove();
     }
 };
 
 // Spawns a fresh soul by ripping it out of 'ent'.
 // 'self' is the monster looking for souls to steal.
 void(entity ent) Soul_Spawn = { // [FUNCTION]
-    local entity newsoul;
-
-    if (ent) ent.soul = "in";
-    else return;
-
-	// Nehahra aborted this if soul would spawn at the origin.
-    newsoul = spawn();
-    newsoul.origin     = ent.origin;
-    newsoul.origin_z   = ent.absmin_z + 4;
-    newsoul.oldenemy   = ent;
-    newsoul.owner      = self;  // Cannot use 'master' because summon code thinks soul is a pet.
-    newsoul.classname  = "soul";
-	newsoul.classtype = CT_SOUL;
-    newsoul.solid      = SOLID_TRIGGER; // Don't make bodies glow.
-    newsoul.movetype   = MOVETYPE_NOCLIP;
-	// Don't need health.  More fields in case enemy is a nightshade and not a wraith.
-    newsoul.cnt        = TRUE; // Begins hidden in corpse.
-    newsoul.mangle     = '0 0 20';
-    if (self.classtype == CT_MONSHADE) newsoul.mangle_x   = 30;
-    newsoul.delay      = time + SOUL_TIME;
-    newsoul.wait       = 0;
-    newsoul.nextthink  = time + 0.2;
-    newsoul.think      = Soul_Think;
-    setorigin(newsoul,newsoul.origin);
-    setmodel(newsoul,"progs/drake/null_256.spr"); // So it can glow while invisible.
-    setsize(newsoul, '0 0 0', '0 0 0');
-    if (self.flags & FL_MONSTER) {
-        if (self.enemy) self.oldenemy = self.enemy;
-        self.enemy = newsoul;
-    }
-};
-
-float() Wraith_FindSoul = { // [FUNCTION]
-    local float dist, d;
-    local entity head, targ;
-
-	// Find the nearest lost soul.
-    dist = 1001;
-    targ = world;
-    head = findradius(self.origin, 1000);
-    while (head) {
-        if (head.classtype == CT_SOUL)
-        if (!head.owner || (head.owner == self))
-            d = vlen(head.origin - self.origin);    //trace_plane_dist
-            if (d < dist) {targ = head;  dist = d;}
-        head = head.chain;
-    }
-    if (targ) { // Found one.
-        targ.owner = self;
-        if (self.enemy) self.oldenemy = self.enemy;
-        self.enemy = targ;
-        return TRUE;
-    }
-	// Didn't find any lost souls, so look for fresh souls in corpses.
-    head = find(world, soul, "yes");
-    while (head) {
-        if (head.health <= 0 && head.liquidbase != CONTENT_SOLID) { // Got one!
-            if (self.classtype == CT_MONSHADE) { // Use voice channel to override others.
-                sound (self, CHAN_VOICE, "drake/shade/screech.wav", 1, ATTN_NORM);
-                sound (head, 6, "drake/shade/screech.wav", 1, ATTN_IDLE);
-            } else { // Nehahra used item channel for selection.
-                sound (self, CHAN_ITEM, "nehahra/wraith/select.wav", 1, ATTN_IDLE);
-                sound (head, 6, "nehahra/wraith/select.wav", 1, ATTN_IDLE);
-            }
-            Soul_Spawn (head);
-            return TRUE;
-        }
-        head = find(head, soul, "yes");
-    }
-    return FALSE;
+	ent.gorging = TRUE;
+    newmis = spawn(); // Nehahra aborted this if soul would spawn at the origin.
+    newmis.origin     = ent.origin;
+    newmis.origin_z   = ent.absmin_z + 4;
+    newmis.oldenemy   = ent;
+    newmis.owner      = self;  // Cannot use 'master' because summon code thinks soul is a pet.
+    newmis.classname  = "soul";
+	newmis.classtype  = CT_SOUL;
+    newmis.solid      = SOLID_TRIGGER; // Don't make bodies glow.
+    newmis.movetype   = MOVETYPE_NOCLIP;
+    newmis.cnt        = 1; // Begins hidden in corpse.
+    newmis.mangle     = '0 0 20';
+    if (self.classtype == CT_MONSHADE) newmis.mangle_x = 30;
+    newmis.wait       = 0;
+	newmis.alpha	  = 0.01;
+    newmis.nextthink  = time + 0.2;
+    newmis.think      = Soul_Think;
+    setorigin(newmis,newmis.origin);
+    setmodel(newmis,"progs/nehahra/soul.mdl"); // So it can glow while invisible.
+    setsize(newmis, '0 0 0', '0 0 0');
 };
 
 void(string sfx) ai_wraith = { // [FUNCTION]
-    if ((self.health < self.max_health)) { // Regenerate a bit if health is low.  Works independently of Regen*.
-        if (random() < 0.1) T_Heal (self, 1, FALSE);
-    } else {
-        if (self.attack_state == AS_FLEEING)
-        {   // self.enemy only in Nehahra.
-            sound (self, CHAN_VOICE, sfx, 1, ATTN_IDLE);
-            sound (self.enemy, CHAN_VOICE, sfx, 1, ATTN_IDLE);
-            self.attack_state = AS_STRAIGHT;
-            if (self.spawnflags & 2)
-                if (self.classtype == CT_MONWRAITHNEHAHRA) self.attack_state = AS_CHASING;
-        }
-    }
+	if (self.attack_state == AS_FLEEING) {
+		sound (self, CHAN_VOICE, sfx, 1, ATTN_IDLE);
+		sound (self.enemy, CHAN_VOICE, sfx, 1, ATTN_IDLE);
+		self.attack_state = AS_STRAIGHT;
+	}
 };
 
 void() aether_out1 = { // [FUNCTION], Phase out start.
@@ -219,13 +161,14 @@ void() aether_out1 = { // [FUNCTION], Phase out start.
     self.solid      = SOLID_NOT;
     self.takedamage = DAMAGE_NO;
     self.effects    = self.effects | EF_DIMLIGHT;
-    sound (self, CHAN_VOICE, "nehahra/wraith/return.wav", 1, 0.5);  // Was ATTN_NONE.
+    sound(self, CHAN_VOICE, "nehahra/wraith/return.wav", 1, 0.5);  // Was ATTN_NONE.
     self.th_melee   = SUB_Null;
     self.th_missile = SUB_Null;
 };
 void() aether_out2 = { // [FUNCTION], Phase out end.
     self.effects    = self.effects - (self.effects & EF_DIMLIGHT);
     self.flags      = self.flags | FL_NOTARGET;
+	self.alpha		= 0.01;
     self.modelindex = 0;
 };
 
@@ -245,57 +188,52 @@ void(void() hth, void() miss) aether_in2 = { // [FUNCTION], Phase in end.
     self.th_missile = miss;
 };
 
-float(void() out, void() in) ai_aether = { // [FUNCTION]
-    local float aether;
+float() Wraith_FindSoul = { // [FUNCTION]
+    local float dist, d;
+    local entity head, targ;
 
-	// FIXME:  Use something other than fleeing to flag aether use.
-    aether = (!self.modelindex && (self.attack_state == AS_FLEEING));
-    if ((self.health < self.max_health)) {
-        if (!aether) {
-			if (self.health < WRAITH_HP_AETHER) { // Phase out of the level.
-                out ();
-                return TRUE;
-            }
-        }
-    } else {
-        // Nehahra had more checks such that the wraith would reappear
-        // only if it had more health than its target and if the target
-        // didn't have any rockets.  Drake does not use such checks because
-        // it makes 100% kills too hard to get.
-        if (aether) { // Rematerialize.
-            in ();
-            return TRUE;
-        }
+	if (self.enemy) return FALSE;
+
+	// Find the nearest lost soul in case a friend wraith was attacked.
+    dist = 1001;
+    targ = world;
+    head = findradius(self.origin, 1000);
+    while (head) {
+        if (head.classtype == CT_SOUL) {
+			if (!head.owner || (head.owner == self)) {
+				d = vlen(head.origin - self.origin);
+				if (d < dist) {targ = head;  dist = d;}
+			}
+		}
+        head = head.chain;
     }
-    return FALSE;
-};
-
-// Look for souls to reap.
-float(float d, void() souls) ai_souls = { // [FUNCTION]
-    if (self.enemy) {
-        if (self.enemy.classtype != CT_SOUL) { // Look for souls if ethereal or if enemy isn't present.
-            if (!self.modelindex) Wraith_FindSoul();
-            else {
-                if (self.search_time < time + 4)
-                if (!visible (self.enemy)) Wraith_FindSoul ();
-            }
-        }
-    } else Wraith_FindSoul(); // Look for souls to reap.
-
-	// Now we move the wraith.
-    if (self.enemy.classtype == CT_SOUL) {
-        if (souls) {
-            if (vlen (self.enemy.origin - self.origin) < 300) { // Close to soul, so stop to collect it.
-                souls ();
-            } else { // Move directly to the soul.
-                ai_face ();
-                walkmove (self.angles_y, d);
-            }
-        } else {
-            ai_face();
-            if (vlen (self.enemy.origin - self.origin) >= 300) walkmove(self.angles_y, d);
-        }
+    if (targ) { // Found one.
+        targ.owner = self;
+        if (self.enemy) self.oldenemy = self.enemy;
+        self.enemy = targ;
+		SUB_SelfThink(self.th_run,0.1);
         return TRUE;
+    }
+	// Didn't find any lost souls, so look for fresh souls in corpses.
+    head = findradius(self.origin,2048);
+    while (head) {
+        if ((head.flags & FL_MONSTER) && head.health <= 0) {
+			if (!head.gibbed && !head.gorging) { // Got one!
+				if (self.classtype == CT_MONSHADE) { // Use voice channel to override others.
+					sound (self, CHAN_VOICE, "drake/shade/screech.wav", 1, ATTN_NORM);
+					sound (head, 6, "drake/shade/screech.wav", 1, ATTN_IDLE);
+				} else { // Nehahra used item channel for selection.
+					sound (self, CHAN_ITEM, "nehahra/wraith/select.wav", 1, ATTN_IDLE);
+					sound (head, 6, "nehahra/wraith/select.wav", 1, ATTN_IDLE);
+				}
+				Soul_Spawn(head);
+				self.enemy = newmis;
+				self.gorging = TRUE;
+				SUB_SelfThink(self.th_run,0.1);
+				return TRUE;
+			}
+		}
+        head = head.chain;
     }
     return FALSE;
 };

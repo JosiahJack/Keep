@@ -37,6 +37,19 @@
 // functionality.
 //=============================================================================
 
+// This reduces a lot of boilerplate code assigning a think and nextthink.
+void(entity targ, void() th_think, float th_time) SUB_Think = {
+	if (th_time <= 0) th_time = 0.1;
+
+	targ.think = th_think;
+	if (targ.bsporigin > 0) targ.nextthink = targ.ltime + th_time;
+	else targ.nextthink = time + th_time;
+};
+
+void(void() th_think, float th_time) SUB_SelfThink = {
+	SUB_Think(self,th_think,th_time);
+};
+
 float (entity o) IsProjectile = { // [FUNCTION]
 	return (o.classgroup == CG_PROJALL || o.classgroup == CG_PROJSHELLS
 		 || o.classgroup == CG_PROJNAILS  || o.classgroup == CG_PROJLAVANAILS

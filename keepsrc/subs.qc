@@ -240,7 +240,7 @@ void(vector tdest, float tspeed, void() func) SUB_CalcMove = { // [FUNCTION]
 	len = vlen (vdestdelta);			// calculate length of vector
 	traveltime = len / tspeed;			// divide by speed to get time to reach dest
 	if (self.faceangle > 0 && self.bsporigin > 0) self.faceangle = FALSE; // Check if faceangle is active on a func bmodel mover?
-	
+
 	// If move distance or time too small, snap to final location
 	if (traveltime < 0.1 || tdest == self.origin) {
 		if (self.faceangle > 0) self.angles = self.finalangle;

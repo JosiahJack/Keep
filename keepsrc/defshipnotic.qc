@@ -72,3 +72,7 @@ float modelindex_hammer;
 .float spawnsolidtype;
 .string spawnmodel;
 .void() spawnthink;
+entity nullentity;
+entity bulletholes;
+entity lastbullet;
+float numbulletholes;

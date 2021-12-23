@@ -330,12 +330,6 @@ void() ambient_custom_sound = { // [ENTITY]
 	}
 };
 
-// Quoth version
-void() play_sound_triggered = { // [ENTITY], Re-direct
-	self.spawnflags = self.spawnflags | ENT_STARTOFF;
-	ambient_custom_sound(); 
-};
-
 void() ambient_custom_water = { // [ENTITY]
 	if (self.noise == "") self.noise = "ad171/steps/water1.wav";
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.75;

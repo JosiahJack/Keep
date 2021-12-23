@@ -268,6 +268,7 @@ vector(float gibforce) DirectionForDamage = {
 	return gvel;
 };
 
+// Only used when vomitus or other creature eats them now.
 void() RemoveGib = {
 	self.think = model_fade; // Fade away model, if active (default)
 	self.nextthink = time + 0.1;

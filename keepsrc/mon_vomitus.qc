@@ -131,28 +131,20 @@ void() Vomit_Spawn = {
 // Vomitus chews on the target.
 // Note:  This is called during running instead of an attack sequence.
 void() vom_melee = {
-    local   entity  targ;
-    local   float   ldmg;
+    local entity targ;
+    local float ldmg;
 
     targ = self.enemy;
-    if (!targ)
-        return;        // removed before stroke
-    if (!CanDamage (targ, self))  // PM:  Added just in case.
-        return;
-    if (!infront (targ))
-        return;     // PM:  Unusual -- must be in front of mouth.
-    if (!InMeleeRange (80))     // PM:  Dragons-related.
-        return;     // Vomitus has short range for a fat monster.
-    //if (IsGhost (targ))
-        //return;     // Cannot hit wraith.
+    if (!targ) return; // Removed before stroke
+    if (!CanDamage (targ, self)) return; // PM:  Added just in case.
+    if (!infront (targ)) return; // PM:  Unusual -- must be in front of mouth.
+    if (!InMeleeRange (80)) return; // PM:  Dragons-related.  Vomitus has short range for a fat monster.
+    if (IsGhost(targ)) return; // Cannot hit wraith.
 
-//- - - - - - - - -
-// Vomitus does the following on a successful attack:
-//
-// * Inflicts anywhere from 1 to 30 damage.
-// * Life leech: 10% of damage inflicted is given back as health to vomitus.
-// * 10% of eating the target's current weapon.
-//- - - - - - - - -
+	// Vomitus does the following on a successful attack:
+	// * Inflicts anywhere from 1 to 30 damage.
+	// * Life leech: 10% of damage inflicted is given back as health to vomitus.
+	// * 10% of eating the target's current weapon.
     sound (self, CHAN_VOICE, "fish/bite.wav", 1, ATTN_NORM);
     // Update 6/17/2011:  Removed poison code.
     // if (random() < 0.1)     // Eat the player's weapon on a critical hit.

@@ -49,6 +49,7 @@ entity bodyque_head; // Keeps track of dead player models
 void() versus_setup;
 entity() ammohealthsum;
 void() InitBodyQue;
+void() InitBulletHoles;
 void() light_style_boundary;
 void() light_style_setuparray;
 void() pendulum_setuparray;
@@ -268,10 +269,11 @@ void() main = { // [FUNCTION]
 void() worldspawn = { // [ENTITY]...well it IS.
 	dprint ("\b[WORLDSPAWN]\b function started ...\n");
 	lastspawn = world;
-	InitBodyQue ();
-	InitTempGoal ();
-	InitMoveBox (); // Create dummy entity used for checking movement for extra large monsters
-    InitLightning ();
+	InitBodyQue();
+	if (world.hipnoticoptions & HIPNOTIC_BULLETHOLES) InitBulletHoles();
+	InitTempGoal();
+	InitMoveBox(); // Create dummy entity used for checking movement for extra large monsters
+    InitLightning();
 	developer = cvar("developer");
 	self.classtype = CT_WORLD;
 	if (self.angles_y != 0) self.angles = '0 0 0'; // ID map E3M3 has worldspawn angles set, WUT!?!
@@ -632,6 +634,8 @@ void() worldspawn = { // [ENTITY]...well it IS.
 			}
 		}
 	}
+
+	hipearthquake = earthquake_active = FALSE; // Start with earthquakes inactive.
 	
 	// Setup target light starting point.  Got to do this early before any light entities
 	light_style_setuparray(); dprint("\b[WORLD]\b Setup Light style array\n");

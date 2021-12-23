@@ -51,37 +51,19 @@ void(float dist) gaunt_hadj = {
 	local float d;
 	self.velocity = VEC_ORIGIN;
 	enemydistance = vlen(self.enemy.origin - self.origin);
-	// if (self.enemy.carrymode == LIGHTNING_RANDOM && enemydistance < 200)
-	// {
-		// dist = dist * CONTENT_EMPTY;
-	// }
-	// if (self.enemy != self.carry && self.carry != world)
-	// {
-		// gaunt_reset();
-	// }
-	// if (self.carry.health <= MSG_BROADCAST && self.carry != world)
-	// {
-		// gaunt_reset();
-	// }
 	self.origin2 = self.origin;
 	oldorg = self.origin;
 	self.movetype = MOVETYPE_STEP;
 	ai_run(dist);
 	d = vlen(self.origin - oldorg);
 	hadj = self.origin_z - self.origin2_z;
-	if (visible(self.enemy))
-	{
-		hadj = hadj * self.vsightmultiplier;
-	}
-	else
-	{
-		hadj = hadj * self.vmultiplier;
-	}
+	if (visible(self.enemy)) hadj = hadj * self.vsightmultiplier;
+	else hadj = hadj * self.vmultiplier;
+
 	hadjvec_z = hadj;
 	setorigin(self, self.origin + hadjvec);
 	self.velocity = VEC_ORIGIN;
-	if (d <= dist + 5)
-	{
+	if (d <= dist + 5) {
 		self.movetype = MOVETYPE_FLY;
 		reqvel = normalize(self.origin - oldorg) * dist * TE_WIZSPIKE;
 		setorigin(self, oldorg);
@@ -90,13 +72,10 @@ void(float dist) gaunt_hadj = {
 };
 
 void() GauntAttackFinished = {
-	if (enemy_range >= RANGE_MID || !enemy_vis)
-	{
+	if (enemy_range >= RANGE_MID || !enemy_vis) {
 		self.attack_state = AS_STRAIGHT;
 		self.think = gaunt_run1;
-	}
-	else
-	{
+	} else {
 		self.attack_state = AS_SLIDING;
 		self.think = gaunt_side1;
 	}

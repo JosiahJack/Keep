@@ -1279,7 +1279,7 @@ void() thinking_balls = {
 		return;
 	}
 		self.cnt = self.cnt + 1;
-		ai_orbit(self.boost, self.aether);
+		ai_orbit_nehahra(self.boost, self.aether);
 		if (self.pain_finished > time) {
 		self.think = thinking_balls;
 		self.nextthink = time + 0.1;
@@ -1347,11 +1347,10 @@ Void function fire_a_ball();
   self.nextthink = time + 0.6;
 }
 
-Void function ai_orbit(radius : Real; offset : Vector);
-var
- dir : Vector;
- dist : Real;
-{
+void() ai_orbit_nehahra(float radius, vector offset) = {
+	local vector dir;
+	local float dist;
+
   if (self.rotate_type > 3 || self.rotate_type < 0) {
     self.rotate_type = 0;
     }

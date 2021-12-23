@@ -38,6 +38,11 @@
 // Run is when a monster is in combat mode and actively chasing an enemy.
 //=============================================================================
 
+float SPEED_RYU_MIN   = 8;
+float SPEED_RYU_SLOW  = 20;
+float RYU_RANGE_MELEE = 120;
+float RYU_RANGE_BEST  = 750; // Maximum range for shot spray.
+float RYU_RANGE_MAX   = 2000;// Maximum attack range.
 float(vector targorg, float angdiff) eidolon_angcheck;
 float() Ryu_HatesWater;
 float(float dist) Ryu_LeaveWater;
@@ -49,11 +54,7 @@ float(float dist) Shade_AvoidGhost;
 void() DragonCheckAttack;
 void() Shade_CheckAttack;
 void() ryu_run_attack;
-float SPEED_RYU_MIN   = 8;
-float SPEED_RYU_SLOW  = 20;
-float RYU_RANGE_MELEE = 120;
-float RYU_RANGE_BEST  = 750; // Maximum range for shot spray.
-float RYU_RANGE_MAX   = 2000;// Maximum attack range.
+void() nehwraith_souls1;
 
 // Waiting around mode
 void() ai_stand = {
@@ -101,12 +102,13 @@ void() ai_stand = {
 // Path/leader following mode
 void(float dist) ai_walk = {
 	local vector vertdiff;
+	local entity stemp;
 	
 	if (self.health < 1) return; // Health < 0, no more walking
 	if (self.movespeed < 0) { self.th_stand(); return; } // Turret monsters don't walk, they stand around
 
 	MonsterDeBuff(); // Check and apply poison
-	if (FindTarget ()) return; // Found a player?
+	if (FindTarget()) return; // Found a player?
 
 	// Allow for flying units to move up/down between path corners
 	if (self.classmove == MON_MOVEFLY) {
@@ -137,6 +139,18 @@ void(float dist) ai_walk = {
 		ryu_untilt ();  // Undo any angle changes due to evasion.
 	}
 
+	if (self.solid == SOLID_NOT && self.goalentity.classtype == CT_PATHCORNER) {
+		if (vlen(self.goalentity.origin - self.origin) < 32 && self.attack_finished < time) {
+			self.attack_finished = time + 0.5;
+			stemp = self;
+			other = self;
+			self = other.goalentity;
+			other.goalentity.touch();
+			self = stemp;
+			return;
+		}
+	}
+
 	if (self.temperament == TEMPRA_COWARDLY && self.charmer) dist = dist * 2.5;
 	else if (self.temperament == TEMPRA_CALM && self.charmer) dist = dist * 2;
 	movedist = dist;
@@ -159,6 +173,10 @@ void(float dist) ai_run = {
 		if ((self.enemy.flags & FLx_CREATURE) && visible (self.enemy)) {
 			winner = TRUE;
 			self.ideal_yaw = vectoyaw (self.enemy.origin - self.origin); // Set yaw in case we need to face the fallen during the dance.
+		}
+		if (self.enemy.classtype == CT_SOUL) {
+			self.gorging = TRUE;
+			if (self.classtype == CT_MONWRAITHNEHAHRA) { SUB_SelfThink(nehwraith_souls1,0.1); return; }
 		}
 	}
 

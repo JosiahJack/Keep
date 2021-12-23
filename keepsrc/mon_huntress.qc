@@ -1056,6 +1056,7 @@ void() monster_huntress_precache = {
 	precache_model (SBURST_FLAME);
 	precache_model ("progs/redfield/huntress/empty_blood.mdl");
 	PreCache_Flame(); // Flame Attack
+	precache_model(MODEL_PROJ_RINGSHOCK);	// Ground shockwave
 	precache_sound ("redfield/huntress/pistol.wav");
 	precache_sound ("redfield/huntress/pistol_cock.wav");
 	precache_sound ("redfield/huntress/fireball.wav");

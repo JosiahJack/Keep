@@ -325,7 +325,7 @@ void() mcorn_die = {
 };
 
 void() monster_mcorn_precache = {
-	precache_model ("progs/h_mcorn.mdl");
+	precache_model ("progs/madfox/h_mcorn.mdl");
 	precache_model ("progs/madfox/mon_manticore.mdl");
 	precache_model ("progs/madfox/proj_mcornflame.mdl");
 	precache_model ("progs/q15/s_spike.mdl");

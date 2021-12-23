@@ -72,7 +72,10 @@ float MINO_BLUE = 0;
 float MINO_GREEN = 1;
 float MINO_RED = 2;
 
-//============================================================================
+void(float side) ShufflerCheckForSlap;
+void() ShufflerFinishedGoonSlap;
+void() mino_gore1;
+
 void() mino_stand1 =[ $stand1, mino_stand2 ] {monster_idle_sound();ai_stand();};
 void() mino_stand2 =[ $stand3, mino_stand3 ] {ai_stand();};
 void() mino_stand3 =[ $stand5, mino_stand4 ] {ai_stand();};
@@ -86,7 +89,6 @@ void() mino_stand10 =[ $stand19, mino_stand11 ] {ai_stand();};
 void() mino_stand11 =[ $stand21, mino_stand12 ] {ai_stand();};
 void() mino_stand12 =[ $stand23, mino_stand1 ] {ai_stand();};
 
-//============================================================================
 void() mino_walk1 =[ $walk1, mino_walk2 ] {monster_idle_sound();ai_walk(12);};
 void() mino_walk2 =[ $walk3, mino_walk3 ] {ai_walk(12);};
 void() mino_walk3 =[ $walk5, mino_walk4 ] {ai_walk(9);};
@@ -100,11 +102,9 @@ void() mino_walk10 =[ $walk19, mino_walk11 ] {ai_walk(10);monster_footstep(FALSE
 void() mino_walk11 =[ $walk21, mino_walk12 ] {ai_walk(4);};
 void() mino_walk12 =[ $walk23, mino_walk1 ] {ai_walk(9);};
 
-//============================================================================
-// Charge/run/gore!
-//============================================================================
 void() mino_run;
 
+// Charge/run/gore!
 void() mino_rage1 =[ $charge2, mino_rage2 ] {monster_idle_sound();ai_run(34);};
 void() mino_rage2 =[ $charge4, mino_rage3 ] {ai_run(28);monster_footstep(FALSE);};
 void() mino_rage3 =[ $charge6, mino_rage4 ] {ai_run(26);};
@@ -112,32 +112,26 @@ void() mino_rage4 =[ $charge8, mino_rage5 ] {ai_run(34);};
 void() mino_rage5 =[ $charge10, mino_rage6 ] {ai_run(28);monster_footstep(FALSE);};
 void() mino_rage6 =[ $charge12, mino_run ] {ai_run(26);};
 
-//----------------------------------------------------------------------
 void() mino_run1 =[ $walk1, mino_run2 ] {monster_idle_sound();ai_run(12);};
 void() mino_run2 =[ $walk3, mino_run3 ] {ai_run(12);};
-void() mino_run3 =[ $walk5, mino_run4 ] {ai_run(9);};
+void() mino_run3 =[ $walk5, mino_run4 ] {ai_run(9); if (self.spawnflags & 2) ShufflerCheckForSlap(1); };
 void() mino_run4 =[ $walk7, mino_run5 ] {ai_run(10);monster_footstep(FALSE);};
 void() mino_run5 =[ $walk9, mino_run6 ] {ai_run(4);};
 void() mino_run6 =[ $walk11, mino_run7 ] {ai_run(9);};
 void() mino_run7 =[ $walk13, mino_run8 ] {ai_run(12);};
 void() mino_run8 =[ $walk15, mino_run9 ] {ai_run(12);};
-void() mino_run9 =[ $walk17, mino_run10 ] {ai_run(9);};
+void() mino_run9 =[ $walk17, mino_run10 ] {ai_run(9); if (self.spawnflags & 2) ShufflerCheckForSlap(-1); };
 void() mino_run10 =[ $walk19, mino_run11 ] {ai_run(10);monster_footstep(FALSE);};
 void() mino_run11 =[ $walk21, mino_run12 ] {ai_run(4);};
 void() mino_run12 =[ $walk23, mino_run ] {ai_run(9);};
 
-//----------------------------------------------------------------------
-void() mino_run =
-{
+void() mino_run = {
 	if (self.attack_rage) mino_rage1();
 	else mino_run1();
 };
 
-//----------------------------------------------------------------------
 // Short howl animation to switch to rage mode
-//----------------------------------------------------------------------
-void() mino_howl1 =[ $howl1, mino_howl2 ] {
-	sound (self, CHAN_WEAPON, "kinn/shuffler/big1.wav", 1, ATTN_NORM);};
+void() mino_howl1 =[ $howl1, mino_howl2 ] {sound (self, CHAN_WEAPON, "kinn/shuffler/big1.wav", 1, ATTN_NORM);};
 void() mino_howl2 =[ $howl3, mino_howl3 ] {};
 void() mino_howl3 =[ $howl5, mino_howl4 ] {};
 void() mino_howl4 =[ $howl7, mino_howl5 ] {};
@@ -150,23 +144,19 @@ void() mino_howl10 =[ $howl27, mino_howl11 ] {};
 void() mino_howl11 =[ $howl29, mino_howl12 ] {};
 void() mino_howl12 =[ $howl31, mino_run ] {};
 
-//============================================================================
 // MELEE ATTACK (claws)
-//============================================================================
-void(float side) mino_claw =
-{
+void(float side) mino_claw = {
 	local float ldmg;
 	
 	if (!self.enemy) return;
 	if (self.health < 1) return;
-	ai_face ();						// Turn towards enemy target
+	ai_face();						// Turn towards enemy target
 	ai_damagebreakable(50);			// Damage any breakables
 
 	if (!ai_checkmelee(MONAI_MELEEMINOTAUR,MONAI_MELEEZTALL) || !self.enemy.takedamage) {
 		// Melee claw miss sound
 		sound (self, CHAN_WEAPON, "ad171/minotaur/swipe.wav", 1, ATTN_NORM);
-	}
-	else {
+	} else {
 		// Melee claw hit sound
 		if (self.lefty) sound (self, CHAN_WEAPON, "ad171/minotaur/strike1.wav", 1, ATTN_NORM);
 		else sound (self, CHAN_WEAPON, "ad171/minotaur/strike2.wav", 1, ATTN_NORM);
@@ -179,7 +169,6 @@ void(float side) mino_claw =
 	}
 };
 
-//----------------------------------------------------------------------
 // Slap LEFT  - 19, 21, 23, 1, 3, 5
 // Slap RIGHT - 7, 9, 11, 13, 15, 17
 void() mino_slapL1 =[ $bwalk19, mino_slapL2 ] {ai_charge(10);monster_footstep(FALSE);};
@@ -187,33 +176,91 @@ void() mino_slapL2 =[ $bwalk21, mino_slapL3 ] {ai_charge(4);};
 void() mino_slapL3 =[ $bwalk23, mino_slapL4 ] {ai_charge(9);};
 void() mino_slapL4 =[ $bwalk1, mino_slapL5 ] {ai_charge(12);mino_claw(-250);};
 void() mino_slapL5 =[ $bwalk3, mino_slapL6 ] {ai_charge(12);};
-void() mino_slapL6 =[ $bwalk5, mino_slapR1 ] {ai_charge(9);};
+void() mino_slapL6 =[ $bwalk5, mino_slapR1 ] {ai_charge(9);ShufflerFinishedGoonSlap();};
 
 void() mino_slapR1 =[ $bwalk7, mino_slapR2 ] {ai_charge(10);monster_footstep(FALSE);};
 void() mino_slapR2 =[ $bwalk9, mino_slapR3 ] {ai_charge(4);};
 void() mino_slapR3 =[ $bwalk11, mino_slapR4 ] {ai_charge(9);};
 void() mino_slapR4 =[ $bwalk13, mino_slapR5 ] {ai_charge(12);mino_claw(250);};
 void() mino_slapR5 =[ $bwalk15, mino_slapR6 ] {ai_charge(12);};
-void() mino_slapR6 =[ $bwalk17, mino_run ] {ai_charge(9);
+void() mino_slapR6 =[ $bwalk17, mino_run ] {
+	ai_charge(9);
 	// Check if enemy is close, alive and visible before doing more melee
-	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEMINOTAUR,MONAI_MELEEZTALL) && 
-		self.enemy.health > 0 && visible(self.enemy)) self.think = mino_slapL1;
+	if (random() < 0.5 && ai_checkmelee(MONAI_MELEEMINOTAUR,MONAI_MELEEZTALL) && self.enemy.health > 0 && visible(self.enemy)) self.think = mino_slapL1;
+	else ShufflerFinishedGoonSlap();
 };
 
-//----------------------------------------------------------------------
+void(float side) ShufflerDoSlap = {
+	if (side == 1) self.think = mino_slapL1;
+	else if (side == -1) self.think = mino_slapR1;
+	else self.think = mino_gore1;
+};
+
+void(float side) ShufflerCheckForSlap = {
+	local entity goon, best_goon;
+	local float dot, best_dot;
+	local vector vec;
+
+	if (enemy_range == RANGE_MELEE) {
+		if(CanDamage(self.enemy, self)) { ShufflerDoSlap(side); return; } // Keep function nested rather than && with above check, functions do stuff!
+	}
+
+	makevectors(self.angles); //find someone else to slap.
+	goon = findradius(self.origin, 120);
+	best_dot = 0;
+	best_goon = world;
+	while(goon) {
+		if ((goon.flags & FLx_CREATURE) && goon.health > 0 && goon.max_health < 200) { // Only slap the lowly minions.
+			if (CanDamage(goon, self)) {	
+				//see if any entities are in the way of the shot
+				traceline(self.origin, goon.origin, FALSE, self);
+				if (trace_ent == goon) { // Potential goon:
+					vec = normalize(goon.origin - self.origin);
+					dot = vec * v_forward;
+					if (dot > best_dot) {
+						best_dot = dot;
+						best_goon = goon;
+					}
+				}
+			}
+		}
+		goon = goon.chain;
+	}
+
+	if (best_goon != world) { // Found a goon to slap...
+		dprint("goon found: ");
+		dprint(best_goon.classname);
+		dprint("\n");
+		self.monsterflags = self.monsterflags & MF_GOON_SLAP;
+		self.lastvictim = self.oldenemy;
+		self.oldenemy = self.enemy;
+		self.enemy = best_goon; 
+		self.goalentity = best_goon;
+		self.ideal_yaw = vectoyaw(best_goon.origin - self.origin);
+		ShufflerDoSlap(side);
+	}
+};
+
+void() ShufflerFinishedGoonSlap = {
+	if (!(self.monsterflags & MF_GOON_SLAP)) return;	
+
+	self.monsterflags = self.monsterflags - MF_GOON_SLAP;
+	self.enemy = self.oldenemy;
+	self.oldenemy = self.lastvictim;
+	self.goalentity = self.enemy;
+	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
+};
+
 // Rage melee attack
 void() mino_gore1 =[ $gore2, mino_gore2 ] {ai_charge(34);};
 void() mino_gore2 =[ $gore4, mino_gore3 ] {ai_charge(28);monster_footstep(FALSE);};
 void() mino_gore3 =[ $gore6, mino_gore4 ] {ai_charge(26);mino_claw(-250);};
 void() mino_gore4 =[ $gore8, mino_gore5 ] {ai_charge(34);};
 void() mino_gore5 =[ $gore10, mino_gore6 ] {ai_charge(28);monster_footstep(FALSE);};
-void() mino_gore6 =[ $gore12, mino_run ] {ai_charge(26);};
+void() mino_gore6 =[ $gore12, mino_run ] {ai_charge(26); if (self.spawnflags & 2) {ShufflerCheckForSlap(0); self.nextthink = time + 0.05;} };
 
-//----------------------------------------------------------------------
-void() mino_melee =
-{
-	// Switch to a faster more deadly melee attack if in rage mode
-	if (self.attack_rage) mino_gore1();
+void() mino_melee = {
+	if (self.attack_rage) mino_gore1(); // Switch to a faster more deadly melee attack if in rage mode
 	else {
 		// Randomly start left or right and then loop
 		if (random() < 0.5) mino_slapR1();
@@ -221,11 +268,8 @@ void() mino_melee =
 	}
 };
 
-//============================================================================
 // JUMP ATTACK - pre-rage only
-//============================================================================
-void() mino_JumpTouch =
-{
+void() mino_JumpTouch = {
 	local float ldmg;
 
 	if (self.health < 1) return;
@@ -260,7 +304,6 @@ void() mino_JumpTouch =
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 void() mino_jump1 =[ $jump1, mino_jump2 ] {
 	self.jump_flag = time + MONAI_JUMPMINOTIME;
 	// Use combat idle grunt sounds (can get annoying otherwise)
@@ -291,7 +334,7 @@ void() mino_jump8 =[ $jump15, mino_jump8 ] {
 	}
 	self.oldorigin = self.origin;
 };
-//----------------------------------------------------------------------
+
 void() mino_jump10 =[ $jump19, mino_jump12 ] {ai_charge(8);monster_footstep(FALSE);};
 void() mino_jump12 =[ $jump23, mino_run ] {ai_charge(10);ai_resetangles();
 	// If close enough start melee ELSE return to run cycle
@@ -299,11 +342,8 @@ void() mino_jump12 =[ $jump23, mino_run ] {ai_charge(10);ai_resetangles();
 		self.think = mino_melee;
 };
 
-//============================================================================
 // RANGE ATTACK - Plasma Bolts (rocket)
-//============================================================================
-float(entity targ) minotaur_skin_type = 
-{
+float(entity targ) minotaur_skin_type = {
 	// Switch skin around for spawning effect
 	if (targ.spawnflags & MON_MINOTAUR_MINIONS) {
 		if (targ.poisonous) return MINO_GREEN;
@@ -313,12 +353,8 @@ float(entity targ) minotaur_skin_type =
 	return MINO_BLUE;
 };
 
-
-//============================================================================
 // RANGE ATTACK - Plasma Bolts (rocket)
-//============================================================================
-void() minotaur_create_attachment =
-{
+void() minotaur_create_attachment = {
 	// Are the attachments setup yet?
 	if (!self.attachment) {
 		self.attachment = spawn();
@@ -334,9 +370,7 @@ void() minotaur_create_attachment =
 	}
 };
 
-//----------------------------------------------------------------------
-void() minotaur_finish_attachment =
-{
+void() minotaur_finish_attachment = {
 	if (self.attachment) {
 		setmodel(self.attachment, "");
 		self.attachment.state = STATE_OFF;
@@ -347,9 +381,7 @@ void() minotaur_finish_attachment =
 	}
 };
 
-//----------------------------------------------------------------------
-void() minotaur_remove_attachment =
-{
+void() minotaur_remove_attachment = {
 	if (self.attachment) {
 		self.attachment.think = SUB_Remove;
 		self.attachment.nextthink = time + 0.1;
@@ -360,9 +392,7 @@ void() minotaur_remove_attachment =
 	}
 };
 
-//----------------------------------------------------------------------
-void(entity handent, vector orgofs, float dbframe) minotaur_handball =
-{
+void(entity handent, vector orgofs, float dbframe) minotaur_handball = {
 	local vector org;
 	
 	// Frame 0 is start of the sequence (move everything into place)
@@ -373,7 +403,7 @@ void(entity handent, vector orgofs, float dbframe) minotaur_handball =
 		setsize (handent, VEC_ORIGIN, VEC_ORIGIN);
 		handent.movetype = MOVETYPE_NONE;
 		handent.solid = SOLID_NOT;
-		handent.skin = self.exactskin;
+		handent.skin = minotaur_skin_type(self);
 		handent.alpha = 0.85;
 	}
 	
@@ -385,11 +415,8 @@ void(entity handent, vector orgofs, float dbframe) minotaur_handball =
 	handent.frame = dbframe;
 };
 
-//----------------------------------------------------------------------
 // There is a ball for each hand with different origins
-//----------------------------------------------------------------------
-void(vector leftofs, vector rightofs, float dbframe) minotaur_hands =
-{
+void(vector leftofs, vector rightofs, float dbframe) minotaur_hands = {
 	if (self.health < 1) return;
 	
 	// Keep turning towards enemy
@@ -401,11 +428,8 @@ void(vector leftofs, vector rightofs, float dbframe) minotaur_hands =
 	minotaur_handball(self.attachment2, rightofs, dbframe);
 };
 
-//----------------------------------------------------------------------
 // Fire a volley of plasma/poison bolts at the enemy
-//----------------------------------------------------------------------
-void(vector orgofs, float angofs) minotaur_fire =
-{
+void(vector orgofs, float angofs) minotaur_fire = {
 	local vector org, dir;
 
 	if (!self.enemy) return;
@@ -426,6 +450,17 @@ void(vector orgofs, float angofs) minotaur_fire =
 		// Projectile behaves like plasma (light/trail/impact effects)
 		// The correct projectile model is switched in launch function
 		launch_plasma(org, dir, CT_PROJ_PLASMA, self.attack_speed);
+	}
+
+	if (self.spawnflags & 2) {
+		if (self.exactskin > 0) newmis.color_x = 40; // White champion version gets blue.
+		else newmis.color_x = 104; // Yellow/gold
+
+		if (self.poisonous) newmis.color_x = 56; // Swampy green.
+		newmis.attack_ricochet = 0; // No ricochet
+		newmis.attack_lifetime = time + LIFE_PROJECTILE;
+		newmis.tracer_time = TRUE; // Activates the tracer effect.
+		SUB_Think(newmis,Think_Projectile,0.1);
 	}
 };
 
@@ -467,17 +502,11 @@ void() mino_magic14 =[ $magic27, mino_magic15 ] {};
 void() mino_magic15 =[ $magic29, mino_magic16 ] {ai_face();};
 void() mino_magic16 =[ $magic31, mino_run ] {ai_face();};
 
-//----------------------------------------------------------------------
 // Spawn particles from body that float upwards during summons
-//----------------------------------------------------------------------
-void() mino_sumeffect = 
-{ particle_debuff(self.origin+'0 0 64', 16, rint(4+random()*4), PARTICLE_BURST_GREEN);};
+void() mino_sumeffect = { particle_debuff(self.origin+'0 0 64', 16, rint(4+random()*4), PARTICLE_BURST_GREEN);};
 
-//----------------------------------------------------------------------
 // Display a green ball where the gargoyle is spawning
-//----------------------------------------------------------------------
-void(float dbframe) mino_sumball =
-{
+void(float dbframe) mino_sumball = {
 	// Double check the space checks worked
 	if (self.aflag == FALSE) return;
 	
@@ -500,15 +529,12 @@ void(float dbframe) mino_sumball =
 	particle_explode(self.pos2, 5+random()*10, 3, self.part_style, PARTICLE_BURST_MINOTAUR);
 };
 
-//----------------------------------------------------------------------
 // Raise up head and howl at the sky and spawn green particles from body
 // Always check if there is space to spawn a gargoyle first
 // Block monster pain function so that the summons is completed
-//----------------------------------------------------------------------
 void() mino_summon1 =[ $howl1, mino_summon2 ] {ai_face();self.pain_finished = time + 2;};
 void() mino_summon2 =[ $howl3, mino_summon3 ] {ai_face();};
-void() mino_summon3 =[ $howl5, mino_summon4 ] {ai_face();mino_sumeffect();
-	sound (self, CHAN_BODY, "kinn/shuffler/big1.wav", 1, ATTN_NORM);};
+void() mino_summon3 =[ $howl5, mino_summon4 ] {ai_face();mino_sumeffect();sound (self, CHAN_BODY, "kinn/shuffler/big1.wav", 1, ATTN_NORM);};
 void() mino_summon4 =[ $howl7, mino_summon5 ] {mino_sumeffect();};
 void() mino_summon5 =[ $howl9, mino_summon6 ] {mino_sumeffect();};
 void() mino_summon6 =[ $howl11, mino_summon7 ] {mino_sumeffect();};
@@ -539,11 +565,8 @@ void() mino_summon16 =[ $howl31, mino_summon17 ] {};
 void() mino_summon17 =[ $howl33, mino_summon18 ] {ai_face();};
 void() mino_summon18 =[ $howl35, mino_run ] {ai_face();SUB_AttackFinished (1 + 2*random());};
 
-//----------------------------------------------------------------------
 // Both type of minotaurs go through the same magic function
-//----------------------------------------------------------------------
-void() mino_magic =
-{
+void() mino_magic = {
 	local entity miniondef;
 	
 	// Make sure the attachments are setup ready
@@ -580,11 +603,8 @@ void() mino_magic =
 	else mino_magic1();
 };
 
-//============================================================================
 // CHARGE ATTACK - just been hit with a long pain animation (pre-rage only)
-//============================================================================
-void(float dist) mino_chargecheck =
-{
+void(float dist) mino_chargecheck = {
 	// turn, face and pursue enemy
 	ai_charge(dist);
 	// Close enough for melee combat?
@@ -595,7 +615,6 @@ void(float dist) mino_chargecheck =
 	else if (!infront(self.enemy)) self.think = mino_run;
 };
 
-//----------------------------------------------------------------------
 void() mino_charge1 =[ $charge1, mino_charge2 ] {mino_chargecheck(34);};
 void() mino_charge2 =[ $charge3, mino_charge3 ] {mino_chargecheck(28);monster_footstep(FALSE);};
 void() mino_charge3 =[ $charge5, mino_charge4 ] {mino_chargecheck(26);};
@@ -603,15 +622,12 @@ void() mino_charge4 =[ $charge7, mino_charge5 ] {mino_chargecheck(34);};
 void() mino_charge5 =[ $charge9, mino_charge6 ] {mino_chargecheck(28);monster_footstep(FALSE);};
 void() mino_charge6 =[ $charge11, mino_charge1 ] {mino_chargecheck(26);};
 
-//----------------------------------------------------------------------
-void() mino_charge =
-{
+void() mino_charge = {
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
 	self.attack_finished = time + 2 + random();
 	mino_charge1();
 };
 
-//============================================================================
 // (133) Quick pain flinch backward
 void() mino_pain1 = [ $pain1, mino_pain2 ] {};
 void() mino_pain2 = [ $pain2, mino_pain3 ] {};
@@ -622,7 +638,6 @@ void() mino_pain6 = [ $pain6, mino_pain7 ] {};
 void() mino_pain7 = [ $pain7, mino_pain8 ] {};
 void() mino_pain8 = [ $pain8, mino_run ] {};
 
-//----------------------------------------------------------------------
 // (141) Stationary - shake head/arms
 // Block the pain and then start charging like crazy
 void() mino_shake1 = [ $shake1, mino_shake2 ] {self.pain_finished = time + 2;};

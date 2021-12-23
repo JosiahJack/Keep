@@ -65,6 +65,8 @@ float(float cam_angle1, float cam_angle2) camera_check_anglezero;
 float(float baxis_start, float baxis_control, float baxis_end, float baxis_time) bezier_axis;
 vector(vector bez_start, vector bez_control, vector bez_end, float bez_timemax, float bez_timeleft) bezier_curve;
 void() misc_camera_filewrite;
+void () earthquake_postthink;
+void (entity ownerEntity) sphere_remove;
 
 // USED : Load (map command) NEW MAP or NEW GAME
 // This is a function called via the engine for new games and resets all parm data back to default values, followed by Decode.
@@ -1102,6 +1104,8 @@ void() PlayerPreThink = {
 	if (self.zerogtime < time) self.gravity = self.oldgravity;// reset normal gravity
 	else self.gravity = 0.0001;// zero G (0 OR 1 is normal), pOx - END  - func_water & func_ladder support
 
+	// TeamCheckLock(); // TODO: Implement Rogue's teamplay.qc stuff.
+	// CheckMOTD(); // TODO: Implement Rogue's teamplay.qc stuff.
 	CheckRules();
 	Divine_Check(); // Lightning strike.
 	WaterMove();
@@ -1295,7 +1299,7 @@ void() PlayerPostThink = {
 	self.SendFlags = self.SendFlags | PLAYER_ORIGIN; // CSQC ping
 
 	// Special systems that pause the QC/Game
-	if (intermission_running > 0) return;	// intermission or finale
+	if (intermission_running > 0) { earthquake_postthink(); return; } // Level intermission or finale, added hook for rogue earthquake sequence.
 	if (secloc_running > 0) return;
 	if (cinematic_running > 0) { // separate from `cutscene` and its implementation
 		// The focalpoint system is about tracking an entity while the camera is stationary or moving and updating the player viewing angle.
@@ -1363,6 +1367,7 @@ void() PlayerPostThink = {
 
 	if (self.deadflag) return; // Dead
 	if (self.target2 != "") trigger_strs(self.target2, self); self.target2 = ""; // Any spawn targets to update?
+
 	if (self.movetype == MOVETYPE_FLY && self.waterlevel && self.waterlevel < 2) self.velocity = self.velocity * 0.7; // flight adjustment we have boots of levitation
 	W_WeaponFrame (); // Impulse commands and Quad updates
 
@@ -1717,5 +1722,10 @@ void() ClientDisconnect = {
 	bprint (ftos(self.frags));
 	bprint (" frags\n");
 	sound (self, CHAN_BODY, "player/tornoff2.wav", 1, ATTN_NONE);
-	set_suicide_frame ();
+	sphere_remove(self);
+	// if (tag_token_owner == self) tag_token_drop (); // TODO: Add rogue's teamplay.qc stuff
+	// TeamDropFlagOfPlayer(self); // TODO: Add rogue's teamplay.qc stuff
+	self.steam = -50.000;
+	self.team = FALSE;
+	set_suicide_frame();
 };

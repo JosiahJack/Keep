@@ -190,16 +190,7 @@ void() dreadlord_souls3  =[ $attackb1,  dreadlord_souls2  ] {ai_face();
 };
 
 float(float d, float run) ai_wraith2 = {
-    if (self.spawnflags & SPAWN_SOUL) {
-        if (ai_aether (dreadlord_aether1, dreadlord_appear1))
-            return TRUE;
-        ai_wraith ("wraith/speak.wav");
-        if (run) {
-			if (ai_souls (d, dreadlord_souls1)) return TRUE;
-        } else {
-			if (Wraith_FindSoul ()) {self.th_run();  return TRUE;}
-        }
-    } else ai_wraith ("wraith/speak.wav");
+    ai_wraith("wraith/speak.wav");
     return FALSE;
 };
 
@@ -310,8 +301,8 @@ void() overlord_axe9  =[ $attack9,  overlord_axe10 ] {ai_charge(self.speed);};
 void() overlord_axe10 =[ $attack10, overlord_run1  ] {ai_charge(self.speed);};
 
 // Mace - - - - - -
-void() overlord_spray1 =[ $attackc6,  overlord_spray2 ] {wrath_shot(2);wrath_shot(1);};
-void() overlord_spray2 =[ $attackc7,  overlord_spray3 ] {ai_charge(self.speed);wrath_shot(0);wrath_shot(-1);wrath_shot(-2);wrath_shot(-3);};
+void() overlord_spray1 =[ $attackc6,  overlord_spray2 ] {nehwraith_shot(2);nehwraith_shot(1);};
+void() overlord_spray2 =[ $attackc7,  overlord_spray3 ] {ai_charge(self.speed);nehwraith_shot(0);nehwraith_shot(-1);nehwraith_shot(-2);nehwraith_shot(-3);};
 void() overlord_spray3 =[ $attackb11, overlord_spray4 ] {ai_charge(self.speed);};
 void() overlord_spray4 =[ $attackb12, overlord_spray5 ] {ai_charge(self.speed);};
 void() overlord_spray5 =[ $attackb13, overlord_spray6 ] {ai_charge(self.speed);};

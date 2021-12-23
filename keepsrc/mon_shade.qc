@@ -182,34 +182,23 @@ void() Shade_MeatTouch = {
     }
 };
 
-//------------------------------------------------------------------------//
-//  The nightshade shoots a bloody gib at its target.
-//------------------------------------------------------------------------//
+// The nightshade shoots a bloody gib at its target.
 void() Shade_Meat = {
-    local   vector  org;    // Location of dragon's mouth.
-    local   vector  dir;    // Vector from 'org' to gib target.
-    local   vector  vec, vy;
-    local   float   mx;     // Length of dir, which is 0 <= x <= 1.
-    local   float   sped;   // Missile speed.
-    local   float   up;     // Extra up speed.
-    local   float   loop, spread, arc;
+    local   vector  org, dir, vec, vy; // org = location of dragon's mouth.  dir = vector from 'org' to gib target.
+    local   float   mx, sped, up, loop, spread, arc; // mx = length of dir, which is 0 <= x <= 1.
 
     up = 200;
     sped = 800;     // Dragons use 'height * 200 + 800'.
     org = '50 -5 -7';
-
     makevectors(self.angles);
     vy = v_right;
     org = self.origin + (v_forward*org_x) + (v_right*org_y) + (v_up*org_z);
     dir = self.enemy.origin + self.enemy.view_ofs;
     dir = Maim_Toss (org, dir, sped, up, world, '0 0 0');
     mx = vlen(dir);
-
     sound (self, CHAN_WEAPON, "drake/dragon/ice.wav", 1, ATTN_NORM);
-
-	// Fire # of shots equal to max zombies.
     arc = 0.06;
-    loop = 5;
+    loop = 5; // Fire # of shots equal to max zombies.
     spread = (loop - 1) * arc;
     while (loop > 0) {
         vec = dir + (vy * spread);
@@ -238,27 +227,19 @@ void() Shade_Meat = {
 //  is phased in or out.                                                  //
 ////////////////////////////////////////////////////////////////////////////
 
-// Sets the nightshade's alpha.
-void(float mx) shade_alpha = { self.alpha = mx; };
-
 // Set the nightshade's speed.  It gets faster when hurt -- "Now I'm angry!"
 void() shadow_speed = {
-    local   float   sped;
+    local float sped;
 
     if (self.max_health >= 1) {
         sped = 1 - (self.health / self.max_health);
         if (sped < 0) sped = 0;
         sped = (sped * 16) & 15;
-    }
-    else
-        sped = 0;
+    } else sped = 0;
     self.speed = 20 + sped;
 };
 
-//------------------------------------------------------------------------//
-//  This lets the nightshade make spooky noises as it drifts.
-//  Assumes the nightshade has phased out and is not attacking.
-//------------------------------------------------------------------------//
+// This lets the nightshade make spooky noises as it drifts.  Assumes the nightshade has phased out and is not attacking.
 void() shade_sfx_idle = {
     if (self.waitmin < time) {
         if (random() < 0.01) {
@@ -279,11 +260,11 @@ void() shade_sfx_idle = {
 // This changes the nightshade to its invisible form.  The nightshade phases out and remains in place, totally silent.
 void(float in) shadow_phase = {
     if (in) { // Phase in.
-        shade_alpha(0.7);
+        self.alpha = 0.7;
         self.takedamage = DAMAGE_AIM;
     } else {
         // Phase out.
-        shade_alpha (0.01);
+        self.alpha = 0.01;
         self.takedamage = DAMAGE_NO;
     }
 };
@@ -295,14 +276,14 @@ void() shade_stand = {
 
     ai_stand();
 };
-void()  shadow_stand1 =[ $form7,  shadow_stand2  ] {shade_alpha (0.7); shade_stand();};
-void()  shadow_stand2 =[ $form6,  shadow_stand3  ] {shade_alpha (0.6); shade_stand();};
-void()  shadow_stand3 =[ $form5,  shadow_stand4  ] {shade_alpha (0.5); shade_stand();};
-void()  shadow_stand4 =[ $form4,  shadow_stand5  ] {shade_alpha (0.4); shade_stand();};
-void()  shadow_stand5 =[ $form3,  shadow_stand6  ] {shade_alpha (0.3); shade_stand();};
-void()  shadow_stand6 =[ $form2,  shadow_stand7  ] {shade_alpha (0.2); shade_stand();};
-void()  shadow_stand7 =[ $form1,  shadow_stand8  ] {shade_alpha (0.1); shade_stand();};
-void()  shadow_stand8 =[ $form1,  shadow_stand9  ] {/*shadow_phase (FALSE);*/ shade_alpha(0.7);  shade_stand();};
+void()  shadow_stand1 =[ $form7,  shadow_stand2  ] {self.alpha = 0.7; shade_stand();};
+void()  shadow_stand2 =[ $form6,  shadow_stand3  ] {self.alpha = 0.6; shade_stand();};
+void()  shadow_stand3 =[ $form5,  shadow_stand4  ] {self.alpha = 0.5; shade_stand();};
+void()  shadow_stand4 =[ $form4,  shadow_stand5  ] {self.alpha = 0.4; shade_stand();};
+void()  shadow_stand5 =[ $form3,  shadow_stand6  ] {self.alpha = 0.3; shade_stand();};
+void()  shadow_stand6 =[ $form2,  shadow_stand7  ] {self.alpha = 0.2; shade_stand();};
+void()  shadow_stand7 =[ $form1,  shadow_stand8  ] {self.alpha = 0.1; shade_stand();};
+void()  shadow_stand8 =[ $form1,  shadow_stand9  ] {/*shadow_phase (FALSE);*/ self.alpha = 0.7;  shade_stand();};
 void()  shadow_stand9 =[ $form1,  shadow_stand9  ] {shade_stand();};
 
 void()  shadow_stand = {
@@ -317,14 +298,14 @@ void(float d) shade_walk = {
 	}
     ai_walk(d);
 };
-void()  shadow_walk1  =[ $form7,  shadow_walk2  ] {shade_alpha (0.7); shade_walk(8);};
-void()  shadow_walk2  =[ $form6,  shadow_walk3  ] {shade_alpha (0.6); shade_walk(8);};
-void()  shadow_walk3  =[ $form5,  shadow_walk4  ] {shade_alpha (0.5); shade_walk(8);};
-void()  shadow_walk4  =[ $form4,  shadow_walk5  ] {shade_alpha (0.4); shade_walk(8);};
-void()  shadow_walk5  =[ $form3,  shadow_walk6  ] {shade_alpha (0.3); shade_walk(8);};
-void()  shadow_walk6  =[ $form2,  shadow_walk7  ] {shade_alpha (0.2); shade_walk(8);};
-void()  shadow_walk7  =[ $form1,  shadow_walk8  ] {shade_alpha (0.1); shade_walk(8);};
-void()  shadow_walk8  =[ $form1,  shadow_walk9  ] {/*shadow_phase (FALSE);*/ shade_alpha(0.7);  shade_walk(8);};
+void()  shadow_walk1  =[ $form7,  shadow_walk2  ] {self.alpha = 0.7; shade_walk(8);};
+void()  shadow_walk2  =[ $form6,  shadow_walk3  ] {self.alpha = 0.6; shade_walk(8);};
+void()  shadow_walk3  =[ $form5,  shadow_walk4  ] {self.alpha = 0.5; shade_walk(8);};
+void()  shadow_walk4  =[ $form4,  shadow_walk5  ] {self.alpha = 0.4; shade_walk(8);};
+void()  shadow_walk5  =[ $form3,  shadow_walk6  ] {self.alpha = 0.3; shade_walk(8);};
+void()  shadow_walk6  =[ $form2,  shadow_walk7  ] {self.alpha = 0.2; shade_walk(8);};
+void()  shadow_walk7  =[ $form1,  shadow_walk8  ] {self.alpha = 0.1; shade_walk(8);};
+void()  shadow_walk8  =[ $form1,  shadow_walk9  ] {/*shadow_phase (FALSE);*/ self.alpha = 0.7;  shade_walk(8);};
 void()  shadow_walk9  =[ $form1,  shadow_walk9  ] {shade_walk(8); shade_sfx_idle ();};
 
 void()  shadow_walk = {
@@ -340,14 +321,14 @@ void() shade_sfx_fly = {
     }
 }; 
 
-void()  shadow_form1  =[ $form1, shadow_form2  ] {shadow_phase (TRUE); shade_alpha (0.1); ai_run(self.speed);};
-void()  shadow_form2  =[ $form2, shadow_form3  ] {shade_alpha (0.2); ai_run(self.speed);};
-void()  shadow_form3  =[ $form3, shadow_form4  ] {shade_alpha (0.3); ai_run(self.speed);};
-void()  shadow_form4  =[ $form4, shadow_form5  ] {shade_alpha (0.4); ai_run(self.speed);};
-void()  shadow_form5  =[ $form5, shadow_form6  ] {shade_alpha (0.5); ai_run(self.speed);};
-void()  shadow_form6  =[ $form6, shadow_form7  ] {shade_alpha (0.6); ai_run(self.speed);};
-void()  shadow_form7  =[ $form7, shadow_run1   ] {shade_alpha (0.7); ai_run(self.speed);};
-void()  shadow_run1   =[ $fly1,  shadow_run2   ] {shade_alpha (0.7); shadow_speed(); ai_run(self.speed);};
+void()  shadow_form1  =[ $form1, shadow_form2  ] {shadow_phase (TRUE); self.alpha = 0.1; ai_run(self.speed);};
+void()  shadow_form2  =[ $form2, shadow_form3  ] {self.alpha = 0.2; ai_run(self.speed);};
+void()  shadow_form3  =[ $form3, shadow_form4  ] {self.alpha = 0.3; ai_run(self.speed);};
+void()  shadow_form4  =[ $form4, shadow_form5  ] {self.alpha = 0.4; ai_run(self.speed);};
+void()  shadow_form5  =[ $form5, shadow_form6  ] {self.alpha = 0.5; ai_run(self.speed);};
+void()  shadow_form6  =[ $form6, shadow_form7  ] {self.alpha = 0.6; ai_run(self.speed);};
+void()  shadow_form7  =[ $form7, shadow_run1   ] {self.alpha = 0.7; ai_run(self.speed);};
+void()  shadow_run1   =[ $fly1,  shadow_run2   ] {self.alpha = 0.7; shadow_speed(); ai_run(self.speed);};
 void()  shadow_run2   =[ $fly2,  shadow_run3   ] {ai_run(self.speed);};
 void()  shadow_run3   =[ $fly3,  shadow_run4   ] {ai_run(self.speed);};
 void()  shadow_run4   =[ $fly4,  shadow_run5   ] {ai_run(self.speed);};
@@ -387,7 +368,7 @@ void()  shadow_bite16 =[ $attack2,  shadow_bite17 ] {dark_melee(); Ryu_Bite();};
 void()  shadow_bite17 =[ $attack1,  shadow_run1   ] {dark_melee(); self.attack_state = AS_STRAIGHT;};
 
 void() shadow_strike = {
-    shade_alpha (0.7);
+    self.alpha = 0.7;
     self.attack_state = AS_STRAIGHT;    // Nightshade does not strafe.
     traceline(self.origin, self.enemy.origin, TRUE, self); // If path crosses contents, use only the bite.
     if (trace_inopen)
@@ -403,7 +384,7 @@ void() shadow_strike = {
 //  Missile attacks!
 void() shadow_missile1  =[ $attack1,  shadow_missile2  ] {
     if (!self.takedamage) shadow_phase (TRUE);    // Fire command hack!
-    shade_alpha (0.7);
+    self.alpha = 0.7;
     self.attack_state = AS_STRAIGHT;    // Never strafe  
     dark_missile();
 };
@@ -451,10 +432,8 @@ void(entity inflictor, entity attacker, float damage) shadow_pain = {
     if (self.pain_finished > time) return; // Same size, standard pain.
 
     self.pain_finished = time + 0.5; 
-    if (random() < 0.5)
-        sound (self, CHAN_VOICE, "drake/shade/pain.wav", 1, ATTN_NORM);
-    else
-        sound (self, CHAN_VOICE, "drake/shade/pain2.wav", 1, ATTN_NORM);
+    if (random() < 0.5) sound (self, CHAN_VOICE, "drake/shade/pain.wav", 1, ATTN_NORM);
+    else sound (self, CHAN_VOICE, "drake/shade/pain2.wav", 1, ATTN_NORM);
 
     if (SUB_IgnorePain ()) return; // No pain anims in Nightmare.
     if (self.waitmin > time) {
@@ -462,7 +441,7 @@ void(entity inflictor, entity attacker, float damage) shadow_pain = {
     }
     // Will go into pain...
     self.waitmin = time + 5;
-    shade_alpha (0.7);   // Reset alpha if it was fading.
+    self.alpha = 0.7;   // Reset alpha if it was fading.
     self.pain_finished = time + 0.5;
     self.attack_state = AS_STRAIGHT;
     self.attack_finished = 0;       // can attack anytime now!
@@ -472,12 +451,9 @@ void(entity inflictor, entity attacker, float damage) shadow_pain = {
     r1 = 0.4;
     r2 = 0.7;   // Was 0.8.
     // Standard pain.
-	if (r < r1)
-		shadow_pain1();
-	else if (r < r2)
-		shadow_painb1();
-	else
-		shadow_painc1();
+	if (r < r1) shadow_pain1();
+	else if (r < r2) shadow_painb1();
+	else shadow_painc1();
 };
 
 // DEATH - - - - - - - - - - - - - - - -
@@ -486,7 +462,6 @@ void() shadow_boom = {
     self.alpha = 1;
     self.deadflag = DEAD_DEAD;
     DropCoin(8);
-    //Pets_Free (self);
 
     // Go boom.
     T_RadiusDamage (self, self, 100, world, DAMAGEALL);    // wrath=80, tarbaby=120.

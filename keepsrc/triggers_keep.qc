@@ -27,8 +27,8 @@
 // NO CHARGE to the recipient.
 //
 // Stats:
-// Entity count: 22
-// Function count: 27
+// Entity count: 23
+// Function count: 32
 //
 // Implements: Triggers (continued)	
 //
@@ -52,8 +52,10 @@ void () counter_on_use;
 void () counter_off_use;
 void () oncount_use;
 void() func_wall_use;
+void(void() th_activate, entity attempter) keyuser_attempt;
+void() keyuser_setup;
 
-void () trigger_remove = { self.classname = "trigger_void"; trigger_void(); }; // [ENTITY], redirect to AD's improved version.
+void () trigger_remove = { self.classname = "trigger_void"; trigger_void(); }; // [ENTITY], redirect to AD's improved safer version.
 
 void () trigger_setgravity = { // [ENTITY], redirect to AD's improved version.
 	self.classname = "trigger_gravity";
@@ -92,7 +94,7 @@ void () command_use_server = { // [FUNCTION]
 };
 
 void () command_use = { // [FUNCTION]
-	localcmd (self.message);
+	if (self.message) localcmd(self.message);
 	if (!(self.spawnflags & CMD_DO_NOT_TERMINATE)) localcmd("\n");
 	if (self.classname == "info_command_spawn") entity_hide(self);
 };
@@ -124,12 +126,37 @@ void () info_command_spawn = { // [ENTITY]
 	self.think = SUB_Null;
 };
 
+void () trigger_command_use = { // [FUNCTION]
+	if (self.attack_finished >= time) return;
+
+	self.attack_finished = time + self.wait;
+   if (self.message) localcmd (self.message);
+};
+
 void () trigger_command_touch = { if (other.flags & FL_CLIENT) command_use(); }; // [FUNCTION]
 
 void () trigger_command = { // [ENTITY]
 	if (self.message == "") { remove(self); return; }
-	InitTrigger ();
+
+	if (self.wait <= 0) self.wait = 0.1;
+	InitTrigger();
 	self.touch = trigger_command_touch;
+};
+
+void () trigger_decoy_touch = { // [FUNCTION]
+   if ( (other.classname != "monster_decoy") ) return ;
+
+   self.touch = SUB_Null;
+   self.nextthink = (time + 0.100);
+   self.think = SUB_Remove;
+   SUB_UseTargets ();
+};
+
+void () trigger_decoy_use = { // [FUNCTION]
+   if ( deathmatch ) { remove (self); return; }
+
+   InitTrigger ();
+   self.touch = trigger_decoy_touch;
 };
 
 void () trigger_waterfall_touch = { // [FUNCTION]
@@ -411,10 +438,10 @@ void () trigger_usekey_skeleton = { // [ENTITY]
 void () requisit_use = { // [FUNCTION]
    if (!(activator.flags & FL_CLIENT)) return;
    if (activator.health <= 0) return;
-   if ((self.items & activator.items) != self.items) return;
+   if (!(self.items & activator.items) || !(self.items2 & activator.items2) || !(self.moditems & activator.moditems) || !(self.perms & activator.perms)) return;
    if (self.attack_finished > time) return;
 
-   self.attack_finished = (time + FL_SWIM);
+   self.attack_finished = (time + 2);
    self.touch = SUB_Null;
    self.use = SUB_Null;
    self.nextthink = (time + 0.100);
@@ -430,8 +457,43 @@ void() requisit_touch = { // [FUNCTION]
 void() trigger_prerequisit = { // [ENTITY]
 	self.use = requisit_use;
 	self.touch = requisit_touch;
-	if (!self.items) self.items = IT_KEY1;
-	InitTrigger ();
+	if (!self.items && !self.items2 && !self.moditems && !self.perms) self.items = IT_KEY1;
+	InitTrigger();
+};
+
+void () hipkeytrigger_use = { // [FUNCTION]
+	if (!(activator.flags & FL_CLIENT)) return;
+	if (self.attack_finished > time) return;
+
+	self.attack_finished = (time + 2);
+	keyuser_attempt(SUB_Null,activator);
+
+	activator.items = (activator.items - self.items);
+	self.touch = SUB_Null;
+	self.use = SUB_Null;
+	self.nextthink = (time + 0.100);
+	self.think = SUB_Remove;
+	self.message = string_null;
+	sound(self,CHAN_VOICE,self.noise4,TRUE,ATTN_NORM);
+	SUB_UseTargets ();
+};
+
+void () hipkeytrigger_touch = { // [FUNCTION]
+	if (!(other.flags & FL_CLIENT)) return;
+	if (other.health <= 0) return;
+
+	activator = other;
+	hipkeytrigger_use();
+};
+
+void () trigger_usekey = { // [ENTITY]
+	keyuser_setup();
+	if (self.spawnflags & 1) self.items = IT_KEY2; // Use gold key.  Was formerly USE_GOLD_KEY, but that's not needed.
+	else if (!(self.spawnflags & 8) && !(self.spawnflags & 16) && self.customkey <= 0) self.items = IT_KEY1; // If normal door settings aren't set, default to hipnotic default.
+
+	self.use = hipkeytrigger_use;
+	self.touch = hipkeytrigger_touch;
+	InitTrigger();
 };
 
 // Thought this could be fun.  Good for ice or slick muddy surfaces. -Qmaster

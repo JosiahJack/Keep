@@ -490,10 +490,6 @@ void() hknight_magicd12 =[ $magica1,  hknight_run1     ] {hk_face();};
 
 //============================================================================
 // ATTACK #5 (Wrath Summoning -- Used by Dark Lords)
-
-// void() monster_wrath;
-// void() wrath_grow1;
-
 // FIXME:  Wrath summoning uses old code that needs updating.
 void() dk_shield;
 void() darklord_magicd1  =[ $magica1,  darklord_magicd2  ] {hk_face();};
@@ -504,9 +500,7 @@ void() darklord_magicd5  =[ $magica11, darklord_magicd6  ] {hk_face();};
 void() darklord_magicd6  =[ $magica10, darklord_magicd7  ] {hk_face();};
 void() darklord_magicd7  =[ $magica9,  hknight_magicd8   ] {hk_face(); /*SpawnMonster_Horde(ID_MP2_WRATH, 3);*/ dk_shield();};
 
-//============================================================================
 // ATTACK #6 (Monster Resurrection -- Bane exclusive)
-
 void() bane_magicd1  =[ $magica1,  bane_magicd2  ] {ai_ritual();};
 void() bane_magicd2  =[ $magica14, bane_magicd3  ] {ai_ritual();};
 void() bane_magicd3  =[ $magica13, bane_magicd4  ] {ai_ritual();};
@@ -809,10 +803,8 @@ void() baneknight_melee = {
     if (!SUB_QuickAttack ())
         if (self.classname == "monster_hell_knight") fast = 0;
     if (fast) {
-        if (self.meleeattack == 1)
-            bane_slice1 ();
-        else if (self.meleeattack == 2)
-            bane_smash1 ();
+        if (self.meleeattack == 1) bane_slice1 ();
+        else if (self.meleeattack == 2) bane_smash1 ();
         else if (self.meleeattack == 3) {
             bane_watk1 ();
             self.meleeattack = 0;
@@ -820,10 +812,8 @@ void() baneknight_melee = {
         return;
     }
 
-    if (self.meleeattack == 1)
-        hknight_slice1 ();
-    else if (self.meleeattack == 2)
-        hknight_smash1 ();
+    if (self.meleeattack == 1) hknight_slice1 ();
+    else if (self.meleeattack == 2) hknight_smash1 ();
     else if (self.meleeattack == 3) {
         hknight_watk1 ();
         self.meleeattack = 0;
@@ -832,10 +822,8 @@ void() baneknight_melee = {
 
 void() bane_win = {
     sound (self, CHAN_VOICE, "drake/bane/laugh.wav", 1, ATTN_NONE); // Update:  Changed from ATTN_NORM to ATTN_NONE for level-wide low laugh.
-    if (self.movetarget || self.charmer)
-        self.th_walk ();
-    else
-        self.th_stand ();
+    if (self.movetarget || self.charmer) self.th_walk ();
+    else self.th_stand ();
 };
 
 // Tougher and meaner red version with fire magic.

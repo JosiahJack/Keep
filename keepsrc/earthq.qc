@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 5
-// Function count: 11
+// Function count: 10
 //
 // Implements: Earthquake System
 //
@@ -136,8 +136,6 @@ void (float value) EarthQuakeTime = { // [FUNCTION]
    value = (value + time);
    if ( (value > hipearthquake) ) hipearthquake = value;
 };
-
-void () earthquake_prethink = {}; // [FUNCTION]
 
 void () earthquake_postthink = { // [FUNCTION]
    if ( (hipearthquake > time) ) {

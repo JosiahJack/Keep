@@ -159,7 +159,6 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/nehahra/soul.mdl");
 	precache_model("progs/null.mdl");
 	precache_model("progs/spark.spr");
-	precache_model("progs/drake/null_256.spr");
 	precache_model("progs/drake/flame2.mdl");
 	precache_model("progs/drake/flame2a.mdl");   // Flames
 	precache_model("progs/custents/beamhit.spr");
@@ -271,4 +270,7 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model(MODEL_HEAL100);
 	precache_model(MODEL_HEAL15B);
 	precache_model(MODEL_HEAL100B);
+	precache_model("progs/rogue/sphere.mdl");
+	precache_sound("rogue/sphere/sphere.wav");
+	precache_model("progs/hipnotic/s_bullet.spr");
 };

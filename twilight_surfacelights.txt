@@ -1,0 +1,96 @@
+Textures that could generate surface lights (note: not needed for sky, using sunlight for that)
+
+Highly likely to always need lights:
+*lava1
+*lavakell5
+lava
++0lavfall
++1lvfall
+barrow
+baslt4_1
+ceil1_3
+central-gwin-cf //dashes for some reason
+dragonwindow1
+dragonwindow2
+fireglass1
+key03_1
+light3_3
+light3_4
+light3_5
+light3_6
+light3_7
+light3_8
+metal5_80
+metal6_3
+midwin
+ogro30b
+orangelight
+r3_32sl1
+r_microluminis // man I love this one
+stngls
+symbol1
+teleport
+window01_1
+window01_2
+window01_3
+window01_4
+window02_1
+window2_1
+window2_2
+window2_3
+window2_4
+window4
+wyndraxwin
+
+Moderately likely to need surface lights (handplace due to offset or might need to use in dark area??):
++0rtex4
+arch2win
+arch2winA
+bigasswindow
+demon2_b
+demon_b
+demon_r
+dkt_window
+eviljr
+kceil_ml
+mosaic5
+pent1_r
+q3a_door1
+r2-centerw2 // dash for some reason
+rtex018
+rtex083
+sancwind01
+sarcophagus02
+swine6d
+swine6h
+vitrail
+towerwindow1
+
+
+Maybe better to hand place due to texture shape, or highly likely to be used without light:
+hereticwindow
+lilwin02
+stngls1 // better to hand place multiple colors?
+stngls3 // better to hand place multiple colors?
+stnglsmage // better to hand place multiple colors?
+window031
+bigwin02
+
+
+
+
+HOW:
+Create a light with the key|value's below, one light for each texture name.
+This light will get copied and placed in front of
+any face with that texture and duplicated every
+128 units.
+
+
+"_surface" "texturename"
+Makes surfaces with the given texture name emit light, by using this light as a template which is copied across those surfaces. Lights are spaced about 128 units (though possibly closer due to bsp splitting) apart and positioned 2 units above the surfaces.
+
+"_surface_offset" "n"
+Controls the offset lights are placed above surfaces for "_surface". Default 2.
+
+"_surface_spotlight" "n"
+For a surface light template (i.e. a light with "_surface" set), setting this to "1" makes each instance into a spotlight, with the direction of light pointing along the surface normal. In other words, it automatically sets "mangle" on each of the generated lights.

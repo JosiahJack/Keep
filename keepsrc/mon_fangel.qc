@@ -74,21 +74,19 @@ void  ()fangel_check_wing =  {
 };
 
 void  ()fangel_find_spot =  {
-	local float crj = 0.00000;
-	local float radius = 0.00000;
-	local float dist = 0.00000;
-	local vector vec = '0.00000 0.00000 0.00000';
+	local float crj, radius, dist;
+	local vector vec;
+
    crj = 0.00000;
    while ( (crj < 50.00000) ) {
-
       radius = 100 + (random() * 100);
-		vec_x = random() * 360;
-		vec_y = random() * 360;
-		vec_z = 0;
+	  vec_x = random() * 360;
+	  vec_y = random() * 360;
+	  vec_z = 0;
       vec = normalize ( vec);
       vec = (self.enemy.origin + (vec * radius));
       vec_z = ((vec_z + 20 + (random() * 20)) + self.enemy.view_ofs_z);
-      tracebox ( self.origin, self.mins, self.maxs, vec, FALSE, self);
+      tracebox(self.origin, self.mins, self.maxs, vec, FALSE, self);
       if ( (trace_fraction == 1.00000) ) {
          dist = (self.origin_z - vec_z);
          if ( (dist < -20.00000) ) {

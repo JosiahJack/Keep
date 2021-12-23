@@ -506,6 +506,7 @@ float CT_ARTBLASTBELT = 577;	// Blast Belt
 float CT_ARTJUMPBOOTS = 578;	// Jump Boots
 float CT_ARTREGEN = 579;		// Regeneration Powerup
 float CT_ARTVITALITY = 580;		// Vitality +25 Max Health
+float CT_ARTSPHERE = 581;		// Vengeance Sphere
 
 float CT_PROGSPAWN = 589;		// Progression spawn
 float CT_ARTTOME = 590;			// Tome of Power

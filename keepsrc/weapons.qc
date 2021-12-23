@@ -48,6 +48,7 @@
 
 entity multi_ent;
 float multi_damage;
+void (vector pos) placebullethole
 
 // Well, we can either do these 55 someodd declarations for player stuff here, or alternatively declare weapon stuff in player.qc and move it up in the progs.src ordering.
 void(entity targ) remoteplayer_run;
@@ -183,7 +184,7 @@ void () HIP_FireMjolnir = { // [FUNCTION]
 	// lag, allow throwing on frame four, even if animation would make the
 	// throw appear a bit late.  Better to have forgiving controls and happy
 	// players than "fake difficulty" for animation's sake.
-    if (Hip_ThrewMjolnir ()) return;
+    if (Hip_ThrewMjolnir()) return;
 
 	W_Reload(0.4);
 	source = (self.origin + '0.000 0.000 16.000');
@@ -193,7 +194,7 @@ void () HIP_FireMjolnir = { // [FUNCTION]
 		source = (source + (v_forward * RANGE_PLAYAXE));
 		traceline (source,(source - (v_up * 50.000)),FALSE,self);
 		if ( ((trace_fraction > 0.300) && (trace_fraction < TRUE)) ) {
-			HIP_FireMjolnirLightning ();
+			HIP_FireMjolnirLightning();
 			W_Reload(1);
 			return;
 		}
@@ -209,7 +210,7 @@ void () HIP_FireMjolnir = { // [FUNCTION]
 		if ((trace_ent.classgroup == CG_ZOMBIE) && trace_ent.classname != "monster_mummy") damage = trace_ent.max_health * 2;
 		trace_ent.axhitme = TRUE;
 		SpawnBlood (trace_ent, org,v_forward,damage);
-		HIP_FireMjolnirLightning ();
+		HIP_FireMjolnirLightning(); dprint("Hit targ slam takedamage\n");
 		T_Damage (trace_ent,self,self,damage, DAMARMOR);
 	} else {
 		if (trace_fraction != TRUE) {
@@ -564,8 +565,9 @@ void(float damage, vector dir) TraceAttack = { // [FUNCTION]
 
 void(float shotcount, vector spread) FireBullets = { // [FUNCTION]
 	local vector direction, src, dir;
-	local float addedtime;
+	local float addedtime, bullet;
 	
+	bullet = 0;
 	makevectors(self.v_angle);
 	if (self.flags & FL_CLIENT) {
 		// Auto aim assist (builtin function 44)
@@ -598,6 +600,11 @@ void(float shotcount, vector spread) FireBullets = { // [FUNCTION]
 			} else {
 				if (self.classtype == CT_MONENF_GUNNER) TraceAttack(9, direction); // More damage
 				else TraceAttack(DAMAGE_SHELL, direction);
+
+				if (!bullet && (trace_ent == world) && (world.hipnoticoptions & HIPNOTIC_BULLETHOLES)) { // Default is off.
+					placebullethole(trace_endpos);
+					bullet = TRUE;
+				}
 			}
 		}
 		shotcount = shotcount - 1;

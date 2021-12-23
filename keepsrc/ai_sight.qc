@@ -541,29 +541,37 @@ void(float wakeupothers) FoundHuntTarget = {
 		if (!self.attack_instant) SUB_AttackFinished (1); // wait a while before first attack
 };
 
-entity() SeeOpposing = {
+entity(float findopposing) SeeTarget = { // [FUNCTION]
 	local float dist;
 	local entity head;
 
-	if (self.alignment == NEUTRAL && !(IsInsane(self))) return FALSE; // I don't care
+	if (self.alignment == NEUTRAL && !(IsInsane(self))) return FALSE; // I careth not.
+	if (!findopposing && self.horn_active && self.charmer) return world; // Already have a leader to follow
 
-	if (self.horn_active) dist = CHARMED_RADIUS; // Shorter sight to keep closer to player who summoned us, maybe
+	if (self.horn_active && findopposing) dist = CHARMED_RADIUS; // Shorter sight to keep closer to player who summoned us, maybe
 	else dist = MON_MAX_RANGE; // NORMAL SIGHT
 
-	if (self.enemymaxdist == TRUE || self.attack_sniper) {
-		dist = 8192; // yikes
-		// dprint("Enemy using sight distance of: ");
-		// dprint(ftos(dist));
-		// dprint("\n");
-	}
+	if (self.enemymaxdist == TRUE || self.attack_sniper) dist = 8192; // yikes
 	head = world;
 	head = findradius (self.origin,dist);
 	while (head) {
-		if ((!(head.flags & FL_NOTARGET) && (head.flags & FLx_CREATURE) && head.invisible_finished < time)) {
-			if ( ((visible (head)) && (head.health > FALSE))) {
-				if (!Align_Match(self,head)){
-					if (head.alignment != NEUTRAL) {
-						return head;
+		if ((!(head.flags & FL_NOTARGET) && ((head.flags & FLx_CREATURE) || (head.classtype == CT_SOUL && self.classtype == CT_MONWRAITHNEHAHRA && self.alpha < 1)) && head.invisible_finished < time)) {
+			if (head.classtype == CT_SOUL && self.classtype == CT_MONWRAITHNEHAHRA && self.alpha < 1 && !self.enemy) return head;
+
+			if (head.health > 0) {
+				if (visible(head)) { // Nested to improve performance by not checking visibility of dead potential enemies.
+					if (findopposing) {
+						if (!Align_Match(self,head)){
+							if (head.alignment != NEUTRAL) {
+								return head;
+							}
+						}
+					} else {
+						if (Align_Match(self,head)) {
+							if (head.alignment != NEUTRAL) {
+								return head;
+							}
+						}
 					}
 				}
 			}
@@ -573,40 +581,12 @@ entity() SeeOpposing = {
 	return head;
 };
 
-entity() SeeFriendly = {
-	local float dist;
-	local entity head;
+entity() SeeOpposing = { return SeeTarget(TRUE); }; // [FUNCTION]
 
-	if (self.alignment == NEUTRAL && !(IsInsane(self))) return FALSE; // I careth not
-
-	if (self.horn_active && self.charmer) return world; // Already have a leader to follow
-	dist = MON_MAX_RANGE; // NORMAL SIGHT
-
-	if (self.enemymaxdist == TRUE || self.attack_sniper) {
-		dist = 8192; // yikes
-		// dprint("Enemy using sight distance of: ");
-		// dprint(ftos(dist));
-		// dprint("\n");
-	}
-	head = world;
-	head = findradius (self.origin,dist);
-	while (head) {
-		if ((!(head.flags & FL_NOTARGET) && (head.flags & FLx_CREATURE) && head.invisible_finished < time)) {
-			if ( ((visible (head)) && (head.health > FALSE))) {
-				if (Align_Match(self,head)) {
-					if (head.alignment != NEUTRAL) {
-						return head;
-					}
-				}
-			}
-		}
-		head = head.chain;
-	}
-	return head;
-};
+entity() SeeFriendly = { return SeeTarget(FALSE); }; // [FUNCTION]
 
 // Main sight routine for finding a target.  Returns TRUE if an enemy was sighted.
-float() FindTarget = {
+float() FindTarget = { // [FUNCTION]
 	local entity client, selected, head;
 	local float r, dist, charmdist,charmmaxdist, charmrand;
 

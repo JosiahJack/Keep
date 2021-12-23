@@ -51,11 +51,8 @@ void() shal_run10	=[	$walk11,	shal_run11	] {ai_run(0);};
 void() shal_run11	=[	$walk12,	shal_run12	] {ai_run(4);};
 void() shal_run12	=[	$walk1,		shal_run1	] {ai_run(5);};
 
-//============================================================================
 // Attachment management (create, finish and delete)
-//============================================================================
-void() shalrath_create_attachment =
-{
+void() shalrath_create_attachment = {
 	// Are the attachments setup yet?
 	if (!self.attachment) {
 		self.attachment = spawn();
@@ -66,29 +63,22 @@ void() shalrath_create_attachment =
 	}
 };
 
-//----------------------------------------------------------------------
-void() shalrath_finish_attachment =
-{
+void() shalrath_finish_attachment = {
 	if (self.attachment) {
 		setmodel(self.attachment, "");
 		self.attachment.state = STATE_OFF;
 	}
 };
 
-//----------------------------------------------------------------------
-void() shalrath_remove_attachment =
-{
+void() shalrath_remove_attachment = {
 	if (self.attachment) {
 		self.attachment.think = SUB_Remove;
 		self.attachment.nextthink = time + 0.1;
 	}
 };
 
-//======================================================================
 // RANGE ATTACK 1 - Homing Missile Attack
-//======================================================================
-void() ShalMissile =
-{
+void() ShalMissile = {
 	// Check if there is a clear line of sight
 	// The original behaviour is ruined by this final check
 	// Baiting shalraths to fire will generate more voreballs flying
@@ -102,9 +92,7 @@ void() ShalMissile =
 	Launch_HomingMissile ('0 8 20', '0 0 10', CT_PROJ_SHAL, self.attack_speed);
 };
 
-//----------------------------------------------------------------------
-void(vector hmofs, float hmframe) Setup_ShalHome =
-{
+void(vector hmofs, float hmframe) Setup_ShalHome = {
 	local vector org;
 	if (self.health < 1) return;
 	

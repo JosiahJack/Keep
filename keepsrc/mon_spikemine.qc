@@ -86,7 +86,6 @@ void() monster_spikemine = {
 
 	setmodel (self,"progs/hipnotic/mon_spikmine.mdl");
 	setsize (self,'-16 -16 -24', '16 16 16'); //MonTiny
-	self.classname = "trap_spike_mine";
 	self.solid = SOLID_BBOX;
 	self.movetype = MOVETYPE_FLYMISSILE;
 	self.avelocity = '-50.000 100.000 150.000';
@@ -106,6 +105,7 @@ void() monster_spikemine = {
 	AddToTotals(self);
 	self.flags = (self.flags | FL_MONSTER);
 	precache_monster(self.classname);
+	self.classname = "trap_spike_mine";
 };
 
 void() trap_spike_mine = {

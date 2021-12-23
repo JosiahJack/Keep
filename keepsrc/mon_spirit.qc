@@ -636,6 +636,7 @@ void() monster_spirit_precache = {
 	precache_model ("progs/redfield/mon_spirit_glow.mdl"); // Glowing aura attachment
 	precache_model ("progs/redfield/sword_spirit.mdl");
 	precache_model (MODEL_SCREAM);			// Scream blast
+	precache_model(MODEL_PROJ_RINGSHOCK);	// Ground shockwave
 	precache_sound ("redfield/spirit/idle1.wav");
 	precache_sound ("redfield/spirit/idlecom1.wav");
 	precache_sound ("redfield/spirit/idlecom2.wav");

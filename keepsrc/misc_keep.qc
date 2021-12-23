@@ -27,28 +27,14 @@
 // NO CHARGE to the recipient.
 //
 // Stats:
-// Entity count: 9
-// Function count: 19
+// Entity count: 8
+// Function count: 18
 //
 // Implements: Various Miscellaneous Effects and Decorations.
 //
 // Description:
-//
+// Various stuff.
 //=============================================================================
-
-void () effect_teleport_use = { // [FUNCTION]
-   WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-   WriteByte (MSG_BROADCAST,TE_TELEPORT);
-   WriteCoord (MSG_BROADCAST,self.origin_x);
-   WriteCoord (MSG_BROADCAST,self.origin_y);
-   WriteCoord (MSG_BROADCAST,self.origin_z);
-   sound (self,CHAN_VOICE,"misc/r_tele1.wav",TRUE,ATTN_NORM);
-};
-
-void () effect_teleport = { // [ENTITY]
-   precache_sound ("misc/r_tele1.wav");
-   self.use = effect_teleport_use;
-};
 
 void() effect_pulse_launch = { // [FUNCTION]
 	local entity missile;
@@ -421,4 +407,27 @@ void() rotating_wall = { // [ENTITY]
 	self.avelocity_x = self.r_wall_x_spin;
 	self.avelocity_y = self.r_wall_y_spin;
 	self.avelocity_z = self.r_wall_z_spin;
+};
+
+void() move_rope_spawn = {
+	self.attachment = find(world,targetname,self.target);
+	if (!self.attachment) self.attachment = find(world,targetname,self.target);
+	if (self.mdl == "") self.mdl = "progs/beam.mdl";
+	if (self.attachment && self.target != "") {
+		dprint("Spawning some ropes!\n");
+		if (self.spawnflags & ENT_SPNSTATIC) QC_ParseBeamGeneric(0,self.mdl,self,self.origin,self.attachment.origin,self.delay, BEAM_STATIC, self.attachment);
+		else QC_ParseBeamGeneric(0,self.mdl,self,self.origin,self.attachment.origin,self.delay, BEAM_NORMAL, self.attachment);
+	} else {
+		dprint("couldn't find a rope target of ");
+		dprint(self.target);
+		dprint("\n");
+	}
+};
+
+void() move_rope = {
+	if (self.delay <= 0) self.delay = 32; // Default length
+	if (self.target != "") {
+		self.think = move_rope_spawn;
+		self.nextthink = time + (random() * 0.5) + 1;
+	}
 };

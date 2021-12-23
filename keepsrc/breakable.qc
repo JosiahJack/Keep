@@ -27,8 +27,8 @@
 // NO CHARGE to the recipient.
 //
 // Stats:
-// Entity count: 18
-// Function count: 36
+// Entity count: 17
+// Function count: 20
 //
 // Implements: Breakable Brush Models System and Breakable Pots
 //
@@ -258,102 +258,25 @@ void() make_breakable_debris;
 void() BecomeExplosion;
 void(float fx,vector spot) Tent_Point;
 
-/*QUAKED func_breakable (0 .5 .8) ? STARTOFF NODAMAGE EXPLOSION SILENT DAMAGE NOMOSTER NOSOUND NOROTATE Not_Easy Not_Normal Not_Hard Not_DM
-Spawn breakable objects from a bmodel
--------- KEYS --------
-target     : targets to fire when breakable is dead/used (only used once)
-target2    : Additional trigger function (need target to be defined as well)
-style      : pre-defined sound/model types - 1=rock, 2=wood, 3=glass, 4=metal, 5=brick, 6=ceramic, 10=custom
-brksound   : Initial breaking sound type (override style default)
-brkimpsound : Impact sound type (override style default)
-brkobjects : Breakable object model type (10-15=rocks, 20-22=woods, 30-32=glass, 40-42=metals, 50-54=brick, 60=ceramic)
-noise     : Initial breaking sound (unique sound file)
-noise1    : Custom Rubble Impact sounds (unique sound files, must have 1 defined)
-noise2    : Custom Rubble Impact sound 2
-noise3    : Custom Rubble Impact sound 3
-noise4    : Custom Rubble Impact sound 4
-brkobj1   : Custom Rubble bmodel objects (unique models, must have 1 defined)
-brkobj2   : Custom Rubble bmodel objects 2
-brkobj3   : Custom Rubble bmodel objects 3
-brkobj4   : Custom Rubble bmodel objects 4
-health    : amount of damage to take before breaking (def 1)
-count     : minimum quantity to spawn (def 4)
-cnt       : random quantity to spawn (def 4) =-1 no random qty
-dmg       : explosive radius damage (emits from center of func object)
-pos1      : x=start particle colour, y=random range, z=quantity
-brkvelbase : Base amount for velocity of broken parts (def "50 50 100")
-brkveladd : Random additions for velocity of broken parts (def "100 100 150")
-brkavel   : Amount of breaking object angle velocity (def 200)
-brkfade   : Fade time before rubble fades away (def 4+random()x4)
-brkmondmg : Damage multiplier for monster damage against breakable
-angles    : direction to throw rubble (override default = impact direction)
-brktrigjump    : Trigger if damaged by jumping monster attack
-brktrigmissile : Trigger if damaged by rocket/grenade/shalball/radiusdmg
-brktrignoplayer: No player/clients can damage this breakable
-brkgravity     : Change the gravity for rubble, useful for underwater (Value = 0-1)
--------- SPAWNFLAGS --------
-STARTOFF  : Will wait for trigger to spawn
-NODAMAGE  : Cannot be damaged or shot, trigger only
-EXPLOSION : trigger sprite/particle explosion
-SILENT    : No initial breakage sound
-DAMAGE    : Spawning rubble can damage (def = 2, use dmg key for touch damage)
-NOMONSTER : monsters cannot damage this breakable and/or spawning rubble will not damage monsters
-NOSOUND   : Spawning rubble has no impact sounds
-NOROTATE  : Spawning rubble has No Y rotation
--------- NOTES --------
-Spawn breakable ojects from a bmodel
-*/
+// Qmaster's custom template breakable setup
+.string break_template1;
+.string break_template2;
+.string break_template3;
+.string break_template4;
+.string break_template5;
+.float brk_obj_count1;
+.float brk_obj_count2;
+.float brk_obj_count3;
+.float brk_obj_count4;
+.float brk_obj_count5;
 
-/*QUAKED func_breakable_spawner (0.5 .5 .8) (-8 -8 -8) (8 8 8) x x EXPLOSION SILENT DAMAGE NOMOSTER NOSOUND NOROTATE Not_Easy Not_Normal Not_Hard Not_DM
-Spawn breakable objects from a single point
--------- KEYS --------
-target     : targets to fire when breakable is dead/used (only used once)
-target2    : Additional trigger function (need target to be defined as well)
-style      : pre-defined sound/model types - 1=rock, 2=wood, 3=glass, 4=metal, 5=brick, 6=ceramic, 10=custom
-brksound   : Initial breaking sound type (override style default)
-brkimpsound : Impact sound type (override style default)
-brkobjects : Breakable object model type (10-15=rocks, 20-22=woods, 30-32=glass, 40-42=metals, 50-54=brick, 60=ceramic)
-noise      : Initial breaking sound (unique sound file)
-noise1    : Custom Rubble Impact sounds (unique sound files, must have 1 defined)
-noise2    : Custom Rubble Impact sound 2
-noise3    : Custom Rubble Impact sound 3
-noise4    : Custom Rubble Impact sound 4
-brkobj1   : Custom Rubble bmodel objects (unique models, must have 1 defined)
-brkobj2   : Custom Rubble bmodel objects 2
-brkobj3   : Custom Rubble bmodel objects 3
-brkobj4   : Custom Rubble bmodel objects 4
-health    : amount of damage to take before breaking (def 1)
-count     : minimum quantity to spawn (def 4)
-cnt       : random quantity to spawn (def 4) =-1 no random qty
-dmg       : explosive radius damage (emits from center of func object)
-pos1      : x=start particle colour, y=random range, z=quantity
-brkvelbase : Base amount for velocity of broken parts (def "50 50 100")
-brkveladd : Random additions for velocity of broken parts (def "100 100 150")
-brkavel   : Amount of breaking object angle velocity (def 200)
-brkfade   : Fade time before rubble fades away (def 4+random()x4)
-angles    : direction to throw rubble (override default = impact direction)
-brktrigjump    : Trigger if damaged by jumping monster attack
-brktrigmissile : Trigger if damaged by rocket/grenade/shalball/radiusdmg
-brkgravity     : Change the gravity for rubble, useful for underwater (Value = 0-1)
-brkvol    : Spawning volume vector for breakable point entity
--------- SPAWNFLAGS --------
-EXPLOSION : trigger sprite/particle explosion
-SILENT    : No initial breakage sound
-DAMAGE    : Spawning rubble can damage (def = 2, use dmg key for touch damage)
-NOMONSTER : Spawning rubble will not damage monsters
-NOSOUND   : Spawning rubble has no impact sounds
-NOROTATE  : Spawning rubble has No Y rotation
--------- NOTES --------
-Spawn breakable ojects from a single point
-*/
-
-void() breakable_remove = {
+void() breakable_remove = { // [FUNCTION]
 	self.think = model_fade;
 	self.nextthink = time + 0.1;
 	self.ltime = self.nextthink;
 };
 
-void() breakable_checkfloor = {
+void() breakable_checkfloor = { // [FUNCTION]
 	// Is it time for the breakable to fade away?
 	if (self.pain_finished > time) {
 		ent_floorcheck(self, FLOOR_TRACE_BREAK); // Check floor below breakable (global function).  Origin at base of model + 16 (typical step height)
@@ -362,7 +285,7 @@ void() breakable_checkfloor = {
 	} else breakable_remove();
 };
 
-void() breakable_particle = {
+void() breakable_particle = { // [FUNCTION]
 	// Are particles disabled? has the model touched something?
 	if (self.wait) {
 		// Is there any time left to setup floor checks
@@ -381,7 +304,7 @@ void() breakable_particle = {
 	}
 };
 
-void() breakable_touch = {
+void() breakable_touch = { // [FUNCTION]
 	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
 	if (self.touchedvoid) { entity_remove(self,0.1); return; }
 	if (other.classtype == CT_FUNCBREAKOBJ) return;	// Ignore other breakables
@@ -412,12 +335,12 @@ void() breakable_touch = {
 };
 
 // Can't have multiple radius explosion on same frame so always delay them to prevent endless loops
-void() funcbreakable_delayexplode = {
+void() funcbreakable_delayexplode = { // [FUNCTION]
 	T_RadiusDamage (self.attachment, self.attachment, self.dmg, self.attachment, DAMAGEALL);
 };
 
 // Main function for generating rubble
-void() funcbreakable_use = {
+void() funcbreakable_use = { // [FUNCTION]
 	local vector dirvec, rorg, gvel, dirorg;
 	local float content_loop, content_flag;
 
@@ -570,7 +493,7 @@ void() funcbreakable_use = {
 	}
 };
 
-void() funcbreakable_touch = {
+void() funcbreakable_touch = { // [FUNCTION]
 	if (!(other.flags & FL_MONSTER)) return; // This only works for monster and special jumping break impacts
 	if (other.flags & FL_ONGROUND) return;
 	if (!self.brktrigjump) return;
@@ -578,7 +501,7 @@ void() funcbreakable_touch = {
 	self.use();
 };
 
-void(entity inflictor, entity attacker, float damage) funcbreakable_pain = {
+void(entity inflictor, entity attacker, float damage) funcbreakable_pain = { // [FUNCTION]
 	local float loop_count;
 	local vector vel;
 
@@ -596,25 +519,13 @@ void(entity inflictor, entity attacker, float damage) funcbreakable_pain = {
 	}
 };
 
-void() funcbreakable_death = {
+void() funcbreakable_death = { // [FUNCTION]
 	if (self.spawnflags & BREAK_NOSHOOT) return;
 	else if (self.activate.flags & FL_CLIENT && self.brktrignoplayer) return; // Check for player exception on damage to breakable
 	else funcbreakable_use();
 };
 
-// Qmaster's custom template breakable setup
-.string break_template1;
-.string break_template2;
-.string break_template3;
-.string break_template4;
-.string break_template5;
-.float brk_obj_count1;
-.float brk_obj_count2;
-.float brk_obj_count3;
-.float brk_obj_count4;
-.float brk_obj_count5;
-
-void() break_template_setup = {
+void() break_template_setup = { // [FUNCTION]
 	if (self.break_template1 != "") precache_model(self.break_template1);
 	if (self.break_template2 != "") precache_model(self.break_template2);
 	if (self.break_template3 != "") precache_model(self.break_template3);
@@ -622,7 +533,7 @@ void() break_template_setup = {
 	if (self.break_template5 != "") precache_model(self.break_template5);
 };
 
-void() make_breakable_debris = {
+void() make_breakable_debris = { // [FUNCTION]
 	local float i;
 	local entity new;
 
@@ -750,7 +661,7 @@ void() make_breakable_debris = {
 };
 
 // Setup all model/sound pre-cache
-void() breakable_cache = {
+void() breakable_cache = { // [FUNCTION]
 	if (self.spawnflags & BREAK_USEMAP) break_template_setup();
 
 	// If a breakable style key setup, update all undefined sounds/model keys
@@ -1034,7 +945,7 @@ void() breakable_cache = {
 };
 	
 // Setup defaults
-void() breakable_defaults = {
+void() breakable_defaults = { // [FUNCTION]
 	self.waitmin = FALSE; // Reset trigger ONCE function
 	if (self.count <= 0) self.count = 4; // Setup rubble counter = count + random*cnt
 	if (self.cnt == 0) self.cnt = 4;
@@ -1069,7 +980,7 @@ void() breakable_defaults = {
 	self.delay = 0; // Can fire other triggers, make sure no delay on breakable function
 };
 
-void() breakable_on = {
+void() breakable_on = { // [FUNCTION]
 	self.use = SUB_Null; // Make sure use function reset
 	
 	// Setup collision based on bmodel type
@@ -1112,8 +1023,50 @@ void() breakable_on = {
 	if (self.brktrigjump) self.touch = funcbreakable_touch;
 };
 
-// Basic workhorse of breakable system (bmodel)
-void() func_breakable = {
+// QUAKED func_breakable (0 .5 .8) ? STARTOFF NODAMAGE EXPLOSION SILENT DAMAGE NOMOSTER NOSOUND NOROTATE Not_Easy Not_Normal Not_Hard Not_DM
+// -------- KEYS --------
+// target     : targets to fire when breakable is dead/used (only used once)
+// target2    : Additional trigger function (need target to be defined as well)
+// style      : pre-defined sound/model types - 1=rock, 2=wood, 3=glass, 4=metal, 5=brick, 6=ceramic, 10=custom
+// brksound   : Initial breaking sound type (override style default)
+// brkimpsound : Impact sound type (override style default)
+// brkobjects : Breakable object model type (10-15=rocks, 20-22=woods, 30-32=glass, 40-42=metals, 50-54=brick, 60=ceramic)
+// noise     : Initial breaking sound (unique sound file)
+// noise1    : Custom Rubble Impact sounds (unique sound files, must have 1 defined)
+// noise2    : Custom Rubble Impact sound 2
+// noise3    : Custom Rubble Impact sound 3
+// noise4    : Custom Rubble Impact sound 4
+// brkobj1   : Custom Rubble bmodel objects (unique models, must have 1 defined)
+// brkobj2   : Custom Rubble bmodel objects 2
+// brkobj3   : Custom Rubble bmodel objects 3
+// brkobj4   : Custom Rubble bmodel objects 4
+// health    : amount of damage to take before breaking (def 1)
+// count     : minimum quantity to spawn (def 4)
+// cnt       : random quantity to spawn (def 4) =-1 no random qty
+// dmg       : explosive radius damage (emits from center of func object)
+// pos1      : x=start particle colour, y=random range, z=quantity
+// brkvelbase : Base amount for velocity of broken parts (def "50 50 100")
+// brkveladd : Random additions for velocity of broken parts (def "100 100 150")
+// brkavel   : Amount of breaking object angle velocity (def 200)
+// brkfade   : Fade time before rubble fades away (def 4+random()x4)
+// brkmondmg : Damage multiplier for monster damage against breakable
+// angles    : direction to throw rubble (override default = impact direction)
+// brktrigjump    : Trigger if damaged by jumping monster attack
+// brktrigmissile : Trigger if damaged by rocket/grenade/shalball/radiusdmg
+// brktrignoplayer: No player/clients can damage this breakable
+// brkgravity     : Change the gravity for rubble, useful for underwater (Value = 0-1)
+// -------- SPAWNFLAGS --------
+// STARTOFF  : Will wait for trigger to spawn
+// NODAMAGE  : Cannot be damaged or shot, trigger only
+// EXPLOSION : trigger sprite/particle explosion
+// SILENT    : No initial breakage sound
+// DAMAGE    : Spawning rubble can damage (def = 2, use dmg key for touch damage)
+// NOMONSTER : monsters cannot damage this breakable and/or spawning rubble will not damage monsters
+// NOSOUND   : Spawning rubble has no impact sounds
+// NOROTATE  : Spawning rubble has No Y rotation
+// -------- NOTES --------
+// Spawn breakable ojects from a bmodel.  Basic workhorse of breakable system (bmodel).
+void() func_breakable = { // [ENTITY]
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	if (self.style < BTYPE_ROCK || self.style > BTYPE_MAX) self.style = BTYPE_ROCK; // reset out of range styles and setup default = BTYPE_ROCK (1)
@@ -1131,8 +1084,47 @@ void() func_breakable = {
 	}
 };
 
-// Point entity version of breakbles. Good for producing rubble from areas unreachable players.  Earthquake and rubble and dust from ceilings.
-void() func_breakable_spawner = {
+// QUAKED func_breakable_spawner (0.5 .5 .8) (-8 -8 -8) (8 8 8) x x EXPLOSION SILENT DAMAGE NOMOSTER NOSOUND NOROTATE Not_Easy Not_Normal Not_Hard Not_DM
+// -------- KEYS --------
+// target     : targets to fire when breakable is dead/used (only used once)
+// target2    : Additional trigger function (need target to be defined as well)
+// style      : pre-defined sound/model types - 1=rock, 2=wood, 3=glass, 4=metal, 5=brick, 6=ceramic, 10=custom
+// brksound   : Initial breaking sound type (override style default)
+// brkimpsound : Impact sound type (override style default)
+// brkobjects : Breakable object model type (10-15=rocks, 20-22=woods, 30-32=glass, 40-42=metals, 50-54=brick, 60=ceramic)
+// noise      : Initial breaking sound (unique sound file)
+// noise1    : Custom Rubble Impact sounds (unique sound files, must have 1 defined)
+// noise2    : Custom Rubble Impact sound 2
+// noise3    : Custom Rubble Impact sound 3
+// noise4    : Custom Rubble Impact sound 4
+// brkobj1   : Custom Rubble bmodel objects (unique models, must have 1 defined)
+// brkobj2   : Custom Rubble bmodel objects 2
+// brkobj3   : Custom Rubble bmodel objects 3
+// brkobj4   : Custom Rubble bmodel objects 4
+// health    : amount of damage to take before breaking (def 1)
+// count     : minimum quantity to spawn (def 4)
+// cnt       : random quantity to spawn (def 4) =-1 no random qty
+// dmg       : explosive radius damage (emits from center of func object)
+// pos1      : x=start particle colour, y=random range, z=quantity
+// brkvelbase : Base amount for velocity of broken parts (def "50 50 100")
+// brkveladd : Random additions for velocity of broken parts (def "100 100 150")
+// brkavel   : Amount of breaking object angle velocity (def 200)
+// brkfade   : Fade time before rubble fades away (def 4+random()x4)
+// angles    : direction to throw rubble (override default = impact direction)
+// brktrigjump    : Trigger if damaged by jumping monster attack
+// brktrigmissile : Trigger if damaged by rocket/grenade/shalball/radiusdmg
+// brkgravity     : Change the gravity for rubble, useful for underwater (Value = 0-1)
+// brkvol    : Spawning volume vector for breakable point entity
+// -------- SPAWNFLAGS --------
+// EXPLOSION : trigger sprite/particle explosion
+// SILENT    : No initial breakage sound
+// DAMAGE    : Spawning rubble can damage (def = 2, use dmg key for touch damage)
+// NOMONSTER : Spawning rubble will not damage monsters
+// NOSOUND   : Spawning rubble has no impact sounds
+// NOROTATE  : Spawning rubble has No Y rotation
+// -------- NOTES --------
+// Point entity version of breakbles. Good for producing rubble from areas unreachable by players.  Earthquake and rubble and dust from ceilings.
+void() func_breakable_spawner = { // [ENTITY]
 	if (self.style < BTYPE_ROCK || self.style > BTYPE_MAX) self.style = BTYPE_ROCK; // reset out of range styles and setup default = BTYPE_ROCK (1)
 	breakable_cache(); // precache all sound/model stuff
 	breakable_defaults();
@@ -1151,19 +1143,7 @@ void() func_breakable_spawner = {
 	}
 };
 
-// QUAKED func_breakable_wall (0 .5 .8) ? START_ON SOLID FADEOUT
-// Switchable bmodel for breakable setups with optional collision
-// -------- KEYS --------
-// targetname : trigger entity (works with entity state system)
-// wait       : set to -1 for trigger once condition (def=0)
-// waitmin    : random time to wait before fading out
-// -------- SPAWNFLAGS --------
-// START_ON : Will spawn visible and wait for trigger
-// SOLID    : Will block player/monster movement
-// FADEOUT  : Will fade out after a certain amount of time if visible!
-// -------- NOTES --------
-// Switchable bmodel for breakable setups with optional collision
-void() breakable_wall_state = {
+void() breakable_wall_state = { // [FUNCTION]
 	if (self.state == STATE_ENABLED) { // Show model and setup collision state
 		if (self.spawnflags & BREAKWALL_SOLID) { // Does the bmodel require any solid collision?
 			self.solid = SOLID_BSP;
@@ -1181,7 +1161,7 @@ void() breakable_wall_state = {
 	}
 };
 
-void() breakable_wall_use = {
+void() breakable_wall_use = { // [FUNCTION]
 	if (self.estate & ESTATE_BLOCK) return;
 	if (self.attack_finished > time) return;
 
@@ -1200,8 +1180,18 @@ void() breakable_wall_use = {
 	}	
 };	
 
-// General purpose bmodel with toggle states and solid/fade functions.  Could be used for all sorts of situations not involving breakables.
-void() func_breakable_wall = {
+// QUAKED func_breakable_wall (0 .5 .8) ? START_ON SOLID FADEOUT
+// -------- KEYS --------
+// targetname : trigger entity (works with entity state system)
+// wait       : set to -1 for trigger once condition (def=0)
+// waitmin    : random time to wait before fading out
+// -------- SPAWNFLAGS --------
+// START_ON : Will spawn visible and wait for trigger
+// SOLID    : Will block player/monster movement
+// FADEOUT  : Will fade out after a certain amount of time if visible!
+// -------- NOTES --------
+// Switchable bmodel for breakable setups with optional collision.  General purpose bmodel with toggle states and solid/fade functions.  Could be used for all sorts of situations not involving breakables.
+void() func_breakable_wall = { // [ENTITY]
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 
 	self.classtype = CT_FUNCBREAKWALL;
@@ -1236,7 +1226,7 @@ void() func_breakable_wall = {
 // WAKEANIM : Will do special wakeup animation when triggered
 // -------- NOTES --------
 // Trigger (once) breakable and monster together
-void() trig_monbreak_delay = {
+void() trig_monbreak_delay = { // [FUNCTION]
 	if (self.target != "") { // Check for breakable targetname first
 		self.owner = find(world,targetname,self.target); // Find breakable (single target only so no other targets checks)
 		if (self.owner.classtype == CT_FUNCBREAK) {
@@ -1247,7 +1237,7 @@ void() trig_monbreak_delay = {
 	}
 };
 
-void() trig_monbreak_use = {
+void() trig_monbreak_use = { // [FUNCTION]
 	if (self.estate & ESTATE_BLOCK) return;
 	if (self.attack_finished > time) return;
 	
@@ -1269,7 +1259,7 @@ void() trig_monbreak_use = {
 };
 
 // A point entity which triggers a breakable and monster together
-void() trigger_monsterbreak = {
+void() trigger_monsterbreak = { // [ENTITY]
 	self.classtype = CT_TRIGMONBREAK;
 	self.classgroup = CG_BREAKABLE;
 	if (self.wait <= 0) self.wait = 0.2;
@@ -1316,7 +1306,7 @@ void() trigger_monsterbreak = {
 // NOROTATE   : Spawning rubble has No Y rotation
 // -------- NOTES --------
 // Breakable ceramic vase (model)
-void() func_breakable_ceramic_model = {
+void() func_breakable_ceramic_model = { // [FUNCTION]
 	// Setup object defaults
 	self.classtype = CT_FUNCBREAKMDL;
 	self.classgroup = CG_BREAKABLE;
@@ -1337,7 +1327,7 @@ void() func_breakable_ceramic_model = {
 	else breakable_on();
 };
 
-void() misc_breakable_vase1 = {
+void() misc_breakable_vase1 = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "progs/ad181/brk_vase1.mdl"; // Default model/skin
 	precache_model(self.mdl);
 	if (self.brkobj1 == "") self.brkobj1 = "progs/ad181/brk_vase1part1.mdl";
@@ -1357,9 +1347,9 @@ void() misc_breakable_vase1 = {
 	func_breakable_ceramic_model(); // Default setup
 };
 
-void() func_breakable_vase = { misc_breakable_vase1(); }; // Re-direct (old entity format)
+void() func_breakable_vase = { misc_breakable_vase1(); }; // [ENTITY], Re-direct (old entity format)
 
-void() misc_breakable_pot_setup = {
+void() misc_breakable_pot_setup = { // [FUNCTION]
 	if (self.brkmdltype == -1) self.brkmdltype = rint(11+(random()*3.5)); // Check for random model setup
 	if (self.brkmdltype < -1) self.brkmdltype = rint(21+(random()*3.5));
 	
@@ -1424,60 +1414,60 @@ void() misc_breakable_pot_setup = {
 	func_breakable_ceramic_model();
 };
 
-void() misc_breakable_pot1a = {
+void() misc_breakable_pot1a = { // [ENTITY]
 	if (self.brkmdltype < 0) self.brkmdltype = -1;
 	else self.brkmdltype = 11;
 	misc_breakable_pot_setup();
 };
 
-void() misc_breakable_pot1b = {
+void() misc_breakable_pot1b = { // [ENTITY]
 	if (self.brkmdltype < 0) self.brkmdltype = -1;
 	else self.brkmdltype = 12;
 	misc_breakable_pot_setup();
 };
 
-void() misc_breakable_pot1c = {
+void() misc_breakable_pot1c = { // [ENTITY]
 	if (self.brkmdltype < 0) self.brkmdltype = -1;
 	else self.brkmdltype = 13;
 	misc_breakable_pot_setup();
 };
 
-void() misc_breakable_pot1d = {
+void() misc_breakable_pot1d = { // [ENTITY]
 	if (self.brkmdltype < 0) self.brkmdltype = -1;
 	else self.brkmdltype = 14;
 	misc_breakable_pot_setup();
 };
 
-void() misc_breakable_pot1aflr = {
+void() misc_breakable_pot1aflr = { // [ENTITY]
 	self.brkmdltype = 15;
 	misc_breakable_pot_setup();
 };
 
-void() misc_breakable_pot2a = {
+void() misc_breakable_pot2a = { // [ENTITY]
 	if (self.brkmdltype < 0) self.brkmdltype = -2;
 	else self.brkmdltype = 21;
 	misc_breakable_pot_setup();
 };
 
-void() misc_breakable_pot2b = {
+void() misc_breakable_pot2b = { // [ENTITY]
 	if (self.brkmdltype < 0) self.brkmdltype = -2;
 	else self.brkmdltype = 22;
 	misc_breakable_pot_setup();
 };
 
-void() misc_breakable_pot2c = {
+void() misc_breakable_pot2c = { // [ENTITY]
 	if (self.brkmdltype < 0) self.brkmdltype = -2;
 	else self.brkmdltype = 23;
 	misc_breakable_pot_setup();
 };
 
-void() misc_breakable_pot2d = {
+void() misc_breakable_pot2d = { // [ENTITY]
 	if (self.brkmdltype < 0) self.brkmdltype = -2;
 	else self.brkmdltype = 24;
 	misc_breakable_pot_setup();
 };
 
-void() misc_breakable_pot2aflr = {
+void() misc_breakable_pot2aflr = { // [ENTITY]
 	self.brkmdltype = 25;
 	misc_breakable_pot_setup();
 };
@@ -1512,7 +1502,7 @@ void() misc_breakable_pot2aflr = {
 // NOROTATE  : Spawning rubble has No Y rotation
 // -------- NOTES --------
 // Breakable ceramic Pot 1 with handles
-void() misc_breakable_pot1 = {
+void() misc_breakable_pot1 = { // [ENTITY]
 	self.classtype = CT_FUNCBREAKMDL;
 	self.classgroup = CG_BREAKABLE;
 	self.bbmins = '-16 -16 0';

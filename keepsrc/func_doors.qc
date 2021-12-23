@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 2
-// Function count: 22
+// Function count: 23
 //
 // Implements: Doors (func_door)
 //
@@ -344,86 +344,90 @@ void(float itemset, float taken, entity e, float used) key_message = {
 	}
 };
 
-// Only used for keys and messages
-void() func_door_touch = { // [FUNCTION]
+void(void() th_activate, entity attempter) keyuser_attempt = {
 	local float keytake, itemset;
 
-	if (self.estate & ESTATE_BLOCK) return;
-	if ( !(other.flags & FL_CLIENT) ) return;
-	if (self.owner.attack_finished > time) return;
-
-	self.owner.attack_finished = time + 2; // Block retouch for 2 seconds
 	if (self.items == 0) { // Does the door require any keys?
 		if (self.owner.message != "") { // Any touch message to display?
-			centerprint (other, self.owner.message);
-			sound (other, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Use custom lock sound (default = talktalk)
+			centerprint (attempter, self.owner.message);
+			sound(attempter, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Use custom lock sound (default = talktalk)
 		}
 	} else { // Check door for keys (silver/gold/custom)
 		if (self.customkey == 5) { // Handle support for 'Any Key' option.  Itemset 0 = self.items, 1 = self.items2, 2 = self.moditems, 3 = self.perms
 			keytake = 0;
-			if (other.items & IT_KEY1) { keytake = IT_KEY1; itemset = 0; } // Start with weakest/lowest-value key and use it first if present.
-			else if (other.items & IT_KEY2) { keytake = IT_KEY2; itemset = 0; }
-			else if (other.moditems & IT_CKEY1) { keytake = IT_CKEY1; itemset = 2; }
-			else if (other.moditems & IT_CKEY2) { keytake = IT_CKEY2; itemset = 2; }
-			else if (other.moditems & IT_CKEY3) { keytake = IT_CKEY3; itemset = 2; }
-			else if (other.moditems & IT_CKEY4) { keytake = IT_CKEY4; itemset = 2; }
-			else if (other.items2 & IT2_KEY_SKELETON) { keytake = IT2_KEY_SKELETON; itemset = 1; } // Saved for last as it is the most valuable and can open any door.  Likely want to save it for later.
+			if (attempter.items & IT_KEY1) { keytake = IT_KEY1; itemset = 0; } // Start with weakest/lowest-value key and use it first if present.
+			else if (attempter.items & IT_KEY2) { keytake = IT_KEY2; itemset = 0; }
+			else if (attempter.moditems & IT_CKEY1) { keytake = IT_CKEY1; itemset = 2; }
+			else if (attempter.moditems & IT_CKEY2) { keytake = IT_CKEY2; itemset = 2; }
+			else if (attempter.moditems & IT_CKEY3) { keytake = IT_CKEY3; itemset = 2; }
+			else if (attempter.moditems & IT_CKEY4) { keytake = IT_CKEY4; itemset = 2; }
+			else if (attempter.items2 & IT2_KEY_SKELETON) { keytake = IT2_KEY_SKELETON; itemset = 1; } // Saved for last as it is the most valuable and can open any door.  Likely want to save it for later.
 
 			if (keytake) { // Opened!
 				if (itemset == 0) {
-					if (!self.persistentkey) other.items = other.items - keytake;
-					key_message(itemset,keytake,other,TRUE);
+					if (!self.persistentkey) attempter.items = attempter.items - keytake;
+					key_message(itemset,keytake,attempter,TRUE);
 				} else if (itemset == 1) {
-					if (!self.persistentkey) other.items2 = other.items2 - keytake;
-					key_message(itemset,keytake,other,TRUE);		
+					if (!self.persistentkey) attempter.items2 = attempter.items2 - keytake;
+					key_message(itemset,keytake,attempter,TRUE);		
 				} else if (itemset == 2) {
-					if (!self.persistentkey) other.moditems = other.moditems - keytake;
-					key_message(itemset,keytake,other,TRUE);
+					if (!self.persistentkey) attempter.moditems = attempter.moditems - keytake;
+					key_message(itemset,keytake,attempter,TRUE);
 				} // Currently no keys in perms so no need to check it.
 			} else { // Still locked.
-				key_message(2,0,other,FALSE);
+				key_message(2,0,attempter,FALSE);
 				if (self.locksounds > 0) sound(self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Check for locksounds override
 				else sound (self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM); // Default lock sound for silver/gold keys
 				return;
 			}
 		} else {
 			if (self.moditems > 0) { // Is this a custom locked door?
-				if ( (self.moditems & other.moditems) != self.moditems ) {
-					if (other.items2 & IT2_KEY_SKELETON) { // Opened!
-						if (!self.persistentkey) other.items2 = other.items2 - IT2_KEY_SKELETON; // Remove custom key from player/client
-						key_message(1,IT2_KEY_SKELETON,other,TRUE);
+				if ( (self.moditems & attempter.moditems) != self.moditems ) {
+					if (attempter.items2 & IT2_KEY_SKELETON) { // Opened!
+						if (!self.persistentkey) attempter.items2 = attempter.items2 - IT2_KEY_SKELETON; // Remove custom key from player/client
+						key_message(1,IT2_KEY_SKELETON,attempter,TRUE);
 					} else { // Still locked.
-						key_message(2,self.moditems,other,FALSE);
+						key_message(2,self.moditems,attempter,FALSE);
 						if (self.locksounds > 0) sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Check for locksounds override
 						else sound (self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM); // Default lock sound (based on worldspawn)
 						return;
 					}
 				} else { // Opened!
-					if (!self.persistentkey) other.moditems = other.moditems - self.moditems; // Remove custom key from player/client
-					key_message(2,self.moditems,other,TRUE);
+					if (!self.persistentkey) attempter.moditems = attempter.moditems - self.moditems; // Remove custom key from player/client
+					key_message(2,self.moditems,attempter,TRUE);
 				}
 			} else {
-				if ((self.items & other.items) != self.items) {
-					if (other.items2 & IT2_KEY_SKELETON) { // Opened!
-						if (!self.persistentkey) other.items2 = other.items2 - IT2_KEY_SKELETON; // Remove custom key from player/client
-						key_message(1,IT2_KEY_SKELETON,other,TRUE);
+				if ((self.items & attempter.items) != self.items) {
+					if (attempter.items2 & IT2_KEY_SKELETON) { // Opened!
+						if (!self.persistentkey) attempter.items2 = attempter.items2 - IT2_KEY_SKELETON; // Remove custom key from player/client
+						key_message(1,IT2_KEY_SKELETON,attempter,TRUE);
 					} else { // Still locked.
-						key_message(0,self.owner.items,other,FALSE);
+						key_message(0,self.owner.items,attempter,FALSE);
 						if (self.locksounds > 0) sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Check for locksounds override
 						else sound (self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM); // Default lock sound for silver/gold keys
 						return;
 					}
 				} else { // Opened!
-					if (!self.persistentkey) other.items = other.items - self.items; // Take key from player inventory
-					key_message(0,self.items,other,TRUE);
+					if (!self.persistentkey) attempter.items = attempter.items - self.items; // Take key from player inventory
+					key_message(0,self.items,attempter,TRUE);
 				}
 			}
 		}
 
 		self.touch = SUB_Null; // Turn off touch function	
 		if (self.enemy) self.enemy.touch = SUB_Null; // turn off touch on pair/master door
-		func_door_use ();
+		th_activate();
 	}
+};
+
+// Used for keys and messages
+void() func_door_touch = { // [FUNCTION]
+	if (self.estate & ESTATE_BLOCK) return;
+	if ( !(other.flags & FL_CLIENT) ) return;
+	if (self.owner.attack_finished > time) return;
+
+	self.owner.attack_finished = time + 2; // Block retouch for 2 seconds
+	keyuser_attempt(func_door_use,other);
 };
 
 void() func_door_on = { // [FUNCTION]
@@ -500,53 +504,7 @@ void() func_door_blocked = { // [FUNCTION]
 	}
 };
 
-// QUAKED func_door (0 .5 .8) ? STARTOPEN SPAWNTRIG DONTLINK GOLD SILVER TOGGLE STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
-// -------- KEYS --------
-// targetname : = "" door automatically opens, != "" requires trigger to open
-// if using entity state system set SPAWN_TRIG spawnflags to fix this problem
-// target   : name of target(s) to trigger at the start opening sequence
-// angle    : determines the opening direction, use "360" for angle 0
-// angletarget : Entity (path_corner) to move towards (custom direction)
-// speed    : movement speed (def=100)
-// yaw_speed: return movement speed (def=speed)
-// wait     : wait before returning (def=3, -1 = never return)
-// lip      : lip remaining at end of move. (def=8)
-// height   : Exact distance to move (works like func_plat and uses angles)
-// midstart : Start in 2nd position and wait for trigger, then work as spawned
-// health   : Can be damaged instead of touched
-// dmg      : damage to inflict when blocked. (def=2)
-// message  : centerprint message when touched (removed when opened)
-// sounds   : 0=silent 1=stone 2=base 3=chain 4=metal 5=custom 11=base plat 12=med plat
-// locksounds : 0=talk 1=med1 2=med2 3=med3 13=trigger 14=silent 16=secret 21=base1 22=base2 23=base3 24=base4
-// noise    : custom sound - door locked sound (targetname+message)
-// noise1   : custom sound - Moving/Open door (looping)
-// noise2   : custom sound - Stop/Close door 
-// noise3   : custom sound - Silver/Gold key try lock
-// noise4   : custom sound - Silver/Gold key OPEN
-// volume   : Volume for all custom sounds played (def=1, range=0-1)
-// persistentkey : Key required for this door is never removed from player
-// customkey: custom key required to open door (1-4 supported values)
-// message2 : custom key message (You need the custom key)
-// bbmins   : custom size for generated trigger (def='-60 -60 -8')
-// bbmaxs   : custom size for generated trigger (def='60 60 8')
-// _dirt       : -1 = will be excluded from dirtmapping
-// _minlight   : Minimum light level for any surface of the brush model
-// _mincolor   : Minimum light color for any surface (def='1 1 1' RGB)
-// _shadow     : Will cast shadows on other models and itself
-// _shadowself : Will cast shadows on itself
-// -------- SPAWNFLAGS --------
-// STARTOPEN : door opens in reverse state (moved to dest at spawn)
-// SPAWNTRIG : Will spawn trigger around door even if targetname SETUP
-// DONTLINK  : Touching doors will not link into a single entity
-// GOLD      : Requires gold key to open
-// SILVER    : Requires silver key to open
-// TOGGLE    : Door waits for trigger between states (if wait=-1 cannot be blocked)
-// STARTOFF  : Starts off and waits for trigger
-// -------- NOTES --------
-// Door (bmodel) with two states
-void() func_door = { // [ENTITY]
-	if (check_bmodel_keys()) return;	// Check for bmodel errors
-
+void() keyuser_setup = { // [FUNCTION]
 	if (self.noise1 == "") self.noise1 = SOUND_EMPTY; // Setup all empty/silent sound files first
 	if (self.noise2 == "") self.noise2 = SOUND_EMPTY;
 	if (self.sounds == 1) { // noise1 : Moving/Open door (looping).  noise2 : Stop/Close door 
@@ -598,21 +556,7 @@ void() func_door = { // [ENTITY]
 	precache_sound (self.noise2);
 	precache_sound (self.noise3);
 	precache_sound (self.noise4);
-	SUB_BoundVolume(1);
-	self.classtype = CT_FUNCDOOR; // Setup classtype and flag as BSP origin
-	self.classgroup = CG_FUNCMOVER;
-	self.bsporigin = TRUE;
-	self.mdl = self.model;
-	SetMovedir (); // Set angle/movedir and reset angles
-	if (self.speed <=0) self.speed = 100;
-	if (self.yaw_speed <=0) self.yaw_speed = self.speed; // Second movement speed can be different, yaw_speed
-	if (!self.wait) self.wait = 3;
-	if (!self.lip) self.lip = 8;
-	if (!self.dmg) self.dmg = 2;
-	self.state = STATE_BOTTOM;
-	self.attack_finished = 0;
-	if (!self.frame_override) self.frame_override = 0; // Default/Setup alternative texture frame
-	self.frame = self.frame_override;
+
 	self.items = self.moditems = 0; // Is the door locked via special keys (silver/gold).  Make sure any rogue entity keys are removed.
 	if (self.spawnflags & DOOR_SILVER_KEY) self.items = IT_KEY1;
 	else if (self.spawnflags & DOOR_GOLD_KEY) self.items = IT_KEY2;
@@ -632,7 +576,71 @@ void() func_door = { // [ENTITY]
 		self.wait = -1;		// Work once
 		self.health = 0;	// no shoot/damage
 	}
+};
 
+// QUAKED func_door (0 .5 .8) ? STARTOPEN SPAWNTRIG DONTLINK GOLD SILVER TOGGLE STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+// -------- KEYS --------
+// targetname : = "" door automatically opens, != "" requires trigger to open
+// if using entity state system set SPAWN_TRIG spawnflags to fix this problem
+// target   : name of target(s) to trigger at the start opening sequence
+// angle    : determines the opening direction, use "360" for angle 0
+// angletarget : Entity (path_corner) to move towards (custom direction)
+// speed    : movement speed (def=100)
+// yaw_speed: return movement speed (def=speed)
+// wait     : wait before returning (def=3, -1 = never return)
+// lip      : lip remaining at end of move. (def=8)
+// height   : Exact distance to move (works like func_plat and uses angles)
+// midstart : Start in 2nd position and wait for trigger, then work as spawned
+// health   : Can be damaged instead of touched
+// dmg      : damage to inflict when blocked. (def=2)
+// message  : centerprint message when touched (removed when opened)
+// sounds   : 0=silent 1=stone 2=base 3=chain 4=metal 5=custom 11=base plat 12=med plat
+// locksounds : 0=talk 1=med1 2=med2 3=med3 13=trigger 14=silent 16=secret 21=base1 22=base2 23=base3 24=base4
+// noise    : custom sound - door locked sound (targetname+message)
+// noise1   : custom sound - Moving/Open door (looping)
+// noise2   : custom sound - Stop/Close door 
+// noise3   : custom sound - Silver/Gold key try lock
+// noise4   : custom sound - Silver/Gold key OPEN
+// volume   : Volume for all custom sounds played (def=1, range=0-1)
+// persistentkey : Key required for this door is never removed from player
+// customkey: custom key required to open door (1-4 supported values)
+// message2 : custom key message (You need the custom key)
+// bbmins   : custom size for generated trigger (def='-60 -60 -8')
+// bbmaxs   : custom size for generated trigger (def='60 60 8')
+// _dirt       : -1 = will be excluded from dirtmapping
+// _minlight   : Minimum light level for any surface of the brush model
+// _mincolor   : Minimum light color for any surface (def='1 1 1' RGB)
+// _shadow     : Will cast shadows on other models and itself
+// _shadowself : Will cast shadows on itself
+// -------- SPAWNFLAGS --------
+// STARTOPEN : door opens in reverse state (moved to dest at spawn)
+// SPAWNTRIG : Will spawn trigger around door even if targetname SETUP
+// DONTLINK  : Touching doors will not link into a single entity
+// GOLD      : Requires gold key to open
+// SILVER    : Requires silver key to open
+// TOGGLE    : Door waits for trigger between states (if wait=-1 cannot be blocked)
+// STARTOFF  : Starts off and waits for trigger
+// -------- NOTES --------
+// Door (bmodel) with two states
+void() func_door = { // [ENTITY]
+	if (check_bmodel_keys()) return;	// Check for bmodel errors
+
+	keyuser_setup();
+	SUB_BoundVolume(1);
+	self.classtype = CT_FUNCDOOR; // Setup classtype and flag as BSP origin
+	self.classgroup = CG_FUNCMOVER;
+	self.bsporigin = TRUE;
+	self.mdl = self.model;
+	SetMovedir (); // Set angle/movedir and reset angles
+	if (self.speed <=0) self.speed = 100;
+	if (self.yaw_speed <=0) self.yaw_speed = self.speed; // Second movement speed can be different, yaw_speed
+	if (!self.wait) self.wait = 3;
+	if (!self.lip) self.lip = 8;
+	if (!self.dmg) self.dmg = 2;
+	self.state = STATE_BOTTOM;
+	self.attack_finished = 0;
+	if (!self.frame_override) self.frame_override = 0; // Default/Setup alternative texture frame
+	self.frame = self.frame_override;
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
 	setmodel (self, self.mdl); // Add bmodel to world and work out movement positions

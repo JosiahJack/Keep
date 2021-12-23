@@ -1312,7 +1312,7 @@ void() CheatCommand = {
 				IT_PLASMA_GUN | IT_EXTRA_WEAPON;
 	self.items2 = self.items2 | IT2_ARMOR3 | IT2_PROXIMITY_GUN | IT2_MJOLNIR | IT2_LASER_CANNON | 
 								IT2_GRAPPLE | IT2_CROSS | IT2_CHAINLIGHTNING;// | IT2_WAND; // IT2_CROSS is the wand!
-	self.perms = self.perms | IT_AIRGUN; // | IT_CHAINSAW | IT_BLASTER; // Left these out since they aren't always applicable to every map -Qmaster
+	self.perms = self.perms | IT_AIRGUN; // | IT_CHAINSAW | IT_BLASTER; // Left these commented out since they aren't always applicable to every map -Qmaster
 	self.weapon = IT2_LASER_CANNON;
 	self.armorvalue = 150;
 	sound (self, CHAN_AUTO, "rogue/misc/flagcap.wav", 1, ATTN_NORM);

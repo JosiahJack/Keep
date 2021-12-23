@@ -1,4 +1,4 @@
-// May the Lord look upon you and give you peace
+// May the LORD look upon you and give you peace
 // And may he forgive me for what may come from this
 // Unholy function...
 string(string old, float type) GetRandomMonsterName = {
@@ -175,7 +175,7 @@ string(string old, float type) GetRandomMonsterName = {
 			else if (rand < 0.37) retval = "monster_army_spike"; 
 			else if (rand < 0.38) retval = "monster_super_enforcer";
 			else if (rand < 0.39) retval = "monster_hell_knight_enforcer";
-			else if (rand < 0.40) retval = "monster_bob"; // More slots for when I add more, yeesh!
+			else if (rand < 0.40) retval = "monster_bob";
 			// else if (rand < 0.41) retval = "monster_mistermax";
 			else if (rand < 0.42) retval = "monster_ogre_marksman";
 			else if (rand < 0.43) retval = "monster_ogre_spikeshooter";
@@ -220,9 +220,9 @@ string(string old, float type) GetRandomMonsterName = {
 			else if (rand < 0.82) retval = "monster_thug";
 			else if (rand < 0.83) retval = "monster_shamvile";
 			else if (rand < 0.84) retval = "monster_ultra";
-			else if (rand < 1.00) retval = "monster_warrior";
-			// else if (rand < 0.80) retval = "monster_ranger";
-			// else if (rand < 0.81) retval = "monster_ranger";
+			else if (rand < 0.85) retval = "monster_warrior";
+			else if (rand < 1.00) retval = "monster_voidwraith";
+			// else if (rand < 0.81) retval = "monster_ranger"; // More slots for when I add more, yeesh!
 			// else if (rand < 0.82) retval = "monster_ranger";
 			// else if (rand < 0.83) retval = "monster_ranger";
 			// else if (rand < 0.84) retval = "monster_ranger";
@@ -243,6 +243,61 @@ string(string old, float type) GetRandomMonsterName = {
 			// else if (rand < 0.99) retval = "monster_ranger"; // 199
 			// else if (rand < 1) 	 retval = "monster_ranger"; // 200!  Do we have enough choices, yeesh!
 		}
+	} else if (self.style == 1) { // Denizens
+		if (rand < 0.16) retval = "monster_frog";
+		else if (rand < 0.32) retval = "monster_ogle";
+		else if (rand < 0.48) retval = "monster_raven";
+		else if (rand < 0.64) retval = "monster_voidwraith";
+		else if (rand < 0.80) retval = "monster_beez";
+		else retval = "monster_sheep"; // Favor sheep slightly more
+	} else if (self.style == 2) { // Fodder Military
+	} else if (self.style == 3) { // Fodder Mystic
+	} else if (self.style == 4) { // Fodder Horrors
+	} else if (self.style == 5) { // Fodder Brigade
+	} else if (self.style == 6) { // Ogre Establishment
+	} else if (self.style == 7) { // Elite Ogres
+	} else if (self.style == 8) { // Undead
+	} else if (self.style == 9) { // Midrank Military
+	} else if (self.style == 10) { // Midrank Mystic
+	} else if (self.style == 11) { // Midrank Horrors
+	} else if (self.style == 12) { // Midrank Brigade
+	} else if (self.style == 13) { // Elite Military
+	} else if (self.style == 14) { // Elite Mystic
+	} else if (self.style == 15) { // Elite Horrors
+	} else if (self.style == 16) { // Elite Brigade
+	} else if (self.style == 17) { // Archnidae
+	} else if (self.style == 18) { // Hostile Animals
+	} else if (self.style == 19) { // Fodder Swimmers
+	} else if (self.style == 20) { // Midrank Swimmers
+	} else if (self.style == 21) { // Elite Swimmers
+	} else if (self.style == 22) { // Boss Swimmers
+	} else if (self.style == 23) { // Fodder Terrestrial
+	} else if (self.style == 24) { // Midrank Terrestrial
+	} else if (self.style == 25) { // Boss Terrestrial
+	} else if (self.style == 26) { // Fodder Flyers
+	} else if (self.style == 27) { // Midrank Flyers
+	} else if (self.style == 28) { // Boss Flyers
+	} else if (self.style == 29) { // Denizen Swimmers
+		retval = "monster_frog";  // The only one right now.  Will change once jellyfish is added.
+	} else if (self.style == 30) { // Denizen Terrestrial
+		if (rand < 0.15) retval = "monster_frog";
+		else if (rand < 0.6) retval = "monster_ogle";
+		else retval = "monster_sheep"; // Favor sheep slightly more
+	} else if (self.style == 31) { // Denizen Flyers
+		if (rand < 0.33) retval = "monster_raven";
+		else if (rand < 0.66) retval = "monster_voidwraith";
+		else retval = "monster_beez";
+	} else if (self.style == 32) { // Military
+	} else if (self.style == 33) { // Mystic
+	} else if (self.style == 34) { // Horrors
+	} else if (self.style == 35) { // Brigade
+	} else if (self.style == 92) { // Boss Ancients
+	} else if (self.style == 93) { // Boss Medieval Menaces
+	} else if (self.style == 94) { // Boss Eldritch Horrors
+	} else if (self.style == 95) { // Boss Technological Terrors
+	} else if (self.style == 96) { // Boss Medieval Monstrosities
+	} else if (self.style == 97) { // Boss Eldritch Abominations
+	} else if (self.style == 98) { // Bosses All
 	}
 	return retval; // Goodness to mergatroidd what did I do!
 };
@@ -452,6 +507,7 @@ void(string mname) BeMonsterFromString = {
 	else if (mname == "monster_ultra") { monster_ultra(); }
 	else if (mname == "monster_vermis") { monster_vermis(); }
 	else if (mname == "monster_virtus") { monster_virtus(); }
+	else if (mname == "monster_voidwraith") { monster_voidwraith(); }
 	else if (mname == "monster_vomit") { monster_vomit(); }
 	else if (mname == "monster_vomitus") { monster_vomitus(); }
 	else if (mname == "monster_voreling") { monster_voreling(); }
@@ -533,35 +589,37 @@ void () func_spawn = {
 	}
 	self.attack_count = 0;
 
-	// Precache 14 random monsters
+	// Precache 13 random monsters
 	if (self.spawnflags & 2) {
-		if (!self.style) self.style = 99; // Complete random! May God have mercy on your soul!
-		self.brkobj1 = GetRandomMonsterName(self.spawnclassname,self.style); // Pass spawnclassname as a backup
-		self.brkobj2 = GetRandomMonsterName(self.spawnclassname,self.style);
-		self.brkobj3 = GetRandomMonsterName(self.spawnclassname,self.style);
-		self.brkobj4 = GetRandomMonsterName(self.spawnclassname,self.style);
-		self.corner_event = GetRandomMonsterName(self.spawnclassname,self.style);
-		self.gib1soundx = GetRandomMonsterName(self.spawnclassname,self.style);
-		self.gib2soundx = GetRandomMonsterName(self.spawnclassname,self.style);
-		self.gib3soundx = GetRandomMonsterName(self.spawnclassname,self.style);
-		self.break_template1 = GetRandomMonsterName(self.spawnclassname,self.style);
-		self.break_template2 = GetRandomMonsterName(self.spawnclassname,self.style);
-		self.break_template3 = GetRandomMonsterName(self.spawnclassname,self.style);
-		self.break_template4 = GetRandomMonsterName(self.spawnclassname,self.style);
-		self.break_template5 = GetRandomMonsterName(self.spawnclassname,self.style);
-		precache_monster(self.brkobj1);
-		precache_monster(self.brkobj2);
-		precache_monster(self.brkobj3);
-		precache_monster(self.brkobj4);
-		precache_monster(self.corner_event);
-		precache_monster(self.gib1soundx);
-		precache_monster(self.gib2soundx);
-		precache_monster(self.gib3soundx);
-		precache_monster(self.break_template1);
-		precache_monster(self.break_template2);
-		precache_monster(self.break_template3);
-		precache_monster(self.break_template4);
-		precache_monster(self.break_template5);
+		if (self.style == 0) self.style = 99; // Complete random! May God have mercy on your soul!
+		if (self.style > 0) {
+			self.brkobj1 = GetRandomMonsterName(self.spawnclassname,self.style); // Pass spawnclassname as a backup
+			self.brkobj2 = GetRandomMonsterName(self.spawnclassname,self.style);
+			self.brkobj3 = GetRandomMonsterName(self.spawnclassname,self.style);
+			self.brkobj4 = GetRandomMonsterName(self.spawnclassname,self.style);
+			self.corner_event = GetRandomMonsterName(self.spawnclassname,self.style);
+			self.gib1soundx = GetRandomMonsterName(self.spawnclassname,self.style);
+			self.gib2soundx = GetRandomMonsterName(self.spawnclassname,self.style);
+			self.gib3soundx = GetRandomMonsterName(self.spawnclassname,self.style);
+			self.break_template1 = GetRandomMonsterName(self.spawnclassname,self.style);
+			self.break_template2 = GetRandomMonsterName(self.spawnclassname,self.style);
+			self.break_template3 = GetRandomMonsterName(self.spawnclassname,self.style);
+			self.break_template4 = GetRandomMonsterName(self.spawnclassname,self.style);
+			self.break_template5 = GetRandomMonsterName(self.spawnclassname,self.style);
+		}
+		if (self.brkobj1 != "") precache_monster(self.brkobj1);
+		if (self.brkobj2 != "") precache_monster(self.brkobj2);
+		if (self.brkobj3 != "") precache_monster(self.brkobj3);
+		if (self.brkobj4 != "") precache_monster(self.brkobj4);
+		if (self.corner_event != "") precache_monster(self.corner_event);
+		if (self.gib1soundx != "") precache_monster(self.gib1soundx);
+		if (self.gib2soundx != "") precache_monster(self.gib2soundx);
+		if (self.gib3soundx != "") precache_monster(self.gib3soundx);
+		if (self.break_template1 != "") precache_monster(self.break_template1);
+		if (self.break_template2 != "") precache_monster(self.break_template2);
+		if (self.break_template3 != "") precache_monster(self.break_template3);
+		if (self.break_template4 != "") precache_monster(self.break_template4);
+		if (self.break_template5 != "") precache_monster(self.break_template5);
 	}
 
 	if (self.targetname) {
@@ -767,6 +825,7 @@ void(string mname) precache_monster = {
 	else if (mname == "monster_ultra")			monster_enforcer_precache();
 	else if (mname == "monster_vermis")			monster_vermis_precache();
 	else if (mname == "monster_virtus")			monster_virtus_precache();
+	else if (mname == "monster_voidwraith")		monster_voidwraith_precache();
 	else if (mname == "monster_vomit")			monster_vomit_precache();
 	else if (mname == "monster_vomitus")		monster_vomit_precache();
 	else if (mname == "monster_voreling")		monster_voreling_precache();

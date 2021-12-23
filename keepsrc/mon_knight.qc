@@ -351,7 +351,6 @@ void() monster_knight_precache = {
 // QUAKED monster_knight (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_knight = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
-	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_knight.mdl";
 	self.headmdl = "progs/h_knight.mdl"; // Large head
@@ -396,11 +395,7 @@ void() monster_knight = {
 	self.steptype = FS_TYPEMEDIUM;
 	self.skin = 0;
 	self.th_die = knight_die;			// Face meets floor
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
     self.hittype    = HIT_METAL;
 	
 	// Detect statues and setup different parameters
@@ -420,11 +415,6 @@ void() monster_knight = {
 		// Allow knights to start with a stone skin, but not be frozen!
 		if (self.spawnflags & MON_NOTFROZEN) {
 			self.spawnflags = self.spawnflags - MON_STATUE;
-
-			// Check for random rotation setup and angle limits
-			if (self.angles_y < 0) self.angles_y = rint(random()*359);
-			if (self.angles_y > 360) self.angles_y = 360;
-
 			knight_aistates();			// setup AI state functions
 		} else {
 			self.spawnstatue = TRUE;		// Start as a statue
@@ -451,16 +441,9 @@ void() monster_knight = {
 		// worldspawn option.
 		// Added -1 option which will randomly pick a skin
 		if (self.exactskin < 0) self.randomskin = 4;
-		if (!self.exactskin && world.knight_defskin > 0)
-			self.exactskin = world.knight_defskin;
-
+		if (!self.exactskin && world.knight_defskin > 0) self.exactskin = world.knight_defskin;
 		self.pain_longanim = TRUE;		// can be chopped with shadow axe
 		self.classgroup = CG_KNIGHT;	// Classic tincan!
-
-		// Check for random rotation setup and angle limits
-		if (self.angles_y < 0) self.angles_y = rint(random()*359);
-		if (self.angles_y > 360) self.angles_y = 360;
-
 		knight_aistates();				// setup AI state functions
 	}
 

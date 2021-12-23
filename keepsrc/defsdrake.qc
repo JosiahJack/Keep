@@ -61,7 +61,7 @@ float   HIT_NORMAL  = 0;    // Default.
 float   HIT_METAL   = 1;    // Knights, centroids, and other armored guys.
 float   HIT_STONE   = 2;    // Statues, golems.
 float   COURAGE_DAMAGE  = 10;   // Damage to armor if it reflects a rocket.
-float COST_MJOLNIR = 25;
+float COST_MJOLNIR = 5;
 
 // Frames for 's_fancy.spr'.
 float   X32_PUFF_ORANGE     = 0;

@@ -39,6 +39,8 @@
 // any benefit to the player and serve as story or progression elements.
 //=============================================================================
 
+void() sphere_spawn;
+
 void() artifact_touch = { // [FUNCTION]
 	entity pl;
 	string amboost;
@@ -115,6 +117,10 @@ void() artifact_touch = { // [FUNCTION]
 		other.empathy_time = TRUE;
 		if (self.cnt < 0) other.empathy_finished = POWERUP_VANIA;
 		else other.empathy_finished = time + self.cnt;
+	} else if (self.classtype == CT_ARTSPHERE) {
+		if (other.items2 & IT2_V_SPHERE) return; // Can only carry one, carries it indefinitely.
+
+        sphere_spawn();
 	} else if (self.classtype == CT_ARTTHERMSUIT) {
 		other.therm_time = TRUE;
 		if (self.cnt < 0) other.therm_finished = POWERUP_VANIA;

@@ -62,6 +62,8 @@ float(entity targ, entity inflictor) CanDamage = {
 	traceline(inflictor.origin, targ.origin + '15 -15 0', TRUE, inflictor);
 	if (trace_fraction == 1) return TRUE;
 
+	
+
 	return FALSE; // Couldn't hit
 };
 
@@ -596,7 +598,6 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	}
 	self = oldself;
 
-	//----------------------------------------------------------------------
 	// Check for ammo type resistance and immunity to pain
 	// Targetdummies rely on the pain function to display stats
 	if (targ.classtype != CT_TARGETDUMMY) {
@@ -618,7 +619,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	oldself = self;
 	self = targ;
 
-	if (self.th_pain && self.pain_finished < time) {
+	if (self.th_pain && (self.pain_finished < time)) {
 		self.pain_finstate = self.pain_finished; // Save pain finished state for later		
 
 		// The damage from projectile shotguns trinkle at the monster which means it cannot trigger the flinch function
@@ -690,7 +691,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 						if (head == attacker) points = points * 0.5; // Half damage if caught by own explosion
 						if (points > 0 && head.health > 0) {
 							// Need CanDamage to check for anything blocking LoS.  It will do several traces (source->target) to check for any blocking entities (lifts, doors, walls etc)
-							if (CanDamage (head, inflictor)) {
+							if (CanDamage(head, inflictor)) {
 								if (points > 0) {
 									if ((inflictor.classgroup == CG_PROJFIRE || attacker.classgroup == CG_PROJFIRE) && (random() < (damage+1)*0.01)) Burn_Add(head, attacker, MAX_BURN_DAMAGE); // Chance to burn equals (damage + 1)%.  E.g., 9 damage = 10%. Yes, use 'damage' and not 'take'.
 									T_Damage (head, inflictor, attacker, points, DAMARMOR); // Any damage left? Check for poison as well

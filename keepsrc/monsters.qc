@@ -471,6 +471,43 @@ void(entity targ, entity charmmaster) ApplyHornCharm = {
 	targ.effects = (targ.effects | EF_DIMLIGHT);
 };
 
+float() FollowSetup = {
+	if (self.target != "") {
+		self.charmer = world;
+		if (self.event != "") {
+			self.movetarget = self.charmer = find(world, targetname, self.event); // Search for Nehahra follow target
+			self.movespeed = FALSE; // Force out of turret mode for mapper specified follow target
+		} else {
+			self.movetarget = find(world, targetname, self.target);
+		}
+
+		// Cannot chase a target if setup as a turret
+		if (self.movetarget && self.movespeed != -1) {
+			if (self.movetarget.classtype == CT_PATHCORNER || (self.charmer != world)) {
+				dprint("Set up a follow target with targetname: ");
+				dprint(self.movetarget.targetname); dprint(".\n");
+				self.goalentity = self.movetarget;
+				self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
+				SUB_SelfThink(self.th_walk,0.1 + random() * 0.5);
+				return TRUE;
+			}
+		}
+	} else if (self.event != "") {
+		self.movetarget = self.charmer = find(world, targetname, self.event); // Search for Nehahra follow target
+		if (self.charmer) {
+			self.alignment = self.charmer.alignment;
+			self.charmed = TRUE;
+			self.goalentity = self.movetarget;
+			self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
+			self.nextthink = time + 0.1 + random()*0.5;
+			self.think = self.th_walk;
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+};
+
 // Second part of setup function).  Checks for any targets to get angry at or stand/walk around
 void() monster_targets = {
 	self.enemy = self.goalentity = self.movetarget = world; // Reset everything first
@@ -502,38 +539,7 @@ void() monster_targets = {
 			}
 		}
 	} else {
-		// If the monster has a target check if path_corner or something to attack?  Do nothing with patrol paths if spawning angry with the player
-		if (self.target != "") {
-			self.charmer = world;
-			if (self.event != "") {
-				self.movetarget = self.charmer = find(world, targetname, self.event); // Search for Nehahra follow target
-				self.movespeed = FALSE; // Force out of turret mode for mapper specified follow target
-			} else {
-				self.movetarget = find(world, targetname, self.target);
-			}
-
-			// Cannot chase a target if setup as a turret
-			if (self.movetarget && self.movespeed != -1) {
-				if (self.movetarget.classtype == CT_PATHCORNER || (self.charmer != world)) {
-					self.goalentity = self.movetarget;
-					self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
-					self.nextthink = time + 0.1 + random()*0.5;
-					self.think = self.th_walk;
-					return;
-				}
-			}
-		} else if (self.event != "") {
-			self.movetarget = self.charmer = find(world, targetname, self.event); // Search for Nehahra follow target
-			if (self.charmer) {
-				self.alignment = self.charmer.alignment;
-				self.charmed = TRUE;
-				self.goalentity = self.movetarget;
-				self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
-				self.nextthink = time + 0.1 + random()*0.5;
-				self.think = self.th_walk;
-				return;
-			}
-		}
+		if (FollowSetup()) return;
 	}
 	
 	if (activator.flags & FL_CLIENT && activator.horn_active == TRUE) ApplyHornCharm(self,activator); // Always follow a player who charmed us rather than our "event" target
@@ -544,6 +550,8 @@ void() monster_targets = {
 void() monster_reset_movement_type = {
 	if (self.classmove == MON_MOVESTATIC) self.movetype = MOVETYPE_NONE; // Not all monsters are step movement, some are stationary
 	else self.movetype = MOVETYPE_STEP;
+
+	if (self.classtype == CT_MONWRAITHNEHAHRA) self.movetype = MOVETYPE_NOCLIP;
 
 	if (self.classmove == MON_MOVEFLY ) { // Flying Monsters
 		if (!self.yaw_speed) self.yaw_speed = 15;
@@ -573,7 +581,7 @@ void() monster_spawn = {
 
 	// Check if the monster can spawn without telefragging something
 	if (self.spawnnotelefrag > 0) {
-		self.solid = SOLID_SLIDEBOX; // Switch on world interaction
+		if (self.classtype != CT_MONWRAITHNEHAHRA) self.solid = SOLID_SLIDEBOX; // Switch on world interaction
 		setmodel(self, self.mdl); // restore model/bbox to get world collision
 		setsize (self, self.bbmins, self.bbmaxs);
 		setorigin(self, self.oldorigin); // reset origin, just in case been moved since last
@@ -632,7 +640,7 @@ void() monster_spawn = {
 	if (self.minion_maxcount > 0 && self.minion_name != "") monster_checkminion(self.minion_name); // Precache any minion monster if we have a counter and if we have a minion name
 	if (self.think1) self.use = self.think1;	// different use function?
 	else self.use = monster_use;				// default trigger event
-	self.solid = SOLID_SLIDEBOX;				// Standard monster movement
+	if (self.classtype != CT_MONWRAITHNEHAHRA) self.solid = SOLID_SLIDEBOX;				// Standard monster movement
 	monster_reset_movement_type();				// Standard monster movement
 	setmodel(self, self.mdl);					// Setup model
 	self.mindex2 = self.modelindex;
@@ -1027,6 +1035,7 @@ void() monster_start = {
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 	self.oldorigin = self.origin;		// Save origin
 	self.max_health = self.health;		// Save max health
+	self.mega_health = self.max_health;
 	if (!self.gibhealth) self.gibhealth = 0 - self.health;	// Default gib health
 	if (self.turrethealth < 0 || self.turrethealth > 1) self.turrethealth = 0.5;
 	if (self.jump_flag < 0) self.jump_flag = LARGE_TIMER; // Check if jump function has been disabled?

@@ -522,7 +522,8 @@ float DOOM_SHOTGUN_PIERCE			= 2;		// Shotgun projectiles pierce through multiple
 float DOOM_MONSTERS_NM_RESPAWN		= 4;		// When skill is Nightmare (>=3), this enables monster respawning.  When respawning, corpse dissappears with teleglitter, monsters respawn with teleglitter, and the monster's previous enemy is remembered if a player and still alive.  Respawn is 8 to 300 seconds.
 
 .float hipnoticoptions;
-float HIPNOTIC_OLDMJOLNIR			= 1;
+float HIPNOTIC_OLDMJOLNIR			= 1;		// Default is off = Drake throwable Mjolnir if held down + aDaya mod jam version for Tome.  On is just lightning ground smack and whack damage similar to Quoth simple hammer whack.
+float HIPNOTIC_BULLETHOLES			= 2;		// Shotguns place bullet hole sprites on world walls.  Default is off.
 
 .float spirit_blessed;
 .float air_blessed;
@@ -539,7 +540,44 @@ float MONSTER_FLAK_OGRE	= 4;
 .float spikecount;
 .float idleweaponframe;	// this is set to be the stationary idle weapon frame used when the player is not firing.  It is different for each weapon and must therefore be set on each weapon change
 .float monsterflags;
+
+// From Kinn stuff
 float MF_COMMANDER	= 1;		// beefier version
+float MF_CHAMPION	= 2;	// really beefy version
+float MF_GUIDED		= 4;	//being guided by a trigger_monsterguide
+float MF_FADING		= 8;	//currently dead and in the process of fading into the ground - don't do anything to it!
+float MF_SHUFFLER_CHARGE= 16;	//shuffler charging - obsolete now
+float MF_GOON_SLAP 	= 32;	//shuffler slapping his goons about
+float MF_COUNT_FRAGS	= 64;	//add kills to self.frags - useful for shuffler
+float MF_GREATER_DEMON	= 128;	//indicates a large, powerful monster - used in shuffler slap
+float MF_ZOMBIE_GIB	= 256;	//gibs like a zombie - used in some monster damage calculations
+float MF_SHUFFLER_MINION= 512;	//spawned by a shuffler
+float MF_GANG_SPAWNED	= 1024;	//spawned by a gangspawner
+float MF_SMOOTH_FLIGHT	= 2048;	//flymonsters/swimmonsters move using entirely velocity changes
+float MF_TFRAG_PRIORITY = 4096;	//give monsters priority when telefragging
+float M_AMBUSH			= 1;
+float M_GROUP			= 2;	//collect 6 of these into a single edict (replaces M_NOJUMP)
+float M_SPAWNED			= 4;	//spawn into the level even if not grouped (replaces M_NOSIGHT)
+float M_SPAWNSILENT		= 8;	//for monster group spawners
+float M_SPAWNANGRY		= 16;	//this lets you make grouped monsters angry on spawning
+float M_SPAWNNODROP		= 32;	//does not droptofloor on spawn
+float M_REMOVECORPSE	= 64;	//remove corpse after a while - gangspawned monsters have this as default
+float M_MISSILETARGET	= 128;	//other monsters will never get angry, unless they can reach it according to self.max_attack_height
+float M_NOGUIDE			= 4096;		//will not use monsterguide triggers
+float M_NOJUMP			= 8192;		//will not use monsterjump triggers - useful if you don't want all monsters to jump
+float M_NOSIGHT			= 16384;	//no sight sound on spotting player for first time
+float M_NOTARGET		= 32768;	//other monsters will not start a fight with this one
+float GF1_WEAPON_TWEAKS = 2;		//nail firing positions changed to match weapon model better, lightning position smoothed
+float GF1_ID_MAPNAME	= 4;
+float GF1_MONSTER_FRIENDLY_DMG = 32;	//if enabled, monsters do not take damage from each other if they have the same classname (like in doom)
+float GF1_IMPACTS 	= 64;		//enable impact sounds like bodydrops etc.
+float GF1_ALT_GIBS	= 128;		//different gib stylies
+float GF1_NO_GROUPING	= 256;		//don't group monsters/items
+float GF1_CORPSE_STAY	= 512;		//all corpses stay behind, like classic quake - use in high-capacity engines
+float GF1_CORPSE_REMOVE_ALL = 1024;	//remove all corpses immediately
+float GF1_GIBS_CHANGED	= 2048;		//hack to support changed gibs
+float GF1_MAP_RESET_HACK = 4096;	//hack to keep position after killing self if you want
+
 float HX_FRAME_TIME   =  0.05000;
 float AF_NORMAL   =  0.00000;
 float AF_BEGINNING   =  1.00000;

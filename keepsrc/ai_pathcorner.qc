@@ -446,7 +446,14 @@ void() path_corner_touch = {
 			other.think = other.th_stand;
 			other.nextthink = time + 0.05;
 		} else { // no pause, turn and keep walking towards next goal
-			other.ideal_yaw = vectoyaw(other.goalentity.origin - other.origin);
+			if (other.goalentity.classtype == CT_PATHCORNER && other.goalentity.spawnflags & PATHC_INSTANT && other.goalentity.movetarget) {
+				//if (!SUB_BBoxInOccupied(other.bbmins, other.bbmaxs, other.goalentity.origin)) {
+					setorigin(other,other.goalentity.origin + '0 0 24');
+					other.angles_y = vectoyaw(other.goalentity.origin - other.goalentity.movetarget.origin);
+					other.ideal_yaw = vectoyaw(other.goalentity.movetarget.origin - other.origin);
+					force_retouch = 2;
+				//}
+			} else other.ideal_yaw = vectoyaw(other.goalentity.origin - other.origin);
 			other.pausetime = 0;
 		}
 	} else path_corner_stop(); // No new target to follow, stand around

@@ -373,10 +373,8 @@ float(float yaw, float dist) noclip_move = {
     move = v_forward * dist * 10;
     if (self.enemy) {
         delta = self.origin_z - self.enemy.origin_z;
-        if (delta < 30)
-            move_z = move_z + 80;
-        else if (delta > 40)
-            move_z = move_z - 80;
+        if (delta < 30) move_z = move_z + 80;
+        else if (delta > 40) move_z = move_z - 80;
     }
     self.velocity = move;
     return TRUE;
@@ -386,10 +384,10 @@ float(float yaw, float dist) noclip_move = {
 // Originally float type, but noclip movement cannot be blocked.
 void(float yaw, float dist) noclip_step = {
     self.ideal_yaw = yaw;
-    ChangeYaw ();
+    ChangeYaw();
 
-    if (FacingIdeal ())
-        noclip_move (yaw, dist);
+    if (FacingIdeal())
+        noclip_move(yaw, dist);
     else
         self.velocity = '0 0 0';    // Didn't turn enough so don't move.
 };
@@ -442,7 +440,7 @@ void(float dist) noclip_chase = {
             {noclip_step (d2, dist); return;}
 
 	// No direct path to goal, so pick another way.
-    noclip_step (old, dist);
+    noclip_step(old, dist);
 };
 
 // This is 'movetogoal' for monsters with noclip movement.  Based on 'SV_MoveToGoal'.
@@ -454,10 +452,10 @@ void(float dist) noclip_goal = {
         if (QC_CloseEnough (dist))
             if (pointcontents (self.origin) != CONTENT_SOLID) {self.velocity = '0 0 0'; return;}
 
-    if (random() < 0.333)
-        noclip_chase (dist);
+    if (random() < 0.333 && self.goalentity.classtype != CT_PATHCORNER)
+        noclip_chase(dist);
     else
-        noclip_step (self.ideal_yaw, dist);
+        noclip_step(self.ideal_yaw, dist);
 };
 
 // Like findradius, except the chain includes entities with solid_not.  Useful when you want explosions and the like to gib non-solid corpses.

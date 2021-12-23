@@ -242,6 +242,27 @@ vigil.qc					// REFINED From Wright's Vigil map, had a useful triggerable Congra
 qrobot.qc 					// REFINED Qmaster's Super Syncronized Trains, boring right, until the whole world is made of them.
 progs_redfield.qc			// REFINED Redfield's decorations and effects.
 
+// Hipnotic stuff
+//-----------------------------------------------------------------------------
+hipdecoy.qc					// Actor for end sequence.
+hipmisc.qc					// Miscellaneous stuff.
+hipwater.qc					// func_bobbingwater
+hiptrain.qc					// func_train2
+hipholes.qc					// Bullet hole sprites for shotguns.
+
+// Rogue stuff
+//-----------------------------------------------------------------------------
+lightnin.qc					// Rogue's lightning traps.
+ending.qc					// Rogue's ending sequence
+timemach.qc					// Rogue's time machine
+sphere.qc					// REFINED Rogue's Vengeance Sphere powerup.
+//teamplay.qc				// Rogues' special capture the flag code and other multiplayer stuff.
+//dmatch.qc					// Rogue's special deathmatch code.
+
+// Kinn's Marcher Fortress and Bastion stuff
+//-----------------------------------------------------------------------------
+//m_bdwspawn.qc				// Handles spawning monster hordes in grid pattern packs.
+
 // Pox's extras_r4 Particle Effects and Various Entities
 //-----------------------------------------------------------------------------
 extras_ai.qc				// REFINED Swimming Surface-Smart AI
@@ -370,7 +391,7 @@ mon_nehahra.qc				// Nehahra, giant dragon-like creature that spits flame
 //mon_mistermax.qc			// Maxwell, aka The Mister, Nehahra final boss.
 //mon_archgaunt.qc			// Nehahra
 //mon_jagger.qc				// Jagger, Nehahra, DENIZEN creature that likes swimming for fish.
-//mon_wraith_nehahra.qc		// Void Wraith, Nehahra, floats about collecting souls, but renamed for Keep since there are too many Wraths and Wraiths
+mon_wraith_nehahra.qc		// Void Wraith, Nehahra, floats about collecting souls, but renamed for Keep since there are too many Wraths and Wraiths
 mon_axeman.qc				// Axeman, Drake, from SOE (Soul of Evil).  Very fast axe wielding maniac.
 mon_axegrunt.qc				// Axe Grunt, Lunaran's axe wielding grunt.
 mon_drone.qc				// Drone, Drake, from OUM (Operation Urth Majik) flying small robot with lasers.  Early predecessor to Jim / Bob.

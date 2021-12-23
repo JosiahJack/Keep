@@ -42,11 +42,11 @@
 //
 // Allegiance System Variables
 // We have 3 variables that determine behavior on a monster.
-// Alignment, Temprament, and Vulnerability
+// Alignment, Temperament, and Vulnerability
 //
 // All 3 can be changed by the mapper per monster.
-// All monsters default to 0 for all 3, which is Evil Angry Normal
-// Monsters now look for any other monster or player, noy just players
+// All monsters default to 0 for all 3, which is Evil Angry Normal.
+// Monsters now look for any other monster or player, not just players.
 //=============================================================================
 
 // All 3 are integers with the following ranges:
@@ -87,21 +87,21 @@ float VULN_UNDEAD = 3;
 .float leader; // manual trick
 .float calm_memory_finished;
 
-float(entity decider, entity targ) Align_Match = {
+float(entity decider, entity targ) Align_Match = { // [FUNCTION]
 	if (!decider || !targ) return FALSE; // Can't match world.
     if (decider == targ) return TRUE; // we are ourself
 	return (decider.alignment == targ.alignment);
 };
 
-float(entity targ) IsInsane = {
+float(entity targ) IsInsane = { // [FUNCTION]
 	return (targ.temperament == TEMPRA_PSYCHOTIC || targ.ryuflags & RYU_INSANE);
 };
 
-float(entity targ) IsLoyal = {
+float(entity targ) IsLoyal = { // [FUNCTION]
 	return (targ.temperament == TEMPRA_COWARDLY || targ.temperament == TEMPRA_CALM || targ.relations >= 3);
 };
 
-float(entity decider, entity targ) Align_Opposing = {
+float(entity decider, entity targ) Align_Opposing = { // [FUNCTION]
 	if (!decider || !targ) return FALSE; // Can't oppose world.
     if (decider == targ) return TRUE; // we are ourself
 	if (decider.alignment == NEUTRAL || targ.alignment == NEUTRAL) return FALSE;
@@ -110,14 +110,14 @@ float(entity decider, entity targ) Align_Opposing = {
 	return FALSE;
 };
 
-float(entity decider, entity targ) Classgroup_Match = {
+float(entity decider, entity targ) Classgroup_Match = { // [FUNCTION]
 	if (!decider || !targ) return FALSE; // Can't match world.
     if (decider == targ) return TRUE; // we are ourself
 	return (decider.classgroup == targ.classgroup);
 };
 
 //  True if two entities are allies or at least non-hostile to each other.
-float(entity decider, entity targ) Align_NonHostile = {
+float(entity decider, entity targ) Align_NonHostile = { // [FUNCTION]
     local entity pat;
 
 	if (Align_Match(decider, targ) && !(IsInsane(decider))) return TRUE; // Same team
@@ -128,9 +128,9 @@ float(entity decider, entity targ) Align_NonHostile = {
     return FALSE; // Not allies if either side is the world or other non-creature hazard.
 };
 
-float(entity targ, entity attacker) Ally_Check = { return Align_NonHostile(attacker, targ); }; // drake compat
+float(entity targ, entity attacker) Ally_Check = { return Align_NonHostile(attacker, targ); };  // [FUNCTION], Drake compat, flipped inputs.
 
-float(entity targ, entity attacker, float dmg, float touch) Align_DamageModifier = {
+float(entity targ, entity attacker, float dmg, float touch) Align_DamageModifier = { // [FUNCTION]
 	if (targ.vulnerability == VULN_SERAPHIC) return FALSE;  // No damage!
 
 	if (Align_Match(attacker, targ) || touch) {
@@ -146,7 +146,7 @@ float(entity targ, entity attacker, float dmg, float touch) Align_DamageModifier
 	return dmg; // VULN_NORMAL
 };
 
-float(entity targ) IsLeader = {
+float(entity targ) IsLeader = { // [FUNCTION]
 	if (targ.leader) return TRUE; // Manual override
 	if (targ.flags & FL_CLIENT) return TRUE;
 	if (targ.classgroup == CG_DRAGON || targ.classgroup == CG_HARMLESS) return FALSE; // Can't follow dragons or denizens

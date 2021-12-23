@@ -2417,7 +2417,6 @@ void () spawn_mister = {
 	head.lives = 5;
 	head.use = monster_use;
 	head.flags = head.flags | FL_MONSTER;
-	head.soul = "undead";
 	head.pausetime = 100000000;
 	head.think = head.th_stand;
 	head.classtype = CT_MONMISTERMAX;

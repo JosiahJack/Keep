@@ -571,7 +571,7 @@ void() Nemesant_Attack = {
         // Allow exceptions if nothing else is effective.
         if (!super_active) {
             if (self.enemy.classgroup == CG_ZOMBIE) fast = 0;
-            // else if (IsGhost (self.enemy)) fast = 0;
+            else if (IsGhost(self.enemy)) fast = 0;
         }
     } else fast = 0;
 

@@ -590,6 +590,7 @@ void() monster_inquisitor_precache = {
 	precache_model ("progs/drake/s_spark.spr"); // Sparkle:  frames 8-5 reverse
 	precache_model ("progs/qmaster/astorm.spr"); // Rain storm
 	precache_model ("progs/s_dripgreen_lg.spr"); // Large green drip
+	precache_model(MODEL_PROJ_RINGSHOCK);	// Ground shockwave
 	precache_sound ("ad171/skullwiz/idle1.wav");
 	precache_sound ("ad171/skullwiz/pain2.wav");
 	precache_sound ("drake/archer/sight2.wav");

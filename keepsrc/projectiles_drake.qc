@@ -1212,7 +1212,7 @@ void() Thor_Touch = { // [FUNCTION]
 				// Don't move sprite back because hammer is still there.
                 sound (self, CHAN_AUTO, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
                 Rocket_Explosion2 (self.origin, 244, 3);
-                Thor_Discharge ();    // Spawn new, separate explosion entity.
+                Thor_Discharge();    // Spawn new, separate explosion entity.
                 if (self.master.tome_finished) {
                     ShockWave (self.origin + '0 0 4', RING_BLUE, 6, "progs/drake/s_wave.spr",FALSE);
                     swap = self;
@@ -1529,10 +1529,10 @@ void(entity inflictor, float radius) StaticField = { // [FUNCTION]
 // Checks if the super slam is safe to use.
 float() Thor_Safe = { // [FUNCTION]
     if (deathmatch) return TRUE;    // Allow for possible net frag gain.
-    if (self.waterlevel <= 1) return TRUE; // Not in the water.
     if (self.cross_finished) return TRUE; // Immune to radius damage.
     if (self.radsuit_finished) return TRUE; // Inherited wetsuit powers...protected from lightning damage.
-    return ImmuneToDamage (self);
+    if (self.waterlevel <= 1) return TRUE; // Not in the water.
+    return ImmuneToDamage(self);
 };
 
 // Slammed the ground, so fire off some lightning.
@@ -1541,21 +1541,22 @@ void() HIP_SlamMjolnir = { // [FUNCTION]
 
     if (self.button0)
     if (self.ammo_cells >= COST_MJOLNIR)
-    if (Thor_Safe ()) { // Super slam.  Update 11/30/09:  Don't discharge if deadly.
+    if (Thor_Safe()) { // Super slam.  Update 11/30/09:  Don't discharge if deadly.
         if (self.tome_finished) hits = 6;
         else hits = 4;
 
 		Quake_Spawn(self,800,10,trace_endpos,TRUE,2,VEC_QUAKE);
-		HIP_FireMjolnirLightning ();
+		HIP_FireMjolnirLightning(); dprint("Slam safe\n");
 		Divine_Wrath (hits, 2);     // Do after Hip lightning.
 		if (!lightzero_finished) sound (world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE);
         if (self.tome_finished) StaticField(self,400); // Soften 'em up before delayed smashing. Was 500.
 		W_Reload(1.5);
-    } else HIP_FireMjolnirShockwave (); // Mini-slam.
+    } else HIP_FireMjolnirShockwave(); // Mini-slam.
 };
 
 float() Hip_ThrewMjolnir = { // [FUNCTION]
-	if ((world.hipnoticoptions & HIPNOTIC_OLDMJOLNIR) && !self.tome_finished) return FALSE; 
+	if (self.hammer_finished) return TRUE;
+	if ((world.hipnoticoptions & HIPNOTIC_OLDMJOLNIR) && !self.tome_finished) return FALSE;
 	if (self.button0 && HasPowerToThrow()) {W_FireThor();  return TRUE;} // Throw if player has the juice.
     return FALSE;
 };
