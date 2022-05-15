@@ -181,12 +181,14 @@ void(string modelstr, float frameno, float skinno) corpse_setup = { // [FUNCTION
 	if (self.mdl == "") self.mdl = modelstr;
 	precache_model(self.mdl);
 	setmodel(self,self.mdl);
-	if (frameno >= 0) self.frame = frameno;
-	if (skinno >= 0) self.skin = skinno;
 	self.gib1sound = GIB_IMPACT_WOOD;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL; // Setup bounding box based on presets
 	monster_bbox();
-	misc_deadbody_setup();
+	setsize (self, self.bbmins, self.bbmaxs);
+	self.frame = frameno;
+	self.skin = skinno;
+	self.bodyonflr = MON_ONFLR;
+	self.gibbed = FALSE;
 };
 
 void() corpse_flayed1 = { corpse_setup("progs/quoth/corpse_flay.mdl",0,0); };  // [ENTITY]

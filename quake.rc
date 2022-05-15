@@ -167,6 +167,18 @@ alias upglg "impulse 210"
 //-----------------------------------------------------------
 temp1 196608
 
+// Turn custom HUD on/off (-1=off, 0=on, 1+=diff layouts)
+scratch1 1
+
+// Random seed for specialty modes (must be > 0)
+scratch2 0
+
+// Chaos mode (0 = off, >0 = on)
+scratch3 0
+
+// Skill 4 EVIL mode (0 = off, >0 = on)
+scratch4 0
+
 // Default to 1st person so vehicle system 3rd person use is correct.
 chase_active 0
 //-----------------------------------------------------------

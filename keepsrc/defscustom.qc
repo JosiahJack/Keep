@@ -60,6 +60,7 @@ float		trig_cdtrack;		// Trigger changed CD track
 string		trig_skybox;		// Trigger changed Skybox
 float		engine;				// Type of engine active 0=Fitz, 1=DP, 2=FTE
 float		ext_active;			// PR extenstions active (DP/FTE)
+float       ext_rerelease;      // Using the Quake Rerelease engine
 float		ext_dpfog;			// Extra DP fog parameters
 float		ext_dppart;			// Extra DP particle system
 float		ext_ftepart;		// Extra FTE particle system

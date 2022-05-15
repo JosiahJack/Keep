@@ -486,6 +486,7 @@ void() worldspawn = { // [ENTITY]...well it IS.
 	ext_active = cvar("pr_checkextension");	// Check for engine type and extensions (different features)
 	if (ext_active) {
 		engine = ENG_DPEXT; // This could be DP, QSS, DQ, RMQ, Qbism etc
+		ext_rerelease = checkextension ("QUAKE_EX");
 		ext_dppart = checkextension("DP_SV_POINTPARTICLES"); // Check for DP/FTE point particle extensions
 		ext_ftepart = checkextension("FTE_SV_POINTPARTICLES");
 		ext_dpfog = checkextension("DP_GFX_FOG"); // DP extra fog params
@@ -501,32 +502,50 @@ void() worldspawn = { // [ENTITY]...well it IS.
 		
 		// There is no way to detect CSQC, no checkextension exists!  If DP detects the CSQC functions it will just use them.
 		// QSS/FTE has a console variable to toggle CSQC on/off, but requires the map to be reloaded for changes to take affect.
-		autocvar(cl_nocsqc, "0"); // Setup a temp variable if none is found (def=0 CSQC is on)
+		autocvar(cl_nocsqc, "1"); // Setup a temp variable if none is found (def=0 CSQC is on)
 		if (cvar("scratch1") < 0) cvar_set("cl_nocsqc", "1"); // Read scratch1 in quake.rc (-1=off, 0=on, 1+=diff layouts)
-		
-		dprint("extension dppart "); dprint(ftos(ext_dppart)); dprint("\n");
-		dprint("extension ftepart "); dprint(ftos(ext_ftepart)); dprint("\n");
-		if (ext_ftepart) {
+		if (!cvar("cl_nocsqc")) {//ext_ftepart) {
 			// Setup variables for CSQC HUD (cannot directly query variables)
 			// FTE/QSS use clientstat, DP use addstat (same function)
 			// The addstat is defined in dpextensions.qc
 			// Example: void(float index, float type, ...) addstat = #232;
-			addstat(CLIENT_MODITEMS, EV_FLOAT, moditems); 
-			addstat(CLIENT_ITEMS2, EV_FLOAT, items2); 
-			addstat(CLIENT_PERMS, EV_FLOAT, perms); 
-			addstat(CLIENT_CKEYNAME1, EV_STRING, ckeyname1); 
-			addstat(CLIENT_CKEYNAME2, EV_STRING, ckeyname2); 
-			addstat(CLIENT_CKEYNAME3, EV_STRING, ckeyname3); 
-			addstat(CLIENT_CKEYNAME4, EV_STRING, ckeyname4); 
-			addstat(CLIENT_CKEYSKIN1, EV_FLOAT, ckeyskin1); 
-			addstat(CLIENT_CKEYSKIN2, EV_FLOAT, ckeyskin2); 
-			addstat(CLIENT_CKEYSKIN3, EV_FLOAT, ckeyskin3); 
-			addstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4);
-			addstat(CLIENT_AMMOPOISON, EV_FLOAT, ammo_poison);
-			addstat(CLIENT_USINGHACKBANK, EV_FLOAT, selfweaponismoditems);
-			addstat(CLIENT_RUNEFLAG, EV_FLOAT, serverflagstemp);
-			//globalstat(CLIENT_DENIZENS, EV_FLOAT, "total_denizens");
-			//globalstat(CLIENT_DENIZENSKILLED, EV_FLOAT, "killed_denizens");
+			if (checkbuiltin(checkbuiltin)) {
+				if (checkbuiltin(addstat)) {
+					addstat(CLIENT_MODITEMS, EV_FLOAT, moditems);
+					addstat(CLIENT_ITEMS2, EV_FLOAT, items2);
+					addstat(CLIENT_PERMS, EV_FLOAT, perms);
+					addstat(CLIENT_CKEYNAME1, EV_STRING, ckeyname1);
+					addstat(CLIENT_CKEYNAME2, EV_STRING, ckeyname2);
+					addstat(CLIENT_CKEYNAME3, EV_STRING, ckeyname3);
+					addstat(CLIENT_CKEYNAME4, EV_STRING, ckeyname4);
+					addstat(CLIENT_CKEYSKIN1, EV_FLOAT, ckeyskin1);
+					addstat(CLIENT_CKEYSKIN2, EV_FLOAT, ckeyskin2);
+					addstat(CLIENT_CKEYSKIN3, EV_FLOAT, ckeyskin3);
+					addstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4);
+					addstat(CLIENT_AMMOPOISON, EV_FLOAT, ammo_poison);
+					addstat(CLIENT_USINGHACKBANK, EV_FLOAT, selfweaponismoditems);
+					addstat(CLIENT_RUNEFLAG, EV_FLOAT, serverflagstemp);
+				} else if (checkbuiltin(clientstat)) {
+					clientstat(CLIENT_MODITEMS, EV_FLOAT, moditems);
+					clientstat(CLIENT_ITEMS2, EV_FLOAT, items2);
+					clientstat(CLIENT_PERMS, EV_FLOAT, perms);
+					clientstat(CLIENT_CKEYNAME1, EV_STRING, ckeyname1);
+					clientstat(CLIENT_CKEYNAME2, EV_STRING, ckeyname2);
+					clientstat(CLIENT_CKEYNAME3, EV_STRING, ckeyname3);
+					clientstat(CLIENT_CKEYNAME4, EV_STRING, ckeyname4);
+					clientstat(CLIENT_CKEYSKIN1, EV_FLOAT, ckeyskin1);
+					clientstat(CLIENT_CKEYSKIN2, EV_FLOAT, ckeyskin2);
+					clientstat(CLIENT_CKEYSKIN3, EV_FLOAT, ckeyskin3);
+					clientstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4);
+					clientstat(CLIENT_AMMOPOISON, EV_FLOAT, ammo_poison);
+					clientstat(CLIENT_USINGHACKBANK, EV_FLOAT, selfweaponismoditems);
+					clientstat(CLIENT_RUNEFLAG, EV_FLOAT, serverflagstemp);
+				}
+				if (checkbuiltin(globalstat)) {
+					globalstat(CLIENT_DENIZENS, EV_FLOAT, "total_denizens");
+					globalstat(CLIENT_DENIZENSKILLED, EV_FLOAT, "killed_denizens");
+				}
+			}
 		}
 	}
 	dprint("\n\b[ENGINE]\b ");

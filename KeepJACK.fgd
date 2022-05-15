@@ -2952,13 +2952,7 @@
 ]
 
 //_____Misc MODEL_____
-@PointClass base(Appearflags, Targetname) size(-16 -16 -16, 16 16 16) color(255 128 64) model({ 
-	"path": mdl,
-	// "skin": pos2,
-    "skin": __show_skin,
-    //"frame": pos1
-    "frame": __show_frame
-}) = misc_model : "Misc Models - Load custom models(.MDL files), as props, that are not predefined in the base game/mod. They can be setup with specific frame/skin and animation groups. Note - Having knowledge of at least opening/viewing '.mdl' files(ex QME) is recommended if customizing the settings." [
+@PointClass base(Appearflags, Targetname) studio() size(-16 -16 -16, 16 16 16) color(255 128 64) = misc_model : "Misc Models - Load custom models(.MDL files), as props, that are not predefined in the base game/mod. They can be setup with specific frame/skin and animation groups. Note - Having knowledge of at least opening/viewing '.mdl' files(ex QME) is recommended if customizing the settings." [
 	spawnflags(Flags) = [
 		 2 : "Collison" : 0 : "Model bbox collision enabled"
 		 4 : "Moveable" : 0 : "Model can be moved around like an item"
@@ -2970,7 +2964,7 @@
 	yaw_speed(integer) : "Turning speed of model twowards path_corner if using faceangle=1 (def=15)"
 	movespeed(integer) : "Movement (map units) per second towards path_corners if using faceangle=1 (def=50)"
 	speed(integer) : "Override for frame/skin animation speed (def=0.1s)"
-	mdl(string) : "Model Selection (ex progs/model.mdl)"
+	mdl(studio) : "Model Selection (ex progs/model.mdl)"
 	model(studio) : "Model Preview (Editor)" :  : "Set to the same value as 'Model Selection', to see the custom model in the editor." 
 	angle(integer) : "facing angle of model (-1 = random position)"
 	ideal_yaw(choices) : "Random Rotation (Y axis)" = [
@@ -5186,21 +5180,21 @@ GN/A" : 0
 // _mirrorinside 1
 
 //_____DETAIL FENCE_____
-@SolidClass base(FuncLighting) = func_detail_fence : "Similar to 'func_detail_wall' except it’s suitable for fence(alphamasked) textures and never clips away world faces. Useful for fences, grates, etc, that are solid and block gunfire. NOTE: Set _mirriorinside to 1 to texture inside faces. See 'func_detail_illusionary' for more information." [   
+@SolidClass base(FuncLighting) = func_detail_fence : "Similar to 'func_detail_wall' except itï¿½s suitable for fence(alphamasked) textures and never clips away world faces. Useful for fences, grates, etc, that are solid and block gunfire. NOTE: Set _mirriorinside to 1 to texture inside faces. See 'func_detail_illusionary' for more information." [   
     _mirrorinside(choices) : "Mirror Inside Face(s)" = [
 	    0 : "Do Nothing"
 	    1 : "Enabled"
 	]    
 ]
 //_____DETAIL ILLUSIONARY_____
-@SolidClass base(FuncLighting) = func_detail_illusionary : "Compiler entity only. A func_detail variant with no collision(players|monsters|gunfire) and doesn’t split world faces. Useful for hanging vines. NOTE: Set '_mirriorinside' to 1 to texture inside faces. Example - You have a brush textured entirely with the 'skip' texture except for one face, which is textured with 'cobwebs'. Setting '_mirrorinside' to 1 will mirror your cobweb texture to the inside of that face." [
+@SolidClass base(FuncLighting) = func_detail_illusionary : "Compiler entity only. A func_detail variant with no collision(players|monsters|gunfire) and doesnï¿½t split world faces. Useful for hanging vines. NOTE: Set '_mirriorinside' to 1 to texture inside faces. Example - You have a brush textured entirely with the 'skip' texture except for one face, which is textured with 'cobwebs'. Setting '_mirrorinside' to 1 will mirror your cobweb texture to the inside of that face." [
     _mirrorinside(choices) : "Mirror Inside Face(s)" = [
 	    0 : "Do Nothing"
 	    1 : "Enabled"
 	]    
 ]
 //_____DETAIL WALL_____
-@SolidClass base(FuncLighting) = func_detail_wall : "Compiler entity only. A func_detail variant that doesn’t split world faces. Useful for when you want decoration touching a floor, or wall, to not split the floor/wall faces. Note: You will get some overdraw instead. If it completely covers up a world face, that face will get clipped away. So it is not suitable for fence(alphamasked) textures." []
+@SolidClass base(FuncLighting) = func_detail_wall : "Compiler entity only. A func_detail variant that doesnï¿½t split world faces. Useful for when you want decoration touching a floor, or wall, to not split the floor/wall faces. Note: You will get some overdraw instead. If it completely covers up a world face, that face will get clipped away. So it is not suitable for fence(alphamasked) textures." []
 
 // *** ADVANCED ***
 

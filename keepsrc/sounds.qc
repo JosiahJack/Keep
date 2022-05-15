@@ -46,15 +46,14 @@ float SOUND_EXTENSION1 = 16;
 // Volume has to be within range of 0-1, otherwise engine errors
 void(float defvol) SUB_BoundVolume = { // [FUNCTION]
 	if (self.volume == 0) self.volume = defvol;	// Default
-	else if (self.volume < SOUND_VOLUME_MIN) self.volume = 0;	// Out of range
-	else if (self.volume > SOUND_VOLUME_MAX) self.volume = 1;	// Out of range
-};
+	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;	// Set to vanilla default
+}; // Engine already bounds this to [0,1]. Silent ambientsounds make no sense.
 
 void() ambient_sound_setup = { // [FUNCTION]
-	SUB_BoundVolume(1);
+	SUB_BoundVolume(self.volume);
 	if (self.speed < 0) self.speed = ATTN_NONE;
-	else if (self.speed == 0) self.speed = ATTN_NORM;
-	ambientsound (self.origin, self.noise, self.volume, self.speed);
+	else if (self.speed == 0) self.speed = ATTN_STATIC;
+	ambientsound(self.origin, self.noise, self.volume, self.speed);
 };
 
 void() ambientsound_trigger_start = { // [FUNCTION]
@@ -105,7 +104,7 @@ void() ambient_comp_hum = { // [ENTITY]
 
 void() ambient_drip = { // [ENTITY]
 	self.noise = "ambience/drip1.wav";
-	precache_sound (self.noise);
+	precache_sound(self.noise);
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 0.5;
 	ambient_sound_setup();
 };
