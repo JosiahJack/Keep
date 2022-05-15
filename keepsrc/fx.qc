@@ -775,7 +775,7 @@ void() InitLightning = { // [FUNCTION]
     lightning.solid      = SOLID_NOT;
     lightning.movetype   = MOVETYPE_NONE;
     lightning.classname  = "lightning";
-	dprint("\b[SETUP]\b Drake lightning is now setup");
+	dprint("\b[SETUP]\b Drake lightning is now setup\n");
 };
 
 void(entity targ, entity inflictor, entity attacker, vector org, float damage) BoltDamage = { // [FUNCTION]

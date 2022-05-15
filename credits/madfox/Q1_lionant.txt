@@ -1,0 +1,43 @@
+==============================================================
+Title                  : lionant.zip
+Filename               : Lionant
+Author                 : Madfox
+Email Adress           : catweazel@kpn.home.nl
+Description            : Quake 1 monster
+
+Additional Credits to  : ID Software
+
+==============================================================
+
+* Play Inormation *
+
+Level Name              : /
+Single Player           : yes
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Monsters            : yes
+New Sounds              : /
+qC                      : yes
+
+==============================================================
+
+* Construction *
+
+Base              : converted HL2 model converted to Qmle by
+                  : Biodude. Animated by Madfox.  
+Build Time        : original Hl2 file, thank them!
+Editor(s) Used    : Qmle Wally Quark4.07 AM2005
+Known Bugs        : Several verticemeshes by converting, could
+                  : be soluted by hand patching. 199 frames.
+                  : No base.dxf for skinning, badass. 
+                  : Solution; patch the 69 objects into a plain
+                  : flat dxf.   
+GameOption        : Not yet qc moted.
+
+You may distribute  but keep file intact,  give me some credit
+when distributing, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 4 januari 2010  

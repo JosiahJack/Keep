@@ -12,27 +12,21 @@
 		2048 : "Not in Deathmatch" : 0 : "Will not spawn for DEATHMATCH skill"
 	]
 ]
-@baseclass = Targetname [ targetname(target_source) : "TargetName" ]
-@baseclass = Target [ target(target_destination) : "Target" ]
-@baseclass = Target2 [ target(target_destination) : "Target 2" ]
+@baseclass = Targetname [ targetname(target_source) : "TargetName" : : "Name of entity, used for triggering/targetting other entities" ]
+@baseclass = Target [ target(target_destination) : "Target" : : "Targets to affect" ]
+@baseclass = Target2 [ target(target_destination) : "Target 2" : : "More targets to affect" ]
 
-//======================================================================
-//
 // WORLDSPAWN
-//
-//======================================================================
 @SolidClass = worldspawn : "World entity" [
-	//----------------------------------------------------------------------
 	worldtype(choices) : "World Type" : 0 = [
 		0 : "Medieval"
 		1 : "Runic (metal)"
 		2 : "Present (base)"
 	]
-	message(string) : "Level Name"
-	message2(string) : "End Screen Text (after pressing Use)"
+	message(string) : "Level Name" : : "Enter a level name that will show ingame when the player presses 'Tab', otherwise it's just the name of the bsp file minus the extension."
 	sounds(integer) : "CD/Music track" :  : "Music track to automatically play."
-	wad(string) : "Wads" : "" : "List of Wad Files used by the compiler, semicolon for seperation."
-    sky(string) : "Sky Texture" :  : "Use a Skybox instead of an id standard animated sky."
+	wad(string) : "Wads" : "" : "List of wad files used by the compiler, use a semicolon for seperation."
+    sky(string) : "Sky Texture" :  : "Use a skybox instead of an id standard animated sky. Skyboxes(.tga) consist of 6 images and are typically referenced as: interstellar_, moonrise_, voidsmoke_ etc with these letters(bk, dn, ft, lf, rt, and up) appended at the end. The underscore is not neccesary but used for clarity. The important part is to just leave off the last 'two' trailing letters from the name of your skybox for 'Sky Texture' here. NOTE: Directory paths are allowed so, '...env/mycustomfolder/mycustomsky_' is perfectly valid. FYI - Quakespasm/Darkplaces both look for skybox files in '...id1/gfx/env/'. Using a Mod directory is also acceptable(ex '... ad/gfx/env'."
     gravity(integer) : "Gravity" :  : "Gravity of the map, default 800."
 	passive_state(choices) : "Global Passive State" : :  "All monsters are setup in a passive state." = [
 		0 : "Off, Normal behaviour"
@@ -54,7 +48,7 @@
     ]   	
 	_range(integer) : "Global Light Range" :  : "Scales the brightness range of all lights without affecting their fade distance. Values more than 0.5 makes lights brighter and values less than 0.5 makes lights less bright. The same effect can be achieved on individual lights by adjusting both the 'light' and 'wait' attributes."
 	_dist(integer) : "Global Light Scale" :  : "Scales the fade distance of all lights by a factor of 'n'. If 'n' is more than 1 lights fade more quickly with distance and if 'n' is less than 1, lights fade more slowly with distance and the light reaches further."
-	_gamma(integer) : "Lightmap gamma" :  : "Adjust brightness of the final lightmap. Values > 1 are brighter while values < 1 are darker, Default 1."
+	_gamma(integer) : "Lightmap gamma" :  : "Adjust brightness of the final lightmap. Default 1, values >1 are brighter while values <1 are darker."
 	_spotlightautofalloff(integer) : "Spotlight Falloff" :  : "When set to 1, spotlight falloff is calculated from the distance to the targeted 'info_null'. Ignored when '_falloff' is not 0. Default 0."
 
 	//-------- SUN options -------- 
@@ -244,6 +238,33 @@
 	fall_heightlow(integer) : "Fall height sound only (no dmg (def=300)" : : "Custom fall height that triggers a thud sound without inflicting player damage"
 	fall_heighthigh(integer) : "Fall height sound+damage (def=650)" : : "Custom fall height that triggers a bone crush sound with inflicting player damage"	
 	fall_speeddebug(integer) : "Set to 1 to display players fall velocity to console"
+
+	// Specialty mod independently toggleable options
+	copperoptions(Flags) = [
+		1 : "Shotguns always pierce" : 0
+		2 : "Imprecise vore ball tracking" : 0
+		4 : "Semi-Z-Aware monster grenade lobbing" : 0
+		8 : "One hit from axe always knocks zombies" : 0
+		16 : "Gibable downed zombies" : 0
+		32 : "Turret enforcers" : 0
+		64 : "Spawn jump calming out of sight" : 0
+		128 : "Chthon projectile speed progression" : 0
+		256 : "Forgetful infighters" : 0
+		512 : "Coop party item share" : 0
+		1024 : "Coop backpack protection" : 0
+		2048 : "Coop megahealth whole party heal" : 0
+		4096 : "Fast Nailgun nails" : 0
+		8192 : "Perforator files double nails" : 0
+	]
+	hipnoticoptions(Flags) = [
+		1 : "Old Mjolnir weapon behavior" : 0
+	]
+	doomoptions(Flags) = [
+		1 : "Shotguns always have knockback" : 0
+	]	
+	noise(string) : "Start music for Secondary Drake Music System" : : "Example music/shadows.wav"
+	noise2(string) : "Intermission music for Secondary Drake Music System" : : "Example music/soultrap.wav"
+	noise3(string) : "Episode end music for Secondary Drake Music System" : : "Example music/halo.wav"
 ]
 
 //======================================================================
@@ -794,7 +815,8 @@
 		"KEYWHITE" : "KEYWHITE - White"
 	]
 ]
-//----------------------------------------------------------------------
+@PointClass base(Items,KeySize) studio("progs/qmaster/w_sk_key.mdl") = item_key_skeleton : "Skeleton key" []
+
 @PointClass base(Items,KeySize) studio("progs/qmaster/coinitem.mdl") = item_coin : "Coin Currency for Versus" [
 	count(integer) : "Number of Coins"
 ]
@@ -975,6 +997,8 @@
 @PointClass base(Items,PowerupSize,PowerTimer) studio("progs/quoth/trinity.mdl") = item_artifact_trinity : "Trinity" []
 @PointClass base(Items,PowerupSize,PowerTimer) studio("progs/quoth/cross.mdl") = item_artifact_cross : "Cross of Deflection" []
 @PointClass base(Items,PowerupSize) studio("progs/hipnotic/horn.mdl") = item_artifact_horn : "Horn of Conjuring" []
+
+@PointClass base(Items,PowerupSize,PowerTimer) studio("progs/drake/wings2.mdl") = item_artifact_haste : "Haste" []
 
 @PointClass base(Items) size(-32 -32 -24, 32 32 40) studio("progs/qrally/sumabase.mdl") = item_rallycar : "Drivable Vehicle" []
 
@@ -1157,13 +1181,16 @@
 @PointClass base(Weapon) studio("progs/hipnotic/g_hammer.mdl") = weapon_mjolnir : "Mjolnir's Hammer" []
 @PointClass base(Weapon) studio("progs/drake/g_saw.mdl") = weapon_chainsaw : "Chainsaw" []
 @PointClass base(Weapon) studio("progs/drake/g_grpple.mdl") = weapon_grapple : "Grappling Hook" []
-// @PointClass base(Weapon) studio("progs/drake/g_xbow.mdl") = weapon_dcrossbow : "Ice Crossbow" []
 @PointClass base(Weapon) studio("progs/drake/g_wand.mdl") = weapon_wand : "Wand" []
 @PointClass base(Weapon) studio("progs/rrp/g_axe.mdl") = weapon_sword : "Sword" []
 @PointClass base(Weapon) studio("progs/drake/g_light2.mdl") = weapon_chain_lightning : "Chain Lightning Gun" []
 @PointClass base(Weapon) studio("progs/w_blaster.mdl") = weapon_blaster : "Laser Blaster" []
 @PointClass base(Weapon) studio("progs/nehahra/mg_sh2.mdl") = weapon_gshotgun : "Auto Shotgun" []
 @PointClass base(Weapon) studio("progs/nehahra/mg_rock2.mdl") = weapon_sprocket : "Sprocket Launcher" []
+@PointClass base(Weapon) studio("progs/drake/g_mirv.mdl") = weapon_mirv : "MIRV - Multiple Independently Targeted Reentry Vehicles" []
+@PointClass base(Weapon) studio("progs/qmaster/g_airgun.mdl") = weapon_airgun : "Air Fist" []
+@PointClass base(Weapon) studio("progs/drake/g_rocks.mdl") = weapon_sidewinder : "Sidewinder" []
+@PointClass base(Weapon) studio("progs/drake/g_xbow.mdl") = weapon_buriza : "Asgard Arbalest" []
 
 // Arms of Asgard weapons from Ryan "ryanscissorhands" Holaday
 @PointClass base(Weapon) studio("progs/aoa/g_rapier.mdl") = weapon_rapier : "Ghost Rapier" []
@@ -1265,7 +1292,6 @@
 	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 
-//----------------------------------------------------------------------
 @SolidClass base(FuncItems, FuncLighting) = func_door : "Door (Basic)" [
 	spawnflags(flags) = [
 		1 : "Start Open" : 0
@@ -1307,12 +1333,16 @@
 		2 : "Custom Key 2"
 		3 : "Custom Key 3"
 		4 : "Custom Key 4"
+		5 : "Any Key"
+	]
+	persistentkey(choices) : "Persistent Key" = [
+		0 : "Key is taken away when door is unlocked."
+		1 : "Key persists in the player's inventory."
 	]
 	message2(string) : "Custom key message"
 	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 
-//----------------------------------------------------------------------
 @SolidClass base(FuncItems, FuncLighting) = func_door_secret : "Door (Secret)" [
 	spawnflags(flags) = [
 		1 : "Open once only" : 0
@@ -1862,7 +1892,9 @@
 @PointClass base(Targetname,Target) color(128 0 128)
 	size(-8 -8 -16, 8 8 16) = trigger_monsterkill : "Remove Monster(s)" [
 	spawnflags(Flags) = [
+		8 : "Only Damage to Flinch" : 0
 		16 : "Death Function" : 0
+		32 : "Gib" : 0
 	]
 ]
 
@@ -1884,22 +1916,118 @@
 	]
 ]
 
-//----------------------------------------------------------------------
-@SolidClass base(TrigOFF,Targetname,Target) 
-	= trigger_teleport : "Trigger Teleport" [
+//_____TRIGGER TELEPORT_____
+//Teleport player/monsters to target location
+//if targetname is setup, the teleporter requires a trigger to activate
+//This entity cannot be damaged and is always touchable once activated
+@SolidClass base(Appearflags, Targetname) 
+	= trigger_teleport : "Trigger Teleport - Teleporters consist typically of three parts. Two brushes(a world brush with a special '*teleporter' texture and a 'trigger_teleport' brush) and an 'info_teleport_destination' point entity. Example, 1)Place an 'info_teleport_destination' somewhere in your map and give it a name of 'dest1'. 2)Now, in another part of your map draw out a 64X64X64 brush near floor level, give it a 'trigger' texture and then: r.click >'tie to entity/create brush entity > trigger> trigger_teleport', and give it a target of 'dest1'. 3)Lastly duplicate that brush, in place, and 'move to world/make structural' (r.click) and give it a teleporter texture. That's the basics, decorate/customize as needed." [
+	target(target_destination) : "Target" : "Points to info_teleport_destination/info_teleportinstant_dest entity"
 	spawnflags(Flags) = [
-		1 : "Player only" : 0
-		2 : "Silent" : 0
-		4 : "Start ON" : 0
+		1 : "Player Only" : 0 : "Can only be used by players (nothing else)"
+		2 : "No Ambient" : 0 : "No teleporter ambient sound regardless of state"
+		4 : "Start ON" : 0 : "Will start active regardless of targetname setting"
+		8 : "Instant" : 0 : "Instant teleporter, no change to velocity, use with info_teleportinstant_dest"
+		16 : "Projectiles" : 0 : "Allow projectiles to use regular/instant teleporters"
+		32 : "No Tele FX" : 0 : "No player sound + FX when teleporting entities"
+		64 : "Start OFF" : 0 : "Starts off, waits for trigger" 
+	   128 : "All Physicals" : 1 : "Affect all physical objects"
 	]
 	wait(choices) : "Wait before reset" = [
 		-1 : "Trigger Once"
 		 0 : "Always reset"
 	]
+	wait2(choices) : "target2 only fires once" = [
+		-1 : "Trigger Once"
+		 0 : "Always reset"
+	]
 	speed(integer) : "Speed after teleport (def=300)"
+	target(string) : "Points to info_teleport_destination entity"
+	target2(string) : "Can be used to fire additional targets"
 	volume(integer) : "Teleport hum sound (def=0.5)"
-	noise(string) : "Custom Sound to play"
-	waitmin(integer) : "Custom Sound Length"
+	noise(sound) : "Custom sound to play when active (must be looped, def=hum1.wav)"
+	waitmin(integer) : "Custom Sound Length(def=3.622)"
+	waitmin2(integer) : "Time between teleport sound/fx (def=0.2s) being played"
+	waitmin3(integer) : "Alpha value for debug lvl showing triggers ingame (def=0.75)"
+	dmg(integer) : "damage from using the teleport trigger (def=0)"
+	dmgskill(string) : "damage based on skill level X=Easy, Y=Normal, Z=Hard/NM (def=0,0,0)"
+	debuglvl(choices) : "shows extra info" = [
+		1 : "Impact markers"
+		2 : "Impact arrows"
+		3 : "Console text"
+	]
+	telefixangle(choices) : "Fixed or preserve angle direction for instant teleporters" = [
+		0 : "Preserve angle (default)"
+		1 : "Fixed angle"
+	]
+	no_trackondeath(choices) : "" = [
+		0 : ""
+		1 : "Homing projectiles don't stop tracking"
+	]
+]
+//_____INFO_TELEPORTINSTANT_DEST_____
+@SolidClass = info_teleportinstant_dest : "Destination for an instant teleporter" [
+    targetname(target_source) : "link to trigger_teleport" 
+	target(target_destination) : "fires when used as a destination (works only once)"
+	angletarget(target_destination) : "targeting entity used for custom direction"
+	angles(string) : "Pitch Yaw Roll (destination angle after teleporting)"
+	teledest(integer) : "Unique number for multiple teleporter destinations"
+]
+//_____TRIGGER MAXHP_____
+@SolidClass base(Appearflags) = trigger_maxhp : "Change the player maximum hp and maximum mega values" [
+	targetname(target_source) : "trigger entity (works with entity state system)"
+	target(target_destination) : "trigger all these targets when activated"
+	max_health(integer) : "Maximum Health for ALL the player / client"
+	mega_health(integer) : "Maximum Health for picking up the mega health item"
+	count(integer) : "Skill level (0=ALL, 1=EASY, 2=NORMAL, 4=HARD, 8=NM, 15=ALL)"
+	wait(integer) : "-1=will only fire targets once (switches off)"
+	sounds(integer) : "1=Secret,2=talk,3=switch,4=silent,6=secret2"
+	noise(integer) : "custom sound to play when triggered"
+	message(string) : "message to display when triggered"
+]
+//_____TRIGGER GRAVITY_____
+@SolidClass base(Appearflags) = trigger_gravity : "Trigger Gravity - change entity/entities/player or server (world) gravity" [
+	spawnflags(Flags) = [
+		1 : "NO Touch" : 0 : "Only triggered via other entities"
+		2 : "Server" : 0 : "Change server gravity vs entity gravity"
+		4 : "Player" : 0 : "Player(s) only can touch this trigger"
+		8 : "Monsters" : 0 : "Monster(s) only can touch this trigger"
+	   16 : "Reset" : 0 : "Reset any entity to default gravity (does not affect server)"
+	   64 : "Start OFF" : 0 : "Requires trigger to activate"
+	  128 : "All Physicals" : 1 : "Affect all physical objects"
+	]
+	targetname(target_source) : "Name" : : "Name to trigger this entity (works with entity state system)"
+	target(target_destination) : "Target" : : "Entities to affect with gravity update"
+	target2(target_destination)  : "Target2" : : "Fire event(s) everytime gravity is changed"
+	count(integer) : "Gravity (server=0-1000 (def=800) entity=0-1, can be negative)"
+	wait(integer) : "Wait (def -1)": : "-1, only fire targets once"
+	waitmin2(integer) : "Minimum time between re-triggering fire events"
+	noise2(sound) : "Custom Sound" : : "Sound to play everytime gravity is changed"
+	waitmin(integer)  : "Minimum time between re-triggering sound"	
+]
+//Patch2 addition
+//_____TRIGGER VELOCITY_____
+@SolidClass base(Appearflags) = trigger_velocity : "Trigger Velocity - Check for projectile / player velocity! This entity cannot be damaged and is always touchable." [
+	spawnflags(Flags) = [
+		1 : "Player" : 0 : "Player only trigger"
+		2 : "Monster" : 0 : "Monster only trigger"
+		4 : "Grenade" : 0 : "Grenade projectile only trigger"
+		8 : "Rocket" : 0 : "Rocket projectile only trigger"
+	   64 : "Start OFF" : 0 : "Starts off, waits for trigger"
+	]
+	targetname(target_source) : "Name" : : "Name used as a target by other entities (works with entity state system)"
+	target(target_destination) : "Target" : : "Fire event(s) everytime trigger conditions successful"
+	message (string)  :  "Message (conditions met)" : : "Display a message everytime trigger conditions successful"
+	waitmin(integer) : "Target retrigger delay (def=1s)" : : "Time between target/message working again"
+	target2(target_destination)  : "Target2" : : "Fire event(s) everytime trigger exceptions fail"
+	message2(string)  : "Message2 (exceptions fail)" : : "Display a message everytime trigger exceptions fail"
+	waitmin2(integer) : "Target2 retrigger delay (def=1s)" : : "Time between target2/message2 working again"
+	wait(integer) : "Wait (def -1)" : : " -1, only fire the triggers functionality once"
+	speed(integer) : "Minimum velocity speed to trigger (def=500)"
+	angle(integer) : "Direction(facing) to Activate" : : "Facing Direction for trigger to work, use '360' for angle 0."
+	ideal_yaw (integer) : "Facing angle sensitivity (def=0.3, range = 0 - 1)"
+	delay (integer) : "Delay spawn(def 1 sec / -1 none)" : :  "-1 = No spawn delay, 0 (def=1s), +0 = spawn delay"
+	dmg_take(integer) : "Grenades will explode on impact of this trigger"	
 ]
 @SolidClass base(TrigOFF,Targetname,Target) flags(Angle)
 	= trigger_push : "Trigger Push" [
@@ -1907,7 +2035,8 @@
 		1 : "Once Only" : 0
 		2 : "Silent" : 0
 		4 : "No Monsters" : 0
-		8 : "Affect All Physicals" : 0
+		8 : "Affect All Physical Objects" : 0
+		16: "Additive Velocity" : 0
 	]
 	angle(string) : "Angle of push"
 	speed(integer) : "Speed of push (def=1000)"
@@ -1970,13 +2099,20 @@
 	]
 	old_velocity(string) : "Bubble speeds (shake base multi)(def=5 10 15)"
 ]
-@SolidClass base(TrigBubbles, Target) = trigger_hurt : "Trigger Hurt" [
-	spawnflags(flags) = [ 
-		4 : "Monster ONLY" : 0	
-		16: "MOD Check" : 0
-	]
-	dmg(integer) : "Damage (def=5)"
+//_____Trigger Hurt Settings_____
+@baseclass = TriggerHurtSettings  [
+    dmg(integer) : "Damage (def=5)"
 	wait(integer) : "Time between pain touch (def=1s)"
+	speed(integer) : "Falling Velocity (def=300)"
+]
+//_____TRIGGER HURT_____
+@SolidClass base(Targetname, TriggerHurtSettings, TrigBubbles, Target) = trigger_hurt : "Trigger Hurt" [
+        spawnflags(flags) = [ 
+		4 : "Monster ONLY" : 0 : "Will only affect monsters"	
+		16: "MOD Check" : 0 : "Will remove this entity if THIS mod is active"
+		32: "Falling" : 0 : "Only hurts if the player is falling (speed=velocity)"
+	]
+	dmgskill(string) : "damage based on skill level X=Easy, Y=Normal, Z=Hard/NM (def=0,0,0)"
 ]
 @SolidClass base(TrigBubbles) = trigger_heal : "Trigger Heal" [
 	target(target_destination) : "Target - first heal"
@@ -2097,7 +2233,7 @@
 	]
 ]
 
-@SolidClass base(TrigOFF,Targetname,Target) = trigger_setgravity : "Trigger Set Gravity" [
+@SolidClass base(TrigOFF,Targetname,Target) = trigger_setgravity : "Trigger Set Gravity (Same as trigger_gravity, legacy compat)" [
 	gravity(integer) : "Gravity percent (value 0 to 1)"
 ]
 
@@ -3800,20 +3936,88 @@
 	alpha(integer) : "Alpha Transparency(def=1,opaque)"
 ]
 
-@PointClass base(MonShort) = func_spawn_small : "Monster Spawn (Legacy Support)" [
-	spawnclassname(string) : "Monster To Spawn"
-	cnt(integer) : "Number to spawn" : 1
+@baseclass = MonsterFamilies [
+	style(choices) : "Random Monster Family (def=99)" = [
+		1: "Denizens"
+		2: "Fodder Military"
+		3: "Fodder Mystic"
+		4: "Fodder Horrors"
+		5: "Fodder Brigade"
+		6: "Ogre Establishment"
+		7: "Elite Ogres"
+		8: "Undead" 
+		9: "Midrank Military"
+		10: "Midrank Mystic"
+		11: "Midrank Horrors"
+		12: "Midrank Brigade"
+		13: "Elite Military"
+		14: "Elite Mystic"
+		15: "Elite Horrors"
+		16: "Elite Brigade"
+		17: "Archnidae"
+		18: "Hostile Animals"
+		19: "Fodder Swimmers"
+		20: "Midrank Swimmers"
+		21: "Elite Swimmers"
+		22:	"Boss Swimmers"
+		23: "Fodder Terrestrial"
+		24: "Midrank Terrestrial"
+		25: "Boss Terrestrial"
+		26: "Fodder Flyers"
+		27: "Midrank Flyers"
+		28: "Boss Flyers"
+		29: "Denizen Swimmers"
+		30: "Denizen Terrestrial"
+		31: "Denizen Flyers"
+		32: "Military"
+		33: "Mystic"
+		34: "Horrors"
+		35: "Brigade"
+		92: "Boss Ancients"
+		93: "Boss Medieval Menaces"
+		94: "Boss Eldritch Horrors"
+		95: "Boss Technological Terrors"
+		96: "Boss Medieval Monstrosities"
+		97: "Boss Eldritch Abominations"
+		98: "Bosses All"
+		99: "ALL MONSTERS (Yikes)"
+	]
 ]
 
-@PointClass base(MonWide) = func_spawn : "Monster Spawn (Legacy Support)" [
+@baseclass = RandomSpawnsStrings [
+	brkobj1(string) : "Override random monster classname 1 of 13 (e.g. monster_dog)"
+	brkobj2(string) : "Override random monster classname 2 of 13 (e.g. monster_dog)"
+	brkobj3(string) : "Override random monster classname 3 of 13 (e.g. monster_dog)"
+	brkobj4(string) : "Override random monster classname 4 of 13 (e.g. monster_dog)"
+	corner_event(string) : "Override random monster classname 5 of 13 (e.g. monster_dog)"
+	gib1soundx(string) : "Override random monster classname 6 of 13 (e.g. monster_dog)"
+	gib2soundx(string) : "Override random monster classname 7 of 13 (e.g. monster_dog)"
+	gib3soundx(string) : "Override random monster classname 8 of 13 (e.g. monster_dog)"
+	break_template1(string) : "Override random monster classname 9 of 13 (e.g. monster_dog)"
+	break_template1(string) : "Override random monster classname 10 of 13 (e.g. monster_dog)"
+	break_template1(string) : "Override random monster classname 11 of 13 (e.g. monster_dog)"
+	break_template1(string) : "Override random monster classname 12 of 13 (e.g. monster_dog)"
+	break_template1(string) : "Override random monster classname 13 of 13 (e.g. monster_dog)"
+]
+
+@PointClass base(MonShort,MonsterFamilies,RandomSpawnsStrings) = func_spawn_small : "Monster Spawner" [
 	spawnclassname(string) : "Monster To Spawn"
 	cnt(integer) : "Number to spawn" : 1
+	spawnflags(flags) = [
+		2 : "Random Monster" : 0 : "Pick a random monster from the entire list (caches 13 types)"
+	]
+]
+
+@PointClass base(MonWide,MonsterFamilies,RandomSpawnsStrings) = func_spawn : "Monster Spawner" [
+	spawnclassname(string) : "Monster To Spawn"
+	cnt(integer) : "Number to spawn" : 1
+	spawnflags(flags) = [
+		2 : "Random Monster" : 0 : "Pick a random monster from the entire list"
+	]
 ]
 
 //======================================================================
-//
 // BREAKABLES
-//
 //======================================================================
 @BaseClass base(Appearflags,Targetname,Target,Target2) = Break [
     spawnflags(flags) = [
@@ -3977,6 +4181,13 @@
 	cost(integer) : "Cost"
 ]
 
+@SolidClass base(Appearflags,Targetname) = trigger_conveyor : "Conveyor belt pusher" [
+	speed(integer) : "Speed (def=10)"
+	spawnflags(flags) = [
+		1 : "Start Off" : 0 : "Starts stopped"
+	]
+]
+
 //======================================================================
 //
 // MONSTERS
@@ -4123,6 +4334,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @baseclass base(Monster) size(-24 -24 -24, 24 24 64) = MonGiant []
 @baseclass base(Monster) size(-32 -32 -24, 32 32 64) = MonMassive []
 @baseclass base(Monster) size(-48 -48 -24, 48 48 84) = MonArmagon []
+@baseclass base(Monster) size(-48 -48 -24, 48 48 24) = MonManticore []
 @baseclass base(Monster) size(-64 -64 -512, 64 64 256) = MonVermis []
 @baseclass base(Monster) size(-46 -40 -24, 46 40 100) = MonShalboss []
 
@@ -4131,9 +4343,8 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	jumprange(vector) : "Range at which the monster will attempt a jump attack - x y 0, for example 200 300 0, which means the monster will attempt jumps when the player is between 200 and 300 units from it"
 ]
 
-//----------------------------------------------------------------------
 @PointClass base(MonArmagon) studio("progs/hipnotic/armabody.mdl") = monster_armagon : "Armagon" []
-@PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") skin(0) = monster_army : "Soldier" []
+@PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") skin(0) = monster_army : "Grunt" []
 @PointClass base(MonTall) studio("progs/mon_axeman.mdl") = monster_axeman : "Axe Knight" []
 @PointClass base(MonShort) studio("progs/lunaran/axegrunt.mdl") = monster_axegrunt : "Axe Solider" []
 @PointClass base(MonShort) studio("progs/kinn/sgrunt.mdl") = monster_super_grunt : "Super Solider" []
@@ -4145,6 +4356,9 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 		8192 : "Lava Nails" : 0
 	]
 ]
+@PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") = monster_soldier : "Soldier" []
+@PointClass base(MonShort) studio("progs/ad171/mon_soldier.mdl") = monster_soldier_elite : "Elite Soldier" []
+
 @PointClass base(MonShort) studio("progs/lieutenant/enforce2.mdl") = monster_super_enforcer : "Lieutenant Enforcer" [
 	spawnflags(Flags) = [
 		8192 : "Lava Nails" : 0
@@ -4171,6 +4385,8 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @PointClass base(MonDemon) studio("progs/mon_demon.mdl") = monster_demon1 : "Fiend" [
 	poisonous(integer) : "Poison attack+skin" : : "Change skin + poison dmg"
 ]
+@PointClass base(MonManticore) studio("progs/madfox/mon_manticore.mdl") = monster_manticore : "Manticore" []
+@PointClass base(MonManticore) studio("progs/madfox/mon_manticore.mdl") skin(1) = monster_lichfiend : "Lich Fiend" []
 @PointClass base(MonDog,JumpingMon) studio("progs/mon_dog.mdl") = monster_dog : "Nasty Doggie" []
 @PointClass base(MonFlat,JumpingMon) studio("progs/hipnotic/grem.mdl") = monster_gremlin : "Gremlin" []
 @PointClass base(MonTiny) studio("progs/ad171/mon_eel.mdl") = monster_eel : "Eel" [
@@ -4210,17 +4426,23 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	pos1(string) : "Statue Idle range" :  : "X->Y, Z=0 ; Idle animation range to pick from"
 ]
 
-//----------------------------------------------------------------------
-@PointClass base(MonTall) studio("progs/mon_enforcer.mdl") skin(0) = monster_enforcer : "Enforcer" [
+@PointClass base(MonTall) studio("progs/qmaster/mon_enforcer.mdl") skin(0) = monster_enforcer : "Enforcer" [
 	spawnflags(flags) = [ 
 		2 : "Mega" : 0
 		4 : "Ultra" : 0
 	]
 ]
-@PointClass base(MonTall) studio("progs/mon_enforcer.mdl") skin(4) = monster_defender : "Defender" []
-@PointClass base(MonTall) studio("progs/mon_enforcer.mdl") skin(6) = monster_eliminator : "Eliminator" [
+@PointClass base(MonTall) studio("progs/qmaster/mon_enforcer.mdl") skin(4) = monster_defender : "Defender" []
+@PointClass base(MonTall) studio("progs/qmaster/mon_enforcer.mdl") skin(6) = monster_eliminator : "Eliminator" [
 	attack_sniper(integer) : "Unlimited ATTACK Range"
 ]
+
+@PointClass base(MonTall) studio("progs/qmaster/mon_enforcer.mdl") skin(15) = monster_commando : "Commando" [
+	attack_sniper(integer) : "Unlimited ATTACK Range"
+]
+
+@PointClass base(MonTall) studio("progs/qmaster/mon_enforcer.mdl") skin(13) = monster_gunner: "Chaingunner" []
+
 @PointClass base(MonTall) studio("progs/ad171/mon_fumigator.mdl") = monster_fumigator : "Fumigator" []
 @PointClass base(MonTall) studio("progs/ad171/mon_pyro.mdl") = monster_pyro : "Pyro" []
 @PointClass base(MonTall) studio("progs/ad171/mon_centurion.mdl") = monster_centurion : "Centurion" []
@@ -4246,7 +4468,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	frame(integer) : "Statue Pose def=44" :  : "Override statue pose"
 	pos1(string) : "Statue Idle range" :  : "X->Y, Z=0 ; Idle animation range to pick from"
 ]
-@PointClass base(MonTall) studio("progs/ad171/mon_hknight.mdl") = monster_hell_knight : "Hell knight" [
+@PointClass base(MonTall) studio("progs/qmaster/mon_hknight.mdl") = monster_hell_knight : "Hell knight" [
 	spawnflags(flags) = [ 
 		2 : "Stone Statue" : 0
 		4 : "Not Frozen" : 0
@@ -4256,7 +4478,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 ]
 @PointClass base(MonTall) studio("progs/q15/warlord.mdl") = monster_hell_knight2 : "Warlord" []
 
-@PointClass base(MonTall) studio("progs/ad171/mon_hknight.mdl") = monster_hell_pointknight : "Hell knight" [
+@PointClass base(MonTall) studio("progs/qmaster/mon_hknight.mdl") = monster_hell_pointknight : "Hell knight" [
 	spawnflags(flags) = [ 
 		2 : "Stone Skin" : 0
 		128: "N/A" : 0
@@ -4269,7 +4491,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	pos2(string) : "XYZ lightning random" : : "uses v_forward/v_right/v_up"
 	pos3(string) : "Animation frame set" : : "Start/Finish/Direction"
 ]
-@PointClass base(MonTall) studio("progs/ad171/mon_hknight.mdl") skin(3) = monster_hell_knight_champion : "Champion knight" [
+@PointClass base(MonTall) studio("progs/qmaster/mon_hknight.mdl") skin(3) = monster_hell_knight_champion : "Champion knight" [
 	skin(integer) : "Skin (def=3)"
 ]
 @PointClass base(MonTall) studio("progs/lieutenant/hknight.mdl") = monster_hell_knight_enforcer : "Saber Enforcer" []
@@ -4287,7 +4509,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 ]
 
 @PointClass base(MonTall) studio("progs/ad171/mon_dknight.mdl") = monster_dknight : "Death Knight" []
-@PointClass base(MonTall) studio("progs/ad171/mon_hknight.mdl") skin(7) = monster_death_lord : "Death Lord" []
+@PointClass base(MonTall) studio("progs/qmaster/mon_hknight.mdl") skin(7) = monster_death_lord : "Death Lord" []
 @PointClass base(MonTall,JumpingMon) studio("progs/ad171/mon_dfury.mdl") = monster_dfury : "Fury Knight" []
 @PointClass base(MonTall) studio("progs/ad171/mon_dsergeant.mdl") = monster_dsergeant : "Sergeant Knight" []
 
@@ -4337,8 +4559,12 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 
 //----------------------------------------------------------------------
 @PointClass base(MonGiant) studio("progs/quoth/drole.mdl") = monster_drole : "Drole" []
-@PointClass base(MonGiant) studio("progs/ad171/mon_minotaur.mdl") = monster_minotaur : "Minotaur"
-[ spawnflags(flags) = [ 4 : "Minions" : 0 ] ]
+@PointClass base(MonGiant) studio("progs/ad171/mon_minotaur.mdl") = monster_minotaur : "Minotaur" [
+	spawnflags(flags) = [
+		2 : "Nethergoat (Kinn shuffler)"
+		4 : "Minions" : 0
+	]
+]
 @PointClass base(MonTall) studio("progs/rogue/mon_morph_az.mdl") = monster_morph : "Mighty Morphin Power Smurf"
 [
 	spawnflags(Flags) = 
@@ -4376,13 +4602,22 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	target2(target_destination) : "target2" : : "triggered when shield turned off"
 ]
 
-//----------------------------------------------------------------------
 @PointClass base(MonMassive) studio("progs/ad171/mon_shambler.mdl") = monster_shambler : "Shambler" [
 	poisonous(integer) : "Poison attack+skin" : : "Change skin + poison dmg"
 	attack_sniper(integer) : "Unlimited ATTACK Range"
+	spawnflags(flags) = [
+		2 : "Vile (monster_shamvile)" : 0
+	]
 ]
 
-//----------------------------------------------------------------------
+@PointClass base(MonMassive) studio("progs/drake/shambler.mdl") skin(1) = monster_shamvile : "Sha'Vile" [
+	attack_sniper(integer) : "Unlimited ATTACK Range"
+	lip(choices) : "Allow Reviving" = [
+		0 : "Revives Dead Friends"
+		1 : "No Revives (soe2m6)"
+	]
+]
+
 @PointClass base(MonMassive) studio("progs/ad171/mon_bossboglord.mdl") = monster_boglord : "Boglord" [
 	spawnflags(flags) = [
 		2 : "Strong (Red)" : 0
@@ -4391,7 +4626,6 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 
 @PointClass base(MonWide) studio("progs/q15/carnivean.mdl") = monster_carnivean : "Carnivean" []
 
-//----------------------------------------------------------------------
 @PointClass base(MonTiny) studio("progs/ad171/mon_lostsoul.mdl") = monster_lostsoul : "Lost Soul" []
 @PointClass base(MonTiny,JumpingMon) studio("progs/ad171/mon_spiderb.mdl") = monster_spider : "Spider" [
 	spawnflags(flags) = [ 
@@ -4432,10 +4666,10 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 //----------------------------------------------------------------------
 @PointClass base(MonTall) studio("progs/wizard.mdl") = monster_wizard : "Wizard"
 [ spawnflags(flags) = [ 4 : "Always Above" : 0 ] ]
-@PointClass base(MonWide) studio("progs/rogue/wrath.mdl") = monster_wrath : "Wrath" []
-@PointClass base(MonWide) studio("progs/nehahra/wraith.mdl") = monster_wraith_nehahra : "Ghost Wraith" []
-@PointClass base(MonWide) studio("progs/rogue/s_wrath.mdl") = monster_super_wrath : "Wrath" []
-@PointClass base(MonWide) studio("progs/ad171/mon_wraith.mdl") = monster_wraith : "Wraith"
+@PointClass base(MonTall) studio("progs/rogue/wrath.mdl") = monster_wrath : "Wrath" []
+@PointClass base(MonTall) studio("progs/nehahra/wraith.mdl") = monster_voidwraith : "Void Wraith" []
+@PointClass base(MonTall) studio("progs/rogue/s_wrath.mdl") = monster_super_wrath : "Wrath" []
+@PointClass base(MonTall) studio("progs/ad171/mon_wraith.mdl") = monster_wraith : "Wraith"
 [ spawnflags(flags) = [ 
 		2 : "Scorpions" : 0
 		4 : "Spiders" : 0

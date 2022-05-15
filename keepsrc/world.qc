@@ -504,26 +504,30 @@ void() worldspawn = { // [ENTITY]...well it IS.
 		autocvar(cl_nocsqc, "0"); // Setup a temp variable if none is found (def=0 CSQC is on)
 		if (cvar("scratch1") < 0) cvar_set("cl_nocsqc", "1"); // Read scratch1 in quake.rc (-1=off, 0=on, 1+=diff layouts)
 		
-		// Setup variables for CSQC HUD (cannot directly query variables)
-		// FTE/QSS use clientstat, DP use addstat (same function)
-		// The addstat is defined in dpextensions.qc
-		// Example: void(float index, float type, ...) addstat = #232;
-		addstat(CLIENT_MODITEMS, EV_FLOAT, moditems); 
-		addstat(CLIENT_ITEMS2, EV_FLOAT, items2); 
-		addstat(CLIENT_PERMS, EV_FLOAT, perms); 
-		addstat(CLIENT_CKEYNAME1, EV_STRING, ckeyname1); 
-		addstat(CLIENT_CKEYNAME2, EV_STRING, ckeyname2); 
-		addstat(CLIENT_CKEYNAME3, EV_STRING, ckeyname3); 
-		addstat(CLIENT_CKEYNAME4, EV_STRING, ckeyname4); 
-		addstat(CLIENT_CKEYSKIN1, EV_FLOAT, ckeyskin1); 
-		addstat(CLIENT_CKEYSKIN2, EV_FLOAT, ckeyskin2); 
-		addstat(CLIENT_CKEYSKIN3, EV_FLOAT, ckeyskin3); 
-		addstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4);
-		addstat(CLIENT_AMMOPOISON, EV_FLOAT, ammo_poison);
-		addstat(CLIENT_USINGHACKBANK, EV_FLOAT, selfweaponismoditems);
-		addstat(CLIENT_RUNEFLAG, EV_FLOAT, serverflagstemp);
-		globalstat(CLIENT_DENIZENS, EV_FLOAT, "total_denizens");
-		globalstat(CLIENT_DENIZENSKILLED, EV_FLOAT, "killed_denizens");
+		dprint("extension dppart "); dprint(ftos(ext_dppart)); dprint("\n");
+		dprint("extension ftepart "); dprint(ftos(ext_ftepart)); dprint("\n");
+		if (ext_ftepart) {
+			// Setup variables for CSQC HUD (cannot directly query variables)
+			// FTE/QSS use clientstat, DP use addstat (same function)
+			// The addstat is defined in dpextensions.qc
+			// Example: void(float index, float type, ...) addstat = #232;
+			addstat(CLIENT_MODITEMS, EV_FLOAT, moditems); 
+			addstat(CLIENT_ITEMS2, EV_FLOAT, items2); 
+			addstat(CLIENT_PERMS, EV_FLOAT, perms); 
+			addstat(CLIENT_CKEYNAME1, EV_STRING, ckeyname1); 
+			addstat(CLIENT_CKEYNAME2, EV_STRING, ckeyname2); 
+			addstat(CLIENT_CKEYNAME3, EV_STRING, ckeyname3); 
+			addstat(CLIENT_CKEYNAME4, EV_STRING, ckeyname4); 
+			addstat(CLIENT_CKEYSKIN1, EV_FLOAT, ckeyskin1); 
+			addstat(CLIENT_CKEYSKIN2, EV_FLOAT, ckeyskin2); 
+			addstat(CLIENT_CKEYSKIN3, EV_FLOAT, ckeyskin3); 
+			addstat(CLIENT_CKEYSKIN4, EV_FLOAT, ckeyskin4);
+			addstat(CLIENT_AMMOPOISON, EV_FLOAT, ammo_poison);
+			addstat(CLIENT_USINGHACKBANK, EV_FLOAT, selfweaponismoditems);
+			addstat(CLIENT_RUNEFLAG, EV_FLOAT, serverflagstemp);
+			//globalstat(CLIENT_DENIZENS, EV_FLOAT, "total_denizens");
+			//globalstat(CLIENT_DENIZENSKILLED, EV_FLOAT, "killed_denizens");
+		}
 	}
 	dprint("\n\b[ENGINE]\b ");
 	if (engine == ENG_FITZ) dprint("Fitz Compatible (old, weak). NOT RECOMMENDED!\n");

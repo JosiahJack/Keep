@@ -76,7 +76,7 @@ void() light_break = { // [FUNCTION]
 	setorigin(self, (self.absmin + self.absmax) * 0.5);
 	T_RadiusDamage (self, self, 5, world,DAMAGEALL);
 	BecomeExplosion ();
-	pointparticles(particleeffectnum("secret"), center, '0 0 0', 1);
+	if (ext_dppart) pointparticles(particleeffectnum("secret"), center, '0 0 0', 1);
 };
 
 void() light_det = { // [FUNCTION]
@@ -238,7 +238,7 @@ void() actor_anim = { // [FUNCTION]
 		self.frame++;
 		self.think = actor_anim;
 		self.nextthink = time + self.speed;
-	} else if (self.spawnflags & FLAG_REMOVE_PARTICLES) self.traileffectnum = particleeffectnum(string_null);
+	} else if (ext_dppart && self.spawnflags & FLAG_REMOVE_PARTICLES) self.traileffectnum = particleeffectnum(string_null);
 }
 
 void() actor_throw = { // [FUNCTION]
@@ -248,7 +248,7 @@ void() actor_throw = { // [FUNCTION]
 	setorigin(newmis, self.oldorigin + self.view_ofs);
 	setmodel (self, "progs/null.spr");
 	if(self.noise) sound(newmis, CHAN_AUTO, self.noise, 1, ATTN_NORM);
-	if (self.partname) newmis.traileffectnum = particleeffectnum(self.partname);
+	if (ext_dppart && self.partname) newmis.traileffectnum = particleeffectnum(self.partname);
 	newmis.angles = self.angles;
 	newmis.movetype = MOVETYPE_TOSS;
 	newmis.velocity = self.velocity;

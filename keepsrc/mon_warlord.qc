@@ -545,7 +545,7 @@ void (vector face_spawn_pos, vector face_spawn_vel) launch_hknight2_homing = {
 	newmis.nextthink = time + 0.27;		// to move completely out of warlords model (to avoid touch function with it)
 	setmodel (newmis, "progs/q15/face.mdl");		
 	setsize (newmis, '-9 -9 -9', '9 9 9');
-	newmis.traileffectnum = particleeffectnum("TR_WARLORDHOMING");
+	if (ext_dppart) newmis.traileffectnum = particleeffectnum("TR_WARLORDHOMING");
 	newmis.health = 30;
 	newmis.takedamage = DAMAGE_AIM;
 	setorigin (newmis, face_spawn_pos);

@@ -252,8 +252,6 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_sound("drake/weapons/freeze.wav");
 	precache_sound("drake/weapons/icehit.wav");
 	precache_sound("drake/weapons/shatter.wav");
-	precache_aoa();
-	precache_poisongibs();
 	precache_model("progs/drake/blood.mdl"); 		// BLOOD_RED
 	precache_model("progs/drake/blood_gr.mdl"); 	// BLOOD_GREEN
 	precache_model("progs/drake/gr_gib.mdl"); 		// BLOOD_GREEN
@@ -273,4 +271,6 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/rogue/sphere.mdl");
 	precache_sound("rogue/sphere/sphere.wav");
 	precache_model("progs/hipnotic/s_bullet.spr");
+	precache_aoa();
+	precache_poisongibs();
 };

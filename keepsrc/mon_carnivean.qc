@@ -148,7 +148,7 @@ void() carniv_projectile = {
 
 	if (random() <= 0.6) {
 		setmodel (missile, "progs/k_spike.mdl");		// flame / explosive model
-		missile.traileffectnum = particleeffectnum("TR_AFRITSPIKE_RED");
+		if (ext_dppart) missile.traileffectnum = particleeffectnum("TR_AFRITSPIKE_RED");
 		missile.cnt = 1;
 		sound (self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
 		missile.velocity = normalize ((self.enemy.origin + '0 0 7') - missile.origin);

@@ -45,7 +45,7 @@ void() groundSmash = {
 	
 	T_RadiusDamage (self, self.owner, 50, self.owner, DAMAGEALL);
 	remove(self);
-	//pointparticles(particleeffectnum("rocket_explo_classic"), shake.origin, '0 0 0', 1);
+	//if (ext_dppart) pointparticles(particleeffectnum("rocket_explo_classic"), shake.origin, '0 0 0', 1);
 };
 
 void(vector org, vector vec) oldone_attack = {

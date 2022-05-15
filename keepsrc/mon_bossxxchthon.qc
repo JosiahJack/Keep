@@ -321,8 +321,7 @@ void() xxchthon_lavasplash =
 			pointparticles(particleeffectnum("TE_SLIMESPLASH"), self.origin, '0 0 0', 1);
 		else
 			pointparticles(particleeffectnum("TE_LAVASPLASH"), self.origin, '0 0 0', 1);
-	}
-	else {
+	} else {
 		// Classic Fitz/QS engine effects (hard coded)
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 		WriteByte (MSG_BROADCAST, TE_LAVASPLASH);

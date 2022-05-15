@@ -145,23 +145,19 @@ void(vector org, vector dir) pyroflame_spawn =
 				setmodel (newmis, SBURST_FLAMEDP);
 			}
 			else setmodel (newmis, SBURST_SMOKE);
-		}
-		else {
+		} else {
 			if (ext_dppart) {
 				// Use special DP flames and empty sprite for collision
 				pointparticles(particleeffectnum(DPP_PYROFLAME1), org, dir, 1);
 				setmodel (newmis, SBURST_FLAMEDP);
-			}
-			else setmodel (newmis, SBURST_FLAME);
+			} else setmodel (newmis, SBURST_FLAME);
 		}
-	}
-	else {
+	} else {
 		if (ext_dppart) {
 			// Use special DP flames and empty sprite for collision
 			pointparticles(particleeffectnum(DPP_PYROFLAME3), org, dir, 1);
 			setmodel (newmis, SBURST_FLAMEDP);
-		}
-		else setmodel (newmis, SBURST_POISON);
+		} else setmodel (newmis, SBURST_POISON);
 	}
 	
 	setorigin (newmis, org);

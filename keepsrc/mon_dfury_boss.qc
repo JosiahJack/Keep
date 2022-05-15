@@ -375,7 +375,7 @@ void() bossdeath_ef = {
 	deatheffect.origin = self.origin;
 	deatheffect.movetype = MOVETYPE_FLY;
 	deatheffect.velocity = '0 0 10';
-	deatheffect.traileffectnum = particleeffectnum("BOSS_DEATH"); 
+	if (ext_dppart) deatheffect.traileffectnum = particleeffectnum("BOSS_DEATH"); 
 	deatheffect.alpha = 0.0001;
 	deatheffect.owner = self;
 	sound (self, CHAN_AUTO, "q15/dfury/boss_death1.wav", 1, ATTN_NONE);
