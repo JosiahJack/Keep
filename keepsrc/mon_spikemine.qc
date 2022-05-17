@@ -84,6 +84,8 @@ void() monster_spikemine_precache = {
 void() monster_spikemine = {
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
+	self.mdl = "progs/hipnotic/mon_spikmine.mdl";
+	precache_monster(self.classname);
 	setmodel (self,"progs/hipnotic/mon_spikmine.mdl");
 	setsize (self,'-16 -16 -24', '16 16 16'); //MonTiny
 	self.solid = SOLID_BBOX;
@@ -104,7 +106,7 @@ void() monster_spikemine = {
 	if (self.deathstring == "") self.deathstring = " was obliterated by a Spikemine\n";
 	AddToTotals(self);
 	self.flags = (self.flags | FL_MONSTER);
-	precache_monster(self.classname);
+
 	self.classname = "trap_spike_mine";
 };
 

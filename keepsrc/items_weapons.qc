@@ -343,19 +343,18 @@ void() weapon_touch = {
 
 	// Display weapon name
 	if (self.classtype == CT_UPGRADE_AXE && other.moditems & IT_UPGRADE_AXE)
-		sprint (other, "You got another axe to grind\n");
+		sprint (other, "You got another axe to grind");
 	else if (self.classtype == CT_SUPER_SHOTGUN && other.moditems & IT_UPGRADE_SSG)
-		sprint (other, "You got a handful of Shells\n");
+		sprint (other, "You got a handful of Shells");
 	else if (self.classtype == CT_UPGRADE_SSG && other.moditems & IT_UPGRADE_SSG)
-		sprint (other, "You got triple barrel boomstick\n");
+		sprint (other, "You got triple barrel boomstick");
 	else if (self.classtype == CT_LIGHTNING && other.moditems & IT_UPGRADE_LG)
-		sprint (other, "You got some AAA batteries\n");
+		sprint (other, "You got some AAA batteries");
 	else if (self.classtype == CT_UPGRADE_LG && other.moditems & IT_UPGRADE_LG)
-		sprint (other, "You got another burst of plasma\n");
+		sprint (other, "You got another burst of plasma");
 	else {
 		sprint (other, "You got the ");
 		sprint (other, self.netname);
-		sprint (other, "\n");
 	}
 	// weapon touch sound
 	if (self.classtype == CT_CHAINSAW) {
@@ -756,3 +755,7 @@ void() weapon_airgun = {
 	if (self.netname == "") self.netname = "Airfist";
 	weapon_start(); // Does not use ammo.
 };
+
+void() weapon_sword = {}; // TODO: Make this for Qmaster's epic episode
+void() weapon_gshotgun = {}; // TODO: finish adding zerstorer quadshotgun
+void() weapon_sprocket = {}; // TODO: finish adding nehahra sprocket

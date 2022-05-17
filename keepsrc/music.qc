@@ -198,6 +198,9 @@ void() InitMusic = { // [FUNCTION]
     stereo1.noise3    = music3;   // End of episode music.
     stereo1.nextthink = time + 0.2;     // Wait until other stuff spawns.
     stereo1.think     = MusicStart_Think;
+    dprint("\b[WORLD]\b Drake music system initialized");
+    if (music1 != "") { dprint(" with tracks "); dprint(music1); dprint(", "); dprint(music2);  dprint(", "); dprint(music3);}
+    dprint("\n");
 };
 
 // Toggles music on and off.  It is not really a cheat, but since music

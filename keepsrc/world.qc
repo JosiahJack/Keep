@@ -499,7 +499,22 @@ void() worldspawn = { // [ENTITY]...well it IS.
 		ext_frikfile = checkextension("FRIK_FILE"); // Frik file system, advanced strings and C code sprintf
 		ext_ftestrings = checkextension("FTE_STRINGS");
 		ext_sprintf = checkextension("DP_QC_SPRINTF");
+
+		if (!checkbuiltin(particleeffectnum)) ext_dppart = ext_ftepart = FALSE;
 		
+		if (ext_dppart || ext_ftepart) {
+			particleeffectnum("TE_EXPLOSION");
+			particleeffectnum(DPP_TRLASER);
+			particleeffectnum(DPP_TEPLASMABIG);
+			particleeffectnum(DPP_TRPOISON);
+			particleeffectnum(DPP_TEBSMOKE);
+			particleeffectnum(DPP_TRPLASMA);
+			particleeffectnum(DPP_TRBLOOD);
+			particleeffectnum("DPP_ITSPYROFLAME1");
+			particleeffectnum("DPP_ITSPYROFLAME2");
+			particleeffectnum("DPP_ITSPYROFLAME3");
+		}
+
 		// There is no way to detect CSQC, no checkextension exists!  If DP detects the CSQC functions it will just use them.
 		// QSS/FTE has a console variable to toggle CSQC on/off, but requires the map to be reloaded for changes to take affect.
 		autocvar(cl_nocsqc, "1"); // Setup a temp variable if none is found (def=0 CSQC is on)
@@ -548,7 +563,7 @@ void() worldspawn = { // [ENTITY]...well it IS.
 			}
 		}
 	}
-	dprint("\n\b[ENGINE]\b ");
+	dprint("\b[ENGINE]\b ");
 	if (engine == ENG_FITZ) dprint("Fitz Compatible (old, weak). NOT RECOMMENDED!\n");
 	else if (engine == ENG_DPEXT) dprint("Advanced Engine\n"); // FTE, no longer lame old broken Darkplaces aka DP, aka flatwater.
 	else dprint("Unknown\n");
@@ -667,8 +682,10 @@ void() worldspawn = { // [ENTITY]...well it IS.
 	switch_shadow_setuparray(); dprint("\b[WORLD]\b Setup Shadow lightstyle array\n");	
 	if (self.devdata & DEV_AMMO_N_HEALTH) self.deventity = ammohealthsum();
 	if (coop > 2) versus_setup();
+	else dprint("\b[VERSUS]\b Versus is currently deactivated.\n         Intended to be played on specific maps with coop 3\n");
 	Gyro_InitialiseVariables(); // Setup the physics system.
 	if (query_configflag(SVR_DRAKEMUSIC) == SVR_DRAKEMUSIC) InitMusic(); // Setup Drake secondary music system that plays music from two speaker entities in the map corners.
+	else dprint("\b[WORLD]\b Drake music system inactive\n");
 	// Kitchen sink?
 };
 

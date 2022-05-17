@@ -335,6 +335,8 @@ void() monster_queen = {
 	self.estate_off = queen_ghost_off;
 	self.estate_use = queen_ghost_use;
 
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+
 	// Always start off and wait for a trigger
 	self.estate = ESTATE_OFF;
 	self.takedamage = DAMAGE_NO;			// No pain/death triggers

@@ -56,7 +56,7 @@
 //
 // Don't go too nuts with these, stay away from the built-in sounds for high
 // frequency emitters (use fx_sound instead) and just use common sense (you 
-// don't need a gib fountain around every corner!).
+// don't need a gib fountain around every corner!).  Fine Tronyn...do whatever!
 //
 // There are a LOT of options - these are really generic and need to be
 // tailored to specifc purposes.
@@ -91,7 +91,7 @@
 // The particle spread is always contained from the first angle (h1/v1) to the
 // second angle (h2/v2), going clockwise. So h1=10 h2=350 is NOT the same as 
 // h1=350 h2=10. (the first is a near circular spread, while the second is a
-// tight 20¼ fan shaped spread).
+// tight 20ï¿½ fan shaped spread).
 //
 // Also note that although 0 would normally be a valid replacement for 360, you
 // should use a range of 1 - 360 as a value of 0 is simply ignored (though this
@@ -677,9 +677,9 @@ void() emitter_init = { // [FUNCTION]
 // "wait"			Delay between particle emissions (-1 is a single burst, then pause)
 // "wait2"			If set, delay is a random number between "wait" and "wait2" (unless "wait" is -1)
 // "ppe"			Particles per emission (default is 1)
-// "h1"			Toss particles along this horizontal (yaw) angle (1¼ - 360¼)
+// "h1"			Toss particles along this horizontal (yaw) angle (1ï¿½ - 360ï¿½)
 // "h2"			If set, tossess particles along a random horizontal angle between "h1" and "h2"
-// "v1"			Toss particles along this vertical (pitch) angle (1¼ - 360¼) 270 is up, 90 is down.
+// "v1"			Toss particles along this vertical (pitch) angle (1ï¿½ - 360ï¿½) 270 is up, 90 is down.
 // "v2"			If set, tossess particles along a random vertical angle between "v1" and "v2"
 // "avelocity"		X Y Z emitter angle velocity (IMPORTANT: rotates after each emittion, this is NOT time based!)
 // "noise"			Noise the emitter makes when spawning a new particle (USE WITH CAUTION WITH HIGH FREQUENCY EMITTERS!)

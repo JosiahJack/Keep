@@ -332,6 +332,7 @@ entity  temp_goal;
 void() InitTempGoal = {
     temp_goal = spawn();
     temp_goal.classname = "goal";
+    dprint("\b[SETUP]\b Drake temporary dragon goal is now setup\n");
 };
 
 // From Drake
@@ -357,6 +358,7 @@ void() InitMoveBox = {
     move_box.solid      = SOLID_NOT;
     move_box.movetype   = MOVETYPE_STEP;
     move_box.classname  = "move_box";
+    dprint("\b[SETUP]\b Drake movebox is now setup for large monsters\n");
 };
 
 //  Noclip Movement -- Used by wraiths and other such ghostly monsters.

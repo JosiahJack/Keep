@@ -63,6 +63,7 @@ void () versus_setup = {
 	numsurvivors = 0;
 	numgamemasters = 0;
 	wavenumber = 0;
+	dprint("\b[VERSUS]\b Versus mode setup and active!\n");
 };
 
 void (entity targ) set_teamsurvivor = {

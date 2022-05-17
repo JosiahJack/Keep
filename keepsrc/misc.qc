@@ -476,9 +476,9 @@ void() misc_drip_touch_common = { // [FUNCTION]
 	setorigin(self,self.origin + '0 0 8'); // Was 12
 	if (!(self.spawnflags & MISC_DRIPSILENT)) { // play a random drip sound
 		self.lip = random() * 3;
-		if (self.lip < 1) sound (self, CHAN_AUTO, self.noise1, 1, ATTN_STATIC);
-		else if (self.lip < 2) sound (self, CHAN_AUTO, self.noise2, 1, ATTN_STATIC);
-		else sound (self, CHAN_AUTO, self.noise3, 1, ATTN_STATIC);
+		if (self.lip < 1 && self.noise1 != "") sound (self, CHAN_AUTO, self.noise1, 1, ATTN_STATIC);
+		else if (self.lip < 2 && self.noise2 != "") sound (self, CHAN_AUTO, self.noise2, 1, ATTN_STATIC);
+		else if (self.noise3 != "") sound (self, CHAN_AUTO, self.noise3, 1, ATTN_STATIC);
 	}
 
 	if (other != self.owner && self.owner.dmg && other.takedamage) { // Damage if our owner has dmg set
@@ -620,7 +620,8 @@ void() misc_drip_removetouch = { // [FUNCTION]
 	if (other.solid == SOLID_TRIGGER) return; // Trigger field, do nothing.
 
 	misc_drip_touch_common();
-	s_splashremoves1();
+	self.think = s_splashremoves1;
+	self.nextthink = time + 0.05;
 };
 
 void() misc_dripremovable_think = { // [FUNCTION]

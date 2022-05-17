@@ -1359,16 +1359,18 @@ void() misc_breakable_pot_setup = { // [FUNCTION]
 	else if (self.brkmdltype > 15 && self.brkmdltype < 21) self.brkmdltype = 15;
 
 	// Pick model
-	if (self.brkmdltype == 11) self.mdl = "progs/ad181/brk_pot1a.mdl";
-	else if (self.brkmdltype == 12) self.mdl = "progs/ad181/brk_pot1b.mdl";
-	else if (self.brkmdltype == 13) self.mdl = "progs/ad181/brk_pot1c.mdl";
-	else if (self.brkmdltype == 14) self.mdl = "progs/ad181/brk_pot1d.mdl";
-	else if (self.brkmdltype == 15) self.mdl = "progs/ad181/brk_pot1aflr.mdl";
-	else if (self.brkmdltype == 21) self.mdl = "progs/ad181/brk_pot2a.mdl";
-	else if (self.brkmdltype == 22) self.mdl = "progs/ad181/brk_pot2b.mdl";
-	else if (self.brkmdltype == 23) self.mdl = "progs/ad181/brk_pot2c.mdl";
-	else if (self.brkmdltype == 24) self.mdl = "progs/ad181/brk_pot2d.mdl";
-	else if (self.brkmdltype == 25) self.mdl = "progs/ad181/brk_pot2aflr.mdl";
+	if (self.mdl == "") {
+		if (self.brkmdltype == 11) self.mdl = "progs/ad181/brk_pot1a.mdl";
+		else if (self.brkmdltype == 12) self.mdl = "progs/ad181/brk_pot1b.mdl";
+		else if (self.brkmdltype == 13) self.mdl = "progs/ad181/brk_pot1c.mdl";
+		else if (self.brkmdltype == 14) self.mdl = "progs/ad181/brk_pot1d.mdl";
+		else if (self.brkmdltype == 15) self.mdl = "progs/ad181/brk_pot1aflr.mdl";
+		else if (self.brkmdltype == 21) self.mdl = "progs/ad181/brk_pot2a.mdl";
+		else if (self.brkmdltype == 22) self.mdl = "progs/ad181/brk_pot2b.mdl";
+		else if (self.brkmdltype == 23) self.mdl = "progs/ad181/brk_pot2c.mdl";
+		else if (self.brkmdltype == 24) self.mdl = "progs/ad181/brk_pot2d.mdl";
+		else if (self.brkmdltype == 25) self.mdl = "progs/ad181/brk_pot2aflr.mdl";
+	}
 	precache_model(self.mdl);
 
 	if (self.brkmdltype == 11 || self.brkmdltype == 21) { // Pot 1a and 2a
@@ -1508,8 +1510,9 @@ void() misc_breakable_pot1 = { // [ENTITY]
 	self.bbmins = '-16 -16 0';
 	self.bbmaxs = '16 16 48';
 	self.brkvol = '32 32 48';
-	self.mdl = "progs/ne_ruins/pot1.mdl";
+	if (self.mdl == "") self.mdl = "progs/ne_ruins/pot1.mdl";
 	precache_model(self.mdl);
+	if (self.exactskin <= 0) self.exactskin = 0; // Check for exactskin range errors, will be copied to rubble
 	self.skin = self.exactskin;
 	self.style = BTYPE_CERAMIC;
 	self.brkobjects = BMODTYPE_CUSTOM;
@@ -1517,7 +1520,7 @@ void() misc_breakable_pot1 = { // [ENTITY]
 	self.brkobj2 = "progs/ne_ruins/potshard2.mdl";
 	self.brkobj3 = "progs/ne_ruins/potshard3.mdl";
 	self.brkobj4 = "progs/ne_ruins/potshard4.mdl";
-	self.pos1 = '16 8 1';	// Brown
+	if (CheckZeroVector(self.pos1)) self.pos1 = '16 8 1';	// Brown
 	self.wait = -1;			// Only break once
 	self.pos2 = self.angles; // Save any custom angles, otherwise random Y rotation
 

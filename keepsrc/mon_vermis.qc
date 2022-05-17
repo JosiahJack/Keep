@@ -1713,7 +1713,6 @@ void() monster_vermis = {
 	self.mdl = "progs/quoth/vermis.mdl";
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_NOCLIP;
-	setmodel(self,self.mdl);
 	self.health = 3000;
 	if (self.coiled != 0) {
 		self.th_stand = vermis_coil1;
@@ -1723,21 +1722,17 @@ void() monster_vermis = {
 		setsize(self, '-64 -64 -512', '64 64 256');
 	}
 
+	self.th_stand = vermis_start;
 	self.th_run = vermis_run1;
 	self.th_missile = vermis_shoot1;
 	self.th_melee = vermis_melee;
 	self.th_pain = vermis_pain;
 	self.th_die = vermis_die;
 	setup_passivestate(self); // Check passive system for exceptions
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "") self.deathstring = " was eradicated by a Vermis\n";
 	self.classtype = CT_MONVERMIS;
 	self.classgroup = CG_BOSS;
 	self.classmove = FALSE;
 	monster_start();
-	vermis_start();
 };

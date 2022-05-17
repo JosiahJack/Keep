@@ -634,6 +634,11 @@ void () func_spawn_small = { func_spawn (); };
 
 // Should match BeMonsterFromString()'s list
 void(string mname) precache_monster = {
+	if (framecount > 1) {
+		dprint("Attempt to precache monster on frame ");
+		dprint(ftos(framecount));
+		dprint("\n");
+	}
 	if (framecount > 5) return;
 	if (framecount > 1) dprint("Precaching monster on > frame 1!\n");
 

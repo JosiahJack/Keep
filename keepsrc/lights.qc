@@ -193,10 +193,10 @@ void() light_on = { // [FUNCTION]
 	if (self.mdl) setmodel (self, self.mdl); // Setup any models, like torches etc
 
 	if (self.style > 0) { // Light style defined?
+		if (self.style < LIGHT_MAXLIGHTSTYLE) lightstyle(self.style, light_style_str[self.style]); // Update light style (use array to get the latest)
 		dprint("Light style set to : ");
 		dprint(ftos(self.style));
 		dprint("\n");
-		lightstyle(self.style, light_style_str[self.style]); // Update light style (use array to get the latest)
 	}
 
 	light_part_emitter_on(); // Switch on particle emitters, if any.
@@ -234,7 +234,7 @@ void() light_customstyle_finish = { // [FUNCTION]
 
 	// Any re-map custom style lights defined?
 	if (self.customstyle_remap > 0 && self.style > 0) {
-		self.customstyle_string = light_style_str[self.customstyle_remap]; // Copy string from array
+		if (self.customstyle_remap < LIGHT_MAXLIGHTSTYLE) self.customstyle_string = light_style_str[self.customstyle_remap]; // Copy string from array
 		dprint("\b[LIGHT]\b ("); dprint(self.classname); // Show debug info for custom lightstyle remaps
 		dprint(") style ("); dprint(ftos(self.style));
 		dprint(") remap ("); dprint(ftos(self.customstyle_remap));
@@ -244,7 +244,7 @@ void() light_customstyle_finish = { // [FUNCTION]
 	// Any custom style light string defined?
 	// No style check, so that 0 (default, whole map) can be changed
 	if (self.customstyle_string != "") {
-		light_style_str[self.style] = self.customstyle_string; // Save the light style to the array
+		if (self.style >= 0 && self.style < LIGHT_MAXLIGHTSTYLE) light_style_str[self.style] = self.customstyle_string; // Save the light style to the array
 		lightstyle(self.style, self.customstyle_string); // Define new light style to the engine
 
 		// Only show debug info for new custom lightstyles not remaps
@@ -459,7 +459,8 @@ void() light_globe = { // [ENTITY]
 void() light_torch_on = { // [FUNCTION]
 	self.frame = 0;
 	self.estate = ESTATE_ON;
-	if (self.style > 0) lightstyle(self.style, light_style_str[self.style]); // Light style defined? (use array to get the latest)
+	if (self.style >= 0 && self.style < LIGHT_MAXLIGHTSTYLE) lightstyle(self.style, light_style_str[self.style]); // Light style defined? (use array to get the latest)
+	else lightstyle(self.style,"m");
 	light_part_emitter_on();
 };
 
@@ -845,7 +846,7 @@ void() light_fixture1 = { // [ENTITY]
 void() light_candle_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.frame = 1 + (self.t_width-1)*2;
-	if (self.style > 0) lightstyle(self.style, light_style_str[self.style]); // Light style defined? (use array to get the latest)
+	if (self.style >= 0 && self.style < LIGHT_MAXLIGHTSTYLE) lightstyle(self.style, light_style_str[self.style]); // Light style defined? (use array to get the latest)
 };
 
 void() light_candle_off = { // [FUNCTION]

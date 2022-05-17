@@ -27,7 +27,7 @@
 // NO CHARGE to the recipient.
 //
 // Stats:
-// Entity count: 52
+// Entity count: 53
 // Function count: 10
 //
 // Implements: Ambient Sounds and Triggerable Sound Effects
@@ -721,3 +721,5 @@ void() ambient_zzxzz = { // [ENTITY]
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 	ambient_sound_setup();
 };
+
+void() env_sound = {}; // [ENTITY] Helper for reverb zones, csqc soundscape stuff.

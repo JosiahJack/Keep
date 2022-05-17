@@ -1162,8 +1162,6 @@ void () gremlin_setup = {
    self.movetype = MOVETYPE_STEP;
    self.items = FALSE;
    self.items2 = FALSE;
-   setmodel (self,"progs/hipnotic/grem.mdl");
-   setsize (self,VEC_HULL_MIN,VEC_HULL_MAX);
    self.health = 100.000;
    self.pain_flinch = 50;
    self.max_health = 101.000;

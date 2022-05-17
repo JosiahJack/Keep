@@ -515,7 +515,7 @@ void(vector imp_vec, float imp_damage, float imp_radius, float imp_forward, floa
 	self.effects = self.effects | EF_MUZZLEFLASH;
 
 	// Play impact sound and work out where the impact is going to happen
-	sound (self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_IDLE);
+	if (self.meleehitsound != "") sound(self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_IDLE);
 	makevectors (self.angles);
 	// Replaced this crazy mess with function attack_vector
 	//impact = self.origin + v_forward*imp_vec_x + v_right*imp_vec_y + v_up*imp_vec_z;

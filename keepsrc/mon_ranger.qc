@@ -1396,6 +1396,7 @@ void() monster_ranger =
     self.th_gib     = ranger_gib;
     self.th_revive  = ranger_revive;
     self.th_spawn   = monster_ranger;
+    Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 
     self.ryuflags   = self.ryuflags | RYU_ALERT;    // From Dragons.
     if (soul_evil)

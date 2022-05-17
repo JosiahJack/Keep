@@ -412,7 +412,6 @@ void() rotating_wall = { // [ENTITY]
 void() move_rope_spawn = {
 	self.attachment = find(world,targetname,self.target);
 	if (!self.attachment) self.attachment = find(world,targetname,self.target);
-	if (self.mdl == "") self.mdl = "progs/beam.mdl";
 	if (self.attachment && self.target != "") {
 		dprint("Spawning some ropes!\n");
 		if (self.spawnflags & ENT_SPNSTATIC) QC_ParseBeamGeneric(0,self.mdl,self,self.origin,self.attachment.origin,self.delay, BEAM_STATIC, self.attachment);
@@ -425,6 +424,8 @@ void() move_rope_spawn = {
 };
 
 void() move_rope = {
+	if (self.mdl == "") self.mdl = "progs/beam.mdl";
+	precache_model(self.mdl);
 	if (self.delay <= 0) self.delay = 32; // Default length
 	if (self.target != "") {
 		self.think = move_rope_spawn;

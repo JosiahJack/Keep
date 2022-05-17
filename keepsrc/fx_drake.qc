@@ -77,6 +77,7 @@ void() LightZero_Update = { // [FUNCTION]
 void() LightZero_Go = { // [FUNCTION]
     if (!lightzero_finished) return;
 
+    dprint("LightZero_Go lightning flash!\n");
     if (lightzero_finished > time) {
         lightzero_level = lightzero_level + lightzero_rate;
         if (lightzero_level < LIGHTZERO_MIN) lightzero_level = LIGHTZERO_MIN;

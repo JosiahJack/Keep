@@ -749,7 +749,6 @@ void() monster_dfury_boss = {
 	self.mdl = "progs/q15/dfury_boss.mdl";
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
-	setmodel (self, "progs/q15/dfury_boss.mdl");
 	self.skin = 0;
 	self.scale = 1;
 	setsize (self, '-26 -30 -24', '26 30 100');

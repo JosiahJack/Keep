@@ -271,7 +271,8 @@ vector(float gibforce) DirectionForDamage = {
 // Only used when vomitus or other creature eats them now.
 void() RemoveGib = {
 	self.think = model_fade; // Fade away model, if active (default)
-	self.nextthink = time + 0.1;
+	if (self.owner.classtype == CT_MISCGIBF) self.nextthink = time + 0.1;
+	else self.nextthink = time + 20;
 	self.ltime = self.nextthink;
 };
 
@@ -294,7 +295,7 @@ void() CheckFloorGib = {
 		if (self.gibAnimfinal > 0 && self.gibAnimTimer < time) {
 			if (self.walkframe > self.gibAnimfinal) {
 				self.gibAnimfinal = 0;
-				//RemoveGib(); // Go ahead and fade now
+				RemoveGib(); // Go ahead and fade now
 				return;
 			} else {
 				self.frame = self.gibAnimstart + self.walkframe;
@@ -303,7 +304,7 @@ void() CheckFloorGib = {
 		}
 		self.think = CheckFloorGib; // Keep checking
 		self.nextthink = time + 0.1;
-	}// else RemoveGib(); // Is it time for the gib to fade away?
+	} else RemoveGib(); // Is it time for the gib to fade away?
 };
 
 float() Gib_Eaten;
@@ -547,8 +548,7 @@ void(float gib_no, float gib_qty) ThrowGib = {
 		gibitem.touch = TouchGib;
 		gibitem.nextthink = time + GIB_FADETIME + random() * GIB_FADETIME;
 		gibitem.pain_finished = gibitem.nextthink;
-		//gibitem.think = RemoveGib;
-		gibitem.think = SUB_Null;
+		gibitem.think = RemoveGib;
 		gibitem.th_die = SUB_Null;
 		gibitem.th_pain = SUB_Null_pain;
 

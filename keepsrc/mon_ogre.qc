@@ -270,15 +270,12 @@ void()	ogre_paine13=[	$paine13,	ogre_paine14	] {};
 void()	ogre_paine14=[	$paine14,	ogre_paine15	] {};
 void()	ogre_paine15=[	$paine15,	ogre_run1	] {};
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) ogre_pain =
-{
-	// Check all pain conditions and set up what to do next
-	monster_pain_check(attacker, damage);
+void(entity inflictor, entity attacker, float damage) ogre_pain = {
+	monster_pain_check(attacker,damage); // Check all pain conditions and set up what to do next
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
+		if (self.pain_sound != "") sound(self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 	
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
@@ -287,13 +284,10 @@ void(entity inflictor, entity attacker, float damage) ogre_pain =
 			else if (self.lip < 0.5) ogre_painb1 ();
 			else if (self.lip < 0.75) ogre_painc1 ();
 			else if (self.lip < 0.88) {
-				// Fall down to the ground
-				ogre_paind1 ();
+				ogre_paind1 (); // Fall down to the ground
 				self.pain_finished = time + 2;
-			}
-			else {
-				// Stagger backwards
-				ogre_paine1 ();
+			} else {
+				ogre_paine1 (); // Stagger backwards
 				self.pain_finished = time + 2;
 			}
 		}
@@ -302,8 +296,7 @@ void(entity inflictor, entity attacker, float damage) ogre_pain =
 			if (random() < 0.5) {
 				self.pain_finished = time + 1.6;
 				ogre_paind1 ();	// Fall to ground
-			}
-			else {
+			} else {
 				self.pain_finished = time + 1.5;
 				ogre_paine1 ();	// Stagger backwards
 			}
@@ -311,13 +304,14 @@ void(entity inflictor, entity attacker, float damage) ogre_pain =
 	}
 };
 
-//======================================================================
 // DIE Ogre DIE!?!
-//======================================================================
 void()	ogre_die1	=[	$death1,	ogre_die2	] {};
 void()	ogre_die2	=[	$death2,	ogre_die3	] {monster_check_gib();};
-void()	ogre_die3	=[	$death3,	ogre_die4	] {monster_check_gib();
-	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
+void()	ogre_die3	=[	$death3,	ogre_die4	] {
+	monster_check_gib();
+	self.solid = SOLID_NOT;
+	if (!self.gibbed) DropBackpack();
+};
 void()	ogre_die4	=[	$death4,	ogre_die5	] {};
 void()	ogre_die5	=[	$death5,	ogre_die6	] {};
 void()	ogre_die6	=[	$death6,	ogre_die7	] {};

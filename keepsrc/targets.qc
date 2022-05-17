@@ -670,7 +670,7 @@ void() trigger_lightstyle_use = { // [FUNCTION]
 
 	// Any re-map functionality defined?
 	if (self.customstyle_remap > 0 && self.style > 0) {
-		self.customstyle_string = light_style_str[self.customstyle_remap]; // Copy string from lightstyle array
+		if (self.customstyle_remap < LIGHT_MAXLIGHTSTYLE) self.customstyle_string = light_style_str[self.customstyle_remap]; // Copy string from lightstyle array
 		dprint("\b[TRIG_LS]\b remap ("); dprint(ftos(self.customstyle_remap)); // Show debug info of remap lightstyle change
 		dprint(") string ("); dprint(self.customstyle_string);
 		dprint(")\n");
@@ -678,7 +678,7 @@ void() trigger_lightstyle_use = { // [FUNCTION]
 
 	// Any custom light string defined?
 	if (self.customstyle_string != "") {
-		light_style_str[self.style] = self.customstyle_string; // Update the string to the lightstyle array
+		if (self.style >= 0 && self.style < LIGHT_MAXLIGHTSTYLE) light_style_str[self.style] = self.customstyle_string; // Update the string to the lightstyle array
 		if (self.customstyle_update == 0 || (self.customstyle_update == 2 && self.enemy.estate == ESTATE_ON)) lightstyle(self.style, self.customstyle_string); // Check for the light style override update to the engine.  customstyle_update : =0 always, =1 no, =2 only if estate/light on.
 		dprint("\b[TRIG_LS]\b style ("); dprint(ftos(self.style)); // Show debug info of lightstyle string change.
 		dprint(") string ("); dprint(self.customstyle_string);

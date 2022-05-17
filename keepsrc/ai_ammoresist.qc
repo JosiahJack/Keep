@@ -125,6 +125,8 @@ void(entity targ) Resist_Save = {
 
 // Switch resistance from FULL to monster default.  This works with Resist_Save system.
 void(entity targ, float artype) Resist_ChangeType = {
+	if (!targ) return;
+
 	if (artype > 0) {
 		// Complete resistance to everything
 		targ.resist_shells = 1;
@@ -155,8 +157,6 @@ void(entity targ, float artype) Resist_ChangeType = {
 		targ.resist_voidshards = 0;
 		targ.resist_elemental = 0;
 	} else {
-		if (!targ) return;
-
 		// Default ammo resist, rocket/cell immunnity
 		targ.resist_shells = targ.save_shells;
 		targ.resist_nails = targ.save_nails;

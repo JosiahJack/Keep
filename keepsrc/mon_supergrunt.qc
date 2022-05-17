@@ -464,8 +464,6 @@ void() monster_super_grunt = {
 
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
-	setmodel (self, "progs/kinn/sgrunt.mdl");
-	setsize (self, '-16 -16 -24', '16 16 40');
 	if (self.health < 1) self.health = 350;
 	self.gibhealth = -60;
 	self.th_stand = sgrunt_stand;

@@ -2612,7 +2612,7 @@
 @PointClass base(Appearflags,Targetname) size(-32 -32 -24, 32 32 80) color(0 128 192) flags(Angle) studio("progs/drake/anglstat.mdl") = misc_statue : "Angel Statue, Breakable" []
 @PointClass base(Appearflags,Targetname) size(-16 -16 0, 16 16 128) color(0 128 192) flags(Angle) studio("progs/drake/tree.mdl") = misc_tree : "Tree Model" []
 
-@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2) studio("progs/ne_ruins/pot1.mdl") = misc_breakable_pot1 [
+@BaseClass = BreakablePots [
     spawnflags(flags) = [
 		1 : "Start OFF (hidden)" : 0 : "Start hidden"
 		2 : "No Damage" : 0 : "Cannot be damaged"
@@ -2623,22 +2623,37 @@
 		64: "No Sounds" : 0 : "No Impact Sounds"
 		128: "No Rubble Rotate" : 0 : "No Y rotation for rubble"
 	]
-	exactskin(integer) : "Model Skin number" :  : "Override default skin (no range check)"
-	health(integer) : "Health"
-	count(integer) : "Rubble Qty to spawn (def=4)"
-	cnt(choices) : "Rubble (Random) to spawn" = [
-		-1 : "No random qty"
-		 0 : "Default = 4"
+	exactskin(integer) : "Skin override (copied to debris)(def=0)"
+	health(integer) : "Health (def=1)"
+	count(integer) : "Minimum rubble count (def=4)"
+	cnt(choices) : "Rubble amount" = [
+		0 : "Randomized (=count + [1,count])"
+		-1 : "Exact (=count)"
 	]
 	dmg(integer) : "Explosive Radius Damage"
 	brkvelbase(string) : "Velocity Base (def=50 50 100)"
 	brkveladd(string) : "Velocity Extra (def=100 100 150)"
 	brkavel(integer) : "Velocity Rotation (def=200)"
 	brkfade(integer) : "Rubble fade timer (def=4)"
+	brkmdltype(integer) : "Model type (def=11 upright 3 handles)"
+	pos1(string) : "Dust particle color"
 	angles(string) : "Direction to throw rubble"
 	mangle(string) : "Override pot Pitch Roll Yaw" : : "up/down, angle, tilt left/right "
 	brkgravity(integer) : "Rubble gravity (def=1)"
 ]
+
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot1a.mdl") = misc_breakable_pot1a []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot1b.mdl") = misc_breakable_pot1b []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot1c.mdl") = misc_breakable_pot1c []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot1d.mdl") = misc_breakable_pot1d []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot1aflr.mdl") = misc_breakable_pot1aflr []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot2a.mdl") = misc_breakable_pot2a []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot2b.mdl") = misc_breakable_pot2b []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot2c.mdl") = misc_breakable_pot2c []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot2d.mdl") = misc_breakable_pot2d []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot2aflr.mdl") = misc_breakable_pot2aflr []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ne_ruins/pot1.mdl") = misc_breakable_pot1 []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_vase1.mdl") = misc_breakable_vase1 []
 
 @PointClass size(-8 -8 -8, 8 8 8) base(Targetname) = func_exploder : "Explosion"
 [
@@ -5178,21 +5193,21 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 // _mirrorinside 1
 
 //_____DETAIL FENCE_____
-@SolidClass base(FuncLighting) = func_detail_fence : "Similar to 'func_detail_wall' except it’s suitable for fence(alphamasked) textures and never clips away world faces. Useful for fences, grates, etc, that are solid and block gunfire. NOTE: Set _mirriorinside to 1 to texture inside faces. See 'func_detail_illusionary' for more information." [   
+@SolidClass base(FuncLighting) = func_detail_fence : "Similar to 'func_detail_wall' except itï¿½s suitable for fence(alphamasked) textures and never clips away world faces. Useful for fences, grates, etc, that are solid and block gunfire. NOTE: Set _mirriorinside to 1 to texture inside faces. See 'func_detail_illusionary' for more information." [   
     _mirrorinside(choices) : "Mirror Inside Face(s)" = [
 	    0 : "Do Nothing"
 	    1 : "Enabled"
 	]    
 ]
 //_____DETAIL ILLUSIONARY_____
-@SolidClass base(FuncLighting) = func_detail_illusionary : "Compiler entity only. A func_detail variant with no collision(players|monsters|gunfire) and doesn’t split world faces. Useful for hanging vines. NOTE: Set '_mirriorinside' to 1 to texture inside faces. Example - You have a brush textured entirely with the 'skip' texture except for one face, which is textured with 'cobwebs'. Setting '_mirrorinside' to 1 will mirror your cobweb texture to the inside of that face." [
+@SolidClass base(FuncLighting) = func_detail_illusionary : "Compiler entity only. A func_detail variant with no collision(players|monsters|gunfire) and doesnï¿½t split world faces. Useful for hanging vines. NOTE: Set '_mirriorinside' to 1 to texture inside faces. Example - You have a brush textured entirely with the 'skip' texture except for one face, which is textured with 'cobwebs'. Setting '_mirrorinside' to 1 will mirror your cobweb texture to the inside of that face." [
     _mirrorinside(choices) : "Mirror Inside Face(s)" = [
 	    0 : "Do Nothing"
 	    1 : "Enabled"
 	]    
 ]
 //_____DETAIL WALL_____
-@SolidClass base(FuncLighting) = func_detail_wall : "Compiler entity only. A func_detail variant that doesn’t split world faces. Useful for when you want decoration touching a floor, or wall, to not split the floor/wall faces. Note: You will get some overdraw instead. If it completely covers up a world face, that face will get clipped away. So it is not suitable for fence(alphamasked) textures." []
+@SolidClass base(FuncLighting) = func_detail_wall : "Compiler entity only. A func_detail variant that doesnï¿½t split world faces. Useful for when you want decoration touching a floor, or wall, to not split the floor/wall faces. Note: You will get some overdraw instead. If it completely covers up a world face, that face will get clipped away. So it is not suitable for fence(alphamasked) textures." []
 
 // *** ADVANCED ***
 

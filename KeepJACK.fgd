@@ -2615,7 +2615,7 @@
 @PointClass base(Appearflags,Targetname) size(-32 -32 -24, 32 32 80) color(0 128 192) flags(Angle) studio("progs/drake/anglstat.mdl") = misc_statue : "Angel Statue, Breakable" []
 @PointClass base(Appearflags,Targetname) size(-16 -16 0, 16 16 128) color(0 128 192) flags(Angle) studio("progs/drake/tree.mdl") = misc_tree : "Tree Model" []
 
-@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2) studio("progs/ne_ruins/pot1.mdl") = misc_breakable_pot1 [
+@BaseClass = BreakablePots [
     spawnflags(flags) = [
 		1 : "Start OFF (hidden)" : 0 : "Start hidden"
 		2 : "No Damage" : 0 : "Cannot be damaged"
@@ -2626,22 +2626,37 @@
 		64: "No Sounds" : 0 : "No Impact Sounds"
 		128: "No Rubble Rotate" : 0 : "No Y rotation for rubble"
 	]
-	exactskin(integer) : "Model Skin number" :  : "Override default skin (no range check)"
-	health(integer) : "Health"
-	count(integer) : "Rubble Qty to spawn (def=4)"
-	cnt(choices) : "Rubble (Random) to spawn" = [
-		-1 : "No random qty"
-		 0 : "Default = 4"
+	exactskin(integer) : "Skin override (copied to debris)(def=0)"
+	health(integer) : "Health (def=1)"
+	count(integer) : "Minimum rubble count (def=4)"
+	cnt(choices) : "Rubble amount" = [
+		0 : "Randomized (=count + [1,count])"
+		-1 : "Exact (=count)"
 	]
 	dmg(integer) : "Explosive Radius Damage"
 	brkvelbase(string) : "Velocity Base (def=50 50 100)"
 	brkveladd(string) : "Velocity Extra (def=100 100 150)"
 	brkavel(integer) : "Velocity Rotation (def=200)"
 	brkfade(integer) : "Rubble fade timer (def=4)"
+	brkmdltype(integer) : "Model type (def=11 upright 3 handles)"
+	pos1(string) : "Dust particle color"
 	angles(string) : "Direction to throw rubble"
 	mangle(string) : "Override pot Pitch Roll Yaw" : : "up/down, angle, tilt left/right "
 	brkgravity(integer) : "Rubble gravity (def=1)"
 ]
+
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot1a.mdl") = misc_breakable_pot1a []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot1b.mdl") = misc_breakable_pot1b []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot1c.mdl") = misc_breakable_pot1c []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot1d.mdl") = misc_breakable_pot1d []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot1aflr.mdl") = misc_breakable_pot1aflr []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot2a.mdl") = misc_breakable_pot2a []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot2b.mdl") = misc_breakable_pot2b []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot2c.mdl") = misc_breakable_pot2c []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot2d.mdl") = misc_breakable_pot2d []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_pot2aflr.mdl") = misc_breakable_pot2aflr []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ne_ruins/pot1.mdl") = misc_breakable_pot1 []
+@PointClass size(-16 -16 0, 16 16 48) base(Appearflags,Targetname,Target,Target2,BreakablePots) studio("progs/ad181/brk_vase1.mdl") = misc_breakable_vase1 []
 
 @PointClass size(-8 -8 -8, 8 8 8) base(Targetname) = func_exploder : "Explosion"
 [

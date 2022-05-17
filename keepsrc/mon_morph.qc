@@ -467,17 +467,14 @@ void() morph_setup = {
 		self.mdl = "progs/rogue/mon_morph_eg.mdl";	// Egyptian
 	} else if (self.spawnflags & MORPH_GREEK) {
 		self.mdl = "progs/rogue/mon_morph_gr.mdl";	// greek
-	} else self.mdl = "progs/rogue/mon_morph_eg.mdl";
-	// Default to Egyptian
-	if (self.owner) self.mdl = self.owner.mdl;
+	} else self.mdl = "progs/rogue/mon_morph_eg.mdl"; // Default to Egyptian
 
+	if (self.owner) self.mdl = self.owner.mdl;
 	self.pain_sound = "rogue/guard/pain1.wav";
 	self.sight_sound = "rogue/guard/see1.wav";
-
 	self.solid = SOLID_NOT;			// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
-
 	self.yaw_speed = 20;
 	self.view_ofs = '0 0 25';
 	self.frame = $start01;
@@ -495,10 +492,7 @@ void() morph_setup = {
 	self.pain_flinch = 35;
 	self.steptype = FS_TYPEHEAVY;
 	self.movespeed = 1;			// Can never be a turret
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 
 	// Morphs have special animation movement sets
 	// Need extra parameters for their morphing ability
@@ -519,7 +513,6 @@ void() morph_setup = {
 	if (self.bodyphased == MONAI_SKULLWINVIS) {
 		self.takedamage = DAMAGE_NO; // Can't hurt it when morphing
 		self.skin = 2;
-
 		self.th_stand = morph_phased;
 		self.th_walk = morph_phased;
 		self.th_run = morph_wake1;
@@ -539,7 +532,6 @@ void() morph_setup = {
 	self.classgroup = CG_BOSS;
 	self.classmove = MON_MOVEWALK;
 	if (self.deathstring == "")  self.deathstring = " was crushed by a Guardian\n";
-
 	monster_start();
 };
 
@@ -598,6 +590,7 @@ void() monster_morph_precache = {
 // Select the look of the monster (Aztec,Greek,Egyptian).
 void() monster_morph = {
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
 	if (self.minion_name == string_null) self.minion_name = "monster_morph";
 	morph_setup();
 };

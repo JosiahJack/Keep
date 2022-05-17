@@ -5,41 +5,27 @@ $cd id1/models/ogre_c
 $origin 0 0 24
 $base base		
 $skin base
-
 $frame	stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7
 $frame walk8 walk9 walk10 walk11 walk12 walk13 walk14 walk15 walk16
-
 $frame run1 run2 run3 run4 run5 run6 run7 run8
-
 $frame swing1 swing2 swing3 swing4 swing5 swing6 swing7
 $frame swing8 swing9 swing10 swing11 swing12 swing13 swing14
-
 $frame smash1 smash2 smash3 smash4 smash5 smash6 smash7
 $frame smash8 smash9 smash10 smash11 smash12 smash13 smash14
-
 $frame shoot1 shoot2 shoot3 shoot4 shoot5 shoot6
-
 $frame pain1 pain2 pain3 pain4 pain5
-
 $frame painb1 painb2 painb3
-
 $frame painc1 painc2 painc3 painc4 painc5 painc6
-
 $frame paind1 paind2 paind3 paind4 paind5 paind6 paind7 paind8 paind9 paind10
 $frame paind11 paind12 paind13 paind14 paind15 paind16
-
 $frame paine1 paine2 paine3 paine4 paine5 paine6 paine7 paine8 paine9 paine10
 $frame paine11 paine12 paine13 paine14 paine15
-
 $frame death1 death2 death3 death4 death5 death6
 $frame death7 death8 death9 death10 death11 death12
 $frame death13 death14
-
 $frame bdeath1 bdeath2 bdeath3 bdeath4 bdeath5 bdeath6
 $frame bdeath7 bdeath8 bdeath9 bdeath10
-
 $frame pull1 pull2 pull3 pull4 pull5 pull6 pull7 pull8 pull9 pull10 pull11
 
 //BDW 31/08/00 - evil, nasty red-hot nail cluster-bomb attack...
@@ -51,35 +37,24 @@ void() FlakDoDamage = {
 };
 
 void() FlakTouch = {
-	if (other.solid == SOLID_TRIGGER)
-		return;
+	if (other.solid == SOLID_TRIGGER) return;
+	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
 
-	if (pointcontents(self.origin) == CONTENT_SKY) {
-		remove(self);
-		return;
-	}
-
-	// hit something that bleeds
-	if (other.takedamage) {		
+	if (other.takedamage) {	// hit something that bleeds	
 		spawn_touchblood(self, other, self.dmg);
 		sound(self, CHAN_VOICE, "weapons/skotch.wav", 1, ATTN_NORM);
-
-		// not the first one...
-		if (other.spikecount) {
+		if (other.spikecount) { // not the first one...
 			other.spikecount = other.spikecount + self.dmg;	
 			remove(self);
 			return;
 		}
 
-		// the first one...
-		other.spikecount = self.dmg;	
-
-		// stick around for a little while...
-		self.velocity = '0 0 0';
+		other.spikecount = self.dmg; // the first one...
+		self.velocity = '0 0 0'; // stick around for a little while...
 		self.solid = SOLID_NOT;
 		self.touch = SUB_Null;
 		self.model = string_null;
-		self.oldorigin = self.origin - other.origin;	//displacement from enemy origin (its gonna move next frame)
+		self.oldorigin = self.origin - other.origin; // displacement from enemy origin (its gonna move next frame)
 		self.oldenemy = other;		
 		self.think = FlakDoDamage;
 		self.nextthink = time + 0.05;
@@ -91,19 +66,12 @@ void() FlakTouch = {
 	WriteCoord (MSG_BROADCAST, self.origin_x);
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, self.origin_z);
+	if (self.spawnflags & MONSTER_FLAK_OGRE) { remove(self); return; } // bit of a hack
 
-	//bit of a hack
-	if (self.spawnflags & MONSTER_FLAK_OGRE) {
-		remove(self);
-		return;
-	}
+	self.dmg = self.dmg - 5;	// gets weaker with each bounce. also stops them getting stuck in world.
+	if (self.dmg <= 0) { remove(self); return; }
 
-	self.dmg = self.dmg - 5;	//gets weaker with each bounce. also stops them getting stuck in world.
-	if (self.dmg <= 0) {
-		remove(self);
-		return;
-	}
-	self.velocity = self.velocity * 0.5;	//reduce crazy ricochets
+	self.velocity = self.velocity * 0.5;	// reduce crazy ricochets
 	self.movetype = MOVETYPE_BOUNCE;
 };
 

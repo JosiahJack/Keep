@@ -162,8 +162,6 @@ void() monster_oldone_tentacle = {
 	self.mdl = "progs/q15/oldone_tent.mdl";
 	self.pain_sound = "boss1/pain.wav";
 	self.death_sound = "boss1/death.wav";
-	setmodel(self, self.mdl);					// Setup model
-	setsize (self, '-12 -12 -24', '12 12 128');
 	self.health = 135;
 	self.scale = 0.5;
 	self.solid = SOLID_BBOX;
@@ -180,7 +178,6 @@ void() monster_oldone_tentacle = {
 	self.th_pain = oldone_pain;
 	self.th_die = oldone_die;
 	self.th_melee = oldone_atta1;
-
 	if (self.deathstring == "")  self.deathstring = " became one with Shub-Niggurath\n";
 
 	// Check for random rotation setup and angle limits
