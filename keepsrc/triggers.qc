@@ -2192,6 +2192,7 @@ void() trigger_hurt_fire = { // [FUNCTION]
 	}
 	if (trigger_check_body(self.bmodel_act,DEAD_EXPLODE)) return; // Check for any dead monster bodies (no exceptions)
 	if (self.bmodel_act.flags & FL_CLIENT && self.bmodel_act.flags & FL_GODMODE) return; // Check for godmode players taking screenshots!
+	if (self.bmodel_act.flags & FL_CLIENT && self.bmodel_act.movetype == MOVETYPE_NOCLIP) return; // Be nice to noclippers taking screenshots!
 
 	self.attack_finished = time + self.wait; // Block touch function based on wait time
 	self.dmg = trigger_dmgquery(); // Work out damage based on skill level
@@ -2504,6 +2505,7 @@ void() trigger_void_touch = { // [FUNCTION]
 		else if (other.classgroup == CG_RUNE) return;
 		else if (other.classgroup == CG_ARTIFACT) return;
 	}
+	if (other.movetype == MOVETYPE_NOCLIP && other.flags & FL_CLIENT) return; // Player is on noclip, be nice to testers!
 
 	other.touchedvoid = TRUE; // flag touching entity, so other functions will ignore it
 	if (other.flags & FLx_CREATURE) T_Damage(other,self,self,other.health+8,NOARMOR); // Let monsters and clients die through their own functions

@@ -41,7 +41,7 @@ float IT_ITEMRESET = IT_KEY1 + IT_KEY2 + IT_INVISIBILITY + IT_INVULNERABILITY + 
 float IT_MODRESET = IT_CKEY1 + IT_CKEY2 + IT_CKEY3 + IT_CKEY4 + IT_ARTLAVASHIELD + IT_ARTWETSUIT + IT_ARTBLASTBELT + IT_ARTJUMPBOOTS + IT_ARTSHARP + IT_ARTPIERCE + IT_ARTTOME;
 float IT2_ITEMRESET = IT2_SHIELD + IT2_SUPERHEALTH + IT2_EARTHQUAKE + IT2_V_SPHERE + HIP_IT2_WETSUIT + HIP_IT2_EMPATHY_SHIELDS + HIP_IT2_HORN_OF_CONJURING + IT2_TRINITY;
 float ALL_WEAPONS = IT_SHOTGUN + IT_SUPER_SHOTGUN + IT_NAILGUN + IT_SUPER_NAILGUN + IT_GRENADE_LAUNCHER + IT_ROCKET_LAUNCHER + IT_LIGHTNING + IT_AXE + IT_LAVA_NAILGUN + IT_LAVA_SUPER_NAILGUN + IT_MULTI_GRENADE + IT_MULTI_ROCKET + IT_PLASMA_GUN + IT_EXTRA_WEAPON;
-float ALL_WEAPONS2 = IT2_CHAINLIGHTNING + IT2_PROXIMITY_GUN + IT2_MJOLNIR + IT2_LASER_CANNON + IT2_GRAPPLE + IT2_WAND + IT2_CROSS;
+float ALL_WEAPONS2 = IT2_CHAINLIGHTNING + IT2_PROXIMITY_GUN + IT2_MJOLNIR + IT2_LASER_CANNON + IT2_GRAPPLE + IT2_CROSS;// IT2_CROSS is the wand!  Don't add twice adding IT2_WAND and make garbage.
 float ALL_WEAPONSMODITEMS = IT_UPGRADE_SSG + IT_UPGRADE_LG + IT_SANGUINATORS + IT_SCIMITAR + IT_RAPIER + IT_UPGRADE_AXE;
 float ALL_WEAPONSMODITEMS_HACKBANK = IT_ICE + IT_MACE + IT_VOID_STAFF + IT_FLAK + IT_GUNGNIR;
 float ALL_WEAPONSPERMS = IT_BLASTER + IT_CHAINSAW;
@@ -114,6 +114,7 @@ void() SetNewParms = {
 
 // Used by trigger_changelevel.  Stores a copy of the parm data ready for death/level reset.
 void() SetChangeParms = {
+	local entity pack;
 	local float had_regen;
 
     if ((self.perms & POW_ARMORBERSERKER) || (self.perms & POW_REGEN)) had_regen = TRUE; // Drake Special exotic armor stuff
@@ -152,10 +153,14 @@ void() SetChangeParms = {
 	parm14 = mapvar[3];
 	parm15 = mapvar[4];
 	parm16 = mapvar[5];
+	cvar_set("gamecfg",ftos(encode(self.ammo_bloodcrystals,self.ammo_voidshards,self.ammo_elemental)));
+	//parm17 = encode(self.ammo_bloodcrystals,self.ammo_voidshards,self.ammo_elemental);
+	cvar_set("savedgamecfg",ftos(globalstate));
+	//parm18 = globalstate;
 
-	// Ok, locking us in as of NOW!  QSS or FTE ENGINES ONLY FROM THIS POINT FORWARD!!!
-	parm17 = encode(self.ammo_bloodcrystals,self.ammo_voidshards,self.ammo_elemental);
-	parm18 = globalstate;
+	dprint("Beyond 16 Parms Set:\n");
+	dprint("gamecfg: "); dprint(ftos(cvar("gamecfg"))); dprint("\n");
+	dprint("savedgamecfg: "); dprint(ftos(cvar("savedgamecfg"))); dprint("\n");
 };
 
 // Used during load new map such as trigger_changelevel.  Not used when loading a saved file or quickload
@@ -383,9 +388,9 @@ void() DecodeWorldParms = {
 		parm5 = encode(tlow8,tmid8,thi8); //store plasma back in parm5
 	}
 
-	tlow8 = decode(parm17,LOW8);
-	tmid8 = decode(parm17,MID8);
-	thi8 = decode(parm17,HI8);
+	tlow8 = decode(cvar("gamecfg"),LOW8);//cvar("parm17_hack"); //decode(parm17,LOW8);
+	tmid8 = decode(cvar("gamecfg"),MID8);//cvar("parm18_hack");//decode(parm17,MID8);
+	thi8 =  decode(cvar("gamecfg"),HI8);//cvar("parm19_hack"); //decode(parm17,HI8);
 	if (world.ammo_bloodcrystals || (world.currentammo && tlow8 > 0)) {
 		dprint("\b[CLIENT]\b Ammo Blood Crystals ("); dprint(ftos(tlow8)); dprint(") To (");
 		if (world.currentammo) tlow8 = world.ammo_bloodcrystals;
@@ -397,7 +402,8 @@ void() DecodeWorldParms = {
 		}
 		if (tlow8 < 0) tlow8 = 0;
 		dprint(ftos(tlow8)); dprint(")\n");	
-		parm17 = encode(tlow8,tmid8,thi8); //store bloodcrystals back in parm17
+		cvar_set("gamecfg",ftos(encode(tlow8,tmid8,thi8)));
+		//parm17 = encode(tlow8,tmid8,thi8); //store bloodcrystals back in parm17
 	}
 	if (world.ammo_voidshards || (world.currentammo && tmid8 > 0)) {
 		dprint("\b[CLIENT]\b Ammo Void Shards ("); dprint(ftos(tmid8)); dprint(") To (");
@@ -410,7 +416,8 @@ void() DecodeWorldParms = {
 		}
 		if (tmid8 < 0) tmid8 = 0;
 		dprint(ftos(tmid8)); dprint(")\n");
-		parm17 = encode(tlow8,tmid8,thi8); //store voidshards back in parm17
+		cvar_set("gamecfg",ftos(encode(tlow8,tmid8,thi8)));
+		//parm17 = encode(tlow8,tmid8,thi8); //store voidshards back in parm17
 	}
 	if (world.ammo_elemental || (world.currentammo && thi8 > 0)) {
 		dprint("\b[CLIENT]\b Ammo Plasma ("); dprint(ftos(thi8)); dprint(") To (");
@@ -423,7 +430,8 @@ void() DecodeWorldParms = {
 		}
 		if (thi8 < 0) thi8 = 0;
 		dprint(ftos(thi8)); dprint(")\n");
-		parm17 = encode(tlow8,tmid8,thi8); //store elemental_mana back in parm17
+		cvar_set("gamecfg",ftos(encode(tlow8,tmid8,thi8)));
+		//parm17 = encode(tlow8,tmid8,thi8); //store elemental_mana back in parm17
 	}
 
 	// Update player armour type and quantity
@@ -564,9 +572,14 @@ void() DecodeLevelParms = {
 	self.ammo_lava_nails = decode(parm5,LOW8);
 	self.ammo_multi_rockets = decode(parm5,MID8);
 	self.ammo_plasma = decode(parm5,HI8);
-	self.ammo_bloodcrystals = decode(parm17,LOW8);
-	self.ammo_voidshards = decode(parm17,MID8);
-	self.ammo_elemental = decode(parm17,HI8);
+
+	dprint("Beyond 16 Parms: gamecfg was "); dprint(ftos(cvar("gamecfg"))); dprint("\n");
+	self.ammo_bloodcrystals = decode(cvar("gamecfg"),LOW8);// cvar("parm17_hack"); //decode(parm17,LOW8);
+	dprint("Beyond 16 Parms: set player ammo_bloodcrystals to: "); dprint(ftos(self.ammo_bloodcrystals)); dprint("\n");
+	self.ammo_voidshards = decode(cvar("gamecfg"),MID8);// cvar("parm18_hack");//decode(parm17,MID8);
+	dprint("Beyond 16 Parms: set player ammo_voidshards to: "); dprint(ftos(self.ammo_voidshards)); dprint("\n");
+	self.ammo_elemental = decode(cvar("gamecfg"),HI8);// cvar("parm19_hack");//decode(parm17,HI8);
+	dprint("Beyond 16 Parms: set player ammo_elemental to: "); dprint(ftos(self.ammo_elemental)); dprint("\n");
 	self.weapon = parm8;
 	self.moditems = parm10;
 	self.items2 = parm11;
@@ -593,8 +606,10 @@ void() DecodeLevelParms = {
 	mapvar[4] = parm15;
 	mapvar[5] = parm16;
 	if (CheckZeroVector(world.mapvar_update) == FALSE) mapvar_range(world.mapvar_update); // Check for any worldspawn map variable settings
-	// parm17 handled above next to the other ammos
-	globalstate = parm18;
+	dprint("Beyond 16 Parms: gamecfg was "); dprint(ftos(cvar("savedgamecfg"))); dprint("\n");
+	globalstate = cvar("savedgamecfg");
+	cvar_set("gamecfg","0"); // Reset these to keep player config.cfg clean
+	cvar_set("savedgamecfg","0");
 };
 
 void() GotoNextMap = {
@@ -798,7 +813,7 @@ void () RunCommandSpawn = {
 
 // PutClientInServer - called each time a player is spawned
 void() PutClientInServer = {
-	local	entity spot;
+	local entity spot, pack;
 
 	dprint("\b[CLIENT]\b PutClientInServer\n");
 	client_ent = self;
@@ -816,8 +831,8 @@ void() PutClientInServer = {
 	// Setup entity chains for coop, dm and intermission
 	SetupSpawnCoopLocations();
 	SetupIntermissionCamera();
-	spot = SelectSpawnPoint (); // Find a spawn location in the map
-	if (spot.target) self.target2 = spot.target; // Fire any targets on spawn location
+	spot = SelectSpawnPoint(); // Find a spawn location in the map
+	if (spot.target) self.target2 = spot.target; // Fire targets on spawn location
 	else self.target2 = "";
 	
 	if (spot.cameratarget) self.cameratarget = spot.cameratarget; // Copy over any cinematic camera start sequences
@@ -870,7 +885,7 @@ void() PutClientInServer = {
 	ResetPowerSystem(self,0,FALSE);		// Remove powerup effects (not vania)
 	ResetDebuffSystem(self);			// Reset/initialize debuff system
 	self.enemy = world;
-	DecodeLevelParms ();
+	DecodeLevelParms();
 
 	// Evil Mode should always start with the Axe!
 	if (Client_QueryEvilmode()) self.weapon = IT_AXE;

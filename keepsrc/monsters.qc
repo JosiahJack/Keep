@@ -994,12 +994,20 @@ float(string mname) monster_checkminion = {
 // Check all spawn conditions.  return TRUE = do NOT spawn, got a problem
 float() monster_checkspawn = {
 	if (deathmatch) { entity_hide(self); return TRUE; } // Classic exception - Multiplayer (modes 1 & 2)
-	if (cvar("nomonsters") != 0) { remove(self); return TRUE; } // This will break progression if monster is used with a counter
+	if (cvar("nomonsters") != 0) {
+		if (self.target != "") {
+			dprint("WARNING: Removing monster for nomonsters but monster has target! ");
+			dprint(vtos(self.origin));
+			dprint("\n");
+		}
+		remove(self);
+		return TRUE;
+	} // This will break progression if monster is used with a counter
 
 	// Check for spawning (entity keys) conditions (nightmare, coop).  Uses entity_hide instead of remove(self) - done in check
 	if (check_nightmare() == TRUE){
 		if (HasTargets(self)) {
-			dprint("WARNING: Hiding monster on nightmare but monster has a target!");
+			dprint("WARNING: Hiding monster on nightmare but monster has target! ");
 			dprint(vtos(self.origin));
 			dprint("\n");
 		}
@@ -1009,7 +1017,7 @@ float() monster_checkspawn = {
 
 	if (check_coop() == TRUE) {
 		if (HasTargets(self)) {
-			dprint("WARNING: Hiding monster on coop but monster has targe(s)! ");
+			dprint("WARNING: Hiding monster on coop but monster has target! ");
 			dprint(vtos(self.origin));
 			dprint("\n");
 		}
