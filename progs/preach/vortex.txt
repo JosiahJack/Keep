@@ -1,0 +1,26 @@
+Vortex by Preach (andrew.denner@btinternet.com)
+
+This is a "special effects" model which looks like a sucking vortex of doom. 
+It would be ideal for an level-end teleporter you want to make especially
+obvious, and could also be used to create a whirlpool with the right skin.
+
+The model comes with a single looping animation of the vortex in action,
+plus four skins:
+
+1: Purple Maelstrom
+2: Teleporter Malfunction
+3: Van de Graaff
+4: Quicksand
+
+This model would look very angular and wrong if you computed the vertex
+normals in the usual way. So included with the model in this zip is the
+python script I used to create it and all the source files. The batch file
+included will build the model and run the python script, so long as you have
+the following tools on your path:
+
+a) md3tomdl (https://tomeofpreach.wordpress.com/md3tomdl/)
+b) a version of python with the qmdl module installed
+   (https://tomeofpreach.wordpress.com/qmdl/)
+
+This is the recommened way to add extra skins to the model - add them to the
+list of skins in model.py and re-run the batch file.

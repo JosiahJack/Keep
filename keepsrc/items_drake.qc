@@ -77,9 +77,11 @@ void() treasure_touch = { // [FUNCTION]
     if (other.health <= 0) return;
     if (!(other.flags & FL_CLIENT)) return;
 
-    sprint(other, "You found "); sprint (other, self.netname); sprint (other, "\n");
+    sprint(other, "You found ");
+    sprint(other, self.netname);
+    sprint(other, "\n");
+    Safe_stuffcmd(other, "bf\n");
     sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-    Safe_stuffcmd (other, "bf\n");
     if (!self.healamount) self.healamount = 5;
     if (self.healtype)
         T_Heal(other, self.healamount, TRUE); // Reward with max hp increase -- not in SoE!

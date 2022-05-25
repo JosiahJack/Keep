@@ -341,7 +341,10 @@ void() monster_death_precheck = {
 			}
 		}
 		monster_check_gib();		// Check for gib state
-		if (!self.gibbed && self.classmove == MON_MOVEFLY) self.movetype = MOVETYPE_TOSS; // Affected by gravity
+		if (!self.gibbed && (self.classmove == MON_MOVEFLY || (self.flags & FL_FLY))
+            && self.classmove != MON_MOVESTATIC && self.movetype != MOVETYPE_NONE) {
+			self.movetype = MOVETYPE_TOSS; // Affected by gravity
+		   }
 	}
 };
 

@@ -587,9 +587,9 @@ void() make_glitter = { // [FUNCTION]
     local vector spot, vel;
     local float rgb, go;
 
-    spot_x = self.absmin_x + (random() * self.size_x);
-    spot_y = self.absmin_y + (random() * self.size_y);
-    spot_z = self.absmin_z + (random() * self.size_z);
+    spot_x = self.origin_x + (crandom() * self.size_x);
+    spot_y = self.origin_y + (crandom() * self.size_y);
+    spot_z = self.origin_z + (crandom() * self.size_z);
     vel = self.movedir * self.speed;
     rgb = self.count;
     if (self.lefty) {

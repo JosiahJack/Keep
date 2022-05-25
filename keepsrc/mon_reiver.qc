@@ -200,7 +200,6 @@ void (vector spawn_pos, vector spawn_vel) launch_ghost_follower =
 	newmis.think = ghost_follower_think;	
 	newmis.nextthink = time + 0.2;	
 	newmis.attack_finished = time + 7;
-	// setmodel (newmis, "progs/q15/ghost_follower.spr32");
 	setmodel (newmis, "progs/ad171/misc_skull.mdl");
 	setsize (newmis, '-8 -8 -8', '8 8 8');
 	
@@ -1020,7 +1019,6 @@ void () reiver_shield_think = {
 void() monster_reiver_precache = {
 	precache_model("progs/q15/reiver.mdl");
 	precache_model("progs/quoth/fireball.mdl");
-	precache_model("progs/q15/ghost_follower.spr32");
 	precache_model("progs/ad171/misc_skull.mdl");
 	precache_model("progs/q15/reiver_shield.mdl");
 	precache_model("progs/q15/reiverhands.spr");

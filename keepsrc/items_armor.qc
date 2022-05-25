@@ -116,9 +116,9 @@ void() armor_touch = { // [FUNCTION]
 		other.perms = other.perms | self.perms; // perms are nonexclusive, we can have multiple types of armor on weehee! -Qmaster
 		if (self.aflag > 0) other.ammo_cells = other.ammo_cells + self.aflag; // Add cells for power shield
 	}
-	sprint (other, "You got the ");
-	sprint (other, self.netname);
-	sprint (other, "\n");
+	sprint(other, "You got the ");
+	sprint(other, self.netname);
+	sprint(other, "\n");
 	if (self.noise != SOUND_EMPTY) sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 	Safe_stuffcmd (other, "bf\n");
 	activator = other;

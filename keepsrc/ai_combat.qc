@@ -147,9 +147,11 @@ void(entity targ, entity attacker) Killed = {
 
 	// doors, triggers, etc
 	if (self.movetype == MOVETYPE_PUSH || self.movetype == MOVETYPE_NONE || self.classtype == CT_FUNCPUSHABLE) {	
-		self.th_die ();
+		self.th_die();
 	} else {
 		if (!self.deadflag && (self.flags & FL_MONSTER || self.flags & FL_CLIENT) ) {
+			self.tethered = FALSE;
+			self.tetherfocus = world;
 			self.deadflag = DEAD_DYING; // Object is dying, stop re-triggering
 			self.enemy = attacker;	// Enemy dealing final blow
 			if (self.enemy.classtype == CT_WORLD) self.enemy = self;	

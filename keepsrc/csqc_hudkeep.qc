@@ -368,7 +368,7 @@ void(vector pos, string num) Hud_DrawCharFont24 = {
 // Draws small 8 pixel numbers to HUD (white/yellow/red text options)
 void(vector pos, float value, float digit, float zerofill, float fontcol) Hud_DrawNoFont8 = {
 	local string val_str;
-	local float disp_len, disp_no;
+	local float disp_len, disp_no, valmod;
 
 	// Make sure value is within range
 	if (value < 0) value = 0;
@@ -379,7 +379,12 @@ void(vector pos, float value, float digit, float zerofill, float fontcol) Hud_Dr
 	
 	// Round number down (floor) and work out length
 	val_str = ftos(floor(value));
-	disp_len = strlen(val_str);
+	valmod = floor(value);
+	disp_len = 1; //strlen(val_str);
+	if (valmod > 9) disp_len = 2;
+	if (valmod > 99) disp_len = 3;
+	if (valmod > 999) disp_len = 4;
+	if (valmod > 9999) disp_len = 5;
 	
 	// Zero fill number?
 	if (zerofill) {
@@ -387,7 +392,7 @@ void(vector pos, float value, float digit, float zerofill, float fontcol) Hud_Dr
 			// Keep adding more zero's
 			val_str = strcat("0", val_str);
 			// Exit condition?
-			disp_len = strlen(val_str);
+			disp_len = disp_len + 1;//= strlen(val_str);
 		}
 	}
 
@@ -395,16 +400,13 @@ void(vector pos, float value, float digit, float zerofill, float fontcol) Hud_Dr
 	pos_x = pos_x + (digit * HUDSIZE_8_x);
 	
 	while (disp_len > 0) {
-		// Countdown first (digit positions = 0-2)
-		disp_len = disp_len - 1;
-		// Move backward to display a digit
-		pos_x = pos_x - HUDSIZE_8_x;
-		// Convert character to number (font table index 48-57)
-		disp_no = str2chr(val_str, disp_len);
+		disp_len = disp_len - 1; // Countdown first (digit positions = 0-2)
+		pos_x = pos_x - HUDSIZE_8_x; // Move backward to display a digit
+		disp_no = str2chr(val_str, disp_len); // Convert character to number (font table index 48-57)
 		if (fontcol == HUDFONT_YELLOW) disp_no = disp_no - 30;
 		else if (fontcol == HUDFONT_RED) disp_no = disp_no + 128;
-		// Draw character from ascii font table (right-justified)
-		drawcharacter(pos, disp_no, HUDSIZE_8, HUDRGB_DEF, hudalpha, 0);	
+
+		drawcharacter(pos, disp_no, HUDSIZE_8, HUDRGB_DEF, hudalpha, 0); // Draw character from ascii font table (right-justified)
 	}	
 };
 
@@ -2121,10 +2123,9 @@ void(float apilevel, string enginename, float engineversion) CSQC_Init = {
 	// Send ping back to server that CSQC client is alive
 	// This can be used on the server side to detect CSQC
 	// and change functions for new features 
-	localcmd(strcat("cmd ", CSQC_PING, "\n"));
-	
-	// precache from gfx.wad ONLY!?!
-	wadonly = FALSE;
+	localcmd("cmd csqcping\n");	
+
+	wadonly = FALSE; // precache from gfx.wad ONLY!?!
 	
 	// Cache all string tables
 	for (i = 0; i < 16; i++) {

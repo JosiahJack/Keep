@@ -114,10 +114,10 @@ void() ammo_touch = {
 		other.ammo_elemental = other.ammo_elemental + self.aflag;
 	}
 	bound_other_ammo(other); // Check/cap ammo limits.
-	sprint (other, "You got the ");
-	sprint (other, self.netname);
-	sprint (other, "\n");
-	sound (other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
+	sprint(other, "You got the ");
+	sprint(other, self.netname);
+	sprint(other, "\n");
+	sound(other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM);
 	Safe_stuffcmd (other, "bf\n");
 	W_SetCurrentAmmo(other); // If changed current ammo, update it.
 	activator = other;

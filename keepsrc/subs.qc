@@ -39,7 +39,6 @@
 //=============================================================================
 
 void() SUB_CalcMoveDone;
-void() SUB_CalcAngleMoveDone;
 void(vector marker_org, float marker_type) spawn_marker;
 void(entity thekilled, entity attacker) AddToKills;
 void(entity targ) AddToTotals;

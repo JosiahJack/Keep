@@ -108,13 +108,13 @@ void () item_coin_touch = {
    if (coop > 2 && other.versustype != VT_SURVIVOR)  return;
    if ( !(other.flags & FL_CLIENT) ) return;
 
-   sprint (other, "You got ");
-   sprint (other, ftos(self.count));
-   if (self.count == 1) sprint (other, " coin!\n");
-   else sprint (other, " coins!\n");
-   Safe_stuffcmd (other, "bf\n");
+   sprint(other, "You got ");
+   sprint(other, ftos(self.count));
+   if (self.count == 1) sprint(other, " coin!\n");
+   else sprint(other, " coins!\n");
+   Safe_stuffcmd(other, "bf\n");
    coins = coins + self.count;
-   sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+   sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
    activator = other;
    SUB_UseTargets();
    item_finished();
@@ -158,13 +158,13 @@ float() can_eat_bones = {
 void () item_bone_touch = {
 	if (!can_eat_bones()) return;
 	
-	sprint (other, "You got ");
-	sprint (other, ftos(self.count));
-	if (self.count == 1) sprint (other, " bone!\n");
-	else sprint (other, " bones!\n");
-	Safe_stuffcmd (other, "bf\n");
+	sprint(other, "You got ");
+	sprint(other, ftos(self.count));
+	if (self.count == 1) sprint(other, " bone!\n");
+	else sprint(other, " bones!\n");
+	Safe_stuffcmd(other, "bf\n");
 	bones = bones + self.count;
-	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+	sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 	activator = other;
 	SUB_UseTargets();
 	item_finished();

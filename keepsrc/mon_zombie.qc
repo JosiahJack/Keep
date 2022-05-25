@@ -597,7 +597,9 @@ void() zombie_cruc_setup = {
 		// Variable start delay on all monsters to reduce packet errors
 		self.nextthink = time + 0.1 + random()*0.4;
 		self.think = zombie_cruc_spawn;
+		self.th_stand = zombie_cruc_spawn;
 	}
+	monster_start();
 };
 
 void() monster_zombie_precache = {

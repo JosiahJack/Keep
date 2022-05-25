@@ -241,6 +241,7 @@ misc_hostage.qc				// REFINED Drake's Cutscene Actor
 vigil.qc					// REFINED From Wright's Vigil map, had a useful triggerable Congratulations Intermission
 qrobot.qc 					// REFINED Qmaster's Super Syncronized Trains, boring right, until the whole world is made of them.
 progs_redfield.qc			// REFINED Redfield's decorations and effects.
+misc_ballista.qc			// Hexen2 Ballista giant crossbow turret.
 
 // Hipnotic stuff
 //-----------------------------------------------------------------------------

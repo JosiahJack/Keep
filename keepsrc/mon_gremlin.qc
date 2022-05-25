@@ -114,65 +114,65 @@ float () GremlinAttemptWeaponSteal = {
    // Take ammo along with the gun and sprint it to console
    if (wep == IT_SHOTGUN) {
       gremlin_steal_shells();
-      sprint (victim,"Gremlin stole your Shotgun\n");
+      sprint(self.enemy,"Gremlin stole your Shotgun\n");
    }
    if (wep == IT_SUPER_SHOTGUN) {
       gremlin_steal_shells();
       if (self.enemy.moditems & IT_UPGRADE_SSG) {
          self.moditems = self.moditems | IT_UPGRADE_SSG;
-         sprint (victim,"Gremlin stole your Widowmaker!\n");
+         sprint(self.enemy,"Gremlin stole your Widowmaker!\n");
       } else {
-         sprint (victim,"Gremlin stole your Double-Barrel Shotgun\n");
+         sprint(self.enemy,"Gremlin stole your Double-Barrel Shotgun\n");
       }
    }
    if (wep == IT_NAILGUN) {
       gremlin_steal_nails();
-      sprint (victim,"Gremlin stole your Nailgun\n");
+      sprint(self.enemy,"Gremlin stole your Nailgun\n");
    }
    if (wep == IT_LAVA_NAILGUN) {
       gremlin_steal_lava_nails();
-      sprint (victim,"Gremlin stole your Lava Nailgun\n");
+      sprint(self.enemy,"Gremlin stole your Lava Nailgun\n");
    }
    if (wep == IT_SUPER_NAILGUN) {
       gremlin_steal_nails();
-      sprint (victim,"Gremlin stole your Perforator\n");
+      sprint(self.enemy,"Gremlin stole your Perforator\n");
    }
    if (wep == IT_LAVA_SUPER_NAILGUN) {
       gremlin_steal_lava_nails();
-      sprint (victim,"Gremlin stole your Lava Perforator!\n");
+      sprint(self.enemy,"Gremlin stole your Lava Perforator!\n");
    }
    if (wep == IT_GRENADE_LAUNCHER) {
       gremlin_steal_rockets();
-      sprint (victim,"Gremlin stole your Grenade Launcher\n");
+      sprint(self.enemy,"Gremlin stole your Grenade Launcher\n");
    }
    if (wep == IT2_PROXIMITY_GUN) {
       gremlin_steal_rockets();
-      sprint (victim,"Gremlin stole your Proximity Gun\n");
+      sprint(self.enemy,"Gremlin stole your Proximity Gun\n");
    }
    if (wep == IT_MULTI_GRENADE) {
       gremlin_steal_multi_rockets();
-      sprint (victim,"Gremlin stole your Multi-Grenade Launcher\n");
+      sprint(self.enemy,"Gremlin stole your Multi-Grenade Launcher\n");
    }
    if (wep == IT_ROCKET_LAUNCHER) {
       gremlin_steal_rockets();
-      sprint (victim,"Gremlin stole your Rocket Launcher\n");
+      sprint(self.enemy,"Gremlin stole your Rocket Launcher\n");
    }
    if (wep == IT_MULTI_ROCKET) {
       gremlin_steal_multi_rockets();
-      sprint (victim,"Gremlin stole your Multi-Rocket Launcher!\n");
+      sprint(self.enemy,"Gremlin stole your Multi-Rocket Launcher!\n");
    }
    if (wep == IT_LIGHTNING) {
       gremlin_steal_cells();
       if (self.enemy.moditems & IT_UPGRADE_LG) {
          self.moditems = self.moditems | IT_UPGRADE_LG;
-         sprint (victim,"Gremlin stole your Plasma Gun!\n");
+         sprint(self.enemy,"Gremlin stole your Plasma Gun!\n");
       } else {
-         sprint (victim,"Gremlin stole your Thunderbolt\n");
+         sprint(self.enemy,"Gremlin stole your Thunderbolt\n");
       }
    }
    if (wep == IT_PLASMA_GUN) {
       gremlin_steal_plasma();
-      sprint (victim,"Gremlin stole your Plasma Lightning Gun\n");
+      sprint(self.enemy,"Gremlin stole your Plasma Lightning Gun\n");
    }
    if (wep == IT_EXTRA_WEAPON) {
       if (self.enemy.ammo_poison > FALSE) {
@@ -180,11 +180,11 @@ float () GremlinAttemptWeaponSteal = {
       } else {
          gremlin_steal_bolts();
       }
-      sprint (victim,"Gremlin stole your Crossbow\n");
+      sprint(self.enemy,"Gremlin stole your Crossbow\n");
    }
    if (wep == IT2_LASER_CANNON) {
       gremlin_steal_cells();
-      sprint (victim,"Gremlin stole your Laser Cannon\n");
+      sprint(self.enemy,"Gremlin stole your Laser Cannon\n");
    }
 
    tempself = self;
@@ -199,10 +199,10 @@ float () GremlinAttemptWeaponSteal = {
    else
       self.lastvictim = self;
 
-   victim = GremlinFindVictim ();
+   victim = GremlinFindVictim();
    if ( (victim != world) ) {
       self.enemy = victim;
-      FoundTarget ();
+      FoundTarget();
       self.attack_finished = time;
       self.search_time = (time + TRUE);
    }

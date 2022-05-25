@@ -494,57 +494,57 @@ void()	sheep_run8		=[231,	sheep_run9	] {sheep_run_think();};
 void()	sheep_run9		=[232,	sheep_run10] {sheep_run_think();};
 void()	sheep_run10		=[233,	sheep_run1]{sheep_run_think();};
 
-void()	sheep_diea1		=[250,	sheep_diea2	] {};
-void()	sheep_diea2		=[251,	sheep_diea3	] {monster_check_gib();};
-void()	sheep_diea3		=[252,	sheep_diea4	] {monster_check_gib();};
-void()	sheep_diea4		=[253,	sheep_diea5	] {};
-void()	sheep_diea5		=[254,	sheep_diea6	] {};
-void()	sheep_diea6		=[255,	sheep_diea7	] {};
-void()	sheep_diea7		=[256,	sheep_diea8	] {};
-void()	sheep_diea8		=[257,	sheep_diea9	] {};
-void()	sheep_diea9		=[258,	sheep_diea10	] {};
-void()	sheep_diea10	=[259,	sheep_diea11	] {};
-void()	sheep_diea11	=[260,	sheep_diea12	] {};
-void()	sheep_diea12	=[261,	sheep_diea13	] {};
-void()	sheep_diea13	=[262,	sheep_diea14	] {};
-void()	sheep_diea14	=[263,	sheep_diea15	] {};
-void()	sheep_diea15	=[264,	sheep_diea16	] {};
-void()	sheep_diea16	=[265,	sheep_diea17	] {};
-void()	sheep_diea17	=[266,	sheep_diea18	] {};
-void()	sheep_diea18	=[267,	sheep_diea19	] {};
-void()	sheep_diea19	=[268,	sheep_diea20	] {};
-void()	sheep_diea20	=[269,	sheep_diea21	] {};
-void()	sheep_diea21	=[270,	sheep_diea22	] {};
-void()	sheep_diea22	=[271,	sheep_diea23	] {};
-void()	sheep_diea23	=[272,	sheep_diea24	] {monster_death_postcheck();};
-void()	sheep_diea24	=[273,	sheep_diea24	] {monster_deadbody_check();};
+void()	sheep_diea1		=[0,	sheep_diea2	] {};
+void()	sheep_diea2		=[1,	sheep_diea3	] {monster_check_gib();};
+void()	sheep_diea3		=[2,	sheep_diea4	] {monster_check_gib();};
+void()	sheep_diea4		=[3,	sheep_diea5	] {};
+void()	sheep_diea5		=[4,	sheep_diea6	] {};
+void()	sheep_diea6		=[5,	sheep_diea7	] {};
+void()	sheep_diea7		=[6,	sheep_diea8	] {};
+void()	sheep_diea8		=[7,	sheep_diea9	] {};
+void()	sheep_diea9		=[8,	sheep_diea10	] {};
+void()	sheep_diea10	=[9,	sheep_diea11	] {};
+void()	sheep_diea11	=[10,	sheep_diea12	] {};
+void()	sheep_diea12	=[11,	sheep_diea13	] {};
+void()	sheep_diea13	=[12,	sheep_diea14	] {};
+void()	sheep_diea14	=[13,	sheep_diea15	] {};
+void()	sheep_diea15	=[14,	sheep_diea16	] {};
+void()	sheep_diea16	=[15,	sheep_diea17	] {};
+void()	sheep_diea17	=[16,	sheep_diea18	] {};
+void()	sheep_diea18	=[17,	sheep_diea19	] {};
+void()	sheep_diea19	=[18,	sheep_diea20	] {};
+void()	sheep_diea20	=[19,	sheep_diea21	] {};
+void()	sheep_diea21	=[20,	sheep_diea22	] {};
+void()	sheep_diea22	=[21,	sheep_diea23	] {};
+void()	sheep_diea23	=[22,	sheep_diea24	] {monster_death_postcheck();};
+void()	sheep_diea24	=[23,	sheep_diea24	] {monster_deadbody_check();};
 
-void()	sheep_dieb1		=[274,	sheep_dieb2	] {};
-void()	sheep_dieb2		=[275,	sheep_dieb3	] {monster_check_gib();};
-void()	sheep_dieb3		=[276,	sheep_dieb4	] {monster_check_gib();};
-void()	sheep_dieb4		=[277,	sheep_dieb5	] {};
-void()	sheep_dieb5		=[278,	sheep_dieb6	] {};
-void()	sheep_dieb6		=[279,	sheep_dieb7	] {};
-void()	sheep_dieb7		=[280,	sheep_dieb8	] {};
-void()	sheep_dieb8		=[281,	sheep_dieb9	] {};
-void()	sheep_dieb9		=[282,	sheep_dieb10	] {};
-void()	sheep_dieb10	=[283,	sheep_dieb11	] {};
-void()	sheep_dieb11	=[284,	sheep_dieb12	] {};
-void()	sheep_dieb12	=[285,	sheep_dieb13	] {};
-void()	sheep_dieb13	=[286,	sheep_dieb14	] {};
-void()	sheep_dieb14	=[287,	sheep_dieb15	] {};
-void()	sheep_dieb15	=[288,	sheep_dieb16	] {};
-void()	sheep_dieb16	=[289,	sheep_dieb17	] {};
-void()	sheep_dieb17	=[290,	sheep_dieb18	] {};
-void()	sheep_dieb18	=[291,	sheep_dieb19	] {};
-void()	sheep_dieb19	=[292,	sheep_dieb20	] {};
-void()	sheep_dieb20	=[293,	sheep_dieb21	] {};
-void()	sheep_dieb21	=[294,	sheep_dieb22	] {};
-void()	sheep_dieb22	=[295,	sheep_dieb23	] {};
-void()	sheep_dieb23	=[296,	sheep_dieb24	] {};
-void()	sheep_dieb24	=[297,	sheep_dieb25	] {};
-void()	sheep_dieb25	=[298,	sheep_dieb26	] {monster_death_postcheck();};
-void()	sheep_dieb26	=[299,	sheep_dieb26	] {monster_deadbody_check();};
+void()	sheep_dieb1		=[24,	sheep_dieb2	] {};
+void()	sheep_dieb2		=[25,	sheep_dieb3	] {monster_check_gib();};
+void()	sheep_dieb3		=[26,	sheep_dieb4	] {monster_check_gib();};
+void()	sheep_dieb4		=[27,	sheep_dieb5	] {};
+void()	sheep_dieb5		=[28,	sheep_dieb6	] {};
+void()	sheep_dieb6		=[29,	sheep_dieb7	] {};
+void()	sheep_dieb7		=[30,	sheep_dieb8	] {};
+void()	sheep_dieb8		=[31,	sheep_dieb9	] {};
+void()	sheep_dieb9		=[32,	sheep_dieb10	] {};
+void()	sheep_dieb10	=[33,	sheep_dieb11	] {};
+void()	sheep_dieb11	=[34,	sheep_dieb12	] {};
+void()	sheep_dieb12	=[35,	sheep_dieb13	] {};
+void()	sheep_dieb13	=[36,	sheep_dieb14	] {};
+void()	sheep_dieb14	=[37,	sheep_dieb15	] {};
+void()	sheep_dieb15	=[38,	sheep_dieb16	] {};
+void()	sheep_dieb16	=[39,	sheep_dieb17	] {};
+void()	sheep_dieb17	=[40,	sheep_dieb18	] {};
+void()	sheep_dieb18	=[41,	sheep_dieb19	] {};
+void()	sheep_dieb19	=[42,	sheep_dieb20	] {};
+void()	sheep_dieb20	=[43,	sheep_dieb21	] {};
+void()	sheep_dieb21	=[44,	sheep_dieb22	] {};
+void()	sheep_dieb22	=[45,	sheep_dieb23	] {};
+void()	sheep_dieb23	=[46,	sheep_dieb24	] {};
+void()	sheep_dieb24	=[47,	sheep_dieb25	] {};
+void()	sheep_dieb25	=[48,	sheep_dieb26	] {monster_death_postcheck();};
+void()	sheep_dieb26	=[49,	sheep_dieb26	] {monster_deadbody_check();};
 
 void() sheep_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
@@ -552,6 +552,11 @@ void() sheep_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "sheep/sheepfly.wav", 1, ATTN_NORM);
+		self.mdl = "progs/hexen2/mon_sheep_extra.mdl";
+		self.oldorigin = self.origin;
+		setmodel(self,self.mdl); // Extra because we used more than 256 frames.
+		setsize (self, self.bbmins, self.bbmaxs);
+		setorigin(self, self.oldorigin); // Reset origin since engine might.
 
 		if (random() > 0.5) sheep_diea1 ();
 		else sheep_dieb1 ();
@@ -560,6 +565,7 @@ void() sheep_die = {
 
 void() monster_sheep_precache =  {
 	precache_model ("progs/hexen2/mon_sheep.mdl");
+	precache_model ("progs/hexen2/mon_sheep_extra.mdl");
 	precache_sound ("sheep/sheep1.wav");
 	precache_sound ("sheep/sheep2.wav");
 	precache_sound ("sheep/sheep3.wav");

@@ -814,7 +814,6 @@ void() hknight2_random_ranged_attack = {
 };
 
 void() monster_hell_knight2_precache = {
-	precache_model("progs/q15/warlord_supernail.mdl");
 	precache_model("progs/q15/k_spike.mdl"); // referenced in projectiles.qc
 	precache_model("progs/q15/h_grenade2.mdl");	// multi
 	precache_model("progs/q15/h_grenade1.mdl");	

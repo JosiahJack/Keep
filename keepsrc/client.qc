@@ -67,6 +67,7 @@ vector(vector bez_start, vector bez_control, vector bez_end, float bez_timemax, 
 void() misc_camera_filewrite;
 void () earthquake_postthink;
 void (entity ownerEntity) sphere_remove;
+void() PlayerBallistaThink;
 
 // USED : Load (map command) NEW MAP or NEW GAME
 // This is a function called via the engine for new games and resets all parm data back to default values, followed by Decode.
@@ -858,6 +859,8 @@ void() PutClientInServer = {
 	self.aura_finished = 0;
 	self.water_blessed = 0;
 	self.alignment = GOOD;
+	self.tethered = FALSE;
+	self.tetherfocus = world;
 
 	// Check if Arcane Key Inventory message is blocked/suppressed
 	if (world.ckeyhint == TRUE) self.ckeyhint = TRUE;
@@ -1092,7 +1095,7 @@ void() PlayerPreThink = {
 		}
 	}
 
-	makevectors (self.v_angle);	
+	makevectors (self.v_angle);
 
 	// func_water screen tinting
 	if (self.fwatershift) {
@@ -1104,6 +1107,7 @@ void() PlayerPreThink = {
 	if (self.zerogtime < time) self.gravity = self.oldgravity;// reset normal gravity
 	else self.gravity = 0.0001;// zero G (0 OR 1 is normal), pOx - END  - func_water & func_ladder support
 
+	if (self.tethered && self.tetherfocus) PlayerBallistaThink();
 	// TeamCheckLock(); // TODO: Implement Rogue's teamplay.qc stuff.
 	// CheckMOTD(); // TODO: Implement Rogue's teamplay.qc stuff.
 	CheckRules();
@@ -1208,7 +1212,7 @@ void() PlayerPreThink = {
 		
 	// When the player/client starts in the map they don't want any velocity	
 	if (time < self.pausetime) self.velocity = '0 0 0';
-	if ((autocvar_player_legs_visibility) && (!cvar("chase_active")) && !( deathmatch || coop ) && !(self.invisible_finished > time)) {	// adds player´s legs to 1st person view  (meant for Single player only !)
+	if ((autocvar_player_legs_visibility) && (!cvar("chase_active")) && !( deathmatch || coop ) && !(self.invisible_finished > time)) {	// adds playerï¿½s legs to 1st person view  (meant for Single player only !)
 		if (self.visible_legs_helper == 0) {
 			self.visible_legs_helper = 1;
 			self.legsattachment = player_legs (self);
@@ -1659,17 +1663,19 @@ void() ClientRespawn = {
 	if (coop) {
 		CopyToBodyQue (self);	// make a copy of the dead body for appearances sake
 		setspawnparms (self);	// get the spawn parms as they were at level start
-		PutClientInServer ();	// respawn
+		PutClientInServer();	// respawn
 	} else if (deathmatch) {
 		CopyToBodyQue (self);	// make a copy of the dead body for appearances sake
 		SetNewParms ();			// set default spawn parms
-		PutClientInServer ();	// respawn
+		PutClientInServer();	// respawn
 	} else localcmd ("restart\n"); // restart the entire server
 };
 
 void() ClientDeath = {
 	local float forward;
 
+	self.tethered = FALSE;
+	self.tetherfocus = world;
 	CheckFuncWaterDeath(); // pOx - func_water support.  Check cshift for dead players in func_water
 	if ((self.flags & FL_ONGROUND)) {
 		forward = vlen (self.velocity);
@@ -1702,7 +1708,7 @@ void() ClientKill = {
 	set_suicide_frame ();
 	self.modelindex = modelindex_player;
 	self.frags = self.frags - 2; // Extra penalty
-	ClientRespawn ();
+	ClientRespawn();
 };
 
 // Called when a player connects to a server

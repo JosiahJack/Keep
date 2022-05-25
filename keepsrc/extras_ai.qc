@@ -131,7 +131,7 @@ void() handleFuncWaterSwimming = { // [FUNCTION]
 
 // Fish movement - new logic
 void(string action, float value) ai_fish_movement= { // [FUNCTION]
-	handleFuncWaterSwimming(); // Do things every animation frame.
+	if (self.flags & FL_SWIM) handleFuncWaterSwimming(); // Do things every animation frame.
 
 	if(action == "ai_walk") ai_walk(value);
 	else if(action == "ai_run") ai_run(value);

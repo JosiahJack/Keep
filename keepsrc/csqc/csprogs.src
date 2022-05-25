@@ -1,8 +1,11 @@
 ../../csprogs.dat
-qsextensions.qc	//builtins and lots of extensions
-defs.h
-math.qc
-env_sound.qc // OpenAL preset reverb zone structs
-csqc_hud_vanilla.qc				//The actual hud code. self-contained, except for qc extensions.
-csqc_scoreboard.qc				//Code for the deathmatch scoreboard overlay. self-contained except for qc extensions
-csqc_legacycompat.qc			//And because non-simple csqc isn't simple, this file needed for getting old versions of FTE, or DP to behave. comment out if you don't care about old engines.
+qsextensions.csqc	   // Builtins & lots of extensions available in FTE & QSS.
+defs.csqc
+math.csqc
+env_sound.csqc         // OpenAL preset reverb zone structs.
+csqc_hud_vanilla.csqc  // HUD code. self-contained, except for qc extensions.
+csqc_scoreboard.csqc   // Code for the deathmatch scoreboard overlay.
+                       // self-contained except for qc extensions
+csqc_legacycompat.csqc // And because non-simple csqc isn't simple, this file
+                       // needed for getting old versions of FTE, or DP to
+                       // behave as well as legacy engines.

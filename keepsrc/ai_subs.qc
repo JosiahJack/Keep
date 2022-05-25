@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 45
+// Function count: 47
 //
 // Implements: AI Core Movement Subroutines
 //
@@ -72,7 +72,7 @@
 void() MonsterDeBuff;
 
 void() ai_face = {
-	if (self.health < 1) return;// Unusual check, caught elsewhere
+	//Commenting this out for the ballista.  Dangerous? if (self.health < 1) return;// Unusual check, caught elsewhere
 	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
 	ChangeYaw(); 				// Done in code
 };
@@ -912,7 +912,7 @@ void(float dist) ai_floatmove_finish = {
 
 	if (vlen(move) > dist + 16) { self.velocity = '0 0 0'; return; } // probably touched a teleporter, so don't try to velocity interp
 	
-	interv = max(0.01, self.nextthink - time);
+	interv = mathlib_max(0.01, self.nextthink - time);
 	
 	// flying/swimming monsters don't raise/lower for regular path walking normally, so fudge the z velocity manually
 	if (self.goalentity.classtype == CT_PATHCORNER) {
@@ -948,4 +948,29 @@ float(float yaw, float dist) walkmoveplus = {
 	}
 	ai_floatmove_finish(dist);
 	return TRUE;
+};
+
+// For Kinn's Sergeant super grunt
+float() ai_face_last = {
+	if ( (visible(self.enemy)) || (self.enemy.origin == '0 0 0') ) {
+		ai_face();
+		return TRUE;
+	}
+
+	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
+	ChangeYaw ();
+	return FALSE;
+};
+
+// For the Ballista giant crossbow turret from Hexen 2
+void() ai_attack_face =  {
+    ai_face();
+    if (FacingIdeal()) {
+        if (self.attack_state == AS_MISSILE && self.th_missile) {
+            self.th_missile();
+        } else if (self.attack_state == AS_MELEE && self.th_melee) {
+            self.th_melee();
+        }
+        self.attack_state = AS_STRAIGHT;
+    }
 };

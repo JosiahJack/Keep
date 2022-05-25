@@ -216,11 +216,11 @@ void() artifact_touch = { // [FUNCTION]
 		other.health = other.max_health; 
 	} else return;
 
-	sprint (other, "You got the ");
-	sprint (other, self.netname);
-	sprint (other,"\n");
-	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM); // Pickup sound
-	Safe_stuffcmd (other, "bf\n"); // Screen flash
+	sprint(other, "You got the ");
+	sprint(other, self.netname);
+	sprint(other,"\n");
+	sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM); // Pickup sound
+	Safe_stuffcmd(other, "bf\n"); // Screen flash
 	other.items = other.items | self.items; // Update player items
 	other.items2 = other.items2 | self.items2;
 	other.moditems = other.moditems | self.moditems;
@@ -337,9 +337,9 @@ void() item_sigil_bane = { // [ENTITY]
 };
 
 void() tomeofpower_touch = { // [FUNCTION]
-	sprint (other, "You got the ");
-	sprint (other, self.netname);
-	sprint (other,"\n");
+	sprint(other, "You got the ");
+	sprint(other, self.netname);
+	sprint(other,"\n");
 	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 	Safe_stuffcmd (other, "bf\n");
 	other.tome_finished = time + self.cnt;

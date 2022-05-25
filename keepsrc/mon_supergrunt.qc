@@ -55,18 +55,6 @@ void() sgrunt_swagger12 = [85, sgrunt_swagger1 ] {ai_walk(6);};
 
 void() sgrunt_fire12;
 
-float() ai_face_last =
-{
-	if ( (visible(self.enemy)) || (self.enemy.origin == '0 0 0') ) {
-		ai_face();
-		return TRUE;
-	}
-
-	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
-	ChangeYaw ();
-	return FALSE;
-};
-
 void() sgrunt_plasma_touch ={
 	if (other == self.owner) return;
 

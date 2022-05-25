@@ -8,3 +8,15 @@ progs.lno
 a1.sav
 a2.sav
 quick.sav
+maps/*.bsp
+maps/*.lit
+maps/*.map
+!maps/asset_library.bsp
+!maps/asset_library.lit
+!maps/b_*.bsp
+!maps/statuegarden.bsp
+screenshots/*.png
+config.cfg
+fte.cfg
+ftenq.cfg
+ironwail.cfg

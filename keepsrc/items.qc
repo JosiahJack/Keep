@@ -86,6 +86,16 @@ void() item_thinkloop = { // [FUNCTION]
 	if (self.attack_finished > time) return; // Has the item been turned off?
 	if (self.item_expired > 0 && self.item_expired < time) remove(self); // Has the item removal timer been reached?
 	
+	if (self.classtype == CT_MJOLNIR) {
+		self.effects = self.effects | EF_DIMLIGHT;
+		if (random() < 0.4) make_glitter();
+		if (random() < 0.2) SpawnProjectileSmoke(self.origin + '0 0 24', 50, 50, 100); 
+		if (random() < 0.2) self.effects = self.effects | EF_MUZZLEFLASH;
+
+		self.frame = self.frame + 1;
+		if (self.frame > 15) self.frame = 0;
+	}
+
 	if (self.item_skinanim > 0) {
 		self.item_skincycle = self.item_skincycle + 1;
 		if (self.item_skincycle > 3) {
@@ -297,7 +307,7 @@ void() item_restore = { // [FUNCTION]
 	}
 	
 	// Setup animated textures for old style ID health boxes.  Check floor under item for any changes.
-	if (self.item_flrcheck > 0 || self.item_skinanim > 0) {
+	if (self.item_flrcheck > 0 || self.item_skinanim > 0 || self.classtype == CT_MJOLNIR) {
 		self.nextthink = time + random()*0.5;
 		self.think = item_thinkloop;
 	}
@@ -693,11 +703,11 @@ float(entity keyplayer, entity keyitem) key_pickupcondition = { // [FUNCTION]
 void() key_touch = { // [FUNCTION]
 	if (key_pickupcondition(other, self)) return;
 	
-	sprint (other, "You got the ");
-	sprint (other, self.netname);
-	sprint (other,"\n");
-	if (self.noise != SOUND_EMPTY) sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-	Safe_stuffcmd (other, "bf\n");
+	sprint(other, "You got the ");
+	sprint(other, self.netname);
+	sprint(other,"\n");
+	if (self.noise != SOUND_EMPTY) sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+	Safe_stuffcmd(other, "bf\n");
 	
 	// Add key to player inventory (items / customkey)
 	if (self.moditems > 0) {
@@ -894,11 +904,11 @@ void() item_keyx = { // [ENTITY]
 // -------- NOTES --------
 // Custom Pickup Item
 void() item_custom_touch = { // [FUNCTION]
-	sprint (other, "You got the ");
-	sprint (other, self.netname);
-	sprint (other,"\n");
+	sprint(other, "You got the ");
+	sprint(other, self.netname);
+	sprint(other,"\n");
 	sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
-	Safe_stuffcmd (other, "bf\n");
+	Safe_stuffcmd(other, "bf\n");
 	activator = other;
 	SUB_UseTargets();
 	if (self.progspawnlist) return; // Quick exit, no need for following stuff
@@ -941,9 +951,9 @@ void() item_custom = { // [ENTITY]
 // * Can be setup as an item with random ammo/armour
 // * Will monitor ground below so can fall further
 float(entity backent, string backtext1, string backtext2, float backcomma) BackpackText = { // [FUNCTION]
-	if (backcomma > 0) sprint (backent, ", ");
-	if (backtext1 != "") sprint (backent, backtext1);
-	if (backtext2 != "") sprint (backent, backtext2);
+	if (backcomma > 0) sprint(backent, ", ");
+	if (backtext1 != "") sprint(backent, backtext1);
+	if (backtext2 != "") sprint(backent, backtext2);
 	return 1;
 };
 
@@ -952,7 +962,7 @@ void() BackpackTouch = { // [FUNCTION]
 	local float pickupweapon, acount;
 	
 	acount = 0;
-	sprint (other, "You get ");
+	sprint(other, "You get ");
 
 	// A Coop player can pickup all of the weapons dropped by previous player (go through list).
 	if (coop > 0) {
@@ -1090,7 +1100,7 @@ void() BackpackTouch = { // [FUNCTION]
 			other.items = other.items | self.items;
 			other.items2 = other.items2 | self.items2;
 			other.moditems = other.moditems | self.moditems;
-			acount = BackpackText(other, "the", self.netname, acount);
+			acount = BackpackText(other, "the ", self.netname, acount);
 		}
 	}
 

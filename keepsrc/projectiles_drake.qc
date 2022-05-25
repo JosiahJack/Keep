@@ -988,7 +988,7 @@ void(vector start, vector dir) NecroBolt_Launch = { // [FUNCTION]
     newmis.avelocity    = '0 0 1200';
     newmis.angles       = vectoangles(newmis.velocity);
     newmis.yaw_speed    = 360;  // PM: Let dragons know this cannot be dodged.
-    newmis.dmg          = 70;   // max(50+d20) = 70.
+    newmis.dmg          = 70;   // mathlib_max(50+d20) = 70.
     newmis.enemy        = self.enemy;
     newmis.touch        = NecroBolt_Touch;
     newmis.delay        = time + 0.8;   // Total duration
@@ -1259,6 +1259,9 @@ void(entity targ) Thor_Fly = { // [FUNCTION]
 void() Thor_Think =[ 0, Thor_Think ] { // [FUNCTION]
     local entity targ;
 
+    self.frame = self.frame + 1;
+    if (self.frame > 15) self.frame = 0;
+
     if (self.master.hammer_finished < time) { // Time's up, return to attacker now!
         Thor_Poof ();
         return;
@@ -1300,7 +1303,8 @@ void(vector start, vector dir, entity targ) Thor_Launch = { // [FUNCTION]
     newmis.nextthink    = time + 0.1;
     newmis.think        = Thor_Think;
 	newmis.classgroup	= CG_WEAPON;
-    setmodel (newmis, "progs/drake/throwham.mdl");
+    newmis.frame = 1;
+    setmodel (newmis,"progs/madfox/thr0wham.mdl");//"progs/drake/throwham.mdl");
     setsize (newmis, '0 0 0', '0 0 0');        
     setorigin (newmis, start);
 

@@ -271,7 +271,7 @@ vector(float gibforce) DirectionForDamage = {
 // Only used when vomitus or other creature eats them now.
 void() RemoveGib = {
 	self.think = model_fade; // Fade away model, if active (default)
-	if (self.owner.classtype == CT_MISCGIBF) self.nextthink = time + 0.1;
+	if (self.owner.classtype == CT_MISCGIBF || self.owner.classgroup == CG_TEMPENT) self.nextthink = time + 0.1;
 	else self.nextthink = time + 20;
 	self.ltime = self.nextthink;
 };
@@ -717,11 +717,11 @@ float() Gib_Eaten = {
 
     if (other.health <= 0) return FALSE;   // Dead.
 	if (can_eat_bones()) {
-		sprint (other, "You got ");
-		sprint (other, ftos(self.count));
-		if (self.count == 1) sprint (other, " bone!\n");
-		else sprint (other, " bones!\n");
-		Safe_stuffcmd (other, "bf\n");
+		sprint(other, "You got ");
+		sprint(other, ftos(self.count));
+		if (self.count == 1) sprint(other, " bone!\n");
+		else sprint(other, " bones!\n");
+		Safe_stuffcmd(other, "bf\n");
 		bones = bones + self.count;
 		sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 		entity_hide(self); // Remove the gib

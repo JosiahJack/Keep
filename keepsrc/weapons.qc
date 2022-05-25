@@ -1419,6 +1419,14 @@ void(entity targ) W_SetCurrentAmmo = { // [FUNCTION]
 	if (frame_pause()) return; // intermission, cinematic, or finale
 
 	remoteplayer_run(targ);	// Get out of any weapon firing states.
+
+	if (targ.tethered && targ.tetherfocus && targ.health > 0) {
+		targ.currentammo = 0;
+		targ.weaponmodel = "progs/hexen2/xhair.mdl";
+		targ.weaponframe = 0;
+		return;
+	}
+
 	if (!targ.selfweaponismoditems) {
 		if (targ.weapon == IT_AXE) {
 			targ.currentammo = 0;
@@ -1579,6 +1587,12 @@ float(entity targ) W_BestWeapon = { // [FUNCTION]
 };
 
 float(entity targ) W_CheckNoAmmo = { // [FUNCTION]
+	if (targ.tethered && targ.tetherfocus && targ.health > 0) {
+		if (targ.tetherfocus.ammo_bolts > 0) return TRUE;
+		sound(self,CHAN_WEAPON,"weapons/noammo.wav",1,ATTN_NORM);
+		return FALSE;
+	}
+
 	if (targ.selfweaponismoditems) {
 		if (targ.weapon == IT_FLAK) targ.currentammo = CountFlakAmmo(targ);
 		if (targ.weapon == IT_GUNGNIR || targ.weapon == IT_MACE || targ.weapon == IT_AIRGUN) return TRUE;
@@ -1602,6 +1616,8 @@ void(float reload) W_Reload = { // [FUNCTION]
 };
 
 void() W_Attack = { // [FUNCTION]
+	local entity stemp;
+
 	if (intermission_running > 0) return;	// intermission or finale
 	if (cinematic_running > 0) return;		// Remote camera active
 	if ( !W_CheckNoAmmo(self) ) return;		// Out of ammo?
@@ -1609,6 +1625,16 @@ void() W_Attack = { // [FUNCTION]
 	makevectors	(self.v_angle);		// calculate forward angle for velocity
 	if (((self.weapon != IT_EXTRA_WEAPON && !self.selfweaponismoditems) || (self.perms & IT_FROSTBOW && self.weapon == IT_EXTRA_WEAPON && !self.selfweaponismoditems)) && self.weapon != IT_AXE && !self.selfweaponismoditems) self.show_hostile = time + 1;	// wake monsters up
     self.b0_click = 0;
+
+	// Fire a controlled ballista, obj_ballista
+	if (self.tethered && self.tetherfocus && self.health > 0) {
+		stemp = self;
+		self = self.tetherfocus;
+		self.th_missile();
+		self = stemp;
+		return;
+	}
+
 	if (!self.selfweaponismoditems) {
 		if (self.weapon == IT_AXE) {
 			if (self.perms & IT_CHAINSAW) { // Chainsaw overrides axes once acquired.
@@ -2166,21 +2192,21 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 	if (inhackbank) {
 		targ.selfweaponismoditems = TRUE;
 		if (fl == IT_ICE) {
-			sprint (targ,"Elemental Tome!\n");
+			sprint(targ,"Elemental Tome!\n");
 		} else {
 			if (fl== IT_MACE) {
-				sprint (targ,"Vampiric Mace!\n");
+				sprint(targ,"Vampiric Mace!\n");
 			} else {
 				if (fl== IT_VOID_STAFF) {
-					sprint (targ,"Void Staff!\n");
+					sprint(targ,"Void Staff!\n");
 				} else {
 					if (fl == IT_FLAK) {
-						sprint (targ,"Flak Cannon!\n");
+						sprint(targ,"Flak Cannon!\n");
 					} else {
 						if (fl == IT_AIRGUN) {
-							sprint (targ,"Air Fist!\n");
+							sprint(targ,"Air Fist!\n");
 						} else {
-							if (fl == IT_GUNGNIR) sprint (targ,"Gungnir!\n");
+							if (fl == IT_GUNGNIR) sprint(targ,"Gungnir!\n");
 						}
 					}
 				}
@@ -2191,57 +2217,57 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 		if ( (targ.weapon != fl) ) {
 		  if ( ((targ.weapon == IT_LAVA_NAILGUN) || (targ.weapon == IT_LAVA_SUPER_NAILGUN)) ) {
 			 if ( ((fl == IT_NAILGUN) || (fl == IT_SUPER_NAILGUN)) ) {
-				sprint (targ,"Normal Nails\n");
+				sprint(targ,"Normal Nails\n");
 			 }
 		  } else {
 			 if ( (targ.weapon == IT_MULTI_GRENADE) ) {
 				if ( (fl == IT_GRENADE_LAUNCHER) ) {
-				   sprint (targ,"Normal Grenades\n");
+				   sprint(targ,"Normal Grenades\n");
 				}
 			 } else {
 				if ( (targ.weapon == IT_MULTI_ROCKET) ) {
-				   if (fl == IT_ROCKET_LAUNCHER) sprint (targ,"Normal Rockets\n");
+				   if (fl == IT_ROCKET_LAUNCHER) sprint(targ,"Normal Rockets\n");
 				} else {
 				   if ( (targ.weapon == IT_PLASMA_GUN) ) {
 					  if ( (fl == IT_LIGHTNING) ) {
 						 if (targ.moditems & IT_UPGRADE_LG) {
-							sprint (targ,"Plasma Gun\n");
+							sprint(targ,"Plasma Gun\n");
 						 } else {
-							sprint (targ,"Lightning Gun\n");
+							sprint(targ,"Lightning Gun\n");
 						 }
 					  }
 				   } else {
 					  if ( ((fl == IT_LAVA_NAILGUN) || (fl == IT_LAVA_SUPER_NAILGUN)) ) {
-						 sprint (targ,"Lava Nails!\n");
+						 sprint(targ,"Lava Nails!\n");
 					  } else {
 						 if ( (fl == IT_MULTI_GRENADE) ) {
-							sprint (targ,"Multi-Grenades!\n");
+							sprint(targ,"Multi-Grenades!\n");
 						 } else {
 							if ( (fl == IT_MULTI_ROCKET) ) {
-							   sprint (targ,"Multi-Rockets!\n");
+							   sprint(targ,"Multi-Rockets!\n");
 							} else {
 							   if ( (fl == IT_PLASMA_GUN) ) {
-								  sprint (targ,"Plasma Gun!\n");
+								  sprint(targ,"Plasma Gun!\n");
 							   } else {
 								  if ( (fl == IT2_PROXIMITY_GUN) ) {
-									 sprint (targ,"Proximity Grenades!\n");
+									 sprint(targ,"Proximity Grenades!\n");
 								  } else {
 									 if ( (fl == IT2_LASER_CANNON) ) {
-										sprint (targ,"Laser Cannon!\n");
+										sprint(targ,"Laser Cannon!\n");
 									 }  else {
 										if ( (fl == IT2_CROSS) ) {
-											sprint (targ,"Magic Wand!\n");
+											sprint(targ,"Magic Wand!\n");
 										}  else {
 											if ( (fl == IT2_MJOLNIR) ) {
-												sprint (targ,"Mjolnir's Hammer!\n");
+												sprint(targ,"Mjolnir's Hammer!\n");
 											} else {
 												if ( (fl == IT_SANGUINATORS) ) {
-													sprint (targ,"Sanguinators!\n");
+													sprint(targ,"Sanguinators!\n");
 												} else {
 													if ( (fl == IT_SCIMITAR) ) {
-														sprint (targ,"Fire Scimitar!\n");
+														sprint(targ,"Fire Scimitar!\n");
 													} else {
-														if ( (fl == IT_RAPIER) ) sprint (targ,"Ghost Rapier!\n"); // Sharp if nest there, don't prick your eyes.
+														if ( (fl == IT_RAPIER) ) sprint(targ,"Ghost Rapier!\n"); // Sharp if nest there, don't prick your eyes.
 													}
 												}
 											}
@@ -2715,7 +2741,7 @@ void() W_WeaponFrame = { // [FUNCTION]
 			}
 		}
 		// Check for weapon updates
-		W_Attack ();
+		W_Attack();
 	} else {
 		if (self.weapon == IT3_MIRV && self.selfweaponismoditems != 1) {
 			if (self.mirv1) Mirv_Use();

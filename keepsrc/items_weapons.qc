@@ -80,7 +80,7 @@ void() weapon_start = {
 	self.bbmaxs = VEC_ITEM_MAX;
 	if (self.respawn_time == 0) self.respawn_time = RESPAWN_WEAPON;
 	if (self.netname == "") self.netname = "Weapon";
-	item_start ();
+	item_start();
 };
 
 void() weapon_touch = {
@@ -343,18 +343,18 @@ void() weapon_touch = {
 
 	// Display weapon name
 	if (self.classtype == CT_UPGRADE_AXE && other.moditems & IT_UPGRADE_AXE)
-		sprint (other, "You got another axe to grind");
+		sprint(other, "You got another axe to grind");
 	else if (self.classtype == CT_SUPER_SHOTGUN && other.moditems & IT_UPGRADE_SSG)
-		sprint (other, "You got a handful of Shells");
+		sprint(other, "You got a handful of Shells");
 	else if (self.classtype == CT_UPGRADE_SSG && other.moditems & IT_UPGRADE_SSG)
-		sprint (other, "You got triple barrel boomstick");
+		sprint(other, "You got triple barrel boomstick");
 	else if (self.classtype == CT_LIGHTNING && other.moditems & IT_UPGRADE_LG)
-		sprint (other, "You got some AAA batteries");
+		sprint(other, "You got some AAA batteries");
 	else if (self.classtype == CT_UPGRADE_LG && other.moditems & IT_UPGRADE_LG)
-		sprint (other, "You got another burst of plasma");
+		sprint(other, "You got another burst of plasma");
 	else {
-		sprint (other, "You got the ");
-		sprint (other, self.netname);
+		sprint(other, "You got the ");
+		sprint(other, self.netname);
 	}
 	// weapon touch sound
 	if (self.classtype == CT_CHAINSAW) {
@@ -362,8 +362,8 @@ void() weapon_touch = {
 	} else {
 		sound (other, CHAN_ITEM, "weapons/pkup.wav", 1, ATTN_NORM);
 	}
-	sprint (other, "\n");
-	Safe_stuffcmd (other, "bf\n"); // Screen flash
+	sprint(other, "\n");
+	Safe_stuffcmd(other, "bf\n"); // Screen flash
 	bound_other_ammo (other); // Make sure no ammo is over limits
 	if (new > 0 && deathmatch) DM_Weapon(other,new,oldhackbank,oldweapon); // Skip any weapon switch if no new weapon.  Check for best weapon (DM only) and switch to it!
 	W_SetCurrentAmmo(other);
@@ -510,6 +510,7 @@ void() weapon_mjolnir = {
 	if (self.netname == "") self.netname = "Mjolnir's Hammer";
 	item_ammo_set(60); // Drake changed from 30 to 60 since it has so much extra cool stuff.  Oddly, it uses 25 now and not 30 so, weird number here. -Qmaster	
 	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_cells = world.deventity.ammo_cells + self.aflag;
+	self.absmin = '-16 -16 -8';
 	weapon_start();
 };
 

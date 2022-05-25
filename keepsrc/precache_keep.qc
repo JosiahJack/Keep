@@ -182,11 +182,14 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/v_multi2.mdl");
 	precache_model("progs/drake/v_mirv.mdl");
 	precache_model("progs/hipnotic/v_laserg.mdl");
+	precache_model("progs/madfox/g_hamer.mdl");
+	precache_model("progs/madfox/v_hamer.mdl");
+	precache_model("progs/madfox/thr0wham.mdl");
 	precache_model("progs/hipnotic/v_hammer.mdl"); //mjolnir
 	precache_model("progs/hipnotic/playham.mdl"); // player with the hammer
 	precache_model("progs/quoth/v_ham.mdl"); //warhammer from quoth
 	precache_model("progs/drake/v_wand.mdl");
-	precache_model("progs/drake/throwham.mdl");
+	//precache_model("progs/drake/throwham.mdl");
 	precache_model("progs/drake/s_wave.spr");
 	precache_model("progs/drake/rocket1.mdl");
 	precache_model("progs/ad171/proj_bolt1.mdl");
@@ -271,6 +274,7 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/rogue/sphere.mdl");
 	precache_sound("rogue/sphere/sphere.wav");
 	precache_model("progs/hipnotic/s_bullet.spr");
+	precache_model(MODEL_PROJ_HKN);
 	precache_aoa();
 	precache_poisongibs();
 };

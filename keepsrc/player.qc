@@ -561,17 +561,18 @@ void() player_xbow3 =[106,player_run] { if (frame_pause()) return; self.weaponfr
 void() player_hammer4t =[ 122,  player_hammer5  ] { playham_frame(35,4);}; // [FUNCTION]
 void() player_mjolnir4t=[ 134, player_mjolnir5 ] { playham_frame(41,4);}; // [FUNCTION]
 
-void () player_hammer1 = [ 32.000, player_hammer2 ] { playham_frame(32,1);}; // [FUNCTION]
-void () player_hammer2 = [ 33.000, player_hammer3 ] { playham_frame(33,2);}; // [FUNCTION]
+void () player_hammer1 = [ 32.000, player_hammer2 ] { playham_frame(32,1); self.nextthink = time + 0.05;}; // [FUNCTION]
+void () player_hammer2 = [ 33.000, player_hammer3 ] { playham_frame(33,2); self.nextthink = time + 0.05;}; // [FUNCTION]
 void () player_hammer3 = [ 34.000, player_hammer4 ] { // [FUNCTION]
 	if (frame_pause()) return;
 
 	playham_frame(34,3);
 	if (HIP_ThrowMjolnir()) self.think = player_hammer4t; // TRUE if the hammer hits something or gets thrown.
+	self.nextthink = time + 0.05;
 };
-void () player_hammer4 = [ 35.000, player_hammer5 ] { if (!frame_pause()) playham_frame(35,4); W_FireMjolnir ();}; // [FUNCTION]
-void () player_hammer5 = [ 36.000, player_hammer6 ] { if (!frame_pause()) playham_frame(36,4); }; // [FUNCTION]
-void () player_hammer6 = [ 37.000, player_run ] { if (!frame_pause()) playham_frame(37,0); }; // [FUNCTION]
+void () player_hammer4 = [ 35.000, player_hammer5 ] { if (!frame_pause()) playham_frame(35,4); self.nextthink = time + 0.05; W_FireMjolnir ();}; // [FUNCTION]
+void () player_hammer5 = [ 36.000, player_hammer6 ] { if (!frame_pause()) playham_frame(36,4); self.nextthink = time + 0.05;}; // [FUNCTION]
+void () player_hammer6 = [ 37.000, player_run ] { if (!frame_pause()) playham_frame(37,0); self.nextthink = time + 0.05; }; // [FUNCTION]
 
 void () player_mjolnir1 = [ 38.000, player_mjolnir2 ] { if (!frame_pause()) playham_frame(38,1); }; // [FUNCTION]
 void () player_mjolnir2 = [ 39.000, player_mjolnir3 ] { if (!frame_pause()) playham_frame(39,2); }; // [FUNCTION]

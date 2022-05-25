@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 24
+// Function count: 25
 //
 // Implements: Subroutines
 //
@@ -230,4 +230,31 @@ void() SUB_RemoveAttachments = { // [FUNCTION]
 	SUB_RemoveAttachment();
 	SUB_RemoveAttachment2();
 	SUB_RemoveAttachment3();
+};
+
+void() SUB_CalcAngleMoveDone =  {
+   self.angles = self.finalangle;
+   self.avelocity = VEC_ORIGIN;
+   self.nextthink = -1;
+   if (self.think1) self.think1();
+};
+
+void(vector destangle, float tspeed) SUB_CalcAngleMove = {
+	local vector destdelta;
+	local float len, traveltime;
+
+	if (tspeed <= 0) tspeed = 0.01388; // 72fps delta time.
+	destdelta = (destangle - self.angles);
+	len = vlen(destdelta);
+	traveltime = (len/tspeed);
+	self.nextthink = (self.ltime + traveltime);
+	if (traveltime <= 0) traveltime = 0.01388;
+	self.avelocity = (destdelta * (1 / traveltime));
+	self.finalangle = destangle;
+	self.think = SUB_CalcAngleMoveDone;
+};
+
+// Wrapper function for assigning to self.think.
+void() SUB_CalcAngleMoveThink = {
+	SUB_CalcAngleMove(self.mangle,10);
 };

@@ -709,6 +709,7 @@ void() monster_dfury_boss_precache = {
 	precache_model ("progs/ad171/gib_gargwing1.mdl");
 	precache_model ("progs/ad171/gib_gargwing2.mdl");
 	precache_model ("progs/ad171/proj_fury1.mdl");
+	precache_model (MODEL_PROJ_HKN);
 	precache_sound ("q15/dfury/boss_explode.wav");
 	precache_sound ("q15/dfury/boss_death1.wav");
 	precache_sound ("q15/dfury/attack1.wav");

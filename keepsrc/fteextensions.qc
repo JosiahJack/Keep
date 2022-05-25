@@ -589,7 +589,7 @@ void(entity client, string s, optional string s2, optional string s3, optional s
 		// dprint(whoops);
 		// dprint("\n"); // Can't rely on nothing these days
 	// }
-// };
+// }; // Really.  This didn't work at all.  Commented out for now, maybe revisit. -Qmaster
 #if defined(QWSSQC)
 void(entity client, float msglvl, string s, optional string s2, optional string s3, optional string s4, optional string s5, optional string s6) sprint = #24; /*QW: Concatenates all string arguments, and prints the messsage on the named client's console, but only if that client's 'msg' infokey is set lower or equal to the supplied 'msglvl' argument. */
 #endif

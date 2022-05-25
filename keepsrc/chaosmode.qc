@@ -1174,7 +1174,7 @@ void() health_touchrandomizer = {
 		self.randomized = random();
 		// Check for <33=negative and >66=positive
 		if (self.randomized < RND_NEGATIVE) {
-			sprint (other, "You got a mouldy MegaHealth!\n");
+			sprint(other, "You got a mouldy MegaHealth!\n");
 			// Default is 1 per second
 			self.rotting_qty = 5;
 			rnd_playsurprise(other, RND_SURPRISENEG);
@@ -1182,7 +1182,7 @@ void() health_touchrandomizer = {
 			other.rad_time = 1;
 			other.radsuit_finished = time + POWERUP_TIMER;
 			other.items = other.items | IT_SUIT;
-			sprint (other, "You got the Environment Suit\n");
+			sprint(other, "You got the Environment Suit\n");
 			Safe_stuffcmd (other, "bf\n");
 			centerprint(other,"You also found the Environment Suit!\n");
 			rnd_playsurprise(other, RND_SURPRISEPOS);
@@ -1207,7 +1207,7 @@ void() armour_touchrandomizer = {
 			other.blastbelt_volume = 1;
 			other.blastbelt_finished = time + POWERUP_TIMER;
 			other.moditems = other.moditems | IT_ARTBLASTBELT;
-			sprint (other, "You got the Blast Belt\n");
+			sprint(other, "You got the Blast Belt\n");
 			Safe_stuffcmd (other, "bf\n");
 			centerprint(other,"You also found the Blast Belt!\n");
 			rnd_playsurprise(other, RND_SURPRISEPOS);
@@ -1227,7 +1227,7 @@ void() artifact_touchrandomizer = {
 			other.lavashield_volume = 1;
 			other.lavashield_finished = time + self.cnt; // Got to match original powerup on time
 			other.moditems = other.moditems | IT_ARTLAVASHIELD;
-			sprint (other, "You got the Aegis of Chthon\n");
+			sprint(other, "You got the Aegis of Chthon\n");
 			Safe_stuffcmd (other, "bf\n");
 			centerprint(other,"You also found Aegis of Chthon!\n");
 			rnd_playsurprise(other, RND_SURPRISEPOS);
@@ -1239,7 +1239,7 @@ void() artifact_touchrandomizer = {
 			other.blastbelt_volume = 1;
 			other.blastbelt_finished = time + self.cnt; // Got to match original powerup on time
 			other.moditems = other.moditems | IT_ARTBLASTBELT;
-			sprint (other, "You got the Blast Belt\n");
+			sprint(other, "You got the Blast Belt\n");
 			Safe_stuffcmd (other, "bf\n");
 			centerprint(other,"You also found the Blast Belt!\n");
 			rnd_playsurprise(other, RND_SURPRISEPOS);
@@ -1254,7 +1254,7 @@ void() artifact_touchrandomizer = {
 			other.jumpboots_forward = 0;
 			other.jumpboots_finished = time + self.cnt; // Got to match original powerup on time
 			other.moditems = other.moditems | IT_ARTJUMPBOOTS;
-			sprint (other, "You got the Jump Boots\n");
+			sprint(other, "You got the Jump Boots\n");
 			Safe_stuffcmd (other, "bf\n");
 			centerprint(other,"You also found the Jump Boots!\n");
 			rnd_playsurprise(other, RND_SURPRISEPOS);

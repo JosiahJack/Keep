@@ -43,8 +43,6 @@ float(entity ent, vector spot, float damage) HasReflection;
 
 //----------------------------------WAND MATHS---------------------------------
 // This is NOT the same as mathlib functions.  DON'T REMOVE AGAIN!
-
-// FIXME:  If DarkPlaces, use builtin.
 // Returns a vector where x = cosine and y = sine of 'theta'.
 vector(float theta) CoSine = {
     local   vector  tx, ty, tz, vec;

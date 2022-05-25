@@ -261,7 +261,7 @@ void() ClientPowerups = { // [FUNCTION]
 
 		if (self.invisible_finished < time + PWR_FADING) {
 			if (self.invisible_time == 1) {
-				sprint (self, "Ring of Shadows magic is fading\n");
+				sprint(self, "Ring of Shadows magic is fading\n");
 				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTINV2, 1, ATTN_NORM);
 				self.invisible_time = time + 1;
@@ -294,7 +294,7 @@ void() ClientPowerups = { // [FUNCTION]
 		self.air_finished = time + WATER_AIR;		// don't drown
 		if (self.radsuit_finished < time + 3) { // sound and screen flash when items starts to run out
 			if (self.rad_time == 1) {
-				sprint (self, "Air supply in Biosuit expiring\n");
+				sprint(self, "Air supply in Biosuit expiring\n");
 				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTSUIT2, 1, ATTN_NORM);
 				self.rad_time = time + 1;
@@ -313,7 +313,7 @@ void() ClientPowerups = { // [FUNCTION]
 		self.air_finished = time + WATER_AIR;		// don't drown
 		if (self.therm_finished < time + 3) { // sound and screen flash when items starts to run out
 			if (self.therm_time == 1) {
-				sprint (self, "Thermal protection suit is expiring\n");
+				sprint(self, "Thermal protection suit is expiring\n");
 				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTSUIT2, 1, ATTN_NORM);
 				self.therm_time = time + 1;
@@ -332,7 +332,7 @@ void() ClientPowerups = { // [FUNCTION]
 	// sound and screen flash when items starts to run out
 		if (self.lavashield_finished < time + 3) {
 			if (self.lavashield_time == 1) {
-				sprint (self, "Aegis is falling apart!\n");
+				sprint(self, "Aegis is falling apart!\n");
 				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTLSHIELD2, 1, ATTN_NORM);
 				self.lavashield_time = time + 1;
@@ -382,7 +382,7 @@ void() ClientPowerups = { // [FUNCTION]
 		if (self.wetsuit_finished < time + 3) { // sound and screen flash when items starts to run out
 			self.wetsuit_sound = time + 4;	// Stop breathing sound
 			if (self.wetsuit_time == 1) {
-				sprint (self, "Air supply in Wet suit expiring\n");
+				sprint(self, "Air supply in Wet suit expiring\n");
 				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTWETS2, 1, ATTN_NORM);
 				self.wetsuit_time = time + 1;
@@ -400,7 +400,7 @@ void() ClientPowerups = { // [FUNCTION]
 	if (self.invincible_finished > 0) {
 		if (self.invincible_finished < time + 3) { // sound and screen flash when items starts to run out
 			if (self.invincible_time == 1) {
-				sprint (self, "Protection is almost burned out\n");
+				sprint(self, "Protection is almost burned out\n");
 				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTPENT2, 1, ATTN_NORM);
 				self.invincible_time = time + 1;
@@ -418,7 +418,7 @@ void() ClientPowerups = { // [FUNCTION]
 	if (self.super_damage_finished > 0) {
 		if (self.super_damage_finished < time + 3) { // sound and screen flash when items starts to run out
 			if (self.super_time == 1) {
-				sprint (self, "Quad Damage is wearing off\n");
+				sprint(self, "Quad Damage is wearing off\n");
 				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTQUAD2, 1, ATTN_NORM);
 				self.super_time = time + 1;
@@ -435,7 +435,7 @@ void() ClientPowerups = { // [FUNCTION]
 	if (self.blastbelt_finished > 0) {
 		if (self.blastbelt_finished < time + 3) { // sound and screen flash when items starts to run out
 			if (self.blastbelt_time == 1) {
-				sprint (self, "Blast belt is failing\n");
+				sprint(self, "Blast belt is failing\n");
 				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTBLASTBELT2, 1, ATTN_NORM);
 				self.blastbelt_time = time + 1;
@@ -455,7 +455,7 @@ void() ClientPowerups = { // [FUNCTION]
 		// sound and screen flash when items starts to run out
 		if (self.jumpboots_finished < time + 3) {
 			if (self.jumpboots_time == 1) {
-				sprint (self, "Jump Boots are wearing off\n");
+				sprint(self, "Jump Boots are wearing off\n");
 				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTJUMPBOOTS2, 1, ATTN_NORM);
 				self.jumpboots_time = time + 1;
@@ -474,7 +474,7 @@ void() ClientPowerups = { // [FUNCTION]
 	if (self.sharpshoot_finished > 0) {
 		if (self.sharpshoot_finished < time + 3) { // sound and screen flash when items starts to run out
 			if (self.sharpshoot_time == 1) {
-				sprint (self, "Sharpshooter has almost gone\n");
+				sprint(self, "Sharpshooter has almost gone\n");
 				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTSHARP2, 1, ATTN_NORM);
 				self.sharpshoot_time = time + 1;
@@ -491,7 +491,7 @@ void() ClientPowerups = { // [FUNCTION]
 	if (self.nailpiercer_finished > 0) {
 		if (self.nailpiercer_finished < time + 3) { // sound and screen flash when items starts to run out
 			if (self.nailpiercer_time == 1) {
-				sprint (self, "Nail Piercer is wearing off\n");
+				sprint(self, "Nail Piercer is wearing off\n");
 				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, SOUND_ARTNAILP2, 1, ATTN_NORM);
 				self.nailpiercer_time = time + 1;
@@ -509,7 +509,7 @@ void() ClientPowerups = { // [FUNCTION]
 	if (self.wing_finished > 0) {
 		if (self.wing_finished < time + 3) { // sound and screen flash when items starts to run out
 			if (self.wing_time == 1) {
-				sprint (self, "Boots of Levitation are fading\n");
+				sprint(self, "Boots of Levitation are fading\n");
 				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, "zerstorer/ambience/wingend.wav", 1, ATTN_NORM);
 				self.wing_time = time + 1;
@@ -526,7 +526,7 @@ void() ClientPowerups = { // [FUNCTION]
 	if (self.tome_finished > 0) {
 		if (self.tome_finished < time + 3) { // sound and screen flash when items starts to run out
 			if (self.tome_time == 1) {
-				sprint (self, "Tome of Power is wearing off\n");
+				sprint(self, "Tome of Power is wearing off\n");
 				Safe_stuffcmd (self, "bf\n");
 				sound (self, CHAN_AUTO, "drake/items/tomepow2.wav", 1, ATTN_NORM);
 				self.tome_time = time + 1;

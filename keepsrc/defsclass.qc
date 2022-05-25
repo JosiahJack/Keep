@@ -494,7 +494,7 @@ float CT_LASER_CANNON = 549;	// Laser Cannon
 float CT_ARTSUIT = 550;			// Environment suit
 float CT_CIRCUIT = 551;			// Circuit Board collectible (17mm Fromitz board from Rubicon2)
 float CT_CHAINSAW = 552;		// Chainsaw (Zerstorer with Drake upgrades)
-
+float CT_PROJ_BALSHAFT = 553;	// Hexen2 Ballista shaft
 
 float CT_ARTPENT = 555;			// Pentagram - Invulnerability
 float CT_ARTINVS = 560;			// Ring of Shadows
@@ -540,6 +540,7 @@ float CT_GASSHOOTER = 658;		// Trap GAS shooter
 float CT_EXPLO_BOX = 660;		// Exploding box
 float CT_PENDULUM = 662;		// Swing Pendulum
 float CT_SAWBLADE = 666;		// Saw Blade
+float CT_BALLISTA = 667;        // Hexen2 Ballista giant crossbow turret
 
 float CT_FIREBALL = 670;		// Misc Fireball
 float CT_MISCSPARK = 672;		// Misc Spark

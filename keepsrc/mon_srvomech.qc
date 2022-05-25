@@ -463,6 +463,10 @@ void() monster_servomech = {
 void(entity targent) cservo_control_on = {
 	local entity targcam;
 
+	if (!targent)  { dprint("ERROR: missing targent for cservo_control_on\n"); return; }
+	if (!(targent.flags & FL_CLIENT)) { dprint("ERROR: targent for cservo_control_on not a player\n"); return; }
+	if (!self.movetarget) return;
+
 	targcam = self.movetarget;
 	targent.rcam = targcam;
 	targcam.owner = targent;
@@ -482,6 +486,10 @@ void(entity targent) cservo_control_on = {
 
 void(entity targent) cservo_control_off= {
 	local entity targcam, tmpent;
+
+	if (!targent) { dprint("ERROR: missing targent for cservo_control_off\n"); return; }
+	if (!(targent.flags & FL_CLIENT)) { dprint("ERROR: targent for cservo_control_off not a player\n"); return; }
+	if (!self.movetarget) return;
 
 	targcam = self.movetarget;
 	dummy_remove(targent);
