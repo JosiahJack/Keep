@@ -261,9 +261,12 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/drake/pur_gib.mdl"); 	// BLOOD_PURPLE
 	precache_model("progs/drake/ember.mdl"); 		// BLOOD_FIRE
 	precache_model("progs/qrally/sumabase.mdl");
+	precache_model("progs/qrally/sumanail.mdl");
+	precache_model("progs/qrally/sumarock.mdl");
 	precache_sound("qrally/start.wav");
 	precache_sound("qrally/ray/engstart.wav");
 	precache_sound("qrally/start2.wav");
+	precache_sound("quoth/items/click.wav");
 	precache_model(MODEL_HEAL5);
 	precache_model(MODEL_HEAL15);
 	precache_model(MODEL_HEAL25);

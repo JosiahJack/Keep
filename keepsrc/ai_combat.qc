@@ -39,6 +39,7 @@
 
 void(entity targ, entity attacker) ClientObituary;
 void(entity victim, entity attacker, float burn) Burn_Add;
+void(entity targ, float jump, float destroy) TakeTargetOutOfVehicle;
 
 float(entity targ, entity inflictor) CanDamage = {
 	if (targ.takedamage == DAMAGE_NO) return FALSE; // Any entity marked with no damage is automatically excluded
@@ -199,6 +200,16 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	// Cannot hurt the world or enemy targets (fake flying markers)
 	if (targ.classtype == CT_WORLD) return;
 	if (targ.classtype == CT_ENEMYTARGET) return;
+
+	if (targ.in_a_vehicle) {
+		take = (damage * 0.25);
+		if (targ.health - take <= 0) {
+			TakeTargetOutOfVehicle(self.bmodel_act,TRUE,TRUE); // Jump, destroy car
+			return;
+		}
+		targ.health = targ.health - take;
+		return;
+	}
 
 	if (targ.items2 & IT2_MJOLNIR && targ.weapon == IT2_MJOLNIR && !targ.selfweaponismoditems && (inflictor.classgroup == CG_PROJCELLS || inflictor.classgroup == CG_PROJPLASMAROGUE || attacker.classtype == CT_MONSHAM || attacker.classtype == CT_MONGAUNT)) damage = damage * 0.5; // 50% lightning protection while holding mjolnir
 
@@ -546,7 +557,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	
 	// When the SG projectile system is active ZOMBIES need to know if there has been enough damage over a single frame to die or not
 	if (targ.classgroup == CG_ZOMBIE && targ.classtype != CT_MONMUMMY) {
-		self.pain_finished = 0; // Zombies MUST ALWAYS RUN their pain function!?!
+		if (random() < 0.5) targ.pain_finished = 0; // Zombies need to be hurt more!
 		// Horrible Hack - Launch_Bullet sets the weapon flag on projectiles.  Only register damage against zombies if SSG upgrade or Quad!
 		if (inflictor.classgroup == CG_PROJSHELLS && inflictor.weapon) {
 			if (targ.dmgcombined > targ.max_health) targ.health = targ.gibhealth; // Has the accumulator gone over the max health?

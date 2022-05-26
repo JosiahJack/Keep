@@ -29,7 +29,6 @@
 // Stats:
 // Entity count: 1
 // Function count: 1
-//
 // Implements: Vehicle Entry and Exit
 //
 // Description:
@@ -38,6 +37,8 @@
 //=============================================================================
 
 void() item_rallycar_touch = { // [FUNCTION]
+	local float boundedChase;
+
 	if (self.pain_finished > time) return;
 	if (!(other.flags & FL_CLIENT)) return; // Only players can drive!
 	if (other.in_a_vehicle) return; // Already in a car
@@ -46,10 +47,21 @@ void() item_rallycar_touch = { // [FUNCTION]
 	other.vehicle_index = self.vehicle_index;
 	other.vehicle_model = self.mdl;
 	other.vehicle_skindex = self.vehicle_skindex;
+	other.randomshells = self.ammo_shells + self.ammo_nails
+                         + self.ammo_rockets + self.ammo_cells; // Give whatever ammo we have.
+	other.turrethealth = other.health; // Save it.
+	other.turrethealth2 = other.max_health;
+	other.turrettimer = other.armorvalue;
+	other.armorvalue = self.armorvalue;
+	other.health = self.health;
 	other.v_angle = self.angles;
 	other.angles = self.angles;
+	boundedChase = cvar("chase_back");
+	if (boundedChase > 255) boundedChase = 255;
+	else if (boundedChase < 0) boundedChase = 0;
+	cvar_set("scratch2",ftos(encode(cvar("chase_active"),boundedChase,0)));
 	localcmd("chase_active 1\n");
-	localcmd("chase_back 128\n"); // evil!
+	localcmd("chase_back 128\n"); // evil!  It's okay.  It's okay, we saved it in scratch2
 	if (self.vehicle_index == 3) sound(self, CHAN_AUTO, "qrally/ray/engstart.wav", 1, ATTN_STATIC);
 	else if (self.vehicle_index == 4) sound(self, CHAN_AUTO, "qrally/start2.wav", 1, ATTN_STATIC);
 	else sound(self, CHAN_AUTO, "qrally/start.wav", 1, ATTN_STATIC);
@@ -57,17 +69,24 @@ void() item_rallycar_touch = { // [FUNCTION]
 };
 
 void() item_rallycar = { // [ENTITY]
-	if (!self.mdl) self.mdl = "progs/qrally/sumabase.mdl"; // Default to the stock car
-	if (self.mdl == "progs/qrally/sumabase.mdl") self.vehicle_index = 2;
-	else if (self.mdl == "progs/qrally/zumabase.mdl") self.vehicle_index = 3;
-	else if (self.mdl == "progs/qrally/mgnabase.mdl") self.vehicle_index = 4;
-	else if (self.mdl == "progs/qrally/tritbase.mdl") self.vehicle_index = 5;
+	if (!self.mdl) self.mdl = "progs/qrally/sumanail.mdl"; // Default to the stock car
+	if (self.mdl == "progs/qrally/sumanail.mdl") self.vehicle_index = 2;
+	else if (self.mdl == "progs/qrally/zumanail.mdl") self.vehicle_index = 3;
+	else if (self.mdl == "progs/qrally/mgnanail.mdl") self.vehicle_index = 4;
+	else if (self.mdl == "progs/qrally/tritnail.mdl") self.vehicle_index = 5;
 	else self.vehicle_index = 1;
 	if (self.skin > 1) self.skin = 1; // cap it, models only have 2 skins
 	self.vehicle_skindex = self.skin;
 	self.solid = SOLID_TRIGGER;
 	self.touch = item_rallycar_touch;
 	self.scale = 2;
+	if (self.armorvalue == 0) self.armorvalue = 100; // Vehicle gas
+	if (self.health <= 0) self.health = 250; // Vehicle health
+	if (self.ammo_nails <= 0) self.ammo_nails = 200; // Vehicle ammo
+	precache_sound("qrally/meepmeep.wav");
+	precache_sound("q15/weapons/rocket1i.wav");
+	precache_model(self.mdl);
+	precache_model("progs/redfield/proj_nailcase.mdl");
 	setmodel(self,self.mdl);
 	setsize(self,VEC_HULL2_MIN,VEC_HULL2_MAX);
 	self.pain_finished = time + 1 + (random() * 5); // prevent touch for a bit

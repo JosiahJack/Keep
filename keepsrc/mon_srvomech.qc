@@ -838,8 +838,7 @@ void(entity attacker, float damage) cservo_pain=
 	}
 };
 
-void() cservo_die=
-{
+void() cservo_die = {
 	if(self.movetarget.owner)
 		cservo_control_off(self.movetarget.owner);
 
@@ -849,18 +848,14 @@ void() cservo_die=
 	servo_die();
 };
 
-//=======================================================================
-
-void() cservo_apply_controlls=
-{
+void() cservo_apply_controlls = {
 	local entity stemp;
 	local float tmpflt;
 
 	stemp = self;
 	self = self.rcam.spawnmaster;
 
-	if(stemp.impulse == 248) // stop using the mech
-	{
+	if(stemp.impulse == 248) { // stop using the mech
 		cservo_control_off(stemp);
 		self = stemp;
 		return;
@@ -1023,8 +1018,7 @@ void() cservo_setup=
 	}
 };
 
-void() func_servomech=
-{
+void() func_servomech= {
 	local entity bodent, legsent, pitent;
 	local entity cmechatt;
 
@@ -1061,12 +1055,10 @@ void() func_servomech=
 	self.th_die = cservo_die;
 	self.th_pain = cservo_pain;
 	
-// ### Added for Custents all affecting gravity
-	if(!self.gravity)
-		self.gravity = 1;
-	else
-	      self.gravity = ((self.gravity - 1) / 100);
-// ###
+	// ### Added for Custents all affecting gravity
+	if(!self.gravity) self.gravity = 1;
+	else self.gravity = ((self.gravity - 1) / 100);
+	// ###
 
 	// setup upper body entity
 	bodent = spawn();
@@ -1081,7 +1073,6 @@ void() func_servomech=
 	bodent.rotate_type = 0;
 	bodent.skin = self.skin;
 	bodent.hittype = HIT_METAL;
-
 
 	// setup cockpit entity
 	pitent = spawn();

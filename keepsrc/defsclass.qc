@@ -495,7 +495,7 @@ float CT_ARTSUIT = 550;			// Environment suit
 float CT_CIRCUIT = 551;			// Circuit Board collectible (17mm Fromitz board from Rubicon2)
 float CT_CHAINSAW = 552;		// Chainsaw (Zerstorer with Drake upgrades)
 float CT_PROJ_BALSHAFT = 553;	// Hexen2 Ballista shaft
-
+float CT_PROJ_NAILC = 554;		// Nail casing projectile
 float CT_ARTPENT = 555;			// Pentagram - Invulnerability
 float CT_ARTINVS = 560;			// Ring of Shadows
 float CT_ARTQUAD = 565;			// Quad Damage
@@ -521,6 +521,7 @@ float CT_ARTCROSS = 598;		// Cross of Deflection
 float CT_ARTHORN = 599;			// Horn of Conjuring
 float CT_SILVERKEY = 600;		// Silver key
 float CT_ARTHASTE = 601;		// Haste
+float CT_ARTFLASHLIGHT = 602;   // Flashlight
 float CT_GOLDKEY = 605;			// Gold key
 float CT_SKELETONKEY = 606;		// Skeleton key by Qmaster, can open any door with a key requirement.  Used once.
 float CT_CUSTOMKEY = 610;		// Custom key

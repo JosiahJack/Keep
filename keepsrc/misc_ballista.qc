@@ -83,6 +83,7 @@ void() trigger_control_touch = {
     local float fire_range;
 
     if (!(other.flags & FL_CLIENT)) return;
+    if (other.in_a_vehicle) return;
     if (self.enemy && self.enemy.flags & FL_CLIENT && self.enemy.tethered) return; // Already under control
     if (self.enemy && other != self.enemy) return;
     if (self.goalentity.health <= 0) return;

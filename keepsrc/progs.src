@@ -277,7 +277,7 @@ extras_misc.qc				// REFINED Miscellaneous Brush Entities
 
 // Quake Rally...oh yes rally ;)
 //-----------------------------------------------------------------------------
-// rally.qc					// Vehicle Handling and Weapons
+rally.qc					// Vehicle Handling and Weapons
 rally_entry.qc				// REFINED Vehicle Entry and Exit
 
 // Monsters

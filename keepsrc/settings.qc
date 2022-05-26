@@ -1519,3 +1519,8 @@ void() TomeOfPowerCheat = {
 	self.tome_finished = time + POWERUP_TIMER;
 	self.moditems = self.moditems | IT_ARTTOME;
 };
+
+void() ToggleFlashlight = {
+	self.flashlight = !self.flashlight;
+	sound(self,CHAN_VOICE,"quoth/items/click.wav",TRUE,ATTN_NONE);
+};

@@ -39,11 +39,16 @@
 void() print_coins;
 void() print_bones;
 void() usecommand;
+void() HonkHorn;
 
 void() ImpulseCommands = {
-	if ((self.impulse >= 1 && self.impulse <= 8) || (self.impulse >= 60 && self.impulse <= 64) || (self.impulse >= 75 && self.impulse <= 90) || self.impulse == 47) W_ChangeWeapon (self);
+	if (   (self.impulse >= 1 && self.impulse <= 8)
+        || (self.impulse >= 60 && self.impulse <= 64)
+        || (self.impulse >= 75 && self.impulse <= 90)
+        || self.impulse == 47) W_ChangeWeapon (self);
 	else if (self.impulse == 10) CycleWeaponCommand();
 	else if (self.impulse == 12) CycleWeaponReverseCommand();
+	else if (self.impulse == 55) HonkHorn();
 	else if (self.impulse == 56) ToggleDragonArmor();
 	else if (self.impulse == 57) ToggleSpiritShroud();
 	else if (self.impulse == 58) ToggleBerserkerArmor(); // Quad time using Demonhide armor for seconds!
@@ -63,7 +68,7 @@ void() ImpulseCommands = {
 	else if (self.impulse == 143) print_coins();	// Display total coins in coinpool
 	else if (self.impulse == 144) print_bones();	// Display total gibs in gibpool
 	else if (self.impulse == 145) StartIntermissionCamera();
-	// else if (self.impulse == 146) ToggleFlashlight(); // Quoth flash light
+	else if (self.impulse == 146) ToggleFlashlight(); // Quoth flash light
 	else if (self.impulse == 150) togglecoopartifacts();// Toggle COOP can drop artifacts
 	else if (self.impulse == 152) togglecoopweapons();	// Toggle COOP weapons to respawn
 	else if (self.impulse == 154) togglecoophealth();	// Toggle COOP health to respawn

@@ -1,3 +1,130 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Qmaster, inspired by Halo and using Quake Rally as a base.
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 
+// Function count: 
+// Implements: Vehicles
+//
+// Description:
+// Vehicles that you can enter and use until they are destroyed, or jump to get
+// out of.  Provides animations for vehicle models, firing vehicle-mounted
+// weapons, and general driving with noises.
+//=============================================================================
+
+void() item_rallycar_touch;
+
+void() item_rallycar_realign = { // [FUNCTION]
+	ChangeYaw();
+	self.think = SUB_Null;
+};
+
+void() HonkHorn = { // [FUNCTION]
+	if (!self.in_a_vehicle) return;
+
+    if (self.wing_sound < time) {
+        self.wing_sound = time + 0.2;
+		sound(self,CHAN_VOICE,"qrally/meepmeep.wav",1,ATTN_NORM);
+	}
+};
+
+void() vehicle_death = {
+	self.think = SUB_Remove;
+	self.nextthink = time + 0.1;
+};
+
+void(float jump, float destroy) TakePlayerOutOfVehicle = { // [FUNCTION]
+	local float oldChaseBack, oldChaseSetting;
+	local entity vehicle;
+
+	if (!self) return;
+	if (!(self.flags & FL_CLIENT)) return;
+	if (!self.in_a_vehicle) return;
+
+	oldChaseSetting = decode(cvar("scratch2"),LOW8);
+	oldChaseBack = decode(cvar("scratch2"),MID8);
+	self.in_a_vehicle = FALSE;
+	self.modelindex = modelindex_player;
+	localcmd("chase_active ");
+	localcmd(ftos(oldChaseSetting));
+	localcmd("\n");
+	localcmd("chase_back ");
+	localcmd(ftos(oldChaseBack));
+	localcmd("\n");
+	cvar_set("scratch2","0");
+	if (destroy) {
+		if (self.vehicleattachment) {
+			self.vehicleattachment.think = vehicle_death;
+			self.vehicleattachment.nextthink = time + 0.1;
+			self.vehicleattachment = world;
+		}
+	} else { // Preserve the vehicle separately.
+		vehicle = spawn();
+		setorigin(vehicle,self.origin); // do before jumping
+		vehicle.skin = self.vehicle_skindex;
+		vehicle.solid = SOLID_TRIGGER;
+		vehicle.touch = item_rallycar_touch;
+		vehicle.scale = 2;
+		setmodel(vehicle,self.vehicle_model);
+		setsize(vehicle,VEC_HULL2_MIN,VEC_HULL2_MAX);
+		vehicle.pain_finished = time + 5; // prevent re-entry for a bit
+		vehicle.ideal_yaw = self.angles_y;
+		vehicle.think = item_rallycar_realign;
+		vehicle.nextthink = time + 0.1;
+	}
+	self.health = self.turrethealth; // Restore health
+	self.max_health = self.turrethealth2;
+	self.armorvalue = self.turrettimer;
+	self.turrethealth = self.turrethealth2 = self.turrettimer = 0;
+	self.flags = self.flags - (self.flags & FL_JUMPRELEASED); // Very precise order for this, Jumprelease and then onground
+	self.flags = self.flags - FL_ONGROUND;	// don't stairwalk
+	self.button2 = 0;
+	if (jump) {
+		if (self.shroom_finished > time) sound(self,CHAN_BODY,"qmaster/player/jumpmario.wav",1,ATTN_NORM);
+		else sound (self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM); // player jumping sound
+
+		self.velocity_z = self.velocity_z + map_jumpheight;
+		makevectors (self.v_angle);
+		self.velocity = self.velocity + (v_right * -80);
+		if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
+	}
+};
+
+void(entity targ, float jump, float destroy) TakeTargetOutOfVehicle = { // [FUNCTION]
+	local entity stemp;
+
+	stemp = self;
+	self = targ;
+	TakePlayerOutOfVehicle(jump, destroy);
+	self = stemp;
+}
+
+/*
 void() rally_centre = [0, rally_centre] {};
 
 void() rally_right10 = [1, rally_right10] {};
@@ -4384,3 +4511,4 @@ void() WaterScreenThink = {
 	stuffcmd(self.owner, "\n");
 	self.nextthink = time + 1;
 };
+*/

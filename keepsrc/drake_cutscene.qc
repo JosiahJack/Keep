@@ -390,7 +390,9 @@ void() camera_remove = { // [FUNCTION]
 void(entity who) camera_activate = { // [FUNCTION]
     local entity t, fpt;
 
+    if (intermission_running || cinematic_running || cutscene) return; // Already in a cutscene
 	if (!who) return;
+    if (who.in_a_vehicle) return;
     if (who.health <= 0) return;
     if (who.deadflag) return; // In case of Alien Quake facehugger kill.
     if (!(who.flags & FL_CLIENT)) return; // only activate for player, 1st time touched.

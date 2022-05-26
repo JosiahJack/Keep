@@ -710,21 +710,30 @@ void() W_FireSuperShotgun = { // [FUNCTION]
 void(float oz, float ox) W_FireSpikes = { // [FUNCTION]
 	local vector org, dir;
 	local entity spike1, spike2;
+	local entity stemp;
 
 	if (self.ammo_nails < 1) { forceweaponswitch(0.2); return; } // If run out of ammo, switch weapons to next best
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	W_Reload(0.2);
 	self.punchangle_x = -2;
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self, SPEED_PLAYSPIKE); // Check for auto aim state.  Auto aim assist (builtin function 44)
 	else dir = normalize(v_forward * SPEED_PLAYSPIKE); // Straight line forward where crosshair is pointing
 
 	// SNG setup, sound and ammo change
-	if (self.ammo_nails > 1 && self.weapon == IT_SUPER_NAILGUN) {
-		sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
-		if (self.perms & POW_DOUBLE) self.currentammo = self.ammo_nails = self.ammo_nails - 1;
-		else self.currentammo = self.ammo_nails = self.ammo_nails - 2;
+	if ((self.ammo_nails > 1 && self.weapon == IT_SUPER_NAILGUN) || self.in_a_vehicle) {
+		if (!self.in_a_vehicle) {
+			sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
+			if (self.perms & POW_DOUBLE) self.currentammo = self.ammo_nails = self.ammo_nails - 1;
+			else self.currentammo = self.ammo_nails = self.ammo_nails - 2;
+		} else {
+			sound (self, CHAN_WEAPON, "q15/weapons/rocket1i.wav", 1, ATTN_NORM);
+			stemp = self;
+			self = self.vehicleattachment;
+			Launch_ShellCasing(1);
+			self = stemp;
+		}
 
 		// Original setup - org = self.origin + '0 0 16';
 		// - SNG projectile offset idea by Kinn
@@ -1587,6 +1596,7 @@ float(entity targ) W_BestWeapon = { // [FUNCTION]
 };
 
 float(entity targ) W_CheckNoAmmo = { // [FUNCTION]
+	if (targ.in_a_vehicle && targ.randomshells > 0) return TRUE;
 	if (targ.tethered && targ.tetherfocus && targ.health > 0) {
 		if (targ.tetherfocus.ammo_bolts > 0) return TRUE;
 		sound(self,CHAN_WEAPON,"weapons/noammo.wav",1,ATTN_NORM);
@@ -1618,13 +1628,19 @@ void(float reload) W_Reload = { // [FUNCTION]
 void() W_Attack = { // [FUNCTION]
 	local entity stemp;
 
-	if (intermission_running > 0) return;	// intermission or finale
-	if (cinematic_running > 0) return;		// Remote camera active
-	if ( !W_CheckNoAmmo(self) ) return;		// Out of ammo?
+	if (intermission_running || cinematic_running || cutscene) return;
+	if ( !W_CheckNoAmmo(self) ) return;	// Out of ammo?
 
-	makevectors	(self.v_angle);		// calculate forward angle for velocity
+	makevectors(self.v_angle);		// calculate forward angle for velocity
 	if (((self.weapon != IT_EXTRA_WEAPON && !self.selfweaponismoditems) || (self.perms & IT_FROSTBOW && self.weapon == IT_EXTRA_WEAPON && !self.selfweaponismoditems)) && self.weapon != IT_AXE && !self.selfweaponismoditems) self.show_hostile = time + 1;	// wake monsters up
     self.b0_click = 0;
+
+	if (self.in_a_vehicle && self.health > 0) {
+		W_FireSpikes(0,crandom() * 2.5);
+		self.randomshells = self.randomshells - 1;
+		W_Reload(0.05);
+		return;
+	}
 
 	// Fire a controlled ballista, obj_ballista
 	if (self.tethered && self.tetherfocus && self.health > 0) {
@@ -1893,12 +1909,11 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 	local float am, fl, gotgun, inhackbank, runaway;
 	local vector checkvec;
 	
-	if (intermission_running > 0) return;	// intermission or finale
-	if (cinematic_running > 0) return;		// Remote camera active
+	if (intermission_running || cinematic_running || cutscene || self.in_a_vehicle) return;
 
 	am = TRUE;
 	checkvec = VEC_ORIGIN;
-	inhackbank = FALSE; // Assume we aren't looking into the hack bank of 2nd set of 24 weapons
+	inhackbank = FALSE; // Set later if switching to hack bank 2nd set of 24 weapons.
 	gotgun = FALSE;
 	runaway = 0;
 	if (targ.impulse == 1) {
@@ -1911,15 +1926,15 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 			if (fl == IT_AXE) {
 				if (InModItems(targ, IT_UPGRADE_AXE)) gotgun = TRUE;
 				if (self.perms & IT_CHAINSAW) gotgun = TRUE; // Kind of hacky, but hey
-				if (gotgun) am = FALSE;
+				if (gotgun && fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_MACE && gotgun) {
 				if (targ.ammo_bloodcrystals < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT2_GRAPPLE && gotgun) {
-				am = FALSE;
+				if (fl != targ.weapon) am = FALSE;
 			}// else if (fl == ? && gotgun) {
 				//if (targ.ammo_? < 1) am = TRUE; // no ammo
-				//else am = FALSE;
+				//else if (fl != targ.weapon) am = FALSE;
 			//}
 			runaway = runaway + 1;
 			if (runaway > 13) break;
@@ -1933,15 +1948,15 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 			inhackbank = checkvec_z;
 			if (fl == IT_SHOTGUN && gotgun) {
 				if (targ.ammo_shells < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_ICE && gotgun) {
 				if (targ.ammo_elemental < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_AIRGUN && gotgun) {
-				am = FALSE;
+				if (fl != targ.weapon) am = FALSE;
 			}// else if (fl == ? && gotgun) {
 				//if (targ.ammo_? < 1) am = TRUE; // no ammo
-				//else am = FALSE;
+				//else if (fl != targ.weapon) am = FALSE;
 			//}
 			runaway = runaway + 1;
 			if (runaway > 13) break;
@@ -1955,16 +1970,16 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 			inhackbank = checkvec_z;
 			if (fl == IT_SUPER_SHOTGUN && gotgun) {
 				if (targ.ammo_shells < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_SCIMITAR && gotgun) {
 				if (targ.ammo_elemental < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			}// else if (fl == ? && gotgun) {
 				//if (targ.ammo_? < 1) am = TRUE; // no ammo
-				//else am = FALSE;
+				//else if (fl != targ.weapon) am = FALSE;
 			//} else if (fl == ? && gotgun) {
 				//if (targ.ammo_? < 1) am = TRUE; // no ammo
-				//else am = FALSE;
+				//else if (fl != targ.weapon) am = FALSE;
 			//}
 			runaway = runaway + 1;
 			if (runaway > 13) break;
@@ -1978,15 +1993,15 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 			inhackbank = checkvec_z;
 			if (fl == IT_NAILGUN && gotgun) {
 				if (targ.ammo_nails < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_LAVA_NAILGUN && gotgun) {
 				if (targ.ammo_lava_nails < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_RAPIER && gotgun) {
-				am = FALSE; // not using ammo right now
+				if (fl != targ.weapon) am = FALSE; // not using ammo right now
 			}// else if (fl == ? && gotgun) {
 				//if (targ.ammo_? < 1) am = TRUE; // no ammo
-				//else am = FALSE;
+				//else if (fl != targ.weapon) am = FALSE;
 			//}
 			runaway = runaway + 1;
 			if (runaway > 13) break;
@@ -2000,16 +2015,16 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 			inhackbank = checkvec_z;
 			if (fl == IT_SUPER_NAILGUN && gotgun) {
 				if (targ.ammo_nails < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_LAVA_SUPER_NAILGUN && gotgun) {
 				if (targ.ammo_lava_nails < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_VOID_STAFF && gotgun) {
 				if (targ.ammo_voidshards < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			}// else if (fl == ? && gotgun) {
 				//if (targ.ammo_? < 1) am = TRUE; // no ammo
-				//else am = FALSE;
+				//else if (fl != targ.weapon) am = FALSE;
 			//}
 			runaway = runaway + 1;
 			if (runaway > 13) break;
@@ -2023,16 +2038,16 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 			inhackbank = checkvec_z;
 			if (fl == IT_GRENADE_LAUNCHER && gotgun) {
 				if (targ.ammo_rockets < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT2_PROXIMITY_GUN && gotgun) {
 				if (targ.ammo_rockets < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_MULTI_GRENADE && gotgun) {
 				if (targ.ammo_multi_rockets < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			}// else if (fl == ? && gotgun) {
 				//if (targ.ammo_? < 1) am = TRUE; // no ammo
-				//else am = FALSE;
+				//else if (fl != targ.weapon) am = FALSE;
 			//}
 			runaway = runaway + 1;
 			if (runaway > 13) break;
@@ -2046,16 +2061,16 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 			inhackbank = checkvec_z;
 			if (fl == IT_ROCKET_LAUNCHER && gotgun) {
 				if (targ.ammo_rockets < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_MULTI_ROCKET && gotgun) {
 				if (targ.ammo_multi_rockets < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_SANGUINATORS && gotgun) {
 				if (targ.ammo_bloodcrystals < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			}// else if (fl == ? && gotgun) {
 				//if (targ.ammo_? < 1) am = TRUE; // no ammo
-				//else am = FALSE;
+				//else if (fl != targ.weapon) am = FALSE;
 			//}
 			runaway = runaway + 1;
 			if (runaway > 13) break;
@@ -2069,16 +2084,16 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 			inhackbank = checkvec_z;
 			if (fl == IT_LIGHTNING && gotgun) {
 				if (targ.ammo_cells < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_PLASMA_GUN && gotgun) {
 				if (targ.ammo_plasma < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_FLAK && gotgun) {
 				if (targ.ammo_nails < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			}// else if (fl == ? && gotgun) {
 				//if (targ.ammo_? < 1) am = TRUE; // no ammo
-				//else am = FALSE;
+				//else if (fl != targ.weapon) am = FALSE;
 			//}
 			runaway = runaway + 1;
 			if (runaway > 13) break;
@@ -2092,13 +2107,16 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 			inhackbank = checkvec_z;
 			if (fl == IT_EXTRA_WEAPON && gotgun) {
 				if (targ.ammo_bolts < 1) am = TRUE; // no ammo
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT2_LASER_CANNON && gotgun) {
 				if (targ.ammo_cells < 1) am = TRUE; // no ammo
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT2_CHAINLIGHTNING && gotgun) {
 				if (targ.ammo_cells < 1) am = TRUE; // no ammo
+				else if (fl != targ.weapon) am = FALSE;
 			}// else if (fl == ? && gotgun) {
 				//if (targ.ammo_? < 1) am = TRUE; // no ammo
-				//else am = FALSE;
+				//else if (fl != targ.weapon) am = FALSE;
 			//}
 			runaway = runaway + 1;
 			if (runaway > 13) break;
@@ -2139,14 +2157,14 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 			inhackbank = checkvec_z;
 			if (fl == IT_GUNGNIR && gotgun) {
 				if (targ.ammo_voidshards < 1) am = TRUE; // no ammo
-				else am = FALSE;
+				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT2_MJOLNIR && gotgun) {
-				am = FALSE;
+				if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT2_CROSS && gotgun) {
-				am = FALSE;
+				if (fl != targ.weapon) am = FALSE;
 			}// else if (fl == ? && gotgun) {
 				//if (targ.ammo_? < 1) am = TRUE; // no ammo
-				//else am = FALSE;
+				//else if (fl != targ.weapon) am = FALSE;
 			//}
 			runaway = runaway + 1;
 			if (runaway > 13) break;

@@ -1674,13 +1674,14 @@ void () item_pushup = { // [ENTITY]
 void () circuitboard_touch = { // [FUNCTION]
 	if (other.classname != "player") return;
 	if (other.health <= 0) return;
+	if (other.in_a_vehicle) return;
 
-	Safe_stuffcmd (other, "bf\n");
-	centerprint (other, "You got a 17-centimeter Fromitz board!");
-	sound (other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
+	Safe_stuffcmd(other, "bf\n");
+	centerprint(other, "You got a 17-centimeter Fromitz board!");
+	sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM);
 	activator = other;
-	SUB_UseTargets ();
-	remove (self);
+	SUB_UseTargets();
+	remove(self);
 };
 
 void () item_circuitboard = { // [ENTITY]
@@ -1704,6 +1705,7 @@ void() item_flagred = {}; // [ENTITY]
 void() mariomushroom_touch = { // [FUNCTION]
 	if (other.health < 1) return;
 	if (!(other.flags & FL_CLIENT)) return;
+	if (other.in_a_vehicle) return;
 	if (other.shroom_finished >= time) return;
 	
 	other.shroom_finished = time + self.cnt;

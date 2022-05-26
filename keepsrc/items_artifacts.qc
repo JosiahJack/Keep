@@ -910,6 +910,32 @@ void() item_artifact_haste = { // [ENTITY]
 	artifact_setup();
 };
 
+void() item_flashlight_touch = {
+	if (!(other.flags & FL_CLIENT)) return;
+	if (other.health < 1) return;
+
+	self.solid = SOLID_NOT;
+	self.model = string_null;
+	sprint(other,"You got the ");
+	sprint(other,self.netname);
+	sprint(other,"\n");
+	sound(other,CHAN_VOICE,self.noise,TRUE,ATTN_NONE);
+	Safe_stuffcmd(other,"bf\n");
+	other.flashlight = TRUE;
+};
+
+void() item_flashlight = {
+	if (deathmatch) { remove(self); return; }
+
+	item_setupmodel("progs/quoth/flashlight.mdl",0);
+	item_setupnoise("quoth/items/click.wav");
+	self.touch2 = item_flashlight_touch;
+	if (self.netname == "") self.netname = "Flashlight";
+	self.classtype = CT_ARTFLASHLIGHT;
+	setsize(self,VEC_HULL_MIN,VEC_HULL_MAX);
+	item_start();
+};
+
 void () horn_touch = { // [FUNCTION]
 	if (!(other.flags & FL_CLIENT)) return;
 	if (other.health < 1) return;

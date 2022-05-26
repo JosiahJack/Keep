@@ -48,6 +48,7 @@ vector VEC_HULL_MAX = '16 16 32';
 .float awake;
 .float carry_time;
 .float coiled;
+.float flashlight;
 .float cross_finished;
 .float cross_sound;
 .float cross_start;

@@ -1551,6 +1551,12 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade = { //
 		newmis.think = model_fade;
 		newmis.nextthink = time + random() + LIFE_SHELLS;
 		newmis.ltime = newmis.nextthink;
+	} else if (proj_type == CT_PROJ_NAILC) {
+		setmodel(newmis, "progs/redfield/proj_nailcase.mdl");
+		newmis.touch = Touch_ShellCasing;
+		newmis.think = model_fade;
+		newmis.nextthink = time + random() + LIFE_SHELLS;
+		newmis.ltime = newmis.nextthink;
 	} else if (proj_type == CT_PROJ_GLMONMULTI) {
 		setmodel(newmis, MODEL_PROJ_GRENADEMULTI);
 		newmis.touch = MultiGrenadeTouch;
@@ -1655,7 +1661,8 @@ void(float shell_qty) Launch_ShellCasing = { // [FUNCTION]
 	while (shell_qty > 0) {
 		dir = -v_right*75 + v_forward*(random()*50) + v_up*(100 + random()*100);
 		avel = vecrand(0,300,TRUE);
-		Launch_Grenade(org, dir, avel, CT_PROJ_SHELLC);
+		if (self.in_a_vehicle) Launch_Grenade(org, dir, avel, CT_PROJ_NAILC);
+		else Launch_Grenade(org, dir, avel, CT_PROJ_SHELLC);
 		shell_qty = shell_qty - 1;
 	}
 };

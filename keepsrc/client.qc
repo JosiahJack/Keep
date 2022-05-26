@@ -1110,7 +1110,7 @@ void() PlayerPreThink = {
 		}
 	}
 
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 
 	// func_water screen tinting
 	if (self.fwatershift) {
@@ -1415,7 +1415,7 @@ void() PlayerPostThink = {
 						}
 					}
 				}
-				if (self.jumptouch.flags & FLx_CREATURE) {
+				if (self.jumptouch.flags & FLx_CREATURE && self.jumptouch != self) {
 					if (self.shroom_finished > time) { // Mario squash!
 						makevectors (self.v_angle);
 						self.finalangle = normalize(v_forward);
@@ -1472,13 +1472,14 @@ void() PlayerPostThink = {
     if (self.hook) GrappleService (); // Update PM 7/24/09:  Added grappler weapon from DoE.
 };
 
-void() item_rallycar_touch;
-
 void() PlayerJump = {
-	local entity vehicle;
+	if (self.in_a_vehicle == TRUE) { // Jump out of the vehicle
+		TakeTargetOutOfVehicle(self,TRUE,FALSE); // Jump, keep vehicle
+		return;
+	}
 
 	if (self.flags & FL_WATERJUMP) return;
-	
+
 	if (self.waterlevel >= 2) {
 		if (self.watertype == CONTENT_WATER) self.velocity_z = 100;
 		else if (self.watertype == CONTENT_SLIME) self.velocity_z = 80;
@@ -1501,34 +1502,6 @@ void() PlayerJump = {
         self.gravity = 0 - fabs(self.gravity);
         return;
     }
-
-	if (self.in_a_vehicle == TRUE) { // Jump out of the vehicle
-		self.in_a_vehicle = FALSE;
-		self.modelindex = modelindex_player;
-		localcmd("chase_active 0\n");
-
-		vehicle = spawn();
-		setorigin(vehicle,self.origin); // do before jumping
-		vehicle.skin = self.vehicle_skindex;
-		vehicle.solid = SOLID_TRIGGER;
-		vehicle.touch = item_rallycar_touch;
-		vehicle.scale = 2;
-		setmodel(vehicle,self.vehicle_model);
-		setsize(vehicle,VEC_HULL2_MIN,VEC_HULL2_MAX);
-		vehicle.pain_finished = time + 5; // prevent re-entry for a bit
-		vehicle.angles_y = self.angles_y;
-
-		self.flags = self.flags - (self.flags & FL_JUMPRELEASED); // Very precise order for this, Jumprelease and then onground
-		self.flags = self.flags - FL_ONGROUND;	// don't stairwalk
-		self.button2 = 0;
-		if (self.shroom_finished > time) sound (self, CHAN_BODY, "qmaster/player/jumpmario.wav", 1, ATTN_NORM);
-		else sound (self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM); // player jumping sound
-		self.velocity_z = self.velocity_z + map_jumpheight;
-		makevectors (self.v_angle);
-		self.velocity = self.velocity + (v_right * -80);
-		if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
-		return;
-	}
 
 	// sock: The jump boots idea by Jose Carlos Rodriguez (JCR) from modjam1.  This code was originally by JCR and modified by me to fit AD layout.  Switched over all the variables to constants and entity options. 
 	if (self.moditems & IT_ARTJUMPBOOTS) { // Does the player have the jump boot powerup?

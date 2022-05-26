@@ -124,6 +124,9 @@ void(entity targ) ResetDebuffSystem = {
 
 // Core debuff function, run every frame from client.qc
 void() ClientDeBuff = {
+	local vector spot;
+	local entity flashlightSpot;
+
 	// Check is self is a NOT player (client) FIRST!
 	// Bug fix from ericw on func msgboard
 	// #655 posted by ericw on 2018/04/10 09:53:36
@@ -138,6 +141,26 @@ void() ClientDeBuff = {
 	if (intermission_running > 0 || self.health < 1) {
 		ResetDebuffSystem(self);
 		return;
+	}
+
+	if (self.flashlight) {
+		if (!self.attachment3) {
+			flashlightSpot = spawn();
+			flashlightSpot.effects = EF_BRIGHTLIGHT;
+			setsize(flashlightSpot,VEC_ORIGIN,VEC_ORIGIN);
+			self.attachment3 = flashlightSpot;
+		}
+		makevectors(self.v_angle);
+		spot = self.origin+self.view_ofs;
+		traceline(spot,spot + v_forward * 1024,FALSE,self);
+		setorigin(self.attachment3,trace_endpos);
+	} else {
+		if (self.attachment3) {
+			self.attachment3.effects = 0;
+			self.attachment3.think = SUB_Remove;
+			self.attachment3.nextthink = time + 0.1;
+			self.attachment3 = world;
+		}
 	}
 
 	// Check for burning debuff (DoT)
