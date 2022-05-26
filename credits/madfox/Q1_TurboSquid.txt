@@ -1,0 +1,42 @@
+==============================================================
+Title                  : Q1_TurboSquid.mdl
+Filename               : Q1_TurboSquid.zip
+Author                 : Madfox
+Email Adress           : catweaze@kpnmail.nl
+Description            : New Q1 monster.
+
+Additional Credits to  : ID Software
+
+==============================================================
+
+* Play Inormation *
+
+Level Name              : /
+Single Player           : /
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Model               : yes
+New Sounds              : /
+New Weapon              : /
+qC                      : /
+
+==============================================================
+
+* Construction *
+
+Base              : Converted from a TurboSquid model "Monster".
+                  : Animated it in traditional Q1 style.
+                  ; hard to get away with texture skin.
+Build Time        : other toppic
+Editor(s) Used    : Quark Qmle Wally Quark6.3 AM2005
+Known Bugs        : Back skin mirrors top skin.. 
+Thanks            : TurboSquid, ID1.
+Install           : Needs a qc for a frames entity model.
+ 
+You may distribute and modify this file, as long as you give
+me credit, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 14november 2021

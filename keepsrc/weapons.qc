@@ -1796,91 +1796,14 @@ float (float mask, entity targ, float testValue) InAnyItems = { // [FUNCTION]
 	return FALSE;
 }
 
+// FOUR WEAPONS ON THE SAME KEYBOARD KEY!!!  Good lawdy we need a bigger keyboard!
 // Function to cycle within the same slot by multiple keypresses, e.g. keep pressing 6 to cycle through grenade launcher,
 // proximity grenade launcher, and multi-grenade launcher.
-// Returns a vector: x = fl (the new self.weapon, y = gotgun (whether we have it), z = (am, whether we have ammo)
+// Returns a vector: x = fl (the new self.weapon, y = gotgun (whether we have it), z = (if it is in the hackbank)
 // targ = player
-// wep1 = 1st weapon in this keybind's slot
-// wep2 = 2nd weapon in this keybind's slot
-// wep3 = 3rd weapon in this keybind's slot
-// wep1initems = bitmask to specify whether to use self.items, self.items2, self.moditems, or self.perms
-vector (entity targ, float wep1, float wep2, float wep3, float wep1initems, float wep2initems, float wep3initems) WeaponSlotPickOneOfThree = { // [FUNCTION]
-	local vector retvec;
-	local float fl, gotgun, gotgun1, gotgun2, gotgun3, am;
-	local float inhackbank;
-	// Make sure it's all zeroed out
-	inhackbank = fl = gotgun1 = gotgun2 = gotgun3 = am = FALSE;
-	if (wep1) gotgun1 = InAnyItems(wep1initems, targ, wep1);
-	if (wep2) gotgun2 = InAnyItems(wep2initems, targ, wep2);
-	if (wep3) gotgun3 = InAnyItems(wep3initems, targ, wep3);
-	retvec = VEC_ORIGIN;
-
-	if (targ.weapon == wep1) {
-		if (gotgun3) {
-			fl = wep3;
-			gotgun = TRUE;
-		} else {
-			fl = wep2;
-			//gotgun = InItems2(targ, fl);
-			gotgun = gotgun2;
-		}
-	} else {
-		if (targ.weapon == wep3) {
-			if (gotgun2) {
-				fl = wep2;
-				gotgun = TRUE;
-			} else {
-				fl = wep1;
-				//gotgun = InItems(targ, fl);
-				gotgun = gotgun1;
-			}
-		}  else {
-			if (targ.weapon == wep2) {
-				if (gotgun1) {
-					fl = wep1;
-					gotgun = TRUE;
-				} else {
-					fl = wep3;
-					//gotgun = InItems(targ, fl);
-					gotgun = gotgun3;
-				}
-			} else {
-				if (gotgun1) {
-					fl = wep1;
-					gotgun = TRUE;
-				} else {
-					if (gotgun3) {
-						fl = wep3;
-						gotgun = TRUE;
-					} else {
-						if (gotgun2) {
-							fl = wep2;
-							gotgun = TRUE;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	if (fl == wep1) {
-		if (wep1initems == IN_ITEMS1_HACKBANK || wep1initems == IN_ITEMS2_HACKBANK || wep1initems == IN_MODITEMS_HACKBANK || wep1initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
-	}
-	if (fl == wep2) {
-		if (wep2initems == IN_ITEMS1_HACKBANK || wep2initems == IN_ITEMS2_HACKBANK || wep2initems == IN_MODITEMS_HACKBANK || wep2initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
-	}
-	if (fl == wep3) {
-		if (wep3initems == IN_ITEMS1_HACKBANK || wep3initems == IN_ITEMS2_HACKBANK || wep3initems == IN_MODITEMS_HACKBANK || wep3initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
-	}
-
-	retvec.x = fl;
-	retvec.y = gotgun;
-	retvec.z = inhackbank;
-	return retvec;
-};
-
-// FOUR WEAPONS ON THE SAME KEYBOARD KEY!!!  Good lawdy we need a bigger keyboard!
-vector (entity targ, float wep1, float wep2, float wep3, float wep4, float wep1initems, float wep2initems, float wep3initems, float wep4initems) WeaponSlotPickOneOfFour = { // [FUNCTION]
+// wep# = # weapon in this keybind's slot
+// wep#initems = bitmask to specify whether to use self.items, self.items2, self.moditems, or self.perms
+vector (float current, entity targ, float wep1, float wep2, float wep3, float wep4, float wep1initems, float wep2initems, float wep3initems, float wep4initems) WeaponSlotPickOneOfFour = { // [FUNCTION]
 	local vector retvec;
 	local float fl, gotgun, gotgun1, gotgun2, gotgun3, gotgun4, am;
 	local float inhackbank;
@@ -1892,80 +1815,71 @@ vector (entity targ, float wep1, float wep2, float wep3, float wep4, float wep1i
 	if (wep4) gotgun4 = InAnyItems(wep4initems, targ, wep3);
 	retvec = VEC_ORIGIN;
 
-	if (targ.weapon == wep1) {
+	// Check if we are already within the slot, then branch.
+	if (current == wep1) {
 		if (gotgun4) {
 			fl = wep4;
 			gotgun = TRUE;
 		} else {
 			fl = wep3;
-			//gotgun = InItems2(targ, fl);
+			gotgun = gotgun3;
+		}
+	} else if (current == wep4) {
+		if (gotgun3) {
+			fl = wep3;
+			gotgun = TRUE;
+		} else {
+			fl = wep2;
+			gotgun = gotgun2;
+		}
+	} else if (current == wep3) {
+		if (gotgun2) {
+			fl = wep2;
+			gotgun = TRUE;
+		} else {
+			fl = wep1;
+			gotgun = gotgun1;
+		}
+	}  else if (current == wep2) {
+		if (gotgun1) {
+			fl = wep1;
+			gotgun = TRUE;
+		} else {
+			fl = wep3;
 			gotgun = gotgun3;
 		}
 	} else {
-		if (targ.weapon == wep4) {
-			if (gotgun3) {
-				fl = wep3;
-				gotgun = TRUE;
-			} else {
-				fl = wep2;
-				gotgun = gotgun2;
-			}
-		} else {
-			if (targ.weapon == wep3) {
-				if (gotgun2) {
-					fl = wep2;
-					gotgun = TRUE;
-				} else {
-					fl = wep1;
-					//gotgun = InItems(targ, fl);
-					gotgun = gotgun1;
-				}
-			}  else {
-				if (targ.weapon == wep2) {
-					if (gotgun1) {
-						fl = wep1;
-						gotgun = TRUE;
-					} else {
-						fl = wep3;
-						//gotgun = InItems(targ, fl);
-						gotgun = gotgun3;
-					}
-				} else {
-					if (gotgun1) {
-						fl = wep1;
-						gotgun = TRUE;
-					} else {
-						if (gotgun4) {
-							fl = wep4;
-							gotgun = TRUE;
-						} else {
-							if (gotgun3) {
-								fl = wep3;
-								gotgun = TRUE;
-							} else {
-								if (gotgun2) {
-									fl = wep2;
-									gotgun = TRUE;
-								}
-							}
-						}
-					}
-				}
-			}
+		// If not in the slot, pick first available in slot.
+		if (gotgun1) {
+			fl = wep1;
+			gotgun = TRUE;
+		} else if (gotgun4) {
+			fl = wep4;
+			gotgun = TRUE;
+		} else if (gotgun3) {
+			fl = wep3;
+			gotgun = TRUE;
+		} else if (gotgun2) {
+			fl = wep2;
+			gotgun = TRUE;
 		}
 	}
 
 	if (fl == wep1) {
-		if (wep1initems == IN_ITEMS1_HACKBANK || wep1initems == IN_ITEMS2_HACKBANK || wep1initems == IN_MODITEMS_HACKBANK || wep1initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
+		if (wep1initems == IN_ITEMS1_HACKBANK || wep1initems == IN_ITEMS2_HACKBANK
+			|| wep1initems == IN_MODITEMS_HACKBANK || wep1initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
 	}
 	if (fl == wep2) {
-		if (wep2initems == IN_ITEMS1_HACKBANK || wep2initems == IN_ITEMS2_HACKBANK || wep2initems == IN_MODITEMS_HACKBANK || wep2initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
+		if (wep2initems == IN_ITEMS1_HACKBANK || wep2initems == IN_ITEMS2_HACKBANK
+			|| wep2initems == IN_MODITEMS_HACKBANK || wep2initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
 	}
 	if (fl == wep3) {
-		if (wep3initems == IN_ITEMS1_HACKBANK || wep3initems == IN_ITEMS2_HACKBANK || wep3initems == IN_MODITEMS_HACKBANK || wep3initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
+		if (wep3initems == IN_ITEMS1_HACKBANK || wep3initems == IN_ITEMS2_HACKBANK
+			|| wep3initems == IN_MODITEMS_HACKBANK || wep3initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
 	}
 	if (fl == wep4) {
-		if (wep4initems == IN_ITEMS1_HACKBANK || wep4initems == IN_ITEMS2_HACKBANK || wep4initems == IN_MODITEMS_HACKBANK || wep4initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
+		if (wep4initems == IN_ITEMS1_HACKBANK || wep4initems == IN_ITEMS2_HACKBANK
+			|| wep4initems == IN_MODITEMS_HACKBANK || wep4initems == IN_PERMS_HACKBANK) inhackbank = TRUE;
 	}
 
 	retvec.x = fl;
@@ -1976,133 +1890,218 @@ vector (entity targ, float wep1, float wep2, float wep3, float wep4, float wep1i
 
 // Check if got weapon and ammo and switch to relevant weapon
 void(entity targ) W_ChangeWeapon = { // [FUNCTION]
-	local float am, fl, gotgun, inhackbank;
+	local float am, fl, gotgun, inhackbank, runaway;
 	local vector checkvec;
 	
 	if (intermission_running > 0) return;	// intermission or finale
 	if (cinematic_running > 0) return;		// Remote camera active
 
-	am = FALSE;
+	am = TRUE;
 	checkvec = VEC_ORIGIN;
 	inhackbank = FALSE; // Assume we aren't looking into the hack bank of 2nd set of 24 weapons
 	gotgun = FALSE;
+	runaway = 0;
 	if (targ.impulse == 1) {
-		checkvec = WeaponSlotPickOneOfThree(targ, IT_AXE, IT2_GRAPPLE, IT_MACE, IN_ITEMS1, IN_ITEMS2, IN_MODITEMS_HACKBANK);
-		fl = checkvec_x;
-		gotgun = checkvec_y;
-		inhackbank = checkvec_z;
-		if (fl == IT_AXE) {
-			if (InModItems(targ, IT_UPGRADE_AXE)) gotgun = TRUE;
-			if (self.perms & IT_CHAINSAW) gotgun = TRUE;
-		}
-		if (fl == IT_MACE) {
-			if (targ.ammo_bloodcrystals < 1) am = TRUE; // no ammo
+		fl = targ.weapon;
+		while (am) {
+			checkvec = WeaponSlotPickOneOfFour(fl, targ, IT_AXE, IT2_GRAPPLE, IT_MACE, 0, IN_ITEMS1, IN_ITEMS2, IN_MODITEMS_HACKBANK, 0);
+			fl = checkvec_x;
+			gotgun = checkvec_y;
+			inhackbank = checkvec_z;
+			if (fl == IT_AXE) {
+				if (InModItems(targ, IT_UPGRADE_AXE)) gotgun = TRUE;
+				if (self.perms & IT_CHAINSAW) gotgun = TRUE; // Kind of hacky, but hey
+				if (gotgun) am = FALSE;
+			} else if (fl == IT_MACE && gotgun) {
+				if (targ.ammo_bloodcrystals < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			} else if (fl == IT2_GRAPPLE && gotgun) {
+				am = FALSE;
+			}// else if (fl == ? && gotgun) {
+				//if (targ.ammo_? < 1) am = TRUE; // no ammo
+				//else am = FALSE;
+			//}
+			runaway = runaway + 1;
+			if (runaway > 13) break;
 		}
 	} else if (targ.impulse == 2) {
-		checkvec = WeaponSlotPickOneOfThree(targ, IT_SHOTGUN, IT_ICE, IT_AIRGUN, IN_ITEMS1, IN_MODITEMS_HACKBANK, IN_PERMS_HACKBANK);
-		fl = checkvec_x;
-		gotgun = checkvec_y;
-		inhackbank = checkvec_z;
-		if (fl == IT_SHOTGUN) {
-			if (targ.ammo_shells < 1) am = TRUE; // no ammo
-		}
-		if (fl == IT_ICE) {
-			if (targ.ammo_elemental < 1) am = TRUE; // no ammo
+		fl = targ.weapon;
+		while (am) {
+			checkvec = WeaponSlotPickOneOfFour(fl, targ, IT_SHOTGUN, IT_ICE, IT_AIRGUN, 0, IN_ITEMS1, IN_MODITEMS_HACKBANK, IN_PERMS_HACKBANK, 0);
+			fl = checkvec_x;
+			gotgun = checkvec_y;
+			inhackbank = checkvec_z;
+			if (fl == IT_SHOTGUN && gotgun) {
+				if (targ.ammo_shells < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			} else if (fl == IT_ICE && gotgun) {
+				if (targ.ammo_elemental < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			} else if (fl == IT_AIRGUN && gotgun) {
+				am = FALSE;
+			}// else if (fl == ? && gotgun) {
+				//if (targ.ammo_? < 1) am = TRUE; // no ammo
+				//else am = FALSE;
+			//}
+			runaway = runaway + 1;
+			if (runaway > 13) break;
 		}
 	} else if (targ.impulse == 3) {
-		checkvec = WeaponSlotPickOneOfThree(targ, IT_SUPER_SHOTGUN, IT_SCIMITAR, 0, IN_ITEMS1, IN_MODITEMS, 0);
-		fl = checkvec_x;
-		gotgun = checkvec_y;
-		inhackbank = checkvec_z;
-		if (fl == IT_SUPER_SHOTGUN) {
-			if (targ.ammo_shells < 1) am = TRUE; // no ammo
-		}
-		if (fl == IT_SCIMITAR) {
-			if (targ.ammo_elemental < 1) am = TRUE; // no ammo
+		fl = targ.weapon;
+		while (am) {
+			checkvec = WeaponSlotPickOneOfFour(fl, targ, IT_SUPER_SHOTGUN, IT_SCIMITAR, 0, 0, IN_ITEMS1, IN_MODITEMS, 0, 0);
+			fl = checkvec_x;
+			gotgun = checkvec_y;
+			inhackbank = checkvec_z;
+			if (fl == IT_SUPER_SHOTGUN && gotgun) {
+				if (targ.ammo_shells < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			} else if (fl == IT_SCIMITAR && gotgun) {
+				if (targ.ammo_elemental < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			}// else if (fl == ? && gotgun) {
+				//if (targ.ammo_? < 1) am = TRUE; // no ammo
+				//else am = FALSE;
+			//} else if (fl == ? && gotgun) {
+				//if (targ.ammo_? < 1) am = TRUE; // no ammo
+				//else am = FALSE;
+			//}
+			runaway = runaway + 1;
+			if (runaway > 13) break;
 		}
 	} else if (targ.impulse == 4) {
-		checkvec = WeaponSlotPickOneOfThree(targ, IT_NAILGUN, IT_RAPIER, IT_LAVA_NAILGUN , IN_ITEMS1, IN_MODITEMS, IN_ITEMS1);
-		fl = checkvec_x;
-		gotgun = checkvec_y;
-		inhackbank = checkvec_z;
-		if (fl == IT_NAILGUN) {
-			if (targ.ammo_nails < 1) am = TRUE; // no ammo
-		}
-		if (fl == IT_LAVA_NAILGUN) {
-			if (targ.ammo_lava_nails < 1) am = TRUE; // no ammo
-		}
-		if (fl == IT_RAPIER) {
-			am = FALSE; // not using ammo right now
+		fl = targ.weapon;
+		while (am) {
+			checkvec = WeaponSlotPickOneOfFour(fl, targ, IT_NAILGUN, IT_RAPIER, IT_LAVA_NAILGUN, 0, IN_ITEMS1, IN_MODITEMS, IN_ITEMS1, 0);
+			fl = checkvec_x;
+			gotgun = checkvec_y;
+			inhackbank = checkvec_z;
+			if (fl == IT_NAILGUN && gotgun) {
+				if (targ.ammo_nails < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			} else if (fl == IT_LAVA_NAILGUN && gotgun) {
+				if (targ.ammo_lava_nails < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			} else if (fl == IT_RAPIER && gotgun) {
+				am = FALSE; // not using ammo right now
+			}// else if (fl == ? && gotgun) {
+				//if (targ.ammo_? < 1) am = TRUE; // no ammo
+				//else am = FALSE;
+			//}
+			runaway = runaway + 1;
+			if (runaway > 13) break;
 		}
 	} else if (targ.impulse == 5) {
-		checkvec = WeaponSlotPickOneOfThree(targ, IT_SUPER_NAILGUN, IT_LAVA_SUPER_NAILGUN, IT_VOID_STAFF, IN_ITEMS1, IN_ITEMS1, IN_MODITEMS_HACKBANK);
-		fl = checkvec_x;
-		gotgun = checkvec_y;
-		inhackbank = checkvec_z;
-		if (fl == IT_SUPER_NAILGUN) {
-			if (targ.ammo_nails < 1) am = TRUE; // no ammo
-		}
-		if (fl == IT_LAVA_SUPER_NAILGUN) {
-			if (targ.ammo_lava_nails < 1) am = TRUE; // no ammo
-		}
-		if (fl == IT_VOID_STAFF) {
-			if (targ.ammo_voidshards < 1) am = TRUE; // no ammo
+		fl = targ.weapon;
+		while (am) {
+			checkvec = WeaponSlotPickOneOfFour(fl, targ, IT_SUPER_NAILGUN, IT_LAVA_SUPER_NAILGUN, IT_VOID_STAFF, 0, IN_ITEMS1, IN_ITEMS1, IN_MODITEMS_HACKBANK, 0);
+			fl = checkvec_x;
+			gotgun = checkvec_y;
+			inhackbank = checkvec_z;
+			if (fl == IT_SUPER_NAILGUN && gotgun) {
+				if (targ.ammo_nails < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			} else if (fl == IT_LAVA_SUPER_NAILGUN && gotgun) {
+				if (targ.ammo_lava_nails < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			} else if (fl == IT_VOID_STAFF && gotgun) {
+				if (targ.ammo_voidshards < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			}// else if (fl == ? && gotgun) {
+				//if (targ.ammo_? < 1) am = TRUE; // no ammo
+				//else am = FALSE;
+			//}
+			runaway = runaway + 1;
+			if (runaway > 13) break;
 		}
 	} else if (targ.impulse == 6) {
-		checkvec = WeaponSlotPickOneOfThree(targ, IT_GRENADE_LAUNCHER, IT2_PROXIMITY_GUN, IT_MULTI_GRENADE, IN_ITEMS1, IN_ITEMS2, IN_ITEMS1);
-		fl = checkvec_x;
-		gotgun = checkvec_y;
-		inhackbank = checkvec_z;
-		if (fl == IT_GRENADE_LAUNCHER) {
-			if (targ.ammo_rockets < 1) am = TRUE; // no ammo
-		}
-		if (fl == IT2_PROXIMITY_GUN) {
-			if (targ.ammo_rockets < 1) am = TRUE; // no ammo
-		}
-		if (fl == IT_MULTI_GRENADE) {
-			if (targ.ammo_multi_rockets < 1) am = TRUE; // no ammo
+		fl = targ.weapon;
+		while (am) {
+			checkvec = WeaponSlotPickOneOfFour(fl, targ, IT_GRENADE_LAUNCHER, IT2_PROXIMITY_GUN, IT_MULTI_GRENADE, 0, IN_ITEMS1, IN_ITEMS2, IN_ITEMS1, 0);
+			fl = checkvec_x;
+			gotgun = checkvec_y;
+			inhackbank = checkvec_z;
+			if (fl == IT_GRENADE_LAUNCHER && gotgun) {
+				if (targ.ammo_rockets < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			} else if (fl == IT2_PROXIMITY_GUN && gotgun) {
+				if (targ.ammo_rockets < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			} else if (fl == IT_MULTI_GRENADE && gotgun) {
+				if (targ.ammo_multi_rockets < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			}// else if (fl == ? && gotgun) {
+				//if (targ.ammo_? < 1) am = TRUE; // no ammo
+				//else am = FALSE;
+			//}
+			runaway = runaway + 1;
+			if (runaway > 13) break;
 		}
 	} else if (targ.impulse == 7) {
-		checkvec = WeaponSlotPickOneOfThree(targ, IT_ROCKET_LAUNCHER, IT_MULTI_ROCKET, IT_SANGUINATORS, IN_ITEMS1, IN_ITEMS1, IN_MODITEMS);
-		fl = checkvec_x;
-		gotgun = checkvec_y;
-		inhackbank = checkvec_z;
-		if (fl == IT_ROCKET_LAUNCHER) {
-			if (targ.ammo_rockets < 1) am = TRUE; // no ammo
-		}
-		if (fl == IT_MULTI_ROCKET) {
-			if (targ.ammo_multi_rockets < 1) am = TRUE; // no ammo
-		}
-		if (fl == IT_SANGUINATORS) {
-			if (targ.ammo_bloodcrystals < 1) am = TRUE; // no ammo
+		fl = targ.weapon;
+		while (am) {
+			checkvec = WeaponSlotPickOneOfFour(fl, targ, IT_ROCKET_LAUNCHER, IT_MULTI_ROCKET, IT_SANGUINATORS, 0, IN_ITEMS1, IN_ITEMS1, IN_MODITEMS, 0);
+			fl = checkvec_x;
+			gotgun = checkvec_y;
+			inhackbank = checkvec_z;
+			if (fl == IT_ROCKET_LAUNCHER && gotgun) {
+				if (targ.ammo_rockets < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			} else if (fl == IT_MULTI_ROCKET && gotgun) {
+				if (targ.ammo_multi_rockets < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			} else if (fl == IT_SANGUINATORS && gotgun) {
+				if (targ.ammo_bloodcrystals < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			}// else if (fl == ? && gotgun) {
+				//if (targ.ammo_? < 1) am = TRUE; // no ammo
+				//else am = FALSE;
+			//}
+			runaway = runaway + 1;
+			if (runaway > 13) break;
 		}
 	} else if (targ.impulse == 8) {
-		checkvec = WeaponSlotPickOneOfThree(targ, IT_LIGHTNING, IT_PLASMA_GUN, IT_FLAK, IN_ITEMS1, IN_ITEMS1, IN_MODITEMS_HACKBANK);
-		fl = checkvec_x;
-		gotgun = checkvec_y;
-		inhackbank = checkvec_z;
-		if (fl == IT_LIGHTNING) {
-			if (targ.ammo_cells < 1) am = TRUE; // no ammo
-		}
-		if (fl == IT_PLASMA_GUN) {
-			if (targ.ammo_plasma < 1) am = TRUE; // no ammo
-		}
-		if (fl == IT_FLAK) {
-			if (targ.ammo_nails < 1) am = TRUE; // no ammo
+		fl = targ.weapon;
+		while (am) {
+			checkvec = WeaponSlotPickOneOfFour(fl, targ, IT_LIGHTNING, IT_PLASMA_GUN, IT_FLAK, 0, IN_ITEMS1, IN_ITEMS1, IN_MODITEMS_HACKBANK, 0);
+			fl = checkvec_x;
+			gotgun = checkvec_y;
+			inhackbank = checkvec_z;
+			if (fl == IT_LIGHTNING && gotgun) {
+				if (targ.ammo_cells < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			} else if (fl == IT_PLASMA_GUN && gotgun) {
+				if (targ.ammo_plasma < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			} else if (fl == IT_FLAK && gotgun) {
+				if (targ.ammo_nails < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			}// else if (fl == ? && gotgun) {
+				//if (targ.ammo_? < 1) am = TRUE; // no ammo
+				//else am = FALSE;
+			//}
+			runaway = runaway + 1;
+			if (runaway > 13) break;
 		}
 	} else if (targ.impulse == 90) {
-		checkvec = WeaponSlotPickOneOfThree(targ, IT_EXTRA_WEAPON, IT2_LASER_CANNON, IT2_CHAINLIGHTNING, IN_ITEMS1, IN_ITEMS2, IN_ITEMS2);
-		fl = checkvec_x;
-		gotgun = checkvec_y;
-		inhackbank = checkvec_z;
-		if (fl == IT_EXTRA_WEAPON) {
-			if (targ.ammo_bolts < 1) am = TRUE; // no ammo
-		}
-		if (fl == IT2_LASER_CANNON) {
-			if (targ.ammo_cells < 1) am = TRUE; // no ammo
-		}
-		if (fl == IT2_CHAINLIGHTNING) {
-			if (targ.ammo_cells < 1) am = TRUE; // no ammo
+		fl = targ.weapon;
+		while (am) {
+			checkvec = WeaponSlotPickOneOfFour(fl, targ, IT_EXTRA_WEAPON, IT2_LASER_CANNON, IT2_CHAINLIGHTNING, 0, IN_ITEMS1, IN_ITEMS2, IN_ITEMS2, 0);
+			fl = checkvec_x;
+			gotgun = checkvec_y;
+			inhackbank = checkvec_z;
+			if (fl == IT_EXTRA_WEAPON && gotgun) {
+				if (targ.ammo_bolts < 1) am = TRUE; // no ammo
+			} else if (fl == IT2_LASER_CANNON && gotgun) {
+				if (targ.ammo_cells < 1) am = TRUE; // no ammo
+			} else if (fl == IT2_CHAINLIGHTNING && gotgun) {
+				if (targ.ammo_cells < 1) am = TRUE; // no ammo
+			}// else if (fl == ? && gotgun) {
+				//if (targ.ammo_? < 1) am = TRUE; // no ammo
+				//else am = FALSE;
+			//}
+			runaway = runaway + 1;
+			if (runaway > 13) break;
 		}
 	} else if (targ.impulse == 60) {
 		fl = IT_LAVA_NAILGUN;
@@ -2132,12 +2131,25 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 		fl = IT2_PROXIMITY_GUN;
 		gotgun = InItems2(targ, fl);
 	} else if (targ.impulse == 77) {
-		checkvec = WeaponSlotPickOneOfThree(targ, IT2_MJOLNIR, IT2_CROSS, IT_GUNGNIR, IN_ITEMS2, IN_ITEMS2, IN_MODITEMS_HACKBANK);
-		fl = checkvec_x;
-		gotgun = checkvec_y;
-		inhackbank = checkvec_z;
-		if (fl == IT_GUNGNIR) {
-			if (targ.ammo_voidshards < 1) am = TRUE; // no ammo
+		fl = targ.weapon;
+		while (am) {
+			checkvec = WeaponSlotPickOneOfFour(fl, targ, IT2_MJOLNIR, IT2_CROSS, IT_GUNGNIR, 0, IN_ITEMS2, IN_ITEMS2, IN_MODITEMS_HACKBANK, 0);
+			fl = checkvec_x;
+			gotgun = checkvec_y;
+			inhackbank = checkvec_z;
+			if (fl == IT_GUNGNIR && gotgun) {
+				if (targ.ammo_voidshards < 1) am = TRUE; // no ammo
+				else am = FALSE;
+			} else if (fl == IT2_MJOLNIR && gotgun) {
+				am = FALSE;
+			} else if (fl == IT2_CROSS && gotgun) {
+				am = FALSE;
+			}// else if (fl == ? && gotgun) {
+				//if (targ.ammo_? < 1) am = TRUE; // no ammo
+				//else am = FALSE;
+			//}
+			runaway = runaway + 1;
+			if (runaway > 13) break;
 		}
 	} else if (targ.impulse == 78) {
 		fl = IT_EXTRA_WEAPON;

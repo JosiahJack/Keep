@@ -1,0 +1,40 @@
+==============================================================
+Title                  : death
+Filename               : death.zip
+Map                    : /
+Author                 : Madfox
+Email Adress           : catweazel@kpnmail.nl
+Description            : new Q1 model
+
+Additional Credits to  : ID Software
+
+==============================================================
+
+* Play Inormation *
+
+New  Q1 Model  : shredder.mdl
+qC             : yes
+
+==============================================================
+
+* Construction *
+
+Base                  : new quake1.mdl of a shadowrider.
+Build Time            : april's fool.
+Editor(s) Used        : Qmle Wally AM2016.
+Use                   : name quakedirectory "death" + map death
+Known Bugs            : skin file is shrinked.
+Thanks                : iD Software. 
+GameOption            : Place in a subdirectory Quake with progs.dat 
+                  
+
+You may distribute and modiy this level, as long as you give
+me credit, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 23 august 2021.
+
+==============================================================
+
+          

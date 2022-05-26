@@ -1,0 +1,46 @@
+===================================================================
+Title                  : Q1_alouette
+Filename               : Q1_alouette.zip
+Author                 : Madfox
+Email Adress           : catweazel@kpnmail.nl
+Description            : Quake chicken
+
+Additional Credits to  : ID Software
+
+===================================================================
+
+* Play Inormation *
+
+Level Name              : /
+Single Player           : /
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Model               : yes
+New Sounds              : yes
+New Weapon              : /
+qC                      : yes
+
+===================================================================
+
+* Construction *
+
+Base              : My curiosity to introduce a quake chicken
+                  : in Quake1.
+Build Time        : other toppic
+Editor(s) Used    : Quark Qmle Wally Quark6.3 AM2017
+Known Bugs        : hungry
+Thanks            : ID Software
+Install           : place mfile in quake and play "quake.exe -game chicken 
+                  : +map chick".
+To do             : Added sounds , map and qc
+ 
+====================================================================
+
+You may distribute and modify this file not for commercial purpose, 
+as long as you give me a little credit, but most of all ID Software'
+Quake! 
+
+====================================================================  
+
+Madfox 8 maart 2022  

@@ -1,0 +1,118 @@
+DRS Modifications:
+
+-- drsdefs.qc
+12/06/2015 Added drsdefs.qc.
+
+-- weapons.qc
+9/09/2015 Changed W_FireSuperSpikes to take vertical / horizontal offsets for SNG
+9/09/2015 Changed W_FireSpikes to not be used for firing W_FireSuperSpikes.
+3/19/2018 Changes to spike, and rocket damages
+3/19/2018 Rocket accelleration modifications
+
+-- player.qc
+9/09/2015 Changed player_nail1() and player_nail2() to use vertical / horizontal offsets for SNG
+
+-- General Changes
+02/08/2018 Changes to player model animation system, may be found in drsdefs.qc, drsfrma.qc, client.qc, player.qc.
+02/08/2018 General changes to all files to fix compiler warnings
+02/08/2018 Changes to various th_pain voids for passing attacker and damage information
+
+6/21/2015 Files resorted under common and monster directories.  Original GPL 2.0 notice and id1 readme may be
+found in the docs and docs/id1 dirs.
+
+-- progs.src
+6/21/2015 Modified file paths to reflect file sorting.
+6/21/2015 Added FBXDX files.
+
+-- subs.qc
+6/21/2015 Changed SetMoveDir from vector() to void().
+
+-- ai.qc
+6/21/2015 Fixed FindTarget and CheckAnyAttack to return values in all cases.
+6/21/2015 Commented out global current_yaw.  Unused?
+6/21/2015 Removed anglemod in favor of fbx's anglemod.
+
+-- buttons.qc
+6/21/2015 Removed local floats gtemp, ftemp from func_button.
+
+-- client.qc
+6/21/2015 Fixed not all control paths returning a value in FindIntermission.
+6/21/2015 Removed local entity pos from changelevel_touch.  (unused)
+6/21/2015 Removed local entity old_self from PlayerDeathThink.  (unused)
+6/21/2015 Removed local vector start, end from PlayerJump.  (Unused)
+6/21/2015 Removed local floats mspeed, aspeed, r from PlayerPreThink / PlayerPostThink.  (unused)
+6/21/2015 Added Frikbot X related items.  See bot.qc for specifics.
+
+-- defs.qc
+6/21/2015 Commented out global empty_float.  Unused?
+6/21/2015 Commented out FBX Required items, see bot.qc.
+
+-- items.qc
+02/13/2018 Changes to dropbackpack to display weapons and proper grammar for stuff.
+6/21/2015 Fixed DropToFloor: too few parameters in PlaceItem.
+6/21/2015 Commented out local floats stemp and best.  (key_touch, sigil_touch, powerup_touch)  Unused?
+
+-- fight.qc
+6/21/2015 Removed unused local float enemy_yaw from ShamCheckAttack.
+6/21/2015 Commented out local float chance.  (ShamCheckAttack) Unused?
+6/21/2015 Commented out local float mtemp. (ai_walk)  Unused?
+6/21/2015 Commented out local vector / float delta, axis, ang_rint, ang_floor, ang_ceil. (ai_run) Unused?
+
+-- monsters.qc
+6/21/2015 Fixed DropToFloor:too few parameters bug in walkmonster_start_go. Fixed improper
+		  usage of droptofloor.
+6/21/2015 Added "monster fell out of level" message.
+6/21/2015 Removed local entitys ent, otemp, stemp from monster_death_use. (unused)
+6/21/2015 Removed local string / entity stemp, etemp from walkmonster_start_go. (unused)
+
+-- misc.qc
+6/21/2015 Fixed self.speed == 1000 effectless statement.
+6/21/2015 Fixed DropToFloor: too few parameters in misc_explobox and misc_explobox2.  Fixed improper
+		  usage of droptofloor.
+6/21/2015 func_illusionary makestatic: too few parameters fixed.
+6/21/2015 Removed local vectors vtmp1, modi from bubble_bob.  Unused.
+
+-- triggers.qc
+6/21/2015 Removed global entitys stemp, otemp, old definitions.  Unused?
+6/21/2015 Removed local string junk from counter_use.  Unused.
+
+-- plats.qc
+6/21/2015 Removed local entity t from func_plat.  Unused.
+
+-- weapons.qc
+6/21/2015 FireBullets modified to allow user defined damage.
+6/21/2015 Re-implimented CycleWeaponReverseCommand based on CycleWeaponCommand.
+6/21/2015 Fixed swimmonster total monster count bug (causes incorrect monster counts with things like fish)
+6/21/2015 Removed duplicate definition in SpawnMeatSpray
+6/21/2015 Removed local entity mpuff from SpawnMeatSpray, W_FireRocket, W_FireGrenade.  (unused)
+6/21/2015 Removed local entity old from W_FireSuperSpikes, W_FireSpikes. (unused)
+6/21/2015 Removed local float rand from spike_touch, superspike_touch.  (unused)
+
+-- world.qc
+6/21/2015 Removed local entity e from InitBodyQue. (unused)
+6/21/2015 Added BotInit() and BotFrame() as per bot.qc
+
+-- demon.qc
+6/21/2015 Removed local vector vec from DemonCheckAttack.  Unused.
+
+-- dog.qc
+6/21/2015 Removed local vector vec from DogCheckAttack.  Unused.
+
+-- enforcer.qc
+6/21/2015 Removed local vector vec (duplicate definition) from LaunchLaser.
+
+-- knight.qc
+12/6/2015 Duplicate frame macro removed.
+
+-- ogre.qc
+6/21/2015 ai_charge with no parameter fixed.
+6/21/2015 Removed local entity mpuff from OgreFireGrenade.  Unused.
+
+-- soldier.qc
+6/21/2015 Modification to use updated FireBullets function.
+
+-- wizard.qc
+6/21/2015 Changed WizardAttackFinished from float to void.
+
+-- zombie.qc
+6/21/2015 Removed local entity mpuff from ZombieFireGrenade.  Unused.

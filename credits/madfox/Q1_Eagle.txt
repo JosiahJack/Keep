@@ -1,0 +1,47 @@
+==============================================================
+Title                  : Q1_Eagle
+Filename               : Q1_Eagle.zip
+Author                 : Madfox
+Email Adress           : catweazel@kpnhome.nl
+Description            : New Quake1 monster
+
+Additional Credits to  : ID Software
+
+==============================================================
+
+* Play Inormation *
+
+Level Name              : /
+Single Player           : /
+Cooperative 2-4 Player  : /
+Deathmatch 1-4 Player   : /
+Difficult Settings      : /
+New Monsters            : yes
+New Sounds              : /
+New Weapon              : /
+qC                      : /
+
+==============================================================
+
+* Construction *
+
+Base              : Animation from an eagle poses in Quake1.
+                  
+Build Time        : 2 vesions, first one blocky, sec straight.
+Editor(s) Used    : Quark Qmle Wally Quark6.3 AM2016 MeshLab
+Known Bugs        : Lots of glitchses.
+ 
+Thanks            : Turbosquid model converted to lowpoly.
+           
+                    ID software's Quake1 sounds and game.
+Install           : compile the qc and play in a test map with 
+                  : q1_eagle.mdl in a progs file. 
+
+You may distribute and modify this file, as long as you give
+me credit, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 19 december 2021
+
+============================================================== 

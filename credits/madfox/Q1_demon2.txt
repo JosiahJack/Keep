@@ -1,0 +1,40 @@
+==============================================================
+Title                  : demon2
+Filename               : Q1_demon2.zip
+Map                    : /
+Author                 : Madfox
+Email Adress           : catweazel@kpnmail.nl
+Description            : new Q1 model
+
+Additional Credits to  : ID Software
+
+==============================================================
+
+* Play Inormation *
+
+New  Q1 Model  : demon2.mdl
+qC             : /
+
+==============================================================
+
+* Construction *
+
+Base                  : new quake1.mdl of a FvF model demon2.
+Build Time            : april's fool.
+Editor(s) Used        : Qmle Wally AM2016.
+Use                   : make a referring qc and use as new model.
+Known Bugs            : some vertice meshes.
+Thanks                : iD Software. 
+GameOption            : Place in a subdirectory Quake with progs.dat 
+                  
+
+You may distribute and modiy this level, as long as you give
+me credit, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 2 oktober 2021.
+
+==============================================================
+
+          

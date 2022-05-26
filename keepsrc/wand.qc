@@ -260,7 +260,7 @@ void(vector start, vector dir) FireBigSpark = { // [FUNCTION]
     self = spawn();
     setall (self, "progs/null.spr", '0 0 0', '0 0 0', end); // was null_256.spr
     self.classtype = CT_WANDBIGSPARK;
-    T_RadiusDamage(self,attacker,splash,targ,DAMAGEALL);
+    T_RadiusDamage(self,attacker,splash,attacker,DAMAGEALL);
     self.origin = end2;
     Rocket_Explosion2(end2,224,16);
     BecomeFancy(X80_SPARK_ORANGE,6);

@@ -1,0 +1,41 @@
+==============================================================
+Title                  : mad_serp
+Filename               : mad_serp.zip
+Map                    : serptest
+Author                 : Madfox
+Email Adress           : catweazel@kpnmail.nl
+Description            : q1test monster
+
+Additional Credits to  : ID Software
+
+==============================================================
+
+* Play Inormation *
+
+New  Q1 Model  : serpent 
+qC             : no
+
+==============================================================
+
+* Construction *
+
+Base                  : new quake1.mdl of the Q1Test serpent.
+Build Time            : april's fool.
+Editor(s) Used        : Qmle Wally AM2016.
+
+Known Bugs            : weapon may overload max frames limit.
+Thanks                : iD Software. 
+GameOption            : Place in a subdirectory Quake with progs.dat 
+                      : and play "quake -game mad_serp +map serptest".
+                  
+
+You may distribute and modiy this level, as long as you give
+me credit, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 21 december 2021.
+
+==============================================================
+
+          

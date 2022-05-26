@@ -1,0 +1,41 @@
+==============================================================
+Title                  : Q1_melyta
+Filename               : Q1_melyta.zip
+Map                    : \
+Author                 : Madfox
+Email Adress           : catweazel@kpnmail.nl
+Description            : Q1 Model remake of the Fatisy-vesus-Future
+
+Additional Credits to  : ID Software
+
+==============================================================
+
+* Play Inormation *
+
+New  Q1 Model  : Melyta.mdl girl entity
+qC             : no
+
+==============================================================
+
+* Construction *
+
+Base                  : new quake1.mdl of a girl soldier Melyta
+Build Time            : made from a base file FvF and remade it.
+Editor(s) Used        : Qmle Wally AM2016.
+Use                   : compile qc file and use it s new model. 
+Known Bugs            : \
+Thanks                : iD Software and FvF for inspiration and skin. 
+GameOption            : Place in a subdirectory Quake with progs.dat 
+                      : or compile your own with the melyta.mdl.
+                  
+
+You may distribute and modiy this level, as long as you give
+me credit, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 11 okt 2021.
+
+==============================================================
+
+          

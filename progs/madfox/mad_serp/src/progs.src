@@ -1,0 +1,55 @@
+../progs.dat
+
+common/defs.qc
+DRS/drsdefs.qc
+DRS/drsfrma.qc
+fbx/waypoints/map_dm1.qc
+fbx/waypoints/map_dm2.qc
+fbx/waypoints/map_dm3.qc
+fbx/waypoints/map_dm4.qc
+fbx/waypoints/map_dm5.qc
+fbx/waypoints/map_dm6.qc
+fbx/waypoints/map_xl1dm1.qc
+fbx/mathlib.qc // FrikaC's mathlib.qc
+fbx/bot.qc
+fbx/bot_way.qc
+fbx/bot_fight.qc 
+fbx/bot_ai.qc
+fbx/bot_misc.qc
+fbx/bot_phys.qc
+fbx/bot_move.qc
+fbx/bot_ed.qc
+common/subs.qc
+common/fight.qc
+monsters/ai.qc
+common/combat.qc
+common/items.qc
+common/weapons.qc
+common/world.qc
+common/client.qc
+common/player.qc
+monsters/monsters.qc
+common/doors.qc
+common/buttons.qc
+common/triggers.qc
+common/plats.qc
+common/statue.qc
+common/misc.qc
+
+monsters/ogre.qc
+monsters/demon.qc
+monsters/shambler.qc
+monsters/knight.qc
+monsters/soldier.qc
+monsters/sserpent.qc // new
+monsters/wizard.qc
+monsters/dog.qc
+monsters/zombie.qc
+monsters/boss.qc
+
+monsters/tarbaby.qc		// registered
+monsters/hknight.qc		// registered
+monsters/fish.qc			// registered
+monsters/shalrath.qc		// registered
+monsters/enforcer.qc		// registered
+monsters/oldone.qc		// registered
