@@ -177,6 +177,33 @@ float   POW_HINT_FALL   	= 8388608;		//23 nsoe4:  slow falling message.
 // float   POWx_HEALTH     = 255;      // Extra max health.  First 8 bits.
 // float   POWx_ARMOR      = 3840;     // Mutually exclustive exotic armor.
 
+//==========================================SELF.ITEMS3================================================
+.float items3;
+//float UNUSED		= 1;			//0  
+//float UNUSED		= 2;			//1  
+//float UNUSED    	= 4;			//2  
+//float UNUSED   		= 8;			//3  
+//float UNUSED		= 16;			//4  
+//float UNUSED   		= 32;			//5  
+//float UNUSED		= 64;			//6  Plasma Gun, direct + splashdamage
+//float UNUSED   		= 128;			//7  AoA		W3  HACKBANK!
+//float UNUSED		= 256;			//8  AoA		W
+//float UNUSED		= 512;			//9  AoA		W
+//float UNUSED 		= 1024;			//10 AoA		W
+//float UNUSED   		= 2048;			//11 Shadow Axe, +75% dmg, +gib bodies
+//float UNUSED		= 4096;			//12	W\
+//float UNUSED		= 8192;			//13 Custom Key 1
+//float UNUSED		= 16384;		//14 Custom Key 2
+//float UNUSED		= 32768;		//15 Custom Key 3
+//float UNUSED		= 65536;		//16 Custom Key 4
+//float UNUSED 		= 131072;		//17 No health or armor damage in lava
+//float UNUSED		= 262144;		//18 No running out of oxygen under water
+//float UNUSED		= 524288;		//19 Immunity to all splashdamage
+//float UNUSED		= 1048576;		//20 JCR Jump Boots (1-4 power levels)
+//float UNUSED		= 2097152;		//21 Reduce SG/SSG/RG spread pattern
+//float UNUSED		= 4194304;		//22 NG/SNG Nails travel through enemy bodies
+//float UNUSED		= 8388608;		//23 Tome of Power (event trigger)
+
 // ===WEAPON ORDERING==================================================================================
 /*
 WEAPON KEYBOARD ORDER
@@ -333,56 +360,6 @@ float DEV_AMMO_N_HEALTH = 1;
 float COOP_VERSUS = 3;
 float VT_SURVIVOR = 2;
 float VT_GAMEMASTER = 4;
-float GLOBALSTATE_1 	= 1.000;
-float GLOBALSTATE_2  	= 2.000;
-float GLOBALSTATE_3    	= 4.000;
-float GLOBALSTATE_4	= 8.000;
-float GLOBALSTATE_5    	= 16.000;
-float GLOBALSTATE_6    	= 32.000;
-float GLOBALSTATE_7    	= 64.000;
-float GLOBALSTATE_8    	= 128.000;
-float GLOBALSTATE_9    	= 256.000;
-float GLOBALSTATE_10    = 512.000;
-float GLOBALSTATE_11    = 1024.000;
-float GLOBALSTATE_12    = 2048.000;
-float GLOBALSTATE_13    = 4096.000;
-float GLOBALSTATE_14   	= 8192.000;
-float GLOBALSTATE_15    = 16384.000;
-float GLOBALSTATE_16    = 32768.000;
-float GLOBALSTATE_17   	 = 65536.000;
-float GLOBALSTATE_18    = 131072.000;
-float GLOBALSTATE_19    = 262144.000;
-float GLOBALSTATE_20    = 524288.000;
-float GLOBALSTATE_21    = 1048576.000;
-float GLOBALSTATE_22    = 2097152.000;
-float GLOBALSTATE_23    = 4194304.000;
-float GLOBALSTATE_24  	= 8388608.000;
-float globalstate;
-.float stateflags;
-.string statetarget1;
-.string statetarget2;
-.string statetarget3;
-.string statetarget4;
-.string statetarget5;
-.string statetarget6;
-.string statetarget7;
-.string statetarget8;
-.string statetarget9;
-.string statetarget10;
-.string statetarget11;
-.string statetarget12;
-.string statetarget13;
-.string statetarget14;
-.string statetarget15;
-.string statetarget16;
-.string statetarget17;
-.string statetarget18;
-.string statetarget19;
-.string statetarget20;
-.string statetarget21;
-.string statetarget22;
-.string statetarget23;
-.string statetarget24;
 .float usingfinished;
 float numsurvivors;
 float numgamemasters;

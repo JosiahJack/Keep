@@ -1741,36 +1741,43 @@ void() Frozen_Touch = { // [FUNCTION]
 	}
 };
 
+void() FreezeFinish = {
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
+	self.deadflag = DEAD_DEAD; 
+	Particle_Cube(self, 1, 41);
+	take_monster_object(self); // drop our stuff
+	if (self.attachment) entity_remove(self.attachment, 0.1);
+	if (self.attachment2) entity_remove(self.attachment2, 0.1);
+	if (self.attachment3) entity_remove(self.attachment3, 0.1);
+	self.velocity = self.avelocity = '0 0 0';
+	self.movetype = MOVETYPE_TOSS;
+	self.colormod = '1 1 2'; // Pale blue white
+	self.alpha = 0.6; // Transparent ice
+	self.effects = 0;
+	self.solid = SOLID_SLIDEBOX;
+	self.takedamage = DAMAGE_AIM;
+	self.think = FrozenThink;
+	self.nextthink = time + 0.1;
+	self.count = 0;
+	self.health = 0;
+	if (self.gibhealth >= 0) self.gibhealth = -60;
+	self.touch = Frozen_Touch;
+	Gyro_Object_Activate(self,MASS_GIB); // Light weight and floats, ice floats
+	Gyro_Object_SetBouyancy(self,BOUY_GIB);
+	Gyro_Object_SetResistance(self,RESIST_GIB);
+	if (self.targetname) self.use = BecomeIcyExp;
+	if (pointcontents(self.origin) == CONTENT_LAVA) BecomeIcyExp(); // Can't freeze that which under lava lies; so burst away!
+};
+
 void(entity targ, entity attacker) T_Freeze = { // [FUNCTION]
 	if (!(targ.flags & FLx_CREATURE)) return;
 
-	monster_death_precheck(); // Pre-check routine to tidy up extra entities
-	self.deadflag = DEAD_DEAD; 
-	sound (targ, CHAN_ITEM, "drake/weapons/freeze.wav", 1, ATTN_NORM);
-	Particle_Cube (self, 1, 41);
-	take_monster_object(targ); // drop our stuff
-	if (targ.attachment) entity_remove(targ.attachment, 0.1);
-	if (targ.attachment2) entity_remove(targ.attachment2, 0.1);
-	if (targ.attachment3) entity_remove(targ.attachment3, 0.1);
-	targ.velocity = targ.avelocity = '0 0 0';
-	targ.movetype = MOVETYPE_TOSS;
-	targ.colormod = '1 1 2'; // Pale blue white
-	targ.alpha = 0.6; // Transparent ice
-	targ.effects = 0;
-	targ.solid = SOLID_SLIDEBOX;
-	targ.takedamage = DAMAGE_AIM;
-	targ.think = FrozenThink;
-	targ.nextthink = time + 0.1;
-	targ.count = 0;
-	targ.health = 0;
-	if (targ.gibhealth >= 0) targ.gibhealth = -60;
-	targ.touch = Frozen_Touch;
-	targ.enemy = attacker; // remember for later if needed
-	Gyro_Object_Activate(targ,MASS_GIB); // Light weight and floats, ice floats
-	Gyro_Object_SetBouyancy(targ,BOUY_GIB);
-	Gyro_Object_SetResistance(targ,RESIST_GIB);
-	if (targ.targetname) targ.use = BecomeIcyExp;
-	if (pointcontents(targ.origin) == CONTENT_LAVA) BecomeIcyExp(); // Can't freeze that which under lava lies; so burst away!
+	sound(targ, CHAN_ITEM, "drake/weapons/freeze.wav", 1, ATTN_NORM);
+	Particle_Cube(self, 1, 41);
+    targ.oldenemy = attacker;
+    targ.enemy = world;
+    targ.think = FreezeFinish;
+    targ.nextthink = time + 0.05;
 };
 
 // Called when an arrow hits something.

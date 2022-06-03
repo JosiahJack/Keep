@@ -35,7 +35,7 @@
 // Description:
 // Various utility subroutine functions used everywhere as well as the main
 // target->targetname entity I/O system.  Runs all forms of target such as
-// target2, target3, target4, statetarget1 - statetarget32, killtarget, etc.
+// target, target2, target3, target4, killtarget, etc.
 //=============================================================================
 
 void() SUB_CalcMoveDone;
@@ -281,31 +281,7 @@ float(entity t) HasTargets = { // [FUNCTION]
 		t.target ||
 		t.target2 ||
 		t.target3 ||
-		t.target4 ||
-		t.statetarget1 ||
-		t.statetarget2 ||
-		t.statetarget3 ||
-		t.statetarget4 ||
-		t.statetarget5 ||
-		t.statetarget6 ||
-		t.statetarget7 ||
-		t.statetarget8 ||
-		t.statetarget9 ||
-		t.statetarget10 ||
-		t.statetarget11 ||
-		t.statetarget12 ||
-		t.statetarget13 ||
-		t.statetarget14 ||
-		t.statetarget15 ||
-		t.statetarget16 ||
-		t.statetarget17 ||
-		t.statetarget18 ||
-		t.statetarget19 ||
-		t.statetarget20 ||
-		t.statetarget21 ||
-		t.statetarget22 ||
-		t.statetarget23 || // ridiculous ain't it!
-		t.statetarget24 ) return TRUE;
+		t.target4) return TRUE;
 	return FALSE;
 };
 
@@ -317,30 +293,6 @@ void (entity t) clear_trigstrs = { // [FUNCTION]
 	t.target2 = string_null;
 	t.target3 = string_null;
 	t.target4 = string_null;
-	t.statetarget1 = string_null;
-	t.statetarget2 = string_null;
-	t.statetarget3 = string_null;
-	t.statetarget4 = string_null;
-	t.statetarget5 = string_null;
-	t.statetarget6 = string_null;
-	t.statetarget7 = string_null;
-	t.statetarget8 = string_null;
-	t.statetarget9 = string_null;
-	t.statetarget10 = string_null;
-	t.statetarget11 = string_null;
-	t.statetarget12 = string_null;
-	t.statetarget13 = string_null;
-	t.statetarget14 = string_null;
-	t.statetarget15 = string_null;
-	t.statetarget16 = string_null;
-	t.statetarget17 = string_null;
-	t.statetarget18 = string_null;
-	t.statetarget19 = string_null;
-	t.statetarget20 = string_null;
-	t.statetarget21 = string_null;
-	t.statetarget22 = string_null;
-	t.statetarget23 = string_null;
-	t.statetarget24 = string_null; // Yep!
 };
 
 void(string ktarg) SUB_KillTarget = { // [FUNCTION]
@@ -412,30 +364,6 @@ void() SUB_UseTargets = { // [FUNCTION]
 		t.target2 = self.target2;
 		t.target3 = self.target3;
 		t.target4 = self.target4;
-		t.statetarget1 = self.statetarget1;
-		t.statetarget2 = self.statetarget2;
-		t.statetarget3 = self.statetarget3;
-		t.statetarget4 = self.statetarget4;
-		t.statetarget5 = self.statetarget5;
-		t.statetarget6 = self.statetarget6;
-		t.statetarget7 = self.statetarget7;
-		t.statetarget8 = self.statetarget8;
-		t.statetarget9 = self.statetarget9;
-		t.statetarget10 = self.statetarget10;
-		t.statetarget11 = self.statetarget11;
-		t.statetarget12 = self.statetarget12;
-		t.statetarget13 = self.statetarget13;
-		t.statetarget14 = self.statetarget14;
-		t.statetarget15 = self.statetarget15;
-		t.statetarget16 = self.statetarget16;
-		t.statetarget17 = self.statetarget17;
-		t.statetarget18 = self.statetarget18;
-		t.statetarget19 = self.statetarget19;
-		t.statetarget20 = self.statetarget20;
-		t.statetarget21 = self.statetarget21;
-		t.statetarget22 = self.statetarget22;
-		t.statetarget23 = self.statetarget23;
-		t.statetarget24 = self.statetarget24; // ridiculous ain't it!
 		t.noise = self.noise;
 		return;
 	}
@@ -458,30 +386,6 @@ void() SUB_UseTargets = { // [FUNCTION]
 	if (self.target2 != "") SUB_Target(self.target2);
 	if (self.target3 != "") SUB_Target(self.target3);
 	if (self.target4 != "") SUB_Target(self.target4);
-	if (self.statetarget1 != "" && (globalstate & GLOBALSTATE_1)) SUB_Target(self.statetarget1);
-	if (self.statetarget2 != "" && (globalstate & GLOBALSTATE_2)) SUB_Target(self.statetarget2);
-	if (self.statetarget3 != "" && (globalstate & GLOBALSTATE_3)) SUB_Target(self.statetarget3);
-	if (self.statetarget4 != "" && (globalstate & GLOBALSTATE_4)) SUB_Target(self.statetarget4);
-	if (self.statetarget5 != "" && (globalstate & GLOBALSTATE_5)) SUB_Target(self.statetarget5);
-	if (self.statetarget6 != "" && (globalstate & GLOBALSTATE_6)) SUB_Target(self.statetarget6);
-	if (self.statetarget7 != "" && (globalstate & GLOBALSTATE_7)) SUB_Target(self.statetarget7);
-	if (self.statetarget8 != "" && (globalstate & GLOBALSTATE_8)) SUB_Target(self.statetarget8);
-	if (self.statetarget9 != "" && (globalstate & GLOBALSTATE_9)) SUB_Target(self.statetarget9);
-	if (self.statetarget10 != "" && (globalstate & GLOBALSTATE_10)) SUB_Target(self.statetarget10);
-	if (self.statetarget11 != "" && (globalstate & GLOBALSTATE_11)) SUB_Target(self.statetarget11);
-	if (self.statetarget12 != "" && (globalstate & GLOBALSTATE_12)) SUB_Target(self.statetarget12);
-	if (self.statetarget13 != "" && (globalstate & GLOBALSTATE_13)) SUB_Target(self.statetarget13);
-	if (self.statetarget14 != "" && (globalstate & GLOBALSTATE_14)) SUB_Target(self.statetarget14);
-	if (self.statetarget15 != "" && (globalstate & GLOBALSTATE_15)) SUB_Target(self.statetarget15);
-	if (self.statetarget16 != "" && (globalstate & GLOBALSTATE_16)) SUB_Target(self.statetarget16);
-	if (self.statetarget17 != "" && (globalstate & GLOBALSTATE_17)) SUB_Target(self.statetarget17);
-	if (self.statetarget18 != "" && (globalstate & GLOBALSTATE_18)) SUB_Target(self.statetarget18);
-	if (self.statetarget19 != "" && (globalstate & GLOBALSTATE_19)) SUB_Target(self.statetarget19);
-	if (self.statetarget20 != "" && (globalstate & GLOBALSTATE_20)) SUB_Target(self.statetarget20);
-	if (self.statetarget21 != "" && (globalstate & GLOBALSTATE_21)) SUB_Target(self.statetarget21);
-	if (self.statetarget22 != "" && (globalstate & GLOBALSTATE_22)) SUB_Target(self.statetarget22);
-	if (self.statetarget23 != "" && (globalstate & GLOBALSTATE_23)) SUB_Target(self.statetarget23);
-	if (self.statetarget24 != "" && (globalstate & GLOBALSTATE_24)) SUB_Target(self.statetarget24);
 };
 
 // Safe wrapper function to use instead of trigger_strs so all targets get ran and not just one

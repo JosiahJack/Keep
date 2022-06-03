@@ -318,17 +318,6 @@ void() trigger_mapvar_multiple = { // [ENTITY]
 	trigger_bmodel_setup();	
 };
 
-// State flags stored in defskeep.qc
-// Client parms decoding and encoding save global state
-void () envglobal_use = { // [FUNCTION]
-	globalstate = (globalstate | self.stateflags); // Activate global state bit
-};
-
-void () env_global = { // [ENTITY]
-	if (self.stateflags <= 0) return; // do nothing, go idle
-	self.use = envglobal_use;
-};
-
 void () logic_auto_think = { // [FUNCTION]
 	if (self.use) self.use();
 	SUB_UseTargets();

@@ -90,7 +90,7 @@ void() SetNewParms = {
 	parm8 = 1;						// Current selected weapon
 	parm10 = 0;						// New MOD items
 	parm11 = 0;						// self.items2
-	parm12 = 0;						// globalstate
+	parm12 = 0;						//
 	parm13 = 0;						// permanent powerups (perms) from Drake, can be reset this level using world.take_perms > 0
 	if (query_configflag(SVR_UPDAXE)) parm10 = parm10 | IT_UPGRADE_AXE; // Update new player inventory based on config flag
 	if (query_configflag(SVR_UPDSSG)) parm10 = parm10 | IT_UPGRADE_SSG;
@@ -155,8 +155,7 @@ void() SetChangeParms = {
 	parm16 = mapvar[5];
 	cvar_set("gamecfg",ftos(encode(self.ammo_bloodcrystals,self.ammo_voidshards,self.ammo_elemental)));
 	//parm17 = encode(self.ammo_bloodcrystals,self.ammo_voidshards,self.ammo_elemental);
-	cvar_set("savedgamecfg",ftos(globalstate));
-	//parm18 = globalstate;
+	cvar_set("savedgamecfg",ftos(self.items3));
 
 	dprint("Beyond 16 Parms Set:\n");
 	dprint("gamecfg: "); dprint(ftos(cvar("gamecfg"))); dprint("\n");
@@ -607,7 +606,7 @@ void() DecodeLevelParms = {
 	mapvar[5] = parm16;
 	if (CheckZeroVector(world.mapvar_update) == FALSE) mapvar_range(world.mapvar_update); // Check for any worldspawn map variable settings
 	dprint("Beyond 16 Parms: gamecfg was "); dprint(ftos(cvar("savedgamecfg"))); dprint("\n");
-	globalstate = cvar("savedgamecfg");
+	self.items3 = cvar("savedgamecfg");
 	cvar_set("gamecfg","0"); // Reset these to keep player config.cfg clean
 	cvar_set("savedgamecfg","0");
 };
@@ -1299,10 +1298,6 @@ void() PlayerPostThink = {
 
 			display_configflag(); // Update console with MOD settings
 			display_version();
-
-			// Keep's globalstate system
-			if (globalstate > 0) dprint ("CLIENT: Global states are set!\n");
-			else dprint ("CLIENT: No global states are set.\n");
 
 			// Warn about chaos mode	
 			if (check_randflags() == TRUE) { // Is the randomizer active?

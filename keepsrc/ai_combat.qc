@@ -161,13 +161,13 @@ void(entity targ, entity attacker) Killed = {
 			ClientObituary(self, attacker);
 			self.touch = SUB_Null;
 			if (self.flags & FL_MONSTER) monster_death_use();
-			if (self.frozen) T_Freeze(self, attacker);
+			if (self.frozen) T_Freeze(self,attacker);
 			else self.th_die ();
 		} else if (!self.deadflag && self.classtype == CT_MONIDSHUB) {
 			// Completely messed up setup for the oldone boss with a weird target field and mess of triggers around it! This elseif is just an exception so it works, anyway no one fights the oldone!
 			self.deadflag = DEAD_DEAD;
 			if ((self.flags & FL_MONSTER) && !self.nomonstercount) AddToKills(self,attacker);
-			if (self.frozen) { T_Freeze(self, attacker); monster_death_use(); }
+			if (self.frozen) { T_Freeze(self,attacker); monster_death_use(); }
 			else self.th_die ();
 		}
 	}
@@ -219,6 +219,13 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	}
 
 	// resist_fire is the odd one out here. There were too many edge cases not handled by classgroups so they exist in individual locations
+	// except if we have the ice arbalest out or elemental tome
+	if (( (targ.moditems & IT_ICE && targ.weapon == IT_ICE && targ.selfweaponismoditems) // Have ice out
+           || (targ.items & IT_EXTRA_WEAPON && targ.perms & IT_FROSTBOW // Have frostbow out
+               && targ.weapon == IT_EXTRA_WEAPON && !targ.selfweaponismoditems) )
+        && (inflictor.classgroup == CG_PROJLAVANAILS || attacker.resist_fire == 1)) {
+		damage = damage * 0.5; // 50% fire protection while holding ice weapon
+	}
 
 	if (attacker.poisonous || inflictor.poisonous) {
 		if (targ.resist_acid > 0) damage = Resist_Damage(targ, AM_ACID, damage);

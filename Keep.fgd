@@ -2167,6 +2167,8 @@
 	map(string) : "Next map name" : : "Leave blank to reload same map"
 	message(string) : "Congratulations text" : : "Leave blank to have default intermission only"
 	message2(string) : "Congratulations text 2nd page"
+	message3(string) : "Congratulations text 3rd page"
+	message4(string) : "Congratulations text 4th page"
 	startspawn2(integer) : "Spawn number in next map (1-7)"
 ]
 @SolidClass base(TrigOFF,Targetname,Target) = trigger_setskill : "Trigger Set Skill" [
@@ -4176,7 +4178,7 @@
 ]
 @PointClass base(Appearflags,Targetname) size(-4 -4 -4, 4 4 4) = trigger_explode : "Trigger Grenade Explosion" [
 	spawnflags(flags) = [
-		1 : "No Particles" : 0 : "Don't use particle burst"
+		2 : "No Particles" : 0 : "Don't use particle burst"
 		4 : "Dust" : 0 : "Dust effect only"
 		8 : "Silent" : 0 : "Don't play explosion sound"
 	]
@@ -5237,41 +5239,6 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	target3(string) : "Target3"
 	target4(string) : "Target4"
 	killtarget(string) : "Kill Target"
-	statetarget1(string) : "Target if Global 1"
-	statetarget2(string) : "Target if Global 2"
-	statetarget3(string) : "Target if Global 3"
-	statetarget4(string) : "Target if Global 4"
-	statetarget5(string) : "statetarget5 etc...24"
-]
-
-@PointClass size(-8 -8 -8, 8 8 8) base(Targetname, Target) = env_global : "Global State setter" [
-		stateflags(choices) : "State to Set" : 0 = [
-		0 : "None (does nothing)"
-		1 : "Global state 1"
-		2 : "Global state 2"
-		4 : "Global state 3"
-		8 : "Global state 4"
-		16 : "Global state 5"
-		32 : "Global state 6"
-		64 : "Global state 7"
-		128 : "Global state 8"
-		256 : "Global state 9"
-		512 : "Global state 10"
-		1024 : "Global state 11"
-		2048 : "Global state 12"
-		4096 : "Global state 13"
-		8192 : "Global state 14"
-		16384 : "Global state 15"
-		32768 : "Global state 16"
-		65536 : "Global state 17"
-		131072 : "Global state 18"
-		262144 : "Global state 19"
-		524288 : "Global state 20"
-		1048576 : "Global state 21"
-		2097152 : "Global state 22"
-		4194304 : "Global state 23"
-		8388608 : "Global state 24"
-	]
 ]
 
 @PointClass base(Targetname) = tele_fog : "Creates teleport effect" []
