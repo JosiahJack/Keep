@@ -191,37 +191,38 @@ WEAPON KEYBOARD ORDER
 9 - Crossbow, Laser Cannon, Chain Lightning Gun (3)
 0 - Wand, Mjolnir, Gungnir (3)
 
-WEAPON CYCLING ORDER										NORMAL e.g.
-UniqueID Wepname												HACKBANK e.g. (indented)
-1  Grapple													IT2_GRAPPLE
-2  Axe/Shadowaxe/Chainsaw									IT_AXE
-3  Mace															IT_MACE
-4  Shotgun/Blaster											IT_SHOTGUN
-5  Ice Tome														IT_ICE
-6  Airfist														IT_AIRGUN
-7  DB Shotgun/Riot Controller/Widowmaker/QuadShotgun		IT_SUPER_SHOTGUN
-8  Scimitar													IT_SCIMITAR
-9  Nailgun													IT_NAILGUN
-10 Lava Nailgun												IT_LAVA_NAILGUN
-11 Rapier													IT_RAPIER
-12 Perforator												IT_SUPER_NAILGUN
-13 Lava Super Nailgun										IT_LAVA_SUPER_NAILGUN
-14 Void Staff													IT_VOID_STAFF
-15 Grenade Launcher											IT_GRENADE_LAUNCHER
-16 Proximity Grenade Launcher/Sidewinder					IT2_PROXIMITY_GUN
-17 Multi-Grenade Launcher									IT_MULTI_GRENADE
-18 Rocket Launcher/MIRV										IT_ROCKET_LAUNCHER
-19 Multi-Rocket Launcher									IT_MULTI_ROCKET
-20 Sanguinators												IT_SANGUINATORS
-21 Thunderbolt/Plasmagun									IT_LIGHTNING
-22 Plasma Gun(rogue)										IT_PLASMA_GUN
-23 Flak Cannon													IT_FLAK
-24 Crossbow/Frostbow										IT_EXTRA_WEAPON
-25 Laser Cannon												IT2_LASER_CANNON
-26 Chain Lightning Gun										IT2_CHAINLIGHTNING
-27 Wand														IT2_CROSS
-28 Mjolnir													IT2_MJOLNIR
-29 Gungir														IT_GUNGNIR
+WEAPON ID's											NORMAL e.g.
+														HACKBANK e.g. (indented)
+UniqueID Wepname
+1  Grapple											IT2_GRAPPLE
+2  Axe/Shadowaxe/Chainsaw							IT_AXE
+3  Mace													IT_MACE
+4  Shotgun/Blaster									IT_SHOTGUN
+5  Ice Tome												IT_ICE
+6  Airfist												IT_AIRGUN
+7  DB Shotgun/Riot Controller/Widowmaker/QuadShotgun IT_SUPER_SHOTGUN
+8  Scimitar											IT_SCIMITAR
+9  Nailgun											IT_NAILGUN
+10 Lava Nailgun										IT_LAVA_NAILGUN
+11 Rapier											IT_RAPIER
+12 Perforator										IT_SUPER_NAILGUN
+13 Lava Super Nailgun								IT_LAVA_SUPER_NAILGUN
+14 Void Staff											IT_VOID_STAFF
+15 Grenade Launcher									IT_GRENADE_LAUNCHER
+16 Proximity Grenade Launcher/Sidewinder			IT2_PROXIMITY_GUN
+17 Multi-Grenade Launcher							IT_MULTI_GRENADE
+18 Rocket Launcher/MIRV								IT_ROCKET_LAUNCHER
+19 Multi-Rocket Launcher							IT_MULTI_ROCKET
+20 Sanguinators										IT_SANGUINATORS
+21 Thunderbolt/Plasmagun							IT_LIGHTNING
+22 Plasma Gun(rogue)								IT_PLASMA_GUN
+23 Flak Cannon											IT_FLAK
+24 Crossbow/Frostbow								IT_EXTRA_WEAPON
+25 Laser Cannon										IT2_LASER_CANNON
+26 Chain Lightning Gun								IT2_CHAINLIGHTNING
+27 Wand												IT2_CROSS
+28 Mjolnir											IT2_MJOLNIR
+29 Gungir												IT_GUNGNIR
 */
 // Unique ID's for weapon cycling list.
 float ID_GRAPPLE = 1;

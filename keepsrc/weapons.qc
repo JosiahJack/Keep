@@ -1835,50 +1835,50 @@ vector (float current, entity targ, float wep1, float wep2, float wep3, float we
 
 	// Check if we are already within the slot, then branch.
 	if (current == wep1) {
-		if (gotgun4) {
-			fl = wep4;
+		if (gotgun2) {
+			fl = wep2;
 			gotgun = TRUE;
 		} else {
 			fl = wep3;
 			gotgun = gotgun3;
 		}
-	} else if (current == wep4) {
+	} else if (current == wep2) {
 		if (gotgun3) {
 			fl = wep3;
 			gotgun = TRUE;
 		} else {
-			fl = wep2;
-			gotgun = gotgun2;
+			fl = wep4;
+			gotgun = gotgun4;
 		}
 	} else if (current == wep3) {
-		if (gotgun2) {
-			fl = wep2;
+		if (gotgun4) {
+			fl = wep4;
 			gotgun = TRUE;
 		} else {
 			fl = wep1;
 			gotgun = gotgun1;
 		}
-	}  else if (current == wep2) {
+	} else if (current == wep4) {
 		if (gotgun1) {
 			fl = wep1;
 			gotgun = TRUE;
 		} else {
-			fl = wep3;
-			gotgun = gotgun3;
+			fl = wep2;
+			gotgun = gotgun2;
 		}
 	} else {
 		// If not in the slot, pick first available in slot.
 		if (gotgun1) {
 			fl = wep1;
 			gotgun = TRUE;
-		} else if (gotgun4) {
-			fl = wep4;
+		} else if (gotgun2) {
+			fl = wep2;
 			gotgun = TRUE;
 		} else if (gotgun3) {
 			fl = wep3;
 			gotgun = TRUE;
-		} else if (gotgun2) {
-			fl = wep2;
+		} else if (gotgun4) {
+			fl = wep4;
 			gotgun = TRUE;
 		}
 	}
@@ -1989,7 +1989,7 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 	} else if (targ.impulse == 4) {
 		fl = targ.weapon;
 		while (am) {
-			checkvec = WeaponSlotPickOneOfFour(fl, targ, IT_NAILGUN, IT_RAPIER, IT_LAVA_NAILGUN, 0, IN_ITEMS1, IN_MODITEMS, IN_ITEMS1, 0);
+			checkvec = WeaponSlotPickOneOfFour(fl, targ, IT_NAILGUN, IT_LAVA_NAILGUN, IT_RAPIER, 0, IN_ITEMS1, IN_ITEMS1, IN_MODITEMS, 0);
 			fl = checkvec_x;
 			gotgun = checkvec_y;
 			inhackbank = checkvec_z;
@@ -2407,25 +2407,25 @@ void() CycleWeaponCommand = { // [FUNCTION]
 	cyclecheck = 0; // counter to see how many times we go through the loop
 	if (self.weapon == 0 && self.items == 0 && self.items2 == 0 && self.moditems == 0 && self.perms == 0) return;
 	wepID = GetWepIDIndex(self.weapon, inhackbank);
-
 	// Keep cycling around weapon list until found a weapon with ammo
 	while (1) {
 		am = 0;
 		cyclecheck = cyclecheck + 1;
 		if (cyclecheck > 100) return; // exit gracefully, no runaway loop error
-		if (wepID == ID_GRAPPLE) {
-			wepID = ID_AXE_SHADAXE_CHAINSAW;
-		} else if (wepID == ID_AXE_SHADAXE_CHAINSAW) {
+
+		if (wepID == ID_AXE_SHADAXE_CHAINSAW) {
+			wepID = ID_GRAPPLE;
+		} else if (wepID == ID_GRAPPLE) {
 			wepID = ID_MACE;
 		} else if (wepID == ID_MACE) {
 			wepID = ID_SHOTGUN_BLASTER;
 			if (self.ammo_shells < 1) am = 1;
 		} else if (wepID == ID_SHOTGUN_BLASTER) {
-			wepID = ID_AIRGUN;
-		} else if (wepID == ID_AIRGUN) {
 			wepID = ID_ICE;
 			if (self.ammo_elemental < 1) am = 1;
 		} else if (wepID == ID_ICE) {
+			wepID = ID_AIRGUN;
+		} else if (wepID == ID_AIRGUN) {
 			wepID = ID_SUPER_SHOTGUN_WIDOWMAKER_SHOTCYCLER_QUADSHOTTY;
 			if (self.ammo_shells < 1) am = 1; // only checking for 1 shell since autoshotgun/shotcycler might only use 1
 		} else if (wepID == ID_SUPER_SHOTGUN_WIDOWMAKER_SHOTCYCLER_QUADSHOTTY) {
@@ -2485,14 +2485,14 @@ void() CycleWeaponCommand = { // [FUNCTION]
 			wepID = ID_CHAINLIGHTNING;
 			if (self.ammo_cells < 1) am = 1;
 		} else if (wepID == ID_CHAINLIGHTNING) {
-			wepID = ID_WANDCROSS2;
-		} else if (wepID == ID_WANDCROSS2) {
 			wepID = ID_MJOLNIR;
 		} else if (wepID == ID_MJOLNIR) {
+			wepID = ID_WANDCROSS2;
+		} else if (wepID == ID_WANDCROSS2) {
 			wepID = ID_GUNGNIR;
 			if (self.ammo_voidshards < 1) am = 1;
 		} else if (wepID == ID_GUNGNIR) {
-			wepID = ID_GRAPPLE;
+			wepID = ID_AXE_SHADAXE_CHAINSAW;
 		}
 
 		if (wepID == FALSE) {
@@ -2508,8 +2508,20 @@ void() CycleWeaponCommand = { // [FUNCTION]
 
 		// Has the player got the weapons and ammo to switch?
 		if (inhackbank) {
-			if (wepID == ID_MACE || wepID == ID_ICE || wepID == ID_VOIDSTAFF || wepID == ID_FLAK || wepID == ID_GUNGNIR) {
+			if (wepID == ID_MACE || wepID == ID_ICE
+                || wepID == ID_VOIDSTAFF || wepID == ID_FLAK
+                || wepID == ID_GUNGNIR) {
 				if ((self.moditems & self.weapon) && !am) {
+					W_SetCurrentAmmo (self);
+					dprint("idconversion: ");
+					dprint(ftos(idconversion_x));
+					dprint(" ");
+					dprint(ftos(idconversion_y));
+					dprint("\n");
+					return;
+				}
+			} else if (wepID == ID_AIRGUN) {
+				if ((self.perms & self.weapon) && !am) {
 					W_SetCurrentAmmo (self);
 					dprint("idconversion: ");
 					dprint(ftos(idconversion_x));
@@ -2521,6 +2533,16 @@ void() CycleWeaponCommand = { // [FUNCTION]
 			}
 		} else {
 			if (wepID == ID_RAPIER) {
+				if ((self.moditems & self.weapon) && !am) {
+					W_SetCurrentAmmo (self);
+					dprint("idconversion: ");
+					dprint(ftos(idconversion_x));
+					dprint(" ");
+					dprint(ftos(idconversion_y));
+					dprint("\n");
+					return;
+				}
+			} else if (wepID == ID_SCIMITAR || wepID == ID_SANGUINATORS) {
 				if ((self.moditems & self.weapon) && !am) {
 					W_SetCurrentAmmo (self);
 					dprint("idconversion: ");
@@ -2574,10 +2596,10 @@ void() CycleWeaponReverseCommand = { // [FUNCTION]
 		cyclecheck = cyclecheck + 1;
 		if (cyclecheck > 100) return; // exit gracefully, no runaway loop error
 		if (wepID == ID_GUNGNIR) {
-			wepID = ID_MJOLNIR;
-		} else if (wepID == ID_MJOLNIR) {
 			wepID = ID_WANDCROSS2;
 		} else if (wepID == ID_WANDCROSS2) {
+			wepID = ID_MJOLNIR;
+		} else if (wepID == ID_MJOLNIR) {
 			wepID = ID_CHAINLIGHTNING;
 			if (self.ammo_cells < 1) am = 1;
 		} else if (wepID == ID_CHAINLIGHTNING) {
@@ -2637,20 +2659,20 @@ void() CycleWeaponReverseCommand = { // [FUNCTION]
 			wepID = ID_SUPER_SHOTGUN_WIDOWMAKER_SHOTCYCLER_QUADSHOTTY;
 			if (self.ammo_shells < 1) am = 1; // only checking for 1 shell since autoshotgun/shotcycler might only use 1
 		} else if (wepID == ID_SUPER_SHOTGUN_WIDOWMAKER_SHOTCYCLER_QUADSHOTTY) {
+			wepID = ID_AIRGUN;
+		} else if (wepID == ID_AIRGUN) {
 			wepID = ID_ICE;
 			if (self.ammo_elemental < 1) am = 1;
 		} else if (wepID == ID_ICE) {
-			wepID = ID_AIRGUN;
-		} else if (wepID == ID_AIRGUN) {
 			wepID = ID_SHOTGUN_BLASTER;
 			if (self.ammo_shells < 1) am = 1;
 		} else if (wepID == ID_SHOTGUN_BLASTER) {
 			wepID = ID_MACE;
 		} else if (wepID == ID_MACE) {
-			wepID = ID_AXE_SHADAXE_CHAINSAW;
-		} else if (wepID == ID_AXE_SHADAXE_CHAINSAW) {
 			wepID = ID_GRAPPLE;
 		} else if (wepID == ID_GRAPPLE) {
+			wepID = ID_AXE_SHADAXE_CHAINSAW;
+		} else if (wepID == ID_AXE_SHADAXE_CHAINSAW) {
 			wepID = ID_GUNGNIR;
 			if (self.ammo_voidshards < 1) am = 1;
 		}
@@ -2666,8 +2688,20 @@ void() CycleWeaponReverseCommand = { // [FUNCTION]
 
 		// Has the player got the weapons and ammo to switch?
 		if (inhackbank) {
-			if (wepID == ID_MACE || wepID == ID_ICE || wepID == ID_VOIDSTAFF || wepID == ID_FLAK || wepID == ID_GUNGNIR || wepID == ID_AIRGUN) {
+			if (wepID == ID_MACE || wepID == ID_ICE
+                || wepID == ID_VOIDSTAFF || wepID == ID_FLAK
+                || wepID == ID_GUNGNIR) {
 				if ((self.moditems & self.weapon) && !am) {
+					W_SetCurrentAmmo (self);
+					dprint("idconversion: ");
+					dprint(ftos(idconversion_x));
+					dprint(" ");
+					dprint(ftos(idconversion_y));
+					dprint("\n");
+					return;
+				}
+			} else if (wepID == ID_AIRGUN) {
+				if ((self.perms & self.weapon) && !am) {
 					W_SetCurrentAmmo (self);
 					dprint("idconversion: ");
 					dprint(ftos(idconversion_x));
@@ -2679,6 +2713,16 @@ void() CycleWeaponReverseCommand = { // [FUNCTION]
 			}
 		} else {
 			if (wepID == ID_RAPIER) {
+				if ((self.moditems & self.weapon) && !am) {
+					W_SetCurrentAmmo (self);
+					dprint("idconversion: ");
+					dprint(ftos(idconversion_x));
+					dprint(" ");
+					dprint(ftos(idconversion_y));
+					dprint("\n");
+					return;
+				}
+			} else if (wepID == ID_SCIMITAR || wepID == ID_SANGUINATORS) {
 				if ((self.moditems & self.weapon) && !am) {
 					W_SetCurrentAmmo (self);
 					dprint("idconversion: ");
