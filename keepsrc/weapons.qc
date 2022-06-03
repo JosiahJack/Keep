@@ -43,7 +43,6 @@
 // CycleWeaponCommand - Move forward or backward through active weapons
 // CycleWeaponReverseCommand
 // W_WeaponFrame      - Called every frame, catches impulse event
-// SuperDamageSound   - Plays quad damage sound
 //=============================================================================
 
 entity multi_ent;
@@ -1521,7 +1520,7 @@ void(entity targ) W_SetCurrentAmmo = { // [FUNCTION]
 			}
 		} else if (targ.weapon == IT2_MJOLNIR) {
 			targ.currentammo = targ.ammo_cells;
-			targ.weaponmodel = MODEL_VWEAP_MJOL;
+			targ.weaponmodel = "progs/hipnotic/v_hammer.mdl";
 		} else if (targ.weapon == IT2_CROSS) {
 			targ.weaponmodel =  "progs/drake/v_wand.mdl";
 		} else if (targ.weapon == IT2_GRAPPLE) {
@@ -1699,10 +1698,13 @@ void() W_Attack = { // [FUNCTION]
 		else if (self.weapon == IT_ROCKET_LAUNCHER) {
 			if (self.moditems & IT3_MIRV) {
 				player_bfg1();
-				if (self.ammo_rockets >= COST_MIRV) {
-					W_FireStinger();
-					W_Reload(1.5);
-				} else W_FireRocket();
+				W_Reload(1.5);
+				if (self.mirv1) {
+					dprint("MIRV Split!\n");
+					self.mirv1.delay = time;
+					self.mirv1 = world;
+					self.attack_finished = time + 0.1;
+				} else W_FireStinger();
 			} else {
 				player_rocket1();
 			}
@@ -2714,7 +2716,7 @@ void() CycleWeaponReverseCommand = { // [FUNCTION]
 void() W_WeaponFrame = { // [FUNCTION]
 	if (self.lavaGunFired) {
 		if (self.weapon == IT_LAVA_NAILGUN || self.weapon == IT_LAVA_SUPER_NAILGUN) {
-			sound (self, CHAN_BODY, "rogue/weapons/snail.wav", 1, ATTN_NORM);
+			sound(self, CHAN_BODY, "rogue/weapons/snail.wav", 1, ATTN_NORM); // Hiss!
 		}
 		self.lavaGunFired = 0;
 	}
@@ -2722,59 +2724,44 @@ void() W_WeaponFrame = { // [FUNCTION]
 	if (time < self.attack_finished) {
 		if (!self.button0) {
 			if (!self.b0_click) self.b0_click = 1; // Released button.
-
-			// Check for loose MIRVs.
-			if (self.weapon == IT3_MIRV && self.selfweaponismoditems != 1) Mirv_Use ();
 		}
 		return;
 	}
 
-	ImpulseCommands ();
+	ImpulseCommands();
+	if (self.ammo_poison > 0) W_SetCurrentAmmo (self); // Change crossbow skin if bolts are poisoned
+	if (!self.button0) return; // check for attack
 
-	// Change crossbow skin if bolts are poisoned
-	if (self.ammo_poison > 0) W_SetCurrentAmmo (self);
+	if (self.b0_click) self.b0_click = 2; // Just double-clicked.
 
-	// check for attack
-	if (self.button0) {
-		if (self.b0_click) self.b0_click = 2; // Just double-clicked.
-
-		// originally - SuperDamageSound
-		// Only play one powerup sound at once
-		if (self.super_damage_finished > 0 && self.powerup_sound < time) {
-			if (self.super_sound < time) {
-				self.super_sound = time + 1;
-				self.powerup_sound = time + 1;
-				sound (self, CHAN_BODY, SOUND_ARTQUAD3, 1, ATTN_NORM);
-			}
-		}
-		// Only play one powerup sound at once
-		if (self.sharpshoot_finished > 0 && self.powerup_sound < time) {
-			// Only works with the shotguns
-			if (self.weapon == IT_SHOTGUN || self.weapon == IT_SUPER_SHOTGUN) {
-				if (self.sharpshooter_sound < time) {
-					self.sharpshooter_sound = time + 0.5;
-					// Only play the sound every other shot
-					self.powerup_sound = time + 1;
-					sound (self, CHAN_BODY, SOUND_ARTSHARP3, 1, ATTN_NORM);
-				}
-			}
-		}
-		// Only play one powerup sound at once
-		if (self.nailpiercer_finished > 0 && self.powerup_sound < time) {
-			// Only works with nailgun + super nailgun
-			if (self.weapon == IT_NAILGUN || self.weapon == IT_SUPER_NAILGUN) {
-				if (self.nailpiercer_sound < time) {
-					self.nailpiercer_sound = time + 0.5;
-					self.powerup_sound = time + 1;
-					sound (self, CHAN_BODY, SOUND_ARTNAILP3, 1, ATTN_NORM);
-				}
-			}
-		}
-		// Check for weapon updates
-		W_Attack();
-	} else {
-		if (self.weapon == IT3_MIRV && self.selfweaponismoditems != 1) {
-			if (self.mirv1) Mirv_Use();
+	if (self.super_damage_finished > 0 && self.powerup_sound < time) { // Only play one powerup sound at once
+		if (self.super_sound < time) {
+			self.super_sound = time + 1;
+			self.powerup_sound = time + 1;
+			sound (self, CHAN_BODY, SOUND_ARTQUAD3, 1, ATTN_NORM);
 		}
 	}
+	
+	if (self.sharpshoot_finished > 0 && self.powerup_sound < time) { // Only play one powerup sound at once
+		if (self.weapon == IT_SHOTGUN || self.weapon == IT_SUPER_SHOTGUN) { // Only works with the shotguns
+			if (self.sharpshooter_sound < time) {
+				self.sharpshooter_sound = time + 0.5;
+				self.powerup_sound = time + 1; // Only play the sound every other shot
+				sound (self, CHAN_BODY, SOUND_ARTSHARP3, 1, ATTN_NORM);
+			}
+		}
+	}
+
+	if (self.nailpiercer_finished > 0 && self.powerup_sound < time) { // Only play one powerup sound at once
+		// Only works with nailgun + super nailgun
+		if (self.weapon == IT_NAILGUN || self.weapon == IT_SUPER_NAILGUN) {
+			if (self.nailpiercer_sound < time) {
+				self.nailpiercer_sound = time + 0.5;
+				self.powerup_sound = time + 1;
+				sound (self, CHAN_BODY, SOUND_ARTNAILP3, 1, ATTN_NORM);
+			}
+		}
+	}
+	// Check for weapon updates
+	W_Attack();
 };

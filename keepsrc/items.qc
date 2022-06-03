@@ -86,15 +86,10 @@ void() item_thinkloop = { // [FUNCTION]
 	if (self.attack_finished > time) return; // Has the item been turned off?
 	if (self.item_expired > 0 && self.item_expired < time) remove(self); // Has the item removal timer been reached?
 	
-	if (self.classtype == CT_MJOLNIR) {
-		self.effects = self.effects | EF_DIMLIGHT;
-		if (random() < 0.4) make_glitter();
-		if (random() < 0.2) SpawnProjectileSmoke(self.origin + '0 0 24', 50, 50, 100); 
-		if (random() < 0.2) self.effects = self.effects | EF_MUZZLEFLASH;
-
-		self.frame = self.frame + 1;
-		if (self.frame > 15) self.frame = 0;
-	}
+	// Revisit this once we have an updated model for Mjolnir (the mod, not the weapon, well ok both).
+	//if (self.classtype == CT_MJOLNIR) {
+	//	if (random() < 0.4) make_glitter();
+	//}
 
 	if (self.item_skinanim > 0) {
 		self.item_skincycle = self.item_skincycle + 1;

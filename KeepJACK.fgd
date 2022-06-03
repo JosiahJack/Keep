@@ -614,7 +614,7 @@
 		2 : "Solid Interaction" : 0 : "Solid world interaction"
 	]
 	target(string) : "target(s) fire when used as a viewing camera"
-	mangle(string) : "Mangle (Pitch Roll Yaw)"
+	mangle(string) : "Mangle (Pitch Yaw Roll)"
 	fog_density(integer) : "Fog density (Must be >0 to activate feature)"
 	fog_colour(string) : "Fog colours (def=0.1 0.1 0.1)"
 	speed(integer) : "Fog time to change (def=2s)"
@@ -2168,6 +2168,10 @@
 		2: "Reset Inventory" : 0
 	]
 	map(string) : "Next map name" : : "Leave blank to reload same map"
+	message(string) : "Congratulations text" : : "Leave blank to have default intermission only"
+	message2(string) : "Congratulations text 2nd page"
+	message3(string) : "Congratulations text 3rd page"
+	message4(string) : "Congratulations text 4th page"
 	startspawn2(integer) : "Spawn number in next map (1-7)"
 ]
 @SolidClass base(TrigOFF,Targetname,Target) = trigger_setskill : "Trigger Set Skill" [

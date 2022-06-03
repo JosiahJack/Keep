@@ -63,8 +63,6 @@ float(entity targ, entity inflictor) CanDamage = {
 	traceline(inflictor.origin, targ.origin + '15 -15 0', TRUE, inflictor);
 	if (trace_fraction == 1) return TRUE;
 
-	
-
 	return FALSE; // Couldn't hit
 };
 
@@ -95,8 +93,11 @@ void(entity thekilled, entity attacker) AddToKills = {
     if (thekilled.xfl & XFL_ADD_TO_KILL && self.classtype != CT_MONANACONDACOIL) { // Marked as a countable enemy
         // thekilled.xfl = thekilled.xfl - XFL_ADD_TO_KILL;  // Count only once.  -Qmaster: Nope.  Well, we might have been revived alright, monster_revive should add to the count by 1.
         killed_monsters = killed_monsters + 1;
-		if (killed_monsters > total_monsters) total_monsters = killed_monsters; // Just in case!
         WriteByte (MSG_ALL, SVC_KILLEDMONSTER);
+		if (killed_monsters > total_monsters) {
+			total_monsters = killed_monsters; // Just in case!
+			update_hud_totals(HUD_MONSTERS);
+		}
 
 		// Apply any benefits to the thing that killed us
 		if (attacker) {
@@ -211,7 +212,11 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 		return;
 	}
 
-	if (targ.items2 & IT2_MJOLNIR && targ.weapon == IT2_MJOLNIR && !targ.selfweaponismoditems && (inflictor.classgroup == CG_PROJCELLS || inflictor.classgroup == CG_PROJPLASMAROGUE || attacker.classtype == CT_MONSHAM || attacker.classtype == CT_MONGAUNT)) damage = damage * 0.5; // 50% lightning protection while holding mjolnir
+	if (targ.items2 & IT2_MJOLNIR && targ.weapon == IT2_MJOLNIR && !targ.selfweaponismoditems
+        && (inflictor.classgroup == CG_PROJCELLS || inflictor.classgroup == CG_PROJPLASMAROGUE
+            || attacker.classtype == CT_MONSHAM || attacker.classtype == CT_MONGAUNT)) {
+		damage = damage * 0.5; // 50% lightning protection while holding mjolnir
+	}
 
 	// resist_fire is the odd one out here. There were too many edge cases not handled by classgroups so they exist in individual locations
 

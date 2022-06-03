@@ -38,6 +38,8 @@
 // nearby monsters.  Effective for large groups of fliers.
 //=============================================================================
 
+void() W_FireRocket;
+
 //  Target Selection.  This checks if the target is inside the targeting box.  Attacker must be a client to work properly.  Non-clients that try to use this will likely get a result of FALSE.
  // TRUE = Target is in the box, FALSE = Target is outside.
 float(entity targ, entity client) BfgLock_InSight = { // [FUNCTION]
@@ -76,7 +78,7 @@ float(entity targ, entity sensor, entity attacker) BfgLock_Confirm = { // [FUNCT
     traceline (p1, p2, TRUE, sensor);
     if (trace_fraction < 1) return FALSE;   // Blocked!
     if (trace_inopen && trace_inwater) return FALSE;   // Lock cannot cross contents.
-    if (Ally_Check (targ, attacker)) return FALSE; // Check relations to avoid friendly fire.
+    if (Ally_Check(targ, attacker)) return FALSE; // Check relations to avoid friendly fire.
     return TRUE; // Target is confirmed.
 };
 
@@ -340,6 +342,7 @@ void() Mirv_Payload = { // [FUNCTION]
     qccos = trig_x; // Approximate cos of 10deg
     qcsin = trig_y; // Approximate sin of 10deg
 
+    if (self.tome_finished) loop = loop * 2;
 	// Spawn each payload missile.
     while (loop) {
         if (head) {
@@ -384,10 +387,11 @@ void() Mirv_Touch = { // [FUNCTION]
     if (pointcontents(self.origin) == CONTENT_SKY) {remove (self); return;}
     if (Reflected_Damage (COURAGE_DAMAGE)) return;
 
-    if (self.tome_finished) Mirv_Payload(); // Unleash AreaBlaster payload.
+    Mirv_Payload(); // Unleash AreaBlaster payload.
     self.touch = SUB_Null; // Stack overflow prevention.
     self.enemy = other;
 	if (!self.dmg) self.dmg = 120;
+    if (self.tome_finished) self.dmg = self.dmg * 2;
 	if (self.dmg > 0 && other.health > 0) {
 		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
 		T_RadiusDamage (self, self.owner, self.dmg, other, DAMAGEALL);
@@ -411,21 +415,16 @@ void() Mirv_Touch = { // [FUNCTION]
 
 // This causes to split into multiple small rockets, releasing its payload.
 void() Mirv_Split = { // [FUNCTION]
-    Mirv_Reset ();
+    Mirv_Reset();
     sound (self, CHAN_WEAPON, "drake/weapons/mirv2.wav", 1, ATTN_NORM);
     self.effects = self.effects | EF_MUZZLEFLASH;
-    Mirv_Payload ();
+    Mirv_Payload();
     BecomeExplosion();
 };
 
 // Lets 'self' use a linked MIRV by releasing its payload.
-void() Mirv_Use = { // [FUNCTION]
-    if (self.mirv1) { // Enforce a brief delay so the attacker cannot hit himself with the payload because the MIRV split too close after launch.
-        if (!self.mirv1.th_win) self.mirv1.th_win = Mirv_Split;
-        if (time - self.mirv1.search_time > 0.3) {
-            SUB_ThinkImmediate (self.mirv1, self.mirv1.th_win);
-        } else self.mirv1.delay = time + (time - self.mirv1.search_time); // Can't use it now.  Since attack was released, MIRV will split.  Reducing fuel to ensure the split is an ugly but simple hack.
-    }
+void(float immediate) Mirv_Use = { // [FUNCTION]
+    if (self.mirv1) SUB_ThinkImmediate(self.mirv1, Mirv_Split);
 };
 
 // Missile think.  Attacker guides the MIRV by sight.
@@ -504,14 +503,13 @@ void(vector start, vector dir) Mirv_Launch = { // [FUNCTION]
 	newmis.selfweaponismoditems = self.selfweaponismoditems;
     newmis.think1     = BecomeBigBang;    // Use alternate explosion code.
     newmis.th_win     = Mirv_Split;
-    if (self) self.mirv1 = newmis;
 };
 
 // Called when player launches a MIRV.
 void() W_FireStinger = { // [FUNCTION]
     local vector start;
 
-    if (self.ammo_rockets < COST_MIRV) return;
+    if (self.ammo_rockets < COST_MIRV) { W_FireRocket(); return; }
 
     self.currentammo = self.ammo_rockets = self.ammo_rockets - COST_MIRV; // Cost of admission paid.  Launch the big missile.
     sound (self, CHAN_WEAPON, "drake/weapons/mirv1.wav", 1, ATTN_NORM);
@@ -519,7 +517,8 @@ void() W_FireStinger = { // [FUNCTION]
     makevectors (self.v_angle);
     self.velocity = self.velocity - (v_forward * 100);  // Recoil!
     start = self.origin + self.view_ofs + (v_forward*8) + (v_right*8);
-    Mirv_Launch (start, v_forward);
+    Mirv_Launch(start,v_forward);
+    self.mirv1 = newmis;
 };
 
 // Hydra/Drunk Missiles.  Not part of the MIRVs, but this borrows some code from there.
@@ -528,10 +527,10 @@ void() DrunkRocket_Think = { // [FUNCTION]
 
     if (self.delay <= time) { // Pop when out of fuel.
         self.enemy = world;
-		if (!self.dmg) self.dmg = 120;
+		if (!self.dmg) self.dmg = 140; // Drake had this at 120, increased to improve overall effectiveness.
 		if (self.dmg > 0 && other.health > 0) {
 			T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
-			T_RadiusDamage (self, self.owner, self.dmg, other, DAMAGEALL);
+			T_RadiusDamage(self, self.owner, self.dmg, other, DAMAGEALL);
 			// Rocket resistance is shown with puffs of smoke
 			if (other.resist_rockets > 0 || (other.resist_multi_rockets && self.classgroup == CG_PROJMULTIROCKETS)) {
 				Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_ROCKETS,other.pain_sound,SOUND_RESIST_ROCKET);

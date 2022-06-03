@@ -250,7 +250,8 @@ void(entity source, vector org, float velrnd, float upbase, float uprnd) SpawnPr
 void(entity targ, vector org, vector vel, float part_qty) SpawnBlood = { // [FUNCTION]
 	local float loop_count, part_col;
 
-	if (targ.bleedcolour != targ.bloodtype && !targ.bleedcolour && targ.bloodtype) targ.bleedcolour = targ.bloodtype; // fix it just in case
+	if (targ.bleedcolour <= 0 && targ.bloodtype <= 0) targ.bleedcolour = MON_BCOLOR_RED;
+	else if (targ.bleedcolour != targ.bloodtype && targ.bleedcolour <= 0 && targ.bloodtype > 0) targ.bleedcolour = targ.bloodtype; // fix it just in case
 	else if (targ.bleedcolour != targ.bloodtype && !targ.bloodtype && targ.bleedcolour) targ.bloodtype = targ.bleedcolour;
 
 	loop_count = 0;
@@ -270,9 +271,9 @@ void(entity targ, vector org, vector vel, float part_qty) SpawnBlood = { // [FUN
 	while(loop_count < 4) {
 		if (loop_count == 2 && targ.bloodtype > 0) part_col = targ.bloodtype;
 		if (targ.frozen) {
-			particle (org, vel, 41 + rint(random()*7), part_qty);
-			particle (org, vel, 9 + rint(random()*7), part_qty);
-		} else particle (org, vel, part_col + rint(random()*7), part_qty);
+			particle(org,vel,41,part_qty);
+			particle(org,vel, 9,part_qty);
+		} else particle(org,vel,part_col,part_qty);
 		loop_count = loop_count + 1;
 	}
 };
@@ -316,6 +317,7 @@ void(entity source, entity targ, float side) SpawnMeatSpray = { // [FUNCTION]
 
 	text = string_null;
 	btype = targ.bloodtype;
+	if (targ.bloodtype <= 0) btype = BLOOD_RED;
     if (btype == BLOOD_RED) text = "progs/q15/zom_gib.mdl";
     if (btype == BLOOD_GREEN) text = "progs/drake/gr_gib.mdl";
     if (btype == BLOOD_PURPLE) text = "progs/drake/pur_gib.mdl";
@@ -328,7 +330,7 @@ void(entity source, entity targ, float side) SpawnMeatSpray = { // [FUNCTION]
 	if (targ.bloodtype) {
 		SpawnBlood(targ, org, v_up*2, 100);
 	} else {
-		newmis = spawn ();
+		newmis = spawn();
 		newmis.classtype = CT_TEMPGIB;
 		newmis.classgroup = CG_TEMPENT;
 		newmis.owner = source;
@@ -422,10 +424,14 @@ void(float fx, string m, entity src, vector start, vector end, float length, flo
 	local entity beam, lastbeam;
 	local vector turnangle, midpoint;
 
-	if (fx == TE_BEAM || fx == TE_LIGHTNING1 || fx == TE_LIGHTNING2) { Tent_Beam(fx,src, start,end); return;} // Normal vanilla beams
-	//if (m == "progs/beam.mdl") { Tent_Beam(TE_BEAM,src, start,end); return;} // Vanilla beam
+	if (fx == TE_BEAM || fx == TE_LIGHTNING1 || fx == TE_LIGHTNING2) { Tent_Beam(fx,src, start,end); return;} // Normal vanilla beams, use if src moves!
 	if (!m) { Tent_Beam(TE_BEAM,src, start,end); return;} // Vanilla beam
-	if (num_beams >= MAX_BEAMS) { dprint("Beam effect list overflow! More than 128!\n"); return; } // Exceeded max qc beams
+	if (num_beams >= MAX_BEAMS) { // Exceeded max qc beams
+		dprint("Beam effect list overflow! More than ");
+		dprint(ftos(MAX_BEAMS));
+		dprint("!\n");\
+		return;
+	}
 
 	if (length <= 0) length = 32; // default
 	dist = vlen(end-start);
@@ -461,17 +467,16 @@ void(float fx, string m, entity src, vector start, vector end, float length, flo
 			setorigin(beam,start + (beam.movedir * loop * length));
 			beam.velocity = beam.avelocity = VEC_ORIGIN;
 
-			if (src.classname == "move_rope" && !src.style) {
-				// Use Gyro aerodynamics code to align to movedir facing angle
-				turnangle = vectoangles(beam.movedir);
-				turnangle = turnangle - beam.angles;
-				while (turnangle_x > 180.0) turnangle_x = turnangle_x - 360.0;
-				while (turnangle_x < -180.0) turnangle_x = turnangle_x + 360.0;
-				while (turnangle_y > 180.0) turnangle_y = turnangle_y - 360.0;
-				while (turnangle_y < -180.0) turnangle_y = turnangle_y + 360.0;
-				while (turnangle_z > 180.0) turnangle_z = turnangle_z - 360.0;
-				while (turnangle_z < -180.0) turnangle_z = turnangle_z + 360.0;
-				beam.angles = turnangle;
+			if (!src.style) {
+				// Align to movedir facing angle
+				if (src.flags & FL_CLIENT) {
+					makevectors(src.v_angle);
+					turnangle = v_forward * 32;
+					beam.angles = vectoangles(turnangle);
+				} else {
+					turnangle = vectoangles(beam.movedir);
+					beam.angles = Gyro_Aerodynamics_Turnangle(turnangle,beam.angles);
+				}
 			}
 			beam.oldorigin = beam.origin;
 			if (persistent == BEAM_STATIC) makestatic(beam);

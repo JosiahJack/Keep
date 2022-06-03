@@ -61,20 +61,22 @@ void(float shotcount, vector spread) FireBullets;
 // than 10 frames per second.  Only clients should use this because of
 // intermission and fire button checks, which do not apply to monsters.
 void() Echo_Think = { // [FUNCTION]
-    if ((!intermission_running && !cutscene) && ((self.owner.button0 || self.tome_finished || self.owner.perms & POW_DOUBLE)) && (self.owner.health > 0)) SUB_ThinkImmediate (self.owner, self.think1);
-    remove (self);
+    if ((!intermission_running && !cutscene && !cinematic_running)
+        && ((self.owner.button0 || self.tome_finished || self.owner.perms & POW_DOUBLE))
+        && (self.owner.health > 0)) {
+        SUB_ThinkImmediate(self.owner, self.think1);
+    }
+    remove(self);
 };
 
 // Spawns a dummy entity that will fire a shot for its owner.
 void(float pause, void() thinkst) Echo_Shot = { // [FUNCTION]
-    local   entity  echo;
-
-    echo = spawn();
-    echo.owner      = self;
-    echo.nextthink  = time + pause;
-    echo.think      = Echo_Think;
-    echo.think1     = thinkst;
-    echo.tome_finished  = self.tome_finished;
+    newmis = spawn();
+    newmis.owner         = self;
+    newmis.nextthink     = time + pause;
+    newmis.think         = Echo_Think;
+    newmis.think1        = thinkst;
+    newmis.tome_finished = self.tome_finished;
 };
 
 //  Archer Knight Arrows
@@ -156,19 +158,19 @@ void() AkArrow_Think = { // [FUNCTION]
 };
 
 void(vector start, vector dir, float type) AkArrow_Launch = { // [FUNCTION]
-    newmis = spawn ();
+    newmis = spawn();
 	newmis.classgroup = CG_PROJALL;
-    newmis.master       = newmis.owner        = self;
-    newmis.movetype     = MOVETYPE_FLYMISSILE;
-    newmis.solid        = SOLID_BBOX;
-    newmis.classname    = "arrow";
-    newmis.movedir      = dir;
-	newmis.speed        = AKARROW_SPEED_FLY;
-	newmis.velocity     = dir * newmis.speed;
-    newmis.avelocity    = '0 0 0';
-    newmis.avelocity_z  = newmis.speed;     // Makes arrow model spiral.
-    newmis.angles       = vectoangles(newmis.velocity);
-    newmis.dest         = dir;      // for 'spawn_touchblood'.
+    newmis.master = newmis.owner = self;
+    newmis.movetype   = MOVETYPE_FLYMISSILE;
+    newmis.solid      = SOLID_BBOX;
+    newmis.classname  = "arrow";
+    newmis.movedir    = dir;
+	newmis.speed      = AKARROW_SPEED_FLY;
+	newmis.velocity   = dir * newmis.speed;
+    newmis.avelocity  = '0 0 0';
+    newmis.avelocity_z = newmis.speed;     // Makes arrow model spiral.
+    newmis.angles     = vectoangles(newmis.velocity);
+    newmis.dest       = dir;      // for 'spawn_touchblood'.
 
 	// Hexen2 Damage: green = 5-7, red = 8-12, gold = 13-17.  For Quake, do x*3 so that orange = 15-20, gold = 25-35, blue = 40-50.  Update/Drake:  Green = 9, Red = 18, Yellow/Orange = 30.
     if (type & 2) { // Energy arrow.
@@ -251,9 +253,11 @@ float(entity targ, entity inflictor, entity attacker, float damage, vector spot,
     // Ghost touch code must be called before calling this function if ghosts are to be hit.
     traceline (spot, end, FALSE, inflictor); // 3rd was TRUE.
     if (trace_ent == targ) {
-        // Draw from source point to target point, except for players.  For players, draw from target point to source point because engine always draws from origin in case of player.
-        if (targ.flags & FL_CLIENT) Tent_Beam (TE_LIGHTNING2, targ, end, spot);
-        else Tent_Beam (TE_LIGHTNING2, targ, spot, end);
+        // Draw from source point to target point, except for players.  For
+        // players, draw from target point to source point because engine
+        // always draws from origin in case of player.
+        if (targ.flags & FL_CLIENT) Tent_Beam(TE_LIGHTNING2, targ, end, spot);
+        else Tent_Beam(TE_LIGHTNING2, targ, spot, end);
 
         if (bang == 2) sound (inflictor, CHAN_VOICE, "weapons/lstart.wav", 1, ATTN_NORM);
         else if (bang) sound (inflictor, CHAN_VOICE, "weapons/lhit.wav", 1, ATTN_NORM);
@@ -277,8 +281,12 @@ void(entity inflictor, entity attacker, float damage, entity ignore, vector spot
     saved = world;
     head = findradius (spot, radius);
     while (head) { // Notarget/stealth won't save you from discharge.  Don't waste hits on immune targets, though.
-        if (head.takedamage == DAMAGE_AIM && head != attacker && head != ignore && head.resist_cells < 1 && !(nofriendlyfire && Ally_Check(head,attacker))) {
-			// Go to the trouble of zapping live, highly vulnerable targets first instead of dead or resistant targets.
+        if (head.takedamage == DAMAGE_AIM && head != attacker
+            && head != ignore && head.resist_cells < 1
+            && !(nofriendlyfire && Ally_Check(head,attacker))
+            && Align_Opposing(head,attacker)) {
+			// Go to the trouble of zapping live, highly vulnerable targets
+            // first instead of dead or resistant targets.
 			if (head.deadflag || (head.health <= 0) || (head.resist_cells > 0)) { // Dead or resistant -- save it for later.
 				head.chain2 = saved;
 				saved = head;
@@ -1128,7 +1136,7 @@ void() Thor_Discharge = { // [FUNCTION]
     newmis.solid    = SOLID_NOT;
     newmis.think    = Thor_Pulse;
     setall (newmis, "", '0 0 0', '0 0 0', self.origin);
-    SUB_ThinkImmediate (newmis, Thor_Pulse);
+    SUB_ThinkImmediate(newmis, Thor_Pulse);
     MakeFancy (self.origin, X56_PLASMA_BLUE, 6); // Spawn a second entity for the explosion sprite.
 };
 
@@ -1150,7 +1158,7 @@ void() Thor_Remove = { // [FUNCTION]
 				if (!thor.selfweaponismoditems && thor.weapon == IT2_MJOLNIR) { // Hammer selected, so restore weapon model and ammo.
 					if (thor.attack_finished < time + 0.2) thor.attack_finished = time + 0.2; // Delay next attack a bit so player doesn't throw immediately.
 					if (cutscene) thor = find (world, classname, "dummy"); // If TRUE, update dummy, not camera.
-					thor.weaponmodel = MODEL_VWEAP_MJOL;
+					thor.weaponmodel = "progs/hipnotic/v_hammer.mdl";
 				}
             }
         }
@@ -1171,8 +1179,8 @@ void() Thor_Touch = { // [FUNCTION]
     local float damage, dmg1, dmg2;
     local entity  swap;
 
-    if (other == self.master) { Thor_Remove (); return; } // Returned to attacker, so simply catch the hammer.
-    if (Reflected ()) return;
+    if (other == self.master) { Thor_Remove(); return; } // Returned to attacker, so simply catch the hammer.
+    if (Reflected()) return;
 
     if (self.owner == self.master) { // Bounce straight back.
         self.movedir = self.movedir * -1;
@@ -1182,17 +1190,17 @@ void() Thor_Touch = { // [FUNCTION]
     self.enemy = self.owner = other;
     if (other && other.takedamage) { // Hammers do not draw blood like edged weapons, so no spawn_touchblood. After all, this is why clerics in AD&D can use only blunt weapons. Hammer in melee may draw blood, but not when thrown.
         damage = 50;
-        if (other.classname == "monster_zombie") damage = other.health + 10;
+        if (other.classname == "monster_zombie") damage = other.health + fabs(other.gibhealth * 1.1);
         sound (self, CHAN_WEAPON, "zombie/z_hit.wav", 1, ATTN_NORM);
-        T_Damage (other, self, self.master, damage, DAMARMOR);
+        T_Damage(other, self, self.master, damage, DAMARMOR);
         if (self.ammo_cells > 0) {
             damage = self.dmg * 0.7;
             damage = damage * 1.5;
-            org = Midpoint (self.master);
+            org = Midpoint(self.master);
             if (vlen(self.origin - org) > damage + 40) { // Discharge.
                 self.ammo_cells = 0;
                 dmg1 = (0.8 + random()*0.2) * self.dmg; // Combine two different sources of damage into one. dmg1 = Splash damage, dmg2 = Discharge.
-                if (Ally_Check (other, self.master)) { // Unlike plasma, this explosion discharges not once, but twice.
+                if (!Align_Opposing(other, self.master)) { // Unlike plasma, this explosion discharges not once, but twice.
                     dmg2 = 0;   // Discharge would not hit target.
                 } else {
                     dmg2 = self.dmg;
@@ -1200,19 +1208,19 @@ void() Thor_Touch = { // [FUNCTION]
                 }
 
                 // Send monsters flying.
-                T_Damage (other, self, self.master, dmg1 + dmg2, DAMARMOR);
+                T_Damage(other, self, self.master, dmg1 + dmg2, DAMARMOR);
                 if (!other.bossflag && (other.health > 0) && other != self.master) {
 					damage_attacker = self.master;
 					damage_velocity = VEC_ORIGIN;
-					other.health = -99;
+					other.health = other.health - other.max_health + other.gibhealth - 1;
 					Killed(other,self.master);
 				}
-                T_RadiusDamage (self, self.master, damage, other, DAMAGEALL);
+                T_RadiusDamage(self,self.master,damage,other,DAMAGEALL);
 
 				// Don't move sprite back because hammer is still there.
-                sound (self, CHAN_AUTO, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
-                Rocket_Explosion2 (self.origin, 244, 3);
-                Thor_Discharge();    // Spawn new, separate explosion entity.
+                sound(self, CHAN_AUTO, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
+                Rocket_Explosion2(self.origin, 244, 3);
+                Thor_Discharge(); // Spawn new, separate explosion entity.
                 if (self.master.tome_finished) {
                     ShockWave (self.origin + '0 0 4', RING_BLUE, 6, "progs/drake/s_wave.spr",FALSE);
                     swap = self;
@@ -1250,7 +1258,7 @@ void(entity targ) Thor_Fly = { // [FUNCTION]
     ang = self.angles; // Temporarily set angles to the direction the missile is traveling.
     self.angles = vectoangles (self.movedir);
     diff = ang_x - self.angles_x;
-    Missile_Seek (targ); // Update velocity and angles based on missile angles.
+    Missile_Seek(targ); // Update velocity and angles based on missile angles.
     self.angles_x = anglemod (self.angles_x + diff); // Restore pitch to what it should be now.
     if (self.angles_x >= 180) self.angles_x = self.angles_x - 360;
 };
@@ -1259,11 +1267,8 @@ void(entity targ) Thor_Fly = { // [FUNCTION]
 void() Thor_Think =[ 0, Thor_Think ] { // [FUNCTION]
     local entity targ;
 
-    self.frame = self.frame + 1;
-    if (self.frame > 15) self.frame = 0;
-
     if (self.master.hammer_finished < time) { // Time's up, return to attacker now!
-        Thor_Poof ();
+        Thor_Poof();
         return;
     }
 
@@ -1304,9 +1309,9 @@ void(vector start, vector dir, entity targ) Thor_Launch = { // [FUNCTION]
     newmis.think        = Thor_Think;
 	newmis.classgroup	= CG_WEAPON;
     newmis.frame = 1;
-    setmodel (newmis,"progs/madfox/thr0wham.mdl");//"progs/drake/throwham.mdl");
-    setsize (newmis, '0 0 0', '0 0 0');        
-    setorigin (newmis, start);
+    setmodel(newmis,"progs/drake/throwham.mdl");
+    setsize(newmis, '0 0 0', '0 0 0');        
+    setorigin(newmis, start);
 
     if (self.flags & FL_CLIENT) { // Update attacker.
         if (self.ammo_cells >= COST_MJOLNIR) {   
@@ -1326,15 +1331,16 @@ entity() W_ThorTarget = { // [FUNCTION]
     local   float   best, dist, dot;
     local   vector  org, spot, vec, vx;
 
-    if (self.flags & FL_CLIENT) makevectors (self.v_angle);
-    else makevectors (self.angles);
+    if (self.flags & FL_CLIENT) makevectors(self.v_angle);
+    else makevectors(self.angles);
     vx = v_forward;
     org = self.origin + self.view_ofs;
     targ = world;
     best = 10000000;
-    head = findradius (org, 2000); // Don't give hammer more range.
+    head = findradius(org,2000); // Don't give hammer more range.
     while (head) {
-        if ((head.modelindex) && (!(head.flags & FL_NOTARGET)) && (head.flags & FLx_CREATURE) && (head.health > 0) && (head.solid >= SOLID_BBOX) &&(!Ally_Check (head, self))) {
+        if (head.modelindex && !(head.flags & FL_NOTARGET) && (head.flags & FLx_CREATURE)
+            && head.health > 0 && head.solid >= SOLID_BBOX && Align_Opposing(head, self)) {
             spot = Midpoint (head);
             traceline (org, spot, TRUE, self);
             if (trace_fraction == 1) {
@@ -1368,7 +1374,7 @@ void() W_FireThor = { // [FUNCTION]
     if (self.hammer_finished) return; // No hammer!
     if (!HasPowerToThrow ()) return; // No ammo or power!
 
-    targ = W_ThorTarget ();      // This calls 'makevectors (self.v_angle)'.
+    targ = W_ThorTarget();      // This calls 'makevectors (self.v_angle)'.
     sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
     Thor_Launch(self.origin + '0 0 12', v_forward, targ); // We can throw.
 };
@@ -1481,7 +1487,7 @@ void() HIP_FireMjolnirShockwave = { // [FUNCTION]
 		fr = 4;
 	}
     ShockWave(spot + '0 0 4', wc, fr, "progs/drake/s_wave.spr",FALSE);
-    T_RadiusDamage (wave, self, damage, self,DAMAGEALL);
+    T_RadiusDamage(wave, self, damage, self,DAMAGEALL);
     if (self.tome_finished) { // Spawn mini-slam effects with Tome of Power. Do after radius damage so dead things won't be targeted.
         if (pointcontents (spot) > CONTENT_WATER) BurstLit_Chain(wave,self,30,self,spot,'1 350 4',2); // No discharge for you!
         Divine_Wrath(1,1);
@@ -1518,7 +1524,7 @@ void(entity inflictor, float radius) StaticField = { // [FUNCTION]
         if (head.flags & FLx_CREATURE)  // Don't zap objects.
         if (head.health > 0)
         if (head.solid > SOLID_NOT)     // So DarkPlaces won't gib the fallen.
-        if (!Ally_Check (head, self)) { // Zap only enemies.
+        if (Align_Opposing(head, self)) { // Zap only enemies.
             if (CanDamage (head, inflictor)) {
                 p2 = Midpoint (head);
                 p2 = p2 - 8*normalize(p2 - p1);
@@ -1551,8 +1557,8 @@ void() HIP_SlamMjolnir = { // [FUNCTION]
 
 		Quake_Spawn(self,800,10,trace_endpos,TRUE,2,VEC_QUAKE);
 		HIP_FireMjolnirLightning(); dprint("Slam safe\n");
-		Divine_Wrath (hits, 2);     // Do after Hip lightning.
-		if (!lightzero_finished) sound (world, CHAN_AUTO, "drake/bane/thunder.wav", 1, ATTN_NONE);
+		Divine_Wrath(hits, 2); // Do after Hip lightning.
+		if (!lightzero_finished) sound(world,CHAN_AUTO,"drake/bane/thunder.wav",1,ATTN_NONE);
         if (self.tome_finished) StaticField(self,400); // Soften 'em up before delayed smashing. Was 500.
 		W_Reload(1.5);
     } else HIP_FireMjolnirShockwave(); // Mini-slam.
@@ -1561,42 +1567,32 @@ void() HIP_SlamMjolnir = { // [FUNCTION]
 float() Hip_ThrewMjolnir = { // [FUNCTION]
 	if (self.hammer_finished) return TRUE;
 	if ((world.hipnoticoptions & HIPNOTIC_OLDMJOLNIR) && !self.tome_finished) return FALSE;
-	if (self.button0 && HasPowerToThrow()) {W_FireThor();  return TRUE;} // Throw if player has the juice.
+	if (HasPowerToThrow()) {W_FireThor();  return TRUE;} // Throw if player has the juice.
     return FALSE;
 };
 
 // PM:  Called on third frame of attack, before the slam on the fourth.
 float() HIP_ThrowMjolnir = { // [FUNCTION]
     local vector org, source;
-    local float damage, frac, stat;
+    local float damage, stat;
 
-    if (frame_pause()) return 0; // Not while viewing through a cam.
-	if (!self.tome_finished) return FALSE;
+	if ((world.hipnoticoptions & HIPNOTIC_OLDMJOLNIR) && !self.tome_finished) return FALSE;
 
     source = self.origin + '0 0 16';
     makevectors (self.v_angle);
-    // PM:  Distance of 32 is obnoxiously short.  Use normal axe range if slam is not desired.
-    if (self.button0 || (self.ammo_cells < COST_MJOLNIR)) {
-		damage = 64;
-		frac = 0.5;
-	} else {
-		damage = 32;
-		frac = 1;
-	}
-
-    traceline (source, source + v_forward*damage, FALSE, self);
-    org = trace_endpos - v_forward*4;
+    traceline(source,source + v_forward * 64,FALSE,self);
+    org = trace_endpos - v_forward * 4;
     if (trace_ent.takedamage) {
         stat = 0;
 		damage = 50;
 		if ((trace_ent.classgroup == CG_ZOMBIE) && trace_ent.classname != "monster_mummy") damage = trace_ent.max_health * 2;
-		sound (self, CHAN_WEAPON, "zombie/z_hit.wav", 1, ATTN_NORM);
-		SpawnBlood (trace_ent, org, '0 0 50', damage);
-		T_Damage (trace_ent, self, self, damage, DAMARMOR); // As a blessed artifact of the gods, use scar damage.
+		sound(self, CHAN_WEAPON, "zombie/z_hit.wav", 1, ATTN_NORM);
+		SpawnBlood(trace_ent,org,'0 0 50',damage);
+		T_Damage(trace_ent, self, self, damage, DAMARMOR);
 		if (random() < 0.2) stat = 1; // Multiple procs are checked independently of each other, and may activate simultaneously.
 		if (random() < 0.1) { // Thunderstorm proc.
-			if (!Divine_Wrath (3, 1)) stat = stat + 1; // 3 shots, 1 sec of darkness.
-		} else Divine_Wrath (1, 1);
+			if (!Divine_Wrath(3, 1)) stat = stat + 1; // 3 shots, 1 sec of darkness.
+		} else Divine_Wrath(1, 1);
 
 		if (stat) {
 			stat = stat + 1;
@@ -1604,20 +1600,20 @@ float() HIP_ThrowMjolnir = { // [FUNCTION]
 			StaticField(trace_ent,stat);
 		}
         return TRUE;
-    } else if (trace_fraction != 1.0) { // Hit wall
+    } else if (trace_fraction < 1.0) { // Hit wall
         if (other.solid == SOLID_BSP && trace_plane_normal * '0 0 1' > COS45) { HIP_SlamMjolnir (); return TRUE; } // Check for premature hit on the ground.
 
         sound (self, CHAN_WEAPON, "hipnotic/weapons/mjoltink.wav", 1, ATTN_NORM);
-        Tent_Point (TE_GUNSHOT, org);
+        Tent_Point(TE_GUNSHOT, org);
         return TRUE;
     } else { // Whiff
 		if (!(self.flags & FL_CLIENT)) { // Frikbot code!  Emulate a double-click, since required timing varies.
-			if (random() < (skill * 0.1 + 0.7)) self.b0_click = 2; // Frikbot tries to throw hammer.  With lag, enforce a chance of failure.
+			if (random() < (skill * 0.1 + 0.7)) return FALSE; // Frikbot tries to throw hammer.  With lag, enforce a chance of failure.
 		}
         self.attack_finished = self.attack_finished + 0.1;  // Update 12/11/09:  T+0.6+0.1=T+0.7.  Changed rate in impulse.qc.
         return Hip_ThrewMjolnir(); // Aww yeah!
     }
-	return 0;
+	return FALSE;
 };
 
 // Super Grenades from Drake
@@ -2002,9 +1998,9 @@ void(vector p1, vector p2, entity attacker, float damage, entity inflictor, floa
 		setorigin(newent,p1);
 		stemp = self;
 		self = newent;
-		Ember_Shower (2);
-		self.think      = SUB_Remove;
-		self.nextthink  = time + 0.1;
+		Ember_Shower(2);
+		self.think = SUB_Remove;
+		self.nextthink = time + 0.1;
 		self = stemp;
 	}
 };

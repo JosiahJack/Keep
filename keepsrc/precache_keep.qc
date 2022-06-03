@@ -189,7 +189,7 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/hipnotic/playham.mdl"); // player with the hammer
 	precache_model("progs/quoth/v_ham.mdl"); //warhammer from quoth
 	precache_model("progs/drake/v_wand.mdl");
-	//precache_model("progs/drake/throwham.mdl");
+	precache_model("progs/drake/throwham.mdl");
 	precache_model("progs/drake/s_wave.spr");
 	precache_model("progs/drake/rocket1.mdl");
 	precache_model("progs/ad171/proj_bolt1.mdl");
@@ -206,7 +206,6 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/zom_gib.mdl");
 	precache_model("progs/drake/gr_gib.mdl");
 	precache_model("progs/drake/pur_gib.mdl");
-	precache_model("progs/drake/ember.mdl");
 	precache_model("progs/drake/s_spark.spr");
 	precache_model("progs/drake/acidbal1.mdl");
 	precache_model("progs/drake/s_fancy.spr");
@@ -278,6 +277,7 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_sound("rogue/sphere/sphere.wav");
 	precache_model("progs/hipnotic/s_bullet.spr");
 	precache_model(MODEL_PROJ_HKN);
+	precache_model("progs/q15/zom_gib.mdl");
 	precache_aoa();
 	precache_poisongibs();
 };

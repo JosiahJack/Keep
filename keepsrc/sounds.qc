@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 53
-// Function count: 10
+// Function count: 9
 //
 // Implements: Ambient Sounds and Triggerable Sound Effects
 //
@@ -501,14 +501,6 @@ void() ambient_custom_chime = { // [ENTITY]
 	if (!self.waitmin) self.waitmin = 10 + random()*10;
 	if (!self.waitmin2) self.waitmin2 = -1;
 	ambient_custom_sound(); // Back into main function
-};
-
-void() SuperDamageSound = { // [FUNCTION]
-    if (self.super_damage_finished >= time) return;
-	if (self.super_sound >= time) return;
-
-	self.super_sound = time + 1;
-	sound (self, CHAN_BODY, "items/damage3.wav", 1, ATTN_NORM);
 };
 
 void() ambient_drain = { // [ENTITY]

@@ -777,6 +777,7 @@ float(entity targ, entity attacker) Divine_Trace = { // [FUNCTION]
 	if (targ.health <= 0) return FALSE;
 	if (!targ.solid) return FALSE;
 	if (!targ.modelindex) return FALSE;
+    if (!Align_Opposing(attacker,targ)) return FALSE;
 
 	traceline(attacker.origin + attacker.view_ofs, targ.origin + targ.view_ofs, TRUE, attacker); // Sees through monsters.
 	if (trace_fraction != 1) return FALSE;
@@ -821,7 +822,7 @@ float(float shots, float dur) Divine_Wrath = { // [FUNCTION]
     hits = 0;
     head = nextent (world);
     while (head) {
-        if (Divine_Trace (head, self)) {
+        if (Divine_Trace(head, self)) {
             dir = normalize (head.origin - self.origin);
             if (dir * vx > 0.7071) { // Must be within fov 90.
 				// Send a bolt down.  Proxy damage due to divine intervention.

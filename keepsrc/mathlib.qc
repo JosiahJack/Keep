@@ -39,13 +39,13 @@
 
 // for speed...
 float pi = 3.14159265; // Pie, endless pie! (well okay not so endless, only 8 slices to share)
-float OneEightyOverPi = 57.29577; // Convert to degrees, multiply by this
-float PiOverOneEighty = 0.017453; // Convert to radians, multiply by this 
-float SQRT2 = 1.4142;   // The square root of 2.
-float COS30   = 0.866; // Handy performance helpers
-float COS45   = 0.7071; // to save time
-float COS60   = 0.5; // and money!
-float() crandom = { return 2*(random() - 0.5); };
+float OneEightyOverPi = 57.295779; // Convert to degrees, multiply by this
+float PiOverOneEighty =  0.017453; // Convert to radians, multiply by this 
+float SQRT2           =  1.414214; // The square root of 2.
+float COS30           =  0.866025; // Handy performance helpers
+float COS45           =  0.707107; // to save time
+float COS60           =  0.500000; // and money!
+float() crandom = { return 2*(random() - 0.5); }; // Random between -1.0 and 1.0
 void(entity ent, string text) Safe_stuffcmd;
 
 // You can set the accuracy of mathlib by changing this value.

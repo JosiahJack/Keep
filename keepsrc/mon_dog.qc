@@ -431,15 +431,8 @@ void() monster_dog = {
 	self.blockudeath = TRUE;			// No humanoid death sound
 	self.meleeoffset = '24 0 10';		// Bite attack offset
 	self.mass = MASS_LIGHT;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "") self.deathstring = " was mauled by a Rottweiler\n";
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
 
 	// Default jump forward/up distance
 	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '300 0 200';

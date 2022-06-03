@@ -197,14 +197,12 @@ void(entity targ, vector org, vector vel, float damage, float type, string hitso
 		Resist_Sound(targ,hitsound); // Always play stone smack sound
 		if (random() < 0.5) Tent_Point(TE_SPIKE,org); // Particle impact
 		else Tent_Point(TE_GUNSHOT,org); 
-
-		if (random() < 0.5) SpawnProjectileSmoke(org, 200, 50, 150); // Random chance of smoke/dust projectile
 	}
 
 	if (type == AM_SHELLS) {
 		if (targ.resist_shells < 1){
 			Resist_Sound(targ,hitsound); // Only play pain sound if we can still get hurt slightly
-			SpawnBlood (targ, org, vel*0.2, rint(damage*targ.resist_shells)); // Drastically reduced blood particles
+			SpawnBlood(targ, org, vel*0.2, rint(damage*targ.resist_shells)); // Drastically reduced blood particles
 		}
 		if (random() < 0.3) {
 			if (random() < 0.5) Tent_Point(TE_SPIKE,org);

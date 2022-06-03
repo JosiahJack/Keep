@@ -504,7 +504,7 @@ void() weapon_axe = {
 };
 
 void() weapon_mjolnir = {
-	item_setupmodel(MODEL_GWEAP_MJOL,0);
+	item_setupmodel("progs/hipnotic/g_hammer.mdl",0);
 	self.weapon = IT2_MJOLNIR;
 	self.classtype = CT_MJOLNIR;
 	if (self.netname == "") self.netname = "Mjolnir's Hammer";

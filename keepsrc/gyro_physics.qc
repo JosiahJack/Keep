@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 37
+// Function count: 38
 //
 // Implements: Gyro Physics Systems API functions
 //
@@ -330,11 +330,25 @@ void(entity e, float resforce, float mod_air, float mod_water, float mod_slime, 
 //----- Give an Object Globally-Defined Motion Resistance --------------------
 void(entity e, float resforce) Gyro_Object_SetResistance = { Gyro_Object_SetResistanceMod(e, resforce, GYRO_RESISTANCEMOD_AIR, GYRO_RESISTANCEMOD_WATER, GYRO_RESISTANCEMOD_SLIME, GYRO_RESISTANCEMOD_LAVA); };
 
+// Seperated this out as its own function for reuse by the rope system. -Qmaster
+vector(vector moveangle, vector angles) Gyro_Aerodynamics_Turnangle = {
+	local vector turnangle;
+
+	turnangle = moveangle - angles;
+	while (turnangle_x > 180.0) turnangle_x = turnangle_x - 360.0;
+	while (turnangle_x < -180.0) turnangle_x = turnangle_x + 360.0;
+	while (turnangle_y > 180.0) turnangle_y = turnangle_y - 360.0;
+	while (turnangle_y < -180.0) turnangle_y = turnangle_y + 360.0;
+	while (turnangle_z > 180.0) turnangle_z = turnangle_z - 360.0;
+	while (turnangle_z < -180.0) turnangle_z = turnangle_z + 360.0;
+	return turnangle;
+};
+
 //===== Aerodynamics Subsystem ====================
 //----- Per-Frame Aerodynamic Rotation --------------------
 void(entity e) Gyro_RunPhysics_Aerodynamics = {
-	local float		movespeed, aeropower, avelmult, adampmult;
-	local vector	moveangle;
+	local float	movespeed, aeropower, avelmult, adampmult;
+	local vector turnangle, moveangle;
 
 	if (e.gyro_object_aerodynamics == 0) return;
 	if (e.velocity == '0 0 0') return;
@@ -360,14 +374,7 @@ void(entity e) Gyro_RunPhysics_Aerodynamics = {
 	adampmult = 1.0 / ((movespeed * aeropower * 0.2) + 1.0);
 	
 	//----- Subtract Actual Angles from Movement Angles --------------------
-	local vector	turnangle;
-	turnangle = moveangle - e.angles;
-	while (turnangle_x > 180.0) turnangle_x = turnangle_x - 360.0;
-	while (turnangle_x < -180.0) turnangle_x = turnangle_x + 360.0;
-	while (turnangle_y > 180.0) turnangle_y = turnangle_y - 360.0;
-	while (turnangle_y < -180.0) turnangle_y = turnangle_y + 360.0;
-	while (turnangle_z > 180.0) turnangle_z = turnangle_z - 360.0;
-	while (turnangle_z < -180.0) turnangle_z = turnangle_z + 360.0;
+	turnangle = Gyro_Aerodynamics_Turnangle(moveangle,e.angles);
 	
 	//----- Compute and Set Angular Velocity --------------------
 	e.gyro_avelocityeffect = e.gyro_avelocityeffect + (turnangle * avelmult * GYRO_TICKRATE);

@@ -60,6 +60,7 @@ float(entity ent) QuakeHurts = { // [FUNCTION]
 	if (ent.movetype == MOVETYPE_FLYMISSILE) return FALSE;
 	if (ent.flags & FL_FLY) return FALSE;
 	if (ent.wing_finished) return FALSE; // Boots provide stability.
+    if (!Align_Opposing(self,ent)) return FALSE;
 	return TRUE;
 };
 
@@ -104,7 +105,10 @@ void() Quake_Think = [0, Quake_Think] { // [FUNCTION]
             if ((head != self.owner || !self.style) && QuakeHurts(head)) { // Safe or blessed.
                 damage = magnitude * dist;
                 if (damage || (head.flags & FL_MONSTER)) { // 5/7/2009:  Call damage function only if there's damage or target is a monster.  Monsters may flinch from zero damage, and flinching works well for disorientation effects.
-					if (self.count == 1 || self.count == 3 || self.count == 6 || self.count == 10 || self.count == 15) T_Damage(head, self, self.owner, damage, DAMARMOR);
+					if (self.count == 1 || self.count == 3 || self.count == 6
+                        || self.count == 10 || self.count == 15) {
+                        T_Damage(head,self,self.owner,damage,DAMARMOR);
+                    }
 				}
 
 				// Add movement.

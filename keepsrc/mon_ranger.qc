@@ -213,7 +213,7 @@ float() RangerCheckAttack_II =
 // If controlling a MIRV, use it if it is near the enemy.
     if (self.mirv1)
         if (vlen(self.mirv1.origin - spot2) < 500)
-            Mirv_Use ();
+            Mirv_Use();
 
 // missile attack
     if (time < self.attack_finished)
@@ -832,14 +832,12 @@ float(float dist) RangerUse_Nailgun =
     return FALSE;   // No compelling reason to use instead of shotgun.
 };
 
-void() ranger_fire =
-{
+void() ranger_fire = {
     local   vector  p1, p2;
     local   float   dist, shot;
 
     self.punked = FALSE;
-    Mirv_Use ();    // FIXME:  Split mirvs?
-
+    Mirv_Use();
     p1 = self.origin + '0 0 16';
     p2 = Midpoint (self.enemy);
     dist = vlen(p2 - p1);

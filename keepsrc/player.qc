@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 297
+// Function count: 298
 //
 // Implements: Player Model Animation and Weapon Firing Passthrough
 //
@@ -49,6 +49,14 @@ void (float tomefinTime) W_FireThunderbolt;
 void(float cnt, float ox) W_FireLavaSpikes;
 void() W_FireProximityGrenade;
 void() misc_bubble_bob;
+
+void() SuperDamageSound = { // [FUNCTION]
+    if (self.super_damage_finished >= time) return;
+	if (self.super_sound >= time) return;
+
+	self.super_sound = time + 1;
+	sound (self,CHAN_BODY,SOUND_ARTQUAD3,1,ATTN_NORM);
+};
 
 float() frame_pause = { return (intermission_running > 0 || cinematic_running > 0 || cutscene); }; // [FUNCTION]
 
@@ -420,7 +428,7 @@ void() player_tbolt = { // [FUNCTION]
     } else {
 		if (self.weaponframe == 5) self.weaponframe = FIRE_WEAPON_FRAME;
     }
-    SuperDamageSound ();
+    SuperDamageSound();
 
 	if (self.tome_finished) W_FireThunderbolt (TRUE);
 	else					W_FireThunderbolt (FALSE);
@@ -484,7 +492,6 @@ void() player_bfg6 =[ 112, player_run   ] {}; // [FUNCTION]
 void() player_grenreset   =[107, player_grenade2  ] { // [FUNCTION] 
 	if (!frame_pause()) self.weaponframe=FIRE_WEAPON_FRAME;
 };
-
 
 void() player_grenade1   =[107, player_grenade2  ] { // [FUNCTION]
 	if (frame_pause()) return;
@@ -561,6 +568,7 @@ void() player_xbow3 =[106,player_run] { if (frame_pause()) return; self.weaponfr
 void() player_hammer4t =[ 122,  player_hammer5  ] { playham_frame(35,4);}; // [FUNCTION]
 void() player_mjolnir4t=[ 134, player_mjolnir5 ] { playham_frame(41,4);}; // [FUNCTION]
 
+// Mjolnir no cells simple swing
 void () player_hammer1 = [ 32.000, player_hammer2 ] { playham_frame(32,1); self.nextthink = time + 0.05;}; // [FUNCTION]
 void () player_hammer2 = [ 33.000, player_hammer3 ] { playham_frame(33,2); self.nextthink = time + 0.05;}; // [FUNCTION]
 void () player_hammer3 = [ 34.000, player_hammer4 ] { // [FUNCTION]
@@ -574,6 +582,7 @@ void () player_hammer4 = [ 35.000, player_hammer5 ] { if (!frame_pause()) playha
 void () player_hammer5 = [ 36.000, player_hammer6 ] { if (!frame_pause()) playham_frame(36,4); self.nextthink = time + 0.05;}; // [FUNCTION]
 void () player_hammer6 = [ 37.000, player_run ] { if (!frame_pause()) playham_frame(37,0); self.nextthink = time + 0.05; }; // [FUNCTION]
 
+// Mjolnir standard throw
 void () player_mjolnir1 = [ 38.000, player_mjolnir2 ] { if (!frame_pause()) playham_frame(38,1); }; // [FUNCTION]
 void () player_mjolnir2 = [ 39.000, player_mjolnir3 ] { if (!frame_pause()) playham_frame(39,2); }; // [FUNCTION]
 void () player_mjolnir3 = [ 40.000, player_mjolnir4 ] { // [FUNCTION]

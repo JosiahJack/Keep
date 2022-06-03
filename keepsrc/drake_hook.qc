@@ -245,7 +245,7 @@ void() GrappleService = { // [FUNCTION]
 		}
 
         // just draw a line to the hook
-        if (vlen(self.hook.origin - self.origin) > HOOK_NEAR) QC_ParseBeam(0,"progs/beam.mdl", self.hook, self.hook.origin, self.origin + '0 0 16', 31);
+        if (vlen(self.hook.origin - self.origin) > HOOK_NEAR) QC_ParseBeam(TE_BEAM,"",self.hook,(self.origin + '0 0 16'),self.hook.origin,31);
         if (!self.button0 && self.weapon == IT2_GRAPPLE && !self.selfweaponismoditems) GrappleSever(self.hook);
         return;
     } // From here on, we know the hook is attached to something.
@@ -293,5 +293,5 @@ void() GrappleService = { // [FUNCTION]
         targ.flags = targ.flags - (targ.flags & FL_ONGROUND);
     }
 
-    if (vlen(self.hook.origin - self.origin) > HOOK_NEAR) QC_ParseBeam(0,"progs/beam.mdl", self.hook, self.hook.origin, self.origin + '0 0 16', 31);
+    if (vlen(self.hook.origin - self.origin) > HOOK_NEAR) QC_ParseBeam(TE_BEAM,"", self.hook,(self.origin + '0 0 16'),self.hook.origin, 31);
 };

@@ -290,7 +290,7 @@ float   BARON_AIR   = 3;
 float   BARON_WATER = 4;
 
 float   COST_MIRV = 5;
-void() Mirv_Use;
+void(float immediate) Mirv_Use;
 .float rate2; // mirv.qc (Update: ...and hydra.qc)
 entity shot_head; // Used for explosive shell chain list.
 entity lightning; // This is an edict set aside for the sole purpose of referencing reflected lightning bolts.

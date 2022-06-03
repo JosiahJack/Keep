@@ -553,7 +553,7 @@ entity(float findopposing) SeeTarget = { // [FUNCTION]
 
 	if (self.enemymaxdist == TRUE || self.attack_sniper) dist = 8192; // yikes
 	head = world;
-	head = findradius (self.origin,dist);
+	head = findradius(self.origin,dist);
 	while (head) {
 		if ((!(head.flags & FL_NOTARGET) && ((head.flags & FLx_CREATURE) || (head.classtype == CT_SOUL && self.classtype == CT_MONWRAITHNEHAHRA && self.alpha < 1)) && head.invisible_finished < time)) {
 			if (head.classtype == CT_SOUL && self.classtype == CT_MONWRAITHNEHAHRA && self.alpha < 1 && !self.enemy) return head;

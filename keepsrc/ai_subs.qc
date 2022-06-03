@@ -395,12 +395,12 @@ void() ai_melee = {
 	if (!CanDamage (self.enemy, self)) return;
 
 	ldmg = (random() + random() + random()) * 3;
-	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
+	T_Damage(self.enemy, self, self, ldmg, DAMARMOR);
 
 	// Only spawn blood/gore/sound every second
 	if (self.meleetimer < time) {
 		self.meleetimer = time + 1;
-		SpawnMeatSpray (self, self.enemy, random() * 100);
+		SpawnMeatSpray(self, self.enemy, random() * 100);
 	}
 
 	// Check for poisonous blades!
@@ -528,21 +528,20 @@ void(vector imp_vec, float imp_damage, float imp_radius, float imp_forward, floa
 	while(sjump) {
 		// Ignore monster (self)
 		if (sjump != self) {
-			// Check for player + blast belt? - play active sound
-			if (sjump.flags & FL_CLIENT && sjump.moditems & IT_ARTBLASTBELT)
-				PlayBlastBeltSound(sjump);
+			// Check for equipped with blast belt? - play active sound
+			if (sjump.flags & FLx_CREATURE && sjump.moditems & IT_ARTBLASTBELT) PlayBlastBeltSound(sjump);
 			// Only affect players and other monsters AND breakables (BSP+model)
-			else if (sjump.flags & FL_CLIENT || sjump.flags & FL_MONSTER || sjump.classgroup == CG_BREAKABLE) {
+			else if (sjump.flags & FLx_CREATURE || sjump.classgroup == CG_BREAKABLE) {
 				// Exclude breakable/pushable immune to monster damage
 				// This does not catch breakables excluded from player damage
-				if (ai_immunebreakable(self, sjump)) {
+				if (ai_immunebreakable(self,sjump)) {
 					dprint("[SHOCKWAVE] Breakable (");
 					dprint(ftos(sjump.classtype));
 					dprint(") spnflg ("); dprint(ftos(sjump.spawnflags));
 					dprint(") Immune\n");
 				}
 				// Exclude statues, stone/heavy monsters and bosses!
-				else if (sjump.classgroup != CG_STONE && sjump.bossflag == FALSE) {
+				else if (sjump.classgroup != CG_STONE && sjump.bossflag == FALSE && sjump.mass < MASS_SUPER) {
 					// Is the entity on the ground or a breakable?
 					// The test for breakables exceptions is done earlier
 					// Breakable bmodel/model don't have onground flag set

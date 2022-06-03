@@ -116,81 +116,85 @@ void (vector org, vector dir) launch_lava_spike = { // [FUNCTION]
 	newmis.velocity = (dir * 1000.000);
 };
 
-void () MiniGrenadeExplode = { // [FUNCTION]
+void() MiniGrenadeExplode = { // [FUNCTION]
 	if ( (self.owner.classname == "player") ) T_RadiusDamage (self,self.owner,90.000,world,DAMAGEALL);
 	else T_RadiusDamage (self,self.owner,60.000,world,DAMAGEALL);
 
-	WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST,TE_EXPLOSION);
-	WriteCoord (MSG_BROADCAST,self.origin_x);
-	WriteCoord (MSG_BROADCAST,self.origin_y);
-	WriteCoord (MSG_BROADCAST,self.origin_z);
-	BecomeExplosion ();
+	WriteByte(MSG_BROADCAST,SVC_TEMPENTITY);
+	WriteByte(MSG_BROADCAST,TE_EXPLOSION);
+	WriteCoord(MSG_BROADCAST,self.origin_x);
+	WriteCoord(MSG_BROADCAST,self.origin_y);
+	WriteCoord(MSG_BROADCAST,self.origin_z);
+	BecomeExplosion();
 };
 
-void (float offsetAngle) MiniGrenadeLaunch = { // [FUNCTION]
-	local entity missile;
+void(float offsetAngle) MiniGrenadeLaunch = { // [FUNCTION]
 	local float tempRand;
 
-	missile = spawn ();
-	missile.classgroup = CG_PROJGRENADES;
-	missile.owner = self.owner;
-	missile.movetype = MOVETYPE_BOUNCE;
-	missile.solid = SOLID_BBOX;
-	missile.classname = "MiniGrenade";
-	missile.v_angle = self.v_angle;
-	missile.v_angle_y = (missile.v_angle_y + offsetAngle);
-	makevectors (missile.v_angle);
-	missile.velocity = ((v_forward * 100.000) + (v_up * 400));
+	newmis = spawn ();
+	newmis.classgroup = CG_PROJGRENADES;
+	newmis.owner = self.owner;
+	newmis.alignment = self.alignment;
+	newmis.movetype = MOVETYPE_BOUNCE;
+	newmis.solid = SOLID_BBOX;
+	newmis.classname = "MiniGrenade";
+	newmis.v_angle = self.v_angle;
+	newmis.v_angle_y = (newmis.v_angle_y + offsetAngle);
+	makevectors (newmis.v_angle);
+	newmis.velocity = ((v_forward * 100.000) + (v_up * 400));
 	tempRand = ((crandom () * 60.000) - 30);
-	missile.velocity = (missile.velocity + (tempRand * v_forward));
+	newmis.velocity = (newmis.velocity + (tempRand * v_forward));
 	tempRand = ((crandom () * 40) - 20.000);
-	missile.velocity = (missile.velocity + (tempRand * v_right));
+	newmis.velocity = (newmis.velocity + (tempRand * v_right));
 	tempRand = ((crandom () * 60.000) - 30);
-	missile.velocity = (missile.velocity + (tempRand * v_up));
-	missile.avelocity = '300.000 300.000 300.000';
-	missile.angles = vectoangles (missile.velocity);
-	missile.touch = MultiGrenadeTouch;
-	setmodel (missile,"progs/rogue/mervup.mdl");
-	setsize (missile,VEC_ORIGIN,VEC_ORIGIN);
-	setorigin (missile,self.origin);
-	missile.nextthink = ((time + TRUE) + (crandom () * 0.500));
-	missile.think = MiniGrenadeExplode;
-	missile.th_die = MiniGrenadeExplode;
-	Gyro_Object_Activate(missile,MASS_MINIGRENADE);
-	Gyro_Object_SetBouyancy(missile,BOUY_MINIGRENADE);
-	Gyro_Object_SetResistance(missile,RESIST_MINIGRENADE); // Sluggish in liquids
+	newmis.velocity = (newmis.velocity + (tempRand * v_up));
+	newmis.avelocity = '300.000 300.000 300.000';
+	newmis.angles = vectoangles (newmis.velocity);
+	newmis.touch = MultiGrenadeTouch;
+	setmodel (newmis,"progs/rogue/mervup.mdl");
+	setsize (newmis,VEC_ORIGIN,VEC_ORIGIN);
+	setorigin (newmis,self.origin);
+	newmis.nextthink = ((time + TRUE) + (crandom () * 0.500));
+	newmis.think = MiniGrenadeExplode;
+	newmis.th_die = MiniGrenadeExplode;
+	Gyro_Object_Activate(newmis,MASS_MINIGRENADE);
+	Gyro_Object_SetBouyancy(newmis,BOUY_MINIGRENADE);
+	Gyro_Object_SetResistance(newmis,RESIST_MINIGRENADE); // Sluggish in liquids
 };
 
-void () MultiGrenadeExplode = { // [FUNCTION]
-	MiniGrenadeLaunch (FALSE);
-	MiniGrenadeLaunch (72.000);
-	MiniGrenadeLaunch (144.000);
-	MiniGrenadeLaunch (216.000);
-	MiniGrenadeLaunch (288.000);
+void() MultiGrenadeExplode = { // [FUNCTION]
+	MiniGrenadeLaunch(FALSE);
+	if (self.lefty) newmis.nextthink = time + 0.15;
+	MiniGrenadeLaunch(72.000);
+	if (self.lefty) newmis.nextthink = time + 0.15;
+	MiniGrenadeLaunch(144.000);
+	if (self.lefty) newmis.nextthink = time + 0.15;
+	MiniGrenadeLaunch(216.000);
+	if (self.lefty) newmis.nextthink = time + 0.15;
+	MiniGrenadeLaunch(288.000);
+	if (self.lefty) newmis.nextthink = time + 0.15;
 	remove(self);
 };
 
-void () MultiGrenadeTouch = { // [FUNCTION]
+void() MultiGrenadeTouch = { // [FUNCTION]
    if (other == self.owner) return;
 
-   if ( (other.takedamage == DAMAGE_AIM) ) {
-      if ( (self.classname == "MiniGrenade") ) {
-         MiniGrenadeExplode ();
+   if (other.takedamage == DAMAGE_AIM) {
+      if (self.classname == "MiniGrenade") {
+         MiniGrenadeExplode(); // Do the split grenade's explode.
       } else {
-         if ( (self.owner.classname == "player") ) {
-            GrenadeExplode ();
-         } else {
-            MiniGrenadeExplode ();
-         }
+         if (self.owner.classname == "player") {
+			self.lefty = TRUE;
+            MultiGrenadeExplode(); // Split and near insta-explode.
+         } else MiniGrenadeExplode(); // Monster grenade, forgiving.
       }
-      return ;
+      return;
    }
-   sound (self,CHAN_WEAPON,"weapons/bounce.wav",TRUE,ATTN_NORM);
+   sound(self,CHAN_WEAPON,"weapons/bounce.wav",TRUE,ATTN_NORM);
    if (self.velocity == VEC_ORIGIN) self.avelocity = VEC_ORIGIN;
 };
 
-void () MultiRocketExplode = { // [FUNCTION]
+void() MultiRocketExplode = { // [FUNCTION]
    local float damg;
 
    if (self.owner.classtype == CT_MONGREMLIN) damg = 30 + random()*10;
@@ -235,66 +239,66 @@ void () HomingMissileAcquire = { // [FUNCTION]
    self.velocity = aim (self,1000.000);
    self.velocity = (self.velocity * 1000.000);
    aimangle = (self.origin + self.velocity);
-   traceline (self.origin,aimangle,FALSE,self);
+   traceline(self.origin,aimangle,FALSE,self);
    if ( (trace_fraction < TRUE) ) {
-      if ( (trace_ent.flags & FL_MONSTER) ) {
+      if ((trace_ent.flags & FLx_CREATURE) && Align_Opposing(self,trace_ent)) {
          self.enemy = trace_ent;
-         HomingMissileThink ();
+         HomingMissileThink();
          return;
       }
    }
    self.velocity = oldVelocity;
-   self.v_angle = vectoangles (self.velocity);
+   self.v_angle = vectoangles(self.velocity);
    self.angles = self.v_angle;
    self.think = HomingMissileAcquire;
    self.nextthink = (time + 0.200);
 };
 
 void (float offset, float frameNum) MultiRocketLaunch = { // [FUNCTION]
-   local entity missile;
    local vector aimangle;
 
-   missile = spawn ();
-   missile.owner = self;
-	missile.classgroup = CG_PROJROCKETS;
-   missile.movetype = MOVETYPE_FLYMISSILE;
-   missile.solid = SOLID_BBOX;
-   missile.classname = "MultiRocket";
-   missile.delay = (time + MOVETYPE_STEP);
-   missile.frame = frameNum;
-   missile.touch = MultiRocketTouch;
-   if ( (deathmatch || coop) ) {
-      setmodel (missile,"progs/rockup_d.mdl");
+   newmis = spawn ();
+   newmis.owner = self;
+   newmis.alignment = self.alignment;
+   newmis.classgroup = CG_PROJROCKETS;
+   newmis.movetype = MOVETYPE_FLYMISSILE;
+   newmis.solid = SOLID_BBOX;
+   newmis.classname = "MultiRocket";
+   newmis.delay = (time + MOVETYPE_STEP);
+   newmis.frame = frameNum;
+   newmis.touch = MultiRocketTouch;
+   if (deathmatch || coop) {
+      setmodel(newmis,"progs/rockup_d.mdl");
    } else {
-      setmodel (missile,"progs/rockup.mdl");
+      setmodel(newmis,"progs/rockup.mdl");
    }
-   setsize (missile,VEC_ORIGIN,VEC_ORIGIN);
-   setorigin (missile,((self.origin + (v_forward * FL_CLIENT)) + '0.000 0.000 16.000'));
-   if ( (coop || deathmatch) ) {
+   setsize(newmis,VEC_ORIGIN,VEC_ORIGIN);
+   setorigin(newmis,((self.origin + (v_forward * FL_CLIENT)) + '0.000 0.000 16.000'));
+   if (deathmatch || coop) {
       aimangle = self.v_angle;
       aimangle_y = (aimangle_y + (offset * 0.660));
-      makevectors (aimangle);
-      missile.velocity = aim (self,1000.000);
-      missile.velocity = (missile.velocity * 1000.000);
-      missile.angles = vectoangles (missile.velocity);
-      missile.think = MultiRocketExplode;
-      missile.nextthink = (time + 4);
+      makevectors(aimangle);
+      newmis.velocity = aim(self,1000.000);
+      newmis.velocity = (newmis.velocity * 1000.000);
+      newmis.angles = vectoangles(newmis.velocity);
+      newmis.think = MultiRocketExplode;
+      newmis.nextthink = time + 4;
    } else {
-      makevectors (self.v_angle);
-      missile.velocity = ((v_forward * 1000.000) - ((v_right * offset) * FL_CLIENT));
-      missile.angles = vectoangles (missile.velocity);
-      missile.v_angle = self.v_angle;
-      aimangle = (missile.origin + missile.velocity);
-      traceline (missile.origin,aimangle,FALSE,self);
-      if ( (trace_fraction < TRUE) ) {
-         if ( (trace_ent.flags & FL_MONSTER) ) {
-            missile.enemy = trace_ent;
-            missile.think = HomingMissileThink;
+      makevectors(self.v_angle);
+      newmis.velocity = ((v_forward * 1000.000) - ((v_right * offset) * FL_CLIENT));
+      newmis.angles = vectoangles(newmis.velocity);
+      newmis.v_angle = self.v_angle;
+      aimangle = (newmis.origin + newmis.velocity);
+      traceline (newmis.origin,aimangle,FALSE,self);
+      if (trace_fraction < TRUE) {
+         if ((trace_ent.flags & FLx_CREATURE) && Align_Opposing(self,trace_ent)) {
+            newmis.enemy = trace_ent;
+            newmis.think = HomingMissileThink;
             return ;
          }
       }
-      missile.think = HomingMissileAcquire;
-      missile.nextthink = (time + 0.100);
+      newmis.think = HomingMissileAcquire;
+      newmis.nextthink = time + 0.1;
    }
 };
 
@@ -334,26 +338,27 @@ void (vector p1, vector p2, entity from, float damage) PlasmaDamage = { // [FUNC
    }
 };
 
-void (entity current, float doDamage) PlasmaDischarge = { // [FUNCTION]
+void (entity current) PlasmaDischarge = { // [FUNCTION]
 	float dmg;
-   WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-   WriteByte (MSG_BROADCAST,TE_LIGHTNING2);
-   WriteEntity (MSG_BROADCAST,current);
-   WriteCoord (MSG_BROADCAST,current.origin_x);
-   WriteCoord (MSG_BROADCAST,current.origin_y);
-   WriteCoord (MSG_BROADCAST,current.origin_z);
-   WriteCoord (MSG_BROADCAST,self.origin_x);
-   WriteCoord (MSG_BROADCAST,self.origin_y);
-   WriteCoord (MSG_BROADCAST,self.origin_z);
-   sound (self,CHAN_VOICE,"weapons/lhit.wav",TRUE,ATTN_NORM);
-   if ( (doDamage == TRUE) ) {
+
+	if (!current) return;
+
+	WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST,TE_LIGHTNING2);
+	WriteEntity (MSG_BROADCAST,current);
+	WriteCoord (MSG_BROADCAST,current.origin_x);
+	WriteCoord (MSG_BROADCAST,current.origin_y);
+	WriteCoord (MSG_BROADCAST,current.origin_z);
+	WriteCoord (MSG_BROADCAST,self.origin_x);
+	WriteCoord (MSG_BROADCAST,self.origin_y);
+	WriteCoord (MSG_BROADCAST,self.origin_z);
+	sound (self,CHAN_VOICE,"weapons/lhit.wav",TRUE,ATTN_NORM);
 	if (self.owner.classtype == CT_MONGREMLIN) {
 		dmg = 20;
 	} else {
 		dmg = 50;
 	}
-      PlasmaDamage (self.origin,current.origin,self,dmg);
-   }
+	PlasmaDamage(self.origin,current.origin,self,dmg);
 };
 
 void () PlasmaGroundOut = { // [FUNCTION]
@@ -367,16 +372,17 @@ void () PlasmaGroundOut = { // [FUNCTION]
    while ( (monstersHit < 5) ) {
       if ( ((current.flags & FL_MONSTER) || (current.classname == "player")) ) {
          if ( (current != self.owner) ) {
-            traceline (self.origin,current.origin,TRUE,world);
-            if ( (trace_fraction == TRUE) ) {
-               monstersHit = (monstersHit + TRUE);
-               PlasmaDischarge (current,TRUE);
-            }
+			if (Align_Opposing(self.owner,current)) {
+            	traceline(self.origin,current.origin,TRUE,world);
+				if (trace_fraction == 1.0) {
+					monstersHit = monstersHit + 1;
+					PlasmaDischarge(current);
+				}
+			}
          }
       }
       current = current.chain;
-      if ( ((start == current) || !current) )
-         return ;
+      if (start == current || !current) return;
    }
 };
 

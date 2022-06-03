@@ -208,7 +208,29 @@ void() CycleIntermissionCamera = {
 		self.button0 = self.button1 = self.button2 = 0;
 		if (intermission_running != INTERMISSION_CAMERA) {
 			self.waitmin = time + 1;
-			if (time > intermission_exittime) FinishIntermissionCamera ();
+			if (time > intermission_exittime) {
+				if (self.enemy) {
+					if (self.enemy.message != "") {
+						self.waitmin = time + 2;
+						WriteByte(MSG_ALL,SVC_FINALE);
+						WriteString(MSG_ALL,self.enemy.message);
+						if (self.enemy.message2 != "") {
+							self.enemy.message = self.enemy.message2;
+							self.enemy.message2 = "";
+						} else if (self.enemy.message3 != "") {
+							self.enemy.message = self.enemy.message3;
+							self.enemy.message3 = "";
+						} else if (self.enemy.message4 != "") {
+							self.enemy.message = self.enemy.message4;
+							self.enemy.message4 = "";
+						} else self.enemy = world;
+					} else {
+						FinishIntermissionCamera();
+					}
+				} else {
+					FinishIntermissionCamera();
+				}
+			}
 		}
 	}
 	// check for attack button to switch cameras
@@ -223,8 +245,12 @@ void() CycleIntermissionCamera = {
 };
 
 void() StartIntermissionCamera = {
+	local entity changeleveltrig;
+	
+	changeleveltrig = self;
 	if (camera_ent) {
 		self = client_ent; // Switch self to client (stored when client is setup)
+		self.enemy = changeleveltrig;
 		
 		// Switch on notarget so monsters don't attack player.  Add god mode to prevent any damage, is reset on map change
 		self.flags = self.flags + (FL_NOTARGET || FL_GODMODE);
@@ -257,5 +283,5 @@ void() StartIntermissionCamera = {
 		// Check if end of map intermission is really running?  Can enter this function via camera test mode (impulse xxx)
 		if (intermission_running == 0) intermission_running = INTERMISSION_CAMERA;
 		else intermission_running = INTERMISSION_ACTIVE;
-	} else FinishIntermissionCamera (); // If camera entity not setup, go straight to next map
+	} else FinishIntermissionCamera(); // If camera entity not setup, go straight to next map
 };

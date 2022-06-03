@@ -1450,6 +1450,7 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade = { //
 	
 	newmis = spawn();
 	newmis.owner = self;
+	newmis.alignment = self.alignment;
 	newmis.classname = "proj_grenade";	// obj name, not really used anymore
 	newmis.classtype = proj_type;		// Class type number, quick identity
 	newmis.classgroup = CG_PROJGRENADES;	// Ammo type
@@ -1488,6 +1489,7 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade = { //
 		setmodel(newmis, "progs/rogue/mervup.mdl");
 		newmis.touch = MultiGrenadeTouch;
 		newmis.think = MultiGrenadeExplode;
+		newmis.lefty = FALSE;
 		newmis.nextthink = time + 1;
 		newmis.classname = "MultiGrenade";
 	}
@@ -1561,6 +1563,7 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade = { //
 		setmodel(newmis, MODEL_PROJ_GRENADEMULTI);
 		newmis.touch = MultiGrenadeTouch;
 		newmis.think = MultiGrenadeExplode;
+		newmis.lefty = FALSE;
 		newmis.nextthink = time + 1;
 		newmis.classname = "MultiGrenade";
 	} else if (proj_type == CT_PROJ_GLMONPROX) {
@@ -1584,7 +1587,7 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade = { //
 		newmis.think = SUB_Remove;
 		newmis.bodyfadeaway = TRUE;
 	}
-
+	
 	newmis.mangle = dir;	// Save for later
 	newmis.velocity = newmis.mangle; // Standard projectile setup (origin, size and velocity)
 	newmis.avelocity = avel;
@@ -1739,6 +1742,7 @@ void (vector org, vector vec, float light) HIP_LaunchLaser = { // [FUNCTION]
 	newmis = spawn ();
 	newmis.classgroup = CG_PROJALL;
 	newmis.owner = newmis.master = self;
+	newmis.alignment = self.alignment;
 	if (newmis.master.tome_finished) newmis.tome_finished = TRUE;
 	newmis.classname = "hiplaser";
 	newmis.lastvictim = self;
@@ -1817,12 +1821,16 @@ void () HIP_LightningThink = { // [FUNCTION]
 		cur_dist = self.distance;
 		head = findradius (self.owner.origin,self.distance);
 		while ( head ) {
-			if ( (!(head.flags & FL_NOTARGET) && ((head.flags & FL_MONSTER) || (head.flags & FL_CLIENT))) ) {
-				if ( ((visible (head) && (head != self.owner.owner) && (head != self.owner)) && (head.health > FALSE)) ) {
-					head_dist = vlen ((head.origin - self.lastvictim.origin));
-					if ( ((head_dist < cur_dist) && (head.struck_by_mjolnir == FALSE)) && !Ally_Check(head,self.owner) && !Ally_Check(head,self.owner.owner)) {
-						selected = head;
-						cur_dist = head_dist;
+			if (!(head.flags & FL_NOTARGET) && (head.flags & FLx_CREATURE)) {
+				if (Align_Opposing(self,head)) {
+					if (head != self.owner.owner && head != self.owner && head.health > 0) {
+						if (visible(head)) {
+							head_dist = vlen(head.origin - self.lastvictim.origin);
+							if ( ((head_dist < cur_dist) && (head.struck_by_mjolnir == FALSE)) && !Ally_Check(head,self.owner) && !Ally_Check(head,self.owner.owner)) {
+								selected = head;
+								cur_dist = head_dist;
+							}
+						}
 					}
 				}
 			}
@@ -1894,25 +1902,25 @@ void (entity prev, entity own, float dst) HIP_SpawnMjolnirLightning = { // [FUNC
 };
 
 void () HIP_SpawnMjolnirBase = { // [FUNCTION]
-   local entity light;
+	local entity light;
 
 	if (self.tome_finished) { Thor_Slam(30,80); return;}
 
-   light = spawn ();
-   light.origin = trace_endpos;
-   light.flags = FALSE;
-   light.owner = self;
-   light.struck_by_mjolnir = TRUE;
-   light.think = SUB_Remove;
-   light.nextthink = (time + TRUE);
-   sound (light,CHAN_AUTO,"hipnotic/weapons/mjolslap.wav",TRUE,ATTN_NORM);
-   sound (light,CHAN_WEAPON,"hipnotic/weapons/mjolhit.wav",TRUE,ATTN_NORM);
-   makevectors (self.v_angle);
-   light.movedir = v_forward;
-   HIP_SpawnMjolnirLightning (light,light,350.000);
-   HIP_SpawnMjolnirLightning (light,light,350.000);
-   HIP_SpawnMjolnirLightning (light,light,350.000);
-   HIP_SpawnMjolnirLightning (light,light,350.000);
+	light = spawn ();
+	light.origin = trace_endpos;
+	light.flags = FALSE;
+	light.owner = self;
+	light.struck_by_mjolnir = TRUE;
+	light.think = SUB_Remove;
+	light.nextthink = (time + TRUE);
+	sound (light,CHAN_AUTO,"hipnotic/weapons/mjolslap.wav",TRUE,ATTN_NORM);
+	sound (light,CHAN_WEAPON,"hipnotic/weapons/mjolhit.wav",TRUE,ATTN_NORM);
+	makevectors (self.v_angle);
+	light.movedir = v_forward;
+	HIP_SpawnMjolnirLightning(light,light,350.000);
+	HIP_SpawnMjolnirLightning(light,light,350.000);
+	HIP_SpawnMjolnirLightning(light,light,350.000);
+	HIP_SpawnMjolnirLightning(light,light,350.000);
 	ShockWave(trace_endpos + '0 0 4',RING_BLUE,6,"progs/drake/s_wave.spr",FALSE);
 };
 
@@ -1923,10 +1931,10 @@ void () HIP_FireMjolnirLightning = { // [FUNCTION]
       cells = self.ammo_cells;
       self.ammo_cells = FALSE;
       discharged = TRUE;
-      T_RadiusDamage (self,self,(35.000 * cells),world, DAMAGEALL);
+      T_RadiusDamage(self,self,(35.000 * cells),world, DAMAGEALL);
       discharged = FALSE;
-      W_SetCurrentAmmo (self);
-      return ;
+      W_SetCurrentAmmo(self);
+      return;
    }
    self.ammo_cells = (self.ammo_cells - 15.000);
    self.currentammo = (self.currentammo - 15.000);

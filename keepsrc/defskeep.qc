@@ -301,7 +301,6 @@ string MODEL_GWEAP_LNG = "progs/g_lava.mdl";
 string MODEL_GWEAP_LSNG = "progs/g_lava2.mdl";
 string MODEL_GWEAP_PROX = "progs/hipnotic/g_prox.mdl";
 string MODEL_GWEAP_LASER = "progs/hipnotic/g_laserg.mdl";
-string MODEL_GWEAP_MJOL = "progs/madfox/g_hamer.mdl"; //"progs/hipnotic/g_hammer.mdl";
 string MODEL_GWEAP_WAND= "progs/drake/g_wand.mdl";
 string MODEL_VWEAP_LAVANG = "progs/v_lava.mdl";			// Lava nailgun
 string MODEL_VWEAP_LAVASNG = "progs/v_lava2.mdl";		// Lava Super Nailgun
@@ -309,7 +308,6 @@ string MODEL_VWEAP_MULTG = "progs/v_multi.mdl";			// Multi-Grenade Launcher
 string MODEL_VWEAP_MULTR = "progs/v_multi2.mdl";		// Multi-Rocket Launcher
 string MODEL_VWEAP_PLASM = "progs/v_plasma2.mdl";		// Plasma Gun
 string MODEL_VWEAP_PROX = "progs/hipnotic/v_prox.mdl";			// Proximity Gun
-string MODEL_VWEAP_MJOL = "progs/madfox/v_hamer.mdl"; //"progs/hipnotic/v_hammer.mdl";			// Mjolnir
 string MODEL_VWEAP_LCAN = "progs/hipnotic/v_laserg.mdl";			// Laser Cannon
 string MODEL_PROJ_GRENADEMULTI = "progs/rogue/mervup.mdl";			// Multi-Grenade for Monsters
 string SOUND_ARTPSHIELD1 = "rogue/shield/pickup.wav";			// Pickup
@@ -600,7 +598,7 @@ float AF_END   =  2.00000;
 .entity owner2;
 .float projectile_type;
 float num_beams;
-float MAX_BEAMS = 128; // Engine side is only 24!!!! What the heck???
+float MAX_BEAMS = 256; // Engine side is only 24!!!! What the heck???
 float frame_pause();
 .entity buddy;
 .vector r_wall;

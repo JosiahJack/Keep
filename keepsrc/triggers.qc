@@ -702,11 +702,13 @@ void() trigger_changelevel_finish = { // [FUNCTION]
 	if (deathmatch) intermission_exittime = time + 5; // enforce a wait time before allowing changelevel
 	else intermission_exittime = time + 2;
 
-	WriteByte (MSG_ALL, SVC_CDTRACK);		// Update CD track
-	WriteByte (MSG_ALL, SVC_UPDATESTAT);	// Update stats, total kills etc
-	WriteByte (MSG_ALL, SVC_UPDATESTAT);	// Update twice?
+	update_hud_totals(HUD_MONSTERS);	// Make screen total is correct
+	update_hud_totals(HUD_SECRETS);		// Update monsters and secrets
+	WriteByte(MSG_ALL,SVC_CDTRACK);		// Update CD track
+	WriteByte(MSG_ALL,SVC_UPDATESTAT);	// Update stats, total kills etc
+	WriteByte(MSG_ALL,SVC_UPDATESTAT);	// Update twice?
 	StartIntermissionCamera();				// Setup intermission camera(s)
-	WriteByte (MSG_ALL, SVC_INTERMISSION);	// Start intermission (lock movement)
+	WriteByte(MSG_ALL,SVC_INTERMISSION);	// Start intermission (lock movement)
 };
 
 void() trigger_changelevel_fire = { // [FUNCTION]

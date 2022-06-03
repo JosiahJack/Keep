@@ -38,7 +38,6 @@
 
 float(float yaw, float dist) noclip_move;
 void(float dist) noclip_goal;
-void SuperDamageSound ();
 float(entity ent, vector spot, float damage) HasReflection;
 
 //----------------------------------WAND MATHS---------------------------------
