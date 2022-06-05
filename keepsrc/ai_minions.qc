@@ -67,7 +67,7 @@ void(entity msource, float countupd) update_minioncount = {
 	if (!msource.minion_active) return;
 	// Add to the active minion counters (check range limits)
 	msource.minion_count = msource.minion_count + countupd;
-	if (msource.minion_count < 0) msource.minion_count = 0;
+	msource.minion_count = SUB_ClampFloat(msource.minion_count,0,msource.minion_count); // Only prevent negative.
 	if (msource.minion_count > msource.minion_maxcount) msource.minion_count = msource.minion_maxcount;
 
 	// Check for trigger events (ignore death triggers)

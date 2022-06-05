@@ -778,12 +778,9 @@ void() monster_karasu = {
 	self.stepc4 = "redfield/karasu/armor4.wav";
 	self.stepc5 = "redfield/karasu/armor5.wav";
 	self.steptype = FS_TYPECUSTOM;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.resist_rockets = self.resist_nails = 0.5; 
 	self.reflectnails = TRUE;		// Reflect nail projectiles	
-
 	self.th_checkattack = KarasuCheckAttack;
 	self.th_stand = karasu_idleb1;
 	self.th_walk = karasu_walk1;

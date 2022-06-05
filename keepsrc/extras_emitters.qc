@@ -583,12 +583,12 @@ void() emitter_init = { // [FUNCTION]
 	}
 	
 	self.state = FORWARD;// spin this way
-	if ((!self.wait || self.wait < 0) && self.wait != -1) self.wait = 0.1;
-	if (self.wait2 < 0) self.wait2 = 0;
+	if (self.wait <= 0 && self.wait != -1) self.wait = 0.1;
+	self.wait2 = SUB_ClampFloat(self.wait2,0,self.wait2);
 	
 	// wait2 has to be greater than wait if defined
 	if (self.wait != -1) {
-		if (self.wait2 && (self.wait2 < self.wait)) {
+		if (self.wait2 > 0 && self.wait2 < self.wait) {
 			t = self.wait;
 			self.wait = self.wait2;
 			self.wait2 = t;
@@ -596,10 +596,8 @@ void() emitter_init = { // [FUNCTION]
 	}
 	
 	// cap the horizontal angle
-	if (self.h1 > 360) self.h1 = 360;
-	if (self.h1 < 0) self.h1 = 0;
-	if (self.h2 < 0) self.h2 = 0;// ignored
-	if (self.h2 > 360) self.h2 = 360;
+	self.h1 = SUB_ClampFloat(self.h1,0,360);
+	self.h2 = SUB_ClampFloat(self.h2,0,360);
 	
 	// invert H so everything's clockwise
 	if (self.h1 != 0 && self.h1 != 360) self.h1 = 360 - self.h1;
@@ -614,10 +612,9 @@ void() emitter_init = { // [FUNCTION]
 	if (self.h2 && (self.h2 < self.h1)) self.h1 = self.h1 - 360;// So it spans the right way
 	
 	// cap the vertical angle
-	if (self.v1 > 360) self.v1 = 360;
-	if (self.v1 < 0) self.v1 = 0;
-	if (self.v2 < 0) self.v2 = 0;// ignored
-	if (self.v2 > 360) self.v2 = 360;
+	self.v1 = SUB_ClampFloat(self.v1,0,360);
+	self.v2 = SUB_ClampFloat(self.v2,0,360);
+
 	// v2 has to be greater than v1 if defined
 	if (self.v2 && (self.v2 < self.v1)) self.v1 = self.v1 - 360;// So it spans the right way
 	if (self.noise) precache_sound(self.noise);

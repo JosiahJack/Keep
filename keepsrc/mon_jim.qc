@@ -506,11 +506,7 @@ void() monster_jim = {
 	self.idlebusy = 0;					// Rotate gun idle states
 	self.idlereverse = FALSE;			// Reverse direction for idle
 	self.attack_offset = '20 0 -10';	// front of laser/rocket
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = JimCheckAttack;
 	self.th_stand = jim_stand1;
 	self.th_walk = jim_walk1;
@@ -521,11 +517,6 @@ void() monster_jim = {
     self.hittype    = HIT_METAL;
 	self.classgroup = CG_ROBOT;
 	self.classmove = MON_MOVEFLY;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	if (self.spawnflags & MON_JIM_ROCKET) {
 		self.classtype = CT_MONJIMROCKET;
 		if (self.health < 1) self.health = 50;
@@ -539,7 +530,6 @@ void() monster_jim = {
 		self.idle_sound2 = "ad171/jim/idle2.wav";
 		if (self.deathstring == "")  self.deathstring = " was cauterized by Jim\n";
 	}
-
 	monster_start();
 };
 

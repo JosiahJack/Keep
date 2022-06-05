@@ -663,18 +663,9 @@ void() monster_fallen_angel =  {
 	self.ideal_yaw = (self.angles * '0.00000 1.00000 0.00000');
 	self.yaw_speed = 15;
 	self.view_ofs = '0.00000 0.00000 -5.00000';
-
 	if (!self.classgroup) self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	monster_start();
 };
 

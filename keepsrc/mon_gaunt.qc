@@ -841,17 +841,9 @@ void() monster_gaunt = {
 	if(!self.classtype) self.classtype = CT_MONGAUNT;
 	if (!self.classgroup) self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.resist_cells = 0.25;
 	self.resist_plasma = 0.25;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	monster_start();
 };
 
@@ -878,15 +870,11 @@ void() setup_gaunt = {
 		if (self.deathstring == "")  self.deathstring = " was charred by a Gaunt\n";
 	}
 
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.resist_cells = 0.25;
-
 	self.th_checkattack = GauntCheckAttack;
 	self.th_pain = gaunt_pain; 
 	self.th_die = gaunt_die;
-
 	if (self.spawnflags & MON_GAUNT_PERCH) {
 		// Perched Gaunt have special idle animation + idle sounds
 		self.th_stand = self.th_walk = gaunt_perch1;

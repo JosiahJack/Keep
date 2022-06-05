@@ -408,15 +408,7 @@ void () monster_super_wrath = {
 	self.blockudeath = TRUE;			// no humanoid death sound
 	self.height = MONAI_ABOVEDIST;		// Enemytarget distance above
 	self.pain_finished = FALSE;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_stand = overlord_stand1;
 	self.th_walk = overlord_walk01;
 	self.th_run = overlord_run01;
@@ -428,7 +420,7 @@ void () monster_super_wrath = {
 	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEFLY;
 	if (self.deathstring == "")  self.deathstring = " was obliterated by a Wrath Overlord\n";
-	monster_start ();
+	monster_start();
 };
 
 void () info_overlord_destination = {

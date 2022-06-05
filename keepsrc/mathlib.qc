@@ -47,6 +47,7 @@ float COS45           =  0.707107; // to save time
 float COS60           =  0.500000; // and money!
 float() crandom = { return 2*(random() - 0.5); }; // Random between -1.0 and 1.0
 void(entity ent, string text) Safe_stuffcmd;
+float(float val, float min, float max) SUB_ClampFloat;
 
 // You can set the accuracy of mathlib by changing this value.
 // If unset, it defaults to 0.001
@@ -462,13 +463,13 @@ void(vector targang) mathlib_makevectors = {
 // Boundary check function
 // Take a float value and return:
 // < 0, return 0
-// 0 - MAX, return integer value, always rounding down
-// > MAX, return MAX, where MAX is the max bit value, 255 is used with standard encoder below
-float(float f, float MAX) f_bound = {
-	if (MAX > 16777215) MAX = 16777215;
+// 0 - max, return integer value, always rounding down
+// > max, return max, where max is the max bit value, 255 is used with standard encoder below
+float(float f, float max) f_bound = {
+	if (max > 16777215) max = 16777215;
 
-	if (f > MAX)
-		f = MAX;
+	if (f > max)
+		f = max;
 	else if (f < 0)
 		f = 0;
 
@@ -489,7 +490,10 @@ float(float f, float MAX) f_bound = {
 float(float s1, float s2, float s3) encode = {
 	local float f;
 
-	f = f_bound(s1, 255) * 65536 + f_bound(s2, 255) * 256 + f_bound(s3, 255);
+	s1 = SUB_ClampFloat(s1,0,255);
+	s2 = SUB_ClampFloat(s2,0,255);
+	s3 = SUB_ClampFloat(s3,0,255);
+	f = s1* 65536 + s2 * 256 + s3;
 	return f;
 };
 

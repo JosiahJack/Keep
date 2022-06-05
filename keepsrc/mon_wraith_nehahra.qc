@@ -485,15 +485,9 @@ void() monster_voidwraith = { // [ENTITY]
 	self.th_run = nehwraith_run1;
 	self.th_missile = nehwraith_attack;
 	self.th_melee = nehwraith_melee;
-	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
 	if (self.deathstring == "")  self.deathstring = " was dispelled by a Void Wraith\n";
-
-	// Standard DENIZEN AI
-	if (!self.alignment) self.alignment = NEUTRAL;
-	if (!self.passive_state) self.passive_state = 1;
-	if (!self.temperament) self.temperament = TEMPRA_PASSIVE;
-	if (!self.vulnerability) self.vulnerability = VULN_RESISTANT;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	self.classtype = CT_MONWRAITHNEHAHRA;
 	self.classgroup = CG_HARMLESS; // DENIZEN!
 	self.classmove = MON_MOVEFLY;

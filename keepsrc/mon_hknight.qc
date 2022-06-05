@@ -826,11 +826,7 @@ void() monster_hell_knight = {
 		if (!self.sight_sound3) self.sight_sound3 = "enforcer/sight3.wav";
 		if (!self.sight_sound4) self.sight_sound4 = "enforcer/sight4.wav";
 	}
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;	
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent	
 	if (self.spawnflags & MON_STATUE) {
 		if (!self.idle_sound) self.idle_sound = "ad171/statue/idle1.wav";
 		if (!self.idle_sound2) self.idle_sound2 = "ad171/statue/idle2.wav";
@@ -846,6 +842,7 @@ void() monster_hell_knight = {
 		self.gibtype = GIBTYPE_STONE; // Stoney gibs!
 		self.gib2mdl = self.gib3mdl = string_null;
 		self.resist_nails = 0.2;
+		self.resist_lava_nails = 0.1;
 		self.reflectnails = TRUE;	  // Reflect nail projectiles
 	} else {
 		if (!self.idle_sound) self.idle_sound = "hknight/idle.wav";
@@ -888,10 +885,6 @@ void() monster_hell_knight = {
 	self.meleeattack = rint(random()*3);	// randomize last melee attack
 	self.th_die = hknight_die;				// Face meets floor
 
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	// Special lightning point knight (metal/stone skins)
 	if (self.spawnflags & MON_POINT_KNIGHT) {
 		self.weaponglow = "progs/ad171/mon_hknight_glow.mdl"; // Glowing magical swords	
@@ -903,6 +896,7 @@ void() monster_hell_knight = {
 			self.pain_timeout = 2;			// high pain threshold
 			self.no_liquiddmg = TRUE;		// Immune to slime/lava
 			self.resist_nails = 0.2;
+			self.resist_lava_nails = 0.1;
 			self.reflectnails = TRUE;		// Reflect nail projectiles
 		}
 		self.th_stand = hknight_pointsetup;	// Find target before shoot
@@ -919,6 +913,7 @@ void() monster_hell_knight = {
 	} else if (self.spawnflags & MON_STATUE) {
 		// Detect statues and setup different parameters.  Tougher skin, less pain, heavy feet etc
 		self.resist_nails = 0.2;
+		self.resist_lava_nails = 0.1;
 		self.reflectnails = TRUE;		// Reflect nail projectiles
 		if (self.classname == "monster_hell_knight_champion") {
 			self.classgroup = CG_DKNIGHT;	// Classic tincan!
@@ -930,7 +925,6 @@ void() monster_hell_knight = {
 		}
 		self.classgroup = CG_STONE;		// Stone hates metal!
 		self.hittype    = HIT_STONE;
-		self.resist_nails = 0.5;		// Tough skin for nails
 		self.skin = 1;					// Stone skin
 		self.pain_flinch = 60;			// Doubled
 		self.pain_longanim = FALSE;		// resistant to shadow axe

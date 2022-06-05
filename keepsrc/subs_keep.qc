@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 25
+// Function count: 30
 //
 // Implements: Subroutines
 //
@@ -38,7 +38,7 @@
 //=============================================================================
 
 // This reduces a lot of boilerplate code assigning a think and nextthink.
-void(entity targ, void() th_think, float th_time) SUB_Think = {
+void(entity targ, void() th_think, float th_time) SUB_Think = { // [FUNCTION]
 	if (th_time <= 0) th_time = 0.1;
 
 	targ.think = th_think;
@@ -46,7 +46,7 @@ void(entity targ, void() th_think, float th_time) SUB_Think = {
 	else targ.nextthink = time + th_time;
 };
 
-void(void() th_think, float th_time) SUB_SelfThink = {
+void(void() th_think, float th_time) SUB_SelfThink = { // [FUNCTION]
 	SUB_Think(self,th_think,th_time);
 };
 
@@ -232,14 +232,14 @@ void() SUB_RemoveAttachments = { // [FUNCTION]
 	SUB_RemoveAttachment3();
 };
 
-void() SUB_CalcAngleMoveDone =  {
+void() SUB_CalcAngleMoveDone =  { // [FUNCTION]
    self.angles = self.finalangle;
    self.avelocity = VEC_ORIGIN;
    self.nextthink = -1;
    if (self.think1) self.think1();
 };
 
-void(vector destangle, float tspeed) SUB_CalcAngleMove = {
+void(vector destangle, float tspeed) SUB_CalcAngleMove = { // [FUNCTION]
 	local vector destdelta;
 	local float len, traveltime;
 
@@ -255,6 +255,15 @@ void(vector destangle, float tspeed) SUB_CalcAngleMove = {
 };
 
 // Wrapper function for assigning to self.think.
-void() SUB_CalcAngleMoveThink = {
+void() SUB_CalcAngleMoveThink = { // [FUNCTION]
 	SUB_CalcAngleMove(self.mangle,10);
 };
+
+float(float val, float min, float max) SUB_ClampFloat = { // [FUNCTION]
+	local float retval;
+
+	retval = val;
+	if (retval < min) retval = min;
+	if (retval > max) retval = max;
+	return retval;
+}

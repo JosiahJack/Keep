@@ -500,6 +500,7 @@ void() monster_megaforce = {
 	self.attack_offset = '28 8.5 16';	// End of Gun
 	self.weaponstate = MEGAF_IDLE;		// No Shield active
 	if (self.deathstring == "") self.deathstring = " was vaporized by a Mega-Enforcer\n";
+	Resist_ChangeType(self,-1);
 	megaf_shieldoff(); // Reset Ammo Resistance/Shield parameters
 	self.th_checkattack = MegaforceCheckAttack;
 	self.th_stand = megaf_stand1;
@@ -509,11 +510,6 @@ void() monster_megaforce = {
 	self.th_missile = megaf_rock1;
 	self.th_pain = megaf_pain;
 	self.th_die = megaf_die;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	self.classtype = CT_MONMEGAFORCE;
 	self.classgroup = CG_DCAPTAIN;	// Make sure to infight
 	self.classmove = MON_MOVEWALK;

@@ -181,11 +181,7 @@ void() monster_spellmaster = {
 	self.th_die = spell_die;
 	self.th_pain = spell_pain;
 	self.th_missile = spell_attack;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.solid = SOLID_NOT;					// No interaction with world
 	self.movetype = MOVETYPE_NONE;			// Static item, no movement
 	self.bbmins = '-32 -32 -24';	// Special Size
@@ -194,12 +190,6 @@ void() monster_spellmaster = {
 	if (self.health < 1) self.health = 2400;
 	self.gibhealth = -40;
 	self.gibbed = FALSE;
-	setup_passivestate(self); // Check passive system for exceptions
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	if (self.deathstring == "") self.deathstring = " was remapped by a Baseboss\n";
 	self.classtype = CT_MONSPELLMAS;
 	self.classgroup = CG_BOSS;

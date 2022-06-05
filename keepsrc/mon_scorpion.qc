@@ -452,10 +452,7 @@ void() setup_scorpion = {
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPSCORPNEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPSCORPFAR;
 
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = ScorpionCheckAttack;
 	self.th_pain = pinch_pain;
 	self.th_die = pinch_die;

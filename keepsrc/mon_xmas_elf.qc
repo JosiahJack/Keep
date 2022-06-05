@@ -398,20 +398,12 @@ void() monster_xmas_elf = {
 	self.attack_offset = '10 0 4';		// Magic attack offset
 	self.poisonous = FALSE;				// Not Supported
 	if (self.deathstring == "") self.deathstring = " was torn to pieces by a Elf\n";
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 
 	// Default jump forward/up distance
 	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '400 0 200';
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPELFNEAR;
-	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPELFFAR;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-	
+	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPELFFAR;	
 	self.th_checkattack = ElfCheckAttack;
 	self.th_stand = elf_stand1;
 	self.th_walk = elf_walk1;

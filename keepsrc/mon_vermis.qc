@@ -1728,7 +1728,6 @@ void() monster_vermis = {
 	self.th_melee = vermis_melee;
 	self.th_pain = vermis_pain;
 	self.th_die = vermis_die;
-	setup_passivestate(self); // Check passive system for exceptions
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "") self.deathstring = " was eradicated by a Vermis\n";
 	self.classtype = CT_MONVERMIS;

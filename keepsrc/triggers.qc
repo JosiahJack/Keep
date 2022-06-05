@@ -50,6 +50,8 @@ float TRIG_HURTFALLING = 32;	// Only hurt if player falling
 float TRIG_PUSHONCE = 1;		// Switch off after one use
 float TRIG_PUSHSILENT = 2;		// No wind sound for player
 float TRIG_PUSHNOMONSTER = 4;	// Monsters cannot use this push trigger
+float TRIG_PUSHADDITIVE = 16;   // Velocity is continuously added, not set
+float TRIG_PUSHARC = 32;		// Objects are carefully lobbed to a point.
 float TRIG_CONVMONSTER = 2;		// Conveyor moving monsters
 float TRIG_CONVITEM = 4;		// Conveyor moving items
 float TRIG_CONVPUSHABLE = 8;	// Conveyor moving pushables
@@ -906,26 +908,60 @@ float() trigger_pushable = { // [FUNCTION]
 };
 
 void() trigger_push_fire = { // [FUNCTION]
+	local float zdiff, dist, spdattn;
+
 	if (self.estate & ESTATE_BLOCK) return;
 	if (self.attack_finished > time) return;
 	if (trigger_check_body(self.bmodel_act,DEAD_EXPLODE)) return; // Check for any dead monster bodies (no exceptions)
 	if (self.spawnflags & TRIG_PUSHNOMONSTER && self.bmodel_act.flags & FL_MONSTER) return; // Check for no monster exception
 
-	if (self.target != "") { self.angletarget = self.target; TargetMovedir(self, FALSE); } // If custom push direction setup, calculate new facing angletarget
+	if (self.target != "") { self.angletarget = self.target; TargetMovedir(self, (self.spawnflags & TRIG_PUSHARC)); } // If custom push direction setup, calculate new facing angletarget
 	if (trigger_pushable()) {
-		if (self.spawnflags & 16) { // Additive velocity rather than forcing the entity to a velocity.
-			self.attack_finished = time + 0.1;
-			self.bmodel_act.velocity = self.bmodel_act.velocity + (self.speed * self.movedir * 10);
-		} else self.bmodel_act.velocity = self.speed * self.movedir * 10; // This is after _use, _killed and _touch, so any reference to activator has to go through 'bmodel_act'.
+		if (self.spawnflags & TRIG_PUSHARC && self.movetarget) {
+			dist = vlen((self.movetarget.origin - self.bmodel_act.origin));
+			if (dist > self.tetherrange) self.bmodel_act.arcing = TRUE;
+			if (dist < self.tetherdist) self.bmodel_act.arcing = FALSE;
+			if (!self.bmodel_act.arcing) return;
+
+			zdiff = self.movetarget.origin_z - self.bmodel_act.origin_z;
+			self.finalangle = self.movetarget.origin;
+			if (zdiff > 0) self.finalangle_z = self.finalangle_z + zdiff * 6.66 + 64;
+			self.movedir = normalize(self.finalangle - self.bmodel_act.origin);
+			spdattn = 10;
+			if (dist < 128) spdattn = dist / 128 * 10;
+			spdattn = SUB_ClampFloat(spdattn,25,spdattn);
+			self.bmodel_act.velocity = self.movedir * self.speed * spdattn;
+		} else {
+			if (self.spawnflags & TRIG_PUSHADDITIVE) { // Additive velocity rather than forcing the entity to a velocity.
+				self.attack_finished = time + 0.1;
+				self.bmodel_act.velocity = self.bmodel_act.velocity + (self.speed * self.movedir * 10);
+			} else self.bmodel_act.velocity = self.speed * self.movedir * 10; // This is after _use, _killed and _touch, so any reference to activator has to go through 'bmodel_act'.
+		}
 	} else if (self.bmodel_act.health > 0) { // Standard push for all bmodel_act living entities
-		if (self.spawnflags & 16) { // Additive velocity rather than forcing the entity to a velocity.
-			self.attack_finished = time + 0.1;
-			self.bmodel_act.velocity = self.bmodel_act.velocity + (self.speed * self.movedir * 10);
-		} else self.bmodel_act.velocity = self.speed * self.movedir * 10;
-		if (self.bmodel_act.flags & FL_CLIENT) {
-			if (self.bmodel_act.fly_sound < time) {
-				self.bmodel_act.fly_sound = time + 1.5;
-				sound (self.bmodel_act, CHAN_AUTO, self.noise, self.volume, ATTN_NORM); // Play wind sound for the player
+		if (self.spawnflags & TRIG_PUSHARC && self.movetarget) {
+			dist = vlen((self.movetarget.origin - self.bmodel_act.origin));
+			if (dist > self.tetherrange) self.bmodel_act.arcing = TRUE;
+			if (dist < self.tetherdist) self.bmodel_act.arcing = FALSE;
+			if (!self.bmodel_act.arcing) return;
+
+			zdiff = self.movetarget.origin_z - self.bmodel_act.origin_z;
+			self.finalangle = self.movetarget.origin;
+			if (zdiff > 0) self.finalangle_z = self.finalangle_z + zdiff * 6.66 + 64;
+			self.movedir = normalize(self.finalangle - self.bmodel_act.origin);
+			spdattn = 10;
+			if (dist < 128) spdattn = dist / 128 * 10;
+			spdattn = SUB_ClampFloat(spdattn,25,spdattn);
+			self.bmodel_act.velocity = self.movedir * self.speed * spdattn;
+		} else {
+			if (self.spawnflags & TRIG_PUSHADDITIVE) { // Additive velocity rather than forcing the entity to a velocity.
+				self.attack_finished = time + 0.1;
+				self.bmodel_act.velocity = self.bmodel_act.velocity + (self.speed * self.movedir * 10);
+			} else self.bmodel_act.velocity = self.speed * self.movedir * 10;
+			if (self.bmodel_act.flags & FL_CLIENT) {
+				if (self.bmodel_act.fly_sound < time) {
+					self.bmodel_act.fly_sound = time + 1.5;
+					sound (self.bmodel_act, CHAN_AUTO, self.noise, self.volume, ATTN_NORM); // Play wind sound for the player
+				}
 			}
 		}
 	}
@@ -959,12 +995,17 @@ void() trigger_push = { // [ENTITY]
 
 	self.classtype = CT_TRIGPUSH;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	if (!self.speed) self.speed = 1000;
 	self.spawnflags = self.spawnflags | TRIG_ALWAYTOUCH | TRIG_NODAMAGE; // Spawnflag 1 is used for something else (notouch duplicate).  No trigger damage functionality and always touchable!
 	if ( !(self.spawnflags & TRIG_PUSHSILENT) && self.noise == "") self.noise = "ambience/windfly.wav"; // Setup default wind sound if no custom sound found...
 	if (self.noise == "") self.noise = SOUND_EMPTY; // ...else if silent trigger, use misc/null.wav blank sound.
 	precache_sound (self.noise);
+	if (self.spawnflags & TRIG_PUSHARC) {
+		if (self.tetherrange <= 0) self.tetherrange = 512;
+		if (self.tetherdist <= 0) self.tetherdist = 32;
+		if (self.tetherdist > self.tetherrange) self.tetherrange = self.tetherdist + 1;
+	}
 	SUB_BoundVolume(1);
 	if (self.spawnflags & TRIG_PUSHONCE) self.wait = -1;
 	self.estate_fire = trigger_push_fire; // Setup Entity State functionality

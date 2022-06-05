@@ -393,17 +393,10 @@ void() monster_manticore = {
 	self.pain_timeout = 2;				// High pain threshold
 	self.blockudeath = TRUE;			// No humanoid death sound
 	self.attack_offset = '0 0 20';
-
-	// Always reset resistances to be consistent
-	self.resist_shells = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset resistances to be consistent
 	self.resist_rockets = self.resist_nails = 0.5;
 	if (self.skin == 1) self.resist_fire = 1; // Can't burn a Lich Fiend
 	if (self.skin != 1) self.resist_cold = 1; // Can't freeze a Manticore
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	if (self.deathstring == "") {
 		if (self.skin == 1) self.deathstring = " was mercilessly devoured by a Lich Fiend\n";
 		else				self.deathstring = " was mauled by a Manticore\n";
@@ -421,7 +414,6 @@ void() monster_manticore = {
 	self.th_jumpexit = mcorn_leap8;
 	self.th_missile = mcorn_atk1;
 	if (self.skin == 1) self.th_missile = self.th_jump; // just in case, Lich Fiend doesn't spit
-
 	self.classtype = CT_MONMANTICORE;
 	if (self.skin == 1) self.classtype = CT_MONLICHFIEND;
 	self.classgroup = CG_DEMON;

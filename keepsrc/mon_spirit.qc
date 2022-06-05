@@ -680,10 +680,7 @@ void() monster_spirit = {
 	self.pain_longanim = TRUE;		// Long pain animation
 	self.attack_offset = '16 0 8';		// Between hands
 	self.deathstring = " was murdered by Vengeful Spirit\n";
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 
 	//Glow attachment setup
 	self.attachment = spawn();
@@ -723,8 +720,7 @@ void() monster_spirit = {
 	
 	self.classtype = CT_MONSPIRIT;
 	self.classgroup = CG_WIZARD;
-	self.classmove = MON_MOVEWALK;
-			
+	self.classmove = MON_MOVEWALK;		
 	monster_start();
 };
 

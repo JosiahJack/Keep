@@ -495,8 +495,8 @@ void() monster_zombie_master = {
 	if (self.deathstring == "") self.deathstring = " joins a Zombie Master's zombie hoard\n";
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
-	setmodel (self, "progs/custents/zmaster.mdl");
-	setsize (self, '-16 -16 -24', '16 16 40');
+	setmodel(self, "progs/custents/zmaster.mdl");
+	setsize(self, '-16 -16 -24', '16 16 40');
 	self.health = 1250;
     self.hittype    = HIT_METAL;
 	self.th_stand = zmaster_stand1;
@@ -506,11 +506,7 @@ void() monster_zombie_master = {
 	self.th_missile = zmaster_missile;
 	self.th_pain = zmaster_pain;
 	self.th_die = zmaster_die;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	Resist_ChangeType(self,-1);
 	monster_start ();
 };
 

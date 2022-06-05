@@ -768,18 +768,13 @@ void() monster_zombiek = {
 	self.pain_timeout = -5;				// Always go into pain (health reset)
 	self.inpain = 0;					// Zombie starts with no pain lock
 	self.count = 0;						// Reset get up timer
-
 	if (self.deathstring == "") self.deathstring = " was cornered by a Zombie Knight\n";
 
 	// Default jump forward/up distance
 	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '150 0 200';
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPZKNEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPZKFAR;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
     self.hittype    = HIT_METAL;
 	self.th_checkattack = ZombiekCheckAttack;
 	self.th_stand = zombiek_stand1;

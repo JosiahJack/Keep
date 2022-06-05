@@ -206,14 +206,7 @@ void() monster_fish = {
 	}
 
 	if (self.spawnflags & MON_LIQUIDBLOCK) self.liquidblock = TRUE; // Check for water sightline wakeup
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 
 	// Tiny fish are easier to kill
 	if (self.spawnflags & MON_FISH_SMALL) {

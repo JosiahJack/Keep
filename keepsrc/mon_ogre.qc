@@ -626,15 +626,8 @@ void() monster_ogre = {
 		if (self.spawnflags & MON_OGRE_NAIL) self.th_missile = ogre_adnail1;
 		else self.th_missile = ogre_shoot1;
 	}
-	
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
 
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = OgreCheckAttack;
 	self.th_stand = ogre_stand1;
 	self.th_walk = ogre_walk1;
@@ -651,7 +644,7 @@ void() monster_ogre = {
 
 void() monster_ogre_marksman = {
 	if (self.deathstring == "")  self.deathstring = " was blasted by a marksman Ogre\n";
-	monster_ogre ();
+	monster_ogre();
 };
 
 void() monster_ogre_fishing = {
@@ -692,11 +685,8 @@ void() monster_ogre_fishing = {
 		self.health = 150;		// Lower HP than regular
 	}
 
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.resist_rockets = 0.5;	// Rocket resistance
-	self.resist_cells = 0;
-
 	self.th_checkattack = OgreCheckAttack;
 	self.th_stand = self.th_walk = self.th_run = ogre_fishsetup;
 	self.th_altstand = ogre_fishing;

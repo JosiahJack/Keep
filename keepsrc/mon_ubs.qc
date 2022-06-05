@@ -1181,7 +1181,7 @@ void () monster_ubs = {
 
 	self.mdl = ("progs/travail/uberscrag.mdl");
 	if (self.deathstring == "") self.deathstring = " was splayed by the Uber Scrag\n";
-	setup_passivestate(self); // Check passive system for exceptions
+	Resist_ChangeType(self,-1);
 	self.touch = monster_touch;	// 1998-09-16 Sliding/not-jumping on monsters/boxes/players fix by Maddes/Kryten
 	self.th_stand = self.th_walk = self.th_run = SUB_Null;
 	self.th_missile = self.th_die = SUB_Null;

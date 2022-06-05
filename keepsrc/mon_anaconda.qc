@@ -112,7 +112,6 @@ void() monster_coil = {
 	self.nomonstercount = 1;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
 	if (self.deathstring == "")  self.deathstring = " was killed by a giant anaconda\n";
-	setup_passivestate(self); // Check passive system for exceptions
 	if(!self.classtype) self.classtype = CT_MONANACONDACOIL;
 	if (!self.classgroup) self.classgroup = CG_BOSS;
 	self.classmove = MON_MOVEWALK;	
@@ -946,7 +945,6 @@ void() monster_anac = {
 	//self.bossflag = TRUE;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
 	if (self.deathstring == "")  self.deathstring = " was killed by a giant anaconda\n";
-	setup_passivestate(self); // Check passive system for exceptions
 	if(!self.classtype) self.classtype = CT_MONANACONDA;
 	if (!self.classgroup) self.classgroup = CG_BOSS;
 	self.classmove = MON_MOVEWALK;	

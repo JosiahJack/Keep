@@ -282,18 +282,11 @@ void(vector pos, float value, float threshhold) Hud_DrawNoFont24 = {
 	local string val_str, disp_str;
 	local float disp_col, disp_len, disp_no;
 
-	// Make sure value is within range
-	if (value < 0) value = 0;
-	else if (value > 999) value = 999;
-	// Work out which number colour to use
-	if (value <= threshhold) disp_col = TRUE;
-	
-	// Round number down (floor) and work out length
-	val_str = ftos(floor(value));
+	value = SUB_ClampFloat(value,0,999); // Make sure value is within range
+	if (value <= threshhold) disp_col = TRUE; // Work out which number colour to use
+	val_str = ftos(floor(value)); // Round number down (floor) and work out length
 	disp_len = strlen(val_str);
-	// Move to the lowest digit position first
-	pos_x = pos_x + (3 * HUDSIZE_24_x);
-	
+	pos_x = pos_x + (3 * HUDSIZE_24_x); // Move to the lowest digit position first
 	while (disp_len > 0) {
 		// Countdown early (range is 0-2, strlen returns 1-3)
 		disp_len = disp_len - 1;
@@ -315,16 +308,10 @@ void(vector pos, float value) Hud_DrawNoFont16 = {
 	local string val_str;
 	local float disp_len, disp_no;
 
-	// Make sure value is within range
-	if (value < 0) value = 0;
-	else if (value > 999) value = 999;
-	
-	// Round number down (floor) and work out length
-	val_str = ftos(floor(value));
+	value = SUB_ClampFloat(value,0,999); // Make sure value is within range
+	val_str = ftos(floor(value)); // Round number down (floor) and work out length
 	disp_len = strlen(val_str);
-	// Move to the lowest digit position first
-	pos_x = pos_x + (3 * HUDSIZE_16_x);
-	
+	pos_x = pos_x + (3 * HUDSIZE_16_x); // Move to the lowest digit position first
 	while (disp_len > 0) {
 		// Countdown early (range is 0-2, strlen returns 1-3)
 		disp_len = disp_len - 1;
@@ -370,15 +357,11 @@ void(vector pos, float value, float digit, float zerofill, float fontcol) Hud_Dr
 	local string val_str;
 	local float disp_len, disp_no, valmod;
 
-	// Make sure value is within range
-	if (value < 0) value = 0;
-	// Check max range against max digits
-	else if (value > 999 && digit >= 3) value = 999;
-	else if (value > 99 && digit == 2) value = 99;
+	value = SUB_ClampFloat(value,0,999); // Make sure value is within range
+	if (value > 99 && digit == 2) value = 99; // Check max range against max digits
 	else if (value > 9 && digit <= 1) value = 9;
-	
-	// Round number down (floor) and work out length
-	val_str = ftos(floor(value));
+
+	val_str = ftos(floor(value)); // Round number down (floor) and work out length
 	valmod = floor(value);
 	disp_len = 1; //strlen(val_str);
 	if (valmod > 9) disp_len = 2;
@@ -433,9 +416,7 @@ void(vector pos) Hud_DrawFace = {
 		else { // Regular face
 			// Work out face based on HP (100/80/60/40/20)
 			hpframe = floor(shealth / 20);
-			// Check for negative and upper (MegaHP) limits
-			if (hpframe < 0) hpframe = 0;
-			else if (hpframe > 4) hpframe = 4;
+			hpframe = SUB_ClampFloat(hpframe,0,4); // Check for negative and upper (MegaHP) limits
 			// Check for any pain/flinch updates
 			if (painfinishtime > time) hpframe = hpframe + 5;
 			// Final HP face
@@ -477,10 +458,8 @@ static void(float num, vector gfx_size, vector pos) Hud_DrawWeapon = {
 			else prefix = weaponselect[0];
 		}
 	} else { // Flashing!
-		// Is the flash into second phase?
-		if (flash < 0) flash = 0;
-		else if (flash >= 5) flash = flash - 5;
-		// flash is only 0-4 frames
+		if (flash >= 5) flash = flash - 5; // Is the flash into second phase?
+		flash = SUB_ClampFloat(flash,0,4); // flash is only 0-4 frames
 		prefix = weaponflash[flash];
 	}
 	// Merge prefix type (defined above) to weapon filename
@@ -1911,7 +1890,7 @@ void(vector virtsize, float showscores) CSQC_DrawHud = {
 			hudlayout = hudlayout - CSQC_HUDREV;
 		}
 		
-		if (hudlayout < 0) hudlayout = 0; // Check for negative range issues
+		hudlayout = SUB_ClampFloat(hudlayout,0,hudlayout); // Check for negative range issues
 		hudscale = cvar("scr_sbarscale"); // Find out HUD virtual scaling
 		if (hudscale < 1) hudscale = 1; // Always have a default if cvar does not exist!
 

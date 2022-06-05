@@ -257,15 +257,7 @@ void() monster_xmas_snowman = {
 	self.bloodtype = self.bleedcolour = MON_BCOLOR_SILVER;// Red is odd for snow
 	if (self.deathstring == "") self.deathstring = " was smashed on a Snowman\n";
 	if (self.attack_count < 1) self.attack_count = 5; // Default amount of nails to burst fire (5x9=45dmg)
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-	
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent	
 	self.th_checkattack = SnowmanCheckAttack;
 	self.th_stand = snowm_stand1;
 	self.th_walk = snowm_walk1;

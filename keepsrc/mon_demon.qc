@@ -250,10 +250,8 @@ void() monster_demon1_precache = {
 QUAKED monster_demon1 (1 0 0) (-32 -32 -24) (32 32 64) Ambush
 ======================================================================*/
 void() monster_demon1 = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	monster_demon1_precache();
 	self.mdl = "progs/mon_demon.mdl";
@@ -293,15 +291,7 @@ void() monster_demon1 = {
 	self.steptype = FS_TYPESLOW;		// Tiny feet/nails
 	self.blockudeath = TRUE;			// No humanoid death sound
 	self.meleeoffset = '32 0 10';		// Claw attack offset
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-	
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = DemonCheckAttack;
 	self.th_stand = demon1_stand1;
 	self.th_walk = demon1_walk1;

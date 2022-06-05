@@ -301,21 +301,11 @@ void () monster_sword = {
 	self.gibbed = FALSE;
 	self.steptype = FS_FLYING;
 	self.bleedcolour = self.bloodtype = MON_BCOLOR_WHITE;
-
-	if ( !self.delay ) self.delay = 0.1;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	if (self.delay <= 0) self.delay = 0.1;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.classtype = CT_MONINVISSWORD;
 	self.classgroup = CG_DKNIGHT;
 	self.classmove = MON_MOVEWALK;
-
 	if (self.spawnflags & INVIS_SWORD_REDFIELD) {
 		self.mdl = "progs/redfield/mon_sword.mdl";
 		self.spawnflags = self.spawnflags | MON_SPAWN_NOSIGHT;

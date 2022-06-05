@@ -315,11 +315,9 @@ void() monster_firetopboss = {
 	self.pain_ignore = 1;
 	self.yaw_speed = 20;
 	self.deadflag = DEAD_NO;
-	setup_passivestate(self); // Check passive system for exceptions
-	if (self.deathstring == "")  self.deathstring = " was destroyed by the Firetop Guardian\n";
+	if (self.deathstring == "") self.deathstring = " was destroyed by the Firetop Guardian\n";
 	self.lastorigin = self.origin;	// Origin for camera interpolation
-
-	// Always reset Ammo Resistance to be consistent
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	// The shamblers infront of the boss are suppose to be killed
 	// by the boss and they fire lightning (cell damage)
 	// If the boss is 100% ammo resist == no infighting
@@ -329,13 +327,10 @@ void() monster_firetopboss = {
 	self.resist_multi_rockets = 0.9;
 	self.resist_plasma = 0.9;
 	self.resist_fire = 1;
-
 	self.th_stand = self.th_walk = self.th_run = SUB_Null;
 	self.th_missile = self.th_die = SUB_Null;
 	self.th_pain = SUB_Null_pain;
 	monster_start();
-	// if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-	// AddToTotals(self);
 	if (self.targetname == "") {ftop_wakeup(); dprint("monster_firetopboss with no targetname! Spawning anyways but it cannot be killed without a targetname!\n");
 	} else self.use = ftop_wakeup;
 };

@@ -340,15 +340,7 @@ void() monster_shalrath = {
 	self.pain_timeout = 3;			// Really high pain tolerance
 	self.steptype = FS_TYPELIGHT;	// Light tap feet
 	self.blockudeath = TRUE;		// no humanoid death sound
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = ShalCheckAttack;
 	self.th_stand = shal_stand;
 	self.th_walk = shal_walk1;

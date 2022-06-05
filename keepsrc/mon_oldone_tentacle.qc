@@ -179,25 +179,12 @@ void() monster_oldone_tentacle = {
 	self.th_die = oldone_die;
 	self.th_melee = oldone_atta1;
 	if (self.deathstring == "")  self.deathstring = " became one with Shub-Niggurath\n";
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;	
-
 	self.classtype = CT_MONXXSHUB;
 	self.classgroup = CG_BOSS;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check passive system for exceptions
-	setup_passivestate(self);
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_stand = SUB_Null;
 	self.th_missile = SUB_Null;
 	monster_start();
-
 	if (!self.targetname) {
 		self.th_stand = oldone_stand1;
 		oldone_start();

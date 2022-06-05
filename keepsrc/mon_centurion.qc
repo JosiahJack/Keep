@@ -276,15 +276,7 @@ void() monster_centurion = {
 	self.ammo_cells = rint(random()*3);
 	self.attack_offset = '28 8.5 24';
 	if (self.deathstring == "") self.deathstring = " was vaporized by a Centurion\n";
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-	
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = CenturionCheckAttack;
 	self.th_stand = cent_stand1;
 	self.th_walk = cent_walk1;
@@ -292,7 +284,6 @@ void() monster_centurion = {
 	self.th_pain = cent_pain;
 	self.th_die = cent_die;
 	self.th_missile = cent_atk1;
-
 	self.classtype = CT_MONCENTURION;
 	self.classgroup = CG_ENFORCER;
 	self.classmove = MON_MOVEFLY;

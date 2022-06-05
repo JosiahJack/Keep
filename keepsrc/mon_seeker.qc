@@ -694,7 +694,6 @@ void() monster_seeker = {
 	self.mdl = "progs/ad171/mon_seeker.mdl";
 	self.headmdl = "progs/ad171/h_seeker.mdl";
 	self.weaponglow = "progs/ad171/mon_seeker_glow.mdl";
-	// 
 	self.gib1mdl = "progs/ad171/gib_seekchunk.mdl";	// 4 poses 0=generic blob, 1=generic square, 2=generic blob2, 3=arm: types 0-2
 	self.gib2mdl = "progs/ad171/gib_seekarm.mdl";	// arm only
 	self.gib3mdl = "progs/ad171/gib_metal1.mdl";	// Breakable metal
@@ -711,7 +710,6 @@ void() monster_seeker = {
 
 	// Check for any custom arm setups
 	if (self.state < SEEKER_ARMS_LEFT || self.state > SEEKER_ARMS_RIGHT) self.state = SEEKER_ARMS_BOTH;	// Both arms are active
-
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_GIANT;
@@ -722,7 +720,6 @@ void() monster_seeker = {
 	}
 
 	if (self.deathstring == "") self.deathstring = " was destroyed by a Seeker\n";
-	
 	self.gibhealth = MON_NEVERGIB;		// Cannot be gibbed by weapons
 	self.gibbed = FALSE;				// Starts in one piece
 	self.pain_flinch = 400;				// takes alot to pain
@@ -732,20 +729,15 @@ void() monster_seeker = {
 	if (self.death_dmg < 1) self.death_dmg = DAMAGE_SEEKER;
 	self.bouncegrenade = TRUE;			// Grenades bounce
 	self.bloodtype = self.bleedcolour = MON_BCOLOR_WHITE;	// Grey dust
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = 0.5; self.resist_cells = 0;
-	
-	// Custom feet sounds (specific order)
-	self.stepc1 = "ad171/seeker/footstep1.wav";
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	self.resist_rockets = 0.5;
+	self.stepc1 = "ad171/seeker/footstep1.wav"; // Custom feet sounds (specific order)
 	self.stepc2 = "ad171/seeker/footstep2.wav";
 	self.stepc3 = "ad171/seeker/footstep1.wav";
 	self.stepc4 = "ad171/seeker/footstep2.wav";
 	self.stepc5 = "ad171/seeker/footstep3.wav";
 	self.steptype = FS_TYPECUSTOM;
     self.hittype    = HIT_METAL;
-
 	if (self.spawnflags & MON_SEEK_SHIELD) {
 		self.th_stand = seek_shield;	// Setup Shield
 		self.think1 = seek_wakeup;		// Wakeup function when triggered
@@ -757,12 +749,7 @@ void() monster_seeker = {
 		self.th_missile = seek_fire;	// Rockets incoming!
 		self.th_pain = seek_pain;
 		self.th_die = seek_die;
-
-		// Check for random rotation setup and angle limits
-		if (self.angles_y < 0) self.angles_y = rint(random()*359);
-		if (self.angles_y > 360) self.angles_y = 360;
 	}
-
 	self.th_checkattack = SeekerCheckAttack;
 	self.classtype = CT_MONSEEKER;
 	self.classgroup = CG_ROBOT;

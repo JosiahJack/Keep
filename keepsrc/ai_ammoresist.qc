@@ -59,52 +59,26 @@ float(entity targ, float resist_type, float damage) Resist_Damage = {
 	return ret_damage;
 };
 
+float RESIST_MIN = 0.00;
+float RESIST_MAX = 1.00;
+
 // Double check that all ammo resistance are within range of 0 to 1
 void(entity targ) Resist_CheckRange = {
-	if (targ.resist_shells < 0) targ.resist_shells = 0;
-	else if (targ.resist_shells > 1) targ.resist_shells = 1;
-
-	if (targ.resist_nails < 0) targ.resist_nails = 0;
-	else if (targ.resist_nails > 1) targ.resist_nails = 1;
-
-	if (targ.resist_rockets < 0) targ.resist_rockets = 0;
-	else if (targ.resist_rockets > 1) targ.resist_rockets = 1;
-
-	if (targ.resist_cells < 0) targ.resist_cells = 0;
-	else if (targ.resist_cells > 1) targ.resist_cells = 1;
-
-	if (targ.resist_lava_nails < 0) targ.resist_lava_nails = 0;
-	else if (targ.resist_lava_nails > 1) targ.resist_lava_nails = 1;
-
-	if (targ.resist_multi_rockets < 0) targ.resist_multi_rockets = 0;
-	else if (targ.resist_multi_rockets > 1) targ.resist_multi_rockets = 1;
-
-	if (targ.resist_plasma < 0) targ.resist_plasma = 0;
-	else if (targ.resist_plasma > 1) targ.resist_plasma = 1;
-
-	if (targ.resist_bolts < 0) targ.resist_bolts = 0;
-	else if (targ.resist_bolts > 1) targ.resist_bolts = 1;
-
-	if (targ.resist_poison < 0) targ.resist_poison = 0;
-	else if (targ.resist_poison > 1) targ.resist_poison = 1;
-
-	if (targ.resist_bloodcrystals < 0) targ.resist_bloodcrystals = 0;
-	else if (targ.resist_bloodcrystals > 1) targ.resist_bloodcrystals = 1;
-
-	if (targ.resist_voidshards < 0) targ.resist_voidshards = 0;
-	else if (targ.resist_voidshards > 1) targ.resist_voidshards = 1;
-
-	if (targ.resist_elemental < 0) targ.resist_elemental = 0;
-	else if (targ.resist_elemental > 1) targ.resist_elemental = 1;
-
-	if (targ.resist_acid < 0) targ.resist_acid = 0;
-	else if (targ.resist_acid > 1) targ.resist_acid = 1;
-
-	if (targ.resist_fire < 0) targ.resist_fire = 0;
-	else if (targ.resist_fire > 1) targ.resist_fire = 1;
-
-	if (targ.resist_cold < 0) targ.resist_cold = 0;
-	else if (targ.resist_cold > 1) targ.resist_cold = 1;
+	targ.resist_shells = SUB_ClampFloat(targ.resist_shells,RESIST_MIN,RESIST_MAX);
+	targ.resist_nails = SUB_ClampFloat(targ.resist_nails,RESIST_MIN,RESIST_MAX);
+	targ.resist_rockets = SUB_ClampFloat(targ.resist_rockets,RESIST_MIN,RESIST_MAX);
+	targ.resist_cells = SUB_ClampFloat(targ.resist_cells,RESIST_MIN,RESIST_MAX);
+	targ.resist_lava_nails = SUB_ClampFloat(targ.resist_lava_nails,RESIST_MIN,RESIST_MAX);
+	targ.resist_multi_rockets = SUB_ClampFloat(targ.resist_multi_rockets,RESIST_MIN,RESIST_MAX);
+	targ.resist_plasma = SUB_ClampFloat(targ.resist_plasma,RESIST_MIN,RESIST_MAX);
+	targ.resist_bolts = SUB_ClampFloat(targ.resist_bolts,RESIST_MIN,RESIST_MAX);
+	targ.resist_poison = SUB_ClampFloat(targ.resist_poison,RESIST_MIN,RESIST_MAX);
+	targ.resist_bloodcrystals = SUB_ClampFloat(targ.resist_bloodcrystals,RESIST_MIN,RESIST_MAX);
+	targ.resist_voidshards = SUB_ClampFloat(targ.resist_voidshards,RESIST_MIN,RESIST_MAX);
+	targ.resist_elemental = SUB_ClampFloat(targ.resist_elemental,RESIST_MIN,RESIST_MAX);
+	targ.resist_acid = SUB_ClampFloat(targ.resist_acid,RESIST_MIN,RESIST_MAX);
+	targ.resist_fire = SUB_ClampFloat(targ.resist_fire,RESIST_MIN,RESIST_MAX);
+	targ.resist_cold = SUB_ClampFloat(targ.resist_cold,RESIST_MIN,RESIST_MAX);
 };
 
 // Store the ammo resistance for switching later

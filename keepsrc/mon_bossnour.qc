@@ -929,16 +929,6 @@ void() nour_awake = {
 	self.movetype = MOVETYPE_FLY;				// Alway fly
 	setmodel(self, self.mdl);					// Setup model
 	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
-	
-	// Check for delay spawn monster count
-	// if (self.delaymonstercount) {
-		// Reset both monster count conditions
-		// self.nomonstercount = self.delaymonstercount = 0;
-		// AddToTotals(self);
-		// update_hud_totals(HUD_MONSTERS);
-	// }
-
-	//Resist_CheckRange(self);		// Double check values
 	Resist_Save(self);				// Save for Later
 	Resist_ChangeType(self,TRUE);	// resist everything
 
@@ -1036,12 +1026,8 @@ void() monster_nour = {
 	self.poisonous = FALSE;			// Cannot be poisonous
 	self.style = NOUR_PHASE0;		// No waves setup
 	self.deathstring = " was picked apart by the Scragmother\n";
-	
-	// Change balance of range (spit/bomb) attacks
-	if (self.attack_chance <= 0) self.attack_chance = 0;
-	if (self.attack_chance >= 1) self.attack_chance = 1;
-	
-	// Setup Ammo Resistance
+	self.attack_chance = SUB_ClampFloat(self.attack_chance,0,1); // Change balance of range (spit/bomb) attacks
+	Resist_ChangeType(self,-1); // Setup Ammo Resistance
 	if (self.spawnflags & MON_NOUR_BOSS) {
 		self.resist_cells = 1;
 		self.resist_plasma = 1;
@@ -1050,13 +1036,9 @@ void() monster_nour = {
 		self.resist_plasma = 0.75;
 		self.resist_cells = 0.75;
 	}
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = 0; 
 	self.reflectlightning = TRUE;	// Reflect lightning strikes
 	self.reflectplasma = TRUE;		// Reflect plasma projectiles
-	
-	// Restore all think functions
-	self.th_checkattack = NourCheckAttack;
+	self.th_checkattack = NourCheckAttack; // Restore all think functions
 	self.th_stand = nour_stand1;
 	self.th_walk = nour_walk1;
 	self.th_run = nour_run1;
@@ -1070,9 +1052,7 @@ void() monster_nour = {
 	self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
 	if (self.minion_name == string_null) self.minion_name = "monster_wizard";
-	setup_passivestate(self); // Check passive system for exceptions
 	self.frame = 0; self.exactskin = self.skin; // Devmarker function changes skins, save for later
-	
 	monster_start();
 
 	// Check for boss version of Nouronihar?

@@ -76,19 +76,9 @@ void() monster_tarbaby_mitosis = {
 	self.gibhealth = MON_NEVERGIB;		// Cannot be gibbed by weapons
 	self.gibbed = FALSE;
 	self.pain_flinch = 20;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "") self.deathstring = " was slimed by a Mitosis Spawn\n";
-
 	if (self.minion_name == string_null) self.minion_name = "monster_tarbaby";
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	self.th_checkattack = SpawnCheckAttack;
 	self.th_stand = tbaby_stand1;
 	self.th_walk = tbaby_walk1;

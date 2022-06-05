@@ -249,24 +249,15 @@ void() monster_cyberdemon = {
 	// Has boss flag because its Heretic counterpart, the Maulotaur, has it.
     self.noradiusdmg = TRUE;
 	self.bossflag = TRUE;
-	self.resist_fire = 1;
 
 	// PM:  I don't think Doom has yaw speeds, and monsters can turn 180 degrees at any given moment.
     self.yaw_speed = 60;        // Fast, but not instant turning.
     self.attack_offset = '31 -20 36';
-	
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-	
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	self.resist_fire = 1;
 	self.classtype = CT_MONCYBERDEMON;
 	self.classgroup = CG_DEMON;
 	self.classmove = MON_MOVEWALK;
-	
 	if ( (random () < 0.500) ) {
 		if (self.deathstring == "")  self.deathstring = " dances the cyberboogie with a Cyberdemon\n";
 	} else {

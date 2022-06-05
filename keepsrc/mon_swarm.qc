@@ -181,15 +181,6 @@ void() monster_beez = {
 	self.gibbed = FALSE;				// Not fallen apart as of yet
 	self.pain_flinch = 10;				// pretty much always pain
 	self.steptype = FS_FLYING;			// Wandering around!
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	self.th_stand = swrm_stand1;
 	self.th_walk = swrm_walk1;
 	self.th_run = swrm_run1;
@@ -197,18 +188,12 @@ void() monster_beez = {
 	self.th_pain = swrm_pain;
 	self.th_die = swrm_die;
 	self.touch = beez_touch;
-
-	// Standard DENIZEN AI
-	if (!self.alignment) self.alignment = NEUTRAL;
-	if (!self.passive_state) self.passive_state = 1;
-	if (!self.temperament) self.temperament = TEMPRA_PASSIVE;
-	if (!self.vulnerability) self.vulnerability = VULN_RESISTANT;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	if (self.deathstring == "") {
 		if (random() < 0.5) self.deathstring = " was swarmed by Bees\n";
 		else self.deathstring = " was stung to death by Bees\n";
 	}
-
 	self.classtype = CT_MONBEEZ;
 	self.classgroup = CG_HARMLESS;
 	self.classmove = MON_MOVEFLY;

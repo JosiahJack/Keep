@@ -409,17 +409,13 @@ void() monster_wolf = {
 	self.attack_offset = '40 0 0';		// Sword attack offset
 	self.meleeoffset = '40 0 16';		// Blood around sword
 	self.deathstring = " was ravaged by a Wolf\n";
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.resist_cells = self.resist_rockets = 0.5;
-	
 	self.th_checkattack = WolfCheckAttack;
 	self.th_walk = wolf_walk1;
 	self.th_pain = wolf_pain;
 	self.th_die = wolf_die;
 	self.th_stand = wolf_stand1;
-
 	if (self.spawnflags & MON_WOLF_HOWL) { 	//Howling wolf start
 		self.th_run = self.th_missile = self.th_melee = wolf_wakeup;
 	} else { //Default wolf start
@@ -427,7 +423,7 @@ void() monster_wolf = {
 		self.th_missile = wolf_shoot1;
 		self.th_run = wolf_run1;
 	}
-	
+
 	self.classgroup = CG_BOSS;
 	self.classtype = CT_MONWOLF;
 	self.classmove = MON_MOVEWALK;

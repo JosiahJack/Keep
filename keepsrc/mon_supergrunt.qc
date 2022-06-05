@@ -444,7 +444,6 @@ void() monster_super_grunt = {
 	
 	self.mdl = "progs/kinn/sgrunt.mdl";
 	self.headmdl = "progs/kinn/head2.mdl";
-	
 	if (random() < 0.5)	
 		self.sight_sound = "sgrunt/infsght1.wav";
 	else
@@ -464,16 +463,8 @@ void() monster_super_grunt = {
 	if (self.ammo_cells < 1) self.ammo_cells = 10;
 	self.th_checkattack = SGruntCheckAttack;
 	self.monsterflags = self.monsterflags | MF_COMMANDER;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "")  self.deathstring = " was slaughtered by a Sergeant\n";
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	self.classtype = CT_MONSUPERGRUNT;
 	self.classgroup = CG_ARMY;
 	self.classmove = MON_MOVEWALK;

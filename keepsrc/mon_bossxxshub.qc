@@ -370,7 +370,6 @@ void() xxshub_start = {
 	self.noinfighting = TRUE;		// No infighting
 	self.gibhealth = -1000;			// Special death sequence
 	self.pain_finished = self.attack_finished = 0;
-	Resist_CheckRange(self);		// Double check values
 	Resist_Save(self);				// Save for Later
 	// Allow for a damage trigger (spawnflag option only)
 	if (!(self.spawnflags & MON_SHUB_DMGTRIG)) Resist_ChangeType(self, TRUE);
@@ -449,7 +448,6 @@ void() monster_shub = {
 	self.liquidbase = self.liquidcheck = 0;		// Used for liquid content damage
 	self.dmgcombined = self.dmgtimeframe = 0;	// combined damage over 0.1s
 	self.takedamage = DAMAGE_NO;				// Immune to damage
-
 	if (CheckZeroVector(self.pos1)) self.pos1 = '200 20 0'; // Attack 1 - Setup projectile speed (200 + 20*skill)
 	if (CheckZeroVector(self.pos2)) self.pos2 = '0 0 40'; // Attack 1 - Setup projectile damage (Base + Random, Splash)
 	if (CheckZeroVector(self.dest1)) self.dest1 = '0 0 128'; // Attack 1 - Spawn location (offset from origin)
@@ -465,8 +463,6 @@ void() monster_shub = {
 	self.classgroup = CG_BOSS;
 	self.style = 0;
 	if (self.deathstring == "")  self.deathstring = " became one with Shub-Niggurath\n";
-	setup_passivestate(self); // Check passive system for exceptions
-
 	self.th_stand = self.th_walk = self.th_run = SUB_Null;
 	self.th_missile = self.th_die = SUB_Null;
 	self.th_pain = SUB_Null_pain;

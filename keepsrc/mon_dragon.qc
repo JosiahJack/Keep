@@ -541,7 +541,7 @@ void () dragon_activate = {
    if ( self.targetname )
       self.use = dragon_use;
    else
-      dragon_use ();
+      dragon_use();
 };
 
 void () monster_dragon_precache = {
@@ -579,12 +579,11 @@ void () monster_dragon = {
 	self.th_pain = dragon_pain;
 	self.th_die = dragon_death1;
 	self.dragonPainSequence = TRUE;
-	setup_passivestate(self); // Check passive system for exceptions
-
 	self.th_stand = self.th_walk = SUB_Null;
 	self.th_missile = SUB_Null;
+   Resist_ChangeType(self,-1);
+   self.resist_fire = 1;
 	monster_start();
-
 	self.nextthink = (self.nextthink + 0.100);
 	if (self.deathstring == "")  self.deathstring = " was annihilated by the Dragon\n";
 	self.think = dragon_activate;

@@ -189,16 +189,7 @@ void() monster_sentinel = {
 	self.th_die = sentinel_die;
 	self.height = -16;
     self.hittype    = HIT_METAL;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = 0;
-	self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.gibtype = GIBTYPE_METAL;
 	self.classtype = CT_MONSENTINEL;
 	self.classgroup = CG_ROBOT;			// One big happy robot family!

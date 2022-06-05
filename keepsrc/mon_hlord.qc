@@ -151,15 +151,15 @@ void(string text) Bane_Speaks = {
 };
 
 void() bane_die = {
-	// ... You win... for now. (Фие Вбоеє ®®® Щпх чйо®®® жпт опч®)
-	// ... I'll be back! (Фие Вбоеє ®®® Йамм ве вбглЎ)
-	// ... I will return! (Фие Вбоеє ®®® Й чймм тефхтоЎ)
-	// ... We will meet again! (Фие Вбоеє ®®® Че чймм нееф бзбйоЎ)
+	// ... You win... for now. (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅо®®пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ)
+	// ... I'll be back! (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ)
+	// ... I will return! (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ)
+	// ... We will meet again! (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ)
 	// Update:  New taunts hinting of nsoe6.
     if (random() < 0.5)     // ... I still have the runes!
-        Bane_Speaks ("Фие Вбоеє ®®® Й уфймм ибце фие тхоеуЎ\n");
+        Bane_Speaks ("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\n");
     else                    // ... You have not won yet!
-        Bane_Speaks ("Фие Вбоеє ®®® Щпх ибце опф чпо щефЎ\n");
+        Bane_Speaks ("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ\n");
     hknight_die ();
 };
 
@@ -590,14 +590,14 @@ void() bane_magice13 =[ $magicb11, bane_magice14 ] {self.alpha = 0; hk_face();
             if (self.height) {
                 if (self.height & BANE_CLONE) {
                     if (random() < 0.5)     // Die, maggot!
-                        Bane_Speaks ("Фие Вбоеє Дйе¬ нбззпфЎ\n");
+                        Bane_Speaks ("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n");
                     else                    // Now die!
-                        Bane_Speaks ("Фие Вбоеє Опч дйеЎ\n");
+                        Bane_Speaks ("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ\n");
                 } else if (self.height & BANE_RAGE) {
                     if (random() < 0.5)     // Behold my power!
-                        Bane_Speaks ("Фие Вбоеє Веипмд¬ нщ рпчетЎ\n");
+                        Bane_Speaks ("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\n");
                     else                    // Feel my wrath!
-                        Bane_Speaks ("Фие Вбоеє Жеем нщ чтбфиЎ\n");
+                        Bane_Speaks ("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\n");
                 }
                 self.height = BANE_CHAT;
             }
@@ -946,7 +946,6 @@ void() monster_bane = {
 	self.steptype = FS_TYPEHEAVY;
 	self.meleeattack = rint(random()*3);	// randomize last melee attack
 	self.th_die = hknight_die;				// Face meets floor
-
     if (cvar("skill") < 1) {
         self.waitmin = self.waitmax = -1;   // No clones or rage on Easy.
     } else if (cvar("skill") < 2) {
@@ -972,11 +971,7 @@ void() monster_bane = {
 	self.th_die = hknight_die;			// Face meets floor
     self.th_win     = bane_win;
 	if (self.deathstring == "") self.deathstring = " provided sport for Bane\n";
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.classtype = CT_MONBANE;
 	self.classgroup = CG_DCAPTAIN;	// Rule over seargent and fury knights but lesser knights are disloyal
 	self.classmove = MON_MOVEWALK;
@@ -1309,25 +1304,18 @@ void() monster_dark_lord = {
 	}
     self.ryuflags   = RYU_ALERT | RYU_INSANE;
 	self.pain_longanim = FALSE;
-
 	self.th_stand = hknight_stand1;		// Idling on feet
 	self.th_walk = hknight_walk1;		// Walking
 	self.th_run = darklord_run1;			// Running
 	self.th_melee = darklord_melee;		// Sword attack
 	self.th_missile = darklord_magic;	// Fire spikes
 	self.th_charge = hknight_char_a1;	// Run + melee
-    if (self.spawnflags & 4)
-        self.th_pain    = darklord_pain;    // Checks for stage change.
-    else
-        self.th_pain    = hknight_pain;
+    if (self.spawnflags & 4) self.th_pain    = darklord_pain;    // Checks for stage change.
+    else self.th_pain    = hknight_pain;
+
 	self.th_die = darklord_die;			// Face meets floor
     self.th_win     = bane_win;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	setup_passivestate(self); // Check passive system for exceptions
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.classtype = CT_MONDARKLORD;
 	self.classgroup = CG_DCAPTAIN;	// Rule over seargent and fury knights but lesser knights are disloyal
 	self.classmove = MON_MOVEWALK;

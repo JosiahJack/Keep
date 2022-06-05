@@ -493,20 +493,13 @@ void() monster_boglord = {
 	// Special Rage attack mode ( >0 = enabled )
 	// Closer to 0 = Lightning attack, Closer to 1 = Ball attack
 	// Make sure percentage chance within range of 0-1
-	if (self.attack_rage <= 0) self.attack_rage = 0;
-	if (self.attack_rage >= 1) self.attack_rage = 1;
-	
-	// Check passive system for exceptions
-	setup_passivestate(self);
-	
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
+	self.attack_rage = SUB_ClampFloat(self.attack_rage,0,1);
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.resist_rockets = self.resist_cells = 0.75;
 	self.resist_multi_rockets = 0.75;
 	self.resist_plasma = 0.75;
 	self.reflectlightning = TRUE;	// Reflect lightning strikes
 	self.reflectplasma = TRUE;		// Reflect plasma projectiles
-	
 	self.th_checkattack = BogLordCheckAttack;
 	self.th_stand = bogl_stand1;
 	self.th_walk = bogl_walk1;
@@ -517,10 +510,8 @@ void() monster_boglord = {
 	self.th_die = bogl_die;
 	self.th_wakeup = bogl_wakeup1;
 	self.th_tether = bogl_tetherattack;
-
 	self.classtype = CT_MONBOGLORD;
 	self.classgroup = CG_DEMON;
 	self.classmove = MON_MOVEWALK;
-	
 	monster_start();
 };

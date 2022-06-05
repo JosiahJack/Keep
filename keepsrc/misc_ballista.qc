@@ -113,7 +113,7 @@ void() trigger_control_find_target =  {
     self.goalentity.mangle = self.goalentity.angles;
 };
 
-void() trigger_control =  {
+void() trigger_control = {
     if (SUB_HideIfNoTarget()) return; 
 
    self.enemy = world;

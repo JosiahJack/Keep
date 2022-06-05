@@ -545,14 +545,11 @@ void() zombie_cruc_spawn = {
 	if (self.exactskin > 0) self.skin = rint(self.exactskin);
 	else self.skin = rint(random()*(self.randomskin-1));
 	if (self.skin < 0) self.skin = 0;	// Double check no negatives	
-	
 	self.takedamage = DAMAGE_AIM;		// Can receive damage
 	self.velocity = '0 0 0';			// Make sure stationary
 	self.deadflag = DEAD_NO;			// used to stop death re-triggering
 	self.view_ofs = '0 0 -24';			// Standard setup
 	self.pain_timeout = 1;				// Default
-
-
 	zombie_cruc1 ();					// Time to do some moaning
 };
 
@@ -560,16 +557,11 @@ void() zombie_cruc_setup = {
 	// Setup AI functions
 	self.th_stand = self.th_walk = self.th_run = zombie_cruc1;
 	self.th_pain = zombie_cruc_pain; self.th_die = zombie_die;
-	
 	self.gibbed = FALSE;				// Still in one piece
 	self.health = self.max_health = 60;	// Save for later
 	self.gibhealth = 0 - self.health;	// Work out damage trigger
 	self.pain_flinch = 10;				// Always in pain
 	self.nomonstercount = TRUE;			// Don't include in initial total
-	// make sure angle field is within range (0-360)
-	// interestingly, if angles_y is negative the engine will ignore it
-	if (self.angles_y < 0) self.angles_y = 0;
-	if (self.angles_y > 360) self.angles_y = 360;
 
 	// Zombies cannot be crucified and on the floor at once!
 	// EDIT: Yeah they can.  Just ask Fredrik 'PeyloW' Olsson and his temple2 map
@@ -659,10 +651,7 @@ void() monster_zombie = {
 	self.classmove = MON_MOVEWALK;
 	if (!self.exactskin) self.randomskin = 2;
 	if (self.deathstring == "") self.deathstring = " joins the Zombies\n";
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 
 	// Setup crucified zombies
 	if (self.spawnflags & MON_CRUCIFIED) {
@@ -679,11 +668,6 @@ void() monster_zombie = {
 		if (!self.movespeed) self.movespeed = 1;// Adjustable speed via skill level
 		self.inpain = 0;						// Zombie starts with no pain lock
 		self.count = 0;							// Reset get up timer
-
-		// Check for random rotation setup and angle limits
-		if (self.angles_y < 0) self.angles_y = rint(random()*359);
-		if (self.angles_y > 360) self.angles_y = 360;
-
 		self.th_stand = zombie_stand1;
 		self.th_walk = zombie_walk1;
 		self.th_run = zombie_run1;
@@ -733,13 +717,8 @@ void() monster_zombiep = {
 	self.gibtype = GIBTYPE_POISON;			// Poison gibs!
 	self.no_liquiddmg = TRUE;				// Immune to slime/lava
 	self.poisonous = TRUE;					// Poison debuff
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "") self.deathstring = " joins the Poisonous Zombies\n";
-
 	self.classtype = CT_MONMUMMY;
 	self.classgroup = CG_ZOMBIE;			// One big happy zombie family!
 	self.classmove = MON_MOVEWALK;
@@ -758,11 +737,6 @@ void() monster_zombiep = {
 		if (!self.movespeed) self.movespeed = 1;// Adjustable speed via skill level
 		self.inpain = 0;						// Zombie starts with no pain lock
 		self.count = 0;							// Reset get up timer
-
-		// Check for random rotation setup and angle limits
-		if (self.angles_y < 0) self.angles_y = rint(random()*359);
-		if (self.angles_y > 360) self.angles_y = 360;
-
 		self.th_stand = zombie_stand1;
 		self.th_walk = zombie_walk1;
 		self.th_run = zombie_run1;

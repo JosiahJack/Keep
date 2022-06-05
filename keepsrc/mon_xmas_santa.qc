@@ -390,19 +390,12 @@ void() monster_xmas_santa = {
 	self.attack_offset = '28 22 26';// End of gun
 	self.attack_rage = TRUE;		// Not in combat yet
 	if (self.deathstring == "") self.deathstring = " was wrapped up by Santa\n";
-	
-	// Setup Ammo Resistance
-	self.resist_shells = self.resist_nails = 0;
+	Resist_ChangeType(self,-1); // Setup Ammo Resistance
 	self.resist_rockets = self.resist_cells = 0.5;
 	self.reflectlightning = TRUE;	// Reflect lightning strikes
 	self.reflectplasma = TRUE;		// Reflect plasma projectiles
-
 	self.th_pain = santa_pain; // Pain/Death functions
 	self.th_die = santa_die;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
 
 	// Check for GOOD Santa setup?
 	if (self.spawnflags & MON_SANTA_GOOD) {

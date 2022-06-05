@@ -38,7 +38,6 @@
 //=============================================================================
 
 .float		passive_mode;		// A monster with passive abilities
-.float		passive_state;		// Passive monster state 0=OFF, 1=ON, -1=NOT SET
 .float		passive_timer;		// When was the last time monster saw enemy?
 .float		passive_resettimer;	// Time after not seeing enemy will reset
 .float		passive_resethp;	// Reset HP when passive mode activated

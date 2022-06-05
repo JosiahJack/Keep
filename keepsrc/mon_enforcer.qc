@@ -469,7 +469,7 @@ void() monster_base_enforcer = {
 	self.movetype = MOVETYPE_NONE;
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
 	if (!self.gibhealth) self.gibhealth = -35;
-	self.gibbed = FALSE;\
+	self.gibbed = FALSE;
 	if (self.classtype == CT_MONENF_ULTRA) self.pain_flinch = 80; // high pain threshhold
 	if (self.classtype == CT_MONENF_MEGA) self.pain_flinch = 50; // medium pain threshold
 	if (self.classtype == CT_MONSUPERENFORCER) self.pain_flinch = 100; // medium pain threshold
@@ -477,25 +477,15 @@ void() monster_base_enforcer = {
 	self.pain_longanim = TRUE;			// Long pain animation for axe
 	if (!self.steptype) self.steptype = FS_TYPEHEAVY;		// heavy player
 	if (CheckZeroVector(self.attack_offset)) self.attack_offset = '28 8.5 16';	// End of Gun
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1);// Always reset Ammo Resistance to be consistent
 	if (self.classtype == CT_MONELIMATOR) {self.resist_cells = 0.5;self.resist_plasma = 0.5;}
 	if (self.classtype == CT_MONDEFENDER) {self.resist_rockets = 0.5;self.resist_multi_rockets = 0.5;}
 	if (self.classtype == CT_MONENF_MEGA) {self.resist_cells = 0.75;self.resist_plasma = 0.75;}
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-	
 	if (!self.th_stand) self.th_stand = enf_stand1;
 	if (!self.th_walk) self.th_walk = enf_walk1;
 	if (!self.th_run) self.th_run = enf_run1;
 	if (!self.th_pain) self.th_pain = enf_pain;
 	if (!self.th_die) self.th_die = enf_die;
-
 	self.classgroup = CG_ENFORCER;
 	self.classmove = MON_MOVEWALK;
 	monster_start();

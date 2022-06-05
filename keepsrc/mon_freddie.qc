@@ -505,15 +505,7 @@ void() monster_freddie = {
 	self.pain_timeout = 2;				// High pain threshold
 	self.blockudeath = TRUE;			// no humanoid death sound
 	self.attack_offset = '0 0 0';		// Run + Gun vector
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-	
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if ( (random () < 0.500) ) {
 		if ( (random () < 0.500) ) {
 			if (self.deathstring == "")  self.deathstring = " was exterminated by Fred\n"; // Silly Qmaster

@@ -561,15 +561,10 @@ void() monster_swampling = {
 	self.movespeed = 1;					// Can never be a turret
 	self.poisonous = TRUE;				// Always poisonous
 	self.deathstring = " was bitten by a Swampling\n";
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = SwamplingCheckAttack;
 	self.th_pain = swampling_pain;
 	self.th_die = swampling_die;
-
 	self.classtype = CT_MONSWAMPLING;
 	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEWALK;

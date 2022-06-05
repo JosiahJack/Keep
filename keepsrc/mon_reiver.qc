@@ -973,18 +973,16 @@ void () reiver_shield_think = {
 	if (self.shield_finished < time) animate_shield ();
 	
 	self.scale = 0.9;	// 1;
+
 	if ((self.owner.dodge_finished > time) && (!self.owner.lefty)) {
 		self.alpha = 1;					// show multi_shield
-		
 		self.shield_time = 1;
 		self.owner.takedamage = DAMAGE_YES; 		// grenades bounces off of Reiver
-
-		// Always reset Ammo Resistance to be consistent
 		self.resist_shells = self.resist_nails = 0.75;
 		self.resist_rockets = self.resist_cells = 0.75;
 		self.resist_plasma = 0.75;
 		self.resist_multi_rockets = 0.75;
-		// Lava nails pierce armor remember :)
+		self.resist_lava_nails = 0; // Lava nails pierce armor remember :)
 		self.resist_plasma = 0.75;
 		self.resist_bolts = 0.75;
 		self.resist_poison = self.resist_acid = 0.75;
@@ -993,15 +991,8 @@ void () reiver_shield_think = {
 		self.alpha = 0.0001;				// hide multi_shield
 		self.shield_time = 0;
 		self.owner.takedamage = DAMAGE_AIM; 		// regular behaviour
+		Resist_ChangeType(self,-1);
 		self.reflectnails = FALSE;		// Reflect nail projectiles
-		// Always reset Ammo Resistance to be consistent
-		self.resist_shells = self.resist_nails = 0;
-		self.resist_rockets = self.resist_cells = 0;
-		self.resist_plasma = 0;
-		self.resist_multi_rockets = 0;
-		self.resist_plasma = 0;
-		self.resist_bolts = 0;
-		self.resist_poison = self.resist_acid = 0;
 	}
 
 	// spawn multi_shield randomly when hunting an enemy (even when not got shot)
@@ -1070,16 +1061,8 @@ void() monster_reiver = {
 	reiver_shield.lefty = 1;
 	reiver_shield.think = reiver_shield_think;
 	reiver_shield.nextthink = time;
-	// setattachment(reiver_shield, self, "test");
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	if (checkbuiltin(checkbuiltin) && checkbuiltin(setattachment)) setattachment(reiver_shield, self, "test");
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "")  self.deathstring = " was terrified by a Reiver\n\n";
 	self.classtype = CT_MONREIVER;
 	self.classgroup = CG_KNIGHT;

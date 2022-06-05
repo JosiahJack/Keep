@@ -252,10 +252,7 @@ void() monster_tarbaby = {
 	if (self.poisonous < 1) self.poisonous = FALSE;
 	else { self.poisonous = TRUE; self.exactskin = 2; }
 
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = SpawnCheckAttack;
 	self.th_stand = tbaby_stand1;
 	self.th_walk = tbaby_walk1;
@@ -265,7 +262,6 @@ void() monster_tarbaby = {
 	self.th_melee = tbaby_jump1;
 	self.th_pain = tbaby_pain;
 	self.th_die = tbaby_die;
-	
 	self.classtype = CT_MONSPAWN;
 	self.classgroup = CG_SPAWN;
 	self.classmove = MON_MOVEWALK;

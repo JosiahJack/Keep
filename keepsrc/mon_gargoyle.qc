@@ -463,17 +463,8 @@ void() setup_gargoyle = {
 	self.blockudeath = TRUE;			// no humanoid death sound
 	if (self.height == 0) self.height = MONAI_ABOVEDIST; // Custom height
 	self.attack_offset = '16 28 22';	// fireball start location
-	
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "")  self.deathstring = " was burned by a Gargoyle\n";
-
 	self.th_checkattack = GargoyleCheckAttack;
 	self.th_pain = garg_pain; 
 	self.th_die = garg_die;

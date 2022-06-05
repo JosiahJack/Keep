@@ -1818,16 +1818,6 @@ void() judge_awake = {
 	self.movetype = MOVETYPE_STEP;
 	setmodel(self, self.mdl);					// Setup model
 	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
-
-	// Check for delay spawn monster count
-	// if (self.delaymonstercount) {
-		// Reset both monster count conditions
-		// self.nomonstercount = self.delaymonstercount = 0;
-		// AddToTotals(self);
-		// update_hud_totals(HUD_MONSTERS);
-	// }
-
-	//Resist_CheckRange(self);		// Double check values
 	Resist_Save(self);				// Save for Later
 	Resist_ChangeType(self,TRUE);	// resist everything
 
@@ -1949,15 +1939,12 @@ void() monster_judicator = {
 	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '450 0 225'; // Default jump forward/up distance
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPJUDGENEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPJUDGEFAR;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.resist_rockets = self.resist_cells = 0.75;
 	self.resist_multi_rockets = 0.75;
 	self.resist_plasma = 0.75;
 	self.reflectlightning = TRUE;	// Reflect lightning strikes
 	self.reflectplasma = TRUE;		// Reflect plasma projectiles
-
 	self.th_checkattack = JudgeCheckAttack;
 	self.th_stand = judge_stand;
 	self.th_walk = judge_walk;
@@ -1979,12 +1966,9 @@ void() monster_judicator = {
 	self.flags = FL_MONSTER;		// Reset flag (no user settings)
 	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)		
 	self.reflectaxe = TRUE;			// Prevent axe damage
-	setup_passivestate(self); // Check passive system for exceptions
-
 	self.frame = 0;
 	self.exactskin = self.skin; // Devmarker function changes skins, save for later
 	if (self.minion_name == string_null) self.minion_name = "monster_gaunt";
-
 	monster_start();
 
 	// Wait for trigger event
@@ -2112,7 +2096,6 @@ void() monster_justice = {
 	self.state = JUDGE_STAND;				// Default state
 	self.weaponstate = JUDGE_SWSHOULDER;	// Default sword position
 	self.attack_switch = FALSE;				// Avoid idleD if patrolling
-	//self.move_altwalk = FALSE;			// No alternative walk
 	self.attack_active = FALSE;			// Not started combat yet
 	self.meleerange = MONAI_CLOSEJUDGE;	// swing/smash range
 	self.meleecontact = FALSE;			// Smash contact sound
@@ -2127,11 +2110,7 @@ void() monster_justice = {
 	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '500 0 250'; // Default jump forward/up distance
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPJUSTICENEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPJUSTICEFAR;
-	
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = JusticeCheckAttack;
 	self.th_stand = judge_stand;
 	self.th_walk = judge_walk;

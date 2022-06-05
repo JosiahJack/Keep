@@ -1146,7 +1146,6 @@ void() setup_necro = {
 	self.gib1mdl = "progs/drake/nec_rod1.mdl";
 	self.gib2mdl = "progs/drake/nec_rod2.mdl";
 	self.gib3mdl = "progs/drake/nec_rod3.mdl";
-
 	if (self.classtype == CT_MONACOLYTE) {
 		self.th_stand   = necro1_stand1;
 		self.th_walk    = necro1_walk1;
@@ -1193,19 +1192,12 @@ void() setup_necro = {
     self.th_spawn   = setup_necro;
     self.waitmax    = 0;    // Teleport delay, similar to nemesant.
     Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	if(!self.classtype) self.classtype = CT_MONACOLYTE;
 	if (!self.classgroup) self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEWALK;
-
 	if (self.worldtype) {
 		if (!self.minion_maxcount) self.minion_maxcount = 3;
 	}
-
     monster_start ();
 };
 

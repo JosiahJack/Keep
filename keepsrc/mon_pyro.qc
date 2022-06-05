@@ -355,15 +355,11 @@ void() monster_pyro = {
 	self.ammo_shells = 4;				// drops armor shards instead
 	if (!self.exactskin) self.randomskin = 4;
 
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = 0; self.resist_nails = 0.5;
-	self.resist_rockets = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	self.resist_nails = 0.5;
+	self.resist_lava_nails = 0.75;
+	self.resist_fire = 1;
 	self.reflectnails = TRUE;		// Reflect nail projectiles
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	self.th_checkattack = PyroCheckAttack;
 	self.th_stand = pyro_stand1;
 	self.th_walk = pyro_walk1;
@@ -375,7 +371,7 @@ void() monster_pyro = {
 	self.classtype = CT_MONPYRO;
 	self.classgroup = CG_ENFORCER;
 	self.classmove = MON_MOVEWALK;
-	if (self.deathstring == "")  self.deathstring = " was toasted by a Pyro\n";
+	if (self.deathstring == "") self.deathstring = " was toasted by a Pyro\n";
 	monster_start();
 };
 
@@ -427,12 +423,12 @@ void() monster_fumigator = {
 	self.gibtype = GIBTYPE_POISON;		// Poison gibs!
 	self.no_liquiddmg = TRUE;			// Immune to slime/lava
 	if (!self.exactskin) self.randomskin = 4;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = 0; self.resist_nails = 0.5;
-	self.resist_rockets = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	self.resist_nails = 0.5;
+	self.resist_lava_nails = 0.25;
+	self.resist_fire = 0.25;
+	self.resist_acid = 1;
 	self.reflectnails = TRUE;		// Reflect nail projectiles
-
 	self.th_checkattack = PyroCheckAttack;
 	self.th_stand = pyro_stand1;
 	self.th_walk = pyro_walk1;
@@ -441,11 +437,6 @@ void() monster_fumigator = {
 	self.th_die = pyro_die;
 	self.th_melee = pyro_atk1;
 	self.th_missile = pyro_atk1; // For monster_turret function
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	self.classtype = CT_MONFUMIGATOR;
 	self.classgroup = CG_ENFORCER;
 	self.classmove = MON_MOVEWALK;

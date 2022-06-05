@@ -66,11 +66,68 @@ float(entity targ, entity inflictor) CanDamage = {
 	return FALSE; // Couldn't hit
 };
 
+float VICTORY_ALL_MONSTERS = 0;
+float VICTORY_THRESHOLD_MONSTERS = 1;
+float VICTORY_ANY_SOME_MONSTERS = 4;
+float VICTORY_NONE_MONSTERS = 5;
+float VICTORY_NONE_DENIZENS = 6;
+float VICTORY_THRESHOLD_DENIZENS = 7;
+float VICTORY_ANY_SOME_DENIZENS = 10;
+float VICTORY_ALL_DENIZENS = 11;
+float VICTORY_MANUAL_ONLY = 1; // Only trigger if targetted, not automatic on kill.
+
+void() trigger_victory_fire = {
+	if (self.enemy) activator = self.enemy;
+	SUB_UseTargets();
+};
+
+void() trigger_victory_check = {
+	local float goal, goalperc;
+
+	if (self.filterstyle == VICTORY_ALL_MONSTERS) {
+		if (killed_monsters < total_monsters) return;
+	} else if (self.filterstyle == VICTORY_ALL_DENIZENS) {
+		if (killed_denizens < total_denizens) return;
+	} else if (self.filterstyle == VICTORY_NONE_MONSTERS) {
+		if (killed_monsters > 0) return;
+	} else if (self.filterstyle == VICTORY_NONE_DENIZENS) {
+		if (killed_denizens > 0) return;
+	} else if (self.filterstyle == VICTORY_ANY_SOME_MONSTERS) {
+		if (killed_monsters <= 0) return;
+	} else if (self.filterstyle == VICTORY_ANY_SOME_DENIZENS) {
+		if (killed_denizens <= 0) return;
+	}
+
+	if (self.filterstyle == VICTORY_THRESHOLD_MONSTERS
+		|| self.filterstyle == VICTORY_THRESHOLD_DENIZENS) {
+		goalperc = SUB_ClampFloat(self.count,0,1);
+	}
+
+	if (self.filterstyle == VICTORY_THRESHOLD_MONSTERS) {
+		goal = SUB_ClampFloat(ceil(total_monsters * goalperc),0,total_monsters);
+		if (self.count >= 1) goal = ceil(self.count);
+		goal = SUB_ClampFloat(goal,1,total_monsters);
+		if (killed_monsters < goal) return;
+	}
+
+	if (self.filterstyle == VICTORY_THRESHOLD_DENIZENS) {
+		goal = SUB_ClampFloat(ceil(total_denizens * goalperc),0,total_denizens);
+		if (self.count >= 1) goal = ceil(self.count);
+		goal = SUB_ClampFloat(goal,1,total_denizens);
+		if (killed_denizens < goal) return;
+	}
+
+	trigger_victory_fire();
+};
+
 // --> QUAKED trigger_victory (.5 .5 .5) (-8 -8 -8) (8 8 8)
 // Drake entity.
 // Only be fired by killing the last monster on a level (i.e., 100% kills).
 // It can contain killtargets, targets, delays, and messages.
-void() trigger_victory = {};
+void() trigger_victory = {
+	 // Allow forcing the effect manually.
+	if (self.targetname != "") self.use = trigger_victory_check;
+};
 
 void(entity targ) AddToTotals = {
 	if (targ.classtype == CT_MONANACONDACOIL) return; // The coils are part of monster_anaconda
@@ -88,7 +145,7 @@ void(entity targ) AddToTotals = {
 float(entity e, float heal, float ignore) T_Repair;
 
 void(entity thekilled, entity attacker) AddToKills = {
-    local entity victory, swap;
+    local entity victory;
 
     if (thekilled.xfl & XFL_ADD_TO_KILL && self.classtype != CT_MONANACONDACOIL) { // Marked as a countable enemy
         // thekilled.xfl = thekilled.xfl - XFL_ADD_TO_KILL;  // Count only once.  -Qmaster: Nope.  Well, we might have been revived alright, monster_revive should add to the count by 1.
@@ -110,21 +167,12 @@ void(entity thekilled, entity attacker) AddToKills = {
 			}
 		}
 
-		// PM:  Activate 'all clear' triggers at 100% kills.
-        if (killed_monsters == total_monsters) { // Just reached 100% kills.
-            victory = find (world, classname, "trigger_victory");
-			swap = self;
-			self = thekilled;
-            while(victory) {
-                activator = attacker;
-				SUB_UseTargets();
-				victory = find(victory, classname, "trigger_victory");
-            }
-			self = swap;
-        }
     } else if (thekilled.xfl & XFL_PET) {
 		killed_denizens = killed_denizens + 1;
-		if (killed_denizens > total_denizens) total_denizens = killed_denizens; // Just in case!
+		if (killed_denizens > total_denizens) {
+			total_denizens = killed_denizens; // Just in case!
+			update_hud_totals(HUD_MONSTERS);
+		}
 
 		// Apply any benefits to the thing that killed us
 		if (attacker) {
@@ -136,6 +184,19 @@ void(entity thekilled, entity attacker) AddToKills = {
 				if (deathmatch || (coop > 2 && attacker.versustype == VT_GAMEMASTER)) attacker.frags = attacker.frags + 1;
 			}
 		}
+	}
+
+	// Activate 'all clear' triggers at 0, partial, 100% kills.
+	victory = find(world,classname,"trigger_victory");
+	while(victory) {
+		if (!(victory.spawnflags & VICTORY_MANUAL_ONLY)) {
+			victory.enemy = attacker; // Pass through so that activator can be set.
+			victory.think = trigger_victory_check; // Let the trigger_victory figure out
+												// what to do, either 0 kills, partial,
+												// or 100%.
+			victory.nextthink = time + 0.1;
+		}
+		victory = find(victory, classname, "trigger_victory");
 	}
 };
 
@@ -711,7 +772,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 						// It should really be based on bounding box edge not monster origin
 						org = head.origin + (head.mins + head.maxs)*0.5;
 						points = 0.5*vlen (imporg - org);
-						if (points < 0) points = 0;
+						points = SUB_ClampFloat(points,0,points); // Only prevent negative.
 						points = damage - points;
 						if (head == attacker) points = points * 0.5; // Half damage if caught by own explosion
 						if (points > 0 && head.health > 0) {
@@ -808,7 +869,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float check
 					if (head.takedamage > 0 && head.noradiusdmg == 0) {
 						org = head.origin + (head.mins + head.maxs)*0.5;
 						points = 0.5*vlen (imporg - org);
-						if (points < 0) points = 0;
+						points = SUB_ClampFloat(points,0,points); // Only prevent negative.
 						points = damage - points;
 						if (head == attacker) points = points * 0.5;
 						if (points > 0 && head.health > 0) {

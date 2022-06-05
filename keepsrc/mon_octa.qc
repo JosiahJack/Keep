@@ -210,10 +210,8 @@ void() monster_octa_precache = {
 
 // QUAKED monster_octa (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 void() monster_octa = {
-	// Check for any random monster setups
-	if (monster_checkrandomizer() == TRUE) return;
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/madfox/mon_octa.mdl";
 	//self.gib1mdl = 
@@ -224,7 +222,6 @@ void() monster_octa = {
 	//self.idle_soundcom = 
 	//self.sight_sound = 
 	//self.pain_sound = 
-
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 	self.gibhealth = -80;
@@ -240,17 +237,8 @@ void() monster_octa = {
 	}
 	self.move_state = '0 8 12';
 	if (self.spawnflags & MON_LIQUIDBLOCK) self.liquidblock = TRUE; // Check for water sightline wakeup
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
-
 	self.th_stand = octa_stand1;
 	self.th_walk = octa_walk1;
 	self.th_run = octa_run1;

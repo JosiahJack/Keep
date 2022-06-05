@@ -472,15 +472,7 @@ void() monster_dguard = {
 	self.gibbed = FALSE;
 	self.pain_flinch = 20;
 	self.steptype = FS_TYPEMEDIUM;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-	
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_stand = dguard_stand1;
 	self.th_walk = dguard_walk1;
 	self.th_run = dguard_run1;

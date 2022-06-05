@@ -715,21 +715,12 @@ void() monster_nemesant = {
     self.th_die     = nemes_die;
     self.th_spawn   = monster_nemesant;
     if (self.classname == "monster_nemesant") self.th_revive  = nemes_revive1;
-	setup_passivestate(self);  // Check passive system for exceptions
     self.waitmin = time + 5;     // Wait for idle sounds
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-	
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.classtype = CT_MONNEMESANT;
 	self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
-	if ( (random () < 0.500) ) {
+	if (random() < 0.5) {
 		if (self.deathstring == "") self.deathstring = " was buried by a Nemesant\n";
 	} else {
 		if (self.deathstring == "") self.deathstring = " was hexed by a Nemesant\n";

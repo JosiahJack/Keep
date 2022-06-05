@@ -459,12 +459,8 @@ void() monster_polyp = {
 	self.gibhealth = MON_NEVERGIB;		// Cannot be gibbed by weapons
 	self.gibbed = FALSE;
 	self.pain_flinch = 20;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-	if (self.deathstring == "")  self.deathstring = " was popped by a polyp\n";
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	if (self.deathstring == "") self.deathstring = " was popped by a polyp\n";
 	self.th_run = polyp_hover0;
 	self.th_missile = polyp_missile;
 	self.th_die = polyp_die1;
@@ -478,11 +474,6 @@ void() monster_polyp = {
 		self.th_stand = polyp_float1;
 		self.th_walk = polyp_walkfly1;
 	}
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	self.classtype = CT_MONPOLYP;
 	self.classgroup = CG_SPAWN;
 	self.classmove = MON_MOVEFLY;

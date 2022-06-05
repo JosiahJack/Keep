@@ -580,9 +580,7 @@ void() monster_wraithminion = {
 	monster_spider();
 };
 
-//----------------------------------------------------------------------------
-void() setup_spider =
-{
+void() setup_spider = {
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TINY;
@@ -595,15 +593,10 @@ void() setup_spider =
 	self.attack_offset = '14 0 8';		// Used by green spider, at jaws
 	self.movespeed = 1;					// Can never be a turret
 	self.deathstring = " was bitten by a Spider\n";
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = SpiderCheckAttack;
 	self.th_pain = spider_pain;
 	self.th_die = spider_die;
-
 	if(!self.classtype) self.classtype = CT_MONSPIDER;
 	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEWALK;
@@ -614,8 +607,7 @@ void() setup_spider =
 		self.gibhealth = -25;
 		self.poisonous = TRUE;		// Always poisonous
 		self.th_missile = spider_spit1;
-	}
-	else {
+	} else {
 		if (self.health < 1) self.health = 30;
 		self.gibhealth = -20;
 		self.poisonous = FALSE;		// Large only are poisonous
@@ -627,32 +619,22 @@ void() setup_spider =
 		if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPSPIDERFAR;
 	}
 	
-	//----------------------------------------------------------------------
 	// Check for quoth on ceiling entity flag
-	//----------------------------------------------------------------------
-	if (self.dangle) {
-		self.spawnflags = self.spawnflags | MON_SPIDER_CEILING;
-	}
+	if (self.dangle) self.spawnflags = self.spawnflags | MON_SPIDER_CEILING;
 
-	//----------------------------------------------------------------------
 	// Ceiling spiders have special idle animation (rotated)
 	// and need to let go of the ceiling before resuming any
 	// normal behaviour (most think functions are intercepted)
-	//----------------------------------------------------------------------
 	if (self.spawnflags & MON_SPIDER_CEILING) {
 		self.th_stand = self.th_walk = spider_idleup1;
 		self.th_run = self.th_slide = spider_wakeup;
 		self.th_melee = self.th_missile = self.th_jump = spider_wakeup;
 		// th_pain and th_die functions understand ceiling spiders
-	}
-	// Special spawning minion need to start spinning
-	else if (self.classtype == CT_MINIONSPIDER) {
+	} else if (self.classtype == CT_MINIONSPIDER) { // Special spawning minion need to start spinning
 		self.th_stand = self.th_walk = self.th_run = spider_grow;
 		self.th_melee = self.th_slide = SUB_Null;
 		self.th_missile = self.th_jump = SUB_Null;
-	}
-	// Default spider behaviour functions
-	else {
+	} else { // Default spider behaviour functions
 		self.th_stand = spider_idle1;
 		self.th_walk = spider_walk1;
 		self.th_run = spider_run1;
@@ -671,20 +653,17 @@ void(vector minion_org, entity minion_targ) minion_spider = {
 	if (entity_pcontent(minion_org)) return;
 	
 	update_minioncount(self.owner, 1);		// Update spawn counters
-	
 	minion = spawn();
 	minion.classname = "monster_spider";	// For function searching
 	setorigin(minion, minion_org);			// Move to new location
 	minion.owner = self.owner;				// Spawner Parent Link
 	self.owner = minion;					// Stop gibs interacting with minion
-	
 	minion.effects = minion.flags = 0;		// make sure are blank
 	minion.gibondeath = 1;					// Always gib on death
 	minion.classtype = CT_MINIONSPIDER;		// Special minion class
 	minion.enemy = minion_targ;				// Target to attack
 	minion.minion_active = TRUE;			// Minion flag
 	minion.bodyfadeaway = TRUE;				// Get rid of body
-	
 	if (random() < 0.2) minion.spawnflags = MON_SPIDER_LARGE;
 	else minion.spawnflags = 0;
 	
@@ -693,8 +672,7 @@ void(vector minion_org, entity minion_targ) minion_spider = {
 		minion.headmdl = "progs/ad171/h_spiderg.mdl";		// Front Jaws
 		minion.gib1mdl = "progs/ad171/gib_spidlegg.mdl";	// Single Leg
 		minion.gib2mdl = "progs/ad171/gib_spidbodyg.mdl";	// Back Body
-	}
-	else {	
+	} else {	
 		minion.mdl = "progs/ad171/mon_spiderb.mdl";
 		minion.headmdl = "progs/ad171/h_spiderb.mdl";		// Front Jaws
 		minion.gib1mdl = "progs/ad171/gib_spidlegb.mdl";	// Single Leg
@@ -709,7 +687,6 @@ void(vector minion_org, entity minion_targ) minion_spider = {
 	minion.sight_sound = "ad171/spider/hiss1.wav";
 	minion.pain_sound = "ad171/spider/pain1.wav";
 	minion.pain_sound2 = "ad171/spider/pain2.wav";
-	
 	minion.nextthink = time + 0.01;
 	minion.think = setup_spider;
 };

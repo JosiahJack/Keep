@@ -86,6 +86,8 @@ float VULN_UNDEAD = 3;
 //.float classgroup; Defined elsewhere
 .float leader; // manual trick
 .float calm_memory_finished;
+.float passive_state; // Passive monster state 0=OFF, 1=ON, -1=NOT SET
+					  // This is the AD system and it meshes with temperament.
 
 float(entity decider, entity targ) Align_Match = { // [FUNCTION]
 	if (!decider || !targ) return FALSE; // Can't match world.
@@ -153,4 +155,11 @@ float(entity targ) IsLeader = { // [FUNCTION]
 	if (targ.bossflag) return TRUE;
 	if (targ.classgroup == CG_DCAPTAIN || targ.classgroup == CG_BOSS) return TRUE;
 	return FALSE;
+};
+
+void(entity tag) SetDefaultDenizenAttributes = { // [FUNCTION]
+	if (!self.alignment) self.alignment = NEUTRAL;
+	if (!self.passive_state) self.passive_state = 1;
+	if (!self.temperament) self.temperament = TEMPRA_PASSIVE;
+	if (!self.vulnerability) self.vulnerability = VULN_RESISTANT;
 };

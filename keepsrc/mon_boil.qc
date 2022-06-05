@@ -309,24 +309,16 @@ void() monster_boil = {
 	if (self.infightextra < 1) self.infightextra = 16;
 	self.attack_instant = 1;			// Start moving right away
 	self.deathstring = " was blown away by a Boil\n";
-	
-	// Setup timer for flesh gib squirting from body
-	if (self.wait < 1) self.wait = 4;
+	if (self.wait < 1) self.wait = 4; // Setup timer for flesh gib squirting from body
 	self.waitmin = time + self.wait + random() * self.wait;
 	// Randomly pick one from the first four skins
 	// 0=flesh, 1=brown, 2=green1, 3=green2, 4=flesh
 	if (!self.exactskin) self.randomskin = 4;
 	self.brkvelbase = '200 50 150';
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// All boils die the same way
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = BoilCheckAttack;
 	self.th_pain = boil_pain;
-	self.th_die = boil_die;
-
+	self.th_die = boil_die; // All boils die the same way
 	self.classtype = CT_MONBOIL;
 	self.classgroup = CG_SPAWN;
 	self.classmove = MON_MOVEWALK;

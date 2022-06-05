@@ -780,17 +780,10 @@ void() monster_minotaur = {
 	self.blockudeath = TRUE;		// No humanoid death
 	self.part_style = PARTICLE_BURST_BLUE;
 	if (self.deathstring == "")  self.deathstring = " was gored by a Minotaur\n";
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = 0; self.resist_cells = 0.5;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	self.resist_cells = 0.5;
 	self.resist_multi_rockets = 0.5;
 	self.resist_plasma = 0.5;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	self.th_checkattack = MinotaurCheckAttack;
 	self.th_stand = mino_stand1;
 	self.th_walk = mino_walk1;

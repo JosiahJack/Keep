@@ -659,15 +659,7 @@ void() monster_dknight = {
 	self.pain_longanim = TRUE;			// can be chopped with shadow axe
 	self.pain_timeout = 1.5;			// Higher than a knight
 	self.steptype = FS_TYPEHEAVY;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.meleeattack = rint(random()*3); // randomize last melee attack
 	self.classtype = CT_MONDKNIGHT;
 	self.classgroup = CG_DKNIGHT;
@@ -701,7 +693,7 @@ void() monster_dknight = {
 		self.takedamage = DAMAGE_NO;		// No pain/death triggers
 		self.movetype = MOVETYPE_NONE;		// Stationary
 		self.solid = SOLID_NOT;				// no world interaction
-		setmodel (self, "");				// invisible
+		setmodel(self, "");				// invisible
 	} else {
 		self.th_stand = dknight_stand1;
 		self.th_walk = dknight_walk1;

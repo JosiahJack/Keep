@@ -2037,10 +2037,13 @@
 		4 : "No Monsters" : 0
 		8 : "Affect All Physical Objects" : 0
 		16: "Additive Velocity" : 0
+		32: "Guide To Target" : 0
 	]
 	angle(string) : "Angle of push"
 	speed(integer) : "Speed of push (def=1000)"
 	noise(string) : "Custom Sound to play(def=ambience/windfly.wav)"
+	tetherrange : "Distance from target before starting movement(def=512)"
+	tetherdist : "Distance to stop applying force (def=32)"
 ]
 
 @SolidClass base(TrigBasic) = trigger_jump : "Q3-style Jump Pad" [
@@ -2322,7 +2325,26 @@
 	height(integer) : "Speed - thrown upwards (def 50)"	
 ]
 
-@PointClass base(Targetname) size (-8 -8 -8, 8 8 8) color(220 0 255) = trigger_victory : "Runs targets after all monsters have been killed" []
+@SolidClass base(Target,Targetname) = trigger_control : "Ballista Control Volume" []
+
+@PointClass base(Appearflags, Target, Targetname) size (-8 -8 -8, 8 8 8) color(220 0 255) = trigger_victory : "Runs targets after all monsters have been killed" [
+	filterstyle(choices) : "Filter Style (def=0)" = [
+		0  : "All Monsters"
+		1  : "Threshold Monsters"
+		4  : "Any Some Monsters"
+		5  : "None Monsters"
+		6  : "None Denizens"
+		7  : "Threshold Denizens"
+		10 : "Any Some Denizens"
+		11 : "All Denizens"
+	]
+	spawnflags(flags) = [
+		1 : "Not Automatic On Any Kill"
+	]
+	message(string) : "Message to center print on success"
+	delay(integer) : "Delay before trigger"
+	count(integer) : "Threshold creature kills, <1 is %,>=1 is number of kills(def = 1)"
+]
 @PointClass base(Targetname) size (-8 -8 -8, 8 8 8) color(220 0 255) = trigger_enemy : "Makes multiple target enemies fight a single enemy" [
 	spawnflags(flags) = [
 		1 : "Ignore Alignment"

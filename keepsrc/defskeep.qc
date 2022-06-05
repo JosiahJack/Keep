@@ -600,3 +600,8 @@ float TURRET_STATE_ACTIVE = 2;
 float TURRET_STATE_DEACTIVATING = 3;
 float TURRET_MAX_PITCH = 6;
 float TURRET_MIN_PITCH = -6;
+.float filterstyle;
+.string filtername;
+.float filterclasstype;
+.float filterclassgroup;
+.float arcing; // Used by trigger_push to arc guide the player safely to a point.

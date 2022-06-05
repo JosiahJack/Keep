@@ -282,18 +282,8 @@ void () monster_eel = {
 	self.blockudeath = TRUE;
 	self.pain_flinch = 10;	// Easy response to pain
 	self.steptype = FS_FLYING;		// It has fins!?!
-
-	// Check for water sightline wakeup
-	if (self.spawnflags & MON_LIQUIDBLOCK) self.liquidblock = TRUE;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	if (self.spawnflags & MON_LIQUIDBLOCK) self.liquidblock = TRUE; // Check for water sightline wakeup
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_stand = eel_stand1;
 	self.th_walk = eel_walk1;
 	self.th_run = eel_run1;

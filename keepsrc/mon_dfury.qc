@@ -751,15 +751,7 @@ void() monster_dfury = {
 	self.meleeoffset = '24 0 16';		// Jump attack offset
 	self.attack_offset = '20 0 10';		// Average of both attacks
 	if (self.deathstring == "") self.deathstring = " was sliced by a Fury Knight\n";
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-	
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = DFuryCheckAttack;
 	self.th_stand = dfury_standL1;
 	self.th_walk = dfury_walk1;

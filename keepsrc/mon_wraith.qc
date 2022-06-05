@@ -860,11 +860,7 @@ void() monster_wraith = {
 	if (self.height == 0) self.height = MONAI_ABOVEDIST; // Custom height
 	self.frame = 1;						// First frame is never used!
 	self.attack_offset = '30 2 8';		// Half way point.  Hitscan = 52 4 6; Nails = 60 4 14; Egg = 20 2 12.
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = WraithCheckAttack;
 	self.th_stand = wraith_stand1;
 	self.th_walk = wraith_walk1;
@@ -872,7 +868,6 @@ void() monster_wraith = {
 	self.th_missile = wraith_magic;
 	self.th_pain = wraith_pain;
 	self.th_die = wraith_die;
-
 	if (self.deathstring == "") self.deathstring = " was shattered by a Wraith\n";
 
 	// Cannot be both scorpion and spider minion spawner, def=spider

@@ -794,10 +794,7 @@ void() monster_skullwiz = {
 	if (!self.bodyphased) self.bodyphased = MONAI_SKULLWSOLID;
 	else self.bodyphased = MONAI_SKULLWINVIS;
 
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = SkullWizCheckAttack;
 	self.th_pain = skullw_pain;
 	self.th_die = skullw_die;

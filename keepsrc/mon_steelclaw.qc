@@ -343,10 +343,7 @@ void() monster_steelclaw = {
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPSTEELNEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPSTEELFAR;
 
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = SteelclawCheckAttack;	
 	self.th_stand = steelc_idle1;
 	self.th_walk = steelc_walk1;

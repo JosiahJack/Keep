@@ -646,18 +646,8 @@ void() monster_dcrossbow = {
 	self.meleecontact = FALSE;			// Smash contact
 	self.meleerange = MONAI_MELEEFRONT;	// Smash attack
 	self.attack_offset = '20 12 28';	// Where to fire bolt from
-	
-	// check for sniper mode, no distance checks for attacks
-	if (self.spawnflags & MON_DCROSSSNIPER) self.enemymaxdist = TRUE;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-	
+	if (self.spawnflags & MON_DCROSSSNIPER) self.enemymaxdist = TRUE; // check for sniper mode, no distance checks for attacks
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = DCrossCheckAttack;
 	self.th_stand = dcrossbow_stand1;
 	self.th_walk = dcrossbow_walk1;

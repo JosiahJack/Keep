@@ -602,18 +602,11 @@ void() monster_dprince = {
 	self.attack_offset = '20 0 8';		// Middle of body (id location)
 	self.attack_count = 6;				// Default floor projectiles
 	self.deathstring = " was annihilated by a Dark Prince\n";
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = self.resist_rockets = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.resist_cells = 0.75;
 	self.resist_plasma = 0.75;
 	self.reflectlightning = TRUE;	// Reflect lightning strikes
 	self.reflectplasma = TRUE;		// Reflect plasma projectiles
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	self.th_checkattack = DPrinceCheckAttack;
 	self.th_stand = dprince_stand1;
 	self.th_walk = dprince_walk1;

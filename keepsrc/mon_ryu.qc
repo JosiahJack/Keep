@@ -1101,15 +1101,10 @@ void() monster_ryu = {
     self.th_pain    = wyrm_pain;
     self.th_checkattack   = DragonCheckAttack;
     self.th_win     = dragon_win;
-
-    // Always reset Ammo Resistance to be consistent
-    self.resist_shells = self.resist_nails = 0;
-    self.resist_rockets = self.resist_cells = 0;
-
+    Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
     if(!self.classtype) self.classtype = CT_MONRYU;
     if (!self.classgroup) self.classgroup = CG_DRAGON;
     self.classmove = MON_MOVEFLY;
-
     monster_start ();
 };
 

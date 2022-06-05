@@ -474,15 +474,7 @@ void() monster_floyd = {
 	self.meleeattack = TRUE;			// Always short pain first
 	self.attack_offset = '24 0 30';		// Laser offset
 	self.frame = 1;						// Frame 0 is special skin version
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-	
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = FloydCheckAttack;
 	self.th_die = floyd_die;
 	self.classtype = CT_MONFLOYD;

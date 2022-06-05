@@ -379,18 +379,12 @@ void() monster_newboss = {
 	if (self.health < 1) self.health = 1800;
 	self.th_run = SUB_Null;
 	self.max_health = self.health;
-	setup_passivestate(self); // Check passive system for exceptions
-	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 	if (self.deathstring == "") self.deathstring = " was destroyed by a Virtus Worm\n";
 	self.th_die = newboss_death1;
 	self.th_pain = newboss_damage;
 	self.classtype = CT_MONVIRTUS;
 	self.classgroup = CG_BOSS;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_stand = self.th_walk = self.th_run = SUB_Null;
 	self.th_missile = SUB_Null;
 	monster_start();

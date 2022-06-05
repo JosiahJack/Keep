@@ -526,21 +526,11 @@ void() setup_voreling = {
 	self.meleeoffset = '20 0 0';		// Bite attack offset
 	self.attack_offset = '14 0 8';		// Used by purple voreling, at jaws
 	self.movespeed = 1;					// Can never be a turret
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "") self.deathstring = " was nibbled by a Voreling\n";
-
 	self.th_checkattack = VorelingCheckAttack;
 	self.th_pain = voreling_pain;
 	self.th_die = voreling_die;
-
 	if(!self.classtype) self.classtype = CT_MONVORELING;
 	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEWALK;

@@ -662,14 +662,10 @@ void() eidolon_start = {
 	self.takedamage = DAMAGE_NO;	// Immune to damage
 	self.gibhealth = -1000;			// Special death sequence
 	self.pain_finished = self.attack_finished = 0;
-	
-	// Setup Ammo Resistance
-	self.resist_shells = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Setup Ammo Resistance
 	self.resist_nails = self.resist_rockets = 0.75;
 	self.reflectnails = TRUE;		// Reflect nail projectiles
 	self.reflectaxe = TRUE;			// Prevent axe damage
-		
-	//Resist_CheckRange(self);		// Double check values
 	Resist_Save(self);				// Save for Later
 	Resist_ChangeType(self,TRUE);	// resist everything
 	
@@ -765,7 +761,6 @@ void() monster_eidolon = {
 	if (self.deathstring == "") self.deathstring = " was pulverized by the Sculptor\n";
 	self.lastorigin = self.origin;	// Origin for camera interpolation
 	self.ticktimer = 0.05;			// Model animations at 20fps
-	setup_passivestate(self); // Check passive system for exceptions
 	if (self.health < 1) self.health = self.max_health = MEGADEATH;
 	self.pain_finished = time + LARGE_TIMER;
 	self.takedamage = DAMAGE_NO;	// Immune to damage
@@ -783,7 +778,6 @@ void() monster_eidolon = {
 	self.stepc5 = "ne_ruins/eidolon/step1.wav";
 	self.steptype = FS_TYPECUSTOM;
 	self.style = 0; // Current wave
-
 	self.think1 = eidolon_start;
 	self.classtype = CT_MONEIDOLON;
 	self.classgroup = CG_STONE;

@@ -401,27 +401,20 @@ void() xxchthon_rise17	=[	$rise17, xxchthon_attack ] {
 	self.takedamage = DAMAGE_AIM;
 };
 
-//======================================================================
 // Setup Chthon after trigger event
-//======================================================================
-void() xxchthon_awake =
-{
+void() xxchthon_awake = {
 	self.use = SUB_Null;			// No more triggers
 	self.style = CHTHON_PHASE1;		// Rising from Lava
 	self.flags = FL_MONSTER;		// Reset flag (no user settings)
-
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 	setmodel(self, self.mdl);					// Setup model
 	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
-
 	self.takedamage = DAMAGE_NO;	// Still immune to damage
 	self.yaw_speed = 20;			// Average Speed
 	self.velocity = '0 0 0';		// Make sure stationary
 	self.pain_longanim = FALSE;		// No axe advantage
 	self.noinfighting = TRUE;		// No infighting
-
-	Resist_CheckRange(self);		// Double check values
 	Resist_Save(self);				// Save for Later
 		
 	// Setup boss waves and overall health
@@ -519,40 +512,15 @@ void() monster_chthon = {
 	self.dmgcombined = self.dmgtimeframe = 0;	// combined damage over 0.1s
 	self.takedamage = DAMAGE_NO;	// Immune to damage
 	if (self.deathstring == "")  self.deathstring = " was blown apart by Chthon\n";
-	
-	// Setup projectile speed (250 + 50*skill)
-	if (CheckZeroVector(self.pos1)) self.pos1 = '250 50 0';
-	// Setup projectile damage (Base + Random, Splash)
-	if (CheckZeroVector(self.pos2)) self.pos2 = DAMAGE_RLPLAYER;
-	// Attack 2 - Setup projectile speed, splash damage
-	if (CheckZeroVector(self.pos3)) self.pos3 = '300 500 40';
-	// Attack 2 - Spawn location (offset from origin)
-	if (CheckZeroVector(self.dest2)) self.dest2 = '0 0 96';
-	
+	if (CheckZeroVector(self.pos1)) self.pos1 = '250 50 0'; // Setup projectile speed (250 + 50*skill)
+	if (CheckZeroVector(self.pos2)) self.pos2 = DAMAGE_RLPLAYER; // Setup projectile damage (Base + Random, Splash)
+	if (CheckZeroVector(self.pos3)) self.pos3 = '300 500 40'; // Attack 2 - Setup projectile speed, splash damage
+	if (CheckZeroVector(self.dest2)) self.dest2 = '0 0 96'; // Attack 2 - Spawn location (offset from origin)
 	self.classtype = CT_MONXXCHTHON;
 	self.classgroup = CG_BOSS;
 	self.style = 0;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.resist_fire = 1;
-
-	// Check passive system for exceptions
-	setup_passivestate(self);
-	
-	// No targetname = no trigger!
-	if (self.targetname == "") {
-		dprint("\b[CHTHON]\b Missing trigger name!\n");
-		spawn_marker(self.origin, SPNMARK_YELLOW);
-		return;
-	}
-	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	self.th_stand = self.th_walk = self.th_run = SUB_Null;
 	self.th_missile = self.th_die = SUB_Null;
 	self.th_pain = SUB_Null_pain;

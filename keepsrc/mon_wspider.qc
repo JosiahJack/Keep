@@ -181,20 +181,12 @@ void() monster_wspider = {
 	self.th_die = spid_die;
 	self.th_pain = spid_pain;
 	self.th_missile = spid_attack1;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 
 	// Default jump forward/up distance
 	if (CheckZeroVector(self.jumpdist)) self.jumpdist = '150 0 600';
 	if (self.jumprange_x <= 0) self.jumprange_x = 100;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = 200;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	if (self.deathstring == "") self.deathstring = " was entangled by Willie the Spider\n";
 	self.classtype = CT_MONWILLYSPIDER;
 	self.classgroup = CG_SPIDER;

@@ -628,18 +628,17 @@ void () monster_armagon = {
 	body.trigger_field = self;
 	setmodel (body,"progs/hipnotic/armabody.mdl");
 	self.mdl = "progs/hipnotic/armalegs.mdl";
-	setmodel (self,self.mdl);
-	setsize (self,'-48.000 -48.000 -24.000','48.000 48.000 84.000');
+	setmodel(self,self.mdl);
+	setsize(self,'-48.000 -48.000 -24.000','48.000 48.000 84.000');
 	self.bboxtype = BBOX_ARMAGON;
-	setorigin (self,self.origin);
-	setorigin (body,body.origin);
+	setorigin(self,self.origin);
+	setorigin(body,body.origin);
 	self.yaw_speed = 9;
 	self.health = 3000.000;
 	self.worldtype = 0.850;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
 	self.resist_cells = 0.5;
 	self.resist_plasma = 0.5;
-	setup_passivestate(self); // Check passive system for exceptions
 	self.gibhealth = -1000000;
 	self.gibbed = FALSE;
 	self.gibondeath = FALSE; // Special death, that in fact does gib him in the end.
@@ -654,6 +653,6 @@ void () monster_armagon = {
 	self.th_melee = armagon_stop1;
 	self.th_pain = armagon_pain;
 	self.classmove = MON_MOVEWALK;
-	if (self.deathstring == "")  self.deathstring = " was outgunned by Armagon\n";
+	if (self.deathstring == "") self.deathstring = " was outgunned by Armagon\n";
 	monster_start();
 };

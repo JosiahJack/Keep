@@ -1109,7 +1109,7 @@ void() monster_baron = {
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
     self.headmdl   = "progs/drake/h_baron.mdl";
-    self.mass       = MASS_HEAVY;   // Really big, buff badass human.
+    self.mass       = MASS_HEAVY; // Really big, buff badass human.
     self.th_stand   = baron_stand;
     self.th_walk    = baron_walk;
     self.th_run     = baron_run;
@@ -1118,18 +1118,10 @@ void() monster_baron = {
     self.th_pain    = baron_pain;
     self.th_die     = baron_die;
     self.th_jump    = baron_tjump;
-    self.blockudeath = FALSE;// Humanoid death sound
+    self.blockudeath = FALSE; // Humanoid death sound
 	self.hittype = HIT_METAL;
-    self.state      = FALSE;     // Use sword as the first attack.
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+    self.state      = FALSE; // Use sword as the first attack.
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.classtype = CT_MONBARON;
 	self.classgroup = CG_DCAPTAIN;
 	self.classmove = MON_MOVEWALK;

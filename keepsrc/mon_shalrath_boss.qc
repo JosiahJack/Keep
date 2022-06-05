@@ -455,11 +455,7 @@ void() monster_shalrath_boss = {
 	self.th_melee = shal_boss_jump1;
 	setsize (self, '-46 -40 -24', '46 40 100');
 	if (self.deathstring == "") self.deathstring = "is a permanent addition to the Vore Queen's hive\n";
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.classtype = CT_MONSHALBOSS;
 	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEWALK;

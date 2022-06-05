@@ -557,20 +557,11 @@ void() setup_lostsoul = {
 	self.lostenemy = world;				// Setup old enemy
 	self.losttimer = LARGE_TIMER;		// Stop lost timer
 	self.lostsearch = FALSE;			// Not searching for an enemy
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = LostCheckAttack;
 	self.th_pain = lost_pain;
 	self.th_die = lost_die;
 	if (self.deathstring == "")  self.deathstring = " was found by a Lost Soul\n";
-	
 	if (self.classtype == CT_MINIONLOSTSOUL) {
 		// Special spawning minion need to start spinning
 		self.th_stand = self.th_walk = self.th_run = lost_grow;

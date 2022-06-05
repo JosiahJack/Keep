@@ -279,15 +279,7 @@ void() monster_deathguard = {
 	self.pain_flinch = 40;
 	self.steptype = FS_TYPEMEDIUM;
 	self.hittype = HIT_METAL;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_stand = deathguard_stand1;
 	self.th_walk = deathguard_walk1;
 	self.th_run = deathguard_run1;
@@ -296,7 +288,6 @@ void() monster_deathguard = {
 	self.th_pain = deathguard_pain;
 	self.th_die = deathguard_die;
 	self.th_checkattack = DGuardCheckAttack;
-
 	self.classtype = CT_MONDGUARD;
 	self.classgroup = CG_KNIGHT;
 	self.classmove = MON_MOVEWALK;

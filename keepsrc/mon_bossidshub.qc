@@ -236,15 +236,11 @@ void() monster_oldone = {
 	setsize (self, self.bbmins, self.bbmaxs);	// Restore BB size
 	self.no_liquiddmg = TRUE;		// no slime/lava damage
 	self.gibbed = FALSE;			// Still in one piece
-	
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 1;
-	self.resist_rockets = self.resist_cells = 1;
+	Resist_ChangeType(self,1); // Always reset Ammo Resistance to be consistent
 	self.reflectnails = TRUE;		// Reflect nail projectiles
+	self.reflectlightning = TRUE;
+	self.reflectplasma = TRUE;
 	self.reflectaxe = TRUE;			// Prevent axe damage
-
-	
-	setup_passivestate(self); // Check passive system for exceptions
 	if (self.deathstring == "")  self.deathstring = " became one with Shub-Niggurath\n";
 	self.classtype = CT_MONIDSHUB;
 	self.classgroup = CG_BOSS;

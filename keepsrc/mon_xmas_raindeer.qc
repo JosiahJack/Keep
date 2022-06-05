@@ -263,7 +263,6 @@ void() monster_xmas_raindeer = {
 	self.sight_sound = "xmas/raindeer/sight.wav";
 	self.pain_sound = "xmas/raindeer/hit.wav";
 	self.death_sound = "xmas/raindeer/death.wav";
-
 	if (self.spawnflags & MON_RAINDEER_DEAD) { raind_deadbody(); return; } // Dead body version is setup different
 	
 	self.solid = SOLID_NOT;				// No interaction with world
@@ -281,15 +280,7 @@ void() monster_xmas_raindeer = {
 	self.meleeoffset = '24 0 20';		// Antler attack offset
 	self.lefty = 0;						// Cycle attack sounds
 	if (self.deathstring == "" ) self.deathstring = " was trampled by a Raindeer\n";
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = RaindeerCheckAttack;
 	self.th_stand = raind_stand1;
 	self.th_walk = raind_walk1;

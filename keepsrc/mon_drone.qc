@@ -405,16 +405,9 @@ void() monster_drone =  {
 	self.idlereverse = FALSE;			// Reverse direction for idle
 	self.attack_offset = '20 0 -10';	// front of laser/rocket
 	self.gibondeath = TRUE;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = 0; self.resist_cells = 0.5;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	self.resist_cells = 0.5;
 	self.resist_plasma = 0.5;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	self.hittype = HIT_METAL;
 	self.touch = DroneTouch;
 	self.effects = EF_DIMLIGHT;

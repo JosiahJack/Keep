@@ -276,15 +276,7 @@ void() monster_snakeman = {
 	self.blockudeath = TRUE;			// No humanoid death sound
 	self.wait2 = TRUE; // have not played sight sound yet
 	self.ammo_nails = 4 + rint(random()*4);
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "") self.deathstring = " was hosed by a Snakeman\n";
 	if(!self.classtype) self.classtype = CT_MONSNAKEMAN;
 	self.classmove = MON_MOVEWALK;	

@@ -587,7 +587,6 @@ void() monster_shambler = {
 	else if (self.lip < 0.75) self.gib3mdl = self.gib4mdl;
 
 	self.meleehitsound = "shambler/smack.wav";
-
 	if (self.poisonous) {
 		self.gibtype = GIBTYPE_POISON; // Green small gibs
 		self.exactskin = 1;
@@ -605,16 +604,9 @@ void() monster_shambler = {
 	self.blockudeath = TRUE;			// No player gib sound
 	self.attack_offset = '0 0 40';		// Between hands
 	self.mass = MASS_HEAVY;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = 0.5; self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	self.resist_rockets = 0.5;
 	self.resist_multi_rockets = 0.5;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	self.th_checkattack = ShamCheckAttack;
 	self.th_stand = sham_stand1;
 	self.th_walk = sham_walk1;

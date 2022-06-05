@@ -220,6 +220,7 @@ static void(vector pos, float value, float threshhold) Hud_DrawLargeValue = {
 
 	if (value < 0) value = 0;	//hrm
 	if (value>999) value = 999;
+	
 	s = ftos(floor(value));
 	len = strlen(s);
 	pos_x += 24 * (3-len);	

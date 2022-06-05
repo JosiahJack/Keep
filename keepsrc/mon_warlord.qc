@@ -875,9 +875,7 @@ void() monster_hell_knight2 = {
 	self.pain_longanim = TRUE;			// can be chopped with shadow axe
 	self.pain_timeout = 1.5;			// Higher than a knight
 	self.steptype = FS_TYPEHEAVY;
-
 	if (self.deathstring == "") self.deathstring = " was bashed by a Warlord\n";
-
 	self.th_stand = hknight2_stand1;
 	self.th_walk = hknight2_walk1;
 	self.th_run = hknight2_run1;
@@ -885,11 +883,7 @@ void() monster_hell_knight2 = {
   	self.th_missile = hknight2_random_ranged_attack;
 	self.th_pain = hknight2_pain;
 	self.th_die = hknight2_die;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.classtype = CT_MONWARLORD;
 	self.classgroup = CG_DKNIGHT;
 	self.classmove = MON_MOVEWALK;

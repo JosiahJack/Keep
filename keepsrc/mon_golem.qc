@@ -651,18 +651,12 @@ void() setup_golem = {
 	self.no_liquiddmg = TRUE;		// Immune to slime/lava
 	self.meleerange = MONAI_MELEEGOLEM;
 	self.attack_offset = '10 0 30';		// Rock storm
-	
 	self.th_checkattack = GolemCheckAttack;
 	self.th_die = golem_die;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = 0; self.resist_nails = 0.5;
-	self.resist_rockets = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	self.resist_nails = 0.5;
+	self.resist_lava_nails = 0.25;
 	self.reflectnails = TRUE;		// Reflect nail projectiles
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
 
 	//----------------------------------------------------------------------
 	// Detect statues and setup different parameters

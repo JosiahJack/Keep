@@ -560,20 +560,11 @@ void() monster_nightshade = {
     self.th_checkattack   = Shade_CheckAttack;
     self.gibondeath = TRUE;
 	if (self.deathstring == "") self.deathstring = " was etherialized by a Nightshade\n";
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
     shadow_speed();
-
-    // Always reset Ammo Resistance to be consistent
-    self.resist_shells = self.resist_nails = 0;
-    self.resist_rockets = self.resist_cells = 0;
+    Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.resist_fire = 1; // Don't want to change this with size.
-
     if(!self.classtype) self.classtype = CT_MONSHADE;
     if (!self.classgroup) self.classgroup = CG_DRAGON;
     self.classmove = MON_MOVEFLY;
-    monster_start ();
+    monster_start();
 };

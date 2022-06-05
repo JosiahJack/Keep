@@ -209,7 +209,6 @@ void () monster_wrath = {
 	self.idle_sound2 = "ad171/wraith/idle2.wav";
 	self.idle_soundcom = "ad171/wraith/idle3.wav";
 	self.sight_sound = "rogue/wrath/wsee.wav";
-	precache_sound (self.sight_sound);
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_WIDE;
@@ -220,28 +219,18 @@ void () monster_wrath = {
 	self.pain_flinch = 70;				// High pain threshold
 	self.blockudeath = TRUE;			// no humanoid death sound
 	self.height = MONAI_ABOVEDIST;		// Enemytarget distance above
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_stand = wrath_stand1;
 	self.th_walk = wrath_walk01;
 	self.th_run = wrath_run01;
 	self.th_missile = wrath_attack;
 	self.th_pain = wrath_pain;
 	self.th_die = wrath_die01;
-
 	if (!self.classtype) self.classtype = CT_MONWRATH;
 	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEFLY;
 	if (self.deathstring == "")  self.deathstring = " was disintegrated by a Wrath\n";
-
-	monster_start ();
+	monster_start();
 };
 
 void (float AttackNumber) WrathMissile = {

@@ -781,7 +781,7 @@ void() Meteor_Think = { // [FUNCTION]
     density = 16;
     if (InLiquid(self.origin)) {
         self.dmg = self.dmg - 10; // Fireball loses strength in water.  Loses 10 damage per frame.  Used to be 10% damage in Dragons.
-        if (self.dmg < 0) self.dmg = 0;
+        self.dmg = SUB_ClampFloat(self.dmg,0,self.dmg);
     } else if (!InLiquid(self.oldorigin)) {
         rgb = 233; // Fireball has not been in water lately, so make an ember trail.
         density = 8;

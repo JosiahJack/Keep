@@ -629,16 +629,7 @@ void() monster_inquisitor = {
 	self.poisonous = TRUE; // Oh yeah, definitely!
 	self.minion_maxcount = 8 + skill; // More clouds on hard! (Spawn faster too, 3 at once per staf slame)
 	if (CheckZeroVector(self.proj_attqty)) self.proj_attqty = '7 3 16';
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
-	setup_passivestate(self); // Check passive system for exceptions
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.pain_longanim = FALSE;		// can't be chopped with shadow axe
 	self.classgroup = CG_WIZARD;	// Creepy dudes
 	self.th_stand = inquisitor_idle1;		// Idling on feet

@@ -1111,18 +1111,15 @@ void() monster_huntress = {
 	setmodel(self.attachment, "");
 	setsize(self.attachment,VEC_ORIGIN, VEC_ORIGIN);
 	setorigin(self.attachment, self.origin);
-
-	// Custom feet sounds
-	self.stepc1 = "redfield/huntress/step1.wav";
+	self.stepc1 = "redfield/huntress/step1.wav"; // Custom feet sounds
 	self.stepc2 = "redfield/huntress/step2.wav";
 	self.stepc3 = "redfield/huntress/step3.wav";
 	self.stepc4 = "redfield/huntress/step4.wav";
 	self.stepc5 = "redfield/huntress/step5.wav";
 	self.steptype = FS_TYPECUSTOM;
-
-	// Always reset Ammo Resistance to be consistent.  Resistant to all ranged attacks - using a sword is wise
-	self.resist_shells = self.resist_nails = self.resist_rockets = self.resist_cells = 0.75;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent.  Resistant to all ranged attacks - using a sword is wise
+	self.resist_shells = self.resist_nails = 0.75;
+	self.resist_rockets = self.resist_cells = 0.75;
 	self.th_checkattack = HuntressCheckAttack;
 	self.th_stand = elena_idle1;
 	self.th_walk = elena_walk1;
@@ -1130,7 +1127,6 @@ void() monster_huntress = {
 	self.th_die = elena_die;
 	self.th_jump = elena_spin1;
 	self.th_jumpexit = elena_spin13;	
-	
 	if (self.spawnflags & MON_HUNTRESS_TAUNT) { //Huntress taunt start
 		self.th_run = self.th_missile = self.th_melee = elena_wakeup;
 	} else { //Default Huntress start	
@@ -1138,10 +1134,6 @@ void() monster_huntress = {
 		self.th_missile = elena_choose_atk;
 		self.th_run = elena_run1;
 	}
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
 
 	self.classgroup = CG_BOSS;	
 	self.classtype = CT_MONHUNTRESS;

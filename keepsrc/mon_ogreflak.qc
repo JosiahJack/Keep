@@ -193,11 +193,7 @@ void() monster_ogre_spikeshooter = {
 	} else {
 		self.ammo_nails = 10;
 	}
-	
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = OgreCheckAttack;
 	self.th_stand = ogre_stand1;
 	self.th_walk = ogre_walk1;
@@ -208,11 +204,6 @@ void() monster_ogre_spikeshooter = {
 	self.th_pain = ogre_pain;
 	self.th_wakeup = ogre_wakeup1;
 	if (self.deathstring == "")  self.deathstring = " was skotched by a Flak Ogre\n";
-	
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	self.classtype = CT_MONOGRE;		// Old style ogres
 	self.classgroup = CG_OGRE;		// One big happy ogre family!
 	self.classmove = MON_MOVEWALK;

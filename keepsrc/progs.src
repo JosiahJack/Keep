@@ -75,11 +75,6 @@ fteextensions.qc 			// N/A     FTE and QSS Engine definitions and API hooks. Aut
 qrobotdefs.qc				// REFINED Definitions for Qmaster's programmable xyz robots
 defsqrally.qc				// REFINED Definitions for the Quake Rally vehicle system
 
-// HUD
-//-----------------------------------------------------------------------------
-csqc_defs.qc				// REFINED Handles csqc references for the HUD
-csqc_hudkeep.qc				// REFINED CSQC Custom HUD implementation, see csqc/ folder.
-
 // Globally used subroutins aka subs, including math and physics
 //-----------------------------------------------------------------------------
 mathlib.qc					// REFINED Math functions library
@@ -100,6 +95,11 @@ subs_extras.qc				// REFINED extras_r5, extras_r4 subroutines
 subs_aoa.qc					// REFINED Arms of Asgard (AoA) subroutines
 subs_q15.qc					// REFINED Quake 1.5 subroutines
 subs_nehahra.qc				// REFINED Nehahra subroutines
+
+// HUD
+//-----------------------------------------------------------------------------
+csqc_defs.qc				// REFINED Handles csqc references for the HUD
+csqc_hudkeep.qc				// REFINED CSQC Custom HUD implementation, see csqc/ folder.
 
 // Various Global Systems
 //-----------------------------------------------------------------------------

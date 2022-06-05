@@ -344,33 +344,22 @@ void() monster_boss = {
 	self.bouncegrenade = TRUE;		// Grenades bounce off!
 	self.dpp_name = "TR_BOSSCHTHON";// Lava smoke and sparks
 	self.yaw_speed = 20;			// Fast turner
-	
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 1;
-	self.resist_rockets = self.resist_cells = 1;
-	self.resist_fire = 1;
-
+	Resist_ChangeType(self,1); // Always reset Ammo Resistance to be consistent
 	self.reflectnails = TRUE;		// Reflect nail projectiles
+	self.reflectlightning = TRUE;
+	self.reflectplasma = TRUE;
 	self.reflectaxe = TRUE;			// Prevent axe damage
-	setup_passivestate(self); 		// Check passive system for exceptions
 	self.th_stand = idchthon_idle1;
 	self.th_walk = idchthon_idle1;
 	self.th_run = idchthon_idle1;
 	self.th_missile = idchthon_missile1;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
-	if (self.deathstring == "")  self.deathstring = " was blown apart by Chthon\n";
+	if (self.deathstring == "") self.deathstring = " was blown apart by Chthon\n";
 	self.classtype = CT_MONIDCHTHON;
 	self.classgroup = CG_BOSS;
-
 	self.th_stand = self.th_walk = self.th_run = SUB_Null;
 	self.th_missile = self.th_die = SUB_Null;
 	self.th_pain = SUB_Null_pain;
 	monster_start();
-
 	if (self.targetname) self.use = idchthon_awake;
 	else idchthon_awake();
 };

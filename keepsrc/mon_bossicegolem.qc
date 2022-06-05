@@ -927,32 +927,21 @@ void() iceg_setup = {
 	self.gibhealth = -1000;			// Special death sequence
 	self.gibbed = FALSE;			// Still in one piece
 	self.pain_finished = self.attack_finished = LARGE_TIMER;
-	
-	// Setup Ammo Resistance
-	self.resist_shells = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Setup Ammo Resistance
 	self.resist_nails = self.resist_rockets = 0.75;
 	self.reflectnails = TRUE;		// Reflect nail projectiles
-	
-	//Resist_CheckRange(self);		// Double check values
 	Resist_Save(self);				// Save for Later
 	Resist_ChangeType(self,TRUE);	// resist everything
-
-	// Setup boss waves and overall health
-	self.bosswave = 1;
+	self.bosswave = 1; // Setup boss waves and overall health
 	self.bosswavetotal = 5;
 	self.bosswaveqty = 500;
 	self.max_health = self.bosswavetotal * self.bosswaveqty;
-	// Setup boss wave HP + trigger event
-	iceg_WaveSetupHP();
-
-	// default = No think functions
+	iceg_WaveSetupHP(); // Setup boss wave HP + trigger event
 	self.th_checkattack = IcegCheckAttack;
-	self.th_stand = self.th_walk = self.th_run = SUB_Null;
+	self.th_stand = self.th_walk = self.th_run = SUB_Null; // default = No think functions
 	self.th_missile = self.th_die = SUB_Null;
 	self.th_pain = SUB_Null_pain;
-
-	// Check there is space for Ice Golem to spawn
-	self.origin_z = self.origin_z + 1;
+	self.origin_z = self.origin_z + 1; // Check there is space for Ice Golem to spawn
 	droptofloor();
 	if (!walkmove(0,0)) {
 		// this condition should be a map spawn event only
@@ -1057,9 +1046,6 @@ void() monster_icegolem = {
 	self.classmove = MON_MOVEWALK;
 	self.style = 0;
 	if (self.deathstring == "")  self.deathstring = " was shattered by the Ice Golem\n";
-	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-	setup_passivestate(self); // Check passive system for exceptions
-
 	self.th_stand = self.th_walk = self.th_run = SUB_Null;
 	self.th_missile = self.th_die = SUB_Null;
 	self.th_pain = SUB_Null_pain;

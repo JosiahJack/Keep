@@ -482,17 +482,8 @@ void() monster_carnivean = {
 	self.th_melee = carniv_swing1;
 	self.th_missile = carniv_missile;
 	self.th_pain = carniv_pain;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "")  self.deathstring = " was sliced by a Carnivean\n";
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	self.classtype = CT_MONCARNIVEAN;
 	self.classgroup = CG_KNIGHT;
 	self.classmove = MON_MOVEWALK;

@@ -734,12 +734,8 @@ void() monster_deflector = {
 		if (CheckZeroVector(self.proj_attqty)) self.proj_attqty = '3 2 7';
 	}
 
-	deflect_shieldoff(); // ALL ammo resistances done in shield functions
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-	
+	Resist_ChangeType(self,-1);
+	deflect_shieldoff(); // Particular resistances done in shield functions.
 	self.th_checkattack = DeflectorCheckAttack;
 	self.th_stand = deflect_stand1;
 	self.th_walk = deflect_walk1;

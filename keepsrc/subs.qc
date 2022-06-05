@@ -42,7 +42,7 @@ void() SUB_CalcMoveDone;
 void(vector marker_org, float marker_type) spawn_marker;
 void(entity thekilled, entity attacker) AddToKills;
 void(entity targ) AddToTotals;
-void(string text) Mass_Centerprint;
+void(string text, string noise, entity act) Mass_Centerprint;
 void(entity targ, float hpminimum, float had_regen) Client_CheckMaxHP;
 
 void() SUB_Null = {}; // [FUNCTION]
@@ -295,6 +295,8 @@ void (entity t) clear_trigstrs = { // [FUNCTION]
 	t.target4 = string_null;
 };
 
+// sock: I really do hate this function because there is hardly any checks on
+// entities being removed; added a player check for sanity!
 void(string ktarg) SUB_KillTarget = { // [FUNCTION]
 	local entity t;
 
@@ -371,15 +373,7 @@ void() SUB_UseTargets = { // [FUNCTION]
 	// Check if previous delay has been disabled.  Unfortunately start off = OFF state and not easy to check for because some entities use that spawnflag bit for other things!
 	if (self.classtype == CT_TRIGRELAYDELAY && (self.owner.estate & ESTATE_DISABLE)) return;
 
-	// print any messages
-	if (activator.flags & FL_CLIENT && self.message != "") {
-		if (coop > 0) Mass_Centerprint(self.message);
-		else centerprint (activator, self.message); // Write message to single client
-		
-		if (self.noise == "") sound (activator, CHAN_VOICE, SOUND_TALK, 1, ATTN_NORM); // Default noise = classic boop boop sound
-	}
-
-	// sock: I really do hate this function because there is hardly any checks on entities being removed; added a player check for sanity!
+	Mass_Centerprint(self.message,self.noise,activator); // print any messages	
 	if (self.killtarget != "") SUB_KillTarget(self.killtarget);
 	if (self.killtarget2 != "") SUB_KillTarget(self.killtarget2);
 	if (self.target != "") SUB_Target(self.target);

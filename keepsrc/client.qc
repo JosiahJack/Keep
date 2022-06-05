@@ -268,7 +268,7 @@ void() DecodeWorldParms = {
 		} else {
 			if (tlow8 > AMMO_MAXSHELLS) tlow8 = AMMO_MAXSHELLS;
 		}
-		if (tlow8 < 0) tlow8 = 0;
+		tlow8 = SUB_ClampFloat(tlow8,0,255);
 		dprint(ftos(tlow8)); dprint(")\n");
 		parm3 = encode(tlow8,tmid8,thi8); //store shells back in parm3
 	}
@@ -281,7 +281,7 @@ void() DecodeWorldParms = {
 		} else {
 			if (tmid8 > AMMO_MAXNAILS) tmid8 = AMMO_MAXNAILS;
 		}
-		if (tmid8 < 0) tmid8 = 0;
+		tmid8 = SUB_ClampFloat(tmid8,0,255);
 		dprint(ftos(tmid8)); dprint(")\n");
 		parm3 = encode(tlow8,tmid8,thi8); //store nails back in parm3
 	}
@@ -294,7 +294,7 @@ void() DecodeWorldParms = {
 		} else {
 			if (thi8 > AMMO_MAXROCKETS) thi8 = AMMO_MAXROCKETS;
 		}
-		if (thi8 < 0) thi8 = 0;
+		thi8 = SUB_ClampFloat(thi8,0,255);
 		dprint(ftos(thi8)); dprint(")\n");
 		parm3 = encode(tlow8,tmid8,thi8); //store rockets back in parm3
 	}
@@ -312,7 +312,7 @@ void() DecodeWorldParms = {
 		} else {
 			if (tlow8 > AMMO_MAXCELLS) tlow8 = AMMO_MAXCELLS;
 		}
-		if (tlow8 < 0) tlow8 = 0;
+		tlow8 = SUB_ClampFloat(tlow8,0,255);
 		dprint(ftos(tlow8)); dprint(")\n");	
 		parm4 = encode(tlow8,tmid8,thi8); //store cells back in parm4
 	}
@@ -325,7 +325,7 @@ void() DecodeWorldParms = {
 		} else {
 			if (tmid8 > AMMO_MAXBOLTS) tmid8 = AMMO_MAXBOLTS;
 		}
-		if (tmid8 < 0) tmid8 = 0;
+		tmid8 = SUB_ClampFloat(tmid8,0,255);
 		dprint(ftos(tmid8)); dprint(")\n");
 		parm4 = encode(tlow8,tmid8,thi8); //store bolts back in parm4
 	}
@@ -338,7 +338,7 @@ void() DecodeWorldParms = {
 		} else {
 			if (thi8 > AMMO_MAXPOISON) thi8 = AMMO_MAXPOISON;
 		}
-		if (thi8 < 0) thi8 = 0;
+		thi8 = SUB_ClampFloat(thi8,0,255);
 		dprint(ftos(thi8)); dprint(")\n");
 		parm4 = encode(tlow8,tmid8,thi8); //store poison back in parm4
 	}
@@ -356,7 +356,7 @@ void() DecodeWorldParms = {
 		} else {
 			if (tlow8 > AMMO_MAXLAVANAILS) tlow8 = AMMO_MAXLAVANAILS;
 		}
-		if (tlow8 < 0) tlow8 = 0;
+		tlow8 = SUB_ClampFloat(tlow8,0,255);
 		dprint(ftos(tlow8)); dprint(")\n");	
 		parm5 = encode(tlow8,tmid8,thi8); //store lava_nails back in parm5
 	}
@@ -369,7 +369,7 @@ void() DecodeWorldParms = {
 		} else {
 			if (tmid8 > AMMO_MAXMULTIROCKETS) tmid8 = AMMO_MAXMULTIROCKETS;
 		}
-		if (tmid8 < 0) tmid8 = 0;
+		tmid8 = SUB_ClampFloat(tmid8,0,255);
 		dprint(ftos(tmid8)); dprint(")\n");
 		parm5 = encode(tlow8,tmid8,thi8); //store multi_rockets back in parm5
 	}
@@ -382,7 +382,7 @@ void() DecodeWorldParms = {
 		} else {
 			if (thi8 > AMMO_MAXPLASMA) thi8 = AMMO_MAXPLASMA;
 		}
-		if (thi8 < 0) thi8 = 0;
+		thi8 = SUB_ClampFloat(thi8,0,255);
 		dprint(ftos(thi8)); dprint(")\n");
 		parm5 = encode(tlow8,tmid8,thi8); //store plasma back in parm5
 	}
@@ -399,7 +399,7 @@ void() DecodeWorldParms = {
 		} else {
 			if (tlow8 > AMMO_MAXBLOOD) tlow8 = AMMO_MAXBLOOD;
 		}
-		if (tlow8 < 0) tlow8 = 0;
+		tlow8 = SUB_ClampFloat(tlow8,0,255);
 		dprint(ftos(tlow8)); dprint(")\n");	
 		cvar_set("gamecfg",ftos(encode(tlow8,tmid8,thi8)));
 		//parm17 = encode(tlow8,tmid8,thi8); //store bloodcrystals back in parm17
@@ -413,7 +413,7 @@ void() DecodeWorldParms = {
 		} else {
 			if (tmid8 > AMMO_MAXVOID) tmid8 = AMMO_MAXVOID;
 		}
-		if (tmid8 < 0) tmid8 = 0;
+		tmid8 = SUB_ClampFloat(tmid8,0,255);
 		dprint(ftos(tmid8)); dprint(")\n");
 		cvar_set("gamecfg",ftos(encode(tlow8,tmid8,thi8)));
 		//parm17 = encode(tlow8,tmid8,thi8); //store voidshards back in parm17
@@ -427,10 +427,9 @@ void() DecodeWorldParms = {
 		} else {
 			if (thi8 > AMMO_MAXMANA) thi8 = AMMO_MAXMANA;
 		}
-		if (thi8 < 0) thi8 = 0;
+		thi8 = SUB_ClampFloat(thi8,0,255);
 		dprint(ftos(thi8)); dprint(")\n");
 		cvar_set("gamecfg",ftos(encode(tlow8,tmid8,thi8)));
-		//parm17 = encode(tlow8,tmid8,thi8); //store elemental_mana back in parm17
 	}
 
 	// Update player armour type and quantity
@@ -475,9 +474,9 @@ void() DecodeWorldParms = {
 		} else {
 			// Default is no armour
 			tlow8 = decode(parm2,LOW8);
-			//parm3 = 0;
+			tmid8 = 0;
 			thi8 = decode(parm2,HI8);
-			parm2 = encode(tlow8,0,thi8);
+			parm2 = encode(tlow8,tmid8,thi8);
 		}
 	}
 

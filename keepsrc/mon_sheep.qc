@@ -596,17 +596,8 @@ void() monster_sheep =  {
 	self.th_walk = sheep_trot1; // sleep walking?
 	self.th_run = sheep_run1;
 	if (self.deathstring == "")  self.deathstring = " fed himself to a sheep\n";
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Standard DENIZEN AI
-	if (!self.alignment) self.alignment = NEUTRAL;
-	if (!self.passive_state) self.passive_state = 1;
-	if (!self.temperament) self.temperament = TEMPRA_PASSIVE;
-	if (!self.vulnerability) self.vulnerability = VULN_RESISTANT;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	self.classtype = CT_MONSHEEP;
 	self.classgroup = CG_HARMLESS;
 	self.classmove = MON_MOVEWALK;

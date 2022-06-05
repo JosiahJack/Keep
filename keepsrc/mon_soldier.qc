@@ -474,15 +474,7 @@ void() monster_army = {
 	self.attack_offset = '12 8 12';		// End of Gun
 	self.mass = MASS_MEDIUM;
 	if (self.deathstring == "") self.deathstring = " was shot by a Grunt\n";	
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
     if (self.classtype != CT_MONARMYCYBORG) self.th_checkattack = SoldierCheckAttack;
 	self.th_stand = army_stand1;
 	self.th_walk = army_walk1;
@@ -490,7 +482,6 @@ void() monster_army = {
 	if (!self.th_missile) self.th_missile = army_atk1;
 	self.th_pain = army_pain;
 	self.th_die = army_die;
-
 	if (!self.classtype) {
 		self.classtype = CT_MONARMY;
 		if (self.ammo_shells < 1) self.ammo_shells = rint(2 + random()*4);

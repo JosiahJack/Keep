@@ -363,21 +363,8 @@ void() monster_fragy = {
 	self.th_melee = frag_atack1;
     self.th_missile = frag_jump1;
 	self.th_checkattack = FragCheckAttack;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
-	// Standard DENIZEN AI
-	if (!self.alignment) self.alignment = NEUTRAL;
-	if (!self.passive_state) self.passive_state = 1;
-	if (!self.temperament) self.temperament = TEMPRA_PASSIVE;
-	if (!self.vulnerability) self.vulnerability = VULN_RESISTANT;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
 	self.classtype = CT_MONFROG;
 	self.classgroup = CG_HARMLESS;
 	self.classmove = MON_MOVEWALK;

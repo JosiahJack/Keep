@@ -473,25 +473,21 @@ void() monster_archer = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	monster_archer_precache();
     self.mdl = "progs/drake/archer.mdl";
     self.headmdl   = "progs/drake/h_archer.mdl";
-
-    // Hexen2 archers have 80 health.  (Lords have 325 health.)
-    // Note:  Hexen2 archers gibbed at -30 hp.  Since the archers have armor
-    // similar to Quake knights, use -40 hp instead.
     if (self.classtype == CT_MONARCHERLORD) {
 		self.hello_sound = "drake/archer/growl2.wav";
 		self.sight_sound = "drake/archer/sight2.wav";
         self.skin = 1;
         self.ryuflags = self.ryuflags | RYU_ALERT;    // From Dragons.
 		if (self.health < 1) self.health = 325;
-        self.gibhealth = -40;
+        self.gibhealth = -40; // Hexen2 archers gibbed at -30 hp.  Since the
+                              // archers have armor similar to Quake knights,
+                              // use -40 hp instead.
 		self.ammo_nails = rint(random()*20);
 		if (random() < 0.1) self.ammo_bolts = rint(random()*2);
 		if (self.deathstring == "")  self.deathstring = " was stealthily skewered by an Assassin\n";
-    } else {
-		// Grunt class.
+    } else { // Grunt class.
 		self.hello_sound = "drake/archer/growl.wav";
 		self.sight_sound = "drake/archer/sight.wav";
         self.skin = 0;
@@ -499,7 +495,7 @@ void() monster_archer = {
         self.gibhealth = -40;
 		self.ammo_nails = rint(random()*2);
 		if (random() < 0.1) self.ammo_bolts = 1;
-		if (self.deathstring == "")  self.deathstring = " was skewered by an Archer\n";
+		if (self.deathstring == "") self.deathstring = " was skewered by an Archer\n";
     }
 
     self.solid = SOLID_NOT;				// No interaction with world

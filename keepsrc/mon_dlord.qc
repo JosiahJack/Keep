@@ -468,16 +468,8 @@ void() monster_death_lord = {
 	self.infightextra = 2;				// Double damage to other monsters
 	self.steptype = FS_TYPEHEAVY;		// Heavy Player feet
 	self.hittype = HIT_METAL;
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "") self.deathstring = " was executed by a Death Lord\n";
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
 	self.classtype = CT_MONDLORD;
 	self.classgroup = CG_DCAPTAIN;
 	self.classmove = MON_MOVEWALK;

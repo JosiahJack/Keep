@@ -264,11 +264,22 @@ void(entity ent, void() thinkst) SUB_ThinkImmediate = {
 void(entity ent, string text) Safe_stuffcmd = { if (ent.flags & FL_CLIENT) stuffcmd(ent, text); }; // The server crashes if it attempts a stuffcmd on a non-client.
 
 // Use this to centerprint a message to everyone.
-void(string text) Mass_Centerprint = {
+void(string text, string noise, entity act) Mass_Centerprint = {
     local   entity  pc;
 
+    if (text == "") return;
+
+	if (coop <= 0 && act.flags & FL_CLIENT) {
+        if (noise != "") sound(pc,CHAN_VOICE,SOUND_TALK,1,ATTN_NORM);
+        else sound(pc,CHAN_VOICE,noise,1,ATTN_NORM); // Default noise = classic boop boop sound
+        centerprint(act,text);
+        return;
+    }
+
     pc = find (world, classname, "player");
-    while (pc) {
+    while(pc) {
+        if (noise != "") sound(pc,CHAN_VOICE,SOUND_TALK,1,ATTN_NORM);
+        else sound(pc,CHAN_VOICE,noise,1,ATTN_NORM); // Default noise = classic boop boop sound
         centerprint_builtin(pc, text); // Confirm pc status.
         pc = find (pc, classname, "player");
     }

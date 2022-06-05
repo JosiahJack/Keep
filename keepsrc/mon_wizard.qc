@@ -284,26 +284,16 @@ void() setup_wizard = {
 		self.th_checkattack = WizardCheckAttack;
 	}
 	self.th_pain = wiz_pain;
-	self.th_die = wiz_die;
-		
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
-	if(!self.classtype) self.classtype = CT_MONWIZARD;
+	self.th_die = wiz_die;	
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	if (!self.classtype) self.classtype = CT_MONWIZARD;
 	if (!self.classgroup) self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
-	
 	if (self.classtype == CT_MINIONWIZARD) {
 		self.th_stand = self.th_walk = self.th_run = wiz_wakeup;
 		self.th_missile = self.th_slide = wiz_wakeup;
 		if (self.deathstring == "") self.deathstring = " was wrecked by a Scrag\n";
-	}
-	else {
+	} else {
 		self.th_stand = wiz_stand1;
 		self.th_walk = wiz_walk1;
 		self.th_run = wiz_run1;
@@ -311,28 +301,21 @@ void() setup_wizard = {
 		self.th_slide = wiz_side1;
 		if (self.deathstring == "") self.deathstring = " was scragged by a Scrag\n";
 	}
-		
 	monster_start();
 };
 
-//----------------------------------------------------------------------------
 // A code way to spawn wizards (requires monster_nourminion entity)
-//----------------------------------------------------------------------------
-void(vector minion_org, entity minion_targ, float minion_sflag) minion_wizard =
-{
+void(vector minion_org, entity minion_targ, float minion_sflag) minion_wizard = {
 	local entity minion;
 
-	// Check if there is space to spawn entity
-	if (entity_pcontent(minion_org)) return;
+	if (entity_pcontent(minion_org)) return; // Check if there is space to spawn entity
 	
 	// Self = minotaur, there is no egg 
-	update_minioncount(self, 1);			// Update spawn counters
-	
+	update_minioncount(self, 1);			// Update spawn counters	
 	minion = spawn();
 	minion.classname = "monster_wizard";	// For function searching
 	setorigin(minion, minion_org);			// Move to new location
 	minion.owner = self;					// Spawner Parent Link
-	
 	minion.effects = minion.flags = 0;		// make sure are blank
 	minion.gibondeath = 1;					// Always gib on death
 	minion.classtype = CT_MINIONWIZARD;		// Special minion class
@@ -341,18 +324,15 @@ void(vector minion_org, entity minion_targ, float minion_sflag) minion_wizard =
 	minion.classgroup = CG_WIZARD;			// Don't turn on master
 	minion.minion_active = TRUE;			// Minion flag
 	minion.bodyfadeaway = TRUE;				// Get rid of body
-	
 	minion.mdl = "progs/ad171/mon_wizard.mdl";
 	minion.headmdl = "progs/h_wizard.mdl";
 	minion.gib1mdl = "progs/ad171/gib_wzarm1.mdl";	// Left arm/stump
 	minion.gib2mdl = "progs/ad171/gib_wzarm2.mdl";	// Right arm/stump
 	minion.gib3mdl = "progs/ad171/gib_wztail.mdl";	// Tail section
-
 	minion.pain_sound = "wizard/wpain.wav";
 	minion.idle_sound = "wizard/widle1.wav";
 	minion.idle_sound2 = "wizard/widle2.wav";
 	minion.sight_sound = "wizard/wsight.wav";
-	
 	minion.nextthink = time + 0.01;
 	minion.think = setup_wizard;
 };

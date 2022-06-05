@@ -918,15 +918,7 @@ void() monster_gug = {
 	self.gibhealth = -150;
 	self.gibbed = FALSE;			// Still in one piece
 	self.pain_flinch = 200;			// Demon level
-
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = 0; self.resist_nails = 0;
-	self.resist_rockets = 0; self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_stand = gug_stand1;
 	self.th_walk = gug_walk1;
 	self.th_run = gug_run1;

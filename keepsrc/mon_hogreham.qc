@@ -430,15 +430,7 @@ void() monster_hogreham = {
 	self.meleecontact = FALSE;				// Smash contact
 	self.meleerange = MONAI_MELEEBLUNTOGRE;	// Hammer range
 	self.movespeed = 0;						// Cannot be turret
-	
-	// Always reset Ammo Resistance to be consistent
-	self.resist_shells = self.resist_nails = 0;
-	self.resist_rockets = self.resist_cells = 0;
-
-	// Check for random rotation setup and angle limits
-	if (self.angles_y < 0) self.angles_y = rint(random()*359);
-	if (self.angles_y > 360) self.angles_y = 360;
-
+	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = OgreHamCheckAttack;
 	self.th_stand = hogreham_stand1;
 	self.th_walk = hogreham_walk1;
