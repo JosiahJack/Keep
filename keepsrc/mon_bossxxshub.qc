@@ -171,7 +171,8 @@ void() xxshub_attack1 =
 	// Skill level adjustment
 	self.attack_speed = self.pos1_x + (skill*self.pos1_y);
 	// Spawn from front of Shub
-	Launch_HomingMissile (self.dest1, '0 0 10', CT_PROJ_SHUB1, self.attack_speed);
+	makevectors(self.angles);
+	launch_projectile(self.origin + attack_vector(self.dest1),'0 0 10',CT_PROJ_SHUB1,self.attack_speed);
 };
 
 //============================================================================

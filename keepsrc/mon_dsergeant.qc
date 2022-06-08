@@ -371,7 +371,8 @@ void() SergMissile = {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "ad171/dknight/dserg_magic.wav", 1, ATTN_NORM);
 	self.attack_speed = SPEED_SERGMISSILE + (skill * SPEED_SERGSKILL);
-	Launch_HomingMissile (self.attack_offset, '0 0 10', CT_PROJ_SERG, self.attack_speed);
+	makevectors(self.angles);
+	launch_projectile(self.origin + attack_vector(self.attack_offset),'0 0 10',CT_PROJ_SERG,self.attack_speed);
 };
 
 // Hell Knight - 11 frames / Death Knight - 14 frames (skipped 1, 10,14)

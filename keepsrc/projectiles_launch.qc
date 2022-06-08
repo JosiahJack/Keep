@@ -293,7 +293,6 @@ void(float bullet_count, vector bullet_spread, float bullet_type) Launch_Shells 
 };
 
 void() SetNewmisCommonPlasmaParameters = {
-	newmis.attack_speed = proj_speed;	// Save for later
 	newmis.classgroup = CG_PROJCELLS;
 	newmis.touch = Touch_PlasmaProjectile;
 	newmis.count = 1 + rint(random()*2);	// Default particles
@@ -303,9 +302,35 @@ void() SetNewmisCommonPlasmaParameters = {
 	else newmis.mdl = MODEL_PROJ_PLASMA;
 };
 
+vector ( vector org, vector targofs) SetNewmisCommonRocketParameters = {
+	local float dist, flytime;
+	local vector dir;
+	
+	newmis.v_angle = targofs;				// Store for later
+	newmis.classgroup = CG_PROJROCKETS;
+	newmis.touch = Touch_HomingMissile;
+	dir = normalize((self.enemy.origin + newmis.v_angle) - org); // Aim the missile slightly above enemy
+	dist = vlen (self.enemy.origin - org);
+	flytime = dist * 0.002;
+	if (flytime < 0.1) flytime = 0.1;
+	newmis.nextthink = flytime + time;
+	newmis.think = Steer_HomingMissile;
+	if (self.no_trackondeath == NEGATIVE) newmis.no_trackondeath = FALSE; // Setup default homing missile mode.  Priority : ENTITY > IMPULSE > WORLDSPAWN
+	else if (self.no_trackondeath == TRUE) newmis.no_trackondeath = TRUE;
+	else if (map_notrackondeath == TRUE) newmis.no_trackondeath = TRUE;
+	else newmis.no_trackondeath = FALSE;
+
+	newmis.waitmin = time + 3; // Allow 3s for the homing missile to travel away
+	newmis.attack_track = dir; // Standard projectile setup (origin, size and velocity)
+	return dir;
+};
+
 void(vector org, vector dir, float proj_type, float proj_speed) launch_projectile = { // [FUNCTION]
+	if (entity_pcontent(org)) return; // Check if there is space to spawn entity
+
 	newmis = spawn ();
-	newmis.owner = self;
+	newmis.owner = newmis.oldenemy = self;
+	newmis.enemy = self.enemy;				// Used for homing target
 	newmis.classname = "projectile";	// Name, not really used anymore
 	newmis.classtype = proj_type;		// Class type number, quick identity
 	newmis.classgroup = CG_PROJALL;	// Ammo type (default)
@@ -313,15 +338,24 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 	newmis.bbmaxs = VEC_ORIGIN;
 	newmis.speed = proj_speed; // Standard projectile setup (origin, size and velocity)
 	newmis.attack_speed = proj_speed;	// Save for later
-	if (newmis.classtype == CT_PROJ_NG || newmis.classtype == CT_PROJ_SNG || newmis.classtype == CT_PROJ_REFNG) newmis.classgroup = CG_PROJNAILS;
-	if (newmis.classtype == CT_PROJ_MONNG || newmis.classtype == CT_PROJ_REFLNG || newmis.classtype == CT_PROJ_LAVASNG || newmis.classtype == CT_PROJ_LAVANG) newmis.classgroup = CG_PROJLAVANAILS;
+	if (newmis.classtype == CT_PROJ_NG || newmis.classtype == CT_PROJ_SNG
+	    || newmis.classtype == CT_PROJ_REFNG) {
+		newmis.classgroup = CG_PROJNAILS;
+	}
+	if (newmis.classtype == CT_PROJ_MONNG || newmis.classtype == CT_PROJ_REFLNG
+	    || newmis.classtype == CT_PROJ_LAVASNG || newmis.classtype == CT_PROJ_LAVANG) {
+		newmis.classgroup = CG_PROJLAVANAILS;
+	}
 
 	// Switch model collision based on auto aim functionality.  Monsters always use large collision (otherwise infighting would be less)
 	if (self.flags & FL_CLIENT) {
 		if (playerprojsize == 0) newmis.movetype = MOVETYPE_FLYMISSILE;	// Large collision
 		else newmis.movetype = MOVETYPE_FLY;		// Small collision
 
-		if (self.moditems & IT_ARTPIERCE && (newmis.classgroup == CG_PROJNAILS || newmis.classgroup == CG_PROJLAVANAILS)) newmis.projeffect = IT_ARTPIERCE; // Check if the player has the nail piercer effect active
+		if ((self.moditems & IT_ARTPIERCE)
+			&& (newmis.classgroup == CG_PROJNAILS || newmis.classgroup == CG_PROJLAVANAILS)) {
+			newmis.projeffect = IT_ARTPIERCE; // Check if the player has the nail piercer effect active
+		}
 	} else newmis.movetype = MOVETYPE_FLYMISSILE; // Default = large collision
 
 	newmis.solid = SOLID_BBOX;
@@ -346,10 +380,10 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 		newmis.attack_ricochet = 5; // Bruh!!
 	} else if (proj_type == CT_PROJ_REFLNG) newmis.mdl = MODEL_PROJ_NG;
 	else if (proj_type == CT_PROJ_SANTA) {
-		newmis.mdl = MODEL_PROJ_SNOWBALL); // Santa Snowball machine gun!
+		newmis.mdl = MODEL_PROJ_SNOWBALL; // Santa Snowball machine gun!
 		newmis.classgroup = CG_PROJICE;
 	} else if (proj_type == CT_PROJ_BOLT1) {
-		newmis.mdl = MODEL_PROJ_BOLT1); // Crossbow Knight has poison/regular bolts
+		newmis.mdl = MODEL_PROJ_BOLT1; // Crossbow Knight has poison/regular bolts
 		newmis.movetype = MOVETYPE_FLY; // Crossbow bolts are small
 		newmis.bodyfadeaway = TRUE; // and stick around
 	} else if (proj_type == CT_PROJ_BOLT2) {
@@ -400,7 +434,6 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 		if (ext_dppart) {
 			if (newmis.poisonous) newmis.traileffectnum = particleeffectnum(DPP_TRPOISON);
 			else newmis.traileffectnum = particleeffectnum(DPP_TRLASER);
-			//newmis.effects = 0;	// Remove extra glow
 		}
 	} else if (proj_type == CT_PROJ_GROCK) {
 		if (random() < 0.5) newmis.mdl = MODEL_PROJ_GROCK1;
@@ -415,7 +448,7 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 		SetNewmisCommonPlasmaParameters();
 	} else if (proj_type == CT_MONGAUNT) {
 		SetNewmisCommonPlasmaParameters();
-		if (newmis.poisonous) newmis.mdl = MODEL_PROJ_GAPLASMAGRN);
+		if (newmis.poisonous) newmis.mdl = MODEL_PROJ_GAPLASMAGRN;
 		else newmis.mdl = MODEL_PROJ_GAPLASMA;
 	} else if (proj_type == CT_MONDEFLECTOR) {
 		SetNewmisCommonPlasmaParameters();
@@ -451,70 +484,145 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 		newmis.angles_y = rint(random()*360);	// Random angle
 		newmis.frame = 3;						// Medium size
 		newmis.classgroup = CG_PROJCELLS;
+	} else if (proj_type == CT_PROJ_SHAL) {
+		dir = SetNewmisCommonRocketParameters(org,dir);
+		newmis.mdl = MODEL_PROJ_SHAL;
+		newmis.dpp_name = DPP_TEVORESPIKE;
+		newmis.avelocity = vecrand(100,200,FALSE);
+	} else if (proj_type == CT_PROJ_SERG) {
+		dir = SetNewmisCommonRocketParameters(org,dir);
+		newmis.mdl = MODEL_PROJ_SERG;
+		newmis.dpp_name = DPP_TEEXPLODE;
+		newmis.avelocity = vecrand(100,200,FALSE);
+	} else if (proj_type == CT_PROJ_SHUB1) {
+		dir = SetNewmisCommonRocketParameters(org,dir);
+		newmis.mdl = MODEL_PROJ_SHUB1;
+		newmis.dpp_name = DPP_TEEXPLODE;
+		newmis.avelocity = vecrand(100,200,FALSE);
+		makevectors(self.angles); // The angles key will reverse direction for up-side-down Shub.
+		dir = v_up*0.5; // Push the homing missing up from center.
+	} else if (proj_type == CT_PROJ_GL) newmis.mdl = MODEL_PROJ_GRENADE; // proj_gl is used by the player (separate so easier to change)
+	else if (proj_type == CT_PROJ_GLSUPER) {
+		newmis.mdl = MODEL_PROJ_GRENADE;
+		newmis.master = self;
+		newmis.movetype = MOVETYPE_TOSS;
+		newmis.speed = 800; // Was 600, too slow.
+		vec = '0 0 200';
+		if (self.v_angle_x) {vec = vec + crandom()*v_right*10; vec = vec + crandom()*v_up*10;}
+		newmis.velocity    = (dir * newmis.speed) + vec;
+		newmis.angles      = vectoangles(newmis.velocity);
+		newmis.dmg         = 160;
+		newmis.enemy       = world;
+		newmis.touch       = Explode_Grenade;
+		newmis.delay       = time + 2.5;
+		newmis.nextthink   = time + 0.1;
+		newmis.think       = SuperGrenade_Think;
+		newmis.think1      = BecomeBigBang;
+	} else if (proj_type == CT_PROJ_GLMULTI) { 
+		newmis.mdl = "progs/rogue/mervup.mdl";
+		newmis.touch = MultiGrenadeTouch;
+		newmis.think = MultiGrenadeExplode;
+		newmis.lefty = FALSE;
+		newmis.nextthink = time + 1;
+		newmis.classname = "MultiGrenade";
+	} else if (proj_type == CT_PROJ_GLMON) { 
+		if (newmis.poisonous) newmis.mdl = MODEL_PROJ_GRENADEGRN; // proj_glmon is used by any monster firing grenades
+		else newmis.mdl = MODEL_PROJ_GRENADE;
+	} else if (proj_type == CT_PROJ_FLESH) {
+		if (newmis.poisonous) newmis.mdl = MODEL_PROJ_FLESHP;
+		else newmis.mdl = MODEL_PROJ_FLESH;
+	} else if (proj_type == CT_PROJ_FLESHP) {
+		newmis.mdl = MODEL_PROJ_FLESHP;
+		newmis.poisonous = TRUE;
+		newmis.noise = "ad171/wraith/bounce.wav";
+	} else if (proj_type == CT_PROJ_MEGG) {
+		if (self.classtype == CT_MONWRAITH) {
+			newmis.mdl = MODEL_PROJ_WEGG;
+			newmis.noise = "ad171/wraith/bounce.wav";
+		} else if (self.classtype == CT_MONSHAL || self.classtype == CT_MONSHALBOSS) {
+			newmis.mdl = MODEL_PROJ_SEGG;
+			newmis.noise = "ad171/wraith/bounce.wav";
+		}
+		newmis.classgroup = CG_MINIONEGG;		// Proper group type
+		newmis.enemy = SUB_entEnemyTarget();	// Make sure got right enemy
+		newmis.bbmins = VEC_HULLE_MIN;			// Small egg size
+		newmis.bbmaxs = VEC_HULLE_MAX;
+		newmis.frame = self.attachment.frame;	// Current ball size (frame)
+		newmis.think = Hatch_Egg;				// Eventually hatch
+		newmis.nextthink = time + LIFE_EGG;		// Short timer
+	} else if (proj_type == CT_PROJ_SPID) {
+		newmis.mdl = MODEL_PROJ_SPID;
+		newmis.frame = rint((random() * 9));
+	} else if (proj_type == CT_PROJ_ELF) {
+		newmis.mdl = MODEL_PROJ_ELF;
+		newmis.frame = rint((random() * 9));
+		newmis.classgroup = CG_PROJICE;
+	} else if (proj_type == CT_PROJ_SWAMP) {
+		newmis.mdl = MODEL_PROJ_SWAMP;
+		newmis.frame = rint((random() * 9));
+	} else if (proj_type == CT_PROJ_VORE) {
+		newmis.mdl = MODEL_PROJ_VORE;
+		newmis.frame = rint((4 + random() * 4));
+	} else if (proj_type == CT_PROJ_NOUR2) {
+		newmis.mdl = MODEL_PROJ_NOUR2B;
+		newmis.skin = self.skin;
+		newmis.frame = 7; // Large size
+		newmis.noise = "ad171/wraith/bounce.wav";
+	} else if (proj_type == CT_PROJ_CHTHON2) {
+		newmis.mdl = MODEL_PROJ_CHTHON1;
+		newmis.skin = self.skin;
+		newmis.frame = rint((random() * 9));
+		newmis.noise = "ad171/wraith/bounce.wav";
+		newmis.dmg = self.pos3_z;
+	} else if (proj_type == CT_PROJ_SHUB2) {
+		newmis.mdl = MODEL_PROJ_SHUB2;
+		newmis.frame = rint((random() * 9));
+		newmis.noise = "ad171/wraith/bounce.wav";
+		newmis.dmg = self.pos3_z;
+	} else if (proj_type == CT_PROJ_SHELLC) {
+		newmis.mdl = MODEL_PROJ_SHELLC;
+		newmis.touch = Touch_ShellCasing;
+		newmis.think = model_fade;
+		newmis.nextthink = time + random() + LIFE_SHELLS;
+		newmis.ltime = newmis.nextthink;
+	} else if (proj_type == CT_PROJ_NAILC) {
+		newmis.mdl = "progs/redfield/proj_nailcase.mdl";
+		newmis.touch = Touch_ShellCasing;
+		newmis.think = model_fade;
+		newmis.nextthink = time + random() + LIFE_SHELLS;
+		newmis.ltime = newmis.nextthink;
+	} else if (proj_type == CT_PROJ_GLMONMULTI) {
+		newmis.mdl = MODEL_PROJ_GRENADEMULTI;
+		newmis.touch = MultiGrenadeTouch;
+		newmis.think = MultiGrenadeExplode;
+		newmis.lefty = FALSE;
+		newmis.nextthink = time + 1;
+		newmis.classname = "MultiGrenade";
+	} else if (proj_type == CT_PROJ_GLMONPROX) {
+		newmis.mdl = "progs/hipnotic/proxbomb.mdl";
+		newmis.touch = ProximityGrenadeTouch;
+		newmis.think = ProximityBomb;
+		newmis.delay = ((time + 15.000) + (MOVETYPE_BOUNCE * random ()));
+		newmis.th_die = ProximityGrenadeExplode;
+		newmis.nextthink = time + 1;
+		newmis.bbmins = '-1.000 -1.000 -1.000';
+		newmis.bbmaxs = '1.000 1.000 1.000';
+		newmis.classname = "ProximityBomb";
 	}
 
 	if (newmis.think) newmis.nextthink = time + newmis.speed;
 	newmis.finalangle = dir;
 	newmis.velocity = newmis.finalangle * newmis.speed;
-	if (!(self.flags & FL_CLIENT)) newmis.angles = vectoangles(newmis.finalangle);
+	if (!(self.flags & FL_CLIENT)) {
+		newmis.angles = vectoangles(newmis.finalangle);
+		if (proj_type == CT_PROJ_SHAL
+		    || proj_type == CT_PROJ_SERG
+			|| proj_type == CT_PROJ_SHUB1)
+			newmis.angles = vectoangles(self.velocity);
+	}
 	setmodel(newmis,newmis.mdl);
 	setsize(newmis,newmis.bbmins,newmis.bbmaxs);		
 	setorigin(newmis,org);
-};
-
-void(vector orgofs, vector targofs, float proj_type, float proj_speed) Launch_HomingMissile = { // [FUNCTION]
-	local vector org, dir;
-	local float dist, flytime;
-
-	makevectors(self.angles);
-	org = self.origin + attack_vector(orgofs);
-	if (entity_pcontent(org)) return; // Check if there is space to spawn entity
-	
-	newmis = spawn ();
-	newmis.owner = newmis.oldenemy = self; // Owner is always excluded from touch functions, save in oldenemy and after one second remove owner so we'll touch everything.
-	newmis.classname = "proj_rocket";		// obj name, not really used anymore
-	newmis.classtype = proj_type;			// Class type number, quick identity
-	newmis.classgroup = CG_PROJROCKETS;		// Ammo type
-	newmis.movetype = MOVETYPE_FLYMISSILE;	// Default = large collision
-	newmis.enemy = self.enemy;				// Used for homing target
-	newmis.v_angle = targofs;				// Store for later
-	dir = normalize((self.enemy.origin + newmis.v_angle) - org); // Aim the missile slightly above enemy
-	dist = vlen (self.enemy.origin - org);
-	flytime = dist * 0.002;
-	if (flytime < 0.1) flytime = 0.1;
-	newmis.solid = SOLID_BBOX;
-	newmis.touch = Touch_HomingMissile;
-	newmis.nextthink = flytime + time;
-	newmis.think = Steer_HomingMissile;
-	newmis.attack_speed = proj_speed;
-	if (self.no_trackondeath == NEGATIVE) newmis.no_trackondeath = FALSE; // Setup default homing missile mode.  Priority : ENTITY > IMPULSE > WORLDSPAWN
-	else if (self.no_trackondeath == TRUE) newmis.no_trackondeath = TRUE;
-	else if (map_notrackondeath == TRUE) newmis.no_trackondeath = TRUE;
-	else newmis.no_trackondeath = FALSE;
-
-	newmis.waitmin = time + 3; // Allow 3s for the homing missile to travel away
-	newmis.poisonous = newmis.owner.poisonous;
-
-	// Setup model for each missile type
-	if (proj_type == CT_PROJ_SHAL) {
-		setmodel(newmis, MODEL_PROJ_SHAL);
-		newmis.dpp_name = DPP_TEVORESPIKE;
-	} else if (proj_type == CT_PROJ_SERG) {
-		setmodel(newmis, MODEL_PROJ_SERG);
-		newmis.dpp_name = DPP_TEEXPLODE;
-	} else if (proj_type == CT_PROJ_SHUB1) {
-		setmodel(newmis, MODEL_PROJ_SHUB1);
-		newmis.dpp_name = DPP_TEEXPLODE;
-		makevectors(self.angles); // The angles key will reverse direction for up-side-down Shub.
-		dir = v_up*0.5; // Push the homing missing up from center.
-	}
-
-	newmis.attack_track = dir; // Standard projectile setup (origin, size and velocity)
-	newmis.velocity = newmis.attack_track * newmis.attack_speed;
-	newmis.angles = vectoangles(self.velocity);
-	newmis.avelocity = vecrand(100,200,FALSE);
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);		
-	setorigin (newmis, org);
 };
 
 void(vector org, vector dir, vector avel, float proj_type, float proj_speed) Launch_Missile = { // [FUNCTION]
@@ -706,9 +814,9 @@ void(vector org, vector dir, vector avel, float proj_type, float proj_speed) Lau
 };
 
 void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade = { // [FUNCTION]
-	local vector vec;
+local vector vec;
 
-	if (entity_pcontent(org)) return; // Check if there is space to spawn entity
+if (entity_pcontent(org)) return; // Check if there is space to spawn entity
 	
 	newmis = spawn();
 	newmis.owner = self;
@@ -841,9 +949,9 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade = { //
 	}
 	
 	// These projectile fly like grenades but are really spikes!
-	if (proj_type == CT_PROJ_SPID || proj_type == CT_PROJ_VORE ||
-		proj_type == CT_PROJ_SWAMP || proj_type == CT_PROJ_ELF ||
-		proj_type == CT_PROJ_FLESH || proj_type == CT_PROJ_FLESHP) {
+	if (proj_type == CT_PROJ_SPID || proj_type == CT_PROJ_VORE
+	    || proj_type == CT_PROJ_SWAMP || proj_type == CT_PROJ_ELF
+		|| proj_type == CT_PROJ_FLESH || proj_type == CT_PROJ_FLESHP) {
 		newmis.touch = Touch_Projectile;
 		newmis.nextthink = time + LIFE_PROJECTILE;
 		newmis.think = SUB_Remove;
