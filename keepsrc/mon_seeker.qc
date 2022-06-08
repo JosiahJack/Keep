@@ -346,7 +346,7 @@ void(vector leftofs, vector rightofs) seek_attack = {
 			if (self.weaponstate == TRUE) {
 				if (skill > SKILL_NORMAL) {
 					sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
-					launch_plasma(org, dir, CT_PROJ_PLASMA, self.attack_speed);
+					launch_projectile(org, dir, CT_PROJ_PLASMA, self.attack_speed);
 				} else {
 					sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);	
 					launch_projectile(org, dir, CT_PROJ_LASER, self.attack_speed);
@@ -369,7 +369,7 @@ void(vector leftofs, vector rightofs) seek_attack = {
 			if (self.weaponstate == TRUE) {
 				if (skill > SKILL_NORMAL) {
 					sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
-					launch_plasma(org, dir, CT_PROJ_PLASMA, self.attack_speed);
+					launch_projectile(org, dir, CT_PROJ_PLASMA, self.attack_speed);
 				} else {
 					sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);	
 					launch_projectile(org, dir, CT_PROJ_LASER, self.attack_speed);

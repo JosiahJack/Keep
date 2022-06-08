@@ -192,45 +192,24 @@ void(string modelstr, float frameno, float skinno) corpse_setup = { // [FUNCTION
 };
 
 void() corpse_flayed1 = { corpse_setup("progs/quoth/corpse_flay.mdl",0,0); };  // [ENTITY]
-
 void() corpse_flayed2 = { corpse_setup("progs/quoth/corpse_flay.mdl",0,1); }; // [ENTITY]
-
 void() corpse_flayed3 = { corpse_setup("progs/quoth/corpse_flay.mdl",2,2); }; // [ENTITY]
-
 void() corpse_flayed4 = { corpse_setup("progs/quoth/corpse_flay.mdl",1,1); }; // [ENTITY]
-
 void() corpse_lynched1 = { corpse_setup("progs/quoth/corpse_lynch.mdl",0,0); }; // [ENTITY]
-
-void() corpse_lynched2 = { corpse_setup("progs/quoth/corpse_lynch.mdl",0,0); }; // [ENTITY]
-
+void() corpse_lynched2 = { corpse_setup("progs/quoth/corpse_lynch.mdl",0,1); }; // [ENTITY]
 void() corpse_lynched3 = { corpse_setup("progs/quoth/corpse_lynch.mdl",1,2); }; // [ENTITY]
-
-void() corpse_crucified1 = { corpse_setup("progs/quoth/corpse_imp.mdl",7,9); }; // [ENTITY]
-
-void() corpse_crucified2 = { corpse_setup("progs/quoth/corpse_imp.mdl",8,10); }; // [ENTITY]
-
+void() corpse_crucified1 = { corpse_setup("progs/quoth/corpse_imp.mdl",9,7); }; // [ENTITY]
+void() corpse_crucified2 = { corpse_setup("progs/quoth/corpse_imp.mdl",10,8); }; // [ENTITY]
 void() corpse_impaled_back1 = { corpse_setup("progs/quoth/corpse_imp.mdl",0,0); }; // [ENTITY]
-
 void() corpse_impaled_back2 = { corpse_setup("progs/quoth/corpse_imp.mdl",0,1); }; // [ENTITY]
-
 void() corpse_impaled_back3 = { corpse_setup("progs/quoth/corpse_imp.mdl",1,2); }; // [ENTITY]
-
 void() corpse_impaled_front1 = { corpse_setup("progs/quoth/corpse_imp.mdl",2,0); }; // [ENTITY]
-
 void() corpse_impaled_front2 = { corpse_setup("progs/quoth/corpse_imp.mdl",2,1); }; // [ENTITY]
-
 void() corpse_impaled_front3 = { corpse_setup("progs/quoth/corpse_imp.mdl",3,3); }; // [ENTITY]
-
 void() corpse_impaled_horizontal1 = { corpse_setup("progs/quoth/corpse_imp.mdl",4,0); }; // [ENTITY]
-
 void() corpse_impaled_horizontal2 = { corpse_setup("progs/quoth/corpse_imp.mdl",4,1); }; // [ENTITY]
-
 void() corpse_impaled_horizontal3 = { corpse_setup("progs/quoth/corpse_imp.mdl",5,4); }; // [ENTITY]
-
 void() corpse_impaled_horizontal4 = { corpse_setup("progs/quoth/corpse_imp.mdl",6,5); }; // [ENTITY]
-
 void() corpse_impaled_vertical1 = { corpse_setup("progs/quoth/corpse_imp.mdl",7,0); }; // [ENTITY]
-
 void() corpse_impaled_vertical2 = { corpse_setup("progs/quoth/corpse_imp.mdl",7,1); }; // [ENTITY]
-
 void() corpse_impaled_vertical3 = { corpse_setup("progs/quoth/corpse_imp.mdl",8,6); }; // [ENTITY]

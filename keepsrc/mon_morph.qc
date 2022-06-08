@@ -152,7 +152,7 @@ void() morph_stab2 = {
 		sound (self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
 	   	attackDamage = (random() * 10) + 20;
 		T_Damage (self.enemy, self, self, attackDamage,DAMARMOR);
-		SpawnBlood (self.enemy, self.enemy.origin, v_forward * 150, 14);
+		SpawnBlood (self.enemy, self.enemy.origin, v_forward * 150, 14,0);
 	} else {
 		self.effects = self.effects | EF_MUZZLEFLASH;
 		org = self.origin + v_forward * 80 + v_right * 4 + '0 0 4';

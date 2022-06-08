@@ -314,3 +314,12 @@ float   LOCK_RANGE      = 16384; // 1000 is about 30 metres.
                                  // 4096 isn't long enough for Masque.   The fact that I'm updating this file for Masque of the Red Death here in 2021 when this was written ~2011 is kind of insane. -Qmaster
 						         // 8192 wasn't long enough for Quake: Mjolnir -Qmaster
 float   AREABLASTER_DAMAGE  = 15; // Was 18, but that was too much.
+
+float SPIKEY_RANGE = 8192; // Quake2 railgun range.
+float SPIKEY_DAMAGE = 9;	
+float THOR_SPEED = 600;	
+
+// Average rocket damage is 100-120.  Scaling maximum damage down to 35, the new range is from 29.17 to 35, with the average at 32.08.
+// 32*3 = 96, which is double of an equalized shotgun's 6*8 (or 12*4) = 48.  Super shotgun's damage rate is doubled similarly by the Tome.
+// Damage based on unmodified shotguns (or those in nsoe).  Recent decision was made to buff shotguns for Drake.
+float EXSHELL_DAMAGE = 35;

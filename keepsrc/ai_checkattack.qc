@@ -60,6 +60,8 @@ void() inquisitor_magicb1;
 void() inquisitor_magicc1;
 void() inquisitor_magicd1;
 void() mcorn_atkb1;
+float(vector waveqty) SpriteCount_Flame;
+float(entity targ, float maxextra) HazardProjectile_CheckLimit;
 
 // Mammoth style phases
 float MM_PHASE0 = 0;		// Phase 0 - Locked
@@ -2838,4 +2840,38 @@ float() CheckTurretAttack = { // [FUNCTION]
 		return TRUE;
 	}
 	return FALSE;
+};
+
+// ATTACK.  SoE:  Check added so hell lords don't summon meteors at inappropriate times.
+float(vector p) M_MeteorCheck = { // [FUNCTION]
+    local vector org, spot, vec;
+
+    spot = self.enemy.origin;
+    vec = spot - self.origin;
+    if (vlen(vec) < 200) return FALSE; // Enemy too close to attacker.
+
+    org = vectoangles (vec);
+    makevectors (org);
+    org = self.origin + p_x*v_forward + p_y*v_right + p_z*'0 0 1';
+    if (vlen(spot - org) < 200) return FALSE; // Not enough time for target to react.
+
+    traceline (self.origin, org, TRUE, self);
+    if (trace_fraction < 1) return FALSE; // Spawn point blocked.
+    return TRUE;
+};
+
+// Checks if the firewall is effective against an enemy.  Assumed to be called during ai_run and self.th_missile().
+float() M_FirewallCheck = { // [FUNCTION]
+    if (self.waterlevel) return FALSE;   // Spawnpoint underwater.
+    if (!(self.flags & FL_ONGROUND)) return FALSE;   // Not on the ground.
+
+    if (self.enemy) {
+        if (self.enemy.waterlevel) return FALSE;       // Underwater.
+        if (vlen(self.enemy.origin - self.origin) > 1000) return FALSE;       // Too far away.
+        if (!(self.enemy.flags & FL_ONGROUND)) {
+            traceline (self.enemy.origin, self.enemy.origin - '0 0 100', TRUE, self.enemy);
+            if (trace_fraction == 1) return FALSE;   // High above the ground.
+        }
+    }
+    return TRUE; // Fire away.
 };

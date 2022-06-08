@@ -449,7 +449,7 @@ void(vector orgofs, float angofs) minotaur_fire = {
 	else {
 		// Projectile behaves like plasma (light/trail/impact effects)
 		// The correct projectile model is switched in launch function
-		launch_plasma(org, dir, CT_PROJ_PLASMA, self.attack_speed);
+		launch_projectile(org, dir, CT_PROJ_PLASMA, self.attack_speed);
 	}
 
 	if (self.spawnflags & 2) {

@@ -582,6 +582,13 @@ void() worldspawn = { // [ENTITY]...well it IS.
 		g_axemodel = "progs/ad171/g_shadaxeplain.mdl";
 		v_axemodel = "progs/ad171/v_shadaxe0.mdl";
 	}
+	if (self.useold_chainsaw) {
+		g_chainsawmodel = "progs/drake/g_saw.mdl"; // Drake/Zerstorer version
+		v_chainsawmodel = "progs/drake/v_saw.mdl";
+	} else {
+		g_chainsawmodel = "progs/q15/g_saw.mdl"; // Quake 1.5 improved version
+		v_chainsawmodel = "progs/q15/v_saw.mdl";
+	}
 	if (self.no_trackondeath == TRUE) map_notrackondeath = TRUE; // Check for changes to monster homing missiles on death behaviour.
 	else map_notrackondeath = FALSE;
 	

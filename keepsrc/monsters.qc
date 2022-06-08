@@ -487,8 +487,10 @@ float() FollowSetup = {
 		// Cannot chase a target if setup as a turret
 		if (self.movetarget && self.movespeed != -1) {
 			if (self.movetarget.classtype == CT_PATHCORNER || (self.charmer != world)) {
-				dprint("Set up a follow target with targetname: ");
-				dprint(self.movetarget.targetname); dprint(".\n");
+				if (developer > 1) {
+					dprint("Set up a follow target with targetname: ");
+					dprint(self.movetarget.targetname); dprint(".\n");
+				}
 				self.goalentity = self.movetarget;
 				self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
 				SUB_SelfThink(self.th_walk,0.1 + random() * 0.5);

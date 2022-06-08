@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 10
+// Function count: 9
 //
 // Implements: Utility functions to play and/or remove a sprite
 //
@@ -38,35 +38,6 @@
 
 void() BDW_SpriteGenericLoop;
 void() BDW_SpriteGenericPlayOnce;
-
-// BDW_TracerEffect
-// this approximates a tracer effect for missiles and such. the only way to produce a particle effect in quakec
-// is to call the particle() function, which is quite limited; particle origins are randomised (in the game, this appears
-// to be roughly 16 units in each direction) so there is a limit as to how accurately you can specify a particles origin. 
-// also, colour is slightly randomised, but this generally works in your favour. called each frame, what this function does 
-// is work out how far the missile has travelled since it last spawned particles, it then spawns a certain number every 
-// 16 units to fill the gap.
-void() BDW_TracerEffect = {	// [FUNCTION]
-	local vector dir, porg, pvel;
-	local float len, pcol;
-
-	dir = self.origin - self.oldorigin;
-	len = vlen(dir);
-	if (len < 16) return;	//not enough distance travelled to spawn particle, so keep oldorigin and return
-
-	if (self.color_x <= 0) pcol = 232;	//lava red
-	else pcol = self.color_x;
-
-	pvel = '0 0 0';	//test
-	dir = normalize(dir);
-	while (len > 0) {
-		porg = self.oldorigin + dir*len;
-		particle(porg, pvel, pcol, 4);
-		len = len - 16;
-	}
-
-	self.oldorigin = self.origin;
-};
 
 // Loops a sprite animation.  self.idleweaponframe represents the total number of frames in the animation. Frames are numbered 
 // starting from 0, so the last frame in the animation is actually (self.idleweaponframe - 1). Useful for missiles.

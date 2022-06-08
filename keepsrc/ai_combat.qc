@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 1
-// Function count: 11
+// Function count: 
 //
 // Implements: Damage application and calculations, direct and radius
 //
@@ -40,6 +40,10 @@
 void(entity targ, entity attacker) ClientObituary;
 void(entity victim, entity attacker, float burn) Burn_Add;
 void(entity targ, float jump, float destroy) TakeTargetOutOfVehicle;
+void() monster_death_precheck;
+void(entity ent, float color1, float color2) Particle_Cube;
+void() FrozenThink;
+void() Frozen_Touch;
 
 float(entity targ, entity inflictor) CanDamage = {
 	if (targ.takedamage == DAMAGE_NO) return FALSE; // Any entity marked with no damage is automatically excluded
@@ -836,6 +840,58 @@ float(entity e, float heal, float ignore) T_Repair = {
 	}
 
     return heal;        // Return amount healed instead of TRUE.
+};
+
+// Generic slow timer.  Inflicted by Buriza.
+void(entity targ, entity attacker, float dur) T_Slow = { // [FUNCTION]
+    if (!targ) return;
+    if (targ.invincible_finished) return;
+    if (targ.cross_finished) return;
+
+	if (targ.slow_finished < time) {
+		targ.slow_finished = time + dur;
+	} else { // Stacks up to 120 seconds (115 + 5)
+		if ((targ.slow_finished - time) < 116) targ.slow_finished = targ.slow_finished + dur; 
+	}
+};
+
+void() FreezeFinish = {
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
+	self.deadflag = DEAD_DEAD; 
+	Particle_Cube(self, 1, 41);
+	take_monster_object(self); // drop our stuff
+	if (self.attachment) entity_remove(self.attachment, 0.1);
+	if (self.attachment2) entity_remove(self.attachment2, 0.1);
+	if (self.attachment3) entity_remove(self.attachment3, 0.1);
+	self.velocity = self.avelocity = '0 0 0';
+	self.movetype = MOVETYPE_TOSS;
+	self.colormod = '1 1 2'; // Pale blue white
+	self.alpha = 0.6; // Transparent ice
+	self.effects = 0;
+	self.solid = SOLID_SLIDEBOX;
+	self.takedamage = DAMAGE_AIM;
+	self.think = FrozenThink;
+	self.nextthink = time + 0.1;
+	self.count = 0;
+	self.health = 0;
+	if (self.gibhealth >= 0) self.gibhealth = -60;
+	self.touch = Frozen_Touch;
+	Gyro_Object_Activate(self,MASS_GIB); // Light weight and floats, ice floats
+	Gyro_Object_SetBouyancy(self,BOUY_GIB);
+	Gyro_Object_SetResistance(self,RESIST_GIB);
+	if (self.targetname) self.use = BecomeIcyExp;
+	if (pointcontents(self.origin) == CONTENT_LAVA) BecomeIcyExp(); // Can't freeze that which under lava lies; so burst away!
+};
+
+void(entity targ, entity attacker) T_Freeze = { // [FUNCTION]
+	if (!(targ.flags & FLx_CREATURE)) return;
+
+	sound(targ, CHAN_ITEM, "drake/weapons/freeze.wav", 1, ATTN_NORM);
+	Particle_Cube(self, 1, 41);
+    targ.oldenemy = attacker;
+    targ.enemy = world;
+    targ.think = FreezeFinish;
+    targ.nextthink = time + 0.05;
 };
 
 // Radius damage but ignores entities outside of the water and other eels

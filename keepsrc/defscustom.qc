@@ -1699,3 +1699,51 @@ float EIDOLON_PHASE1 = 1;	// Trapped in cage
 float EIDOLON_PHASE2 = 2;	// Fighting
 
 .string headmdl;
+
+float PROJ_MAXLIMIT = 32;		// Fire sprite limit per monster
+float FLAME_RED = 0;				// Default colour
+float FLAME_GREEN = 1;				// Not implemented (Add later)
+float FLAME_BLUE = 2;				// Extra blue version
+float LIFE_HAZARD = 5;				// Bouncing hazard models
+float LIFE_FLAME = 5;				// Long burning flame + 2 x random()
+float FRAME_FLAME = 14;				// Maximum amount of frames
+float FLAME_TINY = 1;				// 50% chance
+float FLAME_SML = 2;				// 30% chance
+float FLAME_MED = 5;				// 20% chance
+float FLAME_VLRG = 10;				// Not implemented (Add later)
+.float		proj_count;			// Floor model/sprite active counter
+.float		proj_limit;			// Maximum amount of floor model/sprite active
+.vector		proj_attqty;		// Proj Count = Base (X) * (Skill * Y) Maximum = Z
+.float		proj_attarc;		// Proj Arc Easy=-1/1, Normal=-2/2, Hard=-3/3
+.entity		proj_source;		// Source entity for the floor projectiles
+.entity		proj_trcont;		// Controller entity for flame lines
+.float		proj_trqty;			// Fire trail quantity of flames to create
+.float		proj_trdist;		// Fire trail distance for each flame segment
+.float		proj_trstep;		// Fire trail step up/down height restrictions
+.float		proj_trwobble;		// Fire trail wobble on X/Y axis going forward
+.float		proj_trlife;		// Fire trail life time of flame sprites
+.float		proj_trdmg;			// Fire trail explosive damage at end of line
+.float		proj_trspeed;		// Fire trail tick timing speed
+
+float FLAME_TRCOUNT = 12;			// Trail flame count
+float FLAME_TRDIST = 32;			// Trail distance between flames
+float FLAME_TRSTEP = 64;			// Trail flame ledge height
+float FLAME_TRWOBBLE = 8;			// Trail flame random XY wobble
+float FLAME_TREXPLODE = 40;			// Trail flame xxplosive damage
+float FLAME_TRLIFE = 8;				// Trail flame life time
+float FLAME_TRSPEED = 0.02;			// Trail flame standard speed
+string MODEL_PROJ_FLAMETINY = "progs/ad181/s_flametiny.spr";
+string MODEL_PROJ_FLAMESML = "progs/ad181/s_flamesml.spr";
+string MODEL_PROJ_FLAMEMED = "progs/ad181/s_flamemed.spr";
+// string MODEL_PROJ_FLAMEVLRG = "progs/ad181/s_flamevlrg. spr"; // does not exist yet, Qmaster pre Bal
+string MODEL_PROJ_FLAMEVLRG = "progs/ad181/s_flamemed.spr";
+string MODEL_PROJ_BFLAMETINY = "progs/s_blflametiny.spr"; // Blue fire! (aka Void Knight fire)
+string MODEL_PROJ_BFLAMESML = "progs/s_blflamesml.spr";
+string MODEL_PROJ_BFLAMEMED = "progs/s_blflamemed.spr";
+//string MODEL_PROJ_BFLAMEVLRG = "progs/s_blflamevlrg. spr"; // does not exist yet, Qmaster pre Bal
+string MODEL_PROJ_BFLAMEVLRG = "progs/s_blflamemed.spr";
+string MODEL_PROJ_GRFLAMETINY = "progs/s_grflametiny.spr"; // Green fire!
+string MODEL_PROJ_GRFLAMESML = "progs/s_grflamesml.spr";
+string MODEL_PROJ_GRFLAMEMED = "progs/s_grflamemed.spr";
+// string MODEL_PROJ_GRFLAMEVLRG = "progs/s_grflamevlrg. spr"; // does not exist yet, Qmaster pre Bal
+string MODEL_PROJ_GRFLAMEVLRG = "progs/s_grflamemed.spr";

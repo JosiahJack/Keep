@@ -419,7 +419,7 @@ void(vector minofs) Fire_NourPlasma =
 	org = self.origin + attack_vector(minofs);
 	self.pos2 = vecrand(0,50,TRUE);
 	self.pos3 = normalize(self.pos2);
-	launch_plasma(org, self.pos3, CT_SUMMONLIGHT, SPEED_REFLECTION);
+	launch_projectile(org, self.pos3, CT_SUMMONLIGHT, SPEED_REFLECTION);
 };
 
 //----------------------------------------------------------------------

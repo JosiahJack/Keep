@@ -836,7 +836,7 @@ void(float scratch_noise) ai_melee_carnivean = {
 	makevectors (self.angles);
 	if (self.meleetimer < time) { // Only spawn blood/gore/sound every second
 		self.meleetimer = time + 1;
-		SpawnBlood (self.enemy, self.origin + v_forward*50 + v_up*2, VEC_ORIGIN, 17);
+		SpawnBlood (self.enemy, self.origin + v_forward*50 + v_up*2, VEC_ORIGIN, 17,0);
 		SpawnMeatSpray(self, self.enemy, crandom () * 100);	// spawn a little gore
 	}
 

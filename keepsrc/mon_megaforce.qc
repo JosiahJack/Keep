@@ -252,7 +252,7 @@ void() megaf_fire_plasma = {
 	else targ_org = self.enemy.origin - self.enemy.view_ofs;
 	dir = normalize(targ_org - self.origin);
 
-	launch_plasma(org, dir, CT_MONDEFLECTOR, self.attack_speed);
+	launch_projectile(org, dir, CT_MONDEFLECTOR, self.attack_speed);
 };
 
 void() megaf_plasma1 = [ $attack1, megaf_plasma2] {};

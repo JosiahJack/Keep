@@ -275,7 +275,7 @@ float() overlord_smash = {
     sound (self, CHAN_WEAPON, "s_wrath/smash.wav", 1, ATTN_NORM);
     T_Damage (self.enemy, self, self, smashDmg);
     delta = normalize (self.enemy.origin - self.origin + self.enemy.view_ofs);
-    SpawnBlood (self.enemy.origin - delta * 30, delta * -100, smashDmg, self.enemy.bloodtype);
+    SpawnBlood(self.enemy,self.enemy.origin - delta * 30, delta * -100, smashDmg, 0);
     return TRUE;
 };
 

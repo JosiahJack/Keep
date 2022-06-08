@@ -999,14 +999,10 @@
 @PointClass base(Items,PowerupSize,PowerTimer) studio("progs/quoth/trinity.mdl") = item_artifact_trinity : "Trinity" []
 @PointClass base(Items,PowerupSize,PowerTimer) studio("progs/quoth/cross.mdl") = item_artifact_cross : "Cross of Deflection" []
 @PointClass base(Items,PowerupSize) studio("progs/hipnotic/horn.mdl") = item_artifact_horn : "Horn of Conjuring" []
-
+@PointClass base(Items,PowerupSize) studio("progs/redfield/cat.mdl") = item_secrethunter : "Secret Hunter, Loki's Cat" []
 @PointClass base(Items,PowerupSize,PowerTimer) studio("progs/drake/wings2.mdl") = item_artifact_haste : "Haste" []
-
 @PointClass base(Items) size(-32 -32 -24, 32 32 40) studio("progs/qrally/sumabase.mdl") = item_rallycar : "Drivable Vehicle" []
-
-
 @PointClass base(Items,PowerupSize) studio("progs/madfox/mushroom_item.mdl") = item_mariomushroom : "A Strange Shroom" []
-
 
 @PointClass base(Items,PowerupSize,PowerTimer) = 
 	item_artifact_random : "Random Powerup or Backpack" []
@@ -1181,7 +1177,11 @@
 @PointClass base(Weapon) studio("progs/hipnotic/g_laserg.mdl") = weapon_laser_gun : "Laser Cannon" []
 @PointClass base(Weapon) studio("progs/g_rock.mdl") skin(1) = weapon_proximity_gun : "Proximity Grenade launcher" []
 @PointClass base(Weapon) studio("progs/hipnotic/g_hammer.mdl") = weapon_mjolnir : "Mjolnir's Hammer" []
-@PointClass base(Weapon) studio("progs/drake/g_saw.mdl") = weapon_chainsaw : "Chainsaw" []
+@PointClass base(Weapon) studio("progs/q15/g_saw.mdl") = weapon_chainsaw : "Chainsaw" [
+	spawnflags(Flags) = [
+		1 : "Use Zerstorer/Drake Version" : 0 : "Change appearance to original version"
+	]
+]
 @PointClass base(Weapon) studio("progs/drake/g_grpple.mdl") = weapon_grapple : "Grappling Hook" []
 @PointClass base(Weapon) studio("progs/drake/g_wand.mdl") = weapon_wand : "Wand" []
 @PointClass base(Weapon) studio("progs/rrp/g_axe.mdl") = weapon_sword : "Sword" []
@@ -2045,8 +2045,8 @@
 	angle(string) : "Angle of push"
 	speed(integer) : "Speed of push (def=1000)"
 	noise(string) : "Custom Sound to play(def=ambience/windfly.wav)"
-	tetherrange : "Distance from target before starting movement(def=512)"
-	tetherdist : "Distance to stop applying force (def=32)"
+	tetherrange(integer) : "Distance from target before starting movement(def=512)"
+	tetherdist(integer) : "Distance to stop applying force (def=32)"
 ]
 
 @SolidClass base(TrigBasic) = trigger_jump : "Q3-style Jump Pad" [
@@ -2171,7 +2171,7 @@
 		2: "Reset Inventory" : 0
 	]
 	map(string) : "Next map name" : : "Leave blank to reload same map"
-	message(string) : "Congratulations text" : : "Leave blank to have default intermission only"
+	message(string) : "Congratulations text"
 	message2(string) : "Congratulations text 2nd page"
 	message3(string) : "Congratulations text 3rd page"
 	message4(string) : "Congratulations text 4th page"
@@ -3225,7 +3225,7 @@
 	studio(integer) : "Editor pose" : 10
 ]
 @PointClass base(Appearflags) size(-16 -16 -96, 16 16 0) studio("progs/quoth/corpse_lynch.mdl") = corpse_lynched1 : "Corpse(lynched,clothed)" [
-	skin(integer) : "Skin (def=0)" : 0
+	skin(integer) : "Skin (def=1)" : 1
 	frame(integer) : "Model pose (def=0)" : 0
 ]
 @PointClass base(Appearflags) size(-16 -16 -96, 16 16 0) studio("progs/quoth/corpse_lynch.mdl") = corpse_lynched2 : "Corpse(lynched)" [

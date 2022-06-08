@@ -298,10 +298,10 @@ void() weapon_touch = {
 		other.weapon = IT_AXE;
 	} else if (self.classtype == CT_MIRV) {						// OVERRIDE
 		if (leave && (other.moditems & CT_MIRV) ) return;
-		new = IT3_MIRV;
+		new = IT_MIRV;
 		other.ammo_rockets = other.ammo_rockets + (self.aflag);
 		other.items = other.items | IT_ROCKET_LAUNCHER;
-		other.moditems = other.moditems | IT3_MIRV;
+		other.moditems = other.moditems | IT_MIRV;
 		other.weapon = IT_ROCKET_LAUNCHER;
 	}
 	//
@@ -489,7 +489,7 @@ void() weapon_grapple = {
 };
 
 void() weapon_chainsaw = {
-	item_setupmodel("progs/drake/g_saw.mdl",0);
+	item_setupmodel(g_chainsawmodel,0);
 	self.classtype = CT_CHAINSAW;
 	if (self.netname == "") self.netname = "Chainsaw";
 	weapon_start();
@@ -724,7 +724,7 @@ void () weapon_flak = {
 // --> QUAKED weapon_mirv (0 .5 .8) (-16 -16 0) (16 16 32)
 void() weapon_stinger = {
 	item_setupmodel("progs/drake/g_mirv.mdl",0);
-	self.weapon = IT3_MIRV;
+	self.weapon = IT_MIRV;
 	self.classtype = CT_MIRV;
 	if (self.netname == "") self.netname = "MIRV Launcher";
 	if (self.aflag == 0) self.aflag = 30;

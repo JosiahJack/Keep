@@ -502,9 +502,7 @@ float(entity hpplayer, entity hpitem) health_pickupcondition = { // [FUNCTION]
 // returns FALSE if cannot heal entity by healamount
 // returns TRUE if healamount applied
 float (entity targ, float t_healamount, float ignore) T_Heal = { // [FUNCTION]
-	dprint("T_Heal targets health: "); dprint(ftos(targ.health));
-	dprint(", max_health: "); dprint(ftos(targ.max_health));
-	dprint(", and mega_health: "); dprint(ftos(targ.mega_health));
+	if (!targ) return FALSE;
 	if (targ.health <= 0) return FALSE;
 	if ((!ignore) && (targ.health >= targ.max_health)) return FALSE;
 	

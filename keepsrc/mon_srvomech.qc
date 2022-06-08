@@ -17,7 +17,7 @@ void(vector src, vector dir, float lsrdamage) FireLaser = {
 		vel = vel * 200;
 
 		T_Damage (trace_ent, self, self, lsrdamage);
-		SpawnBlood (org, vel*0.2, lsrdamage, trace_ent);
+		SpawnBlood (org, vel*0.2, lsrdamage, trace_ent,0);
 	}
 	else if(trace_fraction != 1)
 	{

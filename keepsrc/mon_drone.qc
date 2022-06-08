@@ -6,7 +6,7 @@ void() DLaser_Touch = {
 	sound(self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
 	org = self.origin - FL_CLIENT * normalize(self.velocity);
 	if (other.health) {
-		SpawnBlood(other,org, self.velocity * 0.2, 15);
+		SpawnBlood(other,org, self.velocity * 0.2, 15,0);
 		T_Damage(other, self, self.owner, MOVETYPE_BOUNCE, DAMARMOR);
 	} else Tent_Point(TE_GUNSHOT,org);
 	remove(self);

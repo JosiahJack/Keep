@@ -118,7 +118,7 @@ void() eel_plasma = {
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = normalize(self.enemy.origin - self.origin);
 
-	launch_plasma(org, dir, CT_PROJ_PLASMA, self.attack_speed);
+	launch_projectile(org, dir, CT_PROJ_PLASMA, self.attack_speed);
 };
 
 void () eel_melee = {

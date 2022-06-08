@@ -45,7 +45,8 @@ void() item_rallycar_realign = { // [FUNCTION]
 };
 
 void() HonkHorn = { // [FUNCTION]
-	if (!self.in_a_vehicle) return;
+	if (!(self.flags & FL_CLIENT)) return;
+	if (!self.in_a_vehicle) { sprint(self,"Not in a vehicle, can't honk horn\n"); return; }
 
     if (self.wing_sound < time) {
         self.wing_sound = time + 0.2;

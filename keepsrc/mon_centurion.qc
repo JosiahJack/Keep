@@ -82,7 +82,7 @@ void() cent_fire = {
 	vec = SUB_orgEnemyTarget() - '0 0 12';
 	vec = normalize(vec - self.origin);
 
-	launch_plasma(org, vec, CT_PROJ_PLASMA, SPEED_PLASMA);
+	launch_projectile(org, vec, CT_PROJ_PLASMA, SPEED_PLASMA);
 };
 
 void()	cent_atk1	=[	$attack1,	cent_atk2	] {sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM);};

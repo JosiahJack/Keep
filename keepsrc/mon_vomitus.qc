@@ -484,7 +484,7 @@ void() monster_vomit = {
 	self.classtype = CT_MONVOMITUS;
 	self.classgroup = CG_SPAWN;
 	self.classmove = MON_MOVEWALK;
-	monster_start ();
+	monster_start();
 };
 
 void() monster_vomitus = {self.classname = "monster_vomit"; monster_vomit();};

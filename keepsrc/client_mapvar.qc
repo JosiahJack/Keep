@@ -336,3 +336,7 @@ void() info_timer = { // [ENTITY], redirect for old techno progs....wait I made 
 	if (!self.delay) self.delay = self.wait;
 	logic_auto();
 };
+
+void() env_global = { // [ENTITY], Supposed to do more someday.
+
+}; // but doesn't do much right now.

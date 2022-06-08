@@ -691,7 +691,7 @@ void () GremlinFirePlasma = {
 	sound (self, CHAN_WEAPON, "ad171/weapons/plasma_fire.wav", 1, ATTN_NORM);
 	self.currentammo = self.currentammo - 1;
 	self.ammo_cells = self.ammo_cells - 1;
-	launch_plasma (org, dir, CT_PROJ_PLASMA, SPEED_PLAYPLASMA);
+	launch_projectile (org, dir, CT_PROJ_PLASMA, SPEED_PLAYPLASMA);
 };
 
 void () gremlin_plasma1 = [135.000, gremlin_plasma2] {GremlinFirePlasma();};

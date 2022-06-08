@@ -194,6 +194,7 @@ void () monster_wrath_precache = {
 	precache_sound("ad171/wraith/idle1.wav");
 	precache_sound("ad171/wraith/idle2.wav");
 	precache_sound("ad171/wraith/idle3.wav");
+	if (ext_dppart) particleeffectnum(DPP_WRAITHEXPLODE);
 };
 
 void () monster_wrath = {

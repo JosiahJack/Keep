@@ -1,8 +1,4 @@
 // LITTLE CUTY
-
-$origin 0 0 24
-$base wizbase	
-$skin wizbase
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9 stand10 
 $frame stand11 stand12 stand13 stand14 stand15 stand16 stand17 stand18 stand19 
 $frame stand20 
@@ -21,33 +17,23 @@ $frame die11 die12 die13 die14 die15 die16
 $frame dieb1 dieb2 dieb3 dieb4 dieb5 dieb6 dieb7 dieb8 dieb9 dieb10 
 $frame dieb11 dieb12 dieb13 dieb14 dieb15 dieb16
 
-void()   ink_stand1      =[ 0,     ink_stand2  ] {};
-void()   ink_stand2      =[ 1,     ink_stand3  ] {};  
-void()   ink_stand3      =[ 2,     ink_stand4  ] {};  
-void()   ink_stand4      =[ 3,     ink_stand5  ] {};  
-void()   ink_stand5      =[ 4,     ink_stand6  ] {};  
-void()   ink_stand6      =[ 5,     ink_stand7  ] {};  
-void()   ink_stand7      =[ 6,     ink_stand8  ] {};  
-void()   ink_stand8      =[ 7,     ink_stand9  ] {};  
-void()   ink_stand9      =[ 8,     ink_stand10 ] {};
-void()   ink_stand10     =[ 9,     ink_stand11 ] {};
-void()   ink_stand11     =[ 10,    ink_stand12 ] {};
-void()   ink_stand12     =[ 11,    ink_stand13 ] {};  
-void()   ink_stand13     =[ 12,    ink_stand14 ] {};  
-void()   ink_stand14     =[ 13,    ink_stand15 ] {};  
-void()   ink_stand15     =[ 14,    ink_stand16 ] {};  
-void()   ink_stand16     =[ 15,    ink_stand17 ] {}; 
-void()   ink_stand17     =[ 16,    ink_stand1  ] {};  
-
-void() info_inkt = {
-     self.solid = SOLID_BBOX;                               
-     self.movetype = MOVETYPE_NONE;
-
-     setmodel (self, "progs/madfox/wink.spr");
-
-     setsize (self, '16 16 16', '24 24 24');
-     self.nextthink = time + 1.7;
+void()   ink_stand1 =[ 1,     ink_stand2 ] {};  
+void()   ink_stand2 =[ 2,     ink_stand3 ] {};  
+void()   ink_stand3 =[ 3,     ink_stand4 ] {};   
+void()   ink_stand4 =[ 13,    ink_stand5 ] {};  
+void()   ink_stand5 =[ 14,    ink_stand6 ] {};  
+void()   ink_stand6 =[ 15,    ink_stand1 ] {
+     self.nextthink = time + 0.1;
      self.think = SUB_Remove;
+};  
+
+void() OctaInk = {
+	self.solid = SOLID_BBOX;                               
+	self.movetype = MOVETYPE_NONE;
+	setmodel(self, "progs/madfox/wink.spr");
+	setsize(self, '16 16 16', '16 16 16');
+	self.nextthink = time + 1.7;
+	self.think = ink_stand1;
 };
 
 void()	octa_stand1	=[	$stand1,	octa_stand2	] {ai_stand();};

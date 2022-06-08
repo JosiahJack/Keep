@@ -205,7 +205,7 @@ void() eliminator_fire = {
 	org = self.origin + attack_vector(self.attack_offset);
 	vec = normalize(self.enemy.origin - self.origin);
 
-	launch_plasma(org, vec, CT_PROJ_PLASMA, SPEED_PLASMA);
+	launch_projectile(org, vec, CT_PROJ_PLASMA, SPEED_PLASMA);
 };
 
 void()	elim_atk1	=[	$attack1,	elim_atk2	] {

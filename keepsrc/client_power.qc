@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 21
+// Function count: 22
 //
 // Implements: Powerup Reset System for the Player
 //
@@ -37,7 +37,7 @@
 //=============================================================================
 
 float PWR_FADING = 3;
-float (entity targ) Zapper_Level;
+void() SecretHunt;
 
 void(entity targ, float powtimer) ResetPowerInvRing = { // [FUNCTION]
 	if (powtimer == 0) {
@@ -248,9 +248,36 @@ void(entity targ) PlayPentagramSound = { // [FUNCTION]
 	}
 };
 
+// Returns the ammo charge level.  Called by the equivalent of CheckPowerups.
+// Charging notes, for normal mode flare gun:
+// * Charging can be done only while holding the weapon.
+// * The time to charge a super shot is double the time needed for
+//  a full spray of mini-shots.  For example, if it takes one second
+//  to charge a spray of three shots, it takes one more second for the
+//  super shot.
+float(entity ent) Zapper_Level = { // [FUNCTION]
+    local float tnt;
+
+    if (ent.attack_finished > time) return 0; // Can't shoot yet.
+
+    if (ent.tome_finished) {
+		ent.zapper_time = 0; // In case tome wears off before discharge.
+        return WAND_FULL + 2;
+    }
+    if (time < ent.zapper_time) return 0; // Don't let rollover mess up counters.
+
+	// 0-1 = 1, 1-2 = 2, 2-3 = 3, 3-5 = 4.
+    tnt = ceil((time - ent.zapper_time) / WAND_DELAY);
+    if (tnt >= (WAND_FULL * 2 - 1)) return WAND_FULL + 1; // e.g., best 3 out of 5.
+    if (tnt > WAND_FULL) return WAND_FULL;
+    return tnt; 
+};
+
 void() ClientPowerups = { // [FUNCTION]
 	if (frame_pause()) return; // Exceptions: Dead, intermission or cinematic cameras
 	if (self.health < 1) return;
+
+	if ((self.items3 & IT3_SECRETHUNTER)) SecretHunt();
 
 	// Invisibility (Gold Ring) - Flash screen 3s before running out
 	if (self.invisible_finished > 0) {
@@ -563,4 +590,30 @@ void() CheckMjolnir = { // [FUNCTION]
 		self.hammer_finished = 0;
 		W_SetCurrentAmmo(self);
     }
+};
+
+void() SecretHunt = {
+	local entity head;
+	local float dist, pingt, lerp;
+
+	if (self.secrethunt_finished >= time) return;
+
+	head = find(world,classname,"trigger_secret");
+	dist = fabs(vlen(self.origin - head.oldorigin));
+	pingt = 2;
+	while (head) {
+		if (head.count > 0) {
+			dist = vlen(head.oldorigin - self.origin);
+			if (dist <= 384) {
+				lerp = dist / 384;
+				pingt = SUB_ClampFloat(lerp * 4,0.6,4);
+				self.secrethunt_finished = time + pingt;
+				sound(self,CHAN_AUTO,"redfield/misc/catsmeow.wav",
+					  SUB_ClampFloat(1 - lerp,0.3,1),ATTN_NORM); // PING!
+				return;
+			}
+		}
+		head = find(head,classname,"trigger_secret");
+	}
+	self.secrethunt_finished = time + pingt;
 };

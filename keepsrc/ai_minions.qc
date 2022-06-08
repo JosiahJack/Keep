@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 11
+// Function count: 8
 //
 // Implements: Minion System for monsters to summon henchmen
 //
@@ -42,9 +42,7 @@
 // bursting egg.
 //=============================================================================
 
-void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade;
-
-void() setup_minionsupport = {
+void() setup_minionsupport = { // [FUNCTION]
 	// Reset all counters
 	self.minion_active = TRUE;
 	self.minion_count = 0;
@@ -63,7 +61,7 @@ void() setup_minionsupport = {
 	if (!self.minion_throwside) self.minion_throwside = MIN_THROWSIDE;
 };
 
-void(entity msource, float countupd) update_minioncount = {
+void(entity msource, float countupd) update_minioncount = { // [FUNCTION]
 	if (!msource.minion_active) return;
 	// Add to the active minion counters (check range limits)
 	msource.minion_count = msource.minion_count + countupd;
@@ -82,18 +80,18 @@ void(entity msource, float countupd) update_minioncount = {
 };
 
 // Check if anymore minions can be spawned at the moment
-float(entity msource) query_minionactive = {
+float(entity msource) query_minionactive = { // [FUNCTION]
 	if (!msource.minion_active) return NEGATIVE;
 	if (msource.minion_count < msource.minion_maxcount) return TRUE;
 	else return FALSE;
 };
 
 
-void() delete_minionspace = { if (self.minion_test) entity_remove(self.minion_test,0.1); }
-void() touch_minionspace = { if (other.flags & FL_CLIENT) self.aflag = TRUE; };
+void() delete_minionspace = { if (self.minion_test) entity_remove(self.minion_test,0.1); } // [FUNCTION]
+void() touch_minionspace = { if (other.flags & FL_CLIENT) self.aflag = TRUE; }; // [FUNCTION]
 
 // Touch trigger version for detecting client/players too close to see if space to spawn
-void(vector org, vector minspace, vector maxspace) setup_minionspace = {
+void(vector org, vector minspace, vector maxspace) setup_minionspace = { // [FUNCTION]
 	if (!self.minion_test) self.minion_test = spawn(); // Create a touch trigger if one does not exist
 	// reset all parameters
 	self.minion_test.movetype = MOVETYPE_NONE;
@@ -107,7 +105,7 @@ void(vector org, vector minspace, vector maxspace) setup_minionspace = {
 	self.minion_test.aflag = FALSE; // Reset collision flag
 };
 
-float() test_minionspace = {
+float() test_minionspace = { // [FUNCTION]
 	if (!self.minion_test) return FALSE; // Quick exit if no touch entity exists
 
 	// Basic world collision test for origin/min/max of spawn
@@ -122,7 +120,7 @@ float() test_minionspace = {
 };
 
 // Findradius version for detecting client/players too close and space to spawn
-float(vector org) find_minionspace = {
+float(vector org) find_minionspace = { // [FUNCTION]
 	local entity minstuff;
 	local float foundclient;
 
@@ -142,90 +140,4 @@ float(vector org) find_minionspace = {
 		minstuff = minstuff.chain;
 	}
 	return foundclient;
-};
-
-void(vector minion_org, entity minion_targ) minion_spider;
-void(vector minion_org, entity minion_targ) minion_scorpion;
-void(vector minion_org, entity minion_targ) minion_voreling;
-
-// Remove egg and throw gibs up as minion grows
-void() Explode_Egg = {
-	setmodel (self, "");
-	if (self.classgroup == CT_MONWRAITH) self.gib1mdl = MODEL_PROJ_WSHELL; 
-	else if (self.classgroup == CT_MONSHAL) self.gib1mdl = MODEL_PROJ_SSHELL; 
-	self.gib1frame = 9;
-	self.max_health = MON_GIBFOUNTAIN;
-	ThrowGib(11,rint(2+random()*4));
-	self.think = SUB_Remove; // Safely remove egg
-	self.nextthink = time + 0.1;
-};	
-
-// Once the egg has landed via Grenade Touch function.  The minion is spawned and the egg is set to explode
-void() Hatch_Egg = {
-	if (self.state == STATE_DISABLED) return; // Block this functions
-	if (self.touchedvoid) return; // Has the egg been marked for removal?
-
-	if (!self.gibbed) {
-		self.gibbed = TRUE; // only set once, float reuse! nothing to do with gibbing
-		self.attack_finished = time + 6; // It's possible for the egg to get stuck, setup death timer
-	}
-	if (self.attack_finished < time) {
-		self.state = STATE_DISABLED;
-		self.think = Explode_Egg; // Egg has been stuck for too long, destroy it
-		self.nextthink = time + 0.1;
-		return;
-	}
-	// Turn off touch function and any movement
-	self.touch = SUB_Null;
-	self.movetype = MOVETYPE_NONE;
-	self.takedamage = DAMAGE_NO;
-	self.velocity = '0 0 0';
-	
-	// Check if the egg can hatch? turn on collision, setup new bounds and extend upwards for testing
-	setsize (self, VEC_HULLT_MIN, VEC_HULLT_MAX);
-	self.solid = SOLID_SLIDEBOX;
-	self.movetype = MOVETYPE_TOSS;
-	self.oldorigin = self.origin;
-	self.origin_z = self.origin_z + 8;
-	droptofloor();
-	
-	if (!walkmove(0,0) || pointcontents(self.origin) == CONTENT_SOLID) { // Can the egg hatch yet? Solid content?
-		self.origin = self.oldorigin;
-		self.think = Hatch_Egg;
-		self.nextthink = time + 1 + random();
-		self.solid = SOLID_NOT;		// turn off again
-		return;
-	}
-	self.state = STATE_DISABLED; // Setup egg ready for minion
-	traceline (self.origin+'0 0 128', self.origin-'0 0 256', TRUE, world);
-	self.oldorigin = trace_endpos + '0 0 32'; // Setup spawn location for minion
-	// Spawn minion inside of egg model.  self.owner is re-assigned to minion to avoid shell gibs interacting
-	if (self.owner.classtype == CT_MONWRAITH) {
-		if (self.owner.spawnflags & MON_WRAITH_SCORPIONS) minion_scorpion(self.oldorigin, self.enemy);
-		else minion_spider(self.oldorigin, self.enemy);
-	} else if (self.owner.classtype == CT_MONSHAL || self.owner.classtype == CT_MONSHALBOSS) {
-		if (self.owner.classtype == CT_MONSHALBOSS) {
-			sound (self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
-			minion_voreling(self.oldorigin+'0 0 4', self.enemy);
-		} else {
-			minion_voreling(self.oldorigin, self.enemy);
-		}
-	}
-	self.think = Explode_Egg; 
-	self.nextthink = time + 0.4; // Skip a couple of frames
-};
-
-// Work out direction speed of egg and then launch it!
-void(vector eggofs) Create_Egg = {
-	local vector org, dir;
-	local float egg_speed;
-	if (self.health < 1) return;
-	
-	// Turn towards player and drop the egg!
-	makevectors(self.angles);
-	org = self.origin + attack_vector(eggofs);
-	egg_speed = self.minion_throwspeed + (random() * self.minion_throwextra);
-	dir = (v_forward * egg_speed) + (v_right * (crandom()*self.minion_throwside));
-	Launch_Grenade(org,dir,'0 0 0',CT_PROJ_MEGG);
-	SUB_AttackFinished (2 + random());
 };

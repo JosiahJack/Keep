@@ -136,17 +136,17 @@ void(float fr, float wf) playham_frame = { // [FUNCTION]
 };
 
 // Chainsaw
-void() player_saw1 =[ 26, player_saw2 ] {if (!frame_pause()) self.weaponframe = 5; Attack_Saw();}; // [FUNCTION]
+void() player_saw1 =[ 26, player_saw2 ] {if (!frame_pause()) self.weaponframe = 5; W_FireSaw();}; // [FUNCTION]
 void() player_saw2 =[ 27, player_saw3 ] { // [FUNCTION]
 	if (!frame_pause()) playham_frame(27,2);
     if (!self.button0) {player_run (); return;}
 };
-void() player_saw3 =[ 105, player_saw4 ] {if (!frame_pause()) playham_frame(26,3); Attack_Saw();}; // [FUNCTION]
+void() player_saw3 =[ 105, player_saw4 ] {if (!frame_pause()) playham_frame(26,3); W_FireSaw();}; // [FUNCTION]
 void() player_saw4 =[ 106, player_saw5 ] { // [FUNCTION]
 	if (!frame_pause()) playham_frame(27,4);
     if (!self.button0) {player_run ();return;}
 };
-void() player_saw5 =[ 105, player_saw6 ] {if (!frame_pause()) playham_frame(26,5); Attack_Saw();}; // [FUNCTION]
+void() player_saw5 =[ 105, player_saw6 ] {if (!frame_pause()) playham_frame(26,5); W_FireSaw();}; // [FUNCTION]
 void() player_saw6 =[ 106, player_run  ] {if (!frame_pause()) playham_frame(27,6);}; // [FUNCTION]
 
 // Standing

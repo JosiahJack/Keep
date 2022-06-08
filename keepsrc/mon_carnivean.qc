@@ -459,6 +459,10 @@ void() monster_carnivean_precache = {
 	precache_sound("player/inflame.wav");
 	precache_sound("zombie/corpse_fire.wav");
 	precache_sound("ambience/coaled_monster_explode.wav");
+	if (ext_dppart) {
+		particleeffectnum("torment_hellrod_explosion");
+		particleeffectnum("TR_AFRITSPIKE_RED");
+	}
 };
 
 void() monster_carnivean = {

@@ -1,6 +1,7 @@
 void() player_run;
 void(vector p1, vector p2, entity from, float damage) LightningDamage;
 void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage;
+void(float reload) W_Reload;
 
 //   SPHERE #techdebt to remove it when no longer necessary
 
@@ -269,7 +270,7 @@ void(float attackNumber) SwordSwing =
 		if (targets.takedamage && CanDamage(targets, self) && targets != self)
 		{
 			T_Damage(targets, self, self, damage, DAMARMOR);
-			SpawnBlood(targets, (self.origin*2 + targets.origin)/3, '0 0 0', 20);
+			SpawnBlood(targets, (self.origin*2 + targets.origin)/3, '0 0 0', 20,0);
 			hitsTarget = TRUE;
 			sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
 		}
@@ -286,7 +287,7 @@ void(float attackNumber) SwordSwing =
 	if (hitsTarget == TRUE && trace_ent != world)
 	{
 		trace_ent.axhitme = 1;
-		SpawnBlood(trace_ent, dir, dir-org, 20);
+		SpawnBlood(trace_ent, dir, dir-org, 20,0);
 		sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
 	}
 	else if (trace_fraction != 1)
@@ -426,7 +427,7 @@ void() RapierAttack = //this is the player's melee attack, called three times as
 	if (hitsTarget == TRUE && trace_ent != world)
 	{
 		trace_ent.axhitme = 1;
-		SpawnBlood(trace_ent, dir, dir-org, 20);
+		SpawnBlood(trace_ent, dir, dir-org, 20,0);
 		if (trace_ent.classname == "monster_shambler")
 			damage = damage * 1.5;
 		T_Damage (trace_ent, self, self, damage, DAMARMOR);
@@ -468,7 +469,7 @@ void(float damage) GhostRapierAttack = //the projected sword does this attack th
 
 	if (trace_ent.takedamage && trace_ent != world)
 	{
-		SpawnBlood(trace_ent, dir, '0 0 0', 20);
+		SpawnBlood(trace_ent, dir, '0 0 0', 20,0);
 		if (trace_ent.classname == "monster_shambler")
 			damage = damage * 1.5;
 		T_Damage(trace_ent, self, self, damage, DAMARMOR);
@@ -493,7 +494,7 @@ void() RapierSpinAttack =
 		if (target.takedamage && target != self.owner && target.health >0)
 		{
 			T_Damage(target, self, self.owner, 300, DAMARMOR);
-			SpawnBlood(target, (target.origin+self.origin)/2, '0 0 0', 25); 
+			SpawnBlood(target, (target.origin+self.origin)/2, '0 0 0', 25,0); 
 			hitTarget = TRUE;
 		}
 		target = target.chain;
@@ -531,7 +532,7 @@ void() ghostRapierTouch =
 	if (other.takedamage && other != self.owner && other != world)
 	{
 		T_Damage(other, self, self.owner, 20, DAMARMOR);
-		SpawnBlood(other, other.origin, '0 0 0', 20);
+		SpawnBlood(other, other.origin, '0 0 0', 20,0);
 		self.touch = SUB_Null;
 		sound (self, CHAN_VOICE, "aoa/axhit3.wav", 0.5, ATTN_NORM);
 	}
@@ -779,8 +780,8 @@ void() W_FireChainLightning = //direct hitscan damage, then lightning chains fro
 	WriteCoord (MSG_BROADCAST, terminus_x);
 	WriteCoord (MSG_BROADCAST, terminus_y);
 	WriteCoord (MSG_BROADCAST, terminus_z);
-	PlayerLightningDamage (org, terminus, self, 40);
-		
+	PlayerLightningDamage(org,terminus,self,40);
+	SpawnBlood(trace_ent,terminus,vecrand(5,50,TRUE),20,225);
 	stormOrigin = terminus + '0 0 20';
 	storm = spawn();
 	storm.owner = self;
@@ -803,7 +804,7 @@ void() IceSpikeTouch =
 	if (other != self.owner && other.takedamage)
 	{
 		T_Damage(other, self, self.owner, self.dmg, DAMARMOR);//2 dmg per ice spike, 3 with Tome of Power
-		SpawnBlood(self, self.origin, self.velocity, 4);
+		SpawnBlood(self, self.origin, self.velocity, 4,0);
 	}	
 
 	sound (self, CHAN_AUTO, "hknight/hit.wav", 0.5, ATTN_NORM);
@@ -1476,7 +1477,7 @@ void(entity victim, entity attacker) DrainHealth
 {
 	T_Damage(victim, attacker, attacker, 35, DAMARMOR);
 	TriggerHeal(self, 10, 110);
-	SpawnBlood(victim, victim.origin + '0 0 45', '0 0 100' + spread('100 100 100'), 20);
+	SpawnBlood(victim, victim.origin + '0 0 45', '0 0 100' + spread('100 100 100'), 20,0);
 };
 
 void() CastDrainHealth =
@@ -1508,7 +1509,7 @@ void() MaceLungeTouch =
 	{
 		T_Damage(other, self, self, 25, DAMARMOR);
 		sound(self, CHAN_VOICE, "ad171/weapons/axe_wood.wav", 1.0, ATTN_NORM);
-		SpawnBlood(other, (self.origin - other.origin)/2 + '0 0 20', self.velocity, 20);
+		SpawnBlood(other, (self.origin - other.origin)/2 + '0 0 20', self.velocity, 20,0);
 	}
 	self.touch = SUB_Null;
 };
@@ -1548,7 +1549,7 @@ void(vector org, entity victim) MaceSwingHits =
 	sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
 	traceline(org, victim.origin +'0 0 10', TRUE, self);
 	particle(trace_endpos, '0 0 2', 73, 10);
-	SpawnBlood(victim, org, '0 0 1', 10);
+	SpawnBlood(victim, org, '0 0 1', 10,0);
 	sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
 	if (victim.classgroup == CG_ZOMBIE)
 	{
@@ -1951,10 +1952,9 @@ void() W_FireGungnir =
 
 void() SparkTouch =
 {
-	
 	if (other.takedamage)
 	{
-		SpawnBlood (other, self.origin, spread('100 100 100'), 25);
+		SpawnBlood (other, self.origin, spread('100 100 100'), 25,0);
 		T_Damage (other, self, self.owner, self.dmg, DAMARMOR);
 		sound (self, CHAN_AUTO, "aoa/melee_meat.wav", 1, ATTN_NORM);
 	}
@@ -2015,7 +2015,7 @@ void() GungnirPrimary =
 
 		if (trace_ent.takedamage) //do damage and make blood if it lands
 		{
-			SpawnBlood (trace_ent, org, '0 0 0', 40);
+			SpawnBlood (trace_ent, org, '0 0 0', 40,0);
 			if (trace_ent.classgroup == CG_ZOMBIE)
 				T_Damage(trace_ent, self, self, 400, DAMARMOR);
 			T_Damage (trace_ent, self, self, 50, DAMARMOR);

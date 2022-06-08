@@ -1029,6 +1029,8 @@ void() monster_reiver_precache = {
 	precache_sound("q15/reiver/vampire.wav");
 	precache_sound("player/inflame.wav");
 	precache_sound("zombie/corpse_fire.wav");
+	if (ext_dppart) particleeffectnum("double_shotgun_muzzleflash");
+	if (ext_dppart) particleeffectnum("reiver_vampire_drain1");
 };
 
 //QUAKED monster_reiver (1 0 0) (-16 -16 -24) (16 16 24) Ambush

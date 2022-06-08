@@ -1521,6 +1521,8 @@ void() TomeOfPowerCheat = {
 };
 
 void() ToggleFlashlight = {
+	if (!(other.items3 | IT3_FLASHLIGHT)) { sprint(other,"No flashlight\n"); return; }
+
 	self.flashlight = !self.flashlight;
 	sound(self,CHAN_VOICE,"quoth/items/click.wav",TRUE,ATTN_NONE);
 };

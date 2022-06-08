@@ -588,8 +588,8 @@
 // INFO entities - player starts, deathmatch, coop, teleport
 //
 //======================================================================
-@baseclass base(Appearflags) flags(Angle) studio("progs/player.mdl")
-	size(-16 -16 -24, 16 16 24) offset(0 0 24) color(255 0 0)
+@baseclass base(Appearflags) studio("progs/player.mdl")
+	size(-16 -16 -24, 16 16 24) color(255 0 0)
 	= PlayerClass [
 		target(string) : "Target(s) fired when used"
 	]
@@ -602,8 +602,7 @@
 @PointClass base(PlayerClass,StartSpawn2) = info_player_coop : "Player COOP Start" [ spawnflags(Flags) = [ 64 : "Start OFF" : 0 : "Start off" ] ]
 @PointClass base(PlayerClass,StartSpawn2) = info_player_coop2 : "Player COOP Return" [ spawnflags(Flags) = [ 64 : "Start OFF" : 0 : "Start off" ] ]
 @PointClass base(PlayerClass) = info_player_deathmatch : "Player DM Start" [ spawnflags(Flags) = [ 64 : "Start OFF" : 0 : "Start off" ] ]
-@PointClass base(Appearflags, Targetname) flags(Angle)
-	size(-16 -16 -24, 16 16 24) offset(0 0 24) color(255 128 128)
+@PointClass base(Appearflags, Targetname) size(-16 -16 -24, 16 16 24) color(255 128 128)
 	= info_teleport_destination : "Teleport destination" [
 		target(string) : "Target(s) fired when used"
 	]
@@ -645,7 +644,7 @@
 	think(string) : "self.think"
 	nextthink(integer) : "nextthink"
 ]
-@PointClass size(-16 -16 -24, 16 16 32) color(255 128 128) flags(Angle) = info_camera_destination : "Marker for a Cinematic Camera System" [
+@PointClass size(-16 -16 -24, 16 16 32) color(255 128 128) = info_camera_destination : "Marker for a Cinematic Camera System" [
 	targetname(target_source) : "Name (use w/misc_camera)"
 	angles(integer) : "Facing angle" : : "Ex: 0 360 0 (pitch yaw roll)"
 ]
@@ -688,11 +687,11 @@
 //
 //======================================================================
 @baseclass size(0 -0 0, 32 32 56) = ItemSize []
-@baseclass size(-16 -16 -24, 16 16 32) offset(0 0 24) = PowerupSize []
+@baseclass size(-16 -16 -24, 16 16 32) = PowerupSize []
 @baseclass = PowerTimer [ cnt(integer) : "Duration override (def=30, -1 = infinite)" ]
 @baseclass size(-16 -16 -24, 16 16 32) = ArmourSize []
-@baseclass size(-16 -16 -24, 16 16 32) offset(0 0 24) = KeySize []
-@baseclass base(Appearflags,Targetname,Target) flags(Angle) = Items [
+@baseclass size(-16 -16 -24, 16 16 32) = KeySize []
+@baseclass base(Appearflags,Targetname,Target) = Items [
 	spawnflags(Flags) = [
 		16 : "Respawn" : 0 : "Can respawn after being picked up"
 		32 : "Floating" : 0 : "Spawns floating, trigger entity to drop it"
@@ -737,14 +736,13 @@
 @baseclass = AmmoLid [ spawnflags(flags) = [ 2 : "Lid" : 0 ] ]
 
 //----------------------------------------------------------------------
-//@PointClass base(Items,ItemSize,ItemWorldType) studio(
-//        {{
-//            spawnflags & 2 ->   ":progs/ad171/health_100.mdl",
-//            spawnflags & 1 ->   ":progs/ad171/health_15.mdl",
-//                                ":progs/ad171/health_25.mdl"
-//        }}) = item_health : "Health pak" [
-
-@PointClass base(Items,ItemSize,ItemWorldType) studio("progs/ad171/health_25.mdl") = item_health : "Health pak" [
+@PointClass base(Items,ItemSize,ItemWorldType) studio(
+        {{
+            spawnflags & 2 ->   ":progs/ad171/health_100.mdl",
+            spawnflags & 1 ->   ":progs/ad171/health_15.mdl",
+                                ":progs/ad171/health_25.mdl"
+        }}) = item_health : "Health pak" [
+//@PointClass base(Items,ItemSize,ItemWorldType) studio("progs/ad171/health_25.mdl") = item_health : "Health pak" [
 	spawnflags(flags) = [
 		1 : "Rotten" : 0
 		2 : "Megahealth" : 0
@@ -752,16 +750,16 @@
 ]
 @PointClass base(Items,ItemSize,ItemWorldType) studio("progs/ad181/health_5.mdl") = item_healthvial : "Health Vial" []
 //----------------------------------------------------------------------
-//@PointClass base(AmmoBase,AmmoLid) studio({{
-//	spawnflags & 1 ->	":progs/ad171/ammo_shells1.mdl",
-//						":progs/ad171/ammo_shells0.mdl"
-//}}) = item_shells : "Shells" []
-@PointClass base(AmmoBase,AmmoLid) studio("progs/ad171/ammo_shells1.mdl") = item_shells : "Shells" []
-//@PointClass base(AmmoBase,AmmoLid) studio({{
-//	spawnflags & 1 ->	":progs/ad171/ammo_nails1.mdl",
-//						":progs/ad171/ammo_nails0.mdl"
-//}}) = item_spikes : "Nails" []
-@PointClass base(AmmoBase,AmmoLid) studio("progs/ad171/ammo_nails0.mdl") = item_spikes : "Nails" []
+@PointClass base(AmmoBase,AmmoLid) studio({{
+	spawnflags & 1 ->	":progs/ad171/ammo_shells1.mdl",
+						":progs/ad171/ammo_shells0.mdl"
+}}) = item_shells : "Shells" []
+//@PointClass base(AmmoBase,AmmoLid) studio("progs/ad171/ammo_shells1.mdl") = item_shells : "Shells" []
+@PointClass base(AmmoBase,AmmoLid) studio({{
+	spawnflags & 1 ->	":progs/ad171/ammo_nails1.mdl",
+						":progs/ad171/ammo_nails0.mdl"
+}}) = item_spikes : "Nails" []
+//@PointClass base(AmmoBase,AmmoLid) studio("progs/ad171/ammo_nails0.mdl") = item_spikes : "Nails" []
 @PointClass base(AmmoBase) studio("progs/ad171/ammo_rockets0.mdl") = item_rockets : "Rockets" []
 @PointClass base(AmmoBase) studio("progs/ad171/ammo_battery0.mdl") = item_cells : "Cells" []
 @PointClass base(AmmoBase) studio("maps/b_plas0.bsp") = item_plasma : "Plasma" []
@@ -997,14 +995,10 @@
 @PointClass base(Items,PowerupSize,PowerTimer) studio("progs/quoth/trinity.mdl") = item_artifact_trinity : "Trinity" []
 @PointClass base(Items,PowerupSize,PowerTimer) studio("progs/quoth/cross.mdl") = item_artifact_cross : "Cross of Deflection" []
 @PointClass base(Items,PowerupSize) studio("progs/hipnotic/horn.mdl") = item_artifact_horn : "Horn of Conjuring" []
-
+@PointClass base(Items,PowerupSize) studio("progs/redfield/cat.mdl") = item_secrethunter : "Secret Hunter, Loki's Cat" []
 @PointClass base(Items,PowerupSize,PowerTimer) studio("progs/drake/wings2.mdl") = item_artifact_haste : "Haste" []
-
 @PointClass base(Items) size(-32 -32 -24, 32 32 40) studio("progs/qrally/sumabase.mdl") = item_rallycar : "Drivable Vehicle" []
-
-
 @PointClass base(Items,PowerupSize) studio("progs/madfox/mushroom_item.mdl") = item_mariomushroom : "A Strange Shroom" []
-
 
 @PointClass base(Items,PowerupSize,PowerTimer) = 
 	item_artifact_random : "Random Powerup or Backpack" []
@@ -1100,7 +1094,7 @@
 	message(string) : "message to display when triggered"
 ]
 
-@PointClass size(-16 -16 -16, 16 16 16) color(255 200 128) flags(Angle) = info_shrine : "Shrine Effects (bless if player targets, desecrate if breakable)" [
+@PointClass size(-16 -16 -16, 16 16 16) color(255 200 128) = info_shrine : "Shrine Effects (bless if player targets, desecrate if breakable)" [
 	style(choices) : "Shrine Type" = [
 		0 : "Earth"
 		1 : "Water"
@@ -1179,7 +1173,11 @@
 @PointClass base(Weapon) studio("progs/hipnotic/g_laserg.mdl") = weapon_laser_gun : "Laser Cannon" []
 @PointClass base(Weapon) studio("progs/g_rock.mdl") skin(1) = weapon_proximity_gun : "Proximity Grenade launcher" []
 @PointClass base(Weapon) studio("progs/hipnotic/g_hammer.mdl") = weapon_mjolnir : "Mjolnir's Hammer" []
-@PointClass base(Weapon) studio("progs/drake/g_saw.mdl") = weapon_chainsaw : "Chainsaw" []
+@PointClass base(Weapon) studio("progs/q15/g_saw.mdl") = weapon_chainsaw : "Chainsaw" [
+	spawnflags(Flags) = [
+		1 : "Use Zerstorer Drake Version" : 0 : "Change appearance to original version"
+	]
+]
 @PointClass base(Weapon) studio("progs/drake/g_grpple.mdl") = weapon_grapple : "Grappling Hook" []
 @PointClass base(Weapon) studio("progs/drake/g_wand.mdl") = weapon_wand : "Wand" []
 @PointClass base(Weapon) studio("progs/rrp/g_axe.mdl") = weapon_sword : "Sword" []
@@ -1207,7 +1205,7 @@
 // FUNCTIONS
 //
 //======================================================================
-@baseclass base(Appearflags,Targetname,Target) flags(Angle) = FuncItems [
+@baseclass base(Appearflags,Targetname,Target) = FuncItems [
 	spawnflags(Flags) = [
 		64 : "Start OFF" : 0 : "Start off & wait for trigger"
 	]
@@ -1501,7 +1499,7 @@
 ]
 
 //----------------------------------------------------------------------
-@PointClass base(Appearflags) flags(Angle) size(-8 -8 -8, 8 8 8) = path_corner : "Path Corner" [
+@PointClass base(Appearflags) size(-8 -8 -8, 8 8 8) = path_corner : "Path Corner" [
 	spawnflags(Flags) = [
 		1 : "Exact logic" : 0
 		2 : "Instant" : 0
@@ -1545,7 +1543,7 @@
 	speed(integer) : "Speed between corners (def=100)"
 ]
 
-@PointClass base(Appearflags) flags(Angle) size(-8 -8 -24, 8 8 24) = dragon_corner : "Dragon Path Corner" [
+@PointClass base(Appearflags) size(-8 -8 -24, 8 8 24) = dragon_corner : "Dragon Path Corner" [
 	targetname(target_source) : "Name of path corner"
 	target(target_destination) : "Targetname of Forward route"
 ]
@@ -1733,7 +1731,7 @@
 
 //----------------------------------------------------------------------
 @baseClass base(TrigUpg,TrigSound,Appearflags,Targetname,Target)
-	flags(Angle) color(128 0 128) = TrigBasic [
+color(128 0 128) = TrigBasic [
 	spawnflags(flags) = [ 
 		1 : "No Touch" : 0
 		64 : "Start OFF" : 0
@@ -2029,7 +2027,7 @@
 	delay (integer) : "Delay spawn(def 1 sec / -1 none)" : :  "-1 = No spawn delay, 0 (def=1s), +0 = spawn delay"
 	dmg_take(integer) : "Grenades will explode on impact of this trigger"	
 ]
-@SolidClass base(TrigOFF,Targetname,Target) flags(Angle)
+@SolidClass base(TrigOFF,Targetname,Target)
 	= trigger_push : "Trigger Push" [
 	spawnflags(flags) = [ 
 		1 : "Once Only" : 0
@@ -2042,15 +2040,15 @@
 	angle(string) : "Angle of push"
 	speed(integer) : "Speed of push (def=1000)"
 	noise(string) : "Custom Sound to play(def=ambience/windfly.wav)"
-	tetherrange : "Distance from target before starting movement(def=512)"
-	tetherdist : "Distance to stop applying force (def=32)"
+	tetherrange(integer) : "Distance from target before starting movement(def=512)"
+	tetherdist(integer) : "Distance to stop applying force (def=32)"
 ]
 
 @SolidClass base(TrigBasic) = trigger_jump : "Q3-style Jump Pad" [
 	speed(integer) : "Speed of push" : 40
 ]
 
-@SolidClass base(TrigOFF,Targetname,Target) flags(Angle)
+@SolidClass base(TrigOFF,Targetname,Target)
 	= trigger_fog : "Trigger Fog" [
 	speed(integer) : "Time to fade (-1=Instant)"
 	wait(choices) : "Wait before reset" = [
@@ -2061,7 +2059,7 @@
 	fog_density(integer) : "Fog Density (def=0.1)"
 	fog_colour(string) : "Fog Colour (0.1 0.1 0.1)"
 ]
-@SolidClass base(TrigOFF,Targetname,Target) flags(Angle)
+@SolidClass base(TrigOFF,Targetname,Target)
 	= trigger_ladder : "Trigger Ladder" [
 	waitmin(integer) : "Time between climbing sound"
 	speed(integer) : "Velocity to climb (def=160)"
@@ -2078,7 +2076,7 @@
 	noise4(string) : "Custom Sound - Climb 4"
 ]
 //----------------------------------------------------------------------
-@BaseClass base(TrigOFF,Targetname) flags(Angle) = TrigBubbles [
+@BaseClass base(TrigOFF,Targetname) = TrigBubbles [
 	spawnflags(flags) = [ 2 : "Bubbles" : 0 ]
 	count(integer) : "Bubble active total(def=5)"
 	height(integer) : "Max Travel distance"
@@ -2168,7 +2166,7 @@
 		2: "Reset Inventory" : 0
 	]
 	map(string) : "Next map name" : : "Leave blank to reload same map"
-	message(string) : "Congratulations text" : : "Leave blank to have default intermission only"
+	message(string) : "Congratulations text"
 	message2(string) : "Congratulations text 2nd page"
 	message3(string) : "Congratulations text 3rd page"
 	message4(string) : "Congratulations text 4th page"
@@ -2505,7 +2503,7 @@
 //
 //======================================================================
 @PointClass base(Appearflags,Targetname) size(-8 -8 -8, 8 8 8)
-	color(0 128 192) flags(Angle) = misc_particle : "Particle Emitter" [
+	color(0 128 192) = misc_particle : "Particle Emitter" [
 	spawnflags(Flags) = [ 64 : "Start off" : 0 ]
 	target(string) : "Target destination of effect"
 	target2(string) : "Name of particle template"
@@ -2559,7 +2557,7 @@
 ]
 
 @PointClass base(Appearflags,Targetname) size(-8 -8 -8, 8 8 8)
-	color(0 128 192) flags(Angle) = misc_particletemplate : "Particle Template" [
+	color(0 128 192) = misc_particletemplate : "Particle Template" [
 	spr_name1(string) : "Sprite filename 1"
 	spr_name2(string) : "Sprite filename 2"
 	spr_name3(string) : "Sprite filename 3"
@@ -2614,7 +2612,7 @@
 	]	
 ]
 @PointClass base(Appearflags,Targetname) size(-8 -8 -8, 8 8 8)
-	color(0 128 192) flags(Angle) = misc_builtineffects : "Particle Builtin" [
+color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	target(string) : "Target destination of effect"
 	wait(integer) : "Start Delay (def=0)"
 	delay(integer) : "Start Delay (random)"
@@ -2634,9 +2632,9 @@
 	]
 ]
 
-@PointClass base(Appearflags,Targetname) size(-64 -64 -80, 64 64 88) color(0 128 192) flags(Angle) studio("progs/drake/bellring.mdl") = misc_bell : "Bell, Shootable" []
-@PointClass base(Appearflags,Targetname) size(-32 -32 -24, 32 32 80) color(0 128 192) flags(Angle) studio("progs/drake/anglstat.mdl") = misc_statue : "Angel Statue, Breakable" []
-@PointClass base(Appearflags,Targetname) size(-16 -16 0, 16 16 128) color(0 128 192) flags(Angle) studio("progs/drake/tree.mdl") = misc_tree : "Tree Model" []
+@PointClass base(Appearflags,Targetname) size(-64 -64 -80, 64 64 88) color(0 128 192) studio("progs/drake/bellring.mdl") = misc_bell : "Bell, Shootable" []
+@PointClass base(Appearflags,Targetname) size(-32 -32 -24, 32 32 80) color(0 128 192) studio("progs/drake/anglstat.mdl") = misc_statue : "Angel Statue, Breakable" []
+@PointClass base(Appearflags,Targetname) size(-16 -16 0, 16 16 128) color(0 128 192) studio("progs/drake/tree.mdl") = misc_tree : "Tree Model" []
 
 @BaseClass = BreakablePots [
     spawnflags(flags) = [
@@ -2718,7 +2716,7 @@
 
 @PointClass size(-8 -8 -8, 8 8 8) base(Targetname) = misc_boom : "Boss Explosion Effect" []
 
-@PointClass base(Appearflags,Targetname) size(-16 -16 -16,16 16 16) color(255 128 128) flags(Angle) = misc_camera : "Ingame cinematic camera(No COOP/DM), will fade/move based on times in seconds. The first fade (out) is from  previous camera to background colour. The second fade (in) is to current camera view. The linear movementwill  start at the same time as the fade in process. Start -> Fade Out(waitmin1) -> Fade In(waitmin2)  / Movement (waitmin3) Once 'Fade in' has finshed then the pause timer (wait) starts.Waitmin3 = Waitmin2 + Wait (Sync everything to finish together) To sync the final camera to a player start, finish 22 map units above angles = up/down, angle, tilt left/right 'pitch roll yaw'up/left = negative value, down/right = positive valuedeathtarget, modeltarget & returntarget have to be defined on first cameraBe aware that coop is not supported, so be careful of trigger eventsand decide on a coop not working message2." [
+@PointClass base(Appearflags,Targetname) size(-16 -16 -16,16 16 16) color(255 128 128) = misc_camera : "Ingame cinematic camera(No COOP/DM), will fade/move based on times in seconds. The first fade (out) is from  previous camera to background colour. The second fade (in) is to current camera view. The linear movementwill  start at the same time as the fade in process. Start -> Fade Out(waitmin1) -> Fade In(waitmin2)  / Movement (waitmin3) Once 'Fade in' has finshed then the pause timer (wait) starts.Waitmin3 = Waitmin2 + Wait (Sync everything to finish together) To sync the final camera to a player start, finish 22 map units above angles = up/down, angle, tilt left/right 'pitch roll yaw'up/left = negative value, down/right = positive valuedeathtarget, modeltarget & returntarget have to be defined on first cameraBe aware that coop is not supported, so be careful of trigger eventsand decide on a coop not working message2." [
 	spawnflags(Flags) = [ 
 		1 : "Player" : 0 : "Show the player model when starting cinematics"
 		2 : "Skipable" : 0 : "Allow the cinematic to be skipped (exit after fade)"
@@ -2915,7 +2913,7 @@
 
 //----------------------------------------------------------------------
 @PointClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 8)
-	color(128 192 128) flags(Angle) = misc_spark : "Sparks" [
+	color(128 192 128) = misc_spark : "Sparks" [
 	spawnflags(Flags) = [
 		 2 : "Blue" : 0
 		 4 : "Pale White" : 0
@@ -2937,7 +2935,7 @@
 ]
 
 @PointClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 8)
-	color(128 192 128) flags(Angle) = misc_sparks : " Rubicon Sparks" [
+	color(128 192 128) = misc_sparks : " Rubicon Sparks" [
 	spawnflags(Flags) = [
 		 2 : "Blue" : 0
 		 4 : "Pale White" : 0
@@ -2953,7 +2951,7 @@
 	]
 ]
 
-@PointClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 8) color(128 192 128) flags(Angle) = misc_splash : "Splash effect" [
+@PointClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 8) color(128 192 128) = misc_splash : "Splash effect" [
 	movedir(string) : "Move direction and velocity(def=0 0 4)"
 	wait(integer) : "Time Between Bursts (def=0.1)"
 	volume(integer) : "Particles per burst (def=10)"
@@ -2979,7 +2977,7 @@
 
 //----------------------------------------------------------------------
 @PointClass base(Appearflags, Targetname) size(-8 -8 -8, 8 8 8)
-	color(128 128 224) flags(Angle) = misc_shake : "Shaking" [
+	color(128 128 224) = misc_shake : "Shaking" [
 	spawnflags(Flags) = [ 2 : "Screen ONLY" : 0 ]
 	count(integer) : "Radius of shake (def=200)"
 	wait(integer) : "Duration of shake (def=2s)"
@@ -3146,7 +3144,7 @@
 
 //----------------------------------------------------------------------
 @PointClass base(Appearflags, Targetname, Target) size(-16 -16 -8, 16 16 8)
-	color(0 128 128) flags(Angle) = misc_textbook : "Misc Text Books" [
+	color(0 128 128) = misc_textbook : "Misc Text Books" [
 	spawnflags(Flags) = [
 		 1 : "No Model + Effects" : 0
 		 2 : "Plinth1" : 0
@@ -3175,7 +3173,7 @@
 
 //----------------------------------------------------------------------
 @PointClass base(Appearflags, Targetname, Target) size(-16 -16 -8, 16 16 8)
-	color(0 128 256) flags(Angle) = misc_textstory : "Misc Text Story" [
+	color(0 128 256) = misc_textstory : "Misc Text Story" [
 	message(string) : "Header message"
 	message2(string) : "Body text 1"
 	message3(string) : "Body text 2"
@@ -3184,11 +3182,10 @@
 
 //----------------------------------------------------------------------
 @PointClass base(Appearflags, Targetname, Target) size(-16 -16 -8, 16 16 8)
-	color(0 16 256) flags(Angle) = misc_textstoryctrl : "Misc Story Controller" []
+	color(0 16 256) = misc_textstoryctrl : "Misc Story Controller" []
 
 //----------------------------------------------------------------------
-@PointClass size(-32 -32 -24, 32 32 64) color(0 128 128) 
-	flags(Angle) = misc_targetdummy : "Misc Target Dummies" [
+@PointClass size(-32 -32 -24, 32 32 64) color(0 128 128) = misc_targetdummy : "Misc Target Dummies" [
 	spawnflags(Flags) = [
 		 1 : "Knight" : 0
 		 2 : "Wizard" : 0
@@ -3205,8 +3202,7 @@
 	noise4(string) : "Targetnumber tracking % efficency"
 	wait(integer) : "Impact marker removal time"
 ]
-@PointClass base(Targetname) size(-4 -4 -8, 4 4 8) color(128 128 0) 
-	flags(Angle) = misc_targetnumber : "Ingame numbers" [
+@PointClass base(Targetname) size(-4 -4 -8, 4 4 8) color(128 128 0) = misc_targetnumber : "Ingame numbers" [
 	pos1(string) : "X=top digits, Y=lower digits"
 ]
 
@@ -3230,7 +3226,7 @@
 	frame(integer) : "Model pose (def=0)" : 0
 ]
 @PointClass base(Appearflags) size(-16 -16 -96, 16 16 0) studio("progs/quoth/corpse_lynch.mdl") = corpse_lynched2 : "Corpse(lynched)" [
-	skin(integer) : "Skin (def=0)" : 0
+	skin(integer) : "Skin (def=1)" : 1
 	frame(integer) : "Model pose (def=0)" : 0
 ]
 @PointClass base(Appearflags) size(-16 -16 -96, 16 16 0) studio("progs/quoth/corpse_lynch.mdl") = corpse_lynched3 : "Corpse(lynched,eaten)" [
@@ -3399,7 +3395,7 @@
 
 //-----------------------------------------------------------------------------
 @BaseClass base(Appearflags, Targetname, Target) 
-	color(0 128 192) flags(Angle) = EBox [
+	color(0 128 192) = EBox [
 	spawnflags(Flags) = [
 		32 : "Floating" : 0
 		64 : "Start Off" : 0
@@ -3427,8 +3423,7 @@
 //======================================================================
 // TRAP entities
 //======================================================================
-@BaseClass base(Appearflags,Targetname,Target) size(-8 -8 -8, 8 8 8) 
-	color(0 128 192) flags(Angle) = Trap [
+@BaseClass base(Appearflags,Targetname,Target) size(-8 -8 -8, 8 8 8) color(0 128 192) = Trap [
 	spawnflags(Flags) = [ 
 		32 : "Toggle" : 0
 		128 : "Tracking" : 0
@@ -3690,7 +3685,7 @@
 ]
 @baseclass size(-8 -8 -8, 8 8 8) base(Light) = LightPoint [] 
 @baseclass size(-8 -8 -24, 8 8 24) base(Light) = LightTorch []
-@baseclass size(-8 -8 -12, 8 8 20) offset(0 0 12) base(Light) = LightFlame []
+@baseclass size(-8 -8 -12, 8 8 20) base(Light) = LightFlame []
 @baseclass = LightOff [ spawnflags(flags) = [ 1 : "Start Off" : 0 ] ]
 
 //----------------------------------------------------------------------
@@ -3732,7 +3727,7 @@
 		128 : "No Particles" : 0
 	]
 ]
-@PointClass base(LightFlame,LightOff) studio("progs/flame2.mdl") sequence(0) = 
+@PointClass base(LightFlame,LightOff) studio("progs/flame2.mdl") = 
 	light_flame_small_yellow : "Small yellow flame" [
 	spawnflags(flags) = [
 		2 : "No Sound" : 0
@@ -3741,7 +3736,7 @@
 	]
 ]
 
-@PointClass base(LightFlame,LightOff) studio("progs/flame2.mdl") sequence(0) = 
+@PointClass base(LightFlame,LightOff) studio("progs/flame2.mdl") = 
 	light_flame_small_white : "Small white flame" [
 	spawnflags(flags) = [
 		2 : "No Sound" : 0
@@ -3750,7 +3745,7 @@
 	]
 ]
 
-@PointClass base(LightFlame,LightOff) studio("progs/flame2.mdl") sequence(1) = 
+@PointClass base(LightFlame,LightOff) studio("progs/flame2.mdl") = 
 	light_flame_large_yellow : "Large yellow flame" [
 	spawnflags(flags) = [
 		2 : "No Sound" : 0
@@ -3759,7 +3754,7 @@
 	]
 ]
 
-@PointClass base(LightFlame,LightOff) size(-8 -8 -16, 8 8 20) offset(0 0 12) studio("progs/quoth/brazshrt.mdl") = 
+@PointClass base(LightFlame,LightOff) size(-8 -8 -16, 8 8 20) studio("progs/quoth/brazshrt.mdl") = 
 	light_flame_brazier_short : "Short Brazier" [
 	spawnflags(flags) = [
 		2 : "No Sound" : 0
@@ -3768,7 +3763,7 @@
 	]
 ]
 
-@PointClass base(LightFlame,LightOff) size(-8 -8 -64, 8 8 20) offset(0 0 12)  studio("progs/quoth/braztall.mdl") = 
+@PointClass base(LightFlame,LightOff) size(-8 -8 -64, 8 8 20) studio("progs/quoth/braztall.mdl") = 
 	light_flame_brazier_tall : "Tall Brazier" [
 	spawnflags(flags) = [
 		2 : "No Sound" : 0
@@ -3900,7 +3895,7 @@
 // HIPNOTIC/RITUAL ROTATION STUFF
 //
 //======================================================================
-@baseclass base(Appearflags,Targetname,Target) flags(Angle) = HipItems [
+@baseclass base(Appearflags,Targetname,Target) = HipItems [
 	_dirt(integer) : "Dirt mapping (override)"
 	_minlight(integer) : "Min light for all surface"
 	_mincolor(string) : "Min light color R G B"
@@ -4234,8 +4229,7 @@
 // MONSTERS
 //
 //======================================================================
-@baseclass base(Appearflags,Targetname,Target,Target2) 
-flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
+@baseclass base(Appearflags,Targetname,Target,Target2) color(220 0 0) = Monster [
 	spawnflags(flags) = [
 		1 : "Ambush" : 0 : "Wakeup when player is seen"
 		8 : "No Sightsound" : 0 : "No wakeup sight sound"
@@ -5241,22 +5235,19 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 @SolidClass base(FuncLighting) = func_illusionary_visblocker : "For creating *vis-blocking* illusionary brushes. The player can walk through them. This gives the same effect as water brushes when the '-notranswater' flag is used, except the interior of these brushes are saved as CONTENTS_EMPTY. NOTE - If the player's view is very close to the faces of these brushes they might be able to see into the void (depending on the engine). Fitzquake family engines have a workaround for this that is enabled if the brushes are textured with a water texture ('*' prefixed)." []
 
 //======================================================================
-//
-// Broken / Removed Stuff
-//
-//======================================================================
+// Obsolete, noting for posterity
 //@PointClass size(-8 -8 -8, 8 8 8) = item_weapon : "Not used anymore"  []
 //@PointClass size(-8 -8 -8, 8 8 8) = misc_noisemaker : "Not used anymore"  []
 //@PointClass size(-8 -8 -8, 8 8 8) = noclass : "Not used anymore"  []
 //@PointClass size(-8 -8 -8, 8 8 8) = test_spawn : "Not used anymore"  []
 //@PointClass size(-8 -8 -8, 8 8 8) = testplayerstart : "Not used anymore"  []
-@PointClass size(-8 -8 -8, 8 8 8) = viewthing : "Not used anymore"  []
+@PointClass size(-8 -8 -8, 8 8 8) = viewthing : "Display models in-game via console commands"  []
 //@SolidClass = test_fodder : "Not used anymore"  []
 //@SolidClass = test_goaway : "Not used anymore"  []
 //@SolidClass = test_teleport : "Not used anymore"  []
-@SolidClass = trigger_onlyregistered : "Not used anymore" []
-
-@PointClass size(-8 -8 -8, 8 8 8) base(Target) = logic_auto : "Automatically fires on map start." [
+@SolidClass = trigger_onlyregistered : "Trigger if missing pak1" []
+//======================================================================
+@PointClass size(-8 -8 -8, 8 8 8) base(Target) = logic_auto : "Automatically fires on map start" [
 	target2(string) : "Target2"
 	target3(string) : "Target3"
 	target4(string) : "Target4"
@@ -5272,10 +5263,8 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 ///////////////////////////////////////////////////////////////////////////
 /// func_water - Turns a brush into a liquid-mimic that can move up & down.
 
-@SolidClass = func_water : "Water"
-[
-	watertype(choices) : "Water Type" : -3 =
-	[
+@SolidClass = func_water : "Water" [
+	watertype(choices) : "Water Type" : -3 = [
 		-3 : "Water"
 		-4 : "Slime"
 		-5 : "Lava"
@@ -5307,10 +5296,8 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 /// func_watertrain - Turns a brush into a liquid-mimic that travels like a func_train_ext. 
 ///	It can target an existing func_train_ext to become a child of that train, or link directly with a chain of train_ext_waypoint entities.
 
-@SolidClass = func_watertrain : "Water Train"
-[
-	watertype(choices) : "Water Type" : -3 =
-	[
+@SolidClass = func_watertrain : "Water Train" [
+	watertype(choices) : "Water Type" : -3 = [
 		-3 : "Water"
 		-4 : "Slime"
 		-5 : "Lava"
@@ -5328,9 +5315,7 @@ flags(Angle) color(220 0 0) offset(0 0 24) = Monster [
 	target(target_destination) : "Target" : : "Activate this entity after moving (top and bottom)"
 	event(target_destination) : "Event" : : "Start at this waypoint (since you MUST use the first waypoint as the 'target' on a non-looped path)"
 	targetname(target_source) : "Name" : : "Can be triggered (just keeps bobbing between pos1 & pos2 otherwise)."
-
-	spawnflags(Flags) =
-	[
+	spawnflags(Flags) = [
 		1 : "Start On" : 0 : "Start the train immediately, even if targeted."
 		2 : "Allow Pause" : 0 : "Re-Triggering will pause/resume the train at any point along it's path."
 		4 : "Allow Changedir" : 0 : "Lets a changedir trigger reverse the train's direction at any time"

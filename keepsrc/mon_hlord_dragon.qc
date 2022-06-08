@@ -378,7 +378,7 @@ void() hlorddragon_fireball = {
             Meteor_Launch (self, org, dir, sped, 90);
         } else {
 			sound (self, CHAN_WEAPON, "rogue/plasma/fire.wav", 1, ATTN_NORM);
-			launch_plasma(org, dir, CT_PROJ_PLASMA, sped);
+			launch_projectile(org, dir, CT_PROJ_PLASMA, sped);
         }
         fireCount = fireCount - 1;
     }

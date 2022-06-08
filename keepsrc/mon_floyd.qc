@@ -135,7 +135,7 @@ void(float muzzle) floyd_fire = {
 	if (self.enemy.flags & FL_CLIENT) targ_org = self.enemy.origin - '0 0 20'; // Aim plasma bolt towards the enemy feet (using view_ofs)
 	else targ_org = self.enemy.origin - self.enemy.view_ofs;
 	dir = normalize(targ_org - self.origin);
-	launch_plasma(org, dir, CT_MONFLOYD, self.attack_speed);
+	launch_projectile(org, dir, CT_MONFLOYD, self.attack_speed);
 };
 
 void()	floyd_ready1 =[$run1, floyd_ready2] {ai_face();};

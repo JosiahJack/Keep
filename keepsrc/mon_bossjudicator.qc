@@ -1436,7 +1436,7 @@ void() Fire_judgePlasma =
 	org = self.origin + attack_vector(ovec);
 	rndvec = vecrand(0,50,TRUE);
 	destvec = normalize(rndvec);
-	launch_plasma(org, destvec, CT_SUMMONLIGHT, SPEED_REFLECTION);
+	launch_projectile(org, destvec, CT_SUMMONLIGHT, SPEED_REFLECTION);
 };
 
 //----------------------------------------------------------------------

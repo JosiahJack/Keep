@@ -780,7 +780,7 @@ void(entity onflr, float impactdmg) monster_flrbody_gib = {
 	}
 
 	self = tself; other = tother;	// switch back
-	SpawnBlood (onflr, onflr.origin, '0 0 50', impactdmg*4);
+	SpawnBlood (onflr, onflr.origin, '0 0 50', impactdmg*4,0);
 	if (onflr.bodyonflrtrig) trigger_strs(onflr.bodyonflrtrig,self);
 	entity_hide(onflr); // Hide/Remove original body/shadow
 };

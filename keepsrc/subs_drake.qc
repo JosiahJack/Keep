@@ -270,16 +270,16 @@ void(string text, string noise, entity act) Mass_Centerprint = {
     if (text == "") return;
 
 	if (coop <= 0 && act.flags & FL_CLIENT) {
-        if (noise != "") sound(pc,CHAN_VOICE,SOUND_TALK,1,ATTN_NORM);
-        else sound(pc,CHAN_VOICE,noise,1,ATTN_NORM); // Default noise = classic boop boop sound
+        if (noise != "") sound(pc,CHAN_VOICE,noise,1,ATTN_NORM);
+        else sound(pc,CHAN_VOICE,SOUND_TALK,1,ATTN_NORM); // Default noise = classic boop boop sound
         centerprint(act,text);
         return;
     }
 
     pc = find (world, classname, "player");
     while(pc) {
-        if (noise != "") sound(pc,CHAN_VOICE,SOUND_TALK,1,ATTN_NORM);
-        else sound(pc,CHAN_VOICE,noise,1,ATTN_NORM); // Default noise = classic boop boop sound
+        if (noise != "") sound(pc,CHAN_VOICE,noise,1,ATTN_NORM);
+        else sound(pc,CHAN_VOICE,SOUND_TALK,1,ATTN_NORM); // Default noise = classic boop boop sound
         centerprint_builtin(pc, text); // Confirm pc status.
         pc = find (pc, classname, "player");
     }

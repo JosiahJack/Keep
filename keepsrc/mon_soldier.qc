@@ -218,7 +218,7 @@ void() army_plasma_fire = {
 	makevectors (self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	vec = normalize(self.enemy.origin - self.origin);
-	launch_plasma(org, vec, CT_PROJ_PLASMA, SPEED_PLASMA);
+	launch_projectile(org, vec, CT_PROJ_PLASMA, SPEED_PLASMA);
 };
 
 void()	army_plasma_atk1 =[	$shoot1, army_plasma_atk2	] {self.pain_finished = time + 1.3; sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM);};

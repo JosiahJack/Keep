@@ -408,7 +408,7 @@ void() gaunt_plasma = {
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = normalize(SUB_orgEnemyTarget() - self.origin);
 	self.attack_speed = SPEED_GAUNTBOLT + (skill * SPEED_GAUNTSKILL);
-	launch_plasma(org, dir, CT_PROJ_PLASMA, self.attack_speed);
+	launch_projectile(org, dir, CT_PROJ_PLASMA, self.attack_speed);
 };
 
 //============================================================================

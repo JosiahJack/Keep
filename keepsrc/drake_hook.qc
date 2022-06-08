@@ -104,7 +104,7 @@ void() GrappleTrack = { // [FUNCTION]
         spray_x = 100 * crandom();
         spray_y = 100 * crandom();
         spray_z = 100 * crandom() + 50;
-        SpawnBlood (self.enemy,self.origin, spray, 20);
+        SpawnBlood (self.enemy,self.origin, spray, 20,0);
     } else self.velocity = self.enemy.velocity; // Keep it moving with player's velocity to help physics keep grapple close to player in between thinks.
     self.nextthink = time + 0.1;
 };

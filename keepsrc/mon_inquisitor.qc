@@ -602,6 +602,7 @@ void() monster_inquisitor_precache = {
 	precache_sound ("ad171/eidolon/elec_arch2.wav");
 	precache_sound ("quoth/dguard/hit.wav");
 	precache_sound ("ad171/eidolon/implode_death.wav");
+	if (ext_dppart) particleeffectnum(DPP_TEPLASMA);
 };
 
 // QUAKED monster_inquisitor (1 0 0) (-16 -16 -24) (16 16 40) Ambush

@@ -247,8 +247,10 @@ void(entity source, vector org, float velrnd, float upbase, float uprnd) SpawnPr
 };
 
 // SpawnBlood
-void(entity targ, vector org, vector vel, float part_qty) SpawnBlood = { // [FUNCTION]
+void(entity targ, vector org, vector vel, float part_qty, float overridecol) SpawnBlood = { // [FUNCTION]
 	local float loop_count, part_col;
+
+	if (!targ) return;
 
 	if (targ.bleedcolour <= 0 && targ.bloodtype <= 0) targ.bleedcolour = MON_BCOLOR_RED;
 	else if (targ.bleedcolour != targ.bloodtype && targ.bleedcolour <= 0 && targ.bloodtype > 0) targ.bleedcolour = targ.bloodtype; // fix it just in case
@@ -267,6 +269,8 @@ void(entity targ, vector org, vector vel, float part_qty) SpawnBlood = { // [FUN
 
 	if (self.flags & FL_CLIENT && self.weapon == IT_LIGHTNING && !self.selfweaponismoditems) part_col = 225; // Lightning uses 225 blood colour
 	
+	if (overridecol > 0 && overridecol < 255) part_col = overridecol;
+
 	// Loop through particle count creating bursts of particles
 	while(loop_count < 4) {
 		if (loop_count == 2 && targ.bloodtype > 0) part_col = targ.bloodtype;
@@ -282,6 +286,8 @@ void(entity targ, vector org, vector vel, float part_qty) SpawnBlood = { // [FUN
 void(entity source, entity targ, float damage) spawn_touchblood = { // [FUNCTION]
 	local vector org, vel;
 
+	if (!source || !targ) return;
+
 	makevectors(source.angles);
 	vel = normalize (source.velocity);
 	vel = normalize(vel + v_up*(random()- 0.5) + v_right*(random()- 0.5));
@@ -290,7 +296,7 @@ void(entity source, entity targ, float damage) spawn_touchblood = { // [FUNCTION
 	if (CheckZeroVector(source.meleeoffset)) org = '0 0 0'; // Check for an origin blood offset (monsters)
 	else org = attack_vector(source.meleeoffset);
 	
-	SpawnBlood (targ, source.origin + org, vel, damage);
+	SpawnBlood(targ,source.origin + org, vel, damage,0);
 };
 
 // Spawns a particle trail for an invisible blood model.
@@ -328,7 +334,7 @@ void(entity source, entity targ, float side) SpawnMeatSpray = { // [FUNCTION]
 	org = org + source.origin; // Create starting point to spawn
 
 	if (targ.bloodtype) {
-		SpawnBlood(targ, org, v_up*2, 100);
+		SpawnBlood(targ, org, v_up*2, 100,0);
 	} else {
 		newmis = spawn();
 		newmis.classtype = CT_TEMPGIB;
@@ -792,7 +798,7 @@ void(entity targ, entity inflictor, entity attacker, vector org, float damage) B
 		SpawnProjectileSmoke(org, 200, 50, 150);
 	} else {
 		if (targ.resist_cells > 0) Resist_Effects(targ,org,VEC_ORIGIN,0,AM_CELLS,targ.pain_sound,"");
-		else SpawnBlood(targ, org, '0 0 100', damage*4);
+		else SpawnBlood(targ, org, '0 0 100', damage*4,225);
 	}
     T_Damage (targ, inflictor, attacker, damage, DAMARMOR);
 };

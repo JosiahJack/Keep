@@ -37,13 +37,28 @@
 // level functions, and other player movement related utilities.
 //=============================================================================
 
-float IT_ITEMRESET = IT_KEY1 + IT_KEY2 + IT_INVISIBILITY + IT_INVULNERABILITY + IT_SUIT + IT_QUAD;
-float IT_MODRESET = IT_CKEY1 + IT_CKEY2 + IT_CKEY3 + IT_CKEY4 + IT_ARTLAVASHIELD + IT_ARTWETSUIT + IT_ARTBLASTBELT + IT_ARTJUMPBOOTS + IT_ARTSHARP + IT_ARTPIERCE + IT_ARTTOME;
-float IT2_ITEMRESET = IT2_SHIELD + IT2_SUPERHEALTH + IT2_EARTHQUAKE + IT2_V_SPHERE + HIP_IT2_WETSUIT + HIP_IT2_EMPATHY_SHIELDS + HIP_IT2_HORN_OF_CONJURING + IT2_TRINITY;
-float ALL_WEAPONS = IT_SHOTGUN + IT_SUPER_SHOTGUN + IT_NAILGUN + IT_SUPER_NAILGUN + IT_GRENADE_LAUNCHER + IT_ROCKET_LAUNCHER + IT_LIGHTNING + IT_AXE + IT_LAVA_NAILGUN + IT_LAVA_SUPER_NAILGUN + IT_MULTI_GRENADE + IT_MULTI_ROCKET + IT_PLASMA_GUN + IT_EXTRA_WEAPON;
-float ALL_WEAPONS2 = IT2_CHAINLIGHTNING + IT2_PROXIMITY_GUN + IT2_MJOLNIR + IT2_LASER_CANNON + IT2_GRAPPLE + IT2_CROSS;// IT2_CROSS is the wand!  Don't add twice adding IT2_WAND and make garbage.
-float ALL_WEAPONSMODITEMS = IT_UPGRADE_SSG + IT_UPGRADE_LG + IT_SANGUINATORS + IT_SCIMITAR + IT_RAPIER + IT_UPGRADE_AXE;
-float ALL_WEAPONSMODITEMS_HACKBANK = IT_ICE + IT_MACE + IT_VOID_STAFF + IT_FLAK + IT_GUNGNIR;
+float IT_ITEMRESET = IT_KEY1 + IT_KEY2 + IT_INVISIBILITY + IT_INVULNERABILITY
+                     + IT_SUIT + IT_QUAD;
+float IT_MODRESET = IT_CKEY1 + IT_CKEY2 + IT_CKEY3 + IT_CKEY4 + IT_ARTLAVASHIELD
+                    + IT_ARTWETSUIT + IT_ARTBLASTBELT + IT_ARTJUMPBOOTS
+                    + IT_ARTSHARP + IT_ARTPIERCE + IT_ARTTOME;
+//float POW_RESET = POW_HASTE + POW_DOUBLE + POW_SHOTTYMAN + POW_VAMPIRE ???
+float IT2_ITEMRESET = IT2_SHIELD + IT2_SUPERHEALTH + IT2_EARTHQUAKE + IT2_V_SPHERE
+                      + HIP_IT2_WETSUIT + HIP_IT2_EMPATHY_SHIELDS
+                      + HIP_IT2_HORN_OF_CONJURING + IT2_TRINITY + IT2_KEY_SKELETON
+                      + IT2_GRAPPLE;
+float IT3_ITEMRESET = IT3_FLASHLIGHT;
+float ALL_WEAPONS = IT_SHOTGUN + IT_SUPER_SHOTGUN + IT_NAILGUN + IT_SUPER_NAILGUN
+                    + IT_GRENADE_LAUNCHER + IT_ROCKET_LAUNCHER + IT_LIGHTNING
+                    + IT_AXE + IT_LAVA_NAILGUN + IT_LAVA_SUPER_NAILGUN
+                    + IT_MULTI_GRENADE + IT_MULTI_ROCKET + IT_PLASMA_GUN
+                    + IT_EXTRA_WEAPON;
+float ALL_WEAPONS2 = IT2_CHAINLIGHTNING + IT2_PROXIMITY_GUN + IT2_MJOLNIR
+                     + IT2_LASER_CANNON + IT2_GRAPPLE + IT2_CROSS; // IT2_CROSS is the wand!  Don't add twice adding IT2_WAND and make garbage.
+float ALL_WEAPONSMODITEMS = IT_UPGRADE_SSG + IT_UPGRADE_LG + IT_SANGUINATORS
+                            + IT_SCIMITAR + IT_RAPIER + IT_UPGRADE_AXE;
+float ALL_WEAPONSMODITEMS_HACKBANK = IT_ICE + IT_MACE + IT_VOID_STAFF + IT_FLAK
+                                     + IT_GUNGNIR;
 float ALL_WEAPONSPERMS = IT_BLASTER + IT_CHAINSAW;
 
 void() SetupIntermissionCamera;
@@ -126,16 +141,14 @@ void() SetChangeParms = {
 
 	self.items = self.items - (self.items & IT_ITEMRESET); // remove temporary items (keys and powerups)
 	parm1 = self.items;
-
 	self.moditems = self.moditems - (self.moditems & IT_MODRESET); // Special mod items handling and bitstuffing
 	if (self.selfweaponismoditems) self.moditems = self.moditems | WEAPON_HACKBANK1; // remember hack for secondary set of 24 weapons!  For AoA and any further weapon additions!
-	else {
-		if (self.moditems & WEAPON_HACKBANK1) self.moditems = self.moditems -  WEAPON_HACKBANK1;
-	}
-	parm10 = self.moditems;
+	else if (self.moditems & WEAPON_HACKBANK1) self.moditems = self.moditems -  WEAPON_HACKBANK1;
 
+	parm10 = self.moditems;
 	dprint("\b[CLIENT]\b MOD weapons ("); dprint(ftos(parm10)); dprint(")\n");
 	self.items2 = self.items2 - (self.items2 & IT2_ITEMRESET);
+	self.items3 = self.items3 - (self.items3 & IT3_ITEMRESET);
 	parm11 = self.items2; // save the good stuff!  multi-weapons and such
 	Client_CheckMaxHP(self, TRUE, had_regen); // Make sure player HP is within Max range and not less 50%
 	parm2 = encode(self.health, self.armortype, self.armorvalue);

@@ -374,7 +374,7 @@ void(float sideang) deflect_fireplasma = {
 	targ_org = self.attack_track + '0 0 -16' + (v_right * (sideang * 24));
 	dir = normalize(targ_org - self.origin);
 
-	launch_plasma(org, dir, CT_MONDEFLECTOR, self.attack_speed);
+	launch_projectile(org, dir, CT_MONDEFLECTOR, self.attack_speed);
 };
 
 void() deflect_plasmaframe = {

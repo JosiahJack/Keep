@@ -84,7 +84,7 @@ float IT_EXTRA_WEAPON  		= 8388608.000;	//23 Correct for DOE HUD					W
 
 // IT_INVISIBILITY + IT_INVULNERABILITY + IT_SUIT + IT_QUAD
 // 524288 + 1048576 + 2097152 + 4194304
-float ALL_ITEMSARTIFACTS = 7864320; // All items that affect screen overlay cshift
+float ALL_ITEMSARTIFACTS = IT_INVISIBILITY + IT_INVULNERABILITY + IT_SUIT + IT_QUAD; // All cshift items
 //=======================================SELF.ITEMS2======================================================
 float IT2_ARMOR1    		= 1.000;		//0  Correct for DOE HUD					I
 float IT2_ARMOR2    		= 2.000;		//1  Correct for DOE HUD					I
@@ -126,7 +126,7 @@ float IT_SANGUINATORS		= 256;			//8  AoA		W
 float IT_SCIMITAR			= 512;			//9  AoA		W
 float IT_RAPIER 			= 1024;			//10 AoA		W
 float IT_UPGRADE_AXE   		= 2048;			//11 Shadow Axe, +75% dmg, +gib bodies
-float IT3_MIRV				= 4096;			//12	W\
+float IT_MIRV				= 4096;			//12	W\
 float IT_CKEY1				= 8192;			//13 Custom Key 1
 float IT_CKEY2				= 16384;		//14 Custom Key 2
 float IT_CKEY3				= 32768;		//15 Custom Key 3
@@ -168,41 +168,37 @@ float 	IT_SIDEWINDER		= 32768;		//15	W\
 float   POW_DOUBLE      	= 65536;    	//16 Twin shot -- nailgun buff.
 float   POW_SHOTTYMAN		= 131072;   	//17 Shotgun buff.
 float   POW_VAMPIRE     	= 262144;   	//18 Melee buff.
-float   POW_PACK        	= 524288;   	//19 Extra ammo capacity.
+//float UNUSED        		= 524288;   	//19 Extra ammo capacity.
 float	IT_BLASTER 			= 1048576; 		//20 Drake laser blaster 					W  stored in self.perms.  was POW_20 in Drake, unused
 float	IT_CHAINSAW 		= 2097152;		//21 Drake chainsaw						W stored in self.pems.  was POW_21 in Drake, unused.  Chainsaw is modified version of Zerstorer
-float   POW_HINT_ARMOR  	= 4194304;		//22 Armor instructions.
-float   POW_HINT_FALL   	= 8388608;		//23 nsoe4:  slow falling message.
-
-// float   POWx_HEALTH     = 255;      // Extra max health.  First 8 bits.
-// float   POWx_ARMOR      = 3840;     // Mutually exclustive exotic armor.
-
+//float UNUSED         		= 4194304;		//22 
+//float UNUSED        		= 8388608;		//23 
 //==========================================SELF.ITEMS3================================================
 .float items3;
-//float UNUSED		= 1;			//0  
-//float UNUSED		= 2;			//1  
-//float UNUSED    	= 4;			//2  
-//float UNUSED   		= 8;			//3  
-//float UNUSED		= 16;			//4  
-//float UNUSED   		= 32;			//5  
-//float UNUSED		= 64;			//6  Plasma Gun, direct + splashdamage
-//float UNUSED   		= 128;			//7  AoA		W3  HACKBANK!
-//float UNUSED		= 256;			//8  AoA		W
-//float UNUSED		= 512;			//9  AoA		W
-//float UNUSED 		= 1024;			//10 AoA		W
-//float UNUSED   		= 2048;			//11 Shadow Axe, +75% dmg, +gib bodies
-//float UNUSED		= 4096;			//12	W\
-//float UNUSED		= 8192;			//13 Custom Key 1
-//float UNUSED		= 16384;		//14 Custom Key 2
-//float UNUSED		= 32768;		//15 Custom Key 3
-//float UNUSED		= 65536;		//16 Custom Key 4
-//float UNUSED 		= 131072;		//17 No health or armor damage in lava
-//float UNUSED		= 262144;		//18 No running out of oxygen under water
-//float UNUSED		= 524288;		//19 Immunity to all splashdamage
-//float UNUSED		= 1048576;		//20 JCR Jump Boots (1-4 power levels)
-//float UNUSED		= 2097152;		//21 Reduce SG/SSG/RG spread pattern
-//float UNUSED		= 4194304;		//22 NG/SNG Nails travel through enemy bodies
-//float UNUSED		= 8388608;		//23 Tome of Power (event trigger)
+float IT3_FLASHLIGHT		= 1;			//0  Flashlight from Quoth
+float IT3_SECRETHUNTER		= 2;			//1  Secret Hunter (Loki's Cat) 
+//float UNUSED    			= 4;			//2  
+//float UNUSED   			= 8;			//3  
+//float UNUSED				= 16;			//4  
+//float UNUSED   			= 32;			//5  
+//float UNUSED				= 64;			//6  
+//float UNUSED   			= 128;			//7  
+//float UNUSED				= 256;			//8  
+//float UNUSED				= 512;			//9  
+//float UNUSED 				= 1024;			//10 
+//float UNUSED   			= 2048;			//11 
+//float UNUSED				= 4096;			//12 
+//float UNUSED				= 8192;			//13
+//float UNUSED				= 16384;		//14 
+//float UNUSED				= 32768;		//15 
+//float UNUSED				= 65536;		//16 
+//float UNUSED 				= 131072;		//17 
+//float UNUSED				= 262144;		//18 
+//float UNUSED				= 524288;		//19 
+//float UNUSED				= 1048576;		//20 
+//float UNUSED				= 2097152;		//21 
+//float UNUSED				= 4194304;		//22 
+//float UNUSED				= 8388608;		//23 
 
 // ===WEAPON ORDERING==================================================================================
 /*
@@ -366,12 +362,15 @@ float numgamemasters;
 .float cost;
 .float spritestarted;
 .float useold_axe;
+.float useold_chainsaw;
 .float take_perms;
 .float nailcosthalf; // bool for checking if it is time to subtract a nail from ammo
 float coins;  // Currency for survival player(s)
 float bones;  // Currency for gamemaster player(s) (called gibs in-game)
 string g_axemodel;
 string v_axemodel;
+string g_chainsawmodel;
+string v_chainsawmodel;
 .vector dest;	// Could not find this in the source, added
 .entity gravtrigent; //the trigger_setgravity we are in
 .float gravtrig; //bit to say whether or not we are in a gravity trigger
@@ -605,3 +604,12 @@ float TURRET_MIN_PITCH = -6;
 .float filterclasstype;
 .float filterclassgroup;
 .float arcing; // Used by trigger_push to arc guide the player safely to a point.
+.float secrethunt_finished;
+
+// Air Fist
+.float AIRG_Flags; // Used to flag states for entity's for the AirFist mod. At the moment the AIRG_Flags variable is used only for the exclusion routine but this may change.
+.entity AIRG_FlyTracker; // Variables used to track when to turn of FLY movetype for flying entity's
+float AIRG_STEPCONVERTEDTOFLY = 2; // Constant used on the AIRG_Flags to specifiy that we have converted this flying monsters movetype from MOVETYPE_STEP to MOVETYPE_FLY (see horn.qc for more info).
+float AIRG_EXCLUDEENTITY = 1; // Air Gun flag constants. Setting an entity's AIRG_Flags excludes it from harm
+.float AIRG_FireCount; // Used in the Max Fire Rate Calculations.
+.float AIRG_Timeout;

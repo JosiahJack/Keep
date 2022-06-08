@@ -225,7 +225,7 @@ void() ballista_fire = {
             return;
         }
     }
-    AdvanceFrame(1,30);
+    SUB_AdvanceFrame(1,30);
     if (self.frame == 2) sound(self,CHAN_WEAPON,"hexen2/weapons/ballista.wav",1,ATTN_NORM);
     else if (self.frame == 4) FireBalBolt();
     else if (self.frame == 15) sound(self,CHAN_WEAPON,"hexen2/weapons/ballwind.wav",1,ATTN_NORM);
@@ -301,7 +301,7 @@ void() ballista_think = {
 
     if (self.enemy || self.tethered) ballista_track();
     if (self.tethered && self.frame > 15) {
-        AdvanceFrame(1,30);
+        SUB_AdvanceFrame(1,30);
     }
     self.nextthink = self.ltime + 0.1;
     self.think = ballista_think;

@@ -522,6 +522,8 @@ float CT_ARTHORN = 599;			// Horn of Conjuring
 float CT_SILVERKEY = 600;		// Silver key
 float CT_ARTHASTE = 601;		// Haste
 float CT_ARTFLASHLIGHT = 602;   // Flashlight
+float CT_ARTSECRETHUNTER = 603; // Secret Hunter Loki's Cat
+
 float CT_GOLDKEY = 605;			// Gold key
 float CT_SKELETONKEY = 606;		// Skeleton key by Qmaster, can open any door with a key requirement.  Used once.
 float CT_CUSTOMKEY = 610;		// Custom key

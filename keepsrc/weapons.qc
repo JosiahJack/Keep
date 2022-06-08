@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 54
+// Function count: 49
 //
 // Implements: Weapons System for the Player
 //
@@ -47,7 +47,6 @@
 
 entity multi_ent;
 float multi_damage;
-void (vector pos) placebullethole
 
 // Well, we can either do these 55 someodd declarations for player stuff here, or alternatively declare weapon stuff in player.qc and move it up in the progs.src ordering.
 void(entity targ) remoteplayer_run;
@@ -101,6 +100,14 @@ void(vector lstart, entity lsource, float ldamage) LightningReflection;
 void() player_lava_nail1;
 void() player_lava_snail1;
 
+void(float reload) W_Reload = { // [FUNCTION]
+	if ((self.flags & FL_CLIENT) && self.perms & POW_HASTE) reload = reload / 2;
+	if (reload < 0.05) reload = 0.05; // Minimum value, to prevent near zero from Haste, Shotty, and Tome of Power stacking up.
+	if (reload > 10) reload = 10; // Just in case, this is a rather ridiculous value anyway.
+	if (self.slow_finished > time) reload = reload * 1.5; //Such a slog, we are cold
+    self.attack_finished = time + reload;
+};
+
 // Weapon ammo run out and switching to next best weapon
 void(float wait_time) forceweaponswitch = { // [FUNCTION]
 	local float nextweap;
@@ -112,6 +119,140 @@ void(float wait_time) forceweaponswitch = { // [FUNCTION]
 		self.weapon = nextweap;
 		W_SetCurrentAmmo(self);
 	}
+};
+
+// Note:  'shots' is number of hitscan shots.  Does not include the two freebie side missiles.
+void(vector start, vector dir, float shots) FireSparks = { // [FUNCTION]
+    local float damage, dist, mid, fr, sparx;
+    local vector end, end2, d1, glitter;
+    local entity targ, attacker;
+
+    attacker = self;
+    damage = WAND_DAMAGE;
+    dist = WAND_RANGE;
+    fr = X32_SPARK_ORANGE;
+    sparx = TRUE;
+    glitter = '233 97 1'; // Note:  Changed 225 to 97 so blood won't spawn in ports.
+
+	// Check for ToP override.
+    if (shots < 1) {
+		// Fire the two side projectiles.  Remember, spikes lasts up to six seconds.
+        shots = 5;
+        damage = 5; // Heretic damage is d8 per shot.
+        dist = 2048;
+        fr = X32_CUT_ORANGE;
+        sparx = FALSE;
+        glitter_z = 0;
+        d1_x = (shots - 1) * 1.40625;
+		d1_y = 0;
+		d1_z = 1;
+        end = Aim_Scatter(dir, d1);
+        // launch_projectile(start, (start - end), CT_PROJ_HKN, 600); // Death Knight spike
+		Knightspike_Launch(start,end,600); //18*35=630.
+        newmis.dmg = damage;
+        newmis.touch = WandSpark_Touch;
+		newmis.classtype = CT_WANDSPARK;
+        if (shots > 1) {
+            d1_x = 0 - d1_x;
+            end = Aim_Scatter(dir, d1);
+            // launch_projectile (start, (start - end), CT_PROJ_HKN, 600); // Death Knight spike
+			Knightspike_Launch (start, end, 600);
+            newmis.dmg = damage;
+            newmis.touch = WandSpark_Touch;
+            newmis.classtype = CT_WANDSPARK;
+        }
+    }
+
+	// Start multi-trace attack.  Uses MultiDamage_* functions.
+    mid = (shots + 1) * 0.5;
+	ClearMultiDamage();
+    while (shots > 0) {
+        if (mid == 1) {
+            d1 = dir;
+        } else {
+            d1_x = (shots - mid) * 2.8125;
+			d1_y = crandom()*0.5;
+			d1_z = 1;
+            d1 = Aim_Scatter(dir, d1);
+        }
+        Lead_Hitscan(start, d1, dist, damage, attacker, glitter); // Does traceline from start in direction d1 * dist    
+		targ = trace_ent;
+        end = trace_endpos;
+        end2 = end - d1*8;
+        // Note:  Reflection merely stops the beam.
+        if (trace_fraction < 1) {
+			AddMultiDamage (targ, damage);
+            self = spawn();
+            setall (self, "progs/null.spr", '0 0 0', '0 0 0', end2); //was null_256
+            sound (self, CHAN_AUTO, SOUND_LASER_HIT, 0.5, ATTN_STATIC); // Play sizzle sounds at reduced volume and attenuation.
+            BecomeFancy(fr, 4);
+            self = attacker; // We used attacker earlier to store self
+        }
+        shots = shots - 1;
+    }
+    ApplyMultiDamage();
+};
+
+// Shoots one big explosive shot.  Doom damage d3*5.  Heretic damage d8+6 (ToP d8*7).
+void(vector start, vector dir) FireBigSpark = { // [FUNCTION]
+    local entity targ, attacker;
+    local vector end, end2;
+    local float damage, splash;
+
+    attacker = self;
+    splash = WAND_DAMAGE * (WAND_FULL + 1);
+    damage = SUB_RandomDamage(splash);
+    Lead_Hitscan(start,dir,WAND_RANGE,damage,attacker,'233 97 4');
+    targ = trace_ent;
+    end = trace_endpos;
+    end2 = (end - (dir*8));
+    if (targ) {
+        if (targ.classgroup == CG_ZOMBIE && targ.classtype != CT_MONMUMMY) {
+            if (damage < targ.health) damage = targ.health; // Update 11/2/09:  Let max charge obliterate (unarmored) zombies.
+        }
+        T_Damage(targ,attacker,attacker,damage,DAMARMOR);
+    }
+    self = spawn();
+    setall (self, "progs/null.spr", '0 0 0', '0 0 0', end); // was null_256.spr
+    self.classtype = CT_WANDBIGSPARK;
+    T_RadiusDamage(self,attacker,splash,attacker,DAMAGEALL);
+    self.origin = end2;
+    Rocket_Explosion2(end2,224,16);
+    BecomeFancy(X80_SPARK_ORANGE,6);
+    self = attacker;
+    Flare_Spawn(end2);
+};
+
+void() W_FireSparks = { // [FUNCTION]
+    local vector dir, org, err;
+    local float charge;
+
+    if (self.weapon == IT2_CROSS && !self.selfweaponismoditems) charge = self.currentammo;
+    else charge = 0; // This shouldn't happen, but if so...
+	
+    if (charge > WAND_FULL + 1) charge = WAND_FULL + 1;
+    self.currentammo = 0; // Update 4/5/10:  Use all accumulated energy.
+    self.zapper_time = time + WAND_DELAY;
+	W_Reload(WAND_DELAY);
+    sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM); // Was weapons/gldhit. wav.
+    // Since weapon is a magic wand, no recoil effects are needed.
+    makevectors (self.v_angle);
+    org = self.origin + v_forward*8 + '0 0 16';
+    dir = aim(self, 100000);
+    if (self.tome_finished) FireSparks (org, dir, 0);
+    else if (charge <= WAND_FULL) {
+        if (!charge) {
+			// Player is holding attack button down for rapid-fire.  Scatter shots a bit like in Heretic.
+            err_x = random();
+			err_x = err_x - random();
+			err_x = err_x * 2;
+            err_y = crandom();  // Was random() - 0.5;
+            err_z = 1;
+            dir = Aim_Scatter (dir, err);
+            charge = 1; // Fire at least 1 to coincide with recharge rate
+        }
+        FireSparks(org, dir, charge);
+    } else FireBigSpark(org, dir);
 };
 
 // Hipnotic Laser Cannon
@@ -208,7 +349,7 @@ void () HIP_FireMjolnir = { // [FUNCTION]
 		damage = 50;
 		if ((trace_ent.classgroup == CG_ZOMBIE) && trace_ent.classname != "monster_mummy") damage = trace_ent.max_health * 2;
 		trace_ent.axhitme = TRUE;
-		SpawnBlood (trace_ent, org,v_forward,damage);
+		SpawnBlood (trace_ent, org,v_forward,damage,0);
 		HIP_FireMjolnirLightning(); dprint("Hit targ slam takedamage\n");
 		T_Damage (trace_ent,self,self,damage, DAMARMOR);
 	} else {
@@ -228,93 +369,6 @@ void () HIP_FireMjolnir = { // [FUNCTION]
 		}
    }
    W_Reload(0.4);
-};
-
-// Initially written by Qmaster and tested in the Keep mod
-
-void (entity current, float life) SpawnLightningTrace = { // [FUNCTION]
-	float dmg;
-	WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST,TE_LIGHTNING2);
-	WriteEntity (MSG_BROADCAST,current);
-	WriteCoord (MSG_BROADCAST,current.origin_x);
-	WriteCoord (MSG_BROADCAST,current.origin_y);
-	WriteCoord (MSG_BROADCAST,current.origin_z);
-	WriteCoord (MSG_BROADCAST,self.origin_x);
-	WriteCoord (MSG_BROADCAST,self.origin_y);
-	WriteCoord (MSG_BROADCAST,self.origin_z);
-	sound (self,CHAN_VOICE,"weapons/lhit.wav",TRUE,ATTN_NORM);
-	if (current.classgroup == CG_ZOMBIE) dmg = current.max_health; // poor zombies die in so many ways
-	else dmg = 30;
-
-	LightningDamage(self.origin,current.origin,self,dmg);
-};
-
-void (vector startpos, float radius, float life) SpawnOrbLightning = { // [FUNCTION]
-	local entity head;
-	local vector org;
-
-	head = findradius(startpos,radius); // find EVERYTHING within 250 unit radius
-	while (head) {
-		// Can be damaged and NOT immune to radius (splash) damage
-		if ((head.takedamage > 0) && (head.flags & FLx_CREATURE)) {
-			org = head.origin + (head.mins + head.maxs)*0.5;
-			if (head.health > 0) SpawnLightningTrace(head,life); // create initial lightning for any monsters found
-		}
-		head = head.chain;
-	}
-};
-
-void () lightning_orb_death = { // [FUNCTION]
-	local entity light;
-
-	light = spawn ();
-	light.origin = self.origin;
-	light.model = "progs/drake/s_fancy.spr";
-	setmodel(light,light.model);
-	setsize(light,VEC_ORIGIN,VEC_ORIGIN);
-	light.solid = SOLID_NOT;
-	light.spritestarted = FALSE;
-	light.pos1 = '5 1 0'; //start frame, alpha, null
-	light.idleweaponframe = 9; // endframe
-	light.think = env_sprite_loop;
-	light.spawnflags = light.spawnflags | SPRITE_PLAYONCE; // So it only plays sprite once.
-	light.impulse = 0.05; // Fast think for sprite animation.
-	light.use = SUB_Remove;
-	light.nextthink = self.nextthink = time + 0.1;
-	sound (light,CHAN_AUTO,"doom/bfg.wav",TRUE,ATTN_NORM); // death burst
-	T_RadiusDamage(self, self.owner, 40,world,DAMAGEALL); // minor damage from exploding
-	SpawnOrbLightning(self.origin,250,0.4);
-	self.think = SUB_Remove;
-};
-
-
-
-void () lightning_orb_think = { // [FUNCTION]
-	if (self.attack_finished < time) { self.think = lightning_orb_death; self.nextthink = time + 0.1; return; }
-
-	SpawnOrbLightning(self.origin,250,1.9);
-	self.think = lightning_orb_think;
-	self.nextthink = time + 0.1;
-};
-
-void () SpawnLightningOrb = { // [FUNCTION]
-	local entity light;
-
-	light = spawn ();
-	light.origin = trace_endpos;
-	light.origin_z = light.origin_z + 32; //move it up a tad from the hit point
-	light.flags = FALSE;
-	light.owner = self;
-	light.struck_by_mjolnir = TRUE;
-	light.model = "progs/s_light4.spr";
-	setmodel(light,light.model);
-	setsize(light,VEC_ORIGIN,VEC_ORIGIN);
-	light.solid = SOLID_NOT;
-	light.think = lightning_orb_think;
-	light.attack_finished = time + 1.9;
-	light.nextthink = (time + 0.5);
-	sound (light,CHAN_AUTO,"zerstorer/ambience/thunder2.wav",TRUE,ATTN_NORM);
 };
 
 void () HIP_FireMjolnir2 = { // [FUNCTION]
@@ -340,7 +394,7 @@ void () HIP_FireMjolnir2 = { // [FUNCTION]
 		else damage = 80;
 
 		trace_ent.axhitme = TRUE;
-		SpawnBlood(trace_ent, org,v_forward,damage);
+		SpawnBlood(trace_ent, org,v_forward,damage,0);
 		T_Damage (trace_ent,self,self,damage, DAMARMOR);
 		if (self.ammo_cells >= 15) {
 		SpawnLightningOrb();
@@ -366,6 +420,18 @@ void () W_FireMjolnir = { // [FUNCTION]
 			HIP_FireMjolnir(); // Standard Drake Mjolinr throwing
 		}
 	}
+};
+
+void() W_FireThor = { // [FUNCTION]
+    local entity targ;
+
+    if (frame_pause()) return; // There is a delay before firing, so don't throw if not an appropriate time.
+    if (self.hammer_finished) return; // No hammer!
+    if (!HasPowerToThrow ()) return; // No ammo or power!
+
+    targ = W_ThorTarget();      // This calls 'makevectors (self.v_angle)'.
+    sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
+    Thor_Launch(self.origin + '0 0 12', v_forward, targ); // We can throw.
 };
 
 void () W_FireProximityGrenade = { // [FUNCTION]
@@ -408,6 +474,24 @@ void () W_FireProximityGrenade = { // [FUNCTION]
 	setsize (missile,'-1.000 -1.000 -1.000','1.000 1.000 1.000');
 	W_Reload(0.6);
 };
+
+void() W_FireSidewinder = { // [FUNCTION]
+    local vector start, dir;
+    local entity targ;
+
+    if (self.ammo_rockets < 1) return;
+
+    self.currentammo = self.ammo_rockets = self.ammo_rockets - 1;
+    sound (self, CHAN_WEAPON, "zerstorer/weapons/stunfire.wav", 1, ATTN_NORM);
+    self.punchangle_x = -2;
+    makevectors (self.v_angle);
+    start = self.origin + v_forward*8 + '0 0 16';
+    dir = v_forward;
+    targ = SuperRocket_Target (self, start, dir, 2000, COS30); // Select a target in front of the player's sights.
+    Sidewinder_Launch (start, dir, targ);
+};
+
+void() W_FireAirFist = { launch_horn(); }; // Redirect for consistent and clear naming. -Qmaster
 
 void() W_FireAxe = { // [FUNCTION]
 	local vector source, org, vec;
@@ -473,7 +557,7 @@ void() W_FireAxe = { // [FUNCTION]
 			}
 		}
 
-		SpawnBlood (trace_ent, org, '0 0 1', axedmg); // Spamn blood always up so player can see it
+		SpawnBlood (trace_ent, org, '0 0 1', axedmg,0); // Spamn blood always up so player can see it
 		T_Damage (trace_ent, self, self, axedmg, DAMARMOR);
 		if (trace_ent.flags & FL_MONSTER) { // Monster impact sounds (fleshy stuff)
 			if (random() < 0.5) sound (self, CHAN_WEAPON, GIB_SOUND_HEAVY, 1, ATTN_NORM);
@@ -506,109 +590,90 @@ void() W_FireAxe = { // [FUNCTION]
 	}
 };
 
-// OLD STYLE BULLET SYSTEM (HITSCAN)
-void() ClearMultiDamage = { // [FUNCTION]
-    multi_ent = world;
-    multi_damage = 0;
-};
+void() W_FireSaw = { // [FUNCTION]
+    local vector  spot, source, org, vec, vec2;
+	local float src_dist, dotprod, axedmg, damage, pain, save, ignore;
+	local entity onflr, tself, tother;
 
-void() ApplyMultiDamage = { // [FUNCTION]
-    if (!multi_ent) return;
-    T_Damage (multi_ent, self, self, multi_damage,DAMARMOR);
-};
-
-void(entity hit, float damage) AddMultiDamage = { // [FUNCTION]
-    if (!hit) return;
-    
-    if (hit != multi_ent) {
-        ApplyMultiDamage ();
-        multi_damage = damage;
-        multi_ent = hit;
-    }  else {
-        multi_damage = multi_damage + damage;
-	}
-};
-
-void(vector org, float marker_time) MarkAttack = { // [FUNCTION]
-	newmis = spawn();
-	newmis.classtype = CT_DEVMARKER;
-	newmis.movetype = MOVETYPE_NONE;
-	newmis.solid = SOLID_NOT;
-	setmodel(newmis, MODEL_BROKEN);
-	newmis.skin = rint(random()*7);
-	setorigin(newmis, org);
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
-	newmis.think = SUB_Remove;
-	newmis.nextthink = time + marker_time;
-};
-
-void(float damage, vector dir) TraceAttack = { // [FUNCTION]
-	local vector vel, org;
-	
-	vel = normalize(dir + v_up*crandom() + v_right*crandom());
-	vel = vel + 2*trace_plane_normal;
-	vel = vel * 200;
-	org = trace_endpos - dir*4;
-	if (!check_skycontent(org)) { // Check for sky content? skies don't impact or bleed
-		if (trace_ent.takedamage) {
-			if (trace_ent.resist_shells > 0) Resist_Effects(trace_ent,org,vel,damage,AM_SHELLS,trace_ent.pain_sound,""); // Show bullet resistance as small blood+gunshot+smoke
-			else {
-				if (trace_ent.flags & FL_MONSTER) SpawnBlood (trace_ent, org, vel*0.2, damage*2); // Hitting monsters does twice the amount of blood effects
-				else SpawnBlood (trace_ent, org, vel*0.2, damage);
-			}
-			AddMultiDamage (trace_ent, damage); // Keep adding up the damage
-			if (trace_ent.classtype == CT_TARGETDUMMY) MarkAttack(org, trace_ent.wait); // Check for target dummy (manually create marker)
-		} else Tent_Point(TE_GUNSHOT,org); // Hit something that does not bleed (often world)
-	}
-};
-
-void(float shotcount, vector spread) FireBullets = { // [FUNCTION]
-	local vector direction, src, dir;
-	local float addedtime, bullet;
-	
-	bullet = 0;
-	makevectors(self.v_angle);
-	if (self.flags & FL_CLIENT) {
-		// Auto aim assist (builtin function 44)
-		if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self, SPEED_PLAYAIM);
-		// Straight line forward where crosshair is pointing
-		else dir = normalize(v_forward * SPEED_PLAYAIM);
-	} else {
-		// A monster attacking a monster will not dodge
-		if (self.enemy.flags & FL_MONSTER) dir = normalize(self.enemy.origin - self.origin);
-		else {
-			// fire somewhat behind the player
-			// so a dodging player is harder to hit
-			dir = self.enemy.origin - self.enemy.velocity*0.2;
-			dir = normalize(dir - self.origin);
-		}
-	}
-
-	src = self.origin + v_forward*10;
-	src_z = self.absmin_z + self.size_z * 0.7;
-
-	ClearMultiDamage ();
-	while (shotcount > 0) {
-		direction = dir + crandom()*spread_x*v_right + crandom()*spread_y*v_up;
-		traceline (src, src + direction*2048, FALSE, self);
-		if (trace_fraction != 1.0) {
-			if (self.tome_finished) {
-				if (shotcount == 1) addedtime = 0;
-				else addedtime = shotcount * 0.05;
-				TraceExploAttack(EXSHELL_DAMAGE, direction, addedtime);
-			} else {
-				if (self.classtype == CT_MONENF_GUNNER) TraceAttack(9, direction); // More damage
-				else TraceAttack(DAMAGE_SHELL, direction);
-
-				if (!bullet && (trace_ent == world) && (world.hipnoticoptions & HIPNOTIC_BULLETHOLES)) { // Default is off.
-					placebullethole(trace_endpos);
-					bullet = TRUE;
+	makevectors(self.v_angle); // Calculate viewing angle
+	source = self.origin + '0 0 16'; // Move source point up body
+	onflr = find(world, bodyonflr, MON_ONFLR);
+	while (onflr) { // See if there are any bodies lying around
+		src_dist = vlen(source - onflr.origin);
+		if (src_dist < RANGE_CHOPAXE) {			// Is the body close to the player?
+			org = onflr.origin - '0 0 16';		// move origin close to floor	
+			vec2 = normalize (org - self.origin);
+			dotprod = vec2 * v_forward;
+			if (dotprod > 0.6) {				// Is the body infront of the player
+				onflr.origin = org;				// Move gib closer to floor
+				onflr.bodyonflr = string_null;	// no more body gibbing
+				tself = self; tother = other;	// save self/other
+				self = onflr; other = tself;	// switch around
+				if (onflr.classgroup == CG_ZOMBIE) {
+					self.health = 0;
+					Killed(onflr, tself);
+				} else {
+					self.max_health = MON_NOGIBVELOCITY; // use minimal velocity
+					monster_ThrowGib();			// throw parts
 				}
+				
+				self = tself; other = tother;	// switch back
+				SpawnBlood (onflr, onflr.origin, '0 0 50', axedmg*4,0);
+				return;																// Finished
 			}
 		}
-		shotcount = shotcount - 1;
+		// See if there are anymore bodies close by
+		onflr = find(onflr,bodyonflr, MON_ONFLR);
 	}
-	ApplyMultiDamage ();
+
+    spot = self.origin + '0 0 16';      // 'source'
+    traceline (spot, spot + v_forward*64, FALSE, self);
+    if (trace_fraction == 1.0) return;
+
+    spot = trace_endpos - v_forward*4;        // 'org'
+    if (trace_ent.takedamage) {
+        damage = 40;
+
+		// Suck life like Heretic's necro gauntlets.
+        if (self.tome_finished && trace_ent.flags & FLx_CREATURE) {
+			save = ignore = 0;
+			if (trace_ent.classtype == CT_MONWRAITH || trace_ent.classtype == CT_MONWRAITH || trace_ent.classtype == CT_MONWRAITH) {
+                    save = 0.5;      // Assume life drain attack.
+                    ignore = TRUE;          // Exceed normal health limit.
+			} else save = 0.1;
+
+            if (self.dmg > trace_ent.health)
+                save = ceil(trace_ent.health * save);
+            else
+                save = ceil(self.dmg * save);
+
+            if ((self.perms & POW_VAMPIRE) && (!(trace_ent.classgroup & CG_ZOMBIE))) save = save + ceil(1.2 * save);
+			if (save > 0) T_Heal (self, save, ignore);
+		}
+
+        vec = ((random()*300) - 150) * v_right + (100 * v_forward);
+        SpawnBlood (trace_ent, trace_endpos, '0 0 5', damage,0); // Blood!
+        if (self.weaponframe & 1) SpawnMeatSpray(self,trace_ent,(crandom() * 300));
+        pain = FeelsPain(trace_ent); // Damage!
+        T_Damage(trace_ent, self, self, damage, DAMARMOR);
+        if (trace_ent.flags & FL_MONSTER){
+            trace_ent.velocity = trace_ent.velocity * 0.5;
+			sound(self, CHAN_WEAPON, "zerstorer/weapons/sawguts.wav", 1, ATTN_NORM);
+			if ((trace_ent.hittype == HIT_METAL || trace_ent.spawnflags & MON_OGRE_GREEN || trace_ent.spawnflags & MON_HOGRE_METAL) && (pain && (trace_ent.pain_finished > time))) sound (self, CHAN_AUTO, "drake/weapons/clang.wav", 1, ATTN_NORM);
+			else if ((trace_ent.hittype == HIT_STONE) && (pain && (trace_ent.pain_finished > time))) sound (self, CHAN_AUTO, "drake/weapons/axhitwal.wav", 1, ATTN_NORM);
+
+			self.punchangle_x = -8;
+		} else if (trace_ent.classtype == CT_FUNCBREAK) { // Breakable impact sounds (def=stone/brick)
+			if (trace_ent.style == BTYPE_WOOD) sound (self, CHAN_WEAPON, SOUND_AXE_WOOD, 1, ATTN_NORM);
+			else if (trace_ent.style == BTYPE_GLASS) sound (self, CHAN_WEAPON, SOUND_AXE_GLASS, 1, ATTN_NORM);
+			else if (trace_ent.style == BTYPE_METAL) sound (self, CHAN_WEAPON, SOUND_AXE_METAL, 1, ATTN_NORM);
+			else if (trace_ent.style == BTYPE_FLESH) sound (self, CHAN_WEAPON, SOUND_AXE_FLESH, 1, ATTN_NORM);
+			else sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
+		}
+    } else { // Hit wall.
+		sound (self, CHAN_WEAPON, SOUND_AXE_STONE, 1, ATTN_NORM);
+		Tent_Point(TE_GUNSHOT,org);
+    }
 };
 
 void() W_FireShotgun = { // [FUNCTION]
@@ -1016,208 +1081,7 @@ void() W_FirePlasma = { // [FUNCTION]
 	sound (self, CHAN_WEAPON, "ad171/weapons/plasma_fire.wav", 1, ATTN_NORM);
 	self.currentammo = self.ammo_cells = self.ammo_cells - 1;
 	org = self.origin + v_forward*8 + '0 0 16';
-	launch_plasma (org, dir, CT_PROJ_PLASMA, SPEED_PLAYPLASMA);
-};
-
-void(vector p1, vector p2, entity from, float damage) LightningDamage = { // [FUNCTION]
-	local entity e1, e2;
-	local vector f;
-	local float lighthit, temp_classgroup;
-	
-	f = p2 - p1;
-	normalize (f);
-	f_x = 0 - f_y;
-	f_y = f_x;
-	f_z = 0;
-	f = f*16;
-	temp_classgroup = from.classgroup; // Need to fool T_Damage that damage is coming from LG
-	if (from) from.classgroup = CG_PROJCELLS;
-	e1 = e2 = world;
-	lighthit = FALSE;
-	traceline (p1, p2, FALSE, self);
-	if (trace_ent.takedamage) {
-		lighthit = TRUE;
-		if ((self.flags & FL_CLIENT) && (other.flags & FL_CLIENT)) trace_ent.velocity_z = trace_ent.velocity_z + 400; // Some weird MP velocity hack! KEEP IT!!
-	} else {
-		e1 = trace_ent;
-		traceline (p1 + f, p2 + f, FALSE, self);
-		if (trace_ent != e1 && trace_ent.takedamage) lighthit = TRUE;
-		else {
-			e2 = trace_ent;
-			traceline (p1 - f, p2 - f, FALSE, self);
-			if (trace_ent != e1 && trace_ent != e2 && trace_ent.takedamage) lighthit = TRUE;
-		}
-	}
-
-	// Found a target to hit?
-	if (lighthit) {
-		// Check for breakable/pushable monster immunity
-		if (ai_immunebreakable(self, trace_ent)) {
-			if (self.lightning_timer < time) { // This is resist lightning function without pain sound.  Don't spawn smoke constantly (let the sprite finish)
-				self.lightning_timer = time + 0.3;
-				SpawnExplosion(EXPLODE_BURST_SMOKE, trace_endpos, "");
-			}
-			SpawnProjectileSmoke(trace_endpos, 200, 50, 150);
-		} else if (trace_ent.resist_cells > 0) { // Check for any cell/lightning resistance
-			Resist_Effects(trace_ent,trace_endpos,VEC_ORIGIN,0,AM_CELLS,trace_ent.pain_sound,""); // damage = damage * trace_ent.resist_cells;
-			if (damage > 0) T_Damage (trace_ent, from, from, damage, DAMARMOR);
-		} else {
-			SpawnBlood(trace_ent, trace_endpos, '0 0 100', damage*4); // Originally used 225 blood colour
-			T_Damage (trace_ent, from, from, damage, DAMARMOR);
-		}
-		if (trace_ent.reflectlightning) LightningReflection(trace_endpos, trace_ent, damage*0.5); // Check for any lightning reflection abilitites.  Source = Lightning originally came from player
-	}
-	if (from) from.classgroup = temp_classgroup;
-};
-
-// New ability to spawn lighting strikes in random directions
-void(vector lstart, entity lsource, float ldamage) LightningReflection = { // [FUNCTION]
-	local vector lfinish, dir;
-
-	lfinish = lstart + vecrand(0,1000,1); // Setup a random XYZ direction (+/-)
-	traceline(lstart, lfinish, FALSE, lsource); // Trace line in random direction
-	if (random() < 0.5) { // Random chance of a plasma/lightning bolt!
-		dir = normalize(trace_endpos - lstart);
-		launch_plasma(lstart, dir, CT_REFLECTLIGHT, SPEED_REFLECTION);
-	} else {
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY); // Draw lighting beam (32 model unit chunks)
-		WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
-		WriteEntity (MSG_BROADCAST, lsource);
-		WriteCoord (MSG_BROADCAST, lstart_x);
-		WriteCoord (MSG_BROADCAST, lstart_y);
-		WriteCoord (MSG_BROADCAST, lstart_z);
-		WriteCoord (MSG_BROADCAST, trace_endpos_x);
-		WriteCoord (MSG_BROADCAST, trace_endpos_y);
-		WriteCoord (MSG_BROADCAST, trace_endpos_z);
-		LightningDamage(lstart, trace_endpos, world, ldamage); // Check for damage with new lightning beam
-	}
-};
-
-// This lightning damage check is designed for the lightning gun with many modifiers designed for the player and MP combat.
-// This function should not be used for general lightning damage
-void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage = { // [FUNCTION]
-	local entity e1, e2;
-	local vector f, dir;
-	local float lighthit, temp_classgroup, iter, dmg;
-	
-	f = p2 - p1;
-	normalize (f);
-	f_x = 0 - f_y;
-	f_y = f_x;
-	f_z = 0;
-	f = f*16;
-	dmg = damage;
-	e1 = e2 = world;
-	lighthit = FALSE;
-	traceline (p1, p2, FALSE, self);
-	if (trace_ent.takedamage) {
-		lighthit = TRUE;
-		// Some weird MP velocity hack!
-		// The story about this code (from quakeworld.nu)
-		//
-		// This code appears to have been there for a long, long time.
-		// It was there in Quake 1.06 Shareware release, and it may have
-		// been there before that. Someone must have been experimenting
-		// with something and forgot it there, but no one noticed because
-		// in that function, the 'other' entity is not usually set to
-		// anything in particular, and the code never worked.
-		//
-		// But then QW came along, and in the QW engine it turns out
-		// that 'other' will be set to 'self' if the player is touching
-		// a platform. And so the dormant code stared working! It was
-		// discovered by players, and players started using it to their
-		// advantage. Now it's an integral part of dm6 gameplay.
-		//
-		// The code was apparently discovered and removed when Quake QC 
-		// code was cleaned up before being released to public, so you
-		// won't normally see it in NQ mods. But it is there in the
-		// progs.dat in pak0.pak; and it will work in QuakeWorld engines
-		// supporting progs.dat (currently FTE and ZQuake).
-		if ((self.flags & FL_CLIENT) && (other.flags & FL_CLIENT)) trace_ent.velocity_z = trace_ent.velocity_z + 400;
-	} else {
-		e1 = trace_ent;
-		traceline (p1 + f, p2 + f, FALSE, self);
-		if (trace_ent != e1 && trace_ent.takedamage) lighthit = TRUE;
-		else {
-			e2 = trace_ent;
-			traceline (p1 - f, p2 - f, FALSE, self);
-			if (trace_ent != e1 && trace_ent != e2 && trace_ent.takedamage) lighthit = TRUE;
-		}
-	}
-
-	// Found a target to hit?
-	if (lighthit) {
-		if (self.tome_finished && trace_ent) {
-			// Make some extra tome of power spark effects
-			iter = 0;
-			while (iter < 6) {
-				dir = safe_client_forward();
-				make_spark(trace_ent.origin, dir, FALSE); // False to use direction.
-				newmis.velocity_z = 200 + crandom() * 300;
-				newmis.velocity_y = crandom() * 300;
-				newmis.velocity_x = crandom() * 300;
-				newmis.solid = SOLID_NOT;
-				newmis.touch = SUB_Null;
-				newmis.skin = 8;
-				iter = iter + 1;
-			}
-			dmg = dmg * 2; // Double damage
-			if (trace_ent.health < dmg) { // Monster go pop!
-				iter = 0;
-				sound (self, CHAN_AUTO, "rrp/misc/spark.wav", 1, ATTN_STATIC);
-				while (iter < 30) {
-					dir = safe_client_forward();
-					make_spark(trace_ent.origin, dir, FALSE); // False to use direction.
-					if (iter < 15) newmis.velocity_z = 200;
-					else newmis.velocity_z = -200;
-					newmis.velocity_y = crandom() * 100;
-					newmis.velocity_x = crandom() * 100;
-					newmis.solid = SOLID_NOT;
-					newmis.touch = SUB_Null;
-					newmis.skin = 8;
-					iter = iter + 1;
-				}
-			}
-		}
-
-		// Check for any cell/lightning resistance
-		if (trace_ent.resist_cells > 0) {
-			Resist_Effects(trace_ent,trace_endpos,VEC_ORIGIN,0,AM_CELLS,trace_ent.pain_sound,"");
-			if (dmg > 0) {
-				// Need to fool T_Damage that damage is coming from LG
-				temp_classgroup = from.classgroup;
-				from.classgroup = CG_PROJCELLS;
-				T_Damage (trace_ent, from, from, dmg, DAMARMOR);
-				from.classgroup = temp_classgroup;
-			}
-		} else {
-			// Originally used 225 blood colour
-			SpawnBlood(trace_ent, trace_endpos, '0 0 100', dmg*4);
-			T_Damage (trace_ent, from, from, dmg, DAMARMOR);
-		}
-
-		// Check for any lightning reflection abilitites
-		if (trace_ent.reflectlightning) {
-			dmg = dmg * 0.5; // Lightning splits when reflected...I guess.
-			LightningReflection(trace_endpos, trace_ent, dmg); // Source = Lightning originally came from player
-		}
-	} else {
-		if (self.tome_finished) {
-			// Make some extra tome of power spark effects
-			iter = 0;
-			while (iter < 6) {
-				dir = safe_client_forward();	
-				make_spark(trace_endpos, dir * 300, FALSE); // False to use direction.
-				newmis.velocity_z = crandom() * 300;
-				newmis.velocity_y = crandom() * 300;
-				newmis.velocity_x = crandom() * 300;
-				newmis.solid = SOLID_NOT;
-				newmis.touch = SUB_Null;
-				newmis.skin = 8;
-				iter = iter + 1;
-			}
-		}
-	}
+	launch_projectile(org, dir, CT_PROJ_PLASMA, SPEED_PLAYPLASMA);
 };
 
 void() W_FireLightning = { // [FUNCTION]
@@ -1423,6 +1287,129 @@ void () W_FirePlasmaGun = { // [FUNCTION]
 	W_Reload(0.8);
 };
 
+// Called when player launches a MIRV.
+void() W_FireStinger = { // [FUNCTION]
+    local vector start;
+
+    if (self.ammo_rockets < COST_MIRV) { W_FireRocket(); return; }
+
+    self.currentammo = self.ammo_rockets = self.ammo_rockets - COST_MIRV; // Cost of admission paid.  Launch the big missile.
+    sound (self, CHAN_WEAPON, "drake/weapons/mirv1.wav", 1, ATTN_NORM);
+    self.punchangle = '6 0 -12';
+    makevectors (self.v_angle);
+    self.velocity = self.velocity - (v_forward * 100);  // Recoil!
+    start = self.origin + self.view_ofs + (v_forward*8) + (v_right*8);
+    Mirv_Launch(start,v_forward);
+    self.mirv1 = newmis;
+};
+
+// Launches a small MIRV that splits into mini-rockets a few frames
+// after launch.  One big rocket causes less backlash than several
+// smaller rockets.
+//
+// I wanted a multi-rocket launcher, much like a shotgun that fires rockets
+// instead of pellets, but backlash from multiple rockets at point-blank
+// causes too much damage and knockback.  Instead, a MIRV is launched.
+// See above for details.
+void() W_FireHydra = { // [FUNCTION]
+    local vector start, dir;
+    local float cost;
+
+    if (self.ammo_rockets < 1) return;
+
+    cost = 3;
+    if (self.ammo_rockets < cost) cost = self.ammo_rockets;
+    self.currentammo = self.ammo_rockets = self.ammo_rockets - cost;
+    sound(self, CHAN_WEAPON, "zerstorer/weapons/stunfire.wav", 1, ATTN_NORM);
+    self.punchangle_x = -2;
+    makevectors (self.v_angle);
+    start = self.origin + v_forward*8 + '0 0 16';
+    dir = v_forward;
+	Launch_Missile(start, dir, '0 0 0', CT_PROJ_ROCKET, SPEED_RLPLAYER);
+    newmis.velocity = dir * 600;
+    newmis.count    = cost;         // # of warheads after splitting.
+    newmis.nextthink= time + 0.2;
+    newmis.think    = Hydra_Split;
+    if (cost >= 2) { // Make bigger explosion if payload includes multiple rockets.
+        newmis.dmg      = cost * 30 + 60;
+        newmis.think1   = BecomeBigBang;
+    }
+};
+
+void() W_FireBeam = { // [FUNCTION]
+	// explode if under water
+	if (self.waterlevel > 1) {
+		beam_water_burst(self.ammo_cells*2);
+		self.currentammo = self.ammo_cells = 0;
+		return;
+	}
+
+	newmis = spawn();
+	newmis.solid = SOLID_NOT;
+	newmis.movetype = MOVETYPE_FLY;
+	// amount of damage done is based on how much cell ammo you've got
+	newmis.currentammo = self.currentammo;
+	setorigin(newmis, self.origin);
+	newmis.owner = self;
+	newmis.think = beam_generate;
+	newmis.nextthink = time + 0.05;
+
+	// like the damage, the ammo used is according to how much you've got
+	self.currentammo = self.ammo_cells = floor(self.ammo_cells * 0.75);
+};
+
+// Madfox's BFG implementation
+//void(float damage) W_FireRail = {
+void(float damage) W_FireBFG = { // [FUNCTION]
+        local entity tempen;
+        local vector orgen, orgo, dir, tdir, dorg;
+        local float donerail;
+
+        makevectors(self.v_angle);
+        sound (self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
+        self.ammo_cells = self.ammo_cells - 5;
+        self.currentammo = floor(self.ammo_cells / 5);
+        orgo = self.origin + self.view_ofs + v_forward*8;
+        dir = v_forward;
+        traceline (orgo, orgo + v_forward*2048, FALSE, self);
+
+        while(!donerail) {
+			if(trace_ent.takedamage) {
+				orgen = trace_endpos + dir*4;
+				dorg = trace_endpos - dir*4;
+				SpawnBlood(trace_ent, dorg, '0 0 0', damage,0);
+				T_Damage(trace_ent, self, self, damage,DAMARMOR);
+				if (trace_ent.movetype != MOVETYPE_PUSH && trace_ent.classname != "monster_oldone" && trace_ent.classname != "monster_boss") {
+					tdir = trace_endpos - orgo;
+					tdir = normalize(tdir);
+					trace_ent.flags = trace_ent.flags - (trace_ent.flags & FL_ONGROUND);
+					trace_ent.velocity = trace_ent.velocity + tdir*(170+damage);
+
+					if(trace_ent.velocity_z < 270)
+					trace_ent.velocity_z = trace_ent.velocity_z + 270;
+				}
+			} else {
+				dorg = trace_endpos - dir*4;
+				donerail = TRUE;
+			}
+			tempen = self;
+			self = trace_ent;
+			traceline(orgen, orgen + dir*2048, FALSE, self);
+			self = tempen;
+        }
+        newmis = spawn();
+        newmis.solid = SOLID_NOT;
+        setsize(newmis, '-1 -1 -1', '1 1 1');
+        setorigin(newmis, orgo);
+        newmis.classname = "railtrail";
+        newmis.nextthink = time + 0.1;
+        newmis.think = BFGTracerThink;
+        newmis.oldorigin = dorg;
+        newmis.view_ofs = orgo;
+        newmis.pos1 = dir; // store old velocity
+        newmis.owner = self;
+};
+
 void(entity targ) W_SetCurrentAmmo = { // [FUNCTION]
 	if (frame_pause()) return; // intermission, cinematic, or finale
 
@@ -1443,7 +1430,7 @@ void(entity targ) W_SetCurrentAmmo = { // [FUNCTION]
 			} else {
 				targ.weaponmodel = v_axemodel;
 			}
-			if (targ.perms & IT_CHAINSAW) targ.weaponmodel = "progs/drake/v_saw.mdl"; // override axes
+			if (targ.perms & IT_CHAINSAW) targ.weaponmodel = v_chainsawmodel; // override axes
 		} else if (targ.weapon == IT_SHOTGUN) {
 			targ.currentammo = targ.ammo_shells;
 			if (targ.perms & IT_BLASTER) {
@@ -1487,7 +1474,7 @@ void(entity targ) W_SetCurrentAmmo = { // [FUNCTION]
 			targ.weaponmodel = MODEL_VWEAP_MULTR;
 		} else if (targ.weapon == IT_ROCKET_LAUNCHER) {
 			targ.currentammo = targ.ammo_rockets;
-			if (targ.moditems & IT3_MIRV) {
+			if (targ.moditems & IT_MIRV) {
 				targ.weaponmodel = "progs/drake/v_mirv.mdl";
 			} else {
 				targ.weaponmodel = MODEL_VWEAP_RL;
@@ -1616,14 +1603,6 @@ float(entity targ) W_CheckNoAmmo = { // [FUNCTION]
 	return FALSE; // drop the weapon down
 };
 
-void(float reload) W_Reload = { // [FUNCTION]
-	if ((self.flags & FL_CLIENT) && self.perms & POW_HASTE) reload = reload / 2;
-	if (reload < 0.05) reload = 0.05; // Minimum value, to prevent near zero from Haste, Shotty, and Tome of Power stacking up.
-	if (reload > 10) reload = 10; // Just in case, this is a rather ridiculous value anyway.
-	if (self.slow_finished > time) reload = reload * 1.5; //Such a slog, we are cold
-    self.attack_finished = time + reload;
-};
-
 void() W_Attack = { // [FUNCTION]
 	local entity stemp;
 
@@ -1696,7 +1675,7 @@ void() W_Attack = { // [FUNCTION]
 		else if (self.weapon == IT_GRENADE_LAUNCHER) { player_grenade1(); }
 		else if (self.weapon == IT_MULTI_ROCKET) { player_multi_rocket1(); }
 		else if (self.weapon == IT_ROCKET_LAUNCHER) {
-			if (self.moditems & IT3_MIRV) {
+			if (self.moditems & IT_MIRV) {
 				player_bfg1();
 				W_Reload(1.5);
 				if (self.mirv1) {

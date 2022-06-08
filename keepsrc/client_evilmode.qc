@@ -104,7 +104,7 @@ void() Client_SetupEvilmode = {
 
 // Reset HP/Mega back to skill 0-3 and check worldspawn for overrides.  prevskill is for players who switch skills to gain ShadowAxe!
 void(float prevskill) Client_ResetEvilmode = {
-	dprint("\b[SKILL4]\b EvilMode Disabled!\n");
+	dprint("\b[SKILL4]\b EvilMode Disabled\n");
 	// Clear Evil skill flag
 	Client_ClearEvilFlag();
 	// Check worldspawn for any previous default?

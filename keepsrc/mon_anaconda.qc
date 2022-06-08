@@ -123,7 +123,7 @@ void() Puke_Touch = {
 	if (other == self.owner) return;
 	if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
 	org = self.origin - MOVETYPE_NOCLIP * normalize(self.velocity);
-	SpawnBlood(other,org, self.velocity * 0.2, 15);
+	SpawnBlood(other,org, self.velocity * 0.2, 15,0);
 	T_Damage(other, self, self.owner, 10,DAMARMOR);
 	T_RadiusDamage(self, self.owner, 30, other,DAMAGEALL);
 	self.origin = self.origin - MOVETYPE_NOCLIP * normalize(self.velocity);
@@ -169,7 +169,7 @@ void() Bite_Touch = {
 
 	org = self.origin - MOVETYPE_NOCLIP * normalize(self.velocity);
 	if (other.health) {
-		SpawnBlood(other,org, self.velocity * 0.2, 15);
+		SpawnBlood(other,org, self.velocity * 0.2, 15,0);
 		T_Damage(other, self, self.owner, 30,DAMARMOR);
 		sound(self, CHAN_VOICE, "demon/dhit2.wav", ATTN_NORM, ATTN_IDLE);
 		self.gib1mdl = "progs/gib1.mdl";

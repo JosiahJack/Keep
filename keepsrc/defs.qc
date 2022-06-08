@@ -546,4 +546,4 @@ void() W_WeaponFrame;
 void(float sprite_type, vector org, string expl_sound) SpawnExplosion;
 void(vector org, float velrnd, float upbase, float uprnd) SpawnProjectileSmoke;
 void(entity source, entity targ, float side) SpawnMeatSpray;
-void(entity targ, vector org, vector vel, float part_qty) SpawnBlood;
+void(entity targ, vector org, vector vel, float part_qty, float overridecol) SpawnBlood;

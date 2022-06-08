@@ -125,7 +125,6 @@ ai_pathcorner.qc			// REFINED Path Following System for monsters and trains
 fx.qc						// REFINED Special Effects
 fx_drake.qc					// REFINED Drake Special Effects
 fx_quake.qc					// REFINED Drake Earthquake System
-drake_fire.qc				// REFINED Burning effects for when monsters get set on fire 
 hip_expl.qc					// REFINED Explosion on demand
 ai_ammoresist.qc			// REFINED Ammo Resistance System effects and damage functions
 ai_sight.qc					// REFINED Monster Sight System for getting angry on sight or following
@@ -133,7 +132,6 @@ ai_subs.qc					// REFINED AI Core Movement Subroutines
 ai_states.qc				// REFINED AI Core System of stand, walk, and run
 ai_combat.qc				// REFINED Damage System for all damage application
 ai_minions.qc				// REFINED Minion System for monsters spawning monsters and minion eggs
-ai_hazards.qc				// REFINED Hazard Projectile System
 ai_checkattack.qc			// REFINED Check routines form monsters to decide when and which attacks
 ai_ryu.qc					// REFINED AI Behavior System for Drake Dragons and Nightshade
 
@@ -143,11 +141,11 @@ drake_cutscene.qc			// REFINED Old somewhat jerky cinematic sequence tools. Avai
 
 // Projectiles and Effects
 //-----------------------------------------------------------------------------
-projectiles.qc				// REFINED Projectile System for all projectiles that cause damage.
-projectiles_keep.qc			// REFINED Projectiles for various uncategorizable effects and monsters.
-projectiles_drake.qc		// REFINED Projectiles for drake monsters
-projectiles_airfist.qc		// REFINED Airfist weapon effects
-projectiles_hexen2.qc		// REFINED Hexen 2 Projectile Effects such as Fallen Angel blade and spell attacks.
+projectiles_beam.qc         //  Lightning and Beam Attacks
+projectiles_explode.qc		//  Projectile Explosions
+projectiles_think.qc		//  Projectile Thinks
+projectiles_touch.qc		//  Projectile Touches
+projectiles_launch.qc		//  Projectile System for all projectiles that cause damage.
 
 // World and Main System Setup
 //-----------------------------------------------------------------------------
@@ -182,7 +180,6 @@ items_progspn.qc			// REFINED Progressive Spawn System for picking a list of ite
 
 // Weapons
 //-----------------------------------------------------------------------------
-drake_mirv.qc				// REFINED The Multiple Independent Re-entry Vehicles launcher (MIRV) firing and view tracking.
 weapons_aoa.qc				// N/A - Letting Ryanscissorhands update this one as this is his contribution from Arms of Asgard.  NOTE: Different style from my personal one which is mostly LLVM and curly brace on same line.  Leaving as is for his sanity ;).
 weapons.qc					// REFINED Weapon System for firing, cycling, and view models.
 drake_hook.qc				// REFINED Drake's improved implementation of the Rogue grappling hook
@@ -236,7 +233,6 @@ hip_brk.qc					// REFINED Damage threshold trigger and breakaway (dissappearing 
 hipclock.qc					// REFINED Rotating clock hands that actually work
 earthq.qc					// REFINED Rogue's Earthquake System.
 revive.qc 					// REFINED Drake's revival system.  Used by necromancer and bane.
-wand.qc						// REFINED Drake's wand weapon firing and effects
 misc_hostage.qc				// REFINED Drake's Cutscene Actor
 vigil.qc					// REFINED From Wright's Vigil map, had a useful triggerable Congratulations Intermission
 qrobot.qc 					// REFINED Qmaster's Super Syncronized Trains, boring right, until the whole world is made of them.

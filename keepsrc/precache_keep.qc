@@ -42,6 +42,39 @@ void() precache_poisongibs;
 float(string mname) monster_checkminion; // Used later by all monsters.  Must be last after all monsters.
 void(string mname) precache_monster; // Used later by all monsters.  Must be last after all monsters.
 
+void() PreCache_Flame = {
+	precache_model (MODEL_PROJ_FLAMETINY);		// 16 (wide) x  48 (high)
+	precache_model (MODEL_PROJ_FLAMESML);		// 24 (wide) x  64 (high)
+	precache_model (MODEL_PROJ_FLAMEMED);		// 32 (wide) x  96 (high)
+	//precache_model (MODEL_PROJ_FLAMEVLRG);		// 48 (wide) x 128 (high)
+	precache_sound ("ambience/flames1.wav");
+	precache_sound ("ambience/flames2.wav");
+	precache_sound ("ambience/flames3.wav");
+	precache_sound ("ambience/flames4.wav");
+};
+
+void() PreCache_BlueFlame = {
+	precache_model (MODEL_PROJ_BFLAMETINY);		// 16 (wide) x  48 (high)
+	precache_model (MODEL_PROJ_BFLAMESML);		// 24 (wide) x  64 (high)
+	precache_model (MODEL_PROJ_BFLAMEMED);		// 32 (wide) x  96 (high)
+	//precache_model (MODEL_PROJ_BFLAMEVLRG);		// 48 (wide) x 128 (high)
+	precache_sound ("ambience/flames1.wav");
+	precache_sound ("ambience/flames2.wav");
+	precache_sound ("ambience/flames3.wav");
+	precache_sound ("ambience/flames4.wav");
+};
+
+void() PreCache_GreenFlame = {
+	precache_model (MODEL_PROJ_GRFLAMETINY);		// 16 (wide) x  48 (high)
+	precache_model (MODEL_PROJ_GRFLAMESML);		// 24 (wide) x  64 (high)
+	precache_model (MODEL_PROJ_GRFLAMEMED);		// 32 (wide) x  96 (high)
+	//precache_model (MODEL_PROJ_GRFLAMEVLRG);		// 48 (wide) x 128 (high)
+	precache_sound ("ambience/flames1.wav");
+	precache_sound ("ambience/flames2.wav");
+	precache_sound ("ambience/flames3.wav");
+	precache_sound ("ambience/flames4.wav");
+};
+
 void() PrecacheAll = { // [FUNCTION]
 	precache_sound("hipnotic/items/empathy2.wav");	// Empathy shield sound
 	precache_sound("hipnotic/items/wetsuit.wav");		// Wetsuit noise
@@ -217,6 +250,7 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/drake/v_laserb.mdl");
 	precache_model("progs/hipnotic/v_laserg.mdl");
     precache_model("progs/drake/v_saw.mdl");
+    precache_model("progs/q15/v_saw.mdl");
 	precache_model("progs/drake/playham0.mdl");
 	precache_model("progs/drake/playsaw.mdl");
 	precache_model("progs/custents/beam.mdl"); // phase beam
@@ -278,6 +312,11 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/hipnotic/s_bullet.spr");
 	precache_model(MODEL_PROJ_HKN);
 	precache_model("progs/q15/zom_gib.mdl");
+	precache_sound("redfield/misc/catsmeow.wav");
 	precache_aoa();
 	precache_poisongibs();
+	if (ext_dppart) {
+		particleeffectnum("TE_POISONBIG");
+		particleeffectnum("voreball_explosion");
+	}
 };

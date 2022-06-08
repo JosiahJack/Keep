@@ -217,7 +217,7 @@ void () overlord_smash = {
    sound (self,CHAN_WEAPON,"rogue/s_wrath/smash.wav",TRUE,ATTN_NORM);
    T_Damage (self.enemy,self,self,smashDmg,DAMARMOR);
    delta = normalize (((self.enemy.origin - self.origin) + self.enemy.view_ofs));
-   SpawnBlood (self.enemy, (self.enemy.origin - (delta * SVC_INTERMISSION)),(delta * -100.000),smashDmg);
+   SpawnBlood (self.enemy, (self.enemy.origin - (delta * SVC_INTERMISSION)),(delta * -100.000),smashDmg,0);
 };
 
 void () overlord_melee = {
