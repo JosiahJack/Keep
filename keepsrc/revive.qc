@@ -179,11 +179,10 @@ float(entity ent, entity god) monster_revive = { // [FUNCTION]
 // Checks if monster should stop to revive a fallen monster.  Success initiates resurrection.
 float(float d) ai_medic = { // [FUNCTION]
     local entity head, goal;
-    local float hit, hp;
+    local float hp;
 
     hp = 0;	// HACK:  Bane -- Don't revive things with too much hp.  Update:  At least until after Bane clones himself.
     if (self.classname == "monster_bane" && self.waitmin) hp = 300; // This is zero after Bane spawns clones.
-    hit = FALSE;
     goal = self.goalentity;
     head = nextent (world);
     while (head) {
@@ -192,9 +191,8 @@ float(float d) ai_medic = { // [FUNCTION]
         if (!hp || (hp <= head.max_health)
 		    || ((self.flags & FL_CLIENT) && Align_NonHostile(self,head))) {
             self.goalentity = head; // QC_CloseEnough checks against goalentity.
-            hit = QC_CloseEnough(d);
-            if (hit) {
-                if (monster_revive (head, self)) {
+            if (QC_CloseEnough(d)) {
+                if (monster_revive(head,self)) {
                     self.fallen = head;
                     self.goalentity = goal;
                     return TRUE;
