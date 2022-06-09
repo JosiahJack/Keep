@@ -960,14 +960,20 @@ void(entity inflictor, entity attacker, float damage) baron_pain = {
     attacker = attacker;    // Appease FrikQcc.
 };
 
-void() baron_diea1  =[ $diea1,  baron_diea2  ] {};
+void() baron_diea1  =[ $diea1,  baron_diea2  ] {
+	self.reviveframestart = $diea6;
+	self.reviveframeend = $diea1;
+};
 void() baron_diea2  =[ $diea2,  baron_diea3  ] {ai_forward(2); monster_check_gib(); self.solid = SOLID_NOT;};
 void() baron_diea3  =[ $diea3,  baron_diea4  ] {ai_back(2); monster_check_gib();};
 void() baron_diea4  =[ $diea4,  baron_diea5  ] {ai_back(6);};
 void() baron_diea5  =[ $diea5,  baron_diea6  ] {ai_back(2); monster_death_postcheck();};
 void() baron_diea6  =[ $diea6,  baron_diea6  ] {ai_back(8); monster_deadbody_check();};
 
-void() baron_dieb1  =[ $dieb1,  baron_dieb2  ] {};
+void() baron_dieb1  =[ $dieb1,  baron_dieb2  ] {
+	self.reviveframestart = $dieb6;
+	self.reviveframeend = $dieb1;
+};
 void() baron_dieb2  =[ $dieb2,  baron_dieb3  ] {monster_check_gib(); self.solid = SOLID_NOT;};
 void() baron_dieb3  =[ $dieb3,  baron_dieb4  ] {ai_forward(7); monster_check_gib();};
 void() baron_dieb4  =[ $dieb4,  baron_dieb5  ] {};
@@ -985,25 +991,6 @@ void() baron_die = {
         else
             baron_dieb1 ();
     }
-};
-
-void() baron_revivea1  =[ $diea5,  baron_revivea2  ] {};
-void() baron_revivea2  =[ $diea4,  baron_revivea3  ] {};
-void() baron_revivea3  =[ $diea3,  baron_revivea4  ] {};
-void() baron_revivea4  =[ $diea2,  baron_revivea5  ] {};
-void() baron_revivea5  =[ $diea1,  baron_run6      ] {};
-
-void() baron_reviveb1  =[ $dieb5,  baron_reviveb2  ] {};
-void() baron_reviveb2  =[ $dieb4,  baron_reviveb3  ] {};
-void() baron_reviveb3  =[ $dieb3,  baron_reviveb4  ] {};
-void() baron_reviveb4  =[ $dieb2,  baron_reviveb5  ] {};
-void() baron_reviveb5  =[ $dieb1,  baron_run6      ] {};
-
-void() baron_revive = {
-    if ( self.frame == $dieb6 )
-        baron_reviveb1 ();
-    else
-        baron_revivea1 ();
 };
 
 void() monster_baron_precache = { // Baron files are derived from the Rapture pack.

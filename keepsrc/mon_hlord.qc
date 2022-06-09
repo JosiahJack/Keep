@@ -160,44 +160,10 @@ void() bane_die = {
         Bane_Speaks ("��� ���� ��� � ����� ���� ��� �����\n");
     else                    // ... You have not won yet!
         Bane_Speaks ("��� ���� ��� ��� ���� ��� ��� ����\n");
-    hknight_die ();
-};
-
-
-//============================================================================
-
-// REVIVE - - - - - - - - - - - - - - -
-void() hknight_revive1   =[ $death11,   hknight_revive2   ] {};
-void() hknight_revive2   =[ $death10,   hknight_revive3   ] {};
-void() hknight_revive3   =[ $death9,    hknight_revive4   ] {};
-void() hknight_revive4   =[ $death8,    hknight_revive5   ] {};
-void() hknight_revive5   =[ $death7,    hknight_revive6   ] {};
-void() hknight_revive6   =[ $death6,    hknight_revive7   ] {};
-void() hknight_revive7   =[ $death5,    hknight_revive8   ] {};
-void() hknight_revive8   =[ $death4,    hknight_revive9   ] {};
-void() hknight_revive9   =[ $death3,    hknight_revive10  ] {};
-void() hknight_revive10  =[ $death2,    hknight_revive11  ] {};
-void() hknight_revive11  =[ $death1,    hknight_revive12  ] {};
-void() hknight_revive12  =[ $stand1,    hknight_run1      ] {};
-
-void() hknight_reviveb1  =[ $deathb8,   hknight_reviveb2  ] {};
-void() hknight_reviveb2  =[ $deathb7,   hknight_reviveb3  ] {};
-void() hknight_reviveb3  =[ $deathb6,   hknight_reviveb4  ] {};
-void() hknight_reviveb4  =[ $deathb5,   hknight_reviveb5  ] {};
-void() hknight_reviveb5  =[ $deathb4,   hknight_reviveb6  ] {};
-void() hknight_reviveb6  =[ $deathb3,   hknight_reviveb7  ] {};
-void() hknight_reviveb7  =[ $deathb2,   hknight_reviveb8  ] {};
-void() hknight_reviveb8  =[ $deathb1,   hknight_revive12  ] {};
-
-void() hknight_revive = {
-    if ( self.frame == $deathb9 )
-        hknight_reviveb1 ();
-    else //if ( self.frame == $death10 )
-        hknight_revive1 ();
+    hknight_die();
 };
 
 // BANE JUMP
-
 void() Bane_JumpTouch;
 void(float d) hk_charge;
 

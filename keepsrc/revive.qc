@@ -59,11 +59,11 @@ float() monster_revive_finish = { // [FUNCTION]
 void() revive_frames = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 	self.think = revive_frames;
-	self.walkframe = self.walkframe + 1;
+	self.walkframe = self.walkframe - 1;
 	self.frame = self.reviveframestart - self.walkframe; // Revive is death in reverse!
 	particle(self.origin + vecrand(0,4,16),'0 0 100',9,15); // Magical particles...
 	particle(self.origin + vecrand(0,4,16),'0 0 100',41,15); // ...indicate this is unusual.
-	if (self.enemy) ai_face();	
+	if (self.enemy) ai_face();
 	if (self.frame <= self.reviveframeend) {
 		monster_revive_finish();
 		if (self.classmove != MON_MOVESTATIC) {
@@ -170,6 +170,7 @@ float(entity ent, entity god) monster_revive = { // [FUNCTION]
 	// to fuse with self and both will get stuck -- not good.
 	setsize(self,self.bbmins,self.bbmaxs);
 	self.walkframe = 0;
+	if (self.frame < self.reviveframestart) self.reviveframestart = self.frame;
 	self.th_revive();
     self = os;
     return TRUE;
@@ -187,8 +188,9 @@ float(float d) ai_medic = { // [FUNCTION]
     head = nextent (world);
     while (head) {
         if (head.flags & FL_MONSTER)
-        if (head.deadflag == DEAD_DEAD)
-        if (!hp || (hp <= head.max_health)) {
+        if (head.deadflag == DEAD_DEAD || head.health <= 0)
+        if (!hp || (hp <= head.max_health)
+		    || ((self.flags & FL_CLIENT) && Align_NonHostile(self,head))) {
             self.goalentity = head; // QC_CloseEnough checks against goalentity.
             hit = QC_CloseEnough(d);
             if (hit) {

@@ -1040,7 +1040,10 @@ void() ranger_axdecap7 =[ $axdecap7,  ranger_axdecap8 ] {};
 void() ranger_axdecap8 =[ $axdecap8,  decap_end       ] {};
 
 // Normal death
-void() ranger_diea1  =[ $deatha1,  ranger_diea2  ] {};
+void() ranger_diea1  =[ $deatha1,  ranger_diea2  ] {
+	self.reviveframestart = $deatha11;
+	self.reviveframeend = $deatha1;
+};
 void() ranger_diea2  =[ $deatha2,  ranger_diea3  ] {};
 void() ranger_diea3  =[ $deatha3,  ranger_diea4  ] {monster_drop();};
 void() ranger_diea4  =[ $deatha4,  ranger_diea5  ] {};
@@ -1052,7 +1055,10 @@ void() ranger_diea9  =[ $deatha9,  ranger_diea10 ] {};
 void() ranger_diea10 =[ $deatha10, ranger_diea11 ] {};
 void() ranger_diea11 =[ $deatha11, monster_end   ] {};
 
-void() ranger_dieb1  =[ $deathb1,  ranger_dieb2  ] {};
+void() ranger_dieb1  =[ $deathb1,  ranger_dieb2  ] {
+	self.reviveframestart = $deathb9;
+	self.reviveframeend = $deathb1;
+};
 void() ranger_dieb2  =[ $deathb2,  ranger_dieb3  ] {};
 void() ranger_dieb3  =[ $deathb3,  ranger_dieb4  ] {monster_drop();};
 void() ranger_dieb4  =[ $deathb4,  ranger_dieb5  ] {};
@@ -1062,7 +1068,10 @@ void() ranger_dieb7  =[ $deathb7,  ranger_dieb8  ] {};
 void() ranger_dieb8  =[ $deathb8,  ranger_dieb9  ] {};
 void() ranger_dieb9  =[ $deathb9,  monster_end   ] {};
 
-void() ranger_diec1  =[ $deathc1,  ranger_diec2  ] {};
+void() ranger_diec1  =[ $deathc1,  ranger_diec2  ] {
+	self.reviveframestart = $deathc15;
+	self.reviveframeend = $deathc1;
+};
 void() ranger_diec2  =[ $deathc2,  ranger_diec3  ] {};
 void() ranger_diec3  =[ $deathc3,  ranger_diec4  ] {monster_drop();};
 void() ranger_diec4  =[ $deathc4,  ranger_diec5  ] {};
@@ -1078,7 +1087,10 @@ void() ranger_diec13 =[ $deathc13, ranger_diec14 ] {};
 void() ranger_diec14 =[ $deathc14, ranger_diec15 ] {};
 void() ranger_diec15 =[ $deathc15, monster_end   ] {};
 
-void() ranger_died1  =[ $deathd1,  ranger_died2  ] {};
+void() ranger_died1  =[ $deathd1,  ranger_died2  ] {
+	self.reviveframestart = $deathd9;
+	self.reviveframeend = $deathd1;
+};
 void() ranger_died2  =[ $deathd2,  ranger_died3  ] {};
 void() ranger_died3  =[ $deathd3,  ranger_died4  ] {monster_drop();};
 void() ranger_died4  =[ $deathd4,  ranger_died5  ] {};
@@ -1088,7 +1100,10 @@ void() ranger_died7  =[ $deathd7,  ranger_died8  ] {};
 void() ranger_died8  =[ $deathd8,  ranger_died9  ] {};
 void() ranger_died9  =[ $deathd9,  monster_end   ] {};
 
-void() ranger_diee1  =[ $deathe1,  ranger_diee2  ] {};
+void() ranger_diee1  =[ $deathe1,  ranger_diee2  ] {
+	self.reviveframestart = $deathe9;
+	self.reviveframeend = $deathe1;
+};
 void() ranger_diee2  =[ $deathe2,  ranger_diee3  ] {};
 void() ranger_diee3  =[ $deathe3,  ranger_diee4  ] {monster_drop();};
 void() ranger_diee4  =[ $deathe4,  ranger_diee5  ] {};
@@ -1098,7 +1113,10 @@ void() ranger_diee7  =[ $deathe7,  ranger_diee8  ] {};
 void() ranger_diee8  =[ $deathe8,  ranger_diee9  ] {};
 void() ranger_diee9  =[ $deathe9,  monster_end   ] {};
 
-void() ranger_axdie1 =[ $axdeth1,  ranger_axdie2 ] {};
+void() ranger_axdie1 =[ $axdeth1,  ranger_axdie2 ] {
+	self.reviveframestart = $axdeth9;
+	self.reviveframeend = $axdeth1;
+};
 void() ranger_axdie2 =[ $axdeth2,  ranger_axdie3 ] {};
 void() ranger_axdie3 =[ $axdeth3,  ranger_axdie4 ] {monster_drop();};
 void() ranger_axdie4 =[ $axdeth4,  ranger_axdie5 ] {};
@@ -1128,8 +1146,7 @@ float(float dm) ranger_gib =
     return FALSE;
 };
 
-void() ranger_die =
-{
+void() ranger_die = {
     local   float   r;
     local   string  sfx;
 
@@ -1158,13 +1175,10 @@ void() ranger_die =
         return;
 
 // regular death
-    if (self.h2olevel == 3)
-    {
+    if (self.h2olevel == 3) {
         DeathBubbles(4);    // 20 is too many!
         sfx = "player/h2odeath.wav";
-    }
-    else
-    {
+    } else {
         r = ((random() * 4) & 3) + 1;
         if (r == 1)
             sfx = "player/death1.wav";
@@ -1195,137 +1209,35 @@ void() ranger_die =
         ranger_diee1();
 };
 
-// REVIVE - - - - - - - - - - - - - - -
-void() ranger_axvive1   =[ $axdeth8,  ranger_axvive2  ] {};
-void() ranger_axvive2   =[ $axdeth7,  ranger_axvive3  ] {};
-void() ranger_axvive3   =[ $axdeth6,  ranger_axvive4  ] {};
-void() ranger_axvive4   =[ $axdeth5,  ranger_axvive5  ] {};
-void() ranger_axvive5   =[ $axdeth4,  ranger_axvive6  ] {};
-void() ranger_axvive6   =[ $axdeth3,  ranger_axvive7  ] {};
-void() ranger_axvive7   =[ $axdeth2,  ranger_axvive8  ] {};
-void() ranger_axvive8   =[ $axdeth1,  ranger_axvive9  ] {};
-void() ranger_axvive9   =[ $axpain1,  ranger_run      ] {};
-
-void() ranger_revivea1  =[ $deatha10, ranger_revivea2  ] {};
-void() ranger_revivea2  =[ $deatha9,  ranger_revivea3  ] {};
-void() ranger_revivea3  =[ $deatha8,  ranger_revivea4  ] {};
-void() ranger_revivea4  =[ $deatha7,  ranger_revivea5  ] {};
-void() ranger_revivea5  =[ $deatha6,  ranger_revivea6  ] {};
-void() ranger_revivea6  =[ $deatha5,  ranger_revivea7  ] {};
-void() ranger_revivea7  =[ $deatha4,  ranger_revivea8  ] {};
-void() ranger_revivea8  =[ $deatha3,  ranger_revivea9  ] {};
-void() ranger_revivea9  =[ $deatha2,  ranger_revivea10 ] {};
-void() ranger_revivea10 =[ $deatha1,  ranger_run       ] {};
-
-void() ranger_reviveb1  =[ $deathb8,  ranger_reviveb2  ] {};
-void() ranger_reviveb2  =[ $deathb7,  ranger_reviveb3  ] {};
-void() ranger_reviveb3  =[ $deathb6,  ranger_reviveb4  ] {};
-void() ranger_reviveb4  =[ $deathb5,  ranger_reviveb5  ] {};
-void() ranger_reviveb5  =[ $deathb4,  ranger_reviveb6  ] {};
-void() ranger_reviveb6  =[ $deathb3,  ranger_reviveb7  ] {};
-void() ranger_reviveb7  =[ $deathb2,  ranger_reviveb8  ] {};
-void() ranger_reviveb8  =[ $deathb1,  ranger_run       ] {};
-
-void() ranger_revivec1  =[ $deathc14, ranger_revivec2  ] {};
-void() ranger_revivec2  =[ $deathc13, ranger_revivec3  ] {};
-void() ranger_revivec3  =[ $deathc12, ranger_revivec4  ] {};
-void() ranger_revivec4  =[ $deathc11, ranger_revivec5  ] {};
-void() ranger_revivec5  =[ $deathc10, ranger_revivec6  ] {};
-void() ranger_revivec6  =[ $deathc9,  ranger_revivec7  ] {};
-void() ranger_revivec7  =[ $deathc8,  ranger_revivec8  ] {};
-void() ranger_revivec8  =[ $deathc7,  ranger_revivec9  ] {};
-void() ranger_revivec9  =[ $deathc6,  ranger_revivec10 ] {};
-void() ranger_revivec10 =[ $deathc5,  ranger_revivec11 ] {};
-void() ranger_revivec11 =[ $deathc4,  ranger_revivec12 ] {};
-void() ranger_revivec12 =[ $deathc3,  ranger_revivec13 ] {};
-void() ranger_revivec13 =[ $deathc2,  ranger_revivec14 ] {};
-void() ranger_revivec14 =[ $deathc1,  ranger_run       ] {};
-
-void() ranger_revived1  =[ $deathd8,  ranger_revived2  ] {};
-void() ranger_revived2  =[ $deathd7,  ranger_revived3  ] {};
-void() ranger_revived3  =[ $deathd6,  ranger_revived4  ] {};
-void() ranger_revived4  =[ $deathd5,  ranger_revived5  ] {};
-void() ranger_revived5  =[ $deathd4,  ranger_revived6  ] {};
-void() ranger_revived6  =[ $deathd3,  ranger_revived7  ] {};
-void() ranger_revived7  =[ $deathd2,  ranger_run       ] {};
-
-void() ranger_revivee1  =[ $deathe8,  ranger_revivee2  ] {};
-void() ranger_revivee2  =[ $deathe7,  ranger_revivee3  ] {};
-void() ranger_revivee3  =[ $deathe6,  ranger_revivee4  ] {};
-void() ranger_revivee4  =[ $deathe5,  ranger_revivee5  ] {};
-void() ranger_revivee5  =[ $deathe4,  ranger_revivee6  ] {};
-void() ranger_revivee6  =[ $deathe3,  ranger_revivee7  ] {};
-void() ranger_revivee7  =[ $deathe2,  ranger_revivee8  ] {};
-void() ranger_revivee8  =[ $deathe1,  ranger_run       ] {};
-
-void() ranger_revive =
-{
-    if ( self.frame == $axdeth9 )
-        ranger_axvive1 ();
-    else if ( self.frame == $deatha11 )
-        ranger_revivea1 ();
-    else if ( self.frame == $deathb9 )
-        ranger_reviveb1 ();
-    else if ( self.frame == $deathc15 )
-        ranger_revivec1 ();
-    else if ( self.frame == $deathd9 )
-        ranger_revived1 ();
-    else //if ( self.frame == $deathe9 )
-        ranger_revivee1 ();
+void(float hello) ranger_sight = {
+    if (hello) sound (self, CHAN_VOICE, "ranger/idle.wav", 1, ATTN_NORM);
+    else if (random() < 0.5) sound (self, CHAN_VOICE, "ranger/sight1.wav", 1, ATTN_NORM);
+    else sound (self, CHAN_VOICE, "ranger/sight2.wav", 1, ATTN_NORM);
 };
 
-
-//============================================================================
-
-// OTHER - - - - - - - - - - - - - - - -
-void(float hello) ranger_sight =
-{
-    if (hello)
-        sound (self, CHAN_VOICE, "ranger/idle.wav", 1, ATTN_NORM);
-    else if (random() < 0.5)
-        sound (self, CHAN_VOICE, "ranger/sight1.wav", 1, ATTN_NORM);
-    else
-        sound (self, CHAN_VOICE, "ranger/sight2.wav", 1, ATTN_NORM);
-};
-
-void() ranger_cache =
-{
-// All of the player models and sounds are already precached in 'world.qc'.
-// Update 6/15/09:  Ranger uses a modified player model.
+void() ranger_cache = {
     precache_model ("progs/ranger.mdl");
-
-// Other monster sounds.
     precache_sound ("axeman/axe1.wav");
     precache_sound ("ranger/idle.wav");     // Was 'soldier/idle.wav'.
     precache_sound ("ranger/sight1.wav");
     precache_sound ("ranger/sight2.wav");
 };
 
-void() ranger_stats =
-{
-    local   float   sklevel;
-    local   float   axe, am;
+void() ranger_stats = {
+    local float sklevel, axe, am, s, n, r, c, arm;
 
     am = 0;
     sklevel = cvar("skill");
     sklevel = floor(sklevel);
-    if (cranked)
-        sklevel = sklevel + 1;
-    if (sklevel >= 2)
-        self.speed  = 32;   // Running speed.
-    else
-        self.speed  = 20;   // Walking speed.
+    if (cranked) sklevel = sklevel + 1;
+    if (sklevel >= 2) self.speed  = 32;   // Running speed.
+    else self.speed  = 20;   // Walking speed.
 
-    if ( !(self.drama1 || (self.items & ITx_ALL_WEAPONS)) )
-    {   // No predefined weapons.  Give default setup.
-        local   float   s, n, r, c, arm;
-
+    if ( !(self.drama1 || (self.items & ITx_ALL_WEAPONS)) ) {   // No predefined weapons.  Give default setup.
         s = WAR_SHOTGUN;
         n = WAR_NAILGUN;
         r = c = arm = 0;
-
-        if (sklevel >= 2)
-        {
+        if (sklevel >= 2) {
             r = WAR_GRENADE_LAUNCHER;
             if (sklevel >= 3)
                 arm = IT_ARMOR3;

@@ -97,8 +97,6 @@
 // * Grenade damage is based on dmg key (default = player)
 //=============================================================================
 
-void(vector org, vector dir, float proj_type, float proj_speed) launch_plasma;
-void(vector org, vector dir, float proj_type, float proj_speed) launch_projectile;
 entity(entity attacker, vector org, vector dir, float radius, float scope) SuperRocket_Target;
 void() MultiGrenadeExplode;
 void() ProximityBomb;
@@ -326,6 +324,8 @@ vector ( vector org, vector targofs) SetNewmisCommonRocketParameters = {
 };
 
 void(vector org, vector dir, float proj_type, float proj_speed) launch_projectile = { // [FUNCTION]
+	local vector vec;
+	
 	if (entity_pcontent(org)) return; // Check if there is space to spawn entity
 
 	newmis = spawn ();
@@ -509,7 +509,10 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 		newmis.movetype = MOVETYPE_TOSS;
 		newmis.speed = 800; // Was 600, too slow.
 		vec = '0 0 200';
-		if (self.v_angle_x) {vec = vec + crandom()*v_right*10; vec = vec + crandom()*v_up*10;}
+		if (self.v_angle_x) {
+			vec = vec + crandom()*v_right*10;
+			vec = vec + crandom()*v_up*10;
+		}
 		newmis.velocity    = (dir * newmis.speed) + vec;
 		newmis.angles      = vectoangles(newmis.velocity);
 		newmis.dmg         = 160;

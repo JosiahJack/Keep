@@ -157,7 +157,10 @@ void(entity inflictor, entity attacker, float damage)	axeg_pain = {
 	}
 };
 
-void()	axeg_die1	=[	$axdeth1,	axeg_die2	] {};
+void()	axeg_die1	=[	$axdeth1,	axeg_die2	] {
+	self.reviveframestart = $axdeth9;
+	self.reviveframeend = $axdeth1;
+};
 void()	axeg_die2	=[	$axdeth2,	axeg_die3	] {monster_check_gib();};
 void()	axeg_die3	=[	$axdeth3,	axeg_die4	] {monster_check_gib(); self.solid = SOLID_NOT;};
 void()	axeg_die4	=[	$axdeth4,	axeg_die5	] {};
@@ -210,8 +213,6 @@ void() monster_axegrunt = {
 	self.pain_flinch = 20;				// Easy to pain
 	self.pain_longanim = TRUE;			// can be chopped with shadow axe
 	self.steptype = FS_TYPEMEDIUM;		// Average feet
-	self.reviveframestart = 49;
-	self.reviveframeend = 41;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
 	self.th_stand = axeg_stand1;
 	self.th_walk = axeg_stand1;

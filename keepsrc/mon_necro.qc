@@ -980,7 +980,10 @@ void(entity inflictor, entity attacker, float damage) necro_pain = {
 };
 
 // Standard death functions.
-void() necro_die1  =[ $deathA2,  necro_die2  ] {};
+void() necro_die1  =[ $deathA2,  necro_die2  ] {
+	self.reviveframestart = $deathA20;
+	self.reviveframeend = $deathA2;
+};
 void() necro_die2  =[ $deathA4,  necro_die3  ] {monster_check_gib();};
 void() necro_die3  =[ $deathA6,  necro_die4  ] {monster_check_gib();};
 void() necro_die4  =[ $deathA8,  necro_die5  ] {};
@@ -1007,84 +1010,71 @@ void() necro_die = {
 	}
 };
 
-// REVIVE - - - - - - - - - - - - - - -
-void() necro_revive1  =[ $deathA19, necro_revive2  ] {};
-void() necro_revive2  =[ $deathA18, necro_revive3  ] {};
-void() necro_revive3  =[ $deathA16, necro_revive4  ] {};
-void() necro_revive4  =[ $deathA14, necro_revive5  ] {};
-void() necro_revive5  =[ $deathA12, necro_revive6  ] {};
-void() necro_revive6  =[ $deathA10, necro_revive7  ] {};
-void() necro_revive7  =[ $deathA8,  necro_revive8  ] {};
-void() necro_revive8  =[ $deathA6,  necro_revive9  ] {};
-void() necro_revive9  =[ $deathA4,  necro_revive10 ] {};
-void() necro_revive10 =[ $deathA2,  necro_revive11 ] {};
-void() necro_revive11 = {self.th_run();};
-
 void() necro_cache = {
-    precache_model ("progs/drake/necro.mdl");
-    precache_model ("progs/drake/h_necro.mdl");
-    precache_model ("progs/drake/r_bolt.mdl");
-    precache_model ("progs/drake/smartbal.mdl");
-    precache_model ("progs/w_spike.mdl");
-    precache_model ("progs/drake/nec_rune.mdl");
-    precache_model ("progs/drake/nec_rod1.mdl");
-    precache_model ("progs/drake/nec_rod2.mdl");
-    precache_model ("progs/drake/nec_rod3.mdl");
-    precache_model ("progs/drake/s_spark.spr");
-    precache_model ("progs/drake/ice.mdl");
-    precache_model ("progs/drake/k_ball.mdl");
-    precache_model ("progs/drake/s_wave2.spr");
-    precache_model ("progs/drake/akarrow.mdl");
-    precache_model ("progs/drake/hk_golem.mdl");
-    precache_model ("progs/drake/h_hkolem.mdl");
-    precache_model ("progs/drake/st_gib1.mdl");
-    precache_model ("progs/drake/st_gib2.mdl");
-    precache_model ("progs/drake/st_gib3.mdl");
-    precache_sound ("drake/curse/x_armor.wav");
-    precache_sound ("drake/necro/att_a.wav");
-    precache_sound ("drake/necro/att_a2.wav");
-    precache_sound ("drake/necro/att_w.wav");
-    precache_sound ("drake/necro/death1.wav");
-    precache_sound ("drake/necro/death2.wav");
-    precache_sound ("drake/necro/idle1.wav");
-    precache_sound ("drake/necro/idle2.wav");
-    precache_sound ("drake/necro/pain1.wav");
-    precache_sound ("drake/necro/sight1.wav");
-    precache_sound ("zerstorer/trog/frblfly.wav");
-    precache_sound ("drake/skullwiz/push.wav");
-    precache_sound ("drake/curse/x_armor.wav");
-    precache_sound ("drake/curse/x_damage.wav");
-    precache_sound ("drake/curse/x_muddle.wav");
-    precache_sound ("drake/curse/x_slow.wav");
-    precache_sound ("drake/curse/x_weaken.wav");
-    precache_sound ("kinn/misc/metalbrk.wav");
-    precache_sound ("drake/misc/woodbrk.wav");
-    precache_sound ("drake/necro/curse.wav");
-    precache_sound ("drake/necro/pop.wav");
-    precache_sound ("drake/necro/pop1.wav");
-    precache_sound ("drake/necro/pop2.wav");
-    precache_sound ("drake/necro/pop3.wav");
-    precache_sound ("drake/necro/pop4.wav");
-    precache_sound ("drake/necro/summon.wav");
-    precache_sound ("drake/dragon/icehit.wav");
-    precache_sound ("hipnotic/grem/attack.wav");     // Replaces Hexen2 imp slash sfx.
-    precache_sound ("drake/imp/die.wav");
-    precache_sound ("drake/imp/fireball.wav");
-    precache_sound ("drake/imp/fly.wav");
-    precache_sound ("drake/imp/flywater.wav");
-    precache_sound ("drake/imp/shard.wav");
-    precache_sound ("drake/imp/swoop.wav");
-    precache_sound ("drake/imp/up.wav");
-    precache_sound ("drake/misc/pushston.wav");
-    precache_sound ("drake/misc/wallbrk.wav");
-    precache_sound ("ne_ruins/h2golem/death.wav");
-    precache_sound ("drake/golem/sight.wav");
-    precache_sound ("drake/golem/step.wav");
-    precache_sound ("hknight/grunt.wav");
-    precache_sound ("hknight/slash1.wav");
-    precache_sound ("drake/misc/wallbrk.wav");
-    precache_sound ("shambler/smack.wav");
-    precache_sound ("drake/weapons/mirv1.wav");   // In case MIRV is forbidden.
+    precache_model("progs/drake/necro.mdl");
+    precache_model("progs/drake/h_necro.mdl");
+    precache_model("progs/drake/r_bolt.mdl");
+    precache_model("progs/drake/smartbal.mdl");
+    precache_model("progs/w_spike.mdl");
+    precache_model("progs/drake/nec_rune.mdl");
+    precache_model("progs/drake/nec_rod1.mdl");
+    precache_model("progs/drake/nec_rod2.mdl");
+    precache_model("progs/drake/nec_rod3.mdl");
+    precache_model("progs/drake/s_spark.spr");
+    precache_model("progs/drake/ice.mdl");
+    precache_model("progs/drake/k_ball.mdl");
+    precache_model("progs/drake/s_wave2.spr");
+    precache_model("progs/drake/akarrow.mdl");
+    precache_model("progs/drake/hk_golem.mdl");
+    precache_model("progs/drake/h_hkolem.mdl");
+    precache_model("progs/drake/st_gib1.mdl");
+    precache_model("progs/drake/st_gib2.mdl");
+    precache_model("progs/drake/st_gib3.mdl");
+    precache_sound("drake/curse/x_armor.wav");
+    precache_sound("drake/necro/att_a.wav");
+    precache_sound("drake/necro/att_a2.wav");
+    precache_sound("drake/necro/att_w.wav");
+    precache_sound("drake/necro/death1.wav");
+    precache_sound("drake/necro/death2.wav");
+    precache_sound("drake/necro/idle1.wav");
+    precache_sound("drake/necro/idle2.wav");
+    precache_sound("drake/necro/pain1.wav");
+    precache_sound("drake/necro/sight1.wav");
+    precache_sound("zerstorer/trog/frblfly.wav");
+    precache_sound("drake/skullwiz/push.wav");
+    precache_sound("drake/curse/x_armor.wav");
+    precache_sound("drake/curse/x_damage.wav");
+    precache_sound("drake/curse/x_muddle.wav");
+    precache_sound("drake/curse/x_slow.wav");
+    precache_sound("drake/curse/x_weaken.wav");
+    precache_sound("kinn/misc/metalbrk.wav");
+    precache_sound("drake/misc/woodbrk.wav");
+    precache_sound("drake/necro/curse.wav");
+    precache_sound("drake/necro/pop.wav");
+    precache_sound("drake/necro/pop1.wav");
+    precache_sound("drake/necro/pop2.wav");
+    precache_sound("drake/necro/pop3.wav");
+    precache_sound("drake/necro/pop4.wav");
+    precache_sound("drake/necro/summon.wav");
+    precache_sound("drake/dragon/icehit.wav");
+    precache_sound("hipnotic/grem/attack.wav");     // Replaces Hexen2 imp slash sfx.
+    precache_sound("drake/imp/die.wav");
+    precache_sound("drake/imp/fireball.wav");
+    precache_sound("drake/imp/fly.wav");
+    precache_sound("drake/imp/flywater.wav");
+    precache_sound("drake/imp/shard.wav");
+    precache_sound("drake/imp/swoop.wav");
+    precache_sound("drake/imp/up.wav");
+    precache_sound("drake/misc/pushston.wav");
+    precache_sound("drake/misc/wallbrk.wav");
+    precache_sound("ne_ruins/h2golem/death.wav");
+    precache_sound("drake/golem/sight.wav");
+    precache_sound("drake/golem/step.wav");
+    precache_sound("hknight/grunt.wav");
+    precache_sound("hknight/slash1.wav");
+    precache_sound("drake/misc/wallbrk.wav");
+    precache_sound("shambler/smack.wav");
+    precache_sound("drake/weapons/mirv1.wav");   // In case MIRV is forbidden.
 };
 
 void() setup_necro;
@@ -1183,7 +1173,6 @@ void() setup_necro = {
         self.th_melee   = necro1_melee;
     } else {
 		// The other necroclass defaults for nonboss
-		self.th_revive  = necro_revive1;
 		self.purse = '1 0.5 0.5';  // max = 1, 50% for 1, 50% gem.
 		self.purse_x = 1 + self.height;
 	}

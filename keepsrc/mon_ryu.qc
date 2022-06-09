@@ -16,6 +16,12 @@ $frame decap1 decap2 decap3 decap4 decap5 decap6 decap7 decap8 decap9
 $frame decap10 decap11 decap12 decap13
 $frame decapb1 decapb2 decapb3 decapb4 decapb5 decapb6
 
+float   RYUSKIN_RED        = 0;
+float   RYUSKIN_GREEN      = 1;
+float   RYUSKIN_BLUE       = 2;
+float   RYUSKIN_WHITE      = 3;
+float   RYUSKIN_GOLD       = 4; // Kept only for Soul of Evil.
+
 //  This checks whether the dragon is allowed to attack its target when one is in air while the other is in liquid.
 float() Ryu_BlockCrossfire = {
     local float elements;
@@ -867,7 +873,10 @@ void() wyrm_countdown = {
         self.think = wyrm_explode;
 };
 
-void() wyrm_die1  =[ $death1,  wyrm_die2  ] {};
+void() wyrm_die1  =[ $death1,  wyrm_die2  ] {
+	self.reviveframestart = $death13;
+	self.reviveframeend = $death1;
+};
 void() wyrm_die2  =[ $death2,  wyrm_die3  ] {};
 void() wyrm_die3  =[ $death3,  wyrm_die4  ] {self.solid      = SOLID_NOT;};
 void() wyrm_die4  =[ $death4,  wyrm_die5  ] {};
@@ -884,7 +893,10 @@ void() wyrm_die14 =[ $death13, wyrm_die15 ] {death_puff(); self.nextthink = time
 void() wyrm_die15 =[ $death13, wyrm_die16 ] {death_puff(); self.nextthink = time + 0.2;};
 void() wyrm_die16 =[ $death13, wyrm_die16 ] {death_puff(); wyrm_countdown();};
 
-void() wyrm_dieb1  =[ $deathb1,  wyrm_dieb2  ] {};
+void() wyrm_dieb1  =[ $deathb1,  wyrm_dieb2  ] {
+	self.reviveframestart = $deathb6;
+	self.reviveframeend = $deathb1;
+};
 void() wyrm_dieb2  =[ $deathb2,  wyrm_dieb3  ] {};
 void() wyrm_dieb3  =[ $deathb3,  wyrm_dieb4  ] {};
 void() wyrm_dieb4  =[ $deathb4,  wyrm_dieb5  ] {};
@@ -919,33 +931,6 @@ void() wyrm_die = {
         wyrm_dieb1 ();
 };
 
-void() dragon_revive1  =[ $death12, dragon_revive2  ] {};
-void() dragon_revive2  =[ $death11, dragon_revive3  ] {};
-void() dragon_revive3  =[ $death10, dragon_revive4  ] {};
-void() dragon_revive4  =[ $death9,  dragon_revive5  ] {};
-void() dragon_revive5  =[ $death8,  dragon_revive6  ] {};
-void() dragon_revive6  =[ $death7,  dragon_revive7  ] {};
-void() dragon_revive7  =[ $death6,  dragon_revive8  ] {};
-void() dragon_revive8  =[ $death5,  dragon_revive9  ] {};
-void() dragon_revive9  =[ $death4,  dragon_revive10 ] {};
-void() dragon_revive10 =[ $death3,  dragon_revive11 ] {};
-void() dragon_revive11 =[ $death2,  dragon_revive12 ] {};
-void() dragon_revive12 =[ $death1,  ryu_run1      ] {};
-
-void() dragon_reviveb1 =[ $deathb5, dragon_reviveb2 ] {};
-void() dragon_reviveb2 =[ $deathb4, dragon_reviveb3 ] {};
-void() dragon_reviveb3 =[ $deathb3, dragon_reviveb4 ] {};
-void() dragon_reviveb4 =[ $deathb2, dragon_pain4    ] {};
-
-void() dragon_revive = {
-    // Choose revive scene based on current frame.
-    self.flags = (self.flags - (self.flags & FL_ONGROUND)) | FL_FLY;
-    if ( self.frame == $deathb6 )
-        dragon_reviveb1 ();
-    else
-        dragon_revive1 ();
-};
-
 void() dragon_win = {
 	ryu_sfx_idle();
     if (self.movetarget || self.charmer)
@@ -953,12 +938,6 @@ void() dragon_win = {
     else
         self.th_stand ();
 };
-
-float   RYUSKIN_RED        = 0;
-float   RYUSKIN_GREEN      = 1;
-float   RYUSKIN_BLUE       = 2;
-float   RYUSKIN_WHITE      = 3;
-float   RYUSKIN_GOLD       = 4; // Kept only for Soul of Evil.
 
 void() monster_ryu_precache = {
     precache_model ("progs/drake/dr1_head.mdl");  // Gib (head)
@@ -1089,7 +1068,6 @@ void() monster_ryu = {
         self.th_run     = ryu_run1;
         self.th_die     = dragon_die;
         self.th_melee   = dragon_strike;
-        self.th_revive  = dragon_revive;
 		if (self.bboxtype < 1) self.bboxtype = BBOX_RYU;
 		if (self.health < 1) self.health = 750;
 		self.gibhealth = -90;

@@ -279,6 +279,26 @@ void() Touch_Projectile = { // [FUNCTION]
 				self = stemp;
 				Burn_Add(other,self.owner,self.dmg);
 			} else Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_LAVANAILS,other.pain_sound,"");
+			
+			// Check for any nail reflection?
+			if (other.reflectnails && random() < other.resist_lava_nails) {
+				org = self.origin;
+				// Random chance that nail will reflect straight back
+				if (random() < 0.2 && self.owner) 
+					dir = normalize(self.owner.origin - org);
+				else {
+					// Pick random location instead
+					// Flatten the Z axis so the reflection looks less random
+					vec = vecrand(0,100,1);
+					vec_z = random()*25;
+					vec = vec + org;
+					dir = normalize(vec - org);
+				}
+				// Switch around self to make sure reflection happens once
+				tself = self; self = other;
+				launch_projectile(org, dir, CT_PROJ_REFLNG, SPEED_REFLECTION);
+				self = tself;
+			}
 			self.projeffect = 0;
 
 			if (other.resist_fire > 0) self.dmg = self.dmg * (1 - other.resist_fire); // Change damage after applying burning for maximum burn life.
@@ -1199,27 +1219,21 @@ void() Thor_Touch = { // [FUNCTION]
         sound (self, CHAN_WEAPON, "zombie/z_hit.wav", 1, ATTN_NORM);
         T_Damage(other, self, self.master, damage, DAMARMOR);
         if (self.ammo_cells > 0) {
-            damage = self.dmg * 0.7;
-            damage = damage * 1.5;
+            damage = self.dmg;
             org = Midpoint(self.master);
             if (vlen(self.origin - org) > damage + 40) { // Discharge.
                 self.ammo_cells = 0;
                 dmg1 = (0.8 + random()*0.2) * self.dmg; // Combine two different sources of damage into one. dmg1 = Splash damage, dmg2 = Discharge.
-                if (!Align_Opposing(other, self.master)) { // Unlike plasma, this explosion discharges not once, but twice.
-                    dmg2 = 0;   // Discharge would not hit target.
-                } else {
-                    dmg2 = self.dmg;
-                    dmg2 = dmg2 * 1.5;
+                if (Align_Opposing(other, self.master)) { // Discharge would not hit target. 
+                    dmg2 = self.dmg * 1.5; // Unlike plasma, this explosion discharges not once, but twice.
                 }
 
-                // Send monsters flying.
-                T_Damage(other, self, self.master, dmg1 + dmg2, DAMARMOR);
-                if (!other.bossflag && (other.health > 0) && other != self.master) {
+                if (!other.bossflag && (other.health > 0) && other.health < 120 && other != self.master) {
 					damage_attacker = self.master;
 					damage_velocity = VEC_ORIGIN;
-					other.health = other.health - other.max_health + other.gibhealth - 1;
-					Killed(other,self.master);
+					dmg1 = other.health - other.gibhealth + 1;
 				}
+				T_Damage(other, self, self.master, dmg1 + dmg2, DAMARMOR); // Send monsters flying.
                 T_RadiusDamage(self,self.master,damage,other,DAMAGEALL);
 
 				// Don't move sprite back because hammer is still there.
@@ -1227,7 +1241,7 @@ void() Thor_Touch = { // [FUNCTION]
                 Rocket_Explosion2(self.origin, 244, 3);
                 Thor_Discharge(); // Spawn new, separate explosion entity.
                 if (self.master.tome_finished) {
-                    ShockWave (self.origin + '0 0 4', RING_BLUE, 6, "progs/drake/s_wave.spr",FALSE);
+                    ShockWave(self.origin + '0 0 4', RING_BLUE, 6, "progs/drake/s_wave.spr",FALSE);
                     swap = self;
                     self = self.master;
 					Quake_Spawn(self,800,10,self.origin,TRUE,2,VEC_QUAKE);

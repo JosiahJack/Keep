@@ -99,6 +99,7 @@ float Hip_ThrewMjolnir();
 void(vector lstart, entity lsource, float ldamage) LightningReflection;
 void() player_lava_nail1;
 void() player_lava_snail1;
+float(float dist) ai_medic;
 
 void(float reload) W_Reload = { // [FUNCTION]
 	if ((self.flags & FL_CLIENT) && self.perms & POW_HASTE) reload = reload / 2;
@@ -315,6 +316,35 @@ void (float stat) HIP_FireLaser = { // [FUNCTION]
 	self.punchangle_x = CONTENT_EMPTY;
 };
 
+float(vector source, float axedmg) GibFloorBody = {
+	local vector vec, org;
+	local entity onflr;
+	local float src_dist, dotprod;
+	
+	// See if there are any bodies lying around
+	onflr = find(world, bodyonflr, MON_ONFLR);
+	while (onflr) {
+		src_dist = vlen(source - onflr.origin);
+		if (src_dist < RANGE_CHOPAXE) {			// Is the body close to the player?
+			org = onflr.origin - '0 0 16';		// move origin close to floor
+			makevectors (self.v_angle);			// Calculate viewing angle
+			vec = normalize (org - self.origin);
+			dotprod = vec * v_forward;
+			if (dotprod > 0.6) {				// Is the body infront of the player
+				onflr.origin = org;				// Move gib closer to floor
+				if (self.weapon == IT2_MJOLNIR && !self.selfweaponismoditems) {
+					dprint("Slam revive!\n");
+					if (!ai_medic(64)) monster_flrbody_gib(onflr, axedmg*4);
+				} else monster_flrbody_gib(onflr, axedmg*4); // Now a function in ai_gibs since it's used by boil explosion as well
+				self.show_hostile = time + 1;	// wake monsters up, we hit stuff
+				return TRUE;														// Finished
+			}
+		}
+		onflr = find(onflr,bodyonflr, MON_ONFLR); // See if there are anymore bodies close by
+	}
+	return FALSE;
+};
+
 void () HIP_FireMjolnir = { // [FUNCTION]
 	local vector org, source, tvec;
 	local float damage;
@@ -327,6 +357,8 @@ void () HIP_FireMjolnir = { // [FUNCTION]
     if (Hip_ThrewMjolnir()) return;
 
 	W_Reload(0.4);
+	if (GibFloorBody(source,200)) return;
+	
 	source = (self.origin + '0.000 0.000 16.000');
 	makevectors (self.v_angle);
 	traceline (source,(source + (v_forward * RANGE_PLAYAXE)),FALSE,self);
@@ -494,9 +526,8 @@ void() W_FireSidewinder = { // [FUNCTION]
 void() W_FireAirFist = { launch_horn(); }; // Redirect for consistent and clear naming. -Qmaster
 
 void() W_FireAxe = { // [FUNCTION]
-	local vector source, org, vec;
-	local float src_dist, dotprod, axedmg;
-	local entity onflr;
+	local vector source, org;
+	local float axedmg;
 
 	makevectors (self.v_angle);				// Player forward angle
 	source = self.origin + '0 0 16';		// Move source point up body
@@ -513,24 +544,7 @@ void() W_FireAxe = { // [FUNCTION]
 	}		 
 
 	if (self.moditems & IT_UPGRADE_AXE || self.tome_finished) {
-		// See if there are any bodies lying around
-		onflr = find(world, bodyonflr, MON_ONFLR);
-		while (onflr) {
-			src_dist = vlen(source - onflr.origin);
-			if (src_dist < RANGE_CHOPAXE) {			// Is the body close to the player?
-				org = onflr.origin - '0 0 16';		// move origin close to floor
-				makevectors (self.v_angle);			// Calculate viewing angle
-				vec = normalize (org - self.origin);
-				dotprod = vec * v_forward;
-				if (dotprod > 0.6) {				// Is the body infront of the player
-					onflr.origin = org;				// Move gib closer to floor
-					monster_flrbody_gib(onflr, axedmg*4); // Now a function in ai_gibs since it's used by boil explosion as well
-					self.show_hostile = time + 1;	// wake monsters up, we hit stuff
-					return;														// Finished
-				}
-			}
-			onflr = find(onflr,bodyonflr, MON_ONFLR); // See if there are anymore bodies close by
-		}
+		if (GibFloorBody(source,axedmg)) return;
 	}
 
 	traceline (source, source + (v_forward* RANGE_PLAYAXE), FALSE, self); // Trace forward and see if the axe has hit anything?
@@ -597,34 +611,7 @@ void() W_FireSaw = { // [FUNCTION]
 
 	makevectors(self.v_angle); // Calculate viewing angle
 	source = self.origin + '0 0 16'; // Move source point up body
-	onflr = find(world, bodyonflr, MON_ONFLR);
-	while (onflr) { // See if there are any bodies lying around
-		src_dist = vlen(source - onflr.origin);
-		if (src_dist < RANGE_CHOPAXE) {			// Is the body close to the player?
-			org = onflr.origin - '0 0 16';		// move origin close to floor	
-			vec2 = normalize (org - self.origin);
-			dotprod = vec2 * v_forward;
-			if (dotprod > 0.6) {				// Is the body infront of the player
-				onflr.origin = org;				// Move gib closer to floor
-				onflr.bodyonflr = string_null;	// no more body gibbing
-				tself = self; tother = other;	// save self/other
-				self = onflr; other = tself;	// switch around
-				if (onflr.classgroup == CG_ZOMBIE) {
-					self.health = 0;
-					Killed(onflr, tself);
-				} else {
-					self.max_health = MON_NOGIBVELOCITY; // use minimal velocity
-					monster_ThrowGib();			// throw parts
-				}
-				
-				self = tself; other = tother;	// switch back
-				SpawnBlood (onflr, onflr.origin, '0 0 50', axedmg*4,0);
-				return;																// Finished
-			}
-		}
-		// See if there are anymore bodies close by
-		onflr = find(onflr,bodyonflr, MON_ONFLR);
-	}
+	if (GibFloorBody(source, 200)) return;
 
     spot = self.origin + '0 0 16';      // 'source'
     traceline (spot, spot + v_forward*64, FALSE, self);

@@ -415,7 +415,11 @@ void(entity inflictor, entity attacker, float damage) archer_pain = {
     attacker = attacker;    // FrikQcc warning squelch!
 };
 
-void() archer_die1  =[ $deathA2,  archer_die2  ] {ai_back(3);};
+void() archer_die1  =[ $deathA2,  archer_die2  ] {
+	ai_back(3);
+	self.reviveframestart = $deathA22;
+	self.reviveframeend = $deathA2;
+};
 void() archer_die2  =[ $deathA4,  archer_die3  ] {ai_back(2);};
 void() archer_die3  =[ $deathA6,  archer_die4  ] {ai_back(2); self.solid = SOLID_NOT; DropBackpack(); };
 void() archer_die4  =[ $deathA8,  archer_die5  ] {ai_back(4);};
@@ -515,8 +519,6 @@ void() monster_archer = {
     self.th_checkattack = ArcherCheckAttack;
     self.th_spawn   = monster_archer;
     self.attack_state   = AS_FLANKING;
-	self.reviveframestart = 29;
-	self.reviveframeend = 8;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to 0 to be consistent.
     if (!self.classtype) self.classtype = CT_MONARCHER;
     self.classgroup = CG_KNIGHT;
