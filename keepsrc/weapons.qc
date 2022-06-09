@@ -333,8 +333,9 @@ float(vector source, float axedmg) GibFloorBody = {
 			if (dotprod > 0.6) {				// Is the body infront of the player
 				onflr.origin = org;				// Move gib closer to floor
 				if (self.weapon == IT2_MJOLNIR && !self.selfweaponismoditems) {
-					dprint("Slam revive!\n");
-					if (!ai_medic(64)) monster_flrbody_gib(onflr, axedmg*4);
+					if (ai_medic(64)) {
+						dprint("Slam revive!\n");
+					} else monster_flrbody_gib(onflr, axedmg*4);
 				} else monster_flrbody_gib(onflr, axedmg*4); // Now a function in ai_gibs since it's used by boil explosion as well
 				self.show_hostile = time + 1;	// wake monsters up, we hit stuff
 				return TRUE;														// Finished

@@ -311,7 +311,6 @@ void(string mname) BeMonsterFromString = {
 	spawner = self;
 
 	newspawn = spawn();
-	// copyentity(spawner,newspawn); // From spawner to self
 	self = newspawn;
 	setorigin(self,spawner.origin);
 

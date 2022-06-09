@@ -559,6 +559,7 @@ void(float gib_no, float gib_qty) ThrowGib = {
 		}
 		gib_qty = gib_qty - 1;
 	}
+	newmis = gibitem; // Pass along last thrown gib for later.
 };
 
 // Explode monster into a shower of gibs (throw head as well)
@@ -693,6 +694,22 @@ void() monster_ThrowGib = {
 		if (self.max_health == MON_NOGIBVELOCITY) ThrowGib(4, rint(random()*4)); // If monster set for low velocity throw extra gibs instead
 		else ThrowGib(25, 1); // Throw a head gib instead of switch to one
 	}
+	newmis.bodyonflr = TRUE; // Set the last thrown gib to be the respawn source.
+	newmis.classname = self.classname;
+	newmis.health = 0;
+	newmis.flags = FL_MONSTER;
+	newmis.gibbed = TRUE;
+	newmis.alignment = self.alignment;
+	newmis.bouncegrenade = self.bouncegrenade;
+	newmis.classgroup = self.classgroup;
+	newmis.classmove = self.classmove;
+	newmis.classtype = self.classtype;
+	newmis.yaw_speed = self.yaw_speed;
+	newmis.liquidbase = self.liquidbase;
+	newmis.liquidcheck = self.liquidcheck;
+	newmis.max_health = self.max_health * 0.5;
+	newmis.bbmins = self.bbmins;
+	newmis.bbmaxs = self.bbmaxs;
 	entity_hide (self); // Finally hide monster
 };
 

@@ -500,6 +500,8 @@ void() clone_die = {
 void() clone_spawn = {
     local entity kage;       // Watching too much Naruto, eh?
 
+	if (!checkbuiltin(checkbuiltin) && !checkbuiltin(copyentity)) return;
+
     kage = spawn();
     copyentity (self, kage);
     setorigin (kage, self.origin);

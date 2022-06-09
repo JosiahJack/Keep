@@ -52,15 +52,15 @@ float() monster_revive_finish = { // [FUNCTION]
 	}
 	particle(self.origin,VEC_ORIGIN,9,25);
 	particle(self.origin,VEC_ORIGIN,41,30);
-	FoundHuntTarget(TRUE); // Setup goals and warn other monsters
+	//FoundHuntTarget(TRUE); // Setup goals and warn other monsters
 	return TRUE;
 };
 
 void() revive_frames = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 	self.think = revive_frames;
-	self.walkframe = self.walkframe - 1;
-	self.frame = self.reviveframestart - self.walkframe; // Revive is death in reverse!
+	self.walkframe = SUB_ClampFloat(self.walkframe - 1,self.reviveframeend,self.reviveframestart);
+	self.frame = self.walkframe; // Revive is death in reverse!
 	particle(self.origin + vecrand(0,4,16),'0 0 100',9,15); // Magical particles...
 	particle(self.origin + vecrand(0,4,16),'0 0 100',41,15); // ...indicate this is unusual.
 	if (self.enemy) ai_face();
@@ -121,19 +121,22 @@ float(entity ent, entity god) monster_revive = { // [FUNCTION]
     local float good;
 
 	if (!ent) return FALSE; // Can't revive the world.
-	if (!god) return FALSE; // The world isn't magical.  Only entities can revive stuff.
-	if (god == ent) return FALSE; // No self-ressurecting; only Jesus can do that.
+	if (!god) return FALSE; // The world isn't magical.  Only entities can revive stuff. 
 	if ((god.flags & FL_MONSTER) && (ent.classgroup == CG_HARMLESS || ent.alignment == NEUTRAL)) return FALSE; // Only player can save denizens.
     if ((god.flags & FL_MONSTER) && Align_Opposing(ent,god) && !IsInsane(god)) return FALSE; // Monsters only revive friendlies, unless insane.  Players will convert them to their side.
+	if ((pointcontents(ent.origin) == CONTENT_SOLID) { 
+		ent.origin = ent.origin + '0 0 4';
+		if ((pointcontents(ent.origin) == CONTENT_SOLID) return FALSE;
+	}
 
     os = self;
     self = ent;
-    if (!CanSelfRevive()) { self = os; return FALSE; }
+    if ((god == ent) && !CanSelfRevive()) { self = os; return FALSE; } // No self-ressurecting; only Jesus can do that.
 
 	// Ok do the revive now, all good to go here.
 	if ((god.flags & FL_CLIENT)) { // Player is reviving the target.
 		if ((self.alignment == EVIL && self.enemy) || self.enemy.health < 1) self.enemy = self.oldenemy = world; // Good monsters remember their enemy.
-		self.alignment = GOOD; // Conversion complete.
+		self.alignment = god.alignment; // Conversion complete.
 		ApplyHornCharm(self,god);
 	} else { // A plain old map entity or a monster is reviving a monster.
 		if (god.oldenemy == self) god.oldenemy = world; // Prevent repeat infighting.
@@ -159,7 +162,7 @@ float(entity ent, entity god) monster_revive = { // [FUNCTION]
 	self.deadflag = DEAD_NO;
 	self.velocity = '0 0 0'; // Make sure stationary
 	monster_reset_runtime_attributes();
-	if (self.max_health < 1) self.max_health = 30; // Have at least some health!
+	if (self.max_health < 30) self.max_health = 30; // Have at least some health!
 	self.health = self.max_health;
 	self.ideal_yaw = self.angles * '0 1 0';
 
@@ -169,9 +172,11 @@ float(entity ent, entity god) monster_revive = { // [FUNCTION]
 	// next frame.  A delayed solid change may allow another monster
 	// to fuse with self and both will get stuck -- not good.
 	setsize(self,self.bbmins,self.bbmaxs);
-	self.walkframe = 0;
+	self.walkframe = self.frame;
 	if (self.frame < self.reviveframestart) self.reviveframestart = self.frame;
-	self.th_revive();
+	if (self.gibbed) self.think = revive_gibbed;
+	else self.think = th_revive;
+	self.nextthink = time + 0.1;
     self = os;
     return TRUE;
 };
@@ -193,9 +198,11 @@ float(float d) ai_medic = { // [FUNCTION]
             self.goalentity = head; // QC_CloseEnough checks against goalentity.
             if (QC_CloseEnough(d)) {
                 if (monster_revive(head,self)) {
-                    self.fallen = head;
-                    self.goalentity = goal;
-                    return TRUE;
+					if ((self.flags & FL_MONSTER)) {
+						self.fallen = head;
+						self.goalentity = goal;
+					}
+					return TRUE;
                 }
             }
         }
