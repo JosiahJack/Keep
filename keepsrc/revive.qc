@@ -74,6 +74,10 @@ void() revive_frames = { // [FUNCTION]
 	}
 };
 
+void() revive_gibbed = { // [FUNCTION]
+	
+};
+
 void() ai_ritual = { // [FUNCTION]
     local entity temp;
 
@@ -124,9 +128,9 @@ float(entity ent, entity god) monster_revive = { // [FUNCTION]
 	if (!god) return FALSE; // The world isn't magical.  Only entities can revive stuff. 
 	if ((god.flags & FL_MONSTER) && (ent.classgroup == CG_HARMLESS || ent.alignment == NEUTRAL)) return FALSE; // Only player can save denizens.
     if ((god.flags & FL_MONSTER) && Align_Opposing(ent,god) && !IsInsane(god)) return FALSE; // Monsters only revive friendlies, unless insane.  Players will convert them to their side.
-	if ((pointcontents(ent.origin) == CONTENT_SOLID) { 
+	if (pointcontents(ent.origin) == CONTENT_SOLID) { 
 		ent.origin = ent.origin + '0 0 4';
-		if ((pointcontents(ent.origin) == CONTENT_SOLID) return FALSE;
+		if (pointcontents(ent.origin) == CONTENT_SOLID) return FALSE;
 	}
 
     os = self;
@@ -175,7 +179,7 @@ float(entity ent, entity god) monster_revive = { // [FUNCTION]
 	self.walkframe = self.frame;
 	if (self.frame < self.reviveframestart) self.reviveframestart = self.frame;
 	if (self.gibbed) self.think = revive_gibbed;
-	else self.think = th_revive;
+	else self.think = self.th_revive;
 	self.nextthink = time + 0.1;
     self = os;
     return TRUE;
