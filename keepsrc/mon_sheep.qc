@@ -494,7 +494,10 @@ void()	sheep_run8		=[231,	sheep_run9	] {sheep_run_think();};
 void()	sheep_run9		=[232,	sheep_run10] {sheep_run_think();};
 void()	sheep_run10		=[233,	sheep_run1]{sheep_run_think();};
 
-void()	sheep_diea1		=[0,	sheep_diea2	] {};
+void()	sheep_diea1		=[0,	sheep_diea2	] {
+	self.reviveframestart = 0;
+	self.reviveframeend = 23;
+};
 void()	sheep_diea2		=[1,	sheep_diea3	] {monster_check_gib();};
 void()	sheep_diea3		=[2,	sheep_diea4	] {monster_check_gib();};
 void()	sheep_diea4		=[3,	sheep_diea5	] {};
@@ -519,7 +522,10 @@ void()	sheep_diea22	=[21,	sheep_diea23	] {};
 void()	sheep_diea23	=[22,	sheep_diea24	] {monster_death_postcheck();};
 void()	sheep_diea24	=[23,	sheep_diea24	] {monster_deadbody_check();};
 
-void()	sheep_dieb1		=[24,	sheep_dieb2	] {};
+void()	sheep_dieb1		=[24,	sheep_dieb2	] {
+	self.reviveframestart = 24;
+	self.reviveframeend = 49;
+};
 void()	sheep_dieb2		=[25,	sheep_dieb3	] {monster_check_gib();};
 void()	sheep_dieb3		=[26,	sheep_dieb4	] {monster_check_gib();};
 void()	sheep_dieb4		=[27,	sheep_dieb5	] {};

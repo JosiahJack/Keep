@@ -355,6 +355,7 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 		if ((self.moditems & IT_ARTPIERCE)
 			&& (newmis.classgroup == CG_PROJNAILS || newmis.classgroup == CG_PROJLAVANAILS)) {
 			newmis.projeffect = IT_ARTPIERCE; // Check if the player has the nail piercer effect active
+			newmis.attack_ricochet = 7;
 		}
 	} else newmis.movetype = MOVETYPE_FLYMISSILE; // Default = large collision
 
