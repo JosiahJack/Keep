@@ -39,6 +39,7 @@
 void(entity targ, entity charmmaster) ApplyHornCharm;
 void() monster_reset_movement_type;
 void() monster_reset_runtime_attributes;
+void(string mname) BeMonsterFromString;
 
 // To be called after revive animation is completed to restore takedamage.
 float() monster_revive_finish = { // [FUNCTION]
@@ -74,8 +75,51 @@ void() revive_frames = { // [FUNCTION]
 	}
 };
 
+float() SelfHasRoom = {
+	local vector v1, v2; // Used to preserve before setsize call.
+
+	if (self.maxs_x != self.bbmaxs_x) {
+		v1 = self.mins;
+		v2 = self.maxs;
+		setsize(self,self.bbmins,self.bbmaxs);
+		if (walkmove(0,0)) return TRUE;
+		setsize(self,v1,v2);
+	} else {
+		if (walkmove(0,0)) return TRUE;
+	}
+	return FALSE;
+};
+
 void() revive_gibbed = { // [FUNCTION]
-	
+	local float dist, spd;
+	local vector dir;
+
+	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
+	if (self.touchedvoid) return;	
+
+	dist = vlen(self.pos1 - self.origin);
+	if (dist < 32 || self.attack_finished < time) {
+		setorigin(self,self.pos1); // Put back at spot.
+		self.velocity = 0;
+		if (SelfHasRoom()) {
+			particle(self.origin + vecrand(0,4,16),'0 0 100',9,15); // Magical particles...
+			particle(self.origin + vecrand(0,4,16),'0 0 100',41,15); // ...indicate this is unusual.
+			setsize(self,self.bbmins,self.bbmaxs);
+			BeMonsterFromString(self.classname);
+			self.think = SUB_Remove;
+			self.nextthink = time + 0.1;
+			return;
+		}
+	}
+	self.touch = SUB_Null;
+	dir = vectoangles(self.pos1 - self.origin);
+	dir = normalize(dir);
+	if (dist > 512) spd = SUB_ClampFloat(self.speed,150,self.speed);
+	else if (dist < 128) spd = SUB_ClampFloat(self.speed * 0.8,25,self.speed);
+	else spd = SUB_ClampFloat(self.speed,75,self.speed);
+	self.velocity = dir * spd;
+	self.think = revive_gibbed;
+	self.nextthink = time + 0.1;
 };
 
 void() ai_ritual = { // [FUNCTION]
@@ -95,25 +139,16 @@ void() ai_ritual = { // [FUNCTION]
 // Note:  findradius may be safe to use, since it is useless for detecting
 // entities with SOLID_NOT, barring DarkPlaces engine.
 float() CanSelfRevive = { // [FUNCTION]
-	local vector v1, v2; // Used to preserve before setsize call.
-
 	if (self.gibbed) return FALSE; // Need a body!
 	if (!self.th_revive) return FALSE; // Only if there is a legitimate revive animation.
 	if (!(self.flags & FL_MONSTER)) return FALSE; // Only revive monsters.  Players have their own thing for coop but naught else.
 	if (self.health > 0) return FALSE; // Only revive the dead!
 	if (self.gorging) return FALSE; // Don't revive monsters who are being eaten by gremlins currently.
+	if (self.touchedvoid) return FALSE;
+	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return FALSE;}
 
     if (self.modelindex) {
-		if (self.modelindex == self.mindex2) { // Only revive if we have retained our original spawning model (e.g. we are a normal corpse, not a gibbed head or something).
-			if (self.maxs_x != self.bbmaxs_x) {
-				v1 = self.mins; v2 = self.maxs;
-				setsize(self,self.bbmins,self.bbmaxs);
-				if (walkmove(0,0)) return TRUE;
-				setsize(self,v1,v2);
-			} else {
-				if (walkmove(0,0)) return TRUE;
-			}
-		}
+		return SelfHasRoom();
 	}
     return FALSE;
 };
@@ -124,6 +159,7 @@ float(entity ent, entity god) monster_revive = { // [FUNCTION]
     local entity os;
     local float good;
 
+	if (frame_pause()) return FALSE;
 	if (!ent) return FALSE; // Can't revive the world.
 	if (!god) return FALSE; // The world isn't magical.  Only entities can revive stuff. 
 	if ((god.flags & FL_MONSTER) && (ent.classgroup == CG_HARMLESS || ent.alignment == NEUTRAL)) return FALSE; // Only player can save denizens.
@@ -139,9 +175,8 @@ float(entity ent, entity god) monster_revive = { // [FUNCTION]
 
 	// Ok do the revive now, all good to go here.
 	if ((god.flags & FL_CLIENT)) { // Player is reviving the target.
-		if ((self.alignment == EVIL && self.enemy) || self.enemy.health < 1) self.enemy = self.oldenemy = world; // Good monsters remember their enemy.
-		self.alignment = god.alignment; // Conversion complete.
-		ApplyHornCharm(self,god);
+		if (((self.enemy == god && self.classgroup == CG_HARMLESS) || Align_Match(self.enemy,god)) || self.enemy.health < 1) self.enemy = self.oldenemy = world; // Good monsters remember their enemy.
+		killed_denizens = killed_denizens - 1; // Woot woot!  One step closer to Thor's Blessing!
 	} else { // A plain old map entity or a monster is reviving a monster.
 		if (god.oldenemy == self) god.oldenemy = world; // Prevent repeat infighting.
 		if (god.enemy == self) { // Switch to oldenemy (could be world) to prevent repeat infighting.  Yeah I already killed you.  We're good bro.
@@ -152,12 +187,12 @@ float(entity ent, entity god) monster_revive = { // [FUNCTION]
 		else self.enemy = self.movetarget = self.goalentity = god.oldenemy; // Reset all enemy dependant fields.
 		if (self.enemy) self.search_time = time + 5;
 		else self.search_time = time + 3;
-	}
 
+		killed_monsters = killed_monsters - 1; // Ahh, nasty reviver hurting my stats!
+	}
+	update_hud_totals(HUD_MONSTERS);
 	sound (self, CHAN_AUTO, "drake/misc/dsslop.wav", 1, ATTN_NORM); // Play classic arch-vile resurrection sound.
 	self.pain_finished  = time + 3;  // Don't interrupt ressurection reanimation.
-	AddToTotals(self); // Increment kill total -- again.  First time was when it was originally created at map start.
-	update_hud_totals(HUD_MONSTERS);
 	clear_trigstrs(self); // Sever all targeting links.
 	self.use = SUB_Null;
 	self.solid = SOLID_SLIDEBOX; // Restore physical properties then re-animate.
@@ -175,11 +210,15 @@ float(entity ent, entity god) monster_revive = { // [FUNCTION]
 	// which without it, a solid change could get delayed until the
 	// next frame.  A delayed solid change may allow another monster
 	// to fuse with self and both will get stuck -- not good.
-	setsize(self,self.bbmins,self.bbmaxs);
-	self.walkframe = self.frame;
-	if (self.frame < self.reviveframestart) self.reviveframestart = self.frame;
-	if (self.gibbed) self.think = revive_gibbed;
-	else self.think = self.th_revive;
+	if (self.gibbed) {
+		self.think = revive_gibbed;
+		self.attack_finished = time + 10; // Maximum time to try to return before we poof there.
+	} else {
+		setsize(self,self.bbmins,self.bbmaxs);
+		self.think = self.th_revive;
+		self.walkframe = self.frame;
+		if (self.frame < self.reviveframestart) self.reviveframestart = self.frame;
+	}
 	self.nextthink = time + 0.1;
     self = os;
     return TRUE;
@@ -197,8 +236,9 @@ float(float d) ai_medic = { // [FUNCTION]
     while (head) {
         if (head.flags & FL_MONSTER)
         if (head.deadflag == DEAD_DEAD || head.health <= 0)
-        if (!hp || (hp <= head.max_health)
-		    || ((self.flags & FL_CLIENT) && Align_NonHostile(self,head))) {
+		if (!head.gibbed) // Disabled gib regathering for now, too many issues.
+		if ((Align_NonHostile(self,head) && (self.flags & FL_CLIENT))
+            || (!hp || hp <= head.max_health || (self.flags & FL_CLIENT))) {
             self.goalentity = head; // QC_CloseEnough checks against goalentity.
             if (QC_CloseEnough(d)) {
                 if (monster_revive(head,self)) {

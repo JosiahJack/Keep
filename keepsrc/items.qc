@@ -82,14 +82,11 @@ void() item_coopcheck = { // [FUNCTION]
 
 // Check floor under item and animated skin for new BASE health boxes
 void() item_thinkloop = { // [FUNCTION]
+	local float frmmax;
+
 	if (self.estate & ESTATE_BLOCK) return; // Check for entity states
 	if (self.attack_finished > time) return; // Has the item been turned off?
 	if (self.item_expired > 0 && self.item_expired < time) remove(self); // Has the item removal timer been reached?
-	
-	// Revisit this once we have an updated model for Mjolnir (the mod, not the weapon, well ok both).
-	//if (self.classtype == CT_MJOLNIR) {
-	//	if (random() < 0.4) make_glitter();
-	//}
 
 	if (self.item_skinanim > 0) {
 		self.item_skincycle = self.item_skincycle + 1;
@@ -99,6 +96,15 @@ void() item_thinkloop = { // [FUNCTION]
 			if (self.item_skinanim_no > 3) self.item_skinanim_no = 0;
 		}
 		self.skin = self.item_skinanim_no; // Update skin
+	}
+
+	if (self.classtype == CT_AMMOELEMENTAL) {
+		if ((self.spawnflags & A_LARGE)) {
+			frmmax = 9;
+			self.walkframe = SUB_ClampFloat(self.walkframe + 1,0,frmmax);
+			self.frame = self.walkframe;
+			if (self.walkframe >= frmmax) self.walkframe = 0;
+		}
 	}
 
 	if (self.item_flrcheck > 0) { // Check floor below item (global function)
@@ -397,12 +403,10 @@ void() item_delay = { // [FUNCTION]
 void() item_on = { // [FUNCTION]
 	self.estate = ESTATE_ON;
 	self.movetype = MOVETYPE_NONE;
-	if (self.classtype == CT_SHROOM) dprint("...item...on!?!?!\n");
 	if (self.savedeffects > 0) self.effects = self.savedeffects; // Restore any effect flags settings (various dlight glows)
 	
 	// Check for delayed/trigger_once functionality?
 	if (self.spawnflags & ENT_STARTOFF || self.attack_finished > time) {
-		if (self.classtype == CT_SHROOM) dprint("...hiding shroom!?!?!\n");
 		self.solid = SOLID_NOT;
 	} else {
 		// Restore movement, solid and model parameters
@@ -410,14 +414,13 @@ void() item_on = { // [FUNCTION]
 		else self.movetype = MOVETYPE_TOSS;
 		self.solid = SOLID_TRIGGER;
 		setmodel(self,self.mdl);
-		setsize (self, self.bbmins, self.bbmaxs);
+		setsize(self, self.bbmins, self.bbmaxs);
 		self.velocity = '0 0 0';
 		// Restore particle emitter
 		if (self.part_emitter) misc_particle_on(self.part_emitter);
 		// Setup touch/damage/bounding box functionality
 		self.think = SUB_Null;
 		item_restore();
-		if (self.classtype == CT_SHROOM) dprint("finished shroom!\n");
 	}
 };
 

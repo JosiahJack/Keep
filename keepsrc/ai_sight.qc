@@ -582,7 +582,6 @@ entity(float findopposing) SeeTarget = { // [FUNCTION]
 };
 
 entity() SeeOpposing = { return SeeTarget(TRUE); }; // [FUNCTION]
-
 entity() SeeFriendly = { return SeeTarget(FALSE); }; // [FUNCTION]
 
 // Main sight routine for finding a target.  Returns TRUE if an enemy was sighted.
@@ -591,8 +590,7 @@ float() FindTarget = { // [FUNCTION]
 	local float r, dist, charmdist,charmmaxdist, charmrand;
 
 	if (self.health < 1) return FALSE;	// Dead monsters don't hunt!
-	if (intermission_running > 0) return FALSE; // If intermission is running, no sight checks
-	if ((cinematic_running > 0 || cutscene > 0) && !coop) return FALSE; // If cinematic is running in singleplayer, no sight checks
+	if (frame_pause() && !coop) return FALSE; // If cinematic is running in singleplayer, no sight checks
 
 	// Wraith AI - - - -
     if (self.movetype == MOVETYPE_NOCLIP) {  // Most monsters aren't wraiths.

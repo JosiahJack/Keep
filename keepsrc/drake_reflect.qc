@@ -65,6 +65,7 @@
 
 // Checks if entity has reflection from shield or armor.  Return values: 0 = none, 1 = shield, 2 = courage armor.
 float(entity ent, vector spot, float damage) HasReflection = {
+    if (!ent) return FALSE;
     if (ent.mirror_finished) return TRUE; // Check for artifact because it toggles particle field off and on during the three second warning.
 
 	// Update: Entity can reflect frontal attacks if wearing courage armor.

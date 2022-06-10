@@ -772,7 +772,7 @@
 
 @PointClass base(AmmoBase) studio("progs/aoa/ammo_bloodcrystals.mdl") = item_bloodcrystals : "Blood Crystals" []
 @PointClass base(AmmoBase) studio("progs/aoa/ammo_voidshards.mdl") = item_voidshards : "Void Shards" []
-@PointClass base(AmmoBase) studio("progs/aoa/ammo_elemental.mdl") = item_elemental: "Elemental Mana" []
+@PointClass base(AmmoBase) studio("progs/redfield/g_light.mdl") = item_elemental: "Elemental Mana" []
 
 //----------------------------------------------------------------------
 @PointClass base(Items,ArmourSize) studio("progs/ad171/armour.mdl") skin(0) = item_armor1 : "100% armor (Green)" []
@@ -1197,7 +1197,7 @@
 // Arms of Asgard weapons from Ryan "ryanscissorhands" Holaday
 @PointClass base(Weapon) studio("progs/aoa/g_rapier.mdl") = weapon_rapier : "Ghost Rapier" []
 @PointClass base(Weapon) studio("progs/aoa/g_mace.mdl") = weapon_mace : "Vampiric Mace" []
-@PointClass base(Weapon) studio("progs/aoa/g_ice.mdl") = weapon_ice: "Elemental Tome" []
+@PointClass base(Weapon) studio("progs/redfield/g_lightstaff.mdl") = weapon_ice: "Blizzard Sphere" []
 @PointClass base(Weapon) studio("progs/aoa/g_scimitar.mdl") = weapon_scimitar : "Fire Scimitar" []
 @PointClass base(Weapon) studio("progs/aoa/g_voidstaff.mdl") = weapon_voidstaff : "Void Staff" []
 @PointClass base(Weapon) studio("progs/aoa/g_gungnir.mdl") = weapon_gungnir : "Gungnir" []
@@ -2332,14 +2332,14 @@
 
 @PointClass base(Targetname) size (-8 -8 -8, 8 8 8) color(220 0 255) = trigger_victory : "Runs targets after all monsters have been killed" [
 	filterstyle(choices) : "Filter Style (def=0)" = [
-		0  : "All Monsters"
-		1  : "Threshold Monsters"
-		4  : "Any Some Monsters"
-		5  : "None Monsters"
-		6  : "None Denizens"
-		7  : "Threshold Denizens"
-		10 : "Any Some Denizens"
-		11 : "All Denizens"
+		0 : "All Monsters"
+		1 : "Threshold Monsters"
+		2 : "Any Some Monsters"
+		3 : "None Monsters"
+		4 : "None Denizens"
+		5 : "Threshold Denizens"
+		6 : "Any Some Denizens"
+		7 : "All Denizens"
 	]
 	spawnflags(flags) = [
 		1 : "Not Automatic On Any Kill"

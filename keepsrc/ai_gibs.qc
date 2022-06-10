@@ -786,6 +786,8 @@ void(entity targ, entity attacker) Killed;
 void(entity onflr, float impactdmg) monster_flrbody_gib = {
 	local entity tself, tother;
 	
+	if (onflr.classgroup == CG_HARMLESS) return;
+
 	onflr.bodyonflr = string_null;	// no more body gibbing
 	tself = self; tother = other;	// save self/other
 	self = onflr; other = tself;	// switch around

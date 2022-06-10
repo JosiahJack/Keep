@@ -595,13 +595,13 @@ void() ChainLightningAnimation12 = [0, ChainLightningAnimation13] {self.frame = 
 void() ChainLightningAnimation13 = [0, player_run] {self.frame = 13;};
 
 void() IceAttack1 =	[107, IceAttack2] {if (time < self.attack_finished) return;self.weaponframe = 1;IceProjectiles();W_Reload(0.8);};
-void() IceAttack2 =	[108, IceAttack3] {self.weaponframe = 2;};
-void() IceAttack3 =	[109, IceAttack4] {self.weaponframe = 3;};
-void() IceAttack4 =	[110, IceAttack5] {self.weaponframe = 4;};
-void() IceAttack5 =	[111, IceAttack6] {self.weaponframe = 5;};
+void() IceAttack2 =	[108, IceAttack3] {self.weaponframe = 1;};
+void() IceAttack3 =	[109, IceAttack4] {self.weaponframe = 2;};
+void() IceAttack4 =	[110, IceAttack5] {self.weaponframe = 3;};
+void() IceAttack5 =	[111, IceAttack6] {self.weaponframe = 4;};
 void() IceAttack6 =	[112, IceAttack7]
 {
-	self.weaponframe = 6;
+	self.weaponframe = 3;
 	if (!self.button0) //if player isn't holding mouse, don't do second (lightning) attack. will need ammo check here later
 	{
 		player_run();
@@ -610,13 +610,13 @@ void() IceAttack6 =	[112, IceAttack7]
 	W_Reload(0.8);
 };
 
-void() IceAttack7 =	[113, IceAttack8] {self.weaponframe = 7;};
-void() IceAttack8 =	[114, IceAttack9] {self.weaponframe = 8;W_FireChainLightning();};
-void() IceAttack9 =	[115, IceAttack10] {self.weaponframe = 9;};
-void() IceAttack10 =	[116, IceAttack11] {self.weaponframe = 8;};
+void() IceAttack7 =	[113, IceAttack8] {self.weaponframe = 2;};
+void() IceAttack8 =	[114, IceAttack9] {self.weaponframe = 1;W_FireChainLightning();};
+void() IceAttack9 =	[115, IceAttack10] {self.weaponframe = 2;};
+void() IceAttack10 =	[116, IceAttack11] {self.weaponframe = 3;};
 void() IceAttack11 =	[117, IceAttack12]
 {
-	self.weaponframe = 7;
+	self.weaponframe = 4;
 	if (!self.button0 || !self.tome_finished)  //If still attacking and Tome of Power: Launch Boulder for third attack in combo
 	{
 		player_run();
@@ -625,11 +625,11 @@ void() IceAttack11 =	[117, IceAttack12]
 	W_Reload(1);
 };
 
-void() IceAttack12 = [113, IceAttack13] {self.weaponframe = 36;};
-void() IceAttack13 = [114, IceAttack14] {self.weaponframe = 34;};
-void() IceAttack14 = [115, IceAttack15] {self.weaponframe = 32;};
-void() IceAttack15 = [116, IceAttack16] {self.weaponframe = 33;LaunchBoulder();};
-void() IceAttack16 = [117, player_run] {self.weaponframe = 35;};
+void() IceAttack12 = [113, IceAttack13] {self.weaponframe = 3;};
+void() IceAttack13 = [114, IceAttack14] {self.weaponframe = 2;};
+void() IceAttack14 = [115, IceAttack15] {self.weaponframe = 1;};
+void() IceAttack15 = [116, IceAttack16] {self.weaponframe = 2;LaunchBoulder();};
+void() IceAttack16 = [117, player_run] {self.weaponframe = 3;};
 
 void() T_BoulderTouch =
 {	
@@ -744,7 +744,12 @@ void() StormFindTargets =
 	while (nearbyTargets && targets >0)
 	{
 		traceline(self.origin, nearbyTargets.origin, TRUE, self);//was TRUE
-		if (nearbyTargets.takedamage > 0 && nearbyTargets != world && trace_fraction == 1 && nearbyTargets.health > 0 && nearbyTargets != self.owner)
+		if (nearbyTargets.takedamage > 0
+			&& nearbyTargets != world
+			&& trace_fraction == 1
+			&& nearbyTargets.health > 0
+			&& nearbyTargets != self.owner
+			&& Align_Opposing(self.owner,nearbyTargets))
 		{
 			if (developer > 0) bprint("Target found! It's a ");
 			if (developer > 0) bprint(nearbyTargets.classname);

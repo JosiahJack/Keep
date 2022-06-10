@@ -166,89 +166,6 @@ void () HIP_LaserThink = { // [FUNCTION]
 	self.nextthink = (time + 0.100);
 };
 
-void () HIP_LightningThink = { // [FUNCTION]
-	local vector org, dst, vec, end;
-	local entity head, selected;
-	local float cur_dist, head_dist, dot, oldstate, dam;
-
-	if (time > self.delay) {
-		if (self.enemy) self.enemy.struck_by_mjolnir = FALSE;
-		remove (self);
-		return;
-	}
-
-	oldstate = self.state;
-
-	// Multi-lightning effect of Mjolnir
-	if (self.state == FALSE) {
-		self.enemy = world;
-		selected = world;
-		cur_dist = self.distance;
-		head = findradius (self.owner.origin,self.distance);
-		while ( head ) {
-			if (!(head.flags & FL_NOTARGET) && (head.flags & FLx_CREATURE)) {
-				if (Align_Opposing(self,head)) {
-					if (head != self.owner.owner && head != self.owner && head.health > 0) {
-						if (visible(head)) {
-							head_dist = vlen(head.origin - self.lastvictim.origin);
-							if ( ((head_dist < cur_dist) && (head.struck_by_mjolnir == FALSE)) && !Ally_Check(head,self.owner) && !Ally_Check(head,self.owner.owner)) {
-								selected = head;
-								cur_dist = head_dist;
-							}
-						}
-					}
-				}
-			}
-			head = head.chain;
-		}
-		if ( (selected != world) ) {
-			self.state = TRUE;
-			self.enemy = selected;
-			self.enemy.struck_by_mjolnir = TRUE;
-		} else {
-			makevectors (self.v_angle);
-			org = self.owner.origin;
-			end = (org + (v_forward * 200));
-			end = (end + (((400.000 * random ()) - 200) * v_right));
-			traceline (org,end,TRUE,self);
-			Tent_Beam (TE_LIGHTNING2, self, org, trace_endpos);
-			self.nextthink = (time + 0.100);
-			return ;
-		}
-	}
-   org = self.lastvictim.origin;
-   dst = (self.enemy.absmin + (0.250 * (self.enemy.absmax - self.enemy.absmin)));
-   dst = (dst + ((random () * 0.500) * (self.enemy.absmax - self.enemy.absmin)));
-   traceline (org,dst,TRUE,self.owner.owner);
-   if (trace_fraction != 1 || self.enemy.health <= 0) {
-      self.enemy.struck_by_mjolnir = FALSE;
-      self.state = 0;
-      self.nextthink = time + 0.1;
-      return;
-   }
-   WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-   WriteByte (MSG_BROADCAST,TE_LIGHTNING2);
-   WriteEntity (MSG_BROADCAST,self);
-   WriteCoord (MSG_BROADCAST,org_x);
-   WriteCoord (MSG_BROADCAST,org_y);
-   WriteCoord (MSG_BROADCAST,org_z);
-   WriteCoord (MSG_BROADCAST,trace_endpos_x);
-   WriteCoord (MSG_BROADCAST,trace_endpos_y);
-   WriteCoord (MSG_BROADCAST,trace_endpos_z);
-   vec = normalize ((self.enemy.origin - self.owner.origin));
-   dot = (vec * self.owner.movedir);
-   head = self;
-   self = self.owner.owner;
-   if (!oldstate) dam = 80;
-   else dam = 30;
-
-   if (dot > 0.3) HIP_HammerDamage(org,trace_endpos,self,dam);
-   else HIP_HammerDamage(org,trace_endpos,self,(dam * 0.500));
- 
-   self = head;
-   self.nextthink = (time + 0.200);
-};
-
 void () ProximityBomb = { // [FUNCTION]
     local entity head;
     local float blowup;
@@ -1015,10 +932,20 @@ void() Thor_Think =[ 0, Thor_Think ] { // [FUNCTION]
     }
 
     if (self.owner == self.master) { // Outgoing for an attack.
-        if (self.enemy) { // Return to attacker if target is gone. ToP:  If no juice, return after a short delay.
-            if (((self.enemy.solid < SOLID_BBOX) && (self.enemy.takedamage != DAMAGE_AIM) || (self.enemy.health <= 0)) || (!self.enemy.modelindex) || ((!self.ammo_cells) && (self.delay <= time))) self.owner = world;
+        if (self.enemy) { // Return to attacker if target is gone. ToP:  If no 
+                          // juice, return after a short delay.
+            if (((self.enemy.solid < SOLID_BBOX)
+                  && (self.enemy.takedamage != DAMAGE_AIM)
+                  || (self.enemy.health <= 0))
+                  || (!self.enemy.modelindex)
+                  || ((!self.ammo_cells)
+                  && (self.delay <= time))) {
+                self.owner = world;
+            }
         } else {
-            if (self.delay <= time) self.owner = world; // Return to attacker if hammer flew long enough.
+            if (self.delay <= time) self.owner = world; // Return to attacker
+                                                        // if hammer flew long
+                                                        // enough.
         }
         targ = self.enemy;
     } else

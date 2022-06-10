@@ -661,10 +661,10 @@ void () weapon_mace = {
 };
 
 void () weapon_ice = {
-	item_setupmodel("progs/aoa/g_ice.mdl",0);
+	item_setupmodel("progs/redfield/g_lightstaff.mdl",0);
 	self.weapon = IT_ICE;
 	self.classtype = CT_ICE;
-	if (self.netname == "") self.netname = "Elemental Tome";
+	if (self.netname == "") self.netname = "Blizzard Sphere";
 	item_ammo_set(AMMO_ELEMENTAL_WPN);
 	if (world.devdata & DEV_AMMO_N_HEALTH) world.deventity.ammo_elemental = world.deventity.ammo_elemental + self.aflag;
 	weapon_start();

@@ -204,7 +204,7 @@ float IT3_SECRETHUNTER		= 2;			//1  Secret Hunter (Loki's Cat)
 /*
 WEAPON KEYBOARD ORDER
 1 - Axe + Shadow Axe + Chainsaw, Grapple, Mace (3)
-2 - Shotgun + Laser Blaster, Elemental Tome (2)
+2 - Shotgun + Laser Blaster, Blizzard Sphere (2)
 3 - Doublebarrel Shotgun + Widowmaker + Shotcycler + Quad Shotgun, Scimitar (2)
 4 - Nailgun, Lava Nailgun, Rapier (3)
 5 - Perforator, Lava Super Nailgun, Void Staff (3)

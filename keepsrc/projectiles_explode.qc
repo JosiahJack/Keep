@@ -588,7 +588,8 @@ void() Thor_Remove = { // [FUNCTION]
 				if (!thor.selfweaponismoditems && thor.weapon == IT2_MJOLNIR) { // Hammer selected, so restore weapon model and ammo.
 					if (thor.attack_finished < time + 0.2) thor.attack_finished = time + 0.2; // Delay next attack a bit so player doesn't throw immediately.
 					if (cutscene) thor = find (world, classname, "dummy"); // If TRUE, update dummy, not camera.
-					thor.weaponmodel = "progs/hipnotic/v_hammer.mdl";
+					if (thor.tome_finished) thor.weaponmodel = "progs/violentrumble/v_hammerpw.mdl";
+                    else thor.weaponmodel = "progs/violentrumble/v_hammer.mdl";
 				}
             }
         }
@@ -638,7 +639,10 @@ void(float lo, float hi) Thor_Slam = { // [FUNCTION]
         lite.distance  = 350;
         lite.v_angle   = ang;       // Was '0 0 0';
         lite.origin    = base.origin;
-        lite.think     = HIP_LightningThink;
+        lite.style = TRUE; // nofriendlyfire
+        lite.distance = 320; // radius
+        lite.count = 2; // maxhits
+        lite.think     = Thor_Pulse;
         lite.nextthink = time;
         lite.ryuflags  = RYU_ALERT; // PM:  Allow sight across contents.
         lite.waitmin   = lo;    //30; PM:  Damage set here.

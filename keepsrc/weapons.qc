@@ -358,8 +358,6 @@ void () HIP_FireMjolnir = { // [FUNCTION]
     if (Hip_ThrewMjolnir()) return;
 
 	W_Reload(0.4);
-	if (GibFloorBody(source,200)) return;
-	
 	source = (self.origin + '0.000 0.000 16.000');
 	makevectors (self.v_angle);
 	traceline (source,(source + (v_forward * RANGE_PLAYAXE)),FALSE,self);
@@ -445,13 +443,13 @@ void () HIP_FireMjolnir2 = { // [FUNCTION]
 
 void () W_FireMjolnir = { // [FUNCTION]
 	if (world.hipnoticoptions & HIPNOTIC_OLDMJOLNIR) {
-		HIP_FireMjolnir();
-	} else {
 		if (self.tome_finished > 0) {
 			HIP_FireMjolnir2(); //adaya bfg lightning ball spawn!
 		} else { 
 			HIP_FireMjolnir(); // Standard Drake Mjolinr throwing
 		}
+	} else {
+		HIP_FireMjolnir(); // Standard Drake Mjolinr throwing
 	}
 };
 
@@ -459,12 +457,18 @@ void() W_FireThor = { // [FUNCTION]
     local entity targ;
 
     if (frame_pause()) return; // There is a delay before firing, so don't throw if not an appropriate time.
-    if (self.hammer_finished) return; // No hammer!
-    if (!HasPowerToThrow ()) return; // No ammo or power!
+    if (self.hammer_finished) {
+		if (self.attack_finished < time) {
+			self.hammer_finished = 0;
+			W_Reload(0.2);
+		}
+		return; // No hammer!
+	}
+    if (!HasPowerToThrow()) return; // No ammo or power!
 
-    targ = W_ThorTarget();      // This calls 'makevectors (self.v_angle)'.
-    sound (self, CHAN_WEAPON, "knight/sword1.wav", 1, ATTN_NORM);
-    Thor_Launch(self.origin + '0 0 12', v_forward, targ); // We can throw.
+    targ = W_ThorTarget(); // This calls 'makevectors(self.v_angle)'.
+    sound(self, CHAN_WEAPON,"knight/sword1.wav",1,ATTN_NORM);
+    Thor_Launch(self.origin + '0 0 12',v_forward,targ); // We can throw.
 };
 
 void () W_FireProximityGrenade = { // [FUNCTION]
@@ -1495,7 +1499,8 @@ void(entity targ) W_SetCurrentAmmo = { // [FUNCTION]
 			}
 		} else if (targ.weapon == IT2_MJOLNIR) {
 			targ.currentammo = targ.ammo_cells;
-			targ.weaponmodel = "progs/hipnotic/v_hammer.mdl";
+			if (self.tome_finished) targ.weaponmodel = "progs/violentrumble/v_hammerpw.mdl";
+			else targ.weaponmodel = "progs/violentrumble/v_hammer.mdl";
 		} else if (targ.weapon == IT2_CROSS) {
 			targ.weaponmodel =  "progs/drake/v_wand.mdl";
 		} else if (targ.weapon == IT2_GRAPPLE) {
@@ -1523,7 +1528,7 @@ void(entity targ) W_SetCurrentAmmo = { // [FUNCTION]
 	} else {
 		if (targ.weapon == IT_ICE) {
 			targ.currentammo = targ.ammo_elemental;
-			targ.weaponmodel = "progs/aoa/v_ice.mdl";
+			targ.weaponmodel = "progs/redfield/v_light.mdl";
 		} else if (targ.weapon == IT_MACE) {
 			targ.currentammo = targ.ammo_bloodcrystals;
 			targ.weaponmodel = "progs/aoa/v_mace.mdl";
@@ -2191,7 +2196,7 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 	if (inhackbank) {
 		targ.selfweaponismoditems = TRUE;
 		if (fl == IT_ICE) {
-			sprint(targ,"Elemental Tome!\n");
+			sprint(targ,"Blizzard Sphere!\n");
 		} else {
 			if (fl== IT_MACE) {
 				sprint(targ,"Vampiric Mace!\n");

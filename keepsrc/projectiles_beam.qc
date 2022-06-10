@@ -40,9 +40,9 @@ void(vector lstart, entity lsource, float ldamage) LightningReflection;
 void(vector org, vector dir, float proj_type, float proj_speed) launch_projectile;
 void(float lo, float hi) Thor_Slam;
 void(vector pos, vector dir, float rubicon) make_spark;
-void () HIP_LightningThink;
-void () lightning_orb_think;
+void() lightning_orb_think;
 void() Plasma_Fx;
+void() Thor_Discharge;
 
 void(vector p1, vector p2, entity from, float damage) LightningDamage = { // [FUNCTION]
 	local entity e1, e2;
@@ -257,19 +257,18 @@ void (entity prev, entity own, float dst) HIP_SpawnMjolnirLightning = { // [FUNC
    light.v_angle_x = FALSE;
    light.v_angle_z = FALSE;
    light.origin = own.origin;
-   light.think = HIP_LightningThink;
    light.nextthink = time;
 };
 
 void () HIP_SpawnMjolnirBase = { // [FUNCTION]
-	local entity light;
+	local entity light, stemp;
 
 	if (self.tome_finished) { Thor_Slam(30,80); return;}
 
 	light = spawn ();
 	light.origin = trace_endpos;
 	light.flags = FALSE;
-	light.owner = self;
+	light.owner = light.master = self;
 	light.struck_by_mjolnir = TRUE;
 	light.think = SUB_Remove;
 	light.nextthink = (time + TRUE);
@@ -277,17 +276,25 @@ void () HIP_SpawnMjolnirBase = { // [FUNCTION]
 	sound (light,CHAN_WEAPON,"hipnotic/weapons/mjolhit.wav",TRUE,ATTN_NORM);
 	makevectors (self.v_angle);
 	light.movedir = v_forward;
-	HIP_SpawnMjolnirLightning(light,light,350.000);
-	HIP_SpawnMjolnirLightning(light,light,350.000);
-	HIP_SpawnMjolnirLightning(light,light,350.000);
-	HIP_SpawnMjolnirLightning(light,light,350.000);
+	light.dmg = 100;
+	light.ammo_cells = COST_MJOLNIR;
+	light.count = 4;
+	light.yaw_speed = 40;
+	light.speed = THOR_SPEED;
+	stemp = self;
+	self = light;
+	Thor_Discharge();
+	Thor_Discharge();
+	Thor_Discharge();
+	Thor_Discharge();
+	self = stemp;
 	ShockWave(trace_endpos + '0 0 4',RING_BLUE,6,"progs/drake/s_wave.spr",FALSE);
 };
 
 void () HIP_FireMjolnirLightning = { // [FUNCTION]
    local float cells;
 
-   if ( (self.waterlevel > TRUE) ) {
+   if (self.waterlevel > 1) {
       cells = self.ammo_cells;
       self.ammo_cells = FALSE;
       discharged = TRUE;
@@ -296,8 +303,7 @@ void () HIP_FireMjolnirLightning = { // [FUNCTION]
       W_SetCurrentAmmo(self);
       return;
    }
-   self.ammo_cells = (self.ammo_cells - 15.000);
-   self.currentammo = (self.currentammo - 15.000);
+	self.struck_by_mjolnir = TRUE;
    HIP_SpawnMjolnirBase();
 };
 
@@ -573,7 +579,7 @@ void(entity inflictor, entity attacker, float damage, entity ignore, vector spot
     maxhits = pak_z;
     hits = 0;
     saved = world;
-    head = findradius (spot, radius);
+    head = findradius(spot,radius);
     while (head) { // Notarget/stealth won't save you from discharge.  Don't waste hits on immune targets, though.
         if (head.takedamage == DAMAGE_AIM && head != attacker
             && head != ignore && head.resist_cells < 1
@@ -586,7 +592,13 @@ void(entity inflictor, entity attacker, float damage, entity ignore, vector spot
 				saved = head;
 			} else if (BurstLit_Trace(head,inflictor,attacker,damage,spot,bang)) {
 				hits = hits + 1;
-				if (hits >= maxhits) return;
+				if (hits >= maxhits) {
+					if (attacker.flags & FL_CLIENT) {
+						attacker.ammo_cells = SUB_ClampFloat(attacker.ammo_cells - floor(maxhits * 3),0,attacker.ammo_cells);
+						attacker.currentammo = attacker.ammo_cells;
+					}
+					return;
+				}
 			}
         }
         head = head.chain;
@@ -595,7 +607,13 @@ void(entity inflictor, entity attacker, float damage, entity ignore, vector spot
     while (saved) {
         if (BurstLit_Trace(saved,inflictor,attacker,damage,spot,bang)) {
             hits = hits + 1;
-            if (hits >= maxhits) return; // I hate to burst your chain, but...
+            if (hits >= maxhits) {
+				if (attacker.flags & FL_CLIENT) {
+					attacker.ammo_cells = SUB_ClampFloat(attacker.ammo_cells - floor(maxhits * 3),0,attacker.ammo_cells);
+					attacker.currentammo = attacker.ammo_cells;
+				}
+				return; // I hate to burst your chain, but...
+			}
         }
         saved = saved.chain2;
     }
@@ -689,14 +707,22 @@ void(vector p1, vector p2, entity attacker, float damage, float reach) BurstLit_
     }
 };
 
-// Called by exploding plasma balls.  Also by Mjolnir.
-void() RyuPlasma_Discharge = { // [FUNCTION]
+//void(entity inflictor, entity attacker,
+//	float damage, entity ignore,
+//	vector spot, vector pak,
+//	float bang) 
+void(entity attacker) BurstLit_Discharge = { // [FUNCTION]
     local vector pak;
 
-    pak_x = self.style;
-    pak_y = self.distance;
-    pak_z = self.count; //5
-    BurstLit_Chain(self,self.owner,self.dmg * 0.5,self.enemy,self.origin,pak,TRUE);
+    pak_x = self.style; // nofriendlyfire
+    pak_y = self.distance; // radius
+    pak_z = self.count; // maxhits
+    BurstLit_Chain(self,attacker,self.dmg * 0.5,self.enemy,self.origin,pak,TRUE);
+};
+
+// Called by exploding plasma balls.  Also by Mjolnir.
+void() RyuPlasma_Discharge = { // [FUNCTION]
+	BurstLit_Discharge(self.owner);
 };
 
 // "Storm" Lightning Strike  (a.k.a. Airstrike).  This creates a blank entity that will zap targets in the water within a radius for damage.
@@ -891,10 +917,7 @@ void() Thor_Pulse = { // [FUNCTION]
 
     self.nextthink = time + 0.2;
     self.count = self.count - 1;
-    pak_x = self.style;
-    pak_y = self.distance;
-    pak_z = self.count;     //5;
-    BurstLit_Chain(self, self.master, self.dmg*0.5, self.enemy, self.origin, pak, TRUE); // Was Plasma_Discharge from Drake light.qc
+	BurstLit_Discharge(self.master);
 };
 
 // Spawns a special discharge entity for Mjolnir impacts.
@@ -915,7 +938,6 @@ void() Thor_Discharge = { // [FUNCTION]
     newmis.touch    = SUB_Null;
     newmis.solid    = SOLID_NOT;
     newmis.think    = Thor_Pulse;
-    setall (newmis, "", '0 0 0', '0 0 0', self.origin);
+    setall(newmis, "", '0 0 0', '0 0 0', self.origin);
     SUB_ThinkImmediate(newmis, Thor_Pulse);
-    MakeFancy (self.origin, X56_PLASMA_BLUE, 6); // Spawn a second entity for the explosion sprite.
 };

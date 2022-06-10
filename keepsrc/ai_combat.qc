@@ -72,22 +72,24 @@ float(entity targ, entity inflictor) CanDamage = {
 
 float VICTORY_ALL_MONSTERS = 0;
 float VICTORY_THRESHOLD_MONSTERS = 1;
-float VICTORY_ANY_SOME_MONSTERS = 4;
-float VICTORY_NONE_MONSTERS = 5;
-float VICTORY_NONE_DENIZENS = 6;
-float VICTORY_THRESHOLD_DENIZENS = 7;
-float VICTORY_ANY_SOME_DENIZENS = 10;
-float VICTORY_ALL_DENIZENS = 11;
+float VICTORY_ANY_SOME_MONSTERS = 2;
+float VICTORY_NONE_MONSTERS = 3;
+float VICTORY_NONE_DENIZENS = 4;
+float VICTORY_THRESHOLD_DENIZENS = 5;
+float VICTORY_ANY_SOME_DENIZENS = 6;
+float VICTORY_ALL_DENIZENS = 7;
 float VICTORY_MANUAL_ONLY = 1; // Only trigger if targetted, not automatic on kill.
 
 void() trigger_victory_fire = {
 	if (self.enemy) activator = self.enemy;
 	SUB_UseTargets();
+	if (self.wait < 0) self.wait = TRUE;
 };
 
 void() trigger_victory_check = {
 	local float goal, goalperc;
 
+	if (self.wait > 0) return;
 	if (self.filterstyle == VICTORY_ALL_MONSTERS) {
 		if (killed_monsters < total_monsters) return;
 	} else if (self.filterstyle == VICTORY_ALL_DENIZENS) {
@@ -284,7 +286,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	}
 
 	// resist_fire is the odd one out here. There were too many edge cases not handled by classgroups so they exist in individual locations
-	// except if we have the ice arbalest out or elemental tome
+	// except if we have the ice arbalest out or Blizzard Sphere
 	if (( (targ.moditems & IT_ICE && targ.weapon == IT_ICE && targ.selfweaponismoditems) // Have ice out
            || (targ.items & IT_EXTRA_WEAPON && targ.perms & IT_FROSTBOW // Have frostbow out
                && targ.weapon == IT_EXTRA_WEAPON && !targ.selfweaponismoditems) )
@@ -642,7 +644,10 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	}
 	
 	if (targ.health < 1) {
-		if ((inflictor.classgroup == CG_PROJICE || inflictor.classtype == CT_FROSTSHARD) && targ.resist_cold < 1) targ.frozen = TRUE;
+		if ((inflictor.classgroup == CG_PROJICE || inflictor.classtype == CT_FROSTSHARD)
+			 && targ.resist_cold < 1 && targ.classgroup != CG_HARMLESS) {
+			targ.frozen = TRUE;
+		}
 		Killed (targ, attacker);
 		return;
 	} // Has the target died?
@@ -885,6 +890,8 @@ void() FreezeFinish = {
 
 void(entity targ, entity attacker) T_Freeze = { // [FUNCTION]
 	if (!(targ.flags & FLx_CREATURE)) return;
+	if (targ == attacker) return;
+	if (targ.flags & FL_CLIENT) return;
 
 	sound(targ, CHAN_ITEM, "drake/weapons/freeze.wav", 1, ATTN_NORM);
 	Particle_Cube(self, 1, 41);

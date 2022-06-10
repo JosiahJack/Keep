@@ -83,33 +83,36 @@ void () gremlin_steal_plasma = {
 
 float () GremlinAttemptWeaponSteal = {
    local entity tempself, victim;
-   local float wep;
+   local float wepID, wep;
 
-   if (self.stoleweapon)  return ( FALSE ); // already stole a weapon
-   if (!(self.enemy.flags & FL_CLIENT)) return ( FALSE ); // only steal from players
-   if ((vlen(self.enemy.origin - self.origin)) > 100.000) return ( FALSE ); // not within 100 units
+   if (self.stoleweapon) return FALSE; // already stole a weapon
+   if (!(self.enemy.flags & FL_CLIENT)) return FALSE; // only steal from players
+   if ((vlen(self.enemy.origin - self.origin)) > 100.000) return FALSE; // not within 100 units
    if (random () < 0.500) return ( FALSE ); // 50% chance
 
-   wep = self.enemy.weapon;
-   if (wep == FALSE || wep == IT_AXE || wep == IT2_MJOLNIR) return ( FALSE );
-
-   if (wep != IT2_PROXIMITY_GUN && wep != IT2_LASER_CANNON) {
-      self.enemy.items = (self.enemy.items - (self.enemy.items & wep));
-      self.items = 0;
-      self.items2 = 0;
-      self.items = (self.items | wep);
-   } else {
-      if (wep == IT2_PROXIMITY_GUN || wep == IT2_LASER_CANNON) {
-         self.enemy.items2 = (self.enemy.items2 - (self.enemy.items2 & wep));
-         self.items = 0;
-         self.items2 = 0;
-         self.items2 = (self.items2 | wep);
-      } else {
-         return (FALSE);
-      }
+   wepID = GetWepIDIndex(self.enemy.weapon,self.enemy.selfweaponismoditems);
+   if (wepID == FALSE || wepID == ID_AXE_SHADAXE_CHAINSAW
+       || wepID == ID_MACE || wepID == ID_GRAPPLE
+       || wepID == ID_ICE || wepID == ID_SHOTGUN_BLASTER
+       || wepID == ID_SUPER_SHOTGUN_WIDOWMAKER_SHOTCYCLER_QUADSHOTTY
+       || wepID == ID_SCIMITAR || wepID == ID_RAPIER
+       || wepID == ID_VOIDSTAFF || wepID == ID_SANGUINATORS
+       || wepID == ID_THUNDERBOLT_AD_PLASMAGUN || wepID == ID_PLASMAGUN_ROGUE
+       || wepID == ID_FLAK || wepID == ID_CHAINLIGHTNING
+       || wepID == ID_WANDCROSS2 || wepID ==ID_MJOLNIR
+       || wepID == ID_GUNGNIR || wepID == ID_AIRGUN) {
+      return FALSE;
    }
 
-   self.weapon = wep;
+   self.weapon = wep = self.enemy.weapon;
+   self.selfweaponismoditems = self.enemy.selfweaponismoditems;
+   if (wepID == ID_PROXIMITY_GRENADE || wepID == ID_LASER_CANNON) {
+      self.enemy.items2 = (self.enemy.items2 - (self.enemy.items2 & self.weapon));
+      self.items2 = (self.items2 | self.weapon);
+   } else {
+      self.enemy.items = (self.enemy.items - (self.enemy.items & self.weapon));
+      self.items = (self.items | self.weapon);
+   }
 
    // Take ammo along with the gun and sprint it to console
    if (wep == IT_SHOTGUN) {
@@ -221,7 +224,9 @@ float () GremlinFindTarget = {
       gorge = world;
       head = nextent (world);
       while ( (head != world) ) {
-         if ( ((head.health < TRUE) && (head.flags & FLx_CREATURE)) ) {
+         if (head.health < 1 && (head.flags & FL_MONSTER)
+             && !head.gibbed
+             && head.classgroup != CG_HARMLESS) { // Don't eat denizens.
             result = fabs ((head.origin_z - self.origin_z));
             if (visible(head) && result < 80.000 && head.gorging == FALSE) {
                dist = visible_distance;
@@ -971,8 +976,7 @@ void () Gremlin_MeleeAttack = {
 		return;
       } else {
          if ( ((self.enemy.flags & FL_CLIENT) && (random () < 0.400)) ) {
-            if ( GremlinAttemptWeaponSteal () )
-               return ;
+            if (GremlinAttemptWeaponSteal()) return;
          }
       }
       num = random ();

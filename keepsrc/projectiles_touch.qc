@@ -38,6 +38,7 @@
 //=============================================================================
 
 void(entity targ, float playdmg, float mondmg) ApplyFireDmg;
+float(vector source, float axedmg) GibFloorBody;
 
 void() Touch_Bullet = { // [FUNCTION]
 	if (self.touchedvoid) return;				// Marked for removal
@@ -1201,7 +1202,7 @@ void() NecroBolt_Touch = { // [FUNCTION]
 // Called when a thrown hammer hits something.
 void() Thor_Touch = { // [FUNCTION]
     local vector org;
-    local float damage, dmg1, dmg2;
+    local float damage, dmg1, dmg2, hitCorpse;
     local entity  swap;
 
     if (other == self.master) { Thor_Remove(); return; } // Returned to attacker, so simply catch the hammer.
@@ -1217,7 +1218,9 @@ void() Thor_Touch = { // [FUNCTION]
         damage = 50;
         if (other.classname == "monster_zombie") damage = other.health + fabs(other.gibhealth * 1.1);
         sound (self, CHAN_WEAPON, "zombie/z_hit.wav", 1, ATTN_NORM);
-        T_Damage(other, self, self.master, damage, DAMARMOR);
+		if (GibFloorBody(trace_endpos,200)) {
+			hitCorpse = TRUE;
+		} else T_Damage(other, self, self.master, damage, DAMARMOR);
         if (self.ammo_cells > 0) {
             damage = self.dmg;
             org = Midpoint(self.master);
@@ -1233,13 +1236,17 @@ void() Thor_Touch = { // [FUNCTION]
 					damage_velocity = VEC_ORIGIN;
 					dmg1 = other.health - other.gibhealth + 1;
 				}
-				T_Damage(other, self, self.master, dmg1 + dmg2, DAMARMOR); // Send monsters flying.
-                T_RadiusDamage(self,self.master,damage,other,DAMAGEALL);
+
+				if (!hitCorpse) {
+					T_Damage(other, self, self.master, dmg1 + dmg2, DAMARMOR); // Send monsters flying.
+					T_RadiusDamage(self,self.master,damage,other,DAMAGEALL);
+				}
 
 				// Don't move sprite back because hammer is still there.
                 sound(self, CHAN_AUTO, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
                 Rocket_Explosion2(self.origin, 244, 3);
                 Thor_Discharge(); // Spawn new, separate explosion entity.
+				MakeFancy(self.origin, X56_PLASMA_BLUE, 6); // Spawn a second entity for the explosion sprite.
                 if (self.master.tome_finished) {
                     ShockWave(self.origin + '0 0 4', RING_BLUE, 6, "progs/drake/s_wave.spr",FALSE);
                     swap = self;
@@ -1255,13 +1262,21 @@ void() Thor_Touch = { // [FUNCTION]
         if (pointcontents(self.origin) != CONTENT_SKY) {
             org = self.origin - 8*normalize(self.velocity);
             Tent_Point (TE_GUNSHOT, org);
-            sound (self, CHAN_WEAPON, "hipnotic/weapons/mjoltink.wav", 1, ATTN_NORM);
+			if (GibFloorBody(self.origin,200)) {
+				sound (self, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
+				return;
+			} else sound(self, CHAN_WEAPON, "hipnotic/weapons/mjoltink.wav", 1, ATTN_NORM);
         }
+
+		if (GibFloorBody(self.origin,200)) {
+			sound (self, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
+			return;
+		}
 
         if (self.count < 10) {
             self.count = self.count + 1;
         } else { // Stuck, so teleport back to the attacker's hand.
-            Thor_Poof ();
+            Thor_Poof();
             return;
         }
     }

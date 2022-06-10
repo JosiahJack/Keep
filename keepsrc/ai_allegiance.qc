@@ -158,7 +158,10 @@ float(entity targ) IsLeader = { // [FUNCTION]
 };
 
 void(entity tag) SetDefaultDenizenAttributes = { // [FUNCTION]
-	if (!self.alignment) self.alignment = NEUTRAL;
+	if (!self.alignment) {
+		self.alignment = NEUTRAL;
+		self.gibhealth = MON_NEVERGIB;
+	}
 	if (!self.passive_state) self.passive_state = 1;
 	if (!self.temperament) self.temperament = TEMPRA_PASSIVE;
 	if (!self.vulnerability) self.vulnerability = VULN_RESISTANT;

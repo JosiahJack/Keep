@@ -72,7 +72,7 @@ void() item_ammo_setup = {
 	}
 
 	item_coopcheck();
-	item_start ();
+	item_start();
 };
 
 void() ammo_touch = {
@@ -349,10 +349,10 @@ void() item_voidshards = {
 void() item_elemental = {
 	ammo_checkrandomizer();
 	if (self.spawnflags & A_LARGE) {
-		item_setupmodel("progs/aoa/ammo_elemental_big.mdl",0);
+		item_setupmodel("progs/redfield/g_light.mdl",0);
 		item_ammo_set(AMMO_MANA_LGR);
 	} else {
-		item_setupmodel("progs/aoa/ammo_elemental.mdl",0);
+		item_setupmodel("progs/redfield/crystal_ball_ammo.mdl",0);
 		item_ammo_set(AMMO_MANA_SML);
 	}
 	self.ammo_elemental = self.aflag;

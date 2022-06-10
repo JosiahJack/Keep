@@ -190,11 +190,21 @@ void() player_run =[ 6, player_run ] { // [FUNCTION]
 		return;
 	}
 
+	if ((self.weapon == IT_ICE && self.selfweaponismoditems)
+		 || (self.weapon == IT2_MJOLNIR && !self.selfweaponismoditems)) {
+		if (self.idletimer <= time) { // In Zerstorer, when the fifth idle frame was reached, the frame looped back to the first and the saw idle sound was played.
+			if (self.view_ofs != '0 0 0') { // Volume used to be 1, but Tronyn et.al. wanted it quieter.  Pity, it was fun loud.
+				sound(self, CHAN_AUTO, "tronyn/lightning_component_electrified.wav", 0.8, ATTN_NORM);
+				self.idletimer = time + 0.5 + random() * 0.2; // In Drake, the frames are grouped, so play sound periodically.
+			}
+		}	
+	}
+
 	if (self.weapon == IT_AXE && !self.selfweaponismoditems) {
 		if (self.perms & IT_CHAINSAW) { // Check for chainsaw first because it needs a different player model.
 			if (self.idletimer <= time) { // In Zerstorer, when the fifth idle frame was reached, the frame looped back to the first and the saw idle sound was played.
 				if (self.view_ofs != '0 0 0') { // Volume used to be 1, but Tronyn et.al. wanted it quieter.  Pity, it was fun loud.
-					sound (self, CHAN_AUTO, "zerstorer/weapons/sawridle.wav", 0.5, ATTN_NORM);
+					sound(self, CHAN_AUTO, "zerstorer/weapons/sawridle.wav", 0.5, ATTN_NORM);
 					self.idletimer = time + 0.5; // In Drake, the frames are grouped, so play sound periodically.
 				}
 			}
@@ -580,7 +590,7 @@ void () player_hammer3 = [ 34.000, player_hammer4 ] { // [FUNCTION]
 };
 void () player_hammer4 = [ 35.000, player_hammer5 ] { if (!frame_pause()) playham_frame(35,4); self.nextthink = time + 0.05; W_FireMjolnir ();}; // [FUNCTION]
 void () player_hammer5 = [ 36.000, player_hammer6 ] { if (!frame_pause()) playham_frame(36,4); self.nextthink = time + 0.05;}; // [FUNCTION]
-void () player_hammer6 = [ 37.000, player_run ] { if (!frame_pause()) playham_frame(37,0); self.nextthink = time + 0.05; }; // [FUNCTION]
+void () player_hammer6 = [ 37.000, player_run ] { if (!frame_pause()) playham_frame(37,0); self.nextthink = time + 0.05;}; // [FUNCTION]
 
 // Mjolnir standard throw
 void () player_mjolnir1 = [ 38.000, player_mjolnir2 ] { if (!frame_pause()) playham_frame(38,1); }; // [FUNCTION]

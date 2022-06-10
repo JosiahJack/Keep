@@ -623,6 +623,8 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 		    || proj_type == CT_PROJ_SERG
 			|| proj_type == CT_PROJ_SHUB1)
 			newmis.angles = vectoangles(self.velocity);
+	} else {
+		newmis.angles = vectoangles(newmis.velocity);
 	}
 	setmodel(newmis,newmis.mdl);
 	setsize(newmis,newmis.bbmins,newmis.bbmaxs);		
@@ -1850,7 +1852,7 @@ void(vector start, vector dir, entity targ) Thor_Launch = { // [FUNCTION]
     newmis.nextthink    = time + 0.1;
     newmis.think        = Thor_Think;
 	newmis.classgroup	= CG_WEAPON;
-    newmis.frame = 1;
+    newmis.frame		= 0;
     setmodel(newmis,"progs/drake/throwham.mdl");
     setsize(newmis, '0 0 0', '0 0 0');        
     setorigin(newmis, start);
@@ -1865,7 +1867,7 @@ void(vector start, vector dir, entity targ) Thor_Launch = { // [FUNCTION]
         }
         self.weaponmodel = "";
     }
-    self.hammer_finished= time + 10;    // Automatically returns later.
+    self.hammer_finished = time + 10;    // Automatically returns later.
 };
 
 // PM:  Custom shockwave attack for enhanced Mjolnir.
@@ -1873,6 +1875,8 @@ void() HIP_FireMjolnirShockwave = { // [FUNCTION]
     local entity wave;
     local vector spot;
     local float damage, fr, wc;
+
+	if (GibFloorBody(trace_endpos, 200)) return;
 
     spot = trace_endpos;
     wave = spawn();
@@ -1909,17 +1913,15 @@ float() Thor_Safe = { // [FUNCTION]
 
 // Slammed the ground, so fire off some lightning.
 void() HIP_SlamMjolnir = { // [FUNCTION]
-    local float hits;
+	if (self.hammer_finished) return;
 
-    if (self.button0)
     if (self.ammo_cells >= COST_MJOLNIR)
     if (Thor_Safe()) { // Super slam.  Update 11/30/09:  Don't discharge if deadly.
-        if (self.tome_finished) hits = 6;
-        else hits = 4;
-
 		Quake_Spawn(self,800,10,trace_endpos,TRUE,2,VEC_QUAKE);
+		if (GibFloorBody(trace_endpos,200)) return;
+
 		HIP_FireMjolnirLightning(); dprint("Slam safe\n");
-		Divine_Wrath(hits, 2); // Do after Hip lightning.
+		if (self.tome_finished) Divine_Wrath(6, 2); // Do after Hip lightning.
 		if (!lightzero_finished) sound(world,CHAN_AUTO,"drake/bane/thunder.wav",1,ATTN_NONE);
         if (self.tome_finished) StaticField(self,400); // Soften 'em up before delayed smashing. Was 500.
 		W_Reload(1.5);
@@ -1942,7 +1944,7 @@ float() HIP_ThrowMjolnir = { // [FUNCTION]
 
     source = self.origin + '0 0 16';
     makevectors (self.v_angle);
-    traceline(source,source + v_forward * 64,FALSE,self);
+    traceline(source,source + v_forward * 80,FALSE,self);
     org = trace_endpos - v_forward * 4;
     if (trace_ent.takedamage) {
         stat = 0;
@@ -1950,11 +1952,18 @@ float() HIP_ThrowMjolnir = { // [FUNCTION]
 		if ((trace_ent.classgroup == CG_ZOMBIE) && trace_ent.classname != "monster_mummy") damage = trace_ent.max_health * 2;
 		sound(self, CHAN_WEAPON, "zombie/z_hit.wav", 1, ATTN_NORM);
 		SpawnBlood(trace_ent,org,'0 0 50',damage,225);
+		if (trace_ent.alignment == NEUTRAL && trace_ent.enemy == self) {
+			trace_ent.enemy = trace_ent.oldenemy = world;
+			return TRUE;
+		}
+
 		T_Damage(trace_ent, self, self, damage, DAMARMOR);
 		if (random() < 0.2) stat = 1; // Multiple procs are checked independently of each other, and may activate simultaneously.
-		if (random() < 0.1) { // Thunderstorm proc.
-			if (!Divine_Wrath(3, 1)) stat = stat + 1; // 3 shots, 1 sec of darkness.
-		} else Divine_Wrath(1, 1);
+		if (self.tome_finished) {
+			if (random() < 0.1) { // Thunderstorm proc.
+				if (!Divine_Wrath(3,1)) stat = stat + 1; // 3 shots, 1 sec of darkness.
+			} else Divine_Wrath(1,1);
+		}
 
 		if (stat) {
 			stat = stat + 1;
@@ -1963,8 +1972,12 @@ float() HIP_ThrowMjolnir = { // [FUNCTION]
 		}
         return TRUE;
     } else if (trace_fraction < 1.0) { // Hit wall
-        if (other.solid == SOLID_BSP && trace_plane_normal * '0 0 1' > COS45) { HIP_SlamMjolnir (); return TRUE; } // Check for premature hit on the ground.
+        if (other.solid == SOLID_BSP && trace_plane_normal * '0 0 1' > COS45) { HIP_SlamMjolnir(); return TRUE; } // Check for premature hit on the ground.
 
+		if (GibFloorBody(trace_endpos,200)) {
+			sound (self, CHAN_WEAPON, "hipnotic/weapons/mjolhit.wav", 1, ATTN_NORM);
+			return TRUE;
+		}
         sound (self, CHAN_WEAPON, "hipnotic/weapons/mjoltink.wav", 1, ATTN_NORM);
         Tent_Point(TE_GUNSHOT, org);
         return TRUE;

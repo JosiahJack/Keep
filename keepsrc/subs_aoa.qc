@@ -122,7 +122,7 @@ void() precache_aoa =
 	precache_model ("progs/aoa/sphere.mdl");
 	precache_model ("progs/aoa/g_scimitar.mdl");
 	precache_model ("progs/aoa/g_rapier.mdl");
-	precache_model ("progs/aoa/g_ice.mdl");		
+	precache_model ("progs/redfield/g_lightstaff.mdl");		
 	precache_model ("progs/aoa/g_mace.mdl");		
 	precache_model ("progs/aoa/g_voidstaff.mdl");
 	precache_model ("progs/aoa/g_flak.mdl");

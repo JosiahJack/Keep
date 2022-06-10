@@ -1518,6 +1518,7 @@ void() TomeOfPowerCheat = {
 	dprint("\b[Impulse 248]\b Tome of Power Cheat!\n");
 	self.tome_finished = time + POWERUP_TIMER;
 	self.moditems = self.moditems | IT_ARTTOME;
+	W_SetCurrentAmmo(self);
 };
 
 void() ToggleFlashlight = {

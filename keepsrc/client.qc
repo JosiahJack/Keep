@@ -1473,10 +1473,10 @@ void() PlayerPostThink = {
 		self.touchedsound = "";
 	}
 	if (!(self.flags & FL_ONGROUND)) self.jump_flag = self.velocity_z; // If flying through the air, store player Z velocity in jump flag
-	ClientPowerups ();
-	ClientDeBuff ();
-    CheckMjolnir ();            // SoE:  Modified throwing hammer.
-    if (self.hook) GrappleService (); // Update PM 7/24/09:  Added grappler weapon from DoE.
+	ClientPowerups();
+	ClientDeBuff();
+    CheckMjolnir(); // SoE:  Modified throwing hammer.
+    if (self.hook) GrappleService(); // Update PM 7/24/09:  Added grappler weapon from DoE.
 };
 
 void() PlayerJump = {

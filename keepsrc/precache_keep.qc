@@ -219,6 +219,8 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/madfox/v_hamer.mdl");
 	precache_model("progs/madfox/thr0wham.mdl");
 	precache_model("progs/hipnotic/v_hammer.mdl"); //mjolnir
+	precache_model("progs/violentrumble/v_hammer.mdl"); //mjolnir
+	precache_model("progs/violentrumble/v_hammerpw.mdl"); //mjolnir
 	precache_model("progs/hipnotic/playham.mdl"); // player with the hammer
 	precache_model("progs/quoth/v_ham.mdl"); //warhammer from quoth
 	precache_model("progs/drake/v_wand.mdl");
@@ -268,7 +270,7 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/q15/player_legs2.mdl");
 	precache_model("progs/aoa/v_flak.mdl");
 	precache_model("progs/aoa/v_gungnir.mdl");
-	precache_model("progs/aoa/v_ice.mdl");
+	precache_model("progs/redfield/v_light.mdl");
 	precache_model("progs/aoa/v_mace.mdl");
 	precache_model("progs/aoa/v_rapier.mdl");
 	precache_model("progs/aoa/v_sanguinators.mdl");
@@ -313,6 +315,10 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model(MODEL_PROJ_HKN);
 	precache_model("progs/q15/zom_gib.mdl");
 	precache_sound("redfield/misc/catsmeow.wav");
+	precache_sound("ad171/weapons/bolt_hit2.wav");
+	precache_sound("ad171/weapons/bolt_hit3.wav");
+	precache_sound("drake/bane/thunder.wav");
+	precache_sound("tronyn/lightning_component_electrified.wav");
 	precache_aoa();
 	precache_poisongibs();
 	if (ext_dppart) {
