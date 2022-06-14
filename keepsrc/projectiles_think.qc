@@ -1372,11 +1372,11 @@ void() faspell_frames = { // [FUNCTION]
 	if (self.spell_angle >= 360) self.spell_angle -= 360.00000;
 	if (self.count < 6) self.count += 0.60000;
 	makevectors ( self.angles);
-	posA = ((v_right * sin(self.spell_angle)) * self.count);
-	posB = ((v_right * sin(old_angle)) * old_count);
+	posA = ((v_right * mathlib_sin(self.spell_angle)) * self.count);
+	posB = ((v_right * mathlib_sin(old_angle)) * old_count);
 	new_posA = (posA - posB);
-	posA = ((v_up * cos(self.spell_angle)) * self.count);
-	posB = ((v_up * cos(old_angle)) * old_count);
+	posA = ((v_up * mathlib_cos(self.spell_angle)) * self.count);
+	posB = ((v_up * mathlib_cos(old_angle)) * old_count);
 	new_posB = (posA - posB);
 	new_posA += new_posB;
 	walkmove(self.angles_y, vlen(new_posA - new_posB));

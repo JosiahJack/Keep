@@ -159,6 +159,10 @@ void() misc_explobox_setup = { // [FUNCTION]
 			self.oldorigin = self.origin + '16 16 0';
 			setorigin(self, self.oldorigin);
 		}
+		if (self.classname == "misc_barrel") {
+			self.oldorigin = self.origin + '0 0 12';
+			setorigin(self, self.oldorigin);
+		}
 
 		// Setting the angle key in the editor to UP/DOWN = random rotation	
 		if (self.angles_y < 0 || (self.angles_y == 0 && !query_configflag(SVR_ITEMROTATE)) ) { 
@@ -241,8 +245,8 @@ void() misc_explobox2 = { // [ENTITY]
 void() misc_barrel = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "maps/nsoe2/b_barrel.bsp";
 	precache_model (self.mdl);
-	self.bbmins = '-32 -32 0';
-	self.bbmaxs = '32 32 64';
+	self.bbmins = '-16 -16 -20';
+	self.bbmaxs = '16 16 16';
 	misc_explobox_setup();
 };
 

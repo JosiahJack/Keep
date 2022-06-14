@@ -255,7 +255,7 @@ void() misc_statue = { // [ENTITY]
         self.pos2   = '32 32 80';
         //self.touch  = barrel_touch;     // Walk on statue.
     } else { // Default to angel statue.  Since the model is rectangular, calculate the bbox dimensions.
-        trig = CoSine (self.angles_y);
+        trig = CoSine(self.angles_y);
         vx = fabs(16 * trig_x) & 31 + 32;
         vy = fabs(16 * trig_y) & 31 + 32;
         self.mdl    = "progs/drake/anglstat.mdl";

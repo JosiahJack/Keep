@@ -43,9 +43,9 @@ void() sphere_spawn;
 
 void() artifact_touch = { // [FUNCTION]
 	entity pl;
-	string amboost;
+	float overrideSprint;
 
-	amboost = string_null;
+	overrideSprint = FALSE;
 	if (self.classtype == CT_ARTSUIT) {
 		other.rad_time = TRUE;
 		if (self.cnt < 0) other.radsuit_finished = POWERUP_VANIA;
@@ -152,56 +152,106 @@ void() artifact_touch = { // [FUNCTION]
 		if (self.cnt < 0) other.wing_finished = POWERUP_VANIA;
 		else other.wing_finished = time + 45;
 	} else if (self.classtype == CT_ARTOPTIMIZER) {
-		other.maxshells = other.maxshells + self.ammo_shells;
-		other.ammo_shells = other.maxshells; // max out ammo
-		if (self.ammo_shells) amboost = strcat("Max shells increased by ",ftos(self.ammo_shells),"!\n");
+		sprint(other, "You got the ");
+		sprint(other, self.netname);
+		sprint(other, "...\n");
+		if (self.ammo_shells) {
+			other.maxshells = other.maxshells + self.ammo_shells;
+			other.ammo_shells = other.maxshells; // max out ammo
+			sprint(other, "Max shells increased by ");
+			sprint(other, ftos(self.ammo_shells));
+			sprint(other, "!\n");
+		}
 
-		other.maxnails = other.maxnails + self.ammo_nails;
-		other.ammo_nails = other.maxnails; // max out ammo
-		if (self.ammo_nails) amboost = strcat(amboost,"Max nails increased by ",ftos(self.ammo_nails),"!\n");
+		if (self.ammo_nails)  {
+			other.maxnails = other.maxnails + self.ammo_nails;
+			other.ammo_nails = other.maxnails; // max out ammo
+			sprint(other, "Max nails increased by ");
+			sprint(other, ftos(self.ammo_nails));
+			sprint(other, "!\n");
+		}
 
-		other.maxrockets = other.maxrockets + self.ammo_rockets;
-		other.ammo_rockets = other.maxrockets; // max out ammo
-		if (self.ammo_rockets) amboost = strcat(amboost,"Max rockets increased by ",ftos(self.ammo_rockets),"!\n");
+		if (self.ammo_rockets) {
+			other.maxrockets = other.maxrockets + self.ammo_rockets;
+			other.ammo_rockets = other.maxrockets; // max out ammo
+			sprint(other, "Max rockets increased by ");
+			sprint(other, ftos(self.ammo_rockets));
+			sprint(other, "!\n");
+		}
 
-		other.maxcells = other.maxcells + self.ammo_cells;
-		other.ammo_cells = other.maxcells; // max out ammo
-		if (self.ammo_cells) amboost = strcat(amboost,"Max cells increased by ",ftos(self.ammo_cells),"!\n");
+		if (self.ammo_cells) {
+			other.maxcells = other.maxcells + self.ammo_cells;
+			other.ammo_cells = other.maxcells; // max out ammo
+			sprint(other, "Max cells increased by ");
+			sprint(other, ftos(self.ammo_cells));
+			sprint(other, "!\n");
+		}
 
-		other.maxlavanails = other.maxlavanails + self.ammo_lava_nails;
-		other.ammo_lava_nails = other.maxlavanails; // max out ammo
-		if (self.ammo_lava_nails) amboost = strcat(amboost,"Max lava nails increased by ",ftos(self.ammo_lava_nails),"!\n");
+		if (self.ammo_lava_nails) {
+			other.maxlavanails = other.maxlavanails + self.ammo_lava_nails;
+			other.ammo_lava_nails = other.maxlavanails; // max out ammo
+			sprint(other, "Max lava nails increased by ");
+			sprint(other, ftos(self.ammo_lava_nails));
+			sprint(other, "!\n");
+		}
 
-		other.maxmultirockets = other.maxmultirockets + self.ammo_multi_rockets;
-		other.ammo_multi_rockets = other.maxmultirockets; // max out ammo
-		if (self.ammo_multi_rockets) amboost = strcat(amboost,"Max multi-rockets increased by ",ftos(self.ammo_multi_rockets),"!\n");
+		if (self.ammo_multi_rockets) {
+			other.maxmultirockets = other.maxmultirockets + self.ammo_multi_rockets;
+			other.ammo_multi_rockets = other.maxmultirockets; // max out ammo
+			sprint(other, "Max multi-rockets ammo increased by ");
+			sprint(other, ftos(self.ammo_multi_rockets));
+			sprint(other, "!\n");
+		}
 
-		other.maxplasma = other.maxplasma + self.ammo_plasma;
-		other.ammo_plasma = other.maxplasma; // max out ammo
-		if (self.ammo_plasma) amboost = strcat(amboost,"Max plasma increased by ",ftos(self.ammo_plasma),"!\n");
+		if (self.ammo_plasma) {
+			other.maxplasma = other.maxplasma + self.ammo_plasma;
+			other.ammo_plasma = other.maxplasma; // max out ammo
+			sprint(other, "Max poison ammo increased by ");
+			sprint(other, ftos(self.ammo_plasma));
+			sprint(other, "!\n");
+		}
 
+		if (self.ammo_poison) {
 		other.maxpoison = other.maxpoison + self.ammo_poison;
 		other.ammo_poison = other.maxpoison; // max out ammo
-		if (self.ammo_poison) amboost = strcat(amboost,"Max poison ammo increased by ",ftos(self.ammo_poison),"!\n");
+			sprint(other, "Max poison ammo increased by ");
+			sprint(other, ftos(self.ammo_poison));
+			sprint(other, "!\n");
+		}
 
+		if (self.ammo_bolts) {
 		other.maxbolts = other.maxbolts + self.ammo_bolts;
 		other.ammo_bolts = other.maxbolts; // max out ammo
-		if (self.ammo_bolts) amboost = strcat(amboost,"Max bolts increased by ",ftos(self.ammo_bolts),"!\n");
+			sprint(other, "Max bolts increased by ");
+			sprint(other, ftos(self.ammo_bolts));
+			sprint(other, "!\n");
+		}
 
-		other.maxblood = other.maxblood + self.ammo_bloodcrystals;
-		other.ammo_bloodcrystals = other.maxblood; // max out ammo
-		if (self.ammo_bloodcrystals) amboost = strcat(amboost,"Max blood crystals increased by ",ftos(self.ammo_bloodcrystals),"!\n");
+		if (self.ammo_bloodcrystals) {
+			other.maxblood = other.maxblood + self.ammo_bloodcrystals;
+			other.ammo_bloodcrystals = other.maxblood; // max out ammo
+			sprint(other, "Max blood crystals increased by ");
+			sprint(other, ftos(self.ammo_bloodcrystals));
+			sprint(other, "!\n");
+		}
 
-		other.maxvoid = other.maxvoid + self.ammo_voidshards;
-		other.ammo_voidshards = other.maxvoid; // max out ammo
-		if (self.ammo_voidshards) amboost = strcat(amboost,"Max void shards increased by ",ftos(self.ammo_voidshards),"!\n");
+		if (self.ammo_voidshards) {
+			other.maxvoid = other.maxvoid + self.ammo_voidshards;
+			other.ammo_voidshards = other.maxvoid; // max out ammo
+			sprint(other, "Max void shards increased by ");
+			sprint(other, ftos(self.ammo_voidshards));
+			sprint(other, "!\n");
+		}
 
-		other.maxmana = other.maxmana + self.ammo_elemental;
-		other.ammo_elemental = other.maxmana; // max out ammo
-		if (self.ammo_elemental) amboost = strcat(amboost,"Max elemental mana increased by ",ftos(self.ammo_elemental),"!\n");
+		if (self.ammo_elemental) {
+			other.maxmana = other.maxmana + self.ammo_elemental;
+			other.ammo_elemental = other.maxmana; // max out ammo
+			sprint(other, "Max elemental mana increased by ");
+			sprint(other, ftos(self.ammo_elemental));
+			sprint(other, "!\n");
+		}
 
-		sprint(other,amboost);
-		amboost = string_null;
+		overrideSprint = TRUE;
 	} else if (self.classtype == CT_SIGILBANE) {
 		// Give all players 250 health
 		pl = find (world, classname, "player");
@@ -216,8 +266,10 @@ void() artifact_touch = { // [FUNCTION]
 		other.health = other.max_health; 
 	} else return;
 
-	sprint(other, "You got the ");
-	sprint(other, self.netname);
+	if (!overrideSprint) {
+		sprint(other, "You got the ");
+		sprint(other, self.netname);
+	}
 	sprint(other,"\n");
 	sound(other, CHAN_ITEM, self.noise, 1, ATTN_NORM); // Pickup sound
 	Safe_stuffcmd(other, "bf\n"); // Screen flash
@@ -959,7 +1011,10 @@ void() item_secrethunter = {
 	self.touch2 = item_secrethunter_touch;
 	if (self.netname == "") self.netname = "Secret Hunter, Loki's Cat";
 	self.classtype = CT_ARTSECRETHUNTER;
-	setsize(self,VEC_HULL_MIN,VEC_HULL_MAX);
+	if (self.part_active == TRUE) misc_particle_burst_setup(); // Check for a particle burst setup
+	self.part_active = 0;	// Must clear this afterward
+	self.bbmins = '-16 -16 -16';
+	self.bbmaxs = VEC_HULL_MAX;
 	item_start();
 };
 

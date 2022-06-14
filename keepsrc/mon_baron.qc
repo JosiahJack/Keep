@@ -416,7 +416,7 @@ void() Geyser_Erupt = {
     while (loop > 0) {
         // Find cosine and sine of offset angle.
         ang = random() * 30 + 60;   // 60-90 degrees, 90 is straight up. 
-        trig = CoSine (ang);
+        trig = CoSine(ang);
         qcos = trig_x;
         qsin = trig_y;
         dir = '0 0 0';

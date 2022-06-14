@@ -977,13 +977,13 @@ float(float minimum, float val, float maximum) bound = #96;
 //idea: Blub\0
 //darkplaces implementation: Blub\0
 //Function to get the number of an entity - a clean way.
-float(entity num) num_for_edict = #512;
+//float(entity num) num_for_edict = #512;
 
 //DP_QC_RANDOMVEC
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc
 //builtin definitions:
-vector() randomvec = #91;
+//vector() randomvec = #91;
 //description:
 //returns a vector of length < 1, much quicker version of this QC: do {v_x = random()*2-1;v_y = random()*2-1;v_z = random()*2-1;} while(vlen(v) > 1)
 
@@ -991,10 +991,10 @@ vector() randomvec = #91;
 //idea: id Software, LordHavoc
 //darkplaces implementation: id Software, LordHavoc
 //builtin definitions:
-float(float val) sin = #60;
-float(float val) cos = #61;
-float(float val) sqrt = #62;
-float(float a, float b) pow = #97;
+//float(float val) sin = #60;
+//float(float val) cos = #61;
+//float(float val) sqrt = #62;
+//float(float a, float b) pow = #97;
 //description:
 //useful math functions, sine of val, cosine of val, square root of val, and raise a to power b, respectively.
 
@@ -1002,7 +1002,7 @@ float(float a, float b) pow = #97;
 //idea: divVerent
 //darkplaces implementation: divVerent
 //builtin definitions:
-string(string format, ...) sprintf = #627;
+//string(string format, ...) sprintf = #627;
 //description:
 //you know sprintf :P
 //supported stuff:
@@ -1147,7 +1147,7 @@ float MOVE_WORLDONLY = 3;
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc
 //builtin definitions:
-vector(vector forward, vector up) vectoangles2 = #51; // same number as vectoangles
+//vector(vector forward, vector up) vectoangles2 = #51; // same number as vectoangles
 //description:
 //variant of vectoangles that takes an up vector to calculate roll angle (also uses this to calculate yaw correctly if the forward is straight up or straight down)
 //note: just like normal vectoangles you need to negate the pitch of the returned angles if you want to feed them to makevectors or assign to self.v_angle
@@ -1226,7 +1226,7 @@ float(string url, float id, string content_type, string delim, float buf) uri_po
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc
 //builtin definitions:
-float(string name, string value) registercvar = #93;
+//float(string name, string value) registercvar = #93;
 //description:
 //adds a new console cvar to the server console (in singleplayer this is the player's console), the cvar exists until the mod is unloaded or the game quits.
 //NOTE: DP_CON_SET is much better.
@@ -1288,7 +1288,7 @@ float SOUNDFLAG_RELIABLE = 1;
 //darkplaces implementation: VorteX
 //constant definitions:
 float(entity e, float channel) getsoundtime = #533; // get currently sound playing position on entity channel, -1 if not playing or error
-float(string sample) soundlength = #534; // returns length of sound sample in seconds, -1 on error (sound not precached, sound system not initialized etc.)
+//float(string sample) soundlength = #534; // returns length of sound sample in seconds, -1 on error (sound not precached, sound system not initialized etc.)
 //description: provides opportunity to query length of sound samples and realtime tracking of sound playing on entities (similar to DP_GETTIME_CDTRACK)
 //note: beware dedicated server not running sound engine at all, so in dedicated mode this builtins will not work in server progs
 //note also: menu progs not supporting getsoundtime() (will give a warning) since it has no sound playing on entities
@@ -1840,7 +1840,7 @@ void(vector org, vector vel, float howmany) te_flamejet = #457;
 //idea: LordHavoc
 //darkplaces implementation: LordHavoc
 //builtin definitions:
-void(vector mincorner, vector maxcorner, vector vel, float howmany, float color, float gravityflag, float randomveljitter) te_particlecube = #408;
+//void(vector mincorner, vector maxcorner, vector vel, float howmany, float color, float gravityflag, float randomveljitter) te_particlecube = #408;
 //temp entity definitions:
 //float TE_PARTICLECUBE = 54;
 //protocol:

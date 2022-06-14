@@ -1,0 +1,43 @@
+==============================================================
+Title                  : albion03.mdl
+Filename               : Q1_windchime.zip
+File                   : kling00.mdl
+Author                 : Madfox
+Email Adress           : catweazel@kpnmail.nl
+Description            : Static entity
+
+Additional Credits to  : ID Software
+
+==============================================================
+
+* Play Inormation *
+
+New  Q1 Model  : Q1_ windchime
+qC             : no
+
+==============================================================
+
+* Construction *
+
+Base                  : new quake1.mdl of a windchime.
+Build Time            : mayday.
+Editor(s) Used        : Qmle Wally AM2016.
+Use                   : basefile / rear- 65frames/ wind- 25frames
+.                     : shok-12 frames. 
+.                     : change into winchime.  
+Known Bugs            : Corrected base file, updated all files.
+Thanks                : iD Software. 
+GameOption            : Place in a subdirectory Quake with progs.dat 
+                      : or compile your own with the klingon.mdl.md
+                  
+
+You may distribute and modiy this level, as long as you give
+me credit, but most of all ID Software'Quake! 
+
+==============================================================  
+
+Madfox 1 june 2022.
+
+==============================================================
+
+          

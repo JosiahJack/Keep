@@ -57,7 +57,7 @@ void() carniv_projectile_rock_touch = {
 			vel_z = 200 * 0.75;
 		}
 		self.enemy.velocity = self.enemy.velocity + vel;			// apply velocity (pushback)
-		self.enemy.punchangle = self.enemy.punchangle + (randomvec() * 17);	// apply punchangle (tilt view)		ssg: self.punchangle_x = -4;
+		self.enemy.punchangle = self.enemy.punchangle + (mathlib_randomvec() * 17);	// apply punchangle (tilt view)		ssg: self.punchangle_x = -4;
 
 		T_Damage (self.enemy, self, self.owner, 20, DAMARMOR);
 		if (ext_dppart) pointparticles(particleeffectnum("canivean_rock_explode"), detonate, '0 0 0', 1);	

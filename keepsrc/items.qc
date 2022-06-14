@@ -98,13 +98,13 @@ void() item_thinkloop = { // [FUNCTION]
 		self.skin = self.item_skinanim_no; // Update skin
 	}
 
-	if (self.classtype == CT_AMMOELEMENTAL) {
-		if ((self.spawnflags & A_LARGE)) {
-			frmmax = 9;
-			self.walkframe = SUB_ClampFloat(self.walkframe + 1,0,frmmax);
-			self.frame = self.walkframe;
-			if (self.walkframe >= frmmax) self.walkframe = 0;
-		}
+	if (self.classtype == CT_ARTSECRETHUNTER) {
+		frmmax = 17;
+		self.walkframe = SUB_ClampFloat(self.walkframe + 1,0,frmmax);
+		self.frame = self.walkframe;
+		if (self.walkframe >= frmmax) self.walkframe = 0;
+		if (random() < 0.05 && self.skin == 0) self.skin = 1;
+		else if (self.skin == 1) self.skin = 0; // Blink
 	}
 
 	if (self.item_flrcheck > 0) { // Check floor below item (global function)
@@ -308,7 +308,8 @@ void() item_restore = { // [FUNCTION]
 	}
 	
 	// Setup animated textures for old style ID health boxes.  Check floor under item for any changes.
-	if (self.item_flrcheck > 0 || self.item_skinanim > 0 || self.classtype == CT_MJOLNIR) {
+	if (self.item_flrcheck > 0 || self.item_skinanim > 0
+		|| self.classtype == CT_MJOLNIR || self.classtype == CT_ARTSECRETHUNTER) {
 		self.nextthink = time + random()*0.5;
 		self.think = item_thinkloop;
 	}
@@ -925,8 +926,11 @@ void() item_custom_touch = { // [FUNCTION]
 };
 
 void() item_custom = { // [ENTITY]
-	item_setupmodel(MODEL_BROKEN,0);
-	item_setupnoise(AMMO_PICKUP);
+	if (self.mdl == "") self.mdl = MODEL_BROKEN;
+	if (self.noise == "") self.noise = AMMO_PICKUP;
+	if (self.skin <= 0) self.skin = 0;
+	item_setupmodel(self.mdl,self.skin);
+	item_setupnoise(self.noise);
 	self.classtype = CT_CUSTOMITEM;
 	self.classgroup = CG_KEY; // Essentially this item is used like a key pickup, collect and trigger an event
 	if (self.netname == "") self.netname = "Custom Item";

@@ -234,6 +234,7 @@ float	SVC_SETVIEW			= 5;	// Set camera viewpoint entity
 float 	SVC_SETVIEWANGLES	= 10;	// Set camera viewing angles
 float	STAT_TOTALSECRETS 	= 11;	// Added total monster message
 float	STAT_TOTALMONSTERS 	= 12;
+float   SVC_SCALE           = 20;
 float	SVC_TEMPENTITY		= 23;
 float	SVC_SETPAUSE		= 24;
 float	SVC_CENTERPRINT		= 26;

@@ -73,58 +73,55 @@ void  ()fangel_check_wing =  {
    }
 };
 
-void  ()fangel_find_spot =  {
-	local float crj, radius, dist;
-	local vector vec;
+void() fangel_find_spot =  {
+	local float crj, radius, dist, oldz;
+	local vector vec,newpos;
 
-   crj = 0.00000;
-   while ( (crj < 50.00000) ) {
-      radius = 100 + (random() * 100);
-	  vec_x = random() * 360;
-	  vec_y = random() * 360;
-	  vec_z = 0;
-      vec = normalize ( vec);
-      vec = (self.enemy.origin + (vec * radius));
-      vec_z = ((vec_z + 20 + (random() * 20)) + self.enemy.view_ofs_z);
-      tracebox(self.origin, self.mins, self.maxs, vec, FALSE, self);
-      if ( (trace_fraction == 1.00000) ) {
-         dist = (self.origin_z - vec_z);
-         if ( (dist < -20.00000) ) {
-            self.ring_regen_time = (random() * 2);
-         } else {
-            if ( (dist > 20.00000) ) {
-               self.ring_regen_time = -2 + (random() * 2);
-            } else {
-               self.ring_regen_time = -2 + (random() * 4);
-            }
-         }
-         self.ring_flight_time = (time + (HX_FRAME_TIME * (15 + (random() * 10))));
-         return ;
+	crj = 0;
+	while (crj < 50) {
+		radius = 100 + (random() * 100);
+		vec_x = random() * 360;
+		vec_y = random() * 360;
+		vec_z = 0;
+		vec = normalize ( vec);
+		vec = (self.enemy.origin + (vec * radius));
+		vec_z = ((vec_z + 20 + (random() * 20)) + self.enemy.view_ofs_z);
+		oldz = self.origin_z;
+		self.origin_z = self.origin_z + vec_z;
+		newpos = self.origin + vec;
+		trace_fraction = Wyrm_WalkMove(vectoyaw(newpos - self.origin), dist); // Perform walkmove of testbox.
+		self.origin_z = oldz;
+		if (trace_fraction == 1) {
+			dist = (self.origin_z - vec_z);
+			if (dist < -20) self.ring_regen_time = (random() * 2);
+			else if (dist > 20) self.ring_regen_time = -2 + (random() * 2);
+			else self.ring_regen_time = -2 + (random() * 4);
 
-      }
-      crj += 1.00000;
-
-   }
-   self.monster_stage = FANGEL_STAGE_FLOAT;
-   self.monster_duration = 20 + (random() * 10);
+			self.ring_flight_time = (time + (HX_FRAME_TIME * (15 + (random() * 10))));
+			return;
+		}
+		crj += 1;
+	}
+	self.monster_stage = FANGEL_STAGE_FLOAT;
+	self.monster_duration = 20 + (random() * 10);
 };
 
 
-void  ()fangel_init =  {
-   self.ideal_yaw = vectoyaw ( (self.enemy.origin - self.origin));
-   self.think = self.th_stand;
+void() fangel_init =  {
+	self.ideal_yaw = vectoyaw ( (self.enemy.origin - self.origin));
+	self.think = self.th_stand;
 	self.nextthink = time + 0.1 + (random() * 0.5);
-   self.count = 0.00000;
-   self.monster_stage = FANGEL_STAGE_FLY;
-   self.monster_duration = 0.00000;
-   self.goalentity = self.enemy;
-   self.monster_awake = TRUE;
-   if (self.classname == "monster_fallen_angel_lord") {
+	self.count = 0.00000;
+	self.monster_stage = FANGEL_STAGE_FLY;
+	self.monster_duration = 0.00000;
+	self.goalentity = self.enemy;
+	self.monster_awake = TRUE;
+	if (self.classname == "monster_fallen_angel_lord") {
 		self.effects = EF_DIMLIGHT;
-      //self.drawflags |= MLS_POWERMODE;
-   }
+		//self.drawflags |= MLS_POWERMODE;
+	}
 
-   fangel_find_spot ( );
+	fangel_find_spot ( );
 };
 
 void  ()fangel_wait =  {

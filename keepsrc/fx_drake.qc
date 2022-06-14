@@ -162,7 +162,7 @@ void() tornado2 =[ 0, tornado2 ] { // [FUNCTION]
     self.cnt = anglemod (self.cnt + 47);
     spot = self.oldorigin;
     spot_z = spot_z + self.height;
-    trig = CoSine (self.cnt);
+    trig = CoSine(self.cnt);
     dir = (('1 0 0' * self.speed) * trig_x) + (('0 1 0' * self.speed) * trig_y);
     spot = spot + dir;
     setorigin (self, spot);

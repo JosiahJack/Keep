@@ -1142,7 +1142,7 @@ void() Mirv_Payload = { // [FUNCTION]
         } else t1 = t2 = world;
 
         theta = anglemod (loop * hi + 90);
-		trig = CoSine (theta);
+		trig = CoSine(theta);
         dir = (vx*qccos) + ( ((vy*trig_x) + (vz*trig_y))*qcsin );
         Warhead_Launch(self.origin, dir, theta, t1, t2);
         loop = loop - 1;

@@ -347,23 +347,23 @@ float(vector source, float axedmg) GibFloorBody = {
 };
 
 void () HIP_FireMjolnir = { // [FUNCTION]
-	local vector org, source, tvec;
+	local vector org, source, tvec, newpos;
 	local float damage;
-	local entity tester;
+	local entity tester, stemp;
 
 	// Since throwing the hammer on frame three can be almost impossible with
 	// lag, allow throwing on frame four, even if animation would make the
 	// throw appear a bit late.  Better to have forgiving controls and happy
 	// players than "fake difficulty" for animation's sake.
-    if (Hip_ThrewMjolnir()) return;
+    if (Hip_ThrewMjolnir() || self.hammer_finished) return;
 
 	W_Reload(0.4);
-	source = (self.origin + '0.000 0.000 16.000');
+	source = (self.origin + '0 0 16');
 	makevectors (self.v_angle);
 	traceline (source,(source + (v_forward * RANGE_PLAYAXE)),FALSE,self);
-	if ( ((trace_fraction == TRUE) && (self.ammo_cells >= 15.000)) ) {
+	if ( ((trace_fraction == TRUE) && (self.ammo_cells >= 15)) ) {
 		source = (source + (v_forward * RANGE_PLAYAXE));
-		traceline (source,(source - (v_up * 50.000)),FALSE,self);
+		traceline (source,(source - (v_up * 50)),FALSE,self);
 		if ( ((trace_fraction > 0.300) && (trace_fraction < TRUE)) ) {
 			HIP_FireMjolnirLightning();
 			W_Reload(1);
@@ -380,18 +380,24 @@ void () HIP_FireMjolnir = { // [FUNCTION]
 		damage = 50;
 		if ((trace_ent.classgroup == CG_ZOMBIE) && trace_ent.classname != "monster_mummy") damage = trace_ent.max_health * 2;
 		trace_ent.axhitme = TRUE;
-		SpawnBlood (trace_ent, org,v_forward,damage,0);
+		SpawnBlood(trace_ent,org,v_forward,damage,0);
 		HIP_FireMjolnirLightning(); dprint("Hit targ slam takedamage\n");
-		T_Damage (trace_ent,self,self,damage, DAMARMOR);
+		T_Damage(trace_ent,self,self,damage,DAMARMOR);
 	} else {
 		if (trace_fraction != TRUE) {
 			sound (self,CHAN_WEAPON,"hipnotic/weapons/mjoltink.wav",TRUE,ATTN_NORM);
 			tester = spawn();
 			setorigin(tester,org);
+			tester.mins = '-4 -4 0';
+			tester.maxs = '4 4 16';
 			setsize(tester,'-4 -4 0', '4 4 16');
 			tvec = tester.origin;
 			tvec_z = tvec_z + 10;
-			tracebox(org,'-4 -4 0', '4 4 16',tvec, TRUE, tester);
+			stemp = self;
+			self = tester;
+			newpos = self.origin + tvec;
+			trace_fraction = Wyrm_WalkMove(vectoyaw(newpos - self.origin), 0); // Perform walkmove of testbox.
+			self = stemp;
 			if (trace_fraction == TRUE) HIP_FireMjolnirLightning ();
 			remove(tester);
 			Tent_Point(TE_GUNSHOT,org);

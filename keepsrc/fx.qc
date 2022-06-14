@@ -1471,7 +1471,7 @@ void () shambler_walking_quake = { // [FUNCTION]
 					enFind.velocity_y = enFind.velocity_y + (crandom() * 30); 
 					enFind.velocity_z = enFind.velocity_z + (crandom() * 75); 
 				} 
-			   	enFind.punchangle = enFind.punchangle + (randomvec() * 0.6);  // Apply Punchangle
+			   	enFind.punchangle = enFind.punchangle + (mathlib_randomvec() * 0.6);  // Apply Punchangle
 			}
 		}
 		enFind = enFind.chain;
@@ -1514,7 +1514,7 @@ void (float fPunchStrength, float fRadius) Monster_Animation_EarthQuake = { // [
 					enFind.velocity_y = enFind.velocity_y + (crandom() * fPunchStrength * 5); 
 					enFind.velocity_z = enFind.velocity_z + (fPunchStrength * 10) + (crandom() * 40);  
 				}
-				if (enFind.flags & FL_CLIENT) enFind.punchangle = enFind.punchangle + (randomvec() * (0.7 * fPunchStrength));  // Apply Punchangle
+				if (enFind.flags & FL_CLIENT) enFind.punchangle = enFind.punchangle + (mathlib_randomvec() * (0.7 * fPunchStrength));  // Apply Punchangle
 			}
 			enFind = enFind.chain;
 		}

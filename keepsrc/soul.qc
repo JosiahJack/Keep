@@ -115,7 +115,7 @@ void() Soul_Think = [ 0, Soul_Think ] { // [FUNCTION]
     if (vlen(org) < 20 && self.cnt >= 0) { // Close enough for soul to be devoured by wraith.
         StopSound(self,CHAN_BODY);
 		self.cnt = -1;
-        T_Heal(reaper,50,TRUE); dprint("Healed reaper, reaper now has "); dprint(ftos(reaper.health)); dprint(" health\n");
+        T_Heal(reaper,50,TRUE);
         if (reaper.classtype == CT_MONSHADE) sound (reaper, CHAN_VOICE, "drake/shade/taunt.wav", 1, ATTN_NORM);
         else sound (reaper, CHAN_VOICE, "nehahra/wraith/rych1.wav", 1, ATTN_IDLE);
 

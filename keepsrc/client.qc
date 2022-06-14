@@ -1038,6 +1038,13 @@ void(entity targ) Client_LadderSounds = {
 
 void() CheckFuncWaterDeath;
 
+float GetWaterRiseVelocity(float type) {
+	if (type != CONTENT_WATER && type != CONTENT_SLIME && type != CONTENT_LAVA) return 100;
+	if (type == CONTENT_WATER) return 100;
+	else if (type == CONTENT_SLIME) return 80;
+	return 50;
+};
+
 // Called every frame before physics are run
 void() PlayerPreThink = {
 	// This is just a messy situation ...
@@ -1162,9 +1169,7 @@ void() PlayerPreThink = {
 		// The jump button works a bit differently while in flymode.
 		if (self.button2) {
 			if (self.waterlevel) { // Rise if in water.  Otherwise, slam on the brakes.
-				if (self.liquidbase == CONTENT_WATER) self.velocity_z = 100; // Water rise
-				else if (self.liquidbase == CONTENT_SLIME) self.velocity_z = 80; // Slime rise
-				else self.velocity_z = 50; // Lava rise
+				self.velocity_z = GetWaterRiseVelocity(self.liquidbase);
 
 				if (self.swim_flag < time) {
 					self.swim_flag = time + 1;
@@ -1488,9 +1493,7 @@ void() PlayerJump = {
 	if (self.flags & FL_WATERJUMP) return;
 
 	if (self.waterlevel >= 2) {
-		if (self.watertype == CONTENT_WATER) self.velocity_z = 100;
-		else if (self.watertype == CONTENT_SLIME) self.velocity_z = 80;
-		else self.velocity_z = 50;
+		self.velocity_z = GetWaterRiseVelocity(self.watertype);
 		if (self.swim_flag < time) { // play swiming sound
 			self.swim_flag = time + 1;
 			if (random() < 0.5) sound (self, CHAN_BODY, "misc/water1.wav", 1, ATTN_NORM);
@@ -1620,6 +1623,7 @@ void() WaterMove = {
 		else {
 			if (self.dmgtime < time && self.therm_finished < time) {
 				if (self.radsuit_finished > time) self.dmgtime = time + 1;
+				else if (self.wetsuit_finished > time) self.dmgtime = time + 0.75;
 				else self.dmgtime = time + 0.2;
 
 				// Lava damage is crazy high the deeper you go
@@ -1649,6 +1653,7 @@ void() WaterMove = {
 	}
 	
 	if (!(self.flags & FL_WATERJUMP)) self.velocity = self.velocity - 0.8*self.waterlevel*frametime*self.velocity;
+	if (self.infuncwater && pointcontents(self.origin) == CONTENT_EMPTY) self.velocity_z = self.velocity_z * 1/1.429;
 };
 
 // CLIENT GAME EDGE FUNCTIONS

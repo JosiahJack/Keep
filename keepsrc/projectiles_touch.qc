@@ -1231,7 +1231,8 @@ void() Thor_Touch = { // [FUNCTION]
                     dmg2 = self.dmg * 1.5; // Unlike plasma, this explosion discharges not once, but twice.
                 }
 
-                if (!other.bossflag && (other.health > 0) && other.health < 120 && other != self.master) {
+                if (!other.bossflag && (other.health > 0) && other.health < 120
+                    && other != self.master && other.gibhealth != MON_NEVERGIB) {
 					damage_attacker = self.master;
 					damage_velocity = VEC_ORIGIN;
 					dmg1 = other.health - other.gibhealth + 1;

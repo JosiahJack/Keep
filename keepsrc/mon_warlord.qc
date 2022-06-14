@@ -440,7 +440,7 @@ void() hknight2_homing_teleport = {
 	local vector spot, vec;
 
 	// Select teleport destination within a 55 radius.
-	spot = self.origin + (randomvec()*55);
+	spot = self.origin + (mathlib_randomvec()*55);
 	vec = normalize(spot - self.origin);
 	traceline (self.origin, spot, TRUE, self);	// look through monsters
 	spot = trace_endpos - vec*13;
