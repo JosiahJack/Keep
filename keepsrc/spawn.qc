@@ -221,6 +221,10 @@ string(string old, float type) GetRandomMonsterName = {
 			else if (rand < 0.83) retval = "monster_shamvile";
 			else if (rand < 0.84) retval = "monster_ultra";
 			else if (rand < 0.85) retval = "monster_warrior";
+			else if (rand < 0.86) retval = "monster_baron_fire";
+			else if (rand < 0.87) retval = "monster_baron_wind";
+			else if (rand < 0.88) retval = "monster_baron_earth";
+			else if (rand < 0.89) retval = "monster_baron_water";
 			else if (rand < 1.00) retval = "monster_voidwraith";
 			// else if (rand < 0.81) retval = "monster_ranger"; // More slots for when I add more, yeesh!
 			// else if (rand < 0.82) retval = "monster_ranger";
@@ -251,26 +255,152 @@ string(string old, float type) GetRandomMonsterName = {
 		else if (rand < 0.80) retval = "monster_beez";
 		else retval = "monster_sheep"; // Favor sheep slightly more
 	} else if (self.style == 2) { // Fodder Military
+		if (rand < 0.25) retval = "monster_enforcer";
+		else if (rand < 0.50) retval = "monster_dog";
+		else if (rand < 0.75) retval = "monster_axegrunt";
+		else retval = "monster_army";
 	} else if (self.style == 3) { // Fodder Mystic
+		if (rand < 0.2) retval = "monster_scorpion";
+		else if (rand < 0.4) retval = "monster_wspider";
+		else if (rand < 0.6) retval = "monster_spider";
+		else if (rand < 0.8) retval = "monster_gargoyle";
+		else retval = "monster_impling";
 	} else if (self.style == 4) { // Fodder Horrors
+		if (rand < 0.18) retval = "monster_lostsoul";
+		else if (rand < 0.33) retval = "monster_polyp";
+		else if (rand < 0.48) retval = "monster_spikemine";
+		else if (rand < 0.66) retval = "monster_swampling";
+		else if (rand < 0.82) retval = "monster_voreling";
+		else  retval = "monster_wizard";
 	} else if (self.style == 5) { // Fodder Brigade
+		if (rand < 0.2) retval = "monster_dguard";
+		else if (rand < 0.33) retval = "monster_goblin";
+		else if (rand < 0.48) retval = "monster_bandit";
+		else if (rand < 0.66) retval = "monster_sword";
+		else if (rand < 0.8) retval = "monster_rebel";
+		else retval = "monster_knight";
 	} else if (self.style == 6) { // Ogre Establishment
+		if (rand < 0.2) retval = "monster_ogre";
+		else if (rand < 0.4) retval = "monster_ogre_marksman";
+		else if (rand < 0.6) retval = "monster_ogre_spikeshooter";
+		else if (rand < 0.8) retval = "monster_ogre_flak";
+		else retval = "monster_hogre";
 	} else if (self.style == 7) { // Elite Ogres
+		if (rand < 0.33) retval = "monster_ogre_multi";
+		else if (rand < 0.66) retval = "monster_hogremac";
+		else retval = "monster_hogreham";
 	} else if (self.style == 8) { // Undead
+		if (rand < 0.33) retval = "monster_zombiek";
+		else if (rand < 0.66) retval = "monster_zombiep";
+		else retval = "monster_zombie";
 	} else if (self.style == 9) { // Midrank Military
+		if (rand < 0.11) retval = "monster_army_grenade";
+		else if (rand < 0.22) retval = "monster_army_plasma";
+		else if (rand < 0.33) retval = "monster_army_rocket";
+		else if (rand < 0.44) retval = "monster_defender";
+		else if (rand < 0.55) retval = "monster_megaforce";
+		else if (rand < 0.66) retval = "monster_jim";
+		else if (rand < 0.77) retval = "monster_bob";
+		else if (rand < 0.88) retval = "monster_scourge";
+		else retval = "monster_floyd";
 	} else if (self.style == 10) { // Midrank Mystic
+		if (rand < 0.1) retval = "monster_skullwiz";
+		else if (rand < 0.2) retval = "monster_acolyte";
+		else if (rand < 0.3) retval = "monster_sorceror";
+		else if (rand < 0.4) retval = "monster_golem";
+		else if (rand < 0.5) retval = "monster_gremlin";
+		else if (rand < 0.6) retval = "monster_minotaur";
+		else if (rand < 0.7) retval = "monster_fallen_angel";
+		else if (rand < 0.8) retval = "monster_nemesant";
+		else if (rand < 0.9) retval = "monster_troglodyte";
+		else retval = "monster_wrath";
 	} else if (self.style == 11) { // Midrank Horrors
+		if (rand < 0.14) retval = "monster_boil";
+		else if (rand < 0.28) retval = "monster_gaunt";
+		else if (rand < 0.42) retval = "monster_demon1";
+		else if (rand < 0.56) retval = "monster_hell_hound";
+		else if (rand < 0.60) retval = "monster_sentinel";
+		else if (rand < 0.84) retval = "monster_snakeman";
+		else retval = "monster_ryu";
 	} else if (self.style == 12) { // Midrank Brigade
+		if (rand < 0.14) retval = "monster_dcrossbow";
+		else if (rand < 0.28) retval = "monster_archer";
+		else if (rand < 0.42) retval = "monster_death_guard";
+		else if (rand < 0.56) retval = "monster_dknight";
+		else if (rand < 0.70) retval = "monster_axeman";
+		else if (rand < 0.84) retval = "monster_death_knight";
+		else retval = "monster_hell_knight";
 	} else if (self.style == 13) { // Elite Military
+		if (rand < 0.11) retval = "monster_cyberdemon";
+		else if (rand < 0.22) retval = "monster_super_grunt";
+		else if (rand < 0.33) retval = "monster_eliminator";
+		else if (rand < 0.44) retval = "monster_ultra";
+		else if (rand < 0.55) retval = "monster_centurion";
+		else if (rand < 0.66) retval = "monster_freddie";
+		else if (rand < 0.77) retval = "monster_fumigator";
+		else if (rand < 0.88) retval = "monster_pyro";
+		else retval = "monster_seeker";
 	} else if (self.style == 14) { // Elite Mystic
+		if (rand < 0.33) retval = "monster_fallen_angel_lord";
+		else if (rand < 0.66) retval = "monster_mummy";
+		else retval = "monster_wraith";
 	} else if (self.style == 15) { // Elite Horrors
+		if (rand < 0.2) retval = "monster_drole";
+		else if (rand < 0.33) retval = "monster_shalrath";
+		else if (rand < 0.48) retval = "monster_lava_man";
+		else if (rand < 0.66) retval = "monster_nightshade";
+		else if (rand < 0.8) retval = "monster_tarbaby_mitosis";
+		else retval = "monster_tarbaby";
 	} else if (self.style == 16) { // Elite Brigade
+		if (rand < 0.2) retval = "monster_archer_lord";
+		else if (rand < 0.4) retval = "monster_death_lord";
+		else if (rand < 0.6) retval = "monster_dfury";
+		else if (rand < 0.8) retval = "monster_dsergeant";
+		else retval = "monster_hell_knight_champion";
 	} else if (self.style == 17) { // Archnidae
+		if (rand < 0.14) retval = "monster_scorpion";
+		else if (rand < 0.28) retval = "monster_wspider";
+		else if (rand < 0.42) retval = "monster_spider";
+		else if (rand < 0.56) retval = "monster_shalrath";
+		else if (rand < 0.7) retval = "monster_scourge";
+		else if (rand < 0.84) retval = "monster_swampling";
+		else retval = "monster_voreling";
 	} else if (self.style == 18) { // Hostile Animals
+		if (rand < 0.14) retval = "monster_scorpion";
+		else if (rand < 0.28) retval = "monster_wspider";
+		else if (rand < 0.42) retval = "monster_spider";
+		else if (rand < 0.84) retval = "monster_swampling";
+		else if (rand < 0.66) retval = "monster_voreling";
+		else if (rand < 0.66) retval = "monster_nightshade";
+		else if (rand < 0.42) retval = "monster_demon1";
+		else if (rand < 0.56) retval = "monster_hell_hound";
+		else if (rand < 0.50) retval = "monster_dog";
+		else if (rand < 0.5) retval = "monster_gremlin";
+		else if (rand < 0.6) retval = "monster_minotaur";
+		else if (rand < 0.56) retval = "monster_shalrath";
+		else if (rand < 0.7) retval = "monster_scourge";
+		else if (rand < 0.14) retval = "monster_boil";
+		else if (rand < 0.28) retval = "monster_gaunt";
+		else if (rand < 0.8) retval = "monster_gargoyle";
+		
+		
+
 	} else if (self.style == 19) { // Fodder Swimmers
+	
+	
+	
 	} else if (self.style == 20) { // Midrank Swimmers
+	
+	
+	
 	} else if (self.style == 21) { // Elite Swimmers
+	
+	
+	
 	} else if (self.style == 22) { // Boss Swimmers
+	
+	
+	
 	} else if (self.style == 23) { // Fodder Terrestrial
 	} else if (self.style == 24) { // Midrank Terrestrial
 	} else if (self.style == 25) { // Boss Terrestrial
@@ -288,15 +418,124 @@ string(string old, float type) GetRandomMonsterName = {
 		else if (rand < 0.66) retval = "monster_voidwraith";
 		else retval = "monster_beez";
 	} else if (self.style == 32) { // Military
+		if (rand < 0.045) retval = "monster_enforcer";
+		else if (rand < 0.09) retval = "monster_dog";
+		else if (rand < 0.135) retval = "monster_axegrunt";
+		else if (rand < 0.18) retval = "monster_army";
+		else if (rand < 0.225) retval = "monster_army_grenade";
+		else if (rand < 0.27) retval = "monster_army_plasma";
+		else if (rand < 0.315) retval = "monster_army_rocket";
+		else if (rand < 0.36) retval = "monster_defender";
+		else if (rand < 0.405) retval = "monster_megaforce";
+		else if (rand < 0.45) retval = "monster_jim";
+		else if (rand < 0.495) retval = "monster_bob";
+		else if (rand < 0.54) retval = "monster_scourge";
+		else if (rand < 0.595) retval = "monster_floyd";
+		else if (rand < 0.64) retval = "monster_cyberdemon";
+		else if (rand < 0.685) retval = "monster_super_grunt";
+		else if (rand < 0.73) retval = "monster_eliminator";
+		else if (rand < 0.775) retval = "monster_ultra";
+		else if (rand < 0.82) retval = "monster_centurion";
+		else if (rand < 0.865) retval = "monster_freddie";
+		else if (rand < 0.91) retval = "monster_fumigator";
+		else if (rand < 0.955) retval = "monster_pyro";
+		else retval = "monster_seeker";
 	} else if (self.style == 33) { // Mystic
+		if (rand < 0.055) retval = "monster_scorpion";
+		else if (rand < 0.11) retval = "monster_wspider";
+		else if (rand < 0.165) retval = "monster_spider";
+		else if (rand < 0.22) retval = "monster_gargoyle";
+		else if (rand < 0.275) retval = "monster_impling";
+		else if (rand < 0.33) retval = "monster_skullwiz";
+		else if (rand < 0.385) retval = "monster_acolyte";
+		else if (rand < 0.44) retval = "monster_sorceror";
+		else if (rand < 0.495) retval = "monster_golem";
+		else if (rand < 0.55) retval = "monster_gremlin";
+		else if (rand < 0.605) retval = "monster_minotaur";
+		else if (rand < 0.66) retval = "monster_fallen_angel";
+		else if (rand < 0.715) retval = "monster_nemesant";
+		else if (rand < 0.77) retval = "monster_troglodyte";
+		else if (rand < 0.835) retval = "monster_wrath";
+		else if (rand < 0.89) retval = "monster_fallen_angel_lord";
+		else if (rand < 0.945) retval = "monster_mummy";
+		else retval = "monster_wraith";
 	} else if (self.style == 34) { // Horrors
+		if (rand < 0.05) retval = "monster_lostsoul";
+		else if (rand < 0.1) retval = "monster_polyp";
+		else if (rand < 0.15) retval = "monster_spikemine";
+		else if (rand < 0.2) retval = "monster_swampling";
+		else if (rand < 0.25) retval = "monster_voreling";
+		else if (rand < 0.30) retval = "monster_wizard";
+		else if (rand < 0.35) retval = "monster_boil";
+		else if (rand < 0.4) retval = "monster_gaunt";
+		else if (rand < 0.45) retval = "monster_demon1";
+		else if (rand < 0.5) retval = "monster_hell_hound";
+		else if (rand < 0.54) retval = "monster_sentinel";
+		else if (rand < 0.59) retval = "monster_snakeman";
+		else if (rand < 0.63) retval = "monster_ryu";
+		else if (rand < 0.67) retval = "monster_drole";
+		else if (rand < 0.71) retval = "monster_shalrath";
+		else if (rand < 0.83) retval = "monster_lava_man";
+		else if (rand < 0.88) retval = "monster_nightshade";
+		else if (rand < 0.93) retval = "monster_tarbaby_mitosis";
+		else if (rand < 0.97) retval = "monster_shamvile";
+		else retval = "monster_tarbaby";
 	} else if (self.style == 35) { // Brigade
+		if (rand < 0.055) retval = "monster_dguard";
+		else if (rand < 0.11) retval = "monster_goblin";
+		else if (rand < 0.165) retval = "monster_bandit";
+		else if (rand < 0.22) retval = "monster_sword";
+		else if (rand < 0.275) retval = "monster_rebel";
+		else if (rand < 0.33) retval = "monster_knight";
+		else if (rand < 0.385) retval = "monster_dcrossbow";
+		else if (rand < 0.44) retval = "monster_archer";
+		else if (rand < 0.495) retval = "monster_death_guard";
+		else if (rand < 0.55) retval = "monster_dknight";
+		else if (rand < 0.605) retval = "monster_axeman";
+		else if (rand < 0.66) retval = "monster_death_knight";
+		else if (rand < 0.715) retval = "monster_hell_knight";
+		else if (rand < 0.76) retval = "monster_archer_lord";
+		else if (rand < 0.815) retval = "monster_death_lord";
+		else if (rand < 0.87) retval = "monster_dfury";
+		else if (rand < 0.935) retval = "monster_dsergeant";
+		else retval = "monster_hell_knight_champion";
 	} else if (self.style == 92) { // Boss Ancients
+		if (rand < 0.5) retval = "monster_morph";
+		else retval = "monster_super_wrath";
 	} else if (self.style == 93) { // Boss Medieval Menaces
+		if (rand < 0.1) retval = "monster_dark_lord";
+		else if (rand < 0.2) retval = "monster_hell_lord";
+		else if (rand < 0.3) retval = "monster_hkboss";
+		else if (rand < 0.4) retval = "monster_baron";
+		else if (rand < 0.5) retval = "monster_baron_fire";
+		else if (rand < 0.6) retval = "monster_baron_wind";
+		else if (rand < 0.7) retval = "monster_baron_earth";
+		else if (rand < 0.8) retval = "monster_baron_water";
+		else if (rand < 0.9) retval = "monster_warlock";
+		else retval = "monster_necromancer";
 	} else if (self.style == 94) { // Boss Eldritch Horrors
+		if (rand < 0.2) retval = "monster_gug";
+		else if (rand < 0.3) retval = "monster_meatwad";
+		else if (rand < 0.4) retval = "monster_vomit";
+		else if (rand < 0.5) retval = "monster_shamvile";
+		else retval = "monster_shambler"; // Favor shamblers
 	} else if (self.style == 95) { // Boss Technological Terrors
+		retval = "monster_armagon";
 	} else if (self.style == 96) { // Boss Medieval Monstrosities
-	} else if (self.style == 97) { // Boss Eldritch Abominations
+		if (rand < 0.16) retval = "monster_bane";
+		else if (rand < 0.32) retval = "monster_icegolem";
+		else if (rand < 0.48) retval = "monster_ryu_wyrm";
+		else if (rand < 0.64) retval = "monster_eidolon";
+		else if (rand < 0.82) retval = "monster_trogboss";
+		else retval = "monster_dragon";
+	} else if (self.style == 97) { // Boss Eldritch Abominations+
+		if (rand < 0.14) retval = "monster_oldone";
+		else if (rand < 0.28) retval = "monster_boss";
+		else if (rand < 0.42) retval = "monster_vermis";
+		else if (rand < 0.56) retval = "monster_nour";
+		else if (rand < 0.70) retval = "monster_virtus";
+		else if (rand < 0.84) retval = "monster_anac";
+		else retval = "monster_boglord";
 	} else if (self.style == 98) { // Bosses All
 	}
 	return retval; // Goodness to mergatroidd what did I do!
@@ -341,6 +580,10 @@ void(string mname) BeMonsterFromString = {
 	else if (mname == "monster_bandit") { monster_bandit(); }
 	else if (mname == "monster_bane") { monster_bane(); }
 	else if (mname == "monster_baron") { monster_baron(); }
+	else if (mname == "monster_baron_fire") { monster_baron_fire(); }
+	else if (mname == "monster_baron_wind") { monster_baron_wind(); }
+	else if (mname == "monster_baron_earth") { monster_baron_earth(); }
+	else if (mname == "monster_baron_water") { monster_baron_water(); }
 	else if (mname == "monster_beez") { monster_beez(); }
 	else if (mname == "monster_bob") { monster_bob(); }
 	else if (mname == "monster_boglord") { monster_boglord(); }
@@ -655,6 +898,10 @@ void(string mname) precache_monster = {
 	else if (mname == "monster_bandit")			monster_bandit_precache();
 	else if (mname == "monster_bane")			monster_bane_precache();
 	else if (mname == "monster_baron")			monster_baron_precache();
+	else if (mname == "monster_baron_wind")		monster_baron_precache();
+	else if (mname == "monster_baron_fire")		monster_baron_precache();
+	else if (mname == "monster_baron_earth")	monster_baron_precache();
+	else if (mname == "monster_baron_water")	monster_baron_precache();
 	else if (mname == "monster_beez")			monster_beez_precache();
 	else if (mname == "monster_bob")			monster_jim_precache();
 	else if (mname == "monster_boglord")		monster_boglord_precache();

@@ -1114,3 +1114,27 @@ void() monster_baron = {
 	self.classmove = MON_MOVEWALK;
     monster_start ();
 };
+
+void() monster_barron_fire = {
+	self.level = BARON_FIRE;
+	self.classname = "monster_baron";
+	monster_baron();
+};
+
+void() monster_barron_wind = {
+	self.level = BARON_AIR;
+	self.classname = "monster_baron";
+	monster_baron();
+};
+
+void() monster_barron_earth = {
+	self.level = BARON_EARTH;
+	self.classname = "monster_baron";
+	monster_baron();
+};
+
+void() monster_barron_water = {
+	self.level = BARON_WATER;
+	self.classname = "monster_baron";
+	monster_baron();
+};
