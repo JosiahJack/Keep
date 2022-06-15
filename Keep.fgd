@@ -3420,6 +3420,8 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 @PointClass base(EBox) size(-16 -16 0, 16 16 64) studio("maps/quoth/b_plas_l.bsp") = misc_plasmabox_l : "Large box" []
 @PointClass base(EBox) size(-16 -16 0, 16 16 32) studio("maps/quoth/b_plas_s.bsp") = misc_plasmabox_s : "Small box" []
 
+@PointClass base(EBox) size(-16 -16 -24, 16 16 32) studio("maps/nehahra/libcart.bsp") = misc_librarycart : "Librarian's cart" []
+
 //======================================================================
 // TRAP entities
 //======================================================================
@@ -4568,6 +4570,7 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 		4096 : "Shoot Nails" : 0
 	]
 ]
+@PointClass base(MonWide) studio("progs/nehahra/libogre.mdl") = monster_oglib : "Ogre Librarian" []
 
 //_____Fishing OGRE needs some spawnflags and keys removed_____
 @PointClass base(MonWide) studio("progs/ad171/mon_ogrefish.mdl") = monster_ogre_fishing : "Ogre Fishing" 
