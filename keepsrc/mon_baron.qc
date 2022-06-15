@@ -1115,25 +1115,25 @@ void() monster_baron = {
     monster_start ();
 };
 
-void() monster_barron_fire = {
+void() monster_baron_fire = {
 	self.level = BARON_FIRE;
 	self.classname = "monster_baron";
 	monster_baron();
 };
 
-void() monster_barron_wind = {
+void() monster_baron_wind = {
 	self.level = BARON_AIR;
 	self.classname = "monster_baron";
 	monster_baron();
 };
 
-void() monster_barron_earth = {
+void() monster_baron_earth = {
 	self.level = BARON_EARTH;
 	self.classname = "monster_baron";
 	monster_baron();
 };
 
-void() monster_barron_water = {
+void() monster_baron_water = {
 	self.level = BARON_WATER;
 	self.classname = "monster_baron";
 	monster_baron();

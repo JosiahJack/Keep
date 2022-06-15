@@ -28,16 +28,16 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 2
+// Function count: 4
 //
-// Implements: Nehahra aim leading subroutine functions
+// Implements: Nehahra aim leading and other subroutine functions
 //
 // Description:
 // Simple utility functions to aid in monsters tracking player movement.
 // Different than drake's maim features as the behavior is different.
 //=============================================================================
 
-vector() nehahra_lead = {
+vector() nehahra_lead = { // [FUNCTION]
 	local float num;
 	local vector megadeth, vec;
 	local entity mark;
@@ -56,7 +56,7 @@ vector() nehahra_lead = {
 	return vec;
 };
 
-vector(float t) mindcrime_lead = {
+vector(float t) mindcrime_lead = { // [FUNCTION]
 	local float num;
 	local vector dir, megadeth, vec;
 
@@ -77,3 +77,38 @@ vector(float t) mindcrime_lead = {
 	dir = normalize(dir - self.origin);
 	return dir;
 };
+
+float IsOnTopOf(entity top, entity bottom) = { // [FUNCTION]
+	if (top.absmin_z < bottom.absmax_z - 3) return FALSE;
+	if (top.absmin_z > bottom.absmax_z + 2) return FALSE;
+	if (top.absmin_y > bottom.absmax_y) return FALSE;
+	if (top.absmax_y < bottom.absmin_y) return FALSE;
+	if (top.absmin_x > bottom.absmax_x) return FALSE;
+	if (top.absmax_x < bottom.absmin_x) return FALSE;
+	return TRUE;
+}
+
+void() player_push = { // [FUNCTION]
+	local vector spot;
+	local float meas, chck;
+
+	if (other.classname != "player") return;
+	if (!(other.flags & FL_CLIENT)) return;
+	if (IsOnTopOf(other, self)) return;
+
+  	if (self.pain_finished < time) {
+		self.pain_finished = time + 0.4;
+		if (self.event == "stone") sound(self, 7, "nehahra/wall/statslid.wav", 1, ATTN_NORM);
+		else sound(self, 7, "nehahra/wall/barslide.wav", 1, ATTN_NORM);
+    }
+	if (walkmove(other.angles_y, 2) == FALSE) {
+		meas = other.origin_z + 3;
+		chck = meas - self.origin_z;
+		if (self.origin_z < meas) {
+			if (chck < 10) self.origin_z = self.origin_z + 1;
+			self.velocity_x = other.velocity_x + 4 * random();
+			self.velocity_y = other.velocity_y + 4 * random();
+			if (self.flags & FL_ONGROUND) self.flags = self.flags - FL_ONGROUND;
+		}
+	}
+}

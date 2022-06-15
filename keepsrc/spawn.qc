@@ -225,6 +225,7 @@ string(string old, float type) GetRandomMonsterName = {
 			else if (rand < 0.87) retval = "monster_baron_wind";
 			else if (rand < 0.88) retval = "monster_baron_earth";
 			else if (rand < 0.89) retval = "monster_baron_water";
+			else if (rand < 0.90) retval = "monster_oglib";
 			else if (rand < 1.00) retval = "monster_voidwraith";
 			// else if (rand < 0.81) retval = "monster_ranger"; // More slots for when I add more, yeesh!
 			// else if (rand < 0.82) retval = "monster_ranger";
@@ -253,6 +254,7 @@ string(string old, float type) GetRandomMonsterName = {
 		else if (rand < 0.48) retval = "monster_raven";
 		else if (rand < 0.64) retval = "monster_voidwraith";
 		else if (rand < 0.80) retval = "monster_beez";
+		else if (rand < 0.85) retval = "monster_oglib";
 		else retval = "monster_sheep"; // Favor sheep slightly more
 	} else if (self.style == 2) { // Fodder Military
 		if (rand < 0.25) retval = "monster_enforcer";
@@ -410,9 +412,10 @@ string(string old, float type) GetRandomMonsterName = {
 	} else if (self.style == 29) { // Denizen Swimmers
 		retval = "monster_frog";  // The only one right now.  Will change once jellyfish is added.
 	} else if (self.style == 30) { // Denizen Terrestrial
-		if (rand < 0.15) retval = "monster_frog";
-		else if (rand < 0.6) retval = "monster_ogle";
-		else retval = "monster_sheep"; // Favor sheep slightly more
+		if (rand < 0.25) retval = "monster_frog";
+		else if (rand < 0.5) retval = "monster_ogle";
+		else if (rand < 0.6) retval = "monster_oglib";
+		else retval = "monster_sheep"; // Favor sheep more
 	} else if (self.style == 31) { // Denizen Flyers
 		if (rand < 0.33) retval = "monster_raven";
 		else if (rand < 0.66) retval = "monster_voidwraith";
@@ -688,6 +691,7 @@ void(string mname) BeMonsterFromString = {
 	else if (mname == "monster_nourminion") { monster_nourminion(); }
 	else if (mname == "monster_octa") { monster_octa(); }
 	else if (mname == "monster_ogle") { monster_ogle(); }
+	else if (mname == "monster_oglib") { monster_oglib(); }
 	else if (mname == "monster_ogre") { monster_ogre(); }
 	else if (mname == "monster_ogre_flak") { monster_ogre_flak(); }
 	else if (mname == "monster_ogre_fishing") { monster_ogre_fishing(); }
@@ -1007,6 +1011,7 @@ void(string mname) precache_monster = {
 	else if (mname == "monster_nourminion")		monster_wizard_precache();
 	else if (mname == "monster_octa")			monster_octa_precache();
 	else if (mname == "monster_ogle")			monster_ogle_precache();
+	else if (mname == "monster_oglib")			monster_oglib_precache();
 	else if (mname == "monster_ogre")			monster_ogre_precache();
 	else if (mname == "monster_ogre_marksman")	monster_ogre_precache();
 	else if (mname == "monster_ogre_flak")		monster_ogre_spikeshooter_precache();

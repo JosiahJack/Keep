@@ -157,12 +157,12 @@ float(entity targ) IsLeader = { // [FUNCTION]
 	return FALSE;
 };
 
-void(entity tag) SetDefaultDenizenAttributes = { // [FUNCTION]
-	if (!self.alignment) {
-		self.alignment = NEUTRAL;
-		self.gibhealth = MON_NEVERGIB;
+void(entity targ) SetDefaultDenizenAttributes = { // [FUNCTION]
+	if (!targ.alignment) {
+		targ.alignment = NEUTRAL;
+		targ.gibhealth = MON_NEVERGIB;
 	}
-	if (!self.passive_state) self.passive_state = 1;
-	if (!self.temperament) self.temperament = TEMPRA_PASSIVE;
-	if (!self.vulnerability) self.vulnerability = VULN_RESISTANT;
+	if (!targ.passive_state) targ.passive_state = 1;
+	if (!targ.temperament) targ.temperament = TEMPRA_PASSIVE;
+	if (!targ.vulnerability) targ.vulnerability = VULN_RESISTANT;
 };

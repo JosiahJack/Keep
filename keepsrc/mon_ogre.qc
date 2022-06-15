@@ -545,27 +545,27 @@ void() ogre_fishsetup = {
 };
 
 void() monster_ogre_precache = {
-	precache_model ("progs/ad171/mon_ogre.mdl");
-	precache_model ("progs/h_ogre.mdl");
-	precache_model (MODEL_PROJ_GRENADE);
-	precache_model ("progs/ad171/w_chainsaw.mdl");
-	precache_model ("progs/ad171/gib_ogfoot1.mdl");
-	precache_model ("progs/ad171/gib_ogfoot2.mdl");
-	precache_model ("progs/ad171/w_ogregl.mdl");
-	precache_model (MODEL_PROJ_NGRED); // Default attack - red glowing lava nails
-	precache_model ("progs/ad171/mon_ogrefish.mdl");
-	precache_sound ("ogre/ogidle.wav");
-	precache_sound ("ogre/ogidle2.wav");
-	precache_sound ("ogre/ogdth.wav");
-	precache_sound ("ogre/ogpain1.wav");
-	precache_sound ("ogre/ogdrag.wav");
-	precache_sound ("ogre/ogsawatk.wav");
-	precache_sound ("ogre/ogwake.wav");
+	precache_model("progs/ad171/mon_ogre.mdl");
+	precache_model("progs/h_ogre.mdl");
+	precache_model(MODEL_PROJ_GRENADE);
+	precache_model("progs/ad171/w_chainsaw.mdl");
+	precache_model("progs/ad171/gib_ogfoot1.mdl");
+	precache_model("progs/ad171/gib_ogfoot2.mdl");
+	precache_model("progs/ad171/w_ogregl.mdl");
+	precache_model(MODEL_PROJ_NGRED); // Default attack - red glowing lava nails
+	precache_model("progs/ad171/mon_ogrefish.mdl");
+	precache_sound("ogre/ogidle.wav");
+	precache_sound("ogre/ogidle2.wav");
+	precache_sound("ogre/ogdth.wav");
+	precache_sound("ogre/ogpain1.wav");
+	precache_sound("ogre/ogdrag.wav");
+	precache_sound("ogre/ogsawatk.wav");
+	precache_sound("ogre/ogwake.wav");
 	precache_sound("xmas/snowman/nail_fire.wav");
-	precache_sound ("ad171/ogre/ogrefish_out.wav");
-	precache_sound ("ad171/ogre/ogrefish_in.wav");
-	precache_sound ("ad171/ogre/ogrefish_idle.wav");
-	precache_sound ("ad171/ogre/ogrefish_flappy.wav");
+	precache_sound("ad171/ogre/ogrefish_out.wav");
+	precache_sound("ad171/ogre/ogrefish_in.wav");
+	precache_sound("ad171/ogre/ogrefish_idle.wav");
+	precache_sound("ad171/ogre/ogrefish_flappy.wav");
 };
 
 // QUAKED monster_ogre (1 0 0) (-32 -32 -24) (32 32 64) Ambush
@@ -603,9 +603,7 @@ void() monster_ogre = {
 	self.steptype = FS_TYPESLOW;		// Small sounding feet
 	self.meleerange = MONAI_MELEEOGRE;	// Chainsaw range
 	self.no_zaware = TRUE;				
-
-	// Standard ogre health 200 with green+ option
-	if (self.health < 1) self.health = 200;
+	if (self.health < 1) self.health = 200; // Standard ogre health 200 with green+ option
 	if (self.spawnflags & MON_OGRE_GREEN) {
 		if (self.deathstring == "")  self.deathstring = " was destroyed by an armored Ogre\n";
 		self.health = self.health + MON_OGRE_GRNUPG;

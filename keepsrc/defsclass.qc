@@ -194,6 +194,7 @@ float CT_MONBEARD = 147;		// Beard from Nehahra
 float CT_MONMISTERMAX = 148;	// Mister Maxwell, aka the mister, boss from Nehahra
 float CT_MONNEHAHRA = 149;		// Nehahra, boss from Nehahra
 float CT_MONOGRE = 150;			// Chainsaw wielding manics
+float CT_MONLIBRARIAN = 151;    // Nehahra librarian
 float CT_MONOGREFISH = 155;		// Madfox fishing ogre
 float CT_MONSHAL = 160;			// Shalrath / Vore
 float CT_MONSHALBOSS = 161;		// Shalrath Mother

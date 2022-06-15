@@ -435,6 +435,7 @@ mon_wolf.qc					// Moonlight Guardian, Redfield, a giant wolf with a sword in hi
 mon_queen.qc				// Queen, Redfield, DENIZEN, non-combatant queen of the tower who can magically summon portals for you.
 //mon_esquid.qc				// TaoV's Blue squid barnacle stationary plantlike monster (derived from shub)
 //mon_ranger.qc				// Ranger, Drake, implemenation of the player as a singleplayer monster.  Capable of being a buddy.
+mon_ogrelibrary.qc				// Nehahra library ogre and his cart
 
 // Spawn System
 //-----------------------------------------------------------------------------
