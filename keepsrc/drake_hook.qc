@@ -114,7 +114,7 @@ void() GrappleAnchor = { // [FUNCTION]
     local vector org;
     local string sfx;
 
-    if (pointcontents(self.origin) == CONTENT_SKY) {GrappleReset(); return;}
+    if (InSky(self.origin)) {GrappleReset(); return;}
     if (Reflected_Damage (self.dmg)) return;
 
     if (!self.dmg) self.dmg = 10;

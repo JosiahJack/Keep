@@ -37,6 +37,8 @@
 // typically exploding.
 //=============================================================================
 
+float TRAP_PROXSTATIC = 8;		// No movement.
+
 void(entity targ, float playdmg, float mondmg) ApplyFireDmg;
 float(vector source, float axedmg) GibFloorBody;
 
@@ -735,19 +737,22 @@ void () HIP_LaserTouch = { // [FUNCTION]
 };
 
 void () ProximityGrenadeTouch = { // [FUNCTION]
-   if (other == self) return;
-   if (other.classname == self.classname) return;
+	if (other == self) return;
+	if (other.classname == self.classname) return;
+	if (AffectedByPhysics(other)) return;
+	if (other.flags & FL_NOTARGET) return;
+    if (other.items & IT_INVISIBILITY) return;
+    if (other.alignment == NEUTRAL || other.classgroup == CG_HARMLESS) return;
 
-   self.movetype = MOVETYPE_TOSS;
-   if (self.state) return;
-   if (vlen(other.velocity) > 0) { ProximityGrenadeExplode (); self.think(); return; }
-   if (other.takedamage == DAMAGE_AIM) { ProximityGrenadeExplode (); self.think(); return; }
+	self.lastvictim = other;
+	if (self.state) return;
 
-   sound (self,CHAN_WEAPON,"weapons/bounce.wav",TRUE,ATTN_NORM);
-   self.movetype = MOVETYPE_NONE;
-   setsize (self,'-8.000 -8.000 -8.000','8.000 8.000 8.000');
-   self.state = TRUE;
-   self.spawnmaster = other;
+	self.state = TRUE; // First touch
+	if (other.takedamage == DAMAGE_AIM) { ProximityGrenadeExplode(); self.think(); return; }
+
+	sound (self,CHAN_WEAPON,"weapons/bounce.wav",TRUE,ATTN_NORM);
+	self.movetype = MOVETYPE_NONE;
+	setsize(self,'-8.000 -8.000 -8.000','8.000 8.000 8.000');
 };
 
 // AreaBlaster = Fireballs that tear through and grind targets for a while before exploding.  Similar to the AreaBlaster special from the NES game

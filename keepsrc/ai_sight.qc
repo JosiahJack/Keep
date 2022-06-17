@@ -538,7 +538,7 @@ void(float wakeupothers) FoundHuntTarget = {
 	if (self.ryuflags & RYU_ALERT)
 		SUB_AttackFinished (0.5);   // alert monsters don't wait as long...
 	else
-		if (!self.attack_instant) SUB_AttackFinished (1); // wait a while before first attack
+		if (!self.attack_instant) SUB_AttackFinished(1); // Wait a while before first attack.
 };
 
 entity(float findopposing) SeeTarget = { // [FUNCTION]
@@ -548,28 +548,35 @@ entity(float findopposing) SeeTarget = { // [FUNCTION]
 	if (self.alignment == NEUTRAL && !(IsInsane(self))) return FALSE; // I careth not.
 	if (!findopposing && self.horn_active && self.charmer) return world; // Already have a leader to follow
 
-	if (self.horn_active && findopposing) dist = CHARMED_RADIUS; // Shorter sight to keep closer to player who summoned us, maybe
+	// Shorter sight charmers to keep closer to player who summoned us, maybe.
+	if (self.horn_active && findopposing) dist = CHARMED_RADIUS; 
 	else dist = MON_MAX_RANGE; // NORMAL SIGHT
 
 	if (self.enemymaxdist == TRUE || self.attack_sniper) dist = 8192; // yikes
+	if (random() < 0.333) dist = 256;
 	head = world;
 	head = findradius(self.origin,dist);
 	while (head) {
-		if ((!(head.flags & FL_NOTARGET) && ((head.flags & FLx_CREATURE) || (head.classtype == CT_SOUL && self.classtype == CT_MONWRAITHNEHAHRA && self.alpha < 1)) && head.invisible_finished < time)) {
-			if (head.classtype == CT_SOUL && self.classtype == CT_MONWRAITHNEHAHRA && self.alpha < 1 && !self.enemy) return head;
+		if (self.classtype == CT_MONWRAITHNEHAHRA && !self.enemy) {
+			if (head.classtype == CT_SOUL && self.alpha < 1) return head;
+		}
 
-			if (head.health > 0) {
-				if (visible(head)) { // Nested to improve performance by not checking visibility of dead potential enemies.
+		if ((head.flags & FLx_CREATURE)) {
+			if (!(head.flags & FL_NOTARGET) && head.invisible_finished < time) {
+				if (head.health > 0) {
 					if (findopposing) {
 						if (!Align_Match(self,head)){
 							if (head.alignment != NEUTRAL) {
-								return head;
+								// Nested visible() to improve performance by
+								// not checking visibility of dead potential
+								// enemies.
+								if (visible(head)) return head; 
 							}
 						}
 					} else {
 						if (Align_Match(self,head)) {
 							if (head.alignment != NEUTRAL) {
-								return head;
+								if (visible(head)) return head;
 							}
 						}
 					}
@@ -581,8 +588,14 @@ entity(float findopposing) SeeTarget = { // [FUNCTION]
 	return head;
 };
 
-entity() SeeOpposing = { return SeeTarget(TRUE); }; // [FUNCTION]
-entity() SeeFriendly = { return SeeTarget(FALSE); }; // [FUNCTION]
+entity() SeeOpposing = {
+	if (random() < 0.666) return world;
+	return SeeTarget(TRUE);
+}; // [FUNCTION]
+entity() SeeFriendly = { 
+	if (random() < 0.666) return world;
+	return SeeTarget(FALSE);
+}; // [FUNCTION]
 
 // Main sight routine for finding a target.  Returns TRUE if an enemy was sighted.
 float() FindTarget = { // [FUNCTION]
@@ -597,7 +610,6 @@ float() FindTarget = { // [FUNCTION]
         if (pointcontents (self.origin + self.view_ofs) == CONTENT_SOLID) return FALSE;   // Don't let wraiths see targets while in the wall.
 	}
 
-	MonsterDeBuff();
 	self.enemyexit = FALSE; // Reset any combat exit conditions
 
 	// All following monsters (could be evil) such as Horn of Conjouring monsters (always friendly to the player who summoned them)

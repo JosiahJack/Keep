@@ -201,7 +201,7 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_model("progs/quoth/smlexp.spr");
 	precache_model("progs/quoth/medexp.spr");	// For dragon fire
 	precache_model("progs/hipnotic/lasrspik.mdl");
-	precache_model("progs/hipnotic/proxbomb.mdl");
+	precache_model("progs/ne_ruins/proxbomb.mdl");
 	precache_model("progs/g_crossbow.mdl");
 	precache_model("progs/its/v_crossbow1.mdl");
 	precache_model("progs/its/v_crossbow2.mdl");

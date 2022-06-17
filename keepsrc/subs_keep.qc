@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 30
+// Function count: 33
 //
 // Implements: Subroutines
 //
@@ -92,6 +92,7 @@ vector (float dm) VelocityForDamage = { // [FUNCTION]
 	return v;
 };
 
+float(vector spot) InSky = { return (pointcontents(spot) == CONTENT_SKY); }; // [FUNCTION]
 float(vector spot) InAir = { return (pointcontents(spot) == CONTENT_EMPTY); }; // [FUNCTION]
 float(vector spot) InSolid = { return (pointcontents(spot) == CONTENT_SOLID); }; // [FUNCTION]
 float(vector spot) InWater = { return (pointcontents(spot) == CONTENT_WATER); }; // [FUNCTION]
@@ -105,14 +106,35 @@ float(vector spot) InLiquid = { // [FUNCTION]
 	return ((conts <= CONTENT_WATER) && (conts != CONTENT_SKY));
 };
 
-float(entity ent, vector p2, float dist, float nomonsters) pointvisible = { // [FUNCTION]
-    local vector p1;
+float(float amount) SUB_NudgeSelfPlacement = { // [FUNCTION]
+	local float shift, pconts;
+	local vector vec;
 
-    p1 = ent.origin;
-    if (vlen (p2 - p1) > dist) return FALSE; // Exceeded maximum distance.
-    traceline (p1, p2, nomonsters, self);
-    if (trace_fraction < 1) return FALSE;    // Not in line-of-sight.
-    return TRUE;
+	shift = 0;
+	while (shift < 6) {
+		vec = VEC_ORIGIN;
+		if (shift == 0) vec_z = amount; // Move up out of floor
+		else if (shift == 1) vec_x = amount; // Move out of wall to east
+		else if (shift == 2) vec_x = amount * -1; // Move out of wall west
+		else if (shift == 3) vec_y = amount; // Move out of wall north
+		else if (shift == 4) vec_y = amount * -1; // Move out of wall south
+		else vec_z = amount * -1; // Lower from out of ceiling
+		vec = vec + self.origin;
+		pconts = pointcontents(vec);
+		if (pconts != CONTENT_SOLID && pconts != CONTENT_SKY) {
+			setorigin(self,vec);
+			return TRUE; // Freed
+		}
+		shift = shift + 1;
+	}
+
+	dprint(self.classname);
+	dprint(" has bad placement, starting in wall at ");
+	dprint(vtos(self.origin));
+	dprint(", attempted to nudge by ");
+	dprint(ftos(amount));
+	dprint(" in all 6 directions,\nbut couldn't find a way out! Removed!\n");
+	return FALSE; // Still stuck :(.
 };
 
 // Creates a new vector.  From copper, renamed for clarity and avoid case insensitive errors.
@@ -269,13 +291,14 @@ float(float val, float min, float max) SUB_ClampFloat = { // [FUNCTION]
 }
 
 // Hexen 2 general sequence animator
-float SUB_AdvanceFrame(float min, float max) = { // [FUNCTION]
-	if (self.frame < min) { self.frame = min; return self.frame; }
-	if (self.frame > max) { self.frame = max; return self.frame; }
-	if (self.frame < max) { // != max
-		self.frame = self.frame + 1;
-		if (self.frame > max) self.frame = min;
-		return self.frame;
-	}
-	return self.frame;
+void SUB_AdvanceFrame(float min, float max) = { // [FUNCTION]
+	self.walkframe = SUB_ClampFloat(self.frame + 1,min,max);
+	self.frame = self.walkframe;
+	if (self.walkframe >= max) self.walkframe = min - 1;
+};
+
+void SUB_AdvanceSkin(float min, float max) = { // [FUNCTION]
+	self.walkskin = SUB_ClampFloat(self.skin + 1,min,max);
+	self.skin = self.walkskin;
+	if (self.walkskin == max) self.walkskin = min - 1;
 };

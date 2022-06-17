@@ -3536,6 +3536,13 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	speed(integer) : "Velocity speed (def=200)"
 	dmg(integer) : "Touch Damage (def=1)"
 ]
+
+@PointClass base(Targetname,Target) size(-1 -1 -1, 1 1 1) studio("progs/ne_ruins/proxbomb.mdl") = trap_proxmine : "Proximity Mine" [
+	spawnflags(Flags) = [
+		8 : "Floating" : 0
+	]
+]
+
 //----------------------------------------------------------------------
 @BaseClass base(Appearflags,Targetname,Target) = Trap_Pendulum [
 	spawnflags(Flags) = [
@@ -4011,6 +4018,9 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 		33: "Mystic"
 		34: "Horrors"
 		35: "Brigade"
+		36: "Christmas Ruiners"
+		37: "Elite Terrestrial"
+		38: "Elite Flyers"
 		92: "Boss Ancients"
 		93: "Boss Medieval Menaces"
 		94: "Boss Eldritch Horrors"
@@ -4932,6 +4942,15 @@ color(0 128 192) = misc_builtineffects : "Particle Builtin" [
 	target(string) : "Trigger Wave Adds"
 	noise1(string) : "Trigger Event 1"
 	noise2(string) : "Trigger Event 2"
+]
+
+@PointClass size(-32 -32 -24, 32 32 128) studio("progs/ne_ruins/h2golemlg.mdl") = monster_lavagolem : "Lava Golem" [
+	targetname(string) : "monster / trigger name"
+	target(string) : "Wave Final trigger"
+	noise1(string) : "Wave 1 trigger ent"
+	noise2(string) : "Wave 2 trigger ent"
+	noise3(string) : "Wave 3 trigger ent"
+	noise4(string) : "Wave 4 trigger ent"
 ]
 
 @PointClass base(MonVermis) studio("progs/quoth/vermis.mdl") = monster_vermis : "Vermis" []

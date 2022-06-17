@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 13
+// Function count: 59
 //
 // Implements: Projectile System for Players and Monsters
 //
@@ -40,9 +40,6 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 void() Touch_ShellCasing;
 void() MultiGrenadeTouch;
 void() MultiGrenadeExplode;
-void() ProximityGrenadeTouch;
-void() ProximityBomb;
-void() ProximityGrenadeExplode;
 void() SuperGrenade_Think;
 void() SuperRocket_Think;
 void (vector org, vector vec, float light) HIP_LaunchLaser;
@@ -244,22 +241,18 @@ void (vector p1, vector p2, entity from, float damage) HIP_HammerDamage = { // [
 };
 
 void () ProximityExplode = { // [FUNCTION]
-   T_RadiusDamage (self,self.owner,95.000,world, DAMAGEALL);
-   WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
-   WriteByte (MSG_BROADCAST,TE_EXPLOSION);
-   WriteCoord (MSG_BROADCAST,self.origin_x);
-   WriteCoord (MSG_BROADCAST,self.origin_y);
-   WriteCoord (MSG_BROADCAST,self.origin_z);
-   BecomeExplosion ();
-};
-
-void () ProximityGrenadeExplode = { // [FUNCTION]
-   self.takedamage = DAMAGE_NO;
-   NumProximityGrenades = (NumProximityGrenades - TRUE);
-   self.deathtype = "exploding";
-   self.nextthink = (time + 0.100);
-   self.owner = self.lastvictim;
-   self.think = ProximityExplode;
+    if (self.target != "") {
+        activator = self.lastvictim;
+        SUB_UseTargets();
+    }
+    self.owner = world;
+    T_RadiusDamage(self,self,95.000,world,DAMAGEALL);
+    WriteByte(MSG_BROADCAST,SVC_TEMPENTITY);
+    WriteByte(MSG_BROADCAST,TE_EXPLOSION);
+    WriteCoord(MSG_BROADCAST,self.origin_x);
+    WriteCoord(MSG_BROADCAST,self.origin_y);
+    WriteCoord(MSG_BROADCAST,self.origin_z);
+    BecomeExplosion();
 };
 
 // Alternate explosion function for warheads.

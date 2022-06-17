@@ -374,6 +374,7 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .float		debugalpha;			// Shows entities with alpha when testing
 .float		randomskin;			// 0=nothing, x=random number of skins
 .float		exactskin;			// 1-x exact skin number to choose
+.float      walkskin;           // Used for marching through skins in a loop.
 .float		startingpose;		// On spawn special starting animation set
 .void()		th_checkattack;		// Which check attack function to use
 .void()		th_slide;			// Mainly used by wizard monster

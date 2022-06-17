@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 57
+// Function count: 61
 //
 // Implements: Projectile Thinks
 //
@@ -37,8 +37,6 @@
 // alive.
 //=============================================================================
 
-void() ProximityBomb;
-void() ProximityGrenadeExplode;
 void() spark_spawn;
 void() beam_touch;
 void(vector org,vector dir,string emdl,float beginf,float endfrm,float anitm,float skn,vector vel) SpawnBFGBoom;
@@ -166,37 +164,55 @@ void () HIP_LaserThink = { // [FUNCTION]
 	self.nextthink = (time + 0.100);
 };
 
+void () ProximityGrenadeExplode = { // [FUNCTION]
+    self.takedamage = DAMAGE_NO;
+    NumProximityGrenades = (NumProximityGrenades - 1);
+    sound(self,CHAN_WEAPON,"hipnotic/weapons/proxwarn.wav",TRUE,ATTN_NORM);
+    self.think = ProximityExplode;
+    self.nextthink = time + 0.5;
+};
+
 void () ProximityBomb = { // [FUNCTION]
     local entity head;
-    local float blowup;
 
-    if ((time > self.delay || NumProximityGrenades > 64)
-        || vlen(self.spawnmaster.velocity) > 0) {
-        ProximityGrenadeExplode();
-        self.think();
-        return;
+    self.think = ProximityBomb;
+    //SUB_AdvanceSkin(1,4); // Blink
+    if (self.classtype != CT_PROXMINE) {
+        if ((time > self.delay || NumProximityGrenades > 200)
+            || vlen(self.lastvictim.velocity) > 0) {
+            ProximityGrenadeExplode();
+            return;
+        }
     }
 
     self.owner = world;
     self.takedamage = DAMAGE_YES;
+    if (random() < 0.33) { self.nextthink = (time + 0.250); return; }
+
     head = findradius(self.origin,140);
-    blowup = FALSE;
     while (head) {
-        if ((head != self && head.health > FALSE) && (head.flags & FLx_CREATURE)
-            && head.classname != self.classname) {
-            blowup = TRUE;
-        }
-        if (head.classname == self.classname && head.state == FALSE) blowup = TRUE;
-        traceline(self.origin,head.origin,TRUE,self);
-        if (trace_fraction != TRUE) blowup = FALSE;
-        if (blowup) {
-            sound (self,CHAN_WEAPON,"hipnotic/weapons/proxwarn.wav",TRUE,ATTN_NORM);
-            ProximityGrenadeExplode();
-            self.nextthink = (time + 0.5);
-            return;
+        if (head != self) {
+            if (head.flags & FLx_CREATURE) {
+                if (head.health > 0) {
+                    if (!(head.flags & FL_NOTARGET)) {
+                        if (!(head.items & IT_INVISIBILITY)) {
+                            if (Align_Opposing(self,head)) {
+                                self.lastvictim = head;
+                                ProximityGrenadeExplode();
+                                return;
+                            }
+                        }
+                    }
+                }
+            } else if (head.classtype == CT_THROWHAM) {
+                self.lastvictim = head.owner;
+                ProximityGrenadeExplode();
+                return;
+            }
         }
         head = head.chain;
     }
+    self.lastvictim = world;
     self.nextthink = (time + 0.250);
 };
 

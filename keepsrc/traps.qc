@@ -27,7 +27,7 @@
 // NO CHARGE to the recipient.
 //
 // Stats:
-// Entity count: 5
+// Entity count: 6
 // Function count: 11
 //
 // Implements: Traps
@@ -609,4 +609,32 @@ void() trap_gasshooter = { // [ENTITY]
 		self.nextthink = time + 1 + random();
 		self.think = TargetMovedirReturn;
 	}
+};
+
+void() trap_proxmine = { // [ENTITY]
+	self.mdl = "progs/ne_ruins/proxbomb.mdl";
+	setmodel(self,self.mdl);
+	self.bbmins = '-4.000 -4.000 -4.000';
+	self.bbmaxs = '4.000 4.000 4.000';
+	self.takedamage = DAMAGE_YES;
+	self.health = 5;
+	self.solid = SOLID_BBOX;
+	setsize(self,self.bbmins,self.bbmaxs);
+	self.touch = ProximityGrenadeTouch;
+	if (!(self.spawnflags & TRAP_PROXSTATIC)) self.movetype = MOVETYPE_TOSS;
+	self.classtype = CT_PROXMINE;
+	self.th_die = ProximityGrenadeExplode;
+	self.think = ProximityBomb;
+	if (InSky(self.origin)) {
+		dprint(self.classname);
+		dprint(" has bad placement, starting in sky at ");
+		dprint(vtos(self.origin));
+		dprint(", removed!\n");
+		self.think = SUB_Remove;
+	} else if (InSolid(self.origin)) {
+		if (!SUB_NudgeSelfPlacement(5)) {
+			self.think = SUB_Remove;
+		}
+	}
+	self.nextthink = time + 1 + (random() * 2);
 };

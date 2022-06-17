@@ -525,7 +525,7 @@ void() monster_oglib_precache = {
   precache_model("progs/nehahra/frubble3.mdl");
   precache_model("progs/ad171/w_skullbook.mdl");
   precache_model("progs/redfield/misc_bookrk.mdl");
-  precache_sound("nehahra/ogre/ogidle.wav");
+  precache_sound("ogre/ogidle.wav");
   precache_sound("nehahra/ogre/cart1.wav");
   precache_sound("nehahra/ogre/cart2.wav");
   precache_sound("nehahra/ogre/cart3.wav");
@@ -544,7 +544,7 @@ void() monster_oglib = {
 	self.gib2mdl = "progs/ad171/gib_ogfoot1.mdl";	// Left foot
 	self.gib3mdl = "progs/ad171/gib_ogfoot2.mdl";	// Right foot
 	self.gib4mdl = "progs/ad171/w_ogregl.mdl";	// Grenade Launcher
-  self.idle_sound = "nehahra/ogre/ogidle.wav";
+  self.idle_sound = "ogre/ogidle.wav";
 	self.idle_soundcom = "ogre/ogidle2.wav";
 	self.pain_sound = "ogre/ogpain1.wav";
 	self.sight_sound = "ogre/ogwake.wav";

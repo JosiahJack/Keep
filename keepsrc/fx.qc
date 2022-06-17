@@ -893,7 +893,7 @@ void() SmartBall_Bounce = { // [FUNCTION]
 };
 
 void() SmartBall_Touch = { // [FUNCTION]
-    if (pointcontents(self.origin) == CONTENT_SKY) {remove(self); return;}     // Disappeared into space.
+    if (InSky(self.origin)) {remove(self); return;}     // Disappeared into space.
     if (Reflected_Damage (COURAGE_DAMAGE)) return;     // Bounced off reflective shield.
     if (other.takedamage || (self.count >= 3) || (self.enemy.health <= 0)) { Touch_Missile(); return; } // Go BOOM!
 

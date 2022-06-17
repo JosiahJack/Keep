@@ -127,16 +127,9 @@ void() inquisitor_stormcloud = {
 	local vector offs;
 	local float notfound;
 
-	// Only make a stormcloud if we can find a random point visible from the inquisitor.
-	// notfound = TRUE;
-	// while(notfound) {
-		offs_x = crandom() * 32;
-		offs_y = crandom() * 32;
-		offs_z = 128;
-		// if (pointvisible(self,offs,700,TRUE)) notfound = FALSE;
-		// notfound = notfound + 1;
-		// if (notfound > 20) return; // TOO MANY TRIES, FORGET IT!
-	// }
+	offs_x = crandom() * 32;
+	offs_y = crandom() * 32;
+	offs_z = 128;
 
 	if (self.minion_count > self.minion_maxcount) {
 		if (random() < 0.5) return; // still chance to spawn some

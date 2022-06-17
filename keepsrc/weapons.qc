@@ -496,7 +496,7 @@ void () W_FireProximityGrenade = { // [FUNCTION]
 	missile.classname = "proximity_grenade";
 	missile.takedamage = DAMAGE_NO;
 	missile.health = MOVETYPE_FLY;
-	missile.state = FALSE;
+	missile.state = 0;
 	makevectors (self.v_angle);
 	if ( self.v_angle_x ) {
 		missile.velocity = ((((v_forward * 600.000) + (v_up * 200)) + ((crandom () * v_right) * MOVETYPE_BOUNCE)) + ((crandom () * v_up) * MOVETYPE_BOUNCE));
@@ -512,7 +512,7 @@ void () W_FireProximityGrenade = { // [FUNCTION]
 	missile.delay = ((time + 15.000) + (MOVETYPE_BOUNCE * random ()));
 	missile.think = ProximityBomb;
 	missile.th_die = ProximityGrenadeExplode;
-	setmodel (missile,"progs/hipnotic/proxbomb.mdl");
+	setmodel (missile,"progs/ne_ruins/proxbomb.mdl");
 	setorigin (missile,self.origin);
 	setsize (missile,'-1.000 -1.000 -1.000','1.000 1.000 1.000');
 	W_Reload(0.6);

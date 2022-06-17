@@ -82,8 +82,6 @@ void() item_coopcheck = { // [FUNCTION]
 
 // Check floor under item and animated skin for new BASE health boxes
 void() item_thinkloop = { // [FUNCTION]
-	local float frmmax;
-
 	if (self.estate & ESTATE_BLOCK) return; // Check for entity states
 	if (self.attack_finished > time) return; // Has the item been turned off?
 	if (self.item_expired > 0 && self.item_expired < time) remove(self); // Has the item removal timer been reached?
@@ -99,12 +97,9 @@ void() item_thinkloop = { // [FUNCTION]
 	}
 
 	if (self.classtype == CT_ARTSECRETHUNTER) {
-		frmmax = 17;
-		self.walkframe = SUB_ClampFloat(self.walkframe + 1,0,frmmax);
-		self.frame = self.walkframe;
-		if (self.walkframe >= frmmax) self.walkframe = 0;
-		if (random() < 0.05 && self.skin == 0) self.skin = 1;
-		else if (self.skin == 1) self.skin = 0; // Blink
+		SUB_AdvanceFrame(0,17);
+		if (random() < 0.05 && self.skin <= 0) self.skin = 1;
+		else if (self.skin >= 1) self.skin = 0; // Blink
 	}
 
 	if (self.item_flrcheck > 0) { // Check floor below item (global function)

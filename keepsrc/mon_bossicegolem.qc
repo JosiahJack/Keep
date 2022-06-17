@@ -1,7 +1,5 @@
-/*==============================================================================
-ICE GOLEM (Heavily Inspired by Ne_Ruins MOD) (Hexen2 Model)
-==============================================================================*/
-
+// ICE GOLEM (Heavily Inspired by Ne_Ruins MOD) (Hexen2 Model)
+// FIRE GOLEM (Recreated attempting to follow Ne_Ruins MOD by Necros)
 // (000) standing still with heavy breathing
 $frame wait1 wait2 wait3 wait4 wait5 wait6 wait7 wait8
 $frame wait9 wait10 wait11 wait12 wait13 wait14 wait15 wait16
@@ -71,37 +69,30 @@ float() iceg_FindTarget = {
 	if (intermission_running) return FALSE;
 	if (cinematic_running > 0 || cutscene > 0) return FALSE;
 
-	// Find a client in current PVS
-	client = checkclient ();
+	client = checkclient(); // Find a client in current PVS
 	
 	// Go through all the exception(s)
 	if (!client) return FALSE;
 	if (!(client.flags & FL_CLIENT)) return FALSE;
 	if (client.flags & FL_NOTARGET) return FALSE;
 	if (client.items & IT_INVISIBILITY) return FALSE;
-	
-	// Check range and visibility of player
-	enemy_vis = visible(client);
+
+	enemy_vis = visible(client); // Check range and visibility of player
 	if (!enemy_vis) return FALSE;
 	if (!infront(client)) return FALSE;
 
-	// Finally found something
-	self.enemy = client;
+	self.enemy = client; // Finally found something
 	self.oldorigin = self.origin;		// Save origin
 	self.goalentity = self.enemy;		// Focus on enemy
-	// Setup turning angle towards new enemy
-	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
-
-	// We have a winner!
-	return TRUE;	
+	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin); // Setup turning angle towards new enemy
+	return TRUE; // We have a winner!
 };
 
 // Setup wave HP and trigger boundaries
 void() iceg_WaveSetupHP = {
 	// Is there anymore boss waves left?
 	if (self.bosswave >= self.bosswavetotal) {
-		// Only one wave left (death is final trigger)
-		self.health = self.bosswaveqty;
+		self.health = self.bosswaveqty; // Only one wave left (death is final trigger)
 		self.bosswavetrig = -1000;
 	} else {
 		// Multiple waves are still left (reset hp+trigger)
@@ -181,9 +172,7 @@ void() iceg_CheckCombo =
 	}
 };
 
-//======================================================================
 // MONSTER STATES (stand, walk run, attack, pain and death!
-//======================================================================
 void() iceg_idleframe = {
 	// Do nothing if dead
 	if (self.health < 1) return;
@@ -202,12 +191,9 @@ void() iceg_idleframe = {
 	iceg_FindTarget ();
 };
 
-//----------------------------------------------------------------------
 void() iceg_stand1 = {self.walkframe = 0; iceg_idleframe();};
 
-//============================================================================
-void() iceg_walkframe =
-{
+void() iceg_walkframe = {
 	// Do nothing if dead
 	if (self.health < 1) return;
 	
@@ -284,12 +270,9 @@ void() iceg_runframe =
 	else ai_run(self.lip);
 };
 
-//----------------------------------------------------------------------
 void() iceg_run1 = { self.walkframe = 0; iceg_runframe(); };
 
-//============================================================================
 // MELEE - knockback the player with swipe
-//============================================================================
 void(float dist) iceg_mcharge = { 
 	ai_charge(dist);
 	// Hexen 2 models were designed for 20fps
@@ -339,13 +322,10 @@ void() iceg_knock24 = [ $knock24, iceg_run1 ] {iceg_mcharge(5);
 	iceg_CheckCombo();
 };
 
-//============================================================================
 // RANGE ATTACK (ICE SHARDS == rockets)
 // Total shards to fire is based on skill level
 // easy=3, normal=3, hard=4, nm=5
-//============================================================================
-void() iceg_shardanimate =
-{
+void() iceg_shardanimate = {
 	// manually animate
 	self.frame = self.frame + 1;
 	self.lip = 1 - (self.frame / 11);
@@ -357,9 +337,7 @@ void() iceg_shardanimate =
 	else self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
-void() iceg_shardtrail =
-{
+void() iceg_shardtrail = {
 	local entity oring;
 	
 	// Spawn a temporary entity
@@ -409,6 +387,55 @@ void() iceg_shardtrail =
 	self.nextthink = time + 0.05 + random()*0.05;
 };
 
+void() lavag_shardtrail = {
+	local entity oring;
+	
+	// Spawn a temporary entity
+	oring = spawn();
+	oring.owner = self;
+	oring.solid = SOLID_NOT;			// No interaction with world
+	oring.movetype = MOVETYPE_NONE;		// Static item, no movement
+	
+	// move to current projectile location
+	setmodel(oring, MODEL_PROJ_RINGBLAST);
+	setsize(oring, VEC_ORIGIN, VEC_ORIGIN);
+	setorigin(oring, self.origin);
+	oring.alpha = 0.5;
+	oring.skin = 3;
+	
+	// Match orientiation and start Oring animation
+	self.pos2 = normalize(self.velocity);
+	oring.angles = vectoangles(self.pos2);
+	oring.think = iceg_shardanimate;
+	oring.nextthink = time + 0.1;
+
+	// Has the DP particle trail been setup yet?
+	if (!self.pain_finished) {
+		// only run this once
+		self.pain_finished = TRUE;
+		// Re-use plasma trail
+		if (ext_dppart) {
+			self.traileffectnum = particleeffectnum(DPP_TRAILPARTR);
+			self.effects = 0;
+		}
+	} else {
+		// Classic (fitz/qs) engine particles only
+		if (!ext_dppart) {
+			self.oldorigin = crandom() * '1 1 1';
+			// Orange colour
+			self.lip = 225;
+			particle(self.origin, self.oldorigin, self.lip, 8 + rint(random()*8));
+			// Yellow colour
+			self.lip = 198 + rint(random()*4);
+			particle(self.origin, self.oldorigin, self.lip, 4 + rint(random()*4));
+		}
+	}
+	
+	// Keep looping for O rings trails
+	self.think = iceg_shardtrail;
+	self.nextthink = time + 0.05 + random()*0.05;
+};
+
 //----------------------------------------------------------------------
 void(entity targ) iceg_icestorm = 
 {
@@ -421,12 +448,23 @@ void(entity targ) iceg_icestorm =
 
 	// Play random firing sound
 	self.lip = random();
-	if (self.lip < 0.3) 
-		sound (self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard1.wav", 1, ATTN_IDLE);
-	else if (self.lip  < 0.6)
-		sound (self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard2.wav", 1, ATTN_IDLE);
-	else
-		sound (self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard3.wav", 1, ATTN_IDLE);
+	if (self.classtype == CT_MONLAVAGOLEM) {
+		if (self.lip < 0.25) 
+			sound (self, CHAN_WEAPON, "ne_ruins/firegug/flames1.wav", 1, ATTN_IDLE);
+		else if (self.lip  < 0.5)
+			sound (self, CHAN_WEAPON, "ne_ruins/firegug/flames2.wav", 1, ATTN_IDLE);
+		else if (self.lip  < 0.75)
+			sound (self, CHAN_WEAPON, "ne_ruins/firegug/flames3.wav", 1, ATTN_IDLE);
+		else
+			sound (self, CHAN_WEAPON, "ne_ruins/firegug/flames4.wav", 1, ATTN_IDLE);
+	} else {
+		if (self.lip < 0.3) 
+			sound (self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard1.wav", 1, ATTN_IDLE);
+		else if (self.lip  < 0.6)
+			sound (self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard2.wav", 1, ATTN_IDLE);
+		else
+			sound (self, CHAN_WEAPON, "ne_ruins/h2golem/iceshard3.wav", 1, ATTN_IDLE);
+	}
 	
 	// Make sure facing the right direction
 	ai_face();
@@ -439,7 +477,8 @@ void(entity targ) iceg_icestorm =
 		// Spawn a mist of particles where projectiles came from
 	org = self.origin + attack_vector('20 0 64');
 	zpart = 20 + rint(random()*20);
-	particle_explode(org, zpart, 1+random(), PARTICLE_BURST_BLUE, PARTICLE_BURST_UPWARD);
+	if (self.classtype == CT_MONLAVAGOLEM) particle_explode(org, zpart, 1+random(), PARTICLE_BURST_RED, PARTICLE_BURST_UPWARD);
+	else particle_explode(org, zpart, 1+random(), PARTICLE_BURST_BLUE, PARTICLE_BURST_UPWARD);
 
 	// Randomly spawn projectiles from golems chest
 	yrand = (crandom()*10)*v_right;
@@ -452,14 +491,17 @@ void(entity targ) iceg_icestorm =
 
 	// Variable speed based on skill level
 	self.attack_speed = SPEED_ICEGSHARD + (skill * SPEED_ICEGSKILL);
-	Launch_Missile (org, dir, '0 0 0', CT_PROJ_ICEG1, self.attack_speed);
+	if (self.classtype == CT_MONLAVAGOLEM) {
+		launch_projectile(org, dir, CT_PROJ_BLBOLT2, self.attack_speed);	
+	} else Launch_Missile(org,dir,VEC_ORIGIN,CT_PROJ_ICEG1,self.attack_speed);
 };
 
 void() iceg_magtime = {self.nextthink = time + 0.05;};
 
 void() iceg_magic1 = [ $magic1, iceg_magic2 ] {iceg_magtime();ai_face();
 	self.pain_finished = time + 1.5;
-	sound (self, CHAN_WEAPON, "ad171/golem/icestorm.wav", 1, ATTN_NORM);
+	if (self.classtype == CT_MONLAVAGOLEM) sound(self,CHAN_WEAPON,"ne_ruins/h2golem/fireslam.wav",1,ATTN_NORM);
+	else sound(self,CHAN_WEAPON,"ad171/golem/icestorm.wav",1,ATTN_NORM);
 };
 void() iceg_magic2 = [ $magic2, iceg_magic3 ] {iceg_magtime();};
 void() iceg_magic3 = [ $magic3, iceg_magic4 ] {iceg_magtime();ai_face();};
@@ -679,11 +721,8 @@ void() iceg_waveb24 = [ $magic24, iceg_run1 ] {
 	self.pain_finished = self.attack_finished = time + 2;
 };
 
-//----------------------------------------------------------------------
-void() iceg_turnframe =
-{
-	// Do nothing if dead
-	if (self.health < 1) return;
+void() iceg_turnframe = {
+	if (self.health < 1) return; // Do nothing if dead
 	
 	// Check for any special frame events
 	if (self.walkframe == 0 || self.walkframe == 16) monster_footstep(FALSE);
@@ -701,9 +740,7 @@ void() iceg_turnframe =
 	else self.think = iceg_turnframe;
 };
 
-//----------------------------------------------------------------------
-void() iceg_waveboundary = 
-{
+void() iceg_waveboundary = {
 	// Find a target to aim at (columns to blow up)
 	self.enemytarget = find(world, targetname, self.attachment2.noise1);
 	// First target seems to be dead
@@ -745,11 +782,8 @@ void(entity inflictor, entity attacker, float damage) iceg_pain = {
 	}
 };
 
-//============================================================================
 // DEATH : Time to melt the heavy water GOLEM!
-//============================================================================
-void() iceg_fadeout =
-{
+void() iceg_fadeout = {
 	self.origin_z = self.origin_z - 0.2;	// Slowly sink into the ground (melting)
     self.alpha = 1 - ((time - self.ltime) / 1);
 	if (random() < 0.1) SpawnProjectileSmoke(self.origin, 200, 100, 100);
@@ -757,9 +791,7 @@ void() iceg_fadeout =
     else self.nextthink = time + FADEMODEL_TIME;
 };
 
-//----------------------------------------------------------------------
-void() iceg_startfade =
-{
+void() iceg_startfade = {
 	// Check for any final trigger events
 	if (self.message2 != "") trigger_strs(self.message2,self);
 
@@ -771,9 +803,7 @@ void() iceg_startfade =
 	iceg_fadeout();
 };
 
-//----------------------------------------------------------------------
-void(float fdist) iceg_brk =
-{
+void(float fdist) iceg_brk = {
 	if (fdist > 0) ai_forward(fdist);
 	if (random() < 0.2) SpawnProjectileSmoke(self.origin, 200, 50, 150);
 	if (random() < 0.4) SpawnProjectileSmoke(self.origin, 300, 50, 150);
@@ -781,7 +811,6 @@ void(float fdist) iceg_brk =
 	if (random() < 0.3) ThrowGib(11, 1);	// Small Golem rock
 };
 
-//----------------------------------------------------------------------
 void() iceg_death1	= [ $death1, iceg_death2 ] {iceg_brk(0);};
 void() iceg_death2	= [ $death2, iceg_death3 ] {iceg_brk(0);};
 void() iceg_death3	= [ $death3, iceg_death4 ] {iceg_brk(2);};
@@ -828,7 +857,6 @@ void() iceg_birth = {
 	self.nextthink = time + 0.05;
 };
 
-//----------------------------------------------------------------------
 void() iceg_wake1 =[ $birth1, iceg_wake2 ] {
 	self.use = SUB_Null;				// No more triggers
 	self.style = ICEG_PHASE2;			// Free to fight
@@ -837,8 +865,7 @@ void() iceg_wake1 =[ $birth1, iceg_wake2 ] {
 	// Setup player focus
 	if (activator.flags & FL_CLIENT) {
 		self.goalentity = self.enemy = activator;
-	}
-	else self.enemy = world;
+	} else self.enemy = world;
 	
 	// Restore all think functions
 	self.th_stand = iceg_stand1;
@@ -1071,4 +1098,63 @@ void() monster_icegolem_wavetrig = {
 	self.movetype = MOVETYPE_NONE;
 	self.takedamage = DAMAGE_NO;
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
+};
+
+void() monster_lavagolem_precache = {
+	monster_icegolem_precache();
+	precache_model("progs/ne_ruins/h2golemlg.mdl");
+	precache_model(MODEL_PROJ_BLORDBOLT1);
+	precache_model(MODEL_PROJ_BLORDBOLT2);
+	precache_sound("ne_ruins/firegug/flames1.wav");
+	precache_sound("ne_ruins/firegug/flames2.wav");
+	precache_sound("ne_ruins/firegug/flames3.wav");
+	precache_sound("ne_ruins/firegug/flames4.wav");
+	precache_sound("ne_ruins/h2golem/fireslam.wav");
+	precache_sound("ad171/gaunt/plasma_fire.wav");
+};
+
+void() monster_lavagolem = {
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/ne_ruins/h2golemlg.mdl";
+	self.gib1mdl = MODEL_PROJ_GROCK1;	// small golem rock
+	self.gib2mdl = MODEL_PROJ_GROCK2;	// medium golem rock
+	self.gib1frame = self.gib2frame = 9;
+	self.idle_sound = "ne_ruins/h2golem/foley3.wav"; // Idle1a-1b (long sound) idle2a-2b (short sound)
+	self.idle_sound2 = "ne_ruins/h2golem/foley4.wav";
+	self.idle_soundcom = "ne_ruins/h2golem/foley1.wav";
+	self.idle_soundcom2 = "ne_ruins/h2golem/foley2.wav";
+	if (self.brkobj1 == "") self.brkobj1 = MODEL_BRK_ROCK1A;
+	if (self.brkobj2 == "") self.brkobj2 = MODEL_BRK_ROCK1B;
+	if (CheckZeroVector(self.dest1)) self.dest1 = '80 8 1'; // Additional rubble emitter parameters
+	if (CheckZeroVector(self.dest2)) self.dest2 = '0 0 16';
+	if (CheckZeroVector(self.brkvol)) self.brkvol = '160 160 8';
+	if (CheckZeroVector(self.brkvelbase)) self.brkvelbase = '0 0 50';
+	if (CheckZeroVector(self.brkveladd)) self.brkveladd = '100 100 100';
+	if (self.brkfade <= 0) self.brkfade = 4;
+	self.pain_sound = "ne_ruins/h2golem/pain1.wav";
+	self.pain_sound2 = "ne_ruins/h2golem/pain2.wav";
+	self.sight_sound = "ad171/golem/sight.wav"; // Roar!
+	self.solid = SOLID_NOT;			// No interaction with world
+	self.movetype = MOVETYPE_NONE;	// Static item, no movement
+	self.bbmins = '-32 -32 -24';	// Special Size
+	self.bbmaxs = '32 32 128';
+	self.bboxtype = BBOX_CUSTOM;
+	self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
+	self.steptype = FS_TYPEGIANT;	// Giant sound
+	self.health = self.max_health = MEGADEATH;
+	self.classtype = CT_MONLAVAGOLEM;
+	self.classgroup = CG_STONE;
+	self.classmove = MON_MOVEWALK;
+	self.style = 0;
+	self.skin = self.exactskin = 4;
+	if (self.deathstring == "")  self.deathstring = " was shattered by the Lava Golem\n";
+	self.th_stand = self.th_walk = self.th_run = SUB_Null;
+	self.th_missile = self.th_die = SUB_Null;
+	self.th_pain = SUB_Null_pain;
+	monster_start();
+	if (self.targetname == "") {
+		dprint("\b[ICEGOLEM]\b Missing targetname name! Going ahead and spawning anyways.\n");
+		iceg_setup();
+	} else self.use = iceg_setup;
 };

@@ -44,7 +44,8 @@ void() monster_use = {
 	}
 };
 
-// For some reason monsters never took damage from liquids.  This functions checks for liquid content and applies a modifier damage (they die too slow otherwise).
+// For some reason monsters never took damage from liquids.  This functions checks for liquid
+// content and applies a modifier damage (they die too slow otherwise).
 // * If a monster is in liquid there is often no way out!
 // * Moves the content check to the monsters feet (shallow liquid)
 void() monster_liquid_check = {
@@ -62,6 +63,11 @@ void() monster_liquid_check = {
 	monster_feet_z = monster_feet_z + self.mins_z;
 	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) monster_feet_z = monster_feet_z + 1; // Drake added 1 more for Water_Set().
 	self.liquidbase = pointcontents(monster_feet);
+	if (self.liquidbase >= CONTENT_SOLID) {
+		if (self.inBSPwater) self.inBSPwater = FALSE;
+		self.waterlevel = 0;
+		return;
+	}
 
 	// Handle water train check
 	if (self.liquidbase < CONTENT_SOLID) { // -2
@@ -88,12 +94,7 @@ void() monster_liquid_check = {
 	else if (self.liquidbase == CONTENT_LAVA) monster_dmg = LAVA_DAMAGE * MON_MULTIPLIER * (1-self.resist_fire); //-5
 	else return;
 
-	// Gib monster if about to die
-	if (self.health < monster_dmg + 5) {
-		monster_dmg = self.health + 5;
-		self.gibondeath = 1;
-	}
-
+	if (self.health < monster_dmg + 5) monster_dmg = self.health + 5;
 	self.pain_finished = 0; // Always pain for liquids, looks better.
 	T_Damage (self, world, world, monster_dmg, DAMARMOR); // Liquid damage
 };

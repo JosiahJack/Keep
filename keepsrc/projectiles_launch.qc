@@ -411,7 +411,10 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 	else if (proj_type == CT_PROJ_SCORP) newmis.mdl = MODEL_PROJ_SCORP;
 	else if (proj_type == CT_PROJ_FURY2) newmis.mdl = MODEL_PROJ_FURY2;
 	else if (proj_type == CT_PROJ_NOUR1) newmis.mdl = MODEL_PROJ_NOUR1;
-	else if (proj_type == CT_PROJ_BLBOLT) { // Boglord / Fire Shambler nail/lightning attack
+	else if (proj_type == CT_PROJ_BLBOLT2) { // Boglord / Fire Shambler nail/lightning attack
+		newmis.classtype = CT_PROJ_BLBOLT2;
+		newmis.mdl = MODEL_PROJ_BLORDBOLT2;
+	} else if (proj_type == CT_PROJ_BLBOLT) { // Boglord / Fire Shambler nail/lightning attack
 		if (self.spawnflags & MON_BOGL_STRONG) { 
 			newmis.classtype = CT_PROJ_BLBOLT2;
 			newmis.mdl = MODEL_PROJ_BLORDBOLT2;
@@ -603,9 +606,10 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 		newmis.nextthink = time + 1;
 		newmis.classname = "MultiGrenade";
 	} else if (proj_type == CT_PROJ_GLMONPROX) {
-		newmis.mdl = "progs/hipnotic/proxbomb.mdl";
+		newmis.mdl = "progs/ne_ruins/proxbomb.mdl";
 		newmis.touch = ProximityGrenadeTouch;
 		newmis.think = ProximityBomb;
+		newmis.health = 5;
 		newmis.delay = ((time + 15.000) + (MOVETYPE_BOUNCE * random ()));
 		newmis.th_die = ProximityGrenadeExplode;
 		newmis.nextthink = time + 1;
@@ -943,9 +947,10 @@ if (entity_pcontent(org)) return; // Check if there is space to spawn entity
 		newmis.nextthink = time + 1;
 		newmis.classname = "MultiGrenade";
 	} else if (proj_type == CT_PROJ_GLMONPROX) {
-		setmodel(newmis, "progs/hipnotic/proxbomb.mdl");
+		setmodel(newmis, "progs/ne_ruins/proxbomb.mdl");
 		newmis.touch = ProximityGrenadeTouch;
 		newmis.think = ProximityBomb;
+		newmis.health = 5;
 		newmis.delay = ((time + 15.000) + (MOVETYPE_BOUNCE * random ()));
 		newmis.th_die = ProximityGrenadeExplode;
 		newmis.nextthink = time + 1;
@@ -1852,6 +1857,7 @@ void(vector start, vector dir, entity targ) Thor_Launch = { // [FUNCTION]
     newmis.nextthink    = time + 0.1;
     newmis.think        = Thor_Think;
 	newmis.classgroup	= CG_WEAPON;
+	newmis.classtype    = CT_THROWHAM;
     newmis.frame		= 0;
     setmodel(newmis,"progs/drake/throwham.mdl");
     setsize(newmis, '0 0 0', '0 0 0');        

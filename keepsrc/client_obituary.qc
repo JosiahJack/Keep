@@ -346,6 +346,7 @@ void(entity targ, entity attacker) ClientObituary = { // [FUNCTION]
 			else if (attacker.classtype == CT_SPIKESHOOTER) bprint (" did not stick around\n");
 			else if (attacker.classtype == CT_GRENADESHOOTER) bprint (" was pineappled\n");
 			else if (attacker.classtype == CT_ROCKETSHOOTER) bprint (" was blasted\n");
+			else if (attacker.classtype == CT_PROXMINE) bprint (" tripped on a mine\n");
 			else if (attacker.classtype == CT_LIGHTSHOOTER) bprint (" was struck down\n");
 			else if (attacker.classtype == CT_GASSHOOTER) bprint (" was burnt to a crisp\n");
 			else if (attacker.classtype == CT_PENDULUM) bprint (" was cleaved in two\n");
