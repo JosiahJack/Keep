@@ -767,7 +767,10 @@ void() monster_skullwiz = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	if (self.minion_name == string_null) self.minion_name = "monster_lostsoul";
+	if (self.minion_name == string_null) {
+		self.minion_name = "monster_lostsoul";
+        self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
+    }
 	self.mdl = "progs/ad171/mon_skullwiz.mdl";
 	self.gib1mdl = "progs/ad171/h_skullwiz.mdl";		// Skull head
 	self.gib2mdl = "progs/ad171/w_skullbook.mdl";		// Unique book item

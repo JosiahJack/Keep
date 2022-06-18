@@ -41,6 +41,8 @@
 void() precache_poisongibs;
 float(string mname) monster_checkminion; // Used later by all monsters.  Must be last after all monsters.
 void(string mname) precache_monster; // Used later by all monsters.  Must be last after all monsters.
+void(string monstername, vector minion_org, entity minion_targ) SpawnMinion;
+float(vector spot) SpawnMinionInRadius;
 
 void() PreCache_Flame = {
 	precache_model (MODEL_PROJ_FLAMETINY);		// 16 (wide) x  48 (high)

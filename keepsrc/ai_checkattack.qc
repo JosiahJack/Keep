@@ -44,7 +44,7 @@ void() baron_cast1;
 void() baron_slam1;
 float() BaronGolem_Check;
 float(entity ent) QuakeHurts;
-float(vector org) UpIsSky;
+float(vector org, entity ignore) UpIsSky;
 float() eidolon_WaveCheck;
 float() mammoth_WaveCheck;
 float() mammoth_CheckTether;
@@ -367,7 +367,7 @@ void() GolemCheckAttack = {
 	// Floor stomp attack
 	if (self.enemydist < MONAI_GOLEMRANGE && random() < 0.3) {
 		SUB_AttackFinished (1 + 2*random());
-		self.th_slide ();
+		self.th_slide();
 		return;
 	}	
 
@@ -732,7 +732,8 @@ void() WizardCheckAttack = {
 	} else {
 		if (self.attack_state != AS_SLIDING) {
 			self.attack_state = AS_SLIDING;
-			self.th_slide ();
+			if (self.th_slide) self.th_slide();
+			else self.attack_state = AS_STRAIGHT;
 		}
 	}
 };
@@ -2309,7 +2310,7 @@ void() BaronBossCheckAttack = {
             else if (BaronGolem_Check ()) baron_cast1();
             else return;
         } else if (self.level == BARON_AIR) {
-            if (UpIsSky (self.enemy.origin)) {
+            if (UpIsSky (self.enemy.origin, self.enemy)) {
                 if ((r < 0.5) && !super_active)
                     baron_slam1();
                 else

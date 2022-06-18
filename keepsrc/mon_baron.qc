@@ -721,7 +721,7 @@ void() baron_magic = {
                         {baron_slam1();  return;}
 
             if (self.waitmax < time)
-                if (UpIsSky (self.enemy.origin))
+                if (UpIsSky (self.enemy.origin,self.enemy))
                     opt = opt + 1;
             if (self.waterlevel < 2)
                 {add = 0;  opt = opt + 1;  yes = 1;}
@@ -1059,7 +1059,10 @@ void() monster_baron = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	if (self.minion_name == string_null) self.minion_name = "monster_golem";
+	if (self.minion_name == string_null) {
+        self.minion_name = "monster_golem";
+        self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
+    }
     self.mdl = "progs/drake/baron.mdl";
     self.sight_sound = "nehahra/baron/sight.wav";
 	self.idle_sound = "hknight/idle.wav";

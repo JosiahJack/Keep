@@ -238,6 +238,25 @@ void() Touch_Projectile = { // [FUNCTION]
 
 		if (self.poisonous == TRUE) PoisonDeBuff(other); // Check for poison debuff (using poisonous flag)
 
+		if (self.classtype == CT_PROJ_WIZBOSS) {
+			if (other.flags & FL_CLIENT) {
+				if (random() < 0.25) BurnDeBuff(other);
+			} else if (other.flags & FL_MONSTER) {
+				// Add fun fire effects 50% of the time for monsters.
+				if (random() < 0.50 && other.resist_fire < 1) {
+					newent = spawn();
+					setorigin(newent,self.origin);
+					stemp = self;
+					self = newent;
+					Ember_Shower(2);
+					self.think      = SUB_Remove;
+					self.nextthink  = time + 0.1;
+					self = stemp;
+					Burn_Add(other,self.owner,self.dmg);
+				}
+			}
+		}
+
 		// Check for NG/SNG nail resistance
 		if (self.classgroup == CG_PROJNAILS && other.resist_nails > 0) {
 			Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_NAILS,other.pain_sound,"");
@@ -439,7 +458,7 @@ void() Touch_Projectile = { // [FUNCTION]
 			else if (self.classtype == CT_PROJ_FURY2) WriteByte (MSG_BROADCAST, TE_WIZSPIKE);
 			else if (self.classtype == CT_PROJ_NOUR1) WriteByte (MSG_BROADCAST, TE_WIZSPIKE);
 			else if (self.classtype == CT_PROJ_BLBOLT) WriteByte (MSG_BROADCAST, TE_WIZSPIKE);
-			else if (self.classtype == CT_PROJ_BLBOLT2) WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
+			else if (self.classtype == CT_PROJ_BLBOLT2 || self.classtype == CT_PROJ_WIZBOSS) WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
 			else if (self.classtype == CT_PROJ_HKN || self.classtype == CT_PROJ_HKN_BLUE) WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
 			else if (self.classtype == CT_PROJ_HKN2) WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
 			else WriteByte (MSG_BROADCAST, TE_SPIKE);

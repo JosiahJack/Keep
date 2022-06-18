@@ -1051,7 +1051,10 @@ void() monster_nour = {
 	self.classtype = CT_MONNOUR;
 	self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
-	if (self.minion_name == string_null) self.minion_name = "monster_wizard";
+	if (self.minion_name == string_null) {
+		self.minion_name = "monster_wizard";
+        self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
+    }
 	self.frame = 0; self.exactskin = self.skin; // Devmarker function changes skins, save for later
 	monster_start();
 

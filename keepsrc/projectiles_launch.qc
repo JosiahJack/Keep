@@ -113,6 +113,7 @@ void() W_FireThor;
 void() player_failedairgun1;
 void(float num_bubbles) death_bubbles;
 void() player_airgun1;
+float(vector spot) SpawnMinionInRadius;
 
 // OLD STYLE BULLET SYSTEM (HITSCAN)
 void() ClearMultiDamage = { // [FUNCTION]
@@ -328,7 +329,10 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 	
 	if (entity_pcontent(org)) return; // Check if there is space to spawn entity
 
-	newmis = spawn ();
+	if (self.minion_spawn_time & MONANIM_SPECIFIC) {
+		if (SpawnMinionInRadius(self.origin)) return; // Successfully spawned a minion, don't shoot.
+	}
+	newmis = spawn();
 	newmis.owner = newmis.oldenemy = self;
 	newmis.enemy = self.enemy;				// Used for homing target
 	newmis.classname = "projectile";	// Name, not really used anymore
@@ -401,7 +405,10 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 	else if (proj_type == CT_PROJ_HKN2) newmis.mdl = "progs/q15/k_spike.mdl"; // Warlord spike (Quake 1.5)
 	else if (proj_type == CT_PROJ_ENFHKN) newmis.mdl = MODEL_PROJ_HKN;
 	else if (proj_type == CT_PROJ_WIZ) newmis.mdl = MODEL_PROJ_WIZ;
-	else if (proj_type == CT_PROJ_MPOISON) newmis.mdl = MODEL_PROJ_MPOISON;
+	else if (proj_type == CT_PROJ_WIZBOSS) {
+		newmis.mdl = "progs/anevil/wbspike.mdl";
+		newmis.dmg = 11; // Lava is a bit more damaging than a standard scrag spit.
+	} else if (proj_type == CT_PROJ_MPOISON) newmis.mdl = MODEL_PROJ_MPOISON;
 	else if (proj_type == CT_PROJ_MBLOOD) newmis.mdl = MODEL_PROJ_MBLOOD;
 	else if (proj_type == CT_PROJ_WBONE) {
 		if (newmis.poisonous) newmis.mdl = MODEL_PROJ_WPOISON; // Wraith fire bones (nails) can be poisonous as well
@@ -824,9 +831,9 @@ void(vector org, vector dir, vector avel, float proj_type, float proj_speed) Lau
 };
 
 void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade = { // [FUNCTION]
-local vector vec;
+	local vector vec;
 
-if (entity_pcontent(org)) return; // Check if there is space to spawn entity
+	if (entity_pcontent(org)) return; // Check if there is space to spawn entity
 	
 	newmis = spawn();
 	newmis.owner = self;
@@ -872,8 +879,7 @@ if (entity_pcontent(org)) return; // Check if there is space to spawn entity
 		newmis.lefty = FALSE;
 		newmis.nextthink = time + 1;
 		newmis.classname = "MultiGrenade";
-	}
-	else if (proj_type == CT_PROJ_GLMON) { 
+	} else if (proj_type == CT_PROJ_GLMON) {
 		if (newmis.poisonous) setmodel(newmis, MODEL_PROJ_GRENADEGRN); // proj_glmon is used by any monster firing grenades
 		else setmodel(newmis, MODEL_PROJ_GRENADE);
 	} else if (proj_type == CT_PROJ_FLESH) {
@@ -1919,7 +1925,7 @@ float() Thor_Safe = { // [FUNCTION]
 
 // Slammed the ground, so fire off some lightning.
 void() HIP_SlamMjolnir = { // [FUNCTION]
-	if (self.hammer_finished) return;
+	if (self.hammer_finished >= time) return;
 
     if (self.ammo_cells >= COST_MJOLNIR)
     if (Thor_Safe()) { // Super slam.  Update 11/30/09:  Don't discharge if deadly.
@@ -1935,7 +1941,7 @@ void() HIP_SlamMjolnir = { // [FUNCTION]
 };
 
 float() Hip_ThrewMjolnir = { // [FUNCTION]
-	if (self.hammer_finished) return TRUE;
+	if (self.hammer_finished >= time) return TRUE;
 	if ((world.hipnoticoptions & HIPNOTIC_OLDMJOLNIR) && !self.tome_finished) return FALSE;
 	if (HasPowerToThrow()) {W_FireThor();  return TRUE;} // Throw if player has the juice.
     return FALSE;
@@ -2465,7 +2471,8 @@ void(entity victim, entity attacker, float burn) Burn_Add = { // [FUNCTION]
 	newmis = spawn(); // Spawn burner entity.
 	newmis.solid        = SOLID_NOT;
 	newmis.takedamage   = DAMAGE_NO;
-	newmis.frame = newmis.walkframe = 6;
+	newmis.frame = newmis.walkframe = 0;
+	if (victim.bbmins_z + victim.bbmaxs_z > 48) newmis.frame = 1;
 	newmis.pos2 = '6 16 0.1';
 	newmis.effects      = EF_DIMLIGHT;
 	newmis.master       = attacker;
@@ -2571,7 +2578,8 @@ void(entity attacker, vector start, vector dir, float sped, float damage) Fireba
     newmis.movetype   = MOVETYPE_FLYMISSILE;
 	newmis.classgroup = CG_PROJALL;
     newmis.solid      = SOLID_BBOX;
-	newmis.frame = newmis.walkframe = 0;
+	newmis.frame = 0;
+	if (damage > 120) newmis.frame = 1;
 	newmis.pos2 = '0 5 0.1';
     newmis.angles     = vectoangles(dir) + '90 0 0';
     newmis.speed      = sped;
@@ -3018,8 +3026,7 @@ void(vector org, vector dir, float proj_color, string proj_sfx) Launch_Trail = {
 // Void triggers do cope with hazard projectile counters
 // Uses models and particle/trails for effects.  Has radius and impact touch damage
 void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard = {
-	// Check if the hazard projectile limit exists and has been reached?
-	if ( !(HazardProjectile_CheckLimit(self,1)) ) return;
+	if ( !(HazardProjectile_CheckLimit(self,1)) ) return; // Check if the hazard projectile limit exists and has been reached?
 	
 	newmis = spawn ();
 	newmis.owner = self;
@@ -3041,6 +3048,8 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard = {
 		newmis.infightextra = self.infightextra;
 	}
 
+	if (self.attack_proj2 == "") self.attack_proj2 = MODEL_PROJ_DPRINCE2R;
+	if (self.part_trstyle <= 0) self.part_trstyle = PARTICLE_TRAIL_RED;
 	// Setup model for each missile type
 	if (proj_type == CT_PROJ_DPRINCE2) {
 		setmodel(newmis, self.attack_proj2);
@@ -3063,11 +3072,8 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard = {
 	newmis.oldorigin = newmis.origin = org;	// Save starting origin
 	setorigin (newmis, newmis.origin);		// Move to start point
 	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
-
-	// Burning touch sound (precached in world.qc)
-	newmis.part_soundtouch = GIB_SOUND_ACID;
-	// Setup particle defaults for hazard emitter
-	Default_ParticleTrail(newmis);
+	newmis.part_soundtouch = GIB_SOUND_ACID; // Burning touch sound (precached in world.qc)
+	Default_ParticleTrail(newmis); // Setup particle defaults for hazard emitter
 	newmis.think = Custom_ParticleTrail;	
 	newmis.nextthink = time + 0.1;
 
@@ -3078,8 +3084,7 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Hazard = {
 			newmis.traileffectnum = particleeffectnum(newmis.dpp_name);
 			newmis.effects = 0;
 		}
-		// Particle trail needs quick update
-		newmis.nextthink = time + 0.02;
+		newmis.nextthink = time + 0.02; // Particle trail needs quick update
 	}
 };
 
@@ -3279,4 +3284,84 @@ void() launch_horn = {
 	else					sound (self, CHAN_AUTO, "weapons/agfire.wav", 1, ATTN_NORM); // play above water sound
 
 	player_airgun1(); // AirFist gun frame animation
+};
+
+void(float offset) dprince_hazard = { // [FUNCTION]
+	local vector org, torg, dir, ang, avel;
+	local float targetang, haz_loop;
+	
+	if (!self.enemy) return;
+	if (self.enemy.health < 1) return;
+
+	sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
+	makevectors (self.angles);	
+	org = self.origin + attack_vector(self.attack_offset);
+	if (skill <= SKILL_NORMAL) haz_loop = 1;
+	else haz_loop = 2;
+	
+	while(haz_loop > 0) {
+		// Keep looping
+		haz_loop = haz_loop - 1;
+		torg = self.enemy.origin;
+		// Last projectile (0) is direct at enemy
+		if (haz_loop > 0) {
+			// Very large random area around target
+			torg_x = torg_x + (crandom() * 128);
+			torg_y = torg_y + (crandom() * 128);
+		}
+		// Work out elevation towards target origin
+		targetang = SUB_Elevation(ELEV_DEFAULT, self.origin, torg, SPEED_DPRINCE);
+		ang = vectoangles(torg - org);
+		ang_x = -targetang;
+		makevectors(ang);
+		// fire projectile in arc pattern (offset)
+		dir = ( (v_forward * (0.75 + random()*0.25)) + (v_right * (offset*0.1)) ) * SPEED_DPRINCE;	
+		// Some random angle rotation
+		avel = vecrand(100,200,FALSE);
+		Launch_Hazard(org, dir, avel, CT_PROJ_DPRINCE2);
+	}
+};
+
+// Range - Grenades (uses generic attack function in projectiles.qc)
+// Nail - Alternative firemode (based on nail ogre from Marcher Fortress)
+void() OgreFireADNails = {
+	local vector org, dir, vec;
+	local float loopvar;
+
+	if (self.health < 1) return; // Check for death?
+
+	loopvar = 0;
+	self.effects = self.effects | EF_MUZZLEFLASH; // Light up face, setup projectile speed and play fire sound
+	self.attack_speed = SPEED_NAILOGREPROJ + (skill * SPEED_NAILOGRESKILL);
+	sound(self, CHAN_WEAPON, "xmas/snowman/nail_fire.wav", 1, ATTN_NORM);
+	makevectors (self.angles); // turn and face your enemy!
+	org = self.origin + attack_vector(self.attack_offset);
+	if (self.attack_count <= 0) self.attack_count = 5; // Shoot something!
+	while (loopvar < self.attack_count) { // Loop through the nail burst (all at once)
+		vec = (crandom()*20)*v_right + (crandom()*20)*v_up; // Random circle spread pattern
+		dir = normalize((self.enemy.origin + vec) - org);
+		launch_projectile(org, dir, CT_PROJ_MONNG, self.attack_speed); // Generate a red hot nail projectile
+		loopvar = loopvar + 1;
+	}
+};
+
+// FLAMES PATTERN 2 - straight line towards player
+void() judge_fireflameline = {
+	local vector org, dir;
+	local float fire_col;
+
+	// Judge cannot find target!
+	if (!self.enemy) return;
+
+	// Turn toward enemy
+	ai_face();
+	makevectors (self.angles);	
+	org = self.origin + attack_vector(self.attack_offset2);
+	dir = v_forward;
+	
+	// Setup colour scheme (was original red/blue flames)
+	fire_col = FLAME_RED;
+	// Fire that flame!
+	// Origin, v_forward, colour, sfx
+	Launch_Trail (org, dir, fire_col, "");
 };

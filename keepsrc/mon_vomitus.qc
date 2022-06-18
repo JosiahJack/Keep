@@ -470,7 +470,10 @@ void() monster_vomit = {
 		else self.minion_maxcount = 3;
 	}
 
-	if (self.minion_name == string_null) self.minion_name = "monster_tarbaby";
+	if (self.minion_name == string_null) {
+        self.minion_name = "monster_tarbaby";
+        self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
+    }
 
 	if (self.exactskin == 0) {
 		self.headmdl   = "progs/drake/tar_gib.mdl";

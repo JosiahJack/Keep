@@ -4723,6 +4723,11 @@ GN/A" : 0
 //----------------------------------------------------------------------
 @PointClass base(MonTall) studio("progs/wizard.mdl") = monster_wizard : "Wizard"
 [ spawnflags(flags) = [ 4 : "Always Above" : 0 ] ]
+@PointClass base(MonTall) studio("progs/anevil/wizboss.mdl") = monster_wizboss : "Fire God Minion"
+[ spawnflags(flags) = [ 4 : "Always Above" : 0 ] ]
+@PointClass base(MonTall) studio("progs/drake/wizard.mdl") skin(1) = monster_drake : "Drake"
+[ spawnflags(flags) = [ 4 : "Always Above" : 0 ] ]
+
 @PointClass base(MonTall) studio("progs/rogue/wrath.mdl") = monster_wrath : "Wrath" []
 @PointClass base(MonTall) studio("progs/nehahra/wraith.mdl") = monster_voidwraith : "Void Wraith" []
 @PointClass base(MonTall) studio("progs/rogue/s_wrath.mdl") = monster_super_wrath : "Wrath" []

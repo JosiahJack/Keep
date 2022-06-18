@@ -1,5 +1,3 @@
-void(vector minion_org, entity minion_targ, float minion_sflag) minion_gaunt;
-
 /*==============================================================================
  The Judicator Knight (model/animation by Benoit Stordeur)
 
@@ -946,33 +944,7 @@ void() judge_magicBframe =
 	if (self.walkframe > 13) self.th_run();
 };
 
-//======================================================================
-// (JUDGE only) FLAMES PATTERN 2 - straight line towards player
-//======================================================================
-void() judge_fireflameline =
-{
-	local vector org, dir;
-	local float fire_col;
-
-	// Judge cannot find target!
-	if (!self.enemy) return;
-
-	// Turn toward enemy
-	ai_face();
-	makevectors (self.angles);	
-	org = self.origin + attack_vector(self.attack_offset2);
-	dir = v_forward;
-	
-	// Setup colour scheme (was original red/blue flames)
-	fire_col = FLAME_RED;
-	// Fire that flame!
-	// Origin, v_forward, colour, sfx
-	Launch_Trail (org, dir, fire_col, "");
-};
-
-//----------------------------------------------------------------------
-void() judge_flameline =
-{
+void() judge_flameline = {
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -1007,11 +979,8 @@ void() judge_flameline =
 	self.walkframe = self.walkframe + 1;
 };
 
-//======================================================================
 // Lunge forward (leaving ground) and do heavy damage on touch
-//----------------------------------------------------------------------
-void() judge_JumpTouch =
-{
+void() judge_JumpTouch = {
 	local float ldmg;
 	
 	// Judge Dead stops here!
@@ -1424,11 +1393,8 @@ void() Spawn_judgeMinFX =
 	WriteCoord (MSG_BROADCAST, self.origin_z);
 };
 
-//----------------------------------------------------------------------
 // Fire random plasma spikes while summoning gaunt minions
-//----------------------------------------------------------------------
-void() Fire_judgePlasma =
-{
+void() Fire_judgePlasma = {
 	local vector org, ovec, rndvec, destvec;
 
 	makevectors(self.angles);
@@ -1439,9 +1405,7 @@ void() Fire_judgePlasma =
 	launch_projectile(org, destvec, CT_SUMMONLIGHT, SPEED_REFLECTION);
 };
 
-//----------------------------------------------------------------------
-void() Spawn_judgeMin =
-{
+void() Spawn_judgeMin = {
 	// Fire off some random plasma/lightning
 	Fire_judgePlasma();
 	
@@ -1450,22 +1414,14 @@ void() Spawn_judgeMin =
 	while(self.lip > 0) {
 		self.bossminchain.think = Spawn_judgeMinFX;
 		self.bossminchain.nextthink = time + 0.01 + random()*0.3;
-
-		// If the spawn locaiton all clear, spawn something!
 		self.pos1 = self.bossminchain.origin;
-		self.aflag = find_minionspace(self.pos1);			
-		if (self.aflag == TRUE) 
-			minion_gaunt(self.pos1, self.enemy, 0);
-		
-		// Next spawn point
-		self.bossminchain = self.bossminchain.entchain;
+		SpawnMinionInRadius(self.pos1); // If the spawn locaiton all clear, spawn something!
+		self.bossminchain = self.bossminchain.entchain; // Next spawn point
 		self.lip = self.lip - 1;
 	}
 };
 
-//----------------------------------------------------------------------
-void() Setup_judgeMin =
-{
+void() Setup_judgeMin = {
 	local vector org, ovec;
 	
 	// Work out random position along length of sword
@@ -1557,9 +1513,7 @@ void() judge_summonframe = {
 	}
 };
 
-//----------------------------------------------------------------------
-void() judge_summon =
-{
+void() judge_summon = {
 	// Make sure boss ONLY active for this attack
 	if (self.classtype == CT_MONJUSTICE) { 
 		self.think = self.th_run; return;
@@ -1968,7 +1922,10 @@ void() monster_judicator = {
 	self.reflectaxe = TRUE;			// Prevent axe damage
 	self.frame = 0;
 	self.exactskin = self.skin; // Devmarker function changes skins, save for later
-	if (self.minion_name == string_null) self.minion_name = "monster_gaunt";
+	if (self.minion_name == string_null) {
+		self.minion_name = "monster_gaunt";
+        self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
+    }
 	monster_start();
 
 	// Wait for trigger event

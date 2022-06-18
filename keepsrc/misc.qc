@@ -515,9 +515,10 @@ void() misc_drip_spawn = { // [FUNCTION]
 	if (self.cnt) self.movetype = MOVETYPE_NOCLIP;
 	else self.movetype = MOVETYPE_FLY;
 	setsize (self, VEC_ORIGIN, VEC_ORIGIN);
-	self.velocity_z = -map_gravity;
+	self.velocity_z = -map_gravity * self.gravity;
+	if (self.velocity_z < 1) self.velocity_z = -40;
 	self.think = misc_drip_reset;
-	self.nextthink = time + 3; // Drip only lasts 3s, don't want to travel forever
+	self.nextthink = time + self.proj_trlife; // Drip only lasts 3s, don't want to travel forever
 	self.touch = misc_drip_touch;
 	if (self.cnt) { // Is there any water underneath drip?
 		self.attack_finished = self.nextthink;
@@ -547,37 +548,47 @@ void() misc_drip_on = { // [FUNCTION]
 // - Modified to have on/off/toggle state
 void() misc_drip = { // [ENTITY]
 	if (self.spawnflags & MISC_DRIPBLOOD) { // Pick type of drip sprite based on spawnflags
-		if (self.spawnflags & 8) self.path = "progs/s_dripred_lg.spr";
-		else self.mdl = SBLOOD_DRIP;
+		if (self.spawnflags & 8) {
+			if (self.mdl == "") self.mdl = "progs/s_dripred_lg.spr";
+		} else {
+			if (self.mdl == "") self.mdl = SBLOOD_DRIP;
+		}
 
-		self.headmdl = SBLOOD_SPLASH;
-		self.aflag = 64;
+		if (self.headmdl == "") self.headmdl = SBLOOD_SPLASH;
+		if (self.aflag <= 0) self.aflag = 64;
 	} else if (self.spawnflags & MISC_DRIPSLIME) {
-		if (self.spawnflags & 8) self.path = "progs/s_dripgreen_lg.spr";
-		else self.mdl = SSLIME_DRIP;
+		if (self.spawnflags & 8) {
+			if (self.mdl == "") self.mdl = "progs/s_dripgreen_lg.spr";
+		} else {
+			if (self.mdl == "") self.mdl = SSLIME_DRIP;
+		}
 
-		self.headmdl = SSLIME_SPLASH;
-		self.aflag = 48;
+		if (self.headmdl == "") self.headmdl = SSLIME_SPLASH;
+		if (self.aflag <= 0) self.aflag = 48;
 	} else {
-		if (self.spawnflags & 8) self.path = "progs/s_dripblue_lg.spr";
-		else self.mdl = SWATER_DRIP;
+		if (self.spawnflags & 8) {
+			if (self.mdl == "") self.mdl = "progs/s_dripblue_lg.spr";
+		} else {
+			if (self.mdl == "") self.mdl = SWATER_DRIP;
+		}
 
-		self.headmdl = SWATER_SPLASH;
-		self.aflag = 0;
+		if (self.headmdl == "") self.headmdl = SWATER_SPLASH;
+		if (self.aflag < 0) self.aflag = 0;
 	}
 
-	precache_model (self.mdl); // Default cache - water
-	precache_model (self.headmdl);
+	precache_model(self.mdl); // Default cache - water
+	precache_model(self.headmdl);
 	self.noise1 = "rrp/misc/drip1.wav";
 	self.noise2 = "rrp/misc/drip2.wav";
 	self.noise3 = "rrp/misc/drip3.wav";
-	precache_sound (self.noise1);
-	precache_sound (self.noise2);
-	precache_sound (self.noise3);
+	precache_sound(self.noise1);
+	precache_sound(self.noise2);
+	precache_sound(self.noise3);
 	if (self.wait <= 0) self.wait = 3; // default frequency to 3 seconds
 	self.classtype = CT_MISCDRIP;
 	self.classgroup = CG_MISCENT;
 	self.solid = SOLID_NOT;
+	if (self.gravity == 0) self.gravity = 1;
 	self.movetype = MOVETYPE_NONE;
 	setsize(self, VEC_ORIGIN, VEC_ORIGIN);
 	self.height = pointcontents(self.origin); // Check point content for wierd setups (inside liquids/solids)
@@ -588,6 +599,7 @@ void() misc_drip = { // [ENTITY]
 		return;
 	} else if (self.height == CONTENT_SOLID) self.origin_z = self.origin_z - 2; // If flush against a ceiling, move slightly down
 
+	if (self.proj_trlife <= 0) self.proj_trlife = 3;
 	self.oldorigin = self.origin; // Setup drip particle in the correct start location
 	setorigin(self, self.origin);
 	self.pos1 = self.origin; // Find out bottom (world) position first
@@ -650,8 +662,11 @@ void() trigger_spawn_drips = { // [FUNCTION]
 		setorigin(drip, drip.origin);
 		drip.velocity_z = -map_gravity;
 		drip.nextthink = time + 0.5 + random()*0.5;
-		drip.think = misc_dripremovable_think;
 		drip.touch = misc_drip_removetouch;
+		if (self.aflag > 0) {
+			drip.nextthink = time + self.proj_trlife;
+			drip.think = misc_drip_removetouch;
+		} else drip.think = misc_dripremovable_think;
 	}
 
 	self.think = trigger_spawn_drips; // Keep spawning until told not too!
@@ -698,6 +713,7 @@ void() func_drips = { // [ENTITY]
 	self.t_length = (self.size_y/2);
 	if (self.yaw_speed <= 0) self.yaw_speed = 0.5; // Default spawn rate for drips
 	if (self.wait <= 0) self.wait = 0.2; // Frequency
+	if (self.proj_trlife <= 0) self.proj_trlife = 3; // Default lifetime if self.aflag is set > 0
 	self.nextthink = time + self.wait;
 	self.think = trigger_spawn_drips;
 };
@@ -738,8 +754,11 @@ void() func_sprite_emitter = { // [ENTITY]
 
 	InitTrigger();
 	self.spawnflags = self.spawnflags | TRIG_SPAWNBUBBLES;
-	if (self.path) self.mdl = self.path;
-	else self.mdl = PART_BUBBLE_BLUE;
+	if (self.path != "") {
+		self.mdl = self.path;
+	} else { 
+		if (self.mdl == "") self.mdl = PART_BUBBLE_BLUE;
+	}
 	precache_model(self.mdl);
 	self.waitmin = self.bubble_count = 0;		// Reset counters
 	if (!self.count) self.count = 5;			// max active bubbles
@@ -884,7 +903,7 @@ void(vector pos, vector dir, float rubicon) make_spark = { // [FUNCTION]
 	spark.classgroup = CG_TEMPENT;
 	spark.movetype = MOVETYPE_BOUNCE;
 	spark.solid = SOLID_TRIGGER;
-	spark.gravity = 0.3;
+	if (self.gravity == 1) spark.gravity = 0.3;
 	if (rubicon) {
 		setmodel (spark, "progs/rrp/spark.mdl"); // Precached by world. Just in case.
 		spark.velocity_x = -40 + random() * 80; // Use purely random direction for Rubicon.
@@ -898,6 +917,8 @@ void(vector pos, vector dir, float rubicon) make_spark = { // [FUNCTION]
 		spark.velocity = spark.velocity + (dir * self.speed); // speed defaults to 40
 		spark.avelocity = '300 300 300';
 	}
+
+	if (self.gravity != 1) spark.velocity_z = spark.velocity_z * self.gravity;
 
 	setorigin (spark, pos); // Weapons specify certain locations so pass value rather than use self.origin.
 	setsize (spark, VEC_ORIGIN, VEC_ORIGIN);
@@ -987,6 +1008,7 @@ void() misc_spark = { // [ENTITY]
 	self.classtype = CT_MISCSPARK;
 	self.classgroup = CG_MISCENT;
 	self.solid = SOLID_NOT;				// No world interaction
+	if (self.gravity == 0) self.gravity = 1;
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (!self.wait) self.wait = 2;		// -1 = spark once and turn off
 	if (!self.cnt) self.cnt = 16;

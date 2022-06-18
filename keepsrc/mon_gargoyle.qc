@@ -511,37 +511,3 @@ void() setup_gargoyle = {
 	}
 	monster_start();
 };
-
-// A code way to spawn gargoyles (requires monster_minotaurminion entity)
-void(vector minion_org, entity minion_targ) minion_gargoyle = {
-	local entity minion;
-
-	if (entity_pcontent(minion_org)) return; // Check if there is space to spawn entity
-	
-	update_minioncount(self, 1);			// Update spawn counters.  Self = minotaur, there is no egg 	
-	minion = spawn();
-	minion.classname = "monster_gargoyle";	// For function searching
-	setorigin(minion, minion_org);			// Move to new location
-	minion.owner = self;					// Spawner Parent Link
-	minion.effects = minion.flags = 0;		// make sure are blank
-	minion.gibondeath = 1;					// Always gib on death
-	minion.classtype = CT_MINIONGARGOYLE;	// Special minion class
-	minion.enemy = minion_targ;				// Target to attack
-	minion.spawnflags = 0;
-	minion.classgroup = CG_DEMON;			// Don't turn on master
-	minion.minion_active = TRUE;			// Minion flag
-	minion.bodyfadeaway = TRUE;				// Get rid of body
-	minion.infightextra = self.infightextra; // Adopt parameters from host spawner
-	minion.mdl = "progs/ad171/mon_gargoyle.mdl";
-	minion.headmdl = "progs/ad171/h_gargoyle.mdl";
-	minion.gib1mdl = "progs/ad171/gib_gargwing1.mdl";	// Left wing
-	minion.gib2mdl = "progs/ad171/gib_gargwing2.mdl";	// Right wing
-	minion.pain_sound = "ad171/gargoyle/pain75.wav";
-	minion.pain_sound2 = "ad171/gargoyle/pain100.wav";
-	minion.idle_sound = "ad171/gargoyle/idle1.wav";
-	minion.idle_soundcom = "ad171/gargoyle/perch1.wav";
-	minion.idle_soundcom2 = "ad171/gargoyle/perch2.wav";
-	minion.sight_sound = "ad171/gargoyle/sight1.wav";
-	minion.nextthink = time + 0.01;
-	minion.think = setup_gargoyle;
-};

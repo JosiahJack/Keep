@@ -355,7 +355,7 @@ void () HIP_FireMjolnir = { // [FUNCTION]
 	// lag, allow throwing on frame four, even if animation would make the
 	// throw appear a bit late.  Better to have forgiving controls and happy
 	// players than "fake difficulty" for animation's sake.
-    if (Hip_ThrewMjolnir() || self.hammer_finished) return;
+    if (Hip_ThrewMjolnir() || self.hammer_finished >= time) return;
 
 	W_Reload(0.4);
 	source = (self.origin + '0 0 16');
@@ -463,13 +463,6 @@ void() W_FireThor = { // [FUNCTION]
     local entity targ;
 
     if (frame_pause()) return; // There is a delay before firing, so don't throw if not an appropriate time.
-    if (self.hammer_finished) {
-		if (self.attack_finished < time) {
-			self.hammer_finished = 0;
-			W_Reload(0.2);
-		}
-		return; // No hammer!
-	}
     if (!HasPowerToThrow()) return; // No ammo or power!
 
     targ = W_ThorTarget(); // This calls 'makevectors(self.v_angle)'.

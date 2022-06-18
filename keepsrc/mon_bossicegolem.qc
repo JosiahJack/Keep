@@ -446,9 +446,14 @@ void(entity targ) iceg_icestorm =
 	if (!targ) return;
 	if (self.health < 1) return;
 
-	// Play random firing sound
+	// Play random firing sound1
 	self.lip = random();
 	if (self.classtype == CT_MONLAVAGOLEM) {
+		if (random() < 0.33) { 
+			judge_fireflameline();
+			return;
+		}
+
 		if (self.lip < 0.25) 
 			sound (self, CHAN_WEAPON, "ne_ruins/firegug/flames1.wav", 1, ATTN_IDLE);
 		else if (self.lip  < 0.5)
@@ -539,6 +544,7 @@ void() iceg_ceilingrubble =
 	// No enemy or dead?
 	if (!self.enemy) return;
 	if (self.health < 1) return;
+	if (UpIsSky(self.enemy.origin,self.enemy)) return;
 	
 	// Trace a line up from the enemy/player
 	traceline(self.enemy.origin, self.enemy.origin+'0 0 1024', TRUE, self.enemy);
@@ -884,7 +890,8 @@ void() iceg_wake1 =[ $birth1, iceg_wake2 ] {
 	self.attack_finished = time + 2;	// Reset attack system
 
 	iceg_birth();
-	sound (self, CHAN_BODY, "ne_ruins/h2golem/brkfree.wav", 1, ATTN_NORM);
+	if (self.classtype == CT_MONLAVAGOLEM) sound(self,CHAN_BODY,"tronyn/wightattack1.wav",1,ATTN_NORM);
+	else sound(self,CHAN_BODY,"ne_ruins/h2golem/brkfree.wav",1,ATTN_NORM);
 };
 void() iceg_wake2 =[ $birth2, iceg_wake3 ] {iceg_birth();ai_forward(2);};
 void() iceg_wake3 =[ $birth3, iceg_wake4 ] {iceg_birth();ai_forward(3);};
@@ -1111,6 +1118,14 @@ void() monster_lavagolem_precache = {
 	precache_sound("ne_ruins/firegug/flames4.wav");
 	precache_sound("ne_ruins/h2golem/fireslam.wav");
 	precache_sound("ad171/gaunt/plasma_fire.wav");
+	precache_sound("hknight/attack1.wav");
+	precache_model(MODEL_PROJ_DPRINCE1R);
+	precache_model(MODEL_PROJ_DPRINCE2R);
+	precache_model(MODEL_PROJ_DPRINCE1B);	
+	precache_model(MODEL_PROJ_DPRINCE2B);
+	precache_sound("ad171/wraith/bounce.wav");
+	precache_sound(GIB_SOUND_ACID);
+	precache_sound("tronyn/wightattack1.wav");
 };
 
 void() monster_lavagolem = {
@@ -1148,6 +1163,7 @@ void() monster_lavagolem = {
 	self.classmove = MON_MOVEWALK;
 	self.style = 0;
 	self.skin = self.exactskin = 4;
+	self.bloodtype = BLOOD_FIRE;
 	if (self.deathstring == "")  self.deathstring = " was shattered by the Lava Golem\n";
 	self.th_stand = self.th_walk = self.th_run = SUB_Null;
 	self.th_missile = self.th_die = SUB_Null;

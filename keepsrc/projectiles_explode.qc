@@ -696,11 +696,12 @@ void(entity inflictor, float radius) StaticField = { // [FUNCTION]
 };
 
 // Flame animation on modified 'flame2.mdl'.
-void() m_ember1 =[ 28, m_ember2   ] {Ember_Think();}; // [FUNCTION]
-void() m_ember2 =[ 29, m_ember3   ] {Ember_Think();}; // [FUNCTION]
-void() m_ember3 =[ 30, m_ember4   ] {Ember_Think();}; // [FUNCTION]
-void() m_ember4 =[ 31, m_ember5   ] {Ember_Think();}; // [FUNCTION]
-void() m_ember5 =[ 32, m_ember5 ]   { // [FUNCTION]
+void() m_ember1 =[ 3, m_ember2   ] {Ember_Think();}; // [FUNCTION]
+void() m_ember2 =[ 4, m_ember3   ] {Ember_Think();}; // [FUNCTION]
+void() m_ember3 =[ 5, m_ember4   ] {Ember_Think();}; // [FUNCTION]
+void() m_ember4 =[ 6, m_ember5   ] {Ember_Think();}; // [FUNCTION]
+void() m_ember5 =[ 7, m_ember6   ] {Ember_Think();}; // [FUNCTION]
+void() m_ember6 =[ 8, m_ember6 ]   { // [FUNCTION]
 	self.think = SUB_Remove;
 	self.nextthink = time + 0.1;
 };
@@ -725,8 +726,8 @@ void(entity ent) MakeFlame = { // [FUNCTION]
     fire.owner      = ent;
     setall(fire, "progs/drake/flame2.mdl", '0 0 0', '0 0 0', spot);
     r = random() * 3;
-    if (r > 2) SUB_ThinkImmediate (fire, m_ember3); // Animate the flame.
-    else if (r > 1) SUB_ThinkImmediate (fire, m_ember2);
+    if (r > 2) SUB_ThinkImmediate(fire, m_ember3); // Animate the flame.
+    else if (r > 1) SUB_ThinkImmediate(fire, m_ember2);
     else SUB_ThinkImmediate(fire, m_ember1);
 };
 
@@ -811,9 +812,7 @@ void(float ents) Ember_Shower = { // [FUNCTION]
         traceline (self.origin, self.origin + dir*64, FALSE, other);
         if (trace_fraction == 1.0) { // Ember will not impact the wall immediately.
             fire = spawn();
-            fire.walkframe  = random() * 2 + 2.5;   //4.5;
-            fire.walkframe  = floor(fire.walkframe);
-            fire.frame      = 28 + fire.walkframe;
+            fire.frame      = 3;
             fire.think      = m_ember1;
             fire.solid      = SOLID_BBOX;
             fire.movetype   = MOVETYPE_TOSS;

@@ -66,11 +66,8 @@ void()	wiz_run12	=[	$fly12,		wiz_run13	] {ai_run(16);};
 void()	wiz_run13	=[	$fly13,		wiz_run14	] {ai_run(16);};
 void()	wiz_run14	=[	$fly14,		wiz_run1	] {ai_run(16);};
 
-//============================================================================
 // Range attack
-//============================================================================
-void()	WizardAttackFinished =
-{
+void()	WizardAttackFinished = {
 	SUB_AttackFinished(2);
 	if (enemy_range >= RANGE_MID || !enemy_vis) {
 		self.attack_state = AS_STRAIGHT;
@@ -82,65 +79,58 @@ void()	WizardAttackFinished =
 	}
 };
 
-//----------------------------------------------------------------------
 // Fire spit missile towards player position
 // The missile is setup and defined beforehand
-//----------------------------------------------------------------------
-void() Wiz_FastFire =
-{
-	local vector		vec;
-	local vector		dst;
+void() Wiz_FastFire = {
+	local vector vec, dst;
 
 	if (self.owner.health > 0) {
 		self.owner.effects = self.owner.effects | EF_MUZZLEFLASH;
-
 		makevectors (SUB_angEnemyTarget());	
 		dst = SUB_orgEnemyTarget() - 13*self.movedir;
-	
 		vec = normalize(dst - self.origin);
 		self.attack_speed = SPEED_WIZSPIKE + (skill * SPEED_WIZSKILL);
-		sound (self, CHAN_WEAPON, "wizard/wattack.wav", 1, ATTN_NORM);
-		launch_projectile (self.origin, vec, CT_PROJ_WIZ, self.attack_speed);
+		if (self.owner.classtype == CT_MONWIZBOSS) {
+			sound (self, CHAN_WEAPON, "anevil/wizboss/wattack.wav", 1, ATTN_NORM);
+			launch_projectile(self.origin, vec, CT_PROJ_WIZBOSS, self.attack_speed);
+			newmis.classname = "knightspike"; // Firey impact for lava ball spit.
+		} else {
+			sound (self, CHAN_WEAPON, "wizard/wattack.wav", 1, ATTN_NORM);
+			launch_projectile(self.origin, vec, CT_PROJ_WIZ, self.attack_speed);
+		}
 		newmis.owner = self.owner;
 	}
 
 	remove (self);
 };
 
-//----------------------------------------------------------------------
 // Create two spit missiles ready for firing later (delay 0.6, 1.0)
 // This code is hoping the player will strafe into the second shot
-//----------------------------------------------------------------------
-void() Wiz_StartFast =
-{
-	local	entity	missile;
-	
-	sound (self, CHAN_WEAPON, "wizard/wattack.wav", 1, ATTN_NORM);
+void() Wiz_StartFast = {
+	if (self.classtype == CT_MONWIZBOSS) sound(self,CHAN_WEAPON,"anevil/wizboss/wattack.wav",1,ATTN_NORM);
+	else sound (self, CHAN_WEAPON, "wizard/wattack.wav", 1, ATTN_NORM);
 	self.v_angle = self.angles;
 	makevectors (self.angles);
-
-	missile = spawn ();
-	missile.owner = self;
-	missile.nextthink = time + 0.6;
-	setsize (missile, '0 0 0', '0 0 0');		
-	setorigin (missile, self.origin + self.attack_offset + v_forward*14 + v_right*14);
-	missile.enemy = SUB_entEnemyTarget();
-	missile.nextthink = time + 0.8;
-	missile.think = Wiz_FastFire;
-	missile.movedir = v_right;
-
-	missile = spawn ();
-	missile.owner = self;
-	missile.nextthink = time + 1;
-	setsize (missile, '0 0 0', '0 0 0');		
-	setorigin (missile, self.origin + self.attack_offset + v_forward*14 + v_right* -14);
-	missile.enemy = SUB_entEnemyTarget();
-	missile.nextthink = time + 0.3;
-	missile.think = Wiz_FastFire;
-	missile.movedir = VEC_ORIGIN - v_right;
+	newmis = spawn();
+	newmis.owner = self;
+	newmis.nextthink = time + 0.6;
+	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);		
+	setorigin (newmis, self.origin + self.attack_offset + v_forward*14 + v_right*14);
+	newmis.enemy = SUB_entEnemyTarget();
+	newmis.nextthink = time + 0.8;
+	newmis.think = Wiz_FastFire;
+	newmis.movedir = v_right;
+	newmis = spawn();
+	newmis.owner = self;
+	newmis.nextthink = time + 1;
+	setsize (newmis,VEC_ORIGIN,VEC_ORIGIN);		
+	setorigin (newmis, self.origin + self.attack_offset + v_forward*14 + v_right* -14);
+	newmis.enemy = SUB_entEnemyTarget();
+	newmis.nextthink = time + 0.3;
+	newmis.think = Wiz_FastFire;
+	newmis.movedir = VEC_ORIGIN - v_right;
 };
 
-//----------------------------------------------------------------------
 void()	wiz_fast1	=[	$magatt1,		wiz_fast2	] {ai_face();Wiz_StartFast();};
 void()	wiz_fast2	=[	$magatt2,		wiz_fast3	] {ai_face();};
 void()	wiz_fast3	=[	$magatt3,		wiz_fast4	] {ai_face();};
@@ -152,20 +142,14 @@ void()	wiz_fast8	=[	$magatt4,		wiz_fast9	] {ai_face();};
 void()	wiz_fast9	=[	$magatt3,		wiz_fast10] {ai_face();};
 void()	wiz_fast10=[	$magatt2,		wiz_run1	] {WizardAttackFinished (); ai_face();};
 
-//============================================================================
 void()	wiz_wakeup =[ $hover1, wiz_run1 ] {
-	// Is the wizard stuck? cannot move?
-	if (pointcontents(self.origin) == CONTENT_SOLID) {
-		// Time to die!
+	if (pointcontents(self.origin) == CONTENT_SOLID) { // Is the wizard stuck? cannot move?
 		self.health = self.gibhealth;
-		Killed(self, self);
-	}
-	else {
-		monster_sightsound();
-		// Setup goals and warn other monsters
+		Killed(self, self); // Time to die!
+	} else {
+		monster_sightsound(); // Setup goals and warn other monsters
 		FoundHuntTarget(TRUE);
-		// Restore all think state functions
-		self.th_stand = wiz_stand1;
+		self.th_stand = wiz_stand1; // Restore all think state functions
 		self.th_walk = wiz_walk1;
 		self.th_run = wiz_run1;
 		self.th_missile = wiz_fast1;
@@ -173,15 +157,12 @@ void()	wiz_wakeup =[ $hover1, wiz_run1 ] {
 	}
 };
 
-//============================================================================
 void()	wiz_pain1	=[	$pain1,		wiz_pain2	] {};
 void()	wiz_pain2	=[	$pain2,		wiz_pain3	] {};
 void()	wiz_pain3	=[	$pain3,		wiz_pain4	] {};
 void()	wiz_pain4	=[	$pain4,		wiz_run1	] {};
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) wiz_pain =
-{
+void(entity inflictor, entity attacker, float damage) wiz_pain ={
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -229,6 +210,14 @@ void() monster_wizard_precache = {
 	precache_model ("progs/ad171/gib_wzarm1.mdl");
 	precache_model ("progs/ad171/gib_wzarm2.mdl");
 	precache_model ("progs/ad171/gib_wztail.mdl");
+	precache_model("progs/drake/wizard.mdl"); // Dark Green, called Drake
+	precache_model ("progs/drake/h_drake.mdl"); // Dark Green, called Drake
+	precache_model ("progs/drake/gr_gib.mdl"); // Dark Green, Drake gib
+	precache_model ("progs/drake/gr_gib2.mdl"); // Dark Green, Drake gib
+	precache_model ("progs/drake/gr_gib3.mdl"); // Dark Green, Drake gib
+	precache_model("progs/anevil/wizboss.mdl"); // Lava version
+	precache_model("progs/anevil/h_wboss.mdl"); // Lava version
+	precache_model("progs/anevil/wbspike.mdl"); // Lava spit
 	precache_sound ("wizard/widle1.wav");
 	precache_sound ("wizard/widle2.wav");
 	precache_sound ("wizard/wdeath.wav");
@@ -236,6 +225,13 @@ void() monster_wizard_precache = {
 	precache_sound ("wizard/hit.wav");		// used by c code
 	precache_sound ("wizard/wattack.wav");
 	precache_sound ("wizard/wsight.wav");
+	precache_sound("anevil/wizboss/cwhit.wav");
+	precache_sound("anevil/wizboss/wattack.wav");
+	precache_sound("anevil/wizboss/wdeath.wav");
+	precache_sound("anevil/wizboss/widle1.wav");
+	precache_sound("anevil/wizboss/widle2.wav");
+	precache_sound("anevil/wizboss/wpain.wav");
+	precache_sound("anevil/wizboss/wsight.wav");
 };
 
 void() setup_wizard;
@@ -254,7 +250,40 @@ void() monster_wizard = {
 	self.idle_sound2 = "wizard/widle2.wav";
 	self.pain_sound = "wizard/wpain.wav";
 	self.sight_sound = "wizard/wsight.wav";
+	self.death_sound = "wizard/wdeath.wav";
 	if (self.classtype != CT_CACHEWIZARD) setup_wizard(); // Cache gargoyle is a special class used for precache only
+};
+
+void() monster_wizboss = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/anevil/wizboss.mdl";
+	self.headmdl = "progs/anevil/h_wboss.mdl";
+	self.idle_sound = "anevil/wizboss/widle1.wav";
+	self.idle_sound2 = "anevil/wizboss/widle2.wav";
+	self.pain_sound = "anevil/wizboss/wpain.wav";
+	self.sight_sound = "anevil/wizboss/wsight.wav";
+	self.hello_sound = "anevil/wizboss/widle1.wav";
+	self.death_sound = "anevil/wizboss/wdeath.wav";
+	self.classtype = CT_MONWIZBOSS;
+	setup_wizard();
+};
+
+void() monster_drake = {
+	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
+
+	self.mdl = "progs/drake/wizard.mdl";
+	self.headmdl = "progs/h_wizard.mdl";
+	self.idle_sound = "wizard/widle1.wav";
+	self.idle_sound2 = "wizard/widle2.wav";
+	self.pain_sound = "wizard/wpain.wav";
+	self.sight_sound = "wizard/wsight.wav";
+	self.death_sound = "wizard/wdeath.wav";
+	self.exactskin = 1;
+	self.classtype = CT_MONDRAKE;
+	setup_wizard();
 };
 
 void() monster_nourminion = { 
@@ -266,8 +295,6 @@ void() setup_wizard = {
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TALL;
-	if (self.health < 1) self.health = 80;
-	self.gibhealth = -30;
 	self.gibbed = FALSE;				// Not fallen apart as of yet
 	self.pain_flinch = 70;				// high pain threshold
 	self.pain_longanim = TRUE;			// Has long pain animation for Shadow Axe
@@ -284,7 +311,12 @@ void() setup_wizard = {
 		self.th_checkattack = WizardCheckAttack;
 	}
 	self.th_pain = wiz_pain;
-	self.th_die = wiz_die;	
+	self.th_die = wiz_die;
+	self.th_stand = wiz_stand1;
+	self.th_walk = wiz_walk1;
+	self.th_run = wiz_run1;
+	self.th_missile = wiz_fast1;
+	self.th_slide = wiz_side1;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (!self.classtype) self.classtype = CT_MONWIZARD;
 	if (!self.classgroup) self.classgroup = CG_WIZARD;
@@ -293,14 +325,25 @@ void() setup_wizard = {
 		self.th_stand = self.th_walk = self.th_run = wiz_wakeup;
 		self.th_missile = self.th_slide = wiz_wakeup;
 		if (self.deathstring == "") self.deathstring = " was wrecked by a Scrag\n";
+	} else if (self.classtype == CT_MONWIZBOSS) {
+		if (self.health < 1) self.health = 300;
+		if (self.gibhealth == 0) self.gibhealth = -40;
+		self.bloodtype = BLOOD_FIRE;
+		if (self.deathstring == "") self.deathstring = " was fried by the Fire God's minion\n";
+	} else if (self.classtype == CT_MONDRAKE) {
+		self.gib1skin = 2;
+		self.bloodtype = BLOOD_GREEN;
+		self.gib1mdl = "progs/h_wizard.mdl"; // Dark green skin with blood is here. drake/'s is all green.
+		self.gib2mdl = "progs/drake/gr_gib.mdl";
+		self.gib3mdl = "progs/drake/gr_gib2.mdl";
+		self.gib4mdl = "progs/drake/gr_gib3.mdl";
+		if (self.deathstring == "") self.deathstring = " was Martin murdered by a Drake\n";
+		self.poisonous = 1;
 	} else {
-		self.th_stand = wiz_stand1;
-		self.th_walk = wiz_walk1;
-		self.th_run = wiz_run1;
-		self.th_missile = wiz_fast1;
-		self.th_slide = wiz_side1;
 		if (self.deathstring == "") self.deathstring = " was scragged by a Scrag\n";
 	}
+	if (self.health < 1) self.health = 80;
+	if (self.gibhealth == 0) self.gibhealth = -30;
 	monster_start();
 };
 
@@ -333,6 +376,7 @@ void(vector minion_org, entity minion_targ, float minion_sflag) minion_wizard = 
 	minion.idle_sound = "wizard/widle1.wav";
 	minion.idle_sound2 = "wizard/widle2.wav";
 	minion.sight_sound = "wizard/wsight.wav";
+	minion.death_sound = "wizard/wdeath.wav";
 	minion.nextthink = time + 0.01;
 	minion.think = setup_wizard;
 };

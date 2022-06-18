@@ -354,45 +354,6 @@ void() dprince_rocket = {
 	Launch_Missile(org, dir, avel, CT_PROJ_DPRINCE1, self.attack_speed);
 };
 
-void(float offset) dprince_hazard = {
-	local vector org, torg, dir, ang, avel;
-	local float targetang, haz_loop;
-	
-	if (!self.enemy) return;
-	if (self.enemy.health < 1) return;
-	if (self.health < 1) return;
-
-	sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
-
-	makevectors (self.angles);	
-	org = self.origin + attack_vector(self.attack_offset);
-
-	if (skill <= SKILL_NORMAL) haz_loop = 1;
-	else haz_loop = 2;
-	
-	while(haz_loop > 0) {
-		// Keep looping
-		haz_loop = haz_loop - 1;
-		torg = self.enemy.origin;
-		// Last projectile (0) is direct at enemy
-		if (haz_loop > 0) {
-			// Very large random area around target
-			torg_x = torg_x + (crandom() * 128);
-			torg_y = torg_y + (crandom() * 128);
-		}
-		// Work out elevation towards target origin
-		targetang = SUB_Elevation(ELEV_DEFAULT, self.origin, torg, SPEED_DPRINCE);
-		ang = vectoangles(torg - org);
-		ang_x = -targetang;
-		makevectors (ang);
-		// fire projectile in arc pattern (offset)
-		dir = ( (v_forward * (0.75 + random()*0.25)) + (v_right * (offset*0.1)) ) * SPEED_DPRINCE;	
-		// Some random angle rotation
-		avel = vecrand(100,200,FALSE);
-		Launch_Hazard(org, dir, avel, CT_PROJ_DPRINCE2);
-	}
-};
-
 void() dprince_magicframe = {
 	if (self.health < 1) return;
 	if (!self.enemy) return;

@@ -591,7 +591,10 @@ void() monster_morph_precache = {
 void() monster_morph = {
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
-	if (self.minion_name == string_null) self.minion_name = "monster_morph";
+	if (self.minion_name == string_null) {
+		self.minion_name = "monster_morph";
+        self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
+    }
 	morph_setup();
 };
 

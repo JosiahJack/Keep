@@ -384,6 +384,7 @@ void() cart_think = {
 };
 
 void() misc_librarycart = {
+  precache_model("progs/nehahra/libcart.mdl");
   self.classtype = CT_FUNCBREAKOBJ;
   self.classgroup = CG_BREAKABLE;
   self.solid = SOLID_BBOX;
@@ -452,6 +453,8 @@ void() monster_ogre_library_becomenormal = {
 	self.th_run = ogre_run1;
 	self.th_melee = ogre_melee;
   self.th_missile = ogre_adnail1;
+  self.attack_count = 4;
+  self.attack_offset = '0 0 20';
 	self.th_pain = ogre_pain;
 	self.th_die = ogre_die;
 	self.th_wakeup = ogre_wakeup1;
@@ -570,7 +573,7 @@ void() monster_oglib = {
   self.th_missile = oglib_run;
   self.th_pain = oglib_pain;
   if (!self.ammo_rockets) self.ammo_rockets = 2;	// Default ammo drop
-  if (self.deathstring == "")  self.deathstring = " was destroyed by an Ogre\n";
+  if (self.deathstring == "")  self.deathstring = " was destroyed by an Ogre Librarian\n";
   self.pain_finished = time + 1;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.classtype = CT_MONOGRE;		// Old style ogre

@@ -1023,10 +1023,10 @@ void(void() thinkst) M_Break = {
 };
 
 // Checks if the sky is above a given point.
-float(vector org) UpIsSky = { // [FUNCTION]
+float(vector org, entity ignore) UpIsSky = { // [FUNCTION]
     local float pc;
 
-    traceline(org, org + '0 0 8192', TRUE, world); // Sees through monsters.
+    traceline(org, org + '0 0 8192', TRUE, ignore); // Sees through monsters.
     pc = pointcontents(trace_endpos);
 	if (trace_ent.classtype == CT_TRIGVOID) return TRUE; // True if we hit a trigger_void as well.
     if (trace_fraction < 1) return (pc == CONTENT_SKY);

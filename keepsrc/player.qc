@@ -946,7 +946,7 @@ void() player_death = { // [FUNCTION]
 				player_die_ax1 ();
 			}
 		} else if (self.weapon == IT2_MJOLNIR && !self.selfweaponismoditems) {
-			if (self.hammer_finished) { // Hammer has been thrown out.
+			if (self.hammer_finished >= time) { // Hammer has been thrown out.
 				self.modelindex = modelindex_hamout;
 				player_die_weaponless1();
 			} else {

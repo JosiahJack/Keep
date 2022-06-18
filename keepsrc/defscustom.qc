@@ -1687,6 +1687,7 @@ float MONANIM_SPECIFIC 	= 1;	// 1 If minions are specified, spawn at the mod spe
 float MONANIM_PAIN		= 2;	// 2 Spawn minions whenever self.th_pain is called.
 float MONANIM_MISSILE	= 4;	// 3 Spawn minions whenever self.th_missile is called.
 float MONANIM_MELEE		= 8;	// 4 Spawn minions whenever self.th_melee is called.
+float MONANIM_SPECIAL   = 4096; // Spawn minions only at hardcoded special times.
 
 float MIN_MAXACTIVE = 5;		// Maximum amount active at once
 float MIN_MAXTRIGGER = 5;		// How many spawns before triggering

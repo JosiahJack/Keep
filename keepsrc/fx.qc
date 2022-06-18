@@ -1190,31 +1190,31 @@ void () misc_raincloud = { // [ENTITY]
 	// Pick type of drip sprite based on spawnflags
 	if (self.spawnflags & 16) {
 		if (self.spawnflags & 8) {
-			self.path = "progs/s_dripred_lg.spr";
+			if (self.path == "") self.path = "progs/s_dripred_lg.spr";
 		} else {
-			self.path = SBLOOD_DRIP;
+			if (self.path == "") self.path = SBLOOD_DRIP;
 		}
 
-		self.headmdl = SBLOOD_SPLASH;
-		self.aflag = 64;
+		if (self.headmdl == "") self.headmdl = SBLOOD_SPLASH;
+		if (self.aflag <= 0) self.aflag = 64;
 	} else if (self.spawnflags & 32) {
 		if (self.spawnflags & 8) {
-			self.path = "progs/s_dripgreen_lg.spr";
+			if (self.path == "") self.path = "progs/s_dripgreen_lg.spr";
 		} else {
-			self.path = SSLIME_DRIP;
+			if (self.path == "") self.path = SSLIME_DRIP;
 		}
 
-		self.headmdl = SSLIME_SPLASH;
-		self.aflag = 48;
+		if (self.headmdl == "") self.headmdl = SSLIME_SPLASH;
+		if (self.aflag <= 0) self.aflag = 48;
 	} else {
 		if (self.spawnflags & 8) {
-			self.path = "progs/s_dripblue_lg.spr";
+			if (self.path == "") self.path = "progs/s_dripblue_lg.spr";
 		} else {
-			self.path = SWATER_DRIP;
+			if (self.path == "") self.path = SWATER_DRIP;
 		}
 
-		self.headmdl = SWATER_SPLASH;
-		self.aflag = 0;
+		if (self.headmdl == "") self.headmdl = SWATER_SPLASH;
+		if (self.aflag <= 0) self.aflag = 0;
 	}
 	precache_model (self.path);
 	precache_model (self.headmdl);

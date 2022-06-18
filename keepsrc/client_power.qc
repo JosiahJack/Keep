@@ -308,7 +308,7 @@ void() ClientPowerups = { // [FUNCTION]
 		if (self.in_a_vehicle) self.modelindex = modelindex_null;
 		else {
 			if (self.weapon == IT2_MJOLNIR && !self.selfweaponismoditems) {
-				if (self.hammer_finished) self.modelindex = modelindex_hamout; // Hammer has been thrown out.
+				if (self.hammer_finished != 0) self.modelindex = modelindex_hamout; // Hammer has been thrown out.
 				else self.modelindex = modelindex_hammer; // We are holding the hammer.
 			} else if (self.weapon == IT_AXE && self.perms & IT_CHAINSAW && !self.selfweaponismoditems) self.modelindex = modelindex_saw;
 			else if (self.weaponmodel == "") self.modelindex = modelindex_hamout;
@@ -586,7 +586,7 @@ void() ClientPowerups = { // [FUNCTION]
 // This function is a fail-safe that will return the hammer back to the
 // player in case a hammer gets lost. PM:  Only players should use this.
 void() CheckMjolnir = { // [FUNCTION]
-    if (self.hammer_finished && self.hammer_finished < time) {
+    if (self.hammer_finished != 0 && self.hammer_finished < time) {
 		self.hammer_finished = 0;
 		W_SetCurrentAmmo(self);
     }

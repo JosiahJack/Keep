@@ -539,15 +539,9 @@ void() mino_summon4 =[ $howl7, mino_summon5 ] {mino_sumeffect();};
 void() mino_summon5 =[ $howl9, mino_summon6 ] {mino_sumeffect();};
 void() mino_summon6 =[ $howl11, mino_summon7 ] {mino_sumeffect();};
 void() mino_summon7 =[ $howl13, mino_summon8 ] {mino_sumeffect();
-	// Find out if there is enough space to spawn a gargoyle
-	// Findradius version
 	makevectors(self.angles);
 	self.pos1 = self.origin + self.view_ofs + v_forward*64 + v_up*32;
-	self.aflag = find_minionspace(self.pos1);
-	
-	// If the spawn location all clear, spawn something!
-	if (self.aflag == TRUE) {
-		minion_gargoyle(self.pos1, self.enemy);
+	if (SpawnMinionInRadius(self.pos1)) { // Find out if there is enough space and spawn a gargoyle
 		self.pos2 = self.pos1 - '0 0 16';	// Origin of gargoyle
 		mino_sumball(0);
 	}
@@ -798,7 +792,10 @@ void() monster_minotaur = {
 	self.classtype = CT_MONMINOTAUR;
 	self.classgroup = CG_DEMON;
 	self.classmove = MON_MOVEWALK;
-	if (self.minion_name == string_null) self.minion_name = "monster_gargoyle";
+	if (self.minion_name == string_null) {
+		self.minion_name = "monster_gargoyle";
+        self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
+    }
 	
 	// Update Minotaur based on minions spawnflag
 	if (self.spawnflags & MON_MINOTAUR_MINIONS) {

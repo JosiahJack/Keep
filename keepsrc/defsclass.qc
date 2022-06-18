@@ -205,6 +205,8 @@ float CT_MONSPAWN = 170;		// Bouncing annoying crudblossom!
 float CT_MONWIZARD = 180;		// Wizard / Scrags
 float CT_CACHEWIZARD = 181;		// Special entity for precache of assets
 float CT_MINIONWIZARD = 182;	// Minion Spawning version for Nour Boss
+float CT_MONWIZBOSS = 183;      // Lava Scrag from An Old, Old Evil
+float CT_MONDRAKE = 184;        // Dark Green scrag, aka the Drake from Drake
 float CT_MONZOMBIE = 185;		// Rotten flesh
 float CT_MONZOMBIEK = 186;		// Undead Knights
 float CT_MONCYBERDEMON = 187;	// Doom Cyber Demon
@@ -510,6 +512,7 @@ float CT_ARTREGEN = 579;		// Regeneration Powerup
 float CT_ARTVITALITY = 580;		// Vitality +25 Max Health
 float CT_ARTSPHERE = 581;		// Vengeance Sphere
 float CT_THROWHAM = 582;        // Thrown Mjolnir hammer
+float CT_PROJ_WIZBOSS = 583;    // Lava ball of the Lava Scrag
 
 float CT_PROGSPAWN = 589;		// Progression spawn
 float CT_ARTTOME = 590;			// Tome of Power

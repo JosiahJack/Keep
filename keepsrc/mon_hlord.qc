@@ -286,7 +286,7 @@ void() bane_storm4  =[ 0, bane_storm5  ] { // [FUNCTION]
 	// First, check if we should even call an airstrike.
     zot = FALSE;
     if (self.enemy) {
-        if (UpIsSky(self.dest)) zot = TRUE;
+        if (UpIsSky(self.dest,self.enemy)) zot = TRUE;
         else {
 			// Under shelter, so try to find another point nearby that isn't.
             loop = 5;
@@ -296,7 +296,7 @@ void() bane_storm4  =[ 0, bane_storm5  ] { // [FUNCTION]
                 p1_x = crandom() * 256 + self.dest_x;
                 p1_y = crandom() * 256 + self.dest_y;
                 traceline (self.dest, p1, TRUE, self);
-                if (trace_fraction >= 1.0 && UpIsSky (p1)) {
+                if (trace_fraction >= 1.0 && UpIsSky(p1,self.enemy)) {
 					self.dest = p1;
 					zot = TRUE;
 					loop = 0; // End the loop.
@@ -646,7 +646,7 @@ void() bane_magic = {
         }
 	}
 
-    if (!self.waitmax && skill >= 1 && !(self.owner && self.owner.owner == self) && random() < 0.5 && UpIsSky(self.enemy.origin)) {bane_magica1(); return;} // Start a thunderstorm!
+    if (!self.waitmax && skill >= 1 && !(self.owner && self.owner.owner == self) && random() < 0.5 && UpIsSky(self.enemy.origin,self.enemy)) {bane_magica1(); return;} // Start a thunderstorm!
 
 	// Spray some fireballs.
     if (random() <= 0.5)
@@ -1252,7 +1252,10 @@ void() monster_dark_lord = {
 	self.steptype = FS_TYPEHEAVY;
 	self.meleeattack = rint(random()*3);	// randomize last melee attack
 	self.th_die = hknight_die;				// Face meets floor
-	if (self.minion_name == string_null) self.minion_name = "monster_wrath";
+	if (self.minion_name == string_null) {
+        self.minion_name = "monster_wrath";
+        self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
+    }
 
     if (cvar("skill") < 1) {
         self.waitmin = self.waitmax = -1;   // No clones or rage on Easy.

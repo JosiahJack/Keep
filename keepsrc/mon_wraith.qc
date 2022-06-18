@@ -876,13 +876,19 @@ void() monster_wraith = {
 	
 	// Setup each wraith type with different skins/particles
 	if (self.spawnflags & MON_WRAITH_SCORPIONS) {
-		if (self.minion_name == string_null) self.minion_name = "monster_scorpion";
+		if (self.minion_name == string_null) {
+			self.minion_name = "monster_scorpion";
+			self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
+		}
 		if (!self.minion_maxcount) self.minion_maxcount = 3;	// default is usually 5!
 		self.exactskin = WRAITH_SKINPURPLE;			// Purple/Blood skin
 		self.poisonous = FALSE;						// Must be off for scorpion wraith
 		self.part_style = PARTICLE_BURST_PURPLE;	// Purple cloud
 	} else if (self.spawnflags & MON_WRAITH_SPIDERS) {
-		if (self.minion_name == string_null) self.minion_name = "monster_spider";
+		if (self.minion_name == string_null) {
+			self.minion_name = "monster_spider";
+			self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
+		}
 		self.exactskin = WRAITH_SKINGREEN;				// Poison/Green skin
 		if (self.poisonous < 0) self.poisonous = FALSE;	// Poison debuff
 		else self.poisonous = TRUE;

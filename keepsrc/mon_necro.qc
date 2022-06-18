@@ -45,16 +45,9 @@ void() NecroBolt_Summon = {
 		if (self.enemy) {
 			if (visible (self.enemy)) {
 				if (query_minionactive(self) == TRUE && self.minion_count < self.minion_maxcount) {
-					// Findradius version
 					makevectors(self.angles);
 					self.pos1 = self.origin + self.view_ofs + v_forward*64 + v_up*32;
-					self.aflag = find_minionspace(self.pos1);
-					
-					// If the spawn locaiton all clear, spawn something!
-					if (self.aflag == TRUE) {
-						minion_gargoyle(self.pos1, self.enemy);
-						self.pos2 = self.pos1 - '0 0 16';	// Origin of gargoyle
-					}
+                    if (SpawnMinionInRadius(self.pos1)) self.pos2 = self.pos1 - '0 0 16';	// Origin of gargoyle
 				}
 			}
 		}
@@ -645,13 +638,7 @@ void() necro_activate_special = {
 			// Findradius version
 			makevectors(self.angles);
 			self.pos1 = self.origin + self.view_ofs + v_forward*64 + v_up*32;
-			self.aflag = find_minionspace(self.pos1);
-			
-			// If the spawn locaiton all clear, spawn something!
-			if (self.aflag == TRUE) {
-				minion_golem(self.pos1, self.enemy);
-				self.pos2 = self.pos1 - '0 0 16';	// Origin of gargoyle
-			}
+            if (SpawnMinionInRadius(self.pos1)) self.pos2 = self.pos1 - '0 0 16';	// Origin of gargoyle
 		}
         return;
     }
@@ -664,16 +651,9 @@ void() necro_activate_special = {
 			// Find out if there is enough space to spawn a gargoyle
 		// has the gargoyle limit been reached?
 		if (query_minionactive(self) == TRUE) {
-			// Findradius version
-			makevectors(self.angles);
-			self.pos1 = self.origin + self.view_ofs + v_forward*64 + v_up*32;
-			self.aflag = find_minionspace(self.pos1);
-			
-			// If the spawn locaiton all clear, spawn something!
-			if (self.aflag == TRUE) {
-				minion_gargoyle(self.pos1, self.enemy);
-				self.pos2 = self.pos1 - '0 0 16';	// Origin of gargoyle
-			}
+            makevectors(self.angles);
+            self.pos1 = self.origin + self.view_ofs + v_forward*64 + v_up*32;
+            if (SpawnMinionInRadius(self.pos1)) self.pos2 = self.pos1 - '0 0 16';	// Origin of gargoyle
 		}
         return;
     }
@@ -1105,7 +1085,10 @@ void() monster_necromancer = {
 		if (self.health < 1) self.health = 1800;
 	}
 
-	if (self.minion_name == string_null) self.minion_name = "monster_gargoyle";
+	if (self.minion_name == string_null) {
+        self.minion_name = "monster_gargoyle";
+        self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
+    }
 	self.mdl = "progs/drake/necro.mdl";
 	self.headmdl = "progs/drake/h_necro.mdl";
     self.height = nec;

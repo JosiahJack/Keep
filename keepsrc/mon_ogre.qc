@@ -1,50 +1,37 @@
-/*==============================================================================
-OGRE
-==============================================================================*/
-
 $cd id1/models/ogre_c
 $origin 0 0 24
 $base base		
 $skin base
-
 $frame	stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7
 $frame walk8 walk9 walk10 walk11 walk12 walk13 walk14 walk15 walk16
-
 $frame run1 run2 run3 run4 run5 run6 run7 run8
-
 $frame swing1 swing2 swing3 swing4 swing5 swing6 swing7
 $frame swing8 swing9 swing10 swing11 swing12 swing13 swing14
-
 $frame smash1 smash2 smash3 smash4 smash5 smash6 smash7
 $frame smash8 smash9 smash10 smash11 smash12 smash13 smash14
-
 $frame shoot1 shoot2 shoot3 shoot4 shoot5 shoot6
-
 $frame pain1 pain2 pain3 pain4 pain5
-
 $frame painb1 painb2 painb3
-
 $frame painc1 painc2 painc3 painc4 painc5 painc6
-
 $frame paind1 paind2 paind3 paind4 paind5 paind6 paind7 paind8 paind9 paind10
 $frame paind11 paind12 paind13 paind14 paind15 paind16
-
 $frame paine1 paine2 paine3 paine4 paine5 paine6 paine7 paine8 paine9 paine10
 $frame paine11 paine12 paine13 paine14 paine15
-
 $frame death1 death2 death3 death4 death5 death6
 $frame death7 death8 death9 death10 death11 death12
 $frame death13 death14
-
 $frame bdeath1 bdeath2 bdeath3 bdeath4 bdeath5 bdeath6
 $frame bdeath7 bdeath8 bdeath9 bdeath10
-
 $frame pull1 pull2 pull3 pull4 pull5 pull6 pull7 pull8 pull9 pull10 pull11
 
+float OGREFISH_FISHY = 0;
+float OGREFISH_FISHING = 19;
+float OGREFISH_CATCH = 79;
+float ANIMATION_OGREFLAP = 18;
+float ANIMATION_OGREFISH = 59;
+float ANIMATION_OGRECATCH = 25;
 
-//======================================================================
 void() ogre_stand1	=[	$stand1,	ogre_stand2	] {ai_stand();};
 void() ogre_stand2	=[	$stand2,	ogre_stand3	] {ai_stand();};
 void() ogre_stand3	=[	$stand3,	ogre_stand4	] {ai_stand();};
@@ -55,7 +42,6 @@ void() ogre_stand7	=[	$stand7,	ogre_stand8	] {ai_stand();};
 void() ogre_stand8	=[	$stand8,	ogre_stand9	] {ai_stand();};
 void() ogre_stand9	=[	$stand9,	ogre_stand1	] {ai_stand();};
 
-//======================================================================
 void() ogre_walk1	=[	$walk1,		ogre_walk2	] {monster_footstep(FALSE); ai_walk(3);};
 void() ogre_walk2	=[	$walk2,		ogre_walk3	] {ai_walk(2);};
 void() ogre_walk3	=[	$walk3,		ogre_walk4	] {monster_idle_sound(); ai_walk(2);};
@@ -74,7 +60,6 @@ void() ogre_walk14	=[	$walk14,	ogre_walk15	] {ai_walk(3);};
 void() ogre_walk15	=[	$walk15,	ogre_walk16	] {ai_walk(3);};
 void() ogre_walk16	=[	$walk16,	ogre_walk1	] {ai_walk(4);};
 
-//======================================================================
 void() ogre_run1	=[	$run1,		ogre_run2	] {monster_idle_sound(); ai_run(9);};
 void() ogre_run2	=[	$run2,		ogre_run3	] {monster_footstep(FALSE);ai_run(12);};
 void() ogre_run3	=[	$run3,		ogre_run4	] {ai_run(8);};
@@ -83,34 +68,6 @@ void() ogre_run5	=[	$run5,		ogre_run6	] {ai_run(16);};
 void() ogre_run6	=[	$run6,		ogre_run7	] {monster_footstep(FALSE);ai_run(4);};
 void() ogre_run7	=[	$run7,		ogre_run8	] {ai_run(13);};
 void() ogre_run8	=[	$run8,		ogre_run1	] {ai_run(24);};
-
-// Range - Grenades (uses generic attack function in projectiles.qc)
-// Nail - Alternative firemode (based on nail ogre from Marcher Fortress)
-void() OgreFireADNails = {
-	local vector org, dir, vec;
-	local float loopvar;
-	
-	if (self.health < 1) return; // Check for death?
-
-	loopvar = 0;
-	self.effects = self.effects | EF_MUZZLEFLASH; // Light up face, setup projectile speed and play fire sound
-	self.attack_speed = SPEED_NAILOGREPROJ + (skill * SPEED_NAILOGRESKILL);
-	sound(self, CHAN_WEAPON, "xmas/snowman/nail_fire.wav", 1, ATTN_NORM);
-
-	// turn and face your enemy!
-	makevectors (self.angles);
-	org = self.origin + attack_vector(self.attack_offset);
-	
-	// Loop through the nail burst (all at once)
-	while (loopvar < self.attack_count) {
-		// Random circle spread pattern
-		vec = (crandom()*20)*v_right + (crandom()*20)*v_up;
-		dir = normalize((self.enemy.origin + vec) - org);
-		// Generate a red hot nail projectile
-		launch_projectile(org, dir, CT_PROJ_MONNG, self.attack_speed);
-		loopvar = loopvar + 1;
-	}
-};
 
 void() ogre_adnail1 =[ $shoot1, ogre_adnail2 ] {ai_face();};
 void() ogre_adnail2 =[ $shoot2, ogre_adnail3 ] {ai_face();};
@@ -138,13 +95,16 @@ void(float side, float dmgmultipler) chainsaw = {
 	SpawnMeatSpray (self, self.enemy, side);
 };
 
-//----------------------------------------------------------------------
 void() ogre_swing1	=[	$swing1,		ogre_swing2	] {ai_charge(11);};
 void() ogre_swing2	=[	$swing2,		ogre_swing3	] {ai_charge(1);};
 void() ogre_swing3	=[	$swing3,		ogre_swing4	] {ai_charge(4);};
 void() ogre_swing4	=[	$swing4,		ogre_swing5	] {ai_charge(13);};
-void() ogre_swing5	=[	$swing5,		ogre_swing6	] {monster_footstep(FALSE);
-	ai_charge(9); chainsaw(0,1);self.angles_y = self.angles_y + random()*25;};
+void() ogre_swing5	=[	$swing5,		ogre_swing6	] {
+	monster_footstep(FALSE);
+	ai_charge(9);
+	chainsaw(0,1);
+	self.angles_y = self.angles_y + random()*25;
+};
 void() ogre_swing6	=[	$swing6,		ogre_swing7	] {chainsaw(200,1);self.angles_y = self.angles_y + random()* 25;};
 void() ogre_swing7	=[	$swing7,		ogre_swing8	] {chainsaw(0,1);self.angles_y = self.angles_y + random()* 25;};
 void() ogre_swing8	=[	$swing8,		ogre_swing9	] {chainsaw(0,1);self.angles_y = self.angles_y + random()* 25;};
@@ -155,7 +115,6 @@ void() ogre_swing12	=[	$swing12,		ogre_swing13 ] {ai_charge(3);};
 void() ogre_swing13	=[	$swing13,		ogre_swing14 ] {ai_charge(8);};
 void() ogre_swing14	=[	$swing14,		ogre_run1	] {ai_charge(9);};
 
-//----------------------------------------------------------------------
 void() ogre_smash1	=[	$smash1,		ogre_smash2	] {ai_charge(6);};
 void() ogre_smash2	=[	$smash2,		ogre_smash3	] {ai_charge(0);};
 void() ogre_smash3	=[	$smash3,		ogre_smash4	] {ai_charge(0);};
@@ -172,17 +131,13 @@ void() ogre_smash12	=[	$smash12,		ogre_smash13 ] {ai_charge(0);};
 void() ogre_smash13	=[	$smash13,		ogre_smash14 ] {ai_charge(4);};
 void() ogre_smash14	=[	$smash14,		ogre_run1	] {ai_charge(12);};
 
-//----------------------------------------------------------------------
-void() ogre_melee =
-{
+void() ogre_melee = {
 	sound (self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM);
 	if (random() > 0.5) ogre_smash1 ();
 	else ogre_swing1 ();
 };
 
-/*======================================================================
- Range - Grenades (uses generic attack function in projectiles.qc)
-======================================================================*/
+// Range - Grenades (uses generic attack function in projectiles.qc)
 void() ogre_shoot1	=[	$shoot1,		ogre_shoot2	] {ai_face();
 	MonsterGrenadeSound(); self.attack_speed = MonsterGrenadeSpeed();
 	self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed); };
@@ -196,10 +151,7 @@ void() ogre_shoot5	=[	$shoot4,		ogre_shoot6	] {};
 void() ogre_shoot6	=[	$shoot5,		ogre_shoot7	] {};
 void() ogre_shoot7	=[	$shoot6,		ogre_run1	] {ai_face();};
 
-
-/*======================================================================
- Range - Multi-Grenades (uses generic attack function in projectiles.qc)
-======================================================================*/
+// Range - Multi-Grenades (uses generic attack function in projectiles.qc)
 void() ogre_multi_shoot1	=[	$shoot1,		ogre_multi_shoot2	] {ai_face();
 	MonsterGrenadeSound(); self.attack_speed = MonsterGrenadeSpeed();
 	self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed); };
@@ -213,21 +165,17 @@ void() ogre_multi_shoot5	=[	$shoot4,		ogre_multi_shoot6	] {};
 void() ogre_multi_shoot6	=[	$shoot5,		ogre_multi_shoot7	] {};
 void() ogre_multi_shoot7	=[	$shoot6,		ogre_run1	] {ai_face();};
 
-//======================================================================
 // Lots of different pain animations (falling over is a classic
-//======================================================================
 void()	ogre_pain1	=[	$pain1,		ogre_pain2	] {};
 void()	ogre_pain2	=[	$pain2,		ogre_pain3	] {};
 void()	ogre_pain3	=[	$pain3,		ogre_pain4	] {};
 void()	ogre_pain4	=[	$pain4,		ogre_pain5	] {};
 void()	ogre_pain5	=[	$pain5,		ogre_run1	] {};
 
-//----------------------------------------------------------------------
 void()	ogre_painb1	=[	$painb1,	ogre_painb2	] {};
 void()	ogre_painb2	=[	$painb2,	ogre_painb3	] {};
 void()	ogre_painb3	=[	$painb3,	ogre_run1	] {};
 
-//----------------------------------------------------------------------
 void()	ogre_painc1	=[	$painc1,	ogre_painc2	] {};
 void()	ogre_painc2	=[	$painc2,	ogre_painc3	] {};
 void()	ogre_painc3	=[	$painc3,	ogre_painc4	] {};
@@ -235,7 +183,6 @@ void()	ogre_painc4	=[	$painc4,	ogre_painc5	] {};
 void()	ogre_painc5	=[	$painc5,	ogre_painc6	] {};
 void()	ogre_painc6	=[	$painc6,	ogre_run1	] {};
 
-//----------------------------------------------------------------------
 void()	ogre_paind1	=[	$paind1,	ogre_paind2	] {};
 void()	ogre_paind2	=[	$paind2,	ogre_paind3	] {ai_pain(10);};
 void()	ogre_paind3	=[	$paind3,	ogre_paind4	] {ai_pain(9);};
@@ -253,7 +200,6 @@ void()	ogre_paind14=[	$paind14,	ogre_paind15	] {};
 void()	ogre_paind15=[	$paind15,	ogre_paind16	] {};
 void()	ogre_paind16=[	$paind16,	ogre_run1	] {};
 
-//----------------------------------------------------------------------
 void()	ogre_paine1	=[	$paine1,	ogre_paine2	] {};
 void()	ogre_paine2	=[	$paine2,	ogre_paine3	] {ai_pain(10);};
 void()	ogre_paine3	=[	$paine3,	ogre_paine4	] {monster_footstep(FALSE);ai_pain(9);};
@@ -324,7 +270,6 @@ void()	ogre_die12	=[	$death12,	ogre_die13	] {};
 void()	ogre_die13	=[	$death13,	ogre_die14	] {monster_death_postcheck();};
 void()	ogre_die14	=[	$death14,	ogre_die14	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
 void()	ogre_bdie1	=[	$bdeath1,	ogre_bdie2	] {};
 void()	ogre_bdie2	=[	$bdeath2,	ogre_bdie3	] {monster_check_gib();ai_forward(5);};
 void()	ogre_bdie3	=[	$bdeath3,	ogre_bdie4	] {monster_check_gib();
@@ -337,11 +282,8 @@ void()	ogre_bdie8	=[	$bdeath8,	ogre_bdie9	] {};
 void()	ogre_bdie9	=[	$bdeath9,	ogre_bdie10	] {monster_death_postcheck();};
 void()	ogre_bdie10	=[	$bdeath10,	ogre_bdie10	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------
-void() ogre_die =
-{
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+void() ogre_die = {
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "ogre/ogdth.wav", 1, ATTN_NORM);
@@ -365,17 +307,9 @@ void() ogre_wakeup8	=[	$smash13,	ogre_wakeup9 ] {};
 void() ogre_wakeup9	=[	$smash14,	ogre_run1	] {};
 
 // From the crazy mind of Madfox, comes fishing ogre!?!
-float OGREFISH_FISHY = 0;
-float OGREFISH_FISHING = 19;
-float OGREFISH_CATCH = 79;
-float ANIMATION_OGREFLAP = 18;
-float ANIMATION_OGREFISH = 59;
-float ANIMATION_OGRECATCH = 25;
-
 // Special idle animation - Flappy the fish waggles tail
 void() ogre_flappyfish = {
-	// If dead, no more updates
-	if (self.health < 1) return;
+	if (self.health < 1) return; // If dead, no more updates
 
 	self.nextthink = time + 0.1;
 	self.frame = OGREFISH_FISHY + self.walkframe;
@@ -388,14 +322,12 @@ void() ogre_flappyfish = {
 	if (self.walkframe > ANIMATION_OGREFLAP) {
 		self.walkframe = 0;
 		self.think = self.th_altstand;
-	}
-	else self.think = ogre_flappyfish;
+	} else self.think = ogre_flappyfish;
 };
 
 // Special idle animation - Ogre finally catches something!
 void() ogre_catchfish = {
-	// If dead, no more updates
-	if (self.health < 1) return;
+	if (self.health < 1) return; // If dead, no more updates
 
 	self.nextthink = time + 0.1;
 	self.frame = OGREFISH_CATCH + self.walkframe;
@@ -411,13 +343,11 @@ void() ogre_catchfish = {
 	if (self.walkframe > ANIMATION_OGRECATCH) {
 		self.walkframe = 0;
 		self.think = self.th_altstand;
-	}
-	else self.think = ogre_catchfish;
+	} else self.think = ogre_catchfish;
 };
 
 void() ogre_fishing = {
-	// If dead, no more updates
-	if (self.health < 1) return;
+	if (self.health < 1) return; // If dead, no more updates
 
 	self.idlebusy = FALSE;
 	self.nextthink = time + 0.1;

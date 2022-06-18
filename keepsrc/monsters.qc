@@ -643,7 +643,6 @@ void() monster_spawn = {
 		if (self.upgrade_lg && !query_configflag(SVR_UPDLG) ) return;
 	}
 
-	if (self.minion_maxcount > 0 && self.minion_name != "") monster_checkminion(self.minion_name); // Precache any minion monster if we have a counter and if we have a minion name
 	if (self.think1) self.use = self.think1;	// different use function?
 	else self.use = monster_use;				// default trigger event
 	if (self.classtype != CT_MONWRAITHNEHAHRA) self.solid = SOLID_SLIDEBOX;				// Standard monster movement
@@ -909,8 +908,12 @@ void() monster_spawndelay = {
 
 // Setup bounding box for monster (based on types)
 void() monster_bbox =  {
-	if (self.bboxtype == BBOX_CUSTOM && CheckZeroVector(self.bbmins) && CheckZeroVector(self.bbmaxs)) return; // we already set self.bbmins and self.bbmaxs, unless we didn't lol
-	else if (self.bboxtype == BBOX_TINY)
+	if (self.bboxtype == BBOX_CUSTOM && CheckZeroVector(self.bbmins)
+        && CheckZeroVector(self.bbmaxs)) return; // We already set self.bbmins
+												 // and self.bbmaxs, unless we
+												 // didn't lol.
+
+	if (self.bboxtype == BBOX_TINY)
 		// Lost Soul, Scorpion, Spider, Voreling
 		{ self.bbmins = '-16 -16 -24'; self.bbmaxs = '16 16 16'; }
 	else if (self.bboxtype == BBOX_BRKTINY)
@@ -991,6 +994,7 @@ float(string mname) monster_checkminion = {
 	precache_monster(mname);
 	if (!self.minion_spawn_time || !(self.minion_spawn_time & MONANIM_SPECIFIC)) self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIFIC;
 	if (!self.minion_spawn_chance) self.minion_spawn_chance = 1; // Default to 100% spawn chance for custom minions
+	if (self.minion_maxcount <= 0) self.minion_maxcount = 3;
 	return TRUE;
 };
 
@@ -1034,6 +1038,8 @@ float() monster_checkspawn = {
 // Main entry point for ALL monster routines
 void() monster_start = {
 	precache_monster(self.classname);   // Always precache it even if it fails to spawn. This to preserve the save files.
+	if (self.minion_name != "") monster_checkminion(self.minion_name); // Precache any minion monster if we have a counter and if we have a minion name
+
 	SUB_CheckRandomizedAngles();		// Handle randomized rotation, if set.  Bound angles to range of 0 to 360.
 	self.flags = FL_MONSTER;			// Always reset this flag
 	self.ticktimer = 0.1;				// Model animations at 10fps

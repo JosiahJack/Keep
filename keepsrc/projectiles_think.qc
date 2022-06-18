@@ -176,7 +176,7 @@ void () ProximityBomb = { // [FUNCTION]
     local entity head;
 
     self.think = ProximityBomb;
-    //SUB_AdvanceSkin(1,4); // Blink
+    SUB_AdvanceSkin(0,2); // Blink
     if (self.classtype != CT_PROXMINE) {
         if ((time > self.delay || NumProximityGrenades > 200)
             || vlen(self.lastvictim.velocity) > 0) {
@@ -1109,12 +1109,7 @@ void() Buriza_Think = { // [FUNCTION]
 void() Ember_Think = { // [FUNCTION]
     local vector  dir;
 
-    if (self.delay <= time) {
-        if (self.frame >= 5) {remove (self); return;}
-
-        self.walkframe = self.walkframe + 1;
-    }
-    self.frame = 28 + self.walkframe;
+    if (self.delay <= time) { remove (self); return; }
     dir = normalize (self.velocity);  // Update angles to its current direction.
     self.angles = vectoangles(dir) + '90 0 0';
     self.velocity = self.velocity * 0.75; // Cheap hack -- apply air resistance by reducing velocity.
@@ -1191,10 +1186,10 @@ void() Burn_Think = { // [FUNCTION]
 	self.think = Burn_Think;
     if (targ.burner != self) {Burn_Null (targ); return;} // This should not happen.
 
-	if (self.walkframe >= self.pos2_y) self.walkframe = self.pos2_x;
-	else self.walkframe = self.walkframe + 1;
+	//if (self.walkframe >= self.pos2_y) self.walkframe = self.pos2_x;
+	//else self.walkframe = self.walkframe + 1;
 
-	self.frame = self.walkframe;
+	self.frame = 0;//self.walkframe;
 
 	// From here on in either mode, the flame goes through a four step process:
 	// * Check for flame removal.
@@ -1267,7 +1262,7 @@ void() FloorFire_Think = { // [FUNCTION]
         remove (self);
         return;
     }
-    Fireball_EndFrame ();
+    Fireball_EndFrame();
 };
 
 //  This updates the fireball's angles as it flies through the air.
@@ -1276,10 +1271,6 @@ void() Fireball_Update = { // [FUNCTION]
 
     dir = normalize (self.velocity);
     self.angles = vectoangles(dir) + self.pos1; // Update:  Use variable 'self.pos1' instead of always '90 0 0'.
-    if (self.walkframe >= self.pos2_y) self.walkframe = self.pos2_x;
-	else self.walkframe = self.walkframe + 1;
-
-	self.frame = self.walkframe;
 };
 
 //  This gradually shrinks the fireball into nothing as it flies.
@@ -1294,7 +1285,6 @@ void() Fireball_Fade = { // [FUNCTION]
 //  This checks the fireball as it flies through the air.
 void() Fireball_Think = { // [FUNCTION]
     if (self.delay <= time) { // Make the fireball fade into nothing.  Takes 3 frames to fade.
-        self.frame  = 29;
         self.delay  = 31;
         self.think  = Fireball_Fade;
     }

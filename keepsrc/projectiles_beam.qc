@@ -809,7 +809,7 @@ float(entity targ, entity attacker) Divine_Trace = { // [FUNCTION]
 
 	traceline(attacker.origin + attacker.view_ofs, targ.origin + targ.view_ofs, TRUE, attacker); // Sees through monsters.
 	if (trace_fraction != 1) return FALSE;
-	if (UpIsSky(targ.origin)) {
+	if (UpIsSky(targ.origin,targ)) {
 		dist = vlen(targ.origin - attacker.origin);
 		if (dist >= 140 && dist <= 2000) return TRUE;
 	} else return FALSE;

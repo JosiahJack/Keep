@@ -173,23 +173,14 @@ void() FuryBossHome = {
 };
 
 void() FuryBossSpawnTouch = {
-	makevectors(self.angles); // Find out if there is enough space to spawn a gargoyle, Findradius version
-	// self.pos1 = self.origin + self.view_ofs + v_forward*64 + v_up*32;
-	self.aflag = find_minionspace(self.origin);
-	
-	// If the spawn location all clear, spawn something!
-	if (self.aflag == TRUE) {
-		minion_gargoyle(self.origin, self.owner.enemy);
-		sound (self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
-		// self.pos2 = self.origin - '0 0 16';	// Origin of gargoyle
-	}
-
+	SpawnMinionInRadius(self.origin);
+	sound (self, CHAN_WEAPON, "ad171/wraith/attack3.wav", 1, ATTN_NORM);
 	if (ext_dppart) pointparticles(particleeffectnum("gibacid"), self.origin, '0 0 0', 1);
 	self.velocity = '0 0 0';
 	self.touch = SUB_Null;
 	setmodel (self, "progs/drake/s_explod.spr");
 	self.solid = SOLID_NOT;
-	s_explode1 ();
+	s_explode1();
 };
 
 void() FuryBossMissileTouch = {
@@ -760,7 +751,10 @@ void() monster_dfury_boss = {
 	self.classtype = CT_MONDFURYBOSS;
 	self.classmove = MON_MOVEWALK;	
 	self.classgroup = CG_DEMON;	// Don't fight my minions!  Sorry knights
-	if (self.minion_name == string_null) self.minion_name = "monster_gargoyle";
+	if (self.minion_name == string_null) {
+		self.minion_name = "monster_gargoyle";
+        self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
+    }
 
 	// statue
 	if (self.spawnflags & 2) {

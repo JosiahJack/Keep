@@ -78,7 +78,10 @@ void() monster_tarbaby_mitosis = {
 	self.pain_flinch = 20;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "") self.deathstring = " was slimed by a Mitosis Spawn\n";
-	if (self.minion_name == string_null) self.minion_name = "monster_tarbaby";
+	if (self.minion_name == string_null) {
+		self.minion_name = "monster_tarbaby";
+        self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
+    }
 	self.th_checkattack = SpawnCheckAttack;
 	self.th_stand = tbaby_stand1;
 	self.th_walk = tbaby_walk1;

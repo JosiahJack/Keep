@@ -937,8 +937,47 @@ void(string mname) BeMonsterFromString = {
 			// self.think1 = FoundTarget;
 		}
 	}
-
+	newmis = self;
 	self = spawner;
+};
+
+// A code way to spawn minions
+void(string monstername, vector minion_org, entity minion_targ) SpawnMinion = {
+	if (entity_pcontent(minion_org)) return; // Check if there is space to spawn entity
+	
+	update_minioncount(self,1);				// Update spawn counters.  Self = minotaur, there is no egg
+	BeMonsterFromString(monstername);
+	setorigin(newmis, minion_org);			// Move to new location
+	newmis.owner = self;					// Spawner Parent Link
+	newmis.enemy = minion_targ;				// Target to attack
+	newmis.infightextra = self.infightextra;
+	newmis.alignment = self.alignment;
+	newmis.temperament = self.temperament;
+	newmis.vulnerability = self.vulnerability;
+	// Check for poison gibs being cached first
+	if (gibpoison && self.poisonous == TRUE) {
+		newmis.poisonous = self.poisonous;	// carry over from host spawner 
+		newmis.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
+	}
+	newmis.minion_active = TRUE;			// Minion flag
+	newmis.bodyfadeaway = TRUE;				// Get rid of body
+	newmis.spawnflags = 0;
+	newmis.effects = 0;
+	newmis.nextthink = time + 0.01;
+	newmis.think = newmis.th_run;
+};
+
+float(vector spot) SpawnMinionInRadius = {
+	if (self.minion_count >= self.minion_maxcount) return FALSE;
+
+	if (CheckZeroVector(spot)) spot = self.origin;
+	makevectors(self.angles);
+	self.aflag = find_minionspace(spot);
+	if (self.aflag == TRUE) {
+		SpawnMinion(self.minion_name,spot,self.owner.enemy);
+		return TRUE;
+	}
+	return FALSE;
 };
 
 void() func_spawn_use = {
@@ -978,7 +1017,7 @@ void() func_spawn_use = {
 void () func_spawn = {
 	if (!self.spawnclassname) self.spawnclassname = "monster_dog";
 	precache_monster(self.spawnclassname);
-	if (self.minion_name != string_null) precache_monster(self.minion_name);
+	if (self.minion_name != string_null) monster_checkminion(self.minion_name);
 
 	if (self.wait == 0) self.wait = 0.1;
 	else if (self.wait < 0) self.wait = 0;

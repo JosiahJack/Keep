@@ -1151,8 +1151,7 @@ void () monster_ubs_precache = {
 	precache_model ("progs/travail/uberskinflap.mdl");
 	precache_model ("progs/w_spike.mdl");
 	precache_model ("progs/v_spike.mdl");
-	precache_model ("progs/ad171/mon_wizard.mdl");
-	precache_model ("progs/h_wizard.mdl");
+	monster_wizard_precache();
 	precache_model ("progs/w_spike.mdl");
 	precache_model ("progs/travail/utele.mdl");
 	precache_sound ("travail/ubs/hit.wav");

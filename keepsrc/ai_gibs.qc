@@ -682,6 +682,17 @@ void() monster_ThrowGib = {
 		ThrowGib(25,1); // headmdl
 		ThrowGib(11,5); // gib1mdl, lots of tentacles
 		ThrowGib(4, 1);
+	} else if (self.classtype == CT_MONWIZBOSS) {
+		ThrowGib(25,1); // headmdl
+		ThrowGib(4, 1 + rint(random()*3));
+		self.health = self.health * 2.5;
+		ThrowGib(5, 1 + rint(random()*3));
+		self.health = self.gibhealth;
+	} else if (self.classtype == CT_MONDRAKE) {
+		ThrowGib(11,1); // Head, using gib1 for the dark green gib1skin
+		ThrowGib(12,1 + rint(random()*3)); // Dark green chunks.
+		ThrowGib(13,1);
+		ThrowGib(14,1 + rint(random()*3));
 	} else {
 		// Default humanoid explosion
 		if (random()<0.5) ThrowGib(2, 2);
