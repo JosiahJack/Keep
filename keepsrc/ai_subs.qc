@@ -334,7 +334,7 @@ void() CheckBlockedBreakable = {
 
 	if (time < self.attack_finished) return; // Still busy attacking? do nothing	
 
-	if (self.th_melee && !self.meleerange) self.meleerange = MONAI_MELEEKNIGHT; // Double check a DEFAULT melee range exist, use knights
+	if (self.th_melee && self.meleerange <= 0) self.meleerange = MONAI_MELEEKNIGHT; // Double check a DEFAULT melee range exist, use knights
 
 	// Triple trace directly infront of monster using angles
 	if (ai_tracebreakable(BRKTRACE_DIST, BRKTRACE_ANG)) {
@@ -358,14 +358,12 @@ void() CheckBlockedBreakable = {
 	}
 };
 
-/*======================================================================
- ai_checkmelee
-  Check if the monster (self) can attack enemy (target)
-  and returns TRUE if the monster is within XYZ range
-======================================================================*/
+
+// Check if the monster (self) can attack enemy (target) and returns TRUE if the
+// monster is within XYZ range.  Height is checked independently.
 float(float attackdist, float attackzaxis) ai_checkmelee = {
-	local vector	spot1, spot2;
-	local float 	delta, zdiff;
+	local vector spot1, spot2;
+	local float delta, zdiff;
 
 	// Setup default
 	if (attackzaxis <= 0) attackzaxis = MONAI_MELEEZAXIS;

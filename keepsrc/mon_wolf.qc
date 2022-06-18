@@ -1,28 +1,55 @@
-/*==============================================================================
-Moonlight Guardian (New Ravenkeep monster by Redfield)
-==============================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Redfield
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 153
+//
+// Implements: Moonlight Guardian, aka Wolf
+//
+// Description:
+// A giant wolf with a sword in its mouth, guardian of the night.  Used in the
+// impressive Raven Keep by Redfield.
+//=============================================================================
 
 $frame spin1 spin2 spin3 spin4 spin5 spin6 spin7 spin8
 $frame spin9 spin10 spin11 spin12 spin13 spin14 spin15 spin16
-
 $frame run1 run2 run3 run4 run5 run6 run7 run8 run9 run10 run11
-
 $frame shoot1 shoot2 shoot3 shoot4 shoot5 shoot6 shoot7 shoot8 shoot9 shoot10
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9
 $frame walk10 walk11 walk12
-
 $frame slash1 slash2 slash3 slash4 slash5 slash6 slash7 slash8 slash9
 $frame slash10 slash11 slash12 slash13 slash14 slash15 slash16 slash17
-
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 
 $frame stand9 stand10 stand11 stand12 stand13
-
 $frame howl1 howl2 howl3 howl4 howl5 howl6 howl7 howl8 howl9
 $frame howl10 howl11 howl12 howl13 howl14 howl15 howl16 howl17
-
 $frame pain1 pain2 pain3 pain4 pain5 pain6 pain7 pain8 pain9 pain10 pain11
-
 $frame die1 die2 die3 die4 die5 die6 die7 die8 die9 die10
 $frame die11 die12 die13 die14 die15 die16
 
@@ -178,19 +205,23 @@ void(float blframe, float blalpha) wolf_blur = {
 
 // Wolf Sword Melee.
 void() wolf_melee = {
-	local float ldmg;
+	local float ldmg oldrange;
 
-	if (!self.enemy) return;				// removed before stroke
-	ai_damagebreakable(15);					// Damage any breakables
-	if (!ai_checkmelee(MONAI_MELEE2WOLF,MONAI_MELEEZTALL)) return;		// Too far away
-		
-	// Wolf swings sword! 5-15 Damage
-	ldmg = (random() + random() + random()) * 5;
+	if (!self.enemy) return; // Removed before stroke
+
+	ai_damagebreakable(15); // Damage any breakables
+	oldrange = self.meleerange;
+	self.meleerange = MONAI_MELEE2WOLF;
+	if (!ai_checkmelee(self.meleerange,self.meleerangez)) {
+		self.meleerange = oldrange;
+		return; // Too far away
+	}
+
+	self.meleerange = oldrange;	
+	ldmg = (random() + random() + random()) * 5; // Wolf swings sword! 5-15 Damage
 	if (ldmg < 5) ldmg = 5;
 	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
-	
-	// Spawn some touch blood (no explicit direction)
-	spawn_touchblood (self, self.enemy, ldmg*4);
+	spawn_touchblood (self, self.enemy, ldmg*4); // Spawn some touch blood (no explicit direction)
 };
 
 void() wolf_slash1	=[	$slash1,	wolf_slash2	] {ai_face(); wolf_reset_attachment();};
@@ -229,7 +260,7 @@ void() wolf_spin13	=[	$spin13,	wolf_spin14	] {ai_charge(40); wolf_blur(6, 0.2);}
 void() wolf_spin14	=[	$spin14,	wolf_spin15	] {ai_charge(40); wolf_blur(7, 0.2); wolf_melee();};
 void() wolf_spin15	=[	$spin15,	wolf_spin16	] {ai_chargenoturn(0); wolf_blur(8, 0.1); wolf_melee();};
 void() wolf_spin16	=[	$spin16,	wolf_run1	] {ai_chargenoturn(0); wolf_reset_attachment(); wolf_melee();
-	if (ai_checkmelee(MONAI_MELEEWOLF,MONAI_MELEEZTALL) && self.enemy.health > 0) self.think = wolf_slash1;
+	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0) self.think = wolf_slash1;
 };
 
 // Magic Sword Attack
@@ -385,7 +416,7 @@ void() monster_wolf_precache = {
 };
 
 // QUAKED monster_wolf (1 0 0) (-128 -128 -24) (128 128 128) Ambush
-void() monster_wolf = {
+void() monster_wolf = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -412,6 +443,8 @@ void() monster_wolf = {
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.resist_cells = self.resist_rockets = 0.5;
 	self.th_checkattack = WolfCheckAttack;
+	self.meleerange = MONAI_MELEEWOLF;
+	self.meleerangez = MONAI_MELEEZTALL;
 	self.th_walk = wolf_walk1;
 	self.th_pain = wolf_pain;
 	self.th_die = wolf_die;

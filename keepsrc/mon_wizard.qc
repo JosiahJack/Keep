@@ -1,26 +1,60 @@
-/*==============================================================================
-WIZARD
-==============================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Drake and An Old, Old Evil by Patrick Martin
+//               id1
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 4
+// Function count: 70
+//
+// Implements: Scrag, Drake, Fire God's Minion aka Lava Scrag
+//
+// Description:
+// A floating fleshy horror that spits slime at your.
+//
+// The alternate Drake is a dark green version that is poisonous.
+//
+// The alternate Fire God's Minion, aka Lava Scrag, is made of lava, has
+// chthon's face and fireball spit that has a chance to set things on fire. 
+//=============================================================================
 
 $cd id1/models/a_wizard
 $origin 0 0 24
 $base wizbase	
 $skin wizbase
-
 $frame hover1 hover2 hover3 hover4 hover5 hover6 hover7 hover8
 $frame hover9 hover10 hover11 hover12 hover13 hover14 hover15
-
 $frame fly1 fly2 fly3 fly4 fly5 fly6 fly7 fly8 fly9 fly10
 $frame fly11 fly12 fly13 fly14
-
 $frame magatt1 magatt2 magatt3 magatt4 magatt5 magatt6 magatt7
 $frame magatt8 magatt9 magatt10 magatt11 magatt12 magatt13
-
 $frame pain1 pain2 pain3 pain4
-
 $frame death1 death2 death3 death4 death5 death6 death7 death8
 
-//============================================================================
 void()	wiz_stand1	=[	$hover1,		wiz_stand2	] {monster_idle_sound(); ai_stand();};
 void()	wiz_stand2	=[	$hover2,		wiz_stand3	] {ai_stand();};
 void()	wiz_stand3	=[	$hover3,		wiz_stand4	] {ai_stand();};
@@ -30,7 +64,6 @@ void()	wiz_stand6	=[	$hover6,		wiz_stand7	] {ai_stand();};
 void()	wiz_stand7	=[	$hover7,		wiz_stand8	] {ai_stand();};
 void()	wiz_stand8	=[	$hover8,		wiz_stand1	] {ai_stand();};
 
-//============================================================================
 void()	wiz_walk1	=[	$hover1,		wiz_walk2	] {monster_idle_sound(); ai_walk(8);};
 void()	wiz_walk2	=[	$hover2,		wiz_walk3	] {ai_walk(8);};
 void()	wiz_walk3	=[	$hover3,		wiz_walk4	] {ai_walk(8);};
@@ -40,7 +73,6 @@ void()	wiz_walk6	=[	$hover6,		wiz_walk7	] {ai_walk(8);};
 void()	wiz_walk7	=[	$hover7,		wiz_walk8	] {ai_walk(8);};
 void()	wiz_walk8	=[	$hover8,		wiz_walk1	] {ai_walk(8);};
 
-//============================================================================
 void()	wiz_side1	=[	$hover1,		wiz_side2	] {monster_idle_sound(); ai_run(8);};
 void()	wiz_side2	=[	$hover2,		wiz_side3	] {ai_run(8);};
 void()	wiz_side3	=[	$hover3,		wiz_side4	] {ai_run(8);};
@@ -50,7 +82,6 @@ void()	wiz_side6	=[	$hover6,		wiz_side7	] {ai_run(8);};
 void()	wiz_side7	=[	$hover7,		wiz_side8	] {ai_run(8);};
 void()	wiz_side8	=[	$hover8,		wiz_side1	] {ai_run(8);};
 
-//============================================================================
 void()	wiz_run1	=[	$fly1,		wiz_run2	] {monster_idle_sound(); ai_run(16);};
 void()	wiz_run2	=[	$fly2,		wiz_run3	] {ai_run(16);};
 void()	wiz_run3	=[	$fly3,		wiz_run4	] {ai_run(16);};
@@ -237,7 +268,7 @@ void() monster_wizard_precache = {
 void() setup_wizard;
 
 // QUAKED monster_wizard (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-void() monster_wizard = {
+void() monster_wizard = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -254,7 +285,7 @@ void() monster_wizard = {
 	if (self.classtype != CT_CACHEWIZARD) setup_wizard(); // Cache gargoyle is a special class used for precache only
 };
 
-void() monster_wizboss = {
+void() monster_wizboss = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -270,7 +301,7 @@ void() monster_wizboss = {
 	setup_wizard();
 };
 
-void() monster_drake = {
+void() monster_drake = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -286,7 +317,7 @@ void() monster_drake = {
 	setup_wizard();
 };
 
-void() monster_nourminion = { 
+void() monster_nourminion = { // [ENTITY]
 	self.classtype = CT_CACHEWIZARD; 
 	monster_wizard();
 };

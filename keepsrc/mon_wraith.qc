@@ -1,36 +1,59 @@
-/*==============================================================================
-WRAITH from Rogue Expansion Pack
-==============================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD), Rogue
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 117
+//
+// Implements: Wraith
+//
+// Description:
+// Like Rogue's Wrath but with two new variants:
+// - Minion spawning wraith that drops eggs that hatch into spiders or
+//   scorpions.  Able to be overridden to hatch any scorpion using minion_name.
+//   Otherwise quite similar to the Wrath.
+// - Fire Wraith that sets the player on fire and throws bone darts.
+//=============================================================================
+
 $skin wrthskin
-
-// Base animation pose
-$frame basepose
-
-// Walk/Idle pose (strange lerp at the end of frame set)
-$frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8
+$frame basepose // Base animation pose
+$frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 // Walk/Idle pose (strange lerp at the end of frame set)
 $frame stand9 stand10 stand11 stand12
-
-// Magic Attack A - Swing arms forward with hand meeting together
-$frame magicA1 magicA2 magicA3 magicA4 magicA5 magicA6 magicA7 magicA8
+$frame magicA1 magicA2 magicA3 magicA4 magicA5 magicA6 magicA7 magicA8 // Magic Attack A - Swing arms forward with hand meeting together
 $frame magicA9 magicA10 magicA11 magicA12 magicA13 magicA14
-
-// Magic Attack B - Cup hands around a missile object infront and fire
-$frame magicB1 magicB2 magicB3 magicB4 magicB5 magicB6 magicB7 magicB8
+$frame magicB1 magicB2 magicB3 magicB4 magicB5 magicB6 magicB7 magicB8 // Magic Attack B - Cup hands around a missile object infront and fire
 $frame magicB9 magicB10 magicB11 magicB12 magicB13
-
-// Magic Attack C - Swing right arm forward firing a projectile
-$frame magicC1 magicC2 magicC3 magicC4 magicC5 magicC6 magicC7 magicC8
+$frame magicC1 magicC2 magicC3 magicC4 magicC5 magicC6 magicC7 magicC8 // Magic Attack C - Swing right arm forward firing a projectile
 $frame magicC9 magicC10 magicC11 magicC12 magicC13 magicC14 magicC15
-
-// Pain A - Short flinch backwards
-$frame painA1 painA2 painA3 painA4 painA5 painA6
-
-// Pain B - Long motion of being hit several times
-$frame painB1 painB2 painB3 painB4 painB5 painB6 painB7 painB8
+$frame painA1 painA2 painA3 painA4 painA5 painA6 // Pain A - Short flinch backwards
+$frame painB1 painB2 painB3 painB4 painB5 painB6 painB7 painB8 // Pain B - Long motion of being hit several times
 $frame painB9 painB10 painB11
-
-// Death - Shrink down and explode
-$frame death1 death2 death3 death4 death5 death6 death7 death8
+$frame death1 death2 death3 death4 death5 death6 death7 death8 // Death - Shrink down and explode
 $frame death9 death10 death11 death12 death13 death14 death15
 
 float BONEOFFSET = 8;
@@ -45,10 +68,8 @@ float FADEDEBUFF_TIME = 0.01;	// Small amount of time
 float WRAITH_SKINBLUE = 0;		// Fire wraith
 float WRAITH_SKINGREEN = 2;		// Spider version
 float WRAITH_SKINPURPLE = 4;	// Scorpion version
-
 float WRAITH_NOFIREDEBUFF = 8192; // No fire debuf attack
 
-//======================================================================
 void() wraith_stand1 =[ $stand4, wraith_stand2 ] { monster_idle_sound();ai_stand();};
 void() wraith_stand2 =[ $stand5, wraith_stand3 ] { ai_stand();};
 void() wraith_stand3 =[ $stand6, wraith_stand4 ] { ai_stand();};
@@ -62,7 +83,6 @@ void() wraith_stand10 =[ $stand6, wraith_stand11 ] { ai_stand();};
 void() wraith_stand11 =[ $stand5, wraith_stand12 ] { ai_stand();};
 void() wraith_stand12 =[ $stand4, wraith_stand1 ] { ai_stand();};
 
-//======================================================================
 void() wraith_walk1 =[ $stand3, wraith_walk2 ] { monster_idle_sound();ai_walk(8);};
 void() wraith_walk2 =[ $stand4, wraith_walk3 ] { ai_walk(7);};
 void() wraith_walk3 =[ $stand5, wraith_walk4 ] { ai_walk(7);};
@@ -74,7 +94,6 @@ void() wraith_walk8 =[ $stand10, wraith_walk9 ] { ai_walk(4);};
 void() wraith_walk9 =[ $stand11, wraith_walk10 ] { ai_walk(8);};
 void() wraith_walk10 =[ $stand12, wraith_walk1 ] { ai_walk(8);};
 
-//======================================================================
 void() wraith_run1 =[ $stand3, wraith_run2 ] {monster_idle_sound();
 	if (self.meleeattack < time) {
 		self.meleeattack = time + 4 + (random() + random() + random() * 4);
@@ -92,11 +111,8 @@ void() wraith_run8 =[ $stand10, wraith_run3 ] {ai_run(4);};
 void() wraith_run9 =[ $stand11, wraith_run3 ] {ai_run(8);};
 void() wraith_run10 =[ $stand12, wraith_run3 ] {ai_run(8);};
 
-//============================================================================
 // Attachment management (create, finish and delete)
-//============================================================================
-void() wraith_create_attachment =
-{
+void() wraith_create_attachment = {
 	// Are the attachments setup yet?
 	if (!self.attachment) {
 		self.attachment = spawn();
@@ -121,47 +137,9 @@ void() wraith_create_attachment =
 	}
 };
 
-//----------------------------------------------------------------------
-void() wraith_finish_attachment =
-{
-	if (self.attachment) {
-		setmodel(self.attachment, "");
-		self.attachment.state = STATE_OFF;
-	}
-	if (self.attachment2) {
-		setmodel(self.attachment2, "");
-		self.attachment2.state = STATE_OFF;
-	}
-	if (self.attachment3) {
-		setmodel(self.attachment3, "");
-		self.attachment3.state = STATE_OFF;
-		self.attachment3.velocity = '0 0 0';
-	}
-};
-
-//----------------------------------------------------------------------
-void() wraith_remove_attachment =
-{
-	if (self.attachment) {
-		self.attachment.think = SUB_Remove;
-		self.attachment.nextthink = time + 0.1;
-	}
-	if (self.attachment2) {
-		self.attachment2.think = SUB_Remove;
-		self.attachment2.nextthink = time + 0.1;
-	}
-	if (self.attachment3) {
-		self.attachment3.think = SUB_Remove;
-		self.attachment3.nextthink = time + 0.1;
-	}
-};
-
-//======================================================================
 // FADE OUT TEMPORARY MODELS
 // Very quick fade (0.5s) - modified version of model_fade
-//======================================================================
-void() debuff_fade =
-{
+void() debuff_fade = {
     self.alpha = 0.5 - ((time - self.ltime) / 0.5);
 
     if (self.alpha < 0.2) {
@@ -459,7 +437,7 @@ void() wraith_magicA12 =[ $magicA12, wraith_magicA13 ] {
 	self.skin = self.exactskin; 
 	self.alpha = WRAITH_ALPHA;
 };
-void() wraith_magicA13 =[ $magicA13, wraith_magicA14 ] {wraith_finish_attachment();};
+void() wraith_magicA13 =[ $magicA13, wraith_magicA14 ] {SUB_FinishAttachments();};
 void() wraith_magicA14 =[ $magicA14, wraith_run1 ] {};
 
 //======================================================================
@@ -784,21 +762,17 @@ void() wraith_death15 =[ $death15, wraith_death15]
 };
 
 void() wraith_die = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	self.solid = SOLID_NOT;
 	sound (self, CHAN_VOICE, "ad171/wraith/death1.wav", 1, ATTN_NORM);
-
-	// Make sure fire wraith skin/alpha is reset on pain/death
-	self.skin = self.exactskin;
+	self.skin = self.exactskin; // Make sure fire wraith skin/alpha is reset on pain/death
 	self.alpha = WRAITH_ALPHA;
+	SUB_RemoveAttachments(); // Make sure any attachments are removed
 
-	// Make sure any attachments are removed
-	wraith_remove_attachment();
 
-	// Make sure body stays floating up where it finally dies
-	// and do not drop to the ground (reset by monster_death_use func)
-	self.flags = self.flags | FL_FLY;
+	self.flags = self.flags | FL_FLY; // Make sure body stays floating up where
+									  // it finally dies and do not drop to the
+									  // ground (reset by monster_death_use).
 	self.movetype = MOVETYPE_FLY;
 	wraith_death2();
 };
@@ -832,9 +806,8 @@ void() monster_wraith_precache = {
 };
 
 // QUAKED monster_wraith (1 0 0) (-16 -16 -24) (16 16 32) Ambush
-void() monster_wraith = {
-	// Check all spawn exceptions (monsters.qc)
-	if (monster_checkspawn() == TRUE) return;
+void() monster_wraith = { // [ENTITY]
+	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad171/mon_wraith.mdl";
 	self.weaponglow = "progs/ad171/mon_wraith_glow.mdl";

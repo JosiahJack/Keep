@@ -1,9 +1,46 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: custents
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 118
+//
+// Implements: Zombie Master
+//
+// Description:
+// A death knight boss that can summon zombie minions.
+//=============================================================================
+
 // ZOMBIE MASTER
 $cd id1/models/knight2
 $origin 0 0 24
 $base base
 $skin skin
-
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9
 $frame walk10 walk11 walk12 walk13 walk14 walk15 walk16 walk17
@@ -488,7 +525,7 @@ void() monster_zombie_master_precache = {
 	precache_sound ("custents/zombie/trick.wav"); // a clue on how to kill the modified axzombies
 };
 
-void() monster_zombie_master = {
+void() monster_zombie_master = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 

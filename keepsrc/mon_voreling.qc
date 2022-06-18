@@ -1,6 +1,4 @@
-/*==============================================================================
-VORELINGS (Originally from Quoth - Kell/Necros/Preach)
-==============================================================================*/
+// VORELINGS (Originally from Quoth - Kell/Necros/Preach)
 $frame idle1 idle2 idle3 idle4 idle5 idle6 idle7 idle8
 $frame idle9 idle10 idle11 idle12 idle13
 
@@ -32,7 +30,6 @@ $frame deathB1 deathB2 deathB3 deathB4 deathB5 deathB6 deathB7
 // Not used, modelling templates
 $frame base1 base2
 
-//======================================================================
 void()	voreling_idle1	=[	$idle1,	voreling_idle2	] {monster_idle_sound();ai_stand();};
 void()	voreling_idle2	=[	$idle2,	voreling_idle3	] {ai_stand();};
 void()	voreling_idle3	=[	$idle3,	voreling_idle4	] {ai_stand();};
@@ -47,27 +44,21 @@ void()	voreling_idle11	=[	$idle11,voreling_idle12	] {ai_stand();};
 void()	voreling_idle12	=[	$idle12,voreling_idle13	] {ai_stand();};
 void()	voreling_idle13	=[	$idle13,voreling_idle1	] {ai_stand();};
 
-//======================================================================
 void()	voreling_walk1	=[	$walk1,	voreling_walk2	] {monster_idle_sound();ai_walk(4);};
 void()	voreling_walk2	=[	$walk2,	voreling_walk3	] {monster_footstep(FALSE); ai_walk(3);};
 void()	voreling_walk3	=[	$walk3,	voreling_walk4	] {ai_walk(4);};
 void()	voreling_walk4	=[	$walk4,	voreling_walk5	] {ai_walk(5);};
 void()	voreling_walk5	=[	$walk5,	voreling_walk1	] {ai_walk(5);};
 
-//======================================================================
-void() voreling_runpause =
-{
-	// Do nothing is not to fight or dead
-	if (!self.enemy) return;
+void() voreling_runpause = {
+	if (!self.enemy) return; // Do nothing is not to fight or dead
 	if (self.health < 1) return;
 
 	if (self.jump_flag < time) self.th_run();
-	// Is the enemy too close? no more pausing, fight!
-	self.enemydist = range_distance(self.enemy, FALSE);
+	self.enemydist = range_distance(self.enemy, FALSE); // Is the enemy too close? no more pausing, fight!
 	if (self.enemydist < MONAI_RUNPAUSE) self.th_run();
 };
 
-//----------------------------------------------------------------------
 void()	voreling_runp1	=[	$idle1,	voreling_runp2	] {voreling_runpause();};
 void()	voreling_runp2	=[	$idle2,	voreling_runp3	] {voreling_runpause();};
 void()	voreling_runp3	=[	$idle3,	voreling_runp4	] {voreling_runpause();};
@@ -83,12 +74,11 @@ void()	voreling_runp12	=[	$idle12,voreling_runp13	] {voreling_runpause();};
 void()	voreling_runp13	=[	$idle13,voreling_runp1	] {voreling_runpause();};
 
 void(float dist) voreling_checkpause = {
-	// Do nothing is not to fight or dead
-	if (!self.enemy) return;
+	if (!self.enemy) return; // Do nothing is not to fight or dead
 	if (self.health < 1) return;
 
-	// make vorelings run in bursts of speed (reset every run animation cycle)
-	self.movespeed = self.movespeed + 1;
+	self.movespeed = self.movespeed + 1; // Make vorelings run in bursts of
+										 // speed and reset every run cycle.
 	// Do run code to check for enemies
 	ai_run(dist + self.movespeed);
 	if (self.enemydist < MONAI_RUNPAUSE) return; // Too close
@@ -166,7 +156,7 @@ void() voreling_melee = {
 	ai_charge(10);			// Get closer for extra bite
 	ai_damagebreakable(10);	// Damage any breakables
 
-	if (!ai_checkmelee(MONAI_MELEEVORELING,FALSE)) return;	// Too far away
+	if (!ai_checkmelee(self.meleerange,self.meleerangez)) return;	// Too far away
 	if (!self.enemy.takedamage) return; // Can the target bleed?
 
 	if (random() < 0.5) sound(self, CHAN_VOICE, "quoth/voreling/bitestrt.wav", TRUE, TRUE);
@@ -186,7 +176,7 @@ void()	voreling_bite3	=[	$bite3, voreling_bite4 ] {ai_face();};
 void()	voreling_bite4 = [	$bite4, voreling_bite5 ] {voreling_melee();};
 void()	voreling_bite5 = [	$bite5, voreling_bite6 ] {};
 void()	voreling_bite6 =[	$bite6, voreling_bite7 ] {
-	if (ai_checkmelee(MONAI_MELEEVORELING,FALSE) && self.enemy.health > 0) self.think = voreling_bite2;}; // Exit bite attack loop
+	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0) self.think = voreling_bite2;}; // Exit bite attack loop
 void()	voreling_bite7	=[	$bite7, voreling_run1	] {};
 
 void()	Voreling_JumpTouch = {
@@ -312,7 +302,6 @@ void() voreling_droptouch =
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 void()	voreling_drop1	=[	$drop1,	voreling_drop2	] {};
 void()	voreling_drop2	=[	$drop2,	voreling_drop3	] {};
 void()	voreling_drop3	=[	$drop3,	voreling_drop4	] {};
@@ -321,9 +310,7 @@ void()	voreling_drop5	=[	$drop5,	voreling_drop5	] {
 	if (self.attack_timer < time || self.velocity_z == 0) voreling_droptouch();
 };
 
-//----------------------------------------------------------------------------
-void() voreling_wakeup =
-{
+void() voreling_wakeup = {
 	// Dead already?
 	if (self.health < 1) return;
 		
@@ -356,9 +343,7 @@ void() voreling_wakeup =
 	voreling_drop1();						// Turn around, cat tricks!
 };
 
-//======================================================================
 // MINION - Grow and spin up from nothing
-//======================================================================
 void() voreling_growangle = {self.angles_y = self.angles_y + self.lefty;};
 void() voreling_grow1 = [ $grow1, voreling_grow2 ] {};
 void() voreling_grow2 = [ $grow2, voreling_grow3 ] {voreling_growangle();};
@@ -396,9 +381,7 @@ void() voreling_grow10= [ $grow10, voreling_run1 ] {
 		}
 	}
 };
-//----------------------------------------------------------------------------
-void() voreling_grow =
-{
+void() voreling_grow = {
 	// Only call wakeup function once
 	self.th_stand = self.th_walk = self.th_run  = SUB_Null;
 	if (random() < 0.5) self.lefty = 36;
@@ -407,13 +390,10 @@ void() voreling_grow =
 	voreling_grow1();
 };
 
-//============================================================================
 void() voreling_pain1	=[	$pain1,	voreling_pain2	] {};
 void() voreling_pain2	=[	$pain2,	voreling_run1	] {};
 
-//----------------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) voreling_pain = 
-{
+void(entity inflictor, entity attacker, float damage) voreling_pain = {
 	// Has the voreling been hit while on the ceiling?
 	if (self.spawnflags & MON_VORELING_CEILING) {
 		self.pain_finished = time + 1;
@@ -529,6 +509,8 @@ void() setup_voreling = {
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "") self.deathstring = " was nibbled by a Voreling\n";
 	self.th_checkattack = VorelingCheckAttack;
+	self.meleerange = MONAI_MELEEVORELING;
+	self.meleerangez = MONAI_MELEEZAXIS;
 	self.th_pain = voreling_pain;
 	self.th_die = voreling_die;
 	if(!self.classtype) self.classtype = CT_MONVORELING;
@@ -581,7 +563,6 @@ void(vector minion_org, entity minion_targ) minion_voreling = {
 	if (entity_pcontent(minion_org)) return;
 	
 	update_minioncount(self.owner, 1);		// Update spawn counters
-	
 	minion = spawn();
 	minion.classname = "monster_voreling";	// For function searching
 	setorigin(minion, minion_org);			// Move to new location
@@ -594,7 +575,6 @@ void(vector minion_org, entity minion_targ) minion_voreling = {
 	minion.spawnflags = 0;
 	minion.minion_active = TRUE;			// Minion flag
 	minion.bodyfadeaway = TRUE;				// Get rid of body
-	
 	if (random() < 0.2) minion.spawnflags = MON_VORELING_LARGE;
 	else minion.spawnflags = 0;
 

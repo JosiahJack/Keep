@@ -1,26 +1,48 @@
-/*==============================================================================
-XMAS Raindeer - From Twisted Christmas Mod by Twisted Matrix
-==============================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \ 
+// |  \ |___ |___ |        |  | \__/ |__/ 
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD), Twisted Christmas by Twisted Matrix
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 54
+//
+// Implements: Christmas Raindeer
+//
+// Description:
+// Missile launcher toting magical reindeer.
+//=============================================================================
 
-// (000 - 003) Rocket attack
-$frame rattack1 rattack2 rattack3 rattack4
+$frame rattack1 rattack2 rattack3 rattack4 // (000 - 003) Rocket attack
+$frame idlefeet1 idlefeet2 idlefeet3 idlefeet4 idlefeet5 idlefeet6 idlefeet7 // (004 - 010) Alternative idle animation, scrape feet on floor
+$frame stand1 stand2 stand3 stand4 // (011 - 014) Fast and Heavy breathing
+$frame run1 run2 run3 run4 run5 run6 run7 run8 // (015 - 022) Running/Charge attack
+$frame altar1 // (023 - 023) Static death pose - on altar (need skin 1)
+$frame base1 base2 // (024 - 025) Misc modelling stuff
 
-// (004 - 010) Alternative idle animation, scrape feet on floor
-$frame idlefeet1 idlefeet2 idlefeet3 idlefeet4 idlefeet5 idlefeet6 idlefeet7
-
-// (011 - 014) Fast and Heavy breathing
-$frame stand1 stand2 stand3 stand4
-
-// (015 - 022) Running/Charge attack
-$frame run1 run2 run3 run4 run5 run6 run7 run8
-
-// (023 - 023) Static death pose - on altar (need skin 1)
-$frame altar1
-
-// (024 - 025) Misc modelling stuff
-$frame base1 base2
-
-//======================================================================
 void() raind_idlefeet1 = [ $idlefeet1, raind_idlefeet2 ] {monster_footstep(FALSE);ai_stand();};
 void() raind_idlefeet2 = [ $idlefeet2, raind_idlefeet3 ] {ai_stand();};
 void() raind_idlefeet3 = [ $idlefeet3, raind_idlefeet4 ] {monster_footstep(FALSE);ai_stand();};
@@ -29,7 +51,6 @@ void() raind_idlefeet5 = [ $idlefeet5, raind_idlefeet6 ] {ai_stand();};
 void() raind_idlefeet6 = [ $idlefeet6, raind_idlefeet7 ] {ai_stand();};
 void() raind_idlefeet7 = [ $idlefeet7, raind_stand1 ] {ai_stand();};
 
-//----------------------------------------------------------------------
 void() raind_stand1 = [ $stand1, raind_stand2 ] { monster_idle_sound();ai_stand();};
 void() raind_stand2 = [ $stand1, raind_stand3 ] {ai_stand();};
 void() raind_stand3 = [ $stand2, raind_stand4 ] {ai_stand();};
@@ -52,7 +73,6 @@ void() raind_walk6 = [ $run2, raind_walk7 ] {ai_walk(13);};
 void() raind_walk7 = [ $run3, raind_walk8 ] {ai_walk(5);};
 void() raind_walk8 = [ $run4, raind_walk1 ] {monster_footstep(FALSE);ai_walk(8);};
 
-//======================================================================
 void() raind_run1 = [ $run5, raind_run2 ] {monster_idle_sound();ai_run(15);};
 void() raind_run2 = [ $run6, raind_run3 ] {ai_run(10);};
 void() raind_run3 = [ $run7, raind_run4 ] {ai_run(20);};
@@ -62,11 +82,8 @@ void() raind_run6 = [ $run2, raind_run7 ] {ai_run(25);};
 void() raind_run7 = [ $run3, raind_run8 ] {ai_run(10);};
 void() raind_run8 = [ $run4, raind_run1 ] {monster_footstep(FALSE);ai_run(15);};
 
-//======================================================================
 // MELEE : Antler attack
-//======================================================================
-void() raind_melee =
-{
+void() raind_melee = {
 	local float ldmg;
 
 	if (!self.enemy) return;
@@ -74,7 +91,7 @@ void() raind_melee =
 		
 	ai_charge(10);
 	ai_damagebreakable(20);
-	if (!ai_checkmelee(MONAI_MELEERAINDEER,FALSE)) return;
+	if (!ai_checkmelee(self.meleerange,self.meleerangez)) return;
 
 	// Can the target bleed?
 	if (!self.enemy.takedamage) return;
@@ -90,22 +107,18 @@ void() raind_melee =
 	spawn_touchblood (self, self.enemy, ldmg*3);
 };
 
-//----------------------------------------------------------------------
 void() raind_ram1 = [ $rattack1, raind_ram2 ] {ai_charge(10);};
 void() raind_ram2 = [ $rattack2, raind_ram3 ] {raind_melee();};
 void() raind_ram3 = [ $rattack3, raind_ram4 ] {ai_charge(5);};
 void() raind_ram4 = [ $rattack4, raind_run1 ] {
 	// Check if raindeer is within range to attack again
-	if (ai_checkmelee(MONAI_MELEERAINDEER,FALSE) && self.enemy.health > 0) {
+	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0) {
 		if (self.health > 0) self.think = raind_ram1;
 	}
 };
 
-//======================================================================
 // RANGE : Rockets from backpack
-//======================================================================
-void(vector sideofs) raind_attack =
-{
+void(vector sideofs) raind_attack = {
 	local vector org, dir, vec;
 	
 	if (!self.enemy) return;
@@ -251,7 +264,7 @@ void() monster_xmas_raindeer_precache = {
 };
 
 // QUAKED monster_xmas_raindeer (0.5 0.75 0) (-16 -16 -24) (16 16 40) Ambush
-void() monster_xmas_raindeer = {
+void() monster_xmas_raindeer = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -282,6 +295,8 @@ void() monster_xmas_raindeer = {
 	if (self.deathstring == "" ) self.deathstring = " was trampled by a Raindeer\n";
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = RaindeerCheckAttack;
+	self.meleerange = MONAI_MELEERAINDEER;
+	self.meleerangez = MONAI_MELEEZAXIS;
 	self.th_stand = raind_stand1;
 	self.th_walk = raind_walk1;
 	self.th_run = raind_run1;

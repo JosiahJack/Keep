@@ -1,82 +1,64 @@
 $frame unfurl1 unfurl2 unfurl3 unfurl4 unfurl5
 $frame unfurl6 unfurl7 unfurl8 unfurl9 unfurl10
 $frame unfurl11
-
 $frame flya1 flya2 flya3 flya4 flya5
 $frame flya6 flya7 flya8
-
 $frame flyb1 flyb2 flyb3 flyb4 flyb5
 $frame flyb6 flyb7 flyb8
-
 $frame flyc1 flyc2 flyc3 flyc4 flyc5
 $frame flyc6 flyc7 flyc8
-
 $frame figeighta1 figeighta2 figeighta3 figeighta4 figeighta5
 $frame figeighta6 figeighta7 figeighta8 figeighta9 figeighta10
 $frame figeighta11 figeighta12 figeighta13 figeighta14 figeighta15
 $frame figeighta16 figeighta17 figeighta18 figeighta19 figeighta20
 $frame figeighta21 figeighta22 figeighta23 figeighta24
-
 $frame figeightb1 figeightb2 figeightb3 figeightb4 figeightb5
 $frame figeightb6 figeightb7 figeightb8 figeightb9 figeightb10
 $frame figeightb11 figeightb12 figeightb13 figeightb14 figeightb15
 $frame figeightb16 figeightb17 figeightb18 figeightb19 figeightb20
 $frame figeightb21 figeightb22 figeightb23 figeightb24
-
 $frame figeightc1 figeightc2 figeightc3 figeightc4 figeightc5
 $frame figeightc6 figeightc7 figeightc8 figeightc9 figeightc10
 $frame figeightc11 figeightc12 figeightc13 figeightc14 figeightc15
 $frame figeightc16 figeightc17 figeightc18 figeightc19 figeightc20
 $frame figeightc21 figeightc22 figeightc23 figeightc24
-
 $frame flinga1 flinga2 flinga3 flinga4 flinga5
 $frame flinga6 flinga7 flinga8 flinga9 flinga10
 $frame flinga11 flinga12 flinga13 flinga14
-
 $frame flingb1 flingb2 flingb3 flingb4 flingb5
 $frame flingb6 flingb7 flingb8 flingb9 flingb10
 $frame flingb11 flingb12 flingb13 flingb14
-
 $frame flingc1 flingc2 flingc3 flingc4 flingc5
 $frame flingc6 flingc7 flingc8 flingc9 flingc10
 $frame flingc11 flingc12 flingc13 flingc14
-
 $frame zapa1 zapa2 zapa3 zapa4 zapa5
 $frame zapa6 zapa7 zapa8 zapa9 zapa10
-
 $frame zapb1 zapb2 zapb3 zapb4 zapb5
 $frame zapb6 zapb7 zapb8 zapb9 zapb10
-
 $frame zapc1 zapc2 zapc3 zapc4 zapc5
 $frame zapc6 zapc7 zapc8 zapc9 zapc10
-
 $frame paina1 paina2 paina3 paina4 paina5
 $frame paina6 paina7
-
 $frame painb1 painb2 painb3 painb4 painb5
 $frame painb6 painb7
-
 $frame painc1 painc2 painc3 painc4 painc5
 $frame painc6 painc7
-
 $frame dieloop1 dieloop2 dieloop3 dieloop4 dieloop5
 $frame dieloop6 dieloop7 dieloop8 dieloop9 dieloop10
 $frame dieloop11 dieloop12 dieloop13 dieloop14 dieloop15
 $frame dieloop16 dieloop17 dieloop18 dieloop19 dieloop20
 $frame dieloop21 dieloop22 dieloop23
-
 $frame dieend1 dieend2 dieend3 dieend4 dieend5
 $frame dieend6 dieend7 dieend8 dieend9 dieend10
 $frame dieend11
 
-void (float offset) ubs_shot1;
-void () spawnwiz;
-void () ubs_shot2;
-void () ubs_dodge;
-void () ubs_side;
+void(float offset) ubs_shot1;
+void() spawnwiz;
+void() ubs_shot2;
+void() ubs_dodge;
+void() ubs_side;
 
-
-void () ubs_countscraglets = {
+void() ubs_countscraglets = {
 	local entity head;
 
 	self.ident = 0;
@@ -88,7 +70,7 @@ void () ubs_countscraglets = {
 };
 
 
-void () ubscheckdist = {
+void() ubscheckdist = {
 	local vector dist, dist2, org;
 	local float d, d2, cond;
 	local entity head;

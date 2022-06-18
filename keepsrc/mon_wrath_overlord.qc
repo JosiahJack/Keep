@@ -1,3 +1,45 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \ 
+// |  \ |___ |___ |        |  | \__/ |__/ 
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Rogue
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 2
+// Function count: 122
+//
+// Implements: Wrath Overlord
+//
+// Description:
+// Much like the wrath, but with 4 arms, much more powerful, and able to
+// teleport around the arena to info_overlord_destination entities.  Dies in an
+// explosive shower of blood.  Also known as the Super Wrath.
+//
+// Also includes the info_overlord_destination definition.
+//=============================================================================
+
 float (entity thePoint) isSpawnPointEmpty = {
    local entity neighbors;
    local entity start;
@@ -389,7 +431,7 @@ void () monster_super_wrath_precache = {
 	precache_sound("rogue/s_wrath/smash.wav");
 };
 
-void () monster_super_wrath = {
+void () monster_super_wrath = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -423,7 +465,13 @@ void () monster_super_wrath = {
 	monster_start();
 };
 
-void () info_overlord_destination = {
+//============
+// --> QUAKED info_overlord_destination (.5 .5 .5) (-8 -8 -8) (8 8 32) 
+// This is the destination marker for the overlord.
+//
+// It does not require any other fields filled in.
+//============
+void () info_overlord_destination = { // [ENTITY]
 	self.mangle = self.angles;
 	self.angles = VEC_ORIGIN;
 	self.model = "";

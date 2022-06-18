@@ -3,7 +3,7 @@
 // |__/ |__  |__  |__)     |\/| /  \ |  \
 // |  \ |___ |___ |        |  | \__/ |__/                                                    
 //
-// Compiled by Qmaster
+// Compiled by W. Josiah Jack, aka Qmaster
 //
 // Attributions: All mods that have monsters.
 //
@@ -71,7 +71,7 @@ float MM_PHASE3 = 3;		// Phase 3 - Lasers + Grenades
 float MM_PHASE4 = 4;		// Phase 4 - Death
 
 // Why on earth are there so many check attack functions???
-void() CheckAttack = {
+void() CheckAttack = { // [FUNCTION]
 	if (visblocked(self.enemy)) return; // Does the monster have a clear shot to the player? sightline can be blocked by other monsters
 
 	// Melee attack
@@ -2436,29 +2436,6 @@ void() JudgeCheckAttack = {
 	SUB_AttackFinished (2 + random());
 };
 
-void() LfiendCheckAttack = {
-	if (self.enemydist < MONAI_MELEELFIEND) { self.attack_state = AS_MELEE; return; } // Check Melee range and start clawing at the player
-
-	// Range attacks (Fireballs, Giant Spheres and Firestorms).  Only range attack if cooldown has finished
-	if (time > self.attack_finished) {
-		// Quick fireball attacks
-		if (self.enemydist < MONAI_CLOSELFIEND && random() < 0.75) {
-			// Skill 0=3s, 1=2.25s, 2=1.5s, 3=0.75s
-			self.attack_speed = (4 - skill) * 0.75;
-			SUB_AttackFinished(self.attack_speed + random());
-			self.attack_state = AS_MISSILE;
-			return;
-		} else {
-			// Summon giant sphere of Doom!
-			// Skill 0=4s, 1=3s, 2=2s, 3=1s
-			self.attack_speed = (4 - skill) * 1;
-			SUB_AttackFinished(self.attack_speed + random());
-			self.attack_state = AS_JUMP;
-			return;
-		}
-	}
-};
-
 void() mammothCheckAttack = {
 	local vector armorg, eorg;
 
@@ -2686,23 +2663,21 @@ void() KarasuCheckAttack = {
 };
 
 void() WolfCheckAttack = {
-	// Does the monster have a clear shot to the player? sightline can be blocked by other monsters
-	if (visblocked(self.enemy)) return;
+	if (visblocked(self.enemy)) return; // Does the monster have a clear shot to the player? sightline can be blocked by other monsters
 		
 	// Melee attack uses larger check distance then shorter check before attack
-	if (ai_checkmelee(MONAI_MELEEWOLF, MONAI_MELEEZTALL)) {
+	if (ai_checkmelee(self.meleerange, self.meleerangez)) {
 		self.attack_state = AS_MELEE;
 		self.th_melee (); 
 		return;
 	}
 
-	// Range attack (energy sword)
 	if (!enemy_vis) return;
 	if (time < self.attack_finished) return;
 	if (self.enemydist > MONAI_WOLFRANGE && !self.attack_sniper) return;
 
 	SUB_AttackFinished (2 + (2*random()));
-	self.attack_state = AS_MISSILE;
+	self.attack_state = AS_MISSILE; // Range attack (energy sword)
 };
 
 void() HuntressCheckAttack = {

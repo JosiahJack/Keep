@@ -1,6 +1,41 @@
-/*======================================================================
-Zombie KNIGHT (undead version of original knight)
-======================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 295
+//
+// Implements: Zombie Knight
+//
+// Description:
+// Undead version of original knight.
+//=============================================================================
+
 $cd id1/models/zombiek
 $origin	0 0 24
 $base base
@@ -70,7 +105,6 @@ $frame idled9 idled10 idled11 idled12 idled13 idled14 idled15
 void(float type) zombiek_sound;
 void() zombiek_knockdown;
 
-//=============================================================================
 void() zombiek_standB1	=[	$idleb1,		zombiek_standB2	] {ai_stand();};
 void() zombiek_standB2	=[	$idleb2,		zombiek_standB3	] {ai_stand();};
 void() zombiek_standB3	=[	$idleb3,		zombiek_standB4	] {ai_stand();};
@@ -737,7 +771,7 @@ void() monster_zombiek_precache = {
 };
 
 // QUAKED monster_zombiek (1 0 0) (-16 -16 -24) (16 16 32) Ambush x FLOOR
-void() monster_zombiek = {
+void() monster_zombiek = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 

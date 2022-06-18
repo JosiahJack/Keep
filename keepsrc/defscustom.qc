@@ -432,6 +432,7 @@ entity		secloc_cam;			// Camera entity keeping track of stuff
 .float		attack_steering;	// Percentage to steer by over time
 .float		meleeattack;		// Which type of melee attack is happening
 .float		meleerange;			// Distance used for checking melee contact
+.float      meleerangez;        // Height used for checking melee contact before swinging
 .float		meleetimer;			// Blood and gore sound/effect timer
 .string		meleehitsound;		// Sound to play when melee impacts on enemy
 .float		meleecontact;		// Flag set if monster has melee contact sound

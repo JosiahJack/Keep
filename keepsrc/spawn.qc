@@ -711,7 +711,7 @@ void(string mname) BeMonsterFromString = {
 
 	// We are a monster to spawn now
 	// self.spawnnotelefrag = TRUE; // Prevent spawngibbing ourselves
-	// self.randomized = TRUE; // Prevent chaosmode randomizing us yet again
+	self.randomized = TRUE; // Prevent chaosmode randomizing us yet again
 	self.owner = last; // Pass through
 	spawner.enemy = self;
 	self.master = spawner;
@@ -937,6 +937,12 @@ void(string mname) BeMonsterFromString = {
 			// self.think1 = FoundTarget;
 		}
 	}
+	dprint("BeMonsterFromString is now a ");
+	dprint(self.classname);
+	dprint(" at ");
+	dprint(vtos(self.origin));
+	if (self.enemy) dprint(", and has an enemy\n");
+	else dprint("\n");
 	newmis = self;
 	self = spawner;
 };
@@ -946,8 +952,10 @@ void(string monstername, vector minion_org, entity minion_targ) SpawnMinion = {
 	if (entity_pcontent(minion_org)) return; // Check if there is space to spawn entity
 	
 	update_minioncount(self,1);				// Update spawn counters.  Self = minotaur, there is no egg
+	newmis = spawn();
 	BeMonsterFromString(monstername);
 	setorigin(newmis, minion_org);			// Move to new location
+	if (developer > 0) spawn_marker(minion_org, SPNMARK_YELLOW);
 	newmis.owner = self;					// Spawner Parent Link
 	newmis.enemy = minion_targ;				// Target to attack
 	newmis.infightextra = self.infightextra;
@@ -966,12 +974,17 @@ void(string monstername, vector minion_org, entity minion_targ) SpawnMinion = {
 	newmis.nextthink = time + 0.01;
 	newmis.think = newmis.th_run;
 };
-
+ 
 float(vector spot) SpawnMinionInRadius = {
+	local vector vec, dir;
+
 	if (self.minion_count >= self.minion_maxcount) return FALSE;
 
 	if (CheckZeroVector(spot)) spot = self.origin;
-	makevectors(self.angles);
+	vec = spot + vecrand(0,200,TRUE);
+	dir = normalize(vec - spot);
+	spot = spot + dir * (self.bbmins_x * 1.5 + random() * 128);
+	if (spot_z < self.origin_z) spot_z = self.origin_z;
 	self.aflag = find_minionspace(spot);
 	if (self.aflag == TRUE) {
 		SpawnMinion(self.minion_name,spot,self.owner.enemy);

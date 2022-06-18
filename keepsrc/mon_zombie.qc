@@ -1,44 +1,67 @@
-/*==============================================================================
-ZOMBIE
-==============================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: id1, Rogue, Hipnotic
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 2
+// Function count: 210
+//
+// Implements: Zombie and Poison Zombie
+//
+// Description:
+// Undead human that can start lying or crucified.  Must be gibbed to kill it.
+// The poisonous version is green and throws poisonous gibs instead of normal.
+//=============================================================================
+
 $cd id1/models/zombie
-
 $origin	0 0 24
-
 $base base
 $skin skin
-
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8
 $frame stand9 stand10 stand11 stand12 stand13 stand14 stand15
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9 walk10 walk11
 $frame walk12 walk13 walk14 walk15 walk16 walk17 walk18 walk19
-
 $frame run1 run2 run3 run4 run5 run6 run7 run8 run9 run10 run11 run12
 $frame run13 run14 run15 run16 run17 run18
-
 $frame atta1 atta2 atta3 atta4 atta5 atta6 atta7 atta8 atta9 atta10 atta11
 $frame atta12 atta13
-
 $frame attb1 attb2 attb3 attb4 attb5 attb6 attb7 attb8 attb9 attb10 attb11
 $frame attb12 attb13 attb14
-
 $frame attc1 attc2 attc3 attc4 attc5 attc6 attc7 attc8 attc9 attc10 attc11
 $frame attc12
-
 $frame paina1 paina2 paina3 paina4 paina5 paina6 paina7 paina8 paina9 paina10
 $frame paina11 paina12
-
 $frame painb1 painb2 painb3 painb4 painb5 painb6 painb7 painb8 painb9 painb10
 $frame painb11 painb12 painb13 painb14 painb15 painb16 painb17 painb18 painb19
 $frame painb20 painb21 painb22 painb23 painb24 painb25 painb26 painb27 painb28
-
 $frame painc1 painc2 painc3 painc4 painc5 painc6 painc7 painc8 painc9 painc10
 $frame painc11 painc12 painc13 painc14 painc15 painc16 painc17 painc18
-
 $frame paind1 paind2 paind3 paind4 paind5 paind6 paind7 paind8 paind9 paind10
 $frame paind11 paind12 paind13
-
 $frame paine1 paine2 paine3 paine4 paine5 paine6 paine7 paine8 paine9 paine10
 $frame paine11 paine12 paine13 paine14 paine15 paine16 paine17 paine18 paine19
 $frame paine20 paine21 paine22 paine23 paine24 paine25 paine26 paine27 paine28
@@ -48,7 +71,6 @@ $frame cruc_1 cruc_2 cruc_3 cruc_4 cruc_5 cruc_6
 
 void(float type) zombie_sound;
 
-//=============================================================================
 void() zombie_stand1	=[	$stand1,		zombie_stand2	] {
 	zombie_sound(2); self.solid = SOLID_SLIDEBOX; ai_stand();
 };
@@ -67,7 +89,6 @@ void() zombie_stand13	=[	$stand13,		zombie_stand14	] {ai_stand();};
 void() zombie_stand14	=[	$stand14,		zombie_stand15	] {ai_stand();};
 void() zombie_stand15	=[	$stand15,		zombie_stand1	] {ai_stand();};
 
-//============================================================================
 void() zombie_walk1		=[	$walk1,		zombie_walk2	] {
 	self.inpain = 0; self.solid = SOLID_SLIDEBOX; ai_walk(0);
 };
@@ -614,7 +635,7 @@ void() monster_zombiep;
 
 // QUAKED monster_zombie (1 0 0) (-16 -16 -24) (16 16 32) Crucified ambush FLOOR
 // If crucified, stick the bounding box 12 pixels back into a wall to look right.
-void() monster_zombie = {
+void() monster_zombie = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -700,7 +721,7 @@ void() monster_zombiep_precache = {
 
 // QUAKED monster_zombiep (1 0 0) (-16 -16 -24) (16 16 32) ambush x FLOOR
 // Poisonous Zombie that has poisonous gibs on death
-void() monster_zombiep = {
+void() monster_zombiep = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 

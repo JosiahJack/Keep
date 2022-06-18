@@ -1,20 +1,46 @@
-/*==============================================================================
-XMAS Snowman - From Twisted Christmas Mod by Twisted Matrix
-==============================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD), Twisted Christmas by Twisted Matrix
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 44
+//
+// Implements: Christmas Snowman
+//
+// Description:
+// An angry snowman with a nailgun.
+//=============================================================================
 
-// (000) Standing Still
-$frame stand1
+$frame stand1 // (000) Standing Still
+$frame claw1 claw2 claw3 claw4 claw5 // (001 - 005) Fast Claw attack
+$frame attack1 attack2 attack3 // (006 - 008) Fast Nail Attack
+$frame base1 base2 // (009 - 010) Misc modelling stuff
 
-// (001 - 005) Fast Claw attack
-$frame claw1 claw2 claw3 claw4 claw5
-
-// (006 - 008) Fast Nail Attack
-$frame attack1 attack2 attack3
-
-// (009 - 010) Misc modelling stuff
-$frame base1 base2
-
-//======================================================================
 void() snowm_stand1 = [ $stand1, snowm_stand2 ] {monster_idle_sound();ai_stand();}
 void() snowm_stand2 = [ $stand1, snowm_stand3 ] {ai_stand();};
 void() snowm_stand3 = [ $stand1, snowm_stand4 ] {ai_stand();};
@@ -24,7 +50,6 @@ void() snowm_stand6 = [ $stand1, snowm_stand7 ] {ai_stand();};
 void() snowm_stand7 = [ $stand1, snowm_stand8 ] {ai_stand();};
 void() snowm_stand8 = [ $stand1, snowm_stand1 ] {ai_stand();};
 
-//======================================================================
 void() snowm_walk1 = [ $stand1, snowm_walk2 ] {monster_idle_sound();ai_walk(0);}
 void() snowm_walk2 = [ $stand1, snowm_walk3 ] {ai_walk(0);};
 void() snowm_walk3 = [ $stand1, snowm_walk4 ] {ai_walk(0);};
@@ -34,7 +59,6 @@ void() snowm_walk6 = [ $stand1, snowm_walk7 ] {ai_walk(0);};
 void() snowm_walk7 = [ $stand1, snowm_walk8 ] {ai_walk(0);};
 void() snowm_walk8 = [ $stand1, snowm_walk1 ] {ai_walk(0);};
 
-//======================================================================
 void() snowm_run1 = [ $stand1, snowm_run2 ] {monster_idle_sound();ai_run(0);}
 void() snowm_run2 = [ $stand1, snowm_run3 ] {ai_run(0);};
 void() snowm_run3 = [ $stand1, snowm_run4 ] {ai_run(0);};
@@ -44,50 +68,37 @@ void() snowm_run6 = [ $stand1, snowm_run7 ] {ai_run(0);};
 void() snowm_run7 = [ $stand1, snowm_run8 ] {ai_run(0);};
 void() snowm_run8 = [ $stand1, snowm_run1 ] {ai_run(0);};
 
-//======================================================================
 // MELEE : Crows Claw
-//======================================================================
-void() SnowmMelee =
-{
+void() SnowmMelee = {
 	local float ldmg;
 
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 		
 	ai_damagebreakable(10);							// Damage any breakables
-	if (!ai_checkmelee(MONAI_MELEESNOWMAN,FALSE)) return; // Too far away
-
-	// Can the target bleed?
-	if (!self.enemy.takedamage) return;
+	if (!ai_checkmelee(self.meleerange,self.meleerangez)) return; // Too far away
+	if (!self.enemy.takedamage) return; // Can the target bleed?
 
 	sound(self, CHAN_WEAPON, "xmas/snowman/claw.wav", TRUE, TRUE);
-
-	// Claw attack is good (1-15)
-	ldmg = (random() + random() + random()) * 5;
+	ldmg = (random() + random() + random()) * 5; // Claw attack is good (1-15)
 	if (ldmg < 1) ldmg = 1;
 	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
-
-	// Spawn blood at claw
-	spawn_touchblood (self, self.enemy, ldmg*3);
+	spawn_touchblood (self, self.enemy, ldmg*3); // Spawn blood at claw
 };
 
-//----------------------------------------------------------------------
 void() snowm_claw1 = [ $claw1, snowm_claw2 ] {ai_face();};
 void() snowm_claw2 = [ $claw2, snowm_claw3 ] {ai_face();};
 void() snowm_claw3 = [ $claw3, snowm_claw4 ] {ai_face();SnowmMelee();};
 void() snowm_claw4 = [ $claw4, snowm_claw5 ] {};
 void() snowm_claw5 = [ $claw5, snowm_run1 ] {
 	// Check if snowman is within range to attack again
-	if (ai_checkmelee(MONAI_MELEESNOWMAN,FALSE) && self.enemy.health > 0) {
+	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0) {
 		if (self.health > 0) self.think = snowm_claw1;
 	}
 };
 
-//======================================================================
 // RANGE : Burst of Nails
-//======================================================================
-void() SnowmFireNails =
-{
+void() SnowmFireNails = {
 	local vector org, dir, vec;
 	local float loopvar;
 	
@@ -115,7 +126,6 @@ void() SnowmFireNails =
 	}
 };
 
-//----------------------------------------------------------------------
 void() snowm_nail1 = [ $attack1, snowm_nail2 ] {ai_face();};
 void() snowm_nail2 = [ $attack2, snowm_nail3 ] {ai_face();};
 void() snowm_nail3 = [ $attack3, snowm_nail4 ] {ai_face();SnowmFireNails();};
@@ -222,7 +232,7 @@ void() monster_xmas_snowman_precache = {
 };
 
 // QUAKED monster_snowman (1 0 0) (-16 -16 -24) (16 16 32) Ambush
-void() monster_xmas_snowman = {
+void() monster_xmas_snowman = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -259,6 +269,8 @@ void() monster_xmas_snowman = {
 	if (self.attack_count < 1) self.attack_count = 5; // Default amount of nails to burst fire (5x9=45dmg)
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent	
 	self.th_checkattack = SnowmanCheckAttack;
+	self.meleerange = MONAI_MELEESNOWMAN;
+	self.meleerangez = MONAI_MELEEZAXIS;
 	self.th_stand = snowm_stand1;
 	self.th_walk = snowm_walk1;
 	self.th_run = snowm_run1;

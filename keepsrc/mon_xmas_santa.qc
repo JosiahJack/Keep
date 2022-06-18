@@ -1,65 +1,70 @@
-/*==============================================================================
-XMAS Santa - From Twisted Christmas Mod by Twisted Matrix
-==============================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD), Twisted Christmas by Twisted Matrix
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 88
+//
+// Implements: Christmas Santa
+//
+// Description:
+// Either a good santa to be rescued or a bad Santa boss.
+//=============================================================================
 
-// (000 - 005) Standing
-$frame stand1 stand2 stand3 stand4 stand5 stand6
-
-// (006 - 011) Running
-$frame run1 run2 run3 run4 run5 run6
-
-// (012 - 017) Lounging Evil Santa 
-$frame lounge1 lounge2 lounge3 lounge4 lounge5 lounge6
-
-// (018 - 027) Victory at player's death!
-$frame victory1 victory2 victory3 victory4 victory5 victory6
+$frame stand1 stand2 stand3 stand4 stand5 stand6 // (000 - 005) Standing
+$frame run1 run2 run3 run4 run5 run6 // (006 - 011) Running
+$frame lounge1 lounge2 lounge3 lounge4 lounge5 lounge6 // (012 - 017) Lounging Evil Santa 
+$frame victory1 victory2 victory3 victory4 victory5 victory6 // (018 - 027) Victory at player's death!
 $frame victory7 victory8 victory9 victory10
-
-// (028 - 031) Gun Range attack
-$frame attack1 attack2 attack3 attack4
-
-// (032 - 041) Sack Melee attack
-$frame sack1 sack2 sack3 sack4 sack5 sack6 sack7 sack8 sack9 sack10
-
-// (042 - 046) Pain A
-$frame painA1 painA2 painA3 painA4 painA5
-
-// (047 - 051) Pain B
-$frame painB1 painB2 painB3 painB4 painB5
-
-// (052 - 061) Death FORWARD (180 spin)
-$frame death1 death2 death3 death4 death5 death6
+$frame attack1 attack2 attack3 attack4 // (028 - 031) Gun Range attack
+$frame sack1 sack2 sack3 sack4 sack5 sack6 sack7 sack8 sack9 sack10 // (032 - 041) Sack Melee attack
+$frame painA1 painA2 painA3 painA4 painA5 // (042 - 046) Pain A
+$frame painB1 painB2 painB3 painB4 painB5 // (047 - 051) Pain B
+$frame death1 death2 death3 death4 death5 death6  // (052 - 061) Death FORWARD (180 spin)
 $frame death7 death8 death9 death10
-
-// (062 - 070) Death BACKWARD (180 spin)
-$frame bdeath1 bdeath2 bdeath3 bdeath4 bdeath5 bdeath6
+$frame bdeath1 bdeath2 bdeath3 bdeath4 bdeath5 bdeath6 // (062 - 070) Death BACKWARD (180 spin)
 $frame bdeath7 bdeath8 bdeath9 bdeath10
+$frame sitA1 sitA2 sitA3 sitA4 sitA5 sitA6 sitA7 // (071 - 077) Sitting Good Santa 1
+$frame sitB1 sitB2 sitB3 sitB4 sitB5 sitB6 // (078 - 083) Sitting Good Santa 2
+$frame base1 base2 base3 // (084 - 086) Misc modelling stuff
 
-// (071 - 077) Sitting Good Santa 1
-$frame sitA1 sitA2 sitA3 sitA4 sitA5 sitA6 sitA7
-
-// (078 - 083) Sitting Good Santa 2
-$frame sitB1 sitB2 sitB3 sitB4 sitB5 sitB6
-
-// (084 - 086) Misc modelling stuff
-$frame base1 base2 base3
-
-//======================================================================
 // Sitting down animation (located below model baseline)
 // There is no blend animation for this to go from sitting to standing
 // Original MOD had this animation as a standing alternative
-// Really looked odd when the monster jumped straight to running
-/*
+// Really looked odd when the monster jumped straight to running so this isn't used yet.
 void() santa_lounge1 = [ $lounge1, santa_lounge2 ] {monster_idle_sound();ai_stand();};
 void() santa_lounge2 = [ $lounge2, santa_lounge3 ] {ai_stand();};
 void() santa_lounge3 = [ $lounge3, santa_lounge4 ] {ai_stand();};
 void() santa_lounge4 = [ $lounge4, santa_lounge5 ] {ai_stand();};
 void() santa_lounge5 = [ $lounge5, santa_lounge6 ] {ai_stand();};
-void() santa_lounge6 = [ $lounge6, santa_lounge1 ] {ai_stand();}; */
+void() santa_lounge6 = [ $lounge6, santa_lounge1 ] {ai_stand();};
 
-//======================================================================
 // A scaled down good santa sitting shaking his head
-//======================================================================
 void() santa_seatA1 = [ $sitA1, santa_seatA2 ] {};
 void() santa_seatA2 = [ $sitA2, santa_seatA3 ] {};
 void() santa_seatA3 = [ $sitA3, santa_seatA4 ] {};
@@ -68,7 +73,6 @@ void() santa_seatA5 = [ $sitA5, santa_seatA6 ] {};
 void() santa_seatA6 = [ $sitA6, santa_seatA7 ] {};
 void() santa_seatA7 = [ $sitA7, santa_seatA1 ] {self.th_stand();};
 
-//----------------------------------------------------------------------
 void() santa_seatB1 = [ $sitB1, santa_seatB2 ] {};
 void() santa_seatB2 = [ $sitB2, santa_seatB3 ] {};
 void() santa_seatB3 = [ $sitB3, santa_seatB4 ] {};
@@ -88,9 +92,7 @@ void() santa_trigger = {
 	self.ltime = self.nextthink;
 };
 
-//----------------------------------------------------------------------
-void() santa_seated =
-{
+void() santa_seated = {
 	// Keep resetting health/touch function
 	self.health = self.max_health;
 	self.use = santa_trigger;
@@ -98,7 +100,6 @@ void() santa_seated =
 	else santa_seatB1();
 };
 
-//======================================================================
 void() santa_stand1 = [ $stand1, santa_stand2 ] {monster_idle_sound();ai_stand();};
 void() santa_stand2 = [ $stand2, santa_stand3 ] {ai_stand();};
 void() santa_stand3 = [ $stand3, santa_stand4 ] {ai_stand();};
@@ -106,7 +107,6 @@ void() santa_stand4 = [ $stand4, santa_stand5 ] {ai_stand();};
 void() santa_stand5 = [ $stand5, santa_stand6 ] {ai_stand();};
 void() santa_stand6 = [ $stand6, santa_stand1 ] {ai_stand();};
 
-//======================================================================
 void() santa_walk1 = [ $run1, santa_walk2 ] {monster_idle_sound();ai_walk(15);}
 void() santa_walk2 = [ $run2, santa_walk3 ] {ai_walk(17);};
 void() santa_walk3 = [ $run3, santa_walk4 ] {monster_footstep(FALSE);ai_walk(15);};
@@ -114,7 +114,6 @@ void() santa_walk4 = [ $run4, santa_walk5 ] {ai_walk(15);};
 void() santa_walk5 = [ $run5, santa_walk6 ] {ai_walk(17);};
 void() santa_walk6 = [ $run6, santa_walk1 ] {monster_footstep(FALSE);ai_walk(15);};
 
-//======================================================================
 void() santa_run1 = [ $run1, santa_run2 ] {monster_idle_sound();ai_run(20);}
 void() santa_run2 = [ $run2, santa_run3 ] {ai_run(24);};
 void() santa_run3 = [ $run3, santa_run4 ] {monster_footstep(FALSE);ai_run(20);};
@@ -122,11 +121,8 @@ void() santa_run4 = [ $run4, santa_run5 ] {ai_run(20);};
 void() santa_run5 = [ $run5, santa_run6 ] {ai_run(24);};
 void() santa_run6 = [ $run6, santa_run1 ] {monster_footstep(FALSE);ai_run(20);};
 
-//======================================================================
 // MELEE : Sack of Presents
-//======================================================================
-void() SantaMelee =
-{
+void() SantaMelee = {
 	local float ldmg;
 
 	if (!self.enemy) return;
@@ -134,7 +130,7 @@ void() SantaMelee =
 		
 	ai_charge(10);	// + ai_face()
 	ai_damagebreakable(50);
-	if (!ai_checkmelee(MONAI_MELEESANTA,FALSE)) return;
+	if (!ai_checkmelee(self.meleerange,self.meleerangez)) return;
 
 	// Can the target bleed?
 	if (!self.enemy.takedamage) return;
@@ -153,7 +149,6 @@ void() SantaMelee =
 	SpawnMeatSpray (self, self.enemy, crandom() * 100);
 };
 
-//----------------------------------------------------------------------
 void() santa_sack1 = [ $sack1, santa_sack2 ] {ai_face();};
 void() santa_sack2 = [ $sack2, santa_sack3 ] {};
 void() santa_sack3 = [ $sack3, santa_sack4 ] {ai_face();};
@@ -168,16 +163,13 @@ void() santa_sack8 = [ $sack8, santa_sack9 ] {SantaMelee();};
 void() santa_sack9 = [ $sack9, santa_sack10 ] {};
 void() santa_sack10 = [ $sack10, santa_run1 ] {
 	// Check if snowman is within range to attack again
-	if (ai_checkmelee(MONAI_MELEESANTA,FALSE) && self.enemy.health > 0) {
+	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0) {
 		if (self.health > 0) self.think = santa_sack3;
 	}
 };
 
-//======================================================================
 // RANGE : Rocket Gun
-//======================================================================
-void() Santa_FireSnow =
-{
+void() Santa_FireSnow = {
 	local vector org, dir, spot1, spot2;
 	
 	// Keep adding up projectile counter
@@ -344,7 +336,7 @@ void() monster_xmas_santa_precache = {
 };
 
 // QUAKED monster_santa (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-void() monster_xmas_santa = {
+void() monster_xmas_santa = { // [ENTITY]
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 	
 	self.mdl = "progs/xmas/mon_santa.mdl";		// Big Sack Man!
@@ -396,6 +388,8 @@ void() monster_xmas_santa = {
 	self.reflectplasma = TRUE;		// Reflect plasma projectiles
 	self.th_pain = santa_pain; // Pain/Death functions
 	self.th_die = santa_die;
+	self.meleerange = MONAI_MELEESANTA;
+	self.meleerangez = MONAI_MELEEZAXIS;
 
 	// Check for GOOD Santa setup?
 	if (self.spawnflags & MON_SANTA_GOOD) {
@@ -418,6 +412,8 @@ void() monster_xmas_santa = {
 		self.reflectplasma = TRUE;		// Reflect plasma projectiles
 		self.reflectaxe = TRUE;			// Prevent axe damage
 		self.nomonstercount = TRUE;
+		self.alignment = GOOD;
+		self.classgroup = CG_HARMLESS;
 		self.health = self.max_health = MEGADEATH;
 		self.gibhealth = MON_NEVERGIB;
 		self.exactskin = 1;
@@ -428,6 +424,7 @@ void() monster_xmas_santa = {
 		self.waitmin = 0;
 	} else {
 		// Default EVIL Santa!
+		self.classgroup = CG_XMAS;
 		self.th_checkattack = SantaCheckAttack;
 		self.th_stand = santa_stand1;
 		self.th_walk = santa_walk1;
@@ -437,7 +434,6 @@ void() monster_xmas_santa = {
 	}
 		
 	self.classtype = CT_MONSANTA;
-	self.classgroup = CG_XMAS;
 	self.classmove = MON_MOVEWALK;
 	monster_start();	
 };

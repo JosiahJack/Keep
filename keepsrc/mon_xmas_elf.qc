@@ -1,50 +1,60 @@
-/*==============================================================================
-XMAS Elf - From Twisted Christmas Mod by Twisted Matrix
-==============================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \ 
+// |  \ |___ |___ |        |  | \__/ |__/ 
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD), Twisted Christmas by Twisted Matrix
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 91
+//
+// Implements: Christmas Elf
+//
+// Description:
+// Mad tiny elf with a candy cane as a club.
+//=============================================================================
 
-// (000 - 007) Rocking back and forth on feet
-$frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8
-
-// (008 - 017) Skipping! (Running)
-$frame skip1 skip2 skip3 skip4 skip5 skip6 skip7 skip8
+$frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 // (000 - 007) Rocking back and forth on feet
+$frame skip1 skip2 skip3 skip4 skip5 skip6 skip7 skip8 // (008 - 017) Skipping! (Running)
 $frame skip9 skip10
-
-// (018 - 029) Walking
-$frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8
+$frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 // (018 - 029) Walking
 $frame walk9 walk10 walk11 walk12
-
-// (030 - 036) Suprise, jump up into the air with legs wide apart
-$frame surprise1 surprise2 surprise3 surprise4 surprise5 surprise6 surprise7
-
-// (037 - 048) ATTACK - Swing cane around (long version)
-$frame magic1 magic2 magic3 magic4 magic5 magic6 magic7 magic8
+$frame surprise1 surprise2 surprise3 surprise4 surprise5 surprise6 surprise7 // (030 - 036) Suprise, jump up into the air with legs wide apart
+$frame magic1 magic2 magic3 magic4 magic5 magic6 magic7 magic8 // (037 - 048) ATTACK - Swing cane around (long version)
 $frame magic9 magic10 magic11 magic12
-
-// (049 - 056) ATTACK - Jump up and smash cane into ground
-$frame jump1 jump2 jump3 jump4 jump5 jump6 jump7 jump8
-
-// (057 - 061) ATTACK - Swing cane around (short version)
-$frame attack1 attack2 attack3 attack4 attack5
-
-// (062 - 066) PAIN - Recoil backward
-$frame pain1 pain2 pain3 pain4 pain5
-
-// (067 - 078) ATTACK - Fall downward with cane infront
-$frame ambush1 ambush2 ambush3 ambush4 ambush5 ambush6 ambush7 ambush8
+$frame jump1 jump2 jump3 jump4 jump5 jump6 jump7 jump8 // (049 - 056) ATTACK - Jump up and smash cane into ground
+$frame attack1 attack2 attack3 attack4 attack5 // (057 - 061) ATTACK - Swing cane around (short version)
+$frame pain1 pain2 pain3 pain4 pain5 // (062 - 066) PAIN - Recoil backward
+$frame ambush1 ambush2 ambush3 ambush4 ambush5 ambush6 ambush7 ambush8 // (067 - 078) ATTACK - Fall downward with cane infront
 $frame ambush9 ambush10 ambush11 ambush12
-
-// (079 - 093) DEATH - Backward
-$frame bdeath1 bdeath2 bdeath3 bdeath4 bdeath5 bdeath6 bdeath7 bdeath8
+$frame bdeath1 bdeath2 bdeath3 bdeath4 bdeath5 bdeath6 bdeath7 bdeath8 // (079 - 093) DEATH - Backward
 $frame bdeath9 bdeath10 bdeath11 bdeath12 bdeath13 bdeath14 bdeath15
-
-// (094 - 107) DEATH - Forward
-$frame death1 death2 death3 death4 death5 death6 death7 death8
+$frame death1 death2 death3 death4 death5 death6 death7 death8 // (094 - 107) DEATH - Forward
 $frame death9 death10 death11 death12 death13 death14
+$frame base1 base2 // (108 - 109) Misc modelling stuff
 
-// (108 - 109) Misc modelling stuff
-$frame base1 base2
-
-//======================================================================
 void() elf_stand1 = [ $stand1, elf_stand2 ] {monster_idle_sound();ai_stand();};
 void() elf_stand2 = [ $stand2, elf_stand3 ] {ai_stand();};
 void() elf_stand3 = [ $stand3, elf_stand4 ] {ai_stand();};
@@ -54,7 +64,6 @@ void() elf_stand6 = [ $stand6, elf_stand7 ] {ai_stand();};
 void() elf_stand7 = [ $stand7, elf_stand8 ] {ai_stand();};
 void() elf_stand8 = [ $stand8, elf_stand1 ] {ai_stand();};
 
-//======================================================================
 void() elf_walk1 = [ $walk1, elf_walk2 ] {monster_idle_sound();ai_walk(10);};
 void() elf_walk2 = [ $walk2, elf_walk3 ] {ai_walk(6);};
 void() elf_walk3 = [ $walk3, elf_walk4 ] {monster_footstep(FALSE);ai_walk(4);};
@@ -69,7 +78,6 @@ void() elf_walk10 = [ $walk10, elf_walk11 ] {ai_walk(0);};
 void() elf_walk11 = [ $walk11, elf_walk12 ] {ai_walk(2);};
 void() elf_walk12 = [ $walk12, elf_walk1 ] {ai_walk(3);};
 
-//======================================================================
 void() elf_run1 = [ $skip1, elf_run2 ] {monster_idle_sound();ai_run(1);};
 void() elf_run2 = [ $skip2, elf_run3 ] {ai_run(6);};
 void() elf_run3 = [ $skip3, elf_run4 ] {ai_run(20);};
@@ -82,7 +90,6 @@ void() elf_run8 = [ $skip8, elf_run9 ] {ai_run(20);};
 void() elf_run9 = [ $skip9, elf_run10 ] {monster_footstep(FALSE);ai_run(12);};
 void() elf_run10 = [ $skip10, elf_run1 ] {ai_run(8);};
 
-//======================================================================
 void() elf_slide1 = [ $surprise1, elf_slide2 ] {ai_run_slide(2);monster_idle_sound();};
 void() elf_slide2 = [ $surprise2, elf_slide3 ] {ai_run_slide(4);};
 void() elf_slide3 = [ $surprise3, elf_slide4 ] {ai_run_slide(6);};
@@ -91,11 +98,8 @@ void() elf_slide5 = [ $surprise5, elf_slide6 ] {ai_run_slide(4);};
 void() elf_slide6 = [ $surprise6, elf_slide7 ] {ai_run_slide(3);};
 void() elf_slide7 = [ $surprise7, elf_run1 ] {ai_run(2);};
 
-//======================================================================
 // ELF 2 - SPRAY MAGIC (Range)
-//======================================================================
-void(float sideang) elf_shot =
-{
+void(float sideang) elf_shot = {
 	local	vector org, ang, dir, avel;
 	
 	if (!self.enemy) return;
@@ -119,9 +123,7 @@ void(float sideang) elf_shot =
 	Launch_Grenade(org, dir, avel, CT_PROJ_ELF);
 };
 
-//----------------------------------------------------------------------
-void() elf_magic1 = [ $magic12, elf_magic2 ] {
-	sound(self, CHAN_WEAPON, "xmas/elf/magic.wav", 1, ATTN_NORM);};
+void() elf_magic1 = [ $magic12, elf_magic2 ] {sound(self, CHAN_WEAPON, "xmas/elf/magic.wav", 1, ATTN_NORM);};
 void() elf_magic2 = [ $magic11, elf_magic3 ] {ai_face();};
 void() elf_magic3 = [ $magic10, elf_magic4 ] {ai_face();};
 void() elf_magic4 = [ $magic9, elf_magic5 ] {ai_face();};
@@ -137,11 +139,8 @@ void() elf_magic10 = [ $magic3, elf_magic11 ] {elf_shot(0.1);};
 void() elf_magic11 = [ $magic2, elf_magic12 ] {};
 void() elf_magic12 = [ $magic1, elf_run1 ] {};
 
-//======================================================================
 // ELF 1 - SWING CANE - Both elf types can swing cane if within range
-//======================================================================
-void() elf_melee =
-{
+void() elf_melee = {
 	local float ldmg;
 
 	if (!self.enemy) return;
@@ -149,7 +148,7 @@ void() elf_melee =
 		
 	ai_charge(10);
 	ai_damagebreakable(10);
-	if (!ai_checkmelee(MONAI_MELEEELF,FALSE)) return;
+	if (!ai_checkmelee(self.meleerange,self.meleerangez)) return;
 
 	// Can the target bleed?
 	if (!self.enemy.takedamage) return;
@@ -166,7 +165,6 @@ void() elf_melee =
 	spawn_touchblood (self, self.enemy, ldmg*3);
 }
 
-//----------------------------------------------------------------------
 void() elf_cane1 = [ $attack1, elf_cane2 ] {ai_charge(5);
 	if (random() < 0.5) sound(self, CHAN_WEAPON, "xmas/elf/cane_swipe1.wav", 1, ATTN_NORM);
 	else sound(self, CHAN_WEAPON, "xmas/elf/cane_swipe2.wav", 1, ATTN_NORM);	
@@ -175,17 +173,14 @@ void() elf_cane2 = [ $attack2, elf_cane3 ] {ai_charge(5);};
 void() elf_cane3 = [ $attack3, elf_cane4 ] {elf_melee();};
 void() elf_cane4 = [ $attack4, elf_cane5 ] {};
 void() elf_cane5 = [ $attack5, elf_run1 ] {
-	if (ai_checkmelee(MONAI_MELEEELF,FALSE) && self.enemy.health > 0) {
+	if (ai_checkmelee(self.meleerange,self.meleerangez) && self.enemy.health > 0) {
 		if (self.health > 0) self.think = elf_cane1;
 	}
 };
 
-//======================================================================
 // ELF 1 - JUMP FUNCTION (range)
-//======================================================================
-void()	Elf_JumpTouch =
-{
-	local	float	ldmg;
+void()	Elf_JumpTouch = {
+	local float ldmg;
 
 	if (self.health <= 0) return;
 	ai_jumpbreakable(20);			// Damage any breakables
@@ -219,7 +214,6 @@ void()	Elf_JumpTouch =
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------------
 void() elf_leap1 =[ $jump1, elf_leap2 ] {ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	if (random() < 0.5) sound(self, CHAN_WEAPON, "xmas/elf/jump1.wav", 1, ATTN_NORM);
@@ -405,6 +399,8 @@ void() monster_xmas_elf = {
 	if (self.jumprange_x <= 0) self.jumprange_x = MONAI_JUMPELFNEAR;
 	if (self.jumprange_y <= self.jumprange_x) self.jumprange_y = MONAI_JUMPELFFAR;	
 	self.th_checkattack = ElfCheckAttack;
+	self.meleerange = MONAI_MELEEELF;
+	self.meleerangez = MONAI_MELEEZAXIS;
 	self.th_stand = elf_stand1;
 	self.th_walk = elf_walk1;
 	self.th_run = elf_run1;

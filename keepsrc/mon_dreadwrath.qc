@@ -1,135 +1,80 @@
-/*
-==============================================================================
-
-OVERLORD / WRAITH LORD
-(Rogue's super wrath)
-
-==============================================================================
-*/
-// overlord.qc
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \ 
+// |  \ |___ |___ |        |  | \__/ |__/ 
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Drake, Rogue
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 
+// Function count: 
+//
+// Implements: Dread Wraith
+//
+// Description:
+// Similar to the Rogue Overlord (aka Super Wrath) but has a powershield and
+// random teleporting.
+//
+// Drake:  DoE overlord did not have the powershield, but in Drake, the
+// overlord in boss mode gains a reflector shield that stays on until it
+// attacks, then turns back on when finished attacking.
+//=============================================================================
 
 $skin s_wrtrst
 $frame s_wrtfrm
-
-// walk
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9 walk10 walk11
 $frame walk12 walk13 walk14 walk15
-
-// hand to hand attacks
 $frame attack1 attack2 attack3 attack4 attack5 attack6 attack7 attack8
 $frame attack9 attack10
-
 $frame attackb1 attackb2 attackb3 attackb4 attackb5 attackb6 attackb7
 $frame attackb8 attackb9 attackb10 attackb11 attackb12 attackb13 attackb14
-
 $frame attackc1 attackc2 attackc3 attackc4 attackc5 attackc6 attackc7
 $frame attackc8 attackc9 attackc10 attackc11 attackc12 attackc13 attackc14
-
-// ranged attack
 $frame magic1 magic2 magic3 magic4 magic5 magic6 magic7 magic8 magic9
 $frame magic10 magic11 magic12
-
-// pain
 $frame pain1 pain2 pain3 pain4 pain5 pain6 pain7 pain8 pain9 pain10
 $frame pain11 pain12 pain13 pain14
-
 $frame painb1 painb2 painb3 painb4 painb5 painb6 painb7 painb8 painb9
 $frame painb10 painb11 
-
-// death
 $frame death1 death2 death3 death4 death5 death6 death7 death8 death9
 $frame death10 death11 death12 death13 death14 death15 death16 death17
-
-// PM:  Extended scenes for wraith lord variant.
-$frame frame1
-
+$frame frame1 // PM:  Extended scenes for wraith lord variant.
 $frame form1 form2 form3 form4 form5 form6 form7 form8 form9 form10 form11
 $frame form12 form13 form14 form15 form16 form17 form18 form19
-
 $frame painc1 painc2 painc3 painc4 painc5 painc6 painc7
-
 $frame paind1 paind2 paind3 paind4 paind5 paind6 paind7
-
 $frame aether1 aether2 aether3 aether4 aether5 aether6 aether7
 $frame aether8 aether9 aether10 aether11 aether12 aether13 aether14
 $frame aether15 aether16 aether17 aether18
-
 $frame deathb1 deathb2 deathb3 deathb4 deathb5 deathb6 deathb7 deathb8
 $frame deathb9 deathb10
 
-// =======================================================
-//float(entity thePoint) isSpawnPointEmpty;
-
-entity() overlord_find_dest3 =
-    {return M_FindDest ("info_overlord_destination");};
-
-//============
-// --> QUAKED info_overlord_destination (.5 .5 .5) (-8 -8 -8) (8 8 32) 
-// This is the destination marker for the overlord.
-//
-// It does not require any other fields filled in.
-//============
-void() info_overlord_destination =
-{
-// this does nothing, just serves as a target spot
-    self.mangle = self.angles;
-    self.angles = '0 0 0';
-    self.model = "";
-    self.origin = self.origin + '0 0 27';
-};
-
-// =======================================================
-
-
-void() overlord_teleport =
-{
-    local   entity  theDest;
-    local   vector  org;
-
-    if (!(self.spawnflags & 2))
-        return;     // Disabled.
-    if (random() > 0.75)
-        return;     // Only 75% chance of success.
-
-    theDest = overlord_find_dest3();
-    if (theDest == world)
-    {
-        // PM:  If no preset spots, use dynamic teleportation like necro.
-        if (self.enemy)
-            theDest = self.enemy;
-        else
-            theDest = self;
-        org = self.origin;
-        if (EntryPoint_Spawn (self, theDest, theDest.origin, EntryPoint_Random))
-        {
-            spawn_tfog (org);
-            spawn_tfog (self.origin);
-        }
-        return;     // Could not find a spot.
-    }
-
-// put a tfog where the player was
-    spawn_tfog (self.origin);
-
-// spawn a tfog flash in front of the destination
-    makevectors (self.angles);
-    org = theDest.origin + 32 * v_forward;
-
-    spawn_tfog (org);
-    spawn_tdeath (theDest.origin, self);
-
-    setorigin (self, theDest.origin);
-    self.flags = self.flags - self.flags & FL_ONGROUND;
-};
-// =======================================================
-
-void() ai_shield_on =
-{
+void() ai_shield_on = {
     if (self.spawnflags & 2)
         ReflectorShield (self);
 };
-void() ai_shield_off =
-{
+void() ai_shield_off = {
     if (self.spawnflags & 2)
         if (!self.mirror_finished)
             self.effects = self.effects - (self.effects & EF_BRIGHTFIELD);
@@ -513,11 +458,9 @@ void() overlord_die11 =[ $death17, SUB_Null       ] {ol_toss_loop();
 //    SUB_Remove ();
 };
 
-// ==================================================
 // other -- Drake stuff
-// ==================================================
-void() super_wrath_cache =
-{
+
+void() monster_super_wrath_precache = {
     precache_model ("progs/k_spike.mdl");
     precache_model ("progs/s_wrath.mdl");
     precache_model ("progs/s_wrtgb1.mdl");
@@ -538,50 +481,6 @@ void() super_wrath_cache =
     precache_sound ("wrath/wpain.wav");
     precache_sound ("wrath/wdthc.wav");
 };
-
-//============
-// --> QUAKED monster_super_wrath (1 0 0) (-16 -16 -24) (16 16 32) Ambush BossMode
-// The super wrath (Overlord).
-//
-// BossMode enables the superwrath's powershield and the random teleporting.
-//
-// Drake:  DoE overlord did not have the powershield, but here in Drake,
-// the overlord in boss mode gains a reflector shield that stays on until
-// it attacks, then turns back on when finished attacking.
-//============
-void() monster_super_wrath =
-{
-    if (!self.spawned)
-    {
-        if (noenemies)
-            {remove (self); return;}
-        super_wrath_cache ();
-    }
-
-// FIXME:  Remove after unforgiven.
-//self.classname = "monster_dark_lord"; monster_dark_lord();  return;// FIXME
-    monster_form ("progs/s_wrath.mdl", VEC_HULL_MIN, VEC_HULL_MAX, 1000, 0);
-    self.mass       = MASS_LIGHT;
-
-// PM:  DoE disabled the power shield, but Drake gives it a reflector shield.
-    self.th_stand   = overlord_stand1;
-    self.th_walk    = overlord_walk1;
-    self.th_run     = overlord_run1;
-    self.th_missile = overlord_attack;
-    self.th_melee   = overlord_attack;
-    self.th_pain    = overlord_pain;
-    self.th_die     = overlord_die1;
-    //- - - - - - - -
-    self.th_sight   = wrath_sight;
-    self.th_spawn   = monster_super_wrath;
-
-    self.pain_finished  = 0;
-    self.bloodtype      = BLOOD_DARK;
-    self.speed          = 12;
-    if (self.spawnflags & 2) self.bossflag = TRUE;
-    flymonster_start ();
-};
-
 
 //  Dread Lord  (Wraith Boss)
 
@@ -763,6 +662,7 @@ void() monster_wraith_lord = {
 	self.classtype		= CT_MONDREADWRAITH;
     self.classgroup     = CG_SPIDER;
     self.speed          = 8;
+    if (self.deathstring == "")  self.deathstring = " was desecrated by a Dread Wraith\n";
     if (self.spawnflags & 2) self.bossflag = TRUE;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
     monster_start ();
