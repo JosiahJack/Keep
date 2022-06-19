@@ -1,36 +1,60 @@
-/*
-============================================================================
-
-NEMESANT
-(Zerstorer's Troglodyte.  Also the original Qtest shal-rath.)
-
-============================================================================
-*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Drake, Zerstorer, Qtest, id1
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 3
+// Function count: 113
+//
+// Implements: Nemesant and Master Nemesant
+//
+// Description:
+// Floating mysterious being that is somewhat like a voodoo doll crossed with
+// a vore in appearance.  Has various magical attacks and can revive nearby
+// enemies in the boss version.
+//
+// Trivia: Also the original Qtest shal-rath.  Called Troglodyte in Zerstorer.
+//=============================================================================
 
 $cd /progs/nemesant
 $origin 0 0 24
 $base base
 $skin skin
-
 $frame float1 float2 float3 float4 float5 float6 float7
-
 $frame attack1 attack2 attack3 attack4 attack5 attack6 attack7 attack8
 $frame attack9 attack10 attack11 attack12 attack13 attack14 attack15
-
 $frame attackb1 attackb2 attackb3 attackb4 attackb5 attackb6 attackb7
-
 $frame pain1 pain2 pain3 pain4 pain5 pain6
-
 $frame death1 death2 death3 death4 death5 death6 death7 death8 death9
 $frame death10 death11 death12 death13 death14 death15 death16 death17
-
 $frame decap1 decap2 decap3 decap4 decap5 decap6 decap7 decap8 decap9
 $frame decap10 decap11 decap12 decap13 decap14 decap15 decap16 decap17
 
-
-//==========================================================================
 //  Warp Magic
-
 // Update 6/2/09:  Circles and Explosion moved to fx.qc.
 // Used by multiple effects.
 
@@ -39,8 +63,8 @@ void() DoCircles = {
 local   vector  startpos, drag, dragto;
 local   float   delta;
 
-// Update 6/6/10:  Fizzle check.
-// Assumes the nemesant is the attacker.  If not, change the conditions!
+    // Update 6/6/10:  Fizzle check.
+    // Assumes the nemesant is the attacker.  If not, change the conditions!
     if (( self.owner.frame >= $pain1 ) || (self.owner.health < 1)) {
         // The spell fizzles!
         super_active = 0;
@@ -67,8 +91,7 @@ local   float   delta;
         remove (self);
         return;
     }
-    if (self.count == 0)
-        self.dmg = -1;
+    if (self.count == 0) self.dmg = -1;
     if (vlen(self.enemy.origin - self.origin) <= 250) {
         dragto = self.origin;
         dragto_z = self.enemy.origin_z;
@@ -105,16 +128,14 @@ void() TrogWarpMagic = {
     }
 };
 
-void() StartTrogMagic =
-{
-// ** Mutual exclusion for trog magic attack so that we
-//    don't overflow space!
+void() StartTrogMagic = {
+    local entity Mcircle, Tboom;
+    local vector spot;
+
+    // Mutual exclusion for trog magic attack so that we don't overflow space!
     super_active = 1;       // Global defined in defs*.qc.
 
-    local   entity  Mcircle, Tboom;
-    local   vector  spot;
-
-// Particle circle drawing entity.
+    // Particle circle drawing entity.
     spot = self.enemy.origin - '0 0 12';
     Mcircle = spawn();
     Mcircle.movetype   = MOVETYPE_NONE;
@@ -125,39 +146,29 @@ void() StartTrogMagic =
     Mcircle.enemy      = self.enemy;
     Mcircle.touch      = SUB_Null;
     Mcircle.nextthink  = time + 0.01;
-    Mcircle.think      = DoCircles;
-//    setmodel (Mcircle, "");
-//    setsize (Mcircle, '0 0 0', '0 0 0');        
-    setorigin (Mcircle, spot);
-    sound (Mcircle, CHAN_WEAPON, "zerstorer/trog/charge.wav", 1, ATTN_NORM);
+    Mcircle.think      = DoCircles;      
+    setorigin(Mcircle, spot);
+    sound(Mcircle, CHAN_WEAPON, "zerstorer/trog/charge.wav", 1, ATTN_NORM);
 
-// Explosion entity.
+    // Explosion entity.
     spot = self.enemy.origin + '0 0 24';
     Tboom = spawn();
     Tboom.movetype   = MOVETYPE_NONE;
     Tboom.solid      = SOLID_NOT;
     Tboom.owner      = self;
     Tboom.enemy      = self.enemy;
-//    Tboom.angles     = VEC_ORIGIN;
     Tboom.touch      = SUB_Null;
     Tboom.nextthink  = time + 1.1;
-    Tboom.think      = TrogWarpMagic;
-//    setmodel (Tboom, "");
-//    setsize (Tboom, '0 0 0', '0 0 0');        
+    Tboom.think      = TrogWarpMagic;       
     setorigin (Tboom, spot);
-
-// Link the two together.
-    Mcircle.trigger_field = Tboom;
+    Mcircle.trigger_field = Tboom; // Link the two together.
 };
 
-
-//==========================================================================
 //  Normal Attacks
 
 // Used by necromancer and nemesant to shove an enemy away.
 // Note:  Skullwiz version use different velocity and damage methods.
-void() ai_repel =
-{
+void() ai_repel = {
     if (!self.enemy)
         return;     // No one to attack.
     if (!InMeleeRange (120))
@@ -268,12 +279,10 @@ void() Nemesant_Missiles = {
 void() Nemesant_FireBall = {M_FireSmart ('16 12 45');};
 
 
-//==========================================================================
 //  Movement and Teleportation
 
 // PM:  Teleport code mostly rewritten from the original.
-void() tele_attack =
-{
+void() tele_attack = {
     local   vector  org, delta;
 
     delta = self.enemy.origin - self.origin;
@@ -636,24 +645,6 @@ void() nemes_die = {
     nemes_death1 ();
 };
 
-// REVIVE - - - - - - - - - - - - - - -
-void() nemes_revive1  =[ $death16, nemes_revive2  ] {self.flags = (self.flags - (self.flags & FL_ONGROUND)) | FL_FLY;};
-void() nemes_revive2  =[ $death15, nemes_revive3  ] {};
-void() nemes_revive3  =[ $death14, nemes_revive4  ] {};
-void() nemes_revive4  =[ $death13, nemes_revive5  ] {};
-void() nemes_revive5  =[ $death12, nemes_revive6  ] {};
-void() nemes_revive6  =[ $death11, nemes_revive7  ] {};
-void() nemes_revive7  =[ $death10, nemes_revive8  ] {};
-void() nemes_revive8  =[ $death9,  nemes_revive9  ] {};
-void() nemes_revive9  =[ $death8,  nemes_revive10 ] {};
-void() nemes_revive10 =[ $death7,  nemes_revive11 ] {};
-void() nemes_revive11 =[ $death6,  nemes_revive12 ] {};
-void() nemes_revive12 =[ $death5,  nemes_revive13 ] {};
-void() nemes_revive13 =[ $death4,  nemes_revive14 ] {};
-void() nemes_revive14 =[ $death3,  nemes_revive15 ] {};
-void() nemes_revive15 =[ $death2,  nemes_revive16 ] {};
-void() nemes_revive16 =[ $death1,  nemes_run1     ] {};
-
 void() monster_nemesant_precache = {
     precache_model ("progs/drake/nemesant.mdl");
     precache_model ("progs/drake/h_nemes.mdl");
@@ -693,7 +684,7 @@ void() monster_nemesant_precache = {
 };
 
 // --> QUAKED monster_nemesant (1 0 0) (-16 -16 -24) (16 16 40) Ambush Boss
-void() monster_nemesant = {
+void() monster_nemesant = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
   
@@ -730,7 +721,7 @@ void() monster_nemesant = {
 };
 
 // SoE entity.
-void() monster_trogboss = {
+void() monster_trogboss = { // [ENTITY]
     self.lip = 0;
     if (self.skin != 2) self.skin = 1;
     if (!self.health) self.health = 1600;
@@ -740,7 +731,7 @@ void() monster_trogboss = {
 };
 
 // Original classname from Zerstorer.
-void() monster_troglodyte = {
+void() monster_troglodyte = { // [ENTITY]
     if (world.model == "maps/coe4.bsp") { // Ugh
 		self.classname = "monster_trogboss";  monster_trogboss();
 	} else {

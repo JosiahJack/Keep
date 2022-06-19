@@ -1,16 +1,48 @@
-/*==============================================================================
-SPIDER (Hexen2 model by Raven Software)
-==============================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD), Kinn, Hexen2
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 
+// Function count: 
+//
+// Implements: Spider
+//
+// Description:
+// A small spider.  AD added stronger version with spit and added poisonous
+// variant.
+//=============================================================================
+
 $frame idle1 idle2 idle3 idle4 idle5 idle6 idle7 idle8
 $frame idle9 idle10 idle11 idle12 idle13
-
 $frame idleup1 idleup2 idleup3 idleup4 idleup5 idleup6 idleup7 idleup8
 $frame idleup9 idleup10 idleup11 idleup12 idleup13
-
 $frame drop1 drop2 drop3 drop4 drop5 drop6
-
 $frame grow1 grow2 grow3 grow4 grow5 grow6 grow7 grow8 grow9 grow10
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8
 $frame walk9 walk10 walk11 walk12 walk13 walk14 walk15 walk16
 
@@ -112,7 +144,6 @@ void(float dist) spider_checkpause =
 	}
 };
 
-//----------------------------------------------------------------------
 void()	spider_run1 =[ $walk1, spider_run2 ] {self.movespeed = 0; monster_idle_sound();spider_checkpause(8);};
 void()	spider_run2 =[ $walk3, spider_run3 ] {monster_footstep(FALSE); spider_checkpause(6);};
 void()	spider_run3 =[ $walk5, spider_run4 ] {spider_checkpause(8);};
@@ -122,7 +153,6 @@ void()	spider_run6 =[ $walk11, spider_run7 ] {monster_footstep(FALSE); spider_ch
 void()	spider_run7 =[ $walk13, spider_run8 ] {spider_checkpause(8);};
 void()	spider_run8 =[ $walk15, spider_run1 ] {spider_checkpause(10);};
 
-//======================================================================
 void()	spider_slide1 =[ $walk1, spider_slide2 ] {ai_run_slide(6); monster_idle_sound();};
 void()	spider_slide2 =[ $walk3, spider_slide3 ] {ai_run_slide(4);};
 void()	spider_slide3 =[ $walk5, spider_slide4 ] {ai_run_slide(6);};
@@ -132,9 +162,7 @@ void()	spider_slide6 =[ $walk11, spider_slide7 ] {ai_run_slide(4);};
 void()	spider_slide7 =[ $walk13, spider_slide8 ] {ai_run_slide(6);};
 void()	spider_slide8 =[ $walk15, spider_run1 ] {ai_run(4);};
 
-//======================================================================
 // SPIDER 2 - ACID SPIT FUNCTIONS (range)
-//======================================================================
 void(float sideang) spider_spitacid =
 {
 	local	vector org, ang, dir, avel;
@@ -160,7 +188,6 @@ void(float sideang) spider_spitacid =
 	Launch_Grenade(org, dir, avel, CT_PROJ_SPID);
 };
 
-//----------------------------------------------------------------------
 void()	spider_spit1	=[	$atkup1,		spider_spit2	] {ai_face();};
 void()	spider_spit2	=[	$atkup5,		spider_spit3	] {ai_face();};
 void()	spider_spit3	=[	$atkup7,		spider_spit4	] {ai_face();};

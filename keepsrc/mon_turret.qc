@@ -1,37 +1,59 @@
-/*
-==============================================================================
-Automated Gun Turret
-by Carl Glave aka. General WarT'
-for Quake: The Apocalypse
-==============================================================================
-*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Carl Glave aka General Wart for Quake: The Apocalypse
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 51
+//
+// Implements: Automated Gun Turret
+//
+// Description:
+// A stationary gun turret that shoots passersby and can be retraced.
+//=============================================================================
 
 $cd apoc/progs/turret
 $origin 0 0 10
 $base base		
 $skin base
-
-// The tilt according to the angle of that frame's gun tilt
-$frame tilt0 tilt6 tilt12 tilt18
+$frame tilt0 tilt6 tilt12 tilt18 // The tilt according to the angle of that frame's gun tilt
 $frame tilt24 tilt30 tilt36 tilt42
 $frame tilt48 tilt54 tilt60 tilt66
 $frame tilt72 tilt78 tilt84 tilt90
-
 $frame retract1 retract2 retract3 retract4 retract5 retract6 retract7
 
-//=============================================================================
-
 // returns the appropriate frame for the passed pitch
-float(float pitch) turret_frame=
-{return floor(pitch/5.625);};
+float(float pitch) turret_frame = { return floor(pitch/5.625); };
 
 // returns the appropriate frame for while firing
-float(float pitch) turret_fireframe=
-{return (turret_frame(pitch) + 23);};
+float(float pitch) turret_fireframe= { return (turret_frame(pitch) + 23); };
 
 // Check to see if the turret will fire
-float() CheckTurretAttack =
-{
+float() CheckTurretAttack = {
 	local vector	spot1, spot2;	
 	local entity	targ;
 	local float		chance;
@@ -444,7 +466,6 @@ void() monster_turret = {
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 	if(self.rotate_type < 0 || self.rotate_type > 90) self.rotate_type = 0;
 	self.currentammo = TRUE;
-
 	if (self.spawnflags & TUR_RETRACT) {
 		self.th_stand = turret_ret1;
 		self.th_walk = turret_ret1;
@@ -456,7 +477,6 @@ void() monster_turret = {
 	self.th_pain = turret_pain;
 	self.th_die = turret_die;
 	self.th_missile = turret_fire1;
-	AddToTotals(self);
 	self.takedamage = DAMAGE_AIM;
     self.hittype    = HIT_METAL;
 	self.ideal_yaw = self.angles * '0 1 0';

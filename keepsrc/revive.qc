@@ -51,6 +51,7 @@ float() monster_revive_finish = { // [FUNCTION]
 		Killed(self,self);
 		return FALSE;
 	}
+	if (self.classmove = MON_MOVEFLY) self.flags = (self.flags - (self.flags & FL_ONGROUND)) | FL_FLY;
 	particle(self.origin,VEC_ORIGIN,9,25);
 	particle(self.origin,VEC_ORIGIN,41,30);
 	//FoundHuntTarget(TRUE); // Setup goals and warn other monsters

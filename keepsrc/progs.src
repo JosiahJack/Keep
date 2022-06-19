@@ -48,13 +48,29 @@
 							//			  documentation.  All tests pass.
 							// N/A Does not apply.
 
+//============================ Overall Mod Notes ==============================
+// You will note that there are some odd tags in the comments on all functions.
+// These are to indicate to external tools or the reader whether the function
+// is an entity.  QC has the odd quirk where every entity is a function and any
+// function can be an entity, with some caveats.  These "Qmaster Tags" as I'm
+// calling them are to indicate, especially to my automatic .fgd generator
+// tool, where and what all the functions are to differentiate.  Please note
+// that of course all hacks still work to give entities the name of a function.
+//
+// '// [FUNCTION]' = Indicates that this function is just a function and to be
+//                   used only for think, touch, utility, etc.
+// '// [ENTITY]'   = Indicates that this function is an entity.
+//
+//
 //=========================== Start of files ==================================
 // progs.src				// REFINED You are looking at it.
 // COPYING.TXT				// N/A GNU GPL v2.0 License
 // qc_highlight.xml			// N/A Handy highlighting for IDE's
-
+//
 //====================== Start of actual mod code =============================
-../progs.dat				// N/A Instruction to place progs.dat file one folder up (`../` is a terminal command, opposite of `cd`)
+../progs.dat				// N/A Instruction to place progs.dat file one
+							// folder up.  `../` is the terminal command for
+							// one folder up.
 
 // Definitions
 //-----------------------------------------------------------------------------

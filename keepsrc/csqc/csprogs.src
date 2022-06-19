@@ -1,11 +1,66 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Qmaster, Arcane Dimensions (AD)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 0
+//
+// Implements: Compile order and what files are included for the csqc
+//
+// Description:
+// This lists each code file to include in the mod's hud csqc.
+// The order is important since the compiler needs to know about functions
+// ahead of time so it can confirm the data types and arguments all match.
+//=============================================================================
+//
+// Comment format:			// STATE Notes	
+// STATEs:					// <Implemented (blank> It works in-game, or should.
+							// REFINED: Tested at one point, formatted to
+							//          standards, removed redundancy, general
+							//          once over check.
+							// FINALIZED: It's done. Add comment header, final
+							//            code cleanups, final comments. Add to
+							//			  documentation.  All tests pass.
+							// N/A Does not apply.
+
+//=========================== Start of files ==================================
+// csprogs.src				// REFINED You are looking at it.
+
 ../../csprogs.dat
-qsextensions.csqc	   // Builtins & lots of extensions available in FTE & QSS.
+qsextensions.csqc	        // Builtins & lots of extensions available in FTE &
+                            // QSS.
 defs.csqc
 math.csqc
-env_sound.csqc         // OpenAL preset reverb zone structs.
-csqc_hud_vanilla.csqc  // HUD code. self-contained, except for qc extensions.
-csqc_scoreboard.csqc   // Code for the deathmatch scoreboard overlay.
-                       // self-contained except for qc extensions
-csqc_legacycompat.csqc // And because non-simple csqc isn't simple, this file
-                       // needed for getting old versions of FTE, or DP to
-                       // behave as well as legacy engines.
+env_sound.csqc              // OpenAL preset reverb zone structs.
+csqc_hud_vanilla.csqc       // HUD code. self-contained, except for qc
+                            // extensions.
+csqc_scoreboard.csqc        // Code for the deathmatch scoreboard overlay.
+                            // Self-contained except for qc extensions
+csqc_legacycompat.csqc      // And because non-simple csqc isn't simple, this
+                            // file needed for getting old versions of FTE, or
+                            // DP to behave as well as legacy engines.

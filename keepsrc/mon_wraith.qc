@@ -523,7 +523,7 @@ void() wraith_magicC7 =[ $magicC7, wraith_magicC8 ] {wraith_nailball('6 16 14',4
 void() wraith_magicC8 =[ $magicC8, wraith_magicC9 ] {wraith_nailball('14 16 10',5);};
 void() wraith_magicC9 =[ $magicC9, wraith_magicC10 ] {wraith_nailball('54 5 6',6);};
 void() wraith_magicC10 =[ $magicC10, wraith_magicC11 ] {
-	wraith_finish_attachment();
+	SUB_FinishAttachments();
 	wraith_firenails('60 4 14');
 };
 void() wraith_magicC11 =[ $magicC11, wraith_magicC12 ] {monster_idle_sound();};
@@ -571,7 +571,6 @@ void(vector eggofs, float eggframe) Setup_WraithEgg =
 	self.attachment.frame = eggframe;
 };
 
-//======================================================================
 // RANGE ATTACK 3 - Cup hands around a spider egg infront and fire
 //
 // Spawn a yellow/green egg ball shape and then drop it towards the player
@@ -588,11 +587,9 @@ void() wraith_magicB8 =[ $magicB8, wraith_magicB9 ] {Setup_WraithEgg('20 2 12',6
 void() wraith_magicB9 =[ $magicB9, wraith_magicB10 ] {
 	self.skin = self.exactskin;	// Not glowing anymore
 	self.alpha = WRAITH_ALPHA;	// Fade out
-	wraith_finish_attachment();
+	SUB_FinishAttachments();
 	Create_Egg('20 2 12');
-	// Particles drifting up slowly from body
-	particle_explode(self.origin, 30, 2, self.part_style, PARTICLE_BURST_UPWARD);
-
+	particle_explode(self.origin, 30, 2, self.part_style, PARTICLE_BURST_UPWARD); // Particles drifting up slowly from body
 };
 void() wraith_magicB10 =[ $magicB10, wraith_magicB11 ] {};
 void() wraith_magicB11 =[ $magicB11, wraith_magicB12 ] {};
@@ -600,40 +597,19 @@ void() wraith_magicB12 =[ $magicB12, wraith_magicB13 ] {ai_face();};
 void() wraith_magicB13 =[ $magicB13, wraith_run1 ] {ai_face();};
 
 void() wraith_magic = {
-	local entity truetarg, miniondef;
+	local entity truetarg;
 	
-	// Make sure the attachments are setup ready
-	wraith_create_attachment();
+	wraith_create_attachment(); // Make sure the attachments are setup ready
 	truetarg = SUB_entEnemyTarget();
-
-	if (self.spawnflags & MON_WRAITH_SPIDERS && !self.minion_active) {
-		// Check for minion template first
-		miniondef = find(world,classname,"monster_wraithminion");
-		if (miniondef.classtype == CT_CACHESPIDER) setup_minionsupport();
-		else {
-			setup_minionsupport(); // Set them up anyways, Qmaster added precaches to main monster_wraith function
-			// If template no available, warn and remove feature
-			// dprint("\b[WRAITH]\b Cannot find spider template!\n");
-			// self.spawnflags = self.spawnflags - MON_WRAITH_SPIDERS;
-		}
-	}
-	if (self.spawnflags & MON_WRAITH_SCORPIONS && !self.minion_active) {
-		// Check for minion template first
-		miniondef = find(world,classname,"monster_wraithminion2");
-		if (miniondef.classtype == CT_CACHESCORPION) setup_minionsupport();
-		else {
-			setup_minionsupport(); // Set them up anyways, Qmaster added precaches to main monster_wraith function
-			// If template no available, warn and remove feature
-			// dprint("\b[WRAITH]\b Cannot find scorpion template!\n");
-			// self.spawnflags = self.spawnflags - MON_WRAITH_SCORPIONS;
-		}
+	if (((self.spawnflags & MON_WRAITH_SPIDERS) || (self.spawnflags & MON_WRAITH_SCORPIONS))
+	    && !self.minion_active) {
+		setup_minionsupport(); // Set them up anyways, Qmaster added precaches to main monster_wraith function
 	}
 	
 	// Is the target the player or monster?
 	if (truetarg.flags & FL_CLIENT) {
 		if (self.spawnflags & (MON_WRAITH_SPIDERS | MON_WRAITH_SCORPIONS)) {
-			// Calculate a flat vector to ignore Z axis difference
-			self.enemydist = range_distance(self.enemy, TRUE);
+			self.enemydist = range_distance(truetarg, TRUE); // Calculate a flat vector to ignore Z axis difference
 			// If the player is too close (melee distance) try old base attack
 			if (self.minion_baseattack > 0 && self.enemydist < MON_RANGE_MELEE) wraith_nails1();
 			else {
@@ -641,17 +617,10 @@ void() wraith_magic = {
 				if (query_minionactive(self) == TRUE) wraith_minion1();
 				else wraith_nails1();
 			}
-		}
-		// First ever attack is the fire debuff
-		else if (self.attack_speed < time) {
-			if (self.spawnflags & WRAITH_NOFIREDEBUFF) {
-				wraith_nails1();
-			} else {
-				wraith_debuff1();
-			}
-		}
-		// Does the player have the debuff already?
-		else if (truetarg.burning) wraith_nails1();
+		} else if (self.attack_speed < time) { // First ever attack is the fire debuff
+			if (self.spawnflags & WRAITH_NOFIREDEBUFF) wraith_nails1();
+			else wraith_debuff1();
+		} else if (truetarg.burning) wraith_nails1(); // Does the player have the debuff already?
 		else {
 			// Greater chance of debuff attack first
 			if (self.spawnflags & WRAITH_NOFIREDEBUFF) {
@@ -662,12 +631,9 @@ void() wraith_magic = {
 			}
 		}
 		self.attack_speed = LARGE_TIMER;
-	}
-	// Always attack monsters with nails
-	else wraith_nails1();
+	} else wraith_nails1(); // Always attack monsters with nails
 };
 
-//============================================================================
 // Pain A - Short flinch backwards
 void() wraith_painA1 = [ $painA1, wraith_painA2 ] {};
 void() wraith_painA2 = [ $painA2, wraith_painA3 ] {};
@@ -676,7 +642,6 @@ void() wraith_painA4 = [ $painA4, wraith_painA5 ] {};
 void() wraith_painA5 = [ $painA5, wraith_painA6 ] {};
 void() wraith_painA6 = [ $painA6, wraith_run1 ] {};
 
-//----------------------------------------------------------------------
 // Pain B - Long motion of being hit several times
 void() wraith_painB1 = [ $painB1, wraith_painB2 ] {};
 void() wraith_painB2 = [ $painB2, wraith_painB3 ] {};
@@ -690,18 +655,14 @@ void() wraith_painB9 = [ $painB9, wraith_painB10 ] {};
 void() wraith_painB10 = [ $painB10, wraith_painB11 ] {};
 void() wraith_painB11 = [ $painB11, wraith_run1 ] {};
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) wraith_pain =
-{
+void(entity inflictor, entity attacker, float damage) wraith_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
 	// Make sure fire wraith skin/alpha is reset on pain/death
 	self.skin = self.exactskin;
 	self.alpha = WRAITH_ALPHA;
-	
-	// Hide any attachments
-	wraith_finish_attachment();
+	SUB_FinishAttachments(); // Hide any attachments
 	
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
@@ -723,7 +684,6 @@ void(entity inflictor, entity attacker, float damage) wraith_pain =
 	}
 };
 
-//============================================================================
 void() wraith_death2 =[ $death2, wraith_death3] {};
 void() wraith_death3 =[ $death3, wraith_death4] {};
 void() wraith_death4 =[ $death4, wraith_death5] {};
@@ -732,8 +692,7 @@ void() wraith_death7 =[ $death7, wraith_death9] {};
 void() wraith_death9 =[ $death9, wraith_death11] {};
 void() wraith_death11 =[ $death11, wraith_death13] {};
 void() wraith_death13 =[ $death13, wraith_death15] {};
-void() wraith_death15 =[ $death15, wraith_death15]
-{
+void() wraith_death15 =[ $death15, wraith_death15] {
 	// Throw gibs, but create more XY outward velocity
 	self.max_health = MON_XYGIBVELOCITY;
 	monster_ThrowGib();
@@ -768,8 +727,6 @@ void() wraith_die = {
 	self.skin = self.exactskin; // Make sure fire wraith skin/alpha is reset on pain/death
 	self.alpha = WRAITH_ALPHA;
 	SUB_RemoveAttachments(); // Make sure any attachments are removed
-
-
 	self.flags = self.flags | FL_FLY; // Make sure body stays floating up where
 									  // it finally dies and do not drop to the
 									  // ground (reset by monster_death_use).
@@ -842,10 +799,10 @@ void() monster_wraith = { // [ENTITY]
 	self.th_pain = wraith_pain;
 	self.th_die = wraith_die;
 	if (self.deathstring == "") self.deathstring = " was shattered by a Wraith\n";
-
-	// Cannot be both scorpion and spider minion spawner, def=spider
-	if (self.spawnflags & MON_WRAITH_SCORPIONS && self.spawnflags & MON_WRAITH_SPIDERS)
-		self.spawnflags = self.spawnflags - MON_WRAITH_SCORPIONS;
+	if ((self.spawnflags & MON_WRAITH_SCORPIONS)
+		&& (self.spawnflags & MON_WRAITH_SPIDERS)) {
+		self.spawnflags = self.spawnflags - MON_WRAITH_SCORPIONS; // Cannot be both, default to spiders.
+	}
 	
 	// Setup each wraith type with different skins/particles
 	if (self.spawnflags & MON_WRAITH_SCORPIONS) {
@@ -863,7 +820,7 @@ void() monster_wraith = { // [ENTITY]
 			self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
 		}
 		self.exactskin = WRAITH_SKINGREEN;				// Poison/Green skin
-		if (self.poisonous < 0) self.poisonous = FALSE;	// Poison debuff
+		if (self.poisonous < 0) self.poisonous = FALSE;	// Poison debuff override
 		else self.poisonous = TRUE;
 		self.part_style = PARTICLE_BURST_GREEN;			// Poison cloud
 	} else {
@@ -871,7 +828,7 @@ void() monster_wraith = { // [ENTITY]
 		self.poisonous = FALSE;				// Must be off for fire wraith
 		self.part_style = PARTICLE_BURST_FIRE;
 	}
-		
+
 	self.classtype = CT_MONWRAITH;
 	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEFLY;

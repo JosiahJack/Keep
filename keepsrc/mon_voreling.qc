@@ -1,34 +1,59 @@
-// VORELINGS (Originally from Quoth - Kell/Necros/Preach)
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Quoth, Arcane Dimensions (AD), Kell, Necros, Preach
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 121
+//
+// Implements: Voreling
+//
+// Description:
+// A baby vore that bites your kneecaps off, can start hanging from the
+// ceiling, and can be found in all sorts of places such as inside breakables.
+//
+// AD added the growing effect when spawning from an egg as a minion dropped by
+// momma vores.  AD also added large purple variant that attacks with toxic
+// (poisonous) spit.
+//=============================================================================
+
 $frame idle1 idle2 idle3 idle4 idle5 idle6 idle7 idle8
 $frame idle9 idle10 idle11 idle12 idle13
-
 $frame idleup1 idleup2 idleup3 idleup4 idleup5 idleup6 
-
 $frame drop1 drop2 drop3 drop4 drop5
-
 $frame grow1 grow2 grow3 grow4 grow5 grow6 grow7 grow8 grow9 grow10
-
 $frame walk1 walk2 walk3 walk4 walk5
-
 $frame run1 run2 run3 run4
-
-// Jumping up
-$frame jump1 jump2 jump3 jump4 jump5 jump6
-
-// Bite attack
-$frame bite1 bite2 bite3 bite4 bite5 bite6 bite7
-
-// Extremely short pain set
-$frame pain1 pain2
-
-// fall over and die
-$frame death1 death2 death3 death4 death5 death6
-
-// body flies up and then back to the ground
-$frame deathB1 deathB2 deathB3 deathB4 deathB5 deathB6 deathB7
-
-// Not used, modelling templates
-$frame base1 base2
+$frame jump1 jump2 jump3 jump4 jump5 jump6 // Jumping up
+$frame bite1 bite2 bite3 bite4 bite5 bite6 bite7 // Bite attack
+$frame pain1 pain2 // Extremely short pain set
+$frame death1 death2 death3 death4 death5 death6 // fall over and die
+$frame deathB1 deathB2 deathB3 deathB4 deathB5 deathB6 deathB7 // body flies up and then back to the ground
+$frame base1 base2 // Not used, modelling templates
 
 void()	voreling_idle1	=[	$idle1,	voreling_idle2	] {monster_idle_sound();ai_stand();};
 void()	voreling_idle2	=[	$idle2,	voreling_idle3	] {ai_stand();};
@@ -494,7 +519,7 @@ void() monster_shalrathminion = {
 	monster_voreling();
 };
 
-void() setup_voreling = {
+void() setup_voreling = { // [ENTITY]
 	self.solid = SOLID_NOT;				// No interaction with world
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	if (self.bboxtype < 1) self.bboxtype = BBOX_TINY;

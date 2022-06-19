@@ -1,35 +1,66 @@
-/*
- * Copyright (c) 2016-2020 Marco Hladik <marco@icculus.org>
- *
- * Permission to use, copy, modify, and distribute this software for any
- * purpose with or without fee is hereby granted, provided that the above
- * copyright notice and this permission notice appear in all copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
- * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
- * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
- * WHATSOEVER RESULTING FROM LOSS OF MIND, USE, DATA OR PROFITS, WHETHER
- * IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
- * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- */
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Marco Hladik
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 0
+// Function count: 3
+//
+// Implements: Math Utilities
+//
+// Description:
+// Utilities for performing mathematical calculations.
+//
+//
+// Copyright (c) 2016-2020 Marco Hladik <marco@icculus.org>
+//
+// Permission to use, copy, modify, and distribute this software for any
+// purpose with or without fee is hereby granted, provided that the above
+// copyright notice and this permission notice appear in all copies.
+//
+// THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+// WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+// ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+// WHATSOEVER RESULTING FROM LOSS OF MIND, USE, DATA OR PROFITS, WHETHER
+// IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+// OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+//=============================================================================
 
-float
-Math_LerpAngle(float fStart, float fEnd, float fAmount)
-{
+float Math_LerpAngle(float fStart, float fEnd, float fAmount) {
 	float shortest_angle = ((((fEnd - fStart) % 360) + 540) % 360) - 180;
 	return shortest_angle * fAmount;
 }
 
-float
-Math_Lerp(float fA, float fB, float fPercent)
-{
+float Math_Lerp(float fA, float fB, float fPercent) {
 	return (fA * (1 - fPercent)) + (fB * fPercent);
 }
 
-float
-Math_FixDelta(float fDelta)
-{
+float Math_FixDelta(float fDelta) {
 	if (fDelta >= 180) {
 		fDelta -= 360;
 	} else if (fDelta <= -180) {
@@ -38,8 +69,6 @@ Math_FixDelta(float fDelta)
 	return fDelta;
 }
 
-vector
-Math_Reflect(vector v1, vector v2)
-{
+vector Math_Reflect(vector v1, vector v2) {
 	return v1 - 2 * dotproduct(v1, v2) * v2;
 }

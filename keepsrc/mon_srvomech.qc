@@ -1,6 +1,42 @@
-// SERVOMECH, MONSTER by Carl Glave (General WarT)
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Carl Glave aka General WarT
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 3
+// Function count: 159
+//
+// Implements: Servomech
+//
+// Description:
+// A robotic mech.  Either a standalone monster or player controllable from an
+// in world terminal via trigger_servomech which is activates when targetted.
+//=============================================================================
 
-// the servomech lasers
 void(vector src, vector dir, float lsrdamage) FireLaser = {
 	local vector vel, org;
 	local vector src;
@@ -18,9 +54,7 @@ void(vector src, vector dir, float lsrdamage) FireLaser = {
 
 		T_Damage (trace_ent, self, self, lsrdamage);
 		SpawnBlood (org, vel*0.2, lsrdamage, trace_ent,0);
-	}
-	else if(trace_fraction != 1)
-	{
+	} else if(trace_fraction != 1) {
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 		WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
 		WriteCoord (MSG_BROADCAST, org_x);
@@ -41,27 +75,21 @@ void(vector src, vector dir, float lsrdamage) FireLaser = {
 	WriteCoord (MSG_BROADCAST, trace_endpos_z);
 };
 
-//=======================================================================
 
-float(float pitch) servobod_frame =
-{return 15 + floor(pitch/5.3333);};
+float(float pitch) servobod_frame = {return 15 + floor(pitch/5.3333);};
 
-float(float pitch) servobod_fireframe =
-{return 46 + floor(pitch/5.3333);};
+float(float pitch) servobod_fireframe = {return 46 + floor(pitch/5.3333);};
 
-float(float pitch) servobod_rightfireframe =
-{return 77 + floor(pitch/5.3333);};
+float(float pitch) servobod_rightfireframe = {return 77 + floor(pitch/5.3333);};
 
-float(float pitch) servobod_leftfireframe =
-{return 108 + floor(pitch/5.3333);};
+float(float pitch) servobod_leftfireframe = {return 108 + floor(pitch/5.3333);};
 
 float SERVOBOD_NONE = 0;
 float SERVOBOD_BOTH = 1;
 float SERVOBOD_RIGHT = 2;
 float SERVOBOD_LEFT = 3;
 
-void() servo_bodthink =
-{
+void() servo_bodthink = {
 	local entity bod, tmpent;
 	local vector tmpvec;
 
@@ -790,10 +818,7 @@ void() cservo_turn17 =[ 17, cservo_turn18]
 void() cservo_turn18 =[ 18, cservo_turn1]
 {self.pos1 = '0 0 10.8'; cservo_bodthink();cservo_think();};
 
-//=======================================================================
-
-void(entity attacker, float damage) cservo_pain=
-{
+void(entity attacker, float damage) cservo_pain= {
 	local float tmpflt;
 
 	if(self.pain_finished < time)
@@ -961,14 +986,12 @@ void() cservo_apply_controlls = {
 	self.frame = 0;
 };
 
-//=======================================================================
 
 //entity currcheckmech; // the current controlled servomech to check for attacking.
 
 // now also has added targeting for the assasin and the mech
 // so that bugs will attack them as well
-void() cmech_attselect=
-{
+void() cmech_attselect = {
 	self.nextthink = time + 0.1;
 
 	while(1)
@@ -988,9 +1011,7 @@ void() cmech_attselect=
 };
 
 
-//=======================================================================
-void() cservo_setup=
-{
+void() cservo_setup = {
 	local entity tmpent;
 
 	self.origin_z = self.origin_z + 1;	// raise off floor a bit
@@ -1018,7 +1039,7 @@ void() cservo_setup=
 	}
 };
 
-void() func_servomech= {
+void() func_servomech = { // [ENTITY]
 	local entity bodent, legsent, pitent;
 	local entity cmechatt;
 
@@ -1106,10 +1127,7 @@ void() func_servomech= {
 	}
 };
 
-//=======================================================================
-
-void() trigger_servomech_use=
-{
+void() trigger_servomech_use = { // [ENTITY]
 	local entity contmech;
 
 	contmech = find(world, targetname, self.target);
@@ -1128,7 +1146,7 @@ void() trigger_servomech_use=
 	sprint(activator, "No servomech responded.\n");
 };
 
-void() trigger_servomech = {
+void() trigger_servomech = { // [ENTITY]
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 

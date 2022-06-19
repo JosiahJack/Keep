@@ -1,3 +1,50 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Matt Peckham, Eric Sage, John Zwicker all of Virtus Corporation
+//               1997, Macmillan Digital Publishing, as a part of the extras on
+//               the CD for the Deathmatch Maker for Quake.
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 3
+// Function count: 56
+//
+// Implements: Virtus Wyrm
+//
+// Description:
+// The large lava worm boss from the Virtus Deathmatch Maker example maps.
+// This is basically a model replacement for Chthon, but has the ability to go
+// underlava and resurface in a random spot at an info_boss_spot.
+//
+// "When playing the Virtus episode examples that are installed, notice the new
+// end bad guy the lava worm that we threw into this level for your enjoyment."
+//   -- from the Virtus Deathmatch Maker Example guide, refer to near the end of
+//      keep/credits/readme_virtus_exampleguide.txt
+//=============================================================================
+
 void(vector p) newboss_missile;
 
 entity() FindNewBossSpot = {
@@ -226,7 +273,22 @@ void(entity inflictor, entity attacker, float damage) newboss_damage = {
 void() newboss_finale2 = {
 	if (!(self.spawnflags & 2)) {
 		WriteByte(MSG_ALL, SVC_FINALE);
-		//if (!self.message) self.message = "Designers & Artists:\nIntroduction - Eric Sage\nMunitions Warehouse - Eric Sage\nResearch Lab - John Zwicker\nMax Security Prison - Chris Haire\nUnderground Testing Station - \nKristian Hawkinson\nStation Omega - Eric Sage\nSubway Station - Bryan Baldwin\nThe BackAlleys - Eric Sage\nOffice Park - Sean Conlon\nFinal Confrontation - \nKristian Hawkinson, Eric Sage\nNew Textures - Brenda Lo, Eric Sage\n3D Content - Matt Peckham\nThe Wyrm - Eric Sage, John Zwicker";
+		//if (!self.message) self.message = "Designers & Artists:\n
+		//                                   Introduction - Eric Sage\n
+		//                                   Munitions Warehouse - Eric Sage\n
+		//                                   Research Lab - John Zwicker\n
+		//                                   Max Security Prison - Chris Haire\n
+		//                                   Underground Testing Station - \n
+		//                                   Kristian Hawkinson\n
+		//                                   Station Omega - Eric Sage\n
+		//                                   Subway Station - Bryan Baldwin\n
+		//                                   The BackAlleys - Eric Sage\n
+		//                                   Office Park - Sean Conlon\n
+		//                                   Final Confrontation - \n
+		//                                     Kristian Hawkinson, Eric Sage\n
+		//                                   New Textures - Brenda Lo, Eric Sage\n
+		//                                   3D Content - Matt Peckham\n
+		//                                   The Wyrm - Eric Sage, John Zwicker";
 		WriteString(MSG_ALL, self.message2);
 	}
 	remove(self);
@@ -250,7 +312,9 @@ void() newboss_finale = {
 		}
 	
 		WriteByte(MSG_ALL, SVC_FINALE);
-		//WriteString(MSG_ALL, "Congratulations! You have completed the\ndemo episodes created for you\nby Virtus!\nNow your mission is to create\nyour own nightmare!\n");
+		//WriteString(MSG_ALL, "Congratulations! You have completed the\ndemo
+		//                      episodes created for you\nby Virtus!\nNow your
+		//                      mission is to create\nyour own nightmare!\n");
 		WriteString(MSG_ALL, self.message);
 		pl = find(world, classname, "player");
 		while (pl != world) {
@@ -379,7 +443,7 @@ void() monster_newboss = {
 	if (self.health < 1) self.health = 1800;
 	self.th_run = SUB_Null;
 	self.max_health = self.health;
-	if (self.deathstring == "") self.deathstring = " was destroyed by a Virtus Worm\n";
+	if (self.deathstring == "") self.deathstring = " was destroyed by a Virtus Wyrm\n";
 	self.th_die = newboss_death1;
 	self.th_pain = newboss_damage;
 	self.classtype = CT_MONVIRTUS;
@@ -391,7 +455,7 @@ void() monster_newboss = {
 
 	// No targetname = no trigger!
 	if (self.targetname == "") {
-		dprint("\b[VIRTUS]\b Missing targetname! Spawning right away then.\n");
+		dprint("\b[monster_virtus]\b Missing targetname! Spawning right away then.\n");
 		newboss_awake();
 		return;
 	}

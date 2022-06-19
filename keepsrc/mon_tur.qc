@@ -1,3 +1,42 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Operation Urth Majik (OUM)
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 11
+//
+// Implements: Turret
+//
+// Description:
+// A stationary gun turret that fires either lasers or perforator nails.  This
+// is essentially like a trap_spikeshooter but it can track and aim at you.
+//=============================================================================
+
 void() start_monster_tur;
 void() tur_aim;
 void() tur_run;
@@ -217,14 +256,14 @@ void() monster_tur = {
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	if (!deathmatch) AddToTotals(self);	
-	if (self.deathstring == "") self.deathstring = " was blasted by a Turret\n";
+	if (self.deathstring == "") self.deathstring = " was blasted by a Turret\n";\
+	self.mdl = "progs/oum/aagba.mdl";
 	self.gib1mdl = "progs/gib1.mdl";
 	self.gib2mdl = "progs/gib2.mdl";
 	self.gib3mdl = "progs/gib3.mdl";
 	self.oldorigin = self.origin;
 	if (!(self.health)) self.health = 200;
 	self.max_health = self.health;
-	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
 	v1 = self.angles_y * '0 1 0' + '-20 0 0';
 	makevectors(v1);
 	self.movedir = v_forward;

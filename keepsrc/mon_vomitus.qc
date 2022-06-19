@@ -1,31 +1,55 @@
-/*
-==============================================================================
-
-VOMITUS
-
-==============================================================================
-*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Qmaster, id1, Drake by Patrick Martin
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 3
+// Function count: 104
+//
+// Implements: Vomitus
+//
+// Description:
+// The vomitus monster, originally part of qtest and implemented in various
+// mods in various fashions.  This one is from Drake and seems to be the best.
+//=============================================================================
 
 $cd id1/models/vomitus
 $origin 0 0 24
 $base base        
 $skin skin
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9 walk10
 $frame walk11 walk12 walk13 walk14 walk15 walk16 walk17 walk18 walk19
 $frame walk20 walk21 walk22 walk23 walk24 walk25
-
 $frame run1 run2 run3 run4 run5 run6 run7 run8
-
 $frame attack1 attack2 attack3 attack4 attack5 attack6 attack7 attack8
 $frame attack9 attack10 attack11 attack12 attack13
-
 $frame pain1 pain2 pain3
-
 $frame death1 death2 death3 death4 death5 death6 death7 death8 death9
 $frame death10 death11 death12 death13 death14 death15
-
-//==========================================================================
 
 // Vomitus attacks are placed here since they may be called during a
 // non-attack animation scene.
@@ -35,8 +59,8 @@ void(float no) Vomit_Meat = {
     local   vector  org, dir, err;
     local   float   side, up;
 
-    err = '0 0 0';
-    if (no) {
+    err = VEC_ORIGIN;
+    if (no > 0) {
         if (random() < no) return;
         err_x = 10;
     }
@@ -44,88 +68,74 @@ void(float no) Vomit_Meat = {
     up = random() * 300;
     makevectors (self.angles);
     org = self.origin + v_forward*20 + v_right*side - v_up*6;
-    // dir = Maim_Toss (org, self.enemy.origin, 800, up, world, err);
 	dir = (self.enemy.origin - org);
 	dir = normalize(dir);
 	dir = dir + err;
 
     up = random();
     Meat_Launch (org, dir);
-    if (up < 0.2)
-        setmodel (newmis, "progs/gib1.mdl");
+    if (up < 0.2) setmodel (newmis, "progs/gib1.mdl");
     else { // Bigger gibs...
         newmis.dmg = random() * 15 + 15;
-        if (up < 0.4)
-            setmodel (newmis, "progs/ad181/h_zombie.mdl");
-        else if (up < 0.7)
-            setmodel (newmis, "progs/gib2.mdl");
-        else
-            setmodel (newmis, "progs/gib3.mdl");
+        if (up < 0.4) setmodel (newmis, "progs/ad181/h_zombie.mdl");
+        else if (up < 0.7) setmodel (newmis, "progs/gib2.mdl");
+        else setmodel (newmis, "progs/gib3.mdl");
     }
-    setsize (newmis, '0 0 0', '0 0 0');
+    setsize(newmis,VEC_ORIGIN, VEC_ORIGIN);
 };
 
 // Spews forth a tarbaby.
 void() Vomit_Spawn = {
-	local entity oself;
-	local entity newSpawn;
+    // 100% chance of vomiting meat when we've spit up all our minion spawns.
+	if (self.minion_count >= self.minion_maxcount) { Vomit_Meat(0); return; }
 
-	dprint("Vomiting with minioncount of: ");
-	dprint(ftos(self.minion_count));
-	dprint(", and minion_maxcount of: ");
-	dprint(ftos(self.minion_maxcount));
-	dprint("\n");
-	if (self.minion_count >= self.minion_maxcount) {
-		Vomit_Meat(0);
-		return;
-	}
 	self.minion_count = self.minion_count + 1;
-	newSpawn = spawn();
-	sound (newSpawn, CHAN_VOICE, "rogue/blob/mytosis.wav", 1, ATTN_NORM);
-	newSpawn.classname = "monster_tarbaby";
-	newSpawn.classtype = CT_MONSPAWN;
-	newSpawn.classgroup = CG_SPAWN;
-	newSpawn.movetype = MOVETYPE_STEP;
-	newSpawn.classmove = MON_MOVEWALK;
-	newSpawn.resist_shells = newSpawn.resist_nails = 0;
-	newSpawn.resist_rockets = newSpawn.resist_cells = 0;
-	newSpawn.gibhealth = MON_NEVERGIB;		// Cannot be gibbed by weapons
-	newSpawn.bboxtype = BBOX_TALL;
-	newSpawn.gibbed = FALSE;
-	newSpawn.pain_flinch = 20;
-	newSpawn.death_dmg = DAMAGE_TARBABY;
-	newSpawn.health = 80;
-	newSpawn.owner = newSpawn.master = self;
-	newSpawn.death_sound = "blob/death1.wav";
-	newSpawn.idle_sound = "blob/sight1.wav";
-	newSpawn.sight_sound = self.idle_sound;
-	newSpawn.pain_sound = self.idle_sound;
-	newSpawn.solid = SOLID_SLIDEBOX;
-	newSpawn.takedamage = DAMAGE_AIM;
-	newSpawn.skin = self.skin;
-	newSpawn.lastorigin = newSpawn.origin;           
-    newSpawn.angles_x   = 0;
-    newSpawn.angles_y   = self.angles_y;
-    newSpawn.angles_z   = 0;
-    newSpawn.fixangle   = TRUE;
-	newSpawn.th_stand = tbaby_stand1;
-	newSpawn.th_walk = tbaby_walk1;
-	newSpawn.th_run = tbaby_run1;
-	newSpawn.th_jump = tbaby_jump1;
-	newSpawn.th_jumpexit = tbaby_jump5;
-	newSpawn.th_missile = tbaby_jump1;
-	newSpawn.th_melee = tbaby_jump1;
-	newSpawn.th_die = tbaby_die1;
-	newSpawn.th_pain = tbaby_pain;
+	newmis = spawn();
+	sound(newmis,CHAN_VOICE,"rogue/blob/mytosis.wav",1,ATTN_NORM);
+	newmis.classname = "monster_tarbaby";
+	newmis.classtype = CT_MONSPAWN;
+	newmis.classgroup = CG_SPAWN;
+	newmis.movetype = MOVETYPE_STEP;
+	newmis.classmove = MON_MOVEWALK;
+	newmis.resist_shells = newmis.resist_nails = 0;
+	newmis.resist_rockets = newmis.resist_cells = 0;
+	newmis.gibhealth = MON_NEVERGIB;		// Cannot be gibbed by weapons
+	newmis.bboxtype = BBOX_TALL;
+	newmis.gibbed = FALSE;
+	newmis.pain_flinch = 20;
+	newmis.death_dmg = DAMAGE_TARBABY;
+	newmis.health = 80;
+	newmis.owner = newmis.master = self;
+	newmis.death_sound = "blob/death1.wav";
+	newmis.idle_sound = "blob/sight1.wav";
+	newmis.sight_sound = self.idle_sound;
+	newmis.pain_sound = self.idle_sound;
+	newmis.solid = SOLID_SLIDEBOX;
+	newmis.takedamage = DAMAGE_AIM;
+	newmis.skin = self.skin;
+	newmis.lastorigin = newSpawn.origin;           
+    newmis.angles_x   = 0;
+    newmis.angles_y   = self.angles_y;
+    newmis.angles_z   = 0;
+    newmis.fixangle   = TRUE;
+	newmis.th_stand = tbaby_stand1;
+	newmis.th_walk = tbaby_walk1;
+	newmis.th_run = tbaby_run1;
+	newmis.th_jump = tbaby_jump1;
+	newmis.th_jumpexit = tbaby_jump5;
+	newmis.th_missile = tbaby_jump1;
+	newmis.th_melee = tbaby_jump1;
+	newmis.th_die = tbaby_die1;
+	newmis.th_pain = tbaby_pain;
 	// Override normal ai with flying ai, since it is launched out of vomitus.
-    newSpawn.enemy      = self.enemy;
+    newmis.enemy = self.enemy;
 	monster_bbox();
-	setmodel (newSpawn, "progs/qmaster/mon_tarbaby.mdl");
-	setorigin (newSpawn, self.origin);
-	setsize (newSpawn, '-16 -16 -24', '16 16 40');
-	newSpawn.think = tbaby_jump5;
-	newSpawn.nextthink = time + 0.05;
-	AddToTotals(self);
+	setmodel (newmis, "progs/qmaster/mon_tarbaby.mdl");
+	setorigin (newmis, self.origin);
+	setsize (newmis, '-16 -16 -24', '16 16 40');
+	newmis.think = tbaby_jump5;
+	newmis.nextthink = time + 0.05;
+	AddToTotals(newmis);
 };
 
 // Vomitus chews on the target.
@@ -162,58 +172,17 @@ float(entity targ) IsZombieDown = {
     return FALSE;
 };
 
-// Crushes all nearby corpses into edible gibs.
-// Any damage done to achieve this is given back as health to vomitus.
+// Crushes all nearby corpses into edible gibs, healing vomitus.
 void() Vomit_Crush = {
-    local   entity  head, next, swap;
-    local   float   hp, gh;
-
-// Note:  45 is approximately 32 * sqrt(2).
-    head = QC_FindRadius (self.origin, 45);     // Picks up solid_not.
-    while (head) {
-        next = head.chain;  // We may remove head so get the next in line.
-
-        if (head.flags & FLx_CREATURE)
-        if (head.takedamage)    // Corpses can take damage in Drake.
-        if (head != self) {
-            // Crush the body into gibs it can eat.
-            if (head.deadflag == DEAD_DEAD) {
-                if (head.gibhealth != MON_NEVERGIB) {
-                    gh = head.gibhealth - 1;
-                    hp = head.health - gh;
-                    // Modified T_Heal rejects numbers under 1, so no need to fix.
-                    swap = self;
-                    self = head;
-                    self.health = gh;
-                    // if (self.th_gib (0))    // Use 0 to minimize gib velocity.
-                    // {
-                        // self.th_gib = world.null_func;
-                        T_Heal (swap, hp, TRUE);    // Can exceed max hp.
-                    // }
-                    self = swap;
-                }
-            } else {
-                if (IsZombieDown (head)) {
-					// Devour fallen zombies.
-                    T_Heal (self, head.health, TRUE);
-					T_Damage (head, self, self, self.health+1, NOARMOR);
-                }
-            }
-//            if (self.enemy == head)
-//                {self.enemy = world;  self.gorging = FALSE;}
-        }
-        head = next;
-    }
+    if (GibFloorBody(self.origin,100)) T_Heal(self,30,TRUE); // Can exceed max.
 };
 
-// TODO:  Have vomitus scan for corpses, go to them, and devour them.
 void() ai_vomit_stand = { Vomit_Crush(); ai_stand(); };
 void(float dist) ai_vomit_walk = { Vomit_Crush(); ai_walk(dist); };
 void(float dist) ai_vomit_run  = {
-    local   float   close;
+    local float close;
 
-    close = QC_CloseEnough (dist);
-
+    close = QC_CloseEnough(dist);
     Vomit_Crush();
     if (close) {
 	   if (self.gorging) {

@@ -205,7 +205,7 @@ void(float blframe, float blalpha) wolf_blur = {
 
 // Wolf Sword Melee.
 void() wolf_melee = {
-	local float ldmg oldrange;
+	local float ldmg, oldrange;
 
 	if (!self.enemy) return; // Removed before stroke
 

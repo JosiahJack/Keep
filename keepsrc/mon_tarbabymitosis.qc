@@ -1,6 +1,66 @@
-void(entity inflictor, entity attacker, float damage) tbaby_mitosis;
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Rogue
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 2
+//
+// Implements: Mitosis Spawn
+//
+// Description:
+// A green gelatinous blob that splits into two.  Otherwise just like a normal
+// spawn and explodes on death.
+//=============================================================================
 
-void() tbaby_checknew = {
+void() tbaby_checknew;
+
+void(entity inflictor, entity attacker, float damage) tbaby_mitosis = { // [FUNCTION]
+	local entity newSpawn;
+	
+	if ( random() < 0.35 ) {
+		newSpawn = spawn();
+		newSpawn.classname = self.classname;
+		newSpawn.movetype = MOVETYPE_STEP;
+		setsize (newSpawn, '-16 -16 -24', '16 16 40');
+		newSpawn.health = 100;
+		newSpawn.owner = self;
+		self.th_pain = SUB_Null_pain;
+		setmodel (newSpawn, self.owner.mdl);
+		newSpawn.solid = SOLID_SLIDEBOX;
+		newSpawn.skin = self.skin;
+		setorigin (newSpawn, self.origin);              
+		newSpawn.think = tbaby_checknew;
+		newSpawn.nextthink = time + 0.5;
+        sound (newSpawn, CHAN_VOICE, "rogue/blob/mytosis.wav", 1, ATTN_NORM);
+	}
+};
+
+void() tbaby_checknew = { // [FUNCTION]
 	if (!walkmove(0,0)) { remove(self); return; }
 	
 	self.enemy = self.enemy;
@@ -39,28 +99,7 @@ void() tbaby_checknew = {
 	AddToTotals(self);
 };
 
-void(entity inflictor, entity attacker, float damage) tbaby_mitosis = {
-	local entity newSpawn;
-	
-	if ( random() < 0.35 ) {
-		newSpawn = spawn();
-		newSpawn.classname = self.classname;
-		newSpawn.movetype = MOVETYPE_STEP;
-		setsize (newSpawn, '-16 -16 -24', '16 16 40');
-		newSpawn.health = 100;
-		newSpawn.owner = self;
-		self.th_pain = SUB_Null_pain;
-		setmodel (newSpawn, self.owner.mdl);
-		newSpawn.solid = SOLID_SLIDEBOX;
-		newSpawn.skin = self.skin;
-		setorigin (newSpawn, self.origin);              
-		newSpawn.think = tbaby_checknew;
-		newSpawn.nextthink = time + 0.5;
-        sound (newSpawn, CHAN_VOICE, "rogue/blob/mytosis.wav", 1, ATTN_NORM);
-	}
-};
-
-void() monster_tarbaby_mitosis = {
+void() monster_tarbaby_mitosis = { // [ENTITY]
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/qmaster/mon_tarbaby.mdl";

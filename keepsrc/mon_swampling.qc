@@ -1,38 +1,55 @@
-/*==============================================================================
-SWAMPLINGS (Based on Voreling from Quoth - Kell/Necros/Preach)
-==============================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD), Quoth, Kell, Necros, Preach
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 73
+//
+// Implements: Swampling
+//
+// Description:
+// A slimy voreling.  Large variant has poisonous spit.
+//=============================================================================
+
 $frame idle1 idle2 idle3 idle4 idle5 idle6 idle7 idle8
 $frame idle9 idle10 idle11 idle12 idle13
-
 $frame idleup1 idleup2 idleup3 idleup4 idleup5 idleup6 
-
 $frame drop1 drop2 drop3 drop4 drop5
-
 $frame grow1 grow2 grow3 grow4 grow5 grow6 grow7 grow8 grow9 grow10
-
 $frame walk1 walk2 walk3 walk4 walk5
-
 $frame run1 run2 run3 run4
+$frame jump1 jump2 jump3 jump4 jump5 jump6 // Jumping up
+$frame bite1 bite2 bite3 bite4 bite5 bite6 bite7 // Bite attack
+$frame pain1 pain2 // Extremely short pain set
+$frame death1 death2 death3 death4 death5 death6 // fall over and die
+$frame deathB1 deathB2 deathB3 deathB4 deathB5 deathB6 deathB7 // body flies up and then back to the ground
+$frame base1 base2 // Not used, modelling templates
 
-// Jumping up
-$frame jump1 jump2 jump3 jump4 jump5 jump6
-
-// Bite attack
-$frame bite1 bite2 bite3 bite4 bite5 bite6 bite7
-
-// Extremely short pain set
-$frame pain1 pain2
-
-// fall over and die
-$frame death1 death2 death3 death4 death5 death6
-
-// body flies up and then back to the ground
-$frame deathB1 deathB2 deathB3 deathB4 deathB5 deathB6 deathB7
-
-// Not used, modelling templates
-$frame base1 base2
-
-//======================================================================
 void()	swampling_idle1	=[	$idle1,	swampling_idle2	] {monster_idle_sound();ai_stand();};
 void()	swampling_idle2	=[	$idle2,	swampling_idle3	] {ai_stand();};
 void()	swampling_idle3	=[	$idle3,	swampling_idle4	] {ai_stand();};
@@ -47,18 +64,14 @@ void()	swampling_idle11=[	$idle11,swampling_idle12] {ai_stand();};
 void()	swampling_idle12=[	$idle12,swampling_idle13] {ai_stand();};
 void()	swampling_idle13=[	$idle13,swampling_idle1	] {ai_stand();};
 
-//======================================================================
 void()	swampling_walk1	=[	$walk1,	swampling_walk2	] {monster_idle_sound();ai_walk(4);};
 void()	swampling_walk2	=[	$walk2,	swampling_walk3	] {monster_footstep(FALSE); ai_walk(3);};
 void()	swampling_walk3	=[	$walk3,	swampling_walk4	] {ai_walk(4);};
 void()	swampling_walk4	=[	$walk4,	swampling_walk5	] {ai_walk(5);};
 void()	swampling_walk5	=[	$walk5,	swampling_walk1	] {ai_walk(5);};
 
-//======================================================================
-void() swampling_runpause =
-{
-	// Do nothing is not to fight or dead
-	if (!self.enemy) return;
+void() swampling_runpause = {
+	if (!self.enemy) return; // Do nothing is not to fight or dead
 	if (self.health < 1) return;
 
 	if (self.jump_flag < time) self.th_run();
@@ -67,7 +80,6 @@ void() swampling_runpause =
 	if (self.enemydist < MONAI_RUNPAUSE) self.th_run();
 };
 
-//----------------------------------------------------------------------
 void()	swampling_runp1	=[	$idle1,	swampling_runp2	] {swampling_runpause();};
 void()	swampling_runp2	=[	$idle2,	swampling_runp3	] {swampling_runpause();};
 void()	swampling_runp3	=[	$idle3,	swampling_runp4	] {swampling_runpause();};
@@ -82,11 +94,8 @@ void()	swampling_runp11	=[	$idle11,swampling_runp12	] {swampling_runpause();};
 void()	swampling_runp12	=[	$idle12,swampling_runp13	] {swampling_runpause();};
 void()	swampling_runp13	=[	$idle13,swampling_runp1	] {swampling_runpause();};
 
-//----------------------------------------------------------------------
-void(float dist) swampling_checkpause =
-{
-	// Do nothing is not to fight or dead
-	if (!self.enemy) return;
+void(float dist) swampling_checkpause = {
+	if (!self.enemy) return; // Do nothing is not to fight or dead
 	if (self.health < 1) return;
 
 	// make swamplings run in bursts of speed (reset every run animation cycle)
@@ -102,7 +111,6 @@ void(float dist) swampling_checkpause =
 	}
 };
 
-//----------------------------------------------------------------------
 void()	swampling_run1 =[ $run1, swampling_run2 ] {self.movespeed = 0;
 	monster_idle_sound();
 	swampling_checkpause(8);
@@ -118,18 +126,14 @@ void()	swampling_run6 =[ $run2, swampling_run7 ] {monster_footstep(FALSE); swamp
 void()	swampling_run7 =[ $run3, swampling_run8 ] {swampling_checkpause(8);};
 void()	swampling_run8 =[ $run4, swampling_run1 ] {swampling_checkpause(10);};
 
-//======================================================================
 void()	swampling_slide1	=[	$walk1,		swampling_slide2	] {ai_run_slide(6); monster_idle_sound();};
 void()	swampling_slide2	=[	$walk2,		swampling_slide3	] {ai_run_slide(4);};
 void()	swampling_slide3	=[	$walk3,		swampling_slide4	] {ai_run_slide(6);};
 void()	swampling_slide4	=[	$walk4,		swampling_slide5	] {ai_run_slide(4);};
 void()	swampling_slide5	=[	$walk5,		swampling_run1	] {ai_run(4);};
 
-//======================================================================
 // swampling 2 - POISON SPIT FUNCTIONS (range)
-//======================================================================
-void(float sideang) swampling_spitacid =
-{
+void(float sideang) swampling_spitacid = {
 	local vector org, dir, ang, avel;
 	
 	if (!self.enemy) return;
@@ -153,7 +157,6 @@ void(float sideang) swampling_spitacid =
 	Launch_Grenade(org, dir, avel, CT_PROJ_SWAMP);
 };
 
-//----------------------------------------------------------------------
 void()	swampling_spit1 = [ $pain1, swampling_spit2 ] {ai_face();
 	self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_SWAMPLING); };
 void()	swampling_spit2 = [ $pain2, swampling_spit3 ] {ai_face();
@@ -167,11 +170,7 @@ void()	swampling_spit7 = [ $bite5, swampling_spit8 ] {};
 void()	swampling_spit8 = [ $bite6, swampling_spit9 ] {};
 void()	swampling_spit9 = [ $bite7, swampling_run1 ] {};
 
-//======================================================================
-// BITE
-//======================================================================
-void() swampling_melee =
-{
+void() swampling_melee = {
 	local float ldmg;
 
 	if (!self.enemy) return;
@@ -202,21 +201,22 @@ void() swampling_melee =
 	spawn_touchblood (self, self.enemy, ldmg*3);
 };
 
-//----------------------------------------------------------------------
-void()	swampling_bite1	=[	$bite1, swampling_bite2	] {ai_face();};
-// Start bite attack loop
+void()	swampling_bite1	=[	$bite1, swampling_bite2	] {ai_face();}; // Start bite 
+																	// attack loop
 void()	swampling_bite2	=[	$bite2, swampling_bite3 ] {ai_face();};
 void()	swampling_bite3	=[	$bite3, swampling_bite4 ] {ai_face();};
 void()	swampling_bite4 = [	$bite4, swampling_bite5 ] {swampling_melee();};
 void()	swampling_bite5 = [	$bite5, swampling_bite6 ] {};
 void()	swampling_bite6 =[	$bite6, swampling_bite7 ] {
-	if (ai_checkmelee(MONAI_MELEESWAMPLING,FALSE) && self.enemy.health > 0) self.think = swampling_bite2;};
-// Exit bite attack loop
+	if (ai_checkmelee(MONAI_MELEESWAMPLING,FALSE)
+		&& self.enemy.health > 0) {
+		self.think = swampling_bite2; // Exit bite attack loop
+	}
+};
+
 void()	swampling_bite7	=[	$bite7, swampling_run1	] {};
 
-//============================================================================
 // JUMP FUNCTION (range)
-//============================================================================
 void()	swampling_JumpTouch =
 {
 	local float ldmg;
@@ -253,7 +253,6 @@ void()	swampling_JumpTouch =
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------------
 void() swampling_leap1	=[	$jump1, swampling_leap2	] {ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	monster_idle_sound();
@@ -281,14 +280,12 @@ void() swampling_leap6	=[	$jump6, swampling_leap7	] {
 	}
 	self.oldorigin = self.origin;
 };
-//----------------------------------------------------------------------
+
 void() swampling_leap7 =[ $jump3, swampling_leap8 ] {monster_footstep(FALSE);};
 void() swampling_leap8 =[ $jump2, swampling_leap9 ] {monster_footstep(FALSE);};
 void() swampling_leap9 =[ $jump1, swampling_run1	] {ai_resetangles();};
 
-//======================================================================
 // CEILING swamplingS - Idle/Drop/Touch/Land functions
-//======================================================================
 void()	swampling_idleup1 =[ $idleup1, swampling_idleup2] {monster_idle_sound();ai_stand();};
 void()	swampling_idleup2 =[ $idleup2, swampling_idleup3] {ai_stand();};
 void()	swampling_idleup3 =[ $idleup3, swampling_idleup4] {ai_stand();};
@@ -296,9 +293,7 @@ void()	swampling_idleup4 =[ $idleup4, swampling_idleup5] {ai_stand();};
 void()	swampling_idleup5 =[ $idleup5, swampling_idleup6] {ai_stand();};
 void()	swampling_idleup6 =[ $idleup6, swampling_idleup1] {ai_stand();};
 
-//----------------------------------------------------------------------
-void() swampling_droptouch =
-{
+void() swampling_droptouch = {
 	// Check if landed on something that is not the ground?
 	if (!checkbottom(self)) {
 		// Is the swampling standing on something?
@@ -344,7 +339,6 @@ void() swampling_droptouch =
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
 void()	swampling_drop1	=[	$drop1,	swampling_drop2	] {};
 void()	swampling_drop2	=[	$drop2,	swampling_drop3	] {};
 void()	swampling_drop3	=[	$drop3,	swampling_drop4	] {};
@@ -353,11 +347,8 @@ void()	swampling_drop5	=[	$drop5,	swampling_drop5	] {
 	if (self.attack_timer < time || self.velocity_z == 0) swampling_droptouch();
 };
 
-//----------------------------------------------------------------------------
-void() swampling_wakeup =
-{
-	// Dead already?
-	if (self.health < 1) return;
+void() swampling_wakeup = {
+	if (self.health < 1) return; // Dead already?
 		
 	// Only call wakeup function once
 	self.th_walk = self.th_run = self.th_slide = SUB_Null;
@@ -388,9 +379,7 @@ void() swampling_wakeup =
 	swampling_drop1();						// Turn around, cat tricks!
 };
 
-//======================================================================
 // MINION - Grow and spin up from nothing
-//======================================================================
 void() swampling_growangle = {self.angles_y = self.angles_y + self.lefty;};
 void() swampling_grow1 = [ $grow1, swampling_grow2 ] {};
 void() swampling_grow2 = [ $grow2, swampling_grow3 ] {swampling_growangle();};
@@ -428,7 +417,7 @@ void() swampling_grow10= [ $grow10, swampling_run1 ] {
 		}
 	}
 };
-//----------------------------------------------------------------------------
+
 void() swampling_grow =
 {
 	// Only call wakeup function once
@@ -439,13 +428,10 @@ void() swampling_grow =
 	swampling_grow1();
 };
 
-//============================================================================
 void() swampling_pain1	=[	$pain1,	swampling_pain2	] {};
 void() swampling_pain2	=[	$pain2,	swampling_run1	] {};
 
-//----------------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) swampling_pain = 
-{
+void(entity inflictor, entity attacker, float damage) swampling_pain = {
 	// Has the swampling been hit while on the ceiling?
 	if (self.spawnflags & MON_SWAMPLING_CEILING) {
 		self.pain_finished = time + 1;
@@ -471,7 +457,6 @@ void(entity inflictor, entity attacker, float damage) swampling_pain =
 	}
 };
 
-//============================================================================
 void() swampling_die1 =[	$death1, swampling_die2	] {};
 void() swampling_die2 =[	$death2, swampling_die3	] {monster_check_gib();};
 void() swampling_die3 =[	$death3, swampling_die4	] {monster_check_gib();
@@ -480,7 +465,6 @@ void() swampling_die4 =[	$death4, swampling_die5	] {};
 void() swampling_die5 =[	$death5, swampling_die6	] {monster_death_postcheck();};
 void() swampling_die6 =[	$death6, swampling_die6	] {monster_deadbody_check();};
 
-//----------------------------------------------------------------------------
 void() swampling_dieB1 =[	$deathB1, swampling_dieB2	] {};
 void() swampling_dieB2 =[	$deathB2, swampling_dieB3	] {monster_check_gib();};
 void() swampling_dieB3 =[	$deathB3, swampling_dieB4	] {monster_check_gib();
@@ -491,18 +475,10 @@ void() swampling_dieB6 =[	$deathB6, swampling_dieB7	] {monster_death_postcheck()
 void() swampling_dieB7 =[	$deathB7, swampling_dieB7	] {monster_deadbody_check();};
 
 void() swampling_die = {
-	// swamplings are small, gibs don't bounce far
-	self.max_health = MON_NOGIBVELOCITY;
-
-	// Has the swampling died while on the ceiling?
-	if (self.spawnflags & MON_SWAMPLING_CEILING)
-		self.gibondeath = TRUE;
-
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
-
-	// regular death
-	if (!self.gibbed) {
+	self.max_health = MON_NOGIBVELOCITY; // swamplings are small, gibs don't bounce far
+	if (self.spawnflags & MON_SWAMPLING_CEILING) self.gibondeath = TRUE; // Has the swampling died while on the ceiling?
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
+	if (!self.gibbed) { // regular death
 		sound (self, CHAN_VOICE, "quoth/voreling/death.wav", 1, ATTN_NORM);
 		if (random() < 0.6) swampling_die1();
 		else swampling_dieB1();
@@ -531,7 +507,7 @@ void() monster_swampling_precache = {
 };
 
 // QUAKED monster_swampling (1 0 0) (-16 -16 -24) (16 16 24) Ambush
-void() monster_swampling = {
+void() monster_swampling = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 

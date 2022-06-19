@@ -1,38 +1,60 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD), Hexen2
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 96
+//
+// Implements: Steelclaw
+//
+// Description:
+// Silvery mystic spider.
+//=============================================================================
+
 // STEELCLAW (Hexen2 spider model by Raven Software)
 $frame idle1 idle2 idle3 idle4 idle5 idle6 idle7 idle8
 $frame idle9 idle10 idle11 idle12 idle13
-
 $frame idleup1 idleup2 idleup3 idleup4 idleup5 idleup6 idleup7 idleup8
 $frame idleup9 idleup10 idleup11 idleup12 idleup13
-
 $frame drop1 drop2 drop3 drop4 drop5 drop6
-
 $frame grow1 grow2 grow3 grow4 grow5 grow6 grow7 grow8 grow9 grow10
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8
 $frame walk9 walk10 walk11 walk12 walk13 walk14 walk15 walk16
-
-// Lift spider up on to back legs
-$frame atkup1 atkup2 atkup3 atkup4 atkup5 atkup6 atkup7 atkup8
+$frame atkup1 atkup2 atkup3 atkup4 atkup5 atkup6 atkup7 atkup8 // Lift spider up on to back legs
 $frame atkup9 atkup10 atkup11 atkup12
-
-// Forward attacking (looping)
-$frame atkloop1 atkloop2 atkloop3 atkloop4 atkloop5 atkloop6 atkloop7 atkloop8
+$frame atkloop1 atkloop2 atkloop3 atkloop4 atkloop5 atkloop6 atkloop7 atkloop8 // Forward attacking (looping)
 $frame atkloop9 atkloop10
-
-// Jumping up
-$frame jump1 jump2 jump3 jump4 jump5 jump6 jump7 jump8
+$frame jump1 jump2 jump3 jump4 jump5 jump6 jump7 jump8 // Jumping up
 $frame jump9 jump10 jump11 jump12 jump13 jump14 jump15 jump16
-
-// on all legs (pain backwards)
-$frame paindown1 paindown2 paindown3 paindown4 paindown5 paindown6 paindown7 paindown8
+$frame paindown1 paindown2 paindown3 paindown4 paindown5 paindown6 paindown7 paindown8 // on all legs (pain backwards)
 $frame paindown9 paindown10
-
-// On back legs (pain backwards)
-$frame painup1 painup2 painup3 painup4 painup5 painup6 painup7 painup8
-
-// roll over death on back (looks odd)
-$frame death1 death2 death3 death4 death5 death6 death7 death8
+$frame painup1 painup2 painup3 painup4 painup5 painup6 painup7 painup8 // On back legs (pain backwards)
+$frame death1 death2 death3 death4 death5 death6 death7 death8 // roll over death on back (looks odd)
 $frame death9 death10 death11 death12 death13 death14 death15 death16
 $frame death17 death18 death19 death20
 
@@ -243,8 +265,7 @@ void() steelc_painu3 =[$painup5, steelc_painu4] {};
 void() steelc_painu4 =[$painup6, steelc_run1] {};
 
 void(entity inflictor, entity attacker, float damage) steelc_pain = {
-	// Check all pain conditions and set up what to do next
-	monster_pain_check(attacker, damage);
+	monster_pain_check(attacker, damage); // Check all pain conditions and set up what to do next
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
@@ -277,14 +298,11 @@ void() steelc_die9 =[$death17, steelc_die10] {monster_death_postcheck();};
 void() steelc_die10 =[$death19, steelc_die10] {monster_deadbody_check();};
 
 void() steelc_die = {
-	// Gibs don't bounce far
-	self.max_health = MON_NOGIBVELOCITY;
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
-	// regular death
+	self.max_health = MON_NOGIBVELOCITY; // Gibs don't bounce far
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
-		steelc_die1();
+		steelc_die1(); // regular death
 	}
 };
 
@@ -307,8 +325,7 @@ void() monster_steelclaw_precache = {
 	precache_sound ("ad171/scorpion/sight1.wav");
 };
 
-// QUAKED monster_steelclaw (1 0 0) (-16 -16 -24) (16 16 24) Ambush
-void() monster_steelclaw = {
+void() monster_steelclaw = { // [ENTITY]
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
 	self.mdl = "progs/ad181/mon_steelclaw.mdl";
