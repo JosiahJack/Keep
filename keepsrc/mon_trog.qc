@@ -705,7 +705,6 @@ void() monster_nemesant = { // [ENTITY]
     self.th_pain    = nemes_pain;
     self.th_die     = nemes_die;
     self.th_spawn   = monster_nemesant;
-    if (self.classname == "monster_nemesant") self.th_revive  = nemes_revive1;
     self.waitmin = time + 5;     // Wait for idle sounds
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.classtype = CT_MONNEMESANT;

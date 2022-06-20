@@ -1,3 +1,7 @@
+version 0.95:
+	Commit messages have it.
+version 0.94:
+	I'm bad about this sort of thing.  Just look at the commit messages.
 version 0.93:
 	Oh lots of stuff.  Shoot, I can't remember.  Too busy with the Mjolnir Demo.
 version 0.91:
