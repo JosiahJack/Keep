@@ -35,6 +35,9 @@
 // Description:
 // Undead human that can start lying or crucified.  Must be gibbed to kill it.
 // The poisonous version is green and throws poisonous gibs instead of normal.
+//
+// "Thou canst not kill that which doth not live. But you can blast it 
+//  into chunky kibbles."  -id1 Quake manual
 //=============================================================================
 
 $cd id1/models/zombie

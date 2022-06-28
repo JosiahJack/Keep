@@ -1,3 +1,52 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD), Drake, id1
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 8
+// Function count: 191
+//
+// Implements: Grunt, Cyborg Grunt
+//
+// Description:
+// Humanoid soldier that fires a shotgun and drops a backpack on death.
+//
+// "Goons with probes inserted into their pleasure centers; wired up so when
+// they kill someone, they get paroxysms of ecstasy. In essence, customized
+// serial killers. Easy to kill, and they tote shotgun shells. It's like a
+// little Christmas each time you blow a Grunt away!" - id1 Quake manual
+//
+// Also contains the Cyborg Grunt from Drake armed with a perforator, a Nail
+// Grunt that shoots a nailgun, an Elite Grunt with a double-barreled shotgun,
+// and a Plasma, Grenade, and Rocket Grunt variants from AD.
+//
+// Grunts all default to psychotic.
+//=============================================================================
+
 $cd ad171/soldier
 $origin 0 -6 24
 $base base		

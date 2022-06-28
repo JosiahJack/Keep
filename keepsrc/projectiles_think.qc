@@ -178,7 +178,7 @@ void () ProximityBomb = { // [FUNCTION]
     self.think = ProximityBomb;
     SUB_AdvanceSkin(0,2); // Blink
     if (self.classtype != CT_PROXMINE) {
-        if ((time > self.delay || NumProximityGrenades > 200)
+        if ((time > self.delay || NumProximityGrenades > 200) // Was 64
             || vlen(self.lastvictim.velocity) > 0) {
             ProximityGrenadeExplode();
             return;
@@ -1541,3 +1541,15 @@ void() Fire_Trail = {
 		self.nextthink = time + self.speed;
 	}
 };
+
+void() pyroflame_think = {
+	self.cnt = self.cnt + 1;
+	if (self.cnt > 6) remove(self);
+	else {
+		self.frame = self.cnt;
+		// Randomly drift upwards and slow down forward movement
+		self.velocity_z = self.velocity_z + 10 + (random() * 20);
+		self.velocity = self.velocity - (self.movedir * 0.125);
+		self.nextthink = time + 0.1;
+	}
+}

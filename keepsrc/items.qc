@@ -507,19 +507,23 @@ float (entity targ, float t_healamount, float ignore) T_Heal = { // [FUNCTION]
 	
 	t_healamount = ceil(t_healamount);
 	targ.health = targ.health + t_healamount;
-	if ((!ignore) && (targ.health >= targ.max_health)) targ.health = targ.max_health;
+	if (!ignore && targ.health > targ.max_health) targ.health = targ.max_health;
 	if (targ.health > targ.mega_health) targ.health = targ.mega_health;
 	return TRUE;
 };
 
 void() health_touch = { // [FUNCTION]
 	// Megahealth?  Ignore max_health...
-	if (self.classtype == CT_HEALMEGA) {
-		if (other.health >= other.mega_health) return;
+	if (self.classtype == CT_HEALMEGA || self.classtype == CT_HEALVIAL) {
+		if (self.classtype == CT_HEALVIAL) {
+			self.rotting = 0;
+			self.rotting_time = 0;
+			self.items2 = self.items2 - (self.items2 & IT2_SUPERHEALTH);
+		}
 		if (!T_Heal(other, self.healamount, 1)) return;
 	} else {
 		if (!T_Heal(other, self.healamount, 0)) return;
-		if (self.classtype == CT_HEALVIAL) ResetDebuffRotting(other);
+		
 	}
 
 	health_touchrandomizer(); // Check for randomizer megahealth
@@ -536,7 +540,10 @@ void() health_touch = { // [FUNCTION]
 	// Megahealth = rot down the player's super health
 	// Moved functionality to debuff (rotting) system
 	// Rotting_Qty is set to zero (default) on item spawn
-	if (self.classtype == CT_HEALMEGA && !(self.perms & POW_REGEN || self.perms & POW_ARMORBERSERKER || self.perms & POW_REGENLESSER)) RotDeBuff(other, self.rotting_qty);
+	if (self.classtype == CT_HEALMEGA && !(self.perms & POW_REGEN
+		|| self.perms & POW_ARMORBERSERKER || self.perms & POW_REGENLESSER)) {
+		RotDeBuff(other, self.rotting_qty);
+	}
 	if (self.progspawnlist) return; // Quick exit, no need for following stuff
 	
 	item_finished();

@@ -758,10 +758,8 @@ void () HIP_LaserTouch = { // [FUNCTION]
 void () ProximityGrenadeTouch = { // [FUNCTION]
 	if (other == self) return;
 	if (other.classname == self.classname) return;
-	if (AffectedByPhysics(other)) return;
 	if (other.flags & FL_NOTARGET) return;
     if (other.items & IT_INVISIBILITY) return;
-    if (other.alignment == NEUTRAL || other.classgroup == CG_HARMLESS) return;
 
 	self.lastvictim = other;
 	if (self.state) return;
@@ -1550,5 +1548,38 @@ void() Touch_HazardProjectile = {
 			// trigger sound once
 			self.part_soundmiss = "";
 		}
+	}
+};
+
+void() pyroflame_touch = {
+	if (other == self.owner) return;
+	if (other.solid == SOLID_TRIGGER) return;
+	if (other.health < 1) return;
+	if (other.takedamage == DAMAGE_NO) return;
+	if (self.attack_finished > time) return;
+	if (other.classtype == self.owner.classtype) return; // Pyro proof!
+
+	// Stop still if hit world, carry on if burning something
+	if (other != world) self.velocity = self.movedir;
+	else self.velocity = '0 0 0';
+	
+	// Block sprite burst from damage again
+	self.attack_finished = time + 1;
+	
+	// Check owner is a Pyro?
+	if (self.owner.classtype == CT_MONPYRO) {
+		// damage and debuff are same function
+		ApplyFireDmg(other, DAMAGE_PYROFLAME, DAMAGE_MONFLAME);
+	}
+	else {
+		// Can only poison the player
+		if (other.flags & FL_CLIENT) {
+			// Check if player is posioned already?
+			if (other.poisoned) T_Damage (other, self, self, DAMAGE_FUMPOISON, DAMARMOR);
+			// Make sure player is posioned
+			else PoisonDeBuff(other);
+		}
+		// Poison anything else (very quick death, high damage)
+		else T_Damage (other, self, self, DAMAGE_MONFLAME, DAMARMOR);
 	}
 };

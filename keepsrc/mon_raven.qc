@@ -1,27 +1,56 @@
-/*==============================================================================
-Raven (New Ravenkeep monster by Redfield)
-==============================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Redfield
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 149 
+//
+// Implements: Raven 
+//
+// Description:
+// A black raven, typically a harmless denizen though sinister forces may make
+// certain of them attack hapless travelers as used in Ravenkeep.  Capable of
+// starting perched or feeding.
+//=============================================================================
 
 $frame fly1 fly2 fly3 fly4 fly5 fly6 fly7 fly8 fly9 fly10 fly11
-
 $frame takeoff1 takeoff2 takeoff3 takeoff4 takeoff5 takeoff6 takeoff7 takeoff8
 $frame takeoff9 takeoff10 takeoff11 takeoff12 
-
 $frame eat1 eat2 eat3 eat4 eat5 eat6 eat7 eat8 eat9 eat10 eat11
 $frame eat12 eat13 eat14 eat15 eat16 eat17 eat18 eat19 eat20 eat21 eat22
-
 $frame atk1 atk2 atk3 atk4 atk5 atk6 atk7 atk8 atk9 atk10 
 $frame atk11 atk12 atk13 atk14 atk15 atk16 atk17 atk18 atk19 
-
 $frame glide1 glide2 glide3 glide4 glide5 glide6 glide7 glide8 glide9 glide10 
 $frame glide11 glide12 glide13 glide14 glide15 glide16 glide17 glide18 glide19 glide20 
 $frame glide21 glide22 glide23
-
 $frame death1 death2 death3 death4 death5 death6 death7 death8 death9 death10
 $frame death11 death12 death13
-
 $frame deathb1 deathb2 deathb3 deathb4 deathb5 deathb6 deathb7
-
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9 stand10
 $frame stand11 stand12 stand13 stand14 stand15 stand16 stand17 stand18 stand19 stand20 
 $frame stand21 stand22 stand23 stand24 stand25 stand26
@@ -55,7 +84,6 @@ void()	raven_stand24	=[	$stand24,		raven_stand25	] {ai_stand();};
 void()	raven_stand25	=[	$stand25,		raven_stand26	] {ai_stand();};
 void()	raven_stand26	=[	$stand26,		raven_stand1	] {ai_stand();};
 
-//============================================================================
 void()	raven_glide1	=[	$glide1,		raven_glide2	] {ai_walk(8);};
 void()	raven_glide2	=[	$glide2,		raven_glide3	] {ai_walk(8);};
 void()	raven_glide3	=[	$glide3,		raven_glide4	] {ai_walk(8);};
@@ -72,8 +100,7 @@ void()	raven_glide13	=[	$glide13,		raven_glide14	] {ai_walk(8);};
 void()	raven_glide14	=[	$glide14,		raven_glide15	] {ai_walk(8);};
 void()	raven_glide15	=[	$glide15,		raven_glide16	] {ai_walk(8);};
 void()	raven_glide16	=[	$glide16,		raven_glide17	] {ai_walk(8);};
-void()	raven_glide17	=[	$glide17,		raven_glide18	] {ai_walk(8);
-	sound (self, CHAN_VOICE, "redfield/raven/wings.wav", 1, ATTN_NORM);};
+void()	raven_glide17	=[	$glide17,		raven_glide18	] {ai_walk(8); sound(self,CHAN_VOICE,"redfield/raven/wings.wav",1,ATTN_NORM);};
 void()	raven_glide18	=[	$glide18,		raven_glide19	] {ai_walk(8);};
 void()	raven_glide19	=[	$glide19,		raven_glide20	] {ai_walk(8);};
 void()	raven_glide20	=[	$glide20,		raven_glide21	] {ai_walk(8);};
@@ -81,7 +108,6 @@ void()	raven_glide21	=[	$glide21,		raven_glide22	] {ai_walk(8);};
 void()	raven_glide22	=[	$glide22,		raven_glide23	] {ai_walk(8);};
 void()	raven_glide23	=[	$glide23,		raven_glide1	] {ai_walk(8);};
 
-//============================================================================
 void()	raven_eat1	=[	$eat3,		raven_eat2	] {ai_stand();};
 void()	raven_eat2	=[	$eat4,		raven_eat3	] {ai_stand();};
 void()	raven_eat3	=[	$eat5,		raven_eat4	] {ai_stand();};
@@ -103,7 +129,6 @@ void()	raven_eat18	=[	$eat20,		raven_eat19	] {ai_stand();};
 void()	raven_eat19	=[	$eat21,		raven_eat20	] {ai_stand();};
 void()	raven_eat20	=[	$eat22,		raven_eat1	] {ai_stand();};
 
-//============================================================================
 void()	raven_takeoff1	=[	$takeoff1,		raven_takeoff2	] {ai_run(8);};
 void()	raven_takeoff2	=[	$takeoff2,		raven_takeoff3	] {ai_run(8);};
 void()	raven_takeoff3	=[	$takeoff3,		raven_takeoff4	] {ai_run(8);
@@ -118,10 +143,8 @@ void()	raven_takeoff10	=[	$takeoff10,		raven_takeoff11	] {ai_run(8);};
 void()	raven_takeoff11	=[	$takeoff11,		raven_takeoff12	] {ai_run(8);};
 void()	raven_takeoff12	=[	$takeoff12,		raven_run7	] {ai_run(8);};
 
-//============================================================================
 void()	raven_run1	=[	$fly1,		raven_run2	] {ai_face(); ai_run(28);};
-void()	raven_run2	=[	$fly2,		raven_run3	] {ai_run(28);
-	sound (self, CHAN_VOICE, "redfield/raven/wings.wav", 1, ATTN_NORM);};
+void()	raven_run2	=[	$fly2,		raven_run3	] {ai_run(28);sound(self,CHAN_VOICE,"redfield/raven/wings.wav",1,ATTN_NORM);};
 void()	raven_run3	=[	$fly3,		raven_run4	] {ai_run(28);};
 void()	raven_run4	=[	$fly4,		raven_run5	] {ai_run(28);};
 void()	raven_run5	=[	$fly5,		raven_run6	] {ai_run(28);};
@@ -132,10 +155,8 @@ void()	raven_run9	=[	$fly9,		raven_run10	] {ai_run(28);};
 void()	raven_run10	=[	$fly10,		raven_run11	] {ai_run(28);};
 void()	raven_run11	=[	$fly11,		raven_run1	] {ai_run(28);};
 
-//============================================================================
 void()	raven_hover1	=[	$fly1,		raven_hover2	] {ai_stand();};
-void()	raven_hover2	=[	$fly2,		raven_hover3	] {ai_stand();
-	sound (self, CHAN_VOICE, "redfield/raven/wings.wav", 1, ATTN_NORM);};
+void()	raven_hover2	=[	$fly2,		raven_hover3	] {ai_stand();sound (self,CHAN_VOICE,"redfield/raven/wings.wav",1,ATTN_NORM);};
 void()	raven_hover3	=[	$fly3,		raven_hover4	] {ai_stand();};
 void()	raven_hover4	=[	$fly4,		raven_hover5	] {ai_stand();};
 void()	raven_hover5	=[	$fly5,		raven_hover6	] {ai_stand();};
@@ -146,7 +167,6 @@ void()	raven_hover9	=[	$fly9,		raven_hover10	] {ai_stand();};
 void()	raven_hover10	=[	$fly10,		raven_hover11	] {ai_stand();};
 void()	raven_hover11	=[	$fly11,		raven_hover1	] {ai_stand();};
 
-//============================================================================
 void()	raven_atk1  	=[ 	$atk1, 		raven_atk2 	] {ai_charge(26);};
 void()	raven_atk2  	=[ 	$atk2, 		raven_atk3 	] {ai_charge(26);};
 void()	raven_atk3  	=[ 	$atk3, 		raven_atk4 	] {ai_charge(26);};
@@ -171,14 +191,8 @@ void()	raven_atk18  	=[ 	$atk18, 	raven_atk19	] {ai_charge(26);};
 void()	raven_atk19  	=[ 	$atk19, 	raven_run1 	] {ai_charge(26);};
 
 void() raven_glidechoose = {
-	if (random() < 0.5)
-	{
-		raven_glide1 ();
-	}
-	else
-	{
-		raven_glide12 ();
-	}
+	if (random() < 0.5) raven_glide1();
+	else raven_glide12();
 };
 
 // Raven Claw and Bite --- This is not a melee attack! Uses very short hitscan to circumvent flying monster z axis melee calculations. 
@@ -198,7 +212,7 @@ void() raven_melee = {
 	// Check for any breakables first
 	if (ai_foundbreakable(self, trace_ent, FALSE)) {
 		T_Damage (trace_ent, self, self, ldmg, DAMARMOR);
-	} else LightningDamage (org, trace_endpos, self, ldmg); // Random hitscan damage
+	} else LightningDamage(org, trace_endpos, self, ldmg); // Random hitscan damage
 
 	spawn_touchblood (self, self.enemy, ldmg*3); // Spawn some touch blood (no explicit direction)
 };
@@ -271,8 +285,7 @@ void() raven_deathb6 =[ $deathb6, raven_deathb7 ] {monster_death_postcheck();};
 void() raven_deathb7 =[ $deathb7, raven_deathb7 ] {monster_deadbody_check();};
 
 void() raven_die = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	if (!self.gibbed) {  //normal death
 		if (random() < 0.5) {sound (self, CHAN_VOICE, "redfield/raven/rdeath.wav", 1, ATTN_NORM);}

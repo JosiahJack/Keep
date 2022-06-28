@@ -1,22 +1,54 @@
-//==============================================================================
-//oldone
-//==============================================================================
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \ 
+// |  \ |___ |___ |        |  | \__/ |__/ 
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Quake 1.5 by BloodShot
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 61
+//
+// Implements:  Oldone Tentacle
+//
+// Description:
+// Shub-Niggurath can be more than what she seems, reaching her tentacles forth
+// into all sorts of places.  When a tentacle dies, it retracts into the
+// ground.
+//=============================================================================
+
 $cd id1/models/oldone
 $origin 0 0 24
 $base base
 $skin skin
-
 $frame idle1 idle2 idle3 idle4 idle5 idle6 
-
 $frame attack1 attack2 attack3 attack4 attack5 attack6 attack7 attack8 attack9 attack10 attack11 attack12 attack13
 $frame attack14 attack15 attack16 attack17 attack18 attack19 attack20 attack21
-
 $frame death1 death2 death3 death4 death5 death6 death7 death8 death9 death10 death11 death12 death13
 $frame death14 death15 death16 death17
 
-//================
-// oldone_bite
-//================
+
 void() oldone_atta1;
 
 void() oldone_stand1	=[	$idle1, 	oldone_stand2	] {ai_stand();};
@@ -41,8 +73,7 @@ void() groundSmash = {
 	shake.think = screenshake;
 	shake.attack_finished = time + .3;
 	shake.nextthink = time + 0.2;
-	sound (self, CHAN_AUTO, "shambler/fall.wav", 1, ATTN_NORM);
-	
+	sound(self, CHAN_AUTO, "shambler/fall.wav", 1, ATTN_NORM);
 	T_RadiusDamage (self, self.owner, 50, self.owner, DAMAGEALL);
 	remove(self);
 	//if (ext_dppart) pointparticles(particleeffectnum("rocket_explo_classic"), shake.origin, '0 0 0', 1);
@@ -116,10 +147,7 @@ void() oldone_die = {
 	}
 };
 
-// ==============
-// CheckoldoneMelee
 // Returns TRUE if a melee attack would hit right now
-// ==============
 float()	CheckoldoneMelee = {
 	if (enemy_range == RANGE_MELEE) {	// FIXME: check canreach
 		self.attack_state = AS_MELEE;
@@ -128,25 +156,12 @@ float()	CheckoldoneMelee = {
 	return FALSE;
 };
 
-void() oldone_start = {
-	monster_start();
-	// self.ideal_yaw = self.angles * '0 1 0';
-	// if (!self.yaw_speed) self.yaw_speed = 20;
-	// self.view_ofs = '0 0 25';
-
-	// self.use = monster_use;
-	// self.flags = self.flags | FL_MONSTER;
-	// self.pausetime = 99999999;
-	// self.think = self.th_stand;
-	// self.nextthink = self.nextthink + random()*0.5;
-};
-
 void() oldone_rise1		=[	$death17,	oldone_rise2	] {self.solid = SOLID_BBOX;};
 void() oldone_rise2		=[	$death16,	oldone_rise3	] {};
 void() oldone_rise3		=[	$death15,	oldone_rise4	] {};
 void() oldone_rise4		=[	$death14,	oldone_rise5	] {};
 void() oldone_rise5		=[	$death13,	oldone_rise6	] {};
-void() oldone_rise6		=[	$death12,	oldone_aim1	] {	oldone_start(); };
+void() oldone_rise6		=[	$death12,	oldone_aim1	] {	oldone_stand1(); };
 
 void() monster_oldone_tentacle_precache = {
 	precache_model ("progs/q15/oldone_tent.mdl");
@@ -182,15 +197,13 @@ void() monster_oldone_tentacle = {
 	self.classtype = CT_MONXXSHUB;
 	self.classgroup = CG_BOSS;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	self.th_stand = SUB_Null;
+	self.th_stand = oldone_stand1;
 	self.th_missile = SUB_Null;
 	monster_start();
 	if (!self.targetname) {
-		self.th_stand = oldone_stand1;
-		oldone_start();
+		self.th_stand();
 	} else {
 		self.solid = SOLID_NOT;
-		self.th_stand = oldone_stand1;
 		self.frame = $death17;
 		self.use = oldone_rise1;
 	}	

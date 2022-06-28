@@ -535,7 +535,7 @@ void() hknight_pointfire =
 
 	// Can the lightning damage things?
 	if (self.dmg > 0) 
-		LightningDamage (hkp_start, hkp_end, self, self.dmg);
+		LightningDamage(hkp_start, hkp_end, self, self.dmg);
 	
 	// Keep Looping
 	self.think = self.th_run;

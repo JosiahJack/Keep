@@ -1,62 +1,82 @@
-// ==============================================================================
-// Reiver
-
-// Model by Razumen
-// Quake implementation by Seven
-
-// Monster properties:
-// Flying monster escaped from hell to torture his enemies with a wide range of abilities
-
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Seven, Razumen, Dawn of Darkness
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 200
+//
+// Implements: Reiver
+//
+// Description:
+// Flying monster escaped from hell to torture his enemies with a wide range of
+// abilities.
+//
 // Uses 4 different attacks:
-// - long range: He summons ghosts who chase the player relentlessly
-// - long range: He throws homing balls of fire at his enemies (can set the player on fire)
-// - near range: He sucks health out of his pitiful enemies into his own body
+// - long range:  He summons ghosts who chase the player relentlessly
+// - long range:  He throws homing balls of fire at his enemies (can set the 
+//                player on fire)
+// - near range:  He sucks health out of his pitiful enemies into his own body
 // - melee range: He rips deep wounds with its sharp claws
+//
+// Reivers can summon a floating shield-circle around them which protects them
+// from projectiles.
+//
+// Try not to be too close to him when his health is low. He will go back to
+// hell with a big BANG.
+// Can "hide" inside the ground. Waiting for unwary players to break out and
+// devour their life.  Can replace and/or support all id1 monsters (except
+// swimming ones :).  Originally designed exclusively for DarkPlaces.
+//=============================================================================
 
-// Defend:
-// Reivers can summon a floating shield-circle around them which protects them from projectiles
-
-// Try not to be too close to him when his health is low. He will go back to hell with a big BANG.
-
-// Reiverճ can "hide" inside the ground. Waiting for unwary players to break out and devour their lifes.
-// Reiverճ can replace and/or support all id1 monsters (except swimming ones :)
-// ==============================================================================
 $cd id1/models/reiver
 $origin 0 0 24
 $base base
 $skin skin
-
 $frame pose1 
-
 $frame raise1 raise2 raise3 raise4 raise5 raise6 raise7 raise8 raise9 raise10
 $frame raise11 raise12 raise13 raise14 raise15 raise16 raise17 raise18 raise19 raise20
 $frame raise21 raise22 raise23 raise24
-
 $frame idle1 idle2 idle3 idle4 idle5 idle6 idle7 idle8 idle9 idle10
 $frame idle11 idle12 idle13
-
 $frame look1 look2 look3 look4 look5 look6 look7 look8 look9 look10
 $frame look11 look12 look13 look14
-
 $frame shoot1 shoot2 shoot3 shoot4 shoot5 shoot6 shoot7 shoot8 shoot9 shoot10
 $frame shoot11 shoot12 shoot13 shoot14 shoot15 shoot16 shoot17
-
 $frame meele_l1 meele_l2 meele_l3 meele_l4 meele_l5 meele_l6 meele_l7 meele_l8 meele_l9 meele_l10
 $frame meele_l11 meele_l12 meele_l13 meele_l14 meele_l15 meele_l16
-
 $frame meele_r1 meele_r2 meele_r3 meele_r4 meele_r5 meele_r6 meele_r7 meele_r8 meele_r9 meele_r10
 $frame meele_r11 meele_r12 meele_r13 meele_r14 meele_r15
-
 $frame defend1 defend2 defend3 defend4 defend5 defend6 defend7 defend8 defend9 defend10
 $frame defend11 defend12 defend13 defend14 defend15 defend16
-
 $frame scream1 scream2 scream3 scream4 scream5 scream6 scream7
-
 $frame pain1 pain2 pain3 pain4 pain5 pain6 pain7 pain8 pain9 pain10
 $frame pain11 pain12
-
 $frame death1 death2 death3 death4 death5 death6 death7
-
 $frame deatha1 deatha2 deatha3 deatha4 deatha5 deatha6 deatha7 deatha8 deatha9 deatha10
 $frame deatha11 deatha12 deatha13 deatha14 deatha15
 
@@ -938,7 +958,7 @@ void()	reiver_death6	=[$deatha6, reiver_death7] {self.nextthink = time + 0.07;};
 void()	reiver_death7	=[$deatha7, reiver_death8] {self.nextthink = time + 0.07;};
 void()	reiver_death8	=[$deatha8, reiver_death9] {self.nextthink = time + 0.07;};
 void()	reiver_death9	=[$deatha9, reiver_death10] {self.nextthink = time + 0.07;
-	reiver_death_touch ();
+	reiver_death_touch();
 	return;
 };
 void()	reiver_death10	=[$deatha10, reiver_death11] {self.nextthink = time + 0.07;};
@@ -951,8 +971,6 @@ void()	reiver_death15	=[$deatha15, reiver_death15] {self.nextthink = time + 0.07
 void() reiver_die = {
 	self.dodge_finished = time - 1;		// just to be sure that the shield is gone
 	sound (self, CHAN_VOICE, "q15/reiver/death.wav", 1, ATTN_NORM);
-//	self.th_pain = SUB_Null;
-//	self.th_die = SUB_Null;
 	reiver_death1();
 };
 
@@ -970,10 +988,9 @@ void () reiver_shield_think = {
 		setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
 		setorigin (self, '0 0 -9');
 	}
-	if (self.shield_finished < time) animate_shield ();
-	
-	self.scale = 0.9;	// 1;
 
+	if (self.shield_finished < time) animate_shield ();
+	self.scale = 0.9;	// 1;
 	if ((self.owner.dodge_finished > time) && (!self.owner.lefty)) {
 		self.alpha = 1;					// show multi_shield
 		self.shield_time = 1;
@@ -995,7 +1012,7 @@ void () reiver_shield_think = {
 		self.reflectnails = FALSE;		// Reflect nail projectiles
 	}
 
-	// spawn multi_shield randomly when hunting an enemy (even when not got shot)
+	// Spawn multi_shield randomly when hunting an enemy (even when not got shot).
 	if ((self.owner.enemy != world) && (self.shield_time == 0) && (!self.owner.lefty))	 {
 		if (random() < 0.0009) self.owner.dodge_finished = time + 2 + random();
 	}

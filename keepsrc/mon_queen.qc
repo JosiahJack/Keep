@@ -1,4 +1,41 @@
-// Red Queen (Prop monster by Redfield)
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \ 
+// |  \ |___ |___ |        |  | \__/ |__/ 
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Redfield
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 115
+//
+// Implements:  Red Queen
+//
+// Description:
+// Harmless story character.  Opens portals for the weary.
+//=============================================================================
+
 $frame bow1 bow2 bow3 bow4 bow5 bow6 bow7 bow8 bow9 bow10
 $frame bow11 bow12 bow13 bow14 bow15 bow16 bow17 bow18 bow19 bow20
 $frame bow21 bow22 bow23 bow24 bow25 bow26 bow27 bow28 bow29 bow30 bow31
@@ -42,11 +79,9 @@ void(float dist) ghost_walk = {
 		}
 };
 
-//Unfinished and unused walking animation
-void()	queen_walk1	=[	$spell1,		queen_walk1	] {ghost_walk(5);};
+void() queen_walk1=[$spell1, queen_walk1] {ghost_walk(5);}; //Unfinished and unused walking animation
 
-// The Ghost Queen system (this is not a monster)
-void() queen_ghostnull = {};
+void() queen_ghostnull = {}; // The Ghost Queen system (this is not a monster)
 
 // Attachment management (create, finish and delete)
 void() redqueen_create_attachment = {
@@ -87,22 +122,9 @@ void() redqueen_setup_attachment = {
 	}
 };
 
-void() redqueen_remove_attachment = {
-	if (self.attachment) {
-		self.attachment.state = FALSE;
-		self.attachment.think = SUB_Remove;
-		self.attachment.nextthink = time + 0.1;
-	}
-};
-
 void(float rqframe, float rqskin, float rqalpha) redqueen_drawq = {
-	local vector org, dir;
-	
-	// Check if attachment has been setup yet
-	if (!self.attachment) redqueen_create_attachment();
-
-	// Frame 0 is start of the sequence (move everything into place)
-	if (rqframe == 0) redqueen_setup_attachment();
+	if (!self.attachment) redqueen_create_attachment(); // Check if attachment has been setup yet
+	if (rqframe == 0) redqueen_setup_attachment(); // Frame 0 is start of the sequence (move everything into place)
 	
 	// Place Q in center of Red Queen model
 	setorigin(self.attachment, self.origin);
@@ -112,9 +134,7 @@ void(float rqframe, float rqskin, float rqalpha) redqueen_drawq = {
 	self.attachment.alpha = rqalpha;
 };
 
-float idleswitch;
-
-void() redqueen_idleb1 = [	$idleb1,	redqueen_idleb2	 ] {self.skin = 0; idleswitch = 0;}
+void() redqueen_idleb1 = [	$idleb1,	redqueen_idleb2	 ] {self.skin = 0; self.walkframe = 0;}
 void() redqueen_idleb2 = [	$idleb2,	redqueen_idleb3	 ] {}
 void() redqueen_idleb3 = [	$idleb3,	redqueen_idleb4	 ] {}
 void() redqueen_idleb4 = [	$idleb4,	redqueen_idleb5	 ] {}
@@ -146,7 +166,7 @@ void() redqueen_idleb29 = [	$idleb29,	redqueen_idleb30 ] {}
 void() redqueen_idleb30 = [	$idleb30,	redqueen_idle1 ] {self.skin = 1;}
 
 void() 	redqueen_idle1 = [	$idle1,		redqueen_idle2	] {self.skin = 0; redqueen_reset_attachment();
-idleswitch = idleswitch + 1;};
+self.walkframe = self.walkframe + 1;};
 void() 	redqueen_idle2 = [	$idle2,		redqueen_idle3	] {};
 void() 	redqueen_idle3 = [	$idle3,		redqueen_idle4	] {};
 void() 	redqueen_idle4 = [	$idle4,		redqueen_idle5	] {};
@@ -157,7 +177,7 @@ void() 	redqueen_idle8 = [	$idle8,		redqueen_idle9	] {};
 void() 	redqueen_idle9 = [	$idle9,		redqueen_idle10 ] {};
 void() 	redqueen_idle10 = [	$idle10,	redqueen_idle11 ] {};
 void() 	redqueen_idle11 = [	$idle11,	redqueen_idle1 ] {
-	if (idleswitch > 5) {
+	if (self.walkframe > 5) {
 		if (random() < 0.3) redqueen_idleb1();
 	}
 };
@@ -336,6 +356,8 @@ void() monster_queen = {
 	self.estate_use = queen_ghost_use;
 
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
+	SetDefaultDenizenAttributes(self); // Standard DENIZEN AI
+	self.vulnerability = VULN_SERAPHIC; // Invincible good.
 
 	// Always start off and wait for a trigger
 	self.estate = ESTATE_OFF;

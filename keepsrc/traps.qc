@@ -159,7 +159,7 @@ void() trap_shooter_fire = { // [FUNCTION]
 		WriteCoord (MSG_BROADCAST, trace_endpos_x);
 		WriteCoord (MSG_BROADCAST, trace_endpos_y);
 		WriteCoord (MSG_BROADCAST, trace_endpos_z);
-		LightningDamage (lightn_start, trace_endpos, self, self.dmg);	 // Check for things to damage in between the two points	
+		LightningDamage(lightn_start, trace_endpos, self, self.dmg);	 // Check for things to damage in between the two points	
 	}
 
 	// Check for temporary continuous mode

@@ -192,6 +192,8 @@ exec autoexec.cfg
 //-----------------------------------------------------------
 stuffcmds
 
+r_part_density 4
+
 //-----------------------------------------------------------
 // start demos if not already running a server
 startdemos demo1 demo2 demo3

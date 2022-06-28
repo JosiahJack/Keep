@@ -1,5 +1,40 @@
-// PYRO - Originally from Rubicon2 by John Fitzgibbons
-// FUMIGATOR - Green/Poison version of the Pyro
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \ 
+// |  \ |___ |___ |        |  | \__/ |__/ 
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD), Rubicon2 by John Fitzgibbons
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 3
+// Function count: 87
+//
+// Implements:  Pyro aka Dreadnought, Fumigator
+//
+// Description:
+// Pyro is a flamethrower enforcer and the Fumigator is similar but poison gas.
+//=============================================================================
 
 $cd id1/models/enforcer
 $origin 0 -6 24
@@ -19,12 +54,11 @@ $frame paina1 paina2 paina3 paina4
 $frame painb1 painb2 painb3 painb4 painb5
 $frame painc1 painc2 painc3 painc4 painc5 painc6 painc7 painc8
 
+float pyro_RUN_SPEED = 1.5;
+
 void() pyro_soundreset = {
-	//turn off flame sound
-	if (self.attack_finished > time)
-		sound (self, CHAN_WEAPON, self.noise4, 1, ATTN_NORM);
-	//play sound anyway to be sure the channel is silent
-	else StopSound(self,CHAN_WEAPON);
+	if (self.attack_finished > time) sound (self, CHAN_WEAPON, self.noise4, 1, ATTN_NORM); // Turn off flame sound
+	else StopSound(self,CHAN_WEAPON); // Play sound anyway to be sure the channel is silent
 };
 
 void()	pyro_stand1	=[	$stand1,	pyro_stand2	] {monster_idle_sound(); ai_stand();};
@@ -52,8 +86,6 @@ void()	pyro_walk14	=[	$walk14,	pyro_walk15	] {ai_walk(3);};
 void()	pyro_walk15	=[	$walk15,	pyro_walk16	] {ai_walk(4);};
 void()	pyro_walk16	=[	$walk16,	pyro_walk1	] {ai_walk(2);};
 
-//============================================================================
-float pyro_RUN_SPEED = 1.5;
 void()	pyro_run1	=[	$run1,	pyro_run2	] {monster_idle_sound(); ai_run(18 * pyro_RUN_SPEED);};
 void()	pyro_run2	=[	$run2,	pyro_run3	] {ai_run(14 * pyro_RUN_SPEED);};
 void()	pyro_run3	=[	$run3,	pyro_run4	] {ai_run(7 * pyro_RUN_SPEED);};
@@ -63,146 +95,11 @@ void()	pyro_run6	=[	$run6,	pyro_run7	] {ai_run(14 * pyro_RUN_SPEED);};
 void()	pyro_run7	=[	$run7,	pyro_run8	] {ai_run(7 * pyro_RUN_SPEED);};
 void()	pyro_run8	=[	$run8,	pyro_run1	] {ai_run(11 * pyro_RUN_SPEED);};
 
-//============================================================================
-// - Pyro enforcer (FIRE FIRE FIRE!)
-//----------------------------------------------------------------------
-void() pyroflame_touch =
-{
-	if (other == self.owner) return;
-	if (other.solid == SOLID_TRIGGER) return;
-	if (other.health < 1) return;
-	if (other.takedamage == DAMAGE_NO) return;
-	if (self.attack_finished > time) return;
-	if (other.classtype == self.owner.classtype) return; // Pyro proof!
-
-	// Stop still if hit world, carry on if burning something
-	if (other != world) self.velocity = self.movedir;
-	else self.velocity = '0 0 0';
-	
-	// Block sprite burst from damage again
-	self.attack_finished = time + 1;
-	
-	// Check owner is a Pyro?
-	if (self.owner.classtype == CT_MONPYRO) {
-		// damage and debuff are same function
-		ApplyFireDmg(other, DAMAGE_PYROFLAME, DAMAGE_MONFLAME);
-	}
-	else {
-		// Can only poison the player
-		if (other.flags & FL_CLIENT) {
-			// Check if player is posioned already?
-			if (other.poisoned) T_Damage (other, self, self, DAMAGE_FUMPOISON, DAMARMOR);
-			// Make sure player is posioned
-			else PoisonDeBuff(other);
-		}
-		// Poison anything else (very quick death, high damage)
-		else T_Damage (other, self, self, DAMAGE_MONFLAME, DAMARMOR);
-	}
-};
-
-//----------------------------------------------------------------------
-void() pyroflame_think =
-{
-	self.cnt = self.cnt + 1;
-	if (self.cnt > 6) remove(self);
-	else {
-		self.frame = self.cnt;
-		// Randomly drift upwards and slow down forward movement
-		self.velocity_z = self.velocity_z + 10 + (random() * 20);
-		self.velocity = self.velocity - (self.movedir * 0.125);
-		self.nextthink = time + 0.1;
-	}
-}
-
-//----------------------------------------------------------------------
-void(vector org, vector dir) pyroflame_spawn =
-{
-	local vector variance;
-	local float roll, pointc;
-	
-	newmis = spawn();
-	newmis.classtype = CT_TEMPSTREAM;
-	newmis.classgroup = CG_PROJALL;
-	newmis.classname = "PBurst";
-	newmis.owner = self;
-	newmis.frame = newmis.cnt = 0;
-
-	// Extra wide flame contact if fighting a monster
-	if (self.enemy.flags & FL_MONSTER) newmis.movetype = MOVETYPE_FLYMISSILE;
-	else newmis.movetype = MOVETYPE_FLY;	// Standard flame size
-	newmis.solid = SOLID_TRIGGER;			// collision, touch required
-
-	// The Pyro and Fumigator have different flame types
-	// Pyro = fire, Fum = Poison
-	//-----------------------------------------------
-	if (self.classtype == CT_MONPYRO) {
-		// Switch particles between fire and smoke based on contents
-		pointc = pointcontents(self.origin);
-		if (pointc <= CONTENT_WATER) {
-			if (ext_dppart) {
-				// Use special DP smoke and empty sprite for collision
-				pointparticles(particleeffectnum(DPP_PYROFLAME2), org, dir, 1);
-				setmodel (newmis, SBURST_FLAMEDP);
-			}
-			else setmodel (newmis, SBURST_SMOKE);
-		} else {
-			if (ext_dppart) {
-				// Use special DP flames and empty sprite for collision
-				pointparticles(particleeffectnum(DPP_PYROFLAME1), org, dir, 1);
-				setmodel (newmis, SBURST_FLAMEDP);
-			} else setmodel (newmis, SBURST_FLAME);
-		}
-	} else {
-		if (ext_dppart) {
-			// Use special DP flames and empty sprite for collision
-			pointparticles(particleeffectnum(DPP_PYROFLAME3), org, dir, 1);
-			setmodel (newmis, SBURST_FLAMEDP);
-		} else setmodel (newmis, SBURST_POISON);
-	}
-	
-	setorigin (newmis, org);
-	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
-
-	// Work out forward speed (tweak based on skill level)
-	variance = vecrand(0,10,TRUE);	// +/- 10 on all axis
-	newmis.attack_speed = SPEED_PYROFLAME + skill * SPEED_PYROSKILL;
-	newmis.movedir = (dir * newmis.attack_speed) + '0 0 -50' + variance;
-	newmis.velocity = newmis.movedir;
-	
-	// Roll the flames from side to side towards the target
-	roll = 350 + random() * 20;
-	newmis.angles_z = anglemod(roll);
-
-	// If DP engine active remove particle shadow
-	if (engine == ENG_DPEXT) newmis.effects = newmis.effects + EF_NOSHADOW;
-
-	newmis.nextthink = time + 0.1;
-	newmis.think = pyroflame_think;
-	newmis.touch = pyroflame_touch;
-};
-
-//----------------------------------------------------------------------
-void() pyro_fire =
-{
-	local vector org, dir, targ_org;
-
-	if (self.health < 1) return;
-	
-	makevectors (self.angles);
-	org = self.origin + attack_vector(self.attack_offset);
-	// point the flames at the feet of the player
-	if (self.enemy.flags & FL_CLIENT) targ_org = self.enemy.origin - '0 0 20';
-	else targ_org = self.enemy.origin - self.enemy.view_ofs;
-	dir = normalize(targ_org - self.origin);
-	pyroflame_spawn(org, dir);
-};
-
-//----------------------------------------------------------------------
 void()	pyro_atk1	=[	$attack1,	pyro_atk2	] {ai_face();};
 void()	pyro_atk2	=[	$attack3,	pyro_atk3	] {ai_face();};
 void()	pyro_atk3	=[	$attack5,	pyro_atk4	] {ai_face();
 	sound (self, CHAN_WEAPON, self.noise3, 1, ATTN_NORM);	// ON
-	pyro_fire(); 
+	pyro_fire(); // FIRE! FIRE! FIRE!
 	self.attack_finished = time + 0.3;
 };
 void()	pyro_atk4	=[	$attack5,	pyro_atk5	] {ai_face();
@@ -213,23 +110,20 @@ void()	pyro_atk4	=[	$attack5,	pyro_atk5	] {ai_face();
 };
 void()	pyro_atk5	=[	$attack10,	pyro_run1	] {ai_face();
 	sound (self, CHAN_WEAPON, self.noise4, 1, ATTN_NORM);	// OFF
-	SUB_CheckRefire (pyro_atk1);
+	SUB_CheckRefire(pyro_atk1);
 };
 
-//============================================================================
 void()	pyro_paina1	=[	$paina1,	pyro_paina2	] {};
 void()	pyro_paina2	=[	$paina2,	pyro_paina3	] {};
 void()	pyro_paina3	=[	$paina3,	pyro_paina4	] {};
 void()	pyro_paina4	=[	$paina4,	pyro_run1	] {};
 
-//----------------------------------------------------------------------
 void()	pyro_painb1	=[	$painb1,	pyro_painb2	] {};
 void()	pyro_painb2	=[	$painb2,	pyro_painb3	] {};
 void()	pyro_painb3	=[	$painb3,	pyro_painb4	] {};
 void()	pyro_painb4	=[	$painb4,	pyro_painb5	] {};
 void()	pyro_painb5	=[	$painb5,	pyro_run1	] {};
 
-//----------------------------------------------------------------------
 void()	pyro_painc1	=[	$painc1,	pyro_painc2	] {};
 void()	pyro_painc2	=[	$painc2,	pyro_painc3	] {};
 void()	pyro_painc3	=[	$painc3,	pyro_painc4	] {};
@@ -239,11 +133,8 @@ void()	pyro_painc6	=[	$painc6,	pyro_painc7	] {};
 void()	pyro_painc7	=[	$painc7,	pyro_painc8	] {};
 void()	pyro_painc8	=[	$painc8,	pyro_run1	] {};
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) pyro_pain =
-{
-	// Check all pain conditions and set up what to do next
-	monster_pain_check(attacker, damage);
+void(entity inflictor, entity attacker, float damage) pyro_pain = {
+	monster_pain_check(attacker, damage); // Check all pain conditions and set up what to do next
 	pyro_soundreset();
 
 	// Any pain animation/sound required?
@@ -258,8 +149,7 @@ void(entity inflictor, entity attacker, float damage) pyro_pain =
 			if (self.lip < 0.3) pyro_paina1 ();
 			else if (self.lip < 0.6) pyro_painb1 ();
 			else pyro_painc1 ();
-		}
-		else if (self.pain_check == 2) {
+		} else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 0.8;
 			self.axhitme = 0;
@@ -268,11 +158,13 @@ void(entity inflictor, entity attacker, float damage) pyro_pain =
 	}
 };
 
-//============================================================================
 void()	pyro_die1	=[	$death1,	pyro_die2	] {};
 void()	pyro_die2	=[	$death2,	pyro_die3	] {monster_check_gib();};
-void()	pyro_die3	=[	$death3,	pyro_die4	] {monster_check_gib();
-	self.solid = SOLID_NOT; if (!self.gibbed) DropBackpack();};
+void()	pyro_die3	=[	$death3,	pyro_die4	] {
+	monster_check_gib();
+	self.solid = SOLID_NOT;
+	if (!self.gibbed) DropBackpack();
+};
 void()	pyro_die4	=[	$death4,	pyro_die5	] {ai_forward(14);};
 void()	pyro_die5	=[	$death5,	pyro_die6	] {ai_forward(2);};
 void()	pyro_die6	=[	$death6,	pyro_die7	] {};
@@ -298,14 +190,12 @@ void()	pyro_fdie10	=[	$fdeath10,	pyro_fdie11	] {monster_death_postcheck();};
 void()	pyro_fdie11	=[	$fdeath11,	pyro_fdie11	] {monster_deadbody_check();};
 
 void() pyro_die = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities 
 	pyro_soundreset();
 
-	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "enforcer/death1.wav", 1, ATTN_NORM);
-		if (random() > 0.5) pyro_die1 ();
+		if (random() > 0.5) pyro_die1 (); // regular death
 		else pyro_fdie1 ();
 	}
 };

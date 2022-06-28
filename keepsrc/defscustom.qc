@@ -1750,3 +1750,25 @@ string MODEL_PROJ_GRFLAMESML = "progs/s_grflamesml.spr";
 string MODEL_PROJ_GRFLAMEMED = "progs/s_grflamemed.spr";
 // string MODEL_PROJ_GRFLAMEVLRG = "progs/s_grflamevlrg. spr"; // does not exist yet, Qmaster pre Bal
 string MODEL_PROJ_GRFLAMEVLRG = "progs/s_grflamemed.spr";
+
+// Debuffs
+.float		cshift_func;		// 1=Screen flash, 3=artifacts, 5=debuff
+.float		cshift_upd;			// Screen updates (v_cshift) are active
+.float		cshift_time;		// Timer (0.1s tick) for screen updates
+.vector		cshift_col;			// RGB / XYZ values for screen colour
+.float		cshift_den;			// Screen colour density
+.float		cshift_step;		// Quantity to reduce density by per tick
+.float		debuff_sound;		// Heartbeat sound when tick happens
+.float		debuff_qty;			// Quantity to do something with (temp)
+.float		bleeding;			// Bleeding debuff status
+.float		bleeding_time;		// Timer (1s tick) for screen/sound update
+.float		bleeding_qty;		// Total amount of health stored (HoT)
+.float		rotting;			// Rotting debuff status (DoT)
+.float		rotting_time;		// Timer (1s tick) for health update
+.float		regen_time; 
+.float		burning;			// Burning debuff status
+.float		burning_time;		// Timer (1s tick) for screen/sound update
+.float		burning_qty;		// Total amount of damage stored (DoT)
+.float		poisoned;			// Poison debuff status
+.float		poisoned_time;		// Timer (1s tick) for screen/sound update
+.float		poisoned_qty;		// Total amount of damage stored (DoT)

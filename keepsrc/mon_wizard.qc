@@ -34,12 +34,15 @@
 // Implements: Scrag, Drake, Fire God's Minion aka Lava Scrag
 //
 // Description:
-// A floating fleshy horror that spits slime at your.
+// A floating fleshy horror that spits slime at you.
+//
+// "Floats like a butterfly, stings like a bee. Ugly as hell. They're not 
+//  real tough, but like to bushwhack you."  -id1 Quake manual
 //
 // The alternate Drake is a dark green version that is poisonous.
 //
 // The alternate Fire God's Minion, aka Lava Scrag, is made of lava, has
-// chthon's face and fireball spit that has a chance to set things on fire. 
+// chthon's face and fireball spit that has a chance to set things on fire.
 //=============================================================================
 
 $cd id1/models/a_wizard

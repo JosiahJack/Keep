@@ -715,14 +715,15 @@ void() trigger_changelevel_finish = { // [FUNCTION]
 
 void() trigger_changelevel_fire = { // [FUNCTION]
 	if (self.attack_finished > time) return;
-	if ( !(self.bmodel_act.flags & FL_CLIENT) ) return;
-	if ( self.bmodel_act.health < 1 ) return;
+	if (!(self.bmodel_act.flags & FL_CLIENT)) return;
+	if (self.bmodel_act.health < 1) return;
 
 	if (self.bmodel_act.in_a_vehicle) {
 		TakeTargetOutOfVehicle(self.bmodel_act,FALSE,TRUE); // No jump, destroy car. Need this for getting back actual health.
 	}
 
 	self.attack_finished = LARGE_TIMER;
+	self.touch = SUB_Null;
 	ResetPowerSystem(self.bmodel_act,0,FALSE); // Remove all powerup/debuff effects
 	ResetDebuffSystem(self.bmodel_act);
 	if (!CheckZeroVector(self.mapvar_update)) mapvar_range(self.mapvar_update); // Check for map variables on exit

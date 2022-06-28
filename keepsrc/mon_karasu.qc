@@ -447,7 +447,7 @@ void(vector beamoffset) kbeam_shoot = {
 	QC_ParseBeam(0,"progs/redfield/beam.mdl", self, org, trace_endpos, 32); // Display beam model segments
 
 	if (ai_foundbreakable(self, trace_ent, FALSE)) T_Damage (trace_ent, self, self, 80, DAMARMOR); // Check for any breakables first
-	else LightningDamage (org, trace_endpos, self, 5 + skill); // Standard player lightning damage function
+	else LightningDamage(org, trace_endpos, self, 5 + skill); // Standard player lightning damage function
 };
 
 void(vector leftofs, vector rightofs, float spframe, float spalpha) karasu_charging = {
@@ -549,7 +549,7 @@ void() klight_shoot = {
 		T_Damage (trace_ent, self, self, 80, DAMARMOR);
 	}
 	// Standard player lightning damage function
-	else LightningDamage (org, trace_endpos, self, 4 + skill);
+	else LightningDamage(org, trace_endpos, self, 4 + skill);
 };
 
 void(vector leftofsb, vector rightofsb) karasu_litcharge = {	

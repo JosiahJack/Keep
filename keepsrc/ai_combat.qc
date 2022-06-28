@@ -871,7 +871,7 @@ void() FreezeFinish = {
 	self.velocity = self.avelocity = '0 0 0';
 	self.movetype = MOVETYPE_TOSS;
 	self.colormod = '1 1 2'; // Pale blue white
-	self.alpha = 0.6; // Transparent ice
+	self.alpha = 0.8; // Transparent ice
 	self.effects = 0;
 	self.solid = SOLID_SLIDEBOX;
 	self.takedamage = DAMAGE_AIM;

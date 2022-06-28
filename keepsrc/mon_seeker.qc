@@ -1,74 +1,80 @@
-/*==============================================================================
-Seeker (Heavily inspired by Hunter from RRP - ijed)
-==============================================================================*/
-// Slow moving run/walk animation
-$frame run1 run2 run3 run4 run5 run6 run7 run8
-$frame run9 run10 run11 run12 run13 run14 run15 run16 run17 run18 run19
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD), Rubicon Rumble Pack (RRP) by ijed
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 37
+//
+// Implements: Hunter Seeker
+//
+// Description:
+// A giant mech robot with shield that wards off explosives.  Essentially a 
+// tech version of the shambler.  Can start powered off and invicible until it
+// has been activated.
+//=============================================================================
 
-// stationary fire range attack (Not used)
-$frame fire1 fire2 fire3 fire4 fire5 fire6 fire7 fire8
+$frame run1 run2 run3 run4 run5 run6 run7 run8 // Slow moving run/walk animation
+$frame run9 run10 run11 run12 run13 run14 run15 run16 run17 run18 run19
+$frame fire1 fire2 fire3 fire4 fire5 fire6 fire7 fire8 // stationary fire range attack (Not used)
 $frame fire9 fire10 fire11 fire12 fire13 fire14 fire15 fire16
 $frame fire17 fire18 fire19 fire20 fire21 fire22 fire23 fire24
 $frame fire25 fire26 fire27 fire28 fire29 fire30
-
-// right arm punch
-$frame punch1 punch2 punch3 punch4 punch5 punch6 punch7 punch8
+$frame punch1 punch2 punch3 punch4 punch5 punch6 punch7 punch8 // right arm punch
 $frame punch9 punch10
-
-// fall backwards and die
-$frame death1 death2 death3 death4 death5 death6 death7 death8
+$frame death1 death2 death3 death4 death5 death6 death7 death8 // fall backwards and die
 $frame death9 death10 death11 death12
-
-// Stationary classic idle
-$frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8
+$frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 // Stationary classic idle
 $frame stand9 stand10 stand11 stand12 stand13 stand14 stand15 stand16
 $frame stand17 stand18 stand19
-
-// Run with LEFT arm missing
-$frame runL1 runL2 runL3 runL4 runL5 runL6 runL7 runL8
+$frame runL1 runL2 runL3 runL4 runL5 runL6 runL7 runL8 // Run with LEFT arm missing
 $frame runL9 runL10 runL11 runL12 runL13 runL14 runL15 runL16
 $frame runL17 runL18 runL19
-
-// Run with RIGHT arm missing
-$frame runR1 runR2 runR3 runR4 runR5 runR6 runR7 runR8
+$frame runR1 runR2 runR3 runR4 runR5 runR6 runR7 runR8 // Run with RIGHT arm missing
 $frame runR9 runR10 runR11 runR12 runR13 runR14 runR15 runR16
 $frame runR17 runR18 runR19
-
-// Attack with LEFT arm missing
-$frame fireL1 fireL2 fireL3 fireL4 fireL5 fireL6 fireL7 fireL8
+$frame fireL1 fireL2 fireL3 fireL4 fireL5 fireL6 fireL7 fireL8 // Attack with LEFT arm missing
 $frame fireL9 fireL10 fireL11
-
-// Attack with RIGHT arm missing
-$frame fireR1 fireR2 fireR3 fireR4 fireR5 fireR6 fireR7 fireR8
+$frame fireR1 fireR2 fireR3 fireR4 fireR5 fireR6 fireR7 fireR8 // Attack with RIGHT arm missing
 $frame fireR9 fireR10 fireR11
-
-// Attack with BOTH arms active (NEW)
-$frame fireB1 fireB2 fireB3 fireB4 fireB5 fireB6 fireB7 fireB8
+$frame fireB1 fireB2 fireB3 fireB4 fireB5 fireB6 fireB7 fireB8 // Attack with BOTH arms active (NEW)
 $frame fireB9 fireB10 fireB11
-
-// Death with LEFT arm missing
-$frame deathL1 deathL2 deathL3 deathL4 deathL5 deathL6 deathL7 deathL8
+$frame deathL1 deathL2 deathL3 deathL4 deathL5 deathL6 deathL7 deathL8 // Death with LEFT arm missing
 $frame deathL9 deathL10 deathL11 deathL12
-
-// Death with RIGHT arm missing
-$frame deathR1 deathR2 deathR3 deathR4 deathR5 deathR6 deathR7 deathR8
+$frame deathR1 deathR2 deathR3 deathR4 deathR5 deathR6 deathR7 deathR8 // Death with RIGHT arm missing
 $frame deathR9 deathR10 deathR11 deathR12
-
-// Death with BOTH arm missing (special event)
-$frame deathB1 deathB2 deathB3 deathB4 deathB5 deathB6 deathB7 deathB8
+$frame deathB1 deathB2 deathB3 deathB4 deathB5 deathB6 deathB7 deathB8 // Death with BOTH arm missing (special event)
 $frame deathB9 deathB10 deathB11 deathB12
-
-// Death with HEAD missing (special event)
-$frame deathH1 deathH2 deathH3 deathH4 deathH5 deathH6 deathH7 deathH8
+$frame deathH1 deathH2 deathH3 deathH4 deathH5 deathH6 deathH7 deathH8 // Death with HEAD missing (special event)
 $frame deathH9 deathH10 deathH11 deathH12
-
-// Idle with LEFT arm missing
-$frame standL1 standL2 standL3 standL4 standL5 standL6 standL7 standL8
+$frame standL1 standL2 standL3 standL4 standL5 standL6 standL7 standL8 // Idle with LEFT arm missing
 $frame standL9 standL10 standL11 standL12 standL13 standL14 standL15 standL16
 $frame standL17 standL18 standL19
-
-// Idle with RIGHT arm missing
-$frame standR1 standR2 standR3 standR4 standR5 standR6 standR7 standR8
+$frame standR1 standR2 standR3 standR4 standR5 standR6 standR7 standR8 // Idle with RIGHT arm missing
 $frame standR9 standR10 standR11 standR12 standR13 standR14 standR15 standR16
 $frame standR17 standR18 standR19
 
@@ -83,17 +89,13 @@ float SEEKER_WALK = 1;
 float SEEKER_FIRE = 2;
 float SEEKER_DIE = 3;
 
-//============================================================================
-// Spark effect from missing arm joint
-// Low chance out of combat (idle state)
-//============================================================================
+// Spark effect from missing arm joint.  Low chance out of combat (idle state).
 void()	seek_sparks_fade1 = [0, seek_sparks_fade2] {self.alpha = 0.8; self.nextthink = time + 0.05;};
 void()	seek_sparks_fade2 = [0, seek_sparks_fade3] {self.alpha = 0.6; self.nextthink = time + 0.05;};
 void()	seek_sparks_fade3 = [0, seek_sparks_fade4] {self.alpha = 0.4; self.nextthink = time + 0.05;};
 void()	seek_sparks_fade4 = [0, SUB_Remove] {self.alpha = 0.2; self.nextthink = time + 0.05;};
 
-void() seek_spark =
-{
+void() seek_spark = {
 	local float loopvar;
 	local entity spark;
 	
@@ -444,9 +446,7 @@ void() seek_arm_explode = {
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) seek_pain =
-{
+void(entity inflictor, entity attacker, float damage) seek_pain = {
 	// Check all pain conditions and set up what to do next
 	monster_pain_check(attacker, damage);
 
@@ -461,9 +461,6 @@ void(entity inflictor, entity attacker, float damage) seek_pain =
 			self.pos1_x = self.health / self.max_health;
 			self.pos1_y = skill / 10;
 			self.pos1_z = self.pos1_x + self.pos1_y;
-//			dprint("Damage ("); dprint(ftos(damage));
-//			dprint(") Chance ("); dprint(ftos(self.pos1_z));
-//			dprint(")\n");
 
 			// Check for body damage and total damage done
 			// Is there a chance one of the arms will fall off?
@@ -499,22 +496,15 @@ void(entity inflictor, entity attacker, float damage) seek_pain =
 	}
 };
 
-//============================================================================
-void() seek_explode =
-{
-	// Hide and Seek
-	entity_hide(self);
-	
-	// Regular ID particle explosion
+void() seek_explode = {
+	entity_hide(self); // Hide and Seek
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
+	WriteByte (MSG_BROADCAST, TE_EXPLOSION); // Regular ID particle explosion
 	WriteCoord (MSG_BROADCAST, self.origin_x);
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, self.origin_z);
 	T_RadiusDamage (self, self, self.death_dmg, world, DAMAGEALL);
-	
-	// Classic sprite/DP explosion
-	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/seeker/explode_major.wav");
+	SpawnExplosion(EXPLODE_BIG, self.origin, "ad171/seeker/explode_major.wav"); // Classic sprite/DP explosion
 	SpawnProjectileSmoke(self.origin, 150, 150, 150);
 	SpawnProjectileSmoke(self.origin, 150, 150, 150);
 	SpawnProjectileSmoke(self.origin, 150, 150, 150);
@@ -522,21 +512,15 @@ void() seek_explode =
 	// Throw a couple of random body pieces
 	if (random() < 0.5) ThrowGib(11, 1);
 	else ThrowGib(11, 2);
-	// Lets throw our arms in the air like we don't care!
-	if (self.state != SEEKER_ARMSLESS) ThrowGib(12, 1);
-	// Spew random metal1_2 rubble up
-	ThrowGib(13, 5 + rint(random()*5));
+
+	if (self.state != SEEKER_ARMSLESS) ThrowGib(12, 1); // Lets throw our arms in the air like we don't care!
+	ThrowGib(13, 5 + rint(random()*5)); // Spew random metal1_2 rubble up
 	ThrowGib(14, 5 + rint(random()*5));
-	// If head still on shoulders, throw that as well!
-	if (self.state != SEEKER_HEADLESS) ThrowGib(25, 1);
+	if (self.state != SEEKER_HEADLESS) ThrowGib(25, 1); // If head still on shoulders, throw that as well!
 };
 
-//----------------------------------------------------------------------
-void() seek_dieframe =
-{
-	// type of animation state
-	self.attack_timer = SEEKER_DIE;
-
+void() seek_dieframe = {
+	self.attack_timer = SEEKER_DIE; // type of animation state
 	if (self.walkframe == 2) self.solid = SOLID_NOT;
 
 	// Check for arm status
@@ -551,8 +535,7 @@ void() seek_dieframe =
 	if (self.walkframe < 12) {
 		self.nextthink = time + 0.1;
 		self.think = seek_dieframe;
-	}
-	else {
+	} else {
 		// Explode after a while
 		self.nextthink = time + 3 + random()*2;
 		self.think = seek_explode;
@@ -564,16 +547,12 @@ void() seek_dieframe =
 		self.pos1 = self.origin + (crandom()*'16 16 0') + (random()*'0 0 24');
 		SpawnProjectileSmoke(self.pos1, 200, 250, 100);
 		SpawnProjectileSmoke(self.pos1, 200, 250, 100);
-		if (random() < 0.5)
-			SpawnExplosion(EXPLODE_MED, self.pos1, "quoth/bob/s_explode.wav");
+		if (random() < 0.5) SpawnExplosion(EXPLODE_MED, self.pos1, "quoth/bob/s_explode.wav");
 	}
 };
 
-//----------------------------------------------------------------------
-void() seek_die =
-{
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
+void() seek_die = {
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 
 	// Long death sound with comedy bing at the end!
 	sound (self, CHAN_VOICE, "ad171/seeker/death1.wav", 1, ATTN_NORM);
@@ -605,9 +584,7 @@ void() seek_die =
 	seek_dieframe ();
 };
 
-//============================================================================
-void() seek_shield = 
-{
+void() seek_shield = {
 	// Setup particle emitter for shield effect
 	self.part_active = PARTICLE_STYLE_FFIELD;
 	self.spr_frame = PARTICLE_BURST_BLUE;

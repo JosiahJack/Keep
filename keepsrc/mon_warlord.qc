@@ -5,7 +5,7 @@
 //
 // Compiled by W. Josiah Jack, aka Qmaster
 //
-// Attributions: Sven, Dawn of Darkness
+// Attributions: Seven, Dawn of Darkness
 //
 //
 // Distribution / Copyright / Permissions 

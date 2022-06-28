@@ -1,46 +1,73 @@
-/*==============================================================================
-Scorpion (Hexen2 model by Raven Software)
-==============================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD), Kinn, Hexen2
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 2
+// Function count: 103
+//
+// Implements: Scorpion
+//
+// Description:
+// A small scorpion that attacks with its tail and pinchers.  The stinger
+// variant shoots projectiles and lunges.
+//=============================================================================
+
 $frame attackA1 attackA2 attackA3 attackA4 attackA5 attackA6 attackA7
 $frame attackA8 attackA9 attackA10 attackA11 attackA12 attackA13 attackA14
 $frame attackA15 attackA16 attackA17 attackA18 attackA19 attackA20 attackA21
 $frame attackA22 attackA23 attackA24 attackA25
-
 $frame attackB1 attackB2 attackB3 attackB4 attackB5 attackB6 attackB7
 $frame attackB8 attackB9 attackB10 attackB11 attackB12 attackB13 attackB14
 $frame attackB15 attackB16 attackB17 attackB18 attackB19 attackB20 attackB21
 $frame attackB22 attackB23 attackB24 attackB25 attackB26 attackB27
-
 $frame attackC1 attackC2 attackC3 attackC4 attackC5 attackC6 attackC7
 $frame attackC8 attackC9 attackC10 attackC11 attackC12 attackC13 attackC14
 $frame attackC15 attackC16 attackC17 attackC18 attackC19 attackC20 attackC21
 $frame attackC22
-
 $frame death1 death2 death3 death4 death5 death6 death7 death8
 $frame death9 death10 death11 death12 death13 death14 death15 death16
 $frame death17 death18 death19 death20 death21
-
 $frame pain1 pain2 pain3 pain4 pain5 pain6 pain7 pain8
 $frame pain9 pain10
-
 $frame grow1 grow2 grow3 grow4 grow5 grow6 grow7 grow8 grow9 grow10
-
 $frame ready1 ready2 ready3 ready4 ready5 ready6 ready7 ready8
 $frame ready9 ready10 ready11
-
 $frame step1 step2 step3 step4
-
 $frame stop1 stop2 stop3 stop4 stop5 stop6 stop7 stop8 stop9
-
 $frame wake1 wake2 wake3 wake4 wake5 wake6 wake7 wake8
 $frame wake9 wake10 wake11 wake12 wake13 wake14 wake15 wake16
 $frame wake17 wake18 wake19 wake20 wake21 wake22 wake23 wake24
 $frame wake25 wake26 wake27 wake28 wake29 wake30
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8
 $frame walk9 walk10 walk11 walk12 walk13 walk14 walk15 walk16
 
-//======================================================================
+float TAILOFFSET = 8;
+
 void()	pinch_idle1	=[	$ready6,	pinch_idle2 ] {monster_idle_sound();ai_stand();};
 void()	pinch_idle2	=[	$ready7,	pinch_idle3 ] {ai_stand();};
 void()	pinch_idle3	=[	$ready8,	pinch_idle4 ] {ai_stand();};
@@ -52,7 +79,6 @@ void()	pinch_idle8	=[	$ready9,	pinch_idle9 ] {ai_stand();};
 void()	pinch_idle9	=[	$ready8,	pinch_idle10 ] {ai_stand();};
 void()	pinch_idle10=[	$ready7,	pinch_idle1 ] {ai_stand();};
 
-//======================================================================
 void()	pinch_walk1	=[	$walk2,		pinch_walk2	] {monster_idle_sound();ai_walk(3);};
 void()	pinch_walk2	=[	$walk4,		pinch_walk3	] {monster_footstep(FALSE); ai_walk(2);};
 void()	pinch_walk3	=[	$walk6,		pinch_walk4	] {ai_walk(3);};
@@ -62,7 +88,6 @@ void()	pinch_walk6	=[	$walk12,	pinch_walk7	] {monster_footstep(FALSE); ai_walk(2
 void()	pinch_walk7	=[	$walk14,	pinch_walk8	] {ai_walk(3);};
 void()	pinch_walk8	=[	$walk16,	pinch_walk1	] {ai_walk(4);};
 
-//======================================================================
 void()	pinch_run1	=[	$walk1,		pinch_run2	] {monster_idle_sound();ai_run(5);};
 void()	pinch_run2	=[	$walk3,		pinch_run3	] {monster_footstep(FALSE); ai_run(4);};
 void()	pinch_run3	=[	$walk5,		pinch_run4	] {ai_run(5);};
@@ -72,11 +97,8 @@ void()	pinch_run6	=[	$walk11,	pinch_run7	] {monster_footstep(FALSE); ai_run(4);}
 void()	pinch_run7	=[	$walk13,	pinch_run8	] {ai_run(5);};
 void()	pinch_run8	=[	$walk15,	pinch_run1	] {ai_run(6);};
 
-//======================================================================
 // BITE Melee Range
-//======================================================================
-void(float side) pinch_melee =
-{
+void(float side) pinch_melee = {
 	local float ldmg;
 
 	if (!self.enemy) return;
@@ -111,22 +133,14 @@ void()	pinch_claw8 = [	$attackB16,		pinch_claw9 ] {};
 void()	pinch_claw9 = [	$attackB18,		pinch_claw10 ] {};
 void()	pinch_claw10 =[	$attackB20,		pinch_run1 ] {};
 
-//============================================================================
 // TAIL FUNCTION (range)
-//============================================================================
-float TAILOFFSET = 8;
-
-//----------------------------------------------------------------------
-void() pinch_tailsound =
-{
+void() pinch_tailsound = {
 	if (self.meleeattack < 1) sound(self, CHAN_WEAPON, "ad171/scorpion/tailfire1.wav", TRUE, TRUE);
 	else sound(self, CHAN_WEAPON, "ad171/scorpion/tailfire2.wav", TRUE, TRUE);
 	self.meleeattack = 1 - self.meleeattack;
 };
 
-//----------------------------------------------------------------------
-void(vector tailofs) pinch_tailspike =
-{
+void(vector tailofs) pinch_tailspike = {
 	local vector org, dir;
 
 	if (!self.enemy) return;
@@ -152,7 +166,6 @@ void(vector tailofs) pinch_tailspike =
 	launch_projectile (org, dir, CT_PROJ_SCORP, self.attack_speed+random()*25);
 }
 
-//----------------------------------------------------------------------
 void()	pinch_tail1	=[	$attackA2,		pinch_tail2	] {ai_face();
 	if (self.lefty < 1) sound (self, CHAN_VOICE, "ad171/scorpion/tailattack1.wav", 1, ATTN_NORM);
 	else sound (self, CHAN_VOICE, "ad171/scorpion/tailattack2.wav", 1, ATTN_NORM);
@@ -169,12 +182,10 @@ void()	pinch_tail9 = [	$attackA18,		pinch_tail10 ] {ai_face();};
 void()	pinch_tail10 =[	$attackA20,		pinch_tail11 ] {};
 void()	pinch_tail11 =[	$attackA22,		pinch_run1 ] {ai_face();};
 
-//============================================================================
 // JUMP FUNCTION (range)
-//============================================================================
-void()	pinch_jumptouch =
-{
+void()	pinch_jumptouch = {
 	if (self.health <= 0) return;
+
 	ai_jumpbreakable(20);			// Damage any breakables
 	self.touch = SUB_Null;			// No more touching
 	self.count = self.count + 1;	//Total amount of touch jumps
@@ -202,7 +213,6 @@ void()	pinch_jumptouch =
 	self.nextthink = time + 0.1;
 };
 
-//----------------------------------------------------------------------------
 void() pinch_leap1	=[	$attackC1, pinch_leap2	] {ai_face();
 	self.jump_flag = time + MONAI_JUMPSCORPTIME;
 	if (self.lefty < 1) sound (self, CHAN_VOICE, "ad171/scorpion/jumpattack1.wav", 1, ATTN_NORM);
@@ -239,8 +249,6 @@ void() pinch_leap6	=[	$attackC9, pinch_leap8 ] {
 	}
 	self.oldorigin = self.origin;
 };
-
-//----------------------------------------------------------------------
 void() pinch_leap8	=[	$attackC10, pinch_leap9 ] {ai_charge(4);};
 void() pinch_leap9	=[	$attackC11, pinch_leap10] {ai_charge(4);};
 void() pinch_leap10	=[	$attackC12, pinch_leap11] {ai_charge(4);};
@@ -252,9 +260,7 @@ void() pinch_leap13	=[	$attackC18, pinch_leap14] {
 };
 void() pinch_leap14	=[	$attackC20, pinch_run1 ] {};
 
-//======================================================================
 // MINION - Grow and spin up from nothing
-//======================================================================
 void() pinch_growangle = {self.angles_y = self.angles_y + self.lefty;};
 void() pinch_grow1 = [ $grow1, pinch_grow2 ] {};
 void() pinch_grow2 = [ $grow2, pinch_grow3 ] {pinch_growangle();};
@@ -266,20 +272,13 @@ void() pinch_grow7 = [ $grow7, pinch_grow8 ] {pinch_growangle();};
 void() pinch_grow8 = [ $grow8, pinch_grow9 ] {pinch_growangle();};
 void() pinch_grow9 = [ $grow9, pinch_grow10] {pinch_growangle();};
 void() pinch_grow10= [ $grow10, pinch_run1 ] {
-	// Is the scorpion stuck? cannot move?
-	if (pointcontents(self.origin) == CONTENT_SOLID) {
-		// Time to die!
-		self.health = self.gibhealth;
+	if (pointcontents(self.origin) == CONTENT_SOLID) { // Is the scorpion stuck? cannot move?
+		self.health = self.gibhealth; // Time to die!
 		Killed(self, self);
-	}
-	else {
-		// Finally spin back to original position
-		self.angles_y = self.angles_y + self.lefty;
-		// Setup goals and warn other monsters
-		FoundHuntTarget(TRUE);
-
-		// Restore all think state functions
-		self.th_stand = pinch_idle1;
+	} else {
+		self.angles_y = self.angles_y + self.lefty; // Finally spin back to original position
+		FoundHuntTarget(TRUE); // Setup goals and warn other monsters
+		self.th_stand = pinch_idle1; // Restore all think state functions
 		self.th_walk = pinch_walk1;
 		self.th_run = pinch_run1;
 		self.th_melee = pinch_claw1;
@@ -287,9 +286,7 @@ void() pinch_grow10= [ $grow10, pinch_run1 ] {
 	}
 };
 
-//----------------------------------------------------------------------------
-void() pinch_grow =
-{
+void() pinch_grow = {
 	// Only call wakeup function once
 	self.th_stand = self.th_walk = self.th_run  = SUB_Null;
 	if (random() < 0.5) self.lefty = 36;
@@ -298,7 +295,6 @@ void() pinch_grow =
 	pinch_grow1();
 };
 
-//============================================================================
 void() pinch_painA1	=[	$pain1,	pinch_painA2	] {};
 void() pinch_painA2	=[	$pain3,	pinch_painA3	] {};
 void() pinch_painA3	=[	$pain5,	pinch_painA4	] {};
@@ -311,11 +307,8 @@ void() pinch_painB3	=[	$pain6,	pinch_painB4	] {};
 void() pinch_painB4	=[	$pain8,	pinch_painB5	] {};
 void() pinch_painB5	=[	$pain10,pinch_run1		] {};
 
-//----------------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) pinch_pain = 
-{
-	// Check all pain conditions and set up what to do next
-	monster_pain_check(attacker, damage);
+void(entity inflictor, entity attacker, float damage) pinch_pain = {
+	monster_pain_check(attacker, damage); // Check all pain conditions and set up what to do next
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
@@ -331,11 +324,9 @@ void(entity inflictor, entity attacker, float damage) pinch_pain =
 	}
 };
 
-//============================================================================
 void() pinch_die1		=[	$death1,	pinch_die2	] {};
 void() pinch_die2		=[	$death3,	pinch_die3	] {monster_check_gib();};
-void() pinch_die3		=[	$death5,	pinch_die4	] {monster_check_gib();
-	self.solid = SOLID_NOT;};
+void() pinch_die3		=[	$death5,	pinch_die4	] {monster_check_gib();self.solid = SOLID_NOT;};
 void() pinch_die4		=[	$death7,	pinch_die5	] {};
 void() pinch_die5		=[	$death9,	pinch_die6	] {};
 void() pinch_die6		=[	$death11,	pinch_die7	] {};
@@ -346,13 +337,11 @@ void() pinch_die10		=[	$death19,	pinch_die11] {monster_death_postcheck();};
 void() pinch_die11		=[	$death21,	pinch_die11] {monster_deadbody_check();};
 
 void() pinch_die = {
-	// Pre-check routine to tidy up extra entities
-	monster_death_precheck();
-
-	// regular death
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
+ 
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
-		pinch_die1();
+		pinch_die1(); // regular death
 	}
 };
 

@@ -57,7 +57,7 @@ void () SpawnLightningThink = { // [FUNCTION]
       WriteCoord (MSG_BROADCAST,self.oldorigin_z);
 
    }
-   LightningDamage (self.origin,self.oldorigin,self.lastvictim,self.dmg);
+   LightningDamage(self.origin,self.oldorigin,self.lastvictim,self.dmg);
    self.nextthink = (time + 0.100);
 };
 
@@ -232,7 +232,7 @@ void () TeslaLightningThink = { // [FUNCTION]
    WriteCoord (MSG_BROADCAST,trace_endpos_x);
    WriteCoord (MSG_BROADCAST,trace_endpos_y);
    WriteCoord (MSG_BROADCAST,trace_endpos_z);
-   LightningDamage (self.origin,trace_endpos,self.lastvictim,self.dmg);
+   LightningDamage(self.origin,trace_endpos,self.lastvictim,self.dmg);
    self.nextthink = (time + 0.100);
 };
 

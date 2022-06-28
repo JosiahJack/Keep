@@ -1,6 +1,47 @@
-/*==============================================================================
-SKULL WIZARD (Hexen2 model by Raven Software)
-==============================================================================*/
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD), Hexen2
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 3
+// Function count: 142
+//
+// Implements: Skull Wizard, Guardian Skull Wizard
+//
+// Description:
+// Robed ethereal figure with a skull atop the cloak.  Can be one of three
+// variants:
+//   Red robe and hurls exploding skulls in straightline attacks like rockets.
+//   Black robe and summons forth Lost Souls to attack you.
+//   Green robe tougher Guardian Skull Wizard with poisonous attacks.
+// Ethereal form is removed on death leaving the skull and cloak and book to
+// collapse into a heap.
+//=============================================================================
+
 
 // Fall backwards, vanish and robes fall down
 $frame death1 death2 death3 death4 death5 death6 death7 death8
@@ -50,7 +91,6 @@ float SKULLW_HEIGHT = 96;
 float SKULLW_DISTMIN = 256;
 float SKULLW_DISTMAX = 512;
 
-//============================================================================
 void()	skullw_stand1	=[	$stand1,	skullw_stand2	] {
 self.idlebusy=SKULLW_STAND; monster_idle_sound();ai_stand();};
 void()	skullw_stand2	=[	$stand18,	skullw_stand3	] {ai_stand();};
@@ -833,6 +873,7 @@ void() monster_skullwiz = {
 		self.health = self.health * 2;		// 200% HP
 		if (!self.exactskin) self.exactskin = 3;	// Green rboes
 		self.poisonous = TRUE;						// Explosive Poison
+		if (self.deathstring == "") self.deathstring = " was evaporated by a Guardian Skull Wizard\n";
 	}
 
 	if (self.deathstring == "") self.deathstring = " was blown apart by a Skull Wizard\n";

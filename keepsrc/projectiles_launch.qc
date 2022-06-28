@@ -3365,3 +3365,81 @@ void() judge_fireflameline = {
 	// Origin, v_forward, colour, sfx
 	Launch_Trail (org, dir, fire_col, "");
 };
+
+void(vector org, vector dir) pyroflame_spawn = {
+	local vector variance;
+	local float roll, pointc;
+	
+	newmis = spawn();
+	newmis.classtype = CT_TEMPSTREAM;
+	newmis.classgroup = CG_PROJALL;
+	newmis.classname = "PBurst";
+	newmis.owner = self;
+	newmis.frame = newmis.cnt = 0;
+
+	// Extra wide flame contact if fighting a monster
+	if (self.enemy.flags & FL_MONSTER) newmis.movetype = MOVETYPE_FLYMISSILE;
+	else newmis.movetype = MOVETYPE_FLY;	// Standard flame size
+	newmis.solid = SOLID_TRIGGER;			// collision, touch required
+
+	// The Pyro and Fumigator have different flame types
+	// Pyro = fire, Fum = Poison
+	if (self.classtype == CT_MONPYRO) {
+		// Switch particles between fire and smoke based on contents
+		pointc = pointcontents(self.origin);
+		if (pointc <= CONTENT_WATER) {
+			if (ext_dppart) {
+				// Use special DP smoke and empty sprite for collision
+				pointparticles(particleeffectnum(DPP_PYROFLAME2), org, dir, 1);
+				setmodel (newmis, SBURST_FLAMEDP);
+			}
+			else setmodel (newmis, SBURST_SMOKE);
+		} else {
+			if (ext_dppart) {
+				// Use special DP flames and empty sprite for collision
+				pointparticles(particleeffectnum(DPP_PYROFLAME1), org, dir, 1);
+				setmodel (newmis, SBURST_FLAMEDP);
+			} else setmodel (newmis, SBURST_FLAME);
+		}
+	} else {
+		if (ext_dppart) {
+			// Use special DP flames and empty sprite for collision
+			pointparticles(particleeffectnum(DPP_PYROFLAME3), org, dir, 1);
+			setmodel (newmis, SBURST_FLAMEDP);
+		} else setmodel (newmis, SBURST_POISON);
+	}
+	
+	setorigin (newmis, org);
+	setsize (newmis, VEC_ORIGIN, VEC_ORIGIN);
+
+	// Work out forward speed (tweak based on skill level)
+	variance = vecrand(0,10,TRUE);	// +/- 10 on all axis
+	newmis.attack_speed = SPEED_PYROFLAME + skill * SPEED_PYROSKILL;
+	newmis.movedir = (dir * newmis.attack_speed) + '0 0 -50' + variance;
+	newmis.velocity = newmis.movedir;
+	
+	// Roll the flames from side to side towards the target
+	roll = 350 + random() * 20;
+	newmis.angles_z = anglemod(roll);
+
+	// If DP engine active remove particle shadow
+	if (engine == ENG_DPEXT) newmis.effects = newmis.effects + EF_NOSHADOW;
+
+	newmis.nextthink = time + 0.1;
+	newmis.think = pyroflame_think;
+	newmis.touch = pyroflame_touch;
+};
+
+void() pyro_fire = {
+	local vector org, dir, targ_org;
+
+	if (self.health < 1) return;
+	
+	makevectors (self.angles);
+	org = self.origin + attack_vector(self.attack_offset);
+	// point the flames at the feet of the player
+	if (self.enemy.flags & FL_CLIENT) targ_org = self.enemy.origin - '0 0 20';
+	else targ_org = self.enemy.origin - self.enemy.view_ofs;
+	dir = normalize(targ_org - self.origin);
+	pyroflame_spawn(org, dir);
+};

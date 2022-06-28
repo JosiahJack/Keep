@@ -37,27 +37,6 @@
 // such as burning and poison.  Also used to apply shrine aura effects.
 //=============================================================================
 
-.float		cshift_func;		// 1=Screen flash, 3=artifacts, 5=debuff
-.float		cshift_upd;			// Screen updates (v_cshift) are active
-.float		cshift_time;		// Timer (0.1s tick) for screen updates
-.vector		cshift_col;			// RGB / XYZ values for screen colour
-.float		cshift_den;			// Screen colour density
-.float		cshift_step;		// Quantity to reduce density by per tick
-.float		debuff_sound;		// Heartbeat sound when tick happens
-.float		debuff_qty;			// Quantity to do something with (temp)
-.float		bleeding;			// Bleeding debuff status
-.float		bleeding_time;		// Timer (1s tick) for screen/sound update
-.float		bleeding_qty;		// Total amount of health stored (HoT)
-.float		rotting;			// Rotting debuff status (DoT)
-.float		rotting_time;		// Timer (1s tick) for health update
-.float		regen_time; 
-.float		burning;			// Burning debuff status
-.float		burning_time;		// Timer (1s tick) for screen/sound update
-.float		burning_qty;		// Total amount of damage stored (DoT)
-.float		poisoned;			// Poison debuff status
-.float		poisoned_time;		// Timer (1s tick) for screen/sound update
-.float		poisoned_qty;		// Total amount of damage stored (DoT)
-
 // Wraith Health drain
 vector DEBUFF_BLEED_COL = '50 35 0';		// Dark Orange
 float DEBUFF_BLEED_DEN = 80;
@@ -102,7 +81,8 @@ void(entity targ) ResetDebuffScreen = {
 void(entity targ) ResetDebuffBurning = { targ.burning = targ.burning_qty = 0; };
 
 void(entity targ) ResetDebuffRotting = {
-	targ.rotting = 0; 
+	targ.rotting = 0;
+	targ.rotting_time = 0;
 	// Force reset health and remove MH inventory item
 	if (targ.health > targ.max_health) targ.health = targ.max_health;
 	targ.items2 = targ.items2 - (targ.items2 & IT2_SUPERHEALTH);
@@ -269,7 +249,7 @@ void() ClientDeBuff = {
 	if (self.rotting) {
 		if (self.aura_finished < time && self.aura_type != 4) {
 			// Is it time for a debuff update
-			if (self.rotting_time < time) {
+			if (self.rotting_time < time && self.rotting_time != 0) {
 				if (self.health > self.max_health) {
 					// Reset rotting tick timer
 					self.rotting_time = time + 1;

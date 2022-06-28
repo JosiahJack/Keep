@@ -190,12 +190,15 @@ void() player_run =[ 6, player_run ] { // [FUNCTION]
 		return;
 	}
 
-	if ((self.weapon == IT_ICE && self.selfweaponismoditems)
-		 || (self.weapon == IT2_MJOLNIR && !self.selfweaponismoditems)) {
+	if ((self.weapon == IT_ICE && self.selfweaponismoditems && self.ammo_elemental > 5)
+		 || (self.weapon == IT2_MJOLNIR && !self.selfweaponismoditems && self.ammo_cells > 0)) {
 		if (self.idletimer <= time) { // In Zerstorer, when the fifth idle frame was reached, the frame looped back to the first and the saw idle sound was played.
-			if (self.view_ofs != '0 0 0') { // Volume used to be 1, but Tronyn et.al. wanted it quieter.  Pity, it was fun loud.
-				sound(self, CHAN_AUTO, "tronyn/lightning_component_electrified.wav", 0.8, ATTN_NORM);
-				self.idletimer = time + 0.5 + random() * 0.2; // In Drake, the frames are grouped, so play sound periodically.
+			if (random() < 0.5) {
+				sound(self, CHAN_AUTO, "tronyn/lightning_component_electrified.wav", 0.4, ATTN_NORM);
+				self.idletimer = time + 1.59; // In Drake, the frames are grouped, so play sound periodically.
+			} else {
+				sound(self, CHAN_AUTO, "tronyn/lightning_rod_electrified.wav", 0.4, ATTN_NORM);
+				self.idletimer = time + 2.41; // In Drake, the frames are grouped, so play sound periodically.
 			}
 		}	
 	}
@@ -204,8 +207,8 @@ void() player_run =[ 6, player_run ] { // [FUNCTION]
 		if (self.perms & IT_CHAINSAW) { // Check for chainsaw first because it needs a different player model.
 			if (self.idletimer <= time) { // In Zerstorer, when the fifth idle frame was reached, the frame looped back to the first and the saw idle sound was played.
 				if (self.view_ofs != '0 0 0') { // Volume used to be 1, but Tronyn et.al. wanted it quieter.  Pity, it was fun loud.
-					sound(self, CHAN_AUTO, "zerstorer/weapons/sawridle.wav", 0.5, ATTN_NORM);
-					self.idletimer = time + 0.5; // In Drake, the frames are grouped, so play sound periodically.
+					sound(self, CHAN_AUTO, "zerstorer/weapons/sawridle.wav", 0.4, ATTN_NORM);
+					self.idletimer = time + 0.5 + random() * 0.2; // In Drake, the frames are grouped, so play sound periodically.
 				}
 			}
 			if (self.walkframe >= 5) self.walkframe = 0;	
@@ -440,7 +443,7 @@ void() player_tbolt = { // [FUNCTION]
     }
     SuperDamageSound();
 
-	if (self.tome_finished) W_FireThunderbolt (TRUE);
+	if (self.tome_finished || (self.weapon == IT2_CHAINLIGHTNING && !self.selfweaponismoditems)) W_FireThunderbolt (TRUE);
 	else					W_FireThunderbolt (FALSE);
 
 	W_Reload(0.2);

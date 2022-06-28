@@ -229,6 +229,7 @@ void() SUB_FinishAttachments = { // [FUNCTION]
 
 void() SUB_RemoveAttachment = { // [FUNCTION]
 	if (self.attachment) {
+		self.attachment.state = FALSE;
 		self.attachment.think = SUB_Remove;
 		self.attachment.nextthink = time + 0.1;
 	}
@@ -236,6 +237,7 @@ void() SUB_RemoveAttachment = { // [FUNCTION]
 
 void() SUB_RemoveAttachment2 = { // [FUNCTION]
 	if (self.attachment2) {
+		self.attachment2.state = FALSE;
 		self.attachment2.think = SUB_Remove;
 		self.attachment2.nextthink = time + 0.1;
 	}
@@ -243,6 +245,7 @@ void() SUB_RemoveAttachment2 = { // [FUNCTION]
 
 void() SUB_RemoveAttachment3 = { // [FUNCTION]
 	if (self.attachment3) {
+		self.attachment3.state = FALSE;
 		self.attachment3.think = SUB_Remove;
 		self.attachment3.nextthink = time + 0.1;
 	}

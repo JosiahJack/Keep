@@ -10,7 +10,7 @@ Monster properties:
 1 melee attack
 1 ranged attack: Spits out toxic tint that paralyzes the player and makes him blind for a short (adjustable) time
 Adjustable replacement monster for the Quake�s fish monsters (via cvar)
-
+Originally designed exclusively for DarkPlaces.
 ==============================================================================
 */
 

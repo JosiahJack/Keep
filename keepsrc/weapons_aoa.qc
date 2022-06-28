@@ -713,8 +713,10 @@ void() ChainedLightning = {
 	damage = 30;
 	if (self.enemy.classname == "player")//half damage to players
 		damage = damage * 0.5;
-		
-	LightningDamage(self.origin, trace_endpos, self.owner, damage);
+	
+	if (self.enemy.bodyonflr == MON_ONFLR) {
+		monster_flrbody_gib(self.enemy, damage * 2);
+	} else LightningDamage(self.origin, trace_endpos, self.owner, damage);
 	remove(self);
 };
 
@@ -747,13 +749,10 @@ void() StormFindTargets =
 		if (nearbyTargets.takedamage > 0
 			&& nearbyTargets != world
 			&& trace_fraction == 1
-			&& nearbyTargets.health > 0
+			&& (nearbyTargets.health > 0 || nearbyTargets.bodyonflr == MON_ONFLR)
 			&& nearbyTargets != self.owner
 			&& Align_Opposing(self.owner,nearbyTargets))
 		{
-			if (developer > 0) bprint("Target found! It's a ");
-			if (developer > 0) bprint(nearbyTargets.classname);
-			if (developer > 0) bprint(".\n");
 			LightningTarget(nearbyTargets); //attacks secondary target with lightning
 			targets = targets - 1;
 		}
@@ -2331,9 +2330,9 @@ void() GauntletBloodOrbit = //make the blood orbs orbit the player, and provide 
 void() GauntletBloodReturn = //used to move the blood orbs from the victim back to the attacker. As they get close, this loop changes to GauntletBloodOrbit(), which will make the orbs circle the player
 {
 	
-	if (vlen(self.origin - self.owner.origin) > 70)//fly toward self.owner until it gets within 50
+	if (vlen(self.origin - self.owner.origin) > 70)//fly toward self.owner until it gets within 70
 	{
-		self.velocity = normalize( self.owner.origin - self.origin + '0 0 20'+ spread('50 50 80') )*225;
+		self.velocity = normalize( self.owner.origin - self.origin + '0 0 20'+ spread('50 50 80') )*350;
 	}
 	else
 	{
@@ -2368,7 +2367,7 @@ void(entity victim) GauntletDrainSpell = //spawns orbs of blood at enemy hit by 
 	FlyingBlood.dmg = 4;
 	FlyingBlood.attack_finished = time + 15;
 
-	FlyingBlood.velocity = normalize(self.origin - self.owner.origin) * 175 + '0 0 30' + spread('100 100 60'); //fly sort of towards owner
+	FlyingBlood.velocity = normalize(self.origin - self.owner.origin) * 300 + '0 0 30' + spread('100 100 60'); //fly sort of towards owner
 	FlyingBlood.angles = vectoangles(spread('100 100 100'));
 	self.avelocity = spread('360 360 360');
 	FlyingBlood.attack_offset = spread('5 5 4');
@@ -2416,15 +2415,15 @@ void (float RightOffset) GauntletBeam = //triggers attack and visual effect, alt
 	makevectors(self.v_angle);
 	org = self.origin + v_up*6 + v_forward*16 + v_right*RightOffset;
 	
-	if (self.tome_finished) //langer range with Tome
-		dir = org + v_forward*1000 + v_right*(-1)*RightOffset;
+	if (self.tome_finished) //longer range with Tome
+		dir = org + v_forward*8192 + v_right*(-1)*RightOffset;
 	else
-		dir = org + v_forward*600 + v_right*(-1)*RightOffset;
+		dir = org + v_forward*1000 + v_right*(-1)*RightOffset;
 	
 	traceline(org, dir, FALSE, self);
 	if (trace_ent.takedamage)
 	{	
-		GauntletDrainSpell (trace_ent);
+		GauntletDrainSpell(trace_ent);
 		MakeBeam(org, dir, "progs/aoa/drainhit.mdl", 0.3);
 		sound(self, CHAN_VOICE, "aoa/heartbeat.wav", 1, ATTN_NORM);//play heartbeat sound when it hits a target
 	}
@@ -2432,7 +2431,7 @@ void (float RightOffset) GauntletBeam = //triggers attack and visual effect, alt
 	{
 		MakeBeam(org, dir, "progs/aoa/drainmiss.mdl", 0.15);
 	}
-	LightningDamage (org, dir, self, 15);
+	LightningDamage(org, dir, self, 25);
 	
 };
 

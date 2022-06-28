@@ -1,10 +1,41 @@
-/*
-==============================================================================
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Quake 1.5 by BloodShot
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 119
+//
+// Implements: Vore Queen
+//
+// Description:
+// Giant vore boss.
+//=============================================================================
 
-SHAL-RATH
-
-==============================================================================
-*/
 $cd id1/models/shalrath
 $origin 0 0 24
 $base base
@@ -155,13 +186,6 @@ void() shal_boss_death23     =[      22,        shal_boss_death23    ] {
 	self.think = SUB_Null; // don't repeat the last death frame for eternity (monsters)
 	setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX);
 };
-/*void() shal_boss_death1      =[      $death1,        shal_boss_death2     ] {};
-void() shal_boss_death2      =[      $death2,        shal_boss_death3     ] {};
-void() shal_boss_death3      =[      $death3,        shal_boss_death4     ] {};
-void() shal_boss_death4      =[      $death4,        shal_boss_death5     ] {};
-void() shal_boss_death5      =[      $death5,        shal_boss_death6     ] {};
-void() shal_boss_death6      =[      $death6,        shal_boss_death7     ] {};
-void() shal_boss_death7      =[      $death7,        shal_boss_death7    ] {};*/
 
 void(entity inflictor, entity attacker, float damage) shalrath_boss_pain = {
 	if (self.pain_finished > time) return;
@@ -346,9 +370,8 @@ void() ShalBossNovaTouch = {
 
 //Enemy spawner
 void() shal_boss_spawner = {
-	local vector distancedelta; 
-	local vector nozdistancedelta; 
-	local	entity missile;
+	local vector distancedelta, nozdistancedelta; 
+	local entity missile;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	missile = spawn ();
@@ -377,18 +400,6 @@ void() shal_boss_spawner = {
 	missile.scale = 3;	
 	setsize (missile, missile.bbmins, missile.bbmaxs);
 	setorigin (missile, self.origin);
-};
-
-
-void() ShalSpawnerExplode = {
-	//if (ext_dppart) pointparticles(particleeffectnum("gibacid"), self.origin, '0 0 0', 1);
-
-	self.velocity = '0 0 0';
-	self.touch = SUB_Null;
-	//setmodel (self, "progs/drake/s_explod.spr");
-	self.scale = 5;
-	self.solid = SOLID_NOT;
-	s_explode1 ();
 };
 
 void() monster_shalrath_boss_precache = {

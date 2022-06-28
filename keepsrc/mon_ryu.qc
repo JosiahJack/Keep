@@ -1,4 +1,55 @@
-// DRAGON (The Qtest/Drake version)
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Drake by Patrick Martin
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 3
+// Function count: 131
+//
+// Implements: Dragons aka Ryu, Wyrm
+//
+// Description:
+// Drake implemented the early Qtest demo version of Quake's flying serpents
+// giving them much augmented AI and multiple versions such as fire, ice,
+// poison, and lightning.  The Wyrm Dragon is a boss version.  Some utilities
+// here are used by the Nightshade as well.
+//
+// The ryu have unique AI compared to all other monsters, avoiding liquids, and
+// avoiding players with quad and other such things.  The large boss wyrm has a
+// special calculation to prevent it getting stuck since it needs to be treated
+// as larger than usual when moving.
+//
+// Trivia: Ryu is Japanese for dragon.  Wyrm is old English for flying serpents
+//         known to inhabit the coasts near Wales and other cliffs on the west
+//         coast of Brittain, notable for sometimes flying off with sheep. They
+//         have since vanished, likely killed to protect livestock and small
+//         children soon after the people led by Brutus settled there.
+//=============================================================================
+
 $cd progs/dragon
 $origin 0 0 24
 $base base 
@@ -177,10 +228,8 @@ vector() Ryu_Offset = {
     local   float   fr;
 
     // HACK:  If nightshade, convert its frames to dragon frames.
-    if (self.classtype == CT_MONSHADE)
-        fr = self.frame - 7;    // Nightshade appears only as medium-sized.
-    else
-        fr = self.frame;
+    if (self.classtype == CT_MONSHADE) fr = self.frame - 7; // Nightshade appears only as medium-sized.
+    else fr = self.frame;
 
 	// Now find where the dragon's mouth is.
     if (self.classtype == CT_MONWYRM) {
@@ -910,9 +959,7 @@ void() wyrm_dieb10 =[ $deathb6,  wyrm_dieb10 ] {death_puff(); wyrm_countdown();}
 // Special death for the dragon king.
 void() wyrm_die = {
     monster_death_precheck();
-    
-    // Snap tilt angles back to zero now.
-    self.angles_x = self.angles_z = 0;
+    self.angles_x = self.angles_z = 0; // Snap tilt angles back to zero now.
 
     // No gib check, no decapitation, just a simple death scene.
     // Well, it is like Shub's with an initial dying anim then the big kaboom.
@@ -920,23 +967,20 @@ void() wyrm_die = {
     self.velocity_x = -200 + 400*random();
     self.velocity_y = -200 + 400*random();
     self.velocity_z =  100 + 100*random();
-    self.flags = self.flags - (self.flags & FL_ONGROUND);
-    // The wyrm is a boss, so use full volume.
-    sound (self, CHAN_VOICE, "drake/dragon/death1.wav", 1, ATTN_NONE);
+    self.flags = self.flags - FL_ONGROUND;
+    sound (self, CHAN_VOICE, "drake/dragon/death1.wav", 1, ATTN_NONE); // The wyrm is a boss, so use full volume.
     if (random() < 0.5) {
-    	// Shove it up a little for the fallback death anim.
-        self.velocity_z = 250 + 100*random();
-        wyrm_die1 ();
-    } else
-        wyrm_dieb1 ();
+        self.velocity_z = 250 + 100*random(); // Shove it up a little for the fallback death anim.
+        wyrm_die1();
+    } else wyrm_dieb1();
 };
 
 void() dragon_win = {
 	ryu_sfx_idle();
     if (self.movetarget || self.charmer)
-        self.th_walk ();
+        self.th_walk();
     else
-        self.th_stand ();
+        self.th_stand();
 };
 
 void() monster_ryu_precache = {
@@ -1000,12 +1044,12 @@ void() monster_ryu = {
     if (element == RYU_USE_ACID) {
 		self.resist_poison = self.resist_acid = 0.5; // Both slime/poisonous and poison crossbow bolt resistance.
 		evade = FALSE;
-		precache_model ("progs/drake/s_fancy.spr");	// careful!!! 176 frames!!!!!
+		precache_model ("progs/drake/s_fancy.spr");
 		if (self.deathstring == "")  self.deathstring = " was melted by a Dragon\n";
 	} else if (element == RYU_USE_LITE) {
         self.resist_cells = 0.5;
 		self.resist_plasma = 0.5;
-		precache_model ("progs/drake/s_fancy.spr");	// careful!!! 176 frames!!!!!
+		precache_model ("progs/drake/s_fancy.spr");
 		if (self.deathstring == "")  self.deathstring = " was blasted by a Dragon\n";
     } else if (element == RYU_USE_ICE) {
         self.resist_cold = 1;
@@ -1037,15 +1081,12 @@ void() monster_ryu = {
     // Set speed.
     if (powlevel) {
         self.spawnflags = self.spawnflags - (self.spawnflags & SPAWN_SLOW);
-        if (powlevel >= 2)
-            self.ryuflags = self.ryuflags | RYU_ALERT;
+        if (powlevel >= 2) self.ryuflags = self.ryuflags | RYU_ALERT;
         self.speed = 32;
-    } else
-        self.speed = 20;
+    } else self.speed = 20;
 
     self.solid = SOLID_NOT;		// No interaction with world
     self.movetype = MOVETYPE_NONE;	// Static item, no movement
-
     if (self.spawnflags & SPAWN_WYRM) {
         self.headmdl   = "progs/drake/dr2_head.mdl";
 		self.mdl = "progs/drake/dragon2.mdl";

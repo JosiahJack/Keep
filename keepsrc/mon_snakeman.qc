@@ -1,3 +1,49 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Tan Sian Yue aka Bubbah, Coyote, Ken Turner
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 78
+//
+// Implements: Snake-man
+//
+// Description:
+// Snakeman is a muscle bound, double Uzi Wieldin' "Snake-man".  He likes dark,
+// tight places where he can unleash devastating ambushes upon uncareful
+// travellers. He ain't too bad in open spaces either...Strafin' and running
+// up, firing at you!  Highly trained mercenaries (a grunt-extra), the ARMY of
+// SNAKEMEN... 
+//
+// He has 2 death sequences, 2 hurt sequences, a walk sequence and a Double Uzi
+// Blastin' sequence.  Drops uzi on death, but it's not useable at present,
+// sorry Levites! (vague reference to James B. Jordan lecture on Exodus, ha!)
+//=============================================================================
+
 void(float offset) SnakeMissile;
 
 void() snake_stand = [9, snake_stand2] { ai_stand(); };

@@ -49,8 +49,7 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage = { // [FU
 	local vector f;
 	local float lighthit, temp_classgroup;
 	
-	f = p2 - p1;
-	normalize (f);
+	f = normalize(p2 - p1);
 	f_x = 0 - f_y;
 	f_y = f_x;
 	f_z = 0;
@@ -62,7 +61,10 @@ void(vector p1, vector p2, entity from, float damage) LightningDamage = { // [FU
 	traceline (p1, p2, FALSE, self);
 	if (trace_ent.takedamage) {
 		lighthit = TRUE;
-		if ((self.flags & FL_CLIENT) && (other.flags & FL_CLIENT)) trace_ent.velocity_z = trace_ent.velocity_z + 400; // Some weird MP velocity hack! KEEP IT!!
+		if (((self.flags & FL_CLIENT) || self.classname == "monster_ranger")
+		    && ((other.flags & FL_CLIENT)|| other.classname == "monster_ranger")) {
+			trace_ent.velocity_z = trace_ent.velocity_z + 400; // Some weird MP velocity hack! KEEP IT!!
+		}
 	} else {
 		e1 = trace_ent;
 		traceline (p1 + f, p2 + f, FALSE, self);
@@ -563,7 +565,9 @@ float(entity targ, entity inflictor, entity attacker, float damage, vector spot,
         else if (bang) sound (inflictor, CHAN_VOICE, "weapons/lhit.wav", 1, ATTN_NORM);
 
         end = trace_endpos; // Use where bolt hit for blood spot.
-        BoltDamage(targ,inflictor,attacker,end,damage);
+        if (targ.bodyonflr == MON_ONFLR) {
+			monster_flrbody_gib(targ, damage * 2);
+		} else BoltDamage(targ,inflictor,attacker,end,damage);
         return TRUE;
     }
     return FALSE;
@@ -581,16 +585,14 @@ void(entity inflictor, entity attacker, float damage, entity ignore, vector spot
     saved = world;
     head = findradius(spot,radius);
     while (head) { // Notarget/stealth won't save you from discharge.  Don't waste hits on immune targets, though.
-        if (head.takedamage == DAMAGE_AIM && head != attacker
-            && head != ignore && head.resist_cells < 1
+        if ((head.takedamage == DAMAGE_AIM
+			&& (head != attacker&& head != ignore && head.resist_cells < 1
             && !(nofriendlyfire && Ally_Check(head,attacker))
-            && Align_Opposing(head,attacker)) {
+            && Align_Opposing(head,attacker)))
+			|| head.bodyonflr == MON_ONFLR) {
 			// Go to the trouble of zapping live, highly vulnerable targets
             // first instead of dead or resistant targets.
-			if (head.deadflag || (head.health <= 0) || (head.resist_cells > 0)) { // Dead or resistant -- save it for later.
-				head.chain2 = saved;
-				saved = head;
-			} else if (BurstLit_Trace(head,inflictor,attacker,damage,spot,bang)) {
+			if (BurstLit_Trace(head,inflictor,attacker,damage,spot,bang)) {
 				hits = hits + 1;
 				if (hits >= maxhits) {
 					if (attacker.flags & FL_CLIENT) {
@@ -602,20 +604,6 @@ void(entity inflictor, entity attacker, float damage, entity ignore, vector spot
 			}
         }
         head = head.chain;
-    }
-	// Now we zap the saved targets because we ran out of other targets.
-    while (saved) {
-        if (BurstLit_Trace(saved,inflictor,attacker,damage,spot,bang)) {
-            hits = hits + 1;
-            if (hits >= maxhits) {
-				if (attacker.flags & FL_CLIENT) {
-					attacker.ammo_cells = SUB_ClampFloat(attacker.ammo_cells - floor(maxhits * 3),0,attacker.ammo_cells);
-					attacker.currentammo = attacker.ammo_cells;
-				}
-				return; // I hate to burst your chain, but...
-			}
-        }
-        saved = saved.chain2;
     }
 };
 

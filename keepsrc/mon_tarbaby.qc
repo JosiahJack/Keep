@@ -35,6 +35,9 @@
 // Description:
 // A blue gelatinous blob that explodes on death.  Hurts by jumping at players
 // and touching them and explodes on death in special purple explosion.
+//
+// "A merrily bouncing blob as dangerous to kill as to ignore. Blech."
+//   -id1 Quake manual
 //=============================================================================
 
 // Tarbaby, spawn, blue blob! (mostly annoying ... troll monster)

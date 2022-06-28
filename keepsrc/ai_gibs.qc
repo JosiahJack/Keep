@@ -705,7 +705,7 @@ void() monster_ThrowGib = {
 		if (self.max_health == MON_NOGIBVELOCITY) ThrowGib(4, rint(random()*4)); // If monster set for low velocity throw extra gibs instead
 		else ThrowGib(25, 1); // Throw a head gib instead of switch to one
 	}
-	newmis.bodyonflr = 0;// MON_ONFLR; // Set the last thrown gib to be the respawn source. TODO: not ready yet.
+	newmis.bodyonflr = "";// MON_ONFLR; // Set the last thrown gib to be the respawn source. TODO: not ready yet.
 	newmis.classname = self.classname;
 	newmis.health = 0;
 	newmis.flags = FL_MONSTER;
@@ -811,7 +811,7 @@ void(entity onflr, float impactdmg) monster_flrbody_gib = {
 	}
 
 	self = tself; other = tother;	// switch back
-	SpawnBlood (onflr, onflr.origin, '0 0 50', impactdmg*4,0);
+	SpawnBlood(onflr, onflr.origin, '0 0 50', impactdmg*4,0);
 	if (onflr.bodyonflrtrig) trigger_strs(onflr.bodyonflrtrig,self);
 	entity_hide(onflr); // Hide/Remove original body/shadow
 };

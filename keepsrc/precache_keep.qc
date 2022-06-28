@@ -321,6 +321,7 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_sound("ad171/weapons/bolt_hit3.wav");
 	precache_sound("drake/bane/thunder.wav");
 	precache_sound("tronyn/lightning_component_electrified.wav");
+	precache_sound("tronyn/lightning_rod_electrified.wav");
 	precache_model ("progs/drake/dragon.mdl");
 	precache_aoa();
 	precache_poisongibs();

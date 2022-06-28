@@ -208,7 +208,7 @@ void (entity inflictor, entity attacker, float damage) scourge_pain = {
 
 void () scourge_die1 = [ 36.000, scourge_die2 ] { self.spawnsilent = FALSE; scourge_think (); };
 void () scourge_die2 = [ 37.000, scourge_die3 ] {};
-void () scourge_die3 = [ 38.000, scourge_die4 ] { self.solid = SOLID_NOT; };
+void () scourge_die3 = [ 38.000, scourge_die4 ] { self.solid = SOLID_NOT; self.bodyonflr = MON_ONFLR;};
 void () scourge_die4 = [ 39.000, scourge_die5 ] {};
 void () scourge_die5 = [ 40.000, scourge_die5 ] {};
 

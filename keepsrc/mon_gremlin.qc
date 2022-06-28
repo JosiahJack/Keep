@@ -1,52 +1,51 @@
-entity () GremlinFindVictim;
-float () GremlinFindTarget;
-float () GremlinCheckNoAmmo;
-void () gremlin_glook1;
-void () Gremlin_JumpTouch;
-void () Gremlin_FlipTouch;
-void (float side) Gremlin_Melee;
-void (float side) Gremlin_Gorge;
-float () GremlinWeaponAttack;
+entity() GremlinFindVictim;
+float() GremlinFindTarget;
+float() GremlinCheckNoAmmo;
+void() gremlin_glook1;
+void() Gremlin_JumpTouch;
+void() Gremlin_FlipTouch;
+void(float side) Gremlin_Melee;
+void(float side) Gremlin_Gorge;
+float() GremlinWeaponAttack;
 
-float (float ammo) gremlin_ammo_steal = {
-	float take = 0;
-	if (ammo > GREMLIN_AMMO_TAKE) {
-		take = GREMLIN_AMMO_TAKE;
-	} else {
-		take = ammo;
-	}
-	return take;
+float(float ammo) gremlin_ammo_steal = {
+	if (ammo > GREMLIN_AMMO_TAKE) return GREMLIN_AMMO_TAKE;
+	return ammo;
 };
 
-void () gremlin_steal_shells = {
-      float amount = gremlin_ammo_steal(self.enemy.ammo_shells);
+void() gremlin_steal_shells = {
+      local float amount;
+
+      amount = gremlin_ammo_steal(self.enemy.ammo_shells);
       self.enemy.ammo_shells = (self.enemy.ammo_shells - amount);
       self.ammo_shells = (self.ammo_shells + amount);
       self.currentammo = self.ammo_shells;
 };
 
-void () gremlin_steal_nails = {
-      float amount = gremlin_ammo_steal(self.enemy.ammo_nails);
+void() gremlin_steal_nails = {
+      local float amount;
+
+      amount = gremlin_ammo_steal(self.enemy.ammo_nails);
       self.enemy.ammo_nails = (self.enemy.ammo_nails - amount);
       self.ammo_nails = (self.ammo_nails + amount);
       self.currentammo = self.ammo_nails;
 };
 
-void () gremlin_steal_rockets = {
+void() gremlin_steal_rockets = {
       float amount = gremlin_ammo_steal(self.enemy.ammo_rockets);
       self.enemy.ammo_rockets = (self.enemy.ammo_rockets - amount);
       self.ammo_rockets = (self.ammo_rockets + amount);
       self.currentammo = self.ammo_rockets;
 };
 
-void () gremlin_steal_cells = {
+void() gremlin_steal_cells = {
       float amount = gremlin_ammo_steal(self.enemy.ammo_cells);
       self.enemy.ammo_cells = (self.enemy.ammo_cells - amount);
       self.ammo_cells = (self.ammo_cells + amount);
       self.currentammo = self.ammo_cells;
 };
 
-void () gremlin_steal_bolts = {
+void() gremlin_steal_bolts = {
       float amount = gremlin_ammo_steal(self.enemy.ammo_bolts);
       self.enemy.ammo_bolts = (self.enemy.ammo_bolts - amount);
       self.ammo_bolts = (self.ammo_bolts + amount);
@@ -197,13 +196,11 @@ float () GremlinAttemptWeaponSteal = {
    self = tempself; // back to gremlin
    self.stoleweapon = TRUE;
    self.attack_finished = time;
-   if ( (random () > 0.650) )
-      self.lastvictim = self.enemy;
-   else
-      self.lastvictim = self;
+   if ( (random () > 0.650) ) self.lastvictim = self.enemy;
+   else self.lastvictim = self;
 
    victim = GremlinFindVictim();
-   if ( (victim != world) ) {
+   if (victim) {
       self.enemy = victim;
       FoundTarget();
       self.attack_finished = time;
@@ -212,11 +209,9 @@ float () GremlinAttemptWeaponSteal = {
    return (TRUE);
 };
 
-float () GremlinFindTarget = {
-   local entity head;
-   local entity gorge;
-   local float dist;
-   local float result;
+float() GremlinFindTarget = {
+   local entity head, gorge;
+   local float dist, result;
 
    if ( ((self.stoleweapon == FALSE) && (time > self.wait)) ) {
       self.wait = (time + TRUE);
@@ -608,7 +603,7 @@ void () GremlinFireLightning = {
    WriteCoord (MSG_BROADCAST,trace_endpos_x);
    WriteCoord (MSG_BROADCAST,trace_endpos_y);
    WriteCoord (MSG_BROADCAST,trace_endpos_z);
-   LightningDamage (org,trace_endpos+ (dir * MOVETYPE_STEP),self,SVC_INTERMISSION);
+   LightningDamage(org,trace_endpos+ (dir * MOVETYPE_STEP),self,SVC_INTERMISSION);
 };
 
 void () gremlin_light1 = [ 135.000, gremlin_light2 ] {GremlinFireLightning();};
@@ -933,7 +928,7 @@ void () gremlin_flip2 = [ 117.000, gremlin_flip3 ] { ai_face (); };
 void () gremlin_flip3 = [ 118.000, gremlin_flip4 ] {};
 void () gremlin_flip4 = [ 119.000, gremlin_flip5 ] {};
 void () gremlin_flip5 = [ 120.000, gremlin_flip6 ] {};
-void () gremlin_flip6 = [ 121.000, gremlin_flip7 ] { self.touch = Gremlin_FlipTouch; };
+void () gremlin_flip6 = [ 121.000, gremlin_flip7 ] { self.touch = Gremlin_FlipTouch; self.bodyonflr = MON_ONFLR;};
 void () gremlin_flip7 = [ 122.000, gremlin_flip8 ] { self.nextthink = (time + MOVETYPE_WALK); };
 void () gremlin_flip8 = [ 123.000, gremlin_flip8 ] { self.solid = SOLID_NOT; };
 
@@ -958,7 +953,7 @@ void () gremlin_die = {
       return ;
    } else {
       if ( (((dot > 0.700) && (random () < 0.500)) && (self.flags & FL_ONGROUND)) ) {
-         gremlin_flip1 ();
+         gremlin_flip1();
          return ;
       }
    }

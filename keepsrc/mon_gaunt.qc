@@ -114,17 +114,15 @@ void() gaunt_strafe = {
 	if (self.lip == 1) self.lip = 0;
 };
 
-void(vector p1, vector p2, entity from, float damage) GauntLightningDamage = 
-{
-	local entity e1;
-	local entity e2;
+void(vector p1, vector p2, entity from, float damage) GauntLightningDamage = {
+	local entity e1, e2;
 	local vector f;
 	local float preserve_classgroup;
-	f = p2 - p1;
-	normalize(f);
-	f_x = MSG_BROADCAST - f_y;
+
+	f = normalize(p2 - p1);
+	f_x = 0 - f_y;
 	f_y = f_x;
-	f_z = MSG_BROADCAST;
+	f_z = 0;
 	f = f * 16;
 	e2 = world;
 	e1 = world;

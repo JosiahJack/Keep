@@ -1520,6 +1520,12 @@ void(entity targ) W_SetCurrentAmmo = { // [FUNCTION]
 			targ.currentammo = targ.ammo_bloodcrystals;
 			targ.weaponmodel = "progs/aoa/v_rapier.mdl";
 		} else {
+			if (targ.weaponmodel != "") {
+				targ.weaponmodel = "";
+				targ.selfweaponismoditems = TRUE;
+				W_SetCurrentAmmo(targ); // Do it again for the hack bank.
+				return;
+			}
 			// This is also called no axe startup option.  Cinematic mode, no viewmodel.
 			targ.currentammo = 0;
 			targ.weaponmodel = "";
@@ -1544,6 +1550,12 @@ void(entity targ) W_SetCurrentAmmo = { // [FUNCTION]
 			targ.currentammo = 0;
 			targ.weaponmodel = "progs/airfist/v_airgun.mdl";
 		} else {
+			if (targ.weaponmodel != "") {
+				targ.weaponmodel = "";
+				targ.selfweaponismoditems = FALSE;
+				W_SetCurrentAmmo(targ); // Do it again for the other bank.
+				return;
+			}
 			// This is also called no axe startup option.  Cinematic mode, no viewmodel.
 			targ.currentammo = 0;
 			targ.weaponmodel = "";
