@@ -79,7 +79,7 @@ void() ai_stand = {
 	//  The dragon hovers in place.  If a water-fearing dragon is underwater, it will escape the pool if possible. 
 	//  The dragon glides along its path.  Like ryu_stand(), a water-fearing dragon will try to escape from any body of water if it is placed in one.
 	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
-		if (Ryu_HatesWater ()) {
+		if (Ryu_HatesWater()) {
 			if (self.waterlevel) {
 				if (Ryu_LeaveWater(self.speed)) return;
 			}

@@ -539,9 +539,15 @@ void() mino_summon4 =[ $howl7, mino_summon5 ] {mino_sumeffect();};
 void() mino_summon5 =[ $howl9, mino_summon6 ] {mino_sumeffect();};
 void() mino_summon6 =[ $howl11, mino_summon7 ] {mino_sumeffect();};
 void() mino_summon7 =[ $howl13, mino_summon8 ] {mino_sumeffect();
+	// Find out if there is enough space to spawn a gargoyle
+	// Findradius version
 	makevectors(self.angles);
 	self.pos1 = self.origin + self.view_ofs + v_forward*64 + v_up*32;
-	if (SpawnMinionInRadius(self.pos1)) { // Find out if there is enough space and spawn a gargoyle
+	self.aflag = find_minionspace(self.pos1);
+	
+	// If the spawn locaiton all clear, spawn something!
+	if (self.aflag == TRUE) {
+		minion_gargoyle(self.pos1, self.enemy);
 		self.pos2 = self.pos1 - '0 0 16';	// Origin of gargoyle
 		mino_sumball(0);
 	}
@@ -561,23 +567,8 @@ void() mino_summon18 =[ $howl35, mino_run ] {ai_face();SUB_AttackFinished (1 + 2
 
 // Both type of minotaurs go through the same magic function
 void() mino_magic = {
-	local entity miniondef;
-	
-	// Make sure the attachments are setup ready
-	minotaur_create_attachment();
-
-	if (self.spawnflags & MON_MINOTAUR_MINIONS && !self.minion_active) {
-		// Check for minion template first
-		miniondef = find(world,classname,"monster_minotaurminion");
-		if (miniondef.classtype == CT_CACHEGARGOYLE) {
-			setup_minionsupport();
-		} else {
-			setup_minionsupport(); // Set them up anyways, Qmaster added precaches to main monster_minotaur function
-			// If template no available, warn and remove feature
-			// dprint("\b[MINOTAUR]\b Cannot find minion template!\n");
-			// self.spawnflags = self.spawnflags - MON_MINOTAUR_MINIONS;
-		}
-	}
+	minotaur_create_attachment(); // Make sure the attachments are setup ready
+	if (self.spawnflags & MON_MINOTAUR_MINIONS && !self.minion_active) setup_minionsupport();
 	
 	// Is the target the player or monster?
 	if (self.enemy.flags & FL_CLIENT) {
@@ -588,9 +579,7 @@ void() mino_magic = {
 				if (self.minion_baseattack > 0 ) mino_magic1();
 				else mino_run();
 			}
-		}
-		// White Minotaur attacks with plasma
-		else mino_magic1();
+		} else mino_magic1(); // White Minotaur attacks with plasma
 		
 	}
 	// Always attack monsters with plasma/poison projectiles
@@ -792,7 +781,7 @@ void() monster_minotaur = {
 	self.classtype = CT_MONMINOTAUR;
 	self.classgroup = CG_DEMON;
 	self.classmove = MON_MOVEWALK;
-	if (self.minion_name == string_null) {
+	if (self.minion_name == "" || self.spawnflags & MON_MINOTAUR_MINIONS) {
 		self.minion_name = "monster_gargoyle";
         self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIAL;
     }

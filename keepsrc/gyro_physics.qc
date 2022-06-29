@@ -279,10 +279,10 @@ void(entity e) Gyro_RunPhysics_Resistance = {
 	if (!(e.gyro_object_flags & GYRO_OBJECTFLAG_RESISTANCE)) return;
 	
 	//----- Get Motion Values for Current Pointcontents --------------------
-	if (e.gyro_object_pointcontent == -3)		resistpower = e.gyro_object_resistance_water;
-	else if (e.gyro_object_pointcontent == -4)	resistpower = e.gyro_object_resistance_slime;
-	else if (e.gyro_object_pointcontent == -5)	resistpower = e.gyro_object_resistance_lava;
-	else										resistpower = e.gyro_object_resistance_air;
+	if (e.gyro_object_pointcontent == CONTENT_WATER)		resistpower = e.gyro_object_resistance_water;
+	else if (e.gyro_object_pointcontent == CONTENT_SLIME)	resistpower = e.gyro_object_resistance_slime;
+	else if (e.gyro_object_pointcontent == CONTENT_LAVA)	resistpower = e.gyro_object_resistance_lava;
+	else resistpower = e.gyro_object_resistance_air;
 	
 	//----- Apply Resistance Values to Effect Buffers --------------------
 	resistpower = Gyro_PowerEstimation(resistpower, GYRO_TICKRATE);
@@ -300,22 +300,26 @@ void(entity e) Gyro_Object_RemoveResistance = {
 	e.gyro_object_flags = e.gyro_object_flags - (e.gyro_object_flags & GYRO_OBJECTFLAG_RESISTANCE);
 	
 	//----- Print Debugging Information --------------------
-	dprint("Gyro Debug: Entity motion resistance removed from '");
-	dprint(e.classname);
-	dprint("'\n");
+	//dprint("Gyro Debug: Entity motion resistance removed from '");
+	//dprint(e.classname);
+	//dprint("'\n");
 };
 
 //----- Apply Motion Resistance Settings to an Object --------------------
 void(entity e, float resforce, float mod_air, float mod_water, float mod_slime, float mod_lava) Gyro_Object_SetResistanceMod = {
+	if (!e) return;
 	//----- Zero Resistance: Run Deactivation Function --------------------
 	if (resforce == 0) return Gyro_Object_RemoveResistance(e);
 	
 	//----- Set Motion Resistance for All Environments --------------------
-	e.gyro_object_resistance_air = 1.0 / (((resforce * mod_air * 10.0) / e.gyro_object_mass) + 1.0);
-	e.gyro_object_resistance_water = 1.0 / (((resforce * mod_water * 10.0) / e.gyro_object_mass) + 1.0);
-	e.gyro_object_resistance_slime = 1.0 / (((resforce * mod_slime * 10.0) / e.gyro_object_mass) + 1.0);
-	e.gyro_object_resistance_lava = 1.0 / (((resforce * mod_lava * 10.0) / e.gyro_object_mass) + 1.0);
-	e.gyro_object_flags = e.gyro_object_flags | GYRO_OBJECTFLAG_RESISTANCE;
+	if (mod_air > 0) e.gyro_object_resistance_air = 1.0 / (((resforce * mod_air * 10.0) / e.gyro_object_mass) + 1.0);
+	dprint("SetResistanceMod made it to here\n");
+	dprint("air restistance was "); dprint(ftos(resforce)); dprint(", "); dprint(ftos(mod_air));
+	dprint("\n");
+	if (mod_water > 0) e.gyro_object_resistance_water = 1.0 / (((resforce * mod_water * 10.0) / e.gyro_object_mass) + 1.0);
+	if (mod_slime > 0) e.gyro_object_resistance_slime = 1.0 / (((resforce * mod_slime * 10.0) / e.gyro_object_mass) + 1.0);
+	if (mod_lava > 0) e.gyro_object_resistance_lava = 1.0 / (((resforce * mod_lava * 10.0) / e.gyro_object_mass) + 1.0);
+	if (mod_air > 0 || mod_water > 0 || mod_slime > 0 || mod_lava > 0) e.gyro_object_flags = e.gyro_object_flags | GYRO_OBJECTFLAG_RESISTANCE;
 	
 	//----- Print Debugging Information --------------------
 	// dprint("Gyro Debug: Entity motion resistance activated for '");
@@ -328,7 +332,22 @@ void(entity e, float resforce, float mod_air, float mod_water, float mod_slime, 
 };
 
 //----- Give an Object Globally-Defined Motion Resistance --------------------
-void(entity e, float resforce) Gyro_Object_SetResistance = { Gyro_Object_SetResistanceMod(e, resforce, GYRO_RESISTANCEMOD_AIR, GYRO_RESISTANCEMOD_WATER, GYRO_RESISTANCEMOD_SLIME, GYRO_RESISTANCEMOD_LAVA); };
+void(entity e, float resforce) Gyro_Object_SetResistance = {
+	if (!e) return;
+
+	Gyro_Object_SetResistanceMod(e, resforce, GYRO_RESISTANCEMOD_AIR,
+								 GYRO_RESISTANCEMOD_WATER,
+								 GYRO_RESISTANCEMOD_SLIME,
+								 GYRO_RESISTANCEMOD_LAVA);
+};
+void(entity e, float resforce) Gyro_Object_SetLiquidResistance = {
+	if (!e) return;
+
+	Gyro_Object_SetResistanceMod(newmis,resforce,0, // No air resistance.
+								 GYRO_RESISTANCEMOD_WATER,
+								 GYRO_RESISTANCEMOD_SLIME,
+								 GYRO_RESISTANCEMOD_LAVA); 
+}
 
 // Seperated this out as its own function for reuse by the rope system. -Qmaster
 vector(vector moveangle, vector angles) Gyro_Aerodynamics_Turnangle = {

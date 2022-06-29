@@ -634,15 +634,20 @@ void() nemes_death16 =[ $death16, nemes_death17 ] {};
 void() nemes_death17 =[ $death17, nemes_death17 ] {};
 
 void() nemes_die = {
-    self.velocity_x = -200 + 400*random();
-    self.velocity_y = -200 + 400*random();
-    self.velocity_z = 200 + 100*random();   // PM:  Used to be 300.
-    self.flags = self.flags - (self.flags & FL_ONGROUND);
-    if (random() < 0.5)
-        sound (self, CHAN_VOICE, "zerstorer/trog/tdeath1.wav", 1, ATTN_NORM);
-    else
-        sound (self, CHAN_VOICE, "zerstorer/trog/tdeath2.wav", 1, ATTN_NORM);
-    nemes_death1 ();
+	monster_death_precheck(); // Pre-check routine to tidy up extra entities
+
+	if (!self.gibbed) {
+        self.velocity_x = -200 + 400*random();
+        self.velocity_y = -200 + 400*random();
+        self.velocity_z = 200 + 100*random();   // PM:  Used to be 300.
+        self.flags = self.flags - (self.flags & FL_ONGROUND);
+        self.movetype = MOVETYPE_TOSS;
+        if (random() < 0.5)
+            sound (self, CHAN_VOICE, "zerstorer/trog/tdeath1.wav", 1, ATTN_NORM);
+        else
+            sound (self, CHAN_VOICE, "zerstorer/trog/tdeath2.wav", 1, ATTN_NORM);
+        nemes_death1 ();
+    }
 };
 
 void() monster_nemesant_precache = {

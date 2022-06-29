@@ -400,9 +400,6 @@ void() xxshub_start = {
 };
 
 void() monster_shub_precache = {
-	dprint("Precaching shub / oldone on frame ");
-	dprint(ftos(framecount));
-	dprint("!\n");
 	precache_model ("progs/oldone.mdl");
 	precache_model (MODEL_PROJ_SHUB1);		// Large Homing Missile
 	precache_model (MODEL_PROJ_SHUB2);		// Large blob of blood

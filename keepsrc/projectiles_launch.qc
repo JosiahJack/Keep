@@ -329,9 +329,6 @@ void(vector org, vector dir, float proj_type, float proj_speed) launch_projectil
 	
 	if (entity_pcontent(org)) return; // Check if there is space to spawn entity
 
-	if (self.minion_spawn_time & MONANIM_SPECIFIC) {
-		if (SpawnMinionInRadius(self.origin)) return; // Successfully spawned a minion, don't shoot.
-	}
 	newmis = spawn();
 	newmis.owner = newmis.oldenemy = self;
 	newmis.enemy = self.enemy;				// Used for homing target
@@ -985,8 +982,8 @@ void(vector org, vector dir, vector avel, float proj_type) Launch_Grenade = { //
 		Gyro_Object_Activate(newmis,MASS_GRENADE);
 		if (newmis.physicsflags & PHYS_GYRO_BOUYANT) Gyro_Object_SetBouyancy(newmis,BOUY_GRENADE);
 		if (newmis.physicsflags & PHYS_GYRO_TURBULENCE) Gyro_Object_SetTurbulence(newmis,TURB_GRENADE, 0.95);
-		if (newmis.physicsflags & PHYS_GYRO_MOTIONRESIST) Gyro_Object_SetResistance(newmis,RESIST_GRENADE);
-		if (newmis.physicsflags & PHYS_GYRO_AERODYNAMIC) Gyro_Object_SetResistance(newmis,AERO_GRENADE);
+		if (newmis.physicsflags & PHYS_GYRO_MOTIONRESIST) Gyro_Object_SetLiquidResistance(newmis,RESIST_GRENADE);
+		if (newmis.physicsflags & PHYS_GYRO_AERODYNAMIC) Gyro_Object_SetLiquidResistance(newmis,AERO_GRENADE);
 	}
 };
 
@@ -1309,7 +1306,7 @@ void(float offsetAngle) MiniGrenadeLaunch = { // [FUNCTION]
 	newmis.th_die = MiniGrenadeExplode;
 	Gyro_Object_Activate(newmis,MASS_MINIGRENADE);
 	Gyro_Object_SetBouyancy(newmis,BOUY_MINIGRENADE);
-	Gyro_Object_SetResistance(newmis,RESIST_MINIGRENADE); // Sluggish in liquids
+	Gyro_Object_SetLiquidResistance(newmis,RESIST_MINIGRENADE); // Sluggish in liquids
 };
 
 void (float offset, float frameNum) MultiRocketLaunch = { // [FUNCTION]

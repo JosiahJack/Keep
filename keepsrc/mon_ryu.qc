@@ -201,7 +201,7 @@ void(entity targ) wyrm_move = {
                     left = 8;
                 else if (left < -8)
                     left = -8;
-                ai_up (left);
+                ai_up(left);
             }
 
     self.enemy = swap;
@@ -350,10 +350,10 @@ void(vector p1, vector p2, float sped, float damage, entity targ, float shots, f
         if (atype & RYU_ELEMENTS == RYU_USE_ICE) {
             // Ice spray.
             if (bomb) { // Explosive iceballs.
-                Iceball_Toss (p1, dir, sped2, self.height);
+                Iceball_Toss(p1, dir, sped2, self.height);
                 newmis.velocity_z = newmis.velocity_z + 200;
             } else { // Ice shards.  Default damage is 9, so raise it if too weak.
-                Ice_Launch (p1, dir, sped2);    // Use 'sped' for same speed.
+                Ice_Launch(p1, dir, sped2);    // Use 'sped' for same speed.
                 newmis.delay = time + 0.7;  // Total duration.  Was 0.8.
             }
             if (newmis.dmg < damage)
@@ -851,6 +851,7 @@ void() dragon_die = {
         self.velocity_y = -200 + 400*random();
         self.velocity_z =  100 + 100*random();
         self.flags = self.flags - (self.flags & FL_ONGROUND);
+        self.movetype = MOVETYPE_TOSS;
         sound (self, CHAN_VOICE, "drake/dragon/death1.wav", 1, ATTN_NORM);
         if (random() < 0.5) {
     	    // Shove it up a little for the fallback death anim.
@@ -1033,6 +1034,7 @@ void() monster_ryu = {
     self.gib1mdl = "progs/drake/dr1_lw.mdl";
     self.gib2mdl = "progs/drake/dr1_rw.mdl";
     self.gib3mdl = "progs/drake/dr1_tail.mdl";
+    if (self.skin <= 0 && self.exactskin > 0) self.skin = self.exactskin;
     if (self.skin == RYUSKIN_GREEN)        self.ryuflags = RYU_USE_ACID;
     else if (self.skin == RYUSKIN_BLUE)    self.ryuflags = RYU_USE_LITE;
     else if (self.skin == RYUSKIN_WHITE)   self.ryuflags = RYU_USE_ICE;

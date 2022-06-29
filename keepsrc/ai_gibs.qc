@@ -555,7 +555,7 @@ void(float gib_no, float gib_qty) ThrowGib = {
 		if (gibitem.physicsflags) {
 			Gyro_Object_Activate(gibitem,MASS_GIB);
 			if (gibitem.physicsflags & PHYS_GYRO_BOUYANT) Gyro_Object_SetBouyancy(gibitem,BOUY_GIB);
-			if (gibitem.physicsflags & PHYS_GYRO_MOTIONRESIST) Gyro_Object_SetResistance(gibitem,RESIST_GIB);
+			//if (gibitem.physicsflags & PHYS_GYRO_MOTIONRESIST) Gyro_Object_SetLiquidResistance(gibitem,RESIST_GIB);
 		}
 		gib_qty = gib_qty - 1;
 	}

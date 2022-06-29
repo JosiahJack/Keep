@@ -363,7 +363,7 @@ void() Touch_Projectile = { // [FUNCTION]
 
 		// Nail Piercing affect, move nail through monster
 		if (self.projeffect & IT_ARTPIERCE) {
-			if (random() < 0.2) SpawnMeatSpray (self, other, crandom() * 100); // a small pile of gifs! (spog)
+			if (random() < 0.05) SpawnMeatSpray (self, other, crandom() * 100); // a small pile of gifs! (spog)
 			self.movetype = MOVETYPE_FLY; // Setup projectile ready for monster tests
 			self.solid = SOLID_BBOX;
 			self.oldorigin = self.origin;
@@ -386,7 +386,7 @@ void() Touch_Projectile = { // [FUNCTION]
 				proj_type = self.classtype;
 				proj_speed = self.speed;
 				self = self.owner; // Once a projectile hits an object it is impossible to reset its velocity/angles and carry on.  Use owner to make non-solid...
-				launch_projectile(org, dir, proj_type, proj_speed); // ... and create a new projectile and delete the current one instead!
+				//launch_projectile(org, dir, proj_type, proj_speed); // ... and create a new projectile and delete the current one instead!
 				self = tself;
 			}
 		}
@@ -1157,7 +1157,7 @@ void() Ice_Touch = { // [FUNCTION]
     self.angles_y = anglemod(self.angles_y + 180);
     setorigin (self, spot);
     self.alpha = 0;
-    BecomeAnyExplosion (RING2_ICE, 3, "progs/drake/s_wave2.spr");
+    BecomeAnyExplosion(RING2_ICE, 3, "progs/drake/s_wave2.spr");
 };
 
 void() IceMine_Touch = { // [FUNCTION]

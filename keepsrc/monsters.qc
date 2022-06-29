@@ -991,6 +991,7 @@ void() monster_bbox =  {
 
 float(string mname) monster_checkminion = {
 	if (mname == string_null || mname == "") return FALSE;
+	dprint("Precached minion: "); dprint(mname);
 	precache_monster(mname);
 	if (!self.minion_spawn_time || !(self.minion_spawn_time & MONANIM_SPECIFIC)) self.minion_spawn_time = self.minion_spawn_time | MONANIM_SPECIFIC;
 	if (!self.minion_spawn_chance) self.minion_spawn_chance = 1; // Default to 100% spawn chance for custom minions

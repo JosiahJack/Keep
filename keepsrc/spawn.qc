@@ -1093,9 +1093,6 @@ void () func_spawn_small = { func_spawn (); };
 void(string mname) precache_monster = {
 	if (framecount > 1) return;
 
-	// dprint("Precaching ");
-	// dprint(mname);
-	// dprint(".\n");
 	if (mname == "monster_acolyte")				necro_cache();
 	else if (mname == "monster_afrit")			monster_gargoyle_precache();
 	else if (mname == "monster_anac")			monster_anac_precache();
@@ -1310,4 +1307,5 @@ void(string mname) precache_monster = {
 	else if (mname == "monster_zombiek")		monster_zombiek_precache();
 	// else if (mname == "monster_zombie_master")	monster_zombie_master_precache();
 	else if (mname == "monster_zombiep")		monster_zombiep_precache();
+	dprint("\n");
 };

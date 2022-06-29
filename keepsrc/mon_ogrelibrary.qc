@@ -426,6 +426,12 @@ void() cart_think = {
 
 void() misc_librarycart = {
   precache_model("progs/nehahra/libcart.mdl");
+  precache_model("progs/redfield/misc_bookrk.mdl");
+  precache_model("progs/nehahra/frubble1.mdl");
+  precache_model("progs/nehahra/frubble2.mdl");
+  precache_model("progs/nehahra/frubble3.mdl");
+  precache_model("progs/ad171/w_skullbook.mdl");
+  precache_sound("nehahra/wall/woodbrk.wav");
   self.classtype = CT_FUNCBREAKOBJ;
   self.classgroup = CG_BREAKABLE;
   self.solid = SOLID_BBOX;
@@ -576,6 +582,8 @@ void() monster_oglib_precache = {
   precache_sound("nehahra/wall/woodbrk.wav");
   precache_sound("nehahra/wall/statslid.wav");
   precache_sound("nehahra/wall/barslide.wav");
+  precache_model("progs/ad171/w_skullbook.mdl");
+  precache_sound("nehahra/wall/woodbrk.wav");
 };
 
 void() monster_oglib = {

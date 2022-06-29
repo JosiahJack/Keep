@@ -1,3 +1,52 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \ 
+// |  \ |___ |___ |        |  | \__/ |__/ 
+//
+// Compiled by W. Josiah Jack, aka Qmaster
+//
+// Attributions: Arcane Dimensions (AD), Madfox, Rogue, id1
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 5
+// Function count: 183
+//
+// Implements:  Ogre, Mult-grenade Ogre, Marksman Ogre, Fishing Ogre, Fishing
+//              Ogre Ghost 
+//
+// Description:
+// A chainsaw weilding monstrosity that lobs exploding grenades at you.
+//
+// Multi-grenade variant from Rogue launches grenades that split into five
+// minigrenades doing large area damage.
+//
+// The marksman ogre is an original id1 variant that is otherwise normal except
+// with Z-aware aiming.
+//
+// The fishing ogre was created by the Quake classicist and brilliant artistry
+// of Madfox.  Arcane Dimensions added the ghost version which works well with
+// ghostly fish with alpha set.
+//=============================================================================
+
 $cd id1/models/ogre_c
 $origin 0 0 24
 $base base		
@@ -635,5 +684,6 @@ void() monster_ogre_fishing_ghost = {
 
 void() monster_ogre_multi = {
 	self.spawnflags = self.spawnflags | OGRE_MULTI;
+	if (self.exactskin == 0) self.skin = self.exactskin = 3;
 	monster_ogre();
 };

@@ -313,7 +313,16 @@ void()	player_supersg6 =	[118, player_supersg1	] { // [FUNCTION]
 	if (frame_pause()) return;
 
 	self.weaponframe=6;
-	if (self.ammo_shells < 2) forceweaponswitch(0.2);// If player has one shell left, switch to SG after SSG fire animation
+	if (self.ammo_shells < 2) {
+		if (self.ammo_shells == 1){
+			if ((self.items & IT_SHOTGUN) || (self.perms & IT_BLASTER)) {
+				self.weapon = IT_SHOTGUN;
+				W_SetCurrentAmmo(self);
+				return;
+			}
+		}
+		forceweaponswitch(0.2);// If player has one shell left, switch to SG after SSG fire animation
+	}
 };
 
 // Nailgun

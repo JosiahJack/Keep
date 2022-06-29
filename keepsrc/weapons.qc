@@ -270,8 +270,8 @@ void (float stat) HIP_FireLaser = { // [FUNCTION]
 	}
 
 	if ((self.weapon == IT_SHOTGUN && !self.selfweaponismoditems) && (self.ammo_shells < TRUE) ) { // Blaster uses this
-		self.weapon = W_BestWeapon (self);
-		W_SetCurrentAmmo (self);
+		self.weapon = W_BestWeapon(self);
+		W_SetCurrentAmmo(self);
 		return ;
 	}
 
@@ -1578,7 +1578,7 @@ float(entity targ) W_BestWeapon = { // [FUNCTION]
 	if (targ.ammo_bloodcrystals > 0 && (targ.items & IT_SANGUINATORS) ) return IT_SANGUINATORS;
 	if(targ.ammo_shells > 2 && (targ.items & IT_SUPER_SHOTGUN) ) return IT_SUPER_SHOTGUN; // greater than 2 in case of upgraded triple shotgun Widowmaker
 	if(targ.ammo_nails > 0 && (targ.items & IT_NAILGUN) ) return IT_NAILGUN;
-	if(targ.ammo_shells > 0 && (targ.items & IT_SHOTGUN || targ.perms | IT_BLASTER) ) return IT_SHOTGUN;
+	if(targ.ammo_shells > 0 && ((targ.items & IT_SHOTGUN) || (targ.perms & IT_BLASTER))) return IT_SHOTGUN;
 	if (targ.waterlevel > 0 && targ.ammo_cells < 1 && (targ.items & IT2_MJOLNIR) ) return IT2_MJOLNIR;
 	if (targ.items & IT_AXE) return IT_AXE;
 	if (targ.items2 & IT2_CROSS) return IT2_CROSS; // WAND
@@ -1954,7 +1954,7 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 			gotgun = checkvec_y;
 			inhackbank = checkvec_z;
 			if (fl == IT_SUPER_SHOTGUN && gotgun) {
-				if (targ.ammo_shells < 1) am = TRUE; // no ammo
+				if (targ.ammo_shells < 2) am = TRUE; // no ammo
 				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_SCIMITAR && gotgun) {
 				if (targ.ammo_elemental < 1) am = TRUE; // no ammo
@@ -1999,10 +1999,10 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 			gotgun = checkvec_y;
 			inhackbank = checkvec_z;
 			if (fl == IT_SUPER_NAILGUN && gotgun) {
-				if (targ.ammo_nails < 1) am = TRUE; // no ammo
+				if (targ.ammo_nails < 2) am = TRUE; // no ammo
 				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_LAVA_SUPER_NAILGUN && gotgun) {
-				if (targ.ammo_lava_nails < 1) am = TRUE; // no ammo
+				if (targ.ammo_lava_nails < 2) am = TRUE; // no ammo
 				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_VOID_STAFF && gotgun) {
 				if (targ.ammo_voidshards < 1) am = TRUE; // no ammo
@@ -2074,7 +2074,7 @@ void(entity targ) W_ChangeWeapon = { // [FUNCTION]
 				if (targ.ammo_plasma < 1) am = TRUE; // no ammo
 				else if (fl != targ.weapon) am = FALSE;
 			} else if (fl == IT_FLAK && gotgun) {
-				if (targ.ammo_nails < 1) am = TRUE; // no ammo
+				if (targ.ammo_nails < FLAK_NAILUSAGE || targ.ammo_rockets < FLAK_ROCKETUSAGE) am = TRUE; // no ammo
 				else if (fl != targ.weapon) am = FALSE;
 			}// else if (fl == ? && gotgun) {
 				//if (targ.ammo_? < 1) am = TRUE; // no ammo

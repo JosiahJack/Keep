@@ -228,13 +228,13 @@ void(entity targ, entity attacker) Killed = {
 			ClientObituary(self, attacker);
 			self.touch = SUB_Null;
 			if (self.flags & FL_MONSTER) monster_death_use();
-			if (self.frozen) T_Freeze(self,attacker);
+			if (self.frozen && !(self.flags & FL_CLIENT)) T_Freeze(self,attacker);
 			else self.th_die ();
 		} else if (!self.deadflag && self.classtype == CT_MONIDSHUB) {
 			// Completely messed up setup for the oldone boss with a weird target field and mess of triggers around it! This elseif is just an exception so it works, anyway no one fights the oldone!
 			self.deadflag = DEAD_DEAD;
 			if ((self.flags & FL_MONSTER) && !self.nomonstercount) AddToKills(self,attacker);
-			if (self.frozen) { T_Freeze(self,attacker); monster_death_use(); }
+			if (self.frozen && !(self.flags & FL_CLIENT)) { T_Freeze(self,attacker); monster_death_use(); }
 			else self.th_die ();
 		}
 	}
@@ -883,7 +883,7 @@ void() FreezeFinish = {
 	self.touch = Frozen_Touch;
 	Gyro_Object_Activate(self,MASS_GIB); // Light weight and floats, ice floats
 	Gyro_Object_SetBouyancy(self,BOUY_GIB);
-	Gyro_Object_SetResistance(self,RESIST_GIB);
+	Gyro_Object_SetLiquidResistance(self,RESIST_GIB);
 	if (self.targetname) self.use = BecomeIcyExp;
 	if (pointcontents(self.origin) == CONTENT_LAVA) BecomeIcyExp(); // Can't freeze that which under lava lies; so burst away!
 };

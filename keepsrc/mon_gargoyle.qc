@@ -258,8 +258,7 @@ void() gargoyle_grow10= [ $grow10, garg_run1 ] {
 		// Time to die!
 		self.health = self.gibhealth;
 		Killed(self, self);
-	}
-	else {
+	} else {
 		// Finally spin back to original position
 		self.angles_y = self.angles_y + self.lefty;
 		// Setup goals and warn other monsters
@@ -270,6 +269,7 @@ void() gargoyle_grow10= [ $grow10, garg_run1 ] {
 		self.th_walk = garg_walk1;
 		self.th_run = garg_run1;
 		self.th_missile = garg_fire1;
+		self.scale = 1;
 	}
 };
 
@@ -368,28 +368,29 @@ void() garg_die = {
 void() setup_gargoyle;
 
 void() monster_gargoyle_precache = {
-	precache_model ("progs/ad171/mon_gargoyle.mdl");
-	precache_model ("progs/mon_impling.mdl");
-	precache_model ("progs/ad171/h_gargoyle.mdl");
-	precache_model (MODEL_PROJ_GARGBALL);		// FB growing 8 frames
-	precache_model (MODEL_PROJ_GARGOYLE);		// red/smoke wiz projectile
-	precache_model (MODEL_PROJ_GARGOYLEGRN);	// acid/smoke wiz projectile
-	precache_model ("progs/ad171/gib_gargwing1.mdl");
-	precache_model ("progs/ad171/gib_gargwing2.mdl");
-	precache_sound ("ad171/gargoyle/idle1.wav");
-	precache_sound ("ad171/gargoyle/perch1.wav");
-	precache_sound ("ad171/gargoyle/perch2.wav");
-	precache_sound ("ad171/gargoyle/attack1.wav");	// Doom imp fireball!
-	precache_sound ("ad171/gargoyle/swoop1.wav");
-	precache_sound ("ad171/gargoyle/swoop2.wav");
-	precache_sound ("ad171/gargoyle/swoop1hit.wav");
-	precache_sound ("ad171/gargoyle/wings1.wav");
-	precache_sound ("ad171/gargoyle/pain75.wav");
-	precache_sound ("ad171/gargoyle/pain100.wav");
-	precache_sound ("ad171/gargoyle/death1.wav");
-	precache_sound ("ad171/gargoyle/sight1.wav");
-	precache_sound ("ad171/statue/idle1.wav");
-	precache_sound ("ad171/statue/idle2.wav");
+	dprint("monster_gargoyle_precache called\n");
+	precache_model("progs/ad171/mon_gargoyle.mdl");
+	precache_model("progs/mon_impling.mdl");
+	precache_model("progs/ad171/h_gargoyle.mdl");
+	precache_model(MODEL_PROJ_GARGBALL);		// FB growing 8 frames
+	precache_model(MODEL_PROJ_GARGOYLE);		// red/smoke wiz projectile
+	precache_model(MODEL_PROJ_GARGOYLEGRN);	// acid/smoke wiz projectile
+	precache_model("progs/ad171/gib_gargwing1.mdl");
+	precache_model("progs/ad171/gib_gargwing2.mdl");
+	precache_sound("ad171/gargoyle/idle1.wav");
+	precache_sound("ad171/gargoyle/perch1.wav");
+	precache_sound("ad171/gargoyle/perch2.wav");
+	precache_sound("ad171/gargoyle/attack1.wav");	// Doom imp fireball!
+	precache_sound("ad171/gargoyle/swoop1.wav");
+	precache_sound("ad171/gargoyle/swoop2.wav");
+	precache_sound("ad171/gargoyle/swoop1hit.wav");
+	precache_sound("ad171/gargoyle/wings1.wav");
+	precache_sound("ad171/gargoyle/pain75.wav");
+	precache_sound("ad171/gargoyle/pain100.wav");
+	precache_sound("ad171/gargoyle/death1.wav");
+	precache_sound("ad171/gargoyle/sight1.wav");
+	precache_sound("ad171/statue/idle1.wav");
+	precache_sound("ad171/statue/idle2.wav");
 };
 
 // QUAKED monster_gargoyle (0.8 0 0.2) (-16 -16 -24) (16 16 40) AMBUSH STATUE PERCH NOSIGHT NOIDLE NOGFX STARTOFF ANGRY Not_Easy Not_Normal Not_Hard Not_DM
@@ -510,4 +511,58 @@ void() setup_gargoyle = {
 		self.th_missile = garg_fire1;
 	}
 	monster_start();
+};
+
+//----------------------------------------------------------------------------
+// A code way to spawn gargoyles (requires monster_minotaurminion entity)
+//----------------------------------------------------------------------------
+void(vector minion_org, entity minion_targ) minion_gargoyle =
+{
+	local entity minion;
+
+	// Check if there is space to spawn entity
+	if (entity_pcontent(minion_org)) return;
+	
+	// Self = minotaur, there is no egg 
+	update_minioncount(self, 1);			// Update spawn counters
+	
+	minion = spawn();
+	minion.classname = "monster_gargoyle";	// For function searching
+	setorigin(minion, minion_org);			// Move to new location
+	minion.owner = self;					// Spawner Parent Link
+	minion.master = self;	
+	minion.effects = minion.flags = 0;		// make sure are blank
+	minion.alpha = self.alpha;
+	minion.alignment = self.alignment;
+	minion.gibondeath = 1;					// Always gib on death
+	minion.classtype = CT_MINIONGARGOYLE;	// Special minion class
+	minion.enemy = minion_targ;				// Target to attack
+	minion.spawnflags = 0;
+	minion.classgroup = CG_DEMON;			// Don't turn on master
+	minion.minion_active = TRUE;			// Minion flag
+	minion.bodyfadeaway = TRUE;				// Get rid of body
+	
+	// Check for poison gibs being cached first
+	if (gibpoison && self.poisonous == TRUE) {
+		minion.poisonous = self.poisonous;	// carry over from host spawner 
+		minion.gibtype = GIBTYPE_POISON;	// Poisonous blood trails
+	}
+	
+	// Adopt parameters from host spawner
+	minion.infightextra = self.infightextra;
+	
+	minion.mdl = "progs/ad171/mon_gargoyle.mdl";
+	minion.headmdl = "progs/ad171/h_gargoyle.mdl";
+	minion.gib1mdl = "progs/ad171/gib_gargwing1.mdl";	// Left wing
+	minion.gib2mdl = "progs/ad171/gib_gargwing2.mdl";	// Right wing
+
+	minion.pain_sound = "ad171/gargoyle/pain75.wav";
+	minion.pain_sound2 = "ad171/gargoyle/pain100.wav";
+	minion.idle_sound = "ad171/gargoyle/idle1.wav";
+	minion.idle_soundcom = "ad171/gargoyle/perch1.wav";
+	minion.idle_soundcom2 = "ad171/gargoyle/perch2.wav";
+	minion.sight_sound = "ad171/gargoyle/sight1.wav";
+	
+	minion.nextthink = time + 0.01;
+	minion.think = setup_gargoyle;
 };

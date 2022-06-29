@@ -668,9 +668,8 @@ float(float dist) ai_up = {
             }
             remove (box);
             self = os;
-        } else {
-            walkmove (self.angles_y, 0);    // Fails only in solid.
-		}
+        } else walkmove(self.angles_y,0);    // Fails only in solid.
+
         dist = dist - 8;
     }
     self.enemy = swap;

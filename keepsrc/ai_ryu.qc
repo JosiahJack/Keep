@@ -92,7 +92,7 @@ float() Ryu_UseFreeMove = {
 };
 
 float(float yaw, float dist) Ryu_WalkMove = {
-    if (Ryu_UseFreeMove()) return walkmove(yaw, dist);
+    if (Ryu_UseFreeMove()) return walkmove(yaw, dist); 
     return flat_move(yaw, dist);
 };
 
@@ -163,8 +163,8 @@ float() Ryu_HatesWater = {
 // This tells the dragon to escape a pool of water when true.
 float(float dist) Ryu_LeaveWater = {
     // Check if air is above the water (like above a pool or river) from an underwater point.
-    traceline (self.origin, self.origin + '0 0 2048', FALSE, self);
-    if (trace_inopen && trace_inwater) {
+    traceline(self.origin, self.origin + '0 0 2048', FALSE, self);
+    if (trace_inopen && InLiquid(self.origin)) {
 		if (ai_up(dist)) return TRUE;
 	}
 
@@ -178,7 +178,9 @@ void(float dist, entity ent) Ryu_VerticalSlide = {
 
 	// If in the unlikely event a water-fearing dragon is in the water, find some air and go in the direction it is found.
 	if (self.classtype != CT_MONSHADE) {
-		if (Ryu_HatesWater() && self.waterlevel && Ryu_LeaveWater(dist)) return; // If a dragon is in the water, this makes the dragon rise out of it.
+		if (Ryu_HatesWater()) {
+            if (Ryu_LeaveWater(dist)) return; // If a dragon is in the water, this makes the dragon rise out of it.
+        }
 	} else {
 		// Fly away from goal.
 		// Note:  Don't bother with the extra checks dragons go through.
@@ -199,12 +201,13 @@ void(float dist, entity ent) Ryu_VerticalSlide = {
             if (delta < 0) return;     // Don't go down when climbing toward a goal.
             if (delta < dist)  dist = delta;   // Don't descend fully.
         }
-        dist = 0 - dist;
+        ai_down(dist);
+        return;
     } else { // Thinking about going up.
         if (self.goalentity)
             if (self.origin_z - self.goalentity.origin_z > 1000) return;     // Don't fly so high up beyond medium range.
     }
-    ai_up (dist); // Now we're really going.
+    ai_up(dist); // Now we're really going.
 };
 
 //==========================================================================
@@ -240,7 +243,7 @@ void(float newyaw, float dist, entity threat) Ryu_Dodge = {
         else if (tz > sz)
             {if (sz > threat.origin_z)  return;}
     }
-    Ryu_VerticalSlide (dist, targ);
+    Ryu_VerticalSlide(dist,targ);
 };
 
 //  Compare the yaws of the dragon's direction and the direction toward the threat, and find the best direction to dodge the threat on the results.
