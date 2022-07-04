@@ -411,7 +411,7 @@ void() ranger_nailgun = {
     else {
         if (self.frame == $nailatt1) super = 3;
         else super = -3;
-        makevectors (self.angles);
+        makevectors(self.angles);
         v_right = v_right*super;
         p1 = p1 + v_right;
         p2 = p2 + v_right;
@@ -884,7 +884,7 @@ void() ranger_axdie8 =[ $axdeth8,  ranger_axdie9 ] {};
 void() ranger_axdie9 =[ $axdeth9,  monster_end   ] {};
 
 float(float dm) ranger_gib = {
-    if (self.health < self.gib_health) {
+    if (self.health < self.gibhealth) {
         if (self.enemy.classname == "teledeath") sound (self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NORM);
         else if (random() < 0.5) sound (self, CHAN_VOICE, "player/gib.wav", 1, ATTN_NORM);
         else sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);

@@ -45,6 +45,8 @@ float SQRT2           =  1.414214; // The square root of 2.
 float COS30           =  0.866025; // Handy performance helpers
 float COS45           =  0.707107; // to save time
 float COS60           =  0.500000; // and money!
+float MATH_EPSILON    =  0.0000001; // Smallest legitimate value.  Less than this consider equal.
+
 float() crandom = { return 2*(random() - 0.5); }; // Random between -1.0 and 1.0
 void(entity ent, string text) Safe_stuffcmd;
 float(float val, float min, float max) SUB_ClampFloat;
@@ -77,7 +79,7 @@ float(float bitvalue, float bitflag) mathlib_bitvalue = { return floor( (bitvalu
 float(float num) mathlib_sqrt = {
 	local float apr;
 
-	if(mathlib_accuracy <= 0) mathlib_accuracy = 0.001; //this sets a level of accuracy, it's a global float
+	if (mathlib_accuracy <= 0) mathlib_accuracy = 0.001; //this sets a level of accuracy, it's a global float
 
 	if (num < mathlib_accuracy) return 0;
 	if (num>1) apr = num;
@@ -627,7 +629,7 @@ vector(vector dir, vector start, vector end, float theta) Dir_GotoIdeal = {
         // Get the three vectors that make up dir.
         dir = vectoangles (dir);
         dir_x = 0 - dir_x;
-        makevectors (dir);
+        makevectors(dir);
         vx = v_forward; vy = v_right; vz = v_up;
 
         // Project, from start, to the point where the endpoint is neither ahead nor behind it.
@@ -671,7 +673,7 @@ vector(vector dir, float ang1, float ang2) Dir_Change = {
 	local float qccos, qcsin;
 
     dir = Vangles(dir);
-    makevectors (dir);
+    makevectors(dir);
     qccos = mathlib_cos(ang2);
     qcsin = mathlib_sin(ang2);
     dir = v_right*qccos + v_up*qcsin; // Get a vector perpendicular to its direction vector.
@@ -754,7 +756,7 @@ void(entity str_player, float str_num, float topbit, float botbit, float buffer)
 		str_pow = str_pow / 10;
 
 		// Divide number by pow to get divider
-		// Floor can produce rounding errors (fix it with 0.01)
+		// Floor can produce rounding errors(fix it with 0.01)
 		str_result = floor((str_num / str_pow)+0.01);
 		if (str_result > 9) str_result = 9; // Result must be 0-9 digits
 		if (str_result < 1) str_result = 0;
@@ -813,7 +815,7 @@ void(entity str_player, float str_num, float topbit, float botbit, float buffer)
 	// Loop through lower part of number
 	while(str_counter > 0) {
 		str_pow = str_pow / 10; // Move down one pow digit
-		str_result = floor((str_num / str_pow)+0.01); // Divide number by pow to get divider.  Floor can produce rounding errors (fix it with 0.01)
+		str_result = floor((str_num / str_pow)+0.01); // Divide number by pow to get divider.  Floor can produce rounding errors(fix it with 0.01)
 		if (str_result > 9) str_result = 9; // Result must be 0-9 digits
 		if (str_result < 1) str_result = 0;
 

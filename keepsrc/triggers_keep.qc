@@ -48,22 +48,22 @@ float CMD_ACTIVATOR_ONLY = 2;
 float CMD_UPDATE_ENV_VARIABLES = 4;
 float CMD_DO_NOT_TERMINATE = 8;
 
-void () counter_on_use;
-void () counter_off_use;
-void () oncount_use;
+void() counter_on_use;
+void() counter_off_use;
+void() oncount_use;
 void() func_wall_use;
 void(void() th_activate, entity attempter) keyuser_attempt;
 void() keyuser_setup;
 
-void () trigger_remove = { self.classname = "trigger_void"; trigger_void(); }; // [ENTITY], redirect to AD's improved safer version.
+void() trigger_remove = { self.classname = "trigger_void"; trigger_void(); }; // [ENTITY], redirect to AD's improved safer version.
 
-void () trigger_setgravity = { // [ENTITY], redirect to AD's improved version.
+void() trigger_setgravity = { // [ENTITY], redirect to AD's improved version.
 	self.classname = "trigger_gravity";
 	self.spawnflags = self.spawnflags | TRIG_GRAVITYPLAYONLY;
 	trigger_gravity();
 };
 
-void () command_use_server = { // [FUNCTION]
+void() command_use_server = { // [FUNCTION]
 	local entity pent;
 	
 	if (self.spawnflags & CMD_ACTIVATOR_ONLY) {
@@ -93,17 +93,17 @@ void () command_use_server = { // [FUNCTION]
 	}
 };
 
-void () command_use = { // [FUNCTION]
+void() command_use = { // [FUNCTION]
 	if (self.message) localcmd(self.message);
 	if (!(self.spawnflags & CMD_DO_NOT_TERMINATE)) localcmd("\n");
 	if (self.classname == "info_command_spawn") entity_hide(self);
 };
 
-void () info_command_use_server = { command_use_server(); }; // [FUNCTION]
+void() info_command_use_server = { command_use_server(); }; // [FUNCTION]
 
-void () info_command_use = { command_use(); }; // [FUNCTION]
+void() info_command_use = { command_use(); }; // [FUNCTION]
 
-void () info_command = { // [ENTITY]
+void() info_command = { // [ENTITY]
 	if (self.message == "") {
 		dprint("\b[INFO_CMD]\b Message cmd missing!\n");
 		spawn_marker(self.origin, SPNMARK_YELLOW);
@@ -114,28 +114,28 @@ void () info_command = { // [ENTITY]
 	self.use = info_command_use;
 	self.think = SUB_Null;
 };
-void () info_command_server = { // [ENTITY]
+void() info_command_server = { // [ENTITY]
 	if (self.message == "") { remove(self); return; }
 	self.use = info_command_use_server;
 	self.think = SUB_Null;
 };
 
-void () info_command_spawn = { // [ENTITY]
+void() info_command_spawn = { // [ENTITY]
 	if (self.message == "") { remove(self); return; }
 	self.use = info_command_use;
 	self.think = SUB_Null;
 };
 
-void () trigger_command_use = { // [FUNCTION]
+void() trigger_command_use = { // [FUNCTION]
 	if (self.attack_finished >= time) return;
 
 	self.attack_finished = time + self.wait;
    if (self.message) localcmd (self.message);
 };
 
-void () trigger_command_touch = { if (other.flags & FL_CLIENT) command_use(); }; // [FUNCTION]
+void() trigger_command_touch = { if (other.flags & FL_CLIENT) command_use(); }; // [FUNCTION]
 
-void () trigger_command = { // [ENTITY]
+void() trigger_command = { // [ENTITY]
 	if (self.message == "") { remove(self); return; }
 
 	if (self.wait <= 0) self.wait = 0.1;
@@ -143,7 +143,7 @@ void () trigger_command = { // [ENTITY]
 	self.touch = trigger_command_touch;
 };
 
-void () trigger_decoy_touch = { // [FUNCTION]
+void() trigger_decoy_touch = { // [FUNCTION]
    if ( (other.classname != "monster_decoy") ) return ;
 
    self.touch = SUB_Null;
@@ -152,21 +152,21 @@ void () trigger_decoy_touch = { // [FUNCTION]
    SUB_UseTargets ();
 };
 
-void () trigger_decoy_use = { // [FUNCTION]
+void() trigger_decoy_use = { // [FUNCTION]
    if ( deathmatch ) { remove (self); return; }
 
    InitTrigger ();
    self.touch = trigger_decoy_touch;
 };
 
-void () trigger_waterfall_touch = { // [FUNCTION]
+void() trigger_waterfall_touch = { // [FUNCTION]
    if (!(other.flags & FL_CLIENT)) return ;
    other.velocity = (other.velocity + self.movedir);
    other.velocity_x = (other.velocity_x + (self.count * (random () - 0.500)));
    other.velocity_y = (other.velocity_y + (self.count * (random () - 0.500)));
 };
 
-void () trigger_waterfall = { // [ENTITY]
+void() trigger_waterfall = { // [ENTITY]
    InitTrigger ();
    self.touch = trigger_waterfall_touch;
    if (!self.count) self.count = 100.000;
@@ -175,7 +175,7 @@ void () trigger_waterfall = { // [ENTITY]
    else self.movedir = (self.movedir * self.speed);
 };
 
-void () counter_think = { // [FUNCTION]
+void() counter_think = { // [FUNCTION]
    self.cnt = (self.cnt + TRUE);
    if ( (self.spawnflags & COUNTER_RANDOM) ) {
       self.state = (random () * self.count);
@@ -192,14 +192,14 @@ void () counter_think = { // [FUNCTION]
    }
 };
 
-void () counter_on_use = { // [FUNCTION]
+void() counter_on_use = { // [FUNCTION]
    if (self.cnt != 0 && (self.spawnflags & COUNTER_FINISHCOUNT)) { self.aflag = TRUE; return; }
    self.use = counter_off_use;
    self.think = SUB_Null;
    self.aflag = FALSE;
 };
 
-void () counter_off_use = { // [FUNCTION]
+void() counter_off_use = { // [FUNCTION]
    self.aflag = FALSE;
    if (self.spawnflags & COUNTER_TOGGLE) self.use = counter_on_use;
    else self.use = SUB_Null;
@@ -218,7 +218,7 @@ float (entity counter) counter_GetCount = { // [FUNCTION]
    return 0;
 };
 
-void () func_counter = { // [ENTITY]
+void() func_counter = { // [ENTITY]
    if ( !self.wait ) self.wait = TRUE;
    self.count = floor (self.count);
    if ( (self.count <= FALSE) ) self.count = MOVETYPE_BOUNCE;
@@ -233,14 +233,14 @@ void () func_counter = { // [ENTITY]
    }
 };
 
-void () oncount_use = { // [FUNCTION]
+void() oncount_use = { // [FUNCTION]
    if ( (counter_GetCount (other) == self.count) ) {
       activator = other;
       SUB_UseTargets ();
    }
 };
 
-void () func_oncount = { // [ENTITY]
+void() func_oncount = { // [ENTITY]
    self.count = floor (self.count);
    if ( (self.count <= FALSE) ) self.count = TRUE;
    self.classname = "oncount";
@@ -255,7 +255,7 @@ void() change_cvar = { // [FUNCTION]
 	bprint("\n\n");
 	self.classname = "cvar_done";
 	check = find(world, classname, "player");
-	if(!check) check = find(world, classname, "camera");
+	if (!check) check = find(world, classname, "camera");
 	check.ideal_yaw = -1;
 	self.nextthink = time + 0.02;
 	self.think = SUB_UseTargets;
@@ -312,7 +312,7 @@ void() tjump_touch = { // [FUNCTION]
     if (self.speed) { // Unlike trigger_monsterjump, jump at a direction 'other' is facing.
         vec = '0 0 0';
         vec_y = other.angles_y;
-        makevectors (vec);
+        makevectors(vec);
         other.velocity = v_forward * self.speed;
     }
     other.velocity_z = self.height;
@@ -340,7 +340,7 @@ void() trigger_superjump = {InitTrigger(); self.spawnflags = self.spawnflags | P
 
 void() trigger_superjump_point = {InitPointTrigger(); self.spawnflags = self.spawnflags | PUSH_JUMP_ONLY; trigger_jump_spawn();}; // [ENTITY]
 
-void () play_tfog = { spawn_tfog(self.origin); } // [FUNCTION], thanks Khreathor -- dumptruck_ds.  Exists since it is used as a think. -Qmaster
+void() play_tfog = { spawn_tfog(self.origin); } // [FUNCTION], thanks Khreathor -- dumptruck_ds.  Exists since it is used as a think. -Qmaster
 
 //johnfitz
 // QUAKED tele_fog (0.3 0.1 0.6) (-10 -10 -8) (10 10 8)
@@ -348,7 +348,7 @@ void () play_tfog = { spawn_tfog(self.origin); } // [FUNCTION], thanks Khreathor
 // Use this when killtageting an entity if the player can see.
 void() tele_fog = { self.use = play_tfog; }; // [ENTITY]
 
-void () play_meatspray = { // [FUNCTION]
+void() play_meatspray = { // [FUNCTION]
 	if (self.style == 1) {
 		ThrowGib(1,2);
 		ThrowGib(2,2);
@@ -421,12 +421,12 @@ void() keytrigger_use = { // [FUNCTION]
    SUB_UseTargets ();
 };
 
-void () keytrigger_touch = { // [FUNCTION]
+void() keytrigger_touch = { // [FUNCTION]
    activator = other;
    keytrigger_use();
 };
 
-void () trigger_usekey_skeleton = { // [ENTITY]
+void() trigger_usekey_skeleton = { // [ENTITY]
    self.use = keytrigger_use;
    self.touch = keytrigger_touch;
    if (!self.items) self.items = IT2_KEY_SKELETON;
@@ -435,7 +435,7 @@ void () trigger_usekey_skeleton = { // [ENTITY]
    InitTrigger ();
 };
 
-void () requisit_use = { // [FUNCTION]
+void() requisit_use = { // [FUNCTION]
    if (!(activator.flags & FL_CLIENT)) return;
    if (activator.health <= 0) return;
    if (!(self.items & activator.items) || !(self.items2 & activator.items2) || !(self.moditems & activator.moditems) || !(self.perms & activator.perms)) return;
@@ -461,7 +461,7 @@ void() trigger_prerequisit = { // [ENTITY]
 	InitTrigger();
 };
 
-void () hipkeytrigger_use = { // [FUNCTION]
+void() hipkeytrigger_use = { // [FUNCTION]
 	if (!(activator.flags & FL_CLIENT)) return;
 	if (self.attack_finished > time) return;
 
@@ -478,7 +478,7 @@ void () hipkeytrigger_use = { // [FUNCTION]
 	SUB_UseTargets ();
 };
 
-void () hipkeytrigger_touch = { // [FUNCTION]
+void() hipkeytrigger_touch = { // [FUNCTION]
 	if (!(other.flags & FL_CLIENT)) return;
 	if (other.health <= 0) return;
 
@@ -486,7 +486,7 @@ void () hipkeytrigger_touch = { // [FUNCTION]
 	hipkeytrigger_use();
 };
 
-void () trigger_usekey = { // [ENTITY]
+void() trigger_usekey = { // [ENTITY]
 	keyuser_setup();
 	if (self.spawnflags & 1) self.items = IT_KEY2; // Use gold key.  Was formerly USE_GOLD_KEY, but that's not needed.
 	else if (!(self.spawnflags & 8) && !(self.spawnflags & 16) && self.customkey <= 0) self.items = IT_KEY1; // If normal door settings aren't set, default to hipnotic default.
@@ -522,7 +522,7 @@ void() conv_touch = { // [FUNCTION]
 	else other.velocity_z = other.velocity_z + vel_z;
 };
 
-void () conv_use = { // [FUNCTION]
+void() conv_use = { // [FUNCTION]
    if (self.cnt) {
       self.cnt = FALSE; // enabled
       self.touch = conv_touch;
@@ -532,7 +532,7 @@ void () conv_use = { // [FUNCTION]
    }
 };
 
-void () trigger_conveyor = { // [ENTITY]
+void() trigger_conveyor = { // [ENTITY]
 	self.use = conv_use;
 	if (!self.speed) self.speed = 10;
 	if (self.targetname) {

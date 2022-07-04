@@ -48,7 +48,7 @@ void() player_legs_animation = {
 	} else
 		self.alpha = 1;
 
-	makevectors (self.owner.angles);
+	makevectors(self.owner.angles);
 
 	// Only show player legs when looking downwards and is alive
 	if ((self.owner.angles_x <= -9) && (self.owner.health > 0) && (cvar("player_legs_visibility"))) {
@@ -60,7 +60,7 @@ void() player_legs_animation = {
 			self.origin = self.owner.origin + v_up * 7 + v_forward * -10; // for approx. FOV < 100
 
 		self.angles = self.owner.angles;
-		self.angles_x = 15;		// legs must not change x-angles together with player´s view
+		self.angles_x = 15;		// legs must not change x-angles together with playerï¿½s view
 		if (autocvar_player_legs_model == 1) {
 			if (self.owner.items & IT_SUIT)
 				setmodel (self, "progs/q15/player_legs1_suit.mdl");

@@ -44,6 +44,7 @@ void() monster_death_precheck;
 void(entity ent, float color1, float color2) Particle_Cube;
 void() FrozenThink;
 void() Frozen_Touch;
+void() BecomeIcyExp;
 
 float(entity targ, entity inflictor) CanDamage = {
 	if (targ.takedamage == DAMAGE_NO) return FALSE; // Any entity marked with no damage is automatically excluded
@@ -542,7 +543,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 	}
 
 	// check for godmode or invincibility
-	if (targ.flags & FL_GODMODE || targ.invincible_finished >= time) { PlayPentagramSound(targ); return; }
+	if (Indestructable(targ)) { PlayPentagramSound(targ); return; }
 
 	// Warlord special dodging.  From Quake 1.5, simplified a little.   -Qmaster
 	if (targ.classtype == CT_MONWARLORD) {

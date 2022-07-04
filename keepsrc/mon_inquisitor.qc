@@ -88,8 +88,8 @@ void() inquisitor_wavetargets = {
 		// Check for wave boundary triggers
 		self.noise = "";
 		if (self.bosswave == 1) { self.noise = self.noise1; self.noise1 = string_null;}
-		else if(self.bosswave == 2) { self.noise = self.noise2; self.noise2 = string_null;}
-		else if(self.bosswave == 3) { self.noise = self.noise3; self.noise3 = string_null;}
+		else if (self.bosswave == 2) { self.noise = self.noise2; self.noise2 = string_null;}
+		else if (self.bosswave == 3) { self.noise = self.noise3; self.noise3 = string_null;}
 		
 		// Is there any trigger for the wave boundary?
 		if (self.noise != "") trigger_strs(self.noise, self);
@@ -185,16 +185,16 @@ void(vector boneofs) inquisitor_firebones = {
 	org = self.origin + attack_vector(boneofs);
 	dir = SUB_orgEnemyTarget() + v_right*(8*3);
 	dir = normalize(dir - org);
-	launch_projectile (org, dir, CT_PROJ_WPOISON, self.attack_speed+random()*25);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_WPOISON,self.attack_speed+random()*25);
 	dir = SUB_orgEnemyTarget() - v_right*(8*3);
 	dir = normalize(dir - org);
-	launch_projectile (org, dir, CT_PROJ_WPOISON, self.attack_speed+random()*25);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_WPOISON,self.attack_speed+random()*25);
 	dir = SUB_orgEnemyTarget() + v_up*8;
 	dir = normalize(dir - org);
-	launch_projectile (org, dir, CT_PROJ_WPOISON, self.attack_speed+random()*25);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_WPOISON,self.attack_speed+random()*25);
 	dir = SUB_orgEnemyTarget() - v_up*8;
 	dir = normalize(dir - org);
-	launch_projectile (org, dir, CT_PROJ_WPOISON, self.attack_speed+random()*25);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_WPOISON,self.attack_speed+random()*25);
 };
 
 // AttackHoldStaffOut 13-27
@@ -221,7 +221,7 @@ void() inquisitor_fireflamewall = {
 	if (!self.enemy) return; // cannot find target!
 	if (self.health < 1) return; // we're dead Jim!
 
-	makevectors (self.angles);	
+	makevectors(self.angles);	
 	org = self.origin + attack_vector(self.attack_offset);
 	eorg = org + attack_vector('16 0 16'); // Setup explosion origin (infront)
 	
@@ -230,7 +230,7 @@ void() inquisitor_fireflamewall = {
 	if (random() > 0.5) SpawnProjectileSmoke(eorg, 200, 50, 250);
 
 	// Start with facing angle
-	makevectors (self.angles);	
+	makevectors(self.angles);	
 	// Work out offset (24 unit) from left to right (- to +)
 	if (self.lefty == 0) self.lefty = 1;
 	torg = self.enemy.origin + (v_right * (self.attack_count*24*self.lefty));
@@ -238,7 +238,7 @@ void() inquisitor_fireflamewall = {
 	// Work out angle
 	ang = vectoangles(torg - org);
 	ang_x = -targetang;	// Negative = upwards angle 
-	makevectors (ang);
+	makevectors(ang);
 	// fire flames forward with slight Z wobble
 	dir = (v_forward + (v_up * (random()*0.2)) ) * SPEED_FLAME;
 

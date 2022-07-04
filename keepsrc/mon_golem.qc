@@ -315,10 +315,7 @@ void() golem_stomp24 = [ $stomp24, golem_run1 ] {
 	}
 };
 
-
-//----------------------------------------------------------------------
-void() golem_melee =
-{
+void() golem_melee = {
 	if (self.enemy.flags & FL_MONSTER) golem_knock1();
 	else {
 		self.meleeattack = random();
@@ -328,11 +325,8 @@ void() golem_melee =
 	}
 }
 
-//============================================================================
 // RANGE - ROCK STORM from Torso
-//============================================================================
-void() golem_rockstorm = 
-{
+void() golem_rockstorm = {
 	local float shotcount, zpart;
 	local vector org, dir, yrand, zrand;
 
@@ -364,7 +358,7 @@ void() golem_rockstorm =
 
 		// Variable speed based on skill level with extra random spice
 		self.attack_speed = SPEED_GOLEMSPIKE + (skill * SPEED_GOLEMSKILL) + random()*10;
-		launch_projectile (org, dir, CT_PROJ_GROCK, self.attack_speed);
+		launch_projectile(org,dir,NO_SPIN,CT_PROJ_GROCK,self.attack_speed);
 		shotcount = shotcount - 1;
 	}
 };

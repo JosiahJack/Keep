@@ -169,7 +169,7 @@ void() ai_drain = { // [FUNCTION]
     self.effects = self.effects | EF_MUZZLEFLASH;
     if (!self.t_width) sound(self, CHAN_WEAPON,"drake/wraith/drain.wav",1,ATTN_NORM); // Play effects.
     self.t_width = self.t_width + 1;
-    makevectors (self.angles);
+    makevectors(self.angles);
     vec = self.origin + (v_forward*47) + (v_right*6) + (v_up*10);
     particle(vec, '0 0 1', rgb, den);
     T_Damage (self.enemy, self, self, damage, NOARMOR); // No armor, because armor cannot block incorporal attacks.  Leech, because the wraith will suck and drain your life force.
@@ -209,7 +209,7 @@ void(float ofs) nehwraith_shot = { // [FUNCTION]
 
     dir = vectoangles(self.enemy.origin - self.origin);
     dir_y = dir_y + ofs * 6;
-    makevectors (dir);
+    makevectors(dir);
     dir = normalize (v_forward);
     dir_z = 0 - dir_z + (random() - 0.5)*0.1;
     dir = Maim_Scatter(dir, '0 0 0'); // Added for invisibility.
@@ -266,7 +266,7 @@ void() nehwraith_orb7  =[ 84,  nehwraith_orb8  ] { // [FUNCTION]
 		sound(self, CHAN_WEAPON, "drake/hkboss/iceball.wav", 1, ATTN_NORM);
 		self.attack_speed = SPEED_SHALMISSILE + (skill * SPEED_SHALSKILL);
 		makevectors(self.angles);
-		launch_projectile(self.origin + attack_vector('18 0 10'),'0 0 10',CT_PROJ_SHAL,self.attack_speed);
+		launch_projectile(self.origin + attack_vector('18 0 10'),'0 0 10',NO_SPIN,CT_PROJ_SHAL,self.attack_speed);
 		newmis.dmg = 30;
     } else WrathMissile(2);
 };
@@ -427,8 +427,8 @@ void() monster_voidwraith_precache = { // [FUNCTION]
 	precache_model("progs/null.spr");
 	precache_model("progs/nehahra/wr_spike.mdl");
 	precache_model("progs/nehahra/soul.mdl");
-    precache_model ("progs/drake/v_spike.mdl");
-    precache_model ("progs/drake/w_ball.mdl");
+    precache_model("progs/drake/v_spike.mdl");
+    precache_model("progs/drake/w_ball.mdl");
 	precache_sound("nehahra/wraith/soul.wav");
 	precache_sound("nehahra/wraith/idle.wav");
 	precache_sound("nehahra/wraith/idle2.wav");
@@ -442,9 +442,10 @@ void() monster_voidwraith_precache = { // [FUNCTION]
 	precache_sound("nehahra/wraith/talk3.wav");
 	precache_sound("nehahra/wraith/return.wav");
 	precache_sound("nehahra/wraith/select.wav");
-    precache_sound ("drake/hkboss/iceball.wav");
-    precache_sound ("hknight/attack1.wav");
-    precache_sound ("drake/wraith/drain.wav");
+    precache_sound("drake/hkboss/iceball.wav");
+    precache_sound("hknight/attack1.wav");
+    precache_sound("drake/wraith/drain.wav");
+	if (ext_dppart) particleeffectnum(DPP_TEVORESPIKE); 
 };
 
 void() monster_voidwraith = { // [ENTITY]

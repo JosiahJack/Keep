@@ -88,7 +88,7 @@ void(vector orgofs) idchthon_missile = {
 	
 	sound (self, CHAN_WEAPON, "ad171/chthon/attack1.wav", 1, ATTN_NORM);
 	offang = vectoangles (self.enemy.origin - self.origin);	
-	makevectors (offang);
+	makevectors(offang);
 	org = self.origin + attack_vector(orgofs);
 	
 	// Skill level adjustment (easy=250, normal=300, hard=350, nm=400)
@@ -107,7 +107,7 @@ void(vector orgofs) idchthon_missile = {
 	
 	dir = normalize (mdest - org);
 	avel = vecrand(100,200,FALSE);
-	Launch_Missile (org, dir, avel, CT_PROJ_LAVA, self.attack_speed);
+	launch_projectile(org,dir,avel,CT_PROJ_LAVA,self.attack_speed);
 };
 
 void() idchthon_face = {

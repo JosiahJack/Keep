@@ -190,8 +190,7 @@ void() jim_laser =
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);
-
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 
 	// Aim high to catch jumping players
@@ -199,7 +198,7 @@ void() jim_laser =
 	vec = normalize(dir - org);
 	// Variable laser speed, original unit was just 800 every skill
 	self.attack_speed = SPEED_JIMPROJ + (skill * SPEED_JIMPROJSKILL);
-	launch_projectile(org, vec, CT_PROJ_LASER, self.attack_speed);
+	launch_projectile(org,vec,NO_SPIN,CT_PROJ_LASER,self.attack_speed);
 };
 
 // Straight aim rocket, no pre-calculation or steering (skill based speed)
@@ -213,7 +212,7 @@ void() jim_rocket = {
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "quoth/soldier/rocket.wav", 1, ATTN_NORM);	
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 
 	// Aim low to catch players with splash damage
@@ -222,7 +221,7 @@ void() jim_rocket = {
 	
 	// Variable rocket speed, matching laser (very nasty)
 	self.attack_speed = SPEED_JIMPROJ + (skill * SPEED_JIMPROJSKILL);
-	Launch_Missile (org, vec, '0 0 0', CT_PROJ_JIM2, self.attack_speed);
+	launch_projectile(org,vec,NO_SPIN,CT_PROJ_JIM2,self.attack_speed);
 };
 
 void(float vspeed) jim_vel = { 

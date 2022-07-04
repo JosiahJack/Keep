@@ -90,7 +90,7 @@ void() chat_chat = { // [FUNCTION]
 		if (!(other.flags & FL_CLIENT)) return;
 		
 		if (self.movedir != '0 0 0') {
-			makevectors (other.angles);
+			makevectors(other.angles);
 			if (v_forward * self.movedir < 0) return;// not facing the right way
 		}
 	}

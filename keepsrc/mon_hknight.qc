@@ -302,7 +302,7 @@ void(float offset) hknight_shot = {
 	self.attack_speed = SPEED_HKSPIKE + ( skill * SPEED_HKSKILL);
 	offang = vectoangles (self.enemy.origin - self.origin);
 	offang_y = offang_y + offset * 6;
-	makevectors (offang);
+	makevectors(offang);
 
 	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
 	dir = normalize (v_forward);
@@ -316,8 +316,8 @@ void(float offset) hknight_shot = {
     } else if (self.classname == "monster_dark_lord") {
         NecroBolt_Launch(org,dir);
     } else {
-		if (self.classtype == self.classtype == CT_MONSABERENFORCER) launch_projectile (org, dir, CT_PROJ_HKN_BLUE, self.attack_speed);
-		else launch_projectile(org,dir,CT_PROJ_HKN,self.attack_speed);
+		if (self.classtype == self.classtype == CT_MONSABERENFORCER) launch_projectile(org,dir,NO_SPIN,CT_PROJ_HKN_BLUE,self.attack_speed);
+		else launch_projectile(org,dir,NO_SPIN,CT_PROJ_HKN,self.attack_speed);
 	}
 };
 

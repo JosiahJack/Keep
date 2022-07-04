@@ -105,9 +105,9 @@ float() xxchthon_WaveCheck =
 		// Check for wave boundary triggers
 		self.noise = "";
 		if (self.bosswave == 1) self.noise = self.noise1;
-		else if(self.bosswave == 2) self.noise = self.noise2;
-		else if(self.bosswave == 3) self.noise = self.noise3;
-		else if(self.bosswave == 4) self.noise = self.noise4;
+		else if (self.bosswave == 2) self.noise = self.noise2;
+		else if (self.bosswave == 3) self.noise = self.noise3;
+		else if (self.bosswave == 4) self.noise = self.noise4;
 		
 		// Is there any trigger for the wave boundary?
 		if (self.noise != "") trigger_strs(self.noise, self);
@@ -147,7 +147,6 @@ void() xxchthon_idleframe =
 	else if (xxchthon_FindTarget()) self.th_missile();
 };
 
-//----------------------------------------------------------------------
 void() xxchthon_idle ={ self.walkframe = 0; xxchthon_idleframe(); };
 
 // ATTACK 1 - Constant fireballs
@@ -160,7 +159,7 @@ void(vector orgofs) xxchthon_missile = {
 	
 	sound (self, CHAN_WEAPON, "ad171/chthon/attack1.wav", 1, ATTN_NORM);
 	offang = vectoangles (self.enemy.origin - self.origin);	
-	makevectors (offang);
+	makevectors(offang);
 	org = self.origin + attack_vector(orgofs);
 	
 	// Skill level adjustment
@@ -179,12 +178,10 @@ void(vector orgofs) xxchthon_missile = {
 	
 	dir = normalize (mdest - org);
 	avel = vecrand(100,200,FALSE);
-	Launch_Missile (org, dir, avel, CT_PROJ_CHTHON, self.attack_speed);
+	launch_projectile (org,dir,avel,CT_PROJ_CHTHON,self.attack_speed);
 };
 
-//----------------------------------------------------------------------
-void() xxchthon_attackframe =
-{
+void() xxchthon_attackframe = {
 	// Get the obvious exception(s) done first
 	if (self.health < 1) return;
 	
@@ -220,14 +217,10 @@ void() xxchthon_attackframe =
 	}
 };
 
-//----------------------------------------------------------------------
 void() xxchthon_attack ={ self.walkframe = 0; xxchthon_attackframe(); };
 
-//============================================================================
 // Re-using the original shock animations for end of wave event
-//============================================================================
-void() xxchthon_shakeattack =
-{
+void() xxchthon_shakeattack = {
 	local vector org, ang, dir, avel;
 	
 	// Custom grenade firing speed
@@ -247,12 +240,10 @@ void() xxchthon_shakeattack =
 	
 	// A bit of random spin and fire!
 	avel = vecrand(100,200,FALSE);
-	Launch_Grenade(org, dir, avel, CT_PROJ_CHTHON2);
+	launch_projectile(org,dir,avel,CT_PROJ_CHTHON2,1);
 };
 
-//----------------------------------------------------------------------
-void() xxchthon_shakeframe =
-{
+void() xxchthon_shakeframe = {
 	// Randomnly fire grenades outward
 	if (random() < 0.75) xxchthon_shakeattack();
 	

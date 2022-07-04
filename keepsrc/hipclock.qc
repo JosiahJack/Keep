@@ -38,7 +38,7 @@
 // `count` to specify the time interval.
 //=============================================================================
 
-void () clock_setpos = { // [FUNCTION]
+void() clock_setpos = { // [FUNCTION]
    local float pos, ang, seconds;
    local string temp;
 
@@ -61,18 +61,18 @@ void () clock_setpos = { // [FUNCTION]
    self.ltime = ang;
 };
 
-void () clock_think = { // [FUNCTION]
+void() clock_think = { // [FUNCTION]
    clock_setpos ();
    self.nextthink = (time + TRUE);
 };
 
-void () clock_firstthink = { // [FUNCTION]
+void() clock_firstthink = { // [FUNCTION]
    LinkRotateTargets ();
    self.think = clock_think;
    clock_think ();
 };
 
-void () func_clock = { // [ENTITY]
+void() func_clock = { // [ENTITY]
    local vector temp;
 
 	if (!self.target) return;

@@ -27,7 +27,7 @@
 // NO CHARGE to the recipient.
 //
 // Stats:
-// Entity count: 0
+// Entity count: 
 // Function count: 
 //
 // Implements: Lightning System and Beam Attacks
@@ -37,12 +37,145 @@
 //=============================================================================
 
 void(vector lstart, entity lsource, float ldamage) LightningReflection;
-void(vector org, vector dir, float proj_type, float proj_speed) launch_projectile;
+void(vector org, vector dir, vector avel, float proj_type, float proj_speed) launch_projectile;
 void(float lo, float hi) Thor_Slam;
 void(vector pos, vector dir, float rubicon) make_spark;
 void() lightning_orb_think;
 void() Plasma_Fx;
 void() Thor_Discharge;
+void(vector spot, float base, float add, string text, float toponly) ShockWave;
+void() FlameWave;
+
+void(float fx, entity src, vector p1, vector p2) Tent_Beam = { // [FUNCTION]
+    WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+    WriteByte (MSG_BROADCAST, fx);
+    WriteEntity (MSG_BROADCAST, src);   // If client, src.origin overrides p1.
+    WriteCoord (MSG_BROADCAST, p1_x);
+    WriteCoord (MSG_BROADCAST, p1_y);
+    WriteCoord (MSG_BROADCAST, p1_z);
+    WriteCoord (MSG_BROADCAST, p2_x);
+    WriteCoord (MSG_BROADCAST, p2_y);
+    WriteCoord (MSG_BROADCAST, p2_z);
+};
+
+void() SUB_BeamRemove = { // [FUNCTION]
+	num_beams = num_beams - 1;
+	if (num_beams < 0) num_beams = 0;
+	remove(self);
+};
+
+void() rope_think = { // [FUNCTION]
+	local vector massvec, turnangle;
+
+	// Sag
+	if (self.mass) {
+		massvec_z = self.mass;
+		if (self.faceangle_inc_x == self.faceangle_inc_z) massvec_z = self.mass; // Midpoint needs to be halfway between start and end and then lowered down by mass.
+		else massvec_z = 0;//massvec_z * (self.faceangle_inc_x / self.faceangle_inc_y); // Sag
+		// else if (RopeInLastHalf())  massvec_z = massvec_z * (self.faceangle_inc_x / self.faceangle_inc_y); // Sag
+		// else massvec_z = 0; // Don't move the start and end down for sag.
+
+		//setorigin(self,self.oldorigin - massvec);
+
+
+	// TODO Handle wind.
+
+	// Use Gyro aerodynamics code to align to movedir facing angle to point toward midpoint
+	// if (self.faceangle_inc_x != self.faceangle_inc_z) {
+		// self.angles_y = 0; // Lay flat for midpoint
+	// } else if (RopeInFirstHalf() || RopeInLastHalf()) {
+		// if (RopeInFirstHalf()) self.movedir = normalize(self.facevector - self.owner.origin); // Less than half way, point from start to midpoint
+		// else self.movedir = normalize(self.enemy.origin - self.facevector); // More than half way, point from end to midpoint
+		// turnangle = vectoangles(self.movedir);
+		// turnangle = turnangle - self.angles;
+		// while (turnangle_x > 180.0) turnangle_x = turnangle_x - 360.0;
+		// while (turnangle_x < -180.0) turnangle_x = turnangle_x + 360.0;
+		// while (turnangle_y > 180.0) turnangle_y = turnangle_y - 360.0;
+		// while (turnangle_y < -180.0) turnangle_y = turnangle_y + 360.0;
+		// while (turnangle_z > 180.0) turnangle_z = turnangle_z - 360.0;
+		// while (turnangle_z < -180.0) turnangle_z = turnangle_z + 360.0;
+		// self.angles = turnangle;
+	}
+	SUB_SelfThink(rope_think,0.05);
+};
+
+// Engine C Code conversion to QC of CL_ParseBeam.  We need a whole lot more than just one progs/beam.mdl!!
+// Oh and the beams are all different lengths.  Yay modders :/  Supposed to be 32 apparently.
+// Nehahra beam is 32 long
+// Drake beam is 31 long
+// Custents beam is 48 long
+// Redfield beam is 32 long
+// Kurok beam is 32 long
+// Check your precaches in old non-QSS/FTE/DP engines!
+//
+// Example usage: QC_ParseBeam(0,"progs/redfield/beam.mdl", self, org, trace_endpos, 32);
+void(float fx, string m, entity src, vector start, vector end, float length, float persistent, entity dest) QC_ParseBeamGeneric = { // [FUNCTION]
+	local float loop, numneeded, dist;
+	local entity beam, lastbeam;
+	local vector turnangle, midpoint;
+
+	if (fx == TE_BEAM || fx == TE_LIGHTNING1 || fx == TE_LIGHTNING2) { Tent_Beam(fx,src, start,end); return;} // Normal vanilla beams, use if src moves!
+	if (!m) { Tent_Beam(TE_BEAM,src, start,end); return;} // Vanilla beam
+	if (num_beams >= MAX_BEAMS) { // Exceeded max qc beams
+		dprint("Beam effect list overflow! More than ");
+		dprint(ftos(MAX_BEAMS));
+		dprint("!\n");\
+		return;
+	}
+
+	if (length <= 0) length = 32; // default
+	dist = vlen(end-start);
+	numneeded = ceil(dist/length); // Ceil to get at least 2
+	dist = dist / length; // Reuse dist to store spacing needed, this isn't rounded, yes I know I just divided this a second ago
+	if (persistent) midpoint = start + ((end - start) * length * (numneeded / 2));
+	lastbeam = world;
+	while (loop < numneeded) {
+		if (num_beams < MAX_BEAMS) {
+			beam = spawn();
+			if (!lastbeam) lastbeam = beam; // Set first beam.
+			num_beams = num_beams + 1;
+			beam.mass = src.mass;
+			setmodel(beam,m);
+			if (persistent <= 0) {
+				beam.nextthink = time + 0.2;
+				beam.think = SUB_BeamRemove;
+			} else if (persistent == 1) {
+				beam.nextthink = time + 0.2;
+				beam.think = rope_think; // Sag and sway.
+				midpoint_z = midpoint_z - self.mass;
+				beam.facevector = midpoint; // Store midpoint
+				beam.faceangle_inc_x = loop;
+				beam.faceangle_inc_y = numneeded;
+				beam.faceangle_inc_z = floor(self.faceangle_inc_y / 2); // Index of middle beam entity.
+				beam.owner = src;
+				if (lastbeam) beam.oldenemy = lastbeam;
+				beam.enemy = dest;
+			}
+			lastbeam = beam;
+			beam.movedir = normalize(end - start);
+			setsize(beam,VEC_ORIGIN,VEC_ORIGIN);
+			setorigin(beam,start + (beam.movedir * loop * length));
+			beam.velocity = beam.avelocity = VEC_ORIGIN;
+
+			if (!src.style) {
+				// Align to movedir facing angle
+				if (src.flags & FL_CLIENT) {
+					makevectors(src.v_angle);
+					turnangle = v_forward * 32;
+					beam.angles = vectoangles(turnangle);
+				} else {
+					turnangle = vectoangles(beam.movedir);
+					beam.angles = Gyro_Aerodynamics_Turnangle(turnangle,beam.angles);
+				}
+			}
+			beam.oldorigin = beam.origin;
+			if (persistent == BEAM_STATIC) makestatic(beam);
+		}
+		loop = loop + 1;
+	}
+};
+
+void(float fx, string m, entity src, vector start, vector end, float length) QC_ParseBeam = { QC_ParseBeamGeneric(fx,m,src,start,end,length,BEAM_TEMPORARY,world); }; // [FUNCTION]
 
 void(vector p1, vector p2, entity from, float damage) LightningDamage = { // [FUNCTION]
 	local entity e1, e2;
@@ -105,7 +238,7 @@ void(vector lstart, entity lsource, float ldamage) LightningReflection = { // [F
 	traceline(lstart, lfinish, FALSE, lsource); // Trace line in random direction
 	if (random() < 0.5) { // Random chance of a plasma/lightning bolt!
 		dir = normalize(trace_endpos - lstart);
-		launch_projectile(lstart, dir, CT_REFLECTLIGHT, SPEED_REFLECTION);
+		launch_projectile(lstart,dir,NO_SPIN,CT_REFLECTLIGHT,SPEED_REFLECTION);
 	} else {
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY); // Draw lighting beam (32 model unit chunks)
 		WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
@@ -246,7 +379,7 @@ void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage = { 
 	}
 };
 
-void (entity prev, entity own, float dst) HIP_SpawnMjolnirLightning = { // [FUNCTION]
+void(entity prev, entity own, float dst) HIP_SpawnMjolnirLightning = { // [FUNCTION]
    local entity light;
 
    light = spawn ();
@@ -262,7 +395,7 @@ void (entity prev, entity own, float dst) HIP_SpawnMjolnirLightning = { // [FUNC
    light.nextthink = time;
 };
 
-void () HIP_SpawnMjolnirBase = { // [FUNCTION]
+void() HIP_SpawnMjolnirBase = { // [FUNCTION]
 	local entity light, stemp;
 
 	if (self.tome_finished) { Thor_Slam(30,80); return;}
@@ -276,7 +409,7 @@ void () HIP_SpawnMjolnirBase = { // [FUNCTION]
 	light.nextthink = (time + TRUE);
 	sound (light,CHAN_AUTO,"hipnotic/weapons/mjolslap.wav",TRUE,ATTN_NORM);
 	sound (light,CHAN_WEAPON,"hipnotic/weapons/mjolhit.wav",TRUE,ATTN_NORM);
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	light.movedir = v_forward;
 	light.dmg = 100;
 	light.ammo_cells = COST_MJOLNIR;
@@ -293,7 +426,7 @@ void () HIP_SpawnMjolnirBase = { // [FUNCTION]
 	ShockWave(trace_endpos + '0 0 4',RING_BLUE,6,"progs/drake/s_wave.spr",FALSE);
 };
 
-void () HIP_FireMjolnirLightning = { // [FUNCTION]
+void() HIP_FireMjolnirLightning = { // [FUNCTION]
    local float cells;
 
    if (self.waterlevel > 1) {
@@ -309,7 +442,7 @@ void () HIP_FireMjolnirLightning = { // [FUNCTION]
    HIP_SpawnMjolnirBase();
 };
 
-void (entity current, float life) SpawnLightningTrace = { // [FUNCTION]
+void(entity current, float life) SpawnLightningTrace = { // [FUNCTION]
 	float dmg;
 	WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST,TE_LIGHTNING2);
@@ -327,7 +460,7 @@ void (entity current, float life) SpawnLightningTrace = { // [FUNCTION]
 	LightningDamage(self.origin,current.origin,self,dmg);
 };
 
-void (vector startpos, float radius, float life) SpawnOrbLightning = { // [FUNCTION]
+void(vector startpos, float radius, float life) SpawnOrbLightning = { // [FUNCTION]
 	local entity head;
 	local vector org;
 
@@ -344,7 +477,7 @@ void (vector startpos, float radius, float life) SpawnOrbLightning = { // [FUNCT
 
 // Initially written by Qmaster and tested in the Keep mod.  aDaya's lighting 
 // orb, used as tome of power attack when using old hipnotic mjolnir.
-void () SpawnLightningOrb = { // [FUNCTION]
+void() SpawnLightningOrb = { // [FUNCTION]
 	local entity light;
 
 	light = spawn ();
@@ -363,7 +496,7 @@ void () SpawnLightningOrb = { // [FUNCTION]
 	sound(light,CHAN_AUTO,"zerstorer/ambience/thunder2.wav",TRUE,ATTN_NORM);
 };
 
-void (vector p1, vector p2, entity from, float damage) PlasmaDamage = { // [FUNCTION]
+void(vector p1, vector p2, entity from, float damage) PlasmaDamage = { // [FUNCTION]
    local entity e1;
    local entity e2;
    local vector f;
@@ -399,7 +532,7 @@ void (vector p1, vector p2, entity from, float damage) PlasmaDamage = { // [FUNC
    }
 };
 
-void (entity current) PlasmaDischarge = { // [FUNCTION]
+void(entity current) PlasmaDischarge = { // [FUNCTION]
 	float dmg;
 
 	if (!current) return;
@@ -422,7 +555,7 @@ void (entity current) PlasmaDischarge = { // [FUNCTION]
 	PlasmaDamage(self.origin,current.origin,self,dmg);
 };
 
-void () PlasmaGroundOut = { // [FUNCTION]
+void() PlasmaGroundOut = { // [FUNCTION]
    local entity current;
    local entity start;
    local float monstersHit;
@@ -435,7 +568,7 @@ void () PlasmaGroundOut = { // [FUNCTION]
          if ( (current != self.owner) ) {
 			if (Align_Opposing(self.owner,current)) {
             	traceline(self.origin,current.origin,TRUE,world);
-				if (trace_fraction == 1.0) {
+				if (trace_fraction == 1) {
 					monstersHit = monstersHit + 1;
 					PlasmaDischarge(current);
 				}
@@ -542,6 +675,20 @@ vector(entity attacker, entity targ, vector start, vector end) ChainLit_Point = 
         }
     }
     return end;
+};
+
+void(entity targ, entity inflictor, entity attacker, vector org, float damage) BoltDamage = { // [FUNCTION]
+	if (ai_immunebreakable(attacker, targ)) { // This is resist lightning function without pain sound
+		if (inflictor.lightning_timer < time) {
+			inflictor.lightning_timer = time + 0.3; // Don't spawn smoke constantly (let the sprite finish)
+			SpawnExplosion(EXPLODE_BURST_SMOKE, org, "");
+		}
+		SpawnProjectileSmoke(org, 200, 50, 150);
+	} else {
+		if (targ.resist_cells > 0) Resist_Effects(targ,org,VEC_ORIGIN,0,AM_CELLS,targ.pain_sound,"");
+		else SpawnBlood(targ, org, '0 0 100', damage*4,225);
+	}
+    T_Damage(targ, inflictor, attacker, damage, DAMARMOR);
 };
 
 // Called within 'BurstLit_Chain' below.
@@ -833,7 +980,7 @@ float(float shots, float dur) Divine_Wrath = { // [FUNCTION]
     if (self.flags & FL_CLIENT) vx = self.v_angle;
     else vx = self.angles;
 	
-    makevectors (vx);
+    makevectors(vx);
     vx = v_forward;
     hits = 0;
     head = nextent (world);
@@ -928,4 +1075,77 @@ void() Thor_Discharge = { // [FUNCTION]
     newmis.think    = Thor_Pulse;
     setall(newmis, "", '0 0 0', '0 0 0', self.origin);
     SUB_ThinkImmediate(newmis, Thor_Pulse);
+};
+
+// Used by lightning code to draw reflected lightning bolts.
+void() InitLightning = { // [FUNCTION]
+    lightning = spawn();
+    setsize (lightning, VEC_ORIGIN, VEC_ORIGIN);
+    lightning.solid      = SOLID_NOT;
+    lightning.movetype   = MOVETYPE_NONE;
+    lightning.classname  = "lightning";
+	dprint("\b[SETUP]\b Drake lightning is now setup\n");
+};
+
+//  This strikes all entities hit by the lightning bolt.
+// The old lightning code spawned two more invisible beams at weird places
+// that could damage and kill more enemies (or teammates).  The new code
+// below creates a single piercing bolt that hits everything in its path,
+// like the railgun.  Lightning in many games (e.g., D&D, Diablo) pierce.
+void(vector p1, vector p2, entity attacker, float damage, entity inflictor, float fx) LightningBolt = { // [FUNCTION]
+    local entity ruler, ignore, targ;
+    local vector start, dir;
+    local float dist, delta, yes, first;
+
+    first = yes = TRUE;
+    ruler = inflictor;
+    dir = p2 - p1;
+    delta = vlen(dir);  // Get total length in case of reflection.
+    dir = normalize(dir);
+    while (ruler) {
+        ignore = inflictor = ruler;
+        ruler = world;      // End loop unless set otherwise by reflection.
+        start = p1;
+        do {
+            traceline (p1, p2, FALSE, ignore);
+            p1 = trace_endpos;
+            targ = trace_ent;
+
+            if (targ.solid != SOLID_BSP)
+                ignore = targ;
+            else
+                ignore = world;
+
+			// Dirty hack to prevent suicide.
+            if (targ != inflictor) {
+                if (HasReflection (targ, p1, damage)) {
+                    if (yes) {
+                       yes = FALSE;
+                       ruler = targ;
+                       delta = delta - vlen(p1 - start);   // Get remaining dist.
+                       dir = normalize(p1 - targ.origin);
+                        // p2 = p1 + dir*delta;
+                    } else inflictor = lightning; // ...we give up.
+ 
+                    ignore = world;     // Stop bolt.
+                    ReflectSound (targ);
+                } else {
+                    if (first && targ.takedamage) BoltDamage(targ,inflictor,attacker,p1,damage);
+                }
+            }
+
+        // If current trace hits inflictor/attacker, next trace will miss all.
+        // Move the new start point ahead slightly to prevent attacker from
+        // hitting himself and preventing the bolt from piercing anymore.
+        // (Note:  If attacker is inside the monster because of noclip,
+        // he can still hit himself.)
+            if (ignore) { // Always world if 'p2 == trace_endpos'.
+                dist = vlen(p2 - p1);
+                if (dist > 1)	p1 = p1 + dir;
+                else			ignore = world;   // Not enough distance left, so just stop.
+            }
+        } while (ignore); // end do{}while
+
+		QC_ParseBeam(fx,string_null, inflictor, start, p1, 32); // Draw the lightning bolt between the two points.
+    }
 };

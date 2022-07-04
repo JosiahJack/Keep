@@ -37,87 +37,87 @@
 // homing spike balls similar to the vore, but weaker.  Explodes on death.
 //=============================================================================
 
-void () WrathMissileTouch;
-void () WrathHome;
-void (float AttackNumber) WrathMissile;
+void() WrathMissileTouch;
+void() WrathHome;
+void(float AttackNumber) WrathMissile;
 
-void () wrath_stand1 = [ 1.000, wrath_stand1 ] {
+void() wrath_stand1 = [ 1.000, wrath_stand1 ] {
 	if (random() < 0.1) monster_idle_sound();
 	ai_stand ();
 };
 
-void () wrath_walk01 = [ 1.000, wrath_walk02 ] { monster_idle_sound(); ai_walk (8); };
-void () wrath_walk02 = [ 2.000, wrath_walk03 ] { ai_walk (8); };
-void () wrath_walk03 = [ 3.000, wrath_walk04 ] { ai_walk (8); };
-void () wrath_walk04 = [ 4.000, wrath_walk05 ] { ai_walk (8); };
-void () wrath_walk05 = [ 5.000, wrath_walk06 ] { ai_walk (8); };
-void () wrath_walk06 = [ 6.000, wrath_walk07 ] { ai_walk (8); };
-void () wrath_walk07 = [ 7.000, wrath_walk08 ] { ai_walk (8); };
-void () wrath_walk08 = [ 8.000, wrath_walk09 ] { ai_walk (8); };
-void () wrath_walk09 = [ 9.000, wrath_walk10 ] { ai_walk (8); };
-void () wrath_walk10 = [ 10.000, wrath_walk11 ] { ai_walk (8); };
-void () wrath_walk11 = [ 11.000, wrath_walk12 ] { ai_walk (8); };
-void () wrath_walk12 = [ 12.000, wrath_walk01 ] { ai_walk (8); };
+void() wrath_walk01 = [ 1.000, wrath_walk02 ] { monster_idle_sound(); ai_walk (8); };
+void() wrath_walk02 = [ 2.000, wrath_walk03 ] { ai_walk (8); };
+void() wrath_walk03 = [ 3.000, wrath_walk04 ] { ai_walk (8); };
+void() wrath_walk04 = [ 4.000, wrath_walk05 ] { ai_walk (8); };
+void() wrath_walk05 = [ 5.000, wrath_walk06 ] { ai_walk (8); };
+void() wrath_walk06 = [ 6.000, wrath_walk07 ] { ai_walk (8); };
+void() wrath_walk07 = [ 7.000, wrath_walk08 ] { ai_walk (8); };
+void() wrath_walk08 = [ 8.000, wrath_walk09 ] { ai_walk (8); };
+void() wrath_walk09 = [ 9.000, wrath_walk10 ] { ai_walk (8); };
+void() wrath_walk10 = [ 10.000, wrath_walk11 ] { ai_walk (8); };
+void() wrath_walk11 = [ 11.000, wrath_walk12 ] { ai_walk (8); };
+void() wrath_walk12 = [ 12.000, wrath_walk01 ] { ai_walk (8); };
 
-void () wrath_run01 = [ 1.000, wrath_run02 ] { monster_idle_sound(); ai_run (12); };
-void () wrath_run02 = [ 2.000, wrath_run03 ] { ai_run (12); };
-void () wrath_run03 = [ 3.000, wrath_run04 ] { ai_run (12); };
-void () wrath_run04 = [ 4.000, wrath_run05 ] { ai_run (12); };
-void () wrath_run05 = [ 5.000, wrath_run06 ] { ai_run (12); };
-void () wrath_run06 = [ 6.000, wrath_run07 ] { ai_run (12); };
-void () wrath_run07 = [ 7.000, wrath_run08 ] { ai_run (12); };
-void () wrath_run08 = [ 8.000, wrath_run09 ] { ai_run (12); };
-void () wrath_run09 = [ 9.000, wrath_run10 ] { ai_run (12); };
-void () wrath_run10 = [ 10.000, wrath_run11 ] { ai_run (12); };
-void () wrath_run11 = [ 11.000, wrath_run12 ] { ai_run (12); };
-void () wrath_run12 = [ 12.000, wrath_run01 ] { ai_run (12); };
+void() wrath_run01 = [ 1.000, wrath_run02 ] { monster_idle_sound(); ai_run (12); };
+void() wrath_run02 = [ 2.000, wrath_run03 ] { ai_run (12); };
+void() wrath_run03 = [ 3.000, wrath_run04 ] { ai_run (12); };
+void() wrath_run04 = [ 4.000, wrath_run05 ] { ai_run (12); };
+void() wrath_run05 = [ 5.000, wrath_run06 ] { ai_run (12); };
+void() wrath_run06 = [ 6.000, wrath_run07 ] { ai_run (12); };
+void() wrath_run07 = [ 7.000, wrath_run08 ] { ai_run (12); };
+void() wrath_run08 = [ 8.000, wrath_run09 ] { ai_run (12); };
+void() wrath_run09 = [ 9.000, wrath_run10 ] { ai_run (12); };
+void() wrath_run10 = [ 10.000, wrath_run11 ] { ai_run (12); };
+void() wrath_run11 = [ 11.000, wrath_run12 ] { ai_run (12); };
+void() wrath_run12 = [ 12.000, wrath_run01 ] { ai_run (12); };
 
-void () wrath_at_a01 = [ 13.000, wrath_at_a02 ] { ai_charge (12); };
-void () wrath_at_a02 = [ 14.000, wrath_at_a03 ] { ai_charge (12); };
-void () wrath_at_a03 = [ 15.000, wrath_at_a04 ] { ai_charge (12); };
-void () wrath_at_a04 = [ 16.000, wrath_at_a05 ] { ai_charge (12); };
-void () wrath_at_a05 = [ 17.000, wrath_at_a06 ] { ai_charge (12); };
-void () wrath_at_a06 = [ 18.000, wrath_at_a07 ] { ai_charge (12); };
-void () wrath_at_a07 = [ 19.000, wrath_at_a08 ] { ai_charge (12); };
-void () wrath_at_a08 = [ 20.000, wrath_at_a09 ] { ai_charge (12); };
-void () wrath_at_a09 = [ 21.000, wrath_at_a10 ] { ai_charge (12); };
-void () wrath_at_a10 = [ 22.000, wrath_at_a11 ] { ai_charge (12); };
-void () wrath_at_a11 = [ 23.000, wrath_at_a12 ] { WrathMissile (1); };
-void () wrath_at_a12 = [ 24.000, wrath_at_a13 ] { ai_charge (12); };
-void () wrath_at_a13 = [ 25.000, wrath_at_a14 ] { ai_charge (12); };
-void () wrath_at_a14 = [ 26.000, wrath_run01 ] { ai_charge (12); };
+void() wrath_at_a01 = [ 13.000, wrath_at_a02 ] { ai_charge (12); };
+void() wrath_at_a02 = [ 14.000, wrath_at_a03 ] { ai_charge (12); };
+void() wrath_at_a03 = [ 15.000, wrath_at_a04 ] { ai_charge (12); };
+void() wrath_at_a04 = [ 16.000, wrath_at_a05 ] { ai_charge (12); };
+void() wrath_at_a05 = [ 17.000, wrath_at_a06 ] { ai_charge (12); };
+void() wrath_at_a06 = [ 18.000, wrath_at_a07 ] { ai_charge (12); };
+void() wrath_at_a07 = [ 19.000, wrath_at_a08 ] { ai_charge (12); };
+void() wrath_at_a08 = [ 20.000, wrath_at_a09 ] { ai_charge (12); };
+void() wrath_at_a09 = [ 21.000, wrath_at_a10 ] { ai_charge (12); };
+void() wrath_at_a10 = [ 22.000, wrath_at_a11 ] { ai_charge (12); };
+void() wrath_at_a11 = [ 23.000, wrath_at_a12 ] { WrathMissile (1); };
+void() wrath_at_a12 = [ 24.000, wrath_at_a13 ] { ai_charge (12); };
+void() wrath_at_a13 = [ 25.000, wrath_at_a14 ] { ai_charge (12); };
+void() wrath_at_a14 = [ 26.000, wrath_run01 ] { ai_charge (12); };
 
-void () wrath_at_b01 = [ 27.000, wrath_at_b02 ] { ai_charge (12); };
-void () wrath_at_b02 = [ 28.000, wrath_at_b03 ] { ai_charge (12); };
-void () wrath_at_b03 = [ 29.000, wrath_at_b04 ] { ai_charge (12); };
-void () wrath_at_b04 = [ 30.000, wrath_at_b05 ] { ai_charge (12); };
-void () wrath_at_b05 = [ 31.000, wrath_at_b06 ] { ai_charge (12); };
-void () wrath_at_b06 = [ 32.000, wrath_at_b07 ] { WrathMissile (2); };
-void () wrath_at_b07 = [ 33.000, wrath_at_b08 ] { ai_charge (12); };
-void () wrath_at_b08 = [ 34.000, wrath_at_b09 ] { ai_charge (12); };
-void () wrath_at_b09 = [ 35.000, wrath_at_b10 ] { ai_charge (12); };
-void () wrath_at_b10 = [ 36.000, wrath_at_b11 ] { ai_charge (12); };
-void () wrath_at_b11 = [ 37.000, wrath_at_b12 ] { ai_charge (12); };
-void () wrath_at_b12 = [ 38.000, wrath_at_b13 ] { ai_charge (12); };
-void () wrath_at_b13 = [ 39.000, wrath_run01 ] { ai_charge (12); };
+void() wrath_at_b01 = [ 27.000, wrath_at_b02 ] { ai_charge (12); };
+void() wrath_at_b02 = [ 28.000, wrath_at_b03 ] { ai_charge (12); };
+void() wrath_at_b03 = [ 29.000, wrath_at_b04 ] { ai_charge (12); };
+void() wrath_at_b04 = [ 30.000, wrath_at_b05 ] { ai_charge (12); };
+void() wrath_at_b05 = [ 31.000, wrath_at_b06 ] { ai_charge (12); };
+void() wrath_at_b06 = [ 32.000, wrath_at_b07 ] { WrathMissile (2); };
+void() wrath_at_b07 = [ 33.000, wrath_at_b08 ] { ai_charge (12); };
+void() wrath_at_b08 = [ 34.000, wrath_at_b09 ] { ai_charge (12); };
+void() wrath_at_b09 = [ 35.000, wrath_at_b10 ] { ai_charge (12); };
+void() wrath_at_b10 = [ 36.000, wrath_at_b11 ] { ai_charge (12); };
+void() wrath_at_b11 = [ 37.000, wrath_at_b12 ] { ai_charge (12); };
+void() wrath_at_b12 = [ 38.000, wrath_at_b13 ] { ai_charge (12); };
+void() wrath_at_b13 = [ 39.000, wrath_run01 ] { ai_charge (12); };
 
-void () wrath_at_c01 = [ 40.000, wrath_at_c02 ] { ai_charge (12); };
-void () wrath_at_c02 = [ 41.000, wrath_at_c03 ] { ai_charge (12); };
-void () wrath_at_c03 = [ 42.000, wrath_at_c04 ] { ai_charge (12); };
-void () wrath_at_c04 = [ 43.000, wrath_at_c05 ] { ai_charge (12); };
-void () wrath_at_c05 = [ 44.000, wrath_at_c06 ] { ai_charge (12); };
-void () wrath_at_c06 = [ 45.000, wrath_at_c07 ] { ai_charge (12); };
-void () wrath_at_c07 = [ 46.000, wrath_at_c08 ] { WrathMissile (3); };
-void () wrath_at_c08 = [ 47.000, wrath_at_c09 ] { ai_charge (12); };
-void () wrath_at_c09 = [ 48.000, wrath_at_c10 ] { ai_charge (12); };
-void () wrath_at_c10 = [ 49.000, wrath_at_c11 ] { ai_charge (12); };
-void () wrath_at_c11 = [ 50.000, wrath_at_c12 ] { ai_charge (12); };
-void () wrath_at_c12 = [ 51.000, wrath_at_c13 ] { ai_charge (12); };
-void () wrath_at_c13 = [ 52.000, wrath_at_c14 ] { ai_charge (12); };
-void () wrath_at_c14 = [ 53.000, wrath_at_c15 ] { ai_charge (12); };
-void () wrath_at_c15 = [ 54.000, wrath_run01 ] { ai_charge (12); };
+void() wrath_at_c01 = [ 40.000, wrath_at_c02 ] { ai_charge (12); };
+void() wrath_at_c02 = [ 41.000, wrath_at_c03 ] { ai_charge (12); };
+void() wrath_at_c03 = [ 42.000, wrath_at_c04 ] { ai_charge (12); };
+void() wrath_at_c04 = [ 43.000, wrath_at_c05 ] { ai_charge (12); };
+void() wrath_at_c05 = [ 44.000, wrath_at_c06 ] { ai_charge (12); };
+void() wrath_at_c06 = [ 45.000, wrath_at_c07 ] { ai_charge (12); };
+void() wrath_at_c07 = [ 46.000, wrath_at_c08 ] { WrathMissile (3); };
+void() wrath_at_c08 = [ 47.000, wrath_at_c09 ] { ai_charge (12); };
+void() wrath_at_c09 = [ 48.000, wrath_at_c10 ] { ai_charge (12); };
+void() wrath_at_c10 = [ 49.000, wrath_at_c11 ] { ai_charge (12); };
+void() wrath_at_c11 = [ 50.000, wrath_at_c12 ] { ai_charge (12); };
+void() wrath_at_c12 = [ 51.000, wrath_at_c13 ] { ai_charge (12); };
+void() wrath_at_c13 = [ 52.000, wrath_at_c14 ] { ai_charge (12); };
+void() wrath_at_c14 = [ 53.000, wrath_at_c15 ] { ai_charge (12); };
+void() wrath_at_c15 = [ 54.000, wrath_run01 ] { ai_charge (12); };
 
-void () wrath_attack = {
+void() wrath_attack = {
    local float r;
 
    r = random ();
@@ -133,26 +133,26 @@ void () wrath_attack = {
    sound (self,CHAN_VOICE,"rogue/wrath/watt.wav",TRUE,ATTN_NORM);
 };
 
-void () wrath_pn_a01 = [ 55.000, wrath_pn_a02 ] {};
-void () wrath_pn_a02 = [ 56.000, wrath_pn_a03 ] {};
-void () wrath_pn_a03 = [ 57.000, wrath_pn_a04 ] {};
-void () wrath_pn_a04 = [ 58.000, wrath_pn_a05 ] {};
-void () wrath_pn_a05 = [ 59.000, wrath_pn_a06 ] {};
-void () wrath_pn_a06 = [ 60.000, wrath_run01 ] {};
+void() wrath_pn_a01 = [ 55.000, wrath_pn_a02 ] {};
+void() wrath_pn_a02 = [ 56.000, wrath_pn_a03 ] {};
+void() wrath_pn_a03 = [ 57.000, wrath_pn_a04 ] {};
+void() wrath_pn_a04 = [ 58.000, wrath_pn_a05 ] {};
+void() wrath_pn_a05 = [ 59.000, wrath_pn_a06 ] {};
+void() wrath_pn_a06 = [ 60.000, wrath_run01 ] {};
 
-void () wrath_pn_b01 = [ 61.000, wrath_pn_b02 ] {};
-void () wrath_pn_b02 = [ 62.000, wrath_pn_b03 ] {};
-void () wrath_pn_b03 = [ 63.000, wrath_pn_b04 ] {};
-void () wrath_pn_b04 = [ 64.000, wrath_pn_b05 ] {};
-void () wrath_pn_b05 = [ 65.000, wrath_pn_b06 ] {};
-void () wrath_pn_b06 = [ 66.000, wrath_pn_b07 ] {};
-void () wrath_pn_b07 = [ 67.000, wrath_pn_b08 ] {};
-void () wrath_pn_b08 = [ 68.000, wrath_pn_b09 ] {};
-void () wrath_pn_b09 = [ 69.000, wrath_pn_b10 ] {};
-void () wrath_pn_b10 = [ 70.000, wrath_pn_b11 ] {};
-void () wrath_pn_b11 = [ 71.000, wrath_run01 ] {};
+void() wrath_pn_b01 = [ 61.000, wrath_pn_b02 ] {};
+void() wrath_pn_b02 = [ 62.000, wrath_pn_b03 ] {};
+void() wrath_pn_b03 = [ 63.000, wrath_pn_b04 ] {};
+void() wrath_pn_b04 = [ 64.000, wrath_pn_b05 ] {};
+void() wrath_pn_b05 = [ 65.000, wrath_pn_b06 ] {};
+void() wrath_pn_b06 = [ 66.000, wrath_pn_b07 ] {};
+void() wrath_pn_b07 = [ 67.000, wrath_pn_b08 ] {};
+void() wrath_pn_b08 = [ 68.000, wrath_pn_b09 ] {};
+void() wrath_pn_b09 = [ 69.000, wrath_pn_b10 ] {};
+void() wrath_pn_b10 = [ 70.000, wrath_pn_b11 ] {};
+void() wrath_pn_b11 = [ 71.000, wrath_run01 ] {};
 
-void (entity inflictor, entity attacker, float damage) wrath_pain = {
+void(entity inflictor, entity attacker, float damage) wrath_pain = {
    local float r;
 
    if ( (self.pain_finished > time) )
@@ -172,15 +172,15 @@ void (entity inflictor, entity attacker, float damage) wrath_pain = {
    sound (self,CHAN_VOICE,"rogue/wrath/wpain.wav",TRUE,ATTN_NORM);
 };
 
-void () wrath_die02 = [ 73.000, wrath_die03 ] {};
-void () wrath_die03 = [ 74.000, wrath_die04 ] {};
-void () wrath_die04 = [ 75.000, wrath_die05 ] {};
-void () wrath_die05 = [ 76.000, wrath_die07 ] {};
-void () wrath_die07 = [ 78.000, wrath_die09 ] {};
-void () wrath_die09 = [ 80.000, wrath_die11 ] {};
-void () wrath_die11 = [ 82.000, wrath_die13 ] {};
-void () wrath_die13 = [ 84.000, wrath_die15 ] {};
-void () wrath_die15 = [ 86.000, wrath_die15 ] {
+void() wrath_die02 = [ 73.000, wrath_die03 ] {};
+void() wrath_die03 = [ 74.000, wrath_die04 ] {};
+void() wrath_die04 = [ 75.000, wrath_die05 ] {};
+void() wrath_die05 = [ 76.000, wrath_die07 ] {};
+void() wrath_die07 = [ 78.000, wrath_die09 ] {};
+void() wrath_die09 = [ 80.000, wrath_die11 ] {};
+void() wrath_die11 = [ 82.000, wrath_die13 ] {};
+void() wrath_die13 = [ 84.000, wrath_die15 ] {};
+void() wrath_die15 = [ 86.000, wrath_die15 ] {
  	// Throw gibs, but create more XY outward velocity
 	self.max_health = MON_XYGIBVELOCITY;
 	monster_ThrowGib();
@@ -208,7 +208,7 @@ void () wrath_die15 = [ 86.000, wrath_die15 ] {
 	entity_hide(self);
 };
 
-void () wrath_die01 = {
+void() wrath_die01 = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	self.solid = SOLID_NOT;
 	sound (self,CHAN_VOICE,"rogue/wrath/wdthc.wav",TRUE,ATTN_NORM);
@@ -220,7 +220,7 @@ void () wrath_die01 = {
 	wrath_die02();
 };
 
-void () monster_wrath_precache = {
+void() monster_wrath_precache = {
 	precache_model("progs/rogue/wrath.mdl");
 	precache_model("progs/drake/w_ball.mdl");
 	precache_model("progs/rogue/wrthgib1.mdl");
@@ -236,7 +236,7 @@ void () monster_wrath_precache = {
 	if (ext_dppart) particleeffectnum(DPP_WRAITHEXPLODE);
 };
 
-void () monster_wrath = { // [ENTITY]
+void() monster_wrath = { // [ENTITY]
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -273,7 +273,7 @@ void () monster_wrath = { // [ENTITY]
 	monster_start();
 };
 
-void (float AttackNumber) WrathMissile = {
+void(float AttackNumber) WrathMissile = {
    local entity missile;
    local vector dir;
    local vector org;
@@ -287,7 +287,7 @@ void (float AttackNumber) WrathMissile = {
       flytime = 0.100;
 
    self.effects = (self.effects | EF_MUZZLEFLASH);
-   makevectors (self.angles);
+   makevectors(self.angles);
    missile = spawn ();
 	missile.classgroup = CG_PROJALL;
    missile.owner = self;
@@ -319,7 +319,7 @@ void (float AttackNumber) WrathMissile = {
    self.attack_finished = (time + 2);
 };
 
-void () WrathHome = {
+void() WrathHome = {
    if ( (self.enemy.health < TRUE) ) {
       remove (self);
       return ;
@@ -333,7 +333,7 @@ void () WrathHome = {
    self.think = WrathHome;
 };
 
-void () WrathMissileTouch = {
+void() WrathMissileTouch = {
    if ( (((other == self.owner) || (other.classname == "monster_wrath")) || (other.classname == "monster_super_wrath")) ) {
       remove (self);
       return ;

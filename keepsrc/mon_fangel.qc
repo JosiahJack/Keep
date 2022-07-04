@@ -212,7 +212,7 @@ void  (float thrust)fangel_fly =  {
 	if ( (self.ring_flight_time > time) ) walkmove(self.angles_y, self.ring_regen_time);
 };
 
-void ()fangel_float =  {
+void()fangel_float =  {
    self.monster_duration = (self.monster_duration - 1.00000);
    ai_face ( );
    enemy_range = range ( self.enemy);
@@ -271,7 +271,7 @@ void() fangel_hand_fire = {
 void  ()fangel_wing_fire =  {
    ai_face();
    sound ( self, CHAN_WEAPON, "hexen2/fangel/wing.wav", 1.00000, ATTN_NORM);
-   makevectors ( self.angles);
+   makevectors( self.angles);
    do_faBlade ( '8.00000 6.00000 4.00000', 360.00000, (v_right * 2.00000));
    do_faBlade ( '-8.00000 6.00000 4.00000', 360.00000, (v_right * -2.00000));
 
@@ -634,13 +634,13 @@ void() monster_fallen_angel =  {
 	if ((self.classname == "monster_fallen_angel") ) {
 		self.idle_sound = "hexen2/fangel/ambi1.wav";
 		if (self.health < 1) self.health = 300; // was 250 in Hexen2
-		if(!self.classtype) self.classtype = CT_MONFANGEL;
+		if (!self.classtype) self.classtype = CT_MONFANGEL;
 		if (self.deathstring == "")  self.deathstring = " was felled by the Fallen Angel\n";
    } else {
 		self.idle_sound = "hexen2/fangel/ambi2.wav";
 		self.skin = 1;
 		if (self.health < 1) self.health = 500;
-		if(!self.classtype) self.classtype = CT_MONFANGELLORD;
+		if (!self.classtype) self.classtype = CT_MONFANGELLORD;
 		if (self.deathstring == "")  self.deathstring = " was decimated by a Fallen Angel Lord!\n";
 		self.alpha = 0.5;
 		self.pain_sound = "hexen2/fangel/pain2.wav";

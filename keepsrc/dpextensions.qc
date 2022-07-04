@@ -648,7 +648,7 @@ float(float c, float s) atan2 = #474; // returns angle in radians for a given co
 float(float a) tan = #475; // returns tangent value (which is simply sin(a)/cos(a)) for the given angle in radians, the result is in the range -infinity to +infinity
 //description:
 //useful math functions for analyzing vectors, note that these all use angles in radians (just like the cos/sin functions) not degrees unlike makevectors/vectoyaw/vectoangles, so be sure to do the appropriate conversions (multiply by DEG2RAD or RAD2DEG as needed).
-//note: atan2 can take unnormalized vectors (just like vectoyaw), and the function was included only for completeness (more often you want vectoyaw or vectoangles), atan2(v_x,v_y) * RAD2DEG gives the same result as vectoyaw(v)
+//note: atan2 can take unnormalized vectors(just like vectoyaw), and the function was included only for completeness (more often you want vectoyaw or vectoangles), atan2(v_x,v_y) * RAD2DEG gives the same result as vectoyaw(v)
 
 //DP_QC_AUTOCVARS
 //idea: divVerent
@@ -1747,7 +1747,7 @@ void(float to, string s, float sz) WritePicture = #501;
 //JPEG. The data being sent will be equivalent to:
 //  WriteString(to, s);
 //  WriteShort(to, imagesize);
-//  for(i = 0; i < imagesize; ++i)
+//  for (i = 0; i < imagesize; ++i)
 //    WriteByte(to, [the i-th byte of the compressed JPEG image]);
 
 //DP_SV_WRITEUNTERMINATEDSTRING

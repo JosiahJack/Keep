@@ -136,16 +136,14 @@ void(vector sideofs) raind_attack = {
 
 	// turn and face your enemy!
 	ai_face();
-	makevectors (self.angles);
-
+	makevectors(self.angles);
 	org = self.origin + attack_vector(sideofs);
 	// Fire rocket direction to match raindeer side
 	vec = v_right*(sideofs_x+(random()*10));
 	dir = normalize((self.enemy.origin + vec) - org);
-	Launch_Missile (org, dir, '0 0 0', CT_PROJ_RAINDEER, self.attack_speed);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_RAINDEER,self.attack_speed);
 };
 
-//----------------------------------------------------------------------
 void() raind_shoot1 = [ $rattack1, raind_shoot2 ] {ai_face();};
 void() raind_shoot2 = [ $rattack2, raind_shoot3 ] {};
 void() raind_shoot3 = [ $rattack3, raind_shoot4 ] {ai_face();};
@@ -292,7 +290,7 @@ void() monster_xmas_raindeer = { // [ENTITY]
 	self.poisonous = FALSE;				// Not Supported
 	self.meleeoffset = '24 0 20';		// Antler attack offset
 	self.lefty = 0;						// Cycle attack sounds
-	if (self.deathstring == "" ) self.deathstring = " was trampled by a Raindeer\n";
+	if (self.deathstring == "") self.deathstring = " was trampled by a Raindeer\n";
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.th_checkattack = RaindeerCheckAttack;
 	self.meleerange = MONAI_MELEERAINDEER;

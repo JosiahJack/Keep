@@ -331,7 +331,7 @@ void(vector pos, string num) Hud_DrawCharFont24 = {
 	float i, c;
 	// Endless loop until end of string
 	// Keep moving draw pos forward (pos_x)
-	for(i = 0; ; i++, pos_x += HUDSIZE_24_x) {
+	for (i = 0; ; i++, pos_x += HUDSIZE_24_x) {
 		// Read next character from string
 		c = str2chr(num, i);
 		// End of string found?
@@ -485,7 +485,7 @@ float (float hudvar) Hud_CKeyRange = {
 };
 
 // Shows ammo quanity, key/runes and powerups.  Multiple setups for different hud layouts
-void (vector pos, vector br) Hud_DrawIBar0a = {
+void(vector pos, vector br) Hud_DrawIBar0a = {
 	// Draw background bar using scr_sbaralpha default
 	drawpic(pos, backgrd[HUDTYPE_0+3], [320, 16], HUDRGB_DEF, baralpha, 0);
 
@@ -535,7 +535,7 @@ void (vector pos, vector br) Hud_DrawIBar0a = {
 		drawpic(pos+[304,0], ibitems[11], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);
 };
 
-void (vector pos, vector br) Hud_DrawIBar0b = {
+void(vector pos, vector br) Hud_DrawIBar0b = {
 	local vector topcol, botcol;
 	local string player_frags;
 	local float i;
@@ -600,7 +600,7 @@ void (vector pos, vector br) Hud_DrawIBar0b = {
 	}
 };
 
-void (vector pos, vector br) Hud_DrawIBar1a = {
+void(vector pos, vector br) Hud_DrawIBar1a = {
 	// Draw background bar using scr_sbaralpha default
 	drawpic(pos, backgrd[HUDTYPE_1+2], [96, 48], HUDRGB_DEF, baralpha, 0);
 
@@ -630,7 +630,7 @@ void (vector pos, vector br) Hud_DrawIBar1a = {
 	}
 };
 
-void (vector pos, vector br) Hud_DrawIBar1b = {
+void(vector pos, vector br) Hud_DrawIBar1b = {
 	local vector topcol, botcol;
 	local string player_frags;
 	local float i, j;
@@ -712,7 +712,7 @@ void (vector pos, vector br) Hud_DrawIBar1b = {
 	}
 };
 
-void (vector pos, vector br) Hud_DrawIBar2a = {
+void(vector pos, vector br) Hud_DrawIBar2a = {
 	// Draw background bar using scr_sbaralpha default
 	drawpic(pos, backgrd[HUDTYPE_2+2], [48, 96], HUDRGB_DEF, baralpha, 0);
 
@@ -742,7 +742,7 @@ void (vector pos, vector br) Hud_DrawIBar2a = {
 	}
 };
 
-void (vector pos, vector br) Hud_DrawIBar2b = {
+void(vector pos, vector br) Hud_DrawIBar2b = {
 	local vector topcol, botcol;
 	local string player_frags;
 	local float i, j;
@@ -822,11 +822,11 @@ void (vector pos, vector br) Hud_DrawIBar2b = {
 	}
 };
 
-void (vector pos, vector br) Hud_DrawIBar3a = {};
+void(vector pos, vector br) Hud_DrawIBar3a = {};
 
-void (vector pos, vector br) Hud_DrawIBar3b = {};
+void(vector pos, vector br) Hud_DrawIBar3b = {};
 
-void (vector pos, vector br) Hud_DrawIBar4a = {
+void(vector pos, vector br) Hud_DrawIBar4a = {
 	local vector topcol, botcol;
 	local string player_frags;
 	local float i, j;
@@ -891,7 +891,7 @@ void (vector pos, vector br) Hud_DrawIBar4a = {
 	}
 };
 
-void (vector pos, vector br) Hud_DrawIBar4b = {
+void(vector pos, vector br) Hud_DrawIBar4b = {
 	// Draw background bar using scr_sbaralpha default
 	drawpic(pos, backgrd[HUDTYPE_4+3], [48, 64], HUDRGB_DEF, baralpha, 0);
 
@@ -915,7 +915,7 @@ void (vector pos, vector br) Hud_DrawIBar4b = {
 	}
 };
 
-void (vector pos, vector br) Hud_DrawIBar5a = {
+void(vector pos, vector br) Hud_DrawIBar5a = {
 	local vector topcol, botcol;
 	local string player_frags;
 	local float i, j;
@@ -982,7 +982,7 @@ void (vector pos, vector br) Hud_DrawIBar5a = {
 	}
 };	
 
-void (vector pos, vector br) Hud_DrawIBar5b = {
+void(vector pos, vector br) Hud_DrawIBar5b = {
 	// no point drawing, nothing to show!
 	if (sweapon == 0) return;
 	// Draw background bar using scr_sbaralpha default
@@ -1008,7 +1008,7 @@ void (vector pos, vector br) Hud_DrawIBar5b = {
 	}
 };	
 
-void (vector pos, vector br) Hud_DrawIBar6 = {
+void(vector pos, vector br) Hud_DrawIBar6 = {
 	local vector topcol, botcol;
 	local string player_frags;
 	local float i;
@@ -1109,8 +1109,8 @@ void (vector pos, vector br) Hud_DrawIBar6 = {
 	}
 };
 
-void (vector pos, vector br, float grid) Hud_DrawIBar7a = {	
-	if(grid >0 && grid <=1) drawpic(pos, backgrd2[HUDTYPE_7+2], [96, 64], HUDRGB_DEF, grid, 0); // Draw background bar using scr_sbaralpha default
+void(vector pos, vector br, float grid) Hud_DrawIBar7a = {	
+	if (grid >0 && grid <=1) drawpic(pos, backgrd2[HUDTYPE_7+2], [96, 64], HUDRGB_DEF, grid, 0); // Draw background bar using scr_sbaralpha default
 
 	Hud_DrawNoFont24(pos+[24,0], shealth, 25); // Alpha HP value only (no background
 
@@ -1153,13 +1153,13 @@ void (vector pos, vector br, float grid) Hud_DrawIBar7a = {
 	if (smoditems & CSQC_ARTLAVASHIELD) drawpic(pos+[72,48], ibitems[11], HUDSIZE_16, HUDRGB_DEF, hudalpha, 0);	
 };
 
-void (vector pos, vector br, float grid) Hud_DrawIBar7b = {
+void(vector pos, vector br, float grid) Hud_DrawIBar7b = {
 	local vector topcol, botcol;
 	local string player_frags;
 	local float ammorow,i,j;
 	
 	// Draw background bar using scr_sbaralpha default
-	if(grid >0 && grid <=1) drawpic(pos, backgrd2[HUDTYPE_7+3], [104, 56], HUDRGB_DEF, grid, 0);
+	if (grid >0 && grid <=1) drawpic(pos, backgrd2[HUDTYPE_7+3], [104, 56], HUDRGB_DEF, grid, 0);
 
 	// Draw silver/gold key
 	if (sitems & CSQC_KEY1) drawpic(pos+[72,0], sbitems[12], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
@@ -1229,9 +1229,9 @@ void (vector pos, vector br, float grid) Hud_DrawIBar7b = {
 	}
 };
 
-void (vector pos, vector br, float grid) Hud_DrawIBar7c = {
+void(vector pos, vector br, float grid) Hud_DrawIBar7c = {
 	// Draw background bar using scr_sbaralpha default
-	if(grid >0 && grid <=1) 
+	if (grid >0 && grid <=1) 
 		drawpic(pos, backgrd2[HUDTYPE_6+1], [32, 128], HUDRGB_DEF, grid, 0);
 
 	// Draw weapons and highlight current one
@@ -1254,14 +1254,14 @@ void (vector pos, vector br, float grid) Hud_DrawIBar7c = {
 	}
 };
 
-void (vector pos, vector br) Hud_DrawIBar8a = {};
+void(vector pos, vector br) Hud_DrawIBar8a = {};
 
-void (vector pos, vector br) Hud_DrawIBar8b = {};
+void(vector pos, vector br) Hud_DrawIBar8b = {};
 
-void (vector pos, vector br) Hud_DrawIBar9 = {};
+void(vector pos, vector br) Hud_DrawIBar9 = {};
 
 // Shows armour / health and current ammo/qty.  Multiple setups for different hud layouts.  SBar1 is default ID layout, used for Huds 0,2,3
-void (vector pos, vector virtsize) Hud_DrawSBar0 = {
+void(vector pos, vector virtsize) Hud_DrawSBar0 = {
 	// Draw primary HUD bar (Armour/Face/Health/Ammo)
 	drawpic(pos, backgrd[HUDTYPE_0], [320, 24], HUDRGB_DEF, baralpha, 0);
 
@@ -1320,7 +1320,7 @@ void (vector pos, vector virtsize) Hud_DrawSBar0 = {
 	}
 };
 
-void (vector pos, vector virtsize) Hud_DrawSBar4a = {
+void(vector pos, vector virtsize) Hud_DrawSBar4a = {
 	// Draw primary HUD bar (Armour/Face/Health/Ammo)
 	drawpic(pos, backgrd[HUDTYPE_4+0], [96, 48], HUDRGB_DEF, baralpha, 0);
 
@@ -1350,7 +1350,7 @@ void (vector pos, vector virtsize) Hud_DrawSBar4a = {
 	
 };
 
-void (vector pos, vector virtsize) Hud_DrawSBar4b = {
+void(vector pos, vector virtsize) Hud_DrawSBar4b = {
 	// Draw primary HUD bar (Armour/Face/Health/Ammo)
 	drawpic(pos, backgrd[HUDTYPE_4+1], [96, 48], HUDRGB_DEF, baralpha, 0);
 	
@@ -1393,7 +1393,7 @@ void (vector pos, vector virtsize) Hud_DrawSBar4b = {
 	}
 };
 
-void (vector pos, vector virtsize) Hud_DrawSBar5a = {
+void(vector pos, vector virtsize) Hud_DrawSBar5a = {
 	// Draw face first (bar is over face)
 	Hud_DrawFace(pos+[8,8]);
 	// Draw primary HUD bar (Armour/Face/Health/Ammo)
@@ -1431,7 +1431,7 @@ void (vector pos, vector virtsize) Hud_DrawSBar5a = {
 	}
 };
 
-void (vector pos, vector virtsize) Hud_DrawSBar5b = {
+void(vector pos, vector virtsize) Hud_DrawSBar5b = {
 	local float ammorow;
 	
 	// no point drawing, nothing to show!
@@ -1479,7 +1479,7 @@ void (vector pos, vector virtsize) Hud_DrawSBar5b = {
 	}
 };
 
-void (vector pos, vector virtsize, float bckgrd) Hud_DrawSBar6 = {
+void(vector pos, vector virtsize, float bckgrd) Hud_DrawSBar6 = {
 	if (bckgrd) drawpic(pos, backgrd2[HUDTYPE_6+0], [416, 24], HUDRGB_DEF, baralpha, 0); // Draw primary HUD bar (Armour/Face/Health/Ammo)
 
 	// Deal with Pentagram first, its a simple test/update
@@ -1545,8 +1545,8 @@ void (vector pos, vector virtsize, float bckgrd) Hud_DrawSBar6 = {
 	}
 };
 
-void (vector pos, vector virtsize, float grid) Hud_DrawSBar7a = {
-	if(grid >0 && grid <=1) drawpic(pos, backgrd2[HUDTYPE_7+0], [72, 48], HUDRGB_DEF, grid, 0); // Draw primary HUD bar (Armour/Health)
+void(vector pos, vector virtsize, float grid) Hud_DrawSBar7a = {
+	if (grid >0 && grid <=1) drawpic(pos, backgrd2[HUDTYPE_7+0], [72, 48], HUDRGB_DEF, grid, 0); // Draw primary HUD bar (Armour/Health)
 	Hud_DrawNoFont24(pos+[0,0], shealth, 25); // Alpha HP value only (no background
 
 	// Deal with Pentagram first, its a simple test/update
@@ -1571,9 +1571,9 @@ void (vector pos, vector virtsize, float grid) Hud_DrawSBar7a = {
 	}
 };
 
-void (vector pos, vector virtsize, float grid) Hud_DrawSBar7b = {
+void(vector pos, vector virtsize, float grid) Hud_DrawSBar7b = {
 	// Draw primary HUD bar (Ammo/Keys)
-	if(grid >0 && grid <=1) drawpic(pos, backgrd2[HUDTYPE_7+1], [88, 40], HUDRGB_DEF, grid, 0);
+	if (grid > 0 && grid <= 1) drawpic(pos, backgrd2[HUDTYPE_7+1], [88, 40], HUDRGB_DEF, grid, 0);
 
 	// Draw Custom Keys
 	if (smoditems & CSQC_CKEY1) drawpic(pos+[72,0], ibckeys[Hud_CKeyRange(CLIENT_CKEYSKIN1)], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
@@ -1589,11 +1589,11 @@ void (vector pos, vector virtsize, float grid) Hud_DrawSBar7b = {
 	if (sitems & CSQC_KEY2) drawpic(pos+[56,24], sbitems[13], HUDSIZE_168, HUDRGB_DEF, hudalpha, 0);
 };
 
-void (vector pos, vector virtsize) Hud_DrawSBar8a = {};
+void(vector pos, vector virtsize) Hud_DrawSBar8a = {};
 
-void (vector pos, vector virtsize) Hud_DrawSBar8b = {};
+void(vector pos, vector virtsize) Hud_DrawSBar8b = {};
 
-void (vector pos, vector virtsize) Hud_DrawSBar9 = {};
+void(vector pos, vector virtsize) Hud_DrawSBar9 = {};
 
 float(float a, float b) mod;
 

@@ -45,7 +45,7 @@ float FIRE_WEAPON_FRAME = 1; // Start of firing frames
 void(float altfoot) monster_footstep;
 void() player_grapple4;
 void() player_grapple5;
-void (float tomefinTime) W_FireThunderbolt;
+void(float tomefinTime) W_FireThunderbolt;
 void(float cnt, float ox) W_FireLavaSpikes;
 void() W_FireProximityGrenade;
 void() misc_bubble_bob;
@@ -113,15 +113,15 @@ void()	player_axee2 =	[138, player_axee3	] {if (!frame_pause()) self.weaponframe
 void()	player_axee3 =	[139, player_axee4	] {if (!frame_pause()) self.weaponframe=19;W_FireAxe();}; // [FUNCTION]
 void()	player_axee4 =	[140, player_run	] {if (!frame_pause()) self.weaponframe=20;}; // [FUNCTION]
 
-void () player_axeoldc1 = [ 131.000, player_axeoldc2 ] {if (!frame_pause())  self.weaponframe = 1; }; // [FUNCTION]
-void () player_axeoldc2 = [ 132.000, player_axeoldc3 ] {if (!frame_pause())  self.weaponframe = 2; }; // [FUNCTION]
-void () player_axeoldc3 = [ 133.000, player_axeoldc4 ] {if (!frame_pause())  self.weaponframe = 3; W_FireAxe(); }; // [FUNCTION]
-void () player_axeoldc4 = [ 134.000, player_run ] 	   {if (!frame_pause())  self.weaponframe = 4; }; // [FUNCTION]
+void() player_axeoldc1 = [ 131.000, player_axeoldc2 ] {if (!frame_pause())  self.weaponframe = 1; }; // [FUNCTION]
+void() player_axeoldc2 = [ 132.000, player_axeoldc3 ] {if (!frame_pause())  self.weaponframe = 2; }; // [FUNCTION]
+void() player_axeoldc3 = [ 133.000, player_axeoldc4 ] {if (!frame_pause())  self.weaponframe = 3; W_FireAxe(); }; // [FUNCTION]
+void() player_axeoldc4 = [ 134.000, player_run ] 	   {if (!frame_pause())  self.weaponframe = 4; }; // [FUNCTION]
 
-void () player_axeoldd1 = [ 137.000, player_axeoldd2 ] {if (!frame_pause())  self.weaponframe = 5; }; // [FUNCTION]
-void () player_axeoldd2 = [ 138.000, player_axeoldd3 ] {if (!frame_pause())  self.weaponframe = 6; }; // [FUNCTION]
-void () player_axeoldd3 = [ 139.000, player_axeoldd4 ] {if (!frame_pause())  self.weaponframe = 7; W_FireAxe(); }; // [FUNCTION]
-void () player_axeoldd4 = [ 140.000, player_run ]	   {if (!frame_pause())  self.weaponframe = 8; }; // [FUNCTION]
+void() player_axeoldd1 = [ 137.000, player_axeoldd2 ] {if (!frame_pause())  self.weaponframe = 5; }; // [FUNCTION]
+void() player_axeoldd2 = [ 138.000, player_axeoldd3 ] {if (!frame_pause())  self.weaponframe = 6; }; // [FUNCTION]
+void() player_axeoldd3 = [ 139.000, player_axeoldd4 ] {if (!frame_pause())  self.weaponframe = 7; W_FireAxe(); }; // [FUNCTION]
+void() player_axeoldd4 = [ 140.000, player_run ]	   {if (!frame_pause())  self.weaponframe = 8; }; // [FUNCTION]
 
 // Mjolnir
 void(float fr, float wf) playham_frame = { // [FUNCTION]
@@ -591,33 +591,33 @@ void() player_hammer4t =[ 122,  player_hammer5  ] { playham_frame(35,4);}; // [F
 void() player_mjolnir4t=[ 134, player_mjolnir5 ] { playham_frame(41,4);}; // [FUNCTION]
 
 // Mjolnir no cells simple swing
-void () player_hammer1 = [ 32.000, player_hammer2 ] { playham_frame(32,1); self.nextthink = time + 0.05;}; // [FUNCTION]
-void () player_hammer2 = [ 33.000, player_hammer3 ] { playham_frame(33,2); self.nextthink = time + 0.05;}; // [FUNCTION]
-void () player_hammer3 = [ 34.000, player_hammer4 ] { // [FUNCTION]
+void() player_hammer1 = [ 32.000, player_hammer2 ] { playham_frame(32,1); self.nextthink = time + 0.05;}; // [FUNCTION]
+void() player_hammer2 = [ 33.000, player_hammer3 ] { playham_frame(33,2); self.nextthink = time + 0.05;}; // [FUNCTION]
+void() player_hammer3 = [ 34.000, player_hammer4 ] { // [FUNCTION]
 	if (frame_pause()) return;
 
 	playham_frame(34,3);
 	if (HIP_ThrowMjolnir()) self.think = player_hammer4t; // TRUE if the hammer hits something or gets thrown.
 	self.nextthink = time + 0.05;
 };
-void () player_hammer4 = [ 35.000, player_hammer5 ] { if (!frame_pause()) playham_frame(35,4); self.nextthink = time + 0.05; W_FireMjolnir ();}; // [FUNCTION]
-void () player_hammer5 = [ 36.000, player_hammer6 ] { if (!frame_pause()) playham_frame(36,4); self.nextthink = time + 0.05;}; // [FUNCTION]
-void () player_hammer6 = [ 37.000, player_run ] { if (!frame_pause()) playham_frame(37,0); self.nextthink = time + 0.05;}; // [FUNCTION]
+void() player_hammer4 = [ 35.000, player_hammer5 ] { if (!frame_pause()) playham_frame(35,4); self.nextthink = time + 0.05; W_FireMjolnir ();}; // [FUNCTION]
+void() player_hammer5 = [ 36.000, player_hammer6 ] { if (!frame_pause()) playham_frame(36,4); self.nextthink = time + 0.05;}; // [FUNCTION]
+void() player_hammer6 = [ 37.000, player_run ] { if (!frame_pause()) playham_frame(37,0); self.nextthink = time + 0.05;}; // [FUNCTION]
 
 // Mjolnir standard throw
-void () player_mjolnir1 = [ 38.000, player_mjolnir2 ] { if (!frame_pause()) playham_frame(38,1); }; // [FUNCTION]
-void () player_mjolnir2 = [ 39.000, player_mjolnir3 ] { if (!frame_pause()) playham_frame(39,2); }; // [FUNCTION]
-void () player_mjolnir3 = [ 40.000, player_mjolnir4 ] { // [FUNCTION]
+void() player_mjolnir1 = [ 38.000, player_mjolnir2 ] { if (!frame_pause()) playham_frame(38,1); }; // [FUNCTION]
+void() player_mjolnir2 = [ 39.000, player_mjolnir3 ] { if (!frame_pause()) playham_frame(39,2); }; // [FUNCTION]
+void() player_mjolnir3 = [ 40.000, player_mjolnir4 ] { // [FUNCTION]
 	if (frame_pause()) return;
 
 	playham_frame(40,3);
 	if (HIP_ThrowMjolnir()) self.think = player_mjolnir4t; // TRUE if the hammer hits something or gets thrown.
 };
-void () player_mjolnir4 = [ 41.000, player_mjolnir5 ] { if (frame_pause()) return; playham_frame(41,4); W_FireMjolnir();}; // [FUNCTION]
-void () player_mjolnir5 = [ 42.000, player_mjolnir6 ] { playham_frame(42,4); }; // [FUNCTION]
-void () player_mjolnir6 = [ 43.000, player_run ] { playham_frame(43,0);}; // [FUNCTION]
+void() player_mjolnir4 = [ 41.000, player_mjolnir5 ] { if (frame_pause()) return; playham_frame(41,4); W_FireMjolnir();}; // [FUNCTION]
+void() player_mjolnir5 = [ 42.000, player_mjolnir6 ] { playham_frame(42,4); }; // [FUNCTION]
+void() player_mjolnir6 = [ 43.000, player_run ] { playham_frame(43,0);}; // [FUNCTION]
 
-void () player_laser1 = [ 103.000, player_laser3 ] { // [FUNCTION]
+void() player_laser1 = [ 103.000, player_laser3 ] { // [FUNCTION]
 	if (frame_pause()) return;
 	if (!self.button0) {player_run(); return; }
 
@@ -625,13 +625,13 @@ void () player_laser1 = [ 103.000, player_laser3 ] { // [FUNCTION]
 	self.weaponframe = 1;
 	HIP_FireLaser(0);
 };
-void () player_laser2 = [ 104.000, player_laser3 ] { // [FUNCTION]
+void() player_laser2 = [ 104.000, player_laser3 ] { // [FUNCTION]
 	if (frame_pause()) return;
 
 	W_Reload(0.1); 
 	self.weaponframe = 2;
 };
-void () player_laser3 = [ 104.000, player_laser1 ] { // [FUNCTION]
+void() player_laser3 = [ 104.000, player_laser1 ] { // [FUNCTION]
 	if (frame_pause()) return;
    if (!self.button0) {player_run(); return; }
 
@@ -639,7 +639,7 @@ void () player_laser3 = [ 104.000, player_laser1 ] { // [FUNCTION]
 	self.weaponframe = 4;
 	HIP_FireLaser(1);
 };
-void () player_laser4 = [ 103.000, player_laser1 ] { // [FUNCTION]
+void() player_laser4 = [ 103.000, player_laser1 ] { // [FUNCTION]
 	if (frame_pause()) return;
 
 	W_Reload(0.1);

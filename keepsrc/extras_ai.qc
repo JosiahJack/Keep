@@ -42,7 +42,7 @@
 
 // Remove temporary target
 void() getRidOfTempGoal = { // [FUNCTION]
-    if(!self.tempgoal) return;
+    if (!self.tempgoal) return;
 
 	self.enemy = self.oldenemy;
 	self.goalentity = self.enemy;
@@ -65,7 +65,7 @@ void() SpawnTempGoal = { // [FUNCTION]
 	local entity tmpgoal;
 	local vector tmppos;
 	
-	if(!self.tempgoal) {
+	if (!self.tempgoal) {
 		tmpgoal = spawn();
 		tmpgoal.classname = "tmp_goal";
 		tmpgoal.health = 1;
@@ -93,35 +93,35 @@ void() SpawnTempGoal = { // [FUNCTION]
 // Return FALSE when unstuck procedure has been canceled or failed
 float() unsuckFromWaterSurface = { // [FUNCTION]
 	if (((self.enemy.origin_z - self.origin_z) > 32) && (pointcontents(self.enemy.origin) > CONTENT_WATER)) return FALSE;
-	if(self.oldenemy && range(self.oldenemy) == RANGE_MELEE && self.flags & FL_SWIM) return TRUE;
-	if(self.flags & FL_SWIM) {
-		if(pointcontents(self.origin + '0 0 10') > -3) { SpawnTempGoal(); return TRUE; }
-	} else if(self.flags & FL_FLY && self.infuncwater) {
-		if(self.onsurface) { SpawnTempGoal(); return TRUE; }
+	if (self.oldenemy && range(self.oldenemy) == RANGE_MELEE && self.flags & FL_SWIM) return TRUE;
+	if (self.flags & FL_SWIM) {
+		if (pointcontents(self.origin + '0 0 10') > -3) { SpawnTempGoal(); return TRUE; }
+	} else if (self.flags & FL_FLY && self.infuncwater) {
+		if (self.onsurface) { SpawnTempGoal(); return TRUE; }
 	}
 	return FALSE;
 };
 
 void() handleFuncWaterSwimming = { // [FUNCTION]
-    if(self.infuncwater && self.flags) {
+    if (self.infuncwater && self.flags) {
 		self.gravity = 0.375;
 		self.flags = self.flags | FL_FLY;
         self.flags = self.flags - (self.flags & FL_SWIM);
-		if(self.movetype != MOVETYPE_STEP) self.movetype = MOVETYPE_STEP;
+		if (self.movetype != MOVETYPE_STEP) self.movetype = MOVETYPE_STEP;
     } else if (!self.infuncwater && self.inBSPwater) {
 		self.gravity = 0.375;
 		self.flags = self.flags | FL_SWIM;
-		if(self.movetype != MOVETYPE_STEP) self.movetype = MOVETYPE_STEP;
+		if (self.movetype != MOVETYPE_STEP) self.movetype = MOVETYPE_STEP;
 	}
 
-	if(unsuckFromWaterSurface()) return;
+	if (unsuckFromWaterSurface()) return;
 	
-	if(!self.infuncwater && !self.inBSPwater) {
+	if (!self.infuncwater && !self.inBSPwater) {
 		self.gravity = 0.375;
 		self.flags = self.flags - (self.flags & FL_SWIM);
 		self.flags = self.flags - (self.flags & FL_FLY);
 		
-		if(self.flags & FL_ONGROUND) {
+		if (self.flags & FL_ONGROUND) {
 			self.gravity = 0;
 			self.flags = self.flags - (self.flags & FL_ONGROUND);
 			self.flags = self.flags | FL_SWIM;
@@ -133,11 +133,11 @@ void() handleFuncWaterSwimming = { // [FUNCTION]
 void(string action, float value) ai_fish_movement= { // [FUNCTION]
 	if (self.flags & FL_SWIM) handleFuncWaterSwimming(); // Do things every animation frame.
 
-	if(action == "ai_walk") ai_walk(value);
-	else if(action == "ai_run") ai_run(value);
-	else if(action == "ai_pain") ai_pain(value);
-	else if(action == "ai_charge") {
-		if(!(self.enemy.flags & FL_CLIENT)) getRidOfTempGoal();
+	if (action == "ai_walk") ai_walk(value);
+	else if (action == "ai_run") ai_run(value);
+	else if (action == "ai_pain") ai_pain(value);
+	else if (action == "ai_charge") {
+		if (!(self.enemy.flags & FL_CLIENT)) getRidOfTempGoal();
 		ai_charge(value);
 	}
 };

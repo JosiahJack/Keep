@@ -75,14 +75,12 @@ void() cent_fire = {
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
-
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	// Fire plasma projectile at players feet
 	vec = SUB_orgEnemyTarget() - '0 0 12';
 	vec = normalize(vec - self.origin);
-
-	launch_projectile(org, vec, CT_PROJ_PLASMA, SPEED_PLASMA);
+	launch_projectile(org,vec,NO_SPIN,CT_PROJ_PLASMA,SPEED_PLASMA);
 };
 
 void()	cent_atk1	=[	$attack1,	cent_atk2	] {sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM);};

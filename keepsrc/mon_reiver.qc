@@ -154,7 +154,7 @@ void() ghost_follower_think = {
 		dir = normalize((self.enemy.origin + '0 0 16') - self.origin);
 		offang = vectoangles ((self.enemy.origin + '0 0 12') - self.origin);
 		traceline ((self.enemy.origin + '0 0 16'), self.origin, FALSE, self);
-		if (trace_fraction == 1.0) {
+		if (trace_fraction == 1) {
 			self.movetype = MOVETYPE_FLYMISSILE;
 		} else {
 			// player is hiding directly behind a wall. CHEATER :)  Ghost can fly through walls anyway and does the damage !
@@ -169,7 +169,7 @@ void() ghost_follower_think = {
 		dir = normalize((self.enemy.origin + '0 0 16') - (self.origin + self.attack_offset));
 		offang = vectoangles ((self.enemy.origin + '0 0 12') - (self.origin + self.attack_offset));
 	}
-	makevectors (offang);
+	makevectors(offang);
 	
 // set homing-missile angles
 	vec = normalize (v_forward);
@@ -193,7 +193,7 @@ void() ghost_follower_think = {
 };
 
 
-void (vector spawn_pos, vector spawn_vel) launch_ghost_follower =
+void(vector spawn_pos, vector spawn_vel) launch_ghost_follower =
 {
 	newmis = spawn ();
 	newmis.owner = self;
@@ -243,7 +243,7 @@ void()	ghost_followers = {
 	local vector offang, org, vec;
 	
 	offang = vectoangles (self.enemy.origin - self.origin);
-	makevectors (offang);
+	makevectors(offang);
 	org = self.origin + v_forward*20 + v_up*2;
 	vec = normalize (v_forward); // set homing-missile speed
 	vec_z = vec_z * -1;
@@ -357,7 +357,7 @@ void() reiver_fireball = {
 	missile.takedamage = DAMAGE_AIM;
 	missile.th_die = reiver_fireball_death;
 	missile.nextthink = time + 0.2;			// to move completely out of shalraths model (to avoid getting stuck)
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + v_forward*25 + v_up*-1;
 	setorigin (missile, org );
 	missile.velocity = dir * 400;
@@ -572,7 +572,7 @@ void(float scratch_noise) reiver_melee_scratch = {
 		
 	ldmg = (random() + random() + random()) * 4;	// default 4
 	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
-	makevectors (self.angles);
+	makevectors(self.angles);
 	particle (self.origin + v_forward*45 + v_up*-10, '0 0 0', 73, 17);		// spawn a little blood
 	if (scratch_noise) {
 		sound (self, CHAN_AUTO, "demon/dhit2.wav", 0.6, ATTN_NORM);
@@ -628,7 +628,7 @@ void()	reiver_melee = {
 void(vector ofs, float scal) reiver_hand1 = {
 	local vector org;
 
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + v_forward * ofs_x + v_right * ofs_y + v_up * ofs_z;
 	setorigin (self.owner, org);
 	self.owner.scale = scal;
@@ -637,7 +637,7 @@ void(vector ofs, float scal) reiver_hand1 = {
 void(vector ofs, float scal) reiver_hand2 = {
 	local vector org;
 
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + v_forward * ofs_x + v_right * ofs_y + v_up * ofs_z;
 	setorigin (self.owner2, org);
 	self.owner2.scale = scal;
@@ -659,7 +659,7 @@ void()	life_drain = {
 };
 
 void()	life_drain_effect = {
-	makevectors (self.enemy.angles);
+	makevectors(self.enemy.angles);
 	local vector dir;
 	dir = normalize(self.origin - self.enemy.origin);
 	if (ext_dppart) pointparticles(particleeffectnum("reiver_vampire_drain1"), self.enemy.origin + self.enemy.view_ofs + v_up * -8 + v_forward*10, dir*10, 1); // spawn some nice particles which fly from player towards Reiverճ direction to simulate life drain effect 
@@ -793,7 +793,7 @@ void() reiver_missile =	{
 	r = vlen (spot1 - spot2);
 	if (r < 250) {
 		// start vampire animation (life drain) when Reiver is close to his enemy
-		makevectors (self.angles);
+		makevectors(self.angles);
 		self.owner = spawn();		// right hand
 		o = self.owner;
 		o.nextthink = (time + 0.85);
@@ -821,7 +821,7 @@ void() reiver_missile =	{
 		// start one of his projectile attacks
 		if (random() <= 0.6) {
 			self.projectile_type = 0;	// reiver_fireball
-			makevectors (self.angles);
+			makevectors(self.angles);
 			self.owner = spawn();		// right hand
 			o = self.owner;
 			o.nextthink = (time + 0.75);
@@ -975,13 +975,13 @@ void() reiver_die = {
 };
 
 // Reiverճ multi_shield code:
-void () animate_shield = {
+void() animate_shield = {
 	self.shield_finished = time + 0.07;
 	self.frame = self.frame + 1;
 	if (self.frame >= 20) self.frame = 0;
 };
 
-void () reiver_shield_think = {
+void() reiver_shield_think = {
 	if (self.lefty) {
 		self.lefty = 0;
 		setmodel (self,"progs/q15/reiver_shield.mdl"); 

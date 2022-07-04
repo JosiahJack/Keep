@@ -366,7 +366,7 @@ void(entity targ, entity attacker) ClientObituary = { // [FUNCTION]
 			} else if (targ.burning) bprint (" was burnt to a crisp\n"); // Debuff deaths
 			else if (targ.poisoned) bprint (" was poisoned\n");
 			else if (targ.bleeding) bprint (" bled to death\n");
-			else if(targ.deathtype == "loadingevil") { // Special blocking of evil skill savegames
+			else if (targ.deathtype == "loadingevil") { // Special blocking of evil skill savegames
 				targ.deathtype = string_null;
 				bprint (" is too EVIL to live again!\n");
 			} else if (targ.deathtype == "falling") { // fell to their death?

@@ -76,11 +76,11 @@ float(entity testent) corpse_status;
 
 void()	zmaster_stand1	=[	$stand1,	zmaster_stand2	] {
 	zmaster_find_easy_victim();
-	if(self.effects != 0) {
+	if (self.effects != 0) {
 		sound (self, CHAN_WEAPON, "items/protect2.wav", 1, ATTN_NORM);
 		self.effects = 0;
 	}
-	if(random() < 0.2) zm_idle_sound();
+	if (random() < 0.2) zm_idle_sound();
 	ai_stand();
 };
 void()	zmaster_stand2	=[	$stand2,	zmaster_stand3	] {ai_stand();};
@@ -93,11 +93,11 @@ void()	zmaster_stand8	=[	$stand8,	zmaster_stand9	] {ai_stand();};
 void()	zmaster_stand9	=[	$stand9,	zmaster_stand1	] {ai_stand();};
 
 void()	zmaster_walk1	=[	$walk1,		zmaster_walk2	] {
-	if(self.effects != 0) {
+	if (self.effects != 0) {
 		sound (self, CHAN_WEAPON, "items/protect2.wav", 1, ATTN_NORM);
 		self.effects = 0;
 	}
-	if(random() < 0.2) zm_idle_sound();
+	if (random() < 0.2) zm_idle_sound();
 	FootFall("custents/zmaster/echo.wav", 0.2, 1, 0.8);
 	ai_walk(2);
 };
@@ -179,12 +179,12 @@ void() zmaster_seeker_hunt = {
 	self.nextthink = time + 0.1;
 	// the missiles can only seek for a few seconds
 	self.gorging = self.gorging + 1;
-	if(self.gorging > 30) {
+	if (self.gorging > 30) {
 		remove(self);
 		return;
 	}
 	
-	if(visible(self.enemy)) target_missile(self, self.enemy.origin, 4);
+	if (visible(self.enemy)) target_missile(self, self.enemy.origin, 4);
 };
 
 void() zmaster_start_seeker = {
@@ -221,18 +221,18 @@ float() zmaster_find_easy_victim = {
 	victim = nextent(world);
 	while(victim) {
 		if (corpse_status(victim)) {
-			if(visible(victim)) {
+			if (visible(victim)) {
 				curr_dist = vlen(self.origin - victim.origin);
-				if(curr_dist < min_dist) {
+				if (curr_dist < min_dist) {
 					self.enemy = victim;
 					found_one = TRUE;
 					min_dist = curr_dist;
 				}
 			}
-		} else if(victim.classname == "monster_zombie" || victim.classname == "monster_axzombie") {
-			if(victim.owner == world && visible(victim)) {
+		} else if (victim.classname == "monster_zombie" || victim.classname == "monster_axzombie") {
+			if (victim.owner == world && visible(victim)) {
 				curr_dist = vlen(self.origin - victim.origin);
-				if(curr_dist < min_dist) {
+				if (curr_dist < min_dist) {
 					self.enemy = victim;
 					found_one = TRUE;
 					min_dist = curr_dist;
@@ -241,9 +241,9 @@ float() zmaster_find_easy_victim = {
 		}
 		victim = nextent(victim);
 	}
-	if(found_one && enemyold != self.enemy)	{
+	if (found_one && enemyold != self.enemy)	{
 		FoundTarget ();
-		if(self.effects == 0) {
+		if (self.effects == 0) {
 			sound (self, CHAN_WEAPON, "items/protect.wav", 1, ATTN_NORM);
 			self.effects = EF_BRIGHTFIELD;
 		}
@@ -284,7 +284,7 @@ void() zmaster_zombify = {
 	temp = self;
 	self = self.enemy;
 	self.enemy = world;
-	if(self.classname != "monster_zombie" && self.classname != "monster_axzombie") {
+	if (self.classname != "monster_zombie" && self.classname != "monster_axzombie") {
 		self.ammo_shells = 0; // death counter
 		self.solid = SOLID_SLIDEBOX;
 		self.movetype = MOVETYPE_STEP;
@@ -329,7 +329,7 @@ void() zmaster_zombify = {
 		self.th_missile = zombie_missile;
 		self.th_melee = zombie_missile;
 
-		if(self.classname == "monster_zombie") {
+		if (self.classname == "monster_zombie") {
 			self.classname = "monster_axzombie";
 			self.max_health = 400;
 		}
@@ -344,7 +344,7 @@ void() zmaster_zombify = {
 
 void()	zmaster_magica1 =[	$magica1,	zmaster_magica2	] {
 	ai_face();
-	if(self.effects != EF_BRIGHTFIELD)
+	if (self.effects != EF_BRIGHTFIELD)
 		sound (self, CHAN_WEAPON, "items/protect.wav", 1, ATTN_NORM);
 };
 void()	zmaster_magica2 =[	$magica1,	zmaster_magica3	] {
@@ -374,14 +374,14 @@ void()	zmaster_magica13 =[	$magica11,	zmaster_magica14	] {
 	ai_face();
 
 	// when gorging != 0, attacking a living creature
-	if(self.gorging != 0) {
+	if (self.gorging != 0) {
 		// don't hit if creature is alive and out of range
-		if(range(self.enemy) != RANGE_MELEE) {
+		if (range(self.enemy) != RANGE_MELEE) {
 			self.endtime = 0.1;
 			return;
 		} else self.endtime = 0.2;
 
-		if(self.enemy.classname != "player")
+		if (self.enemy.classname != "player")
 			T_Damage (self.enemy, self, self, self.health+1, NOARMOR);  // T_KillDamage(self.enemy, self, self);
 		else
 			T_Damage(self.enemy, self, self, 100);
@@ -391,7 +391,7 @@ void()	zmaster_magica13 =[	$magica11,	zmaster_magica14	] {
 	self.effects = EF_BRIGHTLIGHT + EF_BRIGHTFIELD;
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	if(self.gorging != 0)
+	if (self.gorging != 0)
 		WriteByte (MSG_BROADCAST, TE_EXPLOSION);
 	else
 		WriteByte (MSG_BROADCAST, TE_TAREXPLOSION);
@@ -407,7 +407,7 @@ void()	zmaster_magica18 =[	$magica13,	zmaster_magica19	] {self.nextthink = time 
 void()	zmaster_magica19 =[	$magica14,	zmaster_magica20	] {self.nextthink = time + self.endtime;};
 void()	zmaster_magica20 =[	$magica1,	zmaster_magica21	] {self.nextthink = time + self.endtime;};
 void()	zmaster_magica21 =[	$pain5,	zmaster_run1	] {
-	if(self.endtime == 0.2)
+	if (self.endtime == 0.2)
 		self.nextthink =time + 1;
 	else
 		self.nextthink =time + 0.3;
@@ -439,7 +439,7 @@ void()	zmaster_magicb13 =[	$magicb13,	zmaster_run1] {ai_face();};
 
 void() zm_idle_sound = {
 	if (random() < 0.2 && self.currentammo < time) {
-		if(random() < 0.5) {
+		if (random() < 0.5) {
 			sound (self, CHAN_VOICE, "custents/zmaster/idle1.wav", 1, ATTN_NORM);
 			self.currentammo = time + 2.5;
 		} else {
@@ -451,7 +451,7 @@ void() zm_idle_sound = {
 
 void() zmaster_missile = {
 	if (corpse_status(self.enemy)) return;
-	if(self.gorging > time) return;
+	if (self.gorging > time) return;
 
 	zmaster_magicb1();
 	self.gorging = time + 2.5;
@@ -462,11 +462,11 @@ void() zmaster_melee = {
 		self.gorging = 0;
 		zmaster_magica1();
 	} else {
-		if(random() < 0.25) {
+		if (random() < 0.25) {
 			self.gorging = time + 5;
 			zmaster_magica1();
 		} else {
-			if(self.gorging > time)
+			if (self.gorging > time)
 				return;
 			zmaster_magicb1();
 			self.gorging = time + 1.5;
@@ -554,17 +554,17 @@ void(float dist) zmaster_run = {
 	movedist = dist;
 
 	// a zombie master's first priority is getting more zombies
-	if(time > self.wait) {
+	if (time > self.wait) {
 		zmaster_find_easy_victim();
 		self.wait = time + 1.5;
 	}
-	if(self.effects != 0) {
-		if(self.enemy.classname != "monster_zombie" && self.enemy.classname != "monster_axzombie" && !corpse_status(self.enemy)) {
+	if (self.effects != 0) {
+		if (self.enemy.classname != "monster_zombie" && self.enemy.classname != "monster_axzombie" && !corpse_status(self.enemy)) {
 			sound (self, CHAN_WEAPON, "items/protect2.wav", 1, ATTN_NORM);
 			self.effects = 0;
 		}
-	} else if((self.enemy.classname == "monster_zombie" || self.enemy.classname == "monster_axzombie") && self.enemy.owner != world) {
-		if(self.oldenemy) {
+	} else if ((self.enemy.classname == "monster_zombie" || self.enemy.classname == "monster_axzombie") && self.enemy.owner != world) {
+		if (self.oldenemy) {
 			self.enemy = self.oldenemy;
 			self.oldenemy = world;
 			FoundTarget ();
@@ -572,12 +572,12 @@ void(float dist) zmaster_run = {
 	}
 
 	// take control of a corpse when close enough
-	if(corpse_status(self.enemy)) {
+	if (corpse_status(self.enemy)) {
 		r = vlen(self.enemy.origin - self.origin);
 		if (r < 80) { self.th_melee (); return; }
 
-		if(!visible(self.enemy))
-			if(visible(self.oldenemy))
+		if (!visible(self.enemy))
+			if (visible(self.oldenemy))
 				self.enemy = self.oldenemy;
 	}
 	// see if the enemy is no longer of interest
@@ -609,12 +609,12 @@ void(float dist) zmaster_run = {
 };
 
 float(entity testent) corpse_status = {
-	if(testent.classname == "corpse")
+	if (testent.classname == "corpse")
 		return TRUE;
 	else if ((testent.health <= 0) && (testent.flags & (FL_MONSTER|FL_CLIENT))) {
-		if(testent.classname != "headgib") return TRUE;
-	} else if(testent.classname == "player") {
-		if(testent.deadflag) return TRUE;
+		if (testent.classname != "headgib") return TRUE;
+	} else if (testent.classname == "player") {
+		if (testent.deadflag) return TRUE;
 	}
 	return FALSE;
 };

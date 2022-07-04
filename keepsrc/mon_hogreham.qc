@@ -133,7 +133,7 @@ void() hogreham_smash9	=[	$smash9,	hogreham_smash10 ] {ai_face();};
 void() hogreham_smash10	=[	$smash10,	hogreham_smash11 ] {ai_face();
 	self.meleehitsound = GIB_SOUND_HEAVY;
 	self.meleecontact = TRUE;ai_meleesmash(30);self.meleecontact = FALSE;
-	makevectors (self.angles);				// Put impact infront of ogre
+	makevectors(self.angles);				// Put impact infront of ogre
 	self.finalangle = self.origin + (v_forward * 56) + (-v_up * 22);
 	particle_explode(self.finalangle, 24, 0.5, PARTICLE_BURST_FIRE, PARTICLE_BURST_SHOCKWAVE); 
 	sound (self, CHAN_WEAPON, "ad171/ogre/ham_hit.wav", 1, ATTN_IDLE);

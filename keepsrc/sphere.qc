@@ -40,7 +40,7 @@
 // you exploding on them.
 //=============================================================================
 
-void () sphere_impact = { // [FUNCTION]
+void() sphere_impact = { // [FUNCTION]
    if (other.health) T_Damage(other,self,self,1000.000,DAMARMOR);
    T_RadiusDamage(self,self,300.000,other,DAMAGEALL);
    self.origin = (self.origin - (FL_CLIENT * normalize (self.velocity)));
@@ -52,7 +52,7 @@ void () sphere_impact = { // [FUNCTION]
    BecomeExplosion();
 };
 
-void (entity ownerEntity) sphere_remove = { // [FUNCTION]
+void(entity ownerEntity) sphere_remove = { // [FUNCTION]
    local entity theSphere;
 
    theSphere = find (world,classname,"Vengeance");
@@ -68,7 +68,7 @@ void (entity ownerEntity) sphere_remove = { // [FUNCTION]
    }
 };
 
-void () sphere_attack = { // [FUNCTION]
+void() sphere_attack = { // [FUNCTION]
    self.solid = SOLID_TRIGGER;
    self.touch = sphere_impact;
    if ( (self.enemy.health < TRUE) ) {
@@ -82,7 +82,7 @@ void () sphere_attack = { // [FUNCTION]
    self.think = sphere_attack;
 };
 
-void () sphere_think = { // [FUNCTION]
+void() sphere_think = { // [FUNCTION]
    if ((self.shieldSoundTime < time)) {
       sound (self,CHAN_VOICE,"rogue/sphere/sphere.wav",TRUE,ATTN_NORM);
       self.shieldSoundTime = (time + MOVETYPE_STEP);
@@ -118,7 +118,7 @@ void () sphere_think = { // [FUNCTION]
    self.nextthink = (time + 0.100);
 };
 
-void () sphere_spawn = { // [FUNCTION]
+void() sphere_spawn = { // [FUNCTION]
    local entity missile;
 
    missile = spawn ();
@@ -136,7 +136,7 @@ void () sphere_spawn = { // [FUNCTION]
    missile.nextthink = (time + 0.100);
 };
 
-void () item_sphere = { // [ENTITY]
+void() item_sphere = { // [ENTITY]
 	item_setupmodel("progs/rogue/sphere.mdl",0);
 	item_setupnoise("rogue/sphere/sphere.wav");
 	self.noise1 = self.noise2 = "rogue/sphere/sphere.wav";

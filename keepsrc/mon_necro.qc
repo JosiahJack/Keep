@@ -58,7 +58,7 @@ void() NecroBolt_Summon = {
 void() acolyte_fire = {
     local vector org, dir;
 
-    makevectors (self.angles);
+    makevectors(self.angles);
     org = self.origin + v_forward*14 - v_right*8 + v_up*12;     // '14 -2 19'
     dir = normalize (self.enemy.origin - self.origin);
     NecroSnake_Launch (org, dir, 600);
@@ -81,7 +81,7 @@ void(vector st) warlock_fire =
 
     targ = world;
 
-    makevectors (self.angles);
+    makevectors(self.angles);
     // old st was '12 7 26'.
     org = self.origin + v_forward*st_x + v_right*st_y + v_up*st_z;
 
@@ -877,7 +877,7 @@ float() Necro_WeaponBroke = {
     else
         return FALSE;   // Weapon already broke!
 
-    makevectors (self.angles);
+    makevectors(self.angles);
 
 	// Sickle head.
     if (head) {
@@ -1164,7 +1164,7 @@ void() setup_necro = {
     self.th_spawn   = setup_necro;
     self.waitmax    = 0;    // Teleport delay, similar to nemesant.
     Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-	if(!self.classtype) self.classtype = CT_MONACOLYTE;
+	if (!self.classtype) self.classtype = CT_MONACOLYTE;
 	if (!self.classgroup) self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEWALK;
 	if (self.worldtype) {

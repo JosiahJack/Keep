@@ -45,7 +45,7 @@
 float MULTI_USE    = 1.000;
 float INVISIBLE    = 2.000;
 
-void () damagethreshold_killed = { // [FUNCTION]
+void() damagethreshold_killed = { // [FUNCTION]
    self.health = self.max_health;
    activator = damage_attacker;
    self.takedamage = DAMAGE_NO;
@@ -54,11 +54,11 @@ void () damagethreshold_killed = { // [FUNCTION]
    if ( !(self.spawnflags & MULTI_USE) ) remove (self);
 };
 
-void (entity inflictor, entity attacker, float damage) damagethreshold_pain = { // [FUNCTION]
+void(entity inflictor, entity attacker, float damage) damagethreshold_pain = { // [FUNCTION]
    self.health = self.max_health;
 };
 
-void () trigger_damagethreshold = { // [ENTITY]
+void() trigger_damagethreshold = { // [ENTITY]
    self.mangle = self.angles;
    self.angles = VEC_ORIGIN;
    self.classname = "damagethreshold";
@@ -76,7 +76,7 @@ void () trigger_damagethreshold = { // [ENTITY]
    self.th_die = damagethreshold_killed;
 };
 
-void () func_breakawaywall = { // [ENTITY]
+void() func_breakawaywall = { // [ENTITY]
    self.mangle = self.angles;
    self.angles = VEC_ORIGIN;
    self.classname = "breakaway";

@@ -1,6 +1,6 @@
-void () dlord_move1;
-void () dlord_run1;
-void () dlord_idle_sound;
+void() dlord_move1;
+void() dlord_run1;
+void() dlord_idle_sound;
 
 void() dguard_hit = {
 	if (vlen(self.enemy.origin - self.origin) > 100) {

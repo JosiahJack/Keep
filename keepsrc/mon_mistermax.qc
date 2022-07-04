@@ -2388,7 +2388,7 @@ void() spawn_opens_hit = {
 	mark.nextthink = time + 0.2;
 };
 
-void () spawn_mister = {
+void() spawn_mister = {
 	local entity head;
 
 	head = spawn();

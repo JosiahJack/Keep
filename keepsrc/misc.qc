@@ -947,7 +947,7 @@ void() misc_spark_spawn = { // [FUNCTION]
 	if (self.fixangle > 0) { // Check for random rotation, most be set for whole batch otherwise the sparks will all go in different directions
 		self.angles = '0 0 0';
 		self.angles_y = rint(random()*360);
-		makevectors (self.angles);
+		makevectors(self.angles);
 		self.movedir = v_forward;
 	}
 

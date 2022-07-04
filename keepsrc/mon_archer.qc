@@ -45,7 +45,7 @@ $frame decap11 decap12 decap13 decap14 decap15 decap16 decap17
 float() archer_check_shot = {
     local vector spot1, spot2;
 
-    makevectors (self.angles);
+    makevectors(self.angles);
     spot1 = self.origin + v_forward*16 + v_right*8 + v_up*24;
     spot2 = self.enemy.origin + self.enemy.view_ofs;
     traceline (spot1, spot2, 2, self);
@@ -75,7 +75,7 @@ void(vector st, float up) M_FireAkArrow = {
     if (self.classtype == CT_MONARCHERLORD) targ = self.enemy;
     else targ = world;
 
-    makevectors (self.angles);
+    makevectors(self.angles);
     org = self.origin + v_forward*st_x + v_right*st_y + v_up*st_z;
     dir = Aimpoint (self.enemy);
     dir = Maim_Line (org, dir, AKARROW_SPEED_FLY, targ, '0 0 0');

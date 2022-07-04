@@ -276,7 +276,7 @@ void() lost_charge_touch =
 		// If touched a player, nudge them backwards
 		if (other.flags & FL_CLIENT) {
 			self.lostsearch = FALSE;
-			makevectors (self.angles);
+			makevectors(self.angles);
 			other.velocity = other.velocity + (v_forward * 200 + '0 0 50');
 		}
 	}

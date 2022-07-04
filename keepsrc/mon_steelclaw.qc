@@ -228,7 +228,7 @@ void() steelc_leap3 =[ $jump5, steelc_leap4 ] {ai_face();
 	self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.pos2, self.attack_speed);
 	self.pos1 = vectoangles(self.pos2 - self.origin);
 	self.pos1_x = -self.attack_elev;
-	makevectors (self.pos1);
+	makevectors(self.pos1);
 	self.velocity = v_forward * self.attack_speed;
 	
 	self.jump_flag = time + MONAI_JUMPSTEELTIME; // Stop jumping so much

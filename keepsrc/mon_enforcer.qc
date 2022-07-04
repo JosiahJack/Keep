@@ -123,10 +123,10 @@ void() enforcer_fire = {
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, SOUND_LASER_FIRE, 1, ATTN_NORM);
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	vec = normalize(self.enemy.origin - self.origin);
-	launch_projectile(org, vec, CT_PROJ_LASER, SPEED_LASER);
+	launch_projectile(org,vec,NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
 };
 
 void()	enf_atk1	=[	$attack1,	enf_atk2	] {};
@@ -134,13 +134,11 @@ void()	enf_atk2	=[	$attack2,	enf_atk3	] {monster_footstep(FALSE);ai_face();};
 void()	enf_atk3	=[	$attack3,	enf_atk4	] {ai_face();};
 void()	enf_atk4	=[	$attack4,	enf_atk5	] {ai_face();};
 void()	enf_atk5	=[	$attack5,	enf_atk6	] {ai_face();};
-void()	enf_atk6	=[	$attack6,	enf_atk7	] {
-	if (self.health > 0) enforcer_fire();};
+void()	enf_atk6	=[	$attack6,	enf_atk7	] { if (self.health > 0) enforcer_fire(); };
 void()	enf_atk7	=[	$attack7,	enf_atk8	] {};
 void()	enf_atk8	=[	$attack8,	enf_atk9	] {};
 void()	enf_atk9	=[	$attack5,	enf_atk10	] {ai_face();};
-void()	enf_atk10	=[	$attack6,	enf_atk11	] {ai_face();
-	if (self.health > 0) enforcer_fire();};
+void()	enf_atk10	=[	$attack6,	enf_atk11	] {ai_face(); if (self.health > 0) enforcer_fire(); };
 void()	enf_atk11	=[	$attack7,	enf_atk12	] {};
 void()	enf_atk12	=[	$attack8,	enf_atk13	] {};
 void()	enf_atk13	=[	$attack9,	enf_atk14	] {ai_face();};
@@ -200,12 +198,10 @@ void() eliminator_fire = {
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
-
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	vec = normalize(self.enemy.origin - self.origin);
-
-	launch_projectile(org, vec, CT_PROJ_PLASMA, SPEED_PLASMA);
+	launch_projectile(org,vec,NO_SPIN,CT_PROJ_PLASMA,SPEED_PLASMA);
 };
 
 void()	elim_atk1	=[	$attack1,	elim_atk2	] {

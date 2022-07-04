@@ -172,21 +172,17 @@ void() spid_attack = {
 };
 
 void() SpidMissile = {
-	local vector org;
-	local vector dir;
-	local vector yrand, zrand;
+	local vector org, dir, yrand, zrand;
 
 	ai_face();
 	makevectors(self.angles);
 	org = self.origin + v_forward*20;
-	
 	yrand = (crandom()*12)*v_right;
 	zrand = ((crandom()*4)-16)*v_up;
 	org = self.origin + attack_vector(self.attack_offset) + yrand + zrand;
-	
 	dir = (self.enemy.origin - org);
 	dir = normalize(dir);
-	launch_projectile (org, dir, CT_PROJ_WILLY, 300);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_WILLY,300);
 };
 
 void() monster_wspider_precache = {

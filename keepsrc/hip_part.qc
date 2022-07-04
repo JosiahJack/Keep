@@ -41,7 +41,7 @@
 
 float USE_COUNT    = 1.000;
 
-void () particlefield_XZ = { // [FUNCTION]
+void() particlefield_XZ = { // [FUNCTION]
    local vector pos, start, end;
 
    if ( ((self.spawnflags & USE_COUNT) && (counter_GetCount (other) != self.cnt)) ) return;
@@ -63,7 +63,7 @@ void () particlefield_XZ = { // [FUNCTION]
    }
 };
 
-void () particlefield_YZ = { // [FUNCTION]
+void() particlefield_YZ = { // [FUNCTION]
    local vector pos, start, end;
 
    if ( ((self.spawnflags & USE_COUNT) && (counter_GetCount (other) != self.cnt)) ) return;
@@ -85,7 +85,7 @@ void () particlefield_YZ = { // [FUNCTION]
    }
 };
 
-void () particlefield_XY = { // [FUNCTION]
+void() particlefield_XY = { // [FUNCTION]
    local vector pos;
    local vector start;
    local vector end;
@@ -109,7 +109,7 @@ void () particlefield_XY = { // [FUNCTION]
    }
 };
 
-void () particlefield_touch = { // [FUNCTION]
+void() particlefield_touch = { // [FUNCTION]
    if ( !self.dmg ) return;
    if ( (time > self.ltime) ) return;
    if ( (time < self.attack_finished) ) return;
@@ -118,7 +118,7 @@ void () particlefield_touch = { // [FUNCTION]
    T_Damage (other,self,self,self.dmg,DAMARMOR);
 };
 
-void () func_particlefield = { // [ENTITY]
+void() func_particlefield = { // [ENTITY]
    if ( !self.col ) self.col = 192.000;
    if ( (self.count == FALSE) ) self.count = FL_SWIM;
    self.classname = "particlefield";

@@ -681,7 +681,8 @@ void() worldspawn = { // [ENTITY]...well it IS.
 	}
 
 	hipearthquake = earthquake_active = FALSE; // Start with earthquakes inactive.
-	
+	cheatflags = 0; // Zero out dev cheats to none.
+
 	// Setup target light starting point.  Got to do this early before any light entities
 	light_style_setuparray(); dprint("\b[WORLD]\b Setup Light style array\n");
 	pendulum_setuparray(); dprint("\b[WORLD]\b Setup Pendulum vector array\n");
@@ -719,8 +720,8 @@ void() InitBodyQue = { // [FUNCTION], New Code from Inside3d forums (old system 
 	while(num < numBodies) {
 		e = spawn(); // Spawn another body			
 		e.classname = "bodyque";
-		if(bodyque_head == world) bodyque_head = e; // If this is the first, set the bodyque_head pointer (start of the list)
-		if(prev != world) e.owner = prev; // Link up to previous item to form the linked list
+		if (bodyque_head == world) bodyque_head = e; // If this is the first, set the bodyque_head pointer (start of the list)
+		if (prev != world) e.owner = prev; // Link up to previous item to form the linked list
 		prev = e; // Point prev to the new item			
 		num = num + 1;
 	}

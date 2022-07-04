@@ -915,10 +915,6 @@ float SPEED_TURRETBPROJ = 575;		// Wall mounted turret speed
 float SPEED_TURRETBPROJSKILL = 75;	// 575=easy, 650=normal, 725=hard, 800=nm
 float SPEED_SWEEPERPROJ = 575;		// Slow flying robot laz0r/spikes!?
 float SPEED_SWEEPERPROJSKILL = 75;	// 575=easy, 650=normal, 725=hard, 800=nm
-float SPEED_MAMMOTHLAZ = 600;		// The "fridge" Mammoth
-float SPEED_MAMMOTHLAZSKILL = 200;	// 600=easy, 800=normal, 1000=hard, 1200=nm
-float SPEED_MAMMOTHROCK = 700;		// The "fridge" Mammoth
-float SPEED_MAMMOTHROCKSKILL = 100;	// 700=easy, 800=normal, 900=hard, 1000=nm
 float SPEED_ARMYROCKPROJ = 575;		// Army rocketeer (red skin version)
 float SPEED_ARMYROCKPROJSKILL = 75;	// 575=easy, 650=normal, 725=hard, 800=nm
 float SPEED_DGQFB = 700;			// Chainmail Hell Knight from Quoth
@@ -1024,7 +1020,6 @@ vector DAMAGE_RLWRAITH = '100 20 0';	// Wraith hitscan bolt against monsters
 vector DAMAGE_RLDROLE = '40 10 80';		// High splash damage, low direct
 vector DAMAGE_RLARMY = '25 5 25';		// Weak direct, high splash
 vector DAMAGE_RLSWEEPER = '15 0 30';	// Weak direct, med splash
-vector DAMAGE_RLMAMMOTH = '15 0 30';	// Weak direct, med splash
 vector DAMAGE_RLJIM2 = '25 15 25';		// Weak direct, med splash
 vector DAMAGE_RLSEEKER = '25 15 25';	// Weak direct, med splash
 vector DAMAGE_RLBARON = '15 0 30';		// Weak direct, high splash
@@ -1282,13 +1277,6 @@ float MONAI_JUDGEFORWARD = 250;		// Forward momentum
 float MONAI_JUDGEUP = 500;			// Vertical momentum
 float MONAI_MAXJUDGE = 500;			// Maximum tether range
 float MONAI_IMPACTZAXIS = 128;		// Above/below limit on affect
-
-// Boss Mammoth
-float MONAI_MAXMAMMOTH = 128;		// Maximum tether range
-float MONAI_MELEEMAMMOTH = 256;		// Close distance for melee/dump
-float MONAI_RANGEMAMMOTH = 600;		// Max distance for missiles
-float MONAI_COREMAMMOTH = 350;		// Always fire core laser
-float MONAI_GRENMAMMOTH = 500;		// Always fire grenades
 
 // Boss Nour
 float MONAI_MELEENOUR = 192;		// Always attack player

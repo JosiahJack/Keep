@@ -33,7 +33,7 @@ $frame death1 death2 death3 death4 death5 death6 death7 death8
 $frame death9 death10 death11 death12 death13 death14 death15 death16
 
 //======================================================================
-void () floyd_sleep = [$idle1, floyd_sleep] {};
+void() floyd_sleep = [$idle1, floyd_sleep] {};
 
 //======================================================================
 void() floyd_standframe =
@@ -130,12 +130,13 @@ void(float muzzle) floyd_fire = {
 	self.attack_speed = SPEED_FLOYDBOLT + (skill * SPEED_FLOYDSKILL);
 	sound (self, CHAN_WEAPON, "rrp/floyd/fire.wav", 1, ATTN_NORM);
 	muzoff = '0 0 0'; muzoff_y = muzzle; // Create left/right laser vector
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset + muzoff);
 	if (self.enemy.flags & FL_CLIENT) targ_org = self.enemy.origin - '0 0 20'; // Aim plasma bolt towards the enemy feet (using view_ofs)
 	else targ_org = self.enemy.origin - self.enemy.view_ofs;
+
 	dir = normalize(targ_org - self.origin);
-	launch_projectile(org, dir, CT_MONFLOYD, self.attack_speed);
+	launch_projectile(org,dir,NO_SPIN,CT_MONFLOYD,self.attack_speed);
 };
 
 void()	floyd_ready1 =[$run1, floyd_ready2] {ai_face();};
@@ -162,42 +163,42 @@ void()	floyd_attack9 =[$attack9, floyd_run1] {ai_face();
 
 //======================================================================
 // A = Short pain animation
-void () floyd_paina1 = [$paina1, floyd_paina2] {};
-void () floyd_paina2 = [$paina2, floyd_paina3] {};
-void () floyd_paina3 = [$paina3, floyd_paina4] {};
-void () floyd_paina4 = [$paina4, floyd_paina5] {};
-void () floyd_paina5 = [$paina5, floyd_paina6] {};
-void () floyd_paina6 = [$paina6, floyd_run1]   {};
+void() floyd_paina1 = [$paina1, floyd_paina2] {};
+void() floyd_paina2 = [$paina2, floyd_paina3] {};
+void() floyd_paina3 = [$paina3, floyd_paina4] {};
+void() floyd_paina4 = [$paina4, floyd_paina5] {};
+void() floyd_paina5 = [$paina5, floyd_paina6] {};
+void() floyd_paina6 = [$paina6, floyd_run1]   {};
 
 //----------------------------------------------------------------------
 // B = Long pain animation
-void () floyd_painb1 =  [$painb1,  floyd_painb2]  {};
-void () floyd_painb2 =  [$painb2,  floyd_painb3]  {};
-void () floyd_painb3 =  [$painb3,  floyd_painb4]  {};
-void () floyd_painb4 =  [$painb4,  floyd_painb5]  {};
-void () floyd_painb5 =  [$painb5,  floyd_painb6]  {};
-void () floyd_painb6 =  [$painb6,  floyd_painb7]  {};
-void () floyd_painb7 =  [$painb7,  floyd_painb8]  {};
-void () floyd_painb8 =  [$painb8,  floyd_painb9]  {};
-void () floyd_painb9 =  [$painb9,  floyd_painb10] {};
-void () floyd_painb10 = [$painb10,  floyd_run1]   {};
+void() floyd_painb1 =  [$painb1,  floyd_painb2]  {};
+void() floyd_painb2 =  [$painb2,  floyd_painb3]  {};
+void() floyd_painb3 =  [$painb3,  floyd_painb4]  {};
+void() floyd_painb4 =  [$painb4,  floyd_painb5]  {};
+void() floyd_painb5 =  [$painb5,  floyd_painb6]  {};
+void() floyd_painb6 =  [$painb6,  floyd_painb7]  {};
+void() floyd_painb7 =  [$painb7,  floyd_painb8]  {};
+void() floyd_painb8 =  [$painb8,  floyd_painb9]  {};
+void() floyd_painb9 =  [$painb9,  floyd_painb10] {};
+void() floyd_painb10 = [$painb10,  floyd_run1]   {};
 
 //----------------------------------------------------------------------
 // C = Long stumble animation
-void () floyd_painc1 =  [$painc1,  floyd_painc2]  {};
-void () floyd_painc2 =  [$painc2,  floyd_painc3]  {};
-void () floyd_painc3 =  [$painc3,  floyd_painc4]  {};
-void () floyd_painc4 =  [$painc4,  floyd_painc5]  {};
-void () floyd_painc5 =  [$painc5,  floyd_painc6]  {};
-void () floyd_painc6 =  [$painc6,  floyd_painc7]  {};
-void () floyd_painc7 =  [$painc7,  floyd_painc8]  {ai_painforward(1.25);};
-void () floyd_painc8 =  [$painc8,  floyd_painc9]  {ai_painforward(1.25);};
-void () floyd_painc9 =  [$painc9,  floyd_painc10] {ai_painforward(1.25);};
-void () floyd_painc10 = [$painc10, floyd_painc11] {ai_painforward(1.25);};
-void () floyd_painc11 = [$painc11, floyd_painc12] {ai_painforward(1.25);};
-void () floyd_painc12 = [$painc12, floyd_painc13] {ai_painforward(1.25);};
-void () floyd_painc13 = [$painc13, floyd_painc14] {ai_painforward(1.25);};
-void () floyd_painc14 = [$painc14, floyd_run1]    {ai_painforward(1.25);};
+void() floyd_painc1 =  [$painc1,  floyd_painc2]  {};
+void() floyd_painc2 =  [$painc2,  floyd_painc3]  {};
+void() floyd_painc3 =  [$painc3,  floyd_painc4]  {};
+void() floyd_painc4 =  [$painc4,  floyd_painc5]  {};
+void() floyd_painc5 =  [$painc5,  floyd_painc6]  {};
+void() floyd_painc6 =  [$painc6,  floyd_painc7]  {};
+void() floyd_painc7 =  [$painc7,  floyd_painc8]  {ai_painforward(1.25);};
+void() floyd_painc8 =  [$painc8,  floyd_painc9]  {ai_painforward(1.25);};
+void() floyd_painc9 =  [$painc9,  floyd_painc10] {ai_painforward(1.25);};
+void() floyd_painc10 = [$painc10, floyd_painc11] {ai_painforward(1.25);};
+void() floyd_painc11 = [$painc11, floyd_painc12] {ai_painforward(1.25);};
+void() floyd_painc12 = [$painc12, floyd_painc13] {ai_painforward(1.25);};
+void() floyd_painc13 = [$painc13, floyd_painc14] {ai_painforward(1.25);};
+void() floyd_painc14 = [$painc14, floyd_run1]    {ai_painforward(1.25);};
 
 //----------------------------------------------------------------------
 void(entity inflictor, entity attacker, float damage) floyd_pain =
@@ -356,7 +357,7 @@ void(entity inflictor, entity attacker, float damage) floyd_painawake =
 //======================================================================
 // Floyd ROLLING functions
 //======================================================================
-void () floyd_roll = {
+void() floyd_roll = {
 	self.frame = self.frame + 1;
 	
 	if (self.frame > $death15 || self.frame < $death10) {

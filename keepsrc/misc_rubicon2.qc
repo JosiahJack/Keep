@@ -43,7 +43,7 @@ void() misc_sparks_fade1;
 // QUAKED misc_flag (1 0 0) (-8 -8 -8) (8 8 8) NOT_ANIMATED BIG
 // A hanging banner, gently waving in the wind. Normal dimensions: 64 wide by 144 long.
 // Flags: "Not Animated" Banner is not animated. "Big" Banner is twice as big: 128 wide by 288 long.
-void () misc_flag = { // [ENTITY]
+void() misc_flag = { // [ENTITY]
 	precache_model ("progs/rubicon2/flag.mdl");
 	setmodel (self, "progs/rubicon2/flag.mdl");
 	self.frame = (self.spawnflags & 3);

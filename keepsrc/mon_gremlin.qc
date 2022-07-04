@@ -52,28 +52,28 @@ void() gremlin_steal_bolts = {
       self.currentammo = self.ammo_bolts;
 };
 
-void () gremlin_steal_poison = {
+void() gremlin_steal_poison = {
       float amount = gremlin_ammo_steal(self.enemy.ammo_poison);
       self.enemy.ammo_poison = (self.enemy.ammo_poison - amount);
       self.ammo_poison = (self.ammo_poison + amount);
       self.currentammo = self.ammo_poison;
 };
 
-void () gremlin_steal_multi_rockets = {
+void() gremlin_steal_multi_rockets = {
       float amount = gremlin_ammo_steal(self.enemy.ammo_multi_rockets);
       self.enemy.ammo_multi_rockets = (self.enemy.ammo_multi_rockets - amount);
       self.ammo_multi_rockets = (self.ammo_multi_rockets + amount);
       self.currentammo = self.ammo_multi_rockets;
 };
 
-void () gremlin_steal_lava_nails = {
+void() gremlin_steal_lava_nails = {
       float amount = gremlin_ammo_steal(self.enemy.ammo_lava_nails);
       self.enemy.ammo_lava_nails = (self.enemy.ammo_lava_nails - amount);
       self.ammo_lava_nails = (self.ammo_lava_nails + amount);
       self.currentammo = self.ammo_lava_nails;
 };
 
-void () gremlin_steal_plasma = {
+void() gremlin_steal_plasma = {
       float amount = gremlin_ammo_steal(self.enemy.ammo_plasma);
       self.enemy.ammo_plasma = (self.enemy.ammo_plasma - amount);
       self.ammo_plasma = (self.ammo_plasma + amount);
@@ -255,7 +255,7 @@ float() GremlinFindTarget = {
    return ( result );
 };
 
-void (float dist) gremlin_walk = {
+void(float dist) gremlin_walk = {
    movedist = dist;
    if ( GremlinFindTarget () )
       return ;
@@ -263,7 +263,7 @@ void (float dist) gremlin_walk = {
    movetogoal (dist);
 };
 
-void () gremlin_stand = {
+void() gremlin_stand = {
    if ( FindTarget () )
       return ;
 
@@ -273,7 +273,7 @@ void () gremlin_stand = {
    }
 };
 
-void (float dist) gremlin_run = {
+void(float dist) gremlin_run = {
    local float r;
    local vector d;
    local vector ang;
@@ -352,7 +352,7 @@ void (float dist) gremlin_run = {
                   done = FALSE;
                   c = FALSE;
                   while ( (done == FALSE) ) {
-                     makevectors (ang);
+                     makevectors(ang);
                      end = (self.enemy.origin + (v_forward * 350.000));
                      traceline (self.enemy.origin,end,FALSE,self);
                      if ( (trace_fraction == TRUE) ) {
@@ -381,67 +381,67 @@ void (float dist) gremlin_run = {
    }
 };
 
-void () gremlin_stand1 = [ 0.000, gremlin_stand2 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
-void () gremlin_stand2 = [ 1.000, gremlin_stand3 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
-void () gremlin_stand3 = [ 2.000, gremlin_stand4 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
-void () gremlin_stand4 = [ 3.000, gremlin_stand5 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
-void () gremlin_stand5 = [ 4.000, gremlin_stand6 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
-void () gremlin_stand6 = [ 5.000, gremlin_stand7 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
-void () gremlin_stand7 = [ 6.000, gremlin_stand8 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
-void () gremlin_stand8 = [ 7.000, gremlin_stand9 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
-void () gremlin_stand9 = [ 8.000, gremlin_stand10 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
-void () gremlin_stand10 = [ 9.000, gremlin_stand11 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
-void () gremlin_stand11 = [ 10.000, gremlin_stand12 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
-void () gremlin_stand12 = [ 11.000, gremlin_stand13 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
-void () gremlin_stand13 = [ 12.000, gremlin_stand14 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
-void () gremlin_stand14 = [ 13.000, gremlin_stand15 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
-void () gremlin_stand15 = [ 14.000, gremlin_stand16 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
-void () gremlin_stand16 = [ 15.000, gremlin_stand17 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
-void () gremlin_stand17 = [ 16.000, gremlin_stand1 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand1 = [ 0.000, gremlin_stand2 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand2 = [ 1.000, gremlin_stand3 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand3 = [ 2.000, gremlin_stand4 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand4 = [ 3.000, gremlin_stand5 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand5 = [ 4.000, gremlin_stand6 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand6 = [ 5.000, gremlin_stand7 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand7 = [ 6.000, gremlin_stand8 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand8 = [ 7.000, gremlin_stand9 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand9 = [ 8.000, gremlin_stand10 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand10 = [ 9.000, gremlin_stand11 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand11 = [ 10.000, gremlin_stand12 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand12 = [ 11.000, gremlin_stand13 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand13 = [ 12.000, gremlin_stand14 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand14 = [ 13.000, gremlin_stand15 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand15 = [ 14.000, gremlin_stand16 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand16 = [ 15.000, gremlin_stand17 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
+void() gremlin_stand17 = [ 16.000, gremlin_stand1 ] { gremlin_stand (); self.nextthink = (time + 0.200); };
 
-void () gremlin_walk1 = [ 17.000, gremlin_walk2 ] {
+void() gremlin_walk1 = [ 17.000, gremlin_walk2 ] {
    if ( (random () < 0.100) )
       sound (self,CHAN_VOICE,"hipnotic/grem/idle.wav",TRUE,ATTN_IDLE);
 
    gremlin_walk (8);
 };
-void () gremlin_walk2 = [ 18.000, gremlin_walk3 ] { gremlin_walk (6); };
-void () gremlin_walk3 = [ 19.000, gremlin_walk4 ] { gremlin_walk (8); };
-void () gremlin_walk4 = [ 20.000, gremlin_walk5 ] { gremlin_walk (16);monster_footstep(FALSE); };
-void () gremlin_walk5 = [ 21.000, gremlin_walk6 ] { gremlin_walk (8); };
-void () gremlin_walk6 = [ 22.000, gremlin_walk7 ] { gremlin_walk (4); };
-void () gremlin_walk7 = [ 23.000, gremlin_walk8 ] { gremlin_walk (2); };
-void () gremlin_walk8 = [ 24.000, gremlin_walk9 ] { gremlin_walk (16); monster_footstep(FALSE); };
-void () gremlin_walk9 = [ 25.000, gremlin_walk10 ] { gremlin_walk (10); };
-void () gremlin_walk10 = [ 26.000, gremlin_walk11 ] { gremlin_walk (8); };
-void () gremlin_walk11 = [ 27.000, gremlin_walk12 ] { gremlin_walk (6); };
-void () gremlin_walk12 = [ 28.000, gremlin_walk1 ] { gremlin_walk (4); };
+void() gremlin_walk2 = [ 18.000, gremlin_walk3 ] { gremlin_walk (6); };
+void() gremlin_walk3 = [ 19.000, gremlin_walk4 ] { gremlin_walk (8); };
+void() gremlin_walk4 = [ 20.000, gremlin_walk5 ] { gremlin_walk (16);monster_footstep(FALSE); };
+void() gremlin_walk5 = [ 21.000, gremlin_walk6 ] { gremlin_walk (8); };
+void() gremlin_walk6 = [ 22.000, gremlin_walk7 ] { gremlin_walk (4); };
+void() gremlin_walk7 = [ 23.000, gremlin_walk8 ] { gremlin_walk (2); };
+void() gremlin_walk8 = [ 24.000, gremlin_walk9 ] { gremlin_walk (16); monster_footstep(FALSE); };
+void() gremlin_walk9 = [ 25.000, gremlin_walk10 ] { gremlin_walk (10); };
+void() gremlin_walk10 = [ 26.000, gremlin_walk11 ] { gremlin_walk (8); };
+void() gremlin_walk11 = [ 27.000, gremlin_walk12 ] { gremlin_walk (6); };
+void() gremlin_walk12 = [ 28.000, gremlin_walk1 ] { gremlin_walk (4); };
 
-void () gremlin_run1 = [ 29.000, gremlin_run2 ] {
+void() gremlin_run1 = [ 29.000, gremlin_run2 ] {
    if (random () < 0.1) sound(self,CHAN_VOICE,"hipnotic/grem/idle.wav",TRUE,ATTN_IDLE);
    monster_footstep(FALSE);
    gremlin_run(0);
 };
-void () gremlin_run2 = [ 30.000, gremlin_run3 ] { gremlin_run (8);};
-void () gremlin_run3 = [ 31.000, gremlin_run4 ] { gremlin_run (12); };
-void () gremlin_run4 = [ 32.000, gremlin_run5 ] { gremlin_run (24); }; // Was 16, -Qmaster
-void () gremlin_run5 = [ 33.000, gremlin_run6 ] { gremlin_run (24); }; // Was 16, -Qmaster
-void () gremlin_run6 = [ 34.000, gremlin_run7 ] { gremlin_run (12); };
-void () gremlin_run7 = [ 35.000, gremlin_run8 ] { gremlin_run (8); };
-void () gremlin_run8 = [ 36.000, gremlin_run9 ] { gremlin_run (0); };
-void () gremlin_run9 = [ 37.000, gremlin_run10 ] { gremlin_run (8); monster_footstep(FALSE);};
-void () gremlin_run10 = [ 38.000, gremlin_run11 ] { gremlin_run (12); };
-void () gremlin_run11 = [ 39.000, gremlin_run12 ] { gremlin_run (24); }; // Was 16, -Qmaster
-void () gremlin_run12 = [ 40.000, gremlin_run13 ] { gremlin_run (24); }; // Was 16, -Qmaster
-void () gremlin_run13 = [ 41.000, gremlin_run14 ] { gremlin_run (12); };
-void () gremlin_run14 = [ 42.000, gremlin_run15 ] { gremlin_run (8); };
-void () gremlin_run15 = [ 43.000, gremlin_run1 ] { gremlin_run (2); monster_footstep(FALSE);}; // Was 0, -Qmaster
+void() gremlin_run2 = [ 30.000, gremlin_run3 ] { gremlin_run (8);};
+void() gremlin_run3 = [ 31.000, gremlin_run4 ] { gremlin_run (12); };
+void() gremlin_run4 = [ 32.000, gremlin_run5 ] { gremlin_run (24); }; // Was 16, -Qmaster
+void() gremlin_run5 = [ 33.000, gremlin_run6 ] { gremlin_run (24); }; // Was 16, -Qmaster
+void() gremlin_run6 = [ 34.000, gremlin_run7 ] { gremlin_run (12); };
+void() gremlin_run7 = [ 35.000, gremlin_run8 ] { gremlin_run (8); };
+void() gremlin_run8 = [ 36.000, gremlin_run9 ] { gremlin_run (0); };
+void() gremlin_run9 = [ 37.000, gremlin_run10 ] { gremlin_run (8); monster_footstep(FALSE);};
+void() gremlin_run10 = [ 38.000, gremlin_run11 ] { gremlin_run (12); };
+void() gremlin_run11 = [ 39.000, gremlin_run12 ] { gremlin_run (24); }; // Was 16, -Qmaster
+void() gremlin_run12 = [ 40.000, gremlin_run13 ] { gremlin_run (24); }; // Was 16, -Qmaster
+void() gremlin_run13 = [ 41.000, gremlin_run14 ] { gremlin_run (12); };
+void() gremlin_run14 = [ 42.000, gremlin_run15 ] { gremlin_run (8); };
+void() gremlin_run15 = [ 43.000, gremlin_run1 ] { gremlin_run (2); monster_footstep(FALSE);}; // Was 0, -Qmaster
 
-void () gremlin_jump1 = [ 44.000, gremlin_jump2 ] { ai_face (); };
-void () gremlin_jump2 = [ 45.000, gremlin_jump3 ] { ai_face (); };
-void () gremlin_jump3 = [ 46.000, gremlin_jump4 ] { ai_face (); };
-void () gremlin_jump4 = [ 47.000, gremlin_jump5 ] { ai_face (); monster_footstep(FALSE);};
-void () gremlin_jump5 = [ 48.000, gremlin_jump6 ] {
+void() gremlin_jump1 = [ 44.000, gremlin_jump2 ] { ai_face (); };
+void() gremlin_jump2 = [ 45.000, gremlin_jump3 ] { ai_face (); };
+void() gremlin_jump3 = [ 46.000, gremlin_jump4 ] { ai_face (); };
+void() gremlin_jump4 = [ 47.000, gremlin_jump5 ] { ai_face (); monster_footstep(FALSE);};
+void() gremlin_jump5 = [ 48.000, gremlin_jump6 ] {
    ai_face ();
    if ((self.flags & FL_ONGROUND)) {
       self.touch = Gremlin_JumpTouch;
@@ -453,111 +453,111 @@ void () gremlin_jump5 = [ 48.000, gremlin_jump6 ] {
       gremlin_run1();
    }
 };
-void () gremlin_jump6 = [ 49.000, gremlin_jump7 ] {};
-void () gremlin_jump7 = [ 50.000, gremlin_jump8 ] {};
-void () gremlin_jump8 = [ 51.000, gremlin_jump9 ] {};
-void () gremlin_jump9 = [ 52.000, gremlin_jump10 ] {};
-void () gremlin_jump10 = [ 53.000, gremlin_jump11 ] {};
-void () gremlin_jump11 = [ 54.000, gremlin_jump1 ] { self.nextthink = (time + MOVETYPE_WALK); };
-void () gremlin_jump12 = [ 55.000, gremlin_jump13 ] {};
-void () gremlin_jump13 = [ 56.000, gremlin_jump14 ] {};
-void () gremlin_jump14 = [ 57.000, gremlin_jump15 ] {};
-void () gremlin_jump15 = [ 58.000, gremlin_jump16 ] {};
-void () gremlin_jump16 = [ 59.000, gremlin_run1 ] {};
+void() gremlin_jump6 = [ 49.000, gremlin_jump7 ] {};
+void() gremlin_jump7 = [ 50.000, gremlin_jump8 ] {};
+void() gremlin_jump8 = [ 51.000, gremlin_jump9 ] {};
+void() gremlin_jump9 = [ 52.000, gremlin_jump10 ] {};
+void() gremlin_jump10 = [ 53.000, gremlin_jump11 ] {};
+void() gremlin_jump11 = [ 54.000, gremlin_jump1 ] { self.nextthink = (time + MOVETYPE_WALK); };
+void() gremlin_jump12 = [ 55.000, gremlin_jump13 ] {};
+void() gremlin_jump13 = [ 56.000, gremlin_jump14 ] {};
+void() gremlin_jump14 = [ 57.000, gremlin_jump15 ] {};
+void() gremlin_jump15 = [ 58.000, gremlin_jump16 ] {};
+void() gremlin_jump16 = [ 59.000, gremlin_run1 ] {};
 
-void () gremlin_shot1 = [ 135.000, gremlin_shot2 ] {};
-void () gremlin_shot2 = [ 136.000, gremlin_shot3 ] {};
-void () gremlin_shot3 = [ 137.000, gremlin_shot4 ] {};
-void () gremlin_shot4 = [ 138.000, gremlin_shot5 ] {};
-void () gremlin_shot5 = [ 139.000, gremlin_shot6 ] {};
-void () gremlin_shot6 = [ 140.000, gremlin_run1 ] {};
+void() gremlin_shot1 = [ 135.000, gremlin_shot2 ] {};
+void() gremlin_shot2 = [ 136.000, gremlin_shot3 ] {};
+void() gremlin_shot3 = [ 137.000, gremlin_shot4 ] {};
+void() gremlin_shot4 = [ 138.000, gremlin_shot5 ] {};
+void() gremlin_shot5 = [ 139.000, gremlin_shot6 ] {};
+void() gremlin_shot6 = [ 140.000, gremlin_run1 ] {};
 
-void () GremlinFireSpikes = {
+void() GremlinFireSpikes = {
 	local vector dir;
 
 	dir = normalize ((self.enemy.origin - self.origin));
 	self.v_angle = vectoangles (dir);
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	dir = ((dir + ((crandom () * 0.100) * v_right)) + ((crandom () * 0.100) * v_up));
 	dir = normalize (dir);
 	if (self.ammo_nails > 1 && self.weapon == IT_SUPER_NAILGUN) {
 		sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
 		self.currentammo = self.currentammo - 2;
 		self.ammo_nails = self.ammo_nails - 2;
-		launch_projectile ((self.origin + '0 0 16'), dir, CT_PROJ_SNG, SPEED_PLAYSPIKE);
+		launch_projectile((self.origin + '0 0 16'),dir,NO_SPIN,CT_PROJ_SNG,SPEED_PLAYSPIKE);
 	} else {
 		sound (self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM);
 		self.currentammo = self.currentammo - 1;
 		self.ammo_nails = self.ammo_nails - 1;
-		launch_projectile ((self.origin + '0 0 16'), dir, CT_PROJ_NG, SPEED_PLAYSPIKE);
+		launch_projectile((self.origin + '0 0 16'),dir,NO_SPIN,CT_PROJ_NG,SPEED_PLAYSPIKE);
 	}
 };
 
-void () GremlinFireLavaSpikes = {
+void() GremlinFireLavaSpikes = {
 	local vector dir;
 
 	dir = normalize ((self.enemy.origin - self.origin));
 	self.v_angle = vectoangles (dir);
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	dir = ((dir + ((crandom () * 0.100) * v_right)) + ((crandom () * 0.100) * v_up));
 	dir = normalize (dir);
 	if (self.ammo_lava_nails > 1 && self.weapon == IT_LAVA_SUPER_NAILGUN) {
 		sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
 		self.currentammo = self.currentammo - 2;
 		self.ammo_lava_nails = self.ammo_lava_nails - 2;
-		launch_projectile ((self.origin + '0 0 16'), dir, CT_PROJ_LAVASNG, SPEED_PLAYSPIKE);
+		launch_projectile((self.origin + '0 0 16'),dir,NO_SPIN,CT_PROJ_LAVASNG,SPEED_PLAYSPIKE);
 	} else {
 		sound (self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM);
 		self.currentammo = self.currentammo - 1;
 		self.ammo_lava_nails = self.ammo_lava_nails - 1;
-		launch_projectile ((self.origin + '0 0 16'), dir, CT_PROJ_LAVANG, SPEED_PLAYSPIKE);
+		launch_projectile((self.origin + '0 0 16'),dir,NO_SPIN,CT_PROJ_LAVANG,SPEED_PLAYSPIKE);
 	}
 };
 
-void () gremlin_nail1 = [ 135.000, gremlin_nail2 ] {GremlinFireSpikes();};
-void () gremlin_nail2 = [ 135.000, gremlin_nail3 ] {GremlinFireSpikes();};
-void () gremlin_nail3 = [ 135.000, gremlin_nail4 ] {GremlinFireSpikes();};
-void () gremlin_nail4 = [ 135.000, gremlin_nail5 ] {GremlinFireSpikes();};
-void () gremlin_nail5 = [ 135.000, gremlin_nail6 ] {GremlinFireSpikes();};
-void () gremlin_nail6 = [ 135.000, gremlin_nail7 ] {GremlinFireSpikes();};
-void () gremlin_nail7 = [ 135.000, gremlin_nail8 ] {GremlinFireSpikes();};
-void () gremlin_nail8 = [ 135.000, gremlin_run1 ] {GremlinFireSpikes();};
+void() gremlin_nail1 = [ 135.000, gremlin_nail2 ] {GremlinFireSpikes();};
+void() gremlin_nail2 = [ 135.000, gremlin_nail3 ] {GremlinFireSpikes();};
+void() gremlin_nail3 = [ 135.000, gremlin_nail4 ] {GremlinFireSpikes();};
+void() gremlin_nail4 = [ 135.000, gremlin_nail5 ] {GremlinFireSpikes();};
+void() gremlin_nail5 = [ 135.000, gremlin_nail6 ] {GremlinFireSpikes();};
+void() gremlin_nail6 = [ 135.000, gremlin_nail7 ] {GremlinFireSpikes();};
+void() gremlin_nail7 = [ 135.000, gremlin_nail8 ] {GremlinFireSpikes();};
+void() gremlin_nail8 = [ 135.000, gremlin_run1 ] {GremlinFireSpikes();};
 
-void () gremlin_lava_nail1 = [ 135.000, gremlin_lava_nail2 ] {GremlinFireLavaSpikes();};
-void () gremlin_lava_nail2 = [ 135.000, gremlin_lava_nail3 ] {GremlinFireLavaSpikes();};
-void () gremlin_lava_nail3 = [ 135.000, gremlin_lava_nail4 ] {GremlinFireLavaSpikes();};
-void () gremlin_lava_nail4 = [ 135.000, gremlin_lava_nail5 ] {GremlinFireLavaSpikes();};
-void () gremlin_lava_nail5 = [ 135.000, gremlin_lava_nail6 ] {GremlinFireLavaSpikes();};
-void () gremlin_lava_nail6 = [ 135.000, gremlin_lava_nail7 ] {GremlinFireLavaSpikes();};
-void () gremlin_lava_nail7 = [ 135.000, gremlin_lava_nail8 ] {GremlinFireLavaSpikes();};
-void () gremlin_lava_nail8 = [ 135.000, gremlin_run1 ] {GremlinFireLavaSpikes(); sound (self, CHAN_WEAPON, "rogue/weapons/snail.wav", 1, ATTN_NORM);};
+void() gremlin_lava_nail1 = [ 135.000, gremlin_lava_nail2 ] {GremlinFireLavaSpikes();};
+void() gremlin_lava_nail2 = [ 135.000, gremlin_lava_nail3 ] {GremlinFireLavaSpikes();};
+void() gremlin_lava_nail3 = [ 135.000, gremlin_lava_nail4 ] {GremlinFireLavaSpikes();};
+void() gremlin_lava_nail4 = [ 135.000, gremlin_lava_nail5 ] {GremlinFireLavaSpikes();};
+void() gremlin_lava_nail5 = [ 135.000, gremlin_lava_nail6 ] {GremlinFireLavaSpikes();};
+void() gremlin_lava_nail6 = [ 135.000, gremlin_lava_nail7 ] {GremlinFireLavaSpikes();};
+void() gremlin_lava_nail7 = [ 135.000, gremlin_lava_nail8 ] {GremlinFireLavaSpikes();};
+void() gremlin_lava_nail8 = [ 135.000, gremlin_run1 ] {GremlinFireLavaSpikes(); sound (self, CHAN_WEAPON, "rogue/weapons/snail.wav", 1, ATTN_NORM);};
 
-void () gremlin_snail1 = [ 135.000, gremlin_snail2 ] {GremlinFireSpikes();};
-void () gremlin_snail2 = [ 135.000, gremlin_snail3 ] {GremlinFireSpikes();};
-void () gremlin_snail3 = [ 135.000, gremlin_snail4 ] {GremlinFireSpikes();};
-void () gremlin_snail4 = [ 135.000, gremlin_snail5 ] {GremlinFireSpikes();};
-void () gremlin_snail5 = [ 135.000, gremlin_snail6 ] {GremlinFireSpikes();};
-void () gremlin_snail6 = [ 135.000, gremlin_snail7 ] {GremlinFireSpikes();};
-void () gremlin_snail7 = [ 135.000, gremlin_snail8 ] {GremlinFireSpikes();};
-void () gremlin_snail8 = [ 135.000, gremlin_run1 ] {GremlinFireSpikes();};
+void() gremlin_snail1 = [ 135.000, gremlin_snail2 ] {GremlinFireSpikes();};
+void() gremlin_snail2 = [ 135.000, gremlin_snail3 ] {GremlinFireSpikes();};
+void() gremlin_snail3 = [ 135.000, gremlin_snail4 ] {GremlinFireSpikes();};
+void() gremlin_snail4 = [ 135.000, gremlin_snail5 ] {GremlinFireSpikes();};
+void() gremlin_snail5 = [ 135.000, gremlin_snail6 ] {GremlinFireSpikes();};
+void() gremlin_snail6 = [ 135.000, gremlin_snail7 ] {GremlinFireSpikes();};
+void() gremlin_snail7 = [ 135.000, gremlin_snail8 ] {GremlinFireSpikes();};
+void() gremlin_snail8 = [ 135.000, gremlin_run1 ] {GremlinFireSpikes();};
 
-void () gremlin_lava_snail1 = [ 135.000, gremlin_lava_snail2 ] {GremlinFireLavaSpikes();};
-void () gremlin_lava_snail2 = [ 135.000, gremlin_lava_snail3 ] {GremlinFireLavaSpikes();};
-void () gremlin_lava_snail3 = [ 135.000, gremlin_lava_snail4 ] {GremlinFireLavaSpikes();};
-void () gremlin_lava_snail4 = [ 135.000, gremlin_lava_snail5 ] {GremlinFireLavaSpikes();};
-void () gremlin_lava_snail5 = [ 135.000, gremlin_lava_snail6 ] {GremlinFireLavaSpikes();};
-void () gremlin_lava_snail6 = [ 135.000, gremlin_lava_snail7 ] {GremlinFireLavaSpikes();};
-void () gremlin_lava_snail7 = [ 135.000, gremlin_lava_snail8 ] {GremlinFireLavaSpikes();};
-void () gremlin_lava_snail8 = [ 135.000, gremlin_run1 ] {GremlinFireLavaSpikes(); sound (self, CHAN_WEAPON, "rogue/weapons/snail.wav", 1, ATTN_NORM);};
+void() gremlin_lava_snail1 = [ 135.000, gremlin_lava_snail2 ] {GremlinFireLavaSpikes();};
+void() gremlin_lava_snail2 = [ 135.000, gremlin_lava_snail3 ] {GremlinFireLavaSpikes();};
+void() gremlin_lava_snail3 = [ 135.000, gremlin_lava_snail4 ] {GremlinFireLavaSpikes();};
+void() gremlin_lava_snail4 = [ 135.000, gremlin_lava_snail5 ] {GremlinFireLavaSpikes();};
+void() gremlin_lava_snail5 = [ 135.000, gremlin_lava_snail6 ] {GremlinFireLavaSpikes();};
+void() gremlin_lava_snail6 = [ 135.000, gremlin_lava_snail7 ] {GremlinFireLavaSpikes();};
+void() gremlin_lava_snail7 = [ 135.000, gremlin_lava_snail8 ] {GremlinFireLavaSpikes();};
+void() gremlin_lava_snail8 = [ 135.000, gremlin_run1 ] {GremlinFireLavaSpikes(); sound (self, CHAN_WEAPON, "rogue/weapons/snail.wav", 1, ATTN_NORM);};
 
-void () GremlinFireLaser = {
+void() GremlinFireLaser = {
 	local vector org, dir;
 
 	self.currentammo = self.ammo_cells = self.ammo_cells - 1;
 
 	dir = normalize ((self.enemy.origin - self.origin));
 	self.v_angle = vectoangles (dir);
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	dir = ((dir + ((crandom () * 0.100) * v_right)) + ((crandom () * 0.100) * v_up));
 	dir = normalize (dir);
 	sound (self,CHAN_WEAPON,"hipnotic/weapons/laserg.wav",TRUE,ATTN_NORM);
@@ -567,10 +567,10 @@ void () GremlinFireLaser = {
 	HIP_LaunchLaser (org,dir,TRUE);
 };
 
-void () gremlin_laser1 = [ 135.000, gremlin_laser2 ] {GremlinFireLaser(); self.attack_finished = (time + 0.100);};
-void () gremlin_laser2 = [ 135.000, gremlin_run1 ] {GremlinFireLaser(); self.attack_finished = (time + 0.100);};
+void() gremlin_laser1 = [ 135.000, gremlin_laser2 ] {GremlinFireLaser(); self.attack_finished = (time + 0.100);};
+void() gremlin_laser2 = [ 135.000, gremlin_run1 ] {GremlinFireLaser(); self.attack_finished = (time + 0.100);};
 
-void () GremlinFireLightning = {
+void() GremlinFireLightning = {
    local vector org;
    local vector dir;
    local float cells;
@@ -588,7 +588,7 @@ void () GremlinFireLightning = {
    self.ammo_cells = self.ammo_cells - 1;
    self.currentammo = self.currentammo - 1;
    self.v_angle = vectoangles (dir);
-   makevectors (self.v_angle);
+   makevectors(self.v_angle);
    org = (self.origin + '0.000 0.000 16.000');
    dir = ((self.enemy.origin + '0.000 0.000 16.000') - org);
    dir = normalize (dir);
@@ -606,61 +606,61 @@ void () GremlinFireLightning = {
    LightningDamage(org,trace_endpos+ (dir * MOVETYPE_STEP),self,SVC_INTERMISSION);
 };
 
-void () gremlin_light1 = [ 135.000, gremlin_light2 ] {GremlinFireLightning();};
-void () gremlin_light2 = [ 135.000, gremlin_light3 ] {GremlinFireLightning();};
-void () gremlin_light3 = [ 135.000, gremlin_light4 ] {GremlinFireLightning();};
-void () gremlin_light4 = [ 135.000, gremlin_light5 ] {GremlinFireLightning();};
-void () gremlin_light5 = [ 135.000, gremlin_run1 ] {GremlinFireLightning(); };
+void() gremlin_light1 = [ 135.000, gremlin_light2 ] {GremlinFireLightning();};
+void() gremlin_light2 = [ 135.000, gremlin_light3 ] {GremlinFireLightning();};
+void() gremlin_light3 = [ 135.000, gremlin_light4 ] {GremlinFireLightning();};
+void() gremlin_light4 = [ 135.000, gremlin_light5 ] {GremlinFireLightning();};
+void() gremlin_light5 = [ 135.000, gremlin_run1 ] {GremlinFireLightning(); };
 
-void () gremlin_grenade1 = [ 135.000, gremlin_grenade2 ] { self.effects = (self.effects | EF_MUZZLEFLASH); MonsterGrenadeSound(); self.attack_speed = MonsterGrenadeSpeed(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
-void () gremlin_grenade2 = [ 136.000, gremlin_grenade3 ] {self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
-void () gremlin_grenade3 = [ 137.000, gremlin_grenade4 ] {self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
-void () gremlin_grenade4 = [ 138.000, gremlin_grenade5 ] {MonsterFireGrenade(self.origin, self.enemy.origin); self.currentammo = self.currentammo - 1; self.ammo_rockets = self.ammo_rockets -1;};
-void () gremlin_grenade5 = [ 139.000, gremlin_grenade6 ] {};
-void () gremlin_grenade6 = [ 140.000, gremlin_run1 ] {};
+void() gremlin_grenade1 = [ 135.000, gremlin_grenade2 ] { self.effects = (self.effects | EF_MUZZLEFLASH); MonsterGrenadeSound(); self.attack_speed = MonsterGrenadeSpeed(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
+void() gremlin_grenade2 = [ 136.000, gremlin_grenade3 ] {self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
+void() gremlin_grenade3 = [ 137.000, gremlin_grenade4 ] {self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
+void() gremlin_grenade4 = [ 138.000, gremlin_grenade5 ] {MonsterFireGrenade(self.origin, self.enemy.origin); self.currentammo = self.currentammo - 1; self.ammo_rockets = self.ammo_rockets -1;};
+void() gremlin_grenade5 = [ 139.000, gremlin_grenade6 ] {};
+void() gremlin_grenade6 = [ 140.000, gremlin_run1 ] {};
 
 
-void () gremlin_prox1 = [ 135.000, gremlin_prox2 ] { self.effects = (self.effects | EF_MUZZLEFLASH); MonsterGrenadeSound(); self.attack_speed = MonsterGrenadeSpeed(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
-void () gremlin_prox2 = [ 136.000, gremlin_prox3 ] {self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
-void () gremlin_prox3 = [ 137.000, gremlin_prox4 ] {self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
-void () gremlin_prox4 = [ 138.000, gremlin_prox5 ] {MonsterFireGrenade(self.origin, self.enemy.origin);self.currentammo = self.currentammo - 1; self.ammo_rockets = self.ammo_rockets -1;};
-void () gremlin_prox5 = [ 139.000, gremlin_prox6 ] {};
-void () gremlin_prox6 = [ 140.000, gremlin_run1 ] {};
+void() gremlin_prox1 = [ 135.000, gremlin_prox2 ] { self.effects = (self.effects | EF_MUZZLEFLASH); MonsterGrenadeSound(); self.attack_speed = MonsterGrenadeSpeed(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
+void() gremlin_prox2 = [ 136.000, gremlin_prox3 ] {self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
+void() gremlin_prox3 = [ 137.000, gremlin_prox4 ] {self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
+void() gremlin_prox4 = [ 138.000, gremlin_prox5 ] {MonsterFireGrenade(self.origin, self.enemy.origin);self.currentammo = self.currentammo - 1; self.ammo_rockets = self.ammo_rockets -1;};
+void() gremlin_prox5 = [ 139.000, gremlin_prox6 ] {};
+void() gremlin_prox6 = [ 140.000, gremlin_run1 ] {};
 
-void () gremlin_multi_grenade1 = [ 135.000, gremlin_multi_grenade2 ] { self.effects = (self.effects | EF_MUZZLEFLASH); MonsterGrenadeSound(); self.attack_speed = MonsterGrenadeSpeed(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
-void () gremlin_multi_grenade2 = [ 136.000, gremlin_multi_grenade3 ] {self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
-void () gremlin_multi_grenade3 = [ 137.000, gremlin_multi_grenade4 ] {self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
-void () gremlin_multi_grenade4 = [ 138.000, gremlin_multi_grenade5 ] {MonsterFireGrenade(self.origin, self.enemy.origin);self.currentammo = self.currentammo - 1; self.ammo_multi_rockets = self.ammo_multi_rockets -1;};
-void () gremlin_multi_grenade5 = [ 139.000, gremlin_multi_grenade6 ] {};
-void () gremlin_multi_grenade6 = [ 140.000, gremlin_run1 ] {};
+void() gremlin_multi_grenade1 = [ 135.000, gremlin_multi_grenade2 ] { self.effects = (self.effects | EF_MUZZLEFLASH); MonsterGrenadeSound(); self.attack_speed = MonsterGrenadeSpeed(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
+void() gremlin_multi_grenade2 = [ 136.000, gremlin_multi_grenade3 ] {self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
+void() gremlin_multi_grenade3 = [ 137.000, gremlin_multi_grenade4 ] {self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, self.attack_speed);};
+void() gremlin_multi_grenade4 = [ 138.000, gremlin_multi_grenade5 ] {MonsterFireGrenade(self.origin, self.enemy.origin);self.currentammo = self.currentammo - 1; self.ammo_multi_rockets = self.ammo_multi_rockets -1;};
+void() gremlin_multi_grenade5 = [ 139.000, gremlin_multi_grenade6 ] {};
+void() gremlin_multi_grenade6 = [ 140.000, gremlin_run1 ] {};
 
-void () GremlinFireRocket = {
+void() GremlinFireRocket = {
 	local vector dir;
 
 	dir = normalize ((self.enemy.origin - self.origin));
 	self.v_angle = vectoangles (dir);
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	dir = ((dir + ((crandom () * 0.100) * v_right)) + ((crandom () * 0.100) * v_up));
 	dir = normalize (dir);
 	sound (self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
 	self.currentammo = self.currentammo - 1;
 	self.ammo_rockets = self.ammo_rockets - 1;
-	Launch_Missile ((self.origin + '0 0 16'), dir, '0 0 0', CT_PROJ_ARMY, SPEED_RLPLAYER);
+	launch_projectile((self.origin + '0 0 16'),dir,NO_SPIN,CT_PROJ_ARMY,SPEED_RLPLAYER);
 };
 
-void () gremlin_rocket1 = [ 135.000, gremlin_rocket2 ] {};
-void () gremlin_rocket2 = [ 136.000, gremlin_rocket3 ] {};
-void () gremlin_rocket3 = [ 137.000, gremlin_rocket4 ] {};
-void () gremlin_rocket4 = [ 138.000, gremlin_rocket5 ] {GremlinFireRocket();};
-void () gremlin_rocket5 = [ 139.000, gremlin_rocket6 ] {};
-void () gremlin_rocket6 = [ 140.000, gremlin_run1 ] {};
+void() gremlin_rocket1 = [ 135.000, gremlin_rocket2 ] {};
+void() gremlin_rocket2 = [ 136.000, gremlin_rocket3 ] {};
+void() gremlin_rocket3 = [ 137.000, gremlin_rocket4 ] {};
+void() gremlin_rocket4 = [ 138.000, gremlin_rocket5 ] {GremlinFireRocket();};
+void() gremlin_rocket5 = [ 139.000, gremlin_rocket6 ] {};
+void() gremlin_rocket6 = [ 140.000, gremlin_run1 ] {};
 
-void () GremlinFireMultiRocket = {
+void() GremlinFireMultiRocket = {
 	local vector dir;
 
 	dir = normalize ((self.enemy.origin - self.origin));
 	self.v_angle = vectoangles (dir);
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	dir = ((dir + ((crandom () * 0.100) * v_right)) + ((crandom () * 0.100) * v_up));
 	dir = normalize (dir);
 	sound (self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
@@ -672,32 +672,32 @@ void () GremlinFireMultiRocket = {
 	MultiRocketLaunch (MOVETYPE_BOUNCE,TRUE);
 };
 
-void () gremlin_multi_rocket1 = [ 135.000, gremlin_multi_rocket2 ] {};
-void () gremlin_multi_rocket2 = [ 136.000, gremlin_multi_rocket3 ] {};
-void () gremlin_multi_rocket3 = [ 137.000, gremlin_multi_rocket4 ] {};
-void () gremlin_multi_rocket4 = [ 138.000, gremlin_multi_rocket5 ] {GremlinFireMultiRocket();};
-void () gremlin_multi_rocket5 = [ 139.000, gremlin_multi_rocket6 ] {};
-void () gremlin_multi_rocket6 = [ 140.000, gremlin_run1 ] {};
+void() gremlin_multi_rocket1 = [ 135.000, gremlin_multi_rocket2 ] {};
+void() gremlin_multi_rocket2 = [ 136.000, gremlin_multi_rocket3 ] {};
+void() gremlin_multi_rocket3 = [ 137.000, gremlin_multi_rocket4 ] {};
+void() gremlin_multi_rocket4 = [ 138.000, gremlin_multi_rocket5 ] {GremlinFireMultiRocket();};
+void() gremlin_multi_rocket5 = [ 139.000, gremlin_multi_rocket6 ] {};
+void() gremlin_multi_rocket6 = [ 140.000, gremlin_run1 ] {};
 
-void () GremlinFirePlasma = {
+void() GremlinFirePlasma = {
 	local vector org, dir;
 
 	dir = normalize ((self.enemy.origin - self.origin));
 	self.v_angle = vectoangles (dir);
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	dir = ((dir + ((crandom () * 0.100) * v_right)) + ((crandom () * 0.100) * v_up));
 	dir = normalize (dir);
 	org = self.origin + '0.000 0.000 16.000';
 	sound (self, CHAN_WEAPON, "ad171/weapons/plasma_fire.wav", 1, ATTN_NORM);
 	self.currentammo = self.currentammo - 1;
 	self.ammo_cells = self.ammo_cells - 1;
-	launch_projectile (org, dir, CT_PROJ_PLASMA, SPEED_PLAYPLASMA);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA,SPEED_PLAYPLASMA);
 };
 
-void () gremlin_plasma1 = [135.000, gremlin_plasma2] {GremlinFirePlasma();};
-void () gremlin_plasma2 = [135.000, gremlin_run1] {GremlinFirePlasma();};
+void() gremlin_plasma1 = [135.000, gremlin_plasma2] {GremlinFirePlasma();};
+void() gremlin_plasma2 = [135.000, gremlin_run1] {GremlinFirePlasma();};
 
-void () GremlinFirePlasmaGun = {
+void() GremlinFirePlasmaGun = {
 	local vector dir;
 	local entity missile;
 
@@ -705,7 +705,7 @@ void () GremlinFirePlasmaGun = {
 
 	dir = normalize ((self.enemy.origin - self.origin));
 	self.v_angle = vectoangles (dir);
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	dir = ((dir + ((crandom () * 0.100) * v_right)) + ((crandom () * 0.100) * v_up));
 	dir = normalize (dir);
 	sound (missile,CHAN_WEAPON,"rogue/plasma/flight.wav",TRUE,ATTN_NORM);
@@ -718,7 +718,7 @@ void () GremlinFirePlasmaGun = {
 	missile.movetype = MOVETYPE_FLYMISSILE;
 	missile.solid = SOLID_BBOX;
 	missile.classname = "plasma";
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	missile.velocity = aim (self,1250);
 	missile.velocity = (missile.velocity * 1250);
 	missile.avelocity = '300.000 300.000 300.000';
@@ -733,16 +733,16 @@ void () GremlinFirePlasmaGun = {
 	self.attack_finished = time + 0.8;
 };
 
-void () gremlin_plasmalight1 = [135.000, gremlin_run1] {GremlinFirePlasmaGun();};
+void() gremlin_plasmalight1 = [135.000, gremlin_run1] {GremlinFirePlasmaGun();};
 
-void () GremlinFireCrossbow = {
+void() GremlinFireCrossbow = {
 	local vector org, dir;
 
 	self.currentammo = self.ammo_bolts = self.ammo_bolts - 1;
 
 	dir = normalize ((self.enemy.origin - self.origin));
 	self.v_angle = vectoangles (dir);
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	dir = ((dir + ((crandom () * 0.100) * v_right)) + ((crandom () * 0.100) * v_up));
 	dir = normalize (dir);
 	sound (self, CHAN_WEAPON, "ad171/weapons/crossbow_fire.wav", 1, ATTN_NORM);
@@ -750,66 +750,66 @@ void () GremlinFireCrossbow = {
 
 	org = self.origin + '0 0 16';
 	if (self.ammo_poison > 0) {
-		launch_projectile (org, dir, CT_PROJ_BOLT2, SPEED_DCROSS + (skill*SPEED_BOLTSKILL));
+		launch_projectile(org,dir,NO_SPIN,CT_PROJ_BOLT2,SPEED_DCROSS + (skill*SPEED_BOLTSKILL));
 	} else {
-		launch_projectile (org, dir, CT_PROJ_BOLT1, SPEED_DCROSS + (skill*SPEED_BOLTSKILL));
+		launch_projectile(org,dir,NO_SPIN,CT_PROJ_BOLT1,SPEED_DCROSS + (skill*SPEED_BOLTSKILL));
 	}
 };
 
-void () gremlin_crossbow1 = [ 135.000, gremlin_crossbow2 ] {};
-void () gremlin_crossbow2 = [ 136.000, gremlin_crossbow3 ] {};
-void () gremlin_crossbow3 = [ 137.000, gremlin_crossbow4 ] {};
-void () gremlin_crossbow4 = [ 138.000, gremlin_crossbow5 ] { GremlinFireCrossbow(); };
-void () gremlin_crossbow5 = [ 139.000, gremlin_crossbow6 ] {};
-void () gremlin_crossbow6 = [ 140.000, gremlin_run1 ] {};
+void() gremlin_crossbow1 = [ 135.000, gremlin_crossbow2 ] {};
+void() gremlin_crossbow2 = [ 136.000, gremlin_crossbow3 ] {};
+void() gremlin_crossbow3 = [ 137.000, gremlin_crossbow4 ] {};
+void() gremlin_crossbow4 = [ 138.000, gremlin_crossbow5 ] { GremlinFireCrossbow(); };
+void() gremlin_crossbow5 = [ 139.000, gremlin_crossbow6 ] {};
+void() gremlin_crossbow6 = [ 140.000, gremlin_run1 ] {};
 
-void () gremlin_lunge1 = [ 124.000, gremlin_lunge2 ] { ai_charge (FALSE); };
-void () gremlin_lunge2 = [ 125.000, gremlin_lunge3 ] { ai_charge (FALSE); };
-void () gremlin_lunge3 = [ 126.000, gremlin_lunge4 ] { ai_charge (FALSE); };
-void () gremlin_lunge4 = [ 127.000, gremlin_lunge5 ] { ai_charge (FALSE); };
-void () gremlin_lunge5 = [ 128.000, gremlin_lunge6 ] { ai_charge (FALSE); };
-void () gremlin_lunge6 = [ 129.000, gremlin_lunge7 ] { ai_charge (FALSE); };
-void () gremlin_lunge7 = [ 130.000, gremlin_lunge8 ] { ai_charge (18.000); }; // Was 15, -Qmaster
-void () gremlin_lunge8 = [ 131.000, gremlin_lunge9 ] { ai_charge (1); Gremlin_Melee (FALSE); }; // Was 0, -Qmaster
-void () gremlin_lunge9 = [ 132.000, gremlin_lunge10 ] { ai_charge (FALSE); };
-void () gremlin_lunge10 = [ 133.000, gremlin_lunge11 ] { ai_charge (FALSE); };
-void () gremlin_lunge11 = [ 134.000, gremlin_run1 ] { ai_charge (FALSE); };
+void() gremlin_lunge1 = [ 124.000, gremlin_lunge2 ] { ai_charge (FALSE); };
+void() gremlin_lunge2 = [ 125.000, gremlin_lunge3 ] { ai_charge (FALSE); };
+void() gremlin_lunge3 = [ 126.000, gremlin_lunge4 ] { ai_charge (FALSE); };
+void() gremlin_lunge4 = [ 127.000, gremlin_lunge5 ] { ai_charge (FALSE); };
+void() gremlin_lunge5 = [ 128.000, gremlin_lunge6 ] { ai_charge (FALSE); };
+void() gremlin_lunge6 = [ 129.000, gremlin_lunge7 ] { ai_charge (FALSE); };
+void() gremlin_lunge7 = [ 130.000, gremlin_lunge8 ] { ai_charge (18.000); }; // Was 15, -Qmaster
+void() gremlin_lunge8 = [ 131.000, gremlin_lunge9 ] { ai_charge (1); Gremlin_Melee (FALSE); }; // Was 0, -Qmaster
+void() gremlin_lunge9 = [ 132.000, gremlin_lunge10 ] { ai_charge (FALSE); };
+void() gremlin_lunge10 = [ 133.000, gremlin_lunge11 ] { ai_charge (FALSE); };
+void() gremlin_lunge11 = [ 134.000, gremlin_run1 ] { ai_charge (FALSE); };
 
-void () gremlin_claw1 = [ 60.000, gremlin_claw2 ] { ai_charge (FALSE); };
-void () gremlin_claw2 = [ 61.000, gremlin_claw3 ] { ai_charge (FALSE); };
-void () gremlin_claw3 = [ 62.000, gremlin_claw4 ] { ai_charge (FALSE); };
-void () gremlin_claw4 = [ 63.000, gremlin_claw5 ] { ai_charge (FALSE); };
-void () gremlin_claw5 = [ 64.000, gremlin_claw6 ] { ai_charge (FALSE); };
-void () gremlin_claw6 = [ 65.000, gremlin_claw7 ] { ai_charge (FALSE); Gremlin_Melee (200); };
-void () gremlin_claw7 = [ 66.000, gremlin_claw8 ] { ai_charge (15.000); };
-void () gremlin_claw8 = [ 67.000, gremlin_claw9 ] { ai_charge (FALSE); };
-void () gremlin_claw9 = [ 68.000, gremlin_claw10 ] { ai_charge (FALSE); };
-void () gremlin_claw10 = [ 69.000, gremlin_claw11 ] { ai_charge (FALSE); };
-void () gremlin_claw11 = [ 70.000, gremlin_run1 ] { ai_charge (FALSE); };
+void() gremlin_claw1 = [ 60.000, gremlin_claw2 ] { ai_charge (FALSE); };
+void() gremlin_claw2 = [ 61.000, gremlin_claw3 ] { ai_charge (FALSE); };
+void() gremlin_claw3 = [ 62.000, gremlin_claw4 ] { ai_charge (FALSE); };
+void() gremlin_claw4 = [ 63.000, gremlin_claw5 ] { ai_charge (FALSE); };
+void() gremlin_claw5 = [ 64.000, gremlin_claw6 ] { ai_charge (FALSE); };
+void() gremlin_claw6 = [ 65.000, gremlin_claw7 ] { ai_charge (FALSE); Gremlin_Melee (200); };
+void() gremlin_claw7 = [ 66.000, gremlin_claw8 ] { ai_charge (15.000); };
+void() gremlin_claw8 = [ 67.000, gremlin_claw9 ] { ai_charge (FALSE); };
+void() gremlin_claw9 = [ 68.000, gremlin_claw10 ] { ai_charge (FALSE); };
+void() gremlin_claw10 = [ 69.000, gremlin_claw11 ] { ai_charge (FALSE); };
+void() gremlin_claw11 = [ 70.000, gremlin_run1 ] { ai_charge (FALSE); };
 
-void () gremlin_gorge1 = [ 71.000, gremlin_gorge2 ] { ai_charge (TRUE); };
-void () gremlin_gorge2 = [ 72.000, gremlin_gorge3 ] { ai_charge (TRUE); };
-void () gremlin_gorge3 = [ 73.000, gremlin_gorge4 ] { ai_charge (FL_SWIM); };
-void () gremlin_gorge4 = [ 74.000, gremlin_gorge5 ] { ai_charge (FALSE); };
-void () gremlin_gorge5 = [ 75.000, gremlin_gorge6 ] { ai_charge (FALSE); };
-void () gremlin_gorge6 = [ 76.000, gremlin_gorge7 ] { ai_charge (FALSE); Gremlin_Gorge (200); };
-void () gremlin_gorge7 = [ 77.000, gremlin_gorge8 ] { ai_charge (FALSE); };
-void () gremlin_gorge8 = [ 78.000, gremlin_gorge9 ] { ai_charge (FALSE); Gremlin_Gorge (-200.000); };
-void () gremlin_gorge9 = [ 79.000, gremlin_gorge10 ] { ai_charge (FALSE); };
-void () gremlin_gorge10 = [ 80.000, gremlin_gorge11 ] { ai_charge (FALSE); };
-void () gremlin_gorge11 = [ 81.000, gremlin_gorge12 ] { ai_charge (FALSE); };
-void () gremlin_gorge12 = [ 82.000, gremlin_gorge13 ] { ai_charge (FALSE); };
-void () gremlin_gorge13 = [ 83.000, gremlin_gorge1 ] { ai_charge (FALSE); };
+void() gremlin_gorge1 = [ 71.000, gremlin_gorge2 ] { ai_charge (TRUE); };
+void() gremlin_gorge2 = [ 72.000, gremlin_gorge3 ] { ai_charge (TRUE); };
+void() gremlin_gorge3 = [ 73.000, gremlin_gorge4 ] { ai_charge (FL_SWIM); };
+void() gremlin_gorge4 = [ 74.000, gremlin_gorge5 ] { ai_charge (FALSE); };
+void() gremlin_gorge5 = [ 75.000, gremlin_gorge6 ] { ai_charge (FALSE); };
+void() gremlin_gorge6 = [ 76.000, gremlin_gorge7 ] { ai_charge (FALSE); Gremlin_Gorge (200); };
+void() gremlin_gorge7 = [ 77.000, gremlin_gorge8 ] { ai_charge (FALSE); };
+void() gremlin_gorge8 = [ 78.000, gremlin_gorge9 ] { ai_charge (FALSE); Gremlin_Gorge (-200.000); };
+void() gremlin_gorge9 = [ 79.000, gremlin_gorge10 ] { ai_charge (FALSE); };
+void() gremlin_gorge10 = [ 80.000, gremlin_gorge11 ] { ai_charge (FALSE); };
+void() gremlin_gorge11 = [ 81.000, gremlin_gorge12 ] { ai_charge (FALSE); };
+void() gremlin_gorge12 = [ 82.000, gremlin_gorge13 ] { ai_charge (FALSE); };
+void() gremlin_gorge13 = [ 83.000, gremlin_gorge1 ] { ai_charge (FALSE); };
 
-void () gremlin_look1 = [ 90.000, gremlin_look2 ] { self.nextthink = (time + 0.200); };
-void () gremlin_look2 = [ 91.000, gremlin_look3 ] { self.nextthink = (time + 0.200); };
-void () gremlin_look3 = [ 92.000, gremlin_look4 ] { self.nextthink = (time + 0.200); };
-void () gremlin_look4 = [ 93.000, gremlin_look5 ] { self.nextthink = (time + 0.200); };
-void () gremlin_look5 = [ 94.000, gremlin_look6 ] { self.nextthink = (time + 0.200); };
-void () gremlin_look6 = [ 95.000, gremlin_look7 ] { self.nextthink = (time + 0.200); };
-void () gremlin_look7 = [ 96.000, gremlin_look8 ] { self.nextthink = (time + 0.200); };
-void () gremlin_look8 = [ 97.000, gremlin_look9 ] { self.nextthink = (time + 0.200); };
-void () gremlin_look9 = [ 98.000, gremlin_run1 ] {
+void() gremlin_look1 = [ 90.000, gremlin_look2 ] { self.nextthink = (time + 0.200); };
+void() gremlin_look2 = [ 91.000, gremlin_look3 ] { self.nextthink = (time + 0.200); };
+void() gremlin_look3 = [ 92.000, gremlin_look4 ] { self.nextthink = (time + 0.200); };
+void() gremlin_look4 = [ 93.000, gremlin_look5 ] { self.nextthink = (time + 0.200); };
+void() gremlin_look5 = [ 94.000, gremlin_look6 ] { self.nextthink = (time + 0.200); };
+void() gremlin_look6 = [ 95.000, gremlin_look7 ] { self.nextthink = (time + 0.200); };
+void() gremlin_look7 = [ 96.000, gremlin_look8 ] { self.nextthink = (time + 0.200); };
+void() gremlin_look8 = [ 97.000, gremlin_look9 ] { self.nextthink = (time + 0.200); };
+void() gremlin_look9 = [ 98.000, gremlin_run1 ] {
    if ( (self.oldenemy.health > FALSE) ) {
       self.enemy = self.oldenemy;
       HuntTarget ();
@@ -822,26 +822,26 @@ void () gremlin_look9 = [ 98.000, gremlin_run1 ] {
    }
 };
 
-void () gremlin_glook1 = [ 141.000, gremlin_glook2 ] {};
-void () gremlin_glook2 = [ 142.000, gremlin_glook3 ] {};
-void () gremlin_glook3 = [ 143.000, gremlin_glook4 ] {};
-void () gremlin_glook4 = [ 144.000, gremlin_glook5 ] {};
-void () gremlin_glook5 = [ 145.000, gremlin_glook6 ] {};
-void () gremlin_glook6 = [ 146.000, gremlin_glook7 ] {};
-void () gremlin_glook7 = [ 147.000, gremlin_glook8 ] {};
-void () gremlin_glook8 = [ 148.000, gremlin_glook9 ] {};
-void () gremlin_glook9 = [ 149.000, gremlin_glook10 ] {};
-void () gremlin_glook10 = [ 150.000, gremlin_glook11 ] {};
-void () gremlin_glook11 = [ 151.000, gremlin_glook12 ] {};
-void () gremlin_glook12 = [ 152.000, gremlin_glook13 ] {};
-void () gremlin_glook13 = [ 153.000, gremlin_glook14 ] {};
-void () gremlin_glook14 = [ 154.000, gremlin_glook15 ] {};
-void () gremlin_glook15 = [ 155.000, gremlin_glook16 ] {};
-void () gremlin_glook16 = [ 156.000, gremlin_glook17 ] {};
-void () gremlin_glook17 = [ 157.000, gremlin_glook18 ] {};
-void () gremlin_glook18 = [ 158.000, gremlin_glook19 ] {};
-void () gremlin_glook19 = [ 159.000, gremlin_glook20 ] {};
-void () gremlin_glook20 = [ 160.000, gremlin_glook20 ] {
+void() gremlin_glook1 = [ 141.000, gremlin_glook2 ] {};
+void() gremlin_glook2 = [ 142.000, gremlin_glook3 ] {};
+void() gremlin_glook3 = [ 143.000, gremlin_glook4 ] {};
+void() gremlin_glook4 = [ 144.000, gremlin_glook5 ] {};
+void() gremlin_glook5 = [ 145.000, gremlin_glook6 ] {};
+void() gremlin_glook6 = [ 146.000, gremlin_glook7 ] {};
+void() gremlin_glook7 = [ 147.000, gremlin_glook8 ] {};
+void() gremlin_glook8 = [ 148.000, gremlin_glook9 ] {};
+void() gremlin_glook9 = [ 149.000, gremlin_glook10 ] {};
+void() gremlin_glook10 = [ 150.000, gremlin_glook11 ] {};
+void() gremlin_glook11 = [ 151.000, gremlin_glook12 ] {};
+void() gremlin_glook12 = [ 152.000, gremlin_glook13 ] {};
+void() gremlin_glook13 = [ 153.000, gremlin_glook14 ] {};
+void() gremlin_glook14 = [ 154.000, gremlin_glook15 ] {};
+void() gremlin_glook15 = [ 155.000, gremlin_glook16 ] {};
+void() gremlin_glook16 = [ 156.000, gremlin_glook17 ] {};
+void() gremlin_glook17 = [ 157.000, gremlin_glook18 ] {};
+void() gremlin_glook18 = [ 158.000, gremlin_glook19 ] {};
+void() gremlin_glook19 = [ 159.000, gremlin_glook20 ] {};
+void() gremlin_glook20 = [ 160.000, gremlin_glook20 ] {
    DropBackpack ();
    self.stoleweapon = FALSE;
    if ( (self.oldenemy.health > FALSE) ) {
@@ -856,15 +856,15 @@ void () gremlin_glook20 = [ 160.000, gremlin_glook20 ] {
    }
 };
 
-void () gremlin_pain1 = [ 100.000, gremlin_pain2 ] { ai_back (MOVETYPE_STEP); };
-void () gremlin_pain2 = [ 101.000, gremlin_pain3 ] { ai_back (MOVETYPE_STEP); };
-void () gremlin_pain3 = [ 102.000, gremlin_pain4 ] { ai_back (FL_SWIM); };
-void () gremlin_pain4 = [ 103.000, gremlin_run1 ] {};
-void () gremlin_gunpain1 = [ 161.000, gremlin_gunpain2 ] { ai_back (MOVETYPE_STEP); };
-void () gremlin_gunpain2 = [ 162.000, gremlin_gunpain3 ] { ai_back (FL_SWIM); };
-void () gremlin_gunpain3 = [ 163.000, gremlin_run1 ] {};
+void() gremlin_pain1 = [ 100.000, gremlin_pain2 ] { ai_back (MOVETYPE_STEP); };
+void() gremlin_pain2 = [ 101.000, gremlin_pain3 ] { ai_back (MOVETYPE_STEP); };
+void() gremlin_pain3 = [ 102.000, gremlin_pain4 ] { ai_back (FL_SWIM); };
+void() gremlin_pain4 = [ 103.000, gremlin_run1 ] {};
+void() gremlin_gunpain1 = [ 161.000, gremlin_gunpain2 ] { ai_back (MOVETYPE_STEP); };
+void() gremlin_gunpain2 = [ 162.000, gremlin_gunpain3 ] { ai_back (FL_SWIM); };
+void() gremlin_gunpain3 = [ 163.000, gremlin_run1 ] {};
 
-void (entity inflictor, entity attacker, float damage) gremlin_pain = {
+void(entity inflictor, entity attacker, float damage) gremlin_pain = {
    local float r;
 
    if ( (random () < 0.800) ) {
@@ -894,29 +894,29 @@ void (entity inflictor, entity attacker, float damage) gremlin_pain = {
    }
 };
 
-void () gremlin_spawn1 = [ 84.000, gremlin_spawn2 ] { self.nextthink = (time + 0.300); self.th_pain = SUB_Null_pain; };
-void () gremlin_spawn2 = [ 85.000, gremlin_spawn3 ] { self.nextthink = (time + 0.300); };
-void () gremlin_spawn3 = [ 86.000, gremlin_spawn4 ] { self.nextthink = (time + 0.300); };
-void () gremlin_spawn4 = [ 87.000, gremlin_spawn5 ] { self.nextthink = (time + 0.300); };
-void () gremlin_spawn5 = [ 88.000, gremlin_spawn6 ] { self.nextthink = (time + 0.300); };
-void () gremlin_spawn6 = [ 89.000, gremlin_run1 ] { self.th_pain = gremlin_pain; };
+void() gremlin_spawn1 = [ 84.000, gremlin_spawn2 ] { self.nextthink = (time + 0.300); self.th_pain = SUB_Null_pain; };
+void() gremlin_spawn2 = [ 85.000, gremlin_spawn3 ] { self.nextthink = (time + 0.300); };
+void() gremlin_spawn3 = [ 86.000, gremlin_spawn4 ] { self.nextthink = (time + 0.300); };
+void() gremlin_spawn4 = [ 87.000, gremlin_spawn5 ] { self.nextthink = (time + 0.300); };
+void() gremlin_spawn5 = [ 88.000, gremlin_spawn6 ] { self.nextthink = (time + 0.300); };
+void() gremlin_spawn6 = [ 89.000, gremlin_run1 ] { self.th_pain = gremlin_pain; };
 
-void () gremlin_die1 = [ 104.000, gremlin_die2 ] { sound (self,CHAN_VOICE,"hipnotic/grem/death.wav",TRUE,ATTN_NORM); };
-void () gremlin_die2 = [ 105.000, gremlin_die3 ] { ai_forward (FL_SWIM); };
-void () gremlin_die3 = [ 106.000, gremlin_die4 ] { ai_forward (TRUE); };
-void () gremlin_die4 = [ 107.000, gremlin_die5 ] { ai_forward (FL_SWIM); };
-void () gremlin_die5 = [ 108.000, gremlin_die6 ] { ai_forward (TRUE); };
-void () gremlin_die6 = [ 109.000, gremlin_die7 ] { self.solid = SOLID_NOT; };
-void () gremlin_die7 = [ 110.000, gremlin_die8 ] { ai_forward (FL_SWIM); };
-void () gremlin_die8 = [ 111.000, gremlin_die9 ] { ai_forward (TRUE); };
-void () gremlin_die9 = [ 112.000, gremlin_die10 ] { ai_forward (FL_SWIM);};
-void () gremlin_die10 = [ 113.000, gremlin_die11 ] { ai_forward (TRUE); };
-void () gremlin_die11 = [ 114.000, gremlin_die12 ] { ai_forward (FL_SWIM); };
-void () gremlin_die12 = [ 115.000, gremlin_die12 ] {};
+void() gremlin_die1 = [ 104.000, gremlin_die2 ] { sound (self,CHAN_VOICE,"hipnotic/grem/death.wav",TRUE,ATTN_NORM); };
+void() gremlin_die2 = [ 105.000, gremlin_die3 ] { ai_forward (FL_SWIM); };
+void() gremlin_die3 = [ 106.000, gremlin_die4 ] { ai_forward (TRUE); };
+void() gremlin_die4 = [ 107.000, gremlin_die5 ] { ai_forward (FL_SWIM); };
+void() gremlin_die5 = [ 108.000, gremlin_die6 ] { ai_forward (TRUE); };
+void() gremlin_die6 = [ 109.000, gremlin_die7 ] { self.solid = SOLID_NOT; };
+void() gremlin_die7 = [ 110.000, gremlin_die8 ] { ai_forward (FL_SWIM); };
+void() gremlin_die8 = [ 111.000, gremlin_die9 ] { ai_forward (TRUE); };
+void() gremlin_die9 = [ 112.000, gremlin_die10 ] { ai_forward (FL_SWIM);};
+void() gremlin_die10 = [ 113.000, gremlin_die11 ] { ai_forward (TRUE); };
+void() gremlin_die11 = [ 114.000, gremlin_die12 ] { ai_forward (FL_SWIM); };
+void() gremlin_die12 = [ 115.000, gremlin_die12 ] {};
 
-void () gremlin_flip1 = [ 116.000, gremlin_flip2 ] {
+void() gremlin_flip1 = [ 116.000, gremlin_flip2 ] {
    ai_face ();
-   makevectors (self.angles);
+   makevectors(self.angles);
    self.origin_z = (self.origin_z + TRUE);
    self.velocity = ('0.000 0.000 350.000' - (v_forward * 200));
    if ( (self.flags & FL_ONGROUND) )
@@ -924,15 +924,15 @@ void () gremlin_flip1 = [ 116.000, gremlin_flip2 ] {
 
    sound (self,CHAN_VOICE,"hipnotic/grem/death.wav",TRUE,ATTN_NORM);
 };
-void () gremlin_flip2 = [ 117.000, gremlin_flip3 ] { ai_face (); };
-void () gremlin_flip3 = [ 118.000, gremlin_flip4 ] {};
-void () gremlin_flip4 = [ 119.000, gremlin_flip5 ] {};
-void () gremlin_flip5 = [ 120.000, gremlin_flip6 ] {};
-void () gremlin_flip6 = [ 121.000, gremlin_flip7 ] { self.touch = Gremlin_FlipTouch; self.bodyonflr = MON_ONFLR;};
-void () gremlin_flip7 = [ 122.000, gremlin_flip8 ] { self.nextthink = (time + MOVETYPE_WALK); };
-void () gremlin_flip8 = [ 123.000, gremlin_flip8 ] { self.solid = SOLID_NOT; };
+void() gremlin_flip2 = [ 117.000, gremlin_flip3 ] { ai_face (); };
+void() gremlin_flip3 = [ 118.000, gremlin_flip4 ] {};
+void() gremlin_flip4 = [ 119.000, gremlin_flip5 ] {};
+void() gremlin_flip5 = [ 120.000, gremlin_flip6 ] {};
+void() gremlin_flip6 = [ 121.000, gremlin_flip7 ] { self.touch = Gremlin_FlipTouch; self.bodyonflr = MON_ONFLR;};
+void() gremlin_flip7 = [ 122.000, gremlin_flip8 ] { self.nextthink = (time + MOVETYPE_WALK); };
+void() gremlin_flip8 = [ 123.000, gremlin_flip8 ] { self.solid = SOLID_NOT; };
 
-void () gremlin_die = {
+void() gremlin_die = {
    local vector vec;
    local float dot;
 
@@ -940,7 +940,7 @@ void () gremlin_die = {
       DropBackpack ();
       self.stoleweapon = FALSE;
    }
-   makevectors (self.angles);
+   makevectors(self.angles);
    vec = normalize ((damage_attacker.origin - self.origin));
    dot = (vec * v_forward);
    if ( (self.health < -35.000) ) {
@@ -960,7 +960,7 @@ void () gremlin_die = {
    gremlin_die1 ();
 };
 
-void () Gremlin_MeleeAttack = {
+void() Gremlin_MeleeAttack = {
    local float num;
 
    if (self.gorging) {
@@ -1120,7 +1120,7 @@ float () GremlinWeaponAttack = {
 	return (TRUE);
 };
 
-void () Gremlin_MissileAttack = {
+void() Gremlin_MissileAttack = {
    if ( self.stoleweapon ) {
       if ( GremlinWeaponAttack () ) {
          return;
@@ -1136,7 +1136,7 @@ void () Gremlin_MissileAttack = {
 
 
 
-void () monster_gremlin_precache = {
+void() monster_gremlin_precache = {
    precache_model ("progs/hipnotic/grem.mdl");
    precache_model ("progs/hipnotic/h_grem.mdl");
    precache_sound ("hipnotic/grem/death.wav");
@@ -1153,7 +1153,7 @@ void () monster_gremlin_precache = {
 
 void() GremlinCheckAttack;
 
-void () gremlin_setup = {
+void() gremlin_setup = {
    self.mdl = "progs/hipnotic/grem.mdl";
    self.headmdl = "progs/hipnotic/h_grem.mdl";
 	self.hello_sound = "hipnotic/grem/idle.wav";
@@ -1183,14 +1183,14 @@ void () gremlin_setup = {
    self.th_pain = gremlin_pain;
    self.takedamage = DAMAGE_AIM;
    Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-   if(!self.classtype) self.classtype = CT_MONGREMLIN;
+   if (!self.classtype) self.classtype = CT_MONGREMLIN;
    if (!self.classgroup) self.classgroup = CG_DOG;
    self.classmove = MON_MOVEWALK;
 	if (self.deathstring == "")  self.deathstring = " was outsmarted by a Gremlin\n";
    monster_start();
 };
 
-void () monster_gremlin = {
+void() monster_gremlin = {
 	if (monster_checkrandomizer() == TRUE) return; // Check for any random monster setups
 	if (monster_checkspawn() == TRUE) return; // Check all spawn exceptions (monsters.qc)
 
@@ -1199,7 +1199,7 @@ void () monster_gremlin = {
    gremlin_setup();
 };
 
-void (float side) Gremlin_Melee = {
+void(float side) Gremlin_Melee = {
    local float ldmg;
    local vector delta;
 
@@ -1218,7 +1218,7 @@ void (float side) Gremlin_Melee = {
 };
 
 
-void (entity targ, entity inflictor, entity attacker, float damage) Gremlin_Damage_Corpse = {
+void(entity targ, entity inflictor, entity attacker, float damage) Gremlin_Damage_Corpse = {
    if ( (targ.flags & FL_GODMODE) )
       return ;
 
@@ -1236,7 +1236,7 @@ void (entity targ, entity inflictor, entity attacker, float damage) Gremlin_Dama
 };
 
 
-void () Gremlin_Split = {
+void() Gremlin_Split = {
    local entity grem;
    local entity temp;
    local entity head;
@@ -1250,7 +1250,7 @@ void () Gremlin_Split = {
    c = FALSE;
    ang = self.angles;
    while ( (done == FALSE) ) {
-      makevectors (ang);
+      makevectors(ang);
       pos = (self.origin + (80.000 * v_forward));
       head = findradius (pos,35.000);
       proceed = TRUE;
@@ -1294,7 +1294,7 @@ void () Gremlin_Split = {
    self = temp;
 };
 
-void (float side) Gremlin_Gorge = {
+void(float side) Gremlin_Gorge = {
    local float ldmg;
    local vector delta;
    local entity temp;
@@ -1322,7 +1322,7 @@ void (float side) Gremlin_Gorge = {
    }
 };
 
-void () Gremlin_JumpTouch = {
+void() Gremlin_JumpTouch = {
    if ( (self.health <= FALSE) ) return ;
 
    if ( !checkbottom (self) ) {
@@ -1338,7 +1338,7 @@ void () Gremlin_JumpTouch = {
    self.nextthink = (time + 0.100);
 };
 
-void () Gremlin_FlipTouch = {
+void() Gremlin_FlipTouch = {
    if ( !checkbottom (self) ) {
       if ( (self.flags & FL_ONGROUND) ) {
          self.touch = SUB_Null;

@@ -41,7 +41,7 @@ void() carniv_projectile_rock_touch = {
 	local vector dir, vel, detonate;
 	detonate = self.origin;
 	detonate = detonate - 10 * normalize(self.velocity);
- 	// makevectors (self.angles);
+ 	// makevectors(self.angles);
 	// dir = v_forward;
 	dir = self.enemy.origin - self.origin;		// for pushback effect
 	dir = normalize(dir);
@@ -143,7 +143,7 @@ void() carniv_projectile = {
 	missile.movetype = MOVETYPE_FLYMISSILE;
 	missile.solid = SOLID_BBOX;
 
-	makevectors (self.angles);
+	makevectors(self.angles);
 	setorigin (missile, self.origin + v_right * -12 + v_up * 8 + v_forward * 7);
 
 	if (random() <= 0.6) {

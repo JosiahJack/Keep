@@ -190,10 +190,10 @@ void() army_fire_rocket = {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "quoth/soldier/rocket.wav", 1, ATTN_NORM);	
 	self.attack_speed = 250;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = normalize(self.attack_track - org);
-	Launch_Missile (org, dir, '0 0 0', CT_PROJ_ARMY, self.attack_speed);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_ARMY,self.attack_speed);
 };
 
 void() army_rocket_think = {
@@ -264,10 +264,10 @@ void() army_plasma_fire = {
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "ad171/weapons/plasma_fire.wav", 1, ATTN_NORM);
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	vec = normalize(self.enemy.origin - self.origin);
-	launch_projectile(org, vec, CT_PROJ_PLASMA, SPEED_PLASMA);
+	launch_projectile(org,vec,NO_SPIN,CT_PROJ_PLASMA,SPEED_PLASMA);
 };
 
 void()	army_plasma_atk1 =[	$shoot1, army_plasma_atk2	] {self.pain_finished = time + 1.3; sound (self, CHAN_WEAPON, "ad171/enforcer/elim_pg_load.wav", 1, ATTN_NORM);};
@@ -312,7 +312,7 @@ void() army_nailfire = {
 	if (self.classtype == CT_MONARMYCYBORG || self.classtype == CT_MONSUPERENFORCER) sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
 	else sound (self, CHAN_WEAPON, "q15/weapons/rocket1i.wav", 1, ATTN_NORM);
 
-	launch_projectile(org, dir, type, self.attack_speed);
+	launch_projectile(org, dir,NO_SPIN,type, self.attack_speed);
 };
 
 void()	army_nail1 =[	$shoot1, army_nail2	] { self.pain_finished = time + 1.3; sound (self, CHAN_WEAPON, "soldier/reload.wav", 1, ATTN_NORM);};

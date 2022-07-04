@@ -202,7 +202,7 @@ void(float side) ShufflerCheckForSlap = {
 	local vector vec;
 
 	if (enemy_range == RANGE_MELEE) {
-		if(CanDamage(self.enemy, self)) { ShufflerDoSlap(side); return; } // Keep function nested rather than && with above check, functions do stuff!
+		if (CanDamage(self.enemy, self)) { ShufflerDoSlap(side); return; } // Keep function nested rather than && with above check, functions do stuff!
 	}
 
 	makevectors(self.angles); //find someone else to slap.
@@ -316,7 +316,7 @@ void() mino_jump4 =[ $jump7, mino_jump5 ] {
 	ai_face();
 	self.jump_flag = time + MONAI_JUMPMINOTIME;
 	self.touch = mino_JumpTouch;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	self.velocity = v_forward * 450 + '0 0 250';
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.oldorigin = self.origin;
@@ -444,12 +444,12 @@ void(vector orgofs, float angofs) minotaur_fire = {
 
 	// The spawning minotaur has poison spikes instead
 	if (self.spawnflags & MON_MINOTAUR_MINIONS)
-		if (self.poisonous) launch_projectile(org, dir, CT_PROJ_MPOISON, self.attack_speed);
-		else launch_projectile(org, dir, CT_PROJ_MBLOOD, self.attack_speed);
+		if (self.poisonous) launch_projectile(org,dir,NO_SPIN,CT_PROJ_MPOISON,self.attack_speed);
+		else launch_projectile(org,dir,NO_SPIN,CT_PROJ_MBLOOD,self.attack_speed);
 	else {
 		// Projectile behaves like plasma (light/trail/impact effects)
 		// The correct projectile model is switched in launch function
-		launch_projectile(org, dir, CT_PROJ_PLASMA, self.attack_speed);
+		launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA,self.attack_speed);
 	}
 
 	if (self.spawnflags & 2) {

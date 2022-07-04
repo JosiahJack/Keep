@@ -281,7 +281,7 @@ void(float offset) SnakeMissile = {
 	org = self.origin - SVC_INTERMISSION * normalize(self.velocity);
 	vec = normalize(v_forward);
 	vec_z = 0 - vec_z + (random() - 0.5) * 0.1;
-	launch_projectile(org, vec, CT_PROJ_NG, SPEED_PLAYSPIKE);
+	launch_projectile(org,vec,NO_SPIN,CT_PROJ_NG,SPEED_PLAYSPIKE);
 	sound(self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
 };
 
@@ -324,7 +324,7 @@ void() monster_snakeman = {
 	self.ammo_nails = 4 + rint(random()*4);
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	if (self.deathstring == "") self.deathstring = " was hosed by a Snakeman\n";
-	if(!self.classtype) self.classtype = CT_MONSNAKEMAN;
+	if (!self.classtype) self.classtype = CT_MONSNAKEMAN;
 	self.classmove = MON_MOVEWALK;	
 	monster_start();
 };

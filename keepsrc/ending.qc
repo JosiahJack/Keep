@@ -37,15 +37,15 @@
 // machine after killing the dragon.
 //=============================================================================
 
-void (entity ownerEntity) sphere_remove;
-void (entity thePlayer) spawn_actor;
-void () actor_control;
-void (entity playerEnt) move_rogue_camera;
+void(entity ownerEntity) sphere_remove;
+void(entity thePlayer) spawn_actor;
+void() actor_control;
+void(entity playerEnt) move_rogue_camera;
 void() time_crash;
-void (entity inflictor, entity attacker, float take) time_crash_pain;
-void () ending_remove_stuff;
+void(entity inflictor, entity attacker, float take) time_crash_pain;
+void() ending_remove_stuff;
 
-void () ending_for_coop = { // [FUNCTION]
+void() ending_for_coop = { // [FUNCTION]
    intermission_exittime = (time + 10000000.000);
    intermission_running = TRUE;
    self.model = "";
@@ -54,7 +54,7 @@ void () ending_for_coop = { // [FUNCTION]
    self.takedamage = DAMAGE_NO;
    self.solid = SOLID_NOT;
    self.movetype = MOVETYPE_NONE;
-   self.modelindex = FALSE;
+   self.modelindex = 0;
    setorigin (self,(self.origin + '0.000 0.000 48.000'));
    WriteByte (MSG_ALL,SVC_FINALE);
    WriteString (MSG_ALL,"You have destroyed Quake's\nTemporal Teleporter. His assault\non Time has been defeated.");
@@ -63,7 +63,7 @@ void () ending_for_coop = { // [FUNCTION]
    theMachine.nextthink = (time + 0.100);
 };
 
-void () xpackEnding = { // [FUNCTION]
+void() xpackEnding = { // [FUNCTION]
    local entity cameraview;
 
    if (coop) {ending_for_coop(); return; }
@@ -81,7 +81,7 @@ void () xpackEnding = { // [FUNCTION]
    move_rogue_camera(self);
 };
 
-void () track_camera = { // [FUNCTION]
+void() track_camera = { // [FUNCTION]
    local vector cameraAngle;
 
    cameraAngle = (theActor.origin - self.origin);
@@ -92,7 +92,7 @@ void () track_camera = { // [FUNCTION]
    self.nextthink = (time + 0.100);
 };
 
-void (entity playerEnt) move_rogue_camera = { // [FUNCTION]
+void(entity playerEnt) move_rogue_camera = { // [FUNCTION]
    local entity cameraPoint;
    local vector cameraAngle;
 
@@ -105,7 +105,7 @@ void (entity playerEnt) move_rogue_camera = { // [FUNCTION]
    self.takedamage = DAMAGE_NO;
    self.solid = SOLID_NOT;
    self.movetype = MOVETYPE_NONE;
-   self.modelindex = FALSE;
+   self.modelindex = 0;
    setorigin (self,cameraPoint.origin);
    cameraAngle = (theActor.origin - self.origin);
    self.angles = vectoangles (cameraAngle);
@@ -114,7 +114,7 @@ void (entity playerEnt) move_rogue_camera = { // [FUNCTION]
    self.nextthink = (time + 0.050);
 };
 
-void () ending_remove_stuff = { // [FUNCTION]
+void() ending_remove_stuff = { // [FUNCTION]
    local entity curEnt;
 
    curEnt = find (world,classname,"ltrail_start");
@@ -135,7 +135,7 @@ void () ending_remove_stuff = { // [FUNCTION]
    curEnt.nextthink = (time + 0.100);
 };
 
-void () actor_rogue_run = { // [FUNCTION]
+void() actor_rogue_run = { // [FUNCTION]
    local vector dist;
    local entity pointOne;
 
@@ -165,7 +165,7 @@ void () actor_rogue_run = { // [FUNCTION]
    self.nextthink = (time + 0.100);
 };
 
-void () actor_fire1 = [ 107.000, actor_fire2 ] { // [FUNCTION]
+void() actor_fire1 = [ 107.000, actor_fire2 ] { // [FUNCTION]
 	if (theMachine) {
 	   self.goalentity = theMachine;
 	   theMachine.th_pain = time_crash_pain;
@@ -180,14 +180,14 @@ void () actor_fire1 = [ 107.000, actor_fire2 ] { // [FUNCTION]
    WriteByte (MSG_ALL,SVC_FINALE);
    WriteString (MSG_ALL,"\nFinally, Quake's Temporal Teleporter\nyields to your assault. A high\npitched scream emits from the\ndevastated device as stressed steel\nblasts outward to rock the cavern.\nThe machine is devoured by molten lava.\n\nThe ground shudders as reality shi..");
 };
-void () actor_fire2 = [ 108.000, actor_fire3 ] { // [FUNCTION]
+void() actor_fire2 = [ 108.000, actor_fire3 ] { // [FUNCTION]
    self.v_angle_x = FALSE;
    self.angles_x = FALSE;
    self.nextthink = (time + 0.150);
 };
-void () actor_fire3 = [ 109.000, actor_fire4 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void () actor_fire4 = [ 110.000, actor_fire5 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void () actor_fire5 = [ 111.000, actor_fire6 ] { // [FUNCTION]
+void() actor_fire3 = [ 109.000, actor_fire4 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire4 = [ 110.000, actor_fire5 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire5 = [ 111.000, actor_fire6 ] { // [FUNCTION]
    self.nextthink = (time + 0.150);
    ending_remove_stuff ();
 	if (theMachine) {
@@ -197,31 +197,31 @@ void () actor_fire5 = [ 111.000, actor_fire6 ] { // [FUNCTION]
 	   }
 	}
 };
-void () actor_fire6 = [ 112.000, actor_fire7 ] { self.effects = 0; self.nextthink = (time + 0.150); }; // [FUNCTION]
-void () actor_fire7 = [ 12.000, actor_fire8 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void () actor_fire8 = [ 13.000, actor_fire9 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void () actor_fire9 = [ 14.000, actor_fire10 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void () actor_fire10 = [ 15.000, actor_fire11 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void () actor_fire11 = [ 16.000, actor_fire12 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void () actor_fire12 = [ 12.000, actor_fire13 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void () actor_fire13 = [ 13.000, actor_fire14 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void () actor_fire14 = [ 14.000, actor_fire15 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void () actor_fire15 = [ 15.000, actor_fire16 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void () actor_fire16 = [ 16.000, actor_fire17 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void () actor_fire17 = [ 12.000, actor_fire18 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void () actor_fire18 = [ 13.000, actor_fire19 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void () actor_fire19 = [ 14.000, actor_fire20 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void () actor_fire20 = [ 15.000, actor_fire21 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
-void () actor_fire21 = [ 16.000, actor_control ] { self.nextthink = (time + 0.150); actorStage = STAGE_TO_POINT2; }; // [FUNCTION]
+void() actor_fire6 = [ 112.000, actor_fire7 ] { self.effects = 0; self.nextthink = (time + 0.150); }; // [FUNCTION]
+void() actor_fire7 = [ 12.000, actor_fire8 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire8 = [ 13.000, actor_fire9 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire9 = [ 14.000, actor_fire10 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire10 = [ 15.000, actor_fire11 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire11 = [ 16.000, actor_fire12 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire12 = [ 12.000, actor_fire13 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire13 = [ 13.000, actor_fire14 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire14 = [ 14.000, actor_fire15 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire15 = [ 15.000, actor_fire16 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire16 = [ 16.000, actor_fire17 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire17 = [ 12.000, actor_fire18 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire18 = [ 13.000, actor_fire19 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire19 = [ 14.000, actor_fire20 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire20 = [ 15.000, actor_fire21 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
+void() actor_fire21 = [ 16.000, actor_control ] { self.nextthink = (time + 0.150); actorStage = STAGE_TO_POINT2; }; // [FUNCTION]
 
-void () actor_teleport = { // [FUNCTION]
+void() actor_teleport = { // [FUNCTION]
    spawn_tfog (self.origin);
    self.model = string_null;
    self.think = SUB_Null;
    self.nextthink = (time + 999999.000);
 };
 
-void () actor_control = { // [FUNCTION]
+void() actor_control = { // [FUNCTION]
    if (actorStage == STAGE_START) {
       self.target = "point1";
       self.movetarget = find (world,targetname,self.target);
@@ -262,7 +262,7 @@ void () actor_control = { // [FUNCTION]
    }
 };
 
-void (entity thePlayer) spawn_actor = { // [FUNCTION]
+void(entity thePlayer) spawn_actor = { // [FUNCTION]
 	local entity pointOne;
 
 	theActor = spawn ();

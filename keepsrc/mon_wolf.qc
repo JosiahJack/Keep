@@ -283,13 +283,11 @@ void() wolf_moonsword = {
 
 	ai_face();
 	self.effects = self.effects | EF_MUZZLEFLASH;
-
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = normalize((self.enemy.origin + '0 0 -16')- org);
-
 	self.attack_speed = SPEED_WOLFSWORD + (skill * SPEED_WOLFSKILL);
-	Launch_Missile (org, dir, '0 0 0', CT_PROJ_MOONSWORD, self.attack_speed);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_MOONSWORD,self.attack_speed);
 };
 
 void() wolf_shoot1	=[	$shoot1,	wolf_shoot2	] {ai_face();};

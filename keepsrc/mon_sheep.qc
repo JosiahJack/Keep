@@ -43,7 +43,7 @@ void sheep_graze_b1();
 void sheep_gstep_a1 ();
 void sheep_gstep_b1 ();
 void sheep_wait1 ();
-void (entity inflictor, entity attacker, float damage) sheep_pain;
+void(entity inflictor, entity attacker, float damage) sheep_pain;
 void sheep_lookdown1();
 void sheep_look1();
 void sheep_lookup1();
@@ -497,7 +497,7 @@ void()	sheep_look60 	=[193,	sheep_wait1] {
 };
 
 void() sheep_bite =  {
-	makevectors ( self.angles);
+	makevectors( self.angles);
 	traceline ( (self.origin + self.view_ofs), ((self.origin + self.view_ofs) + (v_forward * 36.00000)), FALSE, self);
 	if (trace_ent.takedamage) {
 		sound ( self, CHAN_VOICE, "sheep/bite.wav", 1.00000, ATTN_NORM);

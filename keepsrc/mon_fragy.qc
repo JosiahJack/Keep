@@ -225,7 +225,7 @@ void() frag_jump2 =[       $jump2,        frag_jump3        ] {
 
 	if (self.enemy) {
 		self.touch = Frag_JumpTouch;
-		makevectors (self.angles);
+		makevectors(self.angles);
 		self.origin_z = self.origin_z + 1;
 		self.velocity = v_forward * 300 + '0 0 200';
 		if (self.flags & FL_ONGROUND) self.flags = self.flags - FL_ONGROUND;

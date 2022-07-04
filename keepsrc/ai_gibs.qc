@@ -268,7 +268,6 @@ vector(float gibforce) DirectionForDamage = {
 	return gvel;
 };
 
-// Only used when vomitus or other creature eats them now.
 void() RemoveGib = {
 	self.think = model_fade; // Fade away model, if active (default)
 	if (self.owner.classtype == CT_MISCGIBF || self.owner.classgroup == CG_TEMPENT) self.nextthink = time + 0.1;

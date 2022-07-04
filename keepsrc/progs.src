@@ -131,7 +131,6 @@ switchshad.qc				// REFINED Switchable Shadow and Light effect entities.
 part_manage.qc				// REFINED Particle System Manager
 part_generate.qc			// REFINED Particle System Emitters and Generators
 part_emitter.qc				// REFINED Particle System Entities and helper functions.
-drake_aim.qc				// REFINED Shot Leading System for smart monster aiming
 ai_allegiance.qc			// REFINED Definitions and subroutines for AI behavior System
 ai_gibs.qc					// REFINED Gibbing and Gore System
 ai_enemytarget.qc			// REFINED AI System for flying monsters to stay above their enemy
@@ -162,6 +161,7 @@ projectiles_explode.qc		//  Projectile Explosions
 projectiles_think.qc		//  Projectile Thinks
 projectiles_touch.qc		//  Projectile Touches
 projectiles_launch.qc		//  Projectile System for all projectiles that cause damage.
+projectiles_aim.qc			//  Projectile Aims
 
 // World and Main System Setup
 //-----------------------------------------------------------------------------
@@ -241,7 +241,7 @@ traps_sawblade.qc			// REFINED Rogue Buzzsaw, enhanced with AD additions
 traps_turret.qc				// REFINED Rubicon 2 / RRP turret trap
 sounds.qc					// REFINED Ambient Sound System, looping and triggered with support for custom sounds.
 misc_rubicon2.qc			// REFINED Miscellaneous Rubicon stuff
-versus.qc					// REFINED Versus Game Mode from Keep where survivors (players) collect coins to buy an arsenal to use against hordes of enemies released by gamemasters (players) who collect gibs to buy monsters
+versus.qc					// REFINED Versus Game Mode from Keep where survivors(players) collect coins to buy an arsenal to use against hordes of enemies released by gamemasters (players) who collect gibs to buy monsters
 soul.qc						// REFINED Floating souls for wraiths to collect.
 hiprubbl.qc					// REFINED Rubble that tumbles and hurts...remember that impossible tumbler in the Lost Mines?
 hip_part.qc					// REFINED Particle field for force fields

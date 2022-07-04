@@ -50,12 +50,12 @@
 //=============================================================================
 
 // For pressing a use keybind to use something.  Used by purchase triggers.
-void () usecommand = {
+void() usecommand = {
 	self.usingfinished = time + 0.8; // show that we pressed using for a bit, to give time for touches to register
 };
 
 // Sets up the base game states for versus mode
-void () versus_setup = {
+void() versus_setup = {
 	precache_model("progs/qmaster/coinitem.mdl"); // Spawned by all monsters on death
 	precache_model("progs/qmaster/boneitem.mdl"); // Spawned by all monsters on death, if gamemasters are present
 	coins = 0;
@@ -66,7 +66,7 @@ void () versus_setup = {
 	dprint("\b[VERSUS]\b Versus mode setup and active!\n");
 };
 
-void (entity targ) set_teamsurvivor = {
+void(entity targ) set_teamsurvivor = {
 	if (targ.versustype < 1) {
 		targ.versustype = VT_SURVIVOR;
 		targ.alignment = GOOD;
@@ -80,7 +80,7 @@ void (entity targ) set_teamsurvivor = {
 	}   
 };
 
-void (entity targ) set_teamgamemaster = {
+void(entity targ) set_teamgamemaster = {
 	if (targ.versustype < 1) {
 		targ.versustype = VT_GAMEMASTER;
 		targ.alignment = EVIL;
@@ -95,16 +95,16 @@ void (entity targ) set_teamgamemaster = {
 };
 
 // Let's Survivors know how many coins they have collected to use for purchasing weapons, items, doors, etc.
-void () print_coins = {
+void() print_coins = {
 	if ((coop < 3 || (coop > 2 && self.versustype == VT_SURVIVOR)) || developer) centerprint2(self,"Coin total: ",ftos(coins));
 };
 
 // Let's Gamemasters know how many gibs they have collected to use for purchasing more monsters or events.
-void () print_bones = {
+void() print_bones = {
 	if ((coop > 2 && self.versustype == VT_GAMEMASTER) || developer) centerprint2(self,"Gib total: ",ftos(bones));
 };
 
-void () item_coin_touch = {
+void() item_coin_touch = {
    if (coop > 2 && other.versustype != VT_SURVIVOR)  return;
    if ( !(other.flags & FL_CLIENT) ) return;
 
@@ -121,7 +121,7 @@ void () item_coin_touch = {
    if (!self.respawn_trig) start_item_respawn();
 };
 
-void () item_coin_setup = {
+void() item_coin_setup = {
    if (self.noise == "") self.noise = "drake/items/money.wav";
 
    precache_sound (self.noise);
@@ -132,7 +132,7 @@ void () item_coin_setup = {
    item_start();
 };
 
-void () item_coin_setskin = {
+void() item_coin_setskin = {
    if (self.count < 1) self.count = 1;  //number of coins
    if (self.count == 1) self.skin = 0;
    if (self.count == 2) self.skin = 1;
@@ -141,7 +141,7 @@ void () item_coin_setskin = {
    if (self.count == 5) self.skin = 4;
 };
 
-void () item_coin = {
+void() item_coin = {
 	if (self.mdl == "") self.mdl = "progs/qmaster/coinitem.mdl"; // Made the drake coin.mdl spin
 	precache_model (self.mdl);
 	item_coin_setskin();
@@ -155,7 +155,7 @@ float() can_eat_bones = {
 	return TRUE;
 };
 
-void () item_bone_touch = {
+void() item_bone_touch = {
 	if (!can_eat_bones()) return;
 	
 	sprint(other, "You got ");
@@ -171,7 +171,7 @@ void () item_bone_touch = {
 	if (!self.respawn_trig) start_item_respawn();
 };
 
-void () item_bone = {
+void() item_bone = {
 	if (self.mdl == "") self.mdl = "progs/qmaster/boneitem.mdl"; // Added rotate flag to ad171/proj_wraithbone.mdl
 	precache_model (self.mdl);
 	if (self.noise == "") self.noise = "quoth/polyp/gibsplt1.wav";
@@ -212,7 +212,7 @@ void(float c) DropCoin = {
 	item.nextthink = time + 0.3;		// Let coin drop first
 };
 
-void () trigger_coinpurchase_touch = {
+void() trigger_coinpurchase_touch = {
 	if ( !(other.flags & FL_CLIENT) ) return;
 	if (coop < 3 || (coop > 2 && other.flags & FL_CLIENT && other.versustype == VT_SURVIVOR)) {
 		// Check for and allow for purchases in versus survivor mode
@@ -237,13 +237,13 @@ void () trigger_coinpurchase_touch = {
 	}
 };
 
-void () trigger_coinpurchase = {
+void() trigger_coinpurchase = {
    InitTrigger ();
    self.touch = trigger_coinpurchase_touch;
 	if (self.cost <= 0) self.cost = 1; // no free lunch
 };
 
-void () trigger_gibpurchase_touch = {
+void() trigger_gibpurchase_touch = {
 	if (other.flags & FL_CLIENT && other.versustype == VT_GAMEMASTER) {
 		// Check for and allow for purchases in versus survivor mode
 		if (coop > 2 && self.cost > 0) {
@@ -266,7 +266,7 @@ void () trigger_gibpurchase_touch = {
 	}
 };
 
-void () trigger_gibpurchase = {
+void() trigger_gibpurchase = {
    InitTrigger ();
    self.touch = trigger_gibpurchase_touch;
 	if (self.cost <= 0) self.cost = 1; // no free lunch

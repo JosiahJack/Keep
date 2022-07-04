@@ -394,26 +394,21 @@ void() gaunt_fast18 = [61, gaunt_fast19] {};
 void() gaunt_fast19 = [62, gaunt_fast20] {};
 void() gaunt_fast20 = [63, gaunt_run1] {ai_face(); self.attack_state = AS_STRAIGHT;};
 
-//============================================================================
 // RANGE - Plasma from arc infront
-//============================================================================
 void() gaunt_plasma = {
 	local vector org, dir;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "ad171/gaunt/plasma_fire.wav", 1, ATTN_NORM);
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = normalize(SUB_orgEnemyTarget() - self.origin);
 	self.attack_speed = SPEED_GAUNTBOLT + (skill * SPEED_GAUNTSKILL);
-	launch_projectile(org, dir, CT_PROJ_PLASMA, self.attack_speed);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA,self.attack_speed);
 };
 
-//============================================================================
 // Attachment management (create, finish and delete)
-//============================================================================
-void() gaunt_create_attachment =
-{
+void() gaunt_create_attachment = {
 	// Are the attachments setup yet?
 	if (!self.attachment) {
 		self.attachment = spawn();
@@ -424,18 +419,14 @@ void() gaunt_create_attachment =
 	}
 };
 
-//----------------------------------------------------------------------
-void() gaunt_finish_attachment =
-{
+void() gaunt_finish_attachment = {
 	if (self.attachment) {
 		setmodel(self.attachment, "");
 		self.attachment.state = STATE_OFF;
 	}
 };
 
-//----------------------------------------------------------------------
-void() gaunt_remove_attachment =
-{
+void() gaunt_remove_attachment = {
 	if (self.attachment) {
 		self.attachment.think = SUB_Remove;
 		self.attachment.nextthink = time + 0.1;
@@ -836,7 +827,7 @@ void() monster_gaunt = {
 			self.th_missile = gaunt_fire1;
 	}
 
-	if(!self.classtype) self.classtype = CT_MONGAUNT;
+	if (!self.classtype) self.classtype = CT_MONGAUNT;
 	if (!self.classgroup) self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
@@ -888,7 +879,7 @@ void() setup_gaunt = {
 		self.th_missile = gaunt_fire1;
 	}
 
-	if(!self.classtype) self.classtype = CT_MONGAUNT;
+	if (!self.classtype) self.classtype = CT_MONGAUNT;
 	if (!self.classgroup) self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
 	monster_start();

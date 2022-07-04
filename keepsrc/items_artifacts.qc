@@ -840,7 +840,7 @@ void() item_artifact_jumpboots = { // [ENTITY]
 
 void() item_jboots = { item_artifact_jumpboots(); }; // [ENTITY], Redirect original JCR maps' entities
 
-void () item_powerup_shield = { // [ENTITY]
+void() item_powerup_shield = { // [ENTITY]
 	if (artifact_checkrandomizer()) return; // Check for any random setups
 
 	item_setupmodel("progs/rogue/shield.mdl",0);
@@ -859,7 +859,7 @@ void () item_powerup_shield = { // [ENTITY]
 	artifact_setup();
 };
 
-void () item_powerup_belt = { // [ENTITY]
+void() item_powerup_belt = { // [ENTITY]
 	if (artifact_checkrandomizer()) return; // Check for any random setups
 	
 	item_setupmodel("progs/ad172/artifact_blastbelt.mdl",0); // sock originally did an orange skin version of rogue/beltup.mdl.  Changed to new model.  Adding here to have 2nd skin as an option.
@@ -878,7 +878,7 @@ void () item_powerup_belt = { // [ENTITY]
 	artifact_setup();
 };
 
-void () item_artifact_empathy_shields = { // [ENTITY]
+void() item_artifact_empathy_shields = { // [ENTITY]
 	if (artifact_checkrandomizer()) return; // Check for any random setups
 
 	item_setupmodel("progs/hipnotic/empathy.mdl",0);
@@ -896,7 +896,7 @@ void () item_artifact_empathy_shields = { // [ENTITY]
 	artifact_setup();
 };
 
-void () item_artifact_lavasuit = { // [ENTITY]
+void() item_artifact_lavasuit = { // [ENTITY]
 	if (artifact_checkrandomizer()) return;
 
 	item_setupmodel("progs/suit2.mdl",1);
@@ -1018,7 +1018,7 @@ void() item_secrethunter = {
 	item_start();
 };
 
-void () horn_touch = { // [FUNCTION]
+void() horn_touch = { // [FUNCTION]
 	if (!(other.flags & FL_CLIENT)) return;
 	if (other.health < 1) return;
 
@@ -1035,7 +1035,7 @@ void () horn_touch = { // [FUNCTION]
 	other.horn_active = FALSE;
 };
 
-void () item_artifact_horn = { // [ENTITY]
+void() item_artifact_horn = { // [ENTITY]
 	if (deathmatch) { remove(self); return; }
 
 	item_setupmodel("progs/hipnotic/horn.mdl",0);
@@ -1066,7 +1066,7 @@ void() item_artifact_monster = { // [ENTITY]
 	item_artifact_horn();
 };
 
-void () item_artifact_berserker = { // [ENTITY]
+void() item_artifact_berserker = { // [ENTITY]
 	item_setupmodel("progs/drake/zerkhelm.mdl",0);
 	item_setupnoise("drake/items/zerkhelm.wav");
     self.netname = "Berserker Helm";
@@ -1078,7 +1078,7 @@ void () item_artifact_berserker = { // [ENTITY]
 };
 
 // Nailguns fire two nails at the price of one -- permanently.  Also fills nails to the maximum.
-void () item_artifact_equalizer = { // [ENTITY]
+void() item_artifact_equalizer = { // [ENTITY]
 	item_setupmodel("progs/drake/gemini.mdl",0);
 	item_setupnoise("rogue/runes/end2.wav");
     self.netname = "Twin Shot";
@@ -1091,7 +1091,7 @@ void () item_artifact_equalizer = { // [ENTITY]
 };
 
 // Gives the player flying ability.
-void () item_artifact_levitation = { // [ENTITY]
+void() item_artifact_levitation = { // [ENTITY]
 	item_setupmodel("progs/drake/levitate.mdl",0);
 	item_setupnoise("nehahra/player/flight.wav");
 	self.noise1 = "zerstorer/ambience/wingget.wav";

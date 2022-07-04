@@ -75,11 +75,8 @@ void() fred_walk14 = [ $run14, fred_walk15 ] {ai_walk(8);};
 void() fred_walk15 = [ $run15, fred_walk16 ] {ai_walk(4);};
 void() fred_walk16 = [ $run16, fred_walk1 ] {ai_walk(16);};
 
-//===========================================================================
 // RANGE ATTACK - Fires spikes or laser bolts
-//===========================================================================
-void(vector weapofs) fred_fireweapon =
-{
+void(vector weapofs) fred_fireweapon = {
 	local vector org, dir, vec;
 	if (self.health < 1) return;
 
@@ -88,7 +85,7 @@ void(vector weapofs) fred_fireweapon =
 	// Nail and laser use the same firing speed
 	self.attack_speed = SPEED_FREDDIEPROJ + (skill * SPEED_FREDDIESKILL);
 	// turn and face your enemy!
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(weapofs);
 	
 	// The mini burst mode (run+fire) can do tracking
@@ -99,8 +96,7 @@ void(vector weapofs) fred_fireweapon =
 			self.attack_track = SUB_Tracking(self.enemy.origin, weapofs, self.enemy, self.attack_speed);
 		else self.attack_track = SUB_Tracking(self.attack_track, weapofs, self.enemy, self.attack_speed);
 		dir = normalize(self.attack_track - org);
-	}
-	else {
+	} else {
 		// Standard mode spray bullets at player
 		vec = v_right*(crandom()*(20+random()*50));
 		dir = normalize((self.enemy.origin + vec) - org);
@@ -109,16 +105,14 @@ void(vector weapofs) fred_fireweapon =
 	// Switch projectile type based on spawnflag
 	if (self.spawnflags & MON_FREDDIE_LASER) {
 		sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);	
-		launch_projectile(org, dir, CT_PROJ_LASER, self.attack_speed);
-	}
-	else {
+		launch_projectile(org,dir,NO_SPIN,CT_PROJ_LASER,self.attack_speed);
+	} else {
 		sound (self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM);
-		launch_projectile(org, dir, CT_PROJ_MONNG, self.attack_speed);
+		launch_projectile(org,dir,NO_SPIN,CT_PROJ_MONNG,self.attack_speed);
 	}
 };
 
 // Start the initial wind up of the weapon first
-//----------------------------------------------------------------------
 void() fred_sfire1 = [ $sfire1, fred_sfire2 ] {ai_face();
 	self.pain_finished = time + 0.5 + (skill*0.5);
 	sound (self, CHAN_WEAPON, "quoth/edie/stfire.wav", 1, ATTN_NORM);};
@@ -135,9 +129,7 @@ void() fred_sfire8 = [ $sfire8, fred_sfire9 ] {ai_face();
 };
 
 // Fire the weapon in bursts
-//----------------------------------------------------------------------
-void(vector weapofs) fred_standfire =
-{
+void(vector weapofs) fred_standfire = {
 	// Always check AI health before locking in function
 	if (self.health < 1) return;
 	

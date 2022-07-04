@@ -288,7 +288,7 @@ void() misc_splash = { // [ENTITY]
 	self.think = splash_think;
 };
 
-void () light_globecolor = { // [ENTITY]
+void() light_globecolor = { // [ENTITY]
    if ( (self.spawnflags & FLAG_REDORANGE) ) {
       precache_model ("progs/s_light2.spr");
       setmodel (self,"progs/s_light2.spr");

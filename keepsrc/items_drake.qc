@@ -69,7 +69,7 @@ void(float gt) gem_colors = { // [FUNCTION]
 void() gem_pulse = { // [FUNCTION]
     self.nextthink = time + 0.1;
     self.think = gem_pulse;     // Must define here in case of dynamic spawn.
-    gem_colors (self.worldtype);    // FIXME:  Confirm in item_treasure.
+    gem_colors(self.worldtype);    // FIXME:  Confirm in item_treasure.
 };
 
 // Called when something bumps into item_treasure.

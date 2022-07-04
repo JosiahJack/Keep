@@ -1,6 +1,45 @@
+//=============================================================================
+//       ___  ___  __            __   __  
+// |__/ |__  |__  |__)     |\/| /  \ |  \
+// |  \ |___ |___ |        |  | \__/ |__/                                                    
+//
+// Compiled by Qmaster
+//
+// Attributions: Hipnotic
+//
+//
+// Distribution / Copyright / Permissions 
+//
+// Please do not use any of these assets in ANY COMMERCIAL PROJECT.
+// and remember to give credit if you use any of these assets. Please credit
+// the appropriate authors of the various content used.  Refer to the credits
+// folder.
+//				  
+// The QC files in this MOD are based on 1.06 source files by ID Software.
+// These files are released under the terms of GNU General Public License v2 or
+// later. You may use the source files as a base to build your own MODs as long
+// as you release them under the same license and make the source available.
+// Please also give proper credit. Check http://www.gnu.org for details.
+//
+// Quake is a registered trademark of id Software, Inc.
+//
+// All of these resources may be electronically distributed only at 
+// NO CHARGE to the recipient.
+//
+// Stats:
+// Entity count: 1
+// Function count: 7
+//
+// Implements: Decoy Player for Cutscenes
+//
+// Description:
+// The decoy player used after Armagon is defeated in Mission Pack 1: Scourge
+// of Armagon aka Hipnotic.
+//=============================================================================
+
 void() monster_use;
 
-void () decoy_stand1 = [ 17.000, decoy_stand1 ] {
+void() decoy_stand1 = [ 17.000, decoy_stand1 ] {
 	ChangeYaw ();
 	if ( (self.walkframe >= 5) ) self.walkframe = 0;
 	self.frame = (12 + self.walkframe);
@@ -10,7 +49,7 @@ void () decoy_stand1 = [ 17.000, decoy_stand1 ] {
 
 void(entity inflictor, entity attacker, float damage) decoy_pain = { decoy_stand1(); };
 
-void () decoy_walk1 = [ 6.000, decoy_walk1 ] {
+void() decoy_walk1 = [ 6.000, decoy_walk1 ] {
 	local float r;
 
 	movetogoal(12);
@@ -32,12 +71,12 @@ void () decoy_walk1 = [ 6.000, decoy_walk1 ] {
 };
 
 void() monster_decoy_go = {
-   self.origin_z = (self.origin_z + TRUE);
+   self.origin_z = self.origin_z + 1;
    droptofloor();
-   if ( !walkmove (FALSE,FALSE) ) {
-      dprint ("decoy in wall at: ");
-      dprint (vtos (self.origin));
-      dprint ("\n");
+   if (!walkmove(0,0)) {
+      dprint("decoy in wall at: ");
+      dprint(vtos (self.origin));
+      dprint("\n");
    }
    self.takedamage = DAMAGE_AIM;
    self.ideal_yaw = (self.angles * '0.000 1.000 0.000');
@@ -72,7 +111,7 @@ void() monster_decoy_go = {
    self.nextthink = (self.nextthink + (random () * 0.500));
 };
 
-void (entity decoy) setup_decoy = {
+void(entity decoy) setup_decoy = {
    local entity pl;
 
    decoy.classname = "monster_decoy";
@@ -102,14 +141,15 @@ void() monster_decoy_precache = {
 	precache_sound("hipnotic/misc/foot7.wav");
 };
 
-void () monster_decoy = {
+void() monster_decoy = {
 	if ( deathmatch ) { remove(self); return; }
 
+   monster_decoy_precache(); // Not really a monster, precache here and now.
 	setup_decoy(self);
 	monster_decoy_go();
 };
 
-void (string targ, vector orig) become_decoy = {
+void(string targ, vector orig) become_decoy = {
 	local entity decoy, temp;
 
 	decoy = spawn();

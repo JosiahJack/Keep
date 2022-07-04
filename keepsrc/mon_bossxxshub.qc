@@ -92,9 +92,9 @@ float() xxshub_WaveCheck =
 		// Check for wave boundary triggers
 		self.noise = "";
 		if (self.bosswave == 1) self.noise = self.noise1;
-		else if(self.bosswave == 2) self.noise = self.noise2;
-		else if(self.bosswave == 3) self.noise = self.noise3;
-		else if(self.bosswave == 4) self.noise = self.noise4;
+		else if (self.bosswave == 2) self.noise = self.noise2;
+		else if (self.bosswave == 3) self.noise = self.noise3;
+		else if (self.bosswave == 4) self.noise = self.noise4;
 		
 		// Is there any trigger for the wave boundary?
 		if (self.noise != "") trigger_strs(self.noise, self);
@@ -153,11 +153,8 @@ void() xxshub_idleframe =
 //----------------------------------------------------------------------
 void() xxshub_idle ={ self.walkframe = 0; xxshub_idleframe(); };
 
-//============================================================================
 // Attack 1 : Fire Shub Homing Missile
-//============================================================================
-void() xxshub_attack1 =
-{
+void() xxshub_attack1 = {
 	//if (self.spawnflags & SHUB_NEEDS_2ND_TRIG && self.use == xxshub_wakeup) return FALSE; // don't start attacking until 2nd trigger
 
 	// Check sightline to player
@@ -172,14 +169,11 @@ void() xxshub_attack1 =
 	self.attack_speed = self.pos1_x + (skill*self.pos1_y);
 	// Spawn from front of Shub
 	makevectors(self.angles);
-	launch_projectile(self.origin + attack_vector(self.dest1),'0 0 10',CT_PROJ_SHUB1,self.attack_speed);
+	launch_projectile(self.origin + attack_vector(self.dest1),'0 0 10',NO_SPIN,CT_PROJ_SHUB1,self.attack_speed);
 };
 
-//============================================================================
 // Attack 2 : shake and spam grenades (end of wave event)
-//============================================================================
-void() xxshub_shakeattack = 
-{
+void() xxshub_shakeattack = {
 	local vector org, dir, ang, avel;
 	
 	// Custom grenade firing speed
@@ -198,7 +192,7 @@ void() xxshub_shakeattack =
 	
 	// Bit of random spin and fire grenade
 	avel = vecrand(100,200,FALSE);
-	Launch_Grenade(org, dir, avel, CT_PROJ_SHUB2);
+	launch_projectile(org,dir,avel,CT_PROJ_SHUB2,1);
 };
 
 void() xxshub_shakeframe = {

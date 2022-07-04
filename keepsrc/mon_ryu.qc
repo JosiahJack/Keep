@@ -282,7 +282,7 @@ vector() Ryu_TargetPoint = {
         return end;
     }
     // Aiming on its own... Aim forward and slightly downward.
-    makevectors (self.angles);
+    makevectors(self.angles);
     return (self.origin + v_forward*1024 - '0 0 16');
 };
 
@@ -400,7 +400,7 @@ void() Ryu_Shot_Fire = {
     if (self.spawnflags & SPAWN_WYRM) sped = 1200;
     else sped = 1000;
 
-    makevectors (self.angles);
+    makevectors(self.angles);
 
     // Find the location of the dragon's mouth (or head).
     start = Ryu_Offset ();
@@ -882,7 +882,7 @@ void() wyrm_explode = {
     self = swap;
     self.health = -99;      // Spawn dragon parts. Some gibs get some velocity.
     org = self.origin;
-    makevectors (self.angles);
+    makevectors(self.angles);
     vx = v_forward;  vy = v_right;  vz = v_up;
     sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
     // Throw dragon parts first.  They will be thrown from a point relative to the body instead of randomly.
@@ -1123,7 +1123,7 @@ void() monster_ryu = {
     self.th_checkattack   = DragonCheckAttack;
     self.th_win     = dragon_win;
     Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-    if(!self.classtype) self.classtype = CT_MONRYU;
+    if (!self.classtype) self.classtype = CT_MONRYU;
     if (!self.classgroup) self.classgroup = CG_DRAGON;
     self.classmove = MON_MOVEFLY;
     monster_start ();

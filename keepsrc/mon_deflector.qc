@@ -253,7 +253,7 @@ void(float fire_explode) deflect_fireflame = {
 	
 	// Facing angle
 	ai_face();
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	
 	// Setup explosion origin (infront)
@@ -277,14 +277,14 @@ void(float fire_explode) deflect_fireflame = {
 	}
 
 	// Start with facing angle
-	makevectors (self.angles);	
+	makevectors(self.angles);	
 	// Work out offset (24 unit) from left to right (- to +)
 	torg = self.enemy.origin + (v_right * (self.proj_attarc*24));
 	targetang = SUB_Elevation(ELEV_DEFAULT, self.origin, torg, SPEED_FLAME);
 	// Work out angle
 	ang = vectoangles(torg - org);
 	ang_x = -targetang;	// Negative = upwards angle 
-	makevectors (ang);
+	makevectors(ang);
 	// fire flames forward with slight Z wobble
 	dir = (v_forward + (v_up * (random()*0.1)) ) * SPEED_FLAME;
 
@@ -363,18 +363,15 @@ void(float sideang) deflect_fireplasma = {
 
 	// Keep adding up projectile counter
 	self.attack_count = self.attack_count + 1;
-	
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
 	self.attack_speed = SPEED_DEFLECTBOLT + (skill * SPEED_DEFLECTBSKILL);
-
 	ai_trackenemy();
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	targ_org = self.attack_track + '0 0 -16' + (v_right * (sideang * 24));
 	dir = normalize(targ_org - self.origin);
-
-	launch_projectile(org, dir, CT_MONDEFLECTOR, self.attack_speed);
+	launch_projectile(org,dir,NO_SPIN,CT_MONDEFLECTOR,self.attack_speed);
 };
 
 void() deflect_plasmaframe = {
@@ -439,19 +436,17 @@ void(float sideang) deflect_fire_rocket = {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "ad181/deflector/rocket_fire.wav", 1, ATTN_NORM);	
 
-	// Maximum speed, initial speed set in Launch_Missile
+	// Maximum speed, initial speed set in launch_projectile
 	self.attack_speed = SPEED_DEFLECTROCKET + (skill * SPEED_DEFLECTRSKILL);
 
 	// check for enemy origin (based on sight test)
 	// if cannot see enemy fire at last known location
 	ai_trackenemy();
-
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.meleeoffset);
 	torg = self.attack_track + (v_right * (sideang * 24));
 	dir = normalize(torg - org);
-
-	Launch_Missile (org, dir, '0 0 0', CT_PROJ_DEFLECT1, self.attack_speed);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_DEFLECT1,self.attack_speed);
 };
 
 void() deflect_rocketframe = {

@@ -290,9 +290,7 @@ void()	dcrossbow_stop5 =[	$tstop5,	dcrossbow_stop6	] {};
 void()	dcrossbow_stop6 =[	$tstop6,	dcrossbow_stop7	] {};
 void()	dcrossbow_stop7 =[	$tstop7,	dcrossbow_run1 ] {self.weaponstate = CROSS_DOWN;};
 
-//===========================================================================
-void() dcrossbow_shot =
-{
+void() dcrossbow_shot = {
 	local	vector org, dir;
 
 	if (!self.enemy) return;
@@ -304,8 +302,7 @@ void() dcrossbow_shot =
 
 	// Skill level adjustment
 	self.attack_speed = SPEED_DCROSS + (skill*SPEED_BOLTSKILL);
-
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 
 	//It certainly was really cool to write the code for tracking and
@@ -316,14 +313,12 @@ void() dcrossbow_shot =
 	else dir = normalize(self.enemy.origin - org);
 	
 	// Fire projectile at player	
-	launch_projectile (org, dir, CT_PROJ_BOLT1, self.attack_speed);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_BOLT1,self.attack_speed);
 };
 
-//----------------------------------------------------------------------------
 // FIRE  - fires crossbow and reload
 // Trimmed down from 32 frames to 20 (now 2s reload time)
 // Removed - 4,6,8,10, 17,19,21,23, 25,27,29,31
-//----------------------------------------------------------------------------
 void()	dcrossbow_fire1 =[	$tfire1,	dcrossbow_fire2	] {dcrossbow_shot();};
 void()	dcrossbow_fire2 =[	$tfire2,	dcrossbow_fire3	] {ai_face();};
 void()	dcrossbow_fire3 =[	$tfire3,	dcrossbow_fire5	] {ai_face();};

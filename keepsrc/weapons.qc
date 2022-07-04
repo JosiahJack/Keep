@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 49
+// Function count: 36
 //
 // Implements: Weapons System for the Player
 //
@@ -95,7 +95,7 @@ void() player_xbow1;
 void() W_FireSparks;
 void(entity ent) ReflectSound;
 void(float pause, void() thinkst) Echo_Shot;
-float Hip_ThrewMjolnir();
+float() Hip_ThrewMjolnir;
 void(vector lstart, entity lsource, float ldamage) LightningReflection;
 void() player_lava_nail1;
 void() player_lava_snail1;
@@ -148,7 +148,7 @@ void(vector start, vector dir, float shots) FireSparks = { // [FUNCTION]
 		d1_y = 0;
 		d1_z = 1;
         end = Aim_Scatter(dir, d1);
-        // launch_projectile(start, (start - end), CT_PROJ_HKN, 600); // Death Knight spike
+        // launch_projectile(start,(start - end),NO_SPIN,CT_PROJ_HKN,600); // Death Knight spike
 		Knightspike_Launch(start,end,600); //18*35=630.
         newmis.dmg = damage;
         newmis.touch = WandSpark_Touch;
@@ -156,8 +156,8 @@ void(vector start, vector dir, float shots) FireSparks = { // [FUNCTION]
         if (shots > 1) {
             d1_x = 0 - d1_x;
             end = Aim_Scatter(dir, d1);
-            // launch_projectile (start, (start - end), CT_PROJ_HKN, 600); // Death Knight spike
-			Knightspike_Launch (start, end, 600);
+            // launch_projectile (start,(start - end),NO_SPIN,CT_PROJ_HKN,600); // Death Knight spike
+			Knightspike_Launch(start,end,600);
             newmis.dmg = damage;
             newmis.touch = WandSpark_Touch;
             newmis.classtype = CT_WANDSPARK;
@@ -237,7 +237,7 @@ void() W_FireSparks = { // [FUNCTION]
 	W_Reload(WAND_DELAY);
     sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM); // Was weapons/gldhit. wav.
     // Since weapon is a magic wand, no recoil effects are needed.
-    makevectors (self.v_angle);
+    makevectors(self.v_angle);
     org = self.origin + v_forward*8 + '0 0 16';
     dir = aim(self, 100000);
     if (self.tome_finished) FireSparks (org, dir, 0);
@@ -257,7 +257,7 @@ void() W_FireSparks = { // [FUNCTION]
 };
 
 // Hipnotic Laser Cannon
-void (float stat) HIP_FireLaser = { // [FUNCTION]
+void(float stat) HIP_FireLaser = { // [FUNCTION]
 	local vector org, dir, out;
 	local float ofs, aofs, glow;
 
@@ -276,7 +276,7 @@ void (float stat) HIP_FireLaser = { // [FUNCTION]
 	}
 
 	self.effects = (self.effects | EF_MUZZLEFLASH);
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	ofs = MOVETYPE_TOSS;
 	out = v_forward;
 	out_z = FALSE;
@@ -327,7 +327,7 @@ float(vector source, float axedmg) GibFloorBody = {
 		src_dist = vlen(source - onflr.origin);
 		if (src_dist < RANGE_CHOPAXE) {			// Is the body close to the player?
 			org = onflr.origin - '0 0 16';		// move origin close to floor
-			makevectors (self.v_angle);			// Calculate viewing angle
+			makevectors(self.v_angle);			// Calculate viewing angle
 			vec = normalize (org - self.origin);
 			dotprod = vec * v_forward;
 			if (dotprod > 0.6) {				// Is the body infront of the player
@@ -346,7 +346,7 @@ float(vector source, float axedmg) GibFloorBody = {
 	return FALSE;
 };
 
-void () HIP_FireMjolnir = { // [FUNCTION]
+void() HIP_FireMjolnir = { // [FUNCTION]
 	local vector org, source, tvec, newpos;
 	local float damage;
 	local entity tester, stemp;
@@ -359,7 +359,7 @@ void () HIP_FireMjolnir = { // [FUNCTION]
 
 	W_Reload(0.4);
 	source = (self.origin + '0 0 16');
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	traceline (source,(source + (v_forward * RANGE_PLAYAXE)),FALSE,self);
 	if ( ((trace_fraction == TRUE) && (self.ammo_cells >= 15)) ) {
 		source = (source + (v_forward * RANGE_PLAYAXE));
@@ -408,13 +408,13 @@ void () HIP_FireMjolnir = { // [FUNCTION]
    W_Reload(0.4);
 };
 
-void () HIP_FireMjolnir2 = { // [FUNCTION]
+void() HIP_FireMjolnir2 = { // [FUNCTION]
 	local vector org, source;
 	local float damage;
 
 	W_Reload(0.4);
 	source = (self.origin + '0.000 0.000 16.000');
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	traceline (source,(source + (v_forward * RANGE_PLAYAXE)),FALSE,self);
 	if ( ((trace_fraction == TRUE) && (self.ammo_cells >= 15.000)) ) {
 		source = (source + (v_forward * RANGE_PLAYAXE));
@@ -447,7 +447,7 @@ void () HIP_FireMjolnir2 = { // [FUNCTION]
 	W_Reload(0.4);
 };
 
-void () W_FireMjolnir = { // [FUNCTION]
+void() W_FireMjolnir = { // [FUNCTION]
 	if (world.hipnoticoptions & HIPNOTIC_OLDMJOLNIR) {
 		if (self.tome_finished > 0) {
 			HIP_FireMjolnir2(); //adaya bfg lightning ball spawn!
@@ -470,7 +470,7 @@ void() W_FireThor = { // [FUNCTION]
     Thor_Launch(self.origin + '0 0 12',v_forward,targ); // We can throw.
 };
 
-void () W_FireProximityGrenade = { // [FUNCTION]
+void() W_FireProximityGrenade = { // [FUNCTION]
 	local entity missile;
 
 	if (self.attack_finished > time) return;
@@ -490,7 +490,7 @@ void () W_FireProximityGrenade = { // [FUNCTION]
 	missile.takedamage = DAMAGE_NO;
 	missile.health = MOVETYPE_FLY;
 	missile.state = 0;
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	if ( self.v_angle_x ) {
 		missile.velocity = ((((v_forward * 600.000) + (v_up * 200)) + ((crandom () * v_right) * MOVETYPE_BOUNCE)) + ((crandom () * v_up) * MOVETYPE_BOUNCE));
 	} else {
@@ -520,7 +520,7 @@ void() W_FireSidewinder = { // [FUNCTION]
     self.currentammo = self.ammo_rockets = self.ammo_rockets - 1;
     sound (self, CHAN_WEAPON, "zerstorer/weapons/stunfire.wav", 1, ATTN_NORM);
     self.punchangle_x = -2;
-    makevectors (self.v_angle);
+    makevectors(self.v_angle);
     start = self.origin + v_forward*8 + '0 0 16';
     dir = v_forward;
     targ = SuperRocket_Target (self, start, dir, 2000, COS30); // Select a target in front of the player's sights.
@@ -533,7 +533,7 @@ void() W_FireAxe = { // [FUNCTION]
 	local vector source, org;
 	local float axedmg;
 
-	makevectors (self.v_angle);				// Player forward angle
+	makevectors(self.v_angle);				// Player forward angle
 	source = self.origin + '0 0 16';		// Move source point up body
 
 	if (self.flags & FL_GODMODE && self.flags & FL_FLY) {
@@ -552,7 +552,7 @@ void() W_FireAxe = { // [FUNCTION]
 	}
 
 	traceline (source, source + (v_forward* RANGE_PLAYAXE), FALSE, self); // Trace forward and see if the axe has hit anything?
-	if (trace_fraction == 1.0) return;	// No contact, no hit
+	if (trace_fraction == 1) return;	// No contact, no hit
 
 	self.show_hostile = time + 1;	// wake monsters up, we hit stuff
 	org = trace_endpos - v_forward*4;	// Back 4 units to spawn blood
@@ -619,7 +619,7 @@ void() W_FireSaw = { // [FUNCTION]
 
     spot = self.origin + '0 0 16';      // 'source'
     traceline (spot, spot + v_forward*64, FALSE, self);
-    if (trace_fraction == 1.0) return;
+    if (trace_fraction == 1) return;
 
     spot = trace_endpos - v_forward*4;        // 'org'
     if (trace_ent.takedamage) {
@@ -707,7 +707,7 @@ void() W_FireSuperShotgun = { // [FUNCTION]
 	if (self.attack_finished > time) return;
 	if (self.ammo_shells < 2 && self.classtype != CT_MONGREMLIN) { forceweaponswitch(0.2); return;}
 
-	makevectors (self.v_angle);		// Special view angle for the player
+	makevectors(self.v_angle);		// Special view angle for the player
 
 	// if shot in the air - do Newton's 3rd law. (from zerstorer)
 	if (!(self.flags & FL_ONGROUND)) self.velocity = self.velocity - (v_forward * 35);
@@ -807,12 +807,12 @@ void(float oz, float ox) W_FireSpikes = { // [FUNCTION]
 			StackDamage_Clear();
 		} else { // Normal Super Nailgun Fire
 			if (world.copperoptions & COPPER_TWOSHOT_PERFORATOR) { // Copper variant fires more nails instead of one super one
-				launch_projectile (org + vecrand(0,1.25,1), dir, CT_PROJ_NG, (940 + random()*30));
+				launch_projectile(org + vecrand(0,1.25,1),dir,NO_SPIN,CT_PROJ_NG,(940 + random()*30));
 				if (self.super_damage_finished > time) {
 					newmis.dmg = DAMAGE_SNGSPIKE; // So zombies still gib at 72 with quad.  Yes Copper did this.
 					spike1 = newmis;
 				}
-				launch_projectile (org + vecrand(0,1.25,1), dir, CT_PROJ_NG, (1020 + random()*30));
+				launch_projectile(org + vecrand(0,1.25,1),dir,NO_SPIN,CT_PROJ_NG,(1020 + random()*30));
 				if (self.super_damage_finished > time) {
 					newmis.dmg = DAMAGE_SNGSPIKE; 
 					spike2 = newmis;
@@ -820,7 +820,7 @@ void(float oz, float ox) W_FireSpikes = { // [FUNCTION]
 					spike2.buddy = spike1; // Race ya!
 					dprint("Buddy nails setup!\n");
 				}
-			} else launch_projectile (org, dir, CT_PROJ_SNG, SPEED_PLAYSPIKE); // Normal Normal Super Nailgun Fire
+			} else launch_projectile(org,dir,NO_SPIN,CT_PROJ_SNG,SPEED_PLAYSPIKE); // Normal Normal Super Nailgun Fire
 		}
 	} else { // NG setup, sound and ammo change
 		sound (self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM);
@@ -844,7 +844,7 @@ void(float oz, float ox) W_FireSpikes = { // [FUNCTION]
 			else Echo_Shot(0.05,W_EchoSpike_Up);
 
 			StackDamage_Clear();
-		} else launch_projectile(org,dir,CT_PROJ_NG,SPEED_PLAYSPIKE); // Normal Nailgun Fire
+		} else launch_projectile(org,dir,NO_SPIN,CT_PROJ_NG,SPEED_PLAYSPIKE); // Normal Nailgun Fire
 	}
 };
 
@@ -856,7 +856,7 @@ void(float oz, float ox) W_FireLavaSpikes = { // [FUNCTION]
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	W_Reload(0.2);
 	self.punchangle_x = -2;
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN)  dir = aim(self, SPEED_PLAYSPIKE); // Auto aim assist (builtin function 44)
 	else dir = normalize(v_forward * SPEED_PLAYSPIKE); // Straight line forward where crosshair is pointing
 
@@ -882,7 +882,7 @@ void(float oz, float ox) W_FireLavaSpikes = { // [FUNCTION]
 			Echo_Shot(1/30, W_EchoLavaSpike_Down);
 			Echo_Shot(2/30, W_EchoLavaSpike_Up);
 			StackDamage_Clear();
-		} else launch_projectile (org, dir, CT_PROJ_LAVASNG, SPEED_PLAYSPIKE); // Normal Super Nailgun Fire
+		} else launch_projectile(org,dir,NO_SPIN,CT_PROJ_LAVASNG,SPEED_PLAYSPIKE); // Normal Super Nailgun Fire
 	} else { // Lava NG setup, sound and ammo change
 		sound (self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM);
 		if (self.perms & POW_DOUBLE) {
@@ -905,12 +905,13 @@ void(float oz, float ox) W_FireLavaSpikes = { // [FUNCTION]
 			else Echo_Shot(0.05,W_EchoLavaSpike_Up);
 
 			StackDamage_Clear();
-		} else launch_projectile (org, dir, CT_PROJ_LAVANG, SPEED_PLAYSPIKE); // Normal Nailgun Fire
+		} else launch_projectile(org,dir,NO_SPIN,CT_PROJ_LAVANG,SPEED_PLAYSPIKE); // Normal Nailgun Fire
 	}
 };
 
 void() W_FireGrenade = { // [FUNCTION]
 	local vector dir, avel;
+	local float spd;
 
 	if (self.attack_finished > time) return;
 	if (self.ammo_rockets < 1) { forceweaponswitch(0.2); return;} // Ran out of ammo, switch to next best weapon
@@ -921,32 +922,31 @@ void() W_FireGrenade = { // [FUNCTION]
 	W_Reload(0.6);
 	self.punchangle_x = -2;
 	player_grenreset();	// reset weaponframe
-	makevectors (self.v_angle);
-
+	makevectors(self.v_angle);
+	dir = v_forward;
+	spd = SPEED_PLAYGRENADE;
+	if (autoaim_cvar < 1) spd = SPEED_PLAYAIM;
 	if (self.tome_finished) {
+		spd = 800; // Faster
 		if (self.v_angle_x) { // Has the player aimed left/right? then no auto aim assist
-			dir = v_forward*800 + v_up * ELEV_ZAXIS + crandom()*v_right*10 + crandom()*v_up*10; // Faster
+			dir = dir * spd + v_up * ELEV_ZAXIS + crandom()*v_right*10 + crandom()*v_up*10;
 		} else {
-			if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN)  dir = aim(self, SPEED_PLAYAIM); // Check for auto aim state
-			else dir = normalize(v_forward * 800); // Faster
-
-			dir = dir * 800; // Faster
+			if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self,SPEED_PLAYAIM); // Check for auto aim state
+			dir = dir * spd;
 			dir_z = ELEV_ZAXIS; // Work out default speed and elevation
 		}
 		avel = vecrand(100,200,FALSE);
-        Launch_Grenade(self.origin, dir, avel, CT_PROJ_GLSUPER);
+        launch_projectile(self.origin,dir,avel,CT_PROJ_GLSUPER,1);
     } else {
 		if (self.v_angle_x) { // Has the player aimed left/right? then no auto aim assist
-			dir = v_forward*SPEED_PLAYGRENADE + v_up * ELEV_ZAXIS + crandom()*v_right*10 + crandom()*v_up*10;
+			dir = dir * spd + v_up * ELEV_ZAXIS + crandom()*v_right*10 + crandom()*v_up*10;
 		} else {
-			if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN)  dir = aim(self, SPEED_PLAYAIM); // Check for auto aim state
-			else dir = normalize(v_forward * SPEED_PLAYGRENADE);
-
-			dir = dir * SPEED_PLAYGRENADE;
+			if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self,spd); // Check for auto aim state
+			dir = dir * spd;
 			dir_z = ELEV_ZAXIS; // Work out default speed and elevation
 		}
 		avel = vecrand(100,200,FALSE);
-		Launch_Grenade(self.origin, dir, avel, CT_PROJ_GL);
+		launch_projectile(self.origin, dir, avel, CT_PROJ_GL,1);
 	}
 };
 
@@ -963,7 +963,7 @@ void() W_FireRocket = { // [FUNCTION]
 	W_Reload(0.8);
 	self.punchangle_x = -2;
 	player_rockreset();	// reset weaponframe
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	org = self.origin + v_forward * 8 + '0 0 16';
 
 	// Auto aim assist (builtin function 44)
@@ -971,17 +971,17 @@ void() W_FireRocket = { // [FUNCTION]
 	// Straight line forward where crosshair is pointing
 	else dir = normalize(v_forward * SPEED_RLPLAYER);
 	
-    if (self.tome_finished) Launch_Missile (org, dir, '0 0 0', CT_PROJ_ROCKETSUPER, 500); //SuperRocket_Launch (org, dir);
-    else Launch_Missile (org, dir, '0 0 0', CT_PROJ_ROCKET, SPEED_RLPLAYER);
+    if (self.tome_finished) launch_projectile(org, dir,NO_SPIN,CT_PROJ_ROCKETSUPER,500); //SuperRocket_Launch (org, dir);
+    else launch_projectile(org,dir,NO_SPIN,CT_PROJ_ROCKET,SPEED_RLPLAYER);
 };
 
-void () W_Fire_Crossbow = { // [FUNCTION]
+void() W_Fire_Crossbow = { // [FUNCTION]
 	local vector org, dir;
 
 	if (self.attack_finished > time) return;
 	if (self.ammo_bolts < 1) { forceweaponswitch(0.2); return;}
 	self.currentammo = self.ammo_bolts = self.ammo_bolts - 1;
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "ad171/weapons/crossbow_fire.wav", 1, ATTN_NORM);
 	if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self, SPEED_PLAYSPIKE);
 	else dir = normalize(v_forward * SPEED_DCROSS); // Straight line forward where crosshair is pointing
@@ -989,16 +989,16 @@ void () W_Fire_Crossbow = { // [FUNCTION]
 	if (self.tome_finished) W_Reload(0.13);
 	else W_Reload(0.9);
 	org = self.origin + '0 0 16';
-	launch_projectile (org, dir, CT_PROJ_BOLT1, 1100);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_BOLT1,1100);
 };
 
-void () W_Fire_Crossbow_Poison = { // [FUNCTION]
+void() W_Fire_Crossbow_Poison = { // [FUNCTION]
 	local vector org, dir;
 
 	if (self.attack_finished > time) return;
 	if (self.ammo_poison < 1) { forceweaponswitch(0.2); return;}
 	self.currentammo = self.ammo_poison = self.ammo_poison - 1;
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	sound (self, CHAN_WEAPON, "ad171/weapons/crossbow_fire.wav", 1, ATTN_NORM);
 	if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN)  dir = aim(self, SPEED_PLAYSPIKE);
 	else dir = normalize(v_forward * SPEED_DCROSS); // Straight line forward where crosshair is pointing
@@ -1007,7 +1007,7 @@ void () W_Fire_Crossbow_Poison = { // [FUNCTION]
 	else W_Reload(0.9);
 	org = self.origin + '0 0 16';
 	self.poisonous = 1;
-	launch_projectile (org, dir, CT_PROJ_BOLT2, 1100);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_BOLT2,1100);
 };
 
 void() W_FireIceCrossbow = { // [FUNCTION]
@@ -1017,7 +1017,7 @@ void() W_FireIceCrossbow = { // [FUNCTION]
 
     self.currentammo = self.ammo_bolts = self.ammo_bolts - 1;
     self.punchangle_x = -2;
-    makevectors (self.v_angle);
+    makevectors(self.v_angle);
     start = self.origin + v_forward*8 + '0 0 16';
     dir = v_forward;    // No auto-aim please.
     vx = v_forward * 0.9848;    // cos(10)
@@ -1062,7 +1062,7 @@ void() W_FirePlasma = { // [FUNCTION]
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	W_Reload(0.2);
 	self.punchangle_x = -2;
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 
 	// Check for auto aim state
 	// Auto aim assist (builtin function 44)
@@ -1072,7 +1072,7 @@ void() W_FirePlasma = { // [FUNCTION]
 	sound (self, CHAN_WEAPON, "ad171/weapons/plasma_fire.wav", 1, ATTN_NORM);
 	self.currentammo = self.ammo_cells = self.ammo_cells - 1;
 	org = self.origin + v_forward*8 + '0 0 16';
-	launch_projectile(org, dir, CT_PROJ_PLASMA, SPEED_PLAYPLASMA);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA,SPEED_PLAYPLASMA);
 };
 
 void() W_FireLightning = { // [FUNCTION]
@@ -1195,31 +1195,49 @@ void(float cl) W_FireThunderbolt = { // [FUNCTION]
         LightningBolt(self.origin,org + v_forward*6000,self,damage,self,TE_LIGHTNING2);
 };
 
-void () W_FireMultiGrenade = { // [FUNCTION]
+void() W_FireMultiGrenade = { // [FUNCTION]
 	local vector dir, avel;
+	local float spd;
 
 	if (self.attack_finished > time) return;
 	if (self.ammo_multi_rockets < 1) { forceweaponswitch(0.2); return;}
 
-	self.ammo_multi_rockets = (self.ammo_multi_rockets - TRUE);
+	self.ammo_multi_rockets = (self.ammo_multi_rockets - 1);
 	self.currentammo = (self.currentammo - TRUE);
 	sound (self,CHAN_WEAPON,"weapons/grenade.wav",TRUE,ATTN_NORM);
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	W_Reload(0.6);
 	self.punchangle_x = -2;
-	makevectors (self.v_angle);
-	if ( self.v_angle_x ) {
-		dir = ((((v_forward * 600.000) + (v_up * 200.000)) + ((crandom () * v_right) * MOVETYPE_BOUNCE)) + ((crandom () * v_up) * MOVETYPE_BOUNCE));
-	} else {
-		dir = aim (self,10000.000);
-		dir = (dir * 600.000);
-		dir_z = 200.000;
+	makevectors(self.v_angle);
+	dir = v_forward;
+	spd = SPEED_PLAYGRENADE;
+	if (autoaim_cvar < 1) spd = SPEED_PLAYAIM;
+	if (self.tome_finished) {
+		spd = 800; // Faster
+		if (self.v_angle_x) { // Has the player aimed left/right? then no auto aim assist
+			dir = dir + v_up * ELEV_ZAXIS + crandom()*v_right*10 + crandom()*v_up*10;
+		} else {
+			if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self,SPEED_PLAYAIM); // Check for auto aim state
+			dir = dir * spd;
+			dir_z = ELEV_ZAXIS; // Work out default speed and elevation
+		}
+		avel = vecrand(100,200,FALSE);
+        launch_projectile(self.origin,dir,avel,CT_PROJ_GLMULTI,1);
+		newmis.tome_finished = 1;
+    } else {
+		if (self.v_angle_x) { // Has the player aimed left/right? then no auto aim assist
+			dir = dir * spd + v_up * ELEV_ZAXIS + crandom()*v_right*10 + crandom()*v_up*10;
+		} else {
+			if ((autoaim_cvar < 1) && self.classtype != CT_MONGREMLIN) dir = aim(self,spd); // Check for auto aim state
+			dir = dir * spd;
+			dir_z = ELEV_ZAXIS; // Work out default speed and elevation
+		}
+		avel = vecrand(100,200,FALSE);
+		launch_projectile(self.origin, dir, avel, CT_PROJ_GLMULTI,1);
 	}
-	avel = '300.000 300.000 300.000';
-	Launch_Grenade(self.origin, dir, avel, CT_PROJ_GLMULTI);
 };
 
-void () W_FireMultiRocket = { // [FUNCTION]
+void() W_FireMultiRocket = { // [FUNCTION]
 	if (self.attack_finished > time) return;
 	self.ammo_multi_rockets = (self.ammo_multi_rockets - TRUE);
 	self.currentammo = (self.currentammo - TRUE);
@@ -1232,7 +1250,7 @@ void () W_FireMultiRocket = { // [FUNCTION]
 	W_Reload(0.9);
 };
 
-void () W_FirePlasmaGun = { // [FUNCTION]
+void() W_FirePlasmaGun = { // [FUNCTION]
    local entity missile;
 	local float cells;
 
@@ -1263,7 +1281,7 @@ void () W_FirePlasmaGun = { // [FUNCTION]
 	missile.movetype = MOVETYPE_FLYMISSILE;
 	missile.solid = SOLID_BBOX;
 	missile.classname = "plasma";
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	missile.velocity = aim (self,1250);
 	missile.velocity = (missile.velocity * 1250);
 	missile.avelocity = '300.000 300.000 300.000';
@@ -1287,7 +1305,7 @@ void() W_FireStinger = { // [FUNCTION]
     self.currentammo = self.ammo_rockets = self.ammo_rockets - COST_MIRV; // Cost of admission paid.  Launch the big missile.
     sound (self, CHAN_WEAPON, "drake/weapons/mirv1.wav", 1, ATTN_NORM);
     self.punchangle = '6 0 -12';
-    makevectors (self.v_angle);
+    makevectors(self.v_angle);
     self.velocity = self.velocity - (v_forward * 100);  // Recoil!
     start = self.origin + self.view_ofs + (v_forward*8) + (v_right*8);
     Mirv_Launch(start,v_forward);
@@ -1313,10 +1331,10 @@ void() W_FireHydra = { // [FUNCTION]
     self.currentammo = self.ammo_rockets = self.ammo_rockets - cost;
     sound(self, CHAN_WEAPON, "zerstorer/weapons/stunfire.wav", 1, ATTN_NORM);
     self.punchangle_x = -2;
-    makevectors (self.v_angle);
+    makevectors(self.v_angle);
     start = self.origin + v_forward*8 + '0 0 16';
     dir = v_forward;
-	Launch_Missile(start, dir, '0 0 0', CT_PROJ_ROCKET, SPEED_RLPLAYER);
+	launch_projectile(start,dir,NO_SPIN,CT_PROJ_ROCKET,SPEED_RLPLAYER);
     newmis.velocity = dir * 600;
     newmis.count    = cost;         // # of warheads after splitting.
     newmis.nextthink= time + 0.2;
@@ -1365,7 +1383,7 @@ void(float damage) W_FireBFG = { // [FUNCTION]
         traceline (orgo, orgo + v_forward*2048, FALSE, self);
 
         while(!donerail) {
-			if(trace_ent.takedamage) {
+			if (trace_ent.takedamage) {
 				orgen = trace_endpos + dir*4;
 				dorg = trace_endpos - dir*4;
 				SpawnBlood(trace_ent, dorg, '0 0 0', damage,0);
@@ -1376,7 +1394,7 @@ void(float damage) W_FireBFG = { // [FUNCTION]
 					trace_ent.flags = trace_ent.flags - (trace_ent.flags & FL_ONGROUND);
 					trace_ent.velocity = trace_ent.velocity + tdir*(170+damage);
 
-					if(trace_ent.velocity_z < 270)
+					if (trace_ent.velocity_z < 270)
 					trace_ent.velocity_z = trace_ent.velocity_z + 270;
 				}
 			} else {
@@ -1570,15 +1588,15 @@ float(entity targ) W_BestWeapon = { // [FUNCTION]
 	if (targ.waterlevel < 1 && targ.ammo_cells > 0 && (targ.items & IT_LIGHTNING) ) return IT_LIGHTNING;
 	if (targ.waterlevel < 1 && targ.ammo_cells > 0 && (targ.items & IT2_MJOLNIR) ) return IT2_MJOLNIR;
 	if (targ.ammo_bloodcrystals > 0 && (targ.items & IT_SANGUINATORS) ) return IT_SANGUINATORS;
-	if(targ.ammo_lava_nails > 1 && (targ.items & IT_LAVA_SUPER_NAILGUN) ) return IT_LAVA_SUPER_NAILGUN;
-	if(targ.ammo_nails > 1 && (targ.items & IT_SUPER_NAILGUN) ) return IT_SUPER_NAILGUN;
-	if(targ.ammo_lava_nails > 1 && (targ.items & IT_LAVA_NAILGUN) ) return IT_LAVA_NAILGUN;
+	if (targ.ammo_lava_nails > 1 && (targ.items & IT_LAVA_SUPER_NAILGUN) ) return IT_LAVA_SUPER_NAILGUN;
+	if (targ.ammo_nails > 1 && (targ.items & IT_SUPER_NAILGUN) ) return IT_SUPER_NAILGUN;
+	if (targ.ammo_lava_nails > 1 && (targ.items & IT_LAVA_NAILGUN) ) return IT_LAVA_NAILGUN;
 	if (targ.ammo_elemental > 0 && (targ.items & IT_SCIMITAR) ) return IT_SCIMITAR;
-	if(targ.ammo_bolts > 1 && (targ.items & IT_EXTRA_WEAPON) ) return IT_EXTRA_WEAPON;
+	if (targ.ammo_bolts > 1 && (targ.items & IT_EXTRA_WEAPON) ) return IT_EXTRA_WEAPON;
 	if (targ.ammo_bloodcrystals > 0 && (targ.items & IT_SANGUINATORS) ) return IT_SANGUINATORS;
-	if(targ.ammo_shells > 2 && (targ.items & IT_SUPER_SHOTGUN) ) return IT_SUPER_SHOTGUN; // greater than 2 in case of upgraded triple shotgun Widowmaker
-	if(targ.ammo_nails > 0 && (targ.items & IT_NAILGUN) ) return IT_NAILGUN;
-	if(targ.ammo_shells > 0 && ((targ.items & IT_SHOTGUN) || (targ.perms & IT_BLASTER))) return IT_SHOTGUN;
+	if (targ.ammo_shells > 2 && (targ.items & IT_SUPER_SHOTGUN) ) return IT_SUPER_SHOTGUN; // greater than 2 in case of upgraded triple shotgun Widowmaker
+	if (targ.ammo_nails > 0 && (targ.items & IT_NAILGUN) ) return IT_NAILGUN;
+	if (targ.ammo_shells > 0 && ((targ.items & IT_SHOTGUN) || (targ.perms & IT_BLASTER))) return IT_SHOTGUN;
 	if (targ.waterlevel > 0 && targ.ammo_cells < 1 && (targ.items & IT2_MJOLNIR) ) return IT2_MJOLNIR;
 	if (targ.items & IT_AXE) return IT_AXE;
 	if (targ.items2 & IT2_CROSS) return IT2_CROSS; // WAND
@@ -2740,6 +2758,41 @@ void() CycleWeaponReverseCommand = { // [FUNCTION]
 	}
 };
 
+void(float gibDeath) Cheat_KillRay = { // [FUNCTION]
+	local float dmg;
+	local vector src, dir, vel, org;
+
+	if (self.attack_finished > time) return;
+
+	if (gibDeath) sound(self,CHAN_WEAPON,"tronyn/lightning_blast.wav",1,ATTN_NORM);
+	else sound(self,CHAN_WEAPON,"tronyn/lightning_strike.wav",1,ATTN_NORM);
+	
+	self.effects = self.effects | EF_MUZZLEFLASH;
+	W_Reload(0.5);
+	self.punchangle_x = -2;
+	makevectors(self.v_angle);
+	dir = normalize(v_forward * SPEED_PLAYAIM);
+	src = self.origin + v_forward*10;
+	traceline(src,src + dir * 2048,FALSE,self);
+	if (trace_fraction != 1.0) {
+		vel = normalize(dir + v_up*crandom() + v_right*crandom());
+		vel = vel + 2*trace_plane_normal;
+		vel = vel * 200;
+		org = trace_endpos - dir*4;
+		if (!check_skycontent(org)) { // Check for sky content? skies don't impact or bleed
+			if (trace_ent.takedamage) {
+				dmg = trace_ent.health + 1;
+				if (gibDeath) dmg = dmg - trace_ent.gibhealth + 1;
+				if (trace_ent.flags & FL_MONSTER) SpawnBlood(trace_ent,org,vel*0.2,dmg*2,0); // Hitting monsters does twice the amount of blood effects
+				else SpawnBlood(trace_ent,org,vel*0.2,dmg,0);
+
+				T_Damage(trace_ent, self, self, dmg,DAMARMOR);
+				if (trace_ent.classtype == CT_TARGETDUMMY) MarkAttack(org, trace_ent.wait); // Check for target dummy (manually create marker)
+			} else Tent_Point(TE_GUNSHOT,org); // Hit something that does not bleed (often world)
+		}
+	} 
+};
+
 void() W_WeaponFrame = { // [FUNCTION]
 	if (self.lavaGunFired) {
 		if (self.weapon == IT_LAVA_NAILGUN || self.weapon == IT_LAVA_SUPER_NAILGUN) {
@@ -2760,7 +2813,6 @@ void() W_WeaponFrame = { // [FUNCTION]
 	if (!self.button0) return; // check for attack
 
 	if (self.b0_click) self.b0_click = 2; // Just double-clicked.
-
 	if (self.super_damage_finished > 0 && self.powerup_sound < time) { // Only play one powerup sound at once
 		if (self.super_sound < time) {
 			self.super_sound = time + 1;
@@ -2790,5 +2842,11 @@ void() W_WeaponFrame = { // [FUNCTION]
 		}
 	}
 	// Check for weapon updates
-	W_Attack();
+	if (cheatflags & CHEAT_GIBGUN) {
+		Cheat_KillRay(1);
+	} else if (cheatflags & CHEAT_KILLGUN) {
+		Cheat_KillRay(0);
+	} else {
+		W_Attack();
+	}
 };

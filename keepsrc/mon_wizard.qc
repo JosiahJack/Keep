@@ -120,17 +120,17 @@ void() Wiz_FastFire = {
 
 	if (self.owner.health > 0) {
 		self.owner.effects = self.owner.effects | EF_MUZZLEFLASH;
-		makevectors (SUB_angEnemyTarget());	
+		makevectors(SUB_angEnemyTarget());	
 		dst = SUB_orgEnemyTarget() - 13*self.movedir;
 		vec = normalize(dst - self.origin);
 		self.attack_speed = SPEED_WIZSPIKE + (skill * SPEED_WIZSKILL);
 		if (self.owner.classtype == CT_MONWIZBOSS) {
 			sound (self, CHAN_WEAPON, "anevil/wizboss/wattack.wav", 1, ATTN_NORM);
-			launch_projectile(self.origin, vec, CT_PROJ_WIZBOSS, self.attack_speed);
+			launch_projectile(self.origin,vec,NO_SPIN,CT_PROJ_WIZBOSS,self.attack_speed);
 			newmis.classname = "knightspike"; // Firey impact for lava ball spit.
 		} else {
 			sound (self, CHAN_WEAPON, "wizard/wattack.wav", 1, ATTN_NORM);
-			launch_projectile(self.origin, vec, CT_PROJ_WIZ, self.attack_speed);
+			launch_projectile(self.origin,vec,NO_SPIN,CT_PROJ_WIZ,self.attack_speed);
 		}
 		newmis.owner = self.owner;
 	}
@@ -144,7 +144,7 @@ void() Wiz_StartFast = {
 	if (self.classtype == CT_MONWIZBOSS) sound(self,CHAN_WEAPON,"anevil/wizboss/wattack.wav",1,ATTN_NORM);
 	else sound (self, CHAN_WEAPON, "wizard/wattack.wav", 1, ATTN_NORM);
 	self.v_angle = self.angles;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	newmis = spawn();
 	newmis.owner = self;
 	newmis.nextthink = time + 0.6;

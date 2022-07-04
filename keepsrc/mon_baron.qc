@@ -325,7 +325,7 @@ void() Baron_Ice = {
     err = '6 4.5 0';     // arctan(err) = '0.105 0.0787 0'.
     loop = random() * 3 + 6;
     base = self.enemy.origin;
-    makevectors (self.angles);
+    makevectors(self.angles);
     org = self.origin + v_forward*16 + v_right*2 + v_up*20;
     base = normalize (base - self.origin);  // Like enforcers.
     while (loop > 0) {
@@ -383,7 +383,7 @@ void() Baron_Earth = {
     err = '6 6 0';
     loop = random() * 3 + 5;
     base = self.enemy.origin;
-    makevectors (self.angles);
+    makevectors(self.angles);
     org = self.origin + v_forward*16 + v_right*2 + v_up*20;
     base = normalize (base - self.origin);  // Like enforcers.
     while (loop > 0) {
@@ -421,7 +421,7 @@ void() Geyser_Erupt = {
         qsin = trig_y;
         dir = '0 0 0';
         dir_y = random() * 360;
-        makevectors (dir);
+        makevectors(dir);
         dir = (v_forward * qcos) + (v_up * qsin);
         sped = random() * 100 + 500;    //830;
         Earth_Launch (org, dir, sped);
@@ -525,7 +525,7 @@ void(vector st) M_FireBaronPlasma = {
     local entity  targ;
 
     targ = world;
-    makevectors (self.angles);
+    makevectors(self.angles);
     p1 = self.origin + (v_forward * st_x) + (v_right * st_y) + (v_up * st_z);
     p2 = Aimpoint (self.enemy);
     dir = Maim_Line (p1, p2, 1000, targ, '0 0 0');
@@ -536,7 +536,7 @@ void(vector st) M_FireBaronPlasma = {
 void() baron_slam = {
     local   vector  org, org2, dir;
 
-    makevectors (self.angles);
+    makevectors(self.angles);
     org = self.origin + (v_forward*32) + (v_right*12);
     traceline (org, org - '0 0 42', TRUE, self);
     org2 = trace_endpos;
@@ -647,35 +647,31 @@ void() baron_point11 =[ $point11, baron_run     ] {ai_face();};
 // various changes required for Tronyn's modified knights.
 // The basic shot code is otherwise the same as the hell knights'.
 void(float offset) baron_shot = {
-    local   vector  offang, org, vec;
+    local vector offang, org, vec;
     
     offang = vectoangles (self.enemy.origin - self.origin);
     offang_y = offang_y + offset * 6;
-
-    makevectors (offang);
-	// PM:  No need to check hell knight frames for different start point.
+    makevectors(offang);
     org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
-
-	// set missile speed
-    vec = normalize (v_forward);
+    vec = normalize(v_forward);
     vec_z = 0 - vec_z + (random() - 0.5)*0.1;
-    // vec = Maim_Scatter (vec, '0 0 0');      // Added for invisibility.
+    // vec = Maim_Scatter (vec, '0 0 0'); // Added for invisibility.
 
 	// PM:  No need to check classnames like Bane, hell knight, hell lord, etc.
     if (self.level == BARON_EARTH) {
-        launch_projectile (org, vec, CT_PROJ_SNG, SPEED_PLAYSPIKE);
+        launch_projectile(org,vec,NO_SPIN,CT_PROJ_SNG,SPEED_PLAYSPIKE);
         // Old damage was 15, but use superspike's 18.
-        sound (self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM);
+        sound (self, CHAN_WEAPON,"weapons/spike2.wav",1,ATTN_NORM);
     } else if (self.level == BARON_WATER) {
-        Baron_Ice_Launch (org, vec, 600);
-        sound (self, CHAN_WEAPON, "drake/baron/icefire.wav", 1, ATTN_NORM);
+        Baron_Ice_Launch(org,vec,600);
+        sound(self,CHAN_WEAPON,"drake/baron/icefire.wav",1,ATTN_NORM);
     } else { // Use offset as speed.
         if (self.level == BARON_FIRE) offset = 500;
         else offset = 300;
         self.attack_speed = SPEED_HKSPIKE + ( skill * SPEED_HKSKILL);
-        launch_projectile (org, vec, CT_PROJ_HKN, self.attack_speed);
+        launch_projectile(org,vec,NO_SPIN,CT_PROJ_HKN,self.attack_speed);
         if (self.level == BARON_FIRE) newmis.dmg  = 20;
-        sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
+        sound(self,CHAN_WEAPON,"hknight/attack1.wav",1,ATTN_NORM);
     }
 };
 
@@ -818,7 +814,7 @@ void() baron_jump4  =[ $jump3,  baron_jump5  ] {
 
     // Make the jump;
     self.touch = baron_jumptouch;
-    makevectors (self.angles);
+    makevectors(self.angles);
 //    self.origin_z   = self.origin_z + 1;
     self.velocity   = v_forward * sped;
     self.velocity_z = self.velocity_z + up;
@@ -904,7 +900,7 @@ float(vector ang, float sped, vector add) baron_tracejump = {
     local   vector  vel, end;
     local   float   pc;
 
-    makevectors (ang);
+    makevectors(ang);
     vel = (v_forward * sped) + add;
 	TraceBallistic (self.origin,vel,FALSE,self,3,self.origin,MOVETYPE_TOSS); // Nehahra engine had a builtin 'tracetoss' function.  Here, use my QC version.  It was made for projectiles, but it'll do.
     end = trace_endpos;

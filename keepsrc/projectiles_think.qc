@@ -27,8 +27,8 @@
 // NO CHARGE to the recipient.
 //
 // Stats:
-// Entity count: 0
-// Function count: 61
+// Entity count: 
+// Function count: 
 //
 // Implements: Projectile Thinks
 //
@@ -45,6 +45,10 @@ vector(entity ent) Burn_Point;
 float(entity ent) ImmuneToBurning;
 void(vector spot, float hot) Firelink_Spawn;
 void(entity targ, vector org, vector dir, float proj_color, float proj_size, float proj_life, float proj_speed) Launch_Flame;
+vector(vector p1, vector p2, float sped, entity targ) Aim_Lead;
+vector(vector p1, vector p2, float sped, entity targ, float ex) Aim_LineEx;
+float(vector p1, vector p2, float sped) Aim_TossUp;
+vector(vector p1, vector p2, float sped, float up, entity targ, vector spread) Maim_SmartBall;
 
 void() Think_Projectile = { // [FUNCTION]
 	if (self.attack_lifetime < time) { // Original projectile lifetime timer
@@ -61,10 +65,9 @@ void() Think_Projectile = { // [FUNCTION]
 };
 
 void() Steer_HomingMissile = { // [FUNCTION]
-	if (self.enemy.health < 1) { remove(self); return; } // If tracking enemies dies or end level? remove homing missiles
-	if (intermission_running > 0) { remove(self); return; }
-	if (cinematic_running > 0) { remove(self); return; }
+	if (self.enemy.health < 1) { entity_remove(self, random() * 3); return; } // If tracking enemies dies or end level? remove homing missiles
 
+	if (intermission_running > 0 || cinematic_running > 0 || cutscene > 0) self.no_trackondeath = NEGATIVE;
 	if (self.waitmin < time) self.owner = self; // After 1s let homing missiles impact on ower
 	if (self.owner.health < 1 && self.no_trackondeath == TRUE) self.no_trackondeath = NEGATIVE; // Stop missile tracking if owner is dead and mode is enabled
 	if (self.no_trackondeath == NEGATIVE) return; // Has projectile tracking been disabled?
@@ -154,7 +157,7 @@ void() Steer_LimitedMissile = { // [FUNCTION]
 	if (self.attack_angle) self.angles = vectoangles(self.velocity);
 };
 
-void () HIP_LaserThink = { // [FUNCTION]
+void() HIP_LaserThink = { // [FUNCTION]
 	if (self.owner.tome_finished) { spark_spawn(); spark_spawn(); spark_spawn(); }
 	if ( (time > self.attack_finished) ) { remove (self); return; }
 
@@ -164,7 +167,7 @@ void () HIP_LaserThink = { // [FUNCTION]
 	self.nextthink = (time + 0.100);
 };
 
-void () ProximityGrenadeExplode = { // [FUNCTION]
+void() ProximityGrenadeExplode = { // [FUNCTION]
     self.takedamage = DAMAGE_NO;
     NumProximityGrenades = (NumProximityGrenades - 1);
     sound(self,CHAN_WEAPON,"hipnotic/weapons/proxwarn.wav",TRUE,ATTN_NORM);
@@ -172,7 +175,7 @@ void () ProximityGrenadeExplode = { // [FUNCTION]
     self.nextthink = time + 0.5;
 };
 
-void () ProximityBomb = { // [FUNCTION]
+void() ProximityBomb = { // [FUNCTION]
     local entity head;
 
     self.think = ProximityBomb;
@@ -228,7 +231,7 @@ float(entity targ, entity client) BfgLock_InSight = { // [FUNCTION]
     v2 = Midpoint (targ);
     vec = normalize (v2 - v1); // Check if the target is within the v_weapon's
 							   // targeting box.
-    makevectors (client.v_angle);
+    makevectors(client.v_angle);
     dot = vec * v_forward;
     if (dot < LOCK_DOT_YAW) return FALSE; // NOT in the box.
     if (dot >= LOCK_DOT_PITCH) return TRUE; // Certainly IN the box.
@@ -241,31 +244,12 @@ float(entity targ, entity client) BfgLock_InSight = { // [FUNCTION]
 					 // the same as the aim vector AND whose yaw is the same as
 					 // the ideal vector.  This fixes pitch reversal.  
     v1_y = v2_y;
-    makevectors (v1);
+    makevectors(v1);
     return (vec * v_forward) >= LOCK_DOT_PITCH; // Then we need to find the dot 
 												// product of the new and ideal 
 												// vectors.  If dot is greater
 												// than or equal to vertical
 												// dot, target is in the box.
-};
-
-// This checks if the target should be targeted by the weapon system.
-float(entity targ, entity sensor, entity attacker) BfgLock_Confirm = { // [FUNCTION]
-    local vector p1, p2;
-
-    if (targ == attacker) return FALSE; // Don't turn on the attacker.
-    if (!targ.takedamage) return FALSE; // Target must be mortal and solid. This will stop here in case targ is the world.
-    if (targ.solid <= SOLID_TRIGGER) return FALSE;   // Ethereal, not solid. solid_not is less than trigger.
-    if (targ.invisible_finished) return FALSE; // Target must not have stealth tech.
-    if (targ.flags & FL_NOTARGET) return FALSE;
-
-    p1 = sensor.origin + sensor.view_ofs; // Sensor entity must see the target. If sensor equals attacker, he must see target as the weapon would.
-    p2 = Midpoint (targ);
-    traceline (p1, p2, TRUE, sensor);
-    if (trace_fraction < 1) return FALSE;   // Blocked!
-    if (trace_inopen && trace_inwater) return FALSE;   // Lock cannot cross contents.
-    if (Ally_Check(targ, attacker)) return FALSE; // Check relations to avoid friendly fire.
-    return TRUE; // Target is confirmed.
 };
 
 // Checks if the warhead can track either of its targets.
@@ -395,56 +379,6 @@ void() Warhead_Think = { // [FUNCTION]
     self.nextthink  = time + 0.1;
 };
 
-// Guided Missile.  This selects targets for the payload warheads to lock on to.  Returns the best target as the head of a list of viable targets.
-entity() Payload_Target = { // [FUNCTION]
-    local entity best, head, ent;
-    local vector org, vec, forwardfacing;
-    local float dist, dot, pc, in;
-
-    ent = self.master;
-    pc = ent.flags & FL_CLIENT;
-    best = world;
-    org = self.master.origin + self.master.view_ofs;
-    head = findradius(org, LOCK_RANGE);
-    if (pc) {
-		makevectors (self.master.v_angle);
-        forwardfacing = v_forward;
-    } else forwardfacing = normalize (ent.enemy.origin - ent.origin);
-
-    while (head) {
-        if (BfgLock_Confirm (head, self.master, self.master)) {
-            vec = Midpoint(head) - org; // Path toward target.
-            dot = normalize(vec) * forwardfacing;
-            if (dot >= LOCK_DOT_YAW) { // Assumes constant > 0.
-                if (pc) in = BfgLock_InSight (head, self.master); // Check if the target is within the gun sights.
-                else in = TRUE;  // Always so for npcs.
-
-                if (in) { // Take this target!
-                    dist = vlen(vec) / dot; // Treat targets that are not perfectly lined up further away than they really are.  Like squaring the circle.
-                    head.rate2 = dist;
-                    if (!best || (dist < best.rate2)) { // Place at the head of the list.
-                        head.chain2 = best;
-                        best = head;
-                    } else { // Placed somewhere under head.
-                        ent = best;
-                        while (ent) {
-                            if (!ent.chain2 || (dist < ent.chain2.rate2)) { // Insert into list then get out of loop.
-                                head.chain2 = ent.chain2;
-                                ent.chain2 = head;
-                                ent = world;
-                            }
-                            if (ent == ent.chain2) ent = world;    // Avoid infinite loop.
-                            else ent = ent.chain2;
-                        }
-                    }
-                }
-            }
-        }
-        head = head.chain;
-    }
-    return best; // Return the head of the hitlist.
-};
-
 // Checks if the weapon's targeting system is offline.
 float() Mirv_Off = { // [FUNCTION]
     if (self.master.mirv1 != self) return TRUE; // Previously went offline.
@@ -479,7 +413,7 @@ void() Mirv_Think = { // [FUNCTION]
     ent = self.master;
     dir = self.movedir;
     if (visible (ent)) { // Fly toward the spot its owner is aiming at. Missile must 'see' its owner.
-        if (ent.flags & FL_CLIENT) {makevectors (ent.v_angle); vec = v_forward; }
+        if (ent.flags & FL_CLIENT) {makevectors(ent.v_angle); vec = v_forward; }
         else vec = normalize (ent.enemy.origin - ent.origin);
 
         org = ent.origin + '0 0 16';
@@ -550,7 +484,7 @@ void() DrunkRocket_Think = { // [FUNCTION]
     if (self.delay < self.nextthink) self.nextthink = self.delay;
 };
 
-void () lightning_orb_think = { // [FUNCTION]
+void() lightning_orb_think = { // [FUNCTION]
 	if (self.attack_finished < time) { self.think = lightning_orb_death; self.nextthink = time + 0.1; return; }
 
 	SpawnOrbLightning(self.origin,250,1.9);
@@ -558,7 +492,7 @@ void () lightning_orb_think = { // [FUNCTION]
 	self.nextthink = time + 0.1;
 };
 
-void () HomingMissileThink = { // [FUNCTION]
+void() HomingMissileThink = { // [FUNCTION]
    local vector dir;
 
    if (self.enemy.health < TRUE) { remove (self); return; }
@@ -569,13 +503,13 @@ void () HomingMissileThink = { // [FUNCTION]
    self.think = HomingMissileThink;
 };
 
-void () HomingMissileAcquire = { // [FUNCTION]
+void() HomingMissileAcquire = { // [FUNCTION]
    local vector oldVelocity, aimangle;
 
    if (self.delay < time) { MultiRocketExplode(); return ; }
 
    oldVelocity = self.velocity;
-   makevectors (self.v_angle);
+   makevectors(self.v_angle);
    self.velocity = aim (self,1000.000);
    self.velocity = (self.velocity * 1000.000);
    aimangle = (self.origin + self.velocity);
@@ -603,11 +537,11 @@ void() beam_generate = { // [FUNCTION]
 	setmodel(beamseg, "progs/custents/beam.mdl");
 	setsize(beamseg, '0 0 0', '0 0 0');
 	makevectors(self.owner.v_angle);
-	if(self.owner.flags & FL_CLIENT) {
+	if (self.owner.flags & FL_CLIENT) {
 		self.owner.attack_finished = time + 0.5;
 		setorigin (beamseg, self.owner.origin + v_forward*12 + self.owner.dest2);
 		beamseg.velocity = aim(self.owner, 800) * 800;
-	} else if(self.owner.flags & FL_MONSTER) {
+	} else if (self.owner.flags & FL_MONSTER) {
 		setorigin (beamseg, self.owner.origin);
 		beamseg.velocity = normalize(self.owner.enemy.origin - self.owner.origin) * 800;
 	} else {
@@ -624,12 +558,12 @@ void() beam_generate = { // [FUNCTION]
 	beamseg.nextthink = time + 6;
 	sound (self.owner, CHAN_WEAPON, "weapons/lstart.wav", 1, ATTN_NORM);
 	self.currentammo = self.currentammo / 2;
-	if((self.owner.flags & FL_CLIENT) && self.deadflag == DEAD_NO) {
+	if ((self.owner.flags & FL_CLIENT) && self.deadflag == DEAD_NO) {
 		self.owner.punchangle_x = -6;
 		self.owner.velocity = self.velocity - v_forward * self.currentammo * 2;
 	}
 
-	if(self.currentammo < 1) remove(self);
+	if (self.currentammo < 1) remove(self);
 
 	self.nextthink = time + 0.05;
 };
@@ -639,7 +573,7 @@ void() BFGBoomThink = { // [FUNCTION]
         self.think = BFGBoomThink;
         self.nextthink = time + self.pain_timeout;
 
-        if(self.frame >= self.frame_override) {
+        if (self.frame >= self.frame_override) {
 			self.frame = self.frame_override;
 			self.think = SUB_Remove;
 			self.nextthink = time + self.pain_timeout;
@@ -659,7 +593,7 @@ void() BFGTracerThink = { // [FUNCTION]
         SpawnBFGBoom(self.origin, (self.pos1-self.pos1*2), "progs/madfox/s_bfg.spr", 8, 14, 0.06, 0, '0 0 0'); // Fixes improperly aligned sprite beamrings.
         newmis.angles_x = newmis.angles_x - newmis.angles_x*2;
 
-        if(self.cnt == 5) {
+        if (self.cnt == 5) {
 			self.think = SUB_Remove;
 			self.nextthink = time + 0.1;
         } else {
@@ -676,6 +610,12 @@ void() Echo_Think = { // [FUNCTION]
         SUB_ThinkImmediate(self.owner, self.think1);
     }
     remove(self);
+};
+
+// This creates a small particle trail behind the shot.
+void(float rgb, float density, float full) Meteor_Trail = { // [FUNCTION]
+    Particle_Beam (self.oldorigin, self.origin, rgb, rgb, density, full);
+    self.oldorigin = self.origin;   // Update previous point.
 };
 
 void() AkArrow_Think = { // [FUNCTION]
@@ -735,7 +675,7 @@ void() Iceball_Think = { // [FUNCTION]
 	self.think = Iceball_Think;
     if ((self.delay > time) && (pointcontents(self.origin) != CONTENT_LAVA)) {self.nextthink = time + 0.1;  return;}
 
-    T_MissileTouch (); // Time to blow up.
+    Touch_Missile(); // Time to blow up.
 };
 
 void() IceMineTrigger_Think =[ 0, IceMineTrigger_Think ] { if (self.owner) setorigin (self, self.owner.origin); }; // [FUNCTION]
@@ -898,7 +838,7 @@ void() Sidewinder_Think = { // [FUNCTION]
     sped = random() * 50 + 450;
     vec = self.angles;
     vec_x = 0 - vec_x;
-    makevectors (vec);
+    makevectors(vec);
     self.velocity = v_forward * sped;
     if (self.lefty & 1) {self.lefty = 2; self.nextthink = time + 0.1;}
     else self.nextthink = time + 0.2;
@@ -921,6 +861,72 @@ void() NecroBolt_Think = { // [FUNCTION]
     particle (self.origin, self.velocity * 0.005, 73, 2); // Draw particle trail.
     particle (self.origin, self.velocity * 0.01, 225, 4);
     self.nextthink = time + 0.1;
+};
+
+// Points missile toward its target.  Used by Mjolnir.
+// Note:  Missile facing favors two dimension movement.
+void(entity targ) Missile_Seek = {
+    local vector vec, ang;
+    local float diff;
+
+    if (targ) {
+        if (targ.invisible_finished || (targ.items & IT_INVISIBILITY)) {
+            if (!((self.classname == "Mjolnir") && self.master == targ)) return;
+		}
+
+        vec = Aimpoint (targ);
+        if (self.state) vec = Aim_Lead(self.origin, vec, self.speed, targ); // Check for intercept course.
+        // Point missile toward a point in space.
+        //
+        // Note:  Missile will seek the same elevation as its target point.
+        // This means if missile is at the same altitude as its target, missile
+        // will not climb or dive to loop toward the target even if such three
+        // dimensional manuvering would let it loop back faster.  Instead,
+        // it will loop to the side.  This does not mean the missile cannot
+        // climb or dive toward the target; in fact, it will do so if there
+        // is a elevation difference between the missile and its target.
+        //
+        // This two dimensional movement is good for sidewinding missiles
+        // and the Mjolnir.  For other missiles, not so much.
+        ang = normalize (vec - self.origin);
+        ang = vectoangles (ang);
+        self.angles_y = anglemod(self.angles_y);
+        // Change pitch - - - - - - -
+        // Copy pitch into yaw to fool Quake into changing the pitch for us.
+        self.ideal_yaw = anglemod(ang_x);
+        diff = self.angles_y;   // Remember this so we can restore yaw later.
+        self.angles_y = self.angles_x;
+        ChangeYaw();
+        self.angles_x = self.angles_y;
+        self.angles_y = diff;   // Restore yaw now that pitch has changed.
+        // Change yaw - - - - - - - -
+        self.ideal_yaw = anglemod(ang_y);
+        ChangeYaw();
+        vec = self.angles;
+        vec_x = 0 - vec_x;
+        makevectors(vec);
+        self.velocity = v_forward * self.speed;
+        self.movedir = v_forward;
+    }
+};
+
+// Points missile toward its target.
+// Function runs more code, but missiles can climb or dive more.
+// Used by homing missiles in this file.
+void(entity targ) Missile_Seek_3D = {
+    if (targ) {
+        if (targ.invisible_finished || (targ.items & IT_INVISIBILITY)) return;
+
+        local   vector  vec, dir;
+
+        vec = Aimpoint (targ);
+		// Check for intercept course.
+        if (self.state) vec = Aim_Lead (self.origin, vec, self.speed, targ);
+        dir = normalize (self.velocity);
+        dir = self.movedir = Dir_GotoIdeal (dir, self.origin, vec, self.yaw_speed);
+        self.angles = vectoangles (dir);
+        self.velocity = dir * self.speed;
+    }
 };
 
 // Controls hammer velocity.  Called by Thor_Think.  Cause thrown hammer to fly towards a given target.
@@ -1056,16 +1062,19 @@ void() SuperRocket_Think = { // [FUNCTION]
 	spark_spawn();
 	spark_spawn();
 	spark_spawn();
-    seen = Missile_Vis();
     self.yaw_speed = self.yaw_speed + self.cnt;     // See launch func below.
     self.velocity = normalize(self.velocity);
-    if (!seen) {
-        if (self.wait <= time) {
-            self.wait = time + 0.5;
-			// Use owner instead of master because missile passes owner.
-			// FIXME:  Use master if owner is the world?
-            self.enemy = SuperRocket_Target (self.master, self.origin, self.velocity, 1000, self.volume);
-            if (self.enemy) seen = TRUE;
+    if (self.enemy && self.enemy.health > 0) {
+        if (!Invisible(self.enemy)) {
+            if (visible(self.enemy)) {
+                if (self.wait <= time) {
+                    self.wait = time + 0.5;
+                    // Use owner instead of master because missile passes owner.
+                    if (!self.owner) self.enemy = SuperRocket_Target(self.master, self.origin, self.velocity, 1000, self.volume);
+                    else self.enemy = SuperRocket_Target(self.owner, self.origin, self.velocity, 1000, self.volume);
+                    if (self.enemy) seen = TRUE;
+                }
+            }
         }
     }
     if (seen) Missile_Seek_3D (self.enemy);
@@ -1350,13 +1359,13 @@ void() Firewall_Think = { // [FUNCTION]
 
     if (self.enemy) { // Steer toward the enemy.
         spot = self.enemy.origin + self.enemy.view_ofs;
-		spot = Aim_Line (self.origin, spot, SPEED_FIREWALL, self.enemy); // Change yaw only.  Aim_Line plots intercept course.
+		spot = Aim_LineEx(self.origin,spot,SPEED_FIREWALL,self.enemy,1); // Change yaw only.  Plots intercept course.
 		self.ideal_yaw = vectoyaw(spot);
 		self.ideal_yaw = anglemod(self.ideal_yaw);
 		ChangeYaw();  // Change yaw only.   
         spot = self.angles;
         spot_x = 0 - spot_x;
-        makevectors (spot);
+        makevectors(spot);
         self.movedir  = v_forward; // Update direction.
     }
     self.velocity   = self.movedir * self.speed;
@@ -1377,7 +1386,7 @@ void() faspell_frames = { // [FUNCTION]
 	self.spell_angle += random(32,42);
 	if (self.spell_angle >= 360) self.spell_angle -= 360.00000;
 	if (self.count < 6) self.count += 0.60000;
-	makevectors ( self.angles);
+	makevectors( self.angles);
 	posA = ((v_right * mathlib_sin(self.spell_angle)) * self.count);
 	posB = ((v_right * mathlib_sin(old_angle)) * old_count);
 	new_posA = (posA - posB);
@@ -1553,3 +1562,116 @@ void() pyroflame_think = {
 		self.nextthink = time + 0.1;
 	}
 }
+
+//  Smart Fireballs -- Used by nemesant (and SoE sorcerer).
+void() SmartBall_Think = { // [FUNCTION]
+    if (self.delay <= time) {remove(self); return;}
+
+    self.angles = vectoangles(self.velocity);
+	// Changed particle count from 25 at 10/sec to 10 at 20/sec.  2000 speed rocket trails spawn 11 at about 50/sec.
+    particle (self.origin, '0 0 1', 233, 10);   //particle (self.origin, '0 0 1', 233, 25);
+    self.nextthink = time + 0.05;               //self.nextthink = time + 0.1;
+};
+
+void() SmartBall_Bounce = { // [FUNCTION]
+    local   vector  p1, p2;
+    local   float   up;
+
+    p1 = self.origin;
+    p2 = self.enemy.origin + self.enemy.view_ofs;   // Go for the eyes.
+    up = Aim_TossUp (p1, p2, 400);
+    self.flags = self.flags - (self.flags & FL_ONGROUND); 
+    self.velocity = Maim_SmartBall(p1, p2, 400, up, world, '0 0 0'); // Fireballs can be fooled by invisibility.
+    self.velocity = self.velocity * 400;
+    self.velocity_z = self.velocity_z + up;
+    self.angles = vectoangles(self.velocity);
+    self.nextthink = time + 0.01;
+    self.think = SmartBall_Think;
+};
+
+//  Tornado -- Used by the wind baron.  Sucks in targets near the cone, and damages those already in it.
+void() Tornado_Attack = { // [FUNCTION]
+    local entity head;
+    local vector delta, spot, vel;
+    local float hit;
+
+	// Note:  Walls offer no protection against the baron's tornado.
+    head = findradius (self.origin, 256);
+    while (head) {
+        if (head != self)
+        if (head != self.master)
+        if (head.origin_z + head.maxs_z >= self.origin_z) { // Head must be at or above spawnpoint.
+            // Get horizontal distance between target and center.
+            spot = head.origin;  spot_z = self.origin_z;
+            delta = self.origin - spot;     // delta_z should be 0.
+
+            // First, inflict some damage.
+            hit = (vlen(delta) < 100);
+            if (hit) T_Damage(head,self,self.master,self.dmg,DAMARMOR);
+
+            // Next, suck the target into the vortex if possible.
+            if (((head.flags & FLx_CREATURE) && head.mass <= MASS_HEAVY) || (AffectedByPhysics(head)) && head.movetype != MOVETYPE_NONE) {
+                if (hit || (head.flags & FL_MONSTER)) { // Sweep the target off its feet.
+                    if (!hit && (head.flags & FL_ONGROUND) && head.velocity_z < 80) head.velocity_z = 80;
+                    head.flags = head.flags - (head.flags & FL_ONGROUND); // Walkers lose control of movement.
+                }
+                vel = head.velocity;
+                vel_x = vel_x * 0.5;
+                vel_y = vel_y * 0.5;
+                if (hit) {
+                    vel_z = vel_z * 0.5;
+                    if (vel_z < 150) vel_z = 150; // Float up and away.
+                }
+                head.velocity = vel + normalize(delta) * 100;
+            }
+        }
+        head = head.chain;
+    }
+};
+
+// Thinking for the smoke particles in the tornado.
+void() tornado2 =[ 0, tornado2 ] { // [FUNCTION]
+    local vector spot, trig, dir;
+
+    if (self.delay <= time) { remove (self); return; }
+
+    self.speed = self.speed + 8;
+    self.height = self.height + 24;
+    self.cnt = anglemod (self.cnt + 47);
+    spot = self.oldorigin;
+    spot_z = spot_z + self.height;
+    trig = CoSine(self.cnt);
+    dir = (('1 0 0' * self.speed) * trig_x) + (('0 1 0' * self.speed) * trig_y);
+    spot = spot + dir;
+    setorigin (self, spot);
+};
+
+// Think function for the tornado.  Spawns all of its effects.
+void() tornado1 =[ 0, tornado1 ] { // [FUNCTION]
+    if (self.delay <= time) {
+        super_active = FALSE;
+        StopSound (self, 6);
+        remove (self);
+        return;
+    }
+
+    if (self.t_width < time) {
+        self.t_width = time + 1;
+        sound (self, CHAN_AUTO, "drake/baron/tornado.wav", 1, ATTN_NORM);
+    }
+    Tornado_Attack ();
+    self.height = (self.height + 3) & 7;
+    self.cnt = anglemod(self.cnt + 107);
+    newmis = spawn();
+    newmis.owner      = self;
+    newmis.movetype   = MOVETYPE_NOCLIP;
+    newmis.solid      = SOLID_NOT;
+    newmis.velocity   = '0 0 0';
+    newmis.nextthink  = 0.01;
+    newmis.delay      = time + 1.2;     // FIXME:  Use T+1?
+    if (newmis.delay > self.delay) newmis.delay = self.delay;     // Last no longer than parent.
+    newmis.think      = tornado2;
+    newmis.cnt        = self.cnt + self.height;
+    newmis.oldorigin  = self.origin;
+    setall (newmis, "progs/drake/smoke.mdl", '0 0 0', '0 0 0', self.origin);
+};

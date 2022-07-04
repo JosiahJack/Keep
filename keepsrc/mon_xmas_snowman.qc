@@ -112,7 +112,7 @@ void() SnowmFireNails = {
 	sound(self, CHAN_WEAPON, "xmas/snowman/nail_fire.wav", 1, ATTN_NORM);
 
 	// turn and face your enemy!
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	
 	// Loop through the nail burst (all at once)
@@ -121,7 +121,7 @@ void() SnowmFireNails = {
 		vec = (crandom()*20)*v_right + (crandom()*20)*v_up;
 		dir = normalize((self.enemy.origin + vec) - org);
 		// Generate a red hot nail projectile
-		launch_projectile(org, dir, CT_PROJ_NG, self.attack_speed);
+		launch_projectile(org,dir,NO_SPIN,CT_PROJ_NG,self.attack_speed);
 		loopvar = loopvar + 1;
 	}
 };

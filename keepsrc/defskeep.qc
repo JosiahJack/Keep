@@ -449,12 +449,16 @@ float BOUY_GRENADE = 0.6;
 float RESIST_GRENADE = 0.4;
 float TURB_GRENADE = 0.24;
 float AERO_GRENADE = 0.8;
+
 float MASS_MINIGRENADE = 0.2;
 float BOUY_MINIGRENADE = 0.3;
 float RESIST_MINIGRENADE = 3;
+
 float MASS_GIB = 1.5;
 float BOUY_GIB = 1.1;
 float RESIST_GIB = 1.8;
+
+float MASS_ROCKET = 1.5;
 
 float BOUY_FROZEN = 1.1;
 
@@ -613,3 +617,9 @@ float AIRG_STEPCONVERTEDTOFLY = 2; // Constant used on the AIRG_Flags to specifi
 float AIRG_EXCLUDEENTITY = 1; // Air Gun flag constants. Setting an entity's AIRG_Flags excludes it from harm
 .float AIRG_FireCount; // Used in the Max Fire Rate Calculations.
 .float AIRG_Timeout;
+
+vector NO_SPIN = '0 0 0'; // To make it obvious as launch_projectile argument.
+
+float cheatflags; // Developer cheats
+float CHEAT_KILLGUN = 1;
+float CHEAT_GIBGUN = 2;

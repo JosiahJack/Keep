@@ -418,7 +418,7 @@ void() trigger_teleport_touch = { // [FUNCTION]
 		if (!other.health) self.pos1 = vectoangles(other.velocity); // Projectiles (no health) are based on velocity
 		else self.pos1 = other.angles; // Player/Monster can use angles field instead
 
-		makevectors (self.pos1);
+		makevectors(self.pos1);
 		self.ideal_yaw = self.movedir * v_forward; // Create a dot product of angles vector
 		if (self.ideal_yaw < 0) return; // Is angle behind target angle (180 degree arc)
 	}
@@ -445,7 +445,7 @@ void() trigger_teleport_touch = { // [FUNCTION]
 	// makevectors + v_angle + bsp + spr all pitch (X) one way
 	// vectoangles + mdl pitch (X) the other way - thanks spike for info
 	//
-	// makevectors (self.angles);
+	// makevectors(self.angles);
 	// self.velocity = v_forward * self.speed;
 	// self.finalangle = vectoangles(self.velocity);
 	//
@@ -1035,7 +1035,7 @@ void() trigger_ladder_fire = { // [FUNCTION]
 	// Update the client with code in PlayerPreThink.client.qc
 	// Setup which ladder system is active and link back
 	if (self.spawnflags & TRIG_LADDERVELOCITY) {
-		makevectors (self.bmodel_act.angles);
+		makevectors(self.bmodel_act.angles);
 		if ( (v_forward*self.movedir)< -0.5 ) return; // Compare ladder facing angle (180 degree freedom)
 
 		ladpos = self.bmodel_act.origin_z + self.bmodel_act.mins_z; // Player feet position
@@ -1133,19 +1133,19 @@ void() trigger_ladder = { // [ENTITY]
 	// Default = wood
 	if (!self.sounds) self.sounds = 2;
 	if (self.sounds == 1) {				// Metal
-		if(!self.waitmin) self.waitmin = 0.45;
+		if (!self.waitmin) self.waitmin = 0.45;
 		if (self.noise1 == "") self.noise1 = "ad171/player/ladmetal1.wav";
 		if (self.noise2 == "") self.noise2 = "ad171/player/ladmetal2.wav";
 		if (self.noise3 == "") self.noise3 = "ad171/player/ladmetal3.wav";
 		if (self.noise4 == "") self.noise4 = "ad171/player/ladmetal4.wav";
 	} else if (self.sounds == 2) {		// Wood
-		if(!self.waitmin) self.waitmin = 0.4;
+		if (!self.waitmin) self.waitmin = 0.4;
 		if (self.noise1 == "") self.noise1 = "ad171/player/ladwood1.wav";
 		if (self.noise2 == "") self.noise2 = "ad171/player/ladwood2.wav";
 		if (self.noise3 == "") self.noise3 = "ad171/player/ladwood3.wav";
 		if (self.noise4 == "") self.noise4 = "ad171/player/ladwood4.wav";
 	} else if (self.sounds == 3) {		// Old Rope
-		if(!self.waitmin) self.waitmin = 0.7;
+		if (!self.waitmin) self.waitmin = 0.7;
 		if (self.noise1 == "") self.noise1 = "ad171/player/ladrope1.wav";
 		if (self.noise2 == "") self.noise2 = "ad171/player/ladrope2.wav";
 		if (self.noise3 == "") self.noise3 = "ad171/player/ladrope3.wav";
@@ -1540,10 +1540,10 @@ void() trigger_velocity_fire = { // [FUNCTION]
 	// Did the trigger have an angle key setup?
 	if (CheckZeroVector(self.movedir) == FALSE) {
 		self.pos4 = vectoangles(self.bmodel_act.velocity); // Work out projectile angle using velocity
-		makevectors (self.pos4);
+		makevectors(self.pos4);
 		self.pos5 = v_forward; // Save v_forward (directional vector) for later
 		self.pos6 = vectoangles(self.movedir); // Work out trigger brush angle using movedir (angle)
-		makevectors (self.pos6);
+		makevectors(self.pos6);
 		
 		// Spawn debug vector angle markers (throttle to 0.5s intervals)
 		if (self.attack_timer < time) {
@@ -2093,7 +2093,7 @@ void() trigger_monsterjump_fire = { // [FUNCTION]
 	if (self.bmodel_act.jump_flag > time) return; // Check monster is not jumping already
 	if (self.bmodel_act.bodyonflr == MON_ONFLR) return; // Cannot make dead bodies jump
 	if (self.bmodel_act.ignore_monjump > 0) return; // entity excluded from using monster jump triggers
-	if (!CheckZeroVector(self.movedir2)) { makevectors (self.bmodel_act.angles); if (v_forward * self.movedir2 < 0) return; } // Did the trigger have an angle key setup?
+	if (!CheckZeroVector(self.movedir2)) { makevectors(self.bmodel_act.angles); if (v_forward * self.movedir2 < 0) return; } // Did the trigger have an angle key setup?
 	if (!(self.bmodel_act.flags & FL_MONSTER)) return; // Block non-monsters and fly/swim if spawnflag not set
 	if (!(self.spawnflags & TRIG_MONJUMPFLY) && self.bmodel_act.flags & FL_FLY) return;
 	if (!(self.spawnflags & TRIG_MONJUMPSWIM) && self.bmodel_act.flags & FL_SWIM) return;
@@ -2151,7 +2151,7 @@ void() trigger_monsterjump = { // [ENTITY]
 	self.classtype = CT_TRIGMONJUMP;
 	self.classgroup = CG_TRIGGERS;
 	if (!CheckZeroVector(self.mangle)) { // Check for a facing angle (used later in fire function)
-		makevectors (self.mangle);
+		makevectors(self.mangle);
 		self.movedir2 = v_forward;
 	} else self.movedir2 = VEC_ORIGIN; // Default setup (not used)
 	
@@ -2392,8 +2392,8 @@ void() trigger_heal = { // [ENTITY]
 		
 	if (!self.message) self.message = "You feel the effects of the healing pool";
 	if (!self.message2) self.message2 = "The Healing Pool has expired!";
-	if (self.target != "" ) self.noise1 = self.target; // Save any trigger names for reset events.  No need to check all targets, special setup that only uses target and...
-	if (self.target2 != "" ) self.noise2 = self.target2; // ...target2, no need to check all targets.
+	if (self.target != "") self.noise1 = self.target; // Save any trigger names for reset events.  No need to check all targets, special setup that only uses target and...
+	if (self.target2 != "") self.noise2 = self.target2; // ...target2, no need to check all targets.
 	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_on = trigger_heal_on;
 	self.estate_off = trigger_bmodel_off;
@@ -2581,7 +2581,7 @@ void() trigger_void_touch = { // [FUNCTION]
 	}
 };
 
-// QUAKED trigger_void (.5 .5 .5) ? NO_CLIENT NO_MONSTER NO_AMMO NO_EGG NO_TEMP NO_ITEM STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
+// QUAKED trigger_void(.5 .5 .5) ? NO_CLIENT NO_MONSTER NO_AMMO NO_EGG NO_TEMP NO_ITEM STARTOFF x Not_Easy Not_Normal Not_Hard Not_DM
 // ------- KEYS --------
 // targetname : trigger entity (works with entity state system)
 // -------- SPAWNFLAGS --------
@@ -2607,14 +2607,14 @@ void() trigger_void = { // [ENTITY]
 	else self.estate = ESTATE_ON;
 };
 
-void () version_touch = { // [FUNCTION]
+void() version_touch = { // [FUNCTION]
    if (self.nextthink > time) return ;
    if (!(self.flags & FL_CLIENT)) return;
 
    centerprint(other,self.message);
 };
 
-void () trigger_version = { // [ENTITY]
+void() trigger_version = { // [ENTITY]
    self.touch = version_touch;
    InitTrigger();
 };

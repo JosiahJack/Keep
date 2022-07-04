@@ -51,17 +51,17 @@ float START_AT_TOP    = 8.000;
 float PLAT2    = 16.000;
 float PLAT2_BOTTOM    = 32.000;
 
-void () dn_and_wait_go_up;
-void () dn_and_wait_go_down;
-void () dn_and_wait_crush;
-void () toggle_go_up;
-void () toggle_go_down;
-void () toggle_crush;
-void () elvtr_crush;
-void () plat2_center_touch;
-void () plat2_go_up;
-void () plat2_go_down;
-void () plat2_crush;
+void() dn_and_wait_go_up;
+void() dn_and_wait_go_down;
+void() dn_and_wait_crush;
+void() toggle_go_up;
+void() toggle_go_down;
+void() toggle_crush;
+void() elvtr_crush;
+void() plat2_center_touch;
+void() plat2_go_up;
+void() plat2_go_down;
+void() plat2_crush;
 void() elvtr_button_wait;
 void() elvtr_button_return;
 
@@ -221,7 +221,7 @@ void() toggle_crush = { // [FUNCTION]
 
 void() toggle_use = { // [FUNCTION]
 	if (self.state == STATE_TOP) toggle_go_down ();
-	else if(self.state == STATE_BOTTOM) toggle_go_up ();
+	else if (self.state == STATE_BOTTOM) toggle_go_up ();
 };
 
 void() elvtr_stop = { // [FUNCTION]
@@ -274,12 +274,12 @@ void() elvtr_use = { // [FUNCTION]
 	}
 		
 	if (self.lefty == -1) {	
-		if(self.elevatorOnFloor > 0) {
+		if (self.elevatorOnFloor > 0) {
 			self.elevatorToFloor = self.elevatorOnFloor - 1;
 			elvtr_go ();
 		}
-	} else if(self.lefty == 1) {
-		if(self.elevatorOnFloor < (self.cnt - 1)) {
+	} else if (self.lefty == 1) {
+		if (self.elevatorOnFloor < (self.cnt - 1)) {
 			self.elevatorToFloor = self.elevatorOnFloor + 1;
 			elvtr_go ();
 		}
@@ -317,12 +317,12 @@ void() plat2_hit_top = { // [FUNCTION]
 	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 	self.state = STATE_TOP;
 	self.plat2LastMove = time;
-	if(self.plat2Called == 1) {
+	if (self.plat2Called == 1) {
 		self.think = plat2_go_down;
 		self.nextthink = self.ltime + 1.5;
 		self.plat2Called = 0;
 		self.plat2LastMove = 0; // allow immediate move
-	} else if(!(self.spawnflags & START_AT_TOP)) {
+	} else if (!(self.spawnflags & START_AT_TOP)) {
 		self.think = plat2_go_down;
 		self.nextthink = self.ltime + self.delay;
 		self.plat2Called = 0;
@@ -333,12 +333,12 @@ void() plat2_hit_bottom = { // [FUNCTION]
 	sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);
 	self.state = STATE_BOTTOM;
 	self.plat2LastMove = time;
-	if(self.plat2Called == 1) {
+	if (self.plat2Called == 1) {
 		self.think = plat2_go_up;
 		self.nextthink = self.ltime + 1.5;
 		self.plat2Called = 0;
 		self.plat2LastMove = 0; // allow immediate move
-	} else if(self.spawnflags & START_AT_TOP) {	
+	} else if (self.spawnflags & START_AT_TOP) {	
 		self.think = plat2_go_up;
 		self.nextthink = self.ltime + self.delay;
 		self.plat2Called = 0;
@@ -403,7 +403,7 @@ void() plat2_center_touch = { // [FUNCTION]
 	}	
 
 	if (self.state == STATE_BOTTOM) self.plat2GoTo = STATE_UP;
-	else if(self.state == STATE_TOP) self.plat2GoTo = STATE_DOWN;
+	else if (self.state == STATE_TOP) self.plat2GoTo = STATE_DOWN;
 };
 
 void() plat2_crush = { // [FUNCTION]
@@ -429,7 +429,7 @@ void() plat2_crush = { // [FUNCTION]
 // Set "sounds" to one of the following:
 // 1) base fast
 // 2) chain slow
-void () func_new_plat = { // [ENTITY]
+void() func_new_plat = { // [ENTITY]
    local float negativeHeight;
 
    negativeHeight = FALSE;

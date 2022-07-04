@@ -1226,8 +1226,8 @@ void() display_secretlocs = {
 	if (!secloc_cam.enemy) { sprint(self, "No secrets found!\n"); return; } // If no secrets exist, tell player and exit
 	SaveSecretCamera(); // Save player parameters
 	self.flags = self.flags + (FL_NOTARGET || FL_GODMODE); // Switch on notarget so monsters don't attack player.  Add god mode to prevent any damage
-	self.flags = self.flags - (self.flags & FL_ONGROUND);		
-		
+	self.flags = self.flags - (self.flags & FL_ONGROUND);
+
 	// Reset player model to nothing and no world interaction
 	self.view_ofs = self.velocity = self.avelocity = '0 0 0';
 	self.solid = SOLID_NOT;

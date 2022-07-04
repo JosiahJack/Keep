@@ -37,7 +37,7 @@
 // impact with almost always deadly damage.
 //=============================================================================
 
-void () spikemine_Home = {
+void() spikemine_Home = {
 	local entity head;
 	local entity selected;
 	local float cur_dist;
@@ -85,7 +85,7 @@ void () spikemine_Home = {
 		self.velocity = (dir * ((skill * 50.000) + 150));
 };
 
-void () spikemine_Touch = {
+void() spikemine_Touch = {
 	if ( (self.health > FALSE) ) {
 		if (other.classname == "trap_spike_mine" || other.classname == "monster_spikemine") return;
 		if (AffectedByPhysics(other)) return;

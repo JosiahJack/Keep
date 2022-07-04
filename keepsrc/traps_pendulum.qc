@@ -296,7 +296,7 @@ void() trap_pendlong = { // [ENTITY]
 	if (self.spawnflags & PEND_SHORT) self.mdl = "progs/ad171/trap_pendshort.mdl"; // Short/long version of the model
 	else self.mdl = "progs/ad171/trap_pendlong.mdl";
 	precache_model (self.mdl);
-	self.view_ofs = '0 0 -108';	// Offset bbox vectors (new model different location)
+	self.view_ofs = '0 0 -108';	// Offset bbox vectors(new model different location)
 	self.oldorigin = '0 0 0';	// Entity is correct location
 	self.noise1 = "ad171/traps/pend_swing.wav";
 	self.noise2 = "ad171/traps/pend_hit.wav";

@@ -152,7 +152,7 @@ void() hogremac_smash8	=[	$smash8,	hogremac_smash9	] {ai_face();monster_footstep
 void() hogremac_smash9	=[	$smash9,	hogremac_smash10 ] {ai_face();};
 void() hogremac_smash10=[	$smash10,	hogremac_smash11 ] {ai_face();
 	self.meleecontact = TRUE;ai_meleesmash(30);self.meleecontact = FALSE;
-	makevectors (self.angles);				// Put impact infront of ogre
+	makevectors(self.angles);				// Put impact infront of ogre
 	self.finalangle = self.origin + (v_forward * 56) + (-v_up * 22);
 	particle_explode(self.finalangle, 24, 0.5, PARTICLE_BURST_FIRE, PARTICLE_BURST_SHOCKWAVE); 
 	sound (self, CHAN_WEAPON, "ad171/ogre/ham_hit.wav", 1, ATTN_IDLE);
@@ -207,7 +207,7 @@ void()	hogre_leap5	=[	$leap5,	hogre_leap6	] {ai_charge(7);};
 void()	hogre_leap6	=[	$leap6,	hogre_leap7	] {ai_charge(14);};
 void()	hogre_leap7	=[	$leap7,	hogre_leap8	] {ai_charge(13);
 	self.touch = hogre_JumpTouch;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	self.origin_z = self.origin_z + 1;
 	self.velocity = v_forward * 350 + '0 0 200';
 	if (self.flags & FL_ONGROUND) self.flags = self.flags - FL_ONGROUND;

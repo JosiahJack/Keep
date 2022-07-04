@@ -27,8 +27,8 @@
 // NO CHARGE to the recipient.
 //
 // Stats:
-// Entity count: 0
-// Function count: 12
+// Entity count: 
+// Function count: 
 //
 // Implements: Projectile Touches
 //
@@ -41,15 +41,15 @@ float TRAP_PROXSTATIC = 8;		// No movement.
 
 void(entity targ, float playdmg, float mondmg) ApplyFireDmg;
 float(vector source, float axedmg) GibFloorBody;
+void() BounceShot_Move;
+void() BounceShot_Seek;
 
 void() Touch_Bullet = { // [FUNCTION]
-	if (self.touchedvoid) return;				// Marked for removal
+	if (self.touchedvoid) return;				// Marked for removal already
 	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
 	if (other == self.owner) return;			// Touching self, do nothing
 	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
 	if (self.waitmin > time) return;			// bullet touch has been disabled
-
-	entity_remove(self, 1);						// Setup bullet for removal	
 
 	if (other.takedamage) {
 		// Hit monster/interactive object, impact blood
@@ -81,94 +81,18 @@ void() Touch_Bullet = { // [FUNCTION]
 			Tent_Point(TE_GUNSHOT,self.origin);
 		}
 	}
-};
 
-void() Touch_PlasmaProjectile = { // [FUNCTION]
-	local vector org, vec, dir;
-	local entity tself;
-
-	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
-	if (self.touchedvoid) return;				// Marked for removal
-	if (other == self.owner) return;			// Touching self, do nothing
-	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
-	if (self.waitmin > time) return;			// plasma touch has been disabled
-
-	if (self.owner.flags & FL_CLIENT) self.pos1 = DAMAGE_PGPLAYER; // Default damage for plasma (override on worldspawn)
-	else if (self.owner.classtype == CT_MONGREMLIN) self.pos1 = DAMAGE_PGGREMLIN;
-	else if (self.classtype == CT_REFLECTLIGHT) self.pos1 = DAMAGE_PGREFLECT; // Default damage for all monsters
-	else if (self.classtype == CT_REFLECTPLASMA) self.pos1 = DAMAGE_PGREFLECT;
-	else if (self.classtype == CT_SUMMONLIGHT) self.pos1 = DAMAGE_PGSUMMON;
-	else if (self.classtype == CT_MONMINOTAUR) self.pos1 = DAMAGE_PGMINOTAUR;
-	else if (self.classtype == CT_MONGAUNT) self.pos1 = DAMAGE_PGGAUNT;
-	else if (self.classtype == CT_MONTURRETB) self.pos1 = DAMAGE_PGTURRETB;
-	else if (self.owner.classtype == CT_MONNOUR) self.pos1 = DAMAGE_PGNOUR;
-	else if (self.classtype == CT_MONFLOYD) self.pos1 = DAMAGE_PGFLOYD;
-	else if (self.classtype == CT_MONDEFLECTOR) self.pos1 = DAMAGE_PGDEFLECT;
-	else self.pos1 = DAMAGE_PLASMA;
-
-	if (ai_immunebreakable(self.owner, other)) self.pos1 = '0 0 0'; // Check for breakable/pushable immunity first
-	self.dmg = self.pos1_x + random()*self.pos1_y;
-	if (self.pos1_z > 0) T_RadiusDamage (self, self.owner, self.pos1_z, world, DAMAGEALL); // Plasma Splashdamage affects everything, check for 0 dmg first.  This can also apply a poisonous debuff from the attacker.
-	if (other.takedamage) { // Hit monster/interactive object, impact blood
-		if (ai_immunebreakable(self.owner, other)) { // Check for breakable/pushable no monster damage
-			SpawnExplosion(EXPLODE_BURST_SMOKE, self.origin, SOUND_PLASMA_HIT); // Using a cut down version of ammo resistance
-			SpawnProjectileSmoke(self.origin, 200, 50, 150);
-			if (random() < 0.5) SpawnProjectileSmoke(self.origin, 200, 50, 250);
-			if (random() < 0.5) SpawnProjectileSmoke(self.origin, 300, 50, 150);
-		} else if (other.resist_cells > 0) Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_CELLS,other.pain_sound,SOUND_PLASMA_HIT);
-		else if (other.resist_plasma > 0) Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_PLASMA,other.pain_sound,SOUND_PLASMA_HIT);
-		else {
-			if (other.flags & FL_MONSTER) spawn_touchblood (self, other, self.dmg*2); // Hitting monsters does twice the amount of blood effects
-			else spawn_touchblood (self, other, self.dmg);
-
-			if (self.poisonous) self.lip = EXPLODE_POISON_SMALL; // Switch poisonous to poison sprite, but keep plasma explosion,oOtherwise this sounds confusing with a rocket explosion.
-			else {
-				if (random() < 0.3) self.lip = EXPLODE_PLASMA_SMALL; // Randomly pick between Quoth electric and AD blue explosions.
-				else self.lip = EXPLODE_ELECT_SMALL;
-			}
-			SpawnExplosion(self.lip, self.origin, SOUND_PLASMA_HIT);
-		}
-
-		if (other.classgroup == CG_ZOMBIE && !(other.classname == "monster_mummy")) self.dmg = DAMAGE_ZOMBIECLASS; // Plasma hits always kill any zombie (1 hit)
-		if (self.dmg > 0) T_Damage (other, self, self.owner, self.dmg, DAMARMOR); // Don't bother with damage if there is none!
-	} else {
-		// Hit world/static object, impact particles
-		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-		WriteByte (MSG_BROADCAST, TE_EXPLOSION2); // New special coloured particle explosion (rogue expansion)
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);
-		WriteByte (MSG_BROADCAST, 35);
-		WriteByte (MSG_BROADCAST, 8);
-		if (self.poisonous) self.lip = EXPLODE_POISON_SMALL; // Poisonous sprite explosion instead
-		else self.lip = EXPLODE_ELECT_SMALL; // Classic quoth electric impact explosion
-		SpawnExplosion(self.lip, self.origin, SOUND_PLASMA_HIT);
-	}
-
-	// Check for any plasma reflection? (player only function)
-	if (self.owner.flags & FL_CLIENT && other.reflectplasma) {
-		org = self.origin;
-		if (random() < 0.2 && self.owner) dir = normalize(self.owner.origin - org); // Random chance that plasma will reflect straight back
-		else {
-			vec = org + vecrand(0,1000,1); // Pick random location instead
-			dir = normalize(vec - org);
-		}
-		tself = self;
-		self = other; // Switch around self to make sure reflection happens once
-		launch_projectile(org, dir, CT_REFLECTPLASMA, SPEED_REFLECTION);
-		self = tself;
-	}
-	entity_remove(self, 1); // Remove plasma bolt
+	entity_remove(self,1); // Setup bullet for removal	
 };
 
 void() Touch_Projectile = { // [FUNCTION]
 	local vector org, dir, vec;
 	local float proj_type, proj_speed, old_armortype, old_armorvalue, old_armormask, olddmg;
 	local entity tself, newent, stemp;
-	
+
+	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}	
 	if (self.touchedvoid) return;				// Marked for removal
-	if (check_skycontent(self.origin)) {entity_remove(self, 0.1); return;}
-	if (other == self.owner) return;			// no touching self
+	if (other == self.owner || other == self.master) return; // No touching launcher.
 	if (other.solid == SOLID_TRIGGER) return;	// trigger field, do nothing
 
 	self.touch = SUB_Null; // No more touch/world interaction
@@ -226,14 +150,58 @@ void() Touch_Projectile = { // [FUNCTION]
 		} else if (self.classtype == CT_PROJ_GROCK) { // Rock projectiles cannot hurt stone monsters!
 			if (other.classgroup == self.owner.classgroup) self.dmg = 0;
 			else self.dmg = DAMAGE_NGSPIKE;
+		} else if (self.classtype == CT_PROJ_PLASMA && self.owner.flags & FL_CLIENT) {
+			self.pos1 = DAMAGE_PGPLAYER; // Default damage for plasma (override on worldspawn)
+			self.dmg = self.pos1_x;
+		} else if (self.classtype == CT_PROJ_PLASMA && self.owner.classtype == CT_MONGREMLIN) {
+			self.pos1 = DAMAGE_PGGREMLIN;
+			self.dmg = self.pos1_x;
+		} else if (self.classtype == CT_REFLECTLIGHT) {
+			self.pos1 = DAMAGE_PGREFLECT; // Default damage for all monsters
+			self.dmg = self.pos1_x;
+		} else if (self.classtype == CT_REFLECTPLASMA) {
+			self.pos1 = DAMAGE_PGREFLECT;
+			self.dmg = self.pos1_x;
+		} else if (self.classtype == CT_SUMMONLIGHT) {
+			self.pos1 = DAMAGE_PGSUMMON;
+			self.dmg = self.pos1_x;
+		} else if (self.classtype == CT_PROJ_PLASMA && self.owner.classtype == CT_MONMINOTAUR) {
+			self.pos1 = DAMAGE_PGMINOTAUR;
+			self.dmg = self.pos1_x;
+		} else if (self.classtype == CT_PROJ_PLASMA && self.owner.classtype == CT_MONGAUNT) {
+			self.pos1 = DAMAGE_PGGAUNT;
+			self.dmg = self.pos1_x;
+		} else if (self.classtype == CT_PROJ_PLASMA && self.owner.classtype == CT_MONTURRETB) {
+			self.pos1 = DAMAGE_PGTURRETB;
+			self.dmg = self.pos1_x;
+		} else if (self.classtype == CT_PROJ_PLASMA && self.owner.classtype == CT_MONNOUR) {
+			self.pos1 = DAMAGE_PGNOUR;
+			self.dmg = self.pos1_x;
+		} else if (self.classtype == CT_PROJ_PLASMA && self.owner.classtype == CT_MONFLOYD) {
+			self.pos1 = DAMAGE_PGFLOYD;
+			self.dmg = self.pos1_x;
+		} else if (self.classtype == CT_PROJ_PLASMA && self.owner.classtype == CT_MONDEFLECTOR) {
+			self.pos1 = DAMAGE_PGDEFLECT;
+			self.dmg = self.pos1_x;
+		} else if (self.classtype == CT_PROJ_PLASMA) {
+			self.pos1 = DAMAGE_PLASMA;
+			self.dmg = self.pos1_x;
 		} else self.dmg = DAMAGE_NGSPIKE; // Default spike damage (nails)
 
 		olddmg = self.dmg;
 		if (ai_immunebreakable(self.owner, other)) { // Check for breakable/pushable monster immunity
 			self.dmg = self.classgroup = 0; // Zero damage and make sure no resistance checks
-			self.poisonous = FALSE; // Remove poisonous effect
+			self.pos1 = '0 0 0';
+			self.poisonous = 0; // Remove poisonous effect
 			Tent_Point(TE_GUNSHOT,org);
-			if (random() < 0.5) SpawnProjectileSmoke(self.origin, 200, 50, 150); // Show ammo resistance effect
+			if (self.classgroup == CG_PROJCELLS) { // Plasma effects
+				SpawnExplosion(EXPLODE_BURST_SMOKE, self.origin, SOUND_PLASMA_HIT); // Using a cut down version of ammo resistance
+				SpawnProjectileSmoke(self.origin, 200, 50, 150);
+				if (random() < 0.5) SpawnProjectileSmoke(self.origin, 200, 50, 250);
+				if (random() < 0.5) SpawnProjectileSmoke(self.origin, 300, 50, 150);
+			} else { // Standard effects
+				if (random() < 0.5) SpawnProjectileSmoke(self.origin, 200, 50, 150); // Show ammo resistance effect
+			}
 		}
 
 		if (self.poisonous == TRUE) PoisonDeBuff(other); // Check for poison debuff (using poisonous flag)
@@ -265,8 +233,7 @@ void() Touch_Projectile = { // [FUNCTION]
 			if (other.reflectnails && random() < other.resist_nails) {
 				org = self.origin;
 				// Random chance that nail will reflect straight back
-				if (random() < 0.2 && self.owner) 
-					dir = normalize(self.owner.origin - org);
+				if (random() < 0.2 && self.owner) dir = normalize(self.owner.origin - org);
 				else {
 					// Pick random location instead
 					// Flatten the Z axis so the reflection looks less random
@@ -276,8 +243,9 @@ void() Touch_Projectile = { // [FUNCTION]
 					dir = normalize(vec - org);
 				}
 				// Switch around self to make sure reflection happens once
-				tself = self; self = other;
-				launch_projectile(org, dir, CT_PROJ_REFNG, SPEED_REFLECTION);
+				tself = self;
+				self = other;
+				launch_projectile(org,dir,tself.avelocity,CT_PROJ_REFNG,SPEED_REFLECTION);
 				self = tself;
 			}
 		}
@@ -316,9 +284,10 @@ void() Touch_Projectile = { // [FUNCTION]
 					vec = vec + org;
 					dir = normalize(vec - org);
 				}
-				// Switch around self to make sure reflection happens once
-				tself = self; self = other;
-				launch_projectile(org, dir, CT_PROJ_REFLNG, SPEED_REFLECTION);
+
+				tself = self;
+				self = other; // Switch around self to make sure reflection happens once
+				launch_projectile(org,dir,tself.avelocity,CT_PROJ_REFLNG,SPEED_REFLECTION);
 				self = tself;
 			}
 			self.projeffect = 0;
@@ -335,16 +304,33 @@ void() Touch_Projectile = { // [FUNCTION]
 					vec = vec + org;
 					dir = normalize(vec - org);
 				}
+
 				tself = self;
 				self = other; // Switch around self to make sure reflection happens once.
-				launch_projectile(org, dir, CT_PROJ_REFLNG, SPEED_REFLECTION);
+				launch_projectile(org,dir,tself.avelocity,CT_PROJ_REFLNG,SPEED_REFLECTION);
 				self = tself;
 			}
 		}
 
-		// Produce blood particles at impact and apply damage to target.
+		if (self.classgroup == CG_PROJCELLS) { // Plasma/Cell resistance effects
+			if (other.resist_cells > 0) Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_CELLS,other.pain_sound,SOUND_PLASMA_HIT);
+			else if (other.resist_plasma > 0) Resist_Effects(other,self.origin,VEC_ORIGIN,0,AM_PLASMA,other.pain_sound,SOUND_PLASMA_HIT);	
+		}
+
+		self.pos1_x = self.dmg; // All resistances have been applied, restore to base damage for splash projectiles
+		spawn_touchblood(self, other, self.dmg); // Produce blood particles at impact and apply damage to target.
+		if (self.classgroup == CG_PROJCELLS) { // Area of effect damage.
+			if (self.poisonous) self.lip = EXPLODE_POISON_SMALL; // Switch poisonous to poison sprite, but keep plasma explosion,oOtherwise this sounds confusing with a rocket explosion.
+			else {
+				if (random() < 0.3) self.lip = EXPLODE_PLASMA_SMALL; // Randomly pick between Quoth electric and AD blue explosions.
+				else self.lip = EXPLODE_ELECT_SMALL;
+			}
+			SpawnExplosion(self.lip, self.origin, SOUND_PLASMA_HIT);
+			if (other.classgroup == CG_ZOMBIE && !(other.classname == "monster_mummy")) self.dmg = DAMAGE_ZOMBIECLASS; // Plasma hits always kill any zombie (1 hit)
+		}
+
 		if (self.dmg > 0) {
-			spawn_touchblood(self, other, self.dmg);
+			// Normal plain impact damage.
 			T_Damage(other, self, self.owner, self.dmg, DAMARMOR);
 		} else {
 			if (other.flags & FL_MONSTER && olddmg && self.owner && (other.enemy != self.owner)) {
@@ -359,11 +345,14 @@ void() Touch_Projectile = { // [FUNCTION]
 		}
 
 		// Restore armor after applying lavanail's pierce damage
-		if (self.classtype == CT_PROJ_LAVANG || self.classtype == CT_PROJ_LAVASNG) { other.armortype = old_armortype; other.armorvalue = old_armorvalue; }
+		if (self.classtype == CT_PROJ_LAVANG || self.classtype == CT_PROJ_LAVASNG) { 
+			other.armortype = old_armortype;
+			other.armorvalue = old_armorvalue;
+		}
 
 		// Nail Piercing affect, move nail through monster
 		if (self.projeffect & IT_ARTPIERCE) {
-			if (random() < 0.05) SpawnMeatSpray (self, other, crandom() * 100); // a small pile of gifs! (spog)
+			if (random() < 0.05) SpawnMeatSpray(self,other,crandom() * 100); // a small pile of gifs! (spog)
 			self.movetype = MOVETYPE_FLY; // Setup projectile ready for monster tests
 			self.solid = SOLID_BBOX;
 			self.oldorigin = self.origin;
@@ -385,8 +374,9 @@ void() Touch_Projectile = { // [FUNCTION]
 				dir = self.finalangle;
 				proj_type = self.classtype;
 				proj_speed = self.speed;
-				self = self.owner; // Once a projectile hits an object it is impossible to reset its velocity/angles and carry on.  Use owner to make non-solid...
-				//launch_projectile(org, dir, proj_type, proj_speed); // ... and create a new projectile and delete the current one instead!
+				self.solid = SOLID_NOT;
+				self = other; // Once a projectile hits an object it is impossible to reset its velocity/angles and carry on.  Use owner to make non-solid...
+				launch_projectile(org,dir,tself.avelocity,proj_type,proj_speed); // ... and create a new projectile and delete the current one instead!
 				self = tself;
 			}
 		}
@@ -428,6 +418,20 @@ void() Touch_Projectile = { // [FUNCTION]
 			return; // We bounced.
 		}
 
+		// Check for any plasma reflection? (player only function)
+		if (self.classgroup == CG_PROJCELLS && (self.owner.flags & FL_CLIENT) && other.reflectplasma) {
+			org = self.origin;
+			if (random() < 0.2 && self.owner) dir = normalize(self.owner.origin - org); // Random chance that plasma will reflect straight back
+			else {
+				vec = org + vecrand(0,1000,1); // Pick random location instead
+				dir = normalize(vec - org);
+			}
+			tself = self;
+			self = other; // Switch around self to make sure reflection happens once
+			launch_projectile(org,dir,tself.avelocity,CT_REFLECTPLASMA,SPEED_REFLECTION);
+			self = tself;
+		}
+
 		// Some projectiles need to be left lying around for a while
 		if (self.bodyfadeaway) {
 			if (self.classtype == CT_PROJ_FLESH || self.classtype == CT_PROJ_FLESHP) 
@@ -444,6 +448,17 @@ void() Touch_Projectile = { // [FUNCTION]
 			self.ltime = self.nextthink;
 			self.think = model_fade;	
 			return;
+		} else if (self.classgroup == CG_PROJCELLS) { // Plasma world impact effects
+			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+			WriteByte (MSG_BROADCAST, TE_EXPLOSION2); // New special coloured particle explosion (rogue expansion)
+			WriteCoord (MSG_BROADCAST, self.origin_x);
+			WriteCoord (MSG_BROADCAST, self.origin_y);
+			WriteCoord (MSG_BROADCAST, self.origin_z);
+			WriteByte (MSG_BROADCAST, 35);
+			WriteByte (MSG_BROADCAST, 8);
+			if (self.poisonous) self.lip = EXPLODE_POISON_SMALL; // Poisonous sprite explosion instead
+			else self.lip = EXPLODE_ELECT_SMALL; // Classic quoth electric impact explosion
+			SpawnExplosion(self.lip, self.origin, SOUND_PLASMA_HIT);
 		} else { // Standard engine impact particles and sounds
 			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 			if (self.classtype == CT_PROJ_SNG) WriteByte (MSG_BROADCAST, TE_SUPERSPIKE);
@@ -600,7 +615,6 @@ void() Touch_Missile = { // [FUNCTION]
 			else if (self.classtype == CT_PROJ_SWEEP1) self.pos1 = DAMAGE_RLSWEEPER;
 			else if (self.classtype == CT_PROJ_DPRINCE1) self.pos1 = DAMAGE_RLDPRINCE;
 			else if (self.classtype == CT_PROJ_DEFLECT1) self.pos1 = DAMAGE_RLDEFLECT;
-			else if (self.classtype == CT_PROJ_MAMMOTH) self.pos1 = DAMAGE_RLMAMMOTH;
 			else if (self.classtype == CT_PROJ_JUDGER) self.pos1 = DAMAGE_RLJUDGE;
 			else if (self.classtype == CT_PROJ_JUSTICER) self.pos1 = DAMAGE_RLJUDGE;
 			else if (self.classtype == CT_PROJ_RAINDEER) self.pos1 = DAMAGE_RLRAINDEER;
@@ -701,7 +715,7 @@ void() Touch_ShellCasing = { // [FUNCTION]
 	if (random() < 0.5) sound(self, CHAN_VOICE, "ad171/weapons/shellc.wav", random()*0.25, ATTN_LOW);		
 };
 
-void () HIP_LaserTouch = { // [FUNCTION]
+void() HIP_LaserTouch = { // [FUNCTION]
 	local vector org, spot1, spot2, oldvel, dir, dir2;
 
 	self.owner = world;
@@ -755,7 +769,7 @@ void () HIP_LaserTouch = { // [FUNCTION]
 	remove (self);
 };
 
-void () ProximityGrenadeTouch = { // [FUNCTION]
+void() ProximityGrenadeTouch = { // [FUNCTION]
 	if (other == self) return;
 	if (other.classname == self.classname) return;
 	if (other.flags & FL_NOTARGET) return;
@@ -816,7 +830,7 @@ void() Mirv_Touch = { // [FUNCTION]
 	BecomeExplosion2 ();
 };
 
-void () lavaspike_touch = { // [FUNCTION]
+void() lavaspike_touch = { // [FUNCTION]
 	local float old_armortype;
 	local float old_armorvalue;
 	local float old_armormask;
@@ -851,7 +865,7 @@ void () lavaspike_touch = { // [FUNCTION]
 	remove(self);
 };
 
-void () superlavaspike_touch = { // [FUNCTION]
+void() superlavaspike_touch = { // [FUNCTION]
 	local float old_armortype;
 
 	if (other == self.owner) return;
@@ -894,14 +908,14 @@ void() MultiGrenadeTouch = { // [FUNCTION]
    if (self.velocity == VEC_ORIGIN) self.avelocity = VEC_ORIGIN;
 };
 
-void () MultiRocketTouch = { // [FUNCTION]
+void() MultiRocketTouch = { // [FUNCTION]
    if (other == self.owner) return;
    if (pointcontents(self.origin) == CONTENT_SKY) { remove(self); return; }
 
    MultiRocketExplode();
 };
 
-void () PlasmaTouch = { // [FUNCTION]
+void() PlasmaTouch = { // [FUNCTION]
    local float damg,raddmg;
 
    if ( (other == self.owner) )
@@ -942,9 +956,9 @@ void() beam_touch = { // [FUNCTION]
 		totaldmg = self.currentammo * 1.25;
 		totaldmg = ceil(totaldmg);
 		// totally decimate the dude if doesn't have enough health
-		if(other.health <= totaldmg) {
+		if (other.health <= totaldmg) {
 			T_Damage (other, self, self.owner, 99999,DAMARMOR);
-			if(other.health <= 0) {
+			if (other.health <= 0) {
 				MakeBeamRing(other.origin);
 				WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 				WriteByte (MSG_BROADCAST, TE_TAREXPLOSION);
@@ -1582,4 +1596,15 @@ void() pyroflame_touch = {
 		// Poison anything else (very quick death, high damage)
 		else T_Damage (other, self, self, DAMAGE_MONFLAME, DAMARMOR);
 	}
+};
+
+void() SmartBall_Touch = { // [FUNCTION]
+    if (InSky(self.origin)) {remove(self); return;}     // Disappeared into space.
+    if (Reflected_Damage (COURAGE_DAMAGE)) return;     // Bounced off reflective shield.
+    if (other.takedamage || (self.count >= 3) || (self.enemy.health <= 0)) { Touch_Missile(); return; } // Go BOOM!
+
+    sound (self, CHAN_WEAPON, "zerstorer/trog/frblfly.wav", 0.6, ATTN_NORM);
+    self.count = self.count + 1;
+    self.think = SmartBall_Bounce;
+    self.nextthink = time + 0.01;
 };

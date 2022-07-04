@@ -67,7 +67,7 @@ void(entity targ) bound_other_ammo = {
 	if (targ.ammo_elemental > targ.maxmana) targ.ammo_elemental = targ.maxmana;	
 };
 
-void (float amount) item_ammo_set = {
+void(float amount) item_ammo_set = {
 	if (self.aflag == 0) self.aflag = amount;
 	else if (self.aflag < 0) self.aflag = 0;
 	// else leave self.aflag at user specified value to allow for custom ammo amount.
@@ -522,7 +522,7 @@ void() weapon_wand = {
 	weapon_start();
 };
 
-void () weapon_crossbow = {
+void() weapon_crossbow = {
 	item_setupmodel("progs/g_crossbow.mdl",0);
 	self.weapon = IT_EXTRA_WEAPON;
 	self.classtype = CT_EXTRA_WEAPON; 
@@ -582,7 +582,7 @@ void() weapon_proximity_gun = {
 	weapon_start();
 };
 
-void () weapon_laser_gun = {
+void() weapon_laser_gun = {
 	item_setupmodel(MODEL_GWEAP_LASER,0);
 	self.weapon = IT2_LASER_CANNON;
 	self.classtype = CT_LASER_CANNON;
@@ -592,7 +592,7 @@ void () weapon_laser_gun = {
 	weapon_start();
 };
 
-void () weapon_multi_grenade = {
+void() weapon_multi_grenade = {
 	item_setupmodel("progs/g_rock.mdl",2);
 	self.weapon = IT_MULTI_GRENADE;
 	self.classtype = CT_MULTI_GRENADE;
@@ -602,7 +602,7 @@ void () weapon_multi_grenade = {
 	weapon_start();
 };
 
-void () weapon_multi_rocket = {
+void() weapon_multi_rocket = {
 	item_setupmodel("progs/g_rock2.mdl",1);
 	self.weapon = IT_MULTI_ROCKET;
 	self.classtype = CT_MULTI_ROCKET;
@@ -612,7 +612,7 @@ void () weapon_multi_rocket = {
 	weapon_start();
 };
 
-void () weapon_plasmalightning = {
+void() weapon_plasmalightning = {
 	item_setupmodel("progs/g_light.mdl",1);
 	self.weapon = IT_PLASMA_GUN;
 	self.classtype = CT_PLASMAGUN;
@@ -622,7 +622,7 @@ void () weapon_plasmalightning = {
 	weapon_start();
 };
 
-void () weapon_chain_lightning = {
+void() weapon_chain_lightning = {
 	item_setupmodel("progs/drake/g_light2.mdl",0);
 	self.weapon = IT2_CHAINLIGHTNING;
 	self.classtype = CT_CHAINLIGHTGUN;
@@ -642,7 +642,7 @@ void() weapon_blaster = {
 	weapon_start();
 };
 
-void () weapon_rapier = {
+void() weapon_rapier = {
 	item_setupmodel("progs/aoa/g_rapier.mdl",0);
 	self.weapon = IT_RAPIER;
 	self.classtype = CT_RAPIER;
@@ -650,7 +650,7 @@ void () weapon_rapier = {
 	weapon_start();
 };
 
-void () weapon_mace = {
+void() weapon_mace = {
 	item_setupmodel("progs/aoa/g_mace.mdl",0);
 	self.weapon = IT_MACE;
 	self.classtype = CT_MACE;
@@ -660,7 +660,7 @@ void () weapon_mace = {
 	weapon_start();
 };
 
-void () weapon_ice = {
+void() weapon_ice = {
 	item_setupmodel("progs/redfield/g_lightstaff.mdl",0);
 	self.weapon = IT_ICE;
 	self.classtype = CT_ICE;
@@ -670,7 +670,7 @@ void () weapon_ice = {
 	weapon_start();
 };
 
-void () weapon_scimitar = {
+void() weapon_scimitar = {
 	item_setupmodel("progs/aoa/g_scimitar.mdl",0);
 	self.weapon = IT_SCIMITAR;
 	self.classtype = CT_SCIMITAR;
@@ -680,7 +680,7 @@ void () weapon_scimitar = {
 	weapon_start();
 };
 
-void () weapon_voidstaff = {
+void() weapon_voidstaff = {
 	item_setupmodel("progs/aoa/g_voidstaff.mdl",0);
 	self.weapon = IT_VOID_STAFF;
 	self.classtype = CT_VOID_STAFF;
@@ -690,7 +690,7 @@ void () weapon_voidstaff = {
 	weapon_start();
 };
 
-void () weapon_gungnir = {
+void() weapon_gungnir = {
 	item_setupmodel("progs/aoa/g_gungnir.mdl",0);
 	self.weapon = IT_GUNGNIR;
 	self.classtype = CT_GUNGNIR;
@@ -700,7 +700,7 @@ void () weapon_gungnir = {
 	weapon_start();
 };
 
-void () weapon_sanguinators = {
+void() weapon_sanguinators = {
 	item_setupmodel("progs/aoa/g_sanguinators.mdl",0);
 	self.weapon = IT_SANGUINATORS;
 	self.classtype = CT_SANGUINATORS;
@@ -710,7 +710,7 @@ void () weapon_sanguinators = {
 	weapon_start();
 };
 
-void () weapon_flak = {
+void() weapon_flak = {
 	item_setupmodel("progs/aoa/g_flak.mdl",0);
 	self.weapon = IT_FLAK;
 	self.classtype = CT_FLAK;

@@ -1,23 +1,15 @@
-/*==============================================================================
-BOIL/BOMB model by Ijed, QC/Gameplay by Sock
-==============================================================================*/
+// BOIL/BOMB model by Ijed, QC/Gameplay by Sock
 
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8
 $frame stand9 stand10 stand11 stand12 stand13 stand14 stand15 stand16
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8
 $frame walk9 walk10 walk11 walk12 walk13 walk14 walk15 walk16
-
 $frame run1 run2 run3 run4 run5 run6 run7 run8
-
 $frame explode1 explode2 explode3 explode4 explode5 explode6
 $frame explode7 explode8 explode9
-
 $frame hobA1 hobA2 hobA3 hobA4 hobA5 hobA6 hobA7 hobA8 hobA9 hobA10
-
 $frame hobB1 hobB2 hobB3 hobB4 hobB5 hobB6 hobB7 hobB8 hobB9 hobB10
 
-//=============================================================================
 void() boil_stand1 = [ $stand1, boil_stand2 ] {monster_idle_sound(); ai_stand();}
 void() boil_stand2 = [ $stand2, boil_stand3 ] {ai_stand();};
 void() boil_stand3 = [ $stand3, boil_stand4 ] {ai_stand();};
@@ -35,9 +27,7 @@ void() boil_stand14 = [ $stand14, boil_stand15 ] {ai_stand();};
 void() boil_stand15 = [ $stand15, boil_stand16 ] {ai_stand();};
 void() boil_stand16 = [ $stand16, boil_stand1 ] {ai_stand();};
 
-//=============================================================================
-void() boil_walk1 = [ $walk1, boil_walk2 ] {
-	monster_idle_sound(); ai_walk(0);};
+void() boil_walk1 = [ $walk1, boil_walk2 ] {monster_idle_sound(); ai_walk(0);};
 void() boil_walk2 = [ $walk2, boil_walk3 ] {monster_footstep(TRUE);ai_walk(3);};
 void() boil_walk3 = [ $walk3, boil_walk4 ] {ai_walk(4);};
 void() boil_walk4 = [ $walk4, boil_walk5 ] {ai_walk(3);};
@@ -54,18 +44,6 @@ void() boil_walk13 = [ $walk13, boil_walk14 ] {ai_walk(3);};
 void() boil_walk14 = [ $walk14, boil_walk15 ] {ai_walk(3);};
 void() boil_walk15 = [ $walk15, boil_walk16 ] {ai_walk(2);};
 void() boil_walk16 = [ $walk16, boil_walk1 ] {ai_walk(2);};
-
-//----------------------------------------------------------------------
-// Used for testing run animation speed and sliding feet problems
-//----------------------------------------------------------------------
-/*void() boil_walk1 = [ $run1, boil_walk2 ] {monster_footstep(TRUE);ai_walk(4);};
-void() boil_walk2 = [ $run2, boil_walk3 ] {monster_idle_sound(); ai_walk(16);};
-void() boil_walk3 = [ $run3, boil_walk4 ] {ai_walk(8);};
-void() boil_walk4 = [ $run4, boil_walk5 ] {ai_walk(4);};
-void() boil_walk5 = [ $run5, boil_walk6 ] {monster_footstep(TRUE);ai_walk(4);};
-void() boil_walk6 = [ $run6, boil_walk7 ] {ai_walk(16);};
-void() boil_walk7 = [ $run7, boil_walk8 ] {ai_walk(8);};
-void() boil_walk8 = [ $run8, boil_walk1 ] {ai_walk(4);};*/
 
 void() boil_run1 = [ $run1, boil_run2 ] {monster_footstep(TRUE);ai_run(4);};
 void() boil_run2 = [ $run2, boil_run3 ] {monster_idle_sound(); ai_run(16);};
@@ -87,7 +65,7 @@ void() boil_expl6 = [ $explode6, boil_expl7 ] {ai_face();};
 void() boil_expl7 = [ $explode7, boil_expl8 ] {ai_face();};
 void() boil_expl8 = [ $explode8, boil_expl9 ] {ai_face();};
 void() boil_expl9 = [ $explode9, boil_expl9 ] {
-	T_Damage (self, self, self, self.health+1, NOARMOR);
+	T_Damage(self,self,self,self.health+1,NOARMOR);
 };
 
 // Stationary Boil - Nailed to the floor or wall
@@ -95,38 +73,29 @@ void() boil_suicide = {
 	if (self.health < 1) return;
 	self.use = SUB_Null;
 	// Make sure current enemy is the cause of the damage
-	T_Damage (self, self, self.enemy, self.health+1, NOARMOR);
+	T_Damage(self,self,self.enemy,self.health+1,NOARMOR);
 };
 
 void() boil_checktarget = {
 	local entity client;
-	
-	// Should never have an active enemy
-	self.enemy = self.goalentity = world;
+
+	self.enemy = self.goalentity = world; // Should never have an active enemy
 	
 	// Get the obvious exception(s) done first
 	if (self.health < 1) return;
 	if (intermission_running > 0) return;
 	if (cinematic_running > 0 || cutscene > 0) return;
 
-	// Find a client in current PVS
-	client = checkclient ();
-
-	// Go through all the exception(s)
-	if (!client) return FALSE;
+	client = checkclient(); // Find a client in current PVS
+	if (!client) return FALSE; // Go through all the exception(s)
 	if (!(client.flags & FL_CLIENT)) return;
-	if (client.flags & FL_NOTARGET) return;
-	if (client.items & IT_INVISIBILITY) return;
+	if (Invisible(client)) return;
 
-	// Check if the player is visible?
-	enemy_vis = visible(client);
+	enemy_vis = visible(client); // Check if the player is trace visible?
 	if (!enemy_vis) return;
-	
-	// Store client/player for later damage
-	self.enemy = client;
 
-	// Is the player within range to blow up?
-	self.enemydist = range_distance(client, FALSE);
+	self.enemy = client; // Store client/player for later damage
+	self.enemydist = range_distance(client, FALSE); // Is the player within range to blow up?
 	if (self.enemydist < self.t_width) self.th_melee();
 };
 

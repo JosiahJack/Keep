@@ -1,5 +1,5 @@
 
-void () bobbingwater_think = {
+void() bobbingwater_think = {
    local vector ang;
 
    self.count = (self.count + (self.speed * (time - self.ltime)));
@@ -7,14 +7,14 @@ void () bobbingwater_think = {
    ang_x = self.count;
    ang_y = FALSE;
    ang_z = FALSE;
-   makevectors (ang);
+   makevectors(ang);
    self.origin_z = (v_forward_z * self.cnt);
    setorigin (self,self.origin);
    self.ltime = time;
    self.nextthink = (time + 0.020);
 };
 
-void () func_bobbingwater = {
+void() func_bobbingwater = {
    self.angles = VEC_ORIGIN;
    self.movetype = MOVETYPE_STEP;
    self.solid = SOLID_NOT;

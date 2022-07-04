@@ -238,7 +238,7 @@ void() ShalBossGrenade = {
 	local vector	vec, dst, follow;
 	local	entity missile;
 	
-	makevectors (self.enemy.angles);	
+	makevectors(self.enemy.angles);	
 	follow = self.enemy.velocity*3.3;		// "guess" players future position to make it harder to dodge
 	follow_z = 0;	
 	dst = (self.enemy.origin + follow) - 13*self.movedir;
@@ -248,7 +248,7 @@ void() ShalBossGrenade = {
 	missile.owner = self;
 	missile.movetype = MOVETYPE_BOUNCE;
 	missile.solid = SOLID_BBOX;	
-	makevectors (self.angles);
+	makevectors(self.angles);
 	sound (self, CHAN_WEAPON, "q15/shalrath/voregren.wav", 1, ATTN_NORM);
 	sound (self, CHAN_ITEM, "q15/shalrath/voretick.wav", 1, ATTN_NORM);
 	distancedelta = self.enemy.origin - self.origin; //work out distance vector  
@@ -340,7 +340,7 @@ void() ShalBossNovaTouch = {
 	
 	while(shockwavefind) {
 		if (shockwavefind.takedamage) { // if head has health, attack it
-			if(shockwavefind != self.owner) { // don't attack thunderbolt owner!!
+			if (shockwavefind != self.owner) { // don't attack thunderbolt owner!!
 				//if (shockwavefind.classname != "monster_voreling")
 				//{
 					//if (ext_dppart) pointparticles(particleeffectnum("voreball_explosion"), self.origin, '0 0 0', 1);
@@ -359,7 +359,7 @@ void() ShalBossNovaTouch = {
 	}
 	sound (self, CHAN_AUTO, "q15/shalrath/earthshake.wav", 1, ATTN_NONE);
 	if (ext_dppart) pointparticles(particleeffectnum("vore_shockwave"), self.origin, '0 0 0', 1);
-	if(shockwavefind.classname == "player") self.owner.enemy.punchangle_x = -10;
+	if (shockwavefind.classname == "player") self.owner.enemy.punchangle_x = -10;
 	self.velocity = '0 0 0';
 	self.touch = SUB_Null;
 	setmodel (self, "progs/q15/ring_shockwave.mdl");
@@ -379,7 +379,7 @@ void() shal_boss_spawner = {
 	missile.enemy = self.enemy;
 	missile.movetype = MOVETYPE_BOUNCE;
 	missile.solid = SOLID_BBOX;
-	makevectors (self.angles);	
+	makevectors(self.angles);	
 	sound (self, CHAN_WEAPON, "q15/shalrath/firesum.wav", 1, ATTN_NORM);
 	distancedelta = self.enemy.origin - self.origin; //work out distance vector  
 	nozdistancedelta = distancedelta;  //copy to no height distance vector 

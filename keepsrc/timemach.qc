@@ -1,7 +1,7 @@
 
-void () xpackEnding;
+void() xpackEnding;
 
-void () time_chunk = {
+void() time_chunk = {
    local entity timeChunk;
 
    timeChunk = spawn ();
@@ -24,12 +24,12 @@ void () time_chunk = {
    timeChunk.nextthink = (time + MOVETYPE_FLY);
 };
 
-void () time_stop_shake = {
+void() time_stop_shake = {
    SUB_UseTargets();
    remove(self);
 };
 
-void () time_boom = {
+void() time_boom = {
    local entity stopShakeEnt;
 
    SUB_UseTargets ();
@@ -72,7 +72,7 @@ void () time_boom = {
    stopShakeEnt.nextthink = (time + 0.7);
 };
 
-void () time_fall = {
+void() time_fall = {
    if ( !self.pain_finished ) {
       if ( (self.origin_z < -20.000) ) {
          WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
@@ -109,9 +109,9 @@ void() time_crash = {
    SUB_UseTargets ();
 };
 
-void (entity inflictor, entity attacker, float take) time_crash_pain = { time_crash(); }; // [FUNCTION], Compiler redirect.
+void(entity inflictor, entity attacker, float take) time_crash_pain = { time_crash(); }; // [FUNCTION], Compiler redirect.
 
-void (entity inflictor, entity attacker, float take) time_pain = {
+void(entity inflictor, entity attacker, float take) time_pain = {
    local entity painEnt;
    local float painRnd;
 
@@ -121,7 +121,7 @@ void (entity inflictor, entity attacker, float take) time_pain = {
    if ( (painRnd < 0.4) ) {
       self.pain_finished = (time + FL_SWIM);
       painRnd = random ();
-      makevectors (self.angles);
+      makevectors(self.angles);
       painEnt = spawn ();
       if ( (painRnd < 0.330) ) {
          painEnt.origin = ((self.origin + (v_forward * 80.000)) - (v_up * FL_GODMODE));
@@ -152,7 +152,7 @@ void (entity inflictor, entity attacker, float take) time_pain = {
 
 void() time_die = { time_pain(world, world, 0); };
 
-void () item_time_machine = {
+void() item_time_machine = {
    precache_model ("progs/rogue/timemach.mdl");
    precache_model ("progs/rogue/timegib.mdl");
    setmodel (self,"progs/rogue/timemach.mdl");
@@ -174,7 +174,7 @@ void () item_time_machine = {
    theMachine = self;
 };
 
-void () item_time_core = {
+void() item_time_core = {
    precache_model ("progs/rogue/timecore.mdl");
    setmodel (self,"progs/rogue/timecore.mdl");
    self.solid = SOLID_NOT;

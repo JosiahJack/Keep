@@ -217,7 +217,7 @@ void() finale_4 = {
 	remove(self);	
 };
 
-void (entity inflictor, entity attacker, float damage) idshub_nopain = { self.health = self.max_health; };
+void(entity inflictor, entity attacker, float damage) idshub_nopain = { self.health = self.max_health; };
 
 // QUAKED monster_oldone (1 0 0) (-16 -16 -24) (16 16 32)
 void() monster_oldone = {

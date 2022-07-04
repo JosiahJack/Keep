@@ -41,7 +41,7 @@ float UNDERWATER = 2.000;
 float LIGHTNING_RANDOM = 1.000;
 float LIGHTNING_BOOM = 2.000;
 
-void () SpawnLightningThink = { // [FUNCTION]
+void() SpawnLightningThink = { // [FUNCTION]
    if (time > self.delay) { remove (self); return ; }
 
    self.think = SpawnLightningThink;
@@ -61,7 +61,7 @@ void () SpawnLightningThink = { // [FUNCTION]
    self.nextthink = (time + 0.100);
 };
 
-void () trap_lightning_use = { // [FUNCTION]
+void() trap_lightning_use = { // [FUNCTION]
    local vector p1, p2, dir;
    local float dst, remainder;
    local entity temp;
@@ -77,7 +77,7 @@ void () trap_lightning_use = { // [FUNCTION]
       p1 = self.origin;
       p2 = self.enemy.origin;
    } else {
-      makevectors (self.angles);
+      makevectors(self.angles);
       self.movedir = v_forward;
       traceline (self.origin,(self.origin + (self.movedir * 600.000)),TRUE,self);
       p1 = self.origin;
@@ -121,7 +121,7 @@ void () trap_lightning_use = { // [FUNCTION]
    }
 };
 
-void () lightning_think = { // [FUNCTION]
+void() lightning_think = { // [FUNCTION]
    local float timedelay;
 
    if (self.state) trap_lightning_use();
@@ -142,7 +142,7 @@ void () lightning_think = { // [FUNCTION]
    } else self.nextthink = (time + 0.200);
 };
 
-void () lightning_firstthink = { // [FUNCTION]
+void() lightning_firstthink = { // [FUNCTION]
    local entity targ;
 
    if (self.target) {
@@ -159,7 +159,7 @@ void () lightning_firstthink = { // [FUNCTION]
    }
 };
 
-void () trap_lightning_triggered = { // [ENTITY]
+void() trap_lightning_triggered = { // [ENTITY]
    if (self.wait == FALSE) self.wait = TRUE;
    if (self.dmg == FALSE) self.dmg = 30;
    if (self.duration == FALSE) self.duration = 0.100;
@@ -174,27 +174,27 @@ void () trap_lightning_triggered = { // [ENTITY]
    if (!self.deathstring) self.deathstring = " was electrocuted";
 };
 
-void () trap_lightning = { // [ENTITY]
+void() trap_lightning = { // [ENTITY]
    trap_lightning_triggered ();
    self.state = TRUE;
 };
 
-void () trap_lightning_switched_use = { // [FUNCTION]
+void() trap_lightning_switched_use = { // [FUNCTION]
    self.state = (TRUE - self.state);
    if (self.state == TRUE) self.nextthink = self.huntingcharmer;
 };
 
-void () trap_lightning_switched = { // [ENTITY]
+void() trap_lightning_switched = { // [ENTITY]
    trap_lightning_triggered ();
    self.use = trap_lightning_switched_use;
 };
 
-void () trap_tesla_switched_use = { // [FUNCTION]
+void() trap_tesla_switched_use = { // [FUNCTION]
 	self.state = (1 - self.state);
 	if (self.state == TRUE) self.nextthink = (time + 0.1);
 };
 
-void () trap_tesla_scan = { // [FUNCTION]
+void() trap_tesla_scan = { // [FUNCTION]
    local entity head, prev;
 
    self.tesla_numtargets = FALSE;
@@ -215,7 +215,7 @@ void () trap_tesla_scan = { // [FUNCTION]
    }
 };
 
-void () TeslaLightningThink = { // [FUNCTION]
+void() TeslaLightningThink = { // [FUNCTION]
    self.owner.attack_state = FL_SWIM;
    if (time > self.delay) { self.enemy.struck_by_mjolnir = FALSE; remove(self); return; }
 
@@ -236,7 +236,7 @@ void () TeslaLightningThink = { // [FUNCTION]
    self.nextthink = (time + 0.100);
 };
 
-void (entity targ) SpawnTeslaLightning = { // [FUNCTION]
+void(entity targ) SpawnTeslaLightning = { // [FUNCTION]
    local entity lgt;
 
    lgt = spawn();
@@ -255,7 +255,7 @@ void (entity targ) SpawnTeslaLightning = { // [FUNCTION]
    lgt.deathtype = self.deathtype;
 };
 
-void () trap_tesla_think = { // [FUNCTION]
+void() trap_tesla_think = { // [FUNCTION]
    if ( (self.state == 0) ) { self.nextthink = (time + 0.250); return; }
 
    if ( (self.attack_state == 0) ) {
@@ -297,7 +297,7 @@ void () trap_tesla_think = { // [FUNCTION]
    }
 };
 
-void () trap_tesla_coil = { // [ENTITY]
+void() trap_tesla_coil = { // [ENTITY]
    precache_sound ("hipnotic/misc/tesla.wav");
    precache_sound ("hipnotic/weapons/mjolhit.wav");
    if ( (self.wait == FALSE) ) self.wait = FL_SWIM;
@@ -315,7 +315,7 @@ void () trap_tesla_coil = { // [ENTITY]
    self.deathtype = "is electrocuted";
 };
 
-void () trap_gods_wrath_use = { // [FUNCTION]
+void() trap_gods_wrath_use = { // [FUNCTION]
    if ( (self.attack_state == FALSE) ) {
       self.search_time = (time + self.delay);
       self.lastvictim = activator;
@@ -323,7 +323,7 @@ void () trap_gods_wrath_use = { // [FUNCTION]
    }
 };
 
-void () trap_gods_wrath = { // [ENTITY]
+void() trap_gods_wrath = { // [ENTITY]
    if ( (self.delay == FALSE) ) self.delay = MOVETYPE_FLY;
    trap_tesla_coil ();
    self.wait = FALSE;
@@ -333,13 +333,13 @@ void () trap_gods_wrath = { // [ENTITY]
    self.use = trap_gods_wrath_use;
 };
 
-void () trap_gravity_touch = { // [FUNCTION]
+void() trap_gravity_touch = { // [FUNCTION]
    if ( (self.attack_finished > time) ) return;
 
    if ( other.takedamage ) { T_Damage (other,self,self,self.dmg,DAMARMOR); self.attack_finished = (time + 0.200); }
 };
 
-void () trap_gravity_think = { // [FUNCTION]
+void() trap_gravity_think = { // [FUNCTION]
    local vector vel, dir, delta;
 
    self.ltime = time;
@@ -356,7 +356,7 @@ void () trap_gravity_think = { // [FUNCTION]
    self.nextthink = (time + 0.100);
 };
 
-void () trap_gravity_well = { // [ENTITY]
+void() trap_gravity_well = { // [ENTITY]
    self.solid = SOLID_TRIGGER;
    self.movetype = MOVETYPE_NONE;
    setsize (self,'-16.000 -16.000 -16.000','16.000 16.000 16.000');

@@ -347,7 +347,7 @@ void()	zombiek_jump3	=[	$atta3,		zombiek_jump4 ] {
 	ai_face();
 	self.jump_flag = time + MONAI_JUMPZOMBTIME;
 	self.touch = zombiek_JumpTouch;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	self.velocity = (v_forward*(self.jumpdist_x + random()*50)) + ('0 0 1'*self.jumpdist_z);
 	self.origin_z = self.origin_z + 4;
 	self.flags = self.flags - (self.flags & FL_ONGROUND);

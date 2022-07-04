@@ -96,22 +96,20 @@ void() hknight2_char_a1;
 void() hknight2_run1;
 
 void(float offset) hknight2_shot = {
-	local	vector	offang;
-	local	vector	org, vec;
+	local vector offang, org, vec;
 
 	if (!self.enemy) return;
 	if (self.health < 1) return;	
 
 	offang = vectoangles (self.enemy.origin - self.origin);
 	offang_y = offang_y + offset * 6;
-	makevectors (offang);
+	makevectors(offang);
 	org = self.origin + self.mins + self.size*0.5 + v_up * 5 + v_forward * 20;
 	// set missile speed
 	vec = normalize (v_forward);
 	vec_z = 0 - vec_z + (random() - 0.5)*0.1;
 	self.attack_speed = 300;
-	
-	launch_projectile (org, vec, CT_PROJ_HKN2, self.attack_speed);
+	launch_projectile(org,vec,NO_SPIN,CT_PROJ_HKN2,self.attack_speed);
 	sound(self, CHAN_WEAPON, "q15/warlord/attack1.wav", 1, ATTN_NORM);
 };
 
@@ -281,7 +279,7 @@ void(float offsetAngle) hknight2_minigrenade_launch = {
 	// set missile speed	
 	missile.v_angle = self.v_angle;
 	missile.v_angle_y = missile.v_angle_y + offsetAngle;
-	makevectors (missile.v_angle);
+	makevectors(missile.v_angle);
 	missile.velocity = v_forward*100 + v_up*400;
 	tempRand = (crandom()*60) - 30;
 	missile.velocity = missile.velocity + tempRand * v_forward;
@@ -360,7 +358,7 @@ void() hknight2_throw = {
 	missile.movetype = MOVETYPE_BOUNCE;
 	missile.solid = SOLID_BBOX;
 
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + /* self.view_ofs +*/ v_right * 12 + v_up * 11 + v_forward * 20;
 		
 	// set missile speed	
@@ -508,7 +506,7 @@ void() hknight2_homing_think = {
 	// to make it touchable again
 	if (vlen((self.enemy.origin + '0 0 16') - self.origin) <= 70) {
 		traceline ((self.enemy.origin + '0 0 16'), self.origin, FALSE, self);
-		if (trace_fraction == 1.0) self.movetype = MOVETYPE_FLYMISSILE;
+		if (trace_fraction == 1) self.movetype = MOVETYPE_FLYMISSILE;
 	}
 
 	// when it got stuck
@@ -521,7 +519,7 @@ void() hknight2_homing_think = {
 
 	dir = normalize((self.enemy.origin + '0 0 16') - self.origin);
 	offang = vectoangles ((self.enemy.origin + '0 0 12') - self.origin);
-	makevectors (offang);
+	makevectors(offang);
 	
 	// set homing-missile angles
 	vec = normalize (v_forward);
@@ -536,7 +534,7 @@ void() hknight2_homing_think = {
 	self.think = hknight2_homing_think;	
 };
 
-void (vector face_spawn_pos, vector face_spawn_vel) launch_hknight2_homing = {
+void(vector face_spawn_pos, vector face_spawn_vel) launch_hknight2_homing = {
 	newmis = spawn ();
 	newmis.owner = self;
 	newmis.enemy = self.enemy;
@@ -567,7 +565,7 @@ void() hknight2_homing_shot = {
 	local vector offang, org, vec;
 	
 	offang = vectoangles (self.enemy.origin - self.origin);
-	makevectors (offang);
+	makevectors(offang);
 	org = self.origin + /* self.view_ofs +*/ v_right * 9 + v_up * 12 + v_forward * 17;
 
 	// set homing-missile speed

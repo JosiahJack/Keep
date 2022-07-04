@@ -1,4 +1,4 @@
-void () play_sound_use = { // [FUNCTION]
+void() play_sound_use = { // [FUNCTION]
    if ( (self.spawnflags & TRUE) ) {
       if ( (self.state == FALSE) ) {
          self.state = TRUE;
@@ -10,7 +10,7 @@ void () play_sound_use = { // [FUNCTION]
    } else sound (self,self.impulse,self.noise,self.volume,self.speed);
 };
 
-void () PlaySoundThink = { // [FUNCTION]
+void() PlaySoundThink = { // [FUNCTION]
    local float t;
 
    t = (self.wait * random());
@@ -19,7 +19,7 @@ void () PlaySoundThink = { // [FUNCTION]
    play_sound_use();
 };
 
-void () play_sound_triggered = { // [ENTITY]
+void() play_sound_triggered = { // [ENTITY]
    precache_sound (self.noise);
    precache_sound ("misc/null.wav");
    if ( (self.volume <= 0) ) self.volume = 1;
@@ -31,7 +31,7 @@ void () play_sound_triggered = { // [ENTITY]
    self.use = play_sound_use;
 };
 
-void () play_sound = { // [ENTITY]
+void() play_sound = { // [ENTITY]
    local float t;
 
    play_sound_triggered();
@@ -43,19 +43,19 @@ void () play_sound = { // [ENTITY]
    self.nextthink = (time + t);
 };
 
-void () random_thunder = { // [ENTITY]
+void() random_thunder = { // [ENTITY]
    self.noise = "ambience/thunder1.wav";
    play_sound();
    self.impulse = MOVETYPE_TOSS;
 };
 
-void () random_thunder_triggered = { // [ENTITY]
+void() random_thunder_triggered = { // [ENTITY]
    self.noise = "ambience/thunder1.wav";
    play_sound_triggered ();
    self.impulse = MOVETYPE_TOSS;
 };
 
-void () effect_teleport_use = { // [FUNCTION]
+void() effect_teleport_use = { // [FUNCTION]
    WriteByte (MSG_BROADCAST,SVC_TEMPENTITY);
    WriteByte (MSG_BROADCAST,TE_TELEPORT);
    WriteCoord (MSG_BROADCAST,self.origin_x);
@@ -64,14 +64,14 @@ void () effect_teleport_use = { // [FUNCTION]
    sound (self,CHAN_VOICE,"misc/r_tele1.wav",TRUE,ATTN_NORM);
 };
 
-void () effect_teleport = { // [ENTITY]
+void() effect_teleport = { // [ENTITY]
    precache_sound ("misc/r_tele1.wav");
    self.use = effect_teleport_use;
 };
 
 float SVC_UPDATEENTITY    = 128.000;
 
-void (entity me, entity camera) UpdateCamera = { // [FUNCTION]
+void(entity me, entity camera) UpdateCamera = { // [FUNCTION]
    msg_entity = me;
    WriteByte (MSG_ONE,(SVC_UPDATEENTITY | 15.000));
    WriteByte (MSG_ONE,FL_GODMODE);
@@ -81,7 +81,7 @@ void (entity me, entity camera) UpdateCamera = { // [FUNCTION]
    WriteCoord (MSG_ONE,camera.origin_z);
 };
 
-void () effect_finale_use = { // [FUNCTION]
+void() effect_finale_use = { // [FUNCTION]
    local entity pos, pl, targ, temp;
 
    if (self.state) return;
@@ -129,7 +129,7 @@ void () effect_finale_use = { // [FUNCTION]
    }
 };
 
-void () effect_finale = { // [ENTITY]
+void() effect_finale = { // [ENTITY]
    if ( deathmatch ) { remove(self); return; }
 
    setorigin (self,self.origin);
@@ -138,11 +138,11 @@ void () effect_finale = { // [ENTITY]
    self.state = FALSE;
 };
 
-void () info_startendtext_use = { // [FUNCTION]
+void() info_startendtext_use = { // [FUNCTION]
    intermission_running = TRUE;
    FinishIntermissionCamera();
 };
 
-void () info_startendtext = { // [ENTITY]
+void() info_startendtext = { // [ENTITY]
    self.use = info_startendtext_use;
 };

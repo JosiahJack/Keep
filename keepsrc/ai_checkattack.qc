@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 69
+// Function count: 75
 //
 // Implements: Check routines for monsters to decide when and which attacks
 //
@@ -37,6 +37,8 @@
 // or missile (range) attack.  Always working 1 frame behind the ai_run
 // function. Moved all checkattack routines here (previously inside each
 // monster file).
+//
+// Why on earth are there so many check attack functions???
 //=============================================================================
 
 float() archer_check_shot;
@@ -46,8 +48,6 @@ float() BaronGolem_Check;
 float(entity ent) QuakeHurts;
 float(vector org, entity ignore) UpIsSky;
 float() eidolon_WaveCheck;
-float() mammoth_WaveCheck;
-float() mammoth_CheckTether;
 void() dcrossbow_stop1;
 void() dcrossbow_fire1;
 void() dcrossbow_slide1;
@@ -63,14 +63,6 @@ void() mcorn_atkb1;
 float(vector waveqty) SpriteCount_Flame;
 float(entity targ, float maxextra) HazardProjectile_CheckLimit;
 
-// Mammoth style phases
-float MM_PHASE0 = 0;		// Phase 0 - Locked
-float MM_PHASE1 = 1;		// Phase 1 - Lasers
-float MM_PHASE2 = 2;		// Phase 2 - Rockets
-float MM_PHASE3 = 3;		// Phase 3 - Lasers + Grenades
-float MM_PHASE4 = 4;		// Phase 4 - Death
-
-// Why on earth are there so many check attack functions???
 void() CheckAttack = { // [FUNCTION]
 	if (visblocked(self.enemy)) return; // Does the monster have a clear shot to the player? sightline can be blocked by other monsters
 
@@ -660,7 +652,7 @@ void() FreddieCheckAttack = {
 	// If Freddie too far away for stationary attack?
 	if (self.enemydist > MONAI_RANGEFREDDIE && skill > SKILL_EASY) {
 		// Work out vector angle of enemy infront
-		makevectors (self.angles);
+		makevectors(self.angles);
 		self.pos1 = normalize (self.enemy.origin - self.origin);
 		self.lip = self.pos1 * v_forward;
 		// Is the enemy infront of freddie?
@@ -2088,7 +2080,7 @@ void() SwamplingCheckAttack = {
 	}
 };
 
-void () LavaManCheckAttack = {
+void() LavaManCheckAttack = {
    if (!visblocked_wide(SUB_entEnemyTarget(), self.attack_offset,'0 0 0')) return;
    if (time < self.attack_finished) return;
 
@@ -2096,7 +2088,7 @@ void () LavaManCheckAttack = {
    SUB_AttackFinished ((random()));
 };
 
-void () GremlinCheckAttack = {
+void() GremlinCheckAttack = {
    local vector spot1, spot2;
    local entity targ;
 
@@ -2436,71 +2428,6 @@ void() JudgeCheckAttack = {
 	SUB_AttackFinished (2 + random());
 };
 
-void() mammothCheckAttack = {
-	local vector armorg, eorg;
-
-	if (mammoth_WaveCheck() == TRUE) return; // Check for boss wave trigger events
-
-	// setup enemytarget if one is not active
-	if (self.enemy.classtype != CT_ENEMYTARGET) {
-		if (SUB_setupEnemyTarget(self.enemy, self.height, MONAI_ABOVETIMER)) {
-			self.enemy = self.enemytarget;
-		}
-	}
-
-	// Melee attack (Dumping fire on to player/floor), this has always got to be available, no cooldown
-	// Flatten distance checks, the mammoth is constantly flying
-	self.enemydist = range_distance(SUB_entEnemyTarget(), TRUE);
-	// Any sprite space left for hazard projectiles? (def=14 frames)
-	// There is no skill difference with the fire/dump attack
-	if (HazardProjectile_CheckLimit(self, self.proj_attqty_z)) {
-		if (self.enemydist < MONAI_MELEEMAMMOTH) {
-			self.attack_state = AS_MELEE;
-			return;
-		}
-	}
-	
-	// Mammoth is a very wide and needs more visibility checks, especially for the arms during phase 1 & 2.
-	self.attack_sidedeny = FALSE; // Phase 3 = central attacks, front and top only
-	if (!enemy_vis) {
-		eorg = self.enemy.origin + self.enemy.view_ofs; // Work out enemy origin + vertical offset
-		makevectors(self.angles);
-		if (self.style == MM_PHASE3) armorg = self.origin + attack_vector('30 24 46'); // Phase 3 has no arms, use left/right side of body instead
-		else armorg = self.origin + attack_vector('30 38 46');
-
-		traceline (armorg, eorg, TRUE, self);
-		if (trace_fraction == 1) { 
-			enemy_vis = TRUE;
-		} else {
-			// first arm was blocked, try second instead
-			if (self.style == MM_PHASE3) armorg = self.origin + attack_vector('30 -24 46');
-			else armorg = self.origin + attack_vector('30 -38 46');
-
-			traceline (armorg, eorg, TRUE, self);
-			if (trace_fraction == 1) enemy_vis = TRUE;
-		}
-		if (enemy_vis) self.attack_sidedeny = TRUE; // Partly blocked, so use agressive attack instead
-	}
-	
-	// Range attacks (Laser, Rockets, Arc and Grenades) if cooldown has finished and can see enemy
-	if (self.attack_finished < time && enemy_vis) {
-		// Is the enemy close enough for attack? If the mammoth at maximum tether range, keep firing!
-		if (mammoth_CheckTether() || self.enemydist < MONAI_RANGEMAMMOTH) {
-			SUB_AttackFinished(2 + random());
-			self.attack_state = AS_MISSILE;
-			return;
-		}
-	}
-
-	if (mammoth_CheckTether()) return; // Don't strafe if at max tether range
-
-	// Maintain distance (strafe)
-	if (enemy_range >= RANGE_MID || !enemy_vis) {
-		if (self.attack_state != AS_STRAIGHT) self.attack_state = AS_STRAIGHT;
-	}
-	else self.attack_state = AS_SLIDING;
-};
-
 void() NourCheckAttack = {
 	// setup enemytarget if one is not active
 	if (self.enemy.classtype != CT_ENEMYTARGET) {
@@ -2827,7 +2754,7 @@ float(vector p) M_MeteorCheck = { // [FUNCTION]
     if (vlen(vec) < 200) return FALSE; // Enemy too close to attacker.
 
     org = vectoangles (vec);
-    makevectors (org);
+    makevectors(org);
     org = self.origin + p_x*v_forward + p_y*v_right + p_z*'0 0 1';
     if (vlen(spot - org) < 200) return FALSE; // Not enough time for target to react.
 

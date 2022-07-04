@@ -93,6 +93,7 @@ void() ImpulseCommands = {
 	else if (self.impulse == 200) toggleupgradeaxe();	// Toggle Axe Upgrade
 	else if (self.impulse == 205) toggleupgradessg();	// Toggle Shotgun Upgrade
 	else if (self.impulse == 210) toggleupgradelg();	// Toggle Lightning Upgrade
+	else if (self.impulse == 211) KillGun();			// Cycle through kill, gib, and normal guns.
 	else if (self.impulse == 220) display_configflag();	// Display MOD config flag
 	else if (self.impulse == 222) showbits_configflag();// Show exact values of flag
 	else if (self.impulse == 225) display_mapvar();		// Display all map variables

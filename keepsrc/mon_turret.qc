@@ -87,11 +87,11 @@ float() CheckTurretAttack = {
 	if (random () < chance)
 	{
 		self.th_missile();
-		if(self.spawnflags & TUR_LASERS)
+		if (self.spawnflags & TUR_LASERS)
 			SUB_AttackFinished (1.5 + 2*random());
-		if(self.spawnflags & TUR_ROCKETS)
+		if (self.spawnflags & TUR_ROCKETS)
 			SUB_AttackFinished (1.5 + 3*random());
-		if(self.spawnflags & TUR_PPC)
+		if (self.spawnflags & TUR_PPC)
 			SUB_AttackFinished (2 + 2*random());
 		else
 			SUB_AttackFinished (1 + 1.5*random());
@@ -107,16 +107,16 @@ void() turret_face =
 	local float idealframe;
 
 	tmpvec = vectoangles(self.origin - (self.enemy.origin + self.enemy.view_ofs));
-	if(tmpvec_x > self.rotate_type)
+	if (tmpvec_x > self.rotate_type)
 	{
-		if(tmpvec_x > (self.rotate_type + 6))
+		if (tmpvec_x > (self.rotate_type + 6))
 			self.rotate_type = self.rotate_type + 6;
 		else
 			self.rotate_type = tmpvec_x;
 	}
-	else if(tmpvec_x < self.rotate_type)
+	else if (tmpvec_x < self.rotate_type)
 	{
-		if(tmpvec_x < (self.rotate_type - 6))
+		if (tmpvec_x < (self.rotate_type - 6))
 			self.rotate_type = self.rotate_type - 6;
 		else
 			self.rotate_type = tmpvec_x;
@@ -146,7 +146,7 @@ void() turret_still =	[ $tilt0, turret_still]
 
 void() turret_ret1 =	[ $retract1, turret_ret1]
 {
-	if(self.frame >= 15)
+	if (self.frame >= 15)
 	{
 		turret_ret2();
 		return;
@@ -163,7 +163,7 @@ void() turret_ret5 =	[ $retract4, turret_ret6]
 void() turret_ret6 =	[ $retract5, turret_ret7] {self.nextthink = time + 0.05;};
 void() turret_ret7 =	[ $retract6, turret_ret8] {self.nextthink = time + 0.05;};
 void() turret_ret8 =	[ $retract7, turret_retracted]
-{if(!self.currentammo) self.think = SUB_Null;self.nextthink = time + 0.05;};
+{if (!self.currentammo) self.think = SUB_Null;self.nextthink = time + 0.05;};
 
 void() turret_unret1 =	[ $retract6, turret_unret2] {self.nextthink = time + 0.05;};
 void() turret_unret2 =	[ $retract5, turret_unret3] {self.nextthink = time + 0.05;};
@@ -178,7 +178,7 @@ void() turret_unret5 =	[ $retract2, turret_unret6] {self.nextthink = time + 0.05
 void() turret_unret6 =	[ $retract1, turret_unret7] {self.nextthink = time + 0.05;};
 void() turret_unret7 =	[ $tilt0, turret_unret7]
 {
-	if(self.frame > (turret_frame(self.rotate_type) + 1))
+	if (self.frame > (turret_frame(self.rotate_type) + 1))
 		self.frame = self.frame - 2;
 	else
 	{
@@ -189,7 +189,7 @@ void() turret_unret7 =	[ $tilt0, turret_unret7]
 
 void() turret_retracted =	[ $retract7, turret_retracted]
 {
-	if(FindTarget ())
+	if (FindTarget ())
 		turret_unret1();
 };
 
@@ -359,7 +359,7 @@ void() turret_fire1 =	[ $tilt0, turret_fire2]
 {
 	turret_face();
 
-	if(infront(self.enemy))
+	if (infront(self.enemy))
 		self.think = turret_fire2;
 	self.nextthink = time + 0.05;
 };
@@ -377,11 +377,11 @@ void() turret_fire4 =	[ $tilt0, turret_fire4]
 {
 	turret_face();
 
-	if(self.spawnflags & TUR_LASERS)
+	if (self.spawnflags & TUR_LASERS)
 		turret_laser1();
-	else if(self.spawnflags & TUR_ROCKETS)
+	else if (self.spawnflags & TUR_ROCKETS)
 		turret_rocket1();
-	else if(self.spawnflags & TUR_PPC)
+	else if (self.spawnflags & TUR_PPC)
 		turret_beam1();
 	else
 		turret_bullet1();
@@ -416,15 +416,15 @@ void() turret_die = {
 };
 
 void() turret_use= {
-	if(self.currentammo) {
+	if (self.currentammo) {
 		self.currentammo = FALSE;
-		if((self.spawnflags & TUR_RETRACT) || (self.spawnflags & TUR_OFFRET))
+		if ((self.spawnflags & TUR_RETRACT) || (self.spawnflags & TUR_OFFRET))
 			turret_ret1();
 		else
 			self.think = SUB_Null;
 	} else {
 		self.currentammo = TRUE;
-		if((self.spawnflags & TUR_RETRACT) || (self.spawnflags & TUR_OFFRET))
+		if ((self.spawnflags & TUR_RETRACT) || (self.spawnflags & TUR_OFFRET))
 			turret_unret1();
 		else
 			turret_still();
@@ -461,10 +461,10 @@ void() monster_turret = {
 	setmodel (self, self.mdl);
 	if (self.deathstring == "") self.deathstring = " was blasted by a Turret\n";
 	setsize (self, '-12 -12 -6', '12 12 12');
-	if(self.health < 1) self.health = 100;
+	if (self.health < 1) self.health = 100;
 	self.max_health = self.health;
 	if (world.devdata & DEV_AMMO_N_HEALTH) sendmonsterdevdata(self);
-	if(self.rotate_type < 0 || self.rotate_type > 90) self.rotate_type = 0;
+	if (self.rotate_type < 0 || self.rotate_type > 90) self.rotate_type = 0;
 	self.currentammo = TRUE;
 	if (self.spawnflags & TUR_RETRACT) {
 		self.th_stand = turret_ret1;
@@ -492,8 +492,8 @@ void() monster_turret = {
 	setorigin(self, endorg);
 
 	// decide how to start according to the spawnflags
-	if(self.spawnflags & TUR_STARTOFF) {
-		if((self.spawnflags & TUR_RETRACT) || (self.spawnflags & TUR_OFFRET)) {
+	if (self.spawnflags & TUR_STARTOFF) {
+		if ((self.spawnflags & TUR_RETRACT) || (self.spawnflags & TUR_OFFRET)) {
 			self.frame = $retract7;
 			self.solid = SOLID_NOT;
 		} else self.frame = turret_frame(self.rotate_type);
@@ -501,7 +501,7 @@ void() monster_turret = {
 		self.currentammo = FALSE;
 		self.think = SUB_Null;
 	} else {
-		if(self.spawnflags & TUR_RETRACT) {
+		if (self.spawnflags & TUR_RETRACT) {
 			self.solid = SOLID_NOT;
 			turret_retracted();
 		} else turret_still();

@@ -199,9 +199,9 @@ float() judge_WaveCheck =
 		// Check for wave boundary triggers
 		self.noise = "";
 		if (self.bosswave == 1) self.noise = self.noise1;
-		else if(self.bosswave == 2) self.noise = self.noise2;
-		else if(self.bosswave == 3) self.noise = self.noise3;
-		else if(self.bosswave == 4) self.noise = self.noise4;
+		else if (self.bosswave == 2) self.noise = self.noise2;
+		else if (self.bosswave == 3) self.noise = self.noise3;
+		else if (self.bosswave == 4) self.noise = self.noise4;
 		
 		// Is there any trigger for the wave boundary?
 		if (self.noise != "") trigger_strs(self.noise, self);
@@ -641,11 +641,8 @@ void() judge_smashframe = {
 	if (self.walkframe > 9) self.th_run();
 };
 
-//======================================================================
 // (JUSTICE only) MAGIC PATTERN A - Giant arrow heads in diamond
-//======================================================================
-void(float offset) judge_firemagicA =
-{
+void(float offset) judge_firemagicA = {
 	local vector org, dir;
 	
 	if (!self.enemy) return;
@@ -657,7 +654,7 @@ void(float offset) judge_firemagicA =
 	// check for enemy origin (based on sight test)
 	// if cannot see enemy fire at last known location
 	ai_trackenemy();
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.meleeoffset);
 	
 	// Create perfect shot (no longer use offset)
@@ -665,12 +662,10 @@ void(float offset) judge_firemagicA =
 
 	// Variable speed based on skill level with extra random spice
 	self.attack_speed = SPEED_JUSTICEMISSILE + (skill * SPEED_JUSTICESKILL) + random()*10;
-	Launch_Missile (org, dir, '0 0 0', CT_PROJ_JUSTICER, self.attack_speed);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_JUSTICER,self.attack_speed);
 };
 
-//----------------------------------------------------------------------
-void() judge_magicAframe =
-{
+void() judge_magicAframe = {
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -690,24 +685,20 @@ void() judge_magicAframe =
 		// Glow ball of magic infront of sword
 		justice_setup_attachment();
 		self.attack_track = self.enemy.origin;
-	}
-	else if (self.walkframe >= 1 && self.walkframe <= 3) {
+	} else if (self.walkframe >= 1 && self.walkframe <= 3) {
 		self.frame = $magicA2;
 		justice_update_attachment(self.walkframe);
 		particle_implode(self.attachment.origin, 20+random()*20, 100, 100, PARTICLE_BURST_YELLOW);
 		ai_trackenemy();
-	}
-	else if (self.walkframe >= 4 && self.walkframe <= 7) { 
+	} else if (self.walkframe >= 4 && self.walkframe <= 7) { 
 		self.frame = $magicA3 + (self.walkframe-4);
 		justice_update_attachment(self.walkframe);
 		judge_firemagicA(self.walkframe-4);
-	}
-	else if (self.walkframe == 8) {
+	} else if (self.walkframe == 8) {
 		self.frame = $magicA7;
 		SpawnExplosion(EXPLODE_BURST_SMOKE, self.attachment.origin, SOUND_RESIST_ROCKET);
 		SUB_FinishAttachment();
-	}
-	else self.th_run();
+	} else self.th_run();
 
 	// Update frame and move forward
 	self.walkframe = self.walkframe + 1;
@@ -726,7 +717,7 @@ void(float fire_explode) judge_fireflamewall =
 
 	// Facing angle
 	ai_face();
-	makevectors (self.angles);	
+	makevectors(self.angles);	
 	org = self.origin + attack_vector(self.attack_offset);
 	
 	// Setup explosion origin (infront)
@@ -754,14 +745,14 @@ void(float fire_explode) judge_fireflamewall =
 	}
 
 	// Start with facing angle
-	makevectors (self.angles);	
+	makevectors(self.angles);	
 	// Work out offset (24 unit) from left to right (- to +)
 	torg = self.enemy.origin + (v_right * (self.proj_attarc*24));
 	targetang = SUB_Elevation(ELEV_DEFAULT, self.origin, torg, SPEED_FLAME);
 	// Work out angle
 	ang = vectoangles(torg - org);
 	ang_x = -targetang;	// Negative = upwards angle 
-	makevectors (ang);
+	makevectors(ang);
 	// fire flames forward with slight Z wobble
 	dir = (v_forward + (v_up * (random()*0.2)) ) * SPEED_FLAME;
 
@@ -851,11 +842,8 @@ void() judge_flamewall = {
 	self.walkframe = self.walkframe + 1;
 };
 
-//======================================================================
 // (JUDGE only) MAGIC PATTERN B - Giant arrow heads in sweeping arc
-//======================================================================
-void(float offset) judge_firemagicB =
-{
+void(float offset) judge_firemagicB = {
 	local float projcol, fire_col;
 	local vector org, dir, fire_pat;
 	
@@ -865,14 +853,13 @@ void(float offset) judge_firemagicB =
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "ad181/justice/magic_fire.wav", 1, ATTN_NORM);	
 
-	// Maximum speed, initial speed set in Launch_Missile
+	// Maximum speed, initial speed set in launch_projectile
 	self.attack_speed = SPEED_JUDGEMISSILE + (skill * SPEED_JUDGESKILL);
 	
 	// check for enemy origin (based on sight test)
 	// if cannot see enemy fire at last known location
 	ai_trackenemy();
-
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.meleeoffset);
 	
 	// Create an arc pattern based on skill level
@@ -888,7 +875,7 @@ void(float offset) judge_firemagicB =
 	
 	// Skill based projectile fire 0=easy, 1=normal, 2=hard, 3=nm
 	if (offset <= skill)
-		Launch_Missile (org, dir, '0 0 0', projcol, self.attack_speed);
+		launch_projectile(org,dir,NO_SPIN,projcol,self.attack_speed);
 	
 	// Chance of flame off first (offset=0) swing of sword
 	if (offset == 0) {
@@ -906,9 +893,7 @@ void(float offset) judge_firemagicB =
 	else SpawnVelocitySmoke(org, dir+v_up, 200, 50);
 };
 
-//----------------------------------------------------------------------
-void() judge_magicBframe =
-{
+void() judge_magicBframe = {
 	// Judge Dead stops here!
 	if (self.health < 1) return;
 	if (self.state == JUDGE_DEAD) return;
@@ -1035,7 +1020,7 @@ void() judge_jump2 = [ $jump2, judge_jump3 ] {
 	else
 		self.jump_flag = time + MONAI_JUMPJUSTICETIME;
 
-	makevectors (self.angles);
+	makevectors(self.angles);
 	self.velocity = (v_forward*self.jumpdist_x) + ('0 0 1'*self.jumpdist_z);
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.oldorigin = self.origin;
@@ -1402,7 +1387,7 @@ void() Fire_judgePlasma = {
 	org = self.origin + attack_vector(ovec);
 	rndvec = vecrand(0,50,TRUE);
 	destvec = normalize(rndvec);
-	launch_projectile(org, destvec, CT_SUMMONLIGHT, SPEED_REFLECTION);
+	launch_projectile(org,destvec,NO_SPIN,CT_SUMMONLIGHT,SPEED_REFLECTION);
 };
 
 void() Spawn_judgeMin = {

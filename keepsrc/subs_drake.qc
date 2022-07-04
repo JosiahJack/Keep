@@ -48,7 +48,7 @@ vector(float theta) CoSine = {
 
     tx = v_forward;  ty = v_right;  tz = v_up;  // Save old makevectors.
     vec = '0 1 0' * theta;
-    makevectors (vec);
+    makevectors(vec);
     vec_x = v_forward_x;    // cos
     vec_y = v_forward_y;    // sin
     vec_z = 0;
@@ -379,7 +379,7 @@ float(float yaw, float dist) noclip_move = {
 	local   float   delta;
 
     move = '0 0 0'; move_y = yaw;
-    makevectors (move);
+    makevectors(move);
     move = v_forward * dist * 10;
     if (self.enemy) {
         delta = self.origin_z - self.enemy.origin_z;
@@ -599,7 +599,7 @@ float(entity ent, vector spot) UseCourage = {
         vx = v_forward;
 		vy = v_right;
 		vz = v_up;
-        makevectors (ent.angles);   // Yes, use model angles, not viewangles.
+        makevectors(ent.angles);   // Yes, use model angles, not viewangles.
         v1 = normalize (spot - ent.origin);
         v2 = v_forward;
         v_forward = vx;
@@ -833,7 +833,7 @@ float() EntryPoint_Circle = {
 
 	// Spawn at one of twelve points around the master.
     org = self.enemy.origin + '0 0 32';
-    makevectors (self.enemy.angles);
+    makevectors(self.enemy.angles);
 
     // e.g., Human with Draco: 80 + (16 + 32) * 1.25 = 140.
     cos0  = 80 + (self.enemy.maxs_x + self.maxs_x) * 1.25;
@@ -905,7 +905,7 @@ float(float r, float m, vector ofs) EntryPoint_Randomize_Ex = {
         } else
             ang_y = crandom() * ofs_y;
         ang_y = anglemod (self.angles_y + ang_y);   //random() * 360;
-        makevectors (ang);
+        makevectors(ang);
         spot = org + (v_forward * dist);
         if (EntryPoint_Test (spot))
             return TRUE;

@@ -60,10 +60,8 @@ void() monster_spawned_use = {
 	if (!(self.spawnflags & M_SPAWNSILENT)) spawn_tfog(self.origin);		
 	spawn_tdeath(self.origin, self);
 	if (self.spawnflags & M_SPAWNANGRY) {		
-		if (activator.classname == "player")
-		{
-			if ( (activator.health > 0) && (!(activator.flags & FL_NOTARGET)) )
-			{
+		if (activator.classname == "player") {
+			if ( (activator.health > 0) && !Invisible(activator)) {
 				self.enemy = activator;
 				self.think = FoundTarget;
 			}
@@ -336,7 +334,7 @@ void(float beastie, vector org, vector vel, float ang, float update, entity atta
 	spawn_tdeath(self.origin, self);
 	if (attacker) {		
 		if ( (attacker.flags & FL_CLIENT) || ( (attacker.flags & FL_MONSTER) && (self.monsterflags & MF_SHUFFLER_MINION) ) ) {
-			if ( (attacker.health > 0) && (!(attacker.flags & FL_NOTARGET)) ) {
+			if (attacker.health > 0 && !Invisible(attacker)) {
 				self.enemy = attacker;
 				self.think = FoundTarget;
 			}

@@ -302,11 +302,11 @@ void() drole_fire = {
 	
 	ai_face();
 	self.attack_speed = 80;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = normalize((self.enemy.origin+'0 0 -8') - org);
 	avel = avel = vecrand(100,200,FALSE);
-	Launch_Missile (org, dir, avel, CT_PROJ_DROLE, self.attack_speed);
+	launch_projectile(org,dir,avel,CT_PROJ_DROLE,self.attack_speed);
 };
 
 void() drole_magic1 = [ $magic1, drole_magic2 ] {ai_face();

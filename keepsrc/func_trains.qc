@@ -44,7 +44,7 @@ float TRAIN_TOUCH = 8;
 float TRAIN_REVERSE = 32;
 
 void() func_train_stop = { // [FUNCTION]
-	if ( self.sounds > 0 && self.noise != "" ) sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play stop sound and switch state OFF
+	if ( self.sounds > 0 && self.noise != "") sound (self, CHAN_VOICE, self.noise, self.volume, ATTN_NORM); // Play stop sound and switch state OFF
 	self.velocity = self.avelocity = '0 0 0';
 	self.state = STATE_OFF;
 };

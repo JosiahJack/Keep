@@ -155,15 +155,13 @@ void(vector tailofs) pinch_tailspike = {
 	org = self.origin + attack_vector(tailofs);
 	dir = self.enemy.origin + v_right*(TAILOFFSET*3);
 	dir = normalize(dir - org);
-	launch_projectile (org, dir, CT_PROJ_SCORP, self.attack_speed+random()*25);
-
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_SCORP,self.attack_speed+random()*25);
 	dir = self.enemy.origin;
 	dir = normalize(dir - org);
-	launch_projectile (org, dir, CT_PROJ_SCORP, self.attack_speed+random()*25);
-
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_SCORP,self.attack_speed+random()*25);
 	dir = self.enemy.origin - v_right*(TAILOFFSET*3);
 	dir = normalize(dir - org);
-	launch_projectile (org, dir, CT_PROJ_SCORP, self.attack_speed+random()*25);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_SCORP,self.attack_speed+random()*25);
 }
 
 void()	pinch_tail1	=[	$attackA2,		pinch_tail2	] {ai_face();
@@ -229,7 +227,7 @@ void() pinch_leap3	=[	$attackC5, pinch_leap4	] {ai_face();
 	self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.pos2, self.attack_speed);
 	self.pos1 = vectoangles(self.pos2 - self.origin);
 	self.pos1_x = -self.attack_elev;
-	makevectors (self.pos1);
+	makevectors(self.pos1);
 	self.velocity = v_forward * self.attack_speed;
 	
 	self.jump_flag = time + MONAI_JUMPSCORPTIME;
@@ -465,7 +463,7 @@ void() setup_scorpion = {
 	}
 	
 	self.gib1skin = self.gib2skin = self.gib3skin = self.exactskin;
-	if(!self.classtype) self.classtype = CT_MONSCORPION;
+	if (!self.classtype) self.classtype = CT_MONSCORPION;
 	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEWALK;
 	monster_start();

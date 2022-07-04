@@ -248,6 +248,6 @@ void() monster_ogre_spikeshooter = {
 	monster_start();
 };
 
-void () monster_ogre_flak = {
+void() monster_ogre_flak = {
 	monster_ogre_spikeshooter();
 };

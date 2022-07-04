@@ -25,7 +25,7 @@ void(float ftop_mode) ftop_track = {
 	}
 	
 	// Check for any no combat conditions
-	if (self.enemy.flags & FL_NOTARGET) self.enemy = world;
+	if (Invisible(self.enemy)) self.enemy = world;
 	else if (intermission_running > 0) self.enemy = world;
 	else if (cinematic_running > 0 || cutscene > 0) self.enemy = world;
 	else if (self.enemy.health < 1) self.enemy = world;
@@ -83,7 +83,7 @@ void(vector orgofs) ftop_fire = {
 	
 	sound (self, CHAN_WEAPON, "ad171/chthon/attack1.wav", 1, ATTN_NORM);
 	offang = vectoangles (self.enemy.origin - self.origin);	
-	makevectors (offang);
+	makevectors(offang);
 	org = self.origin + attack_vector(orgofs);
 	
 	// Skill level adjustment (easy=250, normal=300, hard=350, nm=400)
@@ -102,7 +102,7 @@ void(vector orgofs) ftop_fire = {
 	
 	dir = normalize (mdest - org);
 	avel = vecrand(100,200,FALSE);
-	Launch_Missile (org, dir, avel, CT_PROJ_FIRETOP, self.attack_speed);
+	launch_projectile(org,dir,avel,CT_PROJ_FIRETOP,self.attack_speed);
 };
 
 void() ftop_attack1	=[	$attack1, ftop_attack2 ] {ftop_track(FALSE);};

@@ -40,6 +40,8 @@
 
 float EXPLODER_USE_PARTICLES = 1.000;
 
+void(vector spot) R_Exp3;
+
 void() big_explosion_think = { // [FUNCTION]
 	self.frame = self.frame + 1;
 	if (self.frame > 16) SUB_Remove();
@@ -84,7 +86,7 @@ void(vector org, float snd) spawn_small_explosion = { // [FUNCTION]
 	e.think = small_explosion_think;
 };
 
-void () exploder_fire = { // [FUNCTION]
+void() exploder_fire = { // [FUNCTION]
    local entity temp;
 
    temp = self;
@@ -100,7 +102,7 @@ void () exploder_fire = { // [FUNCTION]
    BecomeExplosion ();
 };
 
-void () exploder_use = { // [FUNCTION]
+void() exploder_use = { // [FUNCTION]
    if ( self.delay ) {
       self.nextthink = (time + self.delay);
       self.delay = FALSE;
@@ -108,7 +110,7 @@ void () exploder_use = { // [FUNCTION]
    } else exploder_fire ();
 };
 
-void () func_exploder = { // [ENTITY]
+void() func_exploder = { // [ENTITY]
 	precache_sound ("drake/misc/shortexp.wav");
 	precache_sound ("drake/misc/longexpl.wav");
 	self.classname = "exploder";
@@ -121,7 +123,7 @@ void () func_exploder = { // [ENTITY]
 	if (self.volume <= 0) self.volume = 1;
 };
 
-void () multi_exploder_fire = { // [FUNCTION]
+void() multi_exploder_fire = { // [FUNCTION]
    local entity temp;
    local entity expl;
 
@@ -152,7 +154,7 @@ void () multi_exploder_fire = { // [FUNCTION]
    self = temp;
 };
 
-void (vector loc, float rad, float damage, float dur, float pause, float vol) multi_explosion = { // [FUNCTION]
+void(vector loc, float rad, float damage, float dur, float pause, float vol) multi_explosion = { // [FUNCTION]
    local entity temp;
 
    temp = self;
@@ -170,7 +172,7 @@ void (vector loc, float rad, float damage, float dur, float pause, float vol) mu
    self = temp;
 };
 
-void () multi_exploder_use = { // [FUNCTION]
+void() multi_exploder_use = { // [FUNCTION]
    if (self.delay) {
       self.nextthink = (time + self.delay);
       self.delay = FALSE;
@@ -181,7 +183,7 @@ void () multi_exploder_use = { // [FUNCTION]
    }
 };
 
-void () func_multi_exploder = { // [ENTITY]
+void() func_multi_exploder = { // [ENTITY]
    precache_sound ("drake/misc/shortexp.wav");
    precache_sound ("drake/misc/longexpl.wav");
    self.classname = "exploder";

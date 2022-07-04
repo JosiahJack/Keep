@@ -208,11 +208,11 @@ void() Actor_fire = { // [FUNCTION]
 	// twas the night before release, and I needed a hack...
     if (world.model == "maps/zerend.bsp") self.spawnflags |= ZEREND_ROCKETS;
 	if (self.spawnflags & ZEREND_ROCKETS) {
-        makevectors (self.v_angle);
+        makevectors(self.v_angle);
         org = self.origin + v_forward*8 + '0 0 16';
         sound (self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NONE);
 		self.finalangle = vecrand(100,200,FALSE);
-		Launch_Missile (self.origin, self.movedir, self.finalangle, CT_PROJ_ROCKET, self.speed);
+		launch_projectile(self.origin,self.movedir,self.finalangle,CT_PROJ_ROCKET,self.speed);
         newmis.velocity = dir * 800;
         newmis.touch = SUB_Remove;      // The Zerstorer cannot be harmed.
     } else {
@@ -274,7 +274,7 @@ void() actor_sf64start = { // [FUNCTION]
 	local entity teldeath;
 
     if (self.style) {
-        makevectors (self.angles);
+        makevectors(self.angles);
         org = self.origin + 16 * v_forward;
         spawn_tfog (org);
         teldeath = spawn();

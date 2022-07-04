@@ -73,9 +73,9 @@ float() eidolon_WaveCheck = {
 		// Check for wave boundary triggers
 		self.noise = "";
 		if (self.bosswave == 1) self.noise = self.noise1;
-		else if(self.bosswave == 2) self.noise = self.noise2;
-		else if(self.bosswave == 3) self.noise = self.noise3;
-		else if(self.bosswave == 4) self.noise = self.noise4;
+		else if (self.bosswave == 2) self.noise = self.noise2;
+		else if (self.bosswave == 3) self.noise = self.noise3;
+		else if (self.bosswave == 4) self.noise = self.noise4;
 		
 		// Is there any trigger for the wave boundary?
 		if (self.noise != "") {
@@ -203,7 +203,7 @@ void(vector rockofs) Fire_attackA = {
 		// based angle of projectiles on straight line between source and target
 		offang = vectoangles ((self.enemy.origin-'0 0 24') - org);
 		offang_y = offang_y + offset;
-		makevectors (offang);
+		makevectors(offang);
 		sorg = org + v_up * (5 + random() * 10); // Randomly spawn projectiles around central point
 		dir = normalize (v_forward); // Straight line velocity from source to target
 		dir_z = 0 - dir_z + (random() - 0.5)*0.1;	// Slight wiggle up/down
@@ -211,7 +211,7 @@ void(vector rockofs) Fire_attackA = {
 		
 		// Variable speed based on skill level with extra random spice
 		self.attack_speed = SPEED_EIDOROCK + (skill * SPEED_EIDOSKILL) + random()*10;
-		Launch_Missile (sorg, dir, avel, CT_PROJ_EIDO1, self.attack_speed );
+		launch_projectile(sorg,dir,avel,CT_PROJ_EIDO1,self.attack_speed);
 		offset = offset + foffset;
 		shotcount = shotcount - 1;
 	}
@@ -262,26 +262,18 @@ void() eidolon_attackA2 = {
 	else if (self.frame == $spell13) Fire_attackA('73 18 112');
 };
 
-//----------------------------------------------------------------------
 void() eidolon_attackA1 = [ $spell1, eidolon_attackA2 ] {ai_face();
 	self.pain_finished = time + 1.5;
 	self.walkframe = 0;
 };
 
-//======================================================================
 // ATTACK B - Drops rocks randomly from above player
 // Animation - Howl, raise arms up and then pull down
-//======================================================================
-void() eidolon_attackB1 =
-{
-};
+void() eidolon_attackB1 = {};
 
-//======================================================================
 // ATTACK C - Projectile vomit rocks and dust at the player
 // Animation - breathe, swings arms back and push head forward
-//======================================================================
-void(vector rockofs) Fire_attackC =
-{
+void(vector rockofs) Fire_attackC = {
 	local vector org, dir;
 
 	if (!self.enemy) return;
@@ -290,17 +282,13 @@ void(vector rockofs) Fire_attackC =
 	makevectors(self.angles);
 	// Spawn a mist of particles where projectiles came from
 	org = self.origin + attack_vector(rockofs) + v_right*(crandom()*8) + v_up*(crandom()*16);
-
 	dir = normalize(self.enemy.origin - org);
 	particle_explode(org, 5 + rint(random()*5), 2, PARTICLE_BURST_WHITE, PARTICLE_BURST_UPWARD);
-	
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	self.attack_speed = SPEED_EIDOSPIKE + (skill * SPEED_EIDOSKILLSP);
-	
-	launch_projectile (org, dir, CT_PROJ_GROCK, self.attack_speed);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_GROCK,self.attack_speed);
 };
 
-//----------------------------------------------------------------------
 void() eidolon_attackC2 = {
 	// Do nothing if dead
 	if (self.health < 0) return;
@@ -323,16 +311,13 @@ void() eidolon_attackC2 = {
 		Fire_attackC('56 0 44');
 };
 
-//----------------------------------------------------------------------
 void() eidolon_attackC1 = [ $breath1, eidolon_attackC2 ] {ai_face();
 	self.pain_finished = time + 2;
 	self.walkframe = 0;
 };
 
-//======================================================================
 // ATTACK E - Summon monsters from blocks of stone
 // Animation - power, lean head back, put hands up right infront
-//======================================================================
 void(vector rockofs, float rockframe) Setup_attackE = {
 	local vector org;
 
@@ -386,7 +371,6 @@ void(vector rockofs, float rockframe) Setup_attackE = {
 	}
 };
 
-//----------------------------------------------------------------------
 void() eidolon_attackE_firing = {
 	self.nextthink = time + 0.1;
 	
@@ -412,12 +396,8 @@ void() eidolon_attackE_firing = {
 	else if (self.frame == $power13) Setup_attackE('80 16 104',7);
 }
 
-//----------------------------------------------------------------------
-void() eidolon_attackE2 = [ $power1, eidolon_attackE_firing ] {
-	self.walkframe = 0;
-};
+void() eidolon_attackE2 = [ $power1, eidolon_attackE_firing ] { self.walkframe = 0; };
 
-//----------------------------------------------------------------------
 void() eidolon_attackE_turning = {
 	self.nextthink = time + 0.05;
 	
@@ -442,7 +422,6 @@ void() eidolon_attackE_turning = {
 	else walkmove (self.ideal_yaw - 180, 3);
 };
 
-//----------------------------------------------------------------------
 void() eidolon_attackE1 = [ $walk1, eidolon_attackE_turning ] {
 	Resist_ChangeType(self, TRUE);
 	self.takedamage = DAMAGE_NO;
@@ -456,11 +435,8 @@ void() eidolon_attackE1 = [ $walk1, eidolon_attackE_turning ] {
 		self.think = eidolon_attackE2;
 };
 
-//============================================================================
 // PAIN and DEATH
-//============================================================================
-void() eidolon_painA2 =
-{
+void() eidolon_painA2 = {
 	// Do nothing if dead
 	if (self.health < 1) return;
 	self.nextthink = time + 0.1;

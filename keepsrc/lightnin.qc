@@ -41,12 +41,12 @@
 float LT_TOGGLE    = 1.000;
 float LT_ACTIVE    = 2.000;
 
-void () ltrail_chain = { // [FUNCTION]
+void() ltrail_chain = { // [FUNCTION]
    SUB_UseTargets ();
    self.think = SUB_Null;
 };
 
-void () ltrail_fire = { // [FUNCTION]
+void() ltrail_fire = { // [FUNCTION]
    local entity myTarget;
 
    if ( (self.classname != "ltrail_end") ) {
@@ -73,7 +73,7 @@ void () ltrail_fire = { // [FUNCTION]
    }
 };
 
-void () ltrail_start_fire = { // [FUNCTION]
+void() ltrail_start_fire = { // [FUNCTION]
    if (self.spawnflags & LT_TOGGLE) {
       if (other.classname != "ltrail_end") {
          if (self.spawnflags & LT_ACTIVE) {
@@ -98,7 +98,7 @@ void () ltrail_start_fire = { // [FUNCTION]
    }
 };
 
-void () ltrail_start = { // [ENTITY]
+void() ltrail_start = { // [ENTITY]
    self.ltrailLastUsed = time;
    precache_sound ("weapons/lhit.wav");
    self.movetype = MOVETYPE_NONE;
@@ -114,7 +114,7 @@ void () ltrail_start = { // [ENTITY]
    }
 };
 
-void () ltrail_relay = { // [ENTITY]
+void() ltrail_relay = { // [ENTITY]
    precache_sound ("weapons/lhit.wav");
    self.movetype = MOVETYPE_NONE;
    self.solid = SOLID_BBOX;
@@ -124,7 +124,7 @@ void () ltrail_relay = { // [ENTITY]
    if (self.frags <= FALSE) self.frags = 0.300;
 };
 
-void () ltrail_end = { // [ENTITY]
+void() ltrail_end = { // [ENTITY]
    precache_sound ("weapons/lhit.wav");
    self.movetype = MOVETYPE_NONE;
    self.solid = SOLID_BBOX;

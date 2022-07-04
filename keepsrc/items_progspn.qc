@@ -201,7 +201,6 @@ void() item_progspawn_touch = { // [FUNCTION]
 	if (self.touchedvoid) {entity_hide(self); return;} // Duplicate of item_touch functionality
 	if ( !(other.flags & FL_CLIENT) ) return;
 	if ( other.health < 1 ) return;
-	if ( other.flags & FL_NOTARGET ) return;
 	if (self.state == STATE_OFF) return; // Has been used ONCE already or disabled?
 	if (self.owner.state == STATE_OFF) return; // Is the progression list controller active?
 

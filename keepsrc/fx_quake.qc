@@ -54,12 +54,11 @@
 // Checks if entity can be damaged by an earthquake.
 float(entity ent) QuakeHurts = { // [FUNCTION]
 	if (ent.takedamage == DAMAGE_NO) return FALSE;
-	if (ent.flags & FL_ONGROUND) return TRUE; // Doesn't matter if we can fly if we are on the ground.
-	if (ent.movetype == MOVETYPE_FLY) return FALSE; // Flyers are immune to damage and movement.
+	if (!(ent.flags & FL_ONGROUND)) return FALSE; // Doesn't matter if we can fly if we are on the ground.
 	if (ent.movetype == MOVETYPE_NOCLIP) return FALSE; // Ghosts are immune to damage and movement.
 	if (ent.movetype == MOVETYPE_FLYMISSILE) return FALSE;
-	if (ent.flags & FL_FLY) return FALSE;
 	if (ent.wing_finished) return FALSE; // Boots provide stability.
+    if (Invisible(ent)) return FALSE; // Makes the ring of shadows quite useful.  Arguably quake damage is magical anyhow and from the source's sight.
     if (!Align_Opposing(self,ent)) return FALSE;
 	return TRUE;
 };
@@ -76,58 +75,58 @@ void() Quake_Think = [0, Quake_Think] { // [FUNCTION]
     radius = self.distance;
     magnitude = self.dmg;
 	if (radius < 1) radius = 15000; // Pick up everyone!
-    head = findradius (self.origin, radius);
+    head = findradius(self.origin, radius);
     while (head) {
-        if (head.modelindex)
-        if ((head.solid >= SOLID_TRIGGER) && (head.solid != SOLID_BSP))
-        if (head.mass && (head.mass <= MASS_HEAVY)) {
-            dizzy = TRUE;
-            if ((head.flags & FL_MONSTER) && !head.enemy) dizzy = FALSE; // Don't drift -- take damage only.
-            org = Midpoint (head);
-            if (radius)	dist = 1 - (vlen(self.origin - org) / radius);
-            else		dist = 1;
+        if (head.flags & FLx_CREATURE) {
+            if (head.mass <= MASS_HEAVY) {
+                dizzy = TRUE;
+                if ((head.flags & FL_MONSTER) && !head.enemy) dizzy = FALSE; // Don't drift -- take damage only.
+                org = Midpoint(head);
+                if (radius)	dist = 1 - (vlen(self.origin - org) / radius);
+                else		dist = 1;
 
-            upper = 80;     // One-tenth of normal gravity.
-            if (head.flags & FLx_CREATURE) {
-                if (head.flags & FL_CLIENT) { // Shake view.  Only players can see.
-                    upper = 100;
-                    head.punchangle_x = crandom() * self.mangle_x;
-                    head.punchangle_y = crandom() * self.mangle_y;
-                    head.punchangle_z = crandom() * self.mangle_z;
-                } else if (head.flags & FL_MONSTER) {
-                    if (dizzy && !((head.health <= 0) || head.deadflag)) {
-						head.angles_y = head.angles_y + (crandom() * 20); // Mess with their yaw to feign disorientation.
-						head.angles_y = anglemod (head.angles_y); // Unlike Hexen2, don't bother with pitch and roll.
-					}
-                }
-            }
-
-            if ((head != self.owner || !self.style) && QuakeHurts(head)) { // Safe or blessed.
-                damage = magnitude * dist;
-                if (damage || (head.flags & FL_MONSTER)) { // 5/7/2009:  Call damage function only if there's damage or target is a monster.  Monsters may flinch from zero damage, and flinching works well for disorientation effects.
-					if (self.count == 1 || self.count == 3 || self.count == 6
-                        || self.count == 10 || self.count == 15) {
-                        T_Damage(head,self,self.owner,damage,DAMARMOR);
-                    }
-				}
-
-				// Add movement.
-				// Note:  Too much trouble discriminating which objects can be
-				// moved without problems, so move only creatures for now.
+                upper = 80; // One-tenth of normal gravity.
                 if (head.flags & FLx_CREATURE) {
-                    if (head.flags & FL_ONGROUND) {
-						// Bump target up a bit.  We need this for players at least for impaired movement.  Monsters will thump a lot, if z is too high, and that sucks.  Hmmm...
-                        up = ((random() * 100) + 25) * dist;
-                        if (up > upper) up = upper;
-                        head.velocity_z = head.velocity_z + up;
+                    if (head.flags & FL_CLIENT) { // Shake view.  Only players can see.
+                        upper = 100;
+                        head.punchangle_x = crandom() * self.mangle_x;
+                        head.punchangle_y = crandom() * self.mangle_y;
+                        head.punchangle_z = crandom() * self.mangle_z;
+                    } else if (head.flags & FL_MONSTER) {
+                        if (dizzy && !((head.health <= 0) || head.deadflag)) {
+                            head.angles_y = head.angles_y + (crandom() * 20); // Mess with their yaw to feign disorientation.
+                            head.angles_y = anglemod(head.angles_y); // Unlike Hexen2, don't bother with pitch and roll.
+                        }
                     }
-					dir = '0 1 0' * (random() * 360); // Random drifting.
-					makevectors (dir);
-					dir = v_forward;
-                    
-                    // vel*25 from Hexen2 is too much, so use *8.
-                    if (dizzy) head.velocity = head.velocity + (dir * (damage * 8 * random())); // Monster does not drift if not fighting.
-                    head.flags = head.flags - (head.flags & FL_ONGROUND);
+                }
+
+                if ((head != self.owner || !self.style) && QuakeHurts(head)) { // Safe or blessed.
+                    damage = magnitude * dist;
+                    if (damage || (head.flags & FL_MONSTER)) { // 5/7/2009:  Call damage function only if there's damage or target is a monster.  Monsters may flinch from zero damage, and flinching works well for disorientation effects.
+                        if (self.count == 1 || self.count == 3 || self.count == 6
+                            || self.count == 10 || self.count == 15) {
+                            T_Damage(head,self,self.owner,damage,DAMARMOR);
+                        }
+                    }
+
+                    // Add movement.
+                    // Note:  Too much trouble discriminating which objects can be
+                    // moved without problems, so move only creatures for now.
+                    if (head.flags & FLx_CREATURE) {
+                        if (head.flags & FL_ONGROUND) {
+                            // Bump target up a bit.  We need this for players at least for impaired movement.  Monsters will thump a lot, if z is too high, and that sucks.  Hmmm...
+                            up = ((random() * 100) + 25) * dist;
+                            if (up > upper) up = upper;
+                            head.velocity_z = head.velocity_z + up;
+                        }
+                        dir = '0 1 0' * (random() * 360); // Random drifting.
+                        makevectors(dir);
+                        dir = v_forward;
+                        
+                        // vel*25 from Hexen2 is too much, so use *8.
+                        if (dizzy) head.velocity = head.velocity + (dir * (damage * 8 * random())); // Monster does not drift if not fighting.
+                        head.flags = head.flags - (head.flags & FL_ONGROUND);
+                    }
                 }
             }
         }

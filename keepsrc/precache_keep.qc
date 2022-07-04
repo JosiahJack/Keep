@@ -323,6 +323,8 @@ void() PrecacheAll = { // [FUNCTION]
 	precache_sound("tronyn/lightning_component_electrified.wav");
 	precache_sound("tronyn/lightning_rod_electrified.wav");
 	precache_model ("progs/drake/dragon.mdl");
+	precache_sound("tronyn/lightning_strike.wav"); // For kill ray cheat
+	precache_sound("tronyn/lightning_blast.wav"); // For gib ray cheat
 	precache_aoa();
 	precache_poisongibs();
 	if (ext_dppart) {

@@ -119,7 +119,7 @@ void() item_reset = { // [FUNCTION]
 
 void(string defaultmdl, float defaultskin) item_setupmodel = { // [FUNCTION]
 	if (self.mdl != "") {
-		dprint("\b[ITEMS]\b "); dprint(self.classname);
+		dprint("["); dprint(self.classname); dprint("]");
 		dprint(" with Custom override mdl ("); dprint(self.mdl);
 		dprint(")\n");
 	} else {
@@ -235,7 +235,7 @@ void() item_use = { // [FUNCTION]
 		if (self.attack_finished > time) return;
 
 		// Was item setup to be floating?
-		if(self.spawnflags & ITEM_FLOATING){
+		if (self.spawnflags & ITEM_FLOATING){
 			// Removed checkbottom check, it often fails and leaves items floating in midair when they should fall
 			// A quick toss of the item instead
 			self.movetype = MOVETYPE_TOSS;	
@@ -338,7 +338,7 @@ void() item_delay = { // [FUNCTION]
 	self.velocity = '0 0 0';
 	
 	// Check if item is floating? = does not interact with world
-	if(self.spawnflags & ITEM_FLOATING) {
+	if (self.spawnflags & ITEM_FLOATING) {
 		if (self.item_flrcheck > 0) self.item_flrcheck = 0; // Cannot check the floor of an item if its floating!
 	} else {
 		// Finalize item location (check drop to floor)
@@ -406,7 +406,7 @@ void() item_on = { // [FUNCTION]
 		self.solid = SOLID_NOT;
 	} else {
 		// Restore movement, solid and model parameters
-		if(self.spawnflags & ITEM_FLOATING) self.movetype = MOVETYPE_NONE;
+		if (self.spawnflags & ITEM_FLOATING) self.movetype = MOVETYPE_NONE;
 		else self.movetype = MOVETYPE_TOSS;
 		self.solid = SOLID_TRIGGER;
 		setmodel(self,self.mdl);
@@ -427,7 +427,7 @@ void() item_off =  { // [FUNCTION]
 	setmodel(self,"");
 	self.effects = 0;
 	setsize(self, VEC_ORIGIN, VEC_ORIGIN);
-	if( !(self.spawnflags & ITEM_FLOATING) ) setorigin(self, self.oldorigin); // If item was setup to float then it will be trigger item, so don't reset origin as it might have fallen somewhere better.
+	if ( !(self.spawnflags & ITEM_FLOATING) ) setorigin(self, self.oldorigin); // If item was setup to float then it will be trigger item, so don't reset origin as it might have fallen somewhere better.
 	SUB_FinishAttachments();
 };
 
@@ -1450,7 +1450,7 @@ void() item_backpack_setup = { // [FUNCTION]
 	if (self.ammo_voidshards < 0) self.ammo_voidshards = 0;
 	if (self.ammo_elemental < 0) self.ammo_elemental = 0;
 	if (self.armorvalue < 0) self.armorvalue = 0;
-	if(self.exactskin < 0 || self.exactskin > 7) self.exactskin = 0; // Check if exact skin is within range
+	if (self.exactskin < 0 || self.exactskin > 7) self.exactskin = 0; // Check if exact skin is within range
 	self.skin = self.exactskin;
 	
 	// Check for random ammo setup (uses spawnflags)
@@ -1654,7 +1654,7 @@ void(entity e) senddevdata { // [FUNCTION]
 };
 
 // Can't touch dis!
-void () item_taunt = { // [ENTITY]
+void() item_taunt = { // [ENTITY]
 	if (self.mdl == "" && self.model == "") { dprint("No model for item_taunt, removed.\n"); remove(self); }
 
 	if (self.model) self.mdl = self.model;
@@ -1667,13 +1667,13 @@ void () item_taunt = { // [ENTITY]
 };
 
 // HACK alert! ...meh, including this here to be nice.  From Drake.  This is an item_taunt and it should have a push trigger and a killtarget to remove this and the trigger after jumping
-void () item_pushup = { // [ENTITY]
+void() item_pushup = { // [ENTITY]
 	self.mdl = "progs/drake/wings2.mdl";
 	item_taunt();
 };
 
 // From Rubicon 2 by ijed, MFX, & Hrimfaxi
-void () circuitboard_touch = { // [FUNCTION]
+void() circuitboard_touch = { // [FUNCTION]
 	if (other.classname != "player") return;
 	if (other.health <= 0) return;
 	if (other.in_a_vehicle) return;
@@ -1686,7 +1686,7 @@ void () circuitboard_touch = { // [FUNCTION]
 	remove(self);
 };
 
-void () item_circuitboard = { // [ENTITY]
+void() item_circuitboard = { // [ENTITY]
 	item_setupmodel("progs/rrp/fromitz.mdl",0);
 	item_setupnoise("items/protect.wav");
 	setmodel (self, self.mdl);

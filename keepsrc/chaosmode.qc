@@ -310,7 +310,7 @@ void() setup_randomseed = {
 		randomseed[RND_SEEDMONSTER] = rnd_checkseedrange(randomorg); // Monster seed always starts with the origin seed
 		
 		// Loop through all the other random seed numbers.  Creating them at different offsets within complete range
-		for(i=0;i<RND_SEEDMAX;i++) {
+		for (i=0;i<RND_SEEDMAX;i++) {
 			rndoffset = (RND_RANGEMAX/16)*(i+1);
 			if (randomorg > RND_RANGEMAX/2) randomseed[i] = randomorg - rndoffset; // Keep secondary seeds in sync with large offset
 			else randomseed[i] = randomorg + rndoffset;

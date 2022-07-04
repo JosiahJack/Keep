@@ -204,7 +204,7 @@ void() W_FireGrapple = { // [FUNCTION]
 
     self.punchangle_x = -2; // bump him
     sound (self, CHAN_WEAPON, "drake/weapons/chain1.wav", 1, ATTN_NORM); // chain out sound (loops)
-    makevectors (self.v_angle);
+    makevectors(self.v_angle);
     Grapple_Launch (self, self.origin + v_forward * 16 + '0 0 16', v_forward);
 };
 
@@ -277,7 +277,7 @@ void() GrappleService = { // [FUNCTION]
 		}
 	}
     if (targ) {
-        makevectors (self.angles);
+        makevectors(self.angles);
         vel = self.hook.origin - ( self.origin + (v_up * 16 * (!self.button2)) + (v_forward * 16)); // The jump button bumps the player up a little bit.
         if (targ == self) mx = SPEED_HOOK;
         else { // Pulling target toward attacker.

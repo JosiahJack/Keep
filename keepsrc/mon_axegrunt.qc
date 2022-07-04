@@ -56,7 +56,7 @@ void()	axeg_run4	=[	$axrun4,		axeg_run5	] {ai_run(25);};
 void()	axeg_run5	=[	$axrun5,		axeg_run6	] {ai_run(18);monster_footstep(FALSE);};
 void()	axeg_run6	=[	$axrun6,		axeg_run1	] {ai_run(12);};
 
-void( vector dir ) axeg_chop = {
+void(vector dir ) axeg_chop = {
 	local vector	delta, toss;
 	local float 	ldmg;
 

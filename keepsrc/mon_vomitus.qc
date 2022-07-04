@@ -66,7 +66,7 @@ void(float no) Vomit_Meat = {
     }
     side = crandom() * 3;
     up = random() * 300;
-    makevectors (self.angles);
+    makevectors(self.angles);
     org = self.origin + v_forward*20 + v_right*side - v_up*6;
 	dir = (self.enemy.origin - org);
 	dir = normalize(dir);

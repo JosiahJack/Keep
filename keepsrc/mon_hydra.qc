@@ -83,7 +83,7 @@ void() hydra_walk18 =[      $swim18, hydra_walk1 ] {ai_fish_movement("ai_walk",1
 void() hydra_run1  =[      $swim1, hydra_run2 ] 
 {
 	// Swim faster after player is paralyzed (khreathor)
-	if(self.aflag > time)
+	if (self.aflag > time)
 		self.speed = 32;
 	else
 		self.speed = 24;
@@ -182,12 +182,12 @@ void() hydra_spit_start = {
 	local	vector	offang, org, vec, follow;
 	local	entity	spit;
 	
-	if(!(self.enemy.flags & FL_CLIENT) && !(self.enemy.flags & FL_MONSTER)) {
+	if (!(self.enemy.flags & FL_CLIENT) && !(self.enemy.flags & FL_MONSTER)) {
 		self.enemy = self.oldenemy;
 	}
 	
 	offang = vectoangles (self.enemy.origin - self.origin);
-	makevectors (offang);
+	makevectors(offang);
 	org = self.origin + v_up * 1 + v_forward * 5;
 	
 	spit = spawn();
@@ -262,7 +262,7 @@ void() hydra_pain8  =[      $pain8, hydra_pain9 ] {ai_fish_movement("ai_pain",6)
 void() hydra_pain9  =[      $pain9, hydra_run1 ] {ai_fish_movement("ai_pain",6);};
 
 void(entity inflictor, entity attacker, float damage)	hydra_pain = {
-	if(random() > 0.875) {
+	if (random() > 0.875) {
 		if (self.pain_finished > time)
 			return;
 

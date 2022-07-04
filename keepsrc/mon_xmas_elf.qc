@@ -108,19 +108,17 @@ void(float sideang) elf_shot = {
 	// Flash effect to show where projectile is coming from	
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	if (sideang < 0) sound (self, CHAN_WEAPON, "xmas/elf/attack1.wav", 1, ATTN_NORM);
-
-	makevectors (self.angles);	
+	makevectors(self.angles);	
 	org = self.origin + attack_vector(self.attack_offset);
 
 	// Create elevation angle and use makevectors to create projectile direction
 	ang = vectoangles(self.enemy.origin - org);
 	ang_x = -self.attack_elev;	// Negative = upwards angle 
-	makevectors (ang);
+	makevectors(ang);
 	// fire magic in arc pattern (sideang)
-	dir = (v_forward + v_right * sideang) * SPEED_ELF;	
-
+	dir = (v_forward * SPEED_ELF + v_right * sideang);	
 	avel = vecrand(100,200,FALSE);
-	Launch_Grenade(org, dir, avel, CT_PROJ_ELF);
+	launch_projectile(org, dir, avel, CT_PROJ_ELF,1);
 };
 
 void() elf_magic1 = [ $magic12, elf_magic2 ] {sound(self, CHAN_WEAPON, "xmas/elf/magic.wav", 1, ATTN_NORM);};
@@ -224,7 +222,7 @@ void() elf_leap3 =[ $jump3, elf_leap4 ] {
 	ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	self.touch = Elf_JumpTouch;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	self.velocity = v_forward * MONAI_JUMPELFDIST + '0 0 200';
 	self.origin_z = self.origin_z + 4;
 	self.flags = self.flags - (self.flags & FL_ONGROUND);

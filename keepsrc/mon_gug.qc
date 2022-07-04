@@ -704,30 +704,26 @@ void(float stime) gug_quake = {
 };
 
 void() gug_quake_damage = {
-	local float points;
+	local string dethmsg;
+	local float dmg;
 	local entity head;
 	local vector org;
 
 	head = findradius(self.origin, 800);
 	while (head) {
 		if (head.classname != "monster_gug") {
-			if (head.takedamage == DAMAGE_AIM && !(head.flags & FL_FLY)) {
+			if (QuakeHurts(head)) {
 				org = head.origin + (head.mins + head.maxs) * 0.5;
-				points = 0.010000 * vlen(self.origin - org);
-				if (points < 0)
-					points = 0;
-
-				points = TE_LIGHTNING3 - points;
-				if (points > 0) {
-					if (head.classname == "player") {
-						if (self.enemy.health <= points && !(self.enemy.flags & FL_GODMODE) && self.enemy.invincible_finished < time)
-							self.enemy.deathtype = "quake";
-
-						T_Damage(head, self, self, points,DAMARMOR);
-					} else {
-						if (CanDamage(head, self))
-							T_Damage(head, self.spawnmaster, self.spawnmaster, points,DAMARMOR);
+				dmg = SUB_ClampFloat(8 - (0.01 * vlen(self.origin - org)),1,8);
+				if (head.classname == "player") {
+					dethmsg = self.deathstring;
+					if (self.enemy.health <= dmg && !(self.enemy.flags & FL_GODMODE) && self.enemy.invincible_finished < time) {
+						self.deathstring = " was quaked\n"; // Original Quoth deathstring.  Almost put "Gug" here, but that precludes custom names.
 					}
+					T_Damage(head,self,self,dmg,DAMARMOR);
+					self.deathstring = dethmsg;
+				} else {
+					T_Damage(head,self.spawnmaster,self.spawnmaster,dmg,DAMARMOR);
 				}
 			}
 		}

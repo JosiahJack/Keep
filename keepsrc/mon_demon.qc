@@ -159,7 +159,7 @@ void()	demon1_jump4	=[	$leap4,		demon1_jump5	] {
 	ai_face();
 	self.jump_flag = time;	// No jump time limits
 	self.touch = Demon_JumpTouch;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	self.velocity = v_forward * 600 + '0 0 250';
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.oldorigin = self.origin;

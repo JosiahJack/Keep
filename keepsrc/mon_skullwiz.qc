@@ -343,11 +343,8 @@ void() skullw_tele13 = {
 	else skullw_blink();
 };
 
-//============================================================================
 // Rocket Skull Attack (Regular)
-//============================================================================
-void(vector orgofs) skullw_fire =
-{
+void(vector orgofs) skullw_fire = {
 	local vector org, dir;
 	local float proj_type;
 
@@ -356,18 +353,14 @@ void(vector orgofs) skullw_fire =
 	if (random() < 0.5) sound (self, CHAN_WEAPON, "ad171/skullwiz/skull1.wav", 1, ATTN_NORM);
 	else sound (self, CHAN_WEAPON, "ad171/skullwiz/skull2.wav", 1, ATTN_NORM);
 
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(orgofs);
 	dir = normalize(self.enemy.origin - org);
-
 	self.attack_speed = SPEED_SWIZMISSILE + (skill * SPEED_SWIZSKILL);
-	// if (self.spawnflags & MON_SKULLWIZ_GUARDIAN) proj_type = CT_PROJ_SKULLWP;
-	// else proj_type = CT_PROJ_SKULLW;
 	proj_type = CT_PROJ_SKULLW; // handles newmis.owner.poisonous check in projectile function, poisonous set if Guardian spawnflag is set
-	Launch_Missile (org, dir, '0 0 0', proj_type, self.attack_speed);
+	launch_projectile(org,dir,NO_SPIN,proj_type,self.attack_speed);
 };
 
-//----------------------------------------------------------------------
 void() skullw_attack1	=[	$spellA3,	skullw_attack2    ] {
 sound (self, CHAN_VOICE, "ad171/skullwiz/attack.wav", 1, ATTN_NORM);};
 void() skullw_attack2	=[	$spellA5,	skullw_attack3	] {ai_face();};
@@ -378,11 +371,8 @@ void() skullw_attack6	=[	$spellA12,	skullw_attack7	] {skullw_fire('30 0 16');};
 void() skullw_attack7	=[	$spellA13,	skullw_attack8	] {};
 void() skullw_attack8	=[	$spellA15,	skullw_run1		] {};
 
-//============================================================================
 // Poison Skull Attack (Guardians)
-//============================================================================
-void() skullw_poison_touch =
-{
+void() skullw_poison_touch = {
 	if (other.solid == SOLID_TRIGGER) return;
 	if (other.classtype == CT_TEMPSTREAM) return;
 	if (other.health > 0) return;

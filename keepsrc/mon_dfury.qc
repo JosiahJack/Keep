@@ -322,7 +322,7 @@ void()	dfury_lunge4	=[	$lunge4,	dfury_lunge5	] {
 	ai_face();
 	self.jump_flag = time + MONAI_JUMPFURYTIME;
 	self.touch = dfury_JumpTouch;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	self.velocity = v_forward * 500 + '0 0 250';
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.oldorigin = self.origin;
@@ -404,13 +404,10 @@ void() dfury_melee =
 	}
 };
 
-//===========================================================================
+
 // Magic attacks (glowing swords)
-//===========================================================================
 // Magic Attack A - Spray of spikes from raised up swords
-//----------------------------------------------------------------------
-void(float offset) dfury_magica_shot =
-{
+void(float offset) dfury_magica_shot = {
 	local float shotcount;
 	local vector soffset, dir, offang;
 
@@ -427,8 +424,7 @@ void(float offset) dfury_magica_shot =
 	// based angle of projectiles on straight line between source and target
 	offang = vectoangles (self.enemy.origin - self.origin);
 	offang_y = offang_y + offset * 6;		// Arc offset
-	makevectors (offang);
-
+	makevectors(offang);
 	while (shotcount > 0) {
 		// Randomly spawn projectiles up and down sword length
 		soffset = v_forward * 20 + v_up * random() * 20;
@@ -443,16 +439,13 @@ void(float offset) dfury_magica_shot =
 		
 		// Variable speed based on skill level with extra random spice
 		self.attack_speed = SPEED_DFURYSPIKE + (skill * SPEED_DFURYSKILL) + random()*10;
-		launch_projectile (soffset, dir, CT_PROJ_FURY2, self.attack_speed);
+		launch_projectile(soffset,dir,NO_SPIN,CT_PROJ_FURY2,self.attack_speed);
 		shotcount = shotcount - 1;
 	}
 };
 
-//----------------------------------------------------------------------
 // Magic Attack B - 3 x rockets launched in an arc
-//----------------------------------------------------------------------
-void() dfury_magicb_shot =
-{
+void() dfury_magicb_shot = {
 	local float offset, shotcount;
 	local vector soffset, dir, offang, avel;
 
@@ -468,7 +461,7 @@ void() dfury_magicb_shot =
 	// based angle of projectiles on straight line between source and target
 		offang = vectoangles (self.enemy.origin - self.origin);
 		offang_y = offang_y + offset;
-		makevectors (offang);
+		makevectors(offang);
 	
 		// Randomly spawn projectiles around central point
 		soffset = v_forward * 20 + v_up * (5 + random() * 10);
@@ -484,7 +477,7 @@ void() dfury_magicb_shot =
 		
 		// Variable speed based on skill level with extra random spice
 		self.attack_speed = SPEED_DFURYSPIKE + (skill * SPEED_DFURYSKILL) + random()*10;
-		Launch_Missile (soffset, dir, avel, CT_PROJ_FURY1, self.attack_speed );
+		launch_projectile(soffset,dir,avel,CT_PROJ_FURY1,self.attack_speed);
 		offset = offset + 4;
 		shotcount = shotcount - 1;
 	}

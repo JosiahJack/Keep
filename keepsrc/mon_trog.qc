@@ -196,7 +196,7 @@ void() ai_repel = {
 
 // Returns the point of one of its hands.
 vector(float left) Nemesant_Hand = {
-    makevectors (self.angles);
+    makevectors(self.angles);
     if (left) return (self.origin + (v_forward*16) - (v_right*10) + (v_up*30)); // TRUE = use left hand, FALSE = use right hand.
     return (self.origin - (v_forward*16) + (v_right*12) + (v_up*45));
 };
@@ -240,7 +240,7 @@ void() nemes_track = {
 	if (!delta) self.lefty = 0 - self.lefty; // TRUE if difference between self's yaw and ideal yaw is one-half of a degree or less.
 	vec = self.angles;
 	vec_x = 0 - vec_x;
-	makevectors (vec);
+	makevectors(vec);
 	self.velocity = v_forward * self.speed;
     self.nextthink = time + 0.1;
 };
@@ -482,7 +482,7 @@ void(vector st) nemes_sparks =
 {
     local   vector  side;
 
-    makevectors (self.angles);
+    makevectors(self.angles);
     side = v_right * st_y;
     st = self.origin + v_forward*st_x + v_up*st_z;
     particle (st + side, '0 0 50', 145, 10);
@@ -515,7 +515,7 @@ void(vector st) nemes_sparks2 =
 {
     local   vector  side;
 
-    makevectors (self.angles);
+    makevectors(self.angles);
     side = v_right * st_y;
     st = self.origin + v_forward*st_x + v_up*st_z;
     particle (st + side, '0 0 50', 241, 10);

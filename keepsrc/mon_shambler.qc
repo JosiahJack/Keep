@@ -400,7 +400,7 @@ void() sham_magic3 =[ $magic3, sham_magic3b ] {
 		self.attachment2.classtype = CT_ATTACHMENT;
 		self.attachment2.frame     = X56_PUFF_ORANGE;
 		setmodel(self.attachment2, "progs/drake/s_fancy.spr");  // Use in case of ports like Qrack.
-		makevectors (self.angles);
+		makevectors(self.angles);
 		self.attachment2.origin = self.origin + (v_forward*30) + (v_right*20) + (v_up*78);
 		setorigin(self.attachment2, self.attachment2.origin);
 		self.attachment2.dest      = '30 20 78'; // Do some semblence of arch-vile flames.

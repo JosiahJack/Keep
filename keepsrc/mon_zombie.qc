@@ -136,11 +136,8 @@ void() zombie_run16		=[	$run16,		zombie_run17] {ai_run(7);};
 void() zombie_run17		=[	$run17,		zombie_run18] {monster_footstep(FALSE); ai_run(3);};
 void() zombie_run18		=[	$run18,		zombie_run1	] {zombie_sound(3);	ai_run(8); };
 
-//======================================================================
 // Zombie Range Attack
-//======================================================================
-void(vector st) ZombieThrowFlesh =
-{
+void(vector st) ZombieThrowFlesh = {
 	local vector org, dir, ang, avel;
 	local float zom_proj;
 
@@ -149,18 +146,17 @@ void(vector st) ZombieThrowFlesh =
 
 	// Is Z aware enabled (AI track player much better)
 	if ( query_configflag(SVR_ZAWARE) || self.no_zaware ) {
-		makevectors (self.angles);
-		dir = normalize(self.enemy.origin - org);
-		dir = dir * SPEED_ZOMBFLESH;
+		self.attack_speed = SPEED_ZOMBFLESH;
+		makevectors(self.angles);
+		dir = normalize(self.enemy.origin - org) * self.attack_speed;
 		dir_z = ELEV_ZAXIS;
-	}
-	else {
+	} else {
 		// One final angle adjustment (based on actual projectile origin)
 		self.attack_speed = SPEED_ZOMBFLESH + (skill * SPEED_ZOMBIESKILL);
 		self.attack_elev = SUB_Elevation(self.attack_elev, org, self.enemy.origin, self.attack_speed);
 		ang = vectoangles(self.enemy.origin - org);
 		ang_x = -self.attack_elev;
-		makevectors (ang);
+		makevectors(ang);
  		dir = v_forward * self.attack_speed;
 	}
 
@@ -168,10 +164,9 @@ void(vector st) ZombieThrowFlesh =
 	if (self.classtype == CT_MONZOMBIE) zom_proj = CT_PROJ_FLESH;
 	else zom_proj = CT_PROJ_FLESHP;
 	
-	Launch_Grenade(org, dir, avel, zom_proj);
+	launch_projectile(org,dir,avel,zom_proj,1);
 };
 
-//----------------------------------------------------------------------
 void() zombie_atta1		=[	$atta1,		zombie_atta2	] {ai_face();};
 void() zombie_atta2		=[	$atta2,		zombie_atta3	] {ai_face();};
 void() zombie_atta3		=[	$atta3,		zombie_atta4	] {ai_face();};

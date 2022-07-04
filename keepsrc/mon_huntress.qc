@@ -107,7 +107,7 @@ void(vector offset, float amount, float life, float clr, float style) elena_part
 	
 	if (self.health < 1) return;
 
-	makevectors (self.angles);
+	makevectors(self.angles);
 	self.pos1 = self.origin + attack_vector(offset);
 
 	// Spawn some particles
@@ -555,7 +555,7 @@ void()	elena_spin5	=[	$spin5,		elena_spin6	] {
 	ai_face(); 
 	self.jump_flag = time + MONAI_JUMPELENATIME;
 	self.touch = elena_SpinTouch;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	self.velocity = v_forward * 500 + '0 0 250';
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.oldorigin = self.origin;
@@ -809,14 +809,13 @@ void() elena_shootgun = {
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "redfield/huntress/pistol.wav", 1, ATTN_NORM);
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	vec = normalize((self.enemy.origin + '0 0 -8') - self.origin);
 	self.attack_speed = SPEED_ELENAGUN + (skill * SPEED_ELENASKILL);
-	launch_projectile(org, vec, CT_PROJ_EVEBULLET, self.attack_speed);
+	launch_projectile(org,vec,NO_SPIN,CT_PROJ_EVEBULLET,self.attack_speed);
 };
 
-//===========================================================================
 void()	elena_shoot1	=[	$shoot1,	elena_shoot2	] {self.skin = 0; rakuyo_run();};
 void()	elena_shoot2	=[	$shoot2,	elena_shoot3	] {ai_face(); elena_usegun(0); rakuyo_run();
 	sound (self, CHAN_WEAPON, "redfield/huntress/pistol_cock.wav", 1, ATTN_NORM);};
@@ -880,7 +879,7 @@ void() elena_bldspears =  {
 
 		// Variable speed based on skill level with extra random spice
 		self.attack_speed = SPEED_ELENASPEAR + (skill * SPEED_ELENASKILL) + random()*10;
-		launch_projectile (org, dir, CT_PROJ_BLDSPEAR, self.attack_speed);
+		launch_projectile(org,dir,NO_SPIN,CT_PROJ_BLDSPEAR,self.attack_speed);
 		shotcount = shotcount - 1;
 	}
 };
@@ -894,7 +893,7 @@ void() elena_fireflameline = {
 	if (!self.enemy) return;
 
 	// Turn toward enemy
-	makevectors (self.angles);	
+	makevectors(self.angles);	
 	org = self.origin + attack_vector('36 0 8');
 	dir = v_forward;
 	

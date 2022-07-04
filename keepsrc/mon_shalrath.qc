@@ -127,7 +127,7 @@ void() ShalMissile = {
 	sound (self, CHAN_WEAPON, "shalrath/attack2.wav", 1, ATTN_NORM);
 	self.attack_speed = SPEED_SHALMISSILE + (skill * SPEED_SHALSKILL);
 	// Original vector location 0 0 10, new 0 8 36
-	launch_projectile(self.origin + attack_vector('0 8 20'),'0 0 10',CT_PROJ_SHAL,self.attack_speed);
+	launch_projectile(self.origin + attack_vector('0 8 20'),'0 0 10',NO_SPIN,CT_PROJ_SHAL,self.attack_speed);
 };
 
 void(vector hmofs, float hmframe) Setup_ShalHome = {
@@ -339,6 +339,7 @@ void() monster_shalrath_precache = {
 	precache_sound("ad171/voreling/attacktear.wav");
 	precache_sound("quoth/voreling/land.wav");
 	precache_sound ("quoth/voreling/sight.wav");
+	if (ext_dppart) particleeffectnum(DPP_TEVORESPIKE); 
 };
 
 // QUAKED monster_shalrath (1 0 0) (-32 -32 -24) (32 32 48) Ambush

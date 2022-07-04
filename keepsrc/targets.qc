@@ -400,7 +400,7 @@ void() trigger_timer_use = { // [FUNCTION]
 		if (activator.flags & FL_CLIENT) self.owner = activator; // Check activator is a player? worse case is client spawn
 		else self.owner = client_ent;
 		
-		if (self.startmsg != "" ) centerprint(self.owner, self.startmsg); // Check for any start message
+		if (self.startmsg != "") centerprint(self.owner, self.startmsg); // Check for any start message
 		if (self.timertarget != "") trigger_timer_think(); // Start timer (visual update only).
 	} else {
 		self.state = STATE_OFF;

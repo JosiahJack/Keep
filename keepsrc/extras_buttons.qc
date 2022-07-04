@@ -242,7 +242,7 @@ void() switch_touch = { // [FUNCTION]
 	if (other.classname != "player") return;
 	
 	if (self.movedir != '0 0 0') {
-		makevectors (other.angles);
+		makevectors(other.angles);
 		if (v_forward * self.movedir < 0) self.attack_finished = time + 0.1;// not facing the right way
 	}
 	

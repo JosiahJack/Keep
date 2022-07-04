@@ -172,7 +172,7 @@ void() misc_explobox_setup = { // [FUNCTION]
 		}
 
 		// Temporarily enable model/bbox for collision test.  Finalize box location (check drop to floor)
-		if( !(self.spawnflags & ITEM_FLOATING) ) {
+		if ( !(self.spawnflags & ITEM_FLOATING) ) {
 			setmodel (self, self.mdl);
 			setsize(self, self.bbmins, self.bbmaxs);
 			self.solid = SOLID_BBOX;
@@ -266,7 +266,7 @@ void() misc_barrel = { // [ENTITY]
 // STARTOFF : Starts off and waits for trigger
 // -------- NOTES --------
 // Exploding box (bmodel)
-void () func_explobox = { // [ENTITY]
+void() func_explobox = { // [ENTITY]
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 	
 	self.mdl = self.model;					// Brushwork version
@@ -287,7 +287,7 @@ void() barrel_explode = { // [FUNCTION]
 	self.enemy.nextthink = 0.01 + random()*0.1;
 };
 
-void () misc_biobox_l = { // [ENTITY]
+void() misc_biobox_l = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "maps/quoth/b_bio_l.bsp";
 	precache_model (self.mdl);
 	precache_model ("progs/quoth/polypgib.mdl");
@@ -301,7 +301,7 @@ void () misc_biobox_l = { // [ENTITY]
 	misc_explobox_setup();
 };
 
-void () misc_biobox_s = { // [ENTITY]
+void() misc_biobox_s = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "maps/quoth/b_bio_s.bsp";
 	precache_model (self.mdl);
 	precache_model ("progs/quoth/polypgib.mdl");
@@ -315,7 +315,7 @@ void () misc_biobox_s = { // [ENTITY]
 	misc_explobox_setup();
 };
 
-void () misc_plasmabox_l = { // [ENTITY]
+void() misc_plasmabox_l = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "maps/quoth/b_plas_l.bsp";
 	precache_model (self.mdl);
 	precache_sound ("rogue/plasma/explode.wav");
@@ -328,7 +328,7 @@ void () misc_plasmabox_l = { // [ENTITY]
 	misc_explobox_setup();
 };
 
-void () misc_plasmabox_s = { // [ENTITY]
+void() misc_plasmabox_s = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "maps/quoth/b_plas_s.bsp";
 	precache_model (self.mdl);
 	precache_sound ("rogue/plasma/explode.wav");

@@ -81,10 +81,10 @@ void() mcorn_fire = {
 
 	if (!self.enemy) return;
 
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	vec = normalize(self.enemy.origin - self.origin);
-	launch_projectile(org, vec, CT_PROJ_MCOR1, SPEED_LASER);
+	launch_projectile(org,vec,NO_SPIN,CT_PROJ_MCOR1,SPEED_LASER);
 };
 
 // Barrage of ricocheting spikes in a fan spray shape
@@ -97,65 +97,52 @@ void() mcorn_barrage = {
 
 	offang = vectoangles (self.enemy.origin - self.origin);
 	offang_y = offang_y - 18;
-	makevectors (offang);
+	makevectors(offang);
 	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
 	dir = normalize (v_forward);
 	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
-	//dir_z = 0.8; 
-    launch_projectile (org, dir, CT_PROJ_MCOR2,(SPEED_HKSPIKE + ( skill * SPEED_HKSKILL)));
-
+    launch_projectile(org,dir,NO_SPIN,CT_PROJ_MCOR2,(SPEED_HKSPIKE + (skill * SPEED_HKSKILL)));
 	offang = vectoangles (self.enemy.origin - self.origin);
 	offang_y = offang_y - 12;
-	makevectors (offang);
+	makevectors(offang);
 	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
 	dir = normalize (v_forward);
 	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
-	//dir_z = 0.8;
-    launch_projectile (org, dir, CT_PROJ_MCOR2,(SPEED_HKSPIKE + ( skill * SPEED_HKSKILL)));
-
+    launch_projectile(org,dir,NO_SPIN,CT_PROJ_MCOR2,(SPEED_HKSPIKE + (skill * SPEED_HKSKILL)));
 	offang = vectoangles (self.enemy.origin - self.origin);
 	offang_y = offang_y - 6;
-	makevectors (offang);
+	makevectors(offang);
 	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
 	dir = normalize (v_forward);
 	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
-	//dir_z = 0.8;
-    launch_projectile (org, dir, CT_PROJ_MCOR2,(SPEED_HKSPIKE + ( skill * SPEED_HKSKILL)));
-
+    launch_projectile(org,dir,NO_SPIN,CT_PROJ_MCOR2,(SPEED_HKSPIKE + (skill * SPEED_HKSKILL)));
 	offang = vectoangles (self.enemy.origin - self.origin);
-	makevectors (offang);
+	makevectors(offang);
 	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
 	dir = normalize (v_forward);
 	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
-	//dir_z = 0.8;
-    launch_projectile (org, dir, CT_PROJ_MCOR2,(SPEED_HKSPIKE + ( skill * SPEED_HKSKILL)));
-
+    launch_projectile(org,dir,NO_SPIN,CT_PROJ_MCOR2,(SPEED_HKSPIKE + (skill * SPEED_HKSKILL)));
 	offang = vectoangles (self.enemy.origin - self.origin);
 	offang_y = offang_y + 6;
-	makevectors (offang);
+	makevectors(offang);
 	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
 	dir = normalize (v_forward);
 	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
-	//dir_z = 0.8;
-    launch_projectile (org, dir, CT_PROJ_MCOR2,(SPEED_HKSPIKE + ( skill * SPEED_HKSKILL)));
-
+    launch_projectile(org, dir,NO_SPIN,CT_PROJ_MCOR2,(SPEED_HKSPIKE + (skill * SPEED_HKSKILL)));
 	offang = vectoangles (self.enemy.origin - self.origin);
 	offang_y = offang_y + 12;
-	makevectors (offang);
+	makevectors(offang);
 	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
 	dir = normalize (v_forward);
 	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
-	//dir_z = 0.8;
-    launch_projectile (org, dir, CT_PROJ_NG,(SPEED_HKSPIKE + ( skill * SPEED_HKSKILL)));
-
+    launch_projectile (org,dir,NO_SPIN,CT_PROJ_NG,(SPEED_HKSPIKE + (skill * SPEED_HKSKILL)));
 	offang = vectoangles (self.enemy.origin - self.origin);
 	offang_y = offang_y + 18;
-	makevectors (offang);
+	makevectors(offang);
 	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
 	dir = normalize (v_forward);
 	dir_z = 0 - dir_z + (random() - 0.5)*0.1;
-	//dir_z = 0.8;
-    launch_projectile (org, dir, CT_PROJ_MCOR2,(SPEED_HKSPIKE + ( skill * SPEED_HKSKILL)));
+    launch_projectile(org,dir,NO_SPIN,CT_PROJ_MCOR2,(SPEED_HKSPIKE + (skill * SPEED_HKSKILL)));
 };
 
 void() mcorn_projectiles = {
@@ -219,7 +206,7 @@ void() mcorn_leap6	=[  85, mcorn_leap7	] {
 	self.jump_flag = time;	// No jump time limits
 	self.attack_finished = time + 0.6; // similar to fiend but we don't have extra jump frames for the flight
 	self.touch = Demon_JumpTouch;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	self.velocity = v_forward * 1100 + '0 0 120';
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	self.oldorigin = self.origin;

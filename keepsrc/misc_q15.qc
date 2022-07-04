@@ -247,7 +247,7 @@ void() actor_throw = { // [FUNCTION]
 	setsize (newmis, '-16 -16 -24', '16 16 40');
 	setorigin(newmis, self.oldorigin + self.view_ofs);
 	setmodel (self, "progs/null.spr");
-	if(self.noise) sound(newmis, CHAN_AUTO, self.noise, 1, ATTN_NORM);
+	if (self.noise) sound(newmis, CHAN_AUTO, self.noise, 1, ATTN_NORM);
 	if (ext_dppart && self.partname) newmis.traileffectnum = particleeffectnum(self.partname);
 	newmis.angles = self.angles;
 	newmis.movetype = MOVETYPE_TOSS;
@@ -272,7 +272,7 @@ void() misc_actor = { // [ENTITY]
 	
 	if (!self.mdl) self.mdl = MODEL_PLAYER;
 	precache_model (self.mdl);
-	if(self.noise) precache_sound (self.noise);
+	if (self.noise) precache_sound (self.noise);
 	self.solid = SOLID_NOT;				// No world interaction
 	self.movetype = MOVETYPE_NONE;		// Static item, no movement
 	self.oldorigin = self.origin;		// Store for later

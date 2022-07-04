@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 33
+// Function count: 34
 //
 // Implements: Subroutines
 //
@@ -304,4 +304,43 @@ void SUB_AdvanceSkin(float min, float max) = { // [FUNCTION]
 	self.walkskin = SUB_ClampFloat(self.skin + 1,min,max);
 	self.skin = self.walkskin;
 	if (self.walkskin == max) self.walkskin = min - 1;
+};
+
+float(entity targ) SUB_DropToFloor = { // [FUNCTION]
+	local entity stemp;
+	local float result;
+
+	result = FALSE;
+	stemp = self;
+	self = targ;
+	result = droptofloor();
+	self = stemp;
+	return result;
+};
+
+// Checks all effects and states that would render targ invisible.  Not to be
+// confused with visible() which does traceline checks.
+float(entity targ) Invisible = { // [FUNCTION]
+	if (targ == world) return TRUE; // We shouldn't want to see the world.
+	if (targ.flags & FL_NOTARGET) return TRUE;
+	if (targ.invisible_finished >= time) return TRUE;
+	if (targ.items & IT_INVISIBILITY) return TRUE;
+	if (targ.alpha < 0.1) return TRUE;
+	if (targ.modelindex == 0) return TRUE;
+	if (targ.estate == ESTATE_OFF) return TRUE;
+	if (targ.model == "") return TRUE;
+	return FALSE;
+};
+
+float(entity targ) Indestructable = {
+	if (targ.flags & FL_GODMODE) return TRUE;
+	if (targ.invincible_finished >= time) return TRUE;
+	return FALSE;
+};
+
+// Account for rounding errors on critical checks.
+float(float first, float second) SafeEquals = {
+	if (first == second) return TRUE; // In fact, equal.
+	if (fabs(first - second) < MATH_EPSILON) return TRUE; // Close enough.
+	return FALSE; // Nope, not equal.
 };

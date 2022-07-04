@@ -56,7 +56,7 @@ void() player_vehicle_animation = { // [FUNCTION]
 	local float drain;
 
 	if ((cvar("chase_active")) && self.owner.in_a_vehicle) { // if switched into 3rd person mode while driving
-		//makevectors (self.owner.angles);
+		//makevectors(self.owner.angles);
 		//self.angles = self.owner.angles;
 		vehicle_angle_lerp(self.owner.angles_y);
 

@@ -225,7 +225,7 @@ void() trigger_monsterpassivestate = {
 	self.estate = ESTATE_ON;
 };
 
-void () UpdateCharmerGoal = {
+void() UpdateCharmerGoal = {
    local entity targ;
    local vector d;
 
@@ -247,7 +247,7 @@ void () UpdateCharmerGoal = {
    }
 };
 
-void () HuntCharmer = {
+void() HuntCharmer = {
    self.huntingcharmer = TRUE;
    UpdateCharmerGoal ();
    if (self.th_walk) self.think = self.th_walk;
@@ -256,7 +256,7 @@ void () HuntCharmer = {
    self.nextthink = (time + 0.100);
 };
 
-void () FleeCharmer = {
+void() FleeCharmer = {
    self.huntingcharmer = TRUE;
    UpdateCharmerGoal ();
    self.huntingcharmer = MOVETYPE_WALK;
@@ -265,7 +265,7 @@ void () FleeCharmer = {
    self.nextthink = (time + 0.100);
 };
 
-void () StopHuntingCharmer = {
+void() StopHuntingCharmer = {
    self.goalentity = world;
    if ( (self.huntingcharmer > TRUE) ) remove (self.trigger_field);
    self.huntingcharmer = FALSE;

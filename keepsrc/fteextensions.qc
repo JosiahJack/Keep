@@ -477,7 +477,7 @@ const float FILE_MMAP_RW = 6;	/* Like FILE_MMAP_READ, except any changes to the 
 #ifdef CSQC
 	const float VF_SKYROOM_CAMERA = 222;	/* Controls the camera position of the skyroom (which will be drawn underneath transparent sky surfaces). This should move slightly with the real camera, but not so much that the skycamera enters walls. Requires a skyshader with a blend mode on the first pass (or no passes). */
 	const float RF_VIEWMODEL = 1;	/* Specifies that the entity is a view model, and that its origin is relative to the current view position. These entities are also subject to viewweapon bob. */
-	const float RF_EXTERNALMODEL = 2;	/* Specifies that this entity should be displayed in mirrors (and may still cast shadows), but will not otherwise be visible. */
+	const float RF_EXTERNALMODEL = 2;	/* Specifies that this entity should be displayed in mirrors(and may still cast shadows), but will not otherwise be visible. */
 	const float RF_USEAXIS = 16;	/* The entity will be oriented according to the current v_forward+v_right+v_up vector values instead of the entity's .angles field. */
 	const float RF_NOSHADOW = 32;	/* This entity will not cast shadows. Often useful on view models. */
 	const float RF_FRAMETIMESARESTARTTIMES = 64;	/* Specifies that the frame1time, frame2time field are timestamps (denoting the start of the animation) rather than time into the animation. */

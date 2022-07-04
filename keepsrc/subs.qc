@@ -55,7 +55,7 @@ void(entity targ) gen_unique_no = { // [FUNCTION]
 };
 
 // Most of the monsters have an attack_offset setup to spawn their proejctiles in the right location relative to their gun model.
-// This function expects the makevectors has been done already.  makevectors (self.angles); <--- if missing, vector will be rubbish!
+// This function expects the makevectors has been done already.  makevectors(self.angles); <--- if missing, vector will be rubbish!
 vector(vector attack_dir) attack_vector = { // [FUNCTION]
 	local vector retvec;
 
@@ -130,7 +130,7 @@ void() SetMovedir = { // [FUNCTION]
 	if (self.angles == '0 -1 0') self.movedir = '0 0 1';
 	else if (self.angles == '0 -2 0') self.movedir = '0 0 -1';
 	else {
-		makevectors (self.angles);
+		makevectors(self.angles);
 		self.movedir = v_forward;
 	}
 	self.angles = '0 0 0'; // Bmodels need angles key reset otherwise twisted on spawn
@@ -286,7 +286,7 @@ float(entity t) HasTargets = { // [FUNCTION]
 };
 
 // Clear all target strings
-void (entity t) clear_trigstrs = { // [FUNCTION]
+void(entity t) clear_trigstrs = { // [FUNCTION]
 	t.killtarget = string_null;
 	t.killtarget2 = string_null;
 	t.target = string_null;
@@ -415,7 +415,7 @@ void(float normal) SUB_AttackFinished = { // [FUNCTION]
 };
 
 // Used by soldiers and enforcers (special double fire mode)
-void (void() thinkst) SUB_CheckRefire = { // [FUNCTION]
+void(void() thinkst) SUB_CheckRefire = { // [FUNCTION]
 	if (skill != SKILL_NIGHTMARE) return;
 	if (self.cnt == 1) return;
 	if (!visible (self.enemy)) return;

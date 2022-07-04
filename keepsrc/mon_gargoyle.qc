@@ -92,31 +92,23 @@ void()	garg_run8	=[	$fly15,	garg_run9	] {ai_run(6);};
 void()	garg_run9	=[	$fly17,	garg_run10	] {ai_run(7);};
 void()	garg_run10	=[	$fly19,	garg_run1	] {ai_run(8);};
 
-//============================================================================
 // Range attack
-//============================================================================
-void() garg_fbthrow =
-{
+void() garg_fbthrow = {
 	local vector org, dir;
 	
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = normalize(SUB_orgEnemyTarget() - org);
 	self.attack_speed = SPEED_GARGMISSILE + (skill * SPEED_GARGSKILL);
-	
-	Launch_Missile (org, dir, '0 0 0', CT_PROJ_GARG, self.attack_speed);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_GARG,self.attack_speed);
 };
 
-//----------------------------------------------------------------------
-void() garg_fbfinish =
-{
+void() garg_fbfinish = {
 	setmodel(self.attachment, "");
 	self.attachment.state = STATE_OFF;
 };
 
-//----------------------------------------------------------------------
-void(float fbframe, vector fbofs) garg_fbupdate =
-{
+void(float fbframe, vector fbofs) garg_fbupdate = {
 	if (self.health < 1) return;
 	if (!self.attachment) {
 		self.attachment = spawn();
@@ -146,12 +138,10 @@ void(float fbframe, vector fbofs) garg_fbupdate =
 	self.attachment.frame = fbframe;
 };
 
-//----------------------------------------------------------------------
 // Original offset position for gargoyle fireball (designed for a sprite)
 // 10 16 0, 4 24 2, -7 28 15, -25 26 28, -38 12 45, -38 9 45, -17 36 30, 24 16 10
 // Changed the offset to match the new model instead
 // Positioned the fireball to match the hand orientation
-//----------------------------------------------------------------------
 void() garg_fire1	=[ $attack2, garg_fire2 ] {garg_fbupdate(0,'10 16 -2');};
 void() garg_fire2	=[ $attack4, garg_fire3 ] {garg_fbupdate(2,'0 20 -2');};
 void() garg_fire3	=[ $attack6, garg_fire4 ] {garg_fbupdate(3,'-6 23 6');gargoylewings();};
@@ -168,9 +158,6 @@ void() garg_fire10	=[ $attack20, garg_run1 ] {ai_face();
 	else self.attack_state = AS_STRAIGHT;
 };
 
-//============================================================================
-// PERCH + WAKEUP
-//============================================================================
 void()	garg_perch1	=[	$perch2,	garg_perch2	] {monster_idle_sound();ai_stand();};
 void()	garg_perch2	=[	$perch4,	garg_perch3	] {ai_stand();};
 void()	garg_perch3	=[	$perch6,	garg_perch4	] {ai_stand();};
@@ -184,7 +171,6 @@ void()	garg_perch10=[	$perch20,	garg_perch11	] {ai_stand();};
 void()	garg_perch11=[	$perch22,	garg_perch12	] {ai_stand();};
 void()	garg_perch12=[	$perch24,	garg_perch1	] {ai_stand();};
 
-//----------------------------------------------------------------------
 // Sightsound and very quick animation while moving forward
 void()	garg_wakeup1	=[	$flyup2,	garg_wakeup2	] {};
 void()	garg_wakeup2	=[	$flyup4,	garg_wakeup3	] {ai_forward(4);};
@@ -201,9 +187,7 @@ void()	garg_wakeup6	=[	$flyup20,	garg_run1	] {
 	self.nextthink = time + 0.1;// Next frame
 };
 
-//----------------------------------------------------------------------
-void() gargoyle_wakeup =
-{
+void() gargoyle_wakeup = {
 	// Dead already?
 	if (self.health < 1) return;
 
@@ -469,7 +453,7 @@ void() setup_gargoyle = {
 	self.th_checkattack = GargoyleCheckAttack;
 	self.th_pain = garg_pain; 
 	self.th_die = garg_die;
-	if(!self.classtype) self.classtype = CT_MONGARGOYLE;
+	if (!self.classtype) self.classtype = CT_MONGARGOYLE;
 	if (!self.classgroup) self.classgroup = CG_WIZARD;
 	self.classmove = MON_MOVEFLY;
 

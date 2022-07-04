@@ -89,17 +89,17 @@ void() trap_shooter_fire = { // [FUNCTION]
 
 	// Determine type of projectile shooter
 	if (self.classtype == CT_SPIKESHOOTER) {
-		launch_projectile (self.origin, self.movedir, self.cnt ,self.speed);
+		launch_projectile(self.origin,self.movedir,self.avelocity,self.cnt,self.speed);
 	} else if (self.classtype == CT_GRENADESHOOTER) {
-		self.finaldest = self.movedir * self.speed;
+		self.finaldest = self.movedir;
 		self.finaldest_z = ELEV_ZAXIS;
 		self.finalangle = vecrand(100,200,FALSE);
-		Launch_Grenade(self.origin, self.finaldest, self.finalangle, self.cnt);
+		launch_projectile(self.origin,self.finaldest,self.finalangle,self.cnt,self.speed);
 	} else if (self.classtype == CT_ROCKETSHOOTER) {
 		if (self.spawnflags == TRAP_LAVAROCKET) self.finalangle = vecrand(100,200,FALSE);
 		else self.finalangle = '0 0 0';
 
-		Launch_Missile (self.origin, self.movedir, self.finalangle, self.cnt, self.speed);
+		launch_projectile(self.origin, self.movedir,self.finalangle, self.cnt, self.speed);
 	} else if (self.classtype == CT_LIGHTSHOOTER) {
 		if (CheckZeroVector(self.dest1)) return; // Double check a destination origin exists
 		
@@ -215,51 +215,52 @@ void() trap_shooter_reset = { // [FUNCTION]
 // When triggered, fires a SPIKE in the direction determined by angle.  Use TOGGLE spawnflag and trigger to enable continuous mode.
 void() trap_spikeshooter = { // [ENTITY]
 	if (self.spawnflags & TRAP_SNGSPIKE) {
-		self.mdl = MODEL_PROJ_SNG;
-		self.noise = "weapons/spike2.wav";
-		self.cnt = CT_PROJ_SNG;
+		item_setupmodel(MODEL_PROJ_SNG,0);
+		item_setupnoise("weapons/spike2.wav");
+		if (!self.cnt) self.cnt = CT_PROJ_SNG;
 		if (!self.speed) self.speed = SPEED_TRAPSPIKE;
 	} else if (self.spawnflags & TRAP_LASER) {
-		self.mdl = MODEL_PROJ_LASER;
-		self.noise = SOUND_LASER_FIRE;
-		self.cnt = CT_PROJ_LASER;
+		item_setupmodel(MODEL_PROJ_LASER,0);
+		item_setupnoise(SOUND_LASER_FIRE);
+		if (!self.cnt) self.cnt = CT_PROJ_LASER;
 		if (!self.speed) self.speed = SPEED_LASER;
 		// Used for impact sound of laser
 		precache_sound (SOUND_LASER_HIT);
 	} else if (self.spawnflags & TRAP_WIZSPIKE) {
-		self.mdl = MODEL_PROJ_WIZ;
-		self.noise = "weapons/spike2.wav";
-		self.volume = 0.5;
-		self.cnt = CT_PROJ_WIZ;
+		item_setupmodel(MODEL_PROJ_WIZ,0);
+		item_setupnoise("weapons/spike2.wav");
+		if (!self.volume) self.volume = 0.5;
+		if (!self.cnt) self.cnt = CT_PROJ_WIZ;
 		if (!self.speed) self.speed = SPEED_WIZSPIKE;
 	} else if (self.spawnflags & TRAP_CROSSBOLTS) {
-		self.mdl = MODEL_PROJ_WIZ;
-		self.noise = "ad171/weapons/crossbow_fire.wav";
-		self.volume = 0.5;
-		self.cnt = CT_PROJ_BOLT1;
+		if (self.poisonous) item_setupmodel("progs/ad171/proj_bolt2.mdl",0);
+		else item_setupmodel(MODEL_PROJ_BOLT1,0);
+		item_setupnoise("ad171/weapons/crossbow_fire.wav");
+		if (!self.volume) self.volume = 0.5;
+		if (!self.cnt) self.cnt = CT_PROJ_BOLT1;
 		if (!self.speed) self.speed = SPEED_DCROSS + (skill * SPEED_BOLTSKILL);
 	} else if (self.spawnflags & TRAP_POISONBOLTS) {
-		self.mdl = MODEL_PROJ_WIZ;
-		self.noise = "ad171/weapons/crossbow_fire.wav";
-		self.volume = 0.5;
-		self.cnt = CT_PROJ_BOLT2;
+		item_setupmodel("progs/ad171/proj_bolt2.mdl",0);
+		item_setupnoise("ad171/weapons/crossbow_fire.wav");
+		if (!self.volume) self.volume = 0.5;
+		if (!self.cnt) self.cnt = CT_PROJ_BOLT2;
 		if (!self.speed) self.speed = SPEED_DCROSS + (skill * SPEED_BOLTSKILL);
 	} else if (self.spawnflags & TRAP_DARTS) {
-		self.mdl = MODEL_PROJ_WIZ;
-		self.noise = "custents/weapons/lncharow.wav";
-		self.volume = 0.5;
-		self.cnt = CT_PROJ_DARTARROW;
+		item_setupmodel("progs/drake/arrow.mdl",0);
+		item_setupnoise("custents/weapons/lncharow.wav");
+		if (!self.volume) self.volume = 0.5;
+		if (!self.cnt) self.cnt = CT_PROJ_DARTARROW;
 		if (!self.speed) self.speed = SPEED_DCROSS + (skill * SPEED_BOLTSKILL);
 	} else if (self.spawnflags & TRAP_HELLSPIKE) {
-		self.mdl = MODEL_PROJ_HKN;
-		self.noise = "weapons/spike2.wav";
-		self.volume = 0.5;
-		self.cnt = CT_PROJ_HKN;
+		item_setupmodel(MODEL_PROJ_HKN,0);
+		item_setupnoise("weapons/spike2.wav");
+		if (!self.volume) self.volume = 0.5;
+		if (!self.cnt) self.cnt = CT_PROJ_HKN;
 		if (!self.speed) self.speed = SPEED_HKSPIKE;
 	} else {
-		self.mdl = MODEL_PROJ_NG;
-		self.noise = "weapons/spike2.wav";
-		self.cnt = CT_PROJ_NG;
+		item_setupmodel(MODEL_PROJ_NG,0);
+		item_setupnoise("weapons/spike2.wav");
+		if (!self.cnt) self.cnt = CT_PROJ_NG;
 		if (!self.speed) self.speed = SPEED_TRAPSPIKE;
 	}
 	precache_model (self.mdl);
@@ -285,6 +286,8 @@ void() trap_spikeshooter = { // [ENTITY]
 		self.nextthink = time + 1 + random();
 		self.think = TargetMovedirReturn;
 	}
+
+	dprint("Shooter setup with cnt "); dprint(ftos(self.cnt)); dprint("\n");
 };
 
 // QUAKED trap_grenadeshooter (0 0.5 0.8) (-8 -8 -8) (8 8 8) LARGE x x x x TOGGLE x TRACK Not_Easy Not_Normal Not_Hard Not_DM
@@ -309,10 +312,10 @@ void() trap_grenadeshooter = { // [ENTITY]
 	precache_sound (self.noise);
 	if (self.spawnflags & TRAP_LARGEGRENADE) {
 		self.cnt = CT_PROJ_GL;
-		if(!self.speed) self.speed = SPEED_PLAYGRENADE;
+		if (!self.speed) self.speed = SPEED_PLAYGRENADE;
 	} else {
 		self.cnt = CT_PROJ_GLMON;
-		if(!self.speed) self.speed = SPEED_PLAYGRENADE;
+		if (!self.speed) self.speed = SPEED_PLAYGRENADE;
 	}
 
 	self.classtype = CT_GRENADESHOOTER;

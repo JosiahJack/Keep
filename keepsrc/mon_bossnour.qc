@@ -114,9 +114,9 @@ float() nour_WaveCheck =
 		// Check for wave boundary triggers
 		self.noise = "";
 		if (self.bosswave == 1) self.noise = self.noise1;
-		else if(self.bosswave == 2) self.noise = self.noise2;
-		else if(self.bosswave == 3) self.noise = self.noise3;
-		else if(self.bosswave == 4) self.noise = self.noise4;
+		else if (self.bosswave == 2) self.noise = self.noise2;
+		else if (self.bosswave == 3) self.noise = self.noise3;
+		else if (self.bosswave == 4) self.noise = self.noise4;
 		
 		// Is there any trigger for the wave boundary?
 		if (self.noise != "") trigger_strs(self.noise, self);
@@ -275,7 +275,7 @@ void(vector offset) nour_spike = {
 	// Work out direction line from self to enemy
 	dtarget = SUB_orgEnemyTarget() - self.origin;
 	dtarget = vectoangles(dtarget);
-	makevectors (dtarget);
+	makevectors(dtarget);
 	
 	// Work out correct source/target origins
 	starget = self.origin + v_forward * 16 + v_up * offset_z;
@@ -285,12 +285,11 @@ void(vector offset) nour_spike = {
 	sorg = starget + v_right * offset_x;
 	forg = ftarget + v_right * offset_x;
 	dir = normalize(forg - sorg);
-	launch_projectile (sorg, dir, CT_PROJ_NOUR1, self.attack_speed);
-	
+	launch_projectile(sorg,dir,NO_SPIN,CT_PROJ_NOUR1,self.attack_speed);
 	sorg = starget - v_right * offset_x;
 	forg = ftarget - v_right * offset_x;
 	dir = normalize(forg - sorg);
-	launch_projectile (sorg, dir, CT_PROJ_NOUR1, self.attack_speed);
+	launch_projectile(sorg,dir,NO_SPIN,CT_PROJ_NOUR1,self.attack_speed);
 };
 
 void() nour_atta1	=[	$shota1, nour_atta2] {ai_face();
@@ -312,29 +311,25 @@ void() nour_atta11	=[ $shota11, nour_run1] {};
 void(vector bombofs) Fire_NourBomb = {
 	local vector org, torg, ang, dir, avel;
 
-	// Finished with bomb effect
-	SUB_FinishAttachment();
+	SUB_FinishAttachment(); // Finished with bomb effect
 	
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "ad171/nour/attack1.wav", 1, ATTN_NORM);
-	
 	ai_face();
 	makevectors(self.angles);
 	org = self.origin + attack_vector(bombofs);
 	torg = SUB_orgEnemyTarget();
-
 	self.attack_speed = SPEED_NOURBOMB;
 	self.attack_elev = SUB_Elevation(ELEV_DEFAULT, org, torg, self.attack_speed);
 	ang = vectoangles(torg - org);
 	ang_x = -self.attack_elev;
-	makevectors (ang);
+	makevectors(ang);
 	dir = v_forward * self.attack_speed;
-
 	avel = vecrand(100,200,FALSE);
-	Launch_Grenade(org, dir, avel, CT_PROJ_NOUR2);
+	launch_projectile(org,dir,avel,CT_PROJ_NOUR2,1);
 };
 
 void(vector bombofs, float bombframe) Setup_NourBomb = {
@@ -408,23 +403,18 @@ void() Spawn_NourFog = {
 	WriteCoord (MSG_BROADCAST, self.origin_z);
 };
 
-//----------------------------------------------------------------------
 // Fire random plasma spikes while summoning wizard minions
-//----------------------------------------------------------------------
-void(vector minofs) Fire_NourPlasma =
-{
+void(vector minofs) Fire_NourPlasma = {
 	local vector org;
 
 	makevectors(self.angles);
 	org = self.origin + attack_vector(minofs);
 	self.pos2 = vecrand(0,50,TRUE);
 	self.pos3 = normalize(self.pos2);
-	launch_projectile(org, self.pos3, CT_SUMMONLIGHT, SPEED_REFLECTION);
+	launch_projectile(org,self.pos3,NO_SPIN,CT_SUMMONLIGHT,SPEED_REFLECTION);
 };
 
-//----------------------------------------------------------------------
-void(vector minofs) Spawn_NourMin =
-{
+void(vector minofs) Spawn_NourMin = {
 	// Finished with bomb effect
 	SUB_FinishAttachment();
 	Fire_NourPlasma(minofs);
@@ -451,9 +441,7 @@ void(vector minofs) Spawn_NourMin =
 	}
 };
 
-//----------------------------------------------------------------------
-void(vector minofs, float minframe) Setup_NourMin =
-{
+void(vector minofs, float minframe) Setup_NourMin = {
 	local vector org;
 	
 	// Re-use the energy ball attachment for spawning lightning from
@@ -518,7 +506,6 @@ void(vector minofs, float minframe) Setup_NourMin =
 	Fire_NourPlasma(minofs);
 };
 
-//----------------------------------------------------------------------
 void() nour_attc1	=[ $shotc1, nour_attc2] {ai_face();
 	// Make sure boss mode active for this attack
 	if (!(self.spawnflags & MON_NOUR_BOSS)) { self.think = self.th_run; return; }
@@ -579,9 +566,6 @@ void() nour_attc23	=[ $shotc23, nour_run1] {ai_face();
 	self.style = NOUR_PHASE2;	// Fight mode
 };
 
-//============================================================================
-// PAIN and DEATH
-//============================================================================
 void() nour_paina1 = [ $paina1, nour_paina2 ] {};
 void() nour_paina2 = [ $paina2, nour_paina3 ] {};
 void() nour_paina3 = [ $paina3, nour_paina4 ] {};
@@ -589,7 +573,6 @@ void() nour_paina4 = [ $paina4, nour_paina5 ] {};
 void() nour_paina5 = [ $paina5, nour_paina6 ] {};
 void() nour_paina6 = [ $paina6, nour_run1 ] {};
 
-//----------------------------------------------------------------------
 void() nour_painb1 = [ $painb1, nour_painb2 ] {};
 void() nour_painb2 = [ $painb2, nour_painb3 ] {};
 void() nour_painb3 = [ $painb3, nour_painb4 ] {};
@@ -600,9 +583,7 @@ void() nour_painb7 = [ $painb7, nour_painb8 ] {};
 void() nour_painb8 = [ $painb8, nour_painb9 ] {};
 void() nour_painb9 = [ $painb9, nour_run1 ] {};
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) nour_pain =
-{
+void(entity inflictor, entity attacker, float damage) nour_pain = {
 	// Finish with all attachments
 	SUB_FinishAttachment();
 
@@ -628,11 +609,8 @@ void(entity inflictor, entity attacker, float damage) nour_pain =
 	}
 };
 
-//============================================================================
 // Death comes to us all, even Nour!
-//============================================================================
-void() nour_explode =
-{
+void() nour_explode = {
 	// Check for any final trigger events
 	if (self.message2 != "") trigger_strs(self.message2,self);
 	
@@ -663,7 +641,6 @@ void() nour_explode =
 	ThrowGib(5, 10 + rint(random()*3));
 };
 
-//----------------------------------------------------------------------
 void() nour_die1 = [ $death1, nour_die2 ] {};
 void() nour_die2 = [ $death2, nour_die3 ] {};
 void() nour_die3 = [ $death3, nour_die4 ] {self.solid = SOLID_NOT;};

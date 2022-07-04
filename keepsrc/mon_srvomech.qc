@@ -54,7 +54,7 @@ void(vector src, vector dir, float lsrdamage) FireLaser = {
 
 		T_Damage (trace_ent, self, self, lsrdamage);
 		SpawnBlood (org, vel*0.2, lsrdamage, trace_ent,0);
-	} else if(trace_fraction != 1) {
+	} else if (trace_fraction != 1) {
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 		WriteByte (MSG_BROADCAST, TE_KNIGHTSPIKE);
 		WriteCoord (MSG_BROADCAST, org_x);
@@ -101,62 +101,62 @@ void() servo_bodthink = {
 	tmpent = self;
 	self = bod;
 
-	if(tmpent.enemy)
+	if (tmpent.enemy)
 	{
-		if(visible(tmpent.enemy))
+		if (visible(tmpent.enemy))
 		{
 //			tmpvec = vectoangles((tmpent.enemy.origin + tmpent.enemy.view_ofs) - (self.origin + '0 0 16'));
 			tmpvec = vectoangles(tmpent.enemy.origin - (self.origin + '0 0 16'));
 			self.ideal_yaw = tmpvec_y;
-			if(tmpvec_x > 180)
+			if (tmpvec_x > 180)
 			{
 				tmpvec_x = 360 - tmpvec_x;
-				if(tmpvec_x > 80)
+				if (tmpvec_x > 80)
 					tmpvec_x = 80;
 			}
 			else
 			{
 				tmpvec_x = tmpvec_x * -1;
-				if(tmpvec_x < -80)
+				if (tmpvec_x < -80)
 					tmpvec_x = -80;
 			}
 			self.search_time = time + 2;
 		}
-		else if(self.search_time < time)
+		else if (self.search_time < time)
 		{
 			self.ideal_yaw = tmpent.angles_y;
 			tmpvec = '0 0 0';
 		}
 
-		if(tmpvec_x > self.rotate_type)
+		if (tmpvec_x > self.rotate_type)
 		{
-			if(tmpvec_x > (self.rotate_type + 6))
+			if (tmpvec_x > (self.rotate_type + 6))
 				self.rotate_type = self.rotate_type + 6;
 			else
 				self.rotate_type = tmpvec_x;
 		}
-		else if(tmpvec_x < self.rotate_type)
+		else if (tmpvec_x < self.rotate_type)
 		{
-			if(tmpvec_x < (self.rotate_type - 6))
+			if (tmpvec_x < (self.rotate_type - 6))
 				self.rotate_type = self.rotate_type - 6;
 			else
 				self.rotate_type = tmpvec_x;
 		}
 	}
-	else if(self.invisible_time < time || fabs(self.ideal_yaw - tmpent.ideal_yaw) > 35)
+	else if (self.invisible_time < time || fabs(self.ideal_yaw - tmpent.ideal_yaw) > 35)
 	{
 		self.ideal_yaw = tmpent.ideal_yaw + crandom()*35;
 		self.rotate_type = 0;
 		self.invisible_time = time + 1 + random()*3;
 	}
 
-	if(self.attack_state)
+	if (self.attack_state)
 	{
-		if(self.attack_state == SERVOBOD_BOTH)
+		if (self.attack_state == SERVOBOD_BOTH)
 			self.frame = servobod_fireframe(self.rotate_type);
-		else if(self.attack_state == SERVOBOD_RIGHT)
+		else if (self.attack_state == SERVOBOD_RIGHT)
 			self.frame = servobod_rightfireframe(self.rotate_type);
-		else if(self.attack_state == SERVOBOD_LEFT)
+		else if (self.attack_state == SERVOBOD_LEFT)
 			self.frame = servobod_leftfireframe(self.rotate_type);
 		self.attack_state = SERVOBOD_NONE;
 	}
@@ -220,8 +220,8 @@ void() servo_run1 =[ 1, servo_run2]
 	ai_run(9);
 	self.pos1 = '0 0 11.4';
 	servo_bodthink();
-	if(enemy_range == RANGE_MELEE)
-		if(enemy_vis)
+	if (enemy_range == RANGE_MELEE)
+		if (enemy_vis)
 			self.think = servo_stillrun;
 };
 void() servo_run2 =[ 3, servo_run3]
@@ -229,8 +229,8 @@ void() servo_run2 =[ 3, servo_run3]
 	ai_run(13);
 	self.pos1 = '0 0 11.3';
 	servo_bodthink();
-	if(enemy_range == RANGE_MELEE)
-		if(enemy_vis)
+	if (enemy_range == RANGE_MELEE)
+		if (enemy_vis)
 			self.think = servo_stillrun;
 };
 void() servo_run3 =[ 5, servo_run4]
@@ -238,8 +238,8 @@ void() servo_run3 =[ 5, servo_run4]
 	ai_run(6);
 	self.pos1 = '0 0 8.2';
 	servo_bodthink();
-	if(enemy_range == RANGE_MELEE)
-		if(enemy_vis)
+	if (enemy_range == RANGE_MELEE)
+		if (enemy_vis)
 			self.think = servo_stillrun;
 };
 void() servo_run4 =[ 7, servo_run5]
@@ -248,8 +248,8 @@ void() servo_run4 =[ 7, servo_run5]
 	ai_run(5);
 	self.pos1 = '0 0 9.6';
 	servo_bodthink();
-	if(enemy_range == RANGE_MELEE)
-		if(enemy_vis)
+	if (enemy_range == RANGE_MELEE)
+		if (enemy_vis)
 			self.think = servo_stillrun;
 };
 void() servo_run5 =[ 9, servo_run6]
@@ -257,8 +257,8 @@ void() servo_run5 =[ 9, servo_run6]
 	ai_run(11);
 	self.pos1 = '0 0 10.8';
 	servo_bodthink();
-	if(enemy_range == RANGE_MELEE)
-		if(enemy_vis)
+	if (enemy_range == RANGE_MELEE)
+		if (enemy_vis)
 			self.think = servo_stillrun;
 };
 void() servo_run6 =[ 11, servo_run7]
@@ -266,8 +266,8 @@ void() servo_run6 =[ 11, servo_run7]
 	ai_run(11);
 	self.pos1 = '0 0 11.9';
 	servo_bodthink();
-	if(enemy_range == RANGE_MELEE)
-		if(enemy_vis)
+	if (enemy_range == RANGE_MELEE)
+		if (enemy_vis)
 			self.think = servo_stillrun;
 };
 void() servo_run7 =[ 13, servo_run8]
@@ -275,8 +275,8 @@ void() servo_run7 =[ 13, servo_run8]
 	ai_run(10);
 	self.pos1 = '0 0 9.6';
 	servo_bodthink();
-	if(enemy_range == RANGE_MELEE)
-		if(enemy_vis)
+	if (enemy_range == RANGE_MELEE)
+		if (enemy_vis)
 			self.think = servo_stillrun;
 };
 void() servo_run8 =[ 15, servo_run9]
@@ -285,8 +285,8 @@ void() servo_run8 =[ 15, servo_run9]
 	ai_run(5);
 	self.pos1 = '0 0 5.8';
 	servo_bodthink();
-	if(enemy_range == RANGE_MELEE)
-		if(enemy_vis)
+	if (enemy_range == RANGE_MELEE)
+		if (enemy_vis)
 			self.think = servo_stillrun;
 };
 void() servo_run9 =[ 17, servo_run1]
@@ -294,8 +294,8 @@ void() servo_run9 =[ 17, servo_run1]
 	ai_run(9);
 	self.pos1 = '0 0 10.7';
 	servo_bodthink();
-	if(enemy_range == RANGE_MELEE)
-		if(enemy_vis)
+	if (enemy_range == RANGE_MELEE)
+		if (enemy_vis)
 			self.think = servo_stillrun;
 };
 
@@ -304,20 +304,20 @@ void() servo_stillrun =[ 0, servo_stillrun]
 	ai_run(0);
 	self.pos1 = '0 0 0';
 	servo_bodthink();
-	if(enemy_range != RANGE_MELEE)
+	if (enemy_range != RANGE_MELEE)
 		self.think = servo_run1;
-	if(!enemy_vis)
+	if (!enemy_vis)
 		self.think = servo_run1;
 };
 
 void(entity attacker, float damage) servo_pain = {
 	local float tmpflt;
 
-	if(self.pain_finished < time) {
+	if (self.pain_finished < time) {
 		self.aiment.rotate_type = self.aiment.rotate_type + crandom() * damage * 0.3;
-		if(self.aiment.rotate_type < -80)
+		if (self.aiment.rotate_type < -80)
 			self.aiment.rotate_type = -80;
-		else if(self.aiment.rotate_type > 80)
+		else if (self.aiment.rotate_type > 80)
 			self.aiment.rotate_type = 80;
 
 		servo_bodthink();
@@ -413,7 +413,7 @@ void() servo_attack = {
 	makevectors(org);
 
 	org = self.aiment.origin + v_forward*37 + '0 0 16';
-	if(self.lefty)
+	if (self.lefty)
 	{
 		dir = normalize (dir - (self.aiment.origin + '0 0 16' - v_right*18));
 		org = org - v_right*18;
@@ -464,7 +464,7 @@ void() monster_servomech = {
 	self.pos1 = '0 0 0';
 	self.yaw_speed = 30;
 	self.view_ofs = '0 0 12';
-	if(!self.skin) self.skin = 1;
+	if (!self.skin) self.skin = 1;
 	self.fov = 0.7;
 	self.th_stand = servo_stand;
 	self.th_walk = servo_walk1;
@@ -524,7 +524,7 @@ void(entity targent) cservo_control_off= {
 	targent.rcam = world;
 	targcam.owner = world;
 	targent.camofs = '0 64 30';
-	if(targent.cament) {
+	if (targent.cament) {
 		msg_entity = targent;
 		WriteByte (MSG_ONE, SVC_SETVIEW);
 		WriteEntity (MSG_ONE, targent.cament);
@@ -549,9 +549,9 @@ void() cservo_think = {
 
 	contplyr = self.movetarget.owner;
 	if (contplyr) {
-		if(contplyr.deadflag != DEAD_NO)
+		if (contplyr.deadflag != DEAD_NO)
 			cservo_control_off(contplyr);
-		else if(contplyr.rcam != self.movetarget) {
+		else if (contplyr.rcam != self.movetarget) {
 			self.movetarget.owner = world;
 			self.style = 0;
 			cservo_stand();
@@ -559,7 +559,7 @@ void() cservo_think = {
 			// this is done to make Quake use the proper VIS information for the view
 			setorigin(contplyr, self.movetarget.origin);
 			// check is external camera adjustment is needed
-			if(contplyr.cament) {
+			if (contplyr.cament) {
 				temp = self;
 				self = contplyr;
 				Cam_position();
@@ -572,7 +572,7 @@ void() cservo_think = {
 		if (!(contplyr.flags & FL_GODMODE)) self.flags = self.flags - FL_GODMODE;
 	} else if (contplyr.flags & FL_GODMODE) self.flags = self.flags | FL_GODMODE;
 
-	if(self.attack_state) {
+	if (self.attack_state) {
 		cservo_attack();
 		self.attack_state = 0;
 	}
@@ -580,7 +580,7 @@ void() cservo_think = {
 
 void() cservo_attack=
 {
-	if(self.attack_finished > time)
+	if (self.attack_finished > time)
 		return;
 	local vector dir, org, fireang, targ;
 
@@ -590,7 +590,7 @@ void() cservo_attack=
 
 	org = self.aiment.origin + v_forward*38 + v_up*17;
 
-	if(self.lefty)
+	if (self.lefty)
 	{
 		traceline(org - v_forward*16 - v_right*8, org + v_forward*2048 - v_right*8, FALSE, self.aiment);
 		targ = trace_endpos;
@@ -636,33 +636,33 @@ void() cservo_bodthink =
 	self = bod;
 	contplyr = self.movetarget.owner;
 
-	if(contplyr)
+	if (contplyr)
 	{
 		tmpvec = contplyr.v_angle;
 		self.ideal_yaw = tmpvec_y;
-		if(tmpvec_x > self.rotate_type)
+		if (tmpvec_x > self.rotate_type)
 		{
-			if(tmpvec_x > (self.rotate_type + 6))
+			if (tmpvec_x > (self.rotate_type + 6))
 				self.rotate_type = self.rotate_type + 6;
 			else
 				self.rotate_type = tmpvec_x;
 		}
-		else if(tmpvec_x < self.rotate_type)
+		else if (tmpvec_x < self.rotate_type)
 		{
-			if(tmpvec_x < (self.rotate_type - 6))
+			if (tmpvec_x < (self.rotate_type - 6))
 				self.rotate_type = self.rotate_type - 6;
 			else
 				self.rotate_type = tmpvec_x;
 		}
 	}
 
-	if(self.attack_state)
+	if (self.attack_state)
 	{
-		if(self.attack_state == SERVOBOD_BOTH)
+		if (self.attack_state == SERVOBOD_BOTH)
 			self.frame = servobod_fireframe(self.rotate_type);
-		else if(self.attack_state == SERVOBOD_RIGHT)
+		else if (self.attack_state == SERVOBOD_RIGHT)
 			self.frame = servobod_rightfireframe(self.rotate_type);
-		else if(self.attack_state == SERVOBOD_LEFT)
+		else if (self.attack_state == SERVOBOD_LEFT)
 			self.frame = servobod_leftfireframe(self.rotate_type);
 		self.attack_state = SERVOBOD_NONE;
 	}
@@ -821,41 +821,41 @@ void() cservo_turn18 =[ 18, cservo_turn1]
 void(entity attacker, float damage) cservo_pain= {
 	local float tmpflt;
 
-	if(self.pain_finished < time)
+	if (self.pain_finished < time)
 	{
 		self.aiment.rotate_type = self.aiment.rotate_type + crandom() * damage * 0.3;
-		if(self.aiment.rotate_type < -80)
+		if (self.aiment.rotate_type < -80)
 			self.aiment.rotate_type = -80;
-		else if(self.aiment.rotate_type > 80)
+		else if (self.aiment.rotate_type > 80)
 			self.aiment.rotate_type = 80;
 
 		cservo_bodthink();
 		self.pain_finished = time + 2 + random()*2;
 		
 		// display servomech status to controller
-		if(self.movetarget.owner)
+		if (self.movetarget.owner)
 		{
 			tmpflt = self.health / 8;
 			
-			if(tmpflt > 90)
+			if (tmpflt > 90)
 				centerprint(self.movetarget.owner, "\n\n\n\nServomech at 100%                       ");
-			else if(tmpflt > 80)
+			else if (tmpflt > 80)
 				centerprint(self.movetarget.owner, "\n\n\n\nServomech at  90%                       ");
-			else if(tmpflt > 70)
+			else if (tmpflt > 70)
 				centerprint(self.movetarget.owner, "\n\n\n\nServomech at  80%                       ");
-			else if(tmpflt > 60)
+			else if (tmpflt > 60)
 				centerprint(self.movetarget.owner, "\n\n\n\nServomech at  70%                       ");
-			else if(tmpflt > 50)
+			else if (tmpflt > 50)
 				centerprint(self.movetarget.owner, "\n\n\n\nServomech at  60%                       ");
-			else if(tmpflt > 40)
+			else if (tmpflt > 40)
 				centerprint(self.movetarget.owner, "\n\n\n\nServomech at  50%                       ");
-			else if(tmpflt > 30)
+			else if (tmpflt > 30)
 				centerprint(self.movetarget.owner, "\n\n\n\nServomech at  40%                       ");
-			else if(tmpflt > 20)
+			else if (tmpflt > 20)
 				centerprint(self.movetarget.owner, "\n\n\n\nServomech at  30%                       ");
-			else if(tmpflt > 10)
+			else if (tmpflt > 10)
 				centerprint(self.movetarget.owner, "\n\n\n\nServomech at  20%                       ");
-			else if(tmpflt > 0)
+			else if (tmpflt > 0)
 				centerprint(self.movetarget.owner, "\n\n\n\nServomech at  10%                       ");
 			else
 				centerprint(self.movetarget.owner, "\n\n\n\nServomech destroyed...                  ");
@@ -864,7 +864,7 @@ void(entity attacker, float damage) cservo_pain= {
 };
 
 void() cservo_die = {
-	if(self.movetarget.owner)
+	if (self.movetarget.owner)
 		cservo_control_off(self.movetarget.owner);
 
 	remove(self.movetarget);
@@ -880,70 +880,70 @@ void() cservo_apply_controlls = {
 	stemp = self;
 	self = self.rcam.spawnmaster;
 
-	if(stemp.impulse == 248) { // stop using the mech
+	if (stemp.impulse == 248) { // stop using the mech
 		cservo_control_off(stemp);
 		self = stemp;
 		return;
 	}
 
-	if(stemp.impulse == 247) // run forward
+	if (stemp.impulse == 247) // run forward
 	{
-		if(self.style != 4)
+		if (self.style != 4)
 		{
 			self.think = cservo_run1;
 			self.style = 4;
 		}
 		stemp.impulse = 0;
 	}
-	else if(stemp.impulse == 240) // walk forward
+	else if (stemp.impulse == 240) // walk forward
 	{
-		if(self.style != 1)
+		if (self.style != 1)
 		{
 			self.think = cservo_walk1;
 			self.style = 1;
 		}
 		stemp.impulse = 0;
 	}
-	else if(stemp.impulse == 241) // walk backwards
+	else if (stemp.impulse == 241) // walk backwards
 	{
-		if(self.style != 2)
+		if (self.style != 2)
 		{
 			self.think = cservo_back1;
 			self.style = 2;
 		}
 		stemp.impulse = 0;
 	}
-	else if(stemp.impulse == 242) // turn left
+	else if (stemp.impulse == 242) // turn left
 	{
 		self.angles_y = self.angles_y + 80*frametime;
 		self.angles_y = anglemod(self.angles_y);
 		self.ideal_yaw = self.angles_y;
-		if(self.style == 0)
+		if (self.style == 0)
 		{
 			self.think = cservo_turn1;
 			self.style = 3;
 		}
 	}
-	else if(stemp.impulse == 243) // turn right
+	else if (stemp.impulse == 243) // turn right
 	{
 		self.angles_y = self.angles_y - 80*frametime;
 		self.angles_y = anglemod(self.angles_y);
 		self.ideal_yaw = self.angles_y;
-		if(self.style == 0)
+		if (self.style == 0)
 		{
 			self.think = cservo_turn1;
 			self.style = 3;
 		}
 	}
-	else if(stemp.impulse == 244) // straighten legs
+	else if (stemp.impulse == 244) // straighten legs
 	{
 		tmpflt = fabs(self.ideal_yaw - stemp.v_angle *'0 1 0');
-		if(tmpflt > 10 && tmpflt < 350)
+		if (tmpflt > 10 && tmpflt < 350)
 		{
 			self.ideal_yaw = stemp.v_angle *'0 1 0';
 			ChangeYaw();
 			self.ideal_yaw = self.angles_y;
-			if(self.style == 0)
+			if (self.style == 0)
 			{
 				self.think = cservo_turn1;
 				self.style = 3;
@@ -953,7 +953,7 @@ void() cservo_apply_controlls = {
 		{
 			self.ideal_yaw = stemp.v_angle *'0 1 0';
 			self.angles_y = self.ideal_yaw;
-			if(self.style == 3)
+			if (self.style == 3)
 			{
 				self.think = cservo_stand;
 				self.style = 0;
@@ -961,25 +961,25 @@ void() cservo_apply_controlls = {
 			stemp.impulse = 0;
 		}
 	}
-	else if(stemp.impulse == 245) // stop
+	else if (stemp.impulse == 245) // stop
 	{
 		self.think = cservo_stand;
 		self.style = 0;
 		stemp.impulse = 0;
 	}
-	else if(stemp.impulse == 246) // stop turning
+	else if (stemp.impulse == 246) // stop turning
 	{
-		if(self.style == 3)
+		if (self.style == 3)
 		{
 			self.think = cservo_stand;
 			self.style = 0;
 		}
 		stemp.impulse = 0;
 	}
-	else if(stemp.impulse == APOCCAM_IMPULSE) // allow toggling the Apoc Cam
+	else if (stemp.impulse == APOCCAM_IMPULSE) // allow toggling the Apoc Cam
 		Cam_toggle();
 
-	if(stemp.button0)
+	if (stemp.button0)
 		self.attack_state = 1;
 
 	self = stemp;
@@ -997,14 +997,14 @@ void() cmech_attselect = {
 	while(1)
 	{
 		checkmech = find(checkmech, classname, "controlled_servomech");
-		if(!checkmech)
+		if (!checkmech)
 			return;
 
-//		if(checkmech.classname == "controlled_servomech")
-			if(checkmech.movetarget.owner.flags & FL_CLIENT)
+//		if (checkmech.classname == "controlled_servomech")
+			if (checkmech.movetarget.owner.flags & FL_CLIENT)
 				return;
-//		if(checkmech.enemy.classname == "controlled_servomech")
-			if(checkmech.show_hostile > time && random() > 0.25)
+//		if (checkmech.enemy.classname == "controlled_servomech")
+			if (checkmech.show_hostile > time && random() > 0.25)
 				return;
 	}
 
@@ -1026,7 +1026,7 @@ void() cservo_setup = {
 	
 	self.takedamage = DAMAGE_AIM;
 
-	if(!self.targetname)
+	if (!self.targetname)
 	{
 		cservo_stand();
 		self.think = SUB_Null;
@@ -1077,7 +1077,7 @@ void() func_servomech = { // [ENTITY]
 	self.th_pain = cservo_pain;
 	
 	// ### Added for Custents all affecting gravity
-	if(!self.gravity) self.gravity = 1;
+	if (!self.gravity) self.gravity = 1;
 	else self.gravity = ((self.gravity - 1) / 100);
 	// ###
 
@@ -1118,7 +1118,7 @@ void() func_servomech = { // [ENTITY]
 	// generate an entity to select controllable servomechs to be checked for attacks
 	// like checkclient
 	cmechatt = find(world, classname, "cmech_attackselector");
-	if(!cmechatt)
+	if (!cmechatt)
 	{
 		cmechatt = spawn();
 		cmechatt.classname = "cmech_attackselector";
@@ -1133,7 +1133,7 @@ void() trigger_servomech_use = { // [ENTITY]
 	contmech = find(world, targetname, self.target);
 	while(contmech)
 	{
-		if(!contmech.movetarget.owner)
+		if (!contmech.movetarget.owner)
 		{
 			contmech.walkframe = self.walkframe;
 			contmech.invincible_finished = self.invincible_finished;
@@ -1150,12 +1150,12 @@ void() trigger_servomech = { // [ENTITY]
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
 
-	if(self.spawnflags & 1)
+	if (self.spawnflags & 1)
 		self.walkframe = 0;
 	else
 		self.walkframe = 1;
 	
-	if(self.spawnflags & 2)
+	if (self.spawnflags & 2)
 		self.invincible_finished = 1;
 	else
 		self.invincible_finished = 0;

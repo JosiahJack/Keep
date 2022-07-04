@@ -1381,11 +1381,11 @@ void() ai_orbit_nehahra(float radius, vector offset) = {
       }
     }
   dist = vlen(dir);
-  if(dist < 8) {
+  if (dist < 8) {
     self.rotate_type = self.rotate_type + 1;
     }
   else {
-    if(dist < 50) {
+    if (dist < 50) {
       self.velocity = normalize(dir);
       self.velocity = self.velocity * 150;
       }

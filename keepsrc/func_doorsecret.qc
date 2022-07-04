@@ -30,7 +30,7 @@
 // Entity count: 1
 // Function count: 14
 //
-// Implements: Secret Doors (func_door_secret)
+// Implements: Secret Doors(func_door_secret)
 //
 // Description:
 // Moving brush models intended for use as secret doors.  These move in two
@@ -60,7 +60,7 @@ void() func_door_secret_touch = { // [FUNCTION]
 };
 
 // FINAL move back (reset door ready for use again)
-void () func_door_secret_done = { // [FUNCTION]
+void() func_door_secret_done = { // [FUNCTION]
 	self.state = STATE_BOTTOM;
 	if (self.estate == ESTATE_OFF) return;
 
@@ -68,7 +68,7 @@ void () func_door_secret_done = { // [FUNCTION]
 	sound(self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM);
 };
 
-void () func_door_secret_move6 = { // [FUNCTION]
+void() func_door_secret_move6 = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
 	sound(self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM);
@@ -76,7 +76,7 @@ void () func_door_secret_move6 = { // [FUNCTION]
 };
 
 // Wait 1 second...
-void () func_door_secret_move5 = { // [FUNCTION]
+void() func_door_secret_move5 = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
 	self.nextthink = self.ltime + 1.0;
@@ -85,7 +85,7 @@ void () func_door_secret_move5 = { // [FUNCTION]
 };
 
 // Move backward...
-void () func_door_secret_move4 = { // [FUNCTION]
+void() func_door_secret_move4 = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
 	sound(self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM);
@@ -93,7 +93,7 @@ void () func_door_secret_move4 = { // [FUNCTION]
 };
 
 // Wait here until time to go back...
-void () func_door_secret_move3 = { // [FUNCTION]
+void() func_door_secret_move3 = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
 	sound(self, CHAN_VOICE, self.noise3, self.volume, ATTN_NORM);
@@ -104,7 +104,7 @@ void () func_door_secret_move3 = { // [FUNCTION]
 };
 
 // Start moving sideways w/sound...
-void () func_door_secret_move2 = { // [FUNCTION]
+void() func_door_secret_move2 = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
 	sound(self, CHAN_VOICE, self.noise2, self.volume, ATTN_NORM);
@@ -112,7 +112,7 @@ void () func_door_secret_move2 = { // [FUNCTION]
 };
 
 // Wait after first movement...
-void () func_door_secret_move1 = { // [FUNCTION]
+void() func_door_secret_move1 = { // [FUNCTION]
 	if (self.estate == ESTATE_OFF) return;
 
 	self.nextthink = self.ltime + 1.0;
@@ -121,7 +121,7 @@ void () func_door_secret_move1 = { // [FUNCTION]
 };
 
 
-void () func_door_secret_use = { // [FUNCTION]
+void() func_door_secret_use = { // [FUNCTION]
 	if (self.spawnflags & ENT_STARTOFF) self.estate_on(); // Deal with STARTOFF functionality first
 	else {
 		if (self.estate & ESTATE_BLOCK) return; // Block USE functionality if state wrong or door moving
@@ -206,7 +206,7 @@ void() func_door_secret_reset = { // [FUNCTION]
 
 };
 
-void () func_door_secret_blocked = {
+void() func_door_secret_blocked = {
 	if (self.estate == ESTATE_OFF) return;
 	if (time < self.attack_finished) return;
 	self.attack_finished = time + 0.5;
@@ -247,7 +247,7 @@ void () func_door_secret_blocked = {
 // STARTOFF  : Starts off and waits for trigger
 // -------- NOTES --------
 // A Door (bmodel) with 2 states and multiple stages
-void () func_door_secret = { // [ENTITY]
+void() func_door_secret = { // [ENTITY]
 	if (check_bmodel_keys()) return;	// Check for bmodel errors
 	
 	if (self.noise == "") self.noise = SOUND_EMPTY; // Setup all empty/silent sound files first

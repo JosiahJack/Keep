@@ -38,16 +38,16 @@
 // Poisonous and its death gibs hurt to touch.
 //=============================================================================
 
-void () polyp_float1;
-void (entity inflictor, entity attacker, float damage) polyp_wake1;
-void () polyp_wake1_prethink = {local entity blank; local float blankf; polyp_wake1(blank,blank,blankf); };
-void (entity inflictor, entity attacker, float damage) polyp_pain;
-void () polyp_walkfly1;
-void () polyp_visible1;
-void () polyp_missile;
-void () polyp_die1;
-void () polyp_idie1;
-void () polyp_jump5;
+void() polyp_float1;
+void(entity inflictor, entity attacker, float damage) polyp_wake1;
+void() polyp_wake1_prethink = {local entity blank; local float blankf; polyp_wake1(blank,blank,blankf); };
+void(entity inflictor, entity attacker, float damage) polyp_pain;
+void() polyp_walkfly1;
+void() polyp_visible1;
+void() polyp_missile;
+void() polyp_die1;
+void() polyp_idie1;
+void() polyp_jump5;
 
 void() polypcheckdist = {
 	local vector dist;
@@ -226,7 +226,7 @@ void() polyp_ihover4 = [0, polyp_ihover1]{polypcheckdist();polyp_invisible_sound
 void() polyp_visible1 = [0, polyp_visible2] {
 	local vector org;
 
-	self.statevis = 0;
+	self.flags = self.flags - FL_NOTARGET;
 	org = self.origin;
 	sound(self, CHAN_AUTO, "quoth/polyp/decloak.wav", 1, ATTN_NORM);
 	self.frame = 0;
@@ -243,7 +243,7 @@ void() polyp_visible3 = [0, polyp_hover0a]{	self.frame = 0; setmodel(self, "prog
 void() polyp_invisible = [0, polyp_invisible2] {
 	local vector org;
 
-	self.statevis = 1;
+	self.flags = self.flags | FL_NOTARGET;
 	org = self.origin;
 	sound(self, CHAN_AUTO, "quoth/polyp/cloak.wav", 1, ATTN_NORM);
 	self.frame = 0;
@@ -463,10 +463,8 @@ void() polyp_missile = {
 };
 
 void(entity inflictor, entity attacker, float damage) polyp_pain = {
-	if (self.statevis == 1)
-		polyp_visible1();
-	else
-		return;
+	if (self.flags & FL_NOTARGET) polyp_visible1();
+	else return;
 };
 
 void() monster_polyp_precache = {

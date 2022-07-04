@@ -91,7 +91,7 @@ void(vector virtmin, vector virtsize) Hud_DeathmatchScoreboard = {
 static void(vector pos, string num) Hud_DrawIntermissionNumber = {
 	float i;
 	float c;
-	for(i = 0; ; i++, pos_x += 24) {
+	for (i = 0; ; i++, pos_x += 24) {
 		c = str2chr(num, i);
 		if (!c)
 			break;

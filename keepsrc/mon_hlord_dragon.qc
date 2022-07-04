@@ -80,7 +80,7 @@ void() hlorddragon_check_attack = {
     if (self.enemy == world)
         FindTarget ();
     else {
-        makevectors (self.angles);
+        makevectors(self.angles);
         vec = normalize (self.enemy.origin - self.origin);
         dot = vec * v_forward;
         if (dot > 0.3) {
@@ -183,7 +183,7 @@ void(float dist) hlorddragon_move = {
             moveDir = targ.origin - self.origin;
             moveAngles = vectoangles (moveDir);
         } else { // No path or target, so fly forward.
-            makevectors (self.angles);
+            makevectors(self.angles);
             moveDir = v_forward;
             moveAngles = self.angles;
         }
@@ -333,7 +333,7 @@ void() hlorddragon_fireball = {
     
     sound (self, CHAN_VOICE, "rogue/dragon/attack.wav", 1, ATTN_NORM);
 
-    makevectors (self.angles);
+    makevectors(self.angles);
     org = self.origin + v_forward*96 + v_up*16;
 
     if (self.classname == "monster_dark_lord") {
@@ -369,16 +369,16 @@ void() hlorddragon_fireball = {
         } else {
             dir = normalize (self.enemy.origin - org); // Normal DoE dragon.
 		}
-        makevectors (dir);
+        makevectors(dir);
         dir = dir + v_right * distortion;
 
         sped = random() * 300 + 900;    // For the fireballs.
         if (fireType) {
 			sound (self, CHAN_WEAPON, "drake/dragon/fire.wav", 1, ATTN_NORM);
-            Meteor_Launch (self, org, dir, sped, 90);
+            Meteor_Launch(self,org,dir,sped,90);
         } else {
 			sound (self, CHAN_WEAPON, "rogue/plasma/fire.wav", 1, ATTN_NORM);
-			launch_projectile(org, dir, CT_PROJ_PLASMA, sped);
+			launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA, sped);
         }
         fireCount = fireCount - 1;
     }
@@ -518,7 +518,7 @@ void() hlorddragon_explode =  {
         self.think = hlorddragon_boom; // We can't remove dragon now, because this may be called during a touch function, ... 
         self.nextthink = time + 0.100; // ...in which case the C code is looping through area links.  Delay removal for at least a frame.
     } else {
-        makevectors (self.angles);
+        makevectors(self.angles);
         self.velocity = self.velocity - 40 * v_up;
         self.hlorddragonLastVelocity = self.velocity;
     }
@@ -537,7 +537,7 @@ void() hlorddragon_squish = {
 
 void() hlorddragon_death1  =[ $drgdth01, hlorddragon_death2  ] {
     self.use      = SUB_Null;
-    makevectors (self.angles);
+    makevectors(self.angles);
     self.velocity = 300 * v_forward - 40 * v_up;
     self.flags    = self.flags - (self.flags & FL_ONGROUND);
     setsize (self, VEC_HULL2_MIN, VEC_HULL2_MAX); // PM: Use the bigger hull2 size instead of hull.

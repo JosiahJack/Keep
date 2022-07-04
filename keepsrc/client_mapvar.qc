@@ -318,16 +318,17 @@ void() trigger_mapvar_multiple = { // [ENTITY]
 	trigger_bmodel_setup();	
 };
 
-void () logic_auto_think = { // [FUNCTION]
+void() logic_auto_think = { // [FUNCTION]
+	//Mass_Centerprint(self.message,SOUND_TALK,world);
 	if (self.use) self.use();
 	SUB_UseTargets();
 	self.think = self.use = SUB_Null; // go idle
 	self.nextthink = time + 0.100;
 };
 
-void () logic_auto = { // [ENTITY]
+void() logic_auto = { // [ENTITY]
 	self.think = logic_auto_think;
-	self.nextthink = time + 0.6 + self.delay; // Give at least a little more than 0.5s to start all other entities before firing targets
+	self.nextthink = time + 0.6 + self.wait; // Give at least a little more than 0.5s to start all other entities before firing targets
 };
 
 void() info_timer = { // [ENTITY], redirect for old techno progs....wait I made that and never released it so, why? -Qmaster ...because.

@@ -270,8 +270,7 @@ float CT_MONJUSTICE = 291;		// Large knight with flat sword
 
 float CT_MONTURRETB = 295;		// Large ball surface turret // Bal MOD (Bal)
 float CT_MONSWEEPER = 296;		// Knight size floating mine layer
-float CT_MONMAMMOTH = 297;		// Large two stage mini "the fridge" boss
-float CT_MONTHUMPER = 298;		// Regular version of mammoth boss
+
 float CT_MONJUDGE = 299;		// Large BOSS with glowing sword
 float CT_MONSPIDER = 300;		// Spiders (brown/green versions) Hexen 2 series (Raven Software)
 float CT_MONSTEELCLAW = 301;	// Steel Claw (bleed attack spider)
@@ -424,6 +423,7 @@ float CT_PROJ_ROCKET = 470;		// Rocket projectile
 float CT_PROJ_LAVA = 471;		// Chthon Lavaball
 float CT_PROJ_FIRETOP = 472;	// Chthon Lavaball (less splash dmg)
 float CT_PROJ_CHTHON = 473;		// Custom Chthon Lava/Slime ball
+float CT_PROJ_GLMULTIMINI = 474;// Multi-grenade's mini grenadelets
 float CT_PROJ_GARG = 475;		// Gargoyle fireball
 float CT_PROG_RLMEGAF = 476;	// Mega Enforcer (rocket)
 float CT_PROJ_SKULLW = 477;		// Skull Wizard Skull (rocket)
@@ -440,7 +440,7 @@ float CT_PROJ_BLORD = 487;		// Bog Lord Slime bomb
 float CT_PROJ_BLORD2 = 488;		// Bog Lord Red Slime bomb
 float CT_PROJ_JUSTICER = 489;	// RED justice arrows
 float CT_PROJ_EIDO1 = 490;		// Eidolon boulder
-float CT_PROJ_MAMMOTH = 491;	// Mammoth rocket
+float CT_PROJ_WARHEAD = 491;    // MIRV Warhead
 float CT_PROJ_ICEG1 = 492;		// Ice Golem ice shard
 float CT_WANDSPARK = 493;		// Magic wand normal spark
 float CT_WANDBIGSPARK = 494;	// Magic wand large burst

@@ -175,7 +175,7 @@ void() bane_jump4   =[ $char_a4,  bane_jump5 ] {
     if (self.health <= 0) {self.touch = SUB_Null;  self.think = hknight_die1;  return;}
     ai_face();
     self.touch = Bane_JumpTouch; // Bane is a bbeg, so don't bother with invisibility shenanigans.  Ditto for the dark lord.
-    makevectors (self.angles);
+    makevectors(self.angles);
     self.velocity = (v_forward * 600) + ('0 0 250' * (cvar("sv_gravity") / 800));
     self.flags = self.flags - (self.flags & FL_ONGROUND);
 };
@@ -254,7 +254,7 @@ void() magica_sword_chop = {
     if (!CanDamage (self.enemy, self)) return;
 
     sound (self, CHAN_WEAPON, "drake/weapons/axhit.wav", 1, ATTN_NORM);
-    makevectors (self.angles);
+    makevectors(self.angles);
     ldmg = 20 + 10*random();    // Player normally does 20 damage with axe.
     T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
     SpawnMeatSpray (self, self.enemy, (crandom() * 50) + 50);
@@ -405,7 +405,7 @@ void() darklord_magica7  =[ $magica7,  darklord_magica8  ] {hk_face();};
 void() darklord_magica8  =[ $magica8,  darklord_magica9  ] {hk_face();};
 void() darklord_magica9  =[ $magica9,  darklord_magica10 ] {hk_face(); magica_sword_chop();};
 void() darklord_magica10 =[ $magica10, hknight_magica11  ] {hk_face();
-    makevectors (self.angles);
+    makevectors(self.angles);
     M_Slam (self.origin + v_forward*46);
     self.waitmin = time + 5;
 };
@@ -429,7 +429,7 @@ void() darklord_magicb7  =[ $magicb7,  darklord_magicb8  ] {hk_face();};
 void() darklord_magicb8  =[ $magicb8,  darklord_magicb9  ] {hk_face(); hknight_shot(0);
     local   vector  org;
 
-    makevectors (self.angles);
+    makevectors(self.angles);
     org = self.origin + (v_forward*16) + (v_right*2) + (v_up*24);
     MakeFancy (org, X32_STAR_RED, 2);
     self.effects = self.effects | EF_MUZZLEFLASH;
@@ -666,7 +666,7 @@ void(float side) bane_melee = {
     if (!CanDamage (self.enemy, self)) return;
 
     sound (self, CHAN_WEAPON, "drake/bane/hit.wav", 1, ATTN_NORM); // Cloning will take a while, so no need to add to pain_finished.
-    makevectors (self.angles);
+    makevectors(self.angles);
     ldmg = 10 + 5*random();
     T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
     SpawnMeatSpray(self, self.enemy, (crandom() * 50) + (50 * side));
@@ -1099,7 +1099,7 @@ void(entity inflictor, entity attacker, float damage) darklord_pain = {
 		self.jump_time  = 0;
 		self.zapper_time        = 0;
         sound (self, CHAN_VOICE, "drake/darklord/death.wav", 1, ATTN_NORM); // Fake death.
-        makevectors (self.angles);
+        makevectors(self.angles);
         st = '-2 0 28';
         st = self.origin + v_forward*st_x + v_right*st_y + v_up*st_z;
         Rocket_Explosion2 (st, 32, 5);
@@ -1147,7 +1147,7 @@ void() darklord_die = {
         {st = '-2 0 28'; darklord_die1 ();}
     else
         {st = '-3 0 33'; darklord_dieb1 ();}
-    makevectors (self.angles);
+    makevectors(self.angles);
     st = self.origin + v_forward*st_x + v_right*st_y + v_up*st_z;
     Rocket_Explosion2 (st, 32, 5);
 };

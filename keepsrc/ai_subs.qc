@@ -147,7 +147,7 @@ void() ai_charge_side = {
 	
 	MonsterDeBuff();
 	ai_face();
-	makevectors (self.angles); // aim to the left of the enemy for a flyby
+	makevectors(self.angles); // aim to the left of the enemy for a flyby
 	dtemp = self.enemy.origin - (30 * v_right);
 	heading = vectoyaw(dtemp - self.origin);
 	walkmove(heading, 20);
@@ -158,7 +158,7 @@ void() ai_charge_front = {
 	
 	MonsterDeBuff();
 	ai_face();			// Turn towards enemy first	
-	makevectors (self.angles);
+	makevectors(self.angles);
 	heading = vectoyaw(self.enemy.origin - self.origin);
 	walkmove(heading, 10);
 };
@@ -514,7 +514,7 @@ void(vector imp_vec, float imp_damage, float imp_radius, float imp_forward, floa
 
 	// Play impact sound and work out where the impact is going to happen
 	if (self.meleehitsound != "") sound(self, CHAN_WEAPON, self.meleehitsound, 1, ATTN_IDLE);
-	makevectors (self.angles);
+	makevectors(self.angles);
 	// Replaced this crazy mess with function attack_vector
 	//impact = self.origin + v_forward*imp_vec_x + v_right*imp_vec_y + v_up*imp_vec_z;
 	impact = self.origin + attack_vector(imp_vec);
@@ -725,7 +725,7 @@ void(float dist) ai_run_strafe = {
     ai_run_side (dist);
 };
 
-void (entity destEnt, float radius, vector offset) ai_orbit = {
+void(entity destEnt, float radius, vector offset) ai_orbit = {
    local vector dir;
    local float dist;
 
@@ -770,7 +770,7 @@ void (entity destEnt, float radius, vector offset) ai_orbit = {
 };
 
 // From Quake 1.5 to move enemy towards destEnt
-void (entity destEnt, float trackSpeed) ai_track = {
+void(entity destEnt, float trackSpeed) ai_track = {
    local vector dir;
 
    dir = (destEnt.origin + destEnt.view_ofs);
@@ -830,7 +830,7 @@ void(float scratch_noise) ai_melee_carnivean = {
 		
 	ldmg = (random() + random() + random()) * 4;
 	T_Damage (self.enemy, self, self, ldmg, DAMARMOR);
-	makevectors (self.angles);
+	makevectors(self.angles);
 	if (self.meleetimer < time) { // Only spawn blood/gore/sound every second
 		self.meleetimer = time + 1;
 		SpawnBlood (self.enemy, self.origin + v_forward*50 + v_up*2, VEC_ORIGIN, 17,0);

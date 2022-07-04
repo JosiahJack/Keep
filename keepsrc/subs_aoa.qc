@@ -283,7 +283,7 @@ void(vector org, vector dest, string model, float duration) MakeBeam =
 Vector Utilities
 ======================================================================================================
 */
-void (vector org) TestThisVector = //this function is designed to test locations by spawning a floating projectile at the given vector
+void(vector org) TestThisVector = //this function is designed to test locations by spawning a floating projectile at the given vector
 {
 	local	entity	test;
 	test = spawn();

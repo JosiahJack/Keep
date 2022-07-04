@@ -39,9 +39,9 @@
 
 float EQ_RANDOM    = 1.000;
 
-void () stop_earthquake;
+void() stop_earthquake;
 
-void () earthquake_rumble = { // [FUNCTION]
+void() earthquake_rumble = { // [FUNCTION]
    if (self.attack_finished < time) stop_earthquake ();
    else {
       sound (self,CHAN_VOICE,"rogue/equake/rumble.wav",TRUE,ATTN_NONE);
@@ -50,7 +50,7 @@ void () earthquake_rumble = { // [FUNCTION]
    }
 };
 
-void () start_earthquake = { // [FUNCTION]
+void() start_earthquake = { // [FUNCTION]
    earthquake_active = TRUE;
    if (self.spawnflags & EQ_RANDOM)  self.attack_finished = (time + (random () * self.delay));
    else self.attack_finished = (time + self.delay);
@@ -58,7 +58,7 @@ void () start_earthquake = { // [FUNCTION]
    earthquake_rumble ();
 };
 
-void () stop_earthquake = { // [FUNCTION]
+void() stop_earthquake = { // [FUNCTION]
    earthquake_active = FALSE;
 	if (self.targetname) self.use = start_earthquake;
 	else self.think = start_earthquake;
@@ -67,7 +67,7 @@ void () stop_earthquake = { // [FUNCTION]
    else self.nextthink = (time + self.wait);
 };
 
-void () earthquake = { // [ENTITY]
+void() earthquake = { // [ENTITY]
    if ( !self.delay ) self.delay = 20.000;
    if ( !self.wait ) self.wait = 60.000;
    if ( !self.weapon ) self.weapon = 40;
@@ -79,9 +79,9 @@ void () earthquake = { // [ENTITY]
    self.nextthink = (time + TRUE);
 };
 
-void () info_earthquake = { earthquake(); }; // [ENTITY]
+void() info_earthquake = { earthquake(); }; // [ENTITY]
 
-void () earthquake_touch = { // [FUNCTION]
+void() earthquake_touch = { // [FUNCTION]
    if ( self.delay ) {
       if ( (self.attack_finished < time) ) {
          sound (self,CHAN_VOICE,"rogue/equake/rumble.wav",TRUE,ATTN_NORM);
@@ -97,9 +97,9 @@ void () earthquake_touch = { // [FUNCTION]
    }
 };
 
-void () earthquake_use = { self.delay = !self.delay; }; // [FUNCTION]
+void() earthquake_use = { self.delay = !self.delay; }; // [FUNCTION]
 
-void () trigger_earthquake = { // [ENTITY]
+void() trigger_earthquake = { // [ENTITY]
    precache_sound ("rogue/equake/rumble.wav");
    if ( !self.weapon ) self.weapon = 40;
    self.weapon = self.weapon * 0.5;
@@ -112,7 +112,7 @@ void () trigger_earthquake = { // [ENTITY]
    InitTrigger ();
 };
 
-void () earthquake_kill_touch = { // [FUNCTION]
+void() earthquake_kill_touch = { // [FUNCTION]
    local entity eq;
 
    if (!(other.flags & FL_CLIENT)) return ;
@@ -123,21 +123,21 @@ void () earthquake_kill_touch = { // [FUNCTION]
    }
 };
 
-void () trigger_earthquake_kill = { // [ENTITY]
+void() trigger_earthquake_kill = { // [ENTITY]
    self.touch = earthquake_kill_touch;
    InitTrigger ();
 };
 
-void () StopEarthQuake = { // [FUNCTION]
+void() StopEarthQuake = { // [FUNCTION]
    hipearthquake = FALSE;
 };
 
-void (float value) EarthQuakeTime = { // [FUNCTION]
+void(float value) EarthQuakeTime = { // [FUNCTION]
    value = (value + time);
    if ( (value > hipearthquake) ) hipearthquake = value;
 };
 
-void () earthquake_postthink = { // [FUNCTION]
+void() earthquake_postthink = { // [FUNCTION]
    if ( (hipearthquake > time) ) {
       if ( (quakeactive == FALSE) ) {
          sound (self,CHAN_VOICE,"hipnotic/misc/quake.wav",TRUE,ATTN_NONE);
@@ -152,11 +152,11 @@ void () earthquake_postthink = { // [FUNCTION]
    }
 };
 
-void () hipearthquake_use = { // [FUNCTION]
+void() hipearthquake_use = { // [FUNCTION]
    EarthQuakeTime (self.dmg);
 };
 
-void () func_earthquake = { // [ENTITY]
+void() func_earthquake = { // [ENTITY]
    quakeactive = FALSE;
    precache_sound ("hipnotic/misc/quake.wav");
    precache_sound ("hipnotic/misc/quakeend.wav");

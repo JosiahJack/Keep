@@ -299,14 +299,13 @@ void() ClientDeBuff = {
     if (self.slow_finished) {
         self.velocity = self.velocity * 0.8; // Less damping for players
         if (self.slow_ping < time)
-            if (self.invisible_finished < time && !(self.flags & FL_NOTARGET)) Particle_Cube (self, 1, 41); // Gray and blue for slow mist.
+            if (!Invisible(self)) Particle_Cube(self,1,41); // Gray and blue slow mist.
         if (self.slow_finished < time) { // just stopped
             self.slow_finished = self.slow_time = self.slow_ping = 0;
         }
     }
-	
-	// Don't need sound or visual updates for cinematic stuff
-	if (cinematic_running || cutscene) return;
+
+	if (cinematic_running || cutscene) return; // Don't need sound or visual updates for cinematic stuff
 	
 	// Check for any debuff screen updates?
 	if (self.cshift_upd) {

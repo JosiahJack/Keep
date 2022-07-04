@@ -71,7 +71,7 @@ void() monster_liquid_check = {
 
 	// Handle water train check
 	if (self.liquidbase < CONTENT_SOLID) { // -2
-		if(!self.inBSPwater) self.inBSPwater = TRUE; // We are inside a normal liquid
+		if (!self.inBSPwater) self.inBSPwater = TRUE; // We are inside a normal liquid
 	} else if (self.inBSPwater) self.inBSPwater = FALSE;
 
 	if (self.classtype == CT_MONRYU || self.classtype == CT_MONWYRM) {
@@ -901,7 +901,7 @@ void() monster_spawn = {
 };
 
 void() monster_spawndelay = {
-	dprint("Spawning delay monster!\n");
+	if (developer > 1) dprint("Spawning delay monster!\n");
 	self.think = monster_spawn;
 	self.nextthink = time + self.spawndelay;
 };

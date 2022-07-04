@@ -247,7 +247,7 @@ void() dog_leap2	=[	$leap2,		dog_leap3	] {
 	ai_face();
 	self.jump_flag = time;	// No jump time limits
 	self.touch = Dog_JumpTouch;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	self.velocity = v_forward * 300 + '0 0 200';
     g = cvar("sv_gravity") / 800;
     if (self.gravity) g = g * self.gravity;
@@ -365,7 +365,7 @@ void(vector start, vector dir, float sped, float up, float damage) Ryu_Fire;
 void(vector st) Dog_Fire = {
     local   vector  dir, spot;
 
-    makevectors (self.angles);
+    makevectors(self.angles);
     spot = self.origin + v_forward*st_x + v_right*st_y + v_up*st_z;
     dir = Maim_Line (spot, self.enemy.origin, 1000, world, '1.2 0.9 0');
     Ryu_Fire (spot, dir, 1000, 0, 0);
@@ -453,7 +453,7 @@ void() monster_dog = {
 	monster_start();
 };
 
-void () monster_hell_hound = {
+void() monster_hell_hound = {
 	if (self.skin == 0) self.skin = 3;
 	if (self.deathstring == "") self.deathstring = " was eaten by a Hell Hound\n";
 	monster_dog();

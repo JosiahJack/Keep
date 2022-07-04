@@ -1,43 +1,28 @@
 $skin aztec
-
 $skin pharoah
-
 $skin roman
-
 $skin florskin
-
 $frame mfstand1 
 //$frame mfup01 mfup02 mfup03 mfup04 mfup05 mfup06
 //$frame mfup07 mfup08 mfup09 mfup10 mfup11 mfup12
-
 $frame start01 start02 start03 start04 start05 start06
 $frame start07 start08 start09 start10 start11 start12
 $frame start13 start14 start15 start16 start17 start18
-
 $frame start19 start20 start21 start22 start23 start24
-
 $frame start25 start26 start27 start28 start29 start30 start31
-
 $frame mfrun01 mfrun02 mfrun03 mfrun04 mfrun05 mfrun06
 $frame mfrun07 mfrun08 mfrun09 mfrun10 mfrun11
 $frame mfwlk01 mfwlk02 mfwlk03 mfwlk04 mfwlk05 mfwlk06 mfwlk07 mfwlk08
 $frame mfwlk09 mfwlk10 mfwlk11 mfwlk12 mfwlk13
-
 $frame mfata01 mfata02 mfata03 mfata04 mfata05
 $frame mfata06 mfata07 mfata08 mfata09
-
 $frame mfatb01 mfatb02 mfatb03 mfatb04 mfatb05 mfatb06
-
 $frame mfatb07 mfatb08 mfatb09 mfatb10 mfatb11
-
 $frame mfatc01 mfatc02 mfatc03 mfatc04 mfatc05 mfatc06
-
 $frame mfatc07 mfatc08 mfatc09 mfatc10 mfatc11 mfatc12
 $frame mfatc13 mfatc14 mfatc15 mfatc16
-
 $frame mfknck01 mfknck02 mfknck03 mfknck04 mfknck05 mfknck06
 $frame mfknck07 mfknck08 mfknck09 mfknck10 mfknck11 mfknck12
-
 $frame mfpain01 mfpain02 mfpain03 mfpain04 mfpain05
 $frame mfpain06 mfpain07 mfpain08 mfpain09 mfpain10
 $frame mfpbin01 mfpbin02 mfpbin03 mfpbin04 mfpbin05
@@ -49,25 +34,16 @@ $frame mfdth16 mfdth17 mfdth18 mfdth19 mfdth20
 $frame mfdth21
 
 float MORPH_AZTEC = 2;
-
 float MORPH_EGYPT = 4;
-
 float MORPH_GREEK = 8;
 
-
 void() morph_minionspawn;
-
 void() morph_use;
 void() morph_phased;
 
-entity () morph_find_dest = {
-   local entity furthestDest;
-   local entity bestDest;
-   local entity curDest;
-   local entity thePlayer;
-   local float theDist;
-   local float curDist;
-   local float dot;
+entity() morph_find_dest = {
+   local entity furthestDest, bestDest, curDest, thePlayer;
+   local float theDist, curDist, dot;
    local vector curVector;
 
    furthestDest = world;
@@ -75,7 +51,7 @@ entity () morph_find_dest = {
    theDist = FALSE;
    thePlayer = find (world,classname,"player");
    curDest = world;
-   makevectors (thePlayer.angles);
+   makevectors(thePlayer.angles);
    while ( TRUE ) {
       curDest = find (curDest,classname,"info_morph_destination");
       if ( (curDest == world) ) {
@@ -103,7 +79,6 @@ entity () morph_find_dest = {
 };
 
 void() morph_stand1 = [ $mfstand1, morph_stand1 ] { ai_stand(); };
-
 
 void() morph_walk1  = [ $mfwlk01, morph_walk2  ] { ai_walk(3); };
 void() morph_walk2  = [ $mfwlk02, morph_walk3  ] { ai_walk(2); };
@@ -146,8 +121,7 @@ void() morph_stab2 = {
 	dir = self.enemy.origin - self.origin + self.enemy.view_ofs;
 	dist = vlen ( dir );
 	dir = normalize ( dir );
-	makevectors (self.angles);
-
+	makevectors(self.angles);
 	if ( dist <= 90 ) {
 		sound (self, CHAN_WEAPON, SOUND_LASER_HIT, 1, ATTN_STATIC);
 	   	attackDamage = (random() * 10) + 20;
@@ -156,19 +130,16 @@ void() morph_stab2 = {
 	} else {
 		self.effects = self.effects | EF_MUZZLEFLASH;
 		org = self.origin + v_forward * 80 + v_right * 4 + '0 0 4';
-		launch_projectile(org, dir, CT_PROJ_LASER, SPEED_LASER);
+		launch_projectile(org,dir,NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
 		if ( dist ) {
-			launch_projectile(org, (dir + v_right * 0.04), CT_PROJ_LASER, SPEED_LASER);
-			launch_projectile(org, (dir + v_right * 0.04), CT_PROJ_LASER, SPEED_LASER);
-
+			launch_projectile(org,(dir + v_right * 0.04),NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
+			launch_projectile(org,(dir + v_right * 0.04),NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
 		} else {
-			launch_projectile(org, (dir + v_right * 0.10), CT_PROJ_LASER, SPEED_LASER);
-			launch_projectile(org, (dir + v_right * 0.10), CT_PROJ_LASER, SPEED_LASER);
+			launch_projectile(org,(dir + v_right * 0.10),NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
+			launch_projectile(org,(dir + v_right * 0.10),NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
 		}
-
 	}
 };
-
 
 void() morph_attack01 = [ $mfatb01, morph_attack02 ] {ai_face();};
 void() morph_attack02 = [ $mfatb02, morph_attack03 ] {ai_face();};
@@ -185,34 +156,21 @@ void() morph_attack12 = [ $mfatb01, morph_run1     ] {ai_face();};
 
 void() morph_bigattack01 = [ $mfatc01, morph_bigattack02 ] { ai_face(); };
 void() morph_bigattack02 = [ $mfatc02, morph_bigattack03 ] { ai_face(); };
-
 void() morph_bigattack03 = [ $mfatc03, morph_bigattack04 ] { ai_face(); };
-
 void() morph_bigattack04 = [ $mfatc04, morph_bigattack05 ] { ai_face(); };
-
 void() morph_bigattack05 = [ $mfatc05, morph_bigattack06 ] { ai_face(); };
-
 void() morph_bigattack06 = [ $mfatc06, morph_bigattack07 ] { ai_face(); };
 void() morph_bigattack07 = [ $mfatc07, morph_bigattack08 ] { ai_face(); };
-
 void() morph_bigattack08 = [ $mfatc08, morph_bigattack09 ] { ai_face(); };
 void() morph_bigattack09 = [ $mfatc09, morph_bigattack10 ] { ai_face(); };
-
 void() morph_bigattack10 = [ $mfatc10, morph_bigattack11 ] { morph_stab2(); };
 void() morph_bigattack11 = [ $mfatc11, morph_bigattack12 ] { ai_face(); };
 void() morph_bigattack12 = [ $mfatc12, morph_bigattack13 ] { ai_face(); };
-
 void() morph_bigattack13 = [ $mfatc13, morph_bigattack14 ] { ai_face(); };
-
 void() morph_bigattack14 = [ $mfatc14, morph_bigattack15 ] { ai_face(); };
-
 void() morph_bigattack15 = [ $mfatc15, morph_bigattack16 ] { ai_face(); };
-
 void() morph_bigattack16 = [ $mfatc16, morph_bigattack17 ] { ai_face(); };
-
 void() morph_bigattack17 = [ $mfatc01, morph_run1        ] { ai_face(); };
-
-
 
 void() morph_smack = {
 	local vector delta;
@@ -224,84 +182,50 @@ void() morph_smack = {
 	ai_face();
 	delta = self.enemy.origin - self.origin;
 	if (vlen(delta) > 100) return;
-		
+
 	ldmg = (random() * 10) + 10;
 	T_Damage (self.enemy, self, self, ldmg,DAMARMOR);
-
-	makevectors (self.angles);
-
+	makevectors(self.angles);
 	self.enemy.velocity = v_forward * 100 + '0 0 100';
 };
 
-
-
 void() morph_knockback01 = [ $mfknck01, morph_knockback02 ] { ai_face(); };
-
 void() morph_knockback02 = [ $mfknck02, morph_knockback03 ] { ai_face(); };
-
 void() morph_knockback03 = [ $mfknck03, morph_knockback04 ] { ai_face(); };
-
 void() morph_knockback04 = [ $mfknck04, morph_knockback05 ] { ai_face(); };
-
 void() morph_knockback05 = [ $mfknck05, morph_knockback06 ] { ai_face(); };
-
 void() morph_knockback06 = [ $mfknck06, morph_knockback07 ] { ai_face(); };
-
 void() morph_knockback07 = [ $mfknck07, morph_knockback08 ] { ai_face(); };
-
 void() morph_knockback08 = [ $mfknck08, morph_knockback09 ] { ai_face(); };
-
 void() morph_knockback09 = [ $mfknck09, morph_knockback10 ] { morph_smack(); };
-
 void() morph_knockback10 = [ $mfknck10, morph_knockback11 ] { ai_face(); };
-
 void() morph_knockback11 = [ $mfknck11, morph_knockback12 ] { ai_face(); };
-
 void() morph_knockback12 = [ $mfknck12, morph_run1        ] { ai_face(); };
 
-
-
-void() morph_attack = 
-{
-
+void() morph_attack = {
 	local float attackChoice;
 
-
-	
-attackChoice = random();
-
-	
-if (attackChoice < 0.50)
-
-		morph_bigattack01();
-	else if (attackChoice < 0.75)
-
-		morph_attack01();
-
-	else
-
-		morph_knockback01();
-
+	attackChoice = random();
+	if (attackChoice < 0.50) morph_bigattack01();
+	else if (attackChoice < 0.75) morph_attack01();
+	else morph_knockback01();
 };
-
-
 
 void() morph_fire = {
 	local vector org, dir;
 
 	ai_face();
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + v_forward * 30 + v_right * 8.5 + '0 0 16';
 	dir = normalize ( self.enemy.origin - self.origin ) ;
-	launch_projectile(org, dir, CT_PROJ_LASER, SPEED_LASER);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
 	if ( vlen (self.enemy.origin - self.origin) > 400 ) {
-		launch_projectile(org, (dir + v_right * 0.04), CT_PROJ_LASER, SPEED_LASER);
-		launch_projectile(org, (dir + v_right * 0.04), CT_PROJ_LASER, SPEED_LASER);
-
+		launch_projectile(org,(dir + v_right * 0.04),NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
+		launch_projectile(org,(dir + v_right * 0.04),NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
 	} else {
-		launch_projectile(org, (dir + v_right * 0.10), CT_PROJ_LASER, SPEED_LASER);
-		launch_projectile(org, (dir + v_right * 0.10), CT_PROJ_LASER, SPEED_LASER);
+		launch_projectile(org,(dir + v_right * 0.10),NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
+		launch_projectile(org,(dir + v_right * 0.10),NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
 	}
 
 };
@@ -336,41 +260,22 @@ void() morph_painB5 = [ $mfpbin05, morph_painB6 ] {};
 void() morph_painB6 = [ $mfpbin06, morph_painB7 ] {};
 void() morph_painB7 = [ $mfpbin07, morph_run1 ] { morph_minionspawn(); };
 
-
 void(entity inflictor, entity attacker, float damage) morph_pain = {
-
 	local float painChoice;
 
-
-	if (random() > 0.1) {
-		morph_minionspawn();
-		return;
-	}
-
-
-	
-if (self.pain_finished > time)	return;
-
-	if (random() > 0.25)
- return;
-
+	if (random() > 0.1) { morph_minionspawn(); return; }
+	if (self.pain_finished > time)return;
+	if (random() > 0.25) return;
 
 	painChoice = random();
 	self.pain_finished = time + 2;
 	sound (self, CHAN_VOICE, "rogue/guard/pain1.wav", 1, ATTN_NORM );
-
-	if ( painChoice > 0.6)
-		self.think = morph_painB1;
-
-	else
-		self.think = morph_painA1;
-
+	if (painChoice > 0.6) self.think = morph_painB1;
+	else self.think = morph_painA1;
 
 	self.nextthink = time + 0.1;
 
 };
-
-
 
 void() morph_die1 = [ $mfdth01, morph_die2 ] {};
 void() morph_die2 = [ $mfdth02, morph_die3 ] {};
@@ -381,39 +286,27 @@ void() morph_die6 = [ $mfdth06, morph_die7 ] {};
 void() morph_die7 = [ $mfdth07, morph_die8 ] {};
 void() morph_die8 = [ $mfdth08, morph_die9 ] {};
 void() morph_die9 = [ $mfdth09, morph_die10 ] { self.skin = self.skin + 1; };
-
 void() morph_die10 = [ $mfdth10, morph_die11 ] {};
-
 void() morph_die11 = [ $mfdth11, morph_die12 ] {};
 void() morph_die12 = [ $mfdth12, morph_die13 ] {};
 void() morph_die13 = [ $mfdth13, morph_die14 ] {};
 void() morph_die14 = [ $mfdth14, morph_die15 ] {};
-
 void() morph_die15 = [ $mfdth15, morph_die16 ] {};
-
 void() morph_die16 = [ $mfdth16, morph_die17 ] {};
-
 void() morph_die17 = [ $mfdth17, morph_die18 ] {};
 void() morph_die18 = [ $mfdth18, morph_die19 ] {};
 void() morph_die19 = [ $mfdth19, morph_die20 ] {};
-
 void() morph_die20 = [ $mfdth20, morph_die21 ] {};
-
 void() morph_die21 = [ $mfdth21, morph_die21 ] { remove(self); };
 
 void() morph_die = {
-	sound ( self, CHAN_VOICE, "rogue/guard/death.wav", 1, ATTN_NORM);
-
+	sound(self,CHAN_VOICE,"rogue/guard/death.wav",1,ATTN_NORM);
 	self.solid = SOLID_NOT;
 	self.think = morph_die1;
 	self.nextthink = time + 0.1;
 };
 
-
-
-
-void() morph_wake1 = [ $start01, morph_wake2 ] { sound ( self, CHAN_VOICE, "rogue/guard/see1.wav", 1, ATTN_NORM );
- };
+void() morph_wake1 = [ $start01, morph_wake2 ] { sound ( self, CHAN_VOICE, "rogue/guard/see1.wav", 1, ATTN_NORM ); };
 void() morph_wake2 = [ $start02, morph_wake3 ] {};
 void() morph_wake3 = [ $start03, morph_wake4 ] {};
 void() morph_wake4 = [ $start04, morph_wake5 ] {};
@@ -445,8 +338,7 @@ void() morph_wake28 = [ $start28, morph_wake29 ] {};
 void() morph_wake29 = [ $start29, morph_wake30 ] {};
 void() morph_wake30 = [ $start30, morph_wake31 ] {};
 void() morph_wake31 = [ $start31, morph_stand1 ] {
-	
-self.solid = SOLID_SLIDEBOX;
+	self.solid = SOLID_SLIDEBOX;
 	self.takedamage = DAMAGE_AIM;
 	self.skin = self.skin - 1;
 	if ( self.owner ) {
@@ -457,7 +349,6 @@ self.solid = SOLID_SLIDEBOX;
 		self.nextthink = time + 0.1;
 	}
 };
-
 
 void() morph_setup = {
 	self.classname = "monster_morph";
@@ -534,7 +425,6 @@ void() morph_setup = {
 	if (self.deathstring == "")  self.deathstring = " was crushed by a Guardian\n";
 	monster_start();
 };
-
 
 void() morph_use = {
 	self.enemy = activator;

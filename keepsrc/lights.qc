@@ -126,7 +126,7 @@ void() play_light_sound = { // [FUNCTION]
 
 void() setup_light_sound = { // [FUNCTION]
 	if (!self.volume) self.volume = 0.5;
-	if ( !(self.spawnflags & LIGHT_NOSOUND) && self.noise != "" ) {
+	if ( !(self.spawnflags & LIGHT_NOSOUND) && self.noise != "") {
 		if (self.targetname) {
 			self.attachment = spawn();
 			self.attachment.owner = self;
@@ -943,7 +943,7 @@ void() light_candle = { // [ENTITY]
 	}
 };
 
-void () light_lantern = { // [ENTITY]
+void() light_lantern = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "progs/rogue/lantern.mdl"; // Allow for custom models
 	precache_model (self.mdl);
 	self.angles_y = self.fixangle;
@@ -955,7 +955,7 @@ void () light_lantern = { // [ENTITY]
 	light_customstyle_start(); // Check for any custom light styles
 };
 
-void () light_lantern2 = { // [ENTITY]
+void() light_lantern2 = { // [ENTITY]
 	if (self.mdl == "") self.mdl = "progs/ad171/misc_lantern.mdl"; // Allow for custom models
 	precache_model(self.mdl);
 	if (self.noise == "") self.noise = "ambience/fire1.wav";

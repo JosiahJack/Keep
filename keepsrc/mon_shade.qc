@@ -563,7 +563,7 @@ void() monster_nightshade = {
     shadow_speed();
     Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
 	self.resist_fire = 1; // Don't want to change this with size.
-    if(!self.classtype) self.classtype = CT_MONSHADE;
+    if (!self.classtype) self.classtype = CT_MONSHADE;
     if (!self.classgroup) self.classgroup = CG_DRAGON;
     self.classmove = MON_MOVEFLY;
     monster_start();

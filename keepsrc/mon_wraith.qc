@@ -260,7 +260,7 @@ void() wraith_debuff_trail =
 	local entity tent;
 
 	// Starting point of beam matched to wraith animation
-	makevectors (self.angles);
+	makevectors(self.angles);
 	orgofs = '52 4 6';
 
 	// Calculate starting point and beam and vector direction
@@ -494,21 +494,19 @@ void(vector boneofs) wraith_firenails =
 	org = self.origin + attack_vector(boneofs);
 	dir = SUB_orgEnemyTarget() + v_right*(BONEOFFSET*3);
 	dir = normalize(dir - org);
-	launch_projectile (org, dir, bone_type, self.attack_speed+random()*25);
+	launch_projectile(org,dir,NO_SPIN,bone_type,self.attack_speed+random()*25);
 	dir = SUB_orgEnemyTarget() - v_right*(BONEOFFSET*3);
 	dir = normalize(dir - org);
-	launch_projectile (org, dir, bone_type, self.attack_speed+random()*25);
+	launch_projectile(org,dir,NO_SPIN,bone_type,self.attack_speed+random()*25);
 	dir = SUB_orgEnemyTarget() + v_up*BONEOFFSET;
 	dir = normalize(dir - org);
-	launch_projectile (org, dir, bone_type, self.attack_speed+random()*25);
+	launch_projectile(org,dir,NO_SPIN,bone_type,self.attack_speed+random()*25);
 	dir = SUB_orgEnemyTarget() - v_up*BONEOFFSET;
 	dir = normalize(dir - org);
-	launch_projectile (org, dir, bone_type, self.attack_speed+random()*25);
+	launch_projectile(org,dir,NO_SPIN,bone_type,self.attack_speed+random()*25);
 };
 
-//----------------------------------------------------------------------
 // RANGE ATTACK 2 - Small bone/nail attack (low damage)
-//
 // 32 22 0, 29 29 6, 15 33 16, 4 28 24, -6 20 24, -10 16 20, 6 16 14, 
 // 14 16 10, 54 5 6, 60 4 14
 void() wraith_nails1 =[ $magicC1, wraith_magicC2 ] {ai_face();

@@ -1,4 +1,3 @@
-//==============================================================================
 //CYBERDEMON
 $origin 0 0 64
 $base base     
@@ -20,14 +19,14 @@ void() CyberDemonFireMissile = {
 	ai_trackenemy();
 	self.effects = self.effects | EF_MUZZLEFLASH;
     sound (self, CHAN_WEAPON, "drake/cyber/cybfire.wav", 1, ATTN_NORM);
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = normalize(self.attack_track - org);
-	Launch_Missile (org, dir, '0 0 0', CT_PROJ_CYBER, 1000);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_CYBER,1000);
 	self.attack_finished = time + 0.8;
 };
 
-// STAND -- (PM:  Originally had stand1 only.  Use MF's unused frames.
+// PM:  Originally had stand1 only.  Use MF's unused frames.
 void() cyber_stand1  =[ $stand1,  cyber_stand2  ] {ai_stand();};
 void() cyber_stand2  =[ $stand2,  cyber_stand3  ] {ai_stand();};
 void() cyber_stand3  =[ $stand3,  cyber_stand4  ] {ai_stand();};
@@ -39,7 +38,6 @@ void() cyber_stand8  =[ $stand4,  cyber_stand9  ] {ai_stand();};
 void() cyber_stand9  =[ $stand3,  cyber_stand10 ] {ai_stand();};
 void() cyber_stand10 =[ $stand2,  cyber_stand1  ] {ai_stand();};
 
-// WALK/RUN - - - - - - - - - - - - - -
 void(float mad) cyber_anim = {
     if ((self.walkframe < 0) || (self.walkframe >= 7))
         self.walkframe = 0;

@@ -30,7 +30,7 @@
 // Entity count: 2
 // Function count: 23
 //
-// Implements: Doors (func_door)
+// Implements: Doors(func_door)
 //
 // Description:
 // Moving brush models intended for use as doors.  Very useful for all sorts of

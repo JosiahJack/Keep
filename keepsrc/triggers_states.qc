@@ -167,7 +167,7 @@ void() trigger_bmodel_touch = { // [FUNCTION]
 
 	TargetMovedir(self, FALSE); // Check for any target entity tracking
 	if (!CheckZeroVector(self.movedir)) {
-		makevectors (other.angles); // Did the trigger have an angle key setup?
+		makevectors(other.angles); // Did the trigger have an angle key setup?
 		if (v_forward * self.movedir < 0) return;		
 	}
 

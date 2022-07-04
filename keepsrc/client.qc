@@ -80,8 +80,8 @@ float(float cam_angle1, float cam_angle2) camera_check_anglezero;
 float(float baxis_start, float baxis_control, float baxis_end, float baxis_time) bezier_axis;
 vector(vector bez_start, vector bez_control, vector bez_end, float bez_timemax, float bez_timeleft) bezier_curve;
 void() misc_camera_filewrite;
-void () earthquake_postthink;
-void (entity ownerEntity) sphere_remove;
+void() earthquake_postthink;
+void(entity ownerEntity) sphere_remove;
 void() PlayerBallistaThink;
 
 // USED : Load (map command) NEW MAP or NEW GAME
@@ -815,7 +815,7 @@ entity() SelectSpawnPoint = {
 
 float CMD_RESEND_ON_LOAD = 16;
 
-void () RunCommandSpawn = {
+void() RunCommandSpawn = {
 	local entity cmd;
 	cmd = find(cmd, classname, "info_command_spawn");
 	if (cmd != world && cmd.spawnflags & CMD_RESEND_ON_LOAD) cmd.use();
@@ -849,6 +849,7 @@ void() PutClientInServer = {
 	if (spot.cameratarget) self.cameratarget = spot.cameratarget; // Copy over any cinematic camera start sequences
 	self.headmdl = MODEL_PLAYER_HEAD;
 	self.takedamage = DAMAGE_AIM;
+	self.alpha = 1;
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_WALK;
 	self.classmove = MON_MOVEWALK;
@@ -1001,7 +1002,7 @@ void() CheckWaterJump = {
 	local vector start, end;
 
 	// check for a jump-out-of-water
-	makevectors (self.angles);
+	makevectors(self.angles);
 	start = self.origin;
 	start_z = start_z + 8; 
 	v_forward_z = 0;
@@ -1429,7 +1430,7 @@ void() PlayerPostThink = {
 				}
 				if (self.jumptouch.flags & FLx_CREATURE && self.jumptouch != self) {
 					if (self.shroom_finished > time) { // Mario squash!
-						makevectors (self.v_angle);
+						makevectors(self.v_angle);
 						self.finalangle = normalize(v_forward);
 						self.finalangle_z = 0; // flatten out
 						self.velocity = self.velocity + (self.finalangle * 200);
@@ -1515,7 +1516,7 @@ void() PlayerJump = {
 
 	// sock: The jump boots idea by Jose Carlos Rodriguez (JCR) from modjam1.  This code was originally by JCR and modified by me to fit AD layout.  Switched over all the variables to constants and entity options. 
 	if (self.moditems & IT_ARTJUMPBOOTS) { // Does the player have the jump boot powerup?
-		if(self.flags & FL_ONGROUND) { // On the ground and starting to jump upward.  Reset jump counter and start sequence.
+		if (self.flags & FL_ONGROUND) { // On the ground and starting to jump upward.  Reset jump counter and start sequence.
 			// Stop constant re-jump, got to press key again
 			if (!(self.flags & FL_JUMPRELEASED)) return;
 			self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
@@ -1530,7 +1531,7 @@ void() PlayerJump = {
 			if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
 		} else {	
 			// Still in the air (no ground contact).   Allow for infinite jumps (airmax = -1).  Check for more jumps (1-4) and reset velocity.  Allow for players falling of ledges (jumpboots_onground)
-			if(self.jumpboots_airmax == -1 || self.jumpboots_airlvl >= 1 || self.jumpboots_onground) {
+			if (self.jumpboots_airmax == -1 || self.jumpboots_airlvl >= 1 || self.jumpboots_onground) {
 				if (!(self.flags & FL_JUMPRELEASED)) return; // Stop constant re-jump, got to press key again
 				self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
 				self.button2 = 0; // Clear button as jump is happening
@@ -1557,7 +1558,7 @@ void() PlayerJump = {
 			self.pos3 = self.pos1 + self.pos2; // Add velocity to origin to create future position
 			self.t_length = vlen(self.pos3 - self.pos1); // Use vector length function to calc distance
 			if (self.t_length < self.jumpboots_forward) { // Check for min/max velocity first
-				makevectors (self.v_angle); // Use the forward/right/up vector system
+				makevectors(self.v_angle); // Use the forward/right/up vector system
 				self.finalangle = normalize(v_forward); // Normalize the result because its a multiplier
 				self.velocity = self.velocity + (self.finalangle * (self.jumpboots_forward - self.t_length)); // Never increase the forward velocity beyond limit.  Otherwise the velocity could grow too fast
 				if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!

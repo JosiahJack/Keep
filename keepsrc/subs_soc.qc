@@ -28,7 +28,7 @@
 //
 // Stats:
 // Entity count: 0
-// Function count: 24
+// Function count: 23
 //
 // Implements: Arcane Dimensions and global subroutines by sock
 //
@@ -231,6 +231,8 @@ void(float hud_item) update_hud_totals = {
 // Reduce any entity down to a non-interactive empty marker
 void(entity targ) entity_stop = {
 	if (targ == world) return;			// Targ is wrong
+	if (targ.flags & FL_CLIENT) return;
+
 	targ.use = targ.touch = SUB_Null;	// No more touchy
 	targ.think = SUB_Null;				// No more thinking/animation
 	targ.nextthink = -1;				// Never fire think
@@ -249,13 +251,18 @@ void(entity targ) entity_stop = {
 // Reduce any entity down to a non-interactive empty marker
 void(entity targ) entity_hide = {
 	if (targ == world) return;			// Targ is wrong
+	if (targ.flags & FL_CLIENT) return;
+
 	entity_stop(targ);					// No world interaction
 	targ.modelindex = 0;				// Make sure no model
 	setmodel (targ, "");				// invisible
 };
 
 void(entity targ, float removetime) entity_remove = {
+	if (!targ) return;
 	if (targ == world) return;
+	if (targ.flags & FL_CLIENT) return;
+
 	entity_hide(targ);
 	targ.think = SUB_Remove;
 	targ.nextthink = time + removetime;
@@ -392,7 +399,7 @@ vector(float base, float rndmix, float plusminus) vecrand = {
 
 // Gradually fade out a model over time.  Optionally entity removal if height = 0
 void() model_fade = {
-	if (coop > 2) {
+	if (coop > 2 && (self.classtype == CT_TEMPGIB || self.owner.classtype == CT_MISCGIBF)) {
 		self.think = SUB_Null;
 		return; // Keep gibs for versus mode :)
 	}
@@ -471,7 +478,7 @@ vector(vector iorg, vector org_offset, entity targ, float zspeed) SUB_Tracking =
 	local float diff;
 
 	// Allow for source origin to be fine tuned (directional)
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(org_offset);
 
 	diff = vlen(iorg - org) / zspeed;		// Workout difference
@@ -528,7 +535,7 @@ float(float theta, vector sorg, vector mdest, float zspeed) SUB_Elevation = {
 	a = 0.5 * map_gravity * y * y / (zspeed * zspeed);
 	b = -y;
 	c = a + z;
-	if(b*b < 4*a*c) {
+	if (b*b < 4*a*c) {
 		if (world.copperoptions & COPPER_SEMI_Z_AWARE_OGRES)
 			return 18; // ID1 default according to Copper
 		else

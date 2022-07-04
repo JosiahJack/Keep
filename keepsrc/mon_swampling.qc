@@ -142,19 +142,17 @@ void(float sideang) swampling_spitacid = {
 	// Flash effect to show where bolt is coming from	
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	if (sideang < 0) sound (self, CHAN_WEAPON, "ad171/swampling/spit4.wav", 1, ATTN_NORM);
-
-	makevectors (self.angles);	
+	makevectors(self.angles);	
 	org = self.origin + attack_vector(self.attack_offset);
 
 	// Create elevation angle and use makevectors to create projectile direction
 	ang = vectoangles(self.enemy.origin - org);
 	ang_x = -self.attack_elev;	// Negative = upwards angle 
-	makevectors (ang);
+	makevectors(ang);
 	// fire spit in arc pattern (sideang)
-	dir = (v_forward + (v_right * sideang)) * SPEED_SWAMPLING;	
-
+	dir = (v_forward * SPEED_SWAMPLING + (v_right * sideang));	
 	avel = vecrand(100,200,FALSE);
-	Launch_Grenade(org, dir, avel, CT_PROJ_SWAMP);
+	launch_projectile(org,dir,avel,CT_PROJ_SWAMP,1);
 };
 
 void()	swampling_spit1 = [ $pain1, swampling_spit2 ] {ai_face();
@@ -262,7 +260,7 @@ void() swampling_leap3	=[	$jump3, swampling_leap4	] {
 	ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	self.touch = swampling_JumpTouch;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	self.velocity = (v_forward*self.jumpdist_x) + ('0 0 1'*self.jumpdist_z);
 	self.origin_z = self.origin_z + 4;
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
@@ -303,7 +301,7 @@ void() swampling_droptouch = {
 			setorigin(self, self.origin);	// raise up
 			self.attack_timer = time + 1;	// reset timer
 			
-			makevectors (self.angles);
+			makevectors(self.angles);
 			self.velocity = v_forward * 100 + '0 0 200';
 		}
 		return;
@@ -370,7 +368,7 @@ void() swampling_wakeup = {
 	self.pain_finished = time + 1.5;	// No pain
 	SUB_AttackFinished(2 + random());	// No attacking
 		
-	makevectors (self.angles);			// Move towards face direction
+	makevectors(self.angles);			// Move towards face direction
 	self.velocity = v_forward * 50;		// Slight nudge forward
 
 	self.touch = swampling_droptouch;	// Touch something?

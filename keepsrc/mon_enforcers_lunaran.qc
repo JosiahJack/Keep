@@ -78,7 +78,7 @@ void() enforcer_fireparticlebeam = {
 	local float go, dot;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + v_forward * 30 + v_right * 8.5 + '0 0 16';
 	sound (self, CHAN_WEAPON, "lunaran/enforcer/me_fire1.wav", 1, ATTN_NORM);
 	go = vlen(self.enemy.origin - org) / 400;
@@ -136,7 +136,7 @@ void() enforcer_firerocket = {
 	local float go;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + v_forward * 30 + v_right * 8.5 + '0 0 16';
 	sound (self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM);
 	go = vlen(self.enemy.origin - org) / 500;
@@ -166,16 +166,16 @@ void() enforcer_firerocket = {
 };
 
 void(float offset) enforcer_fireknight = {
-	local	vector	offang,	org, vec;
+	local vector offang, org, vec;
 
 	offang = vectoangles (self.enemy.origin - self.origin);
 	offang_y = offang_y + offset * 4;
-	makevectors (offang);
+	makevectors(offang);
 	org = self.origin + self.mins + self.size*0.5 + v_forward * 12;
 	vec = normalize (v_forward);
 	vec_z = 0 - vec_z + (random() - 0.5)*0.1;
 	self.attack_speed = SPEED_HKSPIKE + ( skill * SPEED_HKSKILL);
-	launch_projectile (org, vec, CT_PROJ_ENFHKN, self.attack_speed);
+	launch_projectile(org,vec,NO_SPIN,CT_PROJ_ENFHKN,self.attack_speed);
 	sound (self, CHAN_WEAPON, "zerstorer/weapons/rocket1i.wav", 1, ATTN_NORM);
 };
 

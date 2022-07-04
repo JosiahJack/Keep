@@ -36,7 +36,7 @@
 // Small chunks of rock that hurt you when they hit you.
 //=============================================================================
 
-void () hipRubbleTouch = { // [FUNCTION]
+void() hipRubbleTouch = { // [FUNCTION]
 	if (self.ltime < self.pausetime) return;
 
 	if (other.takedamage) {
@@ -46,7 +46,7 @@ void () hipRubbleTouch = { // [FUNCTION]
 	}
 };
 
-void (string rubblename) hipThrowRubble = { // [FUNCTION]
+void(string rubblename) hipThrowRubble = { // [FUNCTION]
 	local entity new;
 
 	new = spawn ();
@@ -71,7 +71,7 @@ void (string rubblename) hipThrowRubble = { // [FUNCTION]
 	new.flags = FALSE;
 };
 
-void () hip_rubble_use = { // [FUNCTION]
+void() hip_rubble_use = { // [FUNCTION]
 	local float which, index;
 
 	index = FALSE;
@@ -85,7 +85,7 @@ void () hip_rubble_use = { // [FUNCTION]
 	}
 };
 
-void () func_rubble = { // [ENTITY]
+void() func_rubble = { // [ENTITY]
 	precache_model ("progs/hipnotic/rubble1.mdl");
 	precache_model ("progs/hipnotic/rubble2.mdl");
 	precache_model ("progs/hipnotic/rubble3.mdl");
@@ -96,19 +96,19 @@ void () func_rubble = { // [ENTITY]
 	self.use = hip_rubble_use;
 };
 
-void () func_rubble1 = { // [ENTITY]
+void() func_rubble1 = { // [ENTITY]
 	self.classname = "rubble1";
 	self.cnt = 1;
 	func_rubble();
 };
 
-void () func_rubble2 = { // [ENTITY]
+void() func_rubble2 = { // [ENTITY]
 	self.classname = "rubble2";
 	self.cnt = 2;
 	func_rubble();
 };
 
-void () func_rubble3 = { // [ENTITY]
+void() func_rubble3 = { // [ENTITY]
 	self.classname = "rubble3";
 	self.cnt = 3;
 	func_rubble();

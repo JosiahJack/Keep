@@ -60,34 +60,6 @@ float ICEG_PHASE2 = 2;	// Fighting
 float ICEG_PHASE3 = 3;	// Busting Columns
 float ICEG_PHASE4 = 4;	// Death
 
-// Special streamlined player find function
-float() iceg_FindTarget = {
-	local entity client;
-	
-	// Get the obvious exception(s) done first
-	if (self.health < 1) return FALSE;
-	if (intermission_running) return FALSE;
-	if (cinematic_running > 0 || cutscene > 0) return FALSE;
-
-	client = checkclient(); // Find a client in current PVS
-	
-	// Go through all the exception(s)
-	if (!client) return FALSE;
-	if (!(client.flags & FL_CLIENT)) return FALSE;
-	if (client.flags & FL_NOTARGET) return FALSE;
-	if (client.items & IT_INVISIBILITY) return FALSE;
-
-	enemy_vis = visible(client); // Check range and visibility of player
-	if (!enemy_vis) return FALSE;
-	if (!infront(client)) return FALSE;
-
-	self.enemy = client; // Finally found something
-	self.oldorigin = self.origin;		// Save origin
-	self.goalentity = self.enemy;		// Focus on enemy
-	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin); // Setup turning angle towards new enemy
-	return TRUE; // We have a winner!
-};
-
 // Setup wave HP and trigger boundaries
 void() iceg_WaveSetupHP = {
 	// Is there anymore boss waves left?
@@ -116,9 +88,9 @@ float() iceg_WaveCheck = {
 		// Check for wave boundary triggers
 		self.noise = "";
 		if (self.bosswave == 1) self.noise = self.noise1;
-		else if(self.bosswave == 2) self.noise = self.noise2;
-		else if(self.bosswave == 3) self.noise = self.noise3;
-		else if(self.bosswave == 4) self.noise = self.noise4;
+		else if (self.bosswave == 2) self.noise = self.noise2;
+		else if (self.bosswave == 3) self.noise = self.noise3;
+		else if (self.bosswave == 4) self.noise = self.noise4;
 		
 		// Is there any trigger for the wave boundary?
 		if (self.noise != "") {
@@ -174,24 +146,16 @@ void() iceg_CheckCombo =
 
 // MONSTER STATES (stand, walk run, attack, pain and death!
 void() iceg_idleframe = {
-	// Do nothing if dead
-	if (self.health < 1) return;
+	if (self.health < 1) return; // Do nothing if dead.
 	if (self.walkframe == 0) monster_idle_sound();
-
-	// Keep moving the animation frame forward
-	self.walkframe = self.walkframe + 1;
-	if (self.walkframe > 20) self.walkframe = 0;
+	self.walkframe = SUB_ClampFloat(self.walkframe + 1,$wait1,20); // Keep animating.
 	self.frame = $wait1 + self.walkframe;
+	if (self.walkframe >= 20) self.walkframe = $wait1;
 	self.think = iceg_idleframe;
-	// Tick slower (10fps) for idle
-	self.ticktimer = 0.1;
+	self.ticktimer = 0.1; // Tick slower (10fps) for idle.
 	self.nextthink = time + self.ticktimer;
-
-	// Keep looking for a player
-	iceg_FindTarget ();
+	ai_stand(); // Keep looking for an enemy.
 };
-
-void() iceg_stand1 = {self.walkframe = 0; iceg_idleframe();};
 
 void() iceg_walkframe = {
 	// Do nothing if dead
@@ -216,26 +180,16 @@ void() iceg_walkframe = {
 	// Hexen 2 models were designed for 20fps
 	self.ticktimer = 0.05;
 	self.nextthink = time + self.ticktimer;
-	
-	// Keep looking for a player
-	iceg_FindTarget ();
-	
-	// Any feet movement?
-	if (self.lip > 0) {
-		// Check for tether system (cutom version)
+	if (self.lip > 0) { // Any feet movement?
 		if (self.movelast) {
-			if (iceg_CheckTether()) movetogoal(self.lip); 
-		}
-		else movetogoal(self.lip);		
+			if (iceg_CheckTether()) ai_walk(self.lip); // Check for tether system (custom version)
+		} else ai_walk(self.lip);		
 	}
 };
 
-//----------------------------------------------------------------------
 void() iceg_walk1 = { self.walkframe = 0; iceg_walkframe(); };
 
-//============================================================================
-void() iceg_runframe =
-{
+void() iceg_runframe = {
 	if (self.style != ICEG_PHASE2) return;
 	if (self.health < 1) return;
 	
@@ -436,9 +390,7 @@ void() lavag_shardtrail = {
 	self.nextthink = time + 0.05 + random()*0.05;
 };
 
-//----------------------------------------------------------------------
-void(entity targ) iceg_icestorm = 
-{
+void(entity targ) iceg_icestorm = {
 	local float zpart;
 	local vector org, targ_org, dir, yrand, zrand;
 
@@ -496,9 +448,8 @@ void(entity targ) iceg_icestorm =
 
 	// Variable speed based on skill level
 	self.attack_speed = SPEED_ICEGSHARD + (skill * SPEED_ICEGSKILL);
-	if (self.classtype == CT_MONLAVAGOLEM) {
-		launch_projectile(org, dir, CT_PROJ_BLBOLT2, self.attack_speed);	
-	} else Launch_Missile(org,dir,VEC_ORIGIN,CT_PROJ_ICEG1,self.attack_speed);
+	if (self.classtype == CT_MONLAVAGOLEM) launch_projectile(org,dir,NO_SPIN,CT_PROJ_BLBOLT2,self.attack_speed);	
+	else launch_projectile(org,dir,NO_SPIN,CT_PROJ_ICEG1,self.attack_speed);
 };
 
 void() iceg_magtime = {self.nextthink = time + 0.05;};
@@ -536,11 +487,8 @@ void() iceg_magic22 = [ $magic22, iceg_magic23 ] {iceg_magtime();};
 void() iceg_magic23 = [ $magic23, iceg_magic24 ] {iceg_magtime();};
 void() iceg_magic24 = [ $magic24, iceg_run1 ] {iceg_magtime();};
 
-//============================================================================
 // RANGE ATTACK (Stomp ground and drop debris from ceiling)
-//============================================================================
-void() iceg_ceilingrubble = 
-{
+void() iceg_ceilingrubble = {
 	// No enemy or dead?
 	if (!self.enemy) return;
 	if (self.health < 1) return;
@@ -598,10 +546,8 @@ void() iceg_ceilingrubble =
 	self.attachment.nextthink = time + 0.05;
 };
 
-//----------------------------------------------------------------------
 void() iceg_footstomp = {self.nextthink = time + 0.05;};
 
-//----------------------------------------------------------------------
 void() iceg_stomp1 = [ $stomp1, iceg_stomp2 ] {iceg_footstomp();
 	self.pain_finished = time + self.pain_timeout;};
 void() iceg_stomp2 = [ $stomp2, iceg_stomp3 ] {iceg_footstomp();
@@ -638,11 +584,8 @@ void() iceg_stomp24 = [ $stomp24, iceg_run1 ] {iceg_footstomp();
 	iceg_CheckCombo();
 };
 
-//============================================================================
 // WAVE BOUNDARY - destroy some objects and spawn adds
-//============================================================================
-void() iceg_aiturn =
-{
+void() iceg_aiturn = {
 	// turn towards a target if one exists
 	if (self.enemytarget) {
 		// Check if enemy target is bmodel or point entity
@@ -660,14 +603,12 @@ void() iceg_aiturn =
 	}
 };
 
-//----------------------------------------------------------------------
 void() iceg_waveface = {
 	// Hexen 2 quicktime!
 	self.nextthink = time + 0.05;
 	iceg_aiturn();
 };
 
-//----------------------------------------------------------------------
 void() iceg_waveb1 = [ $magic1, iceg_waveb2 ] {iceg_waveface();};
 void() iceg_waveb2 = [ $magic2, iceg_waveb3 ] {iceg_waveface();};
 void() iceg_waveb3 = [ $magic3, iceg_waveb4 ] {iceg_waveface();};
@@ -874,7 +815,7 @@ void() iceg_wake1 =[ $birth1, iceg_wake2 ] {
 	} else self.enemy = world;
 	
 	// Restore all think functions
-	self.th_stand = iceg_stand1;
+	self.th_stand = iceg_idleframe;
 	self.th_walk = iceg_walk1;
 	self.th_run = iceg_run1;
 	self.th_melee = iceg_knock1;
@@ -999,13 +940,10 @@ void() iceg_setup = {
 
 		if (!self.tetherrange) self.tetherrange = MONAI_MAXICEG; // Setup default tetherrange
 	}
-	// Make sure tethertarget is blank
-	self.tethertarget = "";
-
-	// Make sure all death triggers are setup ready
-	self.message2 = self.target;
+	
+	self.tethertarget = ""; // Make sure tethertarget is blank
+	self.message2 = self.target; // Make sure all death triggers are setup ready
 	self.target = self.target2 = self.deathtarget = "";
-
 	if (self.targetname == "") {
 		iceg_wake1();
 	} else self.use = iceg_wake1; // Wait for trigger event to be wakeup
@@ -1079,6 +1017,7 @@ void() monster_icegolem = {
 	self.classgroup = CG_STONE;
 	self.classmove = MON_MOVEWALK;
 	self.style = 0;
+	self.walkframe = 0;
 	if (self.deathstring == "")  self.deathstring = " was shattered by the Ice Golem\n";
 	self.th_stand = self.th_walk = self.th_run = SUB_Null;
 	self.th_missile = self.th_die = SUB_Null;
@@ -1168,6 +1107,7 @@ void() monster_lavagolem = {
 	self.th_stand = self.th_walk = self.th_run = SUB_Null;
 	self.th_missile = self.th_die = SUB_Null;
 	self.th_pain = SUB_Null_pain;
+	self.walkframe = 0;
 	monster_start();
 	if (self.targetname == "") {
 		dprint("\b[ICEGOLEM]\b Missing targetname name! Going ahead and spawning anyways.\n");

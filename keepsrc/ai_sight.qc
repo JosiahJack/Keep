@@ -275,8 +275,8 @@ float(entity targ) infront = {
 	local vector vec, imporg, selforg;
 	local float dot, f;
 	
-	makevectors (self.angles);	// sets v_forward, etc globals
-	if (self.flags & FL_CLIENT) makevectors (self.v_angle);
+	makevectors(self.angles);	// sets v_forward, etc globals
+	if (self.flags & FL_CLIENT) makevectors(self.v_angle);
 
 	// Checks for turrets and func based enemies
 	imporg = targ.origin;
@@ -424,7 +424,7 @@ float(entity source, entity targ) targzone = {
 	else return TARGET_BACK;
 };
 
-void () polyp_wake1_prethink;
+void() polyp_wake1_prethink;
 
 // Go into main routine - constantly running/turning towards the enemy
 void() HuntTarget = {
@@ -562,8 +562,8 @@ entity(float findopposing) SeeTarget = { // [FUNCTION]
 		}
 
 		if ((head.flags & FLx_CREATURE)) {
-			if (!(head.flags & FL_NOTARGET) && head.invisible_finished < time) {
-				if (head.health > 0) {
+			if (head.health > 0) {
+				if (!Invisible(head)) {
 					if (findopposing) {
 						if (!Align_Match(self,head)){
 							if (head.alignment != NEUTRAL) {

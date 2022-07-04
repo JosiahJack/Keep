@@ -101,7 +101,7 @@ void() spark_spawn = { // [FUNCTION]
 };
 
 // QUAKED fx_spark (0 .5 .8) (-8 -8 -8) (8 8 8) ? START_ON SILENT
-// Throws sparks randomly 360¼ around the origin in the horizontal axis.
+// Throws sparks randomly 360ï¿½ around the origin in the horizontal axis.
 // Can toggle on/off with multiple triggers.
 // "wait"			Seed for the frequency of the sparks (0 is pretty quick).
 // "targetname"	Can be triggered.
@@ -129,7 +129,7 @@ void(float ox) spawn_ngspark = { // [FUNCTION]
 	spark.solid = SOLID_NOT;// NOTE: SOLID_TRIGGER will make sound in func_water (doesn't matter for real water)
 	spark.movetype = MOVETYPE_BOUNCE;
 	spark.classname = "ngspark";
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	spark.velocity = v_forward*60 + v_up * 260 + crandom()*v_right*200 + crandom()*v_up*20;
 	spark.angles = vectoangles(spark.velocity);	
 	spark.wait = -1; // Quickly kill these.
@@ -189,8 +189,8 @@ void() fx_sound = { // [ENTITY]
 	if (self.noise == string_null) self.noise = "drake/misc/secret2.wav";
 	precache_sound(self.noise);
 	if (self.noise1 != string_null) precache_sound(self.noise1);
-	if(self.volume <= 0) self.volume = 1.0; // default volume to one if not specified
-	if(self.distance < ATTN_NONE || self.distance > ATTN_STATIC) self.distance = ATTN_NORM; // default attenuation to NORM if out of range
+	if (self.volume <= 0) self.volume = 1.0; // default volume to one if not specified
+	if (self.distance < ATTN_NONE || self.distance > ATTN_STATIC) self.distance = ATTN_NORM; // default attenuation to NORM if out of range
 	if (!self.count) self.count = -1; // Set infinite repeat if not specified	
 	if (self.pausetime<0) self.pausetime = 0; // Paustime < 0 makes no sense
 	self.state = self.count; // "state" holds the current number of repeats before pausing

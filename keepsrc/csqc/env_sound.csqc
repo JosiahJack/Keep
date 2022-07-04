@@ -183,7 +183,7 @@ reverbinfo_t reverbPresets [35] = {
 
 void() env_sound = {
 	local vector vmins, vmaxs;
-	if(!self.m_iRadius) self.m_iRadius = 256;
+	if (!self.m_iRadius) self.m_iRadius = 256;
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_TRIGGER;
 	// self.geomtype = GEOMTYPE_CAPSULE;

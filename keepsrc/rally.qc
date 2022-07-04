@@ -110,7 +110,7 @@ void(float jump, float destroy) TakePlayerOutOfVehicle = { // [FUNCTION]
 		else sound (self, CHAN_BODY, SOUND_PLAYER_JUMP, 1, ATTN_NORM); // player jumping sound
 
 		self.velocity_z = self.velocity_z + map_jumpheight;
-		makevectors (self.v_angle);
+		makevectors(self.v_angle);
 		self.velocity = self.velocity + (v_right * -80);
 		if (self.shroom_finished > time) self.velocity_z = self.velocity_z + SHROOM_JUMP_BOOST; // Big Jump for Big Dude!
 	}

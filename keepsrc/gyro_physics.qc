@@ -436,7 +436,7 @@ void(entity e) Gyro_RunPhysics_Thrust = {
 	if (e.gyro_object_thrust == 0) return;
 	
 	//----- Apply Thrust to Object --------------------
-	makevectors (e.angles);
+	makevectors(e.angles);
 	gyrothrust = v_forward;
 	gyrothrust_z = 0 - gyrothrust_z;
 	e.gyro_velocityeffect = e.gyro_velocityeffect + (gyrothrust * e.gyro_object_thrust * GYRO_TICKRATE * GYRO_POWERCONSTANT);

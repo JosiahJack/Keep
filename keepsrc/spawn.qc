@@ -1032,7 +1032,7 @@ void() func_spawn_use = {
 	dprint("\n");
 };
 
-void () func_spawn = {
+void() func_spawn = {
 	if (!self.spawnclassname) self.spawnclassname = "monster_dog";
 	precache_monster(self.spawnclassname);
 	if (self.minion_name != string_null) monster_checkminion(self.minion_name);
@@ -1087,7 +1087,7 @@ void () func_spawn = {
 };
 
 // Handy entity for seeing a smaller bounding box in the editor.  That is all.
-void () func_spawn_small = { func_spawn (); };
+void() func_spawn_small = { func_spawn (); };
 
 // Should match BeMonsterFromString()'s list
 void(string mname) precache_monster = {
@@ -1176,8 +1176,8 @@ void(string mname) precache_monster = {
 	else if (mname == "monster_hell_hound") 	monster_dog_precache();
 	else if (mname == "monster_hell_knight")	monster_hell_knight_precache();
 	else if (mname == "monster_hell_knight2")	monster_hell_knight2_precache(); // Warlord
-	else if(mname=="monster_hell_knight_champion")monster_hell_knight_precache();
-	else if(mname=="monster_hell_knight_enforcer")monster_hell_knight_precache();
+	else if (mname=="monster_hell_knight_champion")monster_hell_knight_precache();
+	else if (mname=="monster_hell_knight_enforcer")monster_hell_knight_precache();
 	else if (mname == "monster_hell_lord")		monster_hell_lord_precache();
 	else if (mname == "monster_hell_pointknight")monster_hell_knight_precache();
 	else if (mname == "monster_hkboss")			monster_hkboss_precache();
@@ -1211,7 +1211,7 @@ void(string mname) precache_monster = {
 	else if (mname == "monster_morph")			monster_morph_precache(); // monster_guardian classname redirect
 	else if (mname == "monster_mummy")			monster_mummy_precache();
 	else if (mname == "monster_necromancer")	necro_cache();
-	else if(mname == "monster_necrominiongolem")monster_golem_precache();
+	else if (mname == "monster_necrominiongolem")monster_golem_precache();
 	else if (mname == "monster_nehahra")		monster_nehahra_precache();
 	else if (mname == "monster_nemesant")		monster_nemesant_precache();
 	else if (mname == "monster_newboss")		monster_virtus_precache();
@@ -1227,7 +1227,7 @@ void(string mname) precache_monster = {
 	else if (mname == "monster_ogre_fishing")	monster_ogre_precache();
 	else if (mname=="monster_ogre_fishing_ghost")monster_ogre_precache();
 	else if (mname == "monster_ogre_multi")		monster_ogre_precache();
-	else if(mname =="monster_ogre_spikeshooter")monster_ogre_spikeshooter_precache();
+	else if (mname =="monster_ogre_spikeshooter")monster_ogre_spikeshooter_precache();
 	else if (mname == "monster_oldone")			monster_shub_precache();
 	else if (mname == "monster_oldone_tentacle")monster_oldone_tentacle_precache();
 	else if (mname == "monster_polyp")			monster_polyp_precache();

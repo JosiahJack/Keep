@@ -1,33 +1,22 @@
-/*==============================================================================
-BOG LORD (Based on Shambler)
-==============================================================================*/
+// BOG LORD (Based on Shambler)
 
 $frame stand1 stand2 stand3 stand4 stand5 stand6 stand7 stand8 stand9
 $frame stand10 stand11 stand12 stand13 stand14 stand15 stand16 stand17
-
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 
 $frame walk8 walk9 walk10 walk11 walk12
-
-$frame	run1 run2 run3 run4 run5 run6
-
+$frame run1 run2 run3 run4 run5 run6
 $frame smash1 smash2 smash3 smash4 smash5 smash6 smash7 
 $frame smash8 smash9 smash10 smash11 smash12
-
 $frame swingr1 swingr2 swingr3 swingr4 swingr5 
 $frame swingr6 swingr7 swingr8 swingr9
-
 $frame swingl1 swingl2 swingl3 swingl4 swingl5 
 $frame swingl6 swingl7 swingl8 swingl9
-
 $frame magic1 magic2 magic3 magic4 magic5 
 $frame magic6 magic7 magic8 magic9 magic10 magic11 magic12
-
 $frame pain1 pain2 pain3 pain4 pain5 pain6
-
 $frame death1 death2 death3 death4 death5 death6 
 $frame death7 death8 death9 death10 death11
 
-//======================================================================
 void() bogl_stand1	=[	$stand1,	bogl_stand2	] {monster_idle_sound();ai_stand();};
 void() bogl_stand2	=[	$stand2,	bogl_stand3	] {ai_stand();};
 void() bogl_stand3	=[	$stand3,	bogl_stand4	] {ai_stand();};
@@ -46,7 +35,6 @@ void() bogl_stand15	=[	$stand15,	bogl_stand16] {ai_stand();};
 void() bogl_stand16	=[	$stand16,	bogl_stand17] {ai_stand();};
 void() bogl_stand17	=[	$stand17,	bogl_stand1	] {ai_stand();};
 
-//======================================================================
 void() bogl_walk1	=[ $walk1, bogl_walk2 ] {monster_idle_sound(); ai_walk(10);};
 void() bogl_walk2	=[ $walk2, bogl_walk3 ] {monster_footstep(FALSE); ai_walk(9);};
 void() bogl_walk3	=[ $walk3, bogl_walk4 ] {ai_walk(9);};
@@ -60,7 +48,6 @@ void() bogl_walk10	=[ $walk10, bogl_walk11] {ai_walk(9);};
 void() bogl_walk11	=[ $walk11, bogl_walk12] {ai_walk(7);};
 void() bogl_walk12	=[ $walk12, bogl_walk1 ] {ai_walk(7);};
 
-//======================================================================
 void() bogl_run1 =[ $run1, bogl_run2 ] {monster_idle_sound(); ai_run(20);};
 void() bogl_run2 =[ $run2, bogl_run3 ] {monster_footstep(FALSE); ai_run(24);};
 void() bogl_run3 =[ $run3, bogl_run4 ] {ai_run(20);};
@@ -68,11 +55,8 @@ void() bogl_run4 =[ $run4, bogl_run5 ] {ai_run(20);};
 void() bogl_run5 =[ $run5, bogl_run6 ] {monster_footstep(FALSE); ai_run(24);};
 void() bogl_run6 =[ $run6, bogl_run1 ] {ai_run(20);};
 
-//============================================================================
 // Attachment management (create, finish and delete)
-//============================================================================
-void() bogl_create_attachment =
-{
+void() bogl_create_attachment = {
 	// Are the attachments setup yet?
 	if (!self.attachment) {
 		self.attachment = spawn();
@@ -113,19 +97,17 @@ void(vector leftofs, vector rightofs) bogl_throwslime = {
 	btarg =self.enemy.origin + v_right*8 - v_up*8;
 	dir = normalize(btarg - org);
 	avel = vecrand(100,200,FALSE);
-	Launch_Missile (org, dir, avel, CT_PROJ_BLORD, self.attack_speed);
+	launch_projectile(org,dir,avel,CT_PROJ_BLORD,self.attack_speed);
 
 	// Fire right hand off center and at players feet
 	org = self.origin + attack_vector(rightofs);
 	btarg =self.enemy.origin - v_right*8 - v_up*8;
 	dir = normalize(btarg - org);
 	avel = vecrand(100,200,FALSE);
-	Launch_Missile (org, dir, avel, CT_PROJ_BLORD, self.attack_speed);
+	launch_projectile(org,dir,avel,CT_PROJ_BLORD,self.attack_speed);
 };
 
-//----------------------------------------------------------------------
-void(vector leftofs, vector rightofs, float sbframe, float chfeet) bogl_slimeball =
-{
+void(vector leftofs, vector rightofs, float sbframe, float chfeet) bogl_slimeball = {
 	local vector org;
 	if (self.health < 1) return;
 
@@ -168,7 +150,6 @@ void(vector leftofs, vector rightofs, float sbframe, float chfeet) bogl_slimebal
 	self.attachment2.frame = sbframe;
 };
 
-//----------------------------------------------------------------------
 void() bogl_smash1  =[ $smash1,  bogl_smash2 ] { ai_charge(2);
 	// Cycle around the melee sounds
 	self.meleeattack = self.meleeattack + 1;
@@ -205,7 +186,7 @@ void() bogl_lightning = {
 	local vector org, dir, vec;
 	if (self.health < 1) return;
 	
-	ai_face ();
+	ai_face();
 	self.effects = self.effects | EF_MUZZLEFLASH;
 
 	// Setup skill based attack speed
@@ -213,16 +194,15 @@ void() bogl_lightning = {
 	sound (self, CHAN_WEAPON, "ad171/gaunt/plasma_fire.wav", 1, ATTN_NORM);	
 
 	// Aim around player
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.pos3 + vecrand(10,10,1);
 	vec = v_right*(crandom()*(20+random()*50));
 	dir = normalize((self.enemy.origin + vec) - org);
-	launch_projectile(org, dir, CT_PROJ_BLBOLT, self.attack_speed);	
-
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_BLBOLT,self.attack_speed);	
 	org = self.pos3 + vecrand(10,10,1);
 	vec = v_right*(crandom()*(20+random()*50));
 	dir = normalize((self.enemy.origin + vec) - org);
-	launch_projectile(org, dir, CT_PROJ_BLBOLT, self.attack_speed);	
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_BLBOLT,self.attack_speed);	
 };
 
 void(vector leftofs, vector rightofs, float sbframe) bogl_casting = {
@@ -289,18 +269,13 @@ void(vector leftofs, vector rightofs, float sbframe) bogl_casting = {
 	particle_explode(self.pos2, 5+random()*5, 1, self.part_style, PARTICLE_BURST_LOSTUP);	
 };
 
-//----------------------------------------------------------------------
 void() bogl_magic1 =[ $magic1, bogl_magic2 ] {ai_face();
 	self.pain_finished = time + 1;
 	sound (self, CHAN_WEAPON, "ad171/boglord/attack2.wav", 1, ATTN_NORM);};
-void() bogl_magic2 =[ $magic2, bogl_magic3 ] {
-	bogl_casting('0 53 86','21 -10 102',0);};
-void() bogl_magic3 =[ $magic3, bogl_magic4 ] {
-	bogl_casting('-16 50 95','11 0 108',1);};
-void() bogl_magic4 =[ $magic4, bogl_magic5 ] {monster_footstep(FALSE); 
-	bogl_casting('-28 48 100','6 3 110',2);};
-void() bogl_magic5 =[ $magic5, bogl_magic6 ] {
-	bogl_casting('-3 34 119','19 -15 110',3);};
+void() bogl_magic2 =[ $magic2, bogl_magic3 ] {bogl_casting('0 53 86','21 -10 102',0);};
+void() bogl_magic3 =[ $magic3, bogl_magic4 ] {bogl_casting('-16 50 95','11 0 108',1);};
+void() bogl_magic4 =[ $magic4, bogl_magic5 ] {monster_footstep(FALSE); bogl_casting('-28 48 100','6 3 110',2);};
+void() bogl_magic5 =[ $magic5, bogl_magic6 ] {bogl_casting('-3 34 119','19 -15 110',3);};
 void() bogl_magic6 =[ $magic6, bogl_magic9 ] {bogl_lightning();
 	// Finished with growing ball of energy
 	SUB_FinishAttachments();
@@ -320,7 +295,6 @@ void() bogl_tetherattack = {
 	else self.th_missile();
 };
 
-//============================================================================
 void() bogl_pain1 =[ $pain1, bogl_pain2 ] {};
 void() bogl_pain2 =[ $pain2, bogl_pain3 ] {};
 void() bogl_pain3 =[ $pain3, bogl_pain4 ] {};
@@ -328,9 +302,7 @@ void() bogl_pain4 =[ $pain4, bogl_pain5 ] {};
 void() bogl_pain5 =[ $pain5, bogl_pain6 ] {};
 void() bogl_pain6 =[ $pain6, bogl_run1  ] {};
 
-//----------------------------------------------------------------------
-void(entity inflictor, entity attacker, float damage) bogl_pain =
-{
+void(entity inflictor, entity attacker, float damage) bogl_pain = {
 	// Finish with all attachments
 	SUB_FinishAttachments();
 
@@ -473,10 +445,6 @@ void() monster_boglord = {
 	self.bbmins = '-32 -32 -24';	// Special Size
 	self.bbmaxs = '32 32 80';
 	self.bboxtype = BBOX_CUSTOM;	// Custom size
-	// Boglord and Fire Shamblers are really just monsters with HP++
-	// They don't need bossflag protection, their combat is standard stuff
-	//self.bossflag = TRUE;			// Boss flag (like FL_MONSTER)
-
 	self.gibhealth = -60;			// Shambler gibness!
 	self.gibbed = FALSE;			// Starts complete
 	self.pain_flinch = 400;			// Really low chance of pain

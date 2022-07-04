@@ -107,7 +107,7 @@ void() seek_spark = {
 	// Light flash and sparky sound
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_BODY, self.noise3, 1, ATTN_STATIC);
-	makevectors (self.angles);
+	makevectors(self.angles);
 	
 	// Change origin and spark direction for each arm
 	if (self.state == SEEKER_ARMS_LEFT) {
@@ -334,7 +334,7 @@ void(vector leftofs, vector rightofs) seek_attack = {
 	
 	// turn and face your enemy!
 	ai_face();
-	makevectors (self.angles);
+	makevectors(self.angles);
 
 	// Does the LEFT arm exist?
 	if (self.state == SEEKER_ARMS_BOTH || self.state == SEEKER_ARMS_LEFT) { 
@@ -348,14 +348,14 @@ void(vector leftofs, vector rightofs) seek_attack = {
 			if (self.weaponstate == TRUE) {
 				if (skill > SKILL_NORMAL) {
 					sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
-					launch_projectile(org, dir, CT_PROJ_PLASMA, self.attack_speed);
+					launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA, self.attack_speed);
 				} else {
 					sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);	
-					launch_projectile(org, dir, CT_PROJ_LASER, self.attack_speed);
+					launch_projectile(org,dir,NO_SPIN,CT_PROJ_LASER, self.attack_speed);
 				}
 			} else {
 				sound (self, CHAN_WEAPON, "quoth/soldier/rocket.wav", 1, ATTN_NORM);	
-				Launch_Missile (org, dir, '0 0 0', CT_PROJ_SEEKER, self.attack_speed);
+				launch_projectile(org,dir,NO_SPIN,CT_PROJ_SEEKER,self.attack_speed);
 			}
 		}
 	}
@@ -371,14 +371,14 @@ void(vector leftofs, vector rightofs) seek_attack = {
 			if (self.weaponstate == TRUE) {
 				if (skill > SKILL_NORMAL) {
 					sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
-					launch_projectile(org, dir, CT_PROJ_PLASMA, self.attack_speed);
+					launch_projectile(org,dir,NO_SPIN,CT_PROJ_PLASMA,self.attack_speed);
 				} else {
 					sound (self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM);	
-					launch_projectile(org, dir, CT_PROJ_LASER, self.attack_speed);
+					launch_projectile(org,dir,NO_SPIN,CT_PROJ_LASER,self.attack_speed);
 				}
 			} else {
 				sound (self, CHAN_WEAPON, "quoth/soldier/rocket.wav", 1, ATTN_NORM);	
-				Launch_Missile (org, dir, '0 0 0', CT_PROJ_SEEKER, self.attack_speed);
+				launch_projectile(org,dir,NO_SPIN,CT_PROJ_SEEKER,self.attack_speed);
 			}
 		}
 	}
@@ -467,13 +467,13 @@ void(entity inflictor, entity attacker, float damage) seek_pain = {
 			if (damage > 25 && random() > self.pos1_z) {
 				if (random() > 0.5) {
 					self.state = SEEKER_ARMS_LEFT;
-					makevectors (self.angles);
+					makevectors(self.angles);
 					self.pos2 = self.origin + attack_vector('0 -35 44');
 					seek_arm_explode();
 				}
 				else {
 					self.state = SEEKER_ARMS_RIGHT;
-					makevectors (self.angles);
+					makevectors(self.angles);
 					self.pos2 = self.origin + attack_vector('0 35 44');
 					seek_arm_explode();
 				}

@@ -242,17 +242,15 @@ void() megaf_fire_plasma = {
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	self.attack_speed = SPEED_MEGAFBOLT + (skill * SPEED_MEGAFBSKILL);
 	sound (self, CHAN_WEAPON, SOUND_PLASMA_FIRE, 1, ATTN_NORM);
-
 	ai_face();
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 
 	// Aim plasma bolt towards the enemy feet (using view_ofs)
 	if (self.enemy.flags & FL_CLIENT) targ_org = self.enemy.origin - '0 0 20';
 	else targ_org = self.enemy.origin - self.enemy.view_ofs;
 	dir = normalize(targ_org - self.origin);
-
-	launch_projectile(org, dir, CT_MONDEFLECTOR, self.attack_speed);
+	launch_projectile(org,dir,NO_SPIN,CT_MONDEFLECTOR,self.attack_speed);
 };
 
 void() megaf_plasma1 = [ $attack1, megaf_plasma2] {};
@@ -293,14 +291,12 @@ void(vector orgofs) megaf_fire_rocket = {
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "ad181/deflector/rocket_fire.wav", 1, ATTN_NORM);	
-
 	ai_face();
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(orgofs);
 	dir = normalize(self.enemy.origin - org);
-
 	self.attack_speed = SPEED_MEGAFROCKET + (skill * SPEED_MEGAFRSKILL);
-	Launch_Missile (org, dir, '0 0 0', CT_PROJ_DEFLECT1, self.attack_speed);
+	launch_projectile(org,dir,NO_SPIN,CT_PROJ_DEFLECT1,self.attack_speed);
 };
 
 void() megaf_rock4b;	// Forward compiler reference

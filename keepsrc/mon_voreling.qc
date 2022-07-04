@@ -146,19 +146,17 @@ void(float sideang) voreling_spitacid = {
 	// Flash effect to show where bolt is coming from	
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	if (sideang < 0) sound (self, CHAN_WEAPON, "ad171/spider/hiss2.wav", 1, ATTN_NORM);
-
-	makevectors (self.angles);	
+	makevectors(self.angles);	
 	org = self.origin + attack_vector(self.attack_offset);
 
 	// Create elevation angle and use makevectors to create projectile direction
 	ang = vectoangles(self.enemy.origin - org);
 	ang_x = -self.attack_elev;	// Negative = upwards angle 
-	makevectors (ang);
+	makevectors(ang);
 	// fire spit in arc pattern (sideang)
-	dir = (v_forward + v_right * sideang) * SPEED_VORELING;	
-
+	dir = (v_forward * SPEED_VORELING + v_right * sideang);	
 	avel = vecrand(100,200,FALSE);
-	Launch_Grenade(org, dir, avel, CT_PROJ_VORE);
+	launch_projectile(org,dir,avel,CT_PROJ_VORE,1);
 };
 
 void()	voreling_spit1 = [ $pain1, voreling_spit2 ] {ai_face();self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_VORELING); };
@@ -249,7 +247,7 @@ void() voreling_leap3	=[	$jump3, voreling_leap4	] {
 	ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	self.touch = Voreling_JumpTouch;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	self.velocity = (v_forward*self.jumpdist_x) + ('0 0 1'*self.jumpdist_z);
 	self.origin_z = self.origin_z + 4;
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
@@ -294,7 +292,7 @@ void() voreling_droptouch =
 			setorigin(self, self.origin);	// raise up
 			self.attack_timer = time + 1;	// reset timer
 			
-			makevectors (self.angles);
+			makevectors(self.angles);
 			self.velocity = v_forward * 100 + '0 0 200';
 		}
 		return;
@@ -359,7 +357,7 @@ void() voreling_wakeup = {
 	self.pain_finished = time + 1.5;	// No pain
 	SUB_AttackFinished(2 + random());	// No attacking
 		
-	makevectors (self.angles);			// Move towards face direction
+	makevectors(self.angles);			// Move towards face direction
 	self.velocity = v_forward * 50;		// Slight nudge forward
 
 	self.touch = voreling_droptouch;	// Touch something?
@@ -538,7 +536,7 @@ void() setup_voreling = { // [ENTITY]
 	self.meleerangez = MONAI_MELEEZAXIS;
 	self.th_pain = voreling_pain;
 	self.th_die = voreling_die;
-	if(!self.classtype) self.classtype = CT_MONVORELING;
+	if (!self.classtype) self.classtype = CT_MONVORELING;
 	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEWALK;
 

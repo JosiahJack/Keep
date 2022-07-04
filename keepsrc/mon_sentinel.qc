@@ -59,14 +59,14 @@ void() SentinelFire = {
 			sound (self, CHAN_WEAPON, "quoth/sentinel/laser.wav", 1, ATTN_NORM);
 		}
 		self.attack_finished = time + self.wait;
-		makevectors (self.angles);
+		makevectors(self.angles);
 		org = self.origin + attack_vector(self.attack_offset);
 		vec = normalize(self.enemy.origin - self.origin);
 	
 		if (self.spawnflags & 4) {
-			launch_projectile(org, vec, CT_PROJ_SNG, SPEED_TRAPSPIKE);
+			launch_projectile(org,vec,NO_SPIN,CT_PROJ_SNG,SPEED_TRAPSPIKE);
 		} else {
-			launch_projectile(org, vec, CT_PROJ_LASER, SPEED_LASER);
+			launch_projectile(org,vec,NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
 		}
 	}
 };

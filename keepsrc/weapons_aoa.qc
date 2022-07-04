@@ -140,7 +140,7 @@ void() sword3Attack7 = [1, sword3Attack8]
 
 void() sword3Attack8 = [2, player_run] {self.weaponframe = 20;};
 
-void (entity inflictor, entity attacker, float damage, float radius, entity ignore, float checkclass) T_RadiusDamageAOA = // radius and damage are now independent arguments with falloff damage being mostly linear, and doesn't hurt attacker. I might extend it further to pass "damage_attacker" boolean "float"
+void(entity inflictor, entity attacker, float damage, float radius, entity ignore, float checkclass) T_RadiusDamageAOA = // radius and damage are now independent arguments with falloff damage being mostly linear, and doesn't hurt attacker. I might extend it further to pass "damage_attacker" boolean "float"
 {
 	local	float 	points, distance;
 	local	entity	head;
@@ -720,7 +720,7 @@ void() ChainedLightning = {
 	remove(self);
 };
 
-void (entity target) LightningTarget = //called once per target of the storm, up to 5 targets
+void(entity target) LightningTarget = //called once per target of the storm, up to 5 targets
 {
 	local entity cloud;
 	
@@ -769,7 +769,7 @@ void() W_FireChainLightning = //direct hitscan damage, then lightning chains fro
 
 	W_Reload(0.7);
 		
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	org = self.origin + '0 0 8' + v_forward*12 + v_right*10;
 	traceline(org, org+v_forward*640, TRUE, self);
 	terminus = trace_endpos;
@@ -849,7 +849,7 @@ void(float offset) IceSpread =
 	IceSpikeProjectile (-offset*1.2, 0);	
 };
 
-void () W_FireIce = 
+void() W_FireIce = 
 {
 	IceAttack1(); //trigger animation
 	self.currentammo = self.ammo_elemental = self.ammo_elemental - 1; 	//consume ammo
@@ -991,7 +991,7 @@ void() StaffDetonate2 = [109, StaffDetonate3] {self.weaponframe =10;};
 void() StaffDetonate3 = [111, StaffDetonate4] {self.weaponframe =11;};
 void() StaffDetonate4 = [112, player_run] {self.weaponframe =12;};
 
-void () VoidExplosion = 
+void() VoidExplosion = 
 {
 
 	sound (self, CHAN_VOICE, "ad171/seeker/explode_major.wav", 1, ATTN_NORM);
@@ -1060,7 +1060,7 @@ void() GreenExplosion =
 	}	
 };
 
-void () DetonateVoidShards = 
+void() DetonateVoidShards = 
 {
 	if (self.ammo_voidshards < 4)
 	{
@@ -1143,7 +1143,7 @@ void() VoidShardTrace =
 	//#techdebt #tomeflag. Check for Tome of Power, and explode as it travels. Explosion might need a flag for deletion to handle this well.
 };
 
-void () VoidStaffProjectile = 
+void() VoidStaffProjectile = 
 {
 	if (self.currentammo < 1) return;
 
@@ -1978,7 +1978,7 @@ void() GungnirPrimary =
 	local float usedAmmo;
 	local entity spark;
 	
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	
 	
 	if (self.ammo_voidshards > 0)
@@ -2043,7 +2043,7 @@ void() GungnirPrimary =
 Sanguinators		#gauntlets #bloodgauntlets #sanguinators #ryanscissorhands
 ========================================================================================
 */
-void (float RightOffset) GauntletBeam;
+void(float RightOffset) GauntletBeam;
 void() GauntletBloodReturn;
 
 void() BloodTornadoSeek;
@@ -2157,7 +2157,7 @@ void() AttackWithGreyOrbs = // self == Player
 	//CountGreyOrbs(); //useful for debugging
 	local entity GreyOrbs, target;
 	local float success;
-	makevectors (self.v_angle);
+	makevectors(self.v_angle);
 	
 	target = world;
 	success = FALSE;
@@ -2217,7 +2217,7 @@ void() BloodTornadoSeek = //converts blood orbs into grey blood orbs, in prepara
 	toOwner = cog-self.origin; //this vector leads from self to center of gravity
 	distance = vlen(toOwner);
 
-	makevectors (vectoangles (toOwner));
+	makevectors(vectoangles (toOwner));
 	
 	if (distance > 50)
 	{
@@ -2311,7 +2311,7 @@ void() GauntletBloodOrbit = //make the blood orbs orbit the player, and provide 
 	toOwner = (self.owner.origin + '0 0 23' + v_forward*50 + v_right*36 + self.attack_offset); //this is where the blood orbs congregate, the player's "blood clot"
 	distance = vlen(toOwner - self.origin);
 
-	makevectors (vectoangles (toOwner - self.origin)); //make orb face the player's "blood clot" location, where the blood orbs congregate
+	makevectors(vectoangles (toOwner - self.origin)); //make orb face the player's "blood clot" location, where the blood orbs congregate
 	
 	if (distance < 60)
 	{
@@ -2382,7 +2382,7 @@ void(entity victim) GauntletDrainSpell = //spawns orbs of blood at enemy hit by 
 };
 
 
-void (float RightOffset) GauntletBeam = //triggers attack and visual effect, alternating left and right by passing a different 'RightOffset" value.
+void(float RightOffset) GauntletBeam = //triggers attack and visual effect, alternating left and right by passing a different 'RightOffset" value.
 {
 	if (self.ammo_bloodcrystals < 1)
 	{

@@ -66,7 +66,6 @@ vector VEC_HULL_MAX = '16 16 32';
 .float polyp_speed;
 .float shield;
 .float startonground;
-.float statevis;
 .float trinity_finished;
 .float trinity_start;
 .float trinity_time;

@@ -1,9 +1,9 @@
 
-void () hip_train_next;
+void() hip_train_next;
 
-void () hip_func_train_find;
+void() hip_func_train_find;
 
-void () hip_train_use = {
+void() hip_train_use = {
 
    if ( (self.think != hip_func_train_find) ) {
 
@@ -18,7 +18,7 @@ void () hip_train_use = {
 
 };
 
-void () hip_train_wait = {
+void() hip_train_wait = {
 
    if ( self.wait ) {
 
@@ -39,7 +39,7 @@ void () hip_train_wait = {
 
 };
 
-void () hip_train_next = {
+void() hip_train_next = {
 
    local entity targ;
    local float current;
@@ -94,7 +94,7 @@ void () hip_train_next = {
 
 };
 
-void () hip_func_train_find = {
+void() hip_func_train_find = {
 
    local entity targ;
 
@@ -112,7 +112,7 @@ void () hip_func_train_find = {
 
 };
 
-void () func_train2 = {
+void() func_train2 = {
 
    if ( !self.speed ) {
 

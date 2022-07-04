@@ -184,7 +184,7 @@ void() Santa_FireSnow = {
 	ai_trackenemy();
 
 	// Calculate the center of the gun
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	// Work out projectil direction
 	dir = normalize(self.attack_track - org);
@@ -192,15 +192,14 @@ void() Santa_FireSnow = {
 	// Barrel 1
 	spot1 = org + v_right*6;
 	spot2 = normalize((self.attack_track+v_right*6) - spot1);
-	launch_projectile (spot1, spot2, CT_PROJ_SANTA, self.attack_speed);
+	launch_projectile(spot1,spot2,NO_SPIN,CT_PROJ_SANTA,self.attack_speed);
 	
 	// Barrel 2
 	spot1 = org - v_right*6;
 	spot2 = normalize((self.attack_track-v_right*6) - spot1);
-	launch_projectile (spot1, spot2, CT_PROJ_SANTA, self.attack_speed);
+	launch_projectile(spot1,spot2,NO_SPIN,CT_PROJ_SANTA,self.attack_speed);
 };
 
-//----------------------------------------------------------------------
 void() santa_snow1 = [ $attack1, santa_snow2 ] {ai_trackenemy();
 	// First 0.2s is repeatable to get machine gun sound
 	sound(self, CHAN_WEAPON, "xmas/santa/fire.wav", 1, ATTN_NORM);

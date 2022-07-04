@@ -60,11 +60,11 @@ void() turret_face = { // [FUNCTION]
 	local vector tmpvec;
 
 	tmpvec = vectoangles(self.origin - (self.enemy.origin + self.enemy.view_ofs));
-	if(tmpvec_x > self.rotate_type) {
-		if(tmpvec_x > (self.rotate_type + 6)) self.rotate_type = self.rotate_type + 6;
+	if (tmpvec_x > self.rotate_type) {
+		if (tmpvec_x > (self.rotate_type + 6)) self.rotate_type = self.rotate_type + 6;
 		else self.rotate_type = tmpvec_x;
-	} else if(tmpvec_x < self.rotate_type) {
-		if(tmpvec_x < (self.rotate_type - 6)) self.rotate_type = self.rotate_type - 6;
+	} else if (tmpvec_x < self.rotate_type) {
+		if (tmpvec_x < (self.rotate_type - 6)) self.rotate_type = self.rotate_type - 6;
 		else self.rotate_type = tmpvec_x;
 	}
 
@@ -74,14 +74,14 @@ void() turret_face = { // [FUNCTION]
 
 void() turret_still =	[ $tilt0, turret_still] { self.frame = turret_frame(self.rotate_type); FindTarget(); }; // [FUNCTION]
 
-void() turret_ret1 =	[ $retract1, turret_ret1] { if(self.frame >= 15) { turret_ret2(); return; } self.frame = self.frame + 1; self.nextthink = time + 0.05; }; // [FUNCTION]
+void() turret_ret1 =	[ $retract1, turret_ret1] { if (self.frame >= 15) { turret_ret2(); return; } self.frame = self.frame + 1; self.nextthink = time + 0.05; }; // [FUNCTION]
 void() turret_ret2 =	[ $retract1, turret_ret3] { self.nextthink = time + 0.05; }; // [FUNCTION]
 void() turret_ret3 =	[ $retract2, turret_ret4] { self.nextthink = time + 0.05; }; // [FUNCTION]
 void() turret_ret4 =	[ $retract3, turret_ret5] { self.nextthink = time + 0.05; }; // [FUNCTION]
 void() turret_ret5 =	[ $retract4, turret_ret6] { self.solid = SOLID_NOT;self.nextthink = time + 0.05; }; // [FUNCTION]
 void() turret_ret6 =	[ $retract5, turret_ret7] { self.nextthink = time + 0.05; }; // [FUNCTION]
 void() turret_ret7 =	[ $retract6, turret_ret8] { self.nextthink = time + 0.05; }; // [FUNCTION]
-void() turret_ret8 =	[ $retract7, turret_retracted] { if(!self.currentammo) self.think = SUB_Null;self.nextthink = time + 0.05; }; // [FUNCTION]
+void() turret_ret8 =	[ $retract7, turret_retracted] { if (!self.currentammo) self.think = SUB_Null;self.nextthink = time + 0.05; }; // [FUNCTION]
 
 void() turret_unret1 =	[ $retract6, turret_unret2] { self.nextthink = time + 0.05; }; // [FUNCTION]
 void() turret_unret2 =	[ $retract5, turret_unret3] { self.nextthink = time + 0.05; }; // [FUNCTION]
@@ -90,14 +90,14 @@ void() turret_unret4 =	[ $retract3, turret_unret5] { self.solid = SOLID_SLIDEBOX
 void() turret_unret5 =	[ $retract2, turret_unret6] { self.nextthink = time + 0.05; }; // [FUNCTION]
 void() turret_unret6 =	[ $retract1, turret_unret7] { self.nextthink = time + 0.05; }; // [FUNCTION]
 void() turret_unret7 =	[ $tilt0, turret_unret7] { // [FUNCTION]
-	if(self.frame > (turret_frame(self.rotate_type) + 1)) self.frame = self.frame - 2;
+	if (self.frame > (turret_frame(self.rotate_type) + 1)) self.frame = self.frame - 2;
 	else {
 		self.frame = turret_frame(self.rotate_type);
 		turret_active();
 	}
 };
 
-void() turret_retracted =	[ $retract7, turret_retracted] { if(FindTarget ()) turret_unret1(); }; // [FUNCTION]
+void() turret_retracted =	[ $retract7, turret_retracted] { if (FindTarget ()) turret_unret1(); }; // [FUNCTION]
 
 void() turret_active =	[ $tilt0, turret_active] { // [FUNCTION]
 	enemy_infront = infront(self.enemy);
@@ -187,7 +187,7 @@ void() turret_laser1 =[ $tilt0, turret_laser2] { // [FUNCTION]
 	vel = normalize(self.enemy.origin - self.origin);
 	vel = vel * SPEED_LASER;
 	dir = vectoangles(vel);
-	launch_projectile (self.origin,dir,CT_PROJ_LASER,SPEED_LASER);
+	launch_projectile (self.origin,dir,NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
 };
 void() turret_laser2 =[ $tilt0, turret_laser3] {turret_face();}; // [FUNCTION]
 void() turret_laser3 =[ $tilt0, turret_laser4] {turret_face();}; // [FUNCTION]
@@ -202,7 +202,7 @@ void() turret_laser5 =[ $tilt0, turret_active] { // [FUNCTION]
 	vel = normalize(self.enemy.origin - self.origin);
 	vel = vel * SPEED_LASER;
 	dir = vectoangles(vel);
-	launch_projectile (self.origin,dir,CT_PROJ_LASER,SPEED_LASER);
+	launch_projectile (self.origin,dir,NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
 };
 
 void() turret_rocket1 =[ $tilt0, turret_active] { // [FUNCTION]
@@ -215,7 +215,7 @@ void() turret_rocket1 =[ $tilt0, turret_active] { // [FUNCTION]
 	vel = normalize(self.enemy.origin - self.origin);
 	vel = vel * SPEED_LASER;
 	dir = vectoangles(vel);
-	Launch_Missile (self.origin, dir, '0 0 0', CT_PROJ_ARMY, SPEED_RLPLAYER);
+	launch_projectile(self.origin,dir,self.avelocity,CT_PROJ_ARMY,SPEED_RLPLAYER);
 };
 
 void() turret_beam1 = [ $tilt0, turret_beam2] { turret_face(); sound (self, CHAN_WEAPON, "custents/turret/beamchrg.wav", 1, ATTN_NORM); self.nextthink = time + 0.2; }; // [FUNCTION]
@@ -244,14 +244,14 @@ void() turret_beam6 = [ $tilt0, turret_beam7] { turret_face(); }; // [FUNCTION]
 void() turret_beam7 = [ $tilt0, turret_active] { turret_face(); }; // [FUNCTION]
 
 void() turret_fire2;
-void() turret_fire1 =	[ $tilt0, turret_fire2] { turret_face(); if(infront(self.enemy)) self.think = turret_fire2; self.nextthink = time + 0.05; }; // [FUNCTION]
+void() turret_fire1 =	[ $tilt0, turret_fire2] { turret_face(); if (infront(self.enemy)) self.think = turret_fire2; self.nextthink = time + 0.05; }; // [FUNCTION]
 void() turret_fire2 =	[ $tilt0, turret_fire3] { turret_face(); self.nextthink = time + 0.05; }; // [FUNCTION]
 void() turret_fire3 =	[ $tilt0, turret_fire4] { turret_face(); self.nextthink = time + 0.05; }; // [FUNCTION]
 void() turret_fire4 =	[ $tilt0, turret_fire4] { // [FUNCTION]
 	turret_face();
-	if(self.spawnflags & TUR_LASERS) turret_laser1();
-	else if(self.spawnflags & TUR_ROCKETS) turret_rocket1();
-	else if(self.spawnflags & TUR_PPC) turret_beam1();
+	if (self.spawnflags & TUR_LASERS) turret_laser1();
+	else if (self.spawnflags & TUR_ROCKETS) turret_rocket1();
+	else if (self.spawnflags & TUR_PPC) turret_beam1();
 	else turret_bullet1();
 };
 
@@ -284,15 +284,15 @@ void() turret_die= { // [FUNCTION]
 };
 
 void() turret_use= { // [FUNCTION]
-	if(self.currentammo) {
+	if (self.currentammo) {
 		self.currentammo = FALSE;
-		if((self.spawnflags & TUR_RETRACT) || (self.spawnflags & TUR_OFFRET))
+		if ((self.spawnflags & TUR_RETRACT) || (self.spawnflags & TUR_OFFRET))
 			turret_ret1();
 		else
 			self.think = SUB_Null;
 	} else {
 		self.currentammo = TRUE;
-		if((self.spawnflags & TUR_RETRACT) || (self.spawnflags & TUR_OFFRET))
+		if ((self.spawnflags & TUR_RETRACT) || (self.spawnflags & TUR_OFFRET))
 			turret_unret1();
 		else
 			turret_still();
@@ -308,8 +308,8 @@ void() turret_setup= { // [FUNCTION]
 	setorigin(self, endorg);
 	self.nextthink = time + random()*0.5;
 	// decide how to start according to the spawnflags
-	if(self.spawnflags & TUR_STARTOFF){
-		if((self.spawnflags & TUR_RETRACT) || (self.spawnflags & TUR_OFFRET)) {
+	if (self.spawnflags & TUR_STARTOFF){
+		if ((self.spawnflags & TUR_RETRACT) || (self.spawnflags & TUR_OFFRET)) {
 			self.frame = $retract7;
 			self.solid = SOLID_NOT;
 		} else
@@ -318,7 +318,7 @@ void() turret_setup= { // [FUNCTION]
 		self.currentammo = FALSE;
 		self.think = SUB_Null;
 	} else {
-		if(self.spawnflags & TUR_RETRACT) {
+		if (self.spawnflags & TUR_RETRACT) {
 			self.solid = SOLID_NOT;
 			turret_retracted();
 		} else self.think = turret_still;
@@ -347,11 +347,11 @@ void() trap_turret= { // [ENTITY]
 	self.movetype = MOVETYPE_STEP;
 	setmodel (self, self.mdl);
 	setsize (self, '-12 -12 -6', '12 12 12');
-	if(self.health < 1) self.health = 100;
+	if (self.health < 1) self.health = 100;
 	self.max_health = self.health;
-	if(self.rotate_type < 0 || self.rotate_type > 90) self.rotate_type = 0;
+	if (self.rotate_type < 0 || self.rotate_type > 90) self.rotate_type = 0;
 	self.currentammo = TRUE;
-	if(self.spawnflags & TUR_RETRACT) {
+	if (self.spawnflags & TUR_RETRACT) {
 		self.th_stand = turret_ret1;
 		self.th_walk = turret_ret1;
 	} else {
@@ -384,8 +384,8 @@ void() turret_shoot = { // [FUNCTION]
 	if (ang_x > TURRET_MAX_PITCH) ang_x = TURRET_MAX_PITCH;
 	if (ang_x < TURRET_MIN_PITCH) ang_x = TURRET_MIN_PITCH;
 	self.angles_x = 0 - ang_x; //invert it because for some reason +pitch is downwards for makevectors() but upwards for vectoangles()	
-	makevectors (self.angles);
-	launch_projectile(self.origin + ('0 0 1' * self.angles_x),v_forward,CT_PROJ_LASER,SPEED_LASER);
+	makevectors(self.angles);
+	launch_projectile(self.origin + ('0 0 1' * self.angles_x),v_forward,NO_SPIN,CT_PROJ_LASER,SPEED_LASER);
 };
 
 void() turret_helper_think = { // [FUNCTION]
@@ -503,12 +503,12 @@ void() func_turret = { // [ENTITY]
 	}
 
 	// Testing using stuff from trap_turret to get this to work right
-	if(self.health < 1) self.health = 100;
+	if (self.health < 1) self.health = 100;
 	self.max_health = self.health;
-	if(self.rotate_type < 0 || self.rotate_type > 90) self.rotate_type = 0;
+	if (self.rotate_type < 0 || self.rotate_type > 90) self.rotate_type = 0;
 	self.currentammo = TRUE;
 
-	if(self.spawnflags & TUR_RETRACT) {
+	if (self.spawnflags & TUR_RETRACT) {
 		self.th_stand = turret_ret1;
 		self.th_walk = turret_ret1;
 	} else {

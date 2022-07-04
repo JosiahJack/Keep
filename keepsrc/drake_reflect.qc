@@ -99,7 +99,7 @@ void(entity ent, entity shot, float straightup) ReflectMissile = {
 			} else {
 				org = vectoangles (self.movedir);
 				org_y = vectoyaw (shot.origin - ent.origin);
-				makevectors (org);
+				makevectors(org);
 				self.movedir = v_forward;
 			}
 		}
@@ -178,7 +178,7 @@ void(entity ent) ReflectorShield = {
             if (shot.owner != ent && shot.think != ReflectThink) {
 				if ( !((shot.classname == "Mjolnir") && (shot.master == ent)) ) { // Next check ignores boomerangs returning to owner.
 					traceline (shot.origin, ent.origin, TRUE, shot);
-					if (trace_fraction == 1.0) ReflectMissile (ent, shot, FALSE);
+					if (trace_fraction == 1) ReflectMissile (ent, shot, FALSE);
 				}
 			}
         }

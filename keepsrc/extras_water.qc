@@ -164,18 +164,18 @@ void() liquid_use = { // [FUNCTION]
 
 // Drown function for monsters (khreathor)
 void(entity entToDrown) liquid_drown = { // [FUNCTION]
-	if(entToDrown.flags & FL_SWIM) return;
+	if (entToDrown.flags & FL_SWIM) return;
 	if (!(entToDrown.flags & FL_CLIENT || entToDrown.flags & FL_MONSTER)) return;
-	if(entToDrown.takedamage == DAMAGE_NO) return;
-	if(entToDrown.health < 0) return;
-	if(entToDrown.bodyonflr == MON_ONFLR) return;
+	if (entToDrown.takedamage == DAMAGE_NO) return;
+	if (entToDrown.health < 0) return;
+	if (entToDrown.bodyonflr == MON_ONFLR) return;
 	
-	if(entToDrown.drawntime < time && entToDrown.spawnflags & CAN_DROWN) {
+	if (entToDrown.drawntime < time && entToDrown.spawnflags & CAN_DROWN) {
 		sound (self, CHAN_BODY, "player/drown1.wav", 1, ATTN_NORM);
 		death_bubbles(5);
 		// drowning damage formula 5*(x^2/10 + 1) // (khreathor)
 		entToDrown.drown_dmg = 5 * (entToDrown.drown_cnt * entToDrown.drown_cnt * 0.1 + 1);
-		if(entToDrown.health < entToDrown.drown_dmg) entToDrown.drown_dmg = entToDrown.health;
+		if (entToDrown.health < entToDrown.drown_dmg) entToDrown.drown_dmg = entToDrown.health;
 		T_Damage (entToDrown, world, world, entToDrown.drown_dmg,DAMARMOR);
 		entToDrown.drawntime = time + 1;
 		entToDrown.drown_cnt = entToDrown.drown_cnt + 1;
@@ -216,15 +216,15 @@ void() liquid_touch = { // [FUNCTION]
 		if (other.movetype == MOVETYPE_NONE || other.movetype == MOVETYPE_PUSH || other.movetype == MOVETYPE_NOCLIP) return; // These movetypes don't splash.
 		
 		// Check if monster in water (khreathor)
-		if(other.flags & FL_MONSTER) {
+		if (other.flags & FL_MONSTER) {
 			test_vec = other.maxs - '0 0 8';
 			test_vec_x = test_vec_y = 0;
 			test_vec = other.origin + test_vec;
 			if (test_vec_z <= self.absmax_z + 4 && test_vec_z >= self.absmin_z - 4) {
-				if(test_vec_x <= self.absmax_x + 4 && test_vec_x >= self.absmin_x - 4) {
-					if(test_vec_y <= self.absmax_y + 4 && test_vec_y >= self.absmin_y - 4) {
+				if (test_vec_x <= self.absmax_x + 4 && test_vec_x >= self.absmin_x - 4) {
+					if (test_vec_y <= self.absmax_y + 4 && test_vec_y >= self.absmin_y - 4) {
 						other.infuncwater = TRUE;
-						if(!other.inwsound)
+						if (!other.inwsound)
 						{
 							other.drawntime = time + 12;
 							other.drown_dmg = 0;
@@ -247,7 +247,7 @@ void() liquid_touch = { // [FUNCTION]
 
 			other.infuncwater = FALSE;
 			other.onsurface = FALSE;
-			if(other.inwsound) {
+			if (other.inwsound) {
 				other.watertype = self.watertype;
 				other.waterlevel = 1;
 				other.inwsound = FALSE;

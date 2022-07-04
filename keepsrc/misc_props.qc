@@ -193,10 +193,10 @@ void() misc_model = {
 };
 
 // Make quoth users happy!
-void () mapobject_custom = {
+void() mapobject_custom = {
 	misc_model();
 };
 
-void () misc_misc = {
+void() misc_misc = {
 	misc_model();
 };

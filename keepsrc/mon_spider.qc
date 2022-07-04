@@ -163,9 +163,8 @@ void()	spider_slide7 =[ $walk13, spider_slide8 ] {ai_run_slide(6);};
 void()	spider_slide8 =[ $walk15, spider_run1 ] {ai_run(4);};
 
 // SPIDER 2 - ACID SPIT FUNCTIONS (range)
-void(float sideang) spider_spitacid =
-{
-	local	vector org, ang, dir, avel;
+void(float sideang) spider_spitacid = {
+	local vector org, ang, dir, avel;
 	
 	if (!self.enemy) return;
 	if (self.health < 1) return;
@@ -173,19 +172,17 @@ void(float sideang) spider_spitacid =
 	// Flash effect to show where bolt is coming from	
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	if (sideang < 0) sound (self, CHAN_WEAPON, self.idle_sound2, 1, ATTN_NORM);
-
-	makevectors (self.angles);	
+	makevectors(self.angles);	
 	org = self.origin + attack_vector(self.attack_offset);
 
 	// Create elevation angle and use makevectors to create projectile direction
 	ang = vectoangles(self.enemy.origin - org);
 	ang_x = -self.attack_elev;	// Negative = upwards angle 
-	makevectors (ang);
+	makevectors(ang);
 	// fire spit in arc pattern (sideang)
-	dir = (v_forward + v_right * sideang) * SPEED_SPIDER;	
-
+	dir = (v_forward * SPEED_SPIDER + v_right * sideang);	
 	avel = vecrand(100,200,FALSE);
-	Launch_Grenade(org, dir, avel, CT_PROJ_SPID);
+	launch_projectile(org,dir,avel,CT_PROJ_SPID,1);
 };
 
 void()	spider_spit1	=[	$atkup1,		spider_spit2	] {ai_face();};
@@ -300,7 +297,7 @@ void() spider_leap3 =[ $jump5, spider_leap4 ] {
 	ai_face();
 	self.jump_flag = time + MONAI_JUMPTIMEOUT; // Stop jumping so much
 	self.touch = Spider_JumpTouch;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	self.velocity = (v_forward*self.jumpdist_x) + ('0 0 1'*self.jumpdist_z);
 	self.origin_z = self.origin_z + 4;
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
@@ -352,7 +349,7 @@ void() spider_droptouch =
 			setorigin(self, self.origin);		// raise up
 			self.attack_timer = time + 1;		// reset timer
 			
-			makevectors (self.angles);
+			makevectors(self.angles);
 			self.velocity = v_forward * 100 + '0 0 200';
 		}
 		return;
@@ -424,7 +421,7 @@ void() spider_wakeup =
 	self.pain_finished = time + 1.5;	// No pain
 	SUB_AttackFinished(2 + random());	// No attacking
 		
-	makevectors (self.angles);			// Move towards face direction
+	makevectors(self.angles);			// Move towards face direction
 	self.velocity = v_forward * 50;		// Slight nudge forward
 
 	self.touch = spider_droptouch;		// Touch something?
@@ -624,7 +621,7 @@ void() setup_spider = {
 	self.th_checkattack = SpiderCheckAttack;
 	self.th_pain = spider_pain;
 	self.th_die = spider_die;
-	if(!self.classtype) self.classtype = CT_MONSPIDER;
+	if (!self.classtype) self.classtype = CT_MONSPIDER;
 	self.classgroup = CG_SPIDER;
 	self.classmove = MON_MOVEWALK;
 

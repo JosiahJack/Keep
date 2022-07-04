@@ -78,7 +78,7 @@ void() ambient_custom_loop = { // [ENTITY]
 	if (self.volume < SOUND_VOLUME_MIN) self.volume = 1;
 
 	// start right away if not triggered
-	if(!self.targetname) {
+	if (!self.targetname) {
 		// Need to start on the second frame since that's when entities not called in world_spawn are created
 		self.nextthink = time + 0.1;
 		self.think = ambient_sound_setup;

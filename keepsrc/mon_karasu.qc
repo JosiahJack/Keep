@@ -640,14 +640,13 @@ void() karasu_rocks =
 
 		// Variable speed based on skill level with extra random spice
 		self.attack_speed = SPEED_KARASUROCKS + (skill * SPEED_KARASUSKILL) + random()*10;
-		launch_projectile (org, dir, CT_PROJ_ZRING, self.attack_speed);
+		launch_projectile(org,dir,NO_SPIN,CT_PROJ_ZRING,self.attack_speed);
 		newmis.think = zring_particle;
     		newmis.nextthink = time + 0.1;
 		shotcount = shotcount - 1;
 	}
 };
 
-//============================================================================
 void()	karasu_rocks1	=[	$rocks1,	karasu_rocks2	] {ai_face();self.pain_finished = time + 1.5;
 	sound (self, CHAN_WEAPON, "redfield/karasu/hotrings.wav", 1, ATTN_NORM);};
 void()	karasu_rocks2	=[	$rocks2,	karasu_rocks3	] {ai_face();};

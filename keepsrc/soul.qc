@@ -106,7 +106,7 @@ void() Soul_Think = [ 0, Soul_Think ] { // [FUNCTION]
         self.effects = EF_DIMLIGHT;
     }
     if (self.mangle_x || self.mangle_y) {
-		makevectors (reaper.angles);
+		makevectors(reaper.angles);
         org = reaper.origin + (v_forward*self.mangle_x) + (v_forward*self.mangle_y) + (v_forward*self.mangle_z);
     } else org = reaper.origin + self.mangle;
 

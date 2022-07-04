@@ -342,16 +342,16 @@ void() dprince_rocket = {
 	sound (self, CHAN_WEAPON, "hknight/attack1.wav", 1, ATTN_NORM);
 
 	// Re-use spike projectile speeds
-	// Maximum speed, initial speed set in Launch_Missile
+	// Maximum speed, initial speed set in launch_projectile
 	self.attack_speed = SPEED_DPRINCEBOLT + (skill * SPEED_DPRINCESKILL);
 
-	makevectors (self.angles);
+	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = normalize(self.attack_track - org);
 	avel = avel = vecrand(100,200,FALSE);
 	
 	// Colour type and trail selected in missile function
-	Launch_Missile(org, dir, avel, CT_PROJ_DPRINCE1, self.attack_speed);
+	launch_projectile(org,dir,avel,CT_PROJ_DPRINCE1,self.attack_speed);
 };
 
 void() dprince_magicframe = {

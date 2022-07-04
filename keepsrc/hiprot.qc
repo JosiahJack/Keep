@@ -115,7 +115,7 @@ float MOVEWALL_NONBLOCKING = 4;
 float DOOR_STAYOPEN = 1;
 
 // from hipsubs.qc in hipnotic/ritual source qc files
-vector ( vector ang ) SUB_NormalizeAngles = {
+vector (vector ang ) SUB_NormalizeAngles = {
    while( ang_x > 360 ) ang_x = ang_x - 360;
    while( ang_x < 0 ) ang_x = ang_x + 360;
    while( ang_y > 360 ) ang_y = ang_y - 360;
@@ -126,7 +126,7 @@ vector ( vector ang ) SUB_NormalizeAngles = {
 };
 
 // from triggers.qc in hipnotic/ritual source qc files
-void( entity ent, float amount ) hurt_setdamage = {
+void(entity ent, float amount ) hurt_setdamage = {
    ent.dmg = amount;
    if ( !amount ) ent.solid = SOLID_NOT;
    else ent.solid = SOLID_TRIGGER;
@@ -140,7 +140,7 @@ void() RotateTargets = {
 	local entity ent;
 	local vector vx, vy, vz, org;
 
-	makevectors (self.angles);
+	makevectors(self.angles);
 	ent = find( world, targetname, self.target);
 	while(ent) {
 		if (ent.rotate_type == OBJECT_SETORIGIN) {
@@ -226,7 +226,7 @@ void() LinkRotateTargets = {
 	}
 };
 
-void( float amount ) SetDamageOnTargets = {
+void(float amount ) SetDamageOnTargets = {
 	local entity ent;
 
 	ent = find( world, targetname, self.target);

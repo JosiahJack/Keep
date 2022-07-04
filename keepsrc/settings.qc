@@ -1527,3 +1527,16 @@ void() ToggleFlashlight = {
 	self.flashlight = !self.flashlight;
 	sound(self,CHAN_VOICE,"quoth/items/click.wav",TRUE,ATTN_NONE);
 };
+
+void() KillGun = {
+	if (cheatflags == CHEAT_GIBGUN) {
+		cheatflags = 0;
+		dprint("KillRay deactivated.\n");
+	} else if (cheatflags == CHEAT_KILLGUN) {
+		cheatflags = CHEAT_GIBGUN;
+		dprint("KillRay activated! Instagib mode!\n");
+	} else {
+		cheatflags = CHEAT_KILLGUN;
+		dprint("KillRay activated! Instakill mode!\n");
+	}
+};

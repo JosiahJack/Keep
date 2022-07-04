@@ -93,7 +93,7 @@ void(float AttackNumber) dfury_boss_shot2 = {
 	if (flytime < 0.1) flytime = 0.1;
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	missile = spawn ();
 	missile.owner = self;
 	missile.solid = SOLID_BBOX;
@@ -118,7 +118,7 @@ void(float AttackNumber) dfury_boss_shot2 = {
 	missile.touch = FuryBossMissileTouch;
 	missile.nextthink = time + 0.1;
 	missile.think = FuryBossHome;
-	sound (self, CHAN_WEAPON, "q15/dfury/attack1.wav", 1, ATTN_NORM);
+	sound(self,CHAN_WEAPON,"q15/dfury/attack1.wav",1,ATTN_NORM);
 	self.attack_finished = time + 2;
 };
 
@@ -127,12 +127,12 @@ void(float offset) dfury_boss_shot = {
 	
 	offang = vectoangles (self.enemy.origin - self.origin);
 	offang_y = offang_y + offset * 6;
-	makevectors (offang);
+	makevectors(offang);
 	org = self.origin + self.mins + self.size*0.5 + v_forward * 20;
 	vec = normalize (v_forward);
 	vec_z = 0 - vec_z + (random() - 0.5)*0.1; // set missile speed
-	launch_projectile (org, vec, CT_PROJ_HKN, 700);
-	sound (self, CHAN_WEAPON, "q15/dfury/proj.wav", 1, ATTN_NORM);
+	launch_projectile(org,vec,NO_SPIN,CT_PROJ_HKN,700);
+	sound(self,CHAN_WEAPON,"q15/dfury/proj.wav",1,ATTN_NORM);
 };
 
 void() dfury_boss_spawner = {
@@ -145,7 +145,7 @@ void() dfury_boss_spawner = {
 	missile.owner = self;
 	missile.movetype = MOVETYPE_BOUNCE;
 	missile.solid = SOLID_BBOX;	
-	makevectors (self.angles);
+	makevectors(self.angles);
 	distancedelta = self.enemy.origin - self.origin; //work out distance vector  
 	nozdistancedelta = distancedelta;  //copy to no height distance vector 
 	nozdistancedelta_z = 0;  //remove height 
@@ -295,7 +295,7 @@ void()	dfury_boss_jump3	=[	$lunge3,		dfury_boss_jump4	] {self.nextthink = (time 
 void()	dfury_boss_jump4	=[	$lunge4,		dfury_boss_jump5	] {self.nextthink = (time + 0.1); ai_face();
 	// self.tail_visible = 1;
 	self.touch = dfury_boss_JumpTouch;
-	makevectors (self.angles);
+	makevectors(self.angles);
 	self.origin_z = self.origin_z + 1;
 	self.velocity = v_forward * 800 + '0 0 250';
 	if (self.flags & FL_ONGROUND) self.flags = self.flags - FL_ONGROUND;
