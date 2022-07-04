@@ -82,7 +82,7 @@ void() spark_spawn = { // [FUNCTION]
 		else sound (self, CHAN_AUTO, "misc/spark4.wav", 1, ATTN_NORM);
 	}
 
-	spark = spawn ();
+	spark = spawn();
 	setorigin (spark, self.origin);
 	spark.solid = SOLID_NOT;
 	spark.movetype = MOVETYPE_BOUNCE;
@@ -124,7 +124,7 @@ void(float ox) spawn_ngspark = { // [FUNCTION]
 
 	if (deathmatch || coop || self.waterlevel >= 3) return;
 
-	spark = spawn ();
+	spark = spawn();
 	spark.owner = self;
 	spark.solid = SOLID_NOT;// NOTE: SOLID_TRIGGER will make sound in func_water (doesn't matter for real water)
 	spark.movetype = MOVETYPE_BOUNCE;

@@ -667,17 +667,17 @@ void(entity inflictor, entity attacker, float damage) wraith_pain = {
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
-			if (random() < 0.85) wraith_painA1 ();
+			if (random() < 0.85) wraith_painA1();
 			else {
 				self.pain_finished = time + 2;
-				wraith_painB1 ();
+				wraith_painB1();
 			}
 		}
 		// The new axe forces monsters into long pain animations
 		else if (self.pain_check == 2) {
 			self.axhitme = 0;
 			self.pain_finished = time + 2;
-			wraith_painB1 ();
+			wraith_painB1();
 		}
 	}
 };

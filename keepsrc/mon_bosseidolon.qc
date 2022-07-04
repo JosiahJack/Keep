@@ -484,9 +484,9 @@ void(entity inflictor, entity attacker, float damage) eidolon_pain = {
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			// Randomly pick which pain animation to play
-			if (random() < 0.7) eidolon_painA1 ();	// Short recoil
+			if (random() < 0.7) eidolon_painA1();	// Short recoil
 			else {
-				eidolon_painB1 ();					// Long recoil
+				eidolon_painB1();					// Long recoil
 				self.pain_finished = time + 2;		// long animation
 			}
 		}

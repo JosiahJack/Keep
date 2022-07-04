@@ -190,7 +190,7 @@ void() InitPointTrigger = { // [FUNCTION]
     v2 = v1 + self.mangle;
     self.model = "";
     setorigin (self, '0 0 0');
-    InitTrigger ();     // Calls 'setmodel', so do first.
+    InitTrigger();     // Calls 'setmodel', so do first.
     setsize (self, v1, v2);     // Calling 'setmodel' resets entity size.
 };
 
@@ -270,7 +270,7 @@ void()  SUB_CalcMoveDone = { // [FUNCTION]
 
 void() DelayThink = { // [FUNCTION]
 	activator = self.enemy;
-	SUB_UseTargets ();
+	SUB_UseTargets();
 	remove(self);
 };
 
@@ -438,7 +438,7 @@ void() play_teleport = { // [FUNCTION]
 void(vector org) spawn_tfog = { // [FUNCTION]
 	local entity spawneffect;
 	
-	spawneffect = spawn ();
+	spawneffect = spawn();
 	spawneffect.origin = org;
 	spawneffect.nextthink = time + 0.2;
 	spawneffect.think = play_teleport;

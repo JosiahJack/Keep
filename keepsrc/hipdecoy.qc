@@ -40,11 +40,11 @@
 void() monster_use;
 
 void() decoy_stand1 = [ 17.000, decoy_stand1 ] {
-	ChangeYaw ();
+	ChangeYaw();
 	if ( (self.walkframe >= 5) ) self.walkframe = 0;
 	self.frame = (12 + self.walkframe);
 	self.walkframe = (self.walkframe + TRUE);
-	if ( (time > self.pausetime) ) self.th_walk ();
+	if ( (time > self.pausetime) ) self.th_walk();
 };
 
 void(entity inflictor, entity attacker, float damage) decoy_pain = { decoy_stand1(); };
@@ -56,7 +56,7 @@ void() decoy_walk1 = [ 6.000, decoy_walk1 ] {
 	self.weaponframe = 0;
 	if (self.walkframe == 6) self.walkframe = 0;
 	if ((self.walkframe == FL_SWIM) || (self.walkframe == 5)) {
-		r = random ();
+		r = random();
 		if ( (r < 0.140) ) sound (self,CHAN_VOICE,"hipnotic/misc/foot1.wav",0.500,ATTN_NORM);
 		else if ( (r < 0.290) ) sound (self,CHAN_VOICE,"hipnotic/misc/foot2.wav",0.500,ATTN_NORM);
 		else if ( (r < 0.430) ) sound (self,CHAN_VOICE,"hipnotic/misc/foot3.wav",0.500,ATTN_NORM);
@@ -94,18 +94,18 @@ void() monster_decoy_go = {
          dprint ("\n");
       }
       if ( (self.movetarget.classname == "path_corner") ) {
-         self.th_walk ();
+         self.th_walk();
       } else {
          if ( (self.movetarget.classname == "path_corner_run") ) {
-            self.th_run ();
+            self.th_run();
          } else {
             self.pausetime = 100000000.000;
          }
       }
-      self.th_stand ();
+      self.th_stand();
    } else {
       self.pausetime = 100000000.000;
-      self.th_stand ();
+      self.th_stand();
 
    }
    self.nextthink = (self.nextthink + (random () * 0.500));

@@ -217,7 +217,7 @@ void() misc_glitter = { // [ENTITY]
 
 	// Sparks should fly up by default.  An angle of 0 is assumed to mean
 	// undefined, so to force east flight path, use a yaw of 360 instead.
-    if (self.angles != '0 0 0')	SetMovedir ();
+    if (self.angles != '0 0 0')	SetMovedir();
     else self.movedir = '0 0 1'; // Straight up
 
     self.nextthink  = time + 1;
@@ -268,7 +268,7 @@ void() divine_use = { // [FUNCTION]
     }
     self = swap; // Restore self.
     self.attack_finished = time + 0.2 + (hits * 0.1);
-    SUB_UseTargets (); // Now function like trigger_relay.
+    SUB_UseTargets(); // Now function like trigger_relay.
 };
 
 void() trigger_smite = { // [ENTITY]

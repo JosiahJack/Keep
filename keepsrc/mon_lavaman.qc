@@ -25,14 +25,14 @@ void() lavaman_idle1 = [ 17.000, lavaman_idle2 ] {
       sound (self,CHAN_VOICE,"boss1/sight1.wav",TRUE,ATTN_NORM);
 };
 
-void() lavaman_idle2 = [ 18.000, lavaman_idle3 ] { ai_stand (); };
-void() lavaman_idle3 = [ 19.000, lavaman_idle4 ] { ai_stand (); };
-void() lavaman_idle4 = [ 20.000, lavaman_idle5 ] { ai_stand (); };
-void() lavaman_idle5 = [ 21.000, lavaman_idle6 ] { ai_stand (); };
-void() lavaman_idle6 = [ 20.000, lavaman_idle7 ] { ai_stand (); };
-void() lavaman_idle7 = [ 19.000, lavaman_idle8 ] { ai_stand (); };
-void() lavaman_idle8 = [ 18.000, lavaman_idle9 ] { ai_stand (); };
-void() lavaman_idle9 = [ 17.000, lavaman_idle1 ] { ai_stand (); };
+void() lavaman_idle2 = [ 18.000, lavaman_idle3 ] { ai_stand(); };
+void() lavaman_idle3 = [ 19.000, lavaman_idle4 ] { ai_stand(); };
+void() lavaman_idle4 = [ 20.000, lavaman_idle5 ] { ai_stand(); };
+void() lavaman_idle5 = [ 21.000, lavaman_idle6 ] { ai_stand(); };
+void() lavaman_idle6 = [ 20.000, lavaman_idle7 ] { ai_stand(); };
+void() lavaman_idle7 = [ 19.000, lavaman_idle8 ] { ai_stand(); };
+void() lavaman_idle8 = [ 18.000, lavaman_idle9 ] { ai_stand(); };
+void() lavaman_idle9 = [ 17.000, lavaman_idle1 ] { ai_stand(); };
 
 void() lavaman_walk1 = [ 17.000, lavaman_walk2 ] { ai_walk (FL_SWIM); };
 void() lavaman_walk2 = [ 18.000, lavaman_walk3 ] { ai_walk (FL_SWIM); };
@@ -98,27 +98,27 @@ void() lavaman_run29 = [ 45.000, lavaman_run30 ] { ai_run (FL_SWIM); };
 void() lavaman_run30 = [ 46.000, lavaman_run31 ] { ai_run (FL_SWIM); };
 void() lavaman_run31 = [ 47.000, lavaman_run1 ] {};
 
-void() lavaman_fire1 = [ 57.000, lavaman_fire2 ] { ai_face (); };
+void() lavaman_fire1 = [ 57.000, lavaman_fire2 ] { ai_face(); };
 void() lavaman_fire2 = [ 58.000, lavaman_fire3 ] { ai_charge (TRUE); };
-void() lavaman_fire3 = [ 59.000, lavaman_fire4 ] { ai_face (); };
-void() lavaman_fire4 = [ 60.000, lavaman_fire5 ] { ai_face (); };
+void() lavaman_fire3 = [ 59.000, lavaman_fire4 ] { ai_face(); };
+void() lavaman_fire4 = [ 60.000, lavaman_fire5 ] { ai_face(); };
 void() lavaman_fire5 = [ 61.000, lavaman_fire6 ] { ai_charge (TRUE); };
-void() lavaman_fire6 = [ 62.000, lavaman_fire7 ] { ai_face (); };
+void() lavaman_fire6 = [ 62.000, lavaman_fire7 ] { ai_face(); };
 void() lavaman_fire7 = [ 63.000, lavaman_fire8 ] { lavaman_missile (TRUE); };
-void() lavaman_fire8 = [ 64.000, lavaman_fire9 ] { ai_face (); };
-void() lavaman_fire9 = [ 65.000, lavaman_fire10 ] { ai_face (); };
+void() lavaman_fire8 = [ 64.000, lavaman_fire9 ] { ai_face(); };
+void() lavaman_fire9 = [ 65.000, lavaman_fire10 ] { ai_face(); };
 void() lavaman_fire10 = [ 66.000, lavaman_fire11 ] { ai_charge (TRUE); };
-void() lavaman_fire11 = [ 67.000, lavaman_fire12 ] { ai_face (); };
+void() lavaman_fire11 = [ 67.000, lavaman_fire12 ] { ai_face(); };
 void() lavaman_fire12 = [ 68.000, lavaman_fire13 ] { ai_charge (TRUE); };
-void() lavaman_fire13 = [ 69.000, lavaman_fire14 ] { ai_face (); };
-void() lavaman_fire14 = [ 70.000, lavaman_fire15 ] { ai_face (); };
+void() lavaman_fire13 = [ 69.000, lavaman_fire14 ] { ai_face(); };
+void() lavaman_fire14 = [ 70.000, lavaman_fire15 ] { ai_face(); };
 void() lavaman_fire15 = [ 71.000, lavaman_fire16 ] { ai_charge (TRUE); };
 void() lavaman_fire16 = [ 72.000, lavaman_fire17 ] { ai_charge (TRUE); };
-void() lavaman_fire17 = [ 73.000, lavaman_fire18 ] { ai_face (); };
+void() lavaman_fire17 = [ 73.000, lavaman_fire18 ] { ai_face(); };
 void() lavaman_fire18 = [ 74.000, lavaman_fire19 ] { lavaman_missile (FL_SWIM); };
-void() lavaman_fire19 = [ 75.000, lavaman_fire20 ] { ai_face (); };
-void() lavaman_fire20 = [ 76.000, lavaman_fire21 ] { ai_face (); };
-void() lavaman_fire21 = [ 77.000, lavaman_fire22 ] { ai_face (); };
+void() lavaman_fire19 = [ 75.000, lavaman_fire20 ] { ai_face(); };
+void() lavaman_fire20 = [ 76.000, lavaman_fire21 ] { ai_face(); };
+void() lavaman_fire21 = [ 77.000, lavaman_fire22 ] { ai_face(); };
 void() lavaman_fire22 = [ 78.000, lavaman_fire23 ] { ai_charge (TRUE); };
 void() lavaman_fire23 = [ 79.000, lavaman_run1 ] {};
 
@@ -139,7 +139,7 @@ void(entity inflictor, entity attacker, float damage) lavaman_pain = {
 
    if ( (random () < 0.050) ) {
       self.pain_finished = (time + FL_SWIM);
-      lavaman_shocka1 ();
+      lavaman_shocka1();
    }
 };
 
@@ -161,7 +161,7 @@ void() lavaman_death9 = [ 56.000, lavaman_death10 ] {
 };
 void() lavaman_death10 = [ 56.000, lavaman_death10 ] {
    AddToKills(self,self.enemy);
-   SUB_UseTargets ();
+   SUB_UseTargets();
    remove (self);
 };
 
@@ -186,7 +186,7 @@ void() lavaman_touch = {
 	WriteCoord (MSG_BROADCAST,self.origin_x);
 	WriteCoord (MSG_BROADCAST,self.origin_y);
 	WriteCoord (MSG_BROADCAST,self.origin_z);
-	BecomeExplosion ();
+	BecomeExplosion();
 };
 
 void(float AttackNumber) lavaman_missile = {
@@ -213,7 +213,7 @@ void(float AttackNumber) lavaman_missile = {
       t = TRUE;
 
    vec = normalize ((d - org));
-   fireball = spawn ();
+   fireball = spawn();
 	fireball.classgroup = CG_PROJALL;
    fireball.owner = self;
    fireball.movetype = MOVETYPE_BOUNCE;
@@ -231,7 +231,7 @@ void(float AttackNumber) lavaman_missile = {
    fireball.think = SUB_Remove;
    fireball.nextthink = (time + MOVETYPE_TOSS);
    sound (self,CHAN_WEAPON,"boss1/throw.wav",TRUE,ATTN_NORM);
-   if ( (self.enemy.health <= FALSE) ) lavaman_idle1 ();
+   if ( (self.enemy.health <= FALSE) ) lavaman_idle1();
 };
 
 void() lavaman_awake = {
@@ -255,7 +255,7 @@ void() lavaman_awake = {
    WriteCoord (MSG_BROADCAST,self.origin_x);
    WriteCoord (MSG_BROADCAST,self.origin_y);
    WriteCoord (MSG_BROADCAST,self.origin_z);
-   lavaman_rise1 ();
+   lavaman_rise1();
 };
 
 void() monster_lava_man_precache = {

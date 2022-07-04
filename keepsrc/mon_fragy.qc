@@ -271,7 +271,7 @@ void(entity inflictor, entity attacker, float damage) frag_pain = {
 	if (self.pain_finished > time) return;
 	
 	sound(self, CHAN_VOICE, "knight/khurt.wav", 1, ATTN_NORM);
-	frag_pain1 ();
+	frag_pain1();
 	self.pain_finished = time + 1;
 };
 
@@ -307,7 +307,7 @@ void() frag_die = {
 	if (!self.gibbed) {
 		if (pointcontents(self.origin) <= CONTENT_WATER) sound (self, CHAN_VOICE, "fish/death.wav", 1, ATTN_NORM);
 		else sound (self, CHAN_VOICE, "quoth/voreling/death.wav", 1, ATTN_NORM);
-		frag_die1 ();
+		frag_die1();
 	}
 };
 

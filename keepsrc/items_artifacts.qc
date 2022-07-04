@@ -297,7 +297,7 @@ void() artifact_setup = { // [FUNCTION]
 		else self.respawn_time = RESPAWN_ARTIFACT1;
 	}
 
-	item_start ();
+	item_start();
 };
 
 /*QUAKED item_sigil (0 0.5 0.8) (-16 -16 -24) (16 16 32) Ep1 Ep2 Ep3 Ep4 RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM
@@ -1046,7 +1046,7 @@ void() item_artifact_horn = { // [ENTITY]
 	if (self.noise == "") self.noise = "hipnotic/items/horn.wav";
 	self.classtype = CT_ARTHORN;
 	setsize (self,VEC_HULL_MIN,VEC_HULL_MAX);
-	item_start ();
+	item_start();
 };
 
 void() item_hornofconjuring = { self.classname = "item_artifact_horn"; item_artifact_horn(); }; // [ENTITY]

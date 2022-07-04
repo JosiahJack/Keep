@@ -388,7 +388,7 @@ void() funcbreakable_use = { // [FUNCTION]
 	
 	// spawn custom templates instead of debris models
 	if (self.spawnflags & BREAK_USEMAP) {
-		make_breakable_debris ();
+		make_breakable_debris();
 		return;
 	}
 

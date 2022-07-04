@@ -365,7 +365,7 @@ void(entity inflictor, entity attacker, float damage) megaf_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		self.lip = random ();
+		self.lip = random();
 		if (self.lip < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 
@@ -374,18 +374,18 @@ void(entity inflictor, entity attacker, float damage) megaf_pain = {
 		
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
-			if (self.lip < 0.2) megaf_paina1 ();
-			else if (self.lip < 0.4) megaf_painb1 ();
-			else if (self.lip < 0.7) megaf_painc1 ();
+			if (self.lip < 0.2) megaf_paina1();
+			else if (self.lip < 0.4) megaf_painb1();
+			else if (self.lip < 0.7) megaf_painc1();
 			else {
 				self.pain_finished = time + 2;
-				megaf_paind1 ();
+				megaf_paind1();
 			}
 		} else if (self.pain_check == 2) { // The new axe forces monsters into long pain animations
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 1.9;
 			self.axhitme = 0;
-			megaf_paind1 ();
+			megaf_paind1();
 		}
 	}
 };
@@ -428,10 +428,10 @@ void() megaf_die = {
 
 		// Typical forward/backward death + unique sound
 		if (random() > 0.5) {
-			megaf_die1 ();
+			megaf_die1();
 			sound (self, CHAN_VOICE, self.death_sound2, 1, ATTN_NORM);
 		} else {
-			megaf_fdie1 ();
+			megaf_fdie1();
 			sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
 		}
 	}

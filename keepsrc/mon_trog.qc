@@ -104,7 +104,7 @@ local   float   delta;
 };
 
 void() TrogWarpMagic = {
-    WarpExplosion (); // Moved all explosion effects into a separate function so other code can use it.
+    WarpExplosion(); // Moved all explosion effects into a separate function so other code can use it.
 
 	// Damage stuff from the circle magic.
     if (self.enemy) {
@@ -230,11 +230,11 @@ void() nemes_track = {
 	old = self.angles_y;
 	self.ideal_yaw = vec_x + up;
 	self.angles_y = self.angles_x;
-	ChangeYaw ();
+	ChangeYaw();
 	self.angles_x = self.angles_y;
 	self.angles_y = old;
 	self.ideal_yaw = vec_y + self.lefty;
-	ChangeYaw ();
+	ChangeYaw();
 	delta = rint(self.angles_y - self.ideal_yaw);
 	delta = anglemod(delta); 
 	if (!delta) self.lefty = 0 - self.lefty; // TRUE if difference between self's yaw and ideal yaw is one-half of a degree or less.
@@ -443,13 +443,13 @@ void() nemes_fast5  =[ $attackb5,  nemes_fast6  ] {
 
 	// If TRUE, Only lightning is effective, at least in Drake.
 	if (zot) {
-		Nemesant_Bolt ();
+		Nemesant_Bolt();
 		self.nextthink = time + 0.2;
 	} else {
 		// Use standard book of tricks.
 		if ((dist <= 120) && (self.enemy.flags & FL_ONGROUND)) {
 			// Try to push enemy away from melee.	
-			ai_repel ();
+			ai_repel();
 			self.attack_finished = 0;   // Don't delay for next attack.
 		} else {
 			// Use pattern like Dracula in Castlevania: SotN.  Launch three fireballs then magic missiles.
@@ -458,18 +458,18 @@ void() nemes_fast5  =[ $attackb5,  nemes_fast6  ] {
 				self.meleeattack = 0;
 				// Use magic missiles sometimes if enemy is not immune.
 				if (!(self.enemy.armortype == ARMOR_RED_TYPE)) {
-					Nemesant_Missiles ();
+					Nemesant_Missiles();
 					return;
 				}
             } else if (!self.meleeattack && boss) {
 				// The boss gets to shoot lightning every fourth shot. Must be inrange and out of the water.
 				if ( !((dist > 600) || (self.waterlevel == 3)) ) {
-					Nemesant_Bolt ();
+					Nemesant_Bolt();
 					self.nextthink = time + 0.2;
 					return;
 				}
 			}
-			Nemesant_FireBall ();   // The original.
+			Nemesant_FireBall();   // The original.
 		}
 	}
 };
@@ -560,7 +560,7 @@ void() Nemesant_Attack = {
 
     if (self.bossflag && random() < 0.5) { // Boss version has other tricks it can use half the time.
         if (!self.invisible_finished && (self.health <= (self.max_health / 2)) && random() < 0.5) { nemes_inviso1(); return; } // If hurt badly enough, cast invisibility sometimes.
-        if (self.count <= 1) {nemes_summon1 ();  return;} // Summon monsters to fight.
+        if (self.count <= 1) {nemes_summon1();  return;} // Summon monsters to fight.
     }
 
 	// Use quick attack instead of super attack if...
@@ -611,7 +611,7 @@ void(entity inflictor, entity attacker, float damage) nemes_pain = {
         self.lip = time + 2;
     }
     self.attack_finished = 0;   // So mage can counterattack after recovery.
-    nemes_pain1 ();
+    nemes_pain1();
     attacker = attacker;    // FrikQcc warning squelch!
 };
 
@@ -646,7 +646,7 @@ void() nemes_die = {
             sound (self, CHAN_VOICE, "zerstorer/trog/tdeath1.wav", 1, ATTN_NORM);
         else
             sound (self, CHAN_VOICE, "zerstorer/trog/tdeath2.wav", 1, ATTN_NORM);
-        nemes_death1 ();
+        nemes_death1();
     }
 };
 
@@ -721,7 +721,7 @@ void() monster_nemesant = { // [ENTITY]
 		if (self.deathstring == "") self.deathstring = " was hexed by a Nemesant\n";
 	}
 
-    monster_start ();
+    monster_start();
 };
 
 // SoE entity.
@@ -731,7 +731,7 @@ void() monster_trogboss = { // [ENTITY]
     if (!self.health) self.health = 1600;
 	self.bossflag = TRUE;
 	if (self.deathstring == "") self.deathstring = " failed to impress the Master Nemesant\n";
-    monster_nemesant ();
+    monster_nemesant();
 };
 
 // Original classname from Zerstorer.

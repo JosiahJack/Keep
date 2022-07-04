@@ -508,9 +508,9 @@ void(entity inflictor, entity attacker, float damage)	dcrossbow_pain =
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
-			if (random() < 0.85) dcrossbow_painA1 ();	// classic, body recoil
+			if (random() < 0.85) dcrossbow_painA1();	// classic, body recoil
 			else {
-				dcrossbow_painD1 ();			// Cool stumble, hand over mouth
+				dcrossbow_painD1();			// Cool stumble, hand over mouth
 				self.pain_finished = time + 2;	// long animation
 			}
 		}
@@ -518,7 +518,7 @@ void(entity inflictor, entity attacker, float damage)	dcrossbow_pain =
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 1.1;
 			self.axhitme = 0;
-			dcrossbow_painD1 ();
+			dcrossbow_painD1();
 		}
 	}
 };
@@ -570,8 +570,8 @@ void() dcrossbow_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "knight/kdeath.wav", 1, ATTN_NORM);
-		if (random() > 0.5) dcrossbow_die1 ();
-		else dcrossbow_dieb1 ();
+		if (random() > 0.5) dcrossbow_die1();
+		else dcrossbow_dieb1();
 	}
 };
 

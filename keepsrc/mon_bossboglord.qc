@@ -313,7 +313,7 @@ void(entity inflictor, entity attacker, float damage) bogl_pain = {
 	if (self.pain_check > 0) {
 		if (random() < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
-		if (self.pain_check == 1 || self.pain_check == 2) bogl_pain1 ();
+		if (self.pain_check == 1 || self.pain_check == 2) bogl_pain1();
 	}
 };
 
@@ -336,7 +336,7 @@ void() bogl_die = {
 	monster_death_precheck(); // Pre-check routine to tidy up extra entities
 	if (!self.gibbed) { // Regular death
 		sound (self, CHAN_VOICE, "ad171/boglord/death1.wav", 1, ATTN_NORM);
-		bogl_death1 ();
+		bogl_death1();
 	} else { // Explosion for gib death!
 		T_RadiusDamage (self, self, self.dmg, world, DAMAGEALL);
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);

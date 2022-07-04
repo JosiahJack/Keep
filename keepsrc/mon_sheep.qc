@@ -40,9 +40,9 @@ void sheep_tran_a1();
 void sheep_tran_b1();
 void sheep_graze_a1();
 void sheep_graze_b1();
-void sheep_gstep_a1 ();
-void sheep_gstep_b1 ();
-void sheep_wait1 ();
+void sheep_gstep_a1();
+void sheep_gstep_b1();
+void sheep_wait1();
 void(entity inflictor, entity attacker, float damage) sheep_pain;
 void sheep_lookdown1();
 void sheep_look1();
@@ -602,8 +602,8 @@ void() sheep_die = {
 		setsize (self, self.bbmins, self.bbmaxs);
 		setorigin(self, self.oldorigin); // Reset origin since engine might.
 
-		if (random() > 0.5) sheep_diea1 ();
-		else sheep_dieb1 ();
+		if (random() > 0.5) sheep_diea1();
+		else sheep_dieb1();
 	}
 };
 

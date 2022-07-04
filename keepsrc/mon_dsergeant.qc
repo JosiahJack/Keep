@@ -286,8 +286,8 @@ void()	dsergeant_char_a12=[	$char_a12,dsergeant_char_b1	] {ai_charge(16);
 	CheckForSergeantCharge();};
 
 void() dsergeant_charging = {
-	if (random() < 0.35) dsergeant_char_a1 ();	// Slow left+right swing
-	else dsergeant_char_b1 ();									// fast spin around head
+	if (random() < 0.35) dsergeant_char_a1();	// Slow left+right swing
+	else dsergeant_char_b1();									// fast spin around head
 };
 
 // Melee Attack 1 - Slice (one hand swinging run attack)
@@ -356,9 +356,9 @@ void()	dsergeant_watk22=[	$w_attack22,dsergeant_run1	] {ai_charge(3);};
 void() dsergeant_melee =
 {
 	self.meleeattack = random();
-	if (self.meleeattack < 0.4) dsergeant_slice1 ();
-	else if (self.meleeattack < 0.9) dsergeant_smash1 ();
-	else dsergeant_watk1 ();
+	if (self.meleeattack < 0.4) dsergeant_slice1();
+	else if (self.meleeattack < 0.9) dsergeant_smash1();
+	else dsergeant_watk1();
 };
 
 // Death Sergeant Homing Missile Attack
@@ -424,9 +424,9 @@ void(entity inflictor, entity attacker, float damage)	dsergeant_pain =
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
-			if (random() < 0.85) dsergeant_painA1 ();	// classic, body recoil
+			if (random() < 0.85) dsergeant_painA1();	// classic, body recoil
 			else {
-				dsergeant_painD1 ();					// Cool stumble
+				dsergeant_painD1();					// Cool stumble
 				self.pain_finished = time + 2;			// long animation
 			}
 		}
@@ -434,7 +434,7 @@ void(entity inflictor, entity attacker, float damage)	dsergeant_pain =
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 1.1;
 			self.axhitme = 0;
-			dsergeant_painD1 ();
+			dsergeant_painD1();
 		}
 	}
 };
@@ -487,8 +487,8 @@ void() dsergeant_die =
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "hknight/death1.wav", 1, ATTN_NORM);
-		if (random() > 0.5) dsergeant_die1 ();
-		else dsergeant_dieb1 ();
+		if (random() > 0.5) dsergeant_die1();
+		else dsergeant_dieb1();
 	}
 };
 

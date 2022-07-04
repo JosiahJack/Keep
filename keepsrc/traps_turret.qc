@@ -111,7 +111,7 @@ void() turret_active =	[ $tilt0, turret_active] { // [FUNCTION]
 		// FIXME: look all around for other targets
 		if (self.oldenemy.health > 0) {
 			self.enemy = self.oldenemy;
-			HuntTarget ();
+			HuntTarget();
 		} else {
 			self.th_stand();
 			return;
@@ -125,8 +125,8 @@ void() turret_active =	[ $tilt0, turret_active] { // [FUNCTION]
 
 	// look for other coop players
 	if ((coop && self.search_time < time) && (FindTarget())) return;
-	if (self.attack_state == AS_MISSILE || self.attack_state == AS_MELEE) { ai_run_missile (); return; }
-	CheckTurretAttack ();
+	if (self.attack_state == AS_MISSILE || self.attack_state == AS_MELEE) { ai_run_missile(); return; }
+	CheckTurretAttack();
 };
 
 void() turret_bullet1 = [ $tilt0, turret_bullet2] { // [FUNCTION]

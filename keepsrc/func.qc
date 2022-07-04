@@ -820,7 +820,7 @@ void() func_skill = { // [ENTITY]
 	SUB_BoundVolume(1);
 	self.bsporigin = TRUE;			// Bmodel (0,0,0 origin)
 	self.mdl = self.model;
-	SetMovedir ();
+	SetMovedir();
 	if (self.speed <= 0) self.speed = 100;	// Default movement speed
 	if (self.lip <= 0) self.lip = 8;		// End movement distance
 	if (self.waitmin <= 0) self.waitmin = 1;// Touch timeout for chaos
@@ -989,7 +989,7 @@ void() func_bob = { // [ENTITY]
 		self.model = "";
 	}
 	
-	SetMovedir ();
+	SetMovedir();
 	self.movedir = normalize(self.movedir);
 	if (self.height <=0) self.height = 8;	// Direction intensity
 	if (self.count <1) self.count = 2;		// Direction switch timer

@@ -212,7 +212,7 @@ void(float side) drole_claw = {
 	
 	if (!self.enemy) return;
 	if (self.health < 1) return;
-	ai_face ();						// Turn towards enemy target
+	ai_face();						// Turn towards enemy target
 	ai_damagebreakable(50);			// Damage any breakables
 
 	if (!ai_checkmelee(MONAI_MELEEDROLE1,MONAI_MELEEZTALL) || !self.enemy.takedamage) {
@@ -336,12 +336,12 @@ void(entity inflictor, entity attacker, float damage) drole_pain = {
 		if (self.attack_rage) sound (self, CHAN_VOICE, "quoth/drole/sight2.wav", 0.5, ATTN_NORM);
 		else sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 
-		if (self.pain_check == 1) drole_pain1 ();
+		if (self.pain_check == 1) drole_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 0.6;
 			self.axhitme = 0;
-			drole_pain1 ();
+			drole_pain1();
 		}
 	}
 };
@@ -381,7 +381,7 @@ void() drole_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "quoth/drole/death.wav", 1, ATTN_NORM);
-		drole_death1 ();
+		drole_death1();
 	}
 };
 

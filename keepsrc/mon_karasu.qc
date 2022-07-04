@@ -369,12 +369,12 @@ void(entity inflictor, entity attacker, float damage) karasu_pain = {
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);	
-		if (self.pain_check == 1) karasu_pain1 ();
+		if (self.pain_check == 1) karasu_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 2;
 			self.axhitme = 0;
-			karasu_pain1 ();
+			karasu_pain1();
 		}
 	}
 };
@@ -433,7 +433,7 @@ void(vector beamoffset) kbeam_shoot = {
 	local vector org, dir;
 	if (self.health < 1) return;
 	
-	ai_face ();
+	ai_face();
 	makevectors(self.angles);
 	org = self.origin + attack_vector(self.attack_offset);
 	dir = self.enemy.origin + (attack_vector(beamoffset)) - org;
@@ -531,7 +531,7 @@ void() klight_shoot = {
 	local vector org, dir;
 	if (self.health < 1) return;
 	
-	ai_face ();
+	ai_face();
 	self.effects = self.effects | EF_MUZZLEFLASH;
 
 	makevectors(self.angles);
@@ -718,7 +718,7 @@ void() karasu_die = {
 	karasu_remove_attachment();
 	
 	// regular death
-	if (!self.gibbed) karasu_die1 ();
+	if (!self.gibbed) karasu_die1();
 };
 
 void() monster_karasu_precache = {

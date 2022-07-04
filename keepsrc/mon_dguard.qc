@@ -336,9 +336,9 @@ void(entity inflictor, entity attacker, float damage)	dguard_pain = {
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			// Randomly pick which pain animation to play
-			if (random() < 0.85) dguard_painA1 ();		// classic, body recoil
+			if (random() < 0.85) dguard_painA1();		// classic, body recoil
 			else {
-				dguard_painD1 ();											// Cool stumble, hand over mouth
+				dguard_painD1();											// Cool stumble, hand over mouth
 				self.pain_finished = time + 2;				// long animation
 			}
 		}
@@ -428,9 +428,9 @@ void() dguard_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "knight/kdeath.wav", 1, ATTN_NORM);
-		if (random() > 0.75) dguard_dieC1 ();				// Forward - platoon like
-		else if (random() > 0.5) dguard_dieA1 ();		// Forward - standard
-		else dguard_dieB1 ();												// Backward - standard
+		if (random() > 0.75) dguard_dieC1();				// Forward - platoon like
+		else if (random() > 0.5) dguard_dieA1();		// Forward - standard
+		else dguard_dieB1();												// Backward - standard
 	}
 };
 

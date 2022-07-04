@@ -19,46 +19,8 @@ float SHUB_PHASE4 = 4;	// Death
 
 float SHUB_NEEDS_2ND_TRIG = 8;
 
-//======================================================================
-// Global functions
-//======================================================================
-// Special streamlined player find function
-//----------------------------------------------------------------------
-float() xxshub_FindTarget =
-{
-	local entity client;
-	
-	// Get the obvious exception(s) done first
-	if (self.health < 1) return FALSE;
-	if (intermission_running) return FALSE;
-	if (cinematic_running > 0) return FALSE;
-
-	// Find a client in current PVS
-	client = checkclient ();
-	
-	// Go through all the exception(s)
-	if (!client) return FALSE;
-	if (!(client.flags & FL_CLIENT)) return FALSE;
-	if (client.flags & FL_NOTARGET) return FALSE;
-	if (client.items & IT_INVISIBILITY) return FALSE;
-	
-	// Check range and visibility of player
-	enemy_vis = visible(client);
-	if (!enemy_vis) return FALSE;
-
-	// Finally found something
-	self.enemy = client;
-	self.goalentity = self.enemy;
-
-	// We have a winner!
-	return TRUE;	
-};
-
-//----------------------------------------------------------------------
 // Setup wave HP and trigger boundaries (one function to be consistent)
-//----------------------------------------------------------------------
-void() xxshub_WaveSetupHP =
-{
+void() xxshub_WaveSetupHP = {
 	// Is there anymore boss waves left?
 	if (self.bosswave >= self.bosswavetotal) {
 		// Only one wave left (death is final trigger)
@@ -82,11 +44,8 @@ void() xxshub_WaveSetupHP =
 
 void() xxshub_wakeup;
 
-//----------------------------------------------------------------------
 // Check if HP has reached next boss wave trigger event
-//----------------------------------------------------------------------
-float() xxshub_WaveCheck =
-{
+float() xxshub_WaveCheck = {
 	// Check for boss wave boundary event
 	if (self.health > 1 && self.health < self.bosswavetrig) {
 		// Check for wave boundary triggers
@@ -108,49 +67,34 @@ float() xxshub_WaveCheck =
 	return FALSE;
 };
 
-//===========================================================================
 // IDLE state - flailing arms (only state really)
-//===========================================================================
-void() xxshub_idleframe =
-{
-	// Get the obvious exception(s) done first
-	if (self.health < 1) return;
+void() xxshub_idleframe = {
+	if (self.health < 1) return; // Get the obvious exception(s) done first
 	
 	// Beginning of animation block
 	if (self.walkframe == 0) monster_idle_sound();
 	else if (self.walkframe == 12) monster_idle_sound();
 	else if (self.walkframe == 24) monster_idle_sound();
 	else if (self.walkframe == 36) monster_idle_sound();
-	
-	// Move frame forward, check for conditions
-	self.walkframe = self.walkframe + 1;
+
+	self.walkframe = self.walkframe + 1; // Move frame forward, check for conditions
 	if (self.walkframe > 45) self.walkframe = 0;
 	self.nextthink = time + 0.1;
 	self.think = xxshub_idleframe;
-	
-	// Setup current animation frame
-	self.frame = $idle1 + self.walkframe;
-
-	// Check for HP trigger event
-	if (xxshub_WaveCheck() == TRUE) self.th_missile();
+	self.frame = $idle1 + self.walkframe; // Setup current animation frame
+	if (xxshub_WaveCheck() == TRUE) self.th_missile(); // Check for HP trigger event
 	
 	// Check for combat event
 	if (self.style == SHUB_PHASE2) {
-		// Check for any no combat conditions
-		if (self.enemy.health < 1) self.enemy = world;
-		else if (intermission_running > 0) self.enemy = world;
-		else if (cinematic_running > 0) self.enemy = world;
-		else if (self.enemy.flags & FL_NOTARGET) self.enemy = world;
-		else if (self.enemy.items & IT_INVISIBILITY) self.enemy = world;
+		if (self.enemy.health < 1) self.enemy = world; // Check for any no combat conditions
+		else if (frame_pause()) self.enemy = world;
+		else if (Invisible(self.enemy)) self.enemy = world;
 
-		// If no enemy, keep looking
-		if (!self.enemy) xxshub_FindTarget();
-		// Check for attack 1 - Homing Missile
-		if (self.enemy) self.th_melee();
+		if (!self.enemy) FindTarget(); // If no enemy, keep looking
+		if (self.enemy) self.th_melee(); // Check for attack 1 - Homing Missile
 	}	
 };
 
-//----------------------------------------------------------------------
 void() xxshub_idle ={ self.walkframe = 0; xxshub_idleframe(); };
 
 // Attack 1 : Fire Shub Homing Missile

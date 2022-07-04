@@ -398,7 +398,7 @@ void() HIP_FireMjolnir = { // [FUNCTION]
 			newpos = self.origin + tvec;
 			trace_fraction = Wyrm_WalkMove(vectoyaw(newpos - self.origin), 0); // Perform walkmove of testbox.
 			self = stemp;
-			if (trace_fraction == TRUE) HIP_FireMjolnirLightning ();
+			if (trace_fraction == TRUE) HIP_FireMjolnirLightning();
 			remove(tester);
 			Tent_Point(TE_GUNSHOT,org);
 		} else {
@@ -480,7 +480,7 @@ void() W_FireProximityGrenade = { // [FUNCTION]
 	self.currentammo = (self.currentammo - TRUE);
 	sound (self,CHAN_WEAPON,"hipnotic/weapons/proxbomb.wav",TRUE,ATTN_NORM);
 	self.punchangle_x = CONTENT_SOLID;
-	missile = spawn ();
+	missile = spawn();
 	missile.classgroup = CG_PROJGRENADES;
 	missile.owner = self;
 	missile.lastvictim = self;
@@ -1275,7 +1275,7 @@ void() W_FirePlasmaGun = { // [FUNCTION]
 	self.currentammo = (self.currentammo - TRUE);
 	sound (self,CHAN_WEAPON,"rogue/plasma/fire.wav",0.500,ATTN_NORM);
 	self.punchangle_x = CONTENT_SOLID;
-	missile = spawn ();
+	missile = spawn();
 	missile.classgroup = CG_PROJCELLS;
 	missile.owner = self;
 	missile.movetype = MOVETYPE_FLYMISSILE;
@@ -1737,12 +1737,12 @@ void() W_Attack = { // [FUNCTION]
 					// Assume hook was improperly removed, so reset links.
 					if (!self.hook.modelindex) {   
 						self.hook = world;  // So W_FireGrapple fires a hook.
-						player_grapple1 ();
+						player_grapple1();
 						return;
 					}
 					if (self.hook.count) return;
-					player_grapple3 ();
-				} else player_grapple1 ();
+					player_grapple3();
+				} else player_grapple1();
 
 				// Modified animation takes three frames to complete, hence 0.3 for 0.1 * 3.
 				W_Reload(0.3);

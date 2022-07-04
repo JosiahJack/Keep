@@ -50,8 +50,8 @@ void() sword_remove_attachment = {
 void() sword_eyecheck = {
 	if (self.spawnflags & MON_SWORD_EYES) {
 		if (!self.attachment) { 
-			sword_create_attachment ();
-			sword_setup_attachment (); 
+			sword_create_attachment();
+			sword_setup_attachment(); 
 		}
 		self.attachment.frame = self.frame;
 		self.attachment.origin = self.origin;
@@ -60,7 +60,7 @@ void() sword_eyecheck = {
 };
 
 // Rogue idle
-void() sword_stand1 = [ 0.000, sword_stand1 ] { ai_stand (); };
+void() sword_stand1 = [ 0.000, sword_stand1 ] { ai_stand(); };
 
 // Redfield idle sound
 void() sword_sound = {
@@ -94,9 +94,9 @@ void() sword_atk1 = [ 9.000, sword_atk2 ] {
 void() sword_atk2 = [ 10.000, sword_atk3 ] { ai_charge (14); };
 void() sword_atk3 = [ 11.000, sword_atk4 ] { ai_charge (14); };
 void() sword_atk4 = [ 12.000, sword_atk5 ] { ai_charge (14); };
-void() sword_atk5 = [ 13.000, sword_atk6 ] { ai_melee (); };
-void() sword_atk6 = [ 14.000, sword_atk7 ] { ai_melee (); };
-void() sword_atk7 = [ 15.000, sword_atk8 ] { ai_melee (); };
+void() sword_atk5 = [ 13.000, sword_atk6 ] { ai_melee(); };
+void() sword_atk6 = [ 14.000, sword_atk7 ] { ai_melee(); };
+void() sword_atk7 = [ 15.000, sword_atk8 ] { ai_melee(); };
 void() sword_atk8 = [ 16.000, sword_atk9 ] { ai_charge (14); };
 void() sword_atk9 = [ 17.000, sword_atk10 ] { ai_charge (14); };
 void() sword_atk10 = [ 18.000, sword_run1 ] { ai_charge (14); };
@@ -130,41 +130,41 @@ void() sword_dieb11 = [ 39.000, sword_dieb11 ] {};
 void() swordredfield_run1 = [ $run1, swordredfield_run2 ] {
    self.alpha = 0.4;
    self.effects = EF_DIMLIGHT;
-   sword_eyecheck ();
+   sword_eyecheck();
    ai_run (14);
 };
-void() swordredfield_run2 = [ $run2, swordredfield_run3 ] { ai_run (14); sword_eyecheck ();};
-void() swordredfield_run3 = [ $run3, swordredfield_run4 ] { ai_run (14); sword_eyecheck ();};
-void() swordredfield_run4 = [ $run4, swordredfield_run5 ] { ai_run (14); sword_eyecheck (); sword_sound (); };
-void() swordredfield_run5 = [ $run5, swordredfield_run6 ] { ai_run (14); sword_eyecheck ();};
-void() swordredfield_run6 = [ $run6, swordredfield_run7 ] { ai_run (14); sword_eyecheck ();};
-void() swordredfield_run7 = [ $run7, swordredfield_run8 ] { ai_run (14); sword_eyecheck ();};
-void() swordredfield_run8 = [ $run8, swordredfield_run1 ] { ai_run (14); sword_eyecheck ();};
+void() swordredfield_run2 = [ $run2, swordredfield_run3 ] { ai_run (14); sword_eyecheck();};
+void() swordredfield_run3 = [ $run3, swordredfield_run4 ] { ai_run (14); sword_eyecheck();};
+void() swordredfield_run4 = [ $run4, swordredfield_run5 ] { ai_run (14); sword_eyecheck(); sword_sound(); };
+void() swordredfield_run5 = [ $run5, swordredfield_run6 ] { ai_run (14); sword_eyecheck();};
+void() swordredfield_run6 = [ $run6, swordredfield_run7 ] { ai_run (14); sword_eyecheck();};
+void() swordredfield_run7 = [ $run7, swordredfield_run8 ] { ai_run (14); sword_eyecheck();};
+void() swordredfield_run8 = [ $run8, swordredfield_run1 ] { ai_run (14); sword_eyecheck();};
 
 // Refield attack
 void() swordredfield_atk1 = [ $atk1, sword_atk2 ] {
    sound (self,FALSE,"knight/sword1.wav",TRUE,TRUE);
    ai_charge (14);
-   sword_eyecheck ();
+   sword_eyecheck();
 };
-void() swordredfield_atk2 = [ $atk2, swordredfield_atk3 ] { ai_charge (14); sword_eyecheck ();};
-void() swordredfield_atk3 = [ $atk3, swordredfield_atk4 ] { ai_charge (14); sword_eyecheck ();};
-void() swordredfield_atk4 = [ $atk4, swordredfield_atk5 ] { ai_charge (14); sword_eyecheck ();};
-void() swordredfield_atk5 = [ $atk5, swordredfield_atk6 ] { ai_melee (); sword_eyecheck ();};
-void() swordredfield_atk6 = [ $atk6, swordredfield_atk7 ] { ai_melee (); sword_eyecheck ();};
-void() swordredfield_atk7 = [ $atk7, swordredfield_atk8 ] { ai_melee (); sword_eyecheck ();};
-void() swordredfield_atk8 = [ $atk8, swordredfield_atk9 ] { ai_charge (14); sword_eyecheck ();};
-void() swordredfield_atk9 = [ $atk9, swordredfield_atk10 ] { ai_charge (14); sword_eyecheck ();};
-void() swordredfield_atk10 = [ $atk10, swordredfield_run1 ] { ai_charge (14); sword_eyecheck ();};
+void() swordredfield_atk2 = [ $atk2, swordredfield_atk3 ] { ai_charge (14); sword_eyecheck();};
+void() swordredfield_atk3 = [ $atk3, swordredfield_atk4 ] { ai_charge (14); sword_eyecheck();};
+void() swordredfield_atk4 = [ $atk4, swordredfield_atk5 ] { ai_charge (14); sword_eyecheck();};
+void() swordredfield_atk5 = [ $atk5, swordredfield_atk6 ] { ai_melee(); sword_eyecheck();};
+void() swordredfield_atk6 = [ $atk6, swordredfield_atk7 ] { ai_melee(); sword_eyecheck();};
+void() swordredfield_atk7 = [ $atk7, swordredfield_atk8 ] { ai_melee(); sword_eyecheck();};
+void() swordredfield_atk8 = [ $atk8, swordredfield_atk9 ] { ai_charge (14); sword_eyecheck();};
+void() swordredfield_atk9 = [ $atk9, swordredfield_atk10 ] { ai_charge (14); sword_eyecheck();};
+void() swordredfield_atk10 = [ $atk10, swordredfield_run1 ] { ai_charge (14); sword_eyecheck();};
 
 // Refield die, the sword, not him/her ;)
-void() swordredfield_die1 = [ $death1, swordredfield_die2 ] { sword_eyecheck (); };
-void() swordredfield_die2 = [ $death2, swordredfield_die3 ] { sword_eyecheck (); };
-void() swordredfield_die3 = [ $death3, swordredfield_die4 ] { sword_eyecheck (); 
+void() swordredfield_die1 = [ $death1, swordredfield_die2 ] { sword_eyecheck(); };
+void() swordredfield_die2 = [ $death2, swordredfield_die3 ] { sword_eyecheck(); };
+void() swordredfield_die3 = [ $death3, swordredfield_die4 ] { sword_eyecheck(); 
 self.solid = SOLID_NOT; monster_check_gib(); };
-void() swordredfield_die4 = [ $death4, swordredfield_die5 ] { sword_eyecheck (); };
-void() swordredfield_die5 = [ $death5, swordredfield_die6 ] { sword_eyecheck (); };
-void() swordredfield_die6 = [ $death6, swordredfield_die7 ] { sword_eyecheck (); };
+void() swordredfield_die4 = [ $death4, swordredfield_die5 ] { sword_eyecheck(); };
+void() swordredfield_die5 = [ $death5, swordredfield_die6 ] { sword_eyecheck(); };
+void() swordredfield_die6 = [ $death6, swordredfield_die7 ] { sword_eyecheck(); };
 void() swordredfield_die7 = [ $death7, swordredfield_die8 ] {sword_finish_attachment(); sword_remove_attachment(); 
 sound (self,TRUE,"player/axhit2.wav",0.500,ATTN_NORM); };
 void() swordredfield_die8 = [ $death8, swordredfield_die9 ] { self.alpha = 1; };
@@ -172,12 +172,12 @@ void() swordredfield_die9 = [ $death9, swordredfield_die10 ] { monster_death_pos
 void() swordredfield_die10 = [ $death10, swordredfield_die10 ] { monster_deadbody_check(); };
 
 // Refield dieb
-void() swordredfield_dieb1 = [ $deathb1, swordredfield_dieb2 ] { sword_eyecheck (); };
-void() swordredfield_dieb2 = [ $deathb2, swordredfield_dieb3 ] { sword_eyecheck (); };
-void() swordredfield_dieb3 = [ $deathb3, swordredfield_dieb4 ] { sword_eyecheck (); self.solid = SOLID_NOT; monster_check_gib(); };
-void() swordredfield_dieb4 = [ $deathb4, swordredfield_dieb5 ] { sword_eyecheck (); };
-void() swordredfield_dieb5 = [ $deathb5, swordredfield_dieb6 ] { sword_eyecheck (); };
-void() swordredfield_dieb6 = [ $deathb6, swordredfield_dieb7 ] { sword_eyecheck (); };
+void() swordredfield_dieb1 = [ $deathb1, swordredfield_dieb2 ] { sword_eyecheck(); };
+void() swordredfield_dieb2 = [ $deathb2, swordredfield_dieb3 ] { sword_eyecheck(); };
+void() swordredfield_dieb3 = [ $deathb3, swordredfield_dieb4 ] { sword_eyecheck(); self.solid = SOLID_NOT; monster_check_gib(); };
+void() swordredfield_dieb4 = [ $deathb4, swordredfield_dieb5 ] { sword_eyecheck(); };
+void() swordredfield_dieb5 = [ $deathb5, swordredfield_dieb6 ] { sword_eyecheck(); };
+void() swordredfield_dieb6 = [ $deathb6, swordredfield_dieb7 ] { sword_eyecheck(); };
 void() swordredfield_dieb7 = [ $deathb7, swordredfield_dieb8 ] { sword_finish_attachment(); sword_remove_attachment(); 
 sound (self,TRUE,"player/axhit2.wav",0.500,ATTN_NORM); };
 void() swordredfield_dieb8 = [ $deathb8, swordredfield_dieb9 ] {};
@@ -214,9 +214,9 @@ void() sword_walk10 = [ $idle10, sword_walk1 ] { ai_walk(6); };
 
 void() sword_idlechoose = {
 	if (self.spawnflags & MON_SWORD_LEAN) {
-		sword_lean1 ();
+		sword_lean1();
 	} else {
-		sword_idle1 ();
+		sword_idle1();
 	}
 };
 
@@ -227,9 +227,9 @@ void() sword_die = {
 
    if (!self.gibbed) {
       if ( (random () < 0.500) ) {
-         sword_die1 ();
+         sword_die1();
       } else {
-         sword_dieb1 ();
+         sword_dieb1();
       }
    }
 };
@@ -241,9 +241,9 @@ void() swordredfield_die = {
 
    if (!self.gibbed) {
       if ( (random () < 0.500) ) {
-         swordredfield_die1 ();
+         swordredfield_die1();
       } else {
-         swordredfield_dieb1 ();
+         swordredfield_dieb1();
       }
    }
 };
@@ -328,5 +328,5 @@ void() monster_sword = {
 
 	self.classmove = MON_MOVEWALK;
 	if (self.deathstring == "")  self.deathstring = " was slit open by a Phantom Swordsman\n";
-	monster_start ();
+	monster_start();
 };

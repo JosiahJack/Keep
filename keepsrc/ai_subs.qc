@@ -74,7 +74,7 @@ void() MonsterDeBuff;
 void() ai_face = {
 	//Commenting this out for the ballista.  Dangerous? if (self.health < 1) return;// Unusual check, caught elsewhere
 	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin);
-	ChangeYaw(); 				// Done in code
+	ChangeYaw(); // Done in engine.
 };
 
 void(float dist) ai_forward = {
@@ -132,7 +132,7 @@ void() ai_resetangles = {
 // ai_charge (generic), The monster is in a melee attack, so get as close as possible to .enemy
 void(float dist) ai_charge = {
 	MonsterDeBuff();
-	ai_face ();
+	ai_face();
 	movetogoal (dist);
 };
 
@@ -168,7 +168,7 @@ void() ai_charge_front = {
 void() ai_run_melee = {
 	ai_face();
 	if (FacingIdeal()) { // Facing towards the ENEMY target? (ideal_yaw)
-		self.th_melee ();
+		self.th_melee();
 		self.attack_state = AS_STRAIGHT;
 	}
 };
@@ -177,7 +177,7 @@ void() ai_run_melee = {
 void() ai_run_missile = {
 	ai_face();
 	if (FacingIdeal()) { // Facing towards the ENEMY target? (ideal_yaw)
-		self.th_missile ();
+		self.th_missile();
 		self.attack_state = AS_STRAIGHT;
 	}
 };
@@ -186,7 +186,7 @@ void() ai_run_missile = {
 void() ai_run_jump = {
 	ai_face();
 	if (FacingIdeal()) { // Facing towards the ENEMY target? (ideal_yaw)
-		self.th_jump ();
+		self.th_jump();
 		self.attack_state = AS_STRAIGHT;
 	}
 };
@@ -223,7 +223,7 @@ void(float dist) ai_run_sidestep = {
 
 	// Work out angle to face for enemy and then turn +/- 90 degrees so that the monster is moving sideways to the enemy
 	self.ideal_yaw = vectoyaw(SUB_orgEnemyTarget() - self.origin) + ofs; // `+ ofs` is Different than ai_face	
-	ChangeYaw ();
+	ChangeYaw();
 	
 	// Tests if monsters can move sideways
 	if (walkmove (self.ideal_yaw, dist)) return;
@@ -237,7 +237,7 @@ void(float dist) ai_run_backward = {
 	
 	// Work out angle to face for enemy and then turn +/- 90 degrees so that the monster is moving sideways to the enemy
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin) + 180; // `+ 180` is Different than ai_face	
-	ChangeYaw ();
+	ChangeYaw();
 	
 	if (walkmove (self.ideal_yaw, dist)) return; // Tests if monsters can move backwards
 	
@@ -721,7 +721,7 @@ void(float dist) ai_run_side = {
 // ai_run.  If called directly, enemy_yaw probably will not be set, and the monster will simply move to the side.
 void(float dist) ai_run_strafe = {
     self.ideal_yaw = enemy_yaw;
-    ChangeYaw ();
+    ChangeYaw();
     ai_run_side (dist);
 };
 
@@ -954,7 +954,7 @@ float() ai_face_last = {
 	}
 
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
-	ChangeYaw ();
+	ChangeYaw();
 	return FALSE;
 };
 

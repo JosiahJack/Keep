@@ -78,7 +78,7 @@ void() hlorddragon_check_attack = {
         return;
     
     if (self.enemy == world)
-        FindTarget ();
+        FindTarget();
     else {
         makevectors(self.angles);
         vec = normalize (self.enemy.origin - self.origin);
@@ -152,7 +152,7 @@ void(float dist) hlorddragon_move = {
     if (self.dragonAttacking == FALSE) {
         if (targ) {   // Seeking a path_corner, enemy, or master...
             if (!onpath) {   // Dragon is seeking a target, not following a path.  Don't bother with fancy tilt code -- just untilt it.
-                hlorddragon_untilt ();
+                hlorddragon_untilt();
 
                 // Aim high above the target's head.
                 temp_goal.origin = targ.origin;
@@ -162,7 +162,7 @@ void(float dist) hlorddragon_move = {
                 self.enemy = temp_goal;
                 if (!oldEnemy) {   // Following a master, not an enemy.
                     if (Wyrm_WalkMove (self.angles_y, dist)) {   // Direct movement successful, so stop here.
-                        ai_face ();
+                        ai_face();
                         self.enemy = oldEnemy;
                         return;
                     }
@@ -174,7 +174,7 @@ void(float dist) hlorddragon_move = {
                     Wyrm_WalkMove (self.angles_y, dist);
                     if (moveDir == self.origin)
                         if (QC_CloseEnough (dist))
-                            ai_face ();
+                            ai_face();
                 }
                 self.enemy = oldEnemy;
                 return;
@@ -232,7 +232,7 @@ void(float dist) hlorddragon_move = {
             turnOffset = leftTurn;
         }
     }
-    else hlorddragon_untilt ();
+    else hlorddragon_untilt();
 
 	// PM:  Don't use setorigin because of clipping problems.
     if (moveDir_z > 5)
@@ -512,8 +512,8 @@ void() hlorddragon_explode =  {
     if (vlen(self.velocity) < 100 || self.flags & FL_INWATER) {
         self.touch = SUB_Null;
 		self.deadflag = self.deadflag & DEAD_DYING;
-        hlorddragon_parts ();
-        hlorddragon_nuke (); // Explode for massive damage!
+        hlorddragon_parts();
+        hlorddragon_nuke(); // Explode for massive damage!
 		Quake_Spawn(self,800,0,self.origin,FALSE,1,VEC_QUAKE);
         self.think = hlorddragon_boom; // We can't remove dragon now, because this may be called during a touch function, ... 
         self.nextthink = time + 0.100; // ...in which case the C code is looping through area links.  Delay removal for at least a frame.
@@ -527,7 +527,7 @@ void() hlorddragon_explode =  {
 void() hlorddragon_squish = {
     if (other.solid == SOLID_BSP) {
         self.velocity = '0 0 0';
-        hlorddragon_explode ();
+        hlorddragon_explode();
         return;
     }
 
@@ -565,8 +565,8 @@ void() hlorddragon_death18 =[ $drgdth18, hlorddragon_death19 ] {hlorddragon_expl
 void() hlorddragon_death19 =[ $drgdth19, hlorddragon_death20 ] {hlorddragon_explode();};
 void() hlorddragon_death20 =[ $drgdth20, hlorddragon_death21 ] {hlorddragon_explode();};
 void() hlorddragon_death21 =[ $drgdth21, SUB_Null       ] {
-    hlorddragon_parts (); // PM: Added explosion and other gibs.
-    hlorddragon_nuke ();
+    hlorddragon_parts(); // PM: Added explosion and other gibs.
+    hlorddragon_nuke();
 	Quake_Spawn(self,600,0,self.origin,FALSE,1,VEC_QUAKE);
     ThrowGib(1,13);
     ThrowGib(2,13);
@@ -578,7 +578,7 @@ void() hlorddragon_death21 =[ $drgdth21, SUB_Null       ] {
 
 // Morphs the dark lord into the beast.  See 'hknight.qc' for dark lord.
 void() darklord_thebeast = {
-    hlorddragon_nuke ();     // Spawn a big explosion.
+    hlorddragon_nuke();     // Spawn a big explosion.
 
     self.flags = (self.flags | FL_FLY) - (self.flags & FL_GODMODE);
     self.solid = SOLID_SLIDEBOX;
@@ -629,5 +629,5 @@ void() darklord_thebeast = {
     self.bloodtype = BLOOD_RED;     // It's flesh and blood now.
     self.ryuflags = self.ryuflags | RYU_NO_WATER;
 	self.resist_poison = self.resist_acid = 1;
-    hlorddragon_walk1 ();
+    hlorddragon_walk1();
 };

@@ -116,10 +116,10 @@ void(entity inflictor, entity attacker, float damage)	swrm_pain = {
 
 	sound (self, CHAN_VOICE, "madfox/bees/bee.wav", 1, ATTN_NORM);
 	if (random() < 0.85) {
-		swrm_pain1 ();
+		swrm_pain1();
 		self.pain_finished = time + 1;
 	} else {
-		swrm_paina1 ();
+		swrm_paina1();
 		self.pain_finished = time + 1;
 	}
 };
@@ -160,7 +160,7 @@ void() swrm_die = {
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
 	sound (self, CHAN_VOICE, "madfox/bees/bee2.wav", 1, ATTN_NORM);
 
-	swrm_die1 ();
+	swrm_die1();
 };
 
 void() beez_touch = {
@@ -229,5 +229,5 @@ void() monster_beez = {
 	self.classtype = CT_MONBEEZ;
 	self.classgroup = CG_HARMLESS;
 	self.classmove = MON_MOVEFLY;
-	monster_start ();
+	monster_start();
 };

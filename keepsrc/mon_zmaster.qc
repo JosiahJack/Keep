@@ -170,9 +170,9 @@ void() zmaster_die = {
 
 	// regular death
 	if (random() > 0.5)
-		zmaster_die1 ();
+		zmaster_die1();
 	else
-		zmaster_dieb1 ();
+		zmaster_dieb1();
 };
 
 void() zmaster_seeker_hunt = {
@@ -242,7 +242,7 @@ float() zmaster_find_easy_victim = {
 		victim = nextent(victim);
 	}
 	if (found_one && enemyold != self.enemy)	{
-		FoundTarget ();
+		FoundTarget();
 		if (self.effects == 0) {
 			sound (self, CHAN_WEAPON, "items/protect.wav", 1, ATTN_NORM);
 			self.effects = EF_BRIGHTFIELD;
@@ -479,7 +479,7 @@ void(entity inflictor, entity attacker, float damage) zmaster_pain = {
 
 	sound (self, CHAN_VOICE, "custents/zmaster/pain.wav", 1, ATTN_NORM);
 	if (time - self.pain_finished > 5) {	// always go into pain frame if it has been a while
-		zmaster_pain1 ();
+		zmaster_pain1();
 		self.pain_finished = time + 1;
 		return;
 	}
@@ -487,7 +487,7 @@ void(entity inflictor, entity attacker, float damage) zmaster_pain = {
 	if (random()*50 > damage) return;		// didn't flinch
 
 	self.pain_finished = time + 2;
-	zmaster_pain1 ();
+	zmaster_pain1();
 };
 
 void() monster_zombie_master_precache = {
@@ -544,7 +544,7 @@ void() monster_zombie_master = { // [ENTITY]
 	self.th_pain = zmaster_pain;
 	self.th_die = zmaster_die;
 	Resist_ChangeType(self,-1);
-	monster_start ();
+	monster_start();
 };
 
 void(float dist) zmaster_run = {
@@ -567,14 +567,14 @@ void(float dist) zmaster_run = {
 		if (self.oldenemy) {
 			self.enemy = self.oldenemy;
 			self.oldenemy = world;
-			FoundTarget ();
+			FoundTarget();
 		}
 	}
 
 	// take control of a corpse when close enough
 	if (corpse_status(self.enemy)) {
 		r = vlen(self.enemy.origin - self.origin);
-		if (r < 80) { self.th_melee (); return; }
+		if (r < 80) { self.th_melee(); return; }
 
 		if (!visible(self.enemy))
 			if (visible(self.oldenemy))
@@ -587,14 +587,14 @@ void(float dist) zmaster_run = {
 		if (self.oldenemy.owner != self && (self.oldenemy.health > 0 || corpse_status(self.oldenemy))) {
 			self.enemy = self.oldenemy;
 			self.oldenemy = world;
-			HuntTarget ();
+			HuntTarget();
 			sound (self, CHAN_VOICE, "custents/zmaster/comnback.wav", 1, ATTN_NORM);
 			self.currentammo = time + 2.5;
 		} else {
 			if (self.movetarget)
-				self.th_walk ();
+				self.th_walk();
 			else
-				self.th_stand ();
+				self.th_stand();
 			return;
 		}
 	}

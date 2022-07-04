@@ -261,5 +261,5 @@ void() monster_cyberdemon = {
 	} else {
 		if (self.deathstring == "")  self.deathstring = " was splattered by a Cyberdemon\n";
 	}
-    monster_start ();
+    monster_start();
 };

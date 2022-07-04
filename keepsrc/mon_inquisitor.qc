@@ -48,21 +48,21 @@ void() InquisitorCheckSetDown = {
 };
 
 // Fly 105-119
-void()	inquisitor_run1	=[105,		inquisitor_run2	] {flat_goal(13);InquisitorCheckSetDown (); self.gravity = 0; self.movetype = MOVETYPE_FLY;};
-void()	inquisitor_run2	=[106,		inquisitor_run3	] {flat_goal(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run3	=[107,		inquisitor_run4	] {flat_goal(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run4	=[108,		inquisitor_run5	] {flat_goal(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run5	=[109,		inquisitor_run6	] {flat_goal(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run6	=[110,		inquisitor_run7	] {flat_goal(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run7	=[111,		inquisitor_run8	] {flat_goal(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run8	=[112,		inquisitor_run9	] {flat_goal(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run9	=[113,		inquisitor_run10] {flat_goal(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run10=[114,		inquisitor_run11] {flat_goal(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run11=[115,		inquisitor_run12] {flat_goal(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run12=[116,		inquisitor_run13] {flat_goal(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run13=[117,		inquisitor_run14] {flat_goal(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run14=[118,		inquisitor_run15] {flat_goal(13);InquisitorCheckSetDown ();};
-void()	inquisitor_run15=[119,		inquisitor_run1 ] {flat_goal(13);InquisitorCheckSetDown ();};
+void()	inquisitor_run1	=[105,		inquisitor_run2	] {flat_goal(13);InquisitorCheckSetDown(); self.gravity = 0; self.movetype = MOVETYPE_FLY;};
+void()	inquisitor_run2	=[106,		inquisitor_run3	] {flat_goal(13);InquisitorCheckSetDown();};
+void()	inquisitor_run3	=[107,		inquisitor_run4	] {flat_goal(13);InquisitorCheckSetDown();};
+void()	inquisitor_run4	=[108,		inquisitor_run5	] {flat_goal(13);InquisitorCheckSetDown();};
+void()	inquisitor_run5	=[109,		inquisitor_run6	] {flat_goal(13);InquisitorCheckSetDown();};
+void()	inquisitor_run6	=[110,		inquisitor_run7	] {flat_goal(13);InquisitorCheckSetDown();};
+void()	inquisitor_run7	=[111,		inquisitor_run8	] {flat_goal(13);InquisitorCheckSetDown();};
+void()	inquisitor_run8	=[112,		inquisitor_run9	] {flat_goal(13);InquisitorCheckSetDown();};
+void()	inquisitor_run9	=[113,		inquisitor_run10] {flat_goal(13);InquisitorCheckSetDown();};
+void()	inquisitor_run10=[114,		inquisitor_run11] {flat_goal(13);InquisitorCheckSetDown();};
+void()	inquisitor_run11=[115,		inquisitor_run12] {flat_goal(13);InquisitorCheckSetDown();};
+void()	inquisitor_run12=[116,		inquisitor_run13] {flat_goal(13);InquisitorCheckSetDown();};
+void()	inquisitor_run13=[117,		inquisitor_run14] {flat_goal(13);InquisitorCheckSetDown();};
+void()	inquisitor_run14=[118,		inquisitor_run15] {flat_goal(13);InquisitorCheckSetDown();};
+void()	inquisitor_run15=[119,		inquisitor_run1 ] {flat_goal(13);InquisitorCheckSetDown();};
 
 // FlyAscend 89-104
 void() inquisitor_ascend1=[89, inquisitor_ascend2] {};

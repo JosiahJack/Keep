@@ -138,7 +138,7 @@ void() item_armor_setup = { // [FUNCTION]
 	if (self.respawn_time == 0) self.respawn_time = RESPAWN_ARMOR;
 	item_setupnoise("items/armor1.wav");
 	item_coopcheck(); // Check for coop errors
-	item_start ();
+	item_start();
 };
 
 // Green Armour with 100 armor value

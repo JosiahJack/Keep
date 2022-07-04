@@ -42,7 +42,7 @@ float LT_TOGGLE    = 1.000;
 float LT_ACTIVE    = 2.000;
 
 void() ltrail_chain = { // [FUNCTION]
-   SUB_UseTargets ();
+   SUB_UseTargets();
    self.think = SUB_Null;
 };
 

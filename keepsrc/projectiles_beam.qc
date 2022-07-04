@@ -382,7 +382,7 @@ void(vector p1, vector p2, entity from, float damage) PlayerLightningDamage = { 
 void(entity prev, entity own, float dst) HIP_SpawnMjolnirLightning = { // [FUNCTION]
    local entity light;
 
-   light = spawn ();
+   light = spawn();
    light.delay = (time + 0.800);
    light.state = FALSE;
    light.lastvictim = prev;
@@ -400,7 +400,7 @@ void() HIP_SpawnMjolnirBase = { // [FUNCTION]
 
 	if (self.tome_finished) { Thor_Slam(30,80); return;}
 
-	light = spawn ();
+	light = spawn();
 	light.origin = trace_endpos;
 	light.flags = FALSE;
 	light.owner = light.master = self;
@@ -480,7 +480,7 @@ void(vector startpos, float radius, float life) SpawnOrbLightning = { // [FUNCTI
 void() SpawnLightningOrb = { // [FUNCTION]
 	local entity light;
 
-	light = spawn ();
+	light = spawn();
 	light.origin = trace_endpos;
 	light.origin_z = light.origin_z + 32; //move it up a tad from the hit point
 	light.flags = FALSE;
@@ -597,7 +597,7 @@ void() BecomeBeamHit = { // [FUNCTION]
 	self.touch = SUB_Null;
 	setmodel (self, "progs/custents/beamhit.spr");
 	self.solid = SOLID_NOT;
-	beamhit1 ();
+	beamhit1();
 };
 
 void() beamring1 =	[1,		beamring2] {self.nextthink = time + 0.05;}; // [FUNCTION]

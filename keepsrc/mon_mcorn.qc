@@ -50,7 +50,7 @@ void() mcorn_tailswipe = {
 	
 	if (!self.enemy) return;
 	if (self.health < 1) return;
-	ai_face ();						// Turn towards enemy target
+	ai_face();						// Turn towards enemy target
 	walkmove (self.ideal_yaw, 12);	// Get extra close to enemy target
 	ai_damagebreakable(20);			// Damage any breakables
 	ldmg = 10 + 5*random();
@@ -250,8 +250,8 @@ void(entity inflictor, entity attacker, float damage) mcorn_pain = {
 		sound (self, CHAN_VOICE, "qmaster/manticore/mon_manticore_pain1.wav", 1, ATTN_NORM);
 	}
 
-	if (random() < 0.5) mcorn_paina1 ();
-	else mcorn_pain1 ();
+	if (random() < 0.5) mcorn_paina1();
+	else mcorn_pain1();
 };
 
 void() mcorn_die1	=[	87,	mcorn_die2	] {};
@@ -307,7 +307,7 @@ void() mcorn_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound(self, CHAN_VOICE, "qmaster/manticore/mon_manticore_death2.wav", 1, ATTN_NORM);
-		mcorn_die1 ();
+		mcorn_die1();
 	}
 };
 

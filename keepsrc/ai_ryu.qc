@@ -227,7 +227,7 @@ void(float newyaw, float dist, entity threat) Ryu_Dodge = {
     }
     targ = self.goalentity;
     self.ideal_yaw = vectoyaw (targ.origin - self.origin); 
-    ChangeYaw (); // Face its goal.
+    ChangeYaw(); // Face its goal.
 
 	// Next, check if the dragon should slide vertically away from its goal.
     if (targ != threat) {
@@ -263,7 +263,7 @@ void(float dist, entity ent) Ryu_FindBestPath = {
     if (yaw != 0) { //Flip the dragon and adjust speed based on its angles. Sidestep.  +yaw = left, -yaw = right.
         ryu_tilt (yaw > 0, dist);
         dist = ryu_slide_speed (dist);
-    } else ryu_untilt ();
+    } else ryu_untilt();
     Ryu_Dodge (self.angles_y + yaw, dist, ent); // Set new course and head in that direction if possible.
 };
 

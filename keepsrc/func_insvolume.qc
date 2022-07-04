@@ -253,7 +253,7 @@ void() func_insidevolume = {
 	self.nodebuginfo = TRUE;
 	
 	// Setup like a trigger in the map
-	InitTrigger ();
+	InitTrigger();
 	setsize (self, self.bbmins, self.bbmaxs);
 	
 	// Work out actual world origin coordinates

@@ -50,26 +50,26 @@ void() clock_setpos = { // [FUNCTION]
       if ( (self.ltime > ang) ) {
          temp = self.target;
          self.target = self.event;
-         SUB_UseTargets ();
+         SUB_UseTargets();
          self.target = temp;
       }
    }
    self.angles_x = (ang * self.movedir_x);
    self.angles_y = (ang * self.movedir_y);
    self.angles_z = (ang * self.movedir_z);
-   RotateTargetsFinal ();
+   RotateTargetsFinal();
    self.ltime = ang;
 };
 
 void() clock_think = { // [FUNCTION]
-   clock_setpos ();
+   clock_setpos();
    self.nextthink = (time + TRUE);
 };
 
 void() clock_firstthink = { // [FUNCTION]
-   LinkRotateTargets ();
+   LinkRotateTargets();
    self.think = clock_think;
-   clock_think ();
+   clock_think();
 };
 
 void() func_clock = { // [ENTITY]
@@ -81,7 +81,7 @@ void() func_clock = { // [ENTITY]
    self.think = clock_firstthink;
    self.nextthink = (time + 0.100);
    self.ltime = time;
-   SetMovedir ();
+   SetMovedir();
    temp = self.movedir;
    self.movedir_x = (FALSE - temp_y);
    self.movedir_y = (FALSE - temp_z);

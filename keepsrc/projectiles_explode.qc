@@ -68,7 +68,7 @@ void() s_explode5 = [4,	s_explode6] {}; // [FUNCTION]
 void() s_explode6 = [5,	SUB_Remove] {}; // [FUNCTION]
 
 void() s_explode_think = { // [FUNCTION]
-    if (self.frame >= self.cnt) {SUB_Remove ();  return;}
+    if (self.frame >= self.cnt) {SUB_Remove();  return;}
 
     self.frame = self.frame + 1;
     self.nextthink = time + self.wait;
@@ -342,7 +342,7 @@ void(string fx, void() thinkst) Explosion_Start = { // [FUNCTION]
     self.touch      = SUB_Null;
     setmodel (self, fx);
     self.solid      = SOLID_NOT;
-    thinkst ();
+    thinkst();
 };
 
 void() BecomeTheBigFire = { // [FUNCTION]
@@ -359,8 +359,8 @@ void() BecomeExplosion2 = { // [FUNCTION]
 void() WarpExplosion = { // [FUNCTION]
     sound (self, CHAN_AUTO, "zerstorer/trog/bigboom.wav", 1, ATTN_NORM);
     Tent_Point (TE_EXPLOSION, self.origin);
-    FlameWave ();       // PM:  New shockwave effect at ground zero.
-    BecomeTheBigFire ();    // Replaced old fireball mdl with big sprite.
+    FlameWave();       // PM:  New shockwave effect at ground zero.
+    BecomeTheBigFire();    // Replaced old fireball mdl with big sprite.
 };
 
 // BDW_TracerEffect
@@ -582,7 +582,7 @@ void(float immediate) Mirv_Use = { // [FUNCTION]
 void() lightning_orb_death = { // [FUNCTION]
 	local entity light;
 
-	light = spawn ();
+	light = spawn();
 	light.origin = self.origin;
 	light.model = "progs/drake/s_fancy.spr";
 	setmodel(light,light.model);
@@ -718,7 +718,7 @@ void() RyuPlasma_Explode = { // [FUNCTION]
     sound (self, CHAN_AUTO, "rogue/plasma/explode.wav", 1, ATTN_NORM);
     setorigin(self, self.origin - 8*normalize(self.velocity)); // PM:  Do it right.
     Tent_Explosion2 (self.origin, 244, 3);
-    RyuPlasma_Discharge ();
+    RyuPlasma_Discharge();
     BecomeAnyExplosion (138, 6, "progs/drake/s_fancy.spr");
 };
 
@@ -788,7 +788,7 @@ void() Orange_Explosion = { // [FUNCTION]
     else
         Rocket_Explosion2 (self.origin, 232, 8);
 
-    BecomeExplosion ();
+    BecomeExplosion();
 };
 
 // Custom particle explosion for plasma shots.
@@ -907,7 +907,7 @@ void() Thor_Remove = { // [FUNCTION]
 void() Thor_Poof = { // [FUNCTION]
     self.ammo_cells = 0;
     spawn_tfog (self.origin);
-    Thor_Remove ();
+    Thor_Remove();
 };
 
 void(float lo, float hi) Thor_Slam = { // [FUNCTION]
@@ -1082,8 +1082,8 @@ void() BecomeBigBangExplosion = { // [FUNCTION]
 
 	R_Exp3(self.origin);
 	Tent_Explosion(self.origin);
-    FlameWave ();
-    BecomeTheBigFire ();    // Was BecomeExplosion.
+    FlameWave();
+    BecomeTheBigFire();    // Was BecomeExplosion.
 };
 
 // This creates a bigger fiery explosion like the one in the game Blood.

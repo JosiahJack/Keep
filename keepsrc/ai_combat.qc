@@ -230,13 +230,13 @@ void(entity targ, entity attacker) Killed = {
 			self.touch = SUB_Null;
 			if (self.flags & FL_MONSTER) monster_death_use();
 			if (self.frozen && !(self.flags & FL_CLIENT)) T_Freeze(self,attacker);
-			else self.th_die ();
+			else self.th_die();
 		} else if (!self.deadflag && self.classtype == CT_MONIDSHUB) {
 			// Completely messed up setup for the oldone boss with a weird target field and mess of triggers around it! This elseif is just an exception so it works, anyway no one fights the oldone!
 			self.deadflag = DEAD_DEAD;
 			if ((self.flags & FL_MONSTER) && !self.nomonstercount) AddToKills(self,attacker);
 			if (self.frozen && !(self.flags & FL_CLIENT)) { T_Freeze(self,attacker); monster_death_use(); }
-			else self.th_die ();
+			else self.th_die();
 		}
 	}
 	self = oself; // Restore self
@@ -685,7 +685,7 @@ void(entity targ, entity inflictor, entity attacker, float damage, float checkar
 							if (SUB_flagsEnemyTarget(FL_CLIENT)) self.oldenemy = SUB_entEnemyTarget();
 							if (self.enemy.classtype == CT_ENEMYTARGET) SUB_switchEnemyTarget();
 							self.enemy = attacker;		// attack the attacker!
-							FoundTarget ();				// Run+turn towards new enemy
+							FoundTarget();				// Run+turn towards new enemy
 						}
 					}
 				}

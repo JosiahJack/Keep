@@ -103,9 +103,9 @@ void() ranger_stand5    =[ $stand5,  ranger_stand1  ] {ai_stand();};
 void() ranger_stand =
 {
     if (self.war & WARx_AXE_FRAMES)
-        ranger_axstand1 ();
+        ranger_axstand1();
     else
-        ranger_stand1 ();
+        ranger_stand1();
 };
 
 // Since player model does not have a proper walk scene, animate the run scene at half speed.
@@ -136,8 +136,8 @@ void() ranger_walk11 =[ $rockrun6,  ranger_walk12 ] {ai_walk(8);};
 void() ranger_walk12 =[ $rockrun6,  ranger_walk1  ] {ai_walk(8);};
 
 void() ranger_walk = {
-    if (self.war & WARx_AXE_FRAMES) ranger_axwalk1 ();
-    else ranger_walk1 ();
+    if (self.war & WARx_AXE_FRAMES) ranger_axwalk1();
+    else ranger_walk1();
 };
 
 void() ranger_axrun1    =[ $axrun1,  ranger_axrun2  ] {ai_run(self.speed);};
@@ -156,8 +156,8 @@ void() ranger_run6  =[ $rockrun6,  ranger_run1  ] {ai_run(self.speed);};
 
 void() ranger_run = {
     self.cnt = 0;   // Reset Nightmare fire counter.
-    if (self.war & WARx_AXE_FRAMES) ranger_axrun1 ();
-    else ranger_run1 ();
+    if (self.war & WARx_AXE_FRAMES) ranger_axrun1();
+    else ranger_run1();
 };
 
 // Similar to 'SoldierCheckAttack', with a few changes.  Part 2.
@@ -202,7 +202,7 @@ float() RangerCheckAttack_II = {
     if (random () < chance) {
         reload = 2*random();    // Grunt is '1+random()'.
         if (self.attack_finished > (time + reload)) reload = self.attack_finished - time;   // Obey reload times.
-        self.th_missile ();
+        self.th_missile();
         SUB_AttackFinished (reload);
         if (random() < 0.3) self.lefty = !self.lefty;
         return TRUE;
@@ -254,7 +254,7 @@ void(float dist) ranger_charge = {
     else safe_goal (dist);
 };
 
-void(float dist) ranger_strafe = {ai_face (); ai_run_strafe (dist);};
+void(float dist) ranger_strafe = {ai_face(); ai_run_strafe (dist);};
 
 void(float dist) ranger_axe_step = {
     local vector p1, p2;
@@ -349,15 +349,15 @@ void() ranger_axer = {
     else if (skill < 1) combo = FALSE;  // Hold back on Easy.
     r = random();
     if (r < 0.25) {
-        if (combo) ranger_axee1 ();    // 3-hit combo.
-        else ranger_axe1 ();
+        if (combo) ranger_axee1();    // 3-hit combo.
+        else ranger_axe1();
     } else if (r < 0.5) {
-        ranger_axeb1 ();
+        ranger_axeb1();
     } else if (r < 0.75) {
-        ranger_axec1 ();
+        ranger_axec1();
     } else {
-        if (combo) ranger_axef1 ();    // 2-hit combo.
-        else ranger_axed1 ();
+        if (combo) ranger_axef1();    // 2-hit combo.
+        else ranger_axed1();
     }
 
     M_Reload (0.5);
@@ -403,7 +403,7 @@ void() ranger_nailgun = {
     local entity targ;
 
     ai_face();
-    targ = Ranger_Target ();
+    targ = Ranger_Target();
     p1 = self.origin + '0 0 16';
     p2 = Aimpoint (self.enemy);
     p2_x = p2_x + crandom(); p2_y = p2_y + crandom(); p2_z = p2_z + crandom();
@@ -438,7 +438,7 @@ void(float lite) ranger_laser = {
             if (!visible (self.enemy))
                 {self.think = ranger_run; return;}
 
-    targ = Ranger_Target ();
+    targ = Ranger_Target();
     up = self.enemy.maxs_z - self.enemy.mins_z - 2;
     if (up < 0)
         up = 0;
@@ -470,7 +470,7 @@ void() ranger_rocket = {
     local entity targ;
 
     ai_face();
-    targ = Ranger_Target ();
+    targ = Ranger_Target();
     p1 = self.origin + '0 0 16';
     p2 = Aimpoint (self.enemy);
     p2_x = p2_x + crandom(); p2_y = p2_y + crandom(); p2_z = p2_z + crandom();
@@ -661,7 +661,7 @@ void() ranger_fire = {
         if (self.ammo_super >= 1)
         if (!(self.enemy.xfl & XFL_BOSS) || (self.enemy.health > 1000)) {
             self.war = WAR_BURIZA;
-            ranger_xbow1 ();
+            ranger_xbow1();
             return;
         }
     }
@@ -671,8 +671,8 @@ void() ranger_fire = {
             if (self.arsenal & WAR_CHAIN_LIGHTNING) self.war = WAR_CHAIN_LIGHTNING;
             else self.war = WAR_THUNDERBOLT;
 
-            ranger_light1 ();
-            M_Lstart ();
+            ranger_light1();
+            M_Lstart();
             return;
         }
     }
@@ -696,7 +696,7 @@ void() ranger_fire = {
             else if ((self.arsenal & WAR_SIDEWINDER) && (dist < 1000)) self.war = WAR_SIDEWINDER;
             else if (self.arsenal & WAR_GRENADE_LAUNCHER) self.war = WAR_GRENADE_LAUNCHER;
             else self.war = WAR_SIDEWINDER;
-            ranger_rock1 ();
+            ranger_rock1();
             return;
         }
     }
@@ -704,7 +704,7 @@ void() ranger_fire = {
     if (self.arsenal & WAR_PLASMA_GUN) {
         if (RangerUse_Plasma (dist)) {
             self.war = WAR_PLASMA_GUN;
-            ranger_plasma1 ();
+            ranger_plasma1();
             return;
         }
     }
@@ -712,7 +712,7 @@ void() ranger_fire = {
     if (self.arsenal & (WAR_LASER_CANNON | WAR_BLASTER)) {
         if (RangerUse_Laser (dist)) {
             if (self.arsenal & WAR_LASER_CANNON) {self.war = WAR_LASER_CANNON; ranger_lc1();}
-            else {self.war = WAR_BLASTER; ranger_laser1 ();}
+            else {self.war = WAR_BLASTER; ranger_laser1();}
             return;
         }
     }
@@ -721,7 +721,7 @@ void() ranger_fire = {
         if (RangerUse_Nailgun (dist)) {
             if (self.arsenal & WAR_SUPER_NAILGUN) self.war = WAR_SUPER_NAILGUN;
             else self.war = WAR_NAILGUN;
-            ranger_nail1 ();
+            ranger_nail1();
             return;
         }
     }
@@ -730,7 +730,7 @@ void() ranger_fire = {
         if ( (self.ammo_shells >= 1) || !(self.xfl & XFL_USE_AMMO)) {
             if (self.arsenal & WAR_SUPER_SHOTGUN) self.war = WAR_SUPER_SHOTGUN;
             else self.war = WAR_SHOTGUN;
-            ranger_shot1 ();
+            ranger_shot1();
             return;
         }
     }
@@ -761,8 +761,8 @@ void(entity inflictor, entity attacker, float damage) ranger_pain = {
     if (self.waitmin > time) return; // No pain anim this time even if played pain sound.
 
     self.waitmin = time + 1;
-    if (self.war == WAR_AXE) ranger_axpain1 ();
-    else ranger_pain1 ();
+    if (self.war == WAR_AXE) ranger_axpain1();
+    else ranger_pain1();
 };
 
 void() ranger_decap1  =[ $decap1,  ranger_decap2  ] {blood_spray ('-14 -3 20', 1);};

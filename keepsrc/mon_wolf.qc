@@ -349,12 +349,12 @@ void(entity inflictor, entity attacker, float damage) wolf_pain = {
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);	
-		if (self.pain_check == 1) wolf_pain1 ();
+		if (self.pain_check == 1) wolf_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 1.4;
 			self.axhitme = 0;
-			wolf_pain1 ();
+			wolf_pain1();
 		}
 	}
 };
@@ -394,7 +394,7 @@ void() wolf_die = {
 
 	// regular death
 	if (!self.gibbed) {
-		wolf_die1 ();
+		wolf_die1();
 	}
 };
 

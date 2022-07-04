@@ -457,8 +457,8 @@ void() army_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "soldier/death1.wav", 1, ATTN_NORM);
-		if (random() < 0.5) army_die1 (); // Forward
-		else army_cdie1 ();				  // Backward/side
+		if (random() < 0.5) army_die1(); // Forward
+		else army_cdie1();				  // Backward/side
 	}
 };
 

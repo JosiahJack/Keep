@@ -469,7 +469,7 @@ void() FoundTarget = {
 			sightgroup_entity = self;		// Highlight target for others
 			sightgroup_entity_time = time;	// reset wakeup timer
 			if (self.enemy.flags & FL_CLIENT) monster_sightsound();
-			HuntTarget ();					// Keep running after enemy
+			HuntTarget();					// Keep running after enemy
 			return;
 		}
 	} else {
@@ -499,7 +499,7 @@ void() FoundTarget = {
 	
 	self.show_hostile = time + 1;		// Wake up other monsters
 	monster_sightsound();				// Make sight sound regardless of who hit us
-	HuntTarget ();						// Keep running after enemy
+	HuntTarget();						// Keep running after enemy
 };
 
 /*======================================================================
@@ -620,7 +620,7 @@ float() FindTarget = { // [FUNCTION]
 			r = vlen ((self.origin - self.goalentity.origin));
 			if ( (r < MIN_CHARMER_DISTANCE) ) {
 				if ( ((self.huntingcharmer == MOVETYPE_WALK) && (r > TOOCLOSE_CHARMER_DISTANCE)) ) return FALSE; // 120units or closer to our charmer
-				StopHuntingCharmer (); // Stay put, we're at our charmer's heels, remove goal point
+				StopHuntingCharmer(); // Stay put, we're at our charmer's heels, remove goal point
 				return TRUE;
 			}
 		} else {
@@ -628,13 +628,13 @@ float() FindTarget = { // [FUNCTION]
 			charmrand = random();
 			if (self.temperament == TEMPRA_COWARDLY && charmrand < 0.1) charmmaxdist = 512;
 			if ( (vlen ((self.origin - self.charmer.origin)) > MAX_CHARMER_DISTANCE) ) {
-				HuntCharmer ();
+				HuntCharmer();
 				return FALSE;
 			} else {
 				charmdist = TOOCLOSE_CHARMER_DISTANCE;
 				if (self.temperament == TEMPRA_COWARDLY && charmrand < 0.1) charmdist = 384;
  				if ( (vlen ((self.origin - self.charmer.origin)) < charmdist) ) { // 120units or closer to our charmer
-					FleeCharmer (); // Get out of our charmer's way
+					FleeCharmer(); // Get out of our charmer's way
 					return FALSE;
 				}
  			}
@@ -651,7 +651,7 @@ float() FindTarget = { // [FUNCTION]
 				if (self.enemy.classtype == CT_ENEMYTARGET) SUB_switchEnemyTarget();
 				self.enemy = sight_entity;	// Switch to new enemy
 				self.passive_state = 0;
-				FoundTarget ();				// Run+turn towards new enemy
+				FoundTarget();				// Run+turn towards new enemy
 				return TRUE;
 			}
 		}
@@ -669,7 +669,7 @@ float() FindTarget = { // [FUNCTION]
 			if (self.sightgroup == sightgroup_entity.sightgroup) {
 				self.enemy = sightgroup_entity.enemy;	// Monster who wokeup
 				self.passive_state = MON_PASSIVESTATE_OFF;
-				FoundTarget ();							// Run+turn at new enemy
+				FoundTarget();							// Run+turn at new enemy
 				return TRUE;
 			}
 		}
@@ -743,6 +743,6 @@ float() FindTarget = { // [FUNCTION]
 	}
 
 	if (self.charmed) self.passive_state = FALSE; // Temporarily get angry.  DON'T CHANGE passive_mode, WE NEED TO REMEMBER THAT IF OUR ENEMY DIES!		
-	FoundTarget ();			// Run+turn towards new enemy
+	FoundTarget();			// Run+turn towards new enemy
 	return TRUE;			// stop previous routine got a target
 };

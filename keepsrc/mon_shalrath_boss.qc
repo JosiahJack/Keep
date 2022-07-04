@@ -217,7 +217,7 @@ void() ShalBossMissile = {
 	if (flytime < 0.1) flytime = 0.1;
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sound (self, CHAN_WEAPON, "q15/shalrath/bossattack2.wav", 1, ATTN_NORM);
-	missile = spawn ();
+	missile = spawn();
 	missile.owner = self;
 	missile.solid = SOLID_BBOX;
 	missile.movetype = MOVETYPE_FLYMISSILE;
@@ -244,7 +244,7 @@ void() ShalBossGrenade = {
 	dst = (self.enemy.origin + follow) - 13*self.movedir;
 	vec = normalize(dst - self.origin);
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	missile = spawn ();
+	missile = spawn();
 	missile.owner = self;
 	missile.movetype = MOVETYPE_BOUNCE;
 	missile.solid = SOLID_BBOX;	
@@ -270,7 +270,7 @@ void() ShalBossGrenade = {
 
 void() ShalBossNova = {
 	local	entity missile;
-	missile = spawn ();
+	missile = spawn();
 	missile.owner = self;
 	missile.movetype = MOVETYPE_FLY;
 	missile.solid = SOLID_BBOX;
@@ -308,7 +308,7 @@ void() ShalBossMissileTouch = {
 	self.touch = SUB_Null;
 	setmodel (self, "progs/drake/s_explod.spr");
 	self.solid = SOLID_NOT;
-	s_explode1 ();
+	s_explode1();
 };
 
 void() ShalBossGrenadeTouch = {
@@ -331,7 +331,7 @@ void() ShalBossGrenadeExplode = {
 	self.touch = SUB_Null;
 	setmodel (self, "progs/drake/s_explod.spr");
 	self.solid = SOLID_NOT;
-	s_explode1 ();
+	s_explode1();
 };
 
 void() ShalBossNovaTouch = {
@@ -365,7 +365,7 @@ void() ShalBossNovaTouch = {
 	setmodel (self, "progs/q15/ring_shockwave.mdl");
 	self.scale = 6;
 	self.solid = SOLID_NOT;
-	ring_grow1 ();
+	ring_grow1();
 };
 
 //Enemy spawner
@@ -374,7 +374,7 @@ void() shal_boss_spawner = {
 	local entity missile;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	missile = spawn ();
+	missile = spawn();
 	missile.owner = self;
 	missile.enemy = self.enemy;
 	missile.movetype = MOVETYPE_BOUNCE;

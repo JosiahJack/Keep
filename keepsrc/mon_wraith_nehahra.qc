@@ -336,7 +336,7 @@ void() nehwraith_melee = { // [FUNCTION]
     if (InMeleeRange (80))  chance = 0.75;
     else chance = 0.5;
 
-    if (random() < chance) nehwraith_melee1 ();
+    if (random() < chance) nehwraith_melee1();
     else nehwraith_attack();
 };
 
@@ -392,8 +392,8 @@ void(entity inflictor, entity attacker, float damage) nehwraith_pain = { // [FUN
     if (random() < 0.4) return;
 
     self.gorging = FALSE; // Get out of reaper mode to stop eating souls.
-    if (random() < 0.05 && self.alpha < 1) nehwraith_painb6 (); // Now do the standard pain routine.
-    else nehwraith_pain1 ();
+    if (random() < 0.05 && self.alpha < 1) nehwraith_painb6(); // Now do the standard pain routine.
+    else nehwraith_pain1();
 };
 
 void() nehwraith_die1  =[ 102, nehwraith_die2  ] {self.solid = SOLID_NOT;}; // [FUNCTION]

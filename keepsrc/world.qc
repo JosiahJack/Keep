@@ -761,7 +761,7 @@ void() trigger_onlyregistered_touch = { // [FUNCTION]
 	self.attack_finished = time + 2;
 	if (cvar("registered")) {
 		self.message = "";
-		SUB_UseTargets ();
+		SUB_UseTargets();
 		remove (self);
 	} else {
 		if (self.message != "") {
@@ -773,7 +773,7 @@ void() trigger_onlyregistered_touch = { // [FUNCTION]
 
 // Checks for registered version of game, no one uses this anymore
 void() trigger_onlyregistered = { // [ENTITY]
-	InitTrigger ();
+	InitTrigger();
 	self.touch = trigger_onlyregistered_touch;
 };
 

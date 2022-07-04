@@ -97,13 +97,13 @@ void() trap_lightning_use = { // [FUNCTION]
 
    if (self.duration > 0.100) {
       temp = self;
-      self = spawn ();
+      self = spawn();
       self.origin = p1;
       self.oldorigin = p2;
       self.lastvictim = temp;
       self.dmg = temp.dmg;
       self.delay = (time + temp.duration);
-      SpawnLightningThink ();
+      SpawnLightningThink();
       self = temp;
    } else {
       if (checkclient()) {
@@ -175,7 +175,7 @@ void() trap_lightning_triggered = { // [ENTITY]
 };
 
 void() trap_lightning = { // [ENTITY]
-   trap_lightning_triggered ();
+   trap_lightning_triggered();
    self.state = TRUE;
 };
 
@@ -185,7 +185,7 @@ void() trap_lightning_switched_use = { // [FUNCTION]
 };
 
 void() trap_lightning_switched = { // [ENTITY]
-   trap_lightning_triggered ();
+   trap_lightning_triggered();
    self.use = trap_lightning_switched_use;
 };
 
@@ -260,7 +260,7 @@ void() trap_tesla_think = { // [FUNCTION]
 
    if ( (self.attack_state == 0) ) {
       self.think = trap_tesla_think;
-      trap_tesla_scan ();
+      trap_tesla_scan();
       if ( (self.tesla_numtargets > FALSE) ) {
          if ( (self.wait > FALSE) ) sound (self,CHAN_AUTO,"hipnotic/misc/tesla.wav",TRUE,ATTN_NORM);
          self.attack_state = TRUE;
@@ -271,7 +271,7 @@ void() trap_tesla_think = { // [FUNCTION]
       if ((self.delay > FALSE) && (time > self.search_time) ) self.attack_state = MOVETYPE_WALK;
    } else {
       if ( (self.attack_state == TRUE) ) {
-         trap_tesla_scan ();
+         trap_tesla_scan();
          while ( (self.tesla_numtargets > FALSE) ) {
             sound (self,CHAN_AUTO,"hipnotic/weapons/mjolhit.wav",TRUE,ATTN_NORM);
             SpawnTeslaLightning (self.tesla_target);
@@ -319,13 +319,13 @@ void() trap_gods_wrath_use = { // [FUNCTION]
    if ( (self.attack_state == FALSE) ) {
       self.search_time = (time + self.delay);
       self.lastvictim = activator;
-      trap_tesla_think ();
+      trap_tesla_think();
    }
 };
 
 void() trap_gods_wrath = { // [ENTITY]
    if ( (self.delay == FALSE) ) self.delay = MOVETYPE_FLY;
-   trap_tesla_coil ();
+   trap_tesla_coil();
    self.wait = FALSE;
    self.state = TRUE;
    self.nextthink = CONTENT_EMPTY;
@@ -343,7 +343,7 @@ void() trap_gravity_think = { // [FUNCTION]
    local vector vel, dir, delta;
 
    self.ltime = time;
-   trap_tesla_scan ();
+   trap_tesla_scan();
    while ( (self.tesla_numtargets > FALSE) ) {
       delta = (self.origin - self.tesla_target.origin);
       dir = normalize (delta);

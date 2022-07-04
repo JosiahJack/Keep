@@ -235,8 +235,8 @@ void() bane_strafe = {
 	if (self.classtype != CT_MONBANE) return;
 
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
-	ChangeYaw ();
-	bane_shadow ();     // Shadow trails, like shadow kick.
+	ChangeYaw();
+	bane_shadow();     // Shadow trails, like shadow kick.
 	ai_run_strafe (20);     // Player walk speed.
 };
 
@@ -248,7 +248,7 @@ void() magica_sword_chop = {
     local   float   ldmg;
     local   vector  delta;
     
-    ai_face (); // movement done elsewhere.
+    ai_face(); // movement done elsewhere.
     delta = self.enemy.origin - self.origin;
     if (!InMeleeRange (80)) return; // 100 is too long.
     if (!CanDamage (self.enemy, self)) return;
@@ -271,7 +271,7 @@ void() bane_storm_target = { // [FUNCTION]
 void() bane_storm_end = { // [FUNCTION]
     if (self.owner && self.owner.owner == self) self.owner.owner = world;
     self.owner = world;
-    SUB_Remove ();
+    SUB_Remove();
 };
 
 void() bane_storm1  =[ 0, bane_storm2  ] {self.nextthink = time + 0.3;}; // [FUNCTION]
@@ -331,7 +331,7 @@ void() bane_storm4  =[ 0, bane_storm5  ] { // [FUNCTION]
 			
         self.pain_finished = time + 5;
     }
-    bane_storm_target ();
+    bane_storm_target();
     self.attack_finished = time + self.delay;
 };
 void() bane_storm5 =[ 0, bane_storm6    ] {LightZero_Set (12, self.delay, -4); self.nextthink = self.attack_finished;}; // [FUNCTION]
@@ -589,13 +589,13 @@ void() lord_magic = {
     if (M_MeteorCheck ('50 0 112')) {add = 0;  opt = opt + 1;} // Using 50 and 100 as sides of a right triangle, hypotenuse is 111.8.
     r = random() * opt + add;
     if (r <= 1)
-        hknight_magica1 ();     // Meteor
+        hknight_magica1();     // Meteor
     else if (r <= 2)
-        hknight_magicb1 ();     // Magic missile straight
+        hknight_magicb1();     // Magic missile straight
     else if (r <= 3)
-        hknight_magicc1 ();     // Magic missile spread
+        hknight_magicc1();     // Magic missile spread
     else
-        hknight_magicd1 ();     // Firewall
+        hknight_magicd1();     // Firewall
 };
 
 // FIXME:  Is this done aside from missing corpse scan/use?
@@ -608,17 +608,17 @@ void() darklord_magic = {
 	//    if (self.minion_count < skill)
 	//        if (random() < 0.1)
 	//    if (random() < (skill - self.minion_count) * 0.1)
-    if ((self.spawnflags & 2) && (self.minion_count < 1) && (self.waitmax < time)) {darklord_magicd1 ();  return;}
+    if ((self.spawnflags & 2) && (self.minion_count < 1) && (self.waitmax < time)) {darklord_magicd1();  return;}
 
 	// Attacking...
     dist = vlen(self.enemy.origin - self.origin);
     if (dist <= DARKLORD_NEAR) {
         if (self.waitmin < time) {darklord_magica1();  return;} // Thor's hand.
 
-        CheckForCharge ();
+        CheckForCharge();
         if (self.frame == $char_a1 || self.frame == $char_b1) return;
     }
-    hknight_magicb1 (); // Magic missile straight
+    hknight_magicb1(); // Magic missile straight
 };
 
 void() hkboss_magic = {
@@ -631,18 +631,18 @@ void() hkboss_magic = {
 	// Old behavior should be magica->magicb->magicc, but it seemed to favor B?
     r = self.meleeattack & 3;
     if (!r)
-        hknight_magica1 ();
+        hknight_magica1();
     else if (r != 3)
-        hknight_magicb1 ();
+        hknight_magicb1();
     else
-        hknight_magicc1 ();
+        hknight_magicc1();
 };
 
 void() bane_magic = {
     if (random() < 0.25) {
         if (CheckBaneJump ()) { // PM:  Jumping done at charge anim.  However, if enemy is low enough that CheckForCharge would abort, then we can check for jumping.
-            if (self.origin_z - self.enemy.origin_z > 20) {bane_jump1 ();  return;} // We want the Bane to occasionally jump down toward the enemy, much like old SoE.
-            if (!self.waitmax && ((self.enemy.origin_z - self.origin_z) > 20)) {bane_magice1 ();  return;} // If enemy is above and using new AI, try to teleport to higher ground occasionally.
+            if (self.origin_z - self.enemy.origin_z > 20) {bane_jump1();  return;} // We want the Bane to occasionally jump down toward the enemy, much like old SoE.
+            if (!self.waitmax && ((self.enemy.origin_z - self.origin_z) > 20)) {bane_magice1();  return;} // If enemy is above and using new AI, try to teleport to higher ground occasionally.
         }
 	}
 
@@ -650,9 +650,9 @@ void() bane_magic = {
 
 	// Spray some fireballs.
     if (random() <= 0.5)
-        hknight_magicb1 ();
+        hknight_magicb1();
     else
-        hknight_magicc1 ();
+        hknight_magicc1();
 };
 
 void(float side) bane_melee = {
@@ -757,9 +757,9 @@ void(entity inflictor, entity attacker, float damage) bane_pain = {
     if (SUB_IgnorePain()) return; // No pain anims in Nightmare.
 
     if (random() < 0.5)
-        bane_pain1 ();
+        bane_pain1();
     else
-        bane_painb1 ();
+        bane_painb1();
 };
 
 void() baneknight_melee = {
@@ -771,27 +771,27 @@ void() baneknight_melee = {
     if (!SUB_QuickAttack ())
         if (self.classname == "monster_hell_knight") fast = 0;
     if (fast) {
-        if (self.meleeattack == 1) bane_slice1 ();
-        else if (self.meleeattack == 2) bane_smash1 ();
+        if (self.meleeattack == 1) bane_slice1();
+        else if (self.meleeattack == 2) bane_smash1();
         else if (self.meleeattack == 3) {
-            bane_watk1 ();
+            bane_watk1();
             self.meleeattack = 0;
         }
         return;
     }
 
-    if (self.meleeattack == 1) hknight_slice1 ();
-    else if (self.meleeattack == 2) hknight_smash1 ();
+    if (self.meleeattack == 1) hknight_slice1();
+    else if (self.meleeattack == 2) hknight_smash1();
     else if (self.meleeattack == 3) {
-        hknight_watk1 ();
+        hknight_watk1();
         self.meleeattack = 0;
     }
 };
 
 void() bane_win = {
     sound (self, CHAN_VOICE, "drake/bane/laugh.wav", 1, ATTN_NONE); // Update:  Changed from ATTN_NORM to ATTN_NONE for level-wide low laugh.
-    if (self.movetarget || self.charmer) self.th_walk ();
-    else self.th_stand ();
+    if (self.movetarget || self.charmer) self.th_walk();
+    else self.th_stand();
 };
 
 // Tougher and meaner red version with fire magic.
@@ -815,8 +815,8 @@ void() monster_hell_lord_precache = {
     precache_sound ("drake/weapons/fwalltap.wav");
 };
 
-void() monster_hell_lord = {monster_hell_knight ();};
-void() monster_lord = {self.classname = "monster_hell_lord";  monster_hell_knight ();};
+void() monster_hell_lord = {monster_hell_knight();};
+void() monster_lord = {self.classname = "monster_hell_lord";  monster_hell_knight();};
 
 // For Rapture's hkboss.
 void() monster_hkboss_precache = {
@@ -839,14 +839,14 @@ void() monster_hkboss_precache = {
     precache_sound ("drake/hkboss/iceball.wav");      // Used by hkboss.
 };
 
-void() monster_hkboss = {monster_hell_knight ();}; // For Rapture.
+void() monster_hkboss = {monster_hell_knight();}; // For Rapture.
 
 // In case Bane gets aggravated during teleportation...
 void() bane_run = {
     if (self.skin == SKIN_BANE_GRAY)
-        bane_painc1 ();     // Restart shadow walk.
+        bane_painc1();     // Restart shadow walk.
     else
-        hknight_run1 ();
+        hknight_run1();
 };
 
 void() monster_bane_precache = {
@@ -998,16 +998,16 @@ void() dk_shield = {
 };
 
 void(float d) dk_slow = {
-    if (!self.enemy) {darklord_fast1 ();  return;}
-    if (!visible (self.enemy)) {darklord_fast1 ();  return;}
-    dk_shield ();
+    if (!self.enemy) {darklord_fast1();  return;}
+    if (!visible (self.enemy)) {darklord_fast1();  return;}
+    dk_shield();
     ai_run(d);
 };
 
 void(float d) dk_fast = {
 	if (self.enemy)
-		if (visible (self.enemy)) {darklord_run1 ();  return;}
-    dk_shield ();
+		if (visible (self.enemy)) {darklord_run1();  return;}
+    dk_shield();
     ai_run(d);
 };
 
@@ -1055,11 +1055,11 @@ void() darklord_melee = {
 
     sound (self, CHAN_WEAPON, "hknight/slash1.wav", 1, ATTN_NORM);
     if (self.meleeattack == 1)
-        darklord_slice1 ();
+        darklord_slice1();
     else if (self.meleeattack == 2)
-        darklord_smash1 ();
+        darklord_smash1();
     else if (self.meleeattack == 3) {
-        darklord_watk1 ();
+        darklord_watk1();
         self.meleeattack = 0;
     }
 };
@@ -1103,7 +1103,7 @@ void(entity inflictor, entity attacker, float damage) darklord_pain = {
         st = '-2 0 28';
         st = self.origin + v_forward*st_x + v_right*st_y + v_up*st_z;
         Rocket_Explosion2 (st, 32, 5);
-        darklord_fall1 ();
+        darklord_fall1();
         return;
     }
     hknight_pain (inflictor, attacker, damage); // Proceed as usual.
@@ -1144,9 +1144,9 @@ void() darklord_die = {
     sound (self, CHAN_VOICE, "drake/darklord/death.wav", 1, ATTN_NORM);
 
     if (random() > 0.5)
-        {st = '-2 0 28'; darklord_die1 ();}
+        {st = '-2 0 28'; darklord_die1();}
     else
-        {st = '-3 0 33'; darklord_dieb1 ();}
+        {st = '-3 0 33'; darklord_dieb1();}
     makevectors(self.angles);
     st = self.origin + v_forward*st_x + v_right*st_y + v_up*st_z;
     Rocket_Explosion2 (st, 32, 5);

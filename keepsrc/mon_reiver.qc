@@ -195,7 +195,7 @@ void() ghost_follower_think = {
 
 void(vector spawn_pos, vector spawn_vel) launch_ghost_follower =
 {
-	newmis = spawn ();
+	newmis = spawn();
 	newmis.owner = self;
 	newmis.enemy = self.enemy;
 	newmis.movetype = MOVETYPE_NOCLIP; 	// so that it can fly through walls :)
@@ -344,7 +344,7 @@ void() reiver_fireball = {
 
 	dir = normalize((self.enemy.origin + '0 0 10') - self.origin);
 	sound (self, CHAN_WEAPON, "q15/reiver/reiver_fireball_shoot.wav", 1, ATTN_NORM);
-	missile = spawn ();
+	missile = spawn();
 	missile.owner = self;
 	missile.enemy = self.enemy;
 	missile.scale = 0.9;	
@@ -469,9 +469,9 @@ void()	reiver_idle_random = {
 	if (random() < 0.4) {
 		traceline (self.origin, self.origin - '0 0 77', TRUE, self);
 		self.origin_z = trace_endpos_z + 34; // Always align him towards ground beneath him. Reason: Walking monsters are always spawned above the floor and then droptofloor(). Flying monsters dont !! So that breakout animation looks right.
-		reiver_wait_underground ();	// underground sneeking
+		reiver_wait_underground();	// underground sneeking
 	} else {
-		reiver_idle1 (); // regular flying
+		reiver_idle1(); // regular flying
 	}
 };
 
@@ -672,23 +672,23 @@ void()	reiver_vampire1	=[	$scream1,	reiver_vampire2	] {ai_face(); self.nextthink
 void()	reiver_vampire2	=[	$scream2,	reiver_vampire3	] {ai_face(); self.nextthink = time + 0.1;
 	reiver_hand1 ('34 23 5', 0.5);
 	reiver_hand2 ('37 -23 5', 0.5);
-	life_drain_effect ();
+	life_drain_effect();
 };
 void()	reiver_vampire3	=[	$scream3,	reiver_vampire4	] {ai_face(); self.nextthink = time + 0.12; life_drain();
 	reiver_hand1 ('42 27 9', 0.75);
 	reiver_hand2 ('42 -27 9', 0.75);
-	life_drain_effect ();};
+	life_drain_effect();};
 void()	reiver_vampire4	=[	$scream4,	reiver_vampire5	] {ai_face(); self.nextthink = time + 0.17; life_drain();
 	reiver_hand1 ('47 31 12', 1);
 	reiver_hand2 ('47 -30 11', 1);
-	life_drain_effect ();
+	life_drain_effect();
 	sound (self, CHAN_AUTO, "q15/reiver/vampire.wav", 1, ATTN_NORM);
 };
 void()	reiver_vampire5	=[	$scream5,	reiver_vampire6	] {ai_face(); self.nextthink = time + 0.12; 
 	if (skill >= 2) life_drain();
 	reiver_hand1 ('45 30 11', 1);
 	reiver_hand2 ('45 -29 10', 1);
-	life_drain_effect ();
+	life_drain_effect();
 };
 void()	reiver_vampire6	=[	$scream6,	reiver_vampire7	] {ai_face(); self.nextthink = time + 0.1;
 	reiver_hand1 ('42 25 9', 0.85);
@@ -892,11 +892,11 @@ void(entity inflictor, entity attacker, float damage) reiver_pain = {
 	if (random() > 0.5) {
 		self.pain_finished = time + 1.7;
 		sound (self, CHAN_VOICE, "q15/reiver/pain2.wav", 1, ATTN_NORM);
-		reiver_paina1 ();
+		reiver_paina1();
 	} else {
 		self.pain_finished = time + 1.5;
 		sound (self, CHAN_VOICE, "q15/reiver/pain1.wav", 1, ATTN_NORM);
-		reiver_painb1 ();
+		reiver_painb1();
 	}
 };
 
@@ -989,7 +989,7 @@ void() reiver_shield_think = {
 		setorigin (self, '0 0 -9');
 	}
 
-	if (self.shield_finished < time) animate_shield ();
+	if (self.shield_finished < time) animate_shield();
 	self.scale = 0.9;	// 1;
 	if ((self.owner.dodge_finished > time) && (!self.owner.lefty)) {
 		self.alpha = 1;					// show multi_shield

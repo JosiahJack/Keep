@@ -147,11 +147,11 @@ void() overlord_teleport = {
    if ( !(self.spawnflags & FL_SWIM) )
       return ;
 
-   chance = random ();
+   chance = random();
    if ( (chance > 0.750) )
       return ;
 
-   theDest = overlord_find_dest3 ();
+   theDest = overlord_find_dest3();
    if ( (theDest == world) )
       return ;
 
@@ -164,7 +164,7 @@ void() overlord_teleport = {
    self.flags = (self.flags - (self.flags & FL_ONGROUND));
 };
 
-void() overlord_stand1 = [ 1.000, overlord_stand1 ] { ai_stand (); };
+void() overlord_stand1 = [ 1.000, overlord_stand1 ] { ai_stand(); };
 void() overlord_walk01 = [ 1.000, overlord_walk02 ] { ai_walk (FL_CLIENT); };
 void() overlord_walk02 = [ 2.000, overlord_walk03 ] { ai_walk (FL_CLIENT); };
 void() overlord_walk03 = [ 3.000, overlord_walk04 ] { ai_walk (FL_CLIENT); };
@@ -205,7 +205,7 @@ void() overlord_at_a03 = [ 18.000, overlord_at_a04 ] { ai_charge (STAT_TOTALMONS
 void() overlord_at_a04 = [ 19.000, overlord_at_a05 ] { ai_charge (STAT_TOTALMONSTERS);};
 void() overlord_at_a05 = [ 20.000, overlord_at_a06 ] { ai_charge (STAT_TOTALMONSTERS);};
 void() overlord_at_a06 = [ 21.000, overlord_at_a07 ] { ai_charge (STAT_TOTALMONSTERS);};
-void() overlord_at_a07 = [ 22.000, overlord_at_a08 ] { overlord_smash ();};
+void() overlord_at_a07 = [ 22.000, overlord_at_a08 ] { overlord_smash();};
 void() overlord_at_a08 = [ 23.000, overlord_at_a09 ] { ai_charge (STAT_TOTALMONSTERS);};
 void() overlord_at_a09 = [ 24.000, overlord_at_a10 ] { ai_charge (STAT_TOTALMONSTERS);};
 void() overlord_at_a10 = [ 25.000, overlord_run01 ] { ai_charge (STAT_TOTALMONSTERS); };
@@ -217,7 +217,7 @@ void() overlord_at_b04 = [ 29.000, overlord_at_b05 ] { ai_charge (STAT_TOTALMONS
 void() overlord_at_b05 = [ 30.000, overlord_at_b06 ] { ai_charge (STAT_TOTALMONSTERS); };
 void() overlord_at_b06 = [ 31.000, overlord_at_b07 ] { ai_charge (STAT_TOTALMONSTERS); };
 void() overlord_at_b07 = [ 32.000, overlord_at_b08 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_b08 = [ 33.000, overlord_at_b09 ] { overlord_smash (); };
+void() overlord_at_b08 = [ 33.000, overlord_at_b09 ] { overlord_smash(); };
 void() overlord_at_b09 = [ 34.000, overlord_at_b10 ] { ai_charge (STAT_TOTALMONSTERS); };
 void() overlord_at_b10 = [ 35.000, overlord_at_b11 ] { ai_charge (STAT_TOTALMONSTERS); };
 void() overlord_at_b11 = [ 36.000, overlord_at_b12 ] { ai_charge (STAT_TOTALMONSTERS); };
@@ -230,12 +230,12 @@ void() overlord_at_c02 = [ 41.000, overlord_at_c03 ] { ai_charge (STAT_TOTALMONS
 void() overlord_at_c03 = [ 42.000, overlord_at_c04 ] { ai_charge (STAT_TOTALMONSTERS); };
 void() overlord_at_c04 = [ 43.000, overlord_at_c05 ] { ai_charge (STAT_TOTALMONSTERS); };
 void() overlord_at_c05 = [ 44.000, overlord_at_c06 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_c06 = [ 45.000, overlord_at_c07 ] { overlord_smash (); };
+void() overlord_at_c06 = [ 45.000, overlord_at_c07 ] { overlord_smash(); };
 void() overlord_at_c07 = [ 46.000, overlord_at_c08 ] { ai_charge (STAT_TOTALMONSTERS); };
 void() overlord_at_c08 = [ 47.000, overlord_at_c09 ] { ai_charge (STAT_TOTALMONSTERS); };
 void() overlord_at_c09 = [ 48.000, overlord_at_c10 ] { ai_charge (STAT_TOTALMONSTERS); };
 void() overlord_at_c10 = [ 49.000, overlord_at_c11 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_at_c11 = [ 50.000, overlord_at_c12 ] { overlord_smash (); };
+void() overlord_at_c11 = [ 50.000, overlord_at_c12 ] { overlord_smash(); };
 void() overlord_at_c12 = [ 51.000, overlord_at_c13 ] { ai_charge (STAT_TOTALMONSTERS); };
 void() overlord_at_c13 = [ 52.000, overlord_at_c14 ] { ai_charge (STAT_TOTALMONSTERS); };
 void() overlord_at_c14 = [ 53.000, overlord_run01 ] { ai_charge (STAT_TOTALMONSTERS); };
@@ -265,14 +265,14 @@ void() overlord_smash = {
 void() overlord_melee = {
    local float r;
 
-   r = random ();
+   r = random();
    if ( (r < 0.330) ) {
-      overlord_at_a01 ();
+      overlord_at_a01();
    } else {
       if ( (r < 0.660) ) {
-         overlord_at_b01 ();
+         overlord_at_b01();
       } else {
-         overlord_at_c01 ();
+         overlord_at_c01();
       }
    }
 };
@@ -288,13 +288,13 @@ void() overlord_msl_a08 = [ 61.000, overlord_msl_a09 ] { ai_charge (STAT_TOTALMO
 void() overlord_msl_a09 = [ 62.000, overlord_msl_a10 ] { ai_charge (STAT_TOTALMONSTERS); };
 void() overlord_msl_a10 = [ 63.000, overlord_msl_a11 ] { ai_charge (STAT_TOTALMONSTERS); };
 void() overlord_msl_a11 = [ 64.000, overlord_msl_a12 ] { ai_charge (STAT_TOTALMONSTERS); };
-void() overlord_msl_a12 = [ 65.000, overlord_run01 ] { overlord_teleport (); };
+void() overlord_msl_a12 = [ 65.000, overlord_run01 ] { overlord_teleport(); };
 
-void() overlord_missile = { overlord_msl_a01 (); };
+void() overlord_missile = { overlord_msl_a01(); };
 
 void() overlord_pn_a01 = [ 66.000, overlord_pn_a02 ] {};
 void() overlord_pn_a02 = [ 67.000, overlord_pn_a03 ] {};
-void() overlord_pn_a03 = [ 68.000, overlord_pn_a04 ] { overlord_teleport (); };
+void() overlord_pn_a03 = [ 68.000, overlord_pn_a04 ] { overlord_teleport(); };
 void() overlord_pn_a04 = [ 69.000, overlord_pn_a05 ] {};
 void() overlord_pn_a05 = [ 70.000, overlord_pn_a06 ] {};
 void() overlord_pn_a06 = [ 71.000, overlord_pn_a07 ] {};
@@ -302,7 +302,7 @@ void() overlord_pn_a07 = [ 72.000, overlord_run01 ] {};
 
 void() overlord_pn_b01 = [ 80.000, overlord_pn_b02 ] {};
 void() overlord_pn_b02 = [ 81.000, overlord_pn_b03 ] {};
-void() overlord_pn_b03 = [ 82.000, overlord_pn_b04 ] { overlord_teleport ();};
+void() overlord_pn_b03 = [ 82.000, overlord_pn_b04 ] { overlord_teleport();};
 void() overlord_pn_b04 = [ 83.000, overlord_pn_b05 ] {};
 void() overlord_pn_b05 = [ 84.000, overlord_pn_b06 ] {};
 void() overlord_pn_b06 = [ 85.000, overlord_pn_b07 ] {};
@@ -314,14 +314,14 @@ void(entity inflictor, entity attacker, float damage) overlord_pain = {
    if ( (self.pain_finished > time) )
       return ;
 
-   r = random ();
+   r = random();
    if ( (r > 0.200) )
       return ;
 
    if ( (r < 0.150) ) {
-      overlord_pn_a01 ();
+      overlord_pn_a01();
    } else {
-      overlord_pn_b01 ();
+      overlord_pn_b01();
    }
    self.pain_finished = (time + FL_SWIM);
    sound (self,CHAN_VOICE,"rogue/wrath/wpain.wav",TRUE,ATTN_NORM);
@@ -336,7 +336,7 @@ void(string gibName) ol_toss = {
 	flingVelocity = (flingVelocity + (v_up * ((random () * 100.000) - 50.000)));
 	flingVelocity = (flingVelocity + (v_right * ((random () * 200.000) - 100.000)));
 
-	myGib = spawn ();
+	myGib = spawn();
 	setmodel (myGib,gibName);
 	setsize (myGib,VEC_ORIGIN,VEC_ORIGIN);
 	myGib.movetype = MOVETYPE_BOUNCE;

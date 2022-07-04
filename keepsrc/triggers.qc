@@ -230,7 +230,7 @@ void() trigger_multiple = { // [ENTITY]
 	trigger_bmodel_sounds();			// Precache any sounds
 	self.classtype = CT_TRIGMULTI;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	if (!self.wait) self.wait = 0.2;
 	trigger_bmodel_setup(); // Setup Entity State functionality
 };
@@ -264,7 +264,7 @@ void() trigger_once = { // [ENTITY]
 	trigger_bmodel_sounds();			// Precache any sounds
 	self.classtype = CT_TRIGONCE;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	self.wait = -1;
 	if (self.spawnflags & TRIG_INVIEW) {
 		self.spawnflags = self.spawnflags | ENT_STARTOFF; // Inview triggers need to start delayed, high cpu functions.
@@ -298,7 +298,7 @@ void() trigger_secret = { // [ENTITY]
 	trigger_bmodel_sounds();				// Precache any sounds
 	self.classtype = CT_TRIGSECRET;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	self.wait = -1;							// Trigger ONCE
 	self.oldorigin = bmodel_origin(self);	// Save XYZ location
 	self.count = 1;		// Add 1 secret
@@ -431,7 +431,7 @@ void() trigger_teleport_touch = { // [FUNCTION]
 
 	// Fire all targets on trigger teleporter entity (ID code).  Not sure why? the target *should* be pointing at a single destination.
 	// Mapper could use killtarget or message strings instead.  Can use target2, target3, etc. for additional triggers on teleport (new feature).
-	SUB_UseTargets ();
+	SUB_UseTargets();
 	self.pos1 = other.origin; // POS1 = touching entity origin (starting point)
 	if (self.goalentity.bsporigin) self.pos2 = self.goalentity.oldorigin; // POS2 = destination origin (can be bmodel or point entity)
 	else self.pos2 = self.goalentity.origin;
@@ -654,7 +654,7 @@ void() trigger_teleport = { // [ENTITY]
 
 	self.classtype = CT_TRIGTELEPORT;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	self.oldorigin = bmodel_origin(self); // True origin used for errors and debug info
 	if (self.noise == "") self.noise = "ambience/hum1.wav"; // Always pre-cache telporter teleporter sound
 	precache_sound (self.noise);
@@ -749,7 +749,7 @@ void() trigger_changelevel_fire = { // [FUNCTION]
 	update_configflag(SVR_SPAWN_BIT2, floor( (self.startspawn2 & 2) / 2) );
 	update_configflag(SVR_SPAWN_BIT3, floor( (self.startspawn2 & 4) / 4) );
 	if (self.map) nextmap = self.map; // *change* if map key not defined, reload current map again
-	SUB_UseTargets ();
+	SUB_UseTargets();
 	if ( (self.spawnflags & TRIG_CMAPNOPAUSE) && (deathmatch == 0) ) { GotoNextMap(); return; } // If no intermission, go straight to next map
 
 	self.think = trigger_changelevel_finish; // We can't move people right now, because touch functions are called in the middle of C movement code, so set a think time to do it.
@@ -779,7 +779,7 @@ void() trigger_changelevel = { // [ENTITY]
 
 	self.classtype = CT_TRIGLEVEL;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	self.spawnflags = self.spawnflags | TRIG_ALWAYTOUCH | TRIG_NODAMAGE; // Spawnflag 1 is used for something else (notouch duplicate).  No trigger damage functionality and always touchable!
 	self.spawnflags = self.spawnflags - (self.spawnflags & TRIG_MONSTERS); // Cannot have change level triggers touched by monsters
 	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
@@ -821,7 +821,7 @@ void() trigger_setskill = { // [ENTITY]
 
 	self.classtype = CT_TRIGSKILLS;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	if (!self.wait) self.wait = 1;
 	if (self.message == "") self.message = "0";
 	self.spawnflags = self.spawnflags - (self.spawnflags & TRIG_MONSTERS); // Cannot have skill triggers touched by monsters
@@ -891,7 +891,7 @@ void() trigger_rune = { // [ENTITY]
 
 	self.classtype = CT_TRIGRUNES;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	if (self.waitmin <=0) self.waitmin = 1;
 	self.spawnflags = self.spawnflags | TRIG_ALWAYTOUCH; // Spawnflag 1 is used for something else (notouch duplicate)
 	self.spawnflags = self.spawnflags - (self.spawnflags & TRIG_MONSTERS); // Cannot have rune triggers touched by monsters
@@ -1123,7 +1123,7 @@ void() trigger_ladder = { // [ENTITY]
 
 	self.classtype = CT_TRIGLADDER;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	if (developer > 0) { // Show facing angle
 		self.oldorigin = bmodel_origin(self) - (self.movedir*40); // Move origin back away from ladder
 		self.finalangle = vectoangles(self.movedir); // Convert movedir back into an angle
@@ -1270,7 +1270,7 @@ void() trigger_fallspeed = { // [ENTITY]
 	trigger_bmodel_sounds();			// Precache any sounds
 	self.classtype = CR_TRIGFALLSPEED;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_fire = trigger_fallspeed_fire;
 	trigger_bmodel_setup();
@@ -1336,7 +1336,7 @@ void() trigger_maxhp = { // [ENTITY]
 	trigger_bmodel_sounds();			// Precache any sounds
 	self.classtype = CR_TRIGMAXHP;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	if (self.max_health <= 0) self.max_health = 0;
 	if (self.mega_health <= 0) self.mega_health = 0;
 	if (self.count <= 0) self.count = 15;
@@ -1473,7 +1473,7 @@ void() trigger_gravity = { // [ENTITY]
 	
 	self.classtype = CT_TRIGGRAVITY;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	if (self.noise2 != "") precache_sound(self.noise2); // Check for any sound wav file cache
 	self.lefty = self.pain_finished = self.attack_finished = 0; // Reset all re-trigger timers (noise2/target2/wait once)
 
@@ -1616,7 +1616,7 @@ void() trigger_velocity = { // [ENTITY]
 
 	self.classtype = CT_TRIGVELOCITY;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	self.spawnflags = self.spawnflags | TRIG_ALWAYTOUCH | TRIG_NODAMAGE; // Spawnflag 1 is used for something else (notouch duplicate).  No trigger damage functionality and always touchable!
 	if (self.waitmin <= 0) self.waitmin = 1;
 	if (self.waitmin2 <= 0) self.waitmin2 = 1;
@@ -1719,7 +1719,7 @@ void() trigger_takeartifact = { // [ENTITY]
 	
 	self.classtype = CT_TRIGTAKEART;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	if (self.sounds <= 0) self.sounds = 4;	// Default = silence
 	trigger_bmodel_sounds();				// Precache any sounds
 	if (self.waitmin <= 0) self.waitmin = 0; // check power timeout is not negative
@@ -1795,7 +1795,7 @@ void() trigger_giveitems = { // [ENTITY]
 	
 	self.classtype = CT_TRIGGIVEITEM;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	if (self.sounds == 0) self.sounds = 4;	// Default = silence
 	trigger_bmodel_sounds();				// Precache any sounds
 	self.wait = -1; // Always trigger once functionality
@@ -1882,7 +1882,7 @@ void() trigger_fog = { // [ENTITY]
 	
 	self.classtype = CT_TRIGFOG;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	if (self.speed == 0) self.speed = 2; // A fade time < minimum fade time = instant change
 	if (self.speed < FADEFOG_TIME) self.speed = FADEFOG_TIME;
 	if (self.wait == 0) self.wait = 2;
@@ -1967,7 +1967,7 @@ void() trigger_skyfog = { // [ENTITY]
 
 	self.classtype = CT_TRIGSKYFOG;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 
 	// A fade time < minimum fade time = instant change
 	if (self.speed == 0) self.speed = 2;
@@ -2026,7 +2026,7 @@ void() trigger_monsternojump = { // [ENTITY]
 
 	self.classtype = CT_TRIGNOJUMP;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	if (!self.delay) self.delay = 0.5;
 	if (!self.waitmin) self.waitmin = 0.1;
 	self.spawnflags = self.spawnflags | TRIG_ALWAYTOUCH | TRIG_NODAMAGE; // No trigger damage functionality and always touchable!
@@ -2156,7 +2156,7 @@ void() trigger_monsterjump = { // [ENTITY]
 	} else self.movedir2 = VEC_ORIGIN; // Default setup (not used)
 	
 	if (self.angles_y == 0) self.angles_y = 360; // Default jump angle is 360, needs to be set BEFORE InitTrigger
-	InitTrigger ();
+	InitTrigger();
 	if (!self.speed) self.speed = 200;
 	if (!self.height) self.height = 200;
 	self.spawnflags = self.spawnflags | TRIG_ALWAYTOUCH | TRIG_NODAMAGE; // No trigger damage functionality and always touchable!
@@ -2218,7 +2218,7 @@ void() trigger_monsterturret = { // [ENTITY]
 	self.classtype = CT_TRIGMONTURRET;
 	self.classgroup = CG_TRIGGERS;
 	if (self.angles_y == 0) self.angles_y = 360;
-	InitTrigger ();
+	InitTrigger();
 	if (self.count < 0) self.count = -1;
 	else if (self.count == 0 || self.count > 1) self.count = 0.25;
 	
@@ -2286,7 +2286,7 @@ void() trigger_hurt = { // [ENTITY]
 
 	self.classtype = CT_TRIGHURT;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	trigger_dmgsetup(5);	// Setup default dmg
 	if (self.wait <= 0) self.wait = 1;
 	if (self.spawnflags & TRIG_SPAWNBUBBLES) trigger_setup_bubbles(); // Setup bubble model/counter/volume
@@ -2373,7 +2373,7 @@ void() trigger_heal = { // [ENTITY]
 
 	self.classtype = CT_TRIGHEAL;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	if (self.sounds == 2) self.noise = SOUND_HEAL25; // Setup default healing sound
 	else if (self.sounds == 3) self.noise = SOUND_HEAL100;
 	else if (self.sounds == 4) self.noise = SOUND_RESPAWN;
@@ -2484,7 +2484,7 @@ void() trigger_touchsound = { // [ENTITY]
 
 	self.classtype = CT_TRIGTSOUND;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	if (!self.speed) self.speed = 1.5;
 	if (!self.yaw_speed) self.yaw_speed = 0.05;
 	if (self.super_time < 0.1) self.super_time = 0.1;
@@ -2599,7 +2599,7 @@ void() trigger_void = { // [ENTITY]
 
 	self.classtype = CT_TRIGVOID;
 	self.classgroup = CG_TRIGGERS;
-	InitTrigger ();
+	InitTrigger();
 	setsize (self, self.bbmins, self.bbmaxs); // Activate trigger (always ON)
 	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.touch = trigger_void_touch; // This does not work via typical trigger bmodel paths.  This trigger is special, needs to work straight away

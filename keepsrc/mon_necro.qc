@@ -52,7 +52,7 @@ void() NecroBolt_Summon = {
 			}
 		}
 	}
-    NecroBolt_Think ();
+    NecroBolt_Think();
 };
 
 void() acolyte_fire = {
@@ -217,11 +217,11 @@ void() necro_face = {
     if (self.worldtype) {
 		// Attempting a special atttack.
         if (self.fallen)
-            ai_ritual ();
+            ai_ritual();
         else if (!self.enemy)
             return;
     }
-    ai_face ();
+    ai_face();
 };
 
 void() necro_activate_special;
@@ -304,7 +304,7 @@ float(entity targ, vector spot, float drop) necro_teleport = {
         spawn_tfog (self.origin);
         self.fallen = world;
         self.worldtype = 0;
-        necro_cast ();
+        necro_cast();
     }
     return FALSE;
 };
@@ -365,7 +365,7 @@ void() necro_run = {
 							self.fallen = world;
 							self.worldtype = 0;
 							shieldon();
-							necro3_cast1 ();
+							necro3_cast1();
 							return;
 						}
 					}
@@ -479,14 +479,14 @@ void() necro1_melee6 =[ $Siatak12, necro1_run1   ] {ai_charge(0); necro_run_chec
 void() necro1_melee =
 {
     if (InMeleeRange (80))
-        necro1_melee1 ();
+        necro1_melee1();
     else
     {
         if (self.classtype == CT_MONNECRO)
             if (random() < 0.2)
             {   // In case the boss gets stuck, let him make some potshots.
                 if (self.th_missile)
-                    self.th_missile ();
+                    self.th_missile();
                 return;
             }
         ai_charge (16);     // Not close enough -- continue march.
@@ -573,7 +573,7 @@ void() necro3_attack3  =[ $Hatak4,  necro3_attack4  ] {ai_face();
                 if (necro4_gangup ())
                     if (sorcerer_tele ()) return;
             }
-            ai_repel ();
+            ai_repel();
             return;
         }
 // Shoving won't work, so zap the target instead.
@@ -597,7 +597,7 @@ void() necro3_melee =
     if (!InMeleeRange (80))
         if (random() < 0.6)     // 40% chance per frame to attack.
             {ai_charge (16);  return;}
-    necro3_attack1 ();
+    necro3_attack1();
 };
 
 void() necro_activate_special = {
@@ -707,7 +707,7 @@ void() necro4_attack = {
         if (random() < 0.5) {
             self.worldtype = NSA_CURSE;
             sound (self, CHAN_AUTO, "drake/necro/curse.wav", 1, ATTN_NORM);
-            necro_cast ();
+            necro_cast();
             return;
         }
     }
@@ -746,7 +746,7 @@ void() necro4_attack = {
             if (self.fallen) {
                 self.worldtype = NSA_CORPSE_EXPLOSION;
                 sound (self, CHAN_AUTO, "drake/necro/pop.wav", 1, ATTN_NORM);
-                necro_cast ();
+                necro_cast();
                 return;
             }
         }
@@ -794,18 +794,18 @@ void() necro4_attack = {
             if (self.worldtype)
             {
                 sound (self, CHAN_AUTO, "drake/necro/summon.wav", 1, ATTN_NORM);
-                necro_cast ();
+                necro_cast();
                 return;
             }
         }
     }
 // Just blast the enemy.
     if (self.height == NECRO_ACOLYTE)
-        necro1_attack1 ();
+        necro1_attack1();
     else if (self.height == NECRO_SORCERER)
-        necro2_attack1 ();
+        necro2_attack1();
     else
-        necro3_attack1 ();
+        necro3_attack1();
 };
 
 // PAIN
@@ -849,13 +849,13 @@ void() necro3_pain6  =[ $Hpain8,  necro3_run1   ] {necro_telepain();};
 void() necro_painswitch =
 {
     if (self.height == NECRO_ACOLYTE)
-        necro1_pain1 ();
+        necro1_pain1();
 //    else if (( self.frame >= $Siatak1 ) && ( self.frame <= $Siwait12 ))
-//        necro1_pain1 ();
+//        necro1_pain1();
     else if (self.height == NECRO_SORCERER)
-        necro2_pain1 ();
+        necro2_pain1();
     else //if (self.height == NECRO_WARLOCK)
-        necro3_pain1 ();
+        necro3_pain1();
 };
 
 // Check for weapon breakage and update ai accordingly.
@@ -937,7 +937,7 @@ void(entity inflictor, entity attacker, float damage) necro_pain = {
 		// Must go into pain for weapon breaking effects to look right.
         self.pain_finished = time + 1;
         sound (self, CHAN_VOICE, "drake/necro/pain1.wav", 1, ATTN_NORM);
-        necro_painswitch ();
+        necro_painswitch();
         return;
     }
 
@@ -956,7 +956,7 @@ void(entity inflictor, entity attacker, float damage) necro_pain = {
     if (!self.mirror_finished)
         self.effects = self.effects - (self.effects & EF_BRIGHTFIELD);
 
-    necro_painswitch ();
+    necro_painswitch();
 };
 
 // Standard death functions.
@@ -986,7 +986,7 @@ void() necro_die = {
 			sound (self, CHAN_VOICE, "drake/necro/death1.wav", 1, ATTN_NORM);
 		else
 			sound (self, CHAN_VOICE, "drake/necro/death2.wav", 1, ATTN_NORM);
-		necro_die1 ();
+		necro_die1();
 	}
 };
 
@@ -1170,12 +1170,12 @@ void() setup_necro = {
 	if (self.worldtype) {
 		if (!self.minion_maxcount) self.minion_maxcount = 3;
 	}
-    monster_start ();
+    monster_start();
 };
 
-void() monster_acolyte = { self.classtype = CT_MONACOLYTE; monster_necromancer (); };
-void() monster_sorcerer = { self.classtype = CT_MONSORCERER; monster_necromancer (); };
-void() monster_warlock = { self.classtype = CT_MONWARLOCK; monster_necromancer (); };
+void() monster_acolyte = { self.classtype = CT_MONACOLYTE; monster_necromancer(); };
+void() monster_sorcerer = { self.classtype = CT_MONSORCERER; monster_necromancer(); };
+void() monster_warlock = { self.classtype = CT_MONWARLOCK; monster_necromancer(); };
 
 // Coven of Ebony entities.
 void() monster_fragwiz = {monster_acolyte();};

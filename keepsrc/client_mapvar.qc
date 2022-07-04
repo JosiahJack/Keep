@@ -306,7 +306,7 @@ void() trigger_mapvar_multiple = { // [ENTITY]
 	if (self.count >= (MAPV_BLCK*MAPV_BITS)) self.count = (MAPV_BLCK*MAPV_BITS) - 1; // Check for upper variable range
 	trigger_bmodel_sounds(); // Typical bmodel trigger setup
 	self.classtype = CT_MAPVAR;
-	InitTrigger ();
+	InitTrigger();
 	if (!self.wait) self.wait = 0.2;
 	self.idle_sound = self.target; // Save all entity targets for later
 	self.idle_sound2 = self.target2;

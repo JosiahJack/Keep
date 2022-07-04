@@ -131,7 +131,7 @@ void(entity hit, float damage) AddMultiDamage = { // [FUNCTION]
     if (!hit) return;
     
     if (hit != multi_ent) {
-        ApplyMultiDamage ();
+        ApplyMultiDamage();
         multi_damage = damage;
         multi_ent = hit;
     }  else {
@@ -197,7 +197,7 @@ void(float shotcount, vector spread) FireBullets = { // [FUNCTION]
 	src = self.origin + v_forward*10;
 	src_z = self.absmin_z + self.size_z * 0.7;
 
-	ClearMultiDamage ();
+	ClearMultiDamage();
 	while (shotcount > 0) {
 		direction = dir + crandom()*spread_x*v_right + crandom()*spread_y*v_up;
 		traceline (src, src + direction*2048, FALSE, self);
@@ -218,7 +218,7 @@ void(float shotcount, vector spread) FireBullets = { // [FUNCTION]
 		}
 		shotcount = shotcount - 1;
 	}
-	ApplyMultiDamage ();
+	ApplyMultiDamage();
 };
 
 void(vector org, vector dir, float proj_type, float proj_speed) Launch_Bullet = { // [FUNCTION]
@@ -3090,7 +3090,7 @@ void() launch_horn = {
 	}
 	nearAWall = 0; // By default, assume not near a wall.
 
-	if (!self.button0) { player_run (); return; } // Make such that all previous attack code completes.
+	if (!self.button0) { player_run(); return; } // Make such that all previous attack code completes.
 
 	W_Reload(0.5); // How long the fire time is.
 
@@ -3407,7 +3407,7 @@ void(vector start) Tornado_Spawn = { // [FUNCTION]
     local entity wind;
 
 	// Spawn the tornado.
-    wind = spawn ();
+    wind = spawn();
     wind.owner        = world;
     wind.master       = self;
     wind.movetype     = MOVETYPE_NONE;    // Immobile.  No MOVETYPE_FLY.

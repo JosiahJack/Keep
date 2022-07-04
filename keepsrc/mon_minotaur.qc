@@ -693,7 +693,7 @@ void() mino_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "kinn/shuffler/death.wav", 1, ATTN_NORM);
-		mino_death1 ();
+		mino_death1();
 	}
 };
 

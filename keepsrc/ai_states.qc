@@ -64,7 +64,7 @@ void() ai_stand = {
 	MonsterDeBuff();					// Check and apply poison
 
 	if (self.classtype == CT_MONEIDOLON) {
-		FindTarget (); // Keep looking for a player
+		FindTarget(); // Keep looking for a player
 		if (self.style == EIDOLON_PHASE1) { //1
 			self.nextthink = time + 0.1; // Slow animation speed, trapped inside cage
 			if (self.enemy.flags & FLx_CREATURE) { // Found a player, now track them around the room
@@ -91,8 +91,8 @@ void() ai_stand = {
 	if (self.goalentity && time > self.pausetime && self.movespeed >= 0) {
 		// Make sure AI is turning towards new path corner direction
 		self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
-		ChangeYaw ();
-		self.th_walk ();
+		ChangeYaw();
+		self.th_walk();
 	} else {
 		// Only test ground walking monsters (no fly/swim/static).  Check global map variable first (default = off)
 		if (map_bodyflrcheck == TRUE && self.classmove == MON_MOVEWALK) ent_floorcheck(self, FLOOR_TRACE_MONSTER);
@@ -136,7 +136,7 @@ void(float dist) ai_walk = {
 				dist = self.speed; // In walk mode.
 			}
 		}
-		ryu_untilt ();  // Undo any angle changes due to evasion.
+		ryu_untilt();  // Undo any angle changes due to evasion.
 	}
 
 	if (self.solid == SOLID_NOT && self.goalentity.classtype == CT_PATHCORNER) {
@@ -191,7 +191,7 @@ void(float dist) ai_run = {
 		// Is the old enemy still alive and can it be damaged?
 		if (self.oldenemy.health > 0 && self.oldenemy.takedamage > 0) {
 			self.enemy = self.oldenemy;
-			HuntTarget ();
+			HuntTarget();
 		} else {
 			if (self.passive_mode == TRUE) { // Was this a passive monster before combat?
 				// Return to passive monster state (reset)
@@ -212,12 +212,12 @@ void(float dist) ai_run = {
 					self.think = self.th_walk;
 				} else self.think = self.th_stand;
 			}
-			if (winner && self.th_win) {self.th_win (); return;}   // We have a winner!
+			if (winner && self.th_win) {self.th_win(); return;}   // We have a winner!
 
 			if (self.movetarget || self.charmer)
-				self.th_walk ();
+				self.th_walk();
 			else
-				self.th_stand ();
+				self.th_stand();
 			return; // Exit run function
 		}
 	}
@@ -305,7 +305,7 @@ void(float dist) ai_run = {
 				// Check for melee attack first.
 				if (enemy_range == RANGE_MELEE)
 					if (self.th_melee) {
-						self.th_melee ();
+						self.th_melee();
 						return;
 					}
 
@@ -316,7 +316,7 @@ void(float dist) ai_run = {
 
 				// Not close enough for melee, so shoot instead if possible.
 				if (self.th_missile && !Ryu_NoShot(self)) {
-					self.th_missile ();
+					self.th_missile();
 					return;
 				}
 			}
@@ -326,13 +326,13 @@ void(float dist) ai_run = {
 		}
 
 		if (self.classtype == CT_MONSHADE) {
-			if (enemy_vis) Shade_CheckAttack ();
+			if (enemy_vis) Shade_CheckAttack();
 		} else {
-			if (enemy_vis) DragonCheckAttack (); // Hunt mode.
+			if (enemy_vis) DragonCheckAttack(); // Hunt mode.
 			if (!ImmuneToDamage (self))
 				if (Ryu_DetectDanger (self.speed)) return; // Avoid projectiles or other threats.
 
-			ryu_untilt (); // Undo any angle changes due to evasion.
+			ryu_untilt(); // Undo any angle changes due to evasion.
 			if (Ryu_HatesWater() && self.waterlevel && Ryu_LeaveWater(self.speed)) return; // If a dragon hates and is in water, this makes dragon rise out of it.
 		}
 	}
@@ -345,7 +345,7 @@ void(float dist) ai_run = {
 			// Is there a chance to pause?
 			if (random() < self.turretactive.count)  self.turrettimer = time + 1 + random()*2;
 			self.attack_state = AS_TURRET;
-			ai_run_missile ();
+			ai_run_missile();
 			return;
 		}
 	}
@@ -362,11 +362,11 @@ void(float dist) ai_run = {
 	CheckBlockedBreakable(); // Check if blocked by breakables
 
 	if (self.attack_state == AS_MISSILE) {
-		ai_run_missile (); return;
+		ai_run_missile(); return;
 	} else if (self.attack_state == AS_JUMP) {
-		ai_run_jump (); return;
+		ai_run_jump(); return;
 	} else if (self.attack_state == AS_MELEE) {
-		ai_run_melee (); return;
+		ai_run_melee(); return;
 	}
 
 	// This has to go after range/melee attack state checks otherwise the AI will not do anything
@@ -378,7 +378,7 @@ void(float dist) ai_run = {
 		if (!self.th_checkattack) {
 			self.th_checkattack = CheckAttack;
 		} else {
-			self.th_checkattack ();
+			self.th_checkattack();
 		}
 	}
 

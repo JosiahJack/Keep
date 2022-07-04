@@ -239,9 +239,9 @@ void() sham_melee = {
 		else sham_cswingl1();
 	} else {
 		// Try to start with a smash
-		if (self.meleeattack > 0.6 || self.health == self.max_health) sham_smash1 ();
-		else if (self.meleeattack > 0.3) sham_swingr1 ();
-		else sham_swingl1 ();
+		if (self.meleeattack > 0.6 || self.health == self.max_health) sham_smash1();
+		else if (self.meleeattack > 0.3) sham_swingr1();
+		else sham_swingl1();
 	}
 };
 
@@ -280,7 +280,7 @@ void() sham_lightning = {
 	if (self.health < 1) return;
 	if (self.classtype == CT_MONSHAMVILE) return;
 	
-	ai_face ();
+	ai_face();
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	sham_finish_attachment();
 	makevectors(self.angles);
@@ -482,9 +482,9 @@ void() shamvile_magic = {
     else if (IsGhost (self.enemy)) chance = 1; // Fireballs pass through harmlessly.
     else chance = random();
 
-    if (chance > 0.6) sham_magic1 ();
-    else if (chance > 0.3) sham_cswingr1 ();
-    else sham_cswingl1 ();
+    if (chance > 0.6) sham_magic1();
+    else if (chance > 0.3) sham_cswingr1();
+    else sham_cswingl1();
 };
 
 void() sham_pain1       =[      $pain1, sham_pain2      ] {};
@@ -499,11 +499,11 @@ void(entity inflictor, entity attacker, float damage) sham_pain = {
 	monster_pain_check(attacker, damage); // Check all pain conditions and set up what to do next
 	if (self.pain_check > 0) { // Any pain animation/sound required?
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		if (self.pain_check == 1) sham_pain1 ();
+		if (self.pain_check == 1) sham_pain1();
 		else if (self.pain_check == 2) {
 			self.pain_finished = time + 0.6; // reset axe hit and setup short pain recovery
 			self.axhitme = 0;
-			sham_pain1 ();
+			sham_pain1();
 		}
 	}
 };
@@ -529,7 +529,7 @@ void() sham_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE,self.death_sound, 1, ATTN_NORM);
-		sham_death1 ();
+		sham_death1();
 	}
 };
 

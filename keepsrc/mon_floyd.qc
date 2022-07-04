@@ -223,15 +223,15 @@ void(entity inflictor, entity attacker, float damage) floyd_pain =
 			self.lip = anglemod(self.angles_y - self.ideal_yaw);
 			//lurch forward if hit in the back
 			if (self.lip > 90 && self.lip < 270) {
-				floyd_painc1 ();
+				floyd_painc1();
 				self.pain_finished = time + 2;
 			}
 			else if (random() < 0.4) {
-				floyd_paina1 ();
+				floyd_paina1();
 				self.pain_finished = time + 1;
 			}
 			else {
-				floyd_painb1 ();
+				floyd_painb1();
 				self.pain_finished = time + 2;
 			}
 		}
@@ -302,7 +302,7 @@ void() floyd_die =
 		// regular death (no head model)
 		if (!self.gibbed) {
 			sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
-			floyd_death2 ();
+			floyd_death2();
 		}
 		// Quick explosion with head model
 		else floyd_explode();

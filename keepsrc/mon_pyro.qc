@@ -139,21 +139,21 @@ void(entity inflictor, entity attacker, float damage) pyro_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		self.lip = random ();
+		self.lip = random();
 		if (self.lip < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 	
 		// Not using long pain animation (need to be agile)
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
-			if (self.lip < 0.3) pyro_paina1 ();
-			else if (self.lip < 0.6) pyro_painb1 ();
-			else pyro_painc1 ();
+			if (self.lip < 0.3) pyro_paina1();
+			else if (self.lip < 0.6) pyro_painb1();
+			else pyro_painc1();
 		} else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 0.8;
 			self.axhitme = 0;
-			pyro_painc1 ();
+			pyro_painc1();
 		}
 	}
 };
@@ -195,8 +195,8 @@ void() pyro_die = {
 
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "enforcer/death1.wav", 1, ATTN_NORM);
-		if (random() > 0.5) pyro_die1 (); // regular death
-		else pyro_fdie1 ();
+		if (random() > 0.5) pyro_die1(); // regular death
+		else pyro_fdie1();
 	}
 };
 

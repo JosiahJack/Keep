@@ -94,7 +94,7 @@ void(float AttackNumber) dfury_boss_shot2 = {
 
 	self.effects = self.effects | EF_MUZZLEFLASH;
 	makevectors(self.angles);
-	missile = spawn ();
+	missile = spawn();
 	missile.owner = self;
 	missile.solid = SOLID_BBOX;
 	missile.movetype = MOVETYPE_FLYMISSILE;
@@ -141,7 +141,7 @@ void() dfury_boss_spawner = {
 	local entity missile;
 	
 	self.effects = self.effects | EF_MUZZLEFLASH;
-	missile = spawn ();
+	missile = spawn();
 	missile.owner = self;
 	missile.movetype = MOVETYPE_BOUNCE;
 	missile.solid = SOLID_BBOX;	
@@ -197,7 +197,7 @@ void() FuryBossMissileTouch = {
 	self.touch = SUB_Null;
 	setmodel (self, "progs/drake/s_explod.spr");
 	self.solid = SOLID_NOT;
-	s_explode1 ();
+	s_explode1();
 };
 
 void() FuryBossSpikeTouch = {
@@ -212,7 +212,7 @@ void() FuryBossSpikeTouch = {
 	self.touch = SUB_Null;
 	setmodel (self, "progs/drake/s_explod.spr");
 	self.solid = SOLID_NOT;
-	s_explode1 ();
+	s_explode1();
 	T_RadiusDamage (self, self.owner, 5, world, DAMAGEALL);	
 };
 
@@ -224,13 +224,13 @@ void() CheckForCharge_boss = {
 	if ( vlen (self.origin - self.enemy.origin) < 80) return;		// use regular attack
 
 	SUB_AttackFinished (2);
-	dfury_boss_char_a1 (); 	// charge!	
+	dfury_boss_char_a1(); 	// charge!	
 };
 
 void() CheckContinueCharge_boss = {
 	if (time > self.attack_finished) {
 		SUB_AttackFinished (3);
-		dfury_boss_run1 ();
+		dfury_boss_run1();
 		return;		// done charging
 	}
 	if (random() > 0.5)
@@ -270,11 +270,11 @@ void()	dfury_boss_walk12	=[	$walk12,	dfury_boss_walk13	] {ai_walk(4);};
 void()	dfury_boss_walk13	=[	$walk13,	dfury_boss_walk14	] {ai_walk(6);};
 void()	dfury_boss_walk14	=[	$walk14,	dfury_boss_walk1	] {ai_walk(2);};
 
-void()	dfury_boss_run1	=[	$run1,		dfury_boss_run2	] {df_idle_sound(); ai_run (55); CheckForCharge_boss (); self.colormod = '1 1 1';shambler_walking_quake ();dfury_boss_footsteps (1);};
+void()	dfury_boss_run1	=[	$run1,		dfury_boss_run2	] {df_idle_sound(); ai_run (55); CheckForCharge_boss(); self.colormod = '1 1 1';shambler_walking_quake();dfury_boss_footsteps (1);};
 void()	dfury_boss_run2	=[	$run2,		dfury_boss_run3	] {ai_run(60);};
-void()	dfury_boss_run3	=[	$run3,		dfury_boss_run4	] {shambler_walking_quake ();dfury_boss_footsteps (1);ai_run(43);};
+void()	dfury_boss_run3	=[	$run3,		dfury_boss_run4	] {shambler_walking_quake();dfury_boss_footsteps (1);ai_run(43);};
 void()	dfury_boss_run4	=[	$run4,		dfury_boss_run5	] {ai_run(61);};
-void()	dfury_boss_run5	=[	$run5,		dfury_boss_run6	] {shambler_walking_quake ();dfury_boss_footsteps (1);ai_run(39);};
+void()	dfury_boss_run5	=[	$run5,		dfury_boss_run6	] {shambler_walking_quake();dfury_boss_footsteps (1);ai_run(39);};
 void()	dfury_boss_run6	=[	$run6,		dfury_boss_run1	] {ai_run(58);};
 
 void()	dfury_boss_pain1	=[	$pain1,		dfury_boss_pain2	] {sound (self, CHAN_VOICE, "q15/dfury/pain1.wav", 1, ATTN_NORM);self.colormod = '1 1 1';};
@@ -287,10 +287,10 @@ void()	dfury_boss_jump1	=[	$lunge1,		dfury_boss_jump2	] {
 	self.nextthink = (time + 0.1);
 	ai_face();
 	// self.tail_visible = 0;
-	shambler_walking_quake ();
+	shambler_walking_quake();
 	dfury_boss_footsteps (1);
 };
-void()	dfury_boss_jump2	=[	$lunge2,		dfury_boss_jump3	] {self.nextthink = (time + 0.1);ai_face();shambler_walking_quake ();dfury_boss_footsteps (1);};
+void()	dfury_boss_jump2	=[	$lunge2,		dfury_boss_jump3	] {self.nextthink = (time + 0.1);ai_face();shambler_walking_quake();dfury_boss_footsteps (1);};
 void()	dfury_boss_jump3	=[	$lunge3,		dfury_boss_jump4	] {self.nextthink = (time + 0.1);ai_face();};
 void()	dfury_boss_jump4	=[	$lunge4,		dfury_boss_jump5	] {self.nextthink = (time + 0.1); ai_face();
 	// self.tail_visible = 1;
@@ -309,12 +309,12 @@ void()	dfury_boss_jump10	=[ 	$lunge10,	dfury_boss_jump1	] 	  {self.nextthink = (
 void()	dfury_boss_jump11	=[ 	$lunge11,	dfury_boss_jump12	] 	  {
 	self.nextthink = (time + 0.1);
 	// self.tail_visible = 0;
-	shambler_walking_quake ();
+	shambler_walking_quake();
 	dfury_boss_footsteps (1);
 };
 void()	dfury_boss_jump12	=[ 	$lunge12,	dfury_boss_run1	] {
 	self.nextthink = (time + 0.1);
-	shambler_walking_quake ();
+	shambler_walking_quake();
 	Monster_Animation_EarthQuake (20, 377);
 	dfury_boss_footsteps (1);
 };
@@ -445,7 +445,7 @@ void(float maxgibs, float gibscounter) producegibs_dfury_boss =	{
 void() dfury_boss_die = {
 	// regular death only
 	sound (self, CHAN_VOICE, "q15/dfury/death1.wav", 1, ATTN_NORM);
-	dfury_boss_die1 ();
+	dfury_boss_die1();
 };
 
 void()	dfury_boss_magica1 =[	$magica1,	dfury_boss_magica2	] {self.nextthink = (time + 0.1);ai_face();self.colormod = '1.5 1 1';};
@@ -520,7 +520,7 @@ void()	dfury_boss_char_a14=[	$char_a14,	dfury_boss_char_a15	] {dfury_boss_footst
 void()	dfury_boss_char_a15=[	$char_a15,	dfury_boss_char_a16	] {dfury_boss_footsteps (1);ai_charge(71);};
 void()	dfury_boss_char_a16=[	$char_a16,	dfury_boss_run1	] 	  {dfury_boss_footsteps (1);ai_charge(73);};
 
-void()	dfury_boss_char_b1	=[	$char_b1,	dfury_boss_char_b2	] {CheckContinueCharge_boss (); ai_charge(23); ai_melee_dfury_boss();self.colormod = '1 1 1';};
+void()	dfury_boss_char_b1	=[	$char_b1,	dfury_boss_char_b2	] {CheckContinueCharge_boss(); ai_charge(23); ai_melee_dfury_boss();self.colormod = '1 1 1';};
 void()	dfury_boss_char_b2	=[	$char_b2,	dfury_boss_char_b3	] {ai_charge(72); ai_melee_dfury_boss();dfury_boss_footsteps (1);};
 void()	dfury_boss_char_b3	=[	$char_b3,	dfury_boss_char_b4	] {ai_charge(72); ai_melee_dfury_boss();dfury_boss_footsteps (1);};
 void()	dfury_boss_char_b4	=[	$char_b4,	dfury_boss_char_b5	] {ai_charge(72); ai_melee_dfury_boss(); dfury_boss_footsteps (0.9);};
@@ -584,7 +584,7 @@ void(entity inflictor, entity attacker, float damage)	dfury_boss_pain = {
 
 	sound (self, CHAN_VOICE, "q15/dfury/pain1.wav", 1, ATTN_NORM);
 	if (time - self.pain_finished > 5) {	// allways go into pain frame if it has been a while
-		dfury_boss_pain1 ();
+		dfury_boss_pain1();
 		self.pain_finished = time + 1;
 		return;
 	}
@@ -592,7 +592,7 @@ void(entity inflictor, entity attacker, float damage)	dfury_boss_pain = {
 	if ((random()*30) > damage) return;		// didn't flinch
 
 	self.pain_finished = time + 1;
-	dfury_boss_pain1 ();
+	dfury_boss_pain1();
 };
 
 void() dfury_boss_melee = {
@@ -600,11 +600,11 @@ void() dfury_boss_melee = {
 
 	sound (self, CHAN_WEAPON, "q15/dfury/slash1.wav", 1, ATTN_NORM);
 	if (self.style == 1)
-		dfury_boss_slice1 ();
+		dfury_boss_slice1();
 	else if (self.style == 2)
-		dfury_boss_smash1 ();
+		dfury_boss_smash1();
 	else if (self.style == 3) {
-		dfury_boss_watk1 ();
+		dfury_boss_watk1();
 		self.style = 0;
 	}
 };
@@ -786,5 +786,5 @@ void() monster_dfury_boss = {
 		if (self.deathstring == "")  self.deathstring = " felt the Brigade Commander's fury like a whirlwind\n";
 	}
 
-	monster_start ();
+	monster_start();
 };

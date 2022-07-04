@@ -7,7 +7,7 @@ void(entity inflictor, entity attacker, float damage) eel_pain1;
 
 void() eel_pitch_change = {
    if ( (pointcontents (self.origin) != CONTENT_WATER) ) {
-      droptofloor ();
+      droptofloor();
       T_Damage (self,world,world,MOVETYPE_TOSS,DAMARMOR);
       return ;
    }
@@ -25,55 +25,55 @@ void() eel_pitch_change = {
 };
 
 void() eel_stand1 = [ 0.000, eel_stand2 ] {
-   ai_stand ();
-   eel_pitch_change ();
+   ai_stand();
+   eel_pitch_change();
 };
 void() eel_stand2 = [ 1.000, eel_stand3 ] {
-   ai_stand ();
-   eel_pitch_change ();
+   ai_stand();
+   eel_pitch_change();
 };
 void() eel_stand3 = [ 2.000, eel_stand4 ] {
-   ai_stand ();
-   eel_pitch_change ();
+   ai_stand();
+   eel_pitch_change();
 };
 void() eel_stand4 = [ 3.000, eel_stand5 ] {
-   ai_stand ();
-   eel_pitch_change ();
+   ai_stand();
+   eel_pitch_change();
 };
 void() eel_stand5 = [ 4.000, eel_stand6 ] {
-   ai_stand ();
-   eel_pitch_change ();
+   ai_stand();
+   eel_pitch_change();
 };
 void() eel_stand6 = [ 5.000, eel_stand1 ] {
-   ai_stand ();
-   eel_pitch_change ();
+   ai_stand();
+   eel_pitch_change();
 };
 
 void() eel_walk1 = [ 0.000, eel_walk2 ] {
    if ( (random () < 0.200) ) sound (self,CHAN_VOICE,"ad171/eel/idle1.wav",TRUE,ATTN_IDLE);
 
    ai_fish_movement("ai_walk",6);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_walk2 = [ 1.000, eel_walk3 ] {
    ai_fish_movement("ai_walk",6);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_walk3 = [ 2.000, eel_walk4 ] {
    ai_fish_movement("ai_walk",6);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_walk4 = [ 3.000, eel_walk5 ] {
    ai_fish_movement("ai_walk",6);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_walk5 = [ 4.000, eel_walk6 ] {
    ai_fish_movement("ai_walk",6);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_walk6 = [ 5.000, eel_walk1 ] {
    ai_fish_movement("ai_walk",6);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 
 void() eel_run1 = [ 0.000, eel_run2 ] {
@@ -81,27 +81,27 @@ void() eel_run1 = [ 0.000, eel_run2 ] {
       sound (self,CHAN_VOICE,"ad171/eel/idle1.wav",TRUE,ATTN_IDLE);
 
    ai_fish_movement("ai_run",10);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_run2 = [ 1.000, eel_run3 ] {
    ai_fish_movement("ai_run",10);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_run3 = [ 2.000, eel_run4 ] {
    ai_fish_movement("ai_run",10);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_run4 = [ 3.000, eel_run5 ] {
    ai_fish_movement("ai_run",10);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_run5 = [ 4.000, eel_run6 ] {
    ai_fish_movement("ai_run",10);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_run6 = [ 5.000, eel_run1 ] {
    ai_fish_movement("ai_run",10);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 
 // RANGE - Plasma from mouth
@@ -133,58 +133,58 @@ void() eel_melee = {
 
 void() eel_attack1 = [ 0.000, eel_attack2 ] {
    ai_fish_movement("ai_charge",8);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_attack2 = [ 1.000, eel_attack3 ] {
    ai_fish_movement("ai_charge",8);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_attack3 = [ 2.000, eel_attack4 ] {
    ai_fish_movement("ai_charge",8);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_attack4 = [ 3.000, eel_attack5 ] {
    ai_fish_movement("ai_charge",8);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_attack5 = [ 4.000, eel_attack6 ] {
    ai_fish_movement("ai_charge",8);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_attack6 = [ 5.000, eel_attack7 ] {
    ai_fish_movement("ai_charge",8);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_attack7 = [ 0.000, eel_attack8 ] {
    ai_fish_movement("ai_charge",8);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_attack8 = [ 1.000, eel_attack9 ] {
    self.effects = EF_DIMLIGHT;
    self.skin = 1;
    ai_fish_movement("ai_charge",8);
-   eel_pitch_change ();
+   eel_pitch_change();
    sound (self,CHAN_WEAPON,"rogue/eel/eatt1.wav",TRUE,ATTN_NORM);
 };
 void() eel_attack9 = [ 2.000, eel_attack10 ] {
    self.skin = FL_SWIM;
    ai_fish_movement("ai_charge",8);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_attack10 = [ 3.000, eel_attack11 ] {
    self.skin = MOVETYPE_WALK;
    ai_fish_movement("ai_charge",8);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_attack11 = [ 4.000, eel_attack12 ] {
    self.effects = EF_BRIGHTLIGHT;
    self.skin = MOVETYPE_STEP;
    ai_fish_movement("ai_charge",8);
-   eel_pitch_change ();
+   eel_pitch_change();
 };
 void() eel_attack12 = [ 5.000, eel_run1 ] {
    self.skin = MOVETYPE_FLY;
-   eel_melee ();
+   eel_melee();
 };
 
 void() eel_attack2_1 = [ $eswim1, eel_attack2_2 ] {self.skin = 1;ai_face();sound (self, CHAN_VOICE, "rogue/eel/eatt1.wav", 1, ATTN_NORM);};
@@ -219,7 +219,7 @@ void() eel_death11 = [ 10.000, eel_death12 ] { self.flags = (self.flags - FL_SWI
 void() eel_death12 = [ 11.000, eel_death13 ] {};
 void() eel_death13 = [ 12.000, eel_death14 ] {};
 void() eel_death14 = [ 13.000, eel_death15 ] {};
-void() eel_death15 = [ 14.000, eel_death16 ] {monster_death_postcheck();/*droptofloor ();*/ };
+void() eel_death15 = [ 14.000, eel_death16 ] {monster_death_postcheck();/*droptofloor();*/ };
 void() eel_death16 = [ 15.000, eel_death16 ] {
    self.solid = SOLID_NOT;
 	monster_deadbody_check();
@@ -228,7 +228,7 @@ void() eel_death16 = [ 15.000, eel_death16 ] {
 void() eel_death = {
    if (pointcontents(self.origin) == CONTENT_WATER) self.gravity = 0.25;
    monster_death_precheck();
-   if (!self.gibbed) { eel_death1 (); }
+   if (!self.gibbed) { eel_death1(); }
 };
 
 void(entity inflictor, entity attacker, float damage) eel_pain1 = [ 6.000, eel_pain2 ] {
@@ -293,5 +293,5 @@ void() monster_eel = {
 	self.classgroup = CG_FISH;
 	self.classmove = MON_MOVESWIM;
 	if (self.deathstring == "")  self.deathstring = " was electrified by an Eel\n";
-	monster_start ();
+	monster_start();
 };

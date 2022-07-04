@@ -47,40 +47,6 @@ float NOUR_PHASE2 = 2;	// Fighting
 float NOUR_PHASE3 = 3;	// Summon mode
 float NOUR_PHASE4 = 4;	// Death
 
-// Special streamlined player find function
-float() nour_FindTarget = {
-	local entity client;
-	
-	// Get the obvious exception(s) done first
-	if (self.health < 1) return FALSE;
-	if (intermission_running > 0) return FALSE;
-	if (cinematic_running > 0 || cutscene > 0) return FALSE;
-
-	// Find a client in current PVS
-	client = checkclient ();
-	
-	// Go through all the exception(s)
-	if (!client) return FALSE;
-	if (!(client.flags & FL_CLIENT)) return FALSE;
-	if (client.flags & FL_NOTARGET) return FALSE;
-	if (client.items & IT_INVISIBILITY) return FALSE;
-	
-	// Check range and visibility of player
-	enemy_vis = visible(client);
-	if (!enemy_vis) return FALSE;
-	//if (!infront(client)) return FALSE;
-
-	// Finally found something
-	self.enemy = client;
-	self.oldorigin = self.origin;		// Save origin
-	self.goalentity = self.enemy;		// Focus on enemy
-	// Setup turning angle towards new enemy
-	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
-
-	// We have a winner!
-	return TRUE;	
-};
-
 // Setup wave HP and trigger boundaries
 void() nour_WaveSetupHP = {
 	// Is there anymore boss waves left?
@@ -104,11 +70,8 @@ void() nour_WaveSetupHP = {
 	dprint(")\n");
 };
 
-//----------------------------------------------------------------------
 // Check if HP has reached next boss wave trigger event
-//----------------------------------------------------------------------
-float() nour_WaveCheck =
-{
+float() nour_WaveCheck = {
 	// Check for boss wave boundary event
 	if (self.health > 1 && self.health < self.bosswavetrig) {
 		// Check for wave boundary triggers
@@ -600,9 +563,9 @@ void(entity inflictor, entity attacker, float damage) nour_pain = {
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			// Randomly pick which pain animation to play
-			if (random() < 0.8) nour_paina1 ();		// Short recoil right
+			if (random() < 0.8) nour_paina1();		// Short recoil right
 			else {
-				nour_painb1 ();						// Long recoil left
+				nour_painb1();						// Long recoil left
 				self.pain_finished = time + 2;		// long animation
 			}
 		}
@@ -707,7 +670,7 @@ void() nour_die = {
 	self.velocity_y = -200 + 400*random();
 	self.velocity_z = 100 + 100*random();
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
-	nour_die1 ();
+	nour_die1();
 };
 
 //======================================================================

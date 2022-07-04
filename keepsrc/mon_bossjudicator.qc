@@ -1572,7 +1572,7 @@ void(entity inflictor, entity attacker, float damage) judge_pain = {
 		self.pain_finished = time + 2;
 		// Only do pain animation if required
 		if (self.pain_check == 1 || self.pain_check == 2)
-			judge_painA1 ();
+			judge_painA1();
 	}
 };
 
@@ -1623,8 +1623,8 @@ void() judge_die =
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
-		if (random() > 0.5) judge_dieA1 ();
-		else judge_dieB1 ();
+		if (random() > 0.5) judge_dieA1();
+		else judge_dieB1();
 	}
 };
 

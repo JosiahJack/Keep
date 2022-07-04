@@ -143,7 +143,7 @@ void() oldone_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "boss1/death.wav", 1, ATTN_NORM);
-		oldone_die1 ();
+		oldone_die1();
 	}
 };
 

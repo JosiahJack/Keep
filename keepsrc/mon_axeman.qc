@@ -99,7 +99,7 @@ void(entity inflictor, entity attacker, float damage)	axe_pain = {
 		return;
 
 	sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-	axe_pain1 ();
+	axe_pain1();
 	self.pain_finished = time + 1;
 };
 
@@ -120,7 +120,7 @@ void() axe_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
-		axe_die1 ();
+		axe_die1();
 	}
 };
 
@@ -176,7 +176,7 @@ void() monster_ax = { // [ENTITY]
 
 		if (self.skin) self.deathstring = " was bushwhacked by a Forest Thug\n";
 	}
-	monster_start ();
+	monster_start();
 };
 
 void() monster_axeman = { monster_ax(); }; // [ENTITY], Re-direct.

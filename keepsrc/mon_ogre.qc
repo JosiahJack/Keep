@@ -182,8 +182,8 @@ void() ogre_smash14	=[	$smash14,		ogre_run1	] {ai_charge(12);};
 
 void() ogre_melee = {
 	sound (self, CHAN_WEAPON, "ogre/ogsawatk.wav", 1, ATTN_NORM);
-	if (random() > 0.5) ogre_smash1 ();
-	else ogre_swing1 ();
+	if (random() > 0.5) ogre_smash1();
+	else ogre_swing1();
 };
 
 // Range - Grenades (uses generic attack function in projectiles.qc)
@@ -275,14 +275,14 @@ void(entity inflictor, entity attacker, float damage) ogre_pain = {
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
 			self.lip = random();
-			if (self.lip < 0.25) ogre_pain1 ();
-			else if (self.lip < 0.5) ogre_painb1 ();
-			else if (self.lip < 0.75) ogre_painc1 ();
+			if (self.lip < 0.25) ogre_pain1();
+			else if (self.lip < 0.5) ogre_painb1();
+			else if (self.lip < 0.75) ogre_painc1();
 			else if (self.lip < 0.88) {
-				ogre_paind1 (); // Fall down to the ground
+				ogre_paind1(); // Fall down to the ground
 				self.pain_finished = time + 2;
 			} else {
-				ogre_paine1 (); // Stagger backwards
+				ogre_paine1(); // Stagger backwards
 				self.pain_finished = time + 2;
 			}
 		}
@@ -290,10 +290,10 @@ void(entity inflictor, entity attacker, float damage) ogre_pain = {
 			self.axhitme = 0;
 			if (random() < 0.5) {
 				self.pain_finished = time + 1.6;
-				ogre_paind1 ();	// Fall to ground
+				ogre_paind1();	// Fall to ground
 			} else {
 				self.pain_finished = time + 1.5;
-				ogre_paine1 ();	// Stagger backwards
+				ogre_paine1();	// Stagger backwards
 			}
 		}
 	}

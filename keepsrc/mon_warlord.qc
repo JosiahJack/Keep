@@ -128,7 +128,7 @@ void() CheckForCharge2 = {
 void() CheckContinueCharge2 = {
 	if (time > self.attack_finished) {
 		SUB_AttackFinished (3);
-		hknight2_run1 ();
+		hknight2_run1();
 		return;		// done charging
 	}
 	if (random() > 0.5)
@@ -193,7 +193,7 @@ void()	hknight2_walk10	=[	$walk10,	hknight2_walk11	] {ai_walk(4); monster_footst
 void()	hknight2_walk11	=[	$walk11,	hknight2_walk12	] {ai_walk(5);};
 void()	hknight2_walk12	=[	$walk12,	hknight2_walk1	] {ai_walk(4);};
 
-void()	hknight2_run1	=[	$run1,		hknight2_run2	] { if (random() < 0.1) sound(self, CHAN_VOICE, "drake/archer/growl2.wav", 1, ATTN_NORM); ai_run (20); CheckForCharge2 ();};
+void()	hknight2_run1	=[	$run1,		hknight2_run2	] { if (random() < 0.1) sound(self, CHAN_VOICE, "drake/archer/growl2.wav", 1, ATTN_NORM); ai_run (20); CheckForCharge2();};
 void()	hknight2_run2	=[	$run2,		hknight2_run3	] {ai_run(25); monster_footstep(FALSE);};
 void()	hknight2_run3	=[	$run3,		hknight2_run4	] {ai_run(18);};
 void()	hknight2_run4	=[	$run4,		hknight2_run5	] {ai_run(16);};
@@ -246,9 +246,9 @@ void() hknight2_die = {
 	if (!self.gibbed) {
 		sound(self, CHAN_VOICE, "q15/warlord/death1.wav", 1, ATTN_NORM);
 		if (random() > 0.5)
-			hknight2_die1 ();
+			hknight2_die1();
 		else
-			hknight2_dieb1 ();
+			hknight2_dieb1();
 	}
 };
 
@@ -263,14 +263,14 @@ void() hknight2_minigrenade_explode = {
 		if (ext_dppart) pointparticles(particleeffectnum("multigrenade_explosion"), self.origin, '0 0 0', 1);
 	}
 	R_Exp3(self.origin);
-	BecomeExplosion ();
+	BecomeExplosion();
 };
 
 void(float offsetAngle) hknight2_minigrenade_launch = {
 	local	entity missile;
 	local	float	tempRand;
 	
-	missile = spawn ();
+	missile = spawn();
 	missile.owner = self.owner;
 	missile.movetype = MOVETYPE_BOUNCE;
 	missile.solid = SOLID_BBOX;
@@ -333,13 +333,13 @@ void() hknight2_grenade_explode = {
 	self.touch = SUB_Null;
 	setmodel (self, "progs/drake/s_explod.spr");
 	self.solid = SOLID_NOT;
-	s_explode1 ();
+	s_explode1();
 };
 
 void() hknight2_grenade_touch = {
 	if (other == self.owner) return;		// don't explode on owner
 	if (other.takedamage == DAMAGE_AIM) {
-		hknight2_grenade_explode ();
+		hknight2_grenade_explode();
 		return;
 	}
 
@@ -353,7 +353,7 @@ void() hknight2_throw = {
 	
 	sound(self, CHAN_WEAPON, "q15/warlord/throw.wav", 1, ATTN_NORM);
 
-	missile = spawn ();
+	missile = spawn();
 	missile.owner = self;
 	missile.movetype = MOVETYPE_BOUNCE;
 	missile.solid = SOLID_BBOX;
@@ -413,7 +413,7 @@ void()	hknight2_throwgrenade16=[	$throw16,	hknight2_throwgrenade17] {ai_face();s
 void()	hknight2_throwgrenade17=[	$throw17,	hknight2_throwgrenade18] {ai_face();self.nextthink = time + 0.06;};
 void()	hknight2_throwgrenade18=[	$throw18,	hknight2_throwgrenade19] {ai_face();self.nextthink = time + 0.06;};
 void()	hknight2_throwgrenade19=[	$throw19,	hknight2_throwgrenade20] {ai_face();self.nextthink = time + 0.06;};
-void()	hknight2_throwgrenade20=[	$throw20,	hknight2_throwgrenade21] {ai_face();self.nextthink = time + 0.06; hknight2_throw (); monster_footstep(FALSE);};
+void()	hknight2_throwgrenade20=[	$throw20,	hknight2_throwgrenade21] {ai_face();self.nextthink = time + 0.06; hknight2_throw(); monster_footstep(FALSE);};
 void()	hknight2_throwgrenade21=[	$throw21,	hknight2_throwgrenade22] {ai_face();self.nextthink = time + 0.06;};
 void()	hknight2_throwgrenade22=[	$throw22,	hknight2_throwgrenade23] {ai_face();self.nextthink = time + 0.06;};
 void()	hknight2_throwgrenade23=[	$throw23,	hknight2_throwgrenade24] {ai_face();self.nextthink = time + 0.06;};
@@ -473,7 +473,7 @@ void(entity inflictor, entity attacker, float damage) hknight2_homing_pain = {
 
 	self.pain_finished = time + 0.5;
 	sound(self, CHAN_VOICE, "q15/warlord/homing_pain.wav", 1, ATTN_NORM);
-	hknight2_homing_teleport ();
+	hknight2_homing_teleport();
 };
 
 void() hknight2_homing_death = {
@@ -484,7 +484,7 @@ void() hknight2_homing_death = {
 void() hknight2_homing_touch = {
 	if (other.takedamage) {
 		if (other.classname != "player") {
-			hknight2_homing_teleport ();
+			hknight2_homing_teleport();
 			return;
 		}
 		T_Damage (other, self, self.owner, 15, DAMARMOR);	 // default 15	
@@ -535,7 +535,7 @@ void() hknight2_homing_think = {
 };
 
 void(vector face_spawn_pos, vector face_spawn_vel) launch_hknight2_homing = {
-	newmis = spawn ();
+	newmis = spawn();
 	newmis.owner = self;
 	newmis.enemy = self.enemy;
 	newmis.movetype = MOVETYPE_FLYMISSILE;
@@ -645,7 +645,7 @@ void()	hknight2_char_a16=[	$char_a16,	hknight2_run1	] {ai_charge(2);};
 //===========================================================================
 
 void()	hknight2_char_b1	=[	$char_b1,	hknight2_char_b2	]
-{CheckContinueCharge2 (); ai_charge(1);};
+{CheckContinueCharge2(); ai_charge(1);};
 void()	hknight2_char_b2	=[	$char_b2,	hknight2_char_b3	] {ai_charge(10);};
 void()	hknight2_char_b3	=[	$char_b3,	hknight2_char_b4	] {ai_charge(15); ai_melee(); monster_footstep(FALSE);};
 void()	hknight2_char_b4	=[	$char_b4,	hknight2_char_b5	] {ai_charge(22); ai_melee();};
@@ -740,18 +740,18 @@ void() hknight2_dodge = {
 	self.takedamage = DAMAGE_YES; 			// grenades bounces off of him
 	zufall = random();
 	if (zufall < 0.27)
-		hknight2_duck1 ();		// ducken mit dem Schild 
+		hknight2_duck1();		// ducken mit dem Schild 
 	else if (zufall < 0.55)
-		hknight2_block1 ();		// block animation 
+		hknight2_block1();		// block animation 
 	else
-		hknight2_dodge1 ();		// dodge animationen (zur seite)
+		hknight2_dodge1();		// dodge animationen (zur seite)
 };
 
 void(entity inflictor, entity attacker, float damage)	hknight2_pain = {
 	self.touch = SUB_Null;
 	if (self.dodging) {
 		self.dodging = 0;
-		hknight2_dodge ();
+		hknight2_dodge();
 		return;
 	}
 
@@ -761,9 +761,9 @@ void(entity inflictor, entity attacker, float damage)	hknight2_pain = {
 	// always go into pain frame if it has been a while
 	if (time - self.pain_finished > 5) {
 		if (random() < 0.5)
-			hknight2_pain1 ();
+			hknight2_pain1();
 		else
-			hknight2_painb1 ();
+			hknight2_painb1();
 		self.pain_finished = time + 1.5;
 		return;
 	}
@@ -772,20 +772,20 @@ void(entity inflictor, entity attacker, float damage)	hknight2_pain = {
 
 	self.pain_finished = time + 1.5;
 	if (random() < 0.5)
-		hknight2_pain1 ();
+		hknight2_pain1();
 	else
-		hknight2_painb1 ();
+		hknight2_painb1();
 };
 
 void() hknight2_melee = {
 	self.lefty = self.lefty + 1;
 	sound(self, CHAN_WEAPON, "q15/warlord/slash1.wav", 1, ATTN_NORM);
 	if (self.lefty == 1) {
-		hknight2_slice1 ();
+		hknight2_slice1();
 	} else if (self.lefty == 2) {
-		hknight2_smash1 ();
+		hknight2_smash1();
 	} else if (self.lefty >= 3) {
-		hknight2_watk1 ();
+		hknight2_watk1();
 		self.lefty = 0;
 	}
 };
@@ -798,24 +798,24 @@ void() hknight2_random_ranged_attack = {
 	// if good range, throw grenade instead of magic-missile attack
 	if (hknight2_throwdistance()) {
 		if (zufall < 0.33) {
-			hknight2_throwgrenade1 ();
+			hknight2_throwgrenade1();
 		} else if (zufall < 0.77) {
-			hknight2_magica1 ();		// regular magic missiles
+			hknight2_magica1();		// regular magic missiles
 		} else {
 			if (random() < 0.23)
-				hknight2_magicb1 ();		// homing missile (23% chance)
+				hknight2_magicb1();		// homing missile (23% chance)
 			else
-				hknight2_magica1 ();		// regular magic missiles
+				hknight2_magica1();		// regular magic missiles
 		}
 	} else {
 		// do not throw grenades
 		if (zufall < 0.72) {
-			hknight2_magica1 ();		// regular magic missiles
+			hknight2_magica1();		// regular magic missiles
 		} else {
 			if (random() < 0.23)
-				hknight2_magicb1 ();		// homing missile (27% chance)
+				hknight2_magicb1();		// homing missile (27% chance)
 			else
-				hknight2_magica1 ();		// regular magic missiles
+				hknight2_magica1();		// regular magic missiles
 		}
 	}	
 };
@@ -894,5 +894,5 @@ void() monster_hell_knight2 = { // [ENTITY]
 	self.classtype = CT_MONWARLORD;
 	self.classgroup = CG_DKNIGHT;
 	self.classmove = MON_MOVEWALK;
-	monster_start ();
+	monster_start();
 };

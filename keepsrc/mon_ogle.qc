@@ -467,7 +467,7 @@ void() ogle_die = {
 
 	if (!self.gibbed) { 
 		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
-		ogle_death1 ();
+		ogle_death1();
 	}
 };
 

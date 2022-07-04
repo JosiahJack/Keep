@@ -862,7 +862,7 @@ void() IceProjectiles =
 	
 	sound (self, CHAN_WEAPON, "aoa/iceattack.wav", 1, ATTN_NORM);
 
-	//24 projectiles IceSpikeProjectile ();
+	//24 projectiles IceSpikeProjectile();
 	IceSpread(24);
 	IceSpread(16);
 	IceSpread(8);
@@ -2114,7 +2114,7 @@ void() GreyOrbTouch = //Tome of Power blood orb projectiles
 		WriteCoord (MSG_BROADCAST, self.origin_x);
 		WriteCoord (MSG_BROADCAST, self.origin_y);
 		WriteCoord (MSG_BROADCAST, self.origin_z);		
-		BecomeExplosion ();
+		BecomeExplosion();
 		remove(self);
 	}
 };

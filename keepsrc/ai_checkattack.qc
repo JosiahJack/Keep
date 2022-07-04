@@ -71,7 +71,7 @@ void() CheckAttack = { // [FUNCTION]
 	// If the monster is within melee range they instantly attack
 	if (ai_checkmelee(MONAI_MELEEKNIGHT,FALSE) && self.th_melee) {
 		self.attack_state = AS_MELEE;
-		self.th_melee ();
+		self.th_melee();
 		return;
 	}
 
@@ -101,7 +101,7 @@ void() CheckAttack = { // [FUNCTION]
 
 	if (random () < self.attack_chance) {
 		SUB_AttackFinished (2*random());
-		self.th_missile ();
+		self.th_missile();
 	}
 };
 
@@ -136,7 +136,7 @@ void() SoldierCheckAttack = {
 			if (walkmove(self.angles_y+180, 16)) {
 				setorigin(self, self.oldorigin);
 				self.attack_state = AS_MELEE;
-				self.th_melee ();
+				self.th_melee();
 				return;
 			} else setorigin(self, self.oldorigin);
 		}
@@ -164,7 +164,7 @@ void() PyroCheckAttack = {
 
 	if (ai_checkmelee(MONAI_RANGEPYRO,FALSE)) {
 		self.attack_state = AS_MELEE;
-		self.th_melee ();
+		self.th_melee();
 		return;
 	}
 };
@@ -173,7 +173,7 @@ void() ShamCheckAttack = {
 	// Melee attack(claws/overhead smash)
 	if (ai_checkmelee(MONAI_MELEESHAM,MONAI_MELEEZTALL)) {
 		self.attack_state = AS_MELEE;
-		self.th_melee (); // Don't wait for next frame, melee attack straight away (different id behaviour)
+		self.th_melee(); // Don't wait for next frame, melee attack straight away (different id behaviour)
 		return;
 	}
 
@@ -196,7 +196,7 @@ void() BogLordCheckAttack = {
 		if (time > self.attack_finished && enemy_vis) {
 			if (self.attack_rage > random()) {
 				self.attack_state = AS_MELEE;
-				self.th_melee ();
+				self.th_melee();
 			}
 			else self.attack_state = AS_MISSILE;
 			return;
@@ -213,7 +213,7 @@ void() BogLordCheckAttack = {
 			self.attack_chance = 0.1 + (skill * 0.1);
 		}
 		if (random() < self.attack_chance) self.attack_state = AS_MISSILE;
-		else { self.attack_state = AS_MELEE; self.th_melee (); }
+		else { self.attack_state = AS_MELEE; self.th_melee(); }
 		return;
 	}
 
@@ -236,7 +236,7 @@ void() BogLordCheckAttack = {
 	// Check for random chance to keep doing overhead smash
 	if (random() > self.attack_chance) {
 		self.attack_state = AS_MELEE;
-		self.th_melee ();
+		self.th_melee();
 	} else self.attack_state = AS_MISSILE; // Range attack harder to dodge at higher projectile speed
 };
 
@@ -246,7 +246,7 @@ void() SeekerCheckAttack = {
 		// Need both arms for melee animation
 		if (self.state == 0) {
 			self.attack_state = AS_MELEE;
-			self.th_melee ();
+			self.th_melee();
 		}
 		// Instantly go to rocket range attack
 		// If the player is too close
@@ -454,7 +454,7 @@ void() MegaforceCheckAttack = {
 	if (ai_checkmelee(MONAI_RANGEMEGAF,FALSE) && 
 		visxray(self.enemy, self.attack_offset, '0 0 0', FALSE)) {
 		self.attack_state = AS_MELEE;
-		self.th_melee ();
+		self.th_melee();
 		return;
 	}
 
@@ -483,7 +483,7 @@ void() DeflectorCheckAttack = {
 			// Rapid firing plasma projectiles
 			if (self.spawnflags & MON_DEFLECTOR_PLASMA) {
 				self.attack_state = AS_MELEE;
-				self.th_melee ();
+				self.th_melee();
 				return;
 			} else {
 				// Flame Count = Base (X) * (Skill * Y) Maximum = Z
@@ -491,7 +491,7 @@ void() DeflectorCheckAttack = {
 				// Any sprite space left for hazard projectiles?
 				if (HazardProjectile_CheckLimit(self, self.attack_count)) {
 					self.attack_state = AS_MELEE;
-					self.th_melee ();
+					self.th_melee();
 					return;
 				}
 			}
@@ -516,7 +516,7 @@ void() DefenderCheckAttack = {
 	// Melee attack (Super Shotgun to face)
 	if (ai_checkmelee(MONAI_RANGEDEFSSG,FALSE)) {
 		self.attack_state = AS_MELEE;
-		self.th_melee ();
+		self.th_melee();
 		return;
 	}
 
@@ -533,7 +533,7 @@ void() DefenderCheckAttack = {
 	// Check enemy for grenade resistance?
 	if (self.enemy.bouncegrenade) {
 		self.attack_state = AS_MELEE;
-		self.th_melee ();
+		self.th_melee();
 	} else {
 		// Aggressive range attack, no % chances
 		self.attack_state = AS_MISSILE;
@@ -1137,7 +1137,7 @@ void() FishCheckAttack = {
 	// Melee attack (Bite).  Uses larger knight distance.
 	if (ai_checkmelee(MONAI_MELEEKNIGHT,FALSE)) {
 		self.attack_state = AS_MELEE;
-		self.th_melee ();
+		self.th_melee();
 		return;
 	}
 };
@@ -1262,7 +1262,7 @@ void() MinotaurCheckAttack = {
 								SUB_AttackFinished (random()); // Block any range attacks for a while
 								self.jumptouch = world;	// Reset last object touched
 								self.count = 0;			// Number of times jumped
-								self.th_jump ();
+								self.th_jump();
 								return;
 							}
 						}
@@ -1370,7 +1370,7 @@ void() DSergeantCheckAttack = {
 	// If the monster is within melee range they instantly attack
 	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE)) {
 		self.attack_state = AS_MELEE;
-		self.th_melee ();
+		self.th_melee();
 		return;
 	}
 
@@ -1391,7 +1391,7 @@ void() DSergeantCheckAttack = {
 				&& self.attack_timer < time) {
 			// If attack timer not active, bump up with a random amount
 			if (self.attack_finished < time) SUB_AttackFinished (random());
-			self.th_charge ();
+			self.th_charge();
 			return;
 		}	
 	} else {
@@ -1410,7 +1410,7 @@ void() DPrinceCheckAttack = {
 	// If the monster is within melee range they instantly attack
 	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE)) {
 		self.attack_state = AS_MELEE;
-		self.th_melee (); 
+		self.th_melee(); 
 		return;
 	}
 
@@ -1447,7 +1447,7 @@ void() DFuryCheckAttack = {
 	// If the monster is within melee range they instantly attack
 	if (ai_checkmelee(MONAI_MELEEFRONT,FALSE)) {
 		self.attack_state = AS_MELEE;
-		self.th_melee (); 
+		self.th_melee(); 
 		return;
 	}
 
@@ -1463,7 +1463,7 @@ void() DFuryCheckAttack = {
 	// is the enemy close enough for a double sword slice attack?
 	if (self.enemydist < self.jumprange_x) {
 		self.attack_state = AS_MELEE;
-		self.th_slide (); 
+		self.th_slide(); 
 		return;
 	}
 
@@ -1474,8 +1474,8 @@ void() DFuryCheckAttack = {
 				SUB_AttackFinished (random()); // Block any range attacks for a while
 				self.jumptouch = world;		// Reset last object touched
 				self.count = 0;				// Number of times jumped
-				if (random() < 0.65) self.th_jump ();
-				else self.th_charge ();
+				if (random() < 0.65) self.th_jump();
+				else self.th_charge();
 				return;
 			}
 		}
@@ -1535,7 +1535,7 @@ void() JusticeCheckAttack = {
 				SUB_AttackFinished (random()); // Block any range attacks for a while
 				self.jumptouch = world;		// Reset last object touched
 				self.count = 0;				// Number of times jumped
-				self.th_jump ();
+				self.th_jump();
 				return;
 			}
 		}
@@ -1570,11 +1570,11 @@ void() DCrossCheckAttack = {
 	if (enemy_range == RANGE_NEAR || self.enemymaxdist) { // range < 500 map units
 		if (!visblocked_wide(self.enemy, self.attack_offset, '0 0 0')) { // If sight blocked by another monster, slide to the side
 			self.attack_state = AS_SLIDING;
-			self.th_slide ();
+			self.th_slide();
 		} else {
 			// No monster in the way, hold still and start aiming
 			self.attack_state = AS_MISSILE;
-			self.th_missile ();
+			self.th_missile();
 		}
 	} else self.attack_state = AS_STRAIGHT;
 };
@@ -1745,7 +1745,7 @@ void() ScorpionCheckAttack = {
 	// Melee attack (CLAWS)
 	if (ai_checkmelee(MONAI_MELEESCORPION,FALSE)) {
 		self.attack_state = AS_MELEE;
-		self.th_melee ();
+		self.th_melee();
 		return;
 	}
 
@@ -1837,7 +1837,7 @@ void() SpiderCheckAttack = {
 		if (enemy_range == RANGE_FAR || visblocked(self.enemy)) {
 			if (self.attack_state != AS_STRAIGHT) {
 				self.attack_state = AS_STRAIGHT;
-				self.th_run ();
+				self.th_run();
 			}
 			return;
 		}
@@ -1852,12 +1852,12 @@ void() SpiderCheckAttack = {
 		} else if (enemy_range == RANGE_MID) {
 			if (self.attack_state != AS_STRAIGHT) {
 				self.attack_state = AS_STRAIGHT;
-				self.th_run ();
+				self.th_run();
 			}
 		} else {
 			if (self.attack_state != AS_SLIDING) {
 				self.attack_state = AS_SLIDING;
-				self.th_slide ();
+				self.th_slide();
 			}
 		}
 	} else {
@@ -1919,7 +1919,7 @@ void() ElfCheckAttack = {
 		if (enemy_range == RANGE_FAR || visblocked(self.enemy)) {
 			if (self.attack_state != AS_STRAIGHT) {
 				self.attack_state = AS_STRAIGHT;
-				self.th_run ();
+				self.th_run();
 			}
 			return;
 		}
@@ -1934,12 +1934,12 @@ void() ElfCheckAttack = {
 		} else if (enemy_range == RANGE_MID) {
 			if (self.attack_state != AS_STRAIGHT) {
 				self.attack_state = AS_STRAIGHT;
-				self.th_run ();
+				self.th_run();
 			}
 		} else {
 			if (self.attack_state != AS_SLIDING) {
 				self.attack_state = AS_SLIDING;
-				self.th_slide ();
+				self.th_slide();
 			}
 		}
 	} else {
@@ -1977,7 +1977,7 @@ void() VorelingCheckAttack = {
 		if (enemy_range == RANGE_FAR || visblocked(self.enemy)) {
 			if (self.attack_state != AS_STRAIGHT) {
 				self.attack_state = AS_STRAIGHT;
-				self.th_run ();
+				self.th_run();
 			}
 			return;
 		}
@@ -1992,12 +1992,12 @@ void() VorelingCheckAttack = {
 		} else if (enemy_range == RANGE_MID) {
 			if (self.attack_state != AS_STRAIGHT) {
 				self.attack_state = AS_STRAIGHT;
-				self.th_run ();
+				self.th_run();
 			}
 		} else {
 			if (self.attack_state != AS_SLIDING) {
 				self.attack_state = AS_SLIDING;
-				self.th_slide ();
+				self.th_slide();
 			}
 		}
 	} else {
@@ -2035,7 +2035,7 @@ void() SwamplingCheckAttack = {
 		if (enemy_range == RANGE_FAR || visblocked(self.enemy)) {
 			if (self.attack_state != AS_STRAIGHT) {
 				self.attack_state = AS_STRAIGHT;
-				self.th_run ();
+				self.th_run();
 			}
 			return;
 		}
@@ -2050,12 +2050,12 @@ void() SwamplingCheckAttack = {
 		} else if (enemy_range == RANGE_MID) {
 			if (self.attack_state != AS_STRAIGHT) {
 				self.attack_state = AS_STRAIGHT;
-				self.th_run ();
+				self.th_run();
 			}
 		} else {
 			if (self.attack_state != AS_SLIDING) {
 				self.attack_state = AS_SLIDING;
-				self.th_slide ();
+				self.th_slide();
 			}
 		}
 	} else {
@@ -2183,7 +2183,7 @@ void() DragonCheckAttack = {
 	// The dragon decides whether to attack or move on.
     if (random () < chance) {
         SUB_AttackFinished ((random() * 2 + 1));   // Reversed in custom 'ai.qc' too.
-        self.th_missile ();
+        self.th_missile();
         return;
     } // move on
 };
@@ -2236,7 +2236,7 @@ void() Shade_CheckAttack = {
         chance = 0.05;
 
     if (random () < chance) {
-        self.th_missile ();
+        self.th_missile();
         pause = random() * 2 + 1;
         SUB_AttackFinished (pause);
         return;
@@ -2259,7 +2259,7 @@ void() ArcherCheckAttack = {
 
     if (random () < chance) {
         chance = 2*random();
-        self.th_missile ();
+        self.th_missile();
         SUB_AttackFinished (chance);
         return;
     }
@@ -2283,7 +2283,7 @@ float() ArmagonCheckAttack = {
    delta = (self.ideal_yaw - ang);
    dist = vlen ((spot2 - spot1));
    if (((fabs(delta) > MOVETYPE_BOUNCE) && dist > 200) || (self.enemy.classname != "player")) return ( FALSE );
-   if (dist < 400.000) { self.th_melee (); return ( TRUE ); }
+   if (dist < 400.000) { self.th_melee(); return ( TRUE ); }
    self.lefty = TRUE;
    return FALSE;
 };
@@ -2296,7 +2296,7 @@ void() BaronBossCheckAttack = {
     if ((enemy_range <= RANGE_MID) && (time >= self.attack_finished) && (self.waitmax < time) && (random() < 0.01)) { // Use only after a delay.
         r = random();
         if (self.level == BARON_FIRE) {
-            baron_cast1 ();
+            baron_cast1();
         } else if (self.level == BARON_EARTH) {
             if ((r < 0.5) && !super_active && QuakeHurts(self.enemy)) baron_slam1();
             else if (BaronGolem_Check ()) baron_cast1();
@@ -2378,7 +2378,7 @@ void() IcegCheckAttack = {
 	// Floor stomp attack
 	if (self.enemydist < MONAI_STOMPICEG && random() < 0.5) {
 		SUB_AttackFinished(((4-skill)*0.5) + random() + random());
-		self.th_slide ();
+		self.th_slide();
 		return;
 	}
 
@@ -2416,7 +2416,7 @@ void() JudgeCheckAttack = {
 				SUB_AttackFinished (random()); // Block any range attacks for a while
 				self.jumptouch = world;		// Reset last object touched
 				self.count = 0;				// Number of times jumped
-				self.th_jump ();
+				self.th_jump();
 				return;
 			}
 		}
@@ -2537,7 +2537,7 @@ void() RavenCheckAttack = {
 	if (visblocked(self.enemy)) return;
 	
 	self.attack_state = AS_MISSILE;
-	self.th_missile ();
+	self.th_missile();
 	return;
 };
 
@@ -2573,7 +2573,7 @@ void() KarasuCheckAttack = {
 		self.attack_chance = 0.25 + (skill * 0.1);
 		
 		if (random() < self.attack_chance) self.attack_state = AS_MISSILE;
-		else { self.attack_state = AS_MELEE; self.th_melee (); }
+		else { self.attack_state = AS_MELEE; self.th_melee(); }
 		return;
 	}
 
@@ -2595,7 +2595,7 @@ void() WolfCheckAttack = {
 	// Melee attack uses larger check distance then shorter check before attack
 	if (ai_checkmelee(self.meleerange, self.meleerangez)) {
 		self.attack_state = AS_MELEE;
-		self.th_melee (); 
+		self.th_melee(); 
 		return;
 	}
 
@@ -2618,7 +2618,7 @@ void() HuntressCheckAttack = {
 			self.attack_state = AS_MISSILE;
 		} else {
 			self.attack_state = AS_MELEE;
-			self.th_melee ();
+			self.th_melee();
 		}
 		return;
 	}
@@ -2633,9 +2633,9 @@ void() HuntressCheckAttack = {
 				SUB_AttackFinished (random());
 				self.jumptouch = world;			// Reset last object touched
 				self.count = 0;				// Number of times jumped
-				if (random() < 0.7) self.th_jump ();
+				if (random() < 0.7) self.th_jump();
 				else {
-					self.th_missile ();
+					self.th_missile();
 				}
 				return;
 			}
@@ -2694,9 +2694,9 @@ void() ManticoreCheckAttack = {
 				self.jumptouch = world;			// Reset last object touched
 				self.count = 0;				// Number of times jumped
 				if (self.skin != 1) {
-					if (random() < 0.7) self.th_jump ();
-					else 				self.th_missile ();
-				} else self.th_jump (); // only jump if Lich Fiend
+					if (random() < 0.7) self.th_jump();
+					else 				self.th_missile();
+				} else self.th_jump(); // only jump if Lich Fiend
 				return;
 			}
 		}

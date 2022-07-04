@@ -233,9 +233,9 @@ void() zombie_missile =
 	}
 
 	self.meleeattack = self.lip;
-	if (self.meleeattack == 1) zombie_atta1 ();
-	else if (self.meleeattack == 2) zombie_attb1 ();
-	else zombie_attc1 ();
+	if (self.meleeattack == 1) zombie_atta1();
+	else if (self.meleeattack == 2) zombie_attb1();
+	else zombie_attc1();
 };
 
 //======================================================================
@@ -395,10 +395,10 @@ void(entity inflictor, entity attacker, float take) zombie_pain =
 	//----------------------------------------------------------------------
 	else {
 		self.lip = random();
-		if (self.lip < 0.25) zombie_paina1 ();			// 12 frames (bent over, short)
-		else if (self.lip <  0.5) zombie_painb1 ();		// 28 frames (9 = on ground)
-		else if (self.lip <  0.75) zombie_painc1 ();	// 18 frames (bent over, long)
-		else zombie_paind1 ();							// 13 frames (slight hit)
+		if (self.lip < 0.25) zombie_paina1();			// 12 frames (bent over, short)
+		else if (self.lip <  0.5) zombie_painb1();		// 28 frames (9 = on ground)
+		else if (self.lip <  0.75) zombie_painc1();	// 18 frames (bent over, long)
+		else zombie_paind1();							// 13 frames (slight hit)
 	}
 };
 
@@ -569,7 +569,7 @@ void() zombie_cruc_spawn = {
 	self.deadflag = DEAD_NO;			// used to stop death re-triggering
 	self.view_ofs = '0 0 -24';			// Standard setup
 	self.pain_timeout = 1;				// Default
-	zombie_cruc1 ();					// Time to do some moaning
+	zombie_cruc1();					// Time to do some moaning
 };
 
 void() zombie_cruc_setup = {

@@ -594,7 +594,7 @@ void() iceg_aiturn = {
 		else self.pos1 = self.enemytarget.origin;
 		// Force turn towards new target
 		self.ideal_yaw = vectoyaw(self.pos1 - self.origin);
-		ChangeYaw ();
+		ChangeYaw();
 
 		// Check angle difference
 		if ((self.ideal_yaw - 10) > self.angles_y) self.attack_elev = TRUE;
@@ -793,7 +793,7 @@ void() iceg_die = {
 
 	sound (self, CHAN_BODY, "ne_ruins/h2golem/death.wav", 1, ATTN_NORM);
 	self.solid = SOLID_NOT;
-	iceg_death1 ();
+	iceg_death1();
 };
 
 // Wakeup From Statue form

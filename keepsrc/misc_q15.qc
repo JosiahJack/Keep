@@ -75,7 +75,7 @@ void() light_break = { // [FUNCTION]
 	center = (self.absmin + self.absmax) * 0.5;		// added to bring the explosion to the center of the explo_box model
 	setorigin(self, (self.absmin + self.absmax) * 0.5);
 	T_RadiusDamage (self, self, 5, world,DAMAGEALL);
-	BecomeExplosion ();
+	BecomeExplosion();
 	if (ext_dppart) pointparticles(particleeffectnum("secret"), center, '0 0 0', 1);
 };
 

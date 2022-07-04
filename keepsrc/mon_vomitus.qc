@@ -195,7 +195,7 @@ void(float dist) ai_vomit_run  = {
             if (IsZombieDown (self.enemy))
                 {walkmove (self.angles_y, dist);  return;}
             // Turn around so it can bite the target while on the run.
-            if (self.enemy) ai_face ();
+            if (self.enemy) ai_face();
         }
     }
     ai_run(dist);
@@ -304,7 +304,7 @@ void(entity inflictor, entity attacker, float damage) vom_pain = {
 
     if (SUB_IgnorePain ()) return; // No pain anims in Nightmare.
 
-    vom_pain1 ();
+    vom_pain1();
 };
 
 // Death
@@ -352,7 +352,7 @@ void() vom_die16 =[ $death15, vom_die16 ] {
 
 void() vom_die = {
     sound (self, CHAN_VOICE, "drake/vomitus/death.wav", 1, ATTN_NORM);
-    vom_die1 ();
+    vom_die1();
 };
 
 // REVIVE - - - - - - - - - - - - - - -

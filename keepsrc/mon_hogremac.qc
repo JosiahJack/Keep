@@ -300,16 +300,16 @@ void(entity inflictor, entity attacker, float damage) hogremac_pain =
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
 			self.lip = random();
-			if (self.lip < 0.65) hogremac_painA1 ();
+			if (self.lip < 0.65) hogremac_painA1();
 			else if (self.lip < 0.85) {
 				self.pain_finished = time + 2;
 				// Stagger backwards
-				hogremac_painB1 ();
+				hogremac_painB1();
 			}
 			else {
 				self.pain_finished = time + 2;
 				// Fall on the floor
-				hogremac_painC1 ();
+				hogremac_painC1();
 			}
 		}
 		if (self.pain_check == 2) {
@@ -317,11 +317,11 @@ void(entity inflictor, entity attacker, float damage) hogremac_pain =
 			self.axhitme = 0;
 			if (random() < 0.5) {
 				self.pain_finished = time + 1.3;
-				hogremac_painC1 ();	// Fall to ground
+				hogremac_painC1();	// Fall to ground
 			}
 			else {
 				self.pain_finished = time + 1.7;
-				hogremac_painB1 ();	// Stagger backwards
+				hogremac_painB1();	// Stagger backwards
 			}
 		}
 	}

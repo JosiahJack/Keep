@@ -100,8 +100,8 @@ void() baron_idle42 =[ $idle3,  baron_idle43 ] {ai_stand();};
 void() baron_idle43 =[ $idle2,  baron_idle6  ] {ai_stand();};
 
 void() baron_stand = {
-    if (baron_sword_drawn ()) baron_idle1 (); // Put sword away.
-    else baron_idle6 ();
+    if (baron_sword_drawn ()) baron_idle1(); // Put sword away.
+    else baron_idle6();
 };
 
 // Since baron model does not have a proper walk scene, animate the run scene at half speed.
@@ -124,8 +124,8 @@ void() baron_walk16 =[ $run6,  baron_walk17 ] {ai_walk(6);};
 void() baron_walk17 =[ $run6,  baron_walk6  ] {ai_walk(6);};
 
 void() baron_walk = {
-    if (baron_sword_drawn ()) baron_walk6 (); // Start jogging.
-    else baron_walk1 (); // Draw sword then move.
+    if (baron_sword_drawn ()) baron_walk6(); // Start jogging.
+    else baron_walk1(); // Draw sword then move.
 };
 
 //  Victory
@@ -156,16 +156,16 @@ void() baron_win = {
             if (r < 0.6) {
 				sound (self, CHAN_VOICE, "nehahra/baron/idle.wav", 1, ATTN_NORM);
                 self.walkframe = 5;
-                baron_look6 ();
+                baron_look6();
             } else {
 				self.walkframe = 0;
-                baron_owned1 ();
+                baron_owned1();
             }
             return;
         }
     }
-    if (self.movetarget || self.charmer) self.th_walk ();
-    else self.th_stand ();
+    if (self.movetarget || self.charmer) self.th_walk();
+    else self.th_stand();
 };
 
 void() baron_run1  =[ $draw1, baron_run2  ] {baron_draw_sound(); ai_face();};
@@ -181,8 +181,8 @@ void() baron_run10 =[ $run5,  baron_run11 ] {ai_run(BARON_SPEED);};
 void() baron_run11 =[ $run6,  baron_run6  ] {ai_run(BARON_SPEED);};
 
 void() baron_run = {
-    if (baron_sword_drawn ()) baron_run6 (); // Start running.
-    else baron_run1 (); // Draw sword then move.
+    if (baron_sword_drawn ()) baron_run6(); // Start running.
+    else baron_run1(); // Draw sword then move.
 };
 
 void() baron_sword = {
@@ -304,7 +304,7 @@ void() baron_melee = {
 	}
 
     sound (self, CHAN_WEAPON, "nehahra/baron/woosh.wav", 1, ATTN_NORM);
-    self.think ();
+    self.think();
 };
 
 
@@ -350,7 +350,7 @@ void() Earth_Touch = {
 };
 
 void(vector start, vector dir, float sped) Earth_Launch = {
-    newmis = spawn ();
+    newmis = spawn();
     newmis.master       = newmis.owner      = self;
 	newmis.classgroup = CG_PROJALL;
     newmis.movetype     = MOVETYPE_FLYMISSILE;
@@ -449,7 +449,7 @@ void() Geyser_Think = {
     spot_z = self.origin_z;
     traceline (spot + '0 0 1', spot - '0 0 1027', TRUE, self);
     if (trace_fraction < 1) ShockWave(trace_endpos + '0 0 2', RING2_QUAKE, 3, "progs/drake/s_wave2.spr",TRUE);
-    Geyser_NextThink ();
+    Geyser_NextThink();
 };
 
 void() Baron_Geyser = {
@@ -774,9 +774,9 @@ void() baron_magic = {
 	// SoE:  Barons need a special attack to make them unique among Banes' army.
 	// Update 5/3/2010:  Keep nsoe barons for Drake.
     if (random() < 0.333)
-        baron_point1 ();    // Fireball
+        baron_point1();    // Fireball
     else
-        baron_magica1 ();   // Classic missile spray
+        baron_magica1();   // Classic missile spray
 };
 
 //  NOTE:  Much of the jump code was cut-and-paste from 'demon.qc'.
@@ -921,7 +921,7 @@ void() baron_missile = {
     if (!(self.spawnflags & BSF_NO_JUMP))
         if (range(self.enemy) != RANGE_MELEE)   // range check not in Nehahra.
             if (random() < 0.3)     // Me: 0.2, Nehahra/Rapture: 0.3.
-                if (baron_tracejump (self.angles, 400, '0 0 300')) {baron_jump1 ();  return;}
+                if (baron_tracejump (self.angles, 400, '0 0 300')) {baron_jump1();  return;}
 
     baron_magic();
 };
@@ -949,9 +949,9 @@ void(entity inflictor, entity attacker, float damage) baron_pain = {
         return;         // No pain anims in Nightmare.
 
     if (random() < 0.4)     // Me: 0.5, Neh: 0.4.
-        baron_paina1 ();
+        baron_paina1();
     else
-        baron_painb1 ();
+        baron_painb1();
 
     attacker = attacker;    // Appease FrikQcc.
 };
@@ -983,9 +983,9 @@ void() baron_die = {
     if (!self.gibbed) {
         sound (self, CHAN_VOICE, "drake/baron/death.wav", 1, ATTN_NORM);
         if (random() < 0.5)     // Nehahra uses 0.3.
-            baron_diea1 ();
+            baron_diea1();
         else
-            baron_dieb1 ();
+            baron_dieb1();
     }
 };
 
@@ -1111,7 +1111,7 @@ void() monster_baron = {
 	self.classtype = CT_MONBARON;
 	self.classgroup = CG_DCAPTAIN;
 	self.classmove = MON_MOVEWALK;
-    monster_start ();
+    monster_start();
 };
 
 void() monster_baron_fire = {

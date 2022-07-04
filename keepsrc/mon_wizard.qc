@@ -174,7 +174,7 @@ void()	wiz_fast6	=[	$magatt6,		wiz_fast7	] {ai_face();};
 void()	wiz_fast7	=[	$magatt5,		wiz_fast8	] {ai_face();};
 void()	wiz_fast8	=[	$magatt4,		wiz_fast9	] {ai_face();};
 void()	wiz_fast9	=[	$magatt3,		wiz_fast10] {ai_face();};
-void()	wiz_fast10=[	$magatt2,		wiz_run1	] {WizardAttackFinished (); ai_face();};
+void()	wiz_fast10=[	$magatt2,		wiz_run1	] {WizardAttackFinished(); ai_face();};
 
 void()	wiz_wakeup =[ $hover1, wiz_run1 ] {
 	if (pointcontents(self.origin) == CONTENT_SOLID) { // Is the wizard stuck? cannot move?
@@ -203,12 +203,12 @@ void(entity inflictor, entity attacker, float damage) wiz_pain ={
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		if (self.pain_check == 1) wiz_pain1 ();
+		if (self.pain_check == 1) wiz_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 0.4;
 			self.axhitme = 0;
-			wiz_pain1 ();
+			wiz_pain1();
 		}
 	}
 };
@@ -233,7 +233,7 @@ void() wiz_die = {
 		self.velocity_z = 100 + 100*random();
 		self.flags = self.flags - (self.flags & FL_ONGROUND);
 		self.movetype = MOVETYPE_TOSS;			// Affected by gravity
-		wiz_death1 ();
+		wiz_death1();
 	}
 };
 

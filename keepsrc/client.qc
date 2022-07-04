@@ -563,7 +563,7 @@ void() DecodeLevelParms = {
 	dprint("\b[CLIENT]\b Decode (Level) Parms\n");
 	mapvar_cvar = TRUE; // Map Variables are active (do not reset)
 	if (serverflags & SVR_RUNE_ALL) {
-		if (world.model == "maps/start.bsp") SetNewParms (); // If we have all 4, take away all runes when returning to info_player_start2 in start map
+		if (world.model == "maps/start.bsp") SetNewParms(); // If we have all 4, take away all runes when returning to info_player_start2 in start map
 	}
 
 	Client_SyncPrevEvilmode(); // Most Quake Engines resets the skill level to 0-3 only.  Make sure skill level/console variable are updated on load
@@ -964,7 +964,7 @@ void() PutClientInServer = {
 	self.bbmaxs = VEC_HULL_MAX;
 	setsize (self, self.bbmins, self.bbmaxs);
 	self.view_ofs = '0 0 22'; // Where the feet are! 22 units below!
-	player_stand1 ();
+	player_stand1();
 
 	// Check for cinematic system startup (NO COOP!!!)
 	//if (self.cameratarget != "" && coop == 0) {
@@ -1106,7 +1106,7 @@ void() PlayerPreThink = {
 	if (secloc_running > 0) { impulse_notvalid(); CheckSecretCamera(); return; } // If secret location camera active check for button0-2 keys
 	if (self.entactive && self.entattachment) setorigin(self.entattachment, self.origin); // Update particle emitter origin attached to the player.  Cinematic camera uses player and this should be before it
 	if (cinematic_running > 0 || cutscene > 0) { impulse_notvalid(); return; } // If cinematic camera system active
-    if (cutscene > 0) { Cutscene_Think (); return; } // Check for Drake cutscene stuff.
+    if (cutscene > 0) { Cutscene_Think(); return; } // Check for Drake cutscene stuff.
 
 	// Allowing weapon switch in a vehicle
 
@@ -1181,8 +1181,8 @@ void() PlayerPreThink = {
 			} else { self.velocity_z = 0; }
 		}
 	} else {
-		if (self.waterlevel == 2) CheckWaterJump (); // Not movetype_fly...normal movement and holding space to get out of the water.
-		if (self.deadflag >= DEAD_DEAD) { ClientDeath (); return; }
+		if (self.waterlevel == 2) CheckWaterJump(); // Not movetype_fly...normal movement and holding space to get out of the water.
+		if (self.deadflag >= DEAD_DEAD) { ClientDeath(); return; }
 	}
 
 	if (self.deadflag == DEAD_DYING) { CheckFuncWaterDeath(); return; } // pOx - check cshift for dead players in func_water.  Dying, so do nothing after.
@@ -1220,7 +1220,7 @@ void() PlayerPreThink = {
 		if (self.button2) { // Is jump key being pressed?
 			self.blockladder = time + 0.1;
 			self.flags = self.flags - FL_ONGROUND;
-			PlayerJump ();
+			PlayerJump();
 		} else self.flags = self.flags | FL_JUMPRELEASED;
 		
 		self.onladder = LADDER_NONE; // Reset ladder touch function
@@ -1228,7 +1228,7 @@ void() PlayerPreThink = {
 		if (self.oldgravity > 0) self.gravity = self.oldgravity; // Reset any ladder gravity settings
 		else self.gravity = 1;
 
-		if (self.button2) PlayerJump (); // Original jump conditions.  Huh!
+		if (self.button2) PlayerJump(); // Original jump conditions.  Huh!
 		else self.flags = self.flags | FL_JUMPRELEASED;
 	}
 
@@ -1401,7 +1401,7 @@ void() PlayerPostThink = {
 	if (self.target2 != "") trigger_strs(self.target2, self); self.target2 = ""; // Any spawn targets to update?
 
 	if (self.movetype == MOVETYPE_FLY && self.waterlevel && self.waterlevel < 2) self.velocity = self.velocity * 0.7; // flight adjustment we have boots of levitation
-	W_WeaponFrame (); // Impulse commands and Quad updates
+	W_WeaponFrame(); // Impulse commands and Quad updates
 
 	if (map_fallspeeddebug == TRUE && developer > 1 && self.jump_flag != 0){ dprint(ftos(self.jump_flag)); dprint(" "); }// Show the player fall speed/velocity to the console.  Useful for showing what map unit heights affect damage values
 	
@@ -1667,7 +1667,7 @@ void() ClientRespawn = {
 		PutClientInServer();	// respawn
 	} else if (deathmatch) {
 		CopyToBodyQue (self);	// make a copy of the dead body for appearances sake
-		SetNewParms ();			// set default spawn parms
+		SetNewParms();			// set default spawn parms
 		PutClientInServer();	// respawn
 	} else localcmd ("restart\n"); // restart the entire server
 };
@@ -1706,7 +1706,7 @@ void() set_suicide_frame; // In player.qc, this function cannot be moved, ref an
 void() ClientKill = {
 	bprint (self.netname);
 	bprint (" suicides\n");
-	set_suicide_frame ();
+	set_suicide_frame();
 	self.modelindex = modelindex_player;
 	self.frags = self.frags - 2; // Extra penalty
 	ClientRespawn();
@@ -1716,7 +1716,7 @@ void() ClientKill = {
 void() ClientConnect = {
 	bprint (self.netname);
 	bprint (" entered the game\n");
-	if (intermission_running > 0) GotoNextMap (); // a client connecting during an intermission can cause problems
+	if (intermission_running > 0) GotoNextMap(); // a client connecting during an intermission can cause problems
 };
 
 // Called when a player disconnects from a server
@@ -1730,7 +1730,7 @@ void() ClientDisconnect = {
 	bprint (" frags\n");
 	sound (self, CHAN_BODY, "player/tornoff2.wav", 1, ATTN_NONE);
 	sphere_remove(self);
-	// if (tag_token_owner == self) tag_token_drop (); // TODO: Add rogue's teamplay.qc stuff
+	// if (tag_token_owner == self) tag_token_drop(); // TODO: Add rogue's teamplay.qc stuff
 	// TeamDropFlagOfPlayer(self); // TODO: Add rogue's teamplay.qc stuff
 	self.steam = -50.000;
 	self.team = FALSE;

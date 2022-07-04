@@ -91,7 +91,7 @@ void() exploder_fire = { // [FUNCTION]
 
    temp = self;
    activator = other;
-   SUB_UseTargets ();
+   SUB_UseTargets();
    self = temp;
    other = self;
    if ( (self.dmg < 120) ) sound (self,CHAN_AUTO,"drake/misc/shortexp.wav",self.volume,self.speed);
@@ -99,7 +99,7 @@ void() exploder_fire = { // [FUNCTION]
 
    T_RadiusDamage (self,self.owner,self.dmg,other,DAMAGEALL);
    if (self.spawnflags & EXPLODER_USE_PARTICLES) Tent_Point(TE_EXPLOSION,self.origin);
-   BecomeExplosion ();
+   BecomeExplosion();
 };
 
 void() exploder_use = { // [FUNCTION]
@@ -107,7 +107,7 @@ void() exploder_use = { // [FUNCTION]
       self.nextthink = (time + self.delay);
       self.delay = FALSE;
       self.think = exploder_fire;
-   } else exploder_fire ();
+   } else exploder_fire();
 };
 
 void() func_exploder = { // [ENTITY]
@@ -133,13 +133,13 @@ void() multi_exploder_fire = { // [FUNCTION]
       self.duration = (time + self.duration);
       temp = self;
       activator = other;
-      SUB_UseTargets ();
+      SUB_UseTargets();
       self = temp;
       other = self;
    }
    if (time > self.duration) { remove(self); return; }
 
-   expl = spawn ();
+   expl = spawn();
    expl.owner = self.owner;
    expl.dmg = self.dmg;
    expl.origin_x = (self.absmin_x + (random() * (self.absmax_x - self.absmin_x)));
@@ -150,7 +150,7 @@ void() multi_exploder_fire = { // [FUNCTION]
    if (self.spawnflags & EXPLODER_USE_PARTICLES) Tent_Point(TE_EXPLOSION,expl.origin);
    temp = self;
    self = expl;
-   BecomeExplosion ();
+   BecomeExplosion();
    self = temp;
 };
 
@@ -158,7 +158,7 @@ void(vector loc, float rad, float damage, float dur, float pause, float vol) mul
    local entity temp;
 
    temp = self;
-   self = spawn ();
+   self = spawn();
    self.origin = loc;
    self.dmg = damage;
    self.duration = dur;
@@ -168,7 +168,7 @@ void(vector loc, float rad, float damage, float dur, float pause, float vol) mul
    self.absmax = (self.origin + (rad * '1 1 1'));
    self.think = multi_exploder_fire;
    self.volume = vol;
-   multi_exploder_fire ();
+   multi_exploder_fire();
    self = temp;
 };
 
@@ -179,7 +179,7 @@ void() multi_exploder_use = { // [FUNCTION]
       self.think = multi_exploder_fire;
    } else {
       self.think = multi_exploder_fire;
-      multi_exploder_fire ();
+      multi_exploder_fire();
    }
 };
 

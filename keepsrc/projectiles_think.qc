@@ -406,7 +406,7 @@ void() Mirv_Think = { // [FUNCTION]
     local vector dir, org, vec;
 
     if (!self.th_win) self.th_win = Mirv_Split;
-    if (self.delay <= time) { self.th_win (); return; }  // Out of fuel, release payload.
+    if (self.delay <= time) { self.th_win(); return; }  // Out of fuel, release payload.
     if (Mirv_Off()) { Mirv_Split(); self.nextthink = self.delay; self.think = self.th_win; return; } // MIRV launcher inactive.
 	if (self.state == 0) return;
 
@@ -453,7 +453,7 @@ void() DrunkRocket_Think = { // [FUNCTION]
 			if (self.noise == "") self.noise = SOUND_REXP3; // Play original explosion sound or replacement
 			R_Exp3(self.origin);
 			Tent_Explosion(self.origin);
-			BecomeExplosion2 ();
+			BecomeExplosion2();
 		}
         return;
     }
@@ -531,7 +531,7 @@ void() HomingMissileAcquire = { // [FUNCTION]
 void() beam_generate = { // [FUNCTION]
 	local entity beamseg;
 
-	beamseg = spawn ();
+	beamseg = spawn();
 	beamseg.owner = self.owner;
 	beamseg.solid = SOLID_BBOX;
 	setmodel(beamseg, "progs/custents/beam.mdl");
@@ -698,7 +698,7 @@ void() RainStorm_Think = { // [FUNCTION]
     traceline (p2, p2 + '0 0 2048', TRUE, self);
     if (trace_fraction < 1) trace_endpos = trace_endpos - '0 0 2'; // Move endpoint away from the ceiling.  We can't pass vectors to a think function, so use trace_endpos.
 
-    if (self.think1) self.think1 ();
+    if (self.think1) self.think1();
     else { remove(self); return; }
 
     self.nextthink = time + self.wait;
@@ -771,7 +771,7 @@ void() Sidewind_Ideal = { // [FUNCTION]
     if ((diff > 0) && (diff <= 180)) self.ideal_yaw = self.angles_y + self.yaw_speed;   // Go left.
     else self.ideal_yaw = self.angles_y - self.yaw_speed;   // Go right;
 
-    ChangeYaw ();
+    ChangeYaw();
     self.ideal_yaw = yaw;
 };
 
@@ -833,7 +833,7 @@ void() Sidewinder_Think = { // [FUNCTION]
             }
         }
     } else if ((self.master == self.owner) && (!self.oldenemy)) Sidewind_Face (self.pos2);      // No target to begin with.
-    else Sidewind_Ideal ();
+    else Sidewind_Ideal();
 
     sped = random() * 50 + 450;
     vec = self.angles;
@@ -1317,7 +1317,7 @@ void() Meteor_Think = { // [FUNCTION]
     Meteor_Trail (rgb, density, TRUE); // Particle trail.
     Fireball_Update(); 
     if (self.dmg <= 0) {Meteor_Fizzle(self); return;} // Fizzle if it lost all power.
-    if (self.delay < time) {Meteor_Explode (); return;} // The fireball will explode after a period of time.
+    if (self.delay < time) {Meteor_Explode(); return;} // The fireball will explode after a period of time.
 
     self.nextthink  = time + 0.1; // Fire is still burning, check again.
 };
@@ -1659,7 +1659,7 @@ void() tornado1 =[ 0, tornado1 ] { // [FUNCTION]
         self.t_width = time + 1;
         sound (self, CHAN_AUTO, "drake/baron/tornado.wav", 1, ATTN_NORM);
     }
-    Tornado_Attack ();
+    Tornado_Attack();
     self.height = (self.height + 3) & 7;
     self.cnt = anglemod(self.cnt + 107);
     newmis = spawn();

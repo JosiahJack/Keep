@@ -125,7 +125,7 @@ void() turret_face =
 	self.frame = turret_frame(self.rotate_type);
 
 	self.ideal_yaw = vectoyaw(self.enemy.origin - self.origin);
-	ChangeYaw ();
+	ChangeYaw();
 };
 
 //=============================================================================
@@ -141,7 +141,7 @@ void() turret_still =	[ $tilt0, turret_still]
 {
 	self.frame = turret_frame(self.rotate_type);
 
-	FindTarget ();
+	FindTarget();
 };
 
 void() turret_ret1 =	[ $retract1, turret_ret1]
@@ -213,7 +213,7 @@ void() turret_active =	[ $tilt0, turret_active]
 		if (self.oldenemy.health > 0)
 		{
 			self.enemy = self.oldenemy;
-			HuntTarget ();
+			HuntTarget();
 		}
 		else
 		{
@@ -238,11 +238,11 @@ void() turret_active =	[ $tilt0, turret_active]
 
 	if (self.attack_state == AS_MISSILE || self.attack_state == AS_MELEE)
 	{
-		ai_run_missile ();
+		ai_run_missile();
 		return;
 	}
 
-	CheckTurretAttack ();
+	CheckTurretAttack();
 };
 
 void() turret_bullet1 = [ $tilt0, turret_bullet2] {

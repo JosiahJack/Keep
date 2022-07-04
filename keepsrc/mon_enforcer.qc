@@ -275,7 +275,7 @@ void(entity inflictor, entity attacker, float damage) enf_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		self.lip = random ();
+		self.lip = random();
 		if (self.lip < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 
@@ -283,12 +283,12 @@ void(entity inflictor, entity attacker, float damage) enf_pain = {
 
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
-			if (self.lip < 0.2) enf_paina1 ();
-			else if (self.lip < 0.4) enf_painb1 ();
-			else if (self.lip < 0.7) enf_painc1 ();
+			if (self.lip < 0.2) enf_paina1();
+			else if (self.lip < 0.4) enf_painb1();
+			else if (self.lip < 0.7) enf_painc1();
 			else {
 				self.pain_finished = time + 2;
-				enf_paind1 ();
+				enf_paind1();
 			}
 		}
 		// The new axe forces monsters into long pain animations
@@ -296,7 +296,7 @@ void(entity inflictor, entity attacker, float damage) enf_pain = {
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 1.9;
 			self.axhitme = 0;
-			enf_paind1 ();
+			enf_paind1();
 		}
 	}
 };
@@ -357,8 +357,8 @@ void() enf_die = {
 			return;
 		}
 
-		if (random() > 0.5) enf_die1 ();
-		else enf_fdie1 ();
+		if (random() > 0.5) enf_die1();
+		else enf_fdie1();
 	}
 };
 

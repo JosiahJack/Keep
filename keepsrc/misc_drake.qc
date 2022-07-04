@@ -122,7 +122,7 @@ void() bell_use = { // [FUNCTION]
     self.walkframe = 0;
     self.waitmin = 0;
 	self.waitmax = 30;
-    bell_ring ();
+    bell_ring();
 };
 
 // Called when bell takes a big hit.
@@ -146,7 +146,7 @@ void(entity inflictor, entity attacker, float damage) bell_hit = { // [FUNCTION]
         self.walkframe = 0;
     }
     self.waitmin = 31;  self.waitmax = 21;
-    bell_ring ();
+    bell_ring();
 };
 
 // --> QUAKED misc_bell (0 .5 .8) (-64 -64 -80) (64 64 88)
@@ -219,7 +219,7 @@ void(float loop, float dm) statue_pieces = { // [FUNCTION]
 };
 
 void() statue_crumble = { // [FUNCTION]
-    monster_death_use ();
+    monster_death_use();
     statue_pieces (8, self.health);
 	setmodel(self, "progs/null.spr");
     self.nextthink = time + 0.1; // PM:  Don't remove self now because we may be in the middle of a damage chain, such as one made by T_RadiusDamage.
@@ -275,11 +275,11 @@ void() misc_statue = { // [ENTITY]
         precache_sound ("drake/misc/wallbrk.wav");
     }
 	self.gibtype = GIBTYPE_STONE;
-    misc_decor ();
+    misc_decor();
 };
 
 // A statue of Hexen2's praying angel.  For Arcanum.
-void() misc_statue_angel = {misc_statue ();}; // [ENTITY]
+void() misc_statue_angel = {misc_statue();}; // [ENTITY]
 
 void(entity inflictor, entity attacker, float damage) tree_pain = { // [FUNCTION]
     if (self.pain_finished > time) return;
@@ -289,7 +289,7 @@ void(entity inflictor, entity attacker, float damage) tree_pain = { // [FUNCTION
 };
 
 void() tree_die = { // [FUNCTION]
-    monster_death_use ();
+    monster_death_use();
     sound (self, CHAN_VOICE, "drake/misc/woodbrk.wav", 1, ATTN_NORM);
     if (self.health > -50) self.health = -50;  // So gibs have some velocity.
 	ThrowGib(11, 1); // gib1mdl
@@ -338,5 +338,5 @@ void() misc_tree = { // [ENTITY]
     } else self.takedamage = DAMAGE_NO;
 
 	self.gibtype = GIBTYPE_WOOD;
-    misc_decor ();
+    misc_decor();
 };

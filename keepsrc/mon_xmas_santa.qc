@@ -256,9 +256,9 @@ void(entity inflictor, entity attacker, float damage) santa_pain =
 		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			// Randomly pick which pain animation to play
-			if (random() < 0.8) santa_painA1 ();
+			if (random() < 0.8) santa_painA1();
 			else {
-				santa_painB1 ();
+				santa_painB1();
 				self.pain_finished = time + 2;
 			}
 		}
@@ -306,8 +306,8 @@ void() santa_die =
 		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
 
 		// Pick a random fall direction
-		if (random() > 0.5) santa_die1 ();
-		else santa_dieb1 ();
+		if (random() > 0.5) santa_die1();
+		else santa_dieb1();
 	}
 };
 

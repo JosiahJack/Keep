@@ -188,7 +188,7 @@ void  (float thrust)fangel_fly =  {
 	ChangeYaw();
 	dist = (2 + (thrust * 4));
 	if (vlen(self.origin - self.enemy.origin) < 20) {
-		if (random() < 0.1) fangel_find_spot ();
+		if (random() < 0.1) fangel_find_spot();
 		else {
 			self.monster_stage = FANGEL_STAGE_FLOAT;
 			self.monster_duration = 10 + (random() * 20);
@@ -477,7 +477,7 @@ void() fangel_hand8 = [98, fangel_hand9] {fangel_check_incoming(); ai_face();};
 void() fangel_hand9 = [99, fangel_hand10] {fangel_check_incoming(); ai_face();};
 void() fangel_hand10 = [100, fangel_hand11] {fangel_check_incoming(); ai_face();};
 void() fangel_hand11 = [101, fangel_hand12] {fangel_check_incoming(); ai_face();};
-void() fangel_hand12 = [102, fangel_hand13] {fangel_check_incoming(); fangel_hand_fire ();};
+void() fangel_hand12 = [102, fangel_hand13] {fangel_check_incoming(); fangel_hand_fire();};
 void() fangel_hand13 = [103, fangel_hand14] {fangel_check_incoming(); ai_face();};
 void() fangel_hand14 = [104, fangel_hand15] {fangel_check_incoming(); ai_face();};
 void() fangel_hand15 = [105, fangel_hand16] {fangel_check_incoming(); ai_face();};

@@ -791,12 +791,12 @@ void(entity inflictor, entity attacker, float damage) elena_pain =
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);	
-		if (self.pain_check == 1) elena_pain1 ();
+		if (self.pain_check == 1) elena_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 2;
 			self.axhitme = 0;
-			elena_pain1 ();
+			elena_pain1();
 		}
 	}
 };
@@ -1034,7 +1034,7 @@ void() elena_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
-		elena_die1 ();
+		elena_die1();
 	}
 };
 

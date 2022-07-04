@@ -294,7 +294,7 @@ void()	zombiek_attc14=[	$attc14,	zombiek_run1	] {};
 //----------------------------------------------------------------------
 void() zombiek_melee =
 {
-	ai_face ();		// Turn towards enemy target
+	ai_face();		// Turn towards enemy target
 	walkmove (self.ideal_yaw, 20);
 
 	// Randomly select melee attacks
@@ -570,11 +570,11 @@ void(entity inflictor, entity attacker, float take) zombiek_pain =
 	//----------------------------------------------------------------------
 	else {
 		self.lip = random();
-		if (self.lip < 0.25) zombiek_paina1 ();			// 12 frames (drag foot)
+		if (self.lip < 0.25) zombiek_paina1();			// 12 frames (drag foot)
 		else if (self.lip < 0.5) zombiek_knockdown();	// ON THE GROUND
 		else if (self.lip <  0.75 && self.attack_elev == TARGET_FRONT) 
-			zombiek_painb1 ();					// 25 frames (flail arms backwards)
-		else zombiek_painc1 ();					// 21 frames (fall to knees)
+			zombiek_painb1();					// 25 frames (flail arms backwards)
+		else zombiek_painc1();					// 21 frames (fall to knees)
 	}
 };
 
@@ -678,35 +678,35 @@ void() zombiek_knockdown = {
 	if (comp_ang > 315) {
 		if (self.debuglvl) dprint("\b[KNOCKDOWN]\b HIT from the UPPER LEFT\n");
 		self.ideal_yaw = anglemod(enemy_ang + 180);
-		ChangeYaw ();
+		ChangeYaw();
 		zombiek_paine1();
 	}
 	// SOUTH WEST : 225-270 (fall FORWARD, side force +45)
 	else if (comp_ang > 270) {
 		if (self.debuglvl) dprint("\b[KNOCKDOWN]\b HIT from the LOWER LEFT\n");
 		self.ideal_yaw = comp_ang;
-		ChangeYaw ();
+		ChangeYaw();
 		zombiek_paind1();
 	}
 	// SOUTH : 135-225 (fall FORWARD)
 	else if (comp_ang > 180) {
 		if (self.debuglvl) dprint("\b[KNOCKDOWN]\b HIT from the BACK\n");
 		self.ideal_yaw = self.angles_y;	// Fix for ai_painforward
-		ChangeYaw ();
+		ChangeYaw();
 		zombiek_paind1();
 	}
 	// SOUTH EAST : 90-135 (fall FORWARD, side force -45)
 	else if (comp_ang > 135) {
 		if (self.debuglvl) dprint("\b[KNOCKDOWN]\b HIT from the LOWER RIGHT\n");
 		self.ideal_yaw = anglemod(enemy_ang+315);
-		ChangeYaw ();	
+		ChangeYaw();	
 		zombiek_paind1();
 	}
 	// NORTH EAST : 45-90 (fall BACKWARD, reverse force)
 	else if (comp_ang > 90) {
 		if (self.debuglvl) dprint("\b[KNOCKDOWN]\b HIT from the UPPER RIGHT\n");
 		self.ideal_yaw = anglemod(enemy_ang + 180);
-		ChangeYaw ();
+		ChangeYaw();
 		zombiek_paine1();
 	}
 	// NORTH : 315-45	(fall BACKWARD)

@@ -145,9 +145,9 @@ void() item_treasure = { // [ENTITY]
 	if (self.angles_y < 0 || (self.angles_y == 0 && query_configflag(SVR_ITEMROTATE) == FALSE)) self.angles_y = rint(random()*359);
 
 	item_coopcheck();
-	item_start ();
+	item_start();
 };
 
-void() item_treasure_gem = { self.healtype = 1; item_treasure (); }; // [ENTITY], Large gems
+void() item_treasure_gem = { self.healtype = 1; item_treasure(); }; // [ENTITY], Large gems
 
 void() item_treasure_coin = { self.healtype = 0; item_treasure(); }; // [ENTITY], Large gold coins

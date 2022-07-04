@@ -102,7 +102,7 @@ void() func_plat_trigger_touch = { // [FUNCTION]
 	if (other.health <= 0) return;
 
 	self = self.owner; // Switch the platform entity
-	if (self.state == STATE_BOTTOM) func_plat_go_up ();
+	if (self.state == STATE_BOTTOM) func_plat_go_up();
 	else if (self.state == STATE_TOP) self.nextthink = self.ltime + 1;	// delay going down
 };
 
@@ -189,8 +189,8 @@ void() func_plat_disable = { // [FUNCTION]
 
 void() func_plat_blocked = { // [FUNCTION]	
 	T_Damage (other, self, self, 1, DAMARMOR);
-	if (self.state == STATE_UP) func_plat_go_down ();
-	else if (self.state == STATE_DOWN) func_plat_go_up ();
+	if (self.state == STATE_UP) func_plat_go_down();
+	else if (self.state == STATE_DOWN) func_plat_go_up();
 };
 
 // QUAKED func_plat (0 .5 .8) ? LOW_TRIGGER x MIN_TRIGGER START_LOWER START_OPEN x STARTOFF x

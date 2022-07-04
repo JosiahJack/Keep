@@ -24,32 +24,23 @@ void() dragon_check_attack = {
    local vector vec;
    local float dot;
 
-   if ( (self.dragonAttacking == TRUE) )
-      return ;
+   if (self.dragonAttacking == TRUE) return;
+   if (!self.th_missile) return;
+   if ((self.attack_finished > time)) return;
 
-   if ( (self.th_missile == SUB_Null) )
-      return ;
+   if ( (self.enemy.health < FALSE) ) self.enemy = world;
+   if (Invisible(self.enemy)) return;
 
-   if ( (self.attack_finished > time) )
-      return ;
-
-   if ( (self.enemy.health < FALSE) )
-      self.enemy = world;
-
-   if ( (self.enemy.flags & FL_NOTARGET) )
-      return ;
-
-   if ( (self.enemy == world) ) {
-      FindTarget ();
-   } else {
+   if (!(self.enemy)) FindTarget();
+   else {
       makevectors(self.angles);
       vec = normalize ((self.enemy.origin - self.origin));
       dot = (vec * v_forward);
-      if ( (dot > 0.300) ) {
+      if ( (dot > 0.3) ) {
          traceline (self.origin,self.enemy.origin,TRUE,world);
-         if ( (trace_fraction == TRUE) ) {
+         if (trace_fraction == 1) {
             dot = vlen ((self.enemy.origin - self.origin));
-            if ( (dot < 350.000) ) {
+            if ( (dot < 350) ) {
                self.dragonAttacking = TRUE;
                self.think = dragon_melee1;
                return ;
@@ -72,7 +63,7 @@ void(float dist) dragon_move = {
 
    if ( (self.health < TRUE) ) { remove (self); return ; }
    if ( (self.dragonAttacking == FALSE) )
-      dragon_check_attack ();
+      dragon_check_attack();
 
    oldEnemy = self.enemy;
    if ( (self.dragonAttacking == FALSE) ) {
@@ -158,34 +149,34 @@ void() dragon_walk9;
 void() dragon_walk11;
 void() dragon_walk13;
 
-void() dragon_atk_a1 = [ 43.000, dragon_atk_a2 ] { dragon_move (17.000); dragon_fireball (); };
-void() dragon_atk_a2 = [ 44.000, dragon_atk_a3 ] { dragon_move (17.000); dragon_fireball (); };
-void() dragon_atk_a3 = [ 45.000, dragon_walk5 ] { dragon_move (17.000); dragon_fireball (); dragon_stop_attack (); };
+void() dragon_atk_a1 = [ 43.000, dragon_atk_a2 ] { dragon_move (17.000); dragon_fireball(); };
+void() dragon_atk_a2 = [ 44.000, dragon_atk_a3 ] { dragon_move (17.000); dragon_fireball(); };
+void() dragon_atk_a3 = [ 45.000, dragon_walk5 ] { dragon_move (17.000); dragon_fireball(); dragon_stop_attack(); };
 
-void() dragon_atk_b1 = [ 46.000, dragon_atk_b2 ] { dragon_move (17.000); dragon_fireball (); };
-void() dragon_atk_b2 = [ 47.000, dragon_atk_b3 ] { dragon_move (17.000); dragon_fireball (); };
-void() dragon_atk_b3 = [ 48.000, dragon_walk7 ] { dragon_move (17.000); dragon_fireball (); dragon_stop_attack (); };
+void() dragon_atk_b1 = [ 46.000, dragon_atk_b2 ] { dragon_move (17.000); dragon_fireball(); };
+void() dragon_atk_b2 = [ 47.000, dragon_atk_b3 ] { dragon_move (17.000); dragon_fireball(); };
+void() dragon_atk_b3 = [ 48.000, dragon_walk7 ] { dragon_move (17.000); dragon_fireball(); dragon_stop_attack(); };
 
-void() dragon_atk_c1 = [ 49.000, dragon_atk_c2 ] { dragon_move (17.000); dragon_fireball (); };
-void() dragon_atk_c2 = [ 50.000, dragon_atk_c3 ] { dragon_move (17.000); dragon_fireball (); };
-void() dragon_atk_c3 = [ 51.000, dragon_walk9 ] { dragon_move (17.000); dragon_fireball (); dragon_stop_attack (); };
+void() dragon_atk_c1 = [ 49.000, dragon_atk_c2 ] { dragon_move (17.000); dragon_fireball(); };
+void() dragon_atk_c2 = [ 50.000, dragon_atk_c3 ] { dragon_move (17.000); dragon_fireball(); };
+void() dragon_atk_c3 = [ 51.000, dragon_walk9 ] { dragon_move (17.000); dragon_fireball(); dragon_stop_attack(); };
 
-void() dragon_atk_d1 = [ 52.000, dragon_atk_d2 ] { dragon_move (17.000); dragon_fireball (); };
-void() dragon_atk_d2 = [ 53.000, dragon_atk_d3 ] { dragon_move (17.000); dragon_fireball (); };
-void() dragon_atk_d3 = [ 54.000, dragon_walk11 ] { dragon_move (17.000); dragon_fireball (); dragon_stop_attack (); };
+void() dragon_atk_d1 = [ 52.000, dragon_atk_d2 ] { dragon_move (17.000); dragon_fireball(); };
+void() dragon_atk_d2 = [ 53.000, dragon_atk_d3 ] { dragon_move (17.000); dragon_fireball(); };
+void() dragon_atk_d3 = [ 54.000, dragon_walk11 ] { dragon_move (17.000); dragon_fireball(); dragon_stop_attack(); };
 
-void() dragon_atk_e1 = [ 55.000, dragon_atk_e2 ] { dragon_move (17.000); dragon_fireball (); };
-void() dragon_atk_e2 = [ 56.000, dragon_atk_e3 ] { dragon_move (17.000); dragon_fireball (); };
-void() dragon_atk_e3 = [ 57.000, dragon_walk13 ] { dragon_move (17.000); dragon_fireball (); dragon_stop_attack (); };
+void() dragon_atk_e1 = [ 55.000, dragon_atk_e2 ] { dragon_move (17.000); dragon_fireball(); };
+void() dragon_atk_e2 = [ 56.000, dragon_atk_e3 ] { dragon_move (17.000); dragon_fireball(); };
+void() dragon_atk_e3 = [ 57.000, dragon_walk13 ] { dragon_move (17.000); dragon_fireball(); dragon_stop_attack(); };
 
-void() dragon_atk_f1 = [ 58.000, dragon_atk_f2 ] { dragon_move (17.000); dragon_fireball (); };
-void() dragon_atk_f2 = [ 59.000, dragon_atk_f3 ] { dragon_move (17.000); dragon_fireball (); };
-void() dragon_atk_f3 = [ 60.000, dragon_atk_f4 ] { dragon_move (17.000); dragon_fireball (); };
-void() dragon_atk_f4 = [ 60.000, dragon_walk3 ] { dragon_move (17.000); dragon_fireball (); dragon_stop_attack (); };
+void() dragon_atk_f1 = [ 58.000, dragon_atk_f2 ] { dragon_move (17.000); dragon_fireball(); };
+void() dragon_atk_f2 = [ 59.000, dragon_atk_f3 ] { dragon_move (17.000); dragon_fireball(); };
+void() dragon_atk_f3 = [ 60.000, dragon_atk_f4 ] { dragon_move (17.000); dragon_fireball(); };
+void() dragon_atk_f4 = [ 60.000, dragon_walk3 ] { dragon_move (17.000); dragon_fireball(); dragon_stop_attack(); };
 
 void() dragon_walk1 = [ 1.000, dragon_walk2 ] {
    if ( self.dragonAttacking )
-      dragon_stop_attack ();
+      dragon_stop_attack();
 
    self.th_missile = dragon_atk_a1;
    self.dragonPainSequence = TRUE;
@@ -245,7 +236,7 @@ void(vector org, vector dir) launch_fireball = {
    local float fireSpeed;
 
    self.effects = (self.effects | EF_MUZZLEFLASH);
-   fireball = spawn ();
+   fireball = spawn();
 	fireball.classgroup = CG_PROJALL;
    fireball.owner = self;
    fireball.movetype = MOVETYPE_FLYMISSILE;
@@ -340,7 +331,7 @@ void() dragon_tail = {
       self.enemy.velocity = (dir * 500.000);
       self.enemy.velocity_z = 350.000;
    }
-   dragon_stop_attack ();
+   dragon_stop_attack();
 };
 
 void() dragon_melee1 = [ 20.000, dragon_melee2 ] { dragon_move (12); };
@@ -352,7 +343,7 @@ void() dragon_melee6 = [ 25.000, dragon_melee7 ] { dragon_move (12); };
 void() dragon_melee7 = [ 26.000, dragon_melee8 ] { dragon_move (12); };
 void() dragon_melee8 = [ 27.000, dragon_melee9 ] { dragon_move (12); };
 void() dragon_melee9 = [ 28.000, dragon_melee10 ] { dragon_move (12); };
-void() dragon_melee10 = [ 29.000, dragon_melee11 ] { dragon_tail (); };
+void() dragon_melee10 = [ 29.000, dragon_melee11 ] { dragon_tail(); };
 void() dragon_melee11 = [ 30.000, dragon_melee12 ] { dragon_move (10); };
 void() dragon_melee12 = [ 31.000, dragon_melee13 ] { dragon_move (10); };
 void() dragon_melee13 = [ 32.000, dragon_walk1 ] { dragon_move (10); };
@@ -386,9 +377,9 @@ void(entity inflictor, entity attacker, float damage) dragon_pain = {
 
    if (self.pain_finished > time) return;
 
-   r = random ();
+   r = random();
    if ( (r < 0.250) ) {
-      dragon_stop_attack ();
+      dragon_stop_attack();
       sound (self,CHAN_VOICE,"rogue/dragon/pain.wav",TRUE,ATTN_NORM);
       self.pain_finished = (time + 2);
       if ( (self.dragonPainSequence == 1) ) {
@@ -421,7 +412,7 @@ void() dragon_boom2 = {
 	ThrowGib(2,5);
 	ThrowGib(3,5);
 	self.target = "dragondoor";
-	SUB_UseTargets ();
+	SUB_UseTargets();
 	remove (self);
 };
 
@@ -444,7 +435,7 @@ void() dragon_explode = {
 
    if ( ((vlen (self.velocity) < 100.000) || (self.flags & FL_INWATER)) ) {
       self.dragonDeathState = DDIE_STOPPED;
-      dragon_boom1 ();
+      dragon_boom1();
    } else {
       makevectors(self.angles);
       self.velocity = (self.velocity - (40 * v_up));
@@ -460,7 +451,7 @@ void() dragon_squish = {
    }
    if ( (other == world) ) {
       self.velocity = VEC_ORIGIN;
-      dragon_explode ();
+      dragon_explode();
    }
 };
 
@@ -469,7 +460,7 @@ void() dragon_death1 = [ 80.000, dragon_death2 ] {
 
 	self.dragonDeathState = DDIE_FALLING;
 	self.use = SUB_Null;
-	SUB_UseTargets ();
+	SUB_UseTargets();
 	makevectors(self.angles);
 	self.velocity = ((300.000 * v_forward) - (40 * v_up));
 	self.flags = (self.flags - (self.flags & FL_ONGROUND));
@@ -478,25 +469,25 @@ void() dragon_death1 = [ 80.000, dragon_death2 ] {
 	sound (self,CHAN_VOICE,"rogue/dragon/death.wav",TRUE,ATTN_NONE);
 	self.dragonAttacking = FALSE;
 };
-void() dragon_death2 = [ 81.000, dragon_death3 ] { dragon_explode (); };
-void() dragon_death3 = [ 82.000, dragon_death4 ] { dragon_explode (); };
-void() dragon_death4 = [ 83.000, dragon_death5 ] { dragon_explode (); };
-void() dragon_death5 = [ 84.000, dragon_death6 ] { dragon_explode (); };
-void() dragon_death6 = [ 85.000, dragon_death7 ] { dragon_explode (); };
-void() dragon_death7 = [ 86.000, dragon_death8 ] { dragon_explode (); };
-void() dragon_death8 = [ 87.000, dragon_death9 ] { dragon_explode (); };
-void() dragon_death9 = [ 88.000, dragon_death10 ] { dragon_explode (); };
-void() dragon_death10 = [ 89.000, dragon_death11 ] { dragon_explode (); };
-void() dragon_death11 = [ 90.000, dragon_death12 ] { dragon_explode (); };
-void() dragon_death12 = [ 91.000, dragon_death13 ] { dragon_explode (); };
-void() dragon_death13 = [ 92.000, dragon_death14 ] { dragon_explode (); };
-void() dragon_death14 = [ 93.000, dragon_death15 ] { dragon_explode (); };
-void() dragon_death15 = [ 94.000, dragon_death16 ] { dragon_explode (); };
-void() dragon_death16 = [ 95.000, dragon_death17 ] { dragon_explode (); };
-void() dragon_death17 = [ 96.000, dragon_death18 ] { dragon_explode (); };
-void() dragon_death18 = [ 97.000, dragon_death19 ] { dragon_explode (); };
-void() dragon_death19 = [ 98.000, dragon_death20 ] { dragon_explode (); };
-void() dragon_death20 = [ 99.000, dragon_death21 ] { dragon_explode (); };
+void() dragon_death2 = [ 81.000, dragon_death3 ] { dragon_explode(); };
+void() dragon_death3 = [ 82.000, dragon_death4 ] { dragon_explode(); };
+void() dragon_death4 = [ 83.000, dragon_death5 ] { dragon_explode(); };
+void() dragon_death5 = [ 84.000, dragon_death6 ] { dragon_explode(); };
+void() dragon_death6 = [ 85.000, dragon_death7 ] { dragon_explode(); };
+void() dragon_death7 = [ 86.000, dragon_death8 ] { dragon_explode(); };
+void() dragon_death8 = [ 87.000, dragon_death9 ] { dragon_explode(); };
+void() dragon_death9 = [ 88.000, dragon_death10 ] { dragon_explode(); };
+void() dragon_death10 = [ 89.000, dragon_death11 ] { dragon_explode(); };
+void() dragon_death11 = [ 90.000, dragon_death12 ] { dragon_explode(); };
+void() dragon_death12 = [ 91.000, dragon_death13 ] { dragon_explode(); };
+void() dragon_death13 = [ 92.000, dragon_death14 ] { dragon_explode(); };
+void() dragon_death14 = [ 93.000, dragon_death15 ] { dragon_explode(); };
+void() dragon_death15 = [ 94.000, dragon_death16 ] { dragon_explode(); };
+void() dragon_death16 = [ 95.000, dragon_death17 ] { dragon_explode(); };
+void() dragon_death17 = [ 96.000, dragon_death18 ] { dragon_explode(); };
+void() dragon_death18 = [ 97.000, dragon_death19 ] { dragon_explode(); };
+void() dragon_death19 = [ 98.000, dragon_death20 ] { dragon_explode(); };
+void() dragon_death20 = [ 99.000, dragon_death21 ] { dragon_explode(); };
 void() dragon_death21 = [ 100.000, dragon_death21 ] {
     ThrowGib(1,13);
     ThrowGib(2,13);

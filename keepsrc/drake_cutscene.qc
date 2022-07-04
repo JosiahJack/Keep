@@ -55,7 +55,7 @@ void(entity o) spawn_dummy = { // [FUNCTION]
 
 	if (!o) return;
 
-    s = spawn ();
+    s = spawn();
     s.velocity      = o.velocity;
     s.angles        = o.angles;
     s.health        = o.health;
@@ -242,7 +242,7 @@ void(vector tdest, float tspeed, entity cam) DHM_CalcMove = { // [FUNCTION]
 
 // Zerstorer-only cutscene code.
 void() wait_camera = { // [FUNCTION]
-    if (!self.wait) {move_camera (); return;}
+    if (!self.wait) {move_camera(); return;}
     
     self.nextthink = time + self.wait;
     self.think = move_camera;
@@ -381,7 +381,7 @@ void() go_camera = { // [FUNCTION]
 
 void() camera_remove = { // [FUNCTION]
     activator = self;
-    SUB_UseTargets ();
+    SUB_UseTargets();
     self.nextthink = time + 0.1;
     self.think = SUB_Remove;
 };
@@ -460,7 +460,7 @@ void() gocam_use = { // [FUNCTION]
 	if (control) {
 		temp = self;
 		self = control;
-		DHM_CalcMoveDone ();
+		DHM_CalcMoveDone();
 		self = temp;
 	} else dprint ("Can't find control for gocam_use!\n");
     self.nextthink = time + 0.1;
@@ -478,11 +478,11 @@ void(float pt) trigger_camera_spawn = { // [FUNCTION]
     if (deathmatch || coop) {remove (self);  return;}   // PM:  Fix -- abort if removed.
 
     if (pt) { // PM:  The new way, this is for you Tronyn.
-        InitPointTrigger ();
+        InitPointTrigger();
         if (!self.targetname)
             self.touch = camera_point_touch;
     } else { // The old way...
-        InitTrigger ();
+        InitTrigger();
         self.touch = camera_touch; // PM:  Must always allow touch because some old maps need it.
     }
     // find the destination
@@ -513,7 +513,7 @@ void() Script_play = { // [FUNCTION]
 	if (scrpt.target) {
 		temp = self;
 		self = scrpt;
-		SUB_UseTargets (); // If script has a target...
+		SUB_UseTargets(); // If script has a target...
 		self.target = string_null; // ...trigger it once.
 		self = temp;
 	} 
@@ -549,7 +549,7 @@ void() Cutscene_Think = { // [FUNCTION]
 		}
 	}
 
-	if (cutscene) look_ahead ();
+	if (cutscene) look_ahead();
 	if (self.script_count < self.script_delay && self.script_time < time) Script_play();
 };
 

@@ -125,9 +125,9 @@ void() wyrm_glide = {
     if (ofs >= 180) {
 		left = 1;  ofs = ofs - 360;
 	} else left = 0;
-    ChangeYaw ();
+    ChangeYaw();
     if (fabs(ofs) <= self.yaw_speed)
-        {ryu_untilt ();  left = 1;}
+        {ryu_untilt();  left = 1;}
     else
         {ryu_tilt (left, 32);  left = 0;  sped = 20;}
 
@@ -170,9 +170,9 @@ void(entity targ) wyrm_move = {
         {left = 1;  ofs = ofs - 360;}
     else
         left = 0;
-    ChangeYaw ();
+    ChangeYaw();
     if (fabs(ofs) <= self.yaw_speed)
-        ryu_untilt ();
+        ryu_untilt();
     else
         {ryu_tilt (left, sped);  sped = 20;}
 
@@ -186,7 +186,7 @@ void(entity targ) wyrm_move = {
             self.ideal_yaw = oy;
             self.angles = oang;
             QC_MoveToGoal(sped);
-            ryu_untilt ();
+            ryu_untilt();
         }
     }
     self.enemy = oe;    // In case of change by trigger_hurt and the like.
@@ -403,10 +403,10 @@ void() Ryu_Shot_Fire = {
     makevectors(self.angles);
 
     // Find the location of the dragon's mouth (or head).
-    start = Ryu_Offset ();
+    start = Ryu_Offset();
     start = self.origin + (v_forward * start_x) + (v_right * start_y) +
         (v_up * start_z);
-    end = Ryu_TargetPoint ();   // Get the spot where dragon is aiming at.
+    end = Ryu_TargetPoint();   // Get the spot where dragon is aiming at.
 
     // Select an attack.
     if (self.worldtype == RYU_USE_FIRE) {
@@ -474,7 +474,7 @@ void(float pause) Ryu_Shot = {
         echo.nextthink = time + pause;
         echo.think = Ryu_Shot_Think;
     } else
-        Ryu_Shot_Fire ();
+        Ryu_Shot_Fire();
 };
 
 void() ryu_sfx_fly = {
@@ -523,7 +523,7 @@ void() wyrm_fly_anim = {
 
     self.frame = $fly1 + fadd;
     self.walkframe = self.walkframe + 1;
-    if ( self.frame == $fly8 ) ryu_sfx_fly ();
+    if ( self.frame == $fly8 ) ryu_sfx_fly();
 };
 
 void() ryu_stand1 =[ $fly1, ryu_stand1  ] {wyrm_fly_anim(); ai_stand();};
@@ -539,7 +539,7 @@ void() wyrm_fly   =[ $fly1, wyrm_fly    ] {
     if (self.enemy)
         wyrm_move (self.enemy);
     else {
-		if (self.charmer || self.movetarget) wyrm_glide ();
+		if (self.charmer || self.movetarget) wyrm_glide();
 	}
 
     if ( self.frame == $fly1 ) ai_stand(); // just updates seeing an enemy
@@ -551,14 +551,14 @@ void() wyrm_start = {
         self.ideal_yaw = self.angles_y;
     }
     self.th_stand = self.th_walk = self.th_run = wyrm_fly;
-    wyrm_fly ();
+    wyrm_fly();
 };
 
 void() wyrm_go = {
     if (self.classtype == CT_MONWYRM)
-        wyrm_fly ();
+        wyrm_fly();
     else
-        ryu_run1 ();
+        ryu_run1();
 };
 
 void() dragon_bite1  =[ $attack1,  dragon_bite2  ] { self.show_hostile = time + 1; ryu_melee(); };
@@ -569,14 +569,14 @@ void() dragon_bite5  =[ $attack5,  dragon_bite6  ] {ryu_melee();};
 void() dragon_bite6  =[ $attack6,  dragon_bite7  ] {ryu_melee();};
 void() dragon_bite7  =[ $attack7,  dragon_bite8  ] {ryu_melee();};
 void() dragon_bite8  =[ $attack8,  dragon_bite9  ] {ryu_melee();};
-void() dragon_bite9  =[ $attack9,  dragon_bite10 ] {ryu_melee(); ryu_sfx_fly (); Ryu_Bite ();};
+void() dragon_bite9  =[ $attack9,  dragon_bite10 ] {ryu_melee(); ryu_sfx_fly(); Ryu_Bite();};
 void() dragon_bite10 =[ $attack8,  dragon_bite11 ] {ryu_melee();};
 void() dragon_bite11 =[ $attack7,  dragon_bite12 ] {ryu_melee();};
 void() dragon_bite12 =[ $attack6,  dragon_bite13 ] {ryu_melee();};
 void() dragon_bite13 =[ $attack5,  dragon_bite14 ] {ryu_melee();};
 void() dragon_bite14 =[ $attack4,  dragon_bite15 ] {ryu_melee();};
 void() dragon_bite15 =[ $attack3,  dragon_bite16 ] {ryu_melee();};
-void() dragon_bite16 =[ $attack2,  dragon_bite17 ] {ryu_melee(); Ryu_Bite ();};
+void() dragon_bite16 =[ $attack2,  dragon_bite17 ] {ryu_melee(); Ryu_Bite();};
 void() dragon_bite17 =[ $attack1,  ryu_go     ] {ryu_melee(); self.attack_state = AS_STRAIGHT; self.walkframe = 0;};
 
 // Check if missile attack is effective or not.
@@ -612,9 +612,9 @@ void() dragon_strike = {
     }
     // If dragon can bite the target, do it.
     if (Ryu_CanBite (chance))
-        dragon_bite1 ();
+        dragon_bite1();
     else
-        self.th_missile ();   // Shoot at target.  Assumes th_missile exists.
+        self.th_missile();   // Shoot at target.  Assumes th_missile exists.
 };
 
 //  This makes the dragon decide whether or not to use meteor instead of fire spray.
@@ -736,7 +736,7 @@ void() dragon_ranged = {
 };
 void() dragon_missile1  =[ $attack1,  dragon_missile2  ] {
     self.show_hostile = time + 1;   // wake monsters up
-    if (self.classtype != CT_MONWYRM) Ryu_StrafeOption ();
+    if (self.classtype != CT_MONWYRM) Ryu_StrafeOption();
     dragon_ranged();
 };
 void() dragon_missile2  =[ $attack2,  dragon_missile3  ] {dragon_ranged();};
@@ -813,11 +813,11 @@ void(entity inflictor, entity attacker, float damage) wyrm_pain = {
     // Choose one of three pain scenes.
     r = random();
     if (r < 0.4)
-        dragon_pain1 ();
+        dragon_pain1();
     else if (r < 0.7)       // Was 0.8 in older Dragons.
-        dragon_painb1 ();
+        dragon_painb1();
     else
-        dragon_painc1 ();
+        dragon_painc1();
 };
 
 void() dragon_die1  =[ $death1,   dragon_die2  ] {DropCoin(2);};
@@ -856,9 +856,9 @@ void() dragon_die = {
         if (random() < 0.5) {
     	    // Shove it up a little for the fallback death anim.
             self.velocity_z = 250 + 100*random();
-            dragon_die1 ();
+            dragon_die1();
         } else
-            dragon_dieb1 ();
+            dragon_dieb1();
     }
 };
 
@@ -878,7 +878,7 @@ void() wyrm_explode = {
     swap = self;
     self = spawn();
     setorigin (self, swap.origin + '0 0 24');
-    WarpExplosion ();
+    WarpExplosion();
     self = swap;
     self.health = -99;      // Spawn dragon parts. Some gibs get some velocity.
     org = self.origin;
@@ -911,9 +911,9 @@ void() wyrm_explode = {
 
 void() ryu_go = {
     if (self.classtype == CT_MONWYRM)
-        wyrm_fly ();
+        wyrm_fly();
     else
-        ryu_run1 ();
+        ryu_run1();
 };
 
 void() wyrm_countdown = {
@@ -1126,7 +1126,7 @@ void() monster_ryu = {
     if (!self.classtype) self.classtype = CT_MONRYU;
     if (!self.classgroup) self.classgroup = CG_DRAGON;
     self.classmove = MON_MOVEFLY;
-    monster_start ();
+    monster_start();
 };
 
 void() monster_ryu_wyrm = {

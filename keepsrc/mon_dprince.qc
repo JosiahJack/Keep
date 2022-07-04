@@ -241,7 +241,7 @@ void()	dprince_char_a12=[	$char_a12,	dprince_run1	] {ai_charge(16);};
 // Identical frame set (Hell Knight / Death Knight)
 
 void()	dprince_char_b1	=[	$char_b1,	dprince_char_b2	] {
-	CheckContinueCharge (); ai_charge(23); ai_melee(); SwordSwipeSound();};
+	CheckContinueCharge(); ai_charge(23); ai_melee(); SwordSwipeSound();};
 void()	dprince_char_b2	=[	$char_b2,	dprince_char_b3	] {monster_footstep(FALSE); ai_charge(17); ai_melee();};
 void()	dprince_char_b3	=[	$char_b3,	dprince_char_b4	] {ai_charge(12); ai_melee();};
 void()	dprince_char_b4	=[	$char_b4,	dprince_char_b5	] {ai_charge(22); ai_melee();};
@@ -321,10 +321,10 @@ void() dprince_melee = {
 		self.meleeattack = self.meleeattack + 1;
 
 		// Slice = Swing attack, Smash = Overhead down, Watk = long swing
-		if (self.meleeattack == 1) dprince_slice1 ();
-		else if (self.meleeattack == 2) dprince_smash1 ();
+		if (self.meleeattack == 1) dprince_slice1();
+		else if (self.meleeattack == 2) dprince_smash1();
 		else {
-			dprince_watk1 ();
+			dprince_watk1();
 			self.meleeattack = 0;
 		}
 	}
@@ -430,9 +430,9 @@ void(entity inflictor, entity attacker, float damage) dprince_pain = {
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
-			if (random() < 0.85) dprince_painA1 ();	// classic, body recoil
+			if (random() < 0.85) dprince_painA1();	// classic, body recoil
 			else {
-				dprince_painD1 ();				// Cool stumble, hand over mouth
+				dprince_painD1();				// Cool stumble, hand over mouth
 				self.pain_finished = time + 2;	// long animation
 			}
 		}
@@ -440,7 +440,7 @@ void(entity inflictor, entity attacker, float damage) dprince_pain = {
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 1.1;
 			self.axhitme = 0;
-			dprince_painD1 ();
+			dprince_painD1();
 		}
 	}
 };
@@ -490,8 +490,8 @@ void() dprince_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
-		if (random() > 0.5) dprince_die1 ();
-		else dprince_dieb1 ();
+		if (random() > 0.5) dprince_die1();
+		else dprince_dieb1();
 	}
 };
 

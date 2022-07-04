@@ -296,9 +296,9 @@ void() raven_die = {
 		self.velocity_y = -100 + 200*random();
 		self.velocity_z = 100 + 100*random();
 		if (random() < 0.5)
-			raven_deathb1 (); 
+			raven_deathb1(); 
 		else
-			raven_death1 ();
+			raven_death1();
 	}
 };
 

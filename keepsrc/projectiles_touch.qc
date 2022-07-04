@@ -800,7 +800,7 @@ void() AreaBlaster_Touch = { // [FUNCTION]
 
 // Called when a MIRV slams into something before releasing its payload.
 void() Mirv_Touch = { // [FUNCTION]
-    Mirv_Reset (); // Turn off control.
+    Mirv_Reset(); // Turn off control.
     if (pointcontents(self.origin) == CONTENT_SKY) {remove (self); return;}
     if (Reflected_Damage (COURAGE_DAMAGE)) return;
 
@@ -827,7 +827,7 @@ void() Mirv_Touch = { // [FUNCTION]
 	if (self.noise == "") self.noise = SOUND_REXP3; // Play original explosion sound or replacement
 	R_Exp3(self.origin);
 	Tent_Explosion(self.origin);
-	BecomeExplosion2 ();
+	BecomeExplosion2();
 };
 
 void() lavaspike_touch = { // [FUNCTION]
@@ -1381,7 +1381,7 @@ void() Fireball_Touch = { // [FUNCTION]
 
     self.effects = self.effects | EF_MUZZLEFLASH;
     if (self.noise) sound (self, CHAN_AUTO, self.noise, 1, ATTN_NORM);
-    BecomeExplosion ();
+    BecomeExplosion();
 };
 
 // The large fireball explodes on contact and inflicts severe damage within a radius.

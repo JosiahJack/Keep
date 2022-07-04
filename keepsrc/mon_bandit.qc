@@ -123,21 +123,21 @@ void(entity inflictor, entity attacker, float damage) bandit_pain = {
 
     if ((r < p1) || (skill >= 3)) {
         self.pain_finished = time + 0.6;
-        army_pain1 ();
+        army_pain1();
         if (self.classtype == CT_MONBANDIT)
             sound (self, CHAN_VOICE, "soldier/pain1.wav", 1, ATTN_NORM);
         else
             sound (self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
     } else if (r < p2) {
         self.pain_finished = time + 1.1;
-        army_painb1 ();
+        army_painb1();
         if (self.classtype == CT_MONBANDIT)
             sound (self, CHAN_VOICE, "soldier/pain2.wav", 1, ATTN_NORM);
         else
             sound (self, CHAN_VOICE, "drake/goblin/pain1.wav", 1, ATTN_NORM);
     } else {
         self.pain_finished = time + 1.1;
-        army_painc1 ();
+        army_painc1();
         if (self.classtype == CT_MONBANDIT)
             sound (self, CHAN_VOICE, "soldier/pain2.wav", 1, ATTN_NORM);
         else
@@ -163,8 +163,8 @@ void() bandit_die = {
 				sound (self, CHAN_VOICE, "drake/goblin/death2.wav", 1, ATTN_NORM);
 			}
 		}
-		if (random() < 0.5) army_die1 ();		// Forward
-		else army_cdie1 ();									// Backward/side
+		if (random() < 0.5) army_die1();		// Forward
+		else army_cdie1();									// Backward/side
 	}
 
 };
@@ -256,7 +256,7 @@ void() monster_bandit = {
 
 	self.classgroup = CG_KNIGHT;
 	self.classmove = MON_MOVEWALK;
-    monster_start ();
+    monster_start();
 };
 
-void() monster_goblin = {self.skin = self.exactskin = 1;  monster_bandit ();};
+void() monster_goblin = {self.skin = self.exactskin = 1;  monster_bandit();};

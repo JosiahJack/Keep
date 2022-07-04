@@ -1,18 +1,18 @@
-void() mummy_stand1 = [ 0.000, mummy_stand2 ] { ai_stand (); };
-void() mummy_stand2 = [ 1.000, mummy_stand3 ] { ai_stand (); };
-void() mummy_stand3 = [ 2.000, mummy_stand4 ] { ai_stand (); };
-void() mummy_stand4 = [ 3.000, mummy_stand5 ] { ai_stand (); };
-void() mummy_stand5 = [ 4.000, mummy_stand6 ] { ai_stand (); };
-void() mummy_stand6 = [ 5.000, mummy_stand7 ] { ai_stand (); };
-void() mummy_stand7 = [ 6.000, mummy_stand8 ] { ai_stand (); };
-void() mummy_stand8 = [ 7.000, mummy_stand9 ] { ai_stand (); };
-void() mummy_stand9 = [ 8.000, mummy_stand10 ] { ai_stand (); };
-void() mummy_stand10 = [ 9.000, mummy_stand11 ] { ai_stand (); };
-void() mummy_stand11 = [ 10.000, mummy_stand12 ] { ai_stand (); };
-void() mummy_stand12 = [ 11.000, mummy_stand13 ] { ai_stand (); };
-void() mummy_stand13 = [ 12.000, mummy_stand14 ] { ai_stand (); };
-void() mummy_stand14 = [ 13.000, mummy_stand15 ] { ai_stand (); };
-void() mummy_stand15 = [ 14.000, mummy_stand1 ] { ai_stand (); };
+void() mummy_stand1 = [ 0.000, mummy_stand2 ] { ai_stand(); };
+void() mummy_stand2 = [ 1.000, mummy_stand3 ] { ai_stand(); };
+void() mummy_stand3 = [ 2.000, mummy_stand4 ] { ai_stand(); };
+void() mummy_stand4 = [ 3.000, mummy_stand5 ] { ai_stand(); };
+void() mummy_stand5 = [ 4.000, mummy_stand6 ] { ai_stand(); };
+void() mummy_stand6 = [ 5.000, mummy_stand7 ] { ai_stand(); };
+void() mummy_stand7 = [ 6.000, mummy_stand8 ] { ai_stand(); };
+void() mummy_stand8 = [ 7.000, mummy_stand9 ] { ai_stand(); };
+void() mummy_stand9 = [ 8.000, mummy_stand10 ] { ai_stand(); };
+void() mummy_stand10 = [ 9.000, mummy_stand11 ] { ai_stand(); };
+void() mummy_stand11 = [ 10.000, mummy_stand12 ] { ai_stand(); };
+void() mummy_stand12 = [ 11.000, mummy_stand13 ] { ai_stand(); };
+void() mummy_stand13 = [ 12.000, mummy_stand14 ] { ai_stand(); };
+void() mummy_stand14 = [ 13.000, mummy_stand15 ] { ai_stand(); };
+void() mummy_stand15 = [ 14.000, mummy_stand1 ] { ai_stand(); };
 
 void() mummy_walk1 = [ 15.000, mummy_walk2 ] { ai_walk (0); };
 void() mummy_walk2 = [ 16.000, mummy_walk3 ] { ai_walk (3); };
@@ -91,7 +91,7 @@ void(vector st) mummyFireGrenade = {
    local vector org;
 
    sound (self,CHAN_WEAPON,"zombie/z_shot1.wav",TRUE,ATTN_NORM);
-   missile = spawn ();
+   missile = spawn();
 	missile.classgroup = CG_PROJALL;
    missile.owner = self;
    missile.movetype = MOVETYPE_BOUNCE;
@@ -110,68 +110,68 @@ void(vector st) mummyFireGrenade = {
    setorigin (missile,org);
 };
 
-void() mummy_atta1 = [ 52.000, mummy_atta2 ] { ai_face (); };
-void() mummy_atta2 = [ 53.000, mummy_atta3 ] { ai_face (); };
-void() mummy_atta3 = [ 54.000, mummy_atta4 ] { ai_face (); };
-void() mummy_atta4 = [ 55.000, mummy_atta5 ] { ai_face (); };
-void() mummy_atta5 = [ 56.000, mummy_atta6 ] { ai_face (); };
-void() mummy_atta6 = [ 57.000, mummy_atta7 ] { ai_face (); };
-void() mummy_atta7 = [ 58.000, mummy_atta8 ] { ai_face (); };
-void() mummy_atta8 = [ 59.000, mummy_atta9 ] { ai_face (); };
-void() mummy_atta9 = [ 60.000, mummy_atta10 ] { ai_face (); };
-void() mummy_atta10 = [ 61.000, mummy_atta11 ] { ai_face (); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH);};
-void() mummy_atta11 = [ 62.000, mummy_atta12 ] { ai_face (); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH);};
-void() mummy_atta12 = [ 63.000, mummy_atta13 ] { ai_face (); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH);};
+void() mummy_atta1 = [ 52.000, mummy_atta2 ] { ai_face(); };
+void() mummy_atta2 = [ 53.000, mummy_atta3 ] { ai_face(); };
+void() mummy_atta3 = [ 54.000, mummy_atta4 ] { ai_face(); };
+void() mummy_atta4 = [ 55.000, mummy_atta5 ] { ai_face(); };
+void() mummy_atta5 = [ 56.000, mummy_atta6 ] { ai_face(); };
+void() mummy_atta6 = [ 57.000, mummy_atta7 ] { ai_face(); };
+void() mummy_atta7 = [ 58.000, mummy_atta8 ] { ai_face(); };
+void() mummy_atta8 = [ 59.000, mummy_atta9 ] { ai_face(); };
+void() mummy_atta9 = [ 60.000, mummy_atta10 ] { ai_face(); };
+void() mummy_atta10 = [ 61.000, mummy_atta11 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH);};
+void() mummy_atta11 = [ 62.000, mummy_atta12 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH);};
+void() mummy_atta12 = [ 63.000, mummy_atta13 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH);};
 void() mummy_atta13 = [ 64.000, mummy_run1 ] {
-   ai_face ();
+   ai_face();
    mummyFireGrenade ('-10.000 -22.000 30.000');
 };
 
-void() mummy_attb1 = [ 65.000, mummy_attb2 ] { ai_face (); };
-void() mummy_attb2 = [ 66.000, mummy_attb3 ] { ai_face (); };
-void() mummy_attb3 = [ 67.000, mummy_attb4 ] { ai_face (); };
-void() mummy_attb4 = [ 68.000, mummy_attb5 ] { ai_face (); };
-void() mummy_attb5 = [ 69.000, mummy_attb6 ] { ai_face (); };
-void() mummy_attb6 = [ 70.000, mummy_attb7 ] { ai_face (); };
-void() mummy_attb7 = [ 71.000, mummy_attb8 ] { ai_face (); };
-void() mummy_attb8 = [ 72.000, mummy_attb9 ] { ai_face (); };
-void() mummy_attb9 = [ 73.000, mummy_attb10 ] { ai_face (); };
-void() mummy_attb10 = [ 74.000, mummy_attb11 ] { ai_face (); };
-void() mummy_attb11 = [ 75.000, mummy_attb12 ] { ai_face (); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH);};
-void() mummy_attb12 = [ 76.000, mummy_attb13 ] { ai_face (); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
-void() mummy_attb13 = [ 77.000, mummy_attb14 ] { ai_face (); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
+void() mummy_attb1 = [ 65.000, mummy_attb2 ] { ai_face(); };
+void() mummy_attb2 = [ 66.000, mummy_attb3 ] { ai_face(); };
+void() mummy_attb3 = [ 67.000, mummy_attb4 ] { ai_face(); };
+void() mummy_attb4 = [ 68.000, mummy_attb5 ] { ai_face(); };
+void() mummy_attb5 = [ 69.000, mummy_attb6 ] { ai_face(); };
+void() mummy_attb6 = [ 70.000, mummy_attb7 ] { ai_face(); };
+void() mummy_attb7 = [ 71.000, mummy_attb8 ] { ai_face(); };
+void() mummy_attb8 = [ 72.000, mummy_attb9 ] { ai_face(); };
+void() mummy_attb9 = [ 73.000, mummy_attb10 ] { ai_face(); };
+void() mummy_attb10 = [ 74.000, mummy_attb11 ] { ai_face(); };
+void() mummy_attb11 = [ 75.000, mummy_attb12 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH);};
+void() mummy_attb12 = [ 76.000, mummy_attb13 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
+void() mummy_attb13 = [ 77.000, mummy_attb14 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
 void() mummy_attb14 = [ 77.000, mummy_run1 ] {
-   ai_face ();
+   ai_face();
    mummyFireGrenade ('-10.000 -24.000 29.000');
 };
 
-void() mummy_attc1 = [ 79.000, mummy_attc2 ] { ai_face (); };
-void() mummy_attc2 = [ 80.000, mummy_attc3 ] { ai_face (); };
-void() mummy_attc3 = [ 81.000, mummy_attc4 ] { ai_face (); };
-void() mummy_attc4 = [ 82.000, mummy_attc5 ] { ai_face (); };
-void() mummy_attc5 = [ 83.000, mummy_attc6 ] { ai_face (); };
-void() mummy_attc6 = [ 84.000, mummy_attc7 ] { ai_face (); };
-void() mummy_attc7 = [ 85.000, mummy_attc8 ] { ai_face (); };
-void() mummy_attc8 = [ 86.000, mummy_attc9 ] { ai_face (); };
-void() mummy_attc9 = [ 87.000, mummy_attc10 ] { ai_face (); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
-void() mummy_attc10 = [ 88.000, mummy_attc11 ] { ai_face (); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
-void() mummy_attc11 = [ 89.000, mummy_attc12 ] { ai_face (); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
+void() mummy_attc1 = [ 79.000, mummy_attc2 ] { ai_face(); };
+void() mummy_attc2 = [ 80.000, mummy_attc3 ] { ai_face(); };
+void() mummy_attc3 = [ 81.000, mummy_attc4 ] { ai_face(); };
+void() mummy_attc4 = [ 82.000, mummy_attc5 ] { ai_face(); };
+void() mummy_attc5 = [ 83.000, mummy_attc6 ] { ai_face(); };
+void() mummy_attc6 = [ 84.000, mummy_attc7 ] { ai_face(); };
+void() mummy_attc7 = [ 85.000, mummy_attc8 ] { ai_face(); };
+void() mummy_attc8 = [ 86.000, mummy_attc9 ] { ai_face(); };
+void() mummy_attc9 = [ 87.000, mummy_attc10 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
+void() mummy_attc10 = [ 88.000, mummy_attc11 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
+void() mummy_attc11 = [ 89.000, mummy_attc12 ] { ai_face(); self.attack_elev = SUB_Elevation(ELEV_DEFAULT, self.origin, self.enemy.origin, SPEED_ZOMBFLESH); };
 void() mummy_attc12 = [ 90.000, mummy_run1 ] {
-   ai_face ();
+   ai_face();
    mummyFireGrenade ('-12.000 -19.000 29.000');
 };
 
 void() mummy_missile = {
    local float r;
 
-   r = random ();
+   r = random();
    if ( (r < 0.300) ) {
-      mummy_atta1 ();
+      mummy_atta1();
    } else {
       if ( (r < 0.600) ) {
-         mummy_attb1 ();
+         mummy_attb1();
       } else {
-         mummy_attc1 ();
+         mummy_attc1();
       }
    }
 };
@@ -310,27 +310,27 @@ void(entity inflictor, entity attacker, float take) mummy_pain = {
    if ( (self.pain_finished > time) )
       return ;
 
-   r = random ();
+   r = random();
    if ( (r > 0.240) )
       return ;
 
    self.pain_finished = (time + 2.500);
    if ( (r < 0.060) ) {
-      mummy_paina1 ();
+      mummy_paina1();
    } else {
       if ( (r < 0.120) ) {
-         mummy_painb1 ();
+         mummy_painb1();
       } else {
          if ( (r < 0.180) ) {
-            mummy_painc1 ();
+            mummy_painc1();
          } else {
-            mummy_paind1 ();
+            mummy_paind1();
          }
       }
    }
 };
 
-void() mummy_sleep = [ 172.000, mummy_sleep ] { ai_stand (); };
+void() mummy_sleep = [ 172.000, mummy_sleep ] { ai_stand(); };
 
 void() mummy_wake = {
    self.th_stand = mummy_stand1;
@@ -338,10 +338,10 @@ void() mummy_wake = {
    self.th_pain = mummy_pain;
    self.th_run = mummy_run1;
    self.th_missile = mummy_missile;
-   mummy_paine12 ();
+   mummy_paine12();
 };
 
-void(entity inflictor, entity attacker, float damage) mummy_wake_pain = { mummy_wake (); };
+void(entity inflictor, entity attacker, float damage) mummy_wake_pain = { mummy_wake(); };
 
 float MUMMY_STRONG = 4.000;
 

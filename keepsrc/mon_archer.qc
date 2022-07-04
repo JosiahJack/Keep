@@ -252,7 +252,7 @@ void() archer_hold = {
     enemy_range = range(self.enemy);
     if (enemy_range < RANGE_NEAR)
         if (random() < 0.4) {
-            archer_fire1 ();
+            archer_fire1();
             return;
         }
 
@@ -269,7 +269,7 @@ void() archer_hold = {
         if (random() >= chance) return;
     }
 
-    archer_fire1 ();
+    archer_fire1();
 };
 
 void() archer_redraw1  =[ $redraw2,  archer_redraw2  ] {archer_face();};
@@ -301,9 +301,9 @@ void() archer_attackb7 =[ $draw13, archer_hold      ] {archer_face();};
 void() archer_attack =
 {
     if (enemy_range < RANGE_MID)    // Range set by CheckAttack.
-        archer_attackb1 ();     // Step back.
+        archer_attackb1();     // Step back.
     else
-        archer_attack1 ();      // Step forward.
+        archer_attack1();      // Step forward.
 };
 
 void() archer_fire1    =[ $fire2,  archer_fire2    ] {ai_face();
@@ -404,14 +404,14 @@ void(entity inflictor, entity attacker, float damage) archer_pain = {
 		// Here, in Quake, do not always allow a redraw.
 		damage = random();
 		if (damage < 0.25)
-			archer_painc1 ();
+			archer_painc1();
 		else if (damage < 0.5)
-			archer_painb1 ();
+			archer_painb1();
 		else
-			archer_pain1 ();
+			archer_pain1();
 		return;
 	}
-    archer_pain1 ();
+    archer_pain1();
     attacker = attacker;    // FrikQcc warning squelch!
 };
 
@@ -444,7 +444,7 @@ void() archer_die = {
 			sound (self, CHAN_VOICE, "drake/archer/death2.wav", 1, ATTN_NORM);
 		else
 			sound (self, CHAN_VOICE, "drake/archer/death.wav", 1, ATTN_NORM);
-		archer_die1 ();
+		archer_die1();
 	}
 };
 
@@ -527,4 +527,4 @@ void() monster_archer = {
 };
 
 // --> QUAKED monster_archer_lord (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-void() monster_archer_lord = { self.classtype = CT_MONARCHERLORD; monster_archer (); };
+void() monster_archer_lord = { self.classtype = CT_MONARCHERLORD; monster_archer(); };

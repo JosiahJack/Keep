@@ -228,7 +228,7 @@ void() func_button = { // [ENTITY]
 	self.bsporigin = TRUE;
 	self.mdl = self.model;
 	if (self.angles_y == 0) self.angles_y = 360;
-	SetMovedir ();	// Setup move direction base on angles
+	SetMovedir();	// Setup move direction base on angles
 	if (!self.speed) self.speed = 40; // Default parameters and states
 	if (!self.yaw_speed) self.yaw_speed = self.speed; // Second movement speed can be different, yaw_speed
 	if (!self.wait) self.wait = 1;

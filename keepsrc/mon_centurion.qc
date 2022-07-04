@@ -146,16 +146,16 @@ void(entity inflictor, entity attacker, float damage) cent_pain = {
 
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
-		self.lip = random ();
+		self.lip = random();
 		if (self.lip < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 	
 		// Not using long pain animation (need to be agile)
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			// Randomly pick which pain animation to play
-			if (self.lip < 0.3) cent_paina1 ();
-			else if (self.lip < 0.6) cent_painb1 ();
-			else cent_painc1 ();
+			if (self.lip < 0.3) cent_paina1();
+			else if (self.lip < 0.6) cent_painb1();
+			else cent_painc1();
 		}
 	}
 };
@@ -221,8 +221,8 @@ void() cent_die = {
 		self.flags = self.flags - (self.flags & FL_ONGROUND);
 		// Spawn a big sprite explosion + sound
 		SpawnExplosion(EXPLODE_BIG, self.origin, SOUND_REXP3);
-		if (random() > 0.5) cent_die1 ();
-		else cent_fdie1 ();
+		if (random() > 0.5) cent_die1();
+		else cent_fdie1();
 	}
 };
 

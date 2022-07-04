@@ -150,12 +150,12 @@ void(entity inflictor, entity attacker, float damage) snowm_pain =
 	if (self.pain_check > 0) {
 		if (random() < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
-		if (self.pain_check == 1) snowm_pain1 ();
+		if (self.pain_check == 1) snowm_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 0.6;
 			self.axhitme = 0;
-			snowm_pain1 ();
+			snowm_pain1();
 		}
 	}
 };

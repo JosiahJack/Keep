@@ -51,7 +51,7 @@ void() random_thunder = { // [ENTITY]
 
 void() random_thunder_triggered = { // [ENTITY]
    self.noise = "ambience/thunder1.wav";
-   play_sound_triggered ();
+   play_sound_triggered();
    self.impulse = MOVETYPE_TOSS;
 };
 

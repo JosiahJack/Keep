@@ -432,7 +432,7 @@ void(entity inflictor, entity attacker, float damage) golem_pain =
 			// reset axe hit and setup short pain recovery
 			self.axhitme = 0;
 			self.pain_finished = time + 0.9;
-			golem_painB1 ();
+			golem_painB1();
 		}
 	}
 };
@@ -473,7 +473,7 @@ void() golem_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "ne_ruins/h2golem/death.wav", 1, ATTN_NORM);
-		golem_death1 ();
+		golem_death1();
 	}
 };
 

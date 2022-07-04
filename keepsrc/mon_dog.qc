@@ -312,9 +312,9 @@ void(entity inflictor, entity attacker, float damage)	dog_pain =
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1 || self.pain_check == 2) {
 			// Randomly pick which pain animation to play
-			if (random() > 0.5) dog_pain1 ();
+			if (random() > 0.5) dog_pain1();
 			else {
-				dog_painb1 ();						// roll over
+				dog_painb1();						// roll over
 				self.pain_finished = time + 2;		// long animation
 			}
 		}
@@ -355,8 +355,8 @@ void() dog_die =
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "dog/ddeath.wav", 1, ATTN_NORM);
 
-		if (random() > 0.5) dog_die1 ();
-		else dog_dieb1 ();
+		if (random() > 0.5) dog_die1();
+		else dog_dieb1();
 	}
 };
 
@@ -380,9 +380,9 @@ void() dog_fire5  =[ $attack1, dog_run1   ] {ai_face();};
 // Hell hounds' missile function.
 void() dog_missile = {
     if (vlen(self.enemy.origin - self.origin) < 200)
-        dog_leap1 ();
+        dog_leap1();
     else
-        dog_fire1 ();
+        dog_fire1();
 };
 
 void() monster_dog_precache = {

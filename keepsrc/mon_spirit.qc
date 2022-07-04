@@ -590,12 +590,12 @@ void(entity inflictor, entity attacker, float damage) spirit_pain =
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		if (self.pain_check == 1) spirit_pain1 ();
+		if (self.pain_check == 1) spirit_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 1.2;
 			self.axhitme = 0;
-			spirit_pain1 ();
+			spirit_pain1();
 		}
 	}
 };

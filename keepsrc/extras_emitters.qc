@@ -223,7 +223,7 @@ void() effector_friction = { // [FUNCTION]
 // Spawnflags
 // "START_ON"		Start in enabled state even if targeted
 void() t_effector_friction = { // [ENTITY]
-	InitTrigger ();
+	InitTrigger();
 	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
 	self.speed = self.speed/100.0;
@@ -246,7 +246,7 @@ void() t_effector_friction = { // [ENTITY]
 // "START_ON"		Start in enabled state even if targeted
 // "TANGENENTAL"	Particles turn to face new direction
 void() t_effector_attract = { // [ENTITY]
-	InitTrigger ();
+	InitTrigger();
 	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
 	if (self.cnt<0) self.cnt = 0;
@@ -279,7 +279,7 @@ void() t_effector_attract = { // [ENTITY]
 // "NOT_Z"			Don't affect Z direction
 // "TANGENENTAL"	Particles turn to face new direction
 void() t_effector_trubulence = { // [ENTITY]
-	InitTrigger ();
+	InitTrigger();
 	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
 	if (!self.speed) self.speed = 1;
@@ -303,7 +303,7 @@ void() t_effector_trubulence = { // [ENTITY]
 // "START_ON"		Start in enabled state even if targeted
 // "ABSOLUTE"		Particles use new gravity outright
 void() t_effector_gravity = { // [ENTITY]
-	InitTrigger ();
+	InitTrigger();
 	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
 	if (self.targetname != string_null && !(self.spawnflags & START_ON)) self.state = FALSE;// off
@@ -323,7 +323,7 @@ void() t_effector_gravity = { // [ENTITY]
 // "START_ON"		Start in enabled state even if targeted
 // "TANGENENTAL"	Particles turn to face new direction
 void() t_effector_push = { // [ENTITY]
-	InitTrigger ();
+	InitTrigger();
 	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
 	if (self.cnt<0) self.cnt = 0;
@@ -343,7 +343,7 @@ void() t_effector_push = { // [ENTITY]
 // Spawnflags
 // "START_ON"		Start in enabled state even if targeted
 void() t_effector_destroy = { // [ENTITY]
-	InitTrigger ();
+	InitTrigger();
 	if (!self.count || self.count<0 || self.count>100) self.count = 100;
 	self.count = self.count*0.01;
 	if (self.targetname != string_null && !(self.spawnflags & START_ON)) self.state = FALSE;// off
@@ -478,7 +478,7 @@ void() emitter_emit = { // [FUNCTION]
 	if (self.noise != string_null && self.count == 1) sound (self, CHAN_VOICE, self.noise, 1, ATTN_NORM); // Play emitter noise
 		
 	// Emit a particle
-	p = spawn ();
+	p = spawn();
 	p.owner = self;
 	p.origin = particle_origin();
 	setorigin (p, p.origin);

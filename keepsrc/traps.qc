@@ -271,7 +271,7 @@ void() trap_spikeshooter = { // [ENTITY]
 	if (self.delay < 0) self.delay = 0;
 	if (!self.volume) self.volume = 1;
 	self.mangle = self.angles;
-	SetMovedir ();
+	SetMovedir();
 
 	// Setup Entity State functionality
 	if (self.targetname != "") self.use = entity_state_use;
@@ -323,7 +323,7 @@ void() trap_grenadeshooter = { // [ENTITY]
 	if (self.delay < 0) self.delay = 0;
 	if (!self.volume) self.volume = 1;
 	self.mangle = self.angles;
-	SetMovedir ();
+	SetMovedir();
 	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_use = trap_shooter_use;
 	self.estate_reset = trap_shooter_reset;
@@ -390,7 +390,7 @@ void() trap_rocketshooter = { // [ENTITY]
 	if (self.delay < 0) self.delay = 0;
 	if (!self.volume) self.volume = 1;
 	self.mangle = self.angles;
-	SetMovedir ();
+	SetMovedir();
 	if (self.targetname != "") self.use = entity_state_use; // Setup Entity State functionality
 	self.estate_use = trap_shooter_use;
 	self.estate_reset = trap_shooter_reset;

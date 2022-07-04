@@ -99,7 +99,7 @@ void(entity source, entity targ) ProjectileType = { // [FUNCTION]
 
 // Mainly used to show resistance to an ammo type.  Also used by boils for their idle gibs
 void(entity source, vector org, float velrnd, float upbase, float uprnd) SpawnProjectileMeat = { // [FUNCTION]
-	newmis = spawn ();
+	newmis = spawn();
 	newmis.classtype = CT_TEMPGIB;
 	newmis.classgroup = CG_TEMPENT;
 	newmis.movetype = MOVETYPE_BOUNCE;

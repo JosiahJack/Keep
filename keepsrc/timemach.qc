@@ -4,7 +4,7 @@ void() xpackEnding;
 void() time_chunk = {
    local entity timeChunk;
 
-   timeChunk = spawn ();
+   timeChunk = spawn();
    setmodel (timeChunk,"progs/rogue/timegib.mdl");
    timeChunk.solid = SOLID_NOT;
    timeChunk.movetype = MOVETYPE_TOSS;
@@ -32,7 +32,7 @@ void() time_stop_shake = {
 void() time_boom = {
    local entity stopShakeEnt;
 
-   SUB_UseTargets ();
+   SUB_UseTargets();
    if ( ((self.owner.health < 1250.000) && (self.owner.frame > FALSE)) ) {
       if ( (self.owner.skin < FL_SWIM) ) {
          self.owner.frame = FL_SWIM;
@@ -41,7 +41,7 @@ void() time_boom = {
    } else {
       if ( (self.owner.health < 1500.000) ) {
          if ( (self.owner.frame == FALSE) ) {
-            time_chunk ();
+            time_chunk();
             self.owner.frame = TRUE;
             self.owner.skin = TRUE;
          }
@@ -65,8 +65,8 @@ void() time_boom = {
       WriteByte (MSG_BROADCAST,MOVETYPE_WALK);
    }
 
-   BecomeExplosion ();
-   stopShakeEnt = spawn ();
+   BecomeExplosion();
+   stopShakeEnt = spawn();
    stopShakeEnt.target = self.target;
    stopShakeEnt.think = time_stop_shake;
    stopShakeEnt.nextthink = (time + 0.7);
@@ -106,7 +106,7 @@ void() time_crash = {
    self.think = time_fall;
    self.nextthink = (time + 0.1);
    self.target = "timeramp";
-   SUB_UseTargets ();
+   SUB_UseTargets();
 };
 
 void(entity inflictor, entity attacker, float take) time_crash_pain = { time_crash(); }; // [FUNCTION], Compiler redirect.
@@ -117,12 +117,12 @@ void(entity inflictor, entity attacker, float take) time_pain = {
 
    if ((self.health > 1100) && (self.pain_finished > time)) return;
 
-   painRnd = random ();
+   painRnd = random();
    if ( (painRnd < 0.4) ) {
       self.pain_finished = (time + FL_SWIM);
-      painRnd = random ();
+      painRnd = random();
       makevectors(self.angles);
-      painEnt = spawn ();
+      painEnt = spawn();
       if ( (painRnd < 0.330) ) {
          painEnt.origin = ((self.origin + (v_forward * 80.000)) - (v_up * FL_GODMODE));
       } else if ( (painRnd < 0.660) ) {

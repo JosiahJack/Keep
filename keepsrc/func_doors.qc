@@ -232,7 +232,7 @@ void() func_door_fire = { // [FUNCTION]
 	oself = starte = self; // Save for later (linked doors)
 	if (self.midstart > 0) { // Check for mid start setup (waiting at pos2)
 		do { // trigger all paired doors
-			if (self.state != STATE_DOWN) func_door_go_down (); // Don't keep re-triggering midstart doors.  Let the door reset back to pos1 (start position).
+			if (self.state != STATE_DOWN) func_door_go_down(); // Don't keep re-triggering midstart doors.  Let the door reset back to pos1 (start position).
 			self = self.enemy;
 			if (self == world) self = starte; // Prevent endless world loops
 		} while ( self != starte );
@@ -254,7 +254,7 @@ void() func_door_fire = { // [FUNCTION]
 		if (self.state == STATE_UP || self.state == STATE_TOP) {
 			starte = self; // Reset
 			do {
-				func_door_go_down ();
+				func_door_go_down();
 				self = self.enemy;
 				if (self == world) self = starte; // Prevent endless world loops
 			} while ( self != starte );
@@ -265,7 +265,7 @@ void() func_door_fire = { // [FUNCTION]
 	
 	starte = self; // Reset
 	do { // trigger all paired doors
-		func_door_go_up ();
+		func_door_go_up();
 		self = self.enemy;
 		if (self == world) self = starte; // Prevent endless world loops
 	} while (self != starte);
@@ -284,7 +284,7 @@ void() func_door_use = { // [FUNCTION]
 		self.enemy.message = string_null;
 		oself = self;
 		self = self.owner; // Switch to master door
-		func_door_fire ();
+		func_door_fire();
 		self = oself;
 	}
 };
@@ -298,7 +298,7 @@ void() func_door_killed = { // [FUNCTION]
 	self = self.owner;
 	self.health = self.max_health;
 	self.takedamage = DAMAGE_NO;	// wil be reset upon return
-	func_door_use ();
+	func_door_use();
 	self = oself;
 };
 
@@ -499,8 +499,8 @@ void() func_door_blocked = { // [FUNCTION]
 	if (self.midstart) self.midstart = FALSE; // Always reset midstart flag (its no longer needed)
 	T_Damage (other, self, self, self.dmg, DAMARMOR); // Do the block damage
 	if (self.wait != -1) { // if a door has a negative wait, it would never come back if blocked, so let it just squash the object to death real fast.
-		if (self.state == STATE_DOWN) func_door_go_up ();
-		else func_door_go_down ();
+		if (self.state == STATE_DOWN) func_door_go_up();
+		else func_door_go_down();
 	}
 };
 
@@ -631,7 +631,7 @@ void() func_door = { // [ENTITY]
 	self.classgroup = CG_FUNCMOVER;
 	self.bsporigin = TRUE;
 	self.mdl = self.model;
-	SetMovedir (); // Set angle/movedir and reset angles
+	SetMovedir(); // Set angle/movedir and reset angles
 	if (self.speed <=0) self.speed = 100;
 	if (self.yaw_speed <=0) self.yaw_speed = self.speed; // Second movement speed can be different, yaw_speed
 	if (!self.wait) self.wait = 3;

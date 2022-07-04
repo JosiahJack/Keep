@@ -97,20 +97,20 @@ void() elvtr_button_fire = { // [FUNCTION]
 	SUB_CalcMove (self.pos2, self.speed, elvtr_button_wait);
 };
 
-void() elvtr_button_use = { self.enemy = activator; elvtr_button_fire (); }; // [FUNCTION]
+void() elvtr_button_use = { self.enemy = activator; elvtr_button_fire(); }; // [FUNCTION]
 
 void() elvtr_button_touch = { // [FUNCTION]
 	if (other.classname != "player") return;
 
 	self.enemy = other;
-	elvtr_button_fire ();
+	elvtr_button_fire();
 };
 
 void() elvtr_button_killed = { // [FUNCTION]
 	self.enemy = damage_attacker;
 	self.health = self.max_health;
 	self.takedamage = DAMAGE_NO;	// wil be reset upon return
-	elvtr_button_fire ();
+	elvtr_button_fire();
 };
 
 // QUAKED func_elvtr_button (0 .5 .8) ? ELVTR_DOWN
@@ -135,7 +135,7 @@ void() func_elvtr_button = { // [ENTITY]
 		else if (self.sounds == 3) self.noise = "buttons/switch04.wav";
 	}
 	precache_sound(self.noise);
-	SetMovedir ();
+	SetMovedir();
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
 	setmodel (self, self.model);
@@ -181,14 +181,14 @@ void() dn_and_wait_go_up = { // [FUNCTION]
 
 void() dn_and_wait_crush = { // [FUNCTION]
 	T_Damage (other, self, self, 1,DAMARMOR);
-	if (self.state == STATE_UP) dn_and_wait_go_down ();
-	else if (self.state == STATE_DOWN) dn_and_wait_go_up ();
+	if (self.state == STATE_UP) dn_and_wait_go_down();
+	else if (self.state == STATE_DOWN) dn_and_wait_go_up();
 };
 
 void() dn_and_wait_use = { // [FUNCTION]
 	if (self.state != STATE_TOP) return;
 	
-	dn_and_wait_go_down ();
+	dn_and_wait_go_down();
 };
 
 void() toggle_hit_top = { // [FUNCTION]
@@ -215,13 +215,13 @@ void() toggle_go_up = { // [FUNCTION]
 
 void() toggle_crush = { // [FUNCTION]
 	T_Damage (other, self, self, 1, DAMARMOR);
-	if (self.state == STATE_UP) toggle_go_down ();
-	else if (self.state == STATE_DOWN) toggle_go_up ();
+	if (self.state == STATE_UP) toggle_go_down();
+	else if (self.state == STATE_DOWN) toggle_go_up();
 };
 
 void() toggle_use = { // [FUNCTION]
-	if (self.state == STATE_TOP) toggle_go_down ();
-	else if (self.state == STATE_BOTTOM) toggle_go_up ();
+	if (self.state == STATE_TOP) toggle_go_down();
+	else if (self.state == STATE_BOTTOM) toggle_go_up();
 };
 
 void() elvtr_stop = { // [FUNCTION]
@@ -242,7 +242,7 @@ void() elvtr_go = { // [FUNCTION]
 
 void() elvtr_crush = { // [FUNCTION]
 	self.elevatorToFloor = self.elevatorOnFloor;
-	elvtr_go ();
+	elvtr_go();
 };
 
 // self = plat, other = elevator button, other.enemy = player
@@ -260,7 +260,7 @@ void() elvtr_use = { // [FUNCTION]
 		tempDist = (elvPos - btnPos) / self.height;
 		tempDist = ceil ( tempDist);
 		self.elevatorToFloor = self.elevatorOnFloor - tempDist;
-		elvtr_go ();
+		elvtr_go();
 		return;
 	} else {
 		tempDist = btnPos - elvPos;
@@ -268,7 +268,7 @@ void() elvtr_use = { // [FUNCTION]
 			tempDist = tempDist / self.height;
 			tempDist = floor ( tempDist );
 			self.elevatorToFloor = self.elevatorOnFloor + tempDist;
-			elvtr_go ();
+			elvtr_go();
 			return;
 		}
 	}
@@ -276,12 +276,12 @@ void() elvtr_use = { // [FUNCTION]
 	if (self.lefty == -1) {	
 		if (self.elevatorOnFloor > 0) {
 			self.elevatorToFloor = self.elevatorOnFloor - 1;
-			elvtr_go ();
+			elvtr_go();
 		}
 	} else if (self.lefty == 1) {
 		if (self.elevatorOnFloor < (self.cnt - 1)) {
 			self.elevatorToFloor = self.elevatorOnFloor + 1;
-			elvtr_go ();
+			elvtr_go();
 		}
 	}
 };
@@ -408,8 +408,8 @@ void() plat2_center_touch = { // [FUNCTION]
 
 void() plat2_crush = { // [FUNCTION]
 	T_Damage (other, self, self, 1, DAMARMOR);
-	if (self.state == STATE_UP) plat2_go_down ();
-	else if (self.state == STATE_DOWN) plat2_go_up ();
+	if (self.state == STATE_UP) plat2_go_down();
+	else if (self.state == STATE_DOWN) plat2_go_up();
 };
 
 
@@ -508,7 +508,7 @@ void() func_new_plat = { // [ENTITY]
             self.blocked = elvtr_crush;
          } else {
             if ( (self.spawnflags & PLAT2) ) {
-               plat2_spawn_inside_trigger ();
+               plat2_spawn_inside_trigger();
                self.plat2Called = FALSE;
                self.plat2LastMove = FALSE;
                self.plat2GoTo = FALSE;

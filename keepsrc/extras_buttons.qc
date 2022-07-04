@@ -118,8 +118,8 @@ void() button_ext_touch = { // [FUNCTION]
 	
 	self.takedamage = DAMAGE_NO;// don't allow shots before reset
 	self.enemy = other;
-	if (self.cnt) button_ext_firedisabled ();
-	else button_ext_fire ();
+	if (self.cnt) button_ext_firedisabled();
+	else button_ext_fire();
 };
 
 void() button_ext_killed = { // [FUNCTION]
@@ -127,8 +127,8 @@ void() button_ext_killed = { // [FUNCTION]
 	self.health = self.max_health;
 	self.takedamage = DAMAGE_NO;
 	
-	if (self.cnt) button_ext_firedisabled ();
-	else button_ext_fire ();
+	if (self.cnt) button_ext_firedisabled();
+	else button_ext_fire();
 };
 
 // QUAKED func_button_ext (0 .5 .8) ? START_OFF ALWAYSTOUCH
@@ -161,7 +161,7 @@ void() func_button_ext = { // [ENTITY]
 	if (self.noise) precache_sound(self.noise);
 	if (self.noise1) precache_sound(self.noise1);
 	if (self.noise2) precache_sound(self.noise2);
-	SetMovedir ();
+	SetMovedir();
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
 	setmodel (self, self.model);
@@ -288,7 +288,7 @@ void() func_switch = { // [ENTITY]
 	if (!self.noise1) self.noise1 = self.noise;	
 	if (self.noise1) precache_sound(self.noise1);
 
-	if (self.angles != '0 0 0') SetMovedir ();
+	if (self.angles != '0 0 0') SetMovedir();
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_NONE;
 	setmodel (self, self.model);

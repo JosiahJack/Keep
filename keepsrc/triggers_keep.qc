@@ -149,13 +149,13 @@ void() trigger_decoy_touch = { // [FUNCTION]
    self.touch = SUB_Null;
    self.nextthink = (time + 0.100);
    self.think = SUB_Remove;
-   SUB_UseTargets ();
+   SUB_UseTargets();
 };
 
 void() trigger_decoy_use = { // [FUNCTION]
    if ( deathmatch ) { remove (self); return; }
 
-   InitTrigger ();
+   InitTrigger();
    self.touch = trigger_decoy_touch;
 };
 
@@ -167,7 +167,7 @@ void() trigger_waterfall_touch = { // [FUNCTION]
 };
 
 void() trigger_waterfall = { // [ENTITY]
-   InitTrigger ();
+   InitTrigger();
    self.touch = trigger_waterfall_touch;
    if (!self.count) self.count = 100.000;
    if (CheckZeroVector(self.movedir)) self.movedir = '0 -90 0';
@@ -182,12 +182,12 @@ void() counter_think = { // [FUNCTION]
       self.state = (floor (self.state) + TRUE);
    } else self.state = self.cnt;
    activator = other;
-   SUB_UseTargets ();
+   SUB_UseTargets();
    self.nextthink = (time + self.wait);
-   if ( (self.spawnflags & COUNTER_STEP) ) counter_on_use ();
+   if ( (self.spawnflags & COUNTER_STEP) ) counter_on_use();
    if ( (self.cnt >= self.count) ) {
 		self.cnt = 0;
-		if ( (self.aflag || !(self.spawnflags & COUNTER_LOOP)) && self.spawnflags & COUNTER_TOGGLE ) counter_on_use ();
+		if ( (self.aflag || !(self.spawnflags & COUNTER_LOOP)) && self.spawnflags & COUNTER_TOGGLE ) counter_on_use();
 		else remove (self);
    }
 };
@@ -211,7 +211,7 @@ void() counter_off_use = { // [FUNCTION]
 
    self.think = counter_think;
    if (self.delay) self.nextthink = (time + self.delay);
-   else counter_think ();
+   else counter_think();
 };
 float (entity counter) counter_GetCount = { // [FUNCTION]
    if (counter.classname == "counter") return counter.state;
@@ -236,7 +236,7 @@ void() func_counter = { // [ENTITY]
 void() oncount_use = { // [FUNCTION]
    if ( (counter_GetCount (other) == self.count) ) {
       activator = other;
-      SUB_UseTargets ();
+      SUB_UseTargets();
    }
 };
 
@@ -268,7 +268,7 @@ void() cvarset_touch = { // [FUNCTION]
 
 void() trigger_cvarset = { // [ENTITY]
 	if (deathmatch || coop) remove (self);
-	InitTrigger ();
+	InitTrigger();
 	self.use = change_cvar;
 	self.touch = cvarset_touch;
 };
@@ -317,7 +317,7 @@ void() tjump_touch = { // [FUNCTION]
     }
     other.velocity_z = self.height;
     other.flags = other.flags - (other.flags & FL_ONGROUND);
-    HipCntDown (); // Hipnotic's cnt stuff 
+    HipCntDown(); // Hipnotic's cnt stuff 
 };
 
 // --> QUAKED trigger_jump (.5 .5 .5) ? PUSH_ONCE PUSH_CURRENT PUSH_JUMP_ONLY
@@ -418,7 +418,7 @@ void() keytrigger_use = { // [FUNCTION]
    self.nextthink = (time + 0.100);
    self.think = SUB_Remove;
    self.message = "";
-   SUB_UseTargets ();
+   SUB_UseTargets();
 };
 
 void() keytrigger_touch = { // [FUNCTION]
@@ -432,7 +432,7 @@ void() trigger_usekey_skeleton = { // [ENTITY]
    if (!self.items) self.items = IT2_KEY_SKELETON;
    precache_sound ("doors/runetry.wav");
    self.noise3 = "doors/runetry.wav";
-   InitTrigger ();
+   InitTrigger();
 };
 
 void() requisit_use = { // [FUNCTION]
@@ -446,12 +446,12 @@ void() requisit_use = { // [FUNCTION]
    self.use = SUB_Null;
    self.nextthink = (time + 0.100);
    self.think = SUB_Remove;
-   SUB_UseTargets ();
+   SUB_UseTargets();
 };
 
 void() requisit_touch = { // [FUNCTION]
 	activator = other;
-	keytrigger_use ();
+	keytrigger_use();
 };
 
 void() trigger_prerequisit = { // [ENTITY]
@@ -475,7 +475,7 @@ void() hipkeytrigger_use = { // [FUNCTION]
 	self.think = SUB_Remove;
 	self.message = string_null;
 	sound(self,CHAN_VOICE,self.noise4,TRUE,ATTN_NORM);
-	SUB_UseTargets ();
+	SUB_UseTargets();
 };
 
 void() hipkeytrigger_touch = { // [FUNCTION]
@@ -547,5 +547,5 @@ void() trigger_conveyor = { // [ENTITY]
 		self.touch = conv_touch;
 		self.cnt = FALSE; // enabled
 	}
-	InitTrigger ();
+	InitTrigger();
 };

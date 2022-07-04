@@ -180,7 +180,7 @@ void() check_tethertimer = {
 		// Check to see if facing enemy is active?
 		if (self.tetherturn && self.tetherfocus) {
 			self.ideal_yaw = vectoyaw(self.tetherfocus.origin - self.origin);
-			ChangeYaw ();			
+			ChangeYaw();			
 		}
 	}
 };

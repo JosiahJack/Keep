@@ -540,7 +540,7 @@ void() monster_targets = {
 			if (self.enemy.health > 0 && self.health > 0) {
 				self.nextthink = time + 0.1;
 				self.think = FoundTarget;
-				if (self.health > 0) monster_sightsound ();	// Wake up sound
+				if (self.health > 0) monster_sightsound();	// Wake up sound
 				return;
 			}
 		}

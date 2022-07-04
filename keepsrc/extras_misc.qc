@@ -45,7 +45,7 @@ void() explobsp_explode = { // [FUNCTION]
 	self.takedamage = DAMAGE_NO;
 	activator = damage_attacker;
 	self.delay = 0.01;// Don't fire targets right away, since they might be inside
-	SUB_UseTargets ();
+	SUB_UseTargets();
 	new = spawn(); // Make an explosion at the center
 	new.origin = self.dest;
 	new.movetype = MOVETYPE_NONE;
@@ -56,7 +56,7 @@ void() explobsp_explode = { // [FUNCTION]
 	Tent_Point(TE_EXPLOSION,new.origin);
 	stemp = self;
 	self = new;
-	BecomeExplosion ();
+	BecomeExplosion();
 	self = stemp;
 	if (self.mdl) setmodel(self, self.mdl); // Go into exploded frame, or disappear
 	else remove(self);
@@ -98,7 +98,7 @@ void() breakaway_break = { // [FUNCTION]
 	if (self.noise1) sound (self, CHAN_VOICE, self.noise1, 1, ATTN_NORM);	
 	activator = damage_attacker;
 	self.delay = 0.01;// Don't fire targets right away, since they might be inside
-	SUB_UseTargets ();
+	SUB_UseTargets();
 	if (self.mdl) { // Go into exploded frame, or disappear
 		self.frame = 0;
 		setmodel(self, self.mdl);

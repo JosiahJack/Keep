@@ -96,7 +96,7 @@ void(entity inflictor, entity attacker, float take) actor_pain = { // [FUNCTION]
 
     ai_back (5);
     self.pain_finished = time + 0.7;
-    actor_pain1 ();
+    actor_pain1();
 };
 
 void() actor_shot1 =[ $shotatt1,  actor_shot2  ] {self.effects = self.effects | EF_MUZZLEFLASH;}; // [FUNCTION]
@@ -392,7 +392,7 @@ void() t_actortarget = { // [FUNCTION]
 
     if (self.message) {
         self.target = self.message;
-        SUB_UseTargets ();
+        SUB_UseTargets();
     }
 
     if (self.dmg) {
@@ -416,7 +416,7 @@ void() t_actortarget = { // [FUNCTION]
        Actor_shoot();
        if (!temp.targetname) { 
 			self.pausetime = time + 999999;
-			self.th_stand ();
+			self.th_stand();
 			self = temp;
 			return;
        }
@@ -446,7 +446,7 @@ void() t_actortarget = { // [FUNCTION]
         temp = self;
         self = other;
         self.pausetime = time + 999999;
-        self.th_stand ();
+        self.th_stand();
         self = temp;
     }
 };

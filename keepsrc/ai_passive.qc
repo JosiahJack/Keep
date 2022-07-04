@@ -231,7 +231,7 @@ void() UpdateCharmerGoal = {
 
    d = normalize ((self.origin - self.charmer.origin));
    if ( (self.huntingcharmer == TRUE) ) {
-      targ = spawn ();
+      targ = spawn();
       self.trigger_field = targ;
       setorigin (targ,self.charmer.origin);
       self.huntingcharmer = FL_SWIM;
@@ -249,7 +249,7 @@ void() UpdateCharmerGoal = {
 
 void() HuntCharmer = {
    self.huntingcharmer = TRUE;
-   UpdateCharmerGoal ();
+   UpdateCharmerGoal();
    if (self.th_walk) self.think = self.th_walk;
 	else self.think = SUB_Null;
    self.ideal_yaw = vectoyaw ((self.goalentity.origin - self.origin));
@@ -258,7 +258,7 @@ void() HuntCharmer = {
 
 void() FleeCharmer = {
    self.huntingcharmer = TRUE;
-   UpdateCharmerGoal ();
+   UpdateCharmerGoal();
    self.huntingcharmer = MOVETYPE_WALK;
    if (self.th_walk) self.think = self.th_walk;
 	else self.think = SUB_Null;

@@ -104,7 +104,7 @@ void() spikemine_Touch = {
 	self.touch = SUB_Null;
 	setmodel (self,"progs/drake/s_explod.spr");
 	self.solid = SOLID_NOT;
-	s_explode1 ();
+	s_explode1();
 };
 
 void() spike_mine_first_think = {

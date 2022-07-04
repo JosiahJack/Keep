@@ -91,7 +91,7 @@ void() enforcer_fireparticlebeam = {
 	if ( dot < 0.75 ) spot = self.enemy.origin; // Too wacky an angle, just shoot at player
 	lead = normalize(spot - org);
 
-	missile = spawn ();
+	missile = spawn();
 	missile.classgroup = CG_PROJALL;
 	missile.owner = self;
 	missile.enemy = self.enemy;
@@ -127,7 +127,7 @@ void() enforcer_missiletouch = {
 	WriteCoord (MSG_BROADCAST, self.origin_x);
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, self.origin_z);
-	BecomeExplosion ();
+	BecomeExplosion();
 };
 
 void() enforcer_firerocket = {
@@ -149,7 +149,7 @@ void() enforcer_firerocket = {
 	traceline(org, spot, FALSE, world);
 	if ( trace_fraction < 0.8 ) { menf_ratk9(); return; } // Something got in the way, skip it
 
-	missile = spawn ();
+	missile = spawn();
 	missile.classgroup = CG_PROJALL;
 	missile.owner = self;
 	missile.movetype = MOVETYPE_FLYMISSILE;

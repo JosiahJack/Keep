@@ -43,7 +43,7 @@ void(float AttackNumber) WrathMissile;
 
 void() wrath_stand1 = [ 1.000, wrath_stand1 ] {
 	if (random() < 0.1) monster_idle_sound();
-	ai_stand ();
+	ai_stand();
 };
 
 void() wrath_walk01 = [ 1.000, wrath_walk02 ] { monster_idle_sound(); ai_walk (8); };
@@ -120,14 +120,14 @@ void() wrath_at_c15 = [ 54.000, wrath_run01 ] { ai_charge (12); };
 void() wrath_attack = {
    local float r;
 
-   r = random ();
+   r = random();
    if ( (r < 0.250) ) {
-      wrath_at_a01 ();
+      wrath_at_a01();
    } else {
       if ( (r < 0.650) ) {
-         wrath_at_b01 ();
+         wrath_at_b01();
       } else {
-         wrath_at_c01 ();
+         wrath_at_c01();
       }
    }
    sound (self,CHAN_VOICE,"rogue/wrath/watt.wav",TRUE,ATTN_NORM);
@@ -158,15 +158,15 @@ void(entity inflictor, entity attacker, float damage) wrath_pain = {
    if ( (self.pain_finished > time) )
       return ;
 
-   r = random ();
+   r = random();
    if ( (r > 0.100) ) {
       self.pain_finished = (time + 0.500);
       return ;
    }
    if ( (r < 0.070) ) {
-      wrath_pn_a01 ();
+      wrath_pn_a01();
    } else {
-      wrath_pn_b01 ();
+      wrath_pn_b01();
    }
    self.pain_finished = (time + 3);
    sound (self,CHAN_VOICE,"rogue/wrath/wpain.wav",TRUE,ATTN_NORM);
@@ -288,7 +288,7 @@ void(float AttackNumber) WrathMissile = {
 
    self.effects = (self.effects | EF_MUZZLEFLASH);
    makevectors(self.angles);
-   missile = spawn ();
+   missile = spawn();
 	missile.classgroup = CG_PROJALL;
    missile.owner = self;
    missile.solid = SOLID_BBOX;
@@ -352,5 +352,5 @@ void() WrathMissileTouch = {
    self.touch = SUB_Null;
    setmodel (self,"progs/drake/s_explod.spr");
    self.solid = SOLID_NOT;
-   s_explode1 ();
+   s_explode1();
 };

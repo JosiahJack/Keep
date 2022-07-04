@@ -99,7 +99,7 @@ float(float yaw, float dist) QC_StepDir = {
 	local vector spot;
 
     self.ideal_yaw = yaw;
-    ChangeYaw ();
+    ChangeYaw();
 	spot = self.origin;
 	if (walkmove (yaw, dist)) { // First, move self.  If successful, see if self is facing ideal.  If not, snap self back.
 		if (!FacingIdeal ()) setorigin (self, spot); // Didn't turn enough so don't move.  
@@ -812,7 +812,7 @@ float(vector spot) EntryPoint_Test = {
         // The past two checks look for walls, not creatures.  This check will hit both walls and creature.
         if (BoxInThing (self.mins, self.maxs, spot, self.owner)) return FALSE;
     } else {
-        droptofloor ();
+        droptofloor();
         if (!walkmove (0,0)) return FALSE;
     }
 
@@ -978,7 +978,7 @@ float() EntryPoint_BossCube = {
 	// Move the dummy to a test point.
 	setorigin (self, self.origin);
 	self.flags = self.flags - (self.flags & FL_ONGROUND);
-	droptofloor ();     // Do this even if creature can fly or swim.
+	droptofloor();     // Do this even if creature can fly or swim.
 
 	// Test the point.
     // Note:  These only detect walls, not creatures.

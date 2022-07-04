@@ -283,7 +283,7 @@ void()	dknight_char_a12=[	$char_a12,	dknight_run1	] {ai_charge(16);};
 // Identical frame set (Hell Knight / Death Knight)
 
 void()	dknight_char_b1	=[	$char_b1,	dknight_char_b2	] {
-	CheckContinueCharge (); ai_charge(23); ai_melee(); SwordSwipeSound();};
+	CheckContinueCharge(); ai_charge(23); ai_melee(); SwordSwipeSound();};
 void()	dknight_char_b2	=[	$char_b2,	dknight_char_b3	] {monster_footstep(FALSE); ai_charge(17); ai_melee();};
 void()	dknight_char_b3	=[	$char_b3,	dknight_char_b4	] {ai_charge(12); ai_melee();};
 void()	dknight_char_b4	=[	$char_b4,	dknight_char_b5	] {ai_charge(22); ai_melee();};
@@ -362,10 +362,10 @@ void() dknight_melee =
 {
 	self.meleeattack = self.meleeattack + 1;
 
-	if (self.meleeattack == 1) dknight_slice1 ();
-	else if (self.meleeattack == 2) dknight_smash1 ();
+	if (self.meleeattack == 1) dknight_slice1();
+	else if (self.meleeattack == 2) dknight_smash1();
 	else {
-		dknight_watk1 ();
+		dknight_watk1();
 		self.meleeattack = 0;
 	}
 };
@@ -419,9 +419,9 @@ void(entity inflictor, entity attacker, float damage)	dknight_pain =
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
-			if (random() < 0.85) dknight_painA1 ();	// classic, body recoil
+			if (random() < 0.85) dknight_painA1();	// classic, body recoil
 			else {
-				dknight_painD1 ();				// Cool stumble, hand over mouth
+				dknight_painD1();				// Cool stumble, hand over mouth
 				self.pain_finished = time + 2;	// long animation
 			}
 		}
@@ -429,7 +429,7 @@ void(entity inflictor, entity attacker, float damage)	dknight_pain =
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 1.1;
 			self.axhitme = 0;
-			dknight_painD1 ();
+			dknight_painD1();
 		}
 	}
 };
@@ -483,8 +483,8 @@ void() dknight_die =
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
-		if (random() > 0.5) dknight_die1 ();
-		else dknight_dieb1 ();
+		if (random() > 0.5) dknight_die1();
+		else dknight_dieb1();
 	}
 };
 

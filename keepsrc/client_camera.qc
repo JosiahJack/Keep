@@ -98,7 +98,7 @@ void() SetupIntermissionCamera = {
 
 void() FinishIntermissionCamera = {
 	// skip any text in deathmatch
-	if (deathmatch) { GotoNextMap (); return; }
+	if (deathmatch) { GotoNextMap(); return; }
 	
 	intermission_exittime = time + 1;
 	intermission_running = intermission_running + 1;

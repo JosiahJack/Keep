@@ -58,7 +58,7 @@ void() ending_for_coop = { // [FUNCTION]
    setorigin (self,(self.origin + '0.000 0.000 48.000'));
    WriteByte (MSG_ALL,SVC_FINALE);
    WriteString (MSG_ALL,"You have destroyed Quake's\nTemporal Teleporter. His assault\non Time has been defeated.");
-   ending_remove_stuff ();
+   ending_remove_stuff();
    theMachine.think = time_crash;
    theMachine.nextthink = (time + 0.100);
 };
@@ -176,7 +176,7 @@ void() actor_fire1 = [ 107.000, actor_fire2 ] { // [FUNCTION]
    self.v_angle = self.angles;
    self.v_angle_x = (FALSE - self.angles_x);
    self.effects = EF_MUZZLEFLASH;
-   W_FireRocket ();
+   W_FireRocket();
    WriteByte (MSG_ALL,SVC_FINALE);
    WriteString (MSG_ALL,"\nFinally, Quake's Temporal Teleporter\nyields to your assault. A high\npitched scream emits from the\ndevastated device as stressed steel\nblasts outward to rock the cavern.\nThe machine is devoured by molten lava.\n\nThe ground shudders as reality shi..");
 };
@@ -189,7 +189,7 @@ void() actor_fire3 = [ 109.000, actor_fire4 ] {self.nextthink = (time + 0.150);}
 void() actor_fire4 = [ 110.000, actor_fire5 ] {self.nextthink = (time + 0.150);}; // [FUNCTION]
 void() actor_fire5 = [ 111.000, actor_fire6 ] { // [FUNCTION]
    self.nextthink = (time + 0.150);
-   ending_remove_stuff ();
+   ending_remove_stuff();
 	if (theMachine) {
 	   if (theMachine.health > 0) {
 		  theMachine.think = time_crash;
@@ -265,7 +265,7 @@ void() actor_control = { // [FUNCTION]
 void(entity thePlayer) spawn_actor = { // [FUNCTION]
 	local entity pointOne;
 
-	theActor = spawn ();
+	theActor = spawn();
 	theActor.owner = self;
 	theActor.classname = "actor";
 	theActor.health = 100.000;

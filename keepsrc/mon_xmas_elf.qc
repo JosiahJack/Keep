@@ -261,12 +261,12 @@ void(entity inflictor, entity attacker, float damage) elf_pain =
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		if (self.pain_check == 1) elf_pain1 ();
+		if (self.pain_check == 1) elf_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
 			self.axhitme = 0;
 			self.pain_finished = time + 1;
-			elf_pain1 ();
+			elf_pain1();
 		}
 	}
 };
@@ -318,8 +318,8 @@ void() elf_die =
 			sound (self, CHAN_VOICE, self.death_sound2, 1, ATTN_NORM);
 
 		// Pick a random fall direction
-		if (random() > 0.5) elf_die1 ();
-		else elf_dieb1 ();
+		if (random() > 0.5) elf_die1();
+		else elf_dieb1();
 	}
 };
 

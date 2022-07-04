@@ -14,7 +14,7 @@ void() hip_train_use = {
       }
 
    }
-   hip_train_next ();
+   hip_train_next();
 
 };
 
@@ -70,7 +70,7 @@ void() hip_train_next = {
       temp = self.target;
       self.target = self.goalentity.event;
       self.message = self.goalentity.message;
-      SUB_UseTargets ();
+      SUB_UseTargets();
       self.target = temp;
       self.message = string_null;
 

@@ -163,7 +163,7 @@ void() GrappleAnchor = { // [FUNCTION]
 };
 
 void() Grapple_Think = { // [FUNCTION]
-    if (self.delay < time) {GrappleReset (); return;}
+    if (self.delay < time) {GrappleReset(); return;}
 
     if (GrappleCutCheck()) {
         GrappleSever (self);

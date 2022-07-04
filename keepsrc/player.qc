@@ -58,7 +58,7 @@ void() SuperDamageSound = { // [FUNCTION]
 	sound (self,CHAN_BODY,SOUND_ARTQUAD3,1,ATTN_NORM);
 };
 
-float() frame_pause = { return (intermission_running > 0 || cinematic_running > 0 || cutscene); }; // [FUNCTION]
+float() frame_pause = { return (intermission_running > 0 || cinematic_running > 0 || cutscene > 0); }; // [FUNCTION]
 
 // Grapple
 void() player_grapple1 =[114,player_grapple2] { if (frame_pause()) return; self.weaponframe = 1; W_FireGrapple(); }; // [FUNCTION]
@@ -139,12 +139,12 @@ void(float fr, float wf) playham_frame = { // [FUNCTION]
 void() player_saw1 =[ 26, player_saw2 ] {if (!frame_pause()) self.weaponframe = 5; W_FireSaw();}; // [FUNCTION]
 void() player_saw2 =[ 27, player_saw3 ] { // [FUNCTION]
 	if (!frame_pause()) playham_frame(27,2);
-    if (!self.button0) {player_run (); return;}
+    if (!self.button0) {player_run(); return;}
 };
 void() player_saw3 =[ 105, player_saw4 ] {if (!frame_pause()) playham_frame(26,3); W_FireSaw();}; // [FUNCTION]
 void() player_saw4 =[ 106, player_saw5 ] { // [FUNCTION]
 	if (!frame_pause()) playham_frame(27,4);
-    if (!self.button0) {player_run ();return;}
+    if (!self.button0) {player_run();return;}
 };
 void() player_saw5 =[ 105, player_saw6 ] {if (!frame_pause()) playham_frame(26,5); W_FireSaw();}; // [FUNCTION]
 void() player_saw6 =[ 106, player_run  ] {if (!frame_pause()) playham_frame(27,6);}; // [FUNCTION]
@@ -272,7 +272,7 @@ void()	player_sg1 =	[113, player_sg1	] { // [FUNCTION]
 
 	self.weaponframe=IDLE_WEAPON_FRAME;
 	if (!self.button0) { player_run(); return; }
-	W_FireShotgun ();
+	W_FireShotgun();
 };
 void()	player_sg2 =	[114, player_sg3	] { if (!frame_pause()) self.weaponframe=2; }; // [FUNCTION]
 void()	player_sg3 =	[115, player_sg4	] { if (!frame_pause()) self.weaponframe=3; }; // [FUNCTION]
@@ -303,7 +303,7 @@ void()	player_supersg1 =	[113, player_supersg2	] { // [FUNCTION]
 
 	self.weaponframe=1;
 	if (!self.button0) { player_run(); return; }
-	W_FireSuperShotgun ();
+	W_FireSuperShotgun();
 };
 void()	player_supersg2 =	[114, player_supersg3	] { if (!frame_pause())  self.weaponframe=2; }; // [FUNCTION]
 void()	player_supersg3 =	[115, player_supersg4	] { if (!frame_pause())  self.weaponframe=3; }; // [FUNCTION]
@@ -442,7 +442,7 @@ void() player_light2   =[106, player_light1  ] { // [FUNCTION]
 void() player_tbolt = { // [FUNCTION]
     self.effects = self.effects | EF_MUZZLEFLASH;
 
-    if (!self.button0 || (frame_pause())) {player_run ();  return;}
+    if (!self.button0 || (frame_pause())) {player_run();  return;}
 
     self.weaponframe = self.weaponframe + 1;
     if (self.weapon == IT2_CHAINLIGHTNING && !self.selfweaponismoditems) {
@@ -583,7 +583,7 @@ void() player_xbow1 =[105,player_xbow2] { // [FUNCTION]
     if (self.tome_finished) sound (self, CHAN_WEAPON, "drake/necro/att_a2.wav", 1, ATTN_NORM);
     else sound (self, CHAN_WEAPON, "drake/necro/att_a.wav", 1, ATTN_NORM);
 };
-void() player_xbow2 =[106,player_xbow3] { if (frame_pause()) return; self.weaponframe=2; W_FireIceCrossbow ();}; // [FUNCTION]
+void() player_xbow2 =[106,player_xbow3] { if (frame_pause()) return; self.weaponframe=2; W_FireIceCrossbow();}; // [FUNCTION]
 void() player_xbow3 =[106,player_run] { if (frame_pause()) return; self.weaponframe=3; sound (self, CHAN_WEAPON, "drake/weapons/xbowdraw.wav", 1, ATTN_IDLE);}; // [FUNCTION]
 
 // Mjolnir
@@ -600,7 +600,7 @@ void() player_hammer3 = [ 34.000, player_hammer4 ] { // [FUNCTION]
 	if (HIP_ThrowMjolnir()) self.think = player_hammer4t; // TRUE if the hammer hits something or gets thrown.
 	self.nextthink = time + 0.05;
 };
-void() player_hammer4 = [ 35.000, player_hammer5 ] { if (!frame_pause()) playham_frame(35,4); self.nextthink = time + 0.05; W_FireMjolnir ();}; // [FUNCTION]
+void() player_hammer4 = [ 35.000, player_hammer5 ] { if (!frame_pause()) playham_frame(35,4); self.nextthink = time + 0.05; W_FireMjolnir();}; // [FUNCTION]
 void() player_hammer5 = [ 36.000, player_hammer6 ] { if (!frame_pause()) playham_frame(36,4); self.nextthink = time + 0.05;}; // [FUNCTION]
 void() player_hammer6 = [ 37.000, player_run ] { if (!frame_pause()) playham_frame(37,0); self.nextthink = time + 0.05;}; // [FUNCTION]
 
@@ -788,7 +788,7 @@ void(entity inflictor, entity attacker, float damage) player_pain = { // [FUNCTI
 		if (self.perms & IT_CHAINSAW) player_sawpain1();
 		else player_axpain1();
 	}
-	else player_pain1 ();
+	else player_pain1();
 };
 
 // Allow respawn after a certain time.
@@ -955,7 +955,7 @@ void() player_death = { // [FUNCTION]
 				player_die_saw1();
 			} else {
 				self.modelindex = modelindex_player;
-				player_die_ax1 ();
+				player_die_ax1();
 			}
 		} else if (self.weapon == IT2_MJOLNIR && !self.selfweaponismoditems) {
 			if (self.hammer_finished >= time) { // Hammer has been thrown out.

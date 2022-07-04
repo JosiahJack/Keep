@@ -49,7 +49,7 @@ void() hipRubbleTouch = { // [FUNCTION]
 void(string rubblename) hipThrowRubble = { // [FUNCTION]
 	local entity new;
 
-	new = spawn ();
+	new = spawn();
 	new.classtype = CT_TEMPPHYS;
 	new.origin = self.origin;
 	setmodel (new,rubblename);

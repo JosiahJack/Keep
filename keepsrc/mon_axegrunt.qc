@@ -224,5 +224,5 @@ void() monster_axegrunt = {
 	self.classgroup = CG_ARMY;
 	self.classmove = MON_MOVEWALK;
 	if (self.deathstring == "")  self.deathstring = " was axed by an Axe Grunt\n";
-	monster_start ();
+	monster_start();
 };

@@ -141,7 +141,7 @@ void() func_door_secret_use = { // [FUNCTION]
 
 void() func_door_secret_killed = { // [FUNCTION]
 	self.health = self.max_health;
-	func_door_secret_use ();
+	func_door_secret_use();
 };
 
 void() func_door_secret_on = { // [FUNCTION]
@@ -289,7 +289,7 @@ void() func_door_secret = { // [ENTITY]
 	self.mdl = self.model;	
 	self.mangle = self.angles; // Save any angle value first (original behaviour)
 	if (CheckZeroVector(self.angles)) self.angles = '0 360 0'; // Allow for angles up/down by using movedir instead
-	SetMovedir (); // Setup move direction base on angles
+	SetMovedir(); // Setup move direction base on angles
 	if (world.model == "maps/e4m2.bsp") self.speed = 50; // In vanilla quake speed = 50 and e4m2 has rogue speed keys! :P
 	if (self.speed <=0) self.speed = 50;	// Movement speed (per phase)
 	if (self.yaw_speed <=0) self.yaw_speed = self.speed;

@@ -1087,7 +1087,7 @@ void() func_spawn = {
 };
 
 // Handy entity for seeing a smaller bounding box in the editor.  That is all.
-void() func_spawn_small = { func_spawn (); };
+void() func_spawn_small = { func_spawn(); };
 
 // Should match BeMonsterFromString()'s list
 void(string mname) precache_monster = {

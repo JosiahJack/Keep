@@ -228,7 +228,7 @@ void() IntermissionMusic = { // [FUNCTION]
 void() tmusic_use = { // [FUNCTION]
 	
     PlayMusic(self.noise, self.wait);
-    SUB_UseTargets ();
+    SUB_UseTargets();
     self.touch      = SUB_Null; // We can't just remove (self) here, because this could be a touch function.
     self.nextthink  = time + 0.1;
     self.think      = SUB_Remove;
@@ -249,6 +249,6 @@ void() trigger_music_spawn = { // [FUNCTION]
     else self.touch = tmusic_touch;
 };
 
-void() trigger_music = {InitTrigger ();  trigger_music_spawn ();}; // [ENTITY]
+void() trigger_music = {InitTrigger();  trigger_music_spawn();}; // [ENTITY]
 
-void() trigger_music_point = {InitPointTrigger ();  trigger_music_spawn ();}; // [ENTITY]
+void() trigger_music_point = {InitPointTrigger();  trigger_music_spawn();}; // [ENTITY]

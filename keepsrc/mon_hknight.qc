@@ -127,7 +127,7 @@ void() CheckForCharge = {
     if (self.classname == "monster_hkboss") {
 		// Emulate old behavior.
         self.shots_left = 3;    // Replaced 'currentammo' with 'shots_*'.
-        hknight_char_b1 ();
+        hknight_char_b1();
         return;
     }
 
@@ -151,7 +151,7 @@ void(float d) hk_run = {
         if (!self.waitmax) {
             if (ai_medic(d)) { // Hack:  Set attack_finished higher than time so that CheckForCharge fails, which would otherwise bypass ritual anim.
                 self.attack_finished = time + 0.2;
-                bane_magicd1 ();
+                bane_magicd1();
                 return;
             }
 
@@ -160,7 +160,7 @@ void(float d) hk_run = {
             if (!visible (self.enemy)) { // Teleport to the enemy.
                 self.attack_finished = time + 0.2;
                 self.search_time = time;    //+ 5;
-                bane_magice1 ();
+                bane_magice1();
                 return;
             }
         }
@@ -211,7 +211,7 @@ void() CheckContinueCharge = {
 	}
 };
 
-void()	hknight_char_b1	=[	$char_b1,	hknight_char_b2	] {CheckContinueCharge (); ai_charge(23); ai_melee();};
+void()	hknight_char_b1	=[	$char_b1,	hknight_char_b2	] {CheckContinueCharge(); ai_charge(23); ai_melee();};
 void()	hknight_char_b2	=[	$char_b2,	hknight_char_b3	] {SwordSwipeSound(); ai_charge(17); ai_melee();};
 void()	hknight_char_b3	=[	$char_b3,	hknight_char_b4	] {ai_charge(12); ai_melee();};
 void()	hknight_char_b4	=[	$char_b4,	hknight_char_b5	] {monster_footstep(FALSE); ai_charge(22); ai_melee();};
@@ -282,10 +282,10 @@ void()	hknight_watk22	=[	$w_attack22,	hknight_run1	] {monster_footstep(FALSE); a
 void() hknight_melee = {
 	self.meleeattack = self.meleeattack + 1;
 
-	if (self.meleeattack == 1) hknight_slice1 ();
-	else if (self.meleeattack == 2) hknight_smash1 ();
+	if (self.meleeattack == 1) hknight_slice1();
+	else if (self.meleeattack == 2) hknight_smash1();
 	else {
-		hknight_watk1 ();
+		hknight_watk1();
 		self.meleeattack = 0;
 	}
 };
@@ -352,7 +352,7 @@ void()	hknight_magica8 =[	$magica8,	hknight_magica9	] {
 void()	hknight_magica9 =[	$magica9,	hknight_magica10] {
 	 if (self.classname == "monster_hell_lord" || self.classname == "monster_hkboss" || self.classname == "monster_bane") {
 		magica_sword_chop();
-		M_Lightwall ();
+		M_Lightwall();
 	} else {
 		hknight_shot(0);
 	}
@@ -487,7 +487,7 @@ void() hknight_pointfire =
 	
 	// Turn the Knight towards lightning target
 	self.ideal_yaw = vectoyaw(self.movetarget.origin - self.origin);
-	ChangeYaw ();
+	ChangeYaw();
 	// Work out start point of lightning bolt
 	makevectors(self.angles);
 	
@@ -612,7 +612,7 @@ void(entity inflictor, entity attacker, float damage) hknight_pain = {
 			else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 		} else sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 
-		if (self.pain_check == 1) hknight_pain1 ();
+		if (self.pain_check == 1) hknight_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 0.5;
@@ -621,11 +621,11 @@ void(entity inflictor, entity attacker, float damage) hknight_pain = {
 			// Update:  Quicker pain for lords.
 			if ((self.classname == "monster_hell_lord") || (self.classname == "monster_dark_lord")) {
 				if (random() < 0.5) {
-					hkfast_pain1 ();
+					hkfast_pain1();
 					return;
 				}
 			}
-			hknight_pain1 ();
+			hknight_pain1();
 		}
 	}
 };
@@ -678,8 +678,8 @@ void() hknight_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
-		if (random() > 0.5) hknight_die1 ();	// Forward - standard
-		else hknight_dieb1 ();					// Backward - standard
+		if (random() > 0.5) hknight_die1();	// Forward - standard
+		else hknight_dieb1();					// Backward - standard
 	}
 };
 

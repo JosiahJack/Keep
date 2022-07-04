@@ -206,8 +206,8 @@ void() knight_fast7  =[ $attackb10, knight_run1   ] {monster_footstep(FALSE); ai
 void() knight_melee = {
 	if (ai_checkmelee(MONAI_MELEEKNIGHT,FALSE)) {
 		if (self.exactskin == 2 && self.max_health > 75) knight_fast1(); // Drake's cranked monster_warrior
-		else knight_atk1 ();
-	} else knight_runatk1 ();
+		else knight_atk1();
+	} else knight_runatk1();
 };
 
 void()	knight_pain1	=[	$pain1,		knight_pain2	] {};
@@ -234,16 +234,16 @@ void(entity inflictor, entity attacker, float damage)	knight_pain = {
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
-			if (random() < 0.85) knight_pain1 ();	// classic, body recoil
+			if (random() < 0.85) knight_pain1();	// classic, body recoil
 			else {
 				self.pain_finished = time + 2;		// long animation
-				knight_painb1 ();					// Cool stumble, hand over mouth
+				knight_painb1();					// Cool stumble, hand over mouth
 			}
 		} else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
 			self.axhitme = 0;
 			self.pain_finished = time + 1.1;
-			knight_painb1 ();
+			knight_painb1();
 		}
 	}
 };
@@ -277,8 +277,8 @@ void() knight_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, self.death_sound, 1, ATTN_NORM);
-		if (random() > 0.5) knight_die1 ();		// Forward - standard
-		else knight_dieb1 ();									// Backward - standard
+		if (random() > 0.5) knight_die1();		// Forward - standard
+		else knight_dieb1();									// Backward - standard
 	}
 };
 

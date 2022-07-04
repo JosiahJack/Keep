@@ -238,7 +238,7 @@ void() trigger_coinpurchase_touch = {
 };
 
 void() trigger_coinpurchase = {
-   InitTrigger ();
+   InitTrigger();
    self.touch = trigger_coinpurchase_touch;
 	if (self.cost <= 0) self.cost = 1; // no free lunch
 };
@@ -267,7 +267,7 @@ void() trigger_gibpurchase_touch = {
 };
 
 void() trigger_gibpurchase = {
-   InitTrigger ();
+   InitTrigger();
    self.touch = trigger_gibpurchase_touch;
 	if (self.cost <= 0) self.cost = 1; // no free lunch
 };

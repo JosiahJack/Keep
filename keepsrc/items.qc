@@ -638,7 +638,7 @@ void() item_health = { // [ENTITY]
 	self.bbmaxs = VEC_ITEM_MAX;
 	if (self.respawn_time == 0) self.respawn_time = RESPAWN_HEALTH;
 	item_coopcheck();
-	item_start ();
+	item_start();
 };
 
 // Redirect for Nehahra medieval healthkit
@@ -680,7 +680,7 @@ void() item_healthvial = { // [ENTITY]
 	self.bbmaxs = '8 8 32';
 	if (self.respawn_time == 0) self.respawn_time = RESPAWN_HEALTH;
 	item_coopcheck();
-	item_start ();
+	item_start();
 };
 
 void() item_healthgem = { item_healthvial(); } // [ENTITY], Used to be called a gem, renamed to vial
@@ -1493,7 +1493,7 @@ void() item_backpack_setup = { // [FUNCTION]
 		self.ammo_rockets = floor(random() * 5);
 		self.ammo_cells = floor(random() * 5);
 	}
-	item_start ();
+	item_start();
 };
 
 // QUAKED item_backpack (0 .5 .8) (-16 -16 0) (16 16 56) SHELLS NAILS ROCKETS CELLS RESPAWN FLOAT STARTOFF NOEFFECTS NOT_EASY NOT_NORMAL NOT_HARD NOT_DM

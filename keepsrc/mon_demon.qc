@@ -66,7 +66,7 @@ void(float side) Demon_Claw = {
 	if (!self.enemy) return;
 	if (self.health < 1) return;
 
-	ai_face ();						// Turn towards enemy target
+	ai_face();						// Turn towards enemy target
 	walkmove (self.ideal_yaw, 12);	// Get extra close to enemy target
 	ai_damagebreakable(20);			// Damage any breakables
 
@@ -198,12 +198,12 @@ void(entity inflictor, entity attacker, float damage) demon1_pain = {
 	// Any pain animation/sound required?
 	if (self.pain_check > 0) {
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
-		if (self.pain_check == 1) demon1_pain1 ();
+		if (self.pain_check == 1) demon1_pain1();
 		else if (self.pain_check == 2) {
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 0.6;
 			self.axhitme = 0;
-			demon1_pain1 ();
+			demon1_pain1();
 		}
 	}
 };
@@ -226,7 +226,7 @@ void() demon1_die = {
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "demon/ddeath.wav", 1, ATTN_NORM);
-		demon1_death1 ();
+		demon1_death1();
 	}
 };
 

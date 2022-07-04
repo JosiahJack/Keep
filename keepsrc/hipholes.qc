@@ -32,7 +32,7 @@ void(vector pos) placebullethole = {
    local entity new;
    local vector norm;
 
-   new = spawn ();
+   new = spawn();
    new.owner = new;
    new.movetype = MOVETYPE_NONE;
    new.solid = SOLID_NOT;
@@ -48,7 +48,7 @@ void(vector pos) placebullethole = {
    new.think = remove_bullethole;
    new.nextthink = (time + 300.000);
    numbulletholes = (numbulletholes + TRUE);
-   if (numbulletholes > 32) remove_bullethole ();
+   if (numbulletholes > 32) remove_bullethole();
    if (lastbullet != nullentity) lastbullet.lastvictim = new;
    else bulletholes = new;
 

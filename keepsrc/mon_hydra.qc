@@ -223,7 +223,7 @@ void()	Hydra_Spit4	=[	$hspit4,	Hydra_Spit5] {ai_face();self.nextthink = time + 0
 void()	Hydra_Spit5	=[	$hspit5,	Hydra_Spit6] {ai_face();self.nextthink = time + 0.07;};
 void()	Hydra_Spit6	=[	$hspit6,	Hydra_Spit7] {ai_face();self.nextthink = time + 0.07;};
 void()	Hydra_Spit7	=[	$hspit7,	Hydra_Spit8] {ai_face();self.nextthink = time + 0.07;};
-void()	Hydra_Spit8	=[	$hspit8,	Hydra_Spit9] {ai_face(); hydra_spit_start ();};
+void()	Hydra_Spit8	=[	$hspit8,	Hydra_Spit9] {ai_face(); hydra_spit_start();};
 void()	Hydra_Spit9	=[	$hspit9,	Hydra_Spit10] {ai_face();self.nextthink = time + 0.07;};
 void()	Hydra_Spit10	=[	$hspit10,	Hydra_Spit11] {ai_face();self.nextthink = time + 0.07;};
 void()	Hydra_Spit11	=[	$hspit11,	Hydra_Spit12] {ai_face();self.nextthink = time + 0.07;};
@@ -268,7 +268,7 @@ void(entity inflictor, entity attacker, float damage)	hydra_pain = {
 
 		self.pain_finished = time + 1;
 		sound (self, CHAN_AUTO, "extras_r5/hydra/hydra_pain.wav", 1, ATTN_NORM);
-		hydra_pain1 ();
+		hydra_pain1();
 	}
 };
 

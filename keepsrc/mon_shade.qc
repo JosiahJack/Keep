@@ -96,7 +96,7 @@ void(float dist, entity ent) Shade_FindBestPath = {
 
 	// Face its goal.
     self.ideal_yaw = vectoyaw (targ.origin - self.origin);
-    ChangeYaw ();
+    ChangeYaw();
 
 	// Next, check if the monster should slide vertically away from its goal.
     if (targ != ent) {
@@ -245,7 +245,7 @@ void() shade_sfx_idle = {
         if (random() < 0.01) {
 			local   float   r;
 
-			r = random ();
+			r = random();
 			if (r < 0.5)
 				sound (self, CHAN_VOICE, "drake/shade/idle.wav", 1, ATTN_NORM);
 			else
@@ -306,7 +306,7 @@ void()  shadow_walk5  =[ $form3,  shadow_walk6  ] {self.alpha = 0.3; shade_walk(
 void()  shadow_walk6  =[ $form2,  shadow_walk7  ] {self.alpha = 0.2; shade_walk(8);};
 void()  shadow_walk7  =[ $form1,  shadow_walk8  ] {self.alpha = 0.1; shade_walk(8);};
 void()  shadow_walk8  =[ $form1,  shadow_walk9  ] {/*shadow_phase (FALSE);*/ self.alpha = 0.7;  shade_walk(8);};
-void()  shadow_walk9  =[ $form1,  shadow_walk9  ] {shade_walk(8); shade_sfx_idle ();};
+void()  shadow_walk9  =[ $form1,  shadow_walk9  ] {shade_walk(8); shade_sfx_idle();};
 
 void()  shadow_walk = {
     if (self.takedamage) shadow_walk1();
@@ -492,7 +492,7 @@ void() shadow_die_delayed = {
     // force Quake to update the entity.
     // Update:  Don't 'setorigin' during a touch frame.
     //setorigin (self, self.origin);
-    shadow_die1 ();
+    shadow_die1();
 };
 void() shadow_die = {
     //monster_death_precheck();

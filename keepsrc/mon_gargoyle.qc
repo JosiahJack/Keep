@@ -294,7 +294,7 @@ void(entity inflictor, entity attacker, float damage) garg_pain =
 			if (random() < 0.5) sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 			else sound (self, CHAN_VOICE, self.pain_sound2, 1, ATTN_NORM);
 			if (self.pain_check == 1 || self.pain_check == 2) {
-				garg_pain1 ();
+				garg_pain1();
 			}
 		}
 	}
@@ -343,7 +343,7 @@ void() garg_die = {
 		self.velocity_x = -200 + 400*random();
 		self.velocity_y = -200 + 400*random();
 		self.velocity_z = 100 + 100*random();
-		garg_death1 ();
+		garg_death1();
 	}
 };
 

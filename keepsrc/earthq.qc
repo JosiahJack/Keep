@@ -42,7 +42,7 @@ float EQ_RANDOM    = 1.000;
 void() stop_earthquake;
 
 void() earthquake_rumble = { // [FUNCTION]
-   if (self.attack_finished < time) stop_earthquake ();
+   if (self.attack_finished < time) stop_earthquake();
    else {
       sound (self,CHAN_VOICE,"rogue/equake/rumble.wav",TRUE,ATTN_NONE);
       self.think = earthquake_rumble;
@@ -55,7 +55,7 @@ void() start_earthquake = { // [FUNCTION]
    if (self.spawnflags & EQ_RANDOM)  self.attack_finished = (time + (random () * self.delay));
    else self.attack_finished = (time + self.delay);
 
-   earthquake_rumble ();
+   earthquake_rumble();
 };
 
 void() stop_earthquake = { // [FUNCTION]
@@ -109,7 +109,7 @@ void() trigger_earthquake = { // [ENTITY]
       self.use = earthquake_use;
       self.delay = FALSE;
    }
-   InitTrigger ();
+   InitTrigger();
 };
 
 void() earthquake_kill_touch = { // [FUNCTION]
@@ -125,7 +125,7 @@ void() earthquake_kill_touch = { // [FUNCTION]
 
 void() trigger_earthquake_kill = { // [ENTITY]
    self.touch = earthquake_kill_touch;
-   InitTrigger ();
+   InitTrigger();
 };
 
 void() StopEarthQuake = { // [FUNCTION]

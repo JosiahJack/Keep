@@ -597,9 +597,9 @@ void(entity inflictor, entity attacker, float damage)	dfury_pain =
 		sound (self, CHAN_VOICE, self.pain_sound, 1, ATTN_NORM);
 		if (self.pain_check == 1) {
 			// Randomly pick which pain animation to play
-			if (random() < 0.9) dfury_painA1 ();		// classic, body recoil
+			if (random() < 0.9) dfury_painA1();		// classic, body recoil
 			else {
-				dfury_painD1 ();						// Cool stumble
+				dfury_painD1();						// Cool stumble
 				self.pain_finished = time + 2;			// long animation
 			}
 		}
@@ -607,7 +607,7 @@ void(entity inflictor, entity attacker, float damage)	dfury_pain =
 			// reset axe hit and setup short pain recovery
 			self.pain_finished = time + 1.1;
 			self.axhitme = 0;
-			dfury_painD1 ();
+			dfury_painD1();
 		}
 	}
 };
@@ -660,8 +660,8 @@ void() dfury_die =
 	// regular death
 	if (!self.gibbed) {
 		sound (self, CHAN_VOICE, "hknight/death1.wav", 1, ATTN_NORM);
-		if (random() > 0.5) dfury_die1 ();
-		else dfury_dieb1 ();
+		if (random() > 0.5) dfury_die1();
+		else dfury_dieb1();
 	}
 };
 

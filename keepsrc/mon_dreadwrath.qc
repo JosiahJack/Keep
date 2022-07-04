@@ -144,7 +144,7 @@ void() ai_wraith2_stand = {
         if (ai_wraith2 (0, FALSE)) return;
 
         if (!self.modelindex)
-            if (!(self.spawnflags & 1) || (self.attack_state == AS_FLEEING)) wraith_stand_fx ();
+            if (!(self.spawnflags & 1) || (self.attack_state == AS_FLEEING)) wraith_stand_fx();
     }
     ai_stand();
 };
@@ -156,7 +156,7 @@ void(float d) ai_wraith2_walk = {
 
         if (random() < 0.2) self.effects = self.effects | EF_MUZZLEFLASH;
         if ( self.frame == $walk1 )
-            wraith_idle_sfx ();
+            wraith_idle_sfx();
     }
     ai_walk(d);
 };
@@ -260,7 +260,7 @@ void() overlord_mace4  =[ $attackc4,  overlord_mace5  ] {ai_charge(self.speed);}
 void() overlord_mace5  =[ $attackc5,  overlord_mace6  ] {ai_charge(self.speed);};
 void() overlord_mace6  =[ $attackc6,  overlord_mace7  ] {
     if (!overlord_smash())      // Smites enemy in melee range.
-        overlord_spray1 ();     // Launch missiles on a miss.
+        overlord_spray1();     // Launch missiles on a miss.
 };
 void() overlord_mace7  =[ $attackc7,  overlord_mace8  ] {ai_charge(self.speed);};
 void() overlord_mace8  =[ $attackc8,  overlord_mace9  ] {ai_charge(self.speed);};
@@ -295,7 +295,7 @@ void() overlord_magic6  =[ $magic6,  overlord_magic7  ] {//WrathMissile(4);};
     if (CanDamage (self.enemy, self))
     if (InMeleeRange (80))
     {   // We can touch the target.
-        overlord_drain1 ();
+        overlord_drain1();
         return;
     }
     // Couldn't touch the target, so launch orb.
@@ -328,22 +328,22 @@ void() overlord_attack =
     if (r < 0.33)
     {
         if ( self.frame == $attack10 )
-            overlord_axe2 ();
+            overlord_axe2();
         else
-            overlord_axe1 ();
+            overlord_axe1();
     }
     else if (r < 0.66)
-        overlord_mace1 ();
+        overlord_mace1();
     else
-        overlord_magic1 ();
+        overlord_magic1();
 };
 
 void() overlord_refire =
 {
     if (self.enemy.health > 0)
         if (visible (self.enemy))
-            {overlord_attack ();  return;}
-    overlord_run1 ();
+            {overlord_attack();  return;}
+    overlord_run1();
 };
 
 // PAIN - - - - - - - - - - - - - - - -
@@ -377,13 +377,13 @@ void() overlord_pain =
         return;
 
 // Go to a pain frame.
-    ai_shield_off ();
+    ai_shield_off();
     self.pain_finished = time + 2;
     sound (self, CHAN_VOICE, "wrath/wpain.wav", 1, ATTN_NORM);
     if (r < 0.15)
-        overlord_pain1 ();
+        overlord_pain1();
     else 
-        overlord_painb1 ();
+        overlord_painb1();
 };
 
 // DEATH - - - - - - - - - - - - - - - -
@@ -453,9 +453,9 @@ void() overlord_die9  =[ $death16, overlord_die10 ] {self.model = "";
 };
 void() overlord_die10 =[ $death17, overlord_die11 ] {ol_toss_loop();};
 void() overlord_die11 =[ $death17, SUB_Null       ] {ol_toss_loop();
-    monster_null ();    // PM:  Sever all other connections first.
-    monster_rod ();
-//    SUB_Remove ();
+    monster_null();    // PM:  Sever all other connections first.
+    monster_rod();
+//    SUB_Remove();
 };
 
 // other -- Drake stuff
@@ -507,7 +507,7 @@ void() dreadlord_walk8  =[ $form3,  dreadlord_walk9  ] {ai_wraith2_walk(8);};
 void() dreadlord_walk9  =[ $form1,  dreadlord_walk10 ] {self.modelindex = 0;  ai_wraith2_walk(8);};
 void() dreadlord_walk10 =[ $form1,  dreadlord_walk10 ] {ai_wraith2_walk(8);
 	if (random() < 0.2) self.effects = self.effects | EF_MUZZLEFLASH;
-    if (random() < 1/12) wraith_idle_sfx ();
+    if (random() < 1/12) wraith_idle_sfx();
 };
 void() dreadlord_walk = {wraith_start (dreadlord_walk1, dreadlord_walk9);};
 
@@ -558,8 +558,8 @@ void() dreadlord_pain = {
     self.pain_finished = time + 2;
     sound (self, CHAN_VOICE, "wraith/growl2.wav", 1, ATTN_NORM);
     self.velocity = '0 0 0';
-    if (r < 0.15) dreadlord_pain1 ();
-    else dreadlord_painb1 ();
+    if (r < 0.15) dreadlord_pain1();
+    else dreadlord_painb1();
 };
 
 void() dreadlord_die =[$deathb1,  dreadlord_die1] {
@@ -665,5 +665,5 @@ void() monster_wraith_lord = {
     if (self.deathstring == "")  self.deathstring = " was desecrated by a Dread Wraith\n";
     if (self.spawnflags & 2) self.bossflag = TRUE;
 	Resist_ChangeType(self,-1); // Always reset Ammo Resistance to be consistent
-    monster_start ();
+    monster_start();
 };

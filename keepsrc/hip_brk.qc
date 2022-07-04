@@ -49,7 +49,7 @@ void() damagethreshold_killed = { // [FUNCTION]
    self.health = self.max_health;
    activator = damage_attacker;
    self.takedamage = DAMAGE_NO;
-   SUB_UseTargets ();
+   SUB_UseTargets();
    self.takedamage = DAMAGE_YES;
    if ( !(self.spawnflags & MULTI_USE) ) remove (self);
 };

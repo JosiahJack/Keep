@@ -35,10 +35,8 @@ void() idchthon_tracking = {
 	}
 	
 	// Check for any no combat conditions
-	if (self.enemy.flags & FL_NOTARGET) self.enemy = world;
-	else if (self.enemy.items & IT_INVISIBILITY) self.enemy = world;
-	else if (intermission_running > 0) self.enemy = world;
-	else if (cinematic_running > 0 || cutscene > 0) self.enemy = world;
+	if (Invisible(self.enemy)) self.enemy = world;
+	else if (frame_pause()) self.enemy = world;
 	else if (self.enemy.health < 1) self.enemy = world;
 	if (self.enemy) self.th_missile();
 };
@@ -118,10 +116,8 @@ void() idchthon_face = {
 	}
 	
 	// Check for any no combat conditions
-	if (self.enemy.flags & FL_NOTARGET) self.enemy = world;
-	else if (self.enemy.items & IT_INVISIBILITY) self.enemy = world;
-	else if (intermission_running > 0) self.enemy = world;
-	else if (cinematic_running > 0 || cutscene > 0) self.enemy = world;
+	if (Invisible(self.enemy)) self.enemy = world;
+	else if (frame_pause()) self.enemy = world;
 	else if (self.enemy.health < 1) self.enemy = world;
 	if (self.enemy) ai_face();
 };
@@ -192,7 +188,7 @@ void() idchthon_awake = {
 	WriteCoord (MSG_BROADCAST, self.origin_z);
 
 	sound (self, CHAN_WEAPON, "ad171/chthon/lavasplash.wav", 1, ATTN_NORM);
-	idchthon_rise1 ();
+	idchthon_rise1();
 };
 
 void() idchthon_shocka1 =[	$shocka1, idchthon_shocka2 ] {};
@@ -238,9 +234,9 @@ void() lightning_fire =
 	// done here, put the terminals back up
 	if (time >= lightning_end) {
 		self = le1;
-		func_door_go_down ();
+		func_door_go_down();
 		self = le2;
-		func_door_go_down ();
+		func_door_go_down();
 		return;
 	}
 	
@@ -285,7 +281,7 @@ void() lightning_use = {
 	le2.nextthink = -1;
 	lightning_end = time + 1;
 	sound (self, CHAN_VOICE, "misc/power.wav", 1, ATTN_NORM);  // vanilla id1 sound
-	lightning_fire ();		
+	lightning_fire();		
 
 	
 	self = find (world, classname, "monster_boss");

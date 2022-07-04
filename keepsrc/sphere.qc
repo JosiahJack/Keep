@@ -99,13 +99,13 @@ void() sphere_think = { // [FUNCTION]
       if (self.owner.items2 & IT2_V_SPHERE) self.owner.items2 = (self.owner.items2 - IT2_V_SPHERE);
       if (self.owner.enemy.flags & FL_CLIENT) {
          self.enemy = self.owner.enemy;
-         sphere_attack ();
+         sphere_attack();
          return;
       }
 
       if (self.owner.enemy.owner.flags & FL_CLIENT) {
          self.enemy = self.owner.enemy.owner;
-         sphere_attack ();
+         sphere_attack();
          return;
       }
 
@@ -121,7 +121,7 @@ void() sphere_think = { // [FUNCTION]
 void() sphere_spawn = { // [FUNCTION]
    local entity missile;
 
-   missile = spawn ();
+   missile = spawn();
    missile.movetype = MOVETYPE_FLYMISSILE;
    missile.solid = SOLID_NOT;
    missile.classname = "Vengeance";

@@ -77,7 +77,7 @@ void() trigger_bmodel_inview = { // [FUNCTION]
 	
 	tself = self; // Swap around self/attachment so checkclient can work properly
 	self = self.attachment;
-	client = checkclient (); // Find a client in current PVS
+	client = checkclient(); // Find a client in current PVS
 	self = tself;
 	if (client.flags & FL_CLIENT) { // Found a player to check sight/distance for?
 		if (visxray(client, VEC_ORIGIN, VEC_ORIGIN, FALSE)) {

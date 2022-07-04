@@ -288,7 +288,7 @@ void() ftop_wakeup = {
 	WriteCoord (MSG_BROADCAST, self.origin_x);
 	WriteCoord (MSG_BROADCAST, self.origin_y);
 	WriteCoord (MSG_BROADCAST, self.origin_z);
-	ftop_rise1 ();
+	ftop_rise1();
 };
 
 // Uses Chthon precache

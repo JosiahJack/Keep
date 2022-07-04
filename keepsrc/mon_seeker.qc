@@ -293,7 +293,7 @@ void() seek_punch = {
 	
 	if (!self.enemy) return;
 	if (self.health < 1) return;
-	ai_face ();						// Turn towards enemy target
+	ai_face();						// Turn towards enemy target
 	ai_damagebreakable(50);			// Damage any breakables
 	if (!ai_checkmelee(MONAI_MELEESEEKER,MONAI_MELEEZTALL)) return;// Too far away
 
@@ -581,7 +581,7 @@ void() seek_die = {
 	
 	// Start death sequence
 	self.walkframe = 0;
-	seek_dieframe ();
+	seek_dieframe();
 };
 
 void() seek_shield = {
